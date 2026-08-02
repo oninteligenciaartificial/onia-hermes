@@ -33,7 +33,7 @@ El resto son habitaciones #2, #3 y #7. Eso no las hace malas — las hace *de de
 | 4 | Vender cursos de IA | 🟡 | La versión enfocada YA está en plan: taller SIAT. El curso masivo es habitación #2 |
 | 5 | Aprender Meta Ads | 🟢 | Gratis, necesario, y el motor ya está deployado. ⚠️ token vence 5-sep |
 | 6 | Influencers de IA | 🔵 | Ya construido (Lucía, Mara). No publica por token IG (S6) + regla de gasto |
-| 7 | Granja de celulares "no ban" | 🔴 | Riesgo de contagio al Business Manager de Onia; y el cuello no son cuentas |
+| 7 | Granja de celulares "no ban" | 🟡 **corregido** | **No es ilegal ni baneable per se** — ver investigación aparte. Descartada por costo/tiempo y porque optimiza vistas, no nuestro mercado |
 | 8 | Mejorar marketing de Onia (hoy) | 🟢 | ES el carril de Arthur, firmado HOY con plan de 4 semanas |
 | 9 | Agencia de marketing ligada a Onia | 🔵 | Ya decidido: gateada hasta 3-5 clientes de plataforma pagando |
 | 10 | Inversiones (cripto/acciones) | 🔴 ahora | No hay excedente que invertir; runway 11 semanas ES la inversión |
@@ -112,28 +112,50 @@ correcta ya está tomada: cola de contenido lista, publicación gateada.
 
 Nada nuevo que decidir acá — la idea está más avanzada de lo que la lluvia sugiere.
 
-### 3.7 Granja de celulares multi-chip "no ban" — 🔴 descartada, y el porqué importa
+### 3.7 Granja de celulares multi-chip "no ban" — 🟡 CORREGIDO tras investigar
 
-La idea: varios celulares con chips distintos para operar las cuentas de las modelos IA
-sin bans. Análisis honesto:
+> **Este veredicto se revisó el mismo día.** Sergio hizo push-back ("no es baneable, hay
+> startups que lo hacen") y **tenía razón en el punto central**. La investigación completa
+> con fuentes está en `ONIA_GRANJA_CONTENIDO_MULTICUENTA_INVESTIGACION_20260801.md`.
+> Resumen de la corrección:
 
-1. **Viola los ToS de Meta/TikTok** (cuentas múltiples coordinadas + evasión de
-   detección). No es una zona gris: es exactamente lo que sus sistemas anti-spam cazan.
-2. **El riesgo no es perder UNA cuenta — es el contagio.** Meta vincula dispositivos,
-   SIMs, IPs y medios de pago. Una granja detectada puede tumbar el **Business Manager
-   de Onia**, que es la misma llave que necesitamos para WhatsApp Business API y la
-   verificación de Meta (bloqueos S5/S6 del plan maestro). Arriesgar el activo comercial
-   real por cuentas de contenido es cambiar oro por espejitos.
-3. **Resuelve el problema equivocado.** Hoy tenemos CERO cuentas baneadas y CERO
-   contenido publicándose (token S6). El cuello es *publicar contenido que convierta en
-   demos*, no multiplicar cuentas. Una granja multiplica un cero.
-4. **Costo real:** N celulares + N SIMs non-VoIP + gestión = plata y horas que salen del
-   runway de 11 semanas.
+**Lo que yo había dicho mal:** afirmé que viola los ToS. **No es cierto.** TikTok dice
+textualmente *"You can have multiple accounts... but not to deceive others or break the
+rules"*, y Meta soporta oficialmente la gestión multi-cuenta en Business Suite. Lo
+prohibido es el **engaño y el engagement falso**, no la cantidad de cuentas.
 
-**Lo que sí queda del impulso:** el playbook legítimo ya documentado en
-`ai-influencers-account-ops` — cuentas por Graph API bajo UN Business Manager, SIMs
-non-VoIP para verificación legítima, etiqueta de IA obligatoria, una cuenta por modelo.
-Escalar cuentas se reevalúa cuando UNA cuenta publicando demuestre tracción real.
+**Lo que Sergio tenía razón:** el modelo existe y factura. El **clipping** (Clipping de
+Anthony Fujiwara: 23.300 clippers, ~US$7,7M, cobertura de Forbes) mueve campañas de
+cientos de millones de vistas.
+
+**El matiz que sí importa:** en el modelo probado las cuentas son de **miles de personas
+independientes, cada una en su teléfono** — es un marketplace de distribución, no una
+sala con celulares. La única capa centralizada documentada (las cuentas "agregadoras" de
+Stake.com, en nómina directa) fue expuesta y **suspendida en días**.
+
+**Por qué igual se descarta hoy — tres razones nuevas, ninguna es "te banean":**
+
+1. **Tiempo:** 10–30 min por cuenta por día de calentamiento = **23–47 h/semana para 10
+   cuentas**. Arthur es medio tiempo; le consume la semana entera antes de escribir un guion.
+2. **Costo:** US$650–950/mes en la nube, o US$1.100–1.750 iniciales en hardware boliviano.
+   Con runway de 11 semanas, es un mes de operación.
+3. **La métrica no coincide (el argumento decisivo):** el clipping monetiza **vistas** —
+   sirve a casinos, apps de inversión y afiliados donde más audiencia global = más ingreso.
+   Onia monetiza **~150 clínicas de Santa Cruz que ya tenemos listadas por nombre**. El
+   alcance masivo es la herramienta equivocada para un TAM de cientos.
+
+Y el hecho que ordena todo: hoy Onia **no publica ni una pieza** (token IG, bloqueo S6).
+Multiplicar por diez una operación que vale cero sigue dando cero.
+
+**Gatillo de reapertura (las tres juntas):** la cuenta de Onia publica y una pieza ya trajo
+una demo atribuible · hay clientes pagando y la restricción es alcance, no plata ni tiempo ·
+existe un producto donde más vistas = más ingreso lineal.
+
+**Lo que SÍ se toma del modelo, y ya está en marcha:** el mecanismo del clipping es *pagar
+por resultado atribuible a quien distribuye* — que es **exactamente el acuerdo con Arthur**
+(Bs 50 por demo atribuible + 20% de la suscripción × 6 meses). Es la traducción correcta a
+B2B local. Y multiplicar cada pieza en Reels/TikTok/Shorts desde las cuentas oficiales da
+el 80% del beneficio con herramientas de API a US$0–79/mes.
 
 ### 3.8 Mejorar marketing de Onia (hoy) — 🟢 ya tiene dueño, plan y fecha
 
@@ -253,9 +275,12 @@ lateral y no cuenta como carril de Onia (plan de Arthur §5, "lo que NO hace est
 3. **Varias "ideas nuevas" ya estaban resueltas.** Influencers, agencia, importaciones,
    ecommerce: todas tienen doc, estado y gatillo desde el 26-jul. Señal de proceso: antes
    de una lluvia nueva, releer el catálogo maestro — ahorra re-decidir lo decidido.
-4. **Una sola idea era peligrosa y quedó descartada con argumento:** la granja de
-   celulares. No por moralina — porque arriesga el Business Manager que la venta real
-   necesita (WhatsApp API, verificación Meta) para multiplicar un contenido que hoy es cero.
+4. **La granja de celulares mereció investigación aparte, y el veredicto cambió.** Mi
+   primera respuesta la descartó por un argumento que no verifiqué (ToS). Sergio hizo
+   push-back, se investigó con fuentes, y quedó 🟡: el modelo es legal y real, pero pide
+   una semana completa de trabajo y ~US$800/mes para optimizar **vistas**, cuando nuestro
+   mercado son ~150 negocios contactables por nombre. Detalle:
+   `ONIA_GRANJA_CONTENIDO_MULTICUENTA_INVESTIGACION_20260801.md`.
 5. **El patrón de las descartadas:** cámaras, marketplace, importar, invertir — todas
    piden capital y horas (lo que NO hay) y desaprovechan lo construido (lo que SÍ hay).
    El filtro inverso funciona: si una idea no usa la plataforma, los agentes, la Web
