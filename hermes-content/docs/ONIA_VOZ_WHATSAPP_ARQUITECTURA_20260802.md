@@ -121,10 +121,12 @@ reuniones: es que las que ocurran valgan la pena.
 
 ## 3. Fases
 
-- **F0 — Prueba con el número de test (exento de tier, sin gasto):** clonar
-  `pipecat-examples/whatsapp`, webhook con dominio propio, pipeline Speaches
-  + Piper + gpt-4o-mini. Entregable: llamada de WhatsApp real contestada por
-  la IA + medición de latencia con 1/2/3 llamadas. ~1 día.
+- **F0 — Prueba con el número de test (Meta da uno GRATIS por 90 días, sin
+  tocar producción):** clonar `pipecat-examples/whatsapp`, webhook con dominio
+  propio, pipeline Speaches + Piper + gpt-4o-mini. Entregable: llamada de
+  WhatsApp real contestada por la IA + medición de latencia con 1/2/3
+  llamadas. ~1 día. **Es el próximo paso más barato: cero costo, cero riesgo,
+  confirma o mata la hipótesis en un día.**
 - **F1 — Número real (cuando esté el alta del chip):** router de webhooks
   (messages→Chatwoot, calls→voz), cerebro del bot en modo voz (guion corto:
   saludo → qué necesita → agendar demo con Cal.com → o derivar a Sergio),
@@ -227,9 +229,58 @@ Tigo — esa sola prueba decide si la vía barata existe; (b) preguntar a Entel
 Empresas si la troncal admite registro SIP por internet o exige Metro
 Ethernet; (c) consulta escrita a la ATT.
 
+## 4.ter Comprar vs construir — DECIDIDO: construir (research 2026-08-03)
+
+Se evaluó comprar la capa de voz en vez de construirla. **Ninguna plataforma
+sirve para nuestro caso**, y la razón es siempre la misma: o no soportan
+WhatsApp Calling, o no dejan traer nuestro propio número.
+
+| Plataforma | ¿WhatsApp Calling? | ¿Nuestro número? | Veredicto |
+|---|---|---|---|
+| **Vapi** | **NO** — cero páginas de WhatsApp en sus docs. La mención de Meta en prensa (jul-2025) es prensa, no producto | — | descartada |
+| **Retell AI** | **NO** — no aparece en su índice de docs | — | descartada |
+| **Twilio** | Beta privada solo Brasil, México, India, Indonesia | — | **Bolivia queda fuera** |
+| **Synthflow** | Sí, entrantes | **NO** — exige número comprado a ellos; prohíbe Twilio propio y SIP propio | descartada |
+| **respond.io** | Sí + agentes de voz | Sí (es BSP) | pero **reemplaza a Chatwoot**; USD 159/mes |
+| **ElevenLabs Agents** | **Sí, nativo** | **Parcial** — toma control de la cuenta | única viable, pero USD 0,08/min de plataforma **+ LLM + telefonía aparte**, y perdemos el control del número |
+| **Pipecat (construir)** | **Sí, transporte oficial** | **Sí, total** (`WHATSAPP_TOKEN` + `PHONE_NUMBER_ID`) | **ELEGIDA** |
+
+**Canal de voz de Chatwoot — la trampa que casi compramos.** Existe, y sí
+soporta WhatsApp Calling nativo sobre un inbox de Cloud API. Pero: (a) exige
+**v4.15.0+** y corremos **v4.12.0**; (b) es de **pago** (USD 19/agente/mes
+anual); y sobre todo (c) **no es una capa de IA: es un softphone para
+humanos.** El flujo documentado es "entra la llamada → notificación → la
+contesta una PERSONA"; la IA solo transcribe después. Pagarlo nos daría un
+teléfono con historial y seguiríamos teniendo que construir el agente igual.
+**No se compra.**
+
+**Matemática de la decisión:** Pipecat es BSD (gratis, activo, push diario),
+corre en el VPS que ya pagamos, y su costo por minuto es solo STT+LLM+TTS
+(~USD 0,07/min con voz cloud) **sin fee de plataforma y sin telefonía, porque
+las entrantes son gratis**. ElevenLabs cobraría 0,08/min *encima* de esos
+mismos componentes. El ejemplo oficial es chico (`server.py` + `bot.py`);
+estimación 1–2 semanas incluyendo el enrolamiento con Meta. La única fricción
+real es que Pipecat es Python: sería un segundo runtime junto al bot de Node.
+
 ## 5. Gates y pendientes
 
-1. F0 puede arrancar YA (número de test, sin gasto, sin permisos nuevos).
+0. **BLOQUEO A VERIFICAR ANTES DE CODEAR — colisión de webhook.** Meta entrega
+   los eventos del campo `calls` a **una sola URL por app**. El canal de voz
+   de Chatwoot y nuestro Pipecat no pueden ser dueños del mismo webhook a la
+   vez. Consecuencia de diseño: **usamos el router propio** (messages →
+   Chatwoot, calls → Pipecat) y la llamada se registra en Chatwoot **por API**
+   (crear conversación / postear la transcripción como mensaje, o mejor: como
+   **nota privada** en la conversación de WhatsApp que ese contacto ya tiene,
+   para que el humano vea todo junto). El canal nativo de voz de Chatwoot
+   queda descartado — lo cual además ahorra el plan pago.
+0.b **DISCREPANCIA A RESOLVER EL DÍA DEL ALTA:** una fuente dice que habilitar
+   calling exige tier de mensajería ≥2.000/día en general; otra dice que ese
+   requisito aplica **solo a las llamadas salientes** y que las entrantes
+   funcionan sin él. No asumir ninguna: verificar en la consola el día que se
+   habilite. Si aplica solo a salientes, las entrantes (que son las que
+   importan y son gratis) se encienden de inmediato.
+1. F0 puede arrancar YA (número de test gratis de Meta, 90 días, sin gasto y
+   sin permisos nuevos).
 2. TTS cloud (Azure/OpenAI) = plataforma paga → **OK explícito de Sergio**
    antes de crear cuenta (regla gasto-plataformas). Piper local no paga nada.
 3. Rate card Bolivia (precio/min saliente) → confirmar logueado en Meta antes
