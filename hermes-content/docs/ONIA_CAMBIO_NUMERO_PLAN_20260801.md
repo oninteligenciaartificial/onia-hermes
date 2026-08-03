@@ -84,6 +84,22 @@ Contexto que quita presión: **la línea 78491375 NO muere** (queda personal de
 Sergio), así que ningún OTP/verificación vieja se rompe. Los trámites son de
 coherencia registral, ambos gratis y online, sin plazo perentorio en días.
 
+> **CORRECCIÓN 2026-08-02 — recomendación: NO cambiar el teléfono en SIAT ni
+> SEPREC.** Al decidirse el cambio total se asumió que el registro debía
+> seguir al número nuevo. Repensado, es al revés: lo que el registro pide es
+> el **teléfono de contacto del comerciante**, y ese sigue siendo el
+> 78491375 — la línea real de Sergio, donde **contesta un humano** y llegan
+> SMS/llamadas del Estado. El número nuevo es una línea de bot: no tiene app,
+> nadie atiende una llamada de voz ahí. Poner en el padrón un número que
+> nadie contesta es peor que no cambiarlo: un fiscalizador que llame no
+> encuentra a nadie. Y no hay nada falso — un negocio puede tener su línea de
+> contacto y su canal comercial de atención en números distintos.
+>
+> **Regla vigente:** SIAT y SEPREC se quedan con el 78491375; el número nuevo
+> es el canal comercial público (web, IG, tarjetas, Google). Los trámites de
+> abajo quedan documentados por si algún día se quiere coherencia registral
+> (o si Sergio deja de usar el 78491375), pero HOY no se hacen.
+
 | # | Dónde | Trámite | Costo | Quién | Notas |
 |---|-------|---------|-------|-------|-------|
 | 1 | SIN / SIAT | SIAT en Línea → Registro Nacional de Contribuyentes → **Modificación de Datos** (RND 102500000017, art. 11) | Gratis | Credenciales del NIT 5371375010 | 100% online para datos de contacto; verificar también que el correo esté vigente (el canal FORMAL del SIN es el correo + Buzón Tributario, no el celular). Multa teórica por padrón desactualizado: 150 UFV (~Bs 365, RND 10-0033-16 anexo I 1.2 — monto a reconfirmar en fuente oficial antes de citarlo a terceros) |
@@ -93,10 +109,12 @@ coherencia registral, ambos gratis y online, sin plazo perentorio en días.
 | 5 | Municipio (SCZ) | Datos de contacto de licencia de funcionamiento | s/d | — | Baja prioridad; según municipio |
 | 6 | Web + legal | Pie legal, `NEXT_PUBLIC_WA_PHONE`, privacidad/términos, tarjetas, bio IG | — | Yo (código) / Sergio (perfiles) | El día D |
 
-Orden recomendado: 1 → 2 (mismo día, ambos online) → 6 el día D → 3/4/5 con
-calma. Base legal del deber de actualizar: Ley 2492 art. 70.2 y Código de
-Comercio art. 30 (sin plazo en días para teléfono; el "30 días" que circula
-en blogs es del cambio de domicilio bajo el régimen viejo PBD-11).
+**Orden vigente:** solo el punto 6 (canal comercial) el día D. Los puntos 1 y
+2 quedan congelados por la corrección de arriba; 3/4/5 no aplican mientras el
+78491375 siga vivo en manos de Sergio. Base legal del deber de actualizar
+(por si algún día aplica): Ley 2492 art. 70.2 y Código de Comercio art. 30
+(sin plazo en días para teléfono; el "30 días" que circula en blogs es del
+cambio de domicilio bajo el régimen viejo PBD-11).
 
 ## 4. Advertencias
 
