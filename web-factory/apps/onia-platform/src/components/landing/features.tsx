@@ -6,8 +6,8 @@ import styles from "./landing.module.css";
 
 const RUBROS = [
   { label: "Dental", estado: "andando" },
-  { label: "Comercio", estado: "pronto" },
-  { label: "Importadora", estado: "pronto" },
+  { label: "Comercio", estado: "andando" },
+  { label: "Importadora", estado: "andando" },
   { label: "Servicios", estado: "pronto" },
 ] as const;
 
