@@ -86,6 +86,39 @@ propio pesado), Vocode (muerto desde nov-2024), Bolna (sin WhatsApp), XTTS
 (RTF>1 en CPU + licencia no comercial), Kokoro (español de segunda, bug
 conocido).
 
+## 2.bis Flujo de la llamada (definido por Sergio, 2026-08-02)
+
+```
+Entra llamada de WhatsApp al número del negocio
+  → contesta el bot: saluda, dice que es un bot, escucha qué necesita
+  → RESUELVE lo que pueda (precios, qué hace el sistema, cómo funciona)
+  → si el prospecto quiere hablar con una persona:
+        NO se transfiere en vivo → se AGENDA la reunión (Cal.com)
+  → si no contesta el bot (caído/ocupado): voicemail de WhatsApp
+        → audio al chat → el bot ya lo transcribe → nada se pierde
+```
+
+**Por qué agendar en vez de transferir** (razonamiento de Sergio, correcto):
+el que acepta esperar y reservar un horario ya demostró intención real; el
+preguntón se cae solo. Bonus técnico: elimina la pieza más difícil de
+construir (transferencia en vivo de una llamada WebRTC a un humano), que
+además Chatwoot no soporta — su app no maneja voz.
+
+**Matiz que aplica (recomendación, pendiente OK de Sergio):** el filtro es
+para el curioso, NO para el que viene a comprar. Válvula de escape por SEÑAL,
+no por regla: si en la llamada aparece intención alta ("quiero contratar",
+"cuánto es y cómo pago", "me recomendó X") o es un CLIENTE con un problema,
+el bot igual agenda pero dispara aviso inmediato a Sergio (el canal de
+handoff ya existe: `notifyCount`/`notifyReasons`) para que devuelva la
+llamada en minutos si quiere. Hacer esperar a todos por igual convierte el
+filtro en fuga: en ventas la velocidad de respuesta es de los factores más
+determinantes.
+
+**Regla de diseño: filtro ≠ muro.** El bot no debe "resistir" hasta que el
+prospecto insista en hablar con un humano — eso espanta también a los buenos.
+Califica rápido y OFRECE el horario temprano. El objetivo no es evitar
+reuniones: es que las que ocurran valgan la pena.
+
 ## 3. Fases
 
 - **F0 — Prueba con el número de test (exento de tier, sin gasto):** clonar
