@@ -51,6 +51,8 @@
 | C5 | **Checkout visual** `/checkout` + ciclo `weekly` + copy multirubro en Mi Plan | `ONIA_CHECKOUT_Y_REUNION_BCP_20260802.md` §1 |
 | C6 | RRHH/planilla (portar payroll del core — bono antigüedad ya testeado) | análisis 7 frentes §5 — espera ratificación de orden |
 | C7 | Fiados (CxC) + compras a crédito (CxP) | ídem |
+| C8 | **Drip de seguimiento del trial** (día 0/3/7/12/14/15 por email) — hoy solo se manda bienvenida | pregunta de Sergio 2026-08-02 |
+| C9 | Recrear contenedor del producto para que tome `BREVO_SENDER_NAME=Onia` (ya corregido en app.env; el actual manda como "DentaGest") | hallazgo 2026-08-02 |
 
 ## E. NOTAS PARA DESPUÉS (registradas, NO se ejecutan)
 
@@ -71,7 +73,8 @@
 | D3 | **Verificación de negocio en Meta (S5) + número (S6)** | envío real de WhatsApp; sin esto, tope de 2 números |
 | D4 | **Cuál chatbot sobrevive** (lo revisás vos) | que no nazca un tercero |
 | D5 | **Reunión BCP (miércoles 5-ago)** | QR dinámico + conciliación automática |
-| D6 | Aprobar dashboard v2 cuando llegue | construirlo en el producto |
+| D6 | ~~Aprobar dashboard v2~~ ✅ aprobado — construyéndose | — |
+| D7 | **Crear OAuth Client de Google** (Google Cloud Console, cuenta de Sergio) → client ID+secret para GoTrue | HALLAZGO: el botón "Continuar con Google" está ROTO en prod — el GoTrue self-hosted no tiene GOTRUE_EXTERNAL_GOOGLE_* configurado |
 
 ---
 Regla de trabajo desde ahora: **cada punto B se ratifica explícito, uno por uno, antes
