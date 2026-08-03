@@ -33,16 +33,34 @@
 | B2 | **Agentes WhatsApp** | PRE-ARMADOS por rubro: cliente conecta su número + aprueba | ✅ 2026-08-02 |
 | B3 | **Pricing/promos** | ✅ mensual + fundadores + referidos **Y ADEMÁS plan semanal** (negocios de caja diaria) **+ revisar montos contra el cálculo de valor** — Sergio juntó las opciones | ✅ con tarea |
 | B4 | **Orden de rubros** | **IMPORTADORA primero** — ✅ EJECUTADO Y EN PRODUCCIÓN 2026-08-02: cotizaciones B2B completas + costeo DS 5646 + card en registro + demo (+56 tests, 1.026 total). Estética/vet después | ✅ hecho |
-| B5 | **Landing: "Comercio" pronto→disponible** | NO ratificado aún (la opción elegida no lo incluía) — sigue "pronto" hasta su palabra | ☐ |
+| B5 | **Landing: rubros a "andando"** | ✅ EJECUTADO 2026-08-02: Comercio E Importadora en vivo como "andando" (solo Servicios queda "pronto") | ✅ hecho |
 
 ## C. EN DESARROLLO (mío, con fecha de hoy)
 
 | # | Qué | Estado |
 |---|---|---|
-| C1 | **Dashboard visual v2** | rehaciéndose AHORA con: logo real (archivo, no dibujo), Archivo, panel "el sistema trabajó por vos" (automatizaciones visibles), animación de entrada. El v1 quedó rechazado con razón |
+| C1 | **Dashboard visual v2** | mockup APROBADO por Sergio → construyéndose en el producto real (panel conectado a la cola real del agente) |
 | C2 | Salida de Vercel por fases | plan escrito; falta ejecutar fases + tu OK a los 16 irreversibles |
 | C3 | Sembrar cola de aprobación (primeras propuestas del agente) | siguiente en el producto |
 | C4 | Papercuts comercio | roles del wizard aún dentales · tab "Mi Plan" con copy dental |
+
+## C-bis. COLA DEL PRODUCTO (orden tras C1)
+
+| # | Qué | Origen |
+|---|---|---|
+| C5 | **Checkout visual** `/checkout` + ciclo `weekly` + copy multirubro en Mi Plan | `ONIA_CHECKOUT_Y_REUNION_BCP_20260802.md` §1 |
+| C6 | RRHH/planilla (portar payroll del core — bono antigüedad ya testeado) | análisis 7 frentes §5 — espera ratificación de orden |
+| C7 | Fiados (CxC) + compras a crédito (CxP) | ídem |
+
+## E. NOTAS PARA DESPUÉS (registradas, NO se ejecutan)
+
+| # | Nota |
+|---|---|
+| N1 | Meta: números de clientes vía Tech Provider + embedded signup (tras D3) |
+| N2 | Webs: productizar "Quiero mi web" desde el panel como work item |
+| N3 | Más funciones de empaquetado (RRHH, carpeta contador, docs con vencimiento, reuniones, notas) |
+| N4 | **Internacional**: tax_argentina/tax_colombia como packs fiscales sobre el mismo core + versión GENÉRICA sin fiscal para cualquier país. NO antes de dominar Bolivia |
+| N5 | **Planes por tamaño + configuración**: modo simple (sin IVA/fiscal) vs completo; el plan da el techo, la config elige qué se muestra |
 
 ## D. BLOQUEADO EN VOS (nada avanza sin esto)
 
