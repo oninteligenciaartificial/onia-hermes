@@ -50,6 +50,44 @@ la cuenta lo cubre. Con pegar ese bloque y redeployar, el bot atiende la web.
 (El mismo snippet ya quedó commiteado en el repo Web-Onia por si el dominio
 vuelve a Vercel algún día.)
 
+## 2.ANTES-QUE-TODO — ALTA HECHA: el número de Onia ya existe (2026-08-03)
+
+> **HITO.** El número comercial de Onia está dado de alta y conectado en Cloud
+> API. Sergio eligió el 75414930 entre tres candidatos (los tres pasaron la
+> prueba de "invitar a WhatsApp", o sea ninguno tenía cuenta previa).
+
+| Dato | Valor |
+|---|---|
+| **Número de Onia** | **+591 75414930** — estado **Conectado** |
+| WABA de producción | **"Onia"**, id **4429061034078857**, propiedad de OniaAgency |
+| Nombre visible | **Onia** (validado en el alta, sin rechazo) |
+| Categoría | Servicios profesionales |
+| Zona horaria | **America/La_Paz** ✔ (se configuró bien desde el inicio) |
+| Sitio web | https://onia.com.bo/ |
+| Verificación de negocio | Verificado ✔ · Estado de la cuenta: Aprobada ✔ |
+| Método de pago | ninguno (solo hace falta para plantillas y llamadas salientes) |
+| WABA de prueba | sigue existiendo con el número de test +1 555-649-7880, reservado para la fase F0 de voz |
+
+**Confirmación importante:** el 75414930 pasó la validación del asistente
+**sin el error de portfolio** que bloqueó al 78491375. El número está limpio.
+
+### Lo que falta para que el bot atienda WhatsApp (bloqueado por login)
+
+La sesión de Facebook se cerró al ir a generar el token. Pasos restantes:
+
+1. **Token permanente** — reusar el usuario del sistema **"Onia Automation"**
+   (id 61591961241672, ya existe): asignarle la WABA `4429061034078857` y
+   generar token con `whatsapp_business_messaging` + `whatsapp_business_management`.
+   El token va a `/opt/onia/bot/webhook.env` (chmod 600, fuera de git); jamás
+   se pega en chat ni en un doc.
+2. **`phone_number_id`** del 75414930 (WhatsApp Manager → API Setup, o por API).
+3. **Inbox de WhatsApp (Cloud API) en Chatwoot** con esos tres datos. El
+   webhook de cuenta (id 2) ya cubre cualquier inbox nuevo → el bot atiende al
+   instante, sin tocar código.
+4. **Prueba real** desde otro número: M0 → calificación → horario → reserva
+   en Cal.com.
+5. Cambiar el CTA de la web al número nuevo (`NEXT_PUBLIC_WA_PHONE` + rebuild).
+
 ## 2.bis Estado REAL del portfolio (verificado en vivo 2026-08-03)
 
 Entré a Business Settings de OniaAgency y confirmé el terreno antes del alta:
