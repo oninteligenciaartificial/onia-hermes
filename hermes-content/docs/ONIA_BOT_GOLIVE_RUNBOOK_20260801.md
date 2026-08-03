@@ -71,22 +71,49 @@ vuelve a Vercel algún día.)
 **Confirmación importante:** el 75414930 pasó la validación del asistente
 **sin el error de portfolio** que bloqueó al 78491375. El número está limpio.
 
-### Lo que falta para que el bot atienda WhatsApp (bloqueado por login)
+### Permisos del usuario del sistema — HECHO
 
-La sesión de Facebook se cerró al ir a generar el token. Pasos restantes:
+El usuario del sistema **"Onia Automation"** (id 61591961241672, acceso Admin,
+ya existía del carril de Meta Ads) tiene asignada la WABA **Onia** con acceso
+parcial deliberado (mínimo privilegio): **"Administrar números de teléfono y
+plantillas de mensajes"** + **"Mensajes"**. Eso equivale a
+`whatsapp_business_management` + `whatsapp_business_messaging`.
 
-1. **Token permanente** — reusar el usuario del sistema **"Onia Automation"**
-   (id 61591961241672, ya existe): asignarle la WABA `4429061034078857` y
-   generar token con `whatsapp_business_messaging` + `whatsapp_business_management`.
-   El token va a `/opt/onia/bot/webhook.env` (chmod 600, fuera de git); jamás
-   se pega en chat ni en un doc.
-2. **`phone_number_id`** del 75414930 (WhatsApp Manager → API Setup, o por API).
-3. **Inbox de WhatsApp (Cloud API) en Chatwoot** con esos tres datos. El
-   webhook de cuenta (id 2) ya cubre cualquier inbox nuevo → el bot atiende al
-   instante, sin tocar código.
-4. **Prueba real** desde otro número: M0 → calificación → horario → reserva
+### BLOQUEO REAL ENCONTRADO (2026-08-03): ninguna app de Meta tiene WhatsApp
+
+Al generar el token permanente (caducidad **Nunca**, obligatorio: uno de 60
+días dejaría el bot mudo sin aviso) el asistente no ofrece los permisos de
+WhatsApp:
+
+- App **"OnIA Agency"** → *"No hay permisos disponibles. Asigna un rol de app
+  al usuario del sistema"* (esa app no está asignada al usuario).
+- App **"ONIA Marketing API"** (sí asignada) → el desplegable solo lista
+  `ads_management`, `business_management`, `catalog_management`… **ninguno de
+  WhatsApp**, con el aviso de Meta: *"Si los permisos que quieres seleccionar
+  no están disponibles, un administrador de la app tendrá que personalizar o
+  agregar un caso de uso a esta app."*
+
+**Diagnóstico:** la WABA se creó desde Business Suite, así que **ningún app de
+developers.facebook.com tiene el producto WhatsApp agregado**. Sin eso no hay
+token de Cloud API — y tampoco hay dónde configurar el webhook de `messages`.
+
+**Siguiente paso (el que destraba todo):** en developers.facebook.com, agregar
+el producto **WhatsApp** a una app (candidata: "OnIA Agency", o una nueva
+dedicada), vincularle la WABA `4429061034078857`, y asignar esa app al usuario
+del sistema. Recién ahí el asistente ofrece los permisos y sale el token.
+
+### Cola después de eso
+
+1. **`phone_number_id`** del 75414930 (aparece en API Setup de la app).
+2. **Inbox de WhatsApp (Cloud API) en Chatwoot** con WABA id + phone_number_id
+   + token. El webhook de cuenta (id 2) ya cubre cualquier inbox nuevo → el
+   bot atiende al instante, sin tocar código.
+3. **Prueba real** desde otro número: M0 → calificación → horario → reserva
    en Cal.com.
-5. Cambiar el CTA de la web al número nuevo (`NEXT_PUBLIC_WA_PHONE` + rebuild).
+4. Cambiar el CTA de la web al número nuevo (`NEXT_PUBLIC_WA_PHONE` + rebuild).
+
+> El token va a `/opt/onia/bot/webhook.env` (chmod 600, fuera de git); jamás
+> se pega en chat ni en un doc.
 
 ## 2.bis Estado REAL del portfolio (verificado en vivo 2026-08-03)
 
