@@ -165,6 +165,68 @@ Reglas: precio en Bs con **cláusula de ajuste cambiario** (los costos son
 - Advertencia comercial: estos números son de vendors del rubro — sirven de
   argumento, NO se prometen como garantía.
 
+## 4.bis Telefonía real en Bolivia — por qué WhatsApp es el foso, no la limitación
+
+> Research 2026-08-03 con fuentes oficiales (Entel, Tigo, ATT, Código Penal).
+> Pregunta: ¿podemos vender "recepcionista IA" que conteste el TELÉFONO del
+> negocio, no solo su WhatsApp?
+
+**Lo que confirma el research:** montar telefonía real en Bolivia es caro,
+lento y con letra chica; WhatsApp Calling esquiva TODO eso.
+
+| Vía | Estado real |
+|---|---|
+| Número +591 de Twilio / Plivo | **No existe.** Bolivia no está en su cobertura |
+| DID +591-5 de Zadarma / Telnyx / DIDWW | Sí se vende (Zadarma ~USD 57/mes, 2 canales). **RIESGO ABIERTO:** el rango +591-5 es "nacional no geográfico" — falta verificar que un celular Entel/Tigo lo marque y **a qué tarifa le cobra al que llama**. Si le sale caro al cliente final, el producto muere |
+| Troncal SIP Entel | **Existe con precio público:** Bs 200/mes (16 canales) + Bs 250 instalación. **Pero se entrega sobre VPN/Metro Ethernet de Entel** → nuestro VPS de afuera probablemente NO puede registrarse directo; haría falta una cajita (FreePBX) **en el local del cliente**. Además hay tasa mínima de consumo (Bs 700–1.500 según servicio asociado) |
+| Troncal SIP Tigo | Existe (fibra propia), precio no público. Pide NIT, CI del representante legal y poder |
+| Desvío de llamadas | Funciona, **pero el negocio paga cada llamada desviada como si él la hiciera**. A número boliviano: viable. A número internacional: larga distancia = inviable |
+| Portabilidad a un SIP extranjero | **Imposible.** Solo entre operadores bolivianos licenciados |
+
+**Regulación (ATT):** no hay norma que prohíba VoIP ni licencia específica
+para un proveedor de software. La regla de oro que nos mantiene fuera del
+perímetro regulado: **la troncal y el número SIEMPRE a nombre del cliente,
+con su NIT; nosotros nunca revendemos minutos.** Lo que la ATT sí persigue es
+el *bypass* de tráfico internacional — nada que ver con lo nuestro, pero la
+línea no se cruza jamás. Si algún día vendemos la vía SIP, corresponde
+consulta escrita a la ATT (probable que no requiera licencia, no confirmado).
+
+**Grabación de llamadas — hay riesgo penal real:** Bolivia **no tiene ley de
+protección de datos vigente** (el anteproyecto de AGETIC sigue en la
+Asamblea), pero el **Código Penal art. 301** castiga con 3 meses a 1 año
+grabar palabras de otro sin su consentimiento si puede causar daño. Por eso,
+obligatorio en el producto: locución al inicio avisando que es un asistente
+automatizado y que se transcribe/graba, consentimiento registrado con
+timestamp, y contrato donde **el negocio es responsable del dato y Onia es
+encargado del tratamiento**. Diseñar con estándar tipo GDPR desde ahora: el
+anteproyecto ya alcanza a servidores fuera de Bolivia.
+
+### Conclusión estratégica
+
+**WhatsApp Calling API no es el plan B de la telefonía: es la ventaja.**
+Recibir es gratis, no necesita número ni troncal ni cajita ni permiso de la
+ATT, Bolivia está soportada, y es el MISMO número que ya atiende el chat. Los
+competidores internacionales (Vapi, Retell, Smith.ai) no pueden entrar a
+Bolivia sin resolver la telefonía local; nosotros la salteamos entera.
+
+**Roadmap del producto en dos escalones:**
+- **Escalón 1 (el que vendemos):** voz sobre WhatsApp. Cero infraestructura,
+  cero trámite, margen alto. En Bolivia cubre la mayoría de las llamadas
+  reales de una pyme.
+- **Escalón 2 (ticket alto, más adelante):** el teléfono real del negocio, vía
+  troncal Entel/Tigo **a nombre del cliente** + FreePBX en su local + puente a
+  nuestro agente. Es negocio de instalación por cliente: más caro de operar,
+  se cotiza aparte, y solo cuando haya demanda que lo justifique.
+
+**Hueco de mercado detectado:** los integradores bolivianos venden PBX
+(hardware + instalación); **nadie vende recepcionista IA gestionada.**
+
+**Validaciones pendientes antes de prometer el escalón 2:** (a) probar con un
+DID de USD 57 si el +591-5 se marca y factura como nacional desde Entel y
+Tigo — esa sola prueba decide si la vía barata existe; (b) preguntar a Entel
+Empresas si la troncal admite registro SIP por internet o exige Metro
+Ethernet; (c) consulta escrita a la ATT.
+
 ## 5. Gates y pendientes
 
 1. F0 puede arrancar YA (número de test, sin gasto, sin permisos nuevos).
