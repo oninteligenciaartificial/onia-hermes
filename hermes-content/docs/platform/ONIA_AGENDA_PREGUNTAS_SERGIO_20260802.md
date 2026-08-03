@@ -52,8 +52,8 @@
 | C6 | RRHH/planilla | ✅ 2026-08-03 EN PROD: /rrhh transversal, bono antigüedad DS 21060 + AFP 12,71% Ley 065 + RC-IVA, SMN configurable (DS 5516), migración aplicada. +45 tests. Patronales = "verificar con contador" (regla fiscal) |
 | C7 | Fiados (CxC) + compras a crédito (CxP) | ✅ 2026-08-03 EN PROD (deploy #13): vender fiado desde caja, abonos, CxP con crédito fiscal IVA real, balance cuadrado. +35 tests |
 | C10 | Roles de agente para comercio | ✅ 2026-08-03: el COBRADOR de comercio lee fiados vencidos (mismo circuito propone→cola); dental byte-idéntico. Rol "stock" queda como idea futura |
-| C8 | **Drip de seguimiento del trial** (día 0/3/7/12/14/15 por email) — hoy solo se manda bienvenida | pregunta de Sergio 2026-08-02 |
-| C9 | Recrear contenedor del producto para que tome `BREVO_SENDER_NAME=Onia` (ya corregido en app.env; el actual manda como "DentaGest") | hallazgo 2026-08-02 |
+| C8 | Drip del trial | ✅ 2026-08-04 EN PROD (deploy #14): secuencia 3/7/12/14/15 con idempotencia, migración aplicada, cron 09:00 La Paz instalado y probado ({evaluated:1,sent:0} correcto). HALLAZGO ARREGLADO: el producto JAMÁS había mandado un correo — faltaba EMAIL_PROVIDER/SMTP_*; cableado con las credenciales Brevo de GoTrue. +35 tests |
+| C9 | Sender "Onia" + SMTP real | ✅ contenedor recreado 2×: sender Onia + SMTP transaccional funcionando |
 
 ## E. NOTAS PARA DESPUÉS (registradas, NO se ejecutan)
 
