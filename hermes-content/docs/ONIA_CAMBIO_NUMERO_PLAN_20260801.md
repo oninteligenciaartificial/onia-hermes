@@ -116,6 +116,47 @@ coherencia registral, ambos gratis y online, sin plazo perentorio en días.
 (sin plazo en días para teléfono; el "30 días" que circula en blogs es del
 cambio de domicilio bajo el régimen viejo PBD-11).
 
+## 3.bis Qué pasa con el 78491375 (decidido 2026-08-03)
+
+**Contexto:** el 2026-08-02 Meta respondió el escalamiento del ticket con OTRA
+respuesta automática ("no se revisarán las respuestas a este correo") —
+ticket 1432944055330559. El canal de soporte de consumidor está **cerrado**.
+La disputa formal de administrador sigue abierta pero ya no se espera nada de
+ella: no bloquea, no cuesta, se deja correr.
+
+**Problema real que plantea Sergio:** dos números de Onia circulando = la
+gente no sabe a cuál escribir. Correcto, hay que consolidar en uno.
+
+**Plan de transición (NO borrar de golpe):**
+
+1. **Primero encender el número nuevo** y que el negocio corra ahí.
+2. **El 78491375 pasa a ser REDIRECTOR, no una tumba.** Borrarlo de una crea
+   silencio: quien lo tenga agendado escribe y no llega nada, y concluye que
+   Onia desapareció. En vez de eso: migrar ese número a la app **WhatsApp
+   Business** (gratis, conserva los chats) y poner **mensaje de ausencia
+   automático 24/7**: *"Este número ya no atiende. Escribinos al +591
+   7XXXXXXX"*. Un redirector automático resuelve la confusión MEJOR que el
+   borrado. Cambiar también el nombre del perfil a algo como
+   `Onia → escribir al 7XXXXXXX`.
+3. **Después de 4–8 semanas** (cuando ya casi nadie escriba ahí), borrar la
+   cuenta si Sergio quiere. Ahí el costo de perder los chats es mínimo.
+4. **Al borrar, se prueba gratis una hipótesis:** si el bloqueo era de capa
+   app, borrar la cuenta libera el número y podría agregarse a nuestra WABA.
+   Si el bloqueo es del portfolio fantasma (lo más probable), el error
+   persiste. No se pierde nada por probar EN ESE MOMENTO — pero no antes,
+   porque hoy el costo (perder chats + perder el redirector) es mayor que la
+   probabilidad de éxito.
+
+**La línea telefónica NO se da de baja** en ninguno de los pasos: sigue siendo
+la línea de Sergio, recibe llamadas y SMS, y sostiene los OTP del Estado.
+
+**Efecto sobre los trámites:** mientras Sergio conserve esa línea y conteste
+ahí, SIAT y SEPREC pueden quedarse con el 78491375 (ver corrección de §3) —
+cero trámites. Los trámites de abajo se hacen SOLO si algún día da de baja la
+línea o si prefiere coherencia total. Si decide hacerlos, el bloqueo a
+resolver primero es que **el Trámite 46 de SEPREC exige la Ciudadanía Digital
+de LESLIE** (propietaria registral), no la de Sergio, y matrícula renovada.
+
 ## 4. Advertencias
 
 - **El chip jamás toca la app de WhatsApp.** Ni "para probar". La app lo
