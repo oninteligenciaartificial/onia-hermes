@@ -41,7 +41,7 @@
 |---|---|---|
 | C1 | **Dashboard visual v2** | mockup APROBADO por Sergio → construyéndose en el producto real (panel conectado a la cola real del agente) |
 | C2 | Salida de Vercel por fases | plan escrito; falta ejecutar fases + tu OK a los 16 irreversibles |
-| C3 | Sembrar cola de aprobación (primeras propuestas del agente) | siguiente en el producto |
+| C3 | Sembrar cola de aprobación | ✅ 2026-08-03: 8 agentes vivos (recall+cobrador × 4 orgs demo), 4 propuestas pending_approval REALES, cron diario 07:00 Bolivia en el VPS. Runbook: ONIA_AGENTES_SEED_RUNBOOK.md |
 | C4 | Papercuts comercio | roles del wizard aún dentales · tab "Mi Plan" con copy dental |
 
 ## C-bis. COLA DEL PRODUCTO (orden tras C1)
@@ -51,6 +51,7 @@
 | C5 | **Checkout visual** `/checkout` + ciclo `weekly` + copy multirubro en Mi Plan | `ONIA_CHECKOUT_Y_REUNION_BCP_20260802.md` §1 |
 | C6 | RRHH/planilla (portar payroll del core — bono antigüedad ya testeado) | análisis 7 frentes §5 — espera ratificación de orden |
 | C7 | Fiados (CxC) + compras a crédito (CxP) | ídem |
+| C10 | **Roles de agente para comercio** — HALLAZGO C3: el runtime solo implementa recall+cobrador (atados a dental); comercio corre con 0 propuestas. El cobrador de comercio necesita fiados (C7); rol "stock" es trabajo nuevo | tras C7 |
 | C8 | **Drip de seguimiento del trial** (día 0/3/7/12/14/15 por email) — hoy solo se manda bienvenida | pregunta de Sergio 2026-08-02 |
 | C9 | Recrear contenedor del producto para que tome `BREVO_SENDER_NAME=Onia` (ya corregido en app.env; el actual manda como "DentaGest") | hallazgo 2026-08-02 |
 
