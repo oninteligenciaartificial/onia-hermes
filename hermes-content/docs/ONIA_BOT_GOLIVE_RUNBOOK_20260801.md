@@ -50,6 +50,45 @@ la cuenta lo cubre. Con pegar ese bloque y redeployar, el bot atiende la web.
 (El mismo snippet ya quedó commiteado en el repo Web-Onia por si el dominio
 vuelve a Vercel algún día.)
 
+## 2.bis Estado REAL del portfolio (verificado en vivo 2026-08-03)
+
+Entré a Business Settings de OniaAgency y confirmé el terreno antes del alta:
+
+| Dato | Valor |
+|---|---|
+| WABAs en el portfolio | **UNA sola: "Test WhatsApp Business Account"** (id 1730104971691715) |
+| Verificación del negocio | **Verificado** ✔ |
+| Estado de la cuenta | **Aprobada** ✔ |
+| Zona horaria | `America/Los_Angeles` ← corregir a `America/La_Paz` |
+| Método de pago | ninguno |
+| Dirección / divisa | sin cargar |
+
+**BLOQUEO ENCONTRADO — el botón "Agregar número de teléfono" está DESHABILITADO.**
+Tooltip literal: *"This WhatsApp account has reached its phone number limit. To
+add a new number, first remove an existing one from this account."* La WABA de
+prueba admite un solo número (el de test +1 555-649-7880), y ese número lo
+queremos conservar para la fase F0 de voz (test gratis 90 días).
+
+**Consecuencia: hay que crear una WABA de PRODUCCIÓN.** Ruta verificada:
+Configuración → Cuentas → **Cuentas de WhatsApp** → **Agregar** → *"Crear una
+nueva cuenta de WhatsApp Business"*. El asistente tiene **3 pasos en un solo
+flujo**: **Detalles** (nombre visible + categoría) → **Número de teléfono** →
+**Verificación telefónica**.
+
+> **Por eso NO se puede "chequear un número" por separado.** La validación de
+> si el número está libre o atrapado en otro portfolio ocurre DENTRO de ese
+> asistente, con el chip en la mano. Se corre una sola vez, en serio, el día
+> del alta. (Probado 2026-08-03: se abrió el asistente y se abandonó sin crear
+> nada — el portfolio quedó intacto con su única WABA de prueba.)
+
+**Hallazgo lateral valioso para el modelo multi-cliente:** el mismo menú
+"Agregar" ofrece además *"Solicita una cuenta de WhatsApp Business para un
+cliente — Crea una cuenta en nombre de otro negocio"* (creación de WABA
+iniciada por socio, que el research daba como exclusiva de Solution Partners)
+y *"Vincular una cuenta de WhatsApp Business — Usa una cuenta para administrar
+la app de WhatsApp Business"* (la puerta de la coexistencia). Verificar ambas
+cuando toque el carril de clientes.
+
 ## 3. DECISIÓN FINAL (2026-08-01, tarde): cambio TOTAL de número
 
 > Tras descartar el número interino ("solo quiero un número"), Evolution API
