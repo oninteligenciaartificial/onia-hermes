@@ -1,5 +1,6 @@
 import type { RuntimeLead, RuntimeTask, TeamMember } from "@/lib/onia-center-store";
 import { arthurScorecard } from "@/app/onia-center/source";
+import { TaskStatusSelect } from "./TaskStatusSelect";
 
 /**
  * Vista Equipo: las personas reales del roster (user_profiles) con su carril,
@@ -17,14 +18,6 @@ interface EquipoViewProps {
   /** Solo Sergio: bloque de liquidacion estimada. */
   showMoney: boolean;
 }
-
-const TASK_STATUS_LABEL: Record<RuntimeTask["status"], string> = {
-  todo: "Pendiente",
-  doing: "En curso",
-  review: "En revision",
-  done: "Hecha",
-  blocked: "Bloqueada",
-};
 
 const MEETING_LABEL: Record<string, string> = {
   pendiente: "sin reunion",
@@ -154,17 +147,7 @@ export function EquipoView({ team, tasks, leads, showMoney }: EquipoViewProps) {
                           className="flex items-start justify-between gap-3 rounded-md border border-border bg-background px-3 py-2 text-sm"
                         >
                           <span>{task.title}</span>
-                          <span
-                            className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${
-                              task.status === "done"
-                                ? "bg-primary/15 text-primary"
-                                : task.status === "blocked"
-                                  ? "bg-destructive/15 text-destructive"
-                                  : "bg-muted text-muted-foreground"
-                            }`}
-                          >
-                            {TASK_STATUS_LABEL[task.status]}
-                          </span>
+                          <TaskStatusSelect task={task} canApprove={showMoney} />
                         </li>
                       ))}
                     </ul>

@@ -319,10 +319,10 @@ export function isSergio(actor: OniaCenterActor) {
 
 // Finanzas del equipo (caja, Fondo Onia, ganancias por persona) viven en el
 // scope internal_restricted. Reusa la matriz de canActorSeeScope como fuente
-// Finanzas (caja, Fondo Onia, postura fiscal, movimientos) es SOLO de Sergio.
-// QA 2026-08-02: con el scope internal_restricted Arthur veia la caja completa,
-// contra la regla "Sergio ve mas que los otros". Los colaboradores ven lo suyo
-// en Equipo (su liquidacion la ve Sergio ahi mismo).
+// Decision de Sergio 2026-08-02: Arthur (aspirante a socio) SI ve Finanzas.
+// El scope internal_restricted cubre sergio/area/arthur; seller/freelancer
+// (Camila, Jeronimo) siguen sin verla. Registrar movimientos sigue siendo
+// sergio-only (la API y la card lo restringen aparte).
 export function canActorSeeFinance(actor: OniaCenterActor) {
-  return actor.role === "sergio";
+  return canActorSeeScope(actor, "internal_restricted");
 }
