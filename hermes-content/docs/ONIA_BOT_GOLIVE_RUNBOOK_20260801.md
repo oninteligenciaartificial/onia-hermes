@@ -102,6 +102,49 @@ el producto **WhatsApp** a una app (candidata: "OnIA Agency", o una nueva
 dedicada), vincularle la WABA `4429061034078857`, y asignar esa app al usuario
 del sistema. Recién ahí el asistente ofrece los permisos y sale el token.
 
+### CAUSA RAÍZ (2026-08-03, vía MCP de Meta Developers): hay DOS portfolios
+
+El diagnóstico de arriba era incompleto. Sí existe una app con WhatsApp —
+**"Onia Agency Chatbots"** (`36422446950687488`, creada abril 2026, caso de uso
+"Conectarte con los clientes a través de WhatsApp" ya agregado, dev mode, cero
+webhooks). No aparecía en el navegador porque **vive en otro negocio**.
+
+En la cuenta conviven dos portfolios de nombre casi idéntico:
+
+| Portfolio | ID | Verificación | Qué tiene |
+|---|---|---|---|
+| **Onia Agency** (con espacio) | `987837053929039` | ✘ sin verificar | app "Onia Agency Chatbots" (con WhatsApp) |
+| **OniaAgency** (junto, legal SEPREC) | `1451773736711697` | ✔ **completada** | WABA "Onia" `4429061034078857`, número 75414930, usuario del sistema "Onia Automation" |
+
+Por eso el asistente de token no ofrecía nada: el usuario del sistema vive en
+el portfolio verificado y **ninguna app de ese portfolio tenía WhatsApp**,
+mientras que la app que sí lo tenía colgaba del portfolio equivocado.
+
+**Trampa a recordar:** los dos nombres se leen igual en las listas de Meta
+("Onia Agency" vs "OniaAgency"). Distinguirlos SIEMPRE por ID o por la
+etiqueta "Verificación del negocio completada", nunca por el nombre.
+
+**Decisión (Sergio, 2026-08-03): crear app nueva en el portfolio verificado**,
+en vez de mover la vieja entre negocios. App **"Onia Bot"**, correo
+`business@onia.com.bo`, caso de uso WhatsApp, negocio **OniaAgency
+(1451773736711697)**, sin requisitos de publicación pendientes. Queda pendiente
+decidir qué hacer con "Onia Agency Chatbots" (borrarla o dejarla dormida) —
+no se toca hasta que el bot esté vivo.
+
+### GATE NUEVO: la app debe estar PUBLICADA para recibir webhooks reales
+
+Texto literal de Meta en Paso 2 (Configuración de producción) de la app:
+*"Las apps solo podrán recibir webhooks de prueba enviados desde el panel de la
+app mientras esta esté sin publicar. **No se entregarán datos de producción**,
+incluidos los de los administradores, desarrolladores o evaluadores de la app,
+a menos que esta se haya publicado."*
+
+O sea: con la app en dev mode el bot NO recibe los mensajes reales de los
+clientes. Publicar exige, como mínimo, **URL de política de privacidad** (hoy
+la app no tiene ninguna → hace falta una página real en onia.com.bo) y el
+ícono/categoría de la app. Esto NO estaba contemplado en el plan original y
+es requisito para que el número atienda de verdad.
+
 ### Cola después de eso
 
 1. **`phone_number_id`** del 75414930 (aparece en API Setup de la app).
