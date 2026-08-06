@@ -3,7 +3,7 @@
 //
 // Lo que se cubre y por que:
 //   1. LAS 4 CONDICIONES DEL BARRIDO (spec §4.6): paso 0, sin humano, sin opt-out y en un estado
-//      donde el follow-up tiene sentido — mas la ventana 20 h / 7 dias. Se verifica en los dos
+//      donde el follow-up tiene sentido — mas la ventana 20-24 h de Meta. Se verifica en los dos
 //      lados: el filtro que sale a PostgREST Y el re-chequeo en memoria (si la base devuelve una
 //      fila que no corresponde, igual no se manda).
 //   2. EL CAS IMPIDE EL DOBLE ENVIO: dos barridos seguidos mandan UNO. Si la reserva devuelve 0
@@ -37,8 +37,11 @@ const CONFIG = createBotConfig({
   ],
 });
 
-const T0 = "2026-07-27T14:05:00Z"; // lunes 10:05 en La Paz
-const NOW = "2026-07-28T14:05:00Z"; // exactamente 24 h despues: pasadas las 20 h
+const T0 = "2026-07-27T16:05:00Z"; // lunes 12:05 en La Paz
+// 22 h despues: pasadas las 20 h que exige el barrido y DENTRO de la ventana de 24 h de Meta.
+// Antes este fixture estaba en 24 h clavadas — justo el borde donde el envio ya falla con 131047.
+// Un caso base parado en el borde hacia pasar tests que en produccion no habrian mandado nada.
+const NOW = "2026-07-28T14:05:00Z";
 
 /** Fila de bot_conversations tal como la devuelve el barrido. */
 function row(extra = {}) {
@@ -118,7 +121,7 @@ const sweep = (rows, options = {}, config = CONFIG) =>
 // 1. Las 4 condiciones del barrido — filtro que sale a PostgREST
 // ---------------------------------------------------------------------------
 
-test("el barrido pide las 4 condiciones + la ventana 20 h / 7 dias, ordenado y con limite", async () => {
+test("el barrido pide las 4 condiciones + la ventana 20-24 h de Meta, ordenado y con limite", async () => {
   const requests = [];
   const store = createStore({
     url: "https://sb.test",
@@ -137,7 +140,10 @@ test("el barrido pide las 4 condiciones + la ventana 20 h / 7 dias, ordenado y c
   assert.match(url, /opt_out_at=is\.null/, "3) no pidio la baja");
   assert.match(url, /bot_stage=in\.\(esperando_calificacion,esperando_horario\)/, "4) estado donde tiene sentido");
   assert.match(url, /last_inbound_at=lte\.2026-07-27T18:05:00\.000Z/, "20 h: 4 h de colchon contra la ventana de 24 de Meta");
-  assert.match(url, /last_inbound_at=gte\.2026-07-21T14:05:00\.000Z/, "techo de 7 dias");
+  // Piso = la ventana de 24 h de Meta, NO los 7 dias de `staleAfterDays`. Con el piso viejo el
+  // barrido traia vencidas primero (`order=last_inbound_at.asc`) y con `limit` se comian el lote
+  // entero: corria todos los dias sin mandarle nada a quien todavia estaba a tiempo.
+  assert.match(url, /last_inbound_at=gte\.2026-07-27T14:05:00\.000Z/, "piso: ventana de 24 h de Meta");
   assert.match(url, /order=last_inbound_at\.asc/);
   assert.match(url, /limit=20/);
 });
@@ -294,7 +300,7 @@ test("dry-run por defecto: dice a quien le mandaria, pero no reserva ni escribe"
   assert.equal(result.send.length, 1);
   assert.equal(result.send[0].reserved, false);
   assert.equal(result.send[0].deliveryStatus, "preview");
-  assert.equal(result.send[0].silentHours, 24);
+  assert.equal(result.send[0].silentHours, 22);
   assert.deepEqual(fake.calls, ["sweep"], "no toca la base");
   assert.equal(fake.steps.get("telegram:777"), 0, "el paso sigue en 0: se puede mandar de verdad despues");
 });
@@ -442,7 +448,7 @@ test("skipReason nombra el motivo exacto (es lo que Sergio lee en el dry-run)", 
 });
 
 test("hoursBetween es aritmetica pura sobre los ISO inyectados", () => {
-  assert.equal(hoursBetween(T0, NOW), 24);
+  assert.equal(hoursBetween(T0, NOW), 22);
   assert.equal(hoursBetween("no", NOW), null);
 });
 
@@ -454,7 +460,7 @@ test("renderHuman muestra a quien se le manda, a quien no y por que", async () =
   assert.match(text, /modo dry-run/);
   assert.match(text, /candidatas del barrido: 2/);
   assert.match(text, /MANDARIA \(1\)/);
-  assert.match(text, /telegram:777 \[telegram\] Ana — esperando_horario, callado hace 24 h/);
+  assert.match(text, /telegram:777 \[telegram\] Ana — esperando_horario, callado hace 22 h/);
   assert.match(text, /NO SE MANDA \(1\)/);
   assert.match(text, /telegram:9 — opt_out/);
 });

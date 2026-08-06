@@ -398,11 +398,19 @@ export function createStore(options = {}) {
     return rows.length > 0;
   }
 
-  /** Barrido del cron: candidatas a follow-up (22 h <= inactividad <= 7 dias). */
+  /**
+   * Barrido del cron: candidatas a follow-up (20 h <= inactividad < 24 h, la ventana de Meta).
+   *
+   * El piso era `staleAfterDays` (7 dias) y eso rompia el barrido entero: el orden es
+   * `last_inbound_at.asc` (mas viejas primero) y hay `limit`, asi que una cola de conversaciones
+   * vencidas se comia el lote completo y las que SI estaban a tiempo no se procesaban nunca.
+   * Con el piso en la ventana de Meta solo vuelven filas accionables.
+   */
   async function sweepFollowUpCandidates(nowIso, config = DEFAULT_CONFIG, limit = 50) {
     const now = Date.parse(nowIso);
     if (!Number.isFinite(now)) return warn("sweepFollowUpCandidates", `nowIso invalido: ${nowIso}`);
-    const from = new Date(now - config.followUp.staleAfterDays * 24 * 3600000).toISOString();
+    const ventanaHoras = config.followUp.windowClosesAtHours ?? 24;
+    const from = new Date(now - ventanaHoras * 3600000).toISOString();
     const to = new Date(now - config.followUp.afterHours * 3600000).toISOString();
     const filter = [
       "followup_step=eq.0",

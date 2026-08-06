@@ -292,6 +292,12 @@ export const DEFAULT_CONFIG = Object.freeze({
     // si el cron se atrasa, el mensaje cae fuera de la ventana y falla con 131047, y fuera de
     // la ventana solo salen plantillas — que hoy no existen. Con 20 quedan 4.
     afterHours: 20,
+    // TOPE DURO de la ventana de Meta. Sin esto la franja elegible iba de 20 h a `staleAfterDays`
+    // (7 dias): todo lo que pasara de 24 h se intentaba igual y Meta lo rechaza con 131047, porque
+    // fuera de la ventana SOLO salen plantillas — que hoy no existen y ademas no hay metodo de
+    // pago. Se descubrio al encender el barrido: tenia 2 conversaciones de 124 h y 131 h esperando,
+    // acumuladas porque el cron nunca existio. Si el mensaje no sale dentro de la ventana, no sale.
+    windowClosesAtHours: 24,
     staleAfterDays: 7,
   }),
 
