@@ -430,6 +430,17 @@ export function eventWindow({ nowSinMs, cufdDesdeMs = null, windowMs = 30 * 60 *
   return { inicioMs, finMs };
 }
 
+// Eventos significativos 5 (virus/falla software), 6 (falla hardware) y
+// 7 (corte de energia) exigen CAFC: sin cafc en el request, el SIN rechaza el
+// paquete con estado 902 "Cafc no encontrado" (verificado en vivo 2026-08-06).
+// Los eventos de conectividad (1-4) emiten offline SIN CAFC.
+const MOTIVOS_CON_CAFC = new Set(["5", "6", "7"]);
+
+/** Primer motivo del catalogo que NO exige CAFC (o null si no hay ninguno). */
+export function pickMotivoSinCafc(eventos) {
+  return (eventos ?? []).find((e) => !MOTIVOS_CON_CAFC.has(String(e.codigoClasificador))) ?? null;
+}
+
 /** Epoch corrido -> "yyyy-MM-ddTHH:mm:ss.SSS" (hora de pared del SIN). */
 export function formatSinLocal(shiftedMs) {
   const d = new Date(shiftedMs);
@@ -938,9 +949,10 @@ class Runner {
   }
 
   async etapaVI(target = STAGE_TARGETS.VI) {
-    const motivo = (this.state.catalogs.eventos ?? [])[0];
+    // El paquete va sin cafc -> el evento DEBE ser de conectividad (1-4).
+    const motivo = pickMotivoSinCafc(this.state.catalogs.eventos);
     if (!motivo) {
-      throw new Error("sin catalogo de eventos para paquetes de contingencia");
+      throw new Error("sin evento de conectividad (1-4) en el catalogo para paquetes sin CAFC");
     }
     await this.loop("VI", target, async (done) => {
       // SIN 984: evento y paquete comparten el MISMO CUFD vigente, y tanto la

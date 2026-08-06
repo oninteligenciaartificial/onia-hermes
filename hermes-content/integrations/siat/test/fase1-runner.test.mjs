@@ -28,6 +28,7 @@ import {
   extractSyncItems,
   formatSinLocal,
   hashFor,
+  pickMotivoSinCafc,
   tagText,
   updateStreak,
 } from "../src/fase1-runner.mjs";
@@ -334,6 +335,19 @@ describe("eventWindow (SIN 984: la ventana del evento debe caer dentro de la vig
 
   it("CUFD con menos de ~2min de vida: error claro en vez de quemar 984s", () => {
     assert.throws(() => eventWindow({ nowSinMs: now, cufdDesdeMs: now - 30 * 1000 }), /demasiado fresco/);
+  });
+});
+
+describe("pickMotivoSinCafc (SIN 'Cafc no encontrado': eventos 5/6/7 exigen CAFC)", () => {
+  it("salta 7/5/6 y elige el primer evento de conectividad (orden real del catalogo del piloto)", () => {
+    const eventos = ["7", "5", "6", "1", "2", "3", "4"].map((c) => ({ codigoClasificador: c }));
+    assert.equal(pickMotivoSinCafc(eventos).codigoClasificador, "1");
+  });
+
+  it("null si el catalogo solo trae eventos con CAFC o esta vacio", () => {
+    assert.equal(pickMotivoSinCafc([{ codigoClasificador: "5" }, { codigoClasificador: 7 }]), null);
+    assert.equal(pickMotivoSinCafc([]), null);
+    assert.equal(pickMotivoSinCafc(undefined), null);
   });
 });
 
