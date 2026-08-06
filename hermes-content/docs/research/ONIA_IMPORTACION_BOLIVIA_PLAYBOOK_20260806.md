@@ -356,6 +356,132 @@ precio más alto. Vale la comparación para el piloto.
 
 ---
 
+## 5-bis. Segundo candidato evaluado — paneles solares
+
+Evaluado el mismo día a pedido de Sergio. **Veredicto: mercado más grande, peor negocio
+para entrar importando. Sí hay un ángulo, pero no es el hardware.**
+
+### 5-bis.1 El marco regulatorio existe y acaba de ampliarse
+
+- **DS 4477 (25-mar-2021)** crea la **Generación Distribuida**, con tres escalas:
+  **nanogeneración ≤10 kW · microgeneración >10–50 kW · minigeneración >50–350 kW**.
+  [Lexivox](https://www.lexivox.org/norms/BO-DS-N4477.xhtml) ·
+  [texto DS 4477 (CRE)](https://www.cre.com.bo/wp-content/uploads/2022/01/Decreto-Supremo-4477_Generaci%C3%B3n-Distribuida.pdf)
+- **DS 5167 (5-jun-2024)** incorpora la retribución por autoproducción con GD.
+  [Lexivox](https://www.lexivox.org/norms/BO-DS-N5167.xhtml)
+- **DS 5549 (feb-2026)** abre la **GD de media escala, 1 a 6 MW** en media tensión, con
+  esquema de remuneración de precio estabilizado. Despliegue escalonado: primero sector
+  privado, después comercio y hogares.
+  [pv magazine](https://www.pv-magazine-latam.com/2026/02/23/el-gobierno-de-bolivia-aprueba-crear-la-generacion-distribuida-de-media-escala-hasta-6-mw/) ·
+  [Review Energy](https://www.review-energy.com/otras-fuentes/bolivia-aprueba-nuevos-reglamentos-y-tarifas-para-la-generacion-distribuida)
+
+### 5-bis.2 EL DATO QUE MATA EL MODELO "INYECTAR A LA RED"
+
+**La energía inyectada se paga al precio de nodo ponderado ≈ Bs 0,129/kWh.**
+Es tan bajo que inyectar a la red **no es atractivo**.
+[Fundación Solón, citando a la AETN](https://fundacionsolon.org/2021/12/15/como-avanza-la-generacion-distribuida-en-bolivia/)
+
+Excepción relevante: si el usuario tenía un **consumo promedio ≤ 500 kWh/mes** al momento
+de registrarse ante la distribuidora (límite de la categoría residencial del DS 4477), la
+energía inyectada se valoriza **al mismo precio de la electricidad de su localidad**.
+
+**Consecuencia:** en Bolivia el solar sólo cierra por **autoconsumo** — evitar comprar kWh,
+no venderlos. Eso **acota el tamaño del sistema a la carga diurna del cliente** y por lo
+tanto acota el ticket. Nada de "lleno el techo y vendo el excedente".
+
+Y el ahorro se mide contra una tarifa **fuertemente subsidiada**: Bolivia tiene una de las
+electricidades más baratas del continente, ~**USD 0,09/kWh** residencial, contra USD 0,16
+en Brasil, 0,18 en Perú y 0,23 en Chile.
+[El País Bolivia](https://elpais.bo/reportajes/20260509_energia-barata-salarios-bajos-el-costo-oculto-del-subsidio-electrico.html) ·
+[CRE — tarifa escalonada](https://www.cre.com.bo/2024/10/21/el-precio-de-la-electricidad-en-bolivia-es-escalonado-a-menor-consumo-es-mas-barato/)
+
+Payback declarado: **6–7 años** según la AETN; **3–5 años** según instaladores para GD
+conectada a red. La tarifa escalonada implica que **el buen cliente es el de consumo alto**
+(comercio, industria, condominio con áreas comunes grandes), no la casa chica subsidiada.
+[El Diario](https://www.eldiario.net/portal/2026/07/19/crisis-energetica-abre-oportunidad-para-instalacion-de-paneles-solares/)
+
+### 5-bis.3 Barrera de entrada: hay que estar certificado
+
+El diseño y ejecución de proyectos de GD sólo lo pueden hacer **empresas instaladoras
+especializadas**, que deben estar:
+1. **Certificadas/inscritas ante la AETN** (Resolución 486/2022), y
+2. **Registradas y habilitadas por la distribuidora** de la zona — en Santa Cruz, la **CRE**.
+
+Resoluciones complementarias: **485/2022** (procedimiento técnico y comercial de registro e
+incorporación de generadores distribuidos), **487/2022** (obligación de **reportar
+información de los generadores distribuidos al regulador**), **488/2022** (determinación de
+la retribución por energía inyectada).
+[ELFEC](https://www.elfec.bo/noticias/elfec-registrara-y-habilitara-empresas-certificadas-por-la-aetn-para-la-instalacion-de) ·
+[CRE — empresas GD](https://www.cre.com.bo/wp-content/uploads/2023/02/GD-EMPRESAS-WEB.pdf) ·
+[AETN — GD](https://www.aetn.gob.bo/web/main?mid=1&cid=216)
+
+Esto es a la vez **foso y peaje**: protege al que ya está adentro, y a nosotros nos cuesta
+meses entrar.
+
+### 5-bis.4 La competencia está consolidada (a diferencia del condominio EV)
+
+- **Enersol** — 40 años en Bolivia, **+21.000 instalaciones**, **+20 MW instalados** en los
+  9 departamentos, y **el centro de distribución con el stock de equipos solares más grande
+  del país, en Santa Cruz**.
+  [InfoRSE](https://www.inforse.com.bo/2026/06/11/enersol-40-anos-en-bolivia-liderando-la-transicion-energetica-del-pais/) ·
+  [Enersol](https://www.enersol-sa.com/)
+- **Solaria Bolivia**, **Lumina Solar** (SCZ), **ECOGUZ**, SolTech, EcoSolar, y **19+
+  empresas instaladoras ya certificadas por la AETN**.
+  [Diario Energético](https://diarioenergetico.com/autoridad-de-electricidad-certifica-a-19-empresas-instaladoras-de-generacion-distribuida/)
+
+### 5-bis.5 La economía del flete condena al importador chico
+
+Módulo Tier-1 TOPCon chino: **USD 0,085–0,095/W FOB**, y bajando.
+[SurgePV](https://www.surgepv.com/blog/solar-module-price-forecast-2026-2028) ·
+[Coule Energy](https://couleenergy.com/chinese-solar-panel-prices-your-2026-strategic-procurement-guide/)
+
+Un panel de 550 W vale ~**USD 50 FOB** y pesa ~25 kg ocupando ~1,15 m². Es el peor ratio
+valor/volumen que podés importar: **el flete y el manipuleo se comen el margen**, y sólo
+gana quien mueve contenedores completos con frecuencia. Enersol ya lo hace hace 40 años y
+tiene el stock puesto en Santa Cruz.
+
+Comparalo con el wallbox: ~5 kg, ~USD 200 FOB. **40× mejor valor por kilo.**
+
+### 5-bis.6 Comparación directa
+
+| | Cargadores EV (condominio) | Paneles solares |
+|---|---|---|
+| Mercado hoy | Chico (>7.000 EV) pero **+226%/año** | Grande y activo |
+| Competencia en el nicho | **Vacío** (todos en carga rápida DC pública) | **Saturado** (Enersol 40 años + 19 certificadas) |
+| Barrera de entrada | Requisitos AETN de estación | **Certificación AETN + habilitación CRE** (meses) |
+| Valor/peso para importar | **Excelente** (~USD 40/kg) | **Pésimo** (~USD 2/kg) |
+| Techo regulatorio | Tarifa kWh regulada Bs 1,01–2,15 | **Inyección a Bs 0,129/kWh** → sólo autoconsumo |
+| Ángulo de software propio | **Fuerte** (prorrateo por departamento) | Medio (monitoreo + reporte obligatorio a AETN) |
+| Capital inmovilizado | Bajo | **Alto** |
+
+### 5-bis.7 Recomendación
+
+**No importar paneles.** Tres razones, en orden:
+1. Es el producto más commoditizado del planeta y **no podés ganarle en costo ni en
+   disponibilidad** a quien ya tiene el stock más grande del país en tu misma ciudad.
+2. La inyección paga Bs 0,129/kWh contra una tarifa subsidiada: el ticket está acotado y el
+   payback depende de un ahorro modesto.
+3. Requiere certificación AETN + habilitación CRE: es un negocio de licencia y obra, no de
+   software. Mano de obra, no producto.
+
+**Lo que sí tiene sentido, si querés entrar al solar:**
+- **No hace falta importar para vender solar.** Comprás el equipo local (Enersol tiene el
+  stock en Santa Cruz), vendés **integración + software**, y no inmovilizás un peso ni
+  asumís riesgo aduanero ni cambiario. Si escala, ahí sí importás.
+- **El ángulo de software real:** la Res. 487/2022 **obliga a reportar información de los
+  generadores distribuidos al regulador**. Monitoreo + balance energético + reporte
+  automático a la AETN es una necesidad de compliance recurrente que hoy se resuelve a mano.
+- **El DS 5549 (1–6 MW)** abre el segmento industrial/comercial, que es donde el ahorro
+  es grande y el cliente paga por gestión.
+- **Y sobre todo: solar y carga EV son el mismo producto en el mismo edificio.** Un
+  condominio con paneles + cargadores + prorrateo por departamento es una sola plataforma de
+  gestión energética. Ese es el producto ONIA. El panel y el cargador son insumos.
+
+**Orden correcto: entrar por el cargador (nicho vacío, alto valor/kg, software
+diferenciador) y sumar solar después como módulo de la misma plataforma, comprando local.**
+
+---
+
 ## 6. Qué NO pude verificar (para no inventar)
 
 1. **Umbral Bs de importador habitual vs. no habitual** — fuente truncada, la ANB no lo
@@ -370,6 +496,12 @@ precio más alto. Vale la comparación para el piloto.
    ausencia de evidencia, no evidencia de ausencia.
 6. **Texto completo de los 3 reglamentos AETN del DS 4539** — sólo tengo la cobertura de
    prensa de su presentación. Bajar los originales de aetn.gob.bo antes de firmar contratos.
+7. **GA de los paneles solares (partida 8541.43)** — no lo pude confirmar; los PDFs del AAI
+   y los Anexos 3 y 4 del DS 5516 no abrieron. Pedirlo por escrito a la ADA.
+8. **Cuántas empresas instaladoras de GD hay hoy certificadas por la AETN** — el PDF de la
+   lista oficial (act. 30-abr-2026) no se pudo parsear. La prensa cita 19; el listado tiene
+   17 páginas, así que probablemente sean más. Bajarlo a mano de aetn.gob.bo.
+9. **Costo y plazo real de certificarse como empresa instaladora de GD** ante AETN + CRE.
 
 ---
 
