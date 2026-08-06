@@ -51,6 +51,7 @@ export const SIAT_SERVICES = {
   FACTURACION_CODIGOS: "FacturacionCodigos",
   FACTURACION_SINCRONIZACION: "FacturacionSincronizacion",
   FACTURACION_COMPUTARIZADA: "ServicioFacturacionComputarizada",
+  FACTURACION_OPERACIONES: "FacturacionOperaciones",
 };
 
 // codigoAmbiente por ambiente. OJO: es al reves de lo intuitivo -- el piloto NO
