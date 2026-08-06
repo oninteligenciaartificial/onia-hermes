@@ -1046,10 +1046,12 @@ class Runner {
   }
 
   async etapaIX(target = STAGE_TARGETS.IX) {
+    // SIN 916 (verificado en vivo 2026-08-06): la masiva exige tipo de emision
+    // 3 (MASIVA) tanto en el request como en el CUF de las facturas del lote.
     await this.loop("IX", target, async (done) => {
-      const lote = this.buildLote(2, { tipoEmision: 1, baseIndex: 1000 + done * 2 });
+      const lote = this.buildLote(2, { tipoEmision: 3, baseIndex: 1000 + done * 2 });
       const envelope = buildRunnerEnvelope("recepcionMasivaFactura", {
-        ...this.recepcionBase(1),
+        ...this.recepcionBase(3),
         archivo: lote.archivo,
         fechaEnvio: this.sinNow(),
         hashArchivo: lote.hashArchivo,
@@ -1062,7 +1064,7 @@ class Runner {
       if (result.ok && result.parsed?.codigoRecepcion) {
         await sleep(2000);
         const val = buildRunnerEnvelope("validacionRecepcionMasivaFactura", {
-          ...this.recepcionBase(1),
+          ...this.recepcionBase(3),
           codigoRecepcion: result.parsed.codigoRecepcion,
         });
         await this.post("FACTURACION_COMPRA_VENTA", val, {
