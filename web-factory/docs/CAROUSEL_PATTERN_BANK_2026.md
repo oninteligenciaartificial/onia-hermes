@@ -83,6 +83,78 @@ De las tendencias 2026 + nuestra identidad ya cerrada:
 
 ---
 
+## 7. Anatomia de un carrusel ganador REAL (visto slide por slide)
+
+> @nocodealex, 2026-08-04: **2.596 likes / 1.684 comentarios / 128 compartidos** en 2 dias.
+> Ratio comentarios/likes = **65%**, absurdo para un post normal. Verificado abriendo el post
+> y recorriendo las 7 slides una por una.
+
+### Slide 1 — el hook (7 elementos, ninguno decorativo)
+
+| Elemento | Que hace |
+|---|---|
+| Pildora naranja arriba-izq: `CLAUDE CODE SKILLS` | Categoria en 1 segundo, antes de leer el titulo |
+| Handle arriba-der: `@nocodealex` | Cada slide es capturable con atribucion |
+| Titular serif grande: **"Best Claude Code skills for _animation_"** | UNA palabra en cursiva naranja: la jerarquia la hace el color, no el tamano |
+| Bajada: "5 free skills. Install in one command." | Promesa NUMERICA + friccion declarada (un comando) |
+| Fila de 5 logos en tarjetas blancas | Prueba visual del contenido: "esto es lo que hay adentro" |
+| Pildora `SWIPE →` abajo-izq | Pide explicitamente la accion que el algoritmo mide |
+| **Puntos de progreso DENTRO de la imagen** | El lector ve cuantas slides son y se compromete |
+
+### Slides 2-6 — la plantilla de valor (se repite identica)
+
+- La pildora cambia a **contador**: `SKILL 01 / 05` → sabes donde estas y cuanto falta.
+- Titulo serif del item + **subtitulo en monoespaciada con la ruta real** (`CloudAI-X/threejs-skills`):
+  el entregable concreto, no una descripcion.
+- **Captura de pantalla REAL** ocupando el centro (galeria densa y colorida). Prueba, no ilustracion.
+- Beneficios en **2 columnas, viñetas naranjas con subrayado fino**. 5 bullets, ni uno mas.
+
+### Slide 7 — el cierre (la parte que casi nadie copia bien)
+
+- La pildora muta de contador a CTA: `GET THE SKILLS`.
+- Titular con la misma formula: **"One comment, _all 5 installed._"** — enuncia el TRUEQUE.
+- **Metafora de ticket/cupon**: una entrada troquelada donde el lado izquierdo lista lo que
+  recibis y el lado derecho dice `COMMENT` + la palabra en naranja + un codigo de barras.
+  **La palabra a comentar ES el codigo del cupon.** Es el mejor detalle del carrusel.
+- Boton naranja grande: `Comment "DESIGN"`.
+- Linea chica: *"Free. Save this so you can find it when you actually sit down to build."*
+  → pide **guardar**, que es la otra senal fuerte del algoritmo ademas del comentario.
+- La mascota 3D reaparece: cierra el arco visual que abrio la slide 1.
+- **El CTA aparece 3 veces en la misma slide** (titular, ticket, boton). Uno solo se pierde.
+
+### Sistema visual observado
+
+Fondo crema con grano · serif display de alto contraste para titulares · acento naranja
+unico · monoespaciada para lo tecnico · tarjetas blancas redondeadas para logos ·
+ilustracion 3D con personalidad (mascota) · cero stock photos.
+
+### Las 5 reglas que salen de esto
+
+1. **La pildora superior cambia de rol** por seccion: categoria → contador → CTA. Es el
+   sistema de navegacion mas barato que existe.
+2. **Un acento de color, y solo uno.** Naranja ahi, verde `#00D26A` en lo nuestro.
+3. **La prueba es una captura real**, nunca una ilustracion de la capacidad.
+4. **El truque se enuncia** ("un comentario, los 5 instalados"). No "escribime" a secas.
+5. **Pedir guardar ademas de comentar.** Son dos senales distintas y se piden juntas.
+
+## 8. Lo que ensenan los dos reels del mismo lote
+
+**@buildercult** (70 s, visto en 4 puntos del arco): talking-head UGC **enmarcado dentro de
+una ventana de escritorio retro** (cielo Windows XP, ventana con botones de Mac, iconos de
+carpeta e impresora), subtitulos quemados en fuente pixel. El arco: dashboard con **408,8M de
+views** → grilla de creativos generados con IA → la landing del producto (app Sprout). O sea:
+**resultado primero, metodo despues, producto al final.** El marco retro es el gancho visual
+que hace que un screen-recording parezca contenido.
+
+**@admanage.ai** (552 likes / 73 comentarios): titular en pantalla **"S-Tier Ads (BREAK the
+meta algorithm)"**, split de Zuckerberg + el creador en PiP hablando al microfono, y abajo el
+creativo real siendo analizado junto a un dashboard con **+147%** y "50+ orders to fulfill".
+El comentario mas util del post: *"Static ads still crush it"*. **Es la tesis que mas nos
+sirve: el ad ESTATICO sigue ganando, y eso es exactamente lo que producimos gratis por
+codigo.** No hace falta video para pautar e-commerce.
+
+---
+
 **Fuentes** (consultadas 2026-08-06): [Instagram Carousel Best Practices
 2026](https://www.adpicto.com/en/blog/instagram-carousel-best-practices-2026) · [Carousel
 Algorithm 2026](https://www.trymypost.com/blog/instagram-carousel-algorithm-2026-guide) ·
