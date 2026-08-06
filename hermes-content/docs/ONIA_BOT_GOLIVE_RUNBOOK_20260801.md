@@ -188,6 +188,60 @@ Higiene del token: Meta lo muestra **una sola vez**. No pasó nunca por el chat
 ni por un documento — la llamada a la Graph API la hizo el propio navegador
 leyendo el campo, y devolvió solo los datos del número.
 
+### 🟢 VIVO 2026-08-06 14:58 UTC — circuito completo probado en producción
+
+Mensaje real desde el celular de Sergio (+591 71654992) al **+591 75414930**:
+
+```
+msg 26  entrante  "Hola"                                 14:58:26
+msg 27  saliente  "¡Hola! Soy el asistente de Onia…"      14:58:33   estado: LEÍDO
+```
+
+Cadena que corre hoy:
+`WhatsApp → Meta → Chatwoot inbox 5 → webhook de cuenta (id 2) → motor del bot
+(onia-center:3020) → respuesta → WhatsApp`. 7 segundos punta a punta.
+
+| Pieza | Valor |
+|---|---|
+| Canal Chatwoot | `channel_id=3`, `inbox_id=5` "Onia WhatsApp", provider `whatsapp_cloud` |
+| Cuenta Chatwoot | **id 2** "OnIA Agency" (NO la 1) · usuario `oninteligenciaartificial@gmail.com` |
+| Callback | `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/webhooks/whatsapp/+59175414930` |
+| Suscripción app | objeto `whatsapp_business_account`, campo `messages`, `active: true` |
+| Suscripción WABA | app "Onia Bot" + `override_callback_uri` al mismo destino |
+| Secreto de app | `META_APP_SECRET` en `/opt/onia/bot/webhook.env` (chmod 600, fuera de git) |
+
+### Las tres trampas que costaron el día (para no repetirlas)
+
+1. **La UI de Chatwoot no sirve para dar de alta WhatsApp Cloud aquí.** La tarjeta
+   "Nube de WhatsApp" no lleva a ningún formulario porque al contenedor le faltan
+   las variables del Embedded Signup de Meta. El alta se hace por consola de Rails
+   (`Channel::Whatsapp` + `account.inboxes.create!`), que además evita la trampa de
+   coexistencia. Scripts en el VPS: `/root/crear-inbox.rb`, `/root/configurar-webhook.sh`.
+2. **Orden obligatorio en Meta, y el error no lo dice.** El override por WABA falla
+   con *"your app must be subscribed to receive messages"* hasta que exista el
+   webhook **a nivel de app**. Y ese endpoint (`POST /<APP_ID>/subscriptions`) exige
+   **token de app** (`APP_ID|APP_SECRET`): el token del usuario del sistema devuelve
+   `(#15) This method must be called with an app access_token`. Secuencia correcta:
+   (a) `POST /<WABA>/subscribed_apps` → (b) webhook de app con token de app →
+   (c) override por WABA.
+3. **El asesino silencioso: `Inactive WhatsApp channel`.** Cuando el alta del inbox
+   falló el webhook, Chatwoot marcó el canal con `reauthorization_required? = true`
+   y **descartó todos los mensajes devolviéndole 200 a Meta** — o sea, Meta entregaba
+   bien, los logs mostraban el POST, y en la base no aparecía nada. Arreglar el
+   webhook NO limpia esa marca. Hay que llamar `Channel::Whatsapp.find(3).reauthorized!`
+   a mano. Ojo: `authorization_error_count` seguía en 0, así que ese campo NO sirve
+   para diagnosticar; el que manda es `reauthorization_required?`.
+
+### Pendientes conocidos
+
+- **App en modo desarrollo** (`is_live=false`). Hoy responde porque Sergio tiene rol
+  en la app. Para clientes reales hay que publicarla → exige **URL de política de
+  privacidad** (la app no tiene ninguna) + ícono 1024x1024 + categoría.
+- **Sin método de pago**: solo conversaciones iniciadas por el cliente (gratis). Las
+  plantillas y los mensajes iniciados por el negocio necesitan tarjeta.
+- **Chatwoot sin correo saliente**: por eso no llegó el mail de recuperación de
+  contraseña. Tampoco puede mandar notificaciones ni invitaciones de agente.
+
 ### Cola después de eso
 
 1. **`phone_number_id`** del 75414930 (aparece en API Setup de la app).
