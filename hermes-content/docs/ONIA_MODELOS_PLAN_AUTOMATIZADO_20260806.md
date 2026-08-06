@@ -18,7 +18,7 @@
 | | **Lucía** `36305a9b` | **Mara** `6c94bbf0` |
 |---|---|---|
 | Soul | Entrenado, limpio, verificado | Entrenado |
-| Handle | `@lucia.antelo.scz` (definido) | `@mara.vale` (propuesto) |
+| Handle | `@lucia.antelo.bo` (definido) | `@mara.vale` (propuesto) |
 | Posicionamiento | Lifestyle SCZ + meta-IA ("es IA y no se esconde") | Beauty / UGC de producto |
 | **Vende** | Servicios Onia a negocios + **es la vitrina del producto "tu influencer IA"** | El servicio "modelo IA para tu marca" (packs 450→6.500) |
 | Le falta | Consistencia de rasgos entre piezas · vestuario/paleta fijos · cuenta creada | Lo mismo + definir su nicho exacto |

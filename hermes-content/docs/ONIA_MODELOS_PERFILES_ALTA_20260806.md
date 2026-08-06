@@ -51,24 +51,30 @@ Seguidores y likes son ruido hasta que haya leads atribuidos.
 | Campo | Valor (copiar tal cual) |
 |---|---|
 | **Nombre** | `Lucía Antelo` |
-| **Usuario** | `lucia.antelo.scz` |
+| **Usuario** | `lucia.antelo.bo` |
 | **Tipo de cuenta** | Profesional → **Creador digital** |
 | **Foto de perfil** | `lucia/perfil-20260806/00-AVATAR.jpg` |
 | **Enlace** | `https://onia.com.bo/?src=lucia-bio` |
 | **Email** | `lucia@` del catch-all de Zoho |
 
 > **Handle 2026-08-06:** `@lu.antelo` está **ocupado** (existe, privada o restringida);
-> `lucia.antelo` (257 seg) y `lucia.ia` (81 seg) también. Queda **`lucia.antelo.scz`**.
+> `lucia.antelo` (257 seg) y `lucia.ia` (81 seg) también. Queda **`lucia.antelo.bo`**.
 >
-> **El handle NO lleva `ia`** (decisión de Sergio, 2026-08-06). La declaración de IA es
-> obligación de la **bio y de la etiqueta de IA de Instagram**, no del usuario: un handle
-> con `.ia` se lee como bot y le cuesta confianza y alcance con la audiencia que necesita
-> (dueños de negocio). El `.scz` la ancla en Santa Cruz — que ES su posicionamiento — y la
-> separa de las dos cuentas `antelo` existentes sin parecer una copia de ellas.
+> **El handle NO lleva `ia` ni `scz`** (decisiones de Sergio, 2026-08-06):
+>
+> - **Sin `ia`:** la declaración de IA es obligación de la **bio y de la etiqueta de IA de
+>   Instagram**, no del usuario. Un handle con `.ia` se lee como bot y le cuesta confianza y
+>   alcance con la audiencia que necesita (dueños de negocio).
+> - **Sin `scz`:** ONIA vende en todo el país, no solo en Santa Cruz. `.bo` no le cierra la
+>   puerta a La Paz ni a Cochabamba, y sigue siendo el sufijo más usado por cuentas
+>   bolivianas reales. Que ella VIVA en Santa Cruz lo dice la bio, no hace falta el handle.
+>
+> `.bo` además la separa de las dos cuentas `antelo` existentes de forma natural — se lee
+> como una persona real, no como copia de otra.
 >
 > **Si el registro lo rechaza**, bajar por esta lista, todas verificadas LIBRES el
-> 2026-08-06: `lu.antelo.scz` · `lu.antelo.bo` · `luantelo.bo` · `soylucia.bo` ·
-> `lucia.antelo.oficial` · `lucia.antelo.bo`.
+> 2026-08-06: `lu.antelo.bo` · `luantelo.bo` · `soylucia.bo` · `lucia.antelo.oficial` ·
+> `holalucia.bo` · `lucia.digital.bo`.
 > *(`luantelo` a secas también está libre, pero está a un punto de la cuenta que ya existe:
 > última opción.)*
 >
