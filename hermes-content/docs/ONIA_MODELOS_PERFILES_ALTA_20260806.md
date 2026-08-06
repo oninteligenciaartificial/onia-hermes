@@ -10,28 +10,67 @@
 
 ---
 
+## 0. Qué vende cada una (había una contradicción en el repo — queda resuelta acá)
+
+Sergio preguntó el 2026-08-06: *"¿y en sí Lucía qué va a vender?"*. Al buscar la respuesta
+aparecieron **dos versiones distintas** conviviendo:
+
+| Doc | Qué decía que vende Lucía |
+|---|---|
+| `ONIA_MODELOS_IA_FICHAS_20260801.md` §2 (1-ago) | **Skincare**: el SPF y el limpiador facial de Sergio, con código `LUCIA10` |
+| `ONIA_EJERCITO_…_20260806.md` + `ONIA_MODELOS_PLAN_…_20260806.md` (6-ago) | **Servicios ONIA** a negocios + ser el caso vivo del producto "tu influencer IA" |
+
+**Gana la versión del 6-ago. Lucía vende SERVICIOS ONIA.** Tres razones, en orden:
+
+1. **Es lo único que ONIA ya cobra hoy.** El skincare está bloqueado en un gate de Sergio que
+   sigue abierto: la propia ficha dice *"PENDIENTE: Sergio fija PVP en Bs"* + stock + logística
+   de envío. Una modelo que publica pero no puede cobrar es un hobby caro.
+2. **El funnel B2B ya existe y está probado** (`?src=` → lead al panel → Cal → reunión). El de
+   e-commerce (carrito, pago, envío) no existe.
+3. **Su activo más valioso no es lo que dice, es lo que ES.** Cada post suyo es un demo
+   funcionando del producto de ticket alto: *"te creamos tu influencer IA"*. Un negocio que la
+   ve no compra seguidores — compra SU modelo haciendo SU contenido. Eso se vende **antes** de
+   que ella tenga audiencia, que es justo lo que necesitamos con una cuenta nueva.
+
+**El skincare NO se pierde: cambia de dueña.** Si algún día hay PVP, stock y envío, el producto
+va con **Mara**, que ya está posicionada en beauty/e-commerce. Mezclar en una sola cuenta
+"te enseño a automatizar tu negocio" con "te vendo protector solar" arruina las dos cosas.
+
+> **Regla que ordena esto** (de `ONIA_EJERCITO_…`): *cada modelo existe para vender algo que ya
+> cobramos, desde el post 1.* Una modelo = una cosa que vender.
+
+| | Vende | CTA | Métrica |
+|---|---|---|---|
+| **Lucía** | Servicios ONIA (webs, agentes, plataforma) **+ ella misma como demo** del servicio "tu influencer IA" | comentario/DM → `onia.com.bo/?src=lucia-*` → Cal | leads con `src=lucia-*` |
+| **Mara** | El servicio "modelo IA para tu marca" (packs del catálogo §3.6) | DM **MODELO** → `?src=mara-*` | leads con `src=mara-*` |
+
+Seguidores y likes son ruido hasta que haya leads atribuidos.
+
 ## 1. Perfil de Lucía
 
 | Campo | Valor (copiar tal cual) |
 |---|---|
 | **Nombre** | `Lucía Antelo` |
-| **Usuario** | `lu.antelo.ia` |
+| **Usuario** | `lucia.antelo.scz` |
 | **Tipo de cuenta** | Profesional → **Creador digital** |
 | **Foto de perfil** | `lucia/perfil-20260806/00-AVATAR.jpg` |
 | **Enlace** | `https://onia.com.bo/?src=lucia-bio` |
 | **Email** | `lucia@` del catch-all de Zoho |
 
-> **Cambio de handle 2026-08-06:** `@lu.antelo` **está ocupado** (existe, cuenta privada o
-> restringida — por eso Instagram lo rechaza). Verificado también: `lucia.antelo` (257
-> seguidores) y `lucia.ia` (81) están tomados. El nuevo handle es **`lu.antelo.ia`**, que
-> además hace trabajo de marca: la diferencia de la cuenta existente (cero riesgo de parecer
-> suplantación) y declara lo que ella es.
+> **Handle 2026-08-06:** `@lu.antelo` está **ocupado** (existe, privada o restringida);
+> `lucia.antelo` (257 seg) y `lucia.ia` (81 seg) también. Queda **`lucia.antelo.scz`**.
 >
-> **Si el registro igual lo rechaza**, bajar por esta lista — todas verificadas LIBRES en
-> Instagram el 2026-08-06: `luantelo` · `lucia.antelo.scz` · `lu.antelo.scz` ·
-> `lu.antelo.bo` · `luantelo.bo` · `lucia.antelo.ia` · `soy.lucia.ia` · `lucia.antelo.oficial`.
-> *(Cuidado con `luantelo` a secas: está a un punto de distancia de la cuenta que ya existe y
-> alguien que la busque puede terminar en la otra.)*
+> **El handle NO lleva `ia`** (decisión de Sergio, 2026-08-06). La declaración de IA es
+> obligación de la **bio y de la etiqueta de IA de Instagram**, no del usuario: un handle
+> con `.ia` se lee como bot y le cuesta confianza y alcance con la audiencia que necesita
+> (dueños de negocio). El `.scz` la ancla en Santa Cruz — que ES su posicionamiento — y la
+> separa de las dos cuentas `antelo` existentes sin parecer una copia de ellas.
+>
+> **Si el registro lo rechaza**, bajar por esta lista, todas verificadas LIBRES el
+> 2026-08-06: `lu.antelo.scz` · `lu.antelo.bo` · `luantelo.bo` · `soylucia.bo` ·
+> `lucia.antelo.oficial` · `lucia.antelo.bo`.
+> *(`luantelo` a secas también está libre, pero está a un punto de la cuenta que ya existe:
+> última opción.)*
 >
 > **Cómo verificar un handle sin registrarse** (reusable): desde una pestaña en
 > `instagram.com`, `fetch('/api/v1/users/web_profile_info/?username=X', {headers:{'x-ig-app-id':'936619743392459'}})`.
@@ -39,13 +78,19 @@
 > devuelve 200 para todo. En TikTok este método no funciona (devuelve un shell); ahí hay que
 > mirarlo en el registro.
 
-**Biografía** (113 caracteres, entra en el límite de 150):
+**Biografía** (103 caracteres, entra en el límite de 150):
 
 ```
-Personaje digital creado con IA por ONIA 🤖
+Creada con IA por @oniahq 🤖
 Santa Cruz de la Sierra
 Te muestro cómo la IA hace vender a tu negocio 👇
 ```
+
+> ⚠️ **Dependencia:** hoy la cuenta de ONIA es **`@oniaagency`**; `@oniahq` es la decisión de
+> marca (`ONIA_ARQUITECTURA_MARCA_Y_RUTA_GLOBAL_20260727.md` §4) pero **todavía no está
+> reclamada**. Reclamá `@oniahq` en la misma sesión en que crees a Lucía, o la bio va a
+> mencionar una cuenta que no existe. Si no lo hacés ahora, poné `@oniaagency` y editá la bio
+> después — la bio se cambia libremente, el handle de ONIA no conviene dejarlo al azar.
 
 **Los primeros 6 posts** (subir en este orden, uno por día o día por medio):
 
@@ -69,13 +114,15 @@ Te muestro cómo la IA hace vender a tu negocio 👇
 | **Enlace** | `https://onia.com.bo/?src=mara-bio` |
 | **Email** | `mara@` del catch-all de Zoho |
 
-**Biografía** (105 caracteres):
+**Biografía** (108 caracteres):
 
 ```
-Modelo digital creada con IA por ONIA 🤖
+Modelo digital creada con IA por @oniahq 🤖
 Tu marca también puede tener la suya
 Escribime y te muestro cómo 👇
 ```
+
+*(Misma dependencia de `@oniahq` que Lucía — ver el aviso de arriba.)*
 
 **Los primeros 6 posts:**
 

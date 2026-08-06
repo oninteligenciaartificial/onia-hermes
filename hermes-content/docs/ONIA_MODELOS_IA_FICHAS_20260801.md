@@ -33,7 +33,7 @@
 
 | # | Modelo | Rubro | Estado | Gate de activación |
 |---|---|---|---|---|
-| 1 | **Lucía Antelo** (@lu.antelo.ia) | Skincare / beauty UGC Bolivia | Construida; cola de contenido lista; **no publica** | Alta manual de la cuenta [S] + app Meta/token (~1h, **sin App Review para cuentas propias**) + PVP productos + regla de gasto |
+| 1 | **Lucía Antelo** (@lucia.antelo.scz) | ~~Skincare / beauty UGC~~ → **Servicios ONIA a negocios** (corregido 2026-08-06, ver §2) | Construida; perfil y 6 posts listos; **no publica** | Alta manual de la cuenta [S] + app Meta/token (~1h, **sin App Review para cuentas propias**) + PVP productos + regla de gasto |
 | 2 | **Mara Vale** | Modelo ecommerce / ads | Identidad + workflow listos | Lucía publicando con tracción, O primer cliente que pague ads/creatives con modelo IA |
 | 3 | *(slot futuro, sin nombre)* | A definir por demanda real | No existe (correcto) | **NUNCA** antes de validar 1 y 2 (regla "no las 5 de golpe", doc 25-jul §4) |
 
@@ -48,8 +48,16 @@ Soul: `LUCIA-REAL-v2-clean`. Imagen base oficial: job `e2d0df73-922d-4073-aaad-1
 Voz: la voz oficial ElevenLabs ya definida (ver catálogo §6.4-6.6). Español boliviano sutil
 ("harto", "¿no ve?"), sin caricatura.
 
-**Rubro y qué vende.** Skincare/beauty UGC, mercado SOLO Bolivia (ángulo sol de altura + piel
-grasa por clima). Vende **productos propios de Sergio**: protector solar (media
+> ⚠️ **CORREGIDO 2026-08-06 — lo de abajo quedó superado.** Lucía **no vende skincare**: vende
+> **servicios ONIA a negocios** y es el caso vivo del producto "tu influencer IA". Motivo: el
+> skincare sigue bloqueado en el gate de PVP + stock + envío, y el funnel B2B ya está probado.
+> El SPF y el limpiador, si algún día salen, van con **Mara** (beauty/e-commerce). Detalle y
+> razones: `ONIA_MODELOS_PERFILES_ALTA_20260806.md` §0. El párrafo original se conserva abajo
+> porque el material de producto (medias, código LUCIA10) sirve igual cuando se reactive.
+
+**Rubro y qué vende (versión original del 1-ago, PARQUEADA).** Skincare/beauty UGC, mercado
+SOLO Bolivia (ángulo sol de altura + piel grasa por clima). Vende **productos propios de
+Sergio**: protector solar (media
 `fe6ed358-45d0-4b51-9bad-8e3beba259d8`) y limpiador facial (media `69196a1a-c2e9-434f-9a4b-0de752dc8255`).
 CTA: link en bio → landing propia (web-factory) con captura de email → WhatsApp. Código de
 atribución propio: **LUCIA10**. Cuando el curso exista, Lucía es su **caso vivo** (pilar 1 del

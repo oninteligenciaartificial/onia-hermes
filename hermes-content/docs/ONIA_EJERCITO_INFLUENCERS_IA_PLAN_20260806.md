@@ -32,7 +32,7 @@
 | Modelo | Soul (listo) | Audiencia | **Vende (desde el post 1)** | CTA / funnel |
 |---|---|---|---|---|
 | **Sergio, marca personal** | ⛔ **sin Soul** — cara REAL grabada con celular ([[feedback-sergio-soul-no-usar]]) | Dueños de negocio BO | **La plataforma** — demos | `?src=sergio-<pieza>` → Cal |
-| **Lucía** `@lu.antelo.ia` | `36305a9b` | Lifestyle SCZ | **Webs y servicios Onia** a negocios + es el CASO VIVO del servicio "influencer IA para tu marca" | `?src=lucia-<pieza>` |
+| **Lucía** `@lucia.antelo.scz` | `36305a9b` | Lifestyle SCZ | **Webs y servicios Onia** a negocios + es el CASO VIVO del servicio "influencer IA para tu marca" | `?src=lucia-<pieza>` |
 | **Mara** | `6c94bbf0` | Beauty / e-commerce | **El servicio "modelo IA para tu marca"** (packs 450→6.500 ya definidos §3.6 del catálogo) + Nuvia si Arthur la opera | `?src=mara-<pieza>` |
 | Modelo 4-5 *(fase 1, solo si 2 y 3 muestran señal)* | a entrenar (~10 min c/u) | por rubro (comercio, gastro) | el vertical que toque | ídem |
 
@@ -78,7 +78,7 @@ que en 8 semanas no atribuye ni un lead se pausa (no se borra: su banco queda).
 5. Avisar a Arthur → él carga: foto de perfil (generada), bio, highlights, y el banco de
    contenido con su calendario y sus `?src=`.
 
-Handles: Lucía = `@lu.antelo.ia` (definido). Mara = definir (propuesta: `@mara.vale`, del doc
+Handles: Lucía = `@lucia.antelo.scz` (definido). Mara = definir (propuesta: `@mara.vale`, del doc
 §3.6 "Mara Vale"). Bios y primeros 9 posts: los dejo escritos en el banco de cada una.
 
 ## 6. Qué está bloqueado y por quién
