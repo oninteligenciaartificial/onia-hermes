@@ -24,6 +24,9 @@
   **jamás testimonios de resultados** (FTC) · nada de consejo de salud · Lucía nunca
   testimonia · gasto pago en video/volumen con OK por caso.
 
+> **Quién lo opera: Arthur** (Sergio, 2026-08-06). Producción, banco y calendario son suyos;
+> las cuentas, las aprobaciones y el OK de gasto siguen siendo de Sergio.
+
 ## 2. El ejército, unidad por unidad — quién vende qué
 
 | Modelo | Soul (listo) | Audiencia | **Vende (desde el post 1)** | CTA / funnel |

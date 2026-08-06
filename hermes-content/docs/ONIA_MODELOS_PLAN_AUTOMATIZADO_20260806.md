@@ -8,6 +8,11 @@
 
 ---
 
+> **DUEÑO OPERATIVO: Arthur** (decisión de Sergio, 2026-08-06: *"Arthur hará lo de las
+> modelos y Higgsfield y Meta Ads"*). Él genera, arma el banco y el calendario. Sergio crea
+> las cuentas, aprueba las piezas y autoriza el gasto de video. Detalle del alcance en
+> `ONIA_ARTHUR_CARRIL_CONTENIDO_Y_PAGO_20260801.md` §5-ter.
+
 ## 1. Qué tenemos y qué le falta a cada una
 
 | | **Lucía** `36305a9b` | **Mara** `b8f5c353` |

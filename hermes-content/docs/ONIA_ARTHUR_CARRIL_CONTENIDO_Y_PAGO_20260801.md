@@ -257,6 +257,11 @@ Sergio (*"soy Sergio de ONIA"*) — hay que hacer la versión de Arthur o mandar
 
 ### Gateados — se preparan ahora, se disparan cuando se destrabe
 
+> **AMPLIACIÓN DE ALCANCE (Sergio, 2026-08-06): "Arthur hará lo de las modelos, Higgsfield y
+> Meta Ads."** Los tres frentes que estaban abajo como gateados pasan a ser SUYOS. Lo que
+> cambia es el dueño, no los bloqueos: siguen bloqueados por lo mismo, pero ahora él es quien
+> los prepara y quien avisa cuando se destraban. Detalle operativo en §5-ter.
+
 | # | Frente | Por qué está frenado | Gatillo |
 |---|---|---|---|
 | **G1** | **Meta Ads** | El motor está deployado en DRY (cero gasto). Pauta necesita caja y un embudo que ya convierta | Presupuesto explícito de Sergio. ⚠️ **El token USER vence el 2026-09-05** → migrar a System User antes, o el motor muere solo |
@@ -287,6 +292,64 @@ No está prohibido para siempre — está gateado por el mismo número que todo 
 | 3 (oct) | 12 |
 
 ---
+
+---
+
+## 5-ter. Los tres frentes nuevos de Arthur (Sergio, 2026-08-06)
+
+> *"Arthur hará lo de las modelos y Higgsfield y Meta Ads."*
+
+Esto **amplía su alcance**, no cambia cómo gana (§9.6-ter sigue vigente: la producción no
+paga por unidad, se gana por resultado y sin topes).
+
+### F1 · Las modelos (Lucía y Mara)
+
+| Qué es suyo | Qué NO |
+|---|---|
+| Generar el contenido de las dos con sus Souls, manteniendo el bloque de identidad fijo | **Crear las cuentas** — es de Sergio (email, SIM, BM, etiqueta IA en la bio) |
+| Armar el banco y el calendario, cada pieza con su `?src=` | Publicar sin aprobación de Sergio |
+| Proponer escenas y guiones dentro del posicionamiento ya definido | Cambiar el posicionamiento de las modelos |
+
+- Souls aprobados: **Lucía `36305a9b`** y **Mara `b8f5c353`**.
+- ⛔ **PROHIBIDO el Soul de Sergio** (decisión suya del 2026-08-06: *"es horrible"*). Su marca
+  personal se hace con cara real grabada, nunca generada.
+- **Etiqueta de IA obligatoria** en las bios de las modelos, y jamás testimonios de resultados
+  (FTC). Lucía nunca testimonia.
+
+### F2 · Higgsfield
+
+Cuenta **ULTRA con ~2.990 créditos**. Costo medido: **imagen Soul 2K = 0,12 créditos**.
+
+| Regla | Detalle |
+|---|---|
+| **Imágenes: libre** | A 0,12 créditos, un lote de 20 cuesta 2,4. Deja de ser una decisión de gasto. Solo con Souls aprobados |
+| **Video: OK por lote** | Cotizar con `get_cost` ANTES de generar y pedir el OK a Sergio con el número |
+| **Tope de referencia** | 65 créditos/mes por modelo. Si un mes se pasa, se avisa y se explica |
+| **Registro** | Cada lote: objetivo, cuántas piezas, para qué cuenta. Sin registro no se repone presupuesto |
+
+### F3 · Meta Ads
+
+⚠️ **La pauta NO se puede activar hoy: ninguna cuenta tiene método de pago.** Lo que Arthur
+hace mientras tanto es real y sirve igual:
+
+| Puede hacer YA | Bloqueado |
+|---|---|
+| Research en la **Ad Library** (qué corre, qué hooks, qué ofertas) | Publicar cualquier anuncio pagado |
+| Preparar creativos y públicos listos para cargar | Gastar un solo peso |
+| Los 5 formatos estáticos S-Tier del `ADS_PATTERN_BANK_2026.md` | — |
+| Avisar cuando algo orgánico ya convierte (eso es lo que se amplifica después) | — |
+
+**Dos fechas que él tiene que vigilar:**
+- ⚠️ **El token USER de ads vence el 2026-09-05.** Migrar a System User es de Sergio (necesita
+  admin del BM), pero Arthur avisa si se acerca sin resolverse.
+- La cuenta **ONIA Ads** (USD) permite desde $1/día; la personal (BOB) desde ~Bs 11/día.
+
+### El orden correcto, para que esto no sea humo
+
+1. Primero **orgánico con `?src=`** hasta que un ángulo traiga reuniones.
+2. Recién ahí se pauta **ese** ángulo, con presupuesto chico y fecha de corte.
+3. Nunca pauta a puerta fría: es la forma más rápida de gastar sin aprender.
+
 
 ## 5-bis. El backlog concreto — en qué trabaja, pieza por pieza
 
