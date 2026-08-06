@@ -2,8 +2,8 @@
 title: "Política de Privacidad"
 slug: "privacidad"
 status: "borrador"
-version: "0.2"
-updatedAt: "2026-07-25"
+version: "0.3"
+updatedAt: "2026-08-06"
 ---
 
 > **BORRADOR — pendiente de revisión por abogado matriculado en Bolivia. No constituye asesoría legal.**
@@ -188,9 +188,65 @@ vigente y su fecha estarán siempre publicadas.
 
 ## 12. Contacto
 
-Solicitudes sobre datos personales: [REVISAR ABOGADO / COMPLETAR: correo oficial
-y teléfono/WhatsApp de contacto]. Santa Cruz de la Sierra, Estado Plurinacional
-de Bolivia.
+Solicitudes sobre datos personales: **business@onia.com.bo**. [REVISAR ABOGADO:
+confirmar teléfono/WhatsApp oficial de contacto.] Santa Cruz de la Sierra,
+Estado Plurinacional de Bolivia.
+
+## 13. Chatbot de WhatsApp de Onia
+
+Onia atiende consultas comerciales por WhatsApp en el número **+591 75414930**
+mediante un **asistente automático (chatbot)**. El propio bot lo declara en su
+primer mensaje: quien escribe sabe desde el inicio que conversa con un sistema
+automatizado.
+
+Esta sección cubre los datos de **cualquier persona que escriba a ese número**,
+sea o no cliente de Onia:
+
+- **Qué recogemos:** tu número de WhatsApp y el nombre de tu perfil; el
+  contenido de los mensajes que envías; y, si nos lo contás durante la
+  conversación, el rubro de tu negocio, el tamaño de tu equipo, tu ciudad y qué
+  tareas te consumen tiempo. Si agendás una reunión, también el horario elegido.
+- **Notas de voz:** si enviás un audio, se transcribe a texto con un servicio
+  propio alojado en el servidor de Onia — el audio no se envía a servicios de
+  transcripción de terceros. [REVISAR: confirmar si el audio original se
+  descarta tras la transcripción o se conserva junto a la conversación.]
+- **Para qué:** atender tu consulta, entender si Onia le sirve a tu negocio y,
+  si querés, agendar una reunión. **No usamos estos datos para publicidad, no
+  los vendemos y no entrenamos modelos de IA con tus conversaciones** (misma
+  regla del §3).
+- **Dónde viven:** las conversaciones se gestionan con un sistema de atención
+  (Chatwoot) instalado en el **servidor propio de Onia** — no es un proveedor
+  externo —, y los datos de contacto y calificación se guardan en la base de
+  datos descrita en el §4 (Supabase).
+- **Terceros que necesariamente participan:** **Meta (WhatsApp)** transporta
+  los mensajes por su infraestructura y bajo sus propios términos; **Supabase**
+  aloja la base de datos; **Cal.com** gestiona la reserva cuando agendás una
+  reunión. Nadie más recibe estos datos.
+- **Cuánto los guardamos:** las conversaciones y los datos del contacto se
+  conservan hasta **24 meses después de tu última interacción**, o hasta que
+  pidas su eliminación (§14) — lo que ocurra primero. El registro de una baja
+  (número y estado) se conserva el tiempo necesario para respetarla y no volver
+  a contactarte. [REVISAR ABOGADO: validar plazo de 24 meses.]
+- **Darte de baja:** escribí **"BAJA"**, **"STOP"**, **"bajarme"** o **"dar de
+  baja"** al mismo WhatsApp y el bot deja de contactarte. La baja queda
+  registrada de inmediato.
+
+## 14. Eliminación de datos
+
+Cualquier persona puede pedir la eliminación de sus datos personales de los
+sistemas de Onia — tanto los del chatbot de WhatsApp (§13) como los de una
+cuenta de la plataforma (§8 y §9). El procedimiento:
+
+- Enviá tu solicitud al correo **business@onia.com.bo**, indicando el número de
+  WhatsApp o el correo con el que interactuaste con Onia.
+- Verificaremos que la solicitud venga del titular de los datos, para no
+  eliminar información de una persona a pedido de otra.
+- Eliminamos tus datos de los sistemas activos dentro de los **15 días
+  hábiles** siguientes (mismo plazo objetivo del §9), y de las copias de
+  seguridad al completarse su ciclo de rotación (§8).
+- **Excepciones:** se conserva lo que la normativa boliviana aplicable exija
+  retener (por ejemplo, registros de facturación) y el registro mínimo de una
+  baja de contacto, que se mantiene justamente para respetarla.
 
 ---
 
