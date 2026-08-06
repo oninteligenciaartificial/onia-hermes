@@ -36,6 +36,37 @@ GEMINI_API_KEY=... node scripts/gemini-see-video.mjs /ruta/video.mp4
 - Devuelve resumen + timeline por secciones + texto en pantalla, todo con timestamps. Eso ES "ver el video".
 - Si falla (sin key, cuota, error) → usar el FALLBACK de abajo. Nunca se rompe.
 
+
+## Instagram / redes: bajar el MP4 con AUDIO (resuelto 2026-08-06)
+
+**El problema, para no volver a chocar:** IG no reproduce reels sin sesion; el `<video>` usa
+MSE (blob, no descargable); `yt-dlp` necesita cookies y **desde Chrome 127 estan cifradas con
+App-Bound Encryption** -> falla con `Failed to decrypt with DPAPI` aunque le pases un snapshot
+de la base. Capturar fotogramas por canvas da imagen pero **NO audio**.
+
+**La ruta que SI funciona** (probada con 2 reels: 70 s / 10,3 MB y 32 s / 4,1 MB):
+
+1. Navegador **con sesion iniciada** (MCP `claude-in-chrome`). Si hay varios navegadores
+   conectados, preguntar cual — la herramienta lo exige.
+2. `navigate` -> `https://www.instagram.com/reel/<SHORTCODE>/`
+3. `javascript_exec` con el cuerpo de `scripts/ig-media-url.js`: convierte el shortcode a
+   `media_id`, pide `/api/v1/media/<id>/info/` con `credentials:'include'` y el header
+   `x-ig-app-id: 936619743392459`, y **dispara la descarga dentro de la pagina**.
+4. Mover el MP4 de la carpeta de descargas al scratchpad.
+5. `node scripts/gemini-see-video.mjs <archivo.mp4>` -> resumen + timeline + **narracion** +
+   texto en pantalla.
+
+**Trampas aprendidas:**
+- **NO devolver la URL del CDN** como valor de retorno: lleva query string firmada y el filtro
+  de seguridad del MCP la bloquea. Descargar SIEMPRE dentro de la pagina.
+- **NO devolver el base64** del video: 10 MB de video son 14 MB de base64 y revientan el
+  contexto. El `<a download>` con blob es el camino.
+- Las pestanas del MCP se reciclan entre llamadas: **usar `browser_batch`** para encadenar
+  navigate + script en un solo viaje.
+- `snapshot-cookies.ps1` (en esta misma carpeta) resuelve el **lock** de la base de cookies
+  del navegador abierto, pero no el cifrado ABE. Sirve para navegadores viejos o Firefox.
+- Nunca iniciar sesion ni escribir contrasenas: la sesion la pone el usuario en su navegador.
+
 ## FALLBACK — frames + transcript (sin key)
 1. **Conseguir el video.**
    - URL (YouTube/etc.): `yt-dlp -f 18 -o in.mp4 "<url>"` (instalar: `pip install -U yt-dlp`; formato 18 = mp4 360p, liviano y suficiente para leer). Para mejor imagen: `-f "b[height<=720]"`.
