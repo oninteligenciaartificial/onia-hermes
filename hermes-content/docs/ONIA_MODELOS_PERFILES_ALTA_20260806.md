@@ -85,29 +85,24 @@ adentro del sistema.
 | Campo | Valor (copiar tal cual) |
 |---|---|
 | **Nombre** | `Lucía Antelo` |
-| **Usuario** | `lucia.antelo.bo` |
+| **Usuario** | `lucia.antelo.oficial` |
 | **Tipo de cuenta** | Profesional → **Creador digital** |
-| **Foto de perfil** | `lucia/perfil-20260806/00-AVATAR.jpg` |
+| **Foto de perfil** | **`lucia/avatar-20260806/FOTO-PERFIL-LUCIA.jpg`** (1080×1080, lista para subir) |
 | **Enlace** | `https://onia.com.bo/?src=lucia-bio` |
 | **Email** | `lucia@` del catch-all de Zoho |
 
 > **Handle 2026-08-06:** `@lu.antelo` está **ocupado** (existe, privada o restringida);
-> `lucia.antelo` (257 seg) y `lucia.ia` (81 seg) también. Queda **`lucia.antelo.bo`**.
+> `lucia.antelo` (257 seg) y `lucia.ia` (81 seg) también. Queda **`lucia.antelo.oficial`**.
 >
-> **El handle NO lleva `ia` ni `scz`** (decisiones de Sergio, 2026-08-06):
+> **Elegido por Sergio: `lucia.antelo.oficial`**, verificado LIBRE el 2026-08-06.
 >
-> - **Sin `ia`:** la declaración de IA es obligación de la **bio y de la etiqueta de IA de
->   Instagram**, no del usuario. Un handle con `.ia` se lee como bot y le cuesta confianza y
->   alcance con la audiencia que necesita (dueños de negocio).
-> - **Sin `scz`:** ONIA vende en todo el país, no solo en Santa Cruz. `.bo` no le cierra la
->   puerta a La Paz ni a Cochabamba, y sigue siendo el sufijo más usado por cuentas
->   bolivianas reales. Que ella VIVA en Santa Cruz lo dice la bio, no hace falta el handle.
->
-> `.bo` además la separa de las dos cuentas `antelo` existentes de forma natural — se lee
-> como una persona real, no como copia de otra.
+> Descartados por decisión suya: **sin `ia`** (la declaración de IA es obligación de la bio y
+> de la etiqueta de Instagram, no del usuario; un handle con `.ia` se lee como bot) y **sin
+> `scz`** (ONIA vende en todo el país, no solo en Santa Cruz). El sufijo `oficial` cumple lo
+> mismo que `.bo`: la separa de las dos cuentas `antelo` que ya existen sin parecer copia.
 >
 > **Si el registro lo rechaza**, bajar por esta lista, todas verificadas LIBRES el
-> 2026-08-06: `lu.antelo.bo` · `luantelo.bo` · `soylucia.bo` · `lucia.antelo.oficial` ·
+> 2026-08-06: `lucia.antelo.bo` · `lu.antelo.bo` · `luantelo.bo` · `soylucia.bo` ·
 > `holalucia.bo` · `lucia.digital.bo`.
 > *(`luantelo` a secas también está libre, pero está a un punto de la cuenta que ya existe:
 > última opción.)*
@@ -117,6 +112,24 @@ adentro del sistema.
 > **404 = libre · 200 = ocupado.** Cargar `instagram.com/X` a secas NO sirve: sin sesión
 > devuelve 200 para todo. En TikTok este método no funciona (devuelve un shell); ahí hay que
 > mirarlo en el registro.
+
+> **Cómo se eligió la foto de perfil** (2026-08-06, criterio reusable para toda modelo):
+> Instagram la muestra **recortada en círculo**, a 320px en el perfil, 110px en historias y
+> **32px en el feed** — que es donde más se ve. Por eso no se elige mirando la foto grande:
+> se elige mirando el círculo chiquito (`_TEST-AVATAR-LUCIA.jpg` compara las 3 en los 3
+> tamaños). Reglas que salieron:
+> 1. **La cara tiene que llenar el cuadro.** Un retrato de medio cuerpo desaparece a 32px.
+> 2. **Fondo con color, no blanco.** La interfaz de Instagram es blanca: un fondo claro hace
+>    que el círculo pierda el borde y la foto se derrita en la pantalla. Por eso se descartó
+>    la opción A pese a ser la más nítida.
+> 3. **La expresión importa más de lo que parece.** Se eligió **B** (risa natural, fondo de
+>    café con bokeh cálido): separa del blanco de IG y es la más cercana, que es justo el
+>    posicionamiento. **C** (fondo verde, gesto sobrio) queda de respaldo si se prefiere algo
+>    más serio.
+>
+> ⚠️ **Defecto conocido del Soul de Lucía:** tiende a rubor fuerte en las mejillas. A 32px no
+> se nota, a 320px se lee un poco quemada de sol. En generaciones futuras conviene pedir
+> *"tono de piel parejo, rubor suave"* — nunca en forma de negación (ver receta visual §1).
 
 **Biografía** (103 caracteres, entra en el límite de 150):
 

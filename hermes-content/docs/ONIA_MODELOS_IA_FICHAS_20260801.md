@@ -33,7 +33,7 @@
 
 | # | Modelo | Rubro | Estado | Gate de activación |
 |---|---|---|---|---|
-| 1 | **Lucía Antelo** (@lucia.antelo.bo) | ~~Skincare / beauty UGC~~ → **Servicios ONIA a negocios** (corregido 2026-08-06, ver §2) | Construida; perfil y 6 posts listos; **no publica** | Alta manual de la cuenta [S] + app Meta/token (~1h, **sin App Review para cuentas propias**) + PVP productos + regla de gasto |
+| 1 | **Lucía Antelo** (@lucia.antelo.oficial) | ~~Skincare / beauty UGC~~ → **Servicios ONIA a negocios** (corregido 2026-08-06, ver §2) | Construida; perfil y 6 posts listos; **no publica** | Alta manual de la cuenta [S] + app Meta/token (~1h, **sin App Review para cuentas propias**) + PVP productos + regla de gasto |
 | 2 | **Mara Vale** | Modelo ecommerce / ads | Identidad + workflow listos | Lucía publicando con tracción, O primer cliente que pague ads/creatives con modelo IA |
 | 3 | *(slot futuro, sin nombre)* | A definir por demanda real | No existe (correcto) | **NUNCA** antes de validar 1 y 2 (regla "no las 5 de golpe", doc 25-jul §4) |
 
