@@ -36,6 +36,20 @@ un requisito para arrancar. Se puede ofrecer el lunes sin esperar al banco.
 
 ## 1. Qué está VIVO en producción hoy
 
+> **Actualización 2026-08-06 (deploys #17-19, verificado en vivo):** SEIS rubros
+> elegibles en el registro (dental · comercio · importadora · **estética** ·
+> **veterinaria** · **servicios profesionales**) — 6 cards confirmadas en prod.
+> Registro NUEVO en 2 pasos (14 campos → 4; Google 1-clic; split-screen de marca)
+> + login hermanado. Checkout con stepper, QR-terminal y **garantía del 1er mes**
+> (también en /terms). **Agentes visibles por PLAN desde el día 1** (trial =
+> professional → nav Agentes + cron proponiendo; antes eran invisibles salvo grant
+> manual — hallazgo de la auditoría de promesas, 60 claims verificadas:
+> `ONIA_AUDITORIA_PROMESAS_LANDING_20260806.md`). Export CSV en todo plan pago.
+> Confirmación de cita por WhatsApp click-to-chat (sin esperar Meta). Landing con
+> /comparativa viva, chips 6 rubros y captura real del registro nuevo.
+> ⚠️ Bloqueo nuevo D8: el QR de cobro en prod es un QR DentalGest de cuenta ajena
+> y con vencimiento — falta el QR de la cuenta Onia (agenda maestra §D).
+
 Verificado, no "construido". **2026-08-01, 5 deploys en el día — el último con todo:**
 
 - **Registro multirubro con configuración previa**: arranca en "¿Qué tipo de negocio
