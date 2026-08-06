@@ -10,6 +10,7 @@ import { describe, it } from "node:test";
 import { gunzipSync } from "node:zlib";
 
 import {
+  CUFD_VIGENCIA_MS,
   RUNNER_OPS,
   normalizeCuisResult,
   SYNC_CASES,
@@ -21,7 +22,9 @@ import {
   buildTar,
   buildTestInvoice,
   computeSinOffset,
+  cufdVigenteDesde,
   errorKey,
+  eventWindow,
   extractSyncItems,
   formatSinLocal,
   hashFor,
@@ -278,6 +281,59 @@ describe("reloj del SIN", () => {
     const nowMs = Date.UTC(2026, 7, 6, 20, 0, 0, 0);
     const offset = computeSinOffset("2026-08-06T16:00:00.000-04:00", nowMs); // SIN va 4h "atras" en pared
     assert.equal(formatSinLocal(nowMs + offset), "2026-08-06T16:00:00.000");
+  });
+});
+
+describe("cufdVigenteDesde", () => {
+  it("prefiere obtenidoEn cuando existe", () => {
+    assert.equal(cufdVigenteDesde({ obtenidoEn: 12345, fechaVigencia: "2026-08-07T18:05:56.509-04:00" }), 12345);
+  });
+
+  it("fallback estados viejos: fechaVigencia - 24h en pared del SIN", () => {
+    const desde = cufdVigenteDesde({ fechaVigencia: "2026-08-07T18:05:56.509-04:00" });
+    assert.equal(desde, Date.UTC(2026, 7, 7, 18, 5, 56, 509) - CUFD_VIGENCIA_MS);
+    assert.equal(formatSinLocal(desde), "2026-08-06T18:05:56.509");
+  });
+
+  it("null si no hay cufd o la fecha es invalida", () => {
+    assert.equal(cufdVigenteDesde(null), null);
+    assert.equal(cufdVigenteDesde({ fechaVigencia: "basura" }), null);
+  });
+});
+
+describe("eventWindow (SIN 984: la ventana del evento debe caer dentro de la vigencia del cufdEvento)", () => {
+  const MIN = 60 * 1000;
+  const now = Date.UTC(2026, 7, 6, 18, 30, 0, 0); // pared del SIN como epoch corrido
+
+  it("CUFD viejo: ventana completa [now-35min, now-5min]", () => {
+    const win = eventWindow({ nowSinMs: now, cufdDesdeMs: now - 2 * 60 * MIN });
+    assert.equal(win.finMs, now - 5 * MIN);
+    assert.equal(win.inicioMs, now - 35 * MIN);
+  });
+
+  it("sin cufdDesdeMs se comporta como antes (ventana completa)", () => {
+    const win = eventWindow({ nowSinMs: now });
+    assert.deepEqual(win, { inicioMs: now - 35 * MIN, finMs: now - 5 * MIN });
+  });
+
+  it("caso real del 984: CUFD obtenido 18:05:56, eventos a las 18:11 -> inicio recortado a la vigencia", () => {
+    // Reproduce el escenario del log 2026-08-06: [now-35, now-5] arrancaba
+    // 17:36, 29 min ANTES de que el cufdEvento existiera -> 984 del SIN.
+    const nowReal = Date.UTC(2026, 7, 6, 18, 11, 58);
+    const desde = cufdVigenteDesde({ fechaVigencia: "2026-08-07T18:05:56.509-04:00" });
+    const win = eventWindow({ nowSinMs: nowReal, cufdDesdeMs: desde });
+    assert.ok(win.inicioMs >= desde + MIN, "inicio dentro de la vigencia del CUFD");
+    assert.ok(win.inicioMs < win.finMs && win.finMs <= nowReal, "ventana valida en el pasado");
+  });
+
+  it("CUFD tan fresco que invierte la ventana: sube el fin manteniendo inicio<fin<=now", () => {
+    const win = eventWindow({ nowSinMs: now, cufdDesdeMs: now - 3 * MIN });
+    assert.equal(win.inicioMs, now - 2 * MIN); // desde + margen
+    assert.ok(win.inicioMs < win.finMs && win.finMs < now);
+  });
+
+  it("CUFD con menos de ~2min de vida: error claro en vez de quemar 984s", () => {
+    assert.throws(() => eventWindow({ nowSinMs: now, cufdDesdeMs: now - 30 * 1000 }), /demasiado fresco/);
   });
 });
 

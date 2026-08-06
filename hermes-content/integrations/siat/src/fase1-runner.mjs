@@ -383,6 +383,53 @@ export function computeSinOffset(sinFechaHora, nowMs) {
   return wall - nowMs;
 }
 
+// El CUFD del piloto vale 24h (verificado en vivo 2026-08-06: obtenido
+// 22:05:56Z con fechaVigencia 2026-08-07T18:05:56-04:00, exactamente +24h).
+export const CUFD_VIGENCIA_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Inicio de vigencia de un CUFD en el timeline "SIN" (epoch corrido, el mismo
+ * que consume formatSinLocal). Preferimos `obtenidoEn` (grabado al pedir el
+ * CUFD en etapa III); para estados viejos sin ese campo se deriva de
+ * fechaVigencia - 24h (la pared del SIN parseada como epoch corrido).
+ */
+export function cufdVigenteDesde(cufd) {
+  if (!cufd) {
+    return null;
+  }
+  if (Number.isFinite(cufd.obtenidoEn)) {
+    return cufd.obtenidoEn;
+  }
+  const venc = computeSinOffset(cufd.fechaVigencia, 0); // wall - 0 = wall como epoch corrido
+  return venc == null ? null : venc - CUFD_VIGENCIA_MS;
+}
+
+/**
+ * Ventana [inicio, fin] de un EVENTO SIGNIFICATIVO, SIEMPRE dentro de la
+ * vigencia del cufdEvento: el SIN responde 984 ("EL EVENTO SIGNIFICATIVO NO
+ * CORRESPONDE AL CUFD DEL EVENTO REGISTRADO") si el evento se fecha antes de
+ * que ese CUFD exista. Default [now-35min, now-5min]; si el CUFD es mas fresco
+ * que eso, se recorta el inicio a vigenciaDesde+margen (y se sube el fin si
+ * quedara invertido). CUFD con menos de ~2*margen de vida: no hay ventana
+ * valida en el pasado -> error claro en vez de quemar intentos con 984.
+ */
+export function eventWindow({ nowSinMs, cufdDesdeMs = null, windowMs = 30 * 60 * 1000, margenMs = 60_000 }) {
+  let finMs = nowSinMs - 5 * 60 * 1000;
+  let inicioMs = finMs - windowMs;
+  if (cufdDesdeMs != null && inicioMs < cufdDesdeMs + margenMs) {
+    inicioMs = cufdDesdeMs + margenMs;
+    if (finMs <= inicioMs) {
+      finMs = Math.min(inicioMs + margenMs, nowSinMs - 1000);
+    }
+  }
+  if (!(inicioMs < finMs)) {
+    throw new Error(
+      "CUFD demasiado fresco para fechar un evento significativo dentro de su vigencia: esperar ~2 min y reintentar",
+    );
+  }
+  return { inicioMs, finMs };
+}
+
 /** Epoch corrido -> "yyyy-MM-ddTHH:mm:ss.SSS" (hora de pared del SIN). */
 export function formatSinLocal(shiftedMs) {
   const d = new Date(shiftedMs);
@@ -704,6 +751,9 @@ class Runner {
           codigo: result.parsed.codigo,
           codigoControl: result.parsed.codigoControl,
           fechaVigencia: result.parsed.fechaVigencia,
+          // Timeline SIN: eventWindow lo usa para no fechar eventos antes de
+          // que este CUFD exista (SIN 984).
+          obtenidoEn: Date.now() + (this.state.sinOffsetMs ?? 0),
         };
       }
       return result;
@@ -778,8 +828,16 @@ class Runner {
     await this.loop("IV", target, (done) => this.emitOne(done));
   }
 
-  async registrarEvento(motivo, { window = 30 * 60 * 1000, finMs } = {}) {
-    const fin = finMs ?? Date.now() + (this.state.sinOffsetMs ?? 0) - 5 * 60 * 1000;
+  /** Ventana de evento valida para el CUFD ACTUAL (el que va como cufdEvento). */
+  eventWindowNow() {
+    return eventWindow({
+      nowSinMs: Date.now() + (this.state.sinOffsetMs ?? 0),
+      cufdDesdeMs: cufdVigenteDesde(this.state.cufd),
+    });
+  }
+
+  async registrarEvento(motivo, { inicioMs, finMs } = {}) {
+    const win = inicioMs != null && finMs != null ? { inicioMs, finMs } : this.eventWindowNow();
     const envelope = buildRunnerEnvelope("registroEventoSignificativo", {
       ...this.baseParams(),
       codigoMotivoEvento: motivo.codigoClasificador,
@@ -787,8 +845,8 @@ class Runner {
       cufdEvento: this.state.cufd?.codigo,
       cuis: this.state.cuis,
       descripcion: motivo.descripcion ?? `Evento ${motivo.codigoClasificador}`,
-      fechaHoraInicioEvento: formatSinLocal(fin - window),
-      fechaHoraFinEvento: formatSinLocal(fin),
+      fechaHoraInicioEvento: formatSinLocal(win.inicioMs),
+      fechaHoraFinEvento: formatSinLocal(win.finMs),
     });
     return this.post("FACTURACION_OPERACIONES", envelope, {
       etapa: "V",
@@ -885,10 +943,12 @@ class Runner {
       throw new Error("sin catalogo de eventos para paquetes de contingencia");
     }
     await this.loop("VI", target, async (done) => {
-      // Ventana del evento: [fin-30min, fin], con fin 5 min en el pasado; las
-      // facturas offline del paquete se fechan DENTRO de esa ventana.
-      const finMs = Date.now() + (this.state.sinOffsetMs ?? 0) - 5 * 60 * 1000;
-      const evento = await this.registrarEvento(motivo, { finMs });
+      // SIN 984: evento y paquete comparten el MISMO CUFD vigente, y tanto la
+      // ventana del evento como las fechas de las facturas offline deben caer
+      // dentro de la vigencia de ese CUFD. eventWindowNow ya recorta la ventana;
+      // el lote se fecha en el punto medio (siempre dentro).
+      const win = this.eventWindowNow();
+      const evento = await this.registrarEvento(motivo, win);
       const codigoEvento =
         tagText(evento.body, "codigoRecepcionEventoSignificativo") ?? null;
       if (!codigoEvento) {
@@ -897,7 +957,7 @@ class Runner {
       const lote = this.buildLote(2, {
         tipoEmision: 2,
         baseIndex: done * 2,
-        fechaIso: formatSinLocal(finMs - 10 * 60 * 1000),
+        fechaIso: formatSinLocal(win.inicioMs + Math.floor((win.finMs - win.inicioMs) / 2)),
       });
       const envelope = buildRunnerEnvelope("recepcionPaqueteFactura", {
         ...this.recepcionBase(2),
