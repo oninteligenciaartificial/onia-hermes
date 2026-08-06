@@ -41,10 +41,44 @@ va con **Mara**, que ya está posicionada en beauty/e-commerce. Mezclar en una s
 
 | | Vende | CTA | Métrica |
 |---|---|---|---|
-| **Lucía** | Servicios ONIA (webs, agentes, plataforma) **+ ella misma como demo** del servicio "tu influencer IA" | comentario/DM → `onia.com.bo/?src=lucia-*` → Cal | leads con `src=lucia-*` |
+| **Lucía** | **LA PLATAFORMA ONIA** — el sistema donde el negocio factura, agenda y hace seguimiento. Nada más | comentario/DM → `onia.com.bo/?src=lucia-*` → **demo en Cal** | **demos agendadas** con `src=lucia-*` |
 | **Mara** | El servicio "modelo IA para tu marca" (packs del catálogo §3.6) | DM **MODELO** → `?src=mara-*` | leads con `src=mara-*` |
 
-Seguidores y likes son ruido hasta que haya leads atribuidos.
+Seguidores y likes son ruido hasta que haya demos agendadas.
+
+### 0.1 Lucía vende LA PLATAFORMA (afinado 2026-08-06)
+
+Sergio: *"que esta Lucía venda la ONIA plataforma"*. Es un recorte sobre lo de arriba y hace
+el trabajo más filoso: **no vende "servicios ONIA" (webs, chatbots, videos) — vende el
+sistema.** Webs y videos son *vitamina* (discrecionales, sensibles al precio, se venden
+DESPUÉS); la plataforma es la *aspirina* (`ONIA_PLATAFORMA_UNICA_BRIEF_DECISION_20260723.md`
+§3). Vender la aspirina primero es la secuencia correcta; invertirla es el error clásico.
+
+**Refuerza la estrategia, no la diluye.** El brief exige *"una sola motion de demanda a la
+vez"* porque las horas de Sergio son el cuello de botella — pero Lucía no consume horas de
+Sergio (la opera Arthur, la genera Claude). Apuntarla al MISMO producto suma al mismo embudo
+en vez de abrir uno nuevo.
+
+**El gancho de entrada: la facturación electrónica.** A los grupos 9-12 les entra en vigencia
+el **1-oct-2026** — demanda que crea el regulador, no nosotros, y faltan ~2 meses.
+
+> ⚠️ **Regla dura que hay que respetar en cada pieza** (`ADS_PATTERN_BANK_2026.md` §2): está
+> **prohibido decir "es obligatorio por ley"** como si hubiera que comprarnos algo. **El portal
+> del SIN es gratis y cumple.** El ángulo honesto —y que además vende mejor porque genera
+> confianza— es: *"la factura electrónica te llega igual; el tema es si la emitís a mano una
+> por una o si sale sola cuando cerrás la venta."*
+
+**Lo que NO vende Lucía hoy:** webs sueltas, videos, chatbots como producto principal, ni
+cursos. Todo eso existe, pero es expansión que se enciende DESPUÉS de que el cliente está
+adentro del sistema.
+
+> **Matizado el mismo día:** Sergio pidió analizar 4 frentes para Lucía (plataforma ·
+> publicidad de marcas · lifestyle · e-commerce propio). El análisis completo, con el eje que
+> los vuelve compatibles y el orden de encendido, está en
+> **`ONIA_LUCIA_FRENTES_ANALISIS_20260806.md`**. Resumen: **lifestyle es el vehículo (60% del
+> contenido, no vende), la plataforma es el producto de HOY, el e-commerce propio entra
+> cuando haya PVP + stock + envío, y la publicidad de marcas no se cobra — se convierte en
+> venta del servicio "tu influencer IA".**
 
 ## 1. Perfil de Lucía
 
