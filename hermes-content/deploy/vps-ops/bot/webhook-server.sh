@@ -23,8 +23,12 @@ set -uo pipefail
 CONTAINER="${ONIA_BOT_CONTAINER:-onia-center}"
 DEST="/tmp/onia-bot"
 PORT="${ONIA_WEBHOOK_PORT:-3020}"
-PIDFILE="$DEST/webhook-server.pid"
-LOGFILE="$DEST/webhook-server.log"
+# El PID y el log viven FUERA de $DEST a proposito: el sync hace `rm -rf $DEST` y se los llevaba
+# puestos. Sin PID, `stop` no mataba nada, el proceso viejo se quedaba con el puerto, el `node`
+# nuevo moria al no poder escuchar... y el servidor seguia contestando /health con el CODIGO VIEJO.
+# Un despliegue que no surte efecto y encima responde ok:true. (Diagnosticado 2026-08-06.)
+PIDFILE="/tmp/onia-bot-webhook.pid"
+LOGFILE="/tmp/onia-bot-webhook.log"
 ACTION="${1:-start}"
 
 BOT_DIR="$(cd "$(dirname "$0")" 2>/dev/null && pwd)"
@@ -75,7 +79,25 @@ case "$ACTION" in
     exit 1
     ;;
   stop|restart)
-    docker exec "$CONTAINER" sh -c "[ -f $PIDFILE ] && kill \$(cat $PIDFILE) 2>/dev/null; rm -f $PIDFILE" >/dev/null 2>&1
+    # Se mata por PID y ADEMAS por patron: si el PID se perdio (o quedo apuntando a un fantasma),
+    # matar "lo que diga el archivo" deja vivo al proceso real. Despues se VERIFICA que no quede
+    # ninguno: dar por detenido algo que sigue corriendo es como nacio el bug de arriba.
+    docker exec "$CONTAINER" sh -c "
+      [ -f $PIDFILE ] && kill \$(cat $PIDFILE) 2>/dev/null
+      rm -f $PIDFILE
+      sleep 1
+      for pid in \$(ps -o pid,args | grep '[w]ebhook-server.mjs' | awk '{print \$1}'); do
+        kill \$pid 2>/dev/null
+      done
+      sleep 1
+      for pid in \$(ps -o pid,args | grep '[w]ebhook-server.mjs' | awk '{print \$1}'); do
+        kill -9 \$pid 2>/dev/null
+      done
+    " >/dev/null 2>&1
+    if docker exec "$CONTAINER" sh -c "ps -o args | grep -q '[w]ebhook-server.mjs'" 2>/dev/null; then
+      echo "ERROR: quedo un webhook-server.mjs vivo — NO se pudo detener" >&2
+      exit 1
+    fi
     echo "servidor detenido"
     [ "$ACTION" = "stop" ] && exit 0
     ;;
@@ -162,8 +184,28 @@ docker exec -d \
   -e CHATWOOT_API_TOKEN="$CW_TOKEN" \
   "$CONTAINER" sh -c "node $DEST/webhook-server.mjs >> $LOGFILE 2>&1 & echo \$! > $PIDFILE"
 
-sleep 1
+# No alcanza con lanzarlo: hay que ESPERAR a que conteste. Si el puerto estaba ocupado, el node
+# nuevo muere en silencio y quien contesta es otro proceso — que es justo lo que hay que detectar.
+HEALTH=""
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  sleep 1
+  HEALTH="$(docker exec "$CONTAINER" sh -c "wget -qO- http://127.0.0.1:$PORT/health 2>/dev/null" 2>/dev/null || true)"
+  [ -n "$HEALTH" ] && break
+done
+
+if [ -z "$HEALTH" ]; then
+  echo "ERROR: el servidor NO responde en el puerto $PORT tras 10s." >&2
+  echo "       Mira los logs:  $0 logs 50" >&2
+  exit 1
+fi
+
+VIVOS="$(docker exec "$CONTAINER" sh -c "ps -o args | grep -c '[w]ebhook-server.mjs'" 2>/dev/null | tr -d ' \r\n')"
+if [ "${VIVOS:-1}" != "1" ]; then
+  echo "AVISO: hay $VIVOS procesos webhook-server.mjs vivos — el que contesta puede ser el VIEJO." >&2
+  echo "       Corre:  $0 restart" >&2
+fi
+
 echo "servidor levantado en el contenedor $CONTAINER, puerto $PORT"
-docker exec "$CONTAINER" sh -c "wget -qO- http://127.0.0.1:$PORT/health 2>/dev/null || echo '{\"ok\":false,\"reason\":\"todavia no responde, mira los logs\"}'"
+echo "$HEALTH"
 echo
 exit 0
