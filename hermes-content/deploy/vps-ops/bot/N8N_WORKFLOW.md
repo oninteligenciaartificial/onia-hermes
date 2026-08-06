@@ -10,8 +10,10 @@
 >
 > Fase 3 del plan: `hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md` §6 (Vía B) y §8.
 > Motor: `hermes-content/deploy/vps-ops/bot/` · Ejecutor del turno: `run-turn.sh` → `run-turn.mjs` ·
-> Cron del follow-up: `followup-run.sh` → `followup-run.mjs` · Adaptador Chatwoot:
-> `chatwoot-adapter.sh` → `chatwoot-adapter.mjs` · Disponibilidad real: `calcom-availability.mjs`.
+> Cron del follow-up: `followup-run.sh` → `followup-run.mjs` · Cron del recordatorio del día de la
+> demo: `reminder-run.sh` → `reminder-run.mjs` (§5B, **sin disparador todavía**) · Adaptador
+> Chatwoot: `chatwoot-adapter.sh` → `chatwoot-adapter.mjs` · Disponibilidad real:
+> `calcom-availability.mjs`.
 
 ---
 
@@ -532,6 +534,41 @@ retryOnFail: false
 
 2. **Encender:** activar el workflow con el nodo 5 habilitado y `ONIA_BOT_DRY_RUN=false` en el
    comando del nodo 2 (así `bot_messages` registra `delivery_status='sent'` en vez de `'skipped'`).
+
+---
+
+## 5B. Workflow C — recordatorio del día de la demo (M9)
+
+**El script ya existe:** `reminder-run.mjs` + `reminder-run.sh`. **Falta el disparador en n8n.**
+
+Qué hace: barre las demos `demo_agendada` que empiezan dentro de las próximas 4 h
+(`reminder.leadHours`) y devuelve el mensaje M9 con el link de la reunión
+(`https://cal.onia.com.bo/booking/<uid>`, derivado del `calendar_event_id` que guardó la reserva).
+
+**El link NO depende de este cron.** Sale en M2, en el mismo mensaje que confirma la reserva
+(`M2_LINK`), porque ése es el único momento garantizado dentro de la ventana de servicio de 24 h de
+Meta. Esto es un recordatorio; si no se puede mandar, el prospecto ya tiene su link.
+
+Mismo esqueleto que el Workflow B (§5.1): Schedule Trigger cada hora → SSH → Code que parte
+`send[]` → nodo de envío por el canal. Comando exacto del nodo SSH:
+
+```yaml
+command: bash /opt/onia/bot/reminder-run.sh --emit
+retryOnFail: false          # el reintento lo cubre la reserva, no n8n
+```
+
+Motivos de descarte que aparecen en `skipped[]` y qué significan:
+
+| motivo | qué pasó | acción |
+|---|---|---|
+| `fuera_de_ventana:<h>` | pasaron +24 h desde el último mensaje del prospecto: Meta rechaza (131047) | **Sergio escribe a mano** |
+| `sin_link` | la reserva en Cal.com falló, `calendar_event_id` quedó null | revisar Cal.com |
+| `ya_recordado` | otro barrido ya lo mandó (la reserva funcionó) | nada |
+| `horario_silencioso:<h>` | son menos de las 08:00 de Bolivia | nada: sale en el barrido de las 08:00 |
+| `demo_ya_paso` / `todavia_lejos` | fuera de la franja de 4 h | nada |
+
+Encendido igual que §5.5: primero `bash /opt/onia/bot/reminder-run.sh` (sin `--emit`) para leer la
+tabla sin reservar ni escribir, y recién después el workflow con `ONIA_BOT_DRY_RUN=false`.
 
 ---
 

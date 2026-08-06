@@ -41,12 +41,12 @@
 
 import { pathToFileURL } from "node:url";
 
-import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
+import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
 import { withKnowledge } from "./knowledge.mjs";
 import { createState, step, markHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
 import { createStore } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
-import { createBooking, buildBookingNotes } from "./calcom-booking.mjs";
+import { createBooking, buildBookingNotes, meetingLink } from "./calcom-booking.mjs";
 
 // ---------------------------------------------------------------------------
 // Entrada
@@ -329,6 +329,15 @@ export async function runTurn(input, deps = {}) {
       bookingWarnings.push(...(booking.warnings || []));
       if (booking.ok) {
         nextState = { ...nextState, calendarEventId: booking.uid };
+        // EL LINK VA ACA, en el mismo mensaje que confirma la reserva. Es el UNICO momento
+        // garantizado dentro de la ventana de servicio de 24 h de Meta: el prospecto acaba de
+        // escribir. Dejarlo para el dia de la demo (M9) fallaria con 131047 en todo el que
+        // reserva para dentro de 3 dias, y es exactamente lo que M2 prometia sin cumplir.
+        const link = meetingLink(booking.uid, deps.env || process.env);
+        const ultima = replies[replies.length - 1];
+        if (link && ultima && ultima.text) {
+          ultima.text += `\n\n${renderTemplate(config.script.M2_LINK, { link_reunion: link })}`;
+        }
       } else {
         // No se puede desdecir el "Listo, agendado" que el motor ya redacto, asi que se le agrega
         // una linea honesta y se deja el aviso: sin esto el prospecto se presenta a una reunion

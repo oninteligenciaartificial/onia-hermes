@@ -68,6 +68,36 @@ export function botAttendeeEmail(conversationKey, domain = "onia.com.bo") {
   return `bot+${safe}@${domain}`;
 }
 
+/**
+ * URL PUBLICA de Cal.com. NO es `CALCOM_BASE_URL`: en el VPS esa vale `http://calcom:3000` (el
+ * hostname interno de docker, mas rapido para reservar sin salir a internet) y mandarsela al
+ * prospecto seria darle un link que no abre desde su telefono. Por eso el link se arma con una
+ * variable propia y, si nadie la define, con el dominio publico — nunca con la interna.
+ */
+export const DEFAULT_PUBLIC_URL = "https://cal.onia.com.bo";
+
+/**
+ * Link de la reunion a partir del uid que devolvio la reserva (el mismo que se guarda en
+ * `calendar_event_id`). `/booking/<uid>` es la pagina de la reserva de Cal.com: muestra cuando es,
+ * el boton para entrar y permite reprogramar o cancelar.
+ *
+ * Se DERIVA del uid a proposito, en vez de guardar una URL nueva: el uid ya esta persistido desde
+ * la primera reserva, asi que esto tambien le sirve a las demos que se agendaron antes de que
+ * existiera el recordatorio. Techo conocido: es la pagina de la reserva, no la sala de video
+ * directa (`metadata.videoCallUrl`, que hoy `createBooking` descarta). Si algun dia se quiere el
+ * link directo a la sala, hay que capturarlo al reservar Y persistirlo — y seguiria haciendo falta
+ * este fallback para todo lo ya reservado.
+ *
+ * @returns {string|null} null si no hay uid: sin uid NO se inventa un link.
+ */
+export function meetingLink(uid, env = process.env) {
+  const clean = String(uid || "").trim();
+  if (!clean) return null;
+  const base = String((env && env.CALCOM_PUBLIC_URL) || DEFAULT_PUBLIC_URL).replace(/\/+$/, "");
+  if (!base) return null;
+  return `${base}/booking/${encodeURIComponent(clean)}`;
+}
+
 /** Payload de `/api/book/event`. Puro: mismo input, mismo output. */
 export function buildBookingPayload(options = {}) {
   const startMs = Date.parse(options.startAt);

@@ -13,7 +13,9 @@ import {
   buildBookingPayload,
   createBooking,
   getBookingConfig,
+  meetingLink,
   DEFAULT_DURATION_MINUTES,
+  DEFAULT_PUBLIC_URL,
 } from "./calcom-booking.mjs";
 
 const CONFIG = { baseUrl: "http://calcom:3000", eventTypeId: 5, durationMinutes: 45, timeZone: "America/La_Paz" };
@@ -59,6 +61,27 @@ test("getBookingConfig: la duracion sale del conocimiento/config, y el entorno l
   assert.equal(getBookingConfig({}, 30).durationMinutes, 30, "sin env manda lo que dice el guion");
   assert.equal(getBookingConfig({ CALCOM_BOT_DURATION_MINUTES: "20" }, 30).durationMinutes, 20, "el env pisa");
   assert.equal(getBookingConfig({}, 0).durationMinutes, DEFAULT_DURATION_MINUTES, "un fallback basura no reserva 0 minutos");
+});
+
+// ---------------------------------------------------------------------------
+// Link de la reunion — lo que se le manda al prospecto
+// ---------------------------------------------------------------------------
+
+test("meetingLink: sin uid no hay link (no se inventa uno)", () => {
+  assert.equal(meetingLink(null), null);
+  assert.equal(meetingLink("  "), null);
+});
+
+test("meetingLink: NUNCA usa la URL interna de docker, aunque sea la que reserva", () => {
+  // Este es el punto: CALCOM_BASE_URL vale `http://calcom:3000` en el VPS y sirve para reservar
+  // desde el contenedor, pero mandarsela al prospecto seria darle un link que no abre nunca.
+  const link = meetingLink("uid-abc", { CALCOM_BASE_URL: "http://calcom:3000" });
+  assert.equal(link, `${DEFAULT_PUBLIC_URL}/booking/uid-abc`);
+  assert.ok(!link.includes("calcom:3000"));
+});
+
+test("meetingLink: CALCOM_PUBLIC_URL manda, sin barra final duplicada", () => {
+  assert.equal(meetingLink("uid-abc", { CALCOM_PUBLIC_URL: "https://cal.test/" }), "https://cal.test/booking/uid-abc");
 });
 
 test("createBooking: la duracion del turno viaja al payload sin pasar por el entorno", async () => {

@@ -23,18 +23,20 @@ export const DEMO_SLOTS = Object.freeze([
 // ---------------------------------------------------------------------------
 // Duracion y modalidad de la demo — UNA sola fuente para el guion Y para la reserva
 // ---------------------------------------------------------------------------
-// ⚠️⚠️ DECISION DE NEGOCIO PENDIENTE (Sergio). Hoy en produccion el MISMO hecho esta escrito con
-// RESUELTO 2026-08-06 (quedan las notas por si vuelve a pasar): durante meses hubo DOS numeros
-// distintos — el guion prometia 15 minutos (M0) y la reserva en Cal.com
-// bloquea 45 (CALCOM_BOT_DURATION_MINUTES=45 en el VPS). Los dos quedan EXACTAMENTE como estaban:
-// bajar la reserva le rompe la agenda a Sergio y subir el texto le cambia la promesa al prospecto.
-// Lo que si cambia: los dos salen de ESTE bloque (el guion por {{demo_duracion}}, la reserva por
-// calcom-booking.mjs), asi que la contradiccion ya no puede nacer de dos lugares distintos.
+// RESUELTO 2026-08-06. La nota queda porque el problema fue caro y puede repetirse:
+// durante meses el MISMO hecho estuvo escrito con DOS numeros distintos — el guion prometia
+// "15 minutos" (M0) y la reserva bloqueaba 45 (CALCOM_BOT_DURATION_MINUTES=45 en el VPS). El
+// prospecto aceptaba creyendo una cosa y su invitacion le decia otra.
 //
-// AL DECIDIR (una sola cosa, en un solo lugar):
-//   - poner el MISMO numero en `duracionMinutos` y en `duracionFrase`, y `pendiente: false`;
+// Ahora los dos salen de ESTE bloque (el guion por {{demo_duracion}}, la reserva porque
+// run-turn.mjs le pasa `durationMinutos` a calcom-booking.mjs), asi que la contradiccion ya no
+// puede nacer de dos lugares distintos.
+//
+// PARA CAMBIAR LA DURACION (una sola cosa, en un solo lugar):
+//   - poner el MISMO numero en `duracionMinutos` y en `duracionFrase`;
 //   - o, sin tocar codigo, ponerlos juntos en knowledge.json (el validador exige que coincidan).
 // El test "duracion de la demo" de knowledge.test.mjs falla si divergen sin declararlo.
+// Ojo: `CALCOM_BOT_DURATION_MINUTES` en el entorno GANA sobre esto. Se dejo vacia a proposito.
 export const DEMO = Object.freeze({
   // DECIDIDO 2026-08-06 por Sergio: 30 y 30. Antes prometia 15 y bloqueaba 45 — el prospecto
   // aceptaba creyendo que eran 15 y recibia una invitacion que le comia 45. Se evaluo "prometer
@@ -121,14 +123,27 @@ export const SCRIPT = Object.freeze({
   // prospecto ya se comprometio, asi que contesta mucho mas que en el primer mensaje.
   // {{preguntas}} lo arma el motor con los datos que TODAVIA faltan (nunca vuelve a pedir lo que
   // el prospecto ya dijo) + la pregunta del dolor, que va SIEMPRE al final de la lista.
+  // La primera linea PROMETIA "te llega el link el mismo dia por aca" y NADIE lo cumplia: no
+  // existia ningun proceso que mandara ese link, asi que el prospecto esperaba el dia de la demo
+  // y no le llegaba nada. Y aunque el recordatorio ya existe (M9), la promesa seguiria siendo
+  // mentira en un caso REAL: fuera de la ventana de servicio de 24 h de Meta (contada desde el
+  // ultimo mensaje ENTRANTE) un mensaje de formato libre falla con 131047, asi que a quien reserva
+  // para dentro de 3 dias no se le puede escribir el dia de la demo. Por eso el link ya no se
+  // promete: se MANDA ACA MISMO (M2_LINK, que run-turn.mjs pega al final en cuanto Cal.com
+  // devuelve la reserva). Este es el unico momento garantizado dentro de la ventana — el prospecto
+  // acaba de escribir. M9 pasa a ser lo que su nombre dice: un recordatorio, no la unica entrega.
   M2: [
-    "Listo, agendado: **{{dia_hora_elegida}}**. Te llega el link el mismo día por acá.",
+    "Listo, agendado: **{{dia_hora_elegida}}**.",
     "",
     "Para que {{humano}} llegue con la demo armada para vos, contame rápido:",
     "{{preguntas}}",
     "",
     "(Con una palabra en cada una alcanza. Si no, igual nos vemos {{dia}}.)",
   ].join("\n"),
+
+  // M2_LINK — se APENDEA a M2 cuando la reserva en Cal.com devolvio uid. Vive en el guion (y no
+  // suelto en run-turn.mjs) porque es copy que ve el prospecto: todo lo que se le dice esta aca.
+  M2_LINK: "El link para entrar es este: {{link_reunion}}",
 
   // M2_PREGUNTA_DOLOR — el ultimo item de la lista de M2. Vive aca y no en el motor porque es
   // copy de cliente, como el resto del guion.
@@ -145,6 +160,20 @@ export const SCRIPT = Object.freeze({
     "",
     "Te dejo dos opciones nuevas por si te sirven: **{{slot_a}}** o **{{slot_b}}**.",
     "Si preferís que te escriba en otro momento, decime \"después\" y no te molesto más.",
+  ].join("\n"),
+
+  // M9 — recordatorio del DIA de la demo (barrido reminder-run.mjs). Es un RECORDATORIO, no la
+  // entrega del link: el link ya salio en M2. Por eso puede fallar sin romper nada — si la ventana
+  // de 24 h de Meta ya se cerro, el barrido lo descarta con `fuera_de_ventana` y el prospecto
+  // igual tiene su link del primer dia.
+  // No dice "hoy" a proposito: la antelacion es config (`reminder.leadHours`) y una copy que se
+  // vuelve mentira al mover un numero es exactamente el error que este archivo viene arrastrando.
+  M9_RECORDATORIO: [
+    "¡Hola! Te recuerdo tu demo de {{producto}}: **{{dia_hora_elegida}}**.",
+    "",
+    "Entrás desde acá: {{link_reunion}}",
+    "",
+    "Si se te complicó, decime y la movemos — sin problema.",
   ].join("\n"),
 
   // M4 — el prospecto trae el precio. El cuerpo NUNCA cotiza; el cierre lo pone el motor segun
@@ -299,6 +328,23 @@ export const DEFAULT_CONFIG = Object.freeze({
     // acumuladas porque el cron nunca existio. Si el mensaje no sale dentro de la ventana, no sale.
     windowClosesAtHours: 24,
     staleAfterDays: 7,
+  }),
+
+  // Recordatorio del dia de la demo (M9). La ventana de Meta NO se repite aca: es UN solo hecho
+  // del canal y vive en `followUp.windowClosesAtHours` (el follow-up fue el primero en chocarse
+  // con ella). Dos numeros para el mismo hecho es la trampa que este archivo ya pago una vez con
+  // la duracion de la demo (15 en el texto / 45 en el calendario).
+  reminder: Object.freeze({
+    // 4 h antes. Con el cron cada hora, el recordatorio sale en el primer barrido en que la demo
+    // entra en esa franja, o sea ~4 h antes: alcanza para acomodar el dia y no es tan temprano
+    // como para olvidarse. Y cuanto ANTES sale, mas chance de que la ventana de Meta siga
+    // abierta: esa ventana se cierra a una hora FIJA (ultimo inbound + 24 h), no relativa a la
+    // demo, asi que cada hora de antelacion que se gana es una hora menos de riesgo de 131047.
+    leadHours: 4,
+    // Nunca antes de las 08:00 de Bolivia. Una demo a las 09:00 caeria en un barrido de las 05:00
+    // y un WhatsApp a esa hora molesta y castiga el quality rating. No pierde el recordatorio: la
+    // fila sigue elegible y sale en el barrido de las 08:00, todavia con una hora de antelacion.
+    quietBeforeHour: 8,
   }),
 
   // Arranca en true (patron de Bolivian Electric): corre todo el pipeline y registra
