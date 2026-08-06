@@ -84,7 +84,7 @@ adentro del sistema.
 
 | Campo | Valor (copiar tal cual) |
 |---|---|
-| **Nombre** | `Lucía Antelo` |
+| **Nombre** | `Lucía Antelo \| IA para tu negocio` |
 | **Usuario** | `lucia.antelo.oficial` |
 | **Tipo de cuenta** | Profesional → **Creador digital** |
 | **Foto de perfil** | **`lucia/avatar-20260806/FOTO-PERFIL-LUCIA.jpg`** (1080×1080, lista para subir) |
@@ -93,6 +93,23 @@ adentro del sistema.
 
 > **Handle 2026-08-06:** `@lu.antelo` está **ocupado** (existe, privada o restringida);
 > `lucia.antelo` (257 seg) y `lucia.ia` (81 seg) también. Queda **`lucia.antelo.oficial`**.
+>
+> ### El campo NOMBRE no es para el nombre — es para la búsqueda
+>
+> En Instagram **el Nombre y el Usuario son los dos campos indexados para búsqueda; la bio
+> no lo está.** Poner solo `Lucía Antelo` desperdicia el único lugar donde una palabra clave
+> hace que la encuentren. Es lo que hace el benchmark que analizamos: el nombre de
+> `@anora.creators` no es "Anora", es **"Anora I Marketing con Creadoras IA"**.
+>
+> **Nombre elegido: `Lucía Antelo | IA para tu negocio`** (32 de los 64 caracteres que permite).
+> Nombre para que la reconozcan + la frase que un dueño de negocio boliviano efectivamente
+> busca. En segunda persona: le habla al que entra, no a ella misma.
+>
+> **Alternativa si se prefiere pescar por país:** `Lucía Antelo · IA para negocios en Bolivia`
+> (42 car.). Gana descubrimiento local y pierde el "tu" que interpela. Bolivia igual queda
+> dicho en la bio ("Santa Cruz de la Sierra"), por eso me quedo con la primera.
+>
+> ⚠️ **El Nombre solo se puede cambiar 2 veces cada 14 días.** Cargarlo bien la primera vez.
 >
 > **Elegido por Sergio: `lucia.antelo.oficial`**, verificado LIBRE el 2026-08-06.
 >
