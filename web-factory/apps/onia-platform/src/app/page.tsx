@@ -6,6 +6,7 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { Features } from "@/components/landing/features";
 import { Pricing } from "@/components/landing/pricing";
 import { Closing, Honesty } from "@/components/landing/closing";
+import { Faq, FAQS } from "@/components/landing/faq";
 import { MobileBar } from "@/components/landing/mobile-bar";
 import styles from "@/components/landing/landing.module.css";
 
@@ -95,6 +96,15 @@ const JSON_LD = {
         availability: "https://schema.org/InStock",
       })),
     },
+    {
+      "@type": "FAQPage",
+      // Mismo texto que la seccion <Faq/> — una sola fuente (FAQS).
+      mainEntity: FAQS.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    },
   ],
 };
 
@@ -134,6 +144,7 @@ export default function Home() {
         <Features />
         <Pricing />
         <Honesty />
+        <Faq />
         <Closing />
       </main>
       <SiteFooter />
