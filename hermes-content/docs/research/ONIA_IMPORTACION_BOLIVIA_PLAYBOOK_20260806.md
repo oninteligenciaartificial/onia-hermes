@@ -900,10 +900,36 @@ titular es la forma correcta y limpia, no un rodeo.
 - Llamar **antes** de ir: confirmar ventanilla de la USO, horario, si hay costo del registro
   y si la firma digital se saca en la misma visita.
 
-### 8.8 Qué sigue sin verificar de este paso
-- **Costo del registro** (la ficha de gob.bo no lo publica) y **plazo de resolución**.
-- Si la verificación de domicilio del paso 9 tiene requisitos formales (cartel, contrato de
-  alquiler a nombre de la empresa).
+### 8.8 ✅ RESUELTO contra el texto del reglamento (2026-08-06)
+
+Se descargó y leyó el **Reglamento GNOA-REG-19 v3 (RD 01-085-24)** artículo por artículo.
+Resultados que **corrigen** lo escrito arriba en 8.3–8.5:
+
+| Punto | Respuesta oficial |
+|---|---|
+| **Requisitos** | **Art. 32:** sólo cuatro — Padrón SIN en **régimen general** · CI vigente del titular ante **SEGIP** · Testimonio de Poder registrado en SEPREC *si corresponde* · Registro ante **SEPREC**. Más un correo activo (Art. 15). |
+| **¿Firma digital?** | **NO.** El **Art. 42 exceptúa al importador que despacha con Agencia Despachante de Aduana.** Se cae el trámite ADSIB y el token del paso 1. |
+| **¿Garantía?** | **NO** para el importador común. La garantía de **UFV's 2.000** (FOB anual ≤ USD 85.000) es del régimen de **despacho directo**, Art. 68 — importar sin despachante. |
+| **¿Costo?** | El reglamento **no fija arancel para el registro**. Las **UFV's 40** del Art. 73 son por **credencial** de acceso a recintos, que es otra cosa. |
+| **¿Hay que ir a la oficina?** | **No según el reglamento.** El flujo es online + **la Aduana viene a verificar el domicilio**. (La infoSUMA vieja aún describe presentación presencial: llevar originales listos por las dudas.) |
+| **Plazos (Arts. 40–41)** | Subsanar observaciones: **5 días hábiles**. Verificación de domicilio: dentro de **2 días hábiles** de la comunicación sin observaciones. Habilitación: **día hábil siguiente**. Total ≈ **una semana**. |
+| **Verificación de domicilio (Art. 41)** | Toman **fotos del domicilio y del representante legal**. **No habilitan** si el domicilio no se encuentra, la dirección no coincide, se niega el ingreso, **el titular no está presente**, o no tiene **CI vigente** en mano. |
+| **Vigencia (Art. 43)** | Se cae si **no se realiza al menos una operación cada 12 meses**, o si vencen NIT, matrícula, garantía o mandato. |
+| **Contraseña SUMA** | Cambio obligatorio cada **60 días** (Art. 40.III). |
+| **Sergio a los 18 (Art. 40.I.5)** | Representantes legales de **18 a 21 años** requieren consignar a **padres/tutores como terceros responsables solidarios** (Ley 2492, arts. 28/29/31), con CI vigentes, y la ANB lo verifica. |
+
+**Plataformas de Atención en Santa Cruz** (se elige una al enviar el formulario):
+Gerencia Regional — Av. La Salle esq. Claudio Peñaranda, Ed. "Don Uruguay", 3425 3333 int. 242 ·
+Aduana Interior — Av. Virgen de Cotoca km 4½, 349 2923 · Viru Viru — carretera al Norte km 17,
+385 2118 · Puerto Suárez — carretera a Puerto Quijarro km 6, 3978 2135 · ZF Winner — km 4½ a
+Cotoca, 349 7782. **Línea gratuita 800 10 5001.**
+[Plataformas de atención](https://www.aduana.gob.bo/plataforma-atencion)
+
+⚠️ La página de *Direcciones* lista la Gerencia Regional en Doble Vía La Guardia (Ed. Da Vinci,
+355-3937) y la de *Plataformas* en Ed. Don Uruguay. Una está desactualizada; como el trámite es
+remoto, no bloquea.
+
+**Runbook operativo con todo esto aplicado:** `ONIA_REGISTRO_IMPORTADOR_PAQUETE_20260806.md`.
 
 ---
 
