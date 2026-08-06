@@ -81,9 +81,48 @@ Cada uno es un carrusel orgánico Y un ad el día que haya pauta:
 | Business Manager | **OniaAgency** `1451773736711697` |
 | Cuenta de ads principal | **ONIA Ads** `1073680778314945` (USD, activa, MCP habilitado) |
 | Cuenta secundaria | `679613631427810` (BOB, mínimo Bs 11,26/día) |
-| Página FB | **Onia** `1140384625819526` (única) |
+| Página FB | **Onia** `1140384625819526` (única, a nivel usuario) |
 | **Método de pago** | ❌ **ninguna cuenta lo tiene** — bloqueo real de la pauta |
+| **Página vinculada a la cuenta de ads** | ❌ **ninguna** (`ads_get_ad_account_pages` → vacío) |
+| Campañas creadas alguna vez | **0** (`date_preset=maximum` → vacío). La cuenta está virgen |
 | IG vinculado a ads | La API aún no lo expone para esta cuenta (rollout gradual de Meta) |
+
+> **Re-verificado 2026-08-06 (segunda pasada, misma fecha).** Aparece un **segundo bloqueo que
+> no estaba anotado**: la página *Onia* existe a nivel usuario pero **no está promocionada bajo
+> la cuenta de ads**. Sin eso no se puede crear un creative (`object_story_spec` exige `page_id`
+> de una página de la cuenta), aunque haya tarjeta. Son 2 trámites, no 1 — y el de la página es
+> gratis y se hace hoy.
+
+## 6. La primera campaña — lista para disparar el día que haya tarjeta
+
+Nada de esto se puede crear hoy (faltan los 2 trámites). Queda escrito para que el día que se
+destrabe sea copiar y pegar, no pensar.
+
+**Trámites previos, en orden (Sergio):**
+1. Vincular la página **Onia** `1140384625819526` a la cuenta **ONIA Ads** `1073680778314945`
+   dentro del BM OniaAgency. Gratis, 5 min.
+2. Cargar método de pago en esa cuenta (USD).
+3. Migrar el token USER a **System User** — vence **2026-09-05** y se lleva el motor puesto.
+
+**Estructura de la campaña 1 (la única que se lanza primero):**
+
+| Nivel | Config |
+|---|---|
+| Campaña | Objetivo `OUTCOME_LEADS`, presupuesto a nivel ad set (no CBO con 1 ad set) |
+| Ad set | Santa Cruz de la Sierra + 25 km · 25-55 · sin intereses (audiencia amplia: el catálogo es chico y el algoritmo aprende mejor) · optimización **conversaciones/mensajes** o `LEAD_GENERATION` |
+| Presupuesto | **USD 5/día × 7 días** por ángulo (mínimo real de la cuenta: $1/día) |
+| Anuncios | 2 creatividades del mismo ángulo, nunca 4 (con $5/día no hay señal para dividir) |
+| Destino | `onia.com.bo/?src=ads-<angulo>` → lead al panel → Cal. **Sin `?src=` no se lanza** |
+
+**Qué ángulo va primero:** el que ya haya traído un lead en orgánico. Si al momento de activar
+no hay ninguno con señal, arranca **A2** ("¿Cuántos pacientes no volvieron este mes?") porque
+es el vertical más desocupado según §1.
+
+**Regla de corte a los 7 días:** si el costo por conversación supera ~USD 5, se apaga y se
+cambia el ángulo — no se sube el presupuesto para "darle tiempo".
+
+⚠️ Si la página no se vincula antes de cargar la tarjeta, la cuenta va a cobrar $0 pero
+igual va a parecer "lista": el error recién aparece al crear el creative. Vincular primero.
 
 ---
 

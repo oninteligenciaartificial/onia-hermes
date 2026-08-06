@@ -6,24 +6,28 @@ Definir que funciones de Higgsfield debe usar Onia primero para crear contenido 
 Este documento es operativo: sirve para decidir modelo, flujo, comandos, limites de seguridad y plan de arranque.
 
 ## Estado actual
-Validado el 2026-06-01 por CLI local:
 
-- Cuenta: `oninteligenciaartificial@gmail.com`
-- Plan: `ultra`
-- Creditos disponibles al validar: `3000`
-- Ruta recomendada actual: CLI
-- Ruta futura: MCP nativo cuando Codex/Hermes lo exponga como herramienta directa
+**Verificado el 2026-08-06 por MCP nativo** (reemplaza la validacion por CLI del 2026-06-01):
 
-Fuentes revisadas:
+- Cuenta: `oninteligenciaartificial@gmail.com` · Plan: `ultra` · Creditos: **2.993,73**
+- **Ruta vigente: MCP** (`https://mcp.higgsfield.ai/mcp`), ya conectado a esta sesion. La CLI
+  pasa a ser respaldo, no la ruta principal.
+- Souls `ready`: `LUCIA-REAL-v2-clean` (`36305a9b-…`), `Mara ONIA v1` (`b8f5c353-…`),
+  `Sergio Onia` + 3 variantes historicas de Sergio.
+- Costo medido: **imagen Soul 2k = 0,12 cr**. Video segun modelo (cotizar con `get_cost:true`).
+- Sin allowance `unlim` activo (plan Ultra paga con creditos; `unlim.available: false`).
+- TikTok conectado: 0 cuentas (existe `tiktok_connect` para publicar directo desde Higgsfield).
 
-- https://higgsfield.ai/cli
-- https://higgsfield.ai/marketing-studio-intro
-- https://higgsfield.ai/canvas-intro
-- https://higgsfield.ai/supercomputer-intro
-- https://higgsfield.ai/apps
-- https://github.com/higgsfield-ai/cli
-- Sesion Chrome autenticada
-- CLI local de Higgsfield
+Lo que cambio respecto de junio y hay que saber:
+
+1. El MCP expone **mucho mas que la CLI**: workflows empaquetados, generacion en lote,
+   publicacion a TikTok, sitios web, juegos, 3D, clipper y predictor de viralidad.
+2. El catalogo de modelos se movio fuerte (Seedance 2.0, Kling 3.0, Veo 3.1, FLUX 3, Nano
+   Banana Pro/2, GPT Image 2, MiniMax H3, Wan 2.7). Verificar con `models_explore` antes de
+   citar parametros: **este doc envejece rapido**.
+
+Fuentes: MCP `balance`, `show_characters`, `models_explore`, `get_workflow_instructions`
+(2026-08-06) · https://higgsfield.ai/cli · marketing-studio / canvas / supercomputer / apps.
 
 ## Inventario de funciones
 
@@ -57,11 +61,41 @@ Capacidades:
 - `product-photoshoot`: generar fotos de producto con prompt mejorado.
 - `marketplace-cards`: generar imagenes tipo marketplace y modulos de producto.
 
-MCP:
+### MCP — la superficie real (verificado 2026-08-06)
 
-- Endpoint publicado: `https://mcp.higgsfield.ai/mcp`
-- Usar MCP cuando aparezca como tool directo en Codex/Hermes.
-- Hasta entonces, usar CLI.
+Endpoint: `https://mcp.higgsfield.ai/mcp`. Ya conectado. Es la ruta por defecto.
+
+**Herramientas nucleo**
+
+| Grupo | Herramientas | Para que |
+|---|---|---|
+| Generar | `generate_image` / `generate_video` / `generate_audio` + sus `_batch` (1-12 jobs en paralelo) | produccion; el `_batch` + `jobs_wait` + `show_generation_by_ids` es el patron de volumen |
+| Costos | `get_cost` / param `get_cost:true` · `balance` · `transactions` | cotizar ANTES de generar (regla de gasto) |
+| Identidad | `show_characters` (list/train/status) · `show_reference_elements` | Souls (1 persona, ~10 min de entreno) vs Elements (varios sujetos/objetos, instantaneo) |
+| Catalogo | `models_explore` (list/search/get/recommend) · `presets_show` | parametros y aspect ratios reales, no de memoria |
+| Edicion | `upscale_image` / `upscale_video` (2K/4K) · `outpaint_image` · `reframe` · `remove_background` · `motion_control` | retocar en vez de re-generar (mas barato) |
+| Marketing | `show_marketing_studio` (avatars, hooks, settings, products, brand kits, ad references) | anuncios de cliente con marca cargada |
+| Analisis | `virality_predictor` · `video_analysis_*` | revisar hook/retencion antes de publicar |
+| Volumen | `personal_clipper_*` (YouTube largo → clips) · `shorts_studio_*` (+ presets) | reciclar video largo a verticales |
+| Publicacion | `tiktok_connect` / `tiktok_prepare_publish` / `tiktok_publish` / `tiktok_music_trending` | **publica a TikTok sin token de Meta** — no depende de S6 |
+| Otros | `generate_3d` (GLB) · `create_website`/`deploy_website` · `deploy_game` · `dubbing` · `voice_change` · `create_voice` | capacidades laterales; no reemplazan web-factory |
+
+**Workflows empaquetados** (`get_workflow_instructions`, cargan un SKILL.md completo que
+orquesta los `generate_*`). Son la parte mas vendible y hay que cargarlos ANTES de producir:
+
+| Workflow | Que produce | Uso comercial Onia |
+|---|---|---|
+| `ugc-flow` | talking-head de creador reseñando un producto | **el default de un ad UGC** |
+| `ugc-product-flow` | solo producto, voz en off, sin persona | marcas que no quieren cara |
+| `ugc-saas-flow` | UGC con capturas REALES del sitio del cliente | **anuncio de web/tienda — el que vende web-factory** |
+| `ugc-unboxing-flow` · `ugc-try-on-flow` · `ugc-tutorial-flow` | unboxing / prueba de ropa / paso a paso | e-commerce, moda, servicios |
+| `brandkit` | logos, identidad, mockups, packaging, social graphics | add-on de marca |
+| `character-sheet` | hoja de personaje consistente | crear modelos IA nuevas |
+| `faceless-channel-video` | video narrado sin cara, 30s a 10+ min | canales K y L (YT faceless) |
+| `youtube-thumbnail-generator` | miniaturas 4K nivel MrBeast | miniaturas propias y de cliente |
+
+Regla: **cargar el workflow con `get_workflow_instructions` antes de llamar a `generate_*`.**
+Improvisar el prompt en vez de cargar el workflow es la causa #1 de piezas mediocres.
 
 ### Marketing Studio
 Uso principal para Onia: vender anuncios UGC y videos comerciales a negocios.
@@ -248,6 +282,37 @@ Regla:
 
 ### Modelos clave
 
+#### Catalogo verificado 2026-08-06 (lo que hay que elegir hoy)
+
+**Video** — 30+ modelos; los que importan:
+
+| Modelo | Id | Cuando |
+|---|---|---|
+| Marketing Studio | `marketing_studio_video` | anuncio de cliente con avatar/producto/brand kit (12-15s) |
+| Seedance 2.0 | `seedance_2_0` | **el caballo de batalla**: identidad consistente por referencia, multi-SKU, audio nativo, hasta 4K |
+| Seedance 2.0 Mini | `seedance_2_0_mini` | misma logica, barato, 480/720p — pruebas y volumen |
+| Kling v3.0 | `kling3_0` | multi-shot, transferencia de movimiento, modo 4k |
+| Veo 3.1 / Lite | `veo3_1` / `veo3_1_lite` | ultra realista (caro) / lotes baratos de 4-8s |
+| Cinema Studio 3.0 | `cinematic_studio_3_0` | pieza cine, 4-15s, hasta 4K |
+| FLUX 3 Video | `flux_3_video` | continuacion de video + audio sincronizado, 5-20s |
+| Personal Clipper | `clipify` | 1 YouTube → hasta 20 clips 9:16 con subtitulos |
+| Lipsync 3 | `sync_so` | pegar voz de ElevenLabs a un video ya generado |
+| Upscale / deflicker | `topaz_video`, `bytedance_video_upscale`, `video_deflicker` | terminar la entrega al cliente |
+
+**Imagen:**
+
+| Modelo | Id | Cuando |
+|---|---|---|
+| Soul 2.0 | `soul_2` (+`soul_id`) | **modelos IA, UGC, retrato** — 0,12 cr a 2k |
+| Nano Banana Pro / 2 | `nano_banana_pro` / `nano_banana_2` | 4K, texto legible y diagramas, mockups |
+| GPT Image 2 | `gpt_image_2` | tipografia y edicion precisa, 4K |
+| Marketing Studio Image / DTC Ads | `marketing_studio_image` / `ms_image` | ads estaticos; `ms_image` exige `style_id` y acepta brand kit |
+| Seedream 4.5 | `seedream_v4_5` | 4K-6K, transformaciones precisas |
+| Cinema Studio Image 2.5 | `cinematic_studio_2_5` | stills cinematograficos 4K |
+
+> Regla dura: **antes de citar parametros, correr `models_explore action=get`.** El catalogo
+> cambia mes a mes; lo de arriba es foto del 2026-08-06.
+
 #### Marketing Studio Video
 Mejor para:
 
@@ -376,7 +441,64 @@ Prioridad 3:
 | Revisar hook | Virality Predictor | Reduce riesgo antes de publicar |
 | Evitar copiar referencias | Similarity Score | Ayuda a revisar similitud/IP |
 
-## Plan de arranque
+## Higgsfield como PRODUCTO de la plataforma ONIA
+
+> Pedido de Sergio 2026-08-06: *"aprendelo como la palma de tu mano para que lo usemos como
+> producto para la ONIA plattform"*. Esta seccion es la respuesta: **que se vende**, no que
+> se puede hacer.
+
+### La tesis
+
+Higgsfield no se vende como "videos con IA" (commodity, lo ofrece cualquiera). Se vende como
+**el Estudio de Contenido dentro de la plataforma que el cliente ya usa**: su marca cargada,
+su modelo/avatar, su cola de aprobacion, su calendario, su atribucion. El foso no es el
+modelo generativo — es que el contenido **cae adentro del panel donde el cliente ya gestiona
+su negocio** y termina en un lead atribuido, no en un archivo por WhatsApp.
+
+Consecuencia de producto: el modulo vive en `onia-center` y reusa lo que ya existe
+(cola de aprobacion, agentes, `?src=` → lead → Cal). Higgsfield es el **motor**, no la marca.
+
+### Los 4 SKU (de menor a mayor compromiso)
+
+| SKU | Que recibe el cliente | Motor | Costo de generacion |
+|---|---|---|---|
+| **Demo de venta** (gratis, arma la reunion) | 1 pieza vertical con SU producto/local | `ugc-saas-flow` desde la URL del cliente | 1 video, cotizar con `get_cost` |
+| **Pack de piezas** (add-on de propuesta) | N videos + estaticos al mes, aprobados en el panel | `ugc-flow` / `marketing_studio_video` + `ms_image` con brand kit | ~0,12 cr/imagen + video por pieza |
+| **Modelo IA de la marca** (ticket alto) | Soul propio del cliente + banco mensual de piezas con esa cara | `show_characters(train)` + `soul_2` + receta visual | entreno ~10 min · 0,12 cr/imagen |
+| **Estudio gestionado** (recurrente, el que importa) | todo lo anterior + calendario + publicacion + reporte de leads atribuidos | pipeline completo + `virality_predictor` antes de publicar | presupuesto de creditos por cliente |
+
+**Precios: NO se inventan aca.** Salen del generador de propuestas (add-on "videos IA") y de
+`ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` §3.6-3.7. Este doc define el producto; el precio
+vive en su fuente. Ver tambien `HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md` §2 (escalera de ofertas).
+
+### Por que el margen es real
+
+El plan Ultra ya esta pagado y da **2.994 creditos**. Una imagen Soul cuesta **0,12 cr** — un
+banco mensual de 30 imagenes para un cliente cuesta **~3,6 creditos**. El costo marginal de
+sumar un cliente al Estudio es practicamente el video, y el video se cotiza por pieza antes de
+generar. **Lo que se cobra es el sistema y la aprobacion, no el render.**
+
+### Lo que hace el modulo dentro del panel (spec corta)
+
+1. **Brand kit del cliente** cargado una vez (`show_marketing_studio type='brand_kit'`) → todas
+   sus piezas salen con su paleta, logo y tono.
+2. **Producto/es** cargados (`type='product'`) → `ms_image` y `marketing_studio_video` los
+   componen solos.
+3. **Cola de aprobacion** (ya existe en onia-center): nada sale sin OK humano. Regla dura.
+4. **Publicacion:** TikTok directo por MCP (`tiktok_publish`, no depende del token de Meta);
+   Instagram queda atado a S6.
+5. **Atribucion:** cada pieza lleva su `?src=` → lead en el panel. **La metrica del modulo es
+   leads atribuidos, no piezas entregadas.**
+
+### Lo que NO se vende (limites que evitan quemar la cuenta)
+
+- Nada de testimonios ni resultados fabricados (FTC) — la modelo **presenta y demuestra**.
+- No se usa cara ni voz de nadie sin consentimiento escrito.
+- No se replica el anuncio de un competidor identificable (usar `ads_library_search` para
+  entender el angulo, no para copiar la pieza).
+- No se promete alcance ni ventas: se promete **produccion + sistema**.
+
+## Plan de arranque *(historico — junio 2026; el arranque vigente es la seccion de arriba)*
 
 ### Dia 1: tres demos vendibles
 Crear briefs, no generar sin aprobacion.

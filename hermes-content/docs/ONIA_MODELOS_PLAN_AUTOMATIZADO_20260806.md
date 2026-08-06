@@ -108,8 +108,8 @@ de Instagram — un trámite tuyo, no código. Con él, esto corre solo de punta
 
 | Paso | Quién | Tiempo |
 |---|---|---|
-| 1. Lote de calibración: 8 imágenes por modelo con bloque de identidad | Arthur | 2 min, ~2 cr |
-| 2. Sergio marca cuáles sí | Sergio | 5 min |
+| ~~1. Lote de calibración: 8 imágenes por modelo con bloque de identidad~~ | ✅ **HECHO 2026-08-06** — 30 imágenes en 3 rondas, 3,6 cr. Resultado y receta reproducible: `ONIA_MODELOS_RECETA_VISUAL_20260806.md` | — |
+| 2. Sergio marca cuáles sí (hojas de contacto en `references/modelos/`) | **Sergio — pendiente** | 5 min |
 | 3. Crear las 2 cuentas IG (etiqueta IA en bio, obligatoria) | Sergio | 30 min |
 | 4. Cargar avatar, bio, y los 4 carruseles con sus `?src=` | Arthur | 1 h |
 | 5. Publicación manual 3×/semana + DM a mano | Arthur (aprueba Sergio) | 15 min/día |
