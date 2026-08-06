@@ -35,6 +35,7 @@
 import { pathToFileURL } from "node:url";
 
 import { DEFAULT_CONFIG, createBotConfig, slotsPending } from "./config.mjs";
+import { withKnowledge } from "./knowledge.mjs";
 import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
@@ -83,7 +84,10 @@ export function parseSlotsSpec(raw) {
     });
 }
 
-/** Config del barrido: DEFAULT_CONFIG + slots + dryRun. Nada mas se pisa desde la CLI. */
+/**
+ * Config del barrido: DEFAULT_CONFIG + slots + dryRun + los HECHOS editables (knowledge.json).
+ * Nada mas se pisa desde la CLI. Sin archivo de conocimiento devuelve el MISMO objeto de antes.
+ */
 export function buildConfig(args = {}) {
   const overrides = {};
   const envDry = String(process.env.ONIA_BOT_DRY_RUN ?? "").toLowerCase();
@@ -92,7 +96,7 @@ export function buildConfig(args = {}) {
 
   const slots = parseSlotsSpec(args.slots || process.env.ONIA_BOT_SLOTS || "");
   if (slots) overrides.slots = slots;
-  return Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG;
+  return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG);
 }
 
 /**
@@ -110,7 +114,7 @@ export async function resolveConfig(args = {}, deps = {}) {
   const getSlots = typeof deps.getAvailableSlots === "function" ? deps.getAvailableSlots : getAvailableSlotsFromCalcom;
   const live = await getSlots({ nowIso: deps.nowIso }, deps);
   if (!live || !Array.isArray(live.slots) || live.slots.length === 0) return config;
-  return createBotConfig({ slots: live.slots, dryRun: config.dryRun });
+  return withKnowledge(createBotConfig({ slots: live.slots, dryRun: config.dryRun }));
 }
 
 // ---------------------------------------------------------------------------

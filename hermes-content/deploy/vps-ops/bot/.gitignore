@@ -1,0 +1,4 @@
+# El conocimiento VIVO se edita en el VPS (/opt/onia/bot/knowledge.json) y NO va a git: si el
+# repo lo trajera, cada deploy le pisaria las ediciones al que las hizo — sin aviso.
+# La plantilla versionada es knowledge.example.json.
+knowledge.json

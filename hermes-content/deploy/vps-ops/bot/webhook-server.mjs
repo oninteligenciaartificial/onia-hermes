@@ -42,6 +42,7 @@ import { parseChatwootWebhook, runChatwootTurn } from "./chatwoot-adapter.mjs";
 import { authenticateChatwootRequest, DEFAULT_TOLERANCE_SECONDS } from "./webhook-security.mjs";
 import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
+import { knowledgeHealth } from "./knowledge.mjs";
 
 export const DEFAULT_PORT = 3020;
 export const DEFAULT_MAX_BODY_BYTES = 1024 * 1024;
@@ -66,8 +67,13 @@ export function getServerConfig(env = process.env) {
   };
 }
 
-/** Estado para `GET /health`. NUNCA devuelve un secreto: sólo si está o no está. */
-export function getHealthStatus(config = getServerConfig(), n8nConfig = getN8nEventConfig()) {
+/**
+ * Estado para `GET /health`. NUNCA devuelve un secreto: sólo si está o no está.
+ * `knowledge` es obligatorio y no decorativo: sin ver la FUENTE y la VERSIÓN que el bot está
+ * usando, "edité el JSON y no pasó nada" tarda días en descubrirse — que es exactamente el modo
+ * de falla que ya nos costó caro con `sync-onia-core.mjs`.
+ */
+export function getHealthStatus(config = getServerConfig(), n8nConfig = getN8nEventConfig(), knowledge = knowledgeHealth()) {
   const authOk = Boolean(config.webhookSecret || config.pathSecret || config.allowUnsigned);
   return {
     ok: authOk,
@@ -81,6 +87,9 @@ export function getHealthStatus(config = getServerConfig(), n8nConfig = getN8nEv
       aviso: authOk ? undefined : "SIN SECRETO CONFIGURADO: el webhook responde 503 a todo.",
     },
     n8n: { enabled: n8nConfig.enabled, configurado: Boolean(n8nConfig.url && n8nConfig.secret) },
+    // source: "file" = manda knowledge.json · "code" = se cayó a los valores del código.
+    // Caer a "code" después de haber sido "file" es la alarma: alguien editó y el bot no lo tomó.
+    knowledge,
   };
 }
 

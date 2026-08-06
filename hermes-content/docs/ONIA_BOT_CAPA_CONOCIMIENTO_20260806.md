@@ -62,20 +62,41 @@ rompa un contrato de datos. Es hecho si equivocarse solo lo hace decir algo desa
 ### 1.2 Hechos que hoy están *escritos dentro del guion* (la deuda real)
 
 Son literales incrustados en plantillas de `config.mjs`. La plantilla se queda; el
-literal pasa a ser una variable que se resuelve desde los datos:
+literal pasa a ser una variable que se resuelve desde los datos.
 
-| Literal | Dónde | Variable propuesta |
-|---|---|---|
-| "o presencial si estás en **Santa Cruz**" | `SCRIPT.M1b` | `{{ciudad_presencial}}` |
-| "son **15-20 minutos** por videollamada" | `SCRIPT.M1b` | `{{demo_duracion}}` |
-| "en horario de oficina (**lun-vie, 9:00-18:00**)" | `SCRIPT.M5` y `SCRIPT.M8_SOPORTE` | `{{horario_frase}}` |
-| "desde el **30 de septiembre** es obligatoria" | `SCRIPT.M_SIAT_BODY` | pasa entera a `faq[siat]` |
+> **Actualizado al estado real post-`f072916c`** (el reordenamiento del embudo). `M1b`
+> ya no existe: el "presencial / Santa Cruz" y la duración vivían ahí y hoy la duración
+> está en `M0`. La tabla de abajo es lo que hay HOY en el archivo, no lo que había.
 
-> ⚠️ **Contradicción encontrada en producción.** `M1b` promete "15-20 minutos" y la
-> reserva real usa `CALCOM_BOT_DURATION_MINUTES` con default **45**
-> (`webhook-server.sh`). Hoy el mismo hecho está escrito en dos lugares con dos
-> valores. Con `{{demo_duracion}}` derivado de un único campo, la contradicción deja
-> de ser posible.
+| Literal | Dónde | Variable | Estado |
+|---|---|---|---|
+| "en **15 minutos** por **videollamada**" | `SCRIPT.M0` | `{{demo_duracion}}` + `{{demo_modalidad}}` | ✅ hecho |
+| "en horario de oficina (**lun-vie, 9:00-18:00**)" | `SCRIPT.M5` y `SCRIPT.M8_SOPORTE` | `{{horario_frase}}` | ✅ hecho |
+| "desde el **30 de septiembre** es obligatoria" | `SCRIPT.M_SIAT_BODY` | pasa entera a `faq[siat]` | ✅ hecho |
+
+`{{ciudad_presencial}}` **no se implementó como campo aparte**: al desaparecer `M1b` se
+quedó sin ningún lugar donde renderizarse, y una clave editable que no se consume es
+justo el fallo silencioso que esta capa viene a evitar. La ciudad presencial se edita
+dentro de `demo.modalidad` ("videollamada, o presencial si estás en Santa Cruz"), que sí
+tiene consumidor (`M0`) y sí pasa por el guardrail.
+
+> ⚠️ **Contradicción encontrada en producción — SIGUE ABIERTA, ahora acorralada.**
+> `M0` promete "15 minutos" y la reserva usa `CALCOM_BOT_DURATION_MINUTES` = **45**.
+> Cuál es la verdadera es una **decisión de negocio de Sergio** y no se tomó desde el
+> código: bajar la reserva le rompe la agenda, subir el texto le cambia la promesa al
+> prospecto. Lo que sí se hizo:
+> - los dos números salen del **mismo bloque** (`config.mjs` → `DEMO`), el guion por
+>   `{{demo_duracion}}` y la reserva porque `run-turn.mjs` le pasa `duracionMinutos` a
+>   Cal.com (`CALCOM_BOT_DURATION_MINUTES` sigue ganando si está definido en el entorno);
+> - la divergencia está **declarada** (`DEMO.pendiente: true`) y **clavada por un test**
+>   (`knowledge.test.mjs` → "DURACION DE LA DEMO"): cambiar uno de los dos números sin el
+>   otro rompe la suite;
+> - la capa editable **no puede crear la contradicción**: si un `knowledge.json` toca la
+>   duración, tiene que traer los dos campos y decir el mismo número, o se rechaza entero.
+>
+> **Tomar la decisión = una sola edición:** poner el mismo número en `duracionMinutos` y
+> `duracionFrase` (en `knowledge.json`, sin desplegar, o en `config.mjs` con
+> `pendiente: false`) y actualizar el assert del test.
 
 ### 1.3 `intents.mjs` — el punto que más duele al crecer
 
@@ -237,6 +258,37 @@ valores salen del repo y están citados; lo que falta va marcado como pendiente.
    distingue hoy no son los 11 `verticalPacks[].rubro` del core; `coreRubro` mapea
    cada uno al pack correspondiente y es lo que valida `moduloListo` (§4).
 
+### 2.1 Lo que ENTRA en la v1 implementada (allowlist real)
+
+> El esquema de arriba es el destino. La v1 que está en el repo acepta **solo lo que
+> tiene consumidor de verdad**, porque una clave que se acepta y no hace nada le miente
+> al editor exactamente igual que un archivo que no se aplicó. Allowlist vigente
+> (`knowledge.mjs` → `SHAPE`), archivo de arranque en
+> `hermes-content/deploy/vps-ops/bot/knowledge.example.json`:
+
+| Clave | Consumidor real |
+|---|---|
+| `schema` (obligatorio, exacto) · `version` · `updatedBy` | identidad del archivo · `/health` |
+| `identity.{productName, humanName, botName}` | `varsFor` → todo el guion |
+| `empresa.horario.{dias, desde, hasta, frase}` | `businessHours` (ventana real) + `{{horario_frase}}` en M5/M8 |
+| `demo.{duracionMinutos, duracionFrase, modalidad}` | `{{demo_duracion}}`/`{{demo_modalidad}}` en M0 **y** la reserva en Cal.com |
+| `faq[]` con `id: "siat"` (`title`,`body`,`status`,`vigenteHasta`,`tags`) | reemplaza el cuerpo de `M_SIAT_BODY` |
+| `triggersExtra.demo[]` | **unión** con `triggers.demo` del código |
+
+Lo que quedó **fuera a propósito** en la v1, con el motivo:
+
+- **`rubros[]` (el léxico de `intents.mjs`)** — es el ítem que más duele al crecer y el
+  que sigue. Requiere pasarle la config a `intents.parseQualification()`, que hoy no la
+  recibe, y volver a medir el banco. Hasta que eso esté, la clave **se rechaza**: mejor
+  un error explícito que una lista de palabras que el matcher nunca lee.
+- **`empresa.{sitio, whatsapp, ciudadBase, ciudadesPresencial}` y `demo.quienLaDa`** — no
+  hay plantilla que los renderice. `quienLaDa` ya vive en `identity.humanName`.
+- **`faq[].gatillos`** — hoy el ruteo al SIAT lo decide `RE_SIAT` en `intents.mjs`, que es
+  lógica. Un gatillo editable cambiaría a qué rama del embudo se contesta, no el texto.
+- **`triggersExtra.optOut`** — `isOptOut()` no lee la config: los gatillos de baja son un
+  regex en código y solo cambian por commit. Quitar una baja es lo único que quema el
+  número ante Meta, así que la capa editable ni lo toca.
+
 ### Pendientes (no inventar)
 
 - `demo.duracionFrase` vs `duracionMinutos`: hay que decidir el valor real (hoy 15-20
@@ -312,15 +364,52 @@ algo que el bot no está diciendo — la falla más cara que ya nos pasó
   de haber sido `db`/`file`. Sin esa alarma, "edité y no pasó nada" tarda días en
   descubrirse.
 
-### 3.6 Bug a corregir antes del paso (a)
+### 3.6 Bug de despliegue — ✅ CORREGIDO
 
-`webhook-server.sh` calcula el STAMP con `cat "$BOT_DIR"/*.mjs | md5sum`: **un cambio
-que toque solo el `.json` no cambia el stamp**, así que un `restart` no re-copia y el
-contenedor se queda con la versión vieja. Dos arreglos de una línea, van los dos:
+`webhook-server.sh` calculaba el STAMP con `cat "$BOT_DIR"/*.mjs | md5sum`: **un cambio
+que tocara solo el `.json` no cambiaba el stamp**, así que un `restart` no re-copiaba y el
+contenedor se quedaba con la versión vieja, en silencio. Los dos arreglos, hechos:
 
-1. Incluir `*.json` en el STAMP → un `restart` arrastra la edición.
-2. Comando `webhook-server.sh knowledge` que haga `docker cp` solo del archivo → la
-   edición aplica **sin reiniciar**, y con el TTL el bot la toma en ≤ 5 min.
+1. `*.json` incluido en el STAMP → un `restart` arrastra la edición. El cálculo estaba
+   **duplicado en los 4 wrappers** (`webhook-server.sh`, `run-turn.sh`,
+   `chatwoot-adapter.sh`, `followup-run.sh`), que comparten carpeta y stamp: se corrigió
+   en los 4. Con uno solo sin arreglar, el primer mensaje que entrara por ese camino
+   volvía a dejar el stamp viejo y la edición desaparecía.
+2. `webhook-server.sh knowledge`: copia SOLO el archivo, **lo valida adentro del
+   contenedor** con el mismo validador que usa el bot al cargar, y recién si pasa lo mueve
+   a su lugar. Sin reiniciar: con el TTL el bot lo toma en ≤ 5 min. Si el archivo se
+   rechaza, se borra el temporal y el bot sigue con lo anterior.
+
+### 3.7 Cómo se edita en el VPS (runbook, 4 comandos)
+
+El archivo vivo es `/opt/onia/bot/knowledge.json` en el **host**, fuera de git — igual que
+`webhook.env`. El repo trae la plantilla `knowledge.example.json` y **nunca** un
+`knowledge.json` (está en `.gitignore`): si el repo lo trajera, cada deploy le pisaría las
+ediciones al que las hizo, sin aviso.
+
+```bash
+ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63
+
+# 1. la primera vez: partir de la plantilla versionada
+cp /opt/onia/bot/knowledge.example.json /opt/onia/bot/knowledge.json
+
+# 2. editar los hechos
+nano /opt/onia/bot/knowledge.json
+
+# 3. aplicar. VALIDA primero: si trae un precio, una promesa, una clave desconocida o el
+#    JSON está roto, NO se aplica y muestra el error exacto (el bot sigue con lo anterior)
+/opt/onia/bot/webhook-server.sh knowledge
+
+# 4. confirmar QUÉ está usando el bot (source debe decir "file" y la version, la tuya)
+/opt/onia/bot/webhook-server.sh status
+```
+
+La edición entra sola en ≤ 5 min (TTL). Para que entre ya:
+`/opt/onia/bot/webhook-server.sh restart`. Para probar un archivo sin aplicarlo:
+`docker exec onia-center node /tmp/onia-bot/knowledge.mjs --check /tmp/onia-bot/knowledge.json`.
+
+> Si `status` sigue diciendo `"source":"code"` después del paso 3, el archivo **no** está
+> mandando: mirá `knowledge.lastError` en la misma salida. Nunca asumas que se aplicó.
 
 ---
 
@@ -393,20 +482,29 @@ hoy 60/60). Si el benchmark baja, no se publica. Ya existe; solo hay que exigirl
 
 ## 5. Ruta de adopción en 3 pasos
 
-### (a) Archivo en el VPS, editable por SSH — *el paso que resuelve el problema*
+### (a) Archivo en el VPS, editable por SSH — ✅ IMPLEMENTADO (2026-08-06)
 
-1. Cargador `knowledge.mjs`: lee `/tmp/onia-bot/knowledge.json`, valida (§4), cachea
-   con TTL, degrada a `DEFAULT_CONFIG`. Nunca tira.
-2. `config.mjs` deja de ser el origen de los hechos y pasa a ser el **piso**: los
-   valores actuales quedan como fallback literal, sin borrar nada.
-3. `intents.mjs` compila `RUBROS` desde el léxico cargado, con el mismo algoritmo.
-4. Variables nuevas en `varsFor` (`ciudad_presencial`, `demo_duracion`, `horario_frase`)
-   y las plantillas de §1.2 usándolas.
-5. `webhook-server.sh`: STAMP con `*.json` + acción `knowledge` (§3.6).
-6. `/health` reporta la fuente y los tamaños; el watchdog alerta si cae a `code`.
+1. ✅ Cargador `knowledge.mjs`: lee `/tmp/onia-bot/knowledge.json` (ruta por defecto = al
+   lado del módulo; `ONIA_BOT_KNOWLEDGE_FILE` la pisa), valida (§4), cachea con TTL 300 s
+   refrescando fuera del camino de la respuesta, degrada a `DEFAULT_CONFIG`. Nunca tira, y
+   la degradación es **identidad**: sin archivo devuelve el MISMO objeto de config.
+2. ✅ `config.mjs` pasa a ser el **piso**: los valores actuales quedan como fallback
+   literal, sin borrar nada. Los 20 templates renderizan byte a byte igual que antes.
+3. ⛔ `intents.mjs` compilando `RUBROS` desde el léxico — **no entró en la v1** (ver §2.1).
+   Es lo próximo y es lo único que falta para "agregar un rubro sin desplegar".
+4. ✅ Variables nuevas en `varsFor` (`demo_duracion`, `demo_modalidad`, `horario_frase`) y
+   las plantillas de §1.2 usándolas.
+5. ✅ `webhook-server.sh` (y los otros 3 wrappers): STAMP con `*.json` + acción
+   `knowledge` con validación previa (§3.6).
+6. ✅ `/health` reporta `knowledge: { source, version, updatedBy, faq, triggersDemo,
+   loadedAt, path, lastError }`. ⛔ Falta la **alarma del watchdog** si `source` cae a
+   `code` después de haber sido `file`: `webhook-watchdog.sh` hoy solo mira que `/health`
+   conteste, no qué dice. Sin esa alarma, "edité y no pasó nada" se ve solo si alguien
+   mira `/health` a mano.
 
-Resultado: agregar un rubro, una FAQ o cambiar un horario = editar un JSON por SSH.
-Sin build, sin commit, sin reinicio.
+Resultado hoy: cambiar horario, identidad, duración/modalidad de la demo o la respuesta
+del SIAT = editar un JSON por SSH. Sin build, sin commit, sin reinicio.
+Falta para el enunciado completo: agregar un **rubro** (punto 3) y la alarma (punto 6).
 
 ### (b) Editable desde el panel ONIA Center
 
