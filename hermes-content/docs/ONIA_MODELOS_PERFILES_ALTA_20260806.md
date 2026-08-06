@@ -115,10 +115,25 @@ adentro del sistema.
 
 > ### Cómo se hizo la foto de perfil — y el error que casi cometo
 >
-> **Origen: `references/models/lucia-surgical-shoot-20260707/03-front-big-smile.png`**, la toma
-> del photoshoot quirúrgico **ya aprobado por Sergio como identidad definitiva**. Lo único que
-> se le hizo fue recorte cuadrado centrado en la cara + entibiar el punto blanco para que el
-> fondo pase a crema. **Cero generación nueva, cero deriva de identidad.**
+> **Origen: `references/models/lucia-content-bank-20260709/realism-goldenhour.png`.** Recorte
+> cuadrado centrado en la cara + un leve levante de medios (está a contraluz y la cara quedaba
+> un punto oscura a tamaño chico). **Cero generación nueva, cero deriva de identidad.**
+>
+> **Por qué esta y no la de estudio** (Sergio, 2026-08-06: *"una foto un poco más improvisada…
+> que sea como una persona real"*): la toma de estudio `03-front-big-smile` se lee como **foto
+> de casting** — fondo liso, pose frontal, simetría perfecta. Ninguna persona real tiene eso de
+> foto de perfil. La de golden hour parece lo que es: una foto que le sacó un amigo al
+> atardecer. Queda guardada como `alternativa-estudio.jpg` por si algún día se quiere el
+> registro formal.
+>
+> **Lo que además la hace ganar técnicamente:** el contraluz le dibuja un borde de luz en el
+> pelo que la **separa del fondo**. Eso es lo que hace que a 32px siga leyéndose una persona y
+> no una mancha. Comparativa completa: `_REALES-TEST.jpg` (5 candidatos) y `_AB-FINAL.jpg`.
+>
+> **Descartadas y por qué:** selfie de espejo del baño (la más "improvisada" de todas, pero
+> expresión neutra que se apaga en chico y fondo blanco sin contraste) · café (ojos
+> entrecerrados a mitad de risa, raro como foto fija) · gym y calle (cara diminuta en el
+> círculo) · cocina (demasiado aire alrededor de la cara).
 >
 > **Lo que pasó antes (queda escrito para no repetirlo):** generé 7 avatares desde el Soul
 > ignorando que este material ya existía. Salieron con la cara más ancha y redonda que la
