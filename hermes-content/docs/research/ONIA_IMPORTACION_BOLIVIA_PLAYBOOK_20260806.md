@@ -351,17 +351,21 @@ mensual del SaaS**, que no consume capital ni tiene riesgo de inventario.
 
 ## 4. Proveedores y canal de compra
 
-### 4.1 Hallazgo que cambia el plan: no hace falta importar para el piloto
+> **REGLA (Sergio, 2026-08-06): se compra SIEMPRE directo de fábrica, nunca a distribuidor.**
+> El margen del distribuidor tiene que quedar de nuestro lado; comprar a un distribuidor nos
+> deja compitiendo contra nuestro propio proveedor. Ver [[feedback-comprar-siempre-de-fabrica]].
+> Única excepción admitida: **una muestra de validación (2 unidades)**, nunca el volumen.
 
-**Huawei ya vende su FusionCharge AC residencial en Bolivia por distribuidores autorizados**
-(7,4 kW monofásico / 22 kW trifásico), desde el primer trimestre. Es decir: **hay producto
-de marca disponible en plaza hoy**, sin abrir una importación.
+### 4.1 Consecuencia inmediata: Huawei queda descartado como fuente de compra
+
+Huawei vende su FusionCharge AC residencial en Bolivia **sólo a través de distribuidores
+autorizados**, y a nuestro volumen no abre cuenta directa de fábrica. Bajo la regla, **no es
+proveedor** — a lo sumo, una unidad para probar contra nuestro backend OCPP.
 [Los Tiempos](https://www.lostiempos.com/mostrador/mostrador/20241009/huawei-revoluciona-electromovilidad-bolivia-cargadores-ultra-rapidos) ·
 [Urgente.bo](https://www.urgente.bo/noticia/huawei-la-vanguardia-presenta-innovadores-cargadores-para-autos-el%C3%A9ctricos-en-bolivia)
 
-Para el primer condominio, **comprar local y vender la solución completa** elimina de un
-saque el riesgo aduanero, el cambiario y el de inventario. La importación se justifica
-recién con demanda repetida.
+Sirve, eso sí, como **señal de mercado**: si Huawei ya puso producto residencial en Bolivia,
+alguien vio la demanda antes que nosotros.
 
 ### 4.2 El producto que mejor calza: WEG WEMOB Parking G2 (Brasil)
 
@@ -437,6 +441,72 @@ más alto: menos flete, menos días, garantía manejable, y repuestos a un día 
 **Regla:** muestra pagada de 2 unidades por courier aéreo, probada contra nuestro backend
 OCPP, antes de cualquier contenedor. `gasto-plataformas-validar-primero` aplicada a hardware.
 
+### 4.6 Cómo distinguir una fábrica de un trader (obligatorio antes de cotizar)
+
+Alibaba y Made-in-China están llenos de **trading companies que se presentan como fábrica**.
+El sello "Verified Supplier" **no garantiza nada**: sólo confirma que la plataforma recibió
+una copia del documento y le pasó un OCR. La verificación es responsabilidad del comprador.
+
+| Prueba | Qué buscar |
+|---|---|
+| **Licencia comercial china (营业执照)** | Que el alcance diga manufactura, no 贸易/"trading". **No pedírsela al proveedor** (se photoshopea): sacarla del registro oficial **GSXT / NECIPS** con el Unified Social Credit Code. |
+| **Certificado CE / TÜV / IEC 61851** | **Emitido a nombre de la fábrica.** Un trader no puede tenerlo a su nombre — esta es la prueba más difícil de falsear. |
+| **ISO 9001** | Verificado contra el registro del organismo emisor, no la foto del PDF. |
+| **Nombre en chino** | Que el del portón de la planta coincida con el de la licencia. Si no coincide, es híbrido o intermediario. |
+| **Video en vivo de planta** | Línea de producción con **el modelo exacto** que cotizás, no un video genérico de stock. |
+| **Capacidad de exportar** | Licencia de exportación propia. Si "usan un agente", el precio ya trae un intermediario adentro. |
+
+Fuentes: [ChineseCheck — 12 métodos](https://chinesecheck.com/blog/identify-real-factory-vs-trading-company) ·
+[Koi Sourcing](https://koisourcing.com/blog/how-to-avoid-fake-alibaba-suppliers) ·
+[China Company Lookup](https://chinacompanylookup.com/china-supply-chain/how-to-spot-fake-alibaba-suppliers/)
+
+### 4.7 Dónde ir — el mapa físico
+
+#### Clusters de fabricación de EVSE en China
+- **Delta del Río Perla — Guangdong** (Shenzhen, Dongguan, Zhongshan): electrónica de alto
+  volumen, cadena de PCBA integrada. Es donde está la mayoría de los OEM de wallbox AC.
+- **Delta del Yangtsé — Zhejiang y Jiangsu**: equipamiento industrial.
+  **Changzhou (Jiangsu)** = sede de **Star Charge**, de los primeros fabricantes chinos y
+  redactor de las normas nacionales de carga. **Ningbo y Wenzhou (Zhejiang)** = BESEN, BENY.
+- Los costos de producción de estos polos corren 15–30% por debajo de sus pares occidentales.
+
+[Cluster EVSE](https://www.accio.com/supplier/ev-charger-factory) ·
+[Top fabricantes](https://anengjipower.com/china-ev-charger-manufacturer-top-10-ev-charging-station-suppliers/)
+
+#### Ferias — dónde ves 20 fábricas en 3 días
+| Feria | Cuándo | Dónde | Para qué |
+|---|---|---|---|
+| **Feria de Cantón, 140ª edición — Fase 1** | **15–19 oct 2026** | Canton Fair Complex, Guangzhou | **La correcta para nosotros.** Fase 1 = electrónica, electrodomésticos, maquinaria, **nueva energía y vehículos**. Amplitud: comparás decenas de fábricas en días. |
+| **CPSE — Shanghai Charging Pile & Battery Swap Expo** | 13–15 may 2026 (ya pasó; próxima edición 2027) | Shanghai Automobile Exhibition Center | Monotemática de carga: 800+ expositores. Profundidad. |
+| **EVSE / Asia PVSC** | **13–15 nov 2026** | Shenzhen World Exhibition & Convention Center | Equipamiento de carga, en pleno cluster de Guangdong. |
+
+[Feria de Cantón 140ª](https://www.zhujianger.com/canton-fair-dates-2026) ·
+[CPSE Shanghai](https://expolume.com/expo/shanghai-international-charging-pile-and-battery-swap-station-expo-cpse/) ·
+[EVSE Shenzhen](https://10times.com/evse-shenzhen)
+
+> **Ventana operativa:** Cantón (15–19 oct, Guangzhou) y EVSE Shenzhen (13–15 nov) están en
+> la misma provincia con menos de un mes de diferencia. **Un solo viaje puede cubrir la feria
+> grande + visitas a planta en Guangdong**, que es donde se cierra de verdad.
+
+#### Visa — hay que gestionarla con tiempo
+**Bolivia NO tiene exención de visado con China.** Desde el 24-mar-2025 la Embajada en La Paz
+y el **Consulado General en Santa Cruz** usan solicitud **en línea + biometría presencial con
+cita**. Para ir a Cantón en octubre, iniciar el trámite con meses de anticipación y con
+**carta de invitación de la feria o de la fábrica** (visa M, de negocios).
+[Consulado General en Santa Cruz](https://santacruz.china-consulate.gov.cn/esp/lsfw_4/qz/) ·
+[Embajada en Bolivia](https://bo.china-embassy.gov.cn/esp/lsfw/qz/)
+
+#### Brasil — la fábrica más cerca
+**WEG** es fabricante, no distribuidor: se va **directo a la fábrica**. Planta y casa matriz
+en **Jaraguá do Sul, Santa Catarina**, con programa de canales propio para la línea WEMOB de
+condominios. Entrar como canal de WEG para Bolivia **es comprar de fábrica**, no a un
+distribuidor.
+Ventaja: sin visa, vuelo corto, **ACE-36** y ruta Corumbá → Puerto Suárez.
+
+#### Si no se viaja todavía
+Auditoría de planta y control de calidad de terceros (SGS, TÜV o firma QC local en China)
+antes del primer pago fuerte. Cuesta cientos de dólares y evita perder decenas de miles.
+
 ---
 
 ## 4-bis. Qué necesitamos exactamente para importar — checklist
@@ -452,9 +522,14 @@ OCPP, antes de cualquier contenedor. `gasto-plataformas-validar-primero` aplicad
 
 ### B. Registro (semana 1–2, costo bajo)
 - [ ] **Formulario 170** — Registro de Importador, categoría **Habitual**, ante la Unidad de
-      Servicio a Operadores de la ANB. Inicio online por el portal **SUMA**, cierre presencial.
-      Llevar: certificado del Padrón SIN, CI del titular/representante, testimonio de poder si
-      corresponde, Matrícula SEPREC.
+      Servicio a Operadores (USO) de la **Aduana Nacional**. Inicio online por el portal
+      **SUMA**, cierre presencial. Llevar: certificado del Padrón SIN, CI del
+      titular/representante, testimonio de poder si corresponde, Matrícula SEPREC.
+      **Dónde:** Gerencia Regional Santa Cruz de la ANB — **Doble Vía La Guardia, entre 5to y
+      6to anillo, Edificio Da Vinci**, tel. **(3) 355-3937**. Llamar antes para confirmar la
+      ventanilla de la USO y el horario.
+      [Direcciones ANB](https://www.aduana.gob.bo/pagina-de-direcciones) ·
+      [Gerencia Regional Santa Cruz](https://portal.aduana.gob.bo/aduana7/content/gerencia-regional-santa-cruz)
 - [ ] Elegir y contratar **agencia despachante** (cotizar 2–3 en Santa Cruz: Procomex,
       Santa Cruz Dispatchers, Sincomex, Oriental SRL, Grupo Empresarial Global).
 
