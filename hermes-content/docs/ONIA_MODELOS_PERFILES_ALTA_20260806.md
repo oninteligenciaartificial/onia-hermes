@@ -88,6 +88,36 @@ Escribime y te muestro cómo 👇
 | P5 | `P3-living-3x4.jpg` | No soy una persona real y no lo escondo. Soy una herramienta de marca — la diferencia es que esta trabaja todos los días. |
 | P6 | `P6-ventana-3x4.jpg` | Si tenés una marca y todavía dependés de conseguir modelo, fotógrafo y fecha para poder publicar… hablemos. Escribime **MODELO**. |
 
+## 2-bis. Reglas de nombre de usuario de Instagram (chequear ANTES de registrar)
+
+**Reglas de formato** (comportamiento estable de la plataforma; la Central de Ayuda no las
+publica en un artículo — el validador definitivo es el formulario de registro):
+
+| Regla | Nuestros handles |
+|---|---|
+| Máximo **30 caracteres** | ✅ el más largo tiene 20 |
+| Solo `a-z`, `0-9`, punto `.` y guion bajo `_` | ✅ solo letras y puntos |
+| **Sin** espacios, guiones `-`, `ñ`, tildes ni emojis | ✅ ojo: `lucía` con tilde **no es válido**, va `lucia` |
+| **No puede terminar en punto** | ✅ |
+| **No puede tener dos puntos seguidos** (`..`) | ✅ |
+| No distingue mayúsculas (se guarda en minúsculas) | — |
+| No usar `insta`, `ig` ni `gram` sugiriendo afiliación con Instagram (política de marca de Meta) | ✅ ninguno |
+
+**Las dos reglas que de verdad nos pueden morder:**
+
+1. **Similitud con una cuenta existente.** Instagram puede rechazar un usuario por parecerse
+   demasiado a otro, y el dueño de la cuenta parecida puede reportar suplantación. `lu.antelo`
+   **existe y es una persona real** — `lu.antelo.ia` está a un sufijo de distancia. El `.ia`
+   ayuda (declara que es otra cosa), pero **es el candidato con más riesgo justamente por ser
+   el más parecido**. Si preferís riesgo cero, el usuario no debe llevar el apellido real:
+   `soy.lucia.ia` o `lucia.digital.bo` (ambos verificados libres) leen como marca, no como
+   persona. El apellido queda igual en el **nombre visible** ("Lucía Antelo").
+2. **El nombre visible solo se puede cambiar 2 veces cada 14 días.** No es el usuario, es el
+   campo *Nombre*. Cargalo bien la primera vez.
+
+**Regla de retención:** un usuario liberado no queda disponible al instante — Instagram lo
+retiene un tiempo. Si `lu.antelo` se libera algún día, no aparece libre de inmediato.
+
 ## 3. Checklist de alta (tuyo, ~15 min por cuenta)
 
 Hacer **una cuenta por vez**, no las dos el mismo día desde la misma IP y el mismo teléfono:
