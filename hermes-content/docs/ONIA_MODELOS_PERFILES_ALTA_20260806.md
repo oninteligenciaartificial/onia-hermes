@@ -1,4 +1,4 @@
-# Los 2 perfiles listos para dar de alta — Lucía y Mara
+﻿# Los 2 perfiles listos para dar de alta — Lucía y Mara
 
 > 2026-08-06. Sergio: *"quiero crear los 2 perfiles de las modelos"*.
 > Acá está **todo el contenido del perfil ya escrito y generado**. Lo único que falta es el
@@ -15,11 +15,29 @@
 | Campo | Valor (copiar tal cual) |
 |---|---|
 | **Nombre** | `Lucía Antelo` |
-| **Usuario** | `lu.antelo` |
+| **Usuario** | `lu.antelo.ia` |
 | **Tipo de cuenta** | Profesional → **Creador digital** |
 | **Foto de perfil** | `lucia/perfil-20260806/00-AVATAR.jpg` |
 | **Enlace** | `https://onia.com.bo/?src=lucia-bio` |
 | **Email** | `lucia@` del catch-all de Zoho |
+
+> **Cambio de handle 2026-08-06:** `@lu.antelo` **está ocupado** (existe, cuenta privada o
+> restringida — por eso Instagram lo rechaza). Verificado también: `lucia.antelo` (257
+> seguidores) y `lucia.ia` (81) están tomados. El nuevo handle es **`lu.antelo.ia`**, que
+> además hace trabajo de marca: la diferencia de la cuenta existente (cero riesgo de parecer
+> suplantación) y declara lo que ella es.
+>
+> **Si el registro igual lo rechaza**, bajar por esta lista — todas verificadas LIBRES en
+> Instagram el 2026-08-06: `luantelo` · `lucia.antelo.scz` · `lu.antelo.scz` ·
+> `lu.antelo.bo` · `luantelo.bo` · `lucia.antelo.ia` · `soy.lucia.ia` · `lucia.antelo.oficial`.
+> *(Cuidado con `luantelo` a secas: está a un punto de distancia de la cuenta que ya existe y
+> alguien que la busque puede terminar en la otra.)*
+>
+> **Cómo verificar un handle sin registrarse** (reusable): desde una pestaña en
+> `instagram.com`, `fetch('/api/v1/users/web_profile_info/?username=X', {headers:{'x-ig-app-id':'936619743392459'}})`.
+> **404 = libre · 200 = ocupado.** Cargar `instagram.com/X` a secas NO sirve: sin sesión
+> devuelve 200 para todo. En TikTok este método no funciona (devuelve un shell); ahí hay que
+> mirarlo en el registro.
 
 **Biografía** (113 caracteres, entra en el límite de 150):
 
