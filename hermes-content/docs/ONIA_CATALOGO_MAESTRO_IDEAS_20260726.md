@@ -164,10 +164,11 @@ techo de horas declarado. Antes de eso, es distracción cara.
 | 8.4 | **Cohorte fundador** (precio congelado primeros N) | 🟡 método ratificado | ⚠️ nunca "de por vida": cláusula de ajuste semestral |
 | 8.5 | **Gradiente self-serve** (concierge → asistido → self-serve) | 🟢 decidido | `provisionOrganization()` = misma función las 3 etapas |
 | 8.6 | **ONIA Empresarial E1-E3** (USD, ancla TR4) | 🟡 | Se calibra al cerrar BE fase 1 |
+| 8.7 | **Live commerce / TikTok Live** (pedido Sergio 2026-08-06) | 🟡 PENDIENTE anotado | Dos caras: (a) **apartado en Onia Platform para que los clientes hagan lives y vendan productos en vivo** (el live como punto de venta: catálogo + pedidos del live a la caja/kardex existentes); (b) **canal propio**: vender productos de Onia/importación por TikTok Live, y TikTok Shop cuando llegue a Bolivia. Razón de reapertura: el TikTok Live es supertendencia en Bolivia hoy. Gatillo de ejecución: regla WOW — cliente pagando que lo pida, o decisión explícita de Sergio de priorizarlo |
 
 ## 9. Descartadas (que no vuelvan sin razón nueva)
 
-Plataforma horizontal por créditos (Dapta clone) · granja de celulares · TikTok Shop Bolivia · Nuvia como retail operado · compra autónoma de importación · OpenClaw · Fanvue · canal genérico de IA · contenido kids · diagnóstico IA sobre radiografías (YMYL) · simulador facial AR · servidor de correo propio · GPU comprada de entrada · LLM local de chat en el VPS · marca doble sin motivo (⚠️ REABIERTO hoy por colisión Oniya — research en curso).
+Plataforma horizontal por créditos (Dapta clone) · granja de celulares · TikTok Shop Bolivia (⚠️ REABIERTO 2026-08-06 con razón nueva — supertendencia de TikTok Live en Bolivia → §8.7) · Nuvia como retail operado · compra autónoma de importación · OpenClaw · Fanvue · canal genérico de IA · contenido kids · diagnóstico IA sobre radiografías (YMYL) · simulador facial AR · servidor de correo propio · GPU comprada de entrada · LLM local de chat en el VPS · marca doble sin motivo (⚠️ REABIERTO hoy por colisión Oniya — research en curso).
 
 ---
 
