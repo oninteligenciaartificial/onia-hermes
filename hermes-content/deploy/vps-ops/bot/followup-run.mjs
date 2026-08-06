@@ -144,6 +144,13 @@ export function skipReason(state, nowIso, config = DEFAULT_CONFIG) {
   if (elapsed === null) return "fecha_invalida";
   if (elapsed < config.followUp.afterHours) return `demasiado_pronto:${elapsed.toFixed(1)}h`;
   if (elapsed > config.followUp.staleAfterDays * 24) return `conversacion_muerta:${elapsed.toFixed(1)}h`;
+  // La ventana de servicio de Meta se cierra a las 24 h del ULTIMO mensaje entrante. Pasada esa
+  // marca el envio de formato libre falla con 131047 y fuera de la ventana solo salen plantillas
+  // (que no existen y no hay metodo de pago). Va DESPUES de `conversacion_muerta` para que el
+  // motivo sea el mas informativo: a los 27 dias lo que hay es una conversacion muerta; a las
+  // 30 h el prospecto sigue vivo y lo que se vencio es el permiso para escribirle.
+  const cierre = config.followUp.windowClosesAtHours ?? 24;
+  if (elapsed >= cierre) return `fuera_de_ventana:${elapsed.toFixed(1)}h`;
   return null;
 }
 
