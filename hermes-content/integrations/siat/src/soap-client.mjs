@@ -50,9 +50,16 @@ const OP_PREFIX = "siat";
 // Segmentos de endpoint por servicio SOAP. OJO: no todos llevan el prefijo
 // 'Servicio' (FacturacionCodigos vs ServicioFacturacionComputarizada); ambos
 // responden en el piloto. VERIFICADO contra los WSDL v2 del piloto.
+//
+// GOTCHA (verificado EN VIVO 2026-08-06): la factura COMPRA-VENTA (sector 1)
+// se emite por su servicio DEDICADO ServicioFacturacionCompraVenta. Mandarla a
+// ServicioFacturacionComputarizada devuelve SIN 995 "SERVICIO NO DISPONIBLE:
+// Para la modalidad 2 y/o sector 1." (mismos tipos/orden en ambos WSDL; el
+// Computarizada queda para los documento-sector que no tienen servicio propio).
 export const SIAT_SERVICES = {
   FACTURACION_CODIGOS: "FacturacionCodigos",
   FACTURACION_SINCRONIZACION: "FacturacionSincronizacion",
+  FACTURACION_COMPRA_VENTA: "ServicioFacturacionCompraVenta",
   FACTURACION_COMPUTARIZADA: "ServicioFacturacionComputarizada",
   FACTURACION_OPERACIONES: "FacturacionOperaciones",
 };

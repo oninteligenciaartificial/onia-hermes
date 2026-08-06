@@ -1,0 +1,5 @@
+# Estado/checkpoint y logs del runner de fase 1: NUNCA al repo (contienen
+# CUFDs y correlativos de la corrida; el token jamas se escribe en ninguno).
+fase1-state.json
+fase1-log.ndjson
+fase1*.log

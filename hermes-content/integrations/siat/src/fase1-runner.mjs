@@ -71,6 +71,15 @@ export const PILOT = {
 // NIT de prueba del piloto para el receptor (convencion de homologacion).
 export const NIT_PRUEBA_RECEPTOR = "99001";
 
+// Datos del emisor para la cabecera de las facturas de prueba (denominacion
+// legal SEPREC de Onia; el piloto no valida la direccion contra el padron).
+export const EMISOR_PRUEBA = {
+  razonSocial: "OniaAgency",
+  municipio: "Santa Cruz de la Sierra",
+  direccion: "Av. Beni, Santa Cruz de la Sierra",
+  telefono: null,
+};
+
 // -------------------- operaciones SOLO fase 1 (orden XSD) -------------------
 
 // Campos del wrapper SolicitudSincronizacion (XSD FacturacionSincronizacion,
@@ -287,6 +296,20 @@ export function updateStreak(streak, key) {
     return { key, count: (streak.count ?? 0) + 1 };
   }
   return { key, count: 1 };
+}
+
+/**
+ * Normaliza el resultado de una solicitud de CUIS: el piloto responde
+ * transaccion=false con SIN 980 ("EXISTE UN CUIS VIGENTE...") pero INCLUYE el
+ * CUIS vigente en <codigo> (verificado en vivo 2026-08-06). Para fase 1 eso ES
+ * un CUIS obtenido: se marca ok. Sin codigo, el resultado queda tal cual.
+ */
+export function normalizeCuisResult(result) {
+  const codigo = result?.parsed?.codigo ?? null;
+  if (!codigo) {
+    return result;
+  }
+  return { ...result, ok: true, parsed: { ...result.parsed, transaccion: true } };
 }
 
 export class StopError extends Error {
@@ -626,7 +649,8 @@ class Runner {
   async etapaI(target = STAGE_TARGETS.I) {
     await this.loop("I", target, async () => {
       const envelope = buildCuisRequest({ ...this.baseParams(), codigoModalidad: PILOT.codigoModalidad });
-      const result = await this.post("FACTURACION_CODIGOS", envelope, { etapa: "I", op: "cuis" });
+      const raw = await this.post("FACTURACION_CODIGOS", envelope, { etapa: "I", op: "cuis" });
+      const result = normalizeCuisResult(raw); // SIN 980 devuelve el CUIS vigente: cuenta
       if (result.ok && result.parsed?.codigo) {
         this.state.cuis = result.parsed.codigo;
       }
@@ -695,7 +719,7 @@ class Runner {
     const numeroFactura = ++this.state.numeroFactura;
     const material = assembleEmission({
       payload,
-      tenant: { emisor: { nit: this.nit, codigoSistema: this.codigoSistema } },
+      tenant: { emisor: { nit: this.nit, codigoSistema: this.codigoSistema, ...EMISOR_PRUEBA } },
       cufd: this.state.cufd,
       cuis: this.state.cuis,
       numeroFactura,
@@ -721,7 +745,7 @@ class Runner {
 
   async emitOne(index) {
     const { material, numeroFactura } = this.buildEmisionMaterial(index);
-    const result = await this.post("FACTURACION_COMPUTARIZADA", this.recepcionRequestFor(material), {
+    const result = await this.post("FACTURACION_COMPRA_VENTA", this.recepcionRequestFor(material), {
       etapa: "IV",
       op: "recepcionFactura",
       numeroFactura,
@@ -754,8 +778,8 @@ class Runner {
     await this.loop("IV", target, (done) => this.emitOne(done));
   }
 
-  async registrarEvento(motivo, { window = 30 * 60 * 1000 } = {}) {
-    const finMs = Date.now() + (this.state.sinOffsetMs ?? 0) - 5 * 60 * 1000;
+  async registrarEvento(motivo, { window = 30 * 60 * 1000, finMs } = {}) {
+    const fin = finMs ?? Date.now() + (this.state.sinOffsetMs ?? 0) - 5 * 60 * 1000;
     const envelope = buildRunnerEnvelope("registroEventoSignificativo", {
       ...this.baseParams(),
       codigoMotivoEvento: motivo.codigoClasificador,
@@ -763,8 +787,8 @@ class Runner {
       cufdEvento: this.state.cufd?.codigo,
       cuis: this.state.cuis,
       descripcion: motivo.descripcion ?? `Evento ${motivo.codigoClasificador}`,
-      fechaHoraInicioEvento: formatSinLocal(finMs - window),
-      fechaHoraFinEvento: formatSinLocal(finMs),
+      fechaHoraInicioEvento: formatSinLocal(fin - window),
+      fechaHoraFinEvento: formatSinLocal(fin),
     });
     return this.post("FACTURACION_OPERACIONES", envelope, {
       etapa: "V",
@@ -786,7 +810,7 @@ class Runner {
   }
 
   /** Paquete/masiva: N facturas -> tar -> gzip -> base64 + hash del modo vigente. */
-  buildLote(count, { tipoEmision, baseIndex }) {
+  buildLote(count, { tipoEmision, baseIndex, fechaIso = null }) {
     const xmls = [];
     for (let i = 0; i < count; i += 1) {
       const { payload, leyenda, codigoMetodoPago } = buildTestInvoice({
@@ -795,7 +819,7 @@ class Runner {
         index: baseIndex + i,
       });
       const numeroFactura = ++this.state.numeroFactura;
-      const fecha17 = this.sinNow();
+      const fecha17 = fechaIso ?? this.sinNow();
       const cuf = buildCuf(
         {
           nit: this.nit,
@@ -812,13 +836,13 @@ class Runner {
       );
       const cabecera = {
         nitEmisor: this.nit,
-        razonSocialEmisor: "ONIA",
-        municipio: "Santa Cruz de la Sierra",
+        razonSocialEmisor: EMISOR_PRUEBA.razonSocial,
+        municipio: EMISOR_PRUEBA.municipio,
         numeroFactura,
         cuf,
         cufd: this.state.cufd.codigo,
         codigoSucursal: PILOT.codigoSucursal,
-        direccion: "Av. Prueba 123",
+        direccion: EMISOR_PRUEBA.direccion,
         codigoPuntoVenta: PILOT.codigoPuntoVenta,
         fechaEmision: fecha17,
         nombreRazonSocial: payload.receptor.razonSocial,
@@ -861,13 +885,20 @@ class Runner {
       throw new Error("sin catalogo de eventos para paquetes de contingencia");
     }
     await this.loop("VI", target, async (done) => {
-      const evento = await this.registrarEvento(motivo);
+      // Ventana del evento: [fin-30min, fin], con fin 5 min en el pasado; las
+      // facturas offline del paquete se fechan DENTRO de esa ventana.
+      const finMs = Date.now() + (this.state.sinOffsetMs ?? 0) - 5 * 60 * 1000;
+      const evento = await this.registrarEvento(motivo, { finMs });
       const codigoEvento =
         tagText(evento.body, "codigoRecepcionEventoSignificativo") ?? null;
       if (!codigoEvento) {
         return evento; // sin evento no hay paquete: cuenta como error de la racha
       }
-      const lote = this.buildLote(2, { tipoEmision: 2, baseIndex: done * 2 });
+      const lote = this.buildLote(2, {
+        tipoEmision: 2,
+        baseIndex: done * 2,
+        fechaIso: formatSinLocal(finMs - 10 * 60 * 1000),
+      });
       const envelope = buildRunnerEnvelope("recepcionPaqueteFactura", {
         ...this.recepcionBase(2),
         archivo: lote.archivo,
@@ -876,7 +907,7 @@ class Runner {
         cantidadFacturas: lote.cantidad,
         codigoEvento,
       });
-      const result = await this.post("FACTURACION_COMPUTARIZADA", envelope, {
+      const result = await this.post("FACTURACION_COMPRA_VENTA", envelope, {
         etapa: "VI",
         op: "recepcionPaqueteFactura",
       });
@@ -886,7 +917,7 @@ class Runner {
           ...this.recepcionBase(2),
           codigoRecepcion: result.parsed.codigoRecepcion,
         });
-        await this.post("FACTURACION_COMPUTARIZADA", val, {
+        await this.post("FACTURACION_COMPRA_VENTA", val, {
           etapa: "VI",
           op: "validacionRecepcionPaqueteFactura",
         });
@@ -896,7 +927,11 @@ class Runner {
   }
 
   async anularOne() {
-    const factura = this.state.invoices.find((f) => !f.anulada && f.estado === 908);
+    // Preferir validadas (908); las 901 (pendientes) suelen validar en segundos
+    // en el piloto, asi que valen como fallback.
+    const factura =
+      this.state.invoices.find((f) => !f.anulada && f.estado === 908) ??
+      this.state.invoices.find((f) => !f.anulada && f.estado === 901);
     if (!factura) {
       throw new Error("etapa VII sin facturas validadas disponibles para anular");
     }
@@ -906,7 +941,7 @@ class Runner {
       codigoMotivo: motivo?.codigoClasificador ?? 1,
       cuf: factura.cuf,
     });
-    const result = await this.post("FACTURACION_COMPUTARIZADA", envelope, {
+    const result = await this.post("FACTURACION_COMPRA_VENTA", envelope, {
       etapa: "VII",
       op: "anulacionFactura",
       numeroFactura: factura.numero,
@@ -931,7 +966,7 @@ class Runner {
         hashArchivo: lote.hashArchivo,
         cantidadFacturas: lote.cantidad,
       });
-      const result = await this.post("FACTURACION_COMPUTARIZADA", envelope, {
+      const result = await this.post("FACTURACION_COMPRA_VENTA", envelope, {
         etapa: "IX",
         op: "recepcionMasivaFactura",
       });
@@ -941,7 +976,7 @@ class Runner {
           ...this.recepcionBase(1),
           codigoRecepcion: result.parsed.codigoRecepcion,
         });
-        await this.post("FACTURACION_COMPUTARIZADA", val, {
+        await this.post("FACTURACION_COMPRA_VENTA", val, {
           etapa: "IX",
           op: "validacionRecepcionMasivaFactura",
         });
@@ -959,7 +994,7 @@ class Runner {
       ...this.recepcionBase(1),
       cuf: factura.cuf,
     });
-    const result = await this.post("FACTURACION_COMPUTARIZADA", envelope, {
+    const result = await this.post("FACTURACION_COMPRA_VENTA", envelope, {
       etapa: "XI",
       op: "reversionAnulacionFactura",
       numeroFactura: factura.numero,
@@ -1021,7 +1056,8 @@ export { Runner, classifyResponse, SOAP_OPERATIONS };
 
 // ------------------------------- main ---------------------------------------
 
-const isMain = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, "/").split("/").pop());
+const isMain =
+  process.argv[1] && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 
 if (isMain) {
   const args = parseArgs(process.argv.slice(2));
