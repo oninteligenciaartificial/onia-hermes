@@ -263,6 +263,57 @@ administrador de condominio, entidades = residentes / medidores / sesiones de ca
 facturación prorrateada. Encaja con el core existente. Coherente con la regla
 `onia-vende-software-nunca-horas`.
 
+### 3.5-bis Cómo se cobra, en concreto
+
+**La Resolución AETN 479/2021 distingue tres tipos de instalación:** (a) particular en
+vivienda, oficina o taller; (b) **en edificios o multifamiliares**; (c) autoservicio con
+acceso público. La tarifa regulada por kWh es la de la **electrolinera de servicio al
+público**. El condominio cae en la categoría (b), que es otra cosa.
+[Bíptico AETN/MHE](https://www.studocu.com/bo/document/universidad-mayor-de-san-simon/ingenieria-automotriz/biptico-electrmovilidad/81168043) ·
+[energiabolivia](https://energiabolivia.com/index.php?Itemid=172&catid=54&id=7966)
+
+Tarifa de carga **lenta** en electrolinera pública, para referencia:
+**Bs 1,01** bloque bajo (00:01–07:00) · **Bs 1,18** medio (07:01–18:00) · **Bs 1,86** alto
+(18:01–23:00). La carga rápida llega a Bs 2,15.
+
+#### Medición
+Con OCPP 1.6J el cargador es un terminal de venta, no un enchufe:
+1. El residente se identifica por **RFID** (lo más barato y confiable) o app.
+2. El cargador consulta al backend si está autorizado → habilita.
+3. Al terminar envía `StopTransaction` con los **kWh medidos por el medidor interno**.
+4. Queda un registro por sesión: quién, cuándo, cuántos kWh, en qué bloque horario.
+
+**Exigir medidor MID o equivalente IEC.** Con un medidor no certificado, cualquier
+copropietario puede impugnar el cobro y el administrador queda en el medio.
+
+#### Las tres formas de cobrar
+
+| Modelo | Cómo funciona | Veredicto |
+|---|---|---|
+| **A. Prorrateo en la expensa** ✅ | Un solo medidor CRE. La plataforma calcula los kWh de cada residente y el administrador **agrega la línea a la expensa mensual**. | **Recomendado.** Nadie vende electricidad: es recuperación de gasto común entre copropietarios. No sos electrolinera, no entrás en la tarifa regulada, y **no hace falta ningún medio de pago nuevo** — la expensa ya se cobra. |
+| **B. Prepago con QR** | El residente carga saldo por **QR Simple** (sin comisión ni para el comercio ni para el cliente); el saldo habilita el RFID. | Complemento útil para visitas y morosos. |
+| **C. Cobrar vos el kWh (CPO)** | Vendés energía al usuario final. | **Evitar en condominios.** Te cae la tarifa regulada + obligaciones de estación de servicio. Sirve para estacionamiento comercial abierto. |
+
+Base legal del modelo A: la **Ley de Propiedad Horizontal (30-dic-1949)** ya faculta al
+administrador a recaudar de cada propietario lo que le corresponde en gastos comunes.
+[resumen](https://casasenbolivia.com/ley-de-propiedad-horizontal-en-bolivia-todos-los-detalles/)
+
+#### Quién factura qué
+- **ONIA → condominio:** factura por el software (mensual) y por equipo + instalación (una
+  vez). Con IVA e IT normales.
+- **Condominio → residente:** no factura; **prorratea en la expensa** (reparto de gasto
+  común, no venta).
+- **CRE → condominio:** una sola factura, como siempre.
+
+⚠️ **Facturación electrónica SIAT obligatoria desde el 30-sep-2026.** Lo que emitamos tiene
+que salir por ahí. Ver `siat-emitter` y el carril fiscal.
+
+#### Dónde está el ingreso
+Un EV consume ~15 kWh/100 km: un residente que hace 1.000 km/mes carga ~150 kWh.
+Esos kWh **pasan derecho al residente sin margen** — por eso el modelo es limpio.
+El ingreso de ONIA es: **suscripción mensual por punto de carga activo** + hardware +
+instalación. Es lo único sin techo regulatorio y sin convertirte en operador eléctrico.
+
 ### 3.6 Costeo ilustrativo (⚠️ ESTIMACIÓN, no cotización)
 
 Escenario: 100 wallboxes AC 7,4 kW, Type 2, OCPP 1.6J, sin módulo celular.
@@ -298,28 +349,146 @@ mensual del SaaS**, que no consume capital ni tiene riesgo de inventario.
 
 ---
 
-## 4. Proveedores — cómo elegir sin quemar plata
+## 4. Proveedores y canal de compra
 
-**Fabricantes chinos de wallbox AC con OCPP 1.6 identificados** (todos vía Made-in-China /
-sitios propios; ninguno verificado por nosotros aún):
-Sichuan Greentech YT New Energy · EVSPB Charge (Guangdong) · EVCOME · Estar ·
-XTECK · Cedars · VSCHNEL (Nanjing) · Hengyi.
+### 4.1 Hallazgo que cambia el plan: no hace falta importar para el piloto
 
-**Criterios de descarte, en orden:**
-1. **OCPP 1.6J real y documentado** (no "compatible"). Sin esto no hay SaaS.
-2. Certificaciones **CE + IEC 61851**, y que te manden el certificado, no una foto.
-3. **Balanceo dinámico de carga** nativo o vía controlador. Sin esto no vendés en edificios viejos.
-4. Variante **sin módulo de radio** disponible (riesgo ATT).
+**Huawei ya vende su FusionCharge AC residencial en Bolivia por distribuidores autorizados**
+(7,4 kW monofásico / 22 kW trifásico), desde el primer trimestre. Es decir: **hay producto
+de marca disponible en plaza hoy**, sin abrir una importación.
+[Los Tiempos](https://www.lostiempos.com/mostrador/mostrador/20241009/huawei-revoluciona-electromovilidad-bolivia-cargadores-ultra-rapidos) ·
+[Urgente.bo](https://www.urgente.bo/noticia/huawei-la-vanguardia-presenta-innovadores-cargadores-para-autos-el%C3%A9ctricos-en-bolivia)
+
+Para el primer condominio, **comprar local y vender la solución completa** elimina de un
+saque el riesgo aduanero, el cambiario y el de inventario. La importación se justifica
+recién con demanda repetida.
+
+### 4.2 El producto que mejor calza: WEG WEMOB Parking G2 (Brasil)
+
+Está **diseñado exactamente para el caso de uso**: recarga en entornos compartidos —
+condominios, empresas, estacionamientos.
+
+| Característica | Detalle |
+|---|---|
+| Potencia | Hasta 22 kW (7,4 kW monofásico / 22 kW trifásico) |
+| Vehículos | **2 simultáneos** por equipo |
+| Protocolo | **OCPP 1.6J abierto** → libertad de elegir la plataforma de gestión ← clave para nosotros |
+| Identificación | **RFID** integrada, app, o acceso libre |
+| Conectividad | WiFi, **Ethernet** o 4G (LTE Cat M1 / NB1) |
+| Protección | IP55/IP65 — instalable en parqueo abierto |
+| Gestión | Split de costos para condominios, con generación automática del monto por usuario |
+| Actualizaciones | OTA remotas |
+
+WEG tiene material comercial y **programa de canales específico para condominios**
+("WEMOB — Eletrifique o seu condomínio"). La línea incluye además **WEMOB Wall** (7,4 kW,
+RFID + WiFi) y **WEMOB Station**.
+[WEG WEMOB](https://www.weg.net/catalog/weg/TZ/pt/WDC_CRITICAL_POWER_WEMOB2) ·
+[canal condominios](https://materiais.wegdigital.weg.net/weg-digital-wemob-condominios-canais) ·
+[catálogo PDF](https://static.weg.net/medias/downloadcenter/hd1/h5e/WEG-WEMOB-50105757-pt.pdf)
+
+**Que tenga Ethernet importa:** permite pedir la variante sin radio y esquivar el riesgo de
+homologación ATT.
+
+**Corrección honesta al análisis anterior:** WEMOB ya trae split de costos por usuario. Eso
+**achica la ventaja funcional cruda** de nuestro software. El foso real no es "medir y
+dividir" — eso ya existe — sino la **integración local**: expensa del condominio,
+facturación SIAT, cobro por QR Simple, soporte y contrato en Bolivia. Hay que decirlo así,
+no vender un moat que no es.
+
+### 4.3 La ventaja arancelaria de comprar en Brasil
+
+Bolivia y MERCOSUR tienen el **ACE-36**, vigente desde 1997, con programa de liberalización
+que completaba la **zona de libre comercio en 2014**. Con **certificado de origen** válido,
+la mercadería de origen brasileño accede a preferencia arancelaria.
+[Aduana Nacional — ACE-36](https://www.aduana.gob.bo/index.php/acuerdo-de-complementaci%C3%B3n-econ%C3%B3mica-n%C2%BA-36-bolivia-%E2%80%93-mercosur) ·
+[Senavex](https://senavex.gob.bo/ace-n-36-bolivia-mercosur/) ·
+[IBCE](https://ibce.org.bo/documentos/informacion-mercado/acuerdos-comerciales-bolivia-mercosur.pdf)
+
+Sumado a la ruta corta **Corumbá → Puerto Suárez/Quijarro**, que está en el propio
+departamento de Santa Cruz, Brasil compite de verdad contra China pese al precio unitario
+más alto: menos flete, menos días, garantía manejable, y repuestos a un día de viaje.
+
+> **Verificar con la despachante** la preferencia exacta para la partida y el certificado de
+> origen requerido. La preferencia no es automática: se pide y se documenta.
+
+### 4.4 Fabricantes chinos — perfil por tipo de compra
+
+| Fabricante | Perfil |
+|---|---|
+| **BESEN** | Especializado en **AC**; explícitamente **MOQ chicos y lead times cortos**, vende a distribuidores y OEM. **El perfil correcto para un primer importador.** |
+| **INJET New Energy** | AC/DC + almacenamiento; usado por 1.000+ marcas en 100+ países → capacidad **OEM/marca blanca**. |
+| **Autel Energy** | Marca fuerte, **ya desplegando MaxiChargers en Latinoamérica** → candidato a acuerdo de distribución. |
+| **Star Charge** | De los mayores fabricantes del mundo; para volumen, no para arrancar. |
+| Otros vistos | EVSPB · EVCOME · Estar · XTECK · Cedars · VSCHNEL · Hengyi · Sichuan Greentech YT. |
+
+[BESEN](https://www.besen-group.com/) · [INJET](https://www.injetenergy.com/) ·
+[Autel Energy](https://autelenergy.com/) ·
+[comparativa fabricantes](https://china-sourcing-agents.com/guides/ev-charger-manufacturers-china/)
+
+### 4.5 Criterios de descarte, en orden
+
+1. **OCPP 1.6J real y documentado** (no "compatible"). Sin esto no hay plataforma.
+2. **CE + IEC 61851**, con el certificado en mano, no una foto.
+3. **Balanceo dinámico de carga**. Sin esto no vendés en edificio viejo.
+4. **Variante sin módulo de radio** (Ethernet/RS485) disponible → esquiva riesgo ATT.
 5. Garantía ≥3 años por escrito y política de RMA.
 6. MOQ y precio — **último**, no primero.
 
-**Antes de comprar:** una muestra pagada de 2 unidades por courier aéreo. Probarla contra
-nuestro backend OCPP. Recién después, contenedor. Regla `gasto-plataformas-validar-primero`
-aplicada a hardware.
+**Regla:** muestra pagada de 2 unidades por courier aéreo, probada contra nuestro backend
+OCPP, antes de cualquier contenedor. `gasto-plataformas-validar-primero` aplicada a hardware.
 
-**Alternativa regional a cotizar en paralelo:** proveedores de Brasil (WEG y similares)
-entrando por Puerto Suárez/Quijarro — flete mucho más corto, garantía más manejable,
-precio más alto. Vale la comparación para el piloto.
+---
+
+## 4-bis. Qué necesitamos exactamente para importar — checklist
+
+### A. Lo que ya tenemos
+- [x] **NIT** activo — 5371375010 (OniaAgency).
+- [x] **Matrícula de Comercio SEPREC** — 5371375010.
+- [x] Objeto social que cubre la actividad.
+
+> ⚠️ La propietaria registrada es **Leslie Mercado Moreno**, no Sergio. Todo trámite que pida
+> titular o representante legal se resuelve con ella o con poder notariado. Ver
+> [[onia-datos-legales-seprec]]. **Definir esto antes de ir a la Aduana**, o el trámite se cae.
+
+### B. Registro (semana 1–2, costo bajo)
+- [ ] **Formulario 170** — Registro de Importador, categoría **Habitual**, ante la Unidad de
+      Servicio a Operadores de la ANB. Inicio online por el portal **SUMA**, cierre presencial.
+      Llevar: certificado del Padrón SIN, CI del titular/representante, testimonio de poder si
+      corresponde, Matrícula SEPREC.
+- [ ] Elegir y contratar **agencia despachante** (cotizar 2–3 en Santa Cruz: Procomex,
+      Santa Cruz Dispatchers, Sincomex, Oriental SRL, Grupo Empresarial Global).
+
+### C. Antes de embarcar — los que frenan contenedores
+- [ ] **Clasificación arancelaria por escrito** de la despachante para "estación de recarga
+      AC para vehículo eléctrico" (esperado: 8504.40.90.10, GA 0% por DS 4539).
+- [ ] **Consulta a la ATT**: ¿el modelo elegido está en el listado de equipos sujetos a
+      homologación? Si tiene WiFi/BT/4G, muy probablemente sí. Costo y plazo si aplica.
+      **Mitigación: pedir la variante Ethernet.**
+- [ ] **Consulta a IBMETRO**: ¿existe reglamento técnico aplicable? Si sí → registro IBMETRO
+      + CRTM antes de importar.
+- [ ] Si se compra en Brasil: **certificado de origen ACE-36** solicitado al proveedor.
+
+### D. Documentos del embarque
+- [ ] Factura comercial original, con FOB detallado
+- [ ] Packing list
+- [ ] BL (marítimo) o CRT (terrestre desde Brasil)
+- [ ] Certificado de origen
+- [ ] Póliza de seguro
+- [ ] Factura del flete internacional
+- [ ] Certificados ATT/IBMETRO si aplican
+
+### E. Plata y plazos
+- [ ] **Transferencia internacional** al proveedor — no tarjeta (topes bajos). Coordinar con
+      el banco con anticipación; ver [[importacion-bolivia-y-cargadores-ev]].
+- [ ] Prever **depósito de garantía de contenedor**: USD 1.000–2.000 (ruta Chile).
+- [ ] **Pago de tributos en Banco Unión dentro de los 3 días hábiles** de aceptada la DUI.
+      Tener el efectivo disponible: si no pagás, la mercadería no sale.
+
+### F. Antes de vender (paralelo, no bloquea la importación)
+- [ ] Verificar en la **Res. AETN 479/2021** qué obligaciones tiene la categoría "edificios o
+      multifamiliares" (registro de instalación, inspección, reportes).
+- [ ] Definir si hace falta **electricista/empresa habilitada por la CRE** para la conexión.
+- [ ] Contrato modelo con el condominio (equipo + instalación + suscripción).
 
 ---
 
