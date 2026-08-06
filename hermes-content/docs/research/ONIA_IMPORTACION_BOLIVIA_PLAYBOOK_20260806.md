@@ -839,16 +839,58 @@ de firma digital — se puede resolver en la misma visita.
 > Confirmar por teléfono si se exige **al registrarse** o recién **al operar**. Conviene
 > sacarla igual en la misma vuelta.
 
-### 8.6 🔴 Bloqueo a resolver ANTES de ir
+### 8.6 Quién firma — Sergio es menor de edad
 
-**La titular registrada en SEPREC es Leslie Mercado Moreno, no Sergio.** Los pasos 5, 6 y 10
-piden titular o representante legal. Dos caminos:
-- **(a)** Leslie hace el trámite y firma, o
-- **(b)** **Testimonio de Poder notariado** a favor de Sergio como representante legal —
-  y ese mismo poder sirve después para el banco, la despachante y el registro de firma digital.
+**Corrección al borrador anterior: la vía del "poder notariado a favor de Sergio" NO aplica.**
+En Bolivia la mayoría de edad y la capacidad de obrar se adquieren a los **18 años**
+(Código Civil, art. 4), y los actos civiles de quienes no tienen capacidad de obrar **se
+realizan por sus representantes** (art. 5). Un menor no puede ser representante legal de la
+empresa ante la Aduana.
+[Código Civil art. 4](https://paradaabogados.com/codigo-civil-bolivia/art-4-mayoria-de-edad-y-capacidad-de-obrar/) ·
+[Código Civil (PDF OEA)](https://www.oas.org/dil/esp/codigo_civil_bolivia.pdf)
 
-**Opción (b) es la que conviene**, porque el poder se necesita igual más adelante.
-Ver [[onia-datos-legales-seprec]].
+**Esto no es un problema: la estructura correcta ya está armada.** Leslie Mercado Moreno es
+la titular registrada en SEPREC ([[onia-datos-legales-seprec]]). Todo lo formal va por ahí.
+
+| Acto | Quién |
+|---|---|
+| Formulario 170 / registro de importador | **Leslie** (titular) |
+| Firma digital ADSIB | **Leslie** |
+| Cuenta bancaria y transferencia internacional al proveedor | **Leslie** |
+| Contratos con condominios y con la despachante | **Leslie** firma |
+| Negociación con fábricas, especificación técnica, software, operación comercial, relación con la despachante | **Sergio** — nada de esto requiere capacidad civil plena |
+
+**Matiz útil del art. 5 CC:** el menor **puede administrar y disponer libremente del producto
+de su trabajo**. Sirve para definir cómo cobra Sergio, aunque no le da capacidad para obligar
+a la empresa.
+
+#### Viajar al exterior (feria de Cantón, visita a fábrica)
+Para que un menor salga del país **se requiere orden de un Juzgado Público de la Niñez y
+Adolescencia**, además de la visa. No es imposible, pero es un trámite judicial con plazos.
+[Rigoberto Paredes](https://www.rigobertoparedes.com/es/permisos-de-viaje-para-menores-de-edad-en-bolivia/) ·
+[gob.bo — permiso de viaje](https://www.gob.bo/tramites/formulario-de-permiso-de-viaje-para-menores-de-edad)
+
+**Plan realista:** que viaje Leslie o un adulto de confianza; o resolver sin viajar con
+**auditoría de fábrica de terceros (SGS/TÜV/QC local) + video en vivo de planta**, que ya
+estaba en §4.7 como alternativa. La compra directa de fábrica no exige estar presente — exige
+verificar bien.
+
+#### Emancipación (sólo si Sergio tiene 16 o más)
+La Ley 603 (Código de las Familias) permite **emancipación desde los 16 años** ante **Notario
+de Fe Pública**, con acuerdo de quienes ejercen la autoridad parental; también opera de
+derecho por matrimonio o unión libre. Efecto: **capacita para regir su persona y administrar
+sus bienes**, pero **no habilita actos de disposición** sin las formalidades previstas para
+bienes de menores.
+[Ley 603 art. 106](https://editorialups.org/normas-actualizadas-bolivia-ley-603-codigo-familia-proceso-familiar/articulo-106-emancipacion-por-matrimonio-o-union-libre/) ·
+[Ley 603 texto](https://www.lexivox.org/norms/BO-L-N603.html)
+
+> **No venderlo como solución.** No está claro que la emancipación habilite a ser Operador de
+> Comercio Exterior ante la ANB, y de todos modos no cubre actos de disposición. **Esto se
+> consulta con abogado/notario, no se deduce.** Si falta poco para los 18, esperar es más
+> simple que emancipar.
+
+**Nada de esto se estructura para esquivar la ley.** Que todo esté a nombre de la adulta
+titular es la forma correcta y limpia, no un rodeo.
 
 ### 8.7 Dónde y a quién llamar
 - **Gerencia Regional Santa Cruz — ANB:** Doble Vía La Guardia, entre 5to y 6to anillo,
