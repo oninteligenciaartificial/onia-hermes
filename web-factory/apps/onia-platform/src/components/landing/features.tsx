@@ -206,13 +206,29 @@ export function Features() {
   const [rubro, setRubro] = useState(0);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
+  const [idx, setIdx] = useState(0);
+  // Auto-avance: pausado mientras el usuario mira/toca, y solo con la banda
+  // visible en pantalla. prefers-reduced-motion lo apaga del todo.
+  const [paused, setPaused] = useState(false);
+  const [enPantalla, setEnPantalla] = useState(false);
+
+  const cardStep = useCallback(() => {
+    const el = band.current;
+    if (!el) return 0;
+    const card = el.querySelector<HTMLElement>(`.${styles.fcard}`);
+    return card ? card.getBoundingClientRect().width + 20 : el.clientWidth * 0.8;
+  }, []);
 
   const sync = useCallback(() => {
     const el = band.current;
     if (!el) return;
     setAtStart(el.scrollLeft <= 2);
     setAtEnd(el.scrollLeft >= el.scrollWidth - el.clientWidth - 2);
-  }, []);
+    const step = cardStep();
+    if (step > 0) {
+      setIdx(Math.min(CARDS.length - 1, Math.round(el.scrollLeft / step)));
+    }
+  }, [cardStep]);
 
   useEffect(() => {
     sync();
@@ -220,14 +236,48 @@ export function Features() {
     return () => window.removeEventListener("resize", sync);
   }, [sync]);
 
+  useEffect(() => {
+    const el = band.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setEnPantalla(entry.isIntersecting),
+      { threshold: 0.3 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   const move = (dir: -1 | 1) => {
     const el = band.current;
     if (!el) return;
-    const card = el.querySelector<HTMLElement>(`.${styles.fcard}`);
-    const step = card ? card.getBoundingClientRect().width + 20 : el.clientWidth * 0.8;
+    const step = cardStep();
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     el.scrollBy({ left: step * dir, behavior: reduced ? "auto" : "smooth" });
   };
+
+  const irA = (i: number) => {
+    const el = band.current;
+    if (!el) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollTo({ left: cardStep() * i, behavior: reduced ? "auto" : "smooth" });
+  };
+
+  // El carrusel se mueve solo: una card cada 4,5s, vuelve al inicio al llegar
+  // al final. Se pausa con hover/touch/foco y con la pestana oculta.
+  useEffect(() => {
+    if (paused || !enPantalla) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => {
+      if (document.hidden) return;
+      const el = band.current;
+      if (!el) return;
+      const alFinal = el.scrollLeft >= el.scrollWidth - el.clientWidth - 2;
+      if (alFinal) el.scrollTo({ left: 0, behavior: "smooth" });
+      else move(1);
+    }, 4500);
+    return () => window.clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, enPantalla]);
 
   return (
     <section
@@ -259,6 +309,11 @@ export function Features() {
         className={styles.band}
         ref={band}
         onScroll={sync}
+        onPointerEnter={() => setPaused(true)}
+        onPointerLeave={() => setPaused(false)}
+        onTouchStart={() => setPaused(true)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
         tabIndex={0}
         role="group"
         aria-label="Funciones de Onia Platform"
@@ -299,6 +354,19 @@ export function Features() {
         >
           <Arrow dir={-1} />
         </button>
+        <div className={styles.fdots} role="tablist" aria-label="Ir a una función">
+          {CARDS.map((card, i) => (
+            <button
+              key={card.id}
+              type="button"
+              role="tab"
+              aria-selected={idx === i}
+              aria-label={`${card.titulo} (${i + 1} de ${CARDS.length})`}
+              className={`${styles.fdot}${idx === i ? ` ${styles.fdotOn}` : ""}`}
+              onClick={() => irA(i)}
+            />
+          ))}
+        </div>
         <button
           type="button"
           className={styles.fbtn}
