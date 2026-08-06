@@ -27,7 +27,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | Carril / Proyecto | Skills núcleo | Subagente | Skill ONIA propia |
 |---|---|---|---|
 | **A** onia-center (panel Next.js) | `impeccable` `ui-ux-pro-max` `taste-design` `frontend-design` `frontend-patterns` `react-components` `shadcn-ui` `ui-styling` `nextjs-turbopack` `design-review` `emil-design-eng` | `web-factory-builder` | `onia-web-factory` |
-| **B** wf-landing (landings cliente) | `impeccable` `taste-design` `design`/`design-md` `image-to-code` `web-artifacts-builder` `landing-report` `land-and-deploy` `imagegen-frontend-web` `banner-design` | `web-factory-builder` | `onia-web-factory` |
+| **B** wf-landing (landings cliente) | `impeccable` `taste-design` `design`/`design-md` `image-to-code` `web-artifacts-builder` `landing-report` `land-and-deploy` `imagegen-frontend-web` `banner-design` `design-dna` (teardown de referencia → JSON de tokens/estilo/efectos; tipografía SIEMPRE verificada contra el CSS real, no a ojo) `gsap-*` (plugin oficial GreenSock, scrollytelling) | `web-factory-builder` | `onia-web-factory` |
 | **C** propuestas (comercial) | `article-writing` `make-pdf` `slides` `document-generate` `brand` | `onia-propuestas` | `onia-propuestas` |
 | **D** DentaGest · **E** GestiOS *(repos aparte)* | `database-migrations` `postgres-patterns` `backend-patterns` `api-design` `security-review` | `dentalgest-migrations` · `onia-core-guardian` | `onia-core` |
 | **F** Bolivian Electric *(cliente, solo lectura)* | mismo stack backend | — | `onia-core` |
