@@ -336,6 +336,23 @@ describe("eventWindow (SIN 984: la ventana del evento debe caer dentro de la vig
   it("CUFD con menos de ~2min de vida: error claro en vez de quemar 984s", () => {
     assert.throws(() => eventWindow({ nowSinMs: now, cufdDesdeMs: now - 30 * 1000 }), /demasiado fresco/);
   });
+
+  it("SIN 981: el inicio no solapa el ultimo evento registrado (minInicioMs + 1s)", () => {
+    const lastFin = now - 20 * MIN;
+    const win = eventWindow({ nowSinMs: now, cufdDesdeMs: now - 2 * 60 * MIN, minInicioMs: lastFin });
+    assert.equal(win.inicioMs, lastFin + 1000);
+    assert.equal(win.finMs, now - 5 * MIN);
+  });
+
+  it("eventos consecutivos segundos aparte: ventanas disyuntas que avanzan (caso real del 981)", () => {
+    // it-1 registro con fin=now1-5min; it-2 llega 7s despues: su inicio debe
+    // quedar DESPUES del fin de it-1, no re-usar [cufdDesde, now-5min].
+    const desde = now - 60 * MIN;
+    const w1 = eventWindow({ nowSinMs: now, cufdDesdeMs: desde });
+    const w2 = eventWindow({ nowSinMs: now + 7000, cufdDesdeMs: desde, minInicioMs: w1.finMs });
+    assert.ok(w2.inicioMs > w1.finMs, "sin solape con el evento anterior");
+    assert.ok(w2.inicioMs < w2.finMs && w2.finMs <= now + 7000, "ventana valida en el pasado");
+  });
 });
 
 describe("pickMotivoSinCafc (SIN 'Cafc no encontrado': eventos 5/6/7 exigen CAFC)", () => {

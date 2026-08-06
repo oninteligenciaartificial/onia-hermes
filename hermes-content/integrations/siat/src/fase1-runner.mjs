@@ -405,26 +405,36 @@ export function cufdVigenteDesde(cufd) {
 }
 
 /**
- * Ventana [inicio, fin] de un EVENTO SIGNIFICATIVO, SIEMPRE dentro de la
- * vigencia del cufdEvento: el SIN responde 984 ("EL EVENTO SIGNIFICATIVO NO
- * CORRESPONDE AL CUFD DEL EVENTO REGISTRADO") si el evento se fecha antes de
- * que ese CUFD exista. Default [now-35min, now-5min]; si el CUFD es mas fresco
- * que eso, se recorta el inicio a vigenciaDesde+margen (y se sube el fin si
- * quedara invertido). CUFD con menos de ~2*margen de vida: no hay ventana
- * valida en el pasado -> error claro en vez de quemar intentos con 984.
+ * Ventana [inicio, fin] de un EVENTO SIGNIFICATIVO. Dos reglas del SIN
+ * (verificadas en vivo 2026-08-06 en el piloto):
+ *  - 984 "NO CORRESPONDE AL CUFD": la ventana debe caer DENTRO de la vigencia
+ *    del cufdEvento -> inicio >= cufdDesde + margen.
+ *  - 981 "RANGO DE FECHAS INVALIDO": una vez validado un paquete, su rango de
+ *    evento queda tomado; el proximo evento no puede solaparlo -> inicio >
+ *    fin del ultimo evento registrado (minInicioMs).
+ * Default [now-35min, now-5min], recortada por ambos pisos; si el fin quedara
+ * invertido se sube (siempre en el pasado). Sin ventana valida -> error claro
+ * en vez de quemar intentos.
  */
-export function eventWindow({ nowSinMs, cufdDesdeMs = null, windowMs = 30 * 60 * 1000, margenMs = 60_000 }) {
+export function eventWindow({
+  nowSinMs,
+  cufdDesdeMs = null,
+  minInicioMs = null,
+  windowMs = 30 * 60 * 1000,
+  margenMs = 60_000,
+}) {
   let finMs = nowSinMs - 5 * 60 * 1000;
-  let inicioMs = finMs - windowMs;
-  if (cufdDesdeMs != null && inicioMs < cufdDesdeMs + margenMs) {
-    inicioMs = cufdDesdeMs + margenMs;
-    if (finMs <= inicioMs) {
-      finMs = Math.min(inicioMs + margenMs, nowSinMs - 1000);
-    }
+  let inicioMs = Math.max(
+    finMs - windowMs,
+    cufdDesdeMs != null ? cufdDesdeMs + margenMs : -Infinity,
+    minInicioMs != null ? minInicioMs + 1000 : -Infinity,
+  );
+  if (finMs <= inicioMs) {
+    finMs = Math.min(inicioMs + margenMs, nowSinMs - 1000);
   }
   if (!(inicioMs < finMs)) {
     throw new Error(
-      "CUFD demasiado fresco para fechar un evento significativo dentro de su vigencia: esperar ~2 min y reintentar",
+      "sin ventana valida para el evento significativo (CUFD o evento previo demasiado frescos): esperar ~2 min y reintentar",
     );
   }
   return { inicioMs, finMs };
@@ -527,7 +537,8 @@ export function emptyState() {
     sinOffsetMs: 0,
     hashMode: "xml", // "xml" | "gzip": sobre que bytes se calcula hashArchivo
     cuis: null,
-    cufd: null, // { codigo, codigoControl, fechaVigencia } vigente
+    cufd: null, // { codigo, codigoControl, fechaVigencia, obtenidoEn } vigente
+    ultimoEventoFin: null, // fin (timeline SIN) del ultimo evento registrado ok
     numeroFactura: null,
     catalogs: {},
     invoices: [], // { numero, cuf, codigoRecepcion, estado, anulada, revertida }
@@ -844,6 +855,7 @@ class Runner {
     return eventWindow({
       nowSinMs: Date.now() + (this.state.sinOffsetMs ?? 0),
       cufdDesdeMs: cufdVigenteDesde(this.state.cufd),
+      minInicioMs: this.state.ultimoEventoFin ?? null,
     });
   }
 
@@ -859,11 +871,16 @@ class Runner {
       fechaHoraInicioEvento: formatSinLocal(win.inicioMs),
       fechaHoraFinEvento: formatSinLocal(win.finMs),
     });
-    return this.post("FACTURACION_OPERACIONES", envelope, {
+    const result = await this.post("FACTURACION_OPERACIONES", envelope, {
       etapa: "V",
       op: "registroEventoSignificativo",
       motivo: motivo.codigoClasificador,
     });
+    if (result.ok && result.parsed?.transaccion === true) {
+      // SIN 981: el proximo evento no puede solapar este rango -> avanzar el piso.
+      this.state.ultimoEventoFin = Math.max(this.state.ultimoEventoFin ?? 0, win.finMs);
+    }
+    return result;
   }
 
   async etapaV(target = STAGE_TARGETS.V) {
