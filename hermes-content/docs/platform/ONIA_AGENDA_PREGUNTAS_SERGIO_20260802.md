@@ -76,8 +76,8 @@
 | # | Qué | Qué destraba |
 |---|---|---|
 | D1 | **Ticket promedio por cita en SCZ** | el argumento de venta en plata ("una cita recuperada lo paga") |
-| D2 | **NIT + homologación SIAT** (caduca 1-oct) | factura fiscal real — el diferenciador de la tabla comparativa |
-| D3 | **Verificación de negocio en Meta (S5) + número (S6)** | envío real de WhatsApp; sin esto, tope de 2 números |
+| D2 | **Homologación SIAT** (guía completa con RND citadas: `ONIA_GUIA_REGISTROS_SIAT_META_20260806.md`) — el NIT ya existe y está activo; falta REGISTRAR EL SISTEMA tipo Proveedor en el launcher SIAT (10 min + formulario) → eso desbloquea el desarrollo de la Fase 1 (yo la scripteo). Ola 1-oct-2026 (RND 102600000007); meta: autorización cerrada en agosto. Firma digital ahora es AGETIC (ADSIB cerrada, DS 5519) | Paso 1-2 del checklist SIAT de la guía + llamar AGETIC 2184026 |
+| D3 | **Meta: ~~S5~~ APROBADA (verificado en vivo 2026-08-06)** — quedan los 4 clics de la Fase A: URLs de privacidad/términos/eliminación en Settings→Basic, verificar business@onia.com.bo, ícono 1024 (entregado), toggle Live. Con eso el bot atiende clientes reales y el tier sube a 2.000/día. S6 (números de clientes) = fase Tech Provider (2 screencasts + App Review + Access Verification), detallada en la guía | Los 4 clics de la guía §1 Fase A |
 | D4 | **Cuál chatbot sobrevive** (lo revisás vos) | que no nazca un tercero |
 | D5 | **Reunión BCP (miércoles 5-ago)** | QR dinámico + conciliación automática |
 | D6 | ~~Aprobar dashboard v2~~ ✅ aprobado — construyéndose | — |
