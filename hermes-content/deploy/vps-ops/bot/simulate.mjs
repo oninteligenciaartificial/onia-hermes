@@ -23,12 +23,12 @@ import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from
 
 const SCRIPTS = {
   "1-feliz": {
-    title: "Camino feliz — califica, elige horario y agenda",
+    title: "Camino feliz — elige horario, agenda y RECIEN AHI contesta las 3 preguntas",
     startAt: "2026-07-27T14:05:00Z", // lunes 10:05 en La Paz: dentro de horario
     turns: [
       { text: "DEMO" },
-      { text: "Tengo una ferreteria, somos 5 y estoy en Santa Cruz" },
       { text: "A" },
+      { text: "Tengo una ferreteria, somos 5 y estoy en Santa Cruz" },
       { text: "la agenda" },
     ],
   },
@@ -103,9 +103,9 @@ const SCRIPTS = {
     startAt: "2026-07-27T14:05:00Z",
     turns: [
       { text: "DEMO" },
+      { text: "A" },
       { text: "soy dentista, somos 4 en la clinica, en cochabamba" },
       { text: "3" },
-      { text: "A" },
     ],
   },
   "10-soporte": {

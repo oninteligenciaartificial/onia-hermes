@@ -55,66 +55,90 @@ const keysOf = (result) => result.replies.map((reply) => reply.templateKey);
 const effectsOf = (result) => result.sideEffects.map((effect) => effect.type);
 
 // ---------------------------------------------------------------------------
-// 1. Calificacion OK -> demo agendada
+// 1. Bienvenida con horarios -> demo agendada -> calificacion
 // ---------------------------------------------------------------------------
 
-test("califica con los 3 datos, ofrece 2 horarios y agenda el elegido", () => {
+test("el primer mensaje ofrece los 2 horarios, agenda el elegido y RECIEN AHI pregunta los 3 datos", () => {
   const { state, turns } = run([
     "DEMO",
-    "tengo una ferreteria, somos 5 y estoy en Santa Cruz",
     "A",
-    "la agenda",
+    "tengo una ferreteria, somos 5 y estoy en Santa Cruz. la agenda",
   ]);
 
   assert.deepEqual(keysOf(turns[0]), ["M0"]);
   assert.match(turns[0].replies[0].text, /soy un bot|Soy el asistente automático/, "D2: el primer mensaje se presenta como bot");
-
-  assert.deepEqual(keysOf(turns[1]), ["M1b"]);
-  assert.equal(turns[1].nextState.botStage, "esperando_horario");
-  assert.deepEqual(turns[1].nextState.qualification, { industry: "comercio", teamSize: 5, city: "Santa Cruz" });
-  assert.ok(effectsOf(turns[1]).includes("lead_upsert"), "el lead se crea recien al calificar");
-  const lead = turns[1].sideEffects.find((effect) => effect.type === "lead_upsert");
+  assert.match(textOf(turns[0]), /jueves 15:00/, "los horarios van en el PRIMER mensaje");
+  assert.match(textOf(turns[0]), /viernes 10:00/);
+  assert.ok(!/a qué se dedica|cuántas personas/i.test(textOf(turns[0])), "y no cobra una sola pregunta antes de ofrecer");
+  assert.equal(turns[0].nextState.botStage, "esperando_horario");
+  assert.ok(effectsOf(turns[0]).includes("lead_upsert"), "el lead nace con la oferta sobre la mesa");
+  const lead = turns[0].sideEffects.find((effect) => effect.type === "lead_upsert");
   assert.equal(lead.payload.pipelineStatus, "Contactado", "valor exacto que entiende el panel");
-  assert.match(textOf(turns[1]), /jueves 15:00/);
-  assert.match(textOf(turns[1]), /viernes 10:00/);
 
-  assert.deepEqual(keysOf(turns[2]), ["M2"]);
+  assert.deepEqual(keysOf(turns[1]), ["M2"]);
+  assert.equal(turns[1].nextState.botStage, "demo_agendada");
+  assert.equal(turns[1].nextState.scheduledAt, "2026-07-30T19:00:00Z");
+  assert.match(textOf(turns[1]), /A qué se dedica tu negocio/, "las 3 preguntas viajan a DESPUES de la reserva");
+  assert.match(textOf(turns[1]), /Cuántas personas trabajan ahí/);
+  assert.match(textOf(turns[1]), /En qué ciudad estás/);
+  assert.deepEqual(effectsOf(turns[1]).sort(), ["audit_log", "calendar_event", "lead_upsert", "notify_sergio", "stage_change"]);
+  assert.equal(turns[1].sideEffects.find((e) => e.type === "lead_upsert").payload.pipelineStatus, "Reunion");
+
+  assert.deepEqual(keysOf(turns[2]), ["M2b"]);
   assert.equal(state.botStage, "demo_agendada");
-  assert.equal(state.scheduledAt, "2026-07-30T19:00:00Z");
-  assert.deepEqual(effectsOf(turns[2]).sort(), ["audit_log", "calendar_event", "lead_upsert", "notify_sergio", "stage_change"]);
-  assert.equal(turns[2].sideEffects.find((e) => e.type === "lead_upsert").payload.pipelineStatus, "Reunion");
-
-  assert.equal(state.qualification.painPoint, "agenda");
+  assert.deepEqual(state.qualification, {
+    industry: "comercio",
+    teamSize: 5,
+    city: "Santa Cruz",
+    painPoint: "agenda",
+  });
 });
 
-test("el primer mensaje con los 3 datos no re-pregunta, pero igual se presenta como bot", () => {
-  const { turns } = run(["DEMO. Tengo un restaurante, somos 8, en Cochabamba"]);
-  assert.deepEqual(keysOf(turns[0]), ["M0_DISCLOSURE", "M1b"]);
+test("los datos que llegan ANTES de reservar no se vuelven a pedir en M2", () => {
+  const { turns } = run(["DEMO. Tengo un restaurante, somos 8, en Cochabamba", "A"]);
+  assert.deepEqual(keysOf(turns[0]), ["M0"]);
   assert.match(turns[0].replies[0].text, /un bot/);
+  assert.deepEqual(turns[0].nextState.qualification, { industry: "gastronomia", teamSize: 8, city: "Cochabamba" });
+
+  assert.deepEqual(keysOf(turns[1]), ["M2"]);
+  assert.ok(
+    !/a qué se dedica|cuántas personas|en qué ciudad/i.test(textOf(turns[1])),
+    "no se le re-pregunta lo que acaba de contestar",
+  );
+  assert.match(textOf(turns[1]), /más tiempo te come/, "pero el dolor se sigue pidiendo");
 });
 
-test("re-pregunta como maximo 2 veces y despues entrega a un humano", () => {
+test("con la demo ya reservada re-pregunta como maximo 2 veces y despues deja de insistir", () => {
   const { state, turns } = run([
     "DEMO",
+    "A",                     // reserva: M2 pide los 3 datos
     "tengo una ferreteria",  // falta tamaño y ciudad -> M1a (1)
     "en Santa Cruz",         // falta tamaño          -> M1a (2)
-    "no se, depende",        // sigue faltando        -> handoff
+    "no se, depende. los cobros", // sigue faltando   -> cierra sin insistir de nuevo
   ]);
-  assert.deepEqual(keysOf(turns[1]), ["M1a"]);
   assert.deepEqual(keysOf(turns[2]), ["M1a"]);
-  assert.equal(state.botStage, "handoff_humano");
-  assert.ok(effectsOf(turns[3]).includes("review_queue"));
+  assert.deepEqual(keysOf(turns[3]), ["M1a"]);
+  assert.deepEqual(keysOf(turns[4]), ["M2b"], "a la 3ra no se insiste: la demo ya esta reservada");
+  assert.ok(!/me falta/i.test(textOf(turns[4])));
+  assert.equal(state.botStage, "demo_agendada", "y la reunion sigue en pie");
+  assert.equal(state.qualification.teamSize, undefined, "no se inventa el dato que nunca dio");
 });
 
 // ---------------------------------------------------------------------------
 // 2. Descarte cortes
 // ---------------------------------------------------------------------------
 
-test("descarta cortesmente a quien no es un negocio (M1c) y no crea lead", () => {
+test("descarta cortesmente a quien no es un negocio (M1c), en cualquier punto del embudo", () => {
   const { state, turns } = run(["DEMO", "soy estudiante todavia, busco trabajo"]);
   assert.deepEqual(keysOf(turns[1]), ["M1c"]);
   assert.equal(state.botStage, "descartado");
-  assert.ok(!effectsOf(turns[1]).includes("lead_upsert"), "un lead sin calificar no es un lead");
+
+  // Y tambien DESPUES de reservar: con las 3 preguntas al final, el dato que descarta llega recien
+  // con la respuesta a M2. Ahi Sergio tiene que enterarse para liberar el horario.
+  const tarde = run(["DEMO", "A", "en realidad busco trabajo, les mando mi cv?"]);
+  assert.deepEqual(keysOf(tarde.turns[2]), ["M1c"]);
+  assert.equal(tarde.state.botStage, "descartado");
+  assert.ok(effectsOf(tarde.turns[2]).includes("notify_sergio"), "la demo reservada quedo colgada: se avisa");
 });
 
 test("el rubro ya NO descalifica: cualquier negocio entra al embudo", () => {
@@ -137,23 +161,31 @@ test("el tamaño tampoco descalifica: un negocio grande es mejor cliente, no peo
 });
 
 test("odontologia pregunta los sillones como dato de RAMA, y el resto de los rubros no", () => {
-  const dental = run(["DEMO", "soy dentista, somos 4, en Sucre"]);
-  assert.deepEqual(keysOf(dental.turns[1]), ["M1_RAMA_DENTAL"]);
-  assert.equal(dental.state.botStage, "esperando_calificacion", "todavia no ofrece horarios");
-  const conSillones = run(["DEMO", "soy dentista, somos 4, en Sucre", "2"]);
-  assert.equal(conSillones.state.qualification.chairs, 2);
-  assert.equal(conSillones.state.botStage, "esperando_horario");
+  const dental = run(["DEMO", "A", "soy dentista, somos 4, en Sucre"]);
+  assert.deepEqual(keysOf(dental.turns[2]), ["M1_RAMA_DENTAL"]);
+  assert.equal(dental.state.botStage, "demo_agendada", "la rama se pregunta con la demo ya reservada");
 
-  const ferreteria = run(["DEMO", "tengo una ferreteria, somos 4, en Sucre"]);
-  assert.deepEqual(keysOf(ferreteria.turns[1]), ["M1b"], "otro rubro pasa derecho a los horarios");
-  assert.ok(!/sillon/i.test(textOf(ferreteria.turns[1])), "y no le nombra el dato de otro rubro");
+  const conSillones = run(["DEMO", "A", "soy dentista, somos 4, en Sucre", "2"]);
+  assert.equal(conSillones.state.qualification.chairs, 2);
+  assert.deepEqual(keysOf(conSillones.turns[3]), ["M2b"]);
+
+  const ferreteria = run(["DEMO", "A", "tengo una ferreteria, somos 4, en Sucre"]);
+  assert.deepEqual(keysOf(ferreteria.turns[2]), ["M2b"], "otro rubro no ve la pregunta de rama");
+  assert.ok(!/sillon/i.test(textOf(ferreteria.turns[2])), "y no le nombra el dato de otro rubro");
 });
 
-test("el dato de rama no bloquea: si no lo contesta, igual se le ofrecen los horarios", () => {
-  const { state, turns } = run(["DEMO", "soy dentista, somos 4, en Sucre", "ni idea, depende del dia"]);
-  assert.deepEqual(keysOf(turns[2]), ["M1b"]);
-  assert.equal(state.botStage, "esperando_horario");
+test("el dato de rama no bloquea: si no lo contesta, la demo sigue agendada igual", () => {
+  const { state, turns } = run([
+    "DEMO",
+    "A",
+    "soy dentista, somos 4, en Sucre",
+    "uf ni idea, lo que más me come son los cobros",
+  ]);
+  assert.deepEqual(keysOf(turns[2]), ["M1_RAMA_DENTAL"]);
+  assert.deepEqual(keysOf(turns[3]), ["M2b"], "no se insiste con el dato de rama");
+  assert.equal(state.botStage, "demo_agendada");
   assert.equal(state.qualification.chairs, undefined, "no se inventa el dato que no dio");
+  assert.equal(state.qualification.painPoint, "cobros");
 });
 
 test("SOPORTE: quien ya es cliente no recibe la demo comercial, va a un humano", () => {
@@ -168,7 +200,7 @@ test("SOPORTE: quien ya es cliente no recibe la demo comercial, va a un humano",
 
 test("SOPORTE no se traga al que usa OTRO sistema: esa es la objecion de venta de siempre", () => {
   const { state } = run(["DEMO", "ya tengo un sistema"]);
-  assert.equal(state.botStage, "esperando_calificacion", "sigue en el embudo, no en soporte");
+  assert.equal(state.botStage, "esperando_horario", "sigue en el embudo, no en soporte");
 });
 
 // ---------------------------------------------------------------------------
@@ -232,7 +264,7 @@ test("solo el disparador DEMO puede reabrir tras un opt-out", () => {
   const { state, turns } = run(["DEMO", "STOP", "y cuantos sillones dijiste?", "DEMO"]);
   assert.equal(turns[2].replies.length, 0);
   assert.deepEqual(keysOf(turns[3]), ["M0"]);
-  assert.equal(state.botStage, "esperando_calificacion");
+  assert.equal(state.botStage, "esperando_horario");
   assert.equal(state.optOutAt, null);
   assert.equal(state.optInSource, "inbound_demo");
 });
@@ -296,8 +328,8 @@ test("audio sin transcripcion pide texto; con transcripcion sigue el embudo", ()
     { kind: "voice", transcript: "si tenemos una panaderia, somos 3 personas aca en la paz" },
   ]);
   assert.deepEqual(keysOf(turns[1]), ["M_AUDIO_FAIL"]);
-  assert.equal(turns[1].nextState.botStage, "esperando_calificacion", "un audio ilegible no mueve el estado");
-  assert.deepEqual(keysOf(turns[2]), ["M1b"]);
+  assert.equal(turns[1].nextState.botStage, "esperando_horario", "un audio ilegible no mueve el estado");
+  assert.deepEqual(keysOf(turns[2]), ["M0b"]);
   assert.equal(state.qualification.city, "La Paz");
 });
 
@@ -305,7 +337,7 @@ test("fuera de horario se APENDEA el aviso, no reemplaza la respuesta", () => {
   const state = createState({ channel: "sim", contactRef: "nocturno" });
   const result = step(state, { text: "DEMO", receivedAt: "2026-07-28T03:30:00Z" }, { config: CONFIG });
   assert.deepEqual(keysOf(result), ["M0"]);
-  assert.match(result.replies[0].text, /Contame tres cosas rápidas/);
+  assert.match(result.replies[0].text, /¿Cuál te va mejor\?/);
   assert.match(result.replies[0].text, /fuera de horario de oficina/);
   assert.ok(result.notes.includes("fuera_de_horario"));
 });

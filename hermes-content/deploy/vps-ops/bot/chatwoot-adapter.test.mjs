@@ -451,7 +451,7 @@ test("integracion punta a punta: DEMO real dispara M0 y se postea via la API de 
   assert.equal(posted.length, 1);
   assert.equal(posted[0].conversationId, "2");
   assert.match(posted[0].text, /asistente automático/);
-  assert.equal(fake.state.botStage, "esperando_calificacion");
+  assert.equal(fake.state.botStage, "esperando_horario");
 });
 
 test("integracion punta a punta: el ECO del mensaje que el bot acaba de mandar NO reinicia nada (sin loop)", async () => {
@@ -477,7 +477,7 @@ test("integracion punta a punta: el ECO del mensaje que el bot acaba de mandar N
 
   assert.equal(dos.skipped, true, "el eco se ignora: el motor ni se entera");
   assert.equal(posted.length, 1, "sigue en 1: no se poste dos veces, no hay loop");
-  assert.equal(fake.state.botStage, "esperando_calificacion", "el estado no se toco con el eco");
+  assert.equal(fake.state.botStage, "esperando_horario", "el estado no se toco con el eco");
 });
 
 test("integracion punta a punta: reenviar el MISMO webhook (reintento de Chatwoot) no duplica el envio", async () => {
@@ -555,8 +555,8 @@ test("VOZ: la transcripcion entra como `transcript` y el guion sigue normal (cal
   assert.equal(result.voice.chars, 4);
   assert.equal(posted.length, 1, "un audio entendido tiene que disparar el guion, no una disculpa");
   assert.ok(!/No me llegó bien el audio/.test(posted[0]), `el bot volvio a pedir texto: ${posted[0]}`);
-  assert.match(posted[0], /Contame tres cosas/, "el audio 'DEMO' tiene que disparar M0, igual que el texto");
-  assert.equal(fake.state.botStage, "esperando_calificacion", "el audio hizo avanzar el embudo igual que un texto");
+  assert.match(posted[0], /¿Cuál te va mejor\?/, "el audio 'DEMO' tiene que disparar M0, igual que el texto");
+  assert.equal(fake.state.botStage, "esperando_horario", "el audio hizo avanzar el embudo igual que un texto");
 });
 
 test("VOZ: el `transcript` es lo que se le pasa al motor, y `kind` sigue siendo voice en la bitacora", async () => {

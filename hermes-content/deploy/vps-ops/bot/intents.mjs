@@ -139,7 +139,9 @@ const RE_PIDE_HUMANO = /\b(?:hablar|hablo|charlar|conversar|comunicarme|contacta
 
 // "no le sirve ninguno". Se consulta DESPUES de detectSlotChoice: "el jueves no puedo, el
 // viernes si" ya quedo resuelto como eleccion del viernes y nunca llega hasta aca.
-const RE_SIN_SLOT = /\bningun[oa]?\b|\bno me sirve\b|\bninguna de las dos\b|\bno me va\b|\bno puedo\b|\botro horario\b|\botro dia\b|\botra fecha\b|\bmas tarde\b|\bmas adelante\b/;
+// `^otro$` esta porque M0 lo promete con todas las letras ("escribime 'otro' y lo coordinamos"):
+// va anclado como mensaje entero — "otro dia" o "en otro local" ya matchean (o no) por su cuenta.
+const RE_SIN_SLOT = /\bningun[oa]?\b|\bno me sirve\b|\bninguna de las dos\b|\bno me va\b|\bno puedo\b|^\s*otro\s*[!.]*$|\botro horario\b|\botro dia\b|\botra fecha\b|\bmas tarde\b|\bmas adelante\b/;
 
 export function isOptOut(norm) {
   return RE_OPT_OUT.test(norm);

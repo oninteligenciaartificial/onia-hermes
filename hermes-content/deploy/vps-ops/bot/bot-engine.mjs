@@ -37,6 +37,19 @@ export const STAGES = Object.freeze([
 /** Marcador que devuelve la rama LLM cuando no se le inyecta un cliente de LLM. */
 export const LLM_PENDING = "[[LLM_PENDIENTE]]";
 
+/**
+ * Estados donde lo unico pendiente es que el prospecto elija uno de los dos horarios.
+ * `esperando_calificacion` y `calificado` son del guion VIEJO (las 3 preguntas iban antes de los
+ * horarios): siguen en la lista porque hay conversaciones vivas en la base con ese estado.
+ */
+const ESPERA_HORARIO_STAGES = Object.freeze(["esperando_calificacion", "calificado", "esperando_horario"]);
+
+/** Estados del embudo en los que se leen datos de calificacion del mensaje entrante. */
+const INTAKE_STAGES = Object.freeze(["nuevo", ...ESPERA_HORARIO_STAGES, "demo_agendada"]);
+
+/** Estados en los que un mensaje puede descartar al prospecto (en 'nuevo' manda el disclosure). */
+const DESCARTABLE_STAGES = Object.freeze([...ESPERA_HORARIO_STAGES, "demo_agendada"]);
+
 // ---------------------------------------------------------------------------
 // Estado
 // ---------------------------------------------------------------------------
@@ -161,13 +174,9 @@ function varsFor(state, config, extra = {}) {
     bot: config.identity.botName,
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
-    ciudad: q.city || "",
     rubro: intents.industryLabel(q.industry) || "",
     personas: q.teamSize ?? "",
     persona_palabra: q.teamSize === 1 ? "persona" : "personas",
-    // "Con 1 persona" suena a formulario. El que trabaja solo lo dice asi, y es la mitad del
-    // mercado boliviano al que le hablamos.
-    tamano_frase: q.teamSize === 1 ? "Trabajando por tu cuenta" : `Con ${q.teamSize ?? ""} personas`,
     // Se nombra el modulo del rubro SOLO si ese rubro tiene uno de verdad. Para el resto queda
     // vacio: nombrar un modulo que no existe es prometer una feature (N2) con otro disfraz.
     nota_modulo: (branch && branch.moduleNote) || "",
@@ -175,9 +184,26 @@ function varsFor(state, config, extra = {}) {
     sillon_palabra: q.chairs === 1 ? "sillón" : "sillones",
     dia_hora_elegida: label,
     dia: label ? label.split(/\s+/)[0] : "",
-    pain_point: q.painPoint || "",
+    preguntas: askList(state, config),
     ...extra,
   };
+}
+
+/** 1️⃣ 2️⃣ 3️⃣ 4️⃣ — la lista de M2 nunca pasa de 4 items (3 datos + el dolor). */
+const VINETAS = Object.freeze(["1️⃣", "2️⃣", "3️⃣", "4️⃣"]);
+
+/**
+ * Las preguntas que M2 pone sobre la mesa DESPUES de reservar: los datos que todavia faltan
+ * (nunca los que el prospecto ya dio) y, siempre al final, la del dolor.
+ * Las preguntas se DERIVAN del `missLabel` de cada campo: asi el guion no puede desincronizarse
+ * de la config, y el banco (que busca ese mismo texto) mide lo que el bot realmente pregunto.
+ */
+function askList(state, config) {
+  const items = missingFields(state.qualification || {}, config).map(
+    (field) => `¿${field.missLabel.charAt(0).toUpperCase()}${field.missLabel.slice(1)}?`,
+  );
+  items.push(config.script.M2_PREGUNTA_DOLOR);
+  return items.map((item, index) => `${VINETAS[index] || "•"} ${item}`).join("\n");
 }
 
 function say(templateKey, state, config, extraVars = {}) {
@@ -192,6 +218,13 @@ function missingFields(qualification, config) {
   });
 }
 
+/** Como se lee el dolor cuando el bot lo repite en voz alta ("anotado ... que lo que más te come"). */
+const DOLOR_LABEL = Object.freeze({
+  agenda: "la agenda",
+  cobros: "los cobros",
+  clientes: "los clientes que no vuelven",
+});
+
 function capturedLabels(qualification) {
   const labels = [];
   if (qualification.industry) {
@@ -204,6 +237,9 @@ function capturedLabels(qualification) {
   if (qualification.city) labels.push(`que estás en ${qualification.city}`);
   if (qualification.chairs) {
     labels.push(`que tenés ${qualification.chairs} ${qualification.chairs === 1 ? "sillón" : "sillones"}`);
+  }
+  if (DOLOR_LABEL[qualification.painPoint]) {
+    labels.push(`que lo que más tiempo te come es ${DOLOR_LABEL[qualification.painPoint]}`);
   }
   return labels;
 }
@@ -222,20 +258,19 @@ function pendingBranch(state, config) {
 
 /** La pregunta pendiente del estado actual: con esto una respuesta off-guion vuelve al embudo. */
 function pendingAsk(state, config) {
-  if (state.botStage === "esperando_calificacion") {
+  // Antes de reservar lo unico pendiente es elegir horario: los datos ya no se piden aca.
+  if (ESPERA_HORARIO_STAGES.includes(state.botStage)) return say("PENDING_HORARIO", state, config).text;
+  if (state.botStage === "demo_agendada") {
     const missing = missingFields(state.qualification, config);
-    if (missing.length === 0) {
-      const branch = pendingBranch(state, config);
-      return branch ? say(branch.askKey, state, config).text : null;
+    if (missing.length > 0) {
+      return say("PENDING_CALIFICACION", state, config, {
+        dato_faltante: joinEs(missing.map((field) => field.missLabel)),
+      }).text;
     }
-    return say("PENDING_CALIFICACION", state, config, {
-      dato_faltante: joinEs(missing.map((field) => field.missLabel)),
-    }).text;
+    const branch = pendingBranch(state, config);
+    if (branch) return say(branch.askKey, state, config).text;
+    return say("PENDING_AGENDADA", state, config).text;
   }
-  if (state.botStage === "esperando_horario" || state.botStage === "calificado") {
-    return say("PENDING_HORARIO", state, config).text;
-  }
-  if (state.botStage === "demo_agendada") return say("PENDING_AGENDADA", state, config).text;
   return null;
 }
 
@@ -371,41 +406,86 @@ function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
   return finalize(ctx, next, [...leadingReplies, say(bodyKey, next, config)], effects, [`handoff:${reason}`]);
 }
 
+/**
+ * La bienvenida: disclosure + que es Onia + los 2 horarios, todo en el primer mensaje.
+ * El compromiso se pide ANTES que los datos (las 3 preguntas viajan a M2): en el momento de
+ * maximo interes se ofrece la reunion, no un formulario.
+ * El lead nace aca, con el horario ya sobre la mesa: en el embudo nuevo no hay un momento
+ * "calificado" previo a la reunion, y sin esto un prospecto que conversa pero no reserva no
+ * aparecería en el panel.
+ */
+function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienvenida"], after = [] } = {}) {
+  const { config, prev, msg } = ctx;
+  const next = {
+    ...base,
+    botStage: "esperando_horario",
+    slotsOffered: config.slots.map((slot) => ({ ...slot })),
+    optInAt: base.optInAt || msg.receivedAt,
+    optInSource: base.optInSource || "inbound_demo",
+    offScriptCount: 0,
+  };
+  const effects = [
+    stageEffect(prev, next, reason),
+    {
+      type: "lead_upsert",
+      payload: {
+        conversationKey: next.conversationKey,
+        pipelineStatus: config.pipelineStatus.calificado,
+        ownerRoleKey: next.ownerRoleKey,
+        channel: next.channel,
+        contactRef: next.contactRef,
+        pieceKey: next.pieceKey,
+        sourceCampaign: next.sourceCampaign,
+        qualification: next.qualification,
+        // lead_key lo genera el ejecutor (no es determinista): vuelve para guardarse en la conversacion.
+      },
+    },
+  ];
+  return finalize(ctx, next, [say("M0", next, config), ...after], effects, notes);
+}
+
+/**
+ * Descarte suave: el que escribe claramente NO es un negocio (busca trabajo o nos quiere vender
+ * algo). Se evalua en cualquier punto del embudo, tambien DESPUES de reservar: con las 3 preguntas
+ * al final, el dato que descarta llega recien con la respuesta a M2.
+ */
+function descartadoResult(ctx, base) {
+  const { config, prev, msg } = ctx;
+  const next = { ...base, botStage: "descartado" };
+  const effects = [stageEffect(prev, next, "descartado_fuera_de_publico"), auditEffect(prev, next, "descartado")];
+  if (next.leadKey) {
+    effects.push({
+      type: "lead_upsert",
+      payload: { leadKey: next.leadKey, pipelineStatus: config.pipelineStatus.descartado, conversationKey: next.conversationKey },
+    });
+  }
+  // Ya habia una demo reservada: Sergio tiene que enterarse para liberar el horario, si no se
+  // presenta a una reunion con alguien que no es cliente posible.
+  if (base.botStage === "demo_agendada") {
+    effects.push({
+      type: "notify_sergio",
+      payload: {
+        kind: "descarte_tras_agendar",
+        conversationKey: next.conversationKey,
+        text: summarize(next, msg, "descartado despues de agendar la demo"),
+      },
+    });
+  }
+  return finalize(ctx, next, [say("M1c", next, config)], effects, ["descartado"]);
+}
+
 /** Respuesta off-guion (precio / SIAT / archivo): cuerpo fijo + la pregunta pendiente del embudo. */
 function composeWithFunnel(ctx, base, bodyKey, reason) {
-  const { config, prev, msg } = ctx;
-  const intake = base.botStage === "nuevo" || base.botStage === "esperando_calificacion";
+  const { config } = ctx;
 
-  // El mismo mensaje trajo la pregunta Y los 3 datos: se contesta y se sigue al horario. Volver
-  // a pedir lo que el prospecto acaba de contestar es lo que hace parecer que el bot no lee.
-  if (intake && missingFields(base.qualification, config).length === 0 && !intents.isDisqualified(msg.norm)) {
-    const staged = {
-      ...base,
-      botStage: "esperando_calificacion",
-      optInAt: base.optInAt || msg.receivedAt,
-      optInSource: base.optInSource || "inbound_demo",
-    };
-    const leading = base.botStage === "nuevo"
-      ? [say("M0_DISCLOSURE", staged, config), say(bodyKey, staged, config)]
-      : [say(bodyKey, staged, config)];
-    return afterQualification(ctx, staged, leading, [reason]);
-  }
-
-  // En 'nuevo' el disclosure manda (D2, sin excepción): primero M0, despues el cuerpo.
+  // En 'nuevo' el disclosure manda (D2, sin excepción): primero M0 —que ya trae los horarios—,
+  // despues el cuerpo. Los datos que vinieran en el mismo mensaje ya quedaron guardados.
   if (base.botStage === "nuevo") {
-    const next = {
-      ...base,
-      botStage: "esperando_calificacion",
-      optInAt: base.optInAt || ctx.msg.receivedAt,
-      optInSource: base.optInSource || "inbound_demo",
-    };
-    return finalize(
-      ctx,
-      next,
-      [say("M0", next, config), say(bodyKey, next, config)],
-      [stageEffect(prev, next, `${reason}_en_bienvenida`)],
-      [reason],
-    );
+    return welcomeResult(ctx, base, {
+      reason: `${reason}_en_bienvenida`,
+      notes: [reason],
+      after: [say(bodyKey, base, config)],
+    });
   }
 
   const ask = pendingAsk(base, config);
@@ -442,19 +522,15 @@ export function step(state, incoming, options = {}) {
     if (intents.isOptOut(msg.norm) || !intents.isDemoTrigger(msg.norm, config)) {
       return finalize(ctx, base, [], [], ["silencio:opt_out"]);
     }
-    const next = {
+    const reabierto = {
       ...base,
-      botStage: "esperando_calificacion",
       optOutAt: null,
       optInAt: msg.receivedAt,
       optInSource: "inbound_demo",
-      offScriptCount: 0,
       qualifyAsks: 0,
       qualification: {},
     };
-    return finalize(ctx, next, [say("M0", next, config)], [stageEffect(prev, next, "reapertura_tras_opt_out")], [
-      "reabierto_por_demo",
-    ]);
+    return welcomeResult(ctx, reabierto, { reason: "reapertura_tras_opt_out", notes: ["reabierto_por_demo"] });
   }
 
   // --- Audio sin transcripcion: el ejecutor debio transcribir antes (Speaches). Pedimos texto.
@@ -469,11 +545,18 @@ export function step(state, incoming, options = {}) {
 
   if (!msg.hasText) return finalize(ctx, base, [], [], ["sin_texto"]);
 
-  // --- Captura ANTES de rutear (regla de oro §2.1). Un mensaje real trae las tres respuestas y
-  // una pregunta en la misma linea ("es mia, tengo 2 sillones, estoy en santa cruz. cuanto
-  // sale?"). Si la intencion cortara antes, los 3 datos se tiran y el bot los vuelve a pedir:
-  // parece que no lee. Los datos se guardan igual; la pregunta se contesta igual.
-  const intake = base.botStage === "nuevo" || base.botStage === "esperando_calificacion";
+  // --- La ELECCION DE HORARIO se resuelve antes que nada: esperando el horario, un "2" pelado es
+  // la opcion B, no un equipo de 2 personas. Sin este orden el bot inventa el dato con el que
+  // despues habla (viola la regla de oro §2.1).
+  ctx.slotChoice = base.botStage === "esperando_horario"
+    ? intents.detectSlotChoice(msg.norm, activeSlots(base, config))
+    : null;
+
+  // --- Captura ANTES de rutear (regla de oro §2.1). Un mensaje real trae las respuestas y una
+  // pregunta en la misma linea ("tengo una ferreteria, somos 5, en santa cruz. cuanto sale?").
+  // Si la intencion cortara antes, los datos se tiran y el bot los vuelve a pedir: parece que no
+  // lee. Los datos se guardan igual; la pregunta se contesta igual.
+  const intake = INTAKE_STAGES.includes(base.botStage) && !ctx.slotChoice;
   const found = intake ? intents.parseQualification(msg.norm, base.qualification) : {};
   const withData = Object.keys(found).length
     ? { ...base, qualification: { ...base.qualification, ...found } }
@@ -513,20 +596,29 @@ export function step(state, incoming, options = {}) {
   // Pidio un humano con todas las letras (N3): el bot no puede contestarlo el mismo.
   if (intents.wantsHuman(msg.norm)) return handoffResult(ctx, withData, "pidio_hablar_con_humano");
 
+  // Descarte suave. Va al final del router (era lo ultimo que se juzgaba en la calificacion) y en
+  // 'nuevo' NO se evalua: el primer mensaje siempre es la bienvenida, que es donde el bot se
+  // declara bot (D2).
+  if (DESCARTABLE_STAGES.includes(withData.botStage) && intents.isDisqualified(msg.norm)) {
+    return descartadoResult(ctx, withData);
+  }
+
   // --- Rama por estado.
   switch (withData.botStage) {
     case "nuevo":
-      return handleNuevo(ctx, withData);
+      return welcomeResult(ctx, withData);
     case "esperando_calificacion":
-      return handleCalificacion(ctx, withData);
     case "calificado":
+      // Guion VIEJO (las 3 preguntas iban antes de los horarios). Las conversaciones que quedaron
+      // en ese estado se migran al embudo nuevo con la bienvenida, que es la que trae la oferta.
+      return welcomeResult(ctx, withData, { reason: "migracion_guion_nuevo" });
     case "esperando_horario":
       return handleHorario(ctx, withData);
     case "demo_agendada":
       return handleAgendada(ctx, withData);
     case "descartado":
       return intents.isDemoTrigger(msg.norm, config)
-        ? handleNuevo(ctx, { ...base, botStage: "nuevo", qualification: {}, offScriptCount: 0, qualifyAsks: 0 })
+        ? welcomeResult(ctx, { ...base, botStage: "nuevo", qualification: {}, offScriptCount: 0, qualifyAsks: 0 })
         : handoffResult(ctx, base, "escribio_tras_descarte");
     case "demo_realizada":
       return handoffResult(ctx, base, "escribio_tras_la_demo");
@@ -542,128 +634,25 @@ export function step(state, incoming, options = {}) {
 // Handlers por estado
 // ---------------------------------------------------------------------------
 
-function handleNuevo(ctx, base) {
-  const { config, prev, msg } = ctx;
-  // La calificacion ya se capturo en step(), antes del router: aca solo se decide con ella.
-  const qualification = base.qualification;
-  const optIn = { optInAt: base.optInAt || msg.receivedAt, optInSource: base.optInSource || "inbound_demo" };
-
-  // El primer mensaje ya trajo los 3 datos: disclosure + oferta de horarios, sin re-preguntar.
-  if (missingFields(qualification, config).length === 0 && !intents.isDisqualified(msg.norm)) {
-    const staged = { ...base, ...optIn, qualification, botStage: "esperando_calificacion" };
-    return afterQualification(ctx, staged, [say("M0_DISCLOSURE", staged, config)]);
-  }
-
-  const next = { ...base, ...optIn, qualification, botStage: "esperando_calificacion" };
-  return finalize(ctx, next, [say("M0", next, config)], [stageEffect(prev, next, "disparador_demo")], ["bienvenida"]);
-}
-
-function handleCalificacion(ctx, base) {
-  const { config, prev, msg } = ctx;
-  const found = ctx.found || {};
-  const qualification = base.qualification;
-
-  // Descarte suave: claramente no es un negocio (busca trabajo / nos quiere vender algo).
-  if (intents.isDisqualified(msg.norm)) {
-    const next = { ...base, qualification, botStage: "descartado" };
-    const effects = [stageEffect(prev, next, "descartado_fuera_de_publico"), auditEffect(prev, next, "descartado")];
-    if (next.leadKey) {
-      effects.push({
-        type: "lead_upsert",
-        payload: { leadKey: next.leadKey, pipelineStatus: config.pipelineStatus.descartado, conversationKey: next.conversationKey },
-      });
-    }
-    return finalize(ctx, next, [say("M1c", next, config)], effects, ["descartado"]);
-  }
-
-  const missing = missingFields(qualification, config);
-
-  if (missing.length === 0) return afterQualification(ctx, { ...base, qualification });
-
-  // Ya se re-pregunto el maximo y siguen faltando datos: "no insistimos una tercera vez" (spec M1a).
-  // El tope se evalua ANTES de la rama LLM: reformular la pregunta seria insistir igual.
-  if (base.qualifyAsks >= config.qualification.maxReAsks) {
-    return handoffResult(ctx, { ...base, qualification }, "calificacion_incompleta");
-  }
-
-  // No entendio nada nuevo: es la rama off-guion (unica con LLM), no una re-pregunta.
-  if (Object.keys(found).length === 0) return offScriptResult(ctx, { ...base, qualification });
-
-  const asks = base.qualifyAsks + 1;
-  const next = { ...base, qualification, qualifyAsks: asks };
-  const reply = say("M1a", next, config, {
-    datos_que_si_dio: joinEs(capturedLabels(qualification)),
-    dato_faltante: joinEs(missing.map((field) => field.missLabel)),
-  });
-  return finalize(ctx, next, [reply], [], [`repregunta:${asks}`]);
-}
-
-/**
- * Los 3 datos universales ya estan. Antes de ofrecer los horarios, el rubro puede pedir UN dato
- * extra (hoy: los sillones de una clinica dental). Cualquier otro rubro pasa derecho.
- *
- * La pregunta de rama NO es un gate: se hace una sola vez y, conteste o no, la proxima vez que
- * pase por aca se ofrecen los horarios igual. Un dato lindo para el CRM no vale una demo.
- */
-function afterQualification(ctx, base, leadingReplies = [], leadingNotes = []) {
-  const { config } = ctx;
-  const branch = pendingBranch(base, config);
-  if (!branch) return qualifiedResult(ctx, base, leadingReplies, leadingNotes);
-
-  const next = { ...base, botStage: "esperando_calificacion", branchAsked: true, offScriptCount: 0 };
-  return finalize(
-    ctx,
-    next,
-    [...leadingReplies, say(branch.askKey, next, config)],
-    [],
-    [...leadingNotes, `rama_rubro:${branch.key}`],
-  );
-}
-
-/** Paso por `calificado` -> ofrece los 2 horarios y queda en `esperando_horario` (spec §2.1). */
-function qualifiedResult(ctx, base, leadingReplies = [], leadingNotes = []) {
-  const { config, prev } = ctx;
-  const next = {
-    ...base,
-    botStage: "esperando_horario",
-    slotsOffered: config.slots.map((slot) => ({ ...slot })),
-    offScriptCount: 0,
-  };
-  const effects = [
-    stageEffect(prev, next, "calificado"),
-    {
-      type: "lead_upsert",
-      payload: {
-        conversationKey: next.conversationKey,
-        pipelineStatus: config.pipelineStatus.calificado,
-        ownerRoleKey: next.ownerRoleKey,
-        channel: next.channel,
-        contactRef: next.contactRef,
-        pieceKey: next.pieceKey,
-        sourceCampaign: next.sourceCampaign,
-        qualification: next.qualification,
-        // lead_key lo genera el ejecutor (no es determinista): vuelve para guardarse en la conversacion.
-      },
-    },
-  ];
-  // La ruta principal va PRIMERA en notes: si el turno arranco contestando el precio, esa es la
-  // rama que tomo, y `calificado` es lo que ademas logro.
-  return finalize(ctx, next, [...leadingReplies, say("M1b", next, config)], effects, [...leadingNotes, "calificado"]);
-}
-
 function handleHorario(ctx, base) {
   const { config, prev, msg } = ctx;
   const slots = activeSlots(base, config);
 
-  // Primero se busca la ELECCION: "el jueves no puedo, el viernes si" esta eligiendo el viernes,
-  // y leerlo como "no le sirve ninguno" tira una demo que el prospecto ya acepto.
-  const chosen = intents.detectSlotChoice(msg.norm, slots);
+  // La ELECCION ya se resolvio en step(), antes de leer datos: "el jueves no puedo, el viernes si"
+  // esta eligiendo el viernes, y leerlo como "no le sirve ninguno" tira una demo ya aceptada.
+  const chosen = ctx.slotChoice;
   if (!chosen) {
     if (intents.noSlotWorks(msg.norm)) return handoffResult(ctx, base, "ningun_horario_le_sirve");
     // Puso SU fecha/hora sobre la mesa sin elegir A ni B ("puedo el jueves a la 1", "el primero
     // de agosto viajo"): eso lo coordina un humano. Agendarle uno de los nuestros y decirle
     // "listo, agendado" es mandarlo a una reunion a la que nunca dijo que iba.
     if (intents.proposesOwnTime(msg.norm)) return handoffResult(ctx, base, "propone_otro_horario");
+    // Contesto contando su negocio en vez de elegir: se le acusa recibo y se le vuelven a poner
+    // los dos horarios. El dato queda guardado, asi que M2 despues no se lo vuelve a pedir.
+    if (Object.keys(ctx.found || {}).length > 0) {
+      const reply = say("M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification)) });
+      return finalize(ctx, base, [reply], [], ["repregunta:horario"]);
+    }
     return offScriptResult(ctx, base);
   }
 
@@ -706,25 +695,66 @@ function handleHorario(ctx, base) {
   return finalize(ctx, next, [say("M2", next, config)], effects, notes);
 }
 
+/**
+ * Despues de reservar. Aca vive AHORA la calificacion: M2 pidio los 3 datos y el dolor, y esto
+ * lee lo que el prospecto contesto. La demo ya esta reservada, asi que nada de esto es un gate:
+ * si un dato no llega, la reunion sigue en pie y lo pregunta Sergio.
+ */
 function handleAgendada(ctx, base) {
   const { config, msg } = ctx;
-  // "gracias" / "dale" no es una consulta: no se molesta a un humano por cortesia.
-  if (intents.isCourtesy(msg.norm)) return finalize(ctx, base, [], [], ["cortesia_sin_respuesta"]);
+  const found = ctx.found || {};
   const pain = intents.detectPainPoint(msg.norm);
-  if (!pain) return handoffResult(ctx, base, "mensaje_tras_agendar_sin_dolor");
-  const next = { ...base, qualification: { ...base.qualification, painPoint: pain } };
+  const captured = Object.keys(found).length > 0 || Boolean(pain);
+
+  // "gracias" / "nos vemos el jueves": no es una consulta ni trae datos, no se molesta a nadie.
+  if (!captured && intents.isCourtesy(msg.norm)) return finalize(ctx, base, [], [], ["cortesia_sin_respuesta"]);
+  // Escribio algo que no es ni un dato ni el dolor: lo mira un humano (ante la duda, derivar).
+  if (!captured) return handoffResult(ctx, base, "mensaje_tras_agendar_sin_dolor");
+
+  const qualification = pain ? { ...base.qualification, painPoint: pain } : base.qualification;
   const effects = [
     {
       type: "lead_upsert",
       payload: {
-        conversationKey: next.conversationKey,
-        leadKey: next.leadKey,
-        painPoint: pain,
+        conversationKey: base.conversationKey,
+        leadKey: base.leadKey,
+        painPoint: qualification.painPoint || null,
+        qualification,
+        // La reunion ya esta agendada: el estado del pipeline no baja por sumar datos.
         pipelineStatus: config.pipelineStatus.demo_agendada,
       },
     },
   ];
-  return finalize(ctx, next, [say("M2b", next, config)], effects, [`dolor:${pain}`]);
+
+  // Falta algo y todavia queda margen: se pide UNA cosa mas. A la 3ra no se insiste (spec D3) —
+  // un campo del CRM no vale cansar a quien ya dijo que si.
+  const missing = missingFields(qualification, config);
+  if (missing.length > 0 && base.qualifyAsks < config.qualification.maxReAsks) {
+    const asks = base.qualifyAsks + 1;
+    const next = { ...base, qualification, qualifyAsks: asks };
+    // M1a repite TODO lo anotado hasta ahora: es lo que hace que "me falta sólo X" se lea bien.
+    const reply = say("M1a", next, config, {
+      datos_que_si_dio: joinEs(capturedLabels(qualification)),
+      dato_faltante: joinEs(missing.map((field) => field.missLabel)),
+    });
+    return finalize(ctx, next, [reply], effects, [`repregunta:${asks}`]);
+  }
+
+  // Los 3 universales estan: el rubro puede pedir UN dato extra (hoy: los sillones de una clinica).
+  // Se pregunta una sola vez y no bloquea nada.
+  const branch = missing.length === 0 ? pendingBranch({ ...base, qualification }, config) : null;
+  if (branch) {
+    const next = { ...base, qualification, branchAsked: true };
+    return finalize(ctx, next, [say(branch.askKey, next, config)], effects, [`rama_rubro:${branch.key}`]);
+  }
+
+  // El acuse repite SOLO lo que vino en ESTE mensaje: si el prospecto contesta en dos tandas,
+  // volver a leerle la lista entera suena a formulario, no a alguien que lo escucho.
+  const next = { ...base, qualification };
+  const reply = say("M2b", next, config, {
+    datos_que_si_dio: joinEs(capturedLabels({ ...found, ...(pain ? { painPoint: pain } : {}) })),
+  });
+  return finalize(ctx, next, [reply], effects, [pain ? `dolor:${pain}` : "calificado"]);
 }
 
 /**

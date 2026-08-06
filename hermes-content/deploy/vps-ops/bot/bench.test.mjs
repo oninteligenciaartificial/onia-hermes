@@ -99,28 +99,37 @@ test("cambiar la config cambia lo que mide el banco (no hay guion copiado adentr
 // 2. Los probes salen de config (si el guion cambia, el instrumento cae, no miente)
 // ---------------------------------------------------------------------------
 
-test("M0 realmente pregunta los 3 datos: la suposicion del probe se verifica contra el guion", () => {
-  // fieldsAsked da por hecho que M0 pide los tres. Si alguien edita M0 y saca una pregunta,
-  // este test cae ANTES de que el banco empiece a contar re-preguntas que no existen.
-  // Las 3 preguntas se leen del propio config: si el guion deja de nombrar un `missLabel` con
-  // esas palabras, el probe deja de reconocerlo y la medicion mentiria.
-  const m0 = normalize(BENCH_CONFIG.script.M0);
+// MOTOR REAL: el embudo cambio de ORDEN (los 3 datos se piden con la demo YA reservada, en M2),
+// pero la garantia que este test protege es la misma de antes: el embudo pide los 3 datos, los
+// pide TODOS JUNTOS en un solo mensaje, y el probe reconoce ese pedido en el texto real.
+test("el embudo pregunta los 3 datos en M2: la suposicion del probe se verifica contra el motor", () => {
+  // fieldsAsked da por hecho que el guion escribe el `missLabel` de cada campo con esas mismas
+  // palabras. Si alguien edita el guion y saca una pregunta, este test cae ANTES de que el banco
+  // empiece a contar re-preguntas que no existen.
+  const observed = runConversation({ id: "t", turns: ["DEMO", "A"] }, BENCH_CONFIG);
+  const reservado = observed[1].result.replies;
+  assert.deepEqual(reservado.map((reply) => reply.templateKey), ["M2"], "reservar es lo que dispara las preguntas");
+
+  const m2 = normalize(reservado[0].text);
   for (const field of BENCH_CONFIG.qualification.fields) {
-    assert.ok(m0.includes(normalize(field.missLabel)), `M0 ya no pregunta ${field.key}`);
+    assert.ok(m2.includes(normalize(field.missLabel)), `M2 ya no pregunta ${field.key}`);
   }
-  assert.deepEqual(
-    [...fieldsAsked([{ templateKey: "M0", text: BENCH_CONFIG.script.M0 }], BENCH_CONFIG)].sort(),
-    ["city", "industry", "teamSize"],
-  );
-  assert.match(m0, /a que se dedica/, "la pregunta 1 es el RUBRO: es lo que abre el bot a todos los negocios");
-  assert.match(m0, /cuantas personas/, "la pregunta 2 es el TAMAÑO: el unico proxy que entiende cualquier rubro");
+  assert.deepEqual([...fieldsAsked(reservado, BENCH_CONFIG)].sort(), ["city", "industry", "teamSize"]);
+  assert.match(m2, /a que se dedica/, "la pregunta 1 es el RUBRO: es lo que abre el bot a todos los negocios");
+  assert.match(m2, /cuantas personas/, "la pregunta 2 es el TAMAÑO: el unico proxy que entiende cualquier rubro");
+
+  // Y la bienvenida no cobra NI UNA: en el momento de maximo interes se ofrece la reunion, no un
+  // formulario. Ese es todo el cambio de orden, medido.
+  assert.deepEqual([...fieldsAsked(observed[0].result.replies, BENCH_CONFIG)], []);
 });
 
-test("el dato de rama NO se le pregunta a todos: M0 sigue siendo 3 preguntas", () => {
-  // La cuarta pregunta (los sillones) es de rama. Si se colara en M0, el bot volveria a hablarle
-  // solo a clinicas dentales — que es exactamente lo que este cambio vino a arreglar.
+test("el dato de rama NO se le pregunta a todos: la lista de M2 sigue siendo 3 preguntas", () => {
+  // La cuarta pregunta (los sillones) es de rama. Si se colara en el pedido general, el bot
+  // volveria a hablarle solo a clinicas dentales — que es lo que este bot vino a arreglar.
+  const observed = runConversation({ id: "t", turns: ["DEMO", "A"] }, BENCH_CONFIG);
   assert.equal(BENCH_CONFIG.qualification.fields.length, 3);
-  assert.ok(!normalize(BENCH_CONFIG.script.M0).includes("sillon"), "M0 no puede nombrar el dato de un rubro");
+  assert.ok(!normalize(observed[1].result.replies[0].text).includes("sillon"), "M2 no puede nombrar el dato de un rubro");
+  assert.ok(!normalize(observed[0].result.replies[0].text).includes("sillon"), "y la bienvenida, menos todavia");
   assert.equal(BENCH_CONFIG.qualification.branches.dental.field.key, "chairs");
 });
 
@@ -142,10 +151,11 @@ test("fieldsAsked deriva las etiquetas de config: con otros missLabel, sigue a l
 
 // MOTOR REAL: la etiqueta que el probe busca es la que el guion escribe de verdad.
 test("fieldsAsked reconoce la re-pregunta real que sale del motor", () => {
-  const observed = runConversation({ id: "t", turns: ["DEMO", "es mia y tengo 2 sillones"] }, BENCH_CONFIG);
-  const asked = fieldsAsked(observed[1].result.replies, BENCH_CONFIG);
+  // Reserva primero (el orden nuevo) y contesta una sola de las 3 preguntas de M2.
+  const observed = runConversation({ id: "t", turns: ["DEMO", "A", "tengo una ferreteria"] }, BENCH_CONFIG);
+  const asked = fieldsAsked(observed[2].result.replies, BENCH_CONFIG);
   assert.equal(asked.has("city"), true, "el motor pidio la ciudad y el probe lo ve");
-  assert.equal(asked.has("chairs"), false, "y no cuenta como pedido lo que ya le dieron");
+  assert.equal(asked.has("industry"), false, "y no cuenta como pedido lo que ya le dieron");
 });
 
 // ---------------------------------------------------------------------------
@@ -355,7 +365,7 @@ test("validateCases rechaza rutas, campos e ids que no existen", () => {
 test("el banco entero corre y cada caso cae en un estado conocido de la taxonomia", () => {
   const outcomes = BENCH_CASES.map((bench) => evaluateCase(bench, BENCH_CONFIG));
   assert.equal(outcomes.length >= 40, true, "un banco chico no mide nada");
-  assert.equal(outcomes.length <= 60, true);
+  assert.equal(outcomes.length <= 70, true, "y uno inflado se deja de leer");
   for (const outcome of outcomes) assert.equal(ALL_STATUSES.includes(outcome.status), true, outcome.id);
 });
 
