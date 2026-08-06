@@ -51,20 +51,68 @@ registro base (esas se piden por producto, al importar).
 
 ---
 
-## 2. Datos a verificar contra los certificados (no de memoria)
+## 2. Datos — VERIFICADOS contra los documentos originales (2026-08-06)
 
-| Dato | Valor en nuestros registros | ¿Verificado? |
+Leídos el **Documento de Exhibición del NIT** (generado 06/08/2026) y la **Matrícula de
+Comercio SEPREC** (certificado 1132539/2026).
+
+| Dato | Valor real | Estado |
 |---|---|---|
-| Denominación legal | OniaAgency | ☐ |
-| NIT | 5371375010 | ☐ |
-| Matrícula SEPREC | 5371375010 | ☐ |
-| Titular | Leslie Mercado Moreno | ☐ |
-| Régimen tributario | debe ser **General** | ☐ |
-| Domicilio fiscal a declarar | _____________________ | ☐ |
-| Correo para notificaciones | _____________________ | ☐ |
+| NIT | **5371375010** | ✅ |
+| **Régimen tributario** | **RÉGIMEN GENERAL · EMITE FACTURA** | ✅ **requisito Art. 32 nº1 cumplido** |
+| Razón social del NIT | LESLIE MERCADO MORENO | ✅ normal en unipersonal |
+| Denominación comercial (SEPREC) | **OniaAgency** | ✅ |
+| Matrícula de Comercio | **5371375010** | ✅ |
+| Tipo de unidad económica | **EMPRESA UNIPERSONAL** | ✅ **califica como Importador Habitual** |
+| Propietaria | MERCADO MORENO LESLIE, **CI 5371375** | ✅ |
+| Estado de la matrícula | **VIGENTE HASTA 31/08/2028** | ✅ sin riesgo cercano |
+| Registro / fecha | 737778 · 23/07/2026 · Libro 80 | ✅ |
+| Capital | Bs 15.000 | — |
+| **Domicilio (SEPREC)** | **Zona Norte, Calle Tulipanes Nro. 9, entre Av. 6to Anillo y Calle Las Américas** — Santa Cruz de la Sierra, Andrés Ibáñez | ⚠️ ver abajo |
 
-⚠️ NIT y matrícula figuran con el mismo número en nuestras notas internas. **Confirmar en los
-certificados.** Un dato mal cargado = observación.
+**Aclarado:** NIT y matrícula no coinciden por error. El **NIT = CI 5371375 + `010`**, que es
+como se arma en Bolivia para unipersonales. No hay nada que corregir.
+
+⚠️ **Pendiente:** el Documento de Exhibición no muestra el **domicilio fiscal del SIN**.
+Verificar en OVT → RNC → *Información del Contribuyente* que sea **exactamente el mismo** que
+el de SEPREC (Calle Tulipanes Nro. 9). Si difieren, la verificación de domicilio del Art. 41
+se cae — es la causal nº1 de rechazo.
+
+---
+
+## 2-bis. 🔴 BLOQUEO REAL: el objeto social no cubre bienes físicos
+
+**Objeto declarado en SEPREC (textual):** desarrollo de páginas web · automatización de
+procesos empresariales · marketing digital · publicidad en redes sociales · desarrollo de
+software a medida · email marketing · chatbots para atención al cliente · inteligencia
+artificial para empresas · capacitación a empresas en IA · y **"venta por menor por correo y
+por internet de software, licencias, sistemas informáticos y servicios digitales"**.
+
+**Todo es intangible.** Importar un cargador eléctrico, venderlo e instalarlo **no está
+cubierto** — ni en el objeto de SEPREC, ni en la actividad económica del Padrón del SIN.
+
+Por qué importa: la Aduana verifica el registro SEPREC (Art. 32), y el SIN determina qué se
+puede facturar según la actividad registrada. Facturar un bien físico con una actividad de
+servicios digitales es una inconsistencia que se observa.
+
+### Cómo se arregla — las dos son gratis
+
+| # | Trámite | Dónde | Costo |
+|---|---|---|---|
+| 1 | **Ampliación de objeto** | SEPREC → **Trámite 14: Modificaciones, Aclaraciones y/o Complementaciones** | **Sin costo** para empresa unipersonal |
+| 2 | **Agregar actividad económica (CIIU)** de comercio/importación de bienes | OVT → **RNC → "Modificación Datos del Contribuyente"** | **Gratis** (marco RND 102500000017 de 16/04/2025) |
+
+[SEPREC Trámite 14](https://www.seprec.gob.bo/index.php/tramite14/) ·
+[costos SEPREC](https://www.seprec.gob.bo/index.php/nota_prensa/seprec-mantiene-costos-accesibles-y-estables-desde-el-inicio-de-sus-operaciones-promoviendo-la-formalizacion-empresarial-en-bolivia/) ·
+[clasificador de actividades SIN](https://boliviaimpuestos.com/actividades-economicas-de-impuestos-nacionales-vigente/)
+
+> **Orden obligatorio: ampliar objeto y actividad ANTES de enviar el formulario de registro a
+> la Aduana.** Si se registra primero y se amplía después, hay que actualizar el registro OCE
+> (Art. 44) — trabajo doble y riesgo de observación.
+
+Redacción sugerida a agregar al objeto (revisar con contador antes de presentar):
+*"Importación, comercialización, distribución, instalación y mantenimiento de equipos
+eléctricos y electrónicos, sus partes, accesorios y repuestos."*
 
 ---
 
