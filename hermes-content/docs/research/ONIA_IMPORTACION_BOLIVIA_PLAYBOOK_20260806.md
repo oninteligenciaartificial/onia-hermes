@@ -728,8 +728,9 @@ diferenciador) y sumar solar después como módulo de la misma plataforma, compr
 
 ## 6. Qué NO pude verificar (para no inventar)
 
-1. **Umbral Bs de importador habitual vs. no habitual** — fuente truncada, la ANB no lo
-   publica. Preguntar en la USO.
+1. ~~Umbral Bs de importador habitual vs. no habitual~~ — **RESUELTO 2026-08-06 contra el
+   portal SUMA oficial. No es un umbral de monto.** Ver §8. Los blogs que hablan de una cifra
+   en Bs están equivocados o desactualizados.
 2. **GA vigente 2026 de la subpartida 8504.40.90.10** — el PDF oficial del AAI-2026 del MEFP
    no abrió (error de certificado TLS). El DS 4539 la fija en 0% y no hay indicio de cambio,
    pero **exigir clasificación escrita de la ADA**.
@@ -763,6 +764,104 @@ dos semanas de trámites en lugar de un contenedor.
 
 **El activo defendible no es el cargador. Es el software que le dice al administrador
 cuánto le debe cobrar al departamento 7B.**
+
+---
+
+## 8. RUNBOOK — PASO 1: registro como importador ← **paso activo**
+
+Verificado el 2026-08-06 contra el **portal SUMA oficial** (`suma.aduana.gob.bo`, abierto y
+funcionando) y la ficha de trámite de gob.bo. Esto reemplaza lo que dicen los blogs.
+
+### 8.1 Corrección: habitual vs. no habitual NO es un monto
+
+El portal oficial lo define por **tipo de persona y tipo de operación**, no por un umbral en Bs:
+
+| Categoría | Quién | Qué puede importar |
+|---|---|---|
+| **Importador Habitual** | **Personas jurídicas o empresas unipersonales** (públicas o privadas), y naturales bajo Régimen Agropecuario Unificado (RAU) | Operaciones de importación comerciales, sin la lista cerrada |
+| **Importador No Habitual** | Personas naturales con CI, o NIT bajo **Régimen Tributario Simplificado** | Sólo una **lista cerrada**: importaciones de menor cuantía, equipaje, encomiendas postales, courier, vehículos sin fines comerciales, menaje doméstico, implantes y equipos ortopédicos |
+
+**OniaAgency es empresa unipersonal con NIT en régimen general → va a Importador Habitual.**
+Sin ambigüedad. Las cifras en Bs que circulan en blogs no aplican a esta distinción.
+[Portal SUMA](https://suma.aduana.gob.bo/portal/index.html) ·
+[ANB — importador habitual](https://www.aduana.gob.bo/infosuma/operadores.php?op=2)
+
+### 8.2 Marco normativo vigente
+- **RD 01-085-24 del 13/09/2024** — Reglamento para la Regulación y Control de Operadores de
+  Comercio Exterior ([PDF](https://www.aduana.gob.bo/sites/default/files/NormativaVigente/Reglamentos/Reglamento%20para%20la%20Regulaci%C3%B3n%20y%20Control%20de%20Operadores%20de%20Comercio%20Exterior.pdf))
+- **DS 5340** · **RM 060/2025** y **RM 067/2025**
+- Ficha oficial: [gob.bo — registro importador habitual](https://www.gob.bo/tramites/registro-operadores-de-comercio-exterior-importador-habitual)
+  (trámite **virtual**, última actualización 27/02/2026)
+
+### 8.3 Los 10 pasos oficiales
+
+| # | Paso |
+|---|---|
+| 1 | Entrar a `aduana.gob.bo` → sección Servicios → enlace **SUMA**. Directo: **https://suma.aduana.gob.bo/portal/index.html** |
+| 2 | Elegir **"Registro Nuevos Operadores"** |
+| 3 | En **"1) Importadores / Exportadores Habituales"** → **"Registrar Nuevo Usuario"** → activar la cuenta por correo |
+| 4 | Ingresar con las credenciales activadas |
+| 5 | Seleccionar **Tipo de Persona** y marcar **Importador** como Tipo de Operador |
+| 6 | Completar el formulario adjuntando **copias escaneadas** de los documentos |
+| 7 | Enviar electrónicamente, **eligiendo la oficina aduanera** donde se cierra presencial → **Gerencia Regional Santa Cruz** |
+| 8 | Recibir confirmación e instrucciones por correo |
+| 9 | La ANB revisa; si observa, notifica por correo. Aprobado → **programa verificación de domicilio** |
+| 10 | Presentarse con **originales**. Se emite **Certificado de Operador** + acceso al Portal de Gestión Aduanera |
+
+⚠️ **Paso 9 — verificación de domicilio:** la Aduana va a ir a constatar el domicilio
+declarado. Declarar uno donde efectivamente se pueda atender, con cartel o identificación.
+Es causal frecuente de observación.
+
+⚠️ Llenado el Formulario 170, hay **máximo 5 días hábiles administrativos** para apersonarse,
+con **dos ejemplares llenados, sellados y firmados** más los respaldos.
+
+### 8.4 Documentos a preparar
+
+| Documento | Estado |
+|---|---|
+| Certificado de registro en el **Padrón del SIN** vigente | ✅ tenemos NIT 5371375010 — sacar el certificado actualizado |
+| **CI del titular o representante legal** | ⚠️ ver 8.6 |
+| **Testimonio de Poder** del representante legal, si corresponde | ⚠️ ver 8.6 |
+| **Matrícula de Comercio SEPREC** | ✅ 5371375010 |
+| Formulario 170 × 2 ejemplares, firmados y sellados | pendiente |
+
+### 8.5 Firma digital — el requisito que frena a mitad de camino
+
+Las operaciones aduaneras se firman digitalmente. El certificado lo emite **ADSIB** (única
+entidad pública autorizada). Costos referenciales: **certificado Bs 70–80** + **token
+Bs ~175**.
+
+**Se tramita en la propia Gerencia Regional Santa Cruz de la ANB**, que es punto de registro
+de firma digital — se puede resolver en la misma visita.
+[ANB — puntos de registro](http://www.aduana.gob.bo/firmadigital/puntosregistro.php) ·
+[firmadigital.bo](https://firmadigital.bo/) · [ADSIB](https://adsib.gob.bo/portal_frontend/contenidos/tramite-100percent-en-linea-certificados-para-firma-digital)
+
+> Confirmar por teléfono si se exige **al registrarse** o recién **al operar**. Conviene
+> sacarla igual en la misma vuelta.
+
+### 8.6 🔴 Bloqueo a resolver ANTES de ir
+
+**La titular registrada en SEPREC es Leslie Mercado Moreno, no Sergio.** Los pasos 5, 6 y 10
+piden titular o representante legal. Dos caminos:
+- **(a)** Leslie hace el trámite y firma, o
+- **(b)** **Testimonio de Poder notariado** a favor de Sergio como representante legal —
+  y ese mismo poder sirve después para el banco, la despachante y el registro de firma digital.
+
+**Opción (b) es la que conviene**, porque el poder se necesita igual más adelante.
+Ver [[onia-datos-legales-seprec]].
+
+### 8.7 Dónde y a quién llamar
+- **Gerencia Regional Santa Cruz — ANB:** Doble Vía La Guardia, entre 5to y 6to anillo,
+  **Edificio Da Vinci**. Tel. **(3) 355-3937**.
+- **Línea de contacto del trámite:** 2184026 · **Soporte:** 63195237 ·
+  soporte@agetic.gob.bo
+- Llamar **antes** de ir: confirmar ventanilla de la USO, horario, si hay costo del registro
+  y si la firma digital se saca en la misma visita.
+
+### 8.8 Qué sigue sin verificar de este paso
+- **Costo del registro** (la ficha de gob.bo no lo publica) y **plazo de resolución**.
+- Si la verificación de domicilio del paso 9 tiene requisitos formales (cartel, contrato de
+  alquiler a nombre de la empresa).
 
 ---
 
