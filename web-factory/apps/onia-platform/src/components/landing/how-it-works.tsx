@@ -38,13 +38,16 @@ export function HowItWorks() {
               01
             </span>
             <h3>Elegí tu rubro.</h3>
-            <p>Dental, comercio, importadora o servicios. Onia se arma para el tuyo.</p>
+            <p>
+              Dental, comercio, importadora, estética, veterinaria o servicios
+              profesionales. Onia se arma para el tuyo.
+            </p>
           </Reveal>
           <Reveal delay={0.1} className={styles.stepVisual}>
             <Shot title="app.onia.com.bo · crear cuenta" bodyless>
               <ShotImage
                 src="/capturas/rubros-onia.webp"
-                alt="Pantalla real de Onia al crear una cuenta: elegís el tipo de negocio. Clínica dental y comercio o tienda están disponibles; importadora, veterinaria, estética, gastronomía, construcción, educación, turismo, servicios profesionales y ganadería figuran como muy pronto."
+                alt="Pantalla real de Onia al crear una cuenta: elegís el tipo de negocio entre seis rubros disponibles — clínica dental, comercio o tienda, importadora, estética y spa, veterinaria y servicios profesionales; gastronomía, construcción, educación, turismo y ganadería figuran como muy pronto."
                 width={1200}
                 height={824}
               />

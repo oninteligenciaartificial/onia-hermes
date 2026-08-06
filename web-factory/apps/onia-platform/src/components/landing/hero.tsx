@@ -67,14 +67,14 @@ export function Hero() {
               captura real en cuanto exista. */}
           <div
             role="img"
-            aria-label="Panel de una cuenta de Onia Platform configurada para una clínica dental: la agenda del día, un hueco que el agente ya propuso llenar, y los módulos de gestión y agentes con IA encendidos."
+            aria-label="Panel de una cuenta de Onia Platform configurada para una clínica dental: la agenda del día, un recordatorio que el agente Recall ya redactó para aprobar, y los módulos de gestión y agentes con IA encendidos."
           >
             <Shot title="Tu cuenta · hoy" tag="Rubro: Dental">
               <Row time="09:00" name="Control · M. Áñez" dur="30 min" state="on" />
               <Row time="10:30" name="Ortodoncia · J. Rojas" dur="45 min" />
               <Row
                 time="11:15"
-                name="Hueco — el agente ya propuso a quién mover"
+                name="Recall: C. Vaca sin volver hace 6 meses — mensaje listo, falta tu OK"
                 state="free"
               />
               <Modules items={MODULOS_HERO} />

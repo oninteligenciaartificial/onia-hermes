@@ -36,9 +36,10 @@
 |---|---|---|
 | **Dental** | ✅ VENDIBLE | factura SIAT real (NIT) · envío WhatsApp real (Meta) |
 | **Comercio** (`gestios-general`) | ✅ VENDIBLE núcleo | UI de FEFO/conteos · compras a crédito (alimenta crédito fiscal) |
-| **Estética** (`esteticagest`) | 🟢 CASI GRATIS | mismo set que dental (agenda+ficha+aprobaciones). Es: copy/vocabulario + ficha genérica en vez de odontograma + seeder. ~días, no semanas |
-| **Veterinaria** (`vetgest`) | 🟢 CASI GRATIS | ídem estética (la "ficha del paciente" es la mascota + dueño) |
-| **Gastronomía · Servicios profesionales · Educación · Turismo** (`gestios-*`) | 🟢 BARATOS | mismo set que comercio (catálogo+caja). Es: habilitar track + vocabulario + seeder por rubro. El de servicios/educación se beneficia de agenda (ya existe) |
+| **Estética** (`esteticagest-clinical`) | ✅ VENDIBLE núcleo (2026-08-06) | reusa pantallas dentales por referencia (agenda+ficha+facturación; odontograma gateado a dental). Pendiente: seeder demo del rubro · copy interno de pantallas sigue diciendo "paciente" |
+| **Veterinaria** (`vetgest-clinical`) | ✅ VENDIBLE núcleo (2026-08-06) | ídem estética. Pendiente: campos mascota (especie/raza/tutor) en la ficha · seeder demo |
+| **Servicios profesionales** (`gestios-servicios-profesionales`) | ✅ VENDIBLE núcleo (2026-08-06) | comercio + agenda dental compartida; cobrador lee fiados; panel comercio. Pendiente: seeder demo · vocab "productos"→"servicios" dentro de pantallas comercio |
+| **Gastronomía · Educación · Turismo** (`gestios-*`) | 🟢 BARATOS | mismo set que comercio — pero gastronomía espera mesas/comandas que comercio no tiene. Se encienden CON prospecto real (regla WOW). Ranking completo: `docs/research/ONIA_RANKING_PROXIMOS_RUBROS_20260806.md` |
 | **Importadora** (`proveegest-electrico`) | ✅ VENDIBLE núcleo (2026-08-02) | cotizaciones B2B completas + costeo DS 5646 + catálogo reusado + contabilidad. Pendiente: TCO automático diario · entrega con salida de stock · TR4 (S4) |
 | **Construcción** (`proveegest-construccion`) | 🟠 | mismas 2 capacidades que importadora — un solo porte sirve a ambos |
 | **Ganadero** (`ganadero-offline`) | 🔴 EL MÁS LEJOS | exige **modo offline** — arquitectura, no pantallas. Último a propósito |

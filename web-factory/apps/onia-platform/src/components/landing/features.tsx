@@ -8,7 +8,9 @@ const RUBROS = [
   { label: "Dental", estado: "andando" },
   { label: "Comercio", estado: "andando" },
   { label: "Importadora", estado: "andando" },
-  { label: "Servicios", estado: "pronto" },
+  { label: "Estética", estado: "andando" },
+  { label: "Veterinaria", estado: "andando" },
+  { label: "Servicios", estado: "andando" },
 ] as const;
 
 type Card = {
@@ -50,16 +52,16 @@ const CARDS: readonly Card[] = [
   {
     id: "agentes",
     tone: "soft",
-    aria: "Cola de aprobación de Onia: el agente propone reprogramar a un paciente y muestra los botones Aprobar y Descartar.",
+    aria: "Cola de aprobación de Onia: el agente Recall redactó un recordatorio para un paciente que no vuelve hace meses y muestra los botones Aprobar y Descartar.",
     badge: { texto: "Nuevo" },
     titulo: "Agentes con IA",
     beneficio: "Trabajan de noche; nada sale sin tu OK.",
     visual: (
       <Shot title="Cola de aprobación" tag="1 pendiente">
         <div className={styles.approval}>
-          <span className={styles.who}>Reprogramar a P. Suárez → hoy 11:15</span>
+          <span className={styles.who}>Recall · P. Suárez, 6 meses sin control</span>
           <span className={styles.msg}>
-            «Hola Pablo, se liberó un espacio hoy a las 11:15. ¿Te sirve?»
+            «Hola Pablo, hace tiempo no te vemos. ¿Agendamos tu control?»
           </span>
           <span className={styles.acts}>
             <span className={styles.ok}>Aprobar</span>
@@ -235,7 +237,7 @@ export function Features() {
       <div className={styles.container}>
         <span className={styles.kicker}>Un sistema · tu rubro</span>
         <h2 className={styles.sectionTitle} style={{ marginTop: "0.5rem" }}>
-          Módulos para clínicas dentales, comercios y servicios.
+          Módulos para clínicas, comercios, importadoras y profesionales.
         </h2>
 
         <div className={styles.rubroTabs} role="group" aria-label="Elegí tu rubro">
