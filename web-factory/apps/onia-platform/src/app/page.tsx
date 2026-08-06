@@ -7,6 +7,7 @@ import { Features } from "@/components/landing/features";
 import { Pricing } from "@/components/landing/pricing";
 import { Closing, Honesty } from "@/components/landing/closing";
 import { Faq, FAQS } from "@/components/landing/faq";
+import { BleedWordmark } from "@/motion";
 import { MobileBar } from "@/components/landing/mobile-bar";
 import styles from "@/components/landing/landing.module.css";
 
@@ -146,6 +147,12 @@ export default function Home() {
         <Honesty />
         <Faq />
         <Closing />
+        {/* Remate editorial: el nombre a escala descarada, cortado por el
+            borde — una sola vez por pagina, siempre al final (doctrina del
+            componente). */}
+        <div className={styles.wordmarkStrip}>
+          <BleedWordmark className={styles.wordmark} />
+        </div>
       </main>
       <SiteFooter />
       <MobileBar />

@@ -770,6 +770,18 @@
   transform: scale(1.25);
 }
 
+/* --------------------- Remate editorial (BleedWordmark) ------------------- */
+.wordmarkStrip {
+  color: var(--tinta);
+  padding-top: clamp(2rem, 6vw, 5rem);
+  /* El componente ya recorta la mitad inferior con su margin negativo. */
+}
+
+.wordmark {
+  font-family: inherit;
+  text-align: center;
+}
+
 /* ------------------------------- FAQ -------------------------------------- */
 .faqList {
   margin-top: clamp(1.5rem, 3vw, 2.5rem);
@@ -1218,7 +1230,13 @@
 }
 
 .secVerde {
-  background: var(--verde-hondo);
+  /* Atmosfera: dos brillos señal muy suaves sobre el verde hondo — la
+     profundidad que separa una seccion plana de una con aire (benchmark
+     Lety/Linear), sin tocar el layout ni el contraste del texto. */
+  background:
+    radial-gradient(640px 420px at 8% 0%, rgb(0 210 106 / 0.10), transparent 60%),
+    radial-gradient(720px 520px at 100% 100%, rgb(0 210 106 / 0.07), transparent 62%),
+    var(--verde-hondo);
 }
 
 .secTinta {

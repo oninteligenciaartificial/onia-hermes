@@ -1,3 +1,4 @@
+import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import styles from "./landing.module.css";
 
 /**
@@ -51,17 +52,23 @@ export function Faq() {
     <section className={styles.section} id="preguntas" aria-labelledby="faq-title">
       <div className={styles.container}>
         <span className={styles.kicker}>Preguntas frecuentes</span>
-        <h2 id="faq-title" className={styles.sectionTitle} style={{ marginTop: "0.5rem" }}>
-          Lo que preguntan antes de empezar.
-        </h2>
-        <div className={styles.faqList}>
-          {FAQS.map((item) => (
-            <details key={item.q} className={styles.faqItem}>
-              <summary className={styles.faqQ}>{item.q}</summary>
-              <p className={styles.faqA}>{item.a}</p>
-            </details>
-          ))}
+        <div style={{ marginTop: "0.5rem" }} id="faq-title">
+          <SplitTextReveal
+            as="h2"
+            className={styles.sectionTitle}
+            text="Lo que preguntan antes de empezar."
+          />
         </div>
+        <StaggerGrid className={styles.faqList}>
+          {FAQS.map((item) => (
+            <StaggerItem key={item.q}>
+              <details className={styles.faqItem}>
+                <summary className={styles.faqQ}>{item.q}</summary>
+                <p className={styles.faqA}>{item.a}</p>
+              </details>
+            </StaggerItem>
+          ))}
+        </StaggerGrid>
       </div>
     </section>
   );

@@ -1,4 +1,4 @@
-import { CountUp, Reveal } from "@/motion";
+import { CountUp, Reveal, SplitTextReveal } from "@/motion";
 import { APP_URL } from "@/lib/site";
 import styles from "./landing.module.css";
 
@@ -17,10 +17,14 @@ export function Pricing() {
       <div className={styles.container}>
         <Reveal>
           <span className={styles.kicker}>Precios</span>
-          <h2 className={styles.sectionTitle} style={{ marginTop: "0.5rem" }}>
-            Precios en bolivianos, publicados acá.
-          </h2>
         </Reveal>
+        <div style={{ marginTop: "0.5rem" }}>
+          <SplitTextReveal
+            as="h2"
+            className={styles.sectionTitle}
+            text="Precios en bolivianos, publicados acá."
+          />
+        </div>
 
         <div className={styles.plans}>
           <Reveal className={styles.plan}>

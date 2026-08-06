@@ -1,4 +1,4 @@
-import { Reveal } from "@/motion";
+import { PressableCta, Reveal } from "@/motion";
 import { Modules, Row, Shot } from "./shot";
 import { ParallaxSoft } from "./parallax";
 import styles from "./landing.module.css";
@@ -42,9 +42,11 @@ export function Hero() {
           </Reveal>
           <Reveal delay={0.18}>
             <div className={styles.heroCta}>
-              <a className={`${styles.btn} ${styles.btnPrimary}`} href="#precios">
-                Probar gratis 14 días
-              </a>
+              <PressableCta>
+                <a className={`${styles.btn} ${styles.btnPrimary}`} href="#precios">
+                  Probar gratis 14 días
+                </a>
+              </PressableCta>
               <a className={`${styles.btn} ${styles.btnGhost}`} href="#como">
                 Ver cómo funciona
               </a>

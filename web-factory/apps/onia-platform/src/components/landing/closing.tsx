@@ -1,4 +1,4 @@
-import { Reveal } from "@/motion";
+import { PressableCta, Reveal } from "@/motion";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
 import styles from "./landing.module.css";
 
@@ -58,12 +58,14 @@ export function Closing() {
           </h2>
         </Reveal>
         <Reveal delay={0.08} className={styles.closeCta}>
-          <a
-            className={`${styles.btn} ${styles.btnPrimary}`}
-            href={`${APP_URL}/register`}
-          >
-            Probar gratis 14 días
-          </a>
+          <PressableCta>
+            <a
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              href={`${APP_URL}/register`}
+            >
+              Probar gratis 14 días
+            </a>
+          </PressableCta>
           <a
             className={`${styles.btn} ${styles.btnGhost}`}
             href={WA_URL_LANDING}

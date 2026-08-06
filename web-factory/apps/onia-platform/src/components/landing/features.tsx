@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Row, Shot } from "./shot";
+import { SplitTextReveal } from "@/motion";
 import styles from "./landing.module.css";
 
 const RUBROS = [
@@ -286,9 +287,13 @@ export function Features() {
     >
       <div className={styles.container}>
         <span className={styles.kicker}>Un sistema · tu rubro</span>
-        <h2 className={styles.sectionTitle} style={{ marginTop: "0.5rem" }}>
-          Módulos para clínicas, comercios, importadoras y profesionales.
-        </h2>
+        <div style={{ marginTop: "0.5rem" }}>
+          <SplitTextReveal
+            as="h2"
+            className={styles.sectionTitle}
+            text="Módulos para clínicas, comercios, importadoras y profesionales."
+          />
+        </div>
 
         <div className={styles.rubroTabs} role="group" aria-label="Elegí tu rubro">
           {RUBROS.map((r, i) => (

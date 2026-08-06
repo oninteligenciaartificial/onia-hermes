@@ -1,4 +1,4 @@
-import { Reveal } from "@/motion";
+import { Reveal, SplitTextReveal } from "@/motion";
 import { WA_URL_LANDING } from "@/lib/site";
 import { Modules, Row, Shot, ShotImage } from "./shot";
 import styles from "./landing.module.css";
@@ -24,11 +24,11 @@ export function HowItWorks() {
   return (
     <section className={styles.section} id="como">
       <div className={styles.container}>
-        <Reveal>
-          <h2 className={styles.sectionTitle}>
-            Tu sistema de gestión, andando en un día.
-          </h2>
-        </Reveal>
+        <SplitTextReveal
+          as="h2"
+          className={styles.sectionTitle}
+          text="Tu sistema de gestión, andando en un día."
+        />
       </div>
 
       <div className={`${styles.container} ${styles.steps}`}>
