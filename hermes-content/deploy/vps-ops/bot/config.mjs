@@ -24,7 +24,8 @@ export const DEMO_SLOTS = Object.freeze([
 // Duracion y modalidad de la demo — UNA sola fuente para el guion Y para la reserva
 // ---------------------------------------------------------------------------
 // ⚠️⚠️ DECISION DE NEGOCIO PENDIENTE (Sergio). Hoy en produccion el MISMO hecho esta escrito con
-// DOS numeros distintos, verificado: el guion promete 15 minutos (M0) y la reserva en Cal.com
+// RESUELTO 2026-08-06 (quedan las notas por si vuelve a pasar): durante meses hubo DOS numeros
+// distintos — el guion prometia 15 minutos (M0) y la reserva en Cal.com
 // bloquea 45 (CALCOM_BOT_DURATION_MINUTES=45 en el VPS). Los dos quedan EXACTAMENTE como estaban:
 // bajar la reserva le rompe la agenda a Sergio y subir el texto le cambia la promesa al prospecto.
 // Lo que si cambia: los dos salen de ESTE bloque (el guion por {{demo_duracion}}, la reserva por
@@ -35,10 +36,15 @@ export const DEMO_SLOTS = Object.freeze([
 //   - o, sin tocar codigo, ponerlos juntos en knowledge.json (el validador exige que coincidan).
 // El test "duracion de la demo" de knowledge.test.mjs falla si divergen sin declararlo.
 export const DEMO = Object.freeze({
-  duracionMinutos: 45, // lo que se BLOQUEA en el calendario (hoy: CALCOM_BOT_DURATION_MINUTES=45)
-  duracionFrase: "15 minutos", // lo que el guion PROMETE en M0 (hoy: "15 minutos")
+  // DECIDIDO 2026-08-06 por Sergio: 30 y 30. Antes prometia 15 y bloqueaba 45 — el prospecto
+  // aceptaba creyendo que eran 15 y recibia una invitacion que le comia 45. Se evaluo "prometer
+  // 30 y bloquear 45" y se descarto: la invitacion muestra la duracion REAL, asi que seguia
+  // diciendo una cosa y haciendo otra. Si hace falta colchon, va en el buffer de Cal.com, que
+  // bloquea solo la agenda de Sergio y el prospecto no lo ve.
+  duracionMinutos: 30, // lo que se BLOQUEA en el calendario
+  duracionFrase: "30 minutos", // lo que el guion PROMETE en M0 — MISMO numero, a proposito
   modalidad: "videollamada", // como se da la demo. Aca entra "o presencial si estas en X" sin deploy.
-  pendiente: true, // hay divergencia declarada y sin resolver. Ver el bloque de arriba.
+  pendiente: false, // decidido: los dos numeros coinciden.
 });
 
 // ---------------------------------------------------------------------------
