@@ -253,6 +253,49 @@ test("camino feliz por runTurn: ofrece, agenda, califica, crea el lead y avisa a
   assert.deepEqual(fake.state.qualification, { industry: "comercio", teamSize: 5, city: "Santa Cruz" });
 });
 
+// El link de la reunion viaja EN M2, no el dia de la demo. Es el unico momento garantizado dentro
+// de la ventana de servicio de 24 h de Meta (el prospecto acaba de escribir): a quien reserva para
+// dentro de 3 dias ya no se le puede escribir, y M2 prometia justamente eso.
+test("cuando Cal.com confirma la reserva, el link se manda en el MISMO mensaje que la confirma", async () => {
+  const fake = memoryStore();
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const deps = {
+    store: fake.store,
+    config: enVivo,
+    nowIso: T0,
+    llm: async () => "",
+    env: { CALCOM_PUBLIC_URL: "https://cal.test" },
+    createBooking: async () => ({ ok: true, uid: "uid-abc", reason: "reservado", warnings: [] }),
+  };
+
+  await runTurn(turn(), deps);
+  const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+
+  assert.equal(agendada.stageAfter, "demo_agendada");
+  assert.match(agendada.send[0].text, /https:\/\/cal\.test\/booking\/uid-abc/, "el prospecto se va con el link");
+  assert.equal(fake.state.calendarEventId, "uid-abc", "y el uid queda guardado para el recordatorio");
+});
+
+test("si la reserva NO sale, no se manda un link inventado: solo el aviso honesto", async () => {
+  const fake = memoryStore();
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const deps = {
+    store: fake.store,
+    config: enVivo,
+    nowIso: T0,
+    llm: async () => "",
+    env: { CALCOM_PUBLIC_URL: "https://cal.test" },
+    createBooking: async () => ({ ok: false, uid: null, reason: "horario_tomado", warnings: [] }),
+  };
+
+  await runTurn(turn(), deps);
+  const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+
+  assert.ok(!/cal\.test\/booking/.test(agendada.send[0].text), "sin reserva no hay link");
+  assert.match(agendada.send[0].text, /se me ocupó ese horario/);
+  assert.equal(fake.state.calendarEventId, null);
+});
+
 test("un humano tomo la conversacion: el ejecutor no devuelve nada para enviar", async () => {
   const fake = memoryStore();
   const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "" };

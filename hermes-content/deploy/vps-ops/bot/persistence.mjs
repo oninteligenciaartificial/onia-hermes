@@ -425,6 +425,36 @@ export function createStore(options = {}) {
     return rest("sweepFollowUpCandidates", `bot_conversations?${filter}`);
   }
 
+  /**
+   * Barrido del recordatorio (M9): demos agendadas que empiezan DENTRO de las proximas
+   * `reminder.leadHours` horas.
+   *
+   * NO filtra por `last_inbound_at` a proposito, y esa es la diferencia importante con el barrido
+   * del follow-up. La ventana de servicio de 24 h de Meta se chequea DESPUES, en memoria, para que
+   * la demo que no se puede avisar aparezca en la salida con el motivo `fuera_de_ventana` en vez
+   * de desaparecer del listado: es exactamente el caso en que Sergio tiene que escribir el a mano.
+   * El lote es chico (las demos de las proximas horas), asi que traerlas todas no cuesta nada.
+   *
+   * Tampoco filtra "ya recordadas": no hay columna para eso. La reserva es la clave unica de
+   * `bot_messages` (ver reminder-run.mjs), asi que en modo --emit un segundo barrido no manda dos;
+   * en dry-run la misma demo se lista de nuevo, y es lo correcto: el dry-run no reserva nada.
+   */
+  async function sweepDemoReminders(nowIso, config = DEFAULT_CONFIG, limit = 50) {
+    const now = Date.parse(nowIso);
+    if (!Number.isFinite(now)) return warn("sweepDemoReminders", `nowIso invalido: ${nowIso}`);
+    const leadHours = config.reminder?.leadHours ?? DEFAULT_CONFIG.reminder.leadHours;
+    const filter = [
+      "bot_stage=eq.demo_agendada",
+      "human_took_over=is.false",
+      "opt_out_at=is.null",
+      `scheduled_at=gte.${new Date(now).toISOString()}`,
+      `scheduled_at=lte.${new Date(now + leadHours * 3600000).toISOString()}`,
+      "order=scheduled_at.asc",
+      `limit=${Number(limit) || 50}`,
+    ].join("&");
+    return rest("sweepDemoReminders", `bot_conversations?${filter}`);
+  }
+
   // -------------------------------------------------------------------------
   // Efectos laterales: leads, review_queue, audit_logs
   // -------------------------------------------------------------------------
@@ -558,6 +588,7 @@ export function createStore(options = {}) {
     insertOutbound,
     reserveFollowUp,
     sweepFollowUpCandidates,
+    sweepDemoReminders,
     upsertLead,
     enqueueReview,
     writeAudit,
