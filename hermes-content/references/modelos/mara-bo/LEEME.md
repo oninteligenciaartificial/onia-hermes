@@ -38,7 +38,13 @@ interiores minimalistas luminosos). Solo cambió la cara, no la línea estética
 5. **Entrenar:** `show_characters(action='train')` con las 10 buenas + la cara original.
    ~10 min, no bloquea.
 
-**Costo total de crear una modelo IA nueva desde cero: ~17 créditos (~0,6% del saldo Ultra).**
+**Costo total de crear una modelo IA nueva desde cero: ~42 créditos.**
+(0,5 casting + ~16,5 set de entrenamiento + **25 el entrenamiento del Soul**.)
+
+> ⚠️ **Corregido:** primero anoté ~17 cr porque di por sentado que entrenar un Soul era gratis.
+> **No lo es: cuesta 25 cr** (verificado en `AVATAR-CONSISTENCY-SCHEME.md`, historial real de
+> transacciones). Pensarlo antes de entrenar — un Soul entrenado sobre la cara equivocada son
+> 25 créditos tirados.
 
 ## Reglas que siguen valiendo
 

@@ -113,23 +113,32 @@ adentro del sistema.
 > devuelve 200 para todo. En TikTok este método no funciona (devuelve un shell); ahí hay que
 > mirarlo en el registro.
 
-> **Cómo se eligió la foto de perfil** (2026-08-06, criterio reusable para toda modelo):
-> Instagram la muestra **recortada en círculo**, a 320px en el perfil, 110px en historias y
-> **32px en el feed** — que es donde más se ve. Por eso no se elige mirando la foto grande:
-> se elige mirando el círculo chiquito (`_TEST-AVATAR-LUCIA.jpg` compara las 3 en los 3
-> tamaños). Reglas que salieron:
-> 1. **La cara tiene que llenar el cuadro.** Un retrato de medio cuerpo desaparece a 32px.
-> 2. **Fondo con color, no blanco.** La interfaz de Instagram es blanca: un fondo claro hace
->    que el círculo pierda el borde y la foto se derrita en la pantalla. Por eso se descartó
->    la opción A pese a ser la más nítida.
-> 3. **La expresión importa más de lo que parece.** Se eligió **B** (risa natural, fondo de
->    café con bokeh cálido): separa del blanco de IG y es la más cercana, que es justo el
->    posicionamiento. **C** (fondo verde, gesto sobrio) queda de respaldo si se prefiere algo
->    más serio.
+> ### Cómo se hizo la foto de perfil — y el error que casi cometo
 >
-> ⚠️ **Defecto conocido del Soul de Lucía:** tiende a rubor fuerte en las mejillas. A 32px no
-> se nota, a 320px se lee un poco quemada de sol. En generaciones futuras conviene pedir
-> *"tono de piel parejo, rubor suave"* — nunca en forma de negación (ver receta visual §1).
+> **Origen: `references/models/lucia-surgical-shoot-20260707/03-front-big-smile.png`**, la toma
+> del photoshoot quirúrgico **ya aprobado por Sergio como identidad definitiva**. Lo único que
+> se le hizo fue recorte cuadrado centrado en la cara + entibiar el punto blanco para que el
+> fondo pase a crema. **Cero generación nueva, cero deriva de identidad.**
+>
+> **Lo que pasó antes (queda escrito para no repetirlo):** generé 7 avatares desde el Soul
+> ignorando que este material ya existía. Salieron con la cara más ancha y redonda que la
+> real. Peor: interpreté el rojo de las mejillas como un defecto del Soul y estuve por
+> "corregirlo" con denoise de croma — **hasta que comparé contra la referencia QA
+> (`pecas-clean-v2/`) y vi que la Lucía real TIENE las mejillas rosadas y las pecas en la
+> nariz.** Esa "corrección" la hubiera alejado de la persona real, que es exactamente lo que
+> `AVATAR-CONSISTENCY-SCHEME.md` prohíbe. Evidencia: `_QA-vs-REAL.jpg` en la carpeta del avatar.
+>
+> **Las 3 reglas que quedan para toda modelo:**
+> 1. **Antes de generar, revisar `references/models/`.** Para Lucía ya existen photoshoot
+>    aprobado (9 ángulos), 5 outfits y 5 lugares como Elements. Generar de cero es tirar
+>    créditos y perder fidelidad.
+> 2. **QA obligatoria contra la referencia** antes de aprobar nada
+>    (`AVATAR-CONSISTENCY-SCHEME.md`). Lucía se compara contra el video REAL; Mara contra su
+>    master aprobado.
+> 3. **Elegir el avatar mirándolo en círculo y chiquito**, no en grande: Instagram lo muestra a
+>    320px en el perfil, 110px en historias y **32px en el feed**. La cara tiene que llenar el
+>    cuadro y el fondo NO puede ser blanco — la interfaz de IG es blanca y el círculo pierde el
+>    borde. Por eso el fondo se pasó a crema. Test: `_AVATAR-FINAL-TEST.jpg`.
 
 **Biografía** (103 caracteres, entra en el límite de 150):
 
