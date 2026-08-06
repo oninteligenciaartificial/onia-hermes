@@ -87,7 +87,7 @@ test("archivo AUSENTE: el bot sigue contestando el guion completo, sin un solo {
     const config = withKnowledge(DEFAULT_CONFIG, { path, nowMs: NOW_MS });
     const result = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config });
     const texto = result.replies.map((reply) => reply.text).join("\n");
-    assert.match(texto, /15 minutos por videollamada/, "el hecho sale del codigo, exactamente como hoy");
+    assert.match(texto, /30 minutos por videollamada/, "el hecho sale del codigo, exactamente como hoy");
     assert.ok(!texto.includes("{{"), "ninguna variable puede quedar sin resolver a la vista del prospecto");
   });
 });
@@ -270,17 +270,18 @@ test("cambiar de ruta no hereda lo de la ruta anterior", () => {
 // 4. DURACION DE LA DEMO — una sola fuente, y la contradiccion no puede volver
 // ---------------------------------------------------------------------------
 
-test("DURACION DE LA DEMO: divergir sin declararlo FALLA (hoy: 45 en la agenda, 15 en el guion)", () => {
+test("DURACION DE LA DEMO: los dos numeros coinciden (decidido 2026-08-06: 30 y 30)", () => {
   const hoy = demoDuration(DEFAULT_CONFIG);
 
-  // La contradiccion REAL de produccion queda clavada aca. Si alguien cambia uno de los dos
-  // numeros sin el otro, este assert cae y lo obliga a tomar la decision en vez de dejar dos
-  // verdades sueltas otra vez. DECISION PENDIENTE DE SERGIO (ver el bloque DEMO de config.mjs).
+  // Sergio decidio 30 y 30. Si alguien cambia uno de los dos numeros sin el otro, este assert
+  // cae y lo obliga a tomar la decision en vez de dejar dos verdades sueltas — que es como
+  // convivieron meses "15 minutos" en el guion y 45 en la agenda.
   assert.deepEqual(
     { minutos: hoy.minutos, fraseMinutos: hoy.fraseMinutos, pendiente: hoy.pendiente },
-    { minutos: 45, fraseMinutos: 15, pendiente: true },
-    "cambio la duracion: poné el MISMO número en duracionMinutos y duracionFrase, `pendiente: false`, y actualizá este test",
+    { minutos: 30, fraseMinutos: 30, pendiente: false },
+    "cambio la duracion: poné el MISMO número en duracionMinutos y duracionFrase, y actualizá este test",
   );
+  assert.equal(hoy.coherente, true, "decidido y coherente: la invitacion dice lo mismo que el guion");
 
   // La regla dura: sin `pendiente` declarado, divergir es un fallo. Es lo que va a proteger el
   // dia que se tome la decision.
