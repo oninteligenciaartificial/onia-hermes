@@ -52,6 +52,25 @@ test("getBookingConfig: descarta valores basura en vez de usarlos", () => {
   assert.equal(c.durationMinutes, DEFAULT_DURATION_MINUTES);
 });
 
+// La MISMA duracion que el guion le promete al prospecto es la que se bloquea en el calendario:
+// run-turn.mjs le pasa `config.demo.duracionMinutos`. El entorno sigue ganando (es el freno de
+// mano del que despliega), pero ya no hace falta que exista para que el numero sea el correcto.
+test("getBookingConfig: la duracion sale del conocimiento/config, y el entorno la puede pisar", () => {
+  assert.equal(getBookingConfig({}, 30).durationMinutes, 30, "sin env manda lo que dice el guion");
+  assert.equal(getBookingConfig({ CALCOM_BOT_DURATION_MINUTES: "20" }, 30).durationMinutes, 20, "el env pisa");
+  assert.equal(getBookingConfig({}, 0).durationMinutes, DEFAULT_DURATION_MINUTES, "un fallback basura no reserva 0 minutos");
+});
+
+test("createBooking: la duracion del turno viaja al payload sin pasar por el entorno", async () => {
+  const f = fetchMock([ok({ uid: "abc" })]);
+  await createBooking({ config: undefined, durationMinutes: 30, startAt: START }, {
+    fetch: f,
+    env: { CALCOM_BASE_URL: "http://calcom:3000", CALCOM_BOT_EVENT_TYPE_ID: "5" },
+  });
+  const { start, end } = f.llamadas[0].body;
+  assert.equal((Date.parse(end) - Date.parse(start)) / 60000, 30);
+});
+
 // ---------------------------------------------------------------------------
 // Payload
 // ---------------------------------------------------------------------------

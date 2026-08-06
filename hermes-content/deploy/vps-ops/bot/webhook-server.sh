@@ -9,7 +9,7 @@
 # "easypanel", asi que el webhook viaja por `http://onia-center:3020/...` y NUNCA SALE A
 # INTERNET. No hace falta exponer un puerto, ni TLS, ni un dominio.
 #
-#   ./webhook-server.sh start|stop|restart|status|logs
+#   ./webhook-server.sh start|stop|restart|status|logs|knowledge
 #
 # SECRETOS: NINGUNO vive en el repo.
 #   - Secreto del webhook y config de n8n -> /opt/onia/bot/webhook.env (chmod 600, FUERA de git).
@@ -48,6 +48,32 @@ case "$ACTION" in
     docker exec "$CONTAINER" sh -c "tail -n ${2:-50} $LOGFILE 2>/dev/null || echo '(sin log todavia)'"
     exit 0
     ;;
+  knowledge)
+    # Aplica SOLO el archivo de conocimiento, SIN reiniciar el proceso: el cargador lo toma al
+    # vencer el TTL (<= 5 min). Asi editar un hecho no corta la atencion de nadie.
+    #
+    # La compuerta de PUBLICACION esta aca: se copia a un temporal, se VALIDA adentro del
+    # contenedor (mismo validador que usa el bot al cargar) y recien si pasa se mueve al lugar
+    # definitivo. Un archivo con un precio, una clave desconocida o un JSON roto NUNCA llega a
+    # ser el archivo vivo, y el editor ve el error exacto en vez de descubrirlo por el silencio.
+    SRC="${ONIA_BOT_KNOWLEDGE_FILE:-$BOT_DIR/knowledge.json}"
+    if [ ! -f "$SRC" ]; then
+      echo "ERROR: no existe $SRC (copia knowledge.example.json y editalo)" >&2
+      exit 1
+    fi
+    if ! docker cp "$SRC" "$CONTAINER:$DEST/knowledge.json.new" >/dev/null 2>&1; then
+      echo "ERROR: no se pudo copiar el conocimiento al contenedor (¿corriste 'start' alguna vez?)" >&2
+      exit 1
+    fi
+    if docker exec "$CONTAINER" node "$DEST/knowledge.mjs" --check "$DEST/knowledge.json.new"; then
+      docker exec "$CONTAINER" mv "$DEST/knowledge.json.new" "$DEST/knowledge.json"
+      echo "conocimiento aplicado — el bot lo toma en <= 5 min (TTL). Para ya mismo: $0 restart"
+      exit 0
+    fi
+    docker exec "$CONTAINER" rm -f "$DEST/knowledge.json.new" >/dev/null 2>&1
+    echo "RECHAZADO: el conocimiento NO se aplico. El bot sigue con lo anterior." >&2
+    exit 1
+    ;;
   stop|restart)
     docker exec "$CONTAINER" sh -c "[ -f $PIDFILE ] && kill \$(cat $PIDFILE) 2>/dev/null; rm -f $PIDFILE" >/dev/null 2>&1
     echo "servidor detenido"
@@ -55,7 +81,7 @@ case "$ACTION" in
     ;;
   start) ;;
   *)
-    echo "uso: $0 start|stop|restart|status|logs [n]" >&2
+    echo "uso: $0 start|stop|restart|status|logs [n]|knowledge" >&2
     exit 2
     ;;
 esac
@@ -64,7 +90,11 @@ esac
 # Sincronizar el codigo (mismo stamp que usan run-turn.sh / chatwoot-adapter.sh)
 # ---------------------------------------------------------------------------
 
-STAMP="$(cat "$BOT_DIR"/*.mjs 2>/dev/null | md5sum | cut -c1-12)"
+# Los *.json ENTRAN en el stamp a proposito: ahi vive knowledge.json (la capa de conocimiento
+# editable). Con el stamp calculado solo sobre *.mjs, editar el conocimiento NO cambiaba el
+# hash, el restart no re-copiaba nada y el contenedor se quedaba con la version vieja EN
+# SILENCIO — o sea el editor creia haber publicado algo que el bot nunca dijo.
+STAMP="$(cat "$BOT_DIR"/*.mjs "$BOT_DIR"/*.json 2>/dev/null | md5sum | cut -c1-12)"
 CURRENT="$(docker exec "$CONTAINER" cat "$DEST/.stamp" 2>/dev/null || true)"
 if [ "$CURRENT" != "$STAMP" ]; then
   docker exec "$CONTAINER" rm -rf "$DEST" >/dev/null 2>&1
@@ -119,7 +149,7 @@ docker exec -d \
   -e CALCOM_EVENT_TYPE_SLUG="${CALCOM_EVENT_TYPE_SLUG:-demo-onia}" \
   -e CALCOM_USERNAME="${CALCOM_USERNAME:-onia}" \
   -e CALCOM_BOT_EVENT_TYPE_ID="${CALCOM_BOT_EVENT_TYPE_ID:-}" \
-  -e CALCOM_BOT_DURATION_MINUTES="${CALCOM_BOT_DURATION_MINUTES:-45}" \
+  -e CALCOM_BOT_DURATION_MINUTES="${CALCOM_BOT_DURATION_MINUTES:-}" \
   -e CALCOM_TIMEZONE="${CALCOM_TIMEZONE:-America/La_Paz}" \
   -e ONIA_AUDIO_ENABLED="${ONIA_AUDIO_ENABLED:-true}" \
   -e ONIA_AUDIO_STT_BASE_URL="${ONIA_AUDIO_STT_BASE_URL:-http://speaches:8000/v1}" \

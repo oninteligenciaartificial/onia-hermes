@@ -168,10 +168,18 @@ function varsFor(state, config, extra = {}) {
   const slots = activeSlots(state, config);
   const label = state.scheduledLabel || "";
   const branch = branchFor(q.industry, config);
+  // HECHOS, no guion: salen de un solo lugar (config.demo / config.businessHours) y son lo que la
+  // capa de conocimiento puede editar sin desplegar. El fallback al codigo esta para que una
+  // config armada a mano en un test nunca deje un {{hueco}} a la vista del prospecto.
+  const demo = config.demo || DEFAULT_CONFIG.demo;
+  const horario = config.businessHours || DEFAULT_CONFIG.businessHours;
   return {
     humano: config.identity.humanName,
     producto: config.identity.productName,
     bot: config.identity.botName,
+    demo_duracion: demo.duracionFrase,
+    demo_modalidad: demo.modalidad,
+    horario_frase: horario.frase || DEFAULT_CONFIG.businessHours.frase,
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
     rubro: intents.industryLabel(q.industry) || "",

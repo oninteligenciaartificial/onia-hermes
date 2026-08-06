@@ -21,6 +21,27 @@ export const DEMO_SLOTS = Object.freeze([
 ]);
 
 // ---------------------------------------------------------------------------
+// Duracion y modalidad de la demo — UNA sola fuente para el guion Y para la reserva
+// ---------------------------------------------------------------------------
+// ⚠️⚠️ DECISION DE NEGOCIO PENDIENTE (Sergio). Hoy en produccion el MISMO hecho esta escrito con
+// DOS numeros distintos, verificado: el guion promete 15 minutos (M0) y la reserva en Cal.com
+// bloquea 45 (CALCOM_BOT_DURATION_MINUTES=45 en el VPS). Los dos quedan EXACTAMENTE como estaban:
+// bajar la reserva le rompe la agenda a Sergio y subir el texto le cambia la promesa al prospecto.
+// Lo que si cambia: los dos salen de ESTE bloque (el guion por {{demo_duracion}}, la reserva por
+// calcom-booking.mjs), asi que la contradiccion ya no puede nacer de dos lugares distintos.
+//
+// AL DECIDIR (una sola cosa, en un solo lugar):
+//   - poner el MISMO numero en `duracionMinutos` y en `duracionFrase`, y `pendiente: false`;
+//   - o, sin tocar codigo, ponerlos juntos en knowledge.json (el validador exige que coincidan).
+// El test "duracion de la demo" de knowledge.test.mjs falla si divergen sin declararlo.
+export const DEMO = Object.freeze({
+  duracionMinutos: 45, // lo que se BLOQUEA en el calendario (hoy: CALCOM_BOT_DURATION_MINUTES=45)
+  duracionFrase: "15 minutos", // lo que el guion PROMETE en M0 (hoy: "15 minutos")
+  modalidad: "videollamada", // como se da la demo. Aca entra "o presencial si estas en X" sin deploy.
+  pendiente: true, // hay divergencia declarada y sin resolver. Ver el bloque de arriba.
+});
+
+// ---------------------------------------------------------------------------
 // Guion. Es texto fijo: NO pasa por el LLM y NO pasa por el guardrail (lo escribimos nosotros y
 // esta versionado). Variables entre {{ }}.
 //
@@ -48,7 +69,7 @@ export const SCRIPT = Object.freeze({
     "",
     "Y esto que estás viendo es justo lo que vendemos: un asistente que atiende tu WhatsApp 24/7 — responde, califica y agenda solo, sin que vos toques el teléfono.",
     "",
-    "Te muestro cómo quedaría en TU negocio en 15 minutos por videollamada. Tengo estos dos horarios:",
+    "Te muestro cómo quedaría en TU negocio en {{demo_duracion}} por {{demo_modalidad}}. Tengo estos dos horarios:",
     "",
     "**A)** {{slot_a}}",
     "**B)** {{slot_b}}",
@@ -132,7 +153,7 @@ export const SCRIPT = Object.freeze({
   M5: [
     "Eso lo tiene que ver {{humano}}, no yo — soy un bot y no quiero inventarte una respuesta.",
     "",
-    "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina (lun-vie, 9:00-18:00). Si es urgente, decime \"urgente\" y lo marco.",
+    "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
@@ -142,7 +163,7 @@ export const SCRIPT = Object.freeze({
   M8_SOPORTE: [
     "Pará — si ya estás usando {{producto}}, esto no es una demo de venta: es soporte. Y el soporte no te lo puedo dar yo, que soy un bot.",
     "",
-    "Le paso tu mensaje a {{humano}} tal cual me lo contaste. Te responde desde este mismo número en horario de oficina (lun-vie, 9:00-18:00) y, si hace falta, te coordina una llamada corta para dejarlo funcionando. Si te está frenando el trabajo ahora mismo, decime \"urgente\" y lo marco.",
+    "Le paso tu mensaje a {{humano}} tal cual me lo contaste. Te responde desde este mismo número en horario de oficina ({{horario_frase}}) y, si hace falta, te coordina una llamada corta para dejarlo funcionando. Si te está frenando el trabajo ahora mismo, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
   // M6 — opt-out.
@@ -243,10 +264,15 @@ export const DEFAULT_CONFIG = Object.freeze({
     descartado: "Perdido",
   }),
 
+  demo: DEMO,
+
   businessHours: Object.freeze({
     days: Object.freeze([1, 2, 3, 4, 5]), // lun-vie (0 = domingo)
     startHour: 9,
     endHour: 18,
+    // Como se DICE el horario en el guion ({{horario_frase}}). Sale del mismo bloque que los
+    // numeros de arriba para que no puedan decir una cosa y hacer otra.
+    frase: "lun-vie, 9:00-18:00",
     tzLabel: "America/La_Paz",
     tzOffsetMinutes: -240, // Bolivia no tiene horario de verano: siempre UTC-4
   }),
@@ -270,17 +296,43 @@ export const DEFAULT_CONFIG = Object.freeze({
   script: SCRIPT,
 });
 
-/** Config del cliente = DEFAULT_CONFIG + overrides (merge de un nivel por clave raiz). */
-export function createBotConfig(overrides = {}) {
-  const merged = { ...DEFAULT_CONFIG };
+/**
+ * Config del cliente = base + overrides (merge de un nivel por clave raiz).
+ * @param {object} [base]  sobre que se mergea. Por defecto DEFAULT_CONFIG; knowledge.mjs le pasa
+ *   la config ya armada del turno para no pisar los horarios que vinieron de Cal.com.
+ */
+export function createBotConfig(overrides = {}, base = DEFAULT_CONFIG) {
+  const merged = { ...base };
   for (const [key, value] of Object.entries(overrides || {})) {
-    if (value && typeof value === "object" && !Array.isArray(value) && DEFAULT_CONFIG[key] && typeof DEFAULT_CONFIG[key] === "object" && !Array.isArray(DEFAULT_CONFIG[key])) {
-      merged[key] = { ...DEFAULT_CONFIG[key], ...value };
+    if (value && typeof value === "object" && !Array.isArray(value) && base[key] && typeof base[key] === "object" && !Array.isArray(base[key])) {
+      merged[key] = { ...base[key], ...value };
     } else {
       merged[key] = value;
     }
   }
   return Object.freeze(merged);
+}
+
+/**
+ * ¿El numero que el guion PROMETE y el que se RESERVA dicen lo mismo?
+ * Existe para que la contradiccion "15 en el texto / 45 en el calendario" no pueda volver a
+ * colarse en silencio: la miden knowledge.test.mjs (sobre el codigo) y knowledge.mjs (sobre el
+ * archivo editable, que se rechaza entero si no coinciden).
+ * @returns {{minutos:number|null, fraseMinutos:number|null, coherente:boolean, pendiente:boolean}}
+ *   `fraseMinutos` es el ULTIMO numero de la frase ("15-20 minutos" -> 20). Sin numero -> null,
+ *   y entonces no hay nada que contradecir.
+ */
+export function demoDuration(config = DEFAULT_CONFIG) {
+  const demo = (config && config.demo) || DEMO;
+  const numeros = String(demo.duracionFrase ?? "").match(/\d+/g);
+  const fraseMinutos = numeros && numeros.length ? Number(numeros[numeros.length - 1]) : null;
+  const minutos = Number.isFinite(demo.duracionMinutos) ? demo.duracionMinutos : null;
+  return {
+    minutos,
+    fraseMinutos,
+    coherente: fraseMinutos === null || minutos === null || fraseMinutos === minutos,
+    pendiente: demo.pendiente === true,
+  };
 }
 
 /**

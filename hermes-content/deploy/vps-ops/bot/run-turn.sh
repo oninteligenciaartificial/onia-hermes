@@ -35,7 +35,9 @@ if [ ! -f "$BOT_DIR/run-turn.mjs" ]; then
 fi
 
 # Sincronizar el código sólo si cambió (evita 2 llamadas a docker por cada mensaje).
-STAMP="$(cat "$BOT_DIR"/*.mjs 2>/dev/null | md5sum | cut -c1-12)"
+# Los *.json van INCLUIDOS: ahí vive knowledge.json (los hechos editables). Sin ellos en el
+# stamp, editar el conocimiento no re-copiaba nada y el contenedor seguía con la copia vieja.
+STAMP="$(cat "$BOT_DIR"/*.mjs "$BOT_DIR"/*.json 2>/dev/null | md5sum | cut -c1-12)"
 CURRENT="$(docker exec "$CONTAINER" cat "$DEST/.stamp" 2>/dev/null || true)"
 if [ "$CURRENT" != "$STAMP" ]; then
   docker exec "$CONTAINER" rm -rf "$DEST" >/dev/null 2>&1

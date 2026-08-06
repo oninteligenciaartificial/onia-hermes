@@ -26,8 +26,14 @@
 // Tolerante por contrato: no tira NUNCA. Si Cal.com no responde, devuelve `ok:false` con una
 // razon y el llamador decide. Un fallo de calendario no puede dejar al prospecto sin respuesta.
 
-/** Duracion de la demo. Igual que el tipo de evento; si no coinciden, manda el tipo de evento. */
-export const DEFAULT_DURATION_MINUTES = 45;
+import { DEFAULT_CONFIG } from "./config.mjs";
+
+/**
+ * Duracion de la demo. NO es un numero suelto: sale del MISMO bloque del que el guion saca lo que
+ * le promete al prospecto ({{demo_duracion}}), asi que el texto y el calendario no pueden decir
+ * dos cosas distintas. Igual que el tipo de evento; si no coinciden, manda el tipo de evento.
+ */
+export const DEFAULT_DURATION_MINUTES = DEFAULT_CONFIG.demo.duracionMinutos;
 
 /** Bolivia no tiene horario de verano: siempre UTC-4. */
 export const DEFAULT_TIME_ZONE = "America/La_Paz";
@@ -35,14 +41,18 @@ export const DEFAULT_TIME_ZONE = "America/La_Paz";
 /**
  * Config desde el entorno. `eventTypeId` es el del evento OCULTO del bot (`demo-bot`), NO el
  * publico: reservar en el publico falla por los 10 campos obligatorios.
+ * @param {number} [fallbackMinutes]  la duracion del conocimiento/config, que se usa cuando el
+ *   entorno no fija CALCOM_BOT_DURATION_MINUTES. El entorno sigue ganando: es el freno de mano
+ *   del que despliega y no queremos que una edicion de datos se lo saque.
  */
-export function getBookingConfig(env = process.env) {
+export function getBookingConfig(env = process.env, fallbackMinutes = DEFAULT_DURATION_MINUTES) {
   const rawId = Number(env.CALCOM_BOT_EVENT_TYPE_ID);
   const rawDuration = Number(env.CALCOM_BOT_DURATION_MINUTES);
+  const fallback = Number.isFinite(fallbackMinutes) && fallbackMinutes > 0 ? fallbackMinutes : DEFAULT_DURATION_MINUTES;
   return {
     baseUrl: String(env.CALCOM_BASE_URL || "").replace(/\/+$/, ""),
     eventTypeId: Number.isInteger(rawId) && rawId > 0 ? rawId : null,
-    durationMinutes: Number.isFinite(rawDuration) && rawDuration > 0 ? rawDuration : DEFAULT_DURATION_MINUTES,
+    durationMinutes: Number.isFinite(rawDuration) && rawDuration > 0 ? rawDuration : fallback,
     timeZone: String(env.CALCOM_TIMEZONE || DEFAULT_TIME_ZONE),
   };
 }
@@ -106,7 +116,7 @@ export function buildBookingNotes(qualification = {}) {
  */
 export async function createBooking(options = {}, deps = {}) {
   const warnings = [];
-  const config = options.config || getBookingConfig(deps.env || process.env);
+  const config = options.config || getBookingConfig(deps.env || process.env, options.durationMinutes);
   const doFetch = deps.fetch || options.fetch || globalThis.fetch;
 
   if (!config.baseUrl || !config.eventTypeId) {

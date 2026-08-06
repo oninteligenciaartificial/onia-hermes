@@ -42,6 +42,7 @@
 import { pathToFileURL } from "node:url";
 
 import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
+import { withKnowledge } from "./knowledge.mjs";
 import { createState, step, markHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
 import { createStore } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
@@ -75,7 +76,11 @@ export function parseInput(raw) {
   return parsed;
 }
 
-/** Config del turno: DEFAULT_CONFIG + slots + dryRun. Nada mas se pisa desde el canal. */
+/**
+ * Config del turno: DEFAULT_CONFIG + slots + dryRun + los HECHOS editables (knowledge.json).
+ * Nada mas se pisa desde el canal. Sin archivo de conocimiento devuelve exactamente lo de antes
+ * (el MISMO objeto): la capa editable degrada a codigo sin cambiar una coma.
+ */
 export function buildConfig(input) {
   const overrides = {};
   const envDry = String(process.env.ONIA_BOT_DRY_RUN ?? "").toLowerCase();
@@ -92,7 +97,7 @@ export function buildConfig(input) {
       pending: false,
     }));
   }
-  return Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG;
+  return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG);
 }
 
 /** ONIA_BOT_SLOTS="jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00@2026-07-31T14:00:00Z" */
@@ -121,7 +126,7 @@ export async function resolveConfig(input, deps = {}) {
   const getSlots = typeof deps.getAvailableSlots === "function" ? deps.getAvailableSlots : getAvailableSlotsFromCalcom;
   const live = await getSlots({ nowIso: input.received_at || input.receivedAt }, deps);
   if (!live || !Array.isArray(live.slots) || live.slots.length === 0) return config;
-  return createBotConfig({ slots: live.slots, dryRun: config.dryRun });
+  return withKnowledge(createBotConfig({ slots: live.slots, dryRun: config.dryRun }));
 }
 
 // ---------------------------------------------------------------------------
@@ -312,6 +317,10 @@ export async function runTurn(input, deps = {}) {
       const bookFn = typeof deps.createBooking === "function" ? deps.createBooking : createBooking;
       const booking = await bookFn({
         startAt: nextState.scheduledAt,
+        // MISMA fuente que el texto que el prospecto acaba de leer ({{demo_duracion}}): si el
+        // guion promete una duracion, el calendario bloquea esa. CALCOM_BOT_DURATION_MINUTES
+        // sigue ganando si esta definido en el entorno (es el freno de mano del que despliega).
+        durationMinutes: config.demo?.duracionMinutos,
         name: nextState.displayName || "Prospecto",
         conversationKey: nextState.conversationKey,
         notes: buildBookingNotes(nextState.qualification || {}),

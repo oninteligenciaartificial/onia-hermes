@@ -38,7 +38,10 @@ export const GUARDRAIL_RULES = Object.freeze([
     reason: "N2 — DentalGest no está homologado ante el SIN: prometer emisión certificada es riesgo real",
     patterns: Object.freeze([
       /\b(emitimos|emite|factura(mos)?)\b[^.]{0,30}\b(siat|sin|electronica|certificada)\b/,
-      /\bhomologad[oa]\b/,
+      // El plural cuenta: "ya estamos homologados" es la forma mas natural de decirlo, y con
+      // `[oa]\b` a secas se colaba entera. Lo caza el guardrail del LLM y tambien el validador de
+      // la capa de conocimiento editable, que usa este mismo checkGuardrails().
+      /\bhomologad[oa]s?\b/,
       /\bautorizado por el sin\b/,
     ]),
   }),
