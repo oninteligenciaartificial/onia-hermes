@@ -33,12 +33,15 @@
  */
 import { ENVIRONMENTS } from "./constants.mjs";
 
-// Namespace del envelope. SOAP 1.1 por defecto (JAX-WS suele bindear 1.1).
-// [VERIFICAR SOAP 1.1 vs 1.2 contra el binding del WSDL del piloto].
+// Namespace del envelope. SOAP 1.1 VERIFICADO 2026-08-06 contra el binding del
+// WSDL del piloto (soap:binding transport=schemas.xmlsoap.org/soap/http,
+// style=document, use=literal, soapAction="" en todas las operaciones).
 export const SOAP_ENV_NS = "http://schemas.xmlsoap.org/soap/envelope/";
 
-// targetNamespace del servicio SIAT (prefijo de la operacion en el Body).
-// PLACEHOLDER -- [VERIFICAR el targetNamespace EXACTO de cada servicio contra el WSDL].
+// targetNamespace de los TIPOS/operaciones SIAT. VERIFICADO 2026-08-06 contra los
+// WSDL v2 del piloto: todos los servicios importan el mismo namespace
+// "https://siat.impuestos.gob.bo/" con elementFormDefault=unqualified (los hijos
+// del wrapper van SIN prefijo, como emite buildSoapEnvelope).
 export const SIAT_TARGET_NS = "https://siat.impuestos.gob.bo/";
 
 // Prefijo de namespace usado para la operacion dentro del Body.
@@ -125,55 +128,79 @@ export const SOAP_OPERATIONS = {
     ],
     verified: true,
   },
-  // Recepcion de factura compra-venta computarizada en linea. Campos VERIFICADOS
-  // contra doc oficial. [VERIFICAR el ORDEN de campos contra el XSD de
-  // ServicioFacturacionComputarizada?wsdl (JAXB = alfabetico) ANTES de la
-  // primera recepcion real -- cuis/cufd requirieron reorden alfabetico].
+  // Recepcion de factura compra-venta computarizada en linea. ORDEN VERIFICADO
+  // 2026-08-06 contra el XSD del WSDL del piloto: el tipo solicitudRecepcionFactura
+  // EXTIENDE solicitudRecepcion (base alfabetica: codigoAmbiente..tipoFacturaDocumento
+  // con cufd/cuis ANTES de nit) y agrega archivo/fechaEnvio/hashArchivo AL FINAL.
   recepcionFactura: {
     service: "FACTURACION_COMPUTARIZADA",
     operation: "recepcionFactura",
-    // [VERIFICAR nombre exacto del wrapper; suele ser SolicitudServicioRecepcionFactura].
-    requestElement: "SolicitudServicioRecepcionFactura",
+    requestElement: "SolicitudServicioRecepcionFactura", // VERIFICADO contra el XSD 2026-08-06
     fields: [
+      // base solicitudRecepcion (orden del XSD, alfabetico JAXB):
       { name: "codigoAmbiente" },
       { name: "codigoDocumentoSector" },
-      { name: "codigoEmision" }, // 1=en linea
+      { name: "codigoEmision" }, // 1=en linea, 2=fuera de linea
       { name: "codigoModalidad" },
-      { name: "codigoPuntoVenta", optional: true }, // 0 si no aplica
+      { name: "codigoPuntoVenta", optional: true }, // minOccurs=0; 0 si no aplica
       { name: "codigoSistema" },
       { name: "codigoSucursal" },
-      { name: "nit" },
       { name: "cufd" },
       { name: "cuis" },
+      { name: "nit" },
       { name: "tipoFacturaDocumento" },
+      // extension solicitudRecepcionFactura (al final, orden del XSD):
       { name: "archivo" }, // base64: XML gzip -> base64
       { name: "fechaEnvio" },
       { name: "hashArchivo" }, // SHA-256 del archivo
     ],
     verified: true,
   },
-  // Anulacion de factura (misma firma compra-venta y electronica). Campos
-  // VERIFICADOS contra doc oficial. [VERIFICAR el ORDEN de campos contra el XSD
-  // de ServicioFacturacionComputarizada?wsdl ANTES de la primera anulacion].
+  // Anulacion de factura. ORDEN VERIFICADO 2026-08-06 contra el XSD del piloto:
+  // solicitudAnulacion = base solicitudRecepcion + extension {codigoMotivo, cuf}.
   anulacionFactura: {
     service: "FACTURACION_COMPUTARIZADA",
     operation: "anulacionFactura",
-    // [VERIFICAR nombre exacto del wrapper; suele ser SolicitudServicioAnulacionFactura].
-    requestElement: "SolicitudServicioAnulacionFactura",
+    requestElement: "SolicitudServicioAnulacionFactura", // VERIFICADO contra el XSD 2026-08-06
+    fields: [
+      // base solicitudRecepcion (mismo orden que recepcionFactura):
+      { name: "codigoAmbiente" },
+      { name: "codigoDocumentoSector" },
+      { name: "codigoEmision" },
+      { name: "codigoModalidad" },
+      { name: "codigoPuntoVenta", optional: true },
+      { name: "codigoSistema" },
+      { name: "codigoSucursal" },
+      { name: "cufd" },
+      { name: "cuis" },
+      { name: "nit" },
+      { name: "tipoFacturaDocumento" },
+      // extension solicitudAnulacion (al final, orden del XSD):
+      { name: "codigoMotivo" }, // del catalogo sincronizado de motivos de anulacion
+      { name: "cuf" }, // CUF de la factura a anular
+    ],
+    verified: true,
+  },
+  // Reversion de anulacion (por unica vez por factura, RND 1021-11 Art. 38).
+  // ORDEN VERIFICADO 2026-08-06 contra el XSD del piloto: solicitudReversionAnulacion
+  // = base solicitudRecepcion + extension {cuf}.
+  reversionAnulacionFactura: {
+    service: "FACTURACION_COMPUTARIZADA",
+    operation: "reversionAnulacionFactura",
+    requestElement: "SolicitudServicioReversionAnulacionFactura", // VERIFICADO contra el XSD 2026-08-06
     fields: [
       { name: "codigoAmbiente" },
-      { name: "codigoSistema" },
-      { name: "codigoSucursal" }, // 0=casa matriz
-      { name: "codigoPuntoVenta", optional: true }, // 0 si no aplica
-      { name: "codigoEmision" }, // 1=en linea
-      { name: "codigoModalidad" },
       { name: "codigoDocumentoSector" },
-      { name: "nit" },
-      { name: "cuis" },
+      { name: "codigoEmision" },
+      { name: "codigoModalidad" },
+      { name: "codigoPuntoVenta", optional: true },
+      { name: "codigoSistema" },
+      { name: "codigoSucursal" },
       { name: "cufd" },
+      { name: "cuis" },
+      { name: "nit" },
       { name: "tipoFacturaDocumento" },
-      { name: "cuf" }, // CUF de la factura a anular
-      { name: "codigoMotivo" }, // del catalogo sincronizado de motivos de anulacion
+      { name: "cuf" }, // CUF de la factura anulada a revertir
     ],
     verified: true,
   },
@@ -356,9 +383,14 @@ export function buildRecepcionFacturaRequest(params = {}, options = {}) {
   return buildFromOperation("recepcionFactura", params, options);
 }
 
-/** anulacionFactura: anulacion de factura (cuf + codigoMotivo). */
+/** anulacionFactura: anulacion de factura (codigoMotivo + cuf). */
 export function buildAnulacionFacturaRequest(params = {}, options = {}) {
   return buildFromOperation("anulacionFactura", params, options);
+}
+
+/** reversionAnulacionFactura: reversion de una anulacion (cuf; por unica vez). */
+export function buildReversionAnulacionFacturaRequest(params = {}, options = {}) {
+  return buildFromOperation("reversionAnulacionFactura", params, options);
 }
 
 // ----------------------------- parser de respuesta --------------------------

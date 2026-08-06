@@ -17,6 +17,7 @@ import {
   SOAP_OPERATIONS,
   buildAnulacionFacturaRequest,
   buildAuthHeader,
+  buildReversionAnulacionFacturaRequest,
   buildCufdRequest,
   buildCuisRequest,
   buildRecepcionFacturaRequest,
@@ -195,11 +196,16 @@ describe("buildRecepcionFacturaRequest", () => {
     hashArchivo: "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
   };
 
-  it("emite archivo (base64), fechaEnvio y hashArchivo, en orden", () => {
+  it("emite la base en orden XSD (cufd, cuis, nit) y la extension al final", () => {
     const xml = buildRecepcionFacturaRequest(params);
     inOrder(xml, [
       "<siat:recepcionFactura>",
-      "<codigoEmision>1</codigoEmision>",
+      "<codigoAmbiente>2</codigoAmbiente>",
+      "<codigoSucursal>0</codigoSucursal>",
+      "<cufd>CUFD-DIA</cufd>",
+      "<cuis>CUIS-SIS</cuis>",
+      "<nit>5371375010</nit>",
+      "<tipoFacturaDocumento>1</tipoFacturaDocumento>",
       "<archivo>H4sIA+/base64+data==</archivo>",
       "<fechaEnvio>2026-07-22T12:00:00.000</fechaEnvio>",
       `<hashArchivo>${params.hashArchivo}</hashArchivo>`,
@@ -213,23 +219,47 @@ describe("buildRecepcionFacturaRequest", () => {
   });
 });
 
+const BASE_ANULACION = {
+  codigoAmbiente: 2,
+  codigoSistema: "SIS-ONIA-01",
+  codigoSucursal: 0,
+  codigoEmision: 1,
+  codigoModalidad: 2,
+  codigoDocumentoSector: 1,
+  nit: "5371375010",
+  cuis: "CUIS-SIS",
+  cufd: "CUFD-DIA",
+  tipoFacturaDocumento: 1,
+  cuf: "1234ABCD5678",
+};
+
 describe("buildAnulacionFacturaRequest", () => {
-  it("incluye el cuf a anular y el codigoMotivo del catalogo", () => {
-    const xml = buildAnulacionFacturaRequest({
-      codigoAmbiente: 2,
-      codigoSistema: "SIS-ONIA-01",
-      codigoSucursal: 0,
-      codigoEmision: 1,
-      codigoModalidad: 2,
-      codigoDocumentoSector: 1,
-      nit: "5371375010",
-      cuis: "CUIS-SIS",
-      cufd: "CUFD-DIA",
-      tipoFacturaDocumento: 1,
-      cuf: "1234ABCD5678",
-      codigoMotivo: 1,
-    });
-    inOrder(xml, ["<siat:anulacionFactura>", "<cuf>1234ABCD5678</cuf>", "<codigoMotivo>1</codigoMotivo>"]);
+  it("orden XSD: base + codigoMotivo ANTES de cuf (extension solicitudAnulacion)", () => {
+    const xml = buildAnulacionFacturaRequest({ ...BASE_ANULACION, codigoMotivo: 1 });
+    inOrder(xml, [
+      "<siat:anulacionFactura>",
+      "<SolicitudServicioAnulacionFactura>",
+      "<cufd>CUFD-DIA</cufd>",
+      "<cuis>CUIS-SIS</cuis>",
+      "<nit>5371375010</nit>",
+      "<tipoFacturaDocumento>1</tipoFacturaDocumento>",
+      "<codigoMotivo>1</codigoMotivo>",
+      "<cuf>1234ABCD5678</cuf>",
+    ]);
+  });
+});
+
+describe("buildReversionAnulacionFacturaRequest", () => {
+  it("orden XSD: base + cuf al final, wrapper SolicitudServicioReversionAnulacionFactura", () => {
+    const xml = buildReversionAnulacionFacturaRequest(BASE_ANULACION);
+    inOrder(xml, [
+      "<siat:reversionAnulacionFactura>",
+      "<SolicitudServicioReversionAnulacionFactura>",
+      "<tipoFacturaDocumento>1</tipoFacturaDocumento>",
+      "<cuf>1234ABCD5678</cuf>",
+      "</SolicitudServicioReversionAnulacionFactura>",
+    ]);
+    assert.ok(!xml.includes("<codigoMotivo>")); // la reversion no lleva motivo
   });
 });
 
@@ -251,11 +281,12 @@ describe("escapeXml", () => {
 });
 
 describe("SOAP_OPERATIONS: marca verified", () => {
-  it("las 5 operaciones estan verified (verificarComunicacion confirmada en vivo 2026-08-06)", () => {
+  it("las 6 operaciones estan verified (orden confirmado contra el XSD del piloto 2026-08-06)", () => {
     assert.equal(SOAP_OPERATIONS.cuis.verified, true);
     assert.equal(SOAP_OPERATIONS.cufd.verified, true);
     assert.equal(SOAP_OPERATIONS.recepcionFactura.verified, true);
     assert.equal(SOAP_OPERATIONS.anulacionFactura.verified, true);
+    assert.equal(SOAP_OPERATIONS.reversionAnulacionFactura.verified, true);
     assert.equal(SOAP_OPERATIONS.verificarComunicacion.verified, true);
     assert.equal(SOAP_OPERATIONS.verificarComunicacion.requestElement, null);
   });
