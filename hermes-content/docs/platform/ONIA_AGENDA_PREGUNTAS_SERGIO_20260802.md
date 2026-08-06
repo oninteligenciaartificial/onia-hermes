@@ -82,7 +82,7 @@
 | D5 | **Reunión BCP (miércoles 5-ago)** | QR dinámico + conciliación automática |
 | D6 | ~~Aprobar dashboard v2~~ ✅ aprobado — construyéndose | — |
 | D7 | **Crear OAuth Client de Google** (Google Cloud Console, cuenta de Sergio) → client ID+secret para GoTrue | HALLAZGO: el botón "Continuar con Google" está ROTO en prod — el GoTrue self-hosted no tiene GOTRUE_EXTERNAL_GOOGLE_* configurado |
-| D8 | **QR de cobro NUEVO (hallazgo 2026-08-06)** — el `/assets/qr-payment.png` que ve el cliente al pagar es un QR "SERVICIO DENTALGEST" a la cuenta personal de Ruddy, CON VENCIMIENTO. Marca ajena + posible QR vencido en el punto exacto del cobro | Mandame la imagen del QR estático vigente de la cuenta Onia (o el de la reunión BCP) y lo reemplazo en minutos. Hasta entonces, cualquier pago real puede rebotar |
+| D8 | ~~QR de cobro DentalGest/vencido~~ **RESUELTO POR DECISIÓN 2026-08-06: el cobro va por la pasarela del BCP** (Sergio post-reunión). El slot del QR dinámico ya está en el código del checkout esperando la API. Nuevo ítem M: integrar API BCP (QR dinámico + webhook/extracto) cuando lleguen credenciales/sandbox. INTERIM pendiente de decidir: mientras no esté la API, el checkout muestra el QR viejo — propuesta: reemplazarlo por bloque "te mandamos el QR por WhatsApp" | Credenciales/sandbox del BCP cuando lleguen + OK al interim |
 
 ---
 Regla de trabajo desde ahora: **cada punto B se ratifica explícito, uno por uno, antes
