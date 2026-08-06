@@ -1,4 +1,4 @@
-# El ejército de influencers IA — pensado para que componga
+﻿# El ejército de influencers IA — pensado para que componga
 
 > 2026-08-06. Sergio: *"la idea era crear un ejército de modelos IA que sean influencers y
 > que vendan nuestros productos, luego vender cursos y más proyectos. Piénsalo de esa manera."*
@@ -33,7 +33,7 @@
 |---|---|---|---|---|
 | **Sergio, marca personal** | ⛔ **sin Soul** — cara REAL grabada con celular ([[feedback-sergio-soul-no-usar]]) | Dueños de negocio BO | **La plataforma** — demos | `?src=sergio-<pieza>` → Cal |
 | **Lucía** `@lu.antelo` | `36305a9b` | Lifestyle SCZ | **Webs y servicios Onia** a negocios + es el CASO VIVO del servicio "influencer IA para tu marca" | `?src=lucia-<pieza>` |
-| **Mara** | `b8f5c353` | Beauty / e-commerce | **El servicio "modelo IA para tu marca"** (packs 450→6.500 ya definidos §3.6 del catálogo) + Nuvia si Arthur la opera | `?src=mara-<pieza>` |
+| **Mara** | `6c94bbf0` | Beauty / e-commerce | **El servicio "modelo IA para tu marca"** (packs 450→6.500 ya definidos §3.6 del catálogo) + Nuvia si Arthur la opera | `?src=mara-<pieza>` |
 | Modelo 4-5 *(fase 1, solo si 2 y 3 muestran señal)* | a entrenar (~10 min c/u) | por rubro (comercio, gastro) | el vertical que toque | ídem |
 
 **El insight que hace negocio:** Lucía y Mara no son solo canales — son **la vitrina del

@@ -1,4 +1,4 @@
-# Arthur — carril contenido y cómo se le paga con plata de Onia Platform
+﻿# Arthur — carril contenido y cómo se le paga con plata de Onia Platform
 
 > **2026-08-01.** Sergio: *"hay que darle trabajo y cómo pagarle en base a lo que genere
 > Onia Platform, porque va a entrar ingreso de ahí y no sé cómo pagarle."*
@@ -310,7 +310,7 @@ paga por unidad, se gana por resultado y sin topes).
 | Armar el banco y el calendario, cada pieza con su `?src=` | Publicar sin aprobación de Sergio |
 | Proponer escenas y guiones dentro del posicionamiento ya definido | Cambiar el posicionamiento de las modelos |
 
-- Souls aprobados: **Lucía `36305a9b`** y **Mara `b8f5c353`**.
+- Souls aprobados: **Lucía `36305a9b`** y **Mara `6c94bbf0`**.
 - ⛔ **PROHIBIDO el Soul de Sergio** (decisión suya del 2026-08-06: *"es horrible"*). Su marca
   personal se hace con cara real grabada, nunca generada.
 - **Etiqueta de IA obligatoria** en las bios de las modelos, y jamás testimonios de resultados

@@ -43,11 +43,17 @@ Bolivian woman, 26, warm tan skin with light freckles, long dark wavy hair, brow
 natural minimal makeup, real skin texture with visible pores.
 ```
 
-**Mara** (`soul_id b8f5c353-faaf-44eb-ae5a-4e0bacfd333f`)
+**Mara** (`soul_id 6c94bbf0-bc71-4fe1-841e-f366bdb00b6e` — **Mara BO v2**, boliviana)
 ```
-Woman, 27, copper-red wavy shoulder-length hair, fair skin with light freckles, clean dewy
-skin, real skin texture with visible pores.
+Bolivian mestiza woman, 27, light olive-tan skin, oval face, expressive dark brown eyes,
+natural thick eyebrows, dark brown hair in a soft blunt shoulder-length cut with a middle
+part, real skin texture with visible pores.
 ```
+
+> ⚠️ El Soul pelirrojo original (`b8f5c353`, *Mara ONIA v1*) quedó **jubilado el 2026-08-06**:
+> no leía como boliviana y no sirve para vender e-commerce local. Las imágenes M1-M15 de este
+> lote son de esa cara vieja — valen como prueba de la receta, **no como banco de contenido**.
+> Cómo se construyó la nueva y cómo repetirlo: `references/modelos/mara-bo/LEEME.md`.
 
 ### Atuendos (rotar; nunca inventar uno nuevo sin sumarlo acá)
 

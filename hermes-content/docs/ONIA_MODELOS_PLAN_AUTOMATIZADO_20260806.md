@@ -1,4 +1,4 @@
-# Lucía y Mara — perfeccionarlas y automatizar la venta con carruseles
+﻿# Lucía y Mara — perfeccionarlas y automatizar la venta con carruseles
 
 > 2026-08-06. Sergio: *"dame un plan sobre las modelos que ya tenemos, perfecciónalas, y que
 > sea todo automatizado más carruseles para la venta del producto automáticamente."*
@@ -15,7 +15,7 @@
 
 ## 1. Qué tenemos y qué le falta a cada una
 
-| | **Lucía** `36305a9b` | **Mara** `b8f5c353` |
+| | **Lucía** `36305a9b` | **Mara** `6c94bbf0` |
 |---|---|---|
 | Soul | Entrenado, limpio, verificado | Entrenado |
 | Handle | `@lu.antelo` (definido) | `@mara.vale` (propuesto) |

@@ -1,4 +1,4 @@
-# Higgsfield Full Capabilities Map
+﻿# Higgsfield Full Capabilities Map
 
 ## Objetivo
 Definir que funciones de Higgsfield debe usar Onia primero para crear contenido propio, contenido de Sergio y piezas comerciales para clientes.
@@ -12,7 +12,7 @@ Este documento es operativo: sirve para decidir modelo, flujo, comandos, limites
 - Cuenta: `oninteligenciaartificial@gmail.com` · Plan: `ultra` · Creditos: **2.993,73**
 - **Ruta vigente: MCP** (`https://mcp.higgsfield.ai/mcp`), ya conectado a esta sesion. La CLI
   pasa a ser respaldo, no la ruta principal.
-- Souls `ready`: `LUCIA-REAL-v2-clean` (`36305a9b-…`), `Mara ONIA v1` (`b8f5c353-…`),
+- Souls `ready`: `LUCIA-REAL-v2-clean` (`36305a9b-…`), `Mara BO v2` (`6c94bbf0-…`),
   `Sergio Onia` + 3 variantes historicas de Sergio.
 - Costo medido: **imagen Soul 2k = 0,12 cr**. Video segun modelo (cotizar con `get_cost:true`).
 - Sin allowance `unlim` activo (plan Ultra paga con creditos; `unlim.available: false`).
