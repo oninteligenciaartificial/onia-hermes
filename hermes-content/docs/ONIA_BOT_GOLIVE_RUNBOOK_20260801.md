@@ -145,6 +145,49 @@ la app no tiene ninguna → hace falta una página real en onia.com.bo) y el
 ícono/categoría de la app. Esto NO estaba contemplado en el plan original y
 es requisito para que el número atienda de verdad.
 
+### DESBLOQUEADO 2026-08-06 — app propia + token permanente + datos del número
+
+App **"Onia Bot"** creada en el portfolio verificado y asignada al usuario del
+sistema. Eso destrabó los permisos de WhatsApp en el asistente de token.
+
+| Dato | Valor |
+|---|---|
+| App | **Onia Bot** — `1078962684709749` (dev mode, is_live=false) |
+| Portfolio | OniaAgency `1451773736711697` (verificado) |
+| Asignación | usuario del sistema "Onia Automation" → app con **Acceso total (Administrar app)** + WABA "Onia" con acceso parcial |
+| Token | permanente (**caducidad: Nunca**), permisos `whatsapp_business_management` + `whatsapp_business_messaging` |
+| WABA id | `4429061034078857` |
+| **phone_number_id** | **`1283320641524523`** |
+
+Estado real del número, leído de la Graph API con el token nuevo (v23.0,
+`GET /4429061034078857/phone_numbers`):
+
+```
+display_phone_number       +591 75414930
+verified_name              Onia
+status                     CONNECTED
+code_verification_status   VERIFIED
+platform_type              CLOUD_API
+name_status                AVAILABLE_WITHOUT_REVIEW
+quality_rating             UNKNOWN   (sin tráfico todavía)
+```
+
+**Dos correcciones al plan gracias a esto:**
+
+1. **El número YA está registrado en Cloud API.** La documentación advierte que
+   agregar+verificar un número NO lo registra y que hay que llamar a
+   `POST /PHONE_NUMBER_ID/register`. No aplica acá: el alta por Business Suite
+   dejó el número en `CONNECTED`, que es el estado de registrado y operativo.
+   No hay que llamar a `/register` (y conviene no hacerlo: hay tope de 10
+   intentos por número cada 72 h, error `133016`).
+2. **El display name "Onia" NO espera revisión** (`AVAILABLE_WITHOUT_REVIEW`).
+   El plan asumía 1–3 días hábiles de espera antes de imprimirlo en material
+   comercial. Se puede usar ya.
+
+Higiene del token: Meta lo muestra **una sola vez**. No pasó nunca por el chat
+ni por un documento — la llamada a la Graph API la hizo el propio navegador
+leyendo el campo, y devolvió solo los datos del número.
+
 ### Cola después de eso
 
 1. **`phone_number_id`** del 75414930 (aparece en API Setup de la app).
