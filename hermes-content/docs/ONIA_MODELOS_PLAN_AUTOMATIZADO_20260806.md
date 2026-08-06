@@ -108,12 +108,12 @@ de Instagram — un trámite tuyo, no código. Con él, esto corre solo de punta
 
 | Paso | Quién | Tiempo |
 |---|---|---|
-| 1. Lote de calibración: 8 imágenes por modelo con bloque de identidad | Yo | 2 min, ~2 cr |
+| 1. Lote de calibración: 8 imágenes por modelo con bloque de identidad | Arthur | 2 min, ~2 cr |
 | 2. Sergio marca cuáles sí | Sergio | 5 min |
 | 3. Crear las 2 cuentas IG (etiqueta IA en bio, obligatoria) | Sergio | 30 min |
-| 4. Cargar avatar, bio, y los 4 carruseles con sus `?src=` | Yo | 1 h |
-| 5. Publicación manual 3×/semana + DM a mano | Sergio/Arthur | 15 min/día |
-| 6. Token IG → todo automático | Sergio → yo | trámite + 1 h |
+| 4. Cargar avatar, bio, y los 4 carruseles con sus `?src=` | Arthur | 1 h |
+| 5. Publicación manual 3×/semana + DM a mano | Arthur (aprueba Sergio) | 15 min/día |
+| 6. Token IG → todo automático | Sergio (trámite) → Claude (cableado) | trámite + 1 h |
 
 **Métrica única:** leads con `src=lucia-*` / `src=mara-*` en el panel. Todo lo demás
 (likes, followers) es ruido hasta que haya leads.

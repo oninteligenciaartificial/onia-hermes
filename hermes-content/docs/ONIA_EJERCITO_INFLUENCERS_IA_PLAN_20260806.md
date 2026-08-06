@@ -31,7 +31,7 @@
 
 | Modelo | Soul (listo) | Audiencia | **Vende (desde el post 1)** | CTA / funnel |
 |---|---|---|---|---|
-| **Sergio IA** (marca personal) | `bce5feb0` v2 + 4 variantes | Dueños de negocio BO | **La plataforma** — demos | `?src=sergio-<pieza>` → Cal |
+| **Sergio, marca personal** | ⛔ **sin Soul** — cara REAL grabada con celular ([[feedback-sergio-soul-no-usar]]) | Dueños de negocio BO | **La plataforma** — demos | `?src=sergio-<pieza>` → Cal |
 | **Lucía** `@lu.antelo` | `36305a9b` | Lifestyle SCZ | **Webs y servicios Onia** a negocios + es el CASO VIVO del servicio "influencer IA para tu marca" | `?src=lucia-<pieza>` |
 | **Mara** | `b8f5c353` | Beauty / e-commerce | **El servicio "modelo IA para tu marca"** (packs 450→6.500 ya definidos §3.6 del catálogo) + Nuvia si Arthur la opera | `?src=mara-<pieza>` |
 | Modelo 4-5 *(fase 1, solo si 2 y 3 muestran señal)* | a entrenar (~10 min c/u) | por rubro (comercio, gastro) | el vertical que toque | ídem |
@@ -53,8 +53,8 @@ haciendo SU contenido. Eso se puede vender **antes** de que ellas tengan audienc
 
 **Por qué en este orden:** los cursos venden cuando hay un caso que mostrar ("mirá lo que
 facturan mis modelos"), no antes. El servicio B2B paga la operación mientras la audiencia
-crece. Y nada de esto toca las horas del carril dental — el ejército lo opero yo (Claude)
-con OKs de Sergio; Arthur sigue en su plan.
+crece. Y nada de esto toca las horas de Sergio: **el ejército lo opera Arthur** (decisión del
+2026-08-06), con Claude produciendo y Sergio aprobando.
 
 ## 4. Unidad económica por modelo (mes)
 
@@ -75,7 +75,7 @@ que en 8 semanas no atribuye ni un lead se pausa (no se borra: su banco queda).
 2. Crear IG (+ página FB si aplica) con ese email — SIM non-VoIP si pide teléfono.
 3. Vincular al BM **OniaAgency** (1451773736711697).
 4. **Etiqueta IA en la bio** (obligatoria, no negociable).
-5. Avisarme → yo cargo: foto de perfil (generada), bio, highlights, y el banco de
+5. Avisar a Arthur → él carga: foto de perfil (generada), bio, highlights, y el banco de
    contenido con su calendario y sus `?src=`.
 
 Handles: Lucía = `@lu.antelo` (definido). Mara = definir (propuesta: `@mara.vale`, del doc
