@@ -72,8 +72,8 @@ describe("helpers de ambiente y endpoint", () => {
     assert.ok(soapWsdlUrl(ENVIRONMENTS.PILOTO, "FACTURACION_SINCRONIZACION").endsWith("?wsdl"));
   });
 
-  it("buildAuthHeader arma 'Token X' (token va en HTTP header, no en el envelope)", () => {
-    assert.equal(buildAuthHeader("abc123"), "Token abc123");
+  it("buildAuthHeader arma 'TokenApi X' (va en el HTTP header apikey; verificado en vivo 2026-08-06)", () => {
+    assert.equal(buildAuthHeader("TOKEN_FAKE"), "TokenApi TOKEN_FAKE");
     assert.throws(() => buildAuthHeader(""), /token/);
   });
 });
@@ -90,6 +90,12 @@ describe("builders de envelope: estructura comun", () => {
     const xml = buildVerificarComunicacionRequest();
     assert.ok(!xml.includes("<nit>"));
     assert.ok(!xml.includes("<codigoSistema>"));
+  });
+
+  it("verificarComunicacion NO lleva wrapper (sequence vacia del XSD; confirmado en vivo 2026-08-06)", () => {
+    const xml = buildVerificarComunicacionRequest();
+    assert.ok(!xml.includes("SolicitudVerificarComunicacion"));
+    assert.ok(xml.includes("<siat:verificarComunicacion></siat:verificarComunicacion>"));
   });
 
   it("buildSoapEnvelope lanza si falta el nombre de operacion", () => {
@@ -112,15 +118,15 @@ describe("buildCuisRequest", () => {
     inOrder(xml, ["<siat:cuis>", "<SolicitudCuis>", "</SolicitudCuis>", "</siat:cuis>"]);
   });
 
-  it("emite los campos EN ORDEN (spec / doc oficial)", () => {
+  it("emite los campos EN ORDEN alfabetico (XSD del piloto, JAXB; 2026-08-06)", () => {
     const xml = buildCuisRequest(params);
     inOrder(xml, [
       "<codigoAmbiente>2</codigoAmbiente>",
-      "<codigoSistema>SIS-ONIA-01</codigoSistema>",
-      "<nit>5371375010</nit>",
       "<codigoModalidad>2</codigoModalidad>",
-      "<codigoSucursal>0</codigoSucursal>",
       "<codigoPuntoVenta>0</codigoPuntoVenta>",
+      "<codigoSistema>SIS-ONIA-01</codigoSistema>",
+      "<codigoSucursal>0</codigoSucursal>",
+      "<nit>5371375010</nit>",
     ]);
   });
 
@@ -146,7 +152,7 @@ describe("buildCuisRequest", () => {
 });
 
 describe("buildCufdRequest", () => {
-  it("incluye el cuis (obtenido en el inicio del sistema) en orden", () => {
+  it("emite los campos en orden alfabetico del XSD, con cuis antes de nit", () => {
     const xml = buildCufdRequest({
       codigoAmbiente: 2,
       codigoSistema: "SIS-ONIA-01",
@@ -155,7 +161,17 @@ describe("buildCufdRequest", () => {
       cuis: "A1B2C3",
       codigoSucursal: 0,
     });
-    inOrder(xml, ["<siat:cufd>", "<SolicitudCufd>", "<cuis>A1B2C3</cuis>", "</SolicitudCufd>"]);
+    inOrder(xml, [
+      "<siat:cufd>",
+      "<SolicitudCufd>",
+      "<codigoAmbiente>2</codigoAmbiente>",
+      "<codigoModalidad>2</codigoModalidad>",
+      "<codigoSistema>SIS-ONIA-01</codigoSistema>",
+      "<codigoSucursal>0</codigoSucursal>",
+      "<cuis>A1B2C3</cuis>",
+      "<nit>5371375010</nit>",
+      "</SolicitudCufd>",
+    ]);
     // codigoPuntoVenta es opcional: omitido -> no aparece
     assert.ok(!xml.includes("<codigoPuntoVenta>"));
   });
@@ -234,13 +250,14 @@ describe("escapeXml", () => {
   });
 });
 
-describe("SOAP_OPERATIONS: marca verified vs [VERIFICAR]", () => {
-  it("cuis/cufd/recepcion/anulacion estan verified; verificarComunicacion no", () => {
+describe("SOAP_OPERATIONS: marca verified", () => {
+  it("las 5 operaciones estan verified (verificarComunicacion confirmada en vivo 2026-08-06)", () => {
     assert.equal(SOAP_OPERATIONS.cuis.verified, true);
     assert.equal(SOAP_OPERATIONS.cufd.verified, true);
     assert.equal(SOAP_OPERATIONS.recepcionFactura.verified, true);
     assert.equal(SOAP_OPERATIONS.anulacionFactura.verified, true);
-    assert.equal(SOAP_OPERATIONS.verificarComunicacion.verified, false);
+    assert.equal(SOAP_OPERATIONS.verificarComunicacion.verified, true);
+    assert.equal(SOAP_OPERATIONS.verificarComunicacion.requestElement, null);
   });
 });
 
@@ -343,6 +360,9 @@ describe("parseSoapResponse: tolerancia", () => {
       codigoEstado: null,
       codigoRecepcion: null,
       codigoDescripcion: null,
+      codigo: null,
+      codigoControl: null,
+      fechaVigencia: null,
       mensajes: [],
     });
   });
@@ -352,5 +372,61 @@ describe("parseSoapResponse: tolerancia", () => {
     const r = parseSoapResponse(xml);
     assert.equal(r.codigoEstado, 901);
     assert.deepEqual(r.mensajes, []);
+  });
+});
+
+describe("parseSoapResponse: expone el VALOR del CUIS/CUFD (smoke test real 2026-08-06)", () => {
+  // Respuesta REAL del piloto (smoke test 2026-08-06, CUIS obtenido).
+  const CUIS_REAL = `<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+ <soap:Body>
+  <ns2:cuisResponse xmlns:ns2="https://siat.impuestos.gob.bo/">
+   <RespuestaCuis><codigo>97DA6A35</codigo><fechaVigencia>2027-08-06T17:11:46.884-04:00</fechaVigencia><transaccion>true</transaccion></RespuestaCuis>
+  </ns2:cuisResponse>
+ </soap:Body>
+</soap:Envelope>`;
+
+  it("expone codigo y fechaVigencia de la respuesta CUIS real", () => {
+    const r = parseSoapResponse(CUIS_REAL);
+    assert.equal(r.transaccion, true);
+    assert.equal(r.codigo, "97DA6A35");
+    assert.equal(r.fechaVigencia, "2027-08-06T17:11:46.884-04:00");
+    assert.equal(r.codigoControl, null);
+    assert.deepEqual(r.mensajes, []);
+  });
+
+  it("un <codigo> de mensajesList ANTES del codigo del CUIS no lo pisa", () => {
+    const CON_MENSAJE = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body>
+     <ns2:cuisResponse xmlns:ns2="https://siat.impuestos.gob.bo/"><RespuestaCuis>
+      <mensajesList><codigo>902</codigo><descripcion>El CUIS se encuentra vigente</descripcion></mensajesList>
+      <codigo>97DA6A35</codigo>
+      <fechaVigencia>2027-08-06T17:11:46.884-04:00</fechaVigencia>
+      <transaccion>true</transaccion>
+     </RespuestaCuis></ns2:cuisResponse></soap:Body></soap:Envelope>`;
+    const r = parseSoapResponse(CON_MENSAJE);
+    assert.equal(r.codigo, "97DA6A35"); // NO el 902 del mensaje
+    assert.deepEqual(r.mensajes, [{ codigo: 902, descripcion: "El CUIS se encuentra vigente" }]);
+  });
+
+  it("expone codigo + codigoControl + fechaVigencia de una respuesta CUFD", () => {
+    const CUFD = `<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body>
+     <ns2:cufdResponse xmlns:ns2="https://siat.impuestos.gob.bo/"><RespuestaCufd>
+      <codigo>BQcnBgZUFEXFAUFBLUJBQkNERAU=</codigo>
+      <codigoControl>A19E23EF34124CD</codigoControl>
+      <direccion>CALLE FALSA 123</direccion>
+      <fechaVigencia>2026-08-07T17:11:46.000-04:00</fechaVigencia>
+      <transaccion>true</transaccion>
+     </RespuestaCufd></ns2:cufdResponse></S:Body></S:Envelope>`;
+    const r = parseSoapResponse(CUFD);
+    assert.equal(r.codigo, "BQcnBgZUFEXFAUFBLUJBQkNERAU=");
+    assert.equal(r.codigoControl, "A19E23EF34124CD");
+    assert.equal(r.fechaVigencia, "2026-08-07T17:11:46.000-04:00");
+  });
+
+  it("sin bloque Respuesta* -> codigo/codigoControl/fechaVigencia null", () => {
+    const r = parseSoapResponse(`<x><transaccion>true</transaccion></x>`);
+    assert.equal(r.codigo, null);
+    assert.equal(r.codigoControl, null);
+    assert.equal(r.fechaVigencia, null);
   });
 });

@@ -3,7 +3,7 @@
  *
  * Arma el XML del ENVELOPE de cada request desde parametros y PARSEA la respuesta
  * a un objeto normalizado. NO hace red ni IO: el TRANSPORTE HTTP real (POST del
- * envelope, header Authorization, timeouts, reintentos) es un concern APARTE que
+ * envelope, header apikey, timeouts, reintentos) es un concern APARTE que
  * necesita el NIT + credenciales del piloto y se enchufa encima de esta capa. Asi
  * el cliente es testeable HOY sin red ni NIT, coherente con external_gate: siat
  * (el core nunca factura).
@@ -22,10 +22,13 @@
  * El NOMBRE de la operacion SI esta confirmado en el binding del WSDL del piloto
  * (verified:true por operacion abajo); lo [VERIFICAR] es el detalle de tipos.
  *
- * AUTENTICACION (VERIFICADO, doc oficial): el Token Delegado NO viaja en el XML
- * ni en el SOAP header, sino en el HTTP header 'Authorization: Token VALOR'. Eso
- * es de la CAPA DE TRANSPORTE (fuera de esta capa pura). buildAuthHeader ayuda a
- * armar ese header sin acoplar red aca.
+ * AUTENTICACION (VERIFICADO EN VIVO 2026-08-06 contra el piloto): el Token
+ * Delegado NO viaja en el XML ni en el SOAP header, sino en el HTTP header
+ * 'apikey: TokenApi VALOR'. OJO: la doc oficial sugiere 'Authorization: Token'
+ * pero el piloto lo RECHAZA con Fault "EL SERVICIO REQUIERE API KEY"; con
+ * 'apikey: TokenApi X' responde 200 COMUNICACION EXITOSA (smoke test real, CUIS
+ * obtenido). Eso es de la CAPA DE TRANSPORTE (fuera de esta capa pura).
+ * buildAuthHeader ayuda a armar el VALOR del header sin acoplar red aca.
  * ============================================================================
  */
 import { ENVIRONMENTS } from "./constants.mjs";
@@ -78,47 +81,53 @@ export const MODALITY_CODES = {
 // refleja si los CAMPOS estan confirmados campo por campo contra doc oficial.
 export const SOAP_OPERATIONS = {
   // Health-check de disponibilidad del servicio (existe en los 3 servicios v2).
-  // Nombre de operacion confirmado en el binding; campos NO confirmados.
+  // VERIFICADO EN VIVO 2026-08-06: el XSD define sequence VACIA sin wrapper, y el
+  // piloto respondio 200 COMUNICACION EXITOSA omitiendo el wrapper.
   verificarComunicacion: {
     service: "FACTURACION_CODIGOS",
     operation: "verificarComunicacion",
-    // [VERIFICAR nombre del wrapper y si lleva parametros de negocio contra el WSDL].
-    requestElement: "SolicitudVerificarComunicacion",
-    fields: [], // sin parametros de negocio (health-check) [VERIFICAR firma exacta]
-    verified: false,
+    requestElement: null, // sin wrapper (sequence vacia del XSD, confirmado en vivo)
+    fields: [], // sin parametros de negocio (health-check)
+    verified: true,
   },
-  // SolicitudCuis: CUIS por sistema. Campos VERIFICADOS contra doc oficial.
+  // SolicitudCuis: CUIS por sistema. Campos VERIFICADOS contra doc oficial;
+  // ORDEN segun el XSD del WSDL del piloto (JAXB = alfabetico), 2026-08-06.
+  // Wrapper confirmado EN VIVO (CUIS obtenido en el smoke test).
   cuis: {
     service: "FACTURACION_CODIGOS",
     operation: "cuis",
-    requestElement: "SolicitudCuis", // [VERIFICAR nombre exacto del wrapper]
+    requestElement: "SolicitudCuis",
     fields: [
       { name: "codigoAmbiente" },
-      { name: "codigoSistema" },
-      { name: "nit" },
       { name: "codigoModalidad" },
-      { name: "codigoSucursal" },
       { name: "codigoPuntoVenta", optional: true }, // 0 si no aplica
+      { name: "codigoSistema" },
+      { name: "codigoSucursal" },
+      { name: "nit" },
     ],
     verified: true,
   },
-  // SolicitudCufd: CUFD diario (vigencia 24h). Campos VERIFICADOS.
+  // SolicitudCufd: CUFD diario (vigencia 24h). Campos VERIFICADOS; ORDEN segun
+  // el XSD del WSDL del piloto (JAXB = alfabetico), 2026-08-06.
   cufd: {
     service: "FACTURACION_CODIGOS",
     operation: "cufd",
-    requestElement: "SolicitudCufd", // [VERIFICAR nombre exacto del wrapper]
+    requestElement: "SolicitudCufd",
     fields: [
       { name: "codigoAmbiente" },
-      { name: "codigoSistema" },
-      { name: "nit" },
       { name: "codigoModalidad" },
-      { name: "cuis" },
-      { name: "codigoSucursal" },
       { name: "codigoPuntoVenta", optional: true }, // 0 si no aplica
+      { name: "codigoSistema" },
+      { name: "codigoSucursal" },
+      { name: "cuis" },
+      { name: "nit" },
     ],
     verified: true,
   },
-  // Recepcion de factura compra-venta computarizada en linea. Campos VERIFICADOS.
+  // Recepcion de factura compra-venta computarizada en linea. Campos VERIFICADOS
+  // contra doc oficial. [VERIFICAR el ORDEN de campos contra el XSD de
+  // ServicioFacturacionComputarizada?wsdl (JAXB = alfabetico) ANTES de la
+  // primera recepcion real -- cuis/cufd requirieron reorden alfabetico].
   recepcionFactura: {
     service: "FACTURACION_COMPUTARIZADA",
     operation: "recepcionFactura",
@@ -142,7 +151,9 @@ export const SOAP_OPERATIONS = {
     ],
     verified: true,
   },
-  // Anulacion de factura (misma firma compra-venta y electronica). Campos VERIFICADOS.
+  // Anulacion de factura (misma firma compra-venta y electronica). Campos
+  // VERIFICADOS contra doc oficial. [VERIFICAR el ORDEN de campos contra el XSD
+  // de ServicioFacturacionComputarizada?wsdl ANTES de la primera anulacion].
   anulacionFactura: {
     service: "FACTURACION_COMPUTARIZADA",
     operation: "anulacionFactura",
@@ -237,16 +248,17 @@ export function soapWsdlUrl(environment, serviceKey, options = {}) {
 }
 
 /**
- * Header HTTP de autenticacion del SIAT (VERIFICADO, doc oficial): el Token
- * Delegado va como 'Authorization: Token VALOR'. Lo consume la CAPA DE TRANSPORTE
- * (aca solo se arma el string; sin red). El token del piloto es distinto al de
- * produccion.
+ * VALOR del header HTTP de autenticacion del SIAT (VERIFICADO EN VIVO 2026-08-06
+ * contra el piloto): el Token Delegado va como 'apikey: TokenApi VALOR'. El
+ * esquema 'Authorization: Token X' de la doc oficial devuelve Fault "EL SERVICIO
+ * REQUIERE API KEY". Lo consume la CAPA DE TRANSPORTE (aca solo se arma el
+ * string; sin red). El token del piloto es distinto al de produccion.
  */
 export function buildAuthHeader(token) {
   if (isEmpty(token)) {
     throw new Error("buildAuthHeader requiere el token delegado del SIAT");
   }
-  return `Token ${token}`;
+  return `TokenApi ${token}`;
 }
 
 // -------------------------- builders de envelope ----------------------------
@@ -323,7 +335,7 @@ function buildFromOperation(key, params, options = {}) {
   });
 }
 
-/** verificarComunicacion: health-check del servicio. [VERIFICAR firma exacta]. */
+/** verificarComunicacion: health-check del servicio (sin wrapper ni parametros; verificado en vivo 2026-08-06). */
 export function buildVerificarComunicacionRequest(params = {}, options = {}) {
   return buildFromOperation("verificarComunicacion", params, options);
 }
@@ -420,22 +432,49 @@ function extractMensajes(xml) {
 }
 
 /**
+ * Campos PROPIOS del bloque contenedor Respuesta* (RespuestaCuis/RespuestaCufd/
+ * RespuestaServicioFacturacion...), SIN los sub-bloques de mensajes. Necesario
+ * porque mensajesList tambien contiene <codigo> (de cada mensaje) y puede
+ * aparecer ANTES del <codigo> del CUIS/CUFD: un extractTag global agarraria el
+ * equivocado. Respuesta real de referencia (smoke test 2026-08-06):
+ *   <RespuestaCuis><codigo>97DA6A35</codigo>
+ *     <fechaVigencia>2027-08-06T17:11:46.884-04:00</fechaVigencia>
+ *     <transaccion>true</transaccion></RespuestaCuis>
+ */
+function extractRespuestaBody(xml) {
+  const re = /<(?:[\w-]+:)?(Respuesta[\w-]*)(?:\s[^>]*)?>([\s\S]*?)<\/(?:[\w-]+:)?\1>/i;
+  const match = re.exec(xml);
+  if (!match) {
+    return null;
+  }
+  // Quita los contenedores de mensajes (mismo DTO bajo distintos nombres).
+  return match[2].replace(
+    /<(?:[\w-]+:)?(listaMensajes|mensajesList|codigosRespuestas)(?:\s[^>]*)?>[\s\S]*?<\/(?:[\w-]+:)?\1>/gi,
+    "",
+  );
+}
+
+/**
  * Parseo TOLERANTE (regex, sin dependencias) de una respuesta SIAT a un objeto
  * normalizado. Patron comun del SIAT: transaccion:boolean + lista de mensajes
  * {codigo, descripcion}; las recepciones agregan codigoRecepcion y codigoEstado
- * (901 pendiente / 904 observada / 908 validada). Campos ausentes -> null.
- *
- * [VERIFICAR los nombres EXACTOS de los elementos de respuesta contra el XSD del
- * piloto antes de emitir real (listaMensajes vs mensajesList vs codigosRespuestas
- * es el mismo DTO; este parser es agnostico al contenedor).]
+ * (901 pendiente / 904 observada / 908 validada); cuis/cufd devuelven el VALOR
+ * en <codigo> + fechaVigencia (+ codigoControl en el CUFD), que se extraen solo
+ * de DENTRO del bloque Respuesta* (ver extractRespuestaBody). Campos ausentes
+ * -> null. Contenedor de mensajes confirmado en vivo 2026-08-06: mensajesList
+ * con {codigo:int, descripcion:string}.
  */
 export function parseSoapResponse(xmlString) {
   const xml = String(xmlString ?? "");
+  const respuesta = extractRespuestaBody(xml);
   return {
     transaccion: parseBoolean(extractTag(xml, "transaccion")),
     codigoEstado: toIntOrNull(extractTag(xml, "codigoEstado")),
     codigoRecepcion: extractTag(xml, "codigoRecepcion"),
     codigoDescripcion: extractTag(xml, "codigoDescripcion"),
+    codigo: respuesta ? extractTag(respuesta, "codigo") : null,
+    codigoControl: respuesta ? extractTag(respuesta, "codigoControl") : null,
+    fechaVigencia: respuesta ? extractTag(respuesta, "fechaVigencia") : null,
     mensajes: extractMensajes(xml),
   };
 }
