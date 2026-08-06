@@ -18,19 +18,27 @@
 // hace X", el caso esta midiendo el codigo en vez del negocio y no va.
 //
 // Los 3 datos que califican son universales: RUBRO · TAMAÑO DEL EQUIPO · CIUDAD. Los sillones
-// son un dato de RAMA: se piden solo a odontología, despues de los 3, y no bloquean la demo.
+// son un dato de RAMA: se piden solo a odontología y no bloquean nada.
+//
+// ORDEN DEL EMBUDO (2026-08-06): valor + horarios -> reserva -> 3 preguntas. Los datos ya NO son
+// un peaje para llegar a la oferta: si el prospecto los cuenta antes, se guardan (y M2 no se los
+// vuelve a pedir); si no, se piden con la demo ya reservada. Por eso muchos casos que antes
+// esperaban `calificado` ahora esperan `repregunta` (el bot acusa el dato y vuelve a ofrecer el
+// horario) o `demo_agendada`: lo que se mide es lo mismo — que el dato se guarde bien y que no se
+// pregunte dos veces —, cambio el punto del embudo donde pasa.
 //
 // El banco NO esta escrito para aprobar: casi todos los casos son mensajes que un vendedor
 // humano contestaria sin pensar. Un banco que da 100% no encontro nada.
 //
-// Estado al reescribirlo para el bot multi-rubro (2026-07-31): 60/60. Ese numero NO significa que
-// el bot este terminado — significa que estos 60 mensajes ya los entiende. Ocho de estos casos se
+// Estado al reordenar el embudo (2026-08-06): 62/62. Ese numero NO significa que el bot este
+// terminado — significa que estos 62 mensajes ya los entiende. Ocho de los casos originales se
 // escribieron ANTES de saber que contestaba el bot y fallaron: el que confundia soporte con la
 // bronca contra el sistema de otro, "hablo con una persona?" contado como un equipo de una
 // persona, "no me anda internet" mandado a soporte, "somos 25 obreros" sin tamaño, "tengo 3
-// tiendas" sin rubro y "es gratis?" fuera de la rama de precio. Cada uno se arreglo en el bot,
-// nunca aflojando el caso. El proximo que toque esto: agregar mensajes que HOY fallen, no mas
-// mensajes que ya pasan.
+// tiendas" sin rubro y "es gratis?" fuera de la rama de precio. Los dos ultimos nacieron con el
+// orden nuevo: el "2" que es la opcion B y no un equipo de 2, y el "otro" que M0 promete. Cada
+// uno se arreglo en el bot, nunca aflojando el caso. El proximo que toque esto: agregar mensajes
+// que HOY fallen, no mas mensajes que ya pasan.
 
 /** Mensaje que entrega los 3 datos de calificacion de una sola vez, bien escrito. */
 const CALIFICA = "tengo una ferreteria, somos 5 y estoy en santa cruz";
@@ -42,75 +50,75 @@ export const BENCH_CASES = Object.freeze([
   // =========================================================================
   {
     id: "hola-suelto",
-    note: "todo el que escribe a este numero viene del CTA de Lucia: un 'hola' pelado abre el guion igual (spec §2.3). Y ese guion no puede nombrar un rubro: el producto es Onia, la plataforma — hablarle de sillones a un ferretero antes de saber a que se dedica es venderle el modulo de otro",
+    note: "todo el que escribe a este numero viene del CTA de Lucia: un 'hola' pelado abre el guion igual (spec §2.3). La bienvenida ya trae los 2 horarios y no cobra una sola pregunta. Y no puede nombrar un rubro: el producto es Onia, la plataforma — hablarle de sillones a un ferretero antes de saber a que se dedica es venderle el modulo de otro",
     tags: ["arranque", "naming"],
     turns: ["hola"],
     said: {},
-    expect: { route: "bienvenida", stage: "esperando_calificacion", replyMustNot: [/dental/i, /sillon/i, /clinica/i] },
+    expect: { route: "bienvenida", stage: "esperando_horario", replyMustNot: [/dental/i, /sillon/i, /clinica/i] },
   },
   {
     id: "ferreteria-tres-datos-primer-mensaje",
-    note: "una ferreteria es hoy un cliente tan bueno como una clinica: con los 3 datos en el primer mensaje se presenta como bot y ofrece horarios, sin re-preguntar nada",
+    note: "una ferreteria es hoy un cliente tan bueno como una clinica: con los 3 datos en el primer mensaje se presenta como bot, GUARDA los tres y ofrece los horarios. Los datos ya no abren ni cierran nada — se guardan para no volver a pedirlos en M2",
     tags: ["arranque", "calificacion", "comercio"],
     turns: ["hola quiero la demo, tengo una ferreteria, somos 5 y estoy en santa cruz"],
     said: CALIFICADO,
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "bienvenida", stage: "esperando_horario" },
   },
   {
     id: "restaurante-tres-datos",
-    note: "gastronomia: mismo embudo, sin una sola pregunta de sillones — preguntarle a un restaurante por sillones dentales lo manda a otro proveedor",
+    note: "contesta contando su negocio en vez de elegir horario: se le acusa recibo (asi no lo repite) y se le vuelven a poner los dos horarios. Sin una sola pregunta de sillones — preguntarle a un restaurante por sillones dentales lo manda a otro proveedor",
     tags: ["calificacion", "gastronomia"],
     turns: ["DEMO", "tengo un restaurante, somos 12 personas, en cochabamba"],
     said: { industry: "gastronomia", teamSize: 12, city: "Cochabamba" },
-    expect: { route: "calificado", stage: "esperando_horario", replyMustNot: [/sillon/i] },
+    expect: { route: "repregunta", stage: "esperando_horario", replyMustNot: [/sillon/i] },
   },
   {
     id: "dental-contesta-la-rama",
-    note: "odontologia es el UNICO rubro con dato extra: con los 3 universales dados se pregunta por los sillones, y recien con esa respuesta se ofrecen los 2 horarios",
+    note: "odontologia es el UNICO rubro con dato extra: con la demo YA reservada y los 3 universales contestados se pregunta por los sillones, y con esa respuesta se cierra la captura",
     tags: ["calificacion", "dental", "rama"],
-    turns: ["DEMO", "soy dentista, somos 4 en la clinica, en cochabamba", "3"],
+    turns: ["DEMO", "A", "soy dentista, somos 4 en la clinica, en cochabamba", "3"],
     said: { industry: "dental", teamSize: 4, city: "Cochabamba", chairs: 3 },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "calificado", stage: "demo_agendada" },
   },
   {
     id: "dental-con-sillones-de-una",
-    note: "si el dentista ya dijo los sillones en el mismo mensaje, volver a preguntarselos es el error que hace parecer que el bot no lee: pasa derecho a los horarios",
+    note: "si el dentista ya dijo los sillones en el mismo mensaje, volver a preguntarselos es el error que hace parecer que el bot no lee: se cierra la captura sin la pregunta de rama",
     tags: ["calificacion", "dental", "rama"],
-    turns: ["DEMO", "soy dentista, tengo 2 sillones, somos 3, en sucre"],
+    turns: ["DEMO", "A", "soy dentista, tengo 2 sillones, somos 3, en sucre"],
     said: { industry: "dental", teamSize: 3, city: "Sucre", chairs: 2 },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "calificado", stage: "demo_agendada" },
   },
   {
     id: "dental-no-contesta-la-rama-igual-agenda",
-    note: "el dato de rama es un lujo, no un requisito: si el dentista no contesta cuantos sillones tiene, igual se le ofrecen los horarios. Cambiar una demo por un campo del CRM es un mal negocio",
+    note: "el dato de rama es un lujo, no un requisito: si el dentista no sabe cuantos sillones tiene, no se insiste y la demo sigue reservada. Cambiar una demo por un campo del CRM es un mal negocio",
     tags: ["calificacion", "dental", "rama"],
-    turns: ["DEMO", "soy dentista, somos 4 en la clinica, en cochabamba", "uf ni idea, depende del turno"],
+    turns: ["DEMO", "A", "soy dentista, somos 4 en la clinica, en cochabamba", "ni idea de eso, lo que me mata son los cobros"],
     said: { industry: "dental", teamSize: 4, city: "Cochabamba" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "dolor", reason: "cobros", stage: "demo_agendada" },
   },
   {
     id: "rubro-sin-tamano",
-    note: "dijo a que se dedica y donde, falta el tamaño: se pide SOLO lo que falta (M1a), sin repetir lo ya contestado",
+    note: "contesto con su negocio en vez de elegir horario: se le acusa lo que dijo y se le vuelve a pedir el horario, que es lo unico pendiente antes de reservar. Lo que falte se pide DESPUES, en M2",
     tags: ["calificacion", "comercio"],
     turns: ["DEMO", "tengo una libreria en sucre"],
     said: { industry: "comercio", city: "Sucre" },
-    expect: { route: "repregunta", stage: "esperando_calificacion" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
   {
     id: "tamano-sin-rubro",
-    note: "el caso inverso: dio el tamaño y la ciudad pero no a que se dedica, que es justo lo que decide si Onia le sirve",
+    note: "el caso inverso: dio el tamaño y la ciudad pero no a que se dedica. Los dos datos se guardan igual (M2 despues solo pedira el que falta) y el bot vuelve a lo unico que bloquea: el horario",
     tags: ["calificacion"],
     turns: ["DEMO", "somos 6, en la paz"],
     said: { teamSize: 6, city: "La Paz" },
-    expect: { route: "repregunta", stage: "esperando_calificacion" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
   {
     id: "numero-pelado-es-el-equipo",
-    note: "el bot pregunto cuanta gente trabaja ahi y el prospecto contesta '4': es la respuesta a lo que se le pregunto, no un dato suelto",
+    note: "con la demo ya reservada el bot pregunto cuanta gente trabaja ahi y el prospecto contesta '4': es la respuesta a lo que se le pregunto, no un dato suelto",
     tags: ["calificacion", "coloquial"],
-    turns: ["DEMO", "tengo una libreria en sucre", "4"],
+    turns: ["DEMO", "A", "tengo una libreria en sucre", "4"],
     said: { industry: "comercio", teamSize: 4, city: "Sucre" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "calificado", stage: "demo_agendada" },
   },
   {
     id: "obreros-tambien-son-personas",
@@ -118,7 +126,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["calificacion", "servicios", "coloquial"],
     turns: ["DEMO", "hola somos constructora, 25 obreros, santa cruz"],
     said: { industry: "servicios", teamSize: 25, city: "Santa Cruz" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
   {
     id: "tres-tiendas-es-un-comercio",
@@ -126,7 +134,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["calificacion", "comercio", "coloquial"],
     turns: ["DEMO", "tengo 3 tiendas, somos 9 en total, en cochabamba"],
     said: { industry: "comercio", teamSize: 9, city: "Cochabamba" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
   {
     id: "rubro-que-no-tenemos-mapeado",
@@ -134,7 +142,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["calificacion", "coloquial"],
     turns: ["DEMO", "me dedico a fumigar oficinas, somos 3, en montero"],
     said: { industry: "otro", teamSize: 3, city: "Montero" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
 
   // =========================================================================
@@ -142,11 +150,11 @@ export const BENCH_CASES = Object.freeze([
   // =========================================================================
   {
     id: "ciudad-en-reunion",
-    note: "'estoy en reunion' es la excusa mas comun de WhatsApp: NO dice una ciudad. Guardar 'Reunion' como ciudad ensucia el CRM y el bot lo repite en voz alta",
+    note: "'estoy en reunion' es la excusa mas comun de WhatsApp: NO dice una ciudad. Guardar 'Reunion' como ciudad ensucia el CRM y el bot lo repite en voz alta. Con los dos horarios ya sobre la mesa, el 'te escribo mas tarde' es ademas un 'ninguno me sirve': eso lo coordina un humano",
     tags: ["extraccion", "coloquial"],
     turns: ["DEMO", "estoy en reunion, te escribo mas tarde"],
     said: {},
-    expect: { route: "off_guion", stage: "esperando_calificacion" },
+    expect: { route: "handoff", reason: "ningun_horario_le_sirve", stage: "handoff_humano" },
   },
   {
     id: "estoy-en-la-tienda-no-declara-rubro",
@@ -154,7 +162,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["extraccion", "regla-de-oro", "coloquial"],
     turns: ["DEMO", "estoy en la tienda ahora, te escribo en un rato"],
     said: {},
-    expect: { route: "off_guion", stage: "esperando_calificacion" },
+    expect: { route: "off_guion", stage: "esperando_horario" },
   },
   {
     id: "verbo-suelto-no-declara-rubro",
@@ -162,7 +170,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["extraccion", "regla-de-oro", "coloquial"],
     turns: ["DEMO", "hago tortas por encargo, una persona nomas, en cocha"],
     said: { teamSize: 1, city: "Cochabamba" },
-    expect: { route: "repregunta", stage: "esperando_calificacion" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
   {
     id: "un-consultorio-no-es-un-sillon",
@@ -170,7 +178,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["extraccion", "regla-de-oro", "dental"],
     turns: ["DEMO", "soy dentista, somos 3, en la paz", "tengo un consultorio nuevo, recien abierto"],
     said: { industry: "dental", teamSize: 3, city: "La Paz" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "off_guion", stage: "esperando_horario" },
   },
   {
     id: "corrige-el-tamano",
@@ -178,7 +186,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["extraccion", "correccion", "comercio"],
     turns: ["DEMO", "tengo una ferreteria, somos 5", "en realidad somos 8, y estoy en la paz"],
     said: { industry: "comercio", teamSize: 8, city: "La Paz" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
   {
     id: "negocio-grande-no-se-descarta",
@@ -186,7 +194,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["calificacion", "comercio"],
     turns: ["DEMO", "tenemos una distribuidora, somos 40 empleados, en santa cruz"],
     said: { industry: "comercio", teamSize: 40, city: "Santa Cruz" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
 
   // =========================================================================
@@ -217,7 +225,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["precio"],
     turns: ["DEMO", "cuanto sale?"],
     said: {},
-    expect: { route: "pregunta_precio", stage: "esperando_calificacion" },
+    expect: { route: "pregunta_precio", stage: "esperando_horario" },
   },
   {
     id: "precio-muy-caro",
@@ -225,15 +233,15 @@ export const BENCH_CASES = Object.freeze([
     tags: ["precio", "coloquial"],
     turns: ["DEMO", "uff eso debe ser muy caro para un negocio chico"],
     said: {},
-    expect: { route: "pregunta_precio", stage: "esperando_calificacion" },
+    expect: { route: "pregunta_precio", stage: "esperando_horario" },
   },
   {
     id: "precio-justo-antes-de-la-rama",
-    note: "el dentista completa los 3 datos y pregunta el precio en el mismo mensaje: se le contesta M4 y se sigue por donde iba, que es la pregunta de rama — ni se saltea la rama ni se le ofrecen horarios antes de tiempo",
+    note: "con la demo ya reservada, el dentista completa los 3 datos y pregunta el precio en el mismo mensaje: se le contesta M4 y se sigue por donde iba, que es la pregunta de rama — la respuesta de precio no puede tragarse el dato con el que Sergio prepara una demo dental",
     tags: ["precio", "dental", "rama", "mezcla"],
-    turns: ["DEMO", "soy dentista, somos 4, en sucre. cuanto sale?"],
+    turns: ["DEMO", "A", "soy dentista, somos 4, en sucre. cuanto sale?"],
     said: { industry: "dental", teamSize: 4, city: "Sucre" },
-    expect: { route: "pregunta_precio", stage: "esperando_calificacion", replyMust: [/sillones/i] },
+    expect: { route: "pregunta_precio", stage: "demo_agendada", replyMust: [/sillones/i] },
   },
   {
     id: "precio-es-gratis",
@@ -241,7 +249,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["precio", "coloquial"],
     turns: ["DEMO", "es gratis?"],
     said: {},
-    expect: { route: "pregunta_precio", stage: "esperando_calificacion" },
+    expect: { route: "pregunta_precio", stage: "esperando_horario" },
   },
   {
     id: "precio-con-los-tres-datos",
@@ -269,7 +277,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["siat"],
     turns: ["DEMO", "ya emiten al sin ustedes?"],
     said: {},
-    expect: { route: "pregunta_siat", stage: "esperando_calificacion" },
+    expect: { route: "pregunta_siat", stage: "esperando_horario" },
   },
   {
     id: "es-deducible-de-impuestos",
@@ -305,7 +313,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["opt-out", "coloquial"],
     turns: ["DEMO", "la demanda esta baja este mes pero somos 4"],
     said: { teamSize: 4 },
-    expect: { route: "repregunta", stage: "esperando_calificacion" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
   {
     id: "no-me-interesa-el-precio",
@@ -313,7 +321,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["opt-out", "precio", "coloquial"],
     turns: ["DEMO", "no me interesa el precio ahora, quiero ver como funciona"],
     said: {},
-    expect: { route: "pregunta_precio", stage: "esperando_calificacion" },
+    expect: { route: "pregunta_precio", stage: "esperando_horario" },
   },
   {
     id: "opt-out-y-despues-info",
@@ -329,7 +337,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["opt-out"],
     turns: ["DEMO", "stop", "DEMO"],
     said: {},
-    expect: { route: "reabierto_por_demo", stage: "esperando_calificacion" },
+    expect: { route: "reabierto_por_demo", stage: "esperando_horario" },
   },
 
   // =========================================================================
@@ -374,7 +382,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["soporte", "coloquial"],
     turns: ["DEMO", "no me anda internet, te escribo luego"],
     said: {},
-    expect: { route: "off_guion", stage: "esperando_calificacion" },
+    expect: { route: "off_guion", stage: "esperando_horario" },
   },
   {
     id: "ya-tengo-un-sistema-es-objecion",
@@ -382,7 +390,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["soporte", "off-guion"],
     turns: ["DEMO", "ya tengo un sistema"],
     said: {},
-    expect: { route: "off_guion", stage: "esperando_calificacion" },
+    expect: { route: "off_guion", stage: "esperando_horario" },
   },
   {
     id: "bronca-con-su-sistema-actual",
@@ -390,7 +398,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["soporte", "queja", "coloquial"],
     turns: ["DEMO", "el sistema que uso ahora es una porqueria, no sirve para nada"],
     said: {},
-    expect: { route: "off_guion", stage: "esperando_calificacion" },
+    expect: { route: "off_guion", stage: "esperando_horario" },
   },
   {
     id: "ya-somos-clientes-otra-sucursal",
@@ -430,11 +438,11 @@ export const BENCH_CASES = Object.freeze([
   },
   {
     id: "dentista-que-cuenta-lo-que-hace",
-    note: "el prospecto se presenta contando su especialidad y da los 3 datos: nadie le esta pidiendo al bot una opinion clinica. Derivar aca pierde una calificacion completa",
+    note: "el prospecto se presenta contando su especialidad y da los 3 datos: nadie le esta pidiendo al bot una opinion clinica. Derivar aca pierde una calificacion completa — y con la demo ya reservada, lo que corresponde es la pregunta de rama",
     tags: ["clinico-legal", "extraccion", "dental", "mezcla"],
-    turns: ["DEMO", "soy dueña de un consultorio dental, hago endodoncia, somos 3 y estoy en sucre"],
+    turns: ["DEMO", "A", "soy dueña de un consultorio dental, hago endodoncia, somos 3 y estoy en sucre"],
     said: { industry: "dental", teamSize: 3, city: "Sucre" },
-    expect: { route: "rama_rubro", reason: "dental", stage: "esperando_calificacion" },
+    expect: { route: "rama_rubro", reason: "dental", stage: "demo_agendada" },
   },
   {
     id: "estudio-de-abogados-es-prospecto",
@@ -442,7 +450,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["clinico-legal", "servicios"],
     turns: ["DEMO", "somos 4 abogados, tenemos un estudio en la paz"],
     said: { industry: "servicios", teamSize: 4, city: "La Paz" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
   {
     id: "hablo-con-una-persona",
@@ -458,15 +466,31 @@ export const BENCH_CASES = Object.freeze([
   // =========================================================================
   {
     id: "slot-letra-a",
-    note: "'A' es la respuesta que el propio M1b pide",
+    note: "'A' es la respuesta que el propio M0 pide, en el primer mensaje",
     tags: ["horario"],
     turns: ["DEMO", CALIFICA, "A"],
     said: CALIFICADO,
     expect: { route: "demo_agendada", stage: "demo_agendada" },
   },
   {
+    id: "slot-numero-2-es-la-opcion-b",
+    note: "un '2' pelado contestando la oferta es la OPCION B, no un equipo de 2 personas. Con los horarios en el primer mensaje esta respuesta llega antes de que el bot haya preguntado nada, asi que leerla como dato inventa el numero con el que despues le habla al prospecto (viola §2.1)",
+    tags: ["horario", "regla-de-oro", "coloquial"],
+    turns: ["DEMO", "2"],
+    said: {},
+    expect: { route: "demo_agendada", stage: "demo_agendada" },
+  },
+  {
+    id: "slot-otro-lo-coordina-un-humano",
+    note: "M0 promete con todas las letras: 'escribime otro y lo coordinamos'. Si el bot no entiende su propia promesa, la respuesta a la unica pregunta que hace el primer mensaje termina en la rama que no entiende",
+    tags: ["horario", "coloquial"],
+    turns: ["DEMO", "otro"],
+    said: {},
+    expect: { route: "handoff", reason: "ningun_horario_le_sirve", stage: "handoff_humano" },
+  },
+  {
     id: "slot-ninguno-me-sirve",
-    note: "si ninguno le sirve, lo coordina Sergio: lo dice el propio M1b",
+    note: "si ninguno le sirve, lo coordina Sergio: lo dice el propio M0",
     tags: ["horario"],
     turns: ["DEMO", CALIFICA, "ninguno me sirve"],
     said: CALIFICADO,
@@ -517,7 +541,7 @@ export const BENCH_CASES = Object.freeze([
     tags: ["audio"],
     turns: ["DEMO", { kind: "voice", transcript: "" }],
     said: {},
-    expect: { route: "audio_sin_transcripcion", stage: "esperando_calificacion" },
+    expect: { route: "audio_sin_transcripcion", stage: "esperando_horario" },
   },
   {
     id: "audio-transcrito-con-muletillas",
@@ -528,7 +552,7 @@ export const BENCH_CASES = Object.freeze([
       { kind: "voice", transcript: "eeeh o sea tengo una pizzeria, somos seis personas, aca en santa cruz" },
     ],
     said: { industry: "gastronomia", teamSize: 6, city: "Santa Cruz" },
-    expect: { route: "calificado", stage: "esperando_horario" },
+    expect: { route: "repregunta", stage: "esperando_horario" },
   },
   {
     id: "adjunto-sin-texto",
@@ -542,10 +566,10 @@ export const BENCH_CASES = Object.freeze([
     id: "humano-a-cargo",
     note: "si Sergio ya contesto en esta conversacion, el bot no vuelve a hablar nunca (D7 / §3.2)",
     tags: ["silencio", "compliance"],
-    state: { botStage: "esperando_calificacion", humanTookOver: true },
+    state: { botStage: "esperando_horario", humanTookOver: true },
     turns: ["hola, sigo interesado"],
     said: {},
-    expect: { route: "silencio", reason: "humano_a_cargo", stage: "esperando_calificacion" },
+    expect: { route: "silencio", reason: "humano_a_cargo", stage: "esperando_horario" },
   },
 
   // =========================================================================
@@ -565,6 +589,6 @@ export const BENCH_CASES = Object.freeze([
     tags: ["naming"],
     turns: ["hola"],
     said: {},
-    expect: { route: "bienvenida", stage: "esperando_calificacion", replyMustNot: [/dental/i, /sillon/i, /clinica/i] },
+    expect: { route: "bienvenida", stage: "esperando_horario", replyMustNot: [/dental/i, /sillon/i, /clinica/i] },
   },
 ]);

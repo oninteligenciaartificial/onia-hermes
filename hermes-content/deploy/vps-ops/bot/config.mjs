@@ -30,80 +30,87 @@ export const DEMO_SLOTS = Object.freeze([
 // y el dato de un rubro se pide en una RAMA. Lo que NO cambia y no se negocia: el disclosure de
 // bot en la primera linea de M0 (D2), el opt-out (M6 + triggers), que el guion sea texto fijo y
 // versionado, y que el bot NUNCA cotice (M4_BODY / N1).
+//
+// ORDEN DEL EMBUDO (cambiado el 2026-08-06, decision de negocio aprobada): primero el COMPROMISO,
+// despues los datos. Antes era "3 preguntas -> horarios -> reserva"; ahora es
+// "valor + horarios -> reserva -> 3 preguntas". Por que: las 3 preguntas YA NO DESCARTAN A NADIE
+// (ver M1c) — solo personalizan el mensaje. O sea que cobraban friccion en el momento de maximo
+// interes a cambio de casi nada. Pedidas DESPUES de que el prospecto ya dijo que si, la tasa de
+// respuesta es mucho mayor y no cuestan la reunion.
 // ---------------------------------------------------------------------------
 export const SCRIPT = Object.freeze({
-  // M0 — bienvenida + disclosure + las 3 preguntas juntas.
-  // Las 3 preguntas son UNIVERSALES (rubro · tamaño · ciudad): Onia es una plataforma por modulos,
-  // no un producto dental. Preguntar por sillones a todo el mundo dejaba afuera al 95% del mercado.
-  // El tamaño del equipo es el proxy universal de capacidad: lo entiende una ferreteria, un
-  // restaurante y una clinica. El dato fino del rubro (sillones, cajas, mesas) se pregunta DESPUES
-  // y solo si ese rubro lo necesita (ver `qualification.branches`).
-  // El maximo sigue siendo 3 preguntas para todos: la 4ta es de rama, no de todos.
+  // M0 — bienvenida + disclosure + que es Onia + los 2 horarios, todo en el primer mensaje.
+  // El disclosure de bot va en la PRIMERA linea (D2) y ademas es el argumento de venta: lo que el
+  // prospecto esta viendo funcionar es exactamente lo que se le vende. No pide un solo dato: la
+  // unica pregunta del mensaje es la que cierra la reunion.
   M0: [
     "¡Hola! Soy el asistente automático de Onia. Sí, un bot 🙂",
-    "Gracias por escribir. Te agendo la demo en 2 minutos, pero primero quiero saber si te va a servir de verdad.",
     "",
-    "Contame tres cosas rápidas:",
-    "1️⃣ ¿A qué se dedica tu negocio?",
-    "2️⃣ ¿Cuántas personas trabajan ahí, contándote a vos?",
-    "3️⃣ ¿En qué ciudad estás?",
-  ].join("\n"),
-
-  // M0_DISCLOSURE — AGREGADO: mismas 2 primeras lineas de M0, sin las 3 preguntas. Se usa cuando
-  // el primer mensaje YA trae los 3 datos: el disclosure es innegociable (D2) pero preguntar lo
-  // que el prospecto acaba de contestar hace quedar mal al producto.
-  M0_DISCLOSURE: [
-    "¡Hola! Soy el asistente automático de Onia. Sí, un bot 🙂",
-    "Gracias por escribir.",
-  ].join("\n"),
-
-  // M1a — falta algun dato. Maximo 2 re-preguntas; a la tercera, handoff.
-  M1a: "Perfecto, anotado {{datos_que_si_dio}}. Me falta sólo {{dato_faltante}} — ¿me lo pasás?",
-
-  // M1_RAMA_DENTAL — pregunta EXTRA de rama, no del guion general. Solo la ve el rubro que la
-  // necesita; el resto pasa derecho a los horarios. Tiene que decir el `missLabel` del campo de
-  // rama con esas mismas palabras (el banco lee de ahi que dato se esta pidiendo).
-  M1_RAMA_DENTAL: [
-    "Perfecto, eso me sirve. Una sola cosa más antes de pasarte los horarios: ¿cuántos sillones tenés? (1, 2, 3 o más)",
-  ].join("\n"),
-
-  // M1b — calificado, ofrece los 2 horarios. Habla del TAMAÑO del equipo, que es lo que se le
-  // pregunta a cualquier rubro. {{nota_modulo}} agrega la frase del modulo SOLO si ese rubro
-  // tiene uno armado de verdad (hoy: odontologia). Vacio para el resto: no se nombra lo que no hay.
-  M1b: [
-    "Buenísimo. {{tamano_frase}} en {{ciudad}}, esto te sirve, sí.{{nota_modulo}}",
+    "Y esto que estás viendo es justo lo que vendemos: un asistente que atiende tu WhatsApp 24/7 — responde, califica y agenda solo, sin que vos toques el teléfono.",
     "",
-    "La demo la da {{humano}} (humano, esta vez 😄): son 15-20 minutos por videollamada — o presencial si estás en Santa Cruz. Te muestra tu panel, el agente que responde y reprograma solo por WhatsApp, y hacen la cuenta con TUS números.",
+    "Te muestro cómo quedaría en TU negocio en 15 minutos por videollamada. Tengo estos dos horarios:",
     "",
-    "¿Cuál te va mejor?",
     "**A)** {{slot_a}}",
     "**B)** {{slot_b}}",
     "",
-    "(Si ninguno te sirve, decime y lo coordina {{humano}} directo.)",
+    '¿Cuál te va mejor? (o escribime "otro" y lo coordinamos)',
+  ].join("\n"),
+
+  // M0b — el prospecto contesto con datos de su negocio en vez de elegir horario. Se le acusa
+  // recibo (para que no repita lo que ya dijo) y se le vuelven a poner los dos horarios sobre la
+  // mesa. Mandarlo a la rama LLM por un mensaje que se entendio perfecto gasta una respuesta y,
+  // al segundo, un handoff — en alguien que esta colaborando.
+  M0b: [
+    "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
+    "",
+    "¿Cuál te va mejor? **A)** {{slot_a}} · **B)** {{slot_b}}",
+  ].join("\n"),
+
+  // M1a — falta algun dato DESPUES de agendar. Maximo 2 re-preguntas; a la tercera se deja de
+  // insistir (la demo ya esta reservada: un campo del CRM no vale molestar a quien ya dijo que si).
+  M1a: "Perfecto, anotado {{datos_que_si_dio}}. Me falta sólo {{dato_faltante}} — ¿me lo pasás?",
+
+  // M1_RAMA_DENTAL — pregunta EXTRA de rama, no del guion general. Solo la ve el rubro que la
+  // necesita. Tiene que decir el `missLabel` del campo de rama con esas mismas palabras (el banco
+  // lee de ahi que dato se esta pidiendo).
+  M1_RAMA_DENTAL: [
+    "Perfecto, eso me sirve. Una sola cosa más para que {{humano}} llegue con la demo armada: ¿cuántos sillones tenés? (1, 2, 3 o más)",
   ].join("\n"),
 
   // M1c — descalificado suave. YA NO se descarta por rubro ni por tamaño (Onia es una plataforma
   // por modulos: una ferreteria de 12 personas es mejor cliente, no peor). Este texto queda solo
   // para quien claramente NO es un negocio: alguien buscando trabajo o alguien que nos quiere
   // vender algo. Ante la duda NO se descarta: se deriva a un humano.
+  // ESTE COMENTARIO ES EL FUNDAMENTO DEL ORDEN NUEVO: si las 3 preguntas ya no descartan a nadie,
+  // no hay ninguna razon para cobrarlas antes de ofrecer la reunion. El descarte se evalua igual
+  // en cualquier punto del embudo — tambien despues de reservar, cuando llegan los datos de M2.
   M1c: [
     "Gracias por contarme. {{producto}} es el sistema que usa un negocio para trabajar, así que por acá no te voy a poder ayudar — no es una bolsa de trabajo ni un lugar para ofrecernos servicios.",
     "",
     "Si más adelante manejás un negocio (o trabajás en uno al que le sirva), escribime DEMO y lo agendamos igual.",
   ].join("\n"),
 
-  // M2 — confirmacion + pre-arma la demo.
+  // M2 — confirmacion de la reserva + LAS PREGUNTAS. Es el nuevo lugar de la calificacion: el
+  // prospecto ya se comprometio, asi que contesta mucho mas que en el primer mensaje.
+  // {{preguntas}} lo arma el motor con los datos que TODAVIA faltan (nunca vuelve a pedir lo que
+  // el prospecto ya dijo) + la pregunta del dolor, que va SIEMPRE al final de la lista.
   M2: [
     "Listo, agendado: **{{dia_hora_elegida}}**. Te llega el link el mismo día por acá.",
     "",
-    "Para que {{humano}} llegue con la demo armada para vos: ¿qué es lo que más tiempo te come hoy — la **agenda**, los **cobros**, o los **clientes que no vuelven**?",
+    "Para que {{humano}} llegue con la demo armada para vos, contame rápido:",
+    "{{preguntas}}",
     "",
-    "(Respondé con una palabra y listo. Si no, igual nos vemos {{dia}}.)",
+    "(Con una palabra en cada una alcanza. Si no, igual nos vemos {{dia}}.)",
   ].join("\n"),
 
-  // M2b — acuse del dolor capturado. AGREGADO (no esta en la spec): sin esto el bot queda mudo
-  // ante la respuesta que el propio M2 pide. Sigue siendo texto fijo y sin cifras.
-  M2b: "Anotado: **{{pain_point}}**. {{humano}} llega con eso preparado. Nos vemos {{dia_hora_elegida}}.",
+  // M2_PREGUNTA_DOLOR — el ultimo item de la lista de M2. Vive aca y no en el motor porque es
+  // copy de cliente, como el resto del guion.
+  M2_PREGUNTA_DOLOR:
+    "¿Qué es lo que más tiempo te come hoy: la **agenda**, los **cobros** o los **clientes que no vuelven**?",
+
+  // M2b — acuse de lo que el prospecto contesto despues de agendar (datos y/o dolor). Sin esto el
+  // bot queda mudo ante la respuesta que el propio M2 pide. Sigue siendo texto fijo y sin cifras.
+  M2b: "Anotado: {{datos_que_si_dio}}. {{humano}} llega con eso preparado.{{nota_modulo}} Nos vemos {{dia_hora_elegida}}.",
 
   // M3 — follow-up unico a las 22 h (dentro de la ventana de servicio de 24 h de Meta).
   M3: [
@@ -185,10 +192,11 @@ export const DEFAULT_CONFIG = Object.freeze({
   }),
 
   qualification: Object.freeze({
-    maxReAsks: 2, // a la 3ra re-pregunta sin datos -> handoff (spec D3)
-    // Los 3 datos UNIVERSALES que se le piden a cualquier negocio. El `missLabel` es el texto con
-    // el que el guion nombra el dato: M0 y M1a lo escriben literal, y el banco lee de ahi que se
-    // esta preguntando. Si cambia uno, cambia el guion.
+    maxReAsks: 2, // a la 3ra re-pregunta sin datos se deja de insistir (spec D3)
+    // Los 3 datos UNIVERSALES que se le piden a cualquier negocio, DESPUES de reservar la demo.
+    // El `missLabel` es el texto con el que el guion nombra el dato: M2 y M1a lo escriben literal
+    // (M2 lo arma con `{{preguntas}}`), y el banco lee de ahi que se esta preguntando. Si cambia
+    // uno, cambia el guion.
     fields: Object.freeze([
       Object.freeze({ key: "industry", missLabel: "a qué se dedica tu negocio" }),
       Object.freeze({ key: "teamSize", missLabel: "cuántas personas trabajan ahí" }),
@@ -196,9 +204,8 @@ export const DEFAULT_CONFIG = Object.freeze({
     ]),
     // RAMIFICACION POR RUBRO. Un rubro puede pedir UN dato extra despues de los 3 universales.
     // Hoy solo odontologia: el sillon es su unidad de capacidad y Sergio llega a la demo sabiendo
-    // de que tamaño hablar. Cualquier otro rubro pasa DERECHO a los horarios — una pregunta de
-    // mas antes de ofrecer la reunion cuesta demos.
-    // El dato de rama NO bloquea: si el prospecto no lo contesta, igual se le ofrecen los horarios.
+    // de que tamaño hablar. Cualquier otro rubro no ve esta pregunta nunca.
+    // El dato de rama NO bloquea nada: se pregunta una sola vez, con la demo YA reservada.
     branches: Object.freeze({
       dental: Object.freeze({
         key: "dental",

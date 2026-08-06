@@ -174,7 +174,7 @@ test("un turno completo funciona sin base: el bot responde igual (estado en memo
   assert.equal(result.ok, true);
   assert.equal(result.duplicate, false);
   assert.equal(result.stageBefore, "nuevo");
-  assert.equal(result.stageAfter, "esperando_calificacion");
+  assert.equal(result.stageAfter, "esperando_horario");
   assert.equal(result.send.length, 1);
   assert.equal(result.send[0].templateKey, "M0");
   assert.match(result.send[0].text, /asistente automático/);
@@ -192,7 +192,7 @@ test("sin base no hay memoria entre turnos: cada mensaje arranca en 'nuevo' (fal
     nowIso: T0,
     llm: async () => "",
   });
-  assert.equal(uno.stageAfter, "esperando_calificacion");
+  assert.equal(uno.stageAfter, "esperando_horario");
   assert.equal(dos.stageBefore, "nuevo");
   assert.ok(dos.send.length > 0, "sigue contestando: nunca queda mudo");
 });
@@ -219,7 +219,7 @@ test("el mismo message_key dos veces avanza el embudo UNA sola vez", async () =>
 
   assert.equal(primero.duplicate, false);
   assert.equal(repetido.duplicate, true);
-  assert.equal(fake.state.botStage, "esperando_calificacion", "el estado no avanzo dos veces");
+  assert.equal(fake.state.botStage, "esperando_horario", "el estado no avanzo dos veces");
 });
 
 test("sin dedup disponible (base caida) el turno sigue, pero lo avisa", async () => {
@@ -234,21 +234,22 @@ test("sin dedup disponible (base caida) el turno sigue, pero lo avisa", async ()
 // 3. Conversacion entera a traves del ejecutor
 // ---------------------------------------------------------------------------
 
-test("camino feliz por runTurn: califica, agenda, crea el lead y avisa a Sergio", async () => {
+test("camino feliz por runTurn: ofrece, agenda, califica, crea el lead y avisa a Sergio", async () => {
   const fake = memoryStore();
   const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "" };
 
   const uno = await runTurn(turn(), deps);
-  const dos = await runTurn(turn({ text: "tengo una ferreteria, somos 5 y estoy en Santa Cruz", message_key: "telegram:2" }), deps);
-  const tres = await runTurn(turn({ text: "A", message_key: "telegram:3" }), deps);
+  const dos = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+  const tres = await runTurn(turn({ text: "tengo una ferreteria, somos 5 y estoy en Santa Cruz", message_key: "telegram:3" }), deps);
 
-  assert.equal(uno.stageAfter, "esperando_calificacion");
-  assert.equal(dos.stageAfter, "esperando_horario");
-  assert.equal(dos.leadKey, "bot-telegram-777", "el lead se crea al calificar, con clave determinista");
-  assert.equal(tres.stageAfter, "demo_agendada");
-  assert.match(tres.send[0].text, /jueves 15:00/);
-  assert.equal(tres.calendar.length, 1, "el evento de calendario queda para n8n");
-  assert.equal(tres.notify.length, 1, "y el aviso a Sergio tambien");
+  assert.equal(uno.stageAfter, "esperando_horario");
+  assert.match(uno.send[0].text, /jueves 15:00/, "la oferta va en el primer mensaje");
+  assert.equal(uno.leadKey, "bot-telegram-777", "el lead nace con la oferta, con clave determinista");
+  assert.equal(dos.stageAfter, "demo_agendada");
+  assert.match(dos.send[0].text, /jueves 15:00/);
+  assert.equal(dos.calendar.length, 1, "el evento de calendario queda para n8n");
+  assert.equal(dos.notify.length, 1, "y el aviso a Sergio tambien");
+  assert.equal(tres.stageAfter, "demo_agendada", "los datos llegan despues, sin mover la reserva");
   assert.deepEqual(fake.state.qualification, { industry: "comercio", teamSize: 5, city: "Santa Cruz" });
 });
 

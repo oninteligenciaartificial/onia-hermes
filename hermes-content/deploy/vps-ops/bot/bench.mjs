@@ -165,18 +165,15 @@ function hasValue(value) {
 
 /**
  * Que datos de calificacion esta pidiendo esta respuesta.
- * Se deriva de config: M1a y PENDING_CALIFICACION escriben literalmente el `missLabel` del
- * campo, y M0 (por diseno del guion) pregunta los tres. bench.test.mjs verifica las dos
- * suposiciones contra el guion real, para que el probe no sobreviva a un cambio de texto.
+ * Se deriva de config: M2, M1a y PENDING_CALIFICACION escriben literalmente el `missLabel` del
+ * campo (M2 arma su lista con esas mismas palabras), asi que alcanza con buscar ese texto en la
+ * respuesta REAL. bench.test.mjs verifica la suposicion contra el guion que sale del motor, para
+ * que el probe no sobreviva a un cambio de texto.
  */
 export function fieldsAsked(replies, config) {
   const asked = new Set();
   const fields = allQualificationFields(config); // incluye el dato de rama (sillones)
   for (const reply of replies || []) {
-    if (reply.templateKey === "M0") {
-      for (const field of config.qualification.fields) asked.add(field.key);
-      continue;
-    }
     const text = normalize(reply.text || "");
     for (const field of fields) {
       if (text.includes(normalize(field.missLabel))) asked.add(field.key);
@@ -264,18 +261,18 @@ export function evaluateCase(bench, config = BENCH_CONFIG, observed = runConvers
   const actual = { route: last.route, reason: last.reason };
   const problems = [];
 
-  // 1. Regla de oro (§2.1): el estado solo avanza con un dato CAPTURADO. Avanzar con un dato
-  //    inventado por un regex, o con un campo vacio, es exactamente lo que la spec prohibe.
+  // 1. Regla de oro (§2.1): el estado solo avanza con un dato CAPTURADO — nunca con uno que el
+  //    prospecto no dijo. Se mira el dato INVENTADO y no el campo vacio: con el embudo nuevo
+  //    (valor + horarios -> reserva -> 3 preguntas) llegar a `demo_agendada` sin los datos es el
+  //    DISEÑO, no un fallo. Lo que sigue prohibido es hablarle a alguien con un dato que un regex
+  //    se imagino: eso ensucia el CRM y el bot lo repite en voz alta.
   const data = dataProblems(bench, state, config);
   if (ADVANCED_STAGES.has(state.botStage)) {
     const invented = data.filter((problem) => problem.kind === "inventado");
-    const empty = config.qualification.fields
-      .filter((field) => !hasValue(state.qualification ? state.qualification[field.key] : undefined))
-      .map((field) => field.key);
-    if (invented.length > 0 || empty.length > 0) {
+    if (invented.length > 0) {
       problems.push({
         kind: "avanzo_sin_dato",
-        detail: `quedo en ${state.botStage} con ${[...invented.map((p) => `${p.key} inventado`), ...empty.map((k) => `${k} vacio`)].join(", ")}`,
+        detail: `quedo en ${state.botStage} con ${invented.map((p) => `${p.key} inventado`).join(", ")}`,
       });
     }
   }
