@@ -64,6 +64,7 @@
 | N3 | Más funciones de empaquetado (RRHH, carpeta contador, docs con vencimiento, reuniones, notas) |
 | N4 | **Internacional**: tax_argentina/tax_colombia como packs fiscales sobre el mismo core + versión GENÉRICA sin fiscal para cualquier país. NO antes de dominar Bolivia |
 | N5 | **Planes por tamaño + configuración**: modo simple (sin IVA/fiscal) vs completo; el plan da el techo, la config elige qué se muestra |
+| N6 | **C21 Acero / hub inmobiliario** (reunión 2026-08-03): NO firmar 50/50 — contraoferta: cliente fundador (precio congelado 12m) + partner comercial 30-35% del SaaS que traiga + exclusividad ACOTADA 6m SOLO si la máster franquicia firma piloto PAGO + marca blanca posible, IP 100% Onia. VERIFICAR antes de creer promesas C21-amplias: autoridad real dentro de la franquicia (máster de Bolivia). Tomar YA gratis: día de inmersión + discovery con asesores. El marketplace de oficios certificados (comisión por trabajo) = capacidad `partners` del core, transversal, entra a Onia con o sin él. Track inmobiliario NO se construye sin piloto pago (regla WOW-con-cliente-pagando) |
 
 ## D. BLOQUEADO EN VOS (nada avanza sin esto)
 
