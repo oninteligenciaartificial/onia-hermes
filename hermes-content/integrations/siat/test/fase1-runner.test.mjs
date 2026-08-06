@@ -12,7 +12,9 @@ import { gunzipSync } from "node:zlib";
 import {
   CUFD_VIGENCIA_MS,
   RUNNER_OPS,
+  Runner,
   normalizeCuisResult,
+  parseArgs,
   SYNC_CASES,
   STAGE_TARGETS,
   STAGE_ORDER,
@@ -468,5 +470,39 @@ describe("plan de etapas", () => {
       "validacionRecepcionMasivaFactura",
       "validacionRecepcionPaqueteFactura",
     ]);
+  });
+});
+
+describe("reintento de casos bloqueados (--retry-blocked)", () => {
+  it("parseArgs reconoce el flag (default false)", () => {
+    assert.equal(parseArgs([]).retryBlocked, false);
+    assert.equal(parseArgs(["--retry-blocked"]).retryBlocked, true);
+    assert.equal(parseArgs(["--etapa", "V", "--retry-blocked"]).etapa, "V");
+  });
+
+  it("clearBlocked limpia SOLO las etapas pedidas y persiste el checkpoint", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    const dir = mkdtempSync(join(tmpdir(), "fase1-"));
+    const stateFile = join(dir, "state.json");
+    const runner = new Runner({
+      token: "t",
+      nit: "5371375010",
+      codigoSistema: "SIS",
+      stateFile,
+      logFile: join(dir, "log.ndjson"),
+      pace: 0,
+    });
+    runner.state.etapas = {
+      V: { done: 0, target: 5, attempts: 35, cases: {}, blockedCases: { "motivo-1": { key: "business:984" } } },
+      VI: { done: 10, target: 10, attempts: 25, cases: {}, blockedCases: { x: { key: "k" } } },
+    };
+    runner.clearBlocked(["V", "VII"]); // VII no existe en el estado: no lanza
+    assert.deepEqual(runner.state.etapas.V.blockedCases, {});
+    assert.deepEqual(runner.state.etapas.VI.blockedCases, { x: { key: "k" } }); // intacta
+    assert.equal(runner.state.etapas.V.done, 0); // el progreso no se toca
+    const persisted = JSON.parse(readFileSync(stateFile, "utf8"));
+    assert.deepEqual(persisted.etapas.V.blockedCases, {});
   });
 });

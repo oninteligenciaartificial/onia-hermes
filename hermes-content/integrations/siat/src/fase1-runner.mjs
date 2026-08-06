@@ -18,6 +18,7 @@
  *   node src/fase1-runner.mjs --etapa gate     # gate minimo antes del volumen
  *   node src/fase1-runner.mjs --etapa IV --count 5
  *   flags: --pace ms (default 500 = ~2 req/s) --state file --log file
+ *          --retry-blocked (limpia blockedCases de las etapas a correr y reintenta)
  *
  * Diseno:
  *  - CHECKPOINT/RESUME: el estado vive en un JSON local (--state); si el proceso
@@ -568,8 +569,8 @@ export function hashFor(mode, xmlString, gzipBuffer) {
   return mode === "gzip" ? sha256HexOf(gzipBuffer) : sha256HexOf(xmlString);
 }
 
-function parseArgs(argv) {
-  const args = { etapa: null, count: null, pace: 500, state: "fase1-state.json", log: "fase1-log.ndjson" };
+export function parseArgs(argv) {
+  const args = { etapa: null, count: null, pace: 500, state: "fase1-state.json", log: "fase1-log.ndjson", retryBlocked: false };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
     if (a === "--etapa") args.etapa = argv[++i];
@@ -577,6 +578,7 @@ function parseArgs(argv) {
     else if (a === "--pace") args.pace = Number(argv[++i]);
     else if (a === "--state") args.state = argv[++i];
     else if (a === "--log") args.log = argv[++i];
+    else if (a === "--retry-blocked") args.retryBlocked = true;
   }
   return args;
 }
@@ -615,6 +617,22 @@ class Runner {
     }
     this.state.etapas[id].target = target;
     return this.state.etapas[id];
+  }
+
+  /**
+   * Reintento de casos bloqueados: limpia blockedCases de las etapas dadas para
+   * que una corrida nueva los vuelva a intentar (p.ej. tras un fix de codigo,
+   * como el 984 de eventos que se corrigio DESPUES de que V quedara bloqueada).
+   */
+  clearBlocked(stageIds) {
+    for (const id of stageIds) {
+      const etapa = this.state.etapas[id];
+      if (etapa && Object.keys(etapa.blockedCases ?? {}).length > 0) {
+        this.log({ etapa: id, op: "retry_blocked", cleared: Object.keys(etapa.blockedCases) });
+        etapa.blockedCases = {};
+      }
+    }
+    this.checkpoint();
   }
 
   baseParams() {
@@ -859,8 +877,27 @@ class Runner {
     });
   }
 
-  async registrarEvento(motivo, { inicioMs, finMs } = {}) {
-    const win = inicioMs != null && finMs != null ? { inicioMs, finMs } : this.eventWindowNow();
+  async registrarEvento(motivo, { inicioMs, finMs, etapa = "V" } = {}) {
+    let win;
+    if (inicioMs != null && finMs != null) {
+      win = { inicioMs, finMs };
+    } else {
+      // Eventos back-to-back consumen ~60s de "tiempo de evento" por ~1s de
+      // pared: la ventana se agota y eventWindow lanza. Esperar 3s la vuelve
+      // valida (fin=now-1s avanza con la pared). Si aun asi no hay ventana,
+      // devolver un error de racha en vez de matar la corrida entera.
+      try {
+        win = this.eventWindowNow();
+      } catch {
+        await sleep(3000);
+        try {
+          win = this.eventWindowNow();
+        } catch (err) {
+          this.log({ etapa, op: "registroEventoSignificativo", motivo: motivo.codigoClasificador, window_error: err.message });
+          return { ok: false, error: "window", parsed: { transaccion: false, mensajes: [{ codigo: "WIN", descripcion: err.message }] } };
+        }
+      }
+    }
     const envelope = buildRunnerEnvelope("registroEventoSignificativo", {
       ...this.baseParams(),
       codigoMotivoEvento: motivo.codigoClasificador,
@@ -872,7 +909,7 @@ class Runner {
       fechaHoraFinEvento: formatSinLocal(win.finMs),
     });
     const result = await this.post("FACTURACION_OPERACIONES", envelope, {
-      etapa: "V",
+      etapa,
       op: "registroEventoSignificativo",
       motivo: motivo.codigoClasificador,
     });
@@ -977,7 +1014,7 @@ class Runner {
       // dentro de la vigencia de ese CUFD. eventWindowNow ya recorta la ventana;
       // el lote se fecha en el punto medio (siempre dentro).
       const win = this.eventWindowNow();
-      const evento = await this.registrarEvento(motivo, win);
+      const evento = await this.registrarEvento(motivo, { ...win, etapa: "VI" });
       const codigoEvento =
         tagText(evento.body, "codigoRecepcionEventoSignificativo") ?? null;
       if (!codigoEvento) {
@@ -1168,6 +1205,9 @@ if (isMain) {
     pace: args.pace,
   });
   const stages = args.etapa ? [args.etapa] : STAGE_ORDER;
+  if (args.retryBlocked) {
+    runner.clearBlocked(stages);
+  }
   try {
     for (const stage of stages) {
       console.log(`[fase1] etapa ${stage}...`);
