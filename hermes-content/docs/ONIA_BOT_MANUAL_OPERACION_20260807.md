@@ -32,9 +32,9 @@ Piezas y dónde viven:
 
 ## 2. De dónde saca lo que dice — las cinco fuentes
 
-**El bot no improvisa.** No hay modelo de lenguaje respondiendo: cada palabra
-sale de un guion escrito y versionado. Esto es deliberado — un bot comercial
-que improvisa termina inventando precios y prometiendo cosas.
+**El bot no improvisa.** El grueso de lo que dice sale de un guion escrito y
+versionado; el modelo de IA solo entra cuando el guion no entendió (ver abajo).
+Es deliberado: un bot comercial que improvisa inventa precios y promete cosas.
 
 | Fuente | Qué aporta | Cada cuánto se actualiza | Quién puede cambiarla |
 |---|---|---|---|
@@ -44,10 +44,29 @@ que improvisa termina inventando precios y prometiendo cosas.
 | **Supabase** (`onia_center`) | El estado de cada conversación y el lead en el CRM | En cada turno | El bot |
 | **Chatwoot** | Los mensajes y el traspaso a humano | Tiempo real | Vos, desde la app |
 
-**El modelo de lenguaje está APAGADO.** Existe una sola rama que lo usaría
-(`askLiteLLM` en `run-turn.mjs`), solo para reformular una pregunta que el
-prospecto no entendió, y con prohibición explícita de dar precios, cifras o
-promesas. Hoy no tiene clave configurada, así que nunca se llama.
+### El modelo de lenguaje SÍ está conectado — y hace muy poco a propósito
+
+Verificado el 2026-08-07 en el proceso que corre: `LITELLM_KEY` presente,
+`LITELLM_BASE` apuntando al LiteLLM del VPS, `ONIA_BOT_MODEL=gpt-4o-mini`.
+Probado con una llamada real: responde.
+
+> Nota: `docker exec onia-center printenv` **no** muestra estas variables,
+> porque `webhook-server.sh` se las pasa al proceso con `-e` al arrancarlo, no
+> al contenedor. Mirar el entorno del contenedor lleva a concluir, falsamente,
+> que el modelo está apagado. Para verificarlo de verdad:
+> `docker exec onia-center pgrep -f webhook-server.mjs` y leer `/proc/<pid>/environ`.
+
+**Cuándo interviene:** solo cuando el prospecto escribe algo que el guion no
+entiende. El orden es: guion primero → si no se entendió, el modelo reformula
+la pregunta pendiente → al **segundo** malentendido, se deriva a un humano
+(`offScript.maxBeforeHandoff: 2`).
+
+**Qué tiene prohibido**, por prompt de sistema: dar precios, planes, features,
+cifras, plazos, casos de clientes, inventar datos o prometer cualquier cosa.
+Máximo 2 frases. Y si la llamada falla o tarda, devuelve vacío y el bot sigue
+con el guion — nunca queda mudo por culpa del modelo.
+
+Costo: `gpt-4o-mini`, 160 tokens máximo por intervención. Despreciable.
 
 ### Cómo editar el conocimiento sin desplegar
 
@@ -191,7 +210,7 @@ está abierta con certeza.
 
 | Qué | Estado |
 |---|---|
-| **Publicar la app de Meta** | Falta el **ícono 1024x1024** y el interruptor final. Ya están cargados privacidad, condiciones, eliminación de datos y categoría. Con la app sin publicar, **el bot solo le responde a quien tenga rol en la app** |
+| ~~Publicar la app de Meta~~ | ✅ **HECHO 2026-08-07.** Meta confirmó "tu app está disponible para el público". El icono NO era obligatorio. El bot ya le responde a cualquiera |
 
 El ícono está listo en el repo:
 `web-factory/apps/onia-platform/public/brand/v2/onia-icon-1024.png`
