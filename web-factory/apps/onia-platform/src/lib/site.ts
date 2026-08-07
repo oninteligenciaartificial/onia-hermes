@@ -50,11 +50,12 @@ export const APP_URL = "https://app.onia.com.bo";
 export const DENTALGEST_URL = "https://dentalgest.app";
 
 /**
- * Numero del carril chatbot/servicios (kickoff B6, 2026-08-07). OJO: difiere
- * del WA_PHONE verificado por Meta (78491375) — es el numero que atiende el
- * propio chatbot. Si Sergio unifica numeros, cambiar SOLO aca.
+ * Numero de ventas de chatbot/servicios — unificado al numero verificado por
+ * Meta que usa el resto de la landing (2026-08-07). El 59175414930 es el que
+ * atiende el propio chatbot; si algun dia los pedidos del configurador deben
+ * caer al bot, cambiar SOLO aca.
  */
-const WA_PHONE_SERVICIOS = "59175414930";
+const WA_PHONE_SERVICIOS = "59178491375";
 
 export function waServiciosLink(text: string): string {
   return `https://wa.me/${WA_PHONE_SERVICIOS}?text=${encodeURIComponent(text)}`;
