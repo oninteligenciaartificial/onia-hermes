@@ -2,7 +2,8 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { Command } from "commander";
-import { writeAutoDesignRecipe, type WebFactoryTemplate } from "../design/auto-designer";
+import { parseTemplate, WEB_FACTORY_TEMPLATES } from "../data/schema";
+import { writeAutoDesignRecipe } from "../design/auto-designer";
 import { sanitizeCliArgv } from "./argv";
 
 const program = new Command();
@@ -11,7 +12,7 @@ program
   .name("onia-auto-design")
   .description("Build a design recipe from client data, captured screenshots and allowed code references.")
   .argument("<slug>", "client slug from data/clients")
-  .option("-t, --template <name>", "template name: landing or store")
+  .option("-t, --template <name>", `template name: ${WEB_FACTORY_TEMPLATES.join(" | ")}`)
   .option("-o, --out-dir <path>", "recipe output directory", path.join("data", "clients"))
   .option("--design-intelligence <path>", "path to latest-design-intelligence.json")
   .option("--code-examples <path>", "path to latest-component-code-examples.json")
@@ -63,16 +64,4 @@ program
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   program.parse(sanitizeCliArgv(process.argv));
-}
-
-function parseTemplate(value?: string): WebFactoryTemplate | undefined {
-  if (!value) {
-    return undefined;
-  }
-
-  if (value === "landing" || value === "store" || value === "dashboard" || value === "landing-focus") {
-    return value;
-  }
-
-  throw new Error(`Unsupported template "${value}". Available: landing, store, dashboard.`);
 }

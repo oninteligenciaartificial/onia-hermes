@@ -17,9 +17,8 @@ describe("renderTrust", () => {
     expect(html).toContain("Esterilizacion certificada");
   });
 
-  it("falls back to beneficios when credenciales is empty", () => {
-    const html = renderTrust({ ...base, beneficios: ["Urgencias el mismo dia"] });
-    expect(html).toContain("Urgencias el mismo dia");
+  it("ignores beneficios: those belong to the hero proof panel", () => {
+    expect(renderTrust({ ...base, beneficios: ["Urgencias el mismo dia"] })).toBe("");
   });
 
   it("returns empty string when there is nothing to show", () => {

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { clientSchema, type ClientProfile } from "./schema";
+import { clientSchema, WEB_FACTORY_TEMPLATES, type ClientProfile } from "./schema";
 
 const slugSchema = z
   .string()
@@ -119,7 +119,7 @@ const intakeDashboardSchema = z
 export const webFactoryIntakeSchema = z.object({
   project: z.object({
     slug: slugSchema,
-    template: z.enum(["landing", "store", "dashboard", "landing-focus"]).default("landing"),
+    template: z.enum(WEB_FACTORY_TEMPLATES).default("landing"),
     package: z.string().default("web"),
     owner: z.string().default("ONIA"),
   }),

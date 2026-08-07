@@ -1,6 +1,32 @@
 import { readFile } from "node:fs/promises";
 import { z } from "zod";
 
+// Single source of truth for template ids. This list used to be copy-pasted in
+// six places (generate, factory-build, auto-design, create-client, the intake
+// enum and the auto-designer type), which is how `landing-clinic` ended up
+// renderable but unreachable from the CLI and the intake.
+export const WEB_FACTORY_TEMPLATES = [
+  "landing",
+  "store",
+  "dashboard",
+  "landing-focus",
+  "landing-clinic",
+] as const;
+
+export type WebFactoryTemplate = (typeof WEB_FACTORY_TEMPLATES)[number];
+
+export function parseTemplate(value: string | undefined): WebFactoryTemplate | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  if ((WEB_FACTORY_TEMPLATES as readonly string[]).includes(value)) {
+    return value as WebFactoryTemplate;
+  }
+
+  throw new Error(`Unsupported template "${value}". Available: ${WEB_FACTORY_TEMPLATES.join(", ")}.`);
+}
+
 const hexColorSchema = z
   .string()
   .regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "Use a hex color like #0f766e.");

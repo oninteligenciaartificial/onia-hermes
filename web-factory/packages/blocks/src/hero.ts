@@ -63,10 +63,12 @@ function renderHeroPoster(src: string, clientName: string): string {
   `;
 }
 
-// Proof panel content driven by real client data (credenciales, else beneficios).
-// Falls back to neutral copy so existing landings without this data still render.
+// Proof panel content driven by real client data. Owns `beneficios` ("por que
+// elegirnos"); `credenciales` belong to the trust strip (renderTrust), so the
+// same list never prints twice on one page. Falls back to neutral copy so
+// landings without this data still render.
 function renderProofPoints(client: SiteClient): string {
-  const points = (client.credenciales?.length ? client.credenciales : client.beneficios ?? [])
+  const points = (client.beneficios ?? [])
     .filter((point) => point.trim().length > 0)
     .slice(0, 4);
 

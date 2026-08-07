@@ -13,12 +13,12 @@ import {
   renderStoreProductDocument,
   storeProductSlug,
 } from "@onia/templates";
-import { loadClientProfile } from "../data/schema";
+import { loadClientProfile, WEB_FACTORY_TEMPLATES, type WebFactoryTemplate } from "../data/schema";
 
 export type GenerateOptions = {
   rootDir?: string;
   outDir?: string;
-  template?: "landing" | "store" | "dashboard" | "landing-focus" | "landing-clinic";
+  template?: WebFactoryTemplate;
 };
 
 export type GenerateResult = {
@@ -40,8 +40,8 @@ export async function generateSite(
 
   const template = options.template ?? "landing";
 
-  if (!["landing", "store", "dashboard", "landing-focus", "landing-clinic"].includes(template)) {
-    throw new Error(`Unsupported template "${template}". Available: landing, store, dashboard, landing-focus, landing-clinic.`);
+  if (!(WEB_FACTORY_TEMPLATES as readonly string[]).includes(template)) {
+    throw new Error(`Unsupported template "${template}". Available: ${WEB_FACTORY_TEMPLATES.join(", ")}.`);
   }
 
   await mkdir(outputDir, { recursive: true });

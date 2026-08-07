@@ -10,10 +10,16 @@ const base = {
 } as const;
 
 describe("renderHero trust panel", () => {
-  it("uses credenciales in the proof panel when present", () => {
-    const html = renderHero({ ...base, credenciales: ["Matricula profesional"] }, { focus: true });
-    expect(html).toContain("Matricula profesional");
+  it("uses beneficios in the proof panel when present", () => {
+    const html = renderHero({ ...base, beneficios: ["Urgencias el mismo dia"] }, { focus: true });
+    expect(html).toContain("Urgencias el mismo dia");
     expect(html).toContain("wf-proof-points");
+  });
+
+  it("leaves credenciales to the trust strip so the same list never prints twice", () => {
+    const html = renderHero({ ...base, credenciales: ["Matricula profesional"] }, { focus: true });
+    expect(html).not.toContain("Matricula profesional");
+    expect(html).toContain("wf-proof-panel");
   });
 
   it("still renders when there is no credential data (backward compatible)", () => {

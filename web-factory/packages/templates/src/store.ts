@@ -66,18 +66,19 @@ export function renderStoreBody(client: StoreClient): string {
   const brandNames = getUniqueValues(products.map((product) => product.marca || product.categoria));
   const categoryNames = getUniqueValues(products.map((product) => product.categoria));
   const slogan = client.tagline || "Everything for everyone";
+  const brand = client.nombre;
   const heroVideo = renderStoreHeroVideo(client, rootRenderContext);
 
   return `
     <main class="store-page${client.heroVideo ? "" : " store-page--light-hero"}" id="top">
       ${renderStoreHeader(client, slogan, rootRenderContext)}
 
-      <section class="store-hero${client.heroVideo ? " has-video" : ""}" aria-labelledby="nuvia-hero-title">
+      <section class="store-hero${client.heroVideo ? " has-video" : ""}" aria-labelledby="store-hero-title">
         ${heroVideo}
         <div class="store-hero-inner">
           <div class="store-hero-copy store-reveal" data-reveal>
-            <p class="store-kicker">NUVIA | ${escapeHtml(slogan.toUpperCase())}</p>
-            <h1 id="nuvia-hero-title">SKINCARE SIMPLE PARA COMPRAR MEJOR</h1>
+            <p class="store-kicker">${escapeHtml(brand.toUpperCase())} | ${escapeHtml(slogan.toUpperCase())}</p>
+            <h1 id="store-hero-title">SKINCARE SIMPLE PARA COMPRAR MEJOR</h1>
             <p>${escapeHtml(client.descripcion)}</p>
             <ul class="store-hero-proof" aria-label="promesas de compra">
               <li><span></span>${escapeHtml(products.map((product) => product.marca).filter(Boolean).slice(0, 2).join(" + ") || "marcas activas")}</li>
@@ -109,7 +110,7 @@ export function renderStoreBody(client: StoreClient): string {
         <div class="store-section-heading">
           <p class="store-kicker">CATALOGO</p>
           <h2>UN SOLO LUGAR PARA ELEGIR PRODUCTOS</h2>
-          <p>El catalogo es la fuente visual principal. Cuando Nuvia agregue mas productos, esta seccion crece sin repetirlos en bloques secundarios.</p>
+          <p>El catalogo es la fuente visual principal. Cuando ${escapeHtml(brand)} agregue mas productos, esta seccion crece sin repetirlos en bloques secundarios.</p>
         </div>
         <div class="store-catalog-tools" aria-label="Resumen del catalogo">
           <div>
@@ -142,7 +143,7 @@ export function renderStoreBody(client: StoreClient): string {
         <div class="store-guide-list">
           ${renderBuyingStep("01", "elige", "Revisa el catalogo y abre la ficha del producto que te interesa.")}
           ${renderBuyingStep("02", "consulta", "Usa el CTA de la ficha para pedir disponibilidad, precio final y recomendacion.")}
-          ${renderBuyingStep("03", "compra", "Cuando el canal este configurado, Nuvia recibira el mensaje prellenado.")}
+          ${renderBuyingStep("03", "compra", `Cuando el canal este configurado, ${brand} recibira el mensaje prellenado.`)}
         </div>
       </section>
 
@@ -153,8 +154,8 @@ export function renderStoreBody(client: StoreClient): string {
           <p>Deja el correo para futuras promos de lanzamiento. La captura queda lista para conectar con CRM, n8n o WhatsApp.</p>
         </div>
         <form class="store-subscribe-form" action="#contacto">
-          <label for="nuvia-discount-email">correo</label>
-          <input id="nuvia-discount-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="tu@email.com" required>
+          <label for="store-discount-email">correo</label>
+          <input id="store-discount-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="tu@email.com" required>
           <button type="submit">suscribirme</button>
         </form>
       </section>
@@ -167,7 +168,7 @@ export function renderStoreBody(client: StoreClient): string {
         <div class="store-faq-list">
           <details open>
             <summary>como pido un producto?</summary>
-            <p>Elige un producto y usa consultar. Cuando Nuvia configure WhatsApp, el mensaje saldra prellenado con el producto.</p>
+            <p>Elige un producto y usa consultar. Cuando ${escapeHtml(brand)} configure WhatsApp, el mensaje saldra prellenado con el producto.</p>
           </details>
           <details>
             <summary>por que no aparecen precios?</summary>
@@ -175,7 +176,7 @@ export function renderStoreBody(client: StoreClient): string {
           </details>
           <details>
             <summary>esto reemplaza una consulta dermatologica?</summary>
-            <p>No. Nuvia vende dermocosmetica y productos de uso diario; ante una condicion de piel, consulta a un profesional.</p>
+            <p>No. ${escapeHtml(brand)} vende dermocosmetica y productos de uso diario; ante una condicion de piel, consulta a un profesional.</p>
           </details>
         </div>
       </section>
@@ -277,6 +278,7 @@ export function renderStoreProductDocument(client: StoreClient, product: StorePr
 
 function renderStoreProductBody(client: StoreClient, product: StoreProduct): string {
   const slogan = client.tagline || "Everything for everyone";
+  const brand = client.nombre;
   const productMeta = [product.marca, product.categoria].filter(Boolean).join(" | ");
   const productChips = getProductPageChips(product);
 
@@ -307,7 +309,7 @@ function renderStoreProductBody(client: StoreClient, product: StoreProduct): str
             <button class="store-button-primary store-product-buy-button" type="button" data-cart-add="${escapeAttribute(storeProductSlug(product))}">agregar al carrito</button>
             <button class="store-button-secondary" type="button" data-cart-open>ver carrito</button>
           </div>
-          <p class="store-product-buy-note">El carrito guarda tu seleccion. Si el precio no esta configurado, Nuvia lo toma como cotizacion antes de cerrar la compra.</p>
+          <p class="store-product-buy-note">El carrito guarda tu seleccion. Si el precio no esta configurado, ${escapeHtml(brand)} lo toma como cotizacion antes de cerrar la compra.</p>
           ${renderProductAccordions(product)}
         </div>
       </section>
@@ -590,6 +592,7 @@ function renderStoreCartScript(client: StoreClient): string {
   const productMap = new Map(products.map((product) => [product.id, product]));
   const config = ${escapeScriptJson(JSON.stringify(config))};
   const storageKey = config.storageKey || "store-cart-v1";
+  const brand = config.brand || "";
 
   if (!shell || !panel || !itemsNode || !products.length) {
     return;
@@ -652,7 +655,7 @@ function renderStoreCartScript(client: StoreClient): string {
     const totals = computeTotals();
     const totalLine = totals.priced && totals.totalCount ? "\\n\\nTotal estimado: " + money(totals.total, "BOB") : "";
 
-    return "Hola Nuvia, quiero cotizar este pedido:\\n" + lines.join("\\n") + totalLine + "\\n\\nPor favor confirmame disponibilidad, precio final y forma de entrega.";
+    return "Hola " + brand + ", quiero cotizar este pedido:\\n" + lines.join("\\n") + totalLine + "\\n\\nPor favor confirmame disponibilidad, precio final y forma de entrega.";
   };
 
   const checkoutHref = () => {
@@ -668,7 +671,7 @@ function renderStoreCartScript(client: StoreClient): string {
     }
 
     if (config.mode === "email") {
-      return config.target + "?subject=" + encodeURIComponent("Pedido Nuvia") + "&body=" + message;
+      return config.target + "?subject=" + encodeURIComponent("Pedido " + brand) + "&body=" + message;
     }
 
     return "#contacto";
@@ -1072,7 +1075,7 @@ function getProductSpecs(product: StoreProduct): StoreProductSpec[] {
   }
 
   return [
-    { label: "Marca", value: product.marca || "Nuvia" },
+    ...(product.marca ? [{ label: "Marca", value: product.marca }] : []),
     { label: "Categoria", value: product.categoria },
     ...(product.tamano ? [{ label: "Tamano", value: product.tamano }] : []),
     ...(product.uso ? [{ label: "Rutina", value: product.uso }] : []),
@@ -1157,9 +1160,11 @@ function getCartContactConfig(client: StoreClient): {
   target: string;
   note: string;
   storageKey: string;
+  brand: string;
 } {
   const baseConfig = {
     storageKey: `${client.slug || slugify(client.nombre)}-cart-v1`,
+    brand: client.nombre,
   };
 
   if (client.contacto.whatsapp) {
@@ -1201,9 +1206,10 @@ function getCartContactConfig(client: StoreClient): {
 
 function getStoreActionUrl(client: StoreClient, product?: StoreProduct): string {
   const productMeta = product ? [product.marca, product.tamano].filter(Boolean).join(" - ") : "";
+  const brand = client.nombre;
   const message = product
-    ? `Hola Nuvia, quiero consultar por ${product.titulo}${productMeta ? ` (${productMeta})` : ""}. Esta disponible y cual es el precio final?`
-    : "Hola Nuvia, quiero ayuda para comprar en el catalogo.";
+    ? `Hola ${brand}, quiero consultar por ${product.titulo}${productMeta ? ` (${productMeta})` : ""}. Esta disponible y cual es el precio final?`
+    : `Hola ${brand}, quiero ayuda para comprar en el catalogo.`;
 
   if (client.contacto.whatsapp) {
     const whatsapp = client.contacto.whatsapp.trim();
@@ -1217,7 +1223,7 @@ function getStoreActionUrl(client: StoreClient, product?: StoreProduct): string 
   }
 
   if (client.contacto.email) {
-    return `mailto:${client.contacto.email}?subject=${encodeURIComponent("Consulta Nuvia")}&body=${encodeURIComponent(message)}`;
+    return `mailto:${client.contacto.email}?subject=${encodeURIComponent(`Consulta ${brand}`)}&body=${encodeURIComponent(message)}`;
   }
 
   return "#contacto";
@@ -1309,7 +1315,7 @@ a:focus-visible,
 button:focus-visible,
 summary:focus-visible,
 input:focus-visible {
-  outline: 2px solid var(--nuvia-coral);
+  outline: 2px solid var(--store-brand-primary);
   outline-offset: 4px;
 }
 
@@ -1336,11 +1342,11 @@ figure {
 }
 
 .store-page {
-  --nuvia-navy: #0F2D52;
-  --nuvia-teal: #00A7A0;
-  --nuvia-gold: #F5B400;
-  --nuvia-coral: #FF6B6B;
-  --nuvia-purple: #7B4FB5;
+  --store-brand-deep: #0F2D52;
+  --store-brand-accent: #00A7A0;
+  --store-brand-warm: #F5B400;
+  --store-brand-primary: #FF6B6B;
+  --store-brand-alt: #7B4FB5;
   --store-ink: #111615;
   --store-muted: rgba(17, 22, 21, 0.62);
   --store-line: rgba(17, 22, 21, 0.12);
@@ -1430,7 +1436,7 @@ figure {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-  color: var(--nuvia-navy);
+  color: var(--store-brand-deep);
   font-size: 0.68rem;
   font-weight: 700;
 }
@@ -1478,7 +1484,7 @@ figure {
   border: 0;
   border-radius: 999px;
   color: #fffdfa;
-  background: var(--nuvia-coral);
+  background: var(--store-brand-primary);
   font-size: 0.82rem;
   font-weight: 650;
   cursor: pointer;
@@ -1498,7 +1504,7 @@ figure {
   height: 22px;
   padding: 0 6px;
   border-radius: 999px;
-  color: var(--nuvia-coral);
+  color: var(--store-brand-primary);
   background: #fffdfa;
   font-size: 0.72rem;
   line-height: 1;
@@ -1615,24 +1621,24 @@ figure {
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: var(--nuvia-teal);
+  background: var(--store-brand-accent);
 }
 
 .store-hero-proof li:nth-child(2) span {
-  background: var(--nuvia-gold);
+  background: var(--store-brand-warm);
 }
 
 .store-hero-proof li:nth-child(3) span {
-  background: var(--nuvia-purple);
+  background: var(--store-brand-alt);
 }
 
-/* Light-hero clients (no hero video): header/hero text defaults to white for
-   Nuvia's dark video hero. On a light hero that fails WCAG AA contrast, so
-   switch to dark navy text. Scoped to .store-page--light-hero, so Nuvia (which
-   always ships a video hero) is unaffected. */
+/* Light-hero clients (no hero video): header/hero text defaults to white for the
+   dark video hero. On a light hero that fails WCAG AA contrast, so switch to the
+   deep brand tone. Scoped to .store-page--light-hero, so clients that do ship a
+   video hero are unaffected. */
 .store-page--light-hero .store-header,
 .store-page--light-hero .store-wordmark {
-  color: var(--nuvia-navy);
+  color: var(--store-brand-deep);
 }
 
 .store-page--light-hero .store-wordmark-copy small {
@@ -1642,11 +1648,11 @@ figure {
 .store-page--light-hero .store-nav {
   border-color: rgba(15, 45, 82, 0.22);
   background: rgba(255, 255, 255, 0.74);
-  color: var(--nuvia-navy);
+  color: var(--store-brand-deep);
 }
 
 .store-page--light-hero .store-header-cta {
-  color: var(--nuvia-navy);
+  color: var(--store-brand-deep);
 }
 
 .store-page--light-hero .store-hero-proof li {
@@ -1660,14 +1666,14 @@ figure {
 .store-page--light-hero .store-product-stage strong,
 .store-page--light-hero .store-stage-meta span,
 .store-page--light-hero .store-stage-meta small {
-  color: var(--nuvia-navy);
+  color: var(--store-brand-deep);
 }
 
-/* Primary CTA is white on coral (2.73:1). Dark navy text on coral clears AA
-   (~5.3:1) while keeping the brand coral; scoped to light-hero demos so Nuvia
-   is untouched. */
+/* Primary CTA is white on the primary tone (2.73:1). The deep brand tone on it
+   clears AA (~5.3:1) while keeping the primary color; scoped to light-hero
+   clients so video-hero clients are untouched. */
 .store-page--light-hero .store-button-primary {
-  color: var(--nuvia-navy);
+  color: var(--store-brand-deep);
 }
 
 .store-kicker {
@@ -1774,15 +1780,15 @@ figure {
   width: 9px;
   height: 9px;
   border-radius: 999px;
-  background: var(--nuvia-coral);
+  background: var(--store-brand-primary);
 }
 
 .store-stage-toolbar span:nth-child(2) {
-  background: var(--nuvia-teal);
+  background: var(--store-brand-accent);
 }
 
 .store-stage-toolbar span:nth-child(3) {
-  background: var(--nuvia-gold);
+  background: var(--store-brand-warm);
 }
 
 .store-stage-toolbar strong {
@@ -1855,7 +1861,7 @@ figure {
   padding: 5px 9px;
   border-radius: 999px;
   color: #fffdfa;
-  background: var(--nuvia-coral);
+  background: var(--store-brand-primary);
   font-size: 0.68rem;
   font-weight: 760;
 }
@@ -1903,7 +1909,7 @@ figure {
 
 .store-stage-meta small,
 .store-product-meta small {
-  color: var(--nuvia-teal);
+  color: var(--store-brand-accent);
   white-space: nowrap;
 }
 
@@ -1952,7 +1958,7 @@ figure {
 }
 
 .store-catalog-tools strong {
-  color: var(--nuvia-teal);
+  color: var(--store-brand-accent);
   font-size: clamp(2.2rem, 5vw, 4rem);
   font-weight: 700;
   line-height: 0.86;
@@ -1995,9 +2001,9 @@ figure {
 }
 
 .store-catalog-filters button.is-active {
-  border-color: var(--nuvia-navy);
+  border-color: var(--store-brand-deep);
   color: #fffdfa;
-  background: var(--nuvia-navy);
+  background: var(--store-brand-deep);
 }
 
 .store-catalog-filters button.is-active span {
@@ -2104,7 +2110,7 @@ figure {
   padding: 7px 10px;
   border-radius: 999px;
   color: #fffdfa;
-  background: var(--nuvia-coral);
+  background: var(--store-brand-primary);
   font-size: 0.72rem;
   font-weight: 760;
 }
@@ -2116,7 +2122,7 @@ figure {
 }
 
 .store-product-price.has-discount strong {
-  color: var(--nuvia-coral);
+  color: var(--store-brand-primary);
 }
 
 .store-product-price s {
@@ -2166,7 +2172,7 @@ figure {
   padding: 6px 9px;
   border-radius: 999px;
   background: rgba(0, 167, 160, 0.08);
-  color: var(--nuvia-teal);
+  color: var(--store-brand-accent);
 }
 
 .store-product-footer {
@@ -2202,13 +2208,13 @@ figure {
   border: 0;
   border-radius: 999px;
   color: #fffdfa;
-  background: var(--nuvia-navy);
+  background: var(--store-brand-deep);
   font-size: 0.78rem;
   font-weight: 650;
 }
 
 .store-product-actions button {
-  background: var(--nuvia-coral);
+  background: var(--store-brand-primary);
 }
 
 .store-product-actions a {
@@ -2360,11 +2366,11 @@ figure {
 }
 
 .store-product-price-panel.has-discount span {
-  color: var(--nuvia-coral);
+  color: var(--store-brand-primary);
 }
 
 .store-product-price-panel.has-discount strong {
-  color: var(--nuvia-coral);
+  color: var(--store-brand-primary);
 }
 
 .store-product-price-panel s {
@@ -2505,7 +2511,7 @@ figure {
   height: 42px;
   border-radius: 999px;
   color: #fffdfa;
-  background: var(--nuvia-navy);
+  background: var(--store-brand-deep);
   font-size: 0.86rem;
   font-weight: 650;
 }
@@ -2764,7 +2770,7 @@ figure {
 }
 
 .store-cart-header span {
-  color: var(--nuvia-teal);
+  color: var(--store-brand-accent);
   font-size: 0.72rem;
   font-weight: 720;
   text-transform: uppercase;
@@ -2869,7 +2875,7 @@ figure {
 .store-cart-item em {
   display: block;
   margin: -2px 0 4px;
-  color: var(--nuvia-coral);
+  color: var(--store-brand-primary);
   font-size: 0.7rem;
   font-style: normal;
   font-weight: 700;
@@ -2925,7 +2931,7 @@ figure {
 }
 
 .store-cart-discount strong {
-  color: var(--nuvia-coral);
+  color: var(--store-brand-primary);
   font-size: 0.9rem;
   font-weight: 700;
 }
@@ -2957,7 +2963,7 @@ figure {
   min-height: 46px;
   border-radius: 999px;
   color: #fffdfa;
-  background: var(--nuvia-coral);
+  background: var(--store-brand-primary);
   font-weight: 700;
 }
 
