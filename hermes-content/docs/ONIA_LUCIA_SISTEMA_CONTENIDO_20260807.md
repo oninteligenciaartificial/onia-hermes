@@ -85,8 +85,20 @@ Todas las imágenes ya existen en `references/models/`. **No hace falta generar 
 | 5 | C | `lucia-content-bank-20260709/combo-cleangirl-kitchen.png` | **nadie volvió a escribirle** | La mayoría de los clientes que te escriben y no compran no se fueron con la competencia. Simplemente nadie les volvió a escribir. Eso no se arregla con más publicidad: se arregla con un sistema que te avise. Comentá **CLIENTES**. |
 | 6 | B | `lucia-content-bank-20260709/realism-goldenhour.png` | **la pregunta incómoda** | ¿Cuánto tardás en contestarle a un cliente nuevo? Si la respuesta es "depende", ahí está tu fuga. No es falta de ganas: es que estás haciendo a mano algo que ya se hace solo. |
 
-**El texto del gancho va QUEMADO sobre la imagen** — en fuente simple, blanca, sin diseño.
-Diseñarlo lo convierte en publicidad y le baja el alcance (regla del benchmark).
+**Las 6 piezas están armadas y listas para subir** en
+`references/modelos/lucia/posts-20260807/` (1080×1350, formato 4:5 que es el que más ocupa
+en el feed). Vista previa: `_GRID-6-POSTS.jpg` · cómo se verá el perfil: `_GRID-PERFIL.jpg`.
+
+### Reglas de texto quemado (aprendidas armando estas 6)
+
+1. **Fuente simple, blanca, con sombra suave. Sin caja, sin color de marca, sin diseño.**
+   Diseñarlo lo convierte en publicidad y le baja el alcance (regla del benchmark).
+2. **El texto tiene que caer entre el 10% y el 88% de la altura.** Instagram recorta el 4:5
+   a cuadrado para la grilla del perfil: lo que esté más abajo **se corta ahí**. Pasó con la
+   pieza 3 y hubo que subirla.
+3. **Mirar sobre qué cae el texto.** Blanco sobre remera blanca no se lee (pieza 3, primera
+   versión). Buscar una zona oscura o subir la opacidad de la sombra.
+4. **Dos líneas cortas antes que una larga.** Se escanea en el segundo que dura el scroll.
 
 **Todos los CTA de comentario necesitan respuesta manual hasta que esté el token de IG.**
 15 min/día. El `?src=lucia-*` va en el DM, no en el caption.
