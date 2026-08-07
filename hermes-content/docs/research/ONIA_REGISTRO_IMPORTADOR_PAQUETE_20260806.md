@@ -110,9 +110,51 @@ servicios digitales es una inconsistencia que se observa.
 > la Aduana.** Si se registra primero y se amplía después, hay que actualizar el registro OCE
 > (Art. 44) — trabajo doble y riesgo de observación.
 
-Redacción sugerida a agregar al objeto (revisar con contador antes de presentar):
-*"Importación, comercialización, distribución, instalación y mantenimiento de equipos
-eléctricos y electrónicos, sus partes, accesorios y repuestos."*
+### Redacción sugerida del objeto
+
+**Decisión de Sergio (2026-08-06): el producto es infraestructura de TI para que los clientes
+corran IA local.** La redacción se amplía a eso, y se deja lo bastante abierta para no volver
+a SEPREC con el próximo producto.
+
+> *"Importación, exportación, comercialización, distribución, instalación, configuración,
+> mantenimiento y soporte técnico de equipos de computación, servidores, equipos y sistemas
+> informáticos, equipos eléctricos y electrónicos, sus partes, piezas, accesorios y repuestos;
+> venta al por mayor y al por menor de los mismos; y servicios de implementación de
+> infraestructura tecnológica y de inteligencia artificial."*
+
+**Revisar con el contador antes de presentar.** Un objeto amplio no cuesta más que uno
+estrecho, y evita repetir el trámite. Cubre servidores, workstations, mini-PCs, almacenamiento,
+UPS, redes — y de paso cargadores EV u otro hardware si más adelante se activa.
+
+### Paso 0 — la lista de equipos (antes de cualquier trámite)
+
+Sin esto no se puede ni redactar bien el objeto ni pedir clasificación arancelaria:
+
+| Categoría | Ejemplos | Partida probable (a confirmar con la ADA) |
+|---|---|---|
+| Servidores / workstations | equipos de tratamiento de datos | **84.71** |
+| Tarjetas GPU, componentes | partes y accesorios de máquinas del 84.71 | **8473.30** |
+| Almacenamiento, NAS | | 84.71 / 8473.30 |
+| UPS | convertidores estáticos | **8504.40** |
+| Switches, routers, APs | equipos de red | **8517** ⚠️ radio → ATT |
+| Racks, gabinetes | | 94.03 / 73.26 |
+
+⚠️ **El DS 5518** (arancel 0% hasta 31-dic-2026) cubre "línea negra" — laptops, tablets,
+teclados, impresoras, cámaras, monitores, audio, consolas, smartphones. **No menciona
+servidores, GPUs ni componentes.** No dar por hecha la exención: pedir clasificación por
+escrito.
+
+### Permisos previos específicos de este producto
+
+| Riesgo | Cuándo aplica | Qué hacer |
+|---|---|---|
+| **Homologación ATT** | Cualquier equipo con radio: **switches/routers/APs WiFi**, tarjetas WiFi/BT, módulos celulares | Consultar el listado de equipos sujetos a homologación **antes de embarcar**. Preferir equipos sólo-Ethernet donde se pueda. |
+| **IMEI** | Equipos con conectividad celular | Registro correspondiente |
+| IBMETRO | No se identificó reglamento técnico aplicable a servidores | Confirmar igual |
+
+⚠️ **Los servidores rara vez traen radio, pero los switches y access points sí.** Si el
+embarque mezcla ambos, el equipo con radio puede frenar todo el contenedor. Considerar
+embarques separados o pedir variantes sin WiFi.
 
 ---
 
