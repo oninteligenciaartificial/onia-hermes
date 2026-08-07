@@ -168,6 +168,122 @@ function deliveryStatusFor(state, config) {
 }
 
 // ---------------------------------------------------------------------------
+// Las tres piezas del barrido: FILTRAR, COMPONER, RESERVAR.
+// Salieron de runReminderSweep (que hacia las cuatro cosas de corrido) sin cambiar una linea de
+// logica: el orden entre ellas es el mismo y lo sigue mandando el bucle.
+// ---------------------------------------------------------------------------
+
+/**
+ * FILTRAR: por que ESTA fila no se manda, o el link con el que si.
+ * Puro: no toca la base ni escribe nada. La ventana de Meta se decide adentro de skipReason().
+ * @returns {{skip: string}|{link: string}}
+ */
+export function planReminder(state, nowIso, config, linkFor, env) {
+  const reason = skipReason(state, nowIso, config);
+  if (reason) return { skip: reason };
+
+  // El uid existe (lo verifico skipReason) pero el link igual puede no armarse si alguien dejo
+  // la URL publica vacia. Sin link no se manda: nunca se inventa uno.
+  const link = linkFor(state.calendarEventId, env);
+  if (!link) return { skip: "sin_link" };
+
+  return { link };
+}
+
+/**
+ * COMPONER: el recordatorio listo para que n8n lo mande. Arma el texto y los datos; no decide.
+ * `key` viaja aparte a proposito: es el de la fila (con el fallback a `conversation_key`), no el
+ * del estado — que puede no ser el mismo si la fila vino a medias.
+ */
+export function composeReminder(key, state, link, nowIso, config) {
+  const built = buildReminder(state, link, config);
+  return {
+    conversationKey: key,
+    channel: state.channel,
+    contactRef: state.contactRef,
+    displayName: state.displayName || null,
+    scheduledAt: state.scheduledAt,
+    scheduledLabel: built.scheduledLabel,
+    hoursUntil: Number(hoursBetween(nowIso, state.scheduledAt).toFixed(1)),
+    link,
+    templateKey: built.templateKey,
+    replySource: built.replySource,
+    text: built.text,
+  };
+}
+
+/**
+ * RESERVAR: la reserva ES este insert — la clave unica de bot_messages decide quien gana.
+ * 1 fila = ganamos y se manda · 0 = ya se mando (otro barrido) · null = fallo de base
+ * (tampoco se manda: sin reserva confirmada, mandar es arriesgarse a duplicar).
+ * @returns {Promise<{skip: string}|{deliveryStatus: string}>}
+ */
+export async function reserveReminder(store, state, item, nowIso, config) {
+  const deliveryStatus = deliveryStatusFor(state, config);
+  const wrote = await store.insertOutbound(
+    [
+      {
+        messageKey: reminderMessageKey(state.conversationKey, state.scheduledAt),
+        direction: "outbound",
+        author: "bot",
+        templateKey: item.templateKey,
+        replySource: item.replySource,
+        text: item.text,
+        deliveryStatus,
+        stageBefore: state.botStage,
+        stageAfter: state.botStage, // el recordatorio no mueve la maquina de estados
+      },
+    ],
+    state,
+    { raw: { reminder: true, scheduledAt: state.scheduledAt, now: nowIso } },
+  );
+
+  if (wrote === null) return { skip: "reserva_fallida" };
+  if (wrote === 0) return { skip: "ya_recordado" };
+  return { deliveryStatus };
+}
+
+/**
+ * Que le pasa a UNA fila del barrido: se descarta, se muestra (dry-run) o se reserva y se manda.
+ * Es el orden de siempre — filtrar, componer, reservar — y sigue siendo el unico lugar donde se
+ * decide; el bucle de arriba solo reparte el resultado entre `skipped` y `send`.
+ * @returns {Promise<{skip: object}|{send: object}>}
+ */
+async function sweepRow(row, ctx) {
+  const { nowIso, emit, config, store, linkFor, env } = ctx;
+  const state = stateFromRow(row);
+  const key = state?.conversationKey || row?.conversation_key || null;
+
+  const plan = planReminder(state, nowIso, config, linkFor, env);
+  if (plan.skip) return { skip: { conversationKey: key, reason: plan.skip } };
+
+  const item = composeReminder(key, state, plan.link, nowIso, config);
+
+  if (!emit) return { send: { ...item, reserved: false, deliveryStatus: "preview" } };
+
+  const reserva = await reserveReminder(store, state, item, nowIso, config);
+  if (reserva.skip) return { skip: { conversationKey: key, reason: reserva.skip } };
+
+  return { send: { ...item, reserved: true, deliveryStatus: reserva.deliveryStatus, logged: true } };
+}
+
+/** El resultado vacio del barrido, antes de mirar una sola fila. */
+function emptyResult(nowIso, emit, config, store) {
+  return {
+    ok: true,
+    now: nowIso || null,
+    mode: emit ? "emit" : "dry-run",
+    dryRun: Boolean(config.dryRun),
+    leadHours: config.reminder?.leadHours ?? DEFAULT_CONFIG.reminder.leadHours,
+    scanned: 0,
+    send: [],
+    skipped: [],
+    notes: [],
+    warnings: store.warnings,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Barrido
 // ---------------------------------------------------------------------------
 
@@ -185,18 +301,7 @@ export async function runReminderSweep(options = {}, deps = {}) {
   const emit = options.emit === true;
   const limit = Number.isFinite(options.limit) && options.limit > 0 ? Math.floor(options.limit) : 50;
 
-  const result = {
-    ok: true,
-    now: nowIso || null,
-    mode: emit ? "emit" : "dry-run",
-    dryRun: Boolean(config.dryRun),
-    leadHours: config.reminder?.leadHours ?? DEFAULT_CONFIG.reminder.leadHours,
-    scanned: 0,
-    send: [],
-    skipped: [],
-    notes: [],
-    warnings: store.warnings,
-  };
+  const result = emptyResult(nowIso, emit, config, store);
 
   if (!nowIso || !Number.isFinite(Date.parse(nowIso))) {
     result.ok = false;
@@ -212,76 +317,11 @@ export async function runReminderSweep(options = {}, deps = {}) {
   }
   result.scanned = rows.length;
 
+  const ctx = { nowIso, emit, config, store, linkFor, env };
   for (const row of rows) {
-    const state = stateFromRow(row);
-    const key = state?.conversationKey || row?.conversation_key || null;
-
-    const reason = skipReason(state, nowIso, config);
-    if (reason) {
-      result.skipped.push({ conversationKey: key, reason });
-      continue;
-    }
-
-    // El uid existe (lo verifico skipReason) pero el link igual puede no armarse si alguien dejo
-    // la URL publica vacia. Sin link no se manda: nunca se inventa uno.
-    const link = linkFor(state.calendarEventId, env);
-    if (!link) {
-      result.skipped.push({ conversationKey: key, reason: "sin_link" });
-      continue;
-    }
-
-    const built = buildReminder(state, link, config);
-    const base = {
-      conversationKey: key,
-      channel: state.channel,
-      contactRef: state.contactRef,
-      displayName: state.displayName || null,
-      scheduledAt: state.scheduledAt,
-      scheduledLabel: built.scheduledLabel,
-      hoursUntil: Number(hoursBetween(nowIso, state.scheduledAt).toFixed(1)),
-      link,
-      templateKey: built.templateKey,
-      replySource: built.replySource,
-      text: built.text,
-    };
-
-    if (!emit) {
-      result.send.push({ ...base, reserved: false, deliveryStatus: "preview" });
-      continue;
-    }
-
-    // --- La reserva ES este insert: la clave unica de bot_messages decide quien gana.
-    // 1 fila = ganamos y se manda · 0 = ya se mando (otro barrido) · null = fallo de base
-    // (tampoco se manda: sin reserva confirmada, mandar es arriesgarse a duplicar).
-    const deliveryStatus = deliveryStatusFor(state, config);
-    const wrote = await store.insertOutbound(
-      [
-        {
-          messageKey: reminderMessageKey(state.conversationKey, state.scheduledAt),
-          direction: "outbound",
-          author: "bot",
-          templateKey: built.templateKey,
-          replySource: built.replySource,
-          text: built.text,
-          deliveryStatus,
-          stageBefore: state.botStage,
-          stageAfter: state.botStage, // el recordatorio no mueve la maquina de estados
-        },
-      ],
-      state,
-      { raw: { reminder: true, scheduledAt: state.scheduledAt, now: nowIso } },
-    );
-
-    if (wrote === null) {
-      result.skipped.push({ conversationKey: key, reason: "reserva_fallida" });
-      continue;
-    }
-    if (wrote === 0) {
-      result.skipped.push({ conversationKey: key, reason: "ya_recordado" });
-      continue;
-    }
-
-    result.send.push({ ...base, reserved: true, deliveryStatus, logged: true });
+    const outcome = await sweepRow(row, ctx);
+    if (outcome.skip) result.skipped.push(outcome.skip);
+    else result.send.push(outcome.send);
   }
 
   return result;
