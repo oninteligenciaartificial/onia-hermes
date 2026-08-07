@@ -170,13 +170,26 @@ adentro del sistema.
 > naturales. La diferencia es evidente en `_ELEMENT-vs-REF.jpg` (las 3 nuevas al lado de la
 > referencia aprobada) y `_ELEMENT-CIRCULOS.jpg` (las 3 en círculo).
 >
-> **Foto final: `FOTO-PERFIL-LUCIA.jpg`, 1440×1440** — selfie en el auto generada con el
-> Element, **escalada a 4K real** con `bytedance_image_upscale` (2 cr) y recortada desde el 4K,
-> no desde el 2K. También hay versión 320.
+> ### Foto final: la elegida por Sergio, del banco
 >
-> **Alternativas guardadas:** `alternativa-element-2-completa.jpg` (la misma toma sin
-> recortar, sirve de post) · `alternativa-selfie-cuarto.jpg` · `alternativa-estudio.jpg`
-> (photoshoot quirúrgico, para prensa o propuestas donde conviene el registro formal).
+> **`FOTO-PERFIL-LUCIA.jpg`, 1440×1440.** Origen:
+> `references/models/lucia-pieza1-20260717/escena-A-bano-reveal.png` — la **selfie de espejo
+> del baño que eligió Sergio**. Es material ya aprobado del banco y encima trae puesto el
+> outfit **cleangirl** de su vestuario definido, así que es coherente con todo lo demás.
+>
+> **Los dos únicos retoques, y por qué:**
+> 1. **Recorte cuadrado bajado** hasta incluir el mentón. Los primeros tres intentos cortaban
+>    a la altura de la nariz: en una foto vertical la cara está más abajo de lo que parece.
+> 2. **Viñeta suave.** El baño es blanco y su saco crema — sobre la interfaz blanca de
+>    Instagram el círculo perdía el borde y la foto se derretía en la pantalla. La viñeta lo
+>    define sin que se note procesada. Comparación: `_VINIETA-AB.jpg`.
+>
+> **La cara no se tocó.** Sale a 1536px nativos y se entrega a 1440, o sea que es un leve
+> reescalado hacia abajo: queda nítida sin inventar detalle.
+>
+> **Alternativas guardadas:** `alternativa-auto-element.jpg` (selfie en el auto hecha con el
+> Element) · `alternativa-selfie-cuarto.jpg` · `alternativa-estudio.jpg` (photoshoot
+> quirúrgico, para prensa o propuestas donde conviene el registro formal).
 >
 > **Lo que pasó antes (queda escrito para no repetirlo):** generé 7 avatares desde el Soul
 > ignorando que este material ya existía. Salieron con la cara más ancha y redonda que la
