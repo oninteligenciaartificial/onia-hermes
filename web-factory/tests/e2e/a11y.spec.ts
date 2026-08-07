@@ -19,6 +19,9 @@ test.describe.configure({ mode: "serial" });
 const PAGES = [
   { name: "landing (demo)", url: "/demo/", schemes: ["light", "dark"] as const },
   { name: "landing-focus (demo-focus)", url: "/demo-focus/", schemes: ["light", "dark"] as const },
+  // The only landing demo carrying credenciales/proceso/faq, so it is the one
+  // that exercises the trust strip, the process list and the <details> FAQ.
+  { name: "landing + trust/process/faq (clinic-demo)", url: "/clinic-demo/", schemes: ["light", "dark"] as const },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", schemes: ["light", "dark"] as const },
   { name: "store (skincare-demo)", url: "/skincare-demo/", schemes: ["light"] as const },
   { name: "landing-clinic (dental-demo)", url: "/dental-demo/", schemes: ["light", "dark"] as const },

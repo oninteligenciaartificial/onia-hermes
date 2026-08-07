@@ -1345,7 +1345,12 @@ figure {
   --store-brand-deep: #0F2D52;
   --store-brand-accent: #00A7A0;
   --store-brand-warm: #F5B400;
-  --store-brand-primary: #FF6B6B;
+  /* #FF6B6B carried the brand but only reached 2.73:1 under white text, so
+     every primary CTA and discount badge failed WCAG AA. Darkened along the
+     same OKLCH hue and chroma (H 22.8->23.0, C 0.181->0.180, L 0.712->0.578):
+     the nearest tone that clears 4.5:1 both as a background under #fffdfa
+     (4.65:1) and as text on the #fbfbf8 surface (4.55:1). */
+  --store-brand-primary: #CF3F44;
   --store-brand-alt: #7B4FB5;
   --store-ink: #111615;
   --store-muted: rgba(17, 22, 21, 0.62);
@@ -1651,9 +1656,9 @@ figure {
   color: var(--store-brand-deep);
 }
 
-.store-page--light-hero .store-header-cta {
-  color: var(--store-brand-deep);
-}
+/* No .store-header-cta override here: it is a filled button on the primary
+   tone, so it keeps its own #fffdfa ink (4.65:1) instead of inheriting the deep
+   text colour .store-header sets for the light hero. */
 
 .store-page--light-hero .store-hero-proof li {
   border-color: rgba(15, 45, 82, 0.2);
@@ -1666,13 +1671,6 @@ figure {
 .store-page--light-hero .store-product-stage strong,
 .store-page--light-hero .store-stage-meta span,
 .store-page--light-hero .store-stage-meta small {
-  color: var(--store-brand-deep);
-}
-
-/* Primary CTA is white on the primary tone (2.73:1). The deep brand tone on it
-   clears AA (~5.3:1) while keeping the primary color; scoped to light-hero
-   clients so video-hero clients are untouched. */
-.store-page--light-hero .store-button-primary {
   color: var(--store-brand-deep);
 }
 
@@ -1697,7 +1695,13 @@ figure {
   font-weight: 500;
   letter-spacing: 0;
   line-height: 0.93;
-  overflow-wrap: anywhere;
+  /* "anywhere" also feeds the intrinsic min-content size, so headings broke
+     mid-word ("PROMOCIO / NES") at 320px even with room to wrap on a space.
+     "break-word" only breaks a word that cannot fit a line on its own, and is
+     supported everywhere ("anywhere" needs Safari 15.4+).
+     No backticks in this file's CSS comments: the stylesheet lives inside a
+     template literal and a stray backtick ends the string mid-file. */
+  overflow-wrap: break-word;
   text-wrap: balance;
 }
 
@@ -3274,7 +3278,11 @@ figure {
   .store-subscribe h2,
   .store-faq h2,
   .store-final h2 {
-    font-size: clamp(2.65rem, 13vw, 4.2rem);
+    /* The 2.65rem floor (42.4px) was taller than 320px can hold: the widest
+       word of the demo copy needed 317px inside a 258px column, so it broke
+       mid-word whatever the wrap mode. 320px is the narrowest width the repo
+       tests, and 10.5vw keeps the longest word on one line down to there. */
+    font-size: clamp(2rem, 10.5vw, 4.2rem);
   }
 
   .store-stage-grid,

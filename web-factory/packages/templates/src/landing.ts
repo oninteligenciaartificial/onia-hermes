@@ -276,6 +276,38 @@ h1 {
   display: block;
 }
 
+/* renderHero emits this list whenever the client has credenciales/beneficios
+   (the common path), so leaving it unstyled shipped browser-default discs with
+   40px of indent inside a designed panel. */
+.wf-proof-points {
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  list-style: none;
+}
+
+.wf-proof-points li {
+  position: relative;
+  padding-left: 28px;
+  color: color-mix(in srgb, var(--color-fg) 80%, var(--color-bg));
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+/* Check drawn in CSS: no glyph, no icon font, no extra markup. */
+.wf-proof-points li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.34em;
+  width: 13px;
+  height: 7px;
+  border-left: 2.5px solid var(--color-primary);
+  border-bottom: 2.5px solid var(--color-primary);
+  transform: rotate(-45deg);
+}
+
 .wf-proof-panel strong {
   display: block;
   margin-top: 18px;
@@ -333,8 +365,19 @@ h1 {
   font-weight: 850;
 }
 
+.wf-feature-icon .wf-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* The number is an eyebrow above the title, but it is the 2nd of 4 flex
+   children: "margin-top: auto" pushed it AND everything after it to the bottom
+   of the card, so a card with a 1-line description sat 27px lower than its
+   2-line neighbours (measured on restaurant/saas/engineering demos).
+   Note: no backticks in this file's CSS comments -- it lives inside a template
+   literal and a stray backtick ends the string mid-stylesheet. */
 .wf-feature-number {
-  margin-top: auto;
+  margin-top: 14px;
 }
 
 .wf-feature h3 {
