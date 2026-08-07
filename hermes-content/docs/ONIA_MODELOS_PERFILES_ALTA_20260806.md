@@ -150,22 +150,33 @@ adentro del sistema.
 > 4. Lugar cotidiano reconocible (auto, cuarto, mesa), no fondo de estudio.
 > 5. Cabeza inclinada y encuadre imperfecto. La simetría perfecta delata la foto posada.
 >
-> **Foto elegida: selfie en el auto** (`prueba_an_auto` → `FOTO-PERFIL-LUCIA.jpg`). Generada
-> con `soul_2` siguiendo la fórmula, y **pasada por la QA obligatoria contra los frames reales**
-> (`_QA-ANORA.jpg`): mantiene estructura de cara, pecas y rubor. Comparativa de los 5
-> candidatos: `_ANORA-FORMULA.jpg`.
+> ### 🔑 La regla que resolvió el "se ve muy IA"
 >
-> **Alternativas guardadas:** `alternativa-selfie-cuarto.jpg` (misma fórmula, interior de
-> noche — la sonrisa sale un punto más limpia) · `alternativa-estudio.jpg` (la del photoshoot
-> quirúrgico, para prensa o propuestas donde conviene el registro formal).
+> Generé **11 avatares con `soul_2`** y todos salían con cara de IA: piel manchada de rojo,
+> nariz difusa, dientes con artefactos, cara ensanchada. **El Soul se rompe en primer plano
+> cerrado** — está entrenado con encuadres más abiertos, y a esa distancia inventa la zona
+> media de la cara.
 >
-> **Descartadas antes:** golden hour y café (al recortarlas cerradas la cara queda mal
-> posicionada) · selfie de espejo (expresión neutra que se apaga en chico, fondo blanco) ·
-> gym, calle y cocina (cara diminuta en el círculo).
+> **La solución estaba cargada en Higgsfield desde julio y no la estaba usando:** el Element
+> **`lucia-surgical-anchor` (`902eeebb-89e9-4477-8426-c555b20f7ecc`)**, cuya propia
+> descripción dice *"para generar variedad manteniendo el nivel de calidad ya aprobado"*.
 >
-> ⚠️ **Defecto menor conocido:** en la elegida los dientes tienen un artefacto leve a
-> resolución completa. A 320px y menos —que es donde vive un avatar— no se resuelve. Si
-> molesta, la alternativa del cuarto no lo tiene.
+> ```
+> Para PRIMER PLANO de cara:  nano_banana_2 + <<<902eeebb-…>>>   (~2 cr/img)
+> Para cuerpo entero y escena: soul_2 + soul_id 36305a9b-…      (0,12 cr/img)
+> ```
+>
+> Con el Element la piel sale limpia, las pecas son pecas y no manchas, y los dientes salen
+> naturales. La diferencia es evidente en `_ELEMENT-vs-REF.jpg` (las 3 nuevas al lado de la
+> referencia aprobada) y `_ELEMENT-CIRCULOS.jpg` (las 3 en círculo).
+>
+> **Foto final: `FOTO-PERFIL-LUCIA.jpg`, 1440×1440** — selfie en el auto generada con el
+> Element, **escalada a 4K real** con `bytedance_image_upscale` (2 cr) y recortada desde el 4K,
+> no desde el 2K. También hay versión 320.
+>
+> **Alternativas guardadas:** `alternativa-element-2-completa.jpg` (la misma toma sin
+> recortar, sirve de post) · `alternativa-selfie-cuarto.jpg` · `alternativa-estudio.jpg`
+> (photoshoot quirúrgico, para prensa o propuestas donde conviene el registro formal).
 >
 > **Lo que pasó antes (queda escrito para no repetirlo):** generé 7 avatares desde el Soul
 > ignorando que este material ya existía. Salieron con la cara más ancha y redonda que la
