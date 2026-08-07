@@ -34,6 +34,7 @@
 | B3 | **Pricing/promos** | ✅ mensual + fundadores + referidos **Y ADEMÁS plan semanal** (negocios de caja diaria) **+ revisar montos contra el cálculo de valor** — Sergio juntó las opciones | ✅ con tarea |
 | B4 | **Orden de rubros** | **IMPORTADORA primero** — ✅ EJECUTADO Y EN PRODUCCIÓN 2026-08-02: cotizaciones B2B completas + costeo DS 5646 + card en registro + demo (+56 tests, 1.026 total). Estética/vet después | ✅ hecho |
 | B5 | **Landing: rubros a "andando"** | ✅ EJECUTADO 2026-08-02: Comercio E Importadora en vivo como "andando" (solo Servicios queda "pronto") | ✅ hecho |
+| B6 | **Configurador de chatbot en la web** (pedido 2026-08-07): página donde el cliente ARMA su chatbot por opciones con precio calculado en vivo (patrón calculadora Lety) + 3 presets de un clic. Matriz propuesta que SUMA a la escalera vigente (nunca cotiza por debajo): base "responde 24/7 entrenado con tu info" Bs 350/mes + inst. Bs 1.000 · +recordatorios/confirmaciones +100 · +agenda solo +100 · +cobra con QR +150 · +entiende audios +100 · modo sin-IA (solo recordatorios) = N1 (300+200). Checks contra catálogo: base+agenda ≈ N2 (550) ✓ · todo ≈ N3 (900) ✓. Volumen por slider (200/500/1.500 msgs) + Meta transparente (~Bs 0,11/msg). Presets: Recepcionista=N1 · Vendedor=N2 · Operador total=N3 | ⬜ ratificar matriz |
 
 ## C. EN DESARROLLO (mío, con fecha de hoy)
 
