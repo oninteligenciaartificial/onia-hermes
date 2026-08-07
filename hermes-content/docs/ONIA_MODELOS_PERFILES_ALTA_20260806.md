@@ -130,27 +130,42 @@ adentro del sistema.
 > devuelve 200 para todo. En TikTok este método no funciona (devuelve un shell); ahí hay que
 > mirarlo en el registro.
 
-> ### Cómo se hizo la foto de perfil — y el error que casi cometo
+> ### La fórmula de foto de perfil — sacada del benchmark, no inventada
 >
-> **Origen: `references/models/lucia-content-bank-20260709/realism-goldenhour.png`.** Recorte
-> cuadrado centrado en la cara + un leve levante de medios (está a contraluz y la cara quedaba
-> un punto oscura a tamaño chico). **Cero generación nueva, cero deriva de identidad.**
+> Sergio pidió mirar las modelos virales antes de decidir. **La foto de perfil de
+> `@anora.creators` (20k seg.) es la evidencia**, y su fórmula es muy distinta a un retrato:
 >
-> **Por qué esta y no la de estudio** (Sergio, 2026-08-06: *"una foto un poco más improvisada…
-> que sea como una persona real"*): la toma de estudio `03-front-big-smile` se lee como **foto
-> de casting** — fondo liso, pose frontal, simetría perfecta. Ninguna persona real tiene eso de
-> foto de perfil. La de golden hour parece lo que es: una foto que le sacó un amigo al
-> atardecer. Queda guardada como `alternativa-estudio.jpg` por si algún día se quiere el
-> registro formal.
+> | Rasgo | Qué hace |
+> |---|---|
+> | **Selfie en un auto** | contexto cotidiano, no sesión de fotos |
+> | **La cara ocupa casi todo el círculo** | es lo único que sobrevive a 32px |
+> | **Risa grande con dientes** | una sonrisa suave se apaga en chico; una risa se lee siempre |
+> | **Cabeza inclinada, encuadre descentrado** | se lee captura, no pose |
+> | **Fondo oscuro** | máximo contraste contra la interfaz blanca de Instagram |
 >
-> **Lo que además la hace ganar técnicamente:** el contraluz le dibuja un borde de luz en el
-> pelo que la **separa del fondo**. Eso es lo que hace que a 32px siga leyéndose una persona y
-> no una mancha. Comparativa completa: `_REALES-TEST.jpg` (5 candidatos) y `_AB-FINAL.jpg`.
+> **Las 5 reglas que salen de ahí** (aplicables a toda modelo, no solo a Lucía):
+> 1. La cara llena el círculo. Si entra el torso, está mal.
+> 2. Risa con dientes, nunca sonrisa cerrada.
+> 3. Fondo oscuro o con luz de borde. Fondo claro = el círculo se derrite en el blanco de IG.
+> 4. Lugar cotidiano reconocible (auto, cuarto, mesa), no fondo de estudio.
+> 5. Cabeza inclinada y encuadre imperfecto. La simetría perfecta delata la foto posada.
 >
-> **Descartadas y por qué:** selfie de espejo del baño (la más "improvisada" de todas, pero
-> expresión neutra que se apaga en chico y fondo blanco sin contraste) · café (ojos
-> entrecerrados a mitad de risa, raro como foto fija) · gym y calle (cara diminuta en el
-> círculo) · cocina (demasiado aire alrededor de la cara).
+> **Foto elegida: selfie en el auto** (`prueba_an_auto` → `FOTO-PERFIL-LUCIA.jpg`). Generada
+> con `soul_2` siguiendo la fórmula, y **pasada por la QA obligatoria contra los frames reales**
+> (`_QA-ANORA.jpg`): mantiene estructura de cara, pecas y rubor. Comparativa de los 5
+> candidatos: `_ANORA-FORMULA.jpg`.
+>
+> **Alternativas guardadas:** `alternativa-selfie-cuarto.jpg` (misma fórmula, interior de
+> noche — la sonrisa sale un punto más limpia) · `alternativa-estudio.jpg` (la del photoshoot
+> quirúrgico, para prensa o propuestas donde conviene el registro formal).
+>
+> **Descartadas antes:** golden hour y café (al recortarlas cerradas la cara queda mal
+> posicionada) · selfie de espejo (expresión neutra que se apaga en chico, fondo blanco) ·
+> gym, calle y cocina (cara diminuta en el círculo).
+>
+> ⚠️ **Defecto menor conocido:** en la elegida los dientes tienen un artefacto leve a
+> resolución completa. A 320px y menos —que es donde vive un avatar— no se resuelve. Si
+> molesta, la alternativa del cuarto no lo tiene.
 >
 > **Lo que pasó antes (queda escrito para no repetirlo):** generé 7 avatares desde el Soul
 > ignorando que este material ya existía. Salieron con la cara más ancha y redonda que la
