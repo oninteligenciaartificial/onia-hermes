@@ -3,8 +3,21 @@
 > 2026-08-06. Sergio: *"analizá esta modelo igual para ganar conocimiento y sepas cómo crear
 > el contenido perfecto para nuestras modelos"*.
 > Fuente: perfil público + 12 posts visibles sin login (`_GRID-ANORA.jpg` en esta carpeta).
-> **Límite honesto:** Instagram no da likes/vistas sin sesión, así que **no hay métricas de
-> engagement por pieza** — el análisis es de ESTRUCTURA y CRAFT, no de rendimiento medido.
+> ⚠️ **Actualizado 2026-08-07 — ahora SÍ hay métricas.** La API pública devolvió datos al día
+> siguiente. Anora: **20.055 seguidores, 3.657 vistas y 110 likes promedio → 0,55% de
+> engagement**. Comparada contra las dos virtuales "famosas":
+>
+> | Cuenta | Seguidores | Vistas prom. | Engagement |
+> |---|---:|---:|---:|
+> | **@anora.creators** | 20.055 | **3.657** | **0,55%** |
+> | @noonoouri (agencia IMG) | 458.941 | ~12.358 | 0,07% |
+> | @shudu.gram (Gucci) | 235.983 | ~2.180 | 0,11% |
+>
+> **Anora tiene 1/12 de los seguidores de Shudu y le gana en vistas.** Las famosas están
+> comercialmente muertas: fama de prensa, cero interacción. Y lo que las mató se ve en sus
+> captions — son listas de créditos de marca. Contenido que le sirve al anunciante, no al que
+> mira. Conclusión completa y sistema derivado:
+> `hermes-content/docs/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md`.
 
 ---
 
