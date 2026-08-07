@@ -22,6 +22,9 @@ export function SiteFooter() {
             2026-08-06): toda página pública del sitio tiene su destino acá. */}
         <a href="/precios">Precios</a>
         <a href="/prueba-gratis">Prueba gratis</a>
+        <a href="/chatbot">Chatbot</a>
+        <a href="/servicios/marketing-ia">Marketing IA</a>
+        <a href="/servicios/consultoria">Consultoría</a>
         <a href="/modulos/dental">Dental</a>
         <a href="/funciones/facturacion-electronica-siat">Facturación SIAT</a>
         <a href="/comparativa">Comparación</a>
