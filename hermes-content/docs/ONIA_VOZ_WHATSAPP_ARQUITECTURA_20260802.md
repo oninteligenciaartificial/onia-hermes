@@ -995,3 +995,64 @@ otro lado es peor que no tenerlo.
 motor de voz completo contra el número de prueba, sin depender del tier ni tocar
 producción. Lo que queda gateado por el tier es únicamente el paso final de
 encenderlo en el número real.
+
+### 15.ter MEDICIÓN REAL (2026-08-07): el VPS NO puede correr voz en tiempo real
+
+Se midió en el VPS de producción, con lo que ya está instalado. Frase en español
+de ~7 segundos, dicha como la diría un prospecto real.
+
+| Etapa | Motor | Tiempo | Factor vs tiempo real |
+|---|---|---|---|
+| Síntesis | Piper `es_ES-davefx-medium` (open source, CPU) | **8.141 ms** para 7 s | **1,16x — más lento** |
+| Transcripción (frío) | `faster-whisper-small` | 34.863 ms | 5x — carga del modelo |
+| Transcripción (caliente) | `faster-whisper-small` | **9.399 ms** para 7 s | **1,34x — más lento** |
+
+Calidad de transcripción: **correcta** ("Somos 5 personas", "Santa Cruz",
+signos de interrogación bien puestos). El problema no es la calidad.
+
+**Un turno de conversación quedaría así:**
+
+```
+habla 5 s → transcribir 6,7 s → pensar ~1,5 s → sintetizar 4,6 s
+≈ 13 segundos de silencio antes de la primera palabra del bot
+```
+
+Una llamada telefónica se abandona a los 3-4 segundos de silencio. **No es
+lento: es inutilizable.**
+
+#### Las tres consecuencias
+
+1. **Whisper en este CPU no sirve para llamadas.** Confirmado con números, ya no
+   es hipótesis.
+2. **Piper tampoco.** Era la salida open source gratuita y también está por
+   encima del tiempo real. La opción "todo local y gratis" queda descartada
+   por medición, no por opinión.
+3. **Si voz sale del VPS, salen LAS DOS PATAS**, no solo la síntesis. El costo
+   por llamada calculado en §4 asumía transcripción local gratis: **ese número
+   queda corto y hay que rehacerlo** antes de vender el add-on.
+
+#### Lo que esto NO rompe
+
+Los **audios de WhatsApp** (notas de voz) siguen funcionando igual: transcribir
+una nota en 9 segundos es perfectamente aceptable porque no es tiempo real.
+La medición no toca nada de lo que hoy está en producción.
+
+#### Recomendación
+
+**Parquear el desarrollo de voz.** Dos bloqueos independientes, y ninguno se
+resuelve programando:
+
+- El número real no llega al tier (§15) — se destraba con clientes, no con código.
+- El VPS no puede correr el bucle — se destraba con GPU (~$380/mes) o con
+  servicios hospedados para STT **y** TTS, que encarecen cada llamada.
+
+Con cero clientes pagando, gastar días de desarrollo y sumar costo mensual fijo
+en una función que **no se puede encender en producción** es exactamente el
+patrón que este repo viene combatiendo: construir algo que queda apagado.
+
+Se retoma cuando haya clientes: ahí sube el tier, hay ingreso que paga los
+servicios hospedados, y el add-on de voz tiene a quién vendérsele.
+
+**Lo que sí queda listo:** el número de prueba con `calling: ENABLED` (§15.bis),
+la arquitectura del repartidor validada por el error 138018, y el pricing
+armado. El día que se retome, se arranca desde acá y no desde cero.
