@@ -1,0 +1,23 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.709
+
+; v6 — mismo tratamiento visual que v5 pero con ENTRADA ANIMADA.
+; \move(540,274,540,250,0,260) = el tag baja 24 px en 260 ms mientras entra el fade.
+; Con \an8 el punto de \move es el CENTRO SUPERIOR del bloque de texto, así que 540
+; (mitad de 1080) lo deja centrado. \move pisa a MarginV — el 250 del estilo queda de
+; respaldo si alguna línea no lleva override.
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Tag,Bricolage Grotesque,54,&H00F4F5F2,&H00F4F5F2,&H1E0D0F0A,&H1E0D0F0A,-1,0,0,0,100,100,5,0,3,22,0,8,50,50,250,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:05.10,0:00:08.40,Tag,,0,0,0,,{\an8\move(540,274,540,250,0,260)\fad(240,200)}{\c&H006AD200&}—{\c&H00F4F5F2&}  YO TRABAJO CON ESTO
+Dialogue: 0,0:00:14.30,0:00:17.20,Tag,,0,0,0,,{\an8\move(540,274,540,250,0,260)\fad(240,200)}{\c&H006AD200&}—{\c&H00F4F5F2&}  ¿DÓNDE ANOTÁN?
+Dialogue: 0,0:00:32.40,0:00:35.60,Tag,,0,0,0,,{\an8\move(540,274,540,250,0,260)\fad(240,200)}{\c&H006AD200&}—{\c&H00F4F5F2&}  MÁS RÁPIDO NO ES MEJOR
+Dialogue: 0,0:00:42.90,0:00:44.45,Tag,,0,0,0,,{\an8\move(540,274,540,250,0,260)\fad(240,0)}{\c&H006AD200&}—{\c&H00F4F5F2&}  COMENTÁ ACÁ ABAJO

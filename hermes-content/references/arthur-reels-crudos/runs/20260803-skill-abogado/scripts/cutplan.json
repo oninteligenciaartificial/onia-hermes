@@ -1,0 +1,168 @@
+{
+  "video": "raw/arthur-skill.mp4",
+  "modo": "audio",
+  "noise": "-32dB",
+  "minSil": 0.45,
+  "pad": 0.08,
+  "origDur": 53.78,
+  "finalDur": 49.21,
+  "silences": [
+    {
+      "start": 9.398708,
+      "end": 10.205896
+    },
+    {
+      "start": 12.493917,
+      "end": 12.9875
+    },
+    {
+      "start": 13.397542,
+      "end": 13.930375
+    },
+    {
+      "start": 31.275792,
+      "end": 31.777625
+    },
+    {
+      "start": 33.159542,
+      "end": 33.622708
+    },
+    {
+      "start": 35.564437,
+      "end": 36.030104
+    },
+    {
+      "start": 44.957583,
+      "end": 45.511042
+    },
+    {
+      "start": 50.981167,
+      "end": 51.432208
+    },
+    {
+      "start": 52.120896,
+      "end": 53.732125
+    }
+  ],
+  "keep": [
+    {
+      "start": 0,
+      "end": 9.48
+    },
+    {
+      "start": 10.13,
+      "end": 12.57
+    },
+    {
+      "start": 12.91,
+      "end": 13.48
+    },
+    {
+      "start": 13.85,
+      "end": 31.36
+    },
+    {
+      "start": 31.7,
+      "end": 33.24
+    },
+    {
+      "start": 33.54,
+      "end": 35.64
+    },
+    {
+      "start": 35.95,
+      "end": 45.04
+    },
+    {
+      "start": 45.43,
+      "end": 51.06
+    },
+    {
+      "start": 51.35,
+      "end": 52.2
+    }
+  ],
+  "ffmpeg": "ffmpeg -y -i \"raw/arthur-skill.mp4\" -vf \"select='between(t,0,9.48)+between(t,10.13,12.57)+between(t,12.91,13.48)+between(t,13.85,31.36)+between(t,31.7,33.24)+between(t,33.54,35.64)+between(t,35.95,45.04)+between(t,45.43,51.06)+between(t,51.35,52.2)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,0,9.48)+between(t,10.13,12.57)+between(t,12.91,13.48)+between(t,13.85,31.36)+between(t,31.7,33.24)+between(t,33.54,35.64)+between(t,35.95,45.04)+between(t,45.43,51.06)+between(t,51.35,52.2)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+  "rows": [
+    {
+      "i": 0,
+      "start": 0.5,
+      "end": 5.22,
+      "text": "la ida te habla razón en todo y eso te está haciendo perder plata bueno en este vídeo te",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 1,
+      "start": 5.22,
+      "end": 9.08,
+      "text": "va a mostrar te va a estar mostrando cómo hacer que la ida te tome la contraria en menos de tres",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 2,
+      "start": 9.08,
+      "end": 16.78,
+      "text": "minutos bueno primero vas a entrar a configuración skills y es un archivo únicamente escrito solamente",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 3,
+      "start": 16.78,
+      "end": 22.3,
+      "text": "vas a copiar y pegarlo ahí adentro no es necesario programar absolutamente nada después de eso le",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 4,
+      "start": 22.3,
+      "end": 27.84,
+      "text": "va a estar pasando tres reglas que son que busque el supuesto si es falso y si es así que lo tire",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 5,
+      "start": 27.84,
+      "end": 35.1,
+      "text": "todo abajo dos que pille el que te diría que no y tres que te hombreito paso tres vas a pasar una",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 6,
+      "start": 35.1,
+      "end": 40.5,
+      "text": "idea tuya y diferentes de las otras veces no te va a decir excelente idea y si te va a decir las",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 7,
+      "start": 40.5,
+      "end": 44.92,
+      "text": "posibles mejoras en las que puedes dar y el posible hueco que podría pillar tu cliente en tu idea",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 8,
+      "start": 44.92,
+      "end": 50.22,
+      "text": "bueno tengo cinco estas escritas si te interesan estos skills escríbeme aquí abajo skills y te las",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 9,
+      "start": 50.22,
+      "end": 50.94,
+      "text": "paso todas",
+      "keep": true,
+      "reason": "contenido"
+    }
+  ]
+}

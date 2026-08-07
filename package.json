@@ -2,6 +2,7 @@
   "name": "hermes-vps-tools",
   "private": true,
   "dependencies": {
+    "playwright": "^1.62.1",
     "ssh2": "^1.17.0"
   },
   "scripts": {

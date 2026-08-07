@@ -1,0 +1,8 @@
+{
+  "sfx": [
+    { "_nota": "entra el clip de pantalla del paso 1", "asset": "C:/dev/proyectos/HERMES/onia-hermes/.claude/skills/editor-videos/assets/sfx/whoosh.wav", "at": 10.85, "gain": -13, "duck": true },
+    { "_nota": "entra el paso 2", "asset": "C:/dev/proyectos/HERMES/onia-hermes/.claude/skills/editor-videos/assets/sfx/whoosh.wav", "at": 20.45, "gain": -13, "duck": true },
+    { "_nota": "aparece la respuesta / el veredicto", "asset": "C:/dev/proyectos/HERMES/onia-hermes/.claude/skills/editor-videos/assets/sfx/whoosh.wav", "at": 35.45, "gain": -12, "duck": true },
+    { "_nota": "vuelve la cara para el CTA", "asset": "C:/dev/proyectos/HERMES/onia-hermes/.claude/skills/editor-videos/assets/sfx/whoosh.wav", "at": 44.42, "gain": -13, "duck": true }
+  ]
+}

@@ -1,0 +1,25 @@
+# Videos crudos, intermedios y finales NO van a git.
+#
+# Por qué: un solo reel de 44s deja ~1,3 GB entre el crudo del iPhone (4K HDR),
+# el normalizado y los 5 renders intermedios. A 3 piezas por semana eso hace
+# inmanejable el repo, y git no suelta los blobs grandes una vez commiteados.
+#
+# Dónde vive cada cosa:
+#   · el CRUDO  → Google Drive (y la carpeta local mientras se edita)
+#   · el FINAL  → se publica en Instagram/TikTok; copia en Drive si hace falta
+#   · lo que SÍ se versiona acá → los planes (JSON), las tiras de control (JPG),
+#     los .ass de subtítulos y los README. Con eso el corte se REPRODUCE exacto.
+
+*.mp4
+*.MOV
+*.mov
+*.m4v
+*.mp3
+*.wav
+*.aac
+
+# fuentes copiadas por el paso de karaoke
+runs/*/renders/_fonts/
+
+# frames sueltos de control (la tira ya combinada sí se versiona)
+runs/*/renders/chk_*.png
