@@ -11,20 +11,26 @@ const REGISTRO_URL = `${APP_URL}/register`;
  * Los numeros son los de lanzamiento vigentes (CLAUDE.md §propuestas 7 y
  * PRICING_RATIONALE_INTERNO.md §0). Si cambian, cambian ahi primero.
  */
-export function Pricing() {
+export function Pricing({ sinEncabezado = false }: { sinEncabezado?: boolean }) {
   return (
     <section className={`${styles.section} ${styles.secDeep}`} id="precios">
       <div className={styles.container}>
-        <Reveal>
-          <span className={styles.kicker}>Precios</span>
-        </Reveal>
-        <div style={{ marginTop: "0.5rem" }}>
-          <SplitTextReveal
-            as="h2"
-            className={styles.sectionTitle}
-            text="Precios en bolivianos, publicados acá."
-          />
-        </div>
+        {/* En /precios la pagina ya trae su propio h1 — el encabezado interno
+            se silencia para no decir "precios" dos veces seguidas. */}
+        {!sinEncabezado && (
+          <>
+            <Reveal>
+              <span className={styles.kicker}>Precios</span>
+            </Reveal>
+            <div style={{ marginTop: "0.5rem" }}>
+              <SplitTextReveal
+                as="h2"
+                className={styles.sectionTitle}
+                text="Precios en bolivianos, publicados acá."
+              />
+            </div>
+          </>
+        )}
 
         <div className={styles.plans}>
           <Reveal className={styles.plan}>

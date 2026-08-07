@@ -1,0 +1,108 @@
+import type { Metadata } from "next";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { Pricing } from "@/components/landing/pricing";
+import { Faq } from "@/components/landing/faq";
+
+const SITE_URL = "https://onia.com.bo";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(`${SITE_URL}/`),
+  title: "Precios de Onia Platform — planes en bolivianos, publicados",
+  description:
+    "Básico Bs 320, Pro Bs 750 y Full Bs 1.500 al mes (o semanal desde Bs 89). Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. 14 días gratis.",
+  alternates: { canonical: "/precios" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: "Precios de Onia Platform — en bolivianos, publicados",
+    description:
+      "Básico 320 · Pro 750 · Full 1.500 Bs/mes. 14 días gratis sin tarjeta, sin permanencia.",
+    url: "/precios",
+  },
+};
+
+/**
+ * /precios — la pagina que Siigo y Alegra tienen y toda landing única no:
+ * una URL enlazable y medible para la decisión de compra. Reusa la MISMA
+ * seccion <Pricing/> del home (un solo lugar donde viven los montos) y la
+ * FAQ; agrega el puente a /comparativa y a /prueba-gratis (el triángulo de
+ * conversión del research: precios ↔ comparativa ↔ prueba).
+ */
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "Precios", item: `${SITE_URL}/precios` },
+      ],
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "Onia Platform",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      url: `${SITE_URL}/precios`,
+      offers: [
+        { name: "Básico", price: "320" },
+        { name: "Pro", price: "750" },
+        { name: "Full", price: "1500" },
+      ].map((plan) => ({
+        "@type": "Offer",
+        name: plan.name,
+        price: plan.price,
+        priceCurrency: "BOB",
+        category: "Suscripción mensual",
+        availability: "https://schema.org/InStock",
+      })),
+    },
+  ],
+};
+
+export default function PreciosPage() {
+  return (
+    <>
+      <a href="#contenido" className="skip-link">
+        Saltar al contenido
+      </a>
+      <SiteHeader />
+      <main id="contenido">
+        <section className="section" style={{ paddingBottom: 0 }}>
+          <div className="container">
+            <p className="kicker">Precios</p>
+            <h1 className="h2">
+              En bolivianos, publicados, sin letra escondida.
+            </h1>
+            <p className="lead">
+              Tres planes que se distinguen por el salto de valor — ordenar,
+              convertir, automatizar — no por contar usuarios. Pagás por QR,
+              mensual o semanal, y cancelás cuando quieras.
+            </p>
+          </div>
+        </section>
+        <Pricing sinEncabezado />
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="container">
+            <p className="lead">
+              ¿Comparando opciones?{" "}
+              <a href="/comparativa">
+                Mirá Onia contra todo lo que se vende en Bolivia
+              </a>{" "}
+              — con los precios públicos de cada uno y lo que todavía no
+              hacemos, dicho de frente. ¿Preferís tocarlo antes que leer?{" "}
+              <a href="/prueba-gratis">Probalo gratis 14 días</a>.
+            </p>
+          </div>
+        </section>
+        <Faq />
+      </main>
+      <SiteFooter />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
+    </>
+  );
+}

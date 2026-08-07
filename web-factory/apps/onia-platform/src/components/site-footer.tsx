@@ -18,9 +18,16 @@ export function SiteFooter() {
         <a href="/" className={styles.brand} aria-label="Onia Platform — inicio">
           <BrandLogo height={22} />
         </a>
+        {/* El pie es el sitemap interno (patrón Holded/Bind, research
+            2026-08-06): toda página pública del sitio tiene su destino acá. */}
+        <a href="/precios">Precios</a>
+        <a href="/prueba-gratis">Prueba gratis</a>
+        <a href="/modulos/dental">Dental</a>
+        <a href="/funciones/facturacion-electronica-siat">Facturación SIAT</a>
+        <a href="/comparativa">Comparación</a>
+        <a href="/nosotros">Nosotros</a>
         <a href="/terminos">Términos</a>
         <a href="/privacidad">Privacidad</a>
-        <a href="/comparativa">Comparación</a>
         <span className={styles.firma}>Onia Platform · Santa Cruz, Bolivia</span>
       </div>
 

@@ -7,7 +7,8 @@ import styles from "./site-header.module.css";
 const NAV = [
   { href: "/#como", label: "Cómo funciona" },
   { href: "/#modulos", label: "Módulos" },
-  { href: "/#precios", label: "Precios" },
+  { href: "/precios", label: "Precios" },
+  { href: "/nosotros", label: "Nosotros" },
 ] as const;
 
 /**
