@@ -8,6 +8,17 @@ descargado del sitio de la ANB y leído artículo por artículo.
 **Reparto:** Leslie Mercado Moreno (titular SEPREC) figura y firma · Sergio prepara, carga el
 sistema y hace seguimiento.
 
+**Decisión 2026-08-06 — ONIA importa por su cuenta.** Se evaluó que Bolivian Electric (empresa
+familiar, [[bolivian-electric-es-familia-vinculada]]) importara el hardware y ONIA vendiera
+sólo software. Sergio eligió capacidad propia: así el margen y la relación con las fábricas se
+acumulan en ONIA. **BE queda como palanca logística** — consolidar embarques chicos en sus
+contenedores, sin dependencia. Toda operación ONIA↔BE se factura a valor de mercado y se
+documenta (partes vinculadas, Ley 549 / DS 2227).
+
+⏱️ **Consecuencia a respetar:** con el registro corre el **Art. 43** — al menos **una operación
+cada 12 meses** o la habilitación se cae. Consolidar con BE hace fácil cumplirlo: un embarque
+chico cuenta.
+
 ---
 
 ## 0. Titulares — lo que el reglamento dice y desarma tres supuestos
