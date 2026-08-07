@@ -1,0 +1,97 @@
+{
+  "title": "Lo que separa a un negocio que escala de uno estancado no es trabajar más",
+  "caption": "Nadie se estanca por vago. Se estanca porque el negocio depende de que él esté. Responde él, sigue él, cobra él. El día que para, el negocio para. El negocio que escala hizo lo contrario: dejó de vender sus horas y montó un sistema que vende sin él. No es trabajar más. Es dejar de ser el cuello de botella. Guardá el slide 6 y comentá ESCALA: te muestro cómo se ve ese sistema montado para tu rubro.",
+  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#negocios", "#emprender", "#whatsapp", "#santacruz"],
+  "comment_trigger": "Comentá ESCALA",
+  "cta": "Comentá ESCALA",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Negocios",
+      "headline": "Lo que te tiene *estancado* no es trabajar poco",
+      "body": "Es otra cosa. Y nadie te la dice.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Ink, titular condensado, acento verde en estancado, objeto 3D.",
+      "alt_text": "Lo que te tiene estancado no es trabajar poco"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "La verdad incómoda",
+      "headline": "El negocio depende de *vos*",
+      "body": "Respondés vos, seguís vos, cobrás vos. El día que parás, el negocio para. Eso no es tener un negocio: es tener un empleo que no podés renunciar.",
+      "callout": "¿Te fuiste 3 días y volviste a un incendio? ↘",
+      "save_worthy": false,
+      "visual_prompt": "Alto contraste, acento verde en vos.",
+      "alt_text": "El negocio depende de vos"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "El paradigma",
+      "headline": "Escalar no es hacer *más*",
+      "body": "El que crece no trabaja más horas. Hace lo contrario: deja de ser la persona por la que pasa todo. Cambia su tiempo por un sistema.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D centro, acento verde en más.",
+      "alt_text": "Escalar no es hacer más"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Qué cambia",
+      "headline": "Vendés sin estar *presente*",
+      "body": "Un sistema con IA responde, califica y agenda solo. Vos dejás de ser el cuello de botella y entrás únicamente a cerrar.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D, acento verde en presente.",
+      "alt_text": "Vendés sin estar presente"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "El momento",
+      "headline": "A las *3 a.m.* ya vendiste",
+      "body": "Mientras dormís, alguien preguntó por WhatsApp, el sistema respondió, lo calificó y lo agendó. Te despertás con la reunión puesta. Vos nunca podrías. Tu sistema sí.",
+      "callout": "El 40% de los leads no vuelve si no respondés en 5 min",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D con glow, dato temporal, acento verde en 3 a.m.",
+      "alt_text": "A las 3am ya vendiste"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "Framework",
+      "headline": "El test del negocio *sin vos*",
+      "body": "1) Si desaparecés una semana, ¿sigue entrando plata? 2) ¿El seguimiento corre sin que lo recuerdes? 3) ¿Sabés de dónde viene cada cliente sin revisar a mano? Cada 'no' es un lugar donde vos sos el cuello de botella.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Tarjeta framework, 3 preguntas.",
+      "alt_text": "El test del negocio sin vos"
+    },
+    {
+      "number": 7,
+      "role": "point",
+      "pill": "Por dónde",
+      "headline": "No automatices *todo*. Empezá por el cuello",
+      "body": "El error es querer automatizar todo de golpe. Se empieza por el proceso que hoy te frena: casi siempre, responder y seguir a los que preguntan.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D, acento verde en todo.",
+      "alt_text": "Empezá por el cuello de botella"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "Empezá hoy",
+      "headline": "Dejá de ser el *cuello de botella*",
+      "body": "Comentá *ESCALA* y te muestro cómo se ve ese sistema montado para tu rubro.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "CTA fuerte verde, acento en ESCALA.",
+      "alt_text": "Comentá ESCALA"
+    }
+  ]
+}
