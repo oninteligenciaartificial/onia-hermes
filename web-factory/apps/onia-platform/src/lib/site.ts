@@ -50,6 +50,17 @@ export const APP_URL = "https://app.onia.com.bo";
 export const DENTALGEST_URL = "https://dentalgest.app";
 
 /**
+ * Numero del carril chatbot/servicios (kickoff B6, 2026-08-07). OJO: difiere
+ * del WA_PHONE verificado por Meta (78491375) — es el numero que atiende el
+ * propio chatbot. Si Sergio unifica numeros, cambiar SOLO aca.
+ */
+const WA_PHONE_SERVICIOS = "59175414930";
+
+export function waServiciosLink(text: string): string {
+  return `https://wa.me/${WA_PHONE_SERVICIOS}?text=${encodeURIComponent(text)}`;
+}
+
+/**
  * Agenda propia (Cal.com self-hosted en el VPS, cuenta `onia`).
  * Verificado 2026-07-30: los dos enlaces responden 200 en publico.
  *
