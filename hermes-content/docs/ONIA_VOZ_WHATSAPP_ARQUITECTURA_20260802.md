@@ -965,3 +965,33 @@ El error `138018` de la misma documentación dice, textual, que hace falta
 subscription to the calls webhook field"*. Eso **confirma la Ruta 1** de §
 anterior: una app aparte suscrita solo a `calls` es un camino soportado por
 Meta, y no obliga a tocar la app que hoy atiende los mensajes.
+
+### 15.bis HIPÓTESIS CONFIRMADA (2026-08-07): el número de prueba SÍ está exento
+
+Se probó de verdad, no se dedujo. `POST /1122144677655183/settings` con
+`{"calling":{"status":"ENABLED"}}` sobre el número de prueba **+1 555-649-7880**,
+que está en `TIER_250` igual que el de producción:
+
+```
+respuesta      HTTP 200 · {"success":true}
+verificación   GET /settings → calling.status = "ENABLED"
+```
+
+**El requisito de messaging limit ≥ 2000 NO aplica a los números de prueba.**
+Meta lo acepta con el mismo tier con el que rechaza al número real.
+
+Estado de los dos números tras la prueba:
+
+| Número | ID | Tier | `calling.status` |
+|---|---|---|---|
+| **+1 555-649-7880** (prueba) | `1122144677655183` | TIER_250 | **ENABLED** |
+| +591 75414930 (producción) | `1283320641524523` | TIER_250 | `NOT_SET` — a propósito |
+
+**El producción se deja intacto**: aunque algún día pase el tier, no se enciende
+hasta que exista un motor que conteste. El botón de llamar visible sin nadie del
+otro lado es peor que no tenerlo.
+
+**Consecuencia para el plan:** F0 es viable YA. Se puede construir y medir el
+motor de voz completo contra el número de prueba, sin depender del tier ni tocar
+producción. Lo que queda gateado por el tier es únicamente el paso final de
+encenderlo en el número real.
