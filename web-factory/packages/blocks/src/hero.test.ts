@@ -7,7 +7,7 @@ const base = {
   redes: { ig: "", fb: "", linkedin: "", x: "" },
   servicios: [{ titulo: "s", desc: "d", icono: "x" }],
   cta: { texto: "Agendar cita", url: "https://wa.me/1" },
-} as const;
+};
 
 describe("renderHero trust panel", () => {
   it("uses beneficios in the proof panel when present", () => {
