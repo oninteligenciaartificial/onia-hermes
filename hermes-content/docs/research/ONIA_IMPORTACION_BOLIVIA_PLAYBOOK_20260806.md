@@ -726,6 +726,34 @@ diferenciador) y sumar solar después como módulo de la misma plataforma, compr
 
 ---
 
+## 5-ter. Regla de decisión — qué hardware vale la pena importar
+
+Surgió al evaluar el tercer candidato (hardware para IA local, 2026-08-06). Es el filtro que
+aplica a **cualquier** producto físico que ONIA considere:
+
+> **¿El hardware crea una necesidad de software recurrente que sin él no existiría?**
+
+| Candidato | ¿Crea SaaS recurrente? | Veredicto |
+|---|---|---|
+| **Cargador EV en condominio** | **Sí.** Alguien tiene que medir y cobrarle a cada residente todos los meses. El box es la razón por la que pagan el mensual. | Único que pasa el filtro |
+| Panel solar | Débil. Monitoreo y el reporte obligatorio a la AETN (Res. 487/2022), pero el cliente puede vivir sin eso. | No justifica importar |
+| **Hardware de IA local** (servidor GPU, edge) | **No.** El software corre igual —y más barato— en la nube. El fierro no genera un cobro mensual que no exista ya. | No pasa |
+
+Contexto del caso IA local: el **DS 5518** (arancel 0% hasta 31-dic-2026) cubre "línea negra"
+—laptops, tablets, teclados, impresoras, cámaras, monitores, audio, consolas, smartphones—
+y **no menciona servidores, GPUs ni componentes**, así que la ventaja arancelaria
+probablemente no aplica. Sumado a ticket alto (USD 5–15k por equipo), RMA a 12.000 km, y un
+comprador objetivo ([[onia-enfoque-compradores]]: dueño de negocio formal boliviano) que no
+compra servidores GPU.
+[Aduana — guía DS 5518](https://www.aduana.gob.bo/todo-lo-que-debe-saber-sobre-el-nuevo-decreto-5518) ·
+[lista de productos](https://www.reduno.com.bo/economia/atencion-gobierno-fija-arancel-cero-para-dispositivos-electronicos-conoce-la-lista-202611494243)
+
+**Corolario:** el valor/kg, el arancel y la moda del producto son secundarios. Lo que decide
+es si el fierro engancha un cobro mensual. Si no lo hace, importarlo es entrar a un negocio de
+márgenes de comerciante, que no es el nuestro ([[onia-vende-software-nunca-horas]]).
+
+---
+
 ## 6. Qué NO pude verificar (para no inventar)
 
 1. ~~Umbral Bs de importador habitual vs. no habitual~~ — **RESUELTO 2026-08-06 contra el
