@@ -17,7 +17,11 @@
  * El fallback existe para no dejar la web sin CTA; el override por entorno es
  * para poder apuntar a otro numero (staging, chatbot) sin tocar codigo.
  */
-const WA_PHONE_FALLBACK = "59178491375";
+// 2026-08-07: pasa a ser el 75414930, el numero del CHATBOT. El 78491375 quedo
+// atrapado en un portfolio fantasma de Meta y NO tiene bot atendiendo: cada
+// visitante que tocaba el boton de WhatsApp caia en un numero que nadie mira.
+// El 75414930 esta en Cloud API con el bot vivo y la app de Meta publicada.
+const WA_PHONE_FALLBACK = "59175414930";
 
 export const WA_PHONE =
   (process.env.NEXT_PUBLIC_WA_PHONE ?? "").replace(/\D/g, "") ||
