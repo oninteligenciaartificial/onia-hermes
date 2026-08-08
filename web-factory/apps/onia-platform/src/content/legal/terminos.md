@@ -74,16 +74,20 @@ incumplimiento grave de estos Términos, avisándote salvo urgencia justificada.
 (Bs)**, según el plan contratado en la propuesta u orden de servicio vigente. Los
 planes y precios publicados pueden ser precios de lanzamiento.
 
-3.2. **Cobro.** El servicio se cobra por **trimestre adelantado**, mediante
-**pago QR** u otro medio que Onia habilite y comunique. El acceso al período se
-habilita una vez confirmado el pago. Onia emite la factura que corresponda
-conforme a la normativa boliviana aplicable. [REVISAR ABOGADO: texto exacto de
-facturación según modalidad vigente.]
+3.2. **Cobro.** El servicio se cobra **por adelantado**, en el ciclo que elijas
+entre los que ofrece tu plan: **semanal, mensual o anual** (el ciclo semanal no
+está disponible en todos los planes). El medio es **pago QR** u otro que Onia
+habilite y comunique. El acceso al período se habilita una vez confirmado el
+pago. Onia emite el documento que corresponda conforme a la normativa boliviana
+aplicable. [REVISAR ABOGADO: texto exacto de facturación según modalidad
+vigente.]
 
-3.3. **Renovación.** Al vencer cada trimestre, el servicio se renueva por un
+3.3. **Renovación.** Al vencer cada período, el servicio se renueva por un
 período igual al precio vigente. Onia envía el aviso de renovación con
 anticipación razonable. Podés no renovar avisando antes del inicio del nuevo
-trimestre; **no hay penalidad por no renovar**.
+período; **no hay penalidad por no renovar**. No hay contrato de permanencia:
+lo pagado cubre el período en curso y no se reembolsa de forma anticipada,
+salvo el caso de discontinuación del servicio previsto en §10.2.
 
 3.4. **Mora y suspensión — nunca borrado inmediato.** Si el pago de renovación no
 se confirma al vencimiento:

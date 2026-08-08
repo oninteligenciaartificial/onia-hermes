@@ -20,8 +20,8 @@ export function Honesty() {
             <li>Cero clientes pagando todavía: serías de los primeros.</li>
             <li>Nuestra factura fiscal está en trámite ante el SIN.</li>
             <li>
-              Por eso el riesgo lo ponemos nosotros: 14 días gratis y devolución
-              del primer mes.
+              Por eso probás primero y pagás después: 14 días gratis, sin
+              tarjeta y sin contrato de permanencia.
             </li>
             <li>
               <a href="/comparativa">Ver la comparación completa →</a>

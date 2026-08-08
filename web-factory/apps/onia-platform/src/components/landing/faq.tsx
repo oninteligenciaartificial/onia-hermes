@@ -43,7 +43,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿Hay contrato de permanencia?",
-    a: "No. Pagás mes a mes o semana a semana y cancelás cuando quieras. El primer mes tiene garantía: si no te sirve, te devolvemos lo pagado.",
+    a: "No. Pagás por adelantado el ciclo que elijas —semana, mes o año— y no renovás cuando quieras, sin penalidad. Lo pagado cubre el período en curso: por eso la prueba de 14 días va antes y sin tarjeta, para que decidas sin poner un peso.",
   },
 ];
 

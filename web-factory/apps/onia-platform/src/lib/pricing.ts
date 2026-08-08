@@ -236,7 +236,7 @@ export const CONDICIONES: readonly string[] = [
   "Pagás semanal, mensual o anual. El anual cobra 10 meses: dos van de regalo.",
   "El semanal existe en Básico (Bs 89) y en Pro (Bs 199). Full se cobra mensual o anual.",
   "14 días de prueba sin tarjeta, con el Pro completo. Al vencer, la cuenta queda en solo lectura — nada se borra.",
-  "Migración e implementación en cero durante esta fase de lanzamiento.",
+  "En los tres planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
   "Tus datos son tuyos: los exportás en CSV desde el plan más chico.",
 ] as const;
 
