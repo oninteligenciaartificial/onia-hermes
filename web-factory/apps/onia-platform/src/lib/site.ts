@@ -8,16 +8,22 @@
  */
 
 /**
- * Numero de WhatsApp del negocio.
+ * Numero de WhatsApp del negocio (el que ATIENDE los mensajes).
  *
- * Sale de `NEXT_PUBLIC_WA_PHONE` (solo digitos, con codigo de pais). Si el
- * entorno no la define se usa el numero confirmado por Sergio 2026-07-26, que
- * es el mismo que figura en el portfolio de Meta y en el pie legal: si cambia,
- * hay que cambiarlo en los tres lados o la verificacion de Meta deja de cruzar.
- * El fallback existe para no dejar la web sin CTA; el override por entorno es
- * para poder apuntar a otro numero (staging, chatbot) sin tocar codigo.
+ * Sale de `NEXT_PUBLIC_WA_PHONE` (solo digitos, con codigo de pais). Esa
+ * variable NO esta definida en ningun lado hoy, asi que en la practica manda
+ * este fallback.
+ *
+ * 2026-08-08: pasa de 78491375 a 75414930. El 78491375 quedo atrapado en un
+ * portfolio fantasma de Meta y NO tiene bot atendiendo; el 75414930 esta en
+ * WhatsApp Cloud API con el chatbot vivo y la app publicada. Todo enlace
+ * wa.me de la web tiene que ir a este numero.
+ *
+ * OJO — el `tel:+59178491375` del pie legal NO se toca: ese es para LLAMAR y
+ * ahi contesta una persona. El 75414930 es un chip en Cloud API sin app: si
+ * alguien lo llama, no lo atiende nadie.
  */
-const WA_PHONE_FALLBACK = "59178491375";
+const WA_PHONE_FALLBACK = "59175414930";
 
 export const WA_PHONE =
   (process.env.NEXT_PUBLIC_WA_PHONE ?? "").replace(/\D/g, "") ||
@@ -50,15 +56,14 @@ export const APP_URL = "https://app.onia.com.bo";
 export const DENTALGEST_URL = "https://dentalgest.app";
 
 /**
- * Numero de ventas de chatbot/servicios — unificado al numero verificado por
- * Meta que usa el resto de la landing (2026-08-07). El 59175414930 es el que
- * atiende el propio chatbot; si algun dia los pedidos del configurador deben
- * caer al bot, cambiar SOLO aca.
+ * CTA de las paginas de servicios (chatbot, marketing IA, consultoria).
+ *
+ * Usa `WA_PHONE`, el MISMO numero que el resto de la web. Antes esto tenia su
+ * propia constante y las dos divergieron: la portada mandaba a un numero y las
+ * paginas de servicios a otro. Un solo numero, un solo lugar donde cambiarlo.
  */
-const WA_PHONE_SERVICIOS = "59178491375";
-
 export function waServiciosLink(text: string): string {
-  return `https://wa.me/${WA_PHONE_SERVICIOS}?text=${encodeURIComponent(text)}`;
+  return `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(text)}`;
 }
 
 /**
