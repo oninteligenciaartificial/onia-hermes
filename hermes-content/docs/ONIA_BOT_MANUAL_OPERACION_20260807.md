@@ -39,7 +39,7 @@ Es deliberado: un bot comercial que improvisa inventa precios y promete cosas.
 | Fuente | Qué aporta | Cada cuánto se actualiza | Quién puede cambiarla |
 |---|---|---|---|
 | **Guion** (`config.mjs`, objeto `SCRIPT`) | Los 20 mensajes: bienvenida, horarios, confirmación, precio, baja, soporte | **Al desplegar código** | Claude, con tests |
-| **Conocimiento** (`knowledge.json` en el VPS) | Los hechos: duración y modalidad de la demo, horario de atención, preguntas frecuentes | **En caliente, máx. 5 min** (TTL 300 s) | **Vos, sin desplegar** |
+| **Conocimiento** (`knowledge.json` en el VPS) | Los hechos: duración y modalidad de la demo, horario de atención, preguntas frecuentes, **y los rubros que el bot reconoce** | **En caliente, máx. 5 min** (TTL 300 s) | **Vos, sin desplegar** |
 | **Cal.com** | Los dos horarios que ofrece, y la reserva real | **En vivo, en cada turno** | Tu calendario |
 | **Supabase** (`onia_center`) | El estado de cada conversación y el lead en el CRM | En cada turno | El bot |
 | **Chatwoot** | Los mensajes y el traspaso a humano | Tiempo real | Vos, desde la app |
@@ -78,6 +78,44 @@ nano /opt/onia/bot/knowledge.json
 Ese comando **valida antes de aplicar**. Si metés un precio, una promesa o una
 clave que no existe, **rechaza el archivo entero** y el bot sigue con lo
 anterior. Nunca queda a medias.
+
+### Agregar un rubro nuevo (sin desplegar)
+
+Cuando aparece un rubro que el bot todavía no reconoce — el prospecto escribe
+"tengo una funeraria" y el bot no entiende a qué se dedica — se agrega así:
+
+```json
+"rubrosExtra": [
+  {
+    "key": "funeraria",
+    "label": "servicios funerarios",
+    "fuerte": ["funeraria", "velatorio", "sala de velacion"],
+    "debil": []
+  }
+]
+```
+
+- **`fuerte`** = palabras que en un WhatsApp de trabajo no significan otra cosa.
+  Matchean solas.
+- **`debil`** = palabras comunes ("bodega", "local"). Sólo cuentan si vienen
+  detrás de algo que indique posesión: *"tengo una bodega"* sí, *"estoy en la
+  bodega"* no. **Ante la duda, la palabra va en `debil`.**
+- **`key`** es lo que se guarda en el CRM: minúsculas, sin tildes ni espacios.
+- **`label`** es cómo se lo lee el prospecto: *"ya me contaste que te dedicás a
+  servicios funerarios"*.
+
+Al aplicar, el validador **corre las 62 conversaciones del banco de prueba** con
+y sin tu léxico. Si una palabra tuya hace que el bot clasifique mal o se invente
+un dato, **no se publica** y te dice cuánto bajó. Por eso una palabra corta o
+demasiado común rebota: no es capricho, es que rompe conversaciones reales.
+
+Tres cosas que **no** se pueden hacer desde el archivo, a propósito:
+
+| No se puede | Por qué |
+|---|---|
+| Borrar un rubro del código | Editar sólo agrega. Quitar es un commit. |
+| Prometer que "el módulo X ya está listo" | Nombrar una feature que no existe es una promesa. Va en código. |
+| Escribir una regex | Una mala cuelga el bot entero. Se escriben palabras; el bot las compila. |
 
 ---
 

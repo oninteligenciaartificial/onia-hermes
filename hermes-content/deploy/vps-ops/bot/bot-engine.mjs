@@ -176,10 +176,10 @@ function auditEffect(prev, next, reason) {
   };
 }
 
-function summarize(state, msg, reason) {
+function summarize(state, msg, reason, config) {
   const q = state.qualification || {};
   const datos = [
-    q.industry ? `rubro: ${intents.industryLabel(q.industry) || "otro"}` : null,
+    q.industry ? `rubro: ${intents.industryLabel(q.industry, config) || "otro"}` : null,
     q.teamSize ? `${q.teamSize} ${q.teamSize === 1 ? "persona" : "personas"}` : null,
     q.city || null,
     q.chairs ? `${q.chairs} sillones` : null,
@@ -272,7 +272,7 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
 function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
   const { config, prev, msg } = ctx;
   const next = { ...base, botStage: "handoff_humano" };
-  const summary = summarize(next, msg, reason);
+  const summary = summarize(next, msg, reason, config);
   const effects = [
     stageEffect(prev, next, reason),
     {
@@ -351,7 +351,7 @@ function descartadoResult(ctx, base) {
       payload: {
         kind: "descarte_tras_agendar",
         conversationKey: next.conversationKey,
-        text: summarize(next, msg, "descartado despues de agendar la demo"),
+        text: summarize(next, msg, "descartado despues de agendar la demo", config),
       },
     });
   }
@@ -441,7 +441,7 @@ export function step(state, incoming, options = {}) {
   // Si la intencion cortara antes, los datos se tiran y el bot los vuelve a pedir: parece que no
   // lee. Los datos se guardan igual; la pregunta se contesta igual.
   const intake = INTAKE_STAGES.includes(base.botStage) && !ctx.slotChoice;
-  const found = intake ? intents.parseQualification(msg.norm, base.qualification) : {};
+  const found = intake ? intents.parseQualification(msg.norm, base.qualification, config) : {};
   const withData = Object.keys(found).length
     ? { ...base, qualification: { ...base.qualification, ...found } }
     : base;
@@ -534,7 +534,7 @@ function handleHorario(ctx, base) {
     // Contesto contando su negocio en vez de elegir: se le acusa recibo y se le vuelven a poner
     // los dos horarios. El dato queda guardado, asi que M2 despues no se lo vuelve a pedir.
     if (Object.keys(ctx.found || {}).length > 0) {
-      const reply = say("M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification)) });
+      const reply = say("M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification, config)) });
       return finalize(ctx, base, [reply], [], ["repregunta:horario"]);
     }
     return offScriptResult(ctx, base);
@@ -570,7 +570,7 @@ function handleHorario(ctx, base) {
     },
     {
       type: "notify_sergio",
-      payload: { kind: "demo_agendada", conversationKey: next.conversationKey, text: summarize(next, msg, `demo agendada ${chosen.label}`) },
+      payload: { kind: "demo_agendada", conversationKey: next.conversationKey, text: summarize(next, msg, `demo agendada ${chosen.label}`, config) },
     },
     auditEffect(prev, next, "demo_agendada"),
   ];
@@ -618,7 +618,7 @@ function handleAgendada(ctx, base) {
     const next = { ...base, qualification, qualifyAsks: asks };
     // M1a repite TODO lo anotado hasta ahora: es lo que hace que "me falta sólo X" se lea bien.
     const reply = say("M1a", next, config, {
-      datos_que_si_dio: joinEs(capturedLabels(qualification)),
+      datos_que_si_dio: joinEs(capturedLabels(qualification, config)),
       dato_faltante: joinEs(missing.map((field) => field.missLabel)),
     });
     return finalize(ctx, next, [reply], effects, [`repregunta:${asks}`]);
@@ -636,7 +636,7 @@ function handleAgendada(ctx, base) {
   // volver a leerle la lista entera suena a formulario, no a alguien que lo escucho.
   const next = { ...base, qualification };
   const reply = say("M2b", next, config, {
-    datos_que_si_dio: joinEs(capturedLabels({ ...found, ...(pain ? { painPoint: pain } : {}) })),
+    datos_que_si_dio: joinEs(capturedLabels({ ...found, ...(pain ? { painPoint: pain } : {}) }, config)),
   });
   return finalize(ctx, next, [reply], effects, [pain ? `dolor:${pain}` : "calificado"]);
 }

@@ -56,7 +56,7 @@ export function varsFor(state, config, extra = {}) {
     horario_frase: horario.frase || DEFAULT_CONFIG.businessHours.frase,
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
-    rubro: intents.industryLabel(q.industry) || "",
+    rubro: intents.industryLabel(q.industry, config) || "",
     personas: q.teamSize ?? "",
     persona_palabra: q.teamSize === 1 ? "persona" : "personas",
     // Se nombra el modulo del rubro SOLO si ese rubro tiene uno de verdad. Para el resto queda
@@ -107,10 +107,10 @@ const DOLOR_LABEL = Object.freeze({
   clientes: "los clientes que no vuelven",
 });
 
-export function capturedLabels(qualification) {
+export function capturedLabels(qualification, config) {
   const labels = [];
   if (qualification.industry) {
-    const label = intents.industryLabel(qualification.industry);
+    const label = intents.industryLabel(qualification.industry, config);
     labels.push(label ? `que te dedicás a ${label}` : "a qué te dedicás");
   }
   if (qualification.teamSize) {

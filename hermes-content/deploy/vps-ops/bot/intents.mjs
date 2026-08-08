@@ -380,27 +380,81 @@ const RUBROS_DEBILES = Object.freeze(
 // parecer que el bot no lee. Inventarle un rubro seria peor todavia.
 const RE_DEDICACION = /\bme dedico a\b|\bnos dedicamos a\b|\bmi rubro es\b|\bel rubro es\b|\bmi negocio es\b|\bnuestro negocio es\b|\bfabricamos\b|\bproducimos\b|\bimportamos\b|\balquilamos\b|\breparamos\b|\bdistribuimos\b|\bofrecemos servicios\b|\bbrindamos servicios\b|\bdamos servicio\b/;
 
+// --- Lexico editable: agregar un rubro SIN desplegar -------------------------
+// Las palabras de `config.rubrosExtra` (la capa de conocimiento) entran como TEXTO, nunca como
+// regex: una regex mala mata el matcher o cuelga el proceso entero. Aca se normalizan, se escapan
+// y se compilan con la MISMA forma que las del codigo.
+//
+// Dos candados, los dos por construccion y no por confianza en el que edita:
+//   1. ORDEN — dentro de cada nivel (fuerte, debil) el codigo va primero y el archivo despues, y
+//      "la primera que matchea gana". Una palabra editable no le puede robar un match a una
+//      palabra FUERTE del codigo, ni quedar delante de `dental`, que existe justo para ganarle a
+//      "clinica". Un `fuerte` editable si le gana a un `debil` del codigo, y esta bien: esa es la
+//      precedencia de siempre — las genericas viven en `debil` para poder ser desplazadas.
+//   2. UNION — para una key que ya existe, las palabras se SUMAN. Quitar una palabra del codigo
+//      sigue siendo un commit, igual que los gatillos de baja.
+// Lo unico que el archivo si pisa es la ETIQUETA: es texto que el prospecto lee, o sea un hecho.
+
+/** Piso de longitud de una palabra del lexico. El validador del archivo rechaza con este mismo. */
+export const MIN_LEXICON_WORD = 3;
+
+const RE_META = /[.*+?^${}()|[\]\\]/g;
+
+/** Palabras -> UN regex `\b(?:a|b|c)\w*\b` (alternacion de literales: lineal, sin ReDoS). */
+function lexiconRegex(words) {
+  const parts = (Array.isArray(words) ? words : [])
+    .map((word) => normalize(String(word)).trim())
+    .filter((word) => word.length >= MIN_LEXICON_WORD)
+    .map((word) => word.replace(RE_META, "\\$&"));
+  return parts.length ? new RegExp(`\\b(?:${parts.join("|")})\\w*\\b`) : null;
+}
+
+const CODE_LEXICON = Object.freeze({ strong: RUBROS, weak: RUBROS_DEBILES, labels: RUBRO_LABEL });
+
+/**
+ * El lexico vigente = codigo + archivo. Sin `config.rubrosExtra` devuelve EL MISMO objeto del
+ * codigo: la misma degradacion por identidad con la que degrada toda la capa de conocimiento.
+ */
+function lexiconOf(config) {
+  const extra = config && Array.isArray(config.rubrosExtra) ? config.rubrosExtra : null;
+  if (!extra || extra.length === 0) return CODE_LEXICON;
+  const strong = [...RUBROS];
+  const weak = [...RUBROS_DEBILES];
+  const labels = { ...RUBRO_LABEL };
+  for (const rubro of extra) {
+    const key = String(rubro?.key || "").trim();
+    if (!key) continue;
+    if (rubro.label) labels[key] = rubro.label;
+    const fuerte = lexiconRegex(rubro.fuerte);
+    if (fuerte) strong.push({ key, re: fuerte });
+    const debil = lexiconRegex(rubro.debil);
+    if (debil) weak.push({ key, re: new RegExp(`${CUE_NEGOCIO}(?:${debil.source})`) });
+  }
+  return { strong, weak, labels };
+}
+
 /**
  * El rubro del prospecto con su fuerza, o null si no lo dijo.
  * `strong` = la palabra sola no significa otra cosa. Solo un match fuerte puede PISAR un rubro ya
  * capturado: si no, un dentista que despues escribe "tengo un consultorio nuevo" se convierte en
  * rubro salud y el bot le habla de otra cosa.
  */
-function matchIndustry(norm) {
-  for (const rubro of RUBROS) if (rubro.re.test(norm)) return { key: rubro.key, strong: true };
-  for (const rubro of RUBROS_DEBILES) if (rubro.re.test(norm)) return { key: rubro.key, strong: false };
+function matchIndustry(norm, config) {
+  const lexicon = lexiconOf(config);
+  for (const rubro of lexicon.strong) if (rubro.re.test(norm)) return { key: rubro.key, strong: true };
+  for (const rubro of lexicon.weak) if (rubro.re.test(norm)) return { key: rubro.key, strong: false };
   return RE_DEDICACION.test(norm) ? { key: "otro", strong: false } : null;
 }
 
 /** El rubro del prospecto, o null si no lo dijo. Nunca adivina: null se re-pregunta. */
-export function findIndustry(norm) {
-  const match = matchIndustry(norm);
+export function findIndustry(norm, config) {
+  const match = matchIndustry(norm, config);
   return match ? match.key : null;
 }
 
 /** Etiqueta legible del rubro para el guion. null = no hay etiqueta que mostrar ("otro"). */
-export function industryLabel(key) {
-  return RUBRO_LABEL[key] || null;
+export function industryLabel(key, config) {
+  return lexiconOf(config).labels[key] || null;
 }
 
 // --- Tamaño del equipo ------------------------------------------------------
@@ -506,14 +560,15 @@ function isCount(value, max) {
 
 /**
  * Extrae los datos de calificacion del mensaje.
+ * `config` solo aporta el lexico editable de rubros (`rubrosExtra`): sin ella se usa el del codigo.
  * Un dato EXPLICITO pisa lo ya capturado: si el prospecto dice "en realidad son 4 sillones",
  * vale lo ultimo que dijo, no lo primero que el bot creyo entender. Los datos que dependen del
  * contexto de la pregunta (un numero pelado, "son 3") solo se toman si el campo esta vacio.
  */
-export function parseQualification(norm, current = {}) {
+export function parseQualification(norm, current = {}, config = null) {
   const found = {};
 
-  const industry = matchIndustry(norm);
+  const industry = matchIndustry(norm, config);
   if (industry && (industry.strong || !hasValue(current.industry))) found.industry = industry.key;
 
   // Tamaño del equipo. Todas las formas de abajo son explicitas: la ultima que dijo gana.
