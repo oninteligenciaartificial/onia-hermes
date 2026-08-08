@@ -1,0 +1,152 @@
+/* Stacks de web — mismas piezas que el configurador de /chatbot: tarjeta con
+   lo que lleva, lo que no lleva y lo que pone el cliente. */
+
+.stacks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1rem, 2vw, 1.6rem);
+  margin-top: 2.5rem;
+  align-items: start;
+}
+
+.stack {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: clamp(1.2rem, 2.4vw, 1.7rem);
+}
+
+.stackFeat {
+  border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
+  box-shadow: 0 0 0 1px var(--accent-glow), var(--shadow-card);
+}
+
+.stackNombre {
+  margin: 0;
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.55rem);
+  line-height: 1.15;
+}
+
+.stackPrecio {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: max(1rem, var(--fs-micro-min));
+  color: var(--accent-ink);
+}
+
+.stackLinea {
+  margin: 0.9rem 0 0;
+  color: var(--ink-soft);
+  font-size: max(0.9rem, var(--fs-micro-min));
+  line-height: 1.55;
+}
+
+.stackLinea strong {
+  color: var(--ink);
+}
+
+.stackTitulo {
+  margin: 1.2rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.68rem, var(--fs-label-min));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.lista {
+  margin: 0.55rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.4rem;
+  color: var(--ink-soft);
+  font-size: max(0.88rem, var(--fs-micro-min));
+  line-height: 1.5;
+}
+
+.stackMensual {
+  margin: 1.2rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line-soft);
+  font-size: max(0.85rem, var(--fs-micro-min));
+  color: var(--ink-faint);
+}
+
+/* ---- Cuidado Web ---- */
+
+.cuidado {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1.6rem;
+}
+
+.cuidadoItem {
+  border-top: 2px solid var(--line-soft);
+  padding-top: 0.9rem;
+}
+
+.cuidadoPrecio {
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+/* ---- elegir el stack antes de pedirlo ---- */
+
+.picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+}
+
+.opcion {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.opcion:hover {
+  border-color: var(--ink-faint);
+}
+
+.opcionOn {
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 1px var(--accent-glow);
+}
+
+.radio {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin-top: 0.1rem;
+  accent-color: var(--accent);
+}
+
+.opcionNombre {
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.opcionPrecio {
+  display: block;
+  font-size: max(0.82rem, var(--fs-micro-min));
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opcion {
+    transition: none;
+  }
+}

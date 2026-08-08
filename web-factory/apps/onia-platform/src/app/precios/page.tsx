@@ -77,8 +77,10 @@ export default function PreciosPage() {
             </h1>
             <p className="lead">
               Tres planes que se distinguen por el salto de valor — ordenar,
-              convertir, automatizar — no por contar usuarios. Pagás por QR,
-              mensual o semanal, y cancelás cuando quieras.
+              recuperar, crecer sin techo. Cada uno dice exactamente qué lleva
+              y qué no, con los números que el sistema aplica de verdad:
+              usuarios, fichas de clientes y recordatorios. Pagás mensual,
+              semanal o anual, y cancelás cuando quieras.
             </p>
           </div>
         </section>
@@ -86,6 +88,13 @@ export default function PreciosPage() {
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="container">
             <p className="lead">
+              ¿Necesitás además que te atiendan el WhatsApp o que te hagamos la
+              web? Son servicios aparte, con su propio precio y sus propios
+              requisitos publicados:{" "}
+              <a href="/chatbot">los tres stacks de chatbot</a> y{" "}
+              <a href="/servicios/webs">los stacks de webs</a>.
+            </p>
+            <p className="lead" style={{ marginTop: "1rem" }}>
               ¿Comparando opciones?{" "}
               <a href="/comparativa">
                 Mirá Onia contra todo lo que se vende en Bolivia

@@ -23,6 +23,7 @@ export function SiteFooter() {
         <a href="/precios">Precios</a>
         <a href="/prueba-gratis">Prueba gratis</a>
         <a href="/chatbot">Chatbot</a>
+        <a href="/servicios/webs">Webs</a>
         <a href="/servicios/marketing-ia">Marketing IA</a>
         <a href="/servicios/consultoria">Consultoría</a>
         <a href="/modulos/dental">Dental</a>

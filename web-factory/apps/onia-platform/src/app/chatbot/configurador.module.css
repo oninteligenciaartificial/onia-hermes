@@ -146,87 +146,45 @@
   color: var(--ink);
 }
 
-/* ---- add-ons (interruptores) ---- */
+/* ---- detalle del stack elegido ---- */
 
-.addons {
-  display: grid;
-  gap: 0.7rem;
-  margin-top: 1.6rem;
-}
-
-.addon {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  width: 100%;
-  border: 1.5px dashed var(--line);
-  border-radius: var(--radius);
-  background: transparent;
-  padding: 0.95rem 1.1rem;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    background 0.25s ease;
-}
-
-.addon:hover {
-  border-color: var(--ink-faint);
-}
-
-.addon[aria-pressed="true"] {
-  border-style: solid;
-  background: var(--surface);
-  border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
-  box-shadow: 0 0 0 1px var(--accent-glow), var(--shadow-card);
-}
-
-.addonLed {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  background: var(--line);
-  flex: none;
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.addon[aria-pressed="true"] .addonLed {
-  background: var(--accent);
-  box-shadow: 0 0 0 4px var(--accent-glow);
-}
-
-.addonBody {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  min-width: 0;
-}
-
-.addonNombre {
-  font-weight: 650;
-  line-height: 1.3;
-}
-
-.addonDesc {
+.detalleLinea {
+  margin: 0.9rem 0 0;
   color: var(--ink-soft);
-  font-size: max(0.88rem, var(--fs-micro-min));
+  font-size: max(0.92rem, var(--fs-micro-min));
+  line-height: 1.55;
 }
 
-.addonPrecio {
-  margin-left: auto;
-  flex: none;
+.detalleLinea strong {
+  color: var(--ink);
+}
+
+.detalleCols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.2rem 1.8rem;
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.detalleTitulo {
+  margin: 0;
   font-family: var(--font-mono), monospace;
-  font-variant-numeric: tabular-nums;
-  font-size: max(0.88rem, var(--fs-micro-min));
+  font-size: max(0.68rem, var(--fs-label-min));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--ink-faint);
-  transition: color 0.2s ease;
 }
 
-.addon[aria-pressed="true"] .addonPrecio {
-  color: var(--accent-ink);
+.listaSimple {
+  margin: 0.7rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.45rem;
+  color: var(--ink-soft);
+  font-size: max(0.9rem, var(--fs-micro-min));
+  line-height: 1.5;
 }
 
 /* ---- resumen (total vivo) ---- */
@@ -349,9 +307,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .preset,
-  .addon,
-  .addonLed,
-  .addonPrecio,
   .cta {
     transition: none;
   }
@@ -374,13 +329,5 @@
 @media (max-width: 560px) {
   .presets {
     grid-template-columns: 1fr;
-  }
-
-  .addon {
-    flex-wrap: wrap;
-  }
-
-  .addonPrecio {
-    margin-left: calc(10px + 0.9rem);
   }
 }

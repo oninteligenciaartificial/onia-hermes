@@ -1055,6 +1055,72 @@
   justify-self: start;
 }
 
+/* qué lleva cada plan: la lista explícita, con los números que el sistema aplica */
+.planCiclos {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: max(0.82rem, var(--fs-micro-min));
+}
+
+.planListaTitulo {
+  margin: 0.6rem 0 0;
+  font-size: max(0.72rem, var(--fs-label-min));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.planIncluye,
+.planSin {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+  font-size: max(0.9rem, var(--fs-micro-min));
+  color: var(--ink-soft);
+}
+
+.planIncluye li,
+.planSin li {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  gap: 0.35rem;
+  line-height: 1.4;
+}
+
+.planIncluye li::before {
+  content: "✓";
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+.planSin li::before {
+  content: "—";
+  color: var(--ink-faint);
+}
+
+.planCuando {
+  margin: 0.4rem 0 0;
+  font-size: max(0.85rem, var(--fs-micro-min));
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.planGrupo {
+  margin: 1.6rem 0 0;
+  padding: 1.1rem 1.3rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  font-size: max(0.9rem, var(--fs-micro-min));
+  line-height: 1.5;
+}
+
+.planGrupo strong {
+  color: var(--ink);
+}
+
 /* la letra chica: nada se elimina, se pliega */
 .fine {
   margin-top: 2rem;

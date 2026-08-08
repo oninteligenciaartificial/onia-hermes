@@ -73,11 +73,10 @@ export const TIENE_OPTIONS: readonly {
  * son los mismos publicados en /#precios y salen de lib/pricing.ts.
  */
 export const PRECIO_COPY: Record<Precio, string> = {
-  pro: "Bs 750/mes — precio de lanzamiento (la lista es Bs 890). Anual: pagás 10 meses.",
-  full: "Bs 1.500/mes — precio de lanzamiento (la lista es Bs 1.990). Anual: pagás 10 meses.",
-  // [FALTA PRECIO] — el plan de grupo clinico no tiene tarifa publicada.
+  pro: "Bs 750/mes — 5 usuarios y hasta 1.500 fichas. Semanal Bs 199 o anual Bs 7.500 (pagás 10 meses).",
+  full: "Bs 1.500/mes — usuarios y fichas sin límite. Anual Bs 15.000 (pagás 10 meses); este plan no se cobra semanal.",
   "a-medida":
-    "Grupo clínico: con ese tamaño el precio se arma con vos. Todavía no publicamos tarifa de grupo — no inventamos una.",
+    "Grupo / Empresarial: Bs 2.900/mes (anual Bs 29.000) más implementación desde Bs 3.500. No se compra en línea — se cotiza con tu caso.",
 };
 
 export const PLAN_INCLUYE: readonly string[] = [
@@ -88,7 +87,7 @@ export const PLAN_INCLUYE: readonly string[] = [
 ] as const;
 
 export const NOTA_DOWNSELL =
-  "Si te queda grande, hay un plan de entrada de Bs 320/mes que ordena la agenda y las fichas — el agente que reprograma no viene ahí.";
+  "Si te queda grande, hay un plan de entrada de Bs 320/mes (2 usuarios, hasta 300 fichas) que ordena la agenda y las fichas — los agentes de IA no vienen ahí.";
 
 export const NOTA_CUADERNO =
   "El cuaderno se jubila: agenda digital con recordatorios, sin pasar nada en limpio.";
@@ -99,15 +98,15 @@ export const NOTA_FACTURACION =
 export const FALTA_COPY: Record<"web" | "chatbot", { nombre: string; copy: string }> = {
   web: {
     nombre: "Página web",
-    copy: "Tu presencia online conectada al sistema: lo que publicás y lo que agendás viven en el mismo lugar.",
+    copy: "Tu presencia online conectada al sistema: lo que publicás y lo que agendás viven en el mismo lugar. Desde Bs 790, pago único.",
   },
   chatbot: {
     nombre: "Chatbot de WhatsApp",
-    copy: "El botón de WhatsApp va gratis con la web. Esto es otra cosa: un bot que conversa por vos, responde consultas y te deriva los que valen la pena.",
+    copy: "El botón de WhatsApp va gratis con la web. Esto es otra cosa: un bot que conversa por vos, responde consultas y te deriva los que valen la pena. Desde Bs 300 de instalación + Bs 200/mes.",
   },
 };
 
-export const FALTA_TAG = "módulo aparte, a cotizar";
+export const FALTA_TAG = "servicio aparte, con su propio precio";
 
 /**
  * Ensamblaje a medio armar de la variante B — mismos labels que

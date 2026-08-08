@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/precios", priority: 0.9 },
     { path: "/prueba-gratis", priority: 0.9 },
     { path: "/chatbot", priority: 0.8 },
+    { path: "/servicios/webs", priority: 0.8 },
     { path: "/servicios/marketing-ia", priority: 0.6 },
     { path: "/servicios/consultoria", priority: 0.6 },
     { path: "/modulos/dental", priority: 0.8 },

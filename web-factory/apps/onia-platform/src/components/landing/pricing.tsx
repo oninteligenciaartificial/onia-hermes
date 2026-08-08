@@ -1,15 +1,25 @@
 import { CountUp, Reveal, SplitTextReveal } from "@/motion";
 import { APP_URL } from "@/lib/site";
+import {
+  ADDONS,
+  CONDICIONES,
+  GRUPO,
+  NO_INCLUYE,
+  NOTA_FISCAL,
+  PLANES,
+  bs,
+} from "@/lib/pricing";
 import styles from "./landing.module.css";
 
 const REGISTRO_URL = `${APP_URL}/register`;
 
 /**
- * Precios — 3 planes simples, en bolivianos y publicados. La letra chica
- * existe entera, pero PLEGADA: nada se elimina, se pliega.
+ * Precios — 3 planes, en bolivianos, y CADA UNO dice qué lleva con los números
+ * que el sistema aplica de verdad (usuarios, fichas, recordatorios). La letra
+ * chica existe entera, pero PLEGADA: nada se elimina, se pliega.
  *
- * Los numeros son los de lanzamiento vigentes (CLAUDE.md §propuestas 7 y
- * PRICING_RATIONALE_INTERNO.md §0). Si cambian, cambian ahi primero.
+ * Ningún monto vive acá: todos salen de src/lib/pricing.ts, que a su vez está
+ * verificado contra el código que cobra. Si cambia un precio, cambia ahí.
  */
 export function Pricing({ sinEncabezado = false }: { sinEncabezado?: boolean }) {
   return (
@@ -33,54 +43,69 @@ export function Pricing({ sinEncabezado = false }: { sinEncabezado?: boolean }) 
         )}
 
         <div className={styles.plans}>
-          <Reveal className={styles.plan}>
-            <span className={styles.planStep}>01 · Ordenar</span>
-            <h3>Básico</h3>
-            <p className={styles.res}>Tu negocio deja de vivir en el cuaderno.</p>
-            <p className={styles.price}>
-              <CountUp value={320} className={`${styles.priceN} ${styles.mono}`} />
-              <span className={styles.priceU}>Bs/mes</span>
-            </p>
-            <a className={`${styles.btn} ${styles.btnGhost}`} href={REGISTRO_URL}>
-              Empezar
-            </a>
-          </Reveal>
+          {PLANES.map((plan, i) => (
+            <Reveal
+              key={plan.id}
+              delay={i * 0.09}
+              className={`${styles.plan} ${plan.destacado ? styles.planFeat : ""}`}
+            >
+              {plan.destacado && (
+                <span className={styles.planFlag}>El recomendado</span>
+              )}
+              <span className={styles.planStep}>
+                {plan.paso} · {plan.salto}
+              </span>
+              <h3>{plan.nombre}</h3>
+              <p className={styles.res}>{plan.resultado}</p>
+              <p className={styles.price}>
+                <CountUp
+                  value={plan.mensual}
+                  className={`${styles.priceN} ${styles.mono}`}
+                />
+                <span className={styles.priceU}>Bs/mes</span>
+              </p>
+              <p className={styles.planCiclos}>
+                {plan.semanal
+                  ? `o Bs ${bs(plan.semanal)}/semana · anual Bs ${bs(plan.anual)} (10 meses)`
+                  : `anual Bs ${bs(plan.anual)} (10 meses) · este plan no se cobra semanal`}
+              </p>
 
-          <Reveal delay={0.09} className={`${styles.plan} ${styles.planFeat}`}>
-            <span className={styles.planFlag}>El recomendado</span>
-            <span className={styles.planStep}>02 · Recuperar</span>
-            <h3>Pro</h3>
-            <p className={styles.res}>
-              No se te escapa un cliente: el agente propone, vos aprobás.
-            </p>
-            <p className={styles.price}>
-              <CountUp value={750} className={`${styles.priceN} ${styles.mono}`} />
-              <span className={styles.priceU}>Bs/mes</span>
-            </p>
-            <a className={`${styles.btn} ${styles.btnPrimary}`} href={REGISTRO_URL}>
-              Probar gratis 14 días
-            </a>
-            <span className={styles.guarantee}>
-              Si al primer mes no te sirve, te devolvemos lo pagado.
-            </span>
-            <span className={styles.planAnnual}>Anual: 2 meses gratis</span>
-          </Reveal>
+              <p className={styles.planListaTitulo}>Qué lleva</p>
+              <ul className={styles.planIncluye}>
+                {plan.incluye.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
 
-          <Reveal delay={0.18} className={styles.plan}>
-            <span className={styles.planStep}>03 · Automatizar</span>
-            <h3>Full</h3>
-            <p className={styles.res}>
-              El negocio opera solo y vos decidís en vez de perseguir.
-            </p>
-            <p className={styles.price}>
-              <CountUp value={1500} className={`${styles.priceN} ${styles.mono}`} />
-              <span className={styles.priceU}>Bs/mes</span>
-            </p>
-            <a className={`${styles.btn} ${styles.btnGhost}`} href={REGISTRO_URL}>
-              Empezar
-            </a>
-          </Reveal>
+              <p className={styles.planListaTitulo}>Qué no lleva</p>
+              <ul className={styles.planSin}>
+                {plan.sinEsto.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+
+              <p className={styles.planCuando}>{plan.cuando}</p>
+
+              <a
+                className={`${styles.btn} ${plan.destacado ? styles.btnPrimary : styles.btnGhost}`}
+                href={REGISTRO_URL}
+              >
+                {plan.destacado ? "Probar gratis 14 días" : "Empezar"}
+              </a>
+              {plan.destacado && (
+                <span className={styles.guarantee}>
+                  14 días de prueba sin tarjeta, corriendo con este mismo plan.
+                </span>
+              )}
+            </Reveal>
+          ))}
         </div>
+
+        <p className={styles.planGrupo}>
+          <strong>{GRUPO.nombre}:</strong> Bs {bs(GRUPO.mensual)}/mes (anual Bs{" "}
+          {bs(GRUPO.anual)}) + implementación desde Bs{" "}
+          {bs(GRUPO.implementacionDesde)}. {GRUPO.copy}
+        </p>
 
         <details className={styles.fine}>
           <summary>La letra chica</summary>
@@ -88,28 +113,34 @@ export function Pricing({ sinEncabezado = false }: { sinEncabezado?: boolean }) 
             <div>
               <h4>Condiciones</h4>
               <ul>
-                <li>Precio de lanzamiento, sostenido 12 meses para quien cierra ahora.</li>
-                <li>Trimestral por QR, o anual con 2 meses de regalo.</li>
-                <li>Migración e implementación en cero durante esta fase.</li>
-                <li>Tus datos son tuyos: los exportás cuando quieras.</li>
+                {CONDICIONES.map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
               </ul>
             </div>
             <div>
               <h4>No incluye</h4>
               <ul>
-                <li>Dominio y hosting de tu web (van a tu nombre).</li>
-                <li>Comisión de la pasarela de pago.</li>
-                <li>Créditos de IA por encima del uso incluido.</li>
-                <li>Conversaciones de WhatsApp API sobre el cupo.</li>
+                {NO_INCLUYE.map((x) => (
+                  <li key={x.que}>
+                    <strong>{x.que}.</strong> {x.detalle}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4>Se suma aparte</h4>
+              <ul>
+                {ADDONS.map((a) => (
+                  <li key={a.nombre}>
+                    <strong>{a.nombre}</strong> — {a.precio}. {a.copy}
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
               <h4>Nota fiscal</h4>
-              <p>
-                Nuestro emisor está en trámite de homologación ante el SIN.
-                Mientras tanto facturás en el Portal Web del SIN, que es gratuito
-                y cumple la ley. No cobramos por algo que todavía no anda.
-              </p>
+              <p>{NOTA_FISCAL}</p>
               <p style={{ marginTop: "0.8rem" }}>
                 <a className={styles.fineLink} href="/comparativa">
                   Comparación con los demás sistemas →

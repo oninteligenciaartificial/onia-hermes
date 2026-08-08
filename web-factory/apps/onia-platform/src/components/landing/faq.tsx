@@ -27,7 +27,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿El chatbot de WhatsApp está incluido?",
-    a: "El botón de WhatsApp de tu página web va incluido. El chatbot con IA — el que responde y califica solo — viene con el plan Full, o como add-on en los otros planes.",
+    a: "No, y no viene incluido en ningún plan: es un servicio aparte, con tres stacks desde Bs 300 de instalación + Bs 200/mes. El botón de WhatsApp de tu web sí va gratis. Antes de contratarlo publicamos los requisitos: necesitás un número dedicado, y los mensajes que tu negocio inicia los cobra Meta aparte.",
   },
   {
     q: "¿Mis datos son míos?",

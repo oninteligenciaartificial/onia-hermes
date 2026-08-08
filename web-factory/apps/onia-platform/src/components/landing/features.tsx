@@ -77,7 +77,8 @@ const CARDS: readonly Card[] = [
     tone: "green",
     aria: "Conversación de WhatsApp: un cliente pregunta por disponibilidad y el chatbot de Onia le ofrece un horario concreto.",
     titulo: "Chatbot de WhatsApp",
-    beneficio: "Responde y califica mientras vos atendés.",
+    beneficio:
+      "Responde y califica mientras vos atendés. Se contrata aparte, desde Bs 200/mes.",
     visual: (
       <Shot title="WhatsApp · consultas">
         <div className={styles.chat}>

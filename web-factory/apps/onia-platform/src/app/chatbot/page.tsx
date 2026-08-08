@@ -2,32 +2,34 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
-import { CHATBOT_BASE } from "@/content/chatbot-precios";
+import { CHATBOT_STACKS, fmtBs } from "@/content/chatbot-precios";
 import { waServiciosLink } from "@/lib/site";
 import { Configurador } from "./Configurador";
 import styles from "./configurador.module.css";
 
 const SITE_URL = "https://onia.com.bo";
+const ENTRADA = CHATBOT_STACKS[0];
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
-  title: "Chatbot de WhatsApp con IA — armalo a tu medida | Onia",
-  description: `Un chatbot que atiende tu WhatsApp 24/7: responde, califica y deriva a tu equipo. Elegís qué encender — recordatorios, agenda, cobros con QR, notas de voz — desde Bs ${CHATBOT_BASE.mensual} al mes. Hecho en Bolivia.`,
+  title: "Chatbot de WhatsApp — tres stacks, precio publicado | Onia",
+  description: `Tres stacks de WhatsApp: recordatorios que no se olvidan, IA que responde 24/7 e IA que agenda sola. Desde Bs ${fmtBs(ENTRADA.setup)} de instalación + Bs ${fmtBs(ENTRADA.mensual)}/mes. Los requisitos, a la vista antes de contratar. Hecho en Bolivia.`,
   alternates: { canonical: "/chatbot" },
   openGraph: {
     type: "website",
     locale: "es_BO",
-    title: "Chatbot de WhatsApp con IA — armalo a tu medida",
-    description: `Responde 24/7, califica y deriva. Encendé solo lo que necesitás, desde Bs ${CHATBOT_BASE.mensual}/mes.`,
+    title: "Chatbot de WhatsApp — tres stacks, precio publicado",
+    description: `Recordatorios, IA que responde o IA que opera. Desde Bs ${fmtBs(ENTRADA.mensual)}/mes, con los requisitos publicados.`,
     url: "/chatbot",
   },
 };
 
 /**
- * /chatbot — el configurador ES la página: el cliente arma su chatbot
- * encendiendo add-ons y se lleva el total a WhatsApp (checkout-WhatsApp,
- * sin backend). Los montos viven en src/content/chatbot-precios.ts —
- * este archivo no conoce números, solo los referencia para el JSON-LD.
+ * /chatbot — el configurador ES la página: el cliente elige uno de los tres
+ * stacks, ve qué lleva y qué no, y manda el pedido por WhatsApp DESPUÉS de
+ * marcar que leyó los requisitos (checkout-WhatsApp, sin backend). Los montos
+ * viven en src/content/chatbot-precios.ts — este archivo no conoce números,
+ * solo los referencia para el JSON-LD.
  */
 const JSON_LD = {
   "@context": "https://schema.org",
@@ -41,20 +43,21 @@ const JSON_LD = {
     },
     {
       "@type": "Service",
-      name: "Chatbot de WhatsApp con IA",
-      serviceType: "Chatbot de WhatsApp con inteligencia artificial",
+      name: "Chatbot de WhatsApp para negocios",
+      serviceType: "Automatización de WhatsApp con inteligencia artificial",
       description:
-        "Chatbot que atiende el WhatsApp del negocio 24/7: responde, califica clientes y deriva a humanos. Add-ons de recordatorios, agenda, cobros con QR y notas de voz.",
+        "Tres stacks de WhatsApp: N1 recordatorios de cita y cobro con reglas fijas; N2 IA que responde, califica y deriva 24/7; N3 IA que agenda, crea tareas y hace seguimiento.",
       provider: { "@type": "Organization", name: "Onia", url: `${SITE_URL}/` },
       areaServed: { "@type": "Country", name: "Bolivia" },
       url: `${SITE_URL}/chatbot`,
-      offers: {
+      offers: CHATBOT_STACKS.map((stack) => ({
         "@type": "Offer",
-        price: String(CHATBOT_BASE.mensual),
+        name: `${stack.nivel} — ${stack.nombre}`,
+        price: String(stack.mensual),
         priceCurrency: "BOB",
         category: "Suscripción mensual",
         availability: "https://schema.org/InStock",
-      },
+      })),
     },
   ],
 };
@@ -63,7 +66,7 @@ const PASOS = [
   {
     titulo: "Nos contás tu negocio",
     detalle:
-      "Qué vendés, qué te preguntan siempre y cómo respondés vos. Con eso entrenamos el chatbot — habla de tu negocio, no genérico.",
+      "Qué vendés, qué te preguntan siempre y cómo respondés vos. Con eso entrenamos el chatbot — habla de tu negocio, no genérico. Es la parte que más tiempo lleva y la ponés vos.",
   },
   {
     titulo: "Lo probás antes de encenderlo",
@@ -89,12 +92,13 @@ export default function ChatbotPage() {
           <div className="container">
             <p className="kicker">Chatbot WhatsApp</p>
             <h1 className="h2">
-              Armá tu chatbot a tu gusto. Pagás solo lo que encendés.
+              Tres stacks de WhatsApp. Elegís el que resuelve tu problema.
             </h1>
             <p className="lead">
-              La base atiende tu WhatsApp las 24 horas: responde, califica al
-              cliente y te deriva las conversaciones que valen. Lo demás lo
-              encendés vos — tocá los interruptores y mirá el precio armarse.
+              No es un menú de funciones sueltas: cada stack resuelve una cosa
+              concreta — que no se te olvide nadie, que nadie quede sin
+              respuesta, o que el chat opere solo. Abajo está lo que lleva cada
+              uno, lo que no lleva y lo que tenés que poner vos.
             </p>
           </div>
         </section>
@@ -141,10 +145,13 @@ export default function ChatbotPage() {
               <a
                 className="btn btn-ghost"
                 href={waServiciosLink(
-                  "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de armarlo.",
+                  "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack.",
                 )}
               >
                 Preguntanos por WhatsApp
+              </a>
+              <a className="btn btn-ghost" href="/servicios/webs">
+                Ver los stacks de webs
               </a>
             </p>
           </div>
