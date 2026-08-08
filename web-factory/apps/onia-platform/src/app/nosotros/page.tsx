@@ -70,7 +70,6 @@ const JSON_LD = {
         legalName: "OniaAgency",
         url: `${SITE_URL}/`,
         email: "business@onia.com.bo",
-        telephone: "+59178491375",
         address: {
           "@type": "PostalAddress",
           addressLocality: "Santa Cruz de la Sierra",

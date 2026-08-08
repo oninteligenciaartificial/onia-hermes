@@ -40,8 +40,6 @@ export function SiteFooter() {
           <span aria-hidden> · </span>NIT 5371375010
           <span aria-hidden> · </span>Santa Cruz de la Sierra, Bolivia
           <span aria-hidden> · </span>
-          <a href="tel:+59178491375">+591 78491375</a>
-          <span aria-hidden> · </span>
           <a href="mailto:business@onia.com.bo">business@onia.com.bo</a>
         </address>
       </div>

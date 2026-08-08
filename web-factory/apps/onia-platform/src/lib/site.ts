@@ -14,14 +14,10 @@
  * variable NO esta definida en ningun lado hoy, asi que en la practica manda
  * este fallback.
  *
- * 2026-08-08: pasa de 78491375 a 75414930. El 78491375 quedo atrapado en un
- * portfolio fantasma de Meta y NO tiene bot atendiendo; el 75414930 esta en
- * WhatsApp Cloud API con el chatbot vivo y la app publicada. Todo enlace
- * wa.me de la web tiene que ir a este numero.
- *
- * OJO — el `tel:+59178491375` del pie legal NO se toca: ese es para LLAMAR y
- * ahi contesta una persona. El 75414930 es un chip en Cloud API sin app: si
- * alguien lo llama, no lo atiende nadie.
+ * 2026-08-08: el numero anterior se retiro por completo (habia quedado en un
+ * portfolio fantasma de Meta, sin bot atendiendo). Este esta en WhatsApp Cloud
+ * API con el chatbot vivo y la app publicada, y es el UNICO numero de la web:
+ * enlaces wa.me, paginas de servicios y datos de contacto salen todos de aca.
  */
 const WA_PHONE_FALLBACK = "59175414930";
 
