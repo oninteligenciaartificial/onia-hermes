@@ -22,8 +22,9 @@
 //      El bot no cotiza: el precio lo da un humano en la demo.
 //   4. EL REFRESCO NO CORRE EN EL CAMINO DE LA RESPUESTA. Vencido el TTL se sirve la copia vieja
 //      y se relee en segundo plano (patron de Bolivian Electric, `learned-synonyms.ts`).
-//   5. LA CAPA EDITABLE SOLO SE MUEVE EN LA DIRECCION SEGURA: agrega disparadores (union), nunca
-//      saca uno; elige el TEXTO de una respuesta que ya existe, nunca crea un mensaje nuevo.
+//   5. LA CAPA EDITABLE SOLO SE MUEVE EN LA DIRECCION SEGURA: agrega disparadores, rubros y
+//      palabras (union), nunca saca uno; elige el TEXTO de una respuesta que ya existe, nunca crea
+//      un mensaje nuevo.
 //
 // Diseño: hermes-content/docs/ONIA_BOT_CAPA_CONOCIMIENTO_20260806.md
 
@@ -32,7 +33,8 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { DEFAULT_CONFIG, createBotConfig, demoDuration } from "./config.mjs";
-import { checkGuardrails, guardrailReason } from "./guardrails.mjs";
+import { checkGuardrails, guardrailReason, normalize } from "./guardrails.mjs";
+import { MIN_LEXICON_WORD } from "./intents.mjs";
 
 /** Version del esquema. Un archivo con otra cadena se rechaza entero (no se "migra" solo). */
 export const KNOWLEDGE_SCHEMA = "onia.bot.knowledge/1";
@@ -130,6 +132,26 @@ const SHAPE = Object.freeze({
     kind: "object",
     fields: { demo: { kind: "textArray", maxItems: 30, max: 60 } },
   },
+
+  // EL LEXICO DE RUBROS — lo que hace que agregar un rubro sea una edicion y no un despliegue.
+  // Palabras, JAMAS regex: quien edita esto no es desarrollador y una regex mala cuelga el
+  // proceso. `intents.mjs` las escapa y las compila, y las agrega DESPUES de las del codigo
+  // (ver lexiconOf): un rubro editable no puede robarle un match a uno versionado.
+  // No hay campo para prometer un modulo: nombrar una feature que no existe es N2 disfrazado, y
+  // eso sigue siendo un commit (`qualification.branches` en config.mjs).
+  rubrosExtra: {
+    kind: "array",
+    maxItems: 12,
+    item: {
+      kind: "object",
+      fields: {
+        key: { kind: "slug", max: 24, required: true },
+        label: { kind: "text", max: 40, required: true },
+        fuerte: { kind: "textArray", maxItems: 40, max: 40 },
+        debil: { kind: "textArray", maxItems: 20, max: 40 },
+      },
+    },
+  },
 });
 
 // ---------------------------------------------------------------------------
@@ -163,6 +185,17 @@ function checkField(value, shape, path, errors) {
 
     case "enum":
       if (!shape.values.includes(value)) errors.push(`${path}: solo puede ser ${shape.values.join(" | ")}`);
+      return;
+
+    // Identificador, no texto: la key del rubro se guarda en el CRM (`business_type`) y viaja al
+    // panel. Sin tildes, sin espacios y sin mayusculas para que "Ferretería" y "ferreteria" no
+    // terminen siendo dos rubros distintos en los tableros.
+    case "slug":
+      if (typeof value !== "string") return void errors.push(`${path}: tiene que ser texto`);
+      if (value.length > shape.max) return void errors.push(`${path}: pasa de ${shape.max} caracteres`);
+      if (!/^[a-z][a-z0-9_]*$/.test(value)) {
+        errors.push(`${path}: solo minusculas, numeros y "_", empezando por letra (va al CRM como business_type)`);
+      }
       return;
 
     case "int":
@@ -247,6 +280,34 @@ function checkDemo(demo, errors) {
 }
 
 /**
+ * Un rubro editable tiene que SERVIR y no puede clasificar de mas. Lo que se rechaza y por que:
+ *   - sin ninguna palabra usable el matcher nunca lo lee: es una edicion que parece publicada y
+ *     no hace nada, o sea el fallo silencioso que esta capa entera existe para evitar;
+ *   - una palabra de 1-2 letras se cuela en medio diccionario ("ol", "sa") y manda al rubro
+ *     equivocado a cualquiera que la escriba de paso;
+ *   - la misma key dos veces es una contradiccion: la segunda pisa la etiqueta de la primera y no
+ *     hay forma de saber cual quiso el editor.
+ */
+function checkRubros(rubros, errors) {
+  if (!Array.isArray(rubros)) return;
+  const vistas = new Set();
+  rubros.forEach((rubro, index) => {
+    if (!isPlainObject(rubro)) return;
+    const path = `rubrosExtra[${index}]`;
+    if (typeof rubro.key === "string" && rubro.key) {
+      if (vistas.has(rubro.key)) errors.push(`${path}.key: "${rubro.key}" esta dos veces`);
+      vistas.add(rubro.key);
+    }
+    const palabras = [...(Array.isArray(rubro.fuerte) ? rubro.fuerte : []), ...(Array.isArray(rubro.debil) ? rubro.debil : [])];
+    const cortas = palabras.filter((word) => typeof word === "string" && normalize(word).trim().length < MIN_LEXICON_WORD);
+    for (const word of cortas) errors.push(`${path}: "${word}" es muy corta (minimo ${MIN_LEXICON_WORD} letras)`);
+    if (palabras.length === cortas.length) {
+      errors.push(`${path}: sin palabras de al menos ${MIN_LEXICON_WORD} letras el matcher nunca lo va a leer`);
+    }
+  });
+}
+
+/**
  * @returns {{ok: boolean, errors: string[]}} `ok:false` = el archivo se descarta ENTERO.
  * Nunca tira: un JSON con un getter hostil no puede tumbar el bot.
  */
@@ -256,6 +317,7 @@ export function validateKnowledge(data) {
     if (!isPlainObject(data)) return { ok: false, errors: ["el archivo no es un objeto JSON"] };
     checkObject(data, SHAPE, "", errors);
     checkDemo(data.demo, errors);
+    checkRubros(data.rubrosExtra, errors);
   } catch (error) {
     errors.push(`no se pudo validar: ${String(error?.message || error).slice(0, 160)}`);
   }
@@ -413,6 +475,7 @@ export function knowledgeHealth(options = {}) {
     updatedBy: state.updatedBy,
     faq: Array.isArray(state.data?.faq) ? state.data.faq.length : 0,
     triggersDemo: Array.isArray(state.data?.triggersExtra?.demo) ? state.data.triggersExtra.demo.length : 0,
+    rubros: Array.isArray(state.data?.rubrosExtra) ? state.data.rubrosExtra.length : 0,
     loadedAt: state.loadedAt,
     path: state.path,
     lastError: state.error,
@@ -460,6 +523,11 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
     overrides.demo = { ...base.demo, ...data.demo, pendiente: data.demo.duracionMinutos !== undefined ? false : base.demo.pendiente };
   }
 
+  // El lexico viaja CRUDO (palabras) hasta intents.mjs, que es el unico que sabe compilarlo y el
+  // unico que puede garantizar el orden codigo-primero. Compilarlo aca seria partir esa regla en
+  // dos archivos.
+  if (Array.isArray(data.rubrosExtra) && data.rubrosExtra.length) overrides.rubrosExtra = data.rubrosExtra;
+
   const extraDemo = data.triggersExtra?.demo;
   if (Array.isArray(extraDemo) && extraDemo.length) {
     // UNION con el codigo: agregar es libre, quitar es imposible (diseño §4, candado 4).
@@ -497,17 +565,56 @@ export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
 // editor la linea exacta y el codigo violado; y al cargar, por si alguien edito el archivo a mano
 // por SSH salteandose el paso anterior. `webhook-server.sh knowledge` usa esto.
 
-export function checkCli(argv = [], deps = {}) {
+/**
+ * EL BANCO COMO COMPUERTA (diseño §4): un lexico que hace bajar el banco NO se publica.
+ * Corre solo si el archivo trae `rubrosExtra`, que es el unico bloque capaz de cambiar a que
+ * rubro se clasifica una conversacion — el resto solo cambia texto. Una palabra demasiado amplia
+ * ("local", "estudio") no se ve leyendo el JSON: se ve cuando 60 conversaciones reales cambian de
+ * rama, y eso es exactamente lo que mide el banco.
+ *
+ * El import es DINAMICO a proposito: el runtime del bot no carga nunca los 60 casos ni el motor
+ * de evaluacion. Si el banco no se puede correr, la publicacion se FRENA: publicar a ciegas el
+ * unico bloque que puede romper la clasificacion es peor que no publicar.
+ */
+async function benchGate(data) {
+  let bench;
+  let cases;
+  try {
+    [bench, cases] = await Promise.all([import("./bench.mjs"), import("./bench-cases.mjs")]);
+  } catch (error) {
+    return [`no se pudo correr el banco: ${String(error?.message || error).slice(0, 160)}`];
+  }
+  const score = (config) => bench.summarizeOutcomes(cases.BENCH_CASES.map((item) => bench.evaluateCase(item, config)));
+  const antes = score(bench.BENCH_CONFIG);
+  const despues = score(applyKnowledge(bench.BENCH_CONFIG, data));
+  if (despues.hits >= antes.hits && despues.datosInventados <= antes.datosInventados) return [];
+  return [
+    `el banco BAJA con este archivo: ${antes.hits}/${antes.total} -> ${despues.hits}/${despues.total}` +
+      (despues.datosInventados > antes.datosInventados
+        ? ` · datos inventados: ${antes.datosInventados} -> ${despues.datosInventados}`
+        : ""),
+    "revisa las palabras de `rubrosExtra`: una demasiado amplia clasifica mal (las genericas van en `debil`)",
+    "para ver caso por caso: node bench.mjs",
+  ];
+}
+
+export async function checkCli(argv = [], deps = {}) {
   const path = argv.find((arg) => !arg.startsWith("--")) || knowledgePath();
   const result = readKnowledgeFile(path, deps);
   if (result.missing) return { code: 1, lines: [`no existe ${path}`] };
   if (result.data) {
+    const rubros = result.data.rubrosExtra || [];
+    const problemas = rubros.length ? await benchGate(result.data) : [];
+    if (problemas.length) {
+      return { code: 1, lines: [`RECHAZADO ${path} (compuerta del banco)`, ...problemas.map((line) => `  - ${line}`)] };
+    }
     return {
       code: 0,
       lines: [
         `OK ${path}`,
         `  version: ${result.data.version || "(sin version)"} · por: ${result.data.updatedBy || "(sin autor)"}`,
         `  faq: ${(result.data.faq || []).length} · disparadores extra: ${(result.data.triggersExtra?.demo || []).length}`,
+        `  rubros: ${rubros.length}${rubros.length ? ` (${rubros.map((rubro) => rubro.key).join(", ")}) · banco OK` : ""}`,
       ],
     };
   }
@@ -516,7 +623,7 @@ export function checkCli(argv = [], deps = {}) {
 
 const invokedDirectly = Boolean(process.argv[1]) && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (invokedDirectly) {
-  const { code, lines } = checkCli(process.argv.slice(2));
+  const { code, lines } = await checkCli(process.argv.slice(2));
   process.stdout.write(`${lines.join("\n")}\n`);
   process.exitCode = code;
 }

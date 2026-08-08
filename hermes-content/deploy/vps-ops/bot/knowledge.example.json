@@ -31,5 +31,7 @@
 
   "triggersExtra": {
     "demo": []
-  }
+  },
+
+  "rubrosExtra": []
 }

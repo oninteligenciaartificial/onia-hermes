@@ -274,13 +274,23 @@ valores salen del repo y están citados; lo que falta va marcado como pendiente.
 | `demo.{duracionMinutos, duracionFrase, modalidad}` | `{{demo_duracion}}`/`{{demo_modalidad}}` en M0 **y** la reserva en Cal.com |
 | `faq[]` con `id: "siat"` (`title`,`body`,`status`,`vigenteHasta`,`tags`) | reemplaza el cuerpo de `M_SIAT_BODY` |
 | `triggersExtra.demo[]` | **unión** con `triggers.demo` del código |
+| `rubrosExtra[]` (`key`, `label`, `fuerte[]`, `debil[]`) — desde 2026-08-08 | `intents.lexiconOf()`: el matcher de rubros. Es lo que permite **agregar un rubro sin desplegar** |
 
 Lo que quedó **fuera a propósito** en la v1, con el motivo:
 
-- **`rubros[]` (el léxico de `intents.mjs`)** — es el ítem que más duele al crecer y el
-  que sigue. Requiere pasarle la config a `intents.parseQualification()`, que hoy no la
-  recibe, y volver a medir el banco. Hasta que eso esté, la clave **se rechaza**: mejor
-  un error explícito que una lista de palabras que el matcher nunca lee.
+- ~~**`rubros[]` (el léxico de `intents.mjs`)**~~ — **IMPLEMENTADO 2026-08-08** como
+  `rubrosExtra[]`, con 4 diferencias respecto del ejemplo de §2, todas a propósito:
+  - **se llama `rubrosExtra` y sólo AGREGA.** Los 5 rubros del código no se re-declaran ni
+    se pueden borrar: un rubro nuevo se suma al final y uno existente recibe palabras
+    nuevas (unión, igual que `triggersExtra`). Lo único que el archivo pisa es la
+    `label`, que es texto que el prospecto lee.
+  - **sin `moduloListo` / `moduloNota`.** Nombrar un módulo que no existe es prometer una
+    feature (N2) con otro disfraz: sigue siendo un commit en `qualification.branches`.
+  - **sin `coreRubro` ni `rama`.** No tienen consumidor en runtime hoy; una clave que se
+    acepta y no hace nada le miente al editor igual que un archivo que no se aplicó.
+  - **compuerta del banco automática**: si el archivo trae `rubrosExtra`, `--check` corre
+    los 62 casos con y sin el léxico y **rechaza la publicación si el banco baja** o si
+    aparecen datos inventados. Deja de ser una regla escrita y pasa a ser un candado.
 - **`empresa.{sitio, whatsapp, ciudadBase, ciudadesPresencial}` y `demo.quienLaDa`** — no
   hay plantilla que los renderice. `quienLaDa` ya vive en `identity.humanName`.
 - **`faq[].gatillos`** — hoy el ruteo al SIAT lo decide `RE_SIAT` en `intents.mjs`, que es
@@ -490,21 +500,24 @@ hoy 60/60). Si el benchmark baja, no se publica. Ya existe; solo hay que exigirl
    la degradación es **identidad**: sin archivo devuelve el MISMO objeto de config.
 2. ✅ `config.mjs` pasa a ser el **piso**: los valores actuales quedan como fallback
    literal, sin borrar nada. Los 20 templates renderizan byte a byte igual que antes.
-3. ⛔ `intents.mjs` compilando `RUBROS` desde el léxico — **no entró en la v1** (ver §2.1).
-   Es lo próximo y es lo único que falta para "agregar un rubro sin desplegar".
+3. ✅ **(2026-08-08)** `intents.mjs` compilando el léxico desde `rubrosExtra[]`: las
+   palabras se normalizan, se **escapan** (nunca son regex) y se compilan `\bpalabra\w*\b`,
+   agregadas SIEMPRE detrás de las del código. `parseQualification`, `findIndustry` e
+   `industryLabel` reciben la config; sin `rubrosExtra` devuelven exactamente el léxico de
+   antes. Compuerta: `--check` corre el banco y rechaza si baja (§2.1).
 4. ✅ Variables nuevas en `varsFor` (`demo_duracion`, `demo_modalidad`, `horario_frase`) y
    las plantillas de §1.2 usándolas.
 5. ✅ `webhook-server.sh` (y los otros 3 wrappers): STAMP con `*.json` + acción
    `knowledge` con validación previa (§3.6).
 6. ✅ `/health` reporta `knowledge: { source, version, updatedBy, faq, triggersDemo,
-   loadedAt, path, lastError }`. ⛔ Falta la **alarma del watchdog** si `source` cae a
+   rubros, loadedAt, path, lastError }`. ⛔ Falta la **alarma del watchdog** si `source` cae a
    `code` después de haber sido `file`: `webhook-watchdog.sh` hoy solo mira que `/health`
    conteste, no qué dice. Sin esa alarma, "edité y no pasó nada" se ve solo si alguien
    mira `/health` a mano.
 
-Resultado hoy: cambiar horario, identidad, duración/modalidad de la demo o la respuesta
-del SIAT = editar un JSON por SSH. Sin build, sin commit, sin reinicio.
-Falta para el enunciado completo: agregar un **rubro** (punto 3) y la alarma (punto 6).
+Resultado hoy: cambiar horario, identidad, duración/modalidad de la demo, la respuesta
+del SIAT **y agregar un rubro nuevo** = editar un JSON por SSH. Sin build, sin commit, sin
+reinicio. Falta sólo la alarma del watchdog (punto 6).
 
 ### (b) Editable desde el panel ONIA Center
 

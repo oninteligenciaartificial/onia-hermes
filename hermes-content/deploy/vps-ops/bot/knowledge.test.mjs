@@ -33,6 +33,8 @@ import {
   withKnowledge,
 } from "./knowledge.mjs";
 import { step, createState } from "./bot-engine.mjs";
+import { normalize } from "./guardrails.mjs";
+import { findIndustry, industryLabel } from "./intents.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const EJEMPLO = join(HERE, "knowledge.example.json");
@@ -56,12 +58,22 @@ function conArchivo(contenido, run) {
   const dir = mkdtempSync(join(tmpdir(), "onia-knowledge-"));
   const path = join(dir, "knowledge.json");
   if (contenido !== null) writeFileSync(path, typeof contenido === "string" ? contenido : JSON.stringify(contenido));
-  try {
-    return run(path);
-  } finally {
+  const limpiar = () => {
     resetKnowledgeCache();
     rmSync(dir, { recursive: true, force: true });
+  };
+  let salida;
+  try {
+    salida = run(path);
+  } catch (error) {
+    limpiar();
+    throw error;
   }
+  // `checkCli` es async (corre el banco): con un `finally` a secas el archivo se borraria ANTES
+  // de que lo terminen de leer, y el test verde estaria midiendo otra cosa.
+  if (salida && typeof salida.finally === "function") return salida.finally(limpiar);
+  limpiar();
+  return salida;
 }
 
 test.afterEach(() => resetKnowledgeCache());
@@ -403,17 +415,19 @@ test("knowledge.example.json es valido y NO cambia una coma de lo que el bot dic
   assert.equal(config.demo, DEFAULT_CONFIG.demo, "el arranque NO decide la duracion: eso lo decide Sergio");
 });
 
-test("checkCli: devuelve 0 con el ejemplo, 1 y el motivo exacto con un archivo rechazado", () => {
-  assert.equal(checkCli([EJEMPLO]).code, 0);
+test("checkCli: devuelve 0 con el ejemplo, 1 y el motivo exacto con un archivo rechazado", async () => {
+  assert.equal((await checkCli([EJEMPLO])).code, 0);
 
-  conArchivo(valido({ tarifas: { mensual: 790 } }), (path) => {
-    const salida = checkCli([path]);
+  await conArchivo(valido({ tarifas: { mensual: 790 } }), async (path) => {
+    const salida = await checkCli([path]);
     assert.equal(salida.code, 1);
     assert.match(salida.lines.join("\n"), /RECHAZADO/);
     assert.match(salida.lines.join("\n"), /tarifas: clave desconocida/, "el editor tiene que ver QUE esta mal, no un 'error'");
   });
 
-  conArchivo(null, (path) => assert.equal(checkCli([path]).code, 1, "un archivo que no existe no es una publicacion valida"));
+  await conArchivo(null, async (path) => {
+    assert.equal((await checkCli([path])).code, 1, "un archivo que no existe no es una publicacion valida");
+  });
 });
 
 test("/health dice de donde salio lo que el bot esta diciendo (si no, 'edite y no paso nada' tarda dias)", () => {
@@ -432,6 +446,104 @@ test("parseKnowledge no tira nunca, ni con un JSON hostil", () => {
     assert.equal(result.data, null);
     assert.ok(result.error, `${raw} tendria que dar un motivo legible`);
   }
+});
+
+// ---------------------------------------------------------------------------
+// 6. EL LEXICO DE RUBROS — agregar un rubro SIN desplegar
+// ---------------------------------------------------------------------------
+// No se prueba "el JSON se lee". Se prueba que un rubro nuevo CLASIFIQUE de verdad (si no, es una
+// edicion que parece publicada y no hace nada), que no pueda pisar a los del codigo, y que una
+// lista de palabras mala se frene ANTES de produccion.
+
+const FUNERARIA = Object.freeze({
+  key: "funeraria",
+  label: "servicios funerarios",
+  fuerte: ["funeraria", "velatorio", "sala de velacion"],
+});
+
+/** La config que tendria el bot si alguien edita el archivo del VPS y no despliega nada. */
+function conRubros(rubros) {
+  return applyKnowledge(DEFAULT_CONFIG, valido({ rubrosExtra: rubros }));
+}
+
+test("un rubro NUEVO del archivo clasifica y el bot lo sabe nombrar — sin desplegar nada", () => {
+  const texto = normalize("hola, tengo una funeraria en santa cruz");
+  assert.equal(findIndustry(texto), null, "sin archivo el codigo no conoce el rubro: es lo que hace honesta a la prueba");
+
+  const config = conRubros([FUNERARIA]);
+  assert.equal(findIndustry(texto, config), "funeraria");
+  assert.equal(industryLabel("funeraria", config), "servicios funerarios");
+});
+
+test("PUNTA A PUNTA: el rubro editable llega hasta lo que el prospecto LEE", () => {
+  const estado = createState({ channel: "sim", contactRef: "t", botStage: "demo_agendada" });
+  const mensaje = { text: "tengo una funeraria, somos 4, en santa cruz", receivedAt: T0 };
+
+  const conCodigo = step(estado, mensaje, { config: DEFAULT_CONFIG });
+  assert.equal(conCodigo.nextState.qualification.industry, undefined, "hoy el bot no sabe que es una funeraria");
+
+  const result = step(estado, mensaje, { config: conRubros([FUNERARIA]) });
+  assert.equal(result.nextState.qualification.industry, "funeraria", "el dato queda en el CRM con su propia key");
+  const texto = result.replies.map((reply) => reply.text).join("\n");
+  assert.match(texto, /servicios funerarios/, "y el bot se lo repite con la etiqueta que puso el que edito");
+  assert.ok(!texto.includes("{{"), "ninguna variable puede quedar sin resolver a la vista del prospecto");
+});
+
+test("el archivo no le roba un match a una palabra FUERTE del codigo (el orden es el candado)", () => {
+  const config = conRubros([{ key: "salon_eventos", label: "salón de eventos", fuerte: ["clinica dental", "dentista"] }]);
+  assert.equal(findIndustry(normalize("tengo una clinica dental"), config), "dental");
+  assert.equal(findIndustry(normalize("soy dentista"), config), "dental");
+});
+
+test("para una key que ya existe el archivo SUMA palabras: nunca reemplaza el lexico del codigo", () => {
+  const config = conRubros([{ key: "comercio", label: "comercio", fuerte: ["botilleria", "bodega"] }]);
+  assert.equal(findIndustry(normalize("tengo una botilleria"), config), "comercio", "la palabra nueva entra");
+  assert.equal(findIndustry(normalize("tengo una ferreteria"), config), "comercio", "y la del codigo sigue viva");
+  assert.equal(findIndustry(normalize("soy dentista"), config), "dental", "editar un rubro no toca a los otros");
+});
+
+test("las palabras son TEXTO, no regex: se escapan (una regex mala mata el matcher o cuelga el proceso)", () => {
+  const config = conRubros([{ key: "rara", label: "rara", fuerte: ["a.*z", "(uno|dos)"] }]);
+  assert.equal(findIndustry(normalize("tengo abcz aca"), config), null, "'a.*z' no puede portarse como comodin");
+  assert.equal(findIndustry(normalize("tengo uno"), config), null, "los parentesis no abren un grupo");
+  assert.equal(findIndustry(normalize("esto es un a.*z"), config), "rara", "la palabra literal si matchea");
+});
+
+test("el validador frena el lexico que no sirve, el que clasifica de mas y el que promete", () => {
+  const casos = [
+    [{ key: "vacio", label: "vacío", fuerte: [] }, /nunca lo va a leer/, "un rubro sin palabras no hace nada"],
+    [{ key: "corto", label: "corto", fuerte: ["ok"] }, /es muy corta/, "2 letras se cuelan en medio diccionario"],
+    [{ key: "Mayuscula", label: "x", fuerte: ["funeraria"] }, /business_type/, "la key va al CRM"],
+    [{ key: "caro", label: "desde 790 Bs", fuerte: ["funeraria"] }, /declara_precio/, "el bot no cotiza, ni en una etiqueta"],
+    [{ key: "extra", label: "x", fuerte: ["funeraria"], moduloListo: true }, /clave desconocida/, "prometer un modulo es un commit"],
+    [{ key: "sinlabel", fuerte: ["funeraria"] }, /falta y es obligatorio/, "sin etiqueta el guion no lo puede nombrar"],
+  ];
+  for (const [rubro, esperado, porque] of casos) {
+    const verdict = validateKnowledge(valido({ rubrosExtra: [rubro] }));
+    assert.equal(verdict.ok, false, porque);
+    assert.match(verdict.errors.join(" · "), esperado, porque);
+  }
+
+  const dup = validateKnowledge(valido({ rubrosExtra: [FUNERARIA, { ...FUNERARIA, label: "otra cosa" }] }));
+  assert.equal(dup.ok, false, "la misma key dos veces es una contradiccion, no una edicion");
+  assert.match(dup.errors.join(" · "), /esta dos veces/);
+});
+
+test("COMPUERTA DEL BANCO: un lexico que rompe la clasificacion no se publica (y uno sano si)", async () => {
+  await conArchivo(valido({ rubrosExtra: [FUNERARIA] }), async (path) => {
+    const salida = await checkCli([path]);
+    assert.equal(salida.code, 0, salida.lines.join("\n"));
+    assert.match(salida.lines.join("\n"), /banco OK/);
+  });
+
+  // "hola" y "buenas" abren media conversacion del banco: el bot guardaria un rubro que el
+  // prospecto nunca dijo. Eso es un dato INVENTADO — el fallo mas caro que mide el banco, y el que
+  // no se ve leyendo el JSON.
+  await conArchivo(valido({ rubrosExtra: [{ key: "saludo", label: "saludo", fuerte: ["hola", "buenas"] }] }), async (path) => {
+    const salida = await checkCli([path]);
+    assert.equal(salida.code, 1, "un lexico que hace bajar el banco NO puede publicarse");
+    assert.match(salida.lines.join("\n"), /el banco BAJA/);
+  });
 });
 
 test("renderTemplate sigue siendo el ultimo paso: los {{ }} del conocimiento se resuelven en el guion", () => {
