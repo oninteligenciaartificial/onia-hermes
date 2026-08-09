@@ -100,6 +100,17 @@ en el feed). Vista previa: `_GRID-6-POSTS.jpg` · cómo se verá el perfil: `_GR
    versión). Buscar una zona oscura o subir la opacidad de la sombra.
 4. **Dos líneas cortas antes que una larga.** Se escanea en el segundo que dura el scroll.
 
+### Dos correcciones del 2026-08-09
+
+**P6 rehecha.** La versión original (golden hour, del banco viejo generado con Soul) *"se veía
+muy IA"* — ese brillo de foto de stock. Reemplazada por una nueva hecha con el **Element**:
+living de noche, luz de lámpara, celular en la mano y expresión honesta, que además acompaña
+mejor la pregunta del caption. La vieja quedó como `_P6-vieja-descartada.jpg`.
+
+⚠️ **Trampa de prompt encontrada: nombrar "Santa Cruz" solo arrastra a California.** Una de las
+variantes salió con un cartel de *"SANTA CRUZ SURF SHOP"* en inglés. **Siempre escribir "Santa
+Cruz de la Sierra, Bolivia"** — nunca la ciudad sola.
+
 **Todos los CTA de comentario necesitan respuesta manual hasta que esté el token de IG.**
 15 min/día. El `?src=lucia-*` va en el DM, no en el caption.
 
