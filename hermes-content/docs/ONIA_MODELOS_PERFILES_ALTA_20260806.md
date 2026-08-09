@@ -211,30 +211,34 @@ adentro del sistema.
 >    cuadro y el fondo NO puede ser blanco — la interfaz de IG es blanca y el círculo pierde el
 >    borde. Por eso el fondo se pasó a crema. Test: `_AVATAR-FINAL-TEST.jpg`.
 
-**Biografía DEFINITIVA** (elegida por Sergio 2026-08-08 — 127 de los 150 caracteres):
+**Biografía DEFINITIVA** (elegida por Sergio 2026-08-08 — 84 de los 150 caracteres):
+
+```
+Creada con IA por @oniahq 🤖
+Bolivia
+Te muestro cómo la IA hace vender a tu negocio 👇
+```
+
+**Bolivia y no "Santa Cruz de la Sierra"** (decisión de Sergio): ONIA vende en todo el país y
+no conviene cerrarle la puerta a La Paz ni a Cochabamba desde la bio. Que ella VIVA en Santa
+Cruz se ve en el contenido, no hace falta declararlo acá.
+
+*Alternativas descartadas, guardadas por si sirven más adelante:*
 
 ```
 Soy Lucía y no soy real 🤖
 Le muestro a dueños de negocio cómo la IA les saca trabajo de encima
 Hecha en Bolivia por @oniahq 👇
 ```
+*(Abre con el gancho meta-IA en vez de con la ficha técnica. Era mi recomendación; queda para
+cuando se quiera empujar más fuerte el ángulo "primera influencer virtual de Bolivia".)*
 
-**Por qué esta y no la anterior** (*"Creada con IA por @oniahq · Santa Cruz de la Sierra · Te
-muestro cómo la IA hace vender a tu negocio"*): la vieja gastaba el renglón más valioso —el
-primero— en la ficha técnica. *"Soy Lucía y no soy real"* son cinco palabras que **nadie más
-en Bolivia puede decir**, declaran la IA y frenan el scroll en la misma línea. La segunda
-línea recién ahí dice para qué sirve, y se lee porque la primera te detuvo.
-
-**"Hecha en Bolivia"** en vez de "Santa Cruz" (decisión de Sergio): ONIA vende en todo el
-país, y como identidad es más fuerte que una etiqueta de ubicación — sostiene el ángulo de
-prensa *"la primera influencer virtual de Bolivia"*.
-
-*Alternativa guardada para más adelante*, cuando la novedad se gaste y haya casos que mostrar:
 ```
 Tu negocio puede facturar, agendar y responder solo
 Te muestro cómo, sin vueltas y sin humo
 Personaje digital creado por @oniahq 🤖
 ```
+*(La más comercial. Para cuando la novedad se gaste y haya casos que mostrar.)*
 
 > ⚠️ **Dependencia:** hoy la cuenta de ONIA es **`@oniaagency`**; `@oniahq` es la decisión de
 > marca (`ONIA_ARQUITECTURA_MARCA_Y_RUTA_GLOBAL_20260727.md` §4) pero **todavía no está
