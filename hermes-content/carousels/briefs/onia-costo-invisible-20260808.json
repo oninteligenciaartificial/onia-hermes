@@ -1,0 +1,93 @@
+{
+  "title": "Automatizar es caro. Hacerlo a mano te cuesta más",
+  "caption": "Cada vez que decimos automatización, alguien contesta: 'debe ser carísimo'. Pero nadie saca la otra cuenta: cuánto te cuesta HOY hacerlo a mano. Las horas que pasás contestando lo mismo. Los que preguntaron y nunca volvieron porque tardaste. Ese costo no aparece en ninguna factura, pero lo pagás todos los meses. Sacá tu número con el test del slide 5 y comentá COSTO: te hago la cuenta para tu rubro, sin compromiso.",
+  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#negocios", "#pymes", "#santacruz", "#emprender"],
+  "comment_trigger": "Comentá COSTO",
+  "cta": "Comentá COSTO",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "La objeción",
+      "headline": "«Automatizar es *caro*»",
+      "body": "Hacerlo a mano te cuesta más. Te hago la cuenta.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Empresario mirando billetes quemándose / calculadora.",
+      "alt_text": "Automatizar es caro",
+      "bg": "hermes-content/assets/onia/heroes/costo-01.png"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "Hay un costo que no *ves*",
+      "body": "No está en ninguna factura, pero lo pagás todos los meses. Se paga en horas tuyas y en clientes que no volvieron.",
+      "callout": "Lo barato no siempre es lo que no se paga ↘",
+      "save_worthy": false,
+      "visual_prompt": "Factura con cifras invisibles, penumbra.",
+      "alt_text": "Hay un costo que no ves",
+      "bg": "hermes-content/assets/onia/heroes/costo-02.png"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Cuenta 1",
+      "headline": "*20 horas* al mes contestando lo mismo",
+      "body": "Poné el precio de tu hora y multiplicá. Ese número ya es más caro que el sistema que lo hace solo.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Reloj de arena con monedas cayendo.",
+      "alt_text": "20 horas al mes contestando lo mismo",
+      "bg": "hermes-content/assets/onia/heroes/costo-03.png"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Cuenta 2",
+      "headline": "Los que *no* volvieron",
+      "body": "Ese es el costo caro de verdad. No es lo que gastás: es lo que dejaste de vender por responder tarde.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Puerta cerrándose, cliente alejándose.",
+      "alt_text": "Los que no volvieron",
+      "bg": "hermes-content/assets/onia/heroes/costo-04.png"
+    },
+    {
+      "number": 5,
+      "role": "save",
+      "pill": "Framework",
+      "headline": "Sacá tu *número*",
+      "body": "1) ¿Cuánto vale tu hora? 2) ¿Cuántas horas al mes contestás lo mismo? 3) ¿Cuántos no volvieron este mes? Multiplicá. Ese es el costo invisible.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Cuaderno con cálculo, luz verde.",
+      "alt_text": "Sacá tu número",
+      "bg": "hermes-content/assets/onia/heroes/costo-05.png"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "El cambio",
+      "headline": "No es un gasto: es un *empleado*",
+      "body": "Uno que trabaja 24/7, no se enferma, no pide aumento y nunca se olvida de un seguimiento. Se paga solo con los clientes que hoy se te escapan.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Silueta digital trabajando de noche.",
+      "alt_text": "No es un gasto es un empleado",
+      "bg": "hermes-content/assets/onia/heroes/costo-06.png"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Empezá hoy",
+      "headline": "Hacé la *cuenta* conmigo",
+      "body": "Comentá *COSTO* y te saco el número de tu negocio, sin compromiso.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "CTA fuerte.",
+      "alt_text": "Comentá COSTO",
+      "bg": "hermes-content/assets/onia/heroes/costo-07.png"
+    }
+  ]
+}
