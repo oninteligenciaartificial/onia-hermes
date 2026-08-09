@@ -37,7 +37,37 @@ GEMINI_API_KEY=... node scripts/gemini-see-video.mjs /ruta/video.mp4
 - Si falla (sin key, cuota, error) → usar el FALLBACK de abajo. Nunca se rompe.
 
 
-## Instagram / redes: bajar el MP4 con AUDIO (resuelto 2026-08-06)
+## Bajar el MP4 — `scripts/fetch-video.mjs` (ruta por DEFECTO, 2026-08-09)
+
+**Sin abrir el navegador del usuario.** Un solo comando para TikTok, YouTube e Instagram:
+
+```bash
+node .claude/skills/ver-videos/scripts/fetch-video.mjs <url> [<url>...] --out DIR
+node .claude/skills/ver-videos/scripts/fetch-video.mjs --login   # 1 sola vez, para IG
+```
+
+Imprime `<url>\t<ruta del mp4>` por linea. Varias URLs bajan en paralelo.
+
+- **TikTok / YouTube:** `yt-dlp` directo, cero cookies, cero navegador (~4 s medidos).
+- **Instagram:** exige sesion. Usa un **perfil de Chromium propio de Playwright**
+  (`.hermes/ig-session/profile`, gitignoreado) — NO el Chrome del usuario. Las cookies
+  se leen por CDP (`context.cookies()`), asi que el cifrado en disco no estorba.
+  Login manual **una vez** (`--login`, ventana headed); despues headless ~1 s y jar
+  reusado 12 h. `--sleep-requests 2` para no gatillar rate limit de IG.
+
+**Por que NO usar `--cookies-from-browser` (medido en la maquina de Sergio, 2026-08-09):**
+
+| Fuente | Resultado |
+| --- | --- |
+| `firefox` | lee 109 cookies, pero **no hay sesion de IG** ahi (solo `csrftoken`/`mid` anonimos) |
+| `chrome` / `brave` | `Could not copy Chrome cookie database` — base bloqueada con el navegador abierto; y aun cerrandolo, ABE |
+| `edge` | `Failed to decrypt with DPAPI` — App-Bound Encryption (Chrome 127+) |
+
+**Trampas conocidas:** no devolver la URL firmada del CDN (el filtro del MCP la bloquea);
+no volcar el video en base64 al contexto; nunca escribir la contrasena de IG — el login
+lo hace Sergio en la ventana.
+
+## Instagram por MCP de navegador (ruta VIEJA — solo si falla la de arriba)
 
 **El problema, para no volver a chocar:** IG no reproduce reels sin sesion; el `<video>` usa
 MSE (blob, no descargable); `yt-dlp` necesita cookies y **desde Chrome 127 estan cifradas con
