@@ -19,6 +19,10 @@ sirven para cosas distintas: uno para entender, el otro para citar sin deformar.
 
 **Veredictos:** `SIRVE YA` · `MEJORA LO ACTUAL` · `FUTURO` · `HUMO`.
 
+➡️ **Lo que hay que hacer con esto vive en [PENDIENTES.md](PENDIENTES.md)** — un ítem por
+acción, con el prompt listo para abrir la sesión del carril que corresponda. Las fichas
+analizan; PENDIENTES es la cola de trabajo.
+
 ## Índice
 
 | Fecha | Ficha | Veredicto | Frente |
