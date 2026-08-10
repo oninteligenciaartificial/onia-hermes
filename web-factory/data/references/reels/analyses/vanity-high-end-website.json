@@ -1,0 +1,74 @@
+{
+  "id": "vanity-high-end-website",
+  "lane": "trend",
+  "clientSlug": "",
+  "rubro": "agency",
+  "source": {
+    "url": "https://www.instagram.com/reel/DbBMwhcuuYE/",
+    "handle": "@vanity.llc",
+    "localVideo": "",
+    "sha256": "",
+    "capturedAt": "2026-07-21T00:00:00.000Z"
+  },
+  "caption": "A high-end website doesn't just look better, it increases your brand's perceived value and helps attract higher-paying clients. If your business needs a website, rebrand, or a fresh online presence, send me a message and let's make it happen. Comment 'site' to get the instructions on how this site was made. #webdesign #designer #websitedeviopment #shopify (247 likes / 39 comments, 1d)",
+  "frames": [],
+  "palette": [
+    { "role": "bg", "hex": "#0d0d10", "note": "near-black desk/scene" },
+    { "role": "accent", "hex": "#a24fd0", "note": "magenta/purple gradient light" },
+    { "role": "secondary", "hex": "#3f63c8", "note": "blue gradient light" },
+    { "role": "glow", "hex": "#c9a8e6", "note": "lavender highlight" }
+  ],
+  "typography": {
+    "style": "minimal — screen was in intro (dark) during capture; reel type is sparse, cinematic",
+    "cases": [],
+    "onScreenText": []
+  },
+  "motion": {
+    "pacing": "medium",
+    "transitions": ["crossfade", "slow-push"],
+    "techniques": ["cinematic-device-reveal", "gradient-lighting", "device-hero"]
+  },
+  "shots": ["laptop-hero-moody", "site-screen-recording-implied"],
+  "productPresentation": "the website presented as a premium OBJECT: a MacBook shot cinematically under purple-to-blue gradient lighting on a dark desk; aspirational, editorial",
+  "hook": { "type": "bold-claim", "text": "A high-end website increases your brand's perceived value and attracts higher-paying clients" },
+  "mood": ["premium", "cinematic", "moody", "dark", "aspirational"],
+  "showcasedSite": {
+    "present": true,
+    "siteType": "gourmet food ecommerce (luxury caviar) — brand 'COSTERS'",
+    "url": "costerscaviar.com (glimpsed in the address bar, unverified)",
+    "layout": "editorial bento product grid on a high-contrast dark + cream palette; centered serif-logo nav; panels mix moody product packshots with lifestyle gourmet food photography",
+    "sections": [
+      "nav with centered serif logo 'COSTERS' + minimal menu (Shop / About / Journal)",
+      "'SHOP CAVIAR' serif headline",
+      "bento product grid: caviar tins on dark panels + product callouts ('White Sturgeon', 'Siberian Sturgeon') with 'Starts at $...' and 'click to shop'",
+      "gourmet food-photography panels (canapes, plated dishes)",
+      "'Claim special offers' pill CTA"
+    ],
+    "palette": [
+      { "role": "bg-dark", "hex": "#14161a", "note": "charcoal/near-black product panels" },
+      { "role": "bg-light", "hex": "#f2efe8", "note": "cream editorial panels" },
+      { "role": "accent", "hex": "#8a9a5b", "note": "muted product green (caviar lid)" },
+      { "role": "text", "hex": "#e8e4da", "note": "warm white on dark" }
+    ],
+    "typography": "elegant serif uppercase headlines ('SHOP CAVIAR', 'SIBERIAN STURGEON'), refined minimal sans for detail",
+    "components": ["editorial bento grid", "circular product seals/badges (PDL)", "product callout tile: name + 'Starts at $X' + click-to-shop", "pill CTA", "centered-logo nav"],
+    "interactions": ["bento product grid", "product tiles link to shop"],
+    "reuseForFactory": [
+      "editorial bento grid mixing product packshots + lifestyle food photography for premium ecommerce",
+      "product callout tile: name + 'Starts at $X' + click-to-shop",
+      "circular seal/badge as a premium trust motif",
+      "centered serif-logo nav for a boutique brand",
+      "high-contrast black + cream luxury palette"
+    ],
+    "captureQuality": "clear"
+  },
+  "webIdeas": {
+    "heroDirection": "Premium/agency hero: dark cinematic stage with a device mockup of the site under a soft colored gradient light, one value-positioning line, one CTA.",
+    "sectionIdeas": ["cinematic device-mockup hero", "'why a premium site' value/ROI section", "selected work showcase", "single comment-to-DM style CTA", "process brief-to-launch"],
+    "motionForWeb": ["slow gradient-light drift behind a device mockup", "scroll-reveal of the site screenshot in the mockup (reduced-motion: static mockup)"],
+    "assetsToRequestOrReuse": ["study only - trend reel, do not reuse footage"],
+    "copyAngles": ["'A high-end site doesn't just look better - it raises your perceived value and attracts higher-paying clients' — directly reusable positioning for ONIA's OWN sales page (matches the pricing rationale: sell result/perceived value, not pixels)", "comment-to-DM CTA to turn reach into conversations"]
+  },
+  "guardrails": ["trend reel: inspiration only", "no reused footage/audio", "site captured clearly at 10s/20s of the reel (logged into IG); site palette hexes are estimates from frames", "the reel's own purple/blue gradient is production lighting, not the site's palette"],
+  "confidence": "high"
+}

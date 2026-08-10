@@ -24,16 +24,17 @@
 //     se incrustan como data URI leyendo el archivo del disco. Si el HTML pidiera red,
 //     el render se bloquea (route abort) → el PNG nunca depende de internet.
 //   · DETERMINISTA: sin Date.now / Math.random. Mismos flags → mismo PNG.
-//   · Sin dependencias nuevas: playwright se resuelve desde el workspace del panel.
+//   · Sin dependencias nuevas: playwright se resuelve desde el workspace del repo
+//     (ver resolve-playwright.mjs: ancla RELATIVA a este archivo, nunca una ruta
+//     absoluta de una sola máquina).
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, extname, resolve, join } from "node:path";
-import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
+import { resolveChromium, launchChromium, REPO_ROOT } from "./resolve-playwright.mjs";
 
-// playwright vive en el workspace de la app del panel (no instalamos nada nuevo)
-const require = createRequire("C:/dev/proyectos/onia-hermes/web-factory/apps/site/package.json");
-const { chromium } = require("playwright");
+// Si playwright no está, esto corta acá con el comando exacto para instalarlo —
+// en vez de reventar con un "Cannot find module" que no dice qué hacer.
+const chromium = resolveChromium("make-mockup");
 
 // ---- args ------------------------------------------------------------------
 const argv = process.argv.slice(2);
@@ -114,7 +115,7 @@ async function dataUri(file) {
 // fuente este instalada en el sistema. Antes se usaba el stack del sistema
 // ("Segoe UI"), que es justamente lo que hacia que un reel mezclando apoyos
 // estaticos y animados mostrara DOS tipografias distintas.
-const FONTS_DIR = resolve(fileURLToPath(new URL("../../../../", import.meta.url)), "hermes-content/brand/fonts");
+const FONTS_DIR = resolve(REPO_ROOT, "hermes-content/brand/fonts");
 const BRAND_FONTS = [
   ["Bricolage Grotesque", "BricolageGrotesque-var-latin.woff2", "500 700"],
   ["DM Sans", "DMSans-var-latin.woff2", "400 500"],
@@ -438,7 +439,7 @@ const selector = spec.selector || "#stage";
 
 await mkdir(dirname(resolve(OUT)), { recursive: true });
 
-const browser = await chromium.launch({
+const browser = await launchChromium("make-mockup", chromium, {
   args: ["--force-color-profile=srgb", "--hide-scrollbars", "--font-render-hinting=none"],
 });
 try {

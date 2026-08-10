@@ -6,6 +6,15 @@ export { renderTrust } from "./trust";
 export { renderProcess } from "./process";
 export { renderFaq } from "./faq";
 export { renderStickyCta } from "./sticky-cta";
+export {
+  WF_EASE,
+  MOTION_CSS,
+  MOTION_RUNTIME_JS,
+  MOTION_PRIMITIVES,
+  renderMotionStyles,
+  renderMotionScript,
+  renderMotionAssets,
+} from "./motion";
 export { renderIcon, pickCredencialIcon } from "./icons";
 export { renderClinicHero } from "./clinic-hero";
 export { renderClinicServices } from "./clinic-services";

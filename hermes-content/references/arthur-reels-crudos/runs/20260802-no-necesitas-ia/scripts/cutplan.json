@@ -1,0 +1,136 @@
+{
+  "video": "raw/arthur-no-necesitas-ia.mp4",
+  "modo": "audio",
+  "noise": "-32dB",
+  "minSil": 0.45,
+  "pad": 0.08,
+  "origDur": 48.17,
+  "finalDur": 44.52,
+  "silences": [
+    {
+      "start": 13.334229,
+      "end": 13.891021
+    },
+    {
+      "start": 18.900021,
+      "end": 19.600979
+    },
+    {
+      "start": 20.581,
+      "end": 21.080479
+    },
+    {
+      "start": 25.167104,
+      "end": 25.623292
+    },
+    {
+      "start": 35.689583,
+      "end": 36.5035
+    },
+    {
+      "start": 46.656062,
+      "end": 48.002271
+    }
+  ],
+  "keep": [
+    {
+      "start": 0,
+      "end": 13.41
+    },
+    {
+      "start": 13.81,
+      "end": 18.98
+    },
+    {
+      "start": 19.52,
+      "end": 20.66
+    },
+    {
+      "start": 21,
+      "end": 25.25
+    },
+    {
+      "start": 25.54,
+      "end": 35.77
+    },
+    {
+      "start": 36.42,
+      "end": 46.74
+    }
+  ],
+  "ffmpeg": "ffmpeg -y -i \"raw/arthur-no-necesitas-ia.mp4\" -vf \"select='between(t,0,13.41)+between(t,13.81,18.98)+between(t,19.52,20.66)+between(t,21,25.25)+between(t,25.54,35.77)+between(t,36.42,46.74)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,0,13.41)+between(t,13.81,18.98)+between(t,19.52,20.66)+between(t,21,25.25)+between(t,25.54,35.77)+between(t,36.42,46.74)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+  "rows": [
+    {
+      "i": 0,
+      "start": 0,
+      "end": 6.94,
+      "text": "La mayoría de las empresas que se contactan conmigo hoy en día no necesitan de inteligencia artificial y sí, te doy yo que trabajo con esto.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 1,
+      "start": 7.6,
+      "end": 13.26,
+      "text": "Varias empresas se contactan conmigo buscando una automatización de inteligencia artificial para así lograr vender más.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 2,
+      "start": 13.94,
+      "end": 18.84,
+      "text": "Y yo le pregunto, ¿y dónde anotan a sus clientes? Y su respuesta es en el whatsapp de cada vendedor.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 3,
+      "start": 19.54,
+      "end": 25.2,
+      "text": "Cuatro listas, cuatro diferentes personas y nadie sabe qué pasó con ningún cliente.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 4,
+      "start": 25.2,
+      "end": 30.94,
+      "text": "Meterle inteligencia artificial a esto es como ponerle el motor de un fórmula 1 a un auto sin ruedas.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 5,
+      "start": 31.68,
+      "end": 35.24,
+      "text": "Automatizar un desorden es solo hacer que el desastre llegue más rápido.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 6,
+      "start": 36.42,
+      "end": 40.14,
+      "text": "Y exactamente lo que necesitan es ordenar la información.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 7,
+      "start": 40.64,
+      "end": 43.58,
+      "text": "Eso es lo que realmente mueve la aguja y cuesta una fracción.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 8,
+      "start": 44.04,
+      "end": 46.62,
+      "text": "Si te ha pasado lo parecido, coméntamelo aquí abajo.",
+      "keep": true,
+      "reason": "contenido"
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta ONIA — Franco Marín · Century 21 Home</title>
+<style>
+  :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
+    --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#b48b2f;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  .page{max-width:900px;margin:0 auto;padding:40px 28px;}
+  .hero{background:linear-gradient(135deg,#0e1f2e 0%,#16344c 55%,#b48b2f 160%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
+  .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.02;margin:0 0 14px;}
+  h2{font-size:26px;margin:34px 0 14px;border-bottom:3px solid var(--accent);padding-bottom:8px;}
+  h3{font-size:18px;margin:0 0 8px;}
+  p{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 10px;}
+  .hero p{color:#e6eefb;font-size:18px;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+  th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;}
+  td.num,th.num{text-align:right;white-space:nowrap;}
+  .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+  .tag.green{background:#e3f4ec;color:var(--green);}
+  .tag.amber{background:#fbeede;color:var(--amber);}
+  ul{margin:6px 0 0;padding-left:20px;}
+  li{font-size:15px;color:var(--muted);line-height:1.5;margin-bottom:5px;}
+  .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13px;color:var(--muted);}
+  .big{font-size:20px;color:var(--ink);font-weight:800;}
+  .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  tr.rec td{background:#fff7ed;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);}
+  tr.rec td.num{font-size:17px;font-weight:800;}
+  .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .lim{color:var(--muted);font-size:12px;}
+  .step p{margin:0;color:var(--ink);}
+  .step h3 + p{color:var(--muted);}
+  .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
+  .vcard h3{color:var(--ink);}
+  figure{margin:18px 0;}
+  figure img{width:100%;border-radius:14px;display:block;}
+  figcaption{font-size:13px;color:var(--muted);margin-top:6px;text-align:center;}
+  table.comp td.win{background:#e3f4ec;color:var(--ink);font-weight:600;}
+  a.cta{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:16px;padding:12px 22px;border-radius:10px;text-decoration:none;}
+  .cover{background:linear-gradient(135deg,#0e1f2e 0%,#16344c 55%,#b48b2f 160%);color:#fff;border-radius:18px;padding:60px 48px;min-height:88vh;display:flex;align-items:center;margin-bottom:28px;page-break-after:always;}
+  .cover p{color:#e6eefb;font-size:19px;}
+  .cover .meta{margin-top:26px;font-size:15px;color:#cfe0ff;}
+  @media print{
+    .page{max-width:100%;}body{background:#fff;}
+    .card,table,figure,.vcard,.step{page-break-inside:avoid;}
+    h2{page-break-after:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+    <h1>Franco Marín — Tu web de marca personal + tu sistema privado de propietarios</h1>
+    <p>Una página profesional con tus propiedades, tus logros de Century 21, tus ventas y tu lado humano — y un panel privado, solo tuyo, que ordena a tus propietarios y te avisa solo cada cumpleaños.</p>
+  </div>
+
+  <h2>Qué problema resolvemos</h2>
+  <div class="card"><p>Hoy tus propiedades y tu trayectoria en <b>Century 21 Home</b> viven en portales y en WhatsApp, donde compiten con cientos de avisos y se pierden. Una <b>web propia</b> reúne tus inmuebles, tus premios, tus ventas y tus clientes en un solo lugar que da autoridad y capta consultas. Y un <b>panel privado</b> convierte tu agenda mental de propietarios en un sistema que recuerda por vos: teléfonos, notas y <b>alertas automáticas de cumpleaños</b> para que nunca pierdas el contacto que trae la próxima venta.</p></div>
+
+  <h2>Qué incluye</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="tag ">Marca personal</div>
+      <h3>Tu web profesional</h3>
+      <ul><li>Catálogo de propiedades con fotos, fichas y buscador</li><li>Logros y premios de Century 21 (con foto de cada certificado)</li><li>Inmuebles vendidos y clientes satisfechos</li><li>Tu historia y tu lado humano — fotos cerrando negocios</li></ul>
+    </div>
+    <div class="card">
+      <div class="tag green">Tu sistema privado</div>
+      <h3>Panel solo para vos</h3>
+      <ul><li>Acceso privado con clave (solo lo ves vos)</li><li>Base de propietarios: teléfono, cumpleaños y notas</li><li>Alertas automáticas cuando es el cumpleaños de un propietario</li><li>Formulario que ordena cada consulta que entra</li></ul>
+    </div></div>
+
+  <h2>Cómo lo construimos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div>
+      <h3>Tu marca y tus propiedades</h3><p>Montamos el sitio con tu identidad Century 21 Home, tu catálogo de inmuebles y el buscador.</p>
+    </div></div>
+    <div class="step"><div class="n">2</div><div>
+      <h3>Autoridad: logros, ventas y clientes</h3><p>Cargamos tus premios y certificados, tus inmuebles vendidos y los testimonios de tus clientes.</p>
+    </div></div>
+    <div class="step"><div class="n">3</div><div>
+      <h3>Tu panel privado + alertas</h3><p>Creamos el acceso privado con tu base de propietarios y la automatización que te avisa cada cumpleaños.</p>
+    </div></div>
+    <div class="step"><div class="n">4</div><div>
+      <h3>Publicación y puesta en marcha</h3><p>Conectamos WhatsApp, optimizamos para Google, publicamos en tu dominio y te dejamos operando.</p>
+    </div></div></div>
+
+  <h2>Por qué te conviene</h2>
+  <div class="grid vgrid">
+    <div class="vcard">
+      <h3>Autoridad que cierra ventas</h3>
+      <p>Tu web con tus premios de Century 21, tus ventas y tus clientes te posiciona por encima del agente que solo tiene Instagram.</p>
+    </div>
+    <div class="vcard">
+      <h3>Nunca más pierdas un cumpleaños</h3>
+      <p>El sistema te avisa solo cada cumpleaños de tus propietarios — el detalle que mantiene la relación y trae la próxima exclusiva.</p>
+    </div>
+    <div class="vcard">
+      <h3>Tus propietarios ordenados en un solo lugar</h3>
+      <p>Dejás la agenda mental y los papeles: teléfonos, notas y seguimiento de cada propietario, privado y siempre a mano.</p>
+    </div>
+    <div class="vcard">
+      <h3>Dejás de depender de los portales</h3>
+      <p>El cliente te encuentra a vos en Google, con tu marca y tu catálogo, en vez de perderse entre avisos de la competencia.</p>
+    </div></div>
+  <h2>Paquetes — elegí el tuyo</h2>
+  <table>
+    <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (Bs)</th></tr>
+    <tr><td><b>Presencia</b></td><td>Web profesional con tu catálogo de propiedades + contacto + botón de WhatsApp<br><span class="res">→ Estás online con tu marca y toda consulta llega a un solo lugar.</span><br><span class="lim">Tope: sin secciones de autoridad ni panel privado — la gestión de propietarios sigue a mano.</span></td><td class="num">1.900 + 190/mes</td></tr><tr><td><b>Marca Personal</b></td><td>Web completa: propiedades + logros y premios + inmuebles vendidos + clientes satisfechos + tu lado humano + formulario de captación<br><span class="res">→ Tu autoridad de Century 21 en un sitio que capta consultas.</span><br><span class="lim">Tope: la web capta, pero el seguimiento de propietarios y cumpleaños lo hacés vos a mano.</span></td><td class="num">3.900 + 390/mes</td></tr><tr class="rec"><td><b>Marca + Sistema privado</b> ⭐</td><td>Todo lo anterior + panel privado con base de propietarios (teléfono, cumpleaños, notas) + alertas automáticas de cumpleaños<br><span class="res">→ No es solo tu web: es tu sistema de trabajo que recuerda y te avisa solo.</span><br><span class="lim">Tope: el alcance del panel se define por escrito antes de arrancar.</span></td><td class="num">7.900 + 890/mes</td></tr>
+  </table>
+  <p style="margin-top:10px;">Diferencia clave: <b>Presencia</b> = estar online · <b>Marca Personal</b> = tu autoridad convertida en consultas · <b>Marca + Sistema privado</b> = tu web + tu sistema propio (login, base de propietarios y alertas automáticas). El salto del Nivel 3 es porque ya no es una web: es <b>desarrollo a medida</b> — un panel privado con base de datos y automatización. Un sistema así se cotiza en Bolivia desde <b>Bs 22.000</b>; este es tu <b>precio de cliente fundador</b> por ser el primer agente inmobiliario de ONIA, y queda fijo para vos. Recomendado: <b>Marca + Sistema privado</b>. El mensual mantiene tu sistema al día y te sale <b>menos que un CRM extranjero en dólares</b>. Pago: 50% de anticipo para arrancar y 50% contra entrega. <b>Dominio y hosting a cargo de Franco</b> (a su nombre).</p>
+  <p style="margin-top:6px;"><b>Plazo de entrega estimado:</b> 2 a 3 semanas desde el anticipo y la entrega de contenidos.</p>
+
+  <h2>Add-ons (opcionales)</h2>
+  <table>
+    <tr><th>Add-on</th><th class="num">Setup (Bs)</th><th class="num">Mensual (Bs)</th></tr>
+    <tr><td>Chatbot WhatsApp con IA — responde y califica consultas solo (el botón de WhatsApp ya viene incluido en la web)</td><td class="num">desde 1.900</td><td class="num">150</td></tr><tr><td>Conexión Instagram / Facebook (publicación)</td><td class="num">690</td><td class="num">150</td></tr>
+  </table>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="tag amber">Importante — costos de terceros</div>
+    <p>No incluidos en el proyecto (a cargo de Franco): dominio y hosting (a su nombre), créditos de IA y mensajería de WhatsApp pagada. Las alertas de cumpleaños llegan por Telegram o correo; WhatsApp automático depende de verificación de Meta.</p>
+  </div>
+
+  <h2>Próximos pasos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div><p>Confirmás el paquete (recomendado: Marca + Sistema privado) y afinamos el alcance del panel.</p></div></div>
+    <div class="step"><div class="n">2</div><div><p>Nos pasás tus premios/certificados (fotos), inmuebles vendidos y 2-3 testimonios.</p></div></div>
+    <div class="step"><div class="n">3</div><div><p>Con el anticipo (50%) arrancamos; en 2-3 semanas tenés tu web y tu panel operando.</p></div></div><p style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;"><a class="cta" href="https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20avanzar%20con%20mi%20web%20%2B%20panel%20privado%20(Franco%20Mar%C3%ADn)">Avanzar con mi web + sistema →</a><a class="cta" href="https://cal.onia.com.bo">Agendá una llamada</a></p></div>
+  <div class="foot">
+    <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
+    <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
+  </div>
+
+</div>
+</body>
+</html>

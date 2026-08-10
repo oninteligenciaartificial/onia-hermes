@@ -5,7 +5,6 @@ type OniaCenterProfile = {
   status?: string | null;
 };
 
-const teamPath = "/onia-center/equipo";
 
 function oniaCenterAuthConfigured() {
   return Boolean(
@@ -144,14 +143,6 @@ function redirectToLogin(request: NextRequest, reason: string) {
   return NextResponse.redirect(loginUrl);
 }
 
-function redirectToTeamView(request: NextRequest) {
-  const teamUrl = request.nextUrl.clone();
-  teamUrl.pathname = teamPath;
-  teamUrl.searchParams.set("from", request.nextUrl.pathname);
-  teamUrl.searchParams.set("reason", "team_view");
-  return NextResponse.redirect(teamUrl);
-}
-
 async function getOniaCenterSessionRole(accessToken: string) {
   const supabaseUrl = getSupabaseUrl().replace(/\/$/, "");
   const serviceKey = getSupabaseServiceKey();
@@ -249,12 +240,16 @@ export async function middleware(request: NextRequest) {
     return redirectToLogin(request, accessToken ? "auth_verify" : "auth_required");
   }
 
-  if (pathname === teamPath || pathname.startsWith(`${teamPath}/`)) {
-    return applyRefreshedCookies(NextResponse.next(), refreshed);
-  }
-
-  if (role !== "sergio") {
-    return applyRefreshedCookies(redirectToTeamView(request), refreshed);
+  // Los colaboradores viven en las vistas nuevas (next/*): cada page ya filtra
+  // el runtime por actor y Finanzas se autoprotege, asi que el middleware solo
+  // exige sesion. Encerrarlos en la vista legacy (regla del monolito) les
+  // escondia su plan, el pipeline y el estudio. Cualquier ruta vieja los
+  // devuelve a la home nueva; Sergio sigue viendo todo, legacy incluido.
+  if (role !== "sergio" && !pathname.startsWith("/onia-center/next/")) {
+    const homeUrl = request.nextUrl.clone();
+    homeUrl.pathname = "/onia-center/next/hoy";
+    homeUrl.search = "";
+    return applyRefreshedCookies(NextResponse.redirect(homeUrl), refreshed);
   }
 
   return applyRefreshedCookies(NextResponse.next(), refreshed);

@@ -319,9 +319,10 @@ export function isSergio(actor: OniaCenterActor) {
 
 // Finanzas del equipo (caja, Fondo Onia, ganancias por persona) viven en el
 // scope internal_restricted. Reusa la matriz de canActorSeeScope como fuente
-// unica de verdad: sergio/area/arthur -> true; seller/freelancer -> false. Con
-// esto la pestana y la ruta de Finanzas se ocultan a Camila (seller) sin
-// duplicar la regla de visibilidad en la capa de UI.
+// Decision de Sergio 2026-08-02: Arthur (aspirante a socio) SI ve Finanzas.
+// El scope internal_restricted cubre sergio/area/arthur; seller/freelancer
+// (Camila, Jeronimo) siguen sin verla. Registrar movimientos sigue siendo
+// sergio-only (la API y la card lo restringen aparte).
 export function canActorSeeFinance(actor: OniaCenterActor) {
   return canActorSeeScope(actor, "internal_restricted");
 }

@@ -1,0 +1,95 @@
+{
+  "id": "lecercle-realestate",
+  "sourceReel": "idanweb-realestate-scroll",
+  "name": "Le Cercle",
+  "siteType": "real-estate",
+  "sourceUrl": "https://www.instagram.com/reel/DZ7gUXYuXbt/",
+  "summary": "Cinematic long-scroll luxury real-estate site that alternates dark full-bleed hero moments with light editorial sections; the visitor 'walks through' the property as they scroll.",
+  "designTokens": {
+    "palette": [
+      { "role": "dark-section", "hex": "#141210", "note": "near-black cinematic bands" },
+      { "role": "light-section", "hex": "#f3efe9", "note": "cream editorial bands" },
+      { "role": "warm-imagery", "hex": "#b06a2e", "note": "amber/brown property photography" },
+      { "role": "text-on-dark", "hex": "#efe9e0", "note": "warm white" }
+    ],
+    "typography": { "display": "elegant serif", "body": "clean sans", "treatment": "editorial, generous whitespace, restrained" },
+    "radius": "rounded",
+    "density": "airy",
+    "motionLevel": 4
+  },
+  "sections": [
+    {
+      "order": 0, "job": "hero", "block": "scroll-story-hero", "layout": "full-bleed",
+      "content": ["headline", "sub", "cta-primary", "cta-secondary", "media"],
+      "motion": {
+        "entrance": "media reveals via clip-path wipe up (inset 0 0 100% 0 -> 0) with a slow zoom (scale 1.12 -> 1); headline lines stagger in (y 30 -> 0, opacity 0 -> 1); CTAs fade-up last",
+        "trigger": "on-load", "easing": "[0.22, 1, 0.36, 1]", "durationSec": 1.0, "staggerSec": 0.1,
+        "scrollLinked": "gentle parallax push on the hero media as the user scrolls past",
+        "hover": "", "reducedMotion": "render final state: static image fully revealed, headline + CTAs visible, no parallax"
+      },
+      "notes": "Dark cinematic hero: serif headline ('Live Where the Sun Meets the Sea') over a warm property photo, pill CTAs 'View Properties' + 'Book a Tour'."
+    },
+    {
+      "order": 1, "job": "trust", "block": "editorial-statement", "layout": "centered",
+      "content": ["statement"],
+      "motion": {
+        "entrance": "fade + slide up (y 28 -> 0)", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.7, "staggerSec": 0, "scrollLinked": "", "hover": "", "reducedMotion": "static, fully visible"
+      },
+      "notes": "Light band, oversized serif statement ('For those who travel like it's an art form')."
+    },
+    {
+      "order": 2, "job": "offer", "block": "media-feature", "layout": "full-bleed",
+      "content": ["heading", "hero-image"],
+      "motion": {
+        "entrance": "image reveals via clip-path + slow zoom (scale 1.08 -> 1); heading fades up", "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]", "durationSec": 1.0, "staggerSec": 0,
+        "scrollLinked": "subtle parallax on the villa image", "hover": "", "reducedMotion": "static image, no zoom/parallax"
+      },
+      "notes": "'Our Villas' intro with a modernist villa hero image."
+    },
+    {
+      "order": 3, "job": "proof", "block": "property-cards", "layout": "grid-2col",
+      "content": ["card:image", "card:name", "card:one-line-desc"],
+      "motion": {
+        "entrance": "cards stagger in (y 24 -> 0, opacity 0 -> 1)", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.55, "staggerSec": 0.08, "scrollLinked": "",
+        "hover": "card lifts (translateY -6px) + shadow; image zooms to 1.05", "reducedMotion": "static cards, no lift or zoom"
+      },
+      "notes": "Two-column property cards (Villa Blanca, Casa Dorada)."
+    },
+    {
+      "order": 4, "job": "conversion", "block": "inline-contact-form", "layout": "dark-split",
+      "content": ["name", "email"],
+      "motion": {
+        "entrance": "form panel fades + slides up (y 20 -> 0); fields focus-ring transitions on focus", "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]", "durationSec": 0.7, "staggerSec": 0, "scrollLinked": "",
+        "hover": "submit button color shift", "reducedMotion": "static panel, focus ring still applies"
+      },
+      "notes": "'Get In Touch' form in a dark closing section."
+    },
+    {
+      "order": 5, "job": "footer", "block": "footer-brand", "layout": "band",
+      "content": ["brand-mark"],
+      "motion": {
+        "entrance": "fade in", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]", "durationSec": 0.5,
+        "staggerSec": 0, "scrollLinked": "", "hover": "", "reducedMotion": "static"
+      },
+      "notes": "Serif brand mark 'Le Cercle'."
+    }
+  ],
+  "components": ["pill-buttons", "rounded-corner-imagery", "sticky-nav-centered-logo", "two-column-cards", "inline-form"],
+  "interactions": [
+    { "pattern": "scrollytelling: alternating dark/light full-bleed sections reveal on scroll", "reducedMotionFallback": "render each section static, no scroll-linked reveal" },
+    { "pattern": "parallax on hero media", "reducedMotionFallback": "static hero image" }
+  ],
+  "buildWithOnia": [
+    "Compose alternating dark/light section bands with ONIA tokens (navy/cream analog per client).",
+    "Rebuild scroll reveals with the existing motion util + a mandatory reduced-motion static fallback; budget LCP/CLS for big media.",
+    "Reuse the property-cards block (photo + name + one-line desc) for units/listings.",
+    "Reuse the inline-quote-form block (the one added for Bolivian Electric) for the 'Get In Touch' closing."
+  ],
+  "assetsNeeded": ["real property photos/renders", "walkthrough or drone video", "floorplans", "brand mark"],
+  "bestFor": ["real-estate", "hospitality", "premium/luxury brand", "architecture"],
+  "confidence": "high"
+}

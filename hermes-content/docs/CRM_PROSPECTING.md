@@ -17,7 +17,18 @@ Ayudar a Onia a encontrar prospectos, calificarlos, preparar mensajes y mantener
 - No hacer spam.
 - Priorizar empresas con senales claras de oportunidad.
 
+## Fuente de prospectos con señal dura (2026-08)
+
+**Meta Ad Library vía Ads MCP** (`ads_library_search` con `countries=['BO']`,
+`ad_active_status='ACTIVE'`) devuelve negocios que **están pagando pauta hoy** — presupuesto
+existente, medición existente, dolor existente. Es la mejor señal disponible y es gratis.
+
+Lista viva: `ONIA_PROSPECTOS_ADLIBRARY_20260806.md` (26 prospectos bolivianos calificados:
+inmobiliarias, clínicas dentales, veterinarias y salud). Repetir la búsqueda por rubro; el
+rubro gimnasios NO sirve por esta vía (se llena de infoproductos extranjeros).
+
 ## Senales de oportunidad
+- **Paga ads "Chatea con nosotros" y responde a mano** (la más fuerte: ya compró el problema).
 - Web inexistente o desactualizada.
 - Redes activas pero sin embudo claro.
 - Formularios pobres o sin seguimiento.

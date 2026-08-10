@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import {
   filterOniaCenterRuntimeForActor,
+  listUpcomingCalcomBookings,
   getMissingOniaCenterConfig,
   getOniaCenterRuntime,
   isOniaCenterConfigured,
@@ -89,6 +90,13 @@ export default async function HoyPage() {
     );
   }
 
+  let bookings: Awaited<ReturnType<typeof listUpcomingCalcomBookings>> = [];
+  try {
+    bookings = await listUpcomingCalcomBookings();
+  } catch {
+    // Sin tabla o sin webhook todavia: el tile muestra el estado vacio.
+  }
+
   const liveStatuses = await getLiveAgentStatuses();
   const visibleAgents = mergeLiveAgentStatus(getVisibleOperatingAgents(auth.actor.role), liveStatuses);
   const liveInfo = selectLiveInfoByAgentId(visibleAgents, liveStatuses);
@@ -173,6 +181,7 @@ export default async function HoyPage() {
   return (
     <AppShell canSeeFinance={canSeeFinance} actorName={auth.actor.displayName}>
       <HoyView
+        bookings={bookings}
         agents={visibleAgents}
         liveInfo={liveInfo}
         kpis={kpis}

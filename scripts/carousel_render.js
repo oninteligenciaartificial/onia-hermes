@@ -467,13 +467,15 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
-  const bg = args && args.bg ? String(args.bg).replace(/\\/g, '/') : '';
+  const rawBg = slide.bg || (args && args.bg) || '';
+  const bg = rawBg ? path.resolve(rawBg).replace(/\\/g, '/') : '';
   const photo = bg
     ? `<div class="photo" style="background-image:url('file://${bg}')"></div>`
     : '';
 
   const headTag = role === 'cover' ? 'h1' : 'h2';
-  const pill = slide.pill ? `<span class="cap">${esc(slide.pill)}</span>` : '';
+  const pill = slide.pill
+    ? `<div class="topbar"><span class="captop">${esc(slide.pill)}</span></div>` : '';
   const body = slide.body ? `<p class="ed-body">${emph(slide.body)}</p>` : '';
 
   return `<!doctype html><html><head><meta charset="utf-8">
@@ -490,39 +492,37 @@ html,body { width:1080px; height:1350px; }
 .scrim { position:absolute; inset:0; z-index:1;
   background:linear-gradient(180deg, rgba(10,15,13,.15) 0%, rgba(10,15,13,.55) 55%, rgba(10,15,13,.92) 100%); }
 .grain { position:absolute; inset:0; z-index:2; opacity:.10; mix-blend-mode:overlay; }
-.slide > *:not(.photo):not(.scrim):not(.grain) { position:relative; z-index:3; }
+.slide > *:not(.photo):not(.scrim):not(.grain):not(.topbar) { position:relative; z-index:3; }
 
+/* Category pill sits at the TOP (niche-winner pattern); no ghost kicker/pageno
+   behind the headline. */
 .topbar { position:absolute; top:var(--pad); left:var(--pad); right:var(--pad);
-  display:flex; align-items:center; z-index:3; }
-.kicker { font-family:'Archivo'; font-weight:800; font-size:28px; letter-spacing:5px;
-  text-transform:uppercase; color:var(--onia-white); }
-.pageno { margin-left:auto; font-family:'Archivo'; font-weight:800; font-size:26px;
-  letter-spacing:2px; color:var(--onia-green); }
+  display:flex; align-items:flex-start; z-index:4; height:auto; pointer-events:none; }
+.captop { display:inline-flex; background:var(--onia-green); color:var(--onia-ink);
+  font-family:'Archivo'; font-weight:800; font-size:26px; letter-spacing:1px;
+  text-transform:uppercase; padding:12px 24px; border-radius:100px; }
 
-.ed-h { font-family:'Archivo'; font-weight:900; font-size:108px; line-height:.95;
+.ed-h { font-family:'Archivo'; font-weight:900; font-size:96px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; }
 .ed-h .g { font-family:'Fraunces'; font-style:italic; font-weight:600; text-transform:none;
   color:var(--onia-green); letter-spacing:0; }
 .ed-body { font-family:'Inter'; font-weight:500; font-size:38px; line-height:1.4;
   margin-top:28px; max-width:880px; color:rgba(255,255,255,.85); }
 .ed-body .g { color:var(--onia-green); font-family:'Fraunces'; font-style:italic; }
-.cap { display:inline-flex; align-self:flex-start; margin-top:30px; background:var(--onia-green);
-  color:var(--onia-ink); font-family:'Archivo'; font-weight:800; font-size:26px;
-  letter-spacing:1px; text-transform:uppercase; padding:12px 24px; border-radius:8px; }
+.swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo'; font-weight:800;
+  font-size:26px; letter-spacing:3px; text-transform:uppercase; color:var(--onia-green); }
 
 .footer { display:flex; align-items:center; gap:16px; margin-top:40px; }
 .footer .mark { width:56px; height:56px; }
 .footer .handle { font-family:'Archivo'; font-weight:800; font-size:28px; opacity:.85; }
-${last ? '' : '.cue{position:absolute;right:44px;bottom:300px;z-index:3;font-size:56px;font-weight:800;color:var(--onia-green)}'}
 </style></head>
 <body><div class="slide ${role}">
   ${photo}<div class="scrim"></div>
   <svg class="grain" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="300" height="300" filter="url(#n)"/></svg>
-  <div class="topbar"><span class="kicker">${esc(acc.name)}</span><span class="pageno">${pageNo(idx, total)}</span></div>
+  ${pill}
   <${headTag} class="ed-h">${emph(slide.headline)}</${headTag}>
   ${body}
-  ${pill}
-  ${last ? '' : '<div class="cue">→</div>'}
+  ${last ? '' : '<div class="swipe">Deslizá →</div>'}
   <div class="footer">
     <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
       <circle cx="60" cy="60" r="43" stroke="var(--onia-white)" stroke-width="13" fill="none"/>

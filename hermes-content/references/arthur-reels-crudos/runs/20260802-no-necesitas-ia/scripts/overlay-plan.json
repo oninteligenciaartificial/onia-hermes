@@ -1,0 +1,24 @@
+{
+  "overlays": [
+    {
+      "_nota": "el desorden — entra en 'en el whatsapp de cada vendedor' y sostiene hasta 'nadie sabe que paso'",
+      "asset": "assets/desorden.png",
+      "start": 17.4,
+      "end": 23.4,
+      "x": "(W-w)/2",
+      "y": "1300",
+      "scale": 0.94,
+      "fade": 0.35
+    },
+    {
+      "_nota": "el orden — entra en 'ordenar la informacion' y sostiene hasta 'cuesta una fraccion'",
+      "asset": "assets/orden.png",
+      "start": 36.6,
+      "end": 41.3,
+      "x": "(W-w)/2",
+      "y": "1300",
+      "scale": 0.94,
+      "fade": 0.35
+    }
+  ]
+}

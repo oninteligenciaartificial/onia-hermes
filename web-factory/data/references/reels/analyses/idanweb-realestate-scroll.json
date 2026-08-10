@@ -1,0 +1,76 @@
+{
+  "id": "idanweb-realestate-scroll",
+  "lane": "trend",
+  "clientSlug": "",
+  "rubro": "real-estate",
+  "source": {
+    "url": "https://www.instagram.com/reel/DZ7gUXYuXbt/",
+    "handle": "@idanweb",
+    "localVideo": "",
+    "sha256": "",
+    "capturedAt": "2026-07-21T00:00:00.000Z"
+  },
+  "caption": "Client wanted an interactive scroll based website experience for their real estate business. We wanted the user to virtually walk through the main property. What do you think? Did we cook? Comment 'build' to get in touch (1198 likes / 107 comments, 23 Jun)",
+  "frames": [],
+  "palette": [
+    { "role": "bg", "hex": "#ece7df", "note": "airy warm off-white architecture (estimated)" },
+    { "role": "secondary", "hex": "#b6a184", "note": "warm taupe / natural materials" },
+    { "role": "accent", "hex": "#6f7d52", "note": "foliage green through glass" },
+    { "role": "text", "hex": "#2b2620", "note": "near-black" }
+  ],
+  "typography": {
+    "style": "bold sans overlay for the POV hook ('POV ... wants a premium website'); minimal, confident",
+    "cases": ["title-case", "bold-overlay"],
+    "onScreenText": ["POV", "wants a", "premium website"]
+  },
+  "motion": {
+    "pacing": "medium",
+    "transitions": ["match-cut", "smooth-camera"],
+    "techniques": ["pov", "scroll-storytelling-implied", "architectural-walkthrough-implied"]
+  },
+  "shots": ["pov-designer-in-luxe-space", "laptop-screen-site", "architectural-b-roll"],
+  "productPresentation": "the real-estate site framed as an immersive experience — designer working in an actual high-end architectural interior (circular light ring, floor-to-ceiling glass, greenery), selling the idea of 'walking through the property' via scroll",
+  "hook": { "type": "pov", "text": "POV: client wants a premium website (for their real-estate business)" },
+  "mood": ["luxe", "calm", "aspirational", "architectural", "editorial"],
+  "showcasedSite": {
+    "present": true,
+    "siteType": "real-estate (luxury villas) — brand 'Le Cercle'",
+    "url": "",
+    "layout": "long-scroll cinematic real-estate site that alternates dark full-bleed hero sections with light editorial sections; rounded-corner imagery, generous whitespace, sticky nav with centered logo",
+    "sections": [
+      "dark cinematic hero: serif headline 'Live Where the Sun Meets the Sea' over a warm amber interior photo, pill CTAs 'View Properties' + 'Book a Tour'",
+      "light editorial statement: 'For those who travel like it's an art form'",
+      "'Our Villas' intro with a modernist villa hero image",
+      "property cards: 2-column (Villa Blanca, Casa Dorada) each photo + name + one-line description",
+      "'Get In Touch' contact form (name / email) on a dark closing section",
+      "footer brand mark 'Le Cercle'"
+    ],
+    "palette": [
+      { "role": "warm-imagery", "hex": "#b06a2e", "note": "amber/brown property photography" },
+      { "role": "light-section", "hex": "#f3efe9", "note": "cream/white editorial sections" },
+      { "role": "dark-section", "hex": "#141210", "note": "near-black cinematic sections" },
+      { "role": "text", "hex": "#efe9e0", "note": "warm white on dark" }
+    ],
+    "typography": "elegant serif display headlines + minimal sans body; refined luxury",
+    "components": ["pill buttons", "rounded-corner hero imagery", "2-column property cards", "sticky top nav with centered logo", "inline contact form"],
+    "interactions": ["smooth scroll walkthrough (scrollytelling): alternating dark/light full-bleed sections reveal as you scroll", "the 'virtually walk through the property' concept via cinematic full-bleed sections"],
+    "reuseForFactory": [
+      "alternating dark-cinematic <-> light-editorial section rhythm for premium real-estate",
+      "serif headline + pill CTA hero over a warm property photo",
+      "2-col property cards (photo + name + one-line desc)",
+      "inline 'Get In Touch' form in a dark closing section",
+      "scroll-linked reveals — ship a reduced-motion + LCP/CLS-safe fallback"
+    ],
+    "captureQuality": "clear"
+  },
+  "webIdeas": {
+    "heroDirection": "Real-estate hero as a scroll-linked walkthrough: pin a hero property visual and reveal the space section by section as the user scrolls (scrollytelling / parallax), airy luxe-neutral palette.",
+    "sectionIdeas": ["scroll-linked property walkthrough hero", "gallery / rooms", "floorplan & units", "neighborhood / location context", "availability + qualified inquiry form", "financing or reservation process"],
+    "motionForWeb": ["scroll-linked section reveals ('virtual walk')", "parallax on hero media", "MANDATORY reduced-motion fallback: static gallery — heavy scroll-motion + big media, so budget LCP/CLS carefully"],
+    "assetsToRequestOrReuse": ["study only - trend reel; for a REAL client this pattern needs real property photos/video/renders and a walkthrough"]
+    ,
+    "copyAngles": ["experiential framing: 'virtually walk through the property'", "POV: 'client wants a premium website' is a strong content angle for ONIA's own reels"]
+  },
+  "guardrails": ["trend reel: inspiration only", "no reused footage/audio", "scroll-heavy hero must ship a reduced-motion + performance-safe fallback", "site captured clearly at 5s/9s/13s of the reel (logged into IG); site palette hexes are estimates from frames"],
+  "confidence": "high"
+}

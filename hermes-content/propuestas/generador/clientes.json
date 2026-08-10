@@ -1340,5 +1340,125 @@
       "url": "https://wa.me/59175414930?text=Hola%20Onia%2C%20quiero%20agendar%20una%20llamada%20por%20la%20propuesta%20de%20Premium%20Cars",
       "texto": "Agendá una llamada"
     }
+  },
+  {
+    "slug": "franco-marin",
+    "nombre": "Franco Marín · Century 21 Home",
+    "accent": "#b48b2f",
+    "heroGrad": "linear-gradient(135deg,#0e1f2e 0%,#16344c 55%,#b48b2f 160%)",
+    "titulo": "Franco Marín — Tu web de marca personal + tu sistema privado de propietarios",
+    "subtitulo": "Una página profesional con tus propiedades, tus logros de Century 21, tus ventas y tu lado humano — y un panel privado, solo tuyo, que ordena a tus propietarios y te avisa solo cada cumpleaños.",
+    "problema": "Hoy tus propiedades y tu trayectoria en <b>Century 21 Home</b> viven en portales y en WhatsApp, donde compiten con cientos de avisos y se pierden. Una <b>web propia</b> reúne tus inmuebles, tus premios, tus ventas y tus clientes en un solo lugar que da autoridad y capta consultas. Y un <b>panel privado</b> convierte tu agenda mental de propietarios en un sistema que recuerda por vos: teléfonos, notas y <b>alertas automáticas de cumpleaños</b> para que nunca pierdas el contacto que trae la próxima venta.",
+    "incluye": [
+      {
+        "tag": "Marca personal",
+        "tagClass": "",
+        "titulo": "Tu web profesional",
+        "items": [
+          "Catálogo de propiedades con fotos, fichas y buscador",
+          "Logros y premios de Century 21 (con foto de cada certificado)",
+          "Inmuebles vendidos y clientes satisfechos",
+          "Tu historia y tu lado humano — fotos cerrando negocios"
+        ]
+      },
+      {
+        "tag": "Tu sistema privado",
+        "tagClass": "green",
+        "titulo": "Panel solo para vos",
+        "items": [
+          "Acceso privado con clave (solo lo ves vos)",
+          "Base de propietarios: teléfono, cumpleaños y notas",
+          "Alertas automáticas cuando es el cumpleaños de un propietario",
+          "Formulario que ordena cada consulta que entra"
+        ]
+      }
+    ],
+    "pasos": [
+      {
+        "titulo": "Tu marca y tus propiedades",
+        "detalle": "Montamos el sitio con tu identidad Century 21 Home, tu catálogo de inmuebles y el buscador."
+      },
+      {
+        "titulo": "Autoridad: logros, ventas y clientes",
+        "detalle": "Cargamos tus premios y certificados, tus inmuebles vendidos y los testimonios de tus clientes."
+      },
+      {
+        "titulo": "Tu panel privado + alertas",
+        "detalle": "Creamos el acceso privado con tu base de propietarios y la automatización que te avisa cada cumpleaños."
+      },
+      {
+        "titulo": "Publicación y puesta en marcha",
+        "detalle": "Conectamos WhatsApp, optimizamos para Google, publicamos en tu dominio y te dejamos operando."
+      }
+    ],
+    "valor": [
+      {
+        "titulo": "Autoridad que cierra ventas",
+        "detalle": "Tu web con tus premios de Century 21, tus ventas y tus clientes te posiciona por encima del agente que solo tiene Instagram."
+      },
+      {
+        "titulo": "Nunca más pierdas un cumpleaños",
+        "detalle": "El sistema te avisa solo cada cumpleaños de tus propietarios — el detalle que mantiene la relación y trae la próxima exclusiva."
+      },
+      {
+        "titulo": "Tus propietarios ordenados en un solo lugar",
+        "detalle": "Dejás la agenda mental y los papeles: teléfonos, notas y seguimiento de cada propietario, privado y siempre a mano."
+      },
+      {
+        "titulo": "Dejás de depender de los portales",
+        "detalle": "El cliente te encuentra a vos en Google, con tu marca y tu catálogo, en vez de perderse entre avisos de la competencia."
+      }
+    ],
+    "plazoEntrega": "2 a 3 semanas",
+    "paquetes": [
+      {
+        "nombre": "Presencia",
+        "incluye": "Web profesional con tu catálogo de propiedades + contacto + botón de WhatsApp",
+        "resultado": "Estás online con tu marca y toda consulta llega a un solo lugar.",
+        "limite": "sin secciones de autoridad ni panel privado — la gestión de propietarios sigue a mano.",
+        "precio": "1.900 + 190/mes",
+        "recomendado": false
+      },
+      {
+        "nombre": "Marca Personal",
+        "incluye": "Web completa: propiedades + logros y premios + inmuebles vendidos + clientes satisfechos + tu lado humano + formulario de captación",
+        "resultado": "Tu autoridad de Century 21 en un sitio que capta consultas.",
+        "limite": "la web capta, pero el seguimiento de propietarios y cumpleaños lo hacés vos a mano.",
+        "precio": "3.900 + 390/mes",
+        "recomendado": false
+      },
+      {
+        "nombre": "Marca + Sistema privado",
+        "incluye": "Todo lo anterior + panel privado con base de propietarios (teléfono, cumpleaños, notas) + alertas automáticas de cumpleaños",
+        "resultado": "No es solo tu web: es tu sistema de trabajo que recuerda y te avisa solo.",
+        "limite": "el alcance del panel se define por escrito antes de arrancar.",
+        "precio": "7.900 + 890/mes",
+        "recomendado": true
+      }
+    ],
+    "notaPaquetes": "Diferencia clave: <b>Presencia</b> = estar online · <b>Marca Personal</b> = tu autoridad convertida en consultas · <b>Marca + Sistema privado</b> = tu web + tu sistema propio (login, base de propietarios y alertas automáticas). El salto del Nivel 3 es porque ya no es una web: es <b>desarrollo a medida</b> — un panel privado con base de datos y automatización. Un sistema así se cotiza en Bolivia desde <b>Bs 22.000</b>; este es tu <b>precio de cliente fundador</b> por ser el primer agente inmobiliario de ONIA, y queda fijo para vos. Recomendado: <b>Marca + Sistema privado</b>. El mensual mantiene tu sistema al día y te sale <b>menos que un CRM extranjero en dólares</b>. Pago: 50% de anticipo para arrancar y 50% contra entrega. <b>Dominio y hosting a cargo de Franco</b> (a su nombre).",
+    "addons": [
+      {
+        "nombre": "Chatbot WhatsApp con IA — responde y califica consultas solo (el botón de WhatsApp ya viene incluido en la web)",
+        "setup": "desde 1.900",
+        "mensual": "150"
+      },
+      {
+        "nombre": "Conexión Instagram / Facebook (publicación)",
+        "setup": "690",
+        "mensual": "150"
+      }
+    ],
+    "terceros": "No incluidos en el proyecto (a cargo de Franco): dominio y hosting (a su nombre), créditos de IA y mensajería de WhatsApp pagada. Las alertas de cumpleaños llegan por Telegram o correo; WhatsApp automático depende de verificación de Meta.",
+    "proximosPasos": [
+      "Confirmás el paquete (recomendado: Marca + Sistema privado) y afinamos el alcance del panel.",
+      "Nos pasás tus premios/certificados (fotos), inmuebles vendidos y 2-3 testimonios.",
+      "Con el anticipo (50%) arrancamos; en 2-3 semanas tenés tu web y tu panel operando."
+    ],
+    "ctaWhatsapp": {
+      "url": "https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20avanzar%20con%20mi%20web%20%2B%20panel%20privado%20(Franco%20Mar%C3%ADn)",
+      "texto": "Avanzar con mi web + sistema →"
+    },
+    "_todo": "BORRADOR 2026-07 — precios CALIBRADOS al mercado boliviano (investigacion 2026): sistema web+panel login/BD se cotiza desde Bs 22.000 (agencia 23-69k / freelance 9-29k, Syncra). N3 fundador = 7.900 + 890/mes, pago 50/50 (SIN cuotas en la propuesta — Sergio guarda la facilidad de pago como palanca de cierre verbal si Franco objeta el precio). Sergio bajo el setup para ASEGURAR el 1er cierre inmobiliario; ~64% bajo mercado 22.000, cerca del costo (build 5-7 dias) — OK solo por ser primer caso/portafolio + reusable como InmoGest; MENSUAL 890 protegido = ahi vive el margen. TC actual ~Bs 11,5/USD (no 6,96). Sergio confirma numeros finales antes de enviar (regla S1). Falta contenido real de Franco (premios/vendidos/testimonios). NO enviar sin OK de Sergio."
   }
 ]
