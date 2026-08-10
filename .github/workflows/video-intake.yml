@@ -1,0 +1,116 @@
+name: ONIA Video Intake
+
+# Bandeja automatica de videos: recibe uno o mas links (Instagram / TikTok / YouTube),
+# baja el mp4, lo "ve" con Gemini nativo (imagen + audio + timeline), saca el verbatim
+# con Speaches en el VPS (gratis), y commitea la lectura completa en
+# hermes-content/references/video-intake/. Avisa a Sergio por Telegram.
+#
+# NO emite veredicto: decidir si algo sirve, mejora algo o es humo se hace en sesion,
+# con el contexto de ONIA delante. Esto llena la bandeja para que la sesion no pierda
+# tiempo bajando y transcribiendo.
+#
+# Se dispara de dos formas:
+#   - a mano:      gh workflow run video-intake.yml -f urls="<url> <url>"
+#   - desde n8n:   POST /repos/:owner/:repo/dispatches
+#                  {"event_type":"video-intake","client_payload":{"urls":"<url>"}}
+#     (asi entra el link que Sergio manda por Telegram)
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "URLs separadas por espacio (IG / TikTok / YouTube)"
+        required: true
+        type: string
+  repository_dispatch:
+    types: [video-intake]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: video-intake
+  cancel-in-progress: false
+
+jobs:
+  intake:
+    name: Bajar + ver + transcribir + commitear
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      URLS: ${{ github.event.inputs.urls || github.event.client_payload.urls }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      ONIA_VPS_KEY: ${{ secrets.ONIA_VPS_SSH_KEY }}
+      IG_COOKIES_B64: ${{ secrets.IG_COOKIES_B64 }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_SERGIO_CHAT_ID: ${{ secrets.TELEGRAM_SERGIO_CHAT_ID }}
+    steps:
+      - name: Validar entrada
+        run: |
+          [ -n "$URLS" ] || { echo "::error::falta 'urls'"; exit 1; }
+          [ -n "$GEMINI_API_KEY" ] || { echo "::error::falta el secret GEMINI_API_KEY"; exit 1; }
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar yt-dlp + ffmpeg
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install --quiet --upgrade yt-dlp
+          yt-dlp --version && ffmpeg -version | head -1
+
+      # Mismo formato crudo que repo-pulse.yml / docs-hygiene-daily.yml (llave sin base64).
+      - name: Llave SSH del VPS (para Speaches)
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$ONIA_VPS_KEY" > ~/.ssh/onia_hermes_vps_ed25519
+          chmod 600 ~/.ssh/onia_hermes_vps_ed25519
+
+      # Opcional: sin este secret los links de Instagram fallan (TikTok/YouTube no lo necesitan).
+      # Se regenera desde la maquina de Sergio con `fetch-video.mjs --login`; la sesion de IG caduca.
+      - name: Cookies de Instagram (si estan)
+        if: env.IG_COOKIES_B64 != ''
+        run: |
+          mkdir -p .hermes/ig-session
+          printf '%s' "$IG_COOKIES_B64" | base64 -d > .hermes/ig-session/cookies.txt
+          chmod 600 .hermes/ig-session/cookies.txt
+          grep -q sessionid .hermes/ig-session/cookies.txt \
+            && echo "sesion de IG presente" \
+            || echo "::warning::cookies sin sessionid — los links de Instagram van a fallar"
+
+      - name: Procesar los videos
+        id: intake
+        run: |
+          set -o pipefail
+          node scripts/video-intake.mjs $URLS 2>&1 | tee intake.log
+        continue-on-error: true
+
+      - name: Commitear la bandeja
+        id: commit
+        run: |
+          git config user.name  "onia-video-intake[bot]"
+          git config user.email "onia-video-intake@users.noreply.github.com"
+          git add hermes-content/references/video-intake || true
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "sin cambios que commitear"
+          else
+            git commit -q -m "docs(video-intake): ingreso automatico de video" -m "$URLS"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Avisar por Telegram
+        if: always() && env.TELEGRAM_BOT_TOKEN != ''
+        run: |
+          OK=$(grep -c '^OK' intake.log 2>/dev/null || echo 0)
+          BAD=$(grep -c '^FALLO' intake.log 2>/dev/null || echo 0)
+          MSG="<b>Video intake</b>%0Aingresados: ${OK} · fallidos: ${BAD}%0Acommit: ${{ steps.commit.outputs.changed }}%0A%0AVer: hermes-content/references/video-intake/BANDEJA.md"
+          curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_SERGIO_CHAT_ID}" -d parse_mode=HTML -d text="$MSG" >/dev/null
+
+      - name: Fallar si no entro ninguno
+        run: grep -q '^OK' intake.log || { echo "::error::ningun video pudo procesarse"; exit 1; }
