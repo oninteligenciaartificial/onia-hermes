@@ -140,13 +140,18 @@ const SHAPE = Object.freeze({
   // declararlo terminado es una promesa comercial (N2) y sigue siendo un commit.
   productos: {
     kind: "array",
-    maxItems: 8,
+    // Modulos + servicios en la misma lista. El tope existe para que la respuesta siga entrando
+    // de un vistazo en WhatsApp, no por capricho: cada modulo es una viñeta.
+    maxItems: 16,
     item: {
       kind: "object",
       fields: {
         key: { kind: "slug", max: 24, required: true },
-        nombre: { kind: "text", max: 40, required: true },
-        queResuelve: { kind: "text", max: 120, required: true },
+        // `servicio` = trabajo que ya entregamos (web, chatbot, videos). `modulo` (el default) =
+        // software de la plataforma, y ESE pasa por MODULOS_LISTOS.
+        tipo: { kind: "enum", values: ["modulo", "servicio"] },
+        nombre: { kind: "text", max: 60, required: true },
+        queResuelve: { kind: "text", max: 120 },
       },
     },
   },
@@ -306,6 +311,21 @@ function checkDemo(demo, errors) {
  *   - la misma key dos veces es una contradiccion: la segunda pisa la etiqueta de la primera y no
  *     hay forma de saber cual quiso el editor.
  */
+/**
+ * Un MODULO sin `queResuelve` sale como una viñeta con un nombre y nada mas — el prospecto lee
+ * "Dental." y sigue sin saber que hace. En los servicios no aplica: van en una frase, donde el
+ * nombre ya alcanza ("la web de tu negocio").
+ */
+function checkProductos(productos, errors) {
+  if (!Array.isArray(productos)) return;
+  productos.forEach((producto, index) => {
+    if (!isPlainObject(producto)) return;
+    if (producto.tipo !== "servicio" && producto.queResuelve === undefined) {
+      errors.push(`productos[${index}].queResuelve: un módulo tiene que decir qué resuelve (los servicios no lo necesitan)`);
+    }
+  });
+}
+
 function checkRubros(rubros, errors) {
   if (!Array.isArray(rubros)) return;
   const vistas = new Set();
@@ -335,6 +355,7 @@ export function validateKnowledge(data) {
     if (!isPlainObject(data)) return { ok: false, errors: ["el archivo no es un objeto JSON"] };
     checkObject(data, SHAPE, "", errors);
     checkDemo(data.demo, errors);
+    checkProductos(data.productos, errors);
     checkRubros(data.rubrosExtra, errors);
   } catch (error) {
     errors.push(`no se pudo validar: ${String(error?.message || error).slice(0, 160)}`);

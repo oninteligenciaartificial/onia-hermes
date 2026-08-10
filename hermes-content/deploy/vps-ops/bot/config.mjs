@@ -245,11 +245,25 @@ export const SCRIPT = Object.freeze({
 //
 // Esto es el PISO: `config.productos` lo puede reemplazar la capa de conocimiento sin desplegar
 // (asi un producto nuevo existe para el bot el mismo dia que existe para el negocio).
+// DOS FAMILIAS, y la diferencia no es cosmetica:
+//   - `modulo`  = software de la plataforma. Puede NO estar construido todavia, y decir que si lo
+//                 esta es prometer una feature (N2). Por eso pasa por MODULOS_LISTOS.
+//   - `servicio` = trabajo que Onia hace hoy (una web, un chatbot, videos, redes). Existe: se
+//                 entrega. Marcarlo "en construccion" seria mentir para el otro lado y regalar
+//                 justamente lo que ya se puede vender.
+// Los servicios salen de lo que ya se vende en la web (lib/pricing.ts → ADDONS) y de los add-ons
+// que aparecen en las propuestas reales (propuestas/generador/clientes.json).
 export const PRODUCTOS = Object.freeze([
   Object.freeze({ key: "dental", nombre: "Dental", queResuelve: "agenda, recordatorios y cobros de una clínica" }),
   Object.freeze({ key: "comercio", nombre: "Comercio", queResuelve: "stock, ventas y clientes de una tienda" }),
   Object.freeze({ key: "servicios", nombre: "Servicios", queResuelve: "turnos, clientes y cobros de un negocio de servicios" }),
   Object.freeze({ key: "proveedores", nombre: "Importadora", queResuelve: "importaciones, costos y precios de una distribuidora" }),
+
+  Object.freeze({ key: "web", tipo: "servicio", nombre: "la web de tu negocio" }),
+  Object.freeze({ key: "chatbot", tipo: "servicio", nombre: "un chatbot de WhatsApp con IA" }),
+  Object.freeze({ key: "videos_ia", tipo: "servicio", nombre: "videos e influencers con IA" }),
+  Object.freeze({ key: "redes", tipo: "servicio", nombre: "conexión y publicación en redes" }),
+  Object.freeze({ key: "automatizaciones", tipo: "servicio", nombre: "automatizaciones a medida" }),
 ]);
 
 /**

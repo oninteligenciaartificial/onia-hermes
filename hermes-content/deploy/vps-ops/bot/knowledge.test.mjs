@@ -594,6 +594,34 @@ test("CANDADO: el archivo puede sumar un producto pero NUNCA declararlo terminad
   }
 });
 
+test("los SERVICIOS que ya entregamos no pueden salir como 'en construcción'", () => {
+  const { texto } = respuestaCatalogo(DEFAULT_CONFIG);
+  // La web y el chatbot se venden HOY (lib/pricing.ts → ADDONS y las propuestas reales).
+  // Meterlos en la bolsa de "en construcción" seria mentir para el otro lado: regala lo unico
+  // que ya se puede cerrar sin esperar a que un modulo este armado.
+  const [enCamino] = texto.match(/^• .*en construcción.*$/m) || [""];
+  for (const servicio of ["web", "chatbot", "videos", "redes", "automatizaciones"]) {
+    assert.ok(!enCamino.includes(servicio), `"${servicio}" quedo listado como en construcción`);
+  }
+  assert.match(texto, /Y además hacemos .*chatbot de WhatsApp con IA.*videos e influencers con IA/);
+});
+
+test("un catalogo SIN servicios no deja un 'Y además hacemos .' colgando", () => {
+  const config = applyKnowledge(DEFAULT_CONFIG, valido({ productos: CATALOGO_NUEVO }));
+  const { texto } = respuestaCatalogo(config);
+  assert.ok(!/Y además hacemos\s*\./.test(texto), "la frase se arma entera o no se arma");
+  assert.ok(!texto.includes("{{"));
+});
+
+test("un servicio no necesita `queResuelve`; un módulo sí (si no, la viñeta no dice nada)", () => {
+  const servicio = validateKnowledge(valido({ productos: [{ key: "web", tipo: "servicio", nombre: "la web de tu negocio" }] }));
+  assert.equal(servicio.ok, true, servicio.errors.join(" · "));
+
+  const modulo = validateKnowledge(valido({ productos: [{ key: "veterinaria", nombre: "Veterinaria" }] }));
+  assert.equal(modulo.ok, false);
+  assert.match(modulo.errors.join(" · "), /qué resuelve/);
+});
+
 test("el catalogo tampoco puede cotizar: el guardrail vale para cada producto", () => {
   const verdict = validateKnowledge(
     valido({ productos: [{ key: "dental", nombre: "Dental", queResuelve: "todo por 390 Bs al mes" }] }),
