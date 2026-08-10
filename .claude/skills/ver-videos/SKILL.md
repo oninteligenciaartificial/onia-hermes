@@ -48,7 +48,10 @@ node .claude/skills/ver-videos/scripts/fetch-video.mjs --login   # 1 sola vez, p
 
 Imprime `<url>\t<ruta del mp4>` por linea. Varias URLs bajan en paralelo.
 
-- **TikTok / YouTube:** `yt-dlp` directo, cero cookies, cero navegador (~4 s medidos).
+Medido 2026-08-09: TikTok 5,4 MB en **3,9 s**; reel de IG 15 s / 1,9 MB (h264+aac, con
+audio) en **1,7 s**. Ambos sin abrir el navegador.
+
+- **TikTok / YouTube:** `yt-dlp` directo, cero cookies, cero navegador.
 - **Instagram:** exige sesion. Usa un **perfil de Chromium propio de Playwright**
   (`.hermes/ig-session/profile`, gitignoreado) — NO el Chrome del usuario. Las cookies
   se leen por CDP (`context.cookies()`), asi que el cifrado en disco no estorba.
