@@ -133,6 +133,24 @@ const SHAPE = Object.freeze({
     fields: { demo: { kind: "textArray", maxItems: 30, max: 60 } },
   },
 
+  // EL CATALOGO — que vendemos. Es la otra mitad del problema "siempre agregamos cosas nuevas":
+  // `rubrosExtra` es A QUIEN le vendemos, esto es QUE le vendemos.
+  // NO existe un campo "listo": cual modulo esta armado lo decide `MODULOS_LISTOS` en config.mjs,
+  // congelado en codigo. Agregar un producto en construccion es libre (no promete nada);
+  // declararlo terminado es una promesa comercial (N2) y sigue siendo un commit.
+  productos: {
+    kind: "array",
+    maxItems: 8,
+    item: {
+      kind: "object",
+      fields: {
+        key: { kind: "slug", max: 24, required: true },
+        nombre: { kind: "text", max: 40, required: true },
+        queResuelve: { kind: "text", max: 120, required: true },
+      },
+    },
+  },
+
   // EL LEXICO DE RUBROS — lo que hace que agregar un rubro sea una edicion y no un despliegue.
   // Palabras, JAMAS regex: quien edita esto no es desarrollador y una regex mala cuelga el
   // proceso. `intents.mjs` las escapa y las compila, y las agrega DESPUES de las del codigo
@@ -476,6 +494,7 @@ export function knowledgeHealth(options = {}) {
     faq: Array.isArray(state.data?.faq) ? state.data.faq.length : 0,
     triggersDemo: Array.isArray(state.data?.triggersExtra?.demo) ? state.data.triggersExtra.demo.length : 0,
     rubros: Array.isArray(state.data?.rubrosExtra) ? state.data.rubrosExtra.length : 0,
+    productos: Array.isArray(state.data?.productos) ? state.data.productos.length : 0,
     loadedAt: state.loadedAt,
     path: state.path,
     lastError: state.error,
@@ -522,6 +541,11 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
   if (isPlainObject(data.demo)) {
     overrides.demo = { ...base.demo, ...data.demo, pendiente: data.demo.duracionMinutos !== undefined ? false : base.demo.pendiente };
   }
+
+  // El catalogo REEMPLAZA al del codigo (no es union como los rubros): una lista de productos
+  // vieja no rompe nada, solo dice algo desactualizado — la definicion misma de "hecho". Lo que
+  // no se puede es declarar un modulo listo: eso no tiene campo.
+  if (Array.isArray(data.productos) && data.productos.length) overrides.productos = data.productos;
 
   // El lexico viaja CRUDO (palabras) hasta intents.mjs, que es el unico que sabe compilarlo y el
   // unico que puede garantizar el orden codigo-primero. Compilarlo aca seria partir esa regla en
@@ -613,7 +637,7 @@ export async function checkCli(argv = [], deps = {}) {
       lines: [
         `OK ${path}`,
         `  version: ${result.data.version || "(sin version)"} · por: ${result.data.updatedBy || "(sin autor)"}`,
-        `  faq: ${(result.data.faq || []).length} · disparadores extra: ${(result.data.triggersExtra?.demo || []).length}`,
+        `  faq: ${(result.data.faq || []).length} · disparadores extra: ${(result.data.triggersExtra?.demo || []).length} · productos: ${(result.data.productos || []).length}`,
         `  rubros: ${rubros.length}${rubros.length ? ` (${rubros.map((rubro) => rubro.key).join(", ")}) · banco OK` : ""}`,
       ],
     };

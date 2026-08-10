@@ -275,6 +275,7 @@ valores salen del repo y están citados; lo que falta va marcado como pendiente.
 | `faq[]` con `id: "siat"` (`title`,`body`,`status`,`vigenteHasta`,`tags`) | reemplaza el cuerpo de `M_SIAT_BODY` |
 | `triggersExtra.demo[]` | **unión** con `triggers.demo` del código |
 | `rubrosExtra[]` (`key`, `label`, `fuerte[]`, `debil[]`) — desde 2026-08-08 | `intents.lexiconOf()`: el matcher de rubros. Es lo que permite **agregar un rubro sin desplegar** |
+| `productos[]` (`key`, `nombre`, `queResuelve`) — desde 2026-08-09 | `{{productos}}` en `M_QUE_ES_ONIA`, la respuesta a "¿qué hacen?". Permite **agregar un producto sin desplegar**. Sin campo `listo`: eso lo decide `MODULOS_LISTOS` en código (§4, candado 5) |
 
 Lo que quedó **fuera a propósito** en la v1, con el motivo:
 

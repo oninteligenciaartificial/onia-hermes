@@ -14,7 +14,7 @@
 //
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md (§2 guion, §3 reglas)
 
-import { DEFAULT_CONFIG, branchFor, renderTemplate, joinEs } from "./config.mjs";
+import { DEFAULT_CONFIG, MODULOS_LISTOS, branchFor, renderTemplate, joinEs } from "./config.mjs";
 import * as intents from "./intents.mjs";
 
 /**
@@ -37,6 +37,23 @@ export function activeSlots(state, config) {
   return state.slotsOffered && state.slotsOffered.length ? state.slotsOffered : config.slots;
 }
 
+/**
+ * El catalogo listo para leerse en WhatsApp.
+ * La LISTA es dato editable (config.productos), pero el "ya está armado" lo decide
+ * `MODULOS_LISTOS`, congelado en codigo: por eso una edicion puede sumar un producto pero NO
+ * puede declararlo terminado. Lo que no esta listo se agrupa en una linea con la misma frase que
+ * usa la web ("sin humo") — decirlo tres veces suena a excusa y es la misma verdad.
+ */
+function productList(config) {
+  const productos = config.productos?.length ? config.productos : DEFAULT_CONFIG.productos;
+  const lineas = productos
+    .filter((producto) => MODULOS_LISTOS.has(producto.key))
+    .map((producto) => `• *${producto.nombre}* — ${producto.queResuelve}.`);
+  const enCamino = productos.filter((producto) => !MODULOS_LISTOS.has(producto.key));
+  if (enCamino.length) lineas.push(`• ${joinEs(enCamino.map((producto) => producto.nombre))}: en construcción, sin humo.`);
+  return lineas.join("\n");
+}
+
 export function varsFor(state, config, extra = {}) {
   const q = state.qualification || {};
   const slots = activeSlots(state, config);
@@ -56,6 +73,7 @@ export function varsFor(state, config, extra = {}) {
     horario_frase: horario.frase || DEFAULT_CONFIG.businessHours.frase,
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
+    productos: productList(config),
     rubro: intents.industryLabel(q.industry, config) || "",
     personas: q.teamSize ?? "",
     persona_palabra: q.teamSize === 1 ? "persona" : "personas",

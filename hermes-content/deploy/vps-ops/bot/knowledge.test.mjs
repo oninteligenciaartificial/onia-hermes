@@ -546,6 +546,78 @@ test("COMPUERTA DEL BANCO: un lexico que rompe la clasificacion no se publica (y
   });
 });
 
+// ---------------------------------------------------------------------------
+// 7. EL CATALOGO — que vendemos, sin desplegar
+// ---------------------------------------------------------------------------
+// El problema real: un producto nuevo tardaba un deploy en existir para el bot. Lo que NO puede
+// pasar es que la misma edicion que agrega un producto pueda declararlo terminado — eso es
+// prometer una feature (N2), y esa llave se queda en el codigo.
+
+const CATALOGO_NUEVO = Object.freeze([
+  Object.freeze({ key: "dental", nombre: "Dental", queResuelve: "agenda, recordatorios y cobros de una clínica" }),
+  Object.freeze({ key: "veterinaria", nombre: "Veterinaria", queResuelve: "fichas, vacunas y recordatorios" }),
+]);
+
+/** Lo que el prospecto LEE cuando pregunta que hacemos. */
+function respuestaCatalogo(config) {
+  const estado = createState({ channel: "sim", contactRef: "t", botStage: "demo_agendada" });
+  const result = step(estado, { text: "y que hacen exactamente?", receivedAt: T0 }, { config });
+  return { texto: result.replies.map((reply) => reply.text).join("\n"), notes: result.notes };
+}
+
+test("'¿que hacen?' se contesta con el catalogo (no con un humano) y el embudo sigue", () => {
+  const { texto, notes } = respuestaCatalogo(DEFAULT_CONFIG);
+  assert.ok(notes.includes("pregunta_que_hacemos"), "tiene su propia rama, no cae en el LLM ni en handoff");
+  assert.match(texto, /Dental/, "nombra lo que SI esta armado");
+  assert.match(texto, /en construcción, sin humo/, "y dice la misma verdad que la web publica");
+  assert.match(texto, /me falta/, "contestar no puede costar la calificacion: el embudo sigue");
+  assert.ok(!texto.includes("{{"), "ninguna variable puede quedar sin resolver a la vista del prospecto");
+});
+
+test("un producto NUEVO aparece con solo editar el JSON — sin desplegar", () => {
+  assert.ok(!respuestaCatalogo(DEFAULT_CONFIG).texto.includes("Veterinaria"), "hoy el bot no lo conoce");
+  const config = applyKnowledge(DEFAULT_CONFIG, valido({ productos: CATALOGO_NUEVO }));
+  assert.match(respuestaCatalogo(config).texto, /Veterinaria/);
+});
+
+test("CANDADO: el archivo puede sumar un producto pero NUNCA declararlo terminado", () => {
+  const config = applyKnowledge(DEFAULT_CONFIG, valido({ productos: CATALOGO_NUEVO }));
+  const { texto } = respuestaCatalogo(config);
+  assert.match(texto, /• \*Dental\*/, "el que SI esta armado se nombra como tal");
+  assert.match(texto, /Veterinaria: en construcción/, "el nuevo entra siempre como en construccion");
+
+  // Y no hay ni donde intentarlo: el esquema no tiene el campo.
+  for (const intento of [{ listo: true }, { moduloListo: true }, { estado: "listo" }, { precio: 390 }]) {
+    const verdict = validateKnowledge(valido({ productos: [{ ...CATALOGO_NUEVO[1], ...intento }] }));
+    assert.equal(verdict.ok, false, `${JSON.stringify(intento)} tendria que rechazarse`);
+    assert.match(verdict.errors.join(" · "), /clave desconocida/);
+  }
+});
+
+test("el catalogo tampoco puede cotizar: el guardrail vale para cada producto", () => {
+  const verdict = validateKnowledge(
+    valido({ productos: [{ key: "dental", nombre: "Dental", queResuelve: "todo por 390 Bs al mes" }] }),
+  );
+  assert.equal(verdict.ok, false);
+  assert.match(verdict.errors.join(" · "), /declara_precio/);
+});
+
+test("una pregunta MAS especifica le gana al catalogo (el orden del router se sostiene)", () => {
+  const estado = createState({ channel: "sim", contactRef: "t", botStage: "demo_agendada" });
+  const casos = [
+    ["que hacen? y cuanto cuesta?", "pregunta_precio"],
+    ["que servicios tienen para la factura del siat?", "pregunta_siat"],
+    ["que hacen si no puedo entrar al sistema de ustedes?", "handoff"],
+  ];
+  for (const [texto, esperado] of casos) {
+    const result = step(estado, { text: texto, receivedAt: T0 }, { config: DEFAULT_CONFIG });
+    assert.ok(
+      result.notes.some((note) => note.includes(esperado)),
+      `"${texto}" tendria que rutear a ${esperado}, no al catalogo (dio: ${result.notes.join(",")})`,
+    );
+  }
+});
+
 test("renderTemplate sigue siendo el ultimo paso: los {{ }} del conocimiento se resuelven en el guion", () => {
   const config = applyKnowledge(
     DEFAULT_CONFIG,
