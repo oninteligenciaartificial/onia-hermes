@@ -36,6 +36,28 @@ regulada ASFI que un unipersonal no puede ejercer.)
 **Conclusión:** "leer el banco" SÍ es real y va al producto — pero por extracto e
 API, no por scraping. Consultarlo el miércoles tal cual (pregunta 6).
 
+## 1-bis. Lo que cambió desde que se escribió este guion (al 2026-08-10)
+
+- **El cobro ya funciona de punta a punta**: el checkout estaba muerto (el comprobante
+  daba error 500) y se reparó; probado en producción con un pago real de prueba. Lo que
+  falta automatizar es **la verificación del depósito**, que hoy es manual — exactamente
+  lo que resuelve esta reunión.
+- **SIAT: sistema registrado y Fase 1 de homologación COMPLETA** (1.968 operaciones
+  contra el SIN, cero bloqueadas). Llevar el PDF de la solicitud 9473: responde en el
+  acto el art. 27.I si lo exigen.
+- **Alternativa a tener en el bolsillo:** Libélula (Todotix SRL, boliviana) publica
+  **débito automático, tarjetas tokenizadas y pagos recurrentes por API** — o sea
+  renovación automática de suscripciones en Bs, que es justo lo que Stripe no puede hacer
+  en Bolivia. Si el BCP no ofrece cobro recurrente, esta es la vía. **Preguntar al BCP si
+  ellos tienen débito automático/recurrente** (pregunta 10, abajo).
+- **Reforzar la pregunta 4 (multi-cuenta)**: es la que define si Onia puede cobrar por sus
+  clientes con UNA integración o si cada cliente firma su propio convenio. Sin respuesta
+  clara a esto, el add-on de pasarela no se puede vender.
+
+**Pregunta 10 (nueva):** ¿el BCP ofrece **débito automático o cobro recurrente** por API
+para suscripciones mensuales? ¿Con qué instrumento (tarjeta tokenizada, débito en cuenta)
+y qué comisión? Si no lo tienen, decirlo explícitamente para evaluar Libélula.
+
 ## 2. Las preguntas para el miércoles (llevar impresas, pedir respuestas por escrito)
 
 **Pasarela / QR dinámico:**
