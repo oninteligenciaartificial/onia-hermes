@@ -3,6 +3,7 @@
 - **Fuente:** https://www.instagram.com/p/Db1JbQzshyA/ · 54 s · español
 - **Visto:** 2026-08-09 (Gemini nativo)
 - **Archivo:** `Instagram-Db1JbQzshyA.mp4` (no versionado)
+- **Lectura completa + transcripción literal:** [transcripciones/2026-08-09-10-errores-seguridad.md](transcripciones/2026-08-09-10-errores-seguridad.md)
 
 ## Qué dice realmente
 

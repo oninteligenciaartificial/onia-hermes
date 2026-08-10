@@ -3,6 +3,7 @@
 - **Fuente:** https://www.instagram.com/p/DbrAX61oo4w/ · 21 s · sin voz (cencerros)
 - **Visto:** 2026-08-09 (Gemini nativo)
 - **Archivo:** `Instagram-DbrAX61oo4w.mp4` (no versionado)
+- **Lectura completa + transcripción literal:** [transcripciones/2026-08-09-supra-vision-ganado.md](transcripciones/2026-08-09-supra-vision-ganado.md)
 
 ## Qué dice realmente
 

@@ -3,6 +3,7 @@
 - **Fuente:** https://www.instagram.com/p/DbyhC0csyaB/ · 74 s · español
 - **Visto:** 2026-08-09 (Gemini nativo)
 - **Archivo:** `Instagram-DbyhC0csyaB.mp4` (no versionado)
+- **Lectura completa + transcripción literal:** [transcripciones/2026-08-09-ai-loops-code-review.md](transcripciones/2026-08-09-ai-loops-code-review.md)
 
 ## Qué dice realmente
 
