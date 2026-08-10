@@ -86,18 +86,31 @@ Cuando Onia lanza un módulo nuevo, el bot se entera editando esto:
 ```json
 "productos": [
   { "key": "dental", "nombre": "Dental", "queResuelve": "agenda, recordatorios y cobros de una clínica" },
-  { "key": "veterinaria", "nombre": "Veterinaria", "queResuelve": "fichas, vacunas y recordatorios" }
+  { "key": "veterinaria", "nombre": "Veterinaria", "queResuelve": "fichas, vacunas y recordatorios" },
+
+  { "key": "web", "tipo": "servicio", "nombre": "la web de tu negocio" },
+  { "key": "videos_ia", "tipo": "servicio", "nombre": "videos e influencers con IA" }
 ]
 ```
 
 Con eso, quien pregunte *"¿qué hacen?"* recibe la lista al día y la conversación sigue
 hacia la demo.
 
+**Son dos cosas distintas, y la diferencia importa:**
+
+| | Qué es | Cómo lo dice el bot |
+|---|---|---|
+| **módulo** (por defecto) | Software de la plataforma. Puede no estar construido. | En viñetas. Sólo los armados se nombran como tales; el resto va junto en *"en construcción, sin humo"*. |
+| **`"tipo": "servicio"`** | Trabajo que ya entregamos: web, chatbot, videos e influencers con IA, redes, automatizaciones. | En una frase: *"Y además hacemos…"*. Nunca sale como en construcción, porque existe. |
+
+Un módulo tiene que decir `queResuelve` (si no, la viñeta es un nombre y nada más).
+Un servicio no lo necesita: el nombre ya lo dice.
+
 **Lo que el archivo NO puede hacer: decir que un módulo está listo.** Cuál está armado
 lo decide una lista congelada en el código (`MODULOS_LISTOS`, hoy sólo `dental`).
-Todo producto que agregues sale como *"en construcción, sin humo"* — la misma frase que
-usa la web. Encender uno es un commit, con el módulo construido delante. No es burocracia:
-es lo único que impide que el bot venda algo que todavía no existe.
+Todo módulo que agregues sale como *"en construcción, sin humo"* — la misma frase que
+usa la web. Encenderlo es un commit, con el módulo construido delante. No es burocracia:
+es lo único que impide que el bot venda un sistema que todavía no existe.
 
 ### Agregar un rubro nuevo (sin desplegar)
 

@@ -37,21 +37,41 @@ export function activeSlots(state, config) {
   return state.slotsOffered && state.slotsOffered.length ? state.slotsOffered : config.slots;
 }
 
+function catalogo(config) {
+  return config.productos?.length ? config.productos : DEFAULT_CONFIG.productos;
+}
+
+const esServicio = (producto) => producto.tipo === "servicio";
+
 /**
- * El catalogo listo para leerse en WhatsApp.
- * La LISTA es dato editable (config.productos), pero el "ya está armado" lo decide
- * `MODULOS_LISTOS`, congelado en codigo: por eso una edicion puede sumar un producto pero NO
- * puede declararlo terminado. Lo que no esta listo se agrupa en una linea con la misma frase que
- * usa la web ("sin humo") — decirlo tres veces suena a excusa y es la misma verdad.
+ * Los MODULOS de la plataforma, listos para leerse en WhatsApp.
+ * La lista es dato editable (config.productos), pero el "ya está armado" lo decide
+ * `MODULOS_LISTOS`, congelado en codigo: por eso una edicion puede sumar un modulo pero NO puede
+ * declararlo terminado. Lo que no esta listo se agrupa en UNA linea con la misma frase que usa la
+ * web ("sin humo") — decirlo tres veces seguidas suena a excusa y es exactamente la misma verdad.
  */
 function productList(config) {
-  const productos = config.productos?.length ? config.productos : DEFAULT_CONFIG.productos;
-  const lineas = productos
+  const modulos = catalogo(config).filter((producto) => !esServicio(producto));
+  const lineas = modulos
     .filter((producto) => MODULOS_LISTOS.has(producto.key))
-    .map((producto) => `• *${producto.nombre}* — ${producto.queResuelve}.`);
-  const enCamino = productos.filter((producto) => !MODULOS_LISTOS.has(producto.key));
+    .map((producto) => `• *${producto.nombre}*${producto.queResuelve ? ` — ${producto.queResuelve}` : ""}.`);
+  const enCamino = modulos.filter((producto) => !MODULOS_LISTOS.has(producto.key));
   if (enCamino.length) lineas.push(`• ${joinEs(enCamino.map((producto) => producto.nombre))}: en construcción, sin humo.`);
   return lineas.join("\n");
+}
+
+/**
+ * Los SERVICIOS, en una sola frase. No pasan por MODULOS_LISTOS porque no son software a medio
+ * construir: son trabajo que Onia ya entrega (web, chatbot, videos con IA, redes). Van en una
+ * linea y no en viñetas para que la respuesta siga entrando de un vistazo en WhatsApp.
+ *
+ * Devuelve la frase ENTERA (o vacio) en vez de solo la lista: si el catalogo editable se quedara
+ * sin servicios, una plantilla con "Y además hacemos {{servicios}}." dejaria un "Y además
+ * hacemos ." colgando a la vista del prospecto. El bloque se arma acá o no se arma.
+ */
+function serviceList(config) {
+  const servicios = catalogo(config).filter(esServicio).map((producto) => producto.nombre);
+  return servicios.length ? `\n\nY además hacemos ${joinEs(servicios)}.` : "";
 }
 
 export function varsFor(state, config, extra = {}) {
@@ -73,7 +93,8 @@ export function varsFor(state, config, extra = {}) {
     horario_frase: horario.frase || DEFAULT_CONFIG.businessHours.frase,
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
-    productos: productList(config),
+    // Un solo bloque: modulos + servicios. Ver serviceList sobre por que no son dos variables.
+    productos: `${productList(config)}${serviceList(config)}`,
     rubro: intents.industryLabel(q.industry, config) || "",
     personas: q.teamSize ?? "",
     persona_palabra: q.teamSize === 1 ? "persona" : "personas",

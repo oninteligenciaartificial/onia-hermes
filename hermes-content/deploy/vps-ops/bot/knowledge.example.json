@@ -33,7 +33,13 @@
     { "key": "dental", "nombre": "Dental", "queResuelve": "agenda, recordatorios y cobros de una clínica" },
     { "key": "comercio", "nombre": "Comercio", "queResuelve": "stock, ventas y clientes de una tienda" },
     { "key": "servicios", "nombre": "Servicios", "queResuelve": "turnos, clientes y cobros de un negocio de servicios" },
-    { "key": "proveedores", "nombre": "Importadora", "queResuelve": "importaciones, costos y precios de una distribuidora" }
+    { "key": "proveedores", "nombre": "Importadora", "queResuelve": "importaciones, costos y precios de una distribuidora" },
+
+    { "key": "web", "tipo": "servicio", "nombre": "la web de tu negocio" },
+    { "key": "chatbot", "tipo": "servicio", "nombre": "un chatbot de WhatsApp con IA" },
+    { "key": "videos_ia", "tipo": "servicio", "nombre": "videos e influencers con IA" },
+    { "key": "redes", "tipo": "servicio", "nombre": "conexión y publicación en redes" },
+    { "key": "automatizaciones", "tipo": "servicio", "nombre": "automatizaciones a medida" }
   ],
 
   "triggersExtra": {
