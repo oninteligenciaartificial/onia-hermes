@@ -211,6 +211,18 @@ export const SCRIPT = Object.freeze({
   M_SIAT_BODY:
     "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. El detalle exacto de tu caso lo ve {{humano}} en la demo.",
 
+  // "¿Que hacen?" / "¿que es Onia?". El marco es fijo; la LISTA sale de `config.productos`, que
+  // la capa de conocimiento edita sin desplegar — es la unica forma de que un producto nuevo no
+  // tarde un deploy en existir para el bot. Lo que NO se edita es cual esta listo (ver
+  // MODULOS_LISTOS): eso es una promesa comercial, no un dato.
+  M_QUE_ES_ONIA: [
+    "{{producto}} es una plataforma por módulos: tu negocio trabaja adentro (agenda, cobros, clientes) y hay agentes que contestan por WhatsApp.",
+    "",
+    "{{productos}}",
+    "",
+    "Cuál te sirve a vos lo ve {{humano}} en la demo, con tus números.",
+  ].join("\n"),
+
   // Audio que no se pudo transcribir (spec §2.3).
   M_AUDIO_FAIL: "No me llegó bien el audio, ¿me lo escribís?",
 
@@ -223,6 +235,30 @@ export const SCRIPT = Object.freeze({
   PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?",
   PENDING_AGENDADA: "Igual ya quedamos para **{{dia_hora_elegida}}**.",
 });
+
+// ---------------------------------------------------------------------------
+// Catalogo — QUE vendemos (el equivalente de RUBROS, que es A QUIEN le vendemos)
+// ---------------------------------------------------------------------------
+// La verdad de esta lista es la MISMA que dice la web publica (onia.com.bo/empezar): dental
+// armado, el resto en construccion "sin humo". Si el bot dijera otra cosa que la web, una de las
+// dos estaria mintiendo y la que se lleva el reclamo es la que hablo por WhatsApp.
+//
+// Esto es el PISO: `config.productos` lo puede reemplazar la capa de conocimiento sin desplegar
+// (asi un producto nuevo existe para el bot el mismo dia que existe para el negocio).
+export const PRODUCTOS = Object.freeze([
+  Object.freeze({ key: "dental", nombre: "Dental", queResuelve: "agenda, recordatorios y cobros de una clínica" }),
+  Object.freeze({ key: "comercio", nombre: "Comercio", queResuelve: "stock, ventas y clientes de una tienda" }),
+  Object.freeze({ key: "servicios", nombre: "Servicios", queResuelve: "turnos, clientes y cobros de un negocio de servicios" }),
+  Object.freeze({ key: "proveedores", nombre: "Importadora", queResuelve: "importaciones, costos y precios de una distribuidora" }),
+]);
+
+/**
+ * Los modulos que EXISTEN de verdad, hoy. Congelado en codigo A PROPOSITO y sin campo equivalente
+ * en el archivo editable: encender un modulo es una promesa comercial (N2), no un hecho. Por eso
+ * cambia por commit — con el modulo construido delante — y nunca por una edicion.
+ * Agregar un producto "en construccion" si es libre: eso no promete nada.
+ */
+export const MODULOS_LISTOS = Object.freeze(new Set(["dental"]));
 
 // ---------------------------------------------------------------------------
 // Config completa
@@ -240,6 +276,9 @@ export const DEFAULT_CONFIG = Object.freeze({
     humanName: "Sergio",
     tone: "voseo-boliviano-informal",
   }),
+
+  // Que vendemos. Editable sin desplegar (ver knowledge.mjs → `productos`).
+  productos: PRODUCTOS,
 
   // Disparadores. 'demo' abre/reabre la conversacion; 'optOut' la cierra en cualquier punto.
   triggers: Object.freeze({

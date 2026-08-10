@@ -93,6 +93,30 @@ const RE_PRACTICA_PROPIA = new RegExp(
 
 const RE_PRODUCTO_DETALLE = /\bse conecta con\b|\bse integra con\b|\bcompatible con\b|\brayos x\b|\bradiograf\w+|\bimpresora\b|\bfirma digital\b|\bapi\b|\bexportar\b|\bmigrar (?:mis|los) datos\b|\bcelular\b|\btelefono\b|\btablet\b|\bcomputadora\b|\bandroid\b|\biphone\b|\bwindows\b|\bsin internet\b|\boffline\b|\ben la nube\b|\b(?:dan|tienen|ofrecen|brindan|incluye|incluyen) (?:soporte|capacitacion|garantia)\b/;
 
+// "¿que hacen?" / "¿que es Onia?" — la pregunta mas basica del embudo, y hasta hoy no tenia
+// respuesta propia: caia en el LLM o en un handoff. Se contesta con el CATALOGO (M_QUE_ES_ONIA),
+// que es dato editable, asi un producto nuevo no tarda un deploy en existir para el bot.
+// Se consulta TARDE en el router a proposito: cualquier pregunta mas especifica (precio, SIAT,
+// soporte, tecnica) le gana, porque esta es la generica.
+// Lo que se excluye: "que hacen si no me sirve" pide una condicion comercial y "que hacen con mis
+// datos" es privacidad — las dos las contesta un humano, no un catalogo.
+const RE_QUE_ES_ONIA = new RegExp(
+  [
+    "\\bque (?:es|son) (?:onia|el sistema|la plataforma|esto)\\b",
+    "\\bque (?:hacen|haces|hacen ustedes|ofrecen|ofreces|venden|vendes|brindan)\\b(?!\\s+(?:si|cuando|con|en caso))",
+    "\\ba que se dedican\\b|\\ba que te dedicas\\b",
+    "\\b(?:de que|en que) (?:se trata|consiste)\\b",
+    "\\bque (?:servicios|productos|modulos|sistemas)\\b",
+    "\\bpara que sirve\\b",
+    "\\bque me (?:ofrecen|ofreces|pueden ofrecer)\\b",
+  ].join("|"),
+);
+
+/** Pregunto QUE vendemos. Se contesta con el catalogo, no con un humano ni con el LLM. */
+export function asksWhatWeDo(norm) {
+  return RE_QUE_ES_ONIA.test(norm);
+}
+
 // ---------------------------------------------------------------------------
 // SEGUNDO CAMINO: soporte (no venta)
 // ---------------------------------------------------------------------------

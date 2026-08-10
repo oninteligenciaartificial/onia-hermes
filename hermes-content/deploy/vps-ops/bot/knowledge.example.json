@@ -29,6 +29,13 @@
     }
   ],
 
+  "productos": [
+    { "key": "dental", "nombre": "Dental", "queResuelve": "agenda, recordatorios y cobros de una clínica" },
+    { "key": "comercio", "nombre": "Comercio", "queResuelve": "stock, ventas y clientes de una tienda" },
+    { "key": "servicios", "nombre": "Servicios", "queResuelve": "turnos, clientes y cobros de un negocio de servicios" },
+    { "key": "proveedores", "nombre": "Importadora", "queResuelve": "importaciones, costos y precios de una distribuidora" }
+  ],
+
   "triggersExtra": {
     "demo": []
   },

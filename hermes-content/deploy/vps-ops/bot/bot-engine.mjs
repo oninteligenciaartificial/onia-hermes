@@ -477,6 +477,11 @@ export function step(state, incoming, options = {}) {
 
   if (intents.isProductDetail(msg.norm)) return handoffResult(ctx, withData, "detalle_tecnico_de_producto");
 
+  // "¿Que hacen?" — va DESPUES de lo especifico (precio, SIAT, clinico, tecnico) porque es la
+  // generica: si el mensaje traia algo mas concreto, eso ya se contesto. El catalogo sale de
+  // config.productos, o sea de un dato editable, no de un texto congelado.
+  if (intents.asksWhatWeDo(msg.norm)) return composeWithFunnel(ctx, withData, "M_QUE_ES_ONIA", "pregunta_que_hacemos");
+
   // Pidio un humano con todas las letras (N3): el bot no puede contestarlo el mismo.
   if (intents.wantsHuman(msg.norm)) return handoffResult(ctx, withData, "pidio_hablar_con_humano");
 

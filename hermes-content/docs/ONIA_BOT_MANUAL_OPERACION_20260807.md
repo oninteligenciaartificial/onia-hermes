@@ -79,6 +79,26 @@ Ese comando **valida antes de aplicar**. Si metés un precio, una promesa o una
 clave que no existe, **rechaza el archivo entero** y el bot sigue con lo
 anterior. Nunca queda a medias.
 
+### Agregar un producto nuevo (sin desplegar)
+
+Cuando Onia lanza un módulo nuevo, el bot se entera editando esto:
+
+```json
+"productos": [
+  { "key": "dental", "nombre": "Dental", "queResuelve": "agenda, recordatorios y cobros de una clínica" },
+  { "key": "veterinaria", "nombre": "Veterinaria", "queResuelve": "fichas, vacunas y recordatorios" }
+]
+```
+
+Con eso, quien pregunte *"¿qué hacen?"* recibe la lista al día y la conversación sigue
+hacia la demo.
+
+**Lo que el archivo NO puede hacer: decir que un módulo está listo.** Cuál está armado
+lo decide una lista congelada en el código (`MODULOS_LISTOS`, hoy sólo `dental`).
+Todo producto que agregues sale como *"en construcción, sin humo"* — la misma frase que
+usa la web. Encender uno es un commit, con el módulo construido delante. No es burocracia:
+es lo único que impide que el bot venda algo que todavía no existe.
+
 ### Agregar un rubro nuevo (sin desplegar)
 
 Cuando aparece un rubro que el bot todavía no reconoce — el prospecto escribe
