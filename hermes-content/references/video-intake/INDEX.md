@@ -4,9 +4,18 @@ Bandeja de entrada de videos para **extraer información y decidir si sirve**. D
 `../creator-video-references/`, que estudia patrones creativos (hook, ritmo, CTA); acá el
 eje es **¿nos sirve, mejora algo nuestro, o es humo?**
 
-**Cómo se procesa:** `node .claude/skills/ver-videos/scripts/fetch-video.mjs <url>` baja el
-MP4 sin abrir navegador → `gemini-see-video.mjs` lo ve nativo (imagen + audio + timeline) →
-una ficha acá. Los MP4 no se versionan.
+**Cómo se procesa** (cada video deja SIEMPRE dos archivos, no solo el análisis):
+
+1. `fetch-video.mjs <url>` — baja el MP4 sin abrir navegador. El MP4 no se versiona.
+2. `gemini-see-video.mjs` — lo ve nativo (imagen + audio + timeline + texto en pantalla).
+3. `transcribe.sh` — verbatim palabra por palabra con timestamps (Speaches, gratis). Solo
+   si el video tiene locución.
+4. **`transcripciones/<slug>.md`** — la lectura completa + el verbatim, tal cual salieron.
+   Es la fuente; se guarda aunque el veredicto sea HUMO.
+5. **`<slug>.md`** — la ficha: qué dice, veredicto, a qué frente aplica, riesgo.
+
+Gemini da la lectura estructurada con citas; Whisper da el verbatim literal. Los dos, porque
+sirven para cosas distintas: uno para entender, el otro para citar sin deformar.
 
 **Veredictos:** `SIRVE YA` · `MEJORA LO ACTUAL` · `FUTURO` · `HUMO`.
 

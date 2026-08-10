@@ -3,6 +3,7 @@
 - **Fuente:** https://www.instagram.com/p/DaAu59nmAng/ · 22 s · inglés
 - **Visto:** 2026-08-09 (Gemini nativo)
 - **Archivo:** `Instagram-DaAu59nmAng.mp4` (no versionado)
+- **Lectura completa + transcripción literal:** [transcripciones/2026-08-09-live-ops-dashboard.md](transcripciones/2026-08-09-live-ops-dashboard.md)
 
 ## Qué dice realmente
 

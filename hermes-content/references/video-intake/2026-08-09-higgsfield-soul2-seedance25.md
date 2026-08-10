@@ -3,6 +3,7 @@
 - **Fuente:** https://www.instagram.com/p/Db0X9tbs5sI/ · 45 s · español
 - **Visto:** 2026-08-09 (Gemini nativo, video+audio completos)
 - **Archivo:** `Instagram-Db0X9tbs5sI.mp4` (no versionado)
+- **Lectura completa + transcripción literal:** [transcripciones/2026-08-09-higgsfield-soul2-seedance25.md](transcripciones/2026-08-09-higgsfield-soul2-seedance25.md)
 
 ## Qué dice realmente
 
