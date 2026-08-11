@@ -38,6 +38,7 @@ import { DEFAULT_CONFIG, createBotConfig, slotsPending } from "./config.mjs";
 import { withKnowledge } from "./knowledge.mjs";
 import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
+import { createChatwootClient } from "./chatwoot-adapter.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 
 /** Estados donde el follow-up tiene sentido (mismos que el barrido en SQL). */
@@ -159,9 +160,29 @@ export function followUpMessageKey(conversationKey, step) {
   return `followup:${conversationKey}:${step}`;
 }
 
-function deliveryStatusFor(state, config) {
-  if (state.channel === "sim") return "simulated";
-  return config.dryRun ? "skipped" : "sent";
+/**
+ * Manda el mensaje POR EL CANAL REAL y devuelve lo que de verdad paso.
+ *
+ * Antes esto era `deliveryStatusFor()`, que devolvia "sent" sin haber mandado NADA: el barrido
+ * reservaba, escribia "enviado" en la base y ahi moria. n8n tenia que mandarlo, pero eso obligaba a
+ * meter el token de Chatwoot tambien en n8n; el bot ya lo tiene, asi que manda el bot.
+ *
+ * Tolerante por contrato: un fallo de Chatwoot no puede tumbar el barrido. Y la conversacion NO se
+ * reintenta — la reserva ya se gasto. Es deliberado: preferimos perder un follow-up antes que
+ * mandar dos, que es lo que quema el numero ante Meta (spec §4.6).
+ */
+export async function deliver(state, text, config, deps = {}) {
+  if (state.channel === "sim") return { status: "simulated", warning: null };
+  if (config.dryRun) return { status: "skipped", warning: null };
+  if (state.channel !== "chatwoot") {
+    return { status: "failed", warning: `canal ${state.channel}: sin envio automatico` };
+  }
+  const client = deps.chatwoot || createChatwootClient();
+  if (!client.enabled) return { status: "failed", warning: "chatwoot: sin token/config, no se mando nada" };
+  // En Chatwoot el contactRef ES el id de conversacion (chatwoot-adapter.mjs lo fija asi).
+  const sent = await client.sendMessage(state.contactRef, text);
+  if (sent) return { status: "sent", warning: null };
+  return { status: "failed", warning: client.warnings[client.warnings.length - 1] || "chatwoot: no se pudo enviar" };
 }
 
 // ---------------------------------------------------------------------------
@@ -262,7 +283,10 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
       continue;
     }
 
-    const deliveryStatus = deliveryStatusFor(state, config);
+    // Envio ANTES del registro: asi `delivery_status` dice lo que paso y no lo que se pensaba hacer.
+    const entrega = await deliver(state, built.reply.text, config, deps);
+    const deliveryStatus = entrega.status;
+    if (entrega.warning) result.warnings.push(`${key}: ${entrega.warning}`);
     const wrote = await store.insertOutbound(
       [
         {

@@ -418,16 +418,40 @@ test("determinista: el mismo --now sobre el mismo estado da exactamente la misma
   assert.deepEqual(uno, dos);
 });
 
-test("el canal 'sim' registra 'simulated'; con dryRun apagado, 'sent'", async () => {
+test("lo GUARDADO dice 'reserved' (la reserva ES el insert); el envio real se reporta aparte", async () => {
   const enVivo = createBotConfig({ dryRun: false });
 
   const sim = memoryStore([row({ conversation_key: "sim:x", channel: "sim", contact_ref: "x" })]);
   await runReminderSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: sim.store, meetingLink: linkFake });
   assert.equal(sim.outbound[0].deliveryStatus, "simulated");
 
-  const real = memoryStore([row()]);
-  await runReminderSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: real.store, meetingLink: linkFake });
-  assert.equal(real.outbound[0].deliveryStatus, "sent");
+  // Aca el insert ES la reserva, o sea que se escribe ANTES de mandar: por eso la fila NUNCA puede
+  // decir "sent" (seria mentira si el envio falla despues). Dice `reserved`, que es lo que paso.
+  const enviados = [];
+  const real = memoryStore([row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" })]);
+  const salida = await runReminderSweep(
+    { nowIso: NOW, emit: true },
+    {
+      config: enVivo,
+      store: real.store,
+      meetingLink: linkFake,
+      chatwoot: { enabled: true, warnings: [], sendMessage: (id, text) => { enviados.push({ id, text }); return { id: 1 }; } },
+    },
+  );
+  assert.equal(real.outbound[0].deliveryStatus, "reserved", "lo guardado no promete el envio");
+  assert.equal(salida.send[0].deliveryStatus, "sent", "el resultado del barrido si dice que se mando");
+  assert.equal(enviados.length, 1);
+  assert.equal(enviados[0].id, "42");
+  assert.match(enviados[0].text, /\S/);
+
+  // Sin token: se reserva igual (para no duplicar) pero el barrido avisa que NO salio.
+  const roto = memoryStore([row({ conversation_key: "chatwoot:43", channel: "chatwoot", contact_ref: "43" })]);
+  const fallo = await runReminderSweep(
+    { nowIso: NOW, emit: true },
+    { config: enVivo, store: roto.store, meetingLink: linkFake, chatwoot: { enabled: false, warnings: [], sendMessage: () => null } },
+  );
+  assert.equal(fallo.send[0].deliveryStatus, "failed");
+  assert.match(fallo.warnings.join(" "), /sin token/);
 });
 
 // ---------------------------------------------------------------------------
