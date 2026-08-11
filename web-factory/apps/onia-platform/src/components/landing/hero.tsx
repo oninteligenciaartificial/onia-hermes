@@ -82,19 +82,6 @@ export function Hero() {
               <Modules items={MODULOS_HERO} />
             </Shot>
           </div>
-
-          <div className={`${styles.photo} ${styles.photoHero}`}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/fotos/dentista.webp"
-              alt="Odontóloga atendiendo en su consultorio, junto al sillón dental."
-              width={896}
-              height={1152}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-            />
-          </div>
         </ParallaxSoft>
       </div>
     </section>

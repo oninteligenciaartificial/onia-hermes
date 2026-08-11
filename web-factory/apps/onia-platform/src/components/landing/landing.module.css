@@ -101,6 +101,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6em;
+  /* micro-etiqueta <=12px MAYUSCULA => Geist Mono, igual que el `.kicker` global.
+     Sin esta linea el home era la UNICA pagina con el kicker en Archivo. */
+  font-family: var(--font-mono), monospace;
   font-size: max(0.78rem, var(--fs-label-min));
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -1406,21 +1409,17 @@
   mix-blend-mode: multiply;
 }
 
-.photoHero {
-  position: absolute;
-  left: -1.5rem;
-  bottom: -3.5rem;
-  width: min(30%, 220px);
-  aspect-ratio: 3/4;
-  box-shadow: var(--shadow-lift);
-  z-index: 2;
-}
-
-@media (max-width: 1099px) {
-  .photoHero {
-    display: none;
-  }
-}
+/*
+ * La foto suelta del hero se retiro (`.photoHero`, solo >=1100px).
+ *
+ * Flotaba sobre el marco de producto y tapaba dos filas enteras de la agenda:
+ * "10:30" y "11:15" al 100%, "Ortodoncia · J. Rojas" al 92% (medido a 1440 y
+ * 1280). Ese marco es lo UNICO que muestra que se compra. Se probaron las dos
+ * reubicaciones posibles y ninguna cierra: por detras el fondo de la seccion se
+ * la come, y abajo a la izquierda tapa los chips ("Desde Bs 320/mes"). El hero
+ * ya vivia sin ella por debajo de 1100px, que es la mayoria del trafico.
+ * La pagina conserva sus fotos en `.photoWide` (como funciona) y `.photoClose`.
+ */
 
 .photoWide {
   aspect-ratio: 16/6;
