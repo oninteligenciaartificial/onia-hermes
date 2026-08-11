@@ -25,7 +25,7 @@ export function PedirWeb() {
   return (
     <>
       <p className="kicker">Pedila</p>
-      <h2 className="h2" style={{ fontSize: "1.6rem" }}>
+      <h2 className="h3">
         ¿Cuál querés?
       </h2>
       <div className={styles.picker} role="radiogroup" aria-label="Elegí tu web">

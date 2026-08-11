@@ -399,6 +399,11 @@ svg {
   margin-top: clamp(1.8rem, 3.5vw, 2.8rem);
 }
 
+/* para grillas de 2 o 4 items: con tres columnas el ultimo queda huerfano */
+.card-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+}
+
 .card {
   display: flex;
   flex-direction: column;

@@ -109,7 +109,7 @@ export default function ChatbotPage() {
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section section-tight">
           <div className="container">
             <Reveal>
               <span className="kicker">Cómo funciona</span>

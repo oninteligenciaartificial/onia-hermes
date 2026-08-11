@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Pricing } from "@/components/landing/pricing";
 import { Faq } from "@/components/landing/faq";
+import { Reveal } from "@/motion";
 
 const SITE_URL = "https://onia.com.bo";
 
@@ -71,38 +72,46 @@ export default function PreciosPage() {
       <main id="contenido">
         <section className="section" style={{ paddingBottom: 0 }}>
           <div className="container">
-            <p className="kicker">Precios</p>
-            <h1 className="h2">
-              En bolivianos, publicados, sin letra escondida.
-            </h1>
-            <p className="lead">
-              Tres planes que se distinguen por el salto de valor — ordenar,
-              recuperar, crecer sin techo. Cada uno dice exactamente qué lleva
-              y qué no, con los números que el sistema aplica de verdad:
-              usuarios, fichas de clientes y recordatorios. Pagás mensual,
-              semanal o anual, y cancelás cuando quieras.
-            </p>
+            <Reveal>
+              <p className="kicker">Precios</p>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <h1 className="h2">
+                En bolivianos, publicados, sin letra escondida.
+              </h1>
+            </Reveal>
+            <Reveal delay={0.12}>
+              <p className="lead">
+                Tres planes que se distinguen por el salto de valor — ordenar,
+                recuperar, crecer sin techo. Cada uno dice exactamente qué lleva
+                y qué no, con los números que el sistema aplica de verdad:
+                usuarios, fichas de clientes y recordatorios. Pagás mensual,
+                semanal o anual, y cancelás cuando quieras.
+              </p>
+            </Reveal>
           </div>
         </section>
         <Pricing sinEncabezado />
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section section-tight">
           <div className="container">
-            <p className="lead">
-              ¿Necesitás además que te atiendan el WhatsApp o que te hagamos la
-              web? Son servicios aparte, con su propio precio y sus propios
-              requisitos publicados:{" "}
-              <a href="/chatbot">los tres stacks de chatbot</a> y{" "}
-              <a href="/servicios/webs">los stacks de webs</a>.
-            </p>
-            <p className="lead" style={{ marginTop: "1rem" }}>
-              ¿Comparando opciones?{" "}
-              <a href="/comparativa">
-                Mirá Onia contra todo lo que se vende en Bolivia
-              </a>{" "}
-              — con los precios públicos de cada uno y lo que todavía no
-              hacemos, dicho de frente. ¿Preferís tocarlo antes que leer?{" "}
-              <a href="/prueba-gratis">Probalo gratis 14 días</a>.
-            </p>
+            <Reveal>
+              <p className="lead">
+                ¿Necesitás además que te atiendan el WhatsApp o que te hagamos la
+                web? Son servicios aparte, con su propio precio y sus propios
+                requisitos publicados:{" "}
+                <a href="/chatbot">los tres stacks de chatbot</a> y{" "}
+                <a href="/servicios/webs">los stacks de webs</a>.
+              </p>
+              <p className="lead" style={{ marginTop: "1rem" }}>
+                ¿Comparando opciones?{" "}
+                <a href="/comparativa">
+                  Mirá Onia contra todo lo que se vende en Bolivia
+                </a>{" "}
+                — con los precios públicos de cada uno y lo que todavía no
+                hacemos, dicho de frente. ¿Preferís tocarlo antes que leer?{" "}
+                <a href="/prueba-gratis">Probalo gratis 14 días</a>.
+              </p>
+            </Reveal>
           </div>
         </section>
         <Faq />

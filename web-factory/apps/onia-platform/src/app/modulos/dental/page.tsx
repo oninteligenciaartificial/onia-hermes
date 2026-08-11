@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
 
 const SITE_URL = "https://onia.com.bo";
@@ -118,64 +119,77 @@ export default function ModuloDentalPage() {
       <main id="contenido">
         <section className="section">
           <div className="container">
-            <p className="kicker">Módulo dental</p>
-            <h1 className="h2">
-              La agenda llena y los impuestos al día — sin cuaderno ni
-              planillas.
-            </h1>
-            <p className="lead">
-              Onia configurada para tu clínica: pacientes, citas, odontograma,
-              cobros y la contabilidad boliviana en una sola cuenta. Y un
-              agente con IA que busca a los pacientes que dejaron de venir.
-            </p>
-            <p style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-              <a className="btn" href={REGISTRO_URL}>
-                Probar gratis 14 días
-              </a>
+            <Reveal>
+              <p className="kicker">Módulo dental</p>
+            </Reveal>
+            {/* h1 SIN split: la promesa de la pagina se lee de una, no palabra
+                por palabra (regla de la casa para titulares sobre el pliegue) */}
+            <Reveal delay={0.06}>
+              <h1 className="h2">
+                La agenda llena y los impuestos al día — sin cuaderno ni
+                planillas.
+              </h1>
+            </Reveal>
+            <Reveal delay={0.12}>
+              <p className="lead">
+                Onia configurada para tu clínica: pacientes, citas, odontograma,
+                cobros y la contabilidad boliviana en una sola cuenta. Y un
+                agente con IA que busca a los pacientes que dejaron de venir.
+              </p>
+            </Reveal>
+            <Reveal delay={0.18} className="actions">
+              <PressableCta>
+                <a className="btn" href={REGISTRO_URL}>
+                  Probar gratis 14 días
+                </a>
+              </PressableCta>
               <a className="btn btn-ghost" href="/precios">
                 Ver precios
               </a>
-            </p>
+            </Reveal>
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section section-tight">
           <div className="container">
-            <div style={{ display: "grid", gap: "1.75rem", maxWidth: "46rem" }}>
+            <SplitTextReveal
+              as="h2"
+              className="h2"
+              text="Qué te queda funcionando."
+            />
+            <StaggerGrid className="card-grid">
               {MODULOS.map((modulo) => (
-                <div key={modulo.titulo}>
-                  <h2 className="h2" style={{ fontSize: "1.35rem" }}>
-                    {modulo.titulo}
-                  </h2>
-                  <p className="lead" style={{ marginTop: "0.5rem" }}>
-                    {modulo.detalle}
-                  </p>
-                </div>
+                <StaggerItem key={modulo.titulo} className="card">
+                  <h3 className="h3">{modulo.titulo}</h3>
+                  <p className="copy">{modulo.detalle}</p>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGrid>
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section section-deep">
           <div className="container">
-            <h2 className="h2" style={{ fontSize: "1.6rem" }}>
-              Preguntas de colegas tuyos
-            </h2>
-            <div style={{ display: "grid", gap: "1.25rem", marginTop: "1.25rem", maxWidth: "46rem" }}>
+            <SplitTextReveal
+              as="h2"
+              className="h2"
+              text="Preguntas de colegas tuyos."
+            />
+            <StaggerGrid className="card-grid">
               {FAQ_DENTAL.map((item) => (
-                <div key={item.q}>
-                  <h3 style={{ fontWeight: 700 }}>{item.q}</h3>
-                  <p className="lead" style={{ marginTop: "0.35rem" }}>
-                    {item.a}
-                  </p>
-                </div>
+                <StaggerItem key={item.q} className="card">
+                  <h3 className="h3">{item.q}</h3>
+                  <p className="copy">{item.a}</p>
+                </StaggerItem>
               ))}
-            </div>
-            <p className="lead" style={{ marginTop: "2rem" }}>
-              ¿Te falta una respuesta?{" "}
-              <a href={WA_URL_LANDING}>Escribinos por WhatsApp</a> — contesta
-              una persona (o nuestro bot, que te lo dice de frente).
-            </p>
+            </StaggerGrid>
+            <Reveal>
+              <p className="lead" style={{ marginTop: "2rem" }}>
+                ¿Te falta una respuesta?{" "}
+                <a href={WA_URL_LANDING}>Escribinos por WhatsApp</a> — contesta
+                una persona (o nuestro bot, que te lo dice de frente).
+              </p>
+            </Reveal>
           </div>
         </section>
       </main>

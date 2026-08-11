@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { waServiciosLink } from "@/lib/site";
 
 const SITE_URL = "https://onia.com.bo";
@@ -96,84 +97,85 @@ export default function ConsultoriaPage() {
       <main id="contenido">
         <section className="section">
           <div className="container">
-            <p className="kicker">Servicios · Consultoría y capacitación</p>
-            <h1 className="h2">
-              Automatizá tu empresa con alguien que automatizó la suya.
-            </h1>
-            <p className="lead">
-              Onia funciona con agentes de IA que preparan el trabajo de cada
-              día y esperan aprobación humana — esa es nuestra operación real,
-              no una promesa de venta. La consultoría es eso mismo aplicado a
-              tu empresa: diagnóstico, implementación y un equipo tuyo que
-              sabe usarlo.
-            </p>
+            <Reveal>
+              <p className="kicker">Servicios · Consultoría y capacitación</p>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <h1 className="h2">
+                Automatizá tu empresa con alguien que automatizó la suya.
+              </h1>
+            </Reveal>
+            <Reveal delay={0.12}>
+              <p className="lead">
+                Onia funciona con agentes de IA que preparan el trabajo de cada
+                día y esperan aprobación humana — esa es nuestra operación real,
+                no una promesa de venta. La consultoría es eso mismo aplicado a
+                tu empresa: diagnóstico, implementación y un equipo tuyo que
+                sabe usarlo.
+              </p>
+            </Reveal>
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="container" style={{ maxWidth: "46rem" }}>
-            <h2 className="h2" style={{ fontSize: "1.6rem" }}>
-              Qué hacemos
-            </h2>
-            <div style={{ display: "grid", gap: "1.5rem", marginTop: "1.25rem" }}>
+        <section className="section section-tight">
+          <div className="container">
+            <SplitTextReveal as="h2" className="h2" text="Qué hacemos." />
+            <StaggerGrid className="card-grid">
               {SERVICIOS.map((servicio) => (
-                <div key={servicio.titulo}>
-                  <h3 style={{ fontWeight: 700 }}>{servicio.titulo}</h3>
-                  <p className="lead" style={{ marginTop: "0.35rem" }}>
-                    {servicio.detalle}
-                  </p>
-                </div>
+                <StaggerItem key={servicio.titulo} className="card">
+                  <h3 className="h3">{servicio.titulo}</h3>
+                  <p className="copy">{servicio.detalle}</p>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGrid>
+          </div>
+        </section>
 
-            <h2 className="h2" style={{ fontSize: "1.6rem", marginTop: "2.5rem" }}>
-              Sin humo
-            </h2>
-            <p className="lead" style={{ marginTop: "0.75rem" }}>
-              No prometemos multiplicar tu facturación ni certificamos nada
-              con diplomas rimbombantes. La IA automatiza muy bien algunas
-              cosas y otras no — parte del trabajo es decirte cuáles son
-              cuáles en TU empresa, aunque eso achique el proyecto. Preferimos
-              un cliente que vuelve a uno que se sintió vendido.
-            </p>
+        <section className="section section-tight">
+          <div className="container">
+            <SplitTextReveal as="h2" className="h2" text="Sin humo." />
+            <Reveal>
+              <p className="lead" style={{ marginTop: "0.75rem" }}>
+                No prometemos multiplicar tu facturación ni certificamos nada
+                con diplomas rimbombantes. La IA automatiza muy bien algunas
+                cosas y otras no — parte del trabajo es decirte cuáles son
+                cuáles en TU empresa, aunque eso achique el proyecto. Preferimos
+                un cliente que vuelve a uno que se sintió vendido.
+              </p>
+            </Reveal>
+          </div>
+        </section>
 
-            <h2 className="h2" style={{ fontSize: "1.6rem", marginTop: "2.5rem" }}>
-              Cómo se contrata
-            </h2>
-            <div style={{ display: "grid", gap: "1.25rem", marginTop: "1.25rem" }}>
+        <section className="section section-deep">
+          <div className="container">
+            <SplitTextReveal as="h2" className="h2" text="Cómo se contrata." />
+            <StaggerGrid className="card-grid">
               {COMO_CONTRATAR.map((paso, i) => (
-                <div key={paso.titulo}>
-                  <h3 style={{ fontWeight: 700 }}>
-                    {i + 1}. {paso.titulo}
-                  </h3>
-                  <p className="lead" style={{ marginTop: "0.35rem" }}>
-                    {paso.detalle}
-                  </p>
-                </div>
+                <StaggerItem key={paso.titulo} className="card">
+                  <span className="card-num" aria-hidden>
+                    {`0${i + 1}`}
+                  </span>
+                  <h3 className="h3">{paso.titulo}</h3>
+                  <p className="copy">{paso.detalle}</p>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGrid>
 
-            <p
-              style={{
-                marginTop: "2rem",
-                display: "flex",
-                gap: "0.75rem",
-                flexWrap: "wrap",
-              }}
-            >
-              <a
-                className="btn"
-                style={{ background: "var(--senal)", color: "var(--tinta)" }}
-                href={waServiciosLink(
-                  "Hola, vengo de la web de Onia. Quiero consultoría/capacitación en IA para mi empresa.",
-                )}
-              >
-                Empezar la conversación
-              </a>
+            <Reveal className="actions">
+              <PressableCta>
+                <a
+                  className="btn"
+                  href={waServiciosLink(
+                    "Hola, vengo de la web de Onia. Quiero consultoría/capacitación en IA para mi empresa.",
+                  )}
+                >
+                  Empezar la conversación
+                </a>
+              </PressableCta>
               <a className="btn btn-ghost" href="/nosotros">
                 Conocer quiénes somos
               </a>
-            </p>
+            </Reveal>
           </div>
         </section>
       </main>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { waServiciosLink } from "@/lib/site";
 
 const SITE_URL = "https://onia.com.bo";
@@ -95,85 +96,90 @@ export default function MarketingIaPage() {
       <main id="contenido">
         <section className="section">
           <div className="container">
-            <p className="kicker">Servicios · Marketing con IA</p>
-            <h1 className="h2">
-              Tu marketing, producido con las mismas IA que usamos para
-              nosotros.
-            </h1>
-            <p className="lead">
-              Onia no es solo el sistema de gestión: el mismo motor de IA que
-              corre nuestros agentes produce contenido, administra pauta y
-              opera influencers IA. Ese motor lo ponemos a trabajar para tu
-              marca — y te lo mostramos andando antes de que pagues un peso.
-            </p>
+            <Reveal>
+              <p className="kicker">Servicios · Marketing con IA</p>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <h1 className="h2">
+                Tu marketing, producido con las mismas IA que usamos para
+                nosotros.
+              </h1>
+            </Reveal>
+            <Reveal delay={0.12}>
+              <p className="lead">
+                Onia no es solo el sistema de gestión: el mismo motor de IA que
+                corre nuestros agentes produce contenido, administra pauta y
+                opera influencers IA. Ese motor lo ponemos a trabajar para tu
+                marca — y te lo mostramos andando antes de que pagues un peso.
+              </p>
+            </Reveal>
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="container" style={{ maxWidth: "46rem" }}>
-            <h2 className="h2" style={{ fontSize: "1.6rem" }}>
-              Qué hacemos
-            </h2>
-            <div style={{ display: "grid", gap: "1.5rem", marginTop: "1.25rem" }}>
+        <section className="section section-tight">
+          <div className="container">
+            <SplitTextReveal as="h2" className="h2" text="Qué hacemos." />
+            <StaggerGrid className="card-grid">
               {SERVICIOS.map((servicio) => (
-                <div key={servicio.titulo}>
-                  <h3 style={{ fontWeight: 700 }}>{servicio.titulo}</h3>
-                  <p className="lead" style={{ marginTop: "0.35rem" }}>
-                    {servicio.detalle}
-                  </p>
-                </div>
+                <StaggerItem key={servicio.titulo} className="card">
+                  <h3 className="h3">{servicio.titulo}</h3>
+                  <p className="copy">{servicio.detalle}</p>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGrid>
+          </div>
+        </section>
 
-            <h2 className="h2" style={{ fontSize: "1.6rem", marginTop: "2.5rem" }}>
-              Lo que NO vas a encontrar acá
-            </h2>
-            <p className="lead" style={{ marginTop: "0.75rem" }}>
-              Somos una empresa nueva y lo decimos de frente: no tenemos un
-              muro de logos ni casos de éxito con números espectaculares — y
-              antes que inventarlos, preferimos no tenerlos todavía. Lo que sí
-              tenemos es el método y las herramientas trabajando todos los
-              días para nuestra propia marca. Pedinos ver eso: es la prueba
-              real.
-            </p>
+        <section className="section section-tight">
+          <div className="container">
+            <SplitTextReveal
+              as="h2"
+              className="h2"
+              text="Lo que NO vas a encontrar acá."
+            />
+            <Reveal>
+              <p className="lead" style={{ marginTop: "0.75rem" }}>
+                Somos una empresa nueva y lo decimos de frente: no tenemos un
+                muro de logos ni casos de éxito con números espectaculares — y
+                antes que inventarlos, preferimos no tenerlos todavía. Lo que sí
+                tenemos es el método y las herramientas trabajando todos los
+                días para nuestra propia marca. Pedinos ver eso: es la prueba
+                real.
+              </p>
+            </Reveal>
+          </div>
+        </section>
 
-            <h2 className="h2" style={{ fontSize: "1.6rem", marginTop: "2.5rem" }}>
-              Cómo se contrata
-            </h2>
-            <div style={{ display: "grid", gap: "1.25rem", marginTop: "1.25rem" }}>
+        <section className="section section-deep">
+          <div className="container">
+            <SplitTextReveal as="h2" className="h2" text="Cómo se contrata." />
+            <StaggerGrid className="card-grid">
               {COMO_CONTRATAR.map((paso, i) => (
-                <div key={paso.titulo}>
-                  <h3 style={{ fontWeight: 700 }}>
-                    {i + 1}. {paso.titulo}
-                  </h3>
-                  <p className="lead" style={{ marginTop: "0.35rem" }}>
-                    {paso.detalle}
-                  </p>
-                </div>
+                <StaggerItem key={paso.titulo} className="card">
+                  <span className="card-num" aria-hidden>
+                    {`0${i + 1}`}
+                  </span>
+                  <h3 className="h3">{paso.titulo}</h3>
+                  <p className="copy">{paso.detalle}</p>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGrid>
 
-            <p
-              style={{
-                marginTop: "2rem",
-                display: "flex",
-                gap: "0.75rem",
-                flexWrap: "wrap",
-              }}
-            >
-              <a
-                className="btn"
-                style={{ background: "var(--senal)", color: "var(--tinta)" }}
-                href={waServiciosLink(
-                  "Hola, vengo de la web de Onia. Quiero una propuesta de marketing con IA para mi negocio.",
-                )}
-              >
-                Pedir propuesta por WhatsApp
-              </a>
+            <Reveal className="actions">
+              <PressableCta>
+                <a
+                  className="btn"
+                  href={waServiciosLink(
+                    "Hola, vengo de la web de Onia. Quiero una propuesta de marketing con IA para mi negocio.",
+                  )}
+                >
+                  Pedir propuesta por WhatsApp
+                </a>
+              </PressableCta>
               <a className="btn btn-ghost" href="/prueba-gratis">
                 Conocer el sistema — 14 días gratis
               </a>
-            </p>
+            </Reveal>
           </div>
         </section>
       </main>

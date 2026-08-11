@@ -105,9 +105,9 @@ export default function PruebaGratisPage() {
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section section-tight">
           <div className="container">
-            <h2 className="h2" style={{ fontSize: "1.6rem" }}>
+            <h2 className="h3">
               Así se ve el camino:
             </h2>
             <ol style={{ marginTop: "1.25rem", display: "grid", gap: "1rem", paddingLeft: "1.25rem" }}>

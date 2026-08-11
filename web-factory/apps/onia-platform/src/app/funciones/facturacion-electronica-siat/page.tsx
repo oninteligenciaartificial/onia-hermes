@@ -107,9 +107,9 @@ export default function SiatPage() {
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section section-tight">
           <div className="container" style={{ maxWidth: "46rem" }}>
-            <h2 className="h2" style={{ fontSize: "1.6rem" }}>
+            <h2 className="h3">
               Lo primero que tenés que saber: podés cumplir GRATIS.
             </h2>
             <p className="lead" style={{ marginTop: "0.75rem" }}>
@@ -120,7 +120,7 @@ export default function SiatPage() {
               que te diga "estás obligado por ley a comprar un sistema" te está
               mintiendo — y con nosotros esa frase no existe.
             </p>
-            <h2 className="h2" style={{ fontSize: "1.6rem", marginTop: "2rem" }}>
+            <h2 className="h3" style={{ marginTop: "2.5rem" }}>
               Lo que un sistema resuelve no es la obligación: es el re-tipeo.
             </h2>
             <p className="lead" style={{ marginTop: "0.75rem" }}>
@@ -132,7 +132,7 @@ export default function SiatPage() {
               solos. Ese es el trabajo que Onia hace — el cumplimiento ya era
               tuyo gratis.
             </p>
-            <h2 className="h2" style={{ fontSize: "1.6rem", marginTop: "2rem" }}>
+            <h2 className="h3" style={{ marginTop: "2.5rem" }}>
               Dónde está Onia en este camino (dicho de frente)
             </h2>
             <p className="lead" style={{ marginTop: "0.75rem" }}>
@@ -149,9 +149,9 @@ export default function SiatPage() {
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section section-tight">
           <div className="container" style={{ maxWidth: "46rem" }}>
-            <h2 className="h2" style={{ fontSize: "1.6rem" }}>
+            <h2 className="h3">
               Las preguntas que todos hacen
             </h2>
             <div style={{ display: "grid", gap: "1.25rem", marginTop: "1.25rem" }}>

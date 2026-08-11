@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useInView,
-  useMotionValueEvent,
-  useReducedMotion,
-  useSpring,
-} from "motion/react";
+import { animate, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useRef } from "react";
 
 type CountUpProps = {
@@ -36,21 +31,42 @@ export function CountUp({ value, format = defaultFormat, className }: CountUpPro
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
   const reduced = useReducedMotion();
-  const spring = useSpring(0, { stiffness: 110, damping: 28, mass: 1.2 });
 
-  useMotionValueEvent(spring, "change", (v) => {
-    if (ref.current) ref.current.textContent = format(v);
-  });
-
+  /*
+   * ATERRIZA EXACTO — esto es plata, no decoracion.
+   *
+   * Antes esto corria con `useSpring` + evento "change": el resorte se da por
+   * quieto cuando su VELOCIDAD baja del umbral, no cuando llega, asi que el
+   * ultimo frame emitido para 1.500 caia en 1.495 y el plan Full quedaba
+   * publicado en la web como "Bs 1.495". Con `animate` hay un `onComplete` de
+   * verdad y el ultimo valor escrito es el numero real.
+   */
   useEffect(() => {
-    if (!inView) return;
-    if (reduced) {
-      spring.jump(value);
-      if (ref.current) ref.current.textContent = format(value);
+    const node = ref.current;
+    if (!node) return;
+    if (!inView || reduced) {
+      node.textContent = format(value);
       return;
     }
-    spring.set(value);
-  }, [inView, value, reduced, spring, format]);
+    const controls = animate(0, value, {
+      type: "spring",
+      stiffness: 110,
+      damping: 28,
+      mass: 1.2,
+      onUpdate: (v) => {
+        node.textContent = format(v);
+      },
+      onComplete: () => {
+        node.textContent = format(value);
+      },
+    });
+    return () => {
+      controls.stop();
+      // si el componente se desmonta o cambia el monto a mitad de cuenta, lo
+      // que queda escrito es el numero correcto, nunca uno a medio contar
+      node.textContent = format(value);
+    };
+  }, [inView, value, reduced, format]);
 
   return (
     <span

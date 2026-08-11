@@ -140,9 +140,9 @@ export default function WebsPage() {
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section section-tight">
           <div className="container" style={{ maxWidth: "52rem" }}>
-            <h2 className="h2" style={{ fontSize: "1.6rem" }}>
+            <h2 className="h3">
               Después de publicarla: Cuidado Web
             </h2>
             <p className="lead" style={{ marginTop: "0.6rem" }}>
@@ -173,7 +173,7 @@ export default function WebsPage() {
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section section-tight">
           <div className="container" style={{ maxWidth: "52rem" }}>
             <PedirWeb />
           </div>

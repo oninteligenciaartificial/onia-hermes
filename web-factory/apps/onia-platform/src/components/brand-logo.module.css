@@ -29,13 +29,9 @@
   display: block;
 }
 
-/* preferencia del sistema, salvo que el toggle pida claro */
-@media (prefers-color-scheme: dark) {
-  :global(html:not([data-theme="light"])) .onLight {
-    display: none;
-  }
-
-  :global(html:not([data-theme="light"])) .onDark {
-    display: block;
-  }
-}
+/*
+ * Sin seguimiento automatico de `prefers-color-scheme`: el sitio publico es
+ * claro siempre (ver globals.css), asi que el wordmark tinta es el correcto
+ * aunque el sistema del visitante este en oscuro. La variante clara sigue
+ * disponible para el toggle manual de arriba y para fondos oscuros.
+ */

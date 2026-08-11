@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Proof } from "@/components/sections/proof";
+import { Reveal } from "@/motion";
 import { HUECO } from "@/lib/proof";
 
 export const metadata: Metadata = {
@@ -30,14 +31,20 @@ export default function ComparativaPage() {
       <main id="contenido">
         <section className="section" style={{ paddingBottom: 0 }}>
           <div className="container">
-            <p className="kicker">Comparación</p>
-            <h1 className="h2">
-              Onia comparada con lo que hoy se vende en Bolivia.
-            </h1>
-            <p className="lead">
-              {HUECO} Todos los precios de abajo son públicos: abrí cualquiera de
-              esas webs y comprobalo vos mismo.
-            </p>
+            <Reveal>
+              <p className="kicker">Comparación</p>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <h1 className="h2">
+                Onia comparada con lo que hoy se vende en Bolivia.
+              </h1>
+            </Reveal>
+            <Reveal delay={0.12}>
+              <p className="lead">
+                {HUECO} Todos los precios de abajo son públicos: abrí cualquiera
+                de esas webs y comprobalo vos mismo.
+              </p>
+            </Reveal>
           </div>
         </section>
         <Proof />

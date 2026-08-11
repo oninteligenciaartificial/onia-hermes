@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { WA_URL_LANDING } from "@/lib/site";
 
 const SITE_URL = "https://onia.com.bo";
@@ -90,57 +91,67 @@ export default function NosotrosPage() {
       <main id="contenido">
         <section className="section">
           <div className="container">
-            <p className="kicker">Nosotros</p>
-            <h1 className="h2">
-              Una empresa boliviana construyendo el sistema que Bolivia no
-              tenía.
-            </h1>
-            <p className="lead">
-              Onia nace en Santa Cruz de la Sierra con una convicción simple:
-              el dueño de un negocio boliviano merece la misma tecnología que
-              una empresa grande — con inteligencia artificial de verdad, en
-              bolivianos, y hablando su idioma. Somos OniaAgency, registrados
-              en SEPREC y con NIT vigente, y estamos empezando: sin
-              inversores, sin humo, con el sistema en producción.
-            </p>
+            <Reveal>
+              <p className="kicker">Nosotros</p>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <h1 className="h2">
+                Una empresa boliviana construyendo el sistema que Bolivia no
+                tenía.
+              </h1>
+            </Reveal>
+            <Reveal delay={0.12}>
+              <p className="lead">
+                Onia nace en Santa Cruz de la Sierra con una convicción simple:
+                el dueño de un negocio boliviano merece la misma tecnología que
+                una empresa grande — con inteligencia artificial de verdad, en
+                bolivianos, y hablando su idioma. Somos OniaAgency, registrados
+                en SEPREC y con NIT vigente, y estamos empezando: sin
+                inversores, sin humo, con el sistema en producción.
+              </p>
+            </Reveal>
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="container" style={{ maxWidth: "46rem" }}>
-            <h2 className="h2" style={{ fontSize: "1.6rem" }}>
-              Cómo trabajamos
-            </h2>
-            <div style={{ display: "grid", gap: "1.5rem", marginTop: "1.25rem" }}>
+        <section className="section section-tight">
+          <div className="container">
+            <SplitTextReveal as="h2" className="h2" text="Cómo trabajamos." />
+            {/* cuatro principios: dos columnas, no tres con un huerfano */}
+            <StaggerGrid className="card-grid card-grid-2">
               {PRINCIPIOS.map((principio) => (
-                <div key={principio.titulo}>
-                  <h3 style={{ fontWeight: 700 }}>{principio.titulo}</h3>
-                  <p className="lead" style={{ marginTop: "0.35rem" }}>
-                    {principio.detalle}
-                  </p>
-                </div>
+                <StaggerItem key={principio.titulo} className="card">
+                  <h3 className="h3">{principio.titulo}</h3>
+                  <p className="copy">{principio.detalle}</p>
+                </StaggerItem>
               ))}
-            </div>
-            <h2 className="h2" style={{ fontSize: "1.6rem", marginTop: "2.5rem" }}>
-              Dónde estamos hoy
-            </h2>
-            <p className="lead" style={{ marginTop: "0.75rem" }}>
-              El sistema corre en producción con seis rubros disponibles —
-              clínicas dentales, comercios, importadoras, estéticas,
-              veterinarias y servicios profesionales — y nuestro emisor de
-              facturación está registrado ante el SIN con las pruebas técnicas
-              de la Fase 1 completadas. Los primeros clientes de Onia van a
-              poder decir que estuvieron desde el principio; por eso el precio
-              de lanzamiento es el que es.
-            </p>
-            <p style={{ marginTop: "1.5rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-              <a className="btn" href="/prueba-gratis">
-                Probar el sistema
-              </a>
+            </StaggerGrid>
+          </div>
+        </section>
+
+        <section className="section section-deep">
+          <div className="container">
+            <SplitTextReveal as="h2" className="h2" text="Dónde estamos hoy." />
+            <Reveal>
+              <p className="lead" style={{ marginTop: "0.75rem" }}>
+                El sistema corre en producción con seis rubros disponibles —
+                clínicas dentales, comercios, importadoras, estéticas,
+                veterinarias y servicios profesionales — y nuestro emisor de
+                facturación está registrado ante el SIN con las pruebas técnicas
+                de la Fase 1 completadas. Los primeros clientes de Onia van a
+                poder decir que estuvieron desde el principio; por eso el precio
+                de lanzamiento es el que es.
+              </p>
+            </Reveal>
+            <Reveal className="actions">
+              <PressableCta>
+                <a className="btn" href="/prueba-gratis">
+                  Probar el sistema
+                </a>
+              </PressableCta>
               <a className="btn btn-ghost" href={WA_URL_LANDING}>
                 Hablar con nosotros
               </a>
-            </p>
+            </Reveal>
           </div>
         </section>
       </main>

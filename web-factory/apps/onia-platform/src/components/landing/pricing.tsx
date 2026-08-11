@@ -86,17 +86,23 @@ export function Pricing({ sinEncabezado = false }: { sinEncabezado?: boolean }) 
 
               <p className={styles.planCuando}>{plan.cuando}</p>
 
-              <a
-                className={`${styles.btn} ${plan.destacado ? styles.btnPrimary : styles.btnGhost}`}
-                href={REGISTRO_URL}
-              >
-                {plan.destacado ? "Probar gratis 14 días" : "Empezar"}
-              </a>
-              {plan.destacado && (
-                <span className={styles.guarantee}>
-                  14 días de prueba sin tarjeta, corriendo con este mismo plan.
-                </span>
-              )}
+              {/* Pie anclado al fondo (.planCta lleva margin-top:auto): las tres
+                  tarjetas miden lo mismo y los tres botones quedan a la misma
+                  altura, midan lo que midan las listas de arriba. La nota de la
+                  prueba va ARRIBA del boton para no descolgarlo. */}
+              <div className={styles.planCta}>
+                {plan.destacado && (
+                  <span className={styles.guarantee}>
+                    14 días de prueba sin tarjeta, corriendo con este mismo plan.
+                  </span>
+                )}
+                <a
+                  className={`${styles.btn} ${plan.destacado ? styles.btnPrimary : styles.btnGhost}`}
+                  href={REGISTRO_URL}
+                >
+                  {plan.destacado ? "Probar gratis 14 días" : "Empezar"}
+                </a>
+              </div>
             </Reveal>
           ))}
         </div>
