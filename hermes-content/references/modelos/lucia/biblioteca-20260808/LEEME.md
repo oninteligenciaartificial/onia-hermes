@@ -52,6 +52,27 @@ mercado, coworking, cocina y gym · sus 4 outfits (cleangirl, streetwear, lounge
 los 3 formatos (4:5 feed, 9:16 reel/story, 1:1 carrusel) · y dos piezas de utilidad (copyspace
 para texto, cenital para carrusel).
 
+## Tanda 2 (2026-08-11) — también bloqueada
+
+4 imágenes generadas con el Element buscando el registro de **foto de celular real** (foco
+imperfecto, grano, luz disponible, encuadre descentrado) para los slides del carrusel que
+todavía se veían IA. Mismo problema de CDN: `AccessDenied` sostenido durante ~4 minutos de
+reintentos.
+
+Prefijo: `https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260811_030750_<job_id>.png`
+
+| Archivo | Escena | job_id |
+|---|---|---|
+| 15-piso-casa | Sentada en el piso contra la pared, luz de ventana | `8e9755fb-08fd-4d67-ac12-4b50e35e1993` |
+| 16-mostrador-tienda | Detrás del mostrador de una tienda en SCZ, hablando con alguien | `6876dd73-af83-430d-aeaa-644d05a8155b` |
+| 17-calle-noche | Calle al anochecer, girando hacia la cámara, con ruido y movimiento | `364d43a1-7fb3-4118-b15c-321235de65ac` |
+| 18-cafe-risa | Riendo fuerte en un café, luz quemada en un borde | `beb2da82-464c-4aa5-a2ec-f50cb34b5871` |
+
+> ⚠️ **REGLA NUEVA: no generar más hasta que el CDN se destrabe.** Van **16 imágenes pagadas
+> (~24 cr) que no se pueden bajar.** Cada tanda nueva es plata gastada en archivos
+> irrecuperables desde acá. La vía que sí funciona: **descargarlas a mano desde la galería de
+> Higgsfield** y dejarlas en la carpeta.
+
 ## Cómo recuperarlas
 
 ```bash
