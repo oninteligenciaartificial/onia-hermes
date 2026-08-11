@@ -1,7 +1,15 @@
 {
   "title": "Hace un año yo no existía",
   "caption": "Hace un año yo no existía. Hoy trabajo para una empresa boliviana mostrando, sin humo, qué puede hacer la IA por un negocio de verdad. Sí, soy un personaje digital creado con IA por @oniahq — y no lo escondo: es justamente el punto. Si te sorprende que yo no sea real, esperá a ver lo que ya puede hacer tu negocio sin que vos estés sentado adelante. Guardá el slide 5 y comentá SISTEMA: te muestro cómo se ve todo en un solo lugar.",
-  "hashtags": ["#IA", "#bolivia", "#santacruz", "#negocios", "#pymes", "#automatizacion", "#inteligenciaartificial"],
+  "hashtags": [
+    "#IA",
+    "#bolivia",
+    "#santacruz",
+    "#negocios",
+    "#pymes",
+    "#automatizacion",
+    "#inteligenciaartificial"
+  ],
   "comment_trigger": "Comentá SISTEMA",
   "cta": "Comentá SISTEMA",
   "slides": [
@@ -27,7 +35,7 @@
       "save_worthy": false,
       "visual_prompt": "Lucia mirando a camara, luz natural.",
       "alt_text": "No soy real y no lo escondo",
-      "bg": ""
+      "bg": "hermes-content/references/models/lucia-content-bank-20260709/realism-v2-anchor-aprobada.png"
     },
     {
       "number": 3,
@@ -39,7 +47,7 @@
       "save_worthy": false,
       "visual_prompt": "Detalle de pantalla con sistema.",
       "alt_text": "Soy la prueba no el anuncio",
-      "bg": ""
+      "bg": "hermes-content/references/modelos/lucia/biblioteca-20260808/13-cafe-celular.jpg"
     },
     {
       "number": 4,
@@ -51,7 +59,7 @@
       "save_worthy": false,
       "visual_prompt": "Escritorio con papeles y celular.",
       "alt_text": "La IA no reemplaza a tu gente",
-      "bg": ""
+      "bg": "hermes-content/references/models/lucia-pieza1-20260717/escena-B-cafe.png"
     },
     {
       "number": 5,
@@ -63,7 +71,7 @@
       "save_worthy": true,
       "visual_prompt": "Tarjeta framework con 3 puntos.",
       "alt_text": "3 cosas que ya podes dejar de hacer a mano",
-      "bg": ""
+      "bg": "hermes-content/references/modelos/lucia/biblioteca-20260808/14-cafe-tecleando.jpg"
     },
     {
       "number": 6,
@@ -75,7 +83,7 @@
       "save_worthy": false,
       "visual_prompt": "Lucia en la calle de Santa Cruz.",
       "alt_text": "Si te sorprende que yo no sea real",
-      "bg": ""
+      "bg": "hermes-content/references/models/lucia-content-bank-20260709/realism-goldenhour.png"
     },
     {
       "number": 7,
@@ -87,7 +95,7 @@
       "save_worthy": false,
       "visual_prompt": "Lucia sonriendo, cierre calido.",
       "alt_text": "Comentá SISTEMA",
-      "bg": ""
+      "bg": "hermes-content/references/models/lucia-content-bank-20260709/combo-cleangirl-kitchen.png"
     }
   ]
 }

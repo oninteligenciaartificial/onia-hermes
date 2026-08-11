@@ -81,7 +81,7 @@ const esc = (s) => String(s == null ? '' : s)
 const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'bright-retail'];
 
 function parseArgs(argv) {
-  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '' };
+  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', accent: '' };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--brief') a.brief = argv[++i];
@@ -90,6 +90,12 @@ function parseArgs(argv) {
     else if (k === '--bg') a.bg = argv[++i];
     else if (k === '--pack') a.pack = argv[++i];
     else if (k === '--object') a.object = argv[++i];
+    else if (k === '--accent') a.accent = argv[++i];
+  }
+  // --accent permite que una cuenta personal (una modelo) tenga SU color y no el
+  // verde de la marca Onia. Sin el flag, nada cambia.
+  if (a.accent && !/^#[0-9a-fA-F]{6}$/.test(a.accent)) {
+    throw new Error('--accent debe ser hex #RRGGBB, recibi: ' + a.accent);
   }
   if (!a.brief) throw new Error('Missing --brief <file.json>');
   if (!ACCOUNTS[a.account]) throw new Error('Unknown account: ' + a.account);
@@ -478,12 +484,16 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
   const pill = slide.pill
     ? `<div class="topbar"><span class="captop">${esc(slide.pill)}</span></div>` : '';
   const body = slide.body ? `<p class="ed-body">${emph(slide.body)}</p>` : '';
+  // Acento propio de la cuenta (una modelo no lleva el verde de la marca Onia).
+  const accentVar = (args && args.accent)
+    ? `:root, .slide { --onia-green: ${args.accent}; }` : '';
 
   return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Fraunces:ital,wght@1,500;1,600&family=Inter:wght@500;600&display=swap" rel="stylesheet">
 <style>
 ${tokens}
+${accentVar}
 * { margin:0; padding:0; box-sizing:border-box; }
 html,body { width:1080px; height:1350px; }
 .slide { position:relative; width:1080px; height:1350px; overflow:hidden;
