@@ -78,6 +78,68 @@ function displayNameOf(sender) {
 }
 
 /**
+ * EL TELÉFONO DEL PROSPECTO, que es con lo que un humano puede llamarlo.
+ *
+ * Hasta hoy el CRM guardaba `contact_ref` como contacto público, o sea el id de la conversación de
+ * Chatwoot: en el panel el contacto decía "2847" y desde ahí no se podía llamar a nadie.
+ * `contact_ref` NO se toca (es la identidad de la conversación, `conversationKey`); el teléfono
+ * viaja aparte.
+ *
+ * Verificado contra el fuente de Chatwoot 4.12.1 en el VPS: `phone_number` está en
+ * `Contact#webhook_data` (el `sender` de `message_created`) Y en `Contact#push_event_data` (el
+ * `sender` de los mensajes anidados en `conversation_created`), así que el mismo lector sirve para
+ * los dos eventos. Viene lleno en WhatsApp (contacto real: `+59171654992`) y vacío en el widget
+ * web y en el inbox de API, donde el contacto simplemente no dio teléfono. Vacío => null, y el
+ * lead queda exactamente como está hoy: NO se inventa un contacto.
+ */
+function phoneOf(sender) {
+  if (!sender || typeof sender !== "object") return null;
+  return String(sender.phone_number ?? "").trim() || null;
+}
+
+/**
+ * ATRIBUCIÓN: qué pieza / campaña trajo al prospecto.
+ *
+ * Qué expone Chatwoot DE VERDAD (leído del fuente 4.12.1 en el VPS, no de la doc):
+ *   · `conversation.custom_attributes` — libre. Lo llena quien crea la conversación (inbox de API)
+ *     o el widget con `setCustomAttributes`. Si trae `piece_key`/`source_campaign`, mandan: es un
+ *     dato puesto a mano, no adivinado.
+ *   · `conversation.additional_attributes.referer` — la URL de la landing, la escribe el widget web
+ *     (`app/controllers/api/v1/widget/base_controller.rb`). De ahí sale `?src=`, que es LA
+ *     convención de atribución de Onia (la landing ya la captura: `api/onia-center/leads/intake`)
+ *     y que la migración de `bot_conversations` documenta como "pieza que lo trajo".
+ *   · `utm_content` / `utm_campaign` de esa misma URL, para el tráfico que llega desde pauta.
+ *
+ * LO QUE CHATWOOT NO EXPONE (y por eso NO se inventa acá): el referral de un anuncio
+ * click-to-WhatsApp. Meta manda `messages[].referral` (`source_id`, `source_url`, `ctwa_clid`) en
+ * el webhook de la WABA, pero Chatwoot 4.12.1 lo DESCARTA — no hay una sola aparición de
+ * "referral" en su código. Para un lead de WhatsApp no hay atribución posible desde acá: hay que
+ * capturarla antes, en el webhook de Meta, o parchear el canal de Chatwoot.
+ *
+ * Todo ausente => null, que es exactamente el comportamiento de hoy.
+ */
+export function attributionFrom(conversation) {
+  const conv = conversation && typeof conversation === "object" ? conversation : {};
+  const custom = conv.custom_attributes && typeof conv.custom_attributes === "object" ? conv.custom_attributes : {};
+  const extra = conv.additional_attributes && typeof conv.additional_attributes === "object" ? conv.additional_attributes : {};
+
+  let query = null;
+  try {
+    // `referer` puede ser "", null o basura: URL() tira y el catch lo deja en null.
+    query = new URL(String(extra.referer || "")).searchParams;
+  } catch {
+    query = null;
+  }
+  const param = (name) => String(query?.get(name) ?? "").trim() || null;
+  const attr = (name) => String(custom[name] ?? "").trim() || null;
+
+  return {
+    pieceKey: attr("piece_key") || param("src") || param("utm_content"),
+    sourceCampaign: attr("source_campaign") || param("utm_campaign"),
+  };
+}
+
+/**
  * kind: text | voice | attachment — solo cuando NO hay texto y SI hay adjuntos (igual que Telegram).
  * El audio se busca en TODA la lista y no solo en el primero: un mensaje con una foto y una nota
  * de voz sigue siendo, para el guion, una nota de voz que hay que escuchar.
@@ -89,18 +151,24 @@ function kindOf(text, attachments) {
   return pickAudioAttachment(list) ? "voice" : "attachment";
 }
 
-function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso }) {
+function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation }) {
   const text = String(content || "").trim();
+  const atribucion = attributionFrom(conversation);
   return {
     skip: false,
     turn: {
       channel: "chatwoot",
+      // OJO: `contact_ref` es la IDENTIDAD de la conversación (de acá sale `conversationKey`).
+      // Cambiarlo rompe todas las conversaciones vivas. El teléfono va aparte, en `public_contact`.
       contact_ref: String(conversationId),
+      public_contact: phoneOf(sender),
       display_name: displayNameOf(sender),
       kind: kindOf(text, attachments),
       text,
       message_key: `chatwoot:${conversationId}:${messageId}`,
       received_at: createdAtIso || new Date().toISOString(),
+      piece_key: atribucion.pieceKey,
+      source_campaign: atribucion.sourceCampaign,
     },
     // Los adjuntos viajan en `meta` y NO en `turn`: el turno es lo que ve el motor (que es puro y
     // no baja archivos), y los adjuntos son materia prima del transporte para transcribir el audio.
@@ -127,6 +195,9 @@ function fromMessageCreated(payload) {
     attachments: payload.attachments,
     sender: payload.sender,
     createdAtIso: toIsoFlexible(payload.created_at),
+    // La atribución vive en la CONVERSACIÓN, no en el mensaje: `payload.additional_attributes` de
+    // este nivel es del mensaje (campaign_id / template_params de Chatwoot) y no sirve para esto.
+    conversation: payload.conversation,
   });
 }
 
@@ -147,8 +218,11 @@ function fromConversationCreated(payload) {
     messageId: first.id,
     content: first.content,
     attachments: first.attachments,
+    // El `sender` anidado es `Contact#push_event_data`, que también trae `phone_number`.
     sender: first.sender,
     createdAtIso: toIsoFlexible(first.created_at),
+    // En `conversation_created` el payload ES la conversación, así que se pasa entero.
+    conversation: payload,
   });
 }
 

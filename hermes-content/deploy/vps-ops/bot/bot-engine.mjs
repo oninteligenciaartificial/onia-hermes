@@ -66,6 +66,10 @@ export function createState(input = {}) {
     conversationKey: input.conversationKey || `${channel}:${contactRef}`,
     channel,
     contactRef,
+    // El contacto con el que un humano puede LLAMAR (telefono de WhatsApp). Distinto de
+    // `contactRef`, que es el id de la conversacion del canal y no sirve para contactar a nadie.
+    // Se persiste en `bot_conversations.raw`, no en columna: ver saveConversation().
+    publicContact: input.publicContact || null,
     displayName: input.displayName || null,
     botStage: input.botStage || "nuevo",
     pieceKey: input.pieceKey || null,
