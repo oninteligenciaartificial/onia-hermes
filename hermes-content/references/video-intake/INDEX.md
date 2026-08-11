@@ -19,9 +19,41 @@ sirven para cosas distintas: uno para entender, el otro para citar sin deformar.
 
 **Veredictos:** `SIRVE YA` · `MEJORA LO ACTUAL` · `FUTURO` · `HUMO`.
 
-➡️ **Lo que hay que hacer con esto vive en [PENDIENTES.md](PENDIENTES.md)** — un ítem por
-acción, con el prompt listo para abrir la sesión del carril que corresponda. Las fichas
-analizan; PENDIENTES es la cola de trabajo.
+➡️ **Lo que hay que hacer con esto vive en dos archivos.** Las fichas analizan; estos dos
+reparten el trabajo:
+
+- **[PROMPTS_POR_SESION.md](PROMPTS_POR_SESION.md)** — un prompt copy-paste por sesión
+  abierta (`chatbot`, `INFLUENCERS IA`, `onia-plattform`, `Carrito de compra`,
+  `Estructura de pagos`, `editor de videos`, `web-factory`…). **Empezar acá.**
+- **[PENDIENTES.md](PENDIENTES.md)** — la cola V-1..V-7 de la primera tanda, con el filtro
+  de "¿ayuda a vender o cobrar?".
+
+## Tanda 2026-08-11 — 20 fichas
+
+De 24 links: 16 procesados con Gemini nativo, 4 por el camino alternativo (audio + muestra
+de fotogramas) porque se agotó la cuota diaria del free tier, 6 eran carruseles de imágenes
+sin video y 1 era un link de mensajes directos.
+
+**9 de 20 salieron `HUMO`** y no se repartieron a ninguna sesión. La lista de descartes y su
+motivo está al final de [PROMPTS_POR_SESION.md](PROMPTS_POR_SESION.md).
+
+Lo que sí sirve, por orden de valor:
+
+| Ficha | Veredicto | Sesión |
+|---|---|---|
+| [Seedance: prompt por escenas](2026-08-11-seedance-prompt-por-escenas-timestamps.md) | SIRVE YA | INFLUENCERS IA |
+| [Chatbot y dato sensible](2026-08-11-chatbot-dato-sensible-ley-21719-chile.md) | SIRVE YA | chatbot |
+| [5 herramientas con Claude](2026-08-11-cinco-herramientas-contenido-claude.md) | SIRVE YA | pendiente (Apify) |
+| [Handy — dictado por voz](2026-08-11-handy-dictado-voz-alternativa-wispr-flow.md) | SIRVE YA | pendiente |
+| [32 plantillas HyperFrames](2026-08-11-hyperframes-32-plantillas-microanimacion.md) | MEJORA | editor de videos |
+| [Carrito flotante](2026-08-11-carrito-flotante-react-ecommerce.md) | MEJORA | Carrito de compra |
+| [Checkout tarjeta animada](2026-08-11-checkout-tarjeta-animada-3d.md) | MEJORA | Estructura de pagos |
+| [PostHog → agente de producto](2026-08-11-posthog-agentes-producto.md) | MEJORA | onia-plattform |
+| [Portafolio agrupado](2026-08-11-portafolio-emails-preventa-curso.md) | MEJORA | web-factory |
+| [Dropzone con progreso](2026-08-11-dropzone-progreso-clip-path.md) | FUTURO | Importación de productos |
+| [Web 3D scrollytelling](2026-08-11-web-3d-scrollytelling-united-carriers.md) | FUTURO | web-factory (techo) |
+
+## Tanda 2026-08-09 — 6 fichas
 
 ## Índice
 
