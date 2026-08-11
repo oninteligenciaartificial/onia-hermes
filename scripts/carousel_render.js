@@ -48,6 +48,7 @@ const ACCOUNTS = {
   arthur: { handle: '@arthur', name: 'Arthur', personal: true },
   sergio: { handle: '@sergio', name: 'Sergio', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
+  lucia: { handle: '@lucia.antelo.oficial', name: 'Lucía Antelo', personal: true },
 };
 
 // Brand kits para packs no-Onia. Cada marca define superficie, tinta, acentos
