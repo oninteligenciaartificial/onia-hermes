@@ -56,8 +56,8 @@ test('last slide omits continuation cue', () => {
   const html = slideHtml({ headline: 'CTA', body: 'comentá AUTO' }, 2, 3, 'onia', '');
   assert.ok(!html.includes('class="cue"'));
 });
-test('accounts configured (onia/arthur/sergio/nuvia)', () => {
-  assert.deepStrictEqual(Object.keys(ACCOUNTS).sort(), ['arthur', 'nuvia', 'onia', 'sergio']);
+test('accounts configured (onia/arthur/sergio/nuvia/lucia)', () => {
+  assert.deepStrictEqual(Object.keys(ACCOUNTS).sort(), ['arthur', 'lucia', 'nuvia', 'onia', 'sergio']);
 });
 
 // dark-product pack
@@ -89,7 +89,9 @@ test('editorial-photo uses photo bg, serif-italic accent, pill caption', () => {
   assert.ok(html.includes('sergio.jpg'));
   assert.ok(html.includes('Fraunces'));
   assert.ok(html.includes('<span class="g">Ads</span>'));
-  assert.ok(html.includes('class="cap"'));
+  // La pill de categoria vive arriba (patron del nicho ganador): topbar > captop.
+  assert.ok(html.includes('class="topbar"'));
+  assert.ok(html.includes('class="captop"'));
 });
 test('editorial-photo without bg still renders (ink fallback)', () => {
   const html = editorialPhotoHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});

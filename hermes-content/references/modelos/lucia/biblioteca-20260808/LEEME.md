@@ -3,16 +3,18 @@
 > Pedido de Sergio: *"usando la foto de perfil que quedó perfecta, creá más imágenes… que
 > tengamos una biblioteca de distintas imágenes para la página y después crear los videos"*.
 
-## ⚠️ Estado: generadas en Higgsfield, NO descargadas todavía
+## ✅ Estado: las 12 están en el repo (recuperadas el 2026-08-10)
 
-Las 12 imágenes **existen y están completas** en la cuenta de Higgsfield (se pueden ver en la
-galería). **No pudieron bajarse al repo**: el CDN de Higgsfield
-(`d8j0ntlcm91z4.cloudfront.net`) devuelve `AccessDenied` de forma persistente para estos
-objetos nuevos — 111 bytes de XML en vez del PNG. Se reintentó ~40 veces durante varios
-minutos; una sola vez respondió bien (6,6 MB) y después volvió a negar.
+Bajaron completas, 12/12, ~100 MB, firma PNG verificada en todas. Están acá al lado, con los
+nombres de la tabla de abajo.
 
-**No es un problema de la generación ni del prompt.** Abajo están todos los IDs para
-recuperarlas cuando el CDN se normalice, sin volver a gastar créditos.
+**Historia, por si vuelve a pasar:** durante el 08-08 el CDN de Higgsfield
+(`d8j0ntlcm91z4.cloudfront.net`) devolvió `AccessDenied` de forma persistente para estos
+objetos nuevos — 111 bytes de XML en vez del PNG, tras ~40 reintentos. **No era un problema de
+la generación ni del prompt: era propagación del CDN.** Dos días después el mismo `curl`, sin
+cambiar nada, devolvió los 12 archivos. Moraleja: ante `AccessDenied` en objetos recién
+generados, **esperar y reintentar; nunca regenerar** — regenerar habría costado otros ~18 cr
+por nada.
 
 **Costo ya gastado: ~18 créditos** (12 imágenes × ~1,5 cr con `nano_banana_2` + Element).
 
