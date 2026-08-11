@@ -197,6 +197,53 @@ actual. Queda como referencia de techo.
 
 ---
 
+## `web-factory` — segunda tarea: la capa de skills que falta
+
+Sale del [mapa de 42 skills](2026-08-11-mapa-42-skills-diseno-claude.md) (`SIRVE YA`). Es el
+único video de los 26 que ataca un problema **ya documentado por nosotros**: que los diseños
+salen genéricos.
+
+```text
+Sesión: web-factory. git branch --show-current primero.
+TAREA ÚNICA: cerrar la capa VISUAL de skills que falta, y medir si sirve.
+Instalar SOLO estas 5 (son las ausentes de la capa 1 del mapa de 42):
+    refactoring-ui · web-typography · microinteractions · ux-heuristics · top-design
+Después: rehacer UNA landing ya existente con ellas cargadas y comparar contra la versión
+actual, lado a lado.
+LISTO = la comparación hecha y una decisión escrita: se quedan o se desinstalan.
+NO HAGAS: NO instales las 18 que faltan de golpe. Más skills no es mejor diseño — es más
+contexto compitiendo entre sí. Las otras 13 se evalúan después, si estas 5 demuestran algo.
+VERIFICÁ de dónde sale cada colección y con qué licencia antes de instalar: esto corre en el
+entorno que toca código de clientes.
+Ya están instaladas (no las busques): ui-ux-pro-max, design-html, taste-design, frontend-design,
+canvas-design, brand-guidelines, theme-factory, image, video, cro, signup, onboarding, popups,
+ab-testing, social, copywriting, copy-editing, content-strategy, review, qa, codex,
+security-review, verification-loop, ship.
+```
+
+---
+
+## `CRM` / prospección — del ejército de 7 agentes
+
+Sale de [7 agentes de venta](2026-08-11-ejercito-7-agentes-ventas.md) (`MEJORA LO ACTUAL`).
+
+```text
+Sesión: la que lleve agentes/CRM. git branch --show-current primero.
+TAREA ÚNICA: usar los 7 roles como checklist contra el agente Vendedor que YA corre, y
+quedarse con lo que falta. Los 7 roles: Lead Finder, Researcher, Personalizer, Outreach,
+Follow-Up, Appointment Setter, Sales Manager.
+Hipótesis a confirmar o tirar: los eslabones débiles son Researcher (investigar el prospecto
+antes de escribirle) y Follow-Up (no dejar morir al lead que ya entró).
+LISTO = la tabla de 7 filas con "lo cubre / no lo cubre / es un estado, no un agente", y UNA
+sola pieza construida: la de mayor retorno.
+NO HAGAS: NO construyas outreach automático. Un agente que escribe y envía solo es spam con
+nuestra marca — el agente redacta, un humano aprueba, igual que la cola actual.
+NO crees siete agentes: varios de esos roles son un estado del work item, no una entidad.
+NO uses un Lead Finder de volumen: la regla es pocos prospectos buenos con señal, no listas.
+```
+
+---
+
 ## `Importación de productos`
 
 Sale de [dropzone con progreso](2026-08-11-dropzone-progreso-clip-path.md) (`FUTURO`).
