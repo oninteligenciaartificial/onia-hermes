@@ -51,6 +51,20 @@ const ENV_BASE_URL = () => process.env.CHATWOOT_BASE_URL || "https://onia-chatbo
 const ENV_ACCOUNT_ID = () => process.env.CHATWOOT_ACCOUNT_ID || "2";
 const ENV_TOKEN = () => process.env.CHATWOOT_API_TOKEN || process.env.CHATWOOT_TOKEN || "";
 
+/**
+ * El id del agente de Chatwoot con el que POSTEA el bot. Existe para una sola cosa: distinguir
+ * "esto lo escribio el bot" de "esto lo escribio Sergio".
+ *
+ * Antes era imposible: el bot posteaba con la MISMA cuenta que Sergio, asi que cuando el tomaba una
+ * conversacion el bot no se enteraba y le seguia hablando encima al prospecto en el mensaje
+ * siguiente — el peor papelon posible delante de un cliente.
+ *
+ * VACIO = comportamiento de antes (los salientes se ignoran y ya). Es el default a proposito: si
+ * esta variable falta o se escribe mal, el bot NO se auto-silencia. Equivocarse para el otro lado
+ * —callarse con todo el mundo— es peor que el problema que esto arregla.
+ */
+const ENV_BOT_AGENT_ID = () => String(process.env.CHATWOOT_BOT_AGENT_ID || "").trim();
+
 // ---------------------------------------------------------------------------
 // Helpers puros
 // ---------------------------------------------------------------------------
@@ -180,12 +194,56 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
   };
 }
 
+/**
+ * ¿Este mensaje SALIENTE lo escribio un humano? Entonces tomo la conversacion y el bot se calla.
+ *
+ * Las cuatro condiciones son todas necesarias, y cada una evita un modo de falla distinto:
+ *   1. hay `CHATWOOT_BOT_AGENT_ID` configurado — sin eso no se puede distinguir nada (ver arriba);
+ *   2. el remitente es un USUARIO de Chatwoot (`sender.type === "user"`), no un contacto ni un bot
+ *      de plataforma: un `sender` raro no puede silenciar al bot;
+ *   3. tiene id — sin id no se sabe quien fue, y ante la duda NO se silencia;
+ *   4. ese id NO es el del bot. Este es EL candado: sin el, la primera respuesta del propio bot lo
+ *      dejaria mudo para siempre en esa conversacion.
+ * Las notas privadas ya se descartaron antes: escribir una nota no es atender al prospecto.
+ *
+ * Devuelve un turno SIN texto: no hay nada que contestar, solo hay que anotar el traspaso. `author`
+ * dice "agent" para que la bitacora no mienta diciendo que lo escribio el contacto.
+ */
+function takeoverTurn(payload, conversationId, type) {
+  if (type !== "outgoing") return null;
+  const botAgentId = ENV_BOT_AGENT_ID();
+  if (!botAgentId) return null;
+  const sender = payload?.sender;
+  if (!sender || typeof sender !== "object") return null;
+  if (sender.type && String(sender.type).toLowerCase() !== "user") return null;
+  const senderId = sender.id === undefined || sender.id === null ? "" : String(sender.id);
+  if (!senderId || senderId === botAgentId) return null;
+
+  return {
+    skip: false,
+    turn: {
+      channel: "chatwoot",
+      contact_ref: String(conversationId),
+      kind: "text",
+      text: "",
+      author: "agent",
+      human_takeover: true,
+      message_key: `chatwoot:takeover:${conversationId}:${payload.id ?? "s/id"}`,
+      received_at: toIsoFlexible(payload.created_at) || new Date().toISOString(),
+    },
+    meta: { conversationId: String(conversationId), messageId: String(payload.id ?? ""), attachments: [], takeover: true },
+  };
+}
+
 function fromMessageCreated(payload) {
   const conversationId = payload?.conversation?.id ?? payload?.conversation_id ?? null;
   if (!conversationId) return { skip: true, reason: "sin_conversation_id" };
   if (payload.private === true) return { skip: true, reason: "nota_privada" };
   const type = normalizeMessageType(payload.message_type);
-  if (type !== "incoming") return { skip: true, reason: `mensaje_no_entrante:${type || "desconocido"}` };
+  if (type !== "incoming") {
+    const traspaso = takeoverTurn(payload, conversationId, type);
+    return traspaso || { skip: true, reason: `mensaje_no_entrante:${type || "desconocido"}` };
+  }
   const messageId = payload.id;
   if (!messageId) return { skip: true, reason: "sin_message_id" };
   return buildTurn({
