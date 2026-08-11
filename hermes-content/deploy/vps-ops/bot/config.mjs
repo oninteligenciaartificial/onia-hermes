@@ -211,6 +211,22 @@ export const SCRIPT = Object.freeze({
   M_SIAT_BODY:
     "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. El detalle exacto de tu caso lo ve {{humano}} en la demo.",
 
+  // M0 SIN HORARIOS — la bienvenida cuando no hay disponibilidad real que ofrecer.
+  // No es un caso raro: alcanza con que Cal.com no conteste O con que la agenda no tenga hueco en
+  // el rango (una semana llena, un feriado). Antes se mandaba M0 con el placeholder literal
+  // ("HORARIO A (pendiente de definir)") y encima el prospecto no podia elegirlo, asi que la
+  // conversacion moria en el primer mensaje — justo el mensaje que vende "un asistente que agenda
+  // solo". Aca no se inventa un horario: se lo atiende igual y lo coordina un humano.
+  M0_SIN_HORARIOS: [
+    "¡Hola! Te escribe {{bot}} — sí, un bot. Es justamente lo que hacemos: sistemas que atienden solos.",
+    "",
+    "{{producto}} es una plataforma por módulos para que un negocio trabaje adentro: agenda, cobros, clientes.",
+    "",
+    "Justo ahora no tengo horarios libres para ofrecerte, así que {{humano}} te coordina uno personalmente — te escribe él.",
+    "",
+    "Contame mientras: ¿a qué se dedica tu negocio?",
+  ].join("\n"),
+
   // "¿Que hacen?" / "¿que es Onia?". El marco es fijo; la LISTA sale de `config.productos`, que
   // la capa de conocimiento edita sin desplegar — es la unica forma de que un producto nuevo no
   // tarde un deploy en existir para el bot. Lo que NO se edita es cual esta listo (ver

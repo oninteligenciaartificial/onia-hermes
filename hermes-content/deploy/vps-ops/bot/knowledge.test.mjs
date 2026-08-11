@@ -42,6 +42,17 @@ const EJEMPLO = join(HERE, "knowledge.example.json");
 const T0 = "2026-07-27T14:05:00Z"; // lunes 10:05 en La Paz: dentro de horario
 const NOW_MS = Date.parse(T0);
 
+/**
+ * Horarios REALES. `DEFAULT_CONFIG` trae los placeholders ("HORARIO A (pendiente de definir)") y
+ * con eso el motor contesta —bien— la bienvenida SIN horarios. Los tests que miden el guion normal
+ * tienen que traer horarios de verdad, o estarian midiendo el camino de contingencia.
+ */
+const HORARIOS = Object.freeze([
+  Object.freeze({ key: "A", label: "jueves 15:00", startAt: "2026-07-30T19:00:00Z" }),
+  Object.freeze({ key: "B", label: "viernes 10:00", startAt: "2026-07-31T14:00:00Z" }),
+]);
+const conHorarios = (config) => createBotConfig({ slots: HORARIOS }, config);
+
 /** Un archivo minimo y valido. Cada test lo deforma para probar UNA cosa. */
 function valido(extra = {}) {
   return {
@@ -96,7 +107,7 @@ test("archivo AUSENTE: degrada a codigo, y la degradacion es la MISMA config (id
 
 test("archivo AUSENTE: el bot sigue contestando el guion completo, sin un solo {{hueco}}", () => {
   conArchivo(null, (path) => {
-    const config = withKnowledge(DEFAULT_CONFIG, { path, nowMs: NOW_MS });
+    const config = conHorarios(withKnowledge(DEFAULT_CONFIG, { path, nowMs: NOW_MS }));
     const result = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config });
     const texto = result.replies.map((reply) => reply.text).join("\n");
     assert.match(texto, /30 minutos por videollamada/, "el hecho sale del codigo, exactamente como hoy");
@@ -324,7 +335,7 @@ test("la capa editable no puede CREAR la contradiccion: si toca la duracion, va 
 });
 
 test("decidida en el JSON, la duracion alimenta el guion Y la reserva desde el mismo campo", () => {
-  const config = applyKnowledge(DEFAULT_CONFIG, valido({ demo: { duracionMinutos: 30, duracionFrase: "30 minutos" } }));
+  const config = conHorarios(applyKnowledge(DEFAULT_CONFIG, valido({ demo: { duracionMinutos: 30, duracionFrase: "30 minutos" } })));
   const result = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config });
   assert.match(result.replies[0].text, /30 minutos por videollamada/, "lo que el prospecto lee");
   assert.equal(config.demo.duracionMinutos, 30, "lo que run-turn.mjs le pasa a Cal.com");
@@ -446,6 +457,39 @@ test("parseKnowledge no tira nunca, ni con un JSON hostil", () => {
     assert.equal(result.data, null);
     assert.ok(result.error, `${raw} tendria que dar un motivo legible`);
   }
+});
+
+// ---------------------------------------------------------------------------
+// 5.bis SIN HORARIOS QUE OFRECER — la contingencia de Cal.com
+// ---------------------------------------------------------------------------
+// No hace falta que Cal.com se caiga: alcanza con que la agenda no tenga hueco en el rango. Antes,
+// en ese caso, el PRIMER mensaje que veia todo prospecto decia "HORARIO A (pendiente de definir)"
+// y encima no se podia elegir (detectSlotChoice descarta los `pending`): la conversacion moria ahi.
+
+test("sin horarios reales el bot NO inventa ni muestra el placeholder: saluda y deriva", () => {
+  // DEFAULT_CONFIG trae los placeholders — es exactamente el estado al que cae produccion si
+  // Cal.com no devuelve nada (run-turn.mjs → resolveConfig).
+  const result = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config: DEFAULT_CONFIG });
+  const texto = result.replies.map((reply) => reply.text).join("\n");
+
+  assert.ok(!/pendiente de definir/i.test(texto), "el placeholder NUNCA puede llegarle al prospecto");
+  assert.ok(!texto.includes("{{"), "ninguna variable sin resolver");
+  assert.match(texto, /coordina uno personalmente/, "se le dice la verdad: el horario lo pone un humano");
+  assert.match(texto, /a qué se dedica tu negocio/, "y no se pierde la calificacion");
+
+  assert.equal(result.nextState.botStage, "handoff_humano", "queda a cargo de un humano, no esperando una eleccion imposible");
+  assert.ok(result.notes.includes("sin_horarios_que_ofrecer"));
+  const tipos = result.sideEffects.map((effect) => effect.type);
+  assert.ok(tipos.includes("lead_upsert"), "el lead nace igual: el prospecto no se pierde");
+  assert.ok(tipos.includes("notify_sergio"), "y Sergio se entera de que tiene que proponer hora");
+});
+
+test("con horarios reales el guion normal no cambia ni una coma", () => {
+  const result = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config: conHorarios(DEFAULT_CONFIG) });
+  const texto = result.replies.map((reply) => reply.text).join("\n");
+  assert.match(texto, /jueves 15:00/);
+  assert.equal(result.nextState.botStage, "esperando_horario");
+  assert.ok(!result.notes.includes("sin_horarios_que_ofrecer"));
 });
 
 // ---------------------------------------------------------------------------
