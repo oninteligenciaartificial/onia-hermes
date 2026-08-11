@@ -1,0 +1,351 @@
+<!-- Patron: barra lateral de navegacion con submenus desplegables (uno solo abierto a la vez).
+     Referencia: https://www.instagram.com/p/DbEwGUkDGjd/ (el video NO da el codigo, lo gatea
+     detras de "comment Sidebar16": esto esta reconstruido mirando los fotogramas).
+
+     Assets NO reproducidos por licencia: el original usa Euclid Circular B / Poppins / SF Pro
+     y una foto de Vecteezy de fondo. Aca va la pila tipografica del sistema, los iconos son
+     SVG propios de trazo simple (el original usa Lucide) y el "paisaje" que le da algo que
+     desenfocar al vidrio esta hecho con gradientes CSS. Lo que se reconstruye es la
+     ESTRUCTURA y el MOVIMIENTO, no los assets.
+
+     El original es React con useState(openId) + useLayoutEffect midiendo la altura del
+     submenu con getBoundingClientRect. Aca no hace falta nada de eso:
+       - <details name="nav-onia"> = acordeon exclusivo NATIVO (abrir uno cierra el otro),
+         que es exactamente el setOpenId(prev => ...) del original, con cero JS;
+       - ::details-content + interpolate-size: allow-keywords anima la altura sin medirla.
+     El JS que queda (~30 lineas) es solo para aria-current, flechas del teclado y el cajon
+     movil.
+
+     La altura del submenu es layout-bound a proposito: el gesto de un acordeon ES el cambio
+     de alto, y falsearlo con transform obliga igual a reservar el espacio. Todo lo demas
+     (chevron, entrada de los items, cajon movil) anima solo transform y opacity. -->
+
+<div class="sb-escena" aria-hidden="true"></div>
+
+<!-- solo aparece en pantalla angosta: es el unico modo de volver a abrir el cajon -->
+<button class="sb-abrir" id="sb-abrir" type="button" aria-controls="sb" aria-expanded="false" aria-label="Abrir menu">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
+
+<aside class="sb" id="sb" data-abierto="false">
+  <header class="sb__top">
+    <span class="sb__logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l7.5 4.3v8.6L12 20.2 4.5 15.9V7.3z"/><path d="M12 12l7.5-4.3M12 12v8.2M12 12L4.5 7.7"/></svg>
+    </span>
+    <h1 class="sb__marca">Onia OS</h1>
+    <!-- el reel muestra un hamburguesa siempre visible, pero ahi no hace nada. Un boton que
+         no hace nada es peor que no tenerlo: aca existe solo donde tiene trabajo (cerrar). -->
+    <button class="sb__cerrar" id="sb-cerrar" type="button" aria-controls="sb" aria-label="Cerrar menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </header>
+
+  <nav class="nav" id="nav" aria-label="Principal">
+    <ul class="nav__lista">
+      <li>
+        <a class="nav__fila" href="#panel">
+          <svg class="nav__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5L12 4l8 6.5V19a1 1 0 01-1 1H5a1 1 0 01-1-1z"/></svg>
+          <span>Inicio</span>
+        </a>
+      </li>
+
+      <li>
+        <details name="nav-onia">
+          <!-- el <span> interno existe por accesibilidad: cambiarle el display al <summary>
+               le saca el rol de disclosure en Safari, asi que el flex vive un nivel adentro -->
+          <summary><span class="nav__fila">
+            <svg class="nav__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 10.2a1.5 1.5 0 001.5 1.2h7.9a1.5 1.5 0 001.5-1.1L20 7H6"/><circle cx="9.5" cy="19" r="1.3"/><circle cx="16.5" cy="19" r="1.3"/></svg>
+            <span>Productos</span>
+            <svg class="nav__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </span></summary>
+          <div class="nav__sub">
+            <ul>
+              <li><a class="nav__fila nav__fila--sub" href="#panel">Agentes</a></li>
+              <li><a class="nav__fila nav__fila--sub" href="#panel">Analitica</a></li>
+              <li><a class="nav__fila nav__fila--sub" href="#panel">Tableros</a></li>
+            </ul>
+          </div>
+        </details>
+      </li>
+
+      <li>
+        <details name="nav-onia" open>
+          <summary><span class="nav__fila">
+            <svg class="nav__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></svg>
+            <span>Agenda</span>
+            <svg class="nav__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </span></summary>
+          <div class="nav__sub">
+            <ul>
+              <li><a class="nav__fila nav__fila--sub" href="#panel">Generacion</a></li>
+              <li><a class="nav__fila nav__fila--sub" href="#panel">Gestion</a></li>
+              <li><a class="nav__fila nav__fila--sub" href="#panel" aria-current="page">Suspension</a></li>
+              <li><a class="nav__fila nav__fila--sub" href="#panel">Alertas</a></li>
+            </ul>
+          </div>
+        </details>
+      </li>
+
+      <li>
+        <details name="nav-onia">
+          <summary><span class="nav__fila">
+            <svg class="nav__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5a5.5 5.5 0 0111 0M16 5.6a3.2 3.2 0 010 5.4M18 14.6a5.5 5.5 0 012.5 4.9"/></svg>
+            <span>Personas</span>
+            <svg class="nav__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </span></summary>
+          <div class="nav__sub">
+            <ul>
+              <li><a class="nav__fila nav__fila--sub" href="#panel">Usuarios</a></li>
+              <li><a class="nav__fila nav__fila--sub" href="#panel">Contactos</a></li>
+            </ul>
+          </div>
+        </details>
+      </li>
+
+      <li>
+        <a class="nav__fila" href="#panel">
+          <svg class="nav__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 9a6 6 0 10-12 0c0 5-2 6.5-2 6.5h16S18 14 18 9M10.5 19a2 2 0 003 0"/></svg>
+          <span>Notificaciones</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav__fila" href="#panel">
+          <svg class="nav__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 018 0v3"/></svg>
+          <span>Cuenta</span>
+        </a>
+      </li>
+
+      <li class="nav__pie">
+        <a class="nav__fila" href="#panel">
+          <svg class="nav__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8l1.3 2.4 2.7-.4 1 2.5 2.4 1.3-.9 2.6.9 2.6-2.4 1.3-1 2.5-2.7-.4L12 21.2l-1.3-2.4-2.7.4-1-2.5L4.6 15l.9-2.6-.9-2.6L7 8.5l1-2.5 2.7.4z"/></svg>
+          <span>Ajustes</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<main class="sb-panel" id="panel" tabindex="-1">
+  <p class="sb-panel__eyebrow">Seccion activa</p>
+  <h2 class="sb-panel__titulo" id="sb-titulo">Suspension</h2>
+  <p class="sb-panel__txt">
+    Un solo submenu abierto a la vez, sin JS: lo da <code>&lt;details name&gt;</code>.
+    El item activo lleva <code>aria-current="page"</code> y el padre se marca solo con
+    <code>:has()</code>. Flechas arriba/abajo mueven el foco entre filas visibles; Tab
+    sigue funcionando igual.
+  </p>
+</main>
+
+<style>
+  .sb, .sb-panel, .sb-abrir {
+    --tinta-alta: rgb(255 255 255 / .95);
+    --tinta-media: rgb(255 255 255 / .62);
+    --vidrio: rgb(255 255 255 / .08);
+    --curva: cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  /* --- el "paisaje": reemplaza la foto de Vecteezy con puro CSS. Existe para que el
+         vidrio del sidebar tenga algo que desenfocar. --- */
+  .sb-escena {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    background:
+      radial-gradient(120% 85% at 76% 8%, #2e4149 0%, transparent 58%),
+      radial-gradient(95% 70% at 18% 88%, #060d10 0%, transparent 62%),
+      linear-gradient(165deg, #16242b, #05090b 72%);
+  }
+  .sb-escena::before, .sb-escena::after {
+    content: ""; position: absolute; inset: -25% -15%;
+  }
+  /* crestas topograficas: elipses concentricas finas, dos capas a distinta escala */
+  .sb-escena::before {
+    background: repeating-radial-gradient(ellipse 58% 26% at 62% 96%,
+      transparent 0 7px, rgb(163 214 226 / .085) 7px 8px);
+    transform: rotate(-7deg);
+  }
+  .sb-escena::after {
+    background: repeating-radial-gradient(ellipse 42% 20% at 88% 78%,
+      transparent 0 9px, rgb(163 214 226 / .06) 9px 10px);
+    transform: rotate(5deg) scale(1.1);
+  }
+
+  /* --- barra lateral --- */
+  .sb {
+    position: fixed; z-index: 3; top: 22px; left: 22px; bottom: 22px;
+    display: flex; flex-direction: column; gap: 8px;
+    width: 262px; padding: 0 15px;
+    border: 3px solid var(--vidrio); border-radius: 34px;
+    background: rgb(10 16 19 / .34);
+    backdrop-filter: blur(30px);
+    color: var(--tinta-alta);
+    /* habilita animar height: auto en ::details-content (se hereda a los hijos) */
+    interpolate-size: allow-keywords;
+    transition: transform .75s var(--curva);
+  }
+
+  .sb__top { display: flex; align-items: center; gap: 13px; height: 70px; padding: 10px 8px 0; }
+  .sb__logo { display: grid; place-items: center; width: 26px; height: 26px; flex: none; color: var(--tinta-alta); }
+  .sb__logo svg { width: 100%; height: 100%; }
+  .sb__marca { flex: 1; margin: 0; font-size: 17px; font-weight: 500; letter-spacing: .5px; }
+  .sb__cerrar {
+    display: none; place-items: center; flex: none;
+    width: 32px; height: 32px; border: 0; border-radius: 9px; cursor: pointer;
+    background: transparent; color: var(--tinta-alta);
+    transition: background-color .3s ease, transform .5s var(--curva);
+  }
+  .sb__cerrar:hover { background: rgb(255 255 255 / .1); }
+  .sb__cerrar svg { width: 19px; height: 19px; }
+
+  .nav { display: flex; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; border-top: 1px solid rgb(255 255 255 / .07); padding-top: 10px; }
+  .nav__lista { display: flex; flex: 1; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+  .nav__pie { margin-top: auto; padding-bottom: 12px; }
+
+  .nav__fila {
+    position: relative;
+    display: flex; align-items: center; gap: 16px;
+    height: 50px; padding: 0 14px; border: 0; border-radius: 8px;
+    background: transparent; color: var(--tinta-alta);
+    font: inherit; font-size: 15.5px; line-height: 1; text-decoration: none;
+    cursor: pointer;
+    transition: background-color .4s ease, color .4s ease;
+  }
+  .nav__fila > span { flex: 1; }
+  .nav__ico { width: 18px; height: 18px; flex: none; opacity: .9; }
+  .nav__chev { width: 17px; height: 17px; flex: none; opacity: .7; transition: transform .6s var(--curva); }
+
+  .nav__fila:hover { background: rgb(255 255 255 / .05); }
+  /* activo (aria-current) y padre desplegado comparten el mismo realce que en el reel */
+  .nav__fila[aria-current="page"],
+  details[open] > summary > .nav__fila,
+  details:has([aria-current="page"]) > summary > .nav__fila { background: rgb(255 255 255 / .1); }
+  /* el foco lo recibe el <summary>, pero el anillo se dibuja sobre la fila */
+  .nav__fila:focus-visible,
+  .nav summary:focus-visible > .nav__fila { outline: 2px solid rgb(120 210 230 / .9); outline-offset: -2px; }
+  .nav summary:focus-visible { outline: none; }
+
+  /* <details name> = acordeon exclusivo nativo. summary sin el triangulito del navegador.
+     Ojo: NO se le toca el display (queda list-item); cambiarselo le saca el rol de
+     disclosure en Safari. El flex vive en el <span class="nav__fila"> de adentro. */
+  .nav details { display: block; }
+  .nav summary { list-style: none; cursor: pointer; }
+  .nav summary::-webkit-details-marker { display: none; }
+  .nav details[open] > summary .nav__chev { transform: rotate(180deg); }
+
+  /* la unica animacion layout-bound del patron, y es la que el gesto exige: un acordeon
+     ES un cambio de alto. interpolate-size permite interpolar hasta height:auto sin medir
+     nada en JS; donde no haya soporte, el submenu simplemente aparece de golpe. */
+  .nav details::details-content {
+    height: 0; overflow: clip;
+    transition: height .7s var(--curva), content-visibility .7s allow-discrete;
+  }
+  .nav details[open]::details-content { height: auto; }
+
+  .nav__sub ul { display: grid; margin: 0; padding: 0; list-style: none; }
+  .nav__sub .nav__fila--sub { padding-left: 52px; font-size: 15px; color: var(--tinta-alta); }
+  /* el puntito del reel */
+  .nav__fila--sub::before {
+    content: ""; position: absolute; top: 50%; left: 24px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgb(255 255 255 / .35);
+    transform: translateY(-50%);
+    transition: transform .5s var(--curva), background-color .4s ease;
+  }
+  .nav__fila--sub[aria-current="page"]::before { background: rgb(255 255 255 / .95); transform: translateY(-50%) scale(1.5); }
+  /* entrada escalonada de los hijos: transform + opacity, nada mas */
+  .nav details[open] .nav__sub li { animation: sb-entra .55s var(--curva) backwards; }
+  .nav details[open] .nav__sub li:nth-child(2) { animation-delay: .06s; }
+  .nav details[open] .nav__sub li:nth-child(3) { animation-delay: .12s; }
+  .nav details[open] .nav__sub li:nth-child(4) { animation-delay: .18s; }
+  @keyframes sb-entra { from { opacity: 0; transform: translateX(-14px); } }
+
+  /* --- contenido al lado --- */
+  .sb-panel {
+    position: relative; z-index: 1;
+    max-width: 46ch; margin-left: 320px; padding: 64px 28px;
+    color: var(--tinta-alta);
+  }
+  .sb-panel:focus { outline: none; }
+  .sb-panel__eyebrow { margin: 0 0 6px; color: rgb(140 215 230 / .9); font-size: .72rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+  .sb-panel__titulo { margin: 0 0 14px; font-size: clamp(1.8rem, 1.2rem + 2vw, 2.8rem); font-weight: 500; letter-spacing: -0.02em; }
+  .sb-panel__txt { margin: 0; color: var(--tinta-media); line-height: 1.7; }
+  .sb-panel code { padding: 1px 6px; border-radius: 5px; background: rgb(255 255 255 / .09); font-size: .88em; }
+
+  /* --- cajon en pantalla angosta: transform puro --- */
+  .sb-abrir {
+    position: fixed; z-index: 4; top: 18px; left: 18px;
+    display: none; place-items: center;
+    width: 44px; height: 44px; border: 2px solid var(--vidrio); border-radius: 13px; cursor: pointer;
+    background: rgb(10 16 19 / .55); backdrop-filter: blur(14px); color: var(--tinta-alta);
+    transition: opacity .5s ease, transform .6s var(--curva);
+  }
+  .sb-abrir svg { width: 20px; height: 20px; }
+  .sb-abrir:focus-visible, .sb__cerrar:focus-visible { outline: 2px solid rgb(120 210 230 / .9); outline-offset: 2px; }
+
+  @media (max-width: 900px) {
+    .sb-abrir { display: grid; }
+    .sb__cerrar { display: grid; }
+    .sb { top: 14px; bottom: 14px; left: 14px; transform: translateX(calc(-100% - 20px)); }
+    .sb[data-abierto="true"] { transform: none; }
+    .sb[data-abierto="true"] ~ .sb-abrir { opacity: 0; transform: scale(.7); pointer-events: none; }
+    .sb-panel { margin-left: 0; padding: 84px 22px 40px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sb, .sb-abrir, .sb__cerrar, .nav__fila, .nav__chev, .nav__fila--sub::before { transition: none !important; }
+    /* content-visibility es discreta: con 0.01ms el submenu queda a medio camino.
+       Va transition: none y el acordeon abre/cierra seco. */
+    .nav details::details-content { transition: none !important; }
+    .nav details[open] .nav__sub li { animation: none !important; }
+  }
+</style>
+
+<script>
+  (() => {
+    const nav = document.querySelector('#nav');
+    const barra = document.querySelector('#sb');
+    const abrir = document.querySelector('#sb-abrir');
+    const titulo = document.querySelector('#sb-titulo');
+    const angosto = window.matchMedia('(max-width: 900px)');
+
+    // aria-current lo movemos a mano porque son enlaces de demo al mismo destino.
+    // El padre desplegable se marca solo, por CSS :has([aria-current="page"]).
+    nav.addEventListener('click', (e) => {
+      const a = e.target.closest('a.nav__fila');
+      if (!a) return;
+      nav.querySelector('[aria-current="page"]')?.removeAttribute('aria-current');
+      a.setAttribute('aria-current', 'page');
+      titulo.textContent = a.textContent.trim();
+      if (angosto.matches) cajon(false);
+    });
+
+    // flechas arriba/abajo entre filas visibles. Tab sigue haciendo lo suyo: esto suma,
+    // no reemplaza. Una fila dentro de un <details> cerrado no cuenta.
+    const filas = () => [...nav.querySelectorAll('a.nav__fila, summary')]
+      .filter((el) => {
+        const d = el.tagName === 'SUMMARY' ? null : el.closest('details');
+        return !d || d.open;
+      });
+
+    nav.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      const lista = filas();
+      const i = lista.indexOf(document.activeElement);
+      if (i === -1) return;
+      e.preventDefault();
+      lista[(i + (e.key === 'ArrowDown' ? 1 : lista.length - 1)) % lista.length].focus();
+    });
+
+    // cajon movil: un solo estado, dos botones (abrir afuera, cerrar adentro)
+    function cajon(v) {
+      barra.dataset.abierto = String(v);
+      abrir.setAttribute('aria-expanded', String(v));
+      (v ? barra.querySelector('#sb-cerrar') : abrir).focus();
+    }
+    abrir.addEventListener('click', () => cajon(true));
+    document.querySelector('#sb-cerrar').addEventListener('click', () => cajon(false));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && barra.dataset.abierto === 'true') cajon(false);
+    });
+  })();
+</script>
