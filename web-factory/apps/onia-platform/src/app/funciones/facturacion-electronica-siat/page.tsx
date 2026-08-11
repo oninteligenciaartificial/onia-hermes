@@ -108,7 +108,7 @@ export default function SiatPage() {
         </section>
 
         <section className="section section-tight">
-          <div className="container" style={{ maxWidth: "46rem" }}>
+          <div className="container prose">
             <h2 className="h3">
               Lo primero que tenés que saber: podés cumplir GRATIS.
             </h2>
@@ -150,7 +150,7 @@ export default function SiatPage() {
         </section>
 
         <section className="section section-tight">
-          <div className="container" style={{ maxWidth: "46rem" }}>
+          <div className="container prose">
             <h2 className="h3">
               Las preguntas que todos hacen
             </h2>

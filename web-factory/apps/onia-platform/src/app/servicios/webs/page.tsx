@@ -141,7 +141,7 @@ export default function WebsPage() {
         </section>
 
         <section className="section section-tight">
-          <div className="container" style={{ maxWidth: "52rem" }}>
+          <div className="container prose">
             <h2 className="h3">
               Después de publicarla: Cuidado Web
             </h2>
@@ -174,7 +174,7 @@ export default function WebsPage() {
         </section>
 
         <section className="section section-tight">
-          <div className="container" style={{ maxWidth: "52rem" }}>
+          <div className="container prose">
             <PedirWeb />
           </div>
         </section>

@@ -377,6 +377,21 @@ svg {
   margin-top: 1.1em;
 }
 
+/*
+ * Columna de lectura, PEGADA al borde izquierdo del contenedor.
+ *
+ * Se combina con `.container` (`class="container prose"`). Es una grilla de una
+ * sola columna a proposito: achicar el `max-width` del propio contenedor lo
+ * volvia a centrar, y entonces el texto de esa seccion arrancaba 145px mas
+ * adentro que el titulo de la pagina — el sintoma exacto de "cada seccion tiene
+ * un margen distinto". Asi el contenedor sigue midiendo lo mismo en toda la
+ * pagina y solo se limita el ANCHO DE LECTURA.
+ */
+.prose {
+  display: grid;
+  grid-template-columns: minmax(0, 46rem);
+}
+
 /* prosa dentro de una tarjeta o de un bloque: no compite con el lead */
 .copy {
   color: var(--ink-soft);
