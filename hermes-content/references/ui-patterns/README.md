@@ -30,7 +30,11 @@ El criterio corregido:
 - **Anotar la fuente** en un comentario arriba del archivo, con el link.
 - **Solo `transform` y `opacity`** salvo que el gesto exija otra cosa; si se anima algo
   layout-bound (como `width`), se deja dicho por qué.
-- **`prefers-reduced-motion` siempre.**
+- **`prefers-reduced-motion` siempre — y con `transition: none`, no con `0.01ms`.**
+  El truco de `transition-duration: 0.01ms !important` funciona para `transform`/`opacity`,
+  pero rompe las propiedades **discretas**: un `<dialog>` con transición de `display`/`overlay`
+  de 0,01 ms queda a medio camino (abierto pero con `opacity: 0`, o sea invisible). Si el
+  patrón toca propiedades discretas, va `transition: none`.
 - **Etiquetas de estado apiladas = un solo nombre accesible.** El truco de apilar los estados
   en la misma celda de grid y cruzar opacidades evita saltos de layout, pero deja TODAS las
   etiquetas en el DOM: el lector de pantalla lee "+ Agregar Agregado". Las etiquetas visuales
@@ -51,3 +55,5 @@ O desde Claude Code: `preview_start` con la config `ui-patterns` de `.claude/lau
 |---|---|---|
 | [upload-button](upload-button/) — pill de archivo → subiendo → completado | [reel](https://www.instagram.com/p/Dbx6AWGz_av/) | reconstruido, estados verificados en navegador |
 | [checkout-card](checkout-card/) — tarjeta que se escribe en vivo, flip 3D al CVC, viaje al centro al pagar | [reel](https://www.instagram.com/p/Db3CrouPbxz/) | reconstruido, estados verificados en navegador |
+| [floating-cart](floating-cart/) — botón flotante "Ver carrito" que aparece con el primer ítem + modal resumen (`<dialog>` nativo) | [reel](https://www.instagram.com/p/DbDjpLuTnKK/) | reconstruido, estados verificados en navegador |
+| [dropzone-progress](dropzone-progress/) — arrastrar archivos, la miniatura ES la barra de progreso (`@property` + `clip-path`) | [reel](https://www.instagram.com/p/Da0iDR4vl5M/) | reconstruido, estados verificados en navegador |
