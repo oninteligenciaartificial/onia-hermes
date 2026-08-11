@@ -162,7 +162,9 @@ export function buildLeadRow(payload, state) {
     business_type: q.industry || null,
     city: q.city || null,
     country: "Bolivia",
-    public_contact: state.contactRef || null,
+    // El TELEFONO si lo hay; si no, se cae al `contactRef` de siempre. Sin este fallback un lead
+    // del widget web (donde el contacto no da telefono) perderia hasta la referencia que tiene hoy.
+    public_contact: state.publicContact || state.contactRef || null,
     channel: CHANNEL_LABEL[state.channel] || "Simulador",
     source: `bot:${payload.pieceKey || state.pieceKey || state.sourceCampaign || DEFAULT_CONFIG.botKey}`,
     contact_permission: state.optOutAt ? "no_contact" : state.optInAt ? "approved" : "pending",
@@ -335,6 +337,7 @@ export function createStore(options = {}) {
         qualifyAsks: state.qualifyAsks || 0,
         outboundSeq: state.outboundSeq || 0,
         scheduledLabel: state.scheduledLabel || null,
+        publicContact: state.publicContact || null,
       },
     };
     const rows = await rest("saveConversation", `bot_conversations?conversation_key=${eq(state.conversationKey)}`, {
@@ -487,6 +490,9 @@ export function createStore(options = {}) {
       raw: merged,
     };
     if (row.pain_point) patch.pain_point = row.pain_point;
+    // Solo cuando hay TELEFONO de verdad. Sin este guard, un lead al que un humano ya le corrigio
+    // el contacto a mano quedaria pisado con el id de conversacion en cada turno siguiente.
+    if (state.publicContact) patch.public_contact = state.publicContact;
     const updated = await rest("upsertLead.patch", `leads?lead_key=${eq(row.lead_key)}`, {
       method: "PATCH",
       headers: { Prefer: "return=representation" },

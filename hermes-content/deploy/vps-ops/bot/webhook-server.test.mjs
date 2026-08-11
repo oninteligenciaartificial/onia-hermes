@@ -21,6 +21,7 @@ import { createHmac } from "node:crypto";
 import { once } from "node:events";
 
 import {
+  checkDatabaseHealth,
   createWebhookServer,
   getHealthStatus,
   getServerConfig,
@@ -117,16 +118,78 @@ test("matchWebhookPath acepta la ruta simple y la ruta con secreto, e ignora el 
   assert.equal(matchWebhookPath("/").match, false);
 });
 
-test("getHealthStatus grita cuando falta el secreto y NUNCA devuelve su valor", () => {
-  const malo = getHealthStatus({ allowUnsigned: false }, { enabled: false });
+/** /health ahora consulta la base; en los tests se inyecta para no salir a la red. */
+const DB_SANA = { checkDb: async () => ({ ok: true, latencyMs: 3 }) };
+const DB_CAIDA = { checkDb: async () => ({ ok: false, latencyMs: 2501, error: "sin respuesta en 3000 ms" }) };
+
+test("getHealthStatus grita cuando falta el secreto y NUNCA devuelve su valor", async () => {
+  const malo = await getHealthStatus({ allowUnsigned: false }, { enabled: false }, DB_SANA);
   assert.equal(malo.ok, false);
   assert.match(malo.auth.aviso, /SIN SECRETO/);
 
-  const bueno = getHealthStatus(CONFIG, { enabled: true, url: "https://x", secret: "y" });
+  const bueno = await getHealthStatus(CONFIG, { enabled: true, url: "https://x", secret: "y" }, DB_SANA);
   assert.equal(bueno.ok, true);
   assert.equal(bueno.auth.firma, true);
   assert.equal(bueno.auth.aviso, undefined);
   assert.ok(!JSON.stringify(bueno).includes(SECRET), "el secreto no se filtra por /health");
+});
+
+// ---------------------------------------------------------------------------
+// 0.b EL HUECO QUE COSTO CINCO DIAS: /health decia ok:true con la base inalcanzable
+// ---------------------------------------------------------------------------
+
+test("BASE CAIDA: /health dice ok:false y explica que la base no responde", async () => {
+  const salud = await getHealthStatus(CONFIG, { enabled: true, url: "https://x", secret: "y" }, DB_CAIDA);
+  assert.equal(salud.db.ok, false);
+  assert.match(salud.db.error, /sin respuesta/);
+  assert.equal(salud.auth.ok, true, "el problema NO es el secreto y el aviso tiene que distinguirlo");
+  assert.equal(salud.ok, false, "sin base el bot contesta pero no guarda nada: la alarma DEBE sonar");
+});
+
+test("checkDatabaseHealth: una lectura REAL, tolerante, y con la latencia a la vista", async () => {
+  const leidas = [];
+  const storeOk = {
+    warnings: [],
+    loadConversation: async (clave) => {
+      leidas.push(clave);
+      return { row: null, state: null };
+    },
+  };
+  const sano = await checkDatabaseHealth({ store: storeOk });
+  assert.equal(sano.ok, true);
+  assert.equal(typeof sano.latencyMs, "number");
+  assert.equal(leidas.length, 1, "tiene que PEGARLE a PostgREST: un chequeo indirecto no vio la caida de agosto");
+
+  // El store es tolerante por contrato: ante fallo devuelve null y apila el motivo en warnings.
+  const storeRoto = {
+    warnings: ["loadConversation: HTTP 500 upstream connect error"],
+    loadConversation: async () => null,
+  };
+  const roto = await checkDatabaseHealth({ store: storeRoto });
+  assert.equal(roto.ok, false);
+  assert.match(roto.error, /HTTP 500/);
+});
+
+test("BASE COLGADA: el chequeo corta solo y /health contesta igual (nunca se queda esperando)", async () => {
+  // Una lectura que NO resuelve nunca: es el caso real de un socket que queda abierto sin datos.
+  const storeMudo = { warnings: [], loadConversation: () => new Promise(() => {}) };
+  const inicio = Date.now();
+  const db = await checkDatabaseHealth({ store: storeMudo, timeoutMs: 40 });
+  assert.equal(db.ok, false);
+  assert.match(db.error, /sin respuesta/);
+  assert.ok(Date.now() - inicio < 3000, "el chequeo tiene que cortar por su reloj, no por el del socket");
+});
+
+test("si el chequeo de base EXPLOTA, /health responde igual (nunca tumba el proceso)", async () => {
+  const storeExplosivo = {
+    warnings: [],
+    loadConversation: async () => {
+      throw new Error("boom");
+    },
+  };
+  const db = await checkDatabaseHealth({ store: storeExplosivo });
+  assert.equal(db.ok, false);
+  assert.match(db.error, /boom/);
 });
 
 // ---------------------------------------------------------------------------
@@ -414,6 +477,11 @@ test("HTTP REAL: /health responde sin auth y firma invalida da 401 por la red", 
     assert.equal(estado.service, "onia-chatbot-webhook");
     assert.equal(estado.auth.firma, true);
     assert.ok(!JSON.stringify(estado).includes(SECRET));
+    // Sin credenciales de Supabase en el entorno de test, el chequeo real reporta la base caida:
+    // eso prueba el cableado completo por HTTP (handler -> getHealthStatus -> store).
+    assert.equal(estado.db.ok, false);
+    assert.match(estado.db.error, /credenciales/);
+    assert.equal(estado.ok, false, "el bot no puede reportarse sano si no puede guardar nada");
 
     const body = mensajeEntrante();
     const malo = await fetch(`http://127.0.0.1:${port}${WEBHOOK_PATH}`, {
