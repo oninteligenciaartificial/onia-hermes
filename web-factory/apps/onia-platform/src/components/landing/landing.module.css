@@ -10,11 +10,13 @@
  *  - Ritmo de tonalidades: claro · claro · VERDE HONDO · claro · TINTA · claro.
  *  - CTA = verde senal #00D26A con texto tinta #12100E (9,2:1).
  *
- * Por que un CSS module y no globals.css: /empezar, /terminos y /privacidad
- * comparten globals (.btn, .kicker, .container, escala .display). La landing
- * cambia esos valores; si se tocaran en globals se les cambiaria la cara a
- * paginas que en este carril NO se tocan. Aca todo queda hasheado y los tokens
- * nuevos viven en .page, que solo envuelve a la landing.
+ * Que vive aca y que no (correccion 2026-08-10, reclamo de Sergio "secciones
+ * inconsistentes"): la ESCALA tipografica, la PALETA, el ancho de `.container`,
+ * el aire de `.section` y el `--ease` son de TODO el sitio y viven en
+ * globals.css. Este modulo se queda solo con lo que es exclusivamente de la
+ * landing: el verde hondo del corte de ritmo, el sangrado del hero, el marco de
+ * producto, el carrusel y las tarjetas de precio. Duplicar tokens aca fue lo
+ * que hizo que el home y las subpaginas parecieran dos sitios.
  *
  * Los pisos moviles (--fs-micro-min / --fs-label-min) salen de globals.css y
  * se respetan con max() en cada tamano chico, igual que en el resto del sitio.
@@ -27,35 +29,17 @@
     0 4px 8px rgb(20 26 23 / 0.07),
     0 40px 80px -30px rgb(20 26 23 / 0.3);
 
-  /* a ancho NORMAL el mismo texto ocupa mucho mas: el techo del display baja
-     de 8,5rem a 6rem, que es el limite sano para un display no condensado */
-  --text-display: clamp(2.6rem, 0.6rem + 5.6vw, 6rem);
-  --text-hero: clamp(2.1rem, 1rem + 3.4vw, 3.9rem);
-  --text-h2: clamp(1.8rem, 1.2rem + 2vw, 2.8rem);
-  --text-h3: clamp(1.2rem, 1.05rem + 0.55vw, 1.5rem);
-
-  --font: var(--font-display-cnd);
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /*
+   * La escala tipografica, la paleta y el `--ease` YA NO se redefinen aca:
+   * subieron TAL CUAL a globals.css (:root) para que el sitio entero use UNA
+   * sola. Redefinirlas solo para la landing era la causa de que un h1 de
+   * subpagina saliera mas chico que un h2 del home y de que /precios se pusiera
+   * oscuro con el sistema en modo oscuro mientras el home seguia claro.
+   */
+  --font: var(--font-sans);
 
   /* mismo margen exterior que .container — para alinear lo que sangra */
   --gutter: max(calc(clamp(1.5rem, 6vw, 5rem) / 2), calc((100vw - 1180px) / 2));
-
-  /* la landing es clara siempre: el ritmo de tonalidades ES el diseno */
-  color-scheme: light;
-  --bg: #f9fbfa;
-  --bg-deep: #f3f5f4;
-  --surface: #ffffff;
-  --surface-dim: #f3f5f4;
-  --ink: #141a17;
-  --ink-soft: #424a46;
-  --ink-faint: #69716d;
-  --line: #d4d9d6;
-  --line-soft: #e2e5e3;
-  --accent: var(--verde-500);
-  --accent-strong: var(--verde-700);
-  --accent-ink: var(--verde-700);
-  --accent-soft: var(--verde-100);
-  --accent-glow: rgb(8 152 104 / 0.3);
 
   background: var(--bg);
   color: var(--ink);
@@ -104,9 +88,9 @@
   margin-inline: auto;
 }
 
-/* ritmo: las secciones NO comparten el mismo aire */
+/* mismo aire que `.section` de globals — un solo token, no dos clamps gemelos */
 .section {
-  padding-block: clamp(4.5rem, 3rem + 6vw, 9rem);
+  padding-block: var(--space-section);
 }
 
 .sectionAir {
@@ -772,13 +756,18 @@
 
 /* --------------------- Remate editorial (BleedWordmark) ------------------- */
 .wordmarkStrip {
-  color: var(--tinta);
   padding-top: clamp(2rem, 6vw, 5rem);
-  /* El componente ya recorta la mitad inferior con su margin negativo. */
+  /*
+   * El mismo margen lateral que el resto de la pagina: el wordmark ocupa todo
+   * el ancho util y se corta SOLO por abajo. Sin este gutter las letras tocan
+   * el borde del viewport y el remate se lee como un desborde, no como una
+   * decision.
+   */
+  padding-inline: var(--gutter);
+  /* El componente ya recorta la parte inferior con su margin negativo. */
 }
 
 .wordmark {
-  font-family: inherit;
   text-align: center;
 }
 
@@ -938,12 +927,17 @@
 
 /* ---------------- precios ---------------- */
 
+/*
+ * Las tres tarjetas miden LO MISMO. Antes el grid iba `align-items: start`, asi
+ * que cada tarjeta media lo que media su lista: Basico larguisimo y Full corto
+ * y flotando. Ahora estiran (`stretch`, el default) y la diferencia de largo se
+ * absorbe en el hueco de arriba del pie, no en la altura de la tarjeta.
+ */
 .plans {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(0.8rem, 1.6vw, 1.4rem);
   margin-top: 2.5rem;
-  align-items: start;
 }
 
 @media (max-width: 899px) {
@@ -957,8 +951,32 @@
   border: 1px solid var(--line-soft);
   border-radius: var(--radius);
   padding: clamp(1.3rem, 2.2vw, 1.9rem);
-  display: grid;
+  /* flex y no grid: el pie necesita `margin-top:auto` para anclarse abajo */
+  display: flex;
+  flex-direction: column;
   gap: 0.7rem;
+  transition:
+    transform 0.22s var(--ease),
+    box-shadow 0.22s var(--ease),
+    border-color 0.22s var(--ease);
+}
+
+.plan:hover {
+  transform: translateY(-3px);
+  border-color: var(--line);
+  box-shadow: var(--shadow-card);
+}
+
+.planFeat:hover {
+  box-shadow: var(--shadow-lift);
+}
+
+/* pie de la tarjeta: nota + boton, anclados al fondo en las tres */
+.planCta {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding-top: 1rem;
 }
 
 .planFeat {
@@ -1009,7 +1027,6 @@
 
 .plan .btn {
   width: 100%;
-  margin-top: 0.4rem;
 }
 
 .planFlag {
@@ -1020,14 +1037,14 @@
   background: var(--accent-soft);
   border-radius: 999px;
   padding: 0.25em 0.8em;
-  justify-self: start;
+  /* la tarjeta es flex: sin esto la pastilla se estira a todo el ancho */
+  align-self: flex-start;
 }
 
 .guarantee {
   display: flex;
   gap: 0.5rem;
   align-items: flex-start;
-  margin-top: 0.6rem;
   font-size: max(0.85rem, var(--fs-micro-min));
   color: var(--ink-faint);
   line-height: 1.4;
@@ -1052,7 +1069,7 @@
   background: var(--accent-soft);
   border-radius: 8px;
   padding: 0.35em 0.7em;
-  justify-self: start;
+  align-self: flex-start;
 }
 
 /* qué lleva cada plan: la lista explícita, con los números que el sistema aplica */
@@ -1444,7 +1461,7 @@
  * que solo puede usar tokens globales (--senal, --tinta, --bg, --line).
  */
 .mobar {
-  --font: var(--font-display-cnd);
+  --font: var(--font-sans);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   position: fixed;
   left: 0;

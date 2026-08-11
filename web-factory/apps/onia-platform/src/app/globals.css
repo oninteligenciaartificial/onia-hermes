@@ -6,7 +6,9 @@
  * ENCENDIDO (semantico:
  * solo marca lo que esta vivo/activo/aprobado, nunca decora). Neutros con
  * sesgo verdoso imperceptible — nunca #000 puro. Rojo suave = hueco/cancelado.
- * Display: Bricolage Grotesque · Body: DM Sans · Datos: Spline Sans Mono.
+ *
+ * Tipografia: DOS familias — Archivo para todo (display y texto) y Geist Mono
+ * solo para micro-etiquetas. Ver el bloque de tokens `--font-*` mas abajo.
  */
 
 :root {
@@ -68,13 +70,40 @@
     0 2px 4px oklch(25% 0.01 165 / 0.09),
     0 24px 56px -20px oklch(25% 0.025 165 / 0.26);
 
-  /* tipografia */
-  /* display = el titular grande condensado; vive por encima de hero */
-  --text-display: clamp(3.2rem, 0.4rem + 10vw, 8.5rem);
-  --text-hero: clamp(2.7rem, 1.1rem + 5.6vw, 5.4rem);
-  --text-h2: clamp(2.05rem, 1.3rem + 2.5vw, 3.3rem);
-  --text-h3: clamp(1.25rem, 1.05rem + 0.7vw, 1.6rem);
+  /*
+   * TIPOGRAFIA — UNA variable por ROL, y las tres apuntan a DOS familias.
+   *
+   * Los archivos se cargan en layout.tsx (`--font-archivo`, `--font-geist-mono`)
+   * y aca se les da el rol. Si manana cambia la familia de marca, se cambia en
+   * ESTOS tres renglones y no en los 12 lugares que declaran font-family.
+   *
+   * Regla dura (ONIA_MARCA_SISTEMA_20260726.md §3): Archivo para todo — la
+   * jerarquia sale del tamano y del eje `wdth`, no de sumar familias — y Geist
+   * Mono SOLO en micro-etiquetas <=12px MAYUSCULA. Nunca una quinta fuente.
+   * `--font-display-cnd` (el alias "condensado") se retiro: no habia tal cosa,
+   * era Archivo a ancho normal con otro nombre.
+   */
+  --font-display: var(--font-archivo);
+  --font-sans: var(--font-archivo);
+  --font-mono: var(--font-geist-mono);
+
+  /*
+   * ESCALA — UNA sola para TODO el sitio publico.
+   *
+   * Antes vivian dos: esta (Bricolage + DM Sans, titulares hasta 8,5rem) y la
+   * de la landing (Archivo a ancho normal, techo 6rem). Resultado: el h1 de
+   * /modulos/dental salia en otra familia y mas chico que un h2 del home, y el
+   * sitio se leia como paginas pegadas. La escala buena es la del mockup
+   * aprobado (2026-08-01) — asi que sube aca y la landing deja de redefinirla.
+   */
+  --text-display: clamp(2.6rem, 0.6rem + 5.6vw, 6rem);
+  --text-hero: clamp(2.1rem, 1rem + 3.4vw, 3.9rem);
+  --text-h2: clamp(1.8rem, 1.2rem + 2vw, 2.8rem);
+  --text-h3: clamp(1.2rem, 1.05rem + 0.55vw, 1.5rem);
   --text-body: clamp(1rem, 0.95rem + 0.2vw, 1.0925rem);
+
+  /* ease de la casa (mismo que usa la landing) */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
 
   /*
    * PISO DE LEGIBILIDAD EN MOVIL — regla del sistema, no un parche.
@@ -130,37 +159,15 @@
     0 26px 60px -20px oklch(0% 0 0 / 0.65);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #0C110F;
-    --bg-deep: #070B0A;
-    --surface: #141A18;
-    --surface-dim: #101513;
-    --ink: #ECEFED;
-    --ink-soft: #B3B9B5;
-    --ink-faint: #8D9490; /* 6.14:1 sobre --bg — AA OK */
-    --line: #28302D;
-    --line-soft: #1E2522;
-    /* encendido: en oscuro el verde sube de LUZ, no de saturacion */
-    --accent: var(--verde-400);
-    --accent-strong: var(--verde-300);
-    --accent-ink: var(--verde-300);
-    --accent-soft: var(--verde-900);
-    --accent-glow: rgb(77 189 140 / 0.25);
-    --ok: var(--verde-400);
-    --ok-soft: var(--verde-900);
-    --danger: oklch(69% 0.13 30);
-    --danger-soft: oklch(29.5% 0.045 30);
-    --wa: oklch(72% 0.14 155);
-    --shadow-card:
-      0 1px 2px oklch(0% 0 0 / 0.35),
-      0 16px 40px -16px oklch(0% 0 0 / 0.55);
-    --shadow-pop:
-      0 2px 4px oklch(0% 0 0 / 0.4),
-      0 26px 60px -20px oklch(0% 0 0 / 0.65);
-  }
-}
+/*
+ * El sitio publico es CLARO siempre — el ritmo de tonalidades (papel · verde
+ * hondo · tinta) ES el diseño, y la landing ya lo forzaba con
+ * `color-scheme: light`. Mientras eso valia solo para el home, un visitante
+ * con el celular en modo oscuro veia el home blanco y /precios negro: dos
+ * sitios. La paleta oscura se conserva completa arriba y se enciende sola si
+ * algun dia existe un toggle (`data-theme="dark"`); lo que se saco es el
+ * seguimiento AUTOMATICO de `prefers-color-scheme`.
+ */
 
 /* piso de legibilidad: solo en telefono (ver bloque en :root) */
 @media (max-width: 599px) {
@@ -193,6 +200,11 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
+  /* Archivo a ancho normal, peso 450: el corte de texto del mockup aprobado.
+     El eje `wdth` se declara explicito para que ningun ancestro lo herede
+     comprimido. */
+  font-weight: 450;
+  font-stretch: 100%;
   font-size: var(--text-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -210,38 +222,41 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display), var(--font-sans), sans-serif;
-  font-weight: 640;
+  /* 600 y no 640/800: en el benchmark de 44 marcas B2B ninguna premium pasa de
+     600 — el peso ES posicionamiento (ONIA_MARCA_SISTEMA_20260726.md §1.2).
+     Mismos valores que ya usaba la landing aprobada, ahora para todo el sitio. */
+  font-weight: 600;
+  font-stretch: 100%;
   letter-spacing: -0.02em;
-  line-height: 1.06;
+  line-height: 1;
   margin: 0;
   text-wrap: balance;
 }
 
 /*
- * .display — el titular GRANDE condensado.
+ * .display — el titular GRANDE.
  *
- * Grotesca muy pesada con el eje de ancho comprimido: mete mas palabras por
- * linea a un tamano que de otro modo no entraria, y al apilarse forma un
- * bloque solido. Recurso PROPIO de Onia. (Corrección 2026-08-01: NO es el
- * sistema de Fanvue — ellos usan AG Next MEDIUM a ancho normal, lh 1.0, una
- * sola familia para todo; ver docs/TIPOGRAFIA_SISTEMA_20260727.md §2.)
+ * Archivo a ancho NORMAL (wdth 100), peso 650. Ya NO es condensado: el
+ * 800/76% anterior era otra cara de la marca — Sergio lo rechazo al verlo
+ * ("la tipografia no es esa") y el mockup aprobado 2026-08-01 lo fijo a ancho
+ * normal. Es exactamente el corte con el que la landing ya venia, subido aca
+ * para que /nosotros y /modulos/dental no titulen distinto que el home.
  *
  * REGLAS DE USO — sin esto se rompe:
  *  - UNO por pantalla. Si hay dos, ninguno es grande.
- *  - Solo de --text-hero para arriba. Condensado a tamano chico no se lee
- *    "editorial", se lee apretado.
+ *  - Solo de --text-hero para arriba.
  *  - Maximo 4-5 palabras. Es un gesto, no un parrafo.
- *  - line-height por debajo de 1: las lineas se tocan y forman el bloque.
+ *  - line-height 1: las lineas se tocan y forman un bloque solido.
  *
- * Sistema completo y de donde sale: docs/TIPOGRAFIA_SISTEMA_20260727.md
+ * Sistema completo: docs/ONIA_MARCA_SISTEMA_20260726.md §3.
  */
 .display {
-  font-family: var(--font-display-cnd), var(--font-display), sans-serif;
+  font-family: var(--font-display), sans-serif;
   font-size: var(--text-display);
-  font-weight: 800;
-  font-stretch: 76%;
-  letter-spacing: -0.015em;
-  line-height: 0.92;
+  font-weight: 650;
+  font-stretch: 100%;
+  letter-spacing: -0.02em;
+  line-height: 1;
   text-wrap: balance;
 }
 
@@ -278,13 +293,37 @@ svg {
 
 /* ---------- utilidades de la casa ---------- */
 
+/* MISMO ancho y MISMO margen exterior que la landing: si difieren, dos paginas
+   seguidas arrancan el texto en columnas distintas y se nota al navegar. */
 .container {
-  width: min(1180px, 100% - clamp(2rem, 6vw, 5rem));
+  width: min(1180px, 100% - clamp(1.5rem, 6vw, 5rem));
   margin-inline: auto;
 }
 
 .section {
   padding-block: var(--space-section);
+}
+
+/*
+ * RITMO VERTICAL — una sola regla para todo el sitio.
+ *
+ * `.section` es el aire completo entre bloques. Cuando dos secciones son el
+ * MISMO tema (intro + su contenido) se encadenan con `.section-tight`, que
+ * mata el padding de arriba. Antes eso se hacia con `style={{paddingTop:0}}`
+ * pagina por pagina y cada una elegia distinto.
+ */
+.section-tight {
+  padding-top: 0;
+}
+
+/*
+ * TRATAMIENTO DE FONDOS — con criterio, no alternando porque si.
+ * Papel (--bg) por defecto. `.section-deep` es el UNICO corte de tono de una
+ * subpagina y se reserva para el bloque de cierre (el CTA final), igual que la
+ * landing reserva el verde hondo para modulos y la tinta para honestidad.
+ */
+.section-deep {
+  background: var(--bg-deep);
 }
 
 /* kicker: etiqueta mono con el punto de "encendido" — motivo recurrente */
@@ -309,16 +348,96 @@ svg {
   box-shadow: 0 0 0 4px var(--accent-glow);
 }
 
+/*
+ * TITULOS — dos tamaños y ni uno mas.
+ *
+ * `.h2` = titulo de pagina o de seccion. Mismo cuerpo que los titulos de
+ * seccion del home (`--text-hero`), asi que un h1 de subpagina ya no sale mas
+ * chico que un h2 del home.
+ * `.h3` = titulo de bloque dentro de una seccion. Reemplaza a los
+ * `style={{fontSize:"1.6rem"}}` / `"1.35rem"` que cada pagina elegia a mano.
+ */
 .h2 {
-  font-size: var(--text-h2);
-  margin-top: 0.55em;
-  max-width: 21ch;
+  font-size: var(--text-hero);
+  margin-top: 0.5rem;
+  max-width: 20ch;
 }
 
+.h3 {
+  font-size: var(--text-h3);
+  max-width: 28ch;
+}
+
+/* parrafo de entrada de una seccion */
 .lead {
   color: var(--ink-soft);
-  max-width: 58ch;
+  max-width: 46ch;
+  font-size: clamp(1.05rem, 1rem + 0.5vw, 1.35rem);
+  line-height: 1.5;
   margin-top: 1.1em;
+}
+
+/* prosa dentro de una tarjeta o de un bloque: no compite con el lead */
+.copy {
+  color: var(--ink-soft);
+  font-size: max(0.95rem, var(--fs-micro-min));
+  line-height: 1.55;
+  max-width: 60ch;
+  margin-top: 0.4rem;
+}
+
+/*
+ * TARJETAS — el mismo objeto en todo el sitio (subpaginas y bloques sueltos).
+ * Estirar a la misma altura es del grid, no de la tarjeta: por eso `stretch`
+ * arriba y `margin-top:auto` en lo que va anclado al pie.
+ */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: clamp(0.8rem, 1.6vw, 1.4rem);
+  align-items: stretch;
+  margin-top: clamp(1.8rem, 3.5vw, 2.8rem);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: clamp(1.2rem, 2.2vw, 1.7rem);
+  transition:
+    transform 0.22s var(--ease),
+    box-shadow 0.22s var(--ease),
+    border-color 0.22s var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--line);
+  box-shadow: var(--shadow-card);
+}
+
+.card .copy {
+  margin-top: 0.5rem;
+}
+
+/* numero de paso: el mismo gesto que los 01/02/03 del home */
+.card-num {
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--line);
+  letter-spacing: -0.02em;
+}
+
+/* fila de acciones al cierre de un bloque */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
 }
 
 /* botones — min-height 44px: es el minimo de area tactil y esta pagina se
@@ -338,6 +457,23 @@ svg {
   text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
+  /* el CTA de la casa: verde senal sobre tinta (9,2:1). Sin esto, un
+     `class="btn"` pelado salia transparente y cada pagina se pintaba el verde
+     con un style inline — de ahi que unas se vieran encendidas y otras no. */
+  background: var(--senal);
+  color: var(--tinta);
+  transition:
+    transform 0.18s var(--ease),
+    background-color 0.18s var(--ease),
+    border-color 0.18s var(--ease);
+}
+
+.btn:hover {
+  background: #00be5f;
+}
+
+.btn:active {
+  transform: translateY(1px);
 }
 
 .btn-wa {
@@ -360,7 +496,8 @@ svg {
 }
 
 .btn-ghost:hover {
-  border-color: var(--ink-faint);
+  border-color: var(--ink);
+  background: var(--surface);
 }
 
 .btn-sm {
@@ -416,4 +553,16 @@ svg {
 :focus-visible {
   outline: 2px solid var(--accent-strong);
   outline-offset: 3px;
+}
+
+/* nadie que pidio menos movimiento recibe hover que se desplaza */
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .card {
+    transition: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
 }

@@ -1,49 +1,37 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Archivo, Bricolage_Grotesque, DM_Sans, Spline_Sans_Mono } from "next/font/google";
+import { Archivo, Geist_Mono } from "next/font/google";
 import { MotionProvider } from "@/motion";
 import "./globals.css";
 
 /*
- * preload:false en las tres familias que NO usa la home. Desde el porte del
- * mockup, la landing (y su cromo: header y pie) es UNA sola familia, Archivo.
- * Bricolage, DM Sans y el mono siguen vivos para /empezar y las paginas
- * legales — pero precargarlos en la home costaba cuatro fuentes en el camino
- * del LCP para usar una.
- */
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-  preload: false,
-});
-
-/**
- * Titular grande condensado. Variable con eje de ancho (wdth 62-125), asi que
- * el condensed pesado sale del mismo archivo: cero peso extra por corte.
- * Sustituto libre (OFL) del genero Akzidenz-Grotesk Next. OJO: el look actual
- * de Fanvue es AG Next MEDIUM a ancho NORMAL (wdth 100, weight 500, lh 1.0),
- * no el condensado. Sistema: web-factory/docs/TIPOGRAFIA_SISTEMA_20260727.md
-
+ * DOS familias en todo el sitio, ni una mas
+ * (web-factory/docs/ONIA_MARCA_SISTEMA_20260726.md §3 "Tipografia").
+ *
+ * Antes eran CUATRO — Archivo en la landing y en el cromo, pero Bricolage +
+ * DM Sans + Spline Mono en /empezar, /nosotros, /precios, legales y servicios.
+ * El resultado era el que vio Sergio: la misma web con dos caras segun la
+ * seccion. Las tres se retiran; queda:
+ *
+ *  - Archivo variable para TODO. La jerarquia sale del TAMANO y del eje `wdth`,
+ *    nunca de sumar familias ni de pesos gordos (el sistema no pasa de 650).
+ *    Es la misma letra con la que se cortaron los SVG del wordmark
+ *    (wght 560 / wdth 96): logo y pagina son la misma tipografia.
+ *  - Geist Mono solo en micro-etiquetas <=12px MAYUSCULA con tracking abierto.
+ *
+ * Los ROLES (display / sans / mono) viven como tokens en globals.css; aca solo
+ * se cargan los archivos.
  */
 const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
-  variable: "--font-display-cnd",
+  variable: "--font-archivo",
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-  preload: false,
-});
-
-const splineMono = Spline_Sans_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-mono",
+  variable: "--font-geist-mono",
   display: "swap",
   preload: false,
 });
@@ -88,7 +76,7 @@ export default function RootLayout({
     <html
       lang="es"
       suppressHydrationWarning
-      className={`${bricolage.variable} ${archivo.variable} ${dmSans.variable} ${splineMono.variable}`}
+      className={`${archivo.variable} ${geistMono.variable}`}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
