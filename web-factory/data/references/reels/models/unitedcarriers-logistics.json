@@ -1,0 +1,165 @@
+{
+  "id": "unitedcarriers-logistics",
+  "sourceReel": "video-intake-20260811-Db0yxc5xnpD",
+  "name": "United Carriers",
+  "siteType": "logistics-transport",
+  "sourceUrl": "https://www.instagram.com/p/Db0yxc5xnpD/",
+  "summary": "Sitio de logistica y transporte de carga donde el scroll mueve una escena 3D que representa la cadena logistica: el visitante 'sigue' la carga desde el deposito hasta la entrega. Alcanzar por este modelo cuando el cliente vende un PROCESO invisible (transporte, importacion, instalacion) y hay que hacerlo visible.",
+  "designTokens": {
+    "palette": [
+      { "role": "bg", "hex": "#0e1116", "note": "fondo oscuro que hace flotar la escena 3D" },
+      { "role": "surface", "hex": "#171c24", "note": "tarjetas y bandas de contenido" },
+      { "role": "accent", "hex": "#3d7dff", "note": "azul de trazo y CTA; color de 'ruta'" },
+      { "role": "text", "hex": "#eef1f6", "note": "blanco frio" },
+      { "role": "detail", "hex": "#8b95a5", "note": "metadatos y ejes" }
+    ],
+    "typography": {
+      "display": "grotesk condensada",
+      "body": "sans limpia",
+      "treatment": "tracking ajustado, mayusculas cortas en etiquetas, numeros grandes"
+    },
+    "radius": "rounded",
+    "density": "balanced",
+    "motionLevel": 5
+  },
+  "sections": [
+    {
+      "order": 0,
+      "job": "hero",
+      "block": "scroll-story-hero",
+      "layout": "full-bleed",
+      "content": ["headline", "sub", "cta-primary", "media-3d"],
+      "motion": {
+        "entrance": "la escena 3D entra con un leve orbit y el titular sube por lineas (y 30 -> 0)",
+        "trigger": "on-load",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 1.0,
+        "staggerSec": 0.1,
+        "scrollLinked": "la camara de la escena avanza con el scroll: el progreso del scroll ES el avance del envio",
+        "hover": "",
+        "reducedMotion": "render del estado final: una imagen estatica de la escena, titular y CTA visibles, sin orbit ni scroll-link"
+      },
+      "notes": "El gancho no es el copy, es que el proceso se ve moverse. Sin 3D, la misma idea se logra con una secuencia de imagenes con scrub."
+    },
+    {
+      "order": 1,
+      "job": "process",
+      "block": "scroll-story",
+      "layout": "pinned",
+      "content": ["step-label", "step-copy", "media-3d"],
+      "motion": {
+        "entrance": "cada paso entra con fade + rise mientras la escena rota hacia el siguiente nodo",
+        "trigger": "scroll-linked",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.8,
+        "staggerSec": 0.08,
+        "scrollLinked": "seccion pineada: el scroll avanza la etapa (deposito -> ruta -> entrega) sin cambiar de pantalla",
+        "hover": "",
+        "reducedMotion": "las etapas se apilan como lista vertical legible, sin pin ni scrub"
+      },
+      "notes": "Es el corazon del modelo: convierte 'hacemos logistica' en un recorrido que el visitante controla."
+    },
+    {
+      "order": 2,
+      "job": "offer",
+      "block": "benefit-strip",
+      "layout": "grid",
+      "content": ["icon", "title", "copy"],
+      "motion": {
+        "entrance": "stagger fade-up de las tarjetas",
+        "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.6,
+        "staggerSec": 0.08,
+        "scrollLinked": "",
+        "hover": "elevacion sutil y el icono adelanta 2px",
+        "reducedMotion": "estatico y visible"
+      },
+      "notes": "Los servicios bajan del espectaculo a lo concreto: que se transporta, con que cobertura."
+    },
+    {
+      "order": 3,
+      "job": "proof",
+      "block": "stat-strip",
+      "layout": "grid",
+      "content": ["number", "label"],
+      "motion": {
+        "entrance": "count-up al entrar en viewport",
+        "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 1.2,
+        "staggerSec": 0.1,
+        "scrollLinked": "",
+        "hover": "",
+        "reducedMotion": "el numero final directo, sin conteo"
+      },
+      "notes": "SOLO con numeros reales del cliente. Sin datos verificables, esta seccion se elimina, no se inventa."
+    },
+    {
+      "order": 4,
+      "job": "conversion",
+      "block": "inline-quote-form",
+      "layout": "split",
+      "content": ["heading", "form", "contacto-directo"],
+      "motion": {
+        "entrance": "fade + rise del formulario",
+        "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.6,
+        "staggerSec": 0,
+        "scrollLinked": "",
+        "hover": "",
+        "reducedMotion": "estatico"
+      },
+      "notes": "Cotizacion inline: en logistica el lead pide origen, destino, tipo de carga y volumen."
+    },
+    {
+      "order": 5,
+      "job": "footer",
+      "block": "footer-brand",
+      "layout": "grid",
+      "content": ["logo", "nav", "contacto", "legal"],
+      "motion": {
+        "entrance": "none",
+        "trigger": "none",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0,
+        "staggerSec": 0,
+        "scrollLinked": "",
+        "hover": "subrayado que crece desde la izquierda",
+        "reducedMotion": "estatico"
+      },
+      "notes": ""
+    }
+  ],
+  "components": ["scroll-story-hero", "scroll-story", "benefit-strip", "stat-strip", "inline-quote-form", "footer-brand"],
+  "interactions": [
+    {
+      "pattern": "Escena 3D con camara atada al progreso de scroll (el scroll avanza el envio)",
+      "reducedMotionFallback": "imagen estatica de cada etapa, apiladas como lista"
+    },
+    {
+      "pattern": "Seccion pineada que cambia de etapa sin cambiar de pantalla",
+      "reducedMotionFallback": "sin pin: las etapas fluyen como secciones normales"
+    },
+    {
+      "pattern": "Count-up de metricas al entrar en viewport",
+      "reducedMotionFallback": "valor final directo"
+    }
+  ],
+  "buildWithOnia": [
+    "ANTES de proponerlo: este modelo choca con el presupuesto de 150 kb de JS por landing. Si no hay margen, se construye la version 2D con scrub de secuencia de imagenes, que da el 80% del efecto por una fraccion del peso.",
+    "Si va 3D: cargar el motor con import dinamico, solo tras el primer viewport, y nunca en el critical path.",
+    "El pin y el scrub con la libreria de scroll ya elegida en MOTION_PATTERN_BANK (P3 sticky scene con scrub, P14 pin real).",
+    "Reemplazar la paleta por tokens ONIA del cliente; el azul de 'ruta' es un rol (accent), no un color literal.",
+    "reduced-motion obligatorio: sin pin, sin scrub, sin count-up.",
+    "Medir CWV antes de mergear: si LCP pasa 2.5 s, se degrada a la version 2D."
+  ],
+  "assetsNeeded": [
+    "Fotos o video reales del deposito, la flota y la operacion del cliente",
+    "Cobertura geografica real (rutas, ciudades)",
+    "Metricas verificables (envios, tiempos, cobertura). Sin fuente, la seccion de proof se elimina"
+  ],
+  "bestFor": ["logistica", "transporte", "importadora", "distribucion", "instalacion", "cualquier rubro que venda un proceso invisible"],
+  "confidence": "medium"
+}

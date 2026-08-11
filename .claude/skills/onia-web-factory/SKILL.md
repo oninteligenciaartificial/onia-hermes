@@ -32,8 +32,13 @@ Reglas de motion que salieron de reconstruirlos, y que aplican a TODA web nueva:
 - `prefers-reduced-motion: reduce` siempre.
 - Casi nada necesita librería: los originales usan framer-motion y salen igual en CSS puro.
 
-Corpus completo de lo aprendido sobre webs (con qué sirve, qué es techo y qué es humo):
-`hermes-content/references/ui-patterns/APRENDIZAJE_WEBS.md`.
+**Dónde vive cada nivel** (no armar estructuras paralelas):
+- Web entera vista en un reel → **learned model** en `web-factory/data/references/reels/models/`,
+  catálogo `web-factory/docs/WEB_FACTORY_LEARNED_MODELS.md`. Proceso ya escrito:
+  `web-factory/REELS_INTELLIGENCE_RUNBOOK.md` + `harvester/reels/{ACQUIRE,ANALYZE}.md`.
+- Componente suelto → reconstruido en `ui-patterns/` (= lista de compras de `packages/blocks`).
+- Patrón de movimiento → `web-factory/docs/MOTION_PATTERN_BANK_2026.md`.
+- Corpus transversal de la tanda: `hermes-content/references/ui-patterns/APRENDIZAJE_WEBS.md`.
 
 ## Flujo de skills (en orden)
 1. **Intake + dirección:** `brainstorming` → definir estilo concreto (no "clean minimal").

@@ -1,6 +1,6 @@
 # Web Factory — Learned Models
 
-Generated: 2026-07-22T14:41:34.588Z
+Generated: 2026-08-11T02:56:30.116Z
 
 Web designs the factory has **acquired** from reels: each is a generation-ready
 blueprint (sections → blocks, tokens, interactions) to build a similar site fast.
@@ -8,27 +8,34 @@ These are recipes, not copies — rebuild with ONIA tokens and real client asset
 
 ## Summary
 
-- Learned models: 3
-- Site types: 3
-- Distinct factory blocks needed: 15
+- Learned models: 5
+- Site types: 4
+- Distinct factory blocks needed: 22
 - Motion primitives needed: 10
 
 ## Block Library (what these models need in packages/blocks)
 
-- `benefit-strip` × 1
+- `footer-brand` × 3
+- `benefit-strip` × 2
+- `editorial-statement` × 2
+- `property-cards` × 2
+- `scroll-story-hero` × 2
+- `article-cards` × 1
 - `bento-grid` × 1
 - `centered-logo-nav` × 1
 - `editorial-headline` × 1
-- `editorial-statement` × 1
-- `footer-brand` × 1
 - `inline-contact-form` × 1
+- `inline-quote-form` × 1
 - `media-feature` × 1
+- `media-hero` × 1
+- `newsletter-band` × 1
+- `path-cards` × 1
 - `pill-cta` × 1
 - `product-story` × 1
-- `property-cards` × 1
 - `saturated-product-hero` × 1
-- `scroll-story-hero` × 1
+- `scroll-story` × 1
 - `seal-badge` × 1
+- `stat-strip` × 1
 - `where-to-buy` × 1
 
 ## Motion Library (the animation primitives to build — what makes these feel pro)
@@ -37,18 +44,18 @@ Each model's sections carry a precise `motion` spec (entrance, trigger, easing
 `[0.22, 1, 0.36, 1]`, duration, stagger, scroll-linked, hover, reduced-motion).
 The reusable primitives across all models:
 
-- `scale-zoom` × 8
-- `fade` × 7
+- `fade` × 15
+- `scale-zoom` × 9
+- `staggered-children` × 8
 - `slide-in` × 5
-- `staggered-children` × 4
-- `clip-path-reveal` × 2
-- `scroll-parallax` × 2
+- `clip-path-reveal` × 3
+- `scroll-parallax` × 3
 - `rotate` × 1
 - `spotlight-glow` × 1
 - `sticky-nav` × 1
 - `type-slam` × 1
 
-Triggers: in-view (12) · on-load (3). Every primitive ships a reduced-motion fallback.
+Triggers: in-view (20) · on-load (5) · none (2) · scroll-linked (1). Every primitive ships a reduced-motion fallback.
 
 ## Models
 
@@ -67,6 +74,22 @@ Punchy single-product CPG landing: one saturated brand-color field, an oversized
 - Flow: saturated-product-hero → benefit-strip → product-story → where-to-buy
 - Best for: food-cpg, packaged goods, beverages, single-product launches
 - Blueprint: `data/references/reels/models/boldflavor-cpg-landing.json` · source: https://www.instagram.com/reel/DZ2r09Rvlei/
+
+### United Carriers — logistics-transport (medium)
+
+Sitio de logistica y transporte de carga donde el scroll mueve una escena 3D que representa la cadena logistica: el visitante 'sigue' la carga desde el deposito hasta la entrega. Alcanzar por este modelo cuando el cliente vende un PROCESO invisible (transporte, importacion, instalacion) y hay que hacerlo visible.
+
+- Flow: scroll-story-hero → scroll-story → benefit-strip → stat-strip → inline-quote-form → footer-brand
+- Best for: logistica, transporte, importadora, distribucion, instalacion, cualquier rubro que venda un proceso invisible
+- Blueprint: `data/references/reels/models/unitedcarriers-logistics.json` · source: https://www.instagram.com/p/Db0yxc5xnpD/
+
+### FIND Real Estate — real-estate (high)
+
+Inmobiliaria editorial y clara: hero con titular animado, tres caminos explicitos (comprar / vender / alquilar), contenido de mercado como prueba de autoridad y newsletter al cierre. Version LIGERA del rubro inmobiliario, frente al modelo cinematografico lecercle-realestate: alcanzar por esta cuando el cliente necesita convertir, no impresionar.
+
+- Flow: media-hero → editorial-statement → path-cards → property-cards → article-cards → newsletter-band → footer-brand
+- Best for: inmobiliaria, corretaje, alquiler temporario, desarrollos, servicios profesionales con 3 caminos de entrada
+- Blueprint: `data/references/reels/models/find-realestate-editorial.json` · source: https://www.instagram.com/p/DbmpRmEIN_L/
 
 ### Le Cercle — real-estate (high)
 
