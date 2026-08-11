@@ -47,7 +47,7 @@ import { withKnowledge } from "./knowledge.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
 import { meetingLink } from "./calcom-booking.mjs";
 import { formatSlotLabel } from "./calcom-availability.mjs";
-import { hoursBetween } from "./followup-run.mjs";
+import { deliver, hoursBetween } from "./followup-run.mjs";
 
 /** Unico estado donde un recordatorio tiene sentido: la demo esta reservada. */
 export const REMINDER_STAGE = "demo_agendada";
@@ -162,9 +162,14 @@ export function buildReminder(state, link, config = DEFAULT_CONFIG) {
   };
 }
 
+/**
+ * El estado con el que se GUARDA la fila. Aca la reserva ES el insert, asi que se escribe ANTES de
+ * mandar: por eso NO puede decir "sent" (seria mentir si el envio falla despues). Dice `reserved`,
+ * que es exactamente lo que paso. El resultado real del envio viaja en el JSON del barrido.
+ */
 function deliveryStatusFor(state, config) {
   if (state.channel === "sim") return "simulated";
-  return config.dryRun ? "skipped" : "sent";
+  return config.dryRun ? "skipped" : "reserved";
 }
 
 // ---------------------------------------------------------------------------
@@ -264,7 +269,13 @@ async function sweepRow(row, ctx) {
   const reserva = await reserveReminder(store, state, item, nowIso, config);
   if (reserva.skip) return { skip: { conversationKey: key, reason: reserva.skip } };
 
-  return { send: { ...item, reserved: true, deliveryStatus: reserva.deliveryStatus, logged: true } };
+  // Ganada la reserva, se manda de verdad. Un fallo NO se reintenta: la reserva ya se gasto y
+  // mandar dos recordatorios al mismo prospecto es peor que no mandar ninguno.
+  const entrega = await deliver(state, item.text, config, ctx);
+  return {
+    send: { ...item, reserved: true, deliveryStatus: entrega.status, logged: true },
+    ...(entrega.warning ? { warning: `${key}: ${entrega.warning}` } : {}),
+  };
 }
 
 /** El resultado vacio del barrido, antes de mirar una sola fila. */
@@ -317,9 +328,12 @@ export async function runReminderSweep(options = {}, deps = {}) {
   }
   result.scanned = rows.length;
 
-  const ctx = { nowIso, emit, config, store, linkFor, env };
+  // `chatwoot` viaja en el ctx porque sweepRow es quien manda: sin esto el envio real nunca ve el
+  // cliente inyectado y todo termina en "failed" (que fue exactamente lo que cazo el test).
+  const ctx = { nowIso, emit, config, store, linkFor, env, chatwoot: deps.chatwoot };
   for (const row of rows) {
     const outcome = await sweepRow(row, ctx);
+    if (outcome.warning) result.warnings.push(outcome.warning);
     if (outcome.skip) result.skipped.push(outcome.skip);
     else result.send.push(outcome.send);
   }

@@ -60,9 +60,21 @@ case " $* " in
   *) NOW_ARGS=(--now "$(date -u +%Y-%m-%dT%H:%M:%SZ)") ;;
 esac
 
+# Token de Chatwoot — el barrido MANDA el recordatorio, no solo lo reserva (mismo patron que
+# webhook-server.sh: sale de la base de Chatwoot, nunca de un archivo ni de n8n).
+CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
+CW_TOKEN=""
+if [ -n "$CWDB" ]; then
+  CW_TOKEN="$(docker exec "$CWDB" psql -U postgres -d 'onia-chatbot' -tAc \
+    "select token from access_tokens where owner_id=2 order by created_at desc limit 1" 2>/dev/null | tr -d ' \t\n' || true)"
+fi
+
 docker exec \
   -e ONIA_BOT_DRY_RUN="${ONIA_BOT_DRY_RUN:-true}" \
   -e CALCOM_PUBLIC_URL="${CALCOM_PUBLIC_URL:-https://cal.onia.com.bo}" \
+  -e CHATWOOT_BASE_URL="${CHATWOOT_BASE_URL:-http://onia-chatbot_chatwoot:3000}" \
+  -e CHATWOOT_ACCOUNT_ID="${CHATWOOT_ACCOUNT_ID:-2}" \
+  -e CHATWOOT_API_TOKEN="$CW_TOKEN" \
   "$CONTAINER" node "$DEST/reminder-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} "$@"
 
 exit 0

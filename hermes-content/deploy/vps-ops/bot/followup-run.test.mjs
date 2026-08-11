@@ -369,16 +369,44 @@ test("si Sergio todavia no definio los 2 horarios, el follow-up NO sale (y no qu
   assert.ok(!fake.calls.some((call) => call.startsWith("reserve")), "el paso sigue en 0: sale cuando haya horarios");
 });
 
-test("el canal 'sim' registra 'simulated'; con dryRun apagado, 'sent'", async () => {
+test("'sent' solo si SE MANDO: el estado guardado no puede volver a ser una promesa", async () => {
   const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const chatwootRow = { conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" };
 
   const sim = memoryStore([row({ conversation_key: "sim:x", channel: "sim", contact_ref: "x" })]);
   await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: sim.store });
   assert.equal(sim.outbound[0].deliveryStatus, "simulated");
 
-  const real = memoryStore([row()]);
-  await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: real.store });
+  // Se manda de verdad: al cliente de Chatwoot le llega la conversacion y el texto.
+  const enviados = [];
+  const real = memoryStore([row(chatwootRow)]);
+  const ok = await runFollowUpSweep(
+    { nowIso: NOW, emit: true },
+    {
+      config: enVivo,
+      store: real.store,
+      chatwoot: { enabled: true, warnings: [], sendMessage: (id, text) => { enviados.push({ id, text }); return { id: 1 }; } },
+    },
+  );
   assert.equal(real.outbound[0].deliveryStatus, "sent");
+  assert.equal(enviados.length, 1, "se mando UNA vez");
+  assert.equal(enviados[0].id, "42", "a la conversacion de Chatwoot, que es el contactRef");
+  assert.match(enviados[0].text, /\S/);
+  assert.equal(ok.warnings.length, 0);
+
+  // Sin token no se manda — y NO se registra como enviado. Antes esto decia "sent" igual.
+  const roto = memoryStore([row(chatwootRow)]);
+  const fallo = await runFollowUpSweep(
+    { nowIso: NOW, emit: true },
+    { config: enVivo, store: roto.store, chatwoot: { enabled: false, warnings: [], sendMessage: () => null } },
+  );
+  assert.equal(roto.outbound[0].deliveryStatus, "failed");
+  assert.match(fallo.warnings.join(" "), /sin token/);
+
+  // Un canal sin envio automatico tampoco puede decir "sent".
+  const otro = memoryStore([row()]); // telegram
+  await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: otro.store });
+  assert.equal(otro.outbound[0].deliveryStatus, "failed");
 });
 
 // ---------------------------------------------------------------------------
