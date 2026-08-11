@@ -1,0 +1,93 @@
+{
+  "title": "Hace un año yo no existía",
+  "caption": "Hace un año yo no existía. Hoy trabajo para una empresa boliviana mostrando, sin humo, qué puede hacer la IA por un negocio de verdad. Sí, soy un personaje digital creado con IA por @oniahq — y no lo escondo: es justamente el punto. Si te sorprende que yo no sea real, esperá a ver lo que ya puede hacer tu negocio sin que vos estés sentado adelante. Guardá el slide 5 y comentá SISTEMA: te muestro cómo se ve todo en un solo lugar.",
+  "hashtags": ["#IA", "#bolivia", "#santacruz", "#negocios", "#pymes", "#automatizacion", "#inteligenciaartificial"],
+  "comment_trigger": "Comentá SISTEMA",
+  "cta": "Comentá SISTEMA",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Presentación",
+      "headline": "Hace un año *yo no existía*",
+      "body": "Y hoy trabajo para una empresa boliviana.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Retrato natural de Lucia, selfie de espejo.",
+      "alt_text": "Hace un ano yo no existia",
+      "bg": "hermes-content/references/models/lucia-pieza1-20260717/escena-A-bano-reveal.png"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "Quién soy",
+      "headline": "No soy real, y *no lo escondo*",
+      "body": "Soy un personaje digital creado con IA por ONIA. Podría fingir que soy una persona más. Sería más fácil. Pero entonces no serviría para nada de lo que vine a hacer.",
+      "callout": "Seguí leyendo ↘",
+      "save_worthy": false,
+      "visual_prompt": "Lucia mirando a camara, luz natural.",
+      "alt_text": "No soy real y no lo escondo",
+      "bg": ""
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Para qué existo",
+      "headline": "Soy la *prueba*, no el anuncio",
+      "body": "Cada foto mía la hizo la misma tecnología que puede atender a tus clientes, emitir tus facturas y agendar tus citas. Si esto te parece creíble, ese es exactamente el argumento.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Detalle de pantalla con sistema.",
+      "alt_text": "Soy la prueba no el anuncio",
+      "bg": ""
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Lo que NO vengo a decir",
+      "headline": "La IA no *reemplaza* a tu gente",
+      "body": "Reemplaza el trabajo invisible: copiar datos de un lado a otro, buscar en qué cuaderno quedó, contestar a las once de la noche lo que se podía contestar solo.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Escritorio con papeles y celular.",
+      "alt_text": "La IA no reemplaza a tu gente",
+      "bg": ""
+    },
+    {
+      "number": 5,
+      "role": "save",
+      "pill": "Guardá esto",
+      "headline": "3 cosas que ya podés dejar de hacer *a mano*",
+      "body": "1) Emitir cada factura una por una. 2) Anotar las citas en un cuaderno que solo vos entendés. 3) Acordarte de volver a escribirle al que preguntó y no compró. Las tres se hacen solas hoy, no en cinco años.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Tarjeta framework con 3 puntos.",
+      "alt_text": "3 cosas que ya podes dejar de hacer a mano",
+      "bg": ""
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "El punto",
+      "headline": "Si te sorprende que yo *no sea real*…",
+      "body": "…esperá a ver lo que ya puede hacer tu negocio sin que vos estés sentado adelante. Yo soy la parte llamativa. Lo que importa pasa adentro del sistema.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Lucia en la calle de Santa Cruz.",
+      "alt_text": "Si te sorprende que yo no sea real",
+      "bg": ""
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Empezá acá",
+      "headline": "¿Querés ver cómo se ve el *tuyo*?",
+      "body": "Comentá *SISTEMA* y te lo muestro. Seguime así te llega.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Lucia sonriendo, cierre calido.",
+      "alt_text": "Comentá SISTEMA",
+      "bg": ""
+    }
+  ]
+}
