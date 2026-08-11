@@ -9,6 +9,63 @@ le sirve.
 
 ---
 
+## 0. Para qué sirve cada pieza — el recorrido completo
+
+**Esta es la explicación para usar frente a un cliente.** Un LLM solo no sirve de nada: sin las
+otras piezas es "ChatGPT sin internet", un chat que no conoce ni un documento de la oficina.
+**Lo que se vende no es el modelo — es que sepa lo que hay adentro de esa oficina.**
+
+### El caso: un abogado escribe
+
+> *"¿Qué dice el contrato con Ferretería Vargas sobre la penalidad por atraso?"*
+
+#### Antes — una sola vez, el día de la instalación
+
+Los 3.000 archivos del estudio hay que dejarlos listos:
+
+1. **Docling** abre los PDFs digitales y extrae el texto **con su estructura** — distingue un
+   título de una cláusula y de una tabla.
+2. **PaddleOCR-VL** se ocupa de lo que Docling no puede leer: los **escaneados** y las **fotos
+   de documentos**. **Sin esto, todo lo digitalizado con scanner es invisible.**
+3. **BGE-M3** convierte cada fragmento en números. Eso permite buscar **por significado**: que
+   el abogado escriba "penalidad" y encuentre una cláusula que dice "multa por incumplimiento".
+4. **Qdrant** guarda esos números para poder buscarlos rápido.
+
+#### Cuando hace la pregunta
+
+5. **BGE-M3** convierte la pregunta en números también.
+6. **Qdrant** busca los fragmentos más parecidos y encuentra las 5 cláusulas relevantes entre
+   los 3.000 archivos.
+7. **Granite** (o Qwen) lee esas cláusulas y **redacta la respuesta en español, citando de dónde
+   la sacó**.
+
+Si en vez de escribir habla, **Whisper** pasa el audio a texto antes de todo lo demás.
+
+### Cada pieza en una línea
+
+| Modelo | Su trabajo |
+|---|---|
+| **Granite / Qwen** | Entiende la pregunta y redacta la respuesta |
+| **BGE-M3** | Encuentra los documentos relevantes por significado |
+| **Docling** | Lee los PDFs digitales |
+| **PaddleOCR-VL** | Lee lo escaneado y las fotos |
+| **Whisper** | Pasa audio a texto |
+| **Qdrant** | Guarda y busca |
+
+### ⚠️ No toda instalación lleva las seis
+
+| Tanda | Qué necesita | Costo de implementación |
+|---|---|---|
+| **Vista** (cámaras) | Sólo visión — **ninguna de estas** | Bajo |
+| **Recepción** (WhatsApp) | LLM chico + embeddings livianos. **Sin OCR** | Medio |
+| **Expediente** | **Todo** — la instalación completa | **Alto** |
+| **Taller** (código) | LLM de código. **Sin OCR ni embeddings de documentos** | Medio |
+
+**Por eso Expediente se cobra 5.500–7.000 y Recepción menos:** no es el hardware lo que cambia,
+es la cantidad de piezas que hay que montar y afinar.
+
+---
+
 ## 1. Qué necesita realmente un modelo de IA local
 
 No es sólo la placa de video. Son cinco cosas, en orden de importancia:
