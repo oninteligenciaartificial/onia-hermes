@@ -190,6 +190,89 @@ test("adjunto sin texto -> kind 'attachment'; audio sin texto -> kind 'voice'", 
   assert.equal(conAudio.turn.kind, "voice");
 });
 
+// ---------------------------------------------------------------------------
+// 2.b EL TELEFONO — sin esto el CRM guarda el id de conversacion y nadie puede llamar
+// ---------------------------------------------------------------------------
+
+test("el telefono del contacto llega al turno como public_contact, SIN tocar contact_ref", () => {
+  // `phone_number` es exactamente lo que manda Chatwoot 4.12.1 en Contact#webhook_data.
+  // Numero real de la base del VPS (contacto 39, inbox "Onia WhatsApp").
+  const parsed = parseChatwootWebhook(
+    incomingFixture({ sender: { id: 39, name: "Sergio", phone_number: "+59171654992" } }),
+  );
+  assert.equal(parsed.turn.public_contact, "+59171654992");
+  assert.equal(parsed.turn.contact_ref, "2", "contact_ref sigue siendo la conversacion: es la identidad");
+});
+
+test("sin telefono (widget web / inbox de API) queda null: NO se inventa un contacto", () => {
+  assert.equal(parseChatwootWebhook(incomingFixture()).turn.public_contact, null);
+  assert.equal(parseChatwootWebhook(incomingFixture({ sender: { id: 2, phone_number: "  " } })).turn.public_contact, null);
+  assert.equal(parseChatwootWebhook(incomingFixture({ sender: null })).turn.public_contact, null);
+});
+
+test("conversation_created: el telefono tambien sale del sender anidado (push_event_data)", () => {
+  const fixture = conversationCreatedWithMessageFixture();
+  fixture.messages[0].sender = { id: 7, name: "Otro Prospecto", type: "contact", phone_number: "+59170000001" };
+  assert.equal(parseChatwootWebhook(fixture).turn.public_contact, "+59170000001");
+});
+
+// ---------------------------------------------------------------------------
+// 2.c ATRIBUCION — de que pieza / campana vino el prospecto
+// ---------------------------------------------------------------------------
+
+test("atribucion: custom_attributes de la conversacion manda (dato puesto a mano)", () => {
+  const parsed = parseChatwootWebhook(
+    incomingFixture({
+      conversation: {
+        id: 2,
+        custom_attributes: { piece_key: "lucia-d03-reel-siat", source_campaign: "lucia-dentalgest-jul2026" },
+      },
+    }),
+  );
+  assert.equal(parsed.turn.piece_key, "lucia-d03-reel-siat");
+  assert.equal(parsed.turn.source_campaign, "lucia-dentalgest-jul2026");
+});
+
+test("atribucion: ?src= del referer del widget (LA convencion de Onia) -> piece_key", () => {
+  const parsed = parseChatwootWebhook(
+    incomingFixture({
+      conversation: {
+        id: 2,
+        // Forma exacta que escribe el widget de Chatwoot (widget/base_controller.rb).
+        additional_attributes: { referer: "https://onia.com.bo/dental?src=lucia-d03-reel-siat", browser: {} },
+      },
+    }),
+  );
+  assert.equal(parsed.turn.piece_key, "lucia-d03-reel-siat");
+  assert.equal(parsed.turn.source_campaign, null, "sin utm_campaign no se inventa una campana");
+});
+
+test("atribucion: UTM de pauta -> utm_content = pieza, utm_campaign = campana", () => {
+  const parsed = parseChatwootWebhook(
+    incomingFixture({
+      conversation: {
+        id: 2,
+        additional_attributes: { referer: "https://onia.com.bo/?utm_campaign=dental-ago&utm_content=reel-siat-03" },
+      },
+    }),
+  );
+  assert.equal(parsed.turn.piece_key, "reel-siat-03");
+  assert.equal(parsed.turn.source_campaign, "dental-ago");
+});
+
+test("atribucion: sin datos (el caso de HOY en todas las conversaciones) queda en null", () => {
+  const vacio = parseChatwootWebhook(incomingFixture());
+  assert.equal(vacio.turn.piece_key, null);
+  assert.equal(vacio.turn.source_campaign, null);
+
+  // Un referer que no es una URL no puede tumbar el turno: sin atribucion, pero el bot contesta.
+  const basura = parseChatwootWebhook(
+    incomingFixture({ conversation: { id: 2, additional_attributes: { referer: "no-es-una-url" } } }),
+  );
+  assert.equal(basura.skip, false);
+  assert.equal(basura.turn.piece_key, null);
+});
+
 test("normalizeMessageType acepta string y numerico; toIsoFlexible acepta ISO y epoch-segundos", () => {
   assert.equal(normalizeMessageType("incoming"), "incoming");
   assert.equal(normalizeMessageType(0), "incoming");

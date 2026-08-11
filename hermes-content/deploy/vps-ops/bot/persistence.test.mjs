@@ -230,6 +230,28 @@ test("sin dedup disponible (base caida) el turno sigue, pero lo avisa", async ()
   assert.ok(fake.store.warnings.some((warning) => warning.includes("sin dedup")));
 });
 
+test("telefono y atribucion que llegan RECIEN en el 2do webhook se guardan igual", async () => {
+  // La fila se crea con el primer mensaje (ensureConversation escribe una sola vez). Sin rellenar,
+  // el estado cargado de la base pisaba con null lo que traia el canal despues y no se guardaba NUNCA.
+  const fake = memoryStore();
+  const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "" };
+
+  await runTurn(turn(), deps);
+  assert.equal(fake.state.publicContact, null);
+
+  await runTurn(
+    turn({ text: "A", message_key: "telegram:2", public_contact: "+59171654992", piece_key: "lucia-d03-reel-siat" }),
+    deps,
+  );
+  assert.equal(fake.state.publicContact, "+59171654992");
+  assert.equal(fake.state.pieceKey, "lucia-d03-reel-siat");
+
+  // Y un turno posterior SIN atribucion no puede borrar la que ya se capturo.
+  await runTurn(turn({ text: "gracias", message_key: "telegram:3" }), deps);
+  assert.equal(fake.state.publicContact, "+59171654992");
+  assert.equal(fake.state.pieceKey, "lucia-d03-reel-siat");
+});
+
 // ---------------------------------------------------------------------------
 // 3. Conversacion entera a traves del ejecutor
 // ---------------------------------------------------------------------------
@@ -492,6 +514,49 @@ test("el lead nunca inventa el nombre NI el rubro del negocio", () => {
   const conRubro = buildLeadRow({}, { ...base, displayName: "Ana", qualification: { city: "Tarija", industry: "ferreteria" } });
   assert.equal(conRubro.company_name, "Ana — ferreteria (Tarija)");
   assert.equal(conRubro.business_type, "ferreteria");
+});
+
+test("el CRM guarda el TELEFONO como contacto publico, no el id de conversacion", () => {
+  // El sintoma: en el panel el contacto decia "2847" (el id de la conversacion de Chatwoot) y
+  // desde ahi no se podia llamar a nadie.
+  const base = createState({ channel: "chatwoot", contactRef: "2847" });
+  assert.equal(buildLeadRow({}, base).public_contact, "2847", "sin telefono queda como hoy: no se pierde la referencia");
+  assert.equal(buildLeadRow({}, { ...base, publicContact: "+59171654992" }).public_contact, "+59171654992");
+});
+
+test("el telefono sobrevive el viaje a la base (va en raw, sin columna nueva en produccion)", () => {
+  const state = { ...createState({ channel: "chatwoot", contactRef: "2847" }), publicContact: "+59171654992" };
+  const round = stateFromRow({
+    conversation_key: state.conversationKey,
+    channel: "chatwoot",
+    contact_ref: "2847",
+    bot_stage: "nuevo",
+    raw: { publicContact: state.publicContact },
+  });
+  assert.equal(round.publicContact, "+59171654992");
+  assert.equal(round.contactRef, "2847", "contact_ref sigue intacto: es la identidad de la conversacion");
+  assert.equal(stateFromRow({ conversation_key: "chatwoot:1", channel: "chatwoot", contact_ref: "1" }).publicContact, null);
+});
+
+test("un lead que YA existe recibe el telefono, pero nunca se lo pisa con el id de conversacion", async () => {
+  const conTelefono = recorder([
+    { status: 200, body: [{ lead_key: "bot-chatwoot-2847", raw: {} }] }, // upsertLead.load
+    { status: 200, body: [{ lead_key: "bot-chatwoot-2847" }] }, //          upsertLead.patch
+  ]);
+  const state = { ...createState({ channel: "chatwoot", contactRef: "2847" }), publicContact: "+59171654992" };
+  await conTelefono.store.upsertLead({}, state);
+  assert.equal(conTelefono.requests[1].body.public_contact, "+59171654992");
+
+  const sinTelefono = recorder([
+    { status: 200, body: [{ lead_key: "bot-chatwoot-2847", raw: {} }] },
+    { status: 200, body: [{ lead_key: "bot-chatwoot-2847" }] },
+  ]);
+  await sinTelefono.store.upsertLead({}, createState({ channel: "chatwoot", contactRef: "2847" }));
+  assert.equal(
+    "public_contact" in sinTelefono.requests[1].body,
+    false,
+    "sin telefono el PATCH ni menciona el campo: un contacto corregido a mano no se pisa",
+  );
 });
 
 test("el permiso de contacto sigue al opt-in / opt-out, no al humor del bot", () => {
