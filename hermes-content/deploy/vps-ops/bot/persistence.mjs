@@ -189,14 +189,38 @@ export function buildLeadRow(payload, state) {
 }
 
 /** Fila de bot_messages a partir de una reply/inbound del motor. */
+/**
+ * Lo que se guarda en `body` de un mensaje ENTRANTE. No es el texto: es un marcador.
+ *
+ * MINIMIZACION DE DATOS: no se persiste ningun dato del prospecto que no cambie el comportamiento
+ * del sistema. El texto crudo de lo que escribe NO lo cambia — verificado en el codigo: nadie lee
+ * `bot_messages.body`, ni el motor (`stateFromRow` solo hidrata `bot_conversations`) ni el LLM
+ * (recibe el mensaje del turno en curso, nunca el historial). Estaba guardado "por si acaso".
+ *
+ * Lo que SI cambia el comportamiento ya se guarda aparte y estructurado: rubro, tamaño, ciudad y
+ * dolor en `qualification`. De un "estoy enferma" no queda nada, porque no decide nada.
+ *
+ * La FILA se sigue escribiendo: es la reserva anti-duplicados (`message_key` unique). Lo unico que
+ * se va es el contenido. Y no se pierde nada operativo: la conversacion entera vive en Chatwoot,
+ * que es la bandeja y la herramienta para leerla — esto solo deja de DUPLICARLA en nuestra base.
+ */
+export const INBOUND_BODY_PLACEHOLDER = "(entrante — texto no persistido)";
+
 export function buildMessageRow(message, state, extra = {}) {
   const guardrail = message.guardrail || { ok: true, violations: [] };
+  const direction = message.direction === "inbound" ? "inbound" : "outbound";
+  // El saliente SI se guarda entero: es NUESTRO guion, no un dato del prospecto, y es la unica
+  // forma de auditar despues que fue exactamente lo que el bot dijo.
+  const body =
+    direction === "inbound"
+      ? INBOUND_BODY_PLACEHOLDER
+      : String(message.text ?? message.body ?? "").trim() || "(sin texto)";
   return {
     message_key: String(message.messageKey || "").slice(0, 400),
     conversation_key: state.conversationKey,
-    direction: message.direction === "inbound" ? "inbound" : "outbound",
+    direction,
     author: ["contact", "bot", "human"].includes(message.author) ? message.author : "bot",
-    body: String(message.text ?? message.body ?? "").trim() || "(sin texto)",
+    body,
     template_key: message.templateKey || null,
     reply_source: ["script", "llm", "human"].includes(message.replySource) ? message.replySource : "script",
     stage_before: message.stageBefore || null,

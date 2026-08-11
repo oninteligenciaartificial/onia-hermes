@@ -22,6 +22,7 @@ import { runTurn } from "./run-turn.mjs";
 import {
   PIPELINE_STATUSES,
   buildLeadRow,
+  INBOUND_BODY_PLACEHOLDER,
   buildMessageRow,
   createStore,
   leadKeyFor,
@@ -579,6 +580,31 @@ test("buildMessageRow sanea lo que va a la base (body nunca vacio, enums validad
   assert.equal(row.delivery_status, "simulated");
   assert.equal(row.guardrail_ok, false);
   assert.deepEqual(row.guardrail_violations, ["cotizar"]);
+});
+
+// ---------------------------------------------------------------------------
+// MINIMIZACION DE DATOS: no se guarda lo que no decide nada
+// ---------------------------------------------------------------------------
+
+test("el texto de lo que escribe el prospecto NO se persiste", () => {
+  const state = createState({ channel: "chatwoot", contactRef: "42" });
+  const row = buildMessageRow(
+    { messageKey: "chatwoot:42:9", direction: "inbound", author: "contact", text: "hola, estoy enferma y no puedo ir" },
+    state,
+  );
+  assert.equal(row.body, INBOUND_BODY_PLACEHOLDER);
+  assert.ok(!row.body.includes("enferma"), "un dato de salud no puede quedar guardado: no decide nada");
+  assert.equal(row.direction, "inbound");
+  assert.equal(row.message_key, "chatwoot:42:9", "la FILA se sigue escribiendo: es el candado anti-duplicados");
+});
+
+test("lo que dice el BOT si se guarda entero (es nuestro guion, no un dato del prospecto)", () => {
+  const state = createState({ channel: "chatwoot", contactRef: "42" });
+  const row = buildMessageRow(
+    { messageKey: "out:chatwoot:42:1", direction: "outbound", author: "bot", text: "¡Hola! Te escribe el asistente de Onia." },
+    state,
+  );
+  assert.match(row.body, /asistente de Onia/, "sin esto no se puede auditar que dijo el bot");
 });
 
 test("claves deterministas: el mismo prospecto no genera dos leads", () => {
