@@ -366,13 +366,18 @@
     modal.addEventListener('click', (e) => { if (e.target === modal) modal.close(); });
     // Escape, foco atrapado y devolucion del foco los da showModal(). Esto solo cubre el caso
     // en que el foco quedo suelto (ej. el carrito se vacio y el boton flotante paso a inert).
-    // Va en transitionend: hasta que el dialog no sale del top layer, el resto sigue inerte.
-    modal.addEventListener('transitionend', (e) => {
-      if (e.target !== modal || modal.open || e.propertyName !== 'opacity') return;
-      const act = document.activeElement;
-      if (!act || act === document.body || modal.contains(act)) {
-        (carrito.size ? fab : grid.querySelector('.fc-add')).focus();
-      }
+    // Espera a que el dialog salga del top layer: hasta entonces el resto sigue inerte y
+    // cualquier .focus() no hace nada.
+    modal.addEventListener('close', () => {
+      const volverFoco = () => {
+        if (modal.open) return;
+        if (getComputedStyle(modal).display !== 'none') return requestAnimationFrame(volverFoco);
+        const act = document.activeElement;
+        if (!act || act === document.body || modal.contains(act)) {
+          (carrito.size ? fab : grid.querySelector('.fc-add')).focus();
+        }
+      };
+      requestAnimationFrame(volverFoco);
     });
     $('#fc-cta').addEventListener('click', (e) => {
       const t = e.currentTarget.firstElementChild;
