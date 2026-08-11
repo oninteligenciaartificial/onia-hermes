@@ -24,6 +24,43 @@ llenar casilleros** — 9 de 20 de la tanda del 11-ago son humo, y así está es
 
 ---
 
+## Preambulo — pega esto al inicio de CUALQUIER sesion
+
+Seis reglas que salieron de los errores de la sesion de analisis de reels (2026-08-11). No son
+teoria: cada una nacio de algo que se hizo mal y se corrigio.
+
+```text
+Antes de escribir una sola linea:
+1. Invoca `onia-router` y ubica el carril. Verifica `git branch --show-current`.
+2. BUSCA DONDE VIVE LA COSA ANTES DE CREARLA. El repo ya tiene pipeline para casi todo
+   (web-factory tiene reels->learned models; ver-videos tiene el intake; el pattern bank tiene
+   el motion). Escribir un doc "al lado" del sistema que ya existe es el error mas caro:
+   duplica y se desincroniza. Si no encontras donde va, pregunta antes de inventar carpeta.
+3. Verifica en vivo lo que toca prod, plata o main. Y deci explicitamente lo que NO pudiste
+   verificar: "los estados estan probados, el timing no porque el panel del navegador esta
+   oculto y las transiciones no avanzan" es una respuesta correcta; "quedo listo" no lo es.
+4. Ninguna cifra, precio o capacidad que venga de afuera se repite como propia sin verificarla.
+   Marcala como "a verificar" o no la menciones.
+5. Reporta la cobertura real ("audio 100%, 5 de 7 laminas"), nunca "lo vi" desde dos cuadros.
+6. Al cerrar: que quedo en produccion, que quedo a medias y donde exactamente, y que depende
+   de Sergio. Nada flotando en la conversacion.
+```
+
+**Para delegar a subagentes** (esto se probo con 8 agentes en paralelo y funciono):
+
+```text
+Trabajas en el worktree EXACTO: <ruta completa>
+Verifica `git branch --show-current` (debe decir <rama>). No commitees, no hagas push.
+Escribis SOLO estos archivos: <lista>. NO toques indices ni docs compartidos — de eso me encargo yo.
+Si el video/doc afirma un dato, marcalo como "a verificar", no lo des por cierto.
+DEVOLVE: una linea por entregable con <archivo> | <resultado> | <decision que tomaste>.
+```
+
+La regla que hace que esto no choque: **cada agente escribe sus propios archivos, el
+orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaron ni una vez.
+
+---
+
 ## `chatbot`
 
 Sale de [chatbot y dato sensible](2026-08-11-chatbot-dato-sensible-ley-21719-chile.md)
@@ -294,3 +331,103 @@ IA que ya corre por cron cada 2 h. Si no aporta algo que el radar no cubra, se d
 | [Botón de carga](2026-08-11-boton-carga-archivos-react-framer.md) | 6,7 s sin mostrar una línea de código |
 | [Checkout flip 3D](2026-08-11-checkout-tarjeta-flip-3d-portfolio.md) | patrón ya estándar, sin sustancia |
 | [ESP32 costo de reunión](2026-08-11-esp32-costo-de-reunion.md) | no toca ningún frente de ONIA |
+
+---
+
+# Arthur — marketing
+
+Arthur opera modelos IA, Higgsfield y Meta Ads. Los prompts van con los topes escritos
+adentro, porque son topes de plata y de permisos, no sugerencias.
+
+**Topes que valen para TODO lo de abajo:**
+- **Imagenes: libres.** Generar imagen con los Souls ya creados no pide permiso.
+- **Video: con OK explicito de Sergio, caso por caso.** Seedance/kling consumen creditos rapido.
+- **Pauta: NO se lanza.** El motor de Meta Ads esta deployado en modo DRY y la cuenta **no
+  tiene metodo de pago**. Se preparan creatividades y publicos; no se enciende nada.
+- **Publicar en IG automaticamente: bloqueado** (token pendiente, S6). Publicacion manual si.
+- Nada de comprar, suscribir ni dar de alta plataformas nuevas sin permiso explicito.
+
+## A1 · Portafolio antes/despues — la que mas rapido toca la caja
+
+```text
+Sesion: marketing (Arthur). git branch --show-current primero.
+TAREA UNICA: 3 piezas verticales antes/despues de webs YA entregadas. Nada mas.
+Formato (de hermes-content/references/video-intake/2026-08-09-web-antes-despues-find-real-estate.md):
+  0-4 s wireframe gris de NUESTRO diseno, rotulo "Cliente: necesito una web de X"
+  5-17 s scroll de la web final, mismo encuadre, rotulo "Despues:"
+  Sin voz, sin cara, musica, 9:16.
+POR QUE IMPORTA: el precio esta en Landing 790 / Web Pro 1.500 Bs porque no hay portafolio.
+La linea premium (2.000 / 4.500) pide 3-5 casos mostrables. Las webs ya existen.
+LISTO = 3 mp4 + una linea por pieza diciendo de que cliente es. SIN publicar.
+NO HAGAS: no muestres la plantilla base ni digas que usamos plantillas. No uses como "antes"
+la web vieja real de un cliente sin su OK — usa wireframe propio. Cero gasto de creditos:
+esto es grabacion de pantalla y montaje.
+```
+
+## A2 · Motor comentario->DM, arrancando a mano
+
+```text
+Sesion: marketing (Arthur). git branch --show-current primero.
+TAREA UNICA: montar UN ciclo completo de captacion por comentario, manual.
+Hallazgo que lo justifica: 4 de 6 reels analizados cierran igual — "comenta X y te mando la
+guia". Convierte contenido en lead con nombre, no en like. Y varios de los recursos que ellos
+prometen NOSOTROS ya los tenemos escritos.
+PASOS: (1) elegir UN recurso que ya exista en el repo (los 10 puntos de seguridad, el checklist
+de release, el pipeline de video); (2) armar UNA pieza que lo ensene y cierre pidiendo una
+palabra clave; (3) responder los DMs a mano y anotar cada lead en el CRM.
+LISTO = la pieza lista para que Sergio apruebe + el recurso empaquetado para mandar + donde se
+anota el lead. Medir: comentarios, DMs respondidos, leads con nombre.
+NO HAGAS: no automatices el DM — necesita permisos de mensajeria de la Graph API y el token de
+IG esta bloqueado (S6). Manual funciona desde hoy y no depende de nada.
+OJO PLAZO: la ventana gratuita de 24 h de WhatsApp se cierra el 1-oct-2026; cualquier embudo
+que termine en WhatsApp cambia de costo ese dia.
+```
+
+## A3 · Carruseles con el pipeline propio (y cerrar el gap de formatos)
+
+```text
+Sesion: marketing (Arthur). git branch --show-current primero.
+TAREA UNICA: producir 2 carruseles con el sistema que YA tenemos
+(hermes-content/carousels/CAROUSEL_SYSTEM.md + scripts/carousel_render.js + skill carruseles-onia),
+y de paso cerrar un gap real: los 4 packs estan fijos en 1080x1350; faltan cuadrado (1080x1080)
+y story (1080x1920).
+Temas con material ya escrito: los 10 errores de seguridad · que mide un panel que sirve
+(LTV:CAC, ROAS, AOV) · antes/despues de una web.
+LISTO = 2 carruseles renderizados on-brand + el render emitiendo los 3 formatos.
+NO HAGAS: NO adoptes "Open Carrusel" ni Canva ni ninguna plataforma de terceros — el pipeline
+propio es mas completo (brief -> HTML/CSS -> PNG on-brand -> publicacion) y adoptar otra es
+gasto y duplicacion. Analizado y descartado en 2026-08-11-open-carrusel-claude-vs-canva.md.
+```
+
+## A4 · Estructura de escenas para video IA — preparar, no generar
+
+```text
+Sesion: marketing (Arthur). git branch --show-current primero.
+TAREA UNICA: escribir UN guion con la estructura de escenas que encontramos, SIN generar nada.
+Formato (de 2026-08-11-seedance-prompt-por-escenas-timestamps.md, sale de una sola foto):
+    Scene N — <nombre> (Xs-Ys)
+    <encuadre y angulo> · <camara> · <que queda en foco y que sale> · <luz>
+Es lo que le falta a nuestras piezas: hoy se genera plano por plano y la consistencia entre
+tomas se rompe. Aca la continuidad esta escrita en el prompt.
+LISTO = un guion de 15-20 s por escenas con sus rangos de tiempo, listo para aprobar.
+NO HAGAS: NO generes video — eso es credito y va con OK explicito de Sergio caso por caso.
+Antes de proponer generar, verifica que Seedance 2.5 este en la cuenta y a cuanto sale la
+generacion (consultar el catalogo es gratis).
+NO copies el contenido del ejemplo (autos de lujo): se roba el esqueleto, no el auto.
+```
+
+## A5 · Meta Ads — dejar todo listo sin encender nada
+
+```text
+Sesion: marketing (Arthur). git branch --show-current primero.
+TAREA UNICA: dejar preparadas creatividades y publicos para la primera campana. SIN lanzar.
+LISTO = un set de creatividades (copy + imagen, imagen es gasto cero) y la definicion de
+publico escrita, todo revisable por Sergio.
+NO HAGAS: NO enciendas campanas. La cuenta no tiene metodo de pago y la verificacion de negocio
+esta en pausa. El motor corre en DRY a proposito — mantenerlo asi.
+NO uses PrimeBoard ni ninguna herramienta de "farmear" cuentas con un Android: viola los ToS de
+Meta y TikTok y con el token de IG ya bloqueado es el riesgo que no conviene tocar
+(2026-08-11-primeboard-autopilot-farming-redes.md).
+NO repitas cifras de terceros ("$1M en 4 meses" y similares) en ninguna creatividad: no tienen
+fuente. Prueba real o no se dice.
+```
