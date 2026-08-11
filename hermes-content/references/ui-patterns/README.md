@@ -35,6 +35,11 @@ El criterio corregido:
   pero rompe las propiedades **discretas**: un `<dialog>` con transición de `display`/`overlay`
   de 0,01 ms queda a medio camino (abierto pero con `opacity: 0`, o sea invisible). Si el
   patrón toca propiedades discretas, va `transition: none`.
+- **En un `<dialog>` o un `popover`, `display` va SOLO en el estado abierto.** El navegador
+  le da `display: none` a un popover cerrado o a un `<dialog>` sin `open`, pero esa regla es
+  del *user-agent*: cualquier regla de autor le gana, aunque tenga menos especificidad. Si
+  la regla base dice `display: flex`, el panel queda ocupando lugar y capturando clics con
+  el widget "cerrado". Va `.panel:popover-open { display: flex }` (o el flex en un hijo).
 - **Etiquetas de estado apiladas = un solo nombre accesible.** El truco de apilar los estados
   en la misma celda de grid y cruzar opacidades evita saltos de layout, pero deja TODAS las
   etiquetas en el DOM: el lector de pantalla lee "+ Agregar Agregado". Las etiquetas visuales
@@ -57,3 +62,5 @@ O desde Claude Code: `preview_start` con la config `ui-patterns` de `.claude/lau
 | [checkout-card](checkout-card/) — tarjeta que se escribe en vivo, flip 3D al CVC, viaje al centro al pagar | [reel](https://www.instagram.com/p/Db3CrouPbxz/) | reconstruido, estados verificados en navegador |
 | [floating-cart](floating-cart/) — botón flotante "Ver carrito" que aparece con el primer ítem + modal resumen (`<dialog>` nativo) | [reel](https://www.instagram.com/p/DbDjpLuTnKK/) | reconstruido, estados verificados en navegador |
 | [dropzone-progress](dropzone-progress/) — arrastrar archivos, la miniatura ES la barra de progreso (`@property` + `clip-path`) | [reel](https://www.instagram.com/p/Da0iDR4vl5M/) | reconstruido, estados verificados en navegador |
+| [chat-widget](chat-widget/) — burbuja flotante + panel de conversación para pegar en la landing del cliente (`popover="manual"` nativo, `role="log"` + `aria-live`) | [reel](https://www.instagram.com/p/DbsUAxCgA3W/) | reconstruido, estados verificados en navegador |
+| [sidebar-nav](sidebar-nav/) — barra lateral de vidrio con submenús desplegables, uno solo abierto a la vez (`<details name>` + `::details-content`) | [reel](https://www.instagram.com/p/DbEwGUkDGjd/) | reconstruido, estados verificados en navegador |
