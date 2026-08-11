@@ -41,7 +41,10 @@ function resumen(texto) {
 }
 
 async function transcribir(mp4, tmp, lang) {
-  const mp3 = path.join(tmp, 'a.mp3');
+  // Nombre unico: transcribe.sh copia el audio a /tmp/ del VPS por basename. Con un
+  // nombre fijo, dos intakes en paralelo se pisan y un video recibe la transcripcion
+  // del otro, en silencio.
+  const mp3 = path.join(tmp, `${path.basename(mp4).replace(/\.[^.]+$/, '')}.mp3`);
   await run('ffmpeg', ['-y', '-v', 'error', '-i', mp4, '-vn', '-ac', '1', '-ar', '16000', '-b:a', '64k', mp3]);
   // Sin pista de audio util, ffmpeg igual produce un mp3: Speaches devuelve 0 segmentos.
   const { stdout } = await run('bash', [path.join(SKILL, 'transcribe.sh'), mp3], {
