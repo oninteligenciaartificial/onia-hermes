@@ -59,10 +59,14 @@ esac
 # Token de Chatwoot — el barrido MANDA el mensaje, no solo lo reserva. Sale de la base de Chatwoot
 # igual que en webhook-server.sh: nunca se escribe en un archivo ni viaja a n8n.
 CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
+# El bot postea con SU PROPIA identidad de Chatwoot (agente "Onia Bot"), no con la de Sergio:
+# es lo unico que permite saber quien escribio y callar al bot cuando el toma la conversacion.
+# Sin la variable cae al 2 (la cuenta de Sergio) = comportamiento de antes, nunca queda sin token.
+CW_AGENT_ID="${CHATWOOT_BOT_AGENT_ID:-2}"
 CW_TOKEN=""
 if [ -n "$CWDB" ]; then
   CW_TOKEN="$(docker exec "$CWDB" psql -U postgres -d 'onia-chatbot' -tAc \
-    "select token from access_tokens where owner_id=2 order by created_at desc limit 1" 2>/dev/null | tr -d ' \t\n' || true)"
+    "select token from access_tokens where owner_id=$CW_AGENT_ID order by created_at desc limit 1" 2>/dev/null | tr -d ' \t\n' || true)"
 fi
 
 docker exec \
@@ -71,6 +75,7 @@ docker exec \
   -e CHATWOOT_BASE_URL="${CHATWOOT_BASE_URL:-http://onia-chatbot_chatwoot:3000}" \
   -e CHATWOOT_ACCOUNT_ID="${CHATWOOT_ACCOUNT_ID:-2}" \
   -e CHATWOOT_API_TOKEN="$CW_TOKEN" \
+  -e CHATWOOT_BOT_AGENT_ID="$CW_AGENT_ID" \
   "$CONTAINER" node "$DEST/followup-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} "$@"
 
 exit 0

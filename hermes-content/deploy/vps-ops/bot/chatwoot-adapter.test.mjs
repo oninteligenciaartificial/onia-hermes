@@ -142,6 +142,69 @@ test("REGLA DE ORO: message_created saliente se ignora (si no, el bot se contest
   assert.match(parsed.reason, /^mensaje_no_entrante:outgoing$/);
 });
 
+// ---------------------------------------------------------------------------
+// TRASPASO A HUMANO: Sergio contesta => el bot se calla
+// ---------------------------------------------------------------------------
+// El bot posteaba con la MISMA cuenta que Sergio, asi que era imposible distinguir quien escribio y
+// el bot le seguia hablando encima al prospecto. Con `CHATWOOT_BOT_AGENT_ID` (el agente "Onia Bot",
+// id 3) los salientes de CUALQUIER otro usuario significan que un humano tomo la conversacion.
+
+/** Corre `run` con la identidad del bot configurada y la restaura pase lo que pase. */
+function conIdentidadDelBot(id, run) {
+  const antes = process.env.CHATWOOT_BOT_AGENT_ID;
+  if (id === null) delete process.env.CHATWOOT_BOT_AGENT_ID;
+  else process.env.CHATWOOT_BOT_AGENT_ID = String(id);
+  try {
+    return run();
+  } finally {
+    if (antes === undefined) delete process.env.CHATWOOT_BOT_AGENT_ID;
+    else process.env.CHATWOOT_BOT_AGENT_ID = antes;
+  }
+}
+
+test("TRASPASO: si contesta OTRO usuario, el turno pide callar al bot", () => {
+  conIdentidadDelBot(3, () => {
+    const parsed = parseChatwootWebhook(outgoingFixture({ sender: { id: 2, name: "OnIA", type: "user" } }));
+    assert.equal(parsed.skip, false, "no se descarta: hay que anotar el traspaso");
+    assert.equal(parsed.turn.human_takeover, true);
+    assert.equal(parsed.turn.text, "", "no hay nada que contestar");
+    assert.equal(parsed.turn.author, "agent", "la bitacora no puede decir que lo escribio el contacto");
+    assert.equal(parsed.turn.contact_ref, "2");
+  });
+});
+
+test("EL CANDADO: el saliente del PROPIO bot NO lo silencia (si no, se calla con su 1ra respuesta)", () => {
+  conIdentidadDelBot(3, () => {
+    const parsed = parseChatwootWebhook(outgoingFixture({ sender: { id: 3, name: "Onia Bot", type: "user" } }));
+    assert.equal(parsed.skip, true, "es su propio eco: se ignora como siempre");
+    assert.match(parsed.reason, /^mensaje_no_entrante:outgoing$/);
+  });
+});
+
+test("sin identidad configurada se comporta como antes: NUNCA se auto-silencia", () => {
+  conIdentidadDelBot(null, () => {
+    const parsed = parseChatwootWebhook(outgoingFixture({ sender: { id: 99, name: "Otro", type: "user" } }));
+    assert.equal(parsed.skip, true, "callarse con todos es peor que el problema que esto arregla");
+  });
+});
+
+test("un remitente que no es un usuario de Chatwoot no puede silenciar al bot", () => {
+  conIdentidadDelBot(3, () => {
+    for (const sender of [{ id: 9, type: "contact" }, { id: null, type: "user" }, { type: "user" }, null]) {
+      const parsed = parseChatwootWebhook(outgoingFixture({ sender }));
+      assert.equal(parsed.skip, true, `sender ${JSON.stringify(sender)} no deberia disparar traspaso`);
+    }
+  });
+});
+
+test("una NOTA PRIVADA de Sergio no es atender al prospecto: no dispara traspaso", () => {
+  conIdentidadDelBot(3, () => {
+    const parsed = parseChatwootWebhook(outgoingFixture({ private: true, sender: { id: 2, type: "user" } }));
+    assert.equal(parsed.skip, true);
+    assert.equal(parsed.reason, "nota_privada");
+  });
+});
+
 test("nota privada (private:true) se ignora aunque diga 'incoming'", () => {
   const parsed = parseChatwootWebhook(incomingFixture({ private: true }));
   assert.equal(parsed.skip, true);
