@@ -154,7 +154,8 @@
   .ub-hint { margin: 0; color: #7c7466; font-size: 0.9rem; letter-spacing: 0.02em; }
 
   @media (prefers-reduced-motion: reduce) {
-    .ub, .ub__file, .ub__action, .ub__label, .ub__progress { transition-duration: 0.01ms !important; }
+    /* transition: none, no 0.01ms — ver README: 0.01ms rompe propiedades discretas. */
+    .ub, .ub__file, .ub__action, .ub__label, .ub__progress { transition: none !important; }
   }
 </style>
 
