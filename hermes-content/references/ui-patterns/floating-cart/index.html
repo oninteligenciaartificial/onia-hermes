@@ -253,8 +253,11 @@
   .fc-modal__cta-fin svg { width: 15px; height: 15px; }
 
   @media (prefers-reduced-motion: reduce) {
-    .fc-card, .fc-add, .fc-add span, .fc-fab, .fc-modal, .fc-modal::backdrop,
+    .fc-card, .fc-add, .fc-add span, .fc-fab,
     .fc-modal__x, .fc-modal__cta, .fc-qty button { transition-duration: 0.01ms !important; }
+    /* el dialog va con transition: none, no con duracion 0: una transicion discreta de
+       display/overlay de 0.01ms deja al <dialog> a medio camino (abierto y opacity 0) */
+    .fc-modal, .fc-modal::backdrop { transition: none !important; }
     .fc-fab__thumbs span, .fc-row, .fc-envio__brillo, .fc-modal__sub strong { animation: none !important; }
   }
 </style>
@@ -284,9 +287,9 @@
         <span class="fc-card__voto"><b>★★★★★</b> ${p.pts} (${p.votos})</span>
         <div class="fc-card__pie">
           <span class="fc-card__precio">${bs(p.precio)}</span>
-          <button class="fc-add" type="button" data-id="${p.id}" data-added="false">
-            <span data-l="add">+ Agregar</span>
-            <span data-l="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Agregado</span>
+          <button class="fc-add" type="button" data-id="${p.id}" data-added="false" aria-label="Agregar ${p.nom} al carrito">
+            <span data-l="add" aria-hidden="true">+ Agregar</span>
+            <span data-l="ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Agregado</span>
           </button>
         </div>
       </li>`).join('');
@@ -371,13 +374,13 @@
     modal.addEventListener('close', () => {
       const volverFoco = () => {
         if (modal.open) return;
-        if (getComputedStyle(modal).display !== 'none') return requestAnimationFrame(volverFoco);
+        if (getComputedStyle(modal).display !== 'none') return setTimeout(volverFoco, 16);
         const act = document.activeElement;
         if (!act || act === document.body || modal.contains(act)) {
           (carrito.size ? fab : grid.querySelector('.fc-add')).focus();
         }
       };
-      requestAnimationFrame(volverFoco);
+      volverFoco();
     });
     $('#fc-cta').addEventListener('click', (e) => {
       const t = e.currentTarget.firstElementChild;

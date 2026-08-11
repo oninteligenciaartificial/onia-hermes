@@ -4,7 +4,7 @@
      El original usa React + framer-motion; aca es CSS puro + 20 lineas de JS:
      todo lo que anima son transform, opacity, background-color y width. -->
 <div class="ub-demo">
-  <button class="ub" data-state="idle" aria-live="polite">
+  <button class="ub" data-state="idle" aria-label="Subir Document.pdf">
     <span class="ub__file">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -12,7 +12,7 @@
       </svg>
       <span class="ub__name">Document.pdf</span>
     </span>
-    <span class="ub__action">
+    <span class="ub__action" aria-hidden="true">
       <span class="ub__label" data-label="idle">Upload</span>
       <span class="ub__label" data-label="busy">Uploading...</span>
       <span class="ub__label" data-label="done">
@@ -163,10 +163,20 @@
     const b = document.currentScript.parentElement.querySelector('.ub');
     const hint = document.currentScript.parentElement.querySelector('.ub-hint');
     b.addEventListener('click', () => {
-      if (b.dataset.state !== 'idle') { b.dataset.state = 'idle'; hint.textContent = 'Tocá el botón'; return; }
+      if (b.dataset.state !== 'idle') {
+        b.dataset.state = 'idle';
+        b.setAttribute('aria-label', 'Subir Document.pdf');
+        hint.textContent = 'Tocá el botón';
+        return;
+      }
       b.dataset.state = 'busy';
+      b.setAttribute('aria-label', 'Subiendo Document.pdf');
       hint.textContent = 'subiendo...';
-      setTimeout(() => { b.dataset.state = 'done'; hint.textContent = 'tocá otra vez para reiniciar'; }, 2600);
+      setTimeout(() => {
+        b.dataset.state = 'done';
+        b.setAttribute('aria-label', 'Document.pdf subido. Tocá para reiniciar');
+        hint.textContent = 'tocá otra vez para reiniciar';
+      }, 2600);
     });
   })();
 </script>
