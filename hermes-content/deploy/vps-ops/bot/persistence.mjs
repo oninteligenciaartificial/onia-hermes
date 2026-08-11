@@ -96,6 +96,10 @@ export function stateFromRow(row) {
     conversationKey: row.conversation_key,
     channel: row.channel,
     contactRef: row.contact_ref,
+    // Vive en `raw` y no en columna propia: `raw` ya es el carril de los campos de estado que no
+    // tienen columna (qualifyAsks, outboundSeq, scheduledLabel), asi que no hace falta un DDL en
+    // produccion para dejar de guardar el id de conversacion como telefono del CRM.
+    publicContact: raw.publicContact || null,
     displayName: row.display_name,
     botStage: STAGES.includes(row.bot_stage) ? row.bot_stage : "nuevo",
     pieceKey: row.piece_key,

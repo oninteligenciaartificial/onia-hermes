@@ -178,11 +178,29 @@ export function seedFrom(input) {
     conversationKey: input.conversation_key || input.conversationKey || `${channel}:${contactRef}`,
     channel,
     contactRef,
+    publicContact: input.public_contact || input.publicContact || null,
     displayName: input.display_name || input.displayName || null,
     pieceKey: input.piece_key || input.pieceKey || null,
     sourceCampaign: input.source_campaign || input.sourceCampaign || null,
     ownerRoleKey: input.owner_role_key || "sergio",
   };
+}
+
+/**
+ * Rellena con lo que trae el canal SOLO los campos que la fila guardada tiene vacios.
+ *
+ * `ensureConversation()` escribe estos datos UNA vez, al crear la fila con el primer mensaje. Si el
+ * telefono o la atribucion recien aparecen en el segundo webhook, el estado cargado de la base los
+ * pisa con null y no se guardan NUNCA (los siguientes turnos ya encuentran la fila creada). Se
+ * rellena y no se sobrescribe a proposito: un dato ya guardado gana, asi un turno posterior sin
+ * atribucion no borra la que trajo el primero.
+ */
+function fillFromSeed(state, seed) {
+  const patch = {};
+  if (!state.publicContact && seed.publicContact) patch.publicContact = seed.publicContact;
+  if (!state.pieceKey && seed.pieceKey) patch.pieceKey = seed.pieceKey;
+  if (!state.sourceCampaign && seed.sourceCampaign) patch.sourceCampaign = seed.sourceCampaign;
+  return Object.keys(patch).length ? { ...state, ...patch } : state;
 }
 
 export function incomingFrom(input, nowIso) {
@@ -272,7 +290,7 @@ export async function runTurn(input, deps = {}) {
 
   // 1. Estado: base primero, memoria si la base no contesta (el bot NO se queda mudo).
   const loaded = await store.ensureConversation(seed);
-  let state = loaded || createState(seed);
+  let state = fillFromSeed(loaded || createState(seed), seed);
   if (!loaded && store.enabled) store.warnings.push("estado en memoria: la conversación no se pudo cargar");
   if (input.human_takeover === true && !state.humanTookOver) state = markHumanTakeover(state, nowIso);
 

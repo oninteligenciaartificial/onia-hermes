@@ -43,10 +43,21 @@ import { authenticateChatwootRequest, DEFAULT_TOLERANCE_SECONDS } from "./webhoo
 import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
 import { knowledgeHealth } from "./knowledge.mjs";
+import { createStore } from "./persistence.mjs";
 
 export const DEFAULT_PORT = 3020;
 export const DEFAULT_MAX_BODY_BYTES = 1024 * 1024;
 export const WEBHOOK_PATH = "/webhook/chatwoot";
+
+/**
+ * Timeout del chequeo de base. CORTO a proposito (el resto del bot usa 8 s): /health lo mira el
+ * vigilante cada 10 minutos y tiene que contestar SIEMPRE. Preferimos reportar `db.ok=false` por
+ * lentitud a dejar la unica ventana de diagnostico colgada esperando a una base que no vuelve.
+ */
+export const DB_HEALTH_TIMEOUT_MS = 2500;
+
+/** Clave que no existe ni va a existir: la lectura pega el indice unico y no devuelve datos. */
+const DB_HEALTH_PROBE_KEY = "health:probe";
 
 // ---------------------------------------------------------------------------
 // Config
@@ -67,25 +78,110 @@ export function getServerConfig(env = process.env) {
   };
 }
 
+/** Parte SINCRÓNICA del estado: sólo la config, sin tocar red. NUNCA devuelve el valor de un secreto. */
+export function getAuthHealth(config = getServerConfig()) {
+  const ok = Boolean(config.webhookSecret || config.pathSecret || config.allowUnsigned);
+  return {
+    ok,
+    firma: Boolean(config.webhookSecret),
+    ruta: Boolean(config.pathSecret),
+    sinVerificar: Boolean(config.allowUnsigned),
+    // Se grita fuerte: sin esto el endpoint no procesa nada y hay que enterarse mirando /health,
+    // no descubriéndolo porque el bot no contesta.
+    aviso: ok ? undefined : "SIN SECRETO CONFIGURADO: el webhook responde 503 a todo.",
+  };
+}
+
+/**
+ * ¿La base RESPONDE? Una lectura de verdad contra PostgREST, no un ping ni una variable de entorno.
+ *
+ * POR QUÉ EXISTE: el bot degrada a memoria por diseño (persistence.mjs regla 1), así que una base
+ * caída no lo deja mudo — lo deja AMNÉSICO, y eso no se ve desde afuera. En agosto 2026 una regla
+ * de firewall bloqueó el puerto de PostgREST entre contenedores y el bot pasó CINCO DÍAS sin poder
+ * guardar nada mientras `/health` decía `ok:true`. Ningún chequeo indirecto habría visto eso: hay
+ * que hacer la lectura.
+ *
+ * Se reusa `createStore()` (el MISMO cliente que escribe en producción) a propósito: un cliente
+ * aparte para el chequeo puede estar sano mientras el real falla, y entonces el health miente.
+ *
+ * NUNCA TIRA Y NUNCA CUELGA: `rest()` ya es tolerante por contrato y aborta a los `timeoutMs`,
+ * pero igual va contra un reloj propio. `AbortSignal.timeout` es opcional en `rest()` (`: undefined`
+ * si el runtime no lo tiene) y ahí el fetch no tendría tope: la carrera es lo que garantiza que
+ * `/health` conteste aunque el socket quede colgado para siempre.
+ *
+ * @returns {Promise<{ok:boolean, latencyMs:number, error?:string}>}
+ */
+export async function checkDatabaseHealth(deps = {}) {
+  const now = typeof deps.now === "function" ? deps.now : Date.now;
+  const started = now();
+  const elapsed = () => Math.max(0, now() - started);
+
+  // NO se toma `deps.fetch`: ese inyectable es el del evento a n8n (createWebhookServer) y
+  // apuntarlo a la base haría que el chequeo mida un cliente que no es el que escribe de verdad.
+  const store = deps.store || createStore({ timeoutMs: DB_HEALTH_TIMEOUT_MS });
+  const timeoutMs = Number(deps.timeoutMs) > 0 ? Number(deps.timeoutMs) : DB_HEALTH_TIMEOUT_MS;
+
+  const vencido = Symbol("db_health_timeout");
+  let timer;
+  const reloj = new Promise((resolve) => {
+    timer = setTimeout(() => resolve(vencido), timeoutMs + 500);
+    // Sin unref, un chequeo en vuelo mantendría vivo el event loop y demoraría el SIGTERM.
+    if (typeof timer?.unref === "function") timer.unref();
+  });
+
+  let rows;
+  try {
+    rows = await Promise.race([store.loadConversation(DB_HEALTH_PROBE_KEY), reloj]);
+  } catch (error) {
+    // `loadConversation` promete no tirar; esto es la red de contención por si alguna vez deja de
+    // cumplirlo. Un throw acá tumbaría /health, que es lo único que no puede pasar.
+    return { ok: false, latencyMs: elapsed(), error: String(error?.message || error).slice(0, 200) };
+  } finally {
+    clearTimeout(timer);
+  }
+
+  if (rows === vencido) {
+    return { ok: false, latencyMs: elapsed(), error: `sin respuesta en ${timeoutMs + 500} ms` };
+  }
+  // `null` = el store apiló el motivo en warnings (sin credenciales, HTTP 4xx/5xx, red caída).
+  if (rows === null) {
+    const motivo = store.warnings[store.warnings.length - 1] || "lectura fallida sin motivo declarado";
+    return { ok: false, latencyMs: elapsed(), error: String(motivo).slice(0, 200) };
+  }
+  return { ok: true, latencyMs: elapsed() };
+}
+
 /**
  * Estado para `GET /health`. NUNCA devuelve un secreto: sólo si está o no está.
  * `knowledge` es obligatorio y no decorativo: sin ver la FUENTE y la VERSIÓN que el bot está
  * usando, "edité el JSON y no pasó nada" tarda días en descubrirse — que es exactamente el modo
  * de falla que ya nos costó caro con `sync-onia-core.mjs`.
+ *
+ * `ok` GLOBAL PASA A FALSE SI LA BASE NO RESPONDE. Es la decisión importante de esta función y va
+ * contra la intuición, porque el bot SIGUE contestando sin base. El argumento:
+ *   · Sin base no hay estado: cada mensaje reabre la conversación en `nuevo`, el prospecto vuelve a
+ *     empezar el guion en cada turno y nunca llega a agendar.
+ *   · Sin base no hay dedup (`bot_messages.message_key`): un reintento de Chatwoot le manda la
+ *     misma respuesta DOS VECES al prospecto.
+ *   · Sin base no hay lead: nada de lo que el bot atienda llega al CRM. Comercialmente, atender
+ *     sin registrar es equivalente a no atender.
+ *   Un bot así tiene la boca sana y la cabeza vacía. `ok` existe para que suene una alarma; si no
+ *   suena para el modo de falla que ya nos costó cinco días, no sirve para nada.
+ * Se verificó que ningún automatismo reinicia el contenedor por `ok:false` — `webhook-watchdog.sh`
+ * mira si /health CONTESTA (código de salida de wget), no el cuerpo — así que esto alerta, no
+ * apaga: durante una caída de base el bot degradado sigue en pie.
  */
-export function getHealthStatus(config = getServerConfig(), n8nConfig = getN8nEventConfig(), knowledge = knowledgeHealth()) {
-  const authOk = Boolean(config.webhookSecret || config.pathSecret || config.allowUnsigned);
+export async function getHealthStatus(config = getServerConfig(), n8nConfig = getN8nEventConfig(), deps = {}) {
+  const auth = getAuthHealth(config);
+  const knowledge = deps.knowledge || knowledgeHealth();
+  const checkDb = typeof deps.checkDb === "function" ? deps.checkDb : checkDatabaseHealth;
+  const db = await checkDb(deps);
   return {
-    ok: authOk,
+    ok: auth.ok && db.ok === true,
     service: "onia-chatbot-webhook",
-    auth: {
-      firma: Boolean(config.webhookSecret),
-      ruta: Boolean(config.pathSecret),
-      sinVerificar: Boolean(config.allowUnsigned),
-      // Se grita fuerte: sin esto el endpoint no procesa nada y hay que enterarse mirando /health,
-      // no descubriéndolo porque el bot no contesta.
-      aviso: authOk ? undefined : "SIN SECRETO CONFIGURADO: el webhook responde 503 a todo.",
-    },
+    auth,
+    // `ok:false` acá = el bot contesta pero NO GUARDA NADA (ni estado, ni dedup, ni lead).
+    db,
     n8n: { enabled: n8nConfig.enabled, configurado: Boolean(n8nConfig.url && n8nConfig.secret) },
     // source: "file" = manda knowledge.json · "code" = se cayó a los valores del código.
     // Caer a "code" después de haber sido "file" es la alarma: alguien editó y el bot no lo tomó.
@@ -301,7 +397,16 @@ export function createWebhookServer(deps = {}) {
     const url = String(req.url || "/");
 
     if (req.method === "GET" && url.split("?")[0].replace(/\/+$/, "") === "/health") {
-      writeJson(res, 200, getHealthStatus(config, n8nConfig));
+      // El `await` es acotado por diseño (ver checkDatabaseHealth): /health contesta sí o sí.
+      // Va con su propio try porque este handler es `async`: un throw acá sería un unhandled
+      // rejection, y el proceso caído deja al bot mudo para TODOS.
+      let estado;
+      try {
+        estado = await getHealthStatus(config, n8nConfig, deps);
+      } catch (error) {
+        estado = { ok: false, service: "onia-chatbot-webhook", error: String(error?.message || error).slice(0, 200) };
+      }
+      writeJson(res, 200, estado);
       return;
     }
 
@@ -352,7 +457,9 @@ export function createWebhookServer(deps = {}) {
 export function main(deps = {}) {
   const config = deps.config || getServerConfig();
   const server = createWebhookServer({ ...deps, config });
-  const health = getHealthStatus(config, deps.n8nConfig || getN8nEventConfig());
+  // Sólo la parte sincrónica: el aviso del arranque es sobre el secreto, y el estado de la base se
+  // consulta en cada /health. Arrancar no puede depender de una lectura de red.
+  const auth = getAuthHealth(config);
 
   // Timeouts explicitos en vez del default de Node: un cliente que abre el socket y no manda
   // nada no puede quedarse colgado ocupando un handle.
@@ -371,7 +478,7 @@ export function main(deps = {}) {
 
   server.listen(config.port, () => {
     process.stdout.write(`[onia-webhook] escuchando en :${config.port}${WEBHOOK_PATH}\n`);
-    if (!health.ok) process.stdout.write(`[onia-webhook] ${health.auth.aviso}\n`);
+    if (!auth.ok) process.stdout.write(`[onia-webhook] ${auth.aviso}\n`);
   });
 
   const shutdown = () => {
