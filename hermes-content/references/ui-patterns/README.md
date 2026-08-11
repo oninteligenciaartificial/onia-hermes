@@ -31,6 +31,11 @@ El criterio corregido:
 - **Solo `transform` y `opacity`** salvo que el gesto exija otra cosa; si se anima algo
   layout-bound (como `width`), se deja dicho por qué.
 - **`prefers-reduced-motion` siempre.**
+- **Etiquetas de estado apiladas = un solo nombre accesible.** El truco de apilar los estados
+  en la misma celda de grid y cruzar opacidades evita saltos de layout, pero deja TODAS las
+  etiquetas en el DOM: el lector de pantalla lee "+ Agregar Agregado". Las etiquetas visuales
+  van con `aria-hidden="true"` y el nombre real vive en un `aria-label` del botón que el JS
+  actualiza en cada cambio de estado.
 
 ## Cómo verlos
 
@@ -45,3 +50,4 @@ O desde Claude Code: `preview_start` con la config `ui-patterns` de `.claude/lau
 | Patrón | Fuente | Estado |
 |---|---|---|
 | [upload-button](upload-button/) — pill de archivo → subiendo → completado | [reel](https://www.instagram.com/p/Dbx6AWGz_av/) | reconstruido, estados verificados en navegador |
+| [checkout-card](checkout-card/) — tarjeta que se escribe en vivo, flip 3D al CVC, viaje al centro al pagar | [reel](https://www.instagram.com/p/Db3CrouPbxz/) | reconstruido, estados verificados en navegador |
