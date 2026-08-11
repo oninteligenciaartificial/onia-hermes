@@ -419,6 +419,14 @@ svg {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
 }
 
+/*
+ * El hover levanta con `translate`, NO con `transform`.
+ *
+ * Estas tarjetas son elementos de Motion (StaggerItem/Reveal) y Motion escribe
+ * `transform` en el atributo style: una regla `transform` de hoja de estilos
+ * pierde siempre contra eso y el hover no se veia. `translate` es una propiedad
+ * independiente que el navegador compone ANTES del transform, asi que conviven.
+ */
 .card {
   display: flex;
   flex-direction: column;
@@ -428,13 +436,13 @@ svg {
   border-radius: var(--radius);
   padding: clamp(1.2rem, 2.2vw, 1.7rem);
   transition:
-    transform 0.22s var(--ease),
+    translate 0.22s var(--ease),
     box-shadow 0.22s var(--ease),
     border-color 0.22s var(--ease);
 }
 
 .card:hover {
-  transform: translateY(-3px);
+  translate: 0 -3px;
   border-color: var(--line);
   box-shadow: var(--shadow-card);
 }
@@ -583,6 +591,6 @@ svg {
   }
 
   .card:hover {
-    transform: none;
+    translate: none;
   }
 }

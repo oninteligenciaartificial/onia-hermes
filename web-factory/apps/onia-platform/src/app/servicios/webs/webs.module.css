@@ -17,14 +17,16 @@
   border-radius: var(--radius-lg);
   background: var(--surface);
   padding: clamp(1.2rem, 2.4vw, 1.7rem);
+  /* `translate` y no `transform`: la tarjeta la anima Motion y su transform
+     llega inline — una regla de hoja de estilos no le gana */
   transition:
-    transform 0.22s var(--ease),
+    translate 0.22s var(--ease),
     box-shadow 0.22s var(--ease),
     border-color 0.22s var(--ease);
 }
 
 .stack:hover {
-  transform: translateY(-3px);
+  translate: 0 -3px;
   border-color: var(--line);
   box-shadow: var(--shadow-card);
 }
@@ -35,7 +37,7 @@
   }
 
   .stack:hover {
-    transform: none;
+    translate: none;
   }
 }
 
