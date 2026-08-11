@@ -53,6 +53,17 @@ Lo que sí sirve, por orden de valor:
 | [Dropzone con progreso](2026-08-11-dropzone-progreso-clip-path.md) | FUTURO | Importación de productos |
 | [Web 3D scrollytelling](2026-08-11-web-3d-scrollytelling-united-carriers.md) | FUTURO | web-factory (techo) |
 
+### Carruseles (6, recuperados el 11-ago)
+
+`yt-dlp` no puede con carruseles de imagenes. Se agregó `ig-carousel.mjs` y se recuperaron
+los 6: **55 láminas + los 6 captions**, leídos sin Gemini. Traían lo mejor de la tanda.
+
+| Ficha | Veredicto | Sesión |
+|---|---|---|
+| [Mapa de 42 skills de diseño](2026-08-11-mapa-42-skills-diseno-claude.md) | SIRVE YA | web-factory |
+| [7 agentes de venta](2026-08-11-ejercito-7-agentes-ventas.md) | MEJORA | CRM / agentes |
+| [Los otros 4 carruseles](2026-08-11-carruseles-menores.md) | 1 SIRVE YA · 1 FUTURO · 2 HUMO | varios |
+
 ## Tanda 2026-08-09 — 6 fichas
 
 ## Índice

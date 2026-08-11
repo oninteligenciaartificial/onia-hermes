@@ -70,6 +70,46 @@ audio) en **1,7 s**. Ambos sin abrir el navegador.
 no volcar el video en base64 al contexto; nunca escribir la contrasena de IG — el login
 lo hace Sergio en la ventana.
 
+## Carruseles de imágenes — `scripts/ig-carousel.mjs` (2026-08-11)
+
+**yt-dlp NO puede con ellos**: falla con `No video formats found!` porque solo entiende de
+video, y encima resuelve un shortcode interno distinto al del link (esa es la firma de un
+carrusel). Perderlos es caro: **un carrusel suele ser el formato MÁS denso en información**
+de todo Instagram — una idea por lámina, más el caption, que muchas veces trae el contenido
+entero escrito.
+
+```bash
+node .claude/skills/ver-videos/scripts/ig-carousel.mjs <url|shortcode> [...] --out DIR
+```
+
+Pide `carousel_media` a la API interna de IG con el mismo `cookies.txt`, baja **todas** las
+láminas en su mayor resolución, guarda los slides que sean video como mp4, y escribe siempre
+`caption.txt`. Después las láminas se leen con visión directa (tool Read) — sin Gemini.
+
+**Trampas resueltas (medidas 2026-08-11, 6 carruseles / 55 láminas):**
+- **Leer el caption PRIMERO.** Es texto, es barato, y en 4 de 6 casos traía el contenido
+  completo; las láminas solo confirmaban. Leer 55 imágenes cuando el caption ya lo dice es
+  quemar contexto.
+- **No mandar el jar de cookies entero**: la cookie `rur` trae comillas y escapes `\054` que
+  undici rechaza (`invalid header value`). Whitelist: `sessionid`, `csrftoken`, `ds_user_id`,
+  `mid`, `ig_did`.
+- **Partir por `/\r?\n/`**: en Windows el `cookies.txt` queda con CRLF y el `\r` se cuela en
+  el valor de la última columna → mismo error de header, con causa distinta.
+
+## Cómo "ver" cuando NO hay Gemini (orden real de preferencia)
+
+Gemini no es la capacidad: es un atajo barato. La visión propia es el piso y nunca se cae.
+
+| Orden | Camino | Cuándo | Costo |
+| --- | --- | --- | --- |
+| 1 | **Gemini nativo** | video con audio y timeline que importa | gratis hasta ~20 videos/día (después: `You exceeded your current quota`, y es DIARIO — reintentar no sirve) |
+| 2 | **Whisper/Speaches + fotogramas leídos con visión** | cuota agotada, o hace falta verbatim exacto para citar | gratis, sin límite |
+| 3 | **Solo fotogramas con visión** | video mudo, carrusel, captura de pantalla | gratis; cuesta CONTEXTO, no dinero |
+| 4 | **Caption / texto** | carruseles y posts: casi siempre el 80% del contenido | gratis y barato — probar SIEMPRE primero |
+
+Regla: reportar la cobertura real de cada camino ("audio 100%, 5 de 7 láminas"), nunca decir
+"vi el video" desde dos cuadros.
+
 ## Instagram por MCP de navegador (ruta VIEJA — solo si falla la de arriba)
 
 **El problema, para no volver a chocar:** IG no reproduce reels sin sesion; el `<video>` usa
