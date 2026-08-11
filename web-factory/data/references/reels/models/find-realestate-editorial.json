@@ -1,0 +1,182 @@
+{
+  "id": "find-realestate-editorial",
+  "sourceReel": "video-intake-20260811-DbmpRmEIN_L",
+  "name": "FIND Real Estate",
+  "siteType": "real-estate",
+  "sourceUrl": "https://www.instagram.com/p/DbmpRmEIN_L/",
+  "summary": "Inmobiliaria editorial y clara: hero con titular animado, tres caminos explicitos (comprar / vender / alquilar), contenido de mercado como prueba de autoridad y newsletter al cierre. Version LIGERA del rubro inmobiliario, frente al modelo cinematografico lecercle-realestate: alcanzar por esta cuando el cliente necesita convertir, no impresionar.",
+  "designTokens": {
+    "palette": [
+      { "role": "bg", "hex": "#faf8f5", "note": "crema editorial de fondo" },
+      { "role": "surface", "hex": "#ffffff", "note": "tarjetas de propiedad y articulos" },
+      { "role": "text", "hex": "#1a1a18", "note": "tinta casi negra" },
+      { "role": "accent", "hex": "#2f4f45", "note": "verde profundo de CTA y detalles" },
+      { "role": "detail", "hex": "#8a8378", "note": "metadatos, etiquetas de seccion" }
+    ],
+    "typography": {
+      "display": "serif editorial",
+      "body": "sans limpia",
+      "treatment": "titular grande con animacion de entrada por palabras, mucho aire, etiquetas en minuscula"
+    },
+    "radius": "rounded",
+    "density": "airy",
+    "motionLevel": 3
+  },
+  "sections": [
+    {
+      "order": 0,
+      "job": "hero",
+      "block": "media-hero",
+      "layout": "full-bleed",
+      "content": ["headline", "sub", "cta-primary", "media"],
+      "motion": {
+        "entrance": "el titular entra por palabras (split-text, y 24 -> 0) y la media revela con clip-path hacia arriba",
+        "trigger": "on-load",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.9,
+        "staggerSec": 0.06,
+        "scrollLinked": "parallax suave de la media al salir del viewport",
+        "hover": "el CTA desplaza su flecha 4px",
+        "reducedMotion": "titular y media en estado final, sin parallax"
+      },
+      "notes": "Titular corto de promesa emocional + CTA de busqueda. La primera pantalla dice el negocio, la oferta y la accion siguiente."
+    },
+    {
+      "order": 1,
+      "job": "trust",
+      "block": "editorial-statement",
+      "layout": "centered",
+      "content": ["statement"],
+      "motion": {
+        "entrance": "fade + rise",
+        "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.7,
+        "staggerSec": 0,
+        "scrollLinked": "",
+        "hover": "",
+        "reducedMotion": "estatico"
+      },
+      "notes": "Una linea que reencuadra el rubro ('esto no se trata solo de inmuebles'). Barata de producir y sube el tono de toda la pagina."
+    },
+    {
+      "order": 2,
+      "job": "offer",
+      "block": "path-cards",
+      "layout": "grid",
+      "content": ["icon", "title", "copy", "cta"],
+      "motion": {
+        "entrance": "stagger fade-up de las tres tarjetas",
+        "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.6,
+        "staggerSec": 0.08,
+        "scrollLinked": "",
+        "hover": "la tarjeta sube 4px y el borde toma el color accent",
+        "reducedMotion": "estatico y visible"
+      },
+      "notes": "Comprar / Vender / Alquilar. Tres intenciones distintas, tres caminos explicitos: es lo que hace que la pagina convierta en vez de solo lucir."
+    },
+    {
+      "order": 3,
+      "job": "catalog",
+      "block": "property-cards",
+      "layout": "grid",
+      "content": ["media", "precio", "ubicacion", "specs", "cta"],
+      "motion": {
+        "entrance": "stagger fade-up",
+        "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.6,
+        "staggerSec": 0.07,
+        "scrollLinked": "",
+        "hover": "zoom lento de la foto dentro de su marco (scale 1 -> 1.04), el marco no se mueve",
+        "reducedMotion": "estatico, sin zoom"
+      },
+      "notes": "Precio visible en la tarjeta. En Bolivia el precio oculto mata la consulta."
+    },
+    {
+      "order": 4,
+      "job": "proof",
+      "block": "article-cards",
+      "layout": "grid",
+      "content": ["media", "titulo", "fecha", "resumen"],
+      "motion": {
+        "entrance": "stagger fade-up",
+        "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.6,
+        "staggerSec": 0.07,
+        "scrollLinked": "",
+        "hover": "subrayado del titulo que crece desde la izquierda",
+        "reducedMotion": "estatico"
+      },
+      "notes": "Articulos de mercado como prueba de autoridad. Sustituye a los testimonios cuando el cliente todavia no tiene ninguno."
+    },
+    {
+      "order": 5,
+      "job": "conversion",
+      "block": "newsletter-band",
+      "layout": "centered",
+      "content": ["heading", "form"],
+      "motion": {
+        "entrance": "fade + rise",
+        "trigger": "in-view",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.6,
+        "staggerSec": 0,
+        "scrollLinked": "",
+        "hover": "",
+        "reducedMotion": "estatico"
+      },
+      "notes": "Captura al visitante que no esta listo para comprar hoy. En ONIA este campo alimenta el pipeline con atribucion ?src=."
+    },
+    {
+      "order": 6,
+      "job": "footer",
+      "block": "footer-brand",
+      "layout": "grid",
+      "content": ["logo", "nav", "contacto", "legal"],
+      "motion": {
+        "entrance": "none",
+        "trigger": "none",
+        "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0,
+        "staggerSec": 0,
+        "scrollLinked": "",
+        "hover": "",
+        "reducedMotion": "estatico"
+      },
+      "notes": ""
+    }
+  ],
+  "components": ["media-hero", "editorial-statement", "path-cards", "property-cards", "article-cards", "newsletter-band", "footer-brand"],
+  "interactions": [
+    {
+      "pattern": "Titular que entra por palabras (split-text) en el hero",
+      "reducedMotionFallback": "titular completo, sin animacion"
+    },
+    {
+      "pattern": "Zoom lento de la foto dentro del marco al hacer hover en una tarjeta",
+      "reducedMotionFallback": "sin zoom"
+    },
+    {
+      "pattern": "Parallax suave de la media del hero",
+      "reducedMotionFallback": "sin parallax"
+    }
+  ],
+  "buildWithOnia": [
+    "Es el modelo por defecto para inmobiliaria con presupuesto de lanzamiento: 7 secciones, motionLevel 3, entra comodo en el presupuesto de 150 kb de JS.",
+    "Las tres tarjetas de camino (comprar/vender/alquilar) son el bloque que hace la diferencia entre presencia y conversion: no recortarlas.",
+    "Reemplazar la paleta por tokens ONIA del cliente; el verde profundo es rol accent, no color literal.",
+    "El newsletter conecta al pipeline de leads con ?src= que ya corre en produccion.",
+    "Si el cliente quiere la version cinematografica, comparar contra lecercle-realestate antes de decidir: son el mismo rubro con dos objetivos distintos."
+  ],
+  "assetsNeeded": [
+    "Fotos reales de las propiedades en cartera (minimo 6 para que la grilla no se vea vacia)",
+    "Precios y especificaciones reales por propiedad",
+    "2-3 articulos o notas de mercado del cliente. Si no tiene, la seccion de proof se reemplaza por FAQ, no se inventan articulos"
+  ],
+  "bestFor": ["inmobiliaria", "corretaje", "alquiler temporario", "desarrollos", "servicios profesionales con 3 caminos de entrada"],
+  "confidence": "high"
+}

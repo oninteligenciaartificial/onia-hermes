@@ -6,6 +6,27 @@ de arrancar una web, junto con la skill `onia-web-factory`.
 
 Las fichas por video viven en `../video-intake/`. Acá está lo transversal.
 
+> **Dónde vive cada cosa (corregido 2026-08-11).** web-factory YA tiene el pipeline para
+> esto y hay que usarlo, no armar uno al lado:
+>
+> | Lo aprendido | Dónde va | Estado |
+> |---|---|---|
+> | Un video que muestra **una web entera** | `web-factory/data/references/reels/models/*.json` → catálogo `docs/WEB_FACTORY_LEARNED_MODELS.md` | ✅ 2 modelos nuevos capturados (abajo) |
+> | Un **componente suelto** (botón, carrito, dropzone) | reconstruido en `ui-patterns/`, y es la lista de compras de `web-factory/packages/blocks` | ✅ 4 reconstruidos |
+> | Un **patrón de movimiento** | `web-factory/docs/MOTION_PATTERN_BANK_2026.md` (P1..P14) | pendiente: sumar los nuevos como P15+ |
+> | El proceso de mirar reels | ya escrito: `web-factory/REELS_INTELLIGENCE_RUNBOOK.md` + `harvester/reels/{ACQUIRE,ANALYZE}.md` | usar ese, no inventar otro |
+>
+> **Modelos capturados de esta tanda** (`node harvester/reels/build-web-models.mjs` para
+> regenerar el catálogo; el schema se valida con zod):
+> - `unitedcarriers-logistics` — el scroll mueve una escena 3D que ES la cadena logística.
+>   Para cualquier cliente que venda un **proceso invisible** (transporte, importación,
+>   instalación). Confianza media: choca con el presupuesto de 150 kb de JS, por eso el
+>   modelo trae escrita la versión 2D degradada.
+> - `find-realestate-editorial` — inmobiliaria que **convierte** en vez de impresionar:
+>   tres caminos explícitos (comprar/vender/alquilar), precio visible, artículos como prueba
+>   cuando todavía no hay testimonios. Confianza alta. Es el hermano ligero del
+>   `lecercle-realestate` que ya estaba en el catálogo.
+
 ---
 
 ## 1. El criterio corregido (lo más importante de todo)
