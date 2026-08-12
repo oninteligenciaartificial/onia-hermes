@@ -12,9 +12,9 @@ llenar casilleros** — 9 de 20 de la tanda del 11-ago son humo, y así está es
 |---|---|---|
 | `chatbot` | **Sí — el más urgente** | minimización de datos |
 | `INFLUENCERS IA` | **Sí — el más valioso** | prompt por escenas de Seedance |
-| `onia-plattform` | Sí (2 tareas) | agente de producto · seguridad |
-| `Carrito de compra` | Sí | patrón de carrito flotante |
-| `Estructura de pagos` | Sí, pero primero verificar | checkout in-page vs redirección al banco |
+| `onia-plattform` | Sí (**3 tareas**) | seguridad · agente de producto · visión como capacidad |
+| `Carrito de compra` | Sí — **es módulo de la plataforma** | patrón de carrito flotante |
+| `Estructura de pagos` | Sí — **es módulo de la plataforma**, pero verificar primero | checkout in-page vs redirección al banco |
 | `editor de videos` | Sí | 32 plantillas + gap de formatos |
 | `web-factory` | Sí | portafolio antes/después |
 | `Importación de productos` | Anotado, no urgente | dropzone con progreso |
@@ -146,6 +146,38 @@ NO HAGAS: NO des de alta PostHog ni ninguna plataforma nueva — es gasto y nece
 Los MCPs de NotebookLM que muestra el video son repos de terceros no oficiales: descartalos,
 ya hay pipeline de voz propio. Verificá contra los agentes que ya corren (Contenido,
 Finanzas, Vendedor) antes de crear uno nuevo: puede ser una vista, no un agente.
+```
+
+---
+
+### 3 · Vision por computadora como capacidad (corregido 2026-08-11)
+
+Sale de [Supra Vision](2026-08-09-supra-vision-ganado-vision-computacional.md). Estaba mal
+archivado como "Ganadero OS, ultimo en la cola": una camara que lee movimiento no es una
+funcion ganadera, es una **capacidad** que enchufa en rubros que ya vendemos.
+
+```text
+Sesion: onia-plattform. git branch --show-current primero.
+TAREA UNICA: evaluar vision por computadora como CAPACIDAD de la plataforma. Solo evaluar.
+No es un rubro nuevo ni un producto: es una capacidad transversal. Contra que rubros ya
+vendibles aplica y que dato entrega:
+  - comercio minorista: cuanta gente entra, a que hora, cuanto se queda frente a que gondola
+  - importadora: conteo de bultos en la descarga, contra la lista de packing
+  - servicios: control de acceso y aforo
+  - ganadero: conteo de hacienda (ultimo, no primero)
+Preguntas a responder con evidencia, no con opinion:
+  1. Que precision real da un modelo de deteccion estandar en cada caso (no en el demo).
+  2. Donde corre: subir video continuo a la nube es caro. Evaluar el encaje con Onia Box
+     (infra on-premise) — la camara le da a Onia Box algo concreto que hacer.
+  3. Que hardware minimo necesita el cliente y quien lo paga.
+  4. Cual de los cuatro casos tiene el dolor mas caro HOY para el comprador.
+LISTO = una tabla de 4 filas (rubro, dato que entrega, precision esperada, donde corre) + UNA
+recomendacion: cual se prototipa primero, o ninguno y por que.
+NO HAGAS: NO construyas el detector. NO des de alta plataformas de vision pagas. NO prometas
+precision sin medirla — el salto de "detecto ovejas en un video" a "gestion inteligente" es
+marketing, y repetirlo seria fabricar capacidad.
+Si se arma una demo con overlay de cajas, se declara que es demo. Nunca mostrarlo como
+capacidad instalada.
 ```
 
 ---
