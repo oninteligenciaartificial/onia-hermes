@@ -281,16 +281,31 @@ NO uses un Lead Finder de volumen: la regla es pocos prospectos buenos con seña
 
 ---
 
-## `Importación de productos`
+## `Importación de productos` — portar los patrones al flujo real
 
-Sale de [dropzone con progreso](2026-08-11-dropzone-progreso-clip-path.md) (`FUTURO`).
-**No abre sesión hoy** — se guarda para cuando toque construir la carga de archivos.
+**Reescrito 2026-08-11.** Antes decia "anotado, no urgente"; eso era ANTES de que los dos
+patrones existieran reconstruidos. Ahora hay codigo andando: `dropzone-progress` y
+`upload-button` en `hermes-content/references/ui-patterns/`.
 
-Técnica: barra de progreso hecha con `@property` de CSS + `clip-path`, sin librería. El
-`easing: SPRING` que aparece en el clip no es sintaxis nativa de la Web Animations API —
-viene de alguna librería que el video no muestra: **verificar antes de copiar**.
-
----
+```text
+Sesion: Importacion de productos. git branch --show-current primero.
+TAREA UNICA: portar dos patrones YA reconstruidos al flujo real de importacion. No disenar
+nada nuevo.
+  1. `ui-patterns/dropzone-progress/` -> la zona donde se sueltan los archivos de catalogo.
+     La miniatura ES la barra: capa viva sobre fantasma en gris, recortada con clip-path
+     atado a una custom property registrada con @property.
+  2. `ui-patterns/upload-button/` -> el boton por archivo (reposo -> subiendo -> completado).
+Los dos son HTML/CSS/JS autocontenidos: hay que portarlos al stack del producto (React),
+conservando la mecanica y las reglas, no reescribiendo el gesto.
+LISTO = la importacion real usando los dos patrones, probada en navegador con archivos de
+verdad, incluido el caso de error y el reintento.
+NO HAGAS: no cambies el gesto ni las duraciones (0,6-0,9 s) — ya estan calibradas y Sergio
+observo que mas rapido no se lee. Respeta las 2 reglas del README de ui-patterns: nombre
+accesible unico si apilas etiquetas de estado, y reduced-motion con `transition: none`
+(0.01ms rompe las propiedades discretas).
+MIENTRAS PORTAS: mira los originales en vivo (`npx serve hermes-content/references/ui-patterns`)
+y confirma el TIMING, que es lo unico que quedo sin verificar de los 6 patrones.
+```
 
 ## `pendiente`
 
@@ -331,6 +346,83 @@ IA que ya corre por cron cada 2 h. Si no aporta algo que el radar no cubra, se d
 | [Botón de carga](2026-08-11-boton-carga-archivos-react-framer.md) | 6,7 s sin mostrar una línea de código |
 | [Checkout flip 3D](2026-08-11-checkout-tarjeta-flip-3d-portfolio.md) | patrón ya estándar, sin sustancia |
 | [ESP32 costo de reunión](2026-08-11-esp32-costo-de-reunion.md) | no toca ningún frente de ONIA |
+
+---
+
+# Lo construido y todavia apagado
+
+Cuatro prompts para cosas que existen y **nadie usa**. Es la antinorma del CLAUDE.md:
+construido no es terminado. Van en este orden por dependencia.
+
+## B1 · Construir `packages/blocks` (va PRIMERO)
+
+```text
+Sesion: web-factory. git branch --show-current primero.
+TAREA UNICA: construir los bloques que el catalogo de learned models ya pidio. Nada mas.
+El catalogo `web-factory/docs/WEB_FACTORY_LEARNED_MODELS.md` lista 22 tipos de bloque que los
+5 modelos necesitan, y `packages/blocks` no los tiene. Sin esto, generar un sitio desde un
+modelo no produce nada: es la lista de compras y esta sin comprar.
+EMPEZA por los que aparecen en 2+ modelos (el catalogo los ordena por frecuencia): footer-brand,
+benefit-strip, editorial-statement.
+Cada bloque: props tipadas, tokens ONIA (no colores literales), reduced-motion, y el spec de
+`motion` que el modelo ya trae escrito por seccion (entrance, trigger, easing, duracion,
+stagger, scrollLinked, hover, reducedMotion).
+LISTO = 3 bloques construidos + renderizados en una pagina de prueba + tsc --noEmit verde.
+NO HAGAS: no construyas los 22. Tres que se usen valen mas que veintidos a medias.
+NO inventes bloques que ningun modelo pidio.
+```
+
+## B2 · Generar un sitio desde un learned model (depende de B1)
+
+```text
+Sesion: web-factory. git branch --show-current primero.
+TAREA UNICA: generar UNA landing real desde el modelo `find-realestate-editorial`.
+Esta en `web-factory/data/references/reels/models/` con confianza ALTA y sin estrenar: 7
+secciones, motionLevel 3, entra comodo en el presupuesto de 150 kb de JS. Trae el orden de
+secciones, los roles de color, la tipografia y el motion por seccion, ya escritos.
+LISTO = la landing generada, corriendo en local, con tokens ONIA (no la paleta del modelo) y
+placeholders honestos donde falten assets reales del cliente.
+NO HAGAS: no uses la paleta literal del modelo — los hex son ROLES (bg, accent, text), se
+reemplazan por los tokens del cliente. No inventes propiedades, precios ni articulos: donde
+falte dato real va placeholder marcado, nunca proof fabricado.
+Si el cliente pidiera la version cinematografica, compara contra `lecercle-realestate` antes
+de decidir: mismo rubro, objetivo opuesto.
+```
+
+## B3 · Encender el intake automatico de video
+
+```text
+Sesion: infra (carril G, UN SOLO DUENO). git branch --show-current primero.
+TAREA UNICA: dejar el intake de video corriendo sin Sergio. El codigo ya existe y esta verde:
+  - `scripts/video-intake.mjs` (link -> mp4 -> lectura -> verbatim -> ficha)
+  - `.github/workflows/video-intake.yml` (workflow_dispatch + repository_dispatch)
+Falta SOLO cablear: (1) crear el secret GEMINI_API_KEY en el repo; (2) opcional IG_COOKIES_B64
+(se regenera con `node .claude/skills/ver-videos/scripts/fetch-video.mjs --login`; la sesion de
+IG caduca, hay que refrescarlo); (3) un workflow n8n que escuche Telegram, detecte un link de
+IG/TikTok/YouTube y dispare repository_dispatch con event_type "video-intake".
+LISTO = Sergio manda un link por Telegram y la ficha aparece commiteada en
+hermes-content/references/video-intake/ + aviso de vuelta por Telegram. Probado punta a punta
+con un link real.
+NO HAGAS: el token de GitHub para n8n va como CREDENCIAL de n8n (Header Auth), NUNCA como
+$env — el plan VPS no lo soporta. No pegues la key en el workflow.
+LIMITE CONOCIDO: la cuota gratis de Gemini corta a ~20 videos por dia. Si se supera, el script
+ya cae al camino alternativo (Whisper + fotogramas); no hay que arreglarlo.
+```
+
+## B4 · Probar los 6 patrones en vivo (chico, 20 min)
+
+```text
+Sesion: cualquiera con navegador. git branch --show-current primero.
+TAREA UNICA: mirar los 6 patrones moverse y anotar si el timing esta bien.
+  npx serve hermes-content/references/ui-patterns
+Patrones: upload-button, checkout-card, floating-cart, dropzone-progress, chat-widget, sidebar-nav.
+Por que hace falta: se verifico estado, DOM, accesibilidad y estados finales, pero NO el timing
+— con el panel del navegador oculto las transiciones CSS no avanzan y getComputedStyle devuelve
+el valor inicial. Nadie los vio moverse todavia salvo el upload-button.
+LISTO = una linea por patron: timing OK o "queda lento/rapido en X". Y probar con
+reduced-motion activado en DevTools (los 6 tienen que quedar legibles y completos).
+NO HAGAS: no toques el codigo en esta sesion. Solo mirar y anotar.
+```
 
 ---
 
@@ -430,4 +522,31 @@ Meta y TikTok y con el token de IG ya bloqueado es el riesgo que no conviene toc
 (2026-08-11-primeboard-autopilot-farming-redes.md).
 NO repitas cifras de terceros ("$1M en 4 meses" y similares) en ninguna creatividad: no tienen
 fuente. Prueba real o no se dice.
+```
+
+## A6 · Los patrones reconstruidos SON contenido
+
+Esto responde a la pregunta de Sergio: si, sirve ahora. Reconstruir un reel de UI viral es en
+si mismo material publicable, y es el mas barato que tenemos — sin cara, sin voz, sin creditos.
+
+```text
+Sesion: marketing (Arthur). git branch --show-current primero.
+TAREA UNICA: 3 piezas verticales a partir de los patrones ya reconstruidos en
+hermes-content/references/ui-patterns/ (upload-button, checkout-card, floating-cart,
+dropzone-progress, chat-widget, sidebar-nav).
+Formato por pieza (grabacion de pantalla, 9:16, sin voz, sin cara):
+  0-3 s   el patron funcionando, en loop limpio
+  3-8 s   una linea de por que esta bien hecho, con el dato concreto
+  8-12 s  cierre pidiendo la palabra clave
+Los datos concretos que YA tenemos y que casi nadie dice (usarlos, son el diferencial):
+  - "el original usa React + framer-motion; esto es CSS puro, 0 kb de libreria"
+  - "el <dialog> nativo te da Escape, foco atrapado y devolucion del foco gratis"
+  - "reduced-motion con 0.01ms deja el modal abierto e INVISIBLE; va transition: none"
+  - "las etiquetas apiladas hacen que el lector lea 'Upload Uploading Completed'"
+LISTO = 3 mp4 listos + su copy, para que Sergio apruebe. SIN publicar.
+NO HAGAS: no digas que inventamos el patron — se reconstruyo mirando el reel, y eso se dice.
+Citar la fuente cuando corresponda; nunca reusar el video, la musica ni el copy del creador.
+No prometas el codigo por DM si despues no lo vas a mandar.
+POR QUE ESTE FUNCIONA: le habla al comprador tecnico y demuestra capacidad real en vez de
+afirmarla. Es prueba, no promesa.
 ```
