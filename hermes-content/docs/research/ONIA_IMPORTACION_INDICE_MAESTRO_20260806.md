@@ -55,7 +55,11 @@ Bolivia, y elegir un producto.
 | 4 | Generar certificado del Padrón (**después** de 1 y 2), destinatario ADUANA NACIONAL | Leslie |
 | 5 | Registro de importador en SUMA + estar presente en la verificación de domicilio | Leslie |
 | 6 | **Enviar el RFQ** a Beelink y GMKtec | Sergio |
-| 7 | **5 conversaciones** con estudios jurídicos y clínicas | Sergio |
+| 7 | **5 conversaciones** con estudios jurídicos y clínicas — guion listo para salir: `ONIA_BOX_LAS_5_CONVERSACIONES_GUION_20260812.md` | Sergio |
+
+> ⚠️ **El 7 manda sobre los otros seis.** Los seis primeros preparan la importación; el séptimo
+> dice si hay que importar. El criterio de corte (qué resultado sigue y cuál para el producto)
+> está escrito **antes** de salir, en la sección 7 de ese guion, para no acomodarlo después.
 
 ### ❓ Sin verificar (marcado, no inventado)
 - GA exacto de las partidas 84.71 / 8473.30 → pedir clasificación escrita a la despachante
@@ -114,6 +118,7 @@ Bolivia, y elegir un producto.
 | Doc | Qué contiene |
 |---|---|
 | `ONIA_BOX_CONTACTOS_FABRICA_Y_RFQ_20260806.md` | **Contactos B2B verificados** de Beelink y GMKtec + **RFQ listo para enviar** |
+| `ONIA_BOX_LAS_5_CONVERSACIONES_GUION_20260812.md` | **El guion de validación**: a quién, qué preguntar, cómo distinguir un sí real de cortesía, y el criterio de corte escrito de antemano |
 
 ---
 
