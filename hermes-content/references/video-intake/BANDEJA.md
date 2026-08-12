@@ -87,3 +87,10 @@ delante. Cuando uno se procesa, se le escribe su ficha y se mueve a [INDEX.md](I
 - [Lectura + verbatim](transcripciones/2026-08-12-Instagram-Dby5fKZvglj.md)
 - Resumen: El video presenta cinco herramientas y plugins de código abierto y gratuitos diseñados para mejorar el desarrollo de páginas web e interfaces de usuario utilizando Claude (y Claude Code). Estas herramientas permiten evitar diseños genéricos o de baja calidad ("AI slop"), integrar sistemas de diseño basados en sitios...
 - **Veredicto: PENDIENTE**
+
+## 2026-08-12-Instagram-DbsnCscPCow
+
+- https://www.instagram.com/reel/DbsnCscPCow/ · 8 s
+- [Lectura + verbatim](transcripciones/2026-08-12-Instagram-DbsnCscPCow.md)
+- Resumen: El video es un recurso promocional dinámico de diseño UI/UX dirigido a creadores y desarrolladores web. A través de transiciones rápidas y rítmicas, muestra diversas plantillas y maquetas de interfaces de usuario con estructuras complejas. El mensaje central busca generar interés en el trabajo de diseño expuesto y m...
+- **Veredicto: PENDIENTE**
