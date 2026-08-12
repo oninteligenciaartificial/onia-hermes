@@ -1,0 +1,444 @@
+{
+  "generatedAt": "2026-08-11T02:56:30.116Z",
+  "policy": "Learned web-models are generation blueprints, not copies. Rebuild each with ONIA tokens and blocks; supply real client assets; never reuse third-party footage, code, copy or logos. Trend models are inspiration; client-owned assets only after rights confirmed.",
+  "summary": {
+    "models": 5,
+    "siteTypes": 4,
+    "blocks": 22,
+    "motionPrimitives": 10
+  },
+  "blockLibrary": [
+    {
+      "value": "footer-brand",
+      "count": 3
+    },
+    {
+      "value": "benefit-strip",
+      "count": 2
+    },
+    {
+      "value": "editorial-statement",
+      "count": 2
+    },
+    {
+      "value": "property-cards",
+      "count": 2
+    },
+    {
+      "value": "scroll-story-hero",
+      "count": 2
+    },
+    {
+      "value": "article-cards",
+      "count": 1
+    },
+    {
+      "value": "bento-grid",
+      "count": 1
+    },
+    {
+      "value": "centered-logo-nav",
+      "count": 1
+    },
+    {
+      "value": "editorial-headline",
+      "count": 1
+    },
+    {
+      "value": "inline-contact-form",
+      "count": 1
+    },
+    {
+      "value": "inline-quote-form",
+      "count": 1
+    },
+    {
+      "value": "media-feature",
+      "count": 1
+    },
+    {
+      "value": "media-hero",
+      "count": 1
+    },
+    {
+      "value": "newsletter-band",
+      "count": 1
+    },
+    {
+      "value": "path-cards",
+      "count": 1
+    },
+    {
+      "value": "pill-cta",
+      "count": 1
+    },
+    {
+      "value": "product-story",
+      "count": 1
+    },
+    {
+      "value": "saturated-product-hero",
+      "count": 1
+    },
+    {
+      "value": "scroll-story",
+      "count": 1
+    },
+    {
+      "value": "seal-badge",
+      "count": 1
+    },
+    {
+      "value": "stat-strip",
+      "count": 1
+    },
+    {
+      "value": "where-to-buy",
+      "count": 1
+    }
+  ],
+  "motionLibrary": {
+    "primitives": [
+      {
+        "value": "fade",
+        "count": 15
+      },
+      {
+        "value": "scale-zoom",
+        "count": 9
+      },
+      {
+        "value": "staggered-children",
+        "count": 8
+      },
+      {
+        "value": "slide-in",
+        "count": 5
+      },
+      {
+        "value": "clip-path-reveal",
+        "count": 3
+      },
+      {
+        "value": "scroll-parallax",
+        "count": 3
+      },
+      {
+        "value": "rotate",
+        "count": 1
+      },
+      {
+        "value": "spotlight-glow",
+        "count": 1
+      },
+      {
+        "value": "sticky-nav",
+        "count": 1
+      },
+      {
+        "value": "type-slam",
+        "count": 1
+      }
+    ],
+    "triggers": [
+      {
+        "value": "in-view",
+        "count": 20
+      },
+      {
+        "value": "on-load",
+        "count": 5
+      },
+      {
+        "value": "none",
+        "count": 2
+      },
+      {
+        "value": "scroll-linked",
+        "count": 1
+      }
+    ]
+  },
+  "componentLibrary": [
+    {
+      "value": "footer-brand",
+      "count": 2
+    },
+    {
+      "value": "article-cards",
+      "count": 1
+    },
+    {
+      "value": "benefit-strip",
+      "count": 1
+    },
+    {
+      "value": "centered-logo-nav",
+      "count": 1
+    },
+    {
+      "value": "centered-packshot-spotlight",
+      "count": 1
+    },
+    {
+      "value": "circular-control-buttons",
+      "count": 1
+    },
+    {
+      "value": "circular-seal-badge",
+      "count": 1
+    },
+    {
+      "value": "editorial-bento-grid",
+      "count": 1
+    },
+    {
+      "value": "editorial-statement",
+      "count": 1
+    },
+    {
+      "value": "inline-form",
+      "count": 1
+    },
+    {
+      "value": "inline-quote-form",
+      "count": 1
+    },
+    {
+      "value": "media-hero",
+      "count": 1
+    },
+    {
+      "value": "newsletter-band",
+      "count": 1
+    },
+    {
+      "value": "path-cards",
+      "count": 1
+    },
+    {
+      "value": "pill-buttons",
+      "count": 1
+    },
+    {
+      "value": "pill-cta",
+      "count": 1
+    },
+    {
+      "value": "product-callout-tile",
+      "count": 1
+    },
+    {
+      "value": "property-cards",
+      "count": 1
+    },
+    {
+      "value": "rounded-corner-imagery",
+      "count": 1
+    },
+    {
+      "value": "rounded-pill-labels",
+      "count": 1
+    },
+    {
+      "value": "scroll-story",
+      "count": 1
+    },
+    {
+      "value": "scroll-story-hero",
+      "count": 1
+    },
+    {
+      "value": "stat-strip",
+      "count": 1
+    },
+    {
+      "value": "sticky-nav-centered-logo",
+      "count": 1
+    },
+    {
+      "value": "two-column-cards",
+      "count": 1
+    }
+  ],
+  "bySiteType": [
+    {
+      "value": "real-estate",
+      "count": 2
+    },
+    {
+      "value": "ecommerce-food",
+      "count": 1
+    },
+    {
+      "value": "food-cpg",
+      "count": 1
+    },
+    {
+      "value": "logistics-transport",
+      "count": 1
+    }
+  ],
+  "models": [
+    {
+      "id": "costers-food-ecommerce",
+      "name": "COSTERS",
+      "siteType": "ecommerce-food",
+      "sourceReel": "vanity-high-end-website",
+      "sourceUrl": "https://www.instagram.com/reel/DbBMwhcuuYE/",
+      "summary": "High-contrast luxury gourmet ecommerce built on an editorial bento grid that mixes moody product packshots, named product callouts with price, and lifestyle food photography.",
+      "sectionFlow": [
+        "centered-logo-nav",
+        "editorial-headline",
+        "bento-grid",
+        "seal-badge",
+        "pill-cta"
+      ],
+      "paletteFamilies": [
+        "#14161a",
+        "#f2efe8",
+        "#8a9a5b",
+        "#e8e4da"
+      ],
+      "bestFor": [
+        "ecommerce-food",
+        "gourmet/premium products",
+        "beauty",
+        "boutique retail"
+      ],
+      "confidence": "high",
+      "path": "data/references/reels/models/costers-food-ecommerce.json"
+    },
+    {
+      "id": "boldflavor-cpg-landing",
+      "name": "BOLD FLAVOR",
+      "siteType": "food-cpg",
+      "sourceReel": "noidgroup-claude-fez-isso",
+      "sourceUrl": "https://www.instagram.com/reel/DZ2r09Rvlei/",
+      "summary": "Punchy single-product CPG landing: one saturated brand-color field, an oversized condensed product name, a single spotlighted packshot and exactly one flavor claim — zero clutter.",
+      "sectionFlow": [
+        "saturated-product-hero",
+        "benefit-strip",
+        "product-story",
+        "where-to-buy"
+      ],
+      "paletteFamilies": [
+        "#6f1a12",
+        "#ee6a1f",
+        "#f2e4c9",
+        "#201512"
+      ],
+      "bestFor": [
+        "food-cpg",
+        "packaged goods",
+        "beverages",
+        "single-product launches"
+      ],
+      "confidence": "high",
+      "path": "data/references/reels/models/boldflavor-cpg-landing.json"
+    },
+    {
+      "id": "unitedcarriers-logistics",
+      "name": "United Carriers",
+      "siteType": "logistics-transport",
+      "sourceReel": "video-intake-20260811-Db0yxc5xnpD",
+      "sourceUrl": "https://www.instagram.com/p/Db0yxc5xnpD/",
+      "summary": "Sitio de logistica y transporte de carga donde el scroll mueve una escena 3D que representa la cadena logistica: el visitante 'sigue' la carga desde el deposito hasta la entrega. Alcanzar por este modelo cuando el cliente vende un PROCESO invisible (transporte, importacion, instalacion) y hay que hacerlo visible.",
+      "sectionFlow": [
+        "scroll-story-hero",
+        "scroll-story",
+        "benefit-strip",
+        "stat-strip",
+        "inline-quote-form",
+        "footer-brand"
+      ],
+      "paletteFamilies": [
+        "#0e1116",
+        "#171c24",
+        "#3d7dff",
+        "#eef1f6",
+        "#8b95a5"
+      ],
+      "bestFor": [
+        "logistica",
+        "transporte",
+        "importadora",
+        "distribucion",
+        "instalacion",
+        "cualquier rubro que venda un proceso invisible"
+      ],
+      "confidence": "medium",
+      "path": "data/references/reels/models/unitedcarriers-logistics.json"
+    },
+    {
+      "id": "find-realestate-editorial",
+      "name": "FIND Real Estate",
+      "siteType": "real-estate",
+      "sourceReel": "video-intake-20260811-DbmpRmEIN_L",
+      "sourceUrl": "https://www.instagram.com/p/DbmpRmEIN_L/",
+      "summary": "Inmobiliaria editorial y clara: hero con titular animado, tres caminos explicitos (comprar / vender / alquilar), contenido de mercado como prueba de autoridad y newsletter al cierre. Version LIGERA del rubro inmobiliario, frente al modelo cinematografico lecercle-realestate: alcanzar por esta cuando el cliente necesita convertir, no impresionar.",
+      "sectionFlow": [
+        "media-hero",
+        "editorial-statement",
+        "path-cards",
+        "property-cards",
+        "article-cards",
+        "newsletter-band",
+        "footer-brand"
+      ],
+      "paletteFamilies": [
+        "#faf8f5",
+        "#ffffff",
+        "#1a1a18",
+        "#2f4f45",
+        "#8a8378"
+      ],
+      "bestFor": [
+        "inmobiliaria",
+        "corretaje",
+        "alquiler temporario",
+        "desarrollos",
+        "servicios profesionales con 3 caminos de entrada"
+      ],
+      "confidence": "high",
+      "path": "data/references/reels/models/find-realestate-editorial.json"
+    },
+    {
+      "id": "lecercle-realestate",
+      "name": "Le Cercle",
+      "siteType": "real-estate",
+      "sourceReel": "idanweb-realestate-scroll",
+      "sourceUrl": "https://www.instagram.com/reel/DZ7gUXYuXbt/",
+      "summary": "Cinematic long-scroll luxury real-estate site that alternates dark full-bleed hero moments with light editorial sections; the visitor 'walks through' the property as they scroll.",
+      "sectionFlow": [
+        "scroll-story-hero",
+        "editorial-statement",
+        "media-feature",
+        "property-cards",
+        "inline-contact-form",
+        "footer-brand"
+      ],
+      "paletteFamilies": [
+        "#141210",
+        "#f3efe9",
+        "#b06a2e",
+        "#efe9e0"
+      ],
+      "bestFor": [
+        "real-estate",
+        "hospitality",
+        "premium/luxury brand",
+        "architecture"
+      ],
+      "confidence": "high",
+      "path": "data/references/reels/models/lecercle-realestate.json"
+    }
+  ],
+  "howToUse": [
+    "Match the client's rubro to a learned model in bySiteType.",
+    "Open the model JSON: use its sections[] as the composition, designTokens as the token seed, and each section's motion spec.",
+    "Build with ONIA blocks (see blockLibrary for what each model needs); swap in the client's real palette and assets.",
+    "Add the motion with the toolkit (packages/blocks/src/motion.ts, see packages/blocks/MOTION.md): map each section's motion spec to a wf-* class. Reduced-motion is built in.",
+    "Run the pre-ship checklist (real assets, hierarchy, responsive, reduced motion, Core Web Vitals) before delivery."
+  ]
+}

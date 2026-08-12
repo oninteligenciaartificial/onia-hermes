@@ -1,0 +1,82 @@
+{
+  "id": "costers-food-ecommerce",
+  "sourceReel": "vanity-high-end-website",
+  "name": "COSTERS",
+  "siteType": "ecommerce-food",
+  "sourceUrl": "https://www.instagram.com/reel/DbBMwhcuuYE/",
+  "summary": "High-contrast luxury gourmet ecommerce built on an editorial bento grid that mixes moody product packshots, named product callouts with price, and lifestyle food photography.",
+  "designTokens": {
+    "palette": [
+      { "role": "bg-dark", "hex": "#14161a", "note": "charcoal product panels" },
+      { "role": "bg-light", "hex": "#f2efe8", "note": "cream editorial panels" },
+      { "role": "accent", "hex": "#8a9a5b", "note": "muted product green" },
+      { "role": "text-on-dark", "hex": "#e8e4da", "note": "warm white" }
+    ],
+    "typography": { "display": "elegant serif, uppercase", "body": "refined sans", "treatment": "editorial, minimal, lots of negative space" },
+    "radius": "sharp",
+    "density": "balanced",
+    "motionLevel": 2
+  },
+  "sections": [
+    {
+      "order": 0, "job": "hero", "block": "centered-logo-nav", "layout": "bar",
+      "content": ["logo", "menu", "cart"],
+      "motion": {
+        "entrance": "nav fades down (y -12 -> 0)", "trigger": "on-load", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.5, "staggerSec": 0, "scrollLinked": "sticky; subtle background blur/opacity increase after scroll",
+        "hover": "menu links underline slide-in", "reducedMotion": "static nav, no slide"
+      },
+      "notes": "Centered serif logo 'COSTERS' + minimal menu (Shop / About / Journal)."
+    },
+    {
+      "order": 1, "job": "hero", "block": "editorial-headline", "layout": "centered",
+      "content": ["headline"],
+      "motion": {
+        "entrance": "fade + slide up (y 24 -> 0)", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.7, "staggerSec": 0, "scrollLinked": "", "hover": "", "reducedMotion": "static"
+      },
+      "notes": "'SHOP CAVIAR' serif headline."
+    },
+    {
+      "order": 2, "job": "catalog", "block": "bento-grid", "layout": "grid",
+      "content": ["tile:product-packshot", "tile:product-callout (name + 'Starts at $' + click-to-shop)", "tile:food-photo"],
+      "motion": {
+        "entrance": "tiles stagger in (y 20 -> 0, opacity 0 -> 1)", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.5, "staggerSec": 0.06, "scrollLinked": "",
+        "hover": "tile lifts + subtle image zoom (1.04); callout reveals 'click to shop'", "reducedMotion": "static tiles, no lift/zoom"
+      },
+      "notes": "Editorial bento mixing caviar tins on dark panels + named product callouts + gourmet food photography."
+    },
+    {
+      "order": 3, "job": "proof", "block": "seal-badge", "layout": "inline",
+      "content": ["circular-seal"],
+      "motion": {
+        "entrance": "fade + scale-in (scale 0.9 -> 1)", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.5, "staggerSec": 0, "scrollLinked": "", "hover": "slow rotate of the seal ring", "reducedMotion": "static seal"
+      },
+      "notes": "Circular product seals as a premium trust motif."
+    },
+    {
+      "order": 4, "job": "conversion", "block": "pill-cta", "layout": "band",
+      "content": ["cta"],
+      "motion": {
+        "entrance": "fade + slide up (y 16 -> 0)", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.6, "staggerSec": 0, "scrollLinked": "", "hover": "bg color shift + slight scale (1.02)", "reducedMotion": "static, hover color only"
+      },
+      "notes": "'Claim special offers' pill CTA."
+    }
+  ],
+  "components": ["editorial-bento-grid", "circular-seal-badge", "product-callout-tile", "pill-cta", "centered-logo-nav"],
+  "interactions": [
+    { "pattern": "hover reveal / lift on bento tiles", "reducedMotionFallback": "static tiles, no lift" }
+  ],
+  "buildWithOnia": [
+    "Add a bento-grid block that alternates product packshots with lifestyle photography tiles.",
+    "Add a product-callout tile: name + 'Starts at $X' + click-to-shop.",
+    "Use a circular seal/badge component as a trust motif.",
+    "High-contrast dark + cream palette via ONIA tokens; centered serif-logo nav for boutique brands."
+  ],
+  "assetsNeeded": ["clean product packshots", "lifestyle gourmet food photos", "prices", "brand mark"],
+  "bestFor": ["ecommerce-food", "gourmet/premium products", "beauty", "boutique retail"],
+  "confidence": "high"
+}
