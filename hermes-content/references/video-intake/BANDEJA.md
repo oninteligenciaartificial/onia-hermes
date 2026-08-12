@@ -59,3 +59,31 @@ delante. Cuando uno se procesa, se le escribe su ficha y se mueve a [INDEX.md](I
 - [Lectura + verbatim](transcripciones/2026-08-12-Instagram-Dbb34dLEvl0.md)
 - Resumen: El video es un recurso educativo e informativo que identifica problemas operativos comunes en 8 industrias distintas y presenta soluciones específicas mediante la implementación de agentes de Inteligencia Artificial. El mensaje central propone que la automatización con IA (para gestión de llamadas, reservas, ventas,...
 - **Veredicto: PENDIENTE**
+
+## 2026-08-12-Instagram-DblcFzIt9UL
+
+- https://www.instagram.com/p/DblcFzIt9UL/ · 32 s
+- [Lectura + verbatim](transcripciones/2026-08-12-Instagram-DblcFzIt9UL.md)
+- Resumen: El video expone 5 formatos de anuncios estáticos de nivel superior ("S-Tier Ads") diseñados para optimizar el rendimiento en el algoritmo de Meta (Facebook e Instagram). El presentador explica cómo cada formato (noticia, problema-solución, texto sobre piel, recibo de compra y anuncio censurado) captura la atención d...
+- **Veredicto: PENDIENTE**
+
+## 2026-08-12-Instagram-DbovTXCR1YV
+
+- https://www.instagram.com/p/DbovTXCR1YV/ · 14 s
+- [Lectura + verbatim](transcripciones/2026-08-12-Instagram-DbovTXCR1YV.md)
+- Resumen: El creador presenta una lista humorística y crítica de 10 elementos cliché que delatan a un sitio web de baja calidad o generado de forma genérica con inteligencia artificial (*"AI Slop"*). A través de un formato rápido de enumeración con superposiciones gráficas, expone detalles comunes en proyectos apresurados com...
+- **Veredicto: PENDIENTE**
+
+## 2026-08-12-Instagram-DborvP0xEeE
+
+- https://www.instagram.com/p/DborvP0xEeE/ · 87 s
+- [Lectura + verbatim](transcripciones/2026-08-12-Instagram-DborvP0xEeE.md)
+- Resumen: El video presenta el caso de éxito de la empresa Climatic y su producto *L Max*, un dispositivo promocionado como un "vaporizador saludable" para limpiar los pulmones. El presentador analiza cómo la marca combina la resolución de una problemática social (el vapeo en jóvenes y la contaminación urbana) con una estrate...
+- **Veredicto: PENDIENTE**
+
+## 2026-08-12-Instagram-Dby5fKZvglj
+
+- https://www.instagram.com/reel/Dby5fKZvglj/ · 107 s
+- [Lectura + verbatim](transcripciones/2026-08-12-Instagram-Dby5fKZvglj.md)
+- Resumen: El video presenta cinco herramientas y plugins de código abierto y gratuitos diseñados para mejorar el desarrollo de páginas web e interfaces de usuario utilizando Claude (y Claude Code). Estas herramientas permiten evitar diseños genéricos o de baja calidad ("AI slop"), integrar sistemas de diseño basados en sitios...
+- **Veredicto: PENDIENTE**
