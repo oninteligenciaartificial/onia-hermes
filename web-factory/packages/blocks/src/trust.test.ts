@@ -7,7 +7,7 @@ const base = {
   redes: { ig: "", fb: "", linkedin: "", x: "" },
   servicios: [{ titulo: "s", desc: "d", icono: "x" }],
   cta: { texto: "c", url: "#" },
-} as const;
+};
 
 describe("renderTrust", () => {
   it("renders credenciales as a trust strip", () => {

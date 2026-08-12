@@ -7,7 +7,7 @@ const base = {
   redes: { ig: "", fb: "", linkedin: "", x: "" },
   servicios: [{ titulo: "s", desc: "d", icono: "x" }],
   cta: { texto: "c", url: "#" },
-} as const;
+};
 
 describe("renderFaq", () => {
   it("renders accessible details/summary items", () => {
