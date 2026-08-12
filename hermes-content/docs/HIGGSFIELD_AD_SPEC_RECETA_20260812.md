@@ -148,3 +148,53 @@ Lo que hay que verificar (consultar es gratis, no gasta créditos):
 **No planificar producción masiva antes de responder esas cuatro.** Y si resulta cierto, el
 plan no es "generar mucho": es generar **lo que quedó encolado y bloqueado por costo** — las
 piezas de portafolio, el spec ad para un prospecto real, el reel de Lucía con guion por escenas.
+
+
+---
+
+# ✅ VERIFICADO EN LA CUENTA — 2026-08-12 (consulta gratis, cero créditos)
+
+Consultado con el MCP de Higgsfield: `balance` y `models_explore`. **Tres cosas que este mismo
+documento afirmaba quedan corregidas.** Se dejan escritas las dos versiones para que nadie
+repita la equivocada.
+
+| Lo que decían los videos | Lo que tiene la cuenta |
+|---|---|
+| "Seedance **2.5**" | **NO existe en el catálogo.** Lo expuesto es `seedance_2_0` y `seedance_2_0_mini` |
+| "hasta **30 segundos** por toma" | **4 a 15 s** por toma (`duration` min 4, max 15) |
+| "**33 DAYS UNLIMITED**" | `unlim: {available: false, remaining: null, expires_at: null}` → **no aplica a nosotros** |
+
+**Cuenta:** plan `ultra`, **2.862,68 créditos**.
+
+## La buena noticia: la receta funciona igual, con Seedance 2.0
+
+`seedance_2_0` acepta exactamente los roles que la receta necesita:
+
+```
+medias.roles = start_image · end_image · image_references · video_references · audio_references
+```
+
+- **`image_references`** → los tres insumos (avatar, escenario, producto). La receta de 3
+  imágenes corre sin cambios.
+- **`video_references`** → **Video2Video ya existe en 2.0**. El pitch de "grabalo con tu celular
+  y yo lo convierto" es viable hoy, no espera a 2.5.
+- Tags del modelo: `reference · identity · consistent · product · multi-sku · e-commerce`. Está
+  pensado literalmente para vender producto — que es nuestro caso de comercio e importadora.
+- Resolución hasta `4k` con `mode: std`; `mode: fast` es más barato y llega a 720p.
+- `generate_audio` nativo, y `genre` como pista cinematográfica (auto/action/drama/epic...).
+
+## Qué cambia en el plan por esto
+
+1. **El gate de costo SIGUE EN PIE.** No hay ventana ilimitada. Video = permiso explícito de
+   Sergio, caso por caso, como estaba.
+2. **Un comercial de 20 s no es una generación: son 2 o 3.** Con tope de 15 s por toma, la
+   pieza se arma por escenas y se une después. Eso encaja bien con el guion por escenas —
+   cada escena es una generación corta— pero **multiplica el costo**: presupuestarlo así.
+3. **Prototipar con `seedance_2_0_mini` y `mode: fast`**, no con std/4k. Se valida la
+   estructura barata y recién después se paga la versión buena.
+4. Antes de la primera generación real, medir el costo unitario con `get_cost` de UNA toma
+   corta. Sigue siendo la tarea V-3 y sigue sin hacerse.
+
+**Lección de método:** los dos videos son marketing de Higgsfield anunciando un modelo que la
+cuenta todavía no expone. Sirve para saber a dónde va la herramienta, no para planificar
+producción. Toda capacidad se confirma contra `models_explore` antes de prometer nada.
