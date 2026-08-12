@@ -91,7 +91,7 @@ export const PATH_CARDS_CSS = `
 }
 
 .wf-paths-label {
-  color: color-mix(in srgb, var(--color-fg) 55%, var(--color-bg));
+  color: color-mix(in srgb, var(--color-fg) 62%, var(--color-bg));
   font-size: 0.8rem;
   letter-spacing: 0.06em;
 }

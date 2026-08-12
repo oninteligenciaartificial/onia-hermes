@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Marcador de foto de propiedad</title>
+  <desc id="desc">Placeholder en la paleta ONIA. Se reemplaza por la foto real de cada propiedad de la cartera.</desc>
+  <rect width="800" height="600" fill="#ECEFED"/>
+  <g opacity=".35" stroke="#027650" stroke-width="1.5">
+    <path d="M0 150h800M0 300h800M0 450h800M200 0v600M400 0v600M600 0v600"/>
+  </g>
+  <path d="M170 380l150-130 120 105 90-70 100 95v100H170z" fill="#027650" opacity=".22"/>
+  <path d="M400 210l190 150v120H210V360z" fill="none" stroke="#013925" stroke-width="6" stroke-linejoin="round" opacity=".7"/>
+  <rect x="360" y="400" width="80" height="80" fill="#013925" opacity=".7"/>
+  <circle cx="600" cy="170" r="42" fill="#86D9B0" opacity=".7"/>
+</svg>

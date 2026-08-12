@@ -140,7 +140,7 @@ export const FOOTER_BRAND_CSS = `
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--color-fg) 52%, var(--color-bg));
+  color: color-mix(in srgb, var(--color-fg) 62%, var(--color-bg));
 }
 
 .wf-fb-list {
@@ -200,7 +200,7 @@ export const FOOTER_BRAND_CSS = `
 }
 
 .wf-fb-legal {
-  color: color-mix(in srgb, var(--color-fg) 50%, var(--color-bg));
+  color: color-mix(in srgb, var(--color-fg) 62%, var(--color-bg));
   font-size: 0.86rem;
 }
 

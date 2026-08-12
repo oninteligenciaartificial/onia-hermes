@@ -38,6 +38,30 @@ export {
   type FooterBrandItem,
   type FooterBrandProps,
 } from "./footer-brand";
+export {
+  renderMediaHero,
+  MEDIA_HERO_CSS,
+  type MediaHeroLink,
+  type MediaHeroProps,
+} from "./media-hero";
+export {
+  renderPathCards,
+  PATH_CARDS_CSS,
+  type PathCard,
+  type PathCardsProps,
+} from "./path-cards";
+export {
+  renderPropertyCards,
+  PROPERTY_CARDS_CSS,
+  type PropertyCard,
+  type PropertyCardsProps,
+  type PropertySpec,
+} from "./property-cards";
+export {
+  renderNewsletterBand,
+  NEWSLETTER_BAND_CSS,
+  type NewsletterBandProps,
+} from "./newsletter-band";
 
 export { renderClinicHero } from "./clinic-hero";
 export { renderClinicServices } from "./clinic-services";

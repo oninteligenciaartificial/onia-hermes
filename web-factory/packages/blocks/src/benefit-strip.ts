@@ -87,7 +87,7 @@ export const BENEFIT_STRIP_CSS = `
 }
 
 .wf-benefit-label {
-  color: color-mix(in srgb, var(--color-fg) 55%, var(--color-bg));
+  color: color-mix(in srgb, var(--color-fg) 62%, var(--color-bg));
   font-size: 0.8rem;
   letter-spacing: 0.06em;
 }
@@ -167,7 +167,7 @@ export const BENEFIT_STRIP_CSS = `
 
 .wf-benefit-copy {
   margin-top: 8px;
-  color: color-mix(in srgb, var(--color-fg) 66%, var(--color-bg));
+  color: color-mix(in srgb, var(--color-fg) 68%, var(--color-bg));
   font-size: 0.97rem;
   line-height: 1.6;
 }

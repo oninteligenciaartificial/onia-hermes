@@ -13,6 +13,10 @@ import { escapeAttribute, escapeHtml } from "./escape";
  *   reducedMotion "titular y media en estado final, sin parallax"
  * Split-text is markup (one span per word) driven by wf-stagger, so it needs no
  * JS of its own and the words stay selectable and readable by screen readers.
+ *
+ * The nav is deliberately NOT wf-sticky: the model specifies no sticky nav for
+ * this hero, and sticky cannot work here anyway (the header clips its media with
+ * overflow:hidden, which kills position:sticky on its descendants).
  */
 
 export type MediaHeroLink = {
@@ -65,7 +69,7 @@ export function renderMediaHero({
 
   return `
     <header class="wf-mh" id="top">
-      <nav class="wf-mh-nav wf-sticky" aria-label="Principal">
+      <nav class="wf-mh-nav" aria-label="Principal">
         <a class="wf-mh-brand" href="#top">${escapeHtml(brand)}</a>
         <div class="wf-mh-nav-links">${navLinks}</div>
       </nav>
@@ -118,14 +122,16 @@ export const MEDIA_HERO_CSS = `
   object-fit: cover;
 }
 
-/* Scrim: a gradient of the client's own ink, so text contrast holds on any photo. */
+/* Scrim: a gradient of the client's own ink, so text contrast holds on any photo.
+   The top stop is deliberately heavy (not a token 20% wash): the nav sits there in
+   --color-bg, and a bright client photo behind a light scrim drops it under 4.5:1. */
 .wf-mh::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(to top, color-mix(in srgb, var(--color-fg) 88%, transparent) 0%, color-mix(in srgb, var(--color-fg) 40%, transparent) 52%, color-mix(in srgb, var(--color-fg) 22%, transparent) 100%);
+    linear-gradient(to top, color-mix(in srgb, var(--color-fg) 90%, transparent) 0%, color-mix(in srgb, var(--color-fg) 52%, transparent) 55%, color-mix(in srgb, var(--color-fg) 62%, transparent) 100%);
 }
 
 .wf-mh-nav {
@@ -138,12 +144,12 @@ export const MEDIA_HERO_CSS = `
   padding: 18px 0;
 }
 
-.wf-mh-nav.wf-scrolled {
-  background: color-mix(in srgb, var(--color-fg) 72%, transparent);
-  backdrop-filter: blur(10px);
-}
-
 .wf-mh-brand {
+  display: inline-flex;
+  align-items: center;
+  /* The wordmark is a link: it needs a real touch target, not the 22px the type
+     happens to occupy. */
+  min-height: 44px;
   font-family: var(--font-heading);
   font-size: 1.15rem;
   font-weight: 800;
@@ -157,18 +163,35 @@ export const MEDIA_HERO_CSS = `
   gap: 4px;
 }
 
+/* Full --color-bg, not a dimmed mix: over the lightest photo the scrim can only
+   guarantee ~4.9:1 at full strength, and a 16% dim drops it under 4.5. The hover
+   cue is the underline, not brightness. */
 .wf-mh-nav-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   padding: 0 14px;
   font-size: 0.94rem;
-  color: color-mix(in srgb, var(--color-bg) 84%, transparent);
-  transition: color .25s var(--wf-ease, ease);
+  color: var(--color-bg);
 }
 
-.wf-mh-nav-link:hover {
-  color: var(--color-bg);
+.wf-mh-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 11px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s var(--wf-ease, ease);
+}
+
+.wf-mh-nav-link:hover::after,
+.wf-mh-nav-link:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .wf-mh-brand:focus-visible,
@@ -258,7 +281,7 @@ export const MEDIA_HERO_CSS = `
 
 @media (prefers-reduced-motion: reduce) {
   .wf-mh-arrow,
-  .wf-mh-nav-link,
+  .wf-mh-nav-link::after,
   .wf-mh-cta {
     transition: none;
   }

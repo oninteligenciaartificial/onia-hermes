@@ -11,6 +11,7 @@ export const WEB_FACTORY_TEMPLATES = [
   "dashboard",
   "landing-focus",
   "landing-clinic",
+  "landing-realestate",
 ] as const;
 
 export type WebFactoryTemplate = (typeof WEB_FACTORY_TEMPLATES)[number];
@@ -51,6 +52,9 @@ const serviceSchema = z.object({
   titulo: z.string().min(1),
   desc: z.string().min(1),
   icono: z.string().min(1).default("sparkles"),
+  // Per-service destination. Blocks that give every service its own next step
+  // (path-cards) use it; empty falls back to the site-wide CTA.
+  url: z.string().default(""),
 });
 
 const procesoPasoSchema = z.object({
@@ -105,6 +109,10 @@ const productSchema = z.object({
   especificaciones: z.array(productSpecSchema).default([]),
   detalleImagenes: z.array(productDetailImageSchema).default([]),
   detalleNota: z.string().default(""),
+  // Sample item waiting for the client's real data. Blocks that render it MUST
+  // label it on screen, so a page built before the portfolio arrives can never
+  // be mistaken for a real listing.
+  esMuestra: z.boolean().default(false),
   ordenRutina: z.number().int().positive().optional(),
   destacadoMes: z.boolean().optional(),
   descuentoPorcentaje: z.number().min(0).max(100).optional(),
@@ -240,18 +248,38 @@ export const clientSchema = z.object({
       titulo: "Diagnostico claro",
       desc: "Explica que haces, para quien y por que conviene elegirte.",
       icono: "search",
+      url: "",
     },
     {
       titulo: "Oferta ordenada",
       desc: "Convierte servicios dispersos en una propuesta facil de entender.",
       icono: "layout",
+      url: "",
     },
     {
       titulo: "Contacto directo",
       desc: "Lleva al visitante a escribir, llamar o pedir una cotizacion.",
       icono: "message",
+      url: "",
     },
   ]),
+  // One line that reframes the rubro (editorial-statement). Optional: with no
+  // statement the section simply does not render.
+  statement: z.string().default(""),
+  statementAccent: z.string().default(""),
+  // Legal line for the footer. Client-supplied: the factory never guesses the
+  // holder or the year.
+  footerLegal: z.string().default(""),
+  newsletter: z
+    .object({
+      titulo: z.string().default(""),
+      texto: z.string().default(""),
+      // Form endpoint. Empty renders the band without a form instead of a dead input.
+      accion: z.string().default(""),
+      boton: z.string().default("Suscribirme"),
+      nota: z.string().default(""),
+    })
+    .default({ titulo: "", texto: "", accion: "", boton: "Suscribirme", nota: "" }),
   categorias: z.array(z.string().min(1)).default([]),
   productos: z.array(productSchema).default([]),
   beneficios: z.array(z.string().min(1)).default([]),

@@ -25,6 +25,9 @@ const PAGES = [
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", schemes: ["light", "dark"] as const },
   { name: "store (skincare-demo)", url: "/skincare-demo/", schemes: ["light"] as const },
   { name: "landing-clinic (dental-demo)", url: "/dental-demo/", schemes: ["light", "dark"] as const },
+  // Built from the learned model find-realestate-editorial: full-bleed media hero
+  // over a scrim, path cards, catalog grid and the inverted newsletter band.
+  { name: "landing-realestate (realestate-demo)", url: "/realestate-demo/", schemes: ["light", "dark"] as const },
 ];
 
 for (const target of PAGES) {

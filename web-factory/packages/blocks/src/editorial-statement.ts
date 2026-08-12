@@ -72,7 +72,7 @@ export const EDITORIAL_STATEMENT_CSS = `
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: color-mix(in srgb, var(--color-fg) 55%, var(--color-bg));
+  color: color-mix(in srgb, var(--color-fg) 62%, var(--color-bg));
   font-size: 0.8rem;
   letter-spacing: 0.06em;
 }
