@@ -1,5 +1,18 @@
 # Pendientes que salieron del video-intake
 
+> ## 🔴 CORRECCION 2026-08-12 — la tarea de seguridad YA ESTA CERRADA
+>
+> Los 3 bloqueantes de seguridad (RLS, firewall/TLS, logging) se cerraron y se **verificaron en
+> produccion el 2026-08-11**: RLS en las 71 tablas y cero grants a `anon`; `ufw` activo, panel
+> solo por TLS y 5 puertos cerrados (habia un `http.server` abierto en el 8099); `fail2ban` mas
+> vigilante diario con alerta probada.
+>
+> **NO abras esa sesion: mandaria a rehacer trabajo terminado.** Queda un unico pendiente
+> menor: el log de Postgres esta bloqueado por `log_min_messages=fatal` del contenedor.
+>
+> Lo detecto la sintesis del corpus al cruzar el tablero contra la memoria del proyecto. El
+> texto de abajo se conserva solo como registro de lo que se pidio en su momento.
+
 Lo que las fichas dejaron como trabajo, ya filtrado y listo para abrir sesión. **No es un
 tablero nuevo**: usa el mismo modelo de carriles y la misma regla anti-descarrilamiento de
 `../../docs/ONIA_PLAN_ARRANQUE_LIMPIO_20260718.md` (una sesión = una tarea chica = un
