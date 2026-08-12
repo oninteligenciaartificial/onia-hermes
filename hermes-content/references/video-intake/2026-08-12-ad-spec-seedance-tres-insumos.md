@@ -40,6 +40,16 @@ afirmación sin fuente: ahora viene del propio Higgsfield.
 | Ventas (comercio, importadora) | Spec ad de 20 s con 3 fotos del producto de un prospecto real, antes de que compre. Es prueba, no promesa |
 | Gasto | **Verificar YA si la ventana de 33 días aplica a nuestra ULTRA.** Consultar es gratis; la ventana corre sola |
 
+## Verificado el mismo día (y corrige a los dos videos)
+
+Consulta gratis con el MCP: **Seedance 2.5 no existe en la cuenta** (hay `seedance_2_0` y
+`seedance_2_0_mini`), el tope real es **15 s por toma** y no 30, y el **`33 DAYS UNLIMITED`
+NO aplica** (`unlim.available = false`). Cuenta: plan ultra, 2.862,68 créditos.
+
+La receta funciona igual con 2.0: acepta `image_references` (los 3 insumos) y
+`video_references` (Video2Video). Detalle y qué cambia en el plan:
+[la receta](../../docs/HIGGSFIELD_AD_SPEC_RECETA_20260812.md).
+
 ## Riesgo
 
 Hacer un spec ad de una marca real y presentarlo como campaña oficial. Se presenta como spec —
