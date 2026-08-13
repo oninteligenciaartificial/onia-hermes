@@ -74,12 +74,16 @@ responsabilidad.
 
 ## 4. Dónde viven los datos
 
-4.1. **Base de datos del producto:** en **Supabase**, un servicio de base de
-datos en la nube sobre infraestructura de proveedores cloud, con servidores
-ubicados fuera de Bolivia. [REVISAR ABOGADO: implicancias de la transferencia
-internacional de datos, en especial datos de salud.]
+4.1. **Base de datos del producto:** en un **servidor privado administrado por
+Onia**, sobre el que corre Supabase en su versión auto-hospedada. No usamos el
+servicio en la nube de Supabase para los datos del producto: la base vive en
+nuestra propia infraestructura, contratada a un proveedor de servidores
+internacional. [REVISAR ABOGADO: confirmar el país exacto del centro de datos y
+las implicancias de la transferencia internacional, en especial para datos de
+salud.]
 
-4.2. **Automatización y agentes:** en un servidor privado administrado por Onia.
+4.2. **Automatización y agentes:** en el mismo servidor privado administrado por
+Onia.
 
 4.3. **Opción on-premise:** para clientes que lo requieran, Onia puede ofrecer
 instalación en infraestructura del propio cliente ("on-premise"), bajo cotización
@@ -93,7 +97,7 @@ y bajo sus propios compromisos de confidencialidad y seguridad:
 
 | Proveedor | Para qué | Notas |
 |---|---|---|
-| Hosting y base de datos en la nube (Supabase y proveedores de infraestructura) | Alojar y respaldar los datos del producto | Cifrado en tránsito y en reposo; aislamiento por cliente |
+| Proveedor del servidor donde Onia aloja la plataforma | Prestar la infraestructura física donde corren la base y los agentes | El proveedor no administra ni consulta los datos: la base la opera Onia sobre ese servidor |
 | Proveedores de modelos de IA (vía API) | Generar borradores y sugerencias | Solo modalidades que **no entrenan** con los datos enviados; se envía el mínimo contexto necesario |
 | WhatsApp (Meta) | Mensajería con tus clientes cuando activás ese canal | Los mensajes pasan por la infraestructura de Meta bajo sus propios términos |
 
@@ -114,13 +118,23 @@ que traten datos de tus clientes. [REVISAR ABOGADO: mecanismo y plazo de aviso.]
 
 Medidas aplicadas (esfuerzo razonable, mejora continua):
 
-- Cifrado de datos **en tránsito** (TLS/HTTPS) y **en reposo**.
-- **Aislamiento por cliente** con reglas de acceso a nivel de fila en la base de
-  datos.
+- Cifrado de datos **en tránsito** (TLS/HTTPS) en todo el tráfico entre el
+  navegador y la plataforma, con certificados vigentes.
+- **Aislamiento por cliente** con reglas de acceso a nivel de fila (RLS) activas
+  en todas las tablas donde viven los datos de cliente.
 - Contraseñas con hash; accesos administrativos con principio de mínimo
-  privilegio.
-- **Copias de seguridad cifradas** y periódicas.
-- Registro de actividad para detectar accesos anómalos.
+  privilegio y roles por perfil.
+- **Copias de seguridad automáticas diarias**, con retención y verificación de
+  que el respaldo no salga vacío.
+- **Cortafuegos** en el servidor, bloqueo automático de intentos repetidos de
+  acceso, y una verificación diaria que comprueba que estas defensas siguen
+  activas y avisa si alguna se cae.
+- Registro de actividad (auditoría) para detectar accesos anómalos.
+
+Onia no afirma cifrado del disco en reposo ni certificaciones de seguridad
+(ISO 27001, SOC 2) porque hoy no las tiene: preferimos decirlo antes que
+prometerlo. Los clientes que requieran custodia física propia pueden optar por
+la modalidad on-premise (§4.3).
 
 Ningún sistema es infalible. Si ocurriera un incidente de seguridad que afecte
 datos personales, Onia lo notificará al cliente afectado sin demora indebida, con
@@ -135,9 +149,8 @@ lo que se sepa del alcance y las medidas tomadas.
   dentro de los **30 días** posteriores a la terminación. Transcurridos **90
   días** desde la terminación, Onia elimina tus datos de los sistemas activos.
   [REVISAR ABOGADO: validar plazos.]
-- **Backups:** las copias de seguridad cifradas rotan en un ciclo de hasta **30
-  días** adicionales; los datos eliminados desaparecen de los backups al
-  completarse la rotación.
+- **Backups:** las copias de seguridad rotan en un ciclo de **7 días**; los datos
+  eliminados desaparecen de los respaldos al completarse la rotación.
 - **Excepciones:** se conserva lo que la normativa boliviana aplicable exija
   retener (por ejemplo, registros de facturación) por el plazo correspondiente.
 - **Importante:** los plazos legales de conservación de registros del negocio
