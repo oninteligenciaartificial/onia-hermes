@@ -44,8 +44,8 @@ const BROWSER_CANDIDATES = [
 ];
 
 const ACCOUNTS = {
-  // @oniahq NO es nuestro todavia (esta por reclamar). Hasta que lo sea, se estampa el real.
-  onia: { handle: '@oniaagency', name: 'Onia', personal: false },
+  // Handle IG real de ONIA, confirmado por Sergio 2026-08-13.
+  onia: { handle: '@oniahq', name: 'Onia', personal: false },
   arthur: { handle: '@arthur', name: 'Arthur', personal: true },
   sergio: { handle: '@sergio', name: 'Sergio', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
