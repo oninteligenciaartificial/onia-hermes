@@ -1,0 +1,8 @@
+{
+  "title": "A3 — la silla vacia",
+  "caption": "Ad estatico. Angulo A3, rotacion siguiente.",
+  "slides": [
+    { "number": 1, "role": "cover", "headline": "¿Sabés cuánto te cuesta una *silla vacía*?", "body": "Si tenés que abrir el cuaderno para saberlo, ya perdiste la mañana." }
+  ],
+  "cta": "Reservá una demo"
+}
