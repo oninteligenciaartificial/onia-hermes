@@ -120,6 +120,7 @@ Bolivia, y elegir un producto.
 |---|---|
 | `ONIA_BOX_CONTACTOS_FABRICA_Y_RFQ_20260806.md` | **Contactos B2B verificados** de Beelink y GMKtec + **RFQ listo para enviar** |
 | `ONIA_BOX_RUNBOOK_DE_COMPRA_20260812.md` | **Cómo se compra**: la unidad de demo ≠ la tanda · las 3 vías para 1 unidad · cómo se paga la primera vez · el único punto donde sale plata |
+| `ONIA_BOX_OPCIONES_HARDWARE_POR_PRESUPUESTO_20260812.md` | **Mac vs NVIDIA vs AMD**: qué vende cada plataforma, la escalera completa de USD 249 a 500.000, qué modelo entra en cada equipo, y cuál es barato para modelos chicos vs caro para razonar |
 | `ONIA_BOX_LAS_5_CONVERSACIONES_GUION_20260812.md` | **El guion de validación**: a quién, qué preguntar, cómo distinguir un sí real de cortesía, y el criterio de corte escrito de antemano |
 
 ---
