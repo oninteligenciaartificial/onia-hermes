@@ -25,37 +25,49 @@
 
 ## 2. 🟡 DECISIÓN 1 — El ancla de la cara
 
-Hay tres anclas vivas y los docs se contradicen sobre cuál es la buena.
+**Mirá `INVENTARIO-caras.jpg`, acá al lado.** Son las 6 caras de Lucía que hay en la cuenta,
+en ese orden.
 
-| Opción | Element ID | Qué es | Evidencia |
-|---|---|---|---|
-| **A** | `452d8375-fb67-4df7-9ae0-8f1b257aa51f` `lucia-ancla-2026-08` | La selfie de espejo que aprobaste | **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
-| **B** | `902eeebb-89e9-4477-8426-c555b20f7ecc` `lucia-surgical-anchor` | Foto 03 del photoshoot, fondo blanco | Aprobado por vos el 2026-07-07 como identidad definitiva. Salió 3ro en la prueba |
-| **C** | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` `lucia-face-real-anchor` | Frame real del video, escalado 2K, cero IA | Es la **verdad de terreno para QA**. El catálogo dice no usarlo para generar |
+| Pos. | Element ID | Nombre | Qué es | Veredicto |
+|---|---|---|---|---|
+| **1** | `452d8375-fb67-4df7-9ae0-8f1b257aa51f` | `lucia-ancla-2026-08` | Selfie de espejo, argolla de oro. Generada | ✅ **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
+| **2** | `902eeebb-89e9-4477-8426-c555b20f7ecc` | `lucia-surgical-anchor` | Photoshoot fondo blanco, sonrisa | ✅ La aprobaste el 7-jul. Salió 3ra |
+| **3** | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | `lucia-face-real-anchor` | Frame REAL del video, escalado 2K | ✅ **Verdad de terreno para QA.** No generar con ella |
+| 4 | `d5e323ef-4d0e-41bf-863e-ec30aede20ae` | `LUCIA-REAL-v2-clean` | Otro frame del MISMO video | ⛔ Redundante con la 3. Y su nombre está duplicado con el Soul |
+| 5 | `de586dbb-0cdd-4ca2-aaac-173d11741c86` | `lucia-face-element` | Otro frame del mismo video | ⛔ Ya marcada legacy en el catálogo |
+| 6 | `fdf4b740-829e-4923-9325-76914539ac0a` | `Lucia ONIA v1` | Selfie de baño, generada, sin descripción | ⛔ La más vieja, superada por la 1 |
 
-**Recomiendo A**, con C como referencia de QA. B queda de respaldo.
+**Recomiendo: quedarse con 1 (generar), 3 (QA) y 2 de respaldo. Borrar 4, 5 y 6.**
 
-⛔ **Jubilados, no usar:** `de586dbb` `lucia-face-element` (generado por soul_2, ya tiene un
-paso de deriva) · Soul `36305a9b` para primer plano (sale con la piel enrojecida).
+Las 3, 4 y 5 son frames del mismo video real — por eso salen con las mejillas rojas, y por eso
+el Soul entrenado con ellas produce piel enrojecida.
+
+⛔ Soul `36305a9b` para primer plano: sale con la piel roja y además ignora el atuendo pedido.
 
 ---
 
-## 3. 🟡 DECISIÓN 2 — El vestuario
+## 3. ✅ DECIDIDO — El vestuario: gana la tanda `-v2`
 
-Las 5 fichas que mandaste **ya existen como Reference Element** con ID. Ninguna hay que rehacer.
+**Mirá `INVENTARIO-ropa.jpg`.** Fila de arriba = tanda vieja (4 flatlays de Pinterest).
+Fila de abajo = tanda **`-v2`** (5 turnarounds front/side/back en maniquí, fondo blanco).
 
-| # | Nombre | Qué es exactamente | Element ID |
+Gana la `-v2` por dos motivos, y el segundo no es estético:
+
+1. Turnaround de 3 vistas contra una foto plana — el modelo ve cómo cae la prenda por atrás.
+2. **La tanda vieja tiene una marca de agua de TikTok visible** en la ficha de jean + remera.
+   Es contenido de terceros. No va en nada nuestro.
+
+| # | Look | Qué es exactamente | Element ID ✅ |
 |---|---|---|---|
-| 1 | **cleangirl** | top de punto acanalado crema + pantalón sastre crema + bandolera camel + cadenita fina + argollas chicas | `16833b18-9e23-434a-99b2-92bac2915e4c` |
-| 2 | **streetwear** | remera blanca entallada + jean recto claro + zapatillas blancas + bandolera camel | `ec1dece5-23c4-4ee3-84c6-14a49a926f7c` |
-| 3 | **nightout** | vestido midi negro un hombro + sandalias de tira + clutch + dije + argollas + lentes | `5503f588-d543-4925-be56-e4db560f632d` |
-| 4 | **loungewear** | sweater de punto crema + pantalón crema al tono + pantuflas de corderito | `6186d80f-cb02-4cd2-89d9-e5afdcce7c6c` |
-| 5 | **gym** | top deportivo negro + calza gris oscuro + zapatillas blancas | ficha `lucia-fit-gym-v2` (ID en `lucia-demos-20260709/`) |
+| 1 | **cleangirl** | top crema acanalado + pantalón beige + dorado mínimo + bandolera camel + mocasines | `cac118e1-a683-4874-b32a-eee4efbbed36` |
+| 2 | **streetwear** | remera blanca + jean claro recto + gorra lisa + zapatillas blancas + bandolera camel | `db9608fd-5f72-49df-b681-9414382c5cbb` |
+| 3 | **nightout** | vestido negro midi un hombro + tacos + cartera negra + dorado + lentes | `3c9d1e87-ea1b-4ae1-8c5e-60683a848033` |
+| 4 | **loungewear** | sweater crema + pantalón de punto crema + pantuflas | `23135bd8-8827-4bb5-9045-fe08ef80f9e1` |
+| 5 | **gym** | top deportivo gris carbón + calza tiro alto + zapatillas blancas | `8352ef80-63b4-4cb1-be8b-b21cbacb22be` |
 
-⚠️ **Hay dos catálogos de outfit vivos con IDs distintos para el mismo look** (los de arriba,
-sin sufijo, y una tanda `lucia-fit-*-v2`). Hay que jubilar uno.
+⛔ **Jubilar los 4 viejos:** `16833b18` · `ec1dece5` · `5503f588` · `6186d80f`.
 
-**Opciones de vestuario canónico:**
+### 🟡 Cuáles de las 5 entran al feed
 
 - **A — las 5.** Máxima variedad. Riesgo: el vestido negro y el gym la corren de "dueña de
   negocio que muestra software" a lifestyle genérico.
@@ -173,6 +185,45 @@ fuente. La regla propia de ONIA dice *"nunca foto de una persona real sin consen
 
 ---
 
+## 10. Los 5 lugares (Elements `environment`, ya creados)
+
+| Lugar | Element ID |
+|---|---|
+| baño mármol blanco/negro | `44a4686e-1733-4b41-811d-1eb5d1cf88fc` |
+| dormitorio cozy | `6a721405-d019-48b3-b3e6-92bdf6a4474e` |
+| café / cocina cálida | `5cfbdab5-3fdd-4cda-b0e3-efb60aa5a9b4` |
+| vereda urbana arbolada | `cddfa484-8dea-4920-8d6b-9d00f896ae51` |
+| bar nocturno terciopelo rojo | `2750ef8b-7fe6-483c-9d32-01292ce32034` |
+
+Recordá §5: **para feed NO se usan** — el lugar se describe en texto. Estos Elements son solo
+para cuando un lugar tiene que salir EXACTO (el local de un cliente).
+
+---
+
+## 11. Índice de archivos de Lucía — qué es cada uno
+
+Este archivo manda. Los de abajo se conservan porque **cada uno tiene algo que no está acá**.
+
+| Archivo | Lo único que tiene | Estado |
+|---|---|---|
+| `docs/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` | Los 4 pilares, los ganchos y los 6 captions escritos | Vigente |
+| `docs/ONIA_LUCIA_ARRANQUE_CUENTA_20260808.md` | Qué se sube, en qué orden, destacadas, primer video | Vigente |
+| `docs/ONIA_LUCIA_DIRECCION_ESTETICA_20260811.md` | Dirección estética | Vigente |
+| `docs/ONIA_LUCIA_FRENTES_ANALISIS_20260806.md` | Los 4 frentes y sus gates | Vigente |
+| `docs/ONIA_AUDITORIA_MARKETING_LUCIA_20260812.md` | Auditoría con evidencia por fila | Vigente |
+| `docs/ONIA_CARRIL_H_LUCIA_PLAN_20260725.md` | **Los 10 guiones completos** | Archivo — se conserva por los guiones |
+| `docs/ONIA_LUCIA_TANDA_A_PREFLIGHT_20260725.md` | **Tarifario verificado con `get_cost`** por acción | Archivo — se conserva por el tarifario |
+| `references/models/LUCIA_GUIONES_SEMANA1.md` | Guiones de la semana 1 | Archivo |
+| `references/models/LUCIA_CONTENT_SYSTEM.md` | El estándar de realismo del 9-jul | Archivo |
+| `references/models/LUCIA_CONTENT_PLAN.md` | Calendario del primer mes | Archivo |
+| `references/models/LUCIA_SURGICAL_FACE_LOCK.md` | Método del photoshoot quirúrgico | Archivo |
+| `references/models/LUCIA_BENCHMARK_ARIA_CRUZ_20260709.md` | Benchmark de una cuenta real | Archivo |
+| `references/models/lucia-elements-catalog.md` | IDs — **ya absorbidos acá** | ⛔ Superado por §2, §3 y §10 |
+| `references/models/lucia-onia-identity-bible.md` | — | ⛔ **Tiene errores**: handle `@lu.antelo` marcado "LIBRE" (está ocupado) |
+| ~~`MOLDE-LUCIA.md`~~ | — | 🗑️ Borrado el 13-ago, absorbido entero acá |
+
+---
+
 Evidencia: `prueba-motor-20260813/` (la prueba que fijó el método) ·
-`references/models/lucia-elements-catalog.md` (IDs) ·
+`INVENTARIO-caras.jpg` y `INVENTARIO-ropa.jpg` (qué imagen es cada ID) ·
 `docs/ONIA_MODELOS_RECETA_VISUAL_20260806.md` (calibración de 30 imágenes).
