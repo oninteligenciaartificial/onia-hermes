@@ -195,6 +195,33 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
 }
 
 /**
+ * El NOMBRE de la plantilla de Meta con la que salio este mensaje, o null si fue texto libre.
+ *
+ * Chatwoot lo expone en el nivel de ARRIBA del payload del webhook — capturado en vivo en sus logs
+ * el 2026-08-13 (el WebhookJob que apunta a nuestro endpoint):
+ *   additional_attributes: { template_params: { name: "seguimiento_demo", language: "es",
+ *                                               processed_params: { body: { ... } } } }
+ * Es el MISMO objeto que arma whatsappTemplate() para el POST: el builder lo guarda en el mensaje
+ * (`messages/message_builder.rb:122-124`) y de ahi sale al webhook. O sea que para saber que este
+ * envio se cobra como plantilla no hay que preguntarle nada a Meta.
+ *
+ * ACA SOLO SE REGISTRA EL HECHO ("salio con la plantilla X"). Que categoria y que tarifa le toca lo
+ * decide el medidor, que es el unico dueño del registro de plantillas (usage-run.mjs
+ * `PLANTILLAS_META`): dos tablas de plantillas en dos archivos se desincronizan y ahi se factura mal.
+ *
+ * OJO: `payload.additional_attributes` del NIVEL DEL MENSAJE es esto; el de la conversacion
+ * (`payload.conversation.additional_attributes`) es otra cosa — de ahi sale la atribucion.
+ */
+function templateNameOf(payload) {
+  const extra = payload?.additional_attributes;
+  const params = extra && typeof extra === "object" ? extra.template_params : null;
+  // Se recorta como todo lo que viene de afuera y termina en la base (mismo criterio que
+  // `external_message_id`): el payload lo arma otro sistema, no nosotros.
+  const name = params && typeof params === "object" ? String(params.name ?? "").trim().slice(0, 200) : "";
+  return name || null;
+}
+
+/**
  * ¿Este mensaje SALIENTE lo escribio un humano? Entonces tomo la conversacion y el bot se calla.
  *
  * Las cuatro condiciones son todas necesarias, y cada una evita un modo de falla distinto:
@@ -207,7 +234,9 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
  * Las notas privadas ya se descartaron antes: escribir una nota no es atender al prospecto.
  *
  * Devuelve un turno SIN texto: no hay nada que contestar, solo hay que anotar el traspaso. `author`
- * dice "agent" para que la bitacora no mienta diciendo que lo escribio el contacto.
+ * dice "human" — es uno de los tres valores que acepta `bot_messages.author` (contact | bot | human)
+ * y es el unico que no miente: no lo escribio el contacto y tampoco el bot. Iba como "agent", que
+ * la base no conoce, y `buildMessageRow` lo degradaba en silencio.
  */
 function takeoverTurn(payload, conversationId, type) {
   if (type !== "outgoing") return null;
@@ -226,8 +255,11 @@ function takeoverTurn(payload, conversationId, type) {
       contact_ref: String(conversationId),
       kind: "text",
       text: "",
-      author: "agent",
+      author: "human",
       human_takeover: true,
+      // Con que plantilla de Meta salio (o null si fue texto libre). Es lo que separa un envio de
+      // 0,0113 USD de uno de 0,0740: sin esto, todo lo que manda un humano se cobra como servicio.
+      template_name: templateNameOf(payload),
       message_key: `chatwoot:takeover:${conversationId}:${payload.id ?? "s/id"}`,
       received_at: toIsoFlexible(payload.created_at) || new Date().toISOString(),
     },

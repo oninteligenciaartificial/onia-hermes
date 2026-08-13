@@ -108,6 +108,37 @@ test("las DOS plantillas aprobadas caen en su categoria de Meta, con su nombre",
   assert.deepEqual(utility, { categoria: "utility", templateKey: "M9_PLANTILLA", templateName: "recordatorio_demo" });
 });
 
+test("lo que manda un HUMANO trae el nombre de Meta, no la clave del guion: se resuelve al reves", () => {
+  // El bot escribe `template_key: "M3_PLANTILLA"`. Un humano que manda la MISMA plantilla desde
+  // Chatwoot no pasa por el guion: el webhook trae `seguimiento_demo` y el adapter lo guarda en
+  // `raw.templateName`. Los dos caminos tienen que terminar en la misma categoria (y en el mismo
+  // registro: duplicar la tabla de plantillas es como se desincronizan las tarifas).
+  assert.deepEqual(clasificar({ template_key: null, raw: { templateName: "seguimiento_demo" } }), {
+    categoria: "marketing",
+    templateKey: "M3_PLANTILLA",
+    templateName: "seguimiento_demo",
+  });
+  assert.deepEqual(clasificar({ template_key: null, raw: { templateName: "recordatorio_demo" } }), {
+    categoria: "utility",
+    templateKey: "M9_PLANTILLA",
+    templateName: "recordatorio_demo",
+  });
+});
+
+test("una plantilla mandada a mano que nadie registro cae en la alarma, NUNCA en servicio", () => {
+  // Si cayera en `servicio` se cobraria 0,0113 una plantilla de marketing de 0,0740: 6,5x regalado,
+  // y sin que nadie se entere. En el balde de alarma se ve y dispara el warning del reporte.
+  const rara = clasificar({ template_key: null, raw: { templateName: "promo_navidad_2027" } });
+  assert.equal(rara.categoria, "plantilla_sin_tarifa");
+  assert.equal(rara.templateName, "promo_navidad_2027", "se dice cual es, para poder registrarla");
+});
+
+test("sin `raw.templateName` no cambia nada: el bot y sus guiones siguen siendo servicio", () => {
+  for (const raw of [undefined, null, {}, { templateName: "" }, { templateName: "   " }, { tenant: "onia" }]) {
+    assert.equal(clasificar({ template_key: "M0", raw }).categoria, "servicio", JSON.stringify(raw));
+  }
+});
+
 test("el registro de plantillas es el mismo que usan followup-run y reminder-run", () => {
   // Si alguien agrega una plantilla en un barrido y se olvida del medidor, esto no lo caza — pero
   // si alguien CAMBIA la categoria de una existente (utility <-> marketing, 6,5x), si.
@@ -188,12 +219,25 @@ test("el total se presenta como TECHO en las dos salidas: el rechazo asincrono d
   assert.match(renderHuman(result), /TECHO, no factura/);
 });
 
-test("y el hueco al reves: lo que manda un humano desde Chatwoot no entra (se dice, no se disimula)", async () => {
-  // Verificado en la base del VPS el 2026-08-13: el takeover se guarda como placeholder ENTRANTE
-  // (mensajes 30 y 31, las dos plantillas reales del dia). El medidor mide al bot, no a la bandeja.
+test("LA BANDEJA YA CUENTA: la plantilla que mando un humano se factura a su tarifa real", async () => {
+  // Hasta el 2026-08-13 este envio se guardaba como placeholder ENTRANTE y no se contaba: el
+  // medidor media al bot y no a la bandeja (mensajes 30 y 31 del VPS, las dos plantillas reales que
+  // existieron). Ahora el traspaso se guarda saliente + `author: 'human'` y entra en la cuenta.
+  const result = await reporte([
+    row({ direction: "outbound", author: "human", template_key: null, raw: { templateName: "seguimiento_demo" } }),
+  ]);
+
+  assert.equal(result.totales.count, 1, "lo que manda Sergio a mano tambien se paga: tiene que contarse");
+  assert.equal(result.totales.categorias.marketing.count, 1);
+  assert.equal(result.totales.usd, 0.074, "a tarifa de MARKETING, no de servicio (6,5x)");
+  assert.equal(result.totales.categorias.servicio.count, 0);
+});
+
+test("el hueco que QUEDA se sigue diciendo, no se disimula (las filas viejas y el agente sin configurar)", async () => {
   const result = await reporte([row({ direction: "inbound", delivery_status: "sent", template_key: null })]);
-  assert.equal(result.totales.count, 0, "el placeholder entrante no se cuenta");
+  assert.equal(result.totales.count, 0, "el placeholder entrante viejo sigue sin contarse: es historia, no se reescribe");
   assert.equal(result.avisoHueco, AVISO_HUECO);
+  assert.match(AVISO_HUECO, /CHATWOOT_BOT_AGENT_ID/, "el aviso nombra el interruptor que apaga el registro");
   assert.match(renderHuman(result), /PISO/);
 });
 
