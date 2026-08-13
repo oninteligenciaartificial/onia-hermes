@@ -28,7 +28,7 @@ en el plan vigente.
 | V-2 | Cerrar los 3 agujeros de seguridad de prod | G infra | **listo para abrir** | [10 errores](2026-08-09-10-errores-seguridad-apps-ia.md) |
 | V-3 | Verificar costo real de SOUL 2.0 / Seedance 2.5 | H (consulta) | **micro-tarea, gratis** | [SOUL 2.0](2026-08-09-higgsfield-soul2-seedance25.md) |
 | V-4 | Tiles LTV:CAC + ROAS + toast de venta en Center | A center | **condicionado** | [LIVE OPS](2026-08-09-live-ops-dashboard-maria-wendt.md) |
-| V-5 | Campos de consistencia en la skill de video | H | anotado (Lucía en pausa) | [SOUL 2.0](2026-08-09-higgsfield-soul2-seedance25.md) |
+| V-5 | Campos de consistencia en la skill de video | H | **ACTIVO** — Lucía no está en pausa | [SOUL 2.0](2026-08-09-higgsfield-soul2-seedance25.md) |
 | V-6 | Overlay táctico como recurso de demo | H / ventas | anotado | [Supra Vision](2026-08-09-supra-vision-ganado-vision-computacional.md) |
 | V-7 | CTA comentario→DM como motor de leads | ventas | manual ya; automático bloqueado por S6 | [INDEX](INDEX.md) |
 
@@ -97,8 +97,19 @@ Cuando toque: tiles `LTV:CAC`, `ROAS`, `AOV` en la vista Finanzas + toast de ven
 ## V-5 · Consistencia en la skill de video — anotado
 
 Añadir `lock_vestuario`, `raccord_luz` y `timestamps` como campos del brief de generación.
-Es la mejora más barata que dejó la tanda, pero **Lucía está en pausa**: no se abre sesión.
-Se hace cuando se reactive el carril H.
+Es la mejora más barata que dejó la tanda.
+
+> **CORRECCION 2026-08-12.** Acá decía "Lucía está en pausa, no se abre sesión". **Estaba mal.**
+> Lo saqué del plan de arranque del 18-jul, que tiene tres semanas y media; hay trabajo de Lucía
+> del 6, 7 y 8 de agosto (`ONIA_LUCIA_FRENTES_ANALISIS_20260806`, `ONIA_LUCIA_SISTEMA_CONTENIDO_20260807`,
+> `ONIA_LUCIA_ARRANQUE_CUENTA_20260808`). Sergio lo corrigió.
+>
+> **El carril H está ACTIVO y esta tarea se abre ya.** Y con Lucía activa, tres cosas del corpus
+> pasan de "anotado" a accionable: el guion por escenas con timestamps (prompt `INFLUENCERS IA`),
+> la receta AD SPEC de 3 insumos (`docs/HIGGSFIELD_AD_SPEC_RECETA_20260812.md`) y el prompt A4.
+>
+> **Leccion de metodo:** un plan con fecha no es estado actual. Antes de decir que un carril esta
+> en pausa, mirar los docs y commits recientes de ese carril, no un documento de hace un mes.
 
 ## V-6 · Overlay táctico como recurso de demo — anotado
 
