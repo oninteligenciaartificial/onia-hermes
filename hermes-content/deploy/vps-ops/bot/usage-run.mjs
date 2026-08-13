@@ -26,7 +26,8 @@
 //   estas tarifas quedan como estimacion. `pricing_model: "PMP"` = per-message pricing YA activo.
 //
 // REGLAS DURAS
-//   1. SOLO se cuenta lo que SALIO: `direction = 'outbound'` y `delivery_status = 'sent'`.
+//   1. SOLO se cuenta lo que SALIO: `direction = 'outbound'` y `delivery_status` en ESTADOS_COBRABLES
+//      ('sent' del turno normal, 'reserved' del recordatorio M9 — ver la constante).
 //      `simulated` (simulador), `skipped` (dry-run) y `failed` (fallo en el POST mismo) no los
 //      cobra Meta y aca tampoco. Igual se muestran aparte: si un mes tiene 300 `skipped`, es que el
 //      bot esta en dry-run, y eso se tiene que ver.
@@ -120,6 +121,20 @@ export const CATEGORIAS = Object.freeze([
 /** Lo que Meta NO cobra y por lo tanto no se factura, pero si se muestra. */
 export const NO_COBRABLES = Object.freeze(["simulated", "skipped", "failed"]);
 
+/**
+ * Los dos estados que significan "esto SALIO al canal" y por lo tanto cuentan.
+ *
+ * `sent` lo escribe el turno normal DESPUES del POST. `reserved` lo escribe el recordatorio (M9)
+ * ANTES de mandar, porque ahi la reserva ES el insert (reminder-run.mjs `deliveryStatusFor`). Los
+ * dos son intentos que salieron; para un TECHO cuentan igual.
+ *
+ * `reserved` faltaba en la lista blanca de `buildMessageRow` y se degradaba en silencio a
+ * `simulated`: todo recordatorio utility real quedaba fuera de esta cuenta. Arreglado en la misma
+ * tanda (migracion 20260813_bot_messages_delivery_status_reserved.sql). Si aparece un estado nuevo
+ * y no se agrega aca, el medidor cuenta de menos y nadie se entera — por eso vive en una constante.
+ */
+export const ESTADOS_COBRABLES = Object.freeze(["sent", "reserved"]);
+
 /** Techo de filas leidas. Lo unico que no puede pasar es contar de menos EN SILENCIO. */
 export const MAX_FILAS = 50000;
 const PAGINA = 1000;
@@ -150,7 +165,7 @@ export function clasificar(row) {
  * companiia) NO deja rastro en esta fila — de ahi que el total sea un techo. Ver el encabezado.
  */
 export function esCobrable(row) {
-  return row?.direction !== "inbound" && row?.delivery_status === "sent";
+  return row?.direction !== "inbound" && ESTADOS_COBRABLES.includes(String(row?.delivery_status ?? ""));
 }
 
 /**
@@ -162,8 +177,9 @@ export const BASIS = "techo_intentado";
 
 /** La advertencia va SIEMPRE, en toda salida: un techo presentado como factura es plata mal cobrada. */
 export const AVISO_TECHO =
-  "TECHO, no factura: cuenta lo que salio ('sent' al hacer el POST). Meta puede marcarlo fallido " +
-  "despues por webhook asincrono (ej. 131042) y esos NO los cobra. La cifra exacta la tiene Meta.";
+  "TECHO, no factura: cuenta lo que salio ('sent' o 'reserved' al hacer el POST). Meta puede " +
+  "marcarlo fallido despues por webhook asincrono (ej. 131042) y esos NO los cobra. La cifra " +
+  "exacta la tiene Meta.";
 
 /**
  * Y el hueco que va para el otro lado. Verificado en la base del VPS el 2026-08-13: lo que un
