@@ -317,7 +317,15 @@ export const PRODUCTOS = Object.freeze([
  * cambia por commit — con el modulo construido delante — y nunca por una edicion.
  * Agregar un producto "en construccion" si es libre: eso no promete nada.
  */
-export const MODULOS_LISTOS = Object.freeze(new Set(["dental"]));
+// 2026-08-13: pasa de {dental} a tres. Evidencia, no opinion: la app REAL en produccion
+// (app.onia.com.bo/registro) dice con todas las letras "Clinicas dentales · Comercios ·
+// Importadoras" y deja registrarse en los tres con 14 dias gratis. El bot estaba SUBVENDIENDO —
+// le decia "en construccion, sin humo" a dos rubros que el producto ya atiende, o sea que
+// regalaba dos de cada tres prospectos.
+// OJO: onia.com.bo/empezar (la web de marketing) todavia marca solo dental como disponible. La
+// web y el producto se contradicen; la fuente de verdad para el bot es lo que el cliente puede
+// CONTRATAR hoy, no lo que dice el folleto.
+export const MODULOS_LISTOS = Object.freeze(new Set(["dental", "comercio", "proveedores"]));
 
 // ---------------------------------------------------------------------------
 // Config completa
