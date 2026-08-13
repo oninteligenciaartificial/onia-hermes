@@ -59,7 +59,77 @@ entra por ahí.
 
 ---
 
-## 3. Lo que todavía falta cruzar
+---
+
+# ✅ ACTUALIZACIÓN 2026-08-12 — RESUELTO: el DS 5518 SÍ cubre el mini PC
+
+**Se descargó el PDF oficial del Decreto Supremo 5518 del sitio de la Aduana Nacional
+([D.S. 5518.pdf](https://www.aduana.gob.bo/sites/default/files/archivos/D.S.%205518.pdf)) y se
+leyó el Anexo página por página.** El PDF es escaneado y no tiene capa de texto: se renderizó a
+imagen y se transcribió a mano. Lo que sigue es textual de la Gaceta Oficial.
+
+## Lo que está en el Anexo — GA 0 %
+
+| Código | Descripción textual | GA |
+|---|---|---|
+| 8471.30.00.10 | Tablet que incluya número IMEI | **0** |
+| 8471.30.00.90 | Las demás *(portátiles ≤ 10 kg)* | **0** |
+| **8471.41.00.00** ⭐ | **Que incluyan en la misma envoltura, al menos, una unidad central de proceso y, aunque estén combinadas, una unidad de entrada y una de salida** | **0** |
+| **8471.49.00.00** | Las demás presentadas en forma de sistemas | **0** |
+| 8471.60.20.00 | Teclados, dispositivos por coordenadas x-y | **0** |
+| 8471.60.90.00 | Las demás *(unidades de entrada/salida)* | **0** |
+
+**8471.41.00.00 es exactamente la partida del mini PC completo. Entra con arancel CERO.**
+
+## Lo que NO está en el Anexo
+
+El anexo va en orden de partida —84.43 · 84.70 · **84.71** · 85.17 · 85.18 · 85.19 · 85.21 ·
+85.25 · 85.28 · 95.04— y **salta de 8471.60 directo a 85.17**. Por lo tanto **quedan afuera**:
+
+| Código | Qué | GA que paga |
+|---|---|---|
+| **8471.70.00.00** | **Unidades de memoria — el SSD** | **5 %** |
+| 8471.80 / 8471.90 | Las demás unidades | 10 % |
+| **84.73 completa** | **Partes y accesorios — placas, componentes** | **5 %** |
+
+## 🔄 Esto INVIERTE la estrategia que teníamos
+
+La sección 2 de este documento decía que convenía traer **componentes** (5 %) en vez del equipo
+armado (10 %). **Con el DS 5518 vigente es al revés:**
+
+| | Antes de verificar | **Verificado** |
+|---|---|---|
+| Mini PC armado | 10 % | **0 %** ✅ |
+| Componentes sueltos | 5 % | 5 % |
+
+> **Conviene traer el equipo ARMADO y COMPLETO**, no las piezas. Y además desaparece el trabajo de
+> ensamblar acá.
+
+## El impacto en plata
+
+| | Con GA 10 % | **Con GA 0 %** |
+|---|---|---|
+| Equipo USD 2.000 | 200 de GA | **0** |
+| SSD 2 TB USD 150 *(paga 5 %)* | 7,50 | 7,50 |
+| **Landed por unidad** | ~2.560-2.735 | **~2.360-2.530** |
+
+**~USD 200 menos por unidad. En un embarque de 10, USD 2.000.**
+
+## ⏰ Y hay una ventana que se cierra
+
+**El arancel cero rige hasta el 31 de diciembre de 2026.** Hoy es 13 de agosto de 2026: quedan
+**poco más de cuatro meses**. Después vuelve al 10 % salvo que lo prorroguen.
+
+**Esto es un argumento real de urgencia** —a diferencia de los inventados— tanto para la unidad de
+demo como, sobre todo, para la primera tanda.
+
+⏳ **Lo único que queda preguntarle a la despachante sobre esto:** en qué partida clasifica el
+**Jetson Orin Nano Super** (kit de desarrollo con carrier board). Si entra por 8471.41 también va
+a 0 %; si lo tratan como módulo suelto, 8473.30 al 5 %.
+
+---
+
+## 3. Lo que todavía falta cruzar *(histórico — el punto del DS 5518 quedó resuelto arriba)*
 
 ### El DS 5518 puede bajar esto a cero — pero no pude confirmarlo
 
