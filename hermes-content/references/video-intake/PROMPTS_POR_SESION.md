@@ -595,3 +595,163 @@ No prometas el codigo por DM si despues no lo vas a mandar.
 POR QUE ESTE FUNCIONA: le habla al comprador tecnico y demuestra capacidad real en vez de
 afirmarla. Es prueba, no promesa.
 ```
+
+---
+
+# Lo que falta — de la ultima tanda (12-ago) y de los huecos de la sintesis
+
+Cuatro prompts, no cinco. Los candidatos que no pasaron el filtro estan listados abajo con el
+motivo: **inventar tareas para llenar casilleros es exactamente el error que la sintesis denuncia.**
+
+Filtro aplicado a todos: *¿ayuda a VENDER o COBRAR en las proximas semanas?* Lo que solo mejora
+como contamos algo que ya existe compite por la misma hora que lo que mueve el precio.
+
+## C1 · Indexabilidad — cerrar la casa antes de auditar la ajena
+
+Sale de [20 senales de web vibecodeada](2026-08-12-20-senales-web-vibecodeada.md)
+(`MEJORA LO ACTUAL`). Verificado en este worktree hoy: `web-factory/apps/onia-platform/src/app/`
+tiene `icon.svg` y `apple-icon.png`, pero **no tiene** `robots.ts`, `sitemap.ts` ni `not-found.tsx`.
+Toca la caja de dos formas: una landing no indexable no trae un solo prospecto organico, y la
+misma lista se convierte en auditoria gratis al prospecto — pero solo si nosotros la pasamos.
+
+```text
+Sesion: web-factory. git branch --show-current primero.
+TAREA UNICA: cerrar los huecos de indexabilidad en las dos webs propias que salen a la calle
+(apps/onia-platform y apps/dentalgest-landing), y dejar el checklist como gate de pre-entrega.
+Lo que falta, verificado: robots.ts · sitemap.ts · not-found.tsx · metadataBase + canonical.
+Y en dentalgest-landing, favicon (no tiene ninguno de los tres archivos de icono).
+Despues: escribir el checklist de pre-entrega (17 items validos de los 20) al lado del gate
+actual, que hoy verifica que compile (tsc --noEmit + e2e + code-reviewer) y no que sea indexable.
+LISTO = las 4 cosas andando en las dos apps, verificadas en el sitio construido (no en el codigo):
+/robots.txt y /sitemap.xml responden, una URL inexistente da 404 propio, y el canonical sale en
+el HTML servido. Mas el checklist commiteado.
+NO HAGAS: NO inventes la OG image — la regla del layout es esperar captura real del sistema, y
+un mockup ahi es fabricar. NO copies los 3 items de opinion de la lista ("Vite + React" no es
+falla, `robots.txt` contra bots de IA es decision de negocio, `llms.txt` esta a verificar).
+NO uses la lista como argumento de venta hasta que estas dos webs la pasen: es bumeran.
+```
+
+## C2 · Kit de venta por rubro — el pitch en el idioma del comprador
+
+Sale de [8 industrias = 8 agentes](2026-08-12-ocho-industrias-ocho-agentes-ia.md) y de
+[5 formatos de anuncio estatico](2026-08-12-cinco-formatos-anuncio-estatico-meta.md), las dos
+`MEJORA LO ACTUAL`. Las dos aportan **molde de copy**, no capacidad: la placa *4 dolores concretos
++ 1 agente con nombre*, y el estatico `recibo` (la oferta itemizada maquetada como ticket), que sale
+del generador de propuestas que ya existe. Cero creditos, cero plataformas, cero token bloqueado.
+
+```text
+Sesion: marketing (Arthur) / ventas. git branch --show-current primero.
+TAREA UNICA: escribir el material de venta de los SEIS rubros vendibles con dos moldes ajenos
+verificados, sin abrir rubros nuevos ni generar video.
+  1. Una placa por rubro (dental · comercio minorista · importadora · estetica · veterinaria ·
+     servicios): 4 dolores en segunda persona, escritos desde la silla del dueno y terminando en
+     plata, + UN agente con nombre, de los que el modulo de agentes YA tiene.
+  2. Un estatico "recibo": los paquetes del generador de propuestas maquetados como ticket de
+     compra, con el pipeline propio brief -> HTML/CSS -> PNG on-brand.
+  3. Un gate de copy de una linea, para todo estatico nuestro: si no nombra el dolor EXACTO del
+     rubro, no sale.
+LISTO = 6 placas escritas + 1 estatico recibo renderizado + el gate escrito donde vive el
+sistema de carruseles. Sin publicar, para que Sergio apruebe.
+NO HAGAS: NO copies una sola cifra de esos videos (482 leads, 91%, 3.7x, 5,5M vistas · $82k) —
+ninguna tiene fuente y ninguna es nuestra. Con cero clientes pagando, la placa va SIN metricas.
+NO inventes un agente para llenar una placa: si el rubro no tiene agente, la placa dice lo que hay.
+NO copies el dolor telefonico del original ("llamada perdida"): nuestro canal es WhatsApp/Chatwoot;
+vender un agente de voz es vender una capacidad que no tenemos. Reescribi cada dolor a ese canal.
+NO uses los otros 3 formatos estaticos: `news headline` sin hecho real es fabricar, `text on skin`
+no aplica a software, `censored ad` quema credibilidad con el comprador formal.
+El copy original es rioplatense: reescribir en uso boliviano antes de que lo vea un cliente.
+```
+
+## C3 · El costo de esperar — la seccion que falta en las propuestas
+
+Sale de [7 tips de agencia de IA](2026-08-12-siete-tips-agencia-ia.md) (`SIRVE YA`, el unico video
+del corpus que discute **como se vende**). De los 7 tips, 5 ya son regla escrita acá. El unico que
+no existe en ningun lado es el 7: *el competidor no es otra agencia, es el negocio que decide no
+hacer nada*. Va al generador, que es por donde pasa toda propuesta.
+
+```text
+Sesion: propuestas-v2 (carril C). git branch --show-current primero.
+TAREA UNICA: agregar la seccion "El costo de esperar" al generador de propuestas
+(hermes-content/propuestas/generador/), como campo del cliente, no como texto fijo.
+La idea: el competidor real es que el cliente no haga nada. Eso en Bolivia es cuantificable con
+datos DEL PROPIO CLIENTE: horas de tipeo por semana, ventas perdidas por responder WhatsApp
+tarde, y el riesgo de facturacion con la fecha encima (facturacion en linea obligatoria).
+LISTO = el campo en el generador + la seccion renderizando en una propuesta de prueba + la regla
+escrita en la skill `propuestas-comerciales-onia.md`, que es la fuente de verdad.
+NO HAGAS: NO pongas numeros de ejemplo como si fueran del cliente. Si no hay dato real del
+cliente, la seccion no se imprime — un costo de esperar inventado es fabricar, y con el comprador
+B2B formal es lo que nos saca de la mesa.
+NO cites la fecha fiscal sin verificarla contra la RND vigente en ese momento (skill
+`onia-contabilidad-bolivia`). Una fecha mal citada en una propuesta es peor que no citarla.
+NO toques pricing ni paquetes: es una seccion nueva, no una revision de la oferta.
+```
+
+## C4 · El hueco #1 no lo cierra ningun video
+
+De los **45 videos ingresados, CERO** hablan de como conseguir el primer cliente pagando, B2B, en
+Bolivia (§6.1 de la [sintesis](SINTESIS_CORPUS.md)). Las tres piezas de `BANDEJA.md` que parecian
+tapar el hueco se procesaron el 12-ago y **ninguna lo tapo**:
+[8 industrias](2026-08-12-ocho-industrias-ocho-agentes-ia.md) da copy, no ruta;
+[5 formatos](2026-08-12-cinco-formatos-anuncio-estatico-meta.md) es ecommerce DTC gringo;
+[caso Climatic](2026-08-12-caso-exito-ajeno-climatic-marca-propia.md) le vende asesoria a un
+aspirante a emprendedor. **Este hueco no se cierra mirando mas reels. Se cierra con fuentes.**
+
+```text
+Sesion: ventas / prospeccion. git branch --show-current primero.
+TAREA UNICA: escribir la ruta al PRIMER cliente pagando, con fuentes reales, no con videos.
+  1. Pregunta abierta que decide Sergio y va PRIMERO (no la decidas vos): la plataforma es
+     multi-rubro, pero ¿el ESFUERZO COMERCIAL se concentra en UN rubro hasta cerrar los primeros
+     casos? Seis rubros son seis mensajes, seis landings y seis listas, con cero clientes hoy.
+     Presentale la pregunta con el pro y el contra en 5 lineas y esperá la respuesta.
+  2. Con el rubro elegido: 20 prospectos REALES y verificables en Santa Cruz, cada uno con la
+     fuente de donde salio (registro publico, directorio del gremio, su propia web o IG) y una
+     senal concreta de por que es candidato — no una lista de volumen.
+  3. El guion de primer contacto por el canal que SI tenemos hoy (WhatsApp/Chatwoot), no por el
+     que esta bloqueado. Maximo 5 lineas, nombrando el dolor exacto del rubro (gate de C2).
+LISTO = la pregunta contestada por Sergio + la tabla de 20 prospectos con fuente por fila + el
+guion. Nada enviado todavia.
+NO HAGAS: NO ingreses ni analices un video mas para esto — 45 piezas no lo cubrieron y la 46 no
+lo va a cubrir. Las fuentes son registros, gremios y las webs de los propios negocios.
+NO inventes un prospecto ni un dato de contacto: fila sin fuente, fila que no va.
+NO automatices el envio (es S6 + spam con nuestra marca) ni uses un Lead Finder de volumen — eso
+ya esta decidido en el prompt de `CRM` / prospeccion, que sigue siendo el que discute la
+arquitectura de agentes. Este prompt es la lista de verdad, hecha a mano, y no lo reemplaza.
+```
+
+## Lo que NO abrio prompt (y por que)
+
+Reglas de la casa: si una ficha nueva refuerza un prompt que ya existe, se dice en una linea y
+**no se escribe otro**.
+
+| De donde | Que hace | Decision |
+|---|---|---|
+| [portafolio de emails / solicitud informal](2026-08-12-portafolio-emails-solicitud-informal.md) | variante de montaje: 9 piezas en 9 s + encuadre "mi postulacion para tu marca" | **Refuerza A1 / V-1.** Se prueba al montar esa pieza. Sin prompt nuevo |
+| [ad-spec Seedance](2026-08-12-ad-spec-seedance-tres-insumos.md) | el escenario como tercer insumo fijo | **Refuerza A4 e INFLUENCERS IA.** Ya quedo escrito como receta en `docs/HIGGSFIELD_AD_SPEC_RECETA_20260812.md` |
+| [Higgsfield Layers](2026-08-12-higgsfield-layers-edicion-por-capas.md) | panel de capas + prompt chips | Verificacion gratis (¿esta en la cuenta? ¿que cuesta?) — **cabe en el prompt `pendiente`**, junto a Apify y Handy. No mueve venta esta semana |
+| [5 plugins para webs](2026-08-12-cinco-plugins-webs-claude.md) | 4 de 5 ya instalados | **Refuerza el prompt de las 5 skills visuales.** Y es el espejo del §1: `impeccable` esta instalada y es regla, y los disenos siguen saliendo genericos. Ejecucion, no informacion |
+| [caso Nicole / Meta MCP](2026-08-12-caso-nicole-meta-mcp-higgsfield-unlimited.md) · [Climatic](2026-08-12-caso-exito-ajeno-climatic-marca-propia.md) · [10 senales visuales](2026-08-12-diez-senales-visuales-web-ia.md) · [maquetas Figma](2026-08-12-montaje-maquetas-ui-cebo-figma.md) · [8 skills](2026-08-12-8-skills-2026-curaduria-youtube.md) | humo predecible | Sin prompt. Ya estan las razones en cada ficha |
+
+**Hueco fiscal (§6.2): no abre prompt acá, y hay que decirlo.** Ningun video del corpus toca SIAT,
+facturacion electronica ni IVA/IT/IUE — el unico contenido legal de las 45 piezas era **ley chilena**
+y hubo que desactivarlo. Ese hueco **no se cierra con video**: se cierra con la RND vigente citada,
+por la skill `onia-contabilidad-bolivia`, y su bloqueo real es humano (S2, NIT/homologacion). Abrir
+un prompt de intake ahi seria fingir que la bandeja lo resuelve.
+
+**Lo mismo con el cobro real (§6.3):** los dos videos de checkout son estetica; la pregunta que
+bloquea (¿el modelo Facilitador captura la tarjeta in-page o redirige al banco?) **ya es el paso 1
+del prompt `Estructura de pagos`**, que se responde con fuente del banco, no con un reel.
+
+## Conteo honesto
+
+**27 prompts escritos en este archivo · 1 anulado (la seguridad de `onia-plattform`, cerrada y
+verificada en prod el 11-ago) · 26 vigentes.**
+
+De esos 26, el unico que consta como **terminado** es justamente el anulado. Para el resto **no
+hay evidencia en el repo de que se hayan abierto**, y de dos hay evidencia de lo contrario: las
+piezas de portafolio llevan **cuatro veces encoladas** (V-1, A1, el bloque `web-factory`, A6) y
+siguen sin producirse, y `robots.ts`/`sitemap.ts`/`not-found.tsx` siguen sin existir — por eso
+C1 se escribio verificando el arbol, no la ficha.
+
+O sea: **26 vigentes, ~25 sin abrir.** Esto no es un tablero de progreso; es la prueba del §1 de
+la sintesis — el cuello de botella no es informacion, es ejecucion. Escribir el prompt numero 27
+no vale nada si no se ejecuta el numero 1.
