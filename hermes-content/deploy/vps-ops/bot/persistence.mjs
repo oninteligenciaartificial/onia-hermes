@@ -493,6 +493,72 @@ export function createStore(options = {}) {
     return rest("sweepDemoReminders", `bot_conversations?${filter}`);
   }
 
+  /**
+   * Barrido del CIERRE: demos que ya terminaron y siguen en `demo_agendada`.
+   *
+   * Es el espejo de sweepDemoReminders — aquel mira hacia ADELANTE (demos por empezar), este mira
+   * hacia ATRAS. Sin el, una demo agendada se queda en `demo_agendada` para siempre: `demo_realizada`
+   * estaba en la lista de estados y NADIE lo escribia nunca, asi que nadie se enteraba de si la
+   * reunion ocurrio.
+   *
+   * `endedBeforeIso` es un CORTE, no el "ahora": ya viene con la duracion de la demo y el margen de
+   * gracia sumados (los calcula postdemo-run.mjs, que es donde se decide cuando se da por terminada).
+   * Pasarle el "ahora" pelado devolveria demos que recien estan EMPEZANDO.
+   *
+   * No filtra "ya avisadas" y no le hace falta: la reserva mueve `bot_stage` a `demo_realizada`, o
+   * sea FUERA de este mismo filtro. El segundo barrido ya no las ve.
+   */
+  async function sweepDemosTerminadas(endedBeforeIso, limit = 50) {
+    if (!Number.isFinite(Date.parse(endedBeforeIso))) {
+      return warn("sweepDemosTerminadas", `endedBeforeIso invalido: ${endedBeforeIso}`);
+    }
+    const filter = [
+      "bot_stage=eq.demo_agendada",
+      "human_took_over=is.false",
+      "opt_out_at=is.null",
+      `scheduled_at=lte.${endedBeforeIso}`,
+      "order=scheduled_at.asc",
+      `limit=${Number(limit) || 50}`,
+    ].join("&");
+    return rest("sweepDemosTerminadas", `bot_conversations?${filter}`);
+  }
+
+  /**
+   * Reserva del cierre. MISMO CAS que reserveFollowUp, pero sobre el estado mismo:
+   *
+   *   update onia_center.bot_conversations set bot_stage = 'demo_realizada'
+   *    where conversation_key = $1 and bot_stage = 'demo_agendada'
+   *      and human_took_over = false and opt_out_at is null returning conversation_key;
+   *
+   * El ESTADO ES LA RESERVA: al moverlo, la fila sale del filtro de sweepDemosTerminadas. Dos
+   * corridas seguidas (o dos crons pisandose) avisan UNA sola vez — la segunda actualiza 0 filas
+   * porque Postgres re-evalua el WHERE despues de tomar el lock. No hace falta columna nueva, o sea
+   * que tampoco hay migracion pendiente.
+   *
+   * NO se usa saveConversation a proposito: eso escribe el estado ENTERO y pisaria un
+   * `human_took_over` que haya ocurrido entre el barrido y ahora. Aca se toca UNA columna.
+   *
+   * `pipeline_status` del lead NO se toca: despues de una demo, Ganado/Perdido/Propuesta es una
+   * decision comercial de una persona (ver PIPELINE_STATUSES).
+   *
+   * @returns true reservado (hay que avisar) · false ya estaba cerrada · null sin base (no avisar)
+   */
+  async function reserveDemoDone(conversationKey) {
+    const filter = [
+      `conversation_key=${eq(conversationKey)}`,
+      "bot_stage=eq.demo_agendada",
+      "human_took_over=is.false",
+      "opt_out_at=is.null",
+    ].join("&");
+    const rows = await rest("reserveDemoDone", `bot_conversations?${filter}`, {
+      method: "PATCH",
+      headers: { Prefer: "return=representation" },
+      body: JSON.stringify({ bot_stage: "demo_realizada" }),
+    });
+    if (!rows) return null;
+    return rows.length > 0;
+  }
+
   // -------------------------------------------------------------------------
   // Efectos laterales: leads, review_queue, audit_logs
   // -------------------------------------------------------------------------
@@ -630,6 +696,8 @@ export function createStore(options = {}) {
     reserveFollowUp,
     sweepFollowUpCandidates,
     sweepDemoReminders,
+    sweepDemosTerminadas,
+    reserveDemoDone,
     upsertLead,
     enqueueReview,
     writeAudit,
