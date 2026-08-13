@@ -162,6 +162,21 @@ export const SCRIPT = Object.freeze({
     "Si preferís que te escriba en otro momento, decime \"después\" y no te molesto más.",
   ].join("\n"),
 
+  // M3_PLANTILLA — el MISMO follow-up, pero cuando la ventana de 24 h de Meta ya se cerro.
+  // COPIA LITERAL de la plantilla `seguimiento_demo` (es · MARKETING · APPROVED) tal como esta
+  // aprobada en Meta: la aprobada es la que se envia de verdad, esto es solo lo que queda en el
+  // panel y en la bitacora. Si las dos no dicen lo mismo, la bitacora miente.
+  // TOCAR ESTE TEXTO NO CAMBIA LO QUE RECIBE EL PROSPECTO: hay que reaprobar la plantilla en Meta.
+  // Las variables son POSICIONALES ({{1}}, {{2}}) porque asi las nombra Meta, no el guion.
+  // Cuesta ~0,0740 USD por envio (6,5x el recordatorio): es marketing, no utility.
+  M3_PLANTILLA: [
+    "¡Hola de nuevo! Te escribí por la demo de Onia y quedó a medias — sé que el negocio no para.",
+    "",
+    "Si querés retomarla, te dejo dos horarios: *{{1}}* o *{{2}}*.",
+    "",
+    "Y si preferís que no te escriba más, respondé BAJA y listo.",
+  ].join("\n"),
+
   // M9 — recordatorio del DIA de la demo (barrido reminder-run.mjs). Es un RECORDATORIO, no la
   // entrega del link: el link ya salio en M2. Por eso puede fallar sin romper nada — si la ventana
   // de 24 h de Meta ya se cerro, el barrido lo descarta con `fuera_de_ventana` y el prospecto
@@ -172,6 +187,20 @@ export const SCRIPT = Object.freeze({
     "¡Hola! Te recuerdo tu demo de {{producto}}: **{{dia_hora_elegida}}**.",
     "",
     "Entrás desde acá: {{link_reunion}}",
+    "",
+    "Si se te complicó, decime y la movemos — sin problema.",
+  ].join("\n"),
+
+  // M9_PLANTILLA — el MISMO recordatorio, pero cuando la ventana de 24 h de Meta ya se cerro (el
+  // caso normal de quien reservo para dentro de 3 dias). COPIA LITERAL de la plantilla
+  // `recordatorio_demo` (es · UTILITY · APPROVED) — mismas reglas que M3_PLANTILLA: la aprobada es
+  // la que sale, esto es lo que se ve en el panel, y editar aca NO cambia lo que recibe el
+  // prospecto. Cuesta ~0,0113 USD por envio.
+  // Fijate que "Onia" va escrito y no como variable: en la plantilla aprobada esta hardcodeado.
+  M9_PLANTILLA: [
+    "¡Hola! Te recuerdo tu demo de Onia: *{{1}}*.",
+    "",
+    "Entrás desde acá: {{2}}",
     "",
     "Si se te complicó, decime y la movemos — sin problema.",
   ].join("\n"),

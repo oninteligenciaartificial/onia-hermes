@@ -32,6 +32,7 @@ import {
   readPayload,
   runChatwootTurn,
   toIsoFlexible,
+  whatsappTemplate,
 } from "./chatwoot-adapter.mjs";
 import { createBotConfig } from "./config.mjs";
 import { leadKeyFor } from "./persistence.mjs";
@@ -386,6 +387,57 @@ test("sendMessage arma el POST exacto: url, header api_access_token, message_typ
   assert.equal(requests[0].headers.api_access_token, "tok-fake");
   assert.equal(requests[0].body.content, "Hola, soy el bot");
   assert.equal(requests[0].body.message_type, "outgoing");
+});
+
+test("sin plantilla el POST no lleva `template_params`: el 99% del trafico sigue siendo texto libre gratis", async () => {
+  const requests = [];
+  const client = createChatwootClient({
+    baseUrl: "https://sb.test",
+    accountId: "2",
+    token: "tok",
+    fetch: async (url, init) => {
+      requests.push(JSON.parse(init.body));
+      return { ok: true, status: 200, text: async () => "{}" };
+    },
+  });
+  await client.sendMessage("7", "Hola");
+  assert.ok(!("template_params" in requests[0]), "la clave ni aparece: si aparece vacia, Chatwoot manda plantilla igual");
+});
+
+test("con plantilla, `template_params` va TOP-LEVEL en el POST (es Chatwoot quien lo anida)", async () => {
+  // La forma sale del fuente de Chatwoot 4.12.1 leido en el VPS, no de la doc:
+  //   app/builders/messages/message_builder.rb:122-124 lee `@params[:template_params]` y lo mete el
+  //   en `additional_attributes`; app/services/whatsapp/send_on_whatsapp_service.rb:45-46 lo lee de
+  //   ahi. Mandarlo nosotros ya anidado NO funciona: el builder nunca mira `additional_attributes`.
+  const requests = [];
+  const client = createChatwootClient({
+    baseUrl: "https://sb.test",
+    accountId: "2",
+    token: "tok",
+    fetch: async (url, init) => {
+      requests.push(JSON.parse(init.body));
+      return { ok: true, status: 200, text: async () => "{}" };
+    },
+  });
+
+  const params = whatsappTemplate("recordatorio_demo", ["jue 30/07 15:00", "https://cal.test/x"]);
+  await client.sendMessage("7", "texto que se ve en el panel", params);
+
+  assert.deepEqual(requests[0].template_params, params, "top-level, tal cual");
+  assert.equal(requests[0].content, "texto que se ve en el panel", "el cuerpo sigue viajando: es lo que ve el agente");
+  assert.equal(requests[0].message_type, "outgoing");
+});
+
+test("whatsappTemplate arma el formato `enhanced` que espera Chatwoot: claves de texto en `body`", () => {
+  // process_body_components (whatsapp/template_processor_service.rb:79) itera `processed_params.body`
+  // y descarta lo vacio: una variable de menos = plantilla rechazada por Meta.
+  assert.deepEqual(whatsappTemplate("seguimiento_demo", ["jue 15:00", "vie 10:00"]), {
+    name: "seguimiento_demo",
+    language: "es",
+    processed_params: { body: { 1: "jue 15:00", 2: "vie 10:00" } },
+  });
+  // Las claves son STRINGS "1"/"2" (JSON no distingue, pero el lado Ruby si).
+  assert.deepEqual(Object.keys(whatsappTemplate("x", ["a", "b"]).processed_params.body), ["1", "2"]);
 });
 
 test("sendMessage con texto vacio no llama a la red", async () => {
