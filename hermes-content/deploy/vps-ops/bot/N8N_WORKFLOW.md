@@ -572,6 +572,54 @@ tabla sin reservar ni escribir, y recién después el workflow con `ONIA_BOT_DRY
 
 ---
 
+## 5C. Workflow D — cierre post-demo (¿cómo salió la reunión?)
+
+**El script ya existe:** `postdemo-run.mjs` + `postdemo-run.sh`. **Falta el disparador en n8n.**
+
+Tapa el hueco donde el bot soltaba la mano: `demo_realizada` estaba en la lista de estados y **nadie
+lo escribía nunca**, así que una demo agendada se quedaba en `demo_agendada` para siempre y nadie se
+enteraba de si la reunión ocurrió, si el prospecto no vino, o si había que mandar propuesta.
+
+Qué hace: barre las `demo_agendada` cuyo `scheduled_at` + `demo.duracionMinutos` (30) + 30 min de
+gracia ya pasó, mueve el estado a `demo_realizada` y devuelve **un aviso para Sergio** con las tres
+salidas posibles (cerró / no vino / quedó en propuesta).
+
+> **`send[]` va a SERGIO, no al prospecto.** Cada item lleva `target: "sergio"`. Este barrido **no le
+> escribe nada al prospecto** (fuera de la ventana de 24 h costaría una plantilla que no existe, y
+> adentro sería un mensaje que nadie pidió) y **no toca `pipeline_status`**: Ganado/Perdido/Propuesta
+> lo decide una persona. Si se clona el Workflow C sin cambiar el nodo de envío, este texto termina
+> en el teléfono del prospecto.
+
+Esqueleto: Schedule Trigger cada hora (puede colgarse del mismo workflow que ya corre los otros dos)
+→ SSH → Code que parte `send[]` → **nodo de Telegram al chat de Sergio (`6830070978`)**, el mismo del
+nodo 11 del Workflow A. Comando exacto del nodo SSH:
+
+```yaml
+command: bash /opt/onia/bot/postdemo-run.sh --emit
+retryOnFail: false          # el reintento lo cubre la reserva, no n8n
+```
+
+**Idempotencia:** la reserva **es** el cambio de estado (`update ... set bot_stage='demo_realizada'
+where bot_stage='demo_agendada'`, el mismo CAS de `reserveFollowUp`). Al moverse, la fila sale del
+filtro del propio barrido: correrlo dos veces avisa una sola vez. No hay columna nueva → **no hay
+migración pendiente**.
+
+Motivos de descarte que aparecen en `skipped[]`:
+
+| motivo | qué pasó | acción |
+|---|---|---|
+| `demo_sin_terminar:<h>` | la demo es futura o sigue en curso | nada: sale en el barrido siguiente |
+| `sin_horario` | está en `demo_agendada` pero sin `scheduled_at` (reserva a medias) | **revisar a mano**: no se adivina |
+| `ya_cerrada` | otro barrido ya la cerró (el CAS funcionó) | nada |
+| `humano_a_cargo` / `opt_out` | la conversación no es del bot | nada |
+| `reserva_fallida` | la base no contestó | nada: se reintenta solo la próxima hora |
+
+`ONIA_BOT_DRY_RUN` **no gatea nada acá** (no hay envío al prospecto que suprimir): el gate es
+`--emit`. Encendido: primero `bash /opt/onia/bot/postdemo-run.sh` (sin `--emit`) para ver qué demos
+cerraría y leer el aviso, y recién después el workflow con `--emit`.
+
+---
+
 ## 6. Cómo se toma la conversación un humano
 
 `human_took_over = true` significa **el bot no vuelve a hablar en esa conversación, nunca**, y sólo
