@@ -67,29 +67,36 @@ frená y pedí el detalle: *"contame cómo fue eso"*.
 1. ¿Cuál fue el caso o el expediente más grande que manejaron este año?
 2. ¿Cuánto material era, más o menos? ¿Quién se lo leyó y cuánto tardó?
 3. La última vez que necesitaste **encontrar algo puntual** adentro de todo eso, ¿qué hiciste?
+4. Si te digo el nombre de un cliente, **¿cuánto tardás en tener su última carpeta en la mano?**
+5. El **estado** de un caso, ¿está escrito en algún lado o lo sabe la persona que lo lleva?
+
+> Las dos últimas separan los dos productos posibles: **encontrar** (funciona siempre) y **decir
+> cómo está** (solo si alguien lo escribió). Detalle en
+> `ONIA_BOX_PREGUNTAR_A_LOS_DOCUMENTOS_20260812.md`. Si contestan *"lo sabe Fulano"*, lo que se
+> vende es recuperación — y con eso alcanza para cobrar.
 
 ### Bloque B — si ya usan IA (acá aparece el problema, o no aparece)
 
-4. ¿Alguien del estudio usa ChatGPT o algo parecido para el trabajo? ¿Quién y para qué?
-5. *(si sí)* ¿Qué le pegan adentro — el documento entero, un pedazo, nombres reales?
-6. *(si sí)* ¿El cliente sabe que su material pasa por ahí?
+6. ¿Alguien del estudio usa ChatGPT o algo parecido para el trabajo? ¿Quién y para qué?
+7. *(si sí)* ¿Qué le pegan adentro — el documento entero, un pedazo, nombres reales?
+8. *(si sí)* ¿El cliente sabe que su material pasa por ahí?
 
-> La pregunta 6 es la que incomoda. **Dejala incomodar.** Anotá la cara, no solo la respuesta.
+> La pregunta 8 es la que incomoda. **Dejala incomodar.** Anotá la cara, no solo la respuesta.
 
 ### Bloque C — la obligación (el corazón de todo)
 
-7. ¿Algún cliente les pidió **por escrito** cómo manejan su información?
-8. ¿Tienen alguna regla interna escrita sobre esto, o es criterio de cada uno?
-9. ¿Alguna vez perdieron —o casi— un cliente, un mandato o una licitación por un tema de
-   confidencialidad o de manejo de datos?
+9. ¿Algún cliente les pidió **por escrito** cómo manejan su información?
+10. ¿Tienen alguna regla interna escrita sobre esto, o es criterio de cada uno?
+11. ¿Alguna vez perdieron —o casi— un cliente, un mandato o una licitación por un tema de
+    confidencialidad o de manejo de datos?
 
 ### Bloque D — plata y decisión
 
-10. ¿Cuál fue la última herramienta o sistema que compraron para el estudio? ¿Cuánto salió?
-11. ¿Quién decidió esa compra? ¿Vos solo, o con los socios?
-12. ¿Cómo lo pagaron — una vez, mensual, cómo?
+12. ¿Cuál fue la última herramienta o sistema que compraron para el estudio? ¿Cuánto salió?
+13. ¿Quién decidió esa compra? ¿Vos solo, o con los socios?
+14. ¿Cómo lo pagaron — una vez, mensual, cómo?
 
-> Las 10-12 no son relleno: te dicen **si hay presupuesto, quién firma y en qué formato compran**.
+> Las 12-14 no son relleno: te dicen **si hay presupuesto, quién firma y en qué formato compran**.
 > Un estudio que nunca gastó más de USD 500 en software no compra una caja de USD 6.000, por más
 > que el problema sea real.
 
@@ -192,7 +199,7 @@ Van a preguntar. Una frase, sin demo, y volvés a preguntar vos:
 > información sin que esa información salga de la oficina. Pero justamente por eso vine a
 > escuchar primero: quiero saber si el problema que yo creo que existe, existe."*
 
-Y seguís con la pregunta 7. **Nada de precios, nada de especificaciones, nada de mostrar el
+Y seguís con la pregunta 9. **Nada de precios, nada de especificaciones, nada de mostrar el
 equipo.** El día que muestres el producto se termina la entrevista y empieza la venta.
 
 ---

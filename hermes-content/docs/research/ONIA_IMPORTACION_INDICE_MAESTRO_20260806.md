@@ -105,6 +105,7 @@ Bolivia, y elegir un producto.
 | `ONIA_BOX_STACK_PERFILES_COMPETENCIA_20260806.md` | Stack de 13 capas, **qué más corre en la caja**, perfiles de comprador, competencia global |
 | `ONIA_BOX_GAMAS_POR_MODELO_20260806.md` | **Prefill vs generación**, 5 gamas, protocolo de medición de 2 semanas |
 | `ONIA_BOX_ALTERNATIVAS_AL_MINIPC_20260806.md` | Formatos alternativos y **5 vías de entrega**, 3 sin importar. Colocation en Bolivia |
+| `ONIA_BOX_PREGUNTAR_A_LOS_DOCUMENTOS_20260812.md` | **La función que cierra la venta**: "¿dónde está la ficha?" vs "¿cómo está el documento?" — qué se promete, la regla de la cita, permisos en la búsqueda, qué lo hace fallar |
 
 ### Modelos de IA
 | Doc | Qué contiene |
