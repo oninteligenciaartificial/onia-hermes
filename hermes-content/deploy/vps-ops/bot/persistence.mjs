@@ -402,6 +402,36 @@ export function createStore(options = {}) {
     return rows ? rows.length : null;
   }
 
+  /**
+   * Los SALIENTES de una ventana de tiempo. Es la lectura del MEDIDOR (usage-run.mjs): con esto se
+   * factura el excedente de la bolsa y se audita el margen contra lo que cobra Meta.
+   *
+   * Media abierta [from, to): asi un mes no se pisa con el siguiente ni pierde el ultimo segundo.
+   * Pagina por `offset` — el que llama repite hasta que vuelve una pagina vacia, porque PostgREST
+   * puede recortar el lote por `db-max-rows` sin avisar y creerle al primer lote seria facturar de
+   * menos.
+   *
+   * El `body` NO se trae a proposito: es el guion entero y aca solo se cuenta. El dia que exista
+   * una columna de cliente/tenant hay que agregarla a este `select` (tenantOf() ya la lee).
+   */
+  async function listOutboundMessages(fromIso, toIso, options = {}) {
+    if (!Number.isFinite(Date.parse(fromIso)) || !Number.isFinite(Date.parse(toIso))) {
+      return warn("listOutboundMessages", `rango invalido: ${fromIso} .. ${toIso}`);
+    }
+    const limit = Number(options.limit) > 0 ? Math.floor(options.limit) : 1000;
+    const offset = Number(options.offset) > 0 ? Math.floor(options.offset) : 0;
+    const filter = [
+      "direction=eq.outbound",
+      `created_at=gte.${fromIso}`,
+      `created_at=lt.${toIso}`,
+      "select=conversation_key,template_key,delivery_status,created_at,raw",
+      "order=created_at.asc",
+      `limit=${limit}`,
+      `offset=${offset}`,
+    ].join("&");
+    return rest("listOutboundMessages", `bot_messages?${filter}`);
+  }
+
   // -------------------------------------------------------------------------
   // Follow-up: reserva CAS + barrido (spec §4.6)
   // -------------------------------------------------------------------------
@@ -693,6 +723,7 @@ export function createStore(options = {}) {
     saveConversation,
     claimInbound,
     insertOutbound,
+    listOutboundMessages,
     reserveFollowUp,
     sweepFollowUpCandidates,
     sweepDemoReminders,
