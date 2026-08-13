@@ -159,7 +159,7 @@ export const SCRIPT = Object.freeze({
     "¡Hola de nuevo! Te escribí ayer por la demo de {{producto}} y quedó a medias — sé que el negocio no para.",
     "",
     "Te dejo dos opciones nuevas por si te sirven: **{{slot_a}}** o **{{slot_b}}**.",
-    "Si preferís que te escriba en otro momento, decime \"después\" y no te molesto más.",
+    "Decime cuál te queda mejor y la dejamos agendada.",
   ].join("\n"),
 
   // M3_PLANTILLA — el MISMO follow-up, pero cuando la ventana de 24 h de Meta ya se cerro.
@@ -174,7 +174,13 @@ export const SCRIPT = Object.freeze({
     "",
     "Si querés retomarla, te dejo dos horarios: *{{1}}* o *{{2}}*.",
     "",
-    "Y si preferís que no te escriba más, respondé BAJA y listo.",
+    // El cierre NO puede sacarse del todo: Meta rechaza una plantilla que TERMINA en variable
+    // (code 100 / subcode 2388299, "las variables no pueden estar al principio ni al final").
+    // Antes aca decia "respondé BAJA y listo". Se saco por decision de Sergio: no se ofrece dejar
+    // de escribir. El MECANISMO sigue vivo — intents.mjs reconoce stop/baja/dar de baja/borrame y
+    // escribe opt_out_at — solo dejo de anunciarse. Riesgo asumido: sin salida visible, el que se
+    // molesta bloquea en vez de pedir la baja, y Meta mide eso como calidad.
+    "Decime cuál te queda mejor y la dejamos agendada.",
   ].join("\n"),
 
   // M9 — recordatorio del DIA de la demo (barrido reminder-run.mjs). Es un RECORDATORIO, no la
