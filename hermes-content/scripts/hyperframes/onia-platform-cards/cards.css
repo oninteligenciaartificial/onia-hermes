@@ -1,0 +1,174 @@
+/* Tarjetas de micro-animación de ONIA Platform.
+   Los tokens son los REALES del producto (onia-platform/app/globals.css @theme):
+   escala verde Onia, superficies Material 3, Manrope headline + Inter body.
+   Si el producto cambia un token, se cambia acá — no se inventa color nuevo. */
+
+:root {
+  --verde-100: #d5f4e3;
+  --verde-500: #089868;
+  --verde-800: #004d32;
+  --primary: #027650;
+  --on-primary: #ffffff;
+  --primary-fixed: #d5f4e3;
+  --on-primary-fixed: #013925;
+
+  --background: #f9fbfa;
+  --surface: #f9fbfa;
+  --on-surface: #141a17;
+  --on-surface-variant: #424a46;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f6f8f7;
+  --surface-container: #f3f5f4;
+  --surface-container-high: #eaedeb;
+  --surface-container-highest: #e2e5e3;
+  --outline: #69716d;
+  --outline-variant: #b9bfbc;
+
+  --error: #ba1a1a;
+  --error-container: #ffdad6;
+  --on-error-container: #410002;
+
+  --font-headline: 'Manrope', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--on-surface);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Lienzo cuadrado: la tarjeta flota sobre el fondo del producto. */
+#root {
+  position: relative;
+  width: 1080px;
+  height: 1080px;
+  overflow: hidden;
+}
+
+/* El fill va en un hijo full-bleed, nunca en el root (el compositor puede
+   descartar el background del root y salir negro). */
+/* Un solo lavado verde en diagonal. Dos radiales superpuestos dejaban un anillo
+   de banding visible arriba al centro en el MP4 (el encoder no aguanta ese
+   degradado tan plano). */
+.stage {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(152deg, #ffffff 0%, var(--background) 46%, #eef6f1 100%);
+}
+
+.clip {
+  position: absolute;
+  inset: 0;
+  padding: 96px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Encabezado del módulo — el mismo par título/aside del dashboard real. */
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.head h2 {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 1.1;
+  margin: 0;
+  color: var(--on-surface);
+}
+.aside {
+  font-size: 22px;
+  color: var(--on-surface-variant);
+}
+
+/* Panel = la tarjeta de la app (bg-surface-container-lowest rounded-xl). */
+.panel {
+  background: var(--surface-container-lowest);
+  border: 1px solid rgba(185, 191, 188, 0.5);
+  border-radius: 28px;
+  box-shadow: 0 24px 70px rgba(20, 26, 23, 0.09);
+  padding: 40px 44px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.grow { flex: 1; min-width: 0; }
+.right { text-align: right; }
+
+.num {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+}
+.lbl {
+  font-size: 22px;
+  color: var(--on-surface-variant);
+}
+.strong { font-weight: 700; color: var(--on-surface); }
+
+/* Badge del producto: px-3 py-1 rounded-full text-xs font-bold. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+.badge-draft { background: var(--surface-container-high); color: var(--on-surface-variant); }
+.badge-sent { background: var(--primary-fixed); color: var(--on-primary-fixed); }
+.badge-paid { background: var(--verde-100); color: var(--verde-800); }
+.badge-pending { background: var(--surface-container-highest); color: var(--on-surface-variant); }
+.badge-overdue { background: var(--error-container); color: var(--on-error-container); }
+
+/* Botones del panel de aprobación. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 14px;
+  padding: 16px 26px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+.btn-primary { background: var(--primary); color: var(--on-primary); }
+.btn-ghost { border: 1px solid var(--outline-variant); color: var(--on-surface); }
+
+.note {
+  margin-top: 26px;
+  font-size: 21px;
+  color: var(--on-surface-variant);
+}
+
+/* Marca al pie — la tarjeta se reconoce como ONIA sin taparse el producto. */
+.brand {
+  position: absolute;
+  left: 96px;
+  bottom: 72px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--on-surface-variant);
+}
+.brand .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+}

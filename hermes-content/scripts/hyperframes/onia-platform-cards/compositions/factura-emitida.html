@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <title>ONIA Platform — Factura emitida</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="cards.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* Fila de factura: el mismo orden de columnas que la tabla de /billing. */
+      #fe-panel { padding: 44px 48px; }
+      #fe-numero { font-family: var(--font-headline); font-weight: 800; font-size: 40px; }
+      #fe-paciente { font-size: 24px; color: var(--on-surface-variant); margin-top: 8px; }
+      #fe-total { font-size: 46px; }
+      #fe-fecha { font-size: 22px; color: var(--on-surface-variant); margin-top: 8px; }
+
+      /* Los dos estados del badge ocupan el mismo hueco: el swap no mueve la fila. */
+      .badge-swap { position: relative; display: inline-grid; }
+      .badge-swap > .badge { grid-area: 1 / 1; }
+      #fe-badge-enviada { opacity: 0; }
+
+      /* Tira fiscal SIAT — aparece recién cuando la factura ya se emitió. */
+      #fe-fiscal {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-top: 34px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(185, 191, 188, 0.55);
+        opacity: 0;
+      }
+      #fe-fiscal .tick { width: 44px; height: 44px; flex: none; }
+      #fe-fiscal .tick circle { fill: var(--verde-100); }
+      #fe-fiscal .tick path {
+        fill: none;
+        stroke: var(--primary);
+        stroke-width: 3.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 26;
+        stroke-dashoffset: 26;
+      }
+      #fe-cuf {
+        font-size: 22px;
+        color: var(--on-surface-variant);
+        font-variant-numeric: tabular-nums;
+      }
+      #fe-cuf b { color: var(--on-surface); font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="factura-emitida"
+      data-start="0"
+      data-width="1080"
+      data-height="1080"
+      data-duration="4.5"
+      data-fps="30"
+    >
+      <div class="stage"></div>
+
+      <section id="fe-clip" class="clip" data-start="0" data-duration="4.5" data-track-index="1">
+        <div class="head">
+          <h2>Facturación</h2>
+          <span class="aside">factura electrónica · SIAT</span>
+        </div>
+
+        <div id="fe-panel" class="panel">
+          <div class="row">
+            <div class="grow">
+              <div class="row" style="gap: 18px">
+                <span id="fe-numero">#F-0042</span>
+                <span class="badge-swap">
+                  <span id="fe-badge-borrador" class="badge badge-draft">Borrador</span>
+                  <span id="fe-badge-enviada" class="badge badge-sent">Enviada</span>
+                </span>
+              </div>
+              <p id="fe-paciente">María Fernanda Ortiz</p>
+            </div>
+            <div class="right">
+              <p id="fe-total" class="num">Bs 1.250,00</p>
+              <p id="fe-fecha">13/08/2026</p>
+            </div>
+          </div>
+
+          <div id="fe-fiscal">
+            <svg class="tick" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="12" />
+              <path d="M6.8 12.4 L10.4 16 L17.2 8.6" />
+            </svg>
+            <span id="fe-cuf"><b>CUF</b> A1B2C3D4E5… · emitida al SIAT</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="brand"><span class="dot"></span>ONIA Platform</div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // 1. La tarjeta entra una sola vez y se queda quieta: el movimiento
+      //    performa (emitir la factura), no respira de fondo.
+      tl.from('#fe-panel', { y: 56, opacity: 0, duration: 0.7, ease: 'power3.out' }, 0.1)
+        .from('.head', { y: 22, opacity: 0, duration: 0.5, ease: 'power2.out' }, 0.05)
+        .from('#fe-total', { y: 14, opacity: 0, duration: 0.45, ease: 'power2.out' }, 0.45);
+
+      // 2. El estado cambia Borrador -> Enviada: el badge nuevo pisa al viejo.
+      tl.to('#fe-badge-borrador', { opacity: 0, scale: 0.9, duration: 0.22, ease: 'power2.in' }, 1.5)
+        .fromTo(
+          '#fe-badge-enviada',
+          { opacity: 0, scale: 0.86 },
+          { opacity: 1, scale: 1, duration: 0.34, ease: 'back.out(2.2)' },
+          1.66,
+        );
+
+      // 3. Recién emitida aparece el dato fiscal, y el check se dibuja al final.
+      tl.to('#fe-fiscal', { opacity: 1, duration: 0.4, ease: 'power2.out' }, 2.1)
+        .from('#fe-fiscal', { y: 16, duration: 0.4, ease: 'power2.out' }, 2.1)
+        .to('#fe-fiscal .tick path', { strokeDashoffset: 0, duration: 0.45, ease: 'power2.inOut' }, 2.4);
+
+      window.__timelines['factura-emitida'] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <title>ONIA Platform — Contador de ingresos</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="cards.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      #ci-panel { padding: 44px 48px; }
+      #ci-hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+
+      #ci-valor {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        margin: 0;
+        font-size: 104px;
+        line-height: 1;
+      }
+      #ci-valor .cur {
+        font-size: 40px;
+        font-weight: 700;
+        color: var(--on-surface-variant);
+        letter-spacing: 0;
+      }
+
+      /* Delta: flecha + porcentaje + con qué se compara (igual que el dashboard). */
+      #ci-delta {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 12px 20px;
+        border-radius: 999px;
+        background: var(--verde-100);
+        color: var(--verde-800);
+        font-size: 24px;
+        font-weight: 700;
+        opacity: 0;
+      }
+      /* La comparación va en su propia línea: dentro del chip empujaba al
+         sparkline fuera del panel. */
+      #ci-vs {
+        display: block;
+        margin-top: 14px;
+        font-size: 21px;
+        color: var(--on-surface-variant);
+        opacity: 0;
+      }
+
+      /* 280px: a 320 el trazo se pasaba del borde redondeado del panel. */
+      #ci-spark { width: 280px; height: 150px; flex: none; }
+      #ci-spark .line {
+        fill: none;
+        stroke: var(--primary);
+        stroke-width: 3.4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 340;
+        stroke-dashoffset: 340;
+      }
+      #ci-spark .area { fill: url(#ci-grad); opacity: 0; }
+
+      /* Fila de datos duros del hero — los mismos 3 del panel real. */
+      #ci-facts {
+        display: flex;
+        gap: 20px;
+        margin-top: 36px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(185, 191, 188, 0.55);
+      }
+      #ci-facts > div { flex: 1; }
+      #ci-facts .num { display: block; font-size: 34px; }
+      #ci-facts .lbl { display: block; font-size: 19px; margin-top: 6px; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="contador-ingresos"
+      data-start="0"
+      data-width="1080"
+      data-height="1080"
+      data-duration="4.5"
+      data-fps="30"
+    >
+      <div class="stage"></div>
+
+      <section id="ci-clip" class="clip" data-start="0" data-duration="4.5" data-track-index="1">
+        <div class="head">
+          <h2>Ingresos de hoy</h2>
+          <span class="aside">pagos registrados de pacientes</span>
+        </div>
+
+        <div id="ci-panel" class="panel">
+          <div id="ci-hero">
+            <div>
+              <p id="ci-valor" class="num"><span class="cur">Bs</span><span id="ci-monto">0</span></p>
+              <span id="ci-delta">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 19V5M5 12l7-7 7 7" />
+                </svg>
+                +18,4 %
+              </span>
+              <span id="ci-vs">vs martes pasado (Bs 4,1 mil)</span>
+            </div>
+
+            <svg id="ci-spark" viewBox="0 0 320 150" aria-hidden="true">
+              <defs>
+                <linearGradient id="ci-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#027650" stop-opacity="0.26" />
+                  <stop offset="100%" stop-color="#027650" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <path class="area" d="M6 118 L58 104 L110 112 L162 76 L214 88 L266 44 L314 26 L314 150 L6 150 Z" />
+              <path class="line" d="M6 118 L58 104 L110 112 L162 76 L214 88 L266 44 L314 26" />
+            </svg>
+          </div>
+
+          <div id="ci-facts">
+            <div>
+              <span class="num">Bs 38,6 mil</span>
+              <span class="lbl">Cobrado este mes</span>
+            </div>
+            <div>
+              <span class="num">9</span>
+              <span class="lbl">Cita(s) hoy</span>
+            </div>
+            <div>
+              <span class="num">Bs 6,2 mil</span>
+              <span class="lbl">Por cobrar · 4 factura(s)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="brand"><span class="dot"></span>ONIA Platform</div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Contador seek-safe: se tweenea un objeto y se escribe el texto en cada
+      // update. Nada de relojes ni de Math.random — el valor depende SOLO del
+      // tiempo de la timeline, así que cualquier frame se puede re-renderizar.
+      const money = new Intl.NumberFormat('es-BO', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+      const counter = { v: 0 };
+      const montoEl = document.getElementById('ci-monto');
+      montoEl.textContent = money.format(0);
+
+      tl.from('.head', { y: 22, opacity: 0, duration: 0.5, ease: 'power2.out' }, 0.05)
+        .from('#ci-panel', { y: 56, opacity: 0, duration: 0.7, ease: 'power3.out' }, 0.1);
+
+      // El número sube; la curva se dibuja con él (misma causa, mismo dato).
+      tl.to(
+        counter,
+        {
+          v: 4850,
+          duration: 1.5,
+          ease: 'power2.out',
+          onUpdate: () => {
+            montoEl.textContent = money.format(counter.v);
+          },
+        },
+        0.75,
+      )
+        .to('#ci-spark .line', { strokeDashoffset: 0, duration: 1.5, ease: 'power2.out' }, 0.75)
+        .to('#ci-spark .area', { opacity: 1, duration: 0.7, ease: 'power2.out' }, 1.35);
+
+      // El delta cierra la lectura recién cuando el número ya se detuvo.
+      tl.to('#ci-delta', { opacity: 1, duration: 0.36, ease: 'power2.out' }, 2.35)
+        .from('#ci-delta', { y: 14, scale: 0.92, duration: 0.42, ease: 'back.out(2.2)' }, 2.35)
+        .to('#ci-vs', { opacity: 1, duration: 0.34, ease: 'power2.out' }, 2.55)
+        .from('#ci-facts > div', {
+          y: 16,
+          opacity: 0,
+          duration: 0.42,
+          ease: 'power2.out',
+          stagger: 0.09,
+        }, 2.6);
+
+      window.__timelines['contador-ingresos'] = tl;
+    </script>
+  </body>
+</html>

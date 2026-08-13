@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <title>ONIA Platform — Cobro confirmado</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="cards.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      #cc-panel { padding: 48px; text-align: center; }
+
+      /* El QR y el check comparten la misma celda: el pago no "salta" de lugar,
+         el QR se convierte en la confirmación. */
+      .swap {
+        position: relative;
+        display: inline-grid;
+        width: 200px;
+        height: 200px;
+        margin: 6px auto 30px;
+      }
+      .swap > * { grid-area: 1 / 1; }
+
+      #cc-qr { width: 200px; height: 200px; }
+      #cc-qr rect.q { fill: var(--on-surface); }
+      #cc-qr rect.bg { fill: var(--surface-container-low); }
+
+      #cc-check { width: 200px; height: 200px; opacity: 0; }
+      #cc-check circle { fill: var(--verde-100); }
+      #cc-check path {
+        fill: none;
+        stroke: var(--primary);
+        stroke-width: 2.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 26;
+        stroke-dashoffset: 26;
+      }
+
+      #cc-titulo {
+        font-family: var(--font-headline);
+        font-weight: 800;
+        font-size: 40px;
+        margin: 0 0 10px;
+      }
+      #cc-monto { font-size: 76px; margin: 0; }
+      #cc-metodo { font-size: 24px; color: var(--on-surface-variant); margin: 14px 0 30px; }
+      .badge-swap { position: relative; display: inline-grid; }
+      .badge-swap > .badge { grid-area: 1 / 1; }
+      #cc-badge-pagada { opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="cobro-confirmado"
+      data-start="0"
+      data-width="1080"
+      data-height="1080"
+      data-duration="4.5"
+      data-fps="30"
+    >
+      <div class="stage"></div>
+
+      <section id="cc-clip" class="clip" data-start="0" data-duration="4.5" data-track-index="1">
+        <div class="head">
+          <h2>Cobro</h2>
+          <span class="aside">pago registrado del paciente</span>
+        </div>
+
+        <div id="cc-panel" class="panel">
+          <div class="swap">
+            <svg id="cc-qr" viewBox="0 0 21 21" shape-rendering="crispEdges" aria-hidden="true">
+              <rect class="bg" x="0" y="0" width="21" height="21" />
+              <g class="q-cells">
+                <rect class="q" x="1" y="1" width="5" height="5" />
+                <rect class="bg" x="2" y="2" width="3" height="3" />
+                <rect class="q" x="3" y="3" width="1" height="1" />
+                <rect class="q" x="15" y="1" width="5" height="5" />
+                <rect class="bg" x="16" y="2" width="3" height="3" />
+                <rect class="q" x="17" y="3" width="1" height="1" />
+                <rect class="q" x="1" y="15" width="5" height="5" />
+                <rect class="bg" x="2" y="16" width="3" height="3" />
+                <rect class="q" x="3" y="17" width="1" height="1" />
+                <rect class="q" x="8" y="1" width="1" height="3" />
+                <rect class="q" x="10" y="2" width="1" height="4" />
+                <rect class="q" x="12" y="1" width="1" height="2" />
+                <rect class="q" x="8" y="6" width="5" height="1" />
+                <rect class="q" x="1" y="8" width="3" height="1" />
+                <rect class="q" x="5" y="9" width="2" height="1" />
+                <rect class="q" x="8" y="9" width="1" height="3" />
+                <rect class="q" x="10" y="10" width="3" height="1" />
+                <rect class="q" x="14" y="9" width="1" height="2" />
+                <rect class="q" x="16" y="8" width="4" height="1" />
+                <rect class="q" x="18" y="10" width="1" height="3" />
+                <rect class="q" x="12" y="13" width="3" height="1" />
+                <rect class="q" x="9" y="14" width="1" height="4" />
+                <rect class="q" x="11" y="16" width="4" height="1" />
+                <rect class="q" x="16" y="15" width="1" height="4" />
+                <rect class="q" x="18" y="17" width="2" height="1" />
+                <rect class="q" x="12" y="19" width="3" height="1" />
+              </g>
+            </svg>
+
+            <svg id="cc-check" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="12" />
+              <path d="M6.8 12.4 L10.4 16 L17.2 8.6" />
+            </svg>
+          </div>
+
+          <p id="cc-titulo">Cobro confirmado</p>
+          <p id="cc-monto" class="num">Bs 1.250,00</p>
+          <p id="cc-metodo">QR Simple · BNB · María Fernanda Ortiz</p>
+
+          <span class="badge-swap">
+            <span id="cc-badge-pendiente" class="badge badge-pending">Pendiente</span>
+            <span id="cc-badge-pagada" class="badge badge-paid">Pagada</span>
+          </span>
+        </div>
+      </section>
+
+      <div class="brand"><span class="dot"></span>ONIA Platform</div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.from('.head', { y: 22, opacity: 0, duration: 0.5, ease: 'power2.out' }, 0.05)
+        .from('#cc-panel', { y: 56, opacity: 0, duration: 0.7, ease: 'power3.out' }, 0.1);
+
+      // El QR se cierra sobre sí mismo y en su lugar queda el check: una sola
+      // acción encadenada, no dos elementos animándose por su cuenta.
+      tl.to('#cc-qr', { scale: 0.72, opacity: 0, duration: 0.36, ease: 'power2.in' }, 1.35)
+        .fromTo(
+          '#cc-check',
+          { opacity: 0, scale: 0.7 },
+          { opacity: 1, scale: 1, duration: 0.42, ease: 'back.out(2)' },
+          1.6,
+        )
+        .to('#cc-check path', { strokeDashoffset: 0, duration: 0.42, ease: 'power2.inOut' }, 1.85);
+
+      // El monto acusa el golpe del check; el badge cierra el estado.
+      tl.from('#cc-titulo', { y: 14, opacity: 0, duration: 0.36, ease: 'power2.out' }, 2.0)
+        .fromTo('#cc-monto', { scale: 0.94 }, { scale: 1, duration: 0.4, ease: 'back.out(2.4)' }, 2.05)
+        .to('#cc-badge-pendiente', { opacity: 0, scale: 0.9, duration: 0.2, ease: 'power2.in' }, 2.5)
+        .fromTo(
+          '#cc-badge-pagada',
+          { opacity: 0, scale: 0.86 },
+          { opacity: 1, scale: 1, duration: 0.34, ease: 'back.out(2.2)' },
+          2.64,
+        );
+
+      window.__timelines['cobro-confirmado'] = tl;
+    </script>
+  </body>
+</html>

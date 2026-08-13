@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, darkProductHtml, editorialPhotoHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS } = require('./carousel_render');
+const { roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS } = require('./carousel_render');
 
 let passed = 0;
 function test(name, fn) {
@@ -56,8 +56,8 @@ test('last slide omits continuation cue', () => {
   const html = slideHtml({ headline: 'CTA', body: 'comentá AUTO' }, 2, 3, 'onia', '');
   assert.ok(!html.includes('class="cue"'));
 });
-test('accounts configured (onia/arthur/sergio/nuvia)', () => {
-  assert.deepStrictEqual(Object.keys(ACCOUNTS).sort(), ['arthur', 'nuvia', 'onia', 'sergio']);
+test('accounts configured (onia/arthur/sergio/nuvia/lucia)', () => {
+  assert.deepStrictEqual(Object.keys(ACCOUNTS).sort(), ['arthur', 'lucia', 'nuvia', 'onia', 'sergio']);
 });
 
 // dark-product pack
@@ -89,7 +89,7 @@ test('editorial-photo uses photo bg, serif-italic accent, pill caption', () => {
   assert.ok(html.includes('sergio.jpg'));
   assert.ok(html.includes('Fraunces'));
   assert.ok(html.includes('<span class="g">Ads</span>'));
-  assert.ok(html.includes('class="cap"'));
+  assert.ok(html.includes('class="captop"'));
 });
 test('editorial-photo without bg still renders (ink fallback)', () => {
   const html = editorialPhotoHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
@@ -121,6 +121,55 @@ test('dark-product object slot rendered when provided', () => {
   const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { object: '/tmp/panel.png' });
   assert.ok(html.includes('class="object"'));
   assert.ok(html.includes('panel.png'));
+});
+
+// formatos: portrait (default) + square + story en los 5 packs
+test('FORMATS expone portrait/square/story con los tamaños de IG', () => {
+  assert.deepStrictEqual(FORMATS.portrait, { w: 1080, h: 1350 });
+  assert.deepStrictEqual(FORMATS.square, { w: 1080, h: 1080 });
+  assert.deepStrictEqual(FORMATS.story, { w: 1080, h: 1920 });
+});
+test('sin --format todos los packs siguen en 1080x1350', () => {
+  const builders = [
+    (a) => slideHtml({ headline: 'H' }, 1, 3, 'onia', '', a),
+    (a) => darkProductHtml({ headline: 'H' }, 1, 3, 'onia', a),
+    (a) => darkNeonHtml({ headline: 'H' }, 1, 3, 'onia', a),
+    (a) => editorialPhotoHtml({ headline: 'H' }, 1, 3, 'onia', a),
+    (a) => brightRetailHtml({ headline: 'H' }, 1, 3, 'nuvia', a),
+  ];
+  for (const b of builders) {
+    const html = b({});
+    assert.ok(html.includes('width:1080px; height:1350px'), 'slide 1080x1350');
+    assert.ok(html.includes('--canvas-h:1350px'));
+  }
+});
+test('--format square|story cambia el lienzo en los 5 packs', () => {
+  const cases = [
+    ['square', 1080], ['story', 1920],
+  ];
+  for (const [format, h] of cases) {
+    const builders = [
+      slideHtml({ headline: 'H' }, 1, 3, 'onia', '', { format }),
+      darkProductHtml({ headline: 'H' }, 1, 3, 'onia', { format }),
+      darkNeonHtml({ headline: 'H' }, 1, 3, 'onia', { format }),
+      editorialPhotoHtml({ headline: 'H' }, 1, 3, 'onia', { format }),
+      brightRetailHtml({ headline: 'H' }, 1, 3, 'nuvia', { format }),
+    ];
+    for (const html of builders) {
+      assert.ok(html.includes(`width:1080px; height:${h}px`), `${format}: slide 1080x${h}`);
+      assert.ok(html.includes(`--canvas-h:${h}px`), `${format}: token canvas`);
+      assert.ok(!html.includes('height:1350px') || h === 1350, `${format}: sin restos de 1350`);
+    }
+  }
+});
+test('la curva/ribbon escalan su viewBox y su geometría al alto real', () => {
+  const dp = darkProductHtml({ headline: 'H' }, 1, 3, 'onia', { format: 'story' });
+  assert.ok(dp.includes('viewBox="0 0 1080 1920"'));
+  assert.ok(dp.includes('M -60 600'), 'story no estira la curva: banda absoluta');
+  const sq = darkProductHtml({ headline: 'H' }, 1, 3, 'onia', { format: 'square' });
+  assert.ok(sq.includes('M -60 480'), 'square comprime: 600*1080/1350 => 480');
+  const br = brightRetailHtml({ headline: 'H' }, 1, 3, 'nuvia', { format: 'square' });
+  assert.ok(br.includes('viewBox="0 0 1080 1080"'));
 });
 
 console.log(`\n${passed} passed`);
