@@ -148,9 +148,25 @@ test("solo `sent` es cobrable: simulated / skipped / failed no cuestan un centav
   assert.equal(result.totales.usd, 0.0113);
   assert.deepEqual(result.totales.noCobrables, { simulated: 1, skipped: 1, failed: 1 });
   assert.equal(esCobrable({ delivery_status: "sent" }), true);
-  for (const estado of ["simulated", "skipped", "failed", "reserved", "", null]) {
+  for (const estado of ["simulated", "skipped", "failed", "", null]) {
     assert.equal(esCobrable({ delivery_status: estado }), false, `${estado} no se cobra`);
   }
+});
+
+// El recordatorio (M9) escribe la fila ANTES de mandar: ahi la reserva ES el insert, y el estado
+// honesto es `reserved`. Si esto vuelve a contar como no-cobrable, cada recordatorio utility real
+// desaparece de la cuenta y el medidor reporta menos de lo que Meta cobra. Paso una vez: el valor
+// ni siquiera llegaba a la base (`buildMessageRow` lo degradaba a `simulated` en silencio).
+test("`reserved` SI se cuenta: es el recordatorio real, no una simulacion", async () => {
+  assert.equal(esCobrable({ delivery_status: "reserved" }), true);
+
+  const result = await reporte([
+    row({ delivery_status: "reserved", template_key: "M9_PLANTILLA" }),
+    row({ delivery_status: "sent", template_key: "M9_PLANTILLA" }),
+  ]);
+
+  assert.equal(result.totales.count, 2, "la reservada cuenta igual que la enviada");
+  assert.equal(result.totales.noCobrables.simulated, 0, "no se cuela como simulacion");
 });
 
 test("un entrante NO se cobra aunque la base lo guarde como `sent` (claimInbound lo hace)", async () => {
@@ -181,8 +197,10 @@ test("y el hueco al reves: lo que manda un humano desde Chatwoot no entra (se di
   assert.match(renderHuman(result), /PISO/);
 });
 
+// Antes el ejemplo de "desconocido" era `reserved` — y era justamente el bug: un estado REAL del
+// recordatorio tratado como basura. El caso sigue valiendo, con un valor que de verdad no existe.
 test("un delivery_status desconocido no se cobra y queda a la vista en `failed`", async () => {
-  const result = await reporte([row({ delivery_status: "reserved" })]);
+  const result = await reporte([row({ delivery_status: "en_cola_del_futuro" })]);
   assert.equal(result.totales.count, 0);
   assert.equal(result.totales.noCobrables.failed, 1);
 });

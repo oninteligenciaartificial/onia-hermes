@@ -227,7 +227,13 @@ export function buildMessageRow(message, state, extra = {}) {
     stage_after: message.stageAfter || null,
     guardrail_ok: guardrail.ok !== false,
     guardrail_violations: Array.isArray(guardrail.violations) ? guardrail.violations : [],
-    delivery_status: ["simulated", "skipped", "sent", "failed"].includes(message.deliveryStatus)
+    // `reserved` entra en la lista porque el recordatorio (M9) escribe la fila ANTES de mandar: la
+    // reserva ES el insert. Faltaba, y como este ternario degrada EN SILENCIO a "simulated", cada
+    // recordatorio utility real quedaba guardado como simulacion — invisible para el medidor, que
+    // solo cuenta lo que salio. Se descubrio midiendo, no leyendo. El CHECK de la tabla se amplio
+    // en la misma tanda (supabase/migrations/20260813_bot_messages_delivery_status_reserved.sql):
+    // si el codigo acepta un valor que la base rechaza, el insert falla y se pierde la fila entera.
+    delivery_status: ["simulated", "skipped", "sent", "failed", "reserved"].includes(message.deliveryStatus)
       ? message.deliveryStatus
       : "simulated",
     external_message_id: extra.externalMessageId || null,
