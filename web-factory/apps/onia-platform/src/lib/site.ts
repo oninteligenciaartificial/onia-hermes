@@ -8,6 +8,14 @@
  */
 
 /**
+ * Origen publico del sitio. Lo usan las TRES cosas que tienen que coincidir o
+ * la indexacion se rompe: `metadataBase` (de donde salen los canonical y las
+ * URLs absolutas de OG), el `sitemap.xml` y la linea `Sitemap:` de robots.txt.
+ * Estaba escrito tres veces a mano; ahora se declara una sola.
+ */
+export const SITE_URL = "https://onia.com.bo";
+
+/**
  * Numero de WhatsApp del negocio (el que ATIENDE los mensajes).
  *
  * Sale de `NEXT_PUBLIC_WA_PHONE` (solo digitos, con codigo de pais). Esa

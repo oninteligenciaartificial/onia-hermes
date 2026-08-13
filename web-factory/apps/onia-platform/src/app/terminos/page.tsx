@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Términos y Condiciones — Onia",
   description:
     "Términos y Condiciones de uso de la plataforma Onia (borrador, pendiente de revisión por abogado): servicio, planes y pagos en Bs, datos del cliente, agentes IA con aprobación humana y jurisdicción en Bolivia.",
+  alternates: { canonical: "/terminos" },
   robots: { index: false },
 };
 

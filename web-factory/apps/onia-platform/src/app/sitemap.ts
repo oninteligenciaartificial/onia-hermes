@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-
-const SITE_URL = "https://onia.com.bo";
+import { SITE_URL } from "@/lib/site";
 
 /**
  * Sitemap del sitio público. /patrones queda fuera (demo interna, noindex)

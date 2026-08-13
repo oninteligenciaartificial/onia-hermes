@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Empezá — Onia",
   description:
     "Respondé 3 preguntas y te decimos qué encenderíamos para tu negocio. Sin registro: no te pedimos nombre, correo ni teléfono.",
+  alternates: { canonical: "/empezar" },
 };
 
 export default function EmpezarPage() {

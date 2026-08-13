@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Archivo, Geist_Mono } from "next/font/google";
 import { MotionProvider } from "@/motion";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 /*
@@ -41,6 +42,14 @@ const SITE_DESCRIPTION =
   "Elegís tu rubro, tu cuenta queda lista y encendés módulos cuando los necesités: gestión, agentes con IA que esperan tu aprobación, chatbot de WhatsApp, facturación SIAT. Hecho en Bolivia.";
 
 export const metadata: Metadata = {
+  /*
+   * Base de TODA URL absoluta del sitio (canonical, OG, sitemap de metadata).
+   * Sin esto Next cae a `http://localhost:3000` y publica canonicals a
+   * localhost. Va en el layout raiz para que lo hereden todas las paginas;
+   * el `canonical` NO se pone aca a proposito: se declara por pagina, o cada
+   * ruta heredaria "/" como canonical y se desindexaria el sitio entero.
+   */
+  metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   // OG sin imagen a proposito: la imagen sera una captura REAL del sistema

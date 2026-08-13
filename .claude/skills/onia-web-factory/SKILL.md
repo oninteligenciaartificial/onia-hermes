@@ -108,6 +108,42 @@ librería sin tocar. Copy hardcodeado del template en el HTML final = defecto, n
 - No filtrar WIP parcial: si un archivo nuevo importa otro nuevo, van los dos o ninguno.
 - `code-review` antes de mergear.
 
+## Checklist de pre-entrega — indexabilidad (17 ítems)
+
+> El gate de arriba verifica que **compile**. No verifica que sea **encontrable**: una web
+> que compila perfecto y no la indexa nadie es una web que no sirve. Esto se corre **sobre
+> el sitio construido y servido**, nunca leyendo el código — la mitad de estas cosas se ven
+> bien en el fuente y salen mal en el HTML servido.
+
+1. `/robots.txt` responde 200 y **anuncia el sitemap**.
+2. `/sitemap.xml` responde 200 y es XML válido.
+3. **Toda** página publicada está en el sitemap (y las internas/demo, fuera).
+4. Una URL inexistente da **404 propio**, no la pantalla por defecto de Next.
+5. `<link rel="canonical">` sale en el **HTML servido** de cada página, no sólo en el código.
+6. `metadataBase` configurado — sin él, canonical y Open Graph salen relativos y rotos.
+7. `<title>` único por página (dos páginas con el mismo título compiten entre sí).
+8. `<meta name="description">` única por página.
+9. Favicon presente y sirviendo 200.
+10. Open Graph con `title`, `description`, `url` y `type`. **La imagen NO se inventa:**
+    si no hay captura real del producto, va sin imagen — un mockup ahí es fabricar.
+11. `<html lang>` correcto (`es` para Bolivia, no el `en` que viene por defecto).
+12. Una sola `<h1>` por página.
+13. Imágenes con `width` y `height` explícitos (si no, el layout salta y el CLS se dispara).
+14. Imágenes con `alt` real; decorativas con `alt=""`.
+15. Cero enlaces internos rotos.
+16. HTTPS sin contenido mixto (un `http://` colado bloquea el candado).
+17. El contenido está **en el HTML servido**, no sólo después de hidratar: si el rastreador
+    lee la página sin ejecutar JS, tiene que ver el texto.
+
+**Tres ítems de la lista original quedaron AFUERA a propósito** — son opinión, no falla:
+"Vite + React" no es un defecto; bloquear bots de IA en `robots.txt` es decisión comercial,
+no técnica; y `llms.txt` está sin verificar como estándar real.
+
+**No usar esta lista como argumento de venta hasta que nuestras propias webs la pasen.**
+Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13: los ítems
+1-6 y 9 están **verificados sobre el sitio servido** en `apps/onia-platform` y
+`apps/dentalgest-landing`; el resto de la lista todavía no se auditó en esas dos.
+
 ## Ojo con los monolitos
 
 - `onia-center` (~14k líneas): NO rediseñar in situ; reconstruir en componentes chicos
