@@ -1,5 +1,16 @@
 # Video Intake — reels/TikToks que manda Sergio
 
+> ## Alcance de esta sesion (Sergio, 2026-08-13)
+>
+> **Aca SOLO se analizan reels y se reparten a su sesion.** Nada mas.
+>
+> El ciclo completo y unico: recibir link -> bajar -> ver -> transcribir -> ficha con veredicto
+> -> asignar la sesion que le toca -> prompt para esa sesion.
+>
+> **NO se hace aca:** construir lo que el video sugiere, arreglar lo que aparezca roto,
+> auditar frentes, verificar cuentas, escribir manuales de produccion. Si algo de eso hace
+> falta, se anota en la ficha y se manda a su sesion. Esta sesion no ejecuta: reparte.
+
 Bandeja de entrada de videos para **extraer información y decidir si sirve**. Distinta de
 `../creator-video-references/`, que estudia patrones creativos (hook, ritmo, CTA); acá el
 eje es **¿nos sirve, mejora algo nuestro, o es humo?**
