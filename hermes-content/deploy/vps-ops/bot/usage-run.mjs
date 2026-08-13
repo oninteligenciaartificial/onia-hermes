@@ -9,11 +9,27 @@
 //   salida  : texto legible · --json una linea JSON
 //   codigo de salida: SIEMPRE 0 (lo llama n8n; un error se reporta en la salida, no reventando).
 //
+// LO QUE ESTE NUMERO ES: UN TECHO, NO LA FACTURA. Leelo antes de cobrarle a nadie.
+//   `bot_messages.delivery_status` se escribe UNA vez, en el momento del POST, y la tabla es
+//   append-only: nadie vuelve a tocar la fila. Pero Meta responde el veredicto DESPUES, por webhook
+//   asincrono. Comprobado en vivo el 2026-08-13: el mensaje 31 de Chatwoot paso de `sent` a
+//   `failed` 9 segundos mas tarde (error 131042). Nuestra fila quedo diciendo `sent` para siempre.
+//   Meta NO cobra los fallidos => contar por `sent` SOBREESTIMA. Con lo que hay guardado hoy ese
+//   caso es INDISTINGUIBLE, asi que el reporte lo dice en la cara (ver renderHuman y `basis`).
+//   Para facturarle a un cliente, el techo sirve de tope y de alarma; la cifra exacta sale de Meta.
+//
+// FUENTE DE VERDAD FUTURA (anotada, NO construida en esta tarea): el webhook de estado de Meta trae
+//   el precio real — `pricing: {billable, pricing_model: "PMP", category, type}`, verificado en los
+//   logs de Chatwoot el 2026-08-13. La categoria de cobro la decide META, no nosotros. Ese webhook
+//   llega Meta -> Chatwoot y Chatwoot NO nos lo reenvia (nuestro webhook solo ve eventos de
+//   Chatwoot), asi que hoy no lo tenemos guardado. El dia que se guarde, el medidor lee de ahi y
+//   estas tarifas quedan como estimacion. `pricing_model: "PMP"` = per-message pricing YA activo.
+//
 // REGLAS DURAS
-//   1. SOLO se cobra lo que SALIO: `direction = 'outbound'` y `delivery_status = 'sent'`.
-//      `simulated` (simulador), `skipped` (dry-run) y `failed` no los cobra Meta y aca tampoco.
-//      Igual se muestran aparte: si un mes tiene 300 `skipped`, es que el bot esta en dry-run, y
-//      eso se tiene que ver.
+//   1. SOLO se cuenta lo que SALIO: `direction = 'outbound'` y `delivery_status = 'sent'`.
+//      `simulated` (simulador), `skipped` (dry-run) y `failed` (fallo en el POST mismo) no los
+//      cobra Meta y aca tampoco. Igual se muestran aparte: si un mes tiene 300 `skipped`, es que el
+//      bot esta en dry-run, y eso se tiene que ver.
 //   2. LA CATEGORIA SALE DEL REGISTRO DE PLANTILLAS APROBADAS, no de "template_key no es null".
 //      OJO con esto, que es el error facil: `bot_messages.template_key` es la clave del GUION
 //      (M0, M1b, M0_DISCLOSURE, llm_freeform...), no una plantilla de Meta. Verificado contra la
@@ -126,10 +142,28 @@ export function clasificar(row) {
   return { categoria: "servicio", templateKey: key || null, templateName: null };
 }
 
-/** Lo unico que factura Meta: saliente y entregado. Se re-chequea en memoria (la base puede cambiar). */
+/**
+ * Lo que se CONTABILIZA: saliente y aceptado por el canal al mandarlo. Se re-chequea en memoria
+ * (el barrido ya filtra en SQL, pero la fila puede venir de cualquier lado).
+ *
+ * OJO: `sent` = "el POST salio", no "Meta lo cobro". El rechazo asincrono posterior (131042 y
+ * companiia) NO deja rastro en esta fila — de ahi que el total sea un techo. Ver el encabezado.
+ */
 export function esCobrable(row) {
   return row?.direction !== "inbound" && row?.delivery_status === "sent";
 }
+
+/**
+ * Que representa el numero, en una palabra, para que el panel/n8n lo etiquete sin interpretar.
+ * `techo_intentado` = lo que se intento y el canal acepto. Cuando exista el webhook de precio de
+ * Meta guardado, este valor pasa a `facturado_meta` y recien ahi es la factura.
+ */
+export const BASIS = "techo_intentado";
+
+/** La advertencia va SIEMPRE, en toda salida: un techo presentado como factura es plata mal cobrada. */
+export const AVISO_TECHO =
+  "TECHO, no factura: cuenta lo que salio ('sent' al hacer el POST). Meta puede marcarlo fallido " +
+  "despues por webhook asincrono (ej. 131042) y esos NO los cobra. La cifra exacta la tiene Meta.";
 
 /**
  * USD de UN mensaje. `null` = no hay tarifa conocida (no se inventa; se cuenta aparte).
@@ -285,6 +319,9 @@ export async function runUsageReport(options = {}, deps = {}) {
     month: rango?.month || null,
     from: rango?.from || null,
     to: rango?.to || null,
+    // Que ES el numero. Viaja en el JSON para que n8n/el panel no lo presenten como una factura.
+    basis: BASIS,
+    aviso: AVISO_TECHO,
     bobPorUsd: bob,
     bobVerificado: BOB_POR_USD_VERIFICADO,
     scanned: 0,
@@ -357,6 +394,7 @@ export function renderHuman(result) {
     `ONIA — mensajes salientes de WhatsApp · mes ${result.month || "?"} (corte UTC)`,
     `rango: ${result.from} .. ${result.to} · filas leidas: ${result.scanned}${result.truncated ? " (CORTADO)" : ""}`,
     `tipo de cambio: ${result.bobPorUsd} Bs/USD (BCB, verificado ${result.bobVerificado})`,
+    AVISO_TECHO,
     "",
   ];
   if (result.error) lines.push(`ERROR: ${result.error}`, "");

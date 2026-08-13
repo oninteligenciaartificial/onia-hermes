@@ -7,6 +7,10 @@
 //      M9_PLANTILLA es UTILITY. Este es EL error caro: contar guiones como plantillas infla ~6x.
 //   2. NO SE COBRA LO QUE NO SALIO: solo `sent`. `simulated`, `skipped` y `failed` no suman un
 //      centavo — y los entrantes tampoco, aunque la base los guarde como `sent`.
+//   2b. Y EL TOTAL SE PRESENTA COMO TECHO: `sent` se escribe al hacer el POST, pero Meta puede
+//      rechazar despues por webhook asincrono (comprobado 2026-08-13: el mensaje 31 de Chatwoot
+//      paso a `failed` 9 s mas tarde, error 131042) y esos no los cobra. La fila append-only nunca
+//      se entera. Si alguien saca la etiqueta de "techo", estas pruebas fallan.
 //   3. TARIFAS: marketing 0,0740 vs utility 0,0113 (6,5x). Servicio GRATIS hasta el 1-oct-2026 y
 //      0,0113 desde esa fecha, decidido por la fecha de CADA mensaje.
 //   4. NO SE INVENTA TARIFA: una `*_PLANTILLA` sin registrar cae en su propio balde con warning,
@@ -23,6 +27,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  AVISO_TECHO,
+  BASIS,
   BOB_POR_USD,
   CATEGORIAS,
   PLANTILLAS_META,
@@ -150,6 +156,19 @@ test("un entrante NO se cobra aunque la base lo guarde como `sent` (claimInbound
   const result = await reporte([row({ direction: "inbound", delivery_status: "sent", template_key: null })]);
   assert.equal(result.totales.count, 0);
   assert.equal(result.totales.usd, 0);
+});
+
+test("el total se presenta como TECHO en las dos salidas: el rechazo asincrono de Meta no se ve", async () => {
+  // Caso real del 2026-08-13: la fila dice `sent` porque el POST salio, pero Meta la rechazo 9 s
+  // despues (131042) y no la cobro. Nuestra fila append-only nunca se entera => se cuenta igual, y
+  // por eso el numero DEBE viajar etiquetado. Sacar la etiqueta rompe esta prueba.
+  const result = await reporte([row()]);
+  assert.equal(result.totales.count, 1, "se cuenta: con lo guardado hoy es indistinguible");
+  assert.equal(result.basis, "techo_intentado", "el JSON dice que es un techo, no una factura");
+  assert.equal(result.aviso, AVISO_TECHO);
+  assert.equal(BASIS, "techo_intentado");
+  assert.match(AVISO_TECHO, /131042/, "el aviso nombra el caso comprobado");
+  assert.match(renderHuman(result), /TECHO, no factura/);
 });
 
 test("un delivery_status desconocido no se cobra y queda a la vista en `failed`", async () => {
