@@ -70,14 +70,22 @@ export const quoteGroups: QuoteGroup[] = [
   {
     id: "automation",
     title: "Automatizaciones y bots",
-    hint: "Setup unico. Comision 10%. WhatsApp requiere validacion Meta.",
+    hint: "Setup unico. Comision 10%. WhatsApp requiere validacion Meta. El chatbot WhatsApp NUNCA se cotiza solo con setup: lleva mensual obligatorio (Onia le paga a Meta todos los meses).",
     components: [
       { id: "n8n-simple", label: "Automatizacion simple n8n", price: 790, kind: "oneoff", category: "automation", commissionRate: 0.1 },
       { id: "n8n-flujo", label: "Flujo de aprobacion n8n", price: 1200, kind: "oneoff", category: "automation", commissionRate: 0.1 },
       { id: "bot-recordatorios", label: "Bot Telegram recordatorios", price: 690, kind: "oneoff", category: "automation", commissionRate: 0.1 },
       { id: "bot-operativo", label: "Bot Telegram operativo", price: 790, kind: "oneoff", category: "automation", commissionRate: 0.1 },
       { id: "bot-avanzado", label: "Bot Telegram avanzado", price: 1200, kind: "oneoff", category: "automation", commissionRate: 0.1 },
-      { id: "chatbot-whatsapp", label: "Chatbot WhatsApp conversacional (+ Meta)", price: 990, kind: "oneoff", category: "automation", commissionRate: 0.1, needsApproval: true, note: "Desde 990 setup + costos Meta. Requiere validacion tecnica antes de prometer." },
+      // Chatbot WhatsApp: SIEMPRE dos lineas, setup + mensual del mismo nivel. El setup solo no cubre
+      // lo que Onia le paga a Meta cada mes; desde el 1-oct-2026 hasta los mensajes de servicio cuestan.
+      // Fuente de precios: hermes-content/docs/ONIA_META_Y_CHATBOT_PRODUCTO_20260725.md seccion 4.3.
+      { id: "chatbot-wa-esencial-setup", label: "Chatbot WhatsApp Esencial (setup)", price: 1500, kind: "oneoff", category: "automation", commissionRate: 0.1, needsApproval: true, note: "Va SIEMPRE con el mensual Esencial. Requiere validacion tecnica antes de prometer." },
+      { id: "chatbot-wa-esencial-mes", label: "Chatbot WhatsApp Esencial (mensual, 800 msgs)", price: 490, kind: "monthly", category: "automation", commissionRate: 0.1, needsApproval: true, note: "Incluye 800 mensajes salientes/mes. Excedente: 0,30/msg utility, 1,50/msg marketing. Campanas de marketing se cotizan aparte." },
+      { id: "chatbot-wa-comercial-setup", label: "Chatbot WhatsApp Comercial (setup)", price: 2900, kind: "oneoff", category: "automation", commissionRate: 0.1, needsApproval: true, note: "Va SIEMPRE con el mensual Comercial. Captura de leads, scoring y ruteo a vendedor." },
+      { id: "chatbot-wa-comercial-mes", label: "Chatbot WhatsApp Comercial (mensual, 1.500 msgs)", price: 890, kind: "monthly", category: "automation", commissionRate: 0.1, needsApproval: true, note: "Incluye 1.500 mensajes salientes/mes. Excedente: 0,30/msg utility, 1,50/msg marketing." },
+      { id: "chatbot-wa-full-setup", label: "Chatbot WhatsApp Full (setup)", price: 5900, kind: "oneoff", category: "automation", commissionRate: 0.1, needsApproval: true, note: "Va SIEMPRE con el mensual Full. Catalogo o agenda conectada, plantillas proactivas, panel." },
+      { id: "chatbot-wa-full-mes", label: "Chatbot WhatsApp Full (mensual, 3.000 msgs)", price: 1890, kind: "monthly", category: "automation", commissionRate: 0.1, needsApproval: true, note: "Incluye 3.000 mensajes salientes/mes. Excedente: 0,25/msg utility, 1,30/msg marketing." },
     ],
   },
   {
