@@ -755,3 +755,101 @@ C1 se escribio verificando el arbol, no la ficha.
 O sea: **26 vigentes, ~25 sin abrir.** Esto no es un tablero de progreso; es la prueba del §1 de
 la sintesis — el cuello de botella no es informacion, es ejecucion. Escribir el prompt numero 27
 no vale nada si no se ejecuta el numero 1.
+
+
+---
+
+# D · Prompts que NO salen de los videos
+
+El corpus de video se agoto: 40% humo y subiendo, cero capacidades nuevas en 45 piezas. Estos
+tres salen de **verificar la memoria del proyecto contra produccion**, que resulto ser una
+fuente mucho mas rica. Los tres estan verificados el 2026-08-12, no supuestos.
+
+## D1 · 🔴 El chatbot no guarda nada hace 6 dias (VERIFICADO HOY)
+
+Consultado directo contra la base de produccion el 2026-08-12:
+
+```
+messages:      16 filas · ultimo 2026-08-06 14:58:33
+conversations: 10 filas · ultimo 2026-08-06 14:58:25
+```
+
+**Seis dias sin una sola conversacion nueva.** La memoria del proyecto atribuia esto a una regla
+de firewall (`ONIA-BLOCK-3000`) que cortaba trafico contenedor-contenedor. Esa regla **ya no
+esta**: hoy hay `RETURN` para 172.16.0.0/12 en el puerto 3000. O sea que se removio la causa
+sospechada y **el sintoma sigue igual**, lo que significa que la causa era otra o hay una segunda.
+
+Esto vale mas que cualquier prompt salido de un reel: es el canal de venta caido, en silencio,
+sin que nadie lo note.
+
+```text
+Sesion: chatbot (o infra). git branch --show-current primero.
+TAREA UNICA: que el chatbot vuelva a guardar conversaciones. Diagnostico primero, no parches.
+DATO DE PARTIDA (verificado 2026-08-12 contra la base onia-chatbot en el VPS):
+  messages      16 filas, ultimo 2026-08-06 14:58:33
+  conversations 10 filas, ultimo 2026-08-06 14:58:25
+  la regla ONIA-BLOCK-3000 ya NO existe: hay RETURN 172.16.0.0/12 -> 172.16.0.0/12 puerto 3000
+PASOS: (1) mandar UN mensaje de prueba por el canal real y seguirlo punta a punta —
+webhook -> contenedor -> base; (2) encontrar en que salto se pierde, con evidencia (logs del
+contenedor, respuesta del webhook, fila en la base); (3) recien ahi arreglar.
+LISTO = un mensaje de prueba nuevo visible en la tabla `messages` con timestamp de hoy, y el
+salto que fallaba explicado con la evidencia pegada.
+NO HAGAS: no des por buena la explicacion vieja del firewall — se removio la regla y el sintoma
+sigue, asi que esa hipotesis ya esta descartada por los hechos. No toques la minimizacion de
+datos en esta sesion (es el otro prompt de `chatbot`): primero que guarde, despues que guarde
+menos. No reinstales Chatwoot: hay 10 conversaciones reales que no se pueden perder.
+```
+
+## D2 · Las fechas que corren solas
+
+Tres plazos de la memoria del proyecto, con la cuenta hecha al 2026-08-12. Ninguno depende de
+que mires un video mas; todos se vencen aunque nadie los mire.
+
+| Fecha | Que pasa | Faltan |
+|---|---|---|
+| **30-sep-2026** | facturacion en linea obligatoria en Bolivia | ~7 semanas |
+| **1-oct-2026** | se cierra la ventana gratuita de 24 h de WhatsApp | ~7 semanas |
+| **~oct-2026** | fin del runway estimado (11 semanas contadas desde el 26-jul) | ~8 semanas |
+
+```text
+Sesion: la de estrategia/fiscal segun corresponda. git branch --show-current primero.
+TAREA UNICA: convertir tres fechas en un plan con responsable, no en una nota.
+  1. FISCAL (30-sep): verificar contra la RND vigente que la fecha sigue siendo esa y que
+     alcanza a nuestros clientes objetivo. La homologacion SIAT depende del NIT (bloqueo S2 de
+     Sergio) — sin eso no hay emision real, y el producto lo promete.
+  2. WHATSAPP (1-oct): recalcular que le cuesta al cliente el chatbot DESPUES del cambio. Hoy el
+     costeo asume la ventana gratis. Si el numero cambia, cambia el precio del add-on.
+  3. RUNWAY: contra el plan vigente, cuantas semanas quedan y que se cae si no entra el primer
+     cliente. Sin dramatizar: numeros.
+LISTO = una tabla de 3 filas: fecha, que se cae, quien lo destraba, y que se hace ANTES.
+NO HAGAS: no cites ninguna fecha fiscal sin la fuente (RND o DS con numero) — usa la skill
+`onia-contabilidad-bolivia`. Una fecha mal citada en una propuesta es peor que no citarla.
+NO inventes el runway: si el dato no esta, se dice que no esta.
+```
+
+## D3 · La busqueda de marca de Bs 75 que bloquea todo lo demas
+
+De la memoria: antes de gastar en registrar la marca hay que hacer la busqueda **PI-112 en el
+SENAPI, que cuesta Bs 75**. Es P0 y sigue sin hacerse. Registrar sin buscar es arriesgar el
+gasto entero.
+
+```text
+Sesion: la administrativa/legal. git branch --show-current primero.
+TAREA UNICA: dejar lista la busqueda de antecedentes marcarios PI-112 en SENAPI (Bs 75) para
+que Sergio la presente: formulario, requisitos, donde se paga, y a nombre de quien va.
+OJO QUIEN FIRMA: la titular legal es Leslie Mercado Moreno (SEPREC), no Sergio. Todo acto legal
+va a su nombre.
+LISTO = el tramite armado y el costo confirmado, listo para presentar. Y la decision escrita:
+se registra la marca MIXTA (nombre + logo), que es lo que ya estaba definido.
+NO HAGAS: no inicies el registro antes de la busqueda — si hay un antecedente, se pierde la
+tasa. No propongas que firme Sergio.
+```
+
+---
+
+**Por que estos tres y no mas.** Salen de verificar hechos, no de opinar. D1 se confirmo contra
+la base de produccion hoy; D2 son fechas escritas; D3 es un tramite con precio. El resto de la
+memoria (S1-S9, Postiz bloqueado por DNS, etc.) son bloqueos de Sergio: no necesitan prompt,
+necesitan que los haga.
+
+**Total: 30 prompts escritos · 1 anulado · 29 vigentes.**
