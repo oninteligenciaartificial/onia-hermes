@@ -27,7 +27,7 @@ obliga a nada y es lo que convierte todas las estimaciones de estos documentos e
 
 | # | A quién | Qué devuelve | Estado |
 |---|---|---|---|
-| 1 | **Beelink** (wholesale@bee-link.com) y **GMKtec** (Caroline Lei, caroline@gmktec.com) | Precio FOB a 1 / 10 / 50 / 100, MOQ, plazo, peso y medidas, CE y licencia | **RFQ redactado, sin enviar** |
+| 1 | **Beelink** (wholesale@bee-link.com), **GMKtec** (Caroline Lei, caroline@gmktec.com) y **Framework** | Precio FOB a 1 / 10 / 50 / 100, MOQ, plazo, peso y medidas, CE y licencia — y a Framework: si envía a Bolivia, a cuánto puesto, y si hace OEM | **RFQ redactado, sin enviar** |
 | 2 | **Oriental** (WhatsApp +591 72030560) | Clasificación por escrito, si el DS 5518 llega a 8471.41, GA efectivo desde Brasil, su tarifario | Consulta redactada |
 | 3 | **Tres bancos**, el mismo día | Tipo de cambio de giro + comisiones, incluidas las del corresponsal | — |
 | 4 | **Plaza Santa Cruz** | Si acá se consigue algo equivalente y a cuánto | — |
@@ -40,6 +40,54 @@ decisión tuya.
 > probable que no esté en Santa Cruz — **pero eso hay que verificarlo, no suponerlo**. Si aparece
 > algo equivalente en plaza, aunque salga 30 % más caro, para **una** unidad de demo puede ganar:
 > cero trámite, cero flete, cero espera, y garantía que se reclama caminando.
+
+---
+
+## 2-bis. Qué se compra exactamente — y por qué a fábrica china
+
+### Dos equipos, no uno. Caminos técnicos distintos
+
+| # | Qué | Precio | Para qué |
+|---|---|---|---|
+| 1 | **Ryzen AI Max+ 395, 128 GB** | ~2.000 | El producto: gamas Recepción, Expediente y Taller |
+| 2 | **NVIDIA Jetson Orin Nano Super 8 GB** | **249** | El seguro: camino CUDA **+ es la gama Vista** (visión) |
+
+Una **segunda AMD idéntica no enseña nada nuevo**. El mejor segundo dólar es el Jetson: cubre el
+riesgo ROCm de `ONIA_BOX_MARCA_PROPIA_VIABILIDAD_20260806.md` §3 —ROCm en ese chip se estabilizó
+recién en enero de 2026 y un firmware conocido lo rompe—, abre un producto de entrada con otro
+comprador, y entra en el bolsillo para llevarlo a una reunión.
+
+### Tres proveedores, no dos
+
+| Proveedor | Precio 128 GB | OEM / marca propia |
+|---|---|---|
+| **Framework Desktop** | **~USD 1.999** | ⏳ a confirmar — su modelo es venta directa, no fabricación para terceros |
+| **Beelink GTR9 Pro** | ~2.000 *(estimado, a cotizar)* | ✅ **OEM y ODM confirmados** |
+| **GMKtec EVO-X2** | ~3.299 | ✅ **OEM/ODM desde su fundación**, ya lo hacen para banca y salud |
+
+> **La lista de compra original decía solo Beelink.** El Framework a USD 1.999 estaba en el doc
+> de equipos y no se había cruzado: **USD 1.300 de diferencia** contra el EVO-X2 por la misma
+> clase de chip.
+
+### 🔑 Por qué igual se va a fábrica china
+
+**No es por precio** — Framework sale lo mismo o menos. Es por **OEM**: logo en el chasis,
+packaging propio y **la imagen del sistema preinstalada de fábrica**. Sin eso no hay Onia Box,
+hay una Beelink con un sticker.
+
+Eso parte la compra en dos decisiones distintas, en momentos distintos:
+
+| Momento | Qué gana | Por qué |
+|---|---|---|
+| **Unidad de demo** (1, ahora) | **El que llegue más rápido y más barato puesto acá** | Nadie le mira la marca a la máquina de demo. Framework suma soporte real y hardware reparable |
+| **Tanda con marca** (después) | **Beelink o GMKtec** | Son los que hacen OEM/ODM. La marca propia se decide con volumen, no con una unidad |
+
+### Y por qué AMD y no NVIDIA para la gama principal
+
+**Decide la memoria, no el cómputo.** 128 GB unificados a ~USD 2.000 **no existen en NVIDIA**: la
+DGX Spark cuesta 4.699 y genera 38,55 t/s contra los 86-103 del AMD, y una RTX 5090 son 32 GB a
+USD 3.000-5.000 de calle con 600 W sólo la GPU en un país de 220 V. **El riesgo de ROCm se cubre
+con el Jetson de 249, no cambiando de arquitectura principal.**
 
 ---
 
