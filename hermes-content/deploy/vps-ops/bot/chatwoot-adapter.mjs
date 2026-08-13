@@ -300,6 +300,48 @@ export function parseChatwootWebhook(payload) {
 // ---------------------------------------------------------------------------
 
 /**
+ * Los `template_params` con los que Chatwoot manda una PLANTILLA aprobada de WhatsApp.
+ *
+ * POR QUE HACE FALTA: pasadas las 24 h del ultimo mensaje del prospecto, la ventana de servicio de
+ * Meta se cierra y el texto de formato libre falla con 131047. Chatwoot ya lo sabe y cambia solo de
+ * carril — `app/services/whatsapp/send_on_whatsapp_service.rb:9` (fuente 4.12.1 leido en el VPS):
+ *   `should_send_template_message = template_params.present? || !message.conversation.can_reply?`
+ * — pero si no le decimos CUAL plantilla, marca el mensaje `failed` con
+ * "Template not found or invalid template name" (linea 27). O sea: fuera de la ventana, sin esto,
+ * el mensaje no sale igual.
+ *
+ * LA FORMA EXACTA, verificada en el fuente (no adivinada):
+ *   - va TOP-LEVEL en el POST. `Messages::MessageBuilder#template_params`
+ *     (`app/builders/messages/message_builder.rb:122-124`) hace
+ *     `@params[:template_params].present? ? { additional_attributes: { template_params: ... } }`,
+ *     o sea que ES CHATWOOT quien lo mete adentro de `additional_attributes`. Mandarlo nosotros ya
+ *     anidado no sirve: el builder nunca lee `@params[:additional_attributes]`. Y no lo filtra
+ *     ningun strong param — el controller le pasa `params` entero
+ *     (`api/v1/accounts/conversations/messages_controller.rb:10`).
+ *   - `name` + `language` tienen que dar con una plantilla `approved` del canal
+ *     (`whatsapp/template_processor_service.rb:21-27`, compara el idioma sin distinguir mayusculas).
+ *   - `processed_params` en formato "enhanced": las variables posicionales van en `body` con la
+ *     clave en TEXTO ("1", "2"), que es lo que espera `process_body_components` (linea 79-94).
+ *     El formato viejo (array plano) tambien entra, pero lo convierte otro servicio: mandamos el
+ *     nuevo y nos ahorramos el paso.
+ *
+ * Una variable vacia se DESCARTA rio abajo (`next if value.blank?`), y entonces la plantilla sale
+ * con menos parametros de los que declara y Meta la rechaza. Por eso el que llama garantiza que no
+ * haya huecos ANTES de armar esto — nunca se manda una plantilla a medias.
+ *
+ * @param {string} name        nombre exacto de la plantilla aprobada en Meta
+ * @param {Array<string>} variables  {{1}}, {{2}}, ... en orden
+ * @param {string} [language]  codigo de idioma con el que se aprobo ("es")
+ */
+export function whatsappTemplate(name, variables = [], language = "es") {
+  const body = {};
+  variables.forEach((value, index) => {
+    body[String(index + 1)] = String(value);
+  });
+  return { name, language, processed_params: { body } };
+}
+
+/**
  * @param {object} [options] { baseUrl, accountId, token, fetch, timeoutMs }
  * @returns cliente tolerante. `client.enabled === false` => sin token/config: no manda nada.
  */
@@ -312,7 +354,15 @@ export function createChatwootClient(options = {}) {
   const enabled = Boolean(baseUrl && accountId && token && typeof doFetch === "function");
   const warnings = [];
 
-  async function sendMessage(conversationId, text) {
+  /**
+   * @param {string|number} conversationId
+   * @param {string} text  el cuerpo. Con plantilla sigue viajando: es lo que se ve en el panel de
+   *   Chatwoot y lo que queda en la bitacora, asi que tiene que decir LO MISMO que recibe el
+   *   prospecto (a Meta el texto se lo da la plantilla aprobada, no esto).
+   * @param {object|null} [templateParams]  ver whatsappTemplate(). Sin esto el POST es identico al
+   *   de siempre — el 99% del trafico va dentro de la ventana y sigue siendo texto libre gratis.
+   */
+  async function sendMessage(conversationId, text, templateParams = null) {
     const trimmed = String(text || "").trim();
     if (!trimmed) return null;
     if (!enabled) {
@@ -323,7 +373,11 @@ export function createChatwootClient(options = {}) {
       const res = await doFetch(`${baseUrl}/api/v1/accounts/${accountId}/conversations/${conversationId}/messages`, {
         method: "POST",
         headers: { api_access_token: token, "Content-Type": "application/json" },
-        body: JSON.stringify({ content: trimmed, message_type: "outgoing" }),
+        body: JSON.stringify({
+          content: trimmed,
+          message_type: "outgoing",
+          ...(templateParams ? { template_params: templateParams } : {}),
+        }),
         signal: AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : undefined,
       });
       const raw = await res.text();

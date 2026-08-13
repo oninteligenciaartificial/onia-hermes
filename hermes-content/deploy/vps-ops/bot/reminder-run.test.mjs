@@ -2,10 +2,10 @@
 //   node --test "hermes-content/deploy/vps-ops/bot/*.test.mjs"
 //
 // Lo que se cubre y por que:
-//   1. LA VENTANA DE META ES EL LIMITE REAL. Se cierra a las 24 h del ULTIMO MENSAJE ENTRANTE;
-//      fuera de ella el mensaje de formato libre falla con 131047 y solo salen plantillas (que no
-//      existen). Una demo reservada para dentro de 3 dias NO recibe recordatorio: se descarta con
-//      `fuera_de_ventana`. Este es el error que ya nos mordio una vez con el follow-up.
+//   1. LA VENTANA DE META ELIGE EL CARRIL. Se cierra a las 24 h del ULTIMO MENSAJE ENTRANTE.
+//      Dentro: texto libre M9 (gratis). Fuera: la plantilla aprobada `recordatorio_demo` — que es
+//      el caso NORMAL aca (quien reserva para dentro de 3 dias). Antes se descartaba con
+//      `fuera_de_ventana` y no le llegaba nada, porque no habia plantilla aprobada.
 //   2. UNO SOLO POR DEMO: dos barridos seguidos mandan UNO. La reserva es la clave unica de
 //      bot_messages y va ANTES de emitir; si no reserva, no se manda.
 //   3. SIN LINK NO SE MANDA: si la reserva en Cal.com fallo (`calendar_event_id` null) no hay nada
@@ -172,29 +172,47 @@ test("sin scheduledLabel guardado, la etiqueta se arma del scheduled_at (no se m
 });
 
 // ---------------------------------------------------------------------------
-// 3. Fuera de la ventana de Meta: NO se manda (y no se intenta)
+// 3. Fuera de la ventana de Meta: sale la PLANTILLA aprobada (antes no salia nada)
 // ---------------------------------------------------------------------------
 
-test("si el prospecto no escribe hace 30 h la ventana de Meta esta cerrada: no se manda ni se intenta", async () => {
+test("si el prospecto no escribe hace 30 h la ventana esta cerrada: sale `recordatorio_demo`, no texto libre", async () => {
   const fake = memoryStore([row({ last_inbound_at: INBOUND_FUERA })]);
   const result = await runReminderSweep({ nowIso: NOW, emit: true }, { config: CONFIG, store: fake.store, meetingLink: linkFake });
 
-  assert.deepEqual(result.send, []);
-  assert.equal(result.skipped.length, 1);
-  assert.match(result.skipped[0].reason, /^fuera_de_ventana:30\.0h$/);
-  assert.deepEqual(fake.calls, ["sweep"], "no se reserva ni se escribe: fuera de la ventana falla con 131047");
+  assert.deepEqual(result.skipped, [], "ya no se descarta: la plantilla si se puede mandar");
+  assert.equal(result.send.length, 1);
+
+  const item = result.send[0];
+  assert.equal(item.sendKind, "plantilla");
+  assert.equal(item.templateName, "recordatorio_demo");
+  assert.equal(item.templateKey, "M9_PLANTILLA");
+  // La forma exacta que espera Chatwoot: variables POSICIONALES, en `body`, con la clave en texto.
+  assert.deepEqual(item.templateParams, {
+    name: "recordatorio_demo",
+    language: "es",
+    processed_params: { body: { 1: "jue 30/07 15:00", 2: LINK } },
+  });
+  // Y el texto guardado tiene que ser el de la plantilla aprobada, no el M9 de texto libre: es lo
+  // que se ve en el panel y lo que queda en la bitacora.
+  assert.match(item.text, /Te recuerdo tu demo de Onia: \*jue 30\/07 15:00\*/);
+  assert.match(item.text, /Entrás desde acá: https:\/\/cal\.test\/booking\/uid-abc/);
+  assert.ok(!item.text.includes("{{"), "ninguna variable sin renderizar");
+  assert.equal(fake.outbound[0].templateKey, "M9_PLANTILLA");
 });
 
-test("el borde de la ventana: a las 23,9 h todavia sale, a las 24 h ya no", async () => {
+test("el borde de la ventana: a las 23,9 h texto libre gratis, a las 24 h la plantilla paga", async () => {
   const casi = new Date(Date.parse(NOW) - 23.9 * 3600000).toISOString();
   const justo = new Date(Date.parse(NOW) - 24 * 3600000).toISOString();
 
   const dentro = await sweep([row({ last_inbound_at: casi })]);
   assert.equal(dentro.send.length, 1);
+  assert.equal(dentro.send[0].sendKind, "texto_libre", "dentro de la ventana NO se paga plantilla");
+  assert.equal(dentro.send[0].templateKey, "M9_RECORDATORIO");
+  assert.equal(dentro.send[0].templateParams, null);
 
   const fuera = await sweep([row({ last_inbound_at: justo })]);
-  assert.deepEqual(fuera.send, []);
-  assert.match(fuera.skipped[0].reason, /^fuera_de_ventana/);
+  assert.equal(fuera.send.length, 1);
+  assert.equal(fuera.send[0].sendKind, "plantilla");
 });
 
 test("sin last_inbound_at no se puede saber si la ventana esta abierta: no se manda", async () => {
@@ -330,14 +348,14 @@ test("aunque la base devuelva la fila, NO se manda si un humano tomo, si pidio l
 
 test("una demo entre varias no frena a las demas", async () => {
   const fake = memoryStore([
-    row({ conversation_key: "whatsapp:1", contact_ref: "1", last_inbound_at: INBOUND_FUERA }),
+    row({ conversation_key: "whatsapp:1", contact_ref: "1", calendar_event_id: null }),
     row({ conversation_key: "whatsapp:2", contact_ref: "2" }),
   ]);
   const result = await runReminderSweep({ nowIso: NOW, emit: true }, { config: CONFIG, store: fake.store, meetingLink: linkFake });
 
   assert.equal(result.send.length, 1);
   assert.equal(result.send[0].conversationKey, "whatsapp:2");
-  assert.match(result.skipped[0].reason, /^fuera_de_ventana/);
+  assert.equal(result.skipped[0].reason, "sin_link");
 });
 
 // ---------------------------------------------------------------------------
@@ -454,6 +472,90 @@ test("lo GUARDADO dice 'reserved' (la reserva ES el insert); el envio real se re
   assert.match(fallo.warnings.join(" "), /sin token/);
 });
 
+test("fuera de la ventana, los `template_params` llegan HASTA el cliente de Chatwoot (no se pierden)", async () => {
+  const enVivo = createBotConfig({ dryRun: false });
+  const enviados = [];
+  const fake = memoryStore([
+    row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42", last_inbound_at: INBOUND_FUERA }),
+  ]);
+  const result = await runReminderSweep(
+    { nowIso: NOW, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      meetingLink: linkFake,
+      chatwoot: {
+        enabled: true,
+        warnings: [],
+        sendMessage: (id, text, templateParams) => {
+          enviados.push({ id, text, templateParams });
+          return { id: 1 };
+        },
+      },
+    },
+  );
+
+  assert.equal(result.send[0].deliveryStatus, "sent");
+  assert.equal(enviados.length, 1);
+  assert.deepEqual(enviados[0].templateParams, {
+    name: "recordatorio_demo",
+    language: "es",
+    processed_params: { body: { 1: "jue 30/07 15:00", 2: LINK } },
+  });
+});
+
+test("dentro de la ventana NO se manda plantilla: el cliente recibe templateParams en null", async () => {
+  const enVivo = createBotConfig({ dryRun: false });
+  const enviados = [];
+  const fake = memoryStore([row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" })]);
+  await runReminderSweep(
+    { nowIso: NOW, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      meetingLink: linkFake,
+      chatwoot: {
+        enabled: true,
+        warnings: [],
+        sendMessage: (id, text, templateParams) => {
+          enviados.push({ templateParams });
+          return { id: 1 };
+        },
+      },
+    },
+  );
+  assert.equal(enviados[0].templateParams, null, "el texto libre es gratis: no se paga una plantilla al pedo");
+});
+
+test("si Meta rechaza la plantilla NO se reintenta: la reserva ya se gasto", async () => {
+  const enVivo = createBotConfig({ dryRun: false });
+  let intentos = 0;
+  const fake = memoryStore([
+    row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42", last_inbound_at: INBOUND_FUERA }),
+  ]);
+  const result = await runReminderSweep(
+    { nowIso: NOW, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      meetingLink: linkFake,
+      chatwoot: {
+        enabled: true,
+        warnings: ["chatwoot: HTTP 400 plantilla en pacing"],
+        sendMessage: () => {
+          intentos += 1;
+          return null;
+        },
+      },
+    },
+  );
+
+  assert.equal(intentos, 1, "un solo intento: dos recordatorios al mismo prospecto es peor que ninguno");
+  assert.equal(result.send[0].deliveryStatus, "failed");
+  assert.equal(result.send[0].sendKind, "plantilla");
+  assert.equal(fake.keys.size, 1, "la reserva quedo tomada: un segundo barrido NO reintenta");
+});
+
 // ---------------------------------------------------------------------------
 // 9. CLI y helpers
 // ---------------------------------------------------------------------------
@@ -485,7 +587,9 @@ test("skipReason nombra el motivo exacto (es lo que Sergio lee en el dry-run)", 
   assert.equal(skipReason({ ...vivo, optOutAt: NOW }, NOW, CONFIG), "opt_out");
   assert.equal(skipReason({ ...vivo, scheduledAt: "no-es-fecha" }, NOW, CONFIG), "fecha_invalida");
   assert.equal(skipReason({ ...vivo, calendarEventId: null }, NOW, CONFIG), "sin_link");
-  assert.match(skipReason({ ...vivo, lastInboundAt: INBOUND_FUERA }, NOW, CONFIG), /^fuera_de_ventana/);
+  assert.equal(skipReason({ ...vivo, lastInboundAt: null }, NOW, CONFIG), "sin_last_inbound_at");
+  // Estar fuera de la ventana YA NO es motivo de descarte: cambia el carril (plantilla), no el si.
+  assert.equal(skipReason({ ...vivo, lastInboundAt: INBOUND_FUERA }, NOW, CONFIG), null);
 });
 
 test("buildReminder arma el texto del guion, sin tocar red ni estado", () => {
@@ -510,15 +614,18 @@ test("el guion NO promete el recordatorio: M2 ya no dice que el link llega el di
 test("renderHuman muestra a quien se le manda, a quien no y por que", async () => {
   const fake = memoryStore([
     row(),
-    row({ conversation_key: "whatsapp:9", contact_ref: "9", last_inbound_at: INBOUND_FUERA }),
+    row({ conversation_key: "whatsapp:8", contact_ref: "8", last_inbound_at: INBOUND_FUERA }),
+    row({ conversation_key: "whatsapp:9", contact_ref: "9", calendar_event_id: null }),
   ]);
   const result = await runReminderSweep({ nowIso: NOW, emit: false }, { config: CONFIG, store: fake.store, meetingLink: linkFake });
   const text = renderHuman(result);
 
   assert.match(text, /modo dry-run/);
-  assert.match(text, /demos en la franja: 2/);
-  assert.match(text, /MANDARIA \(1\)/);
-  assert.match(text, /whatsapp:75414930 \[whatsapp\] Ana — demo jue 30\/07 15:00, en 3 h/);
+  assert.match(text, /demos en la franja: 3/);
+  assert.match(text, /MANDARIA \(2\)/);
+  assert.match(text, /whatsapp:75414930 \[whatsapp\] Ana — demo jue 30\/07 15:00, en 3 h\n/, "el gratis no lleva marca");
+  // El que se paga se tiene que VER en la tabla que Sergio lee antes de encender.
+  assert.match(text, /whatsapp:8 .* · PLANTILLA recordatorio_demo \(paga\)/);
   assert.match(text, /NO SE MANDA \(1\)/);
-  assert.match(text, /whatsapp:9 — fuera_de_ventana/);
+  assert.match(text, /whatsapp:9 — sin_link/);
 });

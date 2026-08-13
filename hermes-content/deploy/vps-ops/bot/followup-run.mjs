@@ -10,8 +10,13 @@
 //                     (si esto revienta, n8n reintenta y el prospecto recibe el follow-up dos veces).
 //
 // REGLAS DURAS
-//   1. 22 h, no 24 (spec §3.6): el mensaje queda DENTRO de la ventana de servicio de 24 h de Meta,
-//      asi que en WhatsApp no necesita plantilla HSM aprobada ni cuesta un mensaje utility.
+//   1. DOS CARRILES SEGUN LA VENTANA DE META (24 h desde el ultimo mensaje ENTRANTE):
+//      - DENTRO (20-24 h, el caso normal): texto libre M3. Gratis y natural. Se apunta a las 20 h
+//        justamente para caer aca con 4 h de colchon si el cron se atrasa.
+//      - FUERA (24 h - 7 dias): el texto libre falla con 131047, asi que sale la plantilla aprobada
+//        `seguimiento_demo` (MARKETING, ~0,0740 USD). Antes esto se descartaba con
+//        `fuera_de_ventana` porque no habia plantilla; ahora la hay y el mensaje SALE.
+//      Pasados los 7 dias no se escribe ni con plantilla: `conversacion_muerta`.
 //   2. UN solo follow-up por conversacion (regla N7). Despues, silencio: decide un humano.
 //   3. La reserva es un CAS y va SIEMPRE ANTES de emitir. Si reserva 0 filas, NO se manda nada:
 //      preferimos perder un follow-up a mandar dos (un duplicado quema el quality rating).
@@ -34,11 +39,12 @@
 
 import { pathToFileURL } from "node:url";
 
-import { DEFAULT_CONFIG, createBotConfig, slotsPending } from "./config.mjs";
+import { DEFAULT_CONFIG, createBotConfig, renderTemplate, slotsPending } from "./config.mjs";
 import { withKnowledge } from "./knowledge.mjs";
 import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
+import { activeSlots, slotLabel } from "./reply-builder.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
-import { createChatwootClient } from "./chatwoot-adapter.mjs";
+import { createChatwootClient, whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 
 /** Estados donde el follow-up tiene sentido (mismos que el barrido en SQL). */
@@ -145,14 +151,53 @@ export function skipReason(state, nowIso, config = DEFAULT_CONFIG) {
   if (elapsed === null) return "fecha_invalida";
   if (elapsed < config.followUp.afterHours) return `demasiado_pronto:${elapsed.toFixed(1)}h`;
   if (elapsed > config.followUp.staleAfterDays * 24) return `conversacion_muerta:${elapsed.toFixed(1)}h`;
-  // La ventana de servicio de Meta se cierra a las 24 h del ULTIMO mensaje entrante. Pasada esa
-  // marca el envio de formato libre falla con 131047 y fuera de la ventana solo salen plantillas
-  // (que no existen y no hay metodo de pago). Va DESPUES de `conversacion_muerta` para que el
-  // motivo sea el mas informativo: a los 27 dias lo que hay es una conversacion muerta; a las
-  // 30 h el prospecto sigue vivo y lo que se vencio es el permiso para escribirle.
-  const cierre = config.followUp.windowClosesAtHours ?? 24;
-  if (elapsed >= cierre) return `fuera_de_ventana:${elapsed.toFixed(1)}h`;
+  // OJO: la ventana de Meta YA NO se descarta aca. Antes devolvia `fuera_de_ventana` y el mensaje
+  // moria, porque fuera de la ventana solo salen plantillas aprobadas y no habia ninguna. Ahora
+  // `seguimiento_demo` esta aprobada, asi que fuera de la ventana se manda ESA (ver outsideWindow).
+  // Lo que sigue mandando es `conversacion_muerta`, arriba: a los 8 dias no se escribe ni con
+  // plantilla — eso ya no es un seguimiento, es spam.
   return null;
+}
+
+/**
+ * ¿La ventana de servicio de 24 h de Meta ya se cerro para esta conversacion?
+ *
+ * Se cuenta desde el ULTIMO MENSAJE ENTRANTE, no desde el ultimo saliente. Adentro: texto libre,
+ * gratis y natural. Afuera: el texto libre falla con 131047 y hay que pagar una plantilla.
+ * El unico hecho del canal, en un solo lugar: lo usa este barrido Y el del recordatorio (M9).
+ *
+ * Fecha ilegible => false (o sea, texto libre). Ese caso ya lo descarto skipReason con
+ * `fecha_invalida` antes de llegar aca; el false es solo para que nadie pague una plantilla por un
+ * dato roto si alguien la llama suelta.
+ */
+export function outsideWindow(state, nowIso, config = DEFAULT_CONFIG) {
+  const elapsed = hoursBetween(state?.lastInboundAt, nowIso);
+  if (elapsed === null) return false;
+  const cierre = config.followUp?.windowClosesAtHours ?? DEFAULT_CONFIG.followUp.windowClosesAtHours;
+  return elapsed >= cierre;
+}
+
+/**
+ * El M3 convertido en la plantilla `seguimiento_demo`, o null si NO hay dos horarios de verdad.
+ *
+ * null NO significa "manda texto libre": significa NO MANDES NADA. Los dos horarios son la unica
+ * razon de ser del mensaje, y mandarle "HORARIO A (pendiente de definir)" a un prospecto — encima
+ * en una plantilla de marketing que se paga y que Meta mide — es peor que perder el follow-up.
+ * Se miran los MISMOS horarios que usa el texto libre (`activeSlots`: los que se le ofrecieron a
+ * esta conversacion, o los del config), asi los dos caminos nunca pueden decir cosas distintas.
+ */
+export function followUpTemplate(state, config = DEFAULT_CONFIG) {
+  const slots = activeSlots(state, config);
+  if ((slots || []).some((slot) => slot?.pending === true)) return null;
+  const a = slotLabel(slots, "A");
+  const b = slotLabel(slots, "B");
+  if (!a || !b) return null;
+  return {
+    name: "seguimiento_demo",
+    templateKey: "M3_PLANTILLA",
+    text: renderTemplate(config.script.M3_PLANTILLA, { 1: a, 2: b }),
+    params: whatsappTemplate("seguimiento_demo", [a, b]),
+  };
 }
 
 /** Clave DETERMINISTA del mensaje: reintentar el barrido no duplica la fila en bot_messages. */
@@ -170,8 +215,11 @@ export function followUpMessageKey(conversationKey, step) {
  * Tolerante por contrato: un fallo de Chatwoot no puede tumbar el barrido. Y la conversacion NO se
  * reintenta — la reserva ya se gasto. Es deliberado: preferimos perder un follow-up antes que
  * mandar dos, que es lo que quema el numero ante Meta (spec §4.6).
+ *
+ * @param {object|null} [templateParams]  presente = va como PLANTILLA aprobada (fuera de la ventana
+ *   de 24 h). Ausente = texto libre, que es lo de siempre y lo que hace el 99% del trafico.
  */
-export async function deliver(state, text, config, deps = {}) {
+export async function deliver(state, text, config, deps = {}, templateParams = null) {
   if (state.channel === "sim") return { status: "simulated", warning: null };
   if (config.dryRun) return { status: "skipped", warning: null };
   if (state.channel !== "chatwoot") {
@@ -180,7 +228,7 @@ export async function deliver(state, text, config, deps = {}) {
   const client = deps.chatwoot || createChatwootClient();
   if (!client.enabled) return { status: "failed", warning: "chatwoot: sin token/config, no se mando nada" };
   // En Chatwoot el contactRef ES el id de conversacion (chatwoot-adapter.mjs lo fija asi).
-  const sent = await client.sendMessage(state.contactRef, text);
+  const sent = await client.sendMessage(state.contactRef, text, templateParams);
   if (sent) return { status: "sent", warning: null };
   return { status: "failed", warning: client.warnings[client.warnings.length - 1] || "chatwoot: no se pudo enviar" };
 }
@@ -257,6 +305,17 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
       continue;
     }
 
+    // Pasadas las 24 h el texto libre NO sale (131047): el mismo mensaje va como plantilla paga.
+    // Sin dos horarios de verdad no hay plantilla posible — y entonces no se manda NADA, ni siquiera
+    // el texto libre (que fuera de la ventana tampoco llegaria). Se corta ANTES del CAS para no
+    // quemar la unica reserva: la conversacion sigue elegible cuando haya horarios.
+    const fueraDeVentana = outsideWindow(state, nowIso, config);
+    const plantilla = fueraDeVentana ? followUpTemplate(built.nextState, config) : null;
+    if (fueraDeVentana && !plantilla) {
+      result.skipped.push({ conversationKey: key, reason: "slots_sin_definir" });
+      continue;
+    }
+
     const base = {
       conversationKey: key,
       channel: state.channel,
@@ -265,9 +324,14 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
       botStage: state.botStage,
       followupStep: built.nextState.followupStep,
       silentHours: Number(hoursBetween(state.lastInboundAt, nowIso).toFixed(1)),
-      templateKey: built.reply.templateKey,
+      templateKey: plantilla ? plantilla.templateKey : built.reply.templateKey,
       replySource: built.reply.replySource,
-      text: built.reply.text,
+      text: plantilla ? plantilla.text : built.reply.text,
+      // QUE se manda, no solo si salio: la plantilla de marketing cuesta 6,5x el texto libre
+      // (0,0740 vs 0,0113 USD) y n8n le reporta esto a Sergio. Si un dia el barrido empieza a
+      // mandar plantillas de a decenas, se tiene que ver ACA y no en la factura de Meta.
+      sendKind: plantilla ? "plantilla" : "texto_libre",
+      templateName: plantilla ? plantilla.name : null,
     };
 
     if (!emit) {
@@ -284,7 +348,7 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
     }
 
     // Envio ANTES del registro: asi `delivery_status` dice lo que paso y no lo que se pensaba hacer.
-    const entrega = await deliver(state, built.reply.text, config, deps);
+    const entrega = await deliver(state, base.text, config, deps, plantilla ? plantilla.params : null);
     const deliveryStatus = entrega.status;
     if (entrega.warning) result.warnings.push(`${key}: ${entrega.warning}`);
     const wrote = await store.insertOutbound(
@@ -293,9 +357,9 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
           messageKey: followUpMessageKey(state.conversationKey, built.nextState.followupStep),
           direction: "outbound",
           author: "bot",
-          templateKey: built.reply.templateKey,
-          replySource: built.reply.replySource,
-          text: built.reply.text,
+          templateKey: base.templateKey,
+          replySource: base.replySource,
+          text: base.text,
           deliveryStatus,
           stageBefore: state.botStage,
           stageAfter: built.nextState.botStage,
@@ -326,8 +390,11 @@ export function renderHuman(result) {
   lines.push(`${result.mode === "emit" ? "ENVIADAS" : "MANDARIA"} (${result.send.length})`);
   if (result.send.length === 0) lines.push("  (ninguna)");
   for (const item of result.send) {
+    // La marca de PLANTILLA va en la tabla que Sergio lee antes de encender: en el dry-run un envio
+    // pago y uno gratis se veian exactamente igual, y la diferencia es 6,5x.
+    const carril = item.sendKind === "plantilla" ? ` · PLANTILLA ${item.templateName} (paga)` : "";
     lines.push(
-      `  ${item.conversationKey} [${item.channel}] ${item.displayName || "sin nombre"} — ${item.botStage}, callado hace ${item.silentHours} h`,
+      `  ${item.conversationKey} [${item.channel}] ${item.displayName || "sin nombre"} — ${item.botStage}, callado hace ${item.silentHours} h${carril}`,
     );
     for (const line of String(item.text).split("\n")) lines.push(`      | ${line}`);
     lines.push("");

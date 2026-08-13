@@ -430,18 +430,25 @@ export function createStore(options = {}) {
   }
 
   /**
-   * Barrido del cron: candidatas a follow-up (20 h <= inactividad < 24 h, la ventana de Meta).
+   * Barrido del cron: candidatas a follow-up (inactividad de 20 h hasta `staleAfterDays`).
    *
-   * El piso era `staleAfterDays` (7 dias) y eso rompia el barrido entero: el orden es
-   * `last_inbound_at.asc` (mas viejas primero) y hay `limit`, asi que una cola de conversaciones
-   * vencidas se comia el lote completo y las que SI estaban a tiempo no se procesaban nunca.
-   * Con el piso en la ventana de Meta solo vuelven filas accionables.
+   * EL PISO CAMBIO DOS VECES, y las dos por el mismo motivo — que vuelvan SOLO filas accionables:
+   *   1. Era `staleAfterDays` (7 dias) y rompia el barrido: el orden es `last_inbound_at.asc` (mas
+   *      viejas primero) y hay `limit`, asi que una cola de conversaciones VENCIDAS se comia el
+   *      lote entero y las que si estaban a tiempo no se procesaban nunca.
+   *   2. Se apreto a la ventana de 24 h de Meta, porque afuera de ella no habia NADA que mandar
+   *      (el texto libre falla con 131047 y no existia plantilla aprobada).
+   * Hoy `seguimiento_demo` esta aprobada: afuera de la ventana el mensaje SI se puede mandar, como
+   * plantilla. O sea que esas filas volvieron a ser accionables y el piso vuelve a `staleAfterDays`
+   * — el problema (1) ya no aplica porque no quedan filas "vencidas pero inutiles" en el rango.
+   * El corte de verdad, el que dice a los 8 dias no se escribe ni con plantilla, lo pone
+   * `conversacion_muerta` en followup-run.mjs.
    */
   async function sweepFollowUpCandidates(nowIso, config = DEFAULT_CONFIG, limit = 50) {
     const now = Date.parse(nowIso);
     if (!Number.isFinite(now)) return warn("sweepFollowUpCandidates", `nowIso invalido: ${nowIso}`);
-    const ventanaHoras = config.followUp.windowClosesAtHours ?? 24;
-    const from = new Date(now - ventanaHoras * 3600000).toISOString();
+    const staleHoras = (config.followUp.staleAfterDays ?? DEFAULT_CONFIG.followUp.staleAfterDays) * 24;
+    const from = new Date(now - staleHoras * 3600000).toISOString();
     const to = new Date(now - config.followUp.afterHours * 3600000).toISOString();
     const filter = [
       "followup_step=eq.0",

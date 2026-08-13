@@ -21,7 +21,9 @@ import { createStore } from "./persistence.mjs";
 import {
   buildConfig,
   followUpMessageKey,
+  followUpTemplate,
   hoursBetween,
+  outsideWindow,
   parseArgs,
   parseSlotsSpec,
   renderHuman,
@@ -121,7 +123,7 @@ const sweep = (rows, options = {}, config = CONFIG) =>
 // 1. Las 4 condiciones del barrido — filtro que sale a PostgREST
 // ---------------------------------------------------------------------------
 
-test("el barrido pide las 4 condiciones + la ventana 20-24 h de Meta, ordenado y con limite", async () => {
+test("el barrido pide las 4 condiciones + la franja 20 h - 7 dias, ordenado y con limite", async () => {
   const requests = [];
   const store = createStore({
     url: "https://sb.test",
@@ -140,10 +142,10 @@ test("el barrido pide las 4 condiciones + la ventana 20-24 h de Meta, ordenado y
   assert.match(url, /opt_out_at=is\.null/, "3) no pidio la baja");
   assert.match(url, /bot_stage=in\.\(esperando_calificacion,esperando_horario\)/, "4) estado donde tiene sentido");
   assert.match(url, /last_inbound_at=lte\.2026-07-27T18:05:00\.000Z/, "20 h: 4 h de colchon contra la ventana de 24 de Meta");
-  // Piso = la ventana de 24 h de Meta, NO los 7 dias de `staleAfterDays`. Con el piso viejo el
-  // barrido traia vencidas primero (`order=last_inbound_at.asc`) y con `limit` se comian el lote
-  // entero: corria todos los dias sin mandarle nada a quien todavia estaba a tiempo.
-  assert.match(url, /last_inbound_at=gte\.2026-07-27T14:05:00\.000Z/, "piso: ventana de 24 h de Meta");
+  // Piso = `staleAfterDays` (7 dias), NO la ventana de 24 h. El piso estuvo en 24 h mientras fuera
+  // de la ventana no habia NADA que mandar; con `seguimiento_demo` aprobada esas filas volvieron a
+  // ser accionables (salen como plantilla) y tienen que llegar al barrido.
+  assert.match(url, /last_inbound_at=gte\.2026-07-21T14:05:00\.000Z/, "piso: los 7 dias de staleAfterDays");
   assert.match(url, /order=last_inbound_at\.asc/);
   assert.match(url, /limit=20/);
 });
@@ -367,6 +369,128 @@ test("si Sergio todavia no definio los 2 horarios, el follow-up NO sale (y no qu
   assert.deepEqual(result.skipped, [{ conversationKey: "telegram:777", reason: "slots_sin_definir" }]);
   assert.ok(result.notes.includes("slots_sin_definir"));
   assert.ok(!fake.calls.some((call) => call.startsWith("reserve")), "el paso sigue en 0: sale cuando haya horarios");
+});
+
+// ---------------------------------------------------------------------------
+// 5B. Fuera de la ventana de Meta: sale la PLANTILLA aprobada (antes no salia nada)
+// ---------------------------------------------------------------------------
+
+// 30 h de silencio: la ventana de 24 h ya se cerro. Antes esto se descartaba con
+// `fuera_de_ventana` porque no habia plantilla aprobada; hoy `seguimiento_demo` si existe.
+const NOW_FUERA = new Date(Date.parse(T0) + 30 * 3600000).toISOString();
+
+test("dentro de la ventana el follow-up es TEXTO LIBRE (gratis), no plantilla", async () => {
+  const result = await sweep([row()]);
+  assert.equal(result.send.length, 1);
+  assert.equal(result.send[0].sendKind, "texto_libre");
+  assert.equal(result.send[0].templateName, null);
+  assert.equal(result.send[0].templateKey, "M3");
+});
+
+test("a las 30 h sale `seguimiento_demo` con los MISMOS dos horarios que el texto libre", async () => {
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const enviados = [];
+  const fake = memoryStore([row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" })]);
+  const result = await runFollowUpSweep(
+    { nowIso: NOW_FUERA, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      chatwoot: {
+        enabled: true,
+        warnings: [],
+        sendMessage: (id, text, templateParams) => {
+          enviados.push({ id, text, templateParams });
+          return { id: 1 };
+        },
+      },
+    },
+  );
+
+  assert.deepEqual(result.skipped, [], "ya no se descarta por la ventana");
+  assert.equal(result.send[0].sendKind, "plantilla");
+  assert.equal(result.send[0].templateName, "seguimiento_demo");
+  assert.equal(result.send[0].templateKey, "M3_PLANTILLA");
+  assert.equal(result.send[0].deliveryStatus, "sent");
+
+  // Los horarios de la plantilla salen de `slots_offered` de ESA conversacion, igual que el texto
+  // libre: los dos caminos no pueden ofrecer cosas distintas.
+  assert.deepEqual(enviados[0].templateParams, {
+    name: "seguimiento_demo",
+    language: "es",
+    processed_params: { body: { 1: "jueves 15:00", 2: "viernes 10:00" } },
+  });
+  assert.match(enviados[0].text, /te dejo dos horarios: \*jueves 15:00\* o \*viernes 10:00\*/);
+  assert.ok(!enviados[0].text.includes("{{"), "ninguna variable sin renderizar");
+  assert.equal(fake.outbound[0].templateKey, "M3_PLANTILLA", "la bitacora dice que salio la plantilla");
+});
+
+test("a los 8 dias no se escribe NI con plantilla: eso ya no es seguimiento", async () => {
+  const muerta = new Date(Date.parse(T0) + 8 * 24 * 3600000).toISOString();
+  const result = await sweep([row()], { nowIso: muerta });
+  assert.deepEqual(result.send, []);
+  assert.match(result.skipped[0].reason, /^conversacion_muerta/);
+});
+
+test("fuera de la ventana y SIN horarios reales: no se manda nada, ni plantilla ni texto", async () => {
+  // Los horarios placeholder pueden venir de la propia conversacion (`slots_offered` viejo), no
+  // solo del config. Mandar "HORARIO A (pendiente de definir)" en una plantilla PAGA es lo peor
+  // de los dos mundos: se gasta plata y se le escribe una pavada a un prospecto real.
+  const fake = memoryStore([
+    row({
+      conversation_key: "chatwoot:42",
+      channel: "chatwoot",
+      contact_ref: "42",
+      slots_offered: [
+        { key: "A", label: "HORARIO A (pendiente de definir)", pending: true },
+        { key: "B", label: "HORARIO B (pendiente de definir)", pending: true },
+      ],
+    }),
+  ]);
+  const result = await runFollowUpSweep({ nowIso: NOW_FUERA, emit: true }, { config: CONFIG, store: fake.store });
+
+  assert.deepEqual(result.send, []);
+  assert.equal(result.skipped[0].reason, "slots_sin_definir");
+  assert.ok(!fake.calls.some((call) => call.startsWith("reserve")), "no se quema la reserva: sale cuando haya horarios");
+});
+
+test("outsideWindow y followUpTemplate son puros y no adivinan", () => {
+  const state = { lastInboundAt: T0, slotsOffered: [] };
+  assert.equal(outsideWindow(state, NOW, CONFIG), false, "22 h: la ventana sigue abierta");
+  assert.equal(outsideWindow(state, NOW_FUERA, CONFIG), true);
+  assert.equal(outsideWindow({ lastInboundAt: "no-es-fecha" }, NOW, CONFIG), false, "dato roto no paga plantilla");
+
+  assert.equal(followUpTemplate(state, DEFAULT_CONFIG), null, "con los placeholders del config, tampoco");
+  const built = followUpTemplate(state, CONFIG);
+  assert.equal(built.name, "seguimiento_demo");
+  assert.match(built.text, /jueves 15:00/);
+});
+
+test("la plantilla NO se reintenta si el envio falla: la reserva ya se gasto", async () => {
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  let intentos = 0;
+  const fake = memoryStore([row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" })]);
+  const result = await runFollowUpSweep(
+    { nowIso: NOW_FUERA, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      chatwoot: {
+        enabled: true,
+        warnings: ["chatwoot: HTTP 400 template pausada"],
+        sendMessage: () => {
+          intentos += 1;
+          return null; // Meta rechazo la plantilla (132015 / pacing): NO se vuelve a intentar
+        },
+      },
+    },
+  );
+
+  assert.equal(intentos, 1, "un solo intento: un duplicado quema la calidad del numero ante Meta");
+  assert.equal(result.send[0].deliveryStatus, "failed");
+  assert.equal(result.send[0].sendKind, "plantilla", "el reporte igual dice QUE se intento mandar");
+  assert.equal(fake.outbound[0].deliveryStatus, "failed", "la bitacora no promete un envio que no paso");
+  assert.equal(fake.steps.get("chatwoot:42"), 1, "el paso quedo consumido: no hay segundo follow-up");
 });
 
 test("'sent' solo si SE MANDO: el estado guardado no puede volver a ser una promesa", async () => {

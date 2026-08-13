@@ -397,14 +397,16 @@ test("si el CAS no reserva ninguna fila, NO se manda el follow-up", async () => 
   assert.equal(await store.reserveFollowUp("telegram:777"), false);
 });
 
-test("el barrido pide solo conversaciones dentro de la ventana de Meta (20-24 h)", async () => {
+test("el barrido pide la franja accionable: de 20 h hasta los 7 dias de staleAfterDays", async () => {
   const { store, requests } = recorder([{ status: 200, body: [] }]);
   await store.sweepFollowUpCandidates("2026-07-28T14:05:00Z");
 
   assert.match(requests[0].url, /followup_step=eq\.0/);
   assert.match(requests[0].url, /bot_stage=in\.\(esperando_calificacion,esperando_horario\)/);
-  assert.match(requests[0].url, /last_inbound_at=lte\.2026-07-27T18:05:00\.000Z/);
-  assert.match(requests[0].url, /last_inbound_at=gte\.2026-07-27T14:05:00\.000Z/);
+  assert.match(requests[0].url, /last_inbound_at=lte\.2026-07-27T18:05:00\.000Z/, "techo: 20 h de silencio");
+  // El piso NO es la ventana de 24 h de Meta. Fuera de esa ventana el mensaje sale igual, como
+  // plantilla aprobada: si el SQL las filtrara, la plantilla no le llegaria nunca a nadie.
+  assert.match(requests[0].url, /last_inbound_at=gte\.2026-07-21T14:05:00\.000Z/, "piso: 7 dias");
 });
 
 test("el lead se inserta una vez y despues se PATCHea (no se duplica ni se pisan notas humanas)", async () => {
