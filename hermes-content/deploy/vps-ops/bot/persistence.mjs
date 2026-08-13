@@ -206,6 +206,17 @@ export function buildLeadRow(payload, state) {
  */
 export const INBOUND_BODY_PLACEHOLDER = "(entrante — texto no persistido)";
 
+/**
+ * Los estados que la base acepta (CHECK de `bot_messages.delivery_status`, migracion
+ * 20260813_bot_messages_delivery_status_reserved.sql).
+ *
+ * Vive en UNA constante porque el bug del recordatorio fue exactamente esto: una lista blanca
+ * escrita a mano que se quedo corta contra el CHECK. Y como el ternario de abajo degrada EN
+ * SILENCIO, el estado desconocido no explota: se convierte en "simulated" y el mensaje real
+ * desaparece de la cuenta. Dos listas separadas volverian a divergir; esta es una sola.
+ */
+export const DELIVERY_STATUSES = Object.freeze(["simulated", "skipped", "sent", "failed", "reserved"]);
+
 export function buildMessageRow(message, state, extra = {}) {
   const guardrail = message.guardrail || { ok: true, violations: [] };
   const direction = message.direction === "inbound" ? "inbound" : "outbound";
@@ -233,9 +244,7 @@ export function buildMessageRow(message, state, extra = {}) {
     // solo cuenta lo que salio. Se descubrio midiendo, no leyendo. El CHECK de la tabla se amplio
     // en la misma tanda (supabase/migrations/20260813_bot_messages_delivery_status_reserved.sql):
     // si el codigo acepta un valor que la base rechaza, el insert falla y se pierde la fila entera.
-    delivery_status: ["simulated", "skipped", "sent", "failed", "reserved"].includes(message.deliveryStatus)
-      ? message.deliveryStatus
-      : "simulated",
+    delivery_status: DELIVERY_STATUSES.includes(message.deliveryStatus) ? message.deliveryStatus : "simulated",
     external_message_id: extra.externalMessageId || null,
     raw: extra.raw || {},
   };
@@ -406,6 +415,42 @@ export function createStore(options = {}) {
       body: JSON.stringify(list.map((reply) => buildMessageRow(reply, state, extra))),
     });
     return rows ? rows.length : null;
+  }
+
+  /**
+   * El DESENLACE de una fila que ya existe: pasa de `reserved` ("reserve y todavia no se como
+   * termino") a lo que de verdad paso, `sent` o `failed`. La usa el recordatorio (M9), el unico
+   * barrido donde la reserva ES el insert y por eso la fila se escribe antes de mandar.
+   *
+   * APPEND-ONLY: la tabla lo es por diseño y esto NO lo viola, aunque sea un PATCH. No agrega ni
+   * borra historia, y sobre todo NO toca `message_key` — o sea que la clave unica, que es LA
+   * proteccion anti-duplicados del recordatorio, queda intacta. Es el MISMO hecho (ese envio)
+   * terminando de contarse, no un hecho nuevo.
+   *
+   * Tolerante como todo lo demas: nunca tira. Un fallo aca no puede tumbar el barrido — si el
+   * proceso reventara, n8n reintentaria y el prospecto recibiria dos recordatorios.
+   *
+   * @param {string|null} [externalMessageId] el id del mensaje en el canal, si el envio lo devolvio.
+   * @returns true actualizada · false ninguna fila con esa clave · null sin base o fallo de red
+   *   (el motivo ya quedo en `warnings`)
+   */
+  async function markMessageDelivered(messageKey, deliveryStatus, externalMessageId = null) {
+    const key = String(messageKey || "").trim();
+    if (!key) return warn("markMessageDelivered", "sin message_key: no hay fila que actualizar");
+    // Un estado que la base rechaza haria fallar el PATCH entero: se corta antes y se dice cual era.
+    if (!DELIVERY_STATUSES.includes(deliveryStatus)) {
+      return warn("markMessageDelivered", `estado desconocido: ${String(deliveryStatus)}`);
+    }
+    const rows = await rest("markMessageDelivered", `bot_messages?message_key=${eq(key)}`, {
+      method: "PATCH",
+      headers: { Prefer: "return=representation" },
+      body: JSON.stringify({
+        delivery_status: deliveryStatus,
+        ...(externalMessageId ? { external_message_id: String(externalMessageId).slice(0, 200) } : {}),
+      }),
+    });
+    if (!rows) return null;
+    return rows.length > 0;
   }
 
   /**
@@ -729,6 +774,7 @@ export function createStore(options = {}) {
     saveConversation,
     claimInbound,
     insertOutbound,
+    markMessageDelivered,
     listOutboundMessages,
     reserveFollowUp,
     sweepFollowUpCandidates,

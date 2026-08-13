@@ -128,6 +128,11 @@ export const NO_COBRABLES = Object.freeze(["simulated", "skipped", "failed"]);
  * ANTES de mandar, porque ahi la reserva ES el insert (reminder-run.mjs `deliveryStatusFor`). Los
  * dos son intentos que salieron; para un TECHO cuentan igual.
  *
+ * OJO con `reserved`: el barrido ahora marca la MISMA fila con `sent` o `failed` apenas sabe como
+ * termino, asi que en regimen normal casi no quedan. La que queda es la que murio en el medio —
+ * "se reservo y no se sabe como termino" — y contarla es la lectura honesta de un techo. Un
+ * `failed` NO se cuenta: antes se quedaba en `reserved` y facturaba un mensaje que Meta no cobro.
+ *
  * `reserved` faltaba en la lista blanca de `buildMessageRow` y se degradaba en silencio a
  * `simulated`: todo recordatorio utility real quedaba fuera de esta cuenta. Arreglado en la misma
  * tanda (migracion 20260813_bot_messages_delivery_status_reserved.sql). Si aparece un estado nuevo

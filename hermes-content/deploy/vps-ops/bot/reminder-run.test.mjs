@@ -10,6 +10,9 @@
 //      bot_messages y va ANTES de emitir; si no reserva, no se manda.
 //   3. SIN LINK NO SE MANDA: si la reserva en Cal.com fallo (`calendar_event_id` null) no hay nada
 //      que recordar, y una demo ya pasada tampoco se recuerda.
+//   2b. EL DESENLACE QUEDA EN LA FILA: se reserva como `reserved` (antes de mandar) y despues la
+//      MISMA fila dice `sent` o `failed`. Importa por PLATA: el medidor cuenta `reserved` como
+//      cobrable, asi que un envio fallido que se quedara ahi facturaria un mensaje que no salio.
 //   4. Tolerancia: sin base, lista vacia y warning. Determinismo: el "ahora" se inyecta.
 //
 // No hay red real en ninguna prueba: el store y el armador de links se inyectan.
@@ -18,7 +21,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { DEFAULT_CONFIG, createBotConfig } from "./config.mjs";
-import { createStore } from "./persistence.mjs";
+import { buildMessageRow, createStore } from "./persistence.mjs";
+// Se importa el MEDIDOR a proposito: el bug no era del recordatorio solo, era de la union — lo que
+// se guarda aca es lo que se le factura al cliente alla.
+import { esCobrable } from "./usage-run.mjs";
 import {
   buildReminder,
   localHour,
@@ -91,6 +97,17 @@ function memoryStore(rows, options = {}) {
         for (const message of nuevos) keys.add(message.messageKey);
         outbound.push(...nuevos);
         return nuevos.length;
+      },
+      // El PATCH del desenlace: mismo contrato que el real (true / false / null) y mismo efecto —
+      // muta la fila que ya estaba, sin agregar historia ni tocar la clave.
+      async markMessageDelivered(messageKey, deliveryStatus, externalMessageId = null) {
+        calls.push("markMessageDelivered");
+        if (options.patchNull) return null; // base caida
+        const fila = outbound.find((message) => message.messageKey === messageKey);
+        if (!fila) return false;
+        fila.deliveryStatus = deliveryStatus;
+        if (externalMessageId) fila.externalMessageId = externalMessageId;
+        return true;
       },
       async saveConversation() {
         calls.push("saveConversation");
@@ -436,15 +453,17 @@ test("determinista: el mismo --now sobre el mismo estado da exactamente la misma
   assert.deepEqual(uno, dos);
 });
 
-test("lo GUARDADO dice 'reserved' (la reserva ES el insert); el envio real se reporta aparte", async () => {
+test("se reserva como 'reserved' ANTES de mandar y la MISMA fila termina en 'sent'", async () => {
   const enVivo = createBotConfig({ dryRun: false });
 
   const sim = memoryStore([row({ conversation_key: "sim:x", channel: "sim", contact_ref: "x" })]);
   await runReminderSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: sim.store, meetingLink: linkFake });
   assert.equal(sim.outbound[0].deliveryStatus, "simulated");
+  assert.ok(!sim.calls.includes("markMessageDelivered"), "en sim la fila ya dice la verdad: no se toca");
 
-  // Aca el insert ES la reserva, o sea que se escribe ANTES de mandar: por eso la fila NUNCA puede
-  // decir "sent" (seria mentira si el envio falla despues). Dice `reserved`, que es lo que paso.
+  // El insert ES la reserva, o sea que se escribe ANTES de mandar: en ese instante NO puede decir
+  // "sent" (seria mentira si el envio falla). Se mira desde adentro del envio, que es el unico
+  // lugar donde se puede probar el ORDEN — y el orden es la proteccion anti-duplicados.
   const enviados = [];
   const real = memoryStore([row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" })]);
   const salida = await runReminderSweep(
@@ -453,14 +472,60 @@ test("lo GUARDADO dice 'reserved' (la reserva ES el insert); el envio real se re
       config: enVivo,
       store: real.store,
       meetingLink: linkFake,
-      chatwoot: { enabled: true, warnings: [], sendMessage: (id, text) => { enviados.push({ id, text }); return { id: 1 }; } },
+      chatwoot: {
+        enabled: true,
+        warnings: [],
+        sendMessage: (id, text) => {
+          enviados.push({ id, text, estadoAlMandar: real.outbound[0]?.deliveryStatus });
+          return { id: 1 };
+        },
+      },
     },
   );
-  assert.equal(real.outbound[0].deliveryStatus, "reserved", "lo guardado no promete el envio");
-  assert.equal(salida.send[0].deliveryStatus, "sent", "el resultado del barrido si dice que se mando");
+  assert.equal(enviados[0].estadoAlMandar, "reserved", "cuando sale el mensaje, la reserva ya estaba");
+  assert.equal(real.outbound[0].deliveryStatus, "sent", "y despues la fila dice como termino de verdad");
+  assert.equal(real.outbound[0].messageKey, `recordatorio:chatwoot:42:${DEMO_AT}`, "la clave NO se toca: sigue dedupeando");
+  assert.equal(salida.send[0].deliveryStatus, "sent", "el resultado del barrido dice lo mismo que la fila");
   assert.equal(enviados.length, 1);
   assert.equal(enviados[0].id, "42");
   assert.match(enviados[0].text, /\S/);
+});
+
+test("un envio REAL nunca queda guardado como 'simulated' (el bug que hacia invisible al recordatorio)", async () => {
+  const enVivo = createBotConfig({ dryRun: false });
+  const real = memoryStore([row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" })]);
+  await runReminderSweep(
+    { nowIso: NOW, emit: true },
+    {
+      config: enVivo,
+      store: real.store,
+      meetingLink: linkFake,
+      chatwoot: { enabled: true, warnings: [], sendMessage: () => ({ id: 1 }) },
+    },
+  );
+
+  const fila = real.outbound[0];
+  assert.notEqual(fila.deliveryStatus, "simulated", "un envio de verdad NO es una simulacion");
+  assert.equal(fila.deliveryStatus, "sent");
+
+  // Las DOS mitades del bug, juntas: lo que el barrido decide y lo que buildMessageRow manda a la
+  // base. La degradacion silenciosa a "simulated" vivia en ese mapeo, no aca.
+  const enBase = buildMessageRow({ ...fila, direction: "outbound" }, { conversationKey: "chatwoot:42" });
+  assert.equal(enBase.delivery_status, "sent");
+  // Y mientras el mensaje vuela, la fila tampoco puede decir "simulated": ese era el bug exacto —
+  // `reserved` no estaba en la lista blanca, asi que cada recordatorio utility REAL nacia como
+  // simulacion y el medidor no lo veia nunca.
+  const reservaEnBase = buildMessageRow(
+    { ...fila, deliveryStatus: "reserved", direction: "outbound" },
+    { conversationKey: "chatwoot:42" },
+  );
+  assert.equal(reservaEnBase.delivery_status, "reserved", "se reservo de verdad: no es una simulacion");
+  // Y el que paga la cuenta lo ve: el medidor solo cuenta lo que salio.
+  assert.equal(esCobrable(enBase), true, "un recordatorio que SI salio se cuenta");
+});
+
+test("si el envio FALLA la fila termina en 'failed', no en 'reserved' (o se factura de mas)", async () => {
+  const enVivo = createBotConfig({ dryRun: false });
 
   // Sin token: se reserva igual (para no duplicar) pero el barrido avisa que NO salio.
   const roto = memoryStore([row({ conversation_key: "chatwoot:43", channel: "chatwoot", contact_ref: "43" })]);
@@ -470,6 +535,38 @@ test("lo GUARDADO dice 'reserved' (la reserva ES el insert); el envio real se re
   );
   assert.equal(fallo.send[0].deliveryStatus, "failed");
   assert.match(fallo.warnings.join(" "), /sin token/);
+
+  const fila = roto.outbound[0];
+  assert.equal(fila.deliveryStatus, "failed", "lo guardado dice que no salio");
+  assert.equal(roto.keys.size, 1, "la reserva sigue tomada: un segundo barrido NO reintenta");
+  // ESTE es el punto: `reserved` cuenta como cobrable. Un fallido que se quedara en `reserved` le
+  // facturaria al cliente un mensaje que Meta nunca cobro.
+  assert.equal(esCobrable({ direction: "outbound", delivery_status: "reserved" }), true, "el techo cuenta lo reservado");
+  const enBase = buildMessageRow({ ...fila, direction: "outbound" }, { conversationKey: "chatwoot:43" });
+  assert.equal(esCobrable(enBase), false, "un fallido no se le factura a nadie");
+});
+
+test("si el PATCH del desenlace falla, el barrido sigue y termina bien (exit 0): solo avisa", async () => {
+  const enVivo = createBotConfig({ dryRun: false });
+  const fake = memoryStore([row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" })], {
+    patchNull: true,
+  });
+  const result = await runReminderSweep(
+    { nowIso: NOW, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      meetingLink: linkFake,
+      chatwoot: { enabled: true, warnings: [], sendMessage: () => ({ id: 1 }) },
+    },
+  );
+
+  // Nada revienta: si esto tirara, n8n reintentaria el barrido y el prospecto recibiria DOS.
+  assert.equal(result.ok, true);
+  assert.equal(result.send.length, 1);
+  assert.equal(result.send[0].deliveryStatus, "sent", "el envio si salio, y se reporta");
+  assert.equal(fake.outbound[0].deliveryStatus, "reserved", "la fila queda en 'reserved': se reservo y no se supo mas");
+  assert.match(result.warnings.join(" "), /no se pudo marcar 'sent'/);
 });
 
 test("fuera de la ventana, los `template_params` llegan HASTA el cliente de Chatwoot (no se pierden)", async () => {
