@@ -119,6 +119,7 @@ Bolivia, y elegir un producto.
 | Doc | Qué contiene |
 |---|---|
 | `ONIA_BOX_CONTACTOS_FABRICA_Y_RFQ_20260806.md` | **Contactos B2B verificados** de Beelink y GMKtec + **RFQ listo para enviar** |
+| `ONIA_BOX_RUNBOOK_DE_COMPRA_20260812.md` | **Cómo se compra**: la unidad de demo ≠ la tanda · las 3 vías para 1 unidad · cómo se paga la primera vez · el único punto donde sale plata |
 | `ONIA_BOX_LAS_5_CONVERSACIONES_GUION_20260812.md` | **El guion de validación**: a quién, qué preguntar, cómo distinguir un sí real de cortesía, y el criterio de corte escrito de antemano |
 
 ---
