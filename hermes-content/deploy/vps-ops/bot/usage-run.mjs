@@ -224,9 +224,9 @@ export const AVISO_TECHO =
  * plata en juego (Telegram no lo cobra Meta), pero afirmar de mas es como se factura mal.
  */
 export const AVISO_HUECO =
-  "Y a la vez PISO: los traspasos guardados ANTES del 13-ago-2026 quedaron como entrantes y no se " +
-  "cuentan (la tabla es append-only), y sin CHATWOOT_BOT_AGENT_ID lo que manda un humano desde " +
-  "Chatwoot no deja fila. Desde ese arreglo, lo que se manda a mano POR CHATWOOT SI se cuenta.";
+  "Y a la vez PISO: lo que se manda a mano POR CHATWOOT si se cuenta, pero solo si " +
+  "CHATWOOT_BOT_AGENT_ID esta configurado — sin eso el traspaso no deja fila. En Telegram el " +
+  "traspaso se marca con un PATCH y NUNCA deja fila, asi que ahi la bandeja sigue sin medirse.";
 
 /**
  * USD de UN mensaje. `null` = no hay tarifa conocida (no se inventa; se cuenta aparte).
