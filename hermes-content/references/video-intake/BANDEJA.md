@@ -94,3 +94,10 @@ delante. Cuando uno se procesa, se le escribe su ficha y se mueve a [INDEX.md](I
 - [Lectura + verbatim](transcripciones/2026-08-12-Instagram-DbsnCscPCow.md)
 - Resumen: El video es un recurso promocional dinámico de diseño UI/UX dirigido a creadores y desarrolladores web. A través de transiciones rápidas y rítmicas, muestra diversas plantillas y maquetas de interfaces de usuario con estructuras complejas. El mensaje central busca generar interés en el trabajo de diseño expuesto y m...
 - **Veredicto: PENDIENTE**
+
+## 2026-08-12-Instagram-DbYojZmyPM3
+
+- https://www.instagram.com/reel/DbYojZmyPM3/ · 70 s
+- [Lectura + verbatim](transcripciones/2026-08-12-Instagram-DbYojZmyPM3.md)
+- Resumen: El video expone el caso de éxito de Nicole, una emprendedora que genera más de $300,000 mensuales con sus dos aplicaciones (*Glam Up* y *Sprout*) gracias a una estrategia masiva de generación de contenido orgánico y UGC. Explica los pilares de su éxito: diseñar apps visualmente atractivas, probar múltiples formatos ...
+- **Veredicto: PENDIENTE**
