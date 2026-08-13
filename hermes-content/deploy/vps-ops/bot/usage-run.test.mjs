@@ -27,6 +27,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  AVISO_HUECO,
   AVISO_TECHO,
   BASIS,
   BOB_POR_USD,
@@ -169,6 +170,15 @@ test("el total se presenta como TECHO en las dos salidas: el rechazo asincrono d
   assert.equal(BASIS, "techo_intentado");
   assert.match(AVISO_TECHO, /131042/, "el aviso nombra el caso comprobado");
   assert.match(renderHuman(result), /TECHO, no factura/);
+});
+
+test("y el hueco al reves: lo que manda un humano desde Chatwoot no entra (se dice, no se disimula)", async () => {
+  // Verificado en la base del VPS el 2026-08-13: el takeover se guarda como placeholder ENTRANTE
+  // (mensajes 30 y 31, las dos plantillas reales del dia). El medidor mide al bot, no a la bandeja.
+  const result = await reporte([row({ direction: "inbound", delivery_status: "sent", template_key: null })]);
+  assert.equal(result.totales.count, 0, "el placeholder entrante no se cuenta");
+  assert.equal(result.avisoHueco, AVISO_HUECO);
+  assert.match(renderHuman(result), /PISO/);
 });
 
 test("un delivery_status desconocido no se cobra y queda a la vista en `failed`", async () => {
