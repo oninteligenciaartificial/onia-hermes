@@ -40,6 +40,9 @@
 //        M3_PLANTILLA -> `seguimiento_demo`  (MARKETING)  — followup-run.mjs
 //        M9_PLANTILLA -> `recordatorio_demo` (UTILITY)    — reminder-run.mjs
 //      Es la MISMA taxonomia que ya usan esos dos barridos en `sendKind` / `templateName`.
+//      Hay DOS puertas de entrada al mismo registro: el bot escribe la clave del guion
+//      (`template_key`), y lo que manda un humano desde Chatwoot trae el NOMBRE de Meta en
+//      `raw.templateName` — se resuelve al reves contra la misma tabla, nunca duplicandola.
 //   3. NO SE INVENTA UNA TARIFA. Una clave `*_PLANTILLA` que nadie registro aca cae en
 //      `plantilla_sin_tarifa`: se cuenta, se avisa y se cobra 0 hasta que alguien ponga el precio.
 //      Tratarla como servicio seria regalar un envio pago.
@@ -157,6 +160,20 @@ export function clasificar(row) {
   const key = String(row?.template_key ?? "").trim();
   const conocida = Object.prototype.hasOwnProperty.call(PLANTILLAS_META, key) ? PLANTILLAS_META[key] : null;
   if (conocida) return { categoria: conocida.categoria, templateKey: key, templateName: conocida.nombre };
+
+  // Lo que manda un HUMANO desde Chatwoot no tiene clave de guion (no lo redacto el guion): trae el
+  // NOMBRE de la plantilla de Meta, que es lo que Chatwoot pone en el webhook y el adapter guarda en
+  // `raw.templateName`. Se resuelve al REVES contra el MISMO registro de arriba, a proposito: una
+  // segunda tabla de plantillas en otro archivo se desincroniza y ahi se factura mal.
+  const nombre = String(row?.raw?.templateName ?? "").trim();
+  if (nombre) {
+    const registrada = Object.entries(PLANTILLAS_META).find(([, dato]) => dato.nombre === nombre);
+    if (registrada) return { categoria: registrada[1].categoria, templateKey: registrada[0], templateName: nombre };
+    // Salio como plantilla (lo dice Meta, no nosotros) pero nadie registro su tarifa: alarma. Como
+    // servicio se cobraria 6,5x menos si era marketing — regalar plata a escondidas.
+    return { categoria: "plantilla_sin_tarifa", templateKey: null, templateName: nombre };
+  }
+
   // Clave que se llama plantilla pero no esta registrada: NO se asume servicio (seria regalarla).
   if (/_PLANTILLA$/i.test(key)) return { categoria: "plantilla_sin_tarifa", templateKey: key, templateName: null };
   return { categoria: "servicio", templateKey: key || null, templateName: null };
@@ -187,16 +204,29 @@ export const AVISO_TECHO =
   "exacta la tiene Meta.";
 
 /**
- * Y el hueco que va para el otro lado. Verificado en la base del VPS el 2026-08-13: lo que un
- * HUMANO manda desde Chatwoot (incluidas las plantillas aprobadas, que es todo el trafico real de
- * ese dia — mensajes 30 y 31) NO entra como saliente. El webhook lo anota con `takeoverTurn` y la
- * fila termina siendo un placeholder `direction = 'inbound'` que solo sirve de dedup.
- * O sea: el medidor ve lo que manda EL BOT. Lo que manda Sergio a mano queda afuera y tambien se
- * paga. Arreglarlo es tocar el webhook/adapter de Chatwoot — otro carril, decidido aparte.
+ * Y el hueco que va para el otro lado — el que hace que el numero tambien sea un PISO.
+ *
+ * HASTA EL 2026-08-13 ERA ENORME: lo que un HUMANO mandaba desde Chatwoot (plantillas incluidas, o
+ * sea todo el trafico real de ese dia) se guardaba como placeholder `direction = 'inbound'` y no se
+ * contaba. YA NO: el traspaso se guarda como saliente con `author = 'human'` (run-turn.mjs paso 3)
+ * y entra en esta cuenta como cualquier otro envio, con su categoria real si salio como plantilla.
+ *
+ * LO QUE SIGUE AFUERA, y por eso el aviso no se borra:
+ *   · las filas escritas ANTES de ese arreglo quedaron como entrantes y ahi se quedan: la tabla es
+ *     append-only y no se reescribe historia. Agosto de 2026 cuenta de menos y no hay forma de
+ *     saberlo desde aca (las dos plantillas reales, mensajes 30 y 31, son de ese lote).
+ *   · sin `CHATWOOT_BOT_AGENT_ID` configurado el adapter no puede distinguir al humano del bot, no
+ *     hay traspaso y ese envio no deja NINGUNA fila. Es el mismo interruptor que evita que el bot
+ *     se silencie solo, asi que si esta apagado se pierden las dos cosas.
+ *
+ * Por eso el aviso dice "por Chatwoot" y no "un humano" a secas: en Telegram el traspaso se marca
+ * con un PATCH directo a `bot_conversations` (N8N_WORKFLOW.md §6), sin turno y sin fila. Ahi no hay
+ * plata en juego (Telegram no lo cobra Meta), pero afirmar de mas es como se factura mal.
  */
 export const AVISO_HUECO =
-  "Y a la vez PISO: lo que un humano manda desde Chatwoot (plantillas incluidas) se guarda como " +
-  "placeholder entrante y NO se cuenta aca. Este medidor mide al BOT, no a la bandeja.";
+  "Y a la vez PISO: los traspasos guardados ANTES del 13-ago-2026 quedaron como entrantes y no se " +
+  "cuentan (la tabla es append-only), y sin CHATWOOT_BOT_AGENT_ID lo que manda un humano desde " +
+  "Chatwoot no deja fila. Desde ese arreglo, lo que se manda a mano POR CHATWOOT SI se cuenta.";
 
 /**
  * USD de UN mensaje. `null` = no hay tarifa conocida (no se inventa; se cuenta aparte).
