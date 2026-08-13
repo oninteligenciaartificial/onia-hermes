@@ -188,9 +188,13 @@ export function buildReminder(state, link, config = DEFAULT_CONFIG, outOfWindow 
 }
 
 /**
- * El estado con el que se GUARDA la fila. Aca la reserva ES el insert, asi que se escribe ANTES de
+ * El estado con el que se RESERVA la fila. Aca la reserva ES el insert, asi que se escribe ANTES de
  * mandar: por eso NO puede decir "sent" (seria mentir si el envio falla despues). Dice `reserved`,
- * que es exactamente lo que paso. El resultado real del envio viaja en el JSON del barrido.
+ * que es exactamente lo que paso hasta ese instante.
+ *
+ * No es la ultima palabra: apenas se sabe como termino el envio, sweepRow marca la MISMA fila con
+ * `sent` o `failed`. `reserved` solo sobrevive si el proceso murio en el medio — y entonces es la
+ * lectura honesta ("se reservo, no se sabe como termino"), que el medidor cuenta como techo.
  */
 function deliveryStatusFor(state, config) {
   if (state.channel === "sim") return "simulated";
@@ -284,7 +288,7 @@ export async function reserveReminder(store, state, item, nowIso, config) {
  * Que le pasa a UNA fila del barrido: se descarta, se muestra (dry-run) o se reserva y se manda.
  * Es el orden de siempre — filtrar, componer, reservar — y sigue siendo el unico lugar donde se
  * decide; el bucle de arriba solo reparte el resultado entre `skipped` y `send`.
- * @returns {Promise<{skip: object}|{send: object}>}
+ * @returns {Promise<{skip: object}|{send: object, warnings: string[]}>}
  */
 async function sweepRow(row, ctx) {
   const { nowIso, emit, config, store, linkFor, env } = ctx;
@@ -304,10 +308,37 @@ async function sweepRow(row, ctx) {
   // Ganada la reserva, se manda de verdad. Un fallo NO se reintenta: la reserva ya se gasto y
   // mandar dos recordatorios al mismo prospecto es peor que no mandar ninguno.
   const entrega = await deliver(state, item.text, config, ctx, item.templateParams);
-  return {
-    send: { ...item, reserved: true, deliveryStatus: entrega.status, logged: true },
-    ...(entrega.warning ? { warning: `${key}: ${entrega.warning}` } : {}),
-  };
+  const warnings = entrega.warning ? [`${key}: ${entrega.warning}`] : [];
+
+  // EL DESENLACE, EN LA MISMA FILA. La reserva quedo en `reserved` — lo unico honesto antes de
+  // mandar — y recien ahora se sabe como termino. Sin este PATCH, un envio que FALLA se quedaba
+  // guardado como `reserved` para siempre, y como el medidor cuenta `reserved` como cobrable
+  // (techo honesto mientras no se sabe), se le facturaba al cliente un mensaje que Meta nunca
+  // cobro. El resultado real solo vivia en el JSON del barrido, que no queda en ningun lado.
+  //
+  // APPEND-ONLY: si, la tabla lo es por diseño, y esto NO lo viola. No agrega ni borra historia y
+  // NO toca `message_key`, asi que la clave unica — LA proteccion anti-duplicados de este barrido —
+  // queda intacta. Es el MISMO hecho (este envio) terminando de contarse, no un hecho nuevo.
+  //
+  // Solo se escribe si cambio algo: en dry-run y en `sim` la fila ya dice la verdad ("skipped" /
+  // "simulated") y un PATCH ahi seria un viaje a la base para no cambiar nada.
+  if (entrega.status !== reserva.deliveryStatus) {
+    const marcada = await store.markMessageDelivered(
+      reminderMessageKey(state.conversationKey, state.scheduledAt),
+      entrega.status,
+      // Hoy siempre null: `deliver()` colapsa la respuesta de Chatwoot a un booleano y el id se
+      // pierde ahi. Se pasa igual para que el dia que lo devuelva quede guardado solo.
+      entrega.externalId ?? null,
+    );
+    // EXIT 0 SIEMPRE: un PATCH fallido se avisa y se sigue. Si reventara, n8n reintentaria el
+    // barrido y el prospecto recibiria DOS recordatorios — peor que una fila desactualizada. La
+    // fila queda en `reserved`, que sigue siendo cierto: se reservo y no se sabe como termino.
+    if (marcada !== true) {
+      warnings.push(`${key}: la fila quedo en '${reserva.deliveryStatus}' — no se pudo marcar '${entrega.status}'`);
+    }
+  }
+
+  return { send: { ...item, reserved: true, deliveryStatus: entrega.status, logged: true }, warnings };
 }
 
 /** El resultado vacio del barrido, antes de mirar una sola fila. */
@@ -365,7 +396,7 @@ export async function runReminderSweep(options = {}, deps = {}) {
   const ctx = { nowIso, emit, config, store, linkFor, env, chatwoot: deps.chatwoot };
   for (const row of rows) {
     const outcome = await sweepRow(row, ctx);
-    if (outcome.warning) result.warnings.push(outcome.warning);
+    if (outcome.warnings?.length) result.warnings.push(...outcome.warnings);
     if (outcome.skip) result.skipped.push(outcome.skip);
     else result.send.push(outcome.send);
   }

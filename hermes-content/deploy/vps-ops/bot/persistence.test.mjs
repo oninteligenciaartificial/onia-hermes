@@ -20,6 +20,7 @@ import { createBotConfig } from "./config.mjs";
 import { createState } from "./bot-engine.mjs";
 import { runTurn } from "./run-turn.mjs";
 import {
+  DELIVERY_STATUSES,
   PIPELINE_STATUSES,
   buildLeadRow,
   INBOUND_BODY_PLACEHOLDER,
@@ -582,6 +583,52 @@ test("buildMessageRow sanea lo que va a la base (body nunca vacio, enums validad
   assert.equal(row.delivery_status, "simulated");
   assert.equal(row.guardrail_ok, false);
   assert.deepEqual(row.guardrail_violations, ["cotizar"]);
+});
+
+test("un envio REAL no se degrada a 'simulated': los estados validos se guardan tal cual", () => {
+  const state = createState({ channel: "chatwoot", contactRef: "42" });
+  // El bug del recordatorio fue exactamente este ternario: `reserved` no estaba en la lista y el
+  // valor desconocido se convertia EN SILENCIO en "simulated". Un mensaje pago que la base decia
+  // que nunca ocurrio. Se prueba TODA la lista, no solo el que fallo.
+  for (const estado of DELIVERY_STATUSES) {
+    const guardada = buildMessageRow({ messageKey: `out:${estado}`, text: "hola", deliveryStatus: estado }, state);
+    assert.equal(guardada.delivery_status, estado, `'${estado}' es valido y no puede terminar como otra cosa`);
+  }
+  // Y la lista tiene que ser LA MISMA que el CHECK de la tabla (migracion
+  // 20260813_bot_messages_delivery_status_reserved.sql): si divergen, o se pierde la fila entera
+  // (la base rechaza) o se guarda una mentira (el codigo degrada).
+  assert.deepEqual([...DELIVERY_STATUSES], ["simulated", "skipped", "sent", "failed", "reserved"]);
+});
+
+test("markMessageDelivered: PATCH por message_key, sin tocar la clave ni agregar historia", async () => {
+  const { requests, store } = recorder([{ status: 200, body: [{ message_key: "recordatorio:chatwoot:42:X" }] }]);
+  assert.equal(await store.markMessageDelivered("recordatorio:chatwoot:42:X", "sent", "meta-99"), true);
+
+  const patch = requests[0];
+  assert.equal(patch.method, "PATCH");
+  assert.match(patch.url, /bot_messages\?message_key=eq\./, "una sola fila, la de esa clave");
+  assert.deepEqual(patch.body, { delivery_status: "sent", external_message_id: "meta-99" });
+  assert.ok(!("message_key" in patch.body), "APPEND-ONLY: la clave unica anti-duplicados NO se toca");
+  assert.ok(!("body" in patch.body), "tampoco se reescribe el texto: es el mismo hecho, no uno nuevo");
+});
+
+test("markMessageDelivered nunca tira: sin clave, con estado invalido, sin base o con la base caida", async () => {
+  const { requests, store } = recorder([{ status: 500, body: "boom" }]);
+  assert.equal(await store.markMessageDelivered("", "sent"), null, "sin clave no se actualiza nada");
+  // Un estado que el CHECK rechaza haria fallar el PATCH entero: se corta ANTES de salir a la red.
+  assert.equal(await store.markMessageDelivered("k", "explotado"), null);
+  assert.equal(requests.length, 0, "ninguno de los dos llego a la base");
+
+  assert.equal(await store.markMessageDelivered("k", "failed"), null, "base caida: null, no excepcion");
+  assert.ok(store.warnings.length >= 3, "cada fallo deja rastro para el barrido");
+
+  const sinBase = createStore({ url: "", key: "" });
+  assert.equal(await sinBase.markMessageDelivered("k", "sent"), null);
+});
+
+test("markMessageDelivered devuelve false si no hay fila con esa clave (no inventa una)", async () => {
+  const { store } = recorder([{ status: 200, body: [] }]);
+  assert.equal(await store.markMessageDelivered("recordatorio:no-existe", "failed"), false);
 });
 
 // ---------------------------------------------------------------------------
