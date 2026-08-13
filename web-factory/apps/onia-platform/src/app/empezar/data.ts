@@ -25,9 +25,11 @@ export const RUBRO_OPTIONS: readonly RubroOption[] = [
     id: "comercio",
     nombre: "Comercio",
     desc: "Tiendas y comercios",
-    disponible: false,
+    disponible: true,
   },
   {
+    // El registro del producto NO ofrece este rubro todavia, asi que aca sigue
+    // en false: la fuente de verdad es lo que el cliente puede CONTRATAR hoy.
     id: "servicios",
     nombre: "Servicios",
     desc: "Negocios de servicios",
@@ -37,9 +39,18 @@ export const RUBRO_OPTIONS: readonly RubroOption[] = [
     id: "proveedores",
     nombre: "Importadora",
     desc: "Importadoras y distribuidoras",
-    disponible: false,
+    disponible: true,
   },
 ] as const;
+
+/**
+ * Unica fuente de verdad de "que rubro se puede contratar hoy". La usan el
+ * selector del wizard y `recomendar()`; antes `recommend.ts` lo tenia
+ * hardcodeado en "dental" y los dos datos se contradecian.
+ */
+export function esRubroDisponible(rubro: Rubro): boolean {
+  return RUBRO_OPTIONS.some((o) => o.id === rubro && o.disponible);
+}
 
 export const NOTA_PROXIMAMENTE =
   "Este rubro está en construcción — sin humo. Igual seguí: te avisamos apenas esté, con tu caso ya anotado.";

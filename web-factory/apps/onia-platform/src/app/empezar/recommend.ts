@@ -3,6 +3,8 @@
  * Fuente: ONIA_WIZARD_EMPEZAR_SPEC_2026.md §3. Misma entrada, misma salida.
  */
 
+import { esRubroDisponible } from "./data";
+
 export type Rubro = "dental" | "comercio" | "servicios" | "proveedores";
 export type Equipo = "solo" | "2-5" | "6-15" | "15+";
 export type Tiene =
@@ -41,7 +43,11 @@ export function recomendar(
   // venta (04-OBJECIONES §4): se recomienda el Pro primero; el Basico aparece
   // como downsell, nunca como apertura. Onia es UNA plataforma: los planes no
   // llevan marca de rubro.
-  const disponible = rubro === "dental";
+  //
+  // La disponibilidad sale de RUBRO_OPTIONS y NO se repite aca: estaba
+  // hardcodeada en "dental" y mandaba comercio e importadora a la variante
+  // "proximamente" aunque el producto ya deja registrarse en los tres.
+  const disponible = esRubroDisponible(rubro);
   const plan = !disponible
     ? null
     : equipo === "15+"
