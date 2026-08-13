@@ -159,8 +159,23 @@ es estimación nuestra. Los tres proveedores de la fila del AMD van a cambiar de
 lleguen las respuestas al RFQ, y el precio **puesto en Santa Cruz** suma GA 10 %, flete y despacho
 (`ONIA_ARANCEL_EQUIPOS_INFORMATICA_20260806.md`).
 
-⏳ **Sin verificar:** ancho de banda de los Mac Mini M4 y M4 Pro, y de las RTX 50 salvo la 5090.
-No se completó para no inventar el dato.
+✅ **Verificado el 2026-08-12** — los anchos de banda que faltaban:
+
+| Equipo | Ancho de banda |
+|---|---|
+| Mac Mini **M4** | **120 GB/s** |
+| Mac Mini **M4 Pro** | **273 GB/s** |
+| RTX **5060 Ti** | **448 GB/s** |
+| RTX **5070** | **672 GB/s** |
+| RTX **5080** | **960 GB/s** |
+
+> Dato que ordena la tabla: el **Mac Mini M4 Pro (273 GB/s) tiene más ancho de banda que el
+> Ryzen AI Max+ 395 (256 GB/s)** — pero **48 GB contra 128 GB de memoria**. Otra vez lo mismo:
+> escribe un poco más rápido, pero le entran modelos más chicos.
+
+[Apple — especificaciones Mac mini](https://www.apple.com/mac-mini/specs/) ·
+[Tom's Hardware — RTX 5060 Ti](https://www.tomshardware.com/pc-components/gpus/nvidia-geforce-rtx-5060-ti-16gb-review) ·
+[Notebookcheck — RTX 5080](https://www.notebookcheck.net/RTX-5080-will-boast-34-higher-memory-bandwidth-than-its-predecessor-according-to-recent-leak.933536.0.html)
 
 ---
 
