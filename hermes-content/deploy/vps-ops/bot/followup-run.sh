@@ -56,6 +56,16 @@ case " $* " in
   *) NOW_ARGS=(--now "$(date -u +%Y-%m-%dT%H:%M:%SZ)") ;;
 esac
 
+# El interruptor de "manda de verdad" vive en UN SOLO lugar: webhook.env, el mismo archivo que ya
+# lee el webhook. Antes el default de aca era `true`, asi que un cron que llamara al barrido sin
+# exportar la variable barria, reportaba y NO mandaba nada: encendido en apariencia, apagado de
+# hecho — y sin ningun error que lo delatara. Quien llama puede seguir forzando el valor (tiene
+# prioridad); esto solo cubre el olvido. Si no hay archivo, sigue cayendo a dry-run, que es el
+# default seguro: preferimos no mandar por accidente a mandar por accidente.
+if [ -z "${ONIA_BOT_DRY_RUN:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
+  ONIA_BOT_DRY_RUN="$(sed -n 's/^ONIA_BOT_DRY_RUN=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
+fi
+
 # Token de Chatwoot — el barrido MANDA el mensaje, no solo lo reserva. Sale de la base de Chatwoot
 # igual que en webhook-server.sh: nunca se escribe en un archivo ni viaja a n8n.
 CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
