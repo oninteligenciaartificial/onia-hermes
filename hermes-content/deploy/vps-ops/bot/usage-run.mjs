@@ -166,6 +166,18 @@ export const AVISO_TECHO =
   "despues por webhook asincrono (ej. 131042) y esos NO los cobra. La cifra exacta la tiene Meta.";
 
 /**
+ * Y el hueco que va para el otro lado. Verificado en la base del VPS el 2026-08-13: lo que un
+ * HUMANO manda desde Chatwoot (incluidas las plantillas aprobadas, que es todo el trafico real de
+ * ese dia — mensajes 30 y 31) NO entra como saliente. El webhook lo anota con `takeoverTurn` y la
+ * fila termina siendo un placeholder `direction = 'inbound'` que solo sirve de dedup.
+ * O sea: el medidor ve lo que manda EL BOT. Lo que manda Sergio a mano queda afuera y tambien se
+ * paga. Arreglarlo es tocar el webhook/adapter de Chatwoot — otro carril, decidido aparte.
+ */
+export const AVISO_HUECO =
+  "Y a la vez PISO: lo que un humano manda desde Chatwoot (plantillas incluidas) se guarda como " +
+  "placeholder entrante y NO se cuenta aca. Este medidor mide al BOT, no a la bandeja.";
+
+/**
  * USD de UN mensaje. `null` = no hay tarifa conocida (no se inventa; se cuenta aparte).
  * Una fecha ilegible se cobra igual: preferimos sobrestimar el costo antes que subestimar la factura.
  */
@@ -322,6 +334,7 @@ export async function runUsageReport(options = {}, deps = {}) {
     // Que ES el numero. Viaja en el JSON para que n8n/el panel no lo presenten como una factura.
     basis: BASIS,
     aviso: AVISO_TECHO,
+    avisoHueco: AVISO_HUECO,
     bobPorUsd: bob,
     bobVerificado: BOB_POR_USD_VERIFICADO,
     scanned: 0,
@@ -395,6 +408,7 @@ export function renderHuman(result) {
     `rango: ${result.from} .. ${result.to} · filas leidas: ${result.scanned}${result.truncated ? " (CORTADO)" : ""}`,
     `tipo de cambio: ${result.bobPorUsd} Bs/USD (BCB, verificado ${result.bobVerificado})`,
     AVISO_TECHO,
+    AVISO_HUECO,
     "",
   ];
   if (result.error) lines.push(`ERROR: ${result.error}`, "");
