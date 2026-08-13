@@ -1201,3 +1201,82 @@ portafolio largo (P11).
 `scripts/carousel_render.js`, `hermes-content/references/ui-patterns/` (6 patrones), skills
 `ver-videos`, `editor-videos`, `hyperframes-*`, `oversized-cursor`, `faceless-explainer`,
 `carruseles-onia`. Datos de la cuenta Higgsfield verificados 2026-08-13.*
+
+
+---
+
+# ✅ Los dos bloqueos se resolvieron consultando — no eran tareas
+
+Verificado el 2026-08-13, minutos después de escribir este manual. **Dos de los tres bloqueos
+que el manual declaraba no existían**: eran preguntas sin responder, no trabajo pendiente. Se
+resolvieron mirando, sin escribir un prompt ni pedirle nada a nadie.
+
+## 1. Los SFX SÍ están — el manual miró la carpeta equivocada
+
+El manual dice que faltan los `.mp3` y que eso bloquea P03 y P12. Es cierto para
+`media-use/audio/assets/sfx/` (0 archivos, solo `manifest.json` y `CREDITS.md`), pero **hay una
+segunda librería que sí está poblada**:
+
+```
+.claude/skills/editor-videos/assets/sfx/
+  ping.wav    1,00 s   192 KB
+  pop.wav     0,20 s    38 KB
+  swish.wav   0,50 s    96 KB
+  thud.wav    0,55 s   106 KB
+  whoosh.wav  0,60 s   115 KB
+```
+
+Verificados con `ffprobe`: son audio real, no archivos vacíos. Y son exactamente los cinco
+gestos que los formatos de este manual necesitan:
+
+| Gesto | Archivo | Dónde se usa |
+|---|---|---|
+| aparición de rótulo | `pop.wav` | P01, P13 — una por placa |
+| cambio de plano rápido | `swish.wav` | P05 muro al ritmo, P03 entre pantallas |
+| entrada pesada / remate | `thud.wav` | cierre de P02, revelación del "después" |
+| transición larga | `whoosh.wav` | P11 entre proyectos |
+| confirmación / éxito | `ping.wav` | P03 cuando la acción del panel completa |
+
+**P03 y P12 NO están bloqueados.** El manual queda corregido acá.
+
+## 2. La voz de Lucía: no hay ambigüedad, son dos plataformas distintas
+
+El manual marca "dos IDs de voz de Lucía a confirmar". Consultado el listado de voces de la
+cuenta:
+
+```
+voice_id:   8de5db95-e898-46a6-bb68-26d02f311686
+voice_type: element          ← el tipo importa: se pasa el par (id, type)
+name:       Lucia-voz
+```
+
+El otro ID (`86V9x9hr…`) es de **ElevenLabs**, que es otro servicio. No compiten ni se
+contradicen:
+
+| Generás en... | Usás |
+|---|---|
+| Higgsfield (`generate_audio`, `voice_change`) | `8de5db95-e898-46a6-bb68-26d02f311686` · `element` |
+| ElevenLabs (voz Marcela es-LATAM) | `86V9x9hr…` |
+
+La causa del "voice not found" que hay registrado en la memoria era el **ID truncado en los
+docs**, no la existencia de dos voces. Está completo arriba.
+
+## 3. El único que sí es decisión de Sergio: el costo de `seedance_2_0`
+
+Medirlo exige **generar**, y generar gasta créditos. Ese no se resuelve consultando.
+
+Cuando haya OK: `balance` → una toma de **4 s en `seedance_2_0_mini`, `mode: fast`, 480p** →
+`balance` otra vez. La diferencia es el costo unitario del piso. Con eso se presupuestan P20,
+P21 y P22, que hoy dicen "sin medir".
+
+---
+
+## La lección de método (vale más que los tres arreglos)
+
+De tres "bloqueos", **dos eran ignorancia, no falta de trabajo**. Se cayeron con dos consultas
+gratis: un `ls` y un listado de voces.
+
+**Antes de escribir un prompt para destrabar algo, verificar que esté trabado.** Un prompt para
+"bajar los SFX que faltan" habría mandado a alguien a bajar archivos que ya estaban en el repo,
+en otra carpeta. La regla del preámbulo de `PROMPTS_POR_SESION.md` —*buscá dónde vive la cosa
+antes de crearla*— aplica igual a los bloqueos: **buscá si el bloqueo existe antes de encolarlo.**
