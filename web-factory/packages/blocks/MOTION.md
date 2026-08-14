@@ -6,7 +6,11 @@ professional — the same movement observed in the learned reel models
 
 Generated sites are static HTML with `wf-*` classes, so this ships as plain CSS +
 a tiny vanilla runtime — **zero deps, zero React**. Source: `src/motion.ts`.
-Live demo (self-contained, no network): open `motion-demo.html` in a browser.
+
+Live demo: run `pnpm blocks:demo` and open `out/blocks-demo/index.html`. Every
+block in the gallery has the toolkit wired, and the primitives table is read from
+`MOTION_PRIMITIVES` at build time. (It replaced `motion-demo.html`, a hand-kept
+copy of `MOTION_CSS` that had already drifted from the source it mirrored.)
 
 ## Wire it once per generated page
 
