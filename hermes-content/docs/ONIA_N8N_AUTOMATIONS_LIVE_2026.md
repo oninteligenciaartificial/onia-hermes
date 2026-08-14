@@ -176,6 +176,89 @@ puede aprobar borradores: Agente Contenido (`nZkaXaZVKzgtwUqU`), Agente Vendedor
 sin necesitar a Sergio): Agente Finanzas (`oKSTNdvS58ixBgnl`, solo avisa por anomalias), backup,
 healthcheck, VPS radar, tipo de cambio, etc. Reactivar con `publish_workflow` al volver.
 
+## Aviso de pago QR por Telegram, sin depender del correo (2026-08-14)
+
+**El problema:** un cliente sube el comprobante de pago QR
+(`POST /api/subscription-payment` en `onia-platform`, tabla `subscription_payments`,
+`status='PENDING'` por default) y la propia ruta intenta avisar por email a
+`ADMIN_NOTIFICATION_EMAIL` con `getEmailClient()` (`lib/email.ts`). En produccion
+`EMAIL_PROVIDER=smtp` cae a Nodemailer contra `smtp-relay.brevo.com`, que devuelve
+`535 5.7.8 Authentication failed` — la credencial depende de Sergio y no esta. El
+envio esta en un `try/catch` que solo hace `console.error`: **si falla, nadie se
+entera nunca**, ni el pago ni el error quedan visibles en ningun lado.
+
+Tambien existe `WF-02: QR Payment Alerts` (`9bF53cn0lkvdUyZT`, activo, tag
+`dentalgest`, ver `N8N_AUTOMATIONS.md`) — poll cada 5 min contra la RPC de Supabase
+`n8n_pending_qr_payments` y manda un email por Gmail a `business@onia.com.bo`. Sigue
+activo y sin tocar. Pero **es otro canal de correo**, y Sergio no revisa esa bandeja
+en tiempo real — el pedido explicito fue un canal que no dependa del correo en
+absoluto.
+
+**Disparador elegido: polling directo a Postgres, no webhook.** Un webhook exigiria
+tocar el codigo de `onia-platform` (agregar un `fetch()` en
+`app/api/subscription-payment/route.ts` hacia n8n) — carril de infra no toca ese
+repo. El polling contra la base **no requiere ningun cambio en el producto**: se lee
+directo desde el contenedor `dentalgest-staging-supabase-db` (puerto `55329`) con la
+credencial n8n `Postgres account` (`2P4w95n0vir90EkT`, ya existente, reusada — no se
+creo ningun secreto nuevo).
+
+**Sin duplicados: tabla de vistos, no "probablemente no pase".** Antes de cada
+`SELECT`, un nodo Postgres corre `CREATE SCHEMA IF NOT EXISTS n8n_ops; CREATE TABLE
+IF NOT EXISTS n8n_ops.payment_alerts_sent (payment_id text PRIMARY KEY, notified_at
+timestamptz DEFAULT now())` — un schema propio de n8n, fuera de las migraciones de
+Prisma, no toca ninguna tabla del producto. El `SELECT` trae `subscription_payments`
+con `status='PENDING'` y `NOT EXISTS (SELECT 1 FROM n8n_ops.payment_alerts_sent WHERE
+payment_id = sp.id)`. Recien **despues** de que el nodo Telegram devuelve `ok:true`
+corre el `INSERT ... ON CONFLICT (payment_id) DO NOTHING` que lo marca como avisado.
+Si el envio a Telegram falla, el `INSERT` no corre y el siguiente barrido reintenta
+— duplicado solo si dos barridos se solapan (imposible aqui: intervalo de 5 min
+&gt;&gt; tiempo de ejecucion) o si dos items del mismo barrido fallan a mitad de
+lote (borde de baja probabilidad dado el volumen; no se construyo aislamiento por
+item para esto).
+
+**Workflow:** `ONIA - Aviso de pago QR (Telegram)`, id `2gk5aOIvIHBbttqJ`, activo.
+
+| # | Nodo | Tipo | Que hace |
+|---|---|---|---|
+| 1 | `Cada 5 min` | `scheduleTrigger` (`*/5 * * * *`) | Dispara el barrido |
+| 2 | `Asegurar tabla de vistos` | `postgres` executeQuery | DDL idempotente (schema `n8n_ops`) |
+| 3 | `Pagos QR pendientes sin avisar` | `postgres` executeQuery | `SELECT` con anti-join contra la tabla de vistos, `JOIN organizations` |
+| 4 | `Avisar a Sergio (Telegram)` | `telegram` sendMessage | Credencial `Telegram account` (`r8y2CN5RyOEIDce3`), chat `6830070978` hardcodeado. Clinica, pagador, plan, monto, banco, ref, comprobante y link a `/admin/payments` |
+| 5 | `Marcar aviso enviado` | `postgres` executeQuery | `INSERT ... ON CONFLICT DO NOTHING` referenciando `$('Pagos QR pendientes sin avisar').item.json.id` |
+
+Credenciales reusadas (cero secretos nuevos): `Postgres account` (postgres, nodos
+2/3/5) y `Telegram account` (telegramApi, nodo 4) — ambas ya existian en n8n antes de
+esta sesion.
+
+**Prueba real end-to-end (2026-08-14), no simulada:**
+
+1. Antes: `subscription_payments` tenia 1 fila historica (`REJECTED`,
+   2026-06-03, org demo) — 0 en `PENDING`. Ejecucion manual: `SELECT` devuelve 0
+   items, nodos 4/5 no corren (comportamiento correcto, sin `alwaysOutputData`).
+2. Insert de prueba: fila `PENDING` real en `subscription_payments`
+   (`id=test-payalert-telegram-check-001`, org `org-demo-001` "Clínica Dental Demo",
+   monto 320.00, banco BNB).
+3. Ejecucion manual del workflow: Telegram respondio `ok:true`,
+   `message_id:1606`, `chat:{id:6830070978,first_name:"Sergio",last_name:"Urcullo"}`
+   — mensaje real entregado al chat de Sergio. El `INSERT` de marcado corrio despues,
+   `success:true`.
+4. Segunda ejecucion inmediata (mismo minuto): `SELECT` devuelve 0 items — el pago de
+   prueba ya estaba en `n8n_ops.payment_alerts_sent`, **no se mando un segundo
+   mensaje**. Dedup verificado en vivo, no por inspeccion de codigo.
+5. Limpieza: `DELETE` de la fila de prueba en `subscription_payments` y de su
+   entrada en `n8n_ops.payment_alerts_sent`. Verificado con `COUNT(*)=0` en ambas
+   tablas para ese id; la fila historica `REJECTED` sigue intacta (total
+   `subscription_payments=1`).
+
+Workflow publicado (`publish_workflow`) recien despues de que la prueba salio bien,
+segun la regla dura de aprobacion/dry-run antes de activar.
+
+**No verificado:** no se confirmo en produccion el error exacto `535` del SMTP de
+Brevo (no hay acceso a las env vars de runtime de `onia-platform` en Vercel/VPS desde
+este carril) — se tomo como dato de entrada del pedido. Tampoco se confirmo si
+`WF-02`/Gmail efectivamente le llega a alguien: solo se confirmo que el `SELECT`
+corre y devuelve `[]` (no hubo pagos reales que probaran el envio de Gmail).
+
 ## Scripts de ops (en el VPS bajo /opt/onia/)
 
 Fuente en este repo: `hermes-content/deploy/vps-ops/`. Se despliegan al VPS a
