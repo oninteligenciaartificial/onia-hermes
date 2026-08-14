@@ -198,3 +198,88 @@ medias.roles = start_image · end_image · image_references · video_references 
 **Lección de método:** los dos videos son marketing de Higgsfield anunciando un modelo que la
 cuenta todavía no expone. Sirve para saber a dónde va la herramienta, no para planificar
 producción. Toda capacidad se confirma contra `models_explore` antes de prometer nada.
+
+
+---
+
+# ✅ V-3 RESUELTA — costo de video MEDIDO (2026-08-14)
+
+La tarea que quedaba pendiente desde el 12-ago. **Ya no se presupuesta a ojo.**
+
+## La medición
+
+```
+balance antes    2.857,94
+1 toma real      seedance_2_0_mini · 4 s · 480p · 9:16 · generate_audio por defecto (true)
+balance despues  2.853,94
+                 ------------
+diferencia         4,00 creditos     job ed3622b1-a742-47bd-a112-30ec96d168c6
+```
+
+**`get_cost: true` habia preflighteado exactamente 4.** Coincide al centavo, asi que
+**`get_cost` es confiable en este modelo y el resto de la tabla se levanto GRATIS**, sin
+generar nada mas.
+
+## Tarifario completo (medido/preflighteado, no estimado)
+
+| Modelo | mode | Resolución | 15 s | **cr por segundo** |
+|---|---|---|---|---|
+| `seedance_2_0_mini` | — | 480p | 15 | **1,00** |
+| `seedance_2_0_mini` | — | 720p | 37,5 | **2,50** |
+| `seedance_2_0` | fast | 480p | 22,5 | **1,50** |
+| `seedance_2_0` | fast | 720p | 52,5 | **3,50** |
+| `seedance_2_0` | std | 720p | 67,5 | **4,50** |
+| `seedance_2_0` | std | 1080p | 135 | **9,00** |
+| `seedance_2_0` | std | 4k | 330 | **22,00** |
+
+**El precio es lineal por segundo.** 4 s costaron 4 y 15 s cuestan 15 en la misma config.
+
+### Corrección a la ficha del modelo
+
+`seedance_2_0_mini` **no tiene parámetro `mode`** — ese es del `seedance_2_0` completo. En mini
+los controles son `resolution` (480p/720p) y `bitrate_mode`. Pedirle `mode: fast` no hace nada.
+
+### El tope de 15 s cuesta trabajo, no créditos
+
+Como el precio es lineal, partir 21 s en 15+6 sale **igual** que una sola toma de 21 s. El tope
+**no encarece la pieza**: encarece la operación (más tomas que empalmar, raccord de luz y
+vestuario que cuidar, más chances de tener que rehacer una). Presupuestar créditos por segundo
+total; presupuestar TIEMPO por cantidad de tomas.
+
+## Presupuesto de las 3 piezas generativas (9:16)
+
+| Pieza | Duración | Tomas | Prototipo<br>mini 480p | Publicable<br>2.0 fast 720p | Premium<br>2.0 std 1080p |
+|---|---|---|---|---|---|
+| **AD SPEC** | 21 s | 2 (15+6) | **21 cr** | 73,5 cr | 189 cr |
+| **Video2Video** | 41 s | 3 (15+15+11) | **41 cr** | 143,5 cr | 369 cr |
+| **Dos que caminan** | 45 s | 3 (15×3) | **45 cr** | 157,5 cr | 405 cr |
+| | | **Total** | **107 cr** | **374,5 cr** | 963 cr |
+
+Sumar aparte, y es despreciable: los 3 insumos de imagen **0,36 cr** con `soul_2` (o 6 cr si van
+con `nano_banana_2` 2k, que es la vía ganadora para cara) · narración ElevenLabs ~2,4 cr.
+
+**Contra un saldo de 2.853 cr:** prototipar las tres en mini 480p cuesta **107 cr = 3,7% del
+saldo.** Es dinero de bolsillo.
+
+### La recomendación
+
+**Prototipar las tres en `mini` 480p (107 cr), elegir la que funciona, y re-renderizar SOLO
+esa en `2.0 fast` 720p.** Rehacer la ganadora en calidad publicable suma entre 73 y 157 cr según
+la pieza. Ir directo a `std` 1080p sin haber visto el corte es pagar 9 cr/s por algo que
+todavía no sabés si sirve — y 4k a 22 cr/s no tiene ningún sentido para vertical de redes.
+
+Reservar ~20% extra para retomas: con 3 tomas por pieza, que una salga mal es lo esperable,
+no la excepción.
+
+## ⛔ "Show Cinema" NO existe
+
+El reel que lo nombraba para generar la imagen de escenario **no aplica a esta cuenta**.
+Verificado con `presets_show`: los ~60 presets son de personaje (EARTH ZOOM, ORBIT 360,
+CGI BREAKDOWN, RED CARPET…), ninguno se llama así ni cumple esa función.
+
+**El escenario se genera como una imagen fija más**, con la misma vía que el resto de los
+insumos. La receta de 3 insumos no cambia; lo que se cae es el atajo del preset.
+
+Cuarto video del corpus que afirma algo que la cuenta no tiene, después de "Seedance 2.5",
+"30 s por toma" y "33 días ilimitado". **Todo lo que sale de un reel se verifica contra la
+cuenta antes de escribirlo como plan.**
