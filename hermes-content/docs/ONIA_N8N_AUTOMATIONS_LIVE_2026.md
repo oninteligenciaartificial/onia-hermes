@@ -198,9 +198,44 @@ absoluto.
 tocar el codigo de `onia-platform` (agregar un `fetch()` en
 `app/api/subscription-payment/route.ts` hacia n8n) — carril de infra no toca ese
 repo. El polling contra la base **no requiere ningun cambio en el producto**: se lee
-directo desde el contenedor `dentalgest-staging-supabase-db` (puerto `55329`) con la
-credencial n8n `Postgres account` (`2P4w95n0vir90EkT`, ya existente, reusada — no se
-creo ningun secreto nuevo).
+con la credencial n8n `Postgres account` (`2P4w95n0vir90EkT`, ya existente, reusada —
+no se creo ningun secreto nuevo).
+
+**Correccion — a que base apunta `Postgres account` (verificado dos veces, la
+segunda a pedido explicito):** la primera version de esta nota decia "contenedor
+`dentalgest-staging-supabase-db`, puerto `55329`" — **eso estaba mal** y quedaba
+como sospecha razonable sin evidencia directa. Verificacion real:
+
+1. Query de identificacion contra la propia credencial: `current_database()=postgres`,
+   `inet_server_addr()` en rango IPv6 `2600:1f13:…` (bloque AWS, no una IP privada de
+   docker), `version()=PostgreSQL 17.6 on aarch64-…` (Graviton, tipico de Supabase
+   Cloud, no de un contenedor Postgres corriendo en un VPS x86). `org_count=9`, con
+   nombres reales de organizaciones (`Clínica Dental Demo`, `dwadwa`, `Mila dent`,
+   `No`, `clinica uwu`, `CLINICA CAMILA (DENTALGEST)`, `Dr. Manzanillo`, `miguel`,
+   `Ianclinic`).
+2. Prueba cruzada decisiva: se armo un workflow temporal con 3 nodos HTTP, cada uno
+   con una de las 3 credenciales `supabaseApi` existentes (`Supabase account`,
+   `Supabase account 2`, `Supabase account 3`), todos pegandole a
+   `GET https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/organizations`. `Supabase
+   account 2` y `3` devolvieron los **9 mismos registros, mismos `id` (cuid) y mismo
+   `createdAt` al milisegundo** que la query por Postgres — no "se parecen", son la
+   misma tabla.
+3. Los propios docs de `onia-platform` lo confirman: `docs/CREDENTIALS_GUIDE.md`
+   lista `Project ref: kvepqgikokjlacxngkiw` como el proyecto de `DATABASE_URL`/
+   `DIRECT_URL` (y el callback de Google OAuth de la app en produccion apunta a ese
+   mismo proyecto). `docs/SUPABASE_SELFHOST_MIGRATION_PLAN.md` (2026-06-29/30)
+   describe `dentalgest-staging-supabase-*` como un **stack de staging dedicado,
+   creado para ensayar una migracion self-host que nunca se cerro**: dice
+   explicitamente *"No se migraron datos productivos"* y deja el corte
+   (`DATABASE_URL`/`DIRECT_URL` apuntando al self-host) como accion pendiente. Osea:
+   ese contenedor es una foto restaurada una vez (30-jun-2026), no donde escribe la
+   app hoy.
+
+**Conclusion:** `Postgres account` SI apunta a produccion real (Supabase Cloud
+`kvepqgikokjlacxngkiw`, el mismo proyecto que usa `WF-02` y el que declara
+`CREDENTIALS_GUIDE.md`). No hizo falta crear una credencial nueva. La prueba
+funcional completa (mas abajo) se repitio una segunda vez, en limpio, ya con esta
+identificacion confirmada.
 
 **Sin duplicados: tabla de vistos, no "probablemente no pase".** Antes de cada
 `SELECT`, un nodo Postgres corre `CREATE SCHEMA IF NOT EXISTS n8n_ops; CREATE TABLE
@@ -252,6 +287,16 @@ esta sesion.
 
 Workflow publicado (`publish_workflow`) recien despues de que la prueba salio bien,
 segun la regla dura de aprobacion/dry-run antes de activar.
+
+**Segunda pasada (2026-08-14, mismo dia), repetida completa a pedido explicito tras
+la verificacion de identidad de base de arriba:** mismo ciclo, otro id de prueba
+(`test-payalert-check-002`) para no chocar con el primero. El INSERT trajo
+`db=postgres, org_count=9` en la misma fila devuelta (mismo fingerprint que la
+seccion de arriba). Ejecucion → Telegram `ok:true, message_id:1607,
+chat:{id:6830070978,"Sergio","Urcullo"}`. Segunda ejecucion inmediata → `SELECT`
+devuelve `[]`, no hay segundo mensaje. Limpieza → `payment_row=0, tracking_row=0,
+total_payments=1, total_pending=0`. Mismo resultado que la primera pasada; la unica
+diferencia es que esta vez la identidad de la base quedo probada, no supuesta.
 
 **No verificado:** no se confirmo en produccion el error exacto `535` del SMTP de
 Brevo (no hay acceso a las env vars de runtime de `onia-platform` en Vercel/VPS desde
