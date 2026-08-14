@@ -213,8 +213,7 @@ sea o no cliente de Onia:
   tareas te consumen tiempo. Si agendás una reunión, también el horario elegido.
 - **Notas de voz:** si enviás un audio, se transcribe a texto con un servicio
   propio alojado en el servidor de Onia — el audio no se envía a servicios de
-  transcripción de terceros. [REVISAR: confirmar si el audio original se
-  descarta tras la transcripción o se conserva junto a la conversación.]
+  transcripción de terceros.
 - **Para qué:** atender tu consulta, entender si Onia le sirve a tu negocio y,
   si querés, agendar una reunión. **No usamos estos datos para publicidad, no
   los vendemos y no entrenamos modelos de IA con tus conversaciones** (misma
