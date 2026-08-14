@@ -30,10 +30,19 @@ test.describe("landing-logistics preview (logistics-demo)", () => {
     await expect(track).toHaveAttribute("data-wf-step", "0");
     await expect(page.locator(".wf-ssh-step").first()).toHaveAttribute("aria-current", "step");
 
-    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.2));
+    // Scroll by the track's own runway, not by viewport guesses: the runway is
+    // svh-based and differs between desktop and a mobile viewport.
+    const runway = (fraction: number) =>
+      page.evaluate((f) => {
+        const el = document.querySelector<HTMLElement>("[data-wf-scrub]");
+        const run = (el?.offsetHeight ?? 0) - window.innerHeight;
+        window.scrollTo(0, run * f);
+      }, fraction);
+
+    await runway(0.5);
     await expect(track).toHaveAttribute("data-wf-step", "1");
 
-    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 2.5));
+    await runway(0.95);
     await expect(track).toHaveAttribute("data-wf-step", "2");
     await expect(page.locator(".wf-ssh-step").last()).toHaveAttribute("aria-current", "step");
     // The last stage image is the one on screen, not a leftover from stage 1.
@@ -93,10 +102,17 @@ test.describe("landing-logistics preview (logistics-demo)", () => {
 });
 
 test.describe("landing-logistics with reduced motion", () => {
-  test.use({ reducedMotion: "reduce" });
-
+  // emulateMedia, not test.use({ reducedMotion }): under this config the
+  // describe-level fixture option does not reach the context (probed: matchMedia
+  // still reported no-preference), and a silently-unemulated test would assert
+  // the default page and pass for the wrong reason.
   test("renders the final state: nothing pinned, nothing hidden", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(URL);
+    expect(
+      await page.evaluate(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches),
+      "reduced motion is actually emulated",
+    ).toBe(true);
 
     // The runtime never engages, so the hero does not pin and no frame is swapped.
     await expect(page.locator("[data-wf-scrub]")).not.toHaveAttribute("data-wf-step", /\d/);

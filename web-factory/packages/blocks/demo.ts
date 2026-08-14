@@ -147,6 +147,11 @@ const FAMILY_ORDER: readonly BlockFamily[] = ["base", "clinic", "model"];
  * Measured once and applied once, on purpose: vh-based blocks (the heroes)
  * resolve against the frame box, so re-measuring after the resize we just caused
  * walks them down to nothing.
+ *
+ * Capped at 1200px: a scroll-driven block (scroll-story-hero) reports its whole
+ * runway — 2.4 screens — and a frame that tall shows the scene frozen with no
+ * scroll left to drive it. Capped, the frame keeps its own scrollbar and the
+ * scrub actually runs inside the gallery, which is the only honest way to show it.
  */
 const FRAME_HEIGHT_JS = `
 (function(){
@@ -162,7 +167,7 @@ window.addEventListener('message',function(e){
   var f=document.getElementById(d.wfFrame);
   if(!f)return;
   wfSized[d.wfFrame]=1;
-  f.style.height=Math.max(180,d.h)+'px';
+  f.style.height=Math.min(1200,Math.max(180,d.h))+'px';
 });`.trim();
 
 function frameDocument(block: GalleryBlock): string {

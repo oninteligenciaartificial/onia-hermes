@@ -329,8 +329,12 @@ export const SCROLL_STORY_HERO_CSS = `
   --wf-stag: .1s;
 }
 
+/* 88%, not the 74% the rest of the muted copy uses: the kicker is the HIGHEST
+   line of text in the scrim, where a bright client photo leaves the least ink to
+   work with (measured 4.15:1 at 74% over a white frame). Its hierarchy comes
+   from size and tracking, not from tint. */
 .wf-ssh-kicker {
-  color: color-mix(in srgb, var(--color-fg) 74%, var(--color-bg));
+  color: color-mix(in srgb, var(--color-fg) 88%, var(--color-bg));
   font-size: 0.82rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;

@@ -36,6 +36,19 @@ Then any block opts into motion by adding a class. That's it.
 | `wf-parallax` + `data-wf-parallax="0.2"` | media moves slower than scroll | scroll-linked |
 | `wf-hover-lift` | card lifts + shadow on hover | hover |
 | `wf-sticky` | sticky nav (+ `wf-scrolled` state) | scroll-linked |
+| `data-wf-scrub` (on a tall track) + `wf-frame` / `wf-step` children | el scroll avanza la escena por etapas (sticky + scrub, patrón P3) | scroll-linked |
+| `wf-count` + `data-wf-count="4200"` | la métrica cuenta hasta su valor real | in view |
+
+**`data-wf-scrub`** — el track mide `100svh + (n-1) * 70svh` y adentro va una escena
+`position: sticky`. El runtime le pone `data-wf-step` con la etapa activa y marca
+`.wf-on` en el `.wf-frame` y el `.wf-step` correspondientes (`aria-current="step"`).
+Sin JS se ve el primer frame; con reduced-motion no hay pin ni scrub. El track no
+puede tener ningún ancestro con `overflow:hidden` o `transform` (mata el sticky).
+
+**`wf-count`** — el HTML lleva SIEMPRE el número final (SEO, sin JS, reduced
+motion); el runtime sólo anima hacia el valor que ya está escrito y lo restaura
+exacto al terminar. Regla 7 del banco de patrones: montos y cifras fiscales no
+bailan — el bloque decide qué es contable, la primitiva no adivina.
 
 Add `wf-onload` to any reveal class to fire it immediately instead of on scroll.
 Tune per element with inline `--wf-dur` (duration) and `--wf-stag` (stagger step).

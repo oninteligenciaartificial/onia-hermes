@@ -93,6 +93,15 @@ export function clientDarkTokenVars(client?: ClientTokenInput): Record<string, s
     base["--color-primary"] = DARK_FG;
     base["--primary"] = DARK_FG;
     base["--primary-foreground"] = DARK_BG;
+    // El par completo, o el arreglo crea otro invisible: `--color-on-primary` es
+    // el token que usan los BOTONES solidos (background primary + color
+    // on-primary). Si el primary se cambia a DARK_FG y el on-primary se queda en
+    // el #ffffff calculado para el color claro, el boton queda blanco sobre casi
+    // blanco: 1,21:1, ilegible. Es exactamente lo que axe encontraba en 93 nodos
+    // de la landing demo en oscuro. `--ring` sigue al primary por el mismo motivo
+    // (el foco tiene que verse sobre el fondo oscuro).
+    base["--color-on-primary"] = DARK_BG;
+    base["--ring"] = DARK_FG;
   }
   return base;
 }
@@ -154,10 +163,20 @@ function fontStack(font: string): string {
   return `"${clean}", "Onest", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
 }
 
+/**
+ * Ink for text sitting ON a brand color (solid buttons: background --color-primary
+ * + color --color-on-primary).
+ *
+ * Se elige por CONTRASTE WCAG real, no por un promedio de canales. La version
+ * anterior comparaba una luminancia sin correccion gamma contra 0.58, y en los
+ * tonos medios se equivocaba: con un azul de marca #3D7DFF elegia blanco, que da
+ * **3,77:1** — texto ilegible en el CTA principal, mientras la tinta oscura daba
+ * 5,4:1. Nadie lo veia porque axe devuelve "incomplete" (no "violation") cuando
+ * el boton vive sobre un fondo con gradiente, asi que el gate pasaba en verde.
+ */
 function readableTextOn(hex: string): string {
-  const [r, g, b] = hexToRgb(hex);
-  const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-  return luminance > 0.58 ? "#111827" : "#ffffff";
+  const dark = "#111827";
+  return contrastRatio(hex, dark) > contrastRatio(hex, "#ffffff") ? dark : "#ffffff";
 }
 
 function hexToRgb(hex: string): [number, number, number] {
