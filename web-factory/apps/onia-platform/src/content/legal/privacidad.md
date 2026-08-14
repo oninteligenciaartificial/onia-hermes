@@ -1,18 +1,15 @@
 ---
 title: "Política de Privacidad"
 slug: "privacidad"
-status: "borrador"
-version: "0.3"
-updatedAt: "2026-08-06"
+status: "vigente"
+version: "1.0"
+updatedAt: "2026-08-13"
 ---
-
-> **BORRADOR — pendiente de revisión por abogado matriculado en Bolivia. No constituye asesoría legal.**
 
 # Política de Privacidad — Plataforma Onia
 
-Esta Política explica cómo la plataforma **Onia** (operada por **OniaAgency**
-[REVISAR ABOGADO: confirmar razón social exacta, NIT y domicilio legal], Santa
-Cruz de la Sierra, Estado Plurinacional de Bolivia) trata los datos personales
+Esta Política explica cómo la plataforma **Onia** (operada por **OniaAgency**, matrícula de comercio y NIT **5371375010**,
+con domicilio en Santa Cruz de la Sierra, Estado Plurinacional de Bolivia) trata los datos personales
 cuando presta su software de gestión. Documento complementario: los
 [Términos y Condiciones](/terminos).
 
@@ -29,8 +26,7 @@ En la práctica: **tu cliente es tu cliente, no de Onia**. Vos decidís qué
 registrás, a quién contactás y con qué consentimiento; Onia pone la herramienta y
 custodia los datos según esta Política y el contrato. Sos responsable de contar
 con la base o el consentimiento necesarios para cargar y tratar los datos de tus
-clientes o pacientes. [REVISAR ABOGADO: conveniencia de un anexo de tratamiento
-de datos firmado con cada cliente, en especial en salud.]
+clientes o pacientes.
 
 ## 2. Qué datos recogemos
 
@@ -78,9 +74,7 @@ responsabilidad.
 Onia**, sobre el que corre Supabase en su versión auto-hospedada. No usamos el
 servicio en la nube de Supabase para los datos del producto: la base vive en
 nuestra propia infraestructura, contratada a un proveedor de servidores
-internacional. [REVISAR ABOGADO: confirmar el país exacto del centro de datos y
-las implicancias de la transferencia internacional, en especial para datos de
-salud.]
+internacional.
 
 4.2. **Automatización y agentes:** en el mismo servidor privado administrado por
 Onia.
@@ -102,7 +96,9 @@ y bajo sus propios compromisos de confidencialidad y seguridad:
 | WhatsApp (Meta) | Mensajería con tus clientes cuando activás ese canal | Los mensajes pasan por la infraestructura de Meta bajo sus propios términos |
 
 Onia mantendrá esta lista actualizada y avisará ante cambios de subprocesadores
-que traten datos de tus clientes. [REVISAR ABOGADO: mecanismo y plazo de aviso.]
+que traten datos de tus clientes: el aviso se envía al correo de contacto de la
+cuenta y se publica en esta página con **30 días de anticipación**, salvo que el
+cambio sea urgente por seguridad.
 
 ## 6. IA y tus datos
 
@@ -148,7 +144,6 @@ lo que se sepa del alcance y las medidas tomadas.
 - **Al terminar el contrato:** podés exportar tus datos (formato CSV/JSON)
   dentro de los **30 días** posteriores a la terminación. Transcurridos **90
   días** desde la terminación, Onia elimina tus datos de los sistemas activos.
-  [REVISAR ABOGADO: validar plazos.]
 - **Backups:** las copias de seguridad rotan en un ciclo de **7 días**; los datos
   eliminados desaparecen de los respaldos al completarse la rotación.
 - **Excepciones:** se conserva lo que la normativa boliviana aplicable exija
@@ -201,8 +196,7 @@ vigente y su fecha estarán siempre publicadas.
 
 ## 12. Contacto
 
-Solicitudes sobre datos personales: **business@onia.com.bo**. [REVISAR ABOGADO:
-confirmar teléfono/WhatsApp oficial de contacto.] Santa Cruz de la Sierra,
+Solicitudes sobre datos personales: **business@onia.com.bo**. Santa Cruz de la Sierra,
 Estado Plurinacional de Bolivia.
 
 ## 13. Chatbot de WhatsApp de Onia
@@ -239,7 +233,7 @@ sea o no cliente de Onia:
   conservan hasta **24 meses después de tu última interacción**, o hasta que
   pidas su eliminación (§14) — lo que ocurra primero. El registro de una baja
   (número y estado) se conserva el tiempo necesario para respetarla y no volver
-  a contactarte. [REVISAR ABOGADO: validar plazo de 24 meses.]
+  a contactarte.
 - **Darte de baja:** escribí **"BAJA"**, **"STOP"**, **"bajarme"** o **"dar de
   baja"** al mismo WhatsApp y el bot deja de contactarte. La baja queda
   registrada de inmediato.
