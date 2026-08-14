@@ -177,16 +177,14 @@ específica, adoptamos por contrato** los principios reconocidos
 internacionalmente (licitud, finalidad, minimización, seguridad, transparencia
 y derechos del titular), y Onia se compromete a adecuar esta Política a la ley
 boliviana de protección de datos cuando se promulgue. Las personas conservan
-en todo caso los derechos y acciones constitucionales mencionados. [REVISAR
-ABOGADO: confirmar el estado normativo al momento de publicar.]
+en todo caso los derechos y acciones constitucionales mencionados.
 
 ## 10. Menores de edad
 
 La plataforma no está dirigida a menores y Onia no recolecta datos de menores
 por cuenta propia. Los negocios clientes pueden registrar clientes o pacientes
 menores de edad como parte de su atención, bajo el consentimiento de sus padres
-o tutores, que es responsabilidad del negocio obtener y documentar. [REVISAR
-ABOGADO.]
+o tutores, que es responsabilidad del negocio obtener y documentar.
 
 ## 11. Cambios a esta Política
 

@@ -11,7 +11,7 @@ updatedAt: "2026-07-25"
 # Términos y Condiciones de Uso — Plataforma Onia
 
 Estos Términos regulan el uso de la plataforma de software de gestión **Onia**
-(operada por **OniaAgency**, NIT 5371375010,, Santa Cruz de la Sierra, Estado Plurinacional de Bolivia).
+(operada por **OniaAgency**, NIT 5371375010, Santa Cruz de la Sierra, Estado Plurinacional de Bolivia).
 Documento complementario: la [Política de Privacidad](/privacidad).
 
 Al crear una cuenta, contratar un plan o usar la plataforma, aceptás estos
@@ -230,8 +230,7 @@ de precio se rigen por el §3.5.
 
 Estos Términos se rigen por las leyes del **Estado Plurinacional de Bolivia**.
 Toda controversia que no se resuelva de forma amistosa se someterá a los jueces y
-tribunales competentes de la ciudad de Santa Cruz de la Sierra. [REVISAR
-ABOGADO: evaluar cláusula de conciliación/arbitraje como alternativa.]
+tribunales competentes de la ciudad de Santa Cruz de la Sierra.
 
 ## 13. Disposiciones finales
 
