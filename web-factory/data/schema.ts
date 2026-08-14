@@ -12,6 +12,7 @@ export const WEB_FACTORY_TEMPLATES = [
   "landing-focus",
   "landing-clinic",
   "landing-realestate",
+  "landing-logistics",
 ] as const;
 
 export type WebFactoryTemplate = (typeof WEB_FACTORY_TEMPLATES)[number];
@@ -60,6 +61,32 @@ const serviceSchema = z.object({
 const procesoPasoSchema = z.object({
   titulo: z.string().min(1),
   desc: z.string().min(1),
+  // A step can carry its own photo. That is what turns the process into a scene
+  // the visitor scrolls through (scroll-story-hero) instead of a list of words.
+  // Blocks that only render text ignore both fields.
+  imagen: optionalAssetSchema,
+  imagenAlt: z.string().default(""),
+});
+
+// Proof, and the model's rule with it: "SOLO con numeros reales del cliente.
+// Sin datos verificables, esta seccion se elimina, no se inventa." `fuente` is
+// where the number comes from; `esMuestra` tags a value the client has not
+// confirmed, and the block prints that tag on screen.
+const metricaSchema = z.object({
+  valor: z.string().min(1),
+  label: z.string().min(1),
+  fuente: z.string().default(""),
+  esMuestra: z.boolean().default(false),
+});
+
+const cotizacionCampoSchema = z.object({
+  nombre: z.string().min(1),
+  label: z.string().min(1),
+  tipo: z.enum(["text", "email", "tel", "number", "date", "textarea", "select"]).default("text"),
+  requerido: z.boolean().default(false),
+  opciones: z.array(z.string().min(1)).default([]),
+  placeholder: z.string().default(""),
+  autocomplete: z.string().default(""),
 });
 
 const faqItemSchema = z.object({
@@ -280,6 +307,20 @@ export const clientSchema = z.object({
       nota: z.string().default(""),
     })
     .default({ titulo: "", texto: "", accion: "", boton: "Suscribirme", nota: "" }),
+  metricas: z.array(metricaSchema).default([]),
+  // Inline quote (the conversion block for a rubro whose lead is a price, not a
+  // newsletter). Like the newsletter band: no `accion` or no `campos`, no form —
+  // the direct contact stays as the way in.
+  cotizacion: z
+    .object({
+      titulo: z.string().default(""),
+      texto: z.string().default(""),
+      accion: z.string().default(""),
+      boton: z.string().default("Pedir cotizacion"),
+      nota: z.string().default(""),
+      campos: z.array(cotizacionCampoSchema).default([]),
+    })
+    .default({ titulo: "", texto: "", accion: "", boton: "Pedir cotizacion", nota: "", campos: [] }),
   categorias: z.array(z.string().min(1)).default([]),
   productos: z.array(productSchema).default([]),
   beneficios: z.array(z.string().min(1)).default([]),

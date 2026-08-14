@@ -19,6 +19,10 @@ const PAGES = [
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", maxBytesKb: 60 },
   { name: "landing-clinic (dental-demo)", url: "/dental-demo/", maxBytesKb: 320 },
   { name: "landing-realestate (realestate-demo)", url: "/realestate-demo/", maxBytesKb: 90 },
+  // The budget IS the point here: unitedcarriers is a 3D scroll story, and this
+  // page is the 2D scrub the model prescribes instead. If it ever needs a scroll
+  // library or a 3D engine, this gate is where that shows up.
+  { name: "landing-logistics (logistics-demo)", url: "/logistics-demo/", maxBytesKb: 90 },
 ];
 
 for (const target of PAGES) {

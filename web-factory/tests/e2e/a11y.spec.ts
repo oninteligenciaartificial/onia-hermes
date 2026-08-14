@@ -28,6 +28,9 @@ const PAGES = [
   // Built from the learned model find-realestate-editorial: full-bleed media hero
   // over a scrim, path cards, catalog grid and the inverted newsletter band.
   { name: "landing-realestate (realestate-demo)", url: "/realestate-demo/", schemes: ["light", "dark"] as const },
+  // Built from unitedcarriers-logistics: scroll-scrubbed hero over a photo scrim,
+  // stat strip and the quote form (the only demo with a multi-field form).
+  { name: "landing-logistics (logistics-demo)", url: "/logistics-demo/", schemes: ["light", "dark"] as const },
 ];
 
 for (const target of PAGES) {

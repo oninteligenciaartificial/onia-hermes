@@ -17,4 +17,5 @@ export default async function globalSetup(): Promise<void> {
   await generateSite("clinic-demo", { rootDir, template: "landing" });
   await generateSite("dental-demo", { rootDir, template: "landing-clinic" });
   await generateSite("realestate-demo", { rootDir, template: "landing-realestate" });
+  await generateSite("logistics-demo", { rootDir, template: "landing-logistics" });
 }

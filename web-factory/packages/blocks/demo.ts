@@ -42,6 +42,7 @@ import {
   EDITORIAL_STATEMENT_CSS,
   escapeHtml,
   FOOTER_BRAND_CSS,
+  INLINE_QUOTE_FORM_CSS,
   MEDIA_HERO_CSS,
   MOTION_PRIMITIVES,
   NEWSLETTER_BAND_CSS,
@@ -49,6 +50,8 @@ import {
   PROPERTY_CARDS_CSS,
   renderMotionScript,
   renderMotionStyles,
+  SCROLL_STORY_HERO_CSS,
+  STAT_STRIP_CSS,
 } from "./src/index";
 
 /**
@@ -65,6 +68,9 @@ const MODEL_BLOCK_CSS = [
   BENEFIT_STRIP_CSS,
   NEWSLETTER_BAND_CSS,
   FOOTER_BRAND_CSS,
+  SCROLL_STORY_HERO_CSS,
+  STAT_STRIP_CSS,
+  INLINE_QUOTE_FORM_CSS,
 ] as const;
 
 function modelFamilyCss(client: RealestateClient): string {
@@ -81,6 +87,9 @@ const SAMPLE_ASSETS: ReadonlyArray<readonly [string, string]> = [
   ["data/clients/realestate-demo.assets/propiedad-placeholder.svg", "propiedad-placeholder.svg"],
   ["data/clients/dental-demo.assets/hero-consultorio.webp", "hero-consultorio.webp"],
   ["data/clients/dental-demo.assets/detalle-atencion.webp", "detalle-atencion.webp"],
+  ["data/clients/logistics-demo.assets/etapa-1-deposito.svg", "etapa-1-deposito.svg"],
+  ["data/clients/logistics-demo.assets/etapa-2-ruta.svg", "etapa-2-ruta.svg"],
+  ["data/clients/logistics-demo.assets/etapa-3-entrega.svg", "etapa-3-entrega.svg"],
 ];
 
 type FamilyMeta = {

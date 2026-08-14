@@ -1,0 +1,113 @@
+{
+  "nombre": "Logistica Demo",
+  "slug": "logistics-demo",
+  "tagline": "Segui tu carga desde el deposito hasta la entrega",
+  "descripcion": "Sitio de demostracion del modelo unitedcarriers-logistics. Las fotos, las cifras y los datos de contacto son de muestra: se reemplazan con la operacion real del cliente antes de publicar.",
+  "logo": "LD",
+  "colores": {
+    "primary": "#3D7DFF",
+    "secondary": "#8FB6FF",
+    "accent": "#6AA0FF",
+    "bg": "#0E1116",
+    "fg": "#EEF1F6"
+  },
+  "tipografia": {
+    "heading": "Bricolage Grotesque",
+    "body": "DM Sans"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "",
+    "direccion": "Santa Cruz de la Sierra, Bolivia"
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "proceso": [
+    {
+      "titulo": "Deposito",
+      "desc": "Recibimos la carga, la pesamos y la registramos con foto: desde ese momento tiene numero de seguimiento.",
+      "imagen": "assets/etapa-1-deposito.svg",
+      "imagenAlt": "Marcador de foto: aca va la foto real del deposito con la carga registrada"
+    },
+    {
+      "titulo": "Ruta",
+      "desc": "La unidad sale con la ruta asignada y el cliente ve donde esta su envio sin tener que llamar.",
+      "imagen": "assets/etapa-2-ruta.svg",
+      "imagenAlt": "Marcador de foto: aca va la foto real de la flota en ruta"
+    },
+    {
+      "titulo": "Entrega",
+      "desc": "Entrega con conformidad firmada y foto del remito, que queda disponible en el historial del cliente.",
+      "imagen": "assets/etapa-3-entrega.svg",
+      "imagenAlt": "Marcador de foto: aca va la foto real de una entrega con conformidad firmada"
+    }
+  ],
+  "servicios": [
+    {
+      "titulo": "Carga paletizada",
+      "desc": "Consolidado y despacho de pallets con manifiesto por unidad. El detalle real de tipos de carga lo define el cliente.",
+      "icono": "grid",
+      "url": ""
+    },
+    {
+      "titulo": "Cobertura",
+      "desc": "Rutas y ciudades donde opera la empresa. Se completa con la cobertura real antes de publicar.",
+      "icono": "map-pin",
+      "url": ""
+    },
+    {
+      "titulo": "Seguimiento",
+      "desc": "Estado del envio en cada etapa, sin llamar a nadie: deposito, ruta y entrega con hora.",
+      "icono": "activity",
+      "url": ""
+    },
+    {
+      "titulo": "Documentacion",
+      "desc": "Remito, conformidad y comprobante fiscal de cada viaje, archivados y disponibles.",
+      "icono": "shield-check",
+      "url": ""
+    }
+  ],
+  "metricas": [
+    { "valor": "—", "label": "envios entregados", "fuente": "", "esMuestra": true },
+    { "valor": "—", "label": "ciudades con cobertura", "fuente": "", "esMuestra": true },
+    { "valor": "—", "label": "horas promedio de transito", "fuente": "", "esMuestra": true },
+    { "valor": "—", "label": "entregas con conformidad firmada", "fuente": "", "esMuestra": true }
+  ],
+  "cotizacion": {
+    "titulo": "Cotiza tu envio",
+    "texto": "Cuatro datos y te devolvemos precio y tiempo estimado. Si preferis hablar, escribinos directo.",
+    "accion": "/api/onia-center/leads/intake",
+    "boton": "Pedir cotizacion",
+    "nota": "Demo: el formulario apunta al intake de leads de ONIA (?src= por slug). Requiere el sitio servido desde el panel para responder.",
+    "campos": [
+      { "nombre": "nombre", "label": "Tu nombre", "tipo": "text", "requerido": true, "autocomplete": "name" },
+      { "nombre": "telefono", "label": "WhatsApp", "tipo": "tel", "requerido": true, "autocomplete": "tel", "placeholder": "+591" },
+      { "nombre": "origen", "label": "Origen", "tipo": "text", "requerido": true, "placeholder": "Ciudad o deposito" },
+      { "nombre": "destino", "label": "Destino", "tipo": "text", "requerido": true, "placeholder": "Ciudad de entrega" },
+      {
+        "nombre": "carga",
+        "label": "Tipo de carga",
+        "tipo": "select",
+        "requerido": true,
+        "opciones": ["Paletizada", "Granel", "Refrigerada", "Contenedor", "Otra"]
+      },
+      { "nombre": "volumen", "label": "Volumen o peso aproximado", "tipo": "text", "placeholder": "Ej: 12 pallets / 4 t" },
+      { "nombre": "detalle", "label": "Algo mas que debamos saber", "tipo": "textarea" }
+    ]
+  },
+  "footerLegal": "Sitio de demostracion de ONIA Web Factory. Las fotos, las cifras y los datos de contacto son de muestra.",
+  "cta": {
+    "texto": "Cotizar un envio",
+    "url": "#cotizacion"
+  },
+  "seo": {
+    "title": "Logistica Demo — modelo unitedcarriers-logistics",
+    "description": "Demostracion del modelo logistico de ONIA Web Factory: el scroll avanza el envio, con tokens ONIA y datos de muestra marcados."
+  }
+}

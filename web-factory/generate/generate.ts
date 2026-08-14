@@ -8,6 +8,8 @@ import {
   renderLandingCss,
   renderLandingDocument,
   renderLandingFocusDocument,
+  renderLandingLogisticsCss,
+  renderLandingLogisticsDocument,
   renderLandingRealestateCss,
   renderLandingRealestateDocument,
   renderStoreCss,
@@ -37,6 +39,10 @@ const TEMPLATE_RENDERERS: Record<WebFactoryTemplate, TemplateRenderer> = {
   "landing-realestate": {
     html: renderLandingRealestateDocument,
     css: renderLandingRealestateCss,
+  },
+  "landing-logistics": {
+    html: renderLandingLogisticsDocument,
+    css: renderLandingLogisticsCss,
   },
   store: { html: renderStoreDocument, css: renderStoreCss },
   dashboard: { html: renderDashboardDocument, css: renderDashboardCss },

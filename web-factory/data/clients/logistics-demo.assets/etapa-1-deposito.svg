@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Marcador de imagen: etapa 1, deposito</title>
+  <desc id="d1">Placeholder geometrico en la paleta del sitio. Se reemplaza por la foto real del deposito del cliente.</desc>
+  <rect width="1600" height="1000" fill="#0E1116"/>
+  <g opacity=".35" fill="none" stroke="#3D7DFF" stroke-width="2">
+    <path d="M0 780h1600M0 860h1600M0 940h1600"/>
+    <path d="M240 1000V300M560 1000V300M880 1000V300M1200 1000V300"/>
+  </g>
+  <g fill="#171C24">
+    <rect x="180" y="300" width="1240" height="520"/>
+    <rect x="140" y="820" width="1320" height="40"/>
+  </g>
+  <path d="M180 300 800 140 1420 300Z" fill="#1F2733"/>
+  <g fill="#0E1116" opacity=".9">
+    <rect x="700" y="560" width="200" height="260"/>
+  </g>
+  <g fill="#8B95A5" opacity=".55">
+    <rect x="260" y="600" width="150" height="90"/><rect x="260" y="700" width="150" height="90"/>
+    <rect x="440" y="600" width="150" height="90"/><rect x="440" y="700" width="150" height="90"/>
+    <rect x="1010" y="600" width="150" height="90"/><rect x="1010" y="700" width="150" height="90"/>
+    <rect x="1190" y="700" width="150" height="90"/>
+  </g>
+  <g fill="#3D7DFF" opacity=".85">
+    <rect x="1190" y="600" width="150" height="90"/>
+  </g>
+  <rect x="1180" y="900" width="360" height="56" rx="28" fill="#0E1116" opacity=".9"/>
+  <text x="1360" y="937" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2" fill="#8FB6FF">IMAGEN DE MUESTRA</text>
+</svg>

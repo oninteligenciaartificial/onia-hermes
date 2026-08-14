@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="t3 d3">
+  <title id="t3">Marcador de imagen: etapa 3, entrega</title>
+  <desc id="d3">Placeholder geometrico en la paleta del sitio. Se reemplaza por la foto real de una entrega firmada.</desc>
+  <rect width="1600" height="1000" fill="#0E1116"/>
+  <g fill="#171C24">
+    <rect x="120" y="200" width="620" height="800"/>
+    <rect x="860" y="320" width="620" height="680"/>
+  </g>
+  <g fill="#0E1116" opacity=".85">
+    <rect x="300" y="600" width="260" height="400" rx="6"/>
+  </g>
+  <g fill="#8B95A5" opacity=".45">
+    <rect x="180" y="280" width="120" height="90"/><rect x="360" y="280" width="120" height="90"/><rect x="540" y="280" width="120" height="90"/>
+    <rect x="180" y="430" width="120" height="90"/><rect x="360" y="430" width="120" height="90"/><rect x="540" y="430" width="120" height="90"/>
+    <rect x="920" y="420" width="140" height="100"/><rect x="1120" y="420" width="140" height="100"/><rect x="1320" y="420" width="140" height="100"/>
+    <rect x="920" y="580" width="140" height="100"/><rect x="1120" y="580" width="140" height="100"/><rect x="1320" y="580" width="140" height="100"/>
+  </g>
+  <g fill="#3D7DFF">
+    <rect x="700" y="740" width="200" height="180" rx="8"/>
+  </g>
+  <g fill="none" stroke="#0E1116" stroke-width="12" stroke-linecap="round">
+    <path d="M760 830l34 34 66-72"/>
+  </g>
+  <g fill="none" stroke="#3D7DFF" stroke-width="8" stroke-linecap="round" opacity=".6">
+    <path d="M0 960h700"/>
+  </g>
+  <rect x="1180" y="900" width="360" height="56" rx="28" fill="#0E1116" opacity=".9"/>
+  <text x="1360" y="937" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2" fill="#8FB6FF">IMAGEN DE MUESTRA</text>
+</svg>

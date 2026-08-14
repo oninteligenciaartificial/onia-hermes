@@ -62,6 +62,27 @@ export {
   NEWSLETTER_BAND_CSS,
   type NewsletterBandProps,
 } from "./newsletter-band";
+export {
+  renderScrollStoryHero,
+  SCROLL_STORY_HERO_CSS,
+  type ScrollStoryFrame,
+  type ScrollStoryHeroLink,
+  type ScrollStoryHeroProps,
+} from "./scroll-story-hero";
+export {
+  renderStatStrip,
+  STAT_STRIP_CSS,
+  type StatItem,
+  type StatStripProps,
+} from "./stat-strip";
+export {
+  renderInlineQuoteForm,
+  INLINE_QUOTE_FORM_CSS,
+  type InlineQuoteFormProps,
+  type QuoteContact,
+  type QuoteField,
+  type QuoteFieldType,
+} from "./inline-quote-form";
 
 export { renderClinicHero } from "./clinic-hero";
 export { renderClinicServices } from "./clinic-services";
