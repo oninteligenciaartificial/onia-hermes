@@ -197,45 +197,52 @@ absoluto.
 **Disparador elegido: polling directo a Postgres, no webhook.** Un webhook exigiria
 tocar el codigo de `onia-platform` (agregar un `fetch()` en
 `app/api/subscription-payment/route.ts` hacia n8n) — carril de infra no toca ese
-repo. El polling contra la base **no requiere ningun cambio en el producto**: se lee
-con la credencial n8n `Postgres account` (`2P4w95n0vir90EkT`, ya existente, reusada —
-no se creo ningun secreto nuevo).
+repo. El polling contra la base **no requiere ningun cambio en el producto**.
 
-**Correccion — a que base apunta `Postgres account` (verificado dos veces, la
-segunda a pedido explicito):** la primera version de esta nota decia "contenedor
-`dentalgest-staging-supabase-db`, puerto `55329`" — **eso estaba mal** y quedaba
-como sospecha razonable sin evidencia directa. Verificacion real:
+**Historial de la identidad de la base (dos correcciones, la segunda es la que
+vale) — dejarlo escrito para que el proximo que lea esto no repita el error:**
 
-1. Query de identificacion contra la propia credencial: `current_database()=postgres`,
-   `inet_server_addr()` en rango IPv6 `2600:1f13:…` (bloque AWS, no una IP privada de
-   docker), `version()=PostgreSQL 17.6 on aarch64-…` (Graviton, tipico de Supabase
-   Cloud, no de un contenedor Postgres corriendo en un VPS x86). `org_count=9`, con
-   nombres reales de organizaciones (`Clínica Dental Demo`, `dwadwa`, `Mila dent`,
-   `No`, `clinica uwu`, `CLINICA CAMILA (DENTALGEST)`, `Dr. Manzanillo`, `miguel`,
-   `Ianclinic`).
-2. Prueba cruzada decisiva: se armo un workflow temporal con 3 nodos HTTP, cada uno
-   con una de las 3 credenciales `supabaseApi` existentes (`Supabase account`,
-   `Supabase account 2`, `Supabase account 3`), todos pegandole a
-   `GET https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/organizations`. `Supabase
-   account 2` y `3` devolvieron los **9 mismos registros, mismos `id` (cuid) y mismo
-   `createdAt` al milisegundo** que la query por Postgres — no "se parecen", son la
-   misma tabla.
-3. Los propios docs de `onia-platform` lo confirman: `docs/CREDENTIALS_GUIDE.md`
-   lista `Project ref: kvepqgikokjlacxngkiw` como el proyecto de `DATABASE_URL`/
-   `DIRECT_URL` (y el callback de Google OAuth de la app en produccion apunta a ese
-   mismo proyecto). `docs/SUPABASE_SELFHOST_MIGRATION_PLAN.md` (2026-06-29/30)
-   describe `dentalgest-staging-supabase-*` como un **stack de staging dedicado,
-   creado para ensayar una migracion self-host que nunca se cerro**: dice
-   explicitamente *"No se migraron datos productivos"* y deja el corte
-   (`DATABASE_URL`/`DIRECT_URL` apuntando al self-host) como accion pendiente. Osea:
-   ese contenedor es una foto restaurada una vez (30-jun-2026), no donde escribe la
-   app hoy.
+1. Primer intento: usar la credencial `Postgres account` (`2P4w95n0vir90EkT`) ya
+   cargada en n8n, asumiendo que apuntaba al VPS. **Mal.** Esa credencial resulto
+   apuntar a Supabase Cloud (`kvepqgikokjlacxngkiw`, IPv6 en bloque AWS, Postgres
+   17.6 aarch64/Graviton, `org_count=9`) — un proyecto cloud verificado por cruce
+   con la REST API publica (mismos `id`/`createdAt` exactos), pero que **no es donde
+   escribe la app real**. La confusion vino de docs viejos de `onia-platform`
+   (`CREDENTIALS_GUIDE.md`, `SUPABASE_SELFHOST_MIGRATION_PLAN.md` del 29/30-jun) que
+   describian el plan de migracion self-host **antes del corte** — el corte ya se
+   hizo despues y esos docs quedaron desactualizados.
+2. **Verificacion real, hecha desde el propio VPS (por el dueño del producto):**
+   registro de organizaciones **entrando por `https://app.onia.com.bo/register`**
+   (la app en vivo) y las encontro en el contenedor `dentalgest-staging-supabase-db`
+   del VPS (a pesar del nombre "staging", es la base que la app usa hoy) — no en la
+   nube. Dato irrefutable: una organizacion con `verticalTrackId=ganadero-offline`
+   (rubro encendido en el codigo ESE MISMO DIA) aparecio ahi y en ningun otro lado.
+3. Se repitio la identificacion **contra esa base real**: `org_count=17`, con
+   `ZZ QA Estancia Ganadero | ZZ QA clinico | ZZ QA comercio | ZZ QA administracion |
+   ...` entre los nombres — coincide exacto con lo reportado. `inet_server_port()=55329`
+   (Postgres, dentro del contenedor, escucha en 55329, no en el 5432 por defecto).
 
-**Conclusion:** `Postgres account` SI apunta a produccion real (Supabase Cloud
-`kvepqgikokjlacxngkiw`, el mismo proyecto que usa `WF-02` y el que declara
-`CREDENTIALS_GUIDE.md`). No hizo falta crear una credencial nueva. La prueba
-funcional completa (mas abajo) se repitio una segunda vez, en limpio, ya con esta
-identificacion confirmada.
+**Por que `Postgres account` no la alcanzaba y como se resolvio:** el n8n del VPS
+corre como servicio Docker Swarm (`n8n-sergio_n8n`) en las redes `easypanel` /
+`easypanel-n8n-sergio`; el stack Supabase de DentalGest (`dentalgest-staging-supabase-*`,
+red `dentalgest-staging-supabase_default`, driver `bridge` local) es una red aparte —
+por eso el host del contenedor no resolvia (`Host not found`). Se conecto el
+contenedor de n8n a esa red (`docker network connect dentalgest-staging-supabase_default
+n8n-sergio_n8n...`, no destructivo, solo agrega una interfaz de red mas) y se creo una
+credencial n8n nueva, **`Postgres VPS (dentalgest-staging)`** (id `ecF3x3SGUrT0hBbm`),
+con los mismos datos de conexion que usa la app real (`DIRECT_URL` de
+`/opt/onia-platform/app.env`: host `dentalgest-staging-supabase-pooler`, puerto `5432`,
+usuario `postgres.your-tenant-id`) — la contraseña se leyo una sola vez por SSH para
+crear la credencial y no quedo en ningun archivo del repo ni del scratchpad.
+**Nota de infraestructura pendiente:** la conexion de red se hizo a mano sobre el
+contenedor en ejecucion; si Easypanel redespliega el servicio de n8n, hay que
+reconectarlo (`docker network connect dentalgest-staging-supabase_default <contenedor
+n8n>`) o agregarlo de forma persistente en la config del stack.
+
+**Conclusion final: `Postgres account` (cloud) NO sirve para este workflow.** El
+workflow usa `Postgres VPS (dentalgest-staging)`, contra la base real (17
+organizaciones, confirmado). La prueba funcional completa (mas abajo) se corrio
+contra esta base.
 
 **Sin duplicados: tabla de vistos, no "probablemente no pase".** Antes de cada
 `SELECT`, un nodo Postgres corre `CREATE SCHEMA IF NOT EXISTS n8n_ops; CREATE TABLE
@@ -261,48 +268,46 @@ item para esto).
 | 4 | `Avisar a Sergio (Telegram)` | `telegram` sendMessage | Credencial `Telegram account` (`r8y2CN5RyOEIDce3`), chat `6830070978` hardcodeado. Clinica, pagador, plan, monto, banco, ref, comprobante y link a `/admin/payments` |
 | 5 | `Marcar aviso enviado` | `postgres` executeQuery | `INSERT ... ON CONFLICT DO NOTHING` referenciando `$('Pagos QR pendientes sin avisar').item.json.id` |
 
-Credenciales reusadas (cero secretos nuevos): `Postgres account` (postgres, nodos
-2/3/5) y `Telegram account` (telegramApi, nodo 4) — ambas ya existian en n8n antes de
-esta sesion.
+Credenciales: `Postgres VPS (dentalgest-staging)` (id `ecF3x3SGUrT0hBbm`, postgres,
+nodos 2/3/5 — **nueva, creada en esta sesion**, ver justificacion arriba) y
+`Telegram account` (telegramApi, nodo 4 — ya existia, reusada tal cual).
 
-**Prueba real end-to-end (2026-08-14), no simulada:**
+**Prueba real end-to-end contra la base correcta (2026-08-14), no simulada:**
 
-1. Antes: `subscription_payments` tenia 1 fila historica (`REJECTED`,
-   2026-06-03, org demo) — 0 en `PENDING`. Ejecucion manual: `SELECT` devuelve 0
-   items, nodos 4/5 no corren (comportamiento correcto, sin `alwaysOutputData`).
-2. Insert de prueba: fila `PENDING` real en `subscription_payments`
-   (`id=test-payalert-telegram-check-001`, org `org-demo-001` "Clínica Dental Demo",
-   monto 320.00, banco BNB).
-3. Ejecucion manual del workflow: Telegram respondio `ok:true`,
-   `message_id:1606`, `chat:{id:6830070978,first_name:"Sergio",last_name:"Urcullo"}`
-   — mensaje real entregado al chat de Sergio. El `INSERT` de marcado corrio despues,
-   `success:true`.
-4. Segunda ejecucion inmediata (mismo minuto): `SELECT` devuelve 0 items — el pago de
-   prueba ya estaba en `n8n_ops.payment_alerts_sent`, **no se mando un segundo
-   mensaje**. Dedup verificado en vivo, no por inspeccion de codigo.
-5. Limpieza: `DELETE` de la fila de prueba en `subscription_payments` y de su
-   entrada en `n8n_ops.payment_alerts_sent`. Verificado con `COUNT(*)=0` en ambas
-   tablas para ese id; la fila historica `REJECTED` sigue intacta (total
-   `subscription_payments=1`).
+1. Antes: `SELECT count(*) FROM organizations` = 17 (confirma la base). 0 filas
+   `PENDING` en `subscription_payments`.
+2. Insert de prueba: fila `PENDING` real (`id=test-payalert-vps-003`, org
+   `ZZ QA clinico`, monto 320.00, banco BNB) — la misma query trajo `org_count=17`
+   pegado a la fila insertada, para dejar la identidad de la base atada a la prueba.
+3. Ejecucion manual del workflow: Telegram respondio `ok:true`, `message_id:1608`,
+   `chat:{id:6830070978,first_name:"Sergio",last_name:"Urcullo"}` — mensaje real
+   entregado. El `INSERT` de marcado corrio despues, `success:true`.
+4. Segunda ejecucion inmediata: `SELECT` devuelve `[]` — el pago ya estaba en
+   `n8n_ops.payment_alerts_sent` (creada de cero en esta base), **no se mando un
+   segundo mensaje**.
+5. Limpieza: `DELETE` de la fila de prueba y de su entrada en
+   `n8n_ops.payment_alerts_sent`. Verificado: `payment_row=0, tracking_row=0,
+   total_pending=0, org_count=17`.
 
-Workflow publicado (`publish_workflow`) recien despues de que la prueba salio bien,
-segun la regla dura de aprobacion/dry-run antes de activar.
+Workflow publicado (`publish_workflow`) recien despues de que esta prueba salio bien.
 
-**Segunda pasada (2026-08-14, mismo dia), repetida completa a pedido explicito tras
-la verificacion de identidad de base de arriba:** mismo ciclo, otro id de prueba
-(`test-payalert-check-002`) para no chocar con el primero. El INSERT trajo
-`db=postgres, org_count=9` en la misma fila devuelta (mismo fingerprint que la
-seccion de arriba). Ejecucion → Telegram `ok:true, message_id:1607,
-chat:{id:6830070978,"Sergio","Urcullo"}`. Segunda ejecucion inmediata → `SELECT`
-devuelve `[]`, no hay segundo mensaje. Limpieza → `payment_row=0, tracking_row=0,
-total_payments=1, total_pending=0`. Mismo resultado que la primera pasada; la unica
-diferencia es que esta vez la identidad de la base quedo probada, no supuesta.
+**Nota historica (no borrar, para que no se repita el error):** antes de esto se
+corrieron dos "pruebas completas" (`message_id` 1606 y 1607) contra la credencial
+`Postgres account` — Telegram tambien las entrego, pero estaban corriendo contra
+Supabase Cloud (`kvepqgikokjlacxngkiw`, `org_count=9`), **no la base donde escribe la
+app real**. Que el mensaje de Telegram llegue no prueba que la base sea la correcta;
+lo unico que prueba eso es el conteo de organizaciones (o un dato equivalente,
+verificable independientemente) contra el numero real que reporta quien tiene acceso
+directo al VPS.
 
 **No verificado:** no se confirmo en produccion el error exacto `535` del SMTP de
-Brevo (no hay acceso a las env vars de runtime de `onia-platform` en Vercel/VPS desde
+Brevo (no hay acceso a las env vars de runtime de `onia-platform` en Vercel desde
 este carril) — se tomo como dato de entrada del pedido. Tampoco se confirmo si
 `WF-02`/Gmail efectivamente le llega a alguien: solo se confirmo que el `SELECT`
-corre y devuelve `[]` (no hubo pagos reales que probaran el envio de Gmail).
+corre y devuelve `[]` (no hubo pagos reales que probaran el envio de Gmail). `WF-02`
+sigue usando la RPC de Supabase Cloud (`kvepqgikokjlacxngkiw`) sin tocar — si esa
+tambien deberia apuntar al VPS es una pregunta abierta, fuera del alcance de esta
+sesion.
 
 ## Scripts de ops (en el VPS bajo /opt/onia/)
 
