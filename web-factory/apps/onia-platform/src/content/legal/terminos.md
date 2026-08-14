@@ -11,8 +11,7 @@ updatedAt: "2026-07-25"
 # Términos y Condiciones de Uso — Plataforma Onia
 
 Estos Términos regulan el uso de la plataforma de software de gestión **Onia**
-(operada por **OniaAgency** [REVISAR ABOGADO: confirmar razón social exacta, NIT y
-domicilio legal], Santa Cruz de la Sierra, Estado Plurinacional de Bolivia).
+(operada por **OniaAgency**, NIT 5371375010,, Santa Cruz de la Sierra, Estado Plurinacional de Bolivia).
 Documento complementario: la [Política de Privacidad](/privacidad).
 
 Al crear una cuenta, contratar un plan o usar la plataforma, aceptás estos
@@ -53,8 +52,7 @@ correspondiente, y a que vos cumplás tus requisitos como contribuyente (NIT
 activo, modalidad habilitada, credenciales vigentes). Mientras esa homologación
 no esté vigente, la plataforma solo **prepara** la información de tus ventas —
 no emite facturas en tu nombre. El portal web gratuito del SIN está siempre
-disponible para emitir tus facturas directamente. [REVISAR ABOGADO: estado de
-homologación al momento de publicar.]
+disponible para emitir tus facturas directamente.
 
 ## 2. Tu cuenta y tu responsabilidad
 
@@ -79,8 +77,7 @@ entre los que ofrece tu plan: **semanal, mensual o anual** (el ciclo semanal no
 está disponible en todos los planes). El medio es **pago QR** u otro que Onia
 habilite y comunique. El acceso al período se habilita una vez confirmado el
 pago. Onia emite el documento que corresponda conforme a la normativa boliviana
-aplicable. [REVISAR ABOGADO: texto exacto de facturación según modalidad
-vigente.]
+aplicable.
 
 3.3. **Renovación.** Al vencer cada período, el servicio se renueva por un
 período igual al precio vigente. Onia envía el aviso de renovación con
@@ -99,8 +96,6 @@ se confirma al vencimiento:
   eliminar cualquier dato aplican el derecho de exportación (§4.2) y los plazos
   de retención de la Política de Privacidad.
 
-[REVISAR ABOGADO: plazos exactos de gracia, suspensión y terminación por mora.]
-
 3.5. **Ajuste de precios.** Por la volatilidad cambiaria e inflacionaria, los
 precios en Bs no son fijos de por vida — en especial los precios de
 lanzamiento. Onia puede ajustar los precios **como máximo una vez por
@@ -110,8 +105,7 @@ por el **Banco Central de Bolivia (BCB)**, y (b) el **Índice de Precios al
 Consumidor** publicado por el **Instituto Nacional de Estadística (INE)**. Todo
 ajuste se avisa con al menos **30 días** de anticipación y rige recién desde la
 **siguiente renovación** (nunca dentro de un período ya pagado). Si no aceptás
-el nuevo precio, podés no renovar sin penalidad. [REVISAR ABOGADO: mecánica y
-exigibilidad de la cláusula de ajuste indexada.]
+el nuevo precio, podés no renovar sin penalidad.
 
 3.6. **Costos de terceros excluidos.** Salvo pacto expreso, no están incluidos en
 el precio: dominio y hosting web del cliente, comisiones de pasarelas de pago,
@@ -197,9 +191,6 @@ contrato, sin perjuicio de las acciones legales que correspondan.
 
 ## 9. Limitación de responsabilidad
 
-[REVISAR ABOGADO: validar alcance y tope de esta cláusula frente a la normativa
-boliviana de protección al consumidor.]
-
 9.1. El servicio se presta "tal cual" y "según disponibilidad", con el alcance de
 los §1 y §7. En la máxima medida permitida por la ley boliviana:
 
@@ -253,7 +244,7 @@ ABOGADO: evaluar cláusula de conciliación/arbitraje como alternativa.]
 
 ## 14. Contacto
 
-[REVISAR ABOGADO / COMPLETAR: correo oficial y teléfono/WhatsApp de contacto.]
+Correo: **business@onia.com.bo** · WhatsApp: **+591 75414930**.
 Santa Cruz de la Sierra, Estado Plurinacional de Bolivia.
 
 ---
