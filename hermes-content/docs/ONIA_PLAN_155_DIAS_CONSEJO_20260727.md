@@ -1,3 +1,7 @@
+> ⚠️ **SUPERADO.** El estado vigente esta en `hermes-content/docs/ONIA_ESTADO_REAL_20260813.md`
+> y la apuesta vigente en `docs/platform/ONIA_DECISION_SAAS_CONSULTORIA_20260813.md`.
+> Este documento se conserva como historia: NO tomes decisiones con el.
+
 # Onia — Plan de 155 días (30-jul → 31-dic-2026): crítica y rediseño
 
 > 2026-07-27. Sergio pidió un consejo directivo (CEO, CTO, PM, arquitecto, creador de

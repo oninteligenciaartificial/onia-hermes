@@ -1,3 +1,7 @@
+> ⚠️ **SUPERADO.** El estado vigente esta en `hermes-content/docs/ONIA_ESTADO_REAL_20260813.md`
+> y la apuesta vigente en `docs/platform/ONIA_DECISION_SAAS_CONSULTORIA_20260813.md`.
+> Este documento se conserva como historia: NO tomes decisiones con el.
+
 # ONIA — Estado real del sistema dental (auditoría de código, 2026-07-27)
 
 > Auditoría de **solo lectura** sobre `C:\dev\proyectos\DentaGest\dental-saas`

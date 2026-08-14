@@ -1,3 +1,7 @@
+> ⚠️ **SUPERADO.** El estado vigente esta en `hermes-content/docs/ONIA_ESTADO_REAL_20260813.md`
+> y la apuesta vigente en `docs/platform/ONIA_DECISION_SAAS_CONSULTORIA_20260813.md`.
+> Este documento se conserva como historia: NO tomes decisiones con el.
+
 # Onia Center - Plan del Jarvis (construcción) 2026-07-20
 
 Estado: orden de construcción para dejar el Onia Center operativo como el "Jarvis".

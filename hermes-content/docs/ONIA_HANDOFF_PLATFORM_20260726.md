@@ -1,3 +1,7 @@
+> ⚠️ **SUPERADO.** El estado vigente esta en `hermes-content/docs/ONIA_ESTADO_REAL_20260813.md`
+> y la apuesta vigente en `docs/platform/ONIA_DECISION_SAAS_CONSULTORIA_20260813.md`.
+> Este documento se conserva como historia: NO tomes decisiones con el.
+
 # Handoff → Sesión Onia Platform (2026-07-26)
 
 > De: sesión **ONIA System** (rama `claude/onia-colaboradores-sin-inversion-d69b19`).

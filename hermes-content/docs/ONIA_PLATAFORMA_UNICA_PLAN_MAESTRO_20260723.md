@@ -1,3 +1,7 @@
+> ⚠️ **SUPERADO.** El estado vigente esta en `hermes-content/docs/ONIA_ESTADO_REAL_20260813.md`
+> y la apuesta vigente en `docs/platform/ONIA_DECISION_SAAS_CONSULTORIA_20260813.md`.
+> Este documento se conserva como historia: NO tomes decisiones con el.
+
 # Plan Maestro — Plataforma Única ONIA (DISPATCH-READY)
 
 > **Carril I (research/estrategia).** Fecha: 2026-07-23. Handoff para el onia-orchestrator.
