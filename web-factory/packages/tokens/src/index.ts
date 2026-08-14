@@ -51,17 +51,65 @@ export function clientTokenVars(client: ClientTokenInput): Record<string, string
  * (muted, border, input, muted-foreground) re-resolves automatically in the
  * dark scope thanks to lazy var() substitution, and brand colors stay intact.
  */
-export function clientDarkTokenVars(): Record<string, string> {
-  return {
-    "--color-bg": "#0c1013",
-    "--color-fg": "#e7e9ec",
-    "--background": "#0c1013",
-    "--foreground": "#e7e9ec",
+const DARK_BG = "#0c1013";
+const DARK_FG = "#e7e9ec";
+
+/**
+ * Tokens del modo oscuro.
+ *
+ * OJO — el bug que esto arregla: antes solo se cambiaban bg/fg/card/popover, y
+ * `--color-secondary` / `--color-primary` se quedaban con el valor de la marca
+ * pensado para fondo CLARO. En 5 de las 11 fichas de cliente el `secondary` ES
+ * el `fg` (un azul casi negro, #0f172a), asi que en oscuro los titulos salian
+ * negro sobre negro: contraste **1,05:1**, texto invisible en un sitio de
+ * cliente publicado. La plantilla `landing` colorea con `--color-secondary` los
+ * titulos de features, proof y proceso.
+ *
+ * Ahora la marca se respeta MIENTRAS se lea; si no alcanza el contraste sobre el
+ * fondo oscuro, ese token cae al color de texto del modo oscuro. No se aplana el
+ * diseno de los clientes cuyo color SI se lee.
+ */
+export function clientDarkTokenVars(client?: ClientTokenInput): Record<string, string> {
+  const base: Record<string, string> = {
+    "--color-bg": DARK_BG,
+    "--color-fg": DARK_FG,
+    "--background": DARK_BG,
+    "--foreground": DARK_FG,
     "--card": "#161c22",
-    "--card-foreground": "#e7e9ec",
+    "--card-foreground": DARK_FG,
     "--popover": "#161c22",
-    "--popover-foreground": "#e7e9ec",
+    "--popover-foreground": DARK_FG,
   };
+  if (!client) return base;
+
+  // 4.5:1 es el minimo de WCAG AA para texto normal.
+  const legible = (color: string) => contrastRatio(color, DARK_BG) >= 4.5;
+  if (!legible(client.colores.secondary)) {
+    base["--color-secondary"] = DARK_FG;
+    base["--secondary"] = DARK_FG;
+    base["--secondary-foreground"] = DARK_BG;
+  }
+  if (!legible(client.colores.primary)) {
+    base["--color-primary"] = DARK_FG;
+    base["--primary"] = DARK_FG;
+    base["--primary-foreground"] = DARK_BG;
+  }
+  return base;
+}
+
+/** Contraste WCAG entre dos colores hex (1 = identicos, 21 = negro sobre blanco). */
+function contrastRatio(hexA: string, hexB: string): number {
+  const lum = (hex: string) => {
+    const canal = (valor: number) => {
+      const s = valor / 255;
+      return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+    };
+    const [r, g, b] = hexToRgb(hex);
+    return 0.2126 * canal(r) + 0.7152 * canal(g) + 0.0722 * canal(b);
+  };
+  const a = lum(hexA);
+  const b = lum(hexB);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
 
 export function clientTokenCss(client: ClientTokenInput, selector = ":root"): string {
@@ -77,10 +125,10 @@ export function clientTokenCss(client: ClientTokenInput, selector = ":root"): st
     return light;
   }
 
-  const darkAuto = Object.entries(clientDarkTokenVars())
+  const darkAuto = Object.entries(clientDarkTokenVars(client))
     .map(([name, value]) => `    ${name}: ${value};`)
     .join("\n");
-  const darkManual = Object.entries(clientDarkTokenVars())
+  const darkManual = Object.entries(clientDarkTokenVars(client))
     .map(([name, value]) => `  ${name}: ${value};`)
     .join("\n");
 

@@ -36,3 +36,32 @@ describe("clientTokenCss dark variant", () => {
     expect(dark).not.toHaveProperty("--color-accent");
   });
 });
+
+describe("modo oscuro: la marca no puede volverse invisible", () => {
+  const clinica = {
+    colores: { primary: "#0ea5e9", secondary: "#0f172a", accent: "#22d3ee", bg: "#ffffff", fg: "#0f172a" },
+    tipografia: { heading: "Onest", body: "Onest" },
+  };
+
+  it("un secondary casi negro se reemplaza en oscuro (era 1,05:1 = invisible)", () => {
+    const dark = clientDarkTokenVars(clinica);
+    expect(dark["--color-secondary"]).toBe("#e7e9ec");
+    expect(dark["--secondary"]).toBe("#e7e9ec");
+  });
+
+  it("una marca que SI se lee sobre oscuro se respeta, no se aplana", () => {
+    const legible = {
+      ...clinica,
+      colores: { ...clinica.colores, secondary: "#f5c542", primary: "#f5c542" },
+    };
+    const dark = clientDarkTokenVars(legible);
+    expect(dark["--color-secondary"]).toBeUndefined();
+    expect(dark["--color-primary"]).toBeUndefined();
+  });
+
+  it("el CSS emitido lleva el arreglo al bloque oscuro", () => {
+    const css = clientTokenCss(clinica);
+    const bloqueOscuro = css.slice(css.indexOf("prefers-color-scheme"));
+    expect(bloqueOscuro).toContain("--color-secondary: #e7e9ec");
+  });
+});
