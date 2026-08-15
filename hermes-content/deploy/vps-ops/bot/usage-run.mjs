@@ -222,11 +222,19 @@ export const AVISO_TECHO =
  * Por eso el aviso dice "por Chatwoot" y no "un humano" a secas: en Telegram el traspaso se marca
  * con un PATCH directo a `bot_conversations` (N8N_WORKFLOW.md §6), sin turno y sin fila. Ahi no hay
  * plata en juego (Telegram no lo cobra Meta), pero afirmar de mas es como se factura mal.
+ *
+ * EL TERCER HUECO, el del follow-up: ese barrido MANDA antes de registrar (tiene su propia reserva
+ * con CAS, followup-run.mjs regla 3), asi que un insert caido deja un mensaje que Meta cobra y que
+ * aca no existe. Ya no muere en silencio: el insert se reintenta y, si ni asi entra, el barrido
+ * grita con la nota `envio_sin_fila` y un warning que nombra la conversacion. Lo que NO se puede es
+ * recuperarlo desde aca un mes despues — de ahi que el aviso lo diga y apunte a donde mirar.
  */
 export const AVISO_HUECO =
   "Y a la vez PISO: lo que se manda a mano POR CHATWOOT si se cuenta, pero solo si " +
   "CHATWOOT_BOT_AGENT_ID esta configurado — sin eso el traspaso no deja fila. En Telegram el " +
-  "traspaso se marca con un PATCH y NUNCA deja fila, asi que ahi la bandeja sigue sin medirse.";
+  "traspaso se marca con un PATCH y NUNCA deja fila, asi que ahi la bandeja sigue sin medirse. " +
+  "Y un follow-up que salio pero cuyo insert fallo tampoco deja fila: buscá la nota " +
+  "`envio_sin_fila` en el JSON de followup-run del mes.";
 
 /**
  * USD de UN mensaje. `null` = no hay tarifa conocida (no se inventa; se cuenta aparte).
