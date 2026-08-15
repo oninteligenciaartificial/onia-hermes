@@ -17,6 +17,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { createHmac } from "node:crypto";
 import { once } from "node:events";
 
@@ -178,6 +179,34 @@ test("BASE COLGADA: el chequeo corta solo y /health contesta igual (nunca se que
   assert.equal(db.ok, false);
   assert.match(db.error, /sin respuesta/);
   assert.ok(Date.now() - inicio < 3000, "el chequeo tiene que cortar por su reloj, no por el del socket");
+});
+
+test("BASE COLGADA en un proceso PELADO: el reloj del chequeo se sostiene SOLO", () => {
+  // El test de arriba corre dentro del runner, que segun la version de Node puede tener handles
+  // propios vivos y prestarle el event loop al reloj del chequeo. Este levanta un proceso sin NADA
+  // mas en vuelo, asi que el reloj tiene que sostenerse solo: si el timer estuviera `unref`, el
+  // loop se vaciaria antes de los timeoutMs y el proceso saldria MUDO, sin resolver nunca.
+  //
+  // Es exactamente la falla que dejaba 18 de 23 pruebas canceladas en el contenedor (Node 20)
+  // mientras en la maquina de desarrollo (Node 24) todo daba verde: el runner de Node 24 mantiene
+  // un handle referenciado y tapaba el agujero. Este test lo destapa en CUALQUIER version.
+  const script = `
+    import { checkDatabaseHealth } from ${JSON.stringify(new URL("./webhook-server.mjs", import.meta.url).href)};
+    const mudo = { warnings: [], loadConversation: () => new Promise(() => {}) };
+    process.stdout.write(JSON.stringify(await checkDatabaseHealth({ store: mudo, timeoutMs: 40 })));
+  `;
+  const hijo = spawnSync(process.execPath, ["--input-type=module", "-e", script], {
+    encoding: "utf8",
+    timeout: 15_000,
+  });
+
+  assert.ok(
+    hijo.stdout,
+    `el proceso salio sin escribir nada: el chequeo nunca resolvio (status=${hijo.status} stderr=${hijo.stderr})`,
+  );
+  const db = JSON.parse(hijo.stdout);
+  assert.equal(db.ok, false);
+  assert.match(db.error, /sin respuesta/);
 });
 
 test("si el chequeo de base EXPLOTA, /health responde igual (nunca tumba el proceso)", async () => {
@@ -458,11 +487,26 @@ test("HTTP REAL: el servidor contesta aunque n8n este COLGADO, y dispara el even
 });
 
 test("HTTP REAL: /health responde sin auth y firma invalida da 401 por la red", async () => {
+  // La base se sustituye en el STORE, no en el chequeo: asi corre la cadena COMPLETA de verdad
+  // (handler -> getHealthStatus -> checkDatabaseHealth -> store) y lo unico simulado es la hoja
+  // de red. Antes este test daba por hecho que la maquina NO tenia credenciales de Supabase; en
+  // el contenedor de produccion si las tiene, la lectura salia bien y el test se caia por el
+  // ENTORNO, no por el codigo.
+  const leidas = [];
+  const storeCaido = {
+    warnings: ["loadConversation: faltan credenciales de Supabase"],
+    loadConversation: async (clave) => {
+      leidas.push(clave);
+      return null;
+    },
+  };
+
   const server = createWebhookServer({
     config: CONFIG,
     n8nConfig: { enabled: false },
     runChatwootTurn: motorMock(),
     nowMs: NOW_MS,
+    store: storeCaido,
     log: () => {},
   });
 
@@ -477,8 +521,10 @@ test("HTTP REAL: /health responde sin auth y firma invalida da 401 por la red", 
     assert.equal(estado.service, "onia-chatbot-webhook");
     assert.equal(estado.auth.firma, true);
     assert.ok(!JSON.stringify(estado).includes(SECRET));
-    // Sin credenciales de Supabase en el entorno de test, el chequeo real reporta la base caida:
-    // eso prueba el cableado completo por HTTP (handler -> getHealthStatus -> store).
+    // /health tiene que PEGARLE a la base por HTTP. El hueco que costo cinco dias en agosto 2026
+    // fue exactamente un /health que se declaraba sano sin leer nada: si esta cuenta da 0, el
+    // chequeo volvio a ser indirecto y la alarma vuelve a no sonar.
+    assert.equal(leidas.length, 1, "el chequeo real tiene que llegar hasta el store, no deducirse");
     assert.equal(estado.db.ok, false);
     assert.match(estado.db.error, /credenciales/);
     assert.equal(estado.ok, false, "el bot no puede reportarse sano si no puede guardar nada");
