@@ -3,25 +3,33 @@ import { APP_URL, WA_URL_LANDING } from "@/lib/site";
 import styles from "./landing.module.css";
 
 /**
- * Honestidad — era una seccion entera con la tabla de 4 competidores; ahora es
- * UNA card de tres lineas sobre tinta. La tabla vive en /comparativa: es el
- * bloque mas denso del sitio y solo lo lee quien ya esta comparando.
+ * Garantia — la card sobre tinta que contesta el miedo real de quien no nos
+ * conoce ("¿y si no me sirve?") con lo unico que lo cubre: probás antes de
+ * pagar, salís cuando querés y los datos te los llevás.
  *
- * Lo que NO se toca: cero clientes y la factura en tramite se dicen primero,
- * antes de comprar. Es el diferencial, no un descargo.
+ * Regla al editar: NADA de prueba inventada (clientes, cifras, testimonios,
+ * logos). Y tampoco al reves: el estado de la factura fiscal y lo que el
+ * sistema todavia no hace no se borran del sitio — viven donde se decide la
+ * compra (preguntas frecuentes, precios y /comparativa), dichos como estado.
  */
-export function Honesty() {
+export function Garantia() {
   return (
     <section className={`${styles.section} ${styles.secTinta} ${styles.onDark}`}>
       <div className={styles.container}>
         <Reveal className={styles.honest}>
-          <h2>Somos nuevos en el mercado boliviano. Te lo decimos primero.</h2>
+          <h2>Probalo 14 días antes de decidir. Sin tarjeta.</h2>
           <ul>
-            <li>Cero clientes pagando todavía: serías de los primeros.</li>
-            <li>Nuestra factura fiscal está en trámite ante el SIN.</li>
             <li>
-              Por eso probás primero y pagás después: 14 días gratis, sin
-              tarjeta y sin contrato de permanencia.
+              Entrás, elegís tu rubro y usás el sistema completo: 14 días
+              gratis, sin poner un peso ni dejar una tarjeta.
+            </li>
+            <li>
+              Sin contrato de permanencia: pagás el ciclo que elijas y dejás de
+              renovar cuando quieras, sin penalidad.
+            </li>
+            <li>
+              Tus datos son tuyos: los exportás en CSV cuando quieras, no los
+              vendemos y no entrenamos modelos de IA con ellos.
             </li>
             <li>
               <a href="/comparativa">Ver la comparación completa →</a>

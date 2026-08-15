@@ -5,7 +5,7 @@ import { Hero } from "@/components/landing/hero";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { Features } from "@/components/landing/features";
 import { Pricing } from "@/components/landing/pricing";
-import { Closing, Honesty } from "@/components/landing/closing";
+import { Closing, Garantia } from "@/components/landing/closing";
 import { Faq, FAQS } from "@/components/landing/faq";
 import { BleedWordmark } from "@/motion";
 import { MobileBar } from "@/components/landing/mobile-bar";
@@ -116,12 +116,13 @@ const JSON_LD = {
  *   hero (promesa + una pantalla)
  *   -> como funciona (3 pasos, con la captura real del selector de rubro)
  *   -> modulos (carrusel de funciones, sobre verde hondo)
- *   -> precios (en bolivianos, con la letra chica plegada)
- *   -> honestidad (cero clientes y factura en tramite, sobre tinta)
+ *   -> precios (en bolivianos, con el estado fiscal a la vista)
+ *   -> garantia (14 dias sin tarjeta, sin permanencia, datos exportables)
  *   -> cierre.
  *
  * Lo denso que salio del home no se borro: la comparacion con la competencia
- * vive en /comparativa y la letra chica quedo plegada dentro de precios.
+ * (incluido lo que el sistema todavia NO hace) vive en /comparativa, el estado
+ * de la factura fiscal esta en precios y en las preguntas frecuentes.
  */
 export default function Home() {
   return (
@@ -144,7 +145,7 @@ export default function Home() {
         <HowItWorks />
         <Features />
         <Pricing />
-        <Honesty />
+        <Garantia />
         <Faq />
         <Closing />
         {/* Remate editorial: el nombre a escala descarada, cortado por el
