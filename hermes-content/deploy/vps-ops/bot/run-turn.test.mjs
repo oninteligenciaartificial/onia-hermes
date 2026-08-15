@@ -16,8 +16,10 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
+import { fileURLToPath } from "node:url";
 
 import { DEFAULT_CONFIG, slotsPending } from "./config.mjs";
+import { resetKnowledgeCache } from "./knowledge.mjs";
 import { buildConfig, resolveConfig } from "./run-turn.mjs";
 
 const T0 = "2026-07-27T14:05:00Z";
@@ -27,9 +29,16 @@ const LIVE_SLOTS = [
   { key: "B", label: "lun 27/07 16:00", startAt: "2026-07-27T20:00:00Z", pending: false },
 ];
 
-test("sin overrides, buildConfig(input) es el DEFAULT_CONFIG (placeholder): no clona, no llama a nadie", () => {
-  assert.equal(buildConfig({}), DEFAULT_CONFIG);
-  assert.ok(slotsPending(buildConfig({})), "sigue con el placeholder hasta que algo lo reemplace");
+test("sin overrides, buildConfig(input) no pisa NADA del transporte: sigue el placeholder", () => {
+  // Antes esto era `assert.equal(buildConfig({}), DEFAULT_CONFIG)` — un assert de IDENTIDAD que
+  // daba verde en Windows y ROJO dentro del contenedor de produccion, porque alli existe
+  // knowledge.json y `withKnowledge()` devuelve un objeto NUEVO. O sea: el verde local no probaba
+  // lo mismo que corre en el servidor. Lo que la prueba cuida de verdad es que sin `slots` ni
+  // `dry_run` del canal, el transporte no pise nada — y eso vale con archivo y sin archivo.
+  const config = buildConfig({});
+  assert.deepEqual(config.slots, DEFAULT_CONFIG.slots, "sin slots del canal, siguen los del codigo");
+  assert.equal(config.dryRun, DEFAULT_CONFIG.dryRun, "sin dry_run del canal, sigue el default");
+  assert.ok(slotsPending(config), "sigue con el placeholder hasta que algo lo reemplace");
 });
 
 test("resolveConfig: con slots explicitos en el turno, NO llama a Cal.com", async () => {
@@ -73,7 +82,8 @@ test("resolveConfig: sin ningun horario a mano, si Cal.com responde, esos 2 hora
 test("resolveConfig: si Cal.com no responde (slots: null), se cae al placeholder sin tirar", async () => {
   const getAvailableSlots = async () => ({ slots: null, source: "error", warnings: ["calcom: ECONNREFUSED"] });
   const config = await resolveConfig({ received_at: T0 }, { getAvailableSlots });
-  assert.equal(config, DEFAULT_CONFIG);
+  // Igual que arriba: lo que se cuida es que no se FABRIQUE un horario, no la identidad del objeto.
+  assert.deepEqual(config.slots, DEFAULT_CONFIG.slots, "no se inventa un horario porque Cal.com no conteste");
   assert.ok(slotsPending(config));
 });
 
@@ -82,4 +92,35 @@ test("resolveConfig: preserva el dry_run explicito del turno aunque Cal.com trai
   const config = await resolveConfig({ received_at: T0, dry_run: false }, { getAvailableSlots });
   assert.equal(config.dryRun, false);
   assert.deepEqual(config.slots, LIVE_SLOTS);
+});
+
+// ---------------------------------------------------------------------------
+// PARIDAD local / VPS — la grieta que hacia valer un verde que no valia
+// ---------------------------------------------------------------------------
+
+/**
+ * En el VPS existe `knowledge.json` (los hechos editables, fuera de git). En el repo NO existe a
+ * proposito. Cuatro pruebas comparaban IDENTIDAD contra DEFAULT_CONFIG y por eso pasaban aca y
+ * fallaban dentro del contenedor: `withKnowledge()` devuelve un objeto nuevo apenas hay archivo.
+ *
+ * Esta prueba fija las dos mitades del contrato de una vez, y corre igual en los dos lados porque
+ * apunta a `knowledge.example.json`, que SI esta versionado:
+ *   1. con archivo, la config del transporte (slots, dryRun) NO cambia — es lo que las 4 cuidan;
+ *   2. con archivo, la config YA NO es el mismo objeto — o sea, el assert de identidad no puede
+ *      volver. Si alguien lo reescribe, esta prueba lo demuestra sin tener que ir al VPS.
+ */
+test("PARIDAD: con knowledge.json el transporte no cambia, pero el objeto SI (por eso no se compara identidad)", () => {
+  process.env.ONIA_BOT_KNOWLEDGE_FILE = fileURLToPath(new URL("./knowledge.example.json", import.meta.url));
+  resetKnowledgeCache();
+  try {
+    const config = buildConfig({});
+    assert.deepEqual(config.slots, DEFAULT_CONFIG.slots, "el conocimiento editable no puede tocar los horarios");
+    assert.equal(config.dryRun, DEFAULT_CONFIG.dryRun, "ni el interruptor de 'manda de verdad'");
+    assert.ok(slotsPending(config));
+    assert.notEqual(config, DEFAULT_CONFIG, "con archivo es OTRO objeto: asi se rompian las 4 pruebas en el VPS");
+    assert.equal(config.identity.productName, "Onia", "y el archivo si se aplico (no es un falso positivo)");
+  } finally {
+    delete process.env.ONIA_BOT_KNOWLEDGE_FILE;
+    resetKnowledgeCache();
+  }
 });

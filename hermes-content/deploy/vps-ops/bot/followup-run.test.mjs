@@ -16,7 +16,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
+import { createBotConfig, DEFAULT_CONFIG, slotsPending } from "./config.mjs";
 import { createStore } from "./persistence.mjs";
 import {
   buildConfig,
@@ -642,7 +642,14 @@ test("parseSlotsSpec / buildConfig: los horarios entran por CLI o por env, sin i
     { key: "A", label: "jueves 15:00", startAt: "2026-07-30T19:00:00Z", pending: false },
     { key: "B", label: "viernes 10:00", startAt: null, pending: false },
   ]);
-  assert.equal(buildConfig({}), DEFAULT_CONFIG, "sin overrides no se clona el config");
+  // Lo que se cuida es que SIN overrides el transporte no pise NADA — no la identidad del objeto.
+  // El assert de identidad (`=== DEFAULT_CONFIG`) daba verde local y ROJO en el VPS: alli existe
+  // knowledge.json y `withKnowledge()` devuelve otro objeto. Ver la prueba de PARIDAD en
+  // run-turn.test.mjs: un verde que no vale es peor que un rojo.
+  const sinOverrides = buildConfig({});
+  assert.deepEqual(sinOverrides.slots, DEFAULT_CONFIG.slots, "sin overrides, los horarios siguen siendo el placeholder");
+  assert.equal(sinOverrides.dryRun, DEFAULT_CONFIG.dryRun, "y el dryRun sigue siendo el del codigo");
+  assert.ok(slotsPending(sinOverrides));
   assert.equal(buildConfig({ slots: "jueves 15:00|viernes 10:00" }).slots[0].label, "jueves 15:00");
 });
 
@@ -671,10 +678,12 @@ test("resolveConfig: sin --slots ni ONIA_BOT_SLOTS, si Cal.com responde reemplaz
   assert.deepEqual(config.slots, live);
 });
 
-test("resolveConfig: si Cal.com no responde, cae al DEFAULT_CONFIG (placeholder) sin tirar", async () => {
+test("resolveConfig: si Cal.com no responde, cae al placeholder sin tirar", async () => {
   const getAvailableSlots = async () => ({ slots: null, source: "error", warnings: ["calcom: caido"] });
   const config = await resolveConfig({}, { getAvailableSlots });
-  assert.equal(config, DEFAULT_CONFIG);
+  // Lo que importa es que NO se inventen horarios, no que sea el mismo objeto en memoria.
+  assert.deepEqual(config.slots, DEFAULT_CONFIG.slots, "no se fabrica un horario porque Cal.com no conteste");
+  assert.ok(slotsPending(config), "queda el placeholder, que es lo que frena el envio de M3");
 });
 
 test("skipReason nombra el motivo exacto (es lo que Sergio lee en el dry-run)", () => {
