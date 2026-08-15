@@ -319,12 +319,48 @@ Cifras externas citadas en las propuestas:
   · normativa oficial: https://www.impuestos.gob.bo/index.php/rnd-2026/
   **Verificar la RND y el grupo con la skill `onia-contabilidad-bolivia` antes de publicar.**
 
-## 6. Limitaciones de esta investigación
+## 6. El hero actual de Onia, medido contra el patrón
+
+Fuente: `web-factory/apps/onia-platform/src/components/landing/hero.tsx` (89 líneas).
+
+| Elemento | Texto actual |
+|---|---|
+| Kicker | "Onia Platform · hecho en Bolivia" |
+| Titular | "El sistema de gestión **con IA** para tu negocio en Bolivia." |
+| Subtítulo | "Agenda, clientes, cobros y agentes que trabajan 24/7 con tu aprobación. Una sola cuenta, un solo precio." |
+| CTA | "Probar gratis 14 días" (primario) · "Ver cómo funciona" (secundario) |
+| Chips | "Sin tarjeta" · "Migramos tus datos" · "Desde Bs 320/mes" |
+| Visual | Maqueta del panel (rotulada como maqueta en el código): agenda del día + una fila del agente Recall — "C. Vaca sin volver hace 6 meses — mensaje listo, falta tu OK" + módulos encendidos |
+
+**Diagnóstico contra la evidencia de este documento:**
+
+1. **El titular cae en la trampa de la categoría.** "El sistema de gestión con IA para tu negocio
+   en Bolivia" es estructuralmente el mismo titular que Defontana: "El sistema ERP con IA que
+   impulsa el crecimiento empresarial". Nombra la categoría y le agrega "IA" — exactamente el
+   patrón que la sección 3.3 identifica como escrito para Google, no para el dueño. No diferencia.
+2. **El valor real ya está escrito, pero en el segundo renglón.** "Agentes que trabajan 24/7 con
+   tu aprobación" es precisamente el hueco #1 que ningún competidor ocupa. Está en el subtítulo,
+   donde pesa menos. **La corrección más barata y de mayor impacto es subir esa idea al titular**
+   — que es lo que hace la Propuesta 1.
+3. **El visual ya gana.** La fila de Recall ("mensaje listo, falta tu OK") es el equivalente al
+   "¡Factura Autorizada!" de Facturación Fácil, y es más fuerte: muestra trabajo **ya hecho por
+   el sistema**, no un documento emitido por el humano. Ningún competidor de la lista tiene algo
+   así. **No tocarlo**; sólo reemplazar la maqueta por captura real cuando exista la cuenta demo.
+4. **El CTA ya está por encima del mercado.** "Probar gratis 14 días" + "Sin tarjeta" evita el
+   muro de vendedor que usan los cuatro bolivianos ("Solicitar Demo", "Cotiza ahora") y compite
+   de frente con Alegra (15 días) y Zoho One (30 días). Confirma que la Propuesta 4 es viable sin
+   cambiar producto.
+5. **"Desde Bs 320/mes" es la clase correcta de cifra**: de producto, verificable, sin depender
+   de clientes. Mantenerla.
+
+**Recomendación concreta**: mantener kicker, CTA, chips y visual como están; cambiar sólo el
+titular y ajustar el subtítulo. Las Propuestas 1 y 4 son las que menos tocan y más mueven.
+
+## 7. Limitaciones de esta investigación
 
 - Kraken (kraken.bo) y Bind ERP (bind.com.mx) no pudieron leerse completos: el primero es una SPA
   que no sirve contenido en el HTML, el segundo tiene un muro anti-bot. Para cerrarlos hace falta
   un navegador real (Chrome MCP o el skill `browse`).
 - Las cifras de los stats del hero de Clara se inyectan por JS y no están en el HTML capturado.
-- No se auditó el hero público actual de Onia: la landing de `onia-platform` no vive en este
-  worktree. Las propuestas se escribieron contra la competencia, no contra la versión vigente —
-  hay que compararlas con lo que está hoy en prod antes de decidir.
+- El hero actual se leyó del código fuente en este worktree, no de producción. Si prod está
+  adelante o atrás de esta rama, verificar antes de decidir.
