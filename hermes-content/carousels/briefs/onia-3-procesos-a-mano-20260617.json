@@ -10,7 +10,7 @@
     "#santacruz"
   ],
   "comment_trigger": "Comentá AUTO",
-  "cta": "Comentá SISTEMA",
+  "cta": "Guardalo",
   "slides": [
     {
       "number": 1,
@@ -70,13 +70,14 @@
     {
       "number": 6,
       "role": "cta",
-      "pill": "Empezá hoy",
+      "pill": "Guardalo",
       "headline": "Pedí tu *diagnóstico* gratis",
-      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve montado para tu negocio.",
+      "body": "*Guardalo* y arrancá por el primero. Ese solo ya te devuelve la semana.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte, acento verde en AUTO.",
       "alt_text": "Comentá AUTO para tu diagnóstico gratis"
     }
-  ]
+  ],
+  "job": "educacional"
 }

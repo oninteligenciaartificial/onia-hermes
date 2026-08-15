@@ -11,7 +11,7 @@
     "#emprender"
   ],
   "comment_trigger": "Comentá COSTO",
-  "cta": "Comentá LISTA",
+  "cta": "Guardalo",
   "slides": [
     {
       "number": 1,
@@ -88,14 +88,15 @@
     {
       "number": 7,
       "role": "cta",
-      "pill": "Empezá hoy",
+      "pill": "Guardalo",
       "headline": "Hacé la *cuenta* conmigo",
-      "body": "Comentá *LISTA* y te paso qué automatizar primero, con el costo de cada cosa.",
+      "body": "*Guardalo* y hacé la cuenta con tus números. El resultado suele doler.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte.",
       "alt_text": "Comentá COSTO",
       "bg": "hermes-content/assets/onia/heroes/costo-07.png"
     }
-  ]
+  ],
+  "job": "educacional"
 }
