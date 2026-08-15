@@ -248,6 +248,45 @@ servidor se cae, se puede reactivar y el bot vuelve a contestar por el camino le
 
 ---
 
+## 10.10 Alta de un cliente en Chatwoot (2026-08-15) — `chatwoot-onboard.sh`
+
+Dar de alta un cliente a mano en Chatwoot es una lista larga de clics, y el paso que siempre se
+olvida es invisible: **la membresía del inbox**. Un agente creado y asignado a la cuenta, pero sin
+fila en `inbox_members`, entra y ve la bandeja VACÍA — sin ningún error que lo explique.
+`chatwoot-onboard.mjs` hace el alta completa (agentes, inbox, membresías) y **audita el resultado**:
+si alguien quedaría sin bandejas, falla ruidoso en vez de reportar éxito.
+
+**Está desplegado en `/opt/onia/bot`** (2026-08-15, junto con su `.sh` y sus pruebas). Corre con el
+node del host, no dentro del contenedor: sólo habla HTTPS con Chatwoot y no necesita las
+credenciales de Supabase. El token de admin lo saca solo de la base de Chatwoot; nunca se imprime.
+
+Ver el plan sin escribir nada (así se prueba contra la instalación real):
+
+```bash
+bash /opt/onia/bot/chatwoot-onboard.sh --account-id 2 --inbox "Onia WhatsApp" --dry-run
+```
+
+Alta de verdad — `--dry-run` fuera y los agentes por argumento:
+
+```bash
+bash /opt/onia/bot/chatwoot-onboard.sh --account-id 2 --inbox "Ferretería X WhatsApp" \
+     --agent "Juan Pérez:juan@ferreteriax.bo"
+```
+
+Es idempotente: correrlo dos veces deja el mismo estado, no duplica nada y nunca borra membresías
+que ya estaban. Sale 0 si el alta quedó bien y 1 si no (se corre a mano; acá el problema es el
+fallo silencioso, no el reintento).
+
+**El único límite real: no puede CREAR cuentas.** Eso pide un token de "platform app" y
+`platform_apps` está vacía en esta instalación, así que la cuenta tiene que existir y se pasa con
+`--account-id` (hoy hay una sola: `2` = OnIA Agency). Todo el resto del alta —agentes, inbox,
+membresías y la auditoría final— funciona. Si algún día hace falta crear cuentas, se crea la
+platform app en Chatwoot y se exporta `CHATWOOT_PLATFORM_TOKEN`.
+
+**Recordatorio que el script imprime y conviene no ignorar:** quien ya esté logueado tiene que
+cerrar sesión y volver a entrar. Chatwoot cachea los permisos en la sesión, así que hasta que no
+vuelva a entrar sigue viendo la bandeja vacía aunque la membresía ya esté escrita.
+
 ---
 
 ## 0. Por qué Telegram y no WhatsApp
