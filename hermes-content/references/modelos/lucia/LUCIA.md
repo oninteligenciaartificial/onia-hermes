@@ -65,7 +65,7 @@ SANTA CRUZ      #B08246 ocre gastado · #4E8C87 turquesa descascarado · #2E2A26
 
 ⛔ `#00D26A` (verde ONIA) **no entra** en sus piezas.
 
-## 2. 🟡 DECISIÓN 1 — El ancla de la cara
+## 2. ✅ DECIDIDO — El ancla de la cara (Sergio, 2026-08-15)
 
 **Mirá `INVENTARIO-caras.jpg`, acá al lado.** Son las 6 caras de Lucía que hay en la cuenta,
 en ese orden.
@@ -75,14 +75,26 @@ en ese orden.
 | **1** | `452d8375-fb67-4df7-9ae0-8f1b257aa51f` | `lucia-ancla-2026-08` | Selfie de espejo, argolla de oro. Generada | ✅ **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
 | **2** | `902eeebb-89e9-4477-8426-c555b20f7ecc` | `lucia-surgical-anchor` | Photoshoot fondo blanco, sonrisa | ✅ La aprobaste el 7-jul. Salió 3ra |
 | **3** | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | `lucia-face-real-anchor` | Frame REAL del video, escalado 2K | ✅ **Verdad de terreno para QA.** No generar con ella |
-| 4 | `d5e323ef-4d0e-41bf-863e-ec30aede20ae` | `LUCIA-REAL-v2-clean` | Otro frame del MISMO video | ⛔ Redundante con la 3. Y su nombre está duplicado con el Soul |
-| 5 | `de586dbb-0cdd-4ca2-aaac-173d11741c86` | `lucia-face-element` | Otro frame del mismo video | ⛔ Ya marcada legacy en el catálogo |
-| 6 | `fdf4b740-829e-4923-9325-76914539ac0a` | `Lucia ONIA v1` | Selfie de baño, generada, sin descripción | ⛔ La más vieja, superada por la 1 |
+| 4 | `d5e323ef-4d0e-41bf-863e-ec30aede20ae` | `LUCIA-REAL-v2-clean` | Otro frame del MISMO video | ⛔ **FUERA** |
+| 5 | `de586dbb-0cdd-4ca2-aaac-173d11741c86` | `lucia-face-element` | Otro frame del mismo video | ⛔ **FUERA** |
+| 6 | `fdf4b740-829e-4923-9325-76914539ac0a` | `Lucia ONIA v1` | Selfie de baño, generada | ⛔ **FUERA** |
 
-**Recomiendo: quedarse con 1 (generar), 3 (QA) y 2 de respaldo. Borrar 4, 5 y 6.**
+> **Sergio, 2026-08-15, viendo las cuatro juntas: *"esas no se usan, no son consistentes."***
+> Quedan **1 para generar y 2 de respaldo**. Las posiciones 3, 4, 5 y 6 salen — incluida
+> `ced20cc2`, que hasta hoy era la referencia de QA.
 
-Las 3, 4 y 5 son frames del mismo video real — por eso salen con las mejillas rojas, y por eso
-el Soul entrenado con ellas produce piel enrojecida.
+Las 3, 4 y 5 eran frames del mismo video real: de ahí salían las mejillas rojas, y por eso el
+Soul entrenado con ellas produce piel enrojecida.
+
+### Las dos consecuencias de sacar `ced20cc2`
+
+1. **Cambia la vara de QA.** Ya no se compara contra el video real. La referencia pasa a ser el
+   **ancla aprobada `452d8375` + el banco aprobado**. Se gana consistencia y se pierde fidelidad
+   al material de origen — que es exactamente el trueque que Sergio eligió.
+2. **Baja la exposición del §9.** Toda la identidad dependía de frames de una persona real cuyo
+   permiso no está documentado. Al salir esos Elements, lo que queda como canon es una imagen
+   **generada y aprobada**, no el material de origen. No resuelve la pregunta del §9, pero
+   achica bastante el problema.
 
 ⛔ Soul `36305a9b` para primer plano: sale con la piel roja y además ignora el atuendo pedido.
 
@@ -226,8 +238,14 @@ slightly imperfect handheld framing, everyday vertical phone photo.
 
 ## 8. QA antes de aprobar
 
-Comparar contra `references/models/pecas-clean-v2/` (18 frames del video real): pecas, cejas,
-ojos, labios tienen que calzar. Es obligatoria — saltearla fue lo que dejó pasar 11 avatares
+**La vara es el ancla `452d8375` + el banco aprobado** (`posts-20260807/`,
+`prueba-realismo-20260815/`). Calzan pecas, cejas, ojos y labios, o la pieza no sale.
+
+⚠️ **Cambió el 2026-08-15.** Antes se comparaba contra `references/models/pecas-clean-v2/`
+(frames del video real). Sergio sacó esos Elements por inconsistentes, así que **el video real
+deja de ser la vara**. La carpeta se conserva como archivo histórico, no como referencia.
+
+La QA sigue siendo obligatoria pieza por pieza: saltearla fue lo que dejó pasar 11 avatares
 deformados.
 
 ## 9. 🔴 Pendiente que no es técnico
