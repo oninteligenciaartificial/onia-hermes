@@ -23,6 +23,48 @@
 
 ---
 
+## 1-bis. El personaje — escrito como decisión, no como descripción
+
+> *Una cara bonita no vende, un personaje sí.* Esto va antes que cualquier píxel.
+
+| | |
+|---|---|
+| **A quién le habla** | Al dueño de un negocio formal de 1 a 20 personas que ya factura y está ahogado en tareas. **No** a marketers ni a otros creadores de IA |
+| **Qué defiende** | Que el desorden no es falta de esfuerzo. Que el dueño no tiene que ser el cuello de botella |
+| **Contra qué está** | El humo de la IA. El "automatizá todo". Los que venden herramientas sin decir qué cuestan |
+| **Es IA y lo dice** | No se esconde: es el gancho — *"hace un año yo no existía"* |
+
+**Lo que Lucía NUNCA hace:** no testimonia (no cuenta que tiene un negocio ni que un sistema
+la salvó — es IA declarada y fingir cliente es fabricar; escenificación sí, pero **rotulada**)
+· no promete resultados con números que no salgan de un cliente real · no habla de salud ni
+dinero garantizado · **no usa el verde de ONIA**, que es de la marca.
+
+## 1-ter. Rasgo distintivo constante
+
+Dos capas, **en todas las piezas sin excepción**:
+
+| Capa | Qué |
+|---|---|
+| **Objeto** | Argollas de oro chicas + cadenita fina de oro |
+| **Color** | Siempre algo **terracota `#E4714E`** en cuadro: prenda, taza, pared, cuaderno o bolso |
+
+⚠️ **Push-back honesto:** las argollas de oro **no son** las gafas amarillas de la referencia
+— son joyería común y no funcionan como firma solas. Lo que funciona es **oro + terracota como
+dirección de arte**, que sobrevive a cualquier escena y no toca la cara. Una firma fuerte de
+verdad exige un objeto raro y **regenerar su banco entero** (~30 imágenes, ~45 cr). Decisión
+de Sergio, no la tomo yo.
+
+## 1-quater. Paleta hex fija — va en TODOS los prompts
+
+```
+PIEL Y PELO     #C89F82 piel tostada · #8A5A3B pelo castaño · #5C3A24 ojos
+SU ACENTO       #E4714E terracota · #C4552F terracota quemada
+VESTUARIO       #EFE7DA crema · #D8C9B0 beige lino · #F4F1EC blanco roto · #6E7A5E oliva apagado
+SANTA CRUZ      #B08246 ocre gastado · #4E8C87 turquesa descascarado · #2E2A26 sombra cálida
+```
+
+⛔ `#00D26A` (verde ONIA) **no entra** en sus piezas.
+
 ## 2. 🟡 DECISIÓN 1 — El ancla de la cara
 
 **Mirá `INVENTARIO-caras.jpg`, acá al lado.** Son las 6 caras de Lucía que hay en la cuenta,
@@ -130,12 +172,26 @@ costo: 2 cr a 2k · 1,5 cr a 1k
 **Apertura (fija):**
 `One single continuous photograph, full bleed, filling the entire frame edge to edge.`
 
-**Piel / identidad (congelada, sin editar):**
-```
-Keep her face identical to the reference: Bolivian woman, 26, warm tan skin with light
-freckles, long dark wavy hair, brown eyes, natural minimal makeup, real skin texture with
-visible pores.
-```
+**Los 11 bloques (probados el 15-ago, ver `prueba-realismo-20260815/`).** Los bloques 7 a 10
+son los que faltaban y los que más mueven la aguja: atacan lo que delata a una imagen
+generada, que es **la luz demasiado perfecta y la óptica demasiado limpia.**
+
+| # | Bloque | Texto |
+|---|---|---|
+| 1 | Ancla | `<<<452d8375-fb67-4df7-9ae0-8f1b257aa51f>>>` |
+| 2 | Apertura | `One single continuous photograph, full bleed, filling the entire frame edge to edge.` |
+| 3 | Identidad | `Keep her face identical to the reference: Bolivian woman, 26, warm tan skin with light freckles, long dark wavy hair, brown eyes, natural minimal makeup.` |
+| 4 | Piel real | `Photorealistic real human skin with visible pores, fine peach fuzz, subtle texture and tiny imperfections; natural face asymmetry.` |
+| 5 | Ojos | `Bright lively eyes with sharp catchlights and natural moisture.` |
+| 6 | Cejas | `Natural eyebrows with individual visible hairs, slightly uneven and unruly.` |
+| 7 | **Rasgo constante** | `She always wears small thin gold hoop earrings and a fine gold chain necklace. Something terracotta #E4714E is visible in the frame.` |
+| 8 | **Luz como DEFECTO** | `Imperfect available light: strong highlights, slightly washed-out tones, uneven exposure across the frame, one side of her face brighter than the other.` |
+| 9 | **Óptica de celular** | `Minor chromatic aberration at the image edges, characteristic of a modern smartphone camera with a slightly wide lens. Slight motion softness, no tripod steadiness.` |
+| 10 | **Paleta** | `Color palette limited to #C89F82 #8A5A3B #E4714E #EFE7DA #D8C9B0 #B08246 #4E8C87 #2E2A26.` |
+| 11 | Cierre | `Shot on iPhone, natural light, slight film grain, no beauty filter, no smoothing. Not a 3D render, not AI-looking, not plastic, not doll-like, not airbrushed. No brand logos, no text, no watermark.` |
+
+⚠️ El bloque 11 lleva **negaciones**: funcionan en la vía `nano_banana_2` + Element. Con
+`soul_2` producen lo que nombran — ahí se corta después de *"no smoothing"*.
 
 **Cámara — 4 colas:**
 
