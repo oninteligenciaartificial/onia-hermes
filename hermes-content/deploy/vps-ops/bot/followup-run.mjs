@@ -26,6 +26,12 @@
 //   6. NO se llama `saveConversation`: escribiria el estado ENTERO y podria pisar un
 //      `human_took_over` que ocurrio entre el barrido y ahora. El CAS ya dejo `followup_step = 1`
 //      y la bitacora va en `bot_messages` (append-only).
+//   7. UN ENVIO QUE SALIO NUNCA QUEDA SIN RASTRO CONTABLE. Aca se manda ANTES de registrar (al
+//      reves que el recordatorio), asi que un insert fallido dejaria un mensaje que Meta COBRA y
+//      que el medidor (usage-run.mjs) NO cuenta — el espejo del bug del recordatorio, que
+//      facturaba de mas. El insert se reintenta UNA vez (es idempotente por `message_key`, no
+//      puede duplicar) y, si ni asi entra, se grita: warning con la conversacion y el carril, mas
+//      la nota `envio_sin_fila`. Nunca se vuelve a mandar el mensaje: la regla 3 manda.
 //
 // Uso:
 //   node followup-run.mjs                               dry-run: dice a quien le mandaria y que
@@ -351,25 +357,55 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
     const entrega = await deliver(state, base.text, config, deps, plantilla ? plantilla.params : null);
     const deliveryStatus = entrega.status;
     if (entrega.warning) result.warnings.push(`${key}: ${entrega.warning}`);
-    const wrote = await store.insertOutbound(
-      [
-        {
-          messageKey: followUpMessageKey(state.conversationKey, built.nextState.followupStep),
-          direction: "outbound",
-          author: "bot",
-          templateKey: base.templateKey,
-          replySource: base.replySource,
-          text: base.text,
-          deliveryStatus,
-          stageBefore: state.botStage,
-          stageAfter: built.nextState.botStage,
-        },
-      ],
-      built.nextState,
-      { raw: { followup: true, step: built.nextState.followupStep, now: nowIso } },
-    );
 
-    result.send.push({ ...base, reserved: true, deliveryStatus, logged: wrote === null ? false : wrote > 0 });
+    const fila = [
+      {
+        messageKey: followUpMessageKey(state.conversationKey, built.nextState.followupStep),
+        direction: "outbound",
+        author: "bot",
+        templateKey: base.templateKey,
+        replySource: base.replySource,
+        text: base.text,
+        deliveryStatus,
+        stageBefore: state.botStage,
+        stageAfter: built.nextState.botStage,
+      },
+    ];
+    const extra = { raw: { followup: true, step: built.nextState.followupStep, now: nowIso } };
+
+    // EL REGISTRO, CON UN SEGUNDO INTENTO. El mensaje YA SALIO: si la fila no entra, Meta nos cobra
+    // un envio que nuestra base dice que no existio y el medidor (usage-run.mjs) cuenta de MENOS.
+    // Es el espejo exacto del bug del recordatorio, que facturaba de mas.
+    //
+    // Reintentar es GRATIS y no puede duplicar NADA: NO se vuelve a mandar (`deliver()` no se llama
+    // otra vez, la regla de "preferimos perder un mensaje a mandar dos" queda intacta) y el insert es
+    // IDEMPOTENTE — `message_key` es determinista y va con `on_conflict=ignore-duplicates`, asi que
+    // si la primera pasada si habia entrado, la segunda devuelve 0 filas y no escribe nada.
+    // UN solo reintento, sin espera: cubre el corte transitorio (la falla realista, con el CAS
+    // recien confirmado milisegundos antes) sin retrasar el cron ni encadenar timeouts.
+    let wrote = await store.insertOutbound(fila, built.nextState, extra);
+    if (wrote === null) wrote = await store.insertOutbound(fila, built.nextState, extra);
+
+    // Y SI NI ASI ENTRO, SE GRITA. Hasta hoy esto moria como un `logged: false` perdido dentro del
+    // array y nadie se enteraba: perder plata EN SILENCIO es peor que perderla a la vista. Se avisa
+    // con la conversacion y el carril (una plantilla de marketing cuesta 6,5x el texto libre), y
+    // queda la nota `envio_sin_fila` para que n8n lo pueda leer sin parsear texto.
+    // Solo se grita cuando el mensaje SALIO de verdad: `skipped` (dry-run), `simulated` y `failed`
+    // no los cobra Meta, asi que su fila faltante no es plata — y el motivo ya quedo en
+    // `store.warnings`, que el propio store empuja en cada fallo de red.
+    // EXIT 0 IGUAL: se avisa y se sigue. Si esto reventara, n8n reintentaria el barrido entero y el
+    // prospecto recibiria DOS follow-ups — peor que una fila que falta.
+    if (wrote === null && deliveryStatus === "sent") {
+      result.notes.push("envio_sin_fila");
+      result.warnings.push(
+        `${key}: MENSAJE ENVIADO SIN FILA en bot_messages (${base.sendKind}${base.templateName ? ` ${base.templateName}` : ""}) — Meta lo cobra y el medidor NO lo cuenta`,
+      );
+    }
+
+    // `logged` = "existe la fila", no "la escribi yo": 0 filas con `on_conflict` significa que ya
+    // estaba (el reintento de arriba lo vuelve un desenlace normal, no una rareza). null es el unico
+    // caso en que NO hay fila.
+    result.send.push({ ...base, reserved: true, deliveryStatus, logged: wrote !== null });
   }
 
   return result;

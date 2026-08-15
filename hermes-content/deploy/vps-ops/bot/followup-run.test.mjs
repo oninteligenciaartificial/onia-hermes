@@ -75,6 +75,7 @@ function memoryStore(rows, options = {}) {
   const calls = [];
   const steps = new Map();
   const outbound = [];
+  let inserts = 0;
   for (const item of rows || []) steps.set(item.conversation_key, Number(item.followup_step) || 0);
   return {
     calls,
@@ -102,6 +103,11 @@ function memoryStore(rows, options = {}) {
       },
       async insertOutbound(messages) {
         calls.push("insertOutbound");
+        inserts += 1;
+        // `insertNull`: la base NUNCA acepta la fila (el hueco que hay que gritar).
+        // `insertNullFirst`: falla la primera y entra la segunda — el corte transitorio, que es
+        // el caso realista (el CAS acaba de confirmar milisegundos antes).
+        if (options.insertNull || (options.insertNullFirst && inserts === 1)) return null;
         outbound.push(...messages);
         return messages.length;
       },
@@ -531,6 +537,87 @@ test("'sent' solo si SE MANDO: el estado guardado no puede volver a ser una prom
   const otro = memoryStore([row()]); // telegram
   await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: otro.store });
   assert.equal(otro.outbound[0].deliveryStatus, "failed");
+});
+
+// ---------------------------------------------------------------------------
+// 5 bis. EL AGUJERO ESPEJO: un envio que SALIO nunca puede quedar sin fila
+//
+// Aca se manda ANTES de registrar (al reves que el recordatorio, porque este barrido tiene su
+// propia reserva con CAS). Si el insert falla despues de un envio exitoso, Meta nos COBRA un
+// mensaje que nuestra base dice que no existio y el medidor cuenta de MENOS. Espejo exacto del
+// bug del recordatorio, que facturaba de mas.
+// ---------------------------------------------------------------------------
+
+/** Un envio real por Chatwoot: es el unico camino donde `deliveryStatus` llega a "sent". */
+async function envioReal(fake, options = {}) {
+  const enviados = [];
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const salida = await runFollowUpSweep(
+    { nowIso: options.nowIso || NOW, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      chatwoot: {
+        enabled: true,
+        warnings: [],
+        sendMessage: (id, text, templateParams) => {
+          enviados.push({ id, text, templateParams });
+          return { id: 1 };
+        },
+      },
+    },
+  );
+  return { enviados, salida };
+}
+
+const CHATWOOT_ROW = { conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" };
+
+test("insert caido tras un envio exitoso: se REINTENTA la fila, NO el envio", async () => {
+  const fake = memoryStore([row(CHATWOOT_ROW)], { insertNullFirst: true });
+  const { enviados, salida } = await envioReal(fake);
+
+  assert.equal(enviados.length, 1, "REGLA DURA: el mensaje sale UNA vez — reintentar la fila no re-manda");
+  assert.equal(fake.calls.filter((call) => call === "insertOutbound").length, 2, "el insert si se reintenta");
+  assert.equal(fake.outbound.length, 1, "y entra UNA sola fila, no dos");
+  assert.equal(fake.outbound[0].messageKey, "followup:chatwoot:42:1", "misma clave: por eso el reintento es idempotente");
+  assert.equal(salida.send[0].deliveryStatus, "sent");
+  assert.equal(salida.send[0].logged, true, "el envio quedo contabilizado");
+  assert.ok(!salida.notes.includes("envio_sin_fila"), "se arreglo: no hay hueco que declarar");
+  assert.ok(!salida.warnings.join(" ").includes("SIN FILA"));
+});
+
+test("si ni el reintento entra, el hueco se GRITA — no muere como `logged: false`", async () => {
+  const fake = memoryStore([row(CHATWOOT_ROW)], { insertNull: true });
+  const { enviados, salida } = await envioReal(fake);
+
+  assert.equal(enviados.length, 1, "aun perdiendo la fila, el mensaje NO se manda dos veces");
+  assert.equal(fake.calls.filter((call) => call === "insertOutbound").length, 2, "se intento dos veces y no entro");
+  assert.equal(salida.ok, true, "EXIT 0: un fallo del registro no puede tumbar el barrido");
+  assert.equal(salida.send[0].deliveryStatus, "sent");
+  assert.equal(salida.send[0].logged, false);
+
+  // Lo que antes moria en silencio: ahora sale con nombre y apellido.
+  assert.ok(salida.notes.includes("envio_sin_fila"), "la nota que n8n puede leer sin parsear texto");
+  const grito = salida.warnings.find((warning) => warning.includes("SIN FILA"));
+  assert.ok(grito, "el warning existe");
+  assert.match(grito, /chatwoot:42/, "nombra la conversacion");
+  assert.match(grito, /Meta lo cobra/, "dice que es plata, no un detalle tecnico");
+  assert.match(grito, /texto_libre/, "y por que carril salio (la plantilla cuesta 6,5x)");
+});
+
+test("el aviso solo suena si SALIO: dry-run y envio fallido no cuestan plata", async () => {
+  // Envio fallido (canal sin envio automatico): la fila tampoco entra, pero Meta no cobra nada.
+  const roto = memoryStore([row()], { insertNull: true }); // telegram
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const fallo = await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: roto.store });
+  assert.equal(fallo.send[0].deliveryStatus, "failed");
+  assert.ok(!fallo.notes.includes("envio_sin_fila"), "un envio que no salio no es un hueco de plata");
+
+  // Dry-run: el barrido calcula todo pero no manda. Una alarma aca seria una mentira.
+  const seco = memoryStore([row(CHATWOOT_ROW)], { insertNull: true });
+  const dry = await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: CONFIG, store: seco.store });
+  assert.equal(dry.send[0].deliveryStatus, "skipped");
+  assert.ok(!dry.notes.includes("envio_sin_fila"));
 });
 
 // ---------------------------------------------------------------------------
