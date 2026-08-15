@@ -126,6 +126,31 @@ const swipeCue = (last) => last ? '' :
 
 const saveBar = `<div class="savebar">Guardá esto ↗</div>`;
 
+// CAROUSEL_PATTERN_BANK §7: la pildora de arriba CAMBIA DE ROL segun la seccion
+// (categoria -> contador -> CTA). Es el sistema de navegacion mas barato que existe:
+// el lector siempre sabe donde esta sin leer nada.
+function pill(role, idx, total, account) {
+  const txt = role === 'cover' ? ACCOUNTS[account].name.toUpperCase()
+    : role === 'cta' ? 'COMENTÁ'
+    : `PASO ${String(idx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+  return `<div class="pill">${esc(txt)}</div>`;
+}
+
+// Puntos DENTRO de la imagen: el lector ve cuantas slides son y se compromete.
+// Un "03 / 08" en texto no produce ese efecto; los puntos si.
+function dots(idx, total) {
+  const d = Array.from({ length: total }, (_, i) =>
+    `<i class="${i === idx ? 'on' : ''}"></i>`).join('');
+  return `<div class="dots">${d}</div>`;
+}
+
+// La palabra del trueque sale del propio cuerpo del ultimo slide ("Comentá *LISTA* y...").
+// Asi el ticket no puede desincronizarse del texto: hay una sola fuente.
+function triggerWord(slide) {
+  const m = String(slide.body || '').match(/Comentá\s+\*?([A-ZÁÉÍÓÚÑ]{3,})\*?/);
+  return m ? m[1] : '';
+}
+
 function logoFooter(account) {
   const acc = ACCOUNTS[account];
   return `<div class="footer">
@@ -148,37 +173,57 @@ function slideHtml(slide, idx, total, account, bg) {
     : '';
 
   let inner = '';
+  const word = triggerWord(slide);
+
   if (role === 'cover') {
     inner = `
       ${bgLayer}
-      <div class="kicker">${esc(acc.name)}</div>
+      <div class="topline">${pill(role, idx, total, account)}<span class="swipe">SWIPE →</span></div>
       <h1 class="hook">${emph(slide.headline)}</h1>
       ${slide.body ? `<p class="coverline">${emph(slide.body)}</p>` : ''}
-      ${swipeCue(false)}
+      ${dots(idx, total)}
       ${logoFooter(account)}`;
   } else if (role === 'cta') {
+    // El cierre es la slide que casi nadie copia bien. El banco §7: el CTA aparece
+    // TRES veces (titular, ticket, boton) y se pide GUARDAR ademas de comentar —
+    // son dos senales distintas del algoritmo y se piden juntas. De paso, el ticket
+    // llena el vacio que dejaba esta slide con solo dos lineas de texto.
     inner = `
       ${bgLayer}
-      <div class="pageno">${pageNo(idx, total)}</div>
+      <div class="topline">${pill(role, idx, total, account)}</div>
       <h2 class="cta-h">${emph(slide.headline)}</h2>
       <p class="body">${emph(slide.body)}</p>
+      ${word ? `<div class="ticket">
+        <div class="ticket-l">
+          <span class="ticket-k">Comentás</span>
+          <span class="ticket-w">${esc(word)}</span>
+        </div>
+        <div class="ticket-r">
+          <span class="ticket-k">Y recibís</span>
+          <span class="ticket-v">${word === 'SISTEMA' ? 'tu diagnóstico de 20 min' : 'la lista con los costos'}</span>
+        </div>
+      </div>
+      <div class="ctabtn">Comentá ${esc(word)}</div>` : ''}
+      <p class="savehint">Gratis. Guardalo para cuando te sientes a resolverlo.</p>
       ${logoFooter(account)}`;
   } else if (role === 'save') {
     inner = `
-      <div class="pageno">${pageNo(idx, total)}</div>
+      <div class="topline">${pill(role, idx, total, account)}</div>
       ${saveBar}
       <div class="savecard">
         <div class="savetag">FRAMEWORK</div>
         <h2 class="point-h">${emph(slide.headline)}</h2>
         <p class="body">${emph(slide.body)}</p>
       </div>
+      ${dots(idx, total)}
       ${swipeCue(last)}
       ${logoFooter(account)}`;
   } else { // stakes | point
     inner = `
-      <div class="pageno">${pageNo(idx, total)}</div>
+      <div class="topline">${pill(role, idx, total, account)}</div>
       <h2 class="point-h">${emph(slide.headline)}</h2>
       <p class="body">${emph(slide.body)}</p>
+      ${dots(idx, total)}
       ${swipeCue(last)}
       ${logoFooter(account)}`;
   }
@@ -210,6 +255,33 @@ html,body { width:1080px; height:1350px; }
 
 .kicker { font-family:var(--font-display); font-weight:500; font-size:30px;
   letter-spacing:6px; text-transform:uppercase; color:var(--onia-green); margin-bottom:36px; }
+
+/* Pildora de rol cambiante + puntos de progreso (CAROUSEL_PATTERN_BANK §7). */
+.topline { display:flex; align-items:center; justify-content:space-between; margin-bottom:44px; }
+.pill { font-family:var(--font-display); font-weight:700; font-size:26px; letter-spacing:4px;
+  text-transform:uppercase; padding:14px 28px; border-radius:999px;
+  background:var(--onia-green); color:var(--onia-ink); }
+.slide.cta .pill { background:var(--onia-ink); color:var(--onia-green); }
+.swipe { font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:3px;
+  color:var(--onia-green); opacity:.9; }
+.dots { display:flex; gap:12px; margin-top:auto; padding-top:40px; }
+.dots i { width:14px; height:14px; border-radius:50%; background:currentColor; opacity:.22; }
+.dots i.on { opacity:1; background:var(--onia-green); }
+
+/* Ticket del trueque: la palabra a comentar ES el cupon. */
+.ticket { display:flex; margin-top:56px; border-radius:28px; overflow:hidden;
+  background:var(--onia-ink); color:var(--onia-white); }
+.ticket-l, .ticket-r { padding:38px 40px; display:flex; flex-direction:column; gap:10px; }
+.ticket-l { flex:0 0 44%; border-right:6px dashed var(--onia-green); }
+.ticket-r { flex:1; }
+.ticket-k { font-size:26px; letter-spacing:3px; text-transform:uppercase; opacity:.62; }
+.ticket-w { font-family:var(--font-display); font-weight:700; font-size:76px;
+  letter-spacing:-1px; color:var(--onia-green); }
+.ticket-v { font-family:var(--font-display); font-weight:700; font-size:40px; line-height:1.15; }
+.ctabtn { margin-top:32px; align-self:flex-start; background:var(--onia-ink);
+  color:var(--onia-green); font-family:var(--font-display); font-weight:700; font-size:46px;
+  padding:26px 52px; border-radius:999px; }
+.savehint { margin-top:28px; font-size:32px; opacity:.72; }
 .hook { font-family:var(--font-display); font-weight:700; font-size:118px;
   line-height:1.02; letter-spacing:-3px; }
 .coverline { font-size:42px; line-height:1.35; color:var(--onia-muted-dark); margin-top:40px; max-width:840px; }
