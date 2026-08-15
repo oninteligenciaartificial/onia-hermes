@@ -48,11 +48,14 @@ Dos capas, **en todas las piezas sin excepción**:
 | **Objeto** | Argollas de oro chicas + cadenita fina de oro |
 | **Color** | Siempre algo **terracota `#E4714E`** en cuadro: prenda, taza, pared, cuaderno o bolso |
 
-⚠️ **Push-back honesto:** las argollas de oro **no son** las gafas amarillas de la referencia
-— son joyería común y no funcionan como firma solas. Lo que funciona es **oro + terracota como
-dirección de arte**, que sobrevive a cualquier escena y no toca la cara. Una firma fuerte de
-verdad exige un objeto raro y **regenerar su banco entero** (~30 imágenes, ~45 cr). Decisión
-de Sergio, no la tomo yo.
+**Corrección (15-ago):** las argollas **ya estaban** documentadas como accesorio de identidad en
+el face lock — no las inventé acá, las rescaté. Y el face lock nombra algo más fuerte que
+cualquier accesorio: **las pecas de nariz y mejillas, que NUNCA se limpian.** Ese es su rasgo
+distintivo real, y a diferencia de unas gafas no se puede perder ni cambiar de outfit.
+
+Orden entonces: **pecas (inamovible) → oro (accesorio) → terracota (dirección de arte).** Las
+tres juntas son la firma. Si alguna vez querés un objeto raro tipo gafas amarillas, exige
+regenerar el banco entero (~30 imágenes, ~45 cr) y es decisión tuya.
 
 ## 1-quater. Paleta hex fija — va en TODOS los prompts
 
@@ -86,15 +89,32 @@ en ese orden.
 Las 3, 4 y 5 eran frames del mismo video real: de ahí salían las mejillas rojas, y por eso el
 Soul entrenado con ellas produce piel enrojecida.
 
-### Las dos consecuencias de sacar `ced20cc2`
+### Tres cosas distintas que se venían confundiendo
 
-1. **Cambia la vara de QA.** Ya no se compara contra el video real. La referencia pasa a ser el
-   **ancla aprobada `452d8375` + el banco aprobado**. Se gana consistencia y se pierde fidelidad
-   al material de origen — que es exactamente el trueque que Sergio eligió.
-2. **Baja la exposición del §9.** Toda la identidad dependía de frames de una persona real cuyo
-   permiso no está documentado. Al salir esos Elements, lo que queda como canon es una imagen
-   **generada y aprobada**, no el material de origen. No resuelve la pregunta del §9, pero
-   achica bastante el problema.
+Sacar `ced20cc2` dejó un hueco de QA. Lo llena el stack de rasgos, que ya existía y nadie
+estaba usando como tal. **Son tres roles separados y ninguno reemplaza al otro:**
+
+| Rol | Qué es | Dónde vive |
+|---|---|---|
+| **RASGOS** — qué cara es | Photoshoot de **10 ángulos** sobre fondo blanco: frontal neutro, media sonrisa, sonrisa completa, 2 perfiles, 2 tres cuartos, detalle de nariz, detalle de oreja, cuerpo entero | `STACK-rasgos-10-angulos.jpg` · fuente en `references/models/lucia-surgical-shoot-20260707/` |
+| **ANCLA** — con qué se genera | El Element que va en el prompt | `452d8375` (ganó la prueba del 13-ago) |
+| **RESPALDO** | Si el ancla falla en un encuadre | `902eeebb` (sale del shot 03 de ese mismo stack) |
+
+**El stack NO se usa para generar.** Se usa para responder "¿es ella?" cuando se aprueba una
+pieza. Es la vara, no el molde.
+
+### Los rasgos sagrados (del face lock, no se negocian)
+
+Pelo castaño oscuro ondulado, raya al medio · piel cálida oliva con textura real ·
+**pecas marcadas en nariz y mejillas — NUNCA se limpian ni se suavizan** · ojos marrones
+almendrados · cejas gruesas oscuras naturales · labios llenos naturales · **argollas doradas
+chicas** · nariz y orejas con la forma exacta de la referencia, sin adelgazar ni redibujar.
+
+### Y baja la exposición del §9
+
+Toda la identidad colgaba de frames de una persona real sin permiso documentado. Al salir esos
+Elements, el canon pasa a ser material **generado y aprobado**. No resuelve la pregunta del §9
+—el ancla nació de ahí— pero achica el problema.
 
 ⛔ Soul `36305a9b` para primer plano: sale con la piel roja y además ignora el atuendo pedido.
 
@@ -238,15 +258,16 @@ slightly imperfect handheld framing, everyday vertical phone photo.
 
 ## 8. QA antes de aprobar
 
-**La vara es el ancla `452d8375` + el banco aprobado** (`posts-20260807/`,
-`prueba-realismo-20260815/`). Calzan pecas, cejas, ojos y labios, o la pieza no sale.
+**La vara es `STACK-rasgos-10-angulos.jpg`** — las 10 tomas de fondo blanco. Se busca el ángulo
+más parecido al de la pieza y se comparan **pecas, cejas, ojos, labios, nariz y orejas**. Si no
+calzan, la pieza no sale.
 
-⚠️ **Cambió el 2026-08-15.** Antes se comparaba contra `references/models/pecas-clean-v2/`
-(frames del video real). Sergio sacó esos Elements por inconsistentes, así que **el video real
-deja de ser la vara**. La carpeta se conserva como archivo histórico, no como referencia.
+⚠️ **Cambió el 2026-08-15.** Antes la vara era `references/models/pecas-clean-v2/` (frames del
+video real). Sergio sacó esos Elements por inconsistentes, así que el video real deja de ser
+referencia; la carpeta queda como archivo histórico. **El stack de 10 ángulos ocupa ese lugar**
+y es mejor vara: cubre perfiles y detalles que un frame de video no tenía.
 
-La QA sigue siendo obligatoria pieza por pieza: saltearla fue lo que dejó pasar 11 avatares
-deformados.
+Obligatoria pieza por pieza: saltearla fue lo que dejó pasar 11 avatares deformados.
 
 ## 9. 🔴 Pendiente que no es técnico
 
