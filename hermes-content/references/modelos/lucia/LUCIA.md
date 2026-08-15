@@ -141,7 +141,26 @@ Gana la `-v2` por dos motivos, y el segundo no es estético:
 
 ⛔ **Jubilar los 4 viejos:** `16833b18` · `ec1dece5` · `5503f588` · `6186d80f`.
 
-### 🟡 Cuáles de las 5 entran al feed
+### ✅ Cuáles entran al feed (Sergio, 2026-08-15)
+
+**Base: `cleangirl`.** Es el look con el que se la reconoce y el que sostiene el contenido de
+trabajo.
+
+Y como **también hace lifestyle**, entran dos más que ya existen y no hay que producir:
+
+| Look | Para qué | Element ID |
+|---|---|---|
+| **cleangirl** | La base. Trabajo, demos, hablar de la plataforma | `cac118e1-…` |
+| **streetwear** | Lifestyle en la calle: mercado, vereda, café | `db9608fd-…` |
+| **loungewear** | Lifestyle en casa: mañana, escritorio, mate | `23135bd8-…` |
+| ~~nightout~~ | — | 🗄 reserva, no al feed |
+| ~~gym~~ | — | 🗄 reserva, no al feed |
+
+**No hace falta generar ni stackear ropa nueva.** Los 5 son turnarounds de 3 vistas sin marca;
+con tres rotando alcanza para meses. El hueco real no es vestuario: son **los lugares** (§10),
+que no son Santa Cruz.
+
+<details><summary>Análisis previo (histórico)</summary>
 
 - **A — las 5.** Máxima variedad. Riesgo: el vestido negro y el gym la corren de "dueña de
   negocio que muestra software" a lifestyle genérico.
@@ -153,7 +172,44 @@ Gana la `-v2` por dos motivos, y el segundo no es estético:
 **Recomiendo B.** Su trabajo es que un dentista de Santa Cruz la crea. El vestido negro de
 noche no aporta a eso y el gym compite con mil cuentas de fitness.
 
+</details>
+
 ---
+
+## 3-bis. ✅ La voz — decidida el 2026-07-09, y sí está stackeada
+
+`references/models/lucia-voice/` tiene 9 audios y su README. La oficial:
+
+| | |
+|---|---|
+| **Nombre** | `Lucia-ONIA` |
+| **voice_id** | **`wrXs6GqcC7X03dDKMoeT`** (ElevenLabs, API REST — no hay MCP) |
+| Cómo nació | Voice Design de ElevenLabs, opción 2 de 3. **Es propia**: nadie más la tiene |
+| Muestra | `lucia-voz-OFICIAL.mp3` · modelo `eleven_multilingual_v2` |
+| En el VPS | `/root/.hermes/.env` → `LUCIA_ELEVENLABS_VOICE_ID` |
+
+### ⚠️ Conflicto de IDs — hay tres dando vueltas
+
+| ID | Qué es | Veredicto |
+|---|---|---|
+| `wrXs6GqcC7X03dDKMoeT` | ElevenLabs, voz propia de Lucía | ✅ **LA OFICIAL** |
+| `8de5db95-e898-46a6-bb68-26d02f311686` | Higgsfield `seed_audio`, clonada del preset **Isabella** | 🟡 Respaldo barato. Es **voz de base compartida**, no suya |
+| `86V9x9hr…` | Aparece **truncado** en varios docs | ⛔ Truncado = `Voice not found`. No usarlo |
+
+La entrega de video-intake cita `8de5db95` como "la voz de Lucía": está nombrando **el
+respaldo**, no la oficial. Los dos existen, pero solo uno es de ella.
+
+### Cómo se usa
+
+- **B-roll (sin lipsync):** VO con su voice_id → mp3 → se monta **encima** del video en edición.
+- **Lipsync (hablando a cámara):** `wan2_7` toma un still + el mp3 como `audio_references` y le
+  sincroniza la boca **a su propia voz**. ~15 cr cada 10 s.
+- ⛔ **Marketing Studio genera su PROPIA voz** y no acepta audio externo → **no mantiene la voz
+  de Lucía.** Para voz consistente, lipsync con `wan2_7`, nunca MS.
+- ⚠️ `generate_audio` con `get_cost: true` **no valida el voice_id**: devuelve costo igual y
+  recién falla al generar. Preflight de costo ≠ validación de voz.
+
+Costo medido: narración de ~50 palabras = **2,4 cr**.
 
 ## 4. 🟡 DECISIÓN 3 — Dónde vive (esto es el que más riesgo tiene)
 
