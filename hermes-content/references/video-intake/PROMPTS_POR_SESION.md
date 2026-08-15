@@ -59,6 +59,47 @@ Antes de escribir una sola linea:
    de Sergio. Nada flotando en la conversacion.
 ```
 
+## Los dos gates que aplican a TODOS los prompts de este archivo
+
+Pegá esto junto al prompt. Nacen de errores concretos de esta sesión, no de teoría.
+
+### Gate 1 — control de calidad ANTES de ejecutar
+
+```text
+Antes de hacer nada de lo que pide el prompt, verificá que el prompt siga siendo válido:
+1. ¿YA ESTA HECHO? Mirá el repo y la memoria del proyecto, no el prompt. Un prompt de esta
+   lista mandaba a cerrar la seguridad de produccion cuando ya estaba cerrada y verificada
+   dias antes — habria mandado a rehacer trabajo terminado.
+2. ¿EL BLOQUEO EXISTE? Si el prompt dice que algo esta trabado, comprobalo. Dos "bloqueos" de
+   esta lista se cayeron con un `ls` y una consulta gratis: los SFX estaban en otra carpeta y
+   la voz no era ambigua, era un ID truncado en los docs.
+3. ¿EL DATO SIGUE VIGENTE? Los numeros de cuenta, precios y capacidades tienen fecha. Si el
+   prompt trae uno, confirmalo antes de construir encima.
+4. ¿YA VIVE EN ALGUN LADO? El repo tiene pipeline para casi todo. Buscá donde vive la cosa
+   antes de crear una carpeta nueva: escribir un doc "al lado" del sistema que ya existe es
+   el error mas caro, porque duplica y se desincroniza.
+Si algo de esto invalida el prompt, DECILO y no lo ejecutes. Un prompt que quedo viejo se
+corrige, no se obedece.
+```
+
+### Gate 2 — ordenar en su carpeta ANTES de cerrar
+
+```text
+Al terminar, nada queda suelto ni en la raiz del repo. Cada cosa a su lugar:
+- Web entera vista en un reel  -> web-factory/data/references/reels/models/ (learned model)
+- Componente de UI reconstruido -> hermes-content/references/ui-patterns/<patron>/
+- Patron de movimiento          -> web-factory/docs/MOTION_PATTERN_BANK_2026.md
+- Analisis de un video          -> hermes-content/references/video-intake/
+- Doc de proceso o decision     -> hermes-content/docs/  (es la fuente; la raiz sin gemelos)
+- Receta de generacion          -> hermes-content/docs/ y se apunta desde la skill
+- Codigo de herramienta         -> scripts/ o .claude/skills/<skill>/scripts/
+Si no sabes donde va, PREGUNTA antes de inventar carpeta.
+Y antes de commitear: `git status` limpio de archivos huerfanos, y el commit explica el POR QUE,
+no solo el que.
+```
+
+---
+
 **Para delegar a subagentes** (esto se probo con 8 agentes en paralelo y funciono):
 
 ```text
