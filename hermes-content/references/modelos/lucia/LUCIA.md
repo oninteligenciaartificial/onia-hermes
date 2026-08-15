@@ -314,7 +314,9 @@ Este archivo manda. Los de abajo se conservan porque **cada uno tiene algo que n
 | `references/models/LUCIA_SURGICAL_FACE_LOCK.md` | Método del photoshoot quirúrgico | Archivo |
 | `references/models/LUCIA_BENCHMARK_ARIA_CRUZ_20260709.md` | Benchmark de una cuenta real | Archivo |
 | `references/models/lucia-elements-catalog.md` | IDs — **ya absorbidos acá** | ⛔ Superado por §2, §3 y §10 |
-| `references/models/lucia-onia-identity-bible.md` | — | ⛔ **Tiene errores**: handle `@lu.antelo` marcado "LIBRE" (está ocupado) |
+| `references/models/LUCIA_SURGICAL_FACE_LOCK.md` | El método del photoshoot de 10 ángulos y los rasgos sagrados | ⚠️ El método sigue vigente; su "ancla real" (`ced20cc2`) quedó **retirada** el 15-ago |
+| `references/models/pecas-clean-v2/` | 18 frames del video real | 🗃 **Archivo histórico.** Dejó de ser la vara de QA el 15-ago |
+| `references/models/lucia-onia-identity-bible.md` | — | ⛔ **Tiene errores**: handle `@lu.antelo` marcado "LIBRE" (está ocupado) y ancla retirada |
 | ~~`MOLDE-LUCIA.md`~~ | — | 🗑️ Borrado el 13-ago, absorbido entero acá |
 
 ---
