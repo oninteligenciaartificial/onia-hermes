@@ -1,6 +1,6 @@
 # Prueba de los 11 bloques — 2026-08-15
 
-3 imágenes con el prompt completo de `BRIEF-IDENTIDAD-LUCIA.md` §PASO 3.
+3 imágenes con el prompt completo de `../LUCIA.md` §6 (los 11 bloques).
 Vía ganadora: `nano_banana_2` + Element `452d8375`, **2k**, 3:4. Costo: 6 cr (2 cr c/u).
 
 En `COMPARACION-vieja-vs-nuevas.jpg`: la de borde rojo es del banco viejo
