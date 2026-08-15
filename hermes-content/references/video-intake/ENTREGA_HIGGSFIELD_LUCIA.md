@@ -177,6 +177,37 @@ Con el punto 10 queda el método completo: **anclas** (quién es) + **realismo d
 se ve). **Falta definir la paleta hex fija de Lucía** — hoy no existe, y es lo que le daría
 coherencia a todo el feed.
 
+## 12. El pipeline completo, confirmado por 4 fuentes independientes (2026-08-15)
+
+Cuatro creadores distintos, el mismo día, describiendo el mismo orden
+([ficha](2026-08-15-crear-influencer-ia-cuatro-fuentes.md)). Cuando cuatro fuentes coinciden en
+el orden de los pasos, el orden **es** el método:
+
+```
+0. PERSONAJE   ← nicho y para qué existe, ANTES de cualquier imagen
+1. IDENTIDAD   ← Soul + anclas por rasgos + rasgo distintivo constante   (punto 10)
+2. REALISMO    ← defecto óptico de celular + paleta hex                  (punto 11)
+3. ESCENARIOS  ← imágenes base del entorno, fijadas como referencia      (punto 2)
+4. CARÁCTER    ← frase, expresión, tono y acento en el prompt de video
+5. PIEZA       ← Seedance con las referencias
+```
+
+**El paso 0 no lo teníamos escrito.** Verbatim de uno de ellos: *"no empieces con imagen,
+empezá con el personaje... una cara bonita no vende, un personaje sí"*. Lucía tiene
+posicionamiento definido, así que estamos mejor que el promedio — pero conviene confirmar que
+esté escrito como decisión y no asumido.
+
+**El paso 4 es nuevo para nosotros.** Ellos meten *"la frase que querés que diga, la expresión,
+el tono de voz, el acento"* en el mismo prompt de video. Nosotros separamos guion (texto) de voz
+(ElevenLabs). Vale probar el enfoque junto.
+
+**Y confirman lo que ya hacemos:** dos de los cuatro dicen *"usá Claude como tu director de arte
+para que te genere los prompts"*. La dirección vive en el texto, no en la herramienta.
+
+**A verificar:** `nano-banana` para las imágenes base (¿está en la cuenta, o usamos el pipeline
+propio?). Las cifras que repiten —"50 referencias", "30 segundos"— ya están desmentidas para
+nuestra cuenta: `seedance_2_0`, tope **15 s**.
+
 ---
 
 ## Lo primero que yo haría en esa sesión
