@@ -3,6 +3,7 @@
 - **Fuente:** https://www.instagram.com/p/DbmpRmEIN_L/ · 21 s · sin voz (música)
 - **Visto:** 2026-08-09 (Gemini nativo)
 - **Archivo:** `Instagram-DbmpRmEIN_L.mp4` (no versionado)
+- **Lectura completa + transcripción literal:** [transcripciones/2026-08-09-web-antes-despues-find.md](transcripciones/2026-08-09-web-antes-despues-find.md)
 
 ## Qué dice realmente
 

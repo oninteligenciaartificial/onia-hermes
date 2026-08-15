@@ -3,6 +3,7 @@
 - **Fuente:** https://www.instagram.com/p/DbrAX61oo4w/ · 21 s · sin voz (cencerros)
 - **Visto:** 2026-08-09 (Gemini nativo)
 - **Archivo:** `Instagram-DbrAX61oo4w.mp4` (no versionado)
+- **Lectura completa + transcripción literal:** [transcripciones/2026-08-09-supra-vision-ganado.md](transcripciones/2026-08-09-supra-vision-ganado.md)
 
 ## Qué dice realmente
 
@@ -47,3 +48,43 @@ ferretería, sobre una sala dental, sobre un depósito.
 Si alguna vez montamos un overlay así para una demo, **decir que es una demo**. Mostrar
 cajas de detección falsas sobre el ganado de un cliente potencial sería fabricar capacidad
 — prohibido.
+
+
+---
+
+## CORRECCION 2026-08-11 — el encuadre estaba mal
+
+Sergio: *"la onia plattform claro que entra"*. Tenia razon, y el error fue de encuadre, no de
+analisis.
+
+Archive esto como **"Ganadero OS, que esta ultimo en la cola"** — o sea, lo trate como una
+pregunta de linea de producto. Pero ONIA no vende lineas de producto: vende **UNA plataforma
+con modulos por rubro**, y hoy hay seis rubros vendibles (dental, comercio, importadora,
+estetica, veterinaria, servicios).
+
+Una camara que detecta y sigue movimiento **no es una funcion ganadera**. Es una capacidad
+que enchufa en varios rubros que YA vendemos:
+
+| Rubro | Que resuelve la camara |
+|---|---|
+| **comercio minorista** | cuanta gente entra, a que hora, cuanto se queda frente a que gondola. Hoy el duenio no tiene ese dato |
+| **importadora** | conteo de bultos en la descarga, verificacion contra la lista de packing |
+| **servicios** | control de acceso y aforo |
+| ganadero | conteo de hacienda (el caso del video) — pero es el ultimo de la cola, no el primero |
+
+Y esto coincide con la doctrina del core escrita en el CLAUDE.md: **un rubro nuevo sale de
+ENCENDER capacidades del core, no de escribir codigo nuevo.** La vision es una capacidad
+candidata, no un producto aparte.
+
+**Encaje con Onia Box.** La vision por computadora necesita procesar en el lugar (subir video
+continuo a la nube es caro y lento). Eso es exactamente lo que Onia Box existe para resolver:
+infraestructura on-premise en el negocio del cliente. La camara le da a Onia Box algo concreto
+que hacer, y Onia Box le da a la camara donde correr.
+
+**Veredicto corregido: FUTURO -> capacidad candidata de la plataforma.** Sigue sin construirse
+hoy — pero se evalua como capacidad transversal, no se archiva bajo un rubro que esta en pausa.
+Prompt en PROMPTS_POR_SESION.md, seccion `onia-plattform`.
+
+**Lo que NO cambia:** el video sigue siendo una pieza publicitaria sin CTA ni precio, y el salto
+de "detecto ovejas en un video" a "gestion ganadera inteligente" sigue siendo marketing. Si
+alguna vez montamos un overlay asi para una demo, se declara que es demo.

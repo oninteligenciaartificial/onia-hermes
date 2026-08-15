@@ -1,0 +1,183 @@
+<!-- Patron: boton de subida con 3 estados (reposo -> subiendo -> completado).
+     Referencia: https://www.instagram.com/p/Dbx6AWGz_av/ (el video NO da el codigo;
+     esto esta reconstruido mirando los fotogramas, asi que es nuestro).
+     El original usa React + framer-motion; aca es CSS puro + 20 lineas de JS:
+     todo lo que anima son transform, opacity, background-color y width. -->
+<div class="ub-demo">
+  <button class="ub" data-state="idle" aria-label="Subir Document.pdf">
+    <span class="ub__file">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+      </svg>
+      <span class="ub__name">Document.pdf</span>
+    </span>
+    <span class="ub__action" aria-hidden="true">
+      <span class="ub__label" data-label="idle">Upload</span>
+      <span class="ub__label" data-label="busy">Uploading...</span>
+      <span class="ub__label" data-label="done">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        Completed
+      </span>
+    </span>
+    <span class="ub__progress"></span>
+  </button>
+  <p class="ub-hint">Tocá el botón</p>
+</div>
+
+<style>
+  .ub-demo {
+    --crema: #f2e3c6;
+    --coral: #de6e5c;
+    --coral-hover: #cd5f4e;
+    --tinta: #2c2b29;
+    --papel: #fff;
+    --radio: 26px;
+    --alto: 76px;
+    --ancho-accion: 168px;
+    --curva: cubic-bezier(0.16, 1, 0.3, 1);
+
+    display: grid;
+    place-items: center;
+    gap: 22px;
+    padding: clamp(32px, 8vw, 72px) 16px;
+    background: var(--crema);
+    border-radius: 18px;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  .ub {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: min(520px, 100%);
+    height: var(--alto);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radio);
+    background: var(--papel);
+    box-shadow: 0 14px 30px -14px rgb(44 43 41 / 0.45);
+    cursor: pointer;
+    overflow: hidden;
+    /* width es layout-bound y normalmente no se anima; aca es deliberado: el colapso
+       del pill ES el gesto del patron, y es un solo elemento aislado. */
+    transition: width 0.9s var(--curva), background-color 0.6s ease;
+  }
+
+  .ub__file {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+    padding-left: 26px;
+    color: var(--tinta);
+    transition: opacity 0.4s ease, transform 0.75s var(--curva);
+  }
+  .ub__file svg { width: 26px; height: 26px; flex: none; opacity: 0.75; }
+  .ub__name {
+    font-size: clamp(1.05rem, 0.9rem + 0.8vw, 1.5rem);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ub__action {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: var(--ancho-accion);
+    align-self: stretch;
+    margin: 8px 8px 8px 0;
+    border-radius: calc(var(--radio) - 8px);
+    background: var(--coral);
+    color: #fff;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.35rem);
+    transition: background-color 0.6s ease, margin 0.9s var(--curva),
+                border-radius 0.9s var(--curva);
+  }
+  .ub:hover .ub__action { background: var(--coral-hover); }
+
+  /* Las 3 etiquetas apiladas: solo una visible. Nada salta de layout. */
+  .ub__label {
+    grid-area: 1 / 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(14px) scale(0.94);
+    transition: opacity 0.45s ease, transform 0.6s var(--curva);
+  }
+  .ub__label svg { width: 22px; height: 22px; }
+
+  .ub__progress {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 5px;
+    background: var(--tinta);
+    transform: scaleX(0);
+    transform-origin: left;
+    opacity: 0;
+  }
+
+  /* --- reposo --- */
+  .ub[data-state="idle"] .ub__label[data-label="idle"] { opacity: 1; transform: none; }
+
+  /* --- subiendo: el pill colapsa al ancho de la accion y se tine de coral --- */
+  .ub[data-state="busy"] { width: min(340px, 100%); background: var(--coral); }
+  .ub[data-state="busy"] .ub__file { opacity: 0; transform: translateX(-24px); }
+  .ub[data-state="busy"] .ub__action {
+    width: 100%; margin: 0; border-radius: var(--radio);
+  }
+  .ub[data-state="busy"] .ub__label[data-label="busy"] { opacity: 1; transform: none; }
+  .ub[data-state="busy"] .ub__progress {
+    opacity: 1;
+    transform: scaleX(1);
+    transition: transform 2.6s linear;
+  }
+
+  /* --- completado --- */
+  .ub[data-state="done"] { width: min(340px, 100%); background: var(--tinta); }
+  .ub[data-state="done"] .ub__file { opacity: 0; transform: translateX(-24px); }
+  .ub[data-state="done"] .ub__action {
+    width: 100%; margin: 0; border-radius: var(--radio);
+    background: var(--tinta); color: #d8d5cf;
+  }
+  .ub[data-state="done"] .ub__label[data-label="done"] { opacity: 1; transform: none; }
+
+  .ub-hint { margin: 0; color: #7c7466; font-size: 0.9rem; letter-spacing: 0.02em; }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* transition: none, no 0.01ms — ver README: 0.01ms rompe propiedades discretas. */
+    .ub, .ub__file, .ub__action, .ub__label, .ub__progress { transition: none !important; }
+  }
+</style>
+
+<script>
+  (() => {
+    const b = document.currentScript.parentElement.querySelector('.ub');
+    const hint = document.currentScript.parentElement.querySelector('.ub-hint');
+    b.addEventListener('click', () => {
+      if (b.dataset.state !== 'idle') {
+        b.dataset.state = 'idle';
+        b.setAttribute('aria-label', 'Subir Document.pdf');
+        hint.textContent = 'Tocá el botón';
+        return;
+      }
+      b.dataset.state = 'busy';
+      b.setAttribute('aria-label', 'Subiendo Document.pdf');
+      hint.textContent = 'subiendo...';
+      setTimeout(() => {
+        b.dataset.state = 'done';
+        b.setAttribute('aria-label', 'Document.pdf subido. Tocá para reiniciar');
+        hint.textContent = 'tocá otra vez para reiniciar';
+      }, 2600);
+    });
+  })();
+</script>

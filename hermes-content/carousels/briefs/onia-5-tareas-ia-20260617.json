@@ -1,7 +1,14 @@
 {
   "title": "5 tareas que una IA hace mejor que tu equipo (y más barato)",
   "caption": "No es reemplazar a tu equipo: es sacarle de encima las 5 tareas repetitivas que le queman el día y se las das a una IA que no se cansa ni se olvida. Tu gente vende y atiende; el sistema hace el resto. Guardá la lista y comentá LISTA: te paso cuál de las 5 conviene automatizar primero en tu negocio.",
-  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#productividad", "#pymes", "#whatsapp"],
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#productividad",
+    "#pymes",
+    "#whatsapp"
+  ],
   "comment_trigger": "Comentá LISTA",
   "cta": "Comentá LISTA",
   "slides": [
@@ -65,7 +72,7 @@
       "role": "cta",
       "pill": "Empezá hoy",
       "headline": "Empezá por *una* tarea",
-      "body": "Comentá *LISTA* y te paso cuál de las 5 conviene automatizar primero en tu negocio.",
+      "body": "Comentá *LISTA* y te paso las 5 en orden, con lo que cuesta cada una.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte verde, acento en una.",

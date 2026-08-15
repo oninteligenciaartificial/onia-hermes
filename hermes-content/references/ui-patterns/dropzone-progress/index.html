@@ -1,0 +1,347 @@
+<!-- Patron: dropzone con progreso por archivo hecho con CSS @property + clip-path.
+     Referencia: https://www.instagram.com/p/Da0iDR4vl5M/ (el reel SI muestra el CSS clave;
+     el resto -- filas, estados, anillo, errores -- esta reconstruido de los fotogramas).
+     Cero librerias: la miniatura ES la barra de progreso.
+
+     Como funciona: --p se registra con @property, asi el navegador la interpola. Una capa
+     fantasma (grayscale) abajo y la foto real arriba recortada con
+     clip-path: inset(0 0 calc((1 - var(--p)) * 100%) 0). Se anima --p (no el clip-path):
+     el clip se recalcula solo. clip-path es paint, no dispara layout.
+
+     OJO: el reel muestra `easing: SPRING` en el .animate() -- eso NO es sintaxis nativa de
+     la Web Animations API (ningun navegador trae un easing llamado asi; sale de alguna
+     libreria). Aca se usa la cubic-bezier con rebote equivalente, ver RESORTE abajo. -->
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <symbol id="dz-zapa" viewBox="0 0 64 64">
+    <path d="M4 46c0-7 6-10 12-13l10-5c3-2 5-5 6-8 1-2 4-2 5 0l4 10c2 4 8 6 12 8 4 2 7 5 7 8v2H4z" fill="currentColor"/>
+    <g stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".75"><path d="M23 34l6-3M27 40l6-3M31 45l6-3"/></g>
+    <path d="M3 46h58a5 5 0 010 10H3a5 5 0 010-10z" fill="#efeef2"/>
+  </symbol>
+  <symbol id="dz-doc" viewBox="0 0 64 64">
+    <path d="M16 6h22l12 12v40a4 4 0 01-4 4H16a4 4 0 01-4-4V10a4 4 0 014-4z" fill="currentColor"/>
+    <path d="M38 6l12 12H40a2 2 0 01-2-2z" fill="#fff" opacity=".5"/>
+    <g stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"><path d="M20 34h24M20 42h24M20 50h16"/></g>
+  </symbol>
+</svg>
+
+<div class="dz">
+  <p class="dz__eyebrow">COMPONENTE</p>
+  <h2 class="dz__title">Dropzone</h2>
+
+  <section class="dz__card">
+    <div class="dz__head">
+      <h3>Subir archivos</h3>
+      <p id="dz-reglas">PNG, JPG, WebP, GIF o PDF · hasta 8 MB c/u · máx. 6 archivos</p>
+    </div>
+
+    <button class="dz__zone" id="dz-zone" type="button" aria-describedby="dz-reglas">
+      <span class="dz__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+      </span>
+      <span class="dz__zone-txt">
+        <strong>Arrastrá los archivos acá</strong>
+        <small>o <u>elegilos</u> · también podés pegar</small>
+      </span>
+    </button>
+    <input type="file" id="dz-input" multiple accept="image/*,application/pdf" hidden>
+
+    <ul class="dz__list" id="dz-list"></ul>
+
+    <footer class="dz__foot">
+      <span class="dz__ring" id="dz-ring" aria-hidden="true"></span>
+      <span class="dz__count" id="dz-count" role="status">0 de 0 subidos</span>
+      <button class="dz__btn" type="button" id="dz-demo">Probar con 4 de ejemplo</button>
+      <button class="dz__btn" type="button" id="dz-clear">Limpiar</button>
+    </footer>
+  </section>
+</div>
+
+<style>
+  /* registrada = el navegador la INTERPOLA (sin esto, --p saltaria de 0 a 1) */
+  @property --p {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  .dz {
+    --violeta: #8b7cf6;
+    --tinta: #0c0c10;
+    --panel: #16161d;
+    --linea: rgb(255 255 255 / .09);
+    --texto: #edecf2;
+    --suave: #8e8b9c;
+    --verde: #34d399;
+    --rojo: #fb7185;
+    --curva: cubic-bezier(0.16, 1, 0.3, 1);
+
+    padding: clamp(24px, 5vw, 44px) clamp(16px, 4vw, 32px);
+    background: radial-gradient(120% 80% at 70% 0%, #1c1a2b 0%, var(--tinta) 55%);
+    border-radius: 18px;
+    color: var(--texto);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .dz__eyebrow { margin: 0 0 4px; color: var(--violeta); font-size: .7rem; font-weight: 700; letter-spacing: .18em; }
+  .dz__title { margin: 0 0 22px; font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem); letter-spacing: -0.03em; }
+
+  .dz__card {
+    max-width: 560px; padding: 18px;
+    background: var(--panel); border: 1px solid var(--linea); border-radius: 20px;
+    box-shadow: 0 34px 60px -34px rgb(0 0 0 / .9);
+  }
+  .dz__head h3 { margin: 0 0 3px; font-size: 1rem; }
+  .dz__head p { margin: 0 0 14px; color: var(--suave); font-size: .78rem; }
+
+  .dz__zone {
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    padding: 16px; border: 1.5px dashed rgb(255 255 255 / .16); border-radius: 15px;
+    background: rgb(255 255 255 / .02); color: inherit; font: inherit; text-align: left; cursor: pointer;
+    transition: transform .5s var(--curva), border-color .4s ease, background-color .4s ease;
+  }
+  .dz__zone:hover, .dz__zone:focus-visible { border-color: rgb(139 124 246 / .55); background: rgb(139 124 246 / .07); }
+  .dz__zone[data-over="true"] { border-color: var(--violeta); background: rgb(139 124 246 / .13); transform: scale(1.015); }
+  .dz__icon { display: grid; place-items: center; width: 44px; height: 44px; flex: none; border-radius: 13px; background: rgb(139 124 246 / .16); color: var(--violeta); }
+  .dz__icon svg { width: 21px; height: 21px; }
+  .dz__zone-txt { display: grid; gap: 2px; }
+  .dz__zone-txt strong { font-size: .95rem; }
+  .dz__zone-txt small { color: var(--suave); font-size: .78rem; }
+
+  .dz__list { display: grid; gap: 2px; margin: 8px 0 0; padding: 0; list-style: none; }
+
+  .dz-file {
+    --p: 0;
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px; border-radius: 14px;
+    /* se anima --p (numero registrado); el clip-path de la capa viva sale de ella */
+    transition: --p .42s linear, background-color .4s ease;
+  }
+  .dz-file:hover { background: rgb(255 255 255 / .04); }
+  .dz-file + .dz-file { box-shadow: 0 -1px 0 var(--linea); }
+  .dz-file[data-estado="error"] { cursor: pointer; }
+
+  .dz-file__img {
+    position: relative; overflow: hidden; flex: none;
+    width: 46px; height: 46px; border-radius: 12px;
+    background: #23232e; box-shadow: 0 0 0 1.5px var(--linea);
+    transition: box-shadow .5s ease;
+  }
+  .dz-file__capa { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* la que todavia no llego */
+  .dz-file__capa--fantasma { filter: grayscale(1) brightness(.32); }
+  /* la real, descubierta de abajo hacia arriba exactamente lo que ya subio */
+  .dz-file__capa--viva { clip-path: inset(0 0 calc((1 - var(--p)) * 100%) 0); }
+
+  .dz-file__ok, .dz-file__err {
+    position: absolute; right: -3px; bottom: -3px;
+    display: grid; place-items: center; width: 19px; height: 19px; border-radius: 50%;
+    color: #0c0c10; box-shadow: 0 0 0 2.5px var(--panel);
+    opacity: 0; transform: scale(.4);
+    transition: opacity .4s ease, transform .55s var(--curva);
+  }
+  .dz-file__ok { background: var(--verde); }
+  .dz-file__err { background: var(--rojo); }
+  .dz-file__ok svg, .dz-file__err svg { width: 12px; height: 12px; }
+  .dz-file[data-estado="listo"] .dz-file__ok,
+  .dz-file[data-estado="error"] .dz-file__err { opacity: 1; transform: none; }
+  .dz-file[data-estado="listo"] .dz-file__img { box-shadow: 0 0 0 1.5px var(--verde); }
+  .dz-file[data-estado="error"] .dz-file__img { box-shadow: 0 0 0 1.5px var(--rojo); }
+
+  .dz-file__id { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .dz-file__nom { font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dz-file__meta { color: var(--suave); font-size: .74rem; font-variant-numeric: tabular-nums; }
+  .dz-file[data-estado="listo"] .dz-file__meta { color: var(--verde); }
+  .dz-file[data-estado="error"] .dz-file__meta { color: var(--rojo); }
+
+  .dz-file__x {
+    display: grid; place-items: center; flex: none;
+    width: 28px; height: 28px; border: 0; border-radius: 50%;
+    background: transparent; color: var(--suave); cursor: pointer;
+    transition: transform .45s var(--curva), color .3s ease, background-color .3s ease;
+  }
+  .dz-file__x:hover { background: rgb(255 255 255 / .08); color: var(--texto); transform: rotate(90deg); }
+  .dz-file__x svg { width: 14px; height: 14px; }
+
+  .dz__foot { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--linea); }
+  .dz__ring {
+    --p: 0;
+    width: 22px; height: 22px; flex: none; border-radius: 50%;
+    background: conic-gradient(var(--violeta) calc(var(--p) * 360deg), rgb(255 255 255 / .12) 0);
+    mask: radial-gradient(closest-side, transparent 62%, #000 65%);
+    -webkit-mask: radial-gradient(closest-side, transparent 62%, #000 65%);
+    transition: --p .42s linear;
+  }
+  .dz__ring[data-full="true"] { background: var(--verde); mask: none; -webkit-mask: none; }
+  .dz__count { flex: 1; color: var(--suave); font-size: .82rem; }
+  .dz__btn {
+    padding: 7px 13px; border: 1px solid var(--linea); border-radius: 10px;
+    background: rgb(255 255 255 / .05); color: var(--texto); font: inherit; font-size: .78rem; cursor: pointer;
+    transition: transform .45s var(--curva), background-color .3s ease;
+  }
+  .dz__btn:hover { background: rgb(255 255 255 / .11); transform: translateY(-1px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dz-file, .dz__ring, .dz__zone, .dz__btn, .dz-file__x,
+    .dz-file__ok, .dz-file__err, .dz-file__img { transition-duration: 0.01ms !important; }
+  }
+</style>
+
+<script>
+  (() => {
+    // El reel muestra `easing: SPRING`, que no existe en la Web Animations API nativa.
+    // Esta es la curva con rebote equivalente (back-out), sin librerias.
+    const RESORTE = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+    const MAX_ARCHIVOS = 6, MAX_BYTES = 8 * 1024 * 1024;
+    const lento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const $ = (s) => document.querySelector(s);
+    const zona = $('#dz-zone'), input = $('#dz-input'), lista = $('#dz-list');
+    const anillo = $('#dz-ring'), cuenta = $('#dz-count');
+    const items = [];
+
+    const peso = (b) => (b < 1024 ? b + ' B' : b < 1048576 ? Math.round(b / 1024) + ' KB' : (b / 1048576).toFixed(1) + ' MB');
+    const demo = [
+      { name: 'zapa-lila.webp',      size: 41 * 1024, tono: '#b8a6f0' },
+      { name: 'zapa-menta.webp',     size: 45 * 1024, tono: '#7fd8b4' },
+      { name: 'zapa-terracota.webp', size: 55 * 1024, tono: '#e08060' },
+      { name: 'brief.pdf',           size: 21,        tono: '#8b9bf5', doc: true }
+    ];
+
+    function capas(it) {
+      const uno = it.url
+        ? `<img class="dz-file__capa CLASE" src="${it.url}" alt="">`
+        : `<svg class="dz-file__capa CLASE" viewBox="0 0 64 64" style="color:${it.tono}" aria-hidden="true"><use href="#${it.doc ? 'dz-doc' : 'dz-zapa'}"/></svg>`;
+      return uno.replace('CLASE', 'dz-file__capa--fantasma') + uno.replace('CLASE', 'dz-file__capa--viva');
+    }
+
+    function fila(it) {
+      const li = document.createElement('li');
+      li.className = 'dz-file';
+      li.dataset.estado = 'subiendo';
+      li.innerHTML = `
+        <span class="dz-file__img">${capas(it)}
+          <span class="dz-file__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+          <span class="dz-file__err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M12 7v6M12 17v.01"/></svg></span>
+        </span>
+        <span class="dz-file__id">
+          <span class="dz-file__nom">${it.name}</span>
+          <span class="dz-file__meta">${peso(it.size)} · 0%</span>
+        </span>
+        <button class="dz-file__x" type="button" aria-label="Quitar ${it.name}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>`;
+      return li;
+    }
+
+    function pintarPie() {
+      const listos = items.filter((i) => i.estado === 'listo').length;
+      const rotos = items.filter((i) => i.estado === 'error').length;
+      cuenta.textContent = `${listos} de ${items.length} subidos` + (rotos ? ` · ${rotos} con error` : '');
+      anillo.style.setProperty('--p', items.length ? listos / items.length : 0);
+      anillo.dataset.full = String(items.length > 0 && listos === items.length);
+    }
+
+    function tick(it) {
+      clearInterval(it.timer);
+      it.timer = setInterval(() => {
+        it.p = Math.min(1, it.p + 0.07 + Math.random() * 0.13);
+        // el primer intento del tercer archivo falla a proposito: muestra el estado error
+        if (it.fallaUna && it.p > 0.55) {
+          clearInterval(it.timer);
+          it.fallaUna = false;
+          it.estado = 'error';
+          it.el.dataset.estado = 'error';
+          it.el.querySelector('.dz-file__meta').textContent = `${peso(it.size)} · error, tocá para reintentar`;
+          return pintarPie();
+        }
+        it.el.style.setProperty('--p', it.p);
+        it.el.querySelector('.dz-file__meta').textContent = `${peso(it.size)} · ${Math.round(it.p * 100)}%`;
+        if (it.p >= 1) {
+          clearInterval(it.timer);
+          it.estado = 'listo';
+          it.el.dataset.estado = 'listo';
+          it.el.querySelector('.dz-file__meta').textContent = `${peso(it.size)} · subido`;
+          pintarPie();
+        }
+      }, 420);
+    }
+
+    function agregar(archivos, desde) {
+      const libres = MAX_ARCHIVOS - items.length;
+      [...archivos].slice(0, Math.max(0, libres)).forEach((f, i) => {
+        const it = {
+          name: f.name, size: f.size, tono: f.tono, doc: f.doc || /pdf$/i.test(f.name),
+          url: f instanceof File && f.type.startsWith('image/') ? URL.createObjectURL(f) : null,
+          p: 0, estado: 'subiendo', fallaUna: items.length === 2
+        };
+        if (f.size > MAX_BYTES) { it.estado = 'error'; it.fallaUna = false; it.pesado = true; }
+        it.el = fila(it);
+        items.push(it);
+        lista.appendChild(it.el);
+
+        if (it.estado === 'error') {
+          it.el.dataset.estado = 'error';
+          it.el.querySelector('.dz-file__meta').textContent = `${peso(it.size)} · supera los 8 MB`;
+        } else {
+          tick(it);
+        }
+
+        // cada fila VUELA desde donde se soltaron los archivos hasta su lugar en la lista
+        if (!lento && desde) {
+          const r = it.el.getBoundingClientRect();
+          const dx = desde.x - (r.left + r.width / 2), dy = desde.y - (r.top + r.height / 2);
+          it.el.animate(
+            [{ transform: `translate(${dx}px, ${dy}px) scale(.82)`, opacity: 0 }, { transform: 'none', opacity: 1 }],
+            { duration: 780, delay: i * 90, easing: RESORTE, fill: 'backwards' }
+          );
+        }
+      });
+      pintarPie();
+    }
+
+    function quitar(it) {
+      clearInterval(it.timer);
+      if (it.url) URL.revokeObjectURL(it.url);
+      items.splice(items.indexOf(it), 1);
+      const fin = () => { it.el.remove(); pintarPie(); };
+      lento ? fin()
+        : it.el.animate([{ opacity: 1 }, { transform: 'translateX(40px) scale(.9)', opacity: 0 }],
+            { duration: 420, easing: 'ease-in' }).finished.then(fin);
+    }
+
+    const centro = () => { const r = zona.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.bottom }; };
+
+    zona.addEventListener('click', () => input.click());
+    input.addEventListener('change', () => { agregar(input.files, centro()); input.value = ''; });
+    $('#dz-demo').addEventListener('click', () => agregar(demo, centro()));
+    $('#dz-clear').addEventListener('click', () => [...items].forEach(quitar));
+
+    ['dragenter', 'dragover'].forEach((ev) => zona.addEventListener(ev, (e) => {
+      e.preventDefault(); zona.dataset.over = 'true';
+    }));
+    ['dragleave', 'drop'].forEach((ev) => zona.addEventListener(ev, () => (zona.dataset.over = 'false')));
+    zona.addEventListener('drop', (e) => {
+      e.preventDefault();
+      agregar(e.dataTransfer.files, { x: e.clientX, y: e.clientY });
+    });
+    document.addEventListener('paste', (e) => {
+      if (e.clipboardData.files.length) agregar(e.clipboardData.files, centro());
+    });
+
+    lista.addEventListener('click', (e) => {
+      const li = e.target.closest('.dz-file');
+      if (!li) return;
+      const it = items.find((x) => x.el === li);
+      if (e.target.closest('.dz-file__x')) return quitar(it);
+      // reintentar: la barra sigue de donde quedo. Lo rechazado por tamano no se reintenta.
+      if (it.estado === 'error' && !it.pesado) {
+        it.estado = 'subiendo';
+        li.dataset.estado = 'subiendo';
+        tick(it);
+        pintarPie();
+      }
+    });
+
+    pintarPie();
+  })();
+</script>

@@ -35,6 +35,7 @@ test('cover renders hook headline and account name', () => {
   const html = slideHtml({ headline: 'Perdés clientes', body: '' }, 0, 5, 'onia', '');
   assert.ok(html.includes('class="slide cover"'));
   assert.ok(html.includes('Perdés clientes'));
+  // @oniahq no es nuestro (esta por reclamar); las piezas llevan el handle real.
   assert.ok(html.includes('@oniahq'));
 });
 test('save slide shows FRAMEWORK + Guardá bar', () => {
@@ -57,7 +58,7 @@ test('last slide omits continuation cue', () => {
   assert.ok(!html.includes('class="cue"'));
 });
 test('accounts configured (onia/arthur/sergio/nuvia)', () => {
-  assert.deepStrictEqual(Object.keys(ACCOUNTS).sort(), ['arthur', 'nuvia', 'onia', 'sergio']);
+  assert.deepStrictEqual(Object.keys(ACCOUNTS).sort(), ['arthur', 'lucia', 'nuvia', 'onia', 'sergio']);
 });
 
 // dark-product pack
@@ -89,7 +90,9 @@ test('editorial-photo uses photo bg, serif-italic accent, pill caption', () => {
   assert.ok(html.includes('sergio.jpg'));
   assert.ok(html.includes('Fraunces'));
   assert.ok(html.includes('<span class="g">Ads</span>'));
-  assert.ok(html.includes('class="cap"'));
+  // La pill de categoria vive arriba (patron del nicho ganador): topbar > captop.
+  assert.ok(html.includes('class="topbar"'));
+  assert.ok(html.includes('class="captop"'));
 });
 test('editorial-photo without bg still renders (ink fallback)', () => {
   const html = editorialPhotoHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});

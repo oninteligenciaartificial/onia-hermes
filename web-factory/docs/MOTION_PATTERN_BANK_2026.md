@@ -404,6 +404,52 @@ const casos = [
 
 - **Costo:** 0 kb marginal.
 
+### P19 — Boton multi-estado (reposo -> proceso -> resultado)
+
+- **Comunica:** el control ES el indicador de estado; no hay spinner aparte ni cartel que aparezca al lado. Subir, pagar, enviar.
+- **Cuando si:** una accion con una espera corta y verificable (subida, cobro, envio de formulario). **Cuando no:** procesos largos o con pasos — eso pide una vista, no un boton.
+- **Implementacion de referencia (vanilla, sin kit):** `hermes-content/references/ui-patterns/upload-button/`.
+- **Mecanica:** las 3 etiquetas viven APILADAS en la misma celda (`grid-area: 1/1`) y cruzan por opacity — nada salta de layout. El estado se maneja con un `data-state` en el boton, no con clases sueltas.
+- **EXCEPCION DECLARADA a la regla dura 1:** este patron anima `width` (el pill colapsa al ancho del boton) y `background-color`. El colapso ES el gesto del patron y ocurre en UN elemento aislado sin hermanos que reflowear. El cross-fade de color se puede pasar a dos capas + opacity si el perfil lo pide; a hoy no lo justifica. Si se porta a una landing con muchos hermanos, medir Layout en DevTools antes de shippear.
+- **Nombre accesible:** las etiquetas visuales van `aria-hidden` y el nombre real vive en un `aria-label` que el JS actualiza por estado — si no, el lector lee las tres juntas ("Upload Uploading Completed").
+- **Costo:** 0 kb. No necesita libreria de motion.
+
+### P20 — Progreso que ES el contenido (clip-path + `@property`)
+
+- **Comunica:** el archivo se "llena" a si mismo. No hay barra separada: la miniatura viva se revela sobre su version fantasma en escala de grises.
+- **Cuando si:** subida de archivos, importacion de productos, cualquier cola donde cada item tiene identidad visual propia. **Cuando no:** progreso de una sola tarea sin objeto que mostrar (ahi alcanza una barra).
+- **Implementacion de referencia (vanilla):** `hermes-content/references/ui-patterns/dropzone-progress/`.
+- **Mecanica:** una custom property registrada con `@property --p` (asi es animable) + `clip-path: inset(0 0 calc((1 - var(--p)) * 100%) 0)` sobre la capa viva. `clip-path` es paint, no dispara layout — permitido por la regla 1.
+- **Ojo:** el `easing: SPRING` que circula en los reels NO es sintaxis nativa de la Web Animations API. Usar `cubic-bezier(0.34, 1.56, 0.64, 1)` para el rebote equivalente.
+- **Costo:** 0 kb.
+
+### P21 — Overlay nativo (`<dialog>`) en vez de div + focus-trap a mano
+
+- **Comunica:** nada por si mismo — es la mecanica correcta debajo de cualquier modal, carrito o panel.
+- **Cuando si:** SIEMPRE que haya un overlay modal. **Cuando no:** paneles no modales (ahi va `popover`).
+- **Implementacion de referencia (vanilla):** `hermes-content/references/ui-patterns/floating-cart/`.
+- **Por que:** `showModal()` da Escape, foco atrapado, devolucion del foco al disparador y `::backdrop` sin una linea de JS. Reimplementarlo a mano es como se rompen los modales.
+- **BUG REAL, no teorico:** bajo `prefers-reduced-motion` NO alcanza `transition-duration: 0.01ms`. Las propiedades DISCRETAS (`display`, `overlay`) con 0,01 ms dejan al `<dialog>` a medio camino: abierto y con `opacity: 0`, o sea invisible para quien pidio menos movimiento. Va `transition: none`.
+- **Entrada:** `@starting-style` para animar la apertura sin JS. El disparador va `inert` cuando no aplica (carrito vacio): invisible Y no enfocable, no solo `opacity: 0`.
+- **Costo:** 0 kb.
+
+### P22 — Flip 3D para revelar el dorso
+
+- **Comunica:** hay una cara oculta del mismo objeto (el CVV de una tarjeta, un detalle al reverso).
+- **Cuando si:** el objeto tiene dos caras reales y el usuario necesita las dos. **Cuando no:** como adorno en una card de contenido.
+- **Implementacion de referencia (vanilla):** `hermes-content/references/ui-patterns/checkout-card/`.
+- **Mecanica:** `transform-style: preserve-3d` en el contenedor + `backface-visibility: hidden` en cada cara + `rotateY(180deg)`. 0,85 s: mas rapido no se lee como giro.
+- **Foco:** el objeto que gira va `aria-hidden` y SIN elementos enfocables adentro. Si hay foco en la cara oculta, el teclado se pierde.
+- **Costo:** 0 kb.
+
+---
+
+**Nota sobre los patrones vanilla (P19-P22).** Salieron de reconstruir reels de UI mirando los
+fotogramas, no de la libreria: `hermes-content/references/ui-patterns/`. Los originales usan
+React + framer-motion y **los cuatro salieron identicos en CSS puro**. Antes de sumar una
+dependencia de motion para un componente aislado, intentarlo sin ella. Reglas y bugs
+aprendidos: `hermes-content/references/ui-patterns/README.md`.
+
 **Nota sobre tipografía:** todos estos patrones usan las familias tipográficas del sistema. Ver `TIPOGRAFIA_SISTEMA_20260727.md` para detalles de tokens, la clase `.display` (usar en titulares grandes), y la escala responsiva con `clamp()`.
 
 ---

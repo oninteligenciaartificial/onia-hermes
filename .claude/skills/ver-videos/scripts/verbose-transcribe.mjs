@@ -20,7 +20,10 @@ function out(o) { process.stdout.write(JSON.stringify(o) + "\n"); }
     const form = new FormData();
     form.append("file", new Blob([buf], { type: "audio/mpeg" }), path.split("/").pop());
     form.append("model", MODEL);
-    form.append("language", LANG);
+    // "auto" (o vacio) = NO mandar el campo, para que Whisper detecte el idioma.
+    // Forzar "es" sobre un video en ingles no falla: TRADUCE, y el verbatim queda
+    // inventado. Con el modelo multilingue la deteccion es segura.
+    if (LANG && LANG !== "auto") form.append("language", LANG);
     form.append("response_format", "verbose_json");
     form.append("timestamp_granularities[]", "segment");
     form.append("timestamp_granularities[]", "word");

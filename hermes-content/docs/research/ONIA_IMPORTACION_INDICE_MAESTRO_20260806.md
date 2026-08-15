@@ -55,14 +55,27 @@ Bolivia, y elegir un producto.
 | 4 | Generar certificado del Padrón (**después** de 1 y 2), destinatario ADUANA NACIONAL | Leslie |
 | 5 | Registro de importador en SUMA + estar presente en la verificación de domicilio | Leslie |
 | 6 | **Enviar el RFQ** a Beelink y GMKtec | Sergio |
-| 7 | **5 conversaciones** con estudios jurídicos y clínicas | Sergio |
+| 7 | **5 conversaciones** con estudios jurídicos y clínicas — guion listo para salir: `ONIA_BOX_LAS_5_CONVERSACIONES_GUION_20260812.md` | Sergio |
+
+> ⚠️ **El 7 manda sobre los otros seis.** Los seis primeros preparan la importación; el séptimo
+> dice si hay que importar. El criterio de corte (qué resultado sigue y cuál para el producto)
+> está escrito **antes** de salir, en la sección 7 de ese guion, para no acomodarlo después.
+
+### ✅ Verificado el 2026-08-12
+- **DS 5518: 8471.41.00.00 (mini PC completo) entra con GA 0 % hasta el 31-dic-2026** — leído del
+  Anexo en la Gaceta Oficial. **SSD (8471.70) y partes (84.73) quedan afuera: pagan 5 %.**
+  **Invierte la estrategia: conviene traer el equipo ARMADO, no los componentes**
+- **ATT: homologación obligatoria** para equipos con radio · **12 semanas** · exención si el modelo
+  ya está homologado · exige **Autorización Previa de Importación antes de que salga la carga**
+- **Minisforum = Shenzhen Meigao Electronic Equipment Co., Ltd** — fábrica propia, hace OEM/ODM
+- Anchos de banda: Mac Mini M4 120 GB/s · M4 Pro 273 · RTX 5060 Ti 448 · 5070 672 · 5080 960
 
 ### ❓ Sin verificar (marcado, no inventado)
-- GA exacto de las partidas 84.71 / 8473.30 → pedir clasificación escrita a la despachante
-- Si la ATT exige homologación para equipos con radio del embarque
+- Si la ATT **exime a una unidad de uso propio** — el procedimiento oficial está en un PDF ilegible;
+  lo responde la despachante
 - Si existe reglamento técnico IBMETRO aplicable
 - Licencias de Ernie, Yi y Baichuan
-- Razón social y contacto B2B de Minisforum
+- Precio real de Beelink y Minisforum (sólo sale de la cotización)
 
 ---
 
@@ -101,6 +114,7 @@ Bolivia, y elegir un producto.
 | `ONIA_BOX_STACK_PERFILES_COMPETENCIA_20260806.md` | Stack de 13 capas, **qué más corre en la caja**, perfiles de comprador, competencia global |
 | `ONIA_BOX_GAMAS_POR_MODELO_20260806.md` | **Prefill vs generación**, 5 gamas, protocolo de medición de 2 semanas |
 | `ONIA_BOX_ALTERNATIVAS_AL_MINIPC_20260806.md` | Formatos alternativos y **5 vías de entrega**, 3 sin importar. Colocation en Bolivia |
+| `ONIA_BOX_PREGUNTAR_A_LOS_DOCUMENTOS_20260812.md` | **La función que cierra la venta**: "¿dónde está la ficha?" vs "¿cómo está el documento?" — qué se promete, la regla de la cita, permisos en la búsqueda, qué lo hace fallar |
 
 ### Modelos de IA
 | Doc | Qué contiene |
@@ -114,6 +128,10 @@ Bolivia, y elegir un producto.
 | Doc | Qué contiene |
 |---|---|
 | `ONIA_BOX_CONTACTOS_FABRICA_Y_RFQ_20260806.md` | **Contactos B2B verificados** de Beelink y GMKtec + **RFQ listo para enviar** |
+| `ONIA_BOX_RUNBOOK_DE_COMPRA_20260812.md` | **Cómo se compra**: la unidad de demo ≠ la tanda · las 3 vías para 1 unidad · cómo se paga la primera vez · el único punto donde sale plata |
+| `ONIA_BOX_OPCIONES_HARDWARE_POR_PRESUPUESTO_20260812.md` | **Mac vs NVIDIA vs AMD**: qué vende cada plataforma, la escalera completa de USD 249 a 500.000, qué modelo entra en cada equipo, y cuál es barato para modelos chicos vs caro para razonar |
+| **`ONIA_PLAN_IMPORTACION_EJECUTABLE_20260812.md`** ⭐ | **EMPEZAR ACÁ para ejecutar**: números finales con el arancel cero confirmado, los contactos completos, los mensajes listos para copiar (4 fábricas, despachante, bancos) y el cronograma con fechas |
+| `ONIA_BOX_LAS_5_CONVERSACIONES_GUION_20260812.md` | **El guion de validación**: a quién, qué preguntar, cómo distinguir un sí real de cortesía, y el criterio de corte escrito de antemano |
 
 ---
 

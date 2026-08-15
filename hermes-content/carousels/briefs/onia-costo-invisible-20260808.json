@@ -1,9 +1,17 @@
 {
   "title": "Automatizar es caro. Hacerlo a mano te cuesta más",
   "caption": "Cada vez que decimos automatización, alguien contesta: 'debe ser carísimo'. Pero nadie saca la otra cuenta: cuánto te cuesta HOY hacerlo a mano. Las horas que pasás contestando lo mismo. Los que preguntaron y nunca volvieron porque tardaste. Ese costo no aparece en ninguna factura, pero lo pagás todos los meses. Sacá tu número con el test del slide 5 y comentá COSTO: te hago la cuenta para tu rubro, sin compromiso.",
-  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#negocios", "#pymes", "#santacruz", "#emprender"],
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#negocios",
+    "#pymes",
+    "#santacruz",
+    "#emprender"
+  ],
   "comment_trigger": "Comentá COSTO",
-  "cta": "Comentá COSTO",
+  "cta": "Comentá LISTA",
   "slides": [
     {
       "number": 1,
@@ -82,7 +90,7 @@
       "role": "cta",
       "pill": "Empezá hoy",
       "headline": "Hacé la *cuenta* conmigo",
-      "body": "Comentá *COSTO* y te saco el número de tu negocio, sin compromiso.",
+      "body": "Comentá *LISTA* y te paso qué automatizar primero, con el costo de cada cosa.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte.",

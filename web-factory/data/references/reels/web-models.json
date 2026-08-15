@@ -1,15 +1,35 @@
 {
-  "generatedAt": "2026-07-22T14:41:34.588Z",
+  "generatedAt": "2026-08-11T02:56:30.116Z",
   "policy": "Learned web-models are generation blueprints, not copies. Rebuild each with ONIA tokens and blocks; supply real client assets; never reuse third-party footage, code, copy or logos. Trend models are inspiration; client-owned assets only after rights confirmed.",
   "summary": {
-    "models": 3,
-    "siteTypes": 3,
-    "blocks": 15,
+    "models": 5,
+    "siteTypes": 4,
+    "blocks": 22,
     "motionPrimitives": 10
   },
   "blockLibrary": [
     {
+      "value": "footer-brand",
+      "count": 3
+    },
+    {
       "value": "benefit-strip",
+      "count": 2
+    },
+    {
+      "value": "editorial-statement",
+      "count": 2
+    },
+    {
+      "value": "property-cards",
+      "count": 2
+    },
+    {
+      "value": "scroll-story-hero",
+      "count": 2
+    },
+    {
+      "value": "article-cards",
       "count": 1
     },
     {
@@ -25,19 +45,27 @@
       "count": 1
     },
     {
-      "value": "editorial-statement",
-      "count": 1
-    },
-    {
-      "value": "footer-brand",
-      "count": 1
-    },
-    {
       "value": "inline-contact-form",
       "count": 1
     },
     {
+      "value": "inline-quote-form",
+      "count": 1
+    },
+    {
       "value": "media-feature",
+      "count": 1
+    },
+    {
+      "value": "media-hero",
+      "count": 1
+    },
+    {
+      "value": "newsletter-band",
+      "count": 1
+    },
+    {
+      "value": "path-cards",
       "count": 1
     },
     {
@@ -49,19 +77,19 @@
       "count": 1
     },
     {
-      "value": "property-cards",
-      "count": 1
-    },
-    {
       "value": "saturated-product-hero",
       "count": 1
     },
     {
-      "value": "scroll-story-hero",
+      "value": "scroll-story",
       "count": 1
     },
     {
       "value": "seal-badge",
+      "count": 1
+    },
+    {
+      "value": "stat-strip",
       "count": 1
     },
     {
@@ -72,28 +100,28 @@
   "motionLibrary": {
     "primitives": [
       {
-        "value": "scale-zoom",
-        "count": 8
+        "value": "fade",
+        "count": 15
       },
       {
-        "value": "fade",
-        "count": 7
+        "value": "scale-zoom",
+        "count": 9
+      },
+      {
+        "value": "staggered-children",
+        "count": 8
       },
       {
         "value": "slide-in",
         "count": 5
       },
       {
-        "value": "staggered-children",
-        "count": 4
-      },
-      {
         "value": "clip-path-reveal",
-        "count": 2
+        "count": 3
       },
       {
         "value": "scroll-parallax",
-        "count": 2
+        "count": 3
       },
       {
         "value": "rotate",
@@ -115,15 +143,35 @@
     "triggers": [
       {
         "value": "in-view",
-        "count": 12
+        "count": 20
       },
       {
         "value": "on-load",
-        "count": 3
+        "count": 5
+      },
+      {
+        "value": "none",
+        "count": 2
+      },
+      {
+        "value": "scroll-linked",
+        "count": 1
       }
     ]
   },
   "componentLibrary": [
+    {
+      "value": "footer-brand",
+      "count": 2
+    },
+    {
+      "value": "article-cards",
+      "count": 1
+    },
+    {
+      "value": "benefit-strip",
+      "count": 1
+    },
     {
       "value": "centered-logo-nav",
       "count": 1
@@ -145,7 +193,27 @@
       "count": 1
     },
     {
+      "value": "editorial-statement",
+      "count": 1
+    },
+    {
       "value": "inline-form",
+      "count": 1
+    },
+    {
+      "value": "inline-quote-form",
+      "count": 1
+    },
+    {
+      "value": "media-hero",
+      "count": 1
+    },
+    {
+      "value": "newsletter-band",
+      "count": 1
+    },
+    {
+      "value": "path-cards",
       "count": 1
     },
     {
@@ -161,11 +229,27 @@
       "count": 1
     },
     {
+      "value": "property-cards",
+      "count": 1
+    },
+    {
       "value": "rounded-corner-imagery",
       "count": 1
     },
     {
       "value": "rounded-pill-labels",
+      "count": 1
+    },
+    {
+      "value": "scroll-story",
+      "count": 1
+    },
+    {
+      "value": "scroll-story-hero",
+      "count": 1
+    },
+    {
+      "value": "stat-strip",
       "count": 1
     },
     {
@@ -179,6 +263,10 @@
   ],
   "bySiteType": [
     {
+      "value": "real-estate",
+      "count": 2
+    },
+    {
       "value": "ecommerce-food",
       "count": 1
     },
@@ -187,7 +275,7 @@
       "count": 1
     },
     {
-      "value": "real-estate",
+      "value": "logistics-transport",
       "count": 1
     }
   ],
@@ -248,6 +336,72 @@
       ],
       "confidence": "high",
       "path": "data/references/reels/models/boldflavor-cpg-landing.json"
+    },
+    {
+      "id": "unitedcarriers-logistics",
+      "name": "United Carriers",
+      "siteType": "logistics-transport",
+      "sourceReel": "video-intake-20260811-Db0yxc5xnpD",
+      "sourceUrl": "https://www.instagram.com/p/Db0yxc5xnpD/",
+      "summary": "Sitio de logistica y transporte de carga donde el scroll mueve una escena 3D que representa la cadena logistica: el visitante 'sigue' la carga desde el deposito hasta la entrega. Alcanzar por este modelo cuando el cliente vende un PROCESO invisible (transporte, importacion, instalacion) y hay que hacerlo visible.",
+      "sectionFlow": [
+        "scroll-story-hero",
+        "scroll-story",
+        "benefit-strip",
+        "stat-strip",
+        "inline-quote-form",
+        "footer-brand"
+      ],
+      "paletteFamilies": [
+        "#0e1116",
+        "#171c24",
+        "#3d7dff",
+        "#eef1f6",
+        "#8b95a5"
+      ],
+      "bestFor": [
+        "logistica",
+        "transporte",
+        "importadora",
+        "distribucion",
+        "instalacion",
+        "cualquier rubro que venda un proceso invisible"
+      ],
+      "confidence": "medium",
+      "path": "data/references/reels/models/unitedcarriers-logistics.json"
+    },
+    {
+      "id": "find-realestate-editorial",
+      "name": "FIND Real Estate",
+      "siteType": "real-estate",
+      "sourceReel": "video-intake-20260811-DbmpRmEIN_L",
+      "sourceUrl": "https://www.instagram.com/p/DbmpRmEIN_L/",
+      "summary": "Inmobiliaria editorial y clara: hero con titular animado, tres caminos explicitos (comprar / vender / alquilar), contenido de mercado como prueba de autoridad y newsletter al cierre. Version LIGERA del rubro inmobiliario, frente al modelo cinematografico lecercle-realestate: alcanzar por esta cuando el cliente necesita convertir, no impresionar.",
+      "sectionFlow": [
+        "media-hero",
+        "editorial-statement",
+        "path-cards",
+        "property-cards",
+        "article-cards",
+        "newsletter-band",
+        "footer-brand"
+      ],
+      "paletteFamilies": [
+        "#faf8f5",
+        "#ffffff",
+        "#1a1a18",
+        "#2f4f45",
+        "#8a8378"
+      ],
+      "bestFor": [
+        "inmobiliaria",
+        "corretaje",
+        "alquiler temporario",
+        "desarrollos",
+        "servicios profesionales con 3 caminos de entrada"
+      ],
+      "confidence": "high",
+      "path": "data/references/reels/models/find-realestate-editorial.json"
     },
     {
       "id": "lecercle-realestate",
