@@ -5,7 +5,7 @@
 
 import { esRubroDisponible } from "./data";
 
-export type Rubro = "dental" | "comercio" | "servicios" | "proveedores";
+export type Rubro = "dental" | "comercio" | "servicios" | "proveedores" | "estetica";
 export type Equipo = "solo" | "2-5" | "6-15" | "15+";
 export type Tiene =
   | "cuaderno"

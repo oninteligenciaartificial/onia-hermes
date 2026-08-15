@@ -28,17 +28,25 @@ export const RUBRO_OPTIONS: readonly RubroOption[] = [
     disponible: true,
   },
   {
-    // El registro del producto NO ofrece este rubro todavia, asi que aca sigue
-    // en false: la fuente de verdad es lo que el cliente puede CONTRATAR hoy.
+    // Autorizado 2026-08-15 tras QA del embudo completo en produccion: registro,
+    // onboarding con vocabulario propio, panel, /agenda y /comercio/caja
+    // operativos, cero errores HTTP. El registro del producto lo vende.
     id: "servicios",
     nombre: "Servicios",
-    desc: "Negocios de servicios",
-    disponible: false,
+    desc: "Estudios y profesionales que agendan y cobran",
+    disponible: true,
   },
   {
     id: "proveedores",
     nombre: "Importadora",
     desc: "Importadoras y distribuidoras",
+    disponible: true,
+  },
+  {
+    // Tambien contratable (QA 2026-08-15). El wizard no la listaba.
+    id: "estetica",
+    nombre: "Estética y spa",
+    desc: "Centros de estética, spas y peluquerías",
     disponible: true,
   },
 ] as const;
@@ -112,8 +120,10 @@ export const FALTA_COPY: Record<"web" | "chatbot", { nombre: string; copy: strin
     copy: "Tu presencia online conectada al sistema: lo que publicás y lo que agendás viven en el mismo lugar. Desde Bs 790, pago único.",
   },
   chatbot: {
-    nombre: "Chatbot de WhatsApp",
-    copy: "El botón de WhatsApp va gratis con la web. Esto es otra cosa: un bot que conversa por vos, responde consultas y te deriva los que valen la pena. Desde Bs 300 de instalación + Bs 200/mes.",
+    nombre: "Chatbot de WhatsApp con IA",
+    // Precio ratificado 2026-08-15 — fuente: onia-platform/lib/pricing.ts
+    // (WHATSAPP_ADDON). El "desde Bs 300 + 200/mes" era el nivel N1 retirado.
+    copy: "El botón de WhatsApp va gratis con la web. Esto es otra cosa: un bot con IA que contesta, califica, agenda y hace seguimiento 24/7, con tu aprobación. Bs 1.500 de instalación + Bs 1.490/mes (500 conversaciones incluidas). Lo que no entre en el estándar se define con vos y se cotiza a medida.",
   },
 };
 
@@ -158,6 +168,16 @@ export const PROXIMO_ASSEMBLY: Record<
     ],
     built: 1,
   },
+  estetica: {
+    nombre: "Estética y spa",
+    blocks: [
+      "Cuenta y usuarios (base común)",
+      "Agenda y clientas",
+      "Tratamientos",
+      "Caja y cobros",
+    ],
+    built: 1,
+  },
 };
 
 /** Lo que SÍ existe hoy para rubros en construcción (se cotiza, sin cifras). */
@@ -174,6 +194,7 @@ export const RUBRO_MSG: Record<Rubro, string> = {
   comercio: "comercio",
   servicios: "servicios",
   proveedores: "importadora / material eléctrico",
+  estetica: "estética y spa",
 };
 
 export const EQUIPO_MSG: Record<Equipo, string> = {
