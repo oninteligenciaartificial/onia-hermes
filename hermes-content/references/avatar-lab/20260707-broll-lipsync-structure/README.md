@@ -1,5 +1,9 @@
 # Estructura de contenido: B-roll + VO + Lipsync intercalado (2026-07-07)
 
+> ⛔ **CORRECCION 2026-08-15:** la fila que dice `wan2_7` para lipsync esta MAL. Sergio:
+> "wan 2.7 es malisimo para lip sync". Ver `references/modelos/lucia/LUCIA.md` §3-bis.
+
+
 Formato definido a pedido de Sergio, comparando su investigacion de herramientas
 (Kling, HeyGen, Seedance 2.0, Veo 3) contra lo que ya tenemos en Higgsfield.
 

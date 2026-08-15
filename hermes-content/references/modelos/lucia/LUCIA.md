@@ -201,13 +201,40 @@ respaldo**, no la oficial. Los dos existen, pero solo uno es de ella.
 
 ### Cómo se usa
 
-- **B-roll (sin lipsync):** VO con su voice_id → mp3 → se monta **encima** del video en edición.
-- **Lipsync (hablando a cámara):** `wan2_7` toma un still + el mp3 como `audio_references` y le
-  sincroniza la boca **a su propia voz**. ~15 cr cada 10 s.
-- ⛔ **Marketing Studio genera su PROPIA voz** y no acepta audio externo → **no mantiene la voz
-  de Lucía.** Para voz consistente, lipsync con `wan2_7`, nunca MS.
-- ⚠️ `generate_audio` con `get_cost: true` **no valida el voice_id**: devuelve costo igual y
-  recién falla al generar. Preflight de costo ≠ validación de voz.
+**B-roll (sin lipsync) — es la vía sólida.** VO con su voice_id → mp3 → se monta **encima** del
+video en edición. La boca no tiene que sincronizar nada. Funciona hoy.
+
+### ⛔ Lipsync: `wan2_7` NO sirve (Sergio, 2026-08-15)
+
+> *"wan 2.7 es malísimo para lip sync; para video tal vez es bueno, pero para eso no."*
+
+**De dónde venía la afirmación contraria:** `lucia-voice/README.md` (9-jul) decía que `wan2_7`
+sincroniza la boca a su propia voz, redactado como hecho probado. **Se repitió sin verificar.**
+El README de `avatar-lab/20260707-broll-lipsync-structure/` habla de un *"fix de dientes"* — o
+sea que el problema de boca ya estaba visto y nunca se anotó como descalificatorio.
+
+**Regla:** un doc interno no es verificación. Si dice "resuelto" sin artefacto de prueba, es
+una hipótesis.
+
+### Los modelos que SÍ aceptan nuestro audio (verificado en la cuenta, 2026-08-15)
+
+| Modelo | Roles de media | Nota |
+|---|---|---|
+| `wan2_7` | start_image · end_image · **audio_references** | ⛔ descartado para lipsync |
+| `grok_video_v15` | start_image · image_references · **audio_references** | 2-15 s, hasta 1080p. **Sin probar** |
+| `seedance_2_0` / `_mini` | start · end · image_refs · video_refs · **audio_references** | El que ya usamos para b-roll. **Sin probar para lipsync** |
+
+**Ninguno de los dos candidatos está probado.** Antes de prometer UGC hablando hay que correr
+una toma corta con cada uno y mirar la boca. Es video: va con OK de Sergio.
+
+### Los que generan su PROPIA voz (no sirven para la de Lucía)
+
+`kling3_0` · `veo3` / `veo3_1` · `flux_3_video` · `gemini_omni` · **Marketing Studio**.
+Todos producen audio propio y no aceptan el nuestro. Si se usa cualquiera de estos para que
+hable, **no es la voz de Lucía**.
+
+⚠️ `generate_audio` con `get_cost: true` **no valida el voice_id**: devuelve costo igual y
+recién falla al generar. Preflight de costo ≠ validación de voz.
 
 Costo medido: narración de ~50 palabras = **2,4 cr**.
 
