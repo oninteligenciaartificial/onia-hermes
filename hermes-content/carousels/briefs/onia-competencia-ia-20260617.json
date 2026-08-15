@@ -10,7 +10,7 @@
     "#pymes"
   ],
   "comment_trigger": "Comentá SISTEMA",
-  "cta": "Comentá SISTEMA",
+  "cta": "Contame",
   "slides": [
     {
       "number": 1,
@@ -59,13 +59,14 @@
     {
       "number": 5,
       "role": "cta",
-      "pill": "Empezá hoy",
+      "pill": "Contame",
       "headline": "Pasá de hacerlo a mano a tener *sistema*",
-      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve montado para tu negocio.",
+      "body": "¿Ya te pasó que un cliente se fue a otro por tardar en contestar?",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte verde, acento en SISTEMA.",
       "alt_text": "Comentá SISTEMA"
     }
-  ]
+  ],
+  "job": "engagement"
 }

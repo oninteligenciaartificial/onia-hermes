@@ -11,7 +11,7 @@
     "#santacruz"
   ],
   "comment_trigger": "Comentá LIBRE",
-  "cta": "Comentá LISTA",
+  "cta": "Contame",
   "slides": [
     {
       "number": 1,
@@ -100,14 +100,15 @@
     {
       "number": 8,
       "role": "cta",
-      "pill": "Empezá hoy",
+      "pill": "Contame",
       "headline": "Soltá el *WhatsApp*",
-      "body": "Comentá *LISTA* y te paso qué automatizar primero y cuánto cuesta cada cosa.",
+      "body": "¿Cuántos mensajes sin responder tenés *ahora mismo*? Decime el número.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte verde, acento en WhatsApp.",
       "alt_text": "Comentá LIBRE",
       "bg": "hermes-content/assets/onia/heroes/wa-08.png"
     }
-  ]
+  ],
+  "job": "engagement"
 }
