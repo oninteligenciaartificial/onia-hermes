@@ -156,6 +156,27 @@ otra"*. Y enseña tres cosas que no teníamos escritas:
 
 Todo esto es **imagen** (~0,12 cr c/u): se puede probar sin tocar el presupuesto de video.
 
+## 11. Realismo de celular — la anatomía del prompt (2026-08-15)
+
+Del mismo autor que el de anclas, y **este no gatea nada**: 20 láminas con los prompts completos
+([ficha](2026-08-15-realismo-de-celular-prompts-soul.md)). Tesis: *"el error es pensar que
+cuanto más cinematográfico, más real; las imágenes que más reales parecen son las fotos hechas
+con el móvil, escena cotidiana e improvisada"*.
+
+Once bloques en orden fijo. **Los tres que no teníamos:**
+
+- **La luz descrita como DEFECTO** — *"strong highlights and washed-out tones"*.
+- **La firma óptica del celular** — *"minor chromatic aberration at the image edges,
+  characteristic of a modern smartphone camera with a slightly wide lens"*.
+- **La paleta como lista de valores HEX explícitos** — 13 colores, no adjetivos.
+
+Y un detalle de composición: **la oclusión parcial de la cara** (un vaso tapando la mitad
+inferior) da menos superficie donde el modelo puede fallar y más sensación de instantánea.
+
+Con el punto 10 queda el método completo: **anclas** (quién es) + **realismo de celular** (cómo
+se ve). **Falta definir la paleta hex fija de Lucía** — hoy no existe, y es lo que le daría
+coherencia a todo el feed.
+
 ---
 
 ## Lo primero que yo haría en esa sesión
