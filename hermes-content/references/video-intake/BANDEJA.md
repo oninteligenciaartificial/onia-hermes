@@ -101,3 +101,10 @@ delante. Cuando uno se procesa, se le escribe su ficha y se mueve a [INDEX.md](I
 - [Lectura + verbatim](transcripciones/2026-08-12-Instagram-DbYojZmyPM3.md)
 - Resumen: El video expone el caso de éxito de Nicole, una emprendedora que genera más de $300,000 mensuales con sus dos aplicaciones (*Glam Up* y *Sprout*) gracias a una estrategia masiva de generación de contenido orgánico y UGC. Explica los pilares de su éxito: diseñar apps visualmente atractivas, probar múltiples formatos ...
 - **Veredicto: PENDIENTE**
+
+## 2026-08-15-Instagram-Db_X_Tkx-3W
+
+- https://www.instagram.com/p/Db_X_Tkx-3W/ · 23 s
+- [Lectura + verbatim](transcripciones/2026-08-15-Instagram-Db_X_Tkx-3W.md)
+- Resumen: El video muestra el contraste entre gestionar agentes de IA de forma manual para múltiples clientes y utilizar un modelo de agencia IA como SaaS (Software as a Service). El enfoque tradicional satura de trabajo operativo al creador (40 horas semanales por 12 clientes). Al centralizarlo en una sola plataforma SaaS de...
+- **Veredicto: PENDIENTE**

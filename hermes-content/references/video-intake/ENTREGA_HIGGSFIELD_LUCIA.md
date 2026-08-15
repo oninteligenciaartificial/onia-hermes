@@ -138,6 +138,24 @@ Las dos variantes legítimas:
 
 Se copia la estructura y el registro coloquial. Nunca la biografía.
 
+## 10. Anclas de identidad — cómo evitar que la cara cambie entre fotos (2026-08-15)
+
+De un carrusel que gatea su guía pero **muestra el método en las láminas**
+([ficha](2026-08-15-bloquear-identidad-avatar-anclas.md)). Diagnostica los tres síntomas
+textuales: *"pieles plasticosas · posturas antinaturales · rostros que cambian de una foto a
+otra"*. Y enseña tres cosas que no teníamos escritas:
+
+- **El ancla no es una foto, son varios primeros planos de rasgos.** La secuencia que muestra es
+  retrato base → boca y mentón → ojos. Detalles cerrados, no plano general.
+- **Un rasgo distintivo constante es un ancla barata.** En sus 10 imágenes de ejemplo, en
+  escenarios totalmente distintos, siempre están las mismas gafas amarillas. **Lucía no tiene
+  hoy un rasgo así definido** — es una decisión que conviene tomar antes de producir en volumen.
+- **La textura imperfecta es lo que mata el look plasticoso.** Sus anclas muestran acné y poros.
+  La solución no es más calidad: es más imperfección. Puede explicar por qué la P6 de Lucía se
+  rehízo *"porque se veía muy IA"*.
+
+Todo esto es **imagen** (~0,12 cr c/u): se puede probar sin tocar el presupuesto de video.
+
 ---
 
 ## Lo primero que yo haría en esa sesión
