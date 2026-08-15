@@ -178,10 +178,19 @@ vendibles aplica y que dato entrega:
   - importadora: conteo de bultos en la descarga, contra la lista de packing
   - servicios: control de acceso y aforo
   - ganadero: conteo de hacienda (ultimo, no primero)
+  - SEGURIDAD LABORAL / EPP (rubro NUEVO, no estaba mapeado): detectar si alguien entra a una
+    obra sin casco o sin chaleco. Es de OBJETOS, no de vigilancia de clientes, asi que evita el
+    problema legal; y construccion/industria es un comprador con plata en Santa Cruz.
+    Empeza la evaluacion por aca, no por el aforo de una tienda.
 Preguntas a responder con evidencia, no con opinion:
   1. Que precision real da un modelo de deteccion estandar en cada caso (no en el demo).
-  2. Donde corre: subir video continuo a la nube es caro. Evaluar el encaje con Onia Box
-     (infra on-premise) — la camara le da a Onia Box algo concreto que hacer.
+  2. [CONTESTADA 2026-08-15 — no la re-investigues] Donde corre: EN EL DISPOSITIVO. Un reel
+     mostro una app con deteccion en vivo corriendo en un TELEFONO, con selector COCO-SSD /
+     YOLO —los dos gratuitos y estandar— sobre la camara del propio equipo. Sin servidor, sin
+     subir video, sin costo por minuto. Un telefono viejo apuntando a una puerta ya es el
+     hardware. Onia Box deja de ser requisito para el caso simple; sigue teniendo sentido para
+     volumen y retencion de video, no para detectar.
+     Ficha: 2026-08-15-vision-en-el-celular-y-espionaje-de-pauta.md
   3. Que hardware minimo necesita el cliente y quien lo paga.
   4. Cual de los cuatro casos tiene el dolor mas caro HOY para el comprador.
 LISTO = una tabla de 4 filas (rubro, dato que entrega, precision esperada, donde corre) + UNA
@@ -362,6 +371,9 @@ Sesión: pendiente. Dos micro-tareas, ninguna gasta plata todavía.
    Instagram sin token propio, con qué límites y a qué precio. Importa porque el token de IG
    está bloqueado (S6) y eso frena prospección y medición. LISTO = una tabla: qué extrae,
    límites, precio, y si destraba o no lo que S6 tiene frenado. NO des de alta la cuenta.
+   AGREGADO 2026-08-15: compará Apify contra `scrapling` (github.com/D4Vinci/Scrapling), que es
+   open source, gratis y trae bypass de Cloudflare. Si scrapling alcanza, Apify no se paga.
+   Sale de 2026-08-15-vision-en-el-celular-y-espionaje-de-pauta.md.
 2. HANDY (dictado por voz) — de 2026-08-11-handy-dictado-voz-alternativa-wispr-flow.md.
    La demo del video es en Mac y acá se trabaja en Windows 11: VERIFICAR soporte Windows,
    repo y licencia ANTES de instalar nada. LISTO = sí/no con la fuente.
@@ -467,6 +479,34 @@ el valor inicial. Nadie los vio moverse todavia salvo el upload-button.
 LISTO = una linea por patron: timing OK o "queda lento/rapido en X". Y probar con
 reduced-motion activado en DevTools (los 6 tienen que quedar legibles y completos).
 NO HAGAS: no toques el codigo en esta sesion. Solo mirar y anotar.
+```
+
+---
+
+# D4 · Espiar la pauta de la competencia — con lo gratis que ya tenemos
+
+Sale de un reel que muestra **Spyglass** (`app.spyglass.so`): una herramienta paga que lista
+todos los anuncios que corre una marca, con el peso de cada creativo y su clasificacion por
+formato ([ficha](2026-08-15-vision-en-el-celular-y-espionaje-de-pauta.md)).
+
+La capacidad es real y util. Pero **la Biblioteca de Anuncios de Meta es publica y gratis, y ya
+la tenemos conectada por MCP** (`ads_library_search`). Antes de evaluar nada pago, hay que
+agotar lo que ya esta.
+
+```text
+Sesion: marketing. git branch --show-current primero.
+TAREA UNICA: ver que anuncios estan corriendo 3 competidores, con la herramienta que YA tenemos.
+Usar `ads_library_search` del MCP de Meta (gratis, publico, sin dar de alta nada).
+  1. Elegir 3 competidores REALES y verificables — agencias o SaaS que le vendan al mismo
+     comprador en Bolivia. Si no hay locales, tomar 3 regionales que sirvan de referencia.
+  2. Por cada uno: que anuncios corre hoy, desde cuando, y que formato usa cada creativo.
+  3. Clasificar los creativos por tipo (el molde que usa Spyglass: GRWM, text overlay,
+     brand story, demo de producto, testimonio).
+LISTO = una tabla por competidor + UNA conclusion: que formato repiten mas, y que hueco dejan
+que nosotros podamos ocupar.
+NO HAGAS: NO des de alta Spyglass ni ninguna herramienta paga hasta que esta pasada demuestre
+que la biblioteca de Meta no alcanza. NO copies sus creativos: se mira el FORMATO y el hueco.
+NO inventes competidores: si no encontras 3 verificables, decilo y trae los que si existan.
 ```
 
 ---
