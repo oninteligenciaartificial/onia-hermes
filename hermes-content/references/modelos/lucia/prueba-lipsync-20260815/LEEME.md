@@ -73,3 +73,46 @@ La entrega del 12-ago decía "Seedance 2.5 NO existe en la cuenta". **Al 15-ago 
 modos `t2v` / `omni_reference` / `video_edit` / `video_extension` y hasta **30 s**. No es que
 la verificación estuviera mal: el catálogo cambió en tres días. Vale re-listarlo antes de
 planificar, no confiar en una lista de la semana pasada.
+
+---
+
+# Ronda 2 — voz Marcela + pruebas que NO parten de imagen estática (15-ago)
+
+## Voz: Marcela es la oficial
+
+Sergio eligió **`Marcela - Colombian Girl` `86V9x9hrQds83qf7zaGn`** (ElevenLabs, professional,
+es-LATAM colombiano, joven, relajada). Cargada en el VPS: `LUCIA_ELEVENLABS_VOICE_ID`.
+Resultado: `lipsync-MARCELA.mp4`.
+
+`Lucia-ONIA` `wrXs6GqcC7X03dDKMoeT` (Voice Design) queda **descartada**.
+
+**`sync_mode` importa:** con `loop` el clip quedó en 5 s; con `remap` retimea el video al
+audio y salió 6 s. `remap` es el correcto cuando el audio manda, que es siempre en una pieza
+hablada. También tarda bastante más en procesar.
+
+## Las tres formas de generar video, probadas
+
+| Vía | Qué hace de verdad | Resultado |
+|---|---|---|
+| **`start_image`** | Anima UNA foto. El encuadre queda fijo al de la foto | `base-sin-audio.mp4` |
+| **`image_references`** | **Inventa un plano nuevo** manteniendo la identidad. No copia ninguna de las fotos de entrada | `testA-image_references.mp4` |
+| **`start_image` + `end_image`** | **Transición real entre dos lugares**: arranca en el café y termina en la pared ocre con la moto, en un movimiento continuo | `testB-start-end.mp4` |
+
+## A qué llegué
+
+**1. La identidad aguanta el movimiento.** Era la duda abierta desde el 13-ago: las pruebas de
+consistencia eran de imágenes sueltas. En los 5 segundos se mantienen pecas, argollas de oro,
+cadenita y el terracota. **La cara no deriva.**
+
+**2. `image_references` cambia la economía.** No hace falta generar la imagen antes: se le pasan
+2-3 fotos aprobadas y compone una escena nueva. Ahorra el paso de imagen (2 cr) y sobre todo
+ahorra el trabajo de dirigir cada encuadre.
+
+**3. `start_image` + `end_image` es el hallazgo grande.** Resuelve el problema de fondo del tope
+de 15 s: cada toma dejaba de ser un plano suelto. Ahora se encadenan **dos lugares aprobados con
+un movimiento continuo**, que es exactamente lo que pedía la estructura de guion por escenas.
+El raccord deja de ser un problema de edición y pasa a estar escrito en la generación.
+
+## Costo de la ronda
+
+Balance 2.783,29 → **2.755,14 = 28,15 cr**: 2 videos base (5 + 5) + `sync_so` remap (~18,15).
