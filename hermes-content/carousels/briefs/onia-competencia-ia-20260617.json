@@ -1,7 +1,14 @@
 {
   "title": "Tu competencia ya vende con IA mientras vos respondés a mano",
   "caption": "No es que tu competencia sea mejor que vos. Es que dejó de hacer a mano lo que una IA hace sola: responder al instante, calificar al lead y hacer el seguimiento sin olvidarse de nadie. Mientras vos contestás cuando podés, ellos ya cerraron. Guardá la señal del slide 4 y comentá SISTEMA: te muestro cómo se ve montado para tu negocio.",
-  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#ventas", "#whatsapp", "#pymes"],
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#ventas",
+    "#whatsapp",
+    "#pymes"
+  ],
   "comment_trigger": "Comentá SISTEMA",
   "cta": "Comentá SISTEMA",
   "slides": [
@@ -54,7 +61,7 @@
       "role": "cta",
       "pill": "Empezá hoy",
       "headline": "Pasá de hacerlo a mano a tener *sistema*",
-      "body": "Comentá *SISTEMA* y te muestro cómo se ve montado para tu negocio.",
+      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve montado para tu negocio.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte verde, acento en SISTEMA.",

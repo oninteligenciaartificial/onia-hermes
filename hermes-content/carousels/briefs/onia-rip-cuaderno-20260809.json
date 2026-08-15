@@ -1,9 +1,17 @@
 {
   "title": "R.I.P. al cuaderno: tu negocio ya no entra ahí",
   "caption": "El cuaderno te sirvió para arrancar. El Excel te aguantó un tiempo. Pero si hoy tenés que abrir tres archivos y llamar a dos personas para saber cuánto vendiste ayer, tu negocio ya no entra ahí. No es que seas desordenado: es que creciste y las herramientas no crecieron con vos. Guardá las 3 señales del slide 5 y comentá ORDEN: te muestro cómo se ve tu negocio con todo en un solo lugar.",
-  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#pymes", "#negocios", "#santacruz", "#gestion"],
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#pymes",
+    "#negocios",
+    "#santacruz",
+    "#gestion"
+  ],
   "comment_trigger": "Comentá ORDEN",
-  "cta": "Comentá ORDEN",
+  "cta": "Comentá SISTEMA",
   "slides": [
     {
       "number": 1,
@@ -82,7 +90,7 @@
       "role": "cta",
       "pill": "Empezá hoy",
       "headline": "Poné tu negocio en *orden*",
-      "body": "Comentá *ORDEN* y te muestro cómo se ve con todo en un solo lugar.",
+      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve con todo en un solo lugar.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Emprendedor tranquilo con todo ordenado.",
