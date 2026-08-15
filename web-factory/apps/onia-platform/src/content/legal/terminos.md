@@ -1,9 +1,9 @@
 ---
 title: "Términos y Condiciones"
 slug: "terminos"
-status: "borrador"
-version: "0.2"
-updatedAt: "2026-07-25"
+status: "vigente"
+version: "1.0"
+updatedAt: "2026-08-15"
 ---
 
 # Términos y Condiciones de Uso — Plataforma Onia
