@@ -18,6 +18,40 @@ Instrucciones de proyecto para Claude. Override sobre defaults.
   el bot del VPS).
 - Si una tarea tiene skill pública instalada (137 globales + plugins), usarla; no reinventar.
 
+## Una sola fuente de verdad por tema (REGLA)
+
+> Nace del 2026-08-15: barrimos el repo y habia **cuatro precios vivos del mismo
+> chatbot** (1.500+550 en el codigo, 650+350 en el cotizador publico, 1.900+150 en
+> propuestas ya firmables, 900-1.200+450-600 en el one-pager de la vendedora), y
+> 95 documentos distintos hablando de precios. Con eso, cualquier sesion elige mal.
+
+- **Precios: manda `onia-platform/lib/pricing.ts`.** Es el unico archivo que cobra
+  de verdad (lo valida el checkout). Ningun doc, propuesta, one-pager ni cotizador
+  define precio: lo LEEN de ahi. Si un material dice otro numero, esta roto.
+- **Un tema = un archivo sin fecha.** Si cambia, se EDITA ese archivo; no se crea
+  uno nuevo con la fecha de hoy.
+- **Fecha en el nombre = historia.** `hermes-content/docs/historial/` son fotos de
+  un dia y **no son fuente de verdad** (102 docs movidos ahi el 2026-08-15). Si un
+  doc con fecha contradice a uno sin fecha, gana el que no tiene fecha.
+- Antes de escribir una cifra o una capacidad en material de cliente, **buscar si ya
+  existe en otro lado**. Si hay dos versiones, no elegir la mas linda: preguntar.
+
+## Verificar es MIRAR, no suponer (REGLA)
+
+> Nace del mismo dia: el login de produccion mostraba los NOMBRES de los iconos
+> como texto ("credit_card_off", "verified_user") y yo lo habia "verificado" varias
+> veces con HTTP 200 y grep, sin abrirlo nunca. Lo encontro Sergio.
+
+- **Toda pantalla que ve un cliente se abre y se MIRA renderizada** (Playwright +
+  Chromium headless, y leer la captura). Un 200 y un grep no son verificacion.
+- **Verificar contra el sistema correcto.** Ese mismo dia: diagnostique la base
+  contra un Supabase en la nube que ya no era produccion, y declare una pagina "no
+  expuesta" probando el dominio equivocado (estaba viva en otro host). Antes de
+  afirmar, confirmar QUE sistema se esta mirando.
+- **Medir peso y tiempo real**, no solo que responda. Un 200 lento es un fallo con
+  cara de exito (la fuente de iconos pesaba 3,9 MB y tardaba 117 s).
+- Un `grep` sirve para DESCARTAR, nunca para CONFIRMAR que algo se ve bien.
+
 ## Video — ver y editar sin editores humanos (REGLA)
 
 > El Onia system ve, transcribe y edita video con código (método del tutorial de Santiago).
@@ -120,7 +154,6 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
 > Fuente de verdad: `onia-core/contract.json` (beta v0.5.0, congelado para
 > adopcion; ver `onia-core/CHANGELOG.md`). Docs canonicos en `onia-core/*.md`.
 > Receta de instalacion en productos: `onia-core/ONIA_CORE_INSTALL_GUIDE_2026.md`.
-> DentalGest esta `installing` (9/9 entidades, wizard /setup, intake vivo).
 
 > ⚠️ **2026-08-01 — el core NO es hoy la columna vertebral, es un catálogo que el producto
 > copia a mano.** Verificado: el producto reimplementó la máquina de estados de work items
@@ -130,8 +163,14 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
 > **El rumbo es al revés: un rubro nuevo debe salir de ENCENDER capacidades del core, no de
 > escribir código nuevo.** Ver `hermes-content/docs/ONIA_CORE_Y_MODULOS_ANALISIS_20260731.md`.
 
-- ONIA Core es el nucleo operativo comun de los SaaS Onia (DentalGest, GestiOS,
-  Ganadero OS, ProveeGest). Vive SOLO en este repo hasta aprobar adopcion.
+- **HAY UN SOLO PRODUCTO: Onia Platform** (repo `onia-platform`), que se vende con
+  packs por rubro. `DentalGest`, `GestiOS`, `Ganadero OS` y `ProveeGest` **NO son
+  productos ni marcas hermanas**: son nombres viejos de lo que hoy es un pack
+  dentro de la plataforma. Prohibido generar material, propuestas o UI que los
+  presente como productos aparte. Al cliente se le nombra el rubro ("modulo
+  dental"), nunca una marca propia.
+- ONIA Core es el nucleo operativo de esa plataforma unica. Vive SOLO en este
+  repo hasta aprobar adopcion.
 - `policy.installInProductRepos = false`: NO crear migraciones, rutas ni UI
   dependientes del core en los repos producto sin plan de adopcion aprobado.
 - Todo cambio al contrato, schema o adapters DEBE pasar
@@ -142,8 +181,8 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
   Ver `onia-core/ONIA_CORE_CLIENT_ADOPTION_MAP_2026.md`.
 - Integraciones externas (WhatsApp, SIAT, TR4) siguen `external_gate`: fuera
   del core, entran solo como intake normalizado (work items).
-- Orden de adopcion: DentalGest beta → Bolivian Electric/ProveeGest → GestiOS
-  → Ganadero OS (offline).
+- Orden de encendido de rubros: dental (vivo) → comercio → importadora → el resto.
+  Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.
 
 ## Git — Auto-sync multi-dispositivo (REGLA)
 
@@ -204,10 +243,11 @@ Fuentes (no duplicar; editar estas, no crear otras):
 
 Carriles = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo:
 - **A** `onia-center-saneamiento` → onia-hermes `src/app/onia-center/**` + `api/onia-center/**` (P2→P3)
-- **B** `wf-landing-dentalgest` → onia-hermes landings `src/app`, `data/clients`, `templates`, `harvester` (P4, E*)
+- **B** `wf-landings` → onia-hermes landings `src/app`, `data/clients`, `templates`, `harvester` (P4, E*)
 - **C** `propuestas-v2` → onia-hermes `hermes-content/propuestas` + docs/skills comercial (P1)
-- **D** `dentagest-core-ui` → repo DentaGest (R2, R4)
-- **E** `gestios-core` → repo Gestios (R1→R5)
+- **D** `producto` → repo **`onia-platform`** (la plataforma que se vende; antes decia
+  "repo DentaGest", que NO EXISTE en el disco)
+- **E** `gestios-core` → repo Gestios (legado; NO es un producto, ver la regla de marca arriba)
 - **F** `bolivian-electric-fase1` → repo Bolivian Electric (R3)
 - **G** `infra-deploy-n8n` → n8n/VPS/Supabase, SERIAL, un solo dueño (M1→M6)
 - **H** `contenido-higgsfield` → onia-hermes `hermes-content/references` + skills(video/IG) + scripts(video/ig) + `.hermes/video-lab` (producción continua)
@@ -220,7 +260,7 @@ Carriles = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo:
 - **Core** `onia-core` → `onia-core/**` (CONGELADO; solo bajo adopción aprobada)
 
 Reglas duras:
-- Repos distintos (DentaGest, Gestios, Bolivian Electric) = paralelo libre.
+- Repos distintos (`onia-platform`, Gestios, Bolivian Electric) = paralelo libre.
 - Dentro de onia-hermes: cada carril su carpeta; **AVISAR** antes de tocar los 4
   raíz de web-factory (`next.config.ts`, `layout.tsx`, `globals.css`, `package.json`).
 - Infra (G) = UN solo dueño a la vez.
