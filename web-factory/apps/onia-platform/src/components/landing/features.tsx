@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Row, Shot } from "./shot";
-import { SplitTextReveal } from "@/motion";
+import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import styles from "./landing.module.css";
 
 const RUBROS = [
@@ -26,6 +26,33 @@ type Card = {
 };
 
 /**
+ * Escena — los pasos de la pantalla entran EN ORDEN cada vez que la tarjeta
+ * aparece. El visual MUESTRA lo que el modulo hace (la conversacion avanza,
+ * el cobro se completa) en vez de decorar: el orden ES la explicacion.
+ *
+ * Reusa el stagger del kit (@/motion), no un sistema de animacion nuevo: solo
+ * transform + opacity, y con prefers-reduced-motion el MotionConfig del
+ * provider apaga el movimiento. `repetir` porque el carrusel avanza solo y una
+ * escena `once` quedaria muerta para quien mira despues.
+ */
+function Escena({
+  children,
+  className = styles.seq,
+  paso = 0.45,
+}: {
+  children: ReactNode;
+  className?: string;
+  /** Segundos entre un paso y el siguiente. */
+  paso?: number;
+}) {
+  return (
+    <StaggerGrid className={className} stagger={paso} repetir>
+      {children}
+    </StaggerGrid>
+  );
+}
+
+/**
  * Las 7 funciones, patron Fanvue: el visual llena el marco y se corta abajo
  * (una pantalla real que sigue), y debajo va badge opcional + titulo de 2-4
  * palabras + UNA linea de beneficio.
@@ -43,10 +70,21 @@ const CARDS: readonly Card[] = [
     beneficio: "Todo tu día en una sola pantalla.",
     visual: (
       <Shot title="Agenda · hoy">
-        <Row time="09:00" name="Control · M. Áñez" dur="30 min" state="on" />
-        <Row time="10:30" name="Ortodoncia · J. Rojas" dur="45 min" />
-        <Row time="11:15" name="Hueco de 45 minutos" state="free" />
-        <Row time="15:00" name="Limpieza · C. Vaca" dur="30 min" />
+        {/* el día se llena hora por hora, y el hueco aparece entre dos citas */}
+        <Escena paso={0.35}>
+          <StaggerItem>
+            <Row time="09:00" name="Control · M. Áñez" dur="30 min" state="on" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row time="10:30" name="Ortodoncia · J. Rojas" dur="45 min" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row time="11:15" name="Hueco de 45 minutos" state="free" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row time="15:00" name="Limpieza · C. Vaca" dur="30 min" />
+          </StaggerItem>
+        </Escena>
       </Shot>
     ),
   },
@@ -59,16 +97,20 @@ const CARDS: readonly Card[] = [
     beneficio: "Trabajan de noche; nada sale sin tu OK.",
     visual: (
       <Shot title="Cola de aprobación" tag="1 pendiente">
-        <div className={styles.approval}>
-          <span className={styles.who}>Recall · P. Suárez, 6 meses sin control</span>
-          <span className={styles.msg}>
+        {/* el agente detecta, redacta, y RECIÉN ENTONCES pide tu OK: los
+            botones entrando último son el human-in-the-loop, dibujado */}
+        <Escena className={styles.approval} paso={0.6}>
+          <StaggerItem as="span" className={styles.who}>
+            Recall · P. Suárez, 6 meses sin control
+          </StaggerItem>
+          <StaggerItem as="span" className={styles.msg}>
             «Hola Pablo, hace tiempo no te vemos. ¿Agendamos tu control?»
-          </span>
-          <span className={styles.acts}>
+          </StaggerItem>
+          <StaggerItem as="span" className={styles.acts}>
             <span className={styles.ok}>Aprobar</span>
             <span className={styles.no}>Descartar</span>
-          </span>
-        </div>
+          </StaggerItem>
+        </Escena>
       </Shot>
     ),
   },
@@ -81,20 +123,22 @@ const CARDS: readonly Card[] = [
       "Responde y califica mientras vos atendés. Se contrata aparte, desde Bs 200/mes.",
     visual: (
       <Shot title="WhatsApp · consultas">
-        <div className={styles.chat}>
-          <span className={`${styles.bub} ${styles.bubThem}`}>
+        {/* la conversación AVANZA: mensaje por mensaje, alternando lados,
+            hasta que la cita queda cerrada sin que nadie del negocio conteste */}
+        <Escena className={styles.chat} paso={0.65}>
+          <StaggerItem as="span" className={`${styles.bub} ${styles.bubThem}`}>
             ¿Tienen espacio esta semana?
-          </span>
-          <span className={`${styles.bub} ${styles.bubUs}`}>
+          </StaggerItem>
+          <StaggerItem as="span" className={`${styles.bub} ${styles.bubUs}`}>
             Sí — hoy 11:15. Te lo reservo.
-          </span>
-          <span className={`${styles.bub} ${styles.bubThem}`}>
+          </StaggerItem>
+          <StaggerItem as="span" className={`${styles.bub} ${styles.bubThem}`}>
             Perfecto, confirmo.
-          </span>
-          <span className={`${styles.bub} ${styles.bubUs}`}>
+          </StaggerItem>
+          <StaggerItem as="span" className={`${styles.bub} ${styles.bubUs}`}>
             Listo, quedó agendado.
-          </span>
-        </div>
+          </StaggerItem>
+        </Escena>
       </Shot>
     ),
   },
@@ -107,23 +151,29 @@ const CARDS: readonly Card[] = [
     beneficio: "Cobrás con QR y la venta queda lista para el SIAT.",
     visual: (
       <Shot title="Cobro · caja">
-        <div className={styles.doc}>
-          <span className={styles.docLine}>
+        {/* el pago SE COMPLETA en orden: los ítems entran, se suma el total,
+            entra el cobro por QR y recién ahí la venta queda lista */}
+        <Escena paso={0.4}>
+          <StaggerItem as="span" className={styles.docLine}>
             <span>Limpieza dental</span>
             <b className={styles.mono}>Bs 250,00</b>
-          </span>
-          <span className={styles.docLine}>
+          </StaggerItem>
+          <StaggerItem as="span" className={styles.docLine}>
             <span>Radiografía</span>
             <b className={styles.mono}>Bs 120,00</b>
-          </span>
+          </StaggerItem>
           <hr />
-          <span className={styles.docLine}>
+          <StaggerItem as="span" className={styles.docLine}>
             <span>Total</span>
             <b className={styles.mono}>Bs 370,00</b>
-          </span>
-        </div>
-        <Row name="Cobrado con QR" dur="14:02" state="on" />
-        <Row name="Listo para facturar" state="free" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row name="Cobrado con QR" dur="14:02" state="on" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row name="Listo para facturar" state="free" />
+          </StaggerItem>
+        </Escena>
       </Shot>
     ),
   },
@@ -135,14 +185,24 @@ const CARDS: readonly Card[] = [
     beneficio: "Tu cliente se agenda solo, un domingo a las once.",
     visual: (
       <Shot title="Reservar · jueves 6">
-        <div className={styles.blocks}>
-          <span>08:30</span>
-          <span className={styles.blockOn}>09:15</span>
-          <span>11:00</span>
-          <span>16:30</span>
-        </div>
-        <Row name="Elegiste 09:15 · Control" dur="30 min" state="on" />
-        <Row name="Confirmamos por WhatsApp" state="free" />
+        {/* aparecen los horarios libres, el cliente toca uno y la reserva se
+            confirma: el flujo entero sin que el negocio levante el teléfono */}
+        <Escena paso={0.5}>
+          <StaggerGrid className={styles.blocks} stagger={0.12} repetir>
+            <StaggerItem as="span">08:30</StaggerItem>
+            <StaggerItem as="span" className={styles.blockOn}>
+              09:15
+            </StaggerItem>
+            <StaggerItem as="span">11:00</StaggerItem>
+            <StaggerItem as="span">16:30</StaggerItem>
+          </StaggerGrid>
+          <StaggerItem>
+            <Row name="Elegiste 09:15 · Control" dur="30 min" state="on" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row name="Confirmamos por WhatsApp" state="free" />
+          </StaggerItem>
+        </Escena>
       </Shot>
     ),
   },
@@ -154,12 +214,22 @@ const CARDS: readonly Card[] = [
     beneficio: "Conectada al sistema, no huérfana.",
     visual: (
       <Shot title="clinicaandina.bo">
-        <span className={styles.webH}>Clínica Andina</span>
-        <span className={styles.webP}>
-          Odontología general y ortodoncia · Santa Cruz
-        </span>
-        <span className={styles.webCta}>Reservar hora</span>
-        <Row name="Los horarios salen de tu agenda" state="free" />
+        {/* la web se arma y termina en el botón de reservar: el último paso
+            aclara de dónde salen los horarios */}
+        <Escena paso={0.4}>
+          <StaggerItem as="span" className={styles.webH}>
+            Clínica Andina
+          </StaggerItem>
+          <StaggerItem as="span" className={styles.webP}>
+            Odontología general y ortodoncia · Santa Cruz
+          </StaggerItem>
+          <StaggerItem as="span" className={styles.webCta}>
+            Reservar hora
+          </StaggerItem>
+          <StaggerItem>
+            <Row name="Los horarios salen de tu agenda" state="free" />
+          </StaggerItem>
+        </Escena>
       </Shot>
     ),
   },
@@ -171,9 +241,19 @@ const CARDS: readonly Card[] = [
     beneficio: "Sabés qué falta antes de que falte.",
     visual: (
       <Shot title="Inventario" tag="1 aviso">
-        <Row name="Guantes (caja)" dur="18" />
-        <Row name="Resina A2" dur="7" state="on" />
-        <Row name="Anestesia — bajo mínimo" dur="2" state="free" />
+        {/* el stock baja renglón a renglón y el aviso llega último: ese es el
+            momento útil, no la lista */}
+        <Escena paso={0.45}>
+          <StaggerItem>
+            <Row name="Guantes (caja)" dur="18" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row name="Resina A2" dur="7" state="on" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row name="Anestesia — bajo mínimo" dur="2" state="free" />
+          </StaggerItem>
+        </Escena>
       </Shot>
     ),
   },

@@ -1,7 +1,7 @@
 "use client";
 
 import * as m from "motion/react-m";
-import type { Variants } from "motion/react";
+import { useReducedMotion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
 import { riseDistance, springs, staggerBase, viewportOnce } from "./tokens";
 
@@ -21,16 +21,24 @@ type StaggerGridProps = {
   /** Segundos entre items. >0.09 se siente lento; listas >12 items bajan a 0.04. */
   stagger?: number;
   as?: "div" | "ul" | "ol";
+  /**
+   * Vuelve a reproducirse cada vez que el bloque entra en pantalla, en vez de
+   * una sola vez. Es para ESCENAS que muestran el producto paso a paso (el
+   * chat que avanza, el cobro que se completa) dentro de un carrusel que se
+   * mueve solo: si corriera `once`, quien llega tarde ve una pantalla muerta.
+   * Para contenido de lectura NO se usa — re-animar un texto al scrollear marea.
+   */
+  repetir?: boolean;
 };
 
 type StaggerItemProps = {
   children: ReactNode;
   className?: string;
-  as?: "div" | "li" | "article";
+  as?: "div" | "li" | "article" | "span";
 };
 
 const gridTags = { div: m.div, ul: m.ul, ol: m.ol } as const;
-const itemTags = { div: m.div, li: m.li, article: m.article } as const;
+const itemTags = { div: m.div, li: m.li, article: m.article, span: m.span } as const;
 
 /**
  * Stagger de grid — el grid entra como SISTEMA, no como cards sueltas.
@@ -45,11 +53,19 @@ export function StaggerGrid({
   className,
   stagger = staggerBase,
   as = "div",
+  repetir = false,
 }: StaggerGridProps) {
   const Tag = gridTags[as] as typeof m.div;
+  /*
+   * Con prefers-reduced-motion el MotionConfig del provider ya apaga el
+   * transform, pero la CASCADA seguia corriendo: el contenido aparecia de a
+   * uno con varios segundos de espera. Para quien pidio menos movimiento eso
+   * es peor, no mejor. Reducido = todo junto, y una sola vez.
+   */
+  const reducido = useReducedMotion();
   const containerVariants: Variants = {
     hidden: {},
-    visible: { transition: { staggerChildren: stagger } },
+    visible: { transition: { staggerChildren: reducido ? 0 : stagger } },
   };
   return (
     <Tag
@@ -57,7 +73,7 @@ export function StaggerGrid({
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={viewportOnce}
+      viewport={repetir && !reducido ? { once: false, amount: 0.6 } : viewportOnce}
     >
       {children}
     </Tag>

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: "Quiénes somos — Onia",
   description:
-    "Onia (OniaAgency) es una empresa boliviana de Santa Cruz que construye el sistema de gestión con IA para negocios de Bolivia. Empresa nueva, tecnología real: así trabajamos.",
+    "Onia (OniaAgency) es una empresa boliviana de Santa Cruz que construye el sistema de gestión con IA para negocios de Bolivia. Registrados en SEPREC, con NIT vigente y el sistema en producción: así trabajamos.",
   alternates: { canonical: "/nosotros" },
   openGraph: {
     type: "website",
@@ -24,15 +24,22 @@ export const metadata: Metadata = {
 /**
  * /nosotros — la señal de confianza que toda marca desconocida necesita antes
  * de que alguien le entregue los datos de su negocio (patrón Alegra/Siigo).
- * Coherente con la sección de honestidad del home: empresa nueva, dicho de
- * frente, con lo verificable por delante. Los datos legales coinciden con el
- * pie y con el portfolio de Meta — no tocar sin actualizar los tres.
+ *
+ * REGLA DE COPY (2026-08-15, pedido de Sergio): la página NO anuncia que la
+ * empresa es nueva ni que todavía no hay clientes — eso contesta el miedo del
+ * comprador («¿y si no funciona?») dándole la razón. Se contesta con lo
+ * verificable y comprobable por él: 14 días con el sistema completo sin
+ * tarjeta, sin permanencia, datos exportables en CSV. Sigue prohibido el
+ * camino opuesto: inventar clientes, logos, testimonios o métricas.
+ * Cada garantía de acá está verificada contra src/lib/pricing.ts, que a su vez
+ * sale del código que cobra. Los datos legales coinciden con el pie y con el
+ * portfolio de Meta — no tocar sin actualizar los tres.
  */
 const PRINCIPIOS = [
   {
     titulo: "Honestidad primero",
     detalle:
-      "Somos nuevos y lo decimos. Lo que está en trámite, lo publicamos como en trámite. Lo que no hacemos todavía, está escrito en la página de comparación.",
+      "Lo que está en trámite lo publicamos como en trámite, y lo que el sistema todavía no hace está escrito en la página de comparación. Preferimos que lo leas acá y no que lo descubras en la primera semana.",
   },
   {
     titulo: "La IA propone, vos aprobás",
@@ -106,8 +113,9 @@ export default function NosotrosPage() {
                 el dueño de un negocio boliviano merece la misma tecnología que
                 una empresa grande — con inteligencia artificial de verdad, en
                 bolivianos, y hablando su idioma. Somos OniaAgency, registrados
-                en SEPREC y con NIT vigente, y estamos empezando: sin
-                inversores, sin humo, con el sistema en producción.
+                en SEPREC y con NIT vigente, y el sistema ya corre en
+                producción: entrás, lo usás completo 14 días sin dejar una
+                tarjeta, y recién después decidís.
               </p>
             </Reveal>
           </div>
@@ -137,9 +145,10 @@ export default function NosotrosPage() {
                 clínicas dentales, comercios, importadoras, estéticas,
                 veterinarias y servicios profesionales — y nuestro emisor de
                 facturación está registrado ante el SIN con las pruebas técnicas
-                de la Fase 1 completadas. Los primeros clientes de Onia van a
-                poder decir que estuvieron desde el principio; por eso el precio
-                de lanzamiento es el que es.
+                de la Fase 1 completadas. Lo probás tal como está hoy: 14 días
+                con el sistema completo, sin tarjeta y sin contrato de
+                permanencia. Si no te sirve, no pagás nada y tus datos te los
+                llevás en CSV cuando quieras.
               </p>
             </Reveal>
             <Reveal className="actions">
