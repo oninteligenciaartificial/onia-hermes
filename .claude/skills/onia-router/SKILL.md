@@ -7,7 +7,7 @@ description: Invocar al INICIO de cualquier trabajo en el monorepo onia-hermes. 
 
 Punto de entrada de toda sesión en `onia-hermes`. Antes de trabajar: identificá el
 carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa completo:
-`hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
+`hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES.md`.
 
 ## Cómo usar
 1. **Identificá el carril** de la tarea (tabla abajo). Ante duda, ver

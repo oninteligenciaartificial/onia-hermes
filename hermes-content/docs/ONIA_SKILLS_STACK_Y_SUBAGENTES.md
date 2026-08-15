@@ -1,6 +1,7 @@
 # Onia — Stack de skills + reglas de subagentes
 
-> Creado 2026-07-05 · **Actualizado 2026-07-22** (auditoría completa + skills propias del repo).
+> Fuente de verdad viva — **sin fecha en el nombre a propósito**: esto se EDITA, no se
+> reemplaza por una copia nueva. (Creado 2026-07-05, última revisión 2026-08-15.)
 > Índice operativo vivo = skill **`onia-router`** (`.claude/skills/onia-router/SKILL.md`).
 > Este doc es la versión legible + la spec para los repos separados.
 
@@ -69,17 +70,21 @@ Generador oficial = fuente; NUNCA HTML a mano.
 `deep-research` (validar RND/DS vigentes con fuente). Gap: no hay skill pública buena.
 
 ## Spec para los repos SEPARADOS (aplicar en SU propia sesión/carril)
-Los repos DentaGest, GestiOS y Bolivian Electric están fuera de `onia-hermes`; por la
+Los repos `onia-platform` y Bolivian Electric están fuera de `onia-hermes`; por la
 regla de carriles NO se tocan desde la sesión del monorepo. Cuando trabajes DENTRO de
 cada uno, crear su `.claude/skills/` con:
 
-- **DentaGest** (carril D): `onia-core` (copia adaptada al namespace del producto),
-  stack backend/DB (`database-migrations`, `postgres-patterns`, `api-design`,
-  `security-review`) + frontend (`impeccable`, `frontend-design`). Subagente
-  `dentalgest-migrations`. Regla: es producto PROPIO de ONIA → se puede leer el cerebro.
-- **GestiOS** (carril E): igual que DentaGest + reconciliación core↔Prisma (Sprint 0).
+- **`onia-platform`** (carril D) — LA plataforma que se vende, con packs por rubro.
+  `onia-core` (copia adaptada al namespace del producto), stack backend/DB
+  (`database-migrations`, `postgres-patterns`, `api-design`, `security-review`) +
+  frontend (`impeccable`, `frontend-design`). Subagente `dentalgest-migrations`.
+  Regla: es producto PROPIO de ONIA → se puede leer el cerebro.
+  ⚠️ Antes decía "repo DentaGest", que **no existe en el disco**.
 - **Bolivian Electric** (carril F): CLIENTE — solo el stack backend, sin cerebro Onia,
   y no exponer skills internas/comerciales. Solo lectura salvo pedido explícito.
+- ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero **no son productos**: son legado
+  del encuadre viejo de cuatro marcas. No se les agrega nada nuevo sin decidir antes si
+  se archivan o se absorben como packs.
 
 Copiar allá el bloque de proceso común + la skill de dominio; NO copiar `onia-propuestas`
 ni docs comerciales a repos de cliente.
