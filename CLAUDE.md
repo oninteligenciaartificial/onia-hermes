@@ -291,11 +291,14 @@ S7 keys Tavily/fal, S8 fiscal, S9 password. Detalle en el plan maestro §(b).
 - **Junto en onia-hermes:** el cerebro (`hermes-content`: docs, skills, memoria,
   propuestas), el core y la orquestación. Se lee a sí mismo (Hermes, agentes,
   memoria); fragmentarlo multiplica la sincronización manual (lección `onia-core`,
-  que hubo que mergear a mano para que DentaGest lo leyera).
+  que hubo que mergear a mano para que el producto lo leyera).
 - **Separado (repo propio):** un producto SOLO cuando cumple las TRES — (1) cliente
   real, (2) deploy y ciclo de release propio, (3) el cliente NO debe ver el cerebro.
-  Correctos hoy: DentaGest, GestiOS, Bolivian Electric. Colaboradores = repo saneado
-  `onia-hermes-collab` (separación por acceso).
+  Correctos hoy: `onia-platform` (la plataforma) y Bolivian Electric (cliente).
+  Colaboradores = repo saneado `onia-hermes-collab` (separación por acceso).
+  ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero **no son productos**: son
+  legado del encuadre viejo de cuatro marcas. No se les agrega nada nuevo sin
+  decidir antes si se archivan o se absorben como packs.
 - **NO separar por sensación de desorden.** El cruce se arregla con disciplina de
   cierre (mergear + cerrar sesión) y el tablero de carriles, no partiendo repos.
 - **Candidato futuro (no ahora):** sacar `onia-center` de `web-factory` cuando pese
