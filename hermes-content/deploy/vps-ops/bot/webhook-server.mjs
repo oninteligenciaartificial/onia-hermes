@@ -124,9 +124,16 @@ export async function checkDatabaseHealth(deps = {}) {
   const vencido = Symbol("db_health_timeout");
   let timer;
   const reloj = new Promise((resolve) => {
+    // El timer va REFERENCIADO a propósito. Con `unref()` este reloj sólo corría si algo MÁS
+    // mantenía vivo el event loop: en un proceso sin otro handle en vuelo, el loop se vaciaba
+    // antes de los `timeoutMs` y esta promesa NO SE RESOLVÍA NUNCA — justo lo contrario de lo
+    // que promete el bloque de arriba. En producción no se veía (el servidor está escuchando,
+    // así que siempre hay un handle vivo); se veía en `node --test`, donde dejaba el archivo
+    // entero cancelado con "Promise resolution is still pending but the event loop has already
+    // resolved" en Node 20. El tope no demora el apagado: el `finally` hace `clearTimeout`
+    // siempre, dura como mucho `timeoutMs + 500`, y `main()` apaga con `process.exit`, que no
+    // espera timers. La garantía "nunca cuelga" tiene que sostenerse SOLA.
     timer = setTimeout(() => resolve(vencido), timeoutMs + 500);
-    // Sin unref, un chequeo en vuelo mantendría vivo el event loop y demoraría el SIGTERM.
-    if (typeof timer?.unref === "function") timer.unref();
   });
 
   let rows;
