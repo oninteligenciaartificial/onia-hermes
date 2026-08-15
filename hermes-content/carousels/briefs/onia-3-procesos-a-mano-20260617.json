@@ -1,9 +1,16 @@
 {
   "title": "3 procesos que tu negocio ya no debería hacer a mano",
   "caption": "Si todavía respondés cada consulta, agendás a mano y persigues cobros uno por uno, no tenés un negocio: tenés un trabajo que no podés dejar. Estos 3 procesos son los primeros que automatizamos en ONIA porque son los que más plata y tiempo te están costando hoy. Guardá el checklist y comentá AUTO: te mando el diagnóstico de cuál automatizar primero en tu caso.",
-  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#pymes", "#whatsapp", "#santacruz"],
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#pymes",
+    "#whatsapp",
+    "#santacruz"
+  ],
   "comment_trigger": "Comentá AUTO",
-  "cta": "Comentá AUTO",
+  "cta": "Comentá SISTEMA",
   "slides": [
     {
       "number": 1,
@@ -65,7 +72,7 @@
       "role": "cta",
       "pill": "Empezá hoy",
       "headline": "Pedí tu *diagnóstico* gratis",
-      "body": "Comentá *AUTO* y te mando cuál de los 3 procesos automatizar primero en tu negocio.",
+      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve montado para tu negocio.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte, acento verde en AUTO.",

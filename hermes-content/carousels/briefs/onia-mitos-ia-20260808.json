@@ -1,9 +1,17 @@
 {
   "title": "Nadie te cuenta esto sobre automatizar con IA",
   "caption": "Casi todos los que no automatizan no es porque no quieran: es porque creen tres cosas que no son ciertas. Que la IA va a reemplazar a su gente. Que eso es solo para empresas grandes. Que tarda meses en funcionar. Ninguna de las tres se sostiene, y mientras tanto siguen perdiendo clientes por responder tarde. Guardá el slide 5 y comentá MITO: te digo cuál de los tres te está frenando a vos.",
-  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#pymes", "#negocios", "#santacruz", "#emprender"],
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#pymes",
+    "#negocios",
+    "#santacruz",
+    "#emprender"
+  ],
   "comment_trigger": "Comentá MITO",
-  "cta": "Comentá MITO",
+  "cta": "Comentá LISTA",
   "slides": [
     {
       "number": 1,
@@ -82,7 +90,7 @@
       "role": "cta",
       "pill": "Empezá hoy",
       "headline": "¿Cuál te frena a *vos*?",
-      "body": "Comentá *MITO* y te digo cuál de los tres te está costando clientes.",
+      "body": "Comentá *LISTA* y te paso la lista real: qué automatizar primero y cuánto sale.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte.",

@@ -1,9 +1,17 @@
 {
   "title": "Lo que separa a un negocio que escala de uno estancado no es trabajar más",
   "caption": "Nadie se estanca por vago. Se estanca porque el negocio depende de que él esté. Responde él, sigue él, cobra él. El día que para, el negocio para. El negocio que escala hizo lo contrario: dejó de vender sus horas y montó un sistema que vende sin él. No es trabajar más. Es dejar de ser el cuello de botella. Guardá el slide 6 y comentá ESCALA: te muestro cómo se ve ese sistema montado para tu rubro.",
-  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#negocios", "#emprender", "#whatsapp", "#santacruz"],
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#negocios",
+    "#emprender",
+    "#whatsapp",
+    "#santacruz"
+  ],
   "comment_trigger": "Comentá ESCALA",
-  "cta": "Comentá ESCALA",
+  "cta": "Comentá SISTEMA",
   "slides": [
     {
       "number": 1,
@@ -87,7 +95,7 @@
       "role": "cta",
       "pill": "Empezá hoy",
       "headline": "Dejá de ser el *cuello de botella*",
-      "body": "Comentá *ESCALA* y te muestro cómo se ve ese sistema montado para tu rubro.",
+      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve ese sistema en tu rubro.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte verde, acento en ESCALA.",
