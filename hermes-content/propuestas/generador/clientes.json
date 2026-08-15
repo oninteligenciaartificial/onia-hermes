@@ -104,11 +104,6 @@
         "mensual": "150"
       },
       {
-        "nombre": "Videos con IA para promo de la agencia",
-        "setup": "—",
-        "mensual": "2,200 (8/mes)"
-      },
-      {
         "nombre": "Cuidado Web (hosting, respaldos, cambios, soporte)",
         "setup": "—",
         "mensual": "190–390"
@@ -226,11 +221,6 @@
         "mensual": "190–390"
       },
       {
-        "nombre": "Videos con IA para promocionar productos",
-        "setup": "—",
-        "mensual": "2,200 (8/mes)"
-      },
-      {
         "nombre": "Conexión Instagram / TikTok (publicación)",
         "setup": "900",
         "mensual": "150"
@@ -340,11 +330,6 @@
         "nombre": "Operación mensual del CRM (Onia Comercio)",
         "setup": "—",
         "mensual": "desde 530"
-      },
-      {
-        "nombre": "Videos con IA para mostrar proyectos y servicios",
-        "setup": "—",
-        "mensual": "2,200 (8/mes)"
       },
       {
         "nombre": "Gestión de pauta + consultoría continua",
@@ -475,11 +460,6 @@
         "mensual": "150"
       },
       {
-        "nombre": "Videos con IA para promocionar el libro y tu consulta",
-        "setup": "—",
-        "mensual": "2,200 (8/mes)"
-      },
-      {
         "nombre": "Cuidado Web (respaldo, soporte, mejoras)",
         "setup": "—",
         "mensual": "190"
@@ -592,11 +572,6 @@
         "mensual": "a convenir"
       },
       {
-        "nombre": "Videos con IA para mostrar equipos y servicios",
-        "setup": "—",
-        "mensual": "2,200 (8/mes)"
-      },
-      {
         "nombre": "Cuidado Web (soporte, respaldo, mejoras)",
         "setup": "—",
         "mensual": "190–690"
@@ -707,11 +682,6 @@
         "nombre": "Conexión y gestión de redes (Instagram/Facebook)",
         "setup": "900",
         "mensual": "a convenir"
-      },
-      {
-        "nombre": "Videos con IA para mostrar equipos y servicios",
-        "setup": "—",
-        "mensual": "2,200 (8/mes)"
       },
       {
         "nombre": "Cuidado Web (soporte, respaldo, mejoras)",
@@ -1008,14 +978,41 @@
     ],
     "comparativa": {
       "titulo": "ERP tradicional vs. Onia Empresarial",
-      "columnas": ["ERP pago único (tipo TR4)", "Onia Empresarial E1"],
+      "columnas": [
+        "ERP pago único (tipo TR4)",
+        "Onia Empresarial E1"
+      ],
       "filas": [
-        ["Inversión inicial", "~USD 20.000", "USD 4.900 — o USD 0 entrando por mensualidad"],
-        ["Cambia una norma (RND del SIN)", "Queda desactualizado o pagás upgrade", "Lo actualizamos nosotros, incluido"],
-        ["Dólar y reprecios", "Manual, planilla por planilla", "Automatizado con aprobación de gerencia"],
-        ["Gerencia fuera de la oficina", "Depende de llamadas", "Consulta y ordena por Telegram"],
-        ["Soporte y monitoreo", "Por contrato o por incidente", "Gestión mensual Onia incluida"],
-        ["Tus sistemas actuales", "Migración traumática", "Puentes de solo lectura, sin migrar nada"]
+        [
+          "Inversión inicial",
+          "~USD 20.000",
+          "USD 4.900 — o USD 0 entrando por mensualidad"
+        ],
+        [
+          "Cambia una norma (RND del SIN)",
+          "Queda desactualizado o pagás upgrade",
+          "Lo actualizamos nosotros, incluido"
+        ],
+        [
+          "Dólar y reprecios",
+          "Manual, planilla por planilla",
+          "Automatizado con aprobación de gerencia"
+        ],
+        [
+          "Gerencia fuera de la oficina",
+          "Depende de llamadas",
+          "Consulta y ordena por Telegram"
+        ],
+        [
+          "Soporte y monitoreo",
+          "Por contrato o por incidente",
+          "Gestión mensual Onia incluida"
+        ],
+        [
+          "Tus sistemas actuales",
+          "Migración traumática",
+          "Puentes de solo lectura, sin migrar nada"
+        ]
       ]
     },
     "problema": "Un ERP tradicional tipo TR4 cuesta alrededor de <b>USD 20.000</b>, pago único — y queda <b>congelado en el tiempo</b>. Pero Bolivia cambia cada mes: RNDs del SIN, dólar, normas nuevas. <b>Onia Empresarial</b> es lo contrario: un sistema <b>vivo</b> que se actualiza con cada norma y cada tipo de cambio, conectado a los sistemas que ya usás (sin migraciones traumáticas), con tu gerencia manejando todo desde Telegram. Entrás por menos de la mitad del ancla — o sin barrera: desde USD 490/mes.",
