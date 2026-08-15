@@ -59,6 +59,58 @@ Antes de escribir una sola linea:
    de Sergio. Nada flotando en la conversacion.
 ```
 
+## DONDE SE PEGA CADA UNO — ruteo por sesion
+
+Las sesiones son las que Sergio tiene abiertas. **Producto y marketing van separados**: la
+plataforma construye, marketing vende lo construido. Un prompt de marketing en la sesion de
+producto descarrila las dos.
+
+### PRODUCTO — construye el software
+
+| Sesion | Prompts que van ahi | Estado |
+|---|---|---|
+| **`onia-plattform`** | Agente de producto · Vision por computadora como capacidad | el de Seguridad esta **ANULADO** (ya hecho y verificado en prod) |
+| **`chatbot`** | Minimizacion de datos · **D1 el bot no guarda hace dias** | D1 primero: esta roto AHORA |
+| **`Carrito de compra`** | Carrito flotante | |
+| **`Estructura de pagos`** | Checkout — con el paso 1 de verificacion que puede matar la tarea | |
+| **`Importación de productos`** | Portar dropzone-progress y upload-button al flujo real | |
+| **`bolivian-electric-chatbot`** | ninguno propio: hereda la minimizacion de datos de `chatbot` | |
+| **`Hotmart`** | **ninguno.** Ningun video aplico. Se dice para que nadie invente uno | |
+
+### WEB — construye lo que se muestra
+
+| Sesion | Prompts | Orden |
+|---|---|---|
+| **`web-factory`** | C1 indexabilidad · portafolio antes/despues · capa de 5 skills visuales · B1 packages/blocks · B2 generar sitio desde learned model | **B1 antes que B2**: sin bloques, generar no produce nada |
+
+### MARKETING — vende lo construido
+
+| Sesion | Prompts |
+|---|---|
+| **`INFLUENCERS IA`** | Guion por escenas · A4 estructura de escenas · **y la ENTREGA_HIGGSFIELD_LUCIA.md entera (12 puntos)** |
+| **marketing** (abrir si no existe) | A1 portafolio · A2 comentario→DM · A3 carruseles · A5 Meta Ads · A6 los patrones como contenido · C2 kit de venta por rubro · **D4 espiar la pauta con lo gratis** |
+| **`editor de videos`** | Animar interfaz con HyperFrames + cerrar el gap de formatos |
+
+### VENTA Y ADMINISTRACION
+
+| Sesion | Prompts |
+|---|---|
+| **CRM / prospeccion** | Los 7 roles contra el Vendedor que ya corre · **C4 la ruta al primer cliente** |
+| **propuestas** | C3 el costo de esperar |
+| **`pendiente`** | Apify vs scrapling · Handy · B3 encender el intake · B4 probar los 6 patrones (20 min) · D2 las fechas que corren · D3 la busqueda de marca |
+
+### El orden si hay que elegir
+
+1. **D1** → `chatbot`. Es lo unico roto ahora mismo.
+2. **C4** → CRM. Es lo unico que ataca la falta de clientes.
+3. **C1** → web-factory. Nuestra web no indexa y auditamos la ajena.
+4. **A1** → marketing. Portafolio, cero costo, sube el precio.
+5. **B4** → `pendiente`. Veinte minutos y da confianza en la biblioteca.
+
+**Choque unico a cuidar:** D1 y B3 son los dos de infra. No los mandes juntos.
+
+---
+
 ## Los dos gates que aplican a TODOS los prompts de este archivo
 
 Pegá esto junto al prompt. Nacen de errores concretos de esta sesión, no de teoría.
