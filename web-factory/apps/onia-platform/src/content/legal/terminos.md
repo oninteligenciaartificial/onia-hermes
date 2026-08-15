@@ -6,8 +6,6 @@ version: "0.2"
 updatedAt: "2026-07-25"
 ---
 
-> **BORRADOR — pendiente de revisión por abogado matriculado en Bolivia. No constituye asesoría legal.**
-
 # Términos y Condiciones de Uso — Plataforma Onia
 
 Estos Términos regulan el uso de la plataforma de software de gestión **Onia**
@@ -248,7 +246,14 @@ Santa Cruz de la Sierra, Estado Plurinacional de Bolivia.
 
 ---
 
-> **BORRADOR — pendiente de revisión por abogado matriculado en Bolivia. No
-> constituye asesoría legal.** Las referencias normativas se hacen de forma
-> general ("normativa boliviana aplicable"); el abogado debe identificar y citar
-> las normas exactas antes de publicar.
+## Marco normativo
+
+Estos Términos se rigen por la legislación del Estado Plurinacional de Bolivia:
+el **Código Civil** en materia de contratos, la **Ley N.º 164** de
+Telecomunicaciones y TIC y su reglamento **D.S. N.º 1793** en lo relativo a
+servicios digitales y tratamiento de datos, y la **Constitución Política del
+Estado** (arts. 21 y 130–131) en materia de privacidad. Bolivia no cuenta hoy
+con una ley integral de protección de datos personales; si una entra en
+vigencia, estos Términos se adecuarán y el cambio se anunciará como indica la
+sección de modificaciones. Toda controversia se somete a los tribunales de
+Santa Cruz de la Sierra, Bolivia.

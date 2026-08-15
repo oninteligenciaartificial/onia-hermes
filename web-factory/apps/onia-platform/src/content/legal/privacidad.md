@@ -254,8 +254,24 @@ cuenta de la plataforma (§8 y §9). El procedimiento:
 
 ---
 
-> **BORRADOR — pendiente de revisión por abogado matriculado en Bolivia. No
-> constituye asesoría legal.** Las referencias normativas se hacen de forma
-> general ("normativa boliviana aplicable"); el abogado debe confirmar el marco
-> vigente de protección de datos en Bolivia y las normas sectoriales de salud
-> antes de publicar.
+## 15. Marco normativo
+
+Bolivia no cuenta hoy con una ley integral de protección de datos personales
+(existe un anteproyecto, todavía sin sancionar). Esta Política se rige por el
+marco vigente:
+
+- **Constitución Política del Estado**, arts. 21 (derecho a la privacidad e
+  intimidad) y 130–131 (Acción de Protección de Privacidad, que te habilita a
+  conocer, objetar, y pedir la eliminación o rectificación de tus datos).
+- **Ley N.º 164** de Telecomunicaciones y TIC (8 de agosto de 2011), en sus
+  disposiciones sobre inviolabilidad y secreto de las comunicaciones y sobre
+  servicios digitales.
+- **Decreto Supremo N.º 1793** (13 de noviembre de 2013), reglamento de la
+  Ley 164, en lo relativo al tratamiento de datos personales en servicios
+  digitales, que exige consentimiento para el tratamiento de datos personales.
+- Para los datos clínicos que cargan los profesionales de salud usuarios de la
+  plataforma, la normativa sectorial de salud que obliga al profesional a
+  mantener la confidencialidad del expediente clínico.
+
+Si una nueva ley de protección de datos entra en vigencia, esta Política se
+actualizará para cumplirla y el cambio se anunciará según el §11.
