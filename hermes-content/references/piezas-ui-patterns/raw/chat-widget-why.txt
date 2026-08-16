@@ -1,0 +1,4 @@
+Con transition: 0.01ms
+el panel queda abierto
+e invisible.
+Va: transition: none.

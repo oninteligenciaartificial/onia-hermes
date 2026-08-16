@@ -10,18 +10,19 @@
     "#pymes"
   ],
   "comment_trigger": "Comentá SISTEMA",
-  "cta": "Comentá SISTEMA",
+  "cta": "Contame",
   "slides": [
     {
       "number": 1,
       "role": "cover",
-      "pill": "Realidad",
+      "pill": "La verdad",
       "headline": "Tu competencia ya vende con *IA*",
       "body": "Vos todavía respondés a mano.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Ink, titular condensado, acento verde en IA, objeto 3D hub.",
-      "alt_text": "Tu competencia ya vende con IA"
+      "alt_text": "Tu competencia ya vende con IA",
+      "bg": "hermes-content/assets/onia/heroes/comp-01.png"
     },
     {
       "number": 2,
@@ -32,18 +33,20 @@
       "callout": "Cada hora sin responder vale leads ↘",
       "save_worthy": false,
       "visual_prompt": "Alto contraste, acento verde en sistema.",
-      "alt_text": "No son mejores, tienen sistema"
+      "alt_text": "No son mejores, tienen sistema",
+      "bg": "hermes-content/assets/onia/heroes/comp-02.png"
     },
     {
       "number": 3,
       "role": "point",
-      "pill": "Qué cambia",
+      "pill": "El punto",
       "headline": "La IA no *duerme*",
       "body": "Responde a las 11 de la noche, el domingo y cuando estás en una reunión. Vos no podés. Tu sistema sí.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Objeto 3D hub centro, acento verde.",
-      "alt_text": "La IA no duerme"
+      "alt_text": "La IA no duerme",
+      "bg": "hermes-content/assets/onia/heroes/comp-03.png"
     },
     {
       "number": 4,
@@ -54,18 +57,21 @@
       "callout": "Guardá esto ↗",
       "save_worthy": true,
       "visual_prompt": "Tarjeta framework 3 señales.",
-      "alt_text": "Las 3 señales de que vas tarde"
+      "alt_text": "Las 3 señales de que vas tarde",
+      "bg": "hermes-content/assets/onia/heroes/comp-04.png"
     },
     {
       "number": 5,
       "role": "cta",
-      "pill": "Empezá hoy",
+      "pill": "Contame",
       "headline": "Pasá de hacerlo a mano a tener *sistema*",
-      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve montado para tu negocio.",
+      "body": "¿Ya te pasó que un cliente se fue a otro por tardar en contestar?",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte verde, acento en SISTEMA.",
-      "alt_text": "Comentá SISTEMA"
+      "alt_text": "Comentá SISTEMA",
+      "bg": "hermes-content/assets/onia/heroes/comp-05.png"
     }
-  ]
+  ],
+  "job": "engagement"
 }

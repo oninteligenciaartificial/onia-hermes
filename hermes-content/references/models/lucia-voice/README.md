@@ -47,6 +47,18 @@ GUARDARLO en la librería: `POST /v1/text-to-voice` con `{voice_name:"Lucia-ONIA
 voice_description, generated_voice_id}` → devuelve el voice_id PERMANENTE. Ese permanente
 es el que se usa siempre.
 
+> ## ⛔ CORRECCIÓN 2026-08-15 — lo de `wan2_7` de abajo está MAL
+>
+> Sergio: *"wan 2.7 es malísimo para lip sync; para video tal vez es bueno, pero para eso no."*
+>
+> Lo que sigue afirma que `wan2_7` sincroniza la boca a su propia voz, escrito como hecho
+> probado cuando nunca se validó — y en `avatar-lab/20260707-broll-lipsync-structure/` ya se
+> hablaba de un *"fix de dientes"* que debió haber sido señal.
+>
+> **Vigente:** el b-roll con VO montada encima sí funciona. Para lipsync, los candidatos sin
+> probar son `grok_video_v15` y `seedance_2_0` (los únicos otros que aceptan
+> `audio_references`). Ver `references/modelos/lucia/LUCIA.md` §3-bis, que es la fuente.
+
 ## Cómo se usa (consistencia total)
 
 Una vez elegida y guardada, Lucia tiene UN voice_id permanente. **Todo** su audio sale

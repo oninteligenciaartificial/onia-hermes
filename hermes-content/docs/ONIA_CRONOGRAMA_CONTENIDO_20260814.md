@@ -112,10 +112,58 @@ precio de Landing 790 → 2.000. Está identificado hace días y sigue sin hacer
 
 ---
 
+## 3-bis. Cada post tiene UN trabajo — y no todos piden lo mismo
+
+> Corrección al plan original: los 8 carruseles terminaban pidiendo comentario. **Ocho de ocho
+> eran CTA.** Un feed donde cada post cobra peaje entrena a la gente a scrollear, y el algoritmo
+> lo castiga antes que la gente. Pero un feed sin ningún CTA junta aplausos y no factura.
+
+Tres trabajos, cada uno con su cierre y su métrica:
+
+| Trabajo | Cómo cierra | Qué produce | Cómo se mide |
+|---|---|---|---|
+| **Educacional** | *"Guardalo"* — no pide nada más | La razón para seguir la cuenta | **Guardados** y seguidores |
+| **Engagement** | Una pregunta que cuesta cero responder | Alcance (el algoritmo lee comentarios) y DMs tibios | **Comentarios** y respuestas |
+| **CTA** | El ticket del trueque + palabra clave | Leads con nombre | **Reuniones con `?src=`** |
+
+**El reparto de los 8**, con la cuenta en cero seguidores — pesa más ganar alcance que cobrar:
+
+| # | Carrusel | Trabajo | Cierre |
+|---|---|---|---|
+| 1 | WhatsApp a mano | 🗣 **Engagement** | *"¿Cuántos mensajes sin responder tenés ahora mismo?"* |
+| 2 | R.I.P. al cuaderno | 🗣 **Engagement** | *"¿Cuaderno, Excel o memoria? Decime cuál sos"* |
+| 3 | 3 procesos a mano | 📚 **Educacional** | *"Guardalo y arrancá por el primero"* |
+| 4 | El costo invisible | 📚 **Educacional** | *"Guardalo y hacé la cuenta con tus números"* |
+| 5 | Mitos de la IA | 📚 **Educacional** | *"Guardalo para la próxima vez que te lo digan"* |
+| 6 | 5 tareas que la IA hace mejor | 🎯 **CTA** | Ticket → **LISTA** |
+| 7 | Tu competencia ya vende con IA | 🗣 **Engagement** | *"¿Ya te pasó que un cliente se fue a otro por tardar?"* |
+| 8 | Paradigma de escala | 🎯 **CTA** | Ticket → **SISTEMA** |
+
+**3 educacionales · 3 de engagement · 2 CTA.** El ticket aparece solo dos veces en tres semanas,
+y por eso pega. Cuando aparece en los ocho, no lo ve nadie.
+
+### Por qué en ese orden y no otro
+
+Los dos de engagement abren (1 y 2): con cero audiencia, lo primero que hace falta es que el
+post **circule**, y un comentario barato vale más que un lead que no va a llegar igual porque
+nadie te ve. Los educacionales van al medio, cuando ya hay gente mirando. Los dos CTA van
+sexto y octavo: recién ahí pedir tiene sentido, y quedan separados por un post de engagement
+para que no se lean como una seguidilla de pedidos.
+
+### La regla que queda
+
+**Nunca dos CTA seguidos, y nunca más de 1 de cada 4 posts.** Si en una semana el feed pide dos
+veces, algo se planificó mal.
+
 ## 4. Lo que mide si esto sirve
 
-**Una sola métrica: reuniones agendadas con `?src=`.** Seguidores, likes, alcance y guardados no
-entran en la conversación hasta que haya reuniones.
+**La métrica del negocio sigue siendo una: reuniones agendadas con `?src=`.** Pero **no se le
+pide a cada post** — se le pide al conjunto. Un educacional con 40 guardados y 0 reuniones está
+haciendo su trabajo; medirlo por reuniones es leerlo mal y llevaría a matar justo el contenido
+que construye la audiencia.
+
+Cada post se mide por el trabajo que se le asignó (tabla de §3-bis). El conjunto se mide por
+reuniones.
 
 El circuito está vivo y probado punta a punta: `?src=` → panel → Cal. Cada pieza lleva el suyo:
 `?src=onia-<carrusel>` · `?src=lucia-<pieza>` · `?src=ads-<angulo>`.

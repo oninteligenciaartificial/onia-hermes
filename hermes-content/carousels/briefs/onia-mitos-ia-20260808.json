@@ -11,7 +11,7 @@
     "#emprender"
   ],
   "comment_trigger": "Comentá MITO",
-  "cta": "Comentá LISTA",
+  "cta": "Guardalo",
   "slides": [
     {
       "number": 1,
@@ -88,14 +88,15 @@
     {
       "number": 7,
       "role": "cta",
-      "pill": "Empezá hoy",
+      "pill": "Guardalo",
       "headline": "¿Cuál te frena a *vos*?",
-      "body": "Comentá *LISTA* y te paso la lista real: qué automatizar primero y cuánto sale.",
+      "body": "*Guardalo* para la próxima vez que alguien te diga cualquiera de los tres.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte.",
       "alt_text": "Comentá MITO",
       "bg": "hermes-content/assets/onia/heroes/mito-07.png"
     }
-  ]
+  ],
+  "job": "educacional"
 }

@@ -16,57 +16,62 @@
     {
       "number": 1,
       "role": "cover",
-      "pill": "Negocios",
+      "pill": "La verdad",
       "headline": "Lo que te tiene *estancado* no es trabajar poco",
       "body": "Es otra cosa. Y nadie te la dice.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Ink, titular condensado, acento verde en estancado, objeto 3D.",
-      "alt_text": "Lo que te tiene estancado no es trabajar poco"
+      "alt_text": "Lo que te tiene estancado no es trabajar poco",
+      "bg": "hermes-content/assets/onia/heroes/esc-01.png"
     },
     {
       "number": 2,
       "role": "stakes",
-      "pill": "La verdad incómoda",
+      "pill": "El problema",
       "headline": "El negocio depende de *vos*",
       "body": "Respondés vos, seguís vos, cobrás vos. El día que parás, el negocio para. Eso no es tener un negocio: es tener un empleo que no podés renunciar.",
       "callout": "¿Te fuiste 3 días y volviste a un incendio? ↘",
       "save_worthy": false,
       "visual_prompt": "Alto contraste, acento verde en vos.",
-      "alt_text": "El negocio depende de vos"
+      "alt_text": "El negocio depende de vos",
+      "bg": "hermes-content/assets/onia/heroes/esc-02.png"
     },
     {
       "number": 3,
       "role": "point",
-      "pill": "El paradigma",
+      "pill": "El punto",
       "headline": "Escalar no es hacer *más*",
       "body": "El que crece no trabaja más horas. Hace lo contrario: deja de ser la persona por la que pasa todo. Cambia su tiempo por un sistema.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Objeto 3D centro, acento verde en más.",
-      "alt_text": "Escalar no es hacer más"
+      "alt_text": "Escalar no es hacer más",
+      "bg": "hermes-content/assets/onia/heroes/esc-03.png"
     },
     {
       "number": 4,
       "role": "point",
-      "pill": "Qué cambia",
+      "pill": "El cambio",
       "headline": "Vendés sin estar *presente*",
       "body": "Un sistema con IA responde, califica y agenda solo. Vos dejás de ser el cuello de botella y entrás únicamente a cerrar.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Objeto 3D, acento verde en presente.",
-      "alt_text": "Vendés sin estar presente"
+      "alt_text": "Vendés sin estar presente",
+      "bg": "hermes-content/assets/onia/heroes/esc-04.png"
     },
     {
       "number": 5,
       "role": "point",
-      "pill": "El momento",
+      "pill": "El cambio",
       "headline": "A las *3 a.m.* ya vendiste",
       "body": "Mientras dormís, alguien preguntó por WhatsApp, el sistema respondió, lo calificó y lo agendó. Te despertás con la reunión puesta. Vos nunca podrías. Tu sistema sí.",
       "callout": "El 40% de los leads no vuelve si no respondés en 5 min",
       "save_worthy": false,
       "visual_prompt": "Objeto 3D con glow, dato temporal, acento verde en 3 a.m.",
-      "alt_text": "A las 3am ya vendiste"
+      "alt_text": "A las 3am ya vendiste",
+      "bg": "hermes-content/assets/onia/heroes/esc-05.png"
     },
     {
       "number": 6,
@@ -77,29 +82,33 @@
       "callout": "Guardá esto ↗",
       "save_worthy": true,
       "visual_prompt": "Tarjeta framework, 3 preguntas.",
-      "alt_text": "El test del negocio sin vos"
+      "alt_text": "El test del negocio sin vos",
+      "bg": "hermes-content/assets/onia/heroes/esc-06.png"
     },
     {
       "number": 7,
       "role": "point",
-      "pill": "Por dónde",
+      "pill": "El cuello",
       "headline": "No automatices *todo*. Empezá por el cuello",
       "body": "El error es querer automatizar todo de golpe. Se empieza por el proceso que hoy te frena: casi siempre, responder y seguir a los que preguntan.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Objeto 3D, acento verde en todo.",
-      "alt_text": "Empezá por el cuello de botella"
+      "alt_text": "Empezá por el cuello de botella",
+      "bg": "hermes-content/assets/onia/heroes/esc-07.png"
     },
     {
       "number": 8,
       "role": "cta",
-      "pill": "Empezá hoy",
+      "pill": "Comentá",
       "headline": "Dejá de ser el *cuello de botella*",
       "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve ese sistema en tu rubro.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte verde, acento en ESCALA.",
-      "alt_text": "Comentá ESCALA"
+      "alt_text": "Comentá ESCALA",
+      "bg": "hermes-content/assets/onia/heroes/esc-08.png"
     }
-  ]
+  ],
+  "job": "cta"
 }

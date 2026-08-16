@@ -11,7 +11,7 @@
     "#gestion"
   ],
   "comment_trigger": "Comentá ORDEN",
-  "cta": "Comentá SISTEMA",
+  "cta": "Contame",
   "slides": [
     {
       "number": 1,
@@ -88,14 +88,15 @@
     {
       "number": 7,
       "role": "cta",
-      "pill": "Empezá hoy",
+      "pill": "Contame",
       "headline": "Poné tu negocio en *orden*",
-      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve con todo en un solo lugar.",
+      "body": "¿Cuaderno, Excel o memoria? Decime cuál sos y te digo por dónde empezar.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Emprendedor tranquilo con todo ordenado.",
       "alt_text": "Comentá ORDEN",
       "bg": "hermes-content/assets/onia/heroes/rip-07.png"
     }
-  ]
+  ],
+  "job": "engagement"
 }
