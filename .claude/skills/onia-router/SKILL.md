@@ -9,6 +9,12 @@ Punto de entrada de toda sesión en `onia-hermes`. Antes de trabajar: identific�
 carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa completo:
 `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
 
+> 📇 **Mapa problema → skill: [`STACK-POR-DOMINIO.md`](STACK-POR-DOMINIO.md).**
+> Hay **196 skills globales + 9 plugins** instaladas. Esta tabla enruta por carril; ese
+> archivo enruta por dominio (contenido/marketing · diseño/UI/UX · frontend · backend ·
+> seguridad · research · proceso), que es como aparecen las tareas en la práctica.
+> **Abrirlo antes de escribir la primera línea.**
+
 ## Cómo usar
 1. **Identificá el carril** de la tarea (tabla abajo). Ante duda, ver
    `CLAUDE.md` §"Desarrollo en paralelo — carriles" y `COORDINATION_MANIFEST.md`.
