@@ -153,7 +153,7 @@ function renderKpis(kpis: DashboardKpi[]): string {
   const cards = kpis
     .map(
       (kpi) => `
-          <article class="wf-kpi" data-reveal>
+          <article class="wf-kpi${kpi.variant === "accent" ? " wf-kpi--accent" : ""}" data-reveal>
             <span class="wf-kpi-label">${escapeHtml(kpi.label)}</span>
             <strong class="wf-kpi-value">${escapeHtml(kpi.value)}</strong>
             <div class="wf-kpi-foot">
@@ -166,6 +166,7 @@ function renderKpis(kpis: DashboardKpi[]): string {
               }
               ${kpi.context ? `<span class="wf-kpi-context">${escapeHtml(kpi.context)}</span>` : ""}
             </div>
+            ${kpi.spark && kpi.spark.length ? renderKpiSpark(kpi.spark, kpi.label) : ""}
           </article>`,
     )
     .join("");
@@ -200,6 +201,49 @@ function renderCharts(charts: DashboardChart[]): string {
 
   return `
         <section class="wf-dash-charts" aria-label="Graficos">
+          ${cards}
+        </section>`;
+}
+
+function renderLists(lists: DashboardProgressList[]): string {
+  if (!lists.length) {
+    return "";
+  }
+
+  const cards = lists
+    .map((list) => {
+      const rows = list.rows
+        .map((row) => {
+          const percent =
+            typeof row.percent === "number"
+              ? `<div class="wf-list-bar" role="img" aria-label="${escapeAttribute(
+                  `${row.title}: ${Math.round(row.percent)}%`,
+                )}"><span style="width:${Math.min(Math.max(row.percent, 0), 100).toFixed(0)}%"></span></div>`
+              : "";
+          const status = row.status
+            ? `<span class="wf-list-status wf-list-status--${row.status.tone}">${escapeHtml(row.status.label)}</span>`
+            : "";
+          return `
+            <li class="wf-list-row">
+              <div class="wf-list-main">
+                <strong>${escapeHtml(row.title)}</strong>
+                <span class="wf-list-meta">${escapeHtml(row.meta)}</span>
+                ${percent}
+              </div>
+              ${status}
+            </li>`;
+        })
+        .join("");
+      return `
+          <article class="wf-list-card" data-reveal>
+            <div class="wf-dash-table-head"><h2>${escapeHtml(list.title)}</h2></div>
+            <ul class="wf-list">${rows}</ul>
+          </article>`;
+    })
+    .join("");
+
+  return `
+        <section class="wf-dash-lists" aria-label="Listas de seguimiento">
           ${cards}
         </section>`;
 }
@@ -346,20 +390,31 @@ function renderBarChart(chart: DashboardChart): string {
   const gap = count > 12 ? 3 : 8;
   const barWidth = Math.max(2, (PLOT_W - gap * (count - 1)) / count);
 
+  const hasPending = points.some((point) => point.pending);
+  // Diagonal-hatch fill for pending/future bars (pattern bank: Fireart 25241984).
+  // Identical defs may repeat across inline charts; the shared id resolves to the same drawing.
+  const hatchDefs = hasPending
+    ? `<defs><pattern id="wf-hatch" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--color-primary)" stroke-width="1.6" opacity="0.55"></line></pattern></defs>`
+    : "";
+
   const bars = points
     .map((point, index) => {
       const height = (Math.max(point.value, 0) / max) * PLOT_H;
       const x = PAD_L + index * (barWidth + gap);
       const y = PAD_T + PLOT_H - height;
+      const paint = point.pending
+        ? `fill="url(#wf-hatch)" stroke="var(--color-primary)" stroke-opacity="0.45" stroke-width="1"`
+        : `fill="var(--color-primary)"`;
+      const pendingNote = point.pending ? " (pendiente)" : "";
       return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(
         1,
-      )}" rx="3" fill="var(--color-primary)"><title>${escapeHtml(point.label)}: ${point.value}</title></rect>`;
+      )}" rx="3" ${paint}><title>${escapeHtml(point.label)}: ${point.value}${pendingNote}</title></rect>`;
     })
     .join("");
 
   const labels = renderChartLabels(points, (index) => PAD_L + index * (barWidth + gap) + barWidth / 2);
 
-  return chartSvg(`${renderGrid(max)}${bars}${labels}`, chartLabel(chart));
+  return chartSvg(`${hatchDefs}${renderGrid(max)}${bars}${labels}`, chartLabel(chart));
 }
 
 function renderLineChart(chart: DashboardChart): string {
@@ -474,6 +529,35 @@ function renderSparkline(chart: DashboardChart): string {
   return `<svg class="wf-chart wf-sparkline" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttribute(
     chartLabel(chart),
   )}" preserveAspectRatio="none"><polygon points="${area}" fill="var(--color-primary)" fill-opacity="0.12"></polygon><polyline points="${line}" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
+}
+
+/** Sparkline drawn inside a KPI card, under the figure (pattern bank: Stakent 23902428).
+ *  Uses currentColor so it inherits the card's ink (accent variant included). */
+function renderKpiSpark(points: DashboardPoint[], label: string): string {
+  const values = points.map((point) => point.value);
+  const max = Math.max(...values, 1);
+  const min = Math.min(...values, 0);
+  const range = max - min || 1;
+  const width = 320;
+  const height = 44;
+  const pad = 4;
+  const count = points.length;
+
+  const xFor = (index: number): number =>
+    pad + (count <= 1 ? (width - 2 * pad) / 2 : (index / (count - 1)) * (width - 2 * pad));
+  const yFor = (value: number): number =>
+    height - pad - ((value - min) / range) * (height - 2 * pad);
+
+  const line = points.map((point, index) => `${xFor(index).toFixed(1)},${yFor(point.value).toFixed(1)}`).join(" ");
+  const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
+  const last = points[count - 1];
+  const dot = last
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="currentColor"></circle>`
+    : "";
+
+  return `<svg class="wf-kpi-spark" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttribute(
+    `Tendencia: ${label}`,
+  )}" preserveAspectRatio="none"><polygon points="${area}" fill="currentColor" fill-opacity="0.14"></polygon><polyline points="${line}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
 }
 
 function renderChartLabels(
@@ -810,6 +894,39 @@ h1, h2, h3 {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow: hidden;
+}
+
+/* Hero KPI cell: one solid accent card among quiet siblings
+   (pattern bank: Fireart 25241984). Use on ONE kpi per row. */
+.wf-kpi--accent {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--color-primary) 86%, var(--color-fg) 14%);
+  color: var(--color-on-primary);
+}
+
+.wf-kpi--accent .wf-kpi-label,
+.wf-kpi--accent .wf-kpi-context {
+  color: color-mix(in srgb, var(--color-on-primary) 78%, transparent);
+}
+
+.wf-kpi--accent .wf-kpi-delta {
+  color: var(--color-on-primary);
+  background: color-mix(in srgb, var(--color-on-primary) 16%, transparent);
+}
+
+/* Sparkline as card anatomy: bleeds to the card edges, under the figure
+   (pattern bank: Stakent 23902428). */
+.wf-kpi-spark {
+  display: block;
+  width: calc(100% + 36px);
+  height: 44px;
+  margin: 4px -18px -16px;
+  color: var(--color-primary);
+}
+
+.wf-kpi--accent .wf-kpi-spark {
+  color: var(--color-on-primary);
 }
 
 .wf-kpi-label {
@@ -942,6 +1059,105 @@ h1, h2, h3 {
   fill: var(--muted-foreground);
   font-size: 9px;
   font-family: var(--font-body);
+}
+
+/* Progress lists: rows with right-aligned status chips
+   (pattern bank: Fireart 25241984, OnPoint 25540988). */
+.wf-dash-lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.wf-list-card {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.wf-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.wf-list-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.wf-list-row + .wf-list-row {
+  border-top: 1px solid var(--border);
+}
+
+.wf-list-main {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wf-list-main strong {
+  font-size: 0.92rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wf-list-meta {
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wf-list-bar {
+  margin-top: 4px;
+  height: 5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-fg) 10%, transparent);
+  overflow: hidden;
+}
+
+.wf-list-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-primary);
+}
+
+.wf-list-status {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.wf-list-status--pos {
+  color: var(--wf-pos);
+  background: color-mix(in srgb, var(--wf-pos) 14%, transparent);
+}
+
+.wf-list-status--neg {
+  color: var(--wf-neg);
+  background: color-mix(in srgb, var(--wf-neg) 14%, transparent);
+}
+
+.wf-list-status--accent {
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.wf-list-status--muted {
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--color-fg) 8%, transparent);
 }
 
 .wf-dash-table-scroll {
