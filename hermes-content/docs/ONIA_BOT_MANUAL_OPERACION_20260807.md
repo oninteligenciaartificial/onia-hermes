@@ -288,12 +288,17 @@ El ícono está listo en el repo:
 
 ### Importante
 
+> Revisado contra producción el **2026-08-16**. Lo cerrado se tacha acá mismo en vez de
+> abrir otro doc de pendientes — ver `ONIA_ESTADO_CHATBOT_Y_VOZ_20260816.md`.
+
 | Qué | Detalle |
 |---|---|
-| **Disparadores de n8n** | El seguimiento y el recordatorio no tienen quién los llame. Comando exacto documentado en `N8N_WORKFLOW.md` §5B |
-| **Webhook abierto** | `ONIA - Disparador de Agentes` acepta llamadas sin ninguna verificación. Le falta el nodo de secreto que los otros tres webhooks del panel sí tienen |
-| **DMARC** | `onia.com.bo` no tiene registro. Cualquiera puede falsificar correos desde tu dominio |
-| **Método de pago en Meta** | Sin él solo funcionan las conversaciones que inicia el cliente (que son gratis, así que el bot opera igual) |
+| ~~**Disparadores de n8n**~~ | ✅ **CERRADO 2026-08-16.** Se resolvió con **cron del VPS, no con n8n** (menos piezas, mismo efecto): `followup` :17 · `reminder` :32 · `postdemo` :47 · `usage` 12:00 UTC. Los cuatro corridos en seco antes de encender: 0 candidatos |
+| **Webhook abierto** | `ONIA - Disparador de Agentes` acepta llamadas sin ninguna verificación. Le falta el nodo de secreto que los otros tres webhooks del panel sí tienen. **Sin verificar el 16-ago** |
+| ~~**DMARC**~~ | ✅ **PUBLICADO.** `v=DMARC1; p=none; rua=mailto:business@onia.com.bo; fo=1`. Queda subirlo de `p=none` a `p=quarantine` cuando los informes confirmen que no hay falsos positivos |
+| ~~**Método de pago en Meta**~~ | ✅ **CARGADO.** El error 131042 se resolvió cuando la tarjeta pasó |
+| **La rama LLM estuvo apagada hasta el 16-ago** | `LITELLM_KEY` no existía en `webhook.env`: `askLiteLLM()` devolvía vacío y todo caía al texto de respaldo. Encendida con llave propia y `gpt-4.1-mini` |
+| **El seguimiento no tiene hora de silencio** | Dispara a las 20 h del último mensaje entrante, así que puede salir a las 6 AM. El recordatorio sí tiene el freno (`quietBeforeHour: 8`). Ponerle el freno achica la ventana de Meta: **decisión de Sergio** |
 
 ### Menor
 

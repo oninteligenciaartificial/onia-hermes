@@ -4,6 +4,17 @@
 **Para:** la sesión de onia-platform
 **Estado de las cifras:** lo marcado *verificado* se comprobó en producción el 13/14-ago-2026. Lo demás está marcado.
 
+**Leer ANTES que este doc** (se escribieron primero y este no los citaba — se agregó el 16-ago):
+
+- `ONIA_MODELO_MULTICLIENTE_CHATBOT_20260802.md` — **cómo se opera N clientes**. Decisiones ya
+  tomadas que este doc da por sentadas: una cuenta de Chatwoot por cliente · provisionar
+  SIEMPRE por Platform API desde el primer cliente (la Platform API **no ve** lo creado a mano
+  por la UI) · bot por cliente vía **Agent Bots**, no webhook crudo · webhook por cliente
+  (`/hook/<cliente>`) validando además `account.id` · la marca blanca **no es viable** ·
+  el super admin puede impersonar y eso va declarado en el contrato.
+- `ONIA_BOT_CAPA_CONOCIMIENTO_20260806.md` — la frontera lógica/hecho y los cuatro candados.
+- `ONIA_ESTADO_CHATBOT_Y_VOZ_20260816.md` — qué está encendido y verificado hoy.
+
 ---
 
 ## 0. Léase primero: qué se está pidiendo
