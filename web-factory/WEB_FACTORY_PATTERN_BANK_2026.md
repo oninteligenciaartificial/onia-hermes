@@ -314,6 +314,67 @@ Tabler (MIT), shadcn/ui charts + dashboard-01 (MIT), Hugging Face Spaces
 (per-Space, review required). Extract structure and component taxonomy; never
 copy identity, proprietary data or assets.
 
+#### Composition patterns (reference-mined 2026-08, anti-generic kit)
+
+Mined from three hand-picked references for the Onia panel redesign. Extract
+STRUCTURE only; never copy identity, palette or assets. Each pattern names its
+source shot.
+
+From **Stakent Crypto Dashboard** (Awsmd, dribbble.com/shots/23902428):
+
+- **Chart as card anatomy, not widget.** The KPI card's area/line chart bleeds
+  to the card's bottom edge and sits UNDER the figure; a floating value chip
+  rides the line. The chart is part of the card, not a sibling in a grid.
+- **Numeric weight mixing inside one figure.** In a long number the significant
+  digits are heavy/bright and the tail (decimals, unit) drops weight and
+  contrast. One glance gives magnitude; precision stays available.
+- **One poster card among quiet cards.** A single card with a gradient accent
+  surface (their Liquid Staking promo) breaks an otherwise neutral rhythm.
+  Never more than one per view.
+- **Nav rows that carry data.** The active sidebar section expands into rows
+  with live amounts and a count badge; navigation doubles as a summary.
+- **Compact filter pills row** (time range, category, sort) right-aligned at
+  the section title, each a self-contained pill with caret.
+
+From **Healthcare Dashboard** (OnPoint Studio, dribbble.com/shots/25540988):
+
+- **Card-in-card metric tiles.** A parent panel holds nested mini-cards, each
+  with label + "detail" chip header, a goal/context chip, a big figure with a
+  small unit, and a micro-chart (bars/waveform) INLINE next to the figure.
+- **Selection = solid inversion.** In icon+title+description list rows, the
+  active row becomes a full accent-color pill with white text; inactive rows
+  stay white with icon-in-tinted-circle. State reads instantly.
+- **Depth by overlap.** A floating spec card overlaps the dominant visual
+  (their 3D organ); layers give the page a foreground and a background instead
+  of a flat card grid.
+- **Greeting as page title** with a count subline ("You have 3 appointments
+  today") and a right-aligned cluster of pill controls (date, range, mode).
+- **One dark anchor card** on a light canvas (their "Issue Found" alert) to
+  hold the composition's corner and flag what needs attention.
+
+From **Task Management Dashboard** (Fireart Studio,
+dribbble.com/shots/25241984):
+
+- **Hero KPI cell.** In a 4-cell KPI row, the FIRST cell is a solid dark
+  accent card (big figure, glow, delta badge); siblings stay white. Hierarchy
+  comes from surface, not from font size alone.
+- **Texture encodes state in charts.** Weekly bars: solid fills in two brand
+  shades for actual data, diagonal-hatch outline bars for future/pending
+  periods; a value tag chip marks the highlighted bar. Same trick in their
+  semi-donut gauge (hatched segment = pending). Charts get character AND a
+  semantic layer with zero extra ink.
+- **Dark utility tiles at the corners.** Small dark-surface cards (time
+  tracker, promo) with a subtle texture background frame the light canvas.
+- **People/progress rows with right-aligned status chips** (tinted Completed /
+  In Progress / Pending) and "working on X" metadata; scannable attribution.
+- **Circled-arrow affordance** top-right of every KPI card as the uniform
+  "go deeper" control.
+
+Web Factory carriers for these patterns (`packages/templates/src/dashboard.ts`):
+`DashboardKpi.variant: "accent"` (hero KPI cell), `DashboardKpi.spark`
+(chart-in-card), `DashboardPoint.pending` (hatched bars),
+`DashboardData.lists` / `DashboardProgressList` (rows with status chips).
+
 ### Legal / Finance / Consulting
 
 Design read: restraint, clarity, authority, low-risk conversion.

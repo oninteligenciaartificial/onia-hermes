@@ -6,9 +6,33 @@ export type DashboardKpi = {
   delta: string;
   trend: "up" | "down" | "flat";
   context: string;
+  /** "accent": hero KPI cell as a solid dark accent card (pattern bank: Fireart 25241984). */
+  variant?: "default" | "accent";
+  /** Integrated sparkline drawn inside the card, under the figure (pattern bank: Stakent 23902428). */
+  spark?: DashboardPoint[];
 };
 
-export type DashboardPoint = { label: string; value: number };
+/** `pending: true` renders the point as a diagonal-hatch outline bar (pattern bank: Fireart 25241984). */
+export type DashboardPoint = { label: string; value: number; pending?: boolean };
+
+export type DashboardListStatus = {
+  label: string;
+  tone: "pos" | "neg" | "accent" | "muted";
+};
+
+export type DashboardListRow = {
+  title: string;
+  meta: string;
+  /** 0-100; renders a thin progress bar under the row text. */
+  percent?: number;
+  status?: DashboardListStatus;
+};
+
+/** Rows with right-aligned status chips (pattern bank: Fireart 25241984, OnPoint 25540988). */
+export type DashboardProgressList = {
+  title: string;
+  rows: DashboardListRow[];
+};
 
 export type DashboardSeries = { name: string; points: DashboardPoint[] };
 
@@ -34,6 +58,7 @@ export type DashboardData = {
   kpis: DashboardKpi[];
   charts: DashboardChart[];
   table: DashboardTable;
+  lists?: DashboardProgressList[];
 };
 
 export type DashboardClient = {
@@ -75,6 +100,7 @@ export function renderDashboardBody(client: DashboardClient): string {
         ${renderTopbar(client)}
         ${renderKpis(dash.kpis)}
         ${renderCharts(dash.charts)}
+        ${renderLists(dash.lists ?? [])}
         ${renderTable(dash.table)}
       </div>
     </div>
