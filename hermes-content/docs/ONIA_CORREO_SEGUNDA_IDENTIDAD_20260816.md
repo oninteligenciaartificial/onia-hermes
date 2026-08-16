@@ -48,19 +48,59 @@ Para que reciba correo de afuera hay que habilitarlo:
 - ⚠️ **No está confirmado que Meta lo acepte.** Es un objeto distinto del alias, pero eso es
   razonamiento, no prueba. Se comprueba creándolo y probando — 5 minutos, costo cero.
 
-### ⚠️ B · Cloudflare Email Routing en un subdominio
+### ✅ B · Cloudflare Email Routing — el dominio YA está en Cloudflare
 
-Gratis y con direcciones ilimitadas, pero:
+Gratis, **direcciones ilimitadas**, y el DNS ya vive ahí: es un interruptor, no una migración
+de nameservers. Hay **dos formas** y la diferencia importa.
 
-- Los subdominios **están soportados a medias**: la UI y la API todavía no los exponen, hay
-  que manejar los registros DNS a mano
-  ([docs](https://developers.cloudflare.com/email-service/configuration/subdomains/) ·
-  [blog](https://blog.cloudflare.com/email-routing-subdomains/)).
-- La comunidad reporta que **no se puede correr Email Routing y Google Workspace sobre la
-  misma zona** ([hilo](https://community.cloudflare.com/t/i-want-to-use-email-routing-while-keeping-my-google-workspace-active/523750)).
-- La dirección quedaría `lucia@equipo.onia.com.bo`, no `@onia.com.bo`.
+#### B1 · En un subdominio, conservando Google en la raíz
 
-**No lo recomiendo hoy:** trabajo manual de DNS a cambio de una dirección peor.
+**Corrección 2026-08-16:** una versión anterior de este doc decía que los subdominios estaban
+"soportados a medias, sin UI". **Es falso** — me guié por hilos de comunidad viejos.
+La [documentación oficial](https://developers.cloudflare.com/email-service/configuration/subdomains/)
+describe un formulario propio:
+
+> *"Email Routing es una función a nivel de zona que aplica al dominio apex por defecto.
+> **Podés extenderla a subdominios de la misma zona**, como `mail.example.com` o
+> `corp.example.com`."*
+> → Email Routing → seleccionar el dominio apex → **Settings** → **Subdomains** → escribirlo.
+
+**El detalle que lo complica:** hay que dar de alta el apex primero, y eso pone el MX de
+Cloudflare en la raíz — que es justo lo que rompe Google. La salida está documentada
+([Domains](https://developers.cloudflare.com/email-service/configuration/domains/)):
+
+> *"Solo los registros de Email Routing en el dominio raíz (MX, SPF y DKIM) admiten
+> **desbloqueo**. Si querés migrar a otro proveedor sin interrumpir el servicio, desbloqueá
+> los registros primero, agregá los del nuevo proveedor al lado, y recién después quitá los
+> de Email Service."*
+
+Secuencia: alta del apex → **desbloquear** el MX raíz → restaurar el MX de Google →
+agregar el subdominio. Queda **raíz = Google** (`business@` intacto) y
+**subdominio = Cloudflare** (direcciones ilimitadas gratis).
+
+- ✅ Google Workspace sigue funcionando, `business@` no se toca
+- ⚠️ La dirección queda `lucia@equipo.onia.com.bo`, no `@onia.com.bo`
+- ⚠️ Hay una ventana de minutos con el MX de Cloudflare en la raíz. **Ahí llegan los PIN del SIAT**
+- Límite: hasta **30 dominios/subdominios** por zona
+
+#### B2 · Migrar el apex entero — la respuesta a "correos corporativos gratis"
+
+Email Routing en la raíz, y **cada dirección reenvía a un Gmail DISTINTO** — eso es lo que da
+identidades separadas de verdad, que es donde falla el alias.
+
+```
+business@onia.com.bo  →  el Gmail de Sergio
+lucia@onia.com.bo     →  el Gmail de Lucía      ← identidad separada
+arthur@onia.com.bo    →  el Gmail de Arthur
+…ilimitadas
+```
+
+- ✅ **Costo cero y se cancela Workspace**
+- ✅ Direcciones limpias `@onia.com.bo`
+- ⚠️ Solo recibe. Para *enviar* como `lucia@` se usa "Enviar como" de Gmail con contraseña de
+  aplicación
+- 🔴 **Se pierden Drive, Docs y Calendar bajo el dominio**
+- 🔴 Corta el correo unos minutos — y ahí llegan los PIN del SIAT
 
 ### 💵 C · Una licencia más de Workspace
 
@@ -89,7 +129,7 @@ enviarlo. Es un frente entero, no una configuración.
 | 2 | Si falla: crear el **grupo** `lucia@onia.com.bo` con posteo externo | 0 | 5 min |
 | 3 | Probar que el grupo recibe (mandarle un correo y buscarlo) | 0 | 2 min |
 | 4 | Reintentar el alta de Instagram con el grupo | 0 | 5 min |
-| 5 | Si Meta lo rechaza: **una licencia más** de Workspace | 1 licencia/mes | 5 min |
+| 5 | Si Meta lo rechaza: **B2 (migrar a Cloudflare)** o **una licencia más** | 0 · o 1 licencia/mes | 20 min |
 
 **No pasar al paso siguiente sin agotar el anterior.** Cada uno descarta una causa distinta.
 
