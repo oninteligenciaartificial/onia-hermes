@@ -133,6 +133,46 @@ enviarlo. Es un frente entero, no una configuración.
 
 **No pasar al paso siguiente sin agotar el anterior.** Cada uno descarta una causa distinta.
 
+## 3-bis. ¿Hace falta Google Workspace? — auditado 2026-08-16
+
+Se revisó el repo y los contenedores en producción.
+
+**Producción no usa Google para nada:**
+
+```
+onia-platform  → cero variables GOOGLE_*. Usa SMTP_* (Postfix propio) + Brevo
+onia-landing   → ninguna
+onia-center    → ninguna
+```
+
+Las agendas corren en **Cal.com**, no en Google Calendar. Los `googleapis` que aparecen en el
+repo son casi todos `fonts.googleapis.com` — tipografías.
+
+**La única dependencia real, y está apagada:** `channels/ciencia-cuerpo/scripts/upload-youtube.mjs`
+y `scripts/social_publisher.py` usan `googleapis` con OAuth2 y scope `youtube.upload`.
+Pero `YOUTUBE_REFRESH_TOKEN` está **vacío en los docs y no existe ninguna variable de YouTube
+en el VPS**. No hay canal ni credenciales. Y cuando se cree, **un canal de YouTube vive bien
+en un Gmail común** — no pide Workspace.
+
+⚠️ **Nota de método:** la primera pasada (búsqueda indexada) dijo "cero dependencias de Google"
+y estaba incompleta — se saltó los dos scripts de YouTube. Los encontró el grep exhaustivo.
+**Una búsqueda rápida que da el resultado esperado merece una segunda pasada.**
+
+**Lo que sí importa conservar:** `business@onia.com.bo` aparece en **8 propuestas de cliente**,
+en el pie de `onia-platform` y en la instalación de Cal.com. Esa dirección tiene que seguir
+recibiendo — pero eso lo cumple un reenvío.
+
+### 🔴 La pregunta que decide, y no se puede contestar desde el repo
+
+**¿`business@onia.com.bo` se usa para "Iniciar sesión con Google" en algún servicio?**
+(Meta Business, Cloudflare, Vercel, Supabase, Higgsfield, el banco.)
+
+Si es solo una bandeja → **B2 es seguro** y se cancela Workspace.
+Si es una identidad de login → **quedarse en Workspace**; para Lucía alcanza el grupo (gratis).
+
+Cómo se comprueba: `myaccount.google.com` con esa cuenta → **Seguridad** → *"Acceder a otros
+sitios"* / apps de terceros conectadas.
+
 ## 4. Lo que NO se sabe todavía
 
 - **Si Meta acepta un grupo de Google como correo de alta.** Es la incógnita central y solo se
