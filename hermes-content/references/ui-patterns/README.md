@@ -46,6 +46,35 @@ El criterio corregido:
   van con `aria-hidden="true"` y el nombre real vive en un `aria-label` del botón que el JS
   actualiza en cada cambio de estado.
 
+## 🔴 Cómo se verifica el TIMING (y por qué nunca se había podido)
+
+**El timing figuraba como "lo único sin verificar" de los 6 patrones. La causa está encontrada:
+el navegador de pruebas corre con `prefers-reduced-motion: reduce` activado.** Comprobado el
+2026-08-12: `matchMedia('(prefers-reduced-motion: reduce)').matches === true`, y con eso la regla
+`transition: none !important` de cada patrón apaga **todas** las transiciones. Las duraciones
+computadas daban `0s`. **No era que el timing estuviera mal: era que ahí no corre.**
+
+**Mirar el patrón en ese navegador nunca va a validar el timing.** Hay que forzar el modo y medir:
+
+```js
+// Playwright — el único modo de medir el gesto de verdad
+const ctx = await browser.newContext({ reducedMotion: "no-preference" });
+```
+
+Y medir **desde el primer cambio del valor, no desde el click**: en React el estado se aplica un
+tick después, y cronometrar desde el click da ~15 ms y parece que el gesto no existe.
+
+### Resultado de la medición
+
+| | Colapso del pill medido |
+|---|---|
+| `upload-button` original (520 → 340 px) | **833 ms** |
+| Portado al producto (256 → 150 px) | **819 ms** |
+
+**14 ms de diferencia (1,7 %), dentro del ruido de `requestAnimationFrame`.** Los dos dentro de la
+banda de 0,6-0,9 s que está calibrada. Duraciones declaradas idénticas: pill `0.9s / 0.6s` ·
+acción `0.6s / 0.9s / 0.9s` · etiquetas `0.45s / 0.6s`.
+
 ## Cómo verlos
 
 ```bash
