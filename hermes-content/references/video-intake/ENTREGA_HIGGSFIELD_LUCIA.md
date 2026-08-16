@@ -8,6 +8,8 @@ cuenta o si es **afirmación de un video sin comprobar**.
 
 ## 1. Los datos duros de la cuenta (verificados 2026-08-12, consulta gratis)
 
+> ⚠️ **CORRECCION 2026-08-16 — `seedance_2_5` SI EXISTE.** Verificado con `models_explore action=list` el 15-ago: esta en la cuenta con modos `t2v` / `omni_reference` / `video_edit` / `video_extension` y hasta **30 s**. Se usaron `video_edit` y `video_extension` y se pagaron creditos por ellos. Lo que sigue vigente de la afirmacion vieja: la ventana de **33 dias ilimitado** NO aplica (`unlim.available = false`) y el preset **Show Cinema** no existe. Tarifario medido: `references/modelos/lucia/prueba-lipsync-20260815/LEEME.md`.
+
 ```
 plan:     ultra
 créditos: 2.862,68

@@ -1,0 +1,17 @@
+[5.7] literalmente acabo de crear una aplicación funcional para un
+[9.1] nutriólogo usando inteligencia artificial, esto lo hicimos con el modelo
+[12.7] fable 5 de cloud, miren les muestro aquí en el panel el nutriólogo puede
+[17.6] enviar sus planes de alimentación y el usuario puede registrarse con su
+[21.9] correo directamente con google y ver su plan completo, puede registrar sus comidas
+[27.1] incluso tomar una foto y va a ser el cálculo con inteligencia artificial y
+[32.9] ya el paciente lo puede verificar o lo puede modificar, además con el plan que
+[36.5] envíe el nutriólogo se le va a generar una lista del supermercado, esto incluso
+[41.4] me sirve a mí, otras cosas súper interesantes es que integramos un sistema
+[45.1] de inteligencia artificial en cada conversación, que ya tiene un plan
+[49.1] precargado y te puede ayudar si tienes alguna pregunta de tu plan específico
+[54.4] y ya si es algo más importante o algo delicado te pide que lo consultes con el
+[58.4] nutriólogo, imagina las posibilidades que hoy en día tenemos si aprendes a
+[62.9] utilizar inteligencia artificial, solo piensen las soluciones y si tú no sabes
+[66.5] todavía utilizar cloud, acabo de crear un curso gratuito completo de cero para
+[72.0] que puedas aprender las bases y puedas empezar a utilizar esta inteligencia
+[76.4] artificial, deja la palabra cloud

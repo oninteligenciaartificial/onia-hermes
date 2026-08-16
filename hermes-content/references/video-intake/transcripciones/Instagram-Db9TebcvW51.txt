@@ -1,0 +1,18 @@
+[0.0] Si usas Cloud Code o Codex, estos son los 5 plugins que necesitas tener.
+[3.4] El primero es Playwright CLI.
+[5.0] Le va a permitir a la idea abrir navegadores, tomar capturas de pantalla de lo que estás construyendo
+[8.9] y ver errores antes de que vos los veas.
+[10.7] El segundo es Superbase.
+[12.1] Te va a ayudar a construir bases de datos completas para tus aplicaciones
+[15.0] y gestionarlas sin tener que salir a tu terminal.
+[17.5] El tercero es Strix.
+[18.9] Este lo que va a hacer es atacar tu aplicación creada con bulk coding como si fuese un hacker real.
+[23.0] Encontrando y solucionando cualquier vulnerabilidad de seguridad que hayas pasado por alto.
+[26.6] El cuarto es Skill UI.
+[27.9] Le puedes pegar el link de cualquier sitio web que te guste
+[30.3] y va a aplicar la ingeniería inversa a todo el sistema de diseño de la marca.
+[33.8] Convirtiéndolo en un archivo .med para que construyas tu proyecto en el mismo estilo.
+[37.5] Y el número 5 es Context 7.
+[39.2] Le proporciona a tu asistente del código la versión más reciente de las librerías,
+[42.9] dependencias y herramientas que usan los desarrolladores de alto nivel.
+[46.0] Si quieres probar todos estos plugins, comenta ya y te los paso.

@@ -65,7 +65,8 @@ prometer precios. `benchmark-models` — antes de cambiar de modelo, medir, no o
 > `onia-verificacion` (qué cuenta como prueba antes de declarar terminado).
 
 Recién DESPUÉS, y solo si hace falta criterio de diseño que esas no cubran:
-`impeccable` (register **product**) · `ui-ux-pro-max` · `shadcn-ui` · `design-review`.
+`impeccable` (register **product**) · `ui-ux-pro-max` · `shadcn-ui` · `design-review` ·
+`frontend-patterns` · `react-components` · `ui-styling` · `nextjs-turbopack`.
 Regla del repo: nada que parezca template por defecto — ver `web-factory-disenos-genericos`.
 
 **Antes de crear una pantalla nueva, mirar si ya tiene casa.** Verificado 2026-08-16:
