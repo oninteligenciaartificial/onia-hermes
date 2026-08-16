@@ -2,7 +2,8 @@
 /**
  * Onia carousel render engine.
  *
- * brief JSON (from carousel_generator.py) -> branded 1080x1350 PNG slides.
+ * brief JSON (from carousel_generator.py) -> branded PNG slides.
+ * Formats: feed 1080x1350 (default) | cuadrado 1080x1080 | story 1080x1920.
  * Zero external deps: builds one HTML per slide and screenshots it with
  * Edge/Chrome headless (same approach as the propuestas generador).
  *
@@ -14,7 +15,7 @@
  *   cta    -> CTA motor + comment trigger (regla 5)
  *
  * Usage:
- *   node carousel_render.js --brief brief.json --out ./out [--account onia|arthur|sergio] [--bg path.jpg]
+ *   node carousel_render.js --brief brief.json --out ./out [--account onia|arthur|sergio] [--bg path.jpg] [--formato feed|cuadrado|story]
  *
  * Node >= 18, CommonJS.
  */
@@ -491,6 +492,7 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
+  const { w: W, h: H } = fmtOf(args);
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
   const bg = args && args.bg ? String(args.bg).replace(/\\/g, '/') : '';
   const photo = bg
@@ -507,8 +509,8 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
-.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+html,body { width:${W}px; height:${H}px; }
+.slide { position:relative; width:${W}px; height:${H}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column; justify-content:flex-end;
   background:var(--onia-ink); color:var(--onia-white); font-family:'Inter',var(--font-body); }
 .photo { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
@@ -563,13 +565,15 @@ ${last ? '' : '.cue{position:absolute;right:44px;bottom:300px;z-index:3;font-siz
 // Ribbon multicolor continuo (eco de las franjas del logo Nuvia). Fluye de
 // borde a borde y cambia de fase por slide -> sensación de panorama/peek entre
 // slides, como la curva verde del pack dark-product de Onia.
-function nuviaRibbon(idx, total, stripes, onAccent) {
+function nuviaRibbon(idx, total, stripes, onAccent, formato) {
+  const { w: W, h: H } = fmtOf({ formato });
+  const k = H / 1350; // alturas autoradas para el feed de 1350px; escalan con el formato
   const first = idx === 0;
   const last = idx === total - 1;
   // S-curve base que entra por izquierda y sale por derecha; alterna altura.
   const up = idx % 2 === 0;
-  const yA = up ? 430 : 980;
-  const yB = up ? 980 : 430;
+  const yA = Math.round((up ? 430 : 980) * k);
+  const yB = Math.round((up ? 980 : 430) * k);
   const base = `M -120 ${yA} C 260 ${yA} 320 ${yB} 560 ${yB} S 900 ${yA} 1200 ${yA}`;
   const cols = onAccent
     ? ['rgba(255,255,255,.9)', 'rgba(255,255,255,.6)', 'rgba(255,255,255,.35)', 'rgba(255,255,255,.2)', 'rgba(255,255,255,.12)']
@@ -579,7 +583,7 @@ function nuviaRibbon(idx, total, stripes, onAccent) {
   ).join('');
   // En cover/cta el ribbon va más visible; en el resto, sutil al fondo.
   const op = onAccent ? 0.9 : (first || last ? 0.5 : 0.28);
-  return `<svg class="ribbon" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg" style="opacity:${op}">${paths}</svg>`;
+  return `<svg class="ribbon" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="opacity:${op}">${paths}</svg>`;
 }
 
 // Pack: bright-retail (Nuvia-style). Marca clara/multicolor, amigable, con
@@ -588,6 +592,7 @@ function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account] || ACCOUNTS.onia;
+  const { w: W, h: H } = fmtOf(args);
   const brand = BRANDS[account] || BRANDS.nuvia;
   const accent = brand.accents[idx % brand.accents.length];
   const stripes = brand.stripes || brand.accents;
@@ -614,14 +619,14 @@ function brightRetailHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
-.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+html,body { width:${W}px; height:${H}px; }
+.slide { position:relative; width:${W}px; height:${H}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column;
   font-family:'Inter',system-ui,sans-serif;
   --accent:${accent};
   background:${coverLike ? accent : brand.bg};
   color:${coverLike ? '#FFFFFF' : brand.ink}; }
-.ribbon { position:absolute; inset:0; width:1080px; height:1350px; z-index:0; pointer-events:none; }
+.ribbon { position:absolute; inset:0; width:${W}px; height:${H}px; z-index:0; pointer-events:none; }
 .slide > *:not(.ribbon) { position:relative; z-index:2; }
 .g { color:var(--accent); }
 .slide.cover .g, .slide.cta .g { color:#fff; text-decoration:underline; text-decoration-thickness:9px; text-underline-offset:8px; }
@@ -659,7 +664,7 @@ html,body { width:1080px; height:1350px; }
 ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-size:58px;font-weight:900;color:${coverLike ? '#fff' : accent}}`}
 </style></head>
 <body><div class="slide ${role}">
-  ${nuviaRibbon(idx, total, stripes, coverLike)}
+  ${nuviaRibbon(idx, total, stripes, coverLike, args && args.formato)}
   <div class="topbar"><span class="kicker">${esc(acc.name)}</span></div>
   <div class="main">
     ${object}
@@ -694,17 +699,18 @@ function render(args) {
     else if (args.pack === 'dark-neon') html = darkNeonHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'editorial-photo') html = editorialPhotoHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'bright-retail') html = brightRetailHtml(slide, idx, slides.length, args.account, args);
-    else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
+    else html = slideHtml(slide, idx, slides.length, args.account, args.bg, args.formato);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
     fs.writeFileSync(htmlPath, html, 'utf8');
     const png = path.resolve(args.out, `slide-${String(idx + 1).padStart(2, '0')}.png`);
+    const fmt = fmtOf(args);
     execFileSync(browser, [
       '--headless=new',
       '--disable-gpu',
       '--hide-scrollbars',
       '--allow-file-access-from-files',
       '--force-device-scale-factor=1',
-      '--window-size=1080,1350',
+      `--window-size=${fmt.w},${fmt.h}`,
       '--virtual-time-budget=4000',
       `--screenshot=${png}`,
       `file://${htmlPath.replace(/\\/g, '/')}`,
@@ -734,4 +740,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml, emph, roleFor, ACCOUNTS, BRANDS, PACKS };
+module.exports = { slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml, emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS };

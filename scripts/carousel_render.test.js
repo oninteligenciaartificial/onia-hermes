@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, darkProductHtml, editorialPhotoHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS } = require('./carousel_render');
+const { roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS } = require('./carousel_render');
 
 let passed = 0;
 function test(name, fn) {
@@ -121,6 +121,49 @@ test('dark-product object slot rendered when provided', () => {
   const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { object: '/tmp/panel.png' });
   assert.ok(html.includes('class="object"'));
   assert.ok(html.includes('panel.png'));
+});
+
+// formatos de salida (feed default, cuadrado, story)
+test('FORMATS expone feed/cuadrado/story con sus dimensiones', () => {
+  assert.deepStrictEqual(FORMATS.feed, { w: 1080, h: 1350 });
+  assert.deepStrictEqual(FORMATS.cuadrado, { w: 1080, h: 1080 });
+  assert.deepStrictEqual(FORMATS.story, { w: 1080, h: 1920 });
+});
+test('sin --formato el typographic sigue saliendo 1080x1350 (default intacto)', () => {
+  const html = slideHtml({ headline: 'H', body: '' }, 0, 3, 'onia', '');
+  assert.ok(html.includes('width:1080px; height:1350px'));
+  assert.ok(!html.includes('1920px'));
+});
+test('typographic cuadrado y story cambian el lienzo', () => {
+  const sq = slideHtml({ headline: 'H', body: '' }, 0, 3, 'onia', '', 'cuadrado');
+  assert.ok(sq.includes('width:1080px; height:1080px'));
+  const st = slideHtml({ headline: 'H', body: '' }, 0, 3, 'onia', '', 'story');
+  assert.ok(st.includes('width:1080px; height:1920px'));
+});
+test('dark-product story: lienzo y viewBox de la curva escalan juntos', () => {
+  const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { formato: 'story' });
+  assert.ok(html.includes('width:1080px; height:1920px'));
+  assert.ok(html.includes('viewBox="0 0 1080 1920"'));
+  // idx impar entra por la rama de y 600 (feed), escalada a story: 600*1920/1350 = 853
+  assert.ok(html.includes('M -60 853'));
+});
+test('dark-product sin formato conserva el viewBox feed historico', () => {
+  const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
+  assert.ok(html.includes('viewBox="0 0 1080 1350"'));
+  assert.ok(html.includes('M -60 600'));
+});
+test('dark-neon y editorial-photo respetan el formato', () => {
+  const dn = darkNeonHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { formato: 'cuadrado' });
+  assert.ok(dn.includes('width:1080px; height:1080px'));
+  const ed = editorialPhotoHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { formato: 'story' });
+  assert.ok(ed.includes('width:1080px; height:1920px'));
+});
+test('bright-retail cuadrado: ribbon con viewBox del formato y alturas escaladas', () => {
+  const html = brightRetailHtml({ role: 'point', headline: 'H' }, 1, 4, 'nuvia', { formato: 'cuadrado' });
+  assert.ok(html.includes('width:1080px; height:1080px'));
+  assert.ok(html.includes('viewBox="0 0 1080 1080"'));
+  // yA impar (980 en feed) escalado: 980*1080/1350 = 784
+  assert.ok(html.includes('M -120 784'));
 });
 
 console.log(`\n${passed} passed`);
