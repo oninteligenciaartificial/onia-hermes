@@ -1,0 +1,5 @@
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/chat-widget-1-landing-clip.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/chat-widget-2-panel-clip.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/chat-widget-3-bot-clip.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/chat-widget-why.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/chat-widget-cta.mp4'

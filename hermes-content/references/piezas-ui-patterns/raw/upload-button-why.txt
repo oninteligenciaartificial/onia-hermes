@@ -1,0 +1,3 @@
+El original usa
+React + framer-motion.
+Acá: CSS puro, 0 kB.
