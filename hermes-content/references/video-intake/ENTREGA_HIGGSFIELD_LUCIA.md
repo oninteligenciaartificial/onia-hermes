@@ -13,7 +13,8 @@ cuenta o si es **afirmación de un video sin comprobar**.
 ```
 plan:     ultra
 créditos: 2.862,68
-modelos:  seedance_2_0 · seedance_2_0_mini   ← "Seedance 2.5" NO existe en la cuenta
+modelos:  seedance_2_0 · seedance_2_0_mini · seedance_2_5 (aparecio el 15-ago) · veo3_1_lite
+          flux_3_video · kling3_0 · sync_so (lipsync) · minimax_h3 · wan2_6/2_7 · gemini_omni
 tope:     4 a 15 s por toma                  ← NO 30 s
 unlim:    available = false                  ← la "ventana de 33 días" NO aplica
 ```
