@@ -34,8 +34,11 @@ Instrucciones de proyecto. Override sobre defaults.
   `onia-core` · `onia-web-factory` · `ver-videos` · `editor-videos`. Envuelven
   conocimiento propio y apuntan a las fuentes de verdad — **al cambiar una regla, editar
   la fuente, no la skill**.
-- Tres capas distintas: skills de Claude Code (`.claude/skills/`) · subagentes
-  (`.claude/agents/`) · skills-doc que lee el bot del VPS (`hermes-content/skills/`).
+- Cuatro capas distintas: skills de Claude Code (`.claude/skills/`) · subagentes
+  (`.claude/agents/`) · skills-doc que lee el bot del VPS (`hermes-content/skills/`) ·
+  **skills del producto en `onia-platform/.claude/skills/`** (onia-frontend/backend/db/
+  seguridad/deploy/verificacion — obligatorias al tocar el producto; solo se
+  autolistan en sesiones abiertas DENTRO de onia-platform).
 - Si una tarea tiene skill pública instalada, usarla. No reinventar.
 
 ---

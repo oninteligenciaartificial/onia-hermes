@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel claro premium · maqueta Onia</title>
+<!--
+  Maqueta del dashboard dental de Onia Platform, dirección "claro premium".
+  Rediseña el MISMO contenido del panel real (métricas del día, agenda de hoy,
+  pacientes por reactivar, aprobaciones del agente, accesos rápidos).
+  Datos de muestra. No es producción. Ver notas de porteo al pie del documento.
+-->
+<style>
+/* ── Fuentes del producto (variables, subset latin, sin CDN) ─────────── */
+@font-face{
+  font-family:'Manrope';
+  src:url('Manrope-var-latin.woff2') format('woff2');
+  font-weight:200 800;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Inter';
+  src:url('Inter-var-latin.woff2') format('woff2');
+  font-weight:100 900;font-style:normal;font-display:swap;
+}
+
+/* ── Tokens ──────────────────────────────────────────────────────────── */
+:root{
+  /* capas: el lienzo es más profundo que las superficies para que floten */
+  --canvas:#EDF2EF;
+  --surface:#FFFFFF;
+  --surface-2:#F8FAF9;
+  --hairline:rgba(19,32,26,.09);
+  --hairline-soft:rgba(19,32,26,.055);
+
+  /* tinta con tinte verde, nunca #000 */
+  --ink:#152119;
+  --ink-2:#48544D;
+  --ink-3:#717D76;
+
+  /* verde Onia = acción y presencia del agente, no decoración */
+  --act:#027650;
+  --act-hover:#016141;
+  --act-tint:#EDFBF3;
+  --act-tint-2:#D5F4E3;
+
+  /* superficie única "committed": el agente */
+  --agent-bg:#06382A;
+  --agent-bg-2:#052E23;
+  --agent-ink:#EDF8F1;
+  --agent-ink-2:#A9CDBB;
+  --agent-hairline:rgba(237,248,241,.1);
+
+  /* estados semánticos, separados del verde de acción */
+  --info:#0A5DC2;      --info-tint:#EAF2FC;
+  --warn:#8A5A00;      --warn-tint:#FBF0D7;
+  --danger:#B3261E;    --danger-tint:#FBEAE8;
+  --done:#5C6862;      --done-tint:#EDF0EE;
+
+  /* elevación en 3 niveles */
+  --e1:0 1px 2px rgba(13,35,25,.05),0 1px 3px rgba(13,35,25,.05);
+  --e2:0 1px 2px rgba(13,35,25,.06),0 12px 28px -14px rgba(13,35,25,.18);
+  --e3:0 2px 4px rgba(3,24,16,.14),0 28px 56px -18px rgba(3,24,16,.38);
+
+  --r-card:18px;
+  --r-ctrl:10px;
+
+  --font-display:'Manrope',system-ui,sans-serif;
+  --font-ui:'Inter',system-ui,sans-serif;
+
+  /* escala fija (rem): chrome contenido, un solo salto grande */
+  --t-caps:.6875rem;   /* 11 etiquetas mayúsculas   */
+  --t-sm:.8125rem;     /* 13 secundario             */
+  --t-body:.875rem;    /* 14 cuerpo                 */
+  --t-title:.9375rem;  /* 15 título de sección      */
+  --t-stat:1.25rem;    /* 20 cifra secundaria       */
+  --t-h1:1.625rem;     /* 26 saludo                 */
+  --t-display:2.875rem;/* 46 la cifra del día       */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-ui);font-size:var(--t-body);line-height:1.45;
+  color:var(--ink);background:var(--canvas);
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--act);outline-offset:2px;border-radius:4px}
+.agent :focus-visible{outline-color:#86D9B0}
+svg{display:block;flex:none}
+
+/* ── Shell ───────────────────────────────────────────────────────────── */
+.shell{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+
+/* ── Sidebar: segundo neutro, un pelo más frío que el contenido ─────── */
+.side{
+  background:var(--surface-2);
+  border-right:1px solid var(--hairline-soft);
+  padding:22px 14px 18px;
+  display:flex;flex-direction:column;gap:6px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:2px 10px 4px}
+.brand-tile{
+  width:30px;height:30px;border-radius:9px;background:var(--act);
+  display:grid;place-items:center;color:#fff;
+  font:800 1rem var(--font-display);
+}
+.brand-name{font:800 1.35rem/1 var(--font-display);letter-spacing:-.02em}
+.tenant{padding:0 10px 14px;font-size:var(--t-sm);color:var(--ink-3)}
+.tenant strong{display:block;color:var(--ink-2);font-weight:600}
+
+.nav-group{padding-top:14px}
+.nav-label{
+  font-size:var(--t-caps);font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-3);padding:0 10px 6px;
+}
+.nav a{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:var(--r-ctrl);
+  font-size:var(--t-body);color:var(--ink-2);font-weight:500;
+  transition:background .15s,color .15s;
+}
+.nav a:hover{background:rgba(19,32,26,.05);color:var(--ink)}
+.nav a[aria-current="page"]{background:var(--act-tint);color:var(--act);font-weight:600}
+.nav a svg{opacity:.75}
+.nav a[aria-current="page"] svg{opacity:1}
+.nav-badge{
+  margin-left:auto;min-width:19px;height:19px;padding:0 6px;border-radius:99px;
+  background:var(--act);color:#fff;font-size:.6875rem;font-weight:700;
+  display:grid;place-items:center;
+}
+.side-foot{margin-top:auto;padding-top:16px}
+.user{
+  display:flex;align-items:center;gap:10px;padding:10px;
+  background:var(--surface);border:1px solid var(--hairline-soft);
+  border-radius:14px;box-shadow:var(--e1);
+}
+.user-av{
+  width:34px;height:34px;border-radius:99px;background:var(--act-tint-2);
+  color:var(--act-hover);display:grid;place-items:center;
+  font:700 .75rem var(--font-display);
+}
+.user b{display:block;font-size:var(--t-sm);font-weight:600}
+.user span{font-size:.75rem;color:var(--ink-3)}
+.logout{
+  display:flex;align-items:center;gap:8px;padding:10px;margin-top:4px;
+  font-size:var(--t-sm);color:var(--ink-3);border-radius:var(--r-ctrl);width:100%;
+}
+.logout:hover{color:var(--danger);background:var(--danger-tint)}
+
+/* ── Barra móvil + drawer (solo <980px) ─────────────────────────────── */
+.topbar-m{display:none}
+#nav-open{position:absolute;opacity:0;pointer-events:none}
+.scrim{display:none}
+
+/* ── Main ────────────────────────────────────────────────────────────── */
+.main{padding:20px 34px 40px;max-width:1120px;width:100%;margin:0 auto}
+
+.toprow{display:flex;align-items:center;gap:14px;padding-bottom:22px}
+.search{
+  flex:1;max-width:430px;display:flex;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid var(--hairline-soft);
+  border-radius:99px;padding:9px 16px;color:var(--ink-3);
+  box-shadow:var(--e1);
+}
+.search input{
+  border:0;background:none;outline:none;flex:1;
+  font:inherit;font-size:var(--t-body);color:var(--ink);
+}
+.search input::placeholder{color:var(--ink-3)}
+.icon-btn{
+  width:38px;height:38px;border-radius:99px;display:grid;place-items:center;
+  color:var(--ink-2);transition:background .15s;margin-left:auto;
+}
+.icon-btn + .icon-btn{margin-left:0}
+.icon-btn:hover{background:rgba(19,32,26,.06)}
+.dot-note{position:relative}
+.dot-note::after{
+  content:"";position:absolute;top:9px;right:10px;width:7px;height:7px;
+  border-radius:99px;background:var(--danger);border:1.5px solid var(--canvas);
+}
+
+/* ── Encabezado ──────────────────────────────────────────────────────── */
+.head{display:flex;align-items:flex-end;gap:18px;padding-bottom:26px;flex-wrap:wrap}
+.head-eyebrow{
+  font-size:var(--t-sm);color:var(--ink-3);display:flex;align-items:center;gap:8px;
+}
+.tag-mock{
+  font-size:.625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--done-tint);color:var(--done);border-radius:5px;padding:2px 6px;
+}
+.head h1{
+  font:800 var(--t-h1)/1.15 var(--font-display);letter-spacing:-.02em;padding-top:4px;
+}
+.head-actions{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;border-radius:var(--r-ctrl);
+  font-size:var(--t-body);font-weight:600;
+  transition:background .15s,box-shadow .15s,transform .15s;
+}
+.btn:active{transform:translateY(1px)}
+.btn-solid{background:var(--act);color:#fff;box-shadow:var(--e1)}
+.btn-solid:hover{background:var(--act-hover)}
+.btn-quiet{background:var(--surface);border:1px solid var(--hairline);color:var(--ink-2)}
+.btn-quiet:hover{border-color:var(--ink-3);color:var(--ink)}
+
+/* ── Grilla principal: banda + agenda a la izquierda, agente a la derecha */
+.board{display:grid;grid-template-columns:1fr 372px;gap:22px;align-items:start}
+.col-l{display:grid;gap:22px}
+.col-r{display:grid;gap:22px}
+
+/* ── Banda "pulso de hoy": UNA superficie, cero grilla de tarjetitas ── */
+.pulse{
+  background:var(--surface);border-radius:var(--r-card);box-shadow:var(--e2);
+  padding:24px 26px 20px;
+}
+.pulse-top{display:flex;align-items:center;gap:12px;padding-bottom:16px}
+.sec-title{font:700 var(--t-title)/1.2 var(--font-display);letter-spacing:-.01em}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.75rem;font-weight:600;border-radius:99px;padding:3px 10px;
+}
+.chip-warn{background:var(--warn-tint);color:var(--warn)}
+.chip-danger{background:var(--danger-tint);color:var(--danger)}
+.chip-info{background:var(--info-tint);color:var(--info)}
+.chip-done{background:var(--done-tint);color:var(--done)}
+.chip-act{background:var(--act-tint);color:var(--act-hover)}
+.pulse-alert{margin-left:auto}
+.pulse-alert:hover{background:#F6E7C4}
+
+.pulse-body{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:28px}
+.money-label{font-size:var(--t-sm);color:var(--ink-3)}
+.money{
+  font:800 var(--t-display)/1 var(--font-display);
+  letter-spacing:-.03em;font-variant-numeric:tabular-nums;
+  padding:6px 0 10px;
+}
+.money small{font-size:.45em;font-weight:700;color:var(--ink-3);margin-right:.18em}
+.delta{
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  font-size:var(--t-sm);font-weight:600;color:var(--act-hover);
+  background:var(--act-tint);border-radius:99px;padding:4px 12px;
+}
+.spark{padding-top:16px}
+.spark-days{
+  display:flex;justify-content:space-between;padding:6px 2px 0;
+  font-size:.6875rem;color:var(--ink-3);
+}
+.spark-days b{color:var(--ink);font-weight:700}
+
+.stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-left:1px solid var(--hairline-soft);padding-left:28px;align-content:center;
+  column-gap:22px;row-gap:18px;
+}
+.stat b{
+  display:block;font:700 var(--t-stat)/1.1 var(--font-display);
+  font-variant-numeric:tabular-nums;letter-spacing:-.01em;
+}
+.stat span{
+  display:block;font-size:var(--t-caps);font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--ink-3);padding-top:3px;
+}
+.stat em{font-style:normal;font-size:.75rem;font-weight:500;color:var(--ink-3)}
+.stat em.warn{color:var(--warn);font-weight:600}
+
+/* ── Agenda de hoy ───────────────────────────────────────────────────── */
+.card{
+  background:var(--surface);border-radius:var(--r-card);
+  box-shadow:var(--e1);border:1px solid var(--hairline-soft);
+}
+.card-head{display:flex;align-items:center;gap:10px;padding:18px 22px 4px}
+.card-sub{font-size:var(--t-sm);color:var(--ink-3)}
+.card-link{
+  margin-left:auto;font-size:var(--t-sm);font-weight:600;color:var(--act);
+  display:inline-flex;align-items:center;gap:5px;
+}
+.card-link:hover{color:var(--act-hover)}
+.agenda-list{list-style:none;padding:10px 10px 12px}
+.appt{
+  display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:14px;
+  padding:11px 12px;border-radius:12px;
+  transition:background .15s;
+}
+.appt:hover{background:var(--surface-2)}
+.appt + .appt{position:relative}
+.appt + .appt::before{
+  content:"";position:absolute;top:0;left:82px;right:12px;height:1px;
+  background:var(--hairline-soft);
+}
+.appt-time{
+  font:700 var(--t-body)/1 var(--font-display);text-align:right;
+  color:var(--ink-2);font-variant-numeric:tabular-nums;
+}
+.appt-who b{display:block;font-size:var(--t-body);font-weight:600}
+.appt-who span{font-size:var(--t-sm);color:var(--ink-3)}
+.appt-meta{display:flex;align-items:center;gap:10px}
+.doc{font-size:.75rem;color:var(--ink-3)}
+.state-quiet{
+  font-size:.75rem;color:var(--ink-3);display:inline-flex;align-items:center;gap:5px;
+}
+.state-quiet::before{content:"";width:6px;height:6px;border-radius:99px;background:var(--done)}
+.appt-now{background:var(--info-tint)}
+.appt-now:hover{background:var(--info-tint)}
+.appt-now .appt-time{color:var(--info)}
+.appt-now + .appt::before{display:none}
+.appt-done .appt-who b,.appt-done .appt-time{color:var(--ink-3)}
+
+/* ── Panel del agente: la única superficie oscura, elevación máxima ─── */
+.agent{
+  background:linear-gradient(178deg,var(--agent-bg) 0%,var(--agent-bg-2) 100%);
+  color:var(--agent-ink);border-radius:var(--r-card);box-shadow:var(--e3);
+  padding:22px;position:relative;
+}
+.agent::after{ /* filo de luz superior: refuerza la capa sin borde gris */
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 1px 0 rgba(237,248,241,.09);
+}
+.agent-head{display:flex;align-items:flex-start;gap:11px}
+.agent-orb{
+  width:34px;height:34px;border-radius:11px;background:rgba(134,217,176,.14);
+  display:grid;place-items:center;color:#86D9B0;
+}
+.agent-head h2{font:700 1.0625rem/1.2 var(--font-display);letter-spacing:-.01em}
+.agent-head p{font-size:.75rem;color:var(--agent-ink-2);padding-top:2px}
+.agent-count{
+  margin-left:auto;font-size:.6875rem;font-weight:700;white-space:nowrap;
+  background:rgba(255,203,107,.16);color:#FFD79A;border-radius:99px;padding:4px 10px;
+}
+.props{list-style:none;padding-top:8px}
+.prop{padding:15px 0 14px;border-top:1px solid var(--agent-hairline)}
+.prop:first-child{border-top:0;margin-top:8px}
+.prop h3{font-size:var(--t-body);font-weight:600;color:#F4FBF7}
+.prop p{font-size:var(--t-sm);color:var(--agent-ink-2);padding:3px 0 11px}
+.prop-act{display:grid}
+.prop-act > *{grid-area:1/1}
+.prop-btns{display:flex;gap:8px;transition:opacity .2s,visibility .2s}
+.btn-approve{
+  background:var(--agent-ink);color:var(--agent-bg-2);
+  padding:7px 14px;border-radius:9px;font-size:var(--t-sm);font-weight:700;
+  transition:transform .15s,background .15s;
+}
+.btn-approve:hover{background:#fff}
+.btn-approve:active{transform:translateY(1px)}
+.btn-ghost-dark{
+  padding:7px 13px;border-radius:9px;font-size:var(--t-sm);font-weight:600;
+  color:var(--agent-ink-2);border:1px solid rgba(237,248,241,.16);
+}
+.btn-ghost-dark:hover{color:var(--agent-ink);border-color:rgba(237,248,241,.34)}
+.prop-done-chip{
+  visibility:hidden;opacity:0;transform:translateY(4px);
+  display:inline-flex;align-items:center;gap:7px;justify-self:start;align-self:center;
+  font-size:var(--t-sm);font-weight:600;color:#86D9B0;
+  background:rgba(134,217,176,.12);border-radius:99px;padding:6px 13px;
+  transition:opacity .25s cubic-bezier(.22,1,.36,1),transform .25s cubic-bezier(.22,1,.36,1);
+}
+.prop.is-approved .prop-btns{visibility:hidden;opacity:0}
+.prop.is-approved .prop-done-chip{visibility:visible;opacity:1;transform:none}
+.agent-foot{
+  border-top:1px solid var(--agent-hairline);margin-top:2px;padding-top:13px;
+  font-size:.75rem;color:var(--agent-ink-2);display:flex;gap:7px;align-items:center;
+}
+.agent-foot svg{color:#86D9B0}
+
+/* ── Pacientes por reactivar ─────────────────────────────────────────── */
+.react-list{list-style:none;padding:8px 12px 4px}
+.react-row{
+  display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;
+  transition:background .15s;
+}
+.react-row:hover{background:var(--surface-2)}
+.react-row + .react-row{border-top:1px solid var(--hairline-soft)}
+.react-row > div{min-width:0;flex:1}
+.react-row b,.react-row span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.react-av{
+  width:36px;height:36px;border-radius:99px;flex:none;
+  display:grid;place-items:center;font:700 .75rem var(--font-display);
+  background:var(--done-tint);color:var(--ink-2);
+}
+.react-row b{display:block;font-size:var(--t-body);font-weight:600}
+.react-row span{font-size:.75rem;color:var(--ink-3)}
+.btn-sm{
+  margin-left:auto;padding:6px 12px;border-radius:9px;flex:none;
+  font-size:var(--t-sm);font-weight:600;color:var(--act);
+  border:1px solid var(--act-tint-2);background:var(--surface);
+  transition:background .15s;
+}
+.btn-sm:hover{background:var(--act-tint)}
+.btn-sm[disabled]{color:var(--done);border-color:var(--done-tint);background:var(--done-tint);cursor:default}
+.react-foot{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 22px 18px;
+}
+.react-note{font-size:.75rem;color:var(--ink-3)}
+
+/* ── Accesos rápidos: fila de enlaces, no grilla de tarjetas ─────────── */
+.quick{padding:2px 4px 0}
+.quick-label{
+  font-size:var(--t-caps);font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-3);padding-bottom:10px;
+}
+.quick-row{display:flex;flex-wrap:wrap;gap:10px}
+.quick-row a{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 15px;border-radius:99px;font-size:var(--t-sm);font-weight:600;
+  background:var(--surface);border:1px solid var(--hairline-soft);
+  color:var(--ink-2);box-shadow:var(--e1);
+  transition:color .15s,border-color .15s,transform .15s;
+}
+.quick-row a:hover{color:var(--act-hover);border-color:var(--act-tint-2);transform:translateY(-1px)}
+.quick-row a svg{opacity:.7}
+
+/* ── Notas de porteo ─────────────────────────────────────────────────── */
+.notes{max-width:1120px;margin:0 auto;padding:8px 34px 48px;color:var(--ink-2)}
+.notes summary{
+  cursor:pointer;font-size:var(--t-sm);font-weight:600;color:var(--ink-3);
+  list-style:none;display:inline-flex;align-items:center;gap:8px;
+}
+.notes summary::before{content:"▸";transition:transform .15s}
+.notes[open] summary::before{transform:rotate(90deg)}
+.notes-body{
+  margin-top:14px;background:var(--surface);border-radius:var(--r-card);
+  box-shadow:var(--e1);padding:22px 26px;font-size:var(--t-sm);line-height:1.6;
+}
+.notes-body h2{font:700 var(--t-title) var(--font-display);padding:14px 0 6px}
+.notes-body h2:first-child{padding-top:0}
+.notes-body ul{padding-left:18px}
+.notes-body code{
+  font-family:ui-monospace,Consolas,monospace;font-size:.75rem;
+  background:var(--surface-2);border:1px solid var(--hairline-soft);
+  border-radius:5px;padding:1px 5px;
+}
+
+/* ── Móvil ───────────────────────────────────────────────────────────── */
+@media (max-width:1120px){
+  /* una sola columna con orden editorial: agente, plata, agenda, reactivar */
+  .board{grid-template-columns:1fr}
+  .col-l,.col-r{display:contents}
+  .agent{order:1}
+  .pulse{order:2}
+  .card-agenda{order:3}
+  .card-react{order:4}
+  .quick{order:5}
+  .main{max-width:760px}
+}
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr}
+  .side{
+    position:fixed;inset:0 auto 0 0;width:280px;z-index:40;
+    transform:translateX(-102%);transition:transform .28s cubic-bezier(.22,1,.36,1);
+    box-shadow:var(--e3);
+  }
+  #nav-open:checked ~ .shell .side{transform:none}
+  .scrim{
+    display:block;position:fixed;inset:0;z-index:30;background:rgba(11,26,19,.4);
+    opacity:0;pointer-events:none;transition:opacity .25s;
+  }
+  #nav-open:checked ~ .scrim{opacity:1;pointer-events:auto}
+  .topbar-m{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 18px;position:sticky;top:0;z-index:20;
+    background:color-mix(in srgb,var(--canvas) 88%,transparent);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--hairline-soft);
+  }
+  .topbar-m .brand-tile{width:28px;height:28px;border-radius:8px}
+  .topbar-m b{font:800 1.1rem var(--font-display);letter-spacing:-.02em}
+  .burger{
+    width:38px;height:38px;border-radius:99px;display:grid;place-items:center;
+    cursor:pointer;color:var(--ink-2);
+  }
+  .burger:hover{background:rgba(19,32,26,.06)}
+  .topbar-m .icon-btn{margin-left:auto}
+  .main{padding:18px 18px 32px}
+  .toprow{display:none}
+  .head{padding-bottom:20px}
+  .head h1{font-size:1.45rem}
+}
+@media (max-width:640px){
+  .pulse{padding:20px 18px 16px}
+  .pulse-body{grid-template-columns:1fr;gap:20px}
+  .stats{border-left:0;padding-left:0;border-top:1px solid var(--hairline-soft);padding-top:18px}
+  .money{font-size:2.375rem}
+  .head-actions{width:100%;margin-left:0}
+  .head-actions .btn{flex:1;justify-content:center}
+  .head-actions .btn:last-child{display:none}
+  .appt{grid-template-columns:48px 1fr;row-gap:2px}
+  .appt-meta{grid-column:2;justify-content:flex-start}
+  .appt + .appt::before{left:72px}
+  .react-foot{flex-wrap:wrap}
+  .notes{padding:4px 18px 40px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<input type="checkbox" id="nav-open" aria-hidden="true">
+<label class="scrim" for="nav-open" aria-hidden="true"></label>
+
+<div class="shell">
+
+<!-- ══ Sidebar ══════════════════════════════════════════════════════ -->
+<aside class="side">
+  <div class="brand">
+    <div class="brand-tile" aria-hidden="true">o</div>
+    <span class="brand-name">onia</span>
+  </div>
+  <div class="tenant"><strong>Clínica Demo Sonrisa</strong>Sistema de gestión</div>
+
+  <nav class="nav" aria-label="Navegación principal">
+    <div class="nav-group">
+      <div class="nav-label">Clínica</div>
+      <a href="#" aria-current="page">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+        Panel</a>
+      <a href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8.5 14.5l2.4 2.4 4.6-4.4"/></svg>
+        Agenda de hoy</a>
+      <a href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+        Citas</a>
+      <a href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.6a3.2 3.2 0 010 5.8M17.8 14.9c1.6.7 2.6 2.3 3 4.6"/></svg>
+        Pacientes</a>
+      <a href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="7" width="17" height="13.5" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0110.5 4h3A1.5 1.5 0 0115 5.5V7M12 11v5M9.5 13.5h5"/></svg>
+        Tratamientos</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Gestión</div>
+      <a href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>
+        Cobros y facturas</a>
+      <a href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+        Inventario</a>
+      <a href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8 8 0 01-11.7 7.1L3.5 20l1.4-5.3a8 8 0 1115.6-3.2z"/></svg>
+        Comunicaciones</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Automatización</div>
+      <a href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l1.8 4.9 4.9 1.8-4.9 1.8L12 16.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 3.5zM19 15.5l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4z"/></svg>
+        Agente Onia
+        <span class="nav-badge" aria-label="2 propuestas pendientes">2</span></a>
+    </div>
+  </nav>
+
+  <div class="side-foot">
+    <div class="user">
+      <div class="user-av" aria-hidden="true">VE</div>
+      <div><b>Dra. Valeria Ejemplo</b><span>Ver perfil · Pro</span></div>
+    </div>
+    <button class="logout" type="button">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h-7A1.5 1.5 0 005.5 5.5v13A1.5 1.5 0 007 20h7M10 12h10.5M17 8.5l3.5 3.5-3.5 3.5"/></svg>
+      Cerrar sesión</button>
+  </div>
+</aside>
+
+<!-- ══ Contenido ════════════════════════════════════════════════════ -->
+<div>
+  <header class="topbar-m">
+    <label class="burger" for="nav-open" aria-label="Abrir navegación">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </label>
+    <div class="brand-tile" aria-hidden="true">o</div><b>onia</b>
+    <button class="icon-btn dot-note" type="button" aria-label="Notificaciones">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9.5a6 6 0 10-12 0c0 5-2 6-2 6h16s-2-1-2-6M10 19.5a2.2 2.2 0 004 0"/></svg>
+    </button>
+  </header>
+
+  <main class="main">
+    <div class="toprow">
+      <div class="search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        <input type="search" placeholder="Buscar pacientes, citas, facturas…" aria-label="Buscar">
+      </div>
+      <button class="icon-btn dot-note" type="button" aria-label="Notificaciones">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9.5a6 6 0 10-12 0c0 5-2 6-2 6h16s-2-1-2-6M10 19.5a2.2 2.2 0 004 0"/></svg>
+      </button>
+    </div>
+
+    <header class="head">
+      <div>
+        <div class="head-eyebrow">
+          Domingo 16 de agosto de 2026 · Plan Profesional
+          <span class="tag-mock">Maqueta</span>
+        </div>
+        <h1>Buen día, Dra. Valeria</h1>
+      </div>
+      <div class="head-actions">
+        <a class="btn btn-solid" href="#">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Paciente</a>
+        <a class="btn btn-quiet" href="#">Agenda</a>
+        <a class="btn btn-quiet" href="#">Registrar cobro</a>
+      </div>
+    </header>
+
+    <div class="board">
+      <div class="col-l">
+
+        <!-- Pulso de hoy -->
+        <section class="pulse" aria-labelledby="pulse-t">
+          <div class="pulse-top">
+            <h2 class="sec-title" id="pulse-t">Ingresos de hoy</h2>
+            <a class="chip chip-warn pulse-alert" href="#">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L2.8 19.5h18.4L12 4zM12 10v4M12 17.2v.1"/></svg>
+              1 insumo bajo mínimo</a>
+          </div>
+          <div class="pulse-body">
+            <div>
+              <div class="money"><small>Bs</small>1.240</div>
+              <span class="delta">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+                Bs 380 más que el domingo pasado</span>
+              <div class="spark">
+                <svg viewBox="0 0 220 56" width="100%" height="56" role="img" aria-label="Ingresos de los últimos 7 días, con pico hoy">
+                  <defs>
+                    <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#089868" stop-opacity=".18"/>
+                      <stop offset="1" stop-color="#089868" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M10 35 43 50 76 36.5 110 27 143 40 176 19.5 210 6 V56 H10 Z" fill="url(#sg)"/>
+                  <path d="M10 35 43 50 76 36.5 110 27 143 40 176 19.5 210 6" fill="none" stroke="#089868" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="210" cy="6" r="3.4" fill="#027650" stroke="#fff" stroke-width="1.6"/>
+                </svg>
+                <div class="spark-days" aria-hidden="true">
+                  <span>lun</span><span>mar</span><span>mié</span><span>jue</span><span>vie</span><span>sáb</span><b>hoy</b>
+                </div>
+              </div>
+            </div>
+            <dl class="stats">
+              <div class="stat"><b>6</b><span>Citas hoy</span><em class="warn">2 por confirmar</em></div>
+              <div class="stat"><b>Bs 18.450</b><span>Cobrado este mes</span><em>34 pagos</em></div>
+              <div class="stat"><b>Bs 2.150</b><span>Por cobrar</span><em>3 facturas abiertas</em></div>
+              <div class="stat"><b>4</b><span>Pacientes nuevos</span><em>este mes</em></div>
+            </dl>
+          </div>
+        </section>
+
+        <!-- Agenda de hoy -->
+        <section class="card card-agenda" aria-labelledby="agenda-t">
+          <div class="card-head">
+            <div>
+              <h2 class="sec-title" id="agenda-t">Agenda de hoy</h2>
+              <div class="card-sub">6 citas · 2 por confirmar</div>
+            </div>
+            <a class="card-link" href="#">Ver calendario
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <ul class="agenda-list">
+            <li class="appt appt-done">
+              <span class="appt-time">09:00</span>
+              <div class="appt-who"><b>Ana Rojas Paredes</b><span>Limpieza y flúor</span></div>
+              <div class="appt-meta"><span class="doc">Dra. Salazar</span><span class="chip chip-done">Completada</span></div>
+            </li>
+            <li class="appt appt-done">
+              <span class="appt-time">09:45</span>
+              <div class="appt-who"><b>Marco Quispe Torrez</b><span>Endodoncia · pieza 16</span></div>
+              <div class="appt-meta"><span class="doc">Dr. Fernández</span><span class="chip chip-done">Completada</span></div>
+            </li>
+            <li class="appt appt-now">
+              <span class="appt-time">10:30</span>
+              <div class="appt-who"><b>Lucía Mamani Cruz</b><span>Control de ortodoncia</span></div>
+              <div class="appt-meta"><span class="doc">Dra. Salazar</span><span class="chip chip-info">En consulta</span></div>
+            </li>
+            <li class="appt">
+              <span class="appt-time">11:15</span>
+              <div class="appt-who"><b>Jorge Choque Vargas</b><span>Extracción simple</span></div>
+              <div class="appt-meta"><span class="doc">Dr. Fernández</span><span class="state-quiet">Confirmada</span></div>
+            </li>
+            <li class="appt">
+              <span class="appt-time">12:00</span>
+              <div class="appt-who"><b>Carla Gutiérrez Soria</b><span>Blanqueamiento</span></div>
+              <div class="appt-meta"><span class="doc">Dra. Salazar</span><span class="chip chip-warn">Por confirmar</span></div>
+            </li>
+            <li class="appt">
+              <span class="appt-time">15:30</span>
+              <div class="appt-who"><b>Pedro Vargas Limachi</b><span>Primera consulta</span></div>
+              <div class="appt-meta"><span class="doc">Dr. Fernández</span><span class="chip chip-warn">Por confirmar</span></div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Accesos rápidos -->
+        <nav class="quick" aria-label="Accesos rápidos">
+          <div class="quick-label">Accesos rápidos</div>
+          <div class="quick-row">
+            <a href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.6a3.2 3.2 0 010 5.8M17.8 14.9c1.6.7 2.6 2.3 3 4.6"/></svg>Pacientes</a>
+            <a href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Citas</a>
+            <a href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="7" width="17" height="13.5" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0110.5 4h3A1.5 1.5 0 0115 5.5V7M12 11v5M9.5 13.5h5"/></svg>Tratamientos</a>
+            <a href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>Facturación</a>
+            <a href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>Inventario</a>
+            <a href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8 8 0 01-11.7 7.1L3.5 20l1.4-5.3a8 8 0 1115.6-3.2z"/></svg>Comunicaciones</a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="col-r">
+
+        <!-- Agente Onia: cola de aprobaciones -->
+        <section class="agent" aria-labelledby="agent-t">
+          <div class="agent-head">
+            <div class="agent-orb" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l1.8 4.9 4.9 1.8-4.9 1.8L12 16.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 3.5zM19 15.5l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4z"/></svg>
+            </div>
+            <div>
+              <h2 id="agent-t">Agente Onia</h2>
+              <p>Propone, vos decidís</p>
+            </div>
+            <span class="agent-count" id="agent-count">2 esperando</span>
+          </div>
+          <ul class="props">
+            <li class="prop" data-prop>
+              <h3>Confirmar 2 citas de hoy por WhatsApp</h3>
+              <p>Carla Gutiérrez (12:00) y Pedro Vargas (15:30) todavía no confirmaron.</p>
+              <div class="prop-act">
+                <div class="prop-btns">
+                  <button class="btn-approve" type="button" data-approve aria-label="Aprobar: confirmar 2 citas por WhatsApp">Aprobar</button>
+                  <button class="btn-ghost-dark" type="button">Ver mensaje</button>
+                </div>
+                <span class="prop-done-chip" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L19.5 7"/></svg>
+                  Aprobada · enviando</span>
+              </div>
+            </li>
+            <li class="prop" data-prop>
+              <h3>Recordar pago a Marco Quispe</h3>
+              <p>Factura abierta de Bs 450 · vence en 3 días.</p>
+              <div class="prop-act">
+                <div class="prop-btns">
+                  <button class="btn-approve" type="button" data-approve aria-label="Aprobar: recordar pago a Marco Quispe">Aprobar</button>
+                  <button class="btn-ghost-dark" type="button">Ver mensaje</button>
+                </div>
+                <span class="prop-done-chip" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L19.5 7"/></svg>
+                  Aprobada · enviando</span>
+              </div>
+            </li>
+            <li class="prop">
+              <h3>Reactivar 3 pacientes sin volver</h3>
+              <p>Más de 6 meses sin visita. La lista está abajo, se aprueba uno por uno.</p>
+            </li>
+          </ul>
+          <div class="agent-foot">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V7.8a3.5 3.5 0 017 0v2.7"/></svg>
+            Nada se envía sin tu aprobación.
+          </div>
+        </section>
+
+        <!-- Pacientes por reactivar -->
+        <section class="card card-react" aria-labelledby="react-t">
+          <div class="card-head">
+            <div>
+              <h2 class="sec-title" id="react-t">Pacientes por reactivar</h2>
+              <div class="card-sub">Propuesta del agente · WhatsApp</div>
+            </div>
+          </div>
+          <ul class="react-list">
+            <li class="react-row">
+              <span class="react-av" aria-hidden="true">RF</span>
+              <div><b>Rosa Flores Mendoza</b><span>Desde dic 2025 · limpieza</span></div>
+              <button class="btn-sm" type="button" data-send aria-label="Aprobar envío de reactivación">Aprobar</button>
+            </li>
+            <li class="react-row">
+              <span class="react-av" aria-hidden="true">DT</span>
+              <div><b>Daniel Ticona Apaza</b><span>Desde sep 2025 · endodoncia</span></div>
+              <button class="btn-sm" type="button" data-send aria-label="Aprobar envío de reactivación">Aprobar</button>
+            </li>
+            <li class="react-row">
+              <span class="react-av" aria-hidden="true">MC</span>
+              <div><b>María Condori Huanca</b><span>Desde nov 2025 · control</span></div>
+              <button class="btn-sm" type="button" data-send aria-label="Aprobar envío de reactivación">Aprobar</button>
+            </li>
+          </ul>
+          <div class="react-foot">
+            <span class="react-note">Ves cada mensaje antes de que salga.</span>
+            <a class="card-link" href="#">Ver mensajes</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══ Notas de porteo ═══════════════════════════════════════════ -->
+  <details class="notes">
+    <summary>Notas de diseño para el porteo (tokens y Required Qualities)</summary>
+    <div class="notes-body">
+      <h2>Required Qualities aplicadas (design-quality.md)</h2>
+      <ul>
+        <li><b>1 · Jerarquía por escala:</b> un solo salto grande (Manrope 800 a 46px para la cifra del día) sobre un chrome contenido de 11 a 15px. Antes había seis números del mismo tamaño.</li>
+        <li><b>2 · Ritmo intencional:</b> la banda de pulso es densa (stats con hairlines), la agenda respira (filas de 11px de padding), el agente aún más (15px por propuesta). El padding no es uniforme.</li>
+        <li><b>3 · Profundidad por capas:</b> lienzo tintado <code>#EDF2EF</code> + tres niveles de sombra (e1 tarjetas, e2 banda, e3 agente). Sin bordes grises como recurso.</li>
+        <li><b>5 · Color semántico:</b> verde solo en acciones y en la superficie del agente. Estados: ámbar (por confirmar, stock), azul (en consulta), rojo (crítico), neutro (completada). Lo confirmado casi no habla: solo las excepciones llevan color.</li>
+        <li><b>6 · Estados diseñados:</b> hover en filas y nav, focus-visible verde (claro en el panel oscuro), aprobar cambia a "Aprobada · enviando" con cross-fade sin salto de layout.</li>
+        <li><b>7 · Composición que rompe la grilla:</b> el panel del agente es la única superficie oscura y ancla la columna derecha completa; la banda de métricas no ocupa todo el ancho.</li>
+      </ul>
+      <h2>Banned patterns eliminados del panel actual</h2>
+      <ul>
+        <li>Grilla de 6 tarjetas KPI idénticas → una banda única con cifra dominante + stats con hairline.</li>
+        <li>Tarjetas blancas uniformes con el mismo borde → 3 niveles de elevación y una superficie "committed".</li>
+        <li>FAB verde flotante → eliminado; las acciones viven en el encabezado.</li>
+        <li>Verde como decoración (iconos de tarjetas, fondos) → verde solo como acción/estado.</li>
+      </ul>
+      <h2>Tokens que saldrían de esta maqueta (porteo a onia-platform)</h2>
+      <ul>
+        <li><code>--canvas: #EDF2EF</code> reemplaza a <code>--color-background: #F9FBFA</code> (el lienzo actual es tan claro que nada flota).</li>
+        <li><code>--e1/--e2/--e3</code> → escala de elevación de 3 pasos; hoy el producto usa una sola sombra genérica.</li>
+        <li><code>--agent-bg: #06382A / #052E23</code> → superficie propia del agente (deriva de verde-900).</li>
+        <li>Estados: <code>--info #0A5DC2 / #EAF2FC</code>, <code>--warn #8A5A00 / #FBF0D7</code>, <code>--danger #B3261E / #FBEAE8</code>, <code>--done #5C6862 / #EDF0EE</code>.</li>
+        <li>Tipos: <code>--t-display 2.875rem</code> (solo dinero del día), escala fija UI 11/13/14/15/20/26. Manrope 700-800 para títulos y cifras, Inter 400-600 para el resto.</li>
+        <li>Radios: 18px tarjeta, 10px control, pill para chips. Hairline: <code>rgba(19,32,26,.09)</code>.</li>
+        <li>Primitivos de componente: <code>Chip</code> (5 variantes semánticas), <code>ApprovalItem</code> (título + evidencia + aprobar/ver + estado aprobado), <code>StatCell</code>, <code>AgendaRow</code> (con variante "now" y "done"), <code>QuickLink</code>.</li>
+      </ul>
+      <h2>Decisiones registradas</h2>
+      <ul>
+        <li>Tema claro único y comprometido: dueño de clínica, media mañana, luz de día. La maqueta no define modo oscuro a propósito.</li>
+        <li>Fuentes reales del producto en woff2 variable (subset latin, 73KB total), hermanas del HTML: cero CDN.</li>
+        <li>El botón "Registrar cobro" se oculta en 390px: en móvil las dos acciones que importan son Paciente y Agenda.</li>
+      </ul>
+    </div>
+  </details>
+</div>
+</div>
+
+<script>
+// Aprobar propuesta del agente: cross-fade a estado "Aprobada · enviando".
+// El chip visual va aria-hidden; el estado accesible vive en aria-label del <li>.
+let pending = 2;
+const count = document.getElementById('agent-count');
+document.querySelectorAll('[data-approve]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const prop = btn.closest('[data-prop]');
+    prop.classList.add('is-approved');
+    prop.setAttribute('aria-label', prop.querySelector('h3').textContent + ': aprobada, enviando');
+    pending -= 1;
+    count.textContent = pending > 0 ? pending + ' esperando' : 'Al día';
+  });
+});
+// Aprobar envío de reactivación por paciente.
+document.querySelectorAll('[data-send]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.disabled = true;
+    btn.textContent = 'Aprobado';
+  });
+});
+// Cerrar el drawer móvil al elegir una entrada de navegación.
+const navToggle = document.getElementById('nav-open');
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', () => { navToggle.checked = false; });
+});
+</script>
+</body>
+</html>
