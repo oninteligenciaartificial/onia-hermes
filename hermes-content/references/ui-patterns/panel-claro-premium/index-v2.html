@@ -240,7 +240,7 @@ svg{display:block;flex:none}
 .pcell em a:hover{color:#6B4600}
 
 /* ── Debajo de la banda: agenda dominante + columna de consulta ──────── */
-.board{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:20px;align-items:start}
+.board{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:20px;align-items:start}
 .col-b{display:grid;gap:20px;min-width:0}
 
 .card{
@@ -298,9 +298,10 @@ svg{display:block;flex:none}
 .appt-now .appt-body{background:var(--info-tint)}
 .appt-who{min-width:0}
 .appt-who b{display:block;font-size:var(--t-body);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.appt-who span{display:block;font-size:var(--t-sm);color:var(--ink-3);line-height:1.35}
+.appt-who span{display:block;font-size:var(--t-sm);color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .appt-done .appt-who b,.appt-done .appt-time{color:var(--ink-3)}
-.appt-meta{display:flex;align-items:center;gap:9px;padding-right:2px}
+.appt-meta{display:grid;justify-items:end;gap:4px;padding-right:2px}
+.doc{font-size:.72rem;color:var(--ink-3);white-space:nowrap}
 .state-quiet{
   font-size:.72rem;color:var(--ink-3);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
 }
@@ -324,11 +325,6 @@ svg{display:block;flex:none}
 }
 .bill:hover{background:var(--surface-2)}
 .bill + .bill{border-top:1px solid var(--hairline-soft)}
-.bill-id{
-  font:700 .72rem var(--font-display);color:var(--ink-3);
-  background:var(--surface-2);border:1px solid var(--hairline-soft);
-  border-radius:7px;padding:4px 7px;font-variant-numeric:tabular-nums;flex:none;
-}
 .bill > div{min-width:0;flex:1}
 .bill b{display:block;font-size:var(--t-sm);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bill span{display:block;font-size:.72rem;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -523,7 +519,7 @@ svg{display:block;flex:none}
   .notes{order:9;padding:8px 16px 100px}
 
   .bottomnav{
-    display:grid;grid-template-columns:repeat(5,1fr);
+    display:grid;grid-template-columns:repeat(5,1fr);order:5;
     position:fixed;left:0;right:0;bottom:0;z-index:25;
     background:var(--surface);border-top:1px solid var(--hairline);
     padding:6px 4px calc(6px + env(safe-area-inset-bottom));
@@ -541,15 +537,16 @@ svg{display:block;flex:none}
   .pcell{padding:2px 16px}
   .money{font-size:1.75rem}
   .pspark{display:none}
+  .delta{white-space:normal;border-radius:14px;line-height:1.35;padding:5px 12px}
   .head-actions{width:100%;margin-left:0}
   .head-actions .btn{flex:1;justify-content:center}
   .head-actions .btn:last-child{display:none}
   .appt{grid-template-columns:50px 18px minmax(0,1fr)}
-  .appt-meta{grid-column:3;justify-content:flex-start;padding:0 0 4px 12px}
+  .appt-meta{grid-column:3;justify-items:start;gap:3px;padding:0 0 4px 12px}
+  .appt-who span{white-space:normal}
   .appt-body{padding:6px 12px 2px}
   .now-line{grid-template-columns:50px 1fr}
   .agenda-list{padding-right:12px}
-  .bill-amt{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
@@ -625,7 +622,7 @@ svg{display:block;flex:none}
       <a href="#">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8.5" width="14" height="10" rx="2.5"/><path d="M12 8.5V5M12 5a1.4 1.4 0 10-.01-2.8A1.4 1.4 0 0012 5z"/><path d="M9.3 13.2v1M14.7 13.2v1"/></svg>
         Agentes
-        <span class="nav-badge" aria-label="4 propuestas pendientes">4</span></a>
+        <span class="nav-badge" aria-label="5 propuestas pendientes">5</span></a>
       <a href="#">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>
         Comunicaciones</a>
@@ -727,7 +724,7 @@ svg{display:block;flex:none}
       <div class="pcell">
         <div class="pcell-label">Este mes</div>
         <b class="num">Bs 18.450</b>
-        <em>34 pagos · 4 nuevos</em>
+        <em>34 pagos</em>
       </div>
     </section>
 
@@ -748,25 +745,25 @@ svg{display:block;flex:none}
             <span class="appt-time">09:00</span>
             <span class="appt-rail" aria-hidden="true"></span>
             <div class="appt-body">
-              <div class="appt-who"><b>Ana Rojas Paredes</b><span>Limpieza y flúor · Dra. Salazar</span></div>
+              <div class="appt-who"><b>Ana Rojas Paredes</b><span>Limpieza y flúor</span></div>
             </div>
-            <div class="appt-meta"><span class="chip chip-done">Completada</span></div>
+            <div class="appt-meta"><span class="doc">Dra. Salazar</span><span class="chip chip-done">Completada</span></div>
           </li>
           <li class="appt appt-done">
             <span class="appt-time">09:45</span>
             <span class="appt-rail" aria-hidden="true"></span>
             <div class="appt-body">
-              <div class="appt-who"><b>Marco Quispe Torrez</b><span>Endodoncia pieza 16 · Dr. Fernández</span></div>
+              <div class="appt-who"><b>Marco Quispe Torrez</b><span>Endodoncia pieza 16</span></div>
             </div>
-            <div class="appt-meta"><span class="chip chip-done">Completada</span></div>
+            <div class="appt-meta"><span class="doc">Dr. Fernández</span><span class="chip chip-done">Completada</span></div>
           </li>
           <li class="appt appt-now">
             <span class="appt-time">10:30</span>
             <span class="appt-rail" aria-hidden="true"></span>
             <div class="appt-body">
-              <div class="appt-who"><b>Lucía Mamani Cruz</b><span>Control de ortodoncia · Dra. Salazar</span></div>
+              <div class="appt-who"><b>Lucía Mamani Cruz</b><span>Control de ortodoncia</span></div>
             </div>
-            <div class="appt-meta"><span class="chip chip-info">En consulta</span></div>
+            <div class="appt-meta"><span class="doc">Dra. Salazar</span><span class="chip chip-info">En consulta</span></div>
           </li>
           <li class="now-line" aria-label="Hora actual: 10:52">
             <b class="num">10:52</b><span aria-hidden="true"></span>
@@ -775,25 +772,25 @@ svg{display:block;flex:none}
             <span class="appt-time">11:15</span>
             <span class="appt-rail" aria-hidden="true"></span>
             <div class="appt-body">
-              <div class="appt-who"><b>Jorge Choque Vargas</b><span>Extracción simple · Dr. Fernández</span></div>
+              <div class="appt-who"><b>Jorge Choque Vargas</b><span>Extracción simple</span></div>
             </div>
-            <div class="appt-meta"><span class="state-quiet">Programada</span></div>
+            <div class="appt-meta"><span class="doc">Dr. Fernández</span><span class="state-quiet">Programada</span></div>
           </li>
           <li class="appt">
             <span class="appt-time">12:00</span>
             <span class="appt-rail" aria-hidden="true"></span>
             <div class="appt-body">
-              <div class="appt-who"><b>Carla Gutiérrez Soria</b><span>Blanqueamiento · Dra. Salazar</span></div>
+              <div class="appt-who"><b>Carla Gutiérrez Soria</b><span>Blanqueamiento</span></div>
             </div>
-            <div class="appt-meta"><span class="chip chip-warn">Por confirmar</span></div>
+            <div class="appt-meta"><span class="doc">Dra. Salazar</span><span class="chip chip-warn">Por confirmar</span></div>
           </li>
           <li class="appt">
             <span class="appt-time">15:30</span>
             <span class="appt-rail" aria-hidden="true"></span>
             <div class="appt-body">
-              <div class="appt-who"><b>Pedro Vargas Limachi</b><span>Primera consulta · Dr. Fernández</span></div>
+              <div class="appt-who"><b>Pedro Vargas Limachi</b><span>Primera consulta</span></div>
             </div>
-            <div class="appt-meta"><span class="chip chip-warn">Por confirmar</span></div>
+            <div class="appt-meta"><span class="doc">Dr. Fernández</span><span class="chip chip-warn">Por confirmar</span></div>
           </li>
         </ol>
       </section>
@@ -805,25 +802,19 @@ svg{display:block;flex:none}
           <div class="card-head">
             <div>
               <h2 class="sec-title" id="bills-t">Facturas abiertas</h2>
-              <div class="card-sub">Enviadas, sin pago registrado</div>
+              <div class="card-sub">Sin pago registrado</div>
             </div>
             <a class="card-link" href="#">Ver todas</a>
           </div>
           <ul class="bill-list">
             <li class="bill">
-              <span class="bill-id">F-0091</span>
-              <div><b>Marco Quispe Torrez</b><span>Vence 19 ago</span></div>
-              <span class="bill-amt num">Bs 450</span>
+              <div><b>Marco Quispe Torrez</b><span class="num">F-0091 · <b>Bs 450</b> · vence 19 ago</span></div>
             </li>
             <li class="bill">
-              <span class="bill-id">F-0088</span>
-              <div><b>Carla Gutiérrez Soria</b><span>Vence 21 ago</span></div>
-              <span class="bill-amt num">Bs 900</span>
+              <div><b>Carla Gutiérrez Soria</b><span class="num">F-0088 · <b>Bs 900</b> · vence 21 ago</span></div>
             </li>
             <li class="bill">
-              <span class="bill-id">F-0085</span>
-              <div><b>Jorge Choque Vargas</b><span>Vence 22 ago</span></div>
-              <span class="bill-amt num">Bs 800</span>
+              <div><b>Jorge Choque Vargas</b><span class="num">F-0085 · <b>Bs 800</b> · vence 22 ago</span></div>
             </li>
           </ul>
           <div class="bill-foot">
@@ -846,7 +837,7 @@ svg{display:block;flex:none}
             </span>
             <div>
               <b>Guantes de nitrilo M</b>
-              <span>Quedan 4 unidades · mínimo 10 · <b style="color:var(--warn);font-weight:600;display:inline">bajo mínimo</b></span>
+              <span>Quedan 4 unidades · mínimo 10 · <b style="color:var(--warn);font-weight:600;display:inline;white-space:nowrap">bajo mínimo</b></span>
             </div>
           </div>
         </section>
@@ -907,7 +898,7 @@ svg{display:block;flex:none}
       <h2>Tus decisiones</h2>
       <p>El agente propone, vos aprobás</p>
     </div>
-    <span class="dock-count" id="dock-count">4 esperando</span>
+    <span class="dock-count" id="dock-count">5 esperando</span>
   </div>
 
   <section class="dock-group" aria-labelledby="g-cobrador">
@@ -955,13 +946,18 @@ svg{display:block;flex:none}
     <ul class="props" aria-label="Pacientes con más de 6 meses sin visita">
       <li class="rec">
         <span class="rec-av" aria-hidden="true">RF</span>
-        <div><b>Rosa Flores Mendoza</b><span>Última visita dic 2025 · limpieza</span></div>
+        <div><b>Rosa Flores Mendoza</b><span>Sin venir desde dic 2025</span></div>
         <button class="btn-sm" type="button" data-send aria-label="Aprobar reactivación de Rosa Flores">Aprobar</button>
       </li>
       <li class="rec">
         <span class="rec-av" aria-hidden="true">DT</span>
-        <div><b>Daniel Ticona Apaza</b><span>Última visita sep 2025 · endodoncia</span></div>
+        <div><b>Daniel Ticona Apaza</b><span>Sin venir desde sep 2025</span></div>
         <button class="btn-sm" type="button" data-send aria-label="Aprobar reactivación de Daniel Ticona">Aprobar</button>
+      </li>
+      <li class="rec">
+        <span class="rec-av" aria-hidden="true">MC</span>
+        <div><b>María Condori Huanca</b><span>Sin venir desde nov 2025</span></div>
+        <button class="btn-sm" type="button" data-send aria-label="Aprobar reactivación de María Condori">Aprobar</button>
       </li>
     </ul>
   </section>
@@ -977,7 +973,6 @@ svg{display:block;flex:none}
     </p>
   </div>
 </aside>
-</div>
 
 <!-- Bottom nav móvil: bottomNavHrefs real de navigation.ts -->
 <nav class="bottomnav" aria-label="Navegación inferior">
@@ -997,16 +992,21 @@ svg{display:block;flex:none}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16M6.5 16.5v-4M11 16.5V8M15.5 16.5v-6.5M20 16.5V5.5"/></svg>
     Reportes</a>
 </nav>
+</div>
 
 <script>
 // Aprobar propuesta: cross-fade al estado "Aprobada" (patrón de estados
 // apilados en una celda de grid; el chip visual va aria-hidden y el estado
 // accesible vive en el aria-label del <li>).
-let pending = 4;
+let pending = 5;
 const count = document.getElementById('dock-count');
+const navBadge = document.querySelector('.nav-badge');
 function decCount(){
   pending -= 1;
   count.textContent = pending > 0 ? pending + ' esperando' : 'Al día';
+  navBadge.textContent = pending;
+  navBadge.setAttribute('aria-label', pending + ' propuestas pendientes');
+  if (pending === 0) navBadge.style.display = 'none';
 }
 document.querySelectorAll('[data-approve]').forEach(btn => {
   btn.addEventListener('click', () => {
