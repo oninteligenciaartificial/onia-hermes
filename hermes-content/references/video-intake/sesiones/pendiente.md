@@ -1,0 +1,326 @@
+# Sesión `pendiente` (harness / infra / varios)
+
+> **Este archivo es la raíz de la sesión `pendiente`.** Todo lo que esta sesión tiene que hacer
+> de lo que salió del análisis de reels está acá, completo. No hace falta abrir otro archivo.
+>
+> Orden: **E4 primero (es el que mejora todas las demás sesiones) → D2 y D3 son fechas que corren → E5 necesita decisión de gasto**
+>
+> Índice general del carril: [../INDEX.md](../INDEX.md) · fichas de origen en `../`
+
+---
+
+## Preambulo — pega esto al inicio de CUALQUIER sesion
+
+Seis reglas que salieron de los errores de la sesion de analisis de reels (2026-08-11). No son
+teoria: cada una nacio de algo que se hizo mal y se corrigio.
+
+```text
+Antes de escribir una sola linea:
+1. Invoca `onia-router` y ubica el carril. Verifica `git branch --show-current`.
+2. BUSCA DONDE VIVE LA COSA ANTES DE CREARLA. El repo ya tiene pipeline para casi todo
+   (web-factory tiene reels->learned models; ver-videos tiene el intake; el pattern bank tiene
+   el motion). Escribir un doc "al lado" del sistema que ya existe es el error mas caro:
+   duplica y se desincroniza. Si no encontras donde va, pregunta antes de inventar carpeta.
+3. Verifica en vivo lo que toca prod, plata o main. Y deci explicitamente lo que NO pudiste
+   verificar: "los estados estan probados, el timing no porque el panel del navegador esta
+   oculto y las transiciones no avanzan" es una respuesta correcta; "quedo listo" no lo es.
+4. Ninguna cifra, precio o capacidad que venga de afuera se repite como propia sin verificarla.
+   Marcala como "a verificar" o no la menciones.
+5. Reporta la cobertura real ("audio 100%, 5 de 7 laminas"), nunca "lo vi" desde dos cuadros.
+6. Al cerrar: que quedo en produccion, que quedo a medias y donde exactamente, y que depende
+   de Sergio. Nada flotando en la conversacion.
+```
+
+---
+
+## Los dos gates que aplican a TODOS los prompts de este archivo
+
+Pegá esto junto al prompt. Nacen de errores concretos de esta sesión, no de teoría.
+
+### Gate 1 — control de calidad ANTES de ejecutar
+
+```text
+Antes de hacer nada de lo que pide el prompt, verificá que el prompt siga siendo válido:
+1. ¿YA ESTA HECHO? Mirá el repo y la memoria del proyecto, no el prompt. Un prompt de esta
+   lista mandaba a cerrar la seguridad de produccion cuando ya estaba cerrada y verificada
+   dias antes — habria mandado a rehacer trabajo terminado.
+2. ¿EL BLOQUEO EXISTE? Si el prompt dice que algo esta trabado, comprobalo. Dos "bloqueos" de
+   esta lista se cayeron con un `ls` y una consulta gratis: los SFX estaban en otra carpeta y
+   la voz no era ambigua, era un ID truncado en los docs.
+3. ¿EL DATO SIGUE VIGENTE? Los numeros de cuenta, precios y capacidades tienen fecha. Si el
+   prompt trae uno, confirmalo antes de construir encima.
+4. ¿YA VIVE EN ALGUN LADO? El repo tiene pipeline para casi todo. Buscá donde vive la cosa
+   antes de crear una carpeta nueva: escribir un doc "al lado" del sistema que ya existe es
+   el error mas caro, porque duplica y se desincroniza.
+Si algo de esto invalida el prompt, DECILO y no lo ejecutes. Un prompt que quedo viejo se
+corrige, no se obedece.
+```
+
+### Gate 2 — ordenar en su carpeta ANTES de cerrar
+
+```text
+Al terminar, nada queda suelto ni en la raiz del repo. Cada cosa a su lugar:
+- Web entera vista en un reel  -> web-factory/data/references/reels/models/ (learned model)
+- Componente de UI reconstruido -> hermes-content/references/ui-patterns/<patron>/
+- Patron de movimiento          -> web-factory/docs/MOTION_PATTERN_BANK_2026.md
+- Analisis de un video          -> hermes-content/references/video-intake/
+- Doc de proceso o decision     -> hermes-content/docs/  (es la fuente; la raiz sin gemelos)
+- Receta de generacion          -> hermes-content/docs/ y se apunta desde la skill
+- Codigo de herramienta         -> scripts/ o .claude/skills/<skill>/scripts/
+Si no sabes donde va, PREGUNTA antes de inventar carpeta.
+Y antes de commitear: `git status` limpio de archivos huerfanos, y el commit explica el POR QUE,
+no solo el que.
+```
+
+---
+
+### Gate 3 — el loop: auto-evaluacion ANTES de responder
+
+Sale del reel de AI loops, que en la primera pasada despache como humo y era el mas importante
+del corpus ([ficha](../2026-08-09-ai-loops-code-review.md)). La idea no es el comando: es **donde
+esta el control**. La verificacion va antes de entregar, no despues de que Sergio encuentre el
+error.
+
+```text
+Antes de decir que terminaste, corre este loop sobre tu propio trabajo:
+1. Reelee el "LISTO =" del prompt. ¿Lo cumpliste, literal? No "casi".
+2. Buscá activamente en que te podes haber equivocado. Nombra la parte mas fragil de lo que
+   hiciste y comprobala. Si no encontras ninguna parte fragil, no miraste bien.
+3. Lo que afirmes, verificalo: si decis que algo existe, abrilo; si decis que funciona,
+   corrélo; si decis que se perdio, revisá que estabas mirando el lugar correcto.
+4. Deci explicitamente que NO pudiste verificar. Un "esto quedo sin comprobar" vale mas que un
+   "listo" que se cae al primer toque.
+5. Recien ahi respondé.
+Si el paso 2 encuentra algo, corregilo y volve al 1. El loop se cierra cuando una pasada
+completa no encuentra nada nuevo — no cuando te cansaste de mirar.
+```
+
+**Un gate que depende de acordarse no es un gate.** En una sola sesion, con los Gates 1 y 2 ya
+escritos, se entregaron cinco cosas sin verificar: un prompt que mandaba a rehacer trabajo
+terminado, dos bloqueos que no existian, un archivo "perdido" que estaba intacto, y una
+escritura en el arbol de otra rama. En los cinco casos el dato correcto estaba a una consulta
+de distancia.
+
+---
+
+**Para delegar a subagentes** (esto se probo con 8 agentes en paralelo y funciono):
+
+```text
+Trabajas en el worktree EXACTO: <ruta completa>
+Verifica `git branch --show-current` (debe decir <rama>). No commitees, no hagas push.
+Escribis SOLO estos archivos: <lista>. NO toques indices ni docs compartidos — de eso me encargo yo.
+Si el video/doc afirma un dato, marcalo como "a verificar", no lo des por cierto.
+DEVOLVE: una linea por entregable con <archivo> | <resultado> | <decision que tomaste>.
+```
+
+La regla que hace que esto no choque: **cada agente escribe sus propios archivos, el
+orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaron ni una vez.
+
+---
+
+---
+
+## E4 · El loop de tres roles, guardado como artefacto
+
+```text
+Contexto: un reel describe el loop que usa quien lo publica, y por primera vez da la forma
+concreta: TRES agentes -- planeador, ejecutador, evaluador -- cada uno con instrucciones,
+objetivos y MEMORIA propios. Ficha:
+hermes-content/references/video-intake/2026-08-16-loop-tres-agentes.md
+
+Por que la separacion importa: un solo agente que se revisa a si mismo arrastra su propio
+sesgo, porque ya decidio que estaba bien cuando lo escribio. Tres roles con contexto
+distinto no comparten ese sesgo.
+
+Lo que YA tenemos (verificado, no lo rehagas): subagentes con instrucciones propias en
+.claude/agents/, y la herramienta Workflow que hace pipeline()/parallel() y bucles. Lo que
+NO existe: el loop guardado como artefacto reusable. Hoy se rearma a mano cada vez, y eso es
+exactamente el problema que el Gate 3 nombra -- un gate que depende de acordarse no es un
+gate.
+
+Diseño a implementar:
+  planeador  -> lee el objetivo y el "LISTO =", devuelve plan + criterios de aceptacion.
+                NO ve el codigo.
+  ejecutador -> implementa contra ese plan.
+  evaluador  -> recibe SOLO el "LISTO =" y el diff. Responde aprobado/rechazado + motivo.
+                NO ve el plan del planeador: si lo ve, hereda su justificacion.
+  rechazado  -> vuelve al ejecutador con el motivo.
+  cierra cuando una pasada completa no encuentra nada nuevo.
+
+Tarea:
+1. Guardalo como workflow reusable en .claude/workflows/ con esos tres roles. Esa carpeta
+   todavia NO existe en el repo: crearla es parte de la tarea.
+2. TOPE DE VUELTAS OBLIGATORIO y visible. El propio video advierte: "si no sabes disenar un
+   buen loop, esto te puede costar muy caro porque los loops consumen muchos tokens". Sin
+   tope, un loop mal disenado quema presupuesto sin avisar.
+3. Que loguee, al cerrar: cuantas vueltas dio, que rechazo el evaluador en cada una, y si
+   cerro por convergencia o por tope. Si cerro por tope, que lo diga fuerte: NO esta listo.
+4. Probalo contra una tarea chica y real, y pegá el log de vueltas.
+
+LISTO = el workflow existe, corrio contra una tarea real, y el log muestra las vueltas y el
+motivo de cierre.
+```
+
+---
+
+## D2 · Las fechas que corren solas
+
+Tres plazos de la memoria del proyecto, con la cuenta hecha al 2026-08-12. Ninguno depende de
+que mires un video mas; todos se vencen aunque nadie los mire.
+
+| Fecha | Que pasa | Faltan |
+|---|---|---|
+| **30-sep-2026** | facturacion en linea obligatoria en Bolivia | ~7 semanas |
+| **1-oct-2026** | se cierra la ventana gratuita de 24 h de WhatsApp | ~7 semanas |
+| **~oct-2026** | fin del runway estimado (11 semanas contadas desde el 26-jul) | ~8 semanas |
+
+```text
+Sesion: la de estrategia/fiscal segun corresponda. git branch --show-current primero.
+TAREA UNICA: convertir tres fechas en un plan con responsable, no en una nota.
+  1. FISCAL (30-sep): verificar contra la RND vigente que la fecha sigue siendo esa y que
+     alcanza a nuestros clientes objetivo. La homologacion SIAT depende del NIT (bloqueo S2 de
+     Sergio) — sin eso no hay emision real, y el producto lo promete.
+  2. WHATSAPP (1-oct): recalcular que le cuesta al cliente el chatbot DESPUES del cambio. Hoy el
+     costeo asume la ventana gratis. Si el numero cambia, cambia el precio del add-on.
+  3. RUNWAY: contra el plan vigente, cuantas semanas quedan y que se cae si no entra el primer
+     cliente. Sin dramatizar: numeros.
+LISTO = una tabla de 3 filas: fecha, que se cae, quien lo destraba, y que se hace ANTES.
+NO HAGAS: no cites ninguna fecha fiscal sin la fuente (RND o DS con numero) — usa la skill
+`onia-contabilidad-bolivia`. Una fecha mal citada en una propuesta es peor que no citarla.
+NO inventes el runway: si el dato no esta, se dice que no esta.
+```
+
+---
+
+## D3 · La busqueda de marca de Bs 75 que bloquea todo lo demas
+
+De la memoria: antes de gastar en registrar la marca hay que hacer la busqueda **PI-112 en el
+SENAPI, que cuesta Bs 75**. Es P0 y sigue sin hacerse. Registrar sin buscar es arriesgar el
+gasto entero.
+
+```text
+Sesion: la administrativa/legal. git branch --show-current primero.
+TAREA UNICA: dejar lista la busqueda de antecedentes marcarios PI-112 en SENAPI (Bs 75) para
+que Sergio la presente: formulario, requisitos, donde se paga, y a nombre de quien va.
+OJO QUIEN FIRMA: la titular legal es Leslie Mercado Moreno (SEPREC), no Sergio. Todo acto legal
+va a su nombre.
+LISTO = el tramite armado y el costo confirmado, listo para presentar. Y la decision escrita:
+se registra la marca MIXTA (nombre + logo), que es lo que ya estaba definido.
+NO HAGAS: no inicies el registro antes de la busqueda — si hay un antecedente, se pierde la
+tasa. No propongas que firme Sergio.
+```
+
+---
+
+**Por que estos tres y no mas.** Salen de verificar hechos, no de opinar. D1 se confirmo contra
+la base de produccion hoy; D2 son fechas escritas; D3 es un tramite con precio. El resto de la
+memoria (S1-S9, Postiz bloqueado por DNS, etc.) son bloqueos de Sergio: no necesitan prompt,
+necesitan que los haga.
+
+**Total: 30 prompts escritos · 1 anulado · 29 vigentes.**
+
+---
+
+## B3 · Encender el intake automatico de video
+
+```text
+Sesion: infra (carril G, UN SOLO DUENO). git branch --show-current primero.
+TAREA UNICA: dejar el intake de video corriendo sin Sergio. El codigo ya existe y esta verde:
+  - `scripts/video-intake.mjs` (link -> mp4 -> lectura -> verbatim -> ficha)
+  - `.github/workflows/video-intake.yml` (workflow_dispatch + repository_dispatch)
+Falta SOLO cablear: (1) crear el secret GEMINI_API_KEY en el repo; (2) opcional IG_COOKIES_B64
+(se regenera con `node .claude/skills/ver-videos/scripts/fetch-video.mjs --login`; la sesion de
+IG caduca, hay que refrescarlo); (3) un workflow n8n que escuche Telegram, detecte un link de
+IG/TikTok/YouTube y dispare repository_dispatch con event_type "video-intake".
+LISTO = Sergio manda un link por Telegram y la ficha aparece commiteada en
+hermes-content/references/video-intake/ + aviso de vuelta por Telegram. Probado punta a punta
+con un link real.
+NO HAGAS: el token de GitHub para n8n va como CREDENCIAL de n8n (Header Auth), NUNCA como
+$env — el plan VPS no lo soporta. No pegues la key en el workflow.
+LIMITE CONOCIDO: la cuota gratis de Gemini corta a ~20 videos por dia. Si se supera, el script
+ya cae al camino alternativo (Whisper + fotogramas); no hay que arreglarlo.
+```
+
+---
+
+## B4 · Probar los 6 patrones en vivo (chico, 20 min)
+
+```text
+Sesion: cualquiera con navegador. git branch --show-current primero.
+TAREA UNICA: mirar los 6 patrones moverse y anotar si el timing esta bien.
+  npx serve hermes-content/references/ui-patterns
+Patrones: upload-button, checkout-card, floating-cart, dropzone-progress, chat-widget, sidebar-nav.
+Por que hace falta: se verifico estado, DOM, accesibilidad y estados finales, pero NO el timing
+— con el panel del navegador oculto las transiciones CSS no avanzan y getComputedStyle devuelve
+el valor inicial. Nadie los vio moverse todavia salvo el upload-button.
+LISTO = una linea por patron: timing OK o "queda lento/rapido en X". Y probar con
+reduced-motion activado en DevTools (los 6 tienen que quedar legibles y completos).
+NO HAGAS: no toques el codigo en esta sesion. Solo mirar y anotar.
+```
+
+---
+
+---
+
+## E5 · Strix — evaluar, con el costo puesto sobre la mesa antes
+
+```text
+Contexto: de cinco plugins que recomendaba un reel, cuatro ya los teniamos. El quinto no, y
+es el de seguridad. Ficha con la verificacion:
+hermes-content/references/video-intake/2026-08-16-cinco-plugins-strix.md
+
+VERIFICADO con fuente (no repetido del reel): github.com/usestrix/strix, Apache 2.0. Son
+agentes autonomos que CORREN la app, la exploran, explotan fallas y validan cada hallazgo
+con una prueba de concepto real -- no un listado de "posibles vulnerabilidades". Tienen
+proxy HTTP, navegador para XSS/CSRF, terminal y entorno Python para exploits propios. La
+CLI es gratis; se paga el consumo de LLM.
+
+Por que nos toca: la plataforma maneja registro de clientes, datos de pacientes en el pack
+dental, y hay carrito y checkout en construccion. La seguridad de produccion se cerro y
+verifico el 2026-08-11, pero eso fue una REVISION, no un ataque. Un agente que valida con
+prueba de concepto encuentra otra clase de cosa.
+
+BLOQUEO REAL, decilo antes de intentar nada: Strix consume LLM y necesita API key propia.
+Las keys del .env estan invalidas, y la suscripcion de Claude Code NO sirve para esto: no es
+una API. O sea, HOY no se puede correr sin gasto nuevo.
+
+Tarea, en este orden y sin saltarse el 1:
+1. Estimá el costo de una corrida contra UNA app chica nuestra. Numero concreto, con el
+   supuesto de tokens escrito. Si no se puede estimar, decilo y pará ahi.
+2. Presentale a Sergio: costo estimado + que app se atacaria + que se rompe si sale mal.
+3. NO CORRAS NADA hasta que Sergio apruebe el gasto explicitamente.
+4. Si aprueba: corré SOLO contra un entorno de prueba, NUNCA contra produccion, y entregá
+   los hallazgos con su prueba de concepto.
+
+Gasto pago sin permiso explicito = prohibido. Esto no es la excepcion.
+
+LISTO = la estimacion de costo esta escrita y presentada. Si no hubo aprobacion, LISTO es
+exactamente eso y nada mas -- no se corre igual "para probar".
+```
+
+---
+
+## `pendiente`
+
+Dos evaluaciones baratas que no encajan en ningún frente de producto.
+
+```text
+Sesión: pendiente. Dos micro-tareas, ninguna gasta plata todavía.
+1. APIFY — de 2026-08-11-cinco-herramientas-contenido-claude.md. Evaluar qué puede extraer de
+   Instagram sin token propio, con qué límites y a qué precio. Importa porque el token de IG
+   está bloqueado (S6) y eso frena prospección y medición. LISTO = una tabla: qué extrae,
+   límites, precio, y si destraba o no lo que S6 tiene frenado. NO des de alta la cuenta.
+   AGREGADO 2026-08-15: compará Apify contra `scrapling` (github.com/D4Vinci/Scrapling), que es
+   open source, gratis y trae bypass de Cloudflare. Si scrapling alcanza, Apify no se paga.
+   Sale de 2026-08-15-vision-en-el-celular-y-espionaje-de-pauta.md.
+2. HANDY (dictado por voz) — de 2026-08-11-handy-dictado-voz-alternativa-wispr-flow.md.
+   La demo del video es en Mac y acá se trabaja en Windows 11: VERIFICAR soporte Windows,
+   repo y licencia ANTES de instalar nada. LISTO = sí/no con la fuente.
+NO HAGAS: no evalúes "Last 30 Days" a fondo sin antes comparar contra el Radar de Novedades
+IA que ya corre por cron cada 2 h. Si no aporta algo que el radar no cubra, se descarta.
+```
+
+---
+
+---
+

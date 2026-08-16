@@ -16,8 +16,13 @@
 > entrega). Antes de escribir una ficha se carga la skill del tema:
 > [SKILLS_DEL_CARRIL.md](SKILLS_DEL_CARRIL.md).
 >
-> **Prompts que salen de acá:** [PROMPTS_POR_SESION.md](PROMPTS_POR_SESION.md) (lotes hasta el
-> 15-ago) · [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md) (E1–E11).
+> **Prompts que salen de acá — para pegar:** [`sesiones/`](sesiones/README.md) tiene **un
+> archivo por sesión**, autocontenido (preámbulo + gates + todos sus prompts, en orden). Es lo
+> que se abre para trabajar.
+>
+> **La fuente de esos prompts:** [PROMPTS_POR_SESION.md](PROMPTS_POR_SESION.md) (lotes hasta el
+> 15-ago) · [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md) (E1–E11). Si cambia una
+> regla, se edita acá, no la copia de `sesiones/`.
 
 Bandeja de entrada de videos para **extraer información y decidir si sirve**. Distinta de
 `../creator-video-references/`, que estudia patrones creativos (hook, ritmo, CTA); acá el
