@@ -28,8 +28,13 @@ start_image · end_image · image_references · video_references · audio_refere
 Tags del modelo: `reference · identity · consistent · product · multi-sku · e-commerce`.
 Resolución hasta `4k` con `mode: std`; `mode: fast` es más barato y llega a 720p.
 
-**Tres videos distintos dijeron "Seedance 2.5" y "33 días ilimitado".** Los tres se equivocan
-para nuestra cuenta. Tercera fuente repitiendo lo mismo no lo vuelve cierto.
+**Tres videos distintos dijeron "Seedance 2.5" y "33 días ilimitado".** El 12-ago las dos eran
+falsas para nuestra cuenta. Al 15-ago solo una lo sigue siendo: **lo ilimitado no aplica**
+(`unlim.available = false`), pero **Seedance 2.5 apareció**.
+
+La lección de método no cambia: se verifica contra la cuenta, no contra el reel. Lo que se
+agrega es que **una verificación tiene fecha de vencimiento** — esta duró tres días. Antes de
+planificar sobre un dato de catálogo, re-listar.
 
 ## 2. La receta de 3 insumos — el hallazgo principal
 
