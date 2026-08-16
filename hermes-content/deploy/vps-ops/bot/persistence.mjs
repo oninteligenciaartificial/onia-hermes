@@ -149,6 +149,14 @@ function leadCompanyName(state) {
  *          contact_permission = excluded.contact_permission, data_complete = excluded.data_complete,
  *          raw = onia_center.leads.raw || excluded.raw, updated_at = now();
  */
+/**
+ * `leads.business_type` es NOT NULL sin default, y el lead se crea con el PRIMER mensaje —
+ * cuando el rubro todavia no se pregunto. Mandar null hacia fallar el insert entero con 23502 y
+ * NINGUN lead llegaba al CRM: el bot conversaba y no dejaba rastro comercial. Se escribe este
+ * centinela y se corrige en cuanto el prospecto dice a que se dedica (ver `upsertLead`).
+ */
+export const RUBRO_SIN_DEFINIR = "sin definir";
+
 export function buildLeadRow(payload, state) {
   const q = { ...(state.qualification || {}), ...(payload.qualification || {}) };
   // Los 3 campos de calificacion cambiaron (rubro/tamano/ciudad). Con los viejos esto daba
@@ -159,7 +167,7 @@ export function buildLeadRow(payload, state) {
   return {
     lead_key: state.leadKey || payload.leadKey || leadKeyFor(state.conversationKey),
     company_name: leadCompanyName(state),
-    business_type: q.industry || null,
+    business_type: q.industry || RUBRO_SIN_DEFINIR,
     city: q.city || null,
     country: "Bolivia",
     // El TELEFONO si lo hay; si no, se cae al `contactRef` de siempre. Sin este fallback un lead
@@ -668,6 +676,10 @@ export function createStore(options = {}) {
       raw: merged,
     };
     if (row.pain_point) patch.pain_point = row.pain_point;
+    // El rubro se corrige UNA vez: entra como centinela con el primer mensaje y se pisa cuando el
+    // prospecto dice a que se dedica. El guard evita el camino inverso — que un turno posterior sin
+    // calificacion devuelva a "sin definir" un rubro ya sabido (o corregido a mano por un humano).
+    if (row.business_type !== RUBRO_SIN_DEFINIR) patch.business_type = row.business_type;
     // Solo cuando hay TELEFONO de verdad. Sin este guard, un lead al que un humano ya le corrigio
     // el contacto a mano quedaria pisado con el id de conversacion en cada turno siguiente.
     if (state.publicContact) patch.public_contact = state.publicContact;
