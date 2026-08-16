@@ -152,6 +152,35 @@ no solo el que.
 
 ---
 
+### Gate 3 — el loop: auto-evaluacion ANTES de responder
+
+Sale del reel de AI loops, que en la primera pasada despache como humo y era el mas importante
+del corpus ([ficha](2026-08-09-ai-loops-code-review.md)). La idea no es el comando: es **donde
+esta el control**. La verificacion va antes de entregar, no despues de que Sergio encuentre el
+error.
+
+```text
+Antes de decir que terminaste, corre este loop sobre tu propio trabajo:
+1. Reelee el "LISTO =" del prompt. ¿Lo cumpliste, literal? No "casi".
+2. Buscá activamente en que te podes haber equivocado. Nombra la parte mas fragil de lo que
+   hiciste y comprobala. Si no encontras ninguna parte fragil, no miraste bien.
+3. Lo que afirmes, verificalo: si decis que algo existe, abrilo; si decis que funciona,
+   corrélo; si decis que se perdio, revisá que estabas mirando el lugar correcto.
+4. Deci explicitamente que NO pudiste verificar. Un "esto quedo sin comprobar" vale mas que un
+   "listo" que se cae al primer toque.
+5. Recien ahi respondé.
+Si el paso 2 encuentra algo, corregilo y volve al 1. El loop se cierra cuando una pasada
+completa no encuentra nada nuevo — no cuando te cansaste de mirar.
+```
+
+**Un gate que depende de acordarse no es un gate.** En una sola sesion, con los Gates 1 y 2 ya
+escritos, se entregaron cinco cosas sin verificar: un prompt que mandaba a rehacer trabajo
+terminado, dos bloqueos que no existian, un archivo "perdido" que estaba intacto, y una
+escritura en el arbol de otra rama. En los cinco casos el dato correcto estaba a una consulta
+de distancia.
+
+---
+
 **Para delegar a subagentes** (esto se probo con 8 agentes en paralelo y funciono):
 
 ```text
