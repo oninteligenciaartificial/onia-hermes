@@ -380,6 +380,35 @@ const RUBROS = Object.freeze([
     label: "odontología",
     re: /\bdentista\w*\b|\bodontolog\w+|\bortodonc\w+|\bclinica dental\b|\bconsultorio dental\b|\blaboratorio dental\b|\bprotesis dental\w*|\bsillones?\b/,
   }),
+  // Veterinaria y estetica son rubros PROPIOS desde 2026-08-16 (decision de Sergio). Antes caian
+  // en `salud` y en `servicios` respectivamente, asi que el bot le decia a un veterinario "anotado
+  // que te dedicás a salud" — y Sergio llegaba a la demo sin saber de que rubro hablaba.
+  //
+  // Por que NO se pudo hacer con la capa editable (`rubrosExtra`), que existe justo para esto:
+  // las palabras del archivo entran DESPUES de las del codigo dentro de cada nivel, y
+  // "la primera que matchea gana" (candado 1 de lexiconOf). Como `salud` ya tiene `veterinari\w+`
+  // como palabra FUERTE, un rubro editable "veterinaria" no le ganaria nunca. Mover la palabra de
+  // rubro es lo unico que lo arregla, y eso es codigo.
+  //
+  // Los dos SIGUEN EL CORE: reusan las pantallas clinicas del track (`vetgest-clinical`,
+  // `esteticagest-clinical` en onia-platform). Acá no se construye nada nuevo, solo se los
+  // identifica bien. NO se agregan a PRODUCTOS ni a MODULOS_LISTOS: nombrar un modulo es una
+  // promesa comercial y esa decision es de Sergio, no de este archivo.
+  Object.freeze({
+    key: "veterinaria",
+    label: "veterinaria",
+    // Sale de `salud`, donde vivia `veterinari\w+`. Va ANTES para ganarle.
+    re: /\bveterinari\w+|\bclinica veterinaria\b|\bconsultorio veterinario\b/,
+    weak: /\bmascotas?\b/,
+  }),
+  Object.freeze({
+    key: "estetica",
+    label: "estética",
+    // Sale de `servicios`, donde vivia `\bestetica\b`. OJO: peluqueria, barberia, salon de belleza
+    // y spa SE QUEDAN en `servicios` — el track del core es la clinica estetica (agenda + ficha),
+    // no el salon. Meterlos aca les cambiaria el rubro a negocios que no son ese.
+    re: /\bestetica\b|\bmedicina estetica\b|\bcentro de estetica\b|\bcosmiatr\w+|\bdepilacion laser\b/,
+  }),
   Object.freeze({
     key: "gastronomia",
     label: "gastronomía",
@@ -389,13 +418,17 @@ const RUBROS = Object.freeze([
   Object.freeze({
     key: "salud",
     label: "salud",
-    re: /\bconsultorio medico\b|\bcentro medico\b|\bpediatr\w+|\bdermatolog\w+|\bfisioterap\w+|\bkinesiolog\w+|\bpsicolog\w+|\bnutricionist\w+|\boftalmolog\w+|\btraumatolog\w+|\bginecolog\w+|\bveterinari\w+|\blaboratorio clinico\b|\bmedic[oa]s?\b/,
+    // `veterinari\w+` se fue a su propio rubro (arriba). Sacarlo de acá es la mitad del arreglo:
+    // si se queda, `salud` le sigue ganando por orden y el rubro nuevo no se usa nunca.
+    re: /\bconsultorio medico\b|\bcentro medico\b|\bpediatr\w+|\bdermatolog\w+|\bfisioterap\w+|\bkinesiolog\w+|\bpsicolog\w+|\bnutricionist\w+|\boftalmolog\w+|\btraumatolog\w+|\bginecolog\w+|\blaboratorio clinico\b|\bmedic[oa]s?\b/,
     weak: /\bclinicas?\b|\bconsultorios?\b/,
   }),
   Object.freeze({
     key: "servicios",
     label: "servicios",
-    re: /\bpeluqueri\w+|\bbarberi\w+|\bsalon de belleza\b|\bestetica\b|\bgimnasio\b|\bspa\b|\bhotel\w*\b|\bhostal\b|\binmobiliari\w+|\bconstructora\b|\bcontabilidad\b|\bcontador\w*\b|\babogad\w+|\bestudio juridico\b|\bbufete\b|\bacademia\b|\bcolegio\b|\bescuela\b|\bguarderi\w+|\bimprenta\b|\bfotografi\w+|\blavanderi\w+|\btaller mecanico\b|\bmecanic[ao]\b|\bcerrajeri\w+|\bmudanzas\b|\btransporte\b|\blimpieza\b/,
+    // `\bestetica\b` se fue a su propio rubro (arriba). Peluqueria, barberia, salon de belleza y
+    // spa se quedan acá a proposito: son servicios, no la clinica estetica del track del core.
+    re: /\bpeluqueri\w+|\bbarberi\w+|\bsalon de belleza\b|\bgimnasio\b|\bspa\b|\bhotel\w*\b|\bhostal\b|\binmobiliari\w+|\bconstructora\b|\bcontabilidad\b|\bcontador\w*\b|\babogad\w+|\bestudio juridico\b|\bbufete\b|\bacademia\b|\bcolegio\b|\bescuela\b|\bguarderi\w+|\bimprenta\b|\bfotografi\w+|\blavanderi\w+|\btaller mecanico\b|\bmecanic[ao]\b|\bcerrajeri\w+|\bmudanzas\b|\btransporte\b|\blimpieza\b/,
     weak: /\btalleres?\b|\bagencias?\b|\bestudio\b|\bconsultora\b/,
   }),
   Object.freeze({

@@ -15,16 +15,30 @@ bot), `onia-platform/lib/platform/types.ts` (tracks del producto). Todo el 2026-
 | Track del producto | Rubro del bot | ¿Chatbot? |
 |---|---|---|
 | `dentagest-clinical` | `dental` | sí |
-| `esteticagest-clinical` | `dental` (reusa agenda+ficha) | sí — **falta su propio léxico** |
-| `vetgest-clinical` | `dental` (reusa agenda+ficha) | sí — **falta su propio léxico** |
+| `esteticagest-clinical` | `estetica` | sí — ✅ rubro propio desde el 16-ago |
+| `vetgest-clinical` | `veterinaria` | sí — ✅ rubro propio desde el 16-ago |
 | `gestios-general` | `comercio` | sí |
 | `gestios-servicios-profesionales` | `servicios` | sí |
 | `proveegest-electrico` | `proveedores` | sí |
 | `ganadero-offline` | — | **NO.** El contrato del core le **bloquea WhatsApp**. No se le vende chatbot |
 
-**Acción que sale de acá:** estética y veterinaria hoy caen en el léxico `dental`. Un cliente
-veterinario que escriba "vacunación" o "desparasitación" no matchea nada. Se arregla **sin
-desplegar**, cargando `rubrosExtra` (§3).
+> ✅ **CERRADO 2026-08-16.** Veterinaria y estética son rubros propios del bot. Antes
+> `veterinari\w+` caía en `salud` y `estetica` en `servicios`: el bot le decía a un veterinario
+> *"anotado que te dedicás a salud"*. Verificado en producción después del cambio: dice
+> **veterinaria** y **estética**, y peluquería/salón/spa siguen siendo `servicios`.
+>
+> **Por qué NO se pudo con `rubrosExtra`** (que existe justo para agregar rubros sin desplegar):
+> las palabras del archivo entran **después** de las del código dentro de cada nivel y la primera
+> que matchea gana. Como `salud` ya tenía `veterinari\w+` como palabra fuerte, un rubro editable
+> nunca le habría ganado. **Mover una palabra de un rubro a otro es código, no edición.** Es la
+> excepción a la regla de §3 y conviene tenerla presente antes de prometer "esto se edita solo".
+>
+> Los dos **siguen el core**: reusan las pantallas clínicas de su track
+> (`vetgest-clinical`, `esteticagest-clinical`). No se construyó nada nuevo.
+>
+> **Queda pendiente y es decisión comercial:** no se agregaron a `PRODUCTOS` ni a
+> `MODULOS_LISTOS`. Nombrar un módulo como listo es una promesa de venta (N2) y esa la toma
+> Sergio, no el código.
 
 ---
 
@@ -88,9 +102,8 @@ crear el mensaje del guion que la consume y su test. Es un commit, no una edici�
 
 ## 3. Lo que hay que cargar YA, sin esperar al panel
 
-Sin tocar código, y arregla el hueco más grande:
+Sin tocar código:
 
-- `rubrosExtra` para **veterinaria** y **estética** — hoy comparten el léxico dental.
 - `productos` con lo que realmente vendemos, para que el bot no invente.
 - Revisar `empresa.horario` (hoy dice lun-vie 9-18) contra lo que atendemos de verdad.
 
@@ -106,7 +119,7 @@ código** — nunca queda a medias.
 |---|---|---|
 | 1 | **¿Se habilitan FAQs por cliente?** | Es lo primero que un dueño quiere cargar. Hoy es imposible sin commit. Alternativa barata: **una** FAQ genérica por cliente (`id: "negocio"`) con un mensaje de guion que la consuma — un commit, y después es edición pura |
 | 2 | **¿El conocimiento pasa a la base?** | Hoy es UN archivo global. Para N clientes tiene que ser una fila por organización. Sin esto el panel no tiene qué editar |
-| 3 | **¿Veterinaria y estética son rubros propios del bot o siguen bajo `dental`?** | Si son propios, cambian las preguntas de calificación (a un veterinario no se le pregunta cuántos sillones tiene) |
+| 3 | ~~¿Veterinaria y estética son rubros propios?~~ | ✅ **DECIDIDO 16-ago: sí, propios, siguiendo el core.** Hecho y verificado en producción. Nota: **no** se les agregó rama de calificación propia — el `chairs` de dental sigue siendo la única. A un veterinario no se le pregunta nada extra, y está bien: la rama es opcional por diseño |
 
 ---
 

@@ -426,6 +426,25 @@ test("mismo estado + mismo mensaje = misma salida (sin Date.now ni Math.random)"
   assert.deepEqual(a.state, b.state);
 });
 
+test("veterinaria y estética son rubros propios, y no se roban los que ya existían", () => {
+  // Antes del 2026-08-16: `veterinari\w+` vivía en `salud` y `estetica` en `servicios`, así que el
+  // bot le decía a un veterinario "anotado que te dedicás a salud". Sergio llegaba a la demo sin
+  // saber de qué rubro hablaba. La capa editable NO podía arreglarlo: sus palabras entran después
+  // de las del código y `salud` le ganaba siempre.
+  const rubroDe = (frase) => run(["hola", frase]).turns[1].nextState.qualification.industry;
+
+  assert.equal(rubroDe("tengo una veterinaria en santa cruz"), "veterinaria");
+  assert.equal(rubroDe("soy veterinario, atiendo mascotas"), "veterinaria");
+  assert.equal(rubroDe("tengo un centro de estetica"), "estetica");
+
+  // La otra mitad: mover una palabra no puede cambiarle el rubro a quien ya lo tenía bien.
+  // Peluquería, salón y spa son SERVICIOS — el track del core es la clínica estética, no el salón.
+  assert.equal(rubroDe("tengo una peluqueria"), "servicios");
+  assert.equal(rubroDe("tengo un salon de belleza"), "servicios");
+  assert.equal(rubroDe("tengo un consultorio medico"), "salud", "salud no se queda vacío");
+  assert.equal(rubroDe("tengo una clinica dental"), "dental", "dental sigue ganándole a 'clinica'");
+});
+
 test("un PACIENTE con sintomas va a un humano, y un DENTISTA presentandose sigue en el embudo", () => {
   // Verificado en vivo el 2026-08-16 y fallaba: "me duele mucho la muela, QUE HAGO" caia en la
   // rama LLM. La palabra "hago" activaba el guardia de practica propia (pensado para "hago
