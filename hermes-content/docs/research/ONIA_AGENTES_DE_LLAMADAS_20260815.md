@@ -463,8 +463,22 @@ O sea: para verse boliviano hay que volver a Entel/Tigo/Cotas.
 Contexto de partida (dato del coordinador, verificado por Onia hoy, no por mí): Onia ya es
 dueña del número **+591 75414930** en Cloud API, calidad **GREEN**, y tramita Tech Provider.
 
+> ⚠️ **Corrección del 2026-08-16.** Esta lista se escribió sin mirar
+> `ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md`, que ya tenía el plan por fases y que
+> **manda sobre esta sección**. Le faltaban dos pasos, y uno de ellos rompe el producto en
+> silencio si se saltea: el **reparto de webhooks** (paso 1.b acá abajo, F1 en aquel doc) y
+> las **cuatro mediciones de F0** (latencia voz-a-voz real, caracteres de TTS por segundo de
+> audio, ratio de habla del bot, carga del VPS con 2 llamadas simultáneas). Sin F0 todo el
+> pricing de §4 se apoya en supuestos. Leer aquel doc antes de ejecutar esto.
+
 1. **Cerrar Business Verification ante Meta.** Es el único portero real y desbloquea el tier
    de 2.000, que es lo que habilita la Calling API. Ya está en trámite.
+1.b **Separar las llamadas de los mensajes ANTES de encender nada.** Hoy los webhooks de la
+   app viva van a Chatwoot. Si se habilita `calls` en esa misma app, los eventos de llamada
+   **también** caen en Chatwoot, que responde 200 y los descarta: el que llama escucha
+   silencio. El diagnóstico equivocado ("no funciona la Calling API") cuesta días. La salida
+   barata es una segunda app de Meta para las llamadas (30–45 min, reversible, no toca la app
+   viva); el repartidor propio es el plan B. Detalle: doc de voz §2 y §6-F1.
 2. **Activar llamadas en el número propio de Onia y usarse de conejillo de indias.** Entrante
    primero: costo de transporte cero, sin permisos.
 3. **Enchufar el motor por SIP.** Onia ya corre un VPS y Meta publicó guía de Asterisk. La
