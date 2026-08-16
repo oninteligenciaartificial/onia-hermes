@@ -426,6 +426,26 @@ test("mismo estado + mismo mensaje = misma salida (sin Date.now ni Math.random)"
   assert.deepEqual(a.state, b.state);
 });
 
+test("un PACIENTE con sintomas va a un humano, y un DENTISTA presentandose sigue en el embudo", () => {
+  // Verificado en vivo el 2026-08-16 y fallaba: "me duele mucho la muela, QUE HAGO" caia en la
+  // rama LLM. La palabra "hago" activaba el guardia de practica propia (pensado para "hago
+  // endodoncia") y anulaba el corte clinico. Un paciente con dolor recibia el pitch de venta.
+  const paciente = run(["hola", "me duele mucho la muela, que hago"]);
+  assert.equal(paciente.turns[1].nextState.botStage, "handoff_humano", "el sintoma corta a humano");
+  assert.match(textOf(paciente.turns[1]), /soy un bot/i, "y al derivar vuelve a decir que es un bot");
+
+  // Sintomas que no traen ninguna palabra de procedimiento: antes no cortaban nunca.
+  for (const msg of ["tengo mucho dolor y fiebre desde ayer, es urgente", "cuantas pastillas me tomo al dia"]) {
+    assert.equal(run(["hola", msg]).turns[1].nextState.botStage, "handoff_humano", `deberia cortar: ${msg}`);
+  }
+
+  // La otra direccion importa igual: el dueño de la clinica es el PROSPECTO, no un paciente.
+  // Si esto se rompe, el bot deja de calificar justo a quien le queremos vender.
+  for (const msg of ["hago endodoncia en mi consultorio", "mi dolor es que pierdo clientes por no contestar"]) {
+    assert.notEqual(run(["hola", msg]).turns[1].nextState.botStage, "handoff_humano", `NO deberia cortar: ${msg}`);
+  }
+});
+
 test("contar el negocio en vez de elegir horario TAMBIEN actualiza el lead del CRM", () => {
   // El sintoma: el prospecto decia "ferreteria, 5, santa cruz" en vez de elegir A o B, y despues se
   // callaba. El dato quedaba en `bot_conversations` y el CRM seguia diciendo "sin definir" y sin

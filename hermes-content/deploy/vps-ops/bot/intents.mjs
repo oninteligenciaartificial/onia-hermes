@@ -73,7 +73,17 @@ const RE_QUEJA = /\bestafa\w*\b|\bchant\w+|\bfraude\b|\bno les creo\b|\bno te cr
 // cuando se abrio.
 const RE_BRONCA_CON_SU_SISTEMA = /\b(?:sistema|programa|software|app|excel|planilla|agenda|proveedor)\b[^.]{0,40}\b(?:que (?:uso|tengo|manejo|usaba|use|tenia|contrate)|actual|de ahora)\b|\b(?:uso|tengo|manejo|use|usaba|tenia|contrate)\b[^.]{0,30}\b(?:sistema|programa|software|excel|planilla)\b/;
 
-const RE_CLINICO = /\b(?:diagnostic\w+|tratamiento|extraccion|endodoncia|caries|implante|anestesia|receta|medicament\w+|muela|carilla\w*)\b/;
+// Vocabulario clinico. Dos grupos con criterios distintos, a proposito:
+//   1. PROCEDIMIENTOS Y COSAS: solo aparecen en contexto clinico, van sueltos.
+//   2. SINTOMAS: agregados 2026-08-16 porque el corte no cubria lo que de verdad escribe un
+//      paciente. Se probo en vivo: "tengo mucho dolor y fiebre desde ayer, es urgente" NO cortaba.
+//      OJO con `dolor` SUELTO: en este embudo "dolor" es el DOLOR DE NEGOCIO que buscamos
+//      ("mi dolor es que pierdo clientes") y cortarlo mataria la calificacion. Por eso va la
+//      forma VERBAL (`duele`) y `dolor de <parte del cuerpo>`, nunca el sustantivo solo.
+const RE_CLINICO =
+  /\b(?:diagnostic\w+|tratamiento|extraccion|endodoncia|caries|implante|anestesia|receta|medicament\w+|muela|carilla\w*)\b/;
+const RE_SINTOMA =
+  /\b(?:duele|duelen|dolor de (?:muela|diente|cabeza|encia|estomago|garganta|oido)|fiebre|sangra\w*|sangrado|hinchad\w+|inflamad\w+|pastilla\w*|dosis|infeccion|absceso)\b/;
 // Consulta legal: consejo profesional, no vocabulario clinico. `\bdemanda\b` suelto NO va:
 // "la demanda esta baja este mes" habla del negocio del prospecto, no de un juicio.
 // El consejo FISCAL (RE_CONSEJO_FISCAL) se juzga aparte y es absoluto: siempre va a un humano.
@@ -84,7 +94,13 @@ const RE_LEGAL_CONSULTA = /\bcontrato\b|\babogad\w+|\bjuicio\b|\b(?:me|nos|los) 
 // medico son PROSPECTOS: sus propias palabras no pueden ser lo que los saca del embudo.
 const RE_PRACTICA_PROPIA = new RegExp(
   [
-    "\\b(?:hago|hacemos|realizo|realizamos|atiendo|atendemos|me dedico|nos dedicamos|me especializo|especialist\\w+ en|especializad\\w+ en)\\b",
+    // El `(?<!que )` es de SEGURIDAD, no de estilo. Sin el, "me duele la muela, QUE HAGO" cazaba
+    // "hago" y el guardia daba por hecho que quien escribe es el dentista presentandose — asi que
+    // el corte clinico no se disparaba y un paciente con dolor recibia el pitch de venta. Es la
+    // frase mas probable que escribe alguien con dolor, y era justo la que se colaba.
+    // Se acepta el falso negativo del guardia ("lo que hago es vender repuestos" ya no lo protege):
+    // ese caso termina en un humano, que es el lado seguro de fallar.
+    "(?<!que )\\b(?:hago|hacemos|realizo|realizamos|atiendo|atendemos|me dedico|nos dedicamos|me especializo|especialist\\w+ en|especializad\\w+ en)\\b",
     "\\bsoy (?:abogad\\w+|contador\\w*|dentista|odontolog\\w+|medic[oa]|veterinari[oa]|arquitect[oa]|ingenier[oa])\\b",
     "\\bsomos (?:\\d+ |un[ao]s? )?(?:abogad\\w+|contador\\w+|dentistas?|odontolog\\w+|medicos?|veterinari\\w+)\\b",
     "\\b(?:tengo|tenemos|manejo|manejamos) (?:un|una|mi) (?:estudio|bufete|clinica|consultorio|laboratorio)\\b",
@@ -196,6 +212,10 @@ export function isClinicalOrLegal(norm) {
   const practicaPropia = RE_PRACTICA_PROPIA.test(norm);
   // "somos 4 abogados en La Paz" se esta presentando; "necesito un abogado" pide consejo legal.
   if (RE_LEGAL_CONSULTA.test(norm)) return !practicaPropia;
+  // Un SINTOMA corta siempre, sin importar el guardia: quien describe un dolor o una fiebre no se
+  // esta presentando como profesional, y equivocarse hacia el lado de derivar a un humano no
+  // cuesta nada. Los procedimientos si pasan por el guardia ("hago endodoncia" es un prospecto).
+  if (RE_SINTOMA.test(norm)) return true;
   if (!RE_CLINICO.test(norm)) return false;
   return !practicaPropia;
 }
