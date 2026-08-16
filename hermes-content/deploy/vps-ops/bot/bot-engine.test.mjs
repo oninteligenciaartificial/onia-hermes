@@ -426,6 +426,25 @@ test("mismo estado + mismo mensaje = misma salida (sin Date.now ni Math.random)"
   assert.deepEqual(a.state, b.state);
 });
 
+test("contar el negocio en vez de elegir horario TAMBIEN actualiza el lead del CRM", () => {
+  // El sintoma: el prospecto decia "ferreteria, 5, santa cruz" en vez de elegir A o B, y despues se
+  // callaba. El dato quedaba en `bot_conversations` y el CRM seguia diciendo "sin definir" y sin
+  // ciudad, asi que en el panel el lead era inservible.
+  const { turns } = run(["DEMO", "tengo una ferreteria, somos 5, santa cruz"]);
+  const reask = turns[1];
+  assert.equal(reask.nextState.botStage, "esperando_horario", "sigue esperando que elija horario");
+
+  const lead = reask.sideEffects.find((effect) => effect.type === "lead_upsert");
+  assert.ok(lead, "el dato tiene que viajar al CRM, no solo a la conversacion");
+  assert.equal(lead.payload.qualification.industry, "comercio");
+  assert.equal(lead.payload.qualification.city, "Santa Cruz");
+  assert.equal(
+    lead.payload.pipelineStatus,
+    "Contactado",
+    "sumar un dato no puede hacer retroceder el lead a 'Nuevo' (buildLeadRow cae ahi si falta)",
+  );
+});
+
 test("el motor no escribe en la base: solo devuelve efectos declarativos", () => {
   const { turns } = run(["DEMO", "tengo una ferreteria, somos 5, santa cruz", "A"]);
   const tipos = new Set(turns.flatMap(effectsOf));

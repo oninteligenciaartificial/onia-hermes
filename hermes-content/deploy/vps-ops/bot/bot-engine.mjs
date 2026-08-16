@@ -558,7 +558,23 @@ function handleHorario(ctx, base) {
     // los dos horarios. El dato queda guardado, asi que M2 despues no se lo vuelve a pedir.
     if (Object.keys(ctx.found || {}).length > 0) {
       const reply = say("M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification, config)) });
-      return finalize(ctx, base, [reply], [], ["repregunta:horario"]);
+      // El dato tambien va al CRM, no solo a la conversacion. Sin esto, quien contaba su negocio en
+      // vez de elegir horario y despues se callaba quedaba en el CRM como "sin definir" y sin
+      // ciudad: el rubro y el tamano vivian en `bot_conversations` y nadie los veia en el panel.
+      // El estado del pipeline se manda EXPLICITO porque `buildLeadRow` cae a "Nuevo" si falta, y
+      // sumar un dato no puede hacer retroceder un lead que ya estaba contactado.
+      const effects = [
+        {
+          type: "lead_upsert",
+          payload: {
+            conversationKey: base.conversationKey,
+            leadKey: base.leadKey,
+            qualification: base.qualification,
+            pipelineStatus: config.pipelineStatus.calificado,
+          },
+        },
+      ];
+      return finalize(ctx, base, [reply], effects, ["repregunta:horario"]);
     }
     return offScriptResult(ctx, base);
   }
