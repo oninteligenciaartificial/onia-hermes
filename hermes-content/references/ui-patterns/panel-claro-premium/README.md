@@ -5,15 +5,16 @@ Datos de muestra, **no es producción**. Rediseñan el MISMO contenido del panel
 real (métricas del día, agenda de hoy, reactivación, aprobaciones del agente,
 accesos rápidos).
 
-## Los 3 archivos
+## Los 4 archivos
 
 | Archivo | Qué es |
 |---|---|
 | `index.html` | v1. Primera pasada de la dirección: banda de pulso con cifra dominante, 3 niveles de elevación sobre lienzo tintado `#EDF2EF`, agente como única superficie oscura. Tipografía: Manrope 700-800 (títulos y cifras) + Inter 400-600 (resto). |
 | `index-letra-b.html` | Variante B de v1: **mismo layout y tokens que `index.html`; solo cambia el par tipográfico** a Bricolage Grotesque (display) + Schibsted Grotesk (UI). |
-| `index-v2.html` | **VIGENTE.** Reorganización estructural sobre v1 (feedback Sergio 2026-08-16): sidebar = la navegación REAL completa (`navigation.ts`, vista ADMIN, 16 items), logo real del producto, shell de 3 zonas (nav · día · bandeja), pulso compacto horizontal, agenda como columna dominante con riel de tiempo, y el agente como bandeja de decisiones de altura completa con los 2 agentes reales (Cobrador y Recall). Usa el par tipográfico B ya decidido. |
+| `index-v2.html` | Reorganización estructural sobre v1 (feedback Sergio 2026-08-16): sidebar = la navegación REAL completa (`navigation.ts`, vista ADMIN, 16 items), logo real del producto, shell de 3 zonas (nav · día · bandeja), pulso compacto horizontal, agenda como columna dominante con riel de tiempo, y el agente como bandeja de decisiones de altura completa con los 2 agentes reales (Cobrador y Recall). Usa el par tipográfico B ya decidido. |
+| `index-v3.html` | **VIGENTE.** Mismo contenido real de v2, composición elevada con 3 referencias elegidas por Sergio (feedback "está súper genérico"): la cifra del día como tarjeta héroe oscura con gráfico que sangra al borde (Fireart 25241984 + Stakent 23902428), micro-gráficos en línea por celda con textura que codifica estado (OnPoint 25540988 + Fireart), cita en curso flotante, dock con textura de anillos y contador con anillo de progreso. Los patrones quedaron escritos en `web-factory/WEB_FACTORY_PATTERN_BANK_2026.md § Dashboard` y como primitivas tipadas en `web-factory/packages/templates/src/dashboard.ts` (variant accent, spark, pending, lists). Mapa patrón→referencia en las notas al pie del HTML. |
 
-## Por qué v2 es la vigente
+## Por qué v2 reorganizó (y v3 hereda)
 
 - Todo lo que muestra mapea a una función que EXISTE según
   `hermes-content/docs/ONIA_AUDITORIA_FUNCIONAL_DENTAL.md`; lo faltante quedó
