@@ -41,6 +41,48 @@ sigue en desarrollo (dev) en paralelo y es el producto que después vendés.
 Datos a tener a mano: NIT 5371375010 · razón social LESLIE MERCADO MORENO · actividades arriba ·
 correo del negocio · datos del cliente (NIT/CI + razón social).
 
+## Qué falta EXACTAMENTE para facturar (verificado 2026-08-15)
+
+> Regla de la casa: no se dice "no está disponible" — se dice qué falta. Esto es
+> lo que falta, en dos carriles que no se bloquean entre sí.
+
+### Carril A — facturar las ventas DE ONIA (todo de Sergio, cero dev)
+
+| # | Paso | Dónde | Estado |
+|---|---|---|---|
+| 1 | Entrar a la Oficina Virtual con el NIT 5371375010 | impuestos.gob.bo | NIT **ACTIVO**, IVA vigente ✅ |
+| 2 | Habilitar modalidad **Portal Web en Línea** | Oficina Virtual | ⬜ pendiente (el padrón figura "Computarizada — PENDIENTE") |
+| 3 | Configurar casa matriz + 1 punto de venta | Oficina Virtual | ⬜ |
+| 4 | Registrar servicios y sincronizar catálogos | Oficina Virtual | ⬜ |
+| 5 | Emitir una factura de prueba y validar PDF/XML | Oficina Virtual | ⬜ |
+
+Con esto Onia **factura sus propias ventas ya**, a mano desde el portal del SIN.
+Ningún paso depende de código.
+
+### Carril B — que EL PRODUCTO emita para los clientes (dev + trámite)
+
+Estado real del código (verificado en `onia-platform/lib/fiscal/`):
+
+- `emission-service.ts` — el enchufe por país existe y está probado ✅
+- `siat-client.ts` — **es un MOCK deliberado**: cero llamadas de red, CUFD/CUF
+  simulados y marcados `mock: true`. **La integración SOAP real no existe todavía.**
+- Los WSDL reales del SIN ya están bajados y estudiados (2026-08-06):
+  `FacturacionCodigos`, `FacturacionSincronizacion` y servicios asociados.
+
+Lo que falta, en orden:
+
+| # | Qué | Quién | Notas |
+|---|---|---|---|
+| 1 | Registrar el sistema en la Oficina Virtual como **sistema de facturación** (arranca la fase de pruebas) | Sergio | destraba TODO el dev de la fase 1 |
+| 2 | Implementar el cliente SOAP real contra los WSDL (CUIS → CUFD → emisión → validación) reemplazando el mock | dev | el enchufe ya está; es rellenar `siat-client` |
+| 3 | Pasar el ciclo de pruebas del SIN en ambiente de test | ambos | el plan completo vive en `onia-core/ONIA_SIAT_CERTIFICACION_PLAN_2026.md` |
+| 4 | Certificar como **sistema PROVEEDOR** (RND 102100000011 art. 17) | Sergio firma, dev acompaña | UNA certificación sirve para TODOS los clientes; modalidad Computarizada en Línea = sin certificado de firma digital por cliente |
+| 5 | Encender `mock: false` por organización y verificar la primera factura real | dev | recién acá se puede prometer "emitimos" |
+
+**La fecha que manda:** RND 102600000007 — el último tramo del padrón queda
+obligado a facturar en línea el **30-sep-2026**. Cada semana que falta, miles de
+NITs buscan sistema autorizado. El carril B no es solo cumplimiento: es el pitch.
+
 ## Y después (cómo se conecta con nuestro sistema)
 
 - **Avisame cuando quede habilitado.** Ahí cambio `siat_emitting = true` en el Agente Finanzas y el
