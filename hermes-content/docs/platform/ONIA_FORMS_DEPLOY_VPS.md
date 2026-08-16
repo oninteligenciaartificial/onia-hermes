@@ -1,7 +1,14 @@
 # Onia Forms — Deploy VPS (runbook)
 
-Cuestionario y brief de clientes (`/cuestionario`, `/brief`), autohospedados en el
-VPS (`187.77.16.63`, Easypanel). Verificado en vivo 2026-08-01.
+Cuestionario, brief y alta de clientes (`/cuestionario`, `/brief`, `/alta`),
+autohospedados en el VPS (`187.77.16.63`, Easypanel). Verificado en vivo
+2026-08-01; `/alta` agregado y verificado 2026-08-16.
+
+**2026-08-16 — el dominio YA está vivo:** `forms.onia.com.bo` resuelve a
+`187.77.16.63` y Traefik emitió el certificado. Las URLs canónicas son
+`https://forms.onia.com.bo/cuestionario|/brief|/alta`. El puerto de prueba
+`8189` quedó **cerrado por el firewall** (ufw solo permite 80/443) — ya no
+sirve para verificar; usar el dominio directo.
 
 **Sigue vivo en Vercel.** `onia-forms.vercel.app` NO se tocó ni se apagó — los
 links viejos siguen sirviendo hasta que Sergio apruebe el apagado (ver "Pendiente
@@ -19,8 +26,16 @@ verificó byte a byte (diff ignorando CRLF) que el HTML servido en
 `onia-forms.vercel.app/cuestionario` y `/brief` es idéntico al que ya vive en
 este repo:
 
-- `hermes-content/propuestas/cuestionario-cliente.html`
-- `hermes-content/propuestas/brief-produccion.html`
+- `hermes-content/propuestas/cuestionario-cliente.html` → `/cuestionario`
+- `hermes-content/propuestas/brief-produccion.html` → `/brief`
+- `hermes-content/propuestas/alta-cliente.html` → `/alta` (Formulario de Alta de
+  Cliente, 2026-08-16: identidad + datos para el bot + datos para la web +
+  operación. Postea a `webhook/alta-cliente` → workflow n8n
+  `Alta de Cliente ONIA → CRM + Correo` [`O0NHmyqP6Fyk4f0b`], que inserta el
+  alta como lead `Ganado` en `onia_center.leads` vía SSH
+  `/opt/onia/lead-insert.mjs` — payload completo en `raw.alta`,
+  `source=alta-form` — y manda el resumen por Gmail. A diferencia de sus
+  hermanos, este SÍ persiste en base, no solo manda correo.)
 
 Estos dos archivos son la fuente de verdad — a partir de ahora, editar acá y
 redeployar (no hay build: son HTML/CSS/JS planos, el form postea directo por
@@ -105,10 +120,17 @@ No hay build. Es copiar archivos.
 scp -i ~/.ssh/onia_hermes_vps_ed25519 \
   hermes-content/propuestas/cuestionario-cliente.html \
   hermes-content/propuestas/brief-produccion.html \
+  hermes-content/propuestas/alta-cliente.html \
   root@187.77.16.63:/opt/onia-forms/html/
 
 ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63 "docker exec onia-forms nginx -s reload"
 ```
+
+⚠️ **Si editás `/opt/onia-forms/nginx/default.conf`: NO alcanza el reload.** Es
+un bind mount de archivo único; `sed -i` (y la mayoría de los editores)
+reemplazan el inode y el contenedor sigue viendo el archivo viejo. Después de
+tocar la config: `docker restart onia-forms` (re-resuelve el path). Pasó el
+2026-08-16 al agregar `/alta` — el 404 persistía con la config "correcta".
 
 nginx sirve directo desde el bind mount — no hace falta recrear el
 contenedor, ni siquiera el reload es estrictamente necesario para archivos
@@ -130,8 +152,9 @@ docker run -d --name onia-forms \
 
 `/opt/onia-forms/nginx/default.conf` mapea las rutas sin extensión
 (`/cuestionario` → `cuestionario-cliente.html`, `/brief` →
-`brief-produccion.html`) vía `try_files`; `/` sirve un `index.html` de
-redirect a `/cuestionario` (mismo comportamiento que tenía en Vercel).
+`brief-produccion.html`, `/alta` → `alta-cliente.html`) vía `try_files`; `/`
+sirve un `index.html` de redirect a `/cuestionario` (mismo comportamiento que
+tenía en Vercel).
 
 ---
 
@@ -171,10 +194,8 @@ Para la ruta Traefik: restaurar
 
 ## Pendiente de Sergio
 
-- **DNS**: crear `forms.onia.com.bo` (A/AAAA o CNAME) → `187.77.16.63`. Hoy no
-  existe ese subdominio. Apenas se cree, Traefik emite el certificado Let's
-  Encrypt solo y el sitio queda en `https://forms.onia.com.bo` sin tocar nada
-  más acá.
+- ~~**DNS**: crear `forms.onia.com.bo`~~ **HECHO** (verificado 2026-08-16: el
+  dominio resuelve, HTTPS con certificado válido, las 3 rutas responden 200).
 - **Apagado de Vercel**: `onia-forms.vercel.app` sigue activo a propósito
   (regla dura: no tocar mientras clientes puedan tener el link viejo en
   manos). Cuando Sergio apruebe migrar los links compartidos a la URL del VPS
