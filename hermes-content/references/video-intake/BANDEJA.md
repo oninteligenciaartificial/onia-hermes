@@ -122,3 +122,23 @@ delante. Cuando uno se procesa, se le escribe su ficha y se mueve a [INDEX.md](I
 - [Lectura + verbatim](transcripciones/2026-08-15-Instagram-DbvlW-_sj_f.md)
 - Resumen: El video presenta la herramienta de inteligencia artificial **Higgsfield Seedance 2.5** para generación de video hiperrealista. Muestra sus capacidades para modificar elementos individuales en escenas conservando el resto y generar clips de hasta 30 segundos por prompt. Finaliza ofreciendo una promoción de 33 días d...
 - **Veredicto: PENDIENTE**
+
+---
+
+# Lote 2026-08-16 — 11 videos, procesados con el método de dos carriles
+
+Fichas y prompts: [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md)
+
+| Video | Carril | Veredicto | Ficha |
+|---|---|---|---|
+| [DcB6PoXkql2](https://www.instagram.com/p/DcB6PoXkql2/) app de nutrición | B | **SIRVE YA** — el molde de un rubro entero | [ficha](2026-08-16-nutriapp-modulo-vertical.md) |
+| [DcCSKN8CDon](https://www.instagram.com/p/DcCSKN8CDon/) comandas DougMenu (AR) | B | **SIRVE YA** — competidor directo | [ficha](2026-08-16-comandas-competidores.md) |
+| [DaaAYsRA1mp](https://www.instagram.com/p/DaaAYsRA1mp/) panel comandas (BR) | B | **SIRVE YA** — competidor directo | [ficha](2026-08-16-comandas-competidores.md) |
+| [Dbt8cuwIqV1](https://www.instagram.com/p/Dbt8cuwIqV1/) loop de 3 agentes | B | **SIRVE YA** — planeador/ejecutador/evaluador | [ficha](2026-08-16-loop-tres-agentes.md) |
+| [DcEcRmFMaAx](https://www.instagram.com/p/DcEcRmFMaAx/) prompt en pantalla | **A** | **SIRVE YA** — los 5 bloques del prompt | [ficha](2026-08-16-carril-a-como-se-hicieron.md) |
+| [DcEUi_cKwmj](https://www.instagram.com/p/DcEUi_cKwmj/) sketch 3D con diálogo | **A** | **SIRVE** — el 3D estilizado esconde los defectos | [ficha](2026-08-16-carril-a-como-se-hicieron.md) |
+| [Dbv2IrORksG](https://www.instagram.com/p/Dbv2IrORksG/) formato gemelo | **A** (truco, no IA) | **SIRVE YA** — costo cero | [ficha](2026-08-16-carril-a-como-se-hicieron.md) |
+| [Db9TebcvW51](https://www.instagram.com/p/Db9TebcvW51/) 5 plugins | B | **SIRVE** — 1 hallazgo de 5: Strix | [ficha](2026-08-16-cinco-plugins-strix.md) |
+| [DcE1hSeIU3Y](https://www.instagram.com/p/DcE1hSeIU3Y/) algoritmo de X | B | **SIRVE** — premisa verificada, números dibujados | [ficha](2026-08-16-x-algoritmo-publico.md) |
+| [DcEVhfiomLo](https://www.instagram.com/p/DcEVhfiomLo/) estación de trabajo | B | HUMO de contenido · **SIRVE de formato** | [ficha](2026-08-16-descartados-y-formato.md) |
+| [DcCUoBgFflT](https://www.instagram.com/p/DcCUoBgFflT/) API regalada | B | **DESCARTADO** — exfiltración de datos | [ficha](2026-08-16-descartados-y-formato.md) |
