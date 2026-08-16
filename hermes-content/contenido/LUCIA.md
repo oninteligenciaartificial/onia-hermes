@@ -10,7 +10,7 @@
 
 | | |
 |---|---|
-| Correo | ✅ `lucia@onia.com.bo` — alias creado y **probado punta a punta** el 2026-08-16 |
+| Correo | 🔴 **sin resolver.** El alias `lucia@onia.com.bo` recibe correo (probado) pero **no sirvió** para dar de alta la cuenta: un alias no es una identidad separada. Plan en [`../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md`](../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md) |
 | Cuenta de Instagram | 🔴 **no existe todavía** |
 | Voz | ✅ Marcela `86V9x9hrQds83qf7zaGn` (ElevenLabs), cargada en el VPS |
 | Identidad visual | ✅ ancla, paleta hex, vestuario y molde de 11 bloques cerrados |
@@ -64,6 +64,21 @@ texto ni comunicados — en el benchmark, un comunicado sacó **4 likes**.
 
 ---
 
+## 3-bis. Dos carruseles heredados de @oniahq (2026-08-16)
+
+Se produjeron para ONIA y **fallaron la prueba del vendedor** allá: hablan de la IA en
+abstracto, no del negocio del que mira. Acá funcionan tal cual, sin reescribir — son
+exactamente el pilar informativo genérico.
+
+| Pieza | Estado |
+|---|---|
+| **Mitos de la IA** — *"Nadie te cuenta esto sobre la IA"* | renderizada, hay que re-renderizar con `--account lucia` |
+| **5 tareas que la IA hace mejor** | ídem. Cierra pidiendo **LISTA**, y el PDF ya existe |
+
+El re-render es un flag (`--account lucia`) y cambia el handle del pie. **No se puede hacer
+hasta que la cuenta exista** y sepamos su @ real: hoy `carousel_render.js` tiene
+`@lucia.antelo.oficial` hardcodeado y nadie confirmó ese handle.
+
 ## 4. Las primeras piezas — ya están armadas
 
 Las 6 imágenes existen en `references/modelos/lucia/posts-20260807/` con sus captions
@@ -108,7 +123,7 @@ mira a cámara y habla, que es exactamente el pilar A.
 | # | Qué | Quién |
 |---|---|---|
 | 1 | **El origen de los videos de los que sale su cara.** La regla propia dice *"nunca foto de una persona real sin consentimiento"* y el material vino de más de una fuente | **solo Sergio** |
-| 2 | Crear la cuenta de Instagram con `lucia@onia.com.bo` | Sergio |
+| 2 | Resolver el correo (§0 del doc: probar en incógnito primero) y crear la cuenta | Sergio |
 | 3 | Decidir el % del pilar informativo genérico | Sergio |
 | 4 | Reescribir los cierres de P4 y P5 | yo |
 

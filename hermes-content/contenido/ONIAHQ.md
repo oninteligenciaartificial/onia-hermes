@@ -61,8 +61,6 @@ post cobra peaje entrena a la gente a scrollear, y el algoritmo lo castiga antes
 | 2 | R.I.P. al cuaderno | 📚 informativo | pregunta | ✅ |
 | 3 | 3 procesos a mano | 📚 informativo | guardalo | ✅ |
 | 4 | El costo invisible | 📚 informativo | guardalo | ✅ |
-| 5 | Mitos de la IA | 📚 informativo | guardalo | ✅ |
-| 6 | 5 tareas que la IA hace mejor | 🎯 venta | **LISTA** | ✅ |
 | 7 | Tu competencia ya vende con IA | 📚 informativo | pregunta | ✅ |
 | 8 | Paradigma de escala | 🎯 venta | **SISTEMA** | ✅ |
 | 9 | Recibo itemizado | 🎯 venta | **LISTA** | ✅ |
@@ -80,12 +78,35 @@ post cobra peaje entrena a la gente a scrollear, y el algoritmo lo castiga antes
 |---|---|
 | Antes/después de web | **no hay ninguna web de cliente entregada.** `web-factory/data/clients/` tiene 9 contextos: **8 son demos** (`clinic-demo`, `dashboard-demo`, `demo`, `dental-demo`, `engineering-demo`, `restaurant-demo`, `saas-demo`, `skincare-demo`) y el noveno es **Nuvia, proyecto propio de Onia**, no un cliente. El pipeline ya está probado con Nuvia |
 
-### ⚠️ Los dos problemas del inventario
+### 🔀 Dos piezas se mudaron a Lucía (2026-08-16)
 
-1. **Las 3 piezas de `ui-patterns` cierran las tres pidiendo SISTEMA.** Van seguidas rompen
-   la regla de 1 de cada 4. Hay que intercalarlas entre los informativos.
-2. ~~Dos piezas piden LISTA y el PDF no existe.~~ **Resuelto el 2026-08-16:**
-   `recursos/lista-por-donde-empezar.pdf`, una página, verificado a tamaño A4.
+**"Mitos de la IA"** y **"5 tareas que la IA hace mejor"** fallaron la prueba del vendedor:
+le sirven igual a un estudiante, a un freelance de Bogotá y a un curioso. Tres de nueve
+portadas decían "IA" — para una cuenta que vende un sistema de gestión, eso apunta al
+público equivocado, y el algoritmo aprende a quién mostrarte.
+
+No son piezas malas: **son piezas de Lucía que estaban en el feed de ONIA**. Van a
+[`LUCIA.md`](LUCIA.md) tal cual, sin reescribir. Quedan **7 piezas**, todas hablándole al
+comprador.
+
+### ✍️ Tres cierres reescritos para que terminen en plata
+
+El gate pide que el dolor termine en algo que se cobra, se pierde o se deja de ganar.
+Solo 3 de 9 lo hacían. Al leerlos apareció además una incoherencia que el gate no ve:
+**el titular del último slide pedía una cosa y el cuerpo otra.**
+
+| Pieza | Antes | Ahora |
+|---|---|---|
+| WhatsApp a mano | *"Soltá el WhatsApp"* + "decime el número" | *"Contá los no respondidos"* + **"multiplicá por tu ticket promedio"** |
+| R.I.P. al cuaderno | *"Poné tu negocio en orden"* + "te digo por dónde empezar" | *"Cuaderno, Excel o memoria"* + **"cuántas veces cobraste de menos"** |
+| 3 procesos a mano | *"Pedí tu diagnóstico gratis"* + *"Guardalo"* ← se contradecían | *"Empezá por uno"* + **"poné cuánto vale tu hora"** |
+
+Ninguna inventa una cifra: le piden al lector que ponga **sus** números.
+
+### ⚠️ El problema que queda
+
+**Las 3 piezas de `ui-patterns` cierran las tres pidiendo SISTEMA.** Van seguidas rompen la
+regla de 1 de cada 4. Hay que intercalarlas entre los informativos.
 
 ---
 
@@ -96,12 +117,15 @@ post cobra peaje entrena a la gente a scrollear, y el algoritmo lo castiga antes
 
 | Semana | L | X | V |
 |---|---|---|---|
-| 1 | 1 · WhatsApp a mano | 2 · R.I.P. al cuaderno | 3 · 3 procesos a mano |
-| 2 | 4 · El costo invisible | 10 · ui-pattern *(venta)* | 5 · Mitos de la IA |
-| 3 | 7 · Tu competencia | 11 · ui-pattern *(venta)* | placa de rubro |
-| 4 | 8 · Paradigma de escala *(venta)* | placa de rubro | 12 · ui-pattern *(venta)* |
+| 1 | WhatsApp a mano | R.I.P. al cuaderno | 3 procesos a mano |
+| 2 | El costo invisible | ui-pattern · upload *(venta)* | Tu competencia |
+| 3 | placa de rubro *(venta)* | Paradigma de escala *(venta)* ⚠️ | ui-pattern · carrito *(venta)* |
+| 4 | placa de rubro *(venta)* | Recibo itemizado *(venta)* | ui-pattern · chat *(venta)* |
 
-Las piezas 6 y 9 ya están destrabadas: el PDF de LISTA existe.
+⚠️ **La semana 3 y la 4 rompen la regla de "1 de cada 4 pide algo".** Es consecuencia de que
+casi todo lo que queda sin publicar es de venta: se gastaron los informativos en las dos
+primeras semanas. **Antes de llegar a la semana 3 hay que producir 2-3 informativos nuevos**
+e intercalarlos, o el feed se vuelve una seguidilla de pedidos.
 
 **Historias:** los días que hay carrusel, una sola — la portada + "link en bio". Sin
 producción. Sirve para que el carrusel no dependa del alcance del feed.
@@ -129,8 +153,9 @@ de formato · 1-2 → hay señal, se amplifica ESE ángulo con pauta · 3+ → f
 |---|---|---|
 | 1 | ~~Cambiar la bio (sacar SIAT)~~ | ✅ hecho |
 | 2 | ~~Armar el PDF de **LISTA**~~ | ✅ hecho |
-| 3 | Conectar `@oniahq` en Postiz | **Sergio** |
+| 3 | ~~Conectar `@oniahq` en Postiz~~ | ✅ hecho — `instagram-standalone`, activa y sin refresh pendiente |
 | 4 | Programar la semana 1 | yo |
 
-**Queda un solo bloqueo y es de Sergio: conectar `@oniahq` en Postiz.** Es de un minuto.
-Sin eso se puede publicar igual, pero a mano.
+✅ **No queda ningún bloqueo.** La cuenta existe, es profesional, está vinculada a la página
+de Facebook, la bio ya no promete el SIAT, las dos palabras clave tienen recurso y Postiz
+está conectado. **Se puede programar la semana 1.**
