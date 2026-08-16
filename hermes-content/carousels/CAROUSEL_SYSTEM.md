@@ -14,6 +14,39 @@ con la marca ONIA, y publica vía `ig-publish` en el VPS.
    (no estiran, no cambian de escala entre slides) y centrados; el tamaño se
    adapta al espacio del slide (headline largo → imagen algo menor) sin perder
    proporción. Cutouts con fondo transparente.
+4. **Gate de COPY — el dolor exacto, y que termine en plata.** Si el estático no
+   nombra el dolor EXACTO del rubro —con la palabra que usa el dueño (fiado,
+   silla vacía, contenedor, paquete de sesiones, control anual, presupuesto)— y
+   ese dolor no termina en plata, **no sale**. Tres chequeos de diez segundos:
+   - **Prueba del reemplazo:** si le cambiás el rubro a la placa y el texto sigue
+     funcionando igual, el dolor no era del rubro. No sale.
+   - **Prueba de la plata:** cada dolor tiene que terminar en algo que se cobra,
+     se pierde o se deja de ganar.
+   - **Prueba del agente:** si nombra un agente, tiene que existir en el producto.
+     Hoy existen **Recall** y **Cobrador** (`onia-platform/lib/onia-core/modules/agents-runtime.ts`
+     → `AGENT_KINDS`). **Captador** está gateado por `addon.inmobiliaria` y no se
+     vende en los seis rubros. Sin agente, la placa dice lo que hay.
+
+   Origen y las 6 placas aplicadas: [`../docs/ONIA_KIT_VENTA_POR_RUBRO_20260815.md`](../docs/ONIA_KIT_VENTA_POR_RUBRO_20260815.md).
+
+## Formatos de salida (`--format`)
+
+| Formato | Tamaño | Para qué |
+|---|---|---|
+| `feed` (default) | 1080×1350 | carrusel de feed 4:5 |
+| `square` | 1080×1080 | feed cuadrado |
+| `story` | 1080×1920 | historia |
+
+`story` **no es el feed más alto**: aplica una zona segura (300px arriba, 380px
+abajo) porque Instagram tapa esas bandas con su UI. Sin eso el texto queda debajo
+de los controles.
+
+## Itemizado (`lines[]`)
+
+Un slide con rol `cta` puede llevar `lines: [{k, v}]` y se renderiza como recibo
+con guía punteada. **Cuando hay `lines[]` el ticket del trueque no se dibuja** —
+el itemizado ya cumple esa función y los dos juntos desbordan la slide. El botón
+`Comentá <PALABRA>` se mantiene en los dos casos. Ejemplo: `briefs/onia-recibo.json`.
 
 ## Piezas
 

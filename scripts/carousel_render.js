@@ -183,6 +183,14 @@ function triggerWord(slide) {
   return m ? m[1] : '';
 }
 
+// Itemizado con guia punteada, para el estatico "recibo". El motor solo tenia un <p> unico
+// como cuerpo (los saltos de linea colapsan), asi que una oferta no se podia desglosar.
+// Opcional: sin `lines[]` en el brief no cambia nada.
+const itemLines = (slide) => !Array.isArray(slide.lines) || !slide.lines.length ? '' :
+  `<div class="lines">${slide.lines.map((l) =>
+    `<div class="ln"><span class="ln-k">${esc(l.k)}</span><i class="ln-d"></i><span class="ln-v">${esc(l.v)}</span></div>`
+  ).join('')}</div>`;
+
 function logoFooter(account) {
   const acc = ACCOUNTS[account];
   return `<div class="footer">
@@ -225,7 +233,8 @@ function slideHtml(slide, idx, total, account, bg) {
       <div class="topline">${pill(role, idx, total, account)}</div>
       <h2 class="cta-h">${emph(slide.headline)}</h2>
       <p class="body">${emph(slide.body)}</p>
-      ${word ? `<div class="ticket">
+      ${itemLines(slide)}
+      ${word && !itemLines(slide) ? `<div class="ticket">
         <div class="ticket-l">
           <span class="ticket-k">Comentás</span>
           <span class="ticket-w">${esc(word)}</span>
@@ -234,8 +243,8 @@ function slideHtml(slide, idx, total, account, bg) {
           <span class="ticket-k">Y recibís</span>
           <span class="ticket-v">${word === 'SISTEMA' ? 'tu diagnóstico de 20 min' : 'la lista con los costos'}</span>
         </div>
-      </div>
-      <div class="ctabtn">Comentá ${esc(word)}</div>` : ''}
+      </div>` : ''}
+      ${word ? `<div class="ctabtn">Comentá ${esc(word)}</div>` : ''}
       <p class="savehint">Gratis. Guardalo para cuando te sientes a resolverlo.</p>
       ${logoFooter(account)}`;
   } else if (role === 'save') {
@@ -302,7 +311,9 @@ ${safeAreaCss()}
 .dots i.on { opacity:1; background:var(--onia-green); }
 
 /* Ticket del trueque: la palabra a comentar ES el cupon. */
-.ticket { display:flex; margin-top:56px; border-radius:28px; overflow:hidden;
+/* flex-shrink:0 — sin esto el ticket se encoge a cero en silencio cuando la slide se
+   llena y desaparece del PNG sin ningun error. Pasó el 2026-08-15 con el recibo. */
+.ticket { display:flex; flex-shrink:0; margin-top:56px; border-radius:28px; overflow:hidden;
   background:var(--onia-ink); color:var(--onia-white); }
 .ticket-l, .ticket-r { padding:38px 40px; display:flex; flex-direction:column; gap:10px; }
 .ticket-l { flex:0 0 44%; border-right:6px dashed var(--onia-green); }
@@ -315,6 +326,11 @@ ${safeAreaCss()}
   color:var(--onia-green); font-family:var(--font-display); font-weight:700; font-size:46px;
   padding:26px 52px; border-radius:999px; }
 .savehint { margin-top:28px; font-size:32px; opacity:.72; }
+.lines { margin-top:44px; display:flex; flex-direction:column; gap:20px; }
+.ln { display:flex; align-items:baseline; gap:16px; font-size:36px; }
+.ln-k { font-weight:600; }
+.ln-d { flex:1; border-bottom:5px dotted currentColor; opacity:.32; }
+.ln-v { font-family:var(--font-display); font-weight:700; font-size:42px; white-space:nowrap; }
 .hook { font-family:var(--font-display); font-weight:700; font-size:118px;
   line-height:1.02; letter-spacing:-3px; }
 .coverline { font-size:42px; line-height:1.35; color:var(--onia-muted-dark); margin-top:40px; max-width:840px; }

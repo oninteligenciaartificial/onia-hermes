@@ -1,0 +1,5 @@
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/upload-button-1-idle-clip.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/upload-button-2-busy-clip.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/upload-button-3-done-clip.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/upload-button-why.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/upload-button-cta.mp4'

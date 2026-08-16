@@ -1,0 +1,5 @@
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/floating-cart-1-catalogo-clip.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/floating-cart-2-fab-clip.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/floating-cart-3-modal-clip.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/floating-cart-why.mp4'
+file 'C:/dev/proyectos/onia-hermes/hermes-content/references/piezas-ui-patterns/raw/floating-cart-cta.mp4'

@@ -1,6 +1,6 @@
 {
   "title": "Recibo — lo que cuesta tu web, itemizado",
-  "caption": "En Bolivia casi nadie publica el precio de una web. Nosotros sí, y va itemizado como un recibo. Landing Bs 790: una página con lo que hacés, tus fotos y el botón de WhatsApp. Web Pro Bs 1.500: sitio completo, para que te encuentren en Google y los pedidos te lleguen ordenados en un formulario, no perdidos en el chat. Los dos son pago único, precio de lanzamiento. Lo que NO va en ese precio y te lo decimos antes de que preguntes: el dominio y el hosting se contratan a TU nombre (son tuyos, no nuestros) y la comisión de la pasarela la cobra el banco sobre cada cobro. Comentá PRECIO y te paso el recibo completo, con los add-ons y los mensuales.",
+  "caption": "En Bolivia casi nadie publica el precio de una web. Nosotros sí, y va itemizado como un recibo. Landing Bs 790: una página con lo que hacés, tus fotos y el botón de WhatsApp. Web Pro Bs 1.500: sitio completo, para que te encuentren en Google y los pedidos te lleguen ordenados en un formulario, no perdidos en el chat. Los dos son pago único, precio de lanzamiento. Lo que NO va en ese precio y te lo decimos antes de que preguntes: el dominio y el hosting se contratan a TU nombre (son tuyos, no nuestros) y la comisión de la pasarela la cobra el banco sobre cada cobro. Comentá LISTA y te paso el recibo completo, con los add-ons y los mensuales.",
   "hashtags": [
     "#bolivia",
     "#santacruz",
@@ -10,8 +10,8 @@
     "#emprender",
     "#whatsappbusiness"
   ],
-  "comment_trigger": "Comentá PRECIO",
-  "cta": "Comentá PRECIO",
+  "comment_trigger": "Comentá LISTA",
+  "cta": "Comentá LISTA",
   "job": "CTA",
   "notas_internas": {
     "formato": "estatico de 1 slide (ad recibo). Pack typographic, role cta: usa el elemento .ticket del motor (troquel punteado).",
@@ -26,8 +26,14 @@
       "number": 1,
       "role": "cta",
       "pill": "Recibo",
-      "headline": "Landing Bs 790. Web Pro Bs 1.500.",
-      "body": "Pago único. Dominio y hosting van a tu nombre y no entran acá. Comentá PRECIO y te paso el recibo completo.",
+      "headline": "Lo que cuesta tu web, itemizado.",
+      "body": "Pago único, precio de lanzamiento. Comentá LISTA y te paso el recibo completo.",
+      "lines": [
+        { "k": "Landing", "v": "Bs 790" },
+        { "k": "Web Pro", "v": "Bs 1.500" },
+        { "k": "Dominio + hosting", "v": "a tu nombre" },
+        { "k": "Comisión pasarela", "v": "la cobra el banco" }
+      ],
       "save_worthy": false,
       "alt_text": "Recibo de Onia: Landing 790 bolivianos, Web Pro 1.500 bolivianos, pago único. Dominio y hosting a nombre del cliente."
     }

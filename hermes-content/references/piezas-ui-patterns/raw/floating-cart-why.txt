@@ -1,0 +1,5 @@
+El modal es un
+<dialog> nativo:
+Escape, foco atrapado
+y devolución de foco,
+gratis del navegador.
