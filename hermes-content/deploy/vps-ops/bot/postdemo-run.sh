@@ -49,6 +49,13 @@ if [ "$CURRENT" != "$STAMP" ]; then
   docker exec "$CONTAINER" sh -c "printf '%s' '$STAMP' > $DEST/.stamp" >/dev/null 2>&1
 fi
 
+# El modo de envío se hereda de webhook.env, igual que followup-run.sh y reminder-run.sh. Sin esto
+# el cron corría SIEMPRE en dry-run: nadie le pasa la variable, así que caía al `:-true` de abajo y
+# el cierre post-demo quedaba registrado como 'skipped' para siempre. Quien llama puede pisarlo.
+if [ -z "${ONIA_BOT_DRY_RUN:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
+  ONIA_BOT_DRY_RUN="$(sed -n 's/^ONIA_BOT_DRY_RUN=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
+fi
+
 # Si quien llama no fijó el instante, se sella acá y viaja como parámetro explícito.
 NOW_ARGS=()
 case " $* " in
