@@ -3,6 +3,11 @@
 Cómo se analiza un video en este carril. Nace de ~70 videos procesados y de los errores
 cometidos en el camino, que están nombrados abajo con su corrección.
 
+> **Antes de analizar: cargar la skill del tema.** Hay 196 skills globales instaladas + 33 del
+> repo. En ~70 videos se usaron dos. El ruteo — que skill para que tema — esta en
+> [SKILLS_DEL_CARRIL.md](SKILLS_DEL_CARRIL.md). No opinar sobre UI sin `ui-ux-pro-max`, ni sobre
+> seguridad sin `security-review`, ni sobre pauta sin `ads`.
+
 **La primera pregunta, siempre:** ¿este video **muestra algo hecho con IA**, o **cuenta una
 idea**? De eso depende todo lo demás, porque son dos trabajos distintos.
 
