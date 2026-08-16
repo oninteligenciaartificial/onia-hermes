@@ -18,5 +18,8 @@ con rótulo "Cliente: …" → corte en movimiento → 4,3–17 s scroll real de
   toda mención al modelo/plantilla interna antes de capturar (plantillas = confidencial).
 - Motion: un solo seam por pieza (scroll continúa hacia arriba a través del corte), verificado con
   `seam-gate.mjs` de la skill `motion-doctrine` (PASSED en las 3; `ledger.json` en cada compo).
+- Logística: la sección scrollytelling del medio solo pinta sus etapas al scrollear en vivo, así que
+  ese tramo (~2.600 px vacíos) está recortado del `page.png` (empalme oscuro-oscuro, filas 2000–4600
+  de la captura original). Nuvia: la captura se recorta a los primeros 13.560 px (hero → catálogo → productos).
 
 Sin publicar: los mp4 quedan en disco (regla del encargo).
