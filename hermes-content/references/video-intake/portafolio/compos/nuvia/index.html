@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <title>Antes/Despues — Nuvia (Web Factory)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      body { margin: 0; background: #0b0f14; font-family: Roboto, "Segoe UI", system-ui, sans-serif; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .bg { position: absolute; inset: 0; }
+
+      .wf-page { position: absolute; top: 0; left: 0; width: 1080px; padding: 72px 64px; box-sizing: border-box; }
+      .b { background: #d7dce3; border-radius: 12px; }
+      .o { border: 3px solid #c6ccd5; border-radius: 16px; box-sizing: border-box; }
+      .row { display: flex; gap: 24px; }
+      .pill { border-radius: 999px; }
+
+      .cap-wrap { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 150px; box-sizing: border-box; }
+      .chip { background: #101418; color: #f2f4f7; font-size: 52px; font-weight: 650; line-height: 1.3;
+              padding: 30px 52px; border-radius: 36px; max-width: 880px; text-align: center;
+              box-shadow: 0 18px 50px rgba(0,0,0,0.35); }
+      .chip small { display: block; font-size: 34px; font-weight: 450; color: #aeb6c0; margin-bottom: 4px; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-fovc" id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="17">
+
+      <!-- ANTES: wireframe gris de nuestro diseno -->
+      <section data-hf-id="hf-tfln" id="wire" class="clip" data-start="0" data-duration="4.3" data-track-index="1">
+        <div data-hf-id="hf-6iln" class="bg" style="background:#eef0f4;"></div>
+        <div data-hf-id="hf-h5un" id="wire-page" class="wf-page" data-layout-allow-overflow="">
+          <div data-hf-id="hf-mnhm" class="wf-block row" style="justify-content:space-between; align-items:center; margin-bottom:64px;">
+            <div data-hf-id="hf-dgys" class="row" style="align-items:center; gap:18px;">
+              <div data-hf-id="hf-8afr" class="b" style="width:56px; height:56px; border-radius:50%;"></div>
+              <div data-hf-id="hf-jeuk" class="b" style="width:200px; height:30px;"></div>
+            </div>
+            <div data-hf-id="hf-5vkc" class="b pill" style="width:200px; height:64px;"></div>
+          </div>
+          <div data-hf-id="hf-08ts" class="wf-block b" style="width:460px; height:22px; margin-bottom:30px;"></div>
+          <div data-hf-id="hf-svst" class="wf-block b" style="width:880px; height:72px; margin-bottom:18px;"></div>
+          <div data-hf-id="hf-mjuq" class="wf-block b" style="width:920px; height:72px; margin-bottom:18px;"></div>
+          <div data-hf-id="hf-esre" class="wf-block b" style="width:780px; height:72px; margin-bottom:18px;"></div>
+          <div data-hf-id="hf-3vr7" class="wf-block b" style="width:520px; height:72px; margin-bottom:40px;"></div>
+          <div data-hf-id="hf-a2ma" class="wf-block b" style="width:930px; height:20px; margin-bottom:14px;"></div>
+          <div data-hf-id="hf-e5y7" class="wf-block b" style="width:900px; height:20px; margin-bottom:14px;"></div>
+          <div data-hf-id="hf-7po5" class="wf-block b" style="width:420px; height:20px; margin-bottom:40px;"></div>
+          <div data-hf-id="hf-2r8s" class="wf-block row" style="margin-bottom:48px;">
+            <div data-hf-id="hf-9ot4" class="b pill" style="width:220px; height:48px;"></div>
+            <div data-hf-id="hf-4oq4" class="b pill" style="width:260px; height:48px;"></div>
+            <div data-hf-id="hf-p05m" class="b pill" style="width:280px; height:48px;"></div>
+          </div>
+          <div data-hf-id="hf-98w0" class="wf-block b pill" style="height:92px; margin-bottom:24px;"></div>
+          <div data-hf-id="hf-tdx2" class="wf-block o pill" style="height:92px; margin-bottom:72px;"></div>
+          <div data-hf-id="hf-6lh7" class="wf-block b" style="width:560px; height:40px; margin-bottom:36px;"></div>
+          <div data-hf-id="hf-cfdu" class="wf-block row" style="margin-bottom:28px;">
+            <div data-hf-id="hf-e0l6" class="o" style="flex:1; padding:20px;">
+              <div data-hf-id="hf-pf1l" class="b" style="height:300px; margin-bottom:16px;"></div>
+              <div data-hf-id="hf-32d4" class="b" style="width:75%; height:20px; margin-bottom:10px;"></div>
+              <div data-hf-id="hf-2ana" class="b" style="width:40%; height:24px; margin-bottom:16px;"></div>
+              <div data-hf-id="hf-h8m2" class="b pill" style="height:56px;"></div>
+            </div>
+            <div data-hf-id="hf-2z32" class="o" style="flex:1; padding:20px;">
+              <div data-hf-id="hf-kdp9" class="b" style="height:300px; margin-bottom:16px;"></div>
+              <div data-hf-id="hf-np8w" class="b" style="width:75%; height:20px; margin-bottom:10px;"></div>
+              <div data-hf-id="hf-u8ru" class="b" style="width:40%; height:24px; margin-bottom:16px;"></div>
+              <div data-hf-id="hf-1o1q" class="b pill" style="height:56px;"></div>
+            </div>
+          </div>
+          <div data-hf-id="hf-us19" class="wf-block b" style="height:160px; margin-bottom:80px;"></div>
+        </div>
+      </section>
+
+      <!-- DESPUES: la tienda real, scroll -->
+      <section data-hf-id="hf-tf51" id="web" class="clip" data-start="4.3" data-duration="12.7" data-track-index="2">
+        <div data-hf-id="hf-rz9k" class="bg" style="background:#141414;"></div>
+        <div data-hf-id="hf-nu5b" id="web-page" data-layout-allow-overflow="" style="position:absolute; top:0; left:0; width:1080px;">
+          <img data-hf-id="hf-50du" id="web-img" src="assets/page.png" width="1080" height="13560" style="display:block; width:1080px; height:auto;">
+        </div>
+      </section>
+
+      <!-- rotulos -->
+      <section data-hf-id="hf-vyeu" id="cap-antes" class="clip" data-start="0" data-duration="4.3" data-track-index="3">
+        <div data-hf-id="hf-69xp" class="cap-wrap">
+          <div data-hf-id="hf-m8b3" id="cap-antes-inner" class="chip"><small data-hf-id="hf-ledk">Cliente:</small>“necesito una tienda online para mi marca de skincare”</div>
+        </div>
+      </section>
+      <section data-hf-id="hf-shru" id="cap-despues" class="clip" data-start="4.3" data-duration="12.7" data-track-index="3">
+        <div data-hf-id="hf-szcx" class="cap-wrap">
+          <div data-hf-id="hf-u2le" id="cap-despues-inner" class="chip">Después:</div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const SPAN = 13560 - 1920;
+      const tl = gsap.timeline({ paused: true });
+
+      tl.from(".wf-block", { y: 36, autoAlpha: 0, duration: 0.5, ease: "power2.out", stagger: { each: 0.03 } }, 0.15);
+      tl.fromTo("#cap-antes-inner", { y: 60, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5, ease: "back.out(1.5)" }, 0.8);
+      tl.to("#wire-page", { y: -420, duration: 1.95, ease: "power1.inOut" }, 1.8);
+      tl.to("#wire-page", { y: "-=380", duration: 0.55, ease: "power2.in" }, 3.75);
+      tl.to("#cap-antes-inner", { y: -140, duration: 0.4, ease: "power2.in" }, 3.9);
+
+      // SEAM 4.3s — misma direccion (arriba), entrada en pleno vuelo
+      tl.fromTo("#web-page", { y: 260 }, { y: 0, duration: 0.55, ease: "power3.out" }, 4.3);
+      tl.fromTo("#cap-despues-inner", { y: 90, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5, ease: "power3.out" }, 4.35);
+      tl.to("#web-page", { y: -SPAN, duration: 10.65, ease: "power1.inOut" }, 5.55);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
