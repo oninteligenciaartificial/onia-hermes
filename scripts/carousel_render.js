@@ -79,8 +79,21 @@ const esc = (s) => String(s == null ? '' : s)
 
 const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'bright-retail'];
 
+// Formatos de salida. 'feed' (1080x1350) es el default historico: quien llama
+// sin --formato sigue recibiendo exactamente lo mismo de siempre.
+const FORMATS = {
+  feed: { w: 1080, h: 1350 },
+  cuadrado: { w: 1080, h: 1080 },
+  story: { w: 1080, h: 1920 },
+};
+
+// Resuelve el formato desde args (o el default). Todas las plantillas lo usan.
+function fmtOf(args) {
+  return FORMATS[(args && args.formato) || 'feed'] || FORMATS.feed;
+}
+
 function parseArgs(argv) {
-  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '' };
+  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', formato: 'feed' };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--brief') a.brief = argv[++i];
@@ -89,10 +102,12 @@ function parseArgs(argv) {
     else if (k === '--bg') a.bg = argv[++i];
     else if (k === '--pack') a.pack = argv[++i];
     else if (k === '--object') a.object = argv[++i];
+    else if (k === '--formato') a.formato = argv[++i];
   }
   if (!a.brief) throw new Error('Missing --brief <file.json>');
   if (!ACCOUNTS[a.account]) throw new Error('Unknown account: ' + a.account);
   if (!PACKS.includes(a.pack)) throw new Error('Unknown --pack: ' + a.pack + ' (use ' + PACKS.join('|') + ')');
+  if (!FORMATS[a.formato]) throw new Error('Unknown --formato: ' + a.formato + ' (use ' + Object.keys(FORMATS).join('|') + ')');
   return a;
 }
 
@@ -131,10 +146,11 @@ function logoFooter(account) {
   </div>`;
 }
 
-function slideHtml(slide, idx, total, account, bg) {
+function slideHtml(slide, idx, total, account, bg, formato) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
+  const { w: W, h: H } = fmtOf({ formato });
   const bgLayer = bg
     ? `<div class="bgphoto" style="background-image:url('file://${bg.replace(/\\/g, '/')}')"></div><div class="bgscrim"></div>`
     : '';
@@ -182,9 +198,9 @@ function slideHtml(slide, idx, total, account, bg) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
+html,body { width:${W}px; height:${H}px; }
 .slide {
-  position:relative; width:1080px; height:1350px; overflow:hidden;
+  position:relative; width:${W}px; height:${H}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column;
   font-family:var(--font-body);
   --ink:var(--onia-ink);
@@ -248,23 +264,30 @@ function emph(s) {
 // Continuation curve: a green stroke that bleeds off the right edge on
 // non-last slides (and enters from the left on non-first), giving the
 // Solaris-style panorama / swipe cue. Alternates arc direction by parity.
-function continuationCurve(idx, total) {
+// The y coordinates were authored for the 1350px feed canvas; they scale with
+// the format height so the band keeps its relative position (and the viewBox
+// matches the slide, avoiding any stretch).
+function continuationCurve(idx, total, formato) {
+  const { w: W, h: H } = fmtOf({ formato });
+  const k = H / 1350;
+  const y = (v) => Math.round(v * k);
   const last = idx === total - 1;
   const first = idx === 0;
   const down = idx % 2 === 0;
-  // Curve stays in the UPPER band (y 300-640), the floating-object zone, and
-  // never dips into the headline/body area at the bottom — so it reads as a
-  // continuous panorama behind the 3D object without crossing the text.
+  // Curve stays in the UPPER band (y 300-640 at feed height), the
+  // floating-object zone, and never dips into the headline/body area at the
+  // bottom — so it reads as a continuous panorama behind the 3D object
+  // without crossing the text.
   // enter from left (unless first), exit right (unless last)
   const enter = first ? '' : (down
-    ? 'M -60 300 C 220 300 260 560 540 560'
-    : 'M -60 600 C 220 600 260 340 540 340');
+    ? `M -60 ${y(300)} C 220 ${y(300)} 260 ${y(560)} 540 ${y(560)}`
+    : `M -60 ${y(600)} C 220 ${y(600)} 260 ${y(340)} 540 ${y(340)}`);
   const exit = last ? '' : (down
-    ? 'M 540 560 C 860 560 940 320 1140 320'
-    : 'M 540 340 C 860 340 940 600 1140 600');
+    ? `M 540 ${y(560)} C 860 ${y(560)} 940 ${y(320)} 1140 ${y(320)}`
+    : `M 540 ${y(340)} C 860 ${y(340)} 940 ${y(600)} 1140 ${y(600)}`);
   const paths = [enter, exit].filter(Boolean)
     .map((d) => `<path d="${d}" />`).join('');
-  return `<svg class="curve" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
+  return `<svg class="curve" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
 }
 
 // Pack: dark-product (Solaris-style). Black canvas, pills, continuation curve,
@@ -273,6 +296,7 @@ function darkProductHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
+  const { w: W, h: H } = fmtOf(args);
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
   const object = args && args.object
     ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
@@ -306,8 +330,8 @@ function darkProductHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
-.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+html,body { width:${W}px; height:${H}px; }
+.slide { position:relative; width:${W}px; height:${H}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column;
   background:var(--onia-ink); color:var(--onia-white);
   font-family:'Inter',var(--font-body); }
@@ -315,7 +339,7 @@ html,body { width:1080px; height:1350px; }
 .g { color:var(--onia-green); }
 .slide.cta .g { color:var(--onia-ink); -webkit-text-stroke:0; background:var(--onia-ink); color:var(--onia-green); padding:0 .12em; }
 
-.curve { position:absolute; inset:0; width:1080px; height:1350px; z-index:0; pointer-events:none; }
+.curve { position:absolute; inset:0; width:${W}px; height:${H}px; z-index:0; pointer-events:none; }
 .curve path { fill:none; stroke:var(--onia-green); stroke-width:16; stroke-linecap:round; opacity:.95; }
 .slide.cta .curve path { stroke:var(--onia-ink); opacity:.5; }
 .slide > *:not(.curve) { position:relative; z-index:2; }
@@ -354,7 +378,7 @@ html,body { width:1080px; height:1350px; }
 .slide.cta .footer .handle { color:var(--onia-ink); }
 </style></head>
 <body><div class="slide ${role}">
-  ${continuationCurve(idx, total)}
+  ${continuationCurve(idx, total, args && args.formato)}
   ${pills}
   ${object}
   ${block}
@@ -376,6 +400,7 @@ html,body { width:1080px; height:1350px; }
 function darkNeonHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const acc = ACCOUNTS[account];
+  const { w: W, h: H } = fmtOf(args);
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
   const object = args && args.object
     ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
@@ -402,8 +427,8 @@ function darkNeonHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
-.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+html,body { width:${W}px; height:${H}px; }
+.slide { position:relative; width:${W}px; height:${H}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column;
   background:#05080A; color:var(--onia-white); font-family:'Inter',var(--font-body); }
 .grid { position:absolute; inset:0; z-index:0;

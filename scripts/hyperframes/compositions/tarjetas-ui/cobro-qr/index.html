@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Onia Platform · Tarjeta UI · Cobro confirmado (QR)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* Tipografia e iconos del PRODUCTO (onia-platform), autohospedados. */
+      @font-face {
+        font-family: "Manrope";
+        src: url("fonts/Manrope-var-latin.woff2") format("woff2");
+        font-weight: 200 800;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("fonts/Inter-var-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Material Symbols Outlined";
+        src: url("fonts/material-symbols-outlined.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: block;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        font-family: "Material Symbols Outlined";
+        font-weight: normal;
+        font-style: normal;
+        font-feature-settings: "liga";
+        -webkit-font-feature-settings: "liga";
+        -webkit-font-smoothing: antialiased;
+        line-height: 1;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --primary: #027650;
+        --on-primary: #ffffff;
+        --primary-container: #d5f4e3;
+        --on-primary-container: #013925;
+        --verde-50: #edfbf3;
+        --verde-300: #86d9b0;
+        --surface: #f9fbfa;
+        --on-surface: #141a17;
+        --on-surface-variant: #424a46;
+        --surface-lowest: #ffffff;
+        --outline-variant: #b9bfbc;
+        --font-headline: "Manrope", sans-serif;
+        --font-sans: "Inter", sans-serif;
+      }
+
+      html,
+      body {
+        width: 1080px;
+        height: 1080px;
+      }
+      #stage {
+        position: relative;
+        width: 1080px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--surface);
+        font-family: var(--font-sans);
+        color: var(--on-surface);
+      }
+      .fill {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .glow {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 900px;
+        height: 900px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(2, 118, 80, 0.07) 0%, rgba(2, 118, 80, 0) 62%);
+      }
+
+      .card {
+        position: relative;
+        width: 680px;
+        border-radius: 28px;
+        background: var(--surface-lowest);
+        border: 1px solid var(--outline-variant);
+        box-shadow: 0 24px 60px rgba(1, 57, 37, 0.1);
+        padding: 52px 56px 48px;
+        opacity: 0;
+        text-align: center;
+      }
+
+      .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .head h1 {
+        font-family: var(--font-headline);
+        font-weight: 800;
+        font-size: 40px;
+        letter-spacing: -0.5px;
+      }
+      .tagchip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: 56px;
+        padding: 0 24px;
+        border-radius: 999px;
+        background: var(--verde-50);
+        color: var(--on-primary-container);
+        font-family: var(--font-headline);
+        font-weight: 700;
+        font-size: 24px;
+      }
+      .tagchip .material-symbols-outlined {
+        font-size: 30px;
+      }
+
+      /* bloque QR: tile con el icono qr_code_2 gigante + linea de escaneo */
+      .qrwrap {
+        position: relative;
+        width: 340px;
+        height: 340px;
+        margin: 40px auto 0;
+        border-radius: 24px;
+        border: 2px solid var(--outline-variant);
+        background: var(--surface-lowest);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .qrwrap .material-symbols-outlined {
+        font-size: 280px;
+        color: var(--on-surface);
+      }
+      .scanline {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: 0;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--primary);
+        box-shadow: 0 0 24px rgba(2, 118, 80, 0.55);
+        opacity: 0;
+        visibility: hidden;
+      }
+      /* check de confirmacion que aterriza sobre el QR */
+      .okdisc {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 170px;
+        height: 170px;
+        margin: -85px 0 0 -85px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: var(--on-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 18px 44px rgba(1, 57, 37, 0.35);
+        opacity: 0;
+        visibility: hidden;
+      }
+      .okdisc .material-symbols-outlined {
+        font-size: 104px;
+      }
+
+      .monto {
+        margin-top: 38px;
+        font-family: var(--font-headline);
+        font-weight: 800;
+        font-size: 72px;
+        letter-spacing: -1px;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .estado {
+        margin-top: 18px;
+        font-size: 28px;
+        color: var(--on-surface-variant);
+        opacity: 0;
+        visibility: hidden;
+      }
+      /* pill final de confirmacion */
+      .okpill {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        height: 72px;
+        padding: 0 32px;
+        margin-top: 30px;
+        border-radius: 999px;
+        background: var(--primary);
+        color: var(--on-primary);
+        font-family: var(--font-headline);
+        font-weight: 700;
+        font-size: 30px;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .okpill .material-symbols-outlined {
+        font-size: 36px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="cobro-qr"
+      data-theme="light"
+      data-start="0"
+      data-duration="5"
+      data-fps="30"
+      data-width="1080"
+      data-height="1080"
+    >
+      <div id="cq-clip" class="clip" data-start="0" data-duration="5" data-track-index="0">
+        <div class="fill">
+          <div class="glow"></div>
+          <div class="card" id="cq-card">
+            <div class="head" id="cq-head">
+              <h1>Cobro con QR</h1>
+              <span class="tagchip"><span class="material-symbols-outlined">qr_code_2</span>QR Simple</span>
+            </div>
+            <div class="qrwrap" id="cq-qr">
+              <!-- el check aterriza SOBRE el QR a proposito (el QR ya cedio a
+                   opacidad 0.22): oclusion declarada -->
+              <span class="material-symbols-outlined" id="cq-qr-icon" data-layout-allow-overlap>qr_code_2</span>
+              <div class="scanline" id="cq-scan" data-layout-allow-overlap></div>
+              <div class="okdisc" id="cq-ok" data-layout-allow-overlap>
+                <span class="material-symbols-outlined">check</span>
+              </div>
+            </div>
+            <div class="monto" id="cq-monto">Bs 350,00</div>
+            <div class="estado" id="cq-estado">Esperando el pago del cliente…</div>
+            <div class="okpill" id="cq-okpill">
+              <span class="material-symbols-outlined">payments</span>
+              Cobro confirmado
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // ============================================================
+        // Onia Platform · Tarjeta UI · "Cobro confirmado (QR)" — 5s, 1080x1080.
+        // Ruta sostenida: Animated sequence — el cobro SE COMPLETA: entra el
+        // QR con el monto, la linea de escaneo lo recorre (el pago ocurre),
+        // quietud, y el check aterriza: cobrado.
+        // ============================================================
+        (function () {
+          "use strict";
+
+          function cubicBezier(x1, y1, x2, y2) {
+            var cx = 3 * x1,
+              bx = 3 * (x2 - x1) - cx,
+              ax = 1 - cx - bx;
+            var cy = 3 * y1,
+              by = 3 * (y2 - y1) - cy,
+              ay = 1 - cy - by;
+            function sampleX(t) {
+              return ((ax * t + bx) * t + cx) * t;
+            }
+            function sampleY(t) {
+              return ((ay * t + by) * t + cy) * t;
+            }
+            function sampleDX(t) {
+              return (3 * ax * t + 2 * bx) * t + cx;
+            }
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x,
+                i,
+                d,
+                dx;
+              for (i = 0; i < 8; i++) {
+                d = sampleX(t) - x;
+                if (Math.abs(d) < 1e-7) return sampleY(t);
+                dx = sampleDX(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0,
+                hi = 1;
+              t = x;
+              while (hi - lo > 1e-7) {
+                if (sampleX(t) < x) lo = t;
+                else hi = t;
+                t = (hi + lo) / 2;
+              }
+              return sampleY(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var card = document.getElementById("cq-card");
+          var tl = gsap.timeline({ paused: true });
+
+          // ---- entrada de la tarjeta ------------------------------------------
+          tl.fromTo(
+            card,
+            { opacity: 0, y: 60, scale: 0.97 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "oniaOutExpo" },
+            0,
+          );
+
+          // ---- cascada: head -> QR -> monto -> estado (waterfall) -------------
+          var group = ["cq-head", "cq-qr", "cq-monto", "cq-estado"];
+          var at = 0.12,
+            gap = 0.1;
+          group.forEach(function (id) {
+            var el = document.getElementById(id);
+            tl.set(el, { autoAlpha: 1 }, at);
+            tl.fromTo(el, { x: 34 }, { x: 0, duration: 0.5, ease: "oniaOutExpo" }, at);
+            at += gap;
+            gap *= 0.84;
+          });
+
+          // ---- escaneo: la linea recorre el QR (1.1-2.4s) — el pago ocurre ----
+          var scan = document.getElementById("cq-scan");
+          tl.set(scan, { autoAlpha: 1 }, 1.1);
+          tl.fromTo(scan, { y: 8 }, { y: 316, duration: 1.3, ease: "oniaOutQuart" }, 1.1);
+          tl.to(scan, { autoAlpha: 0, duration: 0.18, ease: "oniaOutQuart" }, 2.32);
+
+          // ---- quietud antes del climax (2.5-2.85s) ---------------------------
+
+          // ---- climax (2.85s): el check ATERRIZA sobre el QR ------------------
+          var ok = document.getElementById("cq-ok");
+          var qrIcon = document.getElementById("cq-qr-icon");
+          tl.fromTo(
+            ok,
+            { autoAlpha: 0, scale: 0.4 },
+            { autoAlpha: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" },
+            2.85,
+          );
+          // el QR reacciona al impacto en el MISMO frame: cede y se apaga
+          tl.to(qrIcon, { opacity: 0.22, scale: 0.94, duration: 0.35, ease: "oniaOutQuart" }, 2.85);
+          tl.to(card, { y: 4, duration: 0.09, ease: "oniaOutQuart" }, 2.85);
+          tl.to(card, { y: 0, duration: 0.28, ease: "oniaOutExpo" }, 2.94);
+
+          // ---- revelado escalonado: el estado cambia a confirmado -------------
+          var estado = document.getElementById("cq-estado");
+          var okpill = document.getElementById("cq-okpill");
+          tl.to(estado, { autoAlpha: 0, y: -12, duration: 0.25, ease: "oniaOutQuart" }, 3.15);
+          tl.fromTo(
+            okpill,
+            { autoAlpha: 0, y: 22 },
+            { autoAlpha: 1, y: 0, duration: 0.45, ease: "oniaOutExpo" },
+            3.3,
+          );
+
+          // ---- salida (4.5-5.0s): mismo vector -> loop natural ----------------
+          tl.to(card, { opacity: 0, y: 60, scale: 0.97, duration: 0.42, ease: "oniaOutQuart" }, 4.55);
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["cobro-qr"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>
