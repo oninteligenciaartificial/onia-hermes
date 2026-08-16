@@ -105,6 +105,55 @@ Ya tienen pack de vocabulario en el contrato (roadmap, sin producto todavía):
 
 > Onboardear un rubro nuevo = agregar track + pack (**datos**), no código de core.
 
+### 3.1 Gastronomía — las 9 features de comandas vs competidores (2026-08-16)
+
+Fuente: `hermes-content/references/video-intake/2026-08-16-comandas-competidores.md`
+(DougMenu AR + panel BR — lo que un local de comida considera NORMAL en 2026).
+Verificado contra el código de `onia-platform` (lib/comercio, prisma, app) y el
+registro público en producción.
+
+**El hallazgo primero:** el pack gastronomía **NO está encendido**. No es track
+soportado en la plataforma (`SUPPORTED_VERTICAL_TRACK_IDS`, 7 tracks, gastronomía
+ausente) y en el registro público de `app.onia.com.bo` aparece como chip "Pronto"
+(verificado en el HTML servido). Un restaurante hoy no puede ni registrarse: la
+comparación de features es contra el módulo comercio (POS mostrador), que es lo
+que un pack gastronomía reusaría.
+
+| # | Feature | Estado hoy en onia-platform | Clase |
+|---|---|---|---|
+| 1 | Tablero por estados arrastrable, en vivo | ❌ No existe. La venta de mostrador nace `entregado` (lib/comercio/ventas.ts); `/pending` es cola core de aprobaciones, no tablero de pedidos | (ii) construir la UI — los datos ya están (`OniaCommerceOrder.status` + work_items) |
+| 2 | Ticket con cliente + teléfono + dirección + mapa | ❌ Order→partner trae teléfono (contact); dirección de ENTREGA por pedido y mapa no existen | (ii) construir dirección por pedido; mapa = link a Google Maps, no embed (no mueve la venta, agrega peso) |
+| 3 | Método de pago en la tarjeta | 🟡 El dato EXISTE por venta (EFECTIVO/QR/TARJETA/TRANSFERENCIA/FIADO); falta la tarjeta que lo muestre | (i) se enciende gratis al construir #1 |
+| 4 | Impresión térmica de comanda | ❌ Solo print de navegador A4 (`app/print/invoice`, `/prescription`); nada ESC/POS 58/80 mm ni Bluetooth | (ii) construir |
+| 5 | Estados hasta ENTREGADO con reloj | ❌ `status` existe como campo string; sin máquina de estados ni timestamp por transición | (ii) construir — misma pieza que #1 (una sola máquina de estados) |
+| 6 | Métricas del día al pie | ✅ EXISTEN: `lib/comercio/hoy.ts` (hoy vs mismo día semana pasada, ventas/hora, top vendidos, stock crítico) + caja por método | (i) ya está — solo ubicarlas al pie del tablero |
+| 7 | Editor de menú con stock y toggle visible | 🟡 CRUD de productos + stock + `active` (=visible) existen; el modelo NO tiene campo de foto | (i) 90% encendido; foto de producto = construir chico |
+| 8 | Canal salón vs delivery | ❌ No existe | (ii) construir — un campo `channel` en la orden + filtro (barato) |
+| 9 | Suscripción con niveles | ✅ EXISTE: basic/professional/clinic/enterprise + entitlements + add-ons | ya está |
+
+Ninguna de las 9 cae en "(iii) no la queremos" — solo el **mapa embebido** de #2 se
+degrada a link (misma utilidad, cero peso).
+
+**Orden de construcción para una demo de 20 s a un dueño de local** (solo las (ii)):
+
+1. **Tablero de estados en vivo** (features 1+5 juntas — una sola máquina de estados
+   hasta `entregado` con reloj). Los dos videos competidores SON esto: 17 s de
+   arrastrar tarjetas es la demo entera.
+2. **Tarjeta de pedido completa** (features 2+3: cliente, teléfono, dirección, ítems,
+   total, método de pago). Es lo que se ve DENTRO del tablero.
+3. **Impresión térmica** (feature 4). Discrepancia declarada con la hipótesis
+   "impresora y métricas primero": las métricas YA existen (mitad de la hipótesis
+   es moot), y la impresora es invisible en una demo de pantalla de 20 s — es la
+   pregunta #1 del CIERRE ("¿imprime comandas?"), no del gancho. Va tercera en
+   construcción, primera en el checklist de venta.
+4. **Canal salón vs delivery** (feature 8).
+
+**Para no perder el foco:** el foso nuestro es la facturación fiscal boliviana al
+1-oct-2026 — DougMenu y el panel BR no se la darán nunca a un local de Bolivia.
+No se empata 9/9 con un SaaS argentino: se construye el mínimo de demo de 20 s
+(tablero + tarjeta) y se vende con lo fiscal. Y nada de esto vende hasta que el
+rubro se pueda REGISTRAR: encender el track es el paso 0.
+
 ---
 
 ## 4. Bloqueos transversales (external_gate) — quién los destraba

@@ -2676,11 +2676,13 @@ a.workflow-card:hover {
   gap: 18px;
 }
 
-.nuvia-cart-empty,
-.nuvia-cart-list {
-  min-height: 0;
-}
-
+/*
+ * OJO: no poner `min-height: 0` en .nuvia-cart-empty / .nuvia-cart-list.
+ * El scroller es .nuvia-cart-body (grid con altura definida): con min-height 0,
+ * la fila de la lista colapsaba a 0px cuando "seguir comprando" desbordaba,
+ * y los items del carrito quedaban SUPERPUESTOS sobre las sugerencias (visto
+ * en mobile 390px, 2026-08-16).
+ */
 .nuvia-cart-empty {
   display: grid;
   align-content: start;
