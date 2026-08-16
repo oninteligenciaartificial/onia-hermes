@@ -69,15 +69,29 @@ Estado real del código (verificado en `onia-platform/lib/fiscal/`):
 - Los WSDL reales del SIN ya están bajados y estudiados (2026-08-06):
   `FacturacionCodigos`, `FacturacionSincronizacion` y servicios asociados.
 
-Lo que falta, en orden:
+**Y lo que YA está hecho, que es mucho más de lo que el mock del producto sugiere**
+(fuente: memoria `siat-emitter`, verificado el 2026-08-06 contra el SIN):
+
+- ✅ **Sistema REGISTRADO ante el SIN** como PROVEEDOR (solicitud N° 9473, código
+  `228474DC226A215DD26BF`, 2026-08-06). El reloj del Art. 18.III corre:
+  **fecha límite de pruebas 04/11/2026**.
+- ✅ **Fase 1 COMPLETA la misma noche: 1.968 operaciones reales contra el piloto
+  del SIN, cero bloqueadas** (emisiones, anulaciones, reversiones, paramétricas).
+  CUIS obtenido, CUF verificado contra el algoritmo oficial, transporte SOAP real.
+- ✅ El emisor compartido (`hermes-content/integrations/siat/`, 262+ tests) tiene
+  la API pública `emitInvoice`: un producto lo llama y listo.
+
+Lo que falta de verdad, en orden:
 
 | # | Qué | Quién | Notas |
 |---|---|---|---|
-| 1 | Registrar el sistema en la Oficina Virtual como **sistema de facturación** (arranca la fase de pruebas) | Sergio | destraba TODO el dev de la fase 1 |
-| 2 | Implementar el cliente SOAP real contra los WSDL (CUIS → CUFD → emisión → validación) reemplazando el mock | dev | el enchufe ya está; es rellenar `siat-client` |
-| 3 | Pasar el ciclo de pruebas del SIN en ambiente de test | ambos | el plan completo vive en `onia-core/ONIA_SIAT_CERTIFICACION_PLAN_2026.md` |
-| 4 | Certificar como **sistema PROVEEDOR** (RND 102100000011 art. 17) | Sergio firma, dev acompaña | UNA certificación sirve para TODOS los clientes; modalidad Computarizada en Línea = sin certificado de firma digital por cliente |
-| 5 | Encender `mock: false` por organización y verificar la primera factura real | dev | recién acá se puede prometer "emitimos" |
+| 1 | **Fase 2: inspección del SIN** (la agenda el SIN) | Sergio agenda, dev acompaña | límite duro **04/11/2026** |
+| 2 | **Conectar el PRODUCTO al emisor compartido** — hoy `onia-platform/lib/fiscal/siat-client.ts` es un mock deliberado; el emisor real vive aparte y el producto no lo llama | dev | el enchufe por país (`emission-service`) ya existe |
+| 3 | Fase 3: **piloto por cliente** (token delegado que genera cada cliente) | ambos | runbook ya escrito: `integrations/siat/ONBOARDING_CLIENTE.md` |
+| 4 | Encender emisión real por organización y verificar la primera factura | dev | recién acá se puede prometer "emitimos" |
+
+(La etapa VIII —firma digital— es solo de la modalidad Electrónica; la
+Computarizada elegida no la necesita.)
 
 **La fecha que manda:** RND 102600000007 — el último tramo del padrón queda
 obligado a facturar en línea el **30-sep-2026**. Cada semana que falta, miles de
