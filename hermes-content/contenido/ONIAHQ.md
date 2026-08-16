@@ -7,45 +7,29 @@
 
 ---
 
-## 1. La bio — hay que cambiarla antes del primer post
+## 1. La bio — ✅ cambiada el 2026-08-16
 
-**La actual promete algo que el producto no puede hacer hoy:**
+**Lo que decía y por qué salió:**
 
 > ~~*"Facturá al SIAT, agendá y cobrá sin tipear una sola línea."*~~
 
-La facturación al SIAT está bloqueada por el NIT (bloqueo S2 de Sergio). Prometerlo en la
-bio es peor que prometerlo en un post: la bio la lee todo el que cae.
+La facturación al SIAT está bloqueada por el NIT (bloqueo S2). Prometerlo en la bio es peor
+que prometerlo en un post: la bio la lee todo el que cae.
 
-**Reemplazo propuesto** (Instagram: nombre máx 30, bio máx 150 — todas las opciones medidas):
+**Lo que dice ahora** (Instagram contó 130/150):
 
 ```
-Nombre:  Onia · Sistema con IA                                    21/30
-```
+Nombre:  Onia · Sistema con IA
 
-**Opción C — recomendada** · 119/150
-```
-El sistema que reemplaza el cuaderno, el Excel y el WhatsApp suelto.
-Hecho en Santa Cruz, para negocios de Bolivia 🇧🇴
-👇
-```
-*Por qué esta: nombra las tres cosas que el comprador tiene en la mano AHORA. Es lo más
-concreto, y es exactamente el dolor que enganchan los carruseles 1 y 2.*
-
-**Opción B — si preferís nombrar los módulos** · 135/150
-```
-Un solo sistema para tu negocio: agenda, cobros, inventario y facturación.
-Con agentes que hacen el seguimiento por vos 🇧🇴
-👇 Escribinos
+Un solo sistema: agenda, cobros, inventario y caja.
+Reemplaza el cuaderno, el Excel y el WhatsApp suelto.
+Santa Cruz, Bolivia 🇧🇴
 ```
 
-**Opción A — arranca por el enemigo** · 139/150
-```
-Tu negocio no se frena por falta de clientes.
-Se frena por lo que seguís haciendo a mano.
-Agenda, cobros e inventario en un solo lugar 🇧🇴
-```
+*Por qué así: la primera línea nombra la plataforma por sus módulos; la segunda nombra las
+tres cosas que el comprador tiene en la mano AHORA — que es el dolor de los carruseles 1 y 2.*
 
-⚠️ Ninguna dice "obligatorio por ley" ni menciona el SIAT. Cuando el NIT esté, se suma.
+⚠️ No dice "obligatorio por ley" ni menciona el SIAT. **Cuando el NIT esté, se suma.**
 
 ---
 
@@ -78,10 +62,10 @@ post cobra peaje entrena a la gente a scrollear, y el algoritmo lo castiga antes
 | 3 | 3 procesos a mano | 📚 informativo | guardalo | ✅ |
 | 4 | El costo invisible | 📚 informativo | guardalo | ✅ |
 | 5 | Mitos de la IA | 📚 informativo | guardalo | ✅ |
-| 6 | 5 tareas que la IA hace mejor | 🎯 venta | **LISTA** | 🔴 bloqueado |
+| 6 | 5 tareas que la IA hace mejor | 🎯 venta | **LISTA** | ✅ |
 | 7 | Tu competencia ya vende con IA | 📚 informativo | pregunta | ✅ |
 | 8 | Paradigma de escala | 🎯 venta | **SISTEMA** | ✅ |
-| 9 | Recibo itemizado | 🎯 venta | **LISTA** | 🔴 bloqueado |
+| 9 | Recibo itemizado | 🎯 venta | **LISTA** | ✅ |
 | 10-12 | 3 piezas de `ui-patterns` (upload · carrito · chat) | 🎯 venta | **SISTEMA** | ⚠️ ver abajo |
 
 ### Escrito, falta renderizar
@@ -100,7 +84,8 @@ post cobra peaje entrena a la gente a scrollear, y el algoritmo lo castiga antes
 
 1. **Las 3 piezas de `ui-patterns` cierran las tres pidiendo SISTEMA.** Van seguidas rompen
    la regla de 1 de cada 4. Hay que intercalarlas entre los informativos.
-2. **Dos piezas piden LISTA y el PDF no existe.** Hasta que exista, no salen.
+2. ~~Dos piezas piden LISTA y el PDF no existe.~~ **Resuelto el 2026-08-16:**
+   `recursos/lista-por-donde-empezar.pdf`, una página, verificado a tamaño A4.
 
 ---
 
@@ -116,7 +101,7 @@ post cobra peaje entrena a la gente a scrollear, y el algoritmo lo castiga antes
 | 3 | 7 · Tu competencia | 11 · ui-pattern *(venta)* | placa de rubro |
 | 4 | 8 · Paradigma de escala *(venta)* | placa de rubro | 12 · ui-pattern *(venta)* |
 
-Las piezas 6 y 9 entran cuando exista el PDF de LISTA.
+Las piezas 6 y 9 ya están destrabadas: el PDF de LISTA existe.
 
 **Historias:** los días que hay carrusel, una sola — la portada + "link en bio". Sin
 producción. Sirve para que el carrusel no dependa del alcance del feed.
@@ -142,9 +127,10 @@ de formato · 1-2 → hay señal, se amplifica ESE ángulo con pauta · 3+ → f
 
 | # | Qué | Quién |
 |---|---|---|
-| 1 | Cambiar la bio (sacar SIAT) | **Sergio** |
-| 2 | Armar el PDF de **LISTA** | yo |
+| 1 | ~~Cambiar la bio (sacar SIAT)~~ | ✅ hecho |
+| 2 | ~~Armar el PDF de **LISTA**~~ | ✅ hecho |
 | 3 | Conectar `@oniahq` en Postiz | **Sergio** |
 | 4 | Programar la semana 1 | yo |
 
-Los pasos 1 y 3 son de Sergio y son de un minuto cada uno. El 2 no depende de nadie.
+**Queda un solo bloqueo y es de Sergio: conectar `@oniahq` en Postiz.** Es de un minuto.
+Sin eso se puede publicar igual, pero a mano.
