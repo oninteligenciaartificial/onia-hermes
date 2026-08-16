@@ -51,6 +51,20 @@ const ENV_BASE_URL = () => process.env.CHATWOOT_BASE_URL || "https://onia-chatbo
 const ENV_ACCOUNT_ID = () => process.env.CHATWOOT_ACCOUNT_ID || "2";
 const ENV_TOKEN = () => process.env.CHATWOOT_API_TOKEN || process.env.CHATWOOT_TOKEN || "";
 
+/**
+ * El id del agente de Chatwoot con el que POSTEA el bot. Existe para una sola cosa: distinguir
+ * "esto lo escribio el bot" de "esto lo escribio Sergio".
+ *
+ * Antes era imposible: el bot posteaba con la MISMA cuenta que Sergio, asi que cuando el tomaba una
+ * conversacion el bot no se enteraba y le seguia hablando encima al prospecto en el mensaje
+ * siguiente — el peor papelon posible delante de un cliente.
+ *
+ * VACIO = comportamiento de antes (los salientes se ignoran y ya). Es el default a proposito: si
+ * esta variable falta o se escribe mal, el bot NO se auto-silencia. Equivocarse para el otro lado
+ * —callarse con todo el mundo— es peor que el problema que esto arregla.
+ */
+const ENV_BOT_AGENT_ID = () => String(process.env.CHATWOOT_BOT_AGENT_ID || "").trim();
+
 // ---------------------------------------------------------------------------
 // Helpers puros
 // ---------------------------------------------------------------------------
@@ -78,6 +92,68 @@ function displayNameOf(sender) {
 }
 
 /**
+ * EL TELÉFONO DEL PROSPECTO, que es con lo que un humano puede llamarlo.
+ *
+ * Hasta hoy el CRM guardaba `contact_ref` como contacto público, o sea el id de la conversación de
+ * Chatwoot: en el panel el contacto decía "2847" y desde ahí no se podía llamar a nadie.
+ * `contact_ref` NO se toca (es la identidad de la conversación, `conversationKey`); el teléfono
+ * viaja aparte.
+ *
+ * Verificado contra el fuente de Chatwoot 4.12.1 en el VPS: `phone_number` está en
+ * `Contact#webhook_data` (el `sender` de `message_created`) Y en `Contact#push_event_data` (el
+ * `sender` de los mensajes anidados en `conversation_created`), así que el mismo lector sirve para
+ * los dos eventos. Viene lleno en WhatsApp (contacto real: `+59171654992`) y vacío en el widget
+ * web y en el inbox de API, donde el contacto simplemente no dio teléfono. Vacío => null, y el
+ * lead queda exactamente como está hoy: NO se inventa un contacto.
+ */
+function phoneOf(sender) {
+  if (!sender || typeof sender !== "object") return null;
+  return String(sender.phone_number ?? "").trim() || null;
+}
+
+/**
+ * ATRIBUCIÓN: qué pieza / campaña trajo al prospecto.
+ *
+ * Qué expone Chatwoot DE VERDAD (leído del fuente 4.12.1 en el VPS, no de la doc):
+ *   · `conversation.custom_attributes` — libre. Lo llena quien crea la conversación (inbox de API)
+ *     o el widget con `setCustomAttributes`. Si trae `piece_key`/`source_campaign`, mandan: es un
+ *     dato puesto a mano, no adivinado.
+ *   · `conversation.additional_attributes.referer` — la URL de la landing, la escribe el widget web
+ *     (`app/controllers/api/v1/widget/base_controller.rb`). De ahí sale `?src=`, que es LA
+ *     convención de atribución de Onia (la landing ya la captura: `api/onia-center/leads/intake`)
+ *     y que la migración de `bot_conversations` documenta como "pieza que lo trajo".
+ *   · `utm_content` / `utm_campaign` de esa misma URL, para el tráfico que llega desde pauta.
+ *
+ * LO QUE CHATWOOT NO EXPONE (y por eso NO se inventa acá): el referral de un anuncio
+ * click-to-WhatsApp. Meta manda `messages[].referral` (`source_id`, `source_url`, `ctwa_clid`) en
+ * el webhook de la WABA, pero Chatwoot 4.12.1 lo DESCARTA — no hay una sola aparición de
+ * "referral" en su código. Para un lead de WhatsApp no hay atribución posible desde acá: hay que
+ * capturarla antes, en el webhook de Meta, o parchear el canal de Chatwoot.
+ *
+ * Todo ausente => null, que es exactamente el comportamiento de hoy.
+ */
+export function attributionFrom(conversation) {
+  const conv = conversation && typeof conversation === "object" ? conversation : {};
+  const custom = conv.custom_attributes && typeof conv.custom_attributes === "object" ? conv.custom_attributes : {};
+  const extra = conv.additional_attributes && typeof conv.additional_attributes === "object" ? conv.additional_attributes : {};
+
+  let query = null;
+  try {
+    // `referer` puede ser "", null o basura: URL() tira y el catch lo deja en null.
+    query = new URL(String(extra.referer || "")).searchParams;
+  } catch {
+    query = null;
+  }
+  const param = (name) => String(query?.get(name) ?? "").trim() || null;
+  const attr = (name) => String(custom[name] ?? "").trim() || null;
+
+  return {
+    pieceKey: attr("piece_key") || param("src") || param("utm_content"),
+    sourceCampaign: attr("source_campaign") || param("utm_campaign"),
+  };
+}
+
+/**
  * kind: text | voice | attachment — solo cuando NO hay texto y SI hay adjuntos (igual que Telegram).
  * El audio se busca en TODA la lista y no solo en el primero: un mensaje con una foto y una nota
  * de voz sigue siendo, para el guion, una nota de voz que hay que escuchar.
@@ -89,18 +165,24 @@ function kindOf(text, attachments) {
   return pickAudioAttachment(list) ? "voice" : "attachment";
 }
 
-function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso }) {
+function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation }) {
   const text = String(content || "").trim();
+  const atribucion = attributionFrom(conversation);
   return {
     skip: false,
     turn: {
       channel: "chatwoot",
+      // OJO: `contact_ref` es la IDENTIDAD de la conversación (de acá sale `conversationKey`).
+      // Cambiarlo rompe todas las conversaciones vivas. El teléfono va aparte, en `public_contact`.
       contact_ref: String(conversationId),
+      public_contact: phoneOf(sender),
       display_name: displayNameOf(sender),
       kind: kindOf(text, attachments),
       text,
       message_key: `chatwoot:${conversationId}:${messageId}`,
       received_at: createdAtIso || new Date().toISOString(),
+      piece_key: atribucion.pieceKey,
+      source_campaign: atribucion.sourceCampaign,
     },
     // Los adjuntos viajan en `meta` y NO en `turn`: el turno es lo que ve el motor (que es puro y
     // no baja archivos), y los adjuntos son materia prima del transporte para transcribir el audio.
@@ -112,12 +194,88 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
   };
 }
 
+/**
+ * El NOMBRE de la plantilla de Meta con la que salio este mensaje, o null si fue texto libre.
+ *
+ * Chatwoot lo expone en el nivel de ARRIBA del payload del webhook — capturado en vivo en sus logs
+ * el 2026-08-13 (el WebhookJob que apunta a nuestro endpoint):
+ *   additional_attributes: { template_params: { name: "seguimiento_demo", language: "es",
+ *                                               processed_params: { body: { ... } } } }
+ * Es el MISMO objeto que arma whatsappTemplate() para el POST: el builder lo guarda en el mensaje
+ * (`messages/message_builder.rb:122-124`) y de ahi sale al webhook. O sea que para saber que este
+ * envio se cobra como plantilla no hay que preguntarle nada a Meta.
+ *
+ * ACA SOLO SE REGISTRA EL HECHO ("salio con la plantilla X"). Que categoria y que tarifa le toca lo
+ * decide el medidor, que es el unico dueño del registro de plantillas (usage-run.mjs
+ * `PLANTILLAS_META`): dos tablas de plantillas en dos archivos se desincronizan y ahi se factura mal.
+ *
+ * OJO: `payload.additional_attributes` del NIVEL DEL MENSAJE es esto; el de la conversacion
+ * (`payload.conversation.additional_attributes`) es otra cosa — de ahi sale la atribucion.
+ */
+function templateNameOf(payload) {
+  const extra = payload?.additional_attributes;
+  const params = extra && typeof extra === "object" ? extra.template_params : null;
+  // Se recorta como todo lo que viene de afuera y termina en la base (mismo criterio que
+  // `external_message_id`): el payload lo arma otro sistema, no nosotros.
+  const name = params && typeof params === "object" ? String(params.name ?? "").trim().slice(0, 200) : "";
+  return name || null;
+}
+
+/**
+ * ¿Este mensaje SALIENTE lo escribio un humano? Entonces tomo la conversacion y el bot se calla.
+ *
+ * Las cuatro condiciones son todas necesarias, y cada una evita un modo de falla distinto:
+ *   1. hay `CHATWOOT_BOT_AGENT_ID` configurado — sin eso no se puede distinguir nada (ver arriba);
+ *   2. el remitente es un USUARIO de Chatwoot (`sender.type === "user"`), no un contacto ni un bot
+ *      de plataforma: un `sender` raro no puede silenciar al bot;
+ *   3. tiene id — sin id no se sabe quien fue, y ante la duda NO se silencia;
+ *   4. ese id NO es el del bot. Este es EL candado: sin el, la primera respuesta del propio bot lo
+ *      dejaria mudo para siempre en esa conversacion.
+ * Las notas privadas ya se descartaron antes: escribir una nota no es atender al prospecto.
+ *
+ * Devuelve un turno SIN texto: no hay nada que contestar, solo hay que anotar el traspaso. `author`
+ * dice "human" — es uno de los tres valores que acepta `bot_messages.author` (contact | bot | human)
+ * y es el unico que no miente: no lo escribio el contacto y tampoco el bot. Iba como "agent", que
+ * la base no conoce, y `buildMessageRow` lo degradaba en silencio.
+ */
+function takeoverTurn(payload, conversationId, type) {
+  if (type !== "outgoing") return null;
+  const botAgentId = ENV_BOT_AGENT_ID();
+  if (!botAgentId) return null;
+  const sender = payload?.sender;
+  if (!sender || typeof sender !== "object") return null;
+  if (sender.type && String(sender.type).toLowerCase() !== "user") return null;
+  const senderId = sender.id === undefined || sender.id === null ? "" : String(sender.id);
+  if (!senderId || senderId === botAgentId) return null;
+
+  return {
+    skip: false,
+    turn: {
+      channel: "chatwoot",
+      contact_ref: String(conversationId),
+      kind: "text",
+      text: "",
+      author: "human",
+      human_takeover: true,
+      // Con que plantilla de Meta salio (o null si fue texto libre). Es lo que separa un envio de
+      // 0,0113 USD de uno de 0,0740: sin esto, todo lo que manda un humano se cobra como servicio.
+      template_name: templateNameOf(payload),
+      message_key: `chatwoot:takeover:${conversationId}:${payload.id ?? "s/id"}`,
+      received_at: toIsoFlexible(payload.created_at) || new Date().toISOString(),
+    },
+    meta: { conversationId: String(conversationId), messageId: String(payload.id ?? ""), attachments: [], takeover: true },
+  };
+}
+
 function fromMessageCreated(payload) {
   const conversationId = payload?.conversation?.id ?? payload?.conversation_id ?? null;
   if (!conversationId) return { skip: true, reason: "sin_conversation_id" };
   if (payload.private === true) return { skip: true, reason: "nota_privada" };
   const type = normalizeMessageType(payload.message_type);
-  if (type !== "incoming") return { skip: true, reason: `mensaje_no_entrante:${type || "desconocido"}` };
+  if (type !== "incoming") {
+    const traspaso = takeoverTurn(payload, conversationId, type);
+    return traspaso || { skip: true, reason: `mensaje_no_entrante:${type || "desconocido"}` };
+  }
   const messageId = payload.id;
   if (!messageId) return { skip: true, reason: "sin_message_id" };
   return buildTurn({
@@ -127,6 +285,9 @@ function fromMessageCreated(payload) {
     attachments: payload.attachments,
     sender: payload.sender,
     createdAtIso: toIsoFlexible(payload.created_at),
+    // La atribución vive en la CONVERSACIÓN, no en el mensaje: `payload.additional_attributes` de
+    // este nivel es del mensaje (campaign_id / template_params de Chatwoot) y no sirve para esto.
+    conversation: payload.conversation,
   });
 }
 
@@ -147,8 +308,11 @@ function fromConversationCreated(payload) {
     messageId: first.id,
     content: first.content,
     attachments: first.attachments,
+    // El `sender` anidado es `Contact#push_event_data`, que también trae `phone_number`.
     sender: first.sender,
     createdAtIso: toIsoFlexible(first.created_at),
+    // En `conversation_created` el payload ES la conversación, así que se pasa entero.
+    conversation: payload,
   });
 }
 
@@ -168,6 +332,48 @@ export function parseChatwootWebhook(payload) {
 // ---------------------------------------------------------------------------
 
 /**
+ * Los `template_params` con los que Chatwoot manda una PLANTILLA aprobada de WhatsApp.
+ *
+ * POR QUE HACE FALTA: pasadas las 24 h del ultimo mensaje del prospecto, la ventana de servicio de
+ * Meta se cierra y el texto de formato libre falla con 131047. Chatwoot ya lo sabe y cambia solo de
+ * carril — `app/services/whatsapp/send_on_whatsapp_service.rb:9` (fuente 4.12.1 leido en el VPS):
+ *   `should_send_template_message = template_params.present? || !message.conversation.can_reply?`
+ * — pero si no le decimos CUAL plantilla, marca el mensaje `failed` con
+ * "Template not found or invalid template name" (linea 27). O sea: fuera de la ventana, sin esto,
+ * el mensaje no sale igual.
+ *
+ * LA FORMA EXACTA, verificada en el fuente (no adivinada):
+ *   - va TOP-LEVEL en el POST. `Messages::MessageBuilder#template_params`
+ *     (`app/builders/messages/message_builder.rb:122-124`) hace
+ *     `@params[:template_params].present? ? { additional_attributes: { template_params: ... } }`,
+ *     o sea que ES CHATWOOT quien lo mete adentro de `additional_attributes`. Mandarlo nosotros ya
+ *     anidado no sirve: el builder nunca lee `@params[:additional_attributes]`. Y no lo filtra
+ *     ningun strong param — el controller le pasa `params` entero
+ *     (`api/v1/accounts/conversations/messages_controller.rb:10`).
+ *   - `name` + `language` tienen que dar con una plantilla `approved` del canal
+ *     (`whatsapp/template_processor_service.rb:21-27`, compara el idioma sin distinguir mayusculas).
+ *   - `processed_params` en formato "enhanced": las variables posicionales van en `body` con la
+ *     clave en TEXTO ("1", "2"), que es lo que espera `process_body_components` (linea 79-94).
+ *     El formato viejo (array plano) tambien entra, pero lo convierte otro servicio: mandamos el
+ *     nuevo y nos ahorramos el paso.
+ *
+ * Una variable vacia se DESCARTA rio abajo (`next if value.blank?`), y entonces la plantilla sale
+ * con menos parametros de los que declara y Meta la rechaza. Por eso el que llama garantiza que no
+ * haya huecos ANTES de armar esto — nunca se manda una plantilla a medias.
+ *
+ * @param {string} name        nombre exacto de la plantilla aprobada en Meta
+ * @param {Array<string>} variables  {{1}}, {{2}}, ... en orden
+ * @param {string} [language]  codigo de idioma con el que se aprobo ("es")
+ */
+export function whatsappTemplate(name, variables = [], language = "es") {
+  const body = {};
+  variables.forEach((value, index) => {
+    body[String(index + 1)] = String(value);
+  });
+  return { name, language, processed_params: { body } };
+}
+
+/**
  * @param {object} [options] { baseUrl, accountId, token, fetch, timeoutMs }
  * @returns cliente tolerante. `client.enabled === false` => sin token/config: no manda nada.
  */
@@ -180,7 +386,15 @@ export function createChatwootClient(options = {}) {
   const enabled = Boolean(baseUrl && accountId && token && typeof doFetch === "function");
   const warnings = [];
 
-  async function sendMessage(conversationId, text) {
+  /**
+   * @param {string|number} conversationId
+   * @param {string} text  el cuerpo. Con plantilla sigue viajando: es lo que se ve en el panel de
+   *   Chatwoot y lo que queda en la bitacora, asi que tiene que decir LO MISMO que recibe el
+   *   prospecto (a Meta el texto se lo da la plantilla aprobada, no esto).
+   * @param {object|null} [templateParams]  ver whatsappTemplate(). Sin esto el POST es identico al
+   *   de siempre — el 99% del trafico va dentro de la ventana y sigue siendo texto libre gratis.
+   */
+  async function sendMessage(conversationId, text, templateParams = null) {
     const trimmed = String(text || "").trim();
     if (!trimmed) return null;
     if (!enabled) {
@@ -191,7 +405,11 @@ export function createChatwootClient(options = {}) {
       const res = await doFetch(`${baseUrl}/api/v1/accounts/${accountId}/conversations/${conversationId}/messages`, {
         method: "POST",
         headers: { api_access_token: token, "Content-Type": "application/json" },
-        body: JSON.stringify({ content: trimmed, message_type: "outgoing" }),
+        body: JSON.stringify({
+          content: trimmed,
+          message_type: "outgoing",
+          ...(templateParams ? { template_params: templateParams } : {}),
+        }),
         signal: AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : undefined,
       });
       const raw = await res.text();

@@ -59,6 +59,99 @@ Antes de escribir una sola linea:
    de Sergio. Nada flotando en la conversacion.
 ```
 
+## DONDE SE PEGA CADA UNO — ruteo por sesion
+
+Las sesiones son las que Sergio tiene abiertas. **Producto y marketing van separados**: la
+plataforma construye, marketing vende lo construido. Un prompt de marketing en la sesion de
+producto descarrila las dos.
+
+### PRODUCTO — construye el software
+
+| Sesion | Prompts que van ahi | Estado |
+|---|---|---|
+| **`onia-plattform`** | Agente de producto · Vision por computadora como capacidad | el de Seguridad esta **ANULADO** (ya hecho y verificado en prod) |
+| **`chatbot`** | Minimizacion de datos · **D1 el bot no guarda hace dias** | D1 primero: esta roto AHORA |
+| **`Carrito de compra`** | Carrito flotante | |
+| **`Estructura de pagos`** | Checkout — con el paso 1 de verificacion que puede matar la tarea | |
+| **`Importación de productos`** | Portar dropzone-progress y upload-button al flujo real | |
+| **`bolivian-electric-chatbot`** | ninguno propio: hereda la minimizacion de datos de `chatbot` | |
+| **`Hotmart`** | **ninguno.** Ningun video aplico. Se dice para que nadie invente uno | |
+
+### WEB — construye lo que se muestra
+
+| Sesion | Prompts | Orden |
+|---|---|---|
+| **`web-factory`** | C1 indexabilidad · portafolio antes/despues · capa de 5 skills visuales · B1 packages/blocks · B2 generar sitio desde learned model | **B1 antes que B2**: sin bloques, generar no produce nada |
+
+### MARKETING — vende lo construido
+
+| Sesion | Prompts |
+|---|---|
+| **`INFLUENCERS IA`** | Guion por escenas · A4 estructura de escenas · **y la ENTREGA_HIGGSFIELD_LUCIA.md entera (12 puntos)** |
+| **marketing** (abrir si no existe) | A1 portafolio · A2 comentario→DM · A3 carruseles · A5 Meta Ads · A6 los patrones como contenido · C2 kit de venta por rubro · **D4 espiar la pauta con lo gratis** |
+| **`editor de videos`** | Animar interfaz con HyperFrames + cerrar el gap de formatos |
+
+### VENTA Y ADMINISTRACION
+
+| Sesion | Prompts |
+|---|---|
+| **CRM / prospeccion** | Los 7 roles contra el Vendedor que ya corre · **C4 la ruta al primer cliente** |
+| **propuestas** | C3 el costo de esperar |
+| **`pendiente`** | Apify vs scrapling · Handy · B3 encender el intake · B4 probar los 6 patrones (20 min) · D2 las fechas que corren · D3 la busqueda de marca |
+
+### El orden si hay que elegir
+
+1. **D1** → `chatbot`. Es lo unico roto ahora mismo.
+2. **C4** → CRM. Es lo unico que ataca la falta de clientes.
+3. **C1** → web-factory. Nuestra web no indexa y auditamos la ajena.
+4. **A1** → marketing. Portafolio, cero costo, sube el precio.
+5. **B4** → `pendiente`. Veinte minutos y da confianza en la biblioteca.
+
+**Choque unico a cuidar:** D1 y B3 son los dos de infra. No los mandes juntos.
+
+---
+
+## Los dos gates que aplican a TODOS los prompts de este archivo
+
+Pegá esto junto al prompt. Nacen de errores concretos de esta sesión, no de teoría.
+
+### Gate 1 — control de calidad ANTES de ejecutar
+
+```text
+Antes de hacer nada de lo que pide el prompt, verificá que el prompt siga siendo válido:
+1. ¿YA ESTA HECHO? Mirá el repo y la memoria del proyecto, no el prompt. Un prompt de esta
+   lista mandaba a cerrar la seguridad de produccion cuando ya estaba cerrada y verificada
+   dias antes — habria mandado a rehacer trabajo terminado.
+2. ¿EL BLOQUEO EXISTE? Si el prompt dice que algo esta trabado, comprobalo. Dos "bloqueos" de
+   esta lista se cayeron con un `ls` y una consulta gratis: los SFX estaban en otra carpeta y
+   la voz no era ambigua, era un ID truncado en los docs.
+3. ¿EL DATO SIGUE VIGENTE? Los numeros de cuenta, precios y capacidades tienen fecha. Si el
+   prompt trae uno, confirmalo antes de construir encima.
+4. ¿YA VIVE EN ALGUN LADO? El repo tiene pipeline para casi todo. Buscá donde vive la cosa
+   antes de crear una carpeta nueva: escribir un doc "al lado" del sistema que ya existe es
+   el error mas caro, porque duplica y se desincroniza.
+Si algo de esto invalida el prompt, DECILO y no lo ejecutes. Un prompt que quedo viejo se
+corrige, no se obedece.
+```
+
+### Gate 2 — ordenar en su carpeta ANTES de cerrar
+
+```text
+Al terminar, nada queda suelto ni en la raiz del repo. Cada cosa a su lugar:
+- Web entera vista en un reel  -> web-factory/data/references/reels/models/ (learned model)
+- Componente de UI reconstruido -> hermes-content/references/ui-patterns/<patron>/
+- Patron de movimiento          -> web-factory/docs/MOTION_PATTERN_BANK_2026.md
+- Analisis de un video          -> hermes-content/references/video-intake/
+- Doc de proceso o decision     -> hermes-content/docs/  (es la fuente; la raiz sin gemelos)
+- Receta de generacion          -> hermes-content/docs/ y se apunta desde la skill
+- Codigo de herramienta         -> scripts/ o .claude/skills/<skill>/scripts/
+Si no sabes donde va, PREGUNTA antes de inventar carpeta.
+Y antes de commitear: `git status` limpio de archivos huerfanos, y el commit explica el POR QUE,
+no solo el que.
+```
+
+---
+
 **Para delegar a subagentes** (esto se probo con 8 agentes en paralelo y funciono):
 
 ```text
@@ -178,10 +271,19 @@ vendibles aplica y que dato entrega:
   - importadora: conteo de bultos en la descarga, contra la lista de packing
   - servicios: control de acceso y aforo
   - ganadero: conteo de hacienda (ultimo, no primero)
+  - SEGURIDAD LABORAL / EPP (rubro NUEVO, no estaba mapeado): detectar si alguien entra a una
+    obra sin casco o sin chaleco. Es de OBJETOS, no de vigilancia de clientes, asi que evita el
+    problema legal; y construccion/industria es un comprador con plata en Santa Cruz.
+    Empeza la evaluacion por aca, no por el aforo de una tienda.
 Preguntas a responder con evidencia, no con opinion:
   1. Que precision real da un modelo de deteccion estandar en cada caso (no en el demo).
-  2. Donde corre: subir video continuo a la nube es caro. Evaluar el encaje con Onia Box
-     (infra on-premise) — la camara le da a Onia Box algo concreto que hacer.
+  2. [CONTESTADA 2026-08-15 — no la re-investigues] Donde corre: EN EL DISPOSITIVO. Un reel
+     mostro una app con deteccion en vivo corriendo en un TELEFONO, con selector COCO-SSD /
+     YOLO —los dos gratuitos y estandar— sobre la camara del propio equipo. Sin servidor, sin
+     subir video, sin costo por minuto. Un telefono viejo apuntando a una puerta ya es el
+     hardware. Onia Box deja de ser requisito para el caso simple; sigue teniendo sentido para
+     volumen y retencion de video, no para detectar.
+     Ficha: 2026-08-15-vision-en-el-celular-y-espionaje-de-pauta.md
   3. Que hardware minimo necesita el cliente y quien lo paga.
   4. Cual de los cuatro casos tiene el dolor mas caro HOY para el comprador.
 LISTO = una tabla de 4 filas (rubro, dato que entrega, precision esperada, donde corre) + UNA
@@ -362,6 +464,9 @@ Sesión: pendiente. Dos micro-tareas, ninguna gasta plata todavía.
    Instagram sin token propio, con qué límites y a qué precio. Importa porque el token de IG
    está bloqueado (S6) y eso frena prospección y medición. LISTO = una tabla: qué extrae,
    límites, precio, y si destraba o no lo que S6 tiene frenado. NO des de alta la cuenta.
+   AGREGADO 2026-08-15: compará Apify contra `scrapling` (github.com/D4Vinci/Scrapling), que es
+   open source, gratis y trae bypass de Cloudflare. Si scrapling alcanza, Apify no se paga.
+   Sale de 2026-08-15-vision-en-el-celular-y-espionaje-de-pauta.md.
 2. HANDY (dictado por voz) — de 2026-08-11-handy-dictado-voz-alternativa-wispr-flow.md.
    La demo del video es en Mac y acá se trabaja en Windows 11: VERIFICAR soporte Windows,
    repo y licencia ANTES de instalar nada. LISTO = sí/no con la fuente.
@@ -467,6 +572,34 @@ el valor inicial. Nadie los vio moverse todavia salvo el upload-button.
 LISTO = una linea por patron: timing OK o "queda lento/rapido en X". Y probar con
 reduced-motion activado en DevTools (los 6 tienen que quedar legibles y completos).
 NO HAGAS: no toques el codigo en esta sesion. Solo mirar y anotar.
+```
+
+---
+
+# D4 · Espiar la pauta de la competencia — con lo gratis que ya tenemos
+
+Sale de un reel que muestra **Spyglass** (`app.spyglass.so`): una herramienta paga que lista
+todos los anuncios que corre una marca, con el peso de cada creativo y su clasificacion por
+formato ([ficha](2026-08-15-vision-en-el-celular-y-espionaje-de-pauta.md)).
+
+La capacidad es real y util. Pero **la Biblioteca de Anuncios de Meta es publica y gratis, y ya
+la tenemos conectada por MCP** (`ads_library_search`). Antes de evaluar nada pago, hay que
+agotar lo que ya esta.
+
+```text
+Sesion: marketing. git branch --show-current primero.
+TAREA UNICA: ver que anuncios estan corriendo 3 competidores, con la herramienta que YA tenemos.
+Usar `ads_library_search` del MCP de Meta (gratis, publico, sin dar de alta nada).
+  1. Elegir 3 competidores REALES y verificables — agencias o SaaS que le vendan al mismo
+     comprador en Bolivia. Si no hay locales, tomar 3 regionales que sirvan de referencia.
+  2. Por cada uno: que anuncios corre hoy, desde cuando, y que formato usa cada creativo.
+  3. Clasificar los creativos por tipo (el molde que usa Spyglass: GRWM, text overlay,
+     brand story, demo de producto, testimonio).
+LISTO = una tabla por competidor + UNA conclusion: que formato repiten mas, y que hueco dejan
+que nosotros podamos ocupar.
+NO HAGAS: NO des de alta Spyglass ni ninguna herramienta paga hasta que esta pasada demuestre
+que la biblioteca de Meta no alcanza. NO copies sus creativos: se mira el FORMATO y el hueco.
+NO inventes competidores: si no encontras 3 verificables, decilo y trae los que si existan.
 ```
 
 ---

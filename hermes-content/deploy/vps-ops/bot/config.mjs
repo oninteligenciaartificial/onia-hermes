@@ -159,7 +159,28 @@ export const SCRIPT = Object.freeze({
     "¡Hola de nuevo! Te escribí ayer por la demo de {{producto}} y quedó a medias — sé que el negocio no para.",
     "",
     "Te dejo dos opciones nuevas por si te sirven: **{{slot_a}}** o **{{slot_b}}**.",
-    "Si preferís que te escriba en otro momento, decime \"después\" y no te molesto más.",
+    "Decime cuál te queda mejor y la dejamos agendada.",
+  ].join("\n"),
+
+  // M3_PLANTILLA — el MISMO follow-up, pero cuando la ventana de 24 h de Meta ya se cerro.
+  // COPIA LITERAL de la plantilla `seguimiento_demo` (es · MARKETING · APPROVED) tal como esta
+  // aprobada en Meta: la aprobada es la que se envia de verdad, esto es solo lo que queda en el
+  // panel y en la bitacora. Si las dos no dicen lo mismo, la bitacora miente.
+  // TOCAR ESTE TEXTO NO CAMBIA LO QUE RECIBE EL PROSPECTO: hay que reaprobar la plantilla en Meta.
+  // Las variables son POSICIONALES ({{1}}, {{2}}) porque asi las nombra Meta, no el guion.
+  // Cuesta ~0,0740 USD por envio (6,5x el recordatorio): es marketing, no utility.
+  M3_PLANTILLA: [
+    "¡Hola de nuevo! Te escribí por la demo de Onia y quedó a medias — sé que el negocio no para.",
+    "",
+    "Si querés retomarla, te dejo dos horarios: *{{1}}* o *{{2}}*.",
+    "",
+    // El cierre NO puede sacarse del todo: Meta rechaza una plantilla que TERMINA en variable
+    // (code 100 / subcode 2388299, "las variables no pueden estar al principio ni al final").
+    // Antes aca decia "respondé BAJA y listo". Se saco por decision de Sergio: no se ofrece dejar
+    // de escribir. El MECANISMO sigue vivo — intents.mjs reconoce stop/baja/dar de baja/borrame y
+    // escribe opt_out_at — solo dejo de anunciarse. Riesgo asumido: sin salida visible, el que se
+    // molesta bloquea en vez de pedir la baja, y Meta mide eso como calidad.
+    "Decime cuál te queda mejor y la dejamos agendada.",
   ].join("\n"),
 
   // M9 — recordatorio del DIA de la demo (barrido reminder-run.mjs). Es un RECORDATORIO, no la
@@ -172,6 +193,20 @@ export const SCRIPT = Object.freeze({
     "¡Hola! Te recuerdo tu demo de {{producto}}: **{{dia_hora_elegida}}**.",
     "",
     "Entrás desde acá: {{link_reunion}}",
+    "",
+    "Si se te complicó, decime y la movemos — sin problema.",
+  ].join("\n"),
+
+  // M9_PLANTILLA — el MISMO recordatorio, pero cuando la ventana de 24 h de Meta ya se cerro (el
+  // caso normal de quien reservo para dentro de 3 dias). COPIA LITERAL de la plantilla
+  // `recordatorio_demo` (es · UTILITY · APPROVED) — mismas reglas que M3_PLANTILLA: la aprobada es
+  // la que sale, esto es lo que se ve en el panel, y editar aca NO cambia lo que recibe el
+  // prospecto. Cuesta ~0,0113 USD por envio.
+  // Fijate que "Onia" va escrito y no como variable: en la plantilla aprobada esta hardcodeado.
+  M9_PLANTILLA: [
+    "¡Hola! Te recuerdo tu demo de Onia: *{{1}}*.",
+    "",
+    "Entrás desde acá: {{2}}",
     "",
     "Si se te complicó, decime y la movemos — sin problema.",
   ].join("\n"),
@@ -210,6 +245,22 @@ export const SCRIPT = Object.freeze({
   // SIAT / fiscal — respuesta fija segura (spec §2.3). Solo lo que es publico, cero promesa.
   M_SIAT_BODY:
     "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. El detalle exacto de tu caso lo ve {{humano}} en la demo.",
+
+  // M0 SIN HORARIOS — la bienvenida cuando no hay disponibilidad real que ofrecer.
+  // No es un caso raro: alcanza con que Cal.com no conteste O con que la agenda no tenga hueco en
+  // el rango (una semana llena, un feriado). Antes se mandaba M0 con el placeholder literal
+  // ("HORARIO A (pendiente de definir)") y encima el prospecto no podia elegirlo, asi que la
+  // conversacion moria en el primer mensaje — justo el mensaje que vende "un asistente que agenda
+  // solo". Aca no se inventa un horario: se lo atiende igual y lo coordina un humano.
+  M0_SIN_HORARIOS: [
+    "¡Hola! Te escribe {{bot}} — sí, un bot. Es justamente lo que hacemos: sistemas que atienden solos.",
+    "",
+    "{{producto}} es una plataforma por módulos para que un negocio trabaje adentro: agenda, cobros, clientes.",
+    "",
+    "Justo ahora no tengo horarios libres para ofrecerte, así que {{humano}} te coordina uno personalmente — te escribe él.",
+    "",
+    "Contame mientras: ¿a qué se dedica tu negocio?",
+  ].join("\n"),
 
   // "¿Que hacen?" / "¿que es Onia?". El marco es fijo; la LISTA sale de `config.productos`, que
   // la capa de conocimiento edita sin desplegar — es la unica forma de que un producto nuevo no
@@ -272,7 +323,15 @@ export const PRODUCTOS = Object.freeze([
  * cambia por commit — con el modulo construido delante — y nunca por una edicion.
  * Agregar un producto "en construccion" si es libre: eso no promete nada.
  */
-export const MODULOS_LISTOS = Object.freeze(new Set(["dental"]));
+// 2026-08-13: pasa de {dental} a tres. Evidencia, no opinion: la app REAL en produccion
+// (app.onia.com.bo/registro) dice con todas las letras "Clinicas dentales · Comercios ·
+// Importadoras" y deja registrarse en los tres con 14 dias gratis. El bot estaba SUBVENDIENDO —
+// le decia "en construccion, sin humo" a dos rubros que el producto ya atiende, o sea que
+// regalaba dos de cada tres prospectos.
+// OJO: onia.com.bo/empezar (la web de marketing) todavia marca solo dental como disponible. La
+// web y el producto se contradicen; la fuente de verdad para el bot es lo que el cliente puede
+// CONTRATAR hoy, no lo que dice el folleto.
+export const MODULOS_LISTOS = Object.freeze(new Set(["dental", "comercio", "proveedores"]));
 
 // ---------------------------------------------------------------------------
 // Config completa

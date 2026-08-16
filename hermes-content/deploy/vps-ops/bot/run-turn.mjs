@@ -22,6 +22,9 @@
 //   "piece_key": "lucia-d03-reel-siat",     // opcional, atribucion de campana
 //   "source_campaign": "lucia-dentalgest-jul2026",
 //   "human_takeover": false,          // true = un humano contesto: el bot se calla PARA SIEMPRE
+//                                     //        y ese mensaje se guarda como SALIENTE (lo cobra Meta)
+//   "template_name": null,            // nombre de la plantilla de Meta con la que salio, si aplica
+//                                     //        ("seguimiento_demo"): decide utility vs marketing
 //   "dry_run": true,                  // opcional: pisa ONIA_BOT_DRY_RUN
 //   "slots": [{"key":"A","label":"jueves 15:00","startAt":"2026-07-30T19:00:00Z"}]  // opcional
 // }
@@ -178,11 +181,29 @@ export function seedFrom(input) {
     conversationKey: input.conversation_key || input.conversationKey || `${channel}:${contactRef}`,
     channel,
     contactRef,
+    publicContact: input.public_contact || input.publicContact || null,
     displayName: input.display_name || input.displayName || null,
     pieceKey: input.piece_key || input.pieceKey || null,
     sourceCampaign: input.source_campaign || input.sourceCampaign || null,
     ownerRoleKey: input.owner_role_key || "sergio",
   };
+}
+
+/**
+ * Rellena con lo que trae el canal SOLO los campos que la fila guardada tiene vacios.
+ *
+ * `ensureConversation()` escribe estos datos UNA vez, al crear la fila con el primer mensaje. Si el
+ * telefono o la atribucion recien aparecen en el segundo webhook, el estado cargado de la base los
+ * pisa con null y no se guardan NUNCA (los siguientes turnos ya encuentran la fila creada). Se
+ * rellena y no se sobrescribe a proposito: un dato ya guardado gana, asi un turno posterior sin
+ * atribucion no borra la que trajo el primero.
+ */
+function fillFromSeed(state, seed) {
+  const patch = {};
+  if (!state.publicContact && seed.publicContact) patch.publicContact = seed.publicContact;
+  if (!state.pieceKey && seed.pieceKey) patch.pieceKey = seed.pieceKey;
+  if (!state.sourceCampaign && seed.sourceCampaign) patch.sourceCampaign = seed.sourceCampaign;
+  return Object.keys(patch).length ? { ...state, ...patch } : state;
 }
 
 export function incomingFrom(input, nowIso) {
@@ -272,7 +293,7 @@ export async function runTurn(input, deps = {}) {
 
   // 1. Estado: base primero, memoria si la base no contesta (el bot NO se queda mudo).
   const loaded = await store.ensureConversation(seed);
-  let state = loaded || createState(seed);
+  let state = fillFromSeed(loaded || createState(seed), seed);
   if (!loaded && store.enabled) store.warnings.push("estado en memoria: la conversación no se pudo cargar");
   if (input.human_takeover === true && !state.humanTookOver) state = markHumanTakeover(state, nowIso);
 
@@ -282,10 +303,35 @@ export async function runTurn(input, deps = {}) {
   let result = step(state, incoming, { config });
 
   // 3-4. Dedup: si el inbound ya estaba, el turno YA se proceso. Cortar antes de tocar nada.
-  const claimed = await store.claimInbound(result.inbound, state, {
-    externalMessageId: incoming.externalMessageId,
-    raw: { kind: incoming.kind, receivedAt: incoming.receivedAt },
-  });
+  //
+  // EL TRASPASO NO ES UN ENTRANTE. Cuando un humano NUESTRO contesta desde Chatwoot, esta fila es
+  // lo UNICO que queda de ese envio — y Meta lo cobra igual que cualquier otro saliente. Guardada
+  // como `inbound` quedaba fuera del medidor (usage-run.mjs filtra `direction = 'outbound'`): se
+  // media al bot y no a la bandeja, o sea media bolsa del plan sin facturar. Y encima con
+  // `author = 'contact'`: dos mensajes NUESTROS atribuidos al prospecto — verificado en la base del
+  // VPS el 2026-08-13 (mensajes 30 y 31, las dos unicas plantillas reales que existieron).
+  //
+  // Lo que NO cambia: el `message_key`. Es el candado que evita que el bot conteste encima del
+  // humano, y sigue siendo el mismo. Tampoco el `delivery_status`, que claimInbound fija en `sent`:
+  // eso es lo que sabemos (Chatwoot acepto el POST) y ni una letra mas — el veredicto de Meta llega
+  // por un webhook asincrono que Chatwoot no nos reenvia.
+  const traspaso = input.human_takeover === true;
+  const templateName = String(input.template_name ?? input.templateName ?? "").trim();
+  const claimed = await store.claimInbound(
+    traspaso ? { ...result.inbound, direction: "outbound", author: "human", replySource: "human" } : result.inbound,
+    state,
+    {
+      externalMessageId: incoming.externalMessageId,
+      raw: {
+        kind: incoming.kind,
+        receivedAt: incoming.receivedAt,
+        // El nombre de la plantilla de Meta tal cual vino en el webhook. El medidor lo resuelve
+        // contra su registro (utility vs marketing, 6,5x de diferencia); una plantilla que nadie
+        // registro cae en `plantilla_sin_tarifa` y se ve, en vez de colarse barata como servicio.
+        ...(templateName ? { templateName } : {}),
+      },
+    },
+  );
   if (claimed === false) return duplicateResponse(state, stageBefore, store.warnings);
   if (claimed === null && store.enabled) store.warnings.push("sin dedup: el inbound no se pudo registrar");
 

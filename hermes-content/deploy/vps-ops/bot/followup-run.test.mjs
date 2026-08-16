@@ -16,12 +16,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
+import { createBotConfig, DEFAULT_CONFIG, slotsPending } from "./config.mjs";
 import { createStore } from "./persistence.mjs";
 import {
   buildConfig,
   followUpMessageKey,
+  followUpTemplate,
   hoursBetween,
+  outsideWindow,
   parseArgs,
   parseSlotsSpec,
   renderHuman,
@@ -73,6 +75,7 @@ function memoryStore(rows, options = {}) {
   const calls = [];
   const steps = new Map();
   const outbound = [];
+  let inserts = 0;
   for (const item of rows || []) steps.set(item.conversation_key, Number(item.followup_step) || 0);
   return {
     calls,
@@ -100,6 +103,11 @@ function memoryStore(rows, options = {}) {
       },
       async insertOutbound(messages) {
         calls.push("insertOutbound");
+        inserts += 1;
+        // `insertNull`: la base NUNCA acepta la fila (el hueco que hay que gritar).
+        // `insertNullFirst`: falla la primera y entra la segunda — el corte transitorio, que es
+        // el caso realista (el CAS acaba de confirmar milisegundos antes).
+        if (options.insertNull || (options.insertNullFirst && inserts === 1)) return null;
         outbound.push(...messages);
         return messages.length;
       },
@@ -121,7 +129,7 @@ const sweep = (rows, options = {}, config = CONFIG) =>
 // 1. Las 4 condiciones del barrido — filtro que sale a PostgREST
 // ---------------------------------------------------------------------------
 
-test("el barrido pide las 4 condiciones + la ventana 20-24 h de Meta, ordenado y con limite", async () => {
+test("el barrido pide las 4 condiciones + la franja 20 h - 7 dias, ordenado y con limite", async () => {
   const requests = [];
   const store = createStore({
     url: "https://sb.test",
@@ -140,10 +148,10 @@ test("el barrido pide las 4 condiciones + la ventana 20-24 h de Meta, ordenado y
   assert.match(url, /opt_out_at=is\.null/, "3) no pidio la baja");
   assert.match(url, /bot_stage=in\.\(esperando_calificacion,esperando_horario\)/, "4) estado donde tiene sentido");
   assert.match(url, /last_inbound_at=lte\.2026-07-27T18:05:00\.000Z/, "20 h: 4 h de colchon contra la ventana de 24 de Meta");
-  // Piso = la ventana de 24 h de Meta, NO los 7 dias de `staleAfterDays`. Con el piso viejo el
-  // barrido traia vencidas primero (`order=last_inbound_at.asc`) y con `limit` se comian el lote
-  // entero: corria todos los dias sin mandarle nada a quien todavia estaba a tiempo.
-  assert.match(url, /last_inbound_at=gte\.2026-07-27T14:05:00\.000Z/, "piso: ventana de 24 h de Meta");
+  // Piso = `staleAfterDays` (7 dias), NO la ventana de 24 h. El piso estuvo en 24 h mientras fuera
+  // de la ventana no habia NADA que mandar; con `seguimiento_demo` aprobada esas filas volvieron a
+  // ser accionables (salen como plantilla) y tienen que llegar al barrido.
+  assert.match(url, /last_inbound_at=gte\.2026-07-21T14:05:00\.000Z/, "piso: los 7 dias de staleAfterDays");
   assert.match(url, /order=last_inbound_at\.asc/);
   assert.match(url, /limit=20/);
 });
@@ -369,16 +377,247 @@ test("si Sergio todavia no definio los 2 horarios, el follow-up NO sale (y no qu
   assert.ok(!fake.calls.some((call) => call.startsWith("reserve")), "el paso sigue en 0: sale cuando haya horarios");
 });
 
-test("el canal 'sim' registra 'simulated'; con dryRun apagado, 'sent'", async () => {
+// ---------------------------------------------------------------------------
+// 5B. Fuera de la ventana de Meta: sale la PLANTILLA aprobada (antes no salia nada)
+// ---------------------------------------------------------------------------
+
+// 30 h de silencio: la ventana de 24 h ya se cerro. Antes esto se descartaba con
+// `fuera_de_ventana` porque no habia plantilla aprobada; hoy `seguimiento_demo` si existe.
+const NOW_FUERA = new Date(Date.parse(T0) + 30 * 3600000).toISOString();
+
+test("dentro de la ventana el follow-up es TEXTO LIBRE (gratis), no plantilla", async () => {
+  const result = await sweep([row()]);
+  assert.equal(result.send.length, 1);
+  assert.equal(result.send[0].sendKind, "texto_libre");
+  assert.equal(result.send[0].templateName, null);
+  assert.equal(result.send[0].templateKey, "M3");
+});
+
+test("a las 30 h sale `seguimiento_demo` con los MISMOS dos horarios que el texto libre", async () => {
   const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const enviados = [];
+  const fake = memoryStore([row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" })]);
+  const result = await runFollowUpSweep(
+    { nowIso: NOW_FUERA, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      chatwoot: {
+        enabled: true,
+        warnings: [],
+        sendMessage: (id, text, templateParams) => {
+          enviados.push({ id, text, templateParams });
+          return { id: 1 };
+        },
+      },
+    },
+  );
+
+  assert.deepEqual(result.skipped, [], "ya no se descarta por la ventana");
+  assert.equal(result.send[0].sendKind, "plantilla");
+  assert.equal(result.send[0].templateName, "seguimiento_demo");
+  assert.equal(result.send[0].templateKey, "M3_PLANTILLA");
+  assert.equal(result.send[0].deliveryStatus, "sent");
+
+  // Los horarios de la plantilla salen de `slots_offered` de ESA conversacion, igual que el texto
+  // libre: los dos caminos no pueden ofrecer cosas distintas.
+  assert.deepEqual(enviados[0].templateParams, {
+    name: "seguimiento_demo",
+    language: "es",
+    processed_params: { body: { 1: "jueves 15:00", 2: "viernes 10:00" } },
+  });
+  assert.match(enviados[0].text, /te dejo dos horarios: \*jueves 15:00\* o \*viernes 10:00\*/);
+  assert.ok(!enviados[0].text.includes("{{"), "ninguna variable sin renderizar");
+  assert.equal(fake.outbound[0].templateKey, "M3_PLANTILLA", "la bitacora dice que salio la plantilla");
+});
+
+test("a los 8 dias no se escribe NI con plantilla: eso ya no es seguimiento", async () => {
+  const muerta = new Date(Date.parse(T0) + 8 * 24 * 3600000).toISOString();
+  const result = await sweep([row()], { nowIso: muerta });
+  assert.deepEqual(result.send, []);
+  assert.match(result.skipped[0].reason, /^conversacion_muerta/);
+});
+
+test("fuera de la ventana y SIN horarios reales: no se manda nada, ni plantilla ni texto", async () => {
+  // Los horarios placeholder pueden venir de la propia conversacion (`slots_offered` viejo), no
+  // solo del config. Mandar "HORARIO A (pendiente de definir)" en una plantilla PAGA es lo peor
+  // de los dos mundos: se gasta plata y se le escribe una pavada a un prospecto real.
+  const fake = memoryStore([
+    row({
+      conversation_key: "chatwoot:42",
+      channel: "chatwoot",
+      contact_ref: "42",
+      slots_offered: [
+        { key: "A", label: "HORARIO A (pendiente de definir)", pending: true },
+        { key: "B", label: "HORARIO B (pendiente de definir)", pending: true },
+      ],
+    }),
+  ]);
+  const result = await runFollowUpSweep({ nowIso: NOW_FUERA, emit: true }, { config: CONFIG, store: fake.store });
+
+  assert.deepEqual(result.send, []);
+  assert.equal(result.skipped[0].reason, "slots_sin_definir");
+  assert.ok(!fake.calls.some((call) => call.startsWith("reserve")), "no se quema la reserva: sale cuando haya horarios");
+});
+
+test("outsideWindow y followUpTemplate son puros y no adivinan", () => {
+  const state = { lastInboundAt: T0, slotsOffered: [] };
+  assert.equal(outsideWindow(state, NOW, CONFIG), false, "22 h: la ventana sigue abierta");
+  assert.equal(outsideWindow(state, NOW_FUERA, CONFIG), true);
+  assert.equal(outsideWindow({ lastInboundAt: "no-es-fecha" }, NOW, CONFIG), false, "dato roto no paga plantilla");
+
+  assert.equal(followUpTemplate(state, DEFAULT_CONFIG), null, "con los placeholders del config, tampoco");
+  const built = followUpTemplate(state, CONFIG);
+  assert.equal(built.name, "seguimiento_demo");
+  assert.match(built.text, /jueves 15:00/);
+});
+
+test("la plantilla NO se reintenta si el envio falla: la reserva ya se gasto", async () => {
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  let intentos = 0;
+  const fake = memoryStore([row({ conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" })]);
+  const result = await runFollowUpSweep(
+    { nowIso: NOW_FUERA, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      chatwoot: {
+        enabled: true,
+        warnings: ["chatwoot: HTTP 400 template pausada"],
+        sendMessage: () => {
+          intentos += 1;
+          return null; // Meta rechazo la plantilla (132015 / pacing): NO se vuelve a intentar
+        },
+      },
+    },
+  );
+
+  assert.equal(intentos, 1, "un solo intento: un duplicado quema la calidad del numero ante Meta");
+  assert.equal(result.send[0].deliveryStatus, "failed");
+  assert.equal(result.send[0].sendKind, "plantilla", "el reporte igual dice QUE se intento mandar");
+  assert.equal(fake.outbound[0].deliveryStatus, "failed", "la bitacora no promete un envio que no paso");
+  assert.equal(fake.steps.get("chatwoot:42"), 1, "el paso quedo consumido: no hay segundo follow-up");
+});
+
+test("'sent' solo si SE MANDO: el estado guardado no puede volver a ser una promesa", async () => {
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const chatwootRow = { conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" };
 
   const sim = memoryStore([row({ conversation_key: "sim:x", channel: "sim", contact_ref: "x" })]);
   await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: sim.store });
   assert.equal(sim.outbound[0].deliveryStatus, "simulated");
 
-  const real = memoryStore([row()]);
-  await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: real.store });
+  // Se manda de verdad: al cliente de Chatwoot le llega la conversacion y el texto.
+  const enviados = [];
+  const real = memoryStore([row(chatwootRow)]);
+  const ok = await runFollowUpSweep(
+    { nowIso: NOW, emit: true },
+    {
+      config: enVivo,
+      store: real.store,
+      chatwoot: { enabled: true, warnings: [], sendMessage: (id, text) => { enviados.push({ id, text }); return { id: 1 }; } },
+    },
+  );
   assert.equal(real.outbound[0].deliveryStatus, "sent");
+  assert.equal(enviados.length, 1, "se mando UNA vez");
+  assert.equal(enviados[0].id, "42", "a la conversacion de Chatwoot, que es el contactRef");
+  assert.match(enviados[0].text, /\S/);
+  assert.equal(ok.warnings.length, 0);
+
+  // Sin token no se manda — y NO se registra como enviado. Antes esto decia "sent" igual.
+  const roto = memoryStore([row(chatwootRow)]);
+  const fallo = await runFollowUpSweep(
+    { nowIso: NOW, emit: true },
+    { config: enVivo, store: roto.store, chatwoot: { enabled: false, warnings: [], sendMessage: () => null } },
+  );
+  assert.equal(roto.outbound[0].deliveryStatus, "failed");
+  assert.match(fallo.warnings.join(" "), /sin token/);
+
+  // Un canal sin envio automatico tampoco puede decir "sent".
+  const otro = memoryStore([row()]); // telegram
+  await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: otro.store });
+  assert.equal(otro.outbound[0].deliveryStatus, "failed");
+});
+
+// ---------------------------------------------------------------------------
+// 5 bis. EL AGUJERO ESPEJO: un envio que SALIO nunca puede quedar sin fila
+//
+// Aca se manda ANTES de registrar (al reves que el recordatorio, porque este barrido tiene su
+// propia reserva con CAS). Si el insert falla despues de un envio exitoso, Meta nos COBRA un
+// mensaje que nuestra base dice que no existio y el medidor cuenta de MENOS. Espejo exacto del
+// bug del recordatorio, que facturaba de mas.
+// ---------------------------------------------------------------------------
+
+/** Un envio real por Chatwoot: es el unico camino donde `deliveryStatus` llega a "sent". */
+async function envioReal(fake, options = {}) {
+  const enviados = [];
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const salida = await runFollowUpSweep(
+    { nowIso: options.nowIso || NOW, emit: true },
+    {
+      config: enVivo,
+      store: fake.store,
+      chatwoot: {
+        enabled: true,
+        warnings: [],
+        sendMessage: (id, text, templateParams) => {
+          enviados.push({ id, text, templateParams });
+          return { id: 1 };
+        },
+      },
+    },
+  );
+  return { enviados, salida };
+}
+
+const CHATWOOT_ROW = { conversation_key: "chatwoot:42", channel: "chatwoot", contact_ref: "42" };
+
+test("insert caido tras un envio exitoso: se REINTENTA la fila, NO el envio", async () => {
+  const fake = memoryStore([row(CHATWOOT_ROW)], { insertNullFirst: true });
+  const { enviados, salida } = await envioReal(fake);
+
+  assert.equal(enviados.length, 1, "REGLA DURA: el mensaje sale UNA vez — reintentar la fila no re-manda");
+  assert.equal(fake.calls.filter((call) => call === "insertOutbound").length, 2, "el insert si se reintenta");
+  assert.equal(fake.outbound.length, 1, "y entra UNA sola fila, no dos");
+  assert.equal(fake.outbound[0].messageKey, "followup:chatwoot:42:1", "misma clave: por eso el reintento es idempotente");
+  assert.equal(salida.send[0].deliveryStatus, "sent");
+  assert.equal(salida.send[0].logged, true, "el envio quedo contabilizado");
+  assert.ok(!salida.notes.includes("envio_sin_fila"), "se arreglo: no hay hueco que declarar");
+  assert.ok(!salida.warnings.join(" ").includes("SIN FILA"));
+});
+
+test("si ni el reintento entra, el hueco se GRITA — no muere como `logged: false`", async () => {
+  const fake = memoryStore([row(CHATWOOT_ROW)], { insertNull: true });
+  const { enviados, salida } = await envioReal(fake);
+
+  assert.equal(enviados.length, 1, "aun perdiendo la fila, el mensaje NO se manda dos veces");
+  assert.equal(fake.calls.filter((call) => call === "insertOutbound").length, 2, "se intento dos veces y no entro");
+  assert.equal(salida.ok, true, "EXIT 0: un fallo del registro no puede tumbar el barrido");
+  assert.equal(salida.send[0].deliveryStatus, "sent");
+  assert.equal(salida.send[0].logged, false);
+
+  // Lo que antes moria en silencio: ahora sale con nombre y apellido.
+  assert.ok(salida.notes.includes("envio_sin_fila"), "la nota que n8n puede leer sin parsear texto");
+  const grito = salida.warnings.find((warning) => warning.includes("SIN FILA"));
+  assert.ok(grito, "el warning existe");
+  assert.match(grito, /chatwoot:42/, "nombra la conversacion");
+  assert.match(grito, /Meta lo cobra/, "dice que es plata, no un detalle tecnico");
+  assert.match(grito, /texto_libre/, "y por que carril salio (la plantilla cuesta 6,5x)");
+});
+
+test("el aviso solo suena si SALIO: dry-run y envio fallido no cuestan plata", async () => {
+  // Envio fallido (canal sin envio automatico): la fila tampoco entra, pero Meta no cobra nada.
+  const roto = memoryStore([row()], { insertNull: true }); // telegram
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const fallo = await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: enVivo, store: roto.store });
+  assert.equal(fallo.send[0].deliveryStatus, "failed");
+  assert.ok(!fallo.notes.includes("envio_sin_fila"), "un envio que no salio no es un hueco de plata");
+
+  // Dry-run: el barrido calcula todo pero no manda. Una alarma aca seria una mentira.
+  const seco = memoryStore([row(CHATWOOT_ROW)], { insertNull: true });
+  const dry = await runFollowUpSweep({ nowIso: NOW, emit: true }, { config: CONFIG, store: seco.store });
+  assert.equal(dry.send[0].deliveryStatus, "skipped");
+  assert.ok(!dry.notes.includes("envio_sin_fila"));
 });
 
 // ---------------------------------------------------------------------------
@@ -403,7 +642,14 @@ test("parseSlotsSpec / buildConfig: los horarios entran por CLI o por env, sin i
     { key: "A", label: "jueves 15:00", startAt: "2026-07-30T19:00:00Z", pending: false },
     { key: "B", label: "viernes 10:00", startAt: null, pending: false },
   ]);
-  assert.equal(buildConfig({}), DEFAULT_CONFIG, "sin overrides no se clona el config");
+  // Lo que se cuida es que SIN overrides el transporte no pise NADA — no la identidad del objeto.
+  // El assert de identidad (`=== DEFAULT_CONFIG`) daba verde local y ROJO en el VPS: alli existe
+  // knowledge.json y `withKnowledge()` devuelve otro objeto. Ver la prueba de PARIDAD en
+  // run-turn.test.mjs: un verde que no vale es peor que un rojo.
+  const sinOverrides = buildConfig({});
+  assert.deepEqual(sinOverrides.slots, DEFAULT_CONFIG.slots, "sin overrides, los horarios siguen siendo el placeholder");
+  assert.equal(sinOverrides.dryRun, DEFAULT_CONFIG.dryRun, "y el dryRun sigue siendo el del codigo");
+  assert.ok(slotsPending(sinOverrides));
   assert.equal(buildConfig({ slots: "jueves 15:00|viernes 10:00" }).slots[0].label, "jueves 15:00");
 });
 
@@ -432,10 +678,12 @@ test("resolveConfig: sin --slots ni ONIA_BOT_SLOTS, si Cal.com responde reemplaz
   assert.deepEqual(config.slots, live);
 });
 
-test("resolveConfig: si Cal.com no responde, cae al DEFAULT_CONFIG (placeholder) sin tirar", async () => {
+test("resolveConfig: si Cal.com no responde, cae al placeholder sin tirar", async () => {
   const getAvailableSlots = async () => ({ slots: null, source: "error", warnings: ["calcom: caido"] });
   const config = await resolveConfig({}, { getAvailableSlots });
-  assert.equal(config, DEFAULT_CONFIG);
+  // Lo que importa es que NO se inventen horarios, no que sea el mismo objeto en memoria.
+  assert.deepEqual(config.slots, DEFAULT_CONFIG.slots, "no se fabrica un horario porque Cal.com no conteste");
+  assert.ok(slotsPending(config), "queda el placeholder, que es lo que frena el envio de M3");
 });
 
 test("skipReason nombra el motivo exacto (es lo que Sergio lee en el dry-run)", () => {

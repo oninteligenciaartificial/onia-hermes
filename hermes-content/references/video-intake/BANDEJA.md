@@ -101,3 +101,24 @@ delante. Cuando uno se procesa, se le escribe su ficha y se mueve a [INDEX.md](I
 - [Lectura + verbatim](transcripciones/2026-08-12-Instagram-DbYojZmyPM3.md)
 - Resumen: El video expone el caso de éxito de Nicole, una emprendedora que genera más de $300,000 mensuales con sus dos aplicaciones (*Glam Up* y *Sprout*) gracias a una estrategia masiva de generación de contenido orgánico y UGC. Explica los pilares de su éxito: diseñar apps visualmente atractivas, probar múltiples formatos ...
 - **Veredicto: PENDIENTE**
+
+## 2026-08-15-Instagram-Db_X_Tkx-3W
+
+- https://www.instagram.com/p/Db_X_Tkx-3W/ · 23 s
+- [Lectura + verbatim](transcripciones/2026-08-15-Instagram-Db_X_Tkx-3W.md)
+- Resumen: El video muestra el contraste entre gestionar agentes de IA de forma manual para múltiples clientes y utilizar un modelo de agencia IA como SaaS (Software as a Service). El enfoque tradicional satura de trabajo operativo al creador (40 horas semanales por 12 clientes). Al centralizarlo en una sola plataforma SaaS de...
+- **Veredicto: PENDIENTE**
+
+## 2026-08-15-Instagram-DcCoWjpzkWC
+
+- https://www.instagram.com/p/DcCoWjpzkWC/ · 24 s
+- [Lectura + verbatim](transcripciones/2026-08-15-Instagram-DcCoWjpzkWC.md)
+- Resumen: El creador presenta una lista rápida de 20 funciones y elementos prácticos que se le pueden solicitar a la IA Claude para mejorar cualquier sitio web. El objetivo es ofrecer ideas directas de implementación en desarrollo web en menos de 24 segundos.
+- **Veredicto: PENDIENTE**
+
+## 2026-08-15-Instagram-DbvlW-_sj_f
+
+- https://www.instagram.com/p/DbvlW-_sj_f/ · 40 s
+- [Lectura + verbatim](transcripciones/2026-08-15-Instagram-DbvlW-_sj_f.md)
+- Resumen: El video presenta la herramienta de inteligencia artificial **Higgsfield Seedance 2.5** para generación de video hiperrealista. Muestra sus capacidades para modificar elementos individuales en escenas conservando el resto y generar clips de hasta 30 segundos por prompt. Finaliza ofreciendo una promoción de 33 días d...
+- **Veredicto: PENDIENTE**

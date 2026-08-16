@@ -90,7 +90,9 @@ test("el banco corre el motor de produccion: la ruta sale de step(), no de una t
 
 // MOTOR REAL: si cambia la config, cambia la medicion (prueba de que no hay guion hardcodeado).
 test("cambiar la config cambia lo que mide el banco (no hay guion copiado adentro)", () => {
-  const otra = createBotConfig({ script: { ...BENCH_CONFIG.script, M0: "otro texto de bienvenida" } });
+  // Sobre BENCH_CONFIG a proposito: `createBotConfig` sin base parte de DEFAULT_CONFIG, que trae
+  // los horarios PLACEHOLDER, y ahi el motor contesta M0_SIN_HORARIOS (correcto) en vez de M0.
+  const otra = createBotConfig({ script: { ...BENCH_CONFIG.script, M0: "otro texto de bienvenida" } }, BENCH_CONFIG);
   const observed = runConversation({ id: "t", turns: ["hola"] }, otra);
   assert.match(observed[0].result.replies[0].text, /otro texto de bienvenida/);
 });

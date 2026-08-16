@@ -96,6 +96,10 @@ export function stateFromRow(row) {
     conversationKey: row.conversation_key,
     channel: row.channel,
     contactRef: row.contact_ref,
+    // Vive en `raw` y no en columna propia: `raw` ya es el carril de los campos de estado que no
+    // tienen columna (qualifyAsks, outboundSeq, scheduledLabel), asi que no hace falta un DDL en
+    // produccion para dejar de guardar el id de conversacion como telefono del CRM.
+    publicContact: raw.publicContact || null,
     displayName: row.display_name,
     botStage: STAGES.includes(row.bot_stage) ? row.bot_stage : "nuevo",
     pieceKey: row.piece_key,
@@ -158,7 +162,9 @@ export function buildLeadRow(payload, state) {
     business_type: q.industry || null,
     city: q.city || null,
     country: "Bolivia",
-    public_contact: state.contactRef || null,
+    // El TELEFONO si lo hay; si no, se cae al `contactRef` de siempre. Sin este fallback un lead
+    // del widget web (donde el contacto no da telefono) perderia hasta la referencia que tiene hoy.
+    public_contact: state.publicContact || state.contactRef || null,
     channel: CHANNEL_LABEL[state.channel] || "Simulador",
     source: `bot:${payload.pieceKey || state.pieceKey || state.sourceCampaign || DEFAULT_CONFIG.botKey}`,
     contact_permission: state.optOutAt ? "no_contact" : state.optInAt ? "approved" : "pending",
@@ -183,23 +189,62 @@ export function buildLeadRow(payload, state) {
 }
 
 /** Fila de bot_messages a partir de una reply/inbound del motor. */
+/**
+ * Lo que se guarda en `body` de un mensaje ENTRANTE. No es el texto: es un marcador.
+ *
+ * MINIMIZACION DE DATOS: no se persiste ningun dato del prospecto que no cambie el comportamiento
+ * del sistema. El texto crudo de lo que escribe NO lo cambia — verificado en el codigo: nadie lee
+ * `bot_messages.body`, ni el motor (`stateFromRow` solo hidrata `bot_conversations`) ni el LLM
+ * (recibe el mensaje del turno en curso, nunca el historial). Estaba guardado "por si acaso".
+ *
+ * Lo que SI cambia el comportamiento ya se guarda aparte y estructurado: rubro, tamaño, ciudad y
+ * dolor en `qualification`. De un "estoy enferma" no queda nada, porque no decide nada.
+ *
+ * La FILA se sigue escribiendo: es la reserva anti-duplicados (`message_key` unique). Lo unico que
+ * se va es el contenido. Y no se pierde nada operativo: la conversacion entera vive en Chatwoot,
+ * que es la bandeja y la herramienta para leerla — esto solo deja de DUPLICARLA en nuestra base.
+ */
+export const INBOUND_BODY_PLACEHOLDER = "(entrante — texto no persistido)";
+
+/**
+ * Los estados que la base acepta (CHECK de `bot_messages.delivery_status`, migracion
+ * 20260813_bot_messages_delivery_status_reserved.sql).
+ *
+ * Vive en UNA constante porque el bug del recordatorio fue exactamente esto: una lista blanca
+ * escrita a mano que se quedo corta contra el CHECK. Y como el ternario de abajo degrada EN
+ * SILENCIO, el estado desconocido no explota: se convierte en "simulated" y el mensaje real
+ * desaparece de la cuenta. Dos listas separadas volverian a divergir; esta es una sola.
+ */
+export const DELIVERY_STATUSES = Object.freeze(["simulated", "skipped", "sent", "failed", "reserved"]);
+
 export function buildMessageRow(message, state, extra = {}) {
   const guardrail = message.guardrail || { ok: true, violations: [] };
+  const direction = message.direction === "inbound" ? "inbound" : "outbound";
+  // El saliente SI se guarda entero: es NUESTRO guion, no un dato del prospecto, y es la unica
+  // forma de auditar despues que fue exactamente lo que el bot dijo.
+  const body =
+    direction === "inbound"
+      ? INBOUND_BODY_PLACEHOLDER
+      : String(message.text ?? message.body ?? "").trim() || "(sin texto)";
   return {
     message_key: String(message.messageKey || "").slice(0, 400),
     conversation_key: state.conversationKey,
-    direction: message.direction === "inbound" ? "inbound" : "outbound",
+    direction,
     author: ["contact", "bot", "human"].includes(message.author) ? message.author : "bot",
-    body: String(message.text ?? message.body ?? "").trim() || "(sin texto)",
+    body,
     template_key: message.templateKey || null,
     reply_source: ["script", "llm", "human"].includes(message.replySource) ? message.replySource : "script",
     stage_before: message.stageBefore || null,
     stage_after: message.stageAfter || null,
     guardrail_ok: guardrail.ok !== false,
     guardrail_violations: Array.isArray(guardrail.violations) ? guardrail.violations : [],
-    delivery_status: ["simulated", "skipped", "sent", "failed"].includes(message.deliveryStatus)
-      ? message.deliveryStatus
-      : "simulated",
+    // `reserved` entra en la lista porque el recordatorio (M9) escribe la fila ANTES de mandar: la
+    // reserva ES el insert. Faltaba, y como este ternario degrada EN SILENCIO a "simulated", cada
+    // recordatorio utility real quedaba guardado como simulacion — invisible para el medidor, que
+    // solo cuenta lo que salio. Se descubrio midiendo, no leyendo. El CHECK de la tabla se amplio
+    // en la misma tanda (supabase/migrations/20260813_bot_messages_delivery_status_reserved.sql):
+    // si el codigo acepta un valor que la base rechaza, el insert falla y se pierde la fila entera.
+    delivery_status: DELIVERY_STATUSES.includes(message.deliveryStatus) ? message.deliveryStatus : "simulated",
     external_message_id: extra.externalMessageId || null,
     raw: extra.raw || {},
   };
@@ -331,6 +376,7 @@ export function createStore(options = {}) {
         qualifyAsks: state.qualifyAsks || 0,
         outboundSeq: state.outboundSeq || 0,
         scheduledLabel: state.scheduledLabel || null,
+        publicContact: state.publicContact || null,
       },
     };
     const rows = await rest("saveConversation", `bot_conversations?conversation_key=${eq(state.conversationKey)}`, {
@@ -371,6 +417,72 @@ export function createStore(options = {}) {
     return rows ? rows.length : null;
   }
 
+  /**
+   * El DESENLACE de una fila que ya existe: pasa de `reserved` ("reserve y todavia no se como
+   * termino") a lo que de verdad paso, `sent` o `failed`. La usa el recordatorio (M9), el unico
+   * barrido donde la reserva ES el insert y por eso la fila se escribe antes de mandar.
+   *
+   * APPEND-ONLY: la tabla lo es por diseño y esto NO lo viola, aunque sea un PATCH. No agrega ni
+   * borra historia, y sobre todo NO toca `message_key` — o sea que la clave unica, que es LA
+   * proteccion anti-duplicados del recordatorio, queda intacta. Es el MISMO hecho (ese envio)
+   * terminando de contarse, no un hecho nuevo.
+   *
+   * Tolerante como todo lo demas: nunca tira. Un fallo aca no puede tumbar el barrido — si el
+   * proceso reventara, n8n reintentaria y el prospecto recibiria dos recordatorios.
+   *
+   * @param {string|null} [externalMessageId] el id del mensaje en el canal, si el envio lo devolvio.
+   * @returns true actualizada · false ninguna fila con esa clave · null sin base o fallo de red
+   *   (el motivo ya quedo en `warnings`)
+   */
+  async function markMessageDelivered(messageKey, deliveryStatus, externalMessageId = null) {
+    const key = String(messageKey || "").trim();
+    if (!key) return warn("markMessageDelivered", "sin message_key: no hay fila que actualizar");
+    // Un estado que la base rechaza haria fallar el PATCH entero: se corta antes y se dice cual era.
+    if (!DELIVERY_STATUSES.includes(deliveryStatus)) {
+      return warn("markMessageDelivered", `estado desconocido: ${String(deliveryStatus)}`);
+    }
+    const rows = await rest("markMessageDelivered", `bot_messages?message_key=${eq(key)}`, {
+      method: "PATCH",
+      headers: { Prefer: "return=representation" },
+      body: JSON.stringify({
+        delivery_status: deliveryStatus,
+        ...(externalMessageId ? { external_message_id: String(externalMessageId).slice(0, 200) } : {}),
+      }),
+    });
+    if (!rows) return null;
+    return rows.length > 0;
+  }
+
+  /**
+   * Los SALIENTES de una ventana de tiempo. Es la lectura del MEDIDOR (usage-run.mjs): con esto se
+   * factura el excedente de la bolsa y se audita el margen contra lo que cobra Meta.
+   *
+   * Media abierta [from, to): asi un mes no se pisa con el siguiente ni pierde el ultimo segundo.
+   * Pagina por `offset` — el que llama repite hasta que vuelve una pagina vacia, porque PostgREST
+   * puede recortar el lote por `db-max-rows` sin avisar y creerle al primer lote seria facturar de
+   * menos.
+   *
+   * El `body` NO se trae a proposito: es el guion entero y aca solo se cuenta. El dia que exista
+   * una columna de cliente/tenant hay que agregarla a este `select` (tenantOf() ya la lee).
+   */
+  async function listOutboundMessages(fromIso, toIso, options = {}) {
+    if (!Number.isFinite(Date.parse(fromIso)) || !Number.isFinite(Date.parse(toIso))) {
+      return warn("listOutboundMessages", `rango invalido: ${fromIso} .. ${toIso}`);
+    }
+    const limit = Number(options.limit) > 0 ? Math.floor(options.limit) : 1000;
+    const offset = Number(options.offset) > 0 ? Math.floor(options.offset) : 0;
+    const filter = [
+      "direction=eq.outbound",
+      `created_at=gte.${fromIso}`,
+      `created_at=lt.${toIso}`,
+      "select=conversation_key,template_key,delivery_status,created_at,raw",
+      "order=created_at.asc",
+      `limit=${limit}`,
+      `offset=${offset}`,
+    ].join("&");
+    return rest("listOutboundMessages", `bot_messages?${filter}`);
+  }
+
   // -------------------------------------------------------------------------
   // Follow-up: reserva CAS + barrido (spec §4.6)
   // -------------------------------------------------------------------------
@@ -399,18 +511,25 @@ export function createStore(options = {}) {
   }
 
   /**
-   * Barrido del cron: candidatas a follow-up (20 h <= inactividad < 24 h, la ventana de Meta).
+   * Barrido del cron: candidatas a follow-up (inactividad de 20 h hasta `staleAfterDays`).
    *
-   * El piso era `staleAfterDays` (7 dias) y eso rompia el barrido entero: el orden es
-   * `last_inbound_at.asc` (mas viejas primero) y hay `limit`, asi que una cola de conversaciones
-   * vencidas se comia el lote completo y las que SI estaban a tiempo no se procesaban nunca.
-   * Con el piso en la ventana de Meta solo vuelven filas accionables.
+   * EL PISO CAMBIO DOS VECES, y las dos por el mismo motivo — que vuelvan SOLO filas accionables:
+   *   1. Era `staleAfterDays` (7 dias) y rompia el barrido: el orden es `last_inbound_at.asc` (mas
+   *      viejas primero) y hay `limit`, asi que una cola de conversaciones VENCIDAS se comia el
+   *      lote entero y las que si estaban a tiempo no se procesaban nunca.
+   *   2. Se apreto a la ventana de 24 h de Meta, porque afuera de ella no habia NADA que mandar
+   *      (el texto libre falla con 131047 y no existia plantilla aprobada).
+   * Hoy `seguimiento_demo` esta aprobada: afuera de la ventana el mensaje SI se puede mandar, como
+   * plantilla. O sea que esas filas volvieron a ser accionables y el piso vuelve a `staleAfterDays`
+   * — el problema (1) ya no aplica porque no quedan filas "vencidas pero inutiles" en el rango.
+   * El corte de verdad, el que dice a los 8 dias no se escribe ni con plantilla, lo pone
+   * `conversacion_muerta` en followup-run.mjs.
    */
   async function sweepFollowUpCandidates(nowIso, config = DEFAULT_CONFIG, limit = 50) {
     const now = Date.parse(nowIso);
     if (!Number.isFinite(now)) return warn("sweepFollowUpCandidates", `nowIso invalido: ${nowIso}`);
-    const ventanaHoras = config.followUp.windowClosesAtHours ?? 24;
-    const from = new Date(now - ventanaHoras * 3600000).toISOString();
+    const staleHoras = (config.followUp.staleAfterDays ?? DEFAULT_CONFIG.followUp.staleAfterDays) * 24;
+    const from = new Date(now - staleHoras * 3600000).toISOString();
     const to = new Date(now - config.followUp.afterHours * 3600000).toISOString();
     const filter = [
       "followup_step=eq.0",
@@ -455,6 +574,72 @@ export function createStore(options = {}) {
     return rest("sweepDemoReminders", `bot_conversations?${filter}`);
   }
 
+  /**
+   * Barrido del CIERRE: demos que ya terminaron y siguen en `demo_agendada`.
+   *
+   * Es el espejo de sweepDemoReminders — aquel mira hacia ADELANTE (demos por empezar), este mira
+   * hacia ATRAS. Sin el, una demo agendada se queda en `demo_agendada` para siempre: `demo_realizada`
+   * estaba en la lista de estados y NADIE lo escribia nunca, asi que nadie se enteraba de si la
+   * reunion ocurrio.
+   *
+   * `endedBeforeIso` es un CORTE, no el "ahora": ya viene con la duracion de la demo y el margen de
+   * gracia sumados (los calcula postdemo-run.mjs, que es donde se decide cuando se da por terminada).
+   * Pasarle el "ahora" pelado devolveria demos que recien estan EMPEZANDO.
+   *
+   * No filtra "ya avisadas" y no le hace falta: la reserva mueve `bot_stage` a `demo_realizada`, o
+   * sea FUERA de este mismo filtro. El segundo barrido ya no las ve.
+   */
+  async function sweepDemosTerminadas(endedBeforeIso, limit = 50) {
+    if (!Number.isFinite(Date.parse(endedBeforeIso))) {
+      return warn("sweepDemosTerminadas", `endedBeforeIso invalido: ${endedBeforeIso}`);
+    }
+    const filter = [
+      "bot_stage=eq.demo_agendada",
+      "human_took_over=is.false",
+      "opt_out_at=is.null",
+      `scheduled_at=lte.${endedBeforeIso}`,
+      "order=scheduled_at.asc",
+      `limit=${Number(limit) || 50}`,
+    ].join("&");
+    return rest("sweepDemosTerminadas", `bot_conversations?${filter}`);
+  }
+
+  /**
+   * Reserva del cierre. MISMO CAS que reserveFollowUp, pero sobre el estado mismo:
+   *
+   *   update onia_center.bot_conversations set bot_stage = 'demo_realizada'
+   *    where conversation_key = $1 and bot_stage = 'demo_agendada'
+   *      and human_took_over = false and opt_out_at is null returning conversation_key;
+   *
+   * El ESTADO ES LA RESERVA: al moverlo, la fila sale del filtro de sweepDemosTerminadas. Dos
+   * corridas seguidas (o dos crons pisandose) avisan UNA sola vez — la segunda actualiza 0 filas
+   * porque Postgres re-evalua el WHERE despues de tomar el lock. No hace falta columna nueva, o sea
+   * que tampoco hay migracion pendiente.
+   *
+   * NO se usa saveConversation a proposito: eso escribe el estado ENTERO y pisaria un
+   * `human_took_over` que haya ocurrido entre el barrido y ahora. Aca se toca UNA columna.
+   *
+   * `pipeline_status` del lead NO se toca: despues de una demo, Ganado/Perdido/Propuesta es una
+   * decision comercial de una persona (ver PIPELINE_STATUSES).
+   *
+   * @returns true reservado (hay que avisar) · false ya estaba cerrada · null sin base (no avisar)
+   */
+  async function reserveDemoDone(conversationKey) {
+    const filter = [
+      `conversation_key=${eq(conversationKey)}`,
+      "bot_stage=eq.demo_agendada",
+      "human_took_over=is.false",
+      "opt_out_at=is.null",
+    ].join("&");
+    const rows = await rest("reserveDemoDone", `bot_conversations?${filter}`, {
+      method: "PATCH",
+      headers: { Prefer: "return=representation" },
+      body: JSON.stringify({ bot_stage: "demo_realizada" }),
+    });
+    if (!rows) return null;
+    return rows.length > 0;
+  }
+
   // -------------------------------------------------------------------------
   // Efectos laterales: leads, review_queue, audit_logs
   // -------------------------------------------------------------------------
@@ -483,6 +668,9 @@ export function createStore(options = {}) {
       raw: merged,
     };
     if (row.pain_point) patch.pain_point = row.pain_point;
+    // Solo cuando hay TELEFONO de verdad. Sin este guard, un lead al que un humano ya le corrigio
+    // el contacto a mano quedaria pisado con el id de conversacion en cada turno siguiente.
+    if (state.publicContact) patch.public_contact = state.publicContact;
     const updated = await rest("upsertLead.patch", `leads?lead_key=${eq(row.lead_key)}`, {
       method: "PATCH",
       headers: { Prefer: "return=representation" },
@@ -586,9 +774,13 @@ export function createStore(options = {}) {
     saveConversation,
     claimInbound,
     insertOutbound,
+    markMessageDelivered,
+    listOutboundMessages,
     reserveFollowUp,
     sweepFollowUpCandidates,
     sweepDemoReminders,
+    sweepDemosTerminadas,
+    reserveDemoDone,
     upsertLead,
     enqueueReview,
     writeAudit,

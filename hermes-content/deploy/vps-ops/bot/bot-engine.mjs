@@ -66,6 +66,10 @@ export function createState(input = {}) {
     conversationKey: input.conversationKey || `${channel}:${contactRef}`,
     channel,
     contactRef,
+    // El contacto con el que un humano puede LLAMAR (telefono de WhatsApp). Distinto de
+    // `contactRef`, que es el id de la conversacion del canal y no sirve para contactar a nadie.
+    // Se persiste en `bot_conversations.raw`, no en columna: ver saveConversation().
+    publicContact: input.publicContact || null,
     displayName: input.displayName || null,
     botStage: input.botStage || "nuevo",
     pieceKey: input.pieceKey || null,
@@ -300,10 +304,15 @@ function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
  */
 function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienvenida"], after = [] } = {}) {
   const { config, prev, msg } = ctx;
+  // SIN HORARIOS REALES NO SE SALUDA CON HORARIOS. El placeholder de config.mjs sale tal cual al
+  // prospecto ("HORARIO A (pendiente de definir)") y ademas detectSlotChoice descarta los slots
+  // `pending`, asi que el prospecto no puede elegir NADA: la conversacion muere en el primer
+  // mensaje. Se lo saluda igual (el lead nace), pero el horario lo coordina un humano.
+  const sinHorarios = slotsPending(config);
   const next = {
     ...base,
-    botStage: "esperando_horario",
-    slotsOffered: config.slots.map((slot) => ({ ...slot })),
+    botStage: sinHorarios ? "handoff_humano" : "esperando_horario",
+    slotsOffered: sinHorarios ? [] : config.slots.map((slot) => ({ ...slot })),
     optInAt: base.optInAt || msg.receivedAt,
     optInSource: base.optInSource || "inbound_demo",
     offScriptCount: 0,
@@ -325,7 +334,16 @@ function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienve
       },
     },
   ];
-  return finalize(ctx, next, [say("M0", next, config), ...after], effects, notes);
+  if (sinHorarios) {
+    // Un humano TIENE que enterarse: el prospecto quedo esperando que Sergio le proponga hora.
+    const summary = summarize(next, msg, "sin horarios disponibles que ofrecer", config);
+    effects.push(
+      { type: "review_queue", payload: { ...config.handoff.reviewQueue, conversationKey: next.conversationKey, leadKey: next.leadKey, summary } },
+      { type: "notify_sergio", payload: { kind: "sin_horarios", conversationKey: next.conversationKey, text: summary } },
+    );
+  }
+  const bienvenida = say(sinHorarios ? "M0_SIN_HORARIOS" : "M0", next, config);
+  return finalize(ctx, next, [bienvenida, ...after], effects, sinHorarios ? [...notes, "sin_horarios_que_ofrecer"] : notes);
 }
 
 /**

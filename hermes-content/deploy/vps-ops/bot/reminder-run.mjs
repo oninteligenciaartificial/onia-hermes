@@ -10,13 +10,13 @@
 //                     (si esto revienta, n8n reintenta y el prospecto recibe el recordatorio dos veces).
 //
 // REGLAS DURAS
-//   1. LA VENTANA DE META MANDA. Se cierra a las 24 h del ULTIMO MENSAJE ENTRANTE del prospecto;
-//      pasada esa marca el mensaje de formato libre falla con 131047 y solo salen plantillas
-//      aprobadas — que hoy NO existen y que ademas exigen un metodo de pago que la cuenta no
-//      tiene. Quien reservo para dentro de 3 dias NO recibe recordatorio y no se intenta: se
-//      descarta con `fuera_de_ventana` para que Sergio lo vea y escriba el.
-//      Por eso mismo el link NO depende de esto: sale en M2, cuando la ventana esta abierta seguro
-//      (el prospecto acaba de escribir). Esto es un RECORDATORIO, no la unica entrega del link.
+//   1. LA VENTANA DE META DECIDE EL CARRIL, ya no si se manda. Se cierra a las 24 h del ULTIMO
+//      MENSAJE ENTRANTE del prospecto. Dentro: texto libre M9 (gratis). Fuera: la plantilla
+//      aprobada `recordatorio_demo` (UTILITY, ~0,0113 USD). Antes, sin plantilla aprobada, quien
+//      reservaba para dentro de 3 dias se descartaba con `fuera_de_ventana` y no recibia nada —
+//      que era justo el caso mas comun de este barrido.
+//      El link igual NO depende de esto: sale en M2, cuando la ventana esta abierta seguro (el
+//      prospecto acaba de escribir). Esto es un RECORDATORIO, no la unica entrega del link.
 //   2. UNO SOLO POR DEMO. La reserva es la clave unica de `bot_messages`
 //      (`recordatorio:<conversacion>:<inicio>`): el insert con `on_conflict` devuelve 1 fila si
 //      gano la carrera y 0 si ya estaba. Va SIEMPRE ANTES de emitir. Sin reserva confirmada no se
@@ -45,9 +45,10 @@ import { pathToFileURL } from "node:url";
 import { DEFAULT_CONFIG, createBotConfig, renderTemplate } from "./config.mjs";
 import { withKnowledge } from "./knowledge.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
+import { whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { meetingLink } from "./calcom-booking.mjs";
 import { formatSlotLabel } from "./calcom-availability.mjs";
-import { hoursBetween } from "./followup-run.mjs";
+import { deliver, hoursBetween, outsideWindow } from "./followup-run.mjs";
 
 /** Unico estado donde un recordatorio tiene sentido: la demo esta reservada. */
 export const REMINDER_STAGE = "demo_agendada";
@@ -120,14 +121,12 @@ export function skipReason(state, nowIso, config = DEFAULT_CONFIG) {
   // y eso lo tiene que resolver un humano.
   if (!state.calendarEventId) return "sin_link";
 
-  // La ventana de servicio de Meta se cuenta desde el ULTIMO mensaje ENTRANTE. Fuera de ella el
-  // envio de formato libre falla con 131047 y solo salen plantillas (que no existen). Es
-  // DEFINITIVO: esperar al proximo barrido no la reabre.
+  // La ventana de servicio de Meta se cuenta desde el ULTIMO mensaje ENTRANTE, y sin ese dato no se
+  // puede saber de que lado estamos: se descarta en vez de adivinar (que aca costaria plata).
+  // Estar FUERA de la ventana ya NO descarta: sale la plantilla `recordatorio_demo` (ver
+  // buildReminder). Lo que se necesita es saber DONDE estamos, no cerrar la puerta.
   if (!state.lastInboundAt) return "sin_last_inbound_at";
-  const callado = hoursBetween(state.lastInboundAt, nowIso);
-  if (callado === null) return "fecha_invalida";
-  const cierre = config.followUp?.windowClosesAtHours ?? DEFAULT_CONFIG.followUp.windowClosesAtHours;
-  if (callado >= cierre) return `fuera_de_ventana:${callado.toFixed(1)}h`;
+  if (hoursBetween(state.lastInboundAt, nowIso) === null) return "fecha_invalida";
 
   // TRANSITORIO y va al final: la fila sigue elegible y sale en el primer barrido de la mañana.
   const hora = localHour(nowIso, config);
@@ -146,10 +145,34 @@ export function reminderMessageKey(conversationKey, scheduledAt) {
   return `recordatorio:${conversationKey}:${scheduledAt}`;
 }
 
-/** Mensaje M9 listo para enviar. Texto fijo del guion: no pasa por el LLM. */
-export function buildReminder(state, link, config = DEFAULT_CONFIG) {
+/**
+ * Mensaje M9 listo para enviar. Texto fijo del guion: no pasa por el LLM.
+ *
+ * DOS CARRILES, y el que decide es la ventana de Meta:
+ *   - dentro : texto libre M9_RECORDATORIO. Gratis y con el formato de siempre.
+ *   - fuera  : la plantilla aprobada `recordatorio_demo` (UTILITY, ~0,0113 USD). Es el caso NORMAL
+ *              de este barrido, no el raro: quien reservo para dentro de 3 dias esta fuera de la
+ *              ventana casi seguro. Antes se descartaba y el recordatorio no existia para el.
+ * Las dos variables ya estan garantizadas por quien llama (label del horario y link de la reunion):
+ * sin link no se llega hasta aca (`sin_link`), y una variable vacia rompe la plantilla en Meta.
+ */
+export function buildReminder(state, link, config = DEFAULT_CONFIG, outOfWindow = false) {
   const tz = config.businessHours?.tzLabel || DEFAULT_CONFIG.businessHours.tzLabel;
   const label = state.scheduledLabel || formatSlotLabel(state.scheduledAt, tz);
+
+  if (outOfWindow) {
+    return {
+      templateKey: "M9_PLANTILLA",
+      replySource: "script",
+      // Las variables son POSICIONALES: {{1}} = dia y hora, {{2}} = link. Es el orden con el que
+      // la plantilla quedo aprobada en Meta; invertirlo manda el link donde va la fecha.
+      text: renderTemplate(config.script.M9_PLANTILLA, { 1: label, 2: link }),
+      scheduledLabel: label,
+      templateName: "recordatorio_demo",
+      templateParams: whatsappTemplate("recordatorio_demo", [label, link]),
+    };
+  }
+
   return {
     templateKey: "M9_RECORDATORIO",
     replySource: "script",
@@ -159,12 +182,23 @@ export function buildReminder(state, link, config = DEFAULT_CONFIG) {
       link_reunion: link,
     }),
     scheduledLabel: label,
+    templateName: null,
+    templateParams: null,
   };
 }
 
+/**
+ * El estado con el que se RESERVA la fila. Aca la reserva ES el insert, asi que se escribe ANTES de
+ * mandar: por eso NO puede decir "sent" (seria mentir si el envio falla despues). Dice `reserved`,
+ * que es exactamente lo que paso hasta ese instante.
+ *
+ * No es la ultima palabra: apenas se sabe como termino el envio, sweepRow marca la MISMA fila con
+ * `sent` o `failed`. `reserved` solo sobrevive si el proceso murio en el medio — y entonces es la
+ * lectura honesta ("se reservo, no se sabe como termino"), que el medidor cuenta como techo.
+ */
 function deliveryStatusFor(state, config) {
   if (state.channel === "sim") return "simulated";
-  return config.dryRun ? "skipped" : "sent";
+  return config.dryRun ? "skipped" : "reserved";
 }
 
 // ---------------------------------------------------------------------------
@@ -174,9 +208,9 @@ function deliveryStatusFor(state, config) {
 // ---------------------------------------------------------------------------
 
 /**
- * FILTRAR: por que ESTA fila no se manda, o el link con el que si.
- * Puro: no toca la base ni escribe nada. La ventana de Meta se decide adentro de skipReason().
- * @returns {{skip: string}|{link: string}}
+ * FILTRAR: por que ESTA fila no se manda, o el link con el que si (y por que carril sale).
+ * Puro: no toca la base ni escribe nada.
+ * @returns {{skip: string}|{link: string, outOfWindow: boolean}}
  */
 export function planReminder(state, nowIso, config, linkFor, env) {
   const reason = skipReason(state, nowIso, config);
@@ -187,7 +221,8 @@ export function planReminder(state, nowIso, config, linkFor, env) {
   const link = linkFor(state.calendarEventId, env);
   if (!link) return { skip: "sin_link" };
 
-  return { link };
+  // Texto libre o plantilla paga. No cambia A QUIEN se le manda, solo COMO.
+  return { link, outOfWindow: outsideWindow(state, nowIso, config) };
 }
 
 /**
@@ -195,8 +230,8 @@ export function planReminder(state, nowIso, config, linkFor, env) {
  * `key` viaja aparte a proposito: es el de la fila (con el fallback a `conversation_key`), no el
  * del estado — que puede no ser el mismo si la fila vino a medias.
  */
-export function composeReminder(key, state, link, nowIso, config) {
-  const built = buildReminder(state, link, config);
+export function composeReminder(key, state, link, nowIso, config, outOfWindow = false) {
+  const built = buildReminder(state, link, config, outOfWindow);
   return {
     conversationKey: key,
     channel: state.channel,
@@ -209,6 +244,12 @@ export function composeReminder(key, state, link, nowIso, config) {
     templateKey: built.templateKey,
     replySource: built.replySource,
     text: built.text,
+    // QUE se mando, no solo si salio: n8n le reporta esto a Sergio y la plantilla cuesta plata
+    // (~0,0113 USD la utility) mientras que el texto libre es gratis. Sin este campo, una tanda de
+    // envios pagos se veria igual que una gratis hasta que llegue la factura de Meta.
+    sendKind: outOfWindow ? "plantilla" : "texto_libre",
+    templateName: built.templateName,
+    templateParams: built.templateParams,
   };
 }
 
@@ -247,7 +288,7 @@ export async function reserveReminder(store, state, item, nowIso, config) {
  * Que le pasa a UNA fila del barrido: se descarta, se muestra (dry-run) o se reserva y se manda.
  * Es el orden de siempre — filtrar, componer, reservar — y sigue siendo el unico lugar donde se
  * decide; el bucle de arriba solo reparte el resultado entre `skipped` y `send`.
- * @returns {Promise<{skip: object}|{send: object}>}
+ * @returns {Promise<{skip: object}|{send: object, warnings: string[]}>}
  */
 async function sweepRow(row, ctx) {
   const { nowIso, emit, config, store, linkFor, env } = ctx;
@@ -257,14 +298,47 @@ async function sweepRow(row, ctx) {
   const plan = planReminder(state, nowIso, config, linkFor, env);
   if (plan.skip) return { skip: { conversationKey: key, reason: plan.skip } };
 
-  const item = composeReminder(key, state, plan.link, nowIso, config);
+  const item = composeReminder(key, state, plan.link, nowIso, config, plan.outOfWindow);
 
   if (!emit) return { send: { ...item, reserved: false, deliveryStatus: "preview" } };
 
   const reserva = await reserveReminder(store, state, item, nowIso, config);
   if (reserva.skip) return { skip: { conversationKey: key, reason: reserva.skip } };
 
-  return { send: { ...item, reserved: true, deliveryStatus: reserva.deliveryStatus, logged: true } };
+  // Ganada la reserva, se manda de verdad. Un fallo NO se reintenta: la reserva ya se gasto y
+  // mandar dos recordatorios al mismo prospecto es peor que no mandar ninguno.
+  const entrega = await deliver(state, item.text, config, ctx, item.templateParams);
+  const warnings = entrega.warning ? [`${key}: ${entrega.warning}`] : [];
+
+  // EL DESENLACE, EN LA MISMA FILA. La reserva quedo en `reserved` — lo unico honesto antes de
+  // mandar — y recien ahora se sabe como termino. Sin este PATCH, un envio que FALLA se quedaba
+  // guardado como `reserved` para siempre, y como el medidor cuenta `reserved` como cobrable
+  // (techo honesto mientras no se sabe), se le facturaba al cliente un mensaje que Meta nunca
+  // cobro. El resultado real solo vivia en el JSON del barrido, que no queda en ningun lado.
+  //
+  // APPEND-ONLY: si, la tabla lo es por diseño, y esto NO lo viola. No agrega ni borra historia y
+  // NO toca `message_key`, asi que la clave unica — LA proteccion anti-duplicados de este barrido —
+  // queda intacta. Es el MISMO hecho (este envio) terminando de contarse, no un hecho nuevo.
+  //
+  // Solo se escribe si cambio algo: en dry-run y en `sim` la fila ya dice la verdad ("skipped" /
+  // "simulated") y un PATCH ahi seria un viaje a la base para no cambiar nada.
+  if (entrega.status !== reserva.deliveryStatus) {
+    const marcada = await store.markMessageDelivered(
+      reminderMessageKey(state.conversationKey, state.scheduledAt),
+      entrega.status,
+      // Hoy siempre null: `deliver()` colapsa la respuesta de Chatwoot a un booleano y el id se
+      // pierde ahi. Se pasa igual para que el dia que lo devuelva quede guardado solo.
+      entrega.externalId ?? null,
+    );
+    // EXIT 0 SIEMPRE: un PATCH fallido se avisa y se sigue. Si reventara, n8n reintentaria el
+    // barrido y el prospecto recibiria DOS recordatorios — peor que una fila desactualizada. La
+    // fila queda en `reserved`, que sigue siendo cierto: se reservo y no se sabe como termino.
+    if (marcada !== true) {
+      warnings.push(`${key}: la fila quedo en '${reserva.deliveryStatus}' — no se pudo marcar '${entrega.status}'`);
+    }
+  }
+
+  return { send: { ...item, reserved: true, deliveryStatus: entrega.status, logged: true }, warnings };
 }
 
 /** El resultado vacio del barrido, antes de mirar una sola fila. */
@@ -317,9 +391,12 @@ export async function runReminderSweep(options = {}, deps = {}) {
   }
   result.scanned = rows.length;
 
-  const ctx = { nowIso, emit, config, store, linkFor, env };
+  // `chatwoot` viaja en el ctx porque sweepRow es quien manda: sin esto el envio real nunca ve el
+  // cliente inyectado y todo termina en "failed" (que fue exactamente lo que cazo el test).
+  const ctx = { nowIso, emit, config, store, linkFor, env, chatwoot: deps.chatwoot };
   for (const row of rows) {
     const outcome = await sweepRow(row, ctx);
+    if (outcome.warnings?.length) result.warnings.push(...outcome.warnings);
     if (outcome.skip) result.skipped.push(outcome.skip);
     else result.send.push(outcome.send);
   }
@@ -342,8 +419,11 @@ export function renderHuman(result) {
   lines.push(`${result.mode === "emit" ? "ENVIADOS" : "MANDARIA"} (${result.send.length})`);
   if (result.send.length === 0) lines.push("  (ninguno)");
   for (const item of result.send) {
+    // Igual que en el follow-up: en la tabla del dry-run un envio pago y uno gratis se veian
+    // identicos. Aca ademas la plantilla es el caso COMUN, asi que verlo importa mas todavia.
+    const carril = item.sendKind === "plantilla" ? ` · PLANTILLA ${item.templateName} (paga)` : "";
     lines.push(
-      `  ${item.conversationKey} [${item.channel}] ${item.displayName || "sin nombre"} — demo ${item.scheduledLabel}, en ${item.hoursUntil} h`,
+      `  ${item.conversationKey} [${item.channel}] ${item.displayName || "sin nombre"} — demo ${item.scheduledLabel}, en ${item.hoursUntil} h${carril}`,
     );
     for (const line of String(item.text).split("\n")) lines.push(`      | ${line}`);
     lines.push("");

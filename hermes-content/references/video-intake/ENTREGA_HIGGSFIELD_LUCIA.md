@@ -138,6 +138,76 @@ Las dos variantes legítimas:
 
 Se copia la estructura y el registro coloquial. Nunca la biografía.
 
+## 10. Anclas de identidad — cómo evitar que la cara cambie entre fotos (2026-08-15)
+
+De un carrusel que gatea su guía pero **muestra el método en las láminas**
+([ficha](2026-08-15-bloquear-identidad-avatar-anclas.md)). Diagnostica los tres síntomas
+textuales: *"pieles plasticosas · posturas antinaturales · rostros que cambian de una foto a
+otra"*. Y enseña tres cosas que no teníamos escritas:
+
+- **El ancla no es una foto, son varios primeros planos de rasgos.** La secuencia que muestra es
+  retrato base → boca y mentón → ojos. Detalles cerrados, no plano general.
+- **Un rasgo distintivo constante es un ancla barata.** En sus 10 imágenes de ejemplo, en
+  escenarios totalmente distintos, siempre están las mismas gafas amarillas. **Lucía no tiene
+  hoy un rasgo así definido** — es una decisión que conviene tomar antes de producir en volumen.
+- **La textura imperfecta es lo que mata el look plasticoso.** Sus anclas muestran acné y poros.
+  La solución no es más calidad: es más imperfección. Puede explicar por qué la P6 de Lucía se
+  rehízo *"porque se veía muy IA"*.
+
+Todo esto es **imagen** (~0,12 cr c/u): se puede probar sin tocar el presupuesto de video.
+
+## 11. Realismo de celular — la anatomía del prompt (2026-08-15)
+
+Del mismo autor que el de anclas, y **este no gatea nada**: 20 láminas con los prompts completos
+([ficha](2026-08-15-realismo-de-celular-prompts-soul.md)). Tesis: *"el error es pensar que
+cuanto más cinematográfico, más real; las imágenes que más reales parecen son las fotos hechas
+con el móvil, escena cotidiana e improvisada"*.
+
+Once bloques en orden fijo. **Los tres que no teníamos:**
+
+- **La luz descrita como DEFECTO** — *"strong highlights and washed-out tones"*.
+- **La firma óptica del celular** — *"minor chromatic aberration at the image edges,
+  characteristic of a modern smartphone camera with a slightly wide lens"*.
+- **La paleta como lista de valores HEX explícitos** — 13 colores, no adjetivos.
+
+Y un detalle de composición: **la oclusión parcial de la cara** (un vaso tapando la mitad
+inferior) da menos superficie donde el modelo puede fallar y más sensación de instantánea.
+
+Con el punto 10 queda el método completo: **anclas** (quién es) + **realismo de celular** (cómo
+se ve). **Falta definir la paleta hex fija de Lucía** — hoy no existe, y es lo que le daría
+coherencia a todo el feed.
+
+## 12. El pipeline completo, confirmado por 4 fuentes independientes (2026-08-15)
+
+Cuatro creadores distintos, el mismo día, describiendo el mismo orden
+([ficha](2026-08-15-crear-influencer-ia-cuatro-fuentes.md)). Cuando cuatro fuentes coinciden en
+el orden de los pasos, el orden **es** el método:
+
+```
+0. PERSONAJE   ← nicho y para qué existe, ANTES de cualquier imagen
+1. IDENTIDAD   ← Soul + anclas por rasgos + rasgo distintivo constante   (punto 10)
+2. REALISMO    ← defecto óptico de celular + paleta hex                  (punto 11)
+3. ESCENARIOS  ← imágenes base del entorno, fijadas como referencia      (punto 2)
+4. CARÁCTER    ← frase, expresión, tono y acento en el prompt de video
+5. PIEZA       ← Seedance con las referencias
+```
+
+**El paso 0 no lo teníamos escrito.** Verbatim de uno de ellos: *"no empieces con imagen,
+empezá con el personaje... una cara bonita no vende, un personaje sí"*. Lucía tiene
+posicionamiento definido, así que estamos mejor que el promedio — pero conviene confirmar que
+esté escrito como decisión y no asumido.
+
+**El paso 4 es nuevo para nosotros.** Ellos meten *"la frase que querés que diga, la expresión,
+el tono de voz, el acento"* en el mismo prompt de video. Nosotros separamos guion (texto) de voz
+(ElevenLabs). Vale probar el enfoque junto.
+
+**Y confirman lo que ya hacemos:** dos de los cuatro dicen *"usá Claude como tu director de arte
+para que te genere los prompts"*. La dirección vive en el texto, no en la herramienta.
+
+**A verificar:** `nano-banana` para las imágenes base (¿está en la cuenta, o usamos el pipeline
+propio?). Las cifras que repiten —"50 referencias", "30 segundos"— ya están desmentidas para
+nuestra cuenta: `seedance_2_0`, tope **15 s**.
+
 ---
 
 ## Lo primero que yo haría en esa sesión
