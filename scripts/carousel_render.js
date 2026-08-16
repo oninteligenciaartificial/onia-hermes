@@ -2,7 +2,8 @@
 /**
  * Onia carousel render engine.
  *
- * brief JSON (from carousel_generator.py) -> branded 1080x1350 PNG slides.
+ * brief JSON -> branded PNG slides en 3 formatos (--format feed|square|story).
+ * feed 1080x1350 (4:5, default) · square 1080x1080 · story 1080x1920.
  * Zero external deps: builds one HTML per slide and screenshots it with
  * Edge/Chrome headless (same approach as the propuestas generador).
  *
@@ -81,8 +82,34 @@ const esc = (s) => String(s == null ? '' : s)
 
 const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'bright-retail'];
 
+// Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
+// no se podian hacer ni cuadrados ni historias (gap del prompt A3).
+const FORMATS = {
+  feed: { w: 1080, h: 1350 },   // 4:5  — carrusel de feed, el default de siempre
+  square: { w: 1080, h: 1080 }, // 1:1  — feed cuadrado
+  story: { w: 1080, h: 1920 },  // 9:16 — historia
+};
+
+// Estado de modulo a proposito: los 5 packs construyen su CSS en template literals sueltos
+// y pasarles el tamano por parametro obligaba a tocar 5 firmas. El script es CLI de una
+// corrida; el default deja el comportamiento anterior intacto.
+let FMT = FORMATS.feed;
+
+// Una historia NO es un feed mas alto. Instagram tapa ~280px arriba (foto, nombre, cerrar) y
+// ~360px abajo (barra de responder y compartir). Sin esto el texto queda pegado al borde,
+// debajo de su UI, y sobra un hueco enorme en el medio. Los 5 packs comparten
+// `.slide { padding:var(--pad); display:flex; flex-direction:column }`, asi que un solo
+// override sirve para todos.
+// OJO especificidad: este bloque se inyecta ANTES de la regla `.slide` de cada pack, asi que
+// va con `html body .slide` para ganar la cascada. Con `.slide` a secas lo pisa el
+// `padding:var(--pad)` que viene despues y el arreglo no se aplica (pasó, 2026-08-15).
+const safeAreaCss = () => FMT.h < 1600 ? '' : `
+html body .slide { padding-top:300px; padding-bottom:380px; }
+html body .slide .dots { margin-top:56px; padding-top:0; }
+`;
+
 function parseArgs(argv) {
-  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', accent: '' };
+  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', accent: '', format: 'feed' };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--brief') a.brief = argv[++i];
@@ -92,7 +119,12 @@ function parseArgs(argv) {
     else if (k === '--pack') a.pack = argv[++i];
     else if (k === '--object') a.object = argv[++i];
     else if (k === '--accent') a.accent = argv[++i];
+    else if (k === '--format') a.format = argv[++i];
   }
+  if (!FORMATS[a.format]) {
+    throw new Error('Unknown --format: ' + a.format + ' (use ' + Object.keys(FORMATS).join('|') + ')');
+  }
+  FMT = FORMATS[a.format];
   // --accent permite que una cuenta personal (una modelo) tenga SU color y no el
   // verde de la marca Onia. Sin el flag, nada cambia.
   if (a.accent && !/^#[0-9a-fA-F]{6}$/.test(a.accent)) {
@@ -235,9 +267,10 @@ function slideHtml(slide, idx, total, account, bg) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
+html,body { width:${FMT.w}px; height:${FMT.h}px; }
+${safeAreaCss()}
 .slide {
-  position:relative; width:1080px; height:1350px; overflow:hidden;
+  position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column;
   font-family:var(--font-body);
   --ink:var(--onia-ink);
@@ -344,7 +377,7 @@ function continuationCurve(idx, total) {
     : 'M 540 340 C 860 340 940 600 1140 600');
   const paths = [enter, exit].filter(Boolean)
     .map((d) => `<path d="${d}" />`).join('');
-  return `<svg class="curve" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
+  return `<svg class="curve" viewBox="0 0 ${FMT.w} ${FMT.h}" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
 }
 
 // Pack: dark-product (Solaris-style). Black canvas, pills, continuation curve,
@@ -386,8 +419,9 @@ function darkProductHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
-.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+html,body { width:${FMT.w}px; height:${FMT.h}px; }
+${safeAreaCss()}
+.slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column;
   background:var(--onia-ink); color:var(--onia-white);
   font-family:'Inter',var(--font-body); }
@@ -395,7 +429,7 @@ html,body { width:1080px; height:1350px; }
 .g { color:var(--onia-green); }
 .slide.cta .g { color:var(--onia-ink); -webkit-text-stroke:0; background:var(--onia-ink); color:var(--onia-green); padding:0 .12em; }
 
-.curve { position:absolute; inset:0; width:1080px; height:1350px; z-index:0; pointer-events:none; }
+.curve { position:absolute; inset:0; width:${FMT.w}px; height:${FMT.h}px; z-index:0; pointer-events:none; }
 .curve path { fill:none; stroke:var(--onia-green); stroke-width:16; stroke-linecap:round; opacity:.95; }
 .slide.cta .curve path { stroke:var(--onia-ink); opacity:.5; }
 .slide > *:not(.curve) { position:relative; z-index:2; }
@@ -482,8 +516,9 @@ function darkNeonHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
-.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+html,body { width:${FMT.w}px; height:${FMT.h}px; }
+${safeAreaCss()}
+.slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column;
   background:#05080A; color:var(--onia-white); font-family:'Inter',var(--font-body); }
 .grid { position:absolute; inset:0; z-index:0;
@@ -568,8 +603,9 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
 ${tokens}
 ${accentVar}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
-.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+html,body { width:${FMT.w}px; height:${FMT.h}px; }
+${safeAreaCss()}
+.slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column; justify-content:flex-end;
   background:var(--onia-ink); color:var(--onia-white); font-family:'Inter',var(--font-body); }
 .photo { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
@@ -638,7 +674,7 @@ function nuviaRibbon(idx, total, stripes, onAccent) {
   ).join('');
   // En cover/cta el ribbon va más visible; en el resto, sutil al fondo.
   const op = onAccent ? 0.9 : (first || last ? 0.5 : 0.28);
-  return `<svg class="ribbon" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg" style="opacity:${op}">${paths}</svg>`;
+  return `<svg class="ribbon" viewBox="0 0 ${FMT.w} ${FMT.h}" xmlns="http://www.w3.org/2000/svg" style="opacity:${op}">${paths}</svg>`;
 }
 
 // Pack: bright-retail (Nuvia-style). Marca clara/multicolor, amigable, con
@@ -673,14 +709,15 @@ function brightRetailHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-html,body { width:1080px; height:1350px; }
-.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+html,body { width:${FMT.w}px; height:${FMT.h}px; }
+${safeAreaCss()}
+.slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column;
   font-family:'Inter',system-ui,sans-serif;
   --accent:${accent};
   background:${coverLike ? accent : brand.bg};
   color:${coverLike ? '#FFFFFF' : brand.ink}; }
-.ribbon { position:absolute; inset:0; width:1080px; height:1350px; z-index:0; pointer-events:none; }
+.ribbon { position:absolute; inset:0; width:${FMT.w}px; height:${FMT.h}px; z-index:0; pointer-events:none; }
 .slide > *:not(.ribbon) { position:relative; z-index:2; }
 .g { color:var(--accent); }
 .slide.cover .g, .slide.cta .g { color:#fff; text-decoration:underline; text-decoration-thickness:9px; text-underline-offset:8px; }
@@ -763,7 +800,7 @@ function render(args) {
       '--hide-scrollbars',
       '--allow-file-access-from-files',
       '--force-device-scale-factor=1',
-      '--window-size=1080,1350',
+      `--window-size=${FMT.w},${FMT.h}`,
       '--virtual-time-budget=4000',
       `--screenshot=${png}`,
       `file://${htmlPath.replace(/\\/g, '/')}`,
@@ -793,4 +830,8 @@ if (require.main === module) {
   }
 }
 
-module.exports = { slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml, emph, roleFor, ACCOUNTS, BRANDS, PACKS };
+module.exports = {
+  slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml,
+  emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
+  setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
+};

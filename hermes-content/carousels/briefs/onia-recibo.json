@@ -1,0 +1,35 @@
+{
+  "title": "Recibo — lo que cuesta tu web, itemizado",
+  "caption": "En Bolivia casi nadie publica el precio de una web. Nosotros sí, y va itemizado como un recibo. Landing Bs 790: una página con lo que hacés, tus fotos y el botón de WhatsApp. Web Pro Bs 1.500: sitio completo, para que te encuentren en Google y los pedidos te lleguen ordenados en un formulario, no perdidos en el chat. Los dos son pago único, precio de lanzamiento. Lo que NO va en ese precio y te lo decimos antes de que preguntes: el dominio y el hosting se contratan a TU nombre (son tuyos, no nuestros) y la comisión de la pasarela la cobra el banco sobre cada cobro. Comentá PRECIO y te paso el recibo completo, con los add-ons y los mensuales.",
+  "hashtags": [
+    "#bolivia",
+    "#santacruz",
+    "#pymes",
+    "#negocios",
+    "#paginaweb",
+    "#emprender",
+    "#whatsappbusiness"
+  ],
+  "comment_trigger": "Comentá PRECIO",
+  "cta": "Comentá PRECIO",
+  "job": "CTA",
+  "notas_internas": {
+    "formato": "estatico de 1 slide (ad recibo). Pack typographic, role cta: usa el elemento .ticket del motor (troquel punteado).",
+    "techo_verificado": "el motor NO itemiza: body es un <p> unico (los saltos de linea colapsan) y no hay campo lines[]. Con 5 lineas de body el .ticket se aplasta y recorta el texto (probado). Por eso el detalle por paquete vive en el caption y la placa lleva 3 lineas de body. Para un recibo itemizado de verdad hace falta un campo lines[] en scripts/carousel_render.js (archivo de otro carril).",
+    "fuente_precios": "hermes-content/propuestas/ONIA_CATALOGO_PRECIOS_2026.md §2 + PRICING_RATIONALE_INTERNO.md §0 (lanzamiento 2026-07-03). Landing 790 / Web Pro 1.500 Bs.",
+    "fuente_items": "hermes-content/propuestas/generador/clientes.json → paquetes Landing / Web Pro (contenido) y NO_INCLUYE.",
+    "sin_metricas": "cero clientes pagando: la pieza no lleva ni un numero de resultado.",
+    "render": "node scripts/carousel_render.js --brief hermes-content/carousels/briefs/onia-recibo.json --out hermes-content/carousels/out/onia-recibo --account onia"
+  },
+  "slides": [
+    {
+      "number": 1,
+      "role": "cta",
+      "pill": "Recibo",
+      "headline": "Landing Bs 790. Web Pro Bs 1.500.",
+      "body": "Pago único. Dominio y hosting van a tu nombre y no entran acá. Comentá PRECIO y te paso el recibo completo.",
+      "save_worthy": false,
+      "alt_text": "Recibo de Onia: Landing 790 bolivianos, Web Pro 1.500 bolivianos, pago único. Dominio y hosting a nombre del cliente."
+    }
+  ]
+}
