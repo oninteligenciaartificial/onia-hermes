@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Por dónde empezar a automatizar tu negocio — Onia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --onia-green: #10C26B;
+    --onia-green-deep: #0B8F4F;
+    --onia-green-soft: #D6F5E5;
+    --onia-ink: #0A0F0D;
+    --onia-surface: #F4F5F2;
+    --onia-muted: #6B756F;
+    --font-display: 'Space Grotesk','Arial Black',Arial,sans-serif;
+    --font-body: 'Inter','Segoe UI',system-ui,Arial,sans-serif;
+  }
+  @page { size: A4; margin: 0; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  /* Alto fijo A4: sin esto el padding inferior empuja a una 2da pagina en blanco.
+     Verificado visualmente que el contenido termina ~3mm antes del corte. */
+  html, body { width: 210mm; height: 297mm; overflow: hidden; }
+  body {
+    font-family: var(--font-body);
+    color: var(--onia-ink);
+    background: #fff;
+    font-size: 9.1pt;
+    line-height: 1.42;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .page { padding: 10mm 12mm 8mm; height: 297mm; }
+
+  /* ---- encabezado ---- */
+  .top { display:flex; align-items:flex-start; justify-content:space-between; gap:10mm; }
+  .brand { display:flex; align-items:center; gap:2.6mm; }
+  .mark { width:8mm; height:8mm; flex:0 0 8mm; }
+  .brand-name { font-family:var(--font-display); font-weight:700; font-size:12pt; letter-spacing:-0.4px; }
+  .brand-sub { font-size:7pt; color:var(--onia-muted); letter-spacing:1.6px; text-transform:uppercase; margin-top:0.4mm; }
+  .tag { background:var(--onia-ink); color:var(--onia-green); font-family:var(--font-display);
+         font-weight:700; font-size:7.2pt; letter-spacing:1.6px; padding:1.6mm 3.4mm; border-radius:100px;
+         text-transform:uppercase; white-space:nowrap; }
+
+  h1 { font-family:var(--font-display); font-weight:700; font-size:20pt; line-height:1.02;
+       letter-spacing:-0.9px; margin-top:5mm; max-width:150mm; }
+  .sub { font-size:10.4pt; color:var(--onia-muted); margin-top:2.6mm; max-width:158mm; }
+
+  /* ---- el criterio ---- */
+  .criterio { margin-top:4.5mm; border-left:1.4mm solid var(--onia-green);
+              background:var(--onia-green-soft); padding:3.2mm 4.5mm; border-radius:0 2mm 2mm 0; }
+  .criterio .k { font-family:var(--font-display); font-weight:700; font-size:7.4pt;
+                 letter-spacing:1.6px; text-transform:uppercase; color:var(--onia-green-deep); }
+  .criterio p { margin-top:1.6mm; font-size:10pt; line-height:1.4; }
+  .criterio b { font-weight:600; }
+
+  /* ---- tabla ---- */
+  table { width:100%; border-collapse:collapse; margin-top:4.5mm; }
+  thead th { font-family:var(--font-display); font-weight:700; font-size:7.2pt; letter-spacing:1.2px;
+             text-transform:uppercase; color:var(--onia-muted); text-align:left;
+             padding:0 2mm 2mm 0; border-bottom:0.5mm solid var(--onia-ink); }
+  thead th.num { width:8mm; }
+  thead th.ancla { text-align:right; padding-right:0; width:34mm; }
+  tbody td { padding:2.1mm 2mm 2.1mm 0; border-bottom:0.2mm solid #E2E6E3; vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  .num { font-family:var(--font-display); font-weight:700; font-size:12pt; color:var(--onia-green); }
+  .tarea { font-weight:600; font-size:10pt; }
+  .porque { color:var(--onia-muted); font-size:8.8pt; margin-top:0.6mm; }
+  .ancla { text-align:right; font-family:var(--font-display); font-weight:700; font-size:9.6pt;
+           white-space:nowrap; padding-right:0; }
+  .ancla small { display:block; font-family:var(--font-body); font-weight:400; font-size:7.4pt;
+                 color:var(--onia-muted); margin-top:0.5mm; }
+
+  /* ---- dos columnas de abajo ---- */
+  .cols { display:flex; gap:6mm; margin-top:5mm; }
+  .col { flex:1; }
+  .col h2 { font-family:var(--font-display); font-weight:700; font-size:9.6pt; margin-bottom:2.2mm; }
+  .col ul { list-style:none; }
+  .col li { font-size:8.8pt; color:var(--onia-muted); padding-left:4.2mm; position:relative; margin-bottom:1.5mm; line-height:1.36; }
+  .col li::before { content:"—"; position:absolute; left:0; color:var(--onia-green); font-weight:700; }
+  .col li b { color:var(--onia-ink); font-weight:600; }
+
+  /* ---- cierre ---- */
+  .cta { margin-top:5mm; background:var(--onia-ink); color:#fff; border-radius:3mm;
+         padding:4.5mm 5.5mm; display:flex; align-items:center; justify-content:space-between; gap:6mm; }
+  .cta h3 { font-family:var(--font-display); font-weight:700; font-size:12.5pt; line-height:1.14; }
+  .cta p { font-size:8.8pt; color:#9FB0A8; margin-top:1.4mm; max-width:105mm; }
+  .cta .btn { background:var(--onia-green); color:var(--onia-ink); font-family:var(--font-display);
+              font-weight:700; font-size:9.4pt; padding:3mm 5mm; border-radius:100px; white-space:nowrap; }
+
+  .pie { margin-top:3.4mm; font-size:7.2pt; color:var(--onia-muted); line-height:1.45;
+         border-top:0.2mm solid #E2E6E3; padding-top:2.6mm; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="43" stroke="var(--onia-ink)" stroke-width="13" fill="none"/>
+        <path d="M60 17 A43 43 0 0 1 98 43" stroke="var(--onia-green)" stroke-width="13" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="brand-name">Onia</div>
+        <div class="brand-sub">Santa Cruz, Bolivia</div>
+      </div>
+    </div>
+    <div class="tag">La lista</div>
+  </div>
+
+  <h1>Por dónde empezar a automatizar tu negocio.</h1>
+  <p class="sub">Seis tareas, en el orden en que conviene sacárselas de encima. Con lo que cuesta
+    resolver cada una y lo que <em>no</em> conviene tocar todavía.</p>
+
+  <div class="criterio">
+    <div class="k">La regla que decide el orden</div>
+    <p>No se automatiza lo que <b>más te molesta</b>. Se automatiza lo que hacés <b>más veces</b>
+      y <b>siempre igual</b>. Una tarea que hacés 40 veces por semana y que sale idéntica cada vez
+      se resuelve una sola vez y no vuelve. Una que hacés una vez al mes y que cada vez es distinta
+      te va a costar más automatizarla que hacerla.</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="num">#</th>
+        <th>Qué se saca de encima</th>
+        <th class="ancla">Ancla de precio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="num">1</td>
+        <td>
+          <div class="tarea">Anotar la cita o el pedido en el cuaderno</div>
+          <div class="porque">Es lo que más veces por día hacés igual, y es donde se pierde la
+            plata que ya vendiste: lo que no quedó anotado, no se cobra.</div>
+        </td>
+        <td class="ancla">desde Bs 320/mes<small>sistema con agenda y cobros</small></td>
+      </tr>
+      <tr>
+        <td class="num">2</td>
+        <td>
+          <div class="tarea">Contestar las mismas tres preguntas de siempre</div>
+          <div class="porque">Precio, horario y dirección. Son la mayoría de tus mensajes y la
+            respuesta nunca cambia. Se responde solo con un botón y una página, sin bot.</div>
+        </td>
+        <td class="ancla">desde Bs 790<small>página de captación</small></td>
+      </tr>
+      <tr>
+        <td class="num">3</td>
+        <td>
+          <div class="tarea">Acordarte de que un cliente no volvió</div>
+          <div class="porque">Nadie lo hace a mano, y ahí está la venta más barata que tenés:
+            alguien que ya te compró. El sistema lo detecta y te deja el mensaje escrito.</div>
+        </td>
+        <td class="ancla">incluido<small>desde el plan Profesional</small></td>
+      </tr>
+      <tr>
+        <td class="num">4</td>
+        <td>
+          <div class="tarea">Perseguir al que te quedó debiendo</div>
+          <div class="porque">El fiado y la factura vencida. Se junta solo y te lo pone en una
+            lista con el mensaje listo. Vos aprobás y se manda.</div>
+        </td>
+        <td class="ancla">incluido<small>mismo plan</small></td>
+      </tr>
+      <tr>
+        <td class="num">5</td>
+        <td>
+          <div class="tarea">Pasar los mismos datos de un lado a otro</div>
+          <div class="porque">Del WhatsApp al Excel, del Excel a la factura. Cada copiado es una
+            chance de equivocarse y ninguno agrega nada.</div>
+        </td>
+        <td class="ancla">desde Bs 790<small>automatización a medida</small></td>
+      </tr>
+      <tr>
+        <td class="num">6</td>
+        <td>
+          <div class="tarea">Armar el reporte del mes a mano</div>
+          <div class="porque">Va último a propósito: es lo que más bronca da y lo que menos veces
+            hacés. Además se resuelve solo cuando los cinco de arriba ya están.</div>
+        </td>
+        <td class="ancla">incluido<small>sale de los datos que ya cargaste</small></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cols">
+    <div class="col">
+      <h2>Lo que NO conviene automatizar primero</h2>
+      <ul>
+        <li><b>Un bot que hable por vos.</b> Si todavía anotás en cuaderno, el bot va a
+          contestar sobre datos que no existen. Primero el sistema, después el bot.</li>
+        <li><b>Lo que hacés una vez al mes.</b> Cuesta más resolverlo que hacerlo.</li>
+        <li><b>Lo que requiere criterio.</b> Decidir un descuento o cerrar un trato no se
+          automatiza: se le sacan de encima las tareas para que tengas tiempo de hacerlo.</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h2>Lo que va aparte y lo paga el cliente</h2>
+      <ul>
+        <li><b>Dominio y hosting</b>, a tu nombre. Son tuyos, no nuestros.</li>
+        <li><b>Comisión de la pasarela</b> o del QR: la cobra el banco sobre cada cobro.</li>
+        <li><b>WhatsApp Business API</b>: Meta cobra por mensaje y la habilitación depende de
+          ellos. Se cotiza recién con la aprobación en la mano.</li>
+        <li><b>Créditos de IA y pauta</b>, si los usás.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div>
+      <h3>¿Cuál de las seis te está costando más?</h3>
+      <p>El diagnóstico es gratis: 20 minutos, con los datos de tu negocio, y salís con el orden
+        escrito para el tuyo. No hace falta que compres nada para tenerlo.</p>
+    </div>
+    <div class="btn">onia.com.bo</div>
+  </div>
+
+  <p class="pie">
+    Los precios son <b>anclas de referencia</b>, no una lista cerrada: cada negocio se cotiza
+    según su alcance. Onia · Santa Cruz, Bolivia · onia.com.bo
+  </p>
+
+</div>
+</body>
+</html>

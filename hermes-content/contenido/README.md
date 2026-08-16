@@ -89,10 +89,9 @@ qué mandar quema la única conversación que el contenido consiguió.
 | Palabra | Qué se manda | Estado |
 |---|---|---|
 | **SISTEMA** | diagnóstico de 20 min — link de Cal con `?src=` | ✅ vivo y probado punta a punta |
-| **LISTA** | PDF de una página: qué se automatiza primero y qué cuesta cada cosa | 🔴 **no existe** |
+| **LISTA** | PDF de una página: por dónde empezar a automatizar, con anclas de precio | ✅ `recursos/lista-por-donde-empezar.pdf` |
 
-⚠️ **Ninguna pieza que pida LISTA se publica hasta que el PDF exista.** Hoy eso bloquea el
-recibo y varios carruseles.
+✅ **Las dos palabras tienen recurso.** Ya no hay piezas bloqueadas por falta de qué mandar.
 
 Ya se corrigió un desvío: el recibo pedía comentar **PRECIO**. Cambiado a LISTA.
 
