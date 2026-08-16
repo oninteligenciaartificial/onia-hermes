@@ -28,7 +28,7 @@ vendedor.
 | Pacientes | Agregar nota clínica al historial | FUNCIONA | 4 campos clínicos con placeholders dentales reales; queda con fecha y autor, persiste. |
 | Pacientes | Buscar por nombre/CI + buscador global | FUNCIONA | Filtro real con query negativa de control. Matiz: el filtro de lista aplica con Enter, no en vivo mientras tipeás; el buscador global funciona seguro con tipear + Enter (no se vio dropdown de sugerencias). |
 | Agenda | Login y llegar a la agenda | FUNCIONA | Onboarding obligatorio bloquea /appointments hasta completarlo (~5 min guiado). El wizard se resetea si recargás a mitad. |
-| Agenda | Crear cita para HOY (domingo) | **ROTO** | "El doctor no trabaja este día" para AMBOS doctores, pese a que el negocio se configuró Lun-Dom 08:00-18:00. El horario del negocio no se hereda al doctor en domingo. Una clínica que atiende domingos no puede agendar ese día. |
+| Agenda | Crear cita para HOY (domingo) | **CORREGIDO (fff96c3+29f4b09, sin deployar)** | Tres causas apiladas: el escritor de agenda no convertía la convención de día, había un Lun-Sab hardcodeado, y el DUEÑO nunca recibía horario al registrarse. Ahora dueño/doctores/equipo nacen con los días reales del negocio. Pendiente: deploy + probar en prod con org nueva. |
 | Agenda | Crear cita para mañana (lunes) | FUNCIONA | Modal completo con slots reales del doctor; la cita persiste tras recarga; no deja crear citas inválidas. |
 | Agenda | Mover cita de 10:00 a 11:00 | FUNCIONA | Persiste. Matiz: en edición la hora es input libre, no la lista de slots — no se probó si valida disponibilidad. |
 | Agenda | Marcar Completada | FUNCIONA | Persiste; las acciones se reducen coherentemente. |
@@ -40,8 +40,8 @@ vendedor.
 | Tratamientos | Cerrar el navegador en la pantalla de éxito del onboarding (sin el click final) | **SIN EFECTO** | TODO el onboarding se pierde y arranca de cero; nada persiste hasta el último click. Repetido 2 veces. Un cliente que cierre la pestaña ahí pierde toda la carga. |
 | Tratamientos | Catálogo dental precargado | **VACÍO** | No hay. La clínica arranca con cero tratamientos; solo 4 categorías fijas y 2 motivos built-in. Toda la lista de precios se tipea a mano el día 1. |
 | Tratamientos | Crear tratamiento con precio | FUNCIONA | Persiste tras recarga dura. |
-| Tratamientos | Editar el precio de un tratamiento | **ROTO** | La función NO EXISTE: solo Desactivar y Eliminar. Para corregir un precio hay que eliminar y recrear. Falta grave para un catálogo de precios. |
-| Tratamientos | Desactivar un tratamiento | **SIN EFECTO** | La UI lo muestra desactivado y la API responde 200, pero al recargar vuelve ACTIVO. Repetido 3 veces. El toggle es teatro. |
+| Tratamientos | Editar el precio de un tratamiento | **CORREGIDO (6b794ea, sin deployar)** | Botón Editar por fila reutiliza el form de alta precargado; PATCH persiste y la lista se actualiza con la respuesta del servidor. |
+| Tratamientos | Desactivar un tratamiento | **CORREGIDO (1a75454, sin deployar)** | Causa raíz: el schema Zod del PATCH no declaraba `active` y lo descartaba en silencio (update de {}). Además el alta con solo nombre+precio daba 400 por nulls del form (397f57b). |
 | Tratamientos | Asignar tratamiento a un paciente | **VACÍO** | La tarjeta "Tratamientos" del perfil no tiene botón de agregar y NINGÚN flujo la alimenta (se probó odontograma, historial, factura y cita). Promesa decorativa. |
 | Tratamientos | Usar el tratamiento en una factura | FUNCIONA | Catálogo aparece en /billing/new, factura creada y persistida. PERO el primer intento sin fecha de vencimiento dio "Datos inválidos" sin decir qué campo falta. |
 | Tratamientos | Usar el tratamiento en una cita | FUNCIONA | Selector con catálogo, cita creada y visible. Intermitente: una vez los slots quedaron en "Cargando..." indefinido y no se pudo agendar. |
