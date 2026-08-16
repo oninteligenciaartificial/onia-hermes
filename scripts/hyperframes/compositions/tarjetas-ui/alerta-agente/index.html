@@ -207,24 +207,15 @@
       }
       .btn.filled {
         position: relative;
-        overflow: hidden;
         background: var(--primary);
         color: var(--on-primary);
+        /* sombra del enfasis sobre "Aprobar": la enciende GSAP con un pulso */
+        box-shadow: 0 0 0 rgba(2, 118, 80, 0);
       }
       .btn.outlined {
         border: 2px solid var(--outline-variant);
         color: var(--on-surface-variant);
       }
-      /* barrido de foco: un solo pase de luz sobre "Aprobar" */
-      .sweep {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: -70%;
-        width: 55%;
-        background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0) 100%);
-      }
-
       /* estado de espera: pill + barra de tiempo que corre */
       .espera {
         display: flex;
@@ -295,9 +286,6 @@
               <div class="btn filled" id="aa-btn-ok">
                 <span class="material-symbols-outlined">check</span>
                 Aprobar
-                <!-- pase de luz: desborda el boton a proposito (lo recorta el
-                     overflow:hidden del boton) -->
-                <div class="sweep" id="aa-sweep" data-layout-allow-overflow></div>
               </div>
               <div class="btn outlined" id="aa-btn-ver">Ver detalle</div>
             </div>
@@ -406,11 +394,10 @@
           // la barra corre lenta y pareja: es tiempo pasando, no decoracion
           tl.to(waitfill, { scaleX: 1, duration: 2.2, ease: "none" }, 2.0);
 
-          // ---- quietud (2.4-2.75s) y foco: UN barrido sobre "Aprobar" ---------
-          var sweep = document.getElementById("aa-sweep");
-          tl.fromTo(sweep, { x: 0 }, { x: 560, duration: 0.7, ease: "oniaOutQuart" }, 2.75);
-          // el pase termina y la luz se apaga (no queda residuo recortado)
-          tl.to(sweep, { autoAlpha: 0, duration: 0.15, ease: "none" }, 3.4);
+          // ---- quietud (2.4-2.75s) y foco (2.75s): UN pulso sobre "Aprobar" ---
+          // la espera que corre pide una decision; el sistema la senala una vez
+          tl.to(btnOk, { scale: 1.05, boxShadow: "0 14px 34px rgba(2,118,80,0.35)", duration: 0.22, ease: "oniaOutQuart" }, 2.75);
+          tl.to(btnOk, { scale: 1, boxShadow: "0 0 0 rgba(2,118,80,0)", duration: 0.45, ease: "oniaOutExpo" }, 2.97);
 
           // ---- salida (4.4-5.0s): vuelve por la derecha -> loop natural -------
           tl.to(card, { opacity: 0, x: 90, scale: 0.98, duration: 0.45, ease: "oniaOutQuart" }, 4.5);

@@ -248,11 +248,11 @@
               <span class="tagchip"><span class="material-symbols-outlined">qr_code_2</span>QR Simple</span>
             </div>
             <div class="qrwrap" id="cq-qr">
-              <!-- el check aterriza SOBRE el QR a proposito (el QR ya cedio a
-                   opacidad 0.22): oclusion declarada -->
-              <span class="material-symbols-outlined" id="cq-qr-icon" data-layout-allow-overlap>qr_code_2</span>
+              <!-- el check aterriza SOBRE el QR a proposito (el QR cede a
+                   opacidad 0.22 y queda de fondo decorativo): fuera del audit -->
+              <span class="material-symbols-outlined" id="cq-qr-icon" data-layout-ignore>qr_code_2</span>
               <div class="scanline" id="cq-scan" data-layout-allow-overlap></div>
-              <div class="okdisc" id="cq-ok" data-layout-allow-overlap>
+              <div class="okdisc" id="cq-ok" data-layout-allow-overlap data-layout-allow-occlusion>
                 <span class="material-symbols-outlined">check</span>
               </div>
             </div>
