@@ -87,6 +87,33 @@ habla — o sea el pilar meta-IA. No es el default.
 
 ⚠️ Todo gasto de video necesita **OK explícito de Sergio, caso por caso**.
 
+### ⛔ Los presets de Higgsfield no son el camino (revisado 2026-08-17)
+
+Se recorrieron **los 60+ presets** de la galería: EARTH ZOOM · ZOMBIE DANCE · KUNG FU HIT ·
+RED CARPET · 2000'S PAPARAZZI · ACTION FIGURE · CLAY FIGURINE · FOOTBALL INVADER…
+
+**Ni uno solo sirve para vender software.** Son todos de entretenimiento viral: transformar
+al sujeto en figura de acción, meterlo en un videojuego retro, ponerlo en una alfombra roja.
+La galería está construida para creadores de consumo, no para B2B.
+
+**Lo que sí deja la revisión:** los pocos presets de registro documental —CANDID PAPARAZZI,
+SUMMER HAZE, NIGHT VISION, OFFICE CCTV— comparten una tesis con lo que ya sabíamos: **el
+registro crudo y mal iluminado se lee como real; el pulido se lee como anuncio.** Eso ya está
+en §4 pedido como defecto, y se confirma.
+
+**Conclusión: prompt propio, nunca preset.** No volver a mirar la galería esperando encontrar
+el ángulo de negocio.
+
+### ⚠️ `video_extension` devolvió 16:9 con entrada vertical
+
+Verificado en las generaciones del 2026-08-15: la extensión de un plano **9:16** salió en
+`1280×720` — **horizontal**. La vía que esta misma sección recomienda para romper el tope de
+duración **te rompe el formato**, y en silencio.
+
+Sin resolver: si se arregla forzando `aspect_ratio` en la llamada de extensión, o si el modelo
+lo ignora igual que `kling3_0`. **Confirmarlo cuesta créditos** — hacerlo en la próxima
+tanda autorizada, no en una prueba aparte.
+
 ### Las tres vías de generar, y qué hace cada una de verdad
 
 | Vía | Qué hace |
@@ -138,7 +165,31 @@ el producto en una veterinaria o un comercio con escenas generadas está bien **
 está**. Sin rótulo es un caso de éxito inventado, y en Santa Cruz el primer prospecto que
 pregunte *"¿qué veterinaria?"* quema la venta y las siguientes.
 
-## 9. Lo que sigue sin resolver
+## 9. 🔴 Lo que falta no es una prueba más: es la primera pieza
+
+**Estado real al 2026-08-17: cero piezas publicables.** Lo que hay son **6 videos de prueba**
+del 15-ago —ella camina, ella habla, ella mira a cámara— y **ninguno dice nada**. Son pruebas
+de identidad: sirvieron para confirmar que el ancla aguanta y para medir el tarifario. No son
+contenido.
+
+Generar un séptimo video de ella caminando no enseña nada nuevo. **Lo que falta probar es la
+pieza entera**: gancho + valor + cierre, con guion, montada, publicable. Recién ahí se sabe el
+costo real de una pieza y si la calidad aguanta 30 segundos seguidos en vez de 5.
+
+**La prueba que corresponde**, con el gancho mejor medido del benchmark (*"hace un año yo no
+existía"* → 18.642 vistas):
+
+| Parte | Modelo | Costo |
+|---|---|---|
+| 4 planos de 8 s | `veo3_1_lite` | 32 cr |
+| Voz | ElevenLabs, Marcela | ~3 cr |
+| **Total** | | **~35 cr** de 2.663 · **1,3% del saldo** |
+
+Y de paso resuelve el bug del `video_extension` sin una tanda aparte.
+
+⚠️ **Requiere OK explícito de Sergio** (regla de gasto). No se genera nada hasta tenerlo.
+
+## 10. Lo que sigue sin resolver
 
 | Qué | Quién |
 |---|---|
