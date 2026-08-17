@@ -156,53 +156,76 @@ son 38 palabras, o sea ~15 s. Entra justo en el tope duro de 40 palabras por 15 
 
 ---
 
-## 7. 🔴 Estado: la tanda NO corrió — el canal está roto
+## 7. La firma real de la API (probada, no supuesta)
 
-**Nada se generó. El saldo sigue en 2.663 créditos, intacto.**
-
-No es permiso ni credencial: **las herramientas de generación de Higgsfield no se pueden
-invocar desde esta sesión.** `generate_image` y `generate_video` exigen un campo `params` que
-es un objeto, y todo objeto o arreglo que se manda por este canal **llega al servidor
-convertido en texto plano**.
-
-La prueba que lo deja sin discusión — se mandó el arreglo `["nano_banana_2"]` a
-`generate_image_batch` y el servidor contestó:
+**Todo va dentro de `params`, incluido `model`.** No existe un parámetro `model` de nivel
+superior — ese fue mi error, y me costó declarar roto un canal que funcionaba:
 
 ```
-Invalid input: expected array, received string at requests
-Too big: expected string to have <=12 characters at requests
+✅  { params: { model: "nano_banana_2", prompt: "...", aspect_ratio: "9:16" } }
+❌  { model: "nano_banana_2", params: { prompt: "..." } }      → "Invalid input at params"
+❌  { model: "nano_banana_2", prompt: "...", aspect_ratio: "9:16" }  → mismo error
 ```
 
-**Lo contó como 19 caracteres de texto**, que es exactamente el largo de `["nano_banana_2"]`
-escrito como cadena. El servidor nunca vio un arreglo.
+### 🔴 `get_cost` fuera de `params` se ignora — y GENERA
 
-Se probaron 8 formas distintas (parámetros planos, `params` como objeto, `params` con campos
-mínimos, `params` vacío, batch con un solo ítem, y las firmas exactas que documenta el
-workflow oficial). Las 8 dieron el mismo rechazo.
+Pasado al nivel superior no da error, no avisa, y **cobra**. Cinco "preflights" salieron como
+generaciones reales (1,27 cr). Barato, pero el mismo descuido en video cuesta 20 veces más.
 
-**Se buscó una vía alterna y no la hay por ahora:**
+**Si vas a preflightear, `get_cost` va DENTRO de `params`** — y aun así conviene mirar el
+saldo antes y después, que es la única medición que no miente.
 
-| Vía | Resultado |
+### Otras dos cosas que solo se ven llamando
+
+| Qué | Realidad |
 |---|---|
-| Token de Higgsfield para llamar la API por `curl` | no existe en `.env`, ni local ni en el VPS — el MCP autentica por OAuth del servidor |
-| `sandbox_exec` de Higgsfield (tiene `curl`, `python3`, `node` y salida a internet) | **no lleva la credencial**: el único dato en su entorno es `HF_WORKFLOWS`, una ruta |
-| La web de Higgsfield por navegador | posible, pero es operar una UI a ciegas para 10 generaciones — frágil y lento |
+| `medias: [{value, role}]` | el servidor lo traduce a `reference_images` al guardarlo. Se manda como `medias`, se lee como otra cosa |
+| Los ids del catálogo **no son** los del backend | `nano_banana_2` → `nano_banana_flash` · `soul_2` → `text2image_soul_v2`. Al leer un job viejo hay que saber esta traducción o parece otro modelo |
 
-**Dato que ubica el problema en el tiempo:** las generaciones del **15-ago sí salieron** por
-este mismo canal. Se rompió después, no es que nunca haya andado.
+### ⚠️ Los arreglos sí se rompen en el canal — pero solo en algunos campos
 
-### Qué destraba esto
+`jobs_wait` y `generate_image_batch` reciben sus arreglos convertidos en texto (probado:
+`["nano_banana_2"]` llegó como 19 caracteres de cadena). `params` no tiene ese problema porque
+el servidor lo parsea.
 
-1. **Reintentar en una sesión nueva** — si es una versión del puente MCP, se cae solo.
-2. **Una API key de Higgsfield en el `.env`** — con eso la tanda entera corre por `curl`,
-   sin depender del puente. Es la solución que además deja el proceso reproducible.
-3. La UI del navegador, como último recurso.
-
-**Lo que sí quedó hecho y no se pierde:** la rúbrica de §2, el guion de §1, los prompts de §6
-listos para pegar, y las reglas de §8 — que son mejoras al prompt que aplican igual, se
-genere hoy o en una semana.
+**Consecuencia práctica: no se puede usar el batch ni esperar jobs por lista.** Se lanza de a
+uno y se consulta el estado con `show_generations`, que sí funciona.
 
 ---
+
+## 7-bis. RESULTADOS FASE A — imagen (medido 2026-08-17)
+
+**Costo real de las 4: 3,77 créditos.** Total de la sesión con los sondeos: **5,04 cr de 300.**
+
+| Modelo | E1 identidad | E2 deform. | E3 piel | E4 formato | Resolución | Veredicto |
+|---|---|---|---|---|---|---|
+| **`nano_banana_2`** | ✅ **clava** | ✅ | ✅ poros y pecas reales | ✅ | **1536×2752** | 🏆 **el ganador** |
+| `nano_banana_2_lite` | ⚠️ buena, **pelo aclarado** | ✅ | ✅ | ✅ | 768×1376 | sirve de respaldo |
+| `gpt_image_2` low | ⚠️ **cara más ancha**, pelo aclarado | ✅ | ✅ | ✅ | 752×1344 | descartado para primer plano |
+| `z_image` | ❌ **es otra persona** | ✅ | ✅ | ✅ | 1152×2048 | ❌ para Lucía · ✅ para b-roll sin cara conocida |
+| `soul_2` | — | — | — | — | — | el job no volvió; se reintenta |
+
+### Lo que enseña, y no estaba en ningún lado
+
+**1. El `<<<uuid>>>` dentro del prompt es lo que ancla la identidad — no el parámetro.**
+El servidor avisó `reference_elements: omitted — Nano Banana 2 does not support this parameter`
+y **la cara salió igual de bien**. La referencia viaja en el texto del prompt.
+
+Corrige lo que decía el banco: no es que estos modelos "no anclen identidad". Anclan, por otra
+vía.
+
+**2. El pelo es lo primero que deriva, antes que la cara.** Dos de los cuatro le pusieron
+puntas aclaradas tipo balayage; el ancla es castaño parejo. La cara aguantaba en los dos casos.
+
+→ **Regla nueva: revisar el pelo, no solo la cara.** Y nombrar el color en el prompt, no solo
+la forma.
+
+**3. `hands out of frame` funciona.** Cuatro de cuatro sin una sola mano deforme — el fallo
+más común del catálogo, eliminado con tres palabras.
+
+**4. `z_image` no se descarta: se reubica.** Es el más barato y da fotos creíbles; lo que no
+puede es sostener una identidad. Sirve para ambientes y gente de fondo, donde nadie tiene que
+reconocer a nadie.
 
 ## 8. Lo que enseña el workflow oficial de Higgsfield (y no teníamos)
 
@@ -283,3 +306,69 @@ aplica**: la cuenta está en plan `ultra` y `unlim.available` vino en `false`. Q
 por si se abre una cuenta nueva.
 
 ⚠️ Es **opt-in del usuario**: no se manda por iniciativa propia para "ahorrar".
+
+---
+
+## 9. RESULTADOS FASE B — video (medido 2026-08-17)
+
+Misma imagen de entrada en los cuatro (la ganadora de la Fase A), mismo prompt, una sola
+pasada por modelo. **Costo real: 35,50 cr.**
+
+| Modelo | Costo | Por segundo | Identidad | Boca / naturalidad | Audio | Salida |
+|---|---:|---:|---|---|---|---|
+| **`wan2_7`** | **7,50** | **1,50** | ✅ | ✅ **la más natural** | 🔊 **sí, sin pedirlo** | 716×1284 |
+| `kling3_0_turbo` | 7,50 | 1,50 | ✅ | ✅ natural | 🔊 sí, sin pedirlo | 716×1284 |
+| `veo3_1_lite` | 8,00 (8 s) | **1,00** | ✅ | ✅ natural | — (respetó `false`) | 720×1280 |
+| `seedance_2_0_mini` | **12,50** | **2,50** | ✅ | ❌ **boca en "O" exagerada, sobreactuada** | — | 720×1280 |
+
+### 🔴 El que veníamos usando es el más caro y el peor
+
+**`seedance_2_0_mini` cuesta 2,5× lo que `wan2_7` y dio el único resultado que se nota falso.**
+La boca se abre en una "O" enorme que ninguna persona hace hablando normal. Es el modelo que el
+banco tenía como opción principal para escenas con identidad.
+
+### 🏆 `wan2_7` gana, y por un motivo que no estaba en el plan
+
+Sale **1,50 cr/s como `kling3_0_turbo`**, con la boca más natural de los cuatro — y además
+**trae su propia pista de audio sincronizada sin que se la pidan** (AAC 44,1 kHz estéreo,
+−21,4 dB medio / −7,2 pico: contenido real, no silencio).
+
+Eso cambia la cuenta entera. El banco tenía el lipsync a **~18 cr por 5 s** con `sync_so`;
+`wan2_7` entrega video **y** audio por **7,50**.
+
+⚠️ **Sin confirmar: si esa voz sirve para Lucía.** Que exista audio no significa que sea la voz
+correcta — hay que escucharlo antes de descartar ElevenLabs. **Eso lo decide Sergio, oyendo.**
+
+### `veo3_1_lite` sigue siendo el más barato por segundo
+
+**1,00 cr/s**, y es el único que respetó `generate_audio: false`. Para b-roll sin voz sigue
+siendo la opción correcta; para primer plano hablando, `wan2_7` lo supera por el audio.
+
+### Dos cosas que solo se ven midiendo el archivo
+
+1. **`kling3_0_turbo` y `wan2_7` devuelven 716×1284, no 720×1280.** Vertical correcto, pero no
+   es 720p exacto — hay que reescalar antes de montar con material de otro modelo.
+2. **Los dos traen audio aunque no se pida.** Si la pieza lleva voz montada aparte, **ese audio
+   hay que silenciarlo explícitamente** o se superponen.
+
+### Costo real de la pieza de 32 s, recalculado
+
+| Vía | Cuenta | Total |
+|---|---|---:|
+| ~~la del banco~~ | 4× `veo3_1_lite` 8 s + voz ElevenLabs | ~35 cr |
+| **con `wan2_7`** | 7 tramos de 5 s, audio incluido | **~52 cr** |
+| ~~con `seedance_2_0_mini`~~ | 7 tramos de 5 s + voz | ~90 cr |
+
+**Para b-roll mudo con voz montada: `veo3_1_lite`.** Para primer plano hablando: `wan2_7`.
+`seedance_2_0_mini` no entra en ninguna de las dos.
+
+## 10. Gasto de la sesión
+
+| Tanda | Créditos |
+|---|---:|
+| Sondeos de firma (5 imágenes basura por `get_cost` mal puesto) | 1,27 |
+| Fase A — 5 imágenes | 3,77 |
+| Fase B — 4 videos | 35,50 |
+| **Total** | **40,54 de 300** |
+
+Saldo: 2.663,12 → **2.622,58**.

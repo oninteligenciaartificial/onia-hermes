@@ -69,23 +69,62 @@ Todo sale de `references/modelos/lucia/LUCIA.md`. Lo esencial para producir:
 
 Con `get_cost` y midiendo saldo antes/después, no estimado:
 
+> ✅ **Actualizado el 2026-08-17 con una comparativa real** de 5 modelos de imagen y 4 de video,
+> misma entrada y mismo prompt en todos. Detalle y rúbrica: `LUCIA_BANCO_DE_PRUEBAS_2026.md`.
+
+### Video — medido, no estimado
+
 | Para qué | Modelo | Costo |
 |---|---|---|
-| **B-roll vertical** | `veo3_1_lite` 8 s | **8 cr** — 720×1280 real, 1 cr/s |
-| **Encadenar sin tope** | `seedance_2_5` `video_extension` | ~12 cr por tramo de 5 s |
-| Escena nueva con su identidad | `seedance_2_0_mini` 720p + `image_references` | 2,5 cr/s |
-| Mejor cara actuando | `kling3_0` std | 1,5 cr/s ⚠️ **ignora `aspect_ratio`**, recorta a 9:16 |
-| Convertir video real de cliente | `seedance_2_5` `video_edit` | por duración del video |
-| **Lipsync** | `sync_so`, `sync_mode: remap` | ~18 cr / 5 s |
+| **Primer plano hablando** | **`wan2_7`** | **7,50 cr / 5 s** (1,50/s) — 🔊 **trae audio sincronizado sin pedirlo**. La boca más natural de las cuatro |
+| **B-roll mudo** | `veo3_1_lite` 8 s | **8 cr** (1,00/s) — el más barato por segundo, y el único que respeta `generate_audio:false` |
+| Alternativa al primer plano | `kling3_0_turbo` | 7,50 cr / 5 s — igual de bueno, también trae audio |
+| **Encadenar sin tope** | `seedance_2_5` `video_extension` | ~12 cr / 5 s ⚠️ **devolvió 16:9 con entrada 9:16** |
+| Convertir video real de cliente | `seedance_2_5` `video_edit` | por duración |
+| Lipsync sobre video mudo | `sync_so`, `sync_mode: remap` | ~18 cr / 5 s — **solo si `wan2_7` no sirve** |
 | Voz | ElevenLabs — Marcela `86V9x9hrQds83qf7zaGn` | ~2,4 cr / 50 palabras |
-| Imagen | `nano_banana_flash` + ancla | ~2 cr |
 
-**Una pieza de 32 s de b-roll con voz montada: ~48 cr.**
+### ⛔ `seedance_2_0_mini` sale del stack para primer plano
 
-**El lipsync cuesta ~5× más que montar la voz encima.** Se usa SOLO donde ella mira a cámara y
-habla — o sea el pilar meta-IA. No es el default.
+Era la opción principal de este banco. Medido: **12,50 cr por 5 s (2,50/s) — el más caro de
+los cuatro — y el único que se nota falso**: abre la boca en una "O" exagerada que nadie hace
+al hablar.
+
+**Cuesta 2,5× lo que `wan2_7` y sale peor.**
+
+### Imagen — medido
+
+| Modelo | Costo | Veredicto |
+|---|---:|---|
+| **`nano_banana_2`** | **2,00 cr** | 🏆 identidad clavada, piel real, **1536×2752**. El default |
+| `nano_banana_2_lite` | 1,00 | buena, pero **aclara el pelo**. Respaldo |
+| `gpt_image_2` low | 0,50 | ensancha la cara. No para primer plano |
+| `z_image` | **0,15** | ❌ **no es Lucía** · ✅ el más barato para ambientes y gente de fondo |
+| `soul_2` | 0,12 | no sostiene la identidad por sí solo |
+
+**Una pieza de 32 s hablando con `wan2_7`: ~52 cr.** De b-roll mudo con voz montada: ~35 cr.
 
 ⚠️ Todo gasto de video necesita **OK explícito de Sergio, caso por caso**.
+
+### 🔑 La firma real de la API (probada)
+
+**Todo va dentro de `params`, incluido `model`.** No hay parámetro `model` de nivel superior:
+
+```
+✅  { params: { model: "wan2_7", prompt: "...", aspect_ratio: "9:16", duration: 5,
+                medias: [{ value: "<id-imagen>", role: "start_image" }] } }
+❌  { model: "wan2_7", params: {...} }   → "Invalid input at params"
+```
+
+⚠️ **`get_cost` fuera de `params` se ignora en silencio y GENERA de verdad.** Costó 1,27 cr
+descubrirlo. La única medición confiable es el saldo antes/después.
+
+⚠️ **El `<<<uuid-del-ancla>>>` va en el TEXTO del prompt**, no en `reference_elements` — varios
+modelos declaran no soportar ese parámetro y aun así mantienen la cara, porque la referencia
+viaja en el prompt.
+
+⚠️ **`kling3_0_turbo` y `wan2_7` devuelven 716×1284**, no 720×1280. Y **los dos traen audio
+aunque no se pida**: si la pieza lleva voz montada aparte, hay que silenciarlo o se superpone.
 
 ### ⛔ Los presets de Higgsfield no son el camino (revisado 2026-08-17)
 
