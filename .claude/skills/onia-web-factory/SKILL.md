@@ -88,6 +88,9 @@ Mis diseños salen genéricos. ANTES de construir: usar la galería interna
 1. **Intake + dirección:** `brainstorming` → definir estilo concreto (no "clean minimal").
 2. **Investigar patrones:** browser (Awwwards/referencias) + `data/references` internas.
 3. **Taste & sistema:** `taste-design` · `ui-ux-pro-max` · `impeccable` (reglas duras de calidad).
+   **El conocimiento ordenado vive en `web-factory/DESIGN_STACK.md` §"Mapa del
+   conocimiento"** — skills → pattern banks → aprendizaje crudo → packages. Leerlo
+   ANTES de diseñar; el aprendizaje nuevo sigue esa cadena, nunca doc suelto.
 4. **Construcción:** para sitios de cliente = editar bloques/templates del generador.
    Para superficies Next (onia-center, onia-platform): `frontend-design` · `frontend-patterns` ·
    `react-components` · `shadcn-ui` · `ui-styling` · `nextjs-turbopack`.
