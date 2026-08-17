@@ -178,10 +178,27 @@ function dots(idx, total) {
 
 // La palabra del trueque sale del propio cuerpo del ultimo slide ("Comentá *LISTA* y...").
 // Asi el ticket no puede desincronizarse del texto: hay una sola fuente.
+// La palabra del trueque sale del CUERPO del ultimo slide, y el campo `comment_trigger` del
+// brief queda como respaldo — en ese orden y no al reves.
+//
+// Parece contraintuitivo (un campo estructurado deberia ganarle a un regex) pero se midio el
+// 2026-08-17: **6 de 9 briefs tenian el campo podrido** con las palabras viejas — AUTO, COSTO,
+// MITO, ESCALA, ORDEN, LIBRE — que se eliminaron al unificar el sistema en SISTEMA y LISTA.
+// El cuerpo se reescribio en esa unificacion; el campo no. Leer el campo primero habria
+// impreso un boton pidiendo una palabra que ya no existe, que es peor que no tener boton.
+//
+// Si el cuerpo no dice "Comentá X", NO hay boton: es un cierre de guardado o de pregunta.
 function triggerWord(slide) {
   const m = String(slide.body || '').match(/Comentá\s+\*?([A-ZÁÉÍÓÚÑ]{3,})\*?/);
-  return m ? m[1] : '';
+  if (m) return m[1];
+  const fromBrief = String(slide.comment_trigger || '').replace(/^Comentá\s+/i, '').trim();
+  return /^[A-ZÁÉÍÓÚÑ]{3,}$/.test(fromBrief) ? fromBrief : '';
 }
+
+// Boton de accion, compartido. La slide de CTA es la de mayor intencion de todo el carrusel
+// y hasta el 2026-08-17 solo el pack `typographic` dibujaba algo que se leyera como "tocá acá";
+// los otros cuatro dejaban solo texto.
+const ctaButton = (word) => word ? `<div class="ctabtn">Comentá ${esc(word)}</div>` : '';
 
 // Itemizado con guia punteada, para el estatico "recibo". El motor solo tenia un <p> unico
 // como cuerpo (los saltos de linea colapsan), asi que una oferta no se podia desglosar.
@@ -623,7 +640,7 @@ html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
 .slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column; justify-content:flex-end;
-  background:var(--onia-ink); color:var(--onia-white); font-family:'Inter',var(--font-body); }
+  background:var(--onia-ink); color:var(--onia-white); font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif,'Segoe UI',system-ui,Arial,sans-serif; }
 .photo { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
 .scrim { position:absolute; inset:0; z-index:1;
   background:linear-gradient(180deg, rgba(10,15,13,.15) 0%, rgba(10,15,13,.55) 55%, rgba(10,15,13,.92) 100%); }
@@ -635,22 +652,25 @@ ${safeAreaCss()}
 .topbar { position:absolute; top:var(--pad); left:var(--pad); right:var(--pad);
   display:flex; align-items:flex-start; z-index:4; height:auto; pointer-events:none; }
 .captop { display:inline-flex; background:var(--onia-green); color:var(--onia-ink);
-  font-family:'Archivo'; font-weight:800; font-size:26px; letter-spacing:1px;
+  font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800; font-size:26px; letter-spacing:1px;
   text-transform:uppercase; padding:12px 24px; border-radius:100px; }
 
-.ed-h { font-family:'Archivo'; font-weight:900; font-size:96px; line-height:.98;
+.ed-h { font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:900; font-size:96px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; }
-.ed-h .g { font-family:'Fraunces'; font-style:italic; font-weight:600; text-transform:none;
+.ed-h .g { font-family:'Fraunces',Georgia,'Times New Roman',serif; font-style:italic; font-weight:600; text-transform:none;
   color:var(--onia-green); letter-spacing:0; }
-.ed-body { font-family:'Inter'; font-weight:500; font-size:38px; line-height:1.4;
+.ed-body { font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif; font-weight:500; font-size:38px; line-height:1.4;
   margin-top:28px; max-width:880px; color:rgba(255,255,255,.85); }
-.ed-body .g { color:var(--onia-green); font-family:'Fraunces'; font-style:italic; }
-.swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo'; font-weight:800;
+.ed-body .g { color:var(--onia-green); font-family:'Fraunces',Georgia,'Times New Roman',serif; font-style:italic; }
+.swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
   font-size:26px; letter-spacing:3px; text-transform:uppercase; color:var(--onia-green); }
 
 .footer { display:flex; align-items:center; gap:16px; margin-top:40px; }
 .footer .mark { width:56px; height:56px; }
-.footer .handle { font-family:'Archivo'; font-weight:800; font-size:28px; opacity:.85; }
+.footer .handle { font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800; font-size:28px; opacity:.85; }
+.ctabtn { align-self:flex-start; margin-top:34px; background:var(--onia-green); color:var(--onia-ink);
+  font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:900; font-size:40px; letter-spacing:-0.5px;
+  padding:26px 46px; border-radius:100px; box-shadow:0 18px 48px rgba(0,0,0,.45); }
 </style></head>
 <body><div class="slide ${role}">
   ${photo}<div class="scrim"></div>
@@ -658,6 +678,7 @@ ${safeAreaCss()}
   ${pill}
   <${headTag} class="ed-h">${emph(slide.headline)}</${headTag}>
   ${body}
+  ${role === 'cta' ? ctaButton(triggerWord(slide)) : ''}
   ${last ? '' : '<div class="swipe">Deslizá →</div>'}
   <div class="footer">
     <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -791,7 +812,9 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
-  const slides = brief.slides || [];
+  const slides = (brief.slides || []).map((sl) => (
+    // El brief trae `comment_trigger` a nivel raiz; el render lo necesita por slide.
+    { ...sl, comment_trigger: sl.comment_trigger || brief.comment_trigger || '' }));
   if (!slides.length) throw new Error('brief has no slides');
   if (args.bg) args.bg = path.resolve(args.bg);
   if (args.object) args.object = path.resolve(args.object);
@@ -817,7 +840,10 @@ function render(args) {
       '--allow-file-access-from-files',
       '--force-device-scale-factor=1',
       `--window-size=${FMT.w},${FMT.h}`,
-      '--virtual-time-budget=4000',
+      // 10s, no 4s: con 4 las webfonts de Google no siempre llegaban y algunos slides
+      // salian con la fuente de respaldo. Se detecto el 2026-08-17 comparando dos slides
+      // del MISMO carrusel — uno en sans y el otro en serif.
+      '--virtual-time-budget=10000',
       `--screenshot=${png}`,
       `file://${htmlPath.replace(/\\/g, '/')}`,
     ], { stdio: 'ignore', timeout: 60000 });

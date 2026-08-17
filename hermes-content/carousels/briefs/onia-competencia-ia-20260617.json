@@ -9,8 +9,8 @@
     "#whatsapp",
     "#pymes"
   ],
-  "comment_trigger": "Comentá SISTEMA",
-  "cta": "Contame",
+  "comment_trigger": "",
+  "cta": "",
   "slides": [
     {
       "number": 1,

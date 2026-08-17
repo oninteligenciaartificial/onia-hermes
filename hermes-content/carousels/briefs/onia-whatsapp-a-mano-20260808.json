@@ -10,8 +10,8 @@
     "#emprender",
     "#santacruz"
   ],
-  "comment_trigger": "Comentá LIBRE",
-  "cta": "Contame",
+  "comment_trigger": "",
+  "cta": "",
   "slides": [
     {
       "number": 1,

@@ -10,8 +10,8 @@
     "#santacruz",
     "#gestion"
   ],
-  "comment_trigger": "Comentá ORDEN",
-  "cta": "Contame",
+  "comment_trigger": "",
+  "cta": "",
   "slides": [
     {
       "number": 1,
