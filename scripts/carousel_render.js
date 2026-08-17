@@ -109,7 +109,7 @@ html body .slide .dots { margin-top:56px; padding-top:0; }
 `;
 
 function parseArgs(argv) {
-  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', accent: '', format: 'feed' };
+  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', accent: '', format: 'feed', emph: 'marcador' };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--brief') a.brief = argv[++i];
@@ -120,11 +120,14 @@ function parseArgs(argv) {
     else if (k === '--object') a.object = argv[++i];
     else if (k === '--accent') a.accent = argv[++i];
     else if (k === '--format') a.format = argv[++i];
+    else if (k === '--emph') a.emph = argv[++i];
   }
   if (!FORMATS[a.format]) {
     throw new Error('Unknown --format: ' + a.format + ' (use ' + Object.keys(FORMATS).join('|') + ')');
   }
   FMT = FORMATS[a.format];
+  if (!EMPH[a.emph]) throw new Error('Unknown --emph: ' + a.emph + ' (use ' + Object.keys(EMPH).join('|') + ')');
+  EMPH_STYLE = a.emph;
   // --accent permite que una cuenta personal (una modelo) tenga SU color y no el
   // verde de la marca Onia. Sin el flag, nada cambia.
   if (a.accent && !/^#[0-9a-fA-F]{6}$/.test(a.accent)) {
@@ -380,13 +383,35 @@ ${safeAreaCss()}
 .footer .handle { font-family:var(--font-display); font-weight:500; font-size:30px;
   color:var(--ink); opacity:.7; }
 .slide.cover .point-h, .slide.cover .body { margin-top:0; }
-.g { color:var(--onia-green); }
-.slide.cta .g { color:var(--onia-ink); }
+.g { ${EMPH[EMPH_STYLE]} }
+/* El slide de CTA tiene fondo verde: un marcador verde ahi no se ve. Se invierte. */
+.slide.cta .g { background:var(--onia-ink); color:var(--onia-green); box-shadow:none; }
 </style></head>
 <body><div class="slide ${role}">${inner}</div></body></html>`;
 }
 
 // Escape, then turn *emphasis* into a green span (keyword highlight).
+
+// Formas de resaltar la palabra clave dentro de un titular. Hasta el 2026-08-17 habia una
+// sola —cursiva serif— y Sergio la descarto: "busca otra forma de resaltarlo pero que se vea
+// mejor". Cada una es un mecanismo distinto, no una variante estetica:
+//   marcador  el ojo lo lee como subrayado de libro. Es el mas usado en carruseles que venden
+//   subrayado afirma sin gritar; deja la palabra en el mismo plano que el resto
+//   color     el mas limpio; falla si la pieza ya usa el acento en otro lado
+//   caja      el mas fuerte; funciona cuando la palabra ES el producto
+// ⚠️ Accesibilidad: `color` solo depende del color, y esa es la unica que no conviene sola.
+const EMPH = {
+  serif:     `font-family:'Fraunces',Georgia,serif; font-style:italic; font-weight:600; color:var(--onia-green); letter-spacing:0;`,
+  // `white-space:nowrap` NO es cosmetico: sin el, una frase de dos palabras que corta de
+  // linea deja el articulo huerfano en su propio bloquecito verde ("a" arriba, "mano" abajo).
+  // Se vio el 2026-08-17 en "DEJA DE RESPONDER WHATSAPP *a mano*".
+  marcador:  `background:var(--onia-green); color:var(--onia-ink); padding:0 .16em; border-radius:.08em; white-space:nowrap; box-decoration-break:clone; -webkit-box-decoration-break:clone;`,
+  subrayado: `color:inherit; box-shadow:inset 0 -.22em 0 var(--onia-green); padding:0 .04em;`,
+  color:     `color:var(--onia-green);`,
+  caja:      `border:.09em solid var(--onia-green); color:var(--onia-green); padding:0 .18em; border-radius:.18em; box-decoration-break:clone; -webkit-box-decoration-break:clone;`,
+};
+let EMPH_STYLE = 'marcador';
+
 function emph(s) {
   return esc(s).replace(/\*([^*]+)\*/g, '<span class="g">$1</span>');
 }
@@ -657,11 +682,10 @@ ${safeAreaCss()}
 
 .ed-h { font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:900; font-size:96px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; }
-.ed-h .g { font-family:'Fraunces',Georgia,'Times New Roman',serif; font-style:italic; font-weight:600; text-transform:none;
-  color:var(--onia-green); letter-spacing:0; }
+.ed-h .g { text-transform:none; ${EMPH[EMPH_STYLE]} }
 .ed-body { font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif; font-weight:500; font-size:38px; line-height:1.4;
   margin-top:28px; max-width:880px; color:rgba(255,255,255,.85); }
-.ed-body .g { color:var(--onia-green); font-family:'Fraunces',Georgia,'Times New Roman',serif; font-style:italic; }
+.ed-body .g { ${EMPH[EMPH_STYLE]} }
 .swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
   font-size:26px; letter-spacing:3px; text-transform:uppercase; color:var(--onia-green); }
 
