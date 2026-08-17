@@ -149,6 +149,15 @@ Prohibido decir en un pitch, porque hoy no existe o no se pudo verificar:
   no puede ("Sin email"), pero el ENVÍO real con un paciente con correo no fue
   probado. No prometer hasta verificar.
 
+## 4b. Cierre 2026-08-16 (tarde) — qué se movió desde la auditoría
+
+- **Domingos (#1)**: CORREGIDO y verificado E2E en prod con org nueva — dueño y equipo nacen con los 7 días (filas 0-6 en doctor_schedules).
+- **Editar tratamiento (#3) y Desactivar teatro (#4)**: CORREGIDOS y deployados; + el alta con solo nombre+precio ya no da 400.
+- **Editor de conocimiento del chatbot**: NUEVO, vivo en prod (/settings/chatbot) con probador contra el motor real. Vocabulario por rubro verificado con org de comercio (cero dental para una ferretería).
+- **Canal de salida de los agentes**: botón "Enviar yo mismo por WhatsApp" (wa.me) VIVO en /pending — la cola de aprobaciones ya tiene salida real sin credenciales Meta. El automático espera token de Meta (Sergio, ~15 min) + plantilla utility para pacientes fríos.
+- **Incidente cazado**: el registro estuvo caído hasta ~10 h (alias de red `auth` perdido al recrear el contenedor) — restaurado; pendiente canario de registro/login en el guardián.
+- **Siguen abiertos**: #5 factura sin fecha → error opaco · #7 onboarding pierde todo al cerrar (re-verificado hoy) · #8 horario general read-only post-onboarding · #9 tutorial reaparece (re-verificado hoy) · catálogo dental precargado · tarjeta Tratamientos del paciente vacía.
+
 ## 5. Qué arreglar ANTES de la primera demo (en orden)
 
 Regla usada: primero lo que rompe la venta o la demo en vivo, después lo que
