@@ -50,6 +50,20 @@ que uno realmente va a hacer.
 | Recurso descargable a cambio de un dato | `lead-magnets` |
 | Correo frío / secuencia | `cold-email` · `emails` · `sms` |
 
+### 1.2-bis 🔴 Los bancos de patrones — se abren ANTES que la skill
+
+El conocimiento de qué funciona **ya está escrito y medido**. Abrir la skill sin leer el banco
+es opinar cuando hay datos:
+
+| Pieza | Banco |
+|---|---|
+| carrusel / estático | `web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md` |
+| video · Lucía | `web-factory/docs/LUCIA_PATTERN_BANK_2026.md` |
+| pauta | `web-factory/docs/ADS_PATTERN_BANK_2026.md` |
+| movimiento | `web-factory/docs/MOTION_PATTERN_BANK_2026.md` |
+
+Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendiente real.
+
 ### 1.3 Imagen y pieza gráfica
 
 | Cuándo | Skills |

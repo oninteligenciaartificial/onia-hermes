@@ -16,6 +16,21 @@
 
 Fuera de acá no se planifica contenido. Si aparece una idea, va al archivo de su cuenta.
 
+## Qué leer ANTES de producir (no después)
+
+Estos tres archivos dicen **qué se publica**. Los bancos de patrones dicen **cómo se hace**, y
+se abren antes de tocar el motor o generar un solo crédito:
+
+| Voy a producir… | Abro primero |
+|---|---|
+| Un carrusel o un estático | [`../../web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md`](../../web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md) — el molde de 8 slides, los ganchos, y la **§9** con lo que aprendió el motor |
+| Video o cualquier pieza de Lucía | [`../../web-factory/docs/LUCIA_PATTERN_BANK_2026.md`](../../web-factory/docs/LUCIA_PATTERN_BANK_2026.md) — tarifario medido, las 3 vías de generar, el checklist |
+| Una pieza de pauta | [`../../web-factory/docs/ADS_PATTERN_BANK_2026.md`](../../web-factory/docs/ADS_PATTERN_BANK_2026.md) |
+| Movimiento entre planos | [`../../web-factory/docs/MOTION_PATTERN_BANK_2026.md`](../../web-factory/docs/MOTION_PATTERN_BANK_2026.md) |
+
+**Cada banco termina con "lo que sigue sin resolver".** Esa sección es la lista de trabajo real,
+no una nota al pie.
+
 ---
 
 ## 1. Las dos cuentas no son la misma marca con dos nombres
