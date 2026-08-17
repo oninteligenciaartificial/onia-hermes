@@ -110,10 +110,25 @@ regla de 1 de cada 4. Hay que intercalarlas entre los informativos.
 
 ---
 
-## 4. ✅ PROGRAMADO en Postiz — 2026-08-17
+## 4. ✅ PROGRAMADO en Postiz — 2026-08-17 (corregido y reemplazado el mismo día)
 
-Los 7 carruseles están **en cola**, verificado en la base de Postiz (`state = QUEUE`,
-`releaseURL` nulo, cantidad de imágenes coincidente):
+### 🔴 Lo que se encontró antes de que saliera el primero
+
+Dos días antes de la primera publicación, una revisión contra
+`web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md` encontró **tres defectos que ya estaban en
+la cola**:
+
+| Qué | Alcance | Estado |
+|---|---|---|
+| **Una cifra sin fuente**: *"El 40% de los leads no vuelve si no respondés en 5 min"* | 3 piezas | ✅ eliminada, y saneada la plantilla `_sample.json` de donde se contagió |
+| **Captions pidiendo palabras eliminadas** (AUTO, COSTO, ESCALA, ORDEN, LIBRE) | 5 piezas | ✅ reescritos: los informativos piden guardar, solo los de venta piden palabra |
+| **La penúltima slide cerraba** en vez de abrir — la regla que dispara el completion rate | 6 piezas | ✅ reescrita para dejar una pregunta que el CTA recoge |
+
+Las 6 piezas se re-renderizaron, se reprogramaron y **los posts viejos se borraron**.
+Verificado en la base: 7 posts, sin duplicados, sin palabras muertas.
+
+Los 7 carruseles están **en cola** (`state = QUEUE`, `releaseURL` nulo, cantidad de
+imágenes coincidente):
 
 | Fecha (19:00 Bolivia) | Pieza | Tipo | Cierre | Slides |
 |---|---|---|---|---:|
@@ -130,10 +145,22 @@ cada 4 sin forzarla.
 
 **Se puede editar o cancelar en Postiz hasta el 19-ago** — el primero no sale antes.
 
-### Cómo se programó (para repetirlo)
+### Cómo se programa — ahora hay script
 
-API pública de Postiz, base `https://postiz.onia.com.bo/api/public/v1` con la `apiKey` de la
-organización en el header `Authorization`:
+La primera vez se hizo a mano y hubo que redescubrir la API entera para corregir. Ya no:
+
+```bash
+node scripts/postiz_schedule.mjs --key-file <archivo-con-la-apikey> --slides hermes-content/carousels/out/<slug> --caption-from hermes-content/carousels/briefs/<slug>.json --date 2026-08-19T23:00:00.000Z
+```
+
+También `--list` y `--delete <postId>`. El script aborta si la respuesta viene en HTML —el
+error del `200` de abajo— en vez de dárla por buena.
+
+**La apiKey no vive en el repo.** Sale de la base de Postiz en el VPS:
+`docker exec postiz-postgres psql -U postiz-user -d postiz-db-local -t -A -c 'SELECT "apiKey" FROM "Organization" LIMIT 1;'`
+
+Por debajo, la API pública, base `https://postiz.onia.com.bo/api/public/v1`, `apiKey` en el
+header `Authorization`:
 
 ```
 POST /upload   multipart file=@slide.png   → {id, path}
@@ -142,6 +169,7 @@ POST /posts    {type:"schedule", date:"…T23:00:00.000Z", posts:[{
                  value:[{content:<caption>, image:[{id,path}…]}],
                  settings:{post_type:"post"}   ← OBLIGATORIO, si falta da 400
                }]}
+DELETE /posts/<id>
 ```
 
 ⚠️ **Trampa que costó una vuelta:** el frontend (`:4007`, o el dominio sin `/api`) devuelve

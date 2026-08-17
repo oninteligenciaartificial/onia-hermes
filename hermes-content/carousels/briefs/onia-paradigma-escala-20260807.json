@@ -1,6 +1,6 @@
 {
   "title": "Lo que separa a un negocio que escala de uno estancado no es trabajar más",
-  "caption": "Nadie se estanca por vago. Se estanca porque el negocio depende de que él esté. Responde él, sigue él, cobra él. El día que para, el negocio para. El negocio que escala hizo lo contrario: dejó de vender sus horas y montó un sistema que vende sin él. No es trabajar más. Es dejar de ser el cuello de botella. Guardá el slide 6 y comentá ESCALA: te muestro cómo se ve ese sistema montado para tu rubro.",
+  "caption": "Nadie se estanca por vago. Se estanca porque el negocio depende de que él esté. Responde él, sigue él, cobra él. El día que para, el negocio para. El negocio que escala hizo lo contrario: dejó de vender sus horas y montó un sistema que vende sin él. No es trabajar más. Es dejar de ser el cuello de botella. Guardá el test del slide 6 y comentá SISTEMA: te muestro en 20 minutos cómo se ve ese sistema montado para tu rubro.",
   "hashtags": [
     "#automatizacion",
     "#IA",
@@ -67,7 +67,7 @@
       "pill": "El cambio",
       "headline": "A las *3 a.m.* ya vendiste",
       "body": "Mientras dormís, alguien preguntó por WhatsApp, el sistema respondió, lo calificó y lo agendó. Te despertás con la reunión puesta. Vos nunca podrías. Tu sistema sí.",
-      "callout": "El 40% de los leads no vuelve si no respondés en 5 min",
+      "callout": "Mientras dormías, ¿cuántos preguntaron y nadie contestó?",
       "save_worthy": false,
       "visual_prompt": "Objeto 3D con glow, dato temporal, acento verde en 3 a.m.",
       "alt_text": "A las 3am ya vendiste",
@@ -90,7 +90,7 @@
       "role": "point",
       "pill": "El cuello",
       "headline": "No automatices *todo*. Empezá por el cuello",
-      "body": "El error es querer automatizar todo de golpe. Se empieza por el proceso que hoy te frena: casi siempre, responder y seguir a los que preguntan.",
+      "body": "El error es querer automatizar todo de golpe. Se empieza por el proceso que hoy te frena: casi siempre, responder y seguir a los que preguntan. Y hay una forma de saber cuál es el tuyo en 20 minutos.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Objeto 3D, acento verde en todo.",
@@ -102,11 +102,11 @@
       "role": "cta",
       "pill": "Comentá",
       "headline": "Dejá de ser el *cuello de botella*",
-      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve ese sistema en tu rubro.",
+      "body": "Comentá *SISTEMA* y te muestro en 20 minutos cómo se ve ese sistema en tu rubro. Guardalo para cuando te sientes a hacer números.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte verde, acento en ESCALA.",
-      "alt_text": "Comentá ESCALA",
+      "alt_text": "Comentá SISTEMA",
       "bg": "hermes-content/assets/onia/heroes/esc-08.png"
     }
   ],

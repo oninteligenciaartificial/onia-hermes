@@ -271,9 +271,51 @@ el `/api`. Parece que funciona. Un `400` con JSON es la señal de que llegaste a
 Y `201` no es verificación: hay que mirar la base (`state = QUEUE`, `releaseURL` nulo, y que la
 cantidad de imágenes coincida con lo subido).
 
-## 9.8 Qué sigue sin resolver
+## 9.8 🔴 La plantilla de ejemplo contagia datos inventados
+
+El 2026-08-17, dos días antes de que saliera la primera pieza, apareció esto en **3 briefs
+reales**:
+
+> *"El 40% de los leads no vuelve si no respondés en 5 min"*
+
+**No tiene fuente en ningún lado del repo.** Se rastreó el origen: `briefs/_sample.json` y
+`_sample_dark.json` —las plantillas de arranque— traían la cifra como texto de relleno
+(*"perdés 4 de 10 leads"*, *"cada lead sin responder en 5 minutos se enfría"*). Cada brief
+nuevo se armó copiando la plantilla, y la cifra viajó con él.
+
+Tres piezas programadas la habrían publicado como dato verificado.
+
+**Las dos reglas que salen:**
+
+1. **La plantilla de ejemplo se escribe con el placeholder, no con un dato plausible.** Un
+   número creíble en un `_sample` no se lee como relleno: se lee como investigación previa y
+   nadie lo cuestiona.
+2. **Antes de programar, grepear los briefs por cifras.** El gate de copy (§9.4) mira el
+   dolor y la plata; **no mira si el número es real.** Son dos revisiones distintas.
+
+La corrección no busca otra estadística: cambia el dato ajeno por **el número propio del
+lector** — *"Mirá tu WhatsApp: ¿cuántos de anoche siguen sin respuesta?"*. Misma función,
+cero riesgo.
+
+## 9.9 Las palabras del caption se pudren aparte del cuerpo
+
+Ya estaba escrito en §9.3 que el campo `comment_trigger` se pudre. Lo que faltaba: **el
+caption también, y el caption ES lo que se publica.**
+
+Medido sobre las 7 programadas: **5 pedían una palabra eliminada** (AUTO, COSTO, ESCALA,
+ORDEN, LIBRE). Los cuerpos de los slides estaban al día; el caption no.
+
+Y arreglarlos no es poner SISTEMA en los cinco: eso rompe la regla de cadencia. **El
+informativo cierra pidiendo guardar y una pregunta barata; solo el de venta pide la palabra.**
+Quedó 2 de 7 pidiendo palabra.
+
+## 9.10 Qué sigue sin resolver
 
 - **Los otros 3 packs sin botón de CTA** (`dark-product`, `dark-neon`, `bright-retail`).
-- **El cierre que abre.** La §2 dice que la slide 7 no debe cerrar, y nuestras piezas cierran.
-  Ninguna de las 7 producidas aplica esa regla.
-- **La slide 2 = el costo.** El molde de la §2 la pide y nuestros briefs no la tienen.
+- ~~El cierre que abre~~ → ✅ aplicado a las 6 con penúltima `point` (2026-08-17). La
+  penúltima ya no resuelve del todo: deja una pregunta que el CTA recoge.
+- ~~Pedir guardar además de comentar~~ → ✅ las 7 lo piden.
+- **La slide 2 = el costo.** El molde de la §2 la pide con **un número concreto**. Nuestras
+  slides 2 nombran el dolor pero le devuelven la cuenta al lector. Es honesto y es lo único
+  que podemos hacer **hasta tener un cliente real cuyo número podamos citar** — que es el
+  mismo bloqueo que el antes/después de web.
