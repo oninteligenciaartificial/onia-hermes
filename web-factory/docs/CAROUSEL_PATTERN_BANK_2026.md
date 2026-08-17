@@ -165,3 +165,115 @@ Design Trends 2026](https://versacreative.com/blog/top-social-media-design-trend
 
 Relacionado: `ADS_PATTERN_BANK_2026.md` · `WEB_FACTORY_PATTERN_BANK_2026.md` ·
 `MOTION_PATTERN_BANK_2026.md` · `TIPOGRAFIA_SISTEMA_20260727.md`.
+
+---
+
+# 9. Lo que aprendió el MOTOR (2026-08-17)
+
+> Las secciones 1-8 son investigación de referencias. Esta es distinta: sale de **producir 7
+> carruseles reales y programarlos**, y cada punto costó un error. Van acá porque el motor
+> (`scripts/carousel_render.js`) es donde se aplican.
+
+## 9.1 El énfasis: 5 mecanismos, y por qué manda el marcador
+
+La sección 7 dice *"la jerarquía la hace el color, no el tamaño"* y durante meses eso se
+tradujo en **cursiva serif** para la palabra clave. Sergio la descartó el 2026-08-17:
+*"letras exclusivas no me gusta — buscá otra forma de resaltarlo pero que se vea mejor"*.
+
+Se renderizó la MISMA pieza con cinco mecanismos y se eligió mirando, no discutiendo:
+
+| `--emph` | Qué hace | Cuándo |
+|---|---|---|
+| **`marcador`** ✅ | bloque de acento detrás, texto en tinta | **default**. El único que aguanta una foto de fondo cargada |
+| `subrayado` | línea gruesa de acento debajo | cuando la pieza ya tiene mucho color |
+| `color` | la palabra en el acento | fondos planos. ⚠️ falla si el acento ya se usa en otro lado de la slide |
+| `caja` | borde de acento alrededor | se lee como botón: **no usar cerca del CTA** |
+| `serif` | cursiva serif — el viejo | retirado |
+
+**Dos cosas que solo se ven renderizando, no leyendo el CSS:**
+
+1. **En una slide de fondo acento, el marcador de acento es invisible.** Hay que invertirlo a
+   tinta. Pasa en el rol `cta` del pack `typographic`, que tiene fondo verde.
+2. **Sin `white-space:nowrap`, una frase resaltada de dos palabras se parte** y deja el
+   artículo huérfano en su propio bloquecito. Pasó con `*a mano*`: quedó "a" al final de una
+   línea y "mano" en la siguiente, cada uno con su recuadro.
+
+## 9.2 El cierre necesita un OBJETO, no solo texto
+
+La sección 7 lo tenía escrito —*"el CTA aparece 3 veces: titular, ticket, botón"*— y el motor
+no lo cumplía: **4 de los 5 packs no dibujaban ningún botón ni ticket en el rol `cta`.** Solo
+texto. Se descubrió auditando contra `impeccable`, no publicando.
+
+Hoy `editorial-photo` y `typographic` tienen botón. Los otros tres **siguen sin él**.
+
+## 9.3 De dónde sale la palabra del trueque
+
+Del **cuerpo del último slide**, con el campo `comment_trigger` del brief como respaldo — en
+ese orden y no al revés.
+
+Parece contraintuitivo. Se midió: **6 de 9 briefs tenían el campo podrido** con las palabras
+viejas (AUTO, COSTO, MITO, ESCALA, ORDEN, LIBRE) que se eliminaron al unificar el sistema en
+dos. El cuerpo se reescribió en esa unificación; el campo no. Leer el campo primero habría
+impreso un botón pidiendo una palabra que ya no existe — **peor que no tener botón**.
+
+**Si el cuerpo no dice "Comentá X", no hay botón.** Es un cierre de guardado o de pregunta, y
+está bien que lo sea: la regla de cadencia es máximo 1 de cada 4 piezas pidiendo algo.
+
+## 9.4 El gate de copy
+
+> **Si no nombra el dolor EXACTO del rubro —con la palabra que usa el dueño (fiado, silla
+> vacía, contenedor, control anual)— y ese dolor no termina en plata, no sale.**
+
+Aplicado a 9 piezas: **solo 3 pasaban.** Y al leerlas apareció algo que el gate no ve — el
+titular del último slide pedía una cosa y el cuerpo otra (*"Pedí tu diagnóstico gratis"*
+seguido de *"Guardalo"*).
+
+Ninguna corrección inventa una cifra: le piden al lector que ponga **sus** números.
+*"Multiplicá por tu ticket promedio"* en vez de *"perdés Bs 3.000 al mes"*.
+
+## 9.5 Capacidades del motor que la sección 5 no tenía
+
+| Qué | Cómo |
+|---|---|
+| **3 formatos** | `--format feed` (1080×1350, default) · `square` (1080×1080) · `story` (1080×1920) |
+| **Zona segura de historia** | `story` **no es el feed más alto**: Instagram tapa ~300px arriba y ~380px abajo. El motor lo aplica solo |
+| **Itemizado tipo recibo** | `lines: [{k,v}]` en un slide `cta` → guía punteada. **Cuando hay `lines[]` el ticket no se dibuja**: los dos juntos desbordan |
+| **Acento por cuenta** | `--accent #RRGGBB` — una modelo no lleva el verde de la marca |
+| **Énfasis** | `--emph` (§9.1) |
+
+## 9.6 Dos trampas de render que no dan error
+
+**Las fuentes caen a serif sin avisar.** `editorial-photo` declaraba `font-family:'Archivo'`
+**sin cadena de respaldo**. Cuando la webfont no llegaba a tiempo, el navegador caía a su
+default —que es serif— y **dos slides del mismo carrusel salían con fuentes distintas**.
+Se arregló con cadenas completas y subiendo el presupuesto de render de 4s a 10s.
+
+**Un elemento flex se encoge a cero en silencio.** El `.ticket` desaparecía del PNG sin ningún
+error cuando la slide se llenaba. Se arregla con `flex-shrink:0`.
+
+**La regla que sale de las dos:** el render **nunca falla ruidosamente**. Un PNG que se generó
+no es un PNG correcto. Hay que mirarlo.
+
+## 9.7 Publicación — la API de Postiz
+
+```
+base   https://postiz.onia.com.bo/api/public/v1     ← el /api NO es opcional
+POST   /upload   multipart file=@slide.png          → {id, path}
+POST   /posts    {type:"schedule", date:"…Z", posts:[{
+                   integration:{id}, value:[{content, image:[{id,path}]}],
+                   settings:{post_type:"post"}      ← si falta, 400
+                 }]}
+```
+
+⚠️ **El frontend devuelve `200` con el HTML del login** para cualquier ruta `/public/v1/*` sin
+el `/api`. Parece que funciona. Un `400` con JSON es la señal de que llegaste a la API real.
+
+Y `201` no es verificación: hay que mirar la base (`state = QUEUE`, `releaseURL` nulo, y que la
+cantidad de imágenes coincida con lo subido).
+
+## 9.8 Qué sigue sin resolver
+
+- **Los otros 3 packs sin botón de CTA** (`dark-product`, `dark-neon`, `bright-retail`).
+- **El cierre que abre.** La §2 dice que la slide 7 no debe cerrar, y nuestras piezas cierran.
+  Ninguna de las 7 producidas aplica esa regla.
+- **La slide 2 = el costo.** El molde de la §2 la pide y nuestros briefs no la tienen.

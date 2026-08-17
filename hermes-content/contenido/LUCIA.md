@@ -10,7 +10,7 @@
 
 | | |
 |---|---|
-| Correo | 🔴 **sin resolver.** El alias `lucia@onia.com.bo` recibe correo (probado) pero **no sirvió** para dar de alta la cuenta: un alias no es una identidad separada. Plan en [`../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md`](../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md) |
+| Correo | ✅ **decidido 2026-08-17: Gmail propio.** El alias `lucia@onia.com.bo` recibe pero NO es identidad separada, y eso es lo que Meta necesita. Un Gmail lo es, cuesta cero y se delega a Arthur. La dirección del dominio se puede sumar después sin rehacer la cuenta. Contexto: [`../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md`](../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md) |
 | Cuenta de Instagram | 🔴 **no existe todavía** |
 | Voz | ✅ Marcela `86V9x9hrQds83qf7zaGn` (ElevenLabs), cargada en el VPS |
 | Identidad visual | ✅ ancla, paleta hex, vestuario y molde de 11 bloques cerrados |
@@ -123,7 +123,7 @@ mira a cámara y habla, que es exactamente el pilar A.
 | # | Qué | Quién |
 |---|---|---|
 | 1 | **El origen de los videos de los que sale su cara.** La regla propia dice *"nunca foto de una persona real sin consentimiento"* y el material vino de más de una fuente | **solo Sergio** |
-| 2 | Resolver el correo (§0 del doc: probar en incógnito primero) y crear la cuenta | Sergio |
+| 2 | Crear el Gmail de Lucía y con eso la cuenta de Instagram | Sergio |
 | 3 | Decidir el % del pilar informativo genérico | Sergio |
 | 4 | Reescribir los cierres de P4 y P5 | yo |
 

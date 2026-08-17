@@ -9,6 +9,22 @@
 
 ---
 
+## ✅ DECIDIDO 2026-08-17 — Gmail propio para Lucía
+
+Sergio: *"el tema del correo lo voy a crear Gmail para Lucía"*.
+
+Cierra el bloqueo sin tocar el MX, sin pagar y sin arriesgar el correo de `business@`.
+Un Gmail **es** una identidad separada, que es exactamente la propiedad que faltaba.
+
+**Lo que esto NO cierra:** la pregunta de si conviene migrar el dominio a Cloudflare Email
+Routing para tener direcciones corporativas gratis. Eso queda como decisión de plata, sin
+urgencia, con el análisis de §3-bis listo para cuando se retome.
+
+**Se puede sumar `lucia@onia.com.bo` después** sin rehacer la cuenta de Instagram: Meta deja
+cambiar el correo.
+
+---
+
 ## 0. Antes de cambiar nada: puede no ser el correo
 
 Sergio describió que Meta *"lo mete a la cuenta de Onia"*. Eso no es el rechazo de una
