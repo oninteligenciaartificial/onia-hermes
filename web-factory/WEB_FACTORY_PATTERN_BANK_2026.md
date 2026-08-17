@@ -289,6 +289,23 @@ Asset needs: real app screenshots, demo video, integration logos, security notes
 
 ### Dashboard / Analytics / Internal Tool
 
+**DIRECCIÓN ELEGIDA (Sergio, 2026-08-17): "libro mayor editorial" (v4→v5).**
+Los 5 patrones consagrados — todo dashboard nuevo de Onia parte de acá:
+1. **Jerarquía por tipografía, no por superficie**: numeral héroe (Bricolage ~260 de
+   peso óptico) SIN tarjeta, sobre lienzo claro único. (Ledgerix, Callivio — Behance)
+2. **El gráfico ES el control**: full-bleed tipo código de barras que además filtra
+   el rango (Hoy/7/30). Nunca gráfico decorativo + filtro aparte. (Ledgerix)
+3. **Propuestas del agente INLINE junto a su evidencia** (el recordatorio de una
+   factura vive bajo ESA factura) — el acierto de v4 que Sergio ratificó.
+4. **Estado global como píldora oscura flotante** (única superficie oscura de la
+   página): contador de decisiones + acceso al agente. (Ledgerix dock, Recent pill)
+5. **KPIs como celdas de pelo** (hairline, sin caja) y tablas restadas: solo lo que
+   decide una acción; lo secundario vive en su panel. (Convox; pasada sustractiva v5)
+Referencia viva: hermes-content/references/ui-patterns/panel-claro-premium/index-v4.html
+(+v5 sustractiva). Detalle crudo por galería: docs/DESIGN_LEARNED_2026.md §5b.
+
+
+
 Design read: status at a glance, dense but legible, action over decoration.
 Density is a feature here, not a flaw; the win is understanding state in seconds
 and being able to filter or act without friction.
