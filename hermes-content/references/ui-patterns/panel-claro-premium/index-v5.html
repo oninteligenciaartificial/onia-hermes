@@ -1,0 +1,1069 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel claro premium · maqueta Onia · V5</title>
+<!--
+  Maqueta V5 del dashboard dental de Onia Platform, dirección "claro premium".
+  V5 = pasada SUSTRACTIVA sobre V4 (libro mayor editorial, elegida por Sergio).
+  Pedido literal: "que no haya tanta información, más simple y armónico, tablas
+  más sencillas, quita información y advertencias innecesarias — eso se puede
+  ver en otro panel". Nada se pierde: cada cosa quitada está anotada en las
+  notas al pie con el panel donde vive. La composición, el contenido real y
+  las propuestas inline del agente (el acierto de V4) se mantienen.
+  Datos de muestra. No es producción.
+-->
+<style>
+/* ── Fuentes del producto (par B decidido, woff2 hermanos, sin CDN) ──── */
+@font-face{
+  font-family:'Bricolage Grotesque';
+  src:url('BricolageGrotesque-var-latin.woff2') format('woff2');
+  font-weight:200 800;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Schibsted Grotesk';
+  src:url('SchibstedGrotesk-var-latin.woff2') format('woff2');
+  font-weight:400 900;font-style:normal;font-display:swap;
+}
+
+/* ── Tokens (los del sistema v2/v3/v4) ───────────────────────────────── */
+:root{
+  --canvas:#EDF2EF;
+  --surface:#FFFFFF;
+  --surface-2:#F8FAF9;
+  --hairline:rgba(19,32,26,.09);
+  --hairline-soft:rgba(19,32,26,.055);
+
+  --ink:#152119;
+  --ink-2:#48544D;
+  --ink-3:#717D76;
+
+  --act:#027650;
+  --act-hover:#016141;
+  --act-tint:#EDFBF3;
+  --act-tint-2:#D5F4E3;
+
+  /* superficie oscura: solo la barra flotante del agente */
+  --bar-bg:#06382A;
+  --bar-bg-2:#04301F;
+  --bar-ink:#EDF8F1;
+  --bar-ink-2:#A9CDBB;
+  --bar-green:#86D9B0;
+  --bar-amber:#FFD79A;
+
+  --info:#0A5DC2;      --info-tint:#EAF2FC;
+  --warn:#8A5A00;      --warn-tint:#FBF0D7;
+  --danger:#B3261E;
+  --done:#5C6862;      --done-tint:#EDF0EE;
+
+  --bar-muted:#C3D2CA; /* barras pasadas del código de barras */
+
+  --e1:0 1px 2px rgba(13,35,25,.05),0 1px 3px rgba(13,35,25,.05);
+  --e2:0 1px 2px rgba(13,35,25,.06),0 12px 28px -14px rgba(13,35,25,.18);
+  --e3:0 2px 4px rgba(3,24,16,.14),0 28px 56px -18px rgba(3,24,16,.38);
+
+  --r-card:18px;
+  --r-ctrl:10px;
+
+  --font-display:'Bricolage Grotesque',system-ui,sans-serif;
+  --font-ui:'Schibsted Grotesk',system-ui,sans-serif;
+
+  --t-caps:.6875rem;
+  --t-sm:.8125rem;
+  --t-body:.875rem;
+  --t-title:.9375rem;
+  --t-stat:1.375rem;     /* 22 cifras de la cinta de pelo            */
+  --t-h1:1.5rem;         /* 24 saludo                                */
+  --t-ledger:4.25rem;    /* 68 LA cifra del día, peso fino           */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-ui);font-size:var(--t-body);line-height:1.45;
+  color:var(--ink);background:var(--canvas);
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--act);outline-offset:2px;border-radius:4px}
+.agentbar :focus-visible{outline-color:var(--bar-green)}
+svg{display:block;flex:none}
+.num{font-variant-numeric:tabular-nums}
+
+/* ── Shell de 2 zonas: nav real · el libro del día ───────────────────── */
+.shell{display:grid;grid-template-columns:234px minmax(0,1fr);min-height:100vh}
+
+/* ── Sidebar: la navegación real completa (16 items, vista ADMIN) ────── */
+.side{
+  background:var(--surface-2);
+  border-right:1px solid var(--hairline-soft);
+  padding:18px 12px 14px;
+  display:flex;flex-direction:column;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  scrollbar-width:thin;
+}
+.brand{display:flex;align-items:center;padding:4px 10px 8px}
+.brand svg{height:22px;width:55px}
+.tenant{padding:2px 10px 10px;font-size:.75rem;color:var(--ink-3)}
+.tenant strong{display:block;font-size:var(--t-sm);color:var(--ink-2);font-weight:600}
+
+.nav-group{padding-top:11px}
+.nav-label{
+  font-size:.625rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);padding:0 10px 4px;
+}
+.nav a{
+  display:flex;align-items:center;gap:9px;
+  padding:5px 10px;border-radius:9px;
+  font-size:var(--t-sm);color:var(--ink-2);font-weight:500;
+  transition:background .15s,color .15s;
+}
+.nav a:hover{background:rgba(19,32,26,.05);color:var(--ink)}
+.nav a[aria-current="page"]{background:var(--act-tint);color:var(--act);font-weight:600}
+.nav a svg{opacity:.72;width:16px;height:16px}
+.nav a[aria-current="page"] svg{opacity:1}
+.side-foot{margin-top:auto;padding-top:14px}
+.user{
+  display:flex;align-items:center;gap:9px;padding:8px 9px;
+  background:var(--surface);border:1px solid var(--hairline-soft);
+  border-radius:12px;box-shadow:var(--e1);
+}
+.user-av{
+  width:30px;height:30px;border-radius:99px;background:var(--act-tint-2);
+  color:var(--act-hover);display:grid;place-items:center;flex:none;
+  font:700 .7rem var(--font-display);
+}
+.user b{display:block;font-size:.75rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user span{font-size:.6875rem;color:var(--ink-3)}
+.user > div{min-width:0}
+
+/* ── Barra móvil + drawer + bottom nav (solo <1060px) ────────────────── */
+.topbar-m{display:none}
+#nav-open{position:absolute;opacity:0;pointer-events:none}
+.scrim{display:none}
+.bottomnav{display:none}
+
+/* ── Zona central: el libro del día ──────────────────────────────────── */
+.main{padding:18px 34px 120px;min-width:0}
+.measure{max-width:1080px;margin:0 auto}
+
+.toprow{display:flex;align-items:center;gap:12px;padding-bottom:20px}
+.search{
+  flex:1;max-width:400px;display:flex;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid var(--hairline-soft);
+  border-radius:99px;padding:8px 15px;color:var(--ink-3);
+  box-shadow:var(--e1);
+}
+.search input{
+  border:0;background:none;outline:none;flex:1;min-width:0;
+  font:inherit;font-size:var(--t-body);color:var(--ink);
+}
+.search input::placeholder{color:var(--ink-3)}
+.icon-btn{
+  width:37px;height:37px;border-radius:99px;display:grid;place-items:center;
+  color:var(--ink-2);transition:background .15s;
+}
+.icon-btn:hover{background:rgba(19,32,26,.06)}
+.toprow .icon-btn{margin-left:auto}
+
+.head{display:flex;align-items:flex-end;gap:16px;padding-bottom:8px;flex-wrap:wrap}
+.head-eyebrow{
+  font-size:var(--t-sm);color:var(--ink-3);display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.tag-mock{
+  font-size:.625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--done-tint);color:var(--done);border-radius:5px;padding:2px 6px;
+  white-space:nowrap;
+}
+.head h1{
+  font:800 var(--t-h1)/1.15 var(--font-display);letter-spacing:-.015em;padding-top:3px;
+}
+.head-actions{margin-left:auto;display:flex;gap:9px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 14px;border-radius:var(--r-ctrl);
+  font-size:var(--t-sm);font-weight:600;white-space:nowrap;
+  transition:background .15s,box-shadow .15s,transform .15s,border-color .15s,color .15s;
+}
+.btn:active{transform:translateY(1px)}
+.btn-solid{background:var(--act);color:#fff;box-shadow:var(--e1)}
+.btn-solid:hover{background:var(--act-hover)}
+.btn-quiet{background:var(--surface);border:1px solid var(--hairline);color:var(--ink-2)}
+.btn-quiet:hover{border-color:var(--ink-3);color:var(--ink)}
+
+/* ══ El libro mayor: numeral fino sin tarjeta + código de barras ══════ */
+.ledger{padding:26px 0 0}
+.ledger-top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.ledger-label{
+  font-size:var(--t-caps);font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--ink-2);
+}
+.ledger-tabs{margin-left:auto;display:flex;gap:2px}
+.ledger-tabs button{
+  font-size:var(--t-sm);font-weight:600;color:var(--ink-3);
+  padding:4px 10px 6px;border-radius:8px;position:relative;
+  transition:color .15s,background .15s;
+}
+.ledger-tabs button:hover{color:var(--ink)}
+.ledger-tabs button[aria-pressed="true"]{color:var(--ink)}
+.ledger-tabs button[aria-pressed="true"]::after{
+  content:"";position:absolute;left:10px;right:10px;bottom:1px;height:2px;
+  border-radius:2px;background:var(--act);
+}
+.ledger-fig{
+  font:260 var(--t-ledger)/1 var(--font-display);
+  letter-spacing:-.03em;font-variant-numeric:tabular-nums;
+  padding:10px 0 4px;
+}
+.ledger-fig small{
+  font-size:.38em;font-weight:600;color:var(--ink-3);
+  margin-right:.22em;letter-spacing:0;
+}
+.ledger-sub{font-size:var(--t-sm);color:var(--ink-3)}
+
+/* el gráfico sangra de borde a borde de la zona central */
+.barcode{
+  position:relative;margin:18px -34px 0;padding:0 34px 16px;
+  border-bottom:1px solid var(--hairline);
+}
+.barcode svg{width:100%;height:78px}
+
+/* ══ Cinta de pelo: 2 consultas planas, sin cajas ═════════════════════ */
+.strip{display:grid;grid-template-columns:1fr 1fr}
+.scell{padding:20px 22px 8px;min-width:0}
+.scell + .scell{border-left:1px solid var(--hairline-soft)}
+.scell:first-child{padding-left:0}
+.scell-label{
+  font-size:var(--t-caps);font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.scell b{
+  display:block;font:600 var(--t-stat)/1.15 var(--font-display);
+  font-variant-numeric:tabular-nums;letter-spacing:-.01em;padding-top:5px;white-space:nowrap;
+}
+.scell em{
+  display:block;font-style:normal;font-size:.75rem;color:var(--ink-3);padding-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.scell em.warn{color:var(--warn);font-weight:600}
+.scell em a{font-weight:600;color:var(--warn);text-decoration:underline;text-underline-offset:2px}
+.scell em a:hover{color:#6B4600}
+
+/* ══ Secciones del libro: título + tabla, sin tarjeta, con más aire ═══ */
+.sheet{padding-top:42px}
+.sheet-head{display:flex;align-items:baseline;gap:10px;padding-bottom:8px}
+.sec-title{font:700 var(--t-title)/1.2 var(--font-display)}
+.sheet-sub{font-size:var(--t-sm);color:var(--ink-3)}
+.sheet-link{
+  margin-left:auto;font-size:var(--t-sm);font-weight:600;color:var(--act);
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
+}
+.sheet-link:hover{color:var(--act-hover)}
+
+.chip{
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  font-size:.72rem;font-weight:600;border-radius:99px;padding:3px 9px;
+}
+.chip-warn{background:var(--warn-tint);color:var(--warn)}
+.chip-info{background:var(--info-tint);color:var(--info)}
+
+/* ── Agenda: hora · paciente · estado (el estado solo grita si pide acción) */
+.agenda{list-style:none}
+.tr{
+  display:grid;grid-template-columns:52px minmax(0,1fr) auto;
+  align-items:center;column-gap:14px;
+  padding:12px 2px;border-top:1px solid var(--hairline-soft);
+  transition:background .15s;
+}
+.agenda .tr:first-child{border-top:0}
+.tr:hover{background:var(--surface-2)}
+.tr-time{
+  font:700 var(--t-sm)/1 var(--font-display);
+  color:var(--ink-2);font-variant-numeric:tabular-nums;
+}
+.tr-who{min-width:0}
+.tr-who b{display:block;font-size:var(--t-body);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr-who span{display:block;font-size:var(--t-sm);color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr-state{justify-self:end}
+.state-quiet{
+  font-size:.72rem;color:var(--ink-3);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
+}
+.state-quiet::before{content:"";width:6px;height:6px;border-radius:99px;background:var(--done)}
+.tr-done .tr-who b,.tr-done .tr-time{color:var(--ink-3)}
+/* la cita EN CURSO: lavado + borde completo de 1px */
+.tr-now{
+  background:var(--info-tint);border:1px solid rgba(10,93,194,.28);
+  border-radius:12px;padding-left:12px;padding-right:12px;margin:2px -12px;
+}
+.tr-now + .tr{border-top:0}
+.tr-now:hover{background:var(--info-tint)}
+.tr-now .tr-time{color:var(--info)}
+/* línea de hora actual, estilo regla del libro */
+.now-tr{
+  display:grid;grid-template-columns:52px 1fr;align-items:center;column-gap:14px;
+  padding:2px 2px;border-top:1px solid var(--hairline-soft);
+}
+.now-tr b{
+  font:700 .7rem/1 var(--font-display);color:#fff;background:var(--info);
+  border-radius:6px;padding:3px 7px;justify-self:start;font-variant-numeric:tabular-nums;
+}
+.now-tr span{height:2px;background:var(--info);border-radius:2px;display:block}
+
+/* ── Propuesta del agente INLINE (una visible; el resto plegado) ─────── */
+.agent-row{
+  margin:12px 0;border:1px solid var(--act-tint-2);background:var(--act-tint);
+  border-radius:12px;padding:12px 14px;list-style:none;
+}
+.agent-row-head{display:flex;align-items:flex-start;gap:10px}
+.agent-orb{
+  width:28px;height:28px;border-radius:9px;background:var(--act-tint-2);
+  color:var(--act-hover);display:grid;place-items:center;flex:none;
+}
+.agent-row-head p{font-size:var(--t-sm);color:var(--ink-2);min-width:0}
+.agent-row-head p b{color:var(--ink);font-weight:600}
+.agent-tag{
+  font-size:.625rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--act-hover);display:block;padding-bottom:1px;
+}
+.agent-act{display:grid;padding:10px 0 0 38px}
+.agent-act > *{grid-area:1/1}
+.agent-btns{display:flex;gap:8px;transition:opacity .2s,visibility .2s}
+.btn-approve{
+  background:var(--act);color:#fff;
+  padding:6px 13px;border-radius:9px;font-size:var(--t-sm);font-weight:700;
+  transition:transform .15s,background .15s;
+}
+.btn-approve:hover{background:var(--act-hover)}
+.btn-approve:active{transform:translateY(1px)}
+.btn-ghost{
+  padding:6px 12px;border-radius:9px;font-size:var(--t-sm);font-weight:600;
+  color:var(--ink-2);border:1px solid var(--hairline);background:var(--surface);
+  transition:color .15s,border-color .15s;
+}
+.btn-ghost:hover{color:var(--ink);border-color:var(--ink-3)}
+.agent-done{
+  visibility:hidden;opacity:0;transform:translateY(4px);
+  display:inline-flex;align-items:center;gap:7px;justify-self:start;align-self:center;
+  font-size:var(--t-sm);font-weight:600;color:var(--act-hover);
+  transition:opacity .22s cubic-bezier(.22,1,.36,1),transform .22s cubic-bezier(.22,1,.36,1);
+}
+.prop.is-approved .agent-btns{visibility:hidden;opacity:0}
+.prop.is-approved .agent-done{visibility:visible;opacity:1;transform:none}
+.agent-msg{
+  display:none;margin:10px 0 0 38px;padding:10px 12px;border-radius:10px;
+  background:var(--surface);border:1px solid var(--hairline-soft);
+  font-size:.75rem;line-height:1.5;color:var(--ink-2);
+}
+.agent-msg b{color:var(--ink);font-weight:600}
+.prop.msg-open .agent-msg{display:block}
+
+/* propuesta plegada: una línea quieta que se abre a la propuesta completa */
+.fold{border-radius:12px;margin:4px 0}
+.fold summary{
+  list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;
+  padding:9px 10px;border-radius:12px;font-size:var(--t-sm);color:var(--ink-2);
+  transition:background .15s;
+}
+.fold summary::-webkit-details-marker{display:none}
+.fold summary:hover{background:var(--act-tint)}
+.fold summary b{color:var(--act-hover);font-weight:700}
+.fold summary::after{
+  content:"▸";margin-left:auto;color:var(--ink-3);font-size:.72rem;
+  transition:transform .15s;
+}
+.fold[open]{background:var(--act-tint);border:1px solid var(--act-tint-2)}
+.fold[open] summary{border-radius:11px 11px 0 0}
+.fold[open] summary::after{transform:rotate(90deg)}
+.fold .agent-act{padding:2px 10px 12px 48px}
+.fold .agent-msg{margin:0 10px 12px 48px}
+.fold summary .agent-orb{width:24px;height:24px;border-radius:8px}
+
+/* ── Fila doble: facturas · reactivación ─────────────────────────────── */
+.duo{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0 56px;align-items:start}
+.duo > .sheet{min-width:0}
+
+.bill{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;
+  padding:11px 2px;border-top:1px solid var(--hairline-soft);align-items:baseline;
+}
+.bill:first-child{border-top:0}
+.bill b{font-size:var(--t-sm);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bill > div span{
+  display:block;font-size:.72rem;color:var(--ink-3);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-top:1px;
+}
+.bill > div span.warn{color:var(--warn);font-weight:600}
+.bill-amt{text-align:right;font:700 .9375rem/1.2 var(--font-display);font-variant-numeric:tabular-nums}
+
+.rec{display:flex;align-items:center;gap:10px;padding:10px 2px;border-top:1px solid var(--hairline-soft)}
+.rec:first-child{border-top:0}
+.rec-av{
+  width:30px;height:30px;border-radius:99px;flex:none;
+  display:grid;place-items:center;font:700 .625rem/1 var(--font-display);
+  background:var(--surface);border:1px solid var(--hairline);color:var(--ink-2);
+}
+.rec > div{min-width:0;flex:1}
+.rec b{display:block;font-size:var(--t-sm);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rec > div span{display:block;font-size:.72rem;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn-sm{
+  margin-left:auto;padding:5px 11px;border-radius:8px;flex:none;
+  font-size:.75rem;font-weight:600;color:var(--act-hover);
+  border:1px solid var(--act-tint-2);background:var(--surface);
+  transition:background .15s,color .15s;
+}
+.btn-sm:hover{background:var(--act-tint)}
+.btn-sm[disabled]{color:var(--ink-3);border-color:var(--hairline-soft);cursor:default;background:var(--surface-2)}
+
+/* ══ Barra flotante del agente: única fuente del contador ═════════════ */
+.agentbar{
+  position:fixed;left:234px;right:0;bottom:18px;z-index:30;
+  display:flex;justify-content:center;pointer-events:none;
+}
+.agentbar-pill{
+  pointer-events:auto;display:flex;align-items:center;gap:11px;
+  background:linear-gradient(172deg,var(--bar-bg) 0%,var(--bar-bg-2) 100%);
+  color:var(--bar-ink);border-radius:99px;box-shadow:var(--e3);
+  padding:9px 18px 9px 11px;max-width:min(92%,560px);
+  transition:transform .2s cubic-bezier(.22,1,.36,1);
+}
+.agentbar-orb{
+  width:30px;height:30px;border-radius:99px;background:rgba(134,217,176,.16);
+  display:grid;place-items:center;color:var(--bar-green);flex:none;
+}
+.agentbar-pill b{font:700 var(--t-sm)/1.2 var(--font-display);white-space:nowrap}
+.agentbar-pill .sep{width:1px;height:18px;background:rgba(237,248,241,.18);flex:none}
+.agentbar-count{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:.75rem;font-weight:600;color:var(--bar-amber);white-space:nowrap;
+}
+.agentbar-count svg{width:18px;height:18px}
+.agentbar.is-clear .agentbar-count{color:var(--bar-green)}
+.agentbar-go{
+  font-size:.75rem;font-weight:700;color:var(--bar-ink);
+  border:1px solid rgba(237,248,241,.22);border-radius:99px;padding:5px 12px;
+  white-space:nowrap;transition:background .15s,border-color .15s;
+}
+.agentbar-go:hover{background:rgba(237,248,241,.1);border-color:rgba(237,248,241,.4)}
+.agentbar.is-clear .agentbar-go{display:none}
+
+/* ── Notas de porteo ─────────────────────────────────────────────────── */
+.notes{padding:44px 0 10px;color:var(--ink-2)}
+.notes summary{
+  cursor:pointer;font-size:var(--t-sm);font-weight:600;color:var(--ink-3);
+  list-style:none;display:inline-flex;align-items:center;gap:8px;
+}
+.notes summary::before{content:"▸";transition:transform .15s}
+.notes[open] summary::before{transform:rotate(90deg)}
+.notes-body{
+  margin-top:14px;background:var(--surface);border-radius:var(--r-card);
+  box-shadow:var(--e1);padding:22px 26px;font-size:var(--t-sm);line-height:1.6;
+}
+.notes-body h2{font:700 var(--t-title) var(--font-display);padding:14px 0 6px}
+.notes-body h2:first-child{padding-top:0}
+.notes-body ul{padding-left:18px}
+.notes-body code{
+  font-family:ui-monospace,Consolas,monospace;font-size:.75rem;
+  background:var(--surface-2);border:1px solid var(--hairline-soft);
+  border-radius:5px;padding:1px 5px;
+}
+
+/* ── ≤1240px: el duo se apila ────────────────────────────────────────── */
+@media (max-width:1240px){
+  .duo{grid-template-columns:1fr}
+  .ledger-fig{font-size:3.4rem}
+}
+
+/* ── ≤1060px: drawer + bottom nav; la barra flota sobre el bottom nav ── */
+@media (max-width:1060px){
+  .shell{display:flex;flex-direction:column}
+  .side{
+    position:fixed;inset:0 auto 0 0;width:280px;z-index:40;
+    transform:translateX(-102%);transition:transform .28s cubic-bezier(.22,1,.36,1);
+    box-shadow:var(--e3);height:100dvh;
+  }
+  #nav-open:checked ~ .shell .side{transform:none}
+  .scrim{
+    display:block;position:fixed;inset:0;z-index:35;background:rgba(11,26,19,.4);
+    opacity:0;pointer-events:none;transition:opacity .25s;
+  }
+  #nav-open:checked ~ .scrim{opacity:1;pointer-events:auto}
+  .topbar-m{
+    display:flex;align-items:center;gap:10px;
+    padding:12px 16px;position:sticky;top:0;z-index:20;
+    background:color-mix(in srgb,var(--canvas) 88%,transparent);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--hairline-soft);
+  }
+  .topbar-m svg.logo-m{height:19px;width:47px}
+  .burger{
+    width:38px;height:38px;border-radius:99px;display:grid;place-items:center;
+    cursor:pointer;color:var(--ink-2);
+  }
+  .burger:hover{background:rgba(19,32,26,.06)}
+  .topbar-m .icon-btn{margin-left:auto}
+
+  .toprow{display:none}
+  .main{padding:16px 16px 190px}
+  .barcode{margin:14px -16px 0;padding:0 16px 12px}
+
+  .agentbar{
+    left:0;bottom:calc(64px + env(safe-area-inset-bottom));
+  }
+  .bottomnav{
+    display:grid;grid-template-columns:repeat(5,1fr);
+    position:fixed;left:0;right:0;bottom:0;z-index:25;
+    background:var(--surface);border-top:1px solid var(--hairline);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+    box-shadow:0 -4px 18px rgba(13,35,25,.07);
+  }
+  .bottomnav a{
+    display:grid;justify-items:center;gap:3px;padding:5px 2px;border-radius:9px;
+    font-size:.625rem;font-weight:600;color:var(--ink-3);
+  }
+  .bottomnav a[aria-current="page"]{color:var(--act)}
+  .bottomnav a svg{width:19px;height:19px}
+}
+@media (max-width:640px){
+  .ledger-fig{font-size:2.65rem;padding-top:8px}
+  .ledger-tabs{margin-left:0;width:100%;order:3}
+  .barcode svg{height:60px}
+  .strip{grid-template-columns:1fr}
+  .scell{padding:14px 0 6px}
+  .scell + .scell{border-left:0}
+  .head-actions{width:100%;margin-left:0}
+  .head-actions .btn{flex:1;justify-content:center}
+  .head-actions .btn:last-child{display:none}
+  .sec-title{white-space:nowrap}
+  .sheet{padding-top:34px}
+  .sheet-head{flex-wrap:wrap;row-gap:2px}
+  .tr-now{margin:2px -10px;padding-left:10px;padding-right:10px}
+  .agent-act{padding-left:0}
+  .agent-msg{margin-left:0}
+  .fold .agent-act{padding-left:10px}
+  .fold .agent-msg{margin-left:10px}
+  .agentbar-pill{max-width:94%}
+  .agentbar-pill > b,.agentbar-pill .sep{display:none}
+  .duo{gap:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- Logo real del producto (onia-platform/public/onia-logo.svg), inline como symbol -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="onia-logo" viewBox="-23.9 -701.0 1898.3 763.0">
+      <g fill="#12100E"><path d="M287.7 12.0Q213.7 12.0 154.4 -20.7Q95.1 -53.3 60.6 -112.1Q26.1 -171.0 26.1 -248.0Q26.1 -326.0 60.8 -384.4Q95.4 -442.7 155.2 -475.3Q215.0 -508.0 288.3 -508.0Q362.7 -508.0 421.8 -475.3Q480.9 -442.7 515.4 -384.4Q549.9 -326.0 549.9 -248.0Q549.9 -171.0 515.2 -112.1Q480.6 -53.3 421.3 -20.7Q362.0 12.0 287.7 12.0ZM287.6 -88.1Q326.8 -88.1 359.3 -106.0Q391.7 -123.9 411.1 -159.4Q430.5 -195.0 430.5 -247.7Q430.5 -301.2 411.0 -336.7Q391.4 -372.1 359.3 -390.0Q327.1 -407.9 288.7 -407.9Q250.2 -407.9 217.5 -389.9Q184.8 -371.9 165.1 -336.7Q145.5 -301.5 145.5 -247.9Q145.5 -195.1 164.9 -159.5Q184.3 -123.9 216.7 -106.0Q249.1 -88.1 287.6 -88.1Z"/><path d="M601.3 0.0V-496.0H717.3V-418.5Q741.7 -459.9 784.4 -484.0Q827.1 -508.0 882.7 -508.0Q974.0 -508.0 1025.0 -451.1Q1076.0 -394.1 1076.0 -282.5V0.0H960.0V-271.2Q960.0 -339.4 932.1 -374.5Q904.2 -409.5 847.1 -409.5Q790.9 -409.5 754.1 -369.4Q717.3 -329.3 717.3 -256.3V0.0Z"/><path d="M1148.0 0.0V-496.0H1264.0V0.0Z"/><path d="M1502.1 12.0Q1444.7 12.0 1404.4 -8.3Q1364.0 -28.7 1343.0 -62.9Q1322.1 -97.0 1322.1 -137.0Q1322.1 -215.7 1378.9 -258.4Q1435.8 -301.1 1528.2 -301.1Q1570.5 -301.1 1602.9 -294.9Q1635.3 -288.7 1655.7 -282.0V-305.0Q1655.7 -361.2 1624.8 -388.2Q1593.9 -415.1 1544.0 -415.1Q1506.5 -415.1 1477.9 -399.9Q1449.2 -384.6 1441.5 -346.1H1330.4Q1336.4 -399.5 1366.4 -435.4Q1396.5 -471.4 1442.9 -489.7Q1489.4 -508.0 1544.0 -508.0Q1652.9 -508.0 1712.3 -454.1Q1771.7 -400.3 1771.7 -305.0V-180.1Q1771.7 -142.7 1776.2 -125.1Q1780.7 -107.5 1791.2 -103.0Q1801.7 -98.5 1819.1 -98.5H1824.4V0.0H1798.9Q1747.7 0.0 1713.9 -14.7Q1680.1 -29.4 1666.2 -72.9Q1641.6 -36.5 1600.7 -12.2Q1559.9 12.0 1502.1 12.0ZM1526.2 -78.2Q1562.4 -78.2 1588.2 -95.4Q1614.0 -112.5 1629.9 -141.3Q1645.8 -170.2 1650.4 -204.0Q1629.0 -210.3 1599.4 -216.0Q1569.9 -221.7 1539.8 -221.7Q1491.3 -221.7 1465.2 -200.9Q1439.1 -180.1 1439.1 -145.6Q1439.1 -116.4 1462.2 -97.3Q1485.3 -78.2 1526.2 -78.2Z"/></g>
+      <rect x="1148.0" y="-651.0" width="116.0" height="116.0" fill="#00D26A"/>
+    </symbol>
+  </defs>
+</svg>
+
+<input type="checkbox" id="nav-open" aria-hidden="true">
+<label class="scrim" for="nav-open" aria-hidden="true"></label>
+
+<div class="shell">
+
+<!-- ══ Sidebar: navegación real de navigation.ts (vista ADMIN) ═══════ -->
+<aside class="side">
+  <div class="brand">
+    <svg width="55" height="22" role="img" aria-label="onia"><use href="#onia-logo"/></svg>
+  </div>
+  <div class="tenant"><strong>Clínica Demo Sonrisa</strong>Módulo dental · Plan Profesional</div>
+
+  <nav class="nav" aria-label="Navegación principal">
+    <div class="nav-group">
+      <div class="nav-label">Principal</div>
+      <a href="#" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+        Dashboard</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h9.5A1.5 1.5 0 0119 5.5v13a1.5 1.5 0 01-1.5 1.5H8M5 4v16"/><path d="M9.5 12h1.6l1-2 1.6 4 1-2h1.8"/></svg>
+        Operaciones</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8.5 14.5l2.4 2.4 4.6-4.4"/></svg>
+        Agenda de hoy</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+        Citas</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.6a3.2 3.2 0 010 5.8M17.8 14.9c1.6.7 2.6 2.3 3 4.6"/></svg>
+        Pacientes</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="7" width="17" height="13.5" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0110.5 4h3A1.5 1.5 0 0115 5.5V7M12 11v5M9.5 13.5h5"/></svg>
+        Tratamientos</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Gestión</div>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>
+        Facturación</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 4.5L20 7l-2.5 2.5M20 7H8.5A4.5 4.5 0 004 11.5M6.5 19.5L4 17l2.5-2.5M4 17h11.5a4.5 4.5 0 004.5-4.5"/></svg>
+        Facturas Recurrentes</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5L20.5 8h-17L12 3.5zM5 8v8M9.7 8v8M14.3 8v8M19 8v8M3.5 19.5h17"/></svg>
+        Contabilidad</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+        Inventario simple</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16M6.5 16.5v-4M11 16.5V8M15.5 16.5v-6.5M20 16.5V5.5"/></svg>
+        Reportes</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Automatización</div>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8.5" width="14" height="10" rx="2.5"/><path d="M12 8.5V5M12 5a1.4 1.4 0 10-.01-2.8A1.4 1.4 0 0012 5z"/><path d="M9.3 13.2v1M14.7 13.2v1"/></svg>
+        Agentes</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>
+        Comunicaciones</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Organización</div>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8.5" r="3.2"/><path d="M4.5 19.5c.6-3.2 2.8-5 5.5-5 1.2 0 2.3.3 3.2 1M17.5 14.5v1.2M17.5 20.3v1.2m3.4-4.6h-1.2m-4.4 0h-1.2m5.9-2.5l-.9.9m-3.1 3.1l-.9.9m5 0l-.9-.9m-3.1-3.1l-.9-.9"/></svg>
+        Equipo</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6L18 18M18 6l-1.4 1.4M7.4 16.6L6 18"/></svg>
+        Configuración</a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.3A2.5 2.5 0 0112 8a2.4 2.4 0 012.4 2.4c0 1.5-2.4 1.9-2.4 3.3M12 16.8v.1"/></svg>
+        Ayuda</a>
+    </div>
+  </nav>
+
+  <div class="side-foot">
+    <div class="user">
+      <div class="user-av" aria-hidden="true">VE</div>
+      <div><b>Dra. Valeria Ejemplo</b><span>Admin · Cerrar sesión</span></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ Zona central: el libro del día ════════════════════════════════ -->
+<div class="m-wrap">
+  <header class="topbar-m">
+    <label class="burger" for="nav-open" aria-label="Abrir navegación">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </label>
+    <svg class="logo-m" width="47" height="19" role="img" aria-label="onia"><use href="#onia-logo"/></svg>
+    <button class="icon-btn" type="button" aria-label="Notificaciones">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9.5a6 6 0 10-12 0c0 5-2 6-2 6h16s-2-1-2-6M10 19.5a2.2 2.2 0 004 0"/></svg>
+    </button>
+  </header>
+
+  <main class="main">
+   <div class="measure">
+    <div class="toprow">
+      <div class="search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        <input type="search" placeholder="Buscar pacientes, citas, facturas…" aria-label="Buscar">
+      </div>
+      <button class="icon-btn" type="button" aria-label="Notificaciones">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9.5a6 6 0 10-12 0c0 5-2 6-2 6h16s-2-1-2-6M10 19.5a2.2 2.2 0 004 0"/></svg>
+      </button>
+    </div>
+
+    <header class="head">
+      <div>
+        <div class="head-eyebrow">
+          Lunes 17 de agosto de 2026
+          <span class="tag-mock">Maqueta V5</span>
+        </div>
+        <h1>Buen día, Dra. Valeria</h1>
+      </div>
+      <div class="head-actions">
+        <a class="btn btn-solid" href="#">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Nuevo paciente</a>
+        <a class="btn btn-quiet" href="#">Nueva cita</a>
+        <a class="btn btn-quiet" href="#">Nueva factura</a>
+      </div>
+    </header>
+
+    <!-- ══ Libro mayor: numeral fino + código de barras (única fuente) ═ -->
+    <section class="ledger" aria-label="Cobrado, con historial">
+      <div class="ledger-top">
+        <span class="ledger-label" id="ledger-label">Cobrado hoy</span>
+        <div class="ledger-tabs" role="group" aria-label="Rango del gráfico">
+          <button type="button" data-range="hoy" aria-pressed="true">Hoy</button>
+          <button type="button" data-range="d7" aria-pressed="false">7 días</button>
+          <button type="button" data-range="d30" aria-pressed="false">30 días</button>
+        </div>
+      </div>
+      <div class="ledger-fig num" id="ledger-fig"><small>Bs</small>1.240</div>
+      <div class="ledger-sub" id="ledger-sub">6 pagos · el último a las 10:41</div>
+      <div class="barcode">
+        <svg id="barcode-svg" preserveAspectRatio="none" role="img"
+             aria-label="Cobros del rango elegido; la barra resaltada es el período actual"></svg>
+      </div>
+    </section>
+
+    <!-- ══ Cinta de pelo: 2 consultas planas, sin cajas ═══════════════ -->
+    <section class="strip" aria-label="Pulso de hoy">
+      <div class="scell">
+        <div class="scell-label">Citas hoy</div>
+        <b class="num">6</b>
+        <em class="warn"><a href="#agenda-t">2 por confirmar</a></em>
+      </div>
+      <div class="scell">
+        <div class="scell-label">Por cobrar</div>
+        <b class="num">Bs 2.150</b>
+        <em>3 facturas abiertas</em>
+      </div>
+    </section>
+
+    <!-- ══ Agenda: hora · paciente · estado ═══════════════════════════ -->
+    <section class="sheet" aria-labelledby="agenda-t">
+      <div class="sheet-head">
+        <h2 class="sec-title" id="agenda-t">Agenda de hoy</h2>
+        <a class="sheet-link" href="#">Ver calendario
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <ol class="agenda">
+        <li class="tr tr-done">
+          <span class="tr-time">09:00</span>
+          <div class="tr-who"><b>Ana Rojas Paredes</b><span>Limpieza y flúor</span></div>
+          <span class="tr-state"><span class="state-quiet">Completada</span></span>
+        </li>
+        <li class="tr tr-done">
+          <span class="tr-time">09:45</span>
+          <div class="tr-who"><b>Marco Quispe Torrez</b><span>Endodoncia pieza 16</span></div>
+          <span class="tr-state"><span class="state-quiet">Completada</span></span>
+        </li>
+        <li class="tr tr-now">
+          <span class="tr-time">10:30</span>
+          <div class="tr-who"><b>Lucía Mamani Cruz</b><span>Control de ortodoncia</span></div>
+          <span class="tr-state"><span class="chip chip-info">En consulta</span></span>
+        </li>
+        <li class="now-tr" aria-label="Hora actual: 10:52">
+          <b class="num">10:52</b><span aria-hidden="true"></span>
+        </li>
+        <li class="tr">
+          <span class="tr-time">11:15</span>
+          <div class="tr-who"><b>Jorge Choque Vargas</b><span>Extracción simple</span></div>
+          <span class="tr-state"><span class="state-quiet">Programada</span></span>
+        </li>
+        <li class="tr">
+          <span class="tr-time">12:00</span>
+          <div class="tr-who"><b>Carla Gutiérrez Soria</b><span>Blanqueamiento</span></div>
+          <span class="tr-state"><span class="chip chip-warn">Por confirmar</span></span>
+        </li>
+        <li class="tr">
+          <span class="tr-time">15:30</span>
+          <div class="tr-who"><b>Pedro Vargas Limachi</b><span>Primera consulta</span></div>
+          <span class="tr-state"><span class="chip chip-warn">Por confirmar</span></span>
+        </li>
+      </ol>
+
+      <!-- LA propuesta visible del agente (la primera pendiente) -->
+      <div class="agent-row prop" data-prop>
+        <div class="agent-row-head">
+          <span class="agent-orb" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l1.8 4.9 4.9 1.8-4.9 1.8L12 16.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 3.5z"/></svg>
+          </span>
+          <p><span class="agent-tag">Agente Cobrador propone</span>
+            <b>Recordar por correo las 2 citas sin confirmar</b> · Carla Gutiérrez (12:00) y Pedro Vargas (15:30).</p>
+        </div>
+        <div class="agent-act">
+          <div class="agent-btns">
+            <button class="btn-approve" type="button" data-approve aria-label="Aprobar: recordar 2 citas de hoy por correo">Aprobar</button>
+            <button class="btn-ghost" type="button" data-msg aria-expanded="false">Ver mensaje</button>
+          </div>
+          <span class="agent-done" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L19.5 7"/></svg>
+            Aprobada · se envía por correo</span>
+        </div>
+        <div class="agent-msg" role="region" aria-label="Borrador del mensaje">
+          <b>Para:</b> cada paciente, desde el correo de la clínica<br>
+          Hola Carla, te esperamos hoy a las <b>12:00</b> para tu blanqueamiento con la Dra. Salazar. Si no podés venir, respondé este correo y buscamos otro horario. — Clínica Demo Sonrisa
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ Fila doble: facturas · reactivación ════════════════════════ -->
+    <div class="duo">
+
+      <section class="sheet" aria-labelledby="bills-t">
+        <div class="sheet-head">
+          <h2 class="sec-title" id="bills-t">Facturas abiertas</h2>
+          <a class="sheet-link" href="#">Ver todas</a>
+        </div>
+        <ul style="list-style:none">
+          <li class="bill">
+            <div><b>Marco Quispe Torrez</b><span class="warn">Vence en 2 días</span></div>
+            <div class="bill-amt num">Bs 450</div>
+          </li>
+          <!-- Propuesta del Cobrador plegada: una línea, se abre a pedido -->
+          <li class="prop" data-prop>
+            <details class="fold">
+              <summary aria-label="Propuesta del Agente Cobrador: recordar el pago a Marco Quispe">
+                <span class="agent-orb" aria-hidden="true">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l1.8 4.9 4.9 1.8-4.9 1.8L12 16.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 3.5z"/></svg>
+                </span>
+                <span><b>Cobrador propone</b> recordar este pago a Marco Quispe</span>
+              </summary>
+              <div class="agent-act">
+                <div class="agent-btns">
+                  <button class="btn-approve" type="button" data-approve aria-label="Aprobar: recordar pago a Marco Quispe">Aprobar</button>
+                  <button class="btn-ghost" type="button" data-msg aria-expanded="false">Ver mensaje</button>
+                </div>
+                <span class="agent-done" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L19.5 7"/></svg>
+                  Aprobada · se envía por correo</span>
+              </div>
+              <div class="agent-msg" role="region" aria-label="Borrador del mensaje">
+                <b>Para:</b> marco.quispe@… · desde el correo de la clínica<br>
+                Hola Marco, te recordamos que tu factura por <b>Bs 450</b> vence el 19 de agosto. Podés pasar por la clínica o coordinar el pago respondiendo este correo. — Clínica Demo Sonrisa
+              </div>
+            </details>
+          </li>
+          <li class="bill">
+            <div><b>Carla Gutiérrez Soria</b><span>Vence el 21 de agosto</span></div>
+            <div class="bill-amt num">Bs 900</div>
+          </li>
+          <li class="bill">
+            <div><b>Jorge Choque Vargas</b><span>Vence el 22 de agosto</span></div>
+            <div class="bill-amt num">Bs 800</div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="sheet" aria-labelledby="recall-t">
+        <div class="sheet-head">
+          <h2 class="sec-title" id="recall-t">Reactivación</h2>
+          <span class="sheet-sub">Agente Recall</span>
+        </div>
+        <ul style="list-style:none" aria-label="Pacientes con más de 6 meses sin visita, propuestos por el agente">
+          <li class="rec">
+            <span class="rec-av" aria-hidden="true">RF</span>
+            <div><b>Rosa Flores Mendoza</b><span>Sin venir desde dic 2025</span></div>
+            <button class="btn-sm" type="button" data-send aria-label="Aprobar reactivación de Rosa Flores">Aprobar</button>
+          </li>
+          <li class="rec">
+            <span class="rec-av" aria-hidden="true">DT</span>
+            <div><b>Daniel Ticona Apaza</b><span>Sin venir desde sep 2025</span></div>
+            <button class="btn-sm" type="button" data-send aria-label="Aprobar reactivación de Daniel Ticona">Aprobar</button>
+          </li>
+          <li class="rec">
+            <span class="rec-av" aria-hidden="true">MC</span>
+            <div><b>María Condori Huanca</b><span>Sin venir desde nov 2025</span></div>
+            <button class="btn-sm" type="button" data-send aria-label="Aprobar reactivación de María Condori">Aprobar</button>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- ══ Notas de diseño V5: qué se restó y a dónde se fue ══════════ -->
+    <details class="notes">
+      <summary>Notas de diseño V5 (pasada sustractiva: qué se quitó y a dónde se fue)</summary>
+      <div class="notes-body">
+        <h2>a) Qué es V5</h2>
+        <ul>
+          <li>Una sola pasada SUSTRACTIVA sobre V4 (el "libro mayor editorial" elegido).
+            No cambia la composición ni el contenido real: solo resta. Pedido de Sergio:
+            "que no haya tanta información, más simple y armónico, tablas más sencillas,
+            quita información y advertencias innecesarias — eso se puede ver en otro
+            panel". El mapa patrón→galería completo sigue en <code>index-v4.html</code>.</li>
+        </ul>
+        <h2>b) Lo restado, y el panel donde vive cada cosa</h2>
+        <ul>
+          <li><b>Barra de advertencia de inventario</b> (guantes bajo mínimo) →
+            vive en <b>Inventario simple</b> (item de la nav), que es su panel.</li>
+          <li><b>Columna "doctor" de la agenda</b> (Dra. Salazar / Dr. Fernández por
+            fila) → vive en <b>Ver calendario</b> y en el detalle de cada cita.</li>
+          <li><b>Chips de estado en TODAS las filas</b> → chip solo cuando la fila
+            está viva o pide acción (En consulta, Por confirmar). Completada y
+            Programada pasan a texto quieto con punto. El estado completo vive
+            en <b>Citas</b>.</li>
+          <li><b>Sub-metadatos F-00xx de facturas</b> → viven en <b>Facturación</b>
+            (detalle de la factura). La fila queda: quién, cuándo vence, cuánto.</li>
+          <li><b>KPI "Este mes" (Bs 18.450 · 34 pagos)</b> → vive en la pestaña
+            <b>30 días</b> del numeral héroe y en <b>Reportes</b>. Quedan 2 celdas:
+            lo de hoy y lo por cobrar.</li>
+          <li><b>Delta "Bs 380 más que el lunes pasado"</b> → vive en <b>Reportes</b>
+            (comparativas). El numeral héroe queda solo, sin números compitiendo.</li>
+          <li><b>Chip flotante del gráfico ("hoy · Bs 1.240")</b> → duplicaba el
+            numeral héroe a 60px de distancia; el numeral es la única fuente.</li>
+          <li><b>Fila "Total por cobrar Bs 2.150"</b> → la celda <b>Por cobrar</b> de
+            la cinta es la única fuente visual de ese dato.</li>
+          <li><b>Badge "5" del sidebar (Agentes)</b> → la <b>barra flotante del
+            agente</b> es la única fuente del contador de decisiones.</li>
+          <li><b>Subtítulos duplicados de sección</b> ("6 citas · 2 por confirmar",
+            "Sin pago registrado") → la cinta y las propias tablas ya lo dicen.</li>
+          <li><b>Punto rojo del icono de notificaciones</b> → el contador de no
+            leídas vive dentro del panel de <b>notificaciones</b>.</li>
+          <li><b>Nota al pie de Reactivación</b> ("Cada aprobación envía una
+            invitación desde el correo…") → vive en <b>Agentes</b>, en la
+            configuración del canal de salida.</li>
+          <li><b>Segunda propuesta inline del Cobrador</b> (pago de Marco Quispe) →
+            NO se quitó: quedó <b>plegada</b> en una línea junto a su factura.
+            Una sola propuesta visible por pantalla; el resto se abre a pedido.</li>
+        </ul>
+        <h2>c) Qué se mantiene (sin reabrir lo aprobado)</h2>
+        <ul>
+          <li>Composición V4 completa: numeral fino sin tarjeta, código de barras
+            full-bleed con tabs Hoy/7/30, cinta de pelo, agenda tabla-primero,
+            propuestas del agente inline y barra flotante oscura del agente.</li>
+          <li>Contenido 100% real: 16 items de nav ADMIN de <code>navigation.ts</code>,
+            logo real, 3 <code>quickActionItems</code>, <code>bottomNavHrefs</code>,
+            agentes Cobrador y Recall con aprobación humana y salida por el correo
+            propio verificado. Nada de WhatsApp ni funciones inexistentes.</li>
+          <li>Interacciones: aprobar propuestas (contador de la barra baja), ver
+            mensaje inline, plegado/desplegado de la propuesta secundaria, tabs del
+            gráfico, drawer móvil, bottom nav real.</li>
+          <li>Par tipográfico B (Bricolage + Schibsted, woff2 hermanos, sin CDN) y
+            los tokens de v2–v4. Más aire: secciones a 42px, menos separadores
+            (la cinta ya no lleva borde inferior).</li>
+        </ul>
+        <h2>d) Datos de muestra</h2>
+        <ul>
+          <li>Mismo set de muestra de v2–v4 (Bs 1.240 hoy, 6 citas, 3 facturas,
+            Bs 2.150 por cobrar). Las series del gráfico son de muestra.
+            No es producción.</li>
+        </ul>
+      </div>
+    </details>
+   </div>
+  </main>
+</div>
+
+<!-- ══ Barra flotante del agente: única fuente del contador ══════════ -->
+<div class="agentbar" id="agentbar">
+  <div class="agentbar-pill" role="status" aria-live="polite">
+    <span class="agentbar-orb" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l1.8 4.9 4.9 1.8-4.9 1.8L12 16.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 3.5zM19 15.5l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4z"/></svg>
+    </span>
+    <b>Agente Onia</b>
+    <span class="sep" aria-hidden="true"></span>
+    <span class="agentbar-count">
+      <svg viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="13" cy="13" r="10.5" fill="none" stroke="rgba(255,215,154,.22)" stroke-width="3"/>
+        <circle id="ring-arc" cx="13" cy="13" r="10.5" fill="none" stroke="#FFD79A" stroke-width="3"
+          stroke-linecap="round" stroke-dasharray="65.97 65.97" stroke-dashoffset="0"
+          transform="rotate(-90 13 13)"/>
+      </svg>
+      <span id="agentbar-text">5 decisiones esperando</span>
+    </span>
+    <button class="agentbar-go" type="button" id="agentbar-go">Ver la primera</button>
+  </div>
+</div>
+
+<!-- Bottom nav móvil: bottomNavHrefs real de navigation.ts -->
+<nav class="bottomnav" aria-label="Navegación inferior">
+  <a href="#" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+    Dashboard</a>
+  <a href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8.5 14.5l2.4 2.4 4.6-4.4"/></svg>
+    Agenda</a>
+  <a href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.6a3.2 3.2 0 010 5.8M17.8 14.9c1.6.7 2.6 2.3 3 4.6"/></svg>
+    Pacientes</a>
+  <a href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>
+    Facturación</a>
+  <a href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16M6.5 16.5v-4M11 16.5V8M15.5 16.5v-6.5M20 16.5V5.5"/></svg>
+    Reportes</a>
+</nav>
+
+<script>
+// ── Código de barras del libro mayor: 3 series de muestra ─────────────
+// (mismo carácter de muestra que v2–v4; no es producción)
+const SERIES = {
+  hoy: { sub:'6 pagos · el último a las 10:41', caps:'Cobrado hoy', fig:'1.240',
+    data:[0,120,340,180,0,250,0,350] },                    // por hora 09:00–16:00
+  d7:  { sub:'Total de la semana en curso', caps:'Cobrado · 7 días', fig:'6.890',
+    data:[860,1310,940,620,1080,840,1240] },
+  d30: { sub:'Del 19 de julio al 17 de agosto', caps:'Cobrado · 30 días', fig:'24.310',
+    data:[640,880,720,150,980,1120,760,890,0,540,1310,970,860,1050,420,0,760,1180,920,680,1420,850,0,940,1260,780,860,1310,940,1240] },
+};
+const svgEl = document.getElementById('barcode-svg');
+function renderBars(key){
+  const s = SERIES[key];
+  const n = s.data.length, W = 1000, H = 78, gap = n > 12 ? 6 : 14;
+  const bw = (W - gap * (n - 1)) / n;
+  const max = Math.max(...s.data, 1);
+  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  let out = '';
+  s.data.forEach((v, i) => {
+    const h = v === 0 ? 3 : Math.max(6, Math.round((v / max) * (H - 8)));
+    const x = i * (bw + gap), y = H - h;
+    const last = i === n - 1;
+    out += `<rect x="${x.toFixed(1)}" y="${y}" width="${bw.toFixed(1)}" height="${h}" rx="2.5"
+      fill="${last ? 'var(--act)' : v === 0 ? 'var(--hairline)' : 'var(--bar-muted)'}"/>`;
+  });
+  svgEl.innerHTML = out;
+  document.getElementById('ledger-label').textContent = s.caps;
+  document.getElementById('ledger-fig').innerHTML = '<small>Bs</small>' + s.fig;
+  document.getElementById('ledger-sub').textContent = s.sub;
+}
+document.querySelectorAll('.ledger-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ledger-tabs button').forEach(b => b.setAttribute('aria-pressed','false'));
+    btn.setAttribute('aria-pressed','true');
+    renderBars(btn.dataset.range);
+  });
+});
+renderBars('hoy');
+
+// ── Decisiones del agente: la barra flotante es la única fuente ───────
+const TOTAL = 5;
+const RING_C = 65.97; // 2π·10.5
+let pending = TOTAL;
+const barText = document.getElementById('agentbar-text');
+const ringArc = document.getElementById('ring-arc');
+const agentbar = document.getElementById('agentbar');
+function decCount(){
+  pending -= 1;
+  barText.textContent = pending > 0 ? pending + ' decisiones esperando' : 'Al día, nada pendiente';
+  ringArc.setAttribute('stroke-dashoffset', (RING_C * (1 - pending / TOTAL)).toFixed(2));
+  if (pending === 0){ agentbar.classList.add('is-clear'); ringArc.setAttribute('stroke','#86D9B0'); }
+}
+document.querySelectorAll('[data-approve]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const prop = btn.closest('[data-prop]');
+    prop.classList.add('is-approved');
+    prop.classList.remove('msg-open');
+    decCount();
+  });
+});
+document.querySelectorAll('[data-msg]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const prop = btn.closest('[data-prop]');
+    const open = prop.classList.toggle('msg-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.textContent = open ? 'Ocultar' : 'Ver mensaje';
+  });
+});
+document.querySelectorAll('[data-send]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.disabled = true;
+    btn.textContent = 'Aprobado';
+    decCount();
+  });
+});
+// "Ver la primera": lleva a la primera propuesta aún pendiente
+// (si está plegada, la abre antes de desplazarse).
+document.getElementById('agentbar-go').addEventListener('click', () => {
+  const next = document.querySelector('.prop:not(.is-approved)') ||
+               document.querySelector('.btn-sm:not([disabled])');
+  if (!next) return;
+  const fold = next.querySelector('details.fold');
+  if (fold) fold.open = true;
+  next.scrollIntoView({ behavior:'smooth', block:'center' });
+});
+// Cerrar el drawer móvil al elegir una entrada de navegación.
+const navToggle = document.getElementById('nav-open');
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', () => { navToggle.checked = false; });
+});
+</script>
+</body>
+</html>
