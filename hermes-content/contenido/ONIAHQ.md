@@ -110,25 +110,53 @@ regla de 1 de cada 4. Hay que intercalarlas entre los informativos.
 
 ---
 
-## 4. El orden de salida
+## 4. ✅ PROGRAMADO en Postiz — 2026-08-17
 
-3 por semana (lunes, miércoles, viernes). Va de dolor universal → objeción → ambición, y
-**nunca dos piezas de venta seguidas**.
+Los 7 carruseles están **en cola**, verificado en la base de Postiz (`state = QUEUE`,
+`releaseURL` nulo, cantidad de imágenes coincidente):
 
-| Semana | L | X | V |
-|---|---|---|---|
-| 1 | WhatsApp a mano | R.I.P. al cuaderno | 3 procesos a mano |
-| 2 | El costo invisible | ui-pattern · upload *(venta)* | Tu competencia |
-| 3 | placa de rubro *(venta)* | Paradigma de escala *(venta)* ⚠️ | ui-pattern · carrito *(venta)* |
-| 4 | placa de rubro *(venta)* | Recibo itemizado *(venta)* | ui-pattern · chat *(venta)* |
+| Fecha (19:00 Bolivia) | Pieza | Tipo | Cierre | Slides |
+|---|---|---|---|---:|
+| **mié 19-ago** | WhatsApp a mano | 📚 | pregunta | 8 |
+| **vie 21-ago** | R.I.P. al cuaderno | 📚 | pregunta | 7 |
+| **lun 24-ago** | 3 procesos a mano | 📚 | guardalo | 6 |
+| **mié 26-ago** | El costo invisible | 📚 | guardalo | 7 |
+| **vie 28-ago** | Tu competencia ya vende con IA | 📚 | pregunta | 5 |
+| **lun 31-ago** | Paradigma de escala | 🎯 | **SISTEMA** | 8 |
+| **mié 02-sep** | Recibo itemizado | 🎯 | **LISTA** | 1 |
 
-⚠️ **La semana 3 y la 4 rompen la regla de "1 de cada 4 pide algo".** Es consecuencia de que
-casi todo lo que queda sin publicar es de venta: se gastaron los informativos en las dos
-primeras semanas. **Antes de llegar a la semana 3 hay que producir 2-3 informativos nuevos**
-e intercalarlos, o el feed se vuelve una seguidilla de pedidos.
+**5 informativos y 2 de venta, y los dos de venta van al final.** Cumple la regla de 1 de
+cada 4 sin forzarla.
 
-**Historias:** los días que hay carrusel, una sola — la portada + "link en bio". Sin
-producción. Sirve para que el carrusel no dependa del alcance del feed.
+**Se puede editar o cancelar en Postiz hasta el 19-ago** — el primero no sale antes.
+
+### Cómo se programó (para repetirlo)
+
+API pública de Postiz, base `https://postiz.onia.com.bo/api/public/v1` con la `apiKey` de la
+organización en el header `Authorization`:
+
+```
+POST /upload   multipart file=@slide.png   → {id, path}
+POST /posts    {type:"schedule", date:"…T23:00:00.000Z", posts:[{
+                 integration:{id:"cmsw091nx0001lq9c8kr6dsg8"},
+                 value:[{content:<caption>, image:[{id,path}…]}],
+                 settings:{post_type:"post"}   ← OBLIGATORIO, si falta da 400
+               }]}
+```
+
+⚠️ **Trampa que costó una vuelta:** el frontend (`:4007`, o el dominio sin `/api`) devuelve
+**200 con el HTML del login** para cualquier ruta `/public/v1/*`. Parece que funciona y no es
+la API. La API real está bajo **`/api`** y un `400` con mensaje JSON es la señal de que llegaste.
+
+### 🔴 Lo que falta para las semanas siguientes
+
+Después del 02-sep no hay nada en cola. **Y casi todo lo que queda sin producir es de venta:**
+las 3 piezas de `ui-patterns` (las tres piden SISTEMA) y las 6 placas por rubro.
+
+**Antes de programar la semana 4 hay que producir 2-3 informativos nuevos** e intercalarlos, o
+el feed se vuelve una seguidilla de pedidos.
+
+**Historias:** los días que hay carrusel, una sola — la portada + "link en bio". Sin producción.
 
 ---
 
