@@ -1,3 +1,23 @@
+# DECISIÓN DE SERGIO (2026-08-17) — manda sobre el análisis de abajo
+
+1. **Ruta elegida: Embedded Signup (auto-checking)**, con VIDEOS de apoyo para quien
+   se trabe (gratis, guía del popup — no producto aparte). Tech Provider: Sergio
+   verifica la aceptación él mismo.
+2. **La cara es ONIA, nunca Chatwoot.** Chatwoot queda como motor oculto. NO se
+   re-brandea Chatwoot (el cron diario restaura su marca — ya se perdió trabajo ahí);
+   lo que ve el cliente son superficies nuestras: el panel, el editor, y a futuro el
+   widget propio. El "Powered by Chatwoot" del widget B1 es deuda aceptada solo como
+   puente corto.
+3. **Formulario de alta a perfeccionar**: el cliente construye SU chatbot solo,
+   como construimos el nuestro en un día — el form alimenta los bloques A-D del
+   editor. Se prueba primero con EL BOT PROPIO DE ONIA dentro del sistema.
+4. **Escalera de cobro ratificada**: instalación + mensualidad de plataforma +
+   extras; si el cliente no puede solo → consultoría done-for-you, MÁS cara.
+5. **Dirección nueva — consultor técnico + on-premise**: "el SaaS está muriendo" →
+   Onia también diagnostica la empresa (qué falla, cómo opera) y le instala el
+   sistema LOCAL o SaaS configurado, cobrando más. Hay que aprender a instalar y
+   configurar la plataforma on-premise (conecta con la idea Onia Box).
+
 # ONIA — Alta del WhatsApp del cliente y canal del chatbot: decisión
 
 > **Fuente de verdad viva** (sin fecha en el nombre: se EDITA, no se duplica).
