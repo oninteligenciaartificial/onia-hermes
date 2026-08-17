@@ -36,7 +36,9 @@ if [ ! -f "$BOT_DIR/followup-run.mjs" ]; then
 fi
 
 # Sincronizar el código sólo si cambió (mismo sello que run-turn.sh: comparten la carpeta).
-STAMP="$(cat "$BOT_DIR"/*.mjs 2>/dev/null | md5sum | cut -c1-12)"
+# Los *.json van INCLUIDOS: ahí vive knowledge.json (los hechos editables). Sin ellos en el
+# sello, editar el conocimiento no re-copiaba nada y el contenedor seguía con la copia vieja.
+STAMP="$(cat "$BOT_DIR"/*.mjs "$BOT_DIR"/*.json 2>/dev/null | md5sum | cut -c1-12)"
 CURRENT="$(docker exec "$CONTAINER" cat "$DEST/.stamp" 2>/dev/null || true)"
 if [ "$CURRENT" != "$STAMP" ]; then
   docker exec "$CONTAINER" rm -rf "$DEST" >/dev/null 2>&1
@@ -54,9 +56,36 @@ case " $* " in
   *) NOW_ARGS=(--now "$(date -u +%Y-%m-%dT%H:%M:%SZ)") ;;
 esac
 
+# El interruptor de "manda de verdad" vive en UN SOLO lugar: webhook.env, el mismo archivo que ya
+# lee el webhook. Antes el default de aca era `true`, asi que un cron que llamara al barrido sin
+# exportar la variable barria, reportaba y NO mandaba nada: encendido en apariencia, apagado de
+# hecho — y sin ningun error que lo delatara. Quien llama puede seguir forzando el valor (tiene
+# prioridad); esto solo cubre el olvido. Si no hay archivo, sigue cayendo a dry-run, que es el
+# default seguro: preferimos no mandar por accidente a mandar por accidente.
+if [ -z "${ONIA_BOT_DRY_RUN:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
+  ONIA_BOT_DRY_RUN="$(sed -n 's/^ONIA_BOT_DRY_RUN=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
+fi
+
+# Token de Chatwoot — el barrido MANDA el mensaje, no solo lo reserva. Sale de la base de Chatwoot
+# igual que en webhook-server.sh: nunca se escribe en un archivo ni viaja a n8n.
+CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
+# El bot postea con SU PROPIA identidad de Chatwoot (agente "Onia Bot"), no con la de Sergio:
+# es lo unico que permite saber quien escribio y callar al bot cuando el toma la conversacion.
+# Sin la variable cae al 2 (la cuenta de Sergio) = comportamiento de antes, nunca queda sin token.
+CW_AGENT_ID="${CHATWOOT_BOT_AGENT_ID:-2}"
+CW_TOKEN=""
+if [ -n "$CWDB" ]; then
+  CW_TOKEN="$(docker exec "$CWDB" psql -U postgres -d 'onia-chatbot' -tAc \
+    "select token from access_tokens where owner_id=$CW_AGENT_ID order by created_at desc limit 1" 2>/dev/null | tr -d ' \t\n' || true)"
+fi
+
 docker exec \
   -e ONIA_BOT_DRY_RUN="${ONIA_BOT_DRY_RUN:-true}" \
   -e ONIA_BOT_SLOTS="${ONIA_BOT_SLOTS:-}" \
+  -e CHATWOOT_BASE_URL="${CHATWOOT_BASE_URL:-http://onia-chatbot_chatwoot:3000}" \
+  -e CHATWOOT_ACCOUNT_ID="${CHATWOOT_ACCOUNT_ID:-2}" \
+  -e CHATWOOT_API_TOKEN="$CW_TOKEN" \
+  -e CHATWOOT_BOT_AGENT_ID="$CW_AGENT_ID" \
   "$CONTAINER" node "$DEST/followup-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} "$@"
 
 exit 0

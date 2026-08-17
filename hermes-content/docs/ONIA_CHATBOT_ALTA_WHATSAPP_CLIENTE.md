@@ -372,3 +372,83 @@ passwords) · `historial/ONIA_META_WHATSAPP_CLIENTES_20260808.md` (runbook
 Tech Provider) · motor: `hermes-content/deploy/vps-ops/bot/`
 (`bot-engine.mjs`, `preview-route.mjs`, `chatwoot-adapter.mjs`,
 `webhook-server.mjs` puerto 3020).
+
+---
+
+## Prueba E2E 2026-08-17 — el chatbot por cliente ya es REAL (paso b + widget cara Onia)
+
+Sesión carril motor+infra. Todo lo de abajo quedó **encendido en producción y
+verificado mirándolo** (curl con respuesta real + screenshots Playwright en el
+scratchpad de la sesión, `bot-cliente/`).
+
+### Qué quedó vivo
+
+1. **Paso b — el motor lee el conocimiento POR ORGANIZACIÓN desde el producto.**
+   - Producto (onia-platform, commits `662d388` + `264d8c0` en `master`):
+     `GET /api/chatbot-knowledge/published?organizationId=...` con
+     `Bearer BOT_KNOWLEDGE_SECRET` (timing-safe; sin env = apagado 401; solo
+     sale la fila `status='publicado'`; sin fila = 404 real). Abierto en el
+     middleware (`proxy.ts`) porque es server-to-server. 7 tests vitest; suite
+     completa 1553 passed | 5 skipped; tsc limpio.
+   - Motor (`/opt/onia/bot`, espejado acá): `knowledge.mjs` ganó la fuente
+     **"db"** delante del archivo — cache por org con el MISMO TTL (5 min),
+     mismo validador todo-o-nada, y degradación archivo→código si el producto
+     está caído/404/doc inválido. `getKnowledge()` sigue sincrónico (jamás
+     espera red en el camino del turno); `getOrgKnowledge()` (async) la espera
+     solo en `/preview`. 8 tests nuevos en `knowledge.test.mjs` (suite del bot:
+     508 pass; los 2 fails de leads son PREEXISTENTES, verificado contra la
+     base prístina del VPS).
+   - `/preview` acepta `organizationId` opcional y devuelve
+     `conocimiento: {fuente, version, error}`.
+   - Config: `BOT_KNOWLEDGE_SECRET` en `/opt/onia/bot/webhook.env` Y en
+     `/opt/onia-platform/app.env` (mismo valor); URL default
+     `http://onia-platform:3000/...` en `webhook-server.sh` (red easypanel
+     compartida — verificado que el firewall NO corta ese par).
+
+2. **Prueba punta a punta del paso b (curl real):** `/preview` con el
+   `organizationId` de la org QA (`cmsvyguui000001ril9vhxbn2`) contesta
+   **"ZZ QA Ferreteria Tornillo es una plataforma por módulos…"** con
+   `conocimiento: {fuente:"db", version:"v2"}`; el mismo mensaje SIN
+   organizationId sigue diciendo "Onia" (cero regresión del bot de leads).
+
+3. **Deploy del producto** (runbook onia-deploy al pie): build en el VPS en
+   `node:20-alpine` con `app.env` + `next build --webpack`, gates (server.js +
+   node_modules + anon key en bundle + sin localhost horneado — los 3 matches
+   de "localhost" son el default de Sentry Spotlight, idénticos al runtime
+   anterior), standalone COPIADO, swap con backup
+   (`runtime-next.prev-20260817-*`), contenedor RECREADO por la env nueva con
+   sus 3 redes. Login de prod mirado renderizado: iconos como iconos.
+
+4. **Widget con cara Onia (Chatwoot Website channel):**
+   - Inbox nuevo **"ZZ QA Ferreteria"** (id 6, `website_token
+     tiXym8tmNL2drsZb4WUnn1av`) en la cuenta 2 del Chatwoot del VPS (4.12.1).
+   - **No hace falta agent bot**: el webhook de la cuenta 2 es a NIVEL CUENTA
+     (`inbox_id NULL` → `onia-center:3020`), así que cualquier inbox nuevo ya
+     dispara el motor. Lo que SÍ hizo falta: **agregar al agente "Onia Bot"
+     (user 3) como miembro del inbox** — sin eso Chatwoot devuelve 401 al POST
+     del motor y el bot "contesta" solo en su bitácora (delivery_status decía
+     `sent` igual: bug menor conocido, el warning del adapter no se persiste).
+   - Conversación real por el widget: "hola, que venden?" → el motor contestó
+     en <1 s con el pitch de Onia + catálogo (screenshots
+     `04-conversacion-con-bot.png`).
+   - **Marca: SE PUEDE.** `installation_configs` BRAND_NAME/INSTALLATION_NAME
+     → "Onia" y WIDGET_BRAND_URL → onia.com.bo: el pie del widget dice
+     **"Desarrollado por Onia"** (verificado renderizado). ⚠️ Plan
+     `community`: el job interno de reconcile de Chatwoot puede restaurar el
+     branding enterprise — si un día vuelve a decir "Chatwoot", re-aplicar los
+     3 configs (rails runner) o mover esa escritura a un cron nuestro.
+
+### Qué falta / no verificado
+
+- El **turno real por WhatsApp/widget todavía NO resuelve org**: el
+  `organizationId` hoy entra por `options`/`/preview`; falta decidir el mapeo
+  inbox→organización (custom attribute del inbox o tabla) para que cada
+  conversación use el conocimiento de SU cliente en producción.
+- El branding "Desarrollado por Onia" queda a merced del cron de reconcile
+  (no esperé 24 h para verlo revertir).
+- 2 tests de leads del motor fallan desde antes de esta sesión
+  (`el lead se inserta una vez…` y `el lead nunca inventa el nombre…`).
+- La migración de índices de catálogo sigue pendiente (nota 2026-08-08).
+
+Backups: motor `/opt/onia/bot/backups/20260817-185002/`; producto
+`app.env.bak-botknowledge-*` + `runtime-next.prev-20260817-*`.

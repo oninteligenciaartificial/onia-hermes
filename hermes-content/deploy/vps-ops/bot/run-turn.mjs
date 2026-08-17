@@ -22,6 +22,9 @@
 //   "piece_key": "lucia-d03-reel-siat",     // opcional, atribucion de campana
 //   "source_campaign": "lucia-dentalgest-jul2026",
 //   "human_takeover": false,          // true = un humano contesto: el bot se calla PARA SIEMPRE
+//                                     //        y ese mensaje se guarda como SALIENTE (lo cobra Meta)
+//   "template_name": null,            // nombre de la plantilla de Meta con la que salio, si aplica
+//                                     //        ("seguimiento_demo"): decide utility vs marketing
 //   "dry_run": true,                  // opcional: pisa ONIA_BOT_DRY_RUN
 //   "slots": [{"key":"A","label":"jueves 15:00","startAt":"2026-07-30T19:00:00Z"}]  // opcional
 // }
@@ -41,11 +44,12 @@
 
 import { pathToFileURL } from "node:url";
 
-import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
+import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
+import { withKnowledge } from "./knowledge.mjs";
 import { createState, step, markHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
 import { createStore } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
-import { createBooking, buildBookingNotes } from "./calcom-booking.mjs";
+import { createBooking, buildBookingNotes, meetingLink } from "./calcom-booking.mjs";
 
 // ---------------------------------------------------------------------------
 // Entrada
@@ -75,7 +79,11 @@ export function parseInput(raw) {
   return parsed;
 }
 
-/** Config del turno: DEFAULT_CONFIG + slots + dryRun. Nada mas se pisa desde el canal. */
+/**
+ * Config del turno: DEFAULT_CONFIG + slots + dryRun + los HECHOS editables (knowledge.json).
+ * Nada mas se pisa desde el canal. Sin archivo de conocimiento devuelve exactamente lo de antes
+ * (el MISMO objeto): la capa editable degrada a codigo sin cambiar una coma.
+ */
 export function buildConfig(input) {
   const overrides = {};
   const envDry = String(process.env.ONIA_BOT_DRY_RUN ?? "").toLowerCase();
@@ -92,7 +100,7 @@ export function buildConfig(input) {
       pending: false,
     }));
   }
-  return Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG;
+  return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG);
 }
 
 /** ONIA_BOT_SLOTS="jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00@2026-07-31T14:00:00Z" */
@@ -121,7 +129,7 @@ export async function resolveConfig(input, deps = {}) {
   const getSlots = typeof deps.getAvailableSlots === "function" ? deps.getAvailableSlots : getAvailableSlotsFromCalcom;
   const live = await getSlots({ nowIso: input.received_at || input.receivedAt }, deps);
   if (!live || !Array.isArray(live.slots) || live.slots.length === 0) return config;
-  return createBotConfig({ slots: live.slots, dryRun: config.dryRun });
+  return withKnowledge(createBotConfig({ slots: live.slots, dryRun: config.dryRun }));
 }
 
 // ---------------------------------------------------------------------------
@@ -173,11 +181,29 @@ export function seedFrom(input) {
     conversationKey: input.conversation_key || input.conversationKey || `${channel}:${contactRef}`,
     channel,
     contactRef,
+    publicContact: input.public_contact || input.publicContact || null,
     displayName: input.display_name || input.displayName || null,
     pieceKey: input.piece_key || input.pieceKey || null,
     sourceCampaign: input.source_campaign || input.sourceCampaign || null,
     ownerRoleKey: input.owner_role_key || "sergio",
   };
+}
+
+/**
+ * Rellena con lo que trae el canal SOLO los campos que la fila guardada tiene vacios.
+ *
+ * `ensureConversation()` escribe estos datos UNA vez, al crear la fila con el primer mensaje. Si el
+ * telefono o la atribucion recien aparecen en el segundo webhook, el estado cargado de la base los
+ * pisa con null y no se guardan NUNCA (los siguientes turnos ya encuentran la fila creada). Se
+ * rellena y no se sobrescribe a proposito: un dato ya guardado gana, asi un turno posterior sin
+ * atribucion no borra la que trajo el primero.
+ */
+function fillFromSeed(state, seed) {
+  const patch = {};
+  if (!state.publicContact && seed.publicContact) patch.publicContact = seed.publicContact;
+  if (!state.pieceKey && seed.pieceKey) patch.pieceKey = seed.pieceKey;
+  if (!state.sourceCampaign && seed.sourceCampaign) patch.sourceCampaign = seed.sourceCampaign;
+  return Object.keys(patch).length ? { ...state, ...patch } : state;
 }
 
 export function incomingFrom(input, nowIso) {
@@ -267,7 +293,7 @@ export async function runTurn(input, deps = {}) {
 
   // 1. Estado: base primero, memoria si la base no contesta (el bot NO se queda mudo).
   const loaded = await store.ensureConversation(seed);
-  let state = loaded || createState(seed);
+  let state = fillFromSeed(loaded || createState(seed), seed);
   if (!loaded && store.enabled) store.warnings.push("estado en memoria: la conversación no se pudo cargar");
   if (input.human_takeover === true && !state.humanTookOver) state = markHumanTakeover(state, nowIso);
 
@@ -277,10 +303,35 @@ export async function runTurn(input, deps = {}) {
   let result = step(state, incoming, { config });
 
   // 3-4. Dedup: si el inbound ya estaba, el turno YA se proceso. Cortar antes de tocar nada.
-  const claimed = await store.claimInbound(result.inbound, state, {
-    externalMessageId: incoming.externalMessageId,
-    raw: { kind: incoming.kind, receivedAt: incoming.receivedAt },
-  });
+  //
+  // EL TRASPASO NO ES UN ENTRANTE. Cuando un humano NUESTRO contesta desde Chatwoot, esta fila es
+  // lo UNICO que queda de ese envio — y Meta lo cobra igual que cualquier otro saliente. Guardada
+  // como `inbound` quedaba fuera del medidor (usage-run.mjs filtra `direction = 'outbound'`): se
+  // media al bot y no a la bandeja, o sea media bolsa del plan sin facturar. Y encima con
+  // `author = 'contact'`: dos mensajes NUESTROS atribuidos al prospecto — verificado en la base del
+  // VPS el 2026-08-13 (mensajes 30 y 31, las dos unicas plantillas reales que existieron).
+  //
+  // Lo que NO cambia: el `message_key`. Es el candado que evita que el bot conteste encima del
+  // humano, y sigue siendo el mismo. Tampoco el `delivery_status`, que claimInbound fija en `sent`:
+  // eso es lo que sabemos (Chatwoot acepto el POST) y ni una letra mas — el veredicto de Meta llega
+  // por un webhook asincrono que Chatwoot no nos reenvia.
+  const traspaso = input.human_takeover === true;
+  const templateName = String(input.template_name ?? input.templateName ?? "").trim();
+  const claimed = await store.claimInbound(
+    traspaso ? { ...result.inbound, direction: "outbound", author: "human", replySource: "human" } : result.inbound,
+    state,
+    {
+      externalMessageId: incoming.externalMessageId,
+      raw: {
+        kind: incoming.kind,
+        receivedAt: incoming.receivedAt,
+        // El nombre de la plantilla de Meta tal cual vino en el webhook. El medidor lo resuelve
+        // contra su registro (utility vs marketing, 6,5x de diferencia); una plantilla que nadie
+        // registro cae en `plantilla_sin_tarifa` y se ve, en vez de colarse barata como servicio.
+        ...(templateName ? { templateName } : {}),
+      },
+    },
+  );
   if (claimed === false) return duplicateResponse(state, stageBefore, store.warnings);
   if (claimed === null && store.enabled) store.warnings.push("sin dedup: el inbound no se pudo registrar");
 
@@ -312,6 +363,10 @@ export async function runTurn(input, deps = {}) {
       const bookFn = typeof deps.createBooking === "function" ? deps.createBooking : createBooking;
       const booking = await bookFn({
         startAt: nextState.scheduledAt,
+        // MISMA fuente que el texto que el prospecto acaba de leer ({{demo_duracion}}): si el
+        // guion promete una duracion, el calendario bloquea esa. CALCOM_BOT_DURATION_MINUTES
+        // sigue ganando si esta definido en el entorno (es el freno de mano del que despliega).
+        durationMinutes: config.demo?.duracionMinutos,
         name: nextState.displayName || "Prospecto",
         conversationKey: nextState.conversationKey,
         notes: buildBookingNotes(nextState.qualification || {}),
@@ -320,6 +375,15 @@ export async function runTurn(input, deps = {}) {
       bookingWarnings.push(...(booking.warnings || []));
       if (booking.ok) {
         nextState = { ...nextState, calendarEventId: booking.uid };
+        // EL LINK VA ACA, en el mismo mensaje que confirma la reserva. Es el UNICO momento
+        // garantizado dentro de la ventana de servicio de 24 h de Meta: el prospecto acaba de
+        // escribir. Dejarlo para el dia de la demo (M9) fallaria con 131047 en todo el que
+        // reserva para dentro de 3 dias, y es exactamente lo que M2 prometia sin cumplir.
+        const link = meetingLink(booking.uid, deps.env || process.env);
+        const ultima = replies[replies.length - 1];
+        if (link && ultima && ultima.text) {
+          ultima.text += `\n\n${renderTemplate(config.script.M2_LINK, { link_reunion: link })}`;
+        }
       } else {
         // No se puede desdecir el "Listo, agendado" que el motor ya redacto, asi que se le agrega
         // una linea honesta y se deja el aviso: sin esto el prospecto se presenta a una reunion

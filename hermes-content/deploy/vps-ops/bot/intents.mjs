@@ -13,8 +13,11 @@
 import { normalize } from "./guardrails.mjs";
 
 // ---------------------------------------------------------------------------
-// Intenciones (orden de prioridad de la spec §5.2:
-//   opt-out > queja > precio > SIAT > clinico/legal > estado actual)
+// Intenciones (orden de prioridad de la spec §5.2, con SOPORTE agregado:
+//   opt-out > queja > SOPORTE > precio > SIAT > clinico/legal > estado actual)
+// SOPORTE va arriba de precio y SIAT a proposito: "ya soy cliente y no me anda la facturacion"
+// trae la palabra factura, y contestarle la respuesta comercial del SIAT a alguien que pide
+// ayuda es el error que este bot no se puede permitir.
 // ---------------------------------------------------------------------------
 
 // Opt-out. Ojo con las palabras sueltas: `\bbaja\b` a secas apagaba el bot PARA SIEMPRE en
@@ -44,7 +47,8 @@ const RE_PRECIO = new RegExp(
     "\\bcostos?\\b",
     "\\btarifas?\\b",
     "\\d+\\s*(?:bs|bolivianos?|\\$us|usd|dolares?)\\b",
-    "\\bes (?:caro|barato)\\b",
+    "\\bes (?:caro|barato|gratis)\\b",
+    "\\bes pagado\\b|\\btiene (?:algun )?costo\\b|\\bhay que pagar\\b",
     "\\bcaro\\b|\\bcarisimo\\b|\\bbarato\\b",
     "\\bpresupuesto\\b",
     "\\bcobran\\b|\\bcobras\\b",
@@ -69,22 +73,115 @@ const RE_QUEJA = /\bestafa\w*\b|\bchant\w+|\bfraude\b|\bno les creo\b|\bno te cr
 // cuando se abrio.
 const RE_BRONCA_CON_SU_SISTEMA = /\b(?:sistema|programa|software|app|excel|planilla|agenda|proveedor)\b[^.]{0,40}\b(?:que (?:uso|tengo|manejo|usaba|use|tenia|contrate)|actual|de ahora)\b|\b(?:uso|tengo|manejo|use|usaba|tenia|contrate)\b[^.]{0,30}\b(?:sistema|programa|software|excel|planilla)\b/;
 
-const RE_CLINICO = /\b(?:diagnostic\w+|tratamiento|extraccion|endodoncia|caries|implante|anestesia|receta|medicament\w+|muela|carilla\w*)\b/;
-// Legal / fiscal: consejo profesional, no vocabulario clinico. `\bdemanda\b` suelto NO va:
+// Vocabulario clinico. Dos grupos con criterios distintos, a proposito:
+//   1. PROCEDIMIENTOS Y COSAS: solo aparecen en contexto clinico, van sueltos.
+//   2. SINTOMAS: agregados 2026-08-16 porque el corte no cubria lo que de verdad escribe un
+//      paciente. Se probo en vivo: "tengo mucho dolor y fiebre desde ayer, es urgente" NO cortaba.
+//      OJO con `dolor` SUELTO: en este embudo "dolor" es el DOLOR DE NEGOCIO que buscamos
+//      ("mi dolor es que pierdo clientes") y cortarlo mataria la calificacion. Por eso va la
+//      forma VERBAL (`duele`) y `dolor de <parte del cuerpo>`, nunca el sustantivo solo.
+const RE_CLINICO =
+  /\b(?:diagnostic\w+|tratamiento|extraccion|endodoncia|caries|implante|anestesia|receta|medicament\w+|muela|carilla\w*)\b/;
+const RE_SINTOMA =
+  /\b(?:duele|duelen|dolor de (?:muela|diente|cabeza|encia|estomago|garganta|oido)|fiebre|sangra\w*|sangrado|hinchad\w+|inflamad\w+|pastilla\w*|dosis|infeccion|absceso)\b/;
+// Consulta legal: consejo profesional, no vocabulario clinico. `\bdemanda\b` suelto NO va:
 // "la demanda esta baja este mes" habla del negocio del prospecto, no de un juicio.
-const RE_LEGAL = /\bes deducible\b|\bpuedo (?:declarar|deducir)\b|\bcontrato\b|\babogad\w+|\bjuicio\b|\b(?:me|nos|los) demand\w+\b|\bdemanda (?:judicial|legal)\b/;
-// El prospecto contando lo que HACE en su clinica ("soy dueña, hago endodoncia") se esta
-// presentando, no pidiendo una opinion clinica. Derivarlo pierde una calificacion entera.
-const RE_PRACTICA_PROPIA = /\b(?:hago|hacemos|realizo|realizamos|atiendo|atendemos|me dedico|nos dedicamos|me especializo|especialist\w+ en|especializad\w+ en)\b/;
+// El consejo FISCAL (RE_CONSEJO_FISCAL) se juzga aparte y es absoluto: siempre va a un humano.
+const RE_LEGAL_CONSULTA = /\bcontrato\b|\babogad\w+|\bjuicio\b|\b(?:me|nos|los) demand\w+\b|\bdemanda (?:judicial|legal)\b/;
+// El prospecto contando a que se dedica ("soy dueña, hago endodoncia", "somos 4 abogados") se
+// esta presentando, no pidiendo una opinion clinica ni legal. Derivarlo pierde una calificacion
+// entera — y ahora que Onia le vende a cualquier rubro, un estudio juridico o un consultorio
+// medico son PROSPECTOS: sus propias palabras no pueden ser lo que los saca del embudo.
+const RE_PRACTICA_PROPIA = new RegExp(
+  [
+    // El `(?<!que )` es de SEGURIDAD, no de estilo. Sin el, "me duele la muela, QUE HAGO" cazaba
+    // "hago" y el guardia daba por hecho que quien escribe es el dentista presentandose — asi que
+    // el corte clinico no se disparaba y un paciente con dolor recibia el pitch de venta. Es la
+    // frase mas probable que escribe alguien con dolor, y era justo la que se colaba.
+    // Se acepta el falso negativo del guardia ("lo que hago es vender repuestos" ya no lo protege):
+    // ese caso termina en un humano, que es el lado seguro de fallar.
+    "(?<!que )\\b(?:hago|hacemos|realizo|realizamos|atiendo|atendemos|me dedico|nos dedicamos|me especializo|especialist\\w+ en|especializad\\w+ en)\\b",
+    "\\bsoy (?:abogad\\w+|contador\\w*|dentista|odontolog\\w+|medic[oa]|veterinari[oa]|arquitect[oa]|ingenier[oa])\\b",
+    "\\bsomos (?:\\d+ |un[ao]s? )?(?:abogad\\w+|contador\\w+|dentistas?|odontolog\\w+|medicos?|veterinari\\w+)\\b",
+    "\\b(?:tengo|tenemos|manejo|manejamos) (?:un|una|mi) (?:estudio|bufete|clinica|consultorio|laboratorio)\\b",
+  ].join("|"),
+);
 
-const RE_PRODUCTO_DETALLE = /\bse conecta con\b|\bse integra con\b|\bcompatible con\b|\brayos x\b|\bradiograf\w+|\bimpresora\b|\bfirma digital\b|\bapi\b|\bexportar\b|\bmigrar (?:mis|los) datos\b|\bcelular\b|\btelefono\b|\btablet\b|\bcomputadora\b|\bandroid\b|\biphone\b|\bwindows\b|\bsin internet\b|\boffline\b|\ben la nube\b/;
+const RE_PRODUCTO_DETALLE = /\bse conecta con\b|\bse integra con\b|\bcompatible con\b|\brayos x\b|\bradiograf\w+|\bimpresora\b|\bfirma digital\b|\bapi\b|\bexportar\b|\bmigrar (?:mis|los) datos\b|\bcelular\b|\btelefono\b|\btablet\b|\bcomputadora\b|\bandroid\b|\biphone\b|\bwindows\b|\bsin internet\b|\boffline\b|\ben la nube\b|\b(?:dan|tienen|ofrecen|brindan|incluye|incluyen) (?:soporte|capacitacion|garantia)\b/;
+
+// "¿que hacen?" / "¿que es Onia?" — la pregunta mas basica del embudo, y hasta hoy no tenia
+// respuesta propia: caia en el LLM o en un handoff. Se contesta con el CATALOGO (M_QUE_ES_ONIA),
+// que es dato editable, asi un producto nuevo no tarda un deploy en existir para el bot.
+// Se consulta TARDE en el router a proposito: cualquier pregunta mas especifica (precio, SIAT,
+// soporte, tecnica) le gana, porque esta es la generica.
+// Lo que se excluye: "que hacen si no me sirve" pide una condicion comercial y "que hacen con mis
+// datos" es privacidad — las dos las contesta un humano, no un catalogo.
+const RE_QUE_ES_ONIA = new RegExp(
+  [
+    "\\bque (?:es|son) (?:onia|el sistema|la plataforma|esto)\\b",
+    "\\bque (?:hacen|haces|hacen ustedes|ofrecen|ofreces|venden|vendes|brindan)\\b(?!\\s+(?:si|cuando|con|en caso))",
+    "\\ba que se dedican\\b|\\ba que te dedicas\\b",
+    "\\b(?:de que|en que) (?:se trata|consiste)\\b",
+    "\\bque (?:servicios|productos|modulos|sistemas)\\b",
+    "\\bpara que sirve\\b",
+    "\\bque me (?:ofrecen|ofreces|pueden ofrecer)\\b",
+  ].join("|"),
+);
+
+/** Pregunto QUE vendemos. Se contesta con el catalogo, no con un humano ni con el LLM. */
+export function asksWhatWeDo(norm) {
+  return RE_QUE_ES_ONIA.test(norm);
+}
+
+// ---------------------------------------------------------------------------
+// SEGUNDO CAMINO: soporte (no venta)
+// ---------------------------------------------------------------------------
+// Quien YA es cliente no viene a comprar: viene a que algo funcione. Ofrecerle la demo comercial
+// a quien pide ayuda es el peor error que puede cometer este bot — le dice "compra" a quien ya
+// compro, y encima lo deja sin resolver. Este camino NO agenda demo: va a un humano.
+//
+// La frontera fina, y es a proposito: "ya tengo UN sistema" (articulo indefinido) es la OBJECION
+// del que usa otra cosa y sigue siendo un prospecto de venta. "ya tengo EL sistema", "el de
+// ustedes", "no puedo entrar" es NUESTRO cliente pidiendo ayuda. Ante la duda se deriva: un
+// handoff cuesta 5 minutos de Sergio; venderle a quien ya compro cuesta el cliente.
+const RE_YA_ES_CLIENTE = new RegExp(
+  [
+    "\\bya (?:soy|somos) client\\w+",
+    "\\b(?:soy|somos) client\\w+ (?:de ustedes|suyos?|de onia|hace)\\b",
+    "\\bya (?:tengo|uso|estoy usando|contrate|compre|instale)\\s+(?:el|la|su|tu|este|esta)\\s+(?:sistema|plataforma|programa|panel|app|onia)\\b",
+    "\\bya (?:tengo|uso|contrate|estoy usando) onia\\b",
+    "\\b(?:el sistema|la plataforma|el panel|la app) (?:de ustedes|que me (?:instalaron|vendieron|configuraron))\\b",
+    "\\bya me lo (?:instalaron|configuraron|activaron)\\b",
+    "\\bya trabajo con (?:ustedes|onia)\\b",
+  ].join("|"),
+);
+
+const RE_PROBLEMA_SISTEMA = new RegExp(
+  [
+    // "no me anda" SIEMPRE con el sujeto a la vista. Suelto se tragaba "no me anda internet, te
+    // escribo luego", que es una excusa de WhatsApp: mandaba a soporte a un prospecto nuevo.
+    "\\bno (?:me |se )?(?:anda|funciona|carga|abre|deja entrar|deja ingresar)\\b[^.]{0,25}\\b(?:sistema|plataforma|app|panel|onia|programa|cuenta|pagina)\\b",
+    "\\b(?:sistema|plataforma|app|panel|onia|programa|cuenta)\\b[^.]{0,25}\\bno (?:me |se )?(?:anda|funciona|carga|abre|deja)\\b",
+    "\\bno puedo (?:entrar|ingresar|acceder|loguearme|iniciar sesion)\\b",
+    "\\bme (?:da|sale|tira) (?:un )?error\\b",
+    "\\bse (?:me )?(?:cuelga|colgo|traba|trabo|cierra|cerro|borro)\\b",
+    "\\bolvide (?:mi|la) (?:clave|contrasena|password|usuario)\\b",
+    "\\bcomo (?:configuro|activo|cargo|doy de alta|agrego|habilito)\\b",
+    // Primera persona a proposito: "necesito soporte" es un cliente pidiendo ayuda; "¿dan soporte
+    // tecnico?" es un prospecto preguntando por una capacidad del producto, y eso es otra rama.
+    "\\bnecesito (?:soporte|ayuda tecnica)\\b",
+    "\\bayuda con (?:el sistema|la plataforma|la app|el panel|mi cuenta|la configuracion)\\b",
+  ].join("|"),
+);
 
 // Pedir hablar con una persona es el pedido de handoff mas claro que existe (N3).
 const RE_PIDE_HUMANO = /\b(?:hablar|hablo|charlar|conversar|comunicarme|contactarme) con (?:una persona|alguien|un humano|una humana|un asesor|una asesora|un vendedor|una vendedora|sergio|un encargado)\b|\bquiero hablar con\b|\bme pasas con\b|\bpasame con\b|\bhay (?:alguien|algun humano)\b|\bpersona real\b|\bun humano\b/;
 
 // "no le sirve ninguno". Se consulta DESPUES de detectSlotChoice: "el jueves no puedo, el
 // viernes si" ya quedo resuelto como eleccion del viernes y nunca llega hasta aca.
-const RE_SIN_SLOT = /\bningun[oa]?\b|\bno me sirve\b|\bninguna de las dos\b|\bno me va\b|\bno puedo\b|\botro horario\b|\botro dia\b|\botra fecha\b|\bmas tarde\b|\bmas adelante\b/;
+// `^otro$` esta porque M0 lo promete con todas las letras ("escribime 'otro' y lo coordinamos"):
+// va anclado como mensaje entero — "otro dia" o "en otro local" ya matchean (o no) por su cuenta.
+const RE_SIN_SLOT = /\bningun[oa]?\b|\bno me sirve\b|\bninguna de las dos\b|\bno me va\b|\bno puedo\b|^\s*otro\s*[!.]*$|\botro horario\b|\botro dia\b|\botra fecha\b|\bmas tarde\b|\bmas adelante\b/;
 
 export function isOptOut(norm) {
   return RE_OPT_OUT.test(norm);
@@ -110,9 +207,32 @@ export function isComplaint(norm) {
 }
 
 export function isClinicalOrLegal(norm) {
-  if (RE_LEGAL.test(norm)) return true;
+  // El consejo fiscal es absoluto (N5): ni el contador que pregunta por lo suyo lo saca de humano.
+  if (RE_CONSEJO_FISCAL.test(norm)) return true;
+  const practicaPropia = RE_PRACTICA_PROPIA.test(norm);
+  // "somos 4 abogados en La Paz" se esta presentando; "necesito un abogado" pide consejo legal.
+  if (RE_LEGAL_CONSULTA.test(norm)) return !practicaPropia;
+  // Un SINTOMA corta siempre, sin importar el guardia: quien describe un dolor o una fiebre no se
+  // esta presentando como profesional, y equivocarse hacia el lado de derivar a un humano no
+  // cuesta nada. Los procedimientos si pasan por el guardia ("hago endodoncia" es un prospecto).
+  if (RE_SINTOMA.test(norm)) return true;
   if (!RE_CLINICO.test(norm)) return false;
-  return !RE_PRACTICA_PROPIA.test(norm);
+  return !practicaPropia;
+}
+
+/**
+ * SEGUNDO CAMINO: el que escribe ya es cliente o necesita ayuda con el sistema.
+ * NO se le ofrece la demo comercial: va a un humano (reunion de ayuda / soporte).
+ * La bronca contra el sistema que usa HOY (otro proveedor) NO es soporte: ese es el lead caliente
+ * de siempre y sigue el embudo de venta.
+ */
+export function isSupportRequest(norm) {
+  // Decirlo con todas las letras ("ya tengo el sistema de ustedes") le gana a cualquier heuristica:
+  // "tengo el sistema" tambien es la forma de hablar del sistema de otro, y ahi la frase explicita
+  // es la unica que sabe de cual de los dos se trata.
+  if (RE_YA_ES_CLIENTE.test(norm)) return true;
+  if (RE_BRONCA_CON_SU_SISTEMA.test(norm)) return false;
+  return RE_PROBLEMA_SISTEMA.test(norm);
 }
 
 /** Pregunta tecnica de producto: el bot NO adivina, va a handoff (spec §2.3). */
@@ -235,33 +355,225 @@ export function proposesOwnTime(norm) {
 }
 
 // ---------------------------------------------------------------------------
-// Calificacion: ¿es tuya? · ¿cuantos sillones? · ¿que ciudad?
+// Calificacion: ¿a que se dedica? · ¿cuantas personas? · ¿que ciudad?  (+ rama por rubro)
 // ---------------------------------------------------------------------------
+// Los 3 datos son UNIVERSALES: Onia es una plataforma por modulos, no un producto dental.
+// El tamaño del equipo reemplazo a los sillones porque es el unico proxy de capacidad que
+// entiende cualquier rubro. Los sillones siguen existiendo, pero como dato de RAMA: se piden
+// solo si el rubro es odontologia (ver config.qualification.branches).
 
-const RE_ES_MIA = /\bes mi[ao]\b|\bes mi (?:clinica|consultorio)\b|\bsoy (?:el |la )?(?:duen\w+|propietari\w+|titular)\b|\btengo (?:mi|un|una) (?:clinica|consultorio)\b|\bmi propi[ao]\b|\bclinica propia\b|\bes propia\b|\bla manejo yo\b|\bsoy duen\w+|\bla (?:abri|monte|puse|arme|funde) yo\b/;
-const RE_SOCIO = /\bsoci[ao]s?\b|\ba medias\b|\bcon mi (?:hermano|hermana|esposa|esposo|colega|primo|prima)\b|\bcompartida\b|\bentre dos\b/;
-const RE_NO_ES_MIA = /\btrabajo en la de\b|\btrabajo en (?:la|el|una|un)?\s*(?:clinica|consultorio|centro)?\s*de (?:mi|otro|otra|un|una)\b|\bes de (?:mi jefe|otro|otra|un amigo|una amiga)\b|\bsoy (?:emplead\w+|asistent\w+|recepcionista|secretari\w+|pasante)\b|\bno es mia\b|\btrabajo para\b/;
+const NUM_PALABRA = Object.freeze({
+  un: 1, uno: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8,
+  nueve: 9, diez: 10, once: 11, doce: 12, trece: 13, catorce: 14, quince: 15, veinte: 20, treinta: 30,
+});
+const NUM_PALABRAS = Object.keys(NUM_PALABRA).join("|");
 
-// Descarte: claramente NO es el publico (spec §2.2 M1c). Conservador a proposito.
-// Lo que se saco: `\bfarmacia\b` suelto (nombrar la farmacia de al lado es dar una direccion,
-// no ser una farmacia) y `\bquiero vender\w*\b` (un dentista que "quiere vender mas ortodoncia"
-// esta contando su objetivo de negocio, no ofreciendonos mercaderia).
-const RE_ESTUDIANTE = /\bsoy estudiante\b|\bestudio (?:odontologia|medicina)\b|\bbusco trabajo\b|\bcurriculum\b|\bmi cv\b|\bno tengo clinica\b|\bno soy dentista\b/;
-const RE_PROVEEDOR = /\bsoy (?:proveedor|distribuidor|representante)\b|\bles vendo\b|\bquiero vender(?:les|te|le)\b|\bvendo (?:equipos|insumos|materiales|productos|sillones|unidades|software|sistemas)\b|\bofrecerles\b/;
-const RE_OTRO_RUBRO = /\b(?:soy|somos|tengo|tenemos|manejo|manejamos|administro|atiendo) (?:un[ao]?\s+)?(?:veterinari\w+|peluqueri\w+|barberi\w+|restaurante|ferreteri\w+|farmacia|botica|spa|gimnasio|hotel)\b|\bmi (?:veterinaria|peluqueria|barberia|restaurante|ferreteria|farmacia|botica)\b/;
+// --- Rubro ------------------------------------------------------------------
+// `re` matchea sola: son palabras que en un WhatsApp de trabajo no significan otra cosa
+// ("ferreteria", "odontologia"). `weak` necesita una senal de posesion delante, porque suelta
+// diria cualquier cosa: "estoy en la tienda" NO declara un rubro, "tengo una tienda" si.
+// El orden importa: la primera que matchea gana. Odontologia va primera porque "clinica dental"
+// tambien contiene "clinica" (que es el rubro salud).
+const RUBROS = Object.freeze([
+  Object.freeze({
+    key: "dental",
+    label: "odontología",
+    re: /\bdentista\w*\b|\bodontolog\w+|\bortodonc\w+|\bclinica dental\b|\bconsultorio dental\b|\blaboratorio dental\b|\bprotesis dental\w*|\bsillones?\b/,
+  }),
+  // Veterinaria y estetica son rubros PROPIOS desde 2026-08-16 (decision de Sergio). Antes caian
+  // en `salud` y en `servicios` respectivamente, asi que el bot le decia a un veterinario "anotado
+  // que te dedicás a salud" — y Sergio llegaba a la demo sin saber de que rubro hablaba.
+  //
+  // Por que NO se pudo hacer con la capa editable (`rubrosExtra`), que existe justo para esto:
+  // las palabras del archivo entran DESPUES de las del codigo dentro de cada nivel, y
+  // "la primera que matchea gana" (candado 1 de lexiconOf). Como `salud` ya tiene `veterinari\w+`
+  // como palabra FUERTE, un rubro editable "veterinaria" no le ganaria nunca. Mover la palabra de
+  // rubro es lo unico que lo arregla, y eso es codigo.
+  //
+  // Los dos SIGUEN EL CORE: reusan las pantallas clinicas del track (`vetgest-clinical`,
+  // `esteticagest-clinical` en onia-platform). Acá no se construye nada nuevo, solo se los
+  // identifica bien. NO se agregan a PRODUCTOS ni a MODULOS_LISTOS: nombrar un modulo es una
+  // promesa comercial y esa decision es de Sergio, no de este archivo.
+  Object.freeze({
+    key: "veterinaria",
+    label: "veterinaria",
+    // Sale de `salud`, donde vivia `veterinari\w+`. Va ANTES para ganarle.
+    re: /\bveterinari\w+|\bclinica veterinaria\b|\bconsultorio veterinario\b/,
+    weak: /\bmascotas?\b/,
+  }),
+  Object.freeze({
+    key: "estetica",
+    label: "estética",
+    // Sale de `servicios`, donde vivia `\bestetica\b`. OJO: peluqueria, barberia, salon de belleza
+    // y spa SE QUEDAN en `servicios` — el track del core es la clinica estetica (agenda + ficha),
+    // no el salon. Meterlos aca les cambiaria el rubro a negocios que no son ese.
+    re: /\bestetica\b|\bmedicina estetica\b|\bcentro de estetica\b|\bcosmiatr\w+|\bdepilacion laser\b/,
+  }),
+  Object.freeze({
+    key: "gastronomia",
+    label: "gastronomía",
+    re: /\brestaurant\w*\b|\bpizzeri\w+|\bcafeteri\w+|\bheladeri\w+|\bpanaderi\w+|\bpasteleri\w+|\bcatering\b|\bfood ?truck\b|\bcomida rapida\b|\bpolleri\w+|\bchurrasqueri\w+|\bhamburgueseri\w+|\bsushi\b/,
+    weak: /\bcafes?\b|\bbares?\b|\bresto\b|\bsnacks?\b/,
+  }),
+  Object.freeze({
+    key: "salud",
+    label: "salud",
+    // `veterinari\w+` se fue a su propio rubro (arriba). Sacarlo de acá es la mitad del arreglo:
+    // si se queda, `salud` le sigue ganando por orden y el rubro nuevo no se usa nunca.
+    re: /\bconsultorio medico\b|\bcentro medico\b|\bpediatr\w+|\bdermatolog\w+|\bfisioterap\w+|\bkinesiolog\w+|\bpsicolog\w+|\bnutricionist\w+|\boftalmolog\w+|\btraumatolog\w+|\bginecolog\w+|\blaboratorio clinico\b|\bmedic[oa]s?\b/,
+    weak: /\bclinicas?\b|\bconsultorios?\b/,
+  }),
+  Object.freeze({
+    key: "servicios",
+    label: "servicios",
+    // `\bestetica\b` se fue a su propio rubro (arriba). Peluqueria, barberia, salon de belleza y
+    // spa se quedan acá a proposito: son servicios, no la clinica estetica del track del core.
+    re: /\bpeluqueri\w+|\bbarberi\w+|\bsalon de belleza\b|\bgimnasio\b|\bspa\b|\bhotel\w*\b|\bhostal\b|\binmobiliari\w+|\bconstructora\b|\bcontabilidad\b|\bcontador\w*\b|\babogad\w+|\bestudio juridico\b|\bbufete\b|\bacademia\b|\bcolegio\b|\bescuela\b|\bguarderi\w+|\bimprenta\b|\bfotografi\w+|\blavanderi\w+|\btaller mecanico\b|\bmecanic[ao]\b|\bcerrajeri\w+|\bmudanzas\b|\btransporte\b|\blimpieza\b/,
+    weak: /\btalleres?\b|\bagencias?\b|\bestudio\b|\bconsultora\b/,
+  }),
+  Object.freeze({
+    key: "comercio",
+    label: "comercio",
+    re: /\bferreteri\w+|\blibreri\w+|\bboutique\b|\bfarmacia\b|\bbotica\b|\brepuestos\b|\bmuebleri\w+|\bagropecuari\w+|\bbazar\b|\bdistribuidor\w+|\bimportador\w+|\bmayorista\b|\bmini ?market\b|\bsuperm\w+|\bvendemos\b|\bventa de\b|\bvendo\b/,
+    // Los plurales cuentan: "tengo 3 tiendas" es un comercio con 3 locales, el mejor prospecto de
+    // la lista. Sin la `s` el bot lo trataba como si no hubiera contestado.
+    weak: /\btiendas?\b|\balmacen\w*\b|\bmercados?\b|\blocal(?:es)?\b/,
+  }),
+]);
 
-// Unidades de sillon. "consultorio" NO cuenta: "tengo un consultorio" dice que la clinica es
-// propia, no que tenga UN sillon — contarlo asi inventa el dato con el que despues se califica.
+const RUBRO_LABEL = Object.freeze(Object.fromEntries(RUBROS.map((rubro) => [rubro.key, rubro.label])));
+
+// "tengo una", "mi", "abrimos un": lo que convierte una palabra comun en el rubro del prospecto.
+const CUE_NEGOCIO = "(?:tengo|tenemos|manejo|manejamos|administro|administramos|abri|abrimos|puse|pusimos|atiendo|es mi|es un[ao]|somos un[ao]|mi|nuestr[ao]s?|un|una)\\s+(?:\\w+\\s+){0,2}";
+const RUBROS_DEBILES = Object.freeze(
+  RUBROS.filter((rubro) => rubro.weak).map((rubro) => Object.freeze({
+    key: rubro.key,
+    re: new RegExp(`${CUE_NEGOCIO}(?:${rubro.weak.source})`),
+  })),
+);
+
+// Contesto a QUE se dedica pero con palabras que no tenemos mapeadas ("me dedico a fumigar").
+// Se guarda "otro": el prospecto SI contesto, y volver a preguntarle lo mismo es lo que hace
+// parecer que el bot no lee. Inventarle un rubro seria peor todavia.
+const RE_DEDICACION = /\bme dedico a\b|\bnos dedicamos a\b|\bmi rubro es\b|\bel rubro es\b|\bmi negocio es\b|\bnuestro negocio es\b|\bfabricamos\b|\bproducimos\b|\bimportamos\b|\balquilamos\b|\breparamos\b|\bdistribuimos\b|\bofrecemos servicios\b|\bbrindamos servicios\b|\bdamos servicio\b/;
+
+// --- Lexico editable: agregar un rubro SIN desplegar -------------------------
+// Las palabras de `config.rubrosExtra` (la capa de conocimiento) entran como TEXTO, nunca como
+// regex: una regex mala mata el matcher o cuelga el proceso entero. Aca se normalizan, se escapan
+// y se compilan con la MISMA forma que las del codigo.
+//
+// Dos candados, los dos por construccion y no por confianza en el que edita:
+//   1. ORDEN — dentro de cada nivel (fuerte, debil) el codigo va primero y el archivo despues, y
+//      "la primera que matchea gana". Una palabra editable no le puede robar un match a una
+//      palabra FUERTE del codigo, ni quedar delante de `dental`, que existe justo para ganarle a
+//      "clinica". Un `fuerte` editable si le gana a un `debil` del codigo, y esta bien: esa es la
+//      precedencia de siempre — las genericas viven en `debil` para poder ser desplazadas.
+//   2. UNION — para una key que ya existe, las palabras se SUMAN. Quitar una palabra del codigo
+//      sigue siendo un commit, igual que los gatillos de baja.
+// Lo unico que el archivo si pisa es la ETIQUETA: es texto que el prospecto lee, o sea un hecho.
+
+/** Piso de longitud de una palabra del lexico. El validador del archivo rechaza con este mismo. */
+export const MIN_LEXICON_WORD = 3;
+
+const RE_META = /[.*+?^${}()|[\]\\]/g;
+
+/** Palabras -> UN regex `\b(?:a|b|c)\w*\b` (alternacion de literales: lineal, sin ReDoS). */
+function lexiconRegex(words) {
+  const parts = (Array.isArray(words) ? words : [])
+    .map((word) => normalize(String(word)).trim())
+    .filter((word) => word.length >= MIN_LEXICON_WORD)
+    .map((word) => word.replace(RE_META, "\\$&"));
+  return parts.length ? new RegExp(`\\b(?:${parts.join("|")})\\w*\\b`) : null;
+}
+
+const CODE_LEXICON = Object.freeze({ strong: RUBROS, weak: RUBROS_DEBILES, labels: RUBRO_LABEL });
+
+/**
+ * El lexico vigente = codigo + archivo. Sin `config.rubrosExtra` devuelve EL MISMO objeto del
+ * codigo: la misma degradacion por identidad con la que degrada toda la capa de conocimiento.
+ */
+function lexiconOf(config) {
+  const extra = config && Array.isArray(config.rubrosExtra) ? config.rubrosExtra : null;
+  if (!extra || extra.length === 0) return CODE_LEXICON;
+  const strong = [...RUBROS];
+  const weak = [...RUBROS_DEBILES];
+  const labels = { ...RUBRO_LABEL };
+  for (const rubro of extra) {
+    const key = String(rubro?.key || "").trim();
+    if (!key) continue;
+    if (rubro.label) labels[key] = rubro.label;
+    const fuerte = lexiconRegex(rubro.fuerte);
+    if (fuerte) strong.push({ key, re: fuerte });
+    const debil = lexiconRegex(rubro.debil);
+    if (debil) weak.push({ key, re: new RegExp(`${CUE_NEGOCIO}(?:${debil.source})`) });
+  }
+  return { strong, weak, labels };
+}
+
+/**
+ * El rubro del prospecto con su fuerza, o null si no lo dijo.
+ * `strong` = la palabra sola no significa otra cosa. Solo un match fuerte puede PISAR un rubro ya
+ * capturado: si no, un dentista que despues escribe "tengo un consultorio nuevo" se convierte en
+ * rubro salud y el bot le habla de otra cosa.
+ */
+function matchIndustry(norm, config) {
+  const lexicon = lexiconOf(config);
+  for (const rubro of lexicon.strong) if (rubro.re.test(norm)) return { key: rubro.key, strong: true };
+  for (const rubro of lexicon.weak) if (rubro.re.test(norm)) return { key: rubro.key, strong: false };
+  return RE_DEDICACION.test(norm) ? { key: "otro", strong: false } : null;
+}
+
+/** El rubro del prospecto, o null si no lo dijo. Nunca adivina: null se re-pregunta. */
+export function findIndustry(norm, config) {
+  const match = matchIndustry(norm, config);
+  return match ? match.key : null;
+}
+
+/** Etiqueta legible del rubro para el guion. null = no hay etiqueta que mostrar ("otro"). */
+export function industryLabel(key, config) {
+  return lexiconOf(config).labels[key] || null;
+}
+
+// --- Tamaño del equipo ------------------------------------------------------
+// Unidades de sillon (dato de RAMA). "consultorio" NO cuenta: "tengo un consultorio" habla del
+// local, no de tener UN sillon — contarlo asi inventa el dato con el que despues se califica.
 const UNIDAD = "sillon\\w*|unidad\\w*|box\\w*|gabinete\\w*";
 const RELLENO = "(?:solo|solos|sola|solas|unico|unicos|nomas|no mas|dental\\w*|de atencion)?";
 const RE_SILLONES = new RegExp(`\\b(\\d{1,2})\\s*${RELLENO}\\s*(?:${UNIDAD})\\b`);
-const RE_SILLONES_PALABRA = new RegExp(
-  `\\b(un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s+${RELLENO}\\s*(?:${UNIDAD})\\b`,
+const RE_SILLONES_PALABRA = new RegExp(`\\b(${NUM_PALABRAS})\\s+${RELLENO}\\s*(?:${UNIDAD})\\b`);
+
+// La lista es de OFICIOS ademas de "personas": un constructor contesta "somos 25 obreros" y una
+// peluqueria "somos 3 estilistas". Quedarse en "personas" pierde la respuesta a la pregunta 2.
+const PERSONA = "personas?|emplead\\w+|trabajador\\w+|colaborador\\w+|gente|chic[ao]s|dependient\\w+|vendedor\\w+|mozos?|meser[oa]s|asistentes?|secretari\\w+|obrer[oa]s|operari\\w+|tecnic[oa]s|cociner[oa]s|estilistas?|enfermer[oa]s|choferes?";
+const RE_EQUIPO_NUM = new RegExp(`\\b(\\d{1,3})\\s*(?:${PERSONA})\\b`);
+// De "dos" para arriba a proposito: "hablo con UNA PERSONA?" es un pedido de handoff, no la
+// declaracion de que trabaja una sola persona. El equipo de 1 se dice "solo yo" o "somos 1".
+const NUM_PALABRAS_PLURAL = Object.keys(NUM_PALABRA).filter((word) => NUM_PALABRA[word] > 1).join("|");
+const RE_EQUIPO_PALABRA = new RegExp(`\\b(${NUM_PALABRAS_PLURAL})\\s+(?:${PERSONA})\\b`);
+// "somos 4", "trabajamos 3", "habemos 5": la respuesta natural a "¿cuántas personas trabajan ahí?".
+// El lookahead evita contar como gente lo que es una unidad del rubro ("somos 2 sillones").
+const RE_EQUIPO_SOMOS = new RegExp(
+  `\\b(?:somos|trabajamos|trabajan|habemos|estamos)\\s+(\\d{1,3}|${NUM_PALABRAS})\\b(?!\\s*(?:${UNIDAD}))`,
 );
-// Respuesta directa a "¿cuántos sillones?": "son 3", "somos dos". Solo vale si el dato falta
-// (es la pregunta que el bot acaba de hacer), nunca para pisar un dato ya dado.
-const RE_SILLONES_RESPUESTA = /^\s*(?:son|somos|tengo|tenemos|serian|seria|es|hay|habemos)\s+(\d{1,2}|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\s*[.!]*$/;
-const NUM_PALABRA = { un: 1, uno: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10 };
+// "solo yo" es una respuesta completa a la pregunta 2 y la mas comun del negocio chico boliviano.
+// "una persona" solo cuenta con la marca de que es TODO el equipo ("nomas", "sola", "solo una"):
+// suelta seria contar "hablo con una persona?" como un equipo de uno, que es un pedido de handoff.
+const RE_EQUIPO_SOLO = /\bsolo yo\b|\byo solo\b|\byo sol[ao]\b|\bsoy sol[ao]\b|\bestoy sol[ao]\b|\btrabajo sol[ao]\b|\bpor mi cuenta\b|\bsoy yo (?:nomas|no mas|solo|sola)\b|\bnadie mas\b|\bsin emplead\w+|\b(?:una|1) persona (?:nomas|no mas|solamente|sola)\b|\bsolo una persona\b|\buna sola persona\b/;
+
+// Respuesta pelada ("3", "son 3", "tres"): contesta la ULTIMA pregunta que el bot hizo. Cual es
+// depende de lo ya capturado, por eso el parser recibe `current`.
+const RE_RESPUESTA_PELADA = new RegExp(
+  `^\\s*(?:son|somos|tengo|tenemos|serian|seria|es|hay|habemos)?\\s*(\\d{1,3}|${NUM_PALABRAS})\\s*[.!]*$`,
+);
+
+// --- Descarte ---------------------------------------------------------------
+// YA NO se descarta por rubro ni por tamaño: con la plataforma por modulos, una ferreteria de 12
+// personas es un cliente mejor, no uno peor. Queda SOLO lo que claramente no es un negocio: el
+// que busca trabajo y el que nos quiere vender algo a nosotros. Ante la duda NO se descarta.
+const RE_BUSCA_TRABAJO = /\bbusco trabajo\b|\bbuscando trabajo\b|\bnecesito trabajo\b|\bhay (?:alguna )?vacante\b|\bestan contratando\b|\bmi cv\b|\bcurriculum\b|\bhoja de vida\b|\bquiero postular\b|\bsoy estudiante\b|\bestudio (?:odontologia|medicina|derecho|contabilidad|enfermeria)\b|\bno tengo (?:clinica|negocio|empresa|local)\b/;
+// Estrictamente "me esta ofreciendo algo A MI". Lo que se saco a proposito: "soy distribuidor" y
+// "vendo equipos" — con el bot abierto a todo rubro, una distribuidora es un PROSPECTO, no spam.
+const RE_NOS_QUIERE_VENDER = /\bles vendo\b|\bquiero vender(?:les|le|te)\b|\bles ofrezco\b|\bofrecerles\b|\bte ofrezco (?:nuestros|mis)\b|\bofrecerte (?:nuestros|mis)\b|\brepresento a (?:la|una) empresa\b|\bpropuesta comercial para ustedes\b/;
 
 /**
  * Lista blanca de ciudades bolivianas. NO hay fallback abierto: el "toma la palabra que sigue a
@@ -313,44 +625,49 @@ function hasValue(value) {
   return value !== undefined && value !== null && value !== "";
 }
 
+/** Numero de una captura: acepta digitos o la palabra ("tres"). */
+function countOf(raw) {
+  if (raw === undefined || raw === null) return undefined;
+  return /^\d+$/.test(raw) ? Number(raw) : NUM_PALABRA[raw];
+}
+
+function isCount(value, max) {
+  return Number.isFinite(value) && value >= 1 && value <= max;
+}
+
 /**
  * Extrae los datos de calificacion del mensaje.
+ * `config` solo aporta el lexico editable de rubros (`rubrosExtra`): sin ella se usa el del codigo.
  * Un dato EXPLICITO pisa lo ya capturado: si el prospecto dice "en realidad son 4 sillones",
  * vale lo ultimo que dijo, no lo primero que el bot creyo entender. Los datos que dependen del
  * contexto de la pregunta (un numero pelado, "son 3") solo se toman si el campo esta vacio.
  */
-export function parseQualification(norm, current = {}) {
+export function parseQualification(norm, current = {}, config = null) {
   const found = {};
 
-  // Propiedad: siempre es una afirmacion explicita, asi que la ultima gana.
-  if (RE_SOCIO.test(norm)) found.ownsClinic = "socio"; // decide con un socio => califica, con nota
-  else if (RE_NO_ES_MIA.test(norm)) found.ownsClinic = false;
-  else if (RE_ES_MIA.test(norm)) found.ownsClinic = true;
+  const industry = matchIndustry(norm, config);
+  if (industry && (industry.strong || !hasValue(current.industry))) found.industry = industry.key;
 
-  const digits = norm.match(RE_SILLONES);
-  const words = norm.match(RE_SILLONES_PALABRA);
-  let chairs;
-  let chairsExplicit = false;
-  if (digits) {
-    chairs = Number(digits[1]);
-    chairsExplicit = true;
-  } else if (words) {
-    chairs = NUM_PALABRA[words[1]];
-    chairsExplicit = true;
-  } else if (!hasValue(current.chairs)) {
-    const answer = norm.trim().match(RE_SILLONES_RESPUESTA);
-    const bare = norm.trim().match(/^(\d{1,2})$/);
-    if (answer) chairs = /^\d+$/.test(answer[1]) ? Number(answer[1]) : NUM_PALABRA[answer[1]];
-    else if (bare) chairs = Number(bare[1]);
-  }
-  if (
-    chairs !== undefined
-    && Number.isFinite(chairs)
-    && chairs >= 1
-    && chairs <= 60
-    && (chairsExplicit || !hasValue(current.chairs))
-  ) {
-    found.chairs = chairs;
+  // Tamaño del equipo. Todas las formas de abajo son explicitas: la ultima que dijo gana.
+  let team = countOf((norm.match(RE_EQUIPO_NUM) || norm.match(RE_EQUIPO_PALABRA) || norm.match(RE_EQUIPO_SOMOS) || [])[1]);
+  if (team === undefined && RE_EQUIPO_SOLO.test(norm)) team = 1;
+  if (isCount(team, 500)) found.teamSize = team;
+
+  // Sillones (dato de rama). Solo la forma explicita: un numero pelado se resuelve mas abajo,
+  // con el contexto de lo que el bot pregunto.
+  const chairs = countOf((norm.match(RE_SILLONES) || norm.match(RE_SILLONES_PALABRA) || [])[1]);
+  if (isCount(chairs, 60)) found.chairs = chairs;
+
+  // Respuesta pelada: es la contestacion a la ultima pregunta abierta. Si el equipo todavia falta,
+  // el numero es el equipo (es la pregunta 2 del guion); si el equipo ya esta y el rubro pide
+  // sillones, el numero son los sillones (es la pregunta de rama). Nunca pisa un dato ya dado.
+  if (found.teamSize === undefined && found.chairs === undefined) {
+    const bare = countOf((norm.trim().match(RE_RESPUESTA_PELADA) || [])[1]);
+    if (bare !== undefined) {
+      const view = { ...current, ...found };
+      if (!hasValue(view.teamSize) && isCount(bare, 500)) found.teamSize = bare;
+      else if (view.industry === "dental" && !hasValue(view.chairs) && isCount(bare, 60)) found.chairs = bare;
+    }
   }
 
   const city = findCity(norm);
@@ -359,15 +676,19 @@ export function parseQualification(norm, current = {}) {
   return found;
 }
 
-/** Descarte suave: claramente fuera del publico objetivo. */
-export function isDisqualified(norm, qualification = {}) {
-  if (RE_ESTUDIANTE.test(norm) || RE_PROVEEDOR.test(norm) || RE_OTRO_RUBRO.test(norm)) return true;
-  return qualification.ownsClinic === false;
+/**
+ * Descarte suave: lo que claramente NO es un negocio.
+ * NO se descarta por rubro (Onia le vende a todos) ni por tamaño (grande es mejor). Solo el que
+ * busca trabajo y el que nos quiere vender algo. Si hay duda, esto devuelve false: el prospecto
+ * sigue el embudo o termina en un humano, que es mucho mas barato que perderlo.
+ */
+export function isDisqualified(norm) {
+  return RE_BUSCA_TRABAJO.test(norm) || RE_NOS_QUIERE_VENDER.test(norm);
 }
 
 const RE_DOLOR_AGENDA = /\bagenda\b|\bcitas?\b|\bturnos?\b|\bhorarios?\b|\bhuecos?\b|\bausenci\w+|\bno vienen a la cita\b/;
 const RE_DOLOR_COBROS = /\bcobros?\b|\bcobrar\b|\bpagos?\b|\bplata\b|\bcuentas?\b|\bmorosos?\b|\bdeud\w+|\bcaja\b/;
-const RE_DOLOR_PACIENTES = /\bpacientes\b|\bno vuelven\b|\brecall\b|\bseguimiento\b|\bretencion\b|\bfidelizacion\b/;
+const RE_DOLOR_PACIENTES = /\bpacientes\b|\bclientes\b|\bno vuelven\b|\brecall\b|\bseguimiento\b|\bretencion\b|\bfidelizacion\b/;
 
 // Acuse de recibo o despedida. "ya" es el "dale" boliviano por excelencia y "nos vemos el
 // jueves" es despedirse: molestar a Sergio por eso es un handoff que no aporta nada.
@@ -379,10 +700,14 @@ export function isCourtesy(norm) {
   return RE_CORTESIA.test(norm) || RE_DESPEDIDA.test(norm);
 }
 
-/** El dolor que pregunta M2. Devuelve 'agenda' | 'cobros' | 'pacientes' | null. */
+/**
+ * El dolor que pregunta M2. Devuelve 'agenda' | 'cobros' | 'clientes' | null.
+ * El bucket se llama 'clientes' y no 'pacientes': el mismo dolor lo tiene una ferreteria, y en el
+ * CRM un lead de ferreteria con pain_point='pacientes' se lee como un dato de otro negocio.
+ */
 export function detectPainPoint(norm) {
   if (RE_DOLOR_COBROS.test(norm)) return "cobros";
-  if (RE_DOLOR_PACIENTES.test(norm)) return "pacientes";
+  if (RE_DOLOR_PACIENTES.test(norm)) return "clientes";
   if (RE_DOLOR_AGENDA.test(norm)) return "agenda";
   return null;
 }

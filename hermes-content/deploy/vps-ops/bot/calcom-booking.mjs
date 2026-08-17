@@ -26,8 +26,14 @@
 // Tolerante por contrato: no tira NUNCA. Si Cal.com no responde, devuelve `ok:false` con una
 // razon y el llamador decide. Un fallo de calendario no puede dejar al prospecto sin respuesta.
 
-/** Duracion de la demo. Igual que el tipo de evento; si no coinciden, manda el tipo de evento. */
-export const DEFAULT_DURATION_MINUTES = 45;
+import { DEFAULT_CONFIG } from "./config.mjs";
+
+/**
+ * Duracion de la demo. NO es un numero suelto: sale del MISMO bloque del que el guion saca lo que
+ * le promete al prospecto ({{demo_duracion}}), asi que el texto y el calendario no pueden decir
+ * dos cosas distintas. Igual que el tipo de evento; si no coinciden, manda el tipo de evento.
+ */
+export const DEFAULT_DURATION_MINUTES = DEFAULT_CONFIG.demo.duracionMinutos;
 
 /** Bolivia no tiene horario de verano: siempre UTC-4. */
 export const DEFAULT_TIME_ZONE = "America/La_Paz";
@@ -35,14 +41,18 @@ export const DEFAULT_TIME_ZONE = "America/La_Paz";
 /**
  * Config desde el entorno. `eventTypeId` es el del evento OCULTO del bot (`demo-bot`), NO el
  * publico: reservar en el publico falla por los 10 campos obligatorios.
+ * @param {number} [fallbackMinutes]  la duracion del conocimiento/config, que se usa cuando el
+ *   entorno no fija CALCOM_BOT_DURATION_MINUTES. El entorno sigue ganando: es el freno de mano
+ *   del que despliega y no queremos que una edicion de datos se lo saque.
  */
-export function getBookingConfig(env = process.env) {
+export function getBookingConfig(env = process.env, fallbackMinutes = DEFAULT_DURATION_MINUTES) {
   const rawId = Number(env.CALCOM_BOT_EVENT_TYPE_ID);
   const rawDuration = Number(env.CALCOM_BOT_DURATION_MINUTES);
+  const fallback = Number.isFinite(fallbackMinutes) && fallbackMinutes > 0 ? fallbackMinutes : DEFAULT_DURATION_MINUTES;
   return {
     baseUrl: String(env.CALCOM_BASE_URL || "").replace(/\/+$/, ""),
     eventTypeId: Number.isInteger(rawId) && rawId > 0 ? rawId : null,
-    durationMinutes: Number.isFinite(rawDuration) && rawDuration > 0 ? rawDuration : DEFAULT_DURATION_MINUTES,
+    durationMinutes: Number.isFinite(rawDuration) && rawDuration > 0 ? rawDuration : fallback,
     timeZone: String(env.CALCOM_TIMEZONE || DEFAULT_TIME_ZONE),
   };
 }
@@ -56,6 +66,36 @@ export function getBookingConfig(env = process.env) {
 export function botAttendeeEmail(conversationKey, domain = "onia.com.bo") {
   const safe = String(conversationKey || "sin-clave").replace(/[^a-zA-Z0-9]+/g, "-").slice(0, 40);
   return `bot+${safe}@${domain}`;
+}
+
+/**
+ * URL PUBLICA de Cal.com. NO es `CALCOM_BASE_URL`: en el VPS esa vale `http://calcom:3000` (el
+ * hostname interno de docker, mas rapido para reservar sin salir a internet) y mandarsela al
+ * prospecto seria darle un link que no abre desde su telefono. Por eso el link se arma con una
+ * variable propia y, si nadie la define, con el dominio publico — nunca con la interna.
+ */
+export const DEFAULT_PUBLIC_URL = "https://cal.onia.com.bo";
+
+/**
+ * Link de la reunion a partir del uid que devolvio la reserva (el mismo que se guarda en
+ * `calendar_event_id`). `/booking/<uid>` es la pagina de la reserva de Cal.com: muestra cuando es,
+ * el boton para entrar y permite reprogramar o cancelar.
+ *
+ * Se DERIVA del uid a proposito, en vez de guardar una URL nueva: el uid ya esta persistido desde
+ * la primera reserva, asi que esto tambien le sirve a las demos que se agendaron antes de que
+ * existiera el recordatorio. Techo conocido: es la pagina de la reserva, no la sala de video
+ * directa (`metadata.videoCallUrl`, que hoy `createBooking` descarta). Si algun dia se quiere el
+ * link directo a la sala, hay que capturarlo al reservar Y persistirlo — y seguiria haciendo falta
+ * este fallback para todo lo ya reservado.
+ *
+ * @returns {string|null} null si no hay uid: sin uid NO se inventa un link.
+ */
+export function meetingLink(uid, env = process.env) {
+  const clean = String(uid || "").trim();
+  if (!clean) return null;
+  const base = String((env && env.CALCOM_PUBLIC_URL) || DEFAULT_PUBLIC_URL).replace(/\/+$/, "");
+  if (!base) return null;
+  return `${base}/booking/${encodeURIComponent(clean)}`;
 }
 
 /** Payload de `/api/book/event`. Puro: mismo input, mismo output. */
@@ -84,11 +124,15 @@ export function buildBookingPayload(options = {}) {
 
 /** Lo que el bot ya sabe del prospecto, en una linea para el calendario. Nunca inventa. */
 export function buildBookingNotes(qualification = {}) {
+  // Los campos de calificacion son rubro/tamano/ciudad, iguales para todos los rubros. `chairs`
+  // sobrevive como dato de RAMA (solo dental): si esta, suma; si no, no se nombra. Antes esto
+  // escribia \"clinica propia\" y \"sillones\" siempre, asi que la reserva de una ferreteria
+  // llegaba al calendario vacia.
   const parts = [];
-  if (qualification.ownsClinic === true) parts.push("clinica propia: si");
-  else if (qualification.ownsClinic === false) parts.push("clinica propia: no");
-  if (qualification.chairs !== undefined && qualification.chairs !== null) parts.push(`sillones: ${qualification.chairs}`);
+  if (qualification.industry) parts.push(`rubro: ${qualification.industry}`);
+  if (qualification.teamSize !== undefined && qualification.teamSize !== null) parts.push(`personas: ${qualification.teamSize}`);
   if (qualification.city) parts.push(`ciudad: ${qualification.city}`);
+  if (qualification.chairs !== undefined && qualification.chairs !== null) parts.push(`sillones: ${qualification.chairs}`);
   parts.push("agendado por el asistente automatico de Onia");
   return parts.join(" | ");
 }
@@ -102,7 +146,7 @@ export function buildBookingNotes(qualification = {}) {
  */
 export async function createBooking(options = {}, deps = {}) {
   const warnings = [];
-  const config = options.config || getBookingConfig(deps.env || process.env);
+  const config = options.config || getBookingConfig(deps.env || process.env, options.durationMinutes);
   const doFetch = deps.fetch || options.fetch || globalThis.fetch;
 
   if (!config.baseUrl || !config.eventTypeId) {

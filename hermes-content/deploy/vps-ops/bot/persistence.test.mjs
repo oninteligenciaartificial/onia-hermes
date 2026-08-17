@@ -20,8 +20,10 @@ import { createBotConfig } from "./config.mjs";
 import { createState } from "./bot-engine.mjs";
 import { runTurn } from "./run-turn.mjs";
 import {
+  DELIVERY_STATUSES,
   PIPELINE_STATUSES,
   buildLeadRow,
+  INBOUND_BODY_PLACEHOLDER,
   buildMessageRow,
   createStore,
   leadKeyFor,
@@ -174,7 +176,7 @@ test("un turno completo funciona sin base: el bot responde igual (estado en memo
   assert.equal(result.ok, true);
   assert.equal(result.duplicate, false);
   assert.equal(result.stageBefore, "nuevo");
-  assert.equal(result.stageAfter, "esperando_calificacion");
+  assert.equal(result.stageAfter, "esperando_horario");
   assert.equal(result.send.length, 1);
   assert.equal(result.send[0].templateKey, "M0");
   assert.match(result.send[0].text, /asistente automático/);
@@ -192,7 +194,7 @@ test("sin base no hay memoria entre turnos: cada mensaje arranca en 'nuevo' (fal
     nowIso: T0,
     llm: async () => "",
   });
-  assert.equal(uno.stageAfter, "esperando_calificacion");
+  assert.equal(uno.stageAfter, "esperando_horario");
   assert.equal(dos.stageBefore, "nuevo");
   assert.ok(dos.send.length > 0, "sigue contestando: nunca queda mudo");
 });
@@ -219,7 +221,7 @@ test("el mismo message_key dos veces avanza el embudo UNA sola vez", async () =>
 
   assert.equal(primero.duplicate, false);
   assert.equal(repetido.duplicate, true);
-  assert.equal(fake.state.botStage, "esperando_calificacion", "el estado no avanzo dos veces");
+  assert.equal(fake.state.botStage, "esperando_horario", "el estado no avanzo dos veces");
 });
 
 test("sin dedup disponible (base caida) el turno sigue, pero lo avisa", async () => {
@@ -230,26 +232,92 @@ test("sin dedup disponible (base caida) el turno sigue, pero lo avisa", async ()
   assert.ok(fake.store.warnings.some((warning) => warning.includes("sin dedup")));
 });
 
+test("telefono y atribucion que llegan RECIEN en el 2do webhook se guardan igual", async () => {
+  // La fila se crea con el primer mensaje (ensureConversation escribe una sola vez). Sin rellenar,
+  // el estado cargado de la base pisaba con null lo que traia el canal despues y no se guardaba NUNCA.
+  const fake = memoryStore();
+  const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "" };
+
+  await runTurn(turn(), deps);
+  assert.equal(fake.state.publicContact, null);
+
+  await runTurn(
+    turn({ text: "A", message_key: "telegram:2", public_contact: "+59171654992", piece_key: "lucia-d03-reel-siat" }),
+    deps,
+  );
+  assert.equal(fake.state.publicContact, "+59171654992");
+  assert.equal(fake.state.pieceKey, "lucia-d03-reel-siat");
+
+  // Y un turno posterior SIN atribucion no puede borrar la que ya se capturo.
+  await runTurn(turn({ text: "gracias", message_key: "telegram:3" }), deps);
+  assert.equal(fake.state.publicContact, "+59171654992");
+  assert.equal(fake.state.pieceKey, "lucia-d03-reel-siat");
+});
+
 // ---------------------------------------------------------------------------
 // 3. Conversacion entera a traves del ejecutor
 // ---------------------------------------------------------------------------
 
-test("camino feliz por runTurn: califica, agenda, crea el lead y avisa a Sergio", async () => {
+test("camino feliz por runTurn: ofrece, agenda, califica, crea el lead y avisa a Sergio", async () => {
   const fake = memoryStore();
   const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "" };
 
   const uno = await runTurn(turn(), deps);
-  const dos = await runTurn(turn({ text: "es mia, tengo 2 sillones y estoy en Santa Cruz", message_key: "telegram:2" }), deps);
-  const tres = await runTurn(turn({ text: "A", message_key: "telegram:3" }), deps);
+  const dos = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+  const tres = await runTurn(turn({ text: "tengo una ferreteria, somos 5 y estoy en Santa Cruz", message_key: "telegram:3" }), deps);
 
-  assert.equal(uno.stageAfter, "esperando_calificacion");
-  assert.equal(dos.stageAfter, "esperando_horario");
-  assert.equal(dos.leadKey, "bot-telegram-777", "el lead se crea al calificar, con clave determinista");
-  assert.equal(tres.stageAfter, "demo_agendada");
-  assert.match(tres.send[0].text, /jueves 15:00/);
-  assert.equal(tres.calendar.length, 1, "el evento de calendario queda para n8n");
-  assert.equal(tres.notify.length, 1, "y el aviso a Sergio tambien");
-  assert.deepEqual(fake.state.qualification, { ownsClinic: true, chairs: 2, city: "Santa Cruz" });
+  assert.equal(uno.stageAfter, "esperando_horario");
+  assert.match(uno.send[0].text, /jueves 15:00/, "la oferta va en el primer mensaje");
+  assert.equal(uno.leadKey, "bot-telegram-777", "el lead nace con la oferta, con clave determinista");
+  assert.equal(dos.stageAfter, "demo_agendada");
+  assert.match(dos.send[0].text, /jueves 15:00/);
+  assert.equal(dos.calendar.length, 1, "el evento de calendario queda para n8n");
+  assert.equal(dos.notify.length, 1, "y el aviso a Sergio tambien");
+  assert.equal(tres.stageAfter, "demo_agendada", "los datos llegan despues, sin mover la reserva");
+  assert.deepEqual(fake.state.qualification, { industry: "comercio", teamSize: 5, city: "Santa Cruz" });
+});
+
+// El link de la reunion viaja EN M2, no el dia de la demo. Es el unico momento garantizado dentro
+// de la ventana de servicio de 24 h de Meta (el prospecto acaba de escribir): a quien reserva para
+// dentro de 3 dias ya no se le puede escribir, y M2 prometia justamente eso.
+test("cuando Cal.com confirma la reserva, el link se manda en el MISMO mensaje que la confirma", async () => {
+  const fake = memoryStore();
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const deps = {
+    store: fake.store,
+    config: enVivo,
+    nowIso: T0,
+    llm: async () => "",
+    env: { CALCOM_PUBLIC_URL: "https://cal.test" },
+    createBooking: async () => ({ ok: true, uid: "uid-abc", reason: "reservado", warnings: [] }),
+  };
+
+  await runTurn(turn(), deps);
+  const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+
+  assert.equal(agendada.stageAfter, "demo_agendada");
+  assert.match(agendada.send[0].text, /https:\/\/cal\.test\/booking\/uid-abc/, "el prospecto se va con el link");
+  assert.equal(fake.state.calendarEventId, "uid-abc", "y el uid queda guardado para el recordatorio");
+});
+
+test("si la reserva NO sale, no se manda un link inventado: solo el aviso honesto", async () => {
+  const fake = memoryStore();
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const deps = {
+    store: fake.store,
+    config: enVivo,
+    nowIso: T0,
+    llm: async () => "",
+    env: { CALCOM_PUBLIC_URL: "https://cal.test" },
+    createBooking: async () => ({ ok: false, uid: null, reason: "horario_tomado", warnings: [] }),
+  };
+
+  await runTurn(turn(), deps);
+  const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+
+  assert.ok(!/cal\.test\/booking/.test(agendada.send[0].text), "sin reserva no hay link");
+  assert.match(agendada.send[0].text, /se me ocupó ese horario/);
+  assert.equal(fake.state.calendarEventId, null);
 });
 
 test("un humano tomo la conversacion: el ejecutor no devuelve nada para enviar", async () => {
@@ -330,14 +398,16 @@ test("si el CAS no reserva ninguna fila, NO se manda el follow-up", async () => 
   assert.equal(await store.reserveFollowUp("telegram:777"), false);
 });
 
-test("el barrido pide solo conversaciones vivas entre 22 h y 7 dias", async () => {
+test("el barrido pide la franja accionable: de 20 h hasta los 7 dias de staleAfterDays", async () => {
   const { store, requests } = recorder([{ status: 200, body: [] }]);
   await store.sweepFollowUpCandidates("2026-07-28T14:05:00Z");
 
   assert.match(requests[0].url, /followup_step=eq\.0/);
   assert.match(requests[0].url, /bot_stage=in\.\(esperando_calificacion,esperando_horario\)/);
-  assert.match(requests[0].url, /last_inbound_at=lte\.2026-07-27T16:05:00\.000Z/);
-  assert.match(requests[0].url, /last_inbound_at=gte\.2026-07-21T14:05:00\.000Z/);
+  assert.match(requests[0].url, /last_inbound_at=lte\.2026-07-27T18:05:00\.000Z/, "techo: 20 h de silencio");
+  // El piso NO es la ventana de 24 h de Meta. Fuera de esa ventana el mensaje sale igual, como
+  // plantilla aprobada: si el SQL las filtrara, la plantilla no le llegaria nunca a nadie.
+  assert.match(requests[0].url, /last_inbound_at=gte\.2026-07-21T14:05:00\.000Z/, "piso: 7 dias");
 });
 
 test("el lead se inserta una vez y despues se PATCHea (no se duplica ni se pisan notas humanas)", async () => {
@@ -347,7 +417,8 @@ test("el lead se inserta una vez y despues se PATCHea (no se duplica ni se pisan
   assert.equal(await nuevo.store.upsertLead({ pipelineStatus: "Contactado" }, state), "bot-telegram-777");
   assert.equal(nuevo.requests[1].method, "POST");
   assert.equal(nuevo.requests[1].body.pipeline_status, "Contactado");
-  assert.equal(nuevo.requests[1].body.business_type, "Clínica dental");
+  // El rubro sale de la calificacion, ya no se asume dental para todos.
+  assert.equal(nuevo.requests[1].body.business_type, null);
   assert.equal(nuevo.requests[1].body.city, "Santa Cruz");
 
   const viejo = recorder([{ status: 200, body: [{ lead_key: "bot-telegram-777", raw: { humano: "no tocar" } }] }, { status: 200, body: [{}] }]);
@@ -432,11 +503,64 @@ test("al agendar la demo el lead queda en 'Reunion' (valor exacto del CHECK del 
   assert.equal(row.next_followup_at, "2026-07-30T19:00:00Z");
 });
 
-test("el lead nunca inventa el nombre de la clinica", () => {
+test("el lead nunca inventa el nombre NI el rubro del negocio", () => {
   const anonimo = buildLeadRow({}, createState({ channel: "telegram", contactRef: "777" }));
   assert.match(anonimo.company_name, /sin nombre/);
-  const conNombre = buildLeadRow({}, { ...createState({ channel: "telegram", contactRef: "777" }), displayName: "Ana", qualification: { city: "Tarija" } });
-  assert.equal(conNombre.company_name, "Clínica de Ana (Tarija)");
+  assert.equal(anonimo.business_type, null, "sin rubro capturado no se inventa uno");
+
+  // El bot atiende cualquier rubro: llamar "Clinica de X" a una ferreteria metia un dato falso
+  // en el CRM. Ahora el nombre lleva el rubro real cuando esta, y nada cuando no.
+  const base = createState({ channel: "telegram", contactRef: "777" });
+  const soloCiudad = buildLeadRow({}, { ...base, displayName: "Ana", qualification: { city: "Tarija" } });
+  assert.equal(soloCiudad.company_name, "Ana (Tarija)");
+  assert.ok(!/Clínica/.test(soloCiudad.company_name), "no se asume clinica");
+
+  const conRubro = buildLeadRow({}, { ...base, displayName: "Ana", qualification: { city: "Tarija", industry: "ferreteria" } });
+  assert.equal(conRubro.company_name, "Ana — ferreteria (Tarija)");
+  assert.equal(conRubro.business_type, "ferreteria");
+});
+
+test("el CRM guarda el TELEFONO como contacto publico, no el id de conversacion", () => {
+  // El sintoma: en el panel el contacto decia "2847" (el id de la conversacion de Chatwoot) y
+  // desde ahi no se podia llamar a nadie.
+  const base = createState({ channel: "chatwoot", contactRef: "2847" });
+  assert.equal(buildLeadRow({}, base).public_contact, "2847", "sin telefono queda como hoy: no se pierde la referencia");
+  assert.equal(buildLeadRow({}, { ...base, publicContact: "+59171654992" }).public_contact, "+59171654992");
+});
+
+test("el telefono sobrevive el viaje a la base (va en raw, sin columna nueva en produccion)", () => {
+  const state = { ...createState({ channel: "chatwoot", contactRef: "2847" }), publicContact: "+59171654992" };
+  const round = stateFromRow({
+    conversation_key: state.conversationKey,
+    channel: "chatwoot",
+    contact_ref: "2847",
+    bot_stage: "nuevo",
+    raw: { publicContact: state.publicContact },
+  });
+  assert.equal(round.publicContact, "+59171654992");
+  assert.equal(round.contactRef, "2847", "contact_ref sigue intacto: es la identidad de la conversacion");
+  assert.equal(stateFromRow({ conversation_key: "chatwoot:1", channel: "chatwoot", contact_ref: "1" }).publicContact, null);
+});
+
+test("un lead que YA existe recibe el telefono, pero nunca se lo pisa con el id de conversacion", async () => {
+  const conTelefono = recorder([
+    { status: 200, body: [{ lead_key: "bot-chatwoot-2847", raw: {} }] }, // upsertLead.load
+    { status: 200, body: [{ lead_key: "bot-chatwoot-2847" }] }, //          upsertLead.patch
+  ]);
+  const state = { ...createState({ channel: "chatwoot", contactRef: "2847" }), publicContact: "+59171654992" };
+  await conTelefono.store.upsertLead({}, state);
+  assert.equal(conTelefono.requests[1].body.public_contact, "+59171654992");
+
+  const sinTelefono = recorder([
+    { status: 200, body: [{ lead_key: "bot-chatwoot-2847", raw: {} }] },
+    { status: 200, body: [{ lead_key: "bot-chatwoot-2847" }] },
+  ]);
+  await sinTelefono.store.upsertLead({}, createState({ channel: "chatwoot", contactRef: "2847" }));
+  assert.equal(
+    "public_contact" in sinTelefono.requests[1].body,
+    false,
+    "sin telefono el PATCH ni menciona el campo: un contacto corregido a mano no se pisa",
+  );
 });
 
 test("el permiso de contacto sigue al opt-in / opt-out, no al humor del bot", () => {
@@ -459,6 +583,77 @@ test("buildMessageRow sanea lo que va a la base (body nunca vacio, enums validad
   assert.equal(row.delivery_status, "simulated");
   assert.equal(row.guardrail_ok, false);
   assert.deepEqual(row.guardrail_violations, ["cotizar"]);
+});
+
+test("un envio REAL no se degrada a 'simulated': los estados validos se guardan tal cual", () => {
+  const state = createState({ channel: "chatwoot", contactRef: "42" });
+  // El bug del recordatorio fue exactamente este ternario: `reserved` no estaba en la lista y el
+  // valor desconocido se convertia EN SILENCIO en "simulated". Un mensaje pago que la base decia
+  // que nunca ocurrio. Se prueba TODA la lista, no solo el que fallo.
+  for (const estado of DELIVERY_STATUSES) {
+    const guardada = buildMessageRow({ messageKey: `out:${estado}`, text: "hola", deliveryStatus: estado }, state);
+    assert.equal(guardada.delivery_status, estado, `'${estado}' es valido y no puede terminar como otra cosa`);
+  }
+  // Y la lista tiene que ser LA MISMA que el CHECK de la tabla (migracion
+  // 20260813_bot_messages_delivery_status_reserved.sql): si divergen, o se pierde la fila entera
+  // (la base rechaza) o se guarda una mentira (el codigo degrada).
+  assert.deepEqual([...DELIVERY_STATUSES], ["simulated", "skipped", "sent", "failed", "reserved"]);
+});
+
+test("markMessageDelivered: PATCH por message_key, sin tocar la clave ni agregar historia", async () => {
+  const { requests, store } = recorder([{ status: 200, body: [{ message_key: "recordatorio:chatwoot:42:X" }] }]);
+  assert.equal(await store.markMessageDelivered("recordatorio:chatwoot:42:X", "sent", "meta-99"), true);
+
+  const patch = requests[0];
+  assert.equal(patch.method, "PATCH");
+  assert.match(patch.url, /bot_messages\?message_key=eq\./, "una sola fila, la de esa clave");
+  assert.deepEqual(patch.body, { delivery_status: "sent", external_message_id: "meta-99" });
+  assert.ok(!("message_key" in patch.body), "APPEND-ONLY: la clave unica anti-duplicados NO se toca");
+  assert.ok(!("body" in patch.body), "tampoco se reescribe el texto: es el mismo hecho, no uno nuevo");
+});
+
+test("markMessageDelivered nunca tira: sin clave, con estado invalido, sin base o con la base caida", async () => {
+  const { requests, store } = recorder([{ status: 500, body: "boom" }]);
+  assert.equal(await store.markMessageDelivered("", "sent"), null, "sin clave no se actualiza nada");
+  // Un estado que el CHECK rechaza haria fallar el PATCH entero: se corta ANTES de salir a la red.
+  assert.equal(await store.markMessageDelivered("k", "explotado"), null);
+  assert.equal(requests.length, 0, "ninguno de los dos llego a la base");
+
+  assert.equal(await store.markMessageDelivered("k", "failed"), null, "base caida: null, no excepcion");
+  assert.ok(store.warnings.length >= 3, "cada fallo deja rastro para el barrido");
+
+  const sinBase = createStore({ url: "", key: "" });
+  assert.equal(await sinBase.markMessageDelivered("k", "sent"), null);
+});
+
+test("markMessageDelivered devuelve false si no hay fila con esa clave (no inventa una)", async () => {
+  const { store } = recorder([{ status: 200, body: [] }]);
+  assert.equal(await store.markMessageDelivered("recordatorio:no-existe", "failed"), false);
+});
+
+// ---------------------------------------------------------------------------
+// MINIMIZACION DE DATOS: no se guarda lo que no decide nada
+// ---------------------------------------------------------------------------
+
+test("el texto de lo que escribe el prospecto NO se persiste", () => {
+  const state = createState({ channel: "chatwoot", contactRef: "42" });
+  const row = buildMessageRow(
+    { messageKey: "chatwoot:42:9", direction: "inbound", author: "contact", text: "hola, estoy enferma y no puedo ir" },
+    state,
+  );
+  assert.equal(row.body, INBOUND_BODY_PLACEHOLDER);
+  assert.ok(!row.body.includes("enferma"), "un dato de salud no puede quedar guardado: no decide nada");
+  assert.equal(row.direction, "inbound");
+  assert.equal(row.message_key, "chatwoot:42:9", "la FILA se sigue escribiendo: es el candado anti-duplicados");
+});
+
+test("lo que dice el BOT si se guarda entero (es nuestro guion, no un dato del prospecto)", () => {
+  const state = createState({ channel: "chatwoot", contactRef: "42" });
+  const row = buildMessageRow(
+    { messageKey: "out:chatwoot:42:1", direction: "outbound", author: "bot", text: "¡Hola! Te escribe el asistente de Onia." },
+    state,
+  );
+  assert.match(row.body, /asistente de Onia/, "sin esto no se puede auditar que dijo el bot");
 });
 
 test("claves deterministas: el mismo prospecto no genera dos leads", () => {

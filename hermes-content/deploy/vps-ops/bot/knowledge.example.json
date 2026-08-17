@@ -1,0 +1,50 @@
+{
+  "schema": "onia.bot.knowledge/1",
+  "version": "2026-08-06.1",
+  "updatedBy": "sergio",
+
+  "identity": {
+    "productName": "Onia",
+    "humanName": "Sergio",
+    "botName": "el asistente automático de Onia"
+  },
+
+  "empresa": {
+    "horario": {
+      "dias": [1, 2, 3, 4, 5],
+      "desde": 9,
+      "hasta": 18,
+      "frase": "lun-vie, 9:00-18:00"
+    }
+  },
+
+  "faq": [
+    {
+      "id": "siat",
+      "title": "Facturación en línea / SIAT",
+      "body": "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. El detalle exacto de tu caso lo ve {{humano}} en la demo.",
+      "status": "publicado",
+      "vigenteHasta": "2026-09-30",
+      "tags": ["fiscal"]
+    }
+  ],
+
+  "productos": [
+    { "key": "dental", "nombre": "Dental", "queResuelve": "agenda, recordatorios y cobros de una clínica" },
+    { "key": "comercio", "nombre": "Comercio", "queResuelve": "stock, ventas y clientes de una tienda" },
+    { "key": "servicios", "nombre": "Servicios", "queResuelve": "turnos, clientes y cobros de un negocio de servicios" },
+    { "key": "proveedores", "nombre": "Importadora", "queResuelve": "importaciones, costos y precios de una distribuidora" },
+
+    { "key": "web", "tipo": "servicio", "nombre": "la web de tu negocio" },
+    { "key": "chatbot", "tipo": "servicio", "nombre": "un chatbot de WhatsApp con IA" },
+    { "key": "videos_ia", "tipo": "servicio", "nombre": "videos e influencers con IA" },
+    { "key": "redes", "tipo": "servicio", "nombre": "conexión y publicación en redes" },
+    { "key": "automatizaciones", "tipo": "servicio", "nombre": "automatizaciones a medida" }
+  ],
+
+  "triggersExtra": {
+    "demo": []
+  },
+
+  "rubrosExtra": []
+}

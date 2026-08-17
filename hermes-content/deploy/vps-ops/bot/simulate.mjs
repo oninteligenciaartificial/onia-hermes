@@ -18,17 +18,17 @@ import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
 
 // ---------------------------------------------------------------------------
-// Los 8 guiones de prueba (spec §8, fase 1)
+// Los 10 guiones de prueba (spec §8, fase 1 + rama por rubro y soporte)
 // ---------------------------------------------------------------------------
 
 const SCRIPTS = {
   "1-feliz": {
-    title: "Camino feliz — califica, elige horario y agenda",
+    title: "Camino feliz — elige horario, agenda y RECIEN AHI contesta las 3 preguntas",
     startAt: "2026-07-27T14:05:00Z", // lunes 10:05 en La Paz: dentro de horario
     turns: [
       { text: "DEMO" },
-      { text: "Es mia, tengo 2 sillones y estoy en Santa Cruz" },
       { text: "A" },
+      { text: "Tengo una ferreteria, somos 5 y estoy en Santa Cruz" },
       { text: "la agenda" },
     ],
   },
@@ -37,7 +37,7 @@ const SCRIPTS = {
     startAt: "2026-07-27T14:05:00Z",
     turns: [
       { text: "hola, cuanto cuesta?" },
-      { text: "es mi clinica, 3 sillones, cochabamba" },
+      { text: "tengo un restaurante, somos 8, cochabamba" },
       { text: "y el precio final cual es? vi los 750 bs" },
       { text: "B" },
     ],
@@ -48,15 +48,15 @@ const SCRIPTS = {
     turns: [
       { text: "DEMO" },
       { text: "ya emite factura al SIAT?" },
-      { text: "soy la duena, 1 sillon, en tarija" },
+      { text: "tengo una peluqueria, trabajo sola, en tarija" },
     ],
   },
   "4-descalificado": {
-    title: "Descarte cortes — no es el publico (M1c)",
+    title: "Descarte cortes — no es un negocio (M1c)",
     startAt: "2026-07-27T14:05:00Z",
     turns: [
       { text: "DEMO" },
-      { text: "soy estudiante de odontologia todavia, no tengo clinica" },
+      { text: "soy estudiante todavia, busco trabajo, les mando mi cv?" },
     ],
   },
   "5-offscript": {
@@ -84,7 +84,7 @@ const SCRIPTS = {
     turns: [
       { text: "DEMO" },
       { kind: "voice", transcript: "" },
-      { kind: "voice", transcript: "si es mia, tenemos 3 sillones aca en la paz" },
+      { kind: "voice", transcript: "si tenemos una panaderia, somos 3 personas aca en la paz" },
       { text: "opcion A" },
     ],
   },
@@ -95,7 +95,25 @@ const SCRIPTS = {
       { text: "DEMO" },
       { op: "human_takeover" },
       { text: "hola? me decias?" },
-      { text: "es mia, 2 sillones, santa cruz" },
+      { text: "tengo una ferreteria, somos 5, santa cruz" },
+    ],
+  },
+  "9-rama-dental": {
+    title: "Ramificacion por rubro — odontologia es el unico que suma la pregunta de los sillones",
+    startAt: "2026-07-27T14:05:00Z",
+    turns: [
+      { text: "DEMO" },
+      { text: "A" },
+      { text: "soy dentista, somos 4 en la clinica, en cochabamba" },
+      { text: "3" },
+    ],
+  },
+  "10-soporte": {
+    title: "Segundo camino — YA es cliente: soporte y humano, NUNCA la demo comercial",
+    startAt: "2026-07-27T14:05:00Z",
+    turns: [
+      { text: "DEMO" },
+      { text: "ya soy cliente y el sistema no me anda, como configuro los recordatorios?" },
     ],
   },
 };

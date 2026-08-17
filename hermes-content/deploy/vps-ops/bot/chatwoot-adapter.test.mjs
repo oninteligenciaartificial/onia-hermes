@@ -32,9 +32,13 @@ import {
   readPayload,
   runChatwootTurn,
   toIsoFlexible,
+  whatsappTemplate,
 } from "./chatwoot-adapter.mjs";
 import { createBotConfig } from "./config.mjs";
-import { leadKeyFor } from "./persistence.mjs";
+import { createStore, leadKeyFor } from "./persistence.mjs";
+// El medidor entra en estas pruebas a proposito: el traspaso solo esta arreglado si la fila que
+// queda la CUENTA quien factura. Con el store de mentira se probaba la intencion, no el resultado.
+import { clasificar, esCobrable } from "./usage-run.mjs";
 
 // dryRun:false a proposito: estas pruebas verifican el envio REAL (posted:true). El gate de
 // dry-run tiene su propia prueba dedicada mas abajo (misma logica de "encendido en dos pasos"
@@ -142,6 +146,116 @@ test("REGLA DE ORO: message_created saliente se ignora (si no, el bot se contest
   assert.match(parsed.reason, /^mensaje_no_entrante:outgoing$/);
 });
 
+// ---------------------------------------------------------------------------
+// TRASPASO A HUMANO: Sergio contesta => el bot se calla
+// ---------------------------------------------------------------------------
+// El bot posteaba con la MISMA cuenta que Sergio, asi que era imposible distinguir quien escribio y
+// el bot le seguia hablando encima al prospecto. Con `CHATWOOT_BOT_AGENT_ID` (el agente "Onia Bot",
+// id 3) los salientes de CUALQUIER otro usuario significan que un humano tomo la conversacion.
+
+/**
+ * Corre `run` con la identidad del bot configurada y la restaura pase lo que pase.
+ * Es `async` a proposito: hay pruebas que corren un turno entero adentro, y con la version
+ * sincronica el env se restauraba antes de que el turno terminara de leerlo.
+ */
+async function conIdentidadDelBot(id, run) {
+  const antes = process.env.CHATWOOT_BOT_AGENT_ID;
+  if (id === null) delete process.env.CHATWOOT_BOT_AGENT_ID;
+  else process.env.CHATWOOT_BOT_AGENT_ID = String(id);
+  try {
+    return await run();
+  } finally {
+    if (antes === undefined) delete process.env.CHATWOOT_BOT_AGENT_ID;
+    else process.env.CHATWOOT_BOT_AGENT_ID = antes;
+  }
+}
+
+/** El saliente de un humano que ademas salio como PLANTILLA aprobada de Meta. */
+function plantillaFixture(name, overrides = {}) {
+  return outgoingFixture({
+    id: 30,
+    sender: { id: 2, name: "OnIA", type: "user" },
+    content: "Hola, quedamos en la demo del jueves",
+    // Forma capturada en los logs de Chatwoot el 2026-08-13: va en el NIVEL DE ARRIBA del payload.
+    additional_attributes: {
+      template_params: { name, language: "es", processed_params: { body: { 1: "Sergio" } } },
+    },
+    ...overrides,
+  });
+}
+
+test("TRASPASO: si contesta OTRO usuario, el turno pide callar al bot", async () => {
+  await conIdentidadDelBot(3, () => {
+    const parsed = parseChatwootWebhook(outgoingFixture({ sender: { id: 2, name: "OnIA", type: "user" } }));
+    assert.equal(parsed.skip, false, "no se descarta: hay que anotar el traspaso");
+    assert.equal(parsed.turn.human_takeover, true);
+    assert.equal(parsed.turn.text, "", "no hay nada que contestar");
+    // `human` es uno de los 3 valores que acepta bot_messages.author. "agent" no existe en la base
+    // y se degradaba a "bot": la bitacora decia que ese mensaje lo escribio el bot.
+    assert.equal(parsed.turn.author, "human", "ni el contacto ni el bot: lo escribio un humano nuestro");
+    assert.equal(parsed.turn.contact_ref, "2");
+    assert.equal(parsed.turn.template_name, null, "texto libre: no hay plantilla que cobrar");
+  });
+});
+
+test("TRASPASO con PLANTILLA: el nombre de Meta viaja en el turno (utility y marketing no cuestan igual)", async () => {
+  await conIdentidadDelBot(3, () => {
+    const parsed = parseChatwootWebhook(plantillaFixture("seguimiento_demo"));
+    assert.equal(parsed.skip, false);
+    assert.equal(parsed.turn.template_name, "seguimiento_demo");
+
+    // Una plantilla que nadie registro viaja IGUAL: el medidor decide que hacer con ella, no el
+    // adapter. Si el adapter la filtrara, ese envio se cobraria como servicio (6,5x menos).
+    const rara = parseChatwootWebhook(plantillaFixture("promo_navidad_2027"));
+    assert.equal(rara.turn.template_name, "promo_navidad_2027");
+
+    // Basura en `template_params` no puede inventar una plantilla ni tirar el parseo.
+    for (const attrs of [{}, { template_params: null }, { template_params: { name: "  " } }, null]) {
+      const libre = parseChatwootFixtureConAttrs(attrs);
+      assert.equal(libre.turn.template_name, null, `additional_attributes ${JSON.stringify(attrs)}`);
+    }
+  });
+});
+
+/** Helper del caso de arriba: mismo saliente humano, con `additional_attributes` a la carta. */
+function parseChatwootFixtureConAttrs(additionalAttributes) {
+  return parseChatwootWebhook(
+    outgoingFixture({ sender: { id: 2, name: "OnIA", type: "user" }, additional_attributes: additionalAttributes }),
+  );
+}
+
+test("EL CANDADO: el saliente del PROPIO bot NO lo silencia (si no, se calla con su 1ra respuesta)", async () => {
+  await conIdentidadDelBot(3, () => {
+    const parsed = parseChatwootWebhook(outgoingFixture({ sender: { id: 3, name: "Onia Bot", type: "user" } }));
+    assert.equal(parsed.skip, true, "es su propio eco: se ignora como siempre");
+    assert.match(parsed.reason, /^mensaje_no_entrante:outgoing$/);
+  });
+});
+
+test("sin identidad configurada se comporta como antes: NUNCA se auto-silencia", async () => {
+  await conIdentidadDelBot(null, () => {
+    const parsed = parseChatwootWebhook(outgoingFixture({ sender: { id: 99, name: "Otro", type: "user" } }));
+    assert.equal(parsed.skip, true, "callarse con todos es peor que el problema que esto arregla");
+  });
+});
+
+test("un remitente que no es un usuario de Chatwoot no puede silenciar al bot", async () => {
+  await conIdentidadDelBot(3, () => {
+    for (const sender of [{ id: 9, type: "contact" }, { id: null, type: "user" }, { type: "user" }, null]) {
+      const parsed = parseChatwootWebhook(outgoingFixture({ sender }));
+      assert.equal(parsed.skip, true, `sender ${JSON.stringify(sender)} no deberia disparar traspaso`);
+    }
+  });
+});
+
+test("una NOTA PRIVADA de Sergio no es atender al prospecto: no dispara traspaso", async () => {
+  await conIdentidadDelBot(3, () => {
+    const parsed = parseChatwootWebhook(outgoingFixture({ private: true, sender: { id: 2, type: "user" } }));
+    assert.equal(parsed.skip, true);
+    assert.equal(parsed.reason, "nota_privada");
+  });
+});
+
 test("nota privada (private:true) se ignora aunque diga 'incoming'", () => {
   const parsed = parseChatwootWebhook(incomingFixture({ private: true }));
   assert.equal(parsed.skip, true);
@@ -188,6 +302,89 @@ test("adjunto sin texto -> kind 'attachment'; audio sin texto -> kind 'voice'", 
   assert.equal(conAdjunto.turn.kind, "attachment");
   const conAudio = parseChatwootWebhook(incomingFixture({ content: "", attachments: [{ file_type: "audio" }] }));
   assert.equal(conAudio.turn.kind, "voice");
+});
+
+// ---------------------------------------------------------------------------
+// 2.b EL TELEFONO — sin esto el CRM guarda el id de conversacion y nadie puede llamar
+// ---------------------------------------------------------------------------
+
+test("el telefono del contacto llega al turno como public_contact, SIN tocar contact_ref", () => {
+  // `phone_number` es exactamente lo que manda Chatwoot 4.12.1 en Contact#webhook_data.
+  // Numero real de la base del VPS (contacto 39, inbox "Onia WhatsApp").
+  const parsed = parseChatwootWebhook(
+    incomingFixture({ sender: { id: 39, name: "Sergio", phone_number: "+59171654992" } }),
+  );
+  assert.equal(parsed.turn.public_contact, "+59171654992");
+  assert.equal(parsed.turn.contact_ref, "2", "contact_ref sigue siendo la conversacion: es la identidad");
+});
+
+test("sin telefono (widget web / inbox de API) queda null: NO se inventa un contacto", () => {
+  assert.equal(parseChatwootWebhook(incomingFixture()).turn.public_contact, null);
+  assert.equal(parseChatwootWebhook(incomingFixture({ sender: { id: 2, phone_number: "  " } })).turn.public_contact, null);
+  assert.equal(parseChatwootWebhook(incomingFixture({ sender: null })).turn.public_contact, null);
+});
+
+test("conversation_created: el telefono tambien sale del sender anidado (push_event_data)", () => {
+  const fixture = conversationCreatedWithMessageFixture();
+  fixture.messages[0].sender = { id: 7, name: "Otro Prospecto", type: "contact", phone_number: "+59170000001" };
+  assert.equal(parseChatwootWebhook(fixture).turn.public_contact, "+59170000001");
+});
+
+// ---------------------------------------------------------------------------
+// 2.c ATRIBUCION — de que pieza / campana vino el prospecto
+// ---------------------------------------------------------------------------
+
+test("atribucion: custom_attributes de la conversacion manda (dato puesto a mano)", () => {
+  const parsed = parseChatwootWebhook(
+    incomingFixture({
+      conversation: {
+        id: 2,
+        custom_attributes: { piece_key: "lucia-d03-reel-siat", source_campaign: "lucia-dentalgest-jul2026" },
+      },
+    }),
+  );
+  assert.equal(parsed.turn.piece_key, "lucia-d03-reel-siat");
+  assert.equal(parsed.turn.source_campaign, "lucia-dentalgest-jul2026");
+});
+
+test("atribucion: ?src= del referer del widget (LA convencion de Onia) -> piece_key", () => {
+  const parsed = parseChatwootWebhook(
+    incomingFixture({
+      conversation: {
+        id: 2,
+        // Forma exacta que escribe el widget de Chatwoot (widget/base_controller.rb).
+        additional_attributes: { referer: "https://onia.com.bo/dental?src=lucia-d03-reel-siat", browser: {} },
+      },
+    }),
+  );
+  assert.equal(parsed.turn.piece_key, "lucia-d03-reel-siat");
+  assert.equal(parsed.turn.source_campaign, null, "sin utm_campaign no se inventa una campana");
+});
+
+test("atribucion: UTM de pauta -> utm_content = pieza, utm_campaign = campana", () => {
+  const parsed = parseChatwootWebhook(
+    incomingFixture({
+      conversation: {
+        id: 2,
+        additional_attributes: { referer: "https://onia.com.bo/?utm_campaign=dental-ago&utm_content=reel-siat-03" },
+      },
+    }),
+  );
+  assert.equal(parsed.turn.piece_key, "reel-siat-03");
+  assert.equal(parsed.turn.source_campaign, "dental-ago");
+});
+
+test("atribucion: sin datos (el caso de HOY en todas las conversaciones) queda en null", () => {
+  const vacio = parseChatwootWebhook(incomingFixture());
+  assert.equal(vacio.turn.piece_key, null);
+  assert.equal(vacio.turn.source_campaign, null);
+
+  // Un referer que no es una URL no puede tumbar el turno: sin atribucion, pero el bot contesta.
+  const basura = parseChatwootWebhook(
+    incomingFixture({ conversation: { id: 2, additional_attributes: { referer: "no-es-una-url" } } }),
+  );
+  assert.equal(basura.skip, false);
+  assert.equal(basura.turn.piece_key, null);
 });
 
 test("normalizeMessageType acepta string y numerico; toIsoFlexible acepta ISO y epoch-segundos", () => {
@@ -240,6 +437,57 @@ test("sendMessage arma el POST exacto: url, header api_access_token, message_typ
   assert.equal(requests[0].headers.api_access_token, "tok-fake");
   assert.equal(requests[0].body.content, "Hola, soy el bot");
   assert.equal(requests[0].body.message_type, "outgoing");
+});
+
+test("sin plantilla el POST no lleva `template_params`: el 99% del trafico sigue siendo texto libre gratis", async () => {
+  const requests = [];
+  const client = createChatwootClient({
+    baseUrl: "https://sb.test",
+    accountId: "2",
+    token: "tok",
+    fetch: async (url, init) => {
+      requests.push(JSON.parse(init.body));
+      return { ok: true, status: 200, text: async () => "{}" };
+    },
+  });
+  await client.sendMessage("7", "Hola");
+  assert.ok(!("template_params" in requests[0]), "la clave ni aparece: si aparece vacia, Chatwoot manda plantilla igual");
+});
+
+test("con plantilla, `template_params` va TOP-LEVEL en el POST (es Chatwoot quien lo anida)", async () => {
+  // La forma sale del fuente de Chatwoot 4.12.1 leido en el VPS, no de la doc:
+  //   app/builders/messages/message_builder.rb:122-124 lee `@params[:template_params]` y lo mete el
+  //   en `additional_attributes`; app/services/whatsapp/send_on_whatsapp_service.rb:45-46 lo lee de
+  //   ahi. Mandarlo nosotros ya anidado NO funciona: el builder nunca mira `additional_attributes`.
+  const requests = [];
+  const client = createChatwootClient({
+    baseUrl: "https://sb.test",
+    accountId: "2",
+    token: "tok",
+    fetch: async (url, init) => {
+      requests.push(JSON.parse(init.body));
+      return { ok: true, status: 200, text: async () => "{}" };
+    },
+  });
+
+  const params = whatsappTemplate("recordatorio_demo", ["jue 30/07 15:00", "https://cal.test/x"]);
+  await client.sendMessage("7", "texto que se ve en el panel", params);
+
+  assert.deepEqual(requests[0].template_params, params, "top-level, tal cual");
+  assert.equal(requests[0].content, "texto que se ve en el panel", "el cuerpo sigue viajando: es lo que ve el agente");
+  assert.equal(requests[0].message_type, "outgoing");
+});
+
+test("whatsappTemplate arma el formato `enhanced` que espera Chatwoot: claves de texto en `body`", () => {
+  // process_body_components (whatsapp/template_processor_service.rb:79) itera `processed_params.body`
+  // y descarta lo vacio: una variable de menos = plantilla rechazada por Meta.
+  assert.deepEqual(whatsappTemplate("seguimiento_demo", ["jue 15:00", "vie 10:00"]), {
+    name: "seguimiento_demo",
+    language: "es",
+    processed_params: { body: { 1: "jue 15:00", 2: "vie 10:00" } },
+  });
+  // Las claves son STRINGS "1"/"2" (JSON no distingue, pero el lado Ruby si).
+  assert.deepEqual(Object.keys(whatsappTemplate("x", ["a", "b"]).processed_params.body), ["1", "2"]);
 });
 
 test("sendMessage con texto vacio no llama a la red", async () => {
@@ -451,7 +699,7 @@ test("integracion punta a punta: DEMO real dispara M0 y se postea via la API de 
   assert.equal(posted.length, 1);
   assert.equal(posted[0].conversationId, "2");
   assert.match(posted[0].text, /asistente automático/);
-  assert.equal(fake.state.botStage, "esperando_calificacion");
+  assert.equal(fake.state.botStage, "esperando_horario");
 });
 
 test("integracion punta a punta: el ECO del mensaje que el bot acaba de mandar NO reinicia nada (sin loop)", async () => {
@@ -477,7 +725,7 @@ test("integracion punta a punta: el ECO del mensaje que el bot acaba de mandar N
 
   assert.equal(dos.skipped, true, "el eco se ignora: el motor ni se entera");
   assert.equal(posted.length, 1, "sigue en 1: no se poste dos veces, no hay loop");
-  assert.equal(fake.state.botStage, "esperando_calificacion", "el estado no se toco con el eco");
+  assert.equal(fake.state.botStage, "esperando_horario", "el estado no se toco con el eco");
 });
 
 test("integracion punta a punta: reenviar el MISMO webhook (reintento de Chatwoot) no duplica el envio", async () => {
@@ -499,4 +747,363 @@ test("integracion punta a punta: reenviar el MISMO webhook (reintento de Chatwoo
   assert.equal(uno.duplicate, false);
   assert.equal(reintento.duplicate, true, "mismo message_key -> el dedup de run-turn.mjs lo corta");
   assert.equal(posted.length, 1, "no se mando dos veces por el reintento");
+});
+
+// ---------------------------------------------------------------------------
+// 5b. EL TRASPASO, PUNTA A PUNTA HASTA LA FACTURA
+//
+// Lo que un humano manda desde Chatwoot lo cobra Meta igual que lo del bot, pero la fila que
+// quedaba era un placeholder ENTRANTE (`direction = 'inbound'`, `author = 'contact'`) y el medidor
+// filtra `direction = 'outbound'`: se facturaba media bolsa. Verificado en la base del VPS el
+// 2026-08-13 con los mensajes 30 y 31 — las dos unicas plantillas reales que existieron.
+//
+// Estas pruebas NO usan el store de mentira: corren el store REAL contra un Supabase de juguete,
+// asi que la fila que se mira es la que de verdad se escribiria. Y despues se la pasa al medidor.
+// ---------------------------------------------------------------------------
+
+/**
+ * Supabase de juguete: guarda UNA conversacion y las filas de bot_messages con el mismo
+ * `on_conflict=message_key, ignore-duplicates` de la tabla real (por eso sirve para probar dedup).
+ */
+function supabaseDeJuguete() {
+  const requests = [];
+  let conversacion = null;
+  const mensajes = [];
+  const fetchImpl = async (url, init = {}) => {
+    const method = init.method || "GET";
+    const body = init.body ? JSON.parse(init.body) : null;
+    requests.push({ url: String(url), method, body });
+
+    let rows;
+    if (String(url).includes("bot_messages")) {
+      // Append-only con clave unica: lo que ya esta NO se inserta de nuevo y PostgREST devuelve []
+      // (que es como claimInbound se entera de que el mensaje ya se proceso).
+      const nuevas = (Array.isArray(body) ? body : [body]).filter(
+        (fila) => !mensajes.some((vieja) => vieja.message_key === fila.message_key),
+      );
+      mensajes.push(...nuevas);
+      rows = nuevas;
+    } else if (method === "GET") {
+      rows = conversacion ? [conversacion] : [];
+    } else {
+      conversacion = { ...(conversacion || {}), ...body }; // POST = alta · PATCH = update
+      rows = [conversacion];
+    }
+    return { ok: true, status: 200, text: async () => JSON.stringify(rows) };
+  };
+  return {
+    requests,
+    mensajes,
+    get conversacion() {
+      return conversacion;
+    },
+    store: createStore({ url: "https://sb.test", key: "service-role-fake", fetch: fetchImpl }),
+  };
+}
+
+function clienteDeMentira() {
+  const posted = [];
+  return { posted, client: { warnings: [], async sendMessage(id, text) { posted.push({ id, text }); return { id: posted.length }; } } };
+}
+
+test("TRASPASO punta a punta: la fila queda CONTABLE y con la categoria real de la plantilla", async () => {
+  const db = supabaseDeJuguete();
+  const { posted, client } = clienteDeMentira();
+
+  await conIdentidadDelBot(3, () =>
+    runChatwootTurn(plantillaFixture("seguimiento_demo"), {
+      store: db.store,
+      config: CONFIG,
+      nowIso: "2026-08-13T21:02:41Z",
+      llm: async () => "",
+      client,
+    }),
+  );
+
+  assert.equal(db.mensajes.length, 1, "el traspaso deja UNA fila");
+  const fila = db.mensajes[0];
+
+  // 1. Lo que el medidor mira para decidir si cuenta.
+  assert.equal(fila.direction, "outbound", "salio de nosotros: si dice inbound, no se factura nunca");
+  assert.equal(fila.author, "human", "lo escribio Sergio, no el prospecto ni el bot");
+  assert.equal(fila.delivery_status, "sent", "Chatwoot acepto el POST — eso es todo lo que sabemos");
+  assert.equal(esCobrable(fila), true, "EL PUNTO DE TODO ESTO: el medidor lo cuenta");
+
+  // 2. Y en que balde cae: marketing cuesta 6,5x lo que servicio.
+  assert.equal(fila.raw.templateName, "seguimiento_demo");
+  assert.deepEqual(clasificar(fila), {
+    categoria: "marketing",
+    templateKey: "M3_PLANTILLA",
+    templateName: "seguimiento_demo",
+  });
+
+  // 3. El candado intacto: MISMA clave de dedup que antes del arreglo. El "chatwoot:" repetido no
+  // es un error de copia — es el canal que antepone el motor a la clave del canal, y es
+  // exactamente lo que hay guardado en produccion (`chatwoot:chatwoot:takeover:11:30`).
+  assert.equal(fila.message_key, "chatwoot:chatwoot:takeover:2:30");
+  assert.equal(posted.length, 0, "el bot no contesta encima del humano");
+});
+
+test("TRASPASO con plantilla que nadie registro: alarma, NO servicio barato", async () => {
+  const db = supabaseDeJuguete();
+  const { client } = clienteDeMentira();
+
+  await conIdentidadDelBot(3, () =>
+    runChatwootTurn(plantillaFixture("promo_navidad_2027"), {
+      store: db.store,
+      config: CONFIG,
+      nowIso: "2026-08-13T21:02:41Z",
+      llm: async () => "",
+      client,
+    }),
+  );
+
+  const { categoria, templateName } = clasificar(db.mensajes[0]);
+  assert.equal(categoria, "plantilla_sin_tarifa", "sin tarifa registrada NO se asume la mas barata");
+  assert.equal(templateName, "promo_navidad_2027", "y se dice cual es, para poder registrarla");
+});
+
+test("TRASPASO: el mensaje libre de un humano se cuenta como servicio (no toda la bandeja es plantilla)", async () => {
+  const db = supabaseDeJuguete();
+  const { client } = clienteDeMentira();
+
+  await conIdentidadDelBot(3, () =>
+    runChatwootTurn(outgoingFixture({ id: 31, sender: { id: 2, name: "OnIA", type: "user" } }), {
+      store: db.store,
+      config: CONFIG,
+      nowIso: "2026-08-13T21:02:41Z",
+      llm: async () => "",
+      client,
+    }),
+  );
+
+  const fila = db.mensajes[0];
+  assert.equal(esCobrable(fila), true);
+  assert.equal(clasificar(fila).categoria, "servicio");
+  assert.equal(fila.raw.templateName, undefined, "no salio con plantilla: no se inventa una");
+});
+
+test("TRASPASO: despues de que un humano contesta, el bot SIGUE CALLADO", async () => {
+  const db = supabaseDeJuguete();
+  const { posted, client } = clienteDeMentira();
+  const deps = { store: db.store, config: CONFIG, nowIso: "2026-08-13T21:02:41Z", llm: async () => "", client };
+
+  await conIdentidadDelBot(3, () => runChatwootTurn(plantillaFixture("seguimiento_demo"), deps));
+  // De ACA sale el silencio: la columna que el motor lee en el turno siguiente (bot-engine barrera 1).
+  assert.equal(db.conversacion.human_took_over, true, "el traspaso queda marcado en bot_conversations");
+
+  // Y ahora el prospecto escribe DEMO, que en cualquier otra conversacion dispara M0.
+  const despues = await conIdentidadDelBot(3, () =>
+    runChatwootTurn(incomingFixture({ id: 32, content: "DEMO" }), deps),
+  );
+
+  assert.equal(posted.length, 0, "el bot NO le habla encima al humano");
+  assert.deepEqual(despues.sent, []);
+  assert.equal(db.mensajes.length, 2, "el entrante se registra igual (dedup), pero sin respuesta");
+  assert.equal(db.mensajes[1].direction, "inbound", "lo del prospecto sigue siendo entrante y no se cobra");
+  assert.equal(esCobrable(db.mensajes[1]), false);
+});
+
+test("TRASPASO: el MISMO webhook dos veces no duplica la fila (el candado no se toco)", async () => {
+  const db = supabaseDeJuguete();
+  const { client } = clienteDeMentira();
+  const deps = { store: db.store, config: CONFIG, nowIso: "2026-08-13T21:02:41Z", llm: async () => "", client };
+  const payload = plantillaFixture("seguimiento_demo");
+
+  const uno = await conIdentidadDelBot(3, () => runChatwootTurn(payload, deps));
+  const dos = await conIdentidadDelBot(3, () => runChatwootTurn(payload, deps)); // Chatwoot reintenta
+
+  assert.equal(uno.duplicate, false);
+  assert.equal(dos.duplicate, true, "mismo message_key -> el dedup lo corta");
+  assert.equal(db.mensajes.length, 1, "una sola fila: si no, se factura dos veces el mismo envio");
+});
+
+// ---------------------------------------------------------------------------
+// NOTAS DE VOZ — el agujero de comprension mas grande que tenia el bot
+//
+// En Bolivia una parte enorme del WhatsApp son notas de voz. Hasta hoy el bot contestaba
+// "¿me lo escribís?" y ahi se perdia el prospecto. Lo que se prueba: que el texto transcrito
+// entre al motor COMO SI LO HUBIERA ESCRITO (el guion sigue igual: califica, agenda), y que
+// cuando Speaches falla el bot igual conteste algo en vez de quedarse mudo.
+// ---------------------------------------------------------------------------
+
+/** Webhook real de una nota de voz: sin `content`, con un adjunto file_type "audio". */
+function voiceFixture(overrides = {}) {
+  return incomingFixture({
+    id: 21,
+    content: "",
+    attachments: [
+      {
+        id: 7,
+        message_id: 21,
+        file_type: "audio",
+        extension: "oga",
+        file_size: 34_298,
+        data_url: "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/rails/active_storage/blobs/redirect/abc/nota.oga",
+      },
+    ],
+    ...overrides,
+  });
+}
+
+test("los adjuntos viajan en meta (el motor es puro: no baja archivos)", () => {
+  const parsed = parseChatwootWebhook(voiceFixture());
+  assert.equal(parsed.turn.kind, "voice");
+  assert.equal(parsed.meta.attachments.length, 1);
+  assert.equal(parsed.meta.attachments[0].file_type, "audio");
+  assert.equal(parsed.turn.attachments, undefined, "el turno es lo que ve el motor; los archivos no son asunto suyo");
+});
+
+test("VOZ: la transcripcion entra como `transcript` y el guion sigue normal (califica, no pide texto)", async () => {
+  const fake = memoryStore();
+  const posted = [];
+  const client = { warnings: [], async sendMessage(id, text) { posted.push(text); return { id: posted.length }; } };
+
+  const result = await runChatwootTurn(voiceFixture(), {
+    store: fake.store,
+    config: CONFIG,
+    nowIso: "2026-07-27T14:05:00Z",
+    llm: async () => "",
+    client,
+    transcribeAudio: async () => ({ ok: true, text: "DEMO", reason: "transcrito", warnings: [] }),
+  });
+
+  assert.equal(result.voice.transcribed, true);
+  assert.equal(result.voice.chars, 4);
+  assert.equal(posted.length, 1, "un audio entendido tiene que disparar el guion, no una disculpa");
+  assert.ok(!/No me llegó bien el audio/.test(posted[0]), `el bot volvio a pedir texto: ${posted[0]}`);
+  assert.match(posted[0], /¿Cuál te va mejor\?/, "el audio 'DEMO' tiene que disparar M0, igual que el texto");
+  assert.equal(fake.state.botStage, "esperando_horario", "el audio hizo avanzar el embudo igual que un texto");
+});
+
+test("VOZ: el `transcript` es lo que se le pasa al motor, y `kind` sigue siendo voice en la bitacora", async () => {
+  let visto = null;
+  await runChatwootTurn(voiceFixture(), {
+    runTurn: async (turn) => {
+      visto = turn;
+      return { ok: true, send: [], warnings: [] };
+    },
+    client: { warnings: [], async sendMessage() { return {}; } },
+    transcribeAudio: async () => ({ ok: true, text: "hola, tengo una clinica dental", reason: "transcrito", warnings: [] }),
+  });
+
+  assert.equal(visto.transcript, "hola, tengo una clinica dental");
+  assert.equal(visto.kind, "voice", "decir que fue texto seria mentirle a la bitacora");
+  assert.equal(visto.text, "", "el texto original venia vacio: no se pisa, se agrega el transcript");
+});
+
+test("VOZ: la transcripcion recibe el adjunto, el token y la base de Chatwoot", async () => {
+  let recibido = null;
+  await runChatwootTurn(voiceFixture(), {
+    token: "tok-secreto",
+    baseUrl: "http://onia-chatbot_chatwoot:3000",
+    runTurn: async () => ({ ok: true, send: [], warnings: [] }),
+    client: { warnings: [], async sendMessage() { return {}; } },
+    transcribeAudio: async (options) => {
+      recibido = options;
+      return { ok: false, text: "", reason: "stt_fallido", warnings: [] };
+    },
+  });
+
+  assert.equal(recibido.attachments[0].file_type, "audio");
+  assert.equal(recibido.token, "tok-secreto");
+  assert.equal(recibido.chatwootBaseUrl, "http://onia-chatbot_chatwoot:3000");
+});
+
+test("VOZ QUE FALLA: cae a M_AUDIO_FAIL — el prospecto NUNCA se queda sin respuesta", async () => {
+  const fake = memoryStore();
+  const posted = [];
+  const client = { warnings: [], async sendMessage(id, text) { posted.push(text); return { id: posted.length }; } };
+
+  const result = await runChatwootTurn(voiceFixture(), {
+    store: fake.store,
+    config: CONFIG,
+    nowIso: "2026-07-27T14:05:00Z",
+    llm: async () => "",
+    client,
+    transcribeAudio: async () => ({ ok: false, text: "", reason: "stt_fallido", warnings: ["audio: Speaches no respondio"] }),
+  });
+
+  assert.equal(result.ok, true, "que se rompa el audio no puede romper el turno");
+  assert.equal(result.voice.transcribed, false);
+  assert.equal(result.voice.reason, "stt_fallido");
+  assert.equal(posted.length, 1, "el prospecto tiene que recibir ALGO");
+  assert.match(posted[0], /escrib/i, "el fallback sigue siendo el M_AUDIO_FAIL de siempre");
+  assert.match(result.warnings.join(" "), /sin transcripción/);
+});
+
+test("VOZ: si la transcripcion TIRA, el turno sigue (fail-open, no 500)", async () => {
+  const posted = [];
+  const result = await runChatwootTurn(voiceFixture(), {
+    store: memoryStore().store,
+    config: CONFIG,
+    nowIso: "2026-07-27T14:05:00Z",
+    llm: async () => "",
+    client: { warnings: [], async sendMessage(id, text) { posted.push(text); return {}; } },
+    transcribeAudio: async () => { throw new Error("speaches exploto"); },
+  }).catch((error) => ({ tiro: String(error.message) }));
+
+  assert.ok(!result.tiro, `runChatwootTurn dejo escapar una excepcion: ${result.tiro}`);
+  assert.equal(posted.length, 1, "el prospecto igual recibe el M_AUDIO_FAIL");
+});
+
+test("UN TEXTO NORMAL no gasta una transcripcion", async () => {
+  let llamadas = 0;
+  await runChatwootTurn(incomingFixture({ content: "DEMO" }), {
+    runTurn: async () => ({ ok: true, send: [], warnings: [] }),
+    client: { warnings: [], async sendMessage() { return {}; } },
+    transcribeAudio: async () => { llamadas += 1; return { ok: true, text: "x", reason: "transcrito", warnings: [] }; },
+  });
+  assert.equal(llamadas, 0, "transcribir un mensaje escrito seria 30 s de espera regalados");
+});
+
+test("UNA FOTO no se manda a transcribir (no es voz)", async () => {
+  let llamadas = 0;
+  const result = await runChatwootTurn(voiceFixture({ attachments: [{ file_type: "image", data_url: "https://x/y.png" }] }), {
+    runTurn: async () => ({ ok: true, send: [], warnings: [] }),
+    client: { warnings: [], async sendMessage() { return {}; } },
+    transcribeAudio: async () => { llamadas += 1; return { ok: true, text: "x", reason: "transcrito", warnings: [] }; },
+  });
+  assert.equal(llamadas, 0);
+  assert.equal(result.voice, null, "voice:null = no era un audio, distinto de 'era y fallo'");
+});
+
+test("VOZ en conversation_created: el primer mensaje tambien se transcribe", () => {
+  // Chatwoot manda los DOS eventos cuando alguien abre la conversacion con una nota de voz. Si
+  // los adjuntos no viajaran por este camino, el primer audio de cada prospecto se perderia.
+  const parsed = parseChatwootWebhook({
+    event: "conversation_created",
+    id: 9,
+    inbox_id: 3,
+    messages: [
+      {
+        id: 31,
+        content: "",
+        message_type: 0,
+        private: false,
+        created_at: 1785565643,
+        attachments: [{ id: 3, file_type: "audio", data_url: "https://cw/rails/x/nota.oga", file_size: 14296 }],
+      },
+    ],
+  });
+
+  assert.equal(parsed.skip, false);
+  assert.equal(parsed.turn.kind, "voice");
+  assert.equal(parsed.meta.attachments[0].file_type, "audio");
+});
+
+test("VOZ: un transcriptor que devuelve basura tampoco tumba el turno", async () => {
+  const posted = [];
+  const result = await runChatwootTurn(voiceFixture(), {
+    store: memoryStore().store,
+    config: CONFIG,
+    nowIso: "2026-07-27T14:05:00Z",
+    llm: async () => "",
+    client: { warnings: [], async sendMessage(id, text) { posted.push(text); return {}; } },
+    transcribeAudio: async () => undefined,
+  });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.voice.transcribed, false);
+  assert.equal(posted.length, 1, "el prospecto igual recibe el M_AUDIO_FAIL");
 });

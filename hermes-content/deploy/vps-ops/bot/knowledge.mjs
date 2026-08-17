@@ -399,7 +399,7 @@ export function readKnowledgeFile(path, deps = {}) {
 
 const EMPTY = Object.freeze({
   data: null,
-  source: "code", // "file" | "code". El paso (b) del diseño agrega "db" adelante del archivo.
+  source: "code", // "db" | "file" | "code". "db" = la fila publicada POR ORG (paso b), delante del archivo.
   version: null,
   updatedBy: null,
   loadedAt: null,
@@ -480,14 +480,143 @@ function scheduleRefresh(path, nowMs, options = {}) {
     });
 }
 
+// ---------------------------------------------------------------------------
+// Fuente "db" (paso b): la fila publicada POR ORGANIZACION, via HTTP al producto
+// ---------------------------------------------------------------------------
+// El motor NO toca la base del producto: el producto expone la fila publicada en
+// GET /api/chatbot-knowledge/published (Bearer BOT_KNOWLEDGE_SECRET) y aca solo
+// se consume. Mismo contrato que el archivo: TTL, degradacion a archivo/codigo,
+// y el MISMO validador — un documento que el archivo rechazaria, la db tampoco entra.
+
+const DB_TIMEOUT_MS = 5000;
+const ORG_CACHE = new Map(); // organizationId -> mismo shape que CACHE, con source "db"
+const orgRefreshing = new Set();
+
+/** Para los tests: olvida todas las copias por organizacion. */
+export function resetOrgKnowledgeCache() {
+  ORG_CACHE.clear();
+  orgRefreshing.clear();
+}
+
+function dbConfig(options = {}) {
+  return {
+    url: String(options.dbUrl ?? process.env.ONIA_BOT_KNOWLEDGE_URL ?? "").trim(),
+    secret: String(options.dbSecret ?? process.env.BOT_KNOWLEDGE_SECRET ?? "").trim(),
+    timeoutMs: Number.isFinite(options.dbTimeoutMs) ? options.dbTimeoutMs : DB_TIMEOUT_MS,
+    fetch: options.fetch || globalThis.fetch,
+  };
+}
+
+/** Sin URL o sin secreto la fuente esta APAGADA y eso NO es un error: es el estado de hoy. */
+async function fetchOrgKnowledge(organizationId, options = {}) {
+  const { url, secret, timeoutMs, fetch: doFetch } = dbConfig(options);
+  if (!url || !secret || typeof doFetch !== "function") return { data: null, error: null, missing: true };
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    let res;
+    try {
+      res = await doFetch(`${url}?organizationId=${encodeURIComponent(organizationId)}`, {
+        headers: { authorization: `Bearer ${secret}` },
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+    if (res.status === 404) return { data: null, error: null, missing: true }; // org sin fila publicada
+    if (!res.ok) return { data: null, error: `la db contesto HTTP ${res.status}` };
+    const body = await res.json();
+    const verdict = validateKnowledge(body?.data);
+    if (!verdict.ok) {
+      return { data: null, error: `RECHAZADO (${verdict.errors.length}): ${verdict.errors.join(" · ")}`.slice(0, 600) };
+    }
+    return { data: body.data, error: null };
+  } catch (error) {
+    return { data: null, error: `no se pudo leer la db: ${String(error?.message || error).slice(0, 160)}` };
+  }
+}
+
+/** Igual que nextCache: un fetch fallido CONSERVA la ultima copia buena de esa org. */
+function nextOrgCache(prev, result, organizationId, nowMs) {
+  if (result.data) {
+    return Object.freeze({
+      data: result.data,
+      source: "db",
+      version: typeof result.data.version === "string" ? result.data.version : null,
+      updatedBy: typeof result.data.updatedBy === "string" ? result.data.updatedBy : null,
+      loadedAt: new Date(nowMs).toISOString(),
+      checkedAt: nowMs,
+      path: `db:${organizationId}`,
+      error: null,
+    });
+  }
+  const base = prev || EMPTY;
+  return Object.freeze({
+    ...base,
+    source: base.data ? base.source : "code",
+    checkedAt: nowMs,
+    path: `db:${organizationId}`,
+    error: result.missing ? null : result.error || base.error,
+  });
+}
+
+function scheduleOrgRefresh(key, nowMs, options = {}) {
+  if (orgRefreshing.has(key)) return;
+  orgRefreshing.add(key);
+  Promise.resolve()
+    .then(() => fetchOrgKnowledge(key, options))
+    .then((result) => {
+      ORG_CACHE.set(key, nextOrgCache(ORG_CACHE.get(key), result, key, nowMs));
+    })
+    .catch(() => {})
+    .finally(() => {
+      orgRefreshing.delete(key);
+    });
+}
+
+/**
+ * La fila publicada de UNA organizacion, ESPERANDO la red si hace falta.
+ * La usa /preview (que no esta en el camino del mensaje). El camino del turno
+ * usa getKnowledge(), que jamas espera red. Degradacion: sin datos de la db
+ * (fuente apagada, 404, HTTP roto, documento invalido) cae al archivo/codigo.
+ */
+export async function getOrgKnowledge(organizationId, options = {}) {
+  try {
+    const key = String(organizationId || "").trim();
+    if (!key) return getKnowledge(options);
+    const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+    const prev = ORG_CACHE.get(key);
+    if (!prev || prev.checkedAt === null || nowMs - prev.checkedAt >= ttlMs(options)) {
+      ORG_CACHE.set(key, nextOrgCache(prev, await fetchOrgKnowledge(key, options), key, nowMs));
+    }
+    const state = ORG_CACHE.get(key);
+    return state.data ? state : getKnowledge(options);
+  } catch {
+    return getKnowledge(options);
+  }
+}
+
 /**
  * El conocimiento vigente. SINCRONICO y tolerante: nunca tira y nunca espera red.
+ *   - con `options.organizationId` y copia db en cache: la copia de ESA org
+ *     (vencido el TTL se sirve la vieja y se refresca aparte);
+ *   - sin copia db (o sin organizationId): el archivo local de siempre;
  *   - primera vez (o cambio de ruta): lectura sincronica del archivo local (arranque);
  *   - TTL vigente: devuelve el cache;
  *   - TTL vencido: DEVUELVE LA COPIA VIEJA YA y dispara la relectura aparte.
  */
 export function getKnowledge(options = {}) {
   try {
+    const orgKey = String(options.organizationId || "").trim();
+    if (orgKey) {
+      const orgNow = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+      const org = ORG_CACHE.get(orgKey);
+      if (!org || org.checkedAt === null || orgNow - org.checkedAt >= ttlMs(options)) {
+        scheduleOrgRefresh(orgKey, orgNow, options);
+      }
+      if (org?.data) return org;
+      // sin copia db todavia: sigue el camino del archivo/codigo de siempre
+    }
     const path = knowledgePath(options);
     const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
     if (CACHE.path !== path) {

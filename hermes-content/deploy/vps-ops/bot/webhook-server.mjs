@@ -426,7 +426,7 @@ export function createWebhookServer(deps = {}) {
         const { tooLarge, body } = await readBody(req, config.maxBodyBytes);
         out = tooLarge
           ? { status: 413, body: { ok: false, error: "payload_demasiado_grande" } }
-          : handlePreviewRequest({ rawBody: body, headers: req.headers });
+          : await handlePreviewRequest({ rawBody: body, headers: req.headers });
       } catch (error) {
         out = { status: 500, body: { ok: false, error: String(error?.message || error).slice(0, 200) } };
       }

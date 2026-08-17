@@ -25,13 +25,16 @@ import {
   applyKnowledge,
   checkCli,
   getKnowledge,
+  getOrgKnowledge,
   knowledgeHealth,
   parseKnowledge,
   readKnowledgeFile,
   resetKnowledgeCache,
+  resetOrgKnowledgeCache,
   validateKnowledge,
   withKnowledge,
 } from "./knowledge.mjs";
+import { handlePreviewRequest } from "./preview-route.mjs";
 import { step, createState } from "./bot-engine.mjs";
 import { normalize } from "./guardrails.mjs";
 import { findIndustry, industryLabel } from "./intents.mjs";
@@ -87,7 +90,10 @@ function conArchivo(contenido, run) {
   return salida;
 }
 
-test.afterEach(() => resetKnowledgeCache());
+test.afterEach(() => {
+  resetKnowledgeCache();
+  resetOrgKnowledgeCache();
+});
 
 // ---------------------------------------------------------------------------
 // 1. DEGRADACION — el bot no se cae ni queda mudo
@@ -697,4 +703,117 @@ test("renderTemplate sigue siendo el ultimo paso: los {{ }} del conocimiento se 
   );
   assert.match(config.script.M_SIAT_BODY, /\{\{humano\}\}/, "el texto guardado conserva la variable");
   assert.match(renderTemplate(config.script.M_SIAT_BODY, { humano: "Sergio" }), /Sergio en la demo/);
+});
+
+// ---------------------------------------------------------------------------
+// FUENTE "DB" (paso b): la fila publicada POR ORGANIZACION, via HTTP al producto
+// ---------------------------------------------------------------------------
+// Lo que se prueba es el mismo contrato que el archivo, pero con red en el medio:
+// nunca tira, degrada a archivo/codigo, valida TODO O NADA, y el fetch roto no
+// borra la ultima copia buena de la org.
+
+const ORG = "org_ferreteria";
+
+/** Un fetch falso que contesta como el endpoint /published del producto. */
+function fetchFalso(doc, { status = 200, fallar = false } = {}) {
+  const fn = async (url, init) => {
+    fn.calls.push({ url, init });
+    if (fallar) throw new Error("red caida");
+    return {
+      ok: status >= 200 && status < 300,
+      status,
+      json: async () => ({ data: doc, version: 1, updatedBy: "test" }),
+    };
+  };
+  fn.calls = [];
+  return fn;
+}
+
+const DB_OPTS = { dbUrl: "http://producto/api/chatbot-knowledge/published", dbSecret: "s3cr3t" };
+
+test("db: la fila publicada de la org se aplica, source dice 'db' y el Bearer viaja", async () => {
+  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo" } });
+  const fetch = fetchFalso(doc);
+  const state = await getOrgKnowledge(ORG, { ...DB_OPTS, fetch });
+  assert.equal(state.source, "db");
+  assert.match(fetch.calls[0].url, /organizationId=org_ferreteria/);
+  assert.equal(fetch.calls[0].init.headers.authorization, "Bearer s3cr3t");
+  const config = applyKnowledge(createBotConfig(), state.data);
+  assert.equal(config.identity.productName, "ZZ QA Ferreteria Tornillo");
+});
+
+test("db: dentro del TTL NO se vuelve a pedir (la red no esta en el camino de la respuesta)", async () => {
+  const fetch = fetchFalso(valido());
+  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch, nowMs: NOW_MS });
+  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch, nowMs: NOW_MS + 1000 });
+  assert.equal(fetch.calls.length, 1);
+});
+
+test("db: sin URL o sin secreto la fuente esta APAGADA y se sigue con el archivo/codigo", async () => {
+  const state = await getOrgKnowledge(ORG, { fetch: fetchFalso(valido()), dbUrl: "", dbSecret: "" });
+  assert.equal(state.source, "code");
+  assert.equal(state.error, null, "apagado no es un error que gritar");
+});
+
+test("db: red caida, HTTP roto o 404 degradan a codigo SIN tirar", async () => {
+  for (const opts of [
+    { fetch: fetchFalso(null, { fallar: true }) },
+    { fetch: fetchFalso(null, { status: 500 }) },
+    { fetch: fetchFalso(null, { status: 404 }) },
+  ]) {
+    resetOrgKnowledgeCache();
+    const state = await getOrgKnowledge(ORG, { ...DB_OPTS, ...opts });
+    assert.equal(state.data, null);
+    assert.equal(state.source, "code");
+  }
+});
+
+test("db: un documento con precio se rechaza ENTERO — el mismo candado que el archivo", async () => {
+  const doc = valido({ productos: [{ key: "dental", nombre: "Dental", queResuelve: "todo por 390 Bs" }] });
+  const state = await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(doc) });
+  assert.equal(state.data, null, "ni un campo del documento entra");
+});
+
+test("db: un fetch roto CONSERVA la ultima copia buena de la org (no la borra)", async () => {
+  const bueno = fetchFalso(valido({ identity: { productName: "Ferreteria" } }));
+  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: bueno, nowMs: NOW_MS });
+  const state = await getOrgKnowledge(ORG, {
+    ...DB_OPTS,
+    fetch: fetchFalso(null, { fallar: true }),
+    nowMs: NOW_MS + DEFAULT_TTL_MS + 1,
+  });
+  assert.equal(state.source, "db");
+  assert.equal(state.data.identity.productName, "Ferreteria");
+});
+
+test("db: getKnowledge (sincronico) sirve la copia db ya cacheada sin esperar red", async () => {
+  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(valido({ identity: { productName: "Ferreteria" } })), nowMs: NOW_MS });
+  const state = getKnowledge({ organizationId: ORG, nowMs: NOW_MS + 1000 });
+  assert.equal(state.source, "db");
+  // y sin copia todavia, cae al archivo/codigo de siempre (jamas espera):
+  resetOrgKnowledgeCache();
+  assert.equal(getKnowledge({ organizationId: "org_sin_cache", dbUrl: "", dbSecret: "" }).source, "code");
+});
+
+test("preview: con organizationId el turno corre contra el conocimiento de ESA org", async () => {
+  process.env.ONIA_BOT_PREVIEW_SECRET = "prev";
+  try {
+    // Cache caliente de la org (como quedaria tras el primer turno real):
+    const doc = valido({
+      identity: { productName: "ZZ QA Ferreteria Tornillo" },
+      productos: [{ key: "tornillos", tipo: "servicio", nombre: "tornillos al por mayor" }],
+    });
+    await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(doc), nowMs: Date.now() });
+
+    const out = await handlePreviewRequest({
+      rawBody: JSON.stringify({ message: "y que hacen exactamente?", organizationId: ORG }),
+      headers: { authorization: "Bearer prev" },
+    });
+    assert.equal(out.status, 200);
+    assert.equal(out.body.conocimiento.fuente, "db");
+    const texto = out.body.respuestas.map((r) => r.texto).join("\n");
+    assert.match(texto, /tornillos al por mayor/);
+  } finally {
+    delete process.env.ONIA_BOT_PREVIEW_SECRET;
+  }
 });

@@ -1,7 +1,8 @@
-// ONIA — Chatbot propio: BANCO DE MEDICION (cuanto entiende el bot a un dentista REAL).
+// ONIA — Chatbot propio: BANCO DE MEDICION (cuanto entiende el bot a un dueño de negocio REAL,
+// del rubro que sea: dental, ferreteria, restaurante, servicios).
 //
-// Por que existe: los 141 tests unitarios prueban que el codigo hace lo que dice el codigo.
-// Ninguno dice si el bot entiende a alguien que escribe "cuanto sale?" a secas, "son 3" o
+// Por que existe: los tests unitarios prueban que el codigo hace lo que dice el codigo.
+// Ninguno dice si el bot entiende a alguien que escribe "cuanto sale?" a secas, "somos 3" o
 // "estoy en reunion, te escribo mas tarde". Sin este numero, "el bot mejoro" es una opinion.
 //
 // Que se mide, y por que asi (los dos principios, copiados del banco de Bolivian Electric):
@@ -31,7 +32,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { STAGES, createState, step } from "./bot-engine.mjs";
-import { createBotConfig } from "./config.mjs";
+import { allQualificationFields, createBotConfig } from "./config.mjs";
 import { normalize } from "./guardrails.mjs";
 
 // ---------------------------------------------------------------------------
@@ -117,6 +118,7 @@ export const PRIMARY_ROUTES = Object.freeze([
   "bienvenida",
   "calificado",
   "descartado",
+  "rama_rubro",
   "repregunta",
   "off_guion",
   "demo_agendada",
@@ -136,6 +138,9 @@ export const INTENT_HANDOFF_REASONS = new Set([
   "queja_o_desconfianza",
   "consulta_clinica_o_legal",
   "detalle_tecnico_de_producto",
+  // Mandar a soporte a quien venia a comprar es un falso positivo caro (le corta la demo), no un
+  // handoff de mas: por eso se clasifica con la severidad de una deteccion equivocada.
+  "soporte_cliente",
 ]);
 
 /** Estados en los que el bot YA dio por buena la calificacion. */
@@ -160,19 +165,17 @@ function hasValue(value) {
 
 /**
  * Que datos de calificacion esta pidiendo esta respuesta.
- * Se deriva de config: M1a y PENDING_CALIFICACION escriben literalmente el `missLabel` del
- * campo, y M0 (por diseno del guion) pregunta los tres. bench.test.mjs verifica las dos
- * suposiciones contra el guion real, para que el probe no sobreviva a un cambio de texto.
+ * Se deriva de config: M2, M1a y PENDING_CALIFICACION escriben literalmente el `missLabel` del
+ * campo (M2 arma su lista con esas mismas palabras), asi que alcanza con buscar ese texto en la
+ * respuesta REAL. bench.test.mjs verifica la suposicion contra el guion que sale del motor, para
+ * que el probe no sobreviva a un cambio de texto.
  */
 export function fieldsAsked(replies, config) {
   const asked = new Set();
+  const fields = allQualificationFields(config); // incluye el dato de rama (sillones)
   for (const reply of replies || []) {
-    if (reply.templateKey === "M0") {
-      for (const field of config.qualification.fields) asked.add(field.key);
-      continue;
-    }
     const text = normalize(reply.text || "");
-    for (const field of config.qualification.fields) {
+    for (const field of fields) {
       if (text.includes(normalize(field.missLabel))) asked.add(field.key);
     }
   }
@@ -203,7 +206,9 @@ export function runConversation(bench, config = BENCH_CONFIG) {
 function dataProblems(bench, state, config) {
   const said = bench.said || {};
   const problems = [];
-  for (const field of config.qualification.fields) {
+  // Los 3 universales + el dato de rama: perder o inventar los sillones de una clinica tiene que
+  // contar como fallo igual que perder la ciudad.
+  for (const field of allQualificationFields(config)) {
     const key = field.key;
     const stored = state.qualification ? state.qualification[key] : undefined;
     const declared = Object.prototype.hasOwnProperty.call(said, key);
@@ -256,18 +261,18 @@ export function evaluateCase(bench, config = BENCH_CONFIG, observed = runConvers
   const actual = { route: last.route, reason: last.reason };
   const problems = [];
 
-  // 1. Regla de oro (§2.1): el estado solo avanza con un dato CAPTURADO. Avanzar con un dato
-  //    inventado por un regex, o con un campo vacio, es exactamente lo que la spec prohibe.
+  // 1. Regla de oro (§2.1): el estado solo avanza con un dato CAPTURADO — nunca con uno que el
+  //    prospecto no dijo. Se mira el dato INVENTADO y no el campo vacio: con el embudo nuevo
+  //    (valor + horarios -> reserva -> 3 preguntas) llegar a `demo_agendada` sin los datos es el
+  //    DISEÑO, no un fallo. Lo que sigue prohibido es hablarle a alguien con un dato que un regex
+  //    se imagino: eso ensucia el CRM y el bot lo repite en voz alta.
   const data = dataProblems(bench, state, config);
   if (ADVANCED_STAGES.has(state.botStage)) {
     const invented = data.filter((problem) => problem.kind === "inventado");
-    const empty = config.qualification.fields
-      .filter((field) => !hasValue(state.qualification ? state.qualification[field.key] : undefined))
-      .map((field) => field.key);
-    if (invented.length > 0 || empty.length > 0) {
+    if (invented.length > 0) {
       problems.push({
         kind: "avanzo_sin_dato",
-        detail: `quedo en ${state.botStage} con ${[...invented.map((p) => `${p.key} inventado`), ...empty.map((k) => `${k} vacio`)].join(", ")}`,
+        detail: `quedo en ${state.botStage} con ${invented.map((p) => `${p.key} inventado`).join(", ")}`,
       });
     }
   }
@@ -387,7 +392,7 @@ function formatOutcome(outcome, position) {
 
 export function formatBenchReport(summary, outcomes, worstCount = 8, meta = {}) {
   const lines = [];
-  lines.push("BANCO DE MEDICION — chatbot ONIA (agenda demos con dueños de clinicas dentales)");
+  lines.push("BANCO DE MEDICION — chatbot Onia (agenda demos con dueños de negocios, cualquier rubro)");
   if (meta.fingerprint) lines.push(`codigo medido: ${meta.fingerprint}`);
   if (meta.slots) lines.push(`horarios de la config medida: ${meta.slots}`);
   lines.push("");
@@ -442,7 +447,7 @@ export function formatBenchReport(summary, outcomes, worstCount = 8, meta = {}) 
 export function validateCases(cases, config = BENCH_CONFIG) {
   const errors = [];
   const ids = new Set();
-  const fieldKeys = new Set(config.qualification.fields.map((field) => field.key));
+  const fieldKeys = new Set(allQualificationFields(config).map((field) => field.key));
 
   for (const bench of cases) {
     const where = bench.id || "(sin id)";

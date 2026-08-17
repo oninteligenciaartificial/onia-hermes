@@ -25,7 +25,7 @@ export const SAFE_REPLY =
 export const GUARDRAIL_RULES = Object.freeze([
   Object.freeze({
     code: "declara_precio",
-    reason: "N1 — el bot no cotiza: el precio depende del plan y del tamaño de la clínica",
+    reason: "N1 — el bot no cotiza: el precio depende del plan y de los módulos que use el negocio",
     patterns: Object.freeze([
       /\d+(?:[.,]\d+)?\s*(bs\b|bolivianos?\b|\$us\b|usd\b|dolares?\b)/,
       /\bcuesta\b|\bsale\b\s*(en|a|por)?\s*\d/,
@@ -35,10 +35,13 @@ export const GUARDRAIL_RULES = Object.freeze([
   }),
   Object.freeze({
     code: "promete_siat",
-    reason: "N2 — DentalGest no está homologado ante el SIN: prometer emisión certificada es riesgo real",
+    reason: "N2 — Onia NO está homologada ante el SIN: prometer emisión certificada es riesgo real",
     patterns: Object.freeze([
       /\b(emitimos|emite|factura(mos)?)\b[^.]{0,30}\b(siat|sin|electronica|certificada)\b/,
-      /\bhomologad[oa]\b/,
+      // El plural cuenta: "ya estamos homologados" es la forma mas natural de decirlo, y con
+      // `[oa]\b` a secas se colaba entera. Lo caza el guardrail del LLM y tambien el validador de
+      // la capa de conocimiento editable, que usa este mismo checkGuardrails().
+      /\bhomologad[oa]s?\b/,
       /\bautorizado por el sin\b/,
     ]),
   }),
@@ -71,7 +74,7 @@ export const GUARDRAIL_RULES = Object.freeze([
   }),
   Object.freeze({
     code: "consejo_profesional",
-    reason: "N5 — consejo clínico, dental o fiscal: eso va a handoff, no lo contesta el bot",
+    reason: "N5 — consejo profesional (clínico, legal o fiscal): eso va a handoff, no lo contesta el bot",
     patterns: Object.freeze([
       /\b(te recomiendo|deberias)\b[^.]{0,25}\b(declarar|facturar|tratamiento|diagnostic)/,
     ]),

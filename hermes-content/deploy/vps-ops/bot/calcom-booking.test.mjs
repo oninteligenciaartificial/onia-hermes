@@ -13,7 +13,9 @@ import {
   buildBookingPayload,
   createBooking,
   getBookingConfig,
+  meetingLink,
   DEFAULT_DURATION_MINUTES,
+  DEFAULT_PUBLIC_URL,
 } from "./calcom-booking.mjs";
 
 const CONFIG = { baseUrl: "http://calcom:3000", eventTypeId: 5, durationMinutes: 45, timeZone: "America/La_Paz" };
@@ -52,6 +54,46 @@ test("getBookingConfig: descarta valores basura en vez de usarlos", () => {
   assert.equal(c.durationMinutes, DEFAULT_DURATION_MINUTES);
 });
 
+// La MISMA duracion que el guion le promete al prospecto es la que se bloquea en el calendario:
+// run-turn.mjs le pasa `config.demo.duracionMinutos`. El entorno sigue ganando (es el freno de
+// mano del que despliega), pero ya no hace falta que exista para que el numero sea el correcto.
+test("getBookingConfig: la duracion sale del conocimiento/config, y el entorno la puede pisar", () => {
+  assert.equal(getBookingConfig({}, 30).durationMinutes, 30, "sin env manda lo que dice el guion");
+  assert.equal(getBookingConfig({ CALCOM_BOT_DURATION_MINUTES: "20" }, 30).durationMinutes, 20, "el env pisa");
+  assert.equal(getBookingConfig({}, 0).durationMinutes, DEFAULT_DURATION_MINUTES, "un fallback basura no reserva 0 minutos");
+});
+
+// ---------------------------------------------------------------------------
+// Link de la reunion — lo que se le manda al prospecto
+// ---------------------------------------------------------------------------
+
+test("meetingLink: sin uid no hay link (no se inventa uno)", () => {
+  assert.equal(meetingLink(null), null);
+  assert.equal(meetingLink("  "), null);
+});
+
+test("meetingLink: NUNCA usa la URL interna de docker, aunque sea la que reserva", () => {
+  // Este es el punto: CALCOM_BASE_URL vale `http://calcom:3000` en el VPS y sirve para reservar
+  // desde el contenedor, pero mandarsela al prospecto seria darle un link que no abre nunca.
+  const link = meetingLink("uid-abc", { CALCOM_BASE_URL: "http://calcom:3000" });
+  assert.equal(link, `${DEFAULT_PUBLIC_URL}/booking/uid-abc`);
+  assert.ok(!link.includes("calcom:3000"));
+});
+
+test("meetingLink: CALCOM_PUBLIC_URL manda, sin barra final duplicada", () => {
+  assert.equal(meetingLink("uid-abc", { CALCOM_PUBLIC_URL: "https://cal.test/" }), "https://cal.test/booking/uid-abc");
+});
+
+test("createBooking: la duracion del turno viaja al payload sin pasar por el entorno", async () => {
+  const f = fetchMock([ok({ uid: "abc" })]);
+  await createBooking({ config: undefined, durationMinutes: 30, startAt: START }, {
+    fetch: f,
+    env: { CALCOM_BASE_URL: "http://calcom:3000", CALCOM_BOT_EVENT_TYPE_ID: "5" },
+  });
+  const { start, end } = f.llamadas[0].body;
+  assert.equal((Date.parse(end) - Date.parse(start)) / 60000, 30);
+});
+
 // ---------------------------------------------------------------------------
 // Payload
 // ---------------------------------------------------------------------------
@@ -76,17 +118,23 @@ test("botAttendeeEmail: correo propio y trazable, nunca uno con pinta de real", 
 });
 
 test("buildBookingNotes: solo pone lo que el bot capturo de verdad", () => {
-  const completo = buildBookingNotes({ ownsClinic: true, chairs: 2, city: "Santa Cruz" });
-  assert.match(completo, /clinica propia: si/);
-  assert.match(completo, /sillones: 2/);
+  const completo = buildBookingNotes({ industry: "ferreteria", teamSize: 4, city: "Santa Cruz" });
+  assert.match(completo, /rubro: ferreteria/);
+  assert.match(completo, /personas: 4/);
   assert.match(completo, /ciudad: Santa Cruz/);
+  assert.ok(!/sillones/.test(completo), "un no-dental no puede llevar sillones en la reserva");
+
+  // `chairs` es dato de RAMA: suma cuando esta, no se nombra cuando no.
+  const dental = buildBookingNotes({ industry: "dental", teamSize: 3, city: "La Paz", chairs: 2 });
+  assert.match(dental, /sillones: 2/);
 
   const vacio = buildBookingNotes({});
-  assert.ok(!/sillones/.test(vacio), "sin dato no se inventa el campo");
+  assert.ok(!/rubro/.test(vacio), "sin dato no se inventa el campo");
   assert.match(vacio, /asistente automatico/);
 
-  // chairs: 0 es un dato REAL, no un vacio: no se puede perder por un chequeo de verdad/falsedad.
+  // 0 es un dato REAL, no un vacio: no se puede perder por un chequeo de verdad/falsedad.
   assert.match(buildBookingNotes({ chairs: 0 }), /sillones: 0/);
+  assert.match(buildBookingNotes({ teamSize: 0 }), /personas: 0/);
 });
 
 // ---------------------------------------------------------------------------
