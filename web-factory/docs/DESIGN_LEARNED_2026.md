@@ -228,6 +228,122 @@ Schibsted Grotesk (body) para Onia Platform y material propio.
 
 ---
 
+## 5b. Galerías (cosecha v4 — 2026-08-17)
+
+Segunda pasada, esta vez sobre GALERÍAS (no shots sueltos), para la iteración v4 del
+panel. Método: Playwright + Chromium headless con capturas leídas por visión (WebFetch
+solo no alcanza: estas galerías son imagen). Qué rindió y qué no, con cita.
+
+### Acceso: quién dejó entrar y quién no
+
+| Galería | Estado | Nota |
+|---|---|---|
+| SaaS Interface (saasinterface.com) | ✅ Rindió | La página `/pages/dashboard/` muestra 6 dashboards de PRODUCCIÓN gratis (Secfi, June, Compound, Casual, Similarweb, Mixpanel); el resto (154) es de pago. Lo gratis ya vale: son productos reales, no shots |
+| Behance (búsqueda "saas dashboard 2026") | ✅ Rindió (la mejor) | La búsqueda renderiza sin login; los proyectos de alto señal (1K+ likes) se bajan por módulos `project_modules` a full-size y se leen perfecto |
+| Godly (godly.website) | ⚠️ Ya no existe como tal | Redirige a **recent.design** (`?ref=godly`): la curaduría siguió ahí. La categoría "Interface" rinde fragmentos de producto, no composiciones de dashboard |
+| Land-book (land-book.com) | ⚠️ Abre pero rinde poco | El 403 era solo a fetchers (WebFetch); con navegador real entra. Pero buscar "dashboard" devuelve LANDINGS de productos de dashboard, no dashboards: sirve para "cómo se vende un panel", no para diseñarlo |
+| Awwwards (inspiration search "dashboard") | ⚠️ Abre pero rinde poco | Devuelve portfolios de agencias y showcases dark; casi cero UI de producto real. Para dashboards, no es la galería |
+| Mobbin (mobbin.com) | ❌ Bloqueada | Login wall total (`?redirect_to=`); sin cuenta no se ve ni un screen. Queda pendiente con cuenta propia |
+
+**Regla que deja esta cosecha:** para dashboards, las galerías de PRODUCTO REAL
+(SaaS Interface, Mobbin con cuenta) y los case studies de Behance con miles de vistas
+valen más que las galerías de premios (Awwwards) o de landings (Land-book). El filtro
+es "¿esto pasó por producción o por un cliente?", no "¿esto ganó un premio?".
+
+### Qué funciona (patrones concretos, con fuente)
+
+**De Behance — Ledgerix CRM (Ron Design, behance.net/gallery/227454433, 1.1K likes):**
+
+1. **Numeral editorial como héroe, sin tarjeta.** La cifra del período
+   ($1,651,045,139) va centrada, gigante y en peso FINO, directamente sobre el lienzo
+   — sin caja, sin sombra. El dashboard se lee como libro mayor, no como grilla de
+   widgets.
+2. **Gráfico "código de barras" full-bleed bajo la cifra.** Barras finísimas y densas
+   de margen a margen, con el rango seleccionado en barras oscuras y un chip flotante
+   de valor ($115k +32%). El gráfico es fondo tipográfico, no widget.
+3. **Módulos divididos por hairlines, no tarjetas.** La segunda fila (Sales Forecast /
+   Expenses / Budget / Insight) son celdas planas separadas por líneas de pelo; un
+   insight EN PALABRAS convive como par de los módulos numéricos.
+4. **Barra "Ask anything" flotante abajo al centro** con chips de preguntas sugeridas
+   encima: el agente/AI como dock flotante, no como columna fija.
+5. **Selector de granularidad como tabs de texto quietos** (Week/Month/Quarter/Year)
+   alineado a la derecha del título.
+
+**De Behance — Convox Call Center (behance.net/gallery/225853541, 1.2K likes):**
+
+6. **Lo VIVO primero, las métricas después.** El panel abre con la actividad en curso
+   (llamada grabándose: foto, waveform, transporte) como tarjeta rica; los KPIs
+   acompañan. Composición "ahora-primero".
+7. **El acento solo marca lo vivo/accionable.** Lima únicamente en la tarjeta activa,
+   el botón primario y el arco del gauge; todo lo demás casi monocromo. El color es
+   semántica de "esto está pasando", no decoración.
+8. **KPIs de tiempo como primera clase** (1:09, 00:07, 12:11) con unidad chica —
+   cifras no-monetarias tratadas con la misma tipografía protagonista.
+9. **Una sola superficie con celdas de pelo** en vez de tarjetas flotantes: el grid
+   entero es plano, denso, tabla-primero.
+
+**De Behance — Callivio CRM (behance.net/gallery/225485473, 1.3K likes / 16.4K vistas):**
+
+10. **Un solo panel entintado en lienzo claro.** El saludo + score vive en UNA columna
+    celeste; el resto blanco/gris. Jerarquía por UNA superficie de color, no por
+    oscuridad.
+11. **Numerales gigantes en peso ultra-light** ("1 108 calls", "10 832") con espacio
+    fino como separador de miles: magnitud editorial sin gritar en bold.
+12. **Chips marcador-de-texto** (lima) montados sobre la barra destacada del chart:
+    el valor cabalga la barra, no vive en tooltip.
+
+**De SaaS Interface (producción real, saasinterface.com/pages/dashboard/):**
+
+13. **Sidebar que carga datos** (Compound): la nav de cuentas lista cada ítem con su
+    monto al lado — navegación que duplica como resumen (confirma el patrón Stakent
+    del pattern bank con un producto real).
+14. **Reporte-como-tarjeta** (June): cada card es UNA pregunta respondida (adopción
+    87.5%, 606 users) con su fila de avatares/checks — el insight-como-unidad de
+    PostHog, visto en producción.
+15. **Dashboard-hoja-de-cálculo** (Secfi): formulario a la izquierda → panel de
+    resultado con barra de desglose a la derecha. El dashboard como calculadora de
+    UNA decisión.
+16. **Densidad con pestañas, no con scroll** (Similarweb/Mixpanel): la analítica
+    profunda va en tabs y drill-down; el overview se queda en 4-6 números.
+
+**De Recent (ex-Godly, recent.design, categoría Interface):**
+
+17. **Entrada al agente como píldora** ("Ask agents ▾"): pill de vidrio con orbe +
+    dropdown — el agente como affordance chica y omnipresente, no como panel.
+18. **Cifra grande como INPUT** (card "Borrow 1,574"): el numeral protagonista es
+    editable en el lugar, con token de moneda al lado — dato y control en uno.
+19. **Chart como control de tiempo** ("Drag to change time frame" sobre el área):
+    el gráfico acepta arrastre para cambiar el rango — el chart ES el filtro.
+20. **Traza de agente como timeline** (UI de tool-calls): cada acción del agente como
+    fila con su definición y resultado — transparencia de qué hizo el bot.
+
+### Qué NO funciona (visto en las mismas galerías)
+
+- **El dark-crypto-dashboard de concurso** (CrypGo, TerraFlux en Behance): neón sobre
+  negro, 12 charts decorativos, cero jerarquía. Es el look que más se repite y el que
+  más rápido envejece — confirma nuestro anti-pattern "dark-mode-first por defecto".
+- **Mockups 3D en perspectiva como ÚNICA vista** (mitad de Behance): venden el case
+  study pero esconden la UI; si el proyecto no muestra la pantalla plana y el móvil,
+  no hay nada que extraer.
+- **Awwwards para dashboards**: la categoría premia sitios-espectáculo; ninguno de los
+  resultados era un panel operable. Ir ahí para landings de lujo, no para producto.
+- **Buscar "dashboard" en galerías de landings** (Land-book): devuelve marketing DE
+  dashboards. Útil solo para páginas de venta del producto.
+
+### Qué entró a la v4 del panel (hipótesis distinta a v3)
+
+v3 = tarjeta héroe oscura + sparks por celda + dock oscuro de altura completa
+(Dribbble: Fireart/Stakent/OnPoint). v4 prueba la hipótesis OPUESTA que estas
+galerías respaldan: **libro mayor editorial** — numeral fino sin tarjeta (Ledgerix,
+Callivio), gráfico código-de-barras full-bleed con granularidad por tabs (Ledgerix),
+KPIs como celdas de pelo sin caja (Convox), agenda tabla-primero en una sola
+superficie (Convox), propuestas del agente INLINE en la sección a la que pertenecen
+(insight-como-par de Ledgerix) y el estado global del agente como barra flotante
+inferior (dock "Ask anything" de Ledgerix). Maqueta:
+`hermes-content/references/ui-patterns/panel-claro-premium/index-v4.html`.
+
+---
+
 ## 6. PENDIENTES DE APRENDIZAJE (la lista de tareas)
 
 Tareas concretas que quedaron de esta cosecha. Cada una es accionable y autónoma.
