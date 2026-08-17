@@ -205,5 +205,10 @@ Y de paso resuelve el bug del `video_extension` sin una tanda aparte.
 `references/modelos/lucia/prueba-lipsync-20260815/LEEME.md` (el tarifario medido) ·
 `docs/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` (los 4 pilares).
 
-Relacionado: `CAROUSEL_PATTERN_BANK_2026.md` · `MOTION_PATTERN_BANK_2026.md` ·
+Relacionado: **`LUCIA_BANCO_DE_PRUEBAS_2026.md`** — la rúbrica de 9 criterios con la que se
+decide si un modelo sirve, los prompts listos para pegar, y las reglas del workflow oficial de
+Higgsfield (frases prohibidas, expresiones de media acción, densidad de habla, el de-slop de
+`soul_2`). **Se abre antes de generar un solo crédito.**
+
+También: `CAROUSEL_PATTERN_BANK_2026.md` · `MOTION_PATTERN_BANK_2026.md` ·
 `ADS_PATTERN_BANK_2026.md`.
