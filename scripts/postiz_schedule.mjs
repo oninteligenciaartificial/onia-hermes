@@ -91,10 +91,24 @@ const main = async () => {
   if (!files.length) throw new Error(`sin slides en ${args.slides}`);
 
   const brief = JSON.parse(readFileSync(args.captionFrom, 'utf8'));
-  const caption = [brief.caption, (brief.hashtags || []).join(' ')].filter(Boolean).join('\n\n');
+
+  // Los hashtags NO van en el caption: van al primer comentario. Las dos primeras lineas del
+  // caption son las que deciden si alguien abre el post — una pared de hashtags las entierra.
+  const caption = brief.caption;
+  const slug = basename(args.captionFrom, '.json');
+  const comment = [
+    (brief.hashtags || []).join(' '),
+    `📎 onia.com.bo/?src=${slug}`,
+  ].filter(Boolean).join('\n\n');
 
   const image = [];
   for (const f of files) image.push(await uploadSlide(key, f));
+
+  // value[0] = el post. value[1+] = comentarios que el orchestrador publica sobre el propio
+  // post apenas sale (apps/orchestrator/src/activities/post.activity.ts → postComment).
+  // `image` es obligatorio en cada elemento, aunque el comentario no lleve ninguna.
+  const value = [{ content: caption, image }];
+  if (comment) value.push({ content: comment, image: [] });
 
   const out = await api(key, '/posts', {
     method: 'POST',
@@ -107,7 +121,7 @@ const main = async () => {
       posts: [
         {
           integration: { id: INTEGRATION },
-          value: [{ content: caption, image }],
+          value,
           settings: { post_type: 'post' }, // sin esto: 400
         },
       ],

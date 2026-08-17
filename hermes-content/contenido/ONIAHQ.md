@@ -186,6 +186,20 @@ el feed se vuelve una seguidilla de pedidos.
 
 **Historias:** los días que hay carrusel, una sola — la portada + "link en bio". Sin producción.
 
+### ✅ Los hashtags salieron del caption (2026-08-17)
+
+Los 7 posts llevan ahora un **comentario automático** que Postiz publica sobre la propia
+publicación apenas sale, con los hashtags y el link `?src=`. El caption quedó limpio: sus dos
+primeras líneas son las que deciden si alguien abre el post, y una pared de hashtags las
+entierra.
+
+Se hace con `value[1]` en la llamada a la API — `value[0]` es el post, del segundo en adelante
+son comentarios. Ya está en `scripts/postiz_schedule.mjs`, no hay que hacer nada a mano.
+
+⚠️ **Esto NO es responder comentarios de otros.** Postiz no puede, en ninguna red. El detalle
+completo —y qué sí se puede— está en
+[`../docs/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md`](../docs/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md).
+
 ---
 
 ## 5. Cómo se mide
