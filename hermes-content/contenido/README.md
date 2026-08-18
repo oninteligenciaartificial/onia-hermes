@@ -25,6 +25,7 @@ se abren antes de tocar el motor o generar un solo crédito:
 |---|---|
 | Un carrusel o un estático | [`../../web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md`](../../web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md) — el molde de 8 slides, los ganchos, y la **§9** con lo que aprendió el motor |
 | Video o cualquier pieza de Lucía | [`../../web-factory/docs/LUCIA_PATTERN_BANK_2026.md`](../../web-factory/docs/LUCIA_PATTERN_BANK_2026.md) — tarifario medido, las 3 vías de generar, el checklist |
+| **Elegir el modelo de IA** (imagen o video, cualquier cuenta) | [`../../web-factory/docs/MODELOS_IA_QUE_USAR_PARA_QUE.md`](../../web-factory/docs/MODELOS_IA_QUE_USAR_PARA_QUE.md) — tabla de decisión por acción, movimiento y entorno, con costos medidos |
 | **Generar con IA — antes de gastar un crédito** | [`../../web-factory/docs/LUCIA_BANCO_DE_PRUEBAS_2026.md`](../../web-factory/docs/LUCIA_BANCO_DE_PRUEBAS_2026.md) — la rúbrica de 9 criterios (4 eliminatorios), los prompts listos, y las frases prohibidas que producen look de estudio |
 | Una pieza de pauta | [`../../web-factory/docs/ADS_PATTERN_BANK_2026.md`](../../web-factory/docs/ADS_PATTERN_BANK_2026.md) |
 | Movimiento entre planos | [`../../web-factory/docs/MOTION_PATTERN_BANK_2026.md`](../../web-factory/docs/MOTION_PATTERN_BANK_2026.md) |
