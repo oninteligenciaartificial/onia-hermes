@@ -27,7 +27,7 @@ export function Hero() {
         </Reveal>
         <Reveal delay={0.06}>
           <h1 className={`${styles.display} ${styles.heroTitle}`}>
-            El sistema de gestión <em>con IA</em> para tu negocio en Bolivia.
+            Tu negocio no pierde citas ni cobros <em>mientras dormís</em>.
           </h1>
         </Reveal>
       </div>
@@ -36,8 +36,8 @@ export function Hero() {
         <div>
           <Reveal delay={0.12}>
             <p className={styles.lead}>
-              Agenda, clientes, cobros y agentes que trabajan 24/7 con tu
-              aprobación. Una sola cuenta, un solo precio.
+              Onia recuerda cada cita, persigue cada deuda vencida y hace
+              volver al cliente que se enfrió. Vos aprobás; el sistema hace.
             </p>
           </Reveal>
           <Reveal delay={0.18}>
