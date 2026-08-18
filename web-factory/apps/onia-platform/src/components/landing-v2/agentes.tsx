@@ -60,6 +60,7 @@ export function AgentesV2() {
           <Reveal delay={0.12}>
             <Pantalla
               src="/v2/panel-agentes.webp"
+              srcMovil="/v2/panel-agentes-movil.webp"
               alt="Pantalla real de Agentes en Onia: Recall y Cobrador activos, corriendo cada 24 horas, con el texto que aclara que solo proponen y que cada mensaje se aprueba en Pendientes."
               pie="Captura de producción · pantalla Agentes"
               ancho={1440}
