@@ -118,3 +118,63 @@ scrub), `sticky-scene.tsx`, `coverflow.tsx`, `split-text.tsx`, `stagger-grid.tsx
 `magnetic.tsx`, `count-up.tsx`. La landing ya los usa (chatbot-cta, etc.).
 **No hay que construir motion nuevo para verse como Fanvue: hay que USAR el que existe
 con estos tiempos y no inventar parallax.**
+
+
+## 8. EL SISTEMA DE MEDIDAS — el hallazgo mayor (CSS real, 2026-08-18)
+
+Extraje las REGLAS CSS del sitio, no solo los valores computados. Conteo de unidades en
+sus clases de layout: **98 `em` · 14 `rem` · 160 `px` · 1 `vw` · CERO `clamp()`**.
+
+### Todo el ritmo vertical está en `em`
+
+```css
+.section        { padding: 4em 2em 5.5em;  background: rgb(236,237,238); }
+.section-hero   { padding: 0 2em 8.1em; }
+.section-full   { padding: 9.5em 0 5.5em; min-height: 100vh; }
+.section-footer { padding: 5.5em 2em 2.5em; }
+.section.dark   { background: rgb(20,20,20); }     /* modificador, NO base */
+.nav-button     { padding: .7em 1.7em; border-radius: 10em;
+                  transition: box-shadow .4s cubic-bezier(.165,...); }
+```
+
+### Y el `em` se ancla en UN solo número que cambia por breakpoint
+
+```
+body/section font-size: 12.8px  (base)
+  @min-width 1440px → 15px
+  @min-width 1920px → 16px
+  @min-width 2000px → 20px
+```
+
+**Consecuencia: cambian UN valor y toda la página reescala en proporción** — padding,
+gaps, radios y tipografía a la vez, sin tocar nada más. Por eso su espaciado se siente
+tan coherente en cualquier pantalla.
+
+### Comparación honesta con lo que hacemos en Onia
+
+| | Fanvue | Onia hoy |
+|---|---|---|
+| Ritmo | `em` anclado a un font-size por breakpoint | `clamp()` por token, cada medida independiente |
+| Fluidez | Escalones (4 breakpoints) | Continua |
+| Coherencia | **Total: todo escala junto** | Cada token puede desincronizarse del otro |
+| Riesgo | Saltos entre escalones | Combinaciones raras en anchos intermedios |
+
+Ninguno es "el correcto". Pero **el de ellos garantiza proporción y el nuestro no**:
+si un token usa `5.6vw` y otro `4vw`, a 1100 px la relación entre título y espacio no es
+la misma que a 1600 px. Ahí nace parte del "se ve raro" que no se sabe explicar.
+
+**Regla adoptada para Web Factory**: dentro de una SECCIÓN, el espaciado interno va en
+`em` (relativo a su propio font-size). El `clamp()` se reserva para el font-size de la
+sección y para el ancho de los contenedores. Así se hereda la proporción de Fanvue sin
+perder nuestra fluidez.
+
+### Otros detalles del CSS que valen
+
+- **El fondo base es CLARO** `rgb(236,237,238)` y `.dark` es un modificador de sección:
+  exactamente la decisión que Sergio ya había tomado para Onia (claro premium con anclas
+  oscuras). Confirmado por su código, no por opinión.
+- **Hover de botón = `box-shadow .4s`**, no `transform`: el botón no se mueve, se
+  levanta. Más sobrio que el escalado típico.
+- **Radio de píldora `10em`** (no `999px`): también escala con el sistema.
+- Marcado de la marquesina: `.banner > .banner-cont-wrap > .banner-cont-w` con una fila
+  de `img.banner-logo` — es un contenedor con `overflow:hidden` y una pista duplicada.

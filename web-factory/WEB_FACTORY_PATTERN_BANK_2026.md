@@ -305,6 +305,24 @@ opinión — detalle en `data/references/design-sources/fanvue-mecanica-medida.m
 ⚠️ Sus fuentes (AG Next/Akzidenz) son de PAGO: en Onia se aplica la mecánica sobre
 **Archivo** (ya es la fuente de marca).
 
+### Ritmo en `em` — la ley que hace que una web NO parezca hecha por IA
+
+Medido en el CSS real de Fanvue: 98 `em` contra 0 `clamp()` en sus clases de layout.
+Todo su espaciado vertical es `em` anclado a UN font-size que cambia por breakpoint
+(12,8px → 15 → 16 → 20). Cambian ese número y la página entera reescala en proporción.
+
+**Regla de la casa (adoptada 2026-08-18):**
+- El espaciado INTERNO de una sección va en `em` → hereda la proporción del sistema.
+- `clamp()` se reserva para el font-size de la sección y el ancho de contenedores.
+- El fondo base es CLARO; `.dark` es un MODIFICADOR de sección (lo confirma su CSS:
+  `.section{background:#ECEDEE}` + `.section.dark{background:#141414}`).
+- Hover de botón: `box-shadow .4s` (se levanta), no `transform` (se mueve).
+- Radios de píldora en `em` (`10em`), no en px.
+
+Por qué importa: cuando cada token escala por su cuenta (`5.6vw` acá, `4vw` allá), la
+relación entre título, texto y aire cambia según el ancho — y ESO es buena parte del
+"se ve raro / parece IA" que no se sabe explicar. Detalle: `design-sources/fanvue-mecanica-medida.md` §8.
+
 ### Movimiento — receta medida (Fanvue F12, 2026-08-18)
 
 La landing más admirada del benchmark usa **2 keyframes en todo el sitio**. Canon:
