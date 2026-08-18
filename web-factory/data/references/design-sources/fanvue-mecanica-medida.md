@@ -78,3 +78,43 @@ toda tipografía + mockups dibujados.
 | AG Next / Akzidenz | fuentes de pago sin licencia → Archivo |
 | Testimonios de creadores con caras | no tenemos clientes; fabricarlos está prohibido |
 | Fondo negro total | la dirección de Onia es claro premium (decisión de Sergio) — el negro se usa como ANCLA de sección, no como base |
+
+
+## 7. MOVIMIENTO — la receta completa, medida (F12, 2026-08-18)
+
+Sorpresa: su motion es **mínimo y repetido**, no una orgía de scroll. En TODO el sitio
+hay **solo 2 @keyframes**:
+
+```css
+@keyframes scrolllogo { 0% { transform: translateX(0) }
+                        100% { transform: translateX(calc(-100% - 5.56em)) } }
+@keyframes spin { 0% { rotate(0) } 100% { rotate(360deg) } }
+```
+
+| Patrón | Valor medido | Dónde |
+|---|---|---|
+| **Marquesina infinita** | `35s linear infinite scrolllogo` + `will-change: transform` | banda de logos/prueba social |
+| **Revelado al entrar** | `transition: opacity .3s, transform .3s` (32 elementos) | secciones al hacer scroll |
+| **Hover de tarjeta/imagen** | `transform .2s linear` (12-13 elementos) | media y cards |
+| **Hover de texto/link** | `color .3s cubic-bezier(.25,.46,.45,.94)` | nav y links |
+| **Secciones pegadas** | `position: sticky` (clases `en-sticky`, `faq`) | el relato scrollytelling |
+| **Parallax en imágenes** | ❌ **NINGUNO** — transform medido antes/después de scrollear 2400px: `none` | — |
+
+**Las 3 lecciones:**
+1. **Cero scrub de scroll y cero parallax.** El movimiento se dispara al ENTRAR (una
+   vez) o al hacer hover. Nada atado al dedo del scroll: por eso se siente rápido y
+   nunca "pesado".
+2. **Duraciones cortas y fijas**: 0,2 s hover · 0,3 s revelado. El único movimiento
+   largo es la marquesina (35 s), que es ambiental, no un evento.
+3. **Solo `transform` y `opacity`** (compositor). Cero animación de layout.
+   ⚠️ Detalle honesto: tienen **940 elementos con `transition: all`** — default de
+   Webflow, es descuido, NO se copia (`all` obliga al navegador a vigilar todo).
+
+### Estado en Onia: el vocabulario YA está construido
+
+`web-factory/apps/onia-platform/src/motion/` ya tiene: `marquee.tsx` (32 s linear —
+prácticamente el 35 s de Fanvue), `reveal.tsx` (opacity+transform con whileInView, sin
+scrub), `sticky-scene.tsx`, `coverflow.tsx`, `split-text.tsx`, `stagger-grid.tsx`,
+`magnetic.tsx`, `count-up.tsx`. La landing ya los usa (chatbot-cta, etc.).
+**No hay que construir motion nuevo para verse como Fanvue: hay que USAR el que existe
+con estos tiempos y no inventar parallax.**
