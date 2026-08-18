@@ -536,30 +536,99 @@ mensaje real.
 > recomendaba conectar ManyChat gratis para "pedir prestada" su app aprobada. Ese motivo
 > desapareció. Ahorro: ~USD 936/año con las dos cuentas en Pro.
 
-### 10.2 — El workflow, construido y probado
+### 10.2 — El workflow, construido y PROBADO DE PUNTA A PUNTA
 
-`ONIA - Comentario IG -> DM (Private Reply)` — n8n `w1GUalEbvYnLROUI`, **activo**.
-URL de producción: `https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment`
+`ONIA - Comentario IG -> DM (Private Reply)` — n8n **`kUwiJdrmw6hJsAXv`**, activo.
 
-⚠️ La URL con el prefijo del `webhookId` **da 404**. La buena es la ruta simple, de arriba.
+```
+https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment
+```
 
-| Camino probado | Payload | Resultado |
-|---|---|---|
-| Verificación de Meta (`GET hub.mode=subscribe`) | — | ✅ devolvió el `hub.challenge` intacto |
-| Comentario ajeno con SISTEMA | payload real de Meta | ⚠️ 200, llega al nodo SSH y muere: **`Host not found`** |
-| **Nuestro propio comentario** (el de hashtags que publica Postiz) | `from.id` = nuestro | ✅ **200 e ignorado** — el filtro anti-bucle funciona |
+⚠️ La URL con el prefijo del `webhookId` **da 404**. La buena es la ruta simple.
 
-**El filtro anti-bucle no es un detalle.** Postiz publica un comentario automático con los
-hashtags sobre nuestro propio post; sin ese filtro, el flujo se respondería a sí mismo.
+**Ejecución 54775 — corrieron los 6 nodos del camino accionable:**
+
+| Nodo | Evidencia |
+|---|---|
+| Parsear comentario | ✅ |
+| Accionable? | ✅ |
+| Leer token de Postiz | ✅ `IGAA…` en la salida → el SSH leyó el token de la base de Postiz |
+| Enviar DM privado | ✅ `IGApiException` → **Meta respondió**, o sea la llamada salió bien formada. El único error es el `comment_id` falso puesto a propósito |
+| Avisar a Sergio | ✅ Telegram disparado |
+| Responder 200 | ✅ |
+
+Otros caminos probados:
+
+| Camino | Resultado |
+|---|---|
+| Verificación de Meta (`GET hub.mode=subscribe`) | ✅ devuelve el `hub.challenge` intacto |
+| **Nuestro propio comentario** (el de hashtags de Postiz) | ✅ **200 e ignorado** — el filtro anti-bucle funciona |
+
+**El filtro anti-bucle no es un detalle.** Postiz publica un comentario automático con hashtags
+sobre nuestro propio post; sin ese filtro el flujo se respondería a sí mismo.
+
+### 10.2-bis — 🔴 EL BUG QUE COSTÓ TRES VERSIONES (no repetirlo)
+
+**Con `multipleMethods: true`, el nodo Webhook de n8n tiene UNA SALIDA POR MÉTODO.**
+
+```
+httpMethod: ['GET','POST']   →   salida 0 = GET   ·   salida 1 = POST
+```
+
+Cablear solo la salida 0 produce el síntoma más engañoso posible:
+
+- el GET (verificación de Meta) **funciona perfecto**
+- el POST (los eventos reales) **devuelve HTTP 200 y no hace nada**
+- la ejecución queda en estado **`success`**
+- no aparece **ningún error** en los logs
+
+Se diagnostica leyendo `lastNodeExecuted` en `execution_data`: decía
+`"Webhook Comentario IG"`, o sea el flujo moría en el propio trigger.
+
+**Dos horas se fueron persiguiendo la pista equivocada.** En los logs aparecía `Host not found`
+justo después de las pruebas y lo atribuí al nodo SSH sin credencial. **Era de otro workflow** —
+hay 40+ activos escribiendo al mismo log. *Correlación temporal en un log compartido no es
+evidencia.*
+
+**Además, el IF que discriminaba por `hub.mode` sobraba:** el método HTTP ya discrimina. La v3
+tiene 9 nodos en vez de 10 y es más simple.
+
+### 10.2-ter — Cómo adjuntar credenciales por código (lo que sí funciona)
+
+Cuatro vías probadas, **solo una anda**:
+
+| Vía | Resultado |
+|---|---|
+| `update_workflow` del MCP de n8n | ❌ recibe `operations` como string y lo rechaza — bug de serialización |
+| API pública de n8n con el `N8N_API_KEY` del contenedor | ❌ 401. Esa key es de 64 hex; las de n8n son JWT |
+| `credentials: { sshPrivateKey: { id, name } }` en el SDK | ❌ no adjunta |
+| **`credentials: { sshPrivateKey: newCredential('NOMBRE', 'ID') }`** | ✅ **adjunta bien** |
+
+`create_workflow_from_code` reporta `autoAssignedCredentials: []` **aunque la credencial haya
+quedado adjunta**. Ese campo no sirve para verificar — hay que mirar la base.
+
+**Para inspeccionar o corregir n8n sin UI** (no hay `sqlite3` ni `curl` en el contenedor, pero sí
+el driver de node):
+
+```js
+const sqlite3 = require('/usr/local/lib/node_modules/n8n/node_modules/sqlite3');
+const db = new sqlite3.Database('/home/node/.n8n/database.sqlite');
+// workflow_entity: id, name, active, nodes, connections, settings, activeVersionId...
+```
+
+Se copia con `docker cp` y se corre con `docker exec <c> node /tmp/x.js`. Tras editar la base,
+**unpublish + publish por MCP** para que n8n recargue desde disco.
+
+Para depurar hay que encender el guardado, que por defecto no guarda las corridas exitosas:
+`settings.saveDataSuccessExecution = 'all'`.
 
 ### 10.3 — Lo que falta, y es corto
 
 | # | Qué falta | Quién | Por qué |
 |---|---|---|---|
-| 1 | **Adjuntar 2 credenciales** al workflow: `ONIA VPS SSH` en *Leer token de Postiz* y `Telegram account` en *Avisar a Sergio* | Sergio, 2 clics | El MCP de n8n no las auto-asignó y su `update_workflow` no acepta el parámetro (bug de serialización). La API pública devuelve 401 con el `N8N_API_KEY` del contenedor |
-| 2 | **Apuntar el callback de la app de Meta** a `https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment` | Sergio, panel de Meta | No se pudo leer por API: `FACEBOOK_APP_ID` está vacío en Postiz y el secret de Instagram no firma contra el app de Facebook |
-| 3 | **Publicar el PDF de LISTA** | — | `onia.com.bo/recursos/lista-por-donde-empezar.pdf` → **404**. El PDF existe en el repo, no en la web. Por eso el workflow hoy solo acciona con SISTEMA |
-| 4 | Probar el Private Reply de verdad | mié 19-ago | `media_count: 0` — no hay ningún post donde comentar hasta que salga el primer carrusel |
+| 1 | **Apuntar el callback de la app de Meta** a `https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment` | Sergio, panel de Meta | No se pudo leer por API: `FACEBOOK_APP_ID` está vacío en Postiz y el secret de Instagram no firma contra el app de Facebook. **Es lo único que falta para que funcione solo** |
+| 2 | **Publicar el PDF de LISTA** | — | `onia.com.bo/recursos/lista-por-donde-empezar.pdf` → **404**. El PDF existe en el repo, no en la web. Por eso el workflow hoy solo acciona con SISTEMA |
+| 3 | Probar el Private Reply con un comentario real | mié 19-ago | `media_count: 0` — no hay post donde comentar hasta que salga el primer carrusel |
 
 ### 10.4 — Links del DM, verificados en vivo
 
