@@ -876,3 +876,64 @@ Ejecución `54943`, comentario con **LISTA**:
 | **Validar `X-Hub-Signature-256`** | ❌ **NO implementado.** Meta firma el POST con el app secret; hoy no lo verificamos. Quien conozca la URL puede POSTear un evento falso. El daño posible es acotado (necesita un `comment_id` real de un post nuestro, y el freno de 24 h limita repetición), pero **es una punta suelta**. Requiere `options.rawBody` en el webhook + el app secret en n8n |
 | **Filtrar por `entry_id`** | ⚠️ a propósito **no bloquea** todavía. El `entry_id` se reporta por Telegram para ver qué manda Meta de verdad; recién con ese dato se puede exigir que coincida. Poner un filtro duro sobre una suposición el día antes del lanzamiento era peor |
 | **La prueba con un comentario real** | mié 19-ago, cuando salga el primer carrusel. `media_count: 0` hasta entonces |
+
+---
+
+## 14. 🟢 PROBADO EN PRODUCCIÓN CON DATOS REALES — 2026-08-18, 23:16-23:18 UTC
+
+> Se adelantó el primer carrusel un día (Sergio eligió publicar a las 19:16 hora Bolivia, el
+> horario programado) para poder probar el ciclo con un post de verdad. `media_count` era 0 y sin
+> post no existe `comment_id` real.
+
+### 14.1 — Postiz publicó (era lo único "armado y nunca disparado")
+
+```
+https://www.instagram.com/p/DcMxZGekcMo/
+media_id 18150393334511569 · CAROUSEL_ALBUM · 8 slides · comments_count 1
+```
+
+El comentario automático con hashtags salió solo, como estaba diseñado. `media_count: 0 → 1`.
+
+### 14.2 — Meta entrega los webhooks (el eslabón que faltaba)
+
+Cuatro eventos reales llegaron a `/webhook/ig-comment` en 90 segundos:
+
+| exec | quién | qué comentó | resultado |
+|---|---|---|---|
+| 54949 | **`@oniahq`** (el comentario de hashtags de Postiz) | hashtags | ✅ **`comentario_propio` → ignorado** |
+| 54950 | `agustinacastedoc_` | sin palabra clave | ✅ ignorado |
+| 54951 | `sergio_urcullo` | "informacion" | ✅ ignorado |
+| 54952 | `sergio_urcullo` | **"sistema"** | ✅ **DM ENVIADO** |
+
+**Prueba de que vino de Meta y no de un curl:** en el payload llegó
+`sha256=c698f443f2466317ac166c3739528a6afa9a80e45f0770617b5c31f375b6523f` — el header
+`X-Hub-Signature-256`, que solo Meta puede firmar. Más el `entry_id` `17841423363059652` y el
+`media_id` del post recién publicado.
+
+### 14.3 — Meta aceptó el DM
+
+```
+recipient_id: SI   ·   message_id: SI   ·   IGApiException: NO
+```
+
+Sin error. El Private Reply se entregó de verdad.
+
+### 14.4 — Dos cosas que la prueba demostró y que no eran obvias
+
+**1. El filtro anti-bucle era necesario, no teórico.** El primer webhook que llegó fue **nuestro
+propio comentario de hashtags**. Sin ese filtro, el flujo se habría respondido a sí mismo en el
+minuto uno de vida de la cuenta.
+
+**2. Sergio comentó `"sistema"` en minúscula y funcionó.** El parseo hace `.toUpperCase()` antes de
+comparar. **La automatización nativa de Meta (§11.2) es *case-sensitive y de coincidencia exacta*:
+con ella ese comentario NO habría disparado nada.** Es la primera ventaja medida de nuestro stack
+sobre la alternativa gratis, y apareció en el primer comentario real de un humano.
+
+### 14.5 — Lo que sigue pendiente
+
+| Qué | Estado |
+|---|---|
+| Validar `X-Hub-Signature-256` | ❌ sigue sin implementar — **pero ahora sabemos que Meta la manda** (§14.2), así que es viable: falta `options.rawBody` en el webhook + el app secret en n8n |
+| Probar la palabra **LISTA** con un comentario real | pendiente — el freno de 24 h es por persona, así que hace falta una cuenta distinta a la de Sergio |
+| Filtrar por `entry_id` | ahora se conoce el valor real: `17841423363059652`. Ya se puede exigir que coincida |
+| Calendario | el carrusel #1 salió el 18-ago en vez del 19. Los otros 6 quedan como estaban (21, 24, 26, 28, 31-ago, 02-sep) |
