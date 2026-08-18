@@ -69,3 +69,17 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
 2. Ratificar el camino Chatwoot-invisible + bandeja propia gradual.
 3. Portar dashboard v5 + hero/precios de landing.
 4. Llamadas: recién con clientes de chat pagando (F1 primero, siempre).
+
+
+## 5. Requisitos de Sergio para el chatbot del cliente (2026-08-18)
+
+1. **Self-service TOTAL**: el cliente configura TODO desde su panel — sin tocarnos
+   la puerta. Simple por diseño (el formulario A-D es la base; lo que no sea
+   simple, se simplifica).
+2. **Fácil para los clientes DEL cliente**: el que chatea con el bot debe poder
+   usar y COMPRAR sin fricción — el bot no es solo informativo, es un canal de
+   venta del negocio.
+3. **Capacidades ricas a investigar (factibilidad en curso)**: enviar/recibir
+   imágenes (catálogo con fotos, comprobantes), botones/listas interactivas,
+   carrito/pedido por chat, y qué permite cada canal (widget web vs WhatsApp
+   Cloud API — catálogo nativo de WhatsApp incluido).
