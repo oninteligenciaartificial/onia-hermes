@@ -21,7 +21,7 @@
 > que se abre para trabajar.
 >
 > **La fuente de esos prompts:** [PROMPTS_POR_SESION.md](PROMPTS_POR_SESION.md) (lotes hasta el
-> 15-ago) · [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md) (E1–E11). Si cambia una
+> 15-ago) · [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md) (E1–E11) · [PROMPTS_LOTE_2026-08-17.md](PROMPTS_LOTE_2026-08-17.md) (F1–F2). Si cambia una
 > regla, se edita acá, no la copia de `sesiones/`.
 
 Bandeja de entrada de videos para **extraer información y decidir si sirve**. Distinta de

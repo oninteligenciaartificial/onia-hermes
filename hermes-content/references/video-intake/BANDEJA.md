@@ -142,3 +142,15 @@ Fichas y prompts: [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md)
 | [DcE1hSeIU3Y](https://www.instagram.com/p/DcE1hSeIU3Y/) algoritmo de X | B | **SIRVE** — premisa verificada, números dibujados | [ficha](2026-08-16-x-algoritmo-publico.md) |
 | [DcEVhfiomLo](https://www.instagram.com/p/DcEVhfiomLo/) estación de trabajo | B | HUMO de contenido · **SIRVE de formato** | [ficha](2026-08-16-descartados-y-formato.md) |
 | [DcCUoBgFflT](https://www.instagram.com/p/DcCUoBgFflT/) API regalada | B | **DESCARTADO** — exfiltración de datos | [ficha](2026-08-16-descartados-y-formato.md) |
+
+---
+
+# Lote 2026-08-17 — dos videos LARGOS de X (no son reels)
+
+| Video | Duración | Fuente | Veredicto | Ficha |
+|---|---|---|---|---|
+| [Code w/ Claude — StockPilot](https://x.com/0xrafy/status/2089395090506633621) | 44 min | **PRIMERA PARTE** (Anthropic, números medidos en pantalla) | **SIRVE YA — el hallazgo más aplicable del corpus** | [ficha](2026-08-17-code-with-claude-stockpilot.md) |
+| [Karpathy — cómo funciona un LLM](https://x.com/0xwhrrari/status/2089336474923667665) | 2 h 06 | primera parte de un experto, pero **del landscape de principios de 2025** | **SIRVE de formación · no genera tarea** | [ficha](2026-08-17-karpathy-como-funciona-un-llm.md) |
+
+Prompts: **F1** (auditar los 11 agentes contra los 3 antipatrones) y **F2** (evals) en
+[PROMPTS_LOTE_2026-08-17.md](PROMPTS_LOTE_2026-08-17.md). **F1 corrige a E4.**

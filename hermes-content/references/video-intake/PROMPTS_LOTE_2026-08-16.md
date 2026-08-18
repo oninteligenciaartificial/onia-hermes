@@ -367,6 +367,23 @@ de desbloqueo escrita.
 
 ## E4 · El loop de tres roles, guardado como artefacto
 
+> ### ⚠️ CORRECCIÓN 2026-08-17 — leé esto antes de hacer E4
+>
+> Un taller de **Code w/ Claude** (primera parte de Anthropic, con números medidos) cierra con
+> la lámina opuesta: **"One agent. Five skills. Subagents only when a skill says so. 0 hardcoded
+> subagents."** Y mide 28× menos tokens **al sacar** subagentes y herramientas, no al agregarlos.
+> Ficha: `hermes-content/references/video-intake/2026-08-17-code-with-claude-stockpilot.md`
+>
+> **E4 no se anula, se reordena:**
+> - El **evaluador** sigue en pie tal cual. Es el Gate 3 y es lo que más falta hace.
+> - **Planeador y ejecutador NO se crean como agentes hardcodeados.** Primero se prueban como
+>   **skills que se cargan cuando toca**. Si una skill alcanza, no hay agente.
+> - Un subagente entra **solo cuando una skill lo pide**, y devuelve **JSON con forma fija**,
+>   nunca prosa de la que haya que extraer un número.
+> - Antes de construir el loop, corré **F1** (auditar los agentes que ya existen contra los tres
+>   antipatrones). Puede que sobren agentes en vez de faltar.
+
+
 ```text
 Contexto: un reel describe el loop que usa quien lo publica, y por primera vez da la forma
 concreta: TRES agentes -- planeador, ejecutador, evaluador -- cada uno con instrucciones,

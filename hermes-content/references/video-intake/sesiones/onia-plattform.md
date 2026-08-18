@@ -3,7 +3,7 @@
 > **Este archivo es la raíz de la sesión `onia-plattform`.** Todo lo que esta sesión tiene que hacer
 > de lo que salió del análisis de reels está acá, completo. No hace falta abrir otro archivo.
 >
-> Orden: **E1 primero (define el molde) → E3 se mide contra él → el resto**
+> Orden: **F2 después de F1 (que corre en `pendiente`) · E1 primero de los de producto (define el molde) → E3 se mide contra él → el resto**
 >
 > Índice general del carril: [../INDEX.md](../INDEX.md) · fichas de origen en `../`
 
@@ -117,6 +117,42 @@ La regla que hace que esto no choque: **cada agente escribe sus propios archivos
 orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaron ni una vez.
 
 ---
+
+---
+
+## F2 · Evals para el agente que mas corre — medir antes de opinar
+
+```text
+Contexto: el mismo taller de Anthropic no mejoro el agente a ojo: lo midio. Ficha:
+hermes-content/references/video-intake/2026-08-17-code-with-claude-stockpilot.md
+
+Su montaje: 12 tareas de eval con 5 tipos de grader (desde "exact match" hasta graders que
+comparan contra una referencia). Cada ciclo de mejora se corre contra la misma suite, y el
+resultado se lee en una tabla antes/despues con tokens, costo, tiempo, turnos y PASS/FAIL.
+Sin eso, "quedo mejor" es una opinion.
+
+Nosotros tenemos agentes corriendo en produccion por cron y NUNCA los medimos.
+
+Tarea:
+1. Elegí UN agente: el que mas corre o el que mas cuesta. Justifica cual y por que.
+2. Escribi 8 a 12 tareas de eval reales -- casos que ese agente ya enfrenta en produccion,
+   no inventados. Sacalos de corridas reales si hay registro.
+3. Para cada tarea defini el grader: como se decide si paso. Empeza por los baratos
+   (coincidencia exacta, presencia de un campo, forma del JSON) antes de meter un grader
+   que use el modelo.
+4. Corre la baseline y guarda la tabla: PASS/FAIL, tokens, costo, tiempo, turnos.
+5. Deja la suite corrible con un comando y documentado donde ya viven los docs de agentes.
+   No crees carpeta nueva sin buscar antes donde vive.
+
+Gasto: correr la suite consume tokens. Estima el costo de UNA corrida antes de correrla y
+decilo. Si supera lo trivial, presentaselo a Sergio antes.
+
+No inventes numeros de baseline. Si no llegaste a correrla, la entrega es la suite escrita
+y el costo estimado -- y se dice que la baseline quedo sin correr.
+
+LISTO = suite de 8-12 tareas con graders, corrible con un comando, y la tabla de baseline
+real o la razon explicita de por que no se corrio.
+```
 
 ---
 

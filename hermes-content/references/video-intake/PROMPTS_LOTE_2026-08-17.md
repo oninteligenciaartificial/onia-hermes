@@ -1,0 +1,121 @@
+# Prompts del lote del 2026-08-17 — F1 y F2
+
+Salen de **dos videos largos de X**, no de reels: un taller de **Code w/ Claude** (44 min,
+primera parte de Anthropic) y una clase de Karpathy (2 h 06). Fichas:
+[StockPilot](2026-08-17-code-with-claude-stockpilot.md) ·
+[Karpathy](2026-08-17-karpathy-como-funciona-un-llm.md).
+
+**Antes de pegar cualquiera:** los tres gates del preámbulo de
+[PROMPTS_POR_SESION.md](PROMPTS_POR_SESION.md) aplican igual.
+
+> ⚠️ **Este lote corrige el prompt E4** del lote anterior. Si E4 todavía no se ejecutó, leé
+> primero la corrección que quedó escrita adentro de E4 en
+> [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md).
+
+## Dónde se pega cada uno
+
+| Sesión | Prompt | Orden |
+|---|---|---|
+| **`pendiente`** (harness) | **F1** auditar los 11 agentes contra los 3 antipatrones | **antes que E4** — puede que sobren agentes en vez de faltar |
+| **`onia-plattform`** | **F2** evals para el agente que más corre | después de F1: F1 dice cuál medir |
+
+---
+
+# PENDIENTE (harness)
+
+## F1 · Auditar los 11 agentes contra los tres antipatrones
+
+```text
+Contexto: un taller de Code w/ Claude (primera parte de Anthropic, con numeros medidos en
+pantalla) rehizo un agente de inventario y bajo el costo 30x. Ficha con las capturas:
+hermes-content/references/video-intake/2026-08-17-code-with-claude-stockpilot.md
+
+Los numeros medidos, antes -> despues: 216.365 -> 7.628 tokens (28x), ~$2 -> ~$0,07 (30x),
+328s -> 164s, y el resultado paso de FAIL (over budget) a PASS.
+
+Como lo lograron: sacaron 12 herramientas hechas a mano y dejaron
+  agent_toolset (Bash/Read/Write) + 5 skills que se cargan solo cuando se disparan
+  + subagentes SOLO cuando una skill los pide.
+Lamina de cierre: "One agent. Five skills. Subagents only when a skill says so."
+15 lineas de system prompt, 0 subagentes hardcodeados, 92% de eval.
+
+LOS TRES ANTIPATRONES, con nombre:
+1. CONTEXT-DUMPERS. Una herramienta le entrega 395 filas de CSV al modelo en cada llamada
+   y el modelo tiene que escanearlas a ojo. Arreglo: el calculo va al sandbox (bash, awk,
+   un script chico) y vuelve solo el top-N en JSON compacto.
+   Principio: compute-over-context.
+2. SUBAGENT-HIDERS QUE DEVUELVEN PROSA. Una herramienta llama a un subagente y despues el
+   orquestador PARSEA un numero de un texto libre. Ahi se pierde el dato: "la prosa dice
+   'bastante seguro', no 0.72". Arreglo: la skill fija la forma del JSON de retorno.
+   Principio: act via skill.
+3. TRIVIAL WRITES. Una herramienta de 3 lineas (armar dict, agregar al JSONL, devolver
+   estado) que un bash hace igual sin el overhead de definir la herramienta.
+Y una de alcance: si la herramienta no pertenece al dominio del agente, es otro servicio.
+   Principio: scope.
+
+Tarea:
+1. Lista TODOS los agentes que existen hoy: .claude/agents/ y los runtimes de ONIA Center
+   que corren por cron (Vendedor, Contenido, Finanzas y los demas). Listado completo,
+   verificado en el repo, no de memoria.
+2. Por cada uno, decidi contra los tres antipatrones. Uno por uno, con el motivo:
+   - dumpea contexto? (le pasa listados crudos al modelo en vez de calcular antes)
+   - esconde un subagente devolviendo prosa? (se extrae un dato de texto libre)
+   - hace escrituras triviales envueltas en herramienta?
+   - esta fuera de su alcance?
+3. Deci cuales SOBRAN: cuales se reemplazan por una skill que se carga cuando toca, y
+   cuales por dos lineas de bash. El objetivo es tener MENOS agentes, no mas.
+4. Medi lo que puedas medir sin gastar: cuantos tokens de contexto arrastra cada agente en
+   una corrida tipica. Si no se puede medir, decilo; no estimes a ojo.
+5. Entrega una tabla: agente | antipatron detectado | reemplazo propuesto | ahorro esperado.
+
+NO refactorices nada en esta pasada. Es diagnostico. El refactor sale despues, uno por uno.
+
+Un limite honesto: el taller usa Claude Managed Agents (CMA) y su primitiva callable_agents.
+NO esta verificado que la tengamos ni que cueste. Los tres principios SI son portables a
+.claude/agents/ + skills; la primitiva puede no serlo. No planifiques asumiendo CMA.
+
+LISTO = la tabla existe con TODOS los agentes, cada uno juzgado contra los tres antipatrones
+con motivo escrito, y la lista explicita de cuales sobran.
+```
+
+---
+
+
+# ONIA PLATFORM
+
+## F2 · Evals para el agente que mas corre — medir antes de opinar
+
+```text
+Contexto: el mismo taller de Anthropic no mejoro el agente a ojo: lo midio. Ficha:
+hermes-content/references/video-intake/2026-08-17-code-with-claude-stockpilot.md
+
+Su montaje: 12 tareas de eval con 5 tipos de grader (desde "exact match" hasta graders que
+comparan contra una referencia). Cada ciclo de mejora se corre contra la misma suite, y el
+resultado se lee en una tabla antes/despues con tokens, costo, tiempo, turnos y PASS/FAIL.
+Sin eso, "quedo mejor" es una opinion.
+
+Nosotros tenemos agentes corriendo en produccion por cron y NUNCA los medimos.
+
+Tarea:
+1. Elegí UN agente: el que mas corre o el que mas cuesta. Justifica cual y por que.
+2. Escribi 8 a 12 tareas de eval reales -- casos que ese agente ya enfrenta en produccion,
+   no inventados. Sacalos de corridas reales si hay registro.
+3. Para cada tarea defini el grader: como se decide si paso. Empeza por los baratos
+   (coincidencia exacta, presencia de un campo, forma del JSON) antes de meter un grader
+   que use el modelo.
+4. Corre la baseline y guarda la tabla: PASS/FAIL, tokens, costo, tiempo, turnos.
+5. Deja la suite corrible con un comando y documentado donde ya viven los docs de agentes.
+   No crees carpeta nueva sin buscar antes donde vive.
+
+Gasto: correr la suite consume tokens. Estima el costo de UNA corrida antes de correrla y
+decilo. Si supera lo trivial, presentaselo a Sergio antes.
+
+No inventes numeros de baseline. Si no llegaste a correrla, la entrega es la suite escrita
+y el costo estimado -- y se dice que la baseline quedo sin correr.
+
+LISTO = suite de 8-12 tareas con graders, corrible con un comando, y la tabla de baseline
+real o la razon explicita de por que no se corrio.
+```
+
+---
+

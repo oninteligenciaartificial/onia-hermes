@@ -6,7 +6,7 @@ y nuevos, en el orden en que conviene hacerlos. **No hace falta abrir otro archi
 
 Los dos archivos de origen siguen existiendo y son la fuente:
 [PROMPTS_POR_SESION.md](../PROMPTS_POR_SESION.md) (26 videos, hasta el 15-ago) y
-[PROMPTS_LOTE_2026-08-16.md](../PROMPTS_LOTE_2026-08-16.md) (E1–E11). Acá no hay nada nuevo:
+[PROMPTS_LOTE_2026-08-16.md](../PROMPTS_LOTE_2026-08-16.md) (E1–E11) y [PROMPTS_LOTE_2026-08-17.md](../PROMPTS_LOTE_2026-08-17.md) (F1–F2). Acá no hay nada nuevo:
 está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, no la copia.**
 
 ---
@@ -15,7 +15,7 @@ está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, 
 
 | Archivo | Sesión | Qué lleva | Primero |
 |---|---|---|---|
-| [onia-plattform.md](onia-plattform.md) | `onia-plattform` | E1 molde de rubro · E3 las 9 features de gastronomía · agente de producto · visión por computadora | **E1** — define el molde contra el que se mide E3 |
+| [onia-plattform.md](onia-plattform.md) | `onia-plattform` | **F2 evals** · E1 molde de rubro · E3 las 9 features de gastronomía · agente de producto · visión por computadora | **E1** de los de producto — define el molde contra el que se mide E3. **F2 espera a F1** (corre en `pendiente`) |
 | [chatbot.md](chatbot.md) | `chatbot` | **D1 el bot no guarda hace días** · E2 corte YMYL · minimización de datos | **D1** — está roto ahora mismo |
 | [carrito-de-compra.md](carrito-de-compra.md) | `Carrito de compra` | carrito flotante | — |
 | [estructura-de-pagos.md](estructura-de-pagos.md) | `Estructura de pagos` | checkout | el paso 1 de verificación puede matar la tarea |
@@ -41,7 +41,7 @@ está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, 
 |---|---|---|---|
 | [crm-prospeccion.md](crm-prospeccion.md) | CRM / prospección | **C4 la ruta al primer cliente** · los 7 roles contra el Vendedor que ya corre | **C4** — es lo único que ataca la falta de clientes |
 | [propuestas.md](propuestas.md) | `propuestas` | C3 el costo de esperar | — |
-| [pendiente.md](pendiente.md) | `pendiente` | E4 el loop de 3 roles · D2 fechas que corren · D3 búsqueda de marca · B3 intake de video · B4 probar los 6 patrones · E5 Strix | **E4** — mejora todas las demás sesiones |
+| [pendiente.md](pendiente.md) | `pendiente` | **F1 auditar los 11 agentes** · E4 el loop de 3 roles (corregido) · D2 fechas que corren · D3 búsqueda de marca · B3 intake de video · B4 probar los 6 patrones · E5 Strix | **F1** — antes de construir agentes nuevos, ver cuáles sobran |
 
 ---
 
@@ -49,7 +49,7 @@ está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, 
 
 1. **`chatbot` → D1.** Es lo único roto ahora mismo.
 2. **CRM → C4.** Es lo único que ataca la falta de clientes.
-3. **`pendiente` → E4.** El loop de 3 roles mejora el resultado de todas las que vengan después.
+3. **`pendiente` → F1.** Auditar los agentes que ya existen contra los tres antipatrones de Anthropic: 28× menos tokens salió de SACAR agentes, no de agregarlos. Recién después, E4 corregido.
 4. **`web-factory` → C1.** Nuestra web no indexa y auditamos la ajena.
 5. **marketing → A1.** Portafolio: costo cero, sube el precio.
 

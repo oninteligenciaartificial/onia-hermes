@@ -3,7 +3,7 @@
 > **Este archivo es la raíz de la sesión `pendiente`.** Todo lo que esta sesión tiene que hacer
 > de lo que salió del análisis de reels está acá, completo. No hace falta abrir otro archivo.
 >
-> Orden: **E4 primero (es el que mejora todas las demás sesiones) → D2 y D3 son fechas que corren → E5 necesita decisión de gasto**
+> Orden: **F1 PRIMERO** (auditar los agentes que ya existen — puede que sobren, no que falten) → E4 corregido → D2 y D3 son fechas que corren → E5 necesita decisión de gasto
 >
 > Índice general del carril: [../INDEX.md](../INDEX.md) · fichas de origen en `../`
 
@@ -120,7 +120,81 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## F1 · Auditar los 11 agentes contra los tres antipatrones
+
+```text
+Contexto: un taller de Code w/ Claude (primera parte de Anthropic, con numeros medidos en
+pantalla) rehizo un agente de inventario y bajo el costo 30x. Ficha con las capturas:
+hermes-content/references/video-intake/2026-08-17-code-with-claude-stockpilot.md
+
+Los numeros medidos, antes -> despues: 216.365 -> 7.628 tokens (28x), ~$2 -> ~$0,07 (30x),
+328s -> 164s, y el resultado paso de FAIL (over budget) a PASS.
+
+Como lo lograron: sacaron 12 herramientas hechas a mano y dejaron
+  agent_toolset (Bash/Read/Write) + 5 skills que se cargan solo cuando se disparan
+  + subagentes SOLO cuando una skill los pide.
+Lamina de cierre: "One agent. Five skills. Subagents only when a skill says so."
+15 lineas de system prompt, 0 subagentes hardcodeados, 92% de eval.
+
+LOS TRES ANTIPATRONES, con nombre:
+1. CONTEXT-DUMPERS. Una herramienta le entrega 395 filas de CSV al modelo en cada llamada
+   y el modelo tiene que escanearlas a ojo. Arreglo: el calculo va al sandbox (bash, awk,
+   un script chico) y vuelve solo el top-N en JSON compacto.
+   Principio: compute-over-context.
+2. SUBAGENT-HIDERS QUE DEVUELVEN PROSA. Una herramienta llama a un subagente y despues el
+   orquestador PARSEA un numero de un texto libre. Ahi se pierde el dato: "la prosa dice
+   'bastante seguro', no 0.72". Arreglo: la skill fija la forma del JSON de retorno.
+   Principio: act via skill.
+3. TRIVIAL WRITES. Una herramienta de 3 lineas (armar dict, agregar al JSONL, devolver
+   estado) que un bash hace igual sin el overhead de definir la herramienta.
+Y una de alcance: si la herramienta no pertenece al dominio del agente, es otro servicio.
+   Principio: scope.
+
+Tarea:
+1. Lista TODOS los agentes que existen hoy: .claude/agents/ y los runtimes de ONIA Center
+   que corren por cron (Vendedor, Contenido, Finanzas y los demas). Listado completo,
+   verificado en el repo, no de memoria.
+2. Por cada uno, decidi contra los tres antipatrones. Uno por uno, con el motivo:
+   - dumpea contexto? (le pasa listados crudos al modelo en vez de calcular antes)
+   - esconde un subagente devolviendo prosa? (se extrae un dato de texto libre)
+   - hace escrituras triviales envueltas en herramienta?
+   - esta fuera de su alcance?
+3. Deci cuales SOBRAN: cuales se reemplazan por una skill que se carga cuando toca, y
+   cuales por dos lineas de bash. El objetivo es tener MENOS agentes, no mas.
+4. Medi lo que puedas medir sin gastar: cuantos tokens de contexto arrastra cada agente en
+   una corrida tipica. Si no se puede medir, decilo; no estimes a ojo.
+5. Entrega una tabla: agente | antipatron detectado | reemplazo propuesto | ahorro esperado.
+
+NO refactorices nada en esta pasada. Es diagnostico. El refactor sale despues, uno por uno.
+
+Un limite honesto: el taller usa Claude Managed Agents (CMA) y su primitiva callable_agents.
+NO esta verificado que la tengamos ni que cueste. Los tres principios SI son portables a
+.claude/agents/ + skills; la primitiva puede no serlo. No planifiques asumiendo CMA.
+
+LISTO = la tabla existe con TODOS los agentes, cada uno juzgado contra los tres antipatrones
+con motivo escrito, y la lista explicita de cuales sobran.
+```
+
+---
+
 ## E4 · El loop de tres roles, guardado como artefacto
+
+> ### ⚠️ CORRECCIÓN 2026-08-17 — leé esto antes de hacer E4
+>
+> Un taller de **Code w/ Claude** (primera parte de Anthropic, con números medidos) cierra con
+> la lámina opuesta: **"One agent. Five skills. Subagents only when a skill says so. 0 hardcoded
+> subagents."** Y mide 28× menos tokens **al sacar** subagentes y herramientas, no al agregarlos.
+> Ficha: `hermes-content/references/video-intake/2026-08-17-code-with-claude-stockpilot.md`
+>
+> **E4 no se anula, se reordena:**
+> - El **evaluador** sigue en pie tal cual. Es el Gate 3 y es lo que más falta hace.
+> - **Planeador y ejecutador NO se crean como agentes hardcodeados.** Primero se prueban como
+>   **skills que se cargan cuando toca**. Si una skill alcanza, no hay agente.
+> - Un subagente entra **solo cuando una skill lo pide**, y devuelve **JSON con forma fija**,
+>   nunca prosa de la que haya que extraer un número.
+> - Antes de construir el loop, corré **F1** (auditar los agentes que ya existen contra los tres
+>   antipatrones). Puede que sobren agentes en vez de faltar.
+
 
 ```text
 Contexto: un reel describe el loop que usa quien lo publica, y por primera vez da la forma
