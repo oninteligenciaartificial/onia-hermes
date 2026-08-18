@@ -56,7 +56,64 @@ contraseña propia, y recién después se sigue.
 **Si Meta solo tiene `business@` como dirección de contacto o recuperación:** seguí, el reenvío
 lo cubre.
 
-## Paso 2 · Salvar el proyecto de Google Cloud (antes que nada más)
+## Paso 2 · El OAuth — recrearlo, no rescatarlo
+
+> 🔄 **Corregido el 2026-08-18 sobre el terreno.** La primera versión decía "transferir el
+> proyecto agregando otro Propietario". **Se intentó y Google lo rechazó**: la organización
+> `onia.com.bo` —que existe porque existe Workspace— aplica
+> `constraints/iam.allowedPolicyMemberDomains`, que **solo deja agregar cuentas del propio
+> dominio**. Un Gmail externo no entra.
+>
+> Se puede desactivar (Políticas de la organización → anular → permitir todo, y
+> `business@` tiene rol de Administrador de la organización), pero **no vale la pena**.
+
+**Lo que hay realmente en el proyecto `singular-glow-497503-k1`:**
+
+| | |
+|---|---|
+| Claves de API | **0** |
+| Cuentas de servicio | **0** |
+| Clientes OAuth | **1** — `Gmail-business-n8n`, creado el 7-ago |
+
+**Está vacío salvo un OAuth.** Y como la credencial de n8n hay que re-autorizarla igual con la
+cuenta nueva, rescatar el proyecto viejo no ahorra ningún paso.
+
+### Recrear el OAuth (5 minutos, sin tocar políticas)
+
+1. `console.cloud.google.com` **entrando con el Gmail nuevo**, no con `business@`
+2. **Proyecto nuevo** → `onia-n8n`. Al crearlo desde un Gmail queda **sin organización**, o sea
+   fuera del alcance de cualquier política de Workspace
+3. **APIs y servicios → Biblioteca** → habilitar **Gmail API**
+4. **Credenciales → Crear credenciales → ID de cliente de OAuth 2.0** → *Aplicación web*
+5. URI de redirección: **el que muestra n8n** al abrir la credencial
+   (`https://<tu-n8n>/rest/oauth2-credential/callback`)
+6. Client ID + Secret → n8n → reconectar la credencial `Gmail account`
+
+El proyecto viejo se muere con la organización. No importa: no tiene nada que no se recree en
+cinco minutos.
+
+## Paso 2-bis · 🔴 Lo que de verdad se rompe: 8 workflows activos
+
+Esto **no estaba en la primera versión** y es lo más importante del documento. En n8n hay una
+credencial `Gmail account` (OAuth) que sostiene workflows **encendidos ahora**:
+
+| Workflow | Qué hace |
+|---|---|
+| 🔴 **WF-GS-05: BCP Auto Payment Confirmation** | **lee Gmail** para detectar pagos del BCP y **auto-confirmar planes** |
+| Alta de Cliente ONIA → CRM | manda el alta por correo |
+| Cuestionario Cliente ONIA | manda las respuestas |
+| Brief de Producción ONIA | manda el brief |
+| WF-09 · WF-08 · WF-07 · WF-02 | trials vencidos, bienvenida, conciliación, pagos QR |
+
+El refresh token de esa credencial está autorizado **por el usuario `business@`**. Cuando ese
+usuario desaparezca, **muere**, y con él los ocho.
+
+**El correo no es solo un buzón: es el motor de ocho automatizaciones vivas, y una toca plata.**
+
+⚠️ **Prueba obligatoria después de reconectar:** que **WF-GS-05 siga leyendo Gmail**. Si no
+lee, dejan de confirmarse pagos y nadie se entera hasta que un cliente reclama.
+
+## Paso 2-ter · Salvar el proyecto (solo si algún día tiene algo adentro)
 
 Las credenciales OAuth viven en un **proyecto de Google Cloud**, y el proyecto pertenece a la
 cuenta. Si la cuenta se va, el proyecto se va.
