@@ -305,6 +305,24 @@ opinión — detalle en `data/references/design-sources/fanvue-mecanica-medida.m
 ⚠️ Sus fuentes (AG Next/Akzidenz) son de PAGO: en Onia se aplica la mecánica sobre
 **Archivo** (ya es la fuente de marca).
 
+### Movimiento — receta medida (Fanvue F12, 2026-08-18)
+
+La landing más admirada del benchmark usa **2 keyframes en todo el sitio**. Canon:
+
+- **Revelado al entrar**: `opacity + transform`, **0,3 s**, una sola vez. Componente
+  nuestro: `<Reveal>` (`src/motion/reveal.tsx`, whileInView).
+- **Hover**: `transform 0,2 s linear` (media/cards) · `color 0,3 s
+  cubic-bezier(.25,.46,.45,.94)` (links).
+- **Marquesina ambiental**: `35 s linear infinite`, `translateX(0 → calc(-100% - gap))`,
+  `will-change: transform`. Componente: `<Marquee>` (hoy 32 s — equivalente).
+- **Secciones pegadas** (`position: sticky`) para el relato, NO scroll-scrub.
+- ❌ **PROHIBIDO**: parallax en imágenes (Fanvue no tiene NINGUNO — medido antes/después
+  de scrollear), animar layout, y `transition: all` (ellos lo arrastran por descuido de
+  Webflow en 940 elementos: no se copia).
+
+Regla: **el movimiento se dispara al entrar o al hover; nunca se ata al dedo del scroll.**
+Detalle completo: `data/references/design-sources/fanvue-mecanica-medida.md` §7.
+
 ### Dashboard / Analytics / Internal Tool
 
 **DIRECCIÓN ELEGIDA (Sergio, 2026-08-17): "libro mayor editorial" (v4→v5).**
