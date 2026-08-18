@@ -455,6 +455,7 @@ const CONOCIMIENTO_FERRETERIA = {
     botName: "el asistente de Ferretería El Tornillo",
   },
   empresa: { horario: { dias: [1, 2, 3, 4, 5, 6], desde: 8, hasta: 19, frase: "lun-sab, 8:00-19:00" } },
+  demo: { duracionMinutos: 20, duracionFrase: "20 minutos", modalidad: "visita en la tienda" },
   productos: [
     { key: "tornilleria", tipo: "servicio", nombre: "tornillería al por mayor y menor" },
     { key: "herramientas", tipo: "servicio", nombre: "herramientas eléctricas y manuales" },
@@ -572,4 +573,19 @@ test("recepcionista: 'gracias' no molesta a nadie", () => {
   const { turns } = runRecep(["hola", "gracias!"]);
   assert.equal(turns[1].replies.length, 0);
   assert.ok(turns[1].notes.includes("cortesia_sin_respuesta"));
+});
+
+test("recepcionista: '¿cuánto dura la cita?' contesta duración/modalidad del knowledge — es info, no reserva", () => {
+  const { state, turns } = runRecep(["hola", "¿cuánto dura la cita?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_CITA"]);
+  assert.match(textOf(turns[1]), /20 minutos/);
+  assert.match(textOf(turns[1]), /visita en la tienda/);
+  assert.equal(state.botStage, "nuevo", "preguntar no escala: sigue atendiendo");
+
+  // Sin el bloque `demo` en el knowledge: honesto + humano, no los 30 minutos de la demo de Onia.
+  const { demo, ...sinCita } = CONOCIMIENTO_FERRETERIA;
+  const config = asRecepcionista(applyKnowledge(CONFIG, sinCita), sinCita);
+  const otra = run(["hola", "¿cuánto dura la cita?"], { config });
+  assert.deepEqual(keysOf(otra.turns[1]), ["R_NO_DATO"]);
+  assert.ok(!/30 minutos/.test(textOf(otra.turns[1])), "no inventa la duración de la demo de Onia");
 });

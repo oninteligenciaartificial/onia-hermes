@@ -610,6 +610,92 @@ lo escribe al dar de alta) — no se inventó tabla nueva.
 Backups: motor `/opt/onia/bot/backups/20260818-024342/`; producto
 `runtime-next.prev-20260818-024637/` + `build-src-0a4da68/`.
 
+## Prueba E2E 2026-08-18 — MODO RECEPCIONISTA: el bot del cliente ya atiende como SU asistente
+
+Cierra el hueco que dejaba la resolución por inbox: la conversación resolvía a la
+org pero contestaba con el **funnel de VENTA de Onia con el nombre cambiado**
+("ZZ QA Ferreteria Tornillo es una plataforma por módulos…") — inaceptable para
+vender el add-on. Ahora, con conocimiento de fuente **"db"** (org resuelta), el
+motor enciende `config.modo = "recepcionista"`: se presenta como el asistente
+DEL negocio y atiende como recepcionista. El funnel de leads (DEMO, calificación,
+M4) queda **EXCLUSIVO del modo venta**.
+
+### Qué quedó vivo (motor `/opt/onia/bot`, espejado acá)
+
+1. **`recepcionista.mjs` (nuevo)** — router del modo: saludo M0R ("Soy el
+   asistente de <productName> 🙂" + ofrece horarios/servicios/pedido), FAQ
+   renderizadas SOLO desde el knowledge de la org (`R_HORARIO` con
+   `empresa.horario.frase`, `R_SERVICIOS` con `productos` — sin la vara
+   MODULOS_LISTOS, que es un candado de Onia —, `R_CITA` con
+   `demo.duracionFrase/modalidad`). Pedido/compra/cita (`R_INTERES`), precio
+   (`R_PRECIO`, jamás una cifra), queja, "quiero un humano" y todo lo fuera de
+   guion **ESCALAN a handoff real** (review_queue + aviso) — "te confirma
+   {{humano}}" solo se dice si alguien de verdad se entera. Campo ausente en el
+   knowledge = respuesta honesta `R_NO_DATO` + handoff (nunca rellena con los
+   datos de Onia). **LLM APAGADO en este modo** (decisión: el prompt de la rama
+   libre ancla al pitch de Onia; parametrizarlo queda pendiente). Sin etapa
+   nueva de estado: la conversación vive en `nuevo` (el saludo se marca con
+   `opt_in_source='inbound_recepcion'`) hasta handoff/opt-out.
+2. **Activación**: `knowledge.mjs → withKnowledge()` enciende el modo SOLO con
+   fuente "db" (`asRecepcionista()`); archivo/código = cara Onia, funnel igual
+   que siempre. `/preview` con `organizationId` también lo muestra (el borrador
+   explícito del editor sigue corriendo el funnel — pendiente). `resolveConfig()`
+   ya no consulta Cal.com para un inbox de cliente.
+3. **Plantillas** en `config.mjs` (M0R, M0R_INTRO, R_HORARIO, R_SERVICIOS,
+   R_CITA, R_INTERES, R_PRECIO, R_DERIVA, R_NO_DATO, R_ATTACH, M6R — opt-out sin
+   "escribí DEMO"). Intents nuevos en `intents.mjs` (saludo, horario de
+   atención, info de cita, interés de pedido); el resto reusa los existentes.
+4. **Migración `20260818_bot_recepcion_opt_in_source.sql`** (aplicada a mano en
+   prod): el CHECK de `opt_in_source` solo conocía el funnel y hacía fallar
+   `saveConversation` ENTERO con 23514 — la conversación del cliente no
+   persistía **ni el handoff** (el bot hubiera seguido contestando encima del
+   humano). Descubierto MIRANDO el E2E: la fila quedaba en `nuevo`/NULL.
+5. **Knowledge de la org QA a v3** (fila `cmsvz69in000n01riwdkyzy9d`, backup CSV
+   en `/opt/onia/backups/db/chatbot_knowledge_cmsvyguui_*.csv`): la v2 no traía
+   `horario.frase` ni `productos`, así que el bot (bien) derivaba honesto en vez
+   de contestar la FAQ.
+6. **Tests**: guion nuevo "recepcionista-ferreteria" en `simulate.mjs` + 12
+   tests en `bot-engine.test.mjs` + 1 en `knowledge.test.mjs` (withKnowledge db
+   → modo). Suite local **527/529** (solo los 2 de leads preexistentes); VPS
+   **523/529** (los mismos 2 + los 4 ambientales conocidos del `knowledge.json`
+   vivo). Ninguno nuevo.
+
+### La prueba (mirada, no supuesta) — screenshots `bot-cliente/e2e-0*.png`
+
+Conversación NUEVA en el widget de la ferretería (inbox 6, `chatwoot:23`):
+
+- **"hola"** → "¡Hola! Soy el asistente de ZZ QA Ferreteria Tornillo 🙂 · Te
+  puedo contar nuestros horarios y qué ofrecemos, o tomar tu pedido…" — cero
+  "plataforma por módulos", cero DEMO, cero horarios de venta.
+- **"¿qué días atienden?"** → "Atendemos lun-vie, 8:00-18:00" (del knowledge v3).
+- **"¿qué venden?"** → catálogo de la org en viñetas (tornillería, herramientas),
+  sin "en construcción, sin humo".
+- **"quiero comprar 100 tornillos"** → "¡Buenísimo! Ya le paso tu pedido a
+  Sergio — te confirma por este mismo chat." + `bot_stage=handoff_humano`
+  persistido (verificado en la base).
+- **"¿me confirmás?"** → SILENCIO (handoff en curso: el bot no habla encima del
+  humano). Captura `e2e-07-silencio-post-handoff.png`.
+- **No-regresión del bot de leads**: curl sintético al webhook con inbox 5 y
+  conversación inexistente (990002) → M0 del funnel con horarios reales de
+  Cal.com + "Onia es una plataforma por módulos…" intactos; `posted:false`
+  (nada llegó a un hilo real).
+
+### Qué falta / no verificado
+
+- El canal WhatsApp real de un cliente (probado por widget + curl; mismo adapter).
+- La rama LLM del modo recepcionista quedó APAGADA (fuera de guion = humano);
+  parametrizar el prompt al negocio es trabajo futuro.
+- `/preview` con `knowledge` explícito (borrador del editor) sigue mostrando el
+  funnel — decidir si el probador del editor debe simular el modo recepcionista.
+- Cómo muestra el panel el estado `opt_in_source='inbound_recepcion'` (dato
+  nuevo, no mirado en el panel).
+- Filas QA sintéticas en `bot_conversations` (chatwoot:20-22 en `nuevo` por el
+  bug ya corregido, 990777-990779, 990002): basura de prueba, inofensiva.
+
+Backups: motor `/opt/onia/bot/backups/20260818-033640/`; fila knowledge QA
+`chatbot_knowledge_cmsvyguui_*.csv`; constraint viejo documentado en la
+migración.
+
 ---
 
 ## Capacidades ricas del bot — factibilidad (imágenes · botones · comprar por chat)
