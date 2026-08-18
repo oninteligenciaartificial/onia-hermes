@@ -165,7 +165,7 @@ function kindOf(text, attachments) {
   return pickAudioAttachment(list) ? "voice" : "attachment";
 }
 
-function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation }) {
+function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation, inboxId }) {
   const text = String(content || "").trim();
   const atribucion = attributionFrom(conversation);
   return {
@@ -175,6 +175,10 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
       // OJO: `contact_ref` es la IDENTIDAD de la conversación (de acá sale `conversationKey`).
       // Cambiarlo rompe todas las conversaciones vivas. El teléfono va aparte, en `public_contact`.
       contact_ref: String(conversationId),
+      // DE QUE INBOX vino: es lo que resuelve "de que cliente es esta conversación" (el
+      // cargador de knowledge keyea por inbox y el producto lo traduce a organización).
+      // null = comportamiento de siempre (conocimiento de Onia, archivo/código).
+      inbox_id: inboxId === undefined || inboxId === null || inboxId === "" ? null : String(inboxId),
       public_contact: phoneOf(sender),
       display_name: displayNameOf(sender),
       kind: kindOf(text, attachments),
@@ -288,6 +292,9 @@ function fromMessageCreated(payload) {
     // La atribución vive en la CONVERSACIÓN, no en el mensaje: `payload.additional_attributes` de
     // este nivel es del mensaje (campaign_id / template_params de Chatwoot) y no sirve para esto.
     conversation: payload.conversation,
+    // En message_created el inbox viene TOP-LEVEL ({ inbox: { id } }, capturado en vivo el
+    // 2026-07-26); `conversation.inbox_id` es el respaldo por si algún evento no lo trae.
+    inboxId: payload?.inbox?.id ?? payload?.conversation?.inbox_id ?? null,
   });
 }
 
@@ -313,6 +320,8 @@ function fromConversationCreated(payload) {
     createdAtIso: toIsoFlexible(first.created_at),
     // En `conversation_created` el payload ES la conversación, así que se pasa entero.
     conversation: payload,
+    // ... y el inbox es el de la conversación misma (`inbox_id` plano en push_event_data).
+    inboxId: payload?.inbox_id ?? payload?.inbox?.id ?? null,
   });
 }
 

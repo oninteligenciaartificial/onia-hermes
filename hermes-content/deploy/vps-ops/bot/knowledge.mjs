@@ -489,8 +489,28 @@ function scheduleRefresh(path, nowMs, options = {}) {
 // y el MISMO validador — un documento que el archivo rechazaria, la db tampoco entra.
 
 const DB_TIMEOUT_MS = 5000;
-const ORG_CACHE = new Map(); // organizationId -> mismo shape que CACHE, con source "db"
+const ORG_CACHE = new Map(); // clave (org o "inbox:<id>") -> mismo shape que CACHE, con source "db"
 const orgRefreshing = new Set();
+
+/**
+ * La clave de cache de la copia db. `organizationId` explicito manda (/preview);
+ * sin el, el inbox de Chatwoot que trajo la conversacion keyea como "inbox:<id>"
+ * y ES EL PRODUCTO quien lo resuelve a una org (clinic_settings.chatwootInboxId)
+ * — el motor no conoce el mapeo y no lo duplica.
+ */
+function cacheKeyOf(options = {}) {
+  const org = String(options.organizationId || "").trim();
+  if (org) return org;
+  const inbox = String(options.inboxId ?? "").trim();
+  return inbox ? `inbox:${inbox}` : "";
+}
+
+/** La query que entiende GET /published segun la clave: org directa o inbox a resolver. */
+function publishedQuery(key) {
+  return key.startsWith("inbox:")
+    ? `inboxId=${encodeURIComponent(key.slice("inbox:".length))}`
+    : `organizationId=${encodeURIComponent(key)}`;
+}
 
 /** Para los tests: olvida todas las copias por organizacion. */
 export function resetOrgKnowledgeCache() {
@@ -508,7 +528,7 @@ function dbConfig(options = {}) {
 }
 
 /** Sin URL o sin secreto la fuente esta APAGADA y eso NO es un error: es el estado de hoy. */
-async function fetchOrgKnowledge(organizationId, options = {}) {
+async function fetchOrgKnowledge(key, options = {}) {
   const { url, secret, timeoutMs, fetch: doFetch } = dbConfig(options);
   if (!url || !secret || typeof doFetch !== "function") return { data: null, error: null, missing: true };
   try {
@@ -516,7 +536,7 @@ async function fetchOrgKnowledge(organizationId, options = {}) {
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     let res;
     try {
-      res = await doFetch(`${url}?organizationId=${encodeURIComponent(organizationId)}`, {
+      res = await doFetch(`${url}?${publishedQuery(key)}`, {
         headers: { authorization: `Bearer ${secret}` },
         signal: controller.signal,
       });
@@ -582,7 +602,9 @@ function scheduleOrgRefresh(key, nowMs, options = {}) {
  */
 export async function getOrgKnowledge(organizationId, options = {}) {
   try {
-    const key = String(organizationId || "").trim();
+    // Acepta la org directa (asi la llama /preview) o, sin ella, la clave que salga de
+    // options (organizationId u inboxId) — misma clave que usa el camino sincronico.
+    const key = String(organizationId || "").trim() || cacheKeyOf(options);
     if (!key) return getKnowledge(options);
     const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
     const prev = ORG_CACHE.get(key);
@@ -597,17 +619,37 @@ export async function getOrgKnowledge(organizationId, options = {}) {
 }
 
 /**
+ * Como getKnowledge(), pero si esa org/inbox NUNCA se consulto en este proceso, espera UNA
+ * lectura de red (acotada por el timeout de la db, 5 s max) antes de contestar.
+ *
+ * POR QUE EXISTE: con la cache fria, el camino 100% sincronico serviria el archivo/codigo de
+ * Onia — o sea que el PRIMER mensaje del cliente de una ferreteria saldria con la cara de Onia,
+ * que es exactamente lo que la resolucion por inbox existe para evitar. Despues de ese primer
+ * intento (bueno O fallido: la entrada queda en cache igual) esto ES getKnowledge: sincronico,
+ * copia vieja + refresh en background. Una espera acotada por inbox por proceso, nada mas.
+ */
+export async function ensureKnowledge(options = {}) {
+  try {
+    const key = cacheKeyOf(options);
+    if (key && !ORG_CACHE.has(key)) return await getOrgKnowledge(key, options);
+    return getKnowledge(options);
+  } catch {
+    return getKnowledge(options);
+  }
+}
+
+/**
  * El conocimiento vigente. SINCRONICO y tolerante: nunca tira y nunca espera red.
- *   - con `options.organizationId` y copia db en cache: la copia de ESA org
- *     (vencido el TTL se sirve la vieja y se refresca aparte);
- *   - sin copia db (o sin organizationId): el archivo local de siempre;
+ *   - con `options.organizationId` (o `options.inboxId`) y copia db en cache: la copia
+ *     de ESA org (vencido el TTL se sirve la vieja y se refresca aparte);
+ *   - sin copia db (o sin organizationId/inboxId): el archivo local de siempre;
  *   - primera vez (o cambio de ruta): lectura sincronica del archivo local (arranque);
  *   - TTL vigente: devuelve el cache;
  *   - TTL vencido: DEVUELVE LA COPIA VIEJA YA y dispara la relectura aparte.
  */
 export function getKnowledge(options = {}) {
   try {
-    const orgKey = String(options.organizationId || "").trim();
+    const orgKey = cacheKeyOf(options);
     if (orgKey) {
       const orgNow = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
       const org = ORG_CACHE.get(orgKey);

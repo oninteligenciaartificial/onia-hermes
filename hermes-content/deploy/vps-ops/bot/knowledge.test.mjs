@@ -786,6 +786,49 @@ test("db: un fetch roto CONSERVA la ultima copia buena de la org (no la borra)",
   assert.equal(state.data.identity.productName, "Ferreteria");
 });
 
+// --- keying por INBOX: la conversacion real trae inbox, no organizationId ---
+
+test("db: keying por inbox — el fetch va con ?inboxId= y el producto resuelve la org", async () => {
+  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo" } });
+  const fetch = fetchFalso(doc);
+  const state = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "6" });
+  assert.equal(state.source, "db");
+  assert.match(fetch.calls[0].url, /inboxId=6/);
+  assert.doesNotMatch(fetch.calls[0].url, /organizationId=/, "el motor NO conoce la org: la resuelve el producto");
+  // y la copia queda cacheada para el camino SINCRONICO del turno:
+  const sync = getKnowledge({ ...DB_OPTS, fetch, inboxId: "6", nowMs: NOW_MS });
+  assert.equal(sync.source, "db");
+  assert.equal(sync.data.identity.productName, "ZZ QA Ferreteria Tornillo");
+});
+
+test("db: organizationId explicito le gana al inbox (misma regla que el endpoint)", async () => {
+  const fetch = fetchFalso(valido());
+  await ensureKnowledge({ ...DB_OPTS, fetch, organizationId: ORG, inboxId: "6" });
+  assert.match(fetch.calls[0].url, /organizationId=org_ferreteria/);
+  assert.doesNotMatch(fetch.calls[0].url, /inboxId=/);
+});
+
+test("db: ensureKnowledge espera la red SOLO con la cache fria; despues es getKnowledge", async () => {
+  const fetch = fetchFalso(valido({ identity: { productName: "Ferreteria" } }));
+  // 1a vez (fria): espera UNA lectura y ya sirve la copia db — el primer mensaje del
+  // cliente no puede salir con la cara de Onia.
+  const primera = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "6", nowMs: NOW_MS });
+  assert.equal(primera.source, "db");
+  assert.equal(fetch.calls.length, 1);
+  // 2a vez (caliente, TTL vencido): NO espera — sirve la copia vieja ya y refresca aparte.
+  const segunda = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "6", nowMs: NOW_MS + DEFAULT_TTL_MS + 1 });
+  assert.equal(segunda.data.identity.productName, "Ferreteria", "la copia vieja sale YA");
+});
+
+test("db: inbox sin org (404) degrada a codigo y NO vuelve a esperar red en el turno siguiente", async () => {
+  const fetch = fetchFalso(null, { status: 404 });
+  const state = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "99", nowMs: NOW_MS });
+  assert.equal(state.source, "code", "inbox que no es de ningun cliente = bot de Onia, como siempre");
+  assert.equal(state.error ?? null, null, "404 no es un error que gritar");
+  await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "99", nowMs: NOW_MS + 1000 });
+  assert.equal(fetch.calls.length, 1, "el intento fallido tambien deja huella: una sola espera por proceso");
+});
+
 test("db: getKnowledge (sincronico) sirve la copia db ya cacheada sin esperar red", async () => {
   await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(valido({ identity: { productName: "Ferreteria" } })), nowMs: NOW_MS });
   const state = getKnowledge({ organizationId: ORG, nowMs: NOW_MS + 1000 });

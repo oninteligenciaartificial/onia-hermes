@@ -136,8 +136,18 @@ test("message_created entrante -> turno correcto (channel/contact_ref/message_ke
   assert.equal(parsed.turn.message_key, "chatwoot:2:13");
   assert.equal(parsed.turn.received_at, "2026-07-26T15:24:09.329Z");
   assert.equal(parsed.turn.display_name, "Prospecto Prueba ONIA");
+  assert.equal(parsed.turn.inbox_id, "3", "el inbox top-level resuelve de que cliente es la conversacion");
   assert.equal(parsed.meta.conversationId, "2");
   assert.equal(parsed.meta.messageId, "13");
+});
+
+test("inbox_id: sin inbox top-level cae a conversation.inbox_id, y sin ninguno queda null", () => {
+  const sinTop = parseChatwootWebhook(incomingFixture({ inbox: undefined }));
+  assert.equal(sinTop.turn.inbox_id, "3", "respaldo: conversation.inbox_id");
+  const sinNada = parseChatwootWebhook(
+    incomingFixture({ inbox: undefined, conversation: { id: 2, contact_inbox: { source_id: "x" } } }),
+  );
+  assert.equal(sinNada.turn.inbox_id, null, "sin inbox el turno sigue: conocimiento de Onia como siempre");
 });
 
 test("REGLA DE ORO: message_created saliente se ignora (si no, el bot se contesta a si mismo)", () => {
@@ -287,6 +297,7 @@ test("conversation_created CON el primer mensaje embebido: arma el turno (messag
   assert.equal(parsed.turn.text, "info porfa");
   assert.equal(parsed.turn.message_key, "chatwoot:5:20");
   assert.equal(parsed.turn.received_at, "2026-07-26T15:24:09.000Z", "epoch-segundos convertido a ISO");
+  assert.equal(parsed.turn.inbox_id, "3", "en conversation_created el inbox es el de la conversacion misma");
 });
 
 test("conversation_created con el primer mensaje saliente embebido: se ignora igual", () => {

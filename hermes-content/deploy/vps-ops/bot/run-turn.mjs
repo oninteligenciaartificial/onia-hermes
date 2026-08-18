@@ -45,7 +45,7 @@
 import { pathToFileURL } from "node:url";
 
 import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
-import { withKnowledge } from "./knowledge.mjs";
+import { ensureKnowledge, withKnowledge } from "./knowledge.mjs";
 import { createState, step, markHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
 import { createStore } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
@@ -80,6 +80,17 @@ export function parseInput(raw) {
 }
 
 /**
+ * De que INBOX de Chatwoot vino este turno. Es lo que resuelve "de que organizacion es esta
+ * conversacion" sin organizationId manual: el cargador de knowledge keyea por inbox y el
+ * producto lo traduce a org (clinic_settings.chatwootInboxId). Sin inbox (Telegram, sim,
+ * followups) devuelve {} y todo queda exactamente como antes.
+ */
+function knowledgeOptions(input) {
+  const inboxId = String(input?.inbox_id ?? input?.inboxId ?? "").trim();
+  return inboxId ? { inboxId } : {};
+}
+
+/**
  * Config del turno: DEFAULT_CONFIG + slots + dryRun + los HECHOS editables (knowledge.json).
  * Nada mas se pisa desde el canal. Sin archivo de conocimiento devuelve exactamente lo de antes
  * (el MISMO objeto): la capa editable degrada a codigo sin cambiar una coma.
@@ -100,7 +111,7 @@ export function buildConfig(input) {
       pending: false,
     }));
   }
-  return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG);
+  return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG, knowledgeOptions(input));
 }
 
 /** ONIA_BOT_SLOTS="jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00@2026-07-31T14:00:00Z" */
@@ -121,6 +132,13 @@ function parseEnvSlots() {
  * Tolerante por contrato: si Cal.com no responde, se queda con buildConfig(input) tal cual.
  */
 export async function resolveConfig(input, deps = {}) {
+  // El turno de un inbox de cliente con la cache FRIA espera UNA lectura acotada (5 s max)
+  // antes de armar la config: sin esto el primer mensaje saldria con la cara de Onia (el
+  // fallback archivo/codigo) y recien el segundo con la del cliente. Cache caliente = cero
+  // red, el patron sincronico + refresh en background de siempre (ver ensureKnowledge).
+  const kOpts = knowledgeOptions(input);
+  if (kOpts.inboxId) await ensureKnowledge({ ...kOpts, ...(deps.knowledge || {}) });
+
   const config = buildConfig(input);
   const explicitSlots = Array.isArray(input.slots) && input.slots.length > 0;
   const envSlots = Boolean(String(process.env.ONIA_BOT_SLOTS || "").trim());
@@ -129,7 +147,7 @@ export async function resolveConfig(input, deps = {}) {
   const getSlots = typeof deps.getAvailableSlots === "function" ? deps.getAvailableSlots : getAvailableSlotsFromCalcom;
   const live = await getSlots({ nowIso: input.received_at || input.receivedAt }, deps);
   if (!live || !Array.isArray(live.slots) || live.slots.length === 0) return config;
-  return withKnowledge(createBotConfig({ slots: live.slots, dryRun: config.dryRun }));
+  return withKnowledge(createBotConfig({ slots: live.slots, dryRun: config.dryRun }), kOpts);
 }
 
 // ---------------------------------------------------------------------------
