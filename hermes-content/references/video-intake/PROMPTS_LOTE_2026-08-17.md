@@ -68,6 +68,32 @@ Tarea:
    una corrida tipica. Si no se puede medir, decilo; no estimes a ojo.
 5. Entrega una tabla: agente | antipatron detectado | reemplazo propuesto | ahorro esperado.
 
+6. LOS MCP TAMBIEN ENTRAN EN LA AUDITORIA. El taller da un orden explicito y advierte:
+   "we see a lot of folks run towards MCP first, and a lot of our customers end up in this
+   ecosystem where there's a lot of chaotic MCP servers... a lot of times they have overlap,
+   which can create some problems" y "one of the drawbacks of MCP is that it can cause some
+   context issues".
+   El orden correcto, en este orden y no otro:
+     1) primitivas (file system, web search, code execution) -- "we always start there"
+     2) herramientas propias LOCALES, solo para ese agente
+     3) MCP UNICAMENTE cuando varios clientes/agentes necesitan el mismo conjunto
+        estandarizado y gobernado
+   Alternativa que proponen a conectar un MCP: darle el CLI y que invoque la API escribiendo
+   codigo.
+   Tarea concreta: lista los servidores MCP conectados hoy, marca cuales se pisan entre si,
+   cuales usa realmente algun agente, y cuales se pueden reemplazar por un CLI. Esta sesion
+   tiene del orden de 20 conectados y nunca se midio lo que cuestan en contexto.
+
+7. CUANDO SI CORRESPONDE UN SUBAGENTE -- son exactamente dos casos, y hay que respetarlos:
+   (a) tirarle mucho Claude a un problema en paralelo (research, exploracion de codigo)
+   (b) una mente fresca que mire el trabajo de otra: "I do not want to be the same person
+       that is writing and also reviewing my code" -- y clave: el revisor NO tiene el
+       contexto del que escribio.
+   Si un agente nuestro no cae en (a) ni en (b), es candidato a desaparecer. El propio
+   taller advierte: "there are a lot of cases where you can just scrap the subagent entirely
+   and give more flexibility to your main agent... frontier models have gotten intelligent
+   enough where you just don't need as many subagents".
+
 NO refactorices nada en esta pasada. Es diagnostico. El refactor sale despues, uno por uno.
 
 Un limite honesto: el taller usa Claude Managed Agents (CMA) y su primitiva callable_agents.

@@ -376,6 +376,10 @@ de desbloqueo escrita.
 >
 > **E4 no se anula, se reordena:**
 > - El **evaluador** sigue en pie tal cual. Es el Gate 3 y es lo que más falta hace.
+> - **El evaluador queda VALIDADO por el propio taller**, no solo tolerado: *"I do not want to
+>   be the same person that is writing and also reviewing my code"*, y el revisor **no lleva el
+>   contexto** del que escribió. Ese era el rol correcto de E4; el error era hardcodear también
+>   al planeador y al ejecutador.
 > - **Planeador y ejecutador NO se crean como agentes hardcodeados.** Primero se prueban como
 >   **skills que se cargan cuando toca**. Si una skill alcanza, no hay agente.
 > - Un subagente entra **solo cuando una skill lo pide**, y devuelve **JSON con forma fija**,

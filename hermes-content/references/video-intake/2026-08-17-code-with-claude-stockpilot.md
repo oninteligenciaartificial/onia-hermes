@@ -5,9 +5,12 @@
   Ponente en escenario con el logo de Anthropic detrás.
 - **Carril:** B (idea), **nivel de fuente: PRIMERA PARTE** — es Anthropic hablando de sus
   propias herramientas, con números medidos en pantalla.
-- **Cobertura real:** leído por fotograma **9 de 15 muestras** (1 cada 3 min). **El audio está
-  en transcripción y todavía NO lo leí** — todo lo de abajo sale de lo que se ve escrito en
-  pantalla, que en este video es casi todo, porque es una terminal.
+- **Cobertura real:** leído por fotograma **9 de 15 muestras** (1 cada 3 min) + **audio de los
+  últimos 14 min de 44** ([verbatim](transcripciones/X-code-with-claude-stockpilot.txt)).
+  Los primeros 30 min de audio **fallaron** en Speaches (`fetch failed`) y están en reintento.
+  Lo recuperado cubre justo el cierre: la doctrina de MCP, cuándo usar un subagente, y los tres
+  takeaways. **Falta el audio del arranque y de los ciclos 1 y 2.**
+- **Dónde:** Code w/ Claude **Londres**.
 - **Veredicto: SIRVE YA — es el hallazgo más aplicable de todo el corpus**
 
 ---
@@ -148,3 +151,90 @@ prompt.
 |---|---|
 | **`pendiente`** (harness) | **F1** — auditar los 11 agentes contra los 3 antipatrones · y E4 corregido |
 | **`onia-plattform`** | **F2** — evals con tareas y graders para el agente que más corre |
+
+---
+
+# Lo que agregó el audio (últimos 14 min, verbatim)
+
+## El system prompt: 400 líneas → 15
+
+> *"we started with an orchestrator, system prompt of about **400 lines** long... We actually
+> simplified our system prompt to **15 lines** long and we **replaced all of our business logic
+> with skills**. I was just stuffing requirement after requirement into my system prompt. I
+> decided to take that, package it up as skills so that Claude could pull that information into
+> its brain **only when Claude realized that it needed it** in order to solve a problem."*
+
+## Por qué el código gana al contexto, dicho simple
+
+> *"imagine instead of giving my agent a full CSV that needs to be read into context, I just
+> give my agent the ability to **write and run Python** as a means of navigating across all of
+> that information. The agent uses a lot less tokens when it can write code and then run code
+> and then read the results **instead of having to consume all of that data in Claude's mind**."*
+
+Y la honestidad que conviene copiar: *"this is not something that will happen all the time,
+right? **We might see some cases where we regress**."*
+
+## ⚠️ La doctrina de MCP — esto nos pega directo
+
+El orden que recomiendan, en ese orden y no otro:
+
+1. **Primitivas de Claude Code** — sistema de archivos, búsqueda web, ejecución de código. *"we always start there."*
+2. **Herramientas propias locales**, solo para ese agente.
+3. **MCP ÚNICAMENTE** cuando varios clientes o agentes necesitan el mismo conjunto estandarizado y gobernado.
+
+> *"We see a lot of folks run towards MCP first, and a lot of our customers end up in this
+> ecosystem where there's **a lot of chaotic MCP servers** that exist. A lot of times they have
+> **overlap**, which can create some problems."*
+
+> *"One of the drawbacks of MCP is that it can cause some **context issues**."*
+
+Y la alternativa que proponen: **darle CLIs y dejar que invoque APIs escribiendo código**, en
+vez de conectar un MCP.
+
+**Por qué nos toca:** esta sesión tiene del orden de **20 servidores MCP conectados** (Cloudflare,
+n8n, Higgsfield, Figma, Notion, Gmail, Calendar, Supabase, Meta Ads, Stitch, Vercel,
+computer-use…), varios con funciones que se pisan. Es literalmente el cuadro que describen. **Y
+no lo medimos nunca.** Sale como parte de F1.
+
+## Cuándo SÍ usar un subagente — exactamente dos casos
+
+> *"The two main instances where we see subagents as being really effective is **first when you
+> want to throw a lot of Claude at a problem** — deep research, web search, code-based
+> exploration. Subagents are a great way to parallelize."*
+
+> *"The second case is **when you need a fresh mind to look at a problem**. If I am writing code,
+> **I do not want to be the same person that is writing and also reviewing my code**... one
+> instance of Claude doing the writing and then another instance coming over the top and
+> reviewing, **that does not have context about the initial instance**."*
+
+**Esto VALIDA el evaluador de E4, y con primera parte.** El rol de evaluador no era el error de
+E4: el error era hardcodear también al planeador y al ejecutador. El propio taller conserva **un
+solo** subagente — el de forecasting — y por el caso 2:
+
+> *"I don't want anything in my initial context window to distort the forecasting process...
+> I don't want the same Claude that my customer is talking with to also be the Claude that
+> writes the forecast."*
+
+## Y la advertencia contraria: sacar subagentes
+
+> *"There are a lot of cases where you can just **scrap the subagent entirely** and give more
+> flexibility to your main agent. What we have a lot of customers doing is actually just
+> consuming capability into their main orchestrator, because **frontier models have gotten
+> intelligent enough** to manage across more information where you just **don't need as many
+> subagents**."*
+
+Y por qué no exponer un subagente como herramienta: se pierde en la traducción entre orquestador
+y subagente, y el logging se vuelve difícil porque hay que juntar transcripciones de varios
+agentes. `callable_agents` de CMA existe para resolver esa observabilidad.
+
+## Los tres takeaways, textuales
+
+1. **Un solo loop de agente con primitivas simples y human-like** — sistema de archivos,
+   búsqueda web, ejecución de código, a veces una lista de tareas. *"We start there and then we
+   build accordingly."*
+2. **Progressive disclosure a través de skills** — *"Instead of stuffing our system prompt with
+   a lot of information, we made information accessible to Claude whenever Claude realized that
+   it needed that information... **we're not polluting our context window**."*
+3. **Evals y hill climbing** — *"you establish a baseline, you then tweak your architecture and
+   you rerun evals and you get better over time."* Con la condición que casi nadie cumple:
+   *"make sure that your evals are **updated as your product capability expands**."*
