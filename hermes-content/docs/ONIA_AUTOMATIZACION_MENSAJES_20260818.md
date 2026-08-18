@@ -538,7 +538,7 @@ mensaje real.
 
 ### 10.2 — El workflow, construido y PROBADO DE PUNTA A PUNTA
 
-`ONIA - Comentario IG -> DM (Private Reply)` — n8n **`mxl618u4eT209hTc`**, activo.
+`ONIA - Comentario IG -> DM (Private Reply)` — n8n **`gWrVHU8OxI9yugc4`**, activo.
 
 ```
 https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment
@@ -802,3 +802,77 @@ comportamiento correcto aunque la cifra exacta difiera.
   recurso — eso es el uso sancionado, no spam frío.
 - Nada de comprar seguidores.
 - Etiqueta de contenido generado con IA, obligatoria en la cuenta de Lucía.
+
+---
+
+## 13. ✅ CERRADO — el ciclo funciona solo (2026-08-18, 23:10)
+
+### 13.1 — Meta verificó el webhook
+
+Sergio cargó el callback en `developers.facebook.com` → app `OnIA Social API` → Instagram →
+Configurar webhooks:
+
+```
+URL:   https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment
+Token: onia-ig-2026
+```
+
+**Confirmado del lado nuestro:** ejecución n8n `54931` a las 22:57:21, con `hub.challenge` en la
+query y user-agent de Facebook. Meta golpeó y n8n respondió.
+
+⚠️ **No tocar los pasos 1 y 2 de esa pantalla** ("Add all required permissions" / "Generar tokens
+de acceso"): regeneran el token de la cuenta, y **ese token es el que usa Postiz para publicar**.
+
+### 13.2 — El PDF de LISTA ya está publicado
+
+`https://onia.com.bo/recursos/lista-por-donde-empezar.pdf` → **200, application/pdf, 258 KB.**
+
+**Cómo se publicó, porque no es obvio:** `onia.com.bo` lo sirve el contenedor `onia-landing`, que
+monta `/opt/onia-landing/runtime-next` desde el host. El `public/` real está en
+`/opt/onia-landing/runtime-next/apps/onia-platform/public/`. Se copia el archivo ahí…
+
+🔴 **…y hay que REINICIAR el contenedor.** Next cachea la lista de `public/` al arrancar: el archivo
+nuevo daba 404 *desde adentro del propio contenedor* mientras uno viejo daba 200. No era Cloudflare.
+`docker restart onia-landing` → arriba en 2 s.
+
+**El archivo también se copió al repo** (`web-factory/apps/onia-platform/public/recursos/`) para que
+sobreviva un redeploy — el directorio del host se pisa en cada despliegue.
+
+### 13.3 — LISTA ya acciona, con su propio mensaje
+
+Hasta ahora el flujo solo respondía a SISTEMA porque LISTA no tenía qué mandar. Ya no:
+
+| Palabra | Qué manda |
+|---|---|
+| **SISTEMA** | `https://onia.com.bo/?src=onia-ig-sistema` — diagnóstico de 20 min por Cal |
+| **LISTA** | `https://onia.com.bo/recursos/lista-por-donde-empezar.pdf` — la hoja de 6 tareas con anclas de precio |
+
+El texto de cada uno vive en el nodo *Parsear comentario* (`RECURSOS`), no en el nodo HTTP. Para
+cambiar la copia se edita ahí, en un solo lugar.
+
+### 13.4 — El token de verificación ya se valida
+
+Antes el webhook devolvía el challenge a cualquiera. Ahora:
+
+| Prueba | Resultado |
+|---|---|
+| `hub.verify_token=onia-ig-2026` | ✅ devuelve el challenge |
+| `hub.verify_token=intruso` | ✅ **403** |
+
+### 13.5 — Prueba final de v5 (`gWrVHU8OxI9yugc4`, 13 nodos)
+
+Ejecución `54943`, comentario con **LISTA**:
+
+| | |
+|---|---|
+| Parsear comentario · Token o freno 24h · Permite enviar? · Enviar DM privado · Avisar a Sergio · Responder 200 | **todos CORRIERON** |
+| El mensaje trae el link del PDF | ✅ |
+| Meta respondió | ✅ llamada bien formada |
+
+### 13.6 — Lo que queda pendiente, dicho claro
+
+| Qué | Estado |
+|---|---|
+| **Validar `X-Hub-Signature-256`** | ❌ **NO implementado.** Meta firma el POST con el app secret; hoy no lo verificamos. Quien conozca la URL puede POSTear un evento falso. El daño posible es acotado (necesita un `comment_id` real de un post nuestro, y el freno de 24 h limita repetición), pero **es una punta suelta**. Requiere `options.rawBody` en el webhook + el app secret en n8n |
+| **Filtrar por `entry_id`** | ⚠️ a propósito **no bloquea** todavía. El `entry_id` se reporta por Telegram para ver qué manda Meta de verdad; recién con ese dato se puede exigir que coincida. Poner un filtro duro sobre una suposición el día antes del lanzamiento era peor |
+| **La prueba con un comentario real** | mié 19-ago, cuando salga el primer carrusel. `media_count: 0` hasta entonces |
