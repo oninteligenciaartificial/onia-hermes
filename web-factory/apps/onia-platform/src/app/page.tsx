@@ -4,8 +4,10 @@ import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/landing/hero";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { Features } from "@/components/landing/features";
+import { ChatbotCta } from "@/components/landing/chatbot-cta";
 import { Pricing } from "@/components/landing/pricing";
-import { Closing, Garantia } from "@/components/landing/closing";
+import { ComparativaTeaser } from "@/components/landing/comparativa-teaser";
+import { Closing } from "@/components/landing/closing";
 import { Faq, FAQS } from "@/components/landing/faq";
 import { BleedWordmark } from "@/motion";
 import { MobileBar } from "@/components/landing/mobile-bar";
@@ -110,19 +112,22 @@ const JSON_LD = {
 };
 
 /**
- * Landing Onia Platform — porte fiel del mockup aprobado por Sergio
- * (2026-08-01). Seis secciones, en este orden y no en otro:
+ * Landing Onia Platform — rediseno post-hero pedido por Sergio (2026-08-18,
+ * "se ven demasiado simples, demasiada cara de IA"). El hero es el aprobado
+ * y no se toca. Orden de secciones:
  *
  *   hero (promesa + una pantalla)
- *   -> como funciona (3 pasos, con la captura real del selector de rubro)
- *   -> modulos (carrusel de funciones, sobre verde hondo)
- *   -> precios (en bolivianos, con el estado fiscal a la vista)
- *   -> garantia (14 dias sin tarjeta, sin permanencia, datos exportables)
- *   -> cierre.
+ *   -> como funciona (3 pasos con numerales editoriales; el 03 se TOCA)
+ *   -> modulos (bento desigual sobre verde hondo; los rubros, banda de estado)
+ *   -> chatbot (seccion propia: telefono vivo + escalera N1-N3 con precios)
+ *   -> precios (Pro en tinta; listas largas plegadas, nada borrado)
+ *   -> comparativa (teaser en tinta de /comparativa, con fuentes y fecha)
+ *   -> preguntas (dos columnas, aside sticky con salida a WhatsApp)
+ *   -> cierre (foto a sangre + display + las tres garantias sobre hairline).
  *
- * Lo denso que salio del home no se borro: la comparacion con la competencia
- * (incluido lo que el sistema todavia NO hace) vive en /comparativa, el estado
- * de la factura fiscal esta en precios y en las preguntas frecuentes.
+ * La garantia ya no es seccion aparte: sus tres promesas viven en el cierre,
+ * al lado del boton que pide el salto. La comparacion completa sigue en
+ * /comparativa; el home muestra el teaser con los datos de lib/proof.ts.
  */
 export default function Home() {
   return (
@@ -144,8 +149,9 @@ export default function Home() {
         <Hero />
         <HowItWorks />
         <Features />
+        <ChatbotCta />
         <Pricing />
-        <Garantia />
+        <ComparativaTeaser />
         <Faq />
         <Closing />
         {/* Remate editorial: el nombre a escala descarada, cortado por el

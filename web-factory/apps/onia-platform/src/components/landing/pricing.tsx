@@ -71,11 +71,24 @@ export function Pricing({ sinEncabezado = false }: { sinEncabezado?: boolean }) 
               </p>
 
               <p className={styles.planListaTitulo}>Qué lleva</p>
+              {/* 4 renglones clave a la vista; el resto se PLIEGA, no se borra
+                  (la checklist de 8 items igualaba las tres tarjetas en una
+                  pared de texto que nadie leia) */}
               <ul className={styles.planIncluye}>
-                {plan.incluye.map((item) => (
+                {plan.incluye.slice(0, 4).map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
+              {plan.incluye.length > 4 && (
+                <details className={styles.planMore}>
+                  <summary>Todo lo que lleva ({plan.incluye.length})</summary>
+                  <ul>
+                    {plan.incluye.slice(4).map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </details>
+              )}
 
               <p className={styles.planListaTitulo}>Qué no lleva</p>
               <ul className={styles.planSin}>

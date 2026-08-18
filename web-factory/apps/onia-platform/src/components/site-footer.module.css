@@ -1,49 +1,90 @@
 /*
- * Pie — porte del mockup aprobado (2026-08-01). Una fila de destinos y la
- * firma; debajo, la identidad legal en chico (cumplimiento, no venta).
+ * Pie — sitemap agrupado por sustantivos: la marca y la identidad legal a la
+ * izquierda, tres columnas de destinos a la derecha. Reemplaza a la fila
+ * plana de 13 links que quebraba en dos lineas desparejas.
  */
 
 .footer {
   font-family: var(--font-sans), system-ui, sans-serif;
   border-top: 1px solid var(--line-soft);
-  padding-block: 2.5rem 3rem;
+  padding-block: clamp(2.5rem, 5vw, 4rem) 3rem;
   color: var(--ink-faint);
 }
 
-.inner {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 2rem;
-  align-items: center;
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  gap: 2rem clamp(1.5rem, 4vw, 4rem);
+  align-items: start;
+}
+
+@media (max-width: 899px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .brandCol {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 479px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.brandCol {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: start;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  margin-right: 1.5rem;
 }
 
-/* 44px de area tactil tambien en el pie */
-.inner a {
+.firma {
+  font-size: max(0.9rem, var(--fs-micro-min));
+  color: var(--ink-soft);
+  max-width: 26ch;
+  text-wrap: pretty;
+  margin: 0;
+}
+
+/* etiqueta de grupo: el mismo gesto mono de los kickers, sin el punto */
+.colTitulo {
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.68rem, var(--fs-label-min));
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 0.4rem;
+}
+
+.col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.col a {
   color: var(--ink-soft);
   text-decoration: none;
   font-size: max(0.9rem, var(--fs-micro-min));
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 40px;
 }
 
-.inner a:hover {
+.col a:hover {
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-
-.firma {
-  font-size: max(0.75rem, var(--fs-label-min));
-  font-variant-numeric: tabular-nums;
-  margin-left: auto;
 }
 
 .legalId {
@@ -52,6 +93,7 @@
   line-height: 1.7;
   color: var(--ink-faint);
   text-wrap: pretty;
+  font-variant-numeric: tabular-nums;
   margin-top: 0.6rem;
 }
 
@@ -66,8 +108,7 @@
   color: var(--ink);
 }
 
-/* En el telefono el telefono y el mail SE TOCAN: 44px de area tactil. El alto
-   se lo come el propio link, no un hueco entre lineas. */
+/* En el telefono el mail se toca con el pulgar: 44px de area tactil. */
 @media (max-width: 899px) {
   .legalId a {
     display: inline-flex;

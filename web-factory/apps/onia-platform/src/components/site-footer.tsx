@@ -2,47 +2,79 @@ import { BrandLogo } from "@/components/brand-logo";
 import styles from "./site-footer.module.css";
 
 /**
- * Pie — porte del mockup aprobado: una fila, cuatro destinos y la firma.
- * Lo que antes era un pie de cuatro columnas ahora vive en las secciones o
- * en /comparativa; repetirlo abajo era decir dos veces lo mismo.
+ * Pie — sitemap interno agrupado por sustantivos (patron Stripe/Efferd:
+ * grupos con etiqueta, no una fila plana de 13 links que quebraba raro).
+ * Toda pagina publica del sitio conserva su destino aca.
  *
- * La segunda linea (identidad legal) NO sale del mockup y se conserva a
- * proposito: la verificacion de negocio de Meta cruza el sitio contra el
- * documento del SEPREC, y el numero es el mismo que figura en el portfolio.
- * Si se borra, se cae esa verificacion.
+ * La identidad legal NO se toca: la verificacion de negocio de Meta cruza el
+ * sitio contra el documento del SEPREC, y el numero es el mismo que figura
+ * en el portfolio. Si se borra, se cae esa verificacion.
  */
+const GRUPOS: readonly {
+  titulo: string;
+  links: readonly { href: string; label: string }[];
+}[] = [
+  {
+    titulo: "Producto",
+    links: [
+      { href: "/precios", label: "Precios" },
+      { href: "/prueba-gratis", label: "Prueba gratis" },
+      { href: "/comparativa", label: "Comparación" },
+      { href: "/modulos/dental", label: "Módulo dental" },
+      { href: "/funciones/facturacion-electronica-siat", label: "Facturación SIAT" },
+    ],
+  },
+  {
+    titulo: "Servicios",
+    links: [
+      { href: "/chatbot", label: "Chatbot de WhatsApp" },
+      { href: "/servicios/webs", label: "Webs" },
+      { href: "/servicios/marketing-ia", label: "Marketing IA" },
+      { href: "/servicios/consultoria", label: "Consultoría" },
+    ],
+  },
+  {
+    titulo: "Empresa",
+    links: [
+      { href: "/nosotros", label: "Nosotros" },
+      { href: "/terminos", label: "Términos" },
+      { href: "/privacidad", label: "Privacidad" },
+    ],
+  },
+];
+
 export function SiteFooter() {
   return (
     <footer className={styles.footer}>
-      <div className={`container ${styles.inner}`}>
-        <a href="/" className={styles.brand} aria-label="Onia Platform — inicio">
-          <BrandLogo height={22} />
-        </a>
-        {/* El pie es el sitemap interno (patrón Holded/Bind, research
-            2026-08-06): toda página pública del sitio tiene su destino acá. */}
-        <a href="/precios">Precios</a>
-        <a href="/prueba-gratis">Prueba gratis</a>
-        <a href="/chatbot">Chatbot</a>
-        <a href="/servicios/webs">Webs</a>
-        <a href="/servicios/marketing-ia">Marketing IA</a>
-        <a href="/servicios/consultoria">Consultoría</a>
-        <a href="/modulos/dental">Dental</a>
-        <a href="/funciones/facturacion-electronica-siat">Facturación SIAT</a>
-        <a href="/comparativa">Comparación</a>
-        <a href="/nosotros">Nosotros</a>
-        <a href="/terminos">Términos</a>
-        <a href="/privacidad">Privacidad</a>
-        <span className={styles.firma}>Onia Platform · Santa Cruz, Bolivia</span>
-      </div>
+      <div className={`container ${styles.grid}`}>
+        <div className={styles.brandCol}>
+          <a href="/" className={styles.brand} aria-label="Onia Platform — inicio">
+            <BrandLogo height={22} />
+          </a>
+          <p className={styles.firma}>
+            El sistema de gestión con IA hecho en Bolivia.
+          </p>
+          <address className={styles.legalId}>
+            OniaAgency
+            <span aria-hidden> · </span>NIT 5371375010
+            <span aria-hidden> · </span>Santa Cruz de la Sierra, Bolivia
+            <span aria-hidden> · </span>
+            <a href="mailto:business@onia.com.bo">business@onia.com.bo</a>
+          </address>
+        </div>
 
-      <div className="container">
-        <address className={styles.legalId}>
-          OniaAgency
-          <span aria-hidden> · </span>NIT 5371375010
-          <span aria-hidden> · </span>Santa Cruz de la Sierra, Bolivia
-          <span aria-hidden> · </span>
-          <a href="mailto:business@onia.com.bo">business@onia.com.bo</a>
-        </address>
+        {GRUPOS.map((grupo) => (
+          <nav key={grupo.titulo} aria-label={grupo.titulo} className={styles.col}>
+            <p className={styles.colTitulo}>{grupo.titulo}</p>
+            <ul>
+              {grupo.links.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
       </div>
     </footer>
   );

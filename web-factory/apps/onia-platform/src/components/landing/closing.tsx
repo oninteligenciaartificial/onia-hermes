@@ -3,69 +3,42 @@ import { APP_URL, WA_URL_LANDING } from "@/lib/site";
 import styles from "./landing.module.css";
 
 /**
- * Garantia — la card sobre tinta que contesta el miedo real de quien no nos
- * conoce ("¿y si no me sirve?") con lo unico que lo cubre: probás antes de
- * pagar, salís cuando querés y los datos te los llevás.
+ * Cierre — un solo viewport con proposito unico: la foto a sangre con velo de
+ * tinta, el display, las dos salidas y las tres garantias sobre una hairline.
+ *
+ * La antigua seccion "Garantia" (tinta aparte) vive ACA, condensada: las tres
+ * promesas contestan el miedo real ("¿y si no me sirve?") justo al lado del
+ * boton que pide el salto. Nada se borro — se movio a donde se decide.
  *
  * Regla al editar: NADA de prueba inventada (clientes, cifras, testimonios,
- * logos). Y tampoco al reves: el estado de la factura fiscal y lo que el
- * sistema todavia no hace no se borran del sitio — viven donde se decide la
- * compra (preguntas frecuentes, precios y /comparativa), dichos como estado.
+ * logos). El estado fiscal y lo que falta viven en precios, la comparativa y
+ * las preguntas frecuentes, dichos como estado.
  */
-export function Garantia() {
-  return (
-    <section className={`${styles.section} ${styles.secTinta} ${styles.onDark}`}>
-      <div className={styles.container}>
-        <Reveal className={styles.honest}>
-          <h2>Probalo 14 días antes de decidir. Sin tarjeta.</h2>
-          <ul>
-            <li>
-              Entrás, elegís tu rubro y usás el sistema completo: 14 días
-              gratis, sin poner un peso ni dejar una tarjeta.
-            </li>
-            <li>
-              Sin contrato de permanencia: pagás el ciclo que elijas y dejás de
-              renovar cuando quieras, sin penalidad.
-            </li>
-            <li>
-              Tus datos son tuyos: los exportás en CSV cuando quieras, no los
-              vendemos y no entrenamos modelos de IA con ellos.
-            </li>
-            <li>
-              <a href="/comparativa">Ver la comparación completa →</a>
-            </li>
-          </ul>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/** Cierre — una foto ancha, un display y las dos salidas. Nada mas. */
 export function Closing() {
   return (
-    <section className={`${styles.section} ${styles.sectionAir}`}>
-      <div className={styles.container}>
-        <Reveal className={`${styles.photo} ${styles.photoClose}`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/fotos/duena-telefono.webp"
-            alt="Dueña de un negocio revisando en su teléfono las citas confirmadas del día."
-            width={1344}
-            height={768}
-            loading="lazy"
-            decoding="async"
-          />
-        </Reveal>
+    <section className={`${styles.closeSec} ${styles.onDark}`}>
+      <div className={styles.closeBg} aria-hidden>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/fotos/duena-telefono.webp"
+          alt=""
+          width={1344}
+          height={768}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
 
-      <div className={`${styles.container} ${styles.close}`}>
+      <div className={`${styles.container} ${styles.closeIn}`}>
         <Reveal>
+          <span className={styles.kicker}>Empezá hoy</span>
+        </Reveal>
+        <Reveal delay={0.06}>
           <h2 className={styles.display}>
             Probá Onia Platform <em>14 días gratis</em>.
           </h2>
         </Reveal>
-        <Reveal delay={0.08} className={styles.closeCta}>
+        <Reveal delay={0.12} className={styles.closeCta}>
           <PressableCta>
             <a
               className={`${styles.btn} ${styles.btnPrimary}`}
@@ -82,6 +55,30 @@ export function Closing() {
           >
             Hablemos por WhatsApp
           </a>
+        </Reveal>
+
+        <Reveal delay={0.18} className={styles.closeGarantias} as="div">
+          <div>
+            <h3>Sin tarjeta</h3>
+            <p>
+              Entrás, elegís tu rubro y usás el sistema completo 14 días, sin
+              poner un peso ni dejar una tarjeta.
+            </p>
+          </div>
+          <div>
+            <h3>Sin permanencia</h3>
+            <p>
+              Pagás el ciclo que elijas y dejás de renovar cuando quieras, sin
+              penalidad.
+            </p>
+          </div>
+          <div>
+            <h3>Tus datos son tuyos</h3>
+            <p>
+              Los exportás en CSV cuando quieras. No los vendemos y no
+              entrenamos modelos de IA con ellos.
+            </p>
+          </div>
         </Reveal>
       </div>
     </section>

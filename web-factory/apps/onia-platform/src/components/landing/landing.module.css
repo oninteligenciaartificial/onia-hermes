@@ -495,33 +495,68 @@
   transform: translateX(16px);
 }
 
+/* colores del ModuleToggle interactivo (el kit expone data-attributes) */
+.mod [data-track-off] {
+  background: var(--line);
+}
+
+.mod [data-track-on] {
+  background: var(--accent);
+}
+
+.mod [data-knob] {
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+}
+
 /* ---------------- como funciona: 3 pasos zig-zag ---------------- */
 
 .steps {
   display: grid;
-  gap: clamp(3.5rem, 6vw, 7rem);
+  gap: clamp(3rem, 5vw, 5.5rem);
   margin-top: clamp(2.5rem, 5vw, 4.5rem);
 }
 
+/*
+ * Cada paso arranca en una hairline (modulos divididos por lineas de pelo,
+ * no tarjetas — patron Ledgerix/Convox de la cosecha 5b) y el numeral vive
+ * ENCIMA de esa linea: editorial, fino y grande, no un adorno gris invisible
+ * (el 01 anterior iba en --line y desaparecia contra el papel).
+ */
 .step {
   display: grid;
   gap: clamp(1.5rem, 4vw, 3.5rem);
   align-items: center;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  border-top: 1px solid var(--line-soft);
+  padding-top: clamp(1.8rem, 3vw, 2.6rem);
 }
 
 .step:nth-child(even) .stepVisual {
   order: -1;
 }
 
+/* numeral editorial: peso fino, tamano de display, tinta plena */
 .stepNum {
-  font-weight: 500;
-  font-size: clamp(3rem, 1.8rem + 4.5vw, 5rem);
+  font-weight: 330;
+  font-size: clamp(3.6rem, 2.2rem + 5.5vw, 6.5rem);
   line-height: 0.85;
-  color: var(--line);
-  letter-spacing: -0.2px;
-  display: block;
-  margin-bottom: 0.35rem;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.18em;
+  margin-bottom: 0.5rem;
+}
+
+/* el punto de encendido de la casa remata el numeral */
+.stepNum::after {
+  content: "";
+  width: 0.14em;
+  height: 0.14em;
+  border-radius: 50%;
+  background: var(--senal);
 }
 
 .step h3 {
@@ -607,60 +642,136 @@
   color: var(--accent-ink);
 }
 
-/* ---------------- modulos: carrusel de funciones ---------------- */
+/* ---------------- modulos: banda de rubros + bento ---------------- */
 
-.rubroTabs {
+/*
+ * Los rubros dejaron de ser tabs que no filtraban nada (un selector mentiroso
+ * es peor que ninguno): son una BANDA DE ESTADO. Los seis vivos con el punto
+ * de encendido; los que vienen, en linea punteada. Nada se toca, todo se lee.
+ */
+.rubrosBand {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  align-items: center;
+  gap: 0.5rem 0.6rem;
   margin-top: 1.8rem;
 }
 
-.rtab {
+.rubrosLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.68rem, var(--fs-label-min));
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(237 241 239 / 0.55);
+  margin: 0 0.5rem 0 0;
+  flex: none;
+}
+
+.rubrosBand .rubrosLabel + .rubrosLabel {
+  margin-left: 1rem;
+}
+
+.rubroLive {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  min-height: 44px;
-  padding: 0.5rem 1.1rem;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0.4rem 1rem;
   border-radius: 999px;
-  border: 1.5px solid var(--line);
-  background: transparent;
-  cursor: pointer;
-  font-family: var(--font), sans-serif;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--ink-soft);
-  transition:
-    border-color 0.18s var(--ease),
-    color 0.18s var(--ease),
-    background-color 0.18s var(--ease);
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+  font-size: max(0.9rem, var(--fs-micro-min));
+  font-weight: 550;
+  color: #fff;
 }
 
-.rtab small {
-  font-size: max(0.66rem, var(--fs-label-min));
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
+.rubroLive::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--senal);
+  box-shadow: 0 0 0 3px rgb(0 210 106 / 0.22);
+  flex: none;
 }
 
-.band {
+.rubroSoon {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px dashed rgb(255 255 255 / 0.28);
+  font-size: max(0.85rem, var(--fs-micro-min));
+  color: rgb(237 241 239 / 0.6);
+}
+
+/*
+ * Bento desigual (patron "bento grid activo", Dribbble 2026 via
+ * DESIGN_LEARNED §3a): el tile de agentes es el heroe a doble altura, el
+ * resto escolta. Reemplaza al carrusel de 7 cards identicas que dejaba
+ * medio viewport vacio a la derecha.
+ */
+.bento {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: min(82vw, 400px);
-  gap: clamp(1rem, 2vw, 1.6rem);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 0.5rem var(--gutter) 1rem;
-  margin-top: clamp(1.8rem, 3vw, 2.6rem);
-  scrollbar-width: thin;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-top: clamp(2rem, 3.5vw, 3rem);
+}
+
+.bHero {
+  grid-column: span 7;
+  grid-row: span 2;
+}
+
+.bHalf {
+  grid-column: span 5;
+}
+
+.bThird {
+  grid-column: span 4;
+}
+
+@media (max-width: 979px) {
+  .bHero,
+  .bHalf {
+    grid-column: span 12;
+    grid-row: auto;
+  }
+
+  .bThird {
+    grid-column: span 6;
+  }
+
+  .bThird:last-child {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 599px) {
+  .bThird,
+  .bThird:last-child {
+    grid-column: span 12;
+  }
 }
 
 .fcard {
-  scroll-snap-align: center;
   margin: 0;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  align-content: start;
+}
+
+/* el heroe estira su visual para llenar la doble altura */
+.bHero .fvis {
+  aspect-ratio: auto;
+  flex: 1;
+  min-height: 340px;
+}
+
+.bHero .fmeta p {
+  max-width: 46ch;
 }
 
 /* el visual llena el marco y se recorta abajo: da la sensacion de pantalla
@@ -733,42 +844,6 @@
   box-shadow: inset 0 0 0 1px var(--line);
 }
 
-.fnav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
-}
-
-/* Dots del auto-avance: posicion + salto directo a cada card. */
-.fdots {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 0.5rem;
-}
-
-.fdot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  background: rgb(255 255 255 / 0.28);
-  transition: background 0.25s ease, transform 0.25s ease;
-}
-
-.fdot:hover {
-  background: rgb(255 255 255 / 0.55);
-}
-
-.fdotOn {
-  background: var(--senal, #00d26a);
-  transform: scale(1.25);
-}
-
 /* --------------------- Remate editorial (BleedWordmark) ------------------- */
 .wordmarkStrip {
   padding-top: clamp(2rem, 6vw, 5rem);
@@ -786,10 +861,229 @@
   text-align: center;
 }
 
+/* ---------------- chatbot: telefono + escalera de stacks ------------------ */
+
+/*
+ * Split editorial: el telefono con la conversacion VIVA a la izquierda
+ * (la escena del kit avanza mensaje a mensaje), la escalera N1-N2-N3 como
+ * celdas de pelo a la derecha (sin tarjetas). Los montos salen de
+ * src/content/chatbot-precios.ts — aca no vive ningun numero.
+ */
+.botGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+  margin-top: clamp(2rem, 4vw, 3.2rem);
+}
+
+@media (max-width: 899px) {
+  .botGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.botPhone {
+  position: relative;
+  max-width: 340px;
+  width: 100%;
+  justify-self: center;
+  border-radius: 26px;
+  background: var(--surface);
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
+}
+
+/* halo de encendido: el mismo gesto del hero, reciclado */
+.botPhoneWrap {
+  position: relative;
+}
+
+.botPhoneWrap::after {
+  content: "";
+  position: absolute;
+  inset: 14% -4% -8% -4%;
+  background: radial-gradient(60% 60% at 50% 60%, var(--accent-glow), transparent 70%);
+  filter: blur(38px);
+  z-index: -1;
+}
+
+.botPhoneBar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem;
+  background: var(--verde-800);
+  color: #fff;
+}
+
+.botPhoneBar b {
+  font-size: max(0.85rem, var(--fs-micro-min));
+  font-weight: 600;
+}
+
+.botPhoneBar span {
+  font-size: max(0.7rem, var(--fs-label-min));
+  color: rgb(255 255 255 / 0.65);
+}
+
+.botAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--senal);
+  color: var(--tinta);
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex: none;
+}
+
+.botChat {
+  padding: 1rem;
+  display: grid;
+  gap: 0.5rem;
+  background: var(--bg-deep);
+  min-height: 300px;
+  align-content: start;
+}
+
+.botHora {
+  font-size: max(0.62rem, var(--fs-label-min));
+  color: var(--ink-faint);
+  margin-top: -0.2rem;
+}
+
+/* escalera de stacks: celdas de pelo, no tarjetas */
+.stacks {
+  display: grid;
+  border-top: 1px solid var(--line-soft);
+}
+
+.stackRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.4rem 1.2rem;
+  align-items: start;
+  padding: clamp(1.1rem, 2vw, 1.5rem) 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.stackFeat {
+  background: linear-gradient(90deg, var(--accent-soft), transparent 80%);
+  margin-inline: calc(clamp(0.7rem, 1.5vw, 1.1rem) * -1);
+  padding-inline: clamp(0.7rem, 1.5vw, 1.1rem);
+  border-radius: 12px;
+  border-bottom-color: var(--accent);
+}
+
+.stackNivel {
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.78rem, var(--fs-label-min));
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--accent-ink);
+  padding-top: 0.3em;
+}
+
+.stackBody h3 {
+  font-size: max(1.05rem, var(--fs-micro-min));
+}
+
+.stackBody p {
+  margin-top: 0.3rem;
+  font-size: max(0.88rem, var(--fs-micro-min));
+  color: var(--ink-soft);
+  max-width: 44ch;
+  line-height: 1.5;
+}
+
+.stackPrecio {
+  text-align: right;
+  display: grid;
+  gap: 0.1rem;
+  justify-items: end;
+}
+
+.stackPrecio b {
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: max(0.95rem, var(--fs-micro-min));
+}
+
+.stackPrecio span {
+  font-size: max(0.75rem, var(--fs-label-min));
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.stackFlag {
+  font-size: max(0.66rem, var(--fs-label-min));
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  font-family: var(--font-mono), monospace;
+}
+
+@media (max-width: 599px) {
+  .stackRow {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .stackPrecio {
+    grid-column: 2;
+    justify-items: start;
+    text-align: left;
+  }
+}
+
+.botNota {
+  margin-top: 1.2rem;
+  font-size: max(0.85rem, var(--fs-micro-min));
+  color: var(--ink-faint);
+  max-width: 56ch;
+  line-height: 1.5;
+}
+
 /* ------------------------------- FAQ -------------------------------------- */
+
+/*
+ * Dos columnas: titulo + salida por WhatsApp quedan pegados (sticky) a la
+ * izquierda mientras el lector recorre el acordeon — se acabo el desierto
+ * de espacio a la derecha del layout anterior.
+ */
+.faqGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.faqAside {
+  position: sticky;
+  top: calc(var(--header-h) + 2rem);
+  display: grid;
+  gap: 1.1rem;
+  justify-items: start;
+}
+
+.faqAside .copy {
+  max-width: 30ch;
+}
+
+@media (max-width: 899px) {
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .faqAside {
+    position: static;
+  }
+}
+
 .faqList {
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
-  max-width: 46rem;
+  margin-top: 0;
   display: grid;
   gap: 0.65rem;
 }
@@ -840,35 +1134,6 @@
   margin: 0;
   color: rgb(18 16 14 / 0.72);
   line-height: 1.6;
-}
-
-.fbtn {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: var(--surface);
-  border: 1.5px solid var(--line);
-  color: var(--ink);
-  cursor: pointer;
-  transition:
-    border-color 0.18s var(--ease),
-    background-color 0.18s var(--ease),
-    transform 0.18s var(--ease);
-}
-
-.fbtn:hover {
-  border-color: var(--ink);
-}
-
-.fbtn:active {
-  transform: scale(0.94);
-}
-
-.fbtn[disabled] {
-  opacity: 0.35;
-  cursor: default;
 }
 
 /* maqueta de la web del negocio */
@@ -993,9 +1258,55 @@
   padding-top: 1rem;
 }
 
+/*
+ * El recomendado se distingue DE VERDAD: tarjeta de tinta con el CTA señal,
+ * no "la misma tarjeta sin borde". Jerarquia por profundidad y contraste
+ * (una superficie oscura entre dos claras), no por una pastilla.
+ */
 .planFeat {
   border: none;
   box-shadow: var(--shadow-pop);
+  background: var(--tinta);
+  color: #edf1ef;
+}
+
+.planFeat h3 {
+  color: #fff;
+}
+
+.planFeat .res,
+.planFeat .planCiclos,
+.planFeat .planCuando {
+  color: rgb(237 241 239 / 0.66);
+}
+
+.planFeat .planIncluye,
+.planFeat .planSin {
+  color: rgb(237 241 239 / 0.8);
+}
+
+.planFeat .planIncluye li::before {
+  color: var(--senal);
+}
+
+.planFeat .planListaTitulo {
+  color: rgb(237 241 239 / 0.5);
+}
+
+.planFeat .priceU {
+  color: rgb(237 241 239 / 0.6);
+}
+
+.planFeat .guarantee {
+  color: rgb(237 241 239 / 0.66);
+}
+
+/* en escritorio, la tarjeta de tinta ademas SOBRESALE del renglon */
+@media (min-width: 900px) {
+  .planFeat {
+    margin-block: -1.1rem;
+    padding-block: calc(clamp(1.3rem, 2.2vw, 1.9rem) + 1.1rem);
+  }
 }
 
 .planStep {
@@ -1003,10 +1314,11 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-faint);
+  font-family: var(--font-mono), monospace;
 }
 
 .planFeat .planStep {
-  color: var(--accent-ink);
+  color: var(--verde-300);
 }
 
 .plan h3 {
@@ -1027,10 +1339,14 @@
   margin: 0.2rem 0 0;
 }
 
+/*
+ * Numeral editorial: mas grande y mas FINO (Callivio/Ledgerix, cosecha 5b) —
+ * la magnitud la da el tamano, no el bold.
+ */
 .priceN {
-  font-weight: 560;
-  letter-spacing: -0.2px;
-  font-size: clamp(2.4rem, 1.9rem + 2.2vw, 3.4rem);
+  font-weight: 380;
+  letter-spacing: -0.03em;
+  font-size: clamp(2.8rem, 2.1rem + 2.8vw, 4.2rem);
   line-height: 1;
 }
 
@@ -1138,6 +1454,66 @@
   font-style: italic;
 }
 
+/* lo que excede los 4 renglones clave se PLIEGA, no se borra */
+.planMore summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  font-size: max(0.85rem, var(--fs-micro-min));
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+.planFeat .planMore summary {
+  color: var(--verde-300);
+}
+
+.planMore summary::-webkit-details-marker {
+  display: none;
+}
+
+.planMore summary::after {
+  content: "+";
+  margin-left: 0.4em;
+}
+
+.planMore[open] summary::after {
+  content: "–";
+}
+
+.planMore ul {
+  margin: 0.2rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+  font-size: max(0.9rem, var(--fs-micro-min));
+  color: var(--ink-soft);
+}
+
+.planFeat .planMore ul {
+  color: rgb(237 241 239 / 0.8);
+}
+
+.planMore li {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  gap: 0.35rem;
+  line-height: 1.4;
+}
+
+.planMore li::before {
+  content: "✓";
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+.planFeat .planMore li::before {
+  color: var(--senal);
+}
+
 .planGrupo {
   margin: 1.6rem 0 0;
   padding: 1.1rem 1.3rem;
@@ -1218,79 +1594,264 @@
   color: var(--accent-ink);
 }
 
-/* ---------------- honestidad ---------------- */
+/* ---------------- comparativa (tinta, celdas de pelo) ---------------- */
 
-.honest {
-  display: grid;
-  gap: clamp(1.4rem, 3vw, 3rem);
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: center;
+/*
+ * Una sola superficie dividida por hairlines — sin tarjetas (patron Convox
+ * "celdas de pelo" + tabla honesta de /comparativa condensada). El verde
+ * marca SOLO lo que esta vivo; lo en tramite va punteado: el color es
+ * semantica de estado, no decoracion.
+ */
+.cmpTable {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid rgb(255 255 255 / 0.14);
 }
 
-@media (max-width: 899px) {
-  .honest {
-    grid-template-columns: 1fr;
+.cmpHead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) repeat(3, minmax(0, 0.62fr)) minmax(0, 1fr);
+  gap: 0.8rem;
+  padding: 0.9rem 0 0.7rem;
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.66rem, var(--fs-label-min));
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(237 241 239 / 0.55);
+}
+
+.cmpRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) repeat(3, minmax(0, 0.62fr)) minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: center;
+  padding: clamp(1rem, 2vw, 1.4rem) 0;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.cmpOnia {
+  background: linear-gradient(90deg, rgb(0 210 106 / 0.1), transparent 78%);
+  border-top-color: rgb(0 210 106 / 0.4);
+  margin-inline: calc(clamp(0.6rem, 1.5vw, 1.2rem) * -1);
+  padding-inline: clamp(0.6rem, 1.5vw, 1.2rem);
+  border-radius: 12px;
+}
+
+.cmpQuien {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.cmpQuien strong {
+  font-weight: 600;
+  color: #fff;
+  font-size: max(1rem, var(--fs-micro-min));
+}
+
+.cmpQuien span {
+  font-size: max(0.8rem, var(--fs-micro-min));
+  color: rgb(237 241 239 / 0.55);
+}
+
+.cmpCell {
+  display: grid;
+  justify-items: start;
+  gap: 0.35rem;
+}
+
+.cmpDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.cmpCell[data-estado="si"] .cmpDot {
+  background: var(--senal);
+  box-shadow: 0 0 0 4px rgb(0 210 106 / 0.18);
+}
+
+.cmpCell[data-estado="no"] .cmpDot {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.3);
+}
+
+.cmpCell[data-estado="tramite"] .cmpDot {
+  background: transparent;
+  border: 1.5px dashed var(--verde-300);
+}
+
+/* la etiqueta del eje por celda solo aparece en telefono (arriba hay header) */
+.cmpCellLabel {
+  display: none;
+  font-size: max(0.72rem, var(--fs-label-min));
+  color: rgb(237 241 239 / 0.6);
+  line-height: 1.25;
+}
+
+.cmpPrecio {
+  display: grid;
+  gap: 0.15rem;
+  justify-items: start;
+}
+
+.cmpPrecio b {
+  font-weight: 600;
+  color: #fff;
+  font-size: max(0.95rem, var(--fs-micro-min));
+  white-space: nowrap;
+}
+
+.cmpPrecio span {
+  font-size: max(0.78rem, var(--fs-micro-min));
+  color: rgb(237 241 239 / 0.55);
+  text-wrap: pretty;
+}
+
+@media (max-width: 767px) {
+  .cmpHead {
+    display: none;
+  }
+
+  .cmpRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem 0.8rem;
+  }
+
+  .cmpQuien,
+  .cmpPrecio {
+    grid-column: 1 / -1;
+  }
+
+  .cmpCellLabel {
+    display: block;
   }
 }
 
-.honest h2 {
-  font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.6rem);
-  max-width: 16ch;
-}
-
-.honest ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 0.75rem;
-}
-
-.honest li {
+/* la nota de honestidad + el cierre de la seccion */
+.cmpFoot {
   display: flex;
-  gap: 0.7rem;
-  font-size: max(0.95rem, var(--fs-micro-min));
-  color: #cfd6d2;
-  line-height: 1.45;
-}
-
-.honest li::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--verde-400);
-  flex: none;
-  margin-top: 0.55em;
-}
-
-.honest a {
-  color: var(--senal);
-  text-underline-offset: 4px;
-  display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
-  min-height: 44px;
+  gap: 1rem 1.5rem;
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
 }
 
-/* ---------------- cierre ---------------- */
+.cmpFoot p {
+  margin: 0 auto 0 0;
+  max-width: 52ch;
+  font-size: max(0.9rem, var(--fs-micro-min));
+}
 
-.close {
-  text-align: center;
+.cmpFecha {
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.68rem, var(--fs-label-min));
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(237 241 239 / 0.45);
+  margin-top: 1rem;
+}
+
+/* ---------------- cierre (foto a sangre + garantias) ---------------- */
+
+/*
+ * El cierre dejo de ser un centered-stack con la foto arriba: la foto ES la
+ * seccion (a sangre, con velo de tinta) y encima van el display, las dos
+ * salidas y las tres garantias sobre una hairline. Un solo viewport con
+ * proposito unico — el permiso de marca que el registre brand habilita.
+ */
+.closeSec {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(6rem, 5rem + 8vw, 12rem);
+  /* la tinta va en la seccion misma: un hijo con z-index negativo se pierde
+     detras del fondo de .page y deja texto blanco sobre papel */
+  background: var(--tinta);
+}
+
+.closeBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.closeBg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+  opacity: 0.55;
+}
+
+.closeBg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg, rgb(18 16 14 / 0.92) 20%, rgb(18 16 14 / 0.55) 70%, rgb(0 77 50 / 0.45)),
+    linear-gradient(0deg, rgb(18 16 14 / 0.85), transparent 45%);
+}
+
+.closeIn {
   display: grid;
-  justify-items: center;
-  gap: 1.4rem;
-  margin-top: clamp(2.5rem, 5vw, 4rem);
+  gap: 1.6rem;
+  justify-items: start;
 }
 
-.close .display {
-  max-width: 12ch;
+.closeIn .display {
+  max-width: 13ch;
+  color: #fff;
+}
+
+.closeSec .display em {
+  color: var(--senal);
 }
 
 .closeCta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
-  justify-content: center;
+}
+
+/* garantias: tres celdas sobre una hairline, no bullets */
+.closeGarantias {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.2rem, 3vw, 2.5rem);
+  border-top: 1px solid rgb(255 255 255 / 0.18);
+  padding-top: clamp(1.4rem, 2.5vw, 2rem);
+  margin-top: clamp(1.6rem, 3vw, 2.6rem);
+  width: 100%;
+}
+
+.closeGarantias h3 {
+  font-size: max(1rem, var(--fs-micro-min));
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.closeGarantias h3::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--senal);
+  flex: none;
+}
+
+.closeGarantias p {
+  margin-top: 0.45rem;
+  font-size: max(0.88rem, var(--fs-micro-min));
+  color: rgb(237 241 239 / 0.72);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+@media (max-width: 767px) {
+  .closeGarantias {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
 }
 
 /* ---------------- ritmo de tonalidades ---------------- */
@@ -1344,46 +1905,8 @@
   background: var(--bg-deep);
 }
 
-.onDark .rtab {
-  border-color: rgb(255 255 255 / 0.22);
-  color: rgb(237 241 239 / 0.8);
-}
-
-.onDark .rtab:hover {
-  border-color: #fff;
-  color: #fff;
-}
-
-.onDark .rtab[aria-pressed="true"] {
-  background: var(--senal);
-  border-color: var(--senal);
-  color: var(--tinta);
-}
-
-.onDark .rtab small {
-  color: rgb(237 241 239 / 0.6);
-}
-
-.onDark .rtab[aria-pressed="true"] small {
-  color: rgb(18 16 14 / 0.7);
-}
-
 .onDark .fmeta p {
   color: rgb(237 241 239 / 0.68);
-}
-
-.onDark .fbtn {
-  background: transparent;
-  border-color: rgb(255 255 255 / 0.3);
-  color: #fff;
-}
-
-.onDark .fbtn:hover {
-  border-color: #fff;
-}
-
-.onDark .fbtn[disabled] {
-  opacity: 0.28;
 }
 
 .onDark .rail {
@@ -1499,8 +2022,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .btn,
-  .rtab,
-  .fbtn,
   .plan {
     transition: none;
   }
@@ -1509,4 +2030,17 @@
   .plan:hover {
     translate: none;
   }
+}
+
+/* texto solo para lectores de pantalla (estados de la comparativa) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }

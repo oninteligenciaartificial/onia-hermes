@@ -1,24 +1,17 @@
 import { Reveal, SplitTextReveal } from "@/motion";
 import { WA_URL_LANDING } from "@/lib/site";
-import { Modules, Row, Shot, ShotImage } from "./shot";
+import { Row, Shot, ShotImage } from "./shot";
+import { ModulesDemo } from "./modules-demo";
 import styles from "./landing.module.css";
-
-const MODULOS_PASO3 = [
-  { label: "Gestión", on: true },
-  { label: "Agentes IA", on: true },
-  { label: "WhatsApp", on: true },
-  { label: "Página web", on: false },
-  { label: "Reserva online", on: false },
-  { label: "Automatizaciones", on: false },
-] as const;
 
 /**
  * Como funciona — 3 pasos en zig-zag, no 3 cards iguales.
- * Cada paso: numero grande, titulo de 3 palabras, UNA frase (<=11 palabras)
- * y una imagen grande. 44 palabras en toda la seccion.
+ * Cada paso: numeral editorial (fino y grande, sobre su hairline), titulo de
+ * 3 palabras, UNA frase y una imagen grande.
  *
  * El paso 01 lleva la CAPTURA REAL del selector de rubro de app.onia.com.bo:
  * es la pantalla que prueba el multirubro, y es publica (no hace falta cuenta).
+ * El paso 03 se TOCA: los interruptores de modulos son reales (ModulesDemo).
  */
 export function HowItWorks() {
   return (
@@ -88,14 +81,10 @@ export function HowItWorks() {
             <p>Chatbot, web, agentes. Un interruptor, no un sistema nuevo.</p>
           </Reveal>
           <Reveal delay={0.1} className={styles.stepVisual}>
-            <div
-              role="img"
-              aria-label="Pantalla de módulos de la cuenta: interruptores para gestión, agentes con IA, WhatsApp, página web, reserva online y automatizaciones."
-            >
-              <Shot title="Módulos de tu cuenta">
-                <Modules items={MODULOS_PASO3} />
-              </Shot>
-            </div>
+            {/* interactivo de verdad: cada interruptor es un switch accesible */}
+            <Shot title="Módulos de tu cuenta" tag="Probalos">
+              <ModulesDemo />
+            </Shot>
           </Reveal>
         </article>
       </div>

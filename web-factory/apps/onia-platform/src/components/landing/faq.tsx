@@ -1,4 +1,5 @@
 import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
+import { WA_URL_LANDING } from "@/lib/site";
 import styles from "./landing.module.css";
 
 /**
@@ -47,17 +48,35 @@ export const FAQS: { q: string; a: string }[] = [
   },
 ];
 
+/**
+ * Dos columnas: el titulo y la salida por WhatsApp quedan sticky a la
+ * izquierda mientras el lector recorre el acordeon — antes el acordeon media
+ * 46rem y dejaba medio viewport desierto a la derecha.
+ */
 export function Faq() {
   return (
     <section className={styles.section} id="preguntas" aria-labelledby="faq-title">
-      <div className={styles.container}>
-        <span className={styles.kicker}>Preguntas frecuentes</span>
-        <div style={{ marginTop: "0.5rem" }} id="faq-title">
-          <SplitTextReveal
-            as="h2"
-            className={styles.sectionTitle}
-            text="Lo que preguntan antes de empezar."
-          />
+      <div className={`${styles.container} ${styles.faqGrid}`}>
+        <div className={styles.faqAside}>
+          <span className={styles.kicker}>Preguntas frecuentes</span>
+          <div id="faq-title">
+            <SplitTextReveal
+              as="h2"
+              className={styles.sectionTitle}
+              text="Lo que preguntan antes de empezar."
+            />
+          </div>
+          <p className="copy">
+            ¿La tuya no está? Escribinos y te contestamos con tu caso concreto.
+          </p>
+          <a
+            className={`${styles.btn} ${styles.btnGhost}`}
+            href={WA_URL_LANDING}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Preguntar por WhatsApp
+          </a>
         </div>
         <StaggerGrid className={styles.faqList}>
           {FAQS.map((item) => (
