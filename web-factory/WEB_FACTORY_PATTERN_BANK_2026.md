@@ -287,6 +287,24 @@ Avoid: abstract AI glow, fake dashboards, vague automation claims, screenshots m
 
 Asset needs: real app screenshots, demo video, integration logos, security notes.
 
+### Tipografía de display — LEYES MEDIDAS (Fanvue, F12 2026-08-18)
+
+Canon para TODA superficie de Onia (landing y producto). Valores leídos del DOM, no
+opinión — detalle en `data/references/design-sources/fanvue-mecanica-medida.md`.
+
+1. **line-height ≤ 1,0 en display, y baja al crecer**: 1,00 a 50 px · 0,90 a 80 px ·
+   0,80 a 106 px. Un titular grande es un BLOQUE, no líneas.
+2. **tracking negativo proporcional**: −0,4 % a 50 px, **−2 % a 80 px** (`-0.02em`).
+3. **peso 500, nunca 700/800**: el impacto sale del tamaño y el apretado.
+4. **cuerpo al 75 % de opacidad** sobre el fondo (off-black, no negro puro): el párrafo
+   cede jerarquía al titular.
+5. **medida de línea ≤ 900 px** aunque la sección sea de 2000: contenedor de texto propio.
+6. **superficies por transparencia (~15 %)**, no grises opacos: profundidad sin bordes.
+7. **gaps generosos** (48–115 px) y marquesina 35 s `linear infinite` para prueba social
+   REAL (nunca material inventado).
+⚠️ Sus fuentes (AG Next/Akzidenz) son de PAGO: en Onia se aplica la mecánica sobre
+**Archivo** (ya es la fuente de marca).
+
 ### Dashboard / Analytics / Internal Tool
 
 **DIRECCIÓN ELEGIDA (Sergio, 2026-08-17): "libro mayor editorial" (v4→v5).**
