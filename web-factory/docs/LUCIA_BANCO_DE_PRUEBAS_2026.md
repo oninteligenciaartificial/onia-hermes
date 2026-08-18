@@ -463,3 +463,53 @@ plano de una pantalla.
 
 > **Si en el plano no hace falta que se reconozca a Lucía, no se paga identidad.**
 > B-roll con `z_image` + `veo3_1_lite`. La cara solo donde el guion la necesita.
+
+---
+
+## 13. 🔴 CORRECCIÓN — "b-roll" significa cosas distintas en cada cuenta
+
+En §12 apliqué la definición genérica de b-roll —planos de apoyo sin el protagonista— y para
+Lucía **está mal**. Sergio lo corrigió:
+
+> *"el b-roll para Lucía son videos de ELLA haciendo cosas diferentes: montando a caballo, en
+> el gimnasio, vistiéndose. Porque ella hace lifestyle."*
+
+Es correcto y es obvio en cuanto se dice: **una influencer no tiene planos de apoyo sin ella.
+Ella ES el contenido.** Un mostrador vacío no es b-roll de Lucía; es b-roll de ONIA.
+
+La tienda que generé en §12 no se tira — **se reasigna a `@oniahq`**, que es una cuenta sin
+cara y ahí sí el b-roll son objetos y ambientes.
+
+### La matriz que faltaba
+
+| | **@oniahq** — el vendedor | **Lucía** — la influencer |
+|---|---|---|
+| Cara en cuadro | **nunca** | **casi siempre** |
+| Qué es su b-roll | mostradores, cuadernos, el celular, la caja, el negocio cerrado | **ella**: gimnasio, a caballo, vistiéndose, cocinando, en la calle |
+| Imagen | **`z_image` · 0,15 cr** — nadie que reconocer | **`nano_banana_2` + ancla · 2,00 cr** — la identidad es el activo |
+| Video | `veo3_1_lite` · 1,00 cr/s | `kling3_0_turbo` · 1,50 cr/s |
+| Costo por segundo | **~1,02 cr/s** | **~1,90 cr/s** |
+| Qué se cuida | que no se lea texto inventado en pantallas | identidad, deformación, continuidad de vestuario |
+
+### Los dos tipos de plano de Lucía — y valen distinto
+
+| | **UGC** (habla a cámara) | **Lifestyle** (hace algo) |
+|---|---|---|
+| Para qué | el gancho, el valor, el CTA | el relleno que la hace parecer una persona con vida |
+| Lipsync | sí — es lo caro | **no hace falta** |
+| Riesgo | la boca | **las manos** — riendas, pesas, ropa: todo lo que agarra |
+| Vestuario | el del ancla | **cambia**, y ahí está la gracia |
+
+**El lifestyle es más barato de acertar** (sin lipsync que sincronizar) **y más caro de
+arruinar**: en cuanto hay manos agarrando algo, aparece el fallo más común del catálogo. En el
+UGC lo evitábamos con `hands out of frame`; acá **no se puede** — las manos son la acción.
+
+> **Regla nueva: en un plano de lifestyle, las manos son el criterio eliminatorio, no la boca.**
+
+### Por qué importa que ella tenga vida propia
+
+No es decorado. El benchmark de §1 lo dice con números: las cuentas IA que murieron eran las
+que **solo publicaban producto de marca**. La que funciona tiene al personaje como contenido.
+
+Si Lucía solo aparece hablando de sistemas de gestión, es un anuncio con cara. El lifestyle es
+lo que le compra el derecho a vender de vez en cuando.
