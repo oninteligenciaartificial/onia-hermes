@@ -81,3 +81,33 @@ Estructura resultante:
 
 **PENDIENTE DE SERGIO: OK para aplicar** (se edita CLAUDE.md + se verifica que
 cada contenido movido esté de verdad en su skill antes de recortar).
+
+
+---
+
+## APLICADA 2026-08-18
+
+Resultado REAL medido (no el estimado del plan):
+
+| | Líneas | Caracteres | Tokens (~chars/3,5) |
+|---|---|---|---|
+| Antes | 247 | 12.814 | ~3.660 |
+| **Después** | **213** | **10.620** | **~3.030** |
+| Ahorro | −34 (−14%) | −2.194 | **~630 por sesión** |
+
+**Menos de lo proyectado (~105 líneas), y con razón**: al aplicar, la mayoría de las
+secciones resultaron ser (a) SIEMPRE — nacidas de errores caros que se necesitan aunque
+la tarea no las toque. Comprimir más habría sido borrar la historia que hace que la
+regla se obedezca. Lo que sí se movió a punteros (con destino verificado, no supuesto):
+
+- ONIA Core → skill `onia-core` (9→5 líneas)
+- Base de producción → skills `onia-db` + `onia-deploy` del producto (7→7 pero ahora
+  apunta al detalle real, incluida la trampa del search_path)
+- Propuestas: las 9 reglas → skill `onia-propuestas` + su fuente (18→10)
+- Video → skills `ver-videos` / `editor-videos` (14→9, conservando la REGLA DE ORO)
+- Skills/marca/carriles/separar-repo: comprimidas sin perder contenido
+
+**Verificado tras aplicar**: las 8 reglas de errores caros siguen presentes
+(objetivo por sesión · fuente de verdad · verificar MIRANDO · nada a medias · main
+compila · auto-sync · dónde va cada cosa · regla de oro del video) y hay 5 punteros
+a skills cuyo contenido se comprobó que existe ANTES de recortar.

@@ -28,18 +28,13 @@ Instrucciones de proyecto. Override sobre defaults.
 
 ## Skills del proyecto (REGLA)
 
-- Toda sesión arranca invocando **`onia-router`**, que enruta la tarea a su carril y
-  nombra el stack de skills + subagente + docs fuente.
-- Skills propias: `onia-router` · `onia-propuestas` · `onia-contabilidad-bolivia` ·
-  `onia-core` · `onia-web-factory` · `ver-videos` · `editor-videos`. Envuelven
-  conocimiento propio y apuntan a las fuentes de verdad — **al cambiar una regla, editar
-  la fuente, no la skill**.
-- Cuatro capas distintas: skills de Claude Code (`.claude/skills/`) · subagentes
-  (`.claude/agents/`) · skills-doc que lee el bot del VPS (`hermes-content/skills/`) ·
-  **skills del producto en `onia-platform/.claude/skills/`** (onia-frontend/backend/db/
-  seguridad/deploy/verificacion — obligatorias al tocar el producto; solo se
-  autolistan en sesiones abiertas DENTRO de onia-platform).
-- Si una tarea tiene skill pública instalada, usarla. No reinventar.
+- Toda sesión arranca invocando **`onia-router`**: él es el índice y rutea la tarea a su
+  carril, su stack de skills, su subagente y sus docs fuente.
+- **Al tocar el producto (`onia-platform`) son OBLIGATORIAS sus skills propias**
+  (`onia-frontend/backend/db/seguridad/deploy/verificacion` en su `.claude/skills/`) —
+  solo se autolistan en sesiones abiertas DENTRO de ese repo.
+- Al aprender una trampa nueva: **editar la skill que corresponda**, no crear doc suelto.
+  Skill pública instalada que sirva: usarla, no reinventar.
 
 ---
 
@@ -101,39 +96,28 @@ Instrucciones de proyecto. Override sobre defaults.
 ## Hay UN solo producto (REGLA)
 
 - **Onia Platform** (repo `onia-platform`), que se vende con **packs por rubro**.
-- `DentalGest`, `GestiOS`, `Ganadero OS` y `ProveeGest` **NO son productos ni marcas
-  hermanas**: son nombres viejos de lo que hoy es un pack. Prohibido generar material,
-  propuestas o UI que los presente como productos aparte. Al cliente se le nombra el
-  rubro ("módulo dental"), nunca una marca propia.
-- **No se le vende solo a clínicas.** Son siete rubros. Nada de "tus pacientes" ni "tu
-  clínica" en material genérico: el producto ya tiene vocabulario por rubro
-  (`lib/onboarding/vocabulario.ts`) — usarlo.
-- ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero **no son productos**: son legado.
-  No se les agrega nada sin decidir si se archivan o se absorben.
+  `DentalGest`, `GestiOS`, `Ganadero OS` y `ProveeGest` **NO son productos ni marcas**:
+  son nombres viejos de packs. Al cliente se le nombra el rubro ("módulo dental").
+- **No se le vende solo a clínicas**: son 7 rubros. Nada de "tus pacientes" en material
+  genérico — el producto tiene vocabulario por rubro (`lib/onboarding/vocabulario.ts`,
+  detalle en la skill `onia-frontend`).
+- ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero son **legado**: no se les agrega
+  nada sin decidir si se archivan o se absorben.
 
 ## ONIA Core (REGLA)
 
-> Fuente de verdad: `onia-core/contract.json`. Docs canónicos en `onia-core/*.md`.
-
-- El core es el núcleo operativo de la plataforma única. **21 capacidades** declaradas:
-  un rubro es una combinación de esas, no código nuevo.
 - **Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.** Orden: dental
   (vivo) → comercio → importadora → el resto.
-- `policy.installInProductRepos = false`: no crear migraciones, rutas ni UI dependientes
-  del core en repos producto sin plan de adopción aprobado.
-- Todo cambio al contrato, schema o adapters pasa `npm run validate:onia-core` antes de
-  commitear. Cada entidad nueva exige entrada en `contract.json`, tabla en
-  `schema/base-schema.sql` y mapeo en los 3 adapters.
-- Integraciones externas (WhatsApp, SIAT, TR4) siguen `external_gate`: entran como
-  intake normalizado, no dentro del core.
+- Todo lo demás del core (21 capacidades, `contract.json`, los 3 adapters, el validador
+  obligatorio antes de commitear, `external_gate`) → **skill `onia-core`**.
 
 ## Base de producción (REGLA)
 
-- Es **self-hosted en el VPS** (contenedor `supabase-db`, schema `dentalgest`), no la
-  nube. Verificar contra el sistema correcto antes de diagnosticar.
-- Las migraciones **no traen RLS**: si se reconstruye el schema, hay que volver a
-  habilitarlo o se pierde el aislamiento por organización.
-- Aplicar **quirúrgico**, nunca `prisma migrate deploy` a ciegas.
+- Es **self-hosted en el VPS** (contenedor `supabase-db`, schema `public`), no la nube.
+  Verificar contra el sistema correcto antes de diagnosticar.
+- Detalle de base y deploy (RLS que las migraciones NO traen, search_path traicionero,
+  backup antes de tocar datos, runbook y gates del swap) → **skills `onia-db` y
+  `onia-deploy` en `onia-platform/.claude/skills/`**.
 
 ---
 
@@ -144,14 +128,11 @@ Instrucciones de proyecto. Override sobre defaults.
 > El límite no es el plan de Claude: es el **choque** — mismos archivos, `main`, o infra
 > única. Aislás eso y corrés todo lo demás en paralelo.
 
-- Carril = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo.
-- **Repos distintos** (`onia-platform`, Bolivian Electric) = paralelo libre.
-- Dentro de `onia-hermes`: cada carril su carpeta. **AVISAR** antes de tocar los 4 raíz
-  de web-factory (`next.config.ts`, `layout.tsx`, `globals.css`, `package.json`).
-- **Infra (VPS, n8n, Supabase) = UN solo dueño a la vez**, serial.
-- Terminar un carril: rama propia → `git rebase origin/main` → commits chicos por
-  carpeta → gates (`tsc --noEmit`, tests, code-reviewer) → merge.
-- Dueño de archivos por carril: `COORDINATION_MANIFEST.md`.
+- Carril = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo. Repos distintos = paralelo
+  libre; dentro de `onia-hermes`, cada carril su carpeta (AVISAR antes de tocar los 4
+  archivos raíz de web-factory). **Infra (VPS, n8n, Supabase) = UN dueño a la vez.**
+- Cerrar un carril: rama propia → rebase → commits chicos → gates (`tsc --noEmit`, tests,
+  code-reviewer) → merge. Dueño de archivos por carril: `COORDINATION_MANIFEST.md`.
 
 ## `main` siempre compila (REGLA DURA)
 
@@ -200,11 +181,11 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 
 ## Cuándo separar un repo (REGLA)
 
-- **Junto en `onia-hermes`:** el cerebro (docs, skills, memoria, propuestas), el core y
-  la orquestación. Se lee a sí mismo; fragmentarlo multiplica la sincronización manual.
-- **Separado:** un producto SOLO si cumple las TRES — cliente real, deploy propio, y el
-  cliente NO debe ver el cerebro. Correctos hoy: `onia-platform` y Bolivian Electric.
-- **NO separar por sensación de desorden.** El cruce se arregla con disciplina de cierre.
+- **Junto en `onia-hermes`**: el cerebro (docs, skills, memoria, propuestas), el core y
+  la orquestación — se lee a sí mismo; fragmentarlo multiplica sincronización manual.
+- **Separado** solo si cumple las TRES: cliente real, deploy propio, y el cliente NO debe
+  ver el cerebro. Correctos hoy: `onia-platform` y Bolivian Electric.
+- **NO separar por sensación de desorden**: el cruce se arregla con disciplina de cierre.
 
 ---
 
@@ -212,36 +193,21 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 
 ## Propuestas comerciales (REGLA)
 
-> Fuente de verdad: `hermes-content/skills/propuestas-comerciales-onia.md`.
-
-Toda propuesta se genera con `hermes-content/propuestas/generador/`
-(`node generar-propuestas.js <slug> --pdf`). **Nunca escribir HTML de propuesta a mano.**
-
-1. **Niveles por salto de valor**, no por "más páginas": estar online → convertir →
-   automatizar.
-2. **Resultado por paquete**, no solo qué incluye.
-3. **Propuesta de valor** con el ROI real: automatización, más clientes, ahorro de tiempo.
-4. **Dominio y hosting a cargo del cliente**, a su nombre. Nunca en nuestro precio.
-5. **Terceros excluidos**: dominio, hosting, comisión de pasarela, créditos IA,
-   mensajería paga, pauta.
-6. **WhatsApp**: el botón click-to-chat va INCLUIDO. Lo que se cobra es el **chatbot con
-   IA** — no confundirlos.
-7. **Precios: leerlos de `pricing.ts`.** No improvisar ni descontar sin aprobación.
-8. **Plantillas internas = confidencial.** Nunca decirle al cliente que usamos plantillas.
-9. **No fabricar.** Si falta un dato del cliente, se pide o se marca. Cero clientes
-   pagando: prohibido inventar testimonios, logos o cifras de resultados.
+- **Nunca escribir HTML de propuesta a mano**: se genera con
+  `hermes-content/propuestas/generador/` (`node generar-propuestas.js <slug> --pdf`).
+- **Precios: se LEEN de `pricing.ts`.** Sin descuentos ni improvisación.
+- **No fabricar**: cero clientes pagando ⇒ prohibido inventar testimonios, logos o cifras.
+- Las 9 reglas completas (niveles por salto de valor, ROI, dominio/hosting del cliente,
+  terceros excluidos, WhatsApp incluido vs chatbot cobrado, confidencialidad de
+  plantillas) → **skill `onia-propuestas`** + fuente
+  `hermes-content/skills/propuestas-comerciales-onia.md`.
 
 ## Video — sin editores humanos (REGLA)
 
-- **`ver-videos`** — para "ver" cualquier video: audio + fotogramas
-  (`scripts/see-video.sh`) → transcripción con timestamps (`scripts/transcribe.sh`,
-  Speaches en el VPS, gratis) → leer una MUESTRA de frames con visión.
-  **Honestidad:** reportar cobertura real, no afirmar "vi el video" desde 2 cuadros.
-  Forzar `Systran/faster-whisper-small` (el distil traduce el español).
-- **`editor-videos`** — corta silencios y muletillas (`scripts/cut-plan.mjs` + ffmpeg),
-  subtítulos karaoke, overlays, SFX. Orquesta, no reinventa el motor.
-- **REGLA DE ORO:** la **tabla de cortes + preview 360p SIEMPRE se muestran a Sergio
-  ANTES de aplicar el corte.** Nunca cortar a ciegas.
+- **REGLA DE ORO: la tabla de cortes + preview 360p SIEMPRE se muestran a Sergio ANTES
+  de aplicar el corte.** Nunca cortar a ciegas.
 - **Gasto:** generación paga (Higgsfield, ElevenLabs) = permiso explícito caso por caso.
   Por defecto gratis (Speaches, HyperFrames).
-- HyperFrames vive en `.agents/skills/`. Revisarlo ANTES de codear video.
+- Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
+  **skills `ver-videos` y `editor-videos`** (HyperFrames vive en `.agents/skills/`:
+  revisarlo ANTES de codear video).
