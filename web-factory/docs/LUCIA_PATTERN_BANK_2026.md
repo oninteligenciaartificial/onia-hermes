@@ -76,9 +76,9 @@ Con `get_cost` y midiendo saldo antes/después, no estimado:
 
 | Para qué | Modelo | Costo |
 |---|---|---|
-| **Primer plano hablando** | **`wan2_7`** | **7,50 cr / 5 s** (1,50/s) — 🔊 **trae audio sincronizado sin pedirlo**. La boca más natural de las cuatro |
+| **Primer plano hablando en español** | **`kling3_0_turbo`** | **7,50 cr / 5 s** (1,50/s) — 🔊 habla el guion literal en español. Articulación sutil, cara estable |
 | **B-roll mudo** | `veo3_1_lite` 8 s | **8 cr** (1,00/s) — el más barato por segundo, y el único que respeta `generate_audio:false` |
-| Alternativa al primer plano | `kling3_0_turbo` | 7,50 cr / 5 s — igual de bueno, también trae audio |
+| Alternativa al primer plano | `wan2_7` | 7,50 cr / 5 s — mismo precio y también habla español, pero articula más marcado |
 | **Encadenar sin tope** | `seedance_2_5` `video_extension` | ~12 cr / 5 s ⚠️ **devolvió 16:9 con entrada 9:16** |
 | Convertir video real de cliente | `seedance_2_5` `video_edit` | por duración |
 | Lipsync sobre video mudo | `sync_so`, `sync_mode: remap` | ~18 cr / 5 s — **solo si `wan2_7` no sirve** |
@@ -142,7 +142,7 @@ al hablar.
 | `z_image` | **0,15** | ❌ **no es Lucía** · ✅ el más barato para ambientes y gente de fondo |
 | `soul_2` | 0,12 | no sostiene la identidad por sí solo |
 
-**Una pieza de 32 s hablando con `wan2_7`: ~52 cr.** De b-roll mudo con voz montada: ~35 cr.
+**Una pieza de 32 s hablando con `kling3_0_turbo`: ~52 cr.** De b-roll: **~33 cr** (4 planos de 8 s).
 
 ⚠️ Todo gasto de video necesita **OK explícito de Sergio, caso por caso**.
 
