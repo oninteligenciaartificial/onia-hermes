@@ -372,3 +372,94 @@ siendo la opción correcta; para primer plano hablando, `wan2_7` lo supera por e
 | **Total** | **40,54 de 300** |
 
 Saldo: 2.663,12 → **2.622,58**.
+
+---
+
+## 11. 🔴 EL HALLAZGO: el diálogo en español se pide y sale exacto
+
+Sergio, al escuchar la primera prueba: *"esa voz es en inglés"*. Correcto — el prompt describía
+la escena pero **no decía qué decir ni en qué idioma**, así que el modelo inventó habla en
+inglés.
+
+**La corrección es una línea del prompt.** Se le da el diálogo literal entre comillas y se
+nombra el idioma:
+
+```
+She speaks in SPANISH with a Latin American (Bolivian) accent, looking straight at
+the camera, saying clearly: "Hace un año yo no existía. Hoy trabajo para una
+empresa de Santa Cruz." ... Spanish language audio only, no English.
+```
+
+### Verificado con transcripción, no de oído
+
+El audio de los dos videos se extrajo y se pasó por **Whisper** (Speaches en el VPS, modelo
+`Systran/faster-whisper-small` — el multilingüe; el `distil` del contenedor es solo-inglés y
+traduce el español):
+
+| Modelo | Lo que transcribió Whisper |
+|---|---|
+| `wan2_7` | *"Hace un año yo no existía. Hoy trabajo para una empresa de Santa Cruz."* |
+| `kling3_0_turbo` | *"hace un año yo no existía. Hoy trabajo para una empresa de Santa Cruz."* |
+
+**Palabra por palabra el guion, en los dos.** No es "más o menos español": es el texto exacto.
+
+### Lo que esto cambia
+
+El tarifario tenía la voz como un paso aparte —ElevenLabs, ~2,4 cr / 50 palabras— más el
+lipsync de `sync_so` a ~18 cr por 5 s. **Los dos pasos desaparecen** si la voz nativa sirve:
+
+| Vía | Pasos | Costo 5 s |
+|---|---|---:|
+| ~~la del banco~~ | video mudo + ElevenLabs + `sync_so` | ~28 cr |
+| **nativa** | una sola llamada | **7,50 cr** |
+
+⚠️ **Lo que sigue sin decidirse: si esa voz sirve como voz de Lucía.** Que diga el texto
+correcto en español no significa que el timbre y el acento sean los de ella —
+`references/modelos/lucia/LUCIA.md` fija la voz oficial (Marcela, ElevenLabs) y **ese archivo
+manda sobre este**. Cambiarla es decisión de Sergio, escuchando.
+
+**Si la voz nativa no convence, el flujo correcto es híbrido:** generar con `kling3_0_turbo` o
+`wan2_7` (que ya dan la boca articulando en español), **silenciar su pista** y montar encima la
+voz de ElevenLabs. El lipsync ya quedó hecho contra un español real — que es exactamente lo
+que `sync_so` cobraba 18 cr por hacer.
+
+### En español gana el otro
+
+En la primera tanda (inglés) `wan2_7` parecía mejor. Mirando los mismos tres tiempos de ambos:
+
+| | `wan2_7` | `kling3_0_turbo` |
+|---|---|---|
+| Articulación | marcada, casi aparatosa — en t=1,2 s adelanta la boca de más | **sutil, natural** |
+| Estabilidad de la cara | el mentón se le mueve en el frame exagerado | **más consistente con el ancla** |
+| Costo | 7,50 | 7,50 |
+
+**Al mismo precio, `kling3_0_turbo` sale mejor en español.** Es un cambio respecto de §9 — ahí
+ganaba `wan2_7`, y con habla en inglés genérica era cierto. Con diálogo en español, no.
+
+---
+
+## 12. B-roll vs UGC — dos vías con costos muy distintos
+
+| | **UGC** (ella hablando) | **B-roll** (sin cara conocida) |
+|---|---|---|
+| Qué es | primer plano, boca en movimiento, identidad en juego | ambientes, objetos, el negocio, el celular en el mostrador |
+| Imagen | `nano_banana_2` + ancla — **2,00 cr** | **`z_image` — 0,15 cr** |
+| Video | `kling3_0_turbo` / `wan2_7` — **7,50 / 5 s** | `veo3_1_lite` — **8 cr / 8 s** (1,00/s) |
+| Lo que se cuida | identidad, deformación, lipsync | que no se note el texto inventado en pantallas |
+
+**La imagen de b-roll cuesta 13× menos**, porque no hay que sostener ninguna identidad. El
+mismo `z_image` que falló el criterio E1 —no era Lucía— es el correcto acá: nadie tiene que
+reconocer a nadie.
+
+Probado: un mostrador de tienda de barrio en Santa Cruz de noche, con el celular encendido
+mostrando conversaciones sin responder. Sale fotorrealista y sirve directo para ilustrar el
+dolor de los carruseles 1 y 2.
+
+⚠️ **La trampa del b-roll:** cualquier pantalla en cuadro sale con **texto inventado
+ilegible**. Se resuelve pidiendo `no readable text` y encuadrando lejos — nunca un primer
+plano de una pantalla.
+
+### La regla que sale
+
+> **Si en el plano no hace falta que se reconozca a Lucía, no se paga identidad.**
+> B-roll con `z_image` + `veo3_1_lite`. La cara solo donde el guion la necesita.

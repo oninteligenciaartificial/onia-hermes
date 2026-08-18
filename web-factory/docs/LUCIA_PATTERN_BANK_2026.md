@@ -84,6 +84,46 @@ Con `get_cost` y midiendo saldo antes/después, no estimado:
 | Lipsync sobre video mudo | `sync_so`, `sync_mode: remap` | ~18 cr / 5 s — **solo si `wan2_7` no sirve** |
 | Voz | ElevenLabs — Marcela `86V9x9hrQds83qf7zaGn` | ~2,4 cr / 50 palabras |
 
+### 🗣️ El diálogo en español se PIDE — y sale exacto
+
+`wan2_7` y `kling3_0_turbo` generan el habla en el idioma que se les diga, **con el texto
+literal**, si el prompt lleva el guion entre comillas:
+
+```
+She speaks in SPANISH with a Latin American (Bolivian) accent, saying clearly:
+"<el guion, tal cual>" ... Spanish language audio only, no English.
+```
+
+Sin esa línea inventan habla en inglés — fue el primer error, y la corrección es una frase.
+
+**Verificado con Whisper**, no de oído: el audio de los dos transcribió palabra por palabra el
+guion. (Speaches en el VPS, modelo `Systran/faster-whisper-small`; el `distil` es solo-inglés y
+traduce el español — forzar el multilingüe.)
+
+**En español gana `kling3_0_turbo`**, no `wan2_7`: al mismo precio articula más sutil y sostiene
+mejor la cara. Con habla genérica en inglés ganaba el otro; con diálogo real, no.
+
+⚠️ **La voz oficial de Lucía sigue siendo Marcela (ElevenLabs)** según
+`references/modelos/lucia/LUCIA.md`, que manda sobre este banco. Si la voz nativa no convence:
+generar igual con estos modelos (la boca ya queda articulando español real), **silenciar su
+pista** y montar Marcela encima. Eso hace gratis lo que `sync_so` cobraba a ~18 cr.
+
+### 🎬 B-roll vs UGC — no se paga identidad donde no hace falta
+
+| | **UGC** — ella hablando | **B-roll** — sin cara conocida |
+|---|---|---|
+| Imagen | `nano_banana_2` + ancla · **2,00 cr** | **`z_image` · 0,15 cr** |
+| Video | `kling3_0_turbo` · **7,50 / 5 s** | `veo3_1_lite` · **8,00 / 8 s** |
+| **Por segundo** | **1,90 cr/s** | **1,02 cr/s** |
+
+La imagen de b-roll cuesta **13× menos** porque no sostiene ninguna identidad. El mismo
+`z_image` que falla el criterio de identidad es el correcto acá.
+
+> **Regla: si en el plano no hace falta reconocer a Lucía, no se paga identidad.**
+
+⚠️ **Trampa del b-roll:** toda pantalla en cuadro sale con texto inventado ilegible. Pedir
+`no readable text` y encuadrar lejos — nunca un primer plano de una pantalla.
+
 ### ⛔ `seedance_2_0_mini` sale del stack para primer plano
 
 Era la opción principal de este banco. Medido: **12,50 cr por 5 s (2,50/s) — el más caro de
