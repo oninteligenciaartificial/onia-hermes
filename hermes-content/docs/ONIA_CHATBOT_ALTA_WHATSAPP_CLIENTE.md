@@ -609,3 +609,179 @@ lo escribe al dar de alta) — no se inventó tabla nueva.
 
 Backups: motor `/opt/onia/bot/backups/20260818-024342/`; producto
 `runtime-next.prev-20260818-024637/` + `build-src-0a4da68/`.
+
+---
+
+## Capacidades ricas del bot — factibilidad (imágenes · botones · comprar por chat)
+
+> Investigación 2026-08-17 (solo lectura del motor + fuentes fechadas; el motor
+> NO se tocó — otro carril estaba trabajando en `/opt/onia/bot`). Responde la
+> pregunta de Sergio: ¿qué tan real es que el bot del cliente reciba/mande
+> imágenes, tenga botones y que el cliente final COMPRE por el chat?
+
+### F1. Imágenes ENTRANTES (el cliente final manda una foto)
+
+**Qué entrega Chatwoot al webhook (verificado en el código del motor, forma
+capturada en vivo 2026-07-26):** `message_created` trae `attachments[]` con
+`file_type` (`audio`/`image`/`file`) y `data_url` (URL del archivo en el host
+público de Chatwoot). Es exactamente lo que ya consume la transcripción de voz:
+`audio-transcribe.mjs` resuelve la URL contra NUESTRA base (defensa SSRF:
+`resolveAttachmentUrl` conserva solo ruta+query), la baja con tope de bytes y
+timeout, y autentica con `api_access_token`.
+
+**Reconocerla y escalarla a humano: YA EXISTE, esfuerzo CERO.** El adapter
+clasifica el mensaje (`kindOf()` → `attachment` cuando hay adjunto no-audio sin
+texto) y `bot-engine.mjs` (~línea 453) hace handoff con
+`M_ATTACH_BODY: "Recibí tu archivo. Lo mira {{humano}}, no lo puedo leer bien
+yo."` — con el nombre del humano de la org vía knowledge. O sea: la conducta
+"te mando con \<humanName\>" es la conducta ACTUAL del motor, en widget y
+WhatsApp (mismo adapter). Solo falta mirarla en una conversación real con foto
+(se probó con audio, no con imagen).
+
+**Visión IA (que el bot ENTIENDA la foto): factible, mediano.** El bot ya habla
+con LiteLLM (`onia_selfhosted-litellm-1:4000/v1`) y su modelo default
+`gpt-4o-mini` (`ONIA_BOT_MODEL`, `run-turn.mjs:162`) es multimodal: la MISMA
+llamada chat/completions acepta la imagen en base64. Piezas: generalizar la
+descarga que ya existe para audio → armar content multimodal → prompt con
+guardrails. Costo por imagen (fuentes de pricing, 2026-08-17): **~USD
+0,002–0,006** (low vs high detail) — despreciable frente al add-on.
+⚠️ Regla Onia: en rubros delicados (dental: foto de una boca) la visión NO
+diagnostica — describe y ESCALA a humano igual. La visión vende en comercio
+("¿tienen de estos?" + foto de producto), no en clínica.
+
+### F2. Imágenes SALIENTES (el bot manda la foto del catálogo)
+
+**Chatwoot API: SÍ.** `POST /api/v1/accounts/{id}/conversations/{id}/messages`
+acepta `multipart/form-data` con `attachments[]` (binario), documentado en el
+API reference oficial, y autentica con `api_access_token` de usuario O de
+**agent bot** (developers.chatwoot.com, create-new-message, 2026-08-17). Hoy
+`createChatwootClient().sendMessage()` solo postea JSON `{content}` — falta una
+variante multipart (esfuerzo chico: un método más en el cliente + que el motor
+pueda emitir `{image}` además de `{text}` en `send[]`).
+
+**WhatsApp Cloud API (developers.facebook.com, image-messages, 2026-08-17):**
+imágenes **JPEG/PNG únicamente, 8-bit RGB/RGBA, máx 5 MB**, caption hasta 1024
+caracteres; se manda por media `id` subido (recomendado) o por `link`. Vía
+Chatwoot no llamamos esto directo: Chatwoot reenvía el adjunto saliente por su
+canal WhatsApp Cloud. ⚠️ Dos límites del carril Chatwoot→WhatsApp: (a) fuera
+de la ventana de 24 h un adjunto libre NO sale (solo plantillas, y el adjunto
+en plantillas vía Chatwoot tiene issue abierto #12684); (b) verificar en
+NUESTRO 4.12.1 que el adjunto del bot llegue al teléfono (verificar es MIRAR).
+En el widget Website el adjunto renderiza nativo, sin límites de Meta.
+
+### F3. Interactivos (botones y listas)
+
+**WhatsApp Cloud API nativo (developers.facebook.com, 2026-08-17):**
+- **Reply buttons:** máx **3 botones**, título 20 chars, body 1024, footer 60;
+  el header puede ser una IMAGEN (foto de producto arriba + botones abajo).
+- **List messages:** máx **10 filas** en hasta 10 secciones; título de fila 24
+  chars, descripción 72, body 4096, texto del botón 20.
+
+**Chatwoot traduce lo primero, no lo segundo.** El content type
+`input_select` (items `{title, value}`) del Create Message API renderiza como
+opciones clickeables en el widget Website Y Chatwoot lo convierte a **reply
+buttons** en el canal WhatsApp (PR #6886) — con el límite de 3. Los content
+types `cards`/`form` NO pasan al canal WhatsApp (issue #12572, confirmado en
+v4.6.0), y las listas con descripción todavía no (issue #14911 abierto). O sea:
+**un solo formato (`input_select`, ≤3 opciones) sirve para ambos canales** —
+esfuerzo chico en el motor (que `reply-builder` pueda emitir
+`content_type + content_attributes` y el adapter los postee). Más de 3 opciones
+en WhatsApp = pegarle directo a la Cloud API por fuera de Chatwoot (grande, no
+ahora) o degradar a "respondé 1, 2 o 3" en texto (que es lo que el guion ya
+hace hoy).
+
+### F4. COMPRAR por el chat
+
+**(a) Catálogo NATIVO de WhatsApp (product messages + carrito).** Existe y es
+de Cloud API (developers.facebook.com, sell-products-and-services, 2026-08-17):
+catalog messages, single/multi-product (hasta 30 productos), carrito (99
+unidades por ítem). Requisitos: **catálogo subido a Commerce Manager y
+conectado a la WABA** + cumplir la Commerce Policy; la doc NO publica lista de
+países excluidos (mismo patrón que coexistencia: probar con +591 antes de
+prometer). Los PEROS que lo sacan del MVP: (1) **Chatwoot no sabe mandar
+product messages** — habría que llamar la Graph API directo con el token de la
+WABA del cliente, por fuera del carril que ya funciona; (2) hay que crear y
+SINCRONIZAR un catálogo Meta por cliente (catálogo org → Commerce Manager:
+integración nueva entera); (3) el carrito de WhatsApp junta el pedido pero **no
+cobra**: WhatsApp Pay solo existe en India/Brasil — el cobro igual termina en
+un link/QR nuestro. Mucho esfuerzo para ganar solo la vitrina.
+
+**(b) La alternativa nuestra: pedido conversacional + QR BCP como imagen.** ✅
+Las piezas ya existen o son chicas:
+1. El bot ya lee el conocimiento POR organización desde el producto (paso b +
+   resolución por inbox, vivo — secciones E2E de arriba); el catálogo de la org
+   (comercio) y tratamientos (dental) pueden viajar en ese mismo knowledge.
+2. El bot arma el pedido conversando (items + cantidades + total) — guion, no
+   producto nuevo.
+3. La API QR del BCP (`ONIA_BCP_API_QR_INTEGRACION.md`) genera un **QR dinámico
+   con monto exacto** y devuelve la **imagen en Base64** (`data.qrImage`) →
+   se decodifica y se sube como attachment multipart a Chatwoot (F2) → sale
+   como imagen por el widget Y por WhatsApp (un QR PNG pesa KB, lejos de los
+   5 MB). El callback del BCP confirma el pago en línea con NUESTRA referencia
+   (`IdCorrelation`) → el bot avisa "pago recibido" en la misma conversación.
+   **Eso une chatbot + pagos con cero pasarela extranjera y cero comisión de
+   markup.**
+4. Dependencia dura: el **alta bancaria BCP** (contrato, cuenta recaudadora,
+   credenciales+certificado). Y por el modelo Facilitador (cada cliente cobra
+   en SU cuenta), vender "tu cliente paga por el chat" a un cliente exige **el
+   alta BCP DE ESE cliente** — el trámite es parte del done-for-you, y la
+   velocidad la pone el banco, no el código.
+
+**Human-in-the-loop (regla Onia: el bot jamás cobra solo).** Un QR dinámico es
+una orden de cobro: un monto mal armado por el bot es plata mal cobrada, y la
+generación llama la API bancaria del cliente. Veredicto: **el pedido armado por
+bot es aceptable; el QR NO sale sin aprobación del dueño.** Flujo propuesto:
+bot arma el pedido → cola de aprobación (la mecánica `notify` + review_queue ya
+existe en el motor) → el dueño aprueba (un tap) → se genera el QR y el bot lo
+manda. Un modo "auto hasta Bs X con precios de catálogo" puede existir como
+opt-in explícito del dueño — decisión de Sergio, nunca default.
+
+**(c) Qué hacen los grandes (referencia, 2026-08-17):**
+- **Wati:** catálogo nativo Meta + página de Orders; el "auto checkout" con
+  pago adentro de WhatsApp está **en beta y SOLO India** (Razorpay/PayU); en el
+  resto del mundo el agente genera un **payment link manual** desde el inbox.
+- **ManyChat:** feature "Products" en plan PRO conectado a **Stripe/PayPal**;
+  el agente selecciona el producto y manda el link de pago en el chat.
+- Lectura: **nadie tiene cobro nativo en chat fuera de India/Brasil — todos
+  cierran con un link/QR de pago.** Nuestro QR BCP interoperable (lo escanea la
+  app de cualquier banco boliviano) es el equivalente local exacto, sin
+  comisión de pasarela extranjera y sin sacar al cliente del chat.
+
+### F5. Tabla veredicto
+
+| Capacidad | Widget | WhatsApp | Esfuerzo | Dependencias | ¿MVP? |
+|---|---|---|---|---|---|
+| Imagen entrante → reconocer + escalar a humano | ✅ ya existe | ✅ ya existe | **Cero** (mirar una foto real) | — | ✅ ya está |
+| Imagen entrante → visión IA | ✅ | ✅ | Mediano (2–3 días) | LiteLLM ya corre; ~USD 0,002–0,006/img | Después (comercio primero; en dental NO diagnostica) |
+| Imagen saliente (foto de catálogo) | ✅ | ✅ (JPEG/PNG ≤5 MB, ventana 24 h) | Chico (~1 día: multipart + `{image}` en `send[]`) | Fotos de producto en el knowledge de la org | ✅ MVP |
+| Botones (≤3 opciones) | ✅ `input_select` | ✅ (Chatwoot → reply buttons) | Chico (1–2 días motor) | — | ✅ MVP |
+| Listas (hasta 10 ítems) | ✅ (input_select rinde todos) | ✗ vía Chatwoot (solo directo a Cloud API) | Grande | App Review + carril paralelo a Chatwoot | Después |
+| Catálogo nativo Meta + carrito | n/a | Posible, NO vía Chatwoot | Grande | Catálogo Commerce Manager por cliente + App Review + Commerce Policy + prueba +591 | Después |
+| **Pedido por chat + QR BCP (aprobado por el dueño)** | ✅ | ✅ (QR como imagen) | Mediano (sobre imagen saliente + adaptador BCP ya estimado 3–5 días) | **Alta BCP** (nuestra; la del cliente para su cuenta) + aprobación dueño | ✅ **la joya** (gateada por el banco, no por código) |
+
+### F6. Sin verificar
+
+- Payload real de un attachment **imagen** en nuestro Chatwoot (la forma se
+  capturó en vivo con audio; imagen se infiere del mismo esquema).
+- Que un attachment saliente del agent bot **llegue al teléfono** por el canal
+  WhatsApp Cloud de nuestro 4.12.1 (y el issue #12684 de media en plantillas
+  fuera de ventana).
+- `input_select` → reply buttons en NUESTRA versión, mirado en un teléfono
+  real; y cómo renderiza exactamente en el widget (screenshot pendiente).
+- Carrito/product messages visibles para un usuario final en **Bolivia**
+  (la doc de Meta no publica países; probar con +591).
+- Costo efectivo por imagen vía LiteLLM (depende del proveedor ruteado).
+
+### Fuentes F1–F4 (2026-08-17)
+
+- Meta — image messages (JPEG/PNG, 5 MB, caption 1024): <https://developers.facebook.com/docs/whatsapp/cloud-api/messages/image-messages>
+- Meta — interactive reply buttons (3 botones, 20 chars, header imagen): <https://developers.facebook.com/docs/whatsapp/cloud-api/messages/interactive-reply-buttons-messages>
+- Meta — interactive list messages (10 filas, 24/72 chars): <https://developers.facebook.com/docs/whatsapp/cloud-api/messages/interactive-list-messages>
+- Meta — sell products & services (catálogo + Commerce Manager + carrito): <https://developers.facebook.com/docs/whatsapp/cloud-api/guides/sell-products-and-services>
+- Chatwoot — Create New Message (attachments multipart + content_types + agent bot token): <https://developers.chatwoot.com/api-reference/messages/create-new-message>
+- Chatwoot — interactive messages (input_select/cards/form/article en widget): <https://www.chatwoot.com/hc/user-guide/articles/1677689344-how-to-use-interactive-messages>
+- Chatwoot — input_select→WhatsApp reply buttons: PR <https://github.com/chatwoot/chatwoot/pull/6886> · límites: issues <https://github.com/chatwoot/chatwoot/issues/12572> · <https://github.com/chatwoot/chatwoot/issues/14911> · media en plantillas <https://github.com/chatwoot/chatwoot/issues/12684>
+- Wati — auto checkout (beta India) y payment links: <https://support.wati.io/l/en/article/w188eng8pv-how-to-enable-auto-checkout-and-collect-payment-for-my-catalog-order> · <https://support.wati.io/en/articles/11463135-integrating-your-payment-gateway-to-wati>
+- ManyChat — Products/venta en Inbox (Stripe/PayPal, PRO): <https://help.manychat.com/hc/en-us/articles/14281089183260-Selling-products-via-Inbox>
+- BCP — QR con monto e imagen Base64: `hermes-content/docs/ONIA_BCP_API_QR_INTEGRACION.md` (§3.1, §3.3)
+- Motor local: `hermes-content/deploy/vps-ops/bot/` — `chatwoot-adapter.mjs` (kindOf, sendMessage JSON-only), `bot-engine.mjs` ~453 (`M_ATTACH_BODY` handoff), `audio-transcribe.mjs` (descarga de adjuntos con SSRF-guard), `run-turn.mjs:162` (`gpt-4o-mini` vía LiteLLM)
