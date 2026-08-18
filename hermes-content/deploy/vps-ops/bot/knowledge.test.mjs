@@ -842,6 +842,24 @@ test("db: getKnowledge (sincronico) sirve la copia db ya cacheada sin esperar re
   assert.equal(getKnowledge({ organizationId: "org_sin_cache", dbUrl: "", dbSecret: "" }).source, "code");
 });
 
+test("db: withKnowledge con fuente db enciende el MODO RECEPCIONISTA — y solo con fuente db", async () => {
+  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo", humanName: "Marta" } });
+  await getOrgKnowledge("org_modo_recep", { ...DB_OPTS, fetch: fetchFalso(doc), nowMs: NOW_MS });
+  const config = withKnowledge(DEFAULT_CONFIG, { organizationId: "org_modo_recep", nowMs: NOW_MS + 1000 });
+  assert.equal(config.modo, "recepcionista", "org cliente = el bot del negocio, no el funnel de Onia");
+  assert.equal(config.conocimiento.identity.productName, "ZZ QA Ferreteria Tornillo");
+  // ... y el turno entero ya contesta como recepcionista, no con el pitch de venta:
+  const result = step(createState(), { text: "hola", receivedAt: T0 }, { config });
+  assert.equal(result.replies[0].templateKey, "M0R");
+  assert.doesNotMatch(result.replies[0].text, /plataforma por módulos/i);
+
+  // Fuente archivo/codigo (la cara de Onia): NADA de modo — el funnel de venta sigue intacto.
+  resetOrgKnowledgeCache();
+  resetKnowledgeCache();
+  const deOnia = withKnowledge(DEFAULT_CONFIG, { path: "/no/existe/knowledge.json" });
+  assert.equal(deOnia.modo, undefined);
+});
+
 test("preview: con organizationId el turno corre contra el conocimiento de ESA org", async () => {
   process.env.ONIA_BOT_PREVIEW_SECRET = "prev";
   try {

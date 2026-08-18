@@ -22,6 +22,7 @@ import {
   checkGuardrails,
   enforceGuardrails,
 } from "./guardrails.mjs";
+import { applyKnowledge, asRecepcionista, validateKnowledge } from "./knowledge.mjs";
 
 // Config de prueba: horarios concretos (los reales los define Sergio, ver TODO en config.mjs).
 const CONFIG = createBotConfig({
@@ -435,4 +436,140 @@ test("el motor no escribe en la base: solo devuelve efectos declarativos", () =>
       `efecto inesperado: ${tipo}`,
     );
   }
+});
+
+// ---------------------------------------------------------------------------
+// 8. MODO RECEPCIONISTA — el bot de un CLIENTE (guion "recepcionista-ferreteria")
+// ---------------------------------------------------------------------------
+// La config es la MISMA que arma withKnowledge cuando el conocimiento llega de la fuente "db":
+// applyKnowledge(config, data) + asRecepcionista. El funnel de venta de Onia (DEMO, M0, M4)
+// tiene que quedar EXCLUSIVO del modo venta, y el recepcionista solo puede decir hechos del
+// knowledge de su org.
+
+const CONOCIMIENTO_FERRETERIA = {
+  schema: "onia.bot.knowledge/1",
+  version: "test-recepcionista",
+  identity: {
+    productName: "Ferretería El Tornillo",
+    humanName: "doña Marta",
+    botName: "el asistente de Ferretería El Tornillo",
+  },
+  empresa: { horario: { dias: [1, 2, 3, 4, 5, 6], desde: 8, hasta: 19, frase: "lun-sab, 8:00-19:00" } },
+  productos: [
+    { key: "tornilleria", tipo: "servicio", nombre: "tornillería al por mayor y menor" },
+    { key: "herramientas", tipo: "servicio", nombre: "herramientas eléctricas y manuales" },
+  ],
+};
+
+// Se arma sobre CONFIG (que trae los slots de demo de prueba) A PROPOSITO: si un horario de
+// demo se filtrara en una respuesta del recepcionista, estos tests lo ven.
+const CONFIG_FERRETERIA = asRecepcionista(applyKnowledge(CONFIG, CONOCIMIENTO_FERRETERIA), CONOCIMIENTO_FERRETERIA);
+
+const runRecep = (turns, options = {}) => run(turns, { config: CONFIG_FERRETERIA, ...options });
+
+test("recepcionista: el knowledge del guion es una fila publicable real (pasa el validador)", () => {
+  assert.deepEqual(validateKnowledge(CONOCIMIENTO_FERRETERIA).errors, []);
+});
+
+test("recepcionista: 'hola' se presenta como el asistente DEL negocio, cero pitch de Onia", () => {
+  const { state, turns } = runRecep(["hola"]);
+  assert.deepEqual(keysOf(turns[0]), ["M0R"]);
+  const text = textOf(turns[0]);
+  assert.match(text, /asistente de Ferretería El Tornillo/);
+  assert.match(text, /doña Marta/);
+  assert.ok(!/plataforma por módulos/i.test(text), "cero pitch de Onia");
+  assert.ok(!/demo/i.test(text), "el funnel de venta no aparece");
+  assert.ok(!/jueves 15:00|viernes 10:00/.test(text), "cero horarios de demo");
+  assert.equal(state.botStage, "nuevo", "sin etapa nueva: bot_stage tiene CHECK en la base");
+  assert.equal(state.optInSource, "inbound_recepcion", "el primer inbound es el opt-in del contacto");
+});
+
+test("recepcionista: el horario sale del knowledge de la org (y la 1ra respuesta se presenta, D2)", () => {
+  const { turns } = runRecep(["¿qué días atienden?"]);
+  assert.deepEqual(keysOf(turns[0]), ["M0R_INTRO", "R_HORARIO"]);
+  const text = textOf(turns[0]);
+  assert.match(text, /asistente de Ferretería El Tornillo/, "primer contacto: se declara bot del negocio");
+  assert.match(text, /lun-sab, 8:00-19:00/);
+  assert.ok(!/lun-vie, 9:00-18:00/.test(text), "no es el horario de Onia");
+});
+
+test("recepcionista: '¿qué venden?' contesta el catálogo de la org, sin la vara de módulos de Onia", () => {
+  const { turns } = runRecep(["hola", "¿qué venden?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_SERVICIOS"]);
+  const text = textOf(turns[1]);
+  assert.match(text, /tornillería al por mayor y menor/);
+  assert.match(text, /herramientas eléctricas y manuales/);
+  assert.ok(!/en construcción|sin humo/.test(text), "MODULOS_LISTOS es un candado de Onia, no del cliente");
+  assert.ok(!/Dental|Importadora/.test(text), "y no aparece el catálogo de Onia");
+});
+
+test("recepcionista: 'quiero comprar 100 tornillos' escala a humano — el bot no vende ni agenda solo", () => {
+  const { state, turns } = runRecep(["hola", "quiero comprar 100 tornillos"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_INTERES"]);
+  assert.match(textOf(turns[1]), /doña Marta/);
+  assert.equal(state.botStage, "handoff_humano");
+  assert.ok(effectsOf(turns[1]).includes("review_queue"), "el pedido entra a la cola de revisión");
+  assert.ok(effectsOf(turns[1]).includes("notify_sergio"), "y alguien se entera de verdad");
+  assert.ok(turns[1].notes.includes("handoff:pedido_del_cliente"));
+
+  // Con el handoff en curso, el bot no habla encima del humano del negocio.
+  const luego = run(["¿me confirmás?"], { config: CONFIG_FERRETERIA, state });
+  assert.equal(luego.turns[0].replies.length, 0);
+  assert.deepEqual(luego.turns[0].notes, ["silencio:handoff_en_curso"]);
+});
+
+test("recepcionista: pregunta de precio deriva a humano SIN cotizar (jamás el M4 del funnel)", () => {
+  const { state, turns } = runRecep(["hola", "¿cuánto cuestan los tornillos?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_PRECIO"]);
+  const text = textOf(turns[1]);
+  assert.ok(!/\d/.test(text), "N1: ni una cifra");
+  assert.match(text, /doña Marta/);
+  assert.ok(!/en la demo/.test(text), "no es la respuesta de venta de Onia");
+  assert.equal(state.botStage, "handoff_humano");
+});
+
+test("recepcionista: si el knowledge no trae el dato, respuesta honesta + humano — nunca los datos de Onia", () => {
+  const { empresa, ...sinHorario } = CONOCIMIENTO_FERRETERIA;
+  const config = asRecepcionista(applyKnowledge(CONFIG, sinHorario), sinHorario);
+  const { state, turns } = run(["hola", "¿qué días atienden?"], { config });
+  assert.deepEqual(keysOf(turns[1]), ["R_NO_DATO"]);
+  assert.ok(!/lun-vie, 9:00-18:00/.test(textOf(turns[1])), "no rellena con el horario de Onia");
+  assert.match(textOf(turns[1]), /doña Marta/);
+  assert.equal(state.botStage, "handoff_humano", "la promesa 'te lo confirma' lleva el handoff real");
+});
+
+test("recepcionista: 'DEMO' NO dispara el funnel — el guion de leads queda exclusivo del modo venta", () => {
+  const { state, turns } = runRecep(["DEMO"]);
+  assert.ok(!keysOf(turns[0]).includes("M0"), "la bienvenida del funnel no aparece");
+  assert.ok(!/jueves 15:00|viernes 10:00/.test(textOf(turns[0])), "cero horarios de demo");
+  assert.notEqual(state.botStage, "esperando_horario");
+
+  // La MISMA entrada con la config de venta sigue abriendo el funnel (cero regresión).
+  const venta = run(["DEMO"]);
+  assert.deepEqual(keysOf(venta.turns[0]), ["M0"]);
+  assert.equal(venta.state.botStage, "esperando_horario");
+});
+
+test("recepcionista: opt-out corta sin invitar al funnel, y ni 'DEMO' reabre", () => {
+  const { state, turns } = runRecep(["hola", "no me interesa, no me escribas más", "DEMO"]);
+  assert.deepEqual(keysOf(turns[1]), ["M6R"]);
+  assert.ok(!/DEMO/.test(textOf(turns[1])), "no ofrece la reapertura del guion de venta");
+  assert.equal(turns[2].replies.length, 0, "silencio: la reapertura por DEMO es del funnel");
+  assert.equal(state.botStage, "opt_out");
+});
+
+test("recepcionista: SIN LLM — lo fuera de guion va al humano, nunca a la rama libre", () => {
+  const { state, turns } = runRecep(["hola", "che y ustedes hacen envios a domicilio en moto?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_DERIVA"]);
+  assert.equal(state.botStage, "handoff_humano");
+  for (const turno of turns) {
+    assert.ok(turno.replies.every((reply) => reply.replySource !== "llm" && !reply.pending), "cero rama LLM");
+    assert.ok(!effectsOf(turno).includes("llm_request"));
+  }
+});
+
+test("recepcionista: 'gracias' no molesta a nadie", () => {
+  const { turns } = runRecep(["hola", "gracias!"]);
+  assert.equal(turns[1].replies.length, 0);
+  assert.ok(turns[1].notes.includes("cortesia_sin_respuesta"));
 });

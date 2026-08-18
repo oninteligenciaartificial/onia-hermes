@@ -762,13 +762,27 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
 }
 
 /**
+ * MODO RECEPCIONISTA: la config del bot de un CLIENTE de Onia. Se activa SOLO cuando el
+ * conocimiento vino de la fila publicada de una org (fuente "db" con org/inbox resuelto) —
+ * nunca por el archivo local ni por el codigo, que son la cara de Onia. `conocimiento` viaja
+ * entero (el documento validado "onia.bot.knowledge/1") para que el motor renderice SOLO
+ * hechos de la org y pueda ser honesto cuando un campo falta. Ver recepcionista.mjs.
+ */
+export function asRecepcionista(config, data) {
+  return createBotConfig({ modo: "recepcionista", conocimiento: data }, config);
+}
+
+/**
  * La config del turno con los hechos editables aplicados. Es LO UNICO que llaman run-turn.mjs y
  * followup-run.mjs. Sin archivo (el estado de hoy) devuelve la misma config que recibio.
+ * Con fuente "db" (org cliente) ademas enciende el modo recepcionista.
  */
 export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
   try {
     const state = getKnowledge(options);
-    return state.data ? applyKnowledge(config, state.data, options) : config;
+    if (!state.data) return config;
+    const applied = applyKnowledge(config, state.data, options);
+    return state.source === "db" ? asRecepcionista(applied, state.data) : applied;
   } catch {
     return config;
   }

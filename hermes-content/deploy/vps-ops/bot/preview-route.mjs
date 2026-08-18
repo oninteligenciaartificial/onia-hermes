@@ -7,7 +7,7 @@
 //
 // Auth: Bearer ONIA_BOT_PREVIEW_SECRET (webhook.env). Sin secreto configurado,
 // el endpoint queda apagado (401 siempre): apagado por defecto, no abierto.
-import { validateKnowledge, applyKnowledge, getOrgKnowledge } from "./knowledge.mjs";
+import { validateKnowledge, applyKnowledge, asRecepcionista, getOrgKnowledge } from "./knowledge.mjs";
 import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step, LLM_PENDING } from "./bot-engine.mjs";
 
@@ -40,7 +40,12 @@ export async function handlePreviewRequest({ rawBody, headers }) {
     // Sin borrador: probar contra lo PUBLICADO de esa org (paso b — fuente db).
     // /preview no esta en el camino del mensaje, asi que aca SI se espera la red.
     const state = await getOrgKnowledge(payload.organizationId.trim());
-    if (state.data) config = applyKnowledge(createBotConfig(), state.data, { nowIso: new Date().toISOString() });
+    if (state.data) {
+      config = applyKnowledge(createBotConfig(), state.data, { nowIso: new Date().toISOString() });
+      // Fuente db = org cliente: el probador tiene que mostrar lo que el bot REAL contesta
+      // (modo recepcionista), no el funnel de venta con el nombre cambiado.
+      if (state.source === "db") config = asRecepcionista(config, state.data);
+    }
     conocimiento = { fuente: state.source, version: state.version, error: state.error };
   }
 

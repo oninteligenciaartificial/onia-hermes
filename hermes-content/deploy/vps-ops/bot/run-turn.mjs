@@ -140,6 +140,8 @@ export async function resolveConfig(input, deps = {}) {
   if (kOpts.inboxId) await ensureKnowledge({ ...kOpts, ...(deps.knowledge || {}) });
 
   const config = buildConfig(input);
+  // Modo recepcionista (org cliente): no hay demo de Onia que agendar — Cal.com no se consulta.
+  if (config.modo === "recepcionista") return config;
   const explicitSlots = Array.isArray(input.slots) && input.slots.length > 0;
   const envSlots = Boolean(String(process.env.ONIA_BOT_SLOTS || "").trim());
   if (explicitSlots || envSlots) return config; // horario ya fijado a mano: no se pisa

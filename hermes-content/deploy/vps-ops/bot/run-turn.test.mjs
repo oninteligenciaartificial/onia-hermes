@@ -124,7 +124,10 @@ test("resolveConfig: el inbox del turno resuelve el conocimiento de ESE cliente 
     { getAvailableSlots, knowledge: { dbUrl: "http://producto/published", dbSecret: "s3cr3t", fetch: fetchDb } },
   );
   assert.equal(config.identity.productName, "ZZ QA Ferreteria Tornillo", "la cara del cliente sale en el turno 1, no en el 2");
-  assert.deepEqual(config.slots, LIVE_SLOTS, "los horarios de Cal.com siguen entrando igual");
+  // CAMBIO 2026-08-17 (modo recepcionista): un inbox de cliente ya NO consulta Cal.com — el
+  // recepcionista no agenda demos de Onia. Antes este assert exigia LIVE_SLOTS.
+  assert.equal(config.modo, "recepcionista", "org cliente = el bot del negocio");
+  assert.deepEqual(config.slots, DEFAULT_CONFIG.slots, "sin demo de Onia no se pide disponibilidad");
 
   resetOrgKnowledgeCache();
   // Sin mapeo (404 del producto): el mismo turno degrada al conocimiento de Onia, sin tirar.

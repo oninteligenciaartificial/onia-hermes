@@ -20,6 +20,7 @@ import {
 } from "./config.mjs";
 import { enforceGuardrails, normalize, SAFE_REPLY } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
+import { recepcionistaStep } from "./recepcionista.mjs";
 // COMO se escribe cada respuesta vive en reply-builder.mjs; aca queda QUE rama se toma.
 import {
   ESPERA_HORARIO_STAGES,
@@ -415,6 +416,14 @@ export function step(state, incoming, options = {}) {
 
   // --- Barrera 1: un humano tomo la conversacion. El bot NO habla. Falla hacia el SILENCIO.
   if (state.humanTookOver) return finalize(ctx, base, [], [], ["silencio:humano_a_cargo"]);
+
+  // --- MODO RECEPCIONISTA: el bot de un CLIENTE de Onia (conocimiento con fuente "db").
+  // Va ANTES de la barrera de opt-out porque la reapertura por "DEMO" es del funnel de venta;
+  // el recepcionista maneja su propio opt-out (silencio, sin reapertura). Todo el guion de
+  // leads de abajo queda EXCLUSIVO del modo venta. Ver recepcionista.mjs.
+  if (config.modo === "recepcionista") {
+    return recepcionistaStep(ctx, base, { finalize, handoffResult, say });
+  }
 
   // --- Barrera 2: opt-out previo. Solo el disparador DEMO puede reabrir (lo dice M6).
   // El opt-out le gana SIEMPRE al disparador: "ya no me mandes mas info" trae la palabra "info"
