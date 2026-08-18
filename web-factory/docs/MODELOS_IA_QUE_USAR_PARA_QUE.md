@@ -75,22 +75,56 @@ la cara, el peor caso— y salió con cinco dedos y forma natural.
 `86V9x9hrQds83qf7zaGn` → ElevenLabs (verificado contra su API: *"Marcela - Colombian Girl"*).
 `8de5db95-e898-46a6-bb68-26d02f311686` → **otro servicio**. Pasárselo a ElevenLabs da error.
 
-### El flujo híbrido — lo mejor de los dos
+### 🔴 Poner Marcela encima NO alcanza — hace falta `sync_so`
 
-1. Generar con `kling3_0_turbo` **dándole el guion en español entre comillas**. La boca queda
-   articulando español real.
-2. Generar el audio con Marcela en ElevenLabs.
-3. Montar: **descartar la pista nativa** y poner la de Marcela.
+**Escrito mal la primera vez y corregido mirando el resultado.** Yo afirmé que como el video ya
+articula español, bastaba con montar la voz de Marcela y se ahorraban los ~18 cr de `sync_so`.
+**Es falso**, y Sergio lo vio de una: *"no está nada sincronizado este video"*.
 
-```bash
-ffmpeg -i video.mp4 -i marcela.mp3 -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -shortest salida.mp4
+**Por qué falla:** el video y la voz son **dos interpretaciones independientes del mismo
+guion**. Dicen lo mismo pero con otro ritmo. Medido con Whisper sobre ambas pistas:
+
+| | arranca | termina | pausa interna |
+|---|---|---|---|
+| Voz nativa del video | 0,40 s | 5,40 s | corte marcado en 2,40 s |
+| Marcela (ElevenLabs) | 0,00 s | 4,00 s | ninguna, de corrido |
+
+**Hasta 1,4 s de desfase**: la boca sigue moviéndose más de un segundo después de que la voz
+terminó. Imposible de disimular.
+
+### El flujo que SÍ funciona
+
+| Paso | Qué | Costo |
+|---|---|---:|
+| 1 | Generar con `kling3_0_turbo`, guion en español entre comillas | 7,50 |
+| 2 | Voz con Marcela en ElevenLabs | ~2,4 cr / 50 palabras |
+| 3 | **`sync_so` con `sync_mode: remap`** — re-sincroniza los labios al audio nuevo | **18,15** *(medido)* |
+| | **Total por 5 s con la voz correcta** | **~28 cr** |
+
+```
+params: { model: "sync_so", sync_mode: "remap", medias: [
+  { value: "<job-id-del-video>",  role: "input_video" },
+  { value: "<media-id-del-audio>", role: "input_audio" } ] }
 ```
 
-**Esto hace gratis lo que `sync_so` cobraba a ~18 cr por 5 s**, porque el lipsync ya vino hecho
-contra un español real. Probado punta a punta.
+⚠️ Los roles son **`input_video` / `input_audio`**. Con `video` / `audio` a secas, rechaza.
 
-⚠️ Calzar duraciones: la voz de Marcela para 2 frases dio **4,37 s** y el video **5,04 s**.
-Escribir el guion para la duración, no al revés.
+`sync_so` además **recorta el video a la duración del audio** (5,04 s → 4,375 s). No hay que
+calzar las duraciones a mano.
+
+⚠️ **El costo real de la voz propia:** `sync_so` regenera la zona de la boca, y eso **ablanda un
+poco la cara** — en un frame quedó con los ojos cerrados. Se paga sincronía con algo de nitidez.
+
+### Entonces, ¿cuándo usar cuál?
+
+| Situación | Qué hacer | Costo 5 s |
+|---|---|---:|
+| **La voz nativa sirve** | `kling3_0_turbo` y listo | **7,50** |
+| **Tiene que ser Marcela** | kling + ElevenLabs + `sync_so` | **~28** |
+| **No habla** (lifestyle, b-roll) | kling o `veo3_1_lite`, sin audio | 7,50 / 8,00 |
+
+**La decisión de si la voz nativa alcanza es de Sergio, escuchando.** Cambia el costo por pieza
+casi 4×.
 
 ## 7. Imagen — la tabla completa
 

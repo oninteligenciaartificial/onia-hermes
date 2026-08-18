@@ -224,8 +224,8 @@ de formato · 1-2 → hay señal, se amplifica ESE ángulo con pauta · 3+ → f
 | 1 | ~~Cambiar la bio (sacar SIAT)~~ | ✅ hecho |
 | 2 | ~~Armar el PDF de **LISTA**~~ | ✅ hecho |
 | 3 | ~~Conectar `@oniahq` en Postiz~~ | ✅ hecho — `instagram-standalone`, activa y sin refresh pendiente |
-| 4 | Programar la semana 1 | yo |
+| 4 | ~~Programar la semana 1~~ | ✅ hecho el 2026-08-17 — los 7 están en cola, ver §4 |
 
 ✅ **No queda ningún bloqueo.** La cuenta existe, es profesional, está vinculada a la página
 de Facebook, la bio ya no promete el SIAT, las dos palabras clave tienen recurso y Postiz
-está conectado. **Se puede programar la semana 1.**
+está conectado. **La semana 1 ya está programada (§4); el primero sale el mié 19-ago.**

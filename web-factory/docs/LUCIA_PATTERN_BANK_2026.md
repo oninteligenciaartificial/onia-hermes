@@ -81,7 +81,7 @@ Con `get_cost` y midiendo saldo antes/después, no estimado:
 | Alternativa al primer plano | `wan2_7` | 7,50 cr / 5 s — mismo precio y también habla español, pero articula más marcado |
 | **Encadenar sin tope** | `seedance_2_5` `video_extension` | ~12 cr / 5 s ⚠️ **devolvió 16:9 con entrada 9:16** |
 | Convertir video real de cliente | `seedance_2_5` `video_edit` | por duración |
-| Lipsync sobre video mudo | `sync_so`, `sync_mode: remap` | ~18 cr / 5 s — **solo si `wan2_7` no sirve** |
+| Lipsync sobre video mudo | `sync_so`, `sync_mode: remap` | ~18 cr / 5 s — **solo si la voz nativa no sirve** |
 | Voz | ElevenLabs — Marcela `86V9x9hrQds83qf7zaGn` | ~2,4 cr / 50 palabras |
 
 ### 🗣️ El diálogo en español se PIDE — y sale exacto
@@ -104,9 +104,12 @@ traduce el español — forzar el multilingüe.)
 mejor la cara. Con habla genérica en inglés ganaba el otro; con diálogo real, no.
 
 ⚠️ **La voz oficial de Lucía sigue siendo Marcela (ElevenLabs)** según
-`references/modelos/lucia/LUCIA.md`, que manda sobre este banco. Si la voz nativa no convence:
-generar igual con estos modelos (la boca ya queda articulando español real), **silenciar su
-pista** y montar Marcela encima. Eso hace gratis lo que `sync_so` cobraba a ~18 cr.
+`references/modelos/lucia/LUCIA.md`, que manda sobre este banco.
+
+🔴 **Y montar Marcela encima NO alcanza** — se probó y quedó desincronizado hasta 1,4 s, porque
+el video y la voz son dos interpretaciones distintas del mismo guion. **Para usar la voz de
+Marcela hay que pagar `sync_so` igual (18,15 cr medidos).** Con voz nativa la pieza sale 7,50;
+con Marcela, ~28. Detalle en `MODELOS_IA_QUE_USAR_PARA_QUE.md` §6.
 
 ### 🎬 B-roll vs UGC — no se paga identidad donde no hace falta
 
@@ -132,6 +135,10 @@ al hablar.
 
 **Cuesta 2,5× lo que `wan2_7` y sale peor.**
 
+⚠️ Ese 12,50 es la salida **720p** (720×1280, medida). A **480p** el 15-ago costó **5,00 cr /
+5 s** (`references/modelos/lucia/prueba-lipsync-20260815/LEEME.md`). La comparación de arriba
+vale **a igual resolución** — no es que el modelo cueste 12,50 siempre.
+
 ### Imagen — medido
 
 | Modelo | Costo | Veredicto |
@@ -140,9 +147,10 @@ al hablar.
 | `nano_banana_2_lite` | 1,00 | buena, pero **aclara el pelo**. Respaldo |
 | `gpt_image_2` low | 0,50 | ensancha la cara. No para primer plano |
 | `z_image` | **0,15** | ❌ **no es Lucía** · ✅ el más barato para ambientes y gente de fondo |
-| `soul_2` | 0,12 | no sostiene la identidad por sí solo |
+| `soul_2` | 0,12 | ⚠️ **sin veredicto** — cobró, pero el job de la Fase A no volvió. El workflow oficial lo marca para UGC **con de-slop obligatorio** (sale con piel cerosa) |
 
-**Una pieza de 32 s hablando con `kling3_0_turbo`: ~52 cr.** De b-roll: **~33 cr** (4 planos de 8 s).
+**Una pieza de 32 s hablando con `kling3_0_turbo`: ~52 cr.** De b-roll: **~32 cr** mudo
+(4 planos de 8 s) · **~35 cr** con la voz montada encima.
 
 ⚠️ Todo gasto de video necesita **OK explícito de Sergio, caso por caso**.
 

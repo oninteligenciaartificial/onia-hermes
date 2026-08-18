@@ -152,7 +152,7 @@ Vertical **9:16** en todos. `veo3_1_lite` **exige `duration: 8`** cuando lleva s
 ### C. El guion para la voz
 
 Los 3 bloques de §1, tal cual. **Densidad: 2,4-2,7 palabras/segundo** (§8) — el guion entero
-son 38 palabras, o sea ~15 s. Entra justo en el tope duro de 40 palabras por 15 s.
+son 28 palabras, o sea ~11 s. Queda holgado bajo el tope duro de 40 palabras por 15 s.
 
 ---
 
@@ -195,7 +195,8 @@ uno y se consulta el estado con `show_generations`, que sí funciona.
 
 ## 7-bis. RESULTADOS FASE A — imagen (medido 2026-08-17)
 
-**Costo real de las 4: 3,77 créditos.** Total de la sesión con los sondeos: **5,04 cr de 300.**
+**Costo real de las 5: 3,77 créditos** — `soul_2` cobró sus 0,12 aunque el job no volvió.
+Total de la sesión con los sondeos: **5,04 cr de 300.**
 
 | Modelo | E1 identidad | E2 deform. | E3 piel | E4 formato | Resolución | Veredicto |
 |---|---|---|---|---|---|---|
@@ -328,6 +329,9 @@ La boca se abre en una "O" enorme que ninguna persona hace hablando normal. Es e
 banco tenía como opción principal para escenas con identidad.
 
 ### 🏆 `wan2_7` gana, y por un motivo que no estaba en el plan
+
+> ⚠️ **Esto vale solo para esta tanda, que habló en inglés genérico.** Con el diálogo en
+> español pedido entre comillas gana `kling3_0_turbo` — ver §11 antes de elegir modelo.
 
 Sale **1,50 cr/s como `kling3_0_turbo`**, con la boca más natural de los cuatro — y además
 **trae su propia pista de audio sincronizada sin que se la pidan** (AAC 44,1 kHz estéreo,
@@ -513,3 +517,50 @@ que **solo publicaban producto de marca**. La que funciona tiene al personaje co
 
 Si Lucía solo aparece hablando de sistemas de gestión, es un anuncio con cara. El lifestyle es
 lo que le compra el derecho a vender de vez en cuando.
+
+---
+
+## 14. 🔴 CORRECCIÓN — el flujo híbrido "gratis" no existe
+
+En §11 escribí que si la voz nativa no convencía, bastaba con silenciarla y montar Marcela
+encima, y que eso hacía **gratis** lo que `sync_so` cobra. **Falso.** Sergio lo vio en el primer
+visionado: *"no está nada sincronizado este video"*.
+
+**El error de razonamiento:** asumí que si el video articula español y la voz dice el mismo
+texto, iban a calzar. No calzan — son **dos interpretaciones independientes del mismo guion**,
+con pausas y velocidades propias.
+
+Medido con Whisper sobre las dos pistas:
+
+| | arranca | termina | pausa interna |
+|---|---|---|---|
+| Nativa del video | 0,40 s | 5,40 s | corte en 2,40 s |
+| Marcela | 0,00 s | 4,00 s | ninguna |
+
+**Hasta 1,4 s de desfase.** La boca sigue moviéndose más de un segundo después de terminar la voz.
+
+### `sync_so` sí lo resuelve — y cuesta lo que decía el banco
+
+Probado: **18,15 cr** medidos. Roles `input_video` / `input_audio` (con `video`/`audio` rechaza).
+Recorta el video a la duración del audio solo (5,04 → 4,375 s).
+
+⚠️ Tiene un costo que no es en créditos: **regenera la zona de la boca y ablanda la cara** — un
+frame salió con los ojos cerrados. Se paga sincronía con nitidez.
+
+### La cuenta real, corregida
+
+| Con qué voz | Cómo | Costo 5 s |
+|---|---|---:|
+| **La nativa del modelo** | una sola llamada | **7,50** |
+| **Marcela (ElevenLabs)** | kling + ElevenLabs + `sync_so` | **~28** |
+
+**Casi 4× de diferencia.** Que la voz nativa alcance o no es la decisión más cara del pipeline
+de video, y la toma Sergio escuchando.
+
+### La lección de método
+
+Dos veces en la misma sesión di por bueno un resultado sin mirarlo hasta el final: primero
+declaré roto un canal MCP que funcionaba, y después di por sincronizado un montaje que no lo
+estaba. **Las dos veces el error fue afirmar antes de verificar la salida completa.** Un archivo
+que se generó no es un archivo correcto — lo mismo que ya estaba escrito para los PNG del motor
+de carruseles, y que no apliqué al video.

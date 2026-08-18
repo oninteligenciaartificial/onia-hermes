@@ -104,12 +104,13 @@ costo cero.
 Su plan decía 70% reel y no tenía ninguno porque el costo no estaba medido. Ahora sí:
 
 ```
+kling3_0_turbo      5 s hablando en español, voz nativa  7,50 cr
 veo3_1_lite         8 s a 720×1280, 9:16 real           8 cr
-video_extension     encadena sin el tope de 15 s        ~12 cr por tramo
+video_extension     encadena sin el tope de 15 s        ~12 cr por tramo ⚠️ devolvió 16:9
 sync_so (remap)     lipsync con la voz de Marcela       ~18 cr / 5 s
 ```
 
-**~48 cr** una pieza de 32 s de b-roll con voz montada encima.
+**~35 cr** una pieza de 32 s de b-roll (4 planos de 8 s) con voz montada encima.
 
 **El lipsync no es el default** — cuesta ~5× más que montar la voz. Se usa solo donde ella
 mira a cámara y habla, que es exactamente el pilar A.
