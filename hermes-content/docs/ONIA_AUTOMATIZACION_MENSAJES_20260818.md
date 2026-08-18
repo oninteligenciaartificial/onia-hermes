@@ -538,7 +538,7 @@ mensaje real.
 
 ### 10.2 — El workflow, construido y PROBADO DE PUNTA A PUNTA
 
-`ONIA - Comentario IG -> DM (Private Reply)` — n8n **`kUwiJdrmw6hJsAXv`**, activo.
+`ONIA - Comentario IG -> DM (Private Reply)` — n8n **`mxl618u4eT209hTc`**, activo.
 
 ```
 https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment
@@ -723,3 +723,82 @@ comentarios del primer carrusel (mié 19-ago) queden sin respuesta.
 
 **n8n: es el motor real y lo que se vende.** Instantáneo, sin techo de cuentas, y es lo único de
 los tres que se convierte en producto con costo plano.
+
+---
+
+## 12. ¿Nos pueden banear por autopostear? — la respuesta tiene dos mitades
+
+> Pregunta de Sergio, 2026-08-18: *"si autoposteas contenido a Postiz no nos pueden banear si no
+> interactuamos con la cuenta? Hay que calentarla"*. La intuición apunta al lado correcto, pero al
+> riesgo equivocado.
+
+### 12.1 — Publicar NO es el riesgo (medido, no opinado)
+
+Consultado en vivo, `GET /me/content_publishing_limit`:
+
+```json
+{"config":{"quota_total":100,"quota_duration":86400},"quota_usage":0}
+```
+
+**Cupo real de `@oniahq`: 100 posts cada 24 h. Nuestra cadencia son 7 posts en 3 semanas = 0,3 por
+día.** Estamos tres órdenes de magnitud por debajo.
+
+Y hay una distinción que decide todo: **Postiz no automatiza la app, llama a la Content Publishing
+API oficial.** Los baneos por automatización castigan a las herramientas que simulan un humano
+usando la app (seguir/dejar de seguir, likes masivos, DMs a desconocidos). Publicar por API es el
+uso para el que Meta construyó la API.
+
+### 12.2 — "Calentar la cuenta" con actividad es el riesgo, no la cura
+
+Ya estaba decidido el 2026-07-09 en `ONIA_AI_INFLUENCERS_ACCOUNT_OPS_2026.md`:
+
+> *"NO granja de celulares (black-hat de engagement → Meta banea en masa)"* ·
+> *"calidad > cantidad… NO cuentas vacías masivas = red coordinada = ban"*
+
+Meta puntúa confianza por **antigüedad, perfil completo, historial de publicación y violaciones
+previas**. De esa lista, `@oniahq` ya tiene tres: perfil completo, vinculada a la página de
+Facebook, dentro de un portafolio con verificación de negocio aprobada. **Falta historial — y el
+historial se construye publicando.** Publicar ES el calentamiento.
+
+Lo que sí conviene, y es gratis: que Sergio responda a mano los comentarios las primeras semanas.
+Interacción real de la dueña de la cuenta, no un bot dando likes.
+
+### 12.3 — 🔴 El riesgo real estaba en el auto-DM, y el flujo lo tenía
+
+Meta 2026 detecta por **huella de comportamiento**, no solo por volumen. La regla que nos aplicaba:
+
+> **1 DM automático por persona cada 24 h** desde disparadores de comentario — puesta justamente
+> para cortar el patrón "le mando 3 DMs desde 3 posts distintos".
+
+**El flujo v3 la violaba:** sin deduplicación, quien comentara SISTEMA en tres carruseles recibía
+tres DMs. Ese es exactamente el patrón marcado.
+
+**Corregido en v4** (`mxl618u4eT209hTc`) con `/opt/onia/ig-dm-token.sh`:
+
+- Marcador por `from_id` en `/opt/onia/ig-dm-sent/`; si tiene menos de 24 h, **no devuelve el token
+  y el DM no se intenta**.
+- El `from_id` viene de un webhook: se valida que sea **solo dígitos** antes de usarlo como nombre
+  de archivo (si no, es path traversal servido en bandeja).
+- Los marcadores de más de 2 días se borran solos.
+
+Probado dentro del flujo:
+
+| | 1ª vez | 2ª vez, misma persona |
+|---|---|---|
+| Token o freno 24h | CORRIO | CORRIO |
+| Enviar DM privado | **CORRIO** (Meta respondió) | **no se intentó** |
+| Responder 200 (freno 24h) | — | **CORRIO** (`ya_recibio_dm_24h`) |
+
+⚠️ **Los topes de DM son de fuente secundaria** (blogs de proveedores de automatización de DMs, que
+tienen interés comercial en el tema): 750 private replies/hora, 200 DM/hora, 1 por usuario cada
+24 h. **No los verifiqué contra la doc oficial de Meta.** El único número medido de este doc es el
+cupo de publicación de §12.1. Aun así el freno de 24 h se implementa igual: es conservador y es
+comportamiento correcto aunque la cifra exacta difiera.
+
+### 12.4 — Lo que NO hacemos, y queda escrito
+
+- Nada de seguir/dejar de seguir, likes masivos ni pods de engagement.
+- Nada de DM a quien no pidió algo. El Private Reply responde a **un comentario que pidió** un
+  recurso — eso es el uso sancionado, no spam frío.
+- Nada de comprar seguidores.
+- Etiqueta de contenido generado con IA, obligatoria en la cuenta de Lucía.
