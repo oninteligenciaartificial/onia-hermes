@@ -41,9 +41,18 @@ sandbox), y hay **19 preguntas abiertas** al banco. Las dos que definen todo:
 ⚠️ Además: el QR que hoy muestra el checkout dice **"SERVICIO DENTALGEST", titular Ruddy
 Urcullo, monto Bs 0,00** — no se le puede mostrar a un cliente.
 
-**Qué destraba esto (de Sergio):** mandar las 19 preguntas al ejecutivo del BCP abriendo
-por esas dos, y pedir credenciales de **sandbox** ya (se puede integrar sin esperar el
-resto). Mientras tanto: cobrar por transferencia o QR personal.
+**Y hay algo ANTES que las preguntas: la cuenta corriente empresa todavía no está
+abierta.** El trámite está armado al 90 % (`ONIA_BCP_APERTURA_CUENTA_PAQUETE.md`: datos
+completos, las 2 cartas redactadas listas para firmar, FATCA resuelto). Falta: que
+Leslie confirme sus datos y firme, imprimir el CI escaneado con firma a mano, y la
+llamada al ejecutivo con las 7 preguntas — la #1 es si la cuenta que Leslie YA tiene en
+el BCP es personal o está asociada al NIT, porque eso cambia el trámite entero.
+
+**Orden real para destrabar el cobro automático:**
+1. Leslie confirma y firma → se presenta el paquete → cuenta corriente empresa abierta.
+2. Con la cuenta: pedir credenciales de sandbox de la API de QR.
+3. Con el sandbox: integrar el checkout (el diseño ya está hecho).
+Mientras tanto: cobrar por transferencia o QR personal, alta manual.
 
 ### 2. Cobro del add-on chatbot ❌ (en construcción)
 
