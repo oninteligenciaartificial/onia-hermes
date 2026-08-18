@@ -50,7 +50,7 @@ developers.facebook.com y developers.chatwoot.com:
 | Ser **Tech Provider** (auto-servicio, no hay que ser BSP ni entrar a un programa de partners) | Nuestro, UNA vez | En curso |
 | Business Verification de la agencia | Nuestro | ✅ aprobada 31-jul-2026 |
 | App con caso de uso WhatsApp en live mode | Nuestro | ✅ "Onia Bot" (1078962684709749) |
-| App Review: **2 videos** (enviar mensaje desde la app; crear plantilla) para Advanced Access a `whatsapp_business_messaging` + `whatsapp_business_management` | Nuestro | **NO VERIFICADO si ya se presentó** — ~24 h de revisión |
+| App Review: **2 videos** (enviar mensaje desde la app; crear plantilla) para Advanced Access a `whatsapp_business_messaging` + `whatsapp_business_management` | Nuestro | ✅ **PRESENTADO Y EN CURSO** al 2026-08-17 (visto por Sergio en el panel de Meta: `whatsapp_business_messaging` + `whatsapp_business_management` + `public_profile`; plazo típico ~20 días) |
 | Access Verification (formulario) | Nuestro | Pendiente, ~5 días |
 | Embedded Signup **v4** (v2 se deprecia el **15-oct-2026** — nunca implementar v2) | Nuestro | Pendiente (lo trae Chatwoot, ver abajo) |
 | Business Verification **del cliente** | Del cliente | **NO necesaria para arrancar**: sin verificar puede iniciar conversaciones a 250 clientes únicos/24 h y responder SIN límite lo que le escriban. Verificarse solo le hace falta para escalar difusiones y para el display name oficial / check verde |
@@ -274,7 +274,101 @@ precio nuevo sin decisión de Sergio.
 
 ---
 
-## 5. Recomendación (alta + canal, en secuencia)
+## 5. El número del cliente — casos y costos
+
+> Pregunta de Sergio: ¿el cliente pierde su número al conectar el chatbot?
+> **No** — con coexistencia conserva número Y app; migrar o estrenar número
+> son elecciones, no obligaciones. Todo verificado **2026-08-17** en
+> developers.facebook.com (Meta cambia reglas: regla de re-verificación al
+> pie de esta sección).
+
+### Caso A — Conserva su número Y su app (coexistencia) ✅ el default
+
+Disponible HOY vía Embedded Signup ("onboarding business app users").
+Verificado 2026-08-17:
+
+- **Requisito del cliente:** tener **WhatsApp Business app ≥ 2.24.17** en el
+  teléfono (la app de consumidor NO califica → Caso B o C). Del lado
+  nuestro: ser Tech Provider (§1, en trámite).
+- **Qué conserva:** su número, su app y sus chats en el teléfono. El mismo
+  número atiende por la app Y por el bot/panel a la vez.
+- **Qué se sincroniza al panel:** solo los últimos **6 meses** de chats 1:1
+  (media de >14 días llega sin asset); hay **24 h** para completar la sync o
+  se repite el flujo.
+- **Qué NO entra / se le apaga en la app:** los **grupos no se sincronizan**;
+  se desactivan mensajes temporales, "ver una vez" y ubicación en vivo en
+  chats 1:1, y las **listas de difusión**; throughput tope 20 msg/s.
+- **Reversible por el cliente:** desde su app (Ajustes > Cuenta > Plataforma
+  de negocios > Desconectar); nos llega el webhook `PARTNER_REMOVED`.
+- **¿Bolivia?** El doc de Meta **no publica ninguna lista de países
+  excluidos** (re-visto 2026-08-17: la página no tiene sección de países).
+  Aun así, la prueba con un +591 real sigue siendo el gate antes de
+  prometerla (§6.3).
+
+### Caso B — Migra el número a la API, sin coexistencia
+
+Para el cliente que quiere operar 100% desde el panel, o cuyo número está en
+el WhatsApp de consumidor. Proceso (verificado 2026-08-17): en la app,
+**Ajustes > Cuenta > Eliminar mi cuenta** → esperar ~3 min → registrar el
+número en la API.
+
+- **Pierde:** TODO el historial ("your existing messaging history will be
+  lost" — irrecuperable: exigir backup antes) y el uso de la app con ese
+  número mientras viva en la API.
+- **Reversible a medias:** desregistrando el número de Cloud API puede volver
+  a usarse en la app — pero los chats borrados no vuelven.
+
+### Caso C — Número nuevo
+
+- **Cuándo conviene:** número personal mezclado con el negocio; quiere línea
+  comercial separada; o su número cae en el Caso D. En Bolivia un chip
+  prepago cuesta **~Bs 10–20** — único costo del caso.
+- **Requisitos del número (2026-08-17):** propio del cliente, con código de
+  país y área, capaz de **recibir SMS o llamada** (así lo verifica Meta);
+  móvil recomendado, fijo también sirve.
+
+### Caso D — "Con ESE número no se va a poder" (o no todavía)
+
+- **Número baneado por WhatsApp:** "must be unbanned via the appeal process
+  first" (2026-08-17). Sin apelación exitosa no se registra. Jugada: apelar
+  y arrancar YA con Caso C.
+- **Número registrado en otra BSP/WABA** (cliente que viene de Wati,
+  360dialog, etc.): **no está perdido** — Meta soporta migrar números entre
+  WABAs conservando el número (2026-08-17). Requiere coordinar con la
+  plataforma saliente (bajar el 2FA del número). Trámite, no bloqueo.
+- **Ojo al timing:** un número que envió mensajes pagos en los últimos 30
+  días no se puede borrar de su WABA (2026-08-17) — retrasa migraciones, no
+  las impide.
+
+### Qué cobra Meta en todos los casos
+
+**Nada por el número ni por el registro** (verificado 2026-08-17: ni la doc
+de pricing ni la de phone numbers mencionan cargo por alta o tenencia del
+número). Meta cobra **por mensaje de plantilla entregado** (desde
+1-jul-2025), según categoría y país; las conversaciones de servicio son
+gratis **hasta el 1-oct-2026**. El detalle del cambio y el costeo del add-on
+ya están en `ONIA_FECHAS_CRITICAS_PLAN.md` §3 (checkpoint 1-sep: re-descargar
+el CSV de tarifas) — no re-investigar acá.
+
+### Tabla de decisión para la venta
+
+| Perfil del cliente | Ruta | Qué le decimos | Costo extra |
+|---|---|---|---|
+| Ya atiende por WhatsApp Business app y quiere seguir con su teléfono (el típico) | **A — Coexistencia** | "Conservás tu número y tu app; el bot atiende el mismo número. Se apagan temporales, 'ver una vez' y difusiones; los grupos no entran al panel" (aviso en contrato, §7.4) | Bs 0 |
+| Quiere operar 100% en panel / varios operadores, no necesita la app | **B — Migración** | "Tu número pasa a la plataforma; la app deja de funcionar con ese número y el historial se pierde — backup antes. Podés volver, sin chats" | Bs 0 |
+| Número personal mezclado con el negocio | **C — Número nuevo** | "Estrenamos línea comercial; tu número personal queda intacto" | Chip ~Bs 10–20 (lo compra el cliente) |
+| Su número está baneado | **D → apelar; mientras, C** | "Ese número está bloqueado por Meta; apelamos, y arrancamos con línea nueva para no esperar" | Chip ~Bs 10–20 |
+| Viene de otra plataforma (Wati, 360dialog, …) | **D — Migración entre WABAs** | "Tu número se muda con nosotros, no se pierde; coordinamos la salida con tu proveedor actual" | Bs 0 |
+
+**Regla de mantenimiento (checkpoint tipo 1-sep):** re-verificar **cada mes
+— y siempre antes de prometerle coexistencia a un cliente —** la página de
+Meta de coexistencia (onboarding-business-app-users, en Fuentes) y la de
+pricing; fechar cada afirmación al citarla. El checkpoint del 1-sep-2026
+(CSV de tarifas) ya vive en `ONIA_FECHAS_CRITICAS_PLAN.md` §1.
+
+---
+
+## 6. Recomendación (alta + canal, en secuencia)
 
 **Hoy (esta semana, con 0–3 clientes):**
 1. **Canal: encender B1** — crear un inbox Website en Chatwoot, colgarle el
@@ -283,12 +377,12 @@ precio nuevo sin decisión de Sergio.
 2. **Alta WhatsApp: R3 done-for-you** en la cuenta del cliente (partner
    access, runbook ya escrito). Nuestra WABA solo si es piloto y firma
    consentimiento.
-3. **En paralelo, destrabar R1**: verificar si App Review ya se presentó →
-   presentarlo (2 screencasts, guion listo en
-   `historial/ONIA_META_WHATSAPP_CLIENTES_20260808.md` §2) → Access
-   Verification → Configuration ID → 3 env vars → **probar el popup con un
-   +591 real** (la prueba de coexistencia de 20 min incluida — nunca
-   prometer coexistencia a un boliviano sin haberla pasado).
+3. **En paralelo, destrabar R1**: App Review **ya presentado y en curso**
+   (2026-08-17, ~20 días típicos) → seguirlo en el panel y responder rápido
+   si Meta pide cambios → Access Verification → Configuration ID → 3 env
+   vars → **probar el popup con un +591 real** (la prueba de coexistencia de
+   20 min incluida — nunca prometer coexistencia a un boliviano sin haberla
+   pasado).
 
 **Cuando el botón funcione (estimado 2–6 semanas, casi todo espera de Meta):**
 4. **R1 Embedded Signup pasa a ser el camino estándar** y R3 queda como
@@ -306,11 +400,11 @@ altas nuevas bajo nuestra WABA más allá de 3 pilotos.
 
 ---
 
-## 6. Qué depende de Sergio
+## 7. Qué depende de Sergio
 
-1. **Confirmar/presentar App Review + Access Verification** de la app "Onia
-   Bot" (los screencasts los preparamos nosotros; el submit sale de la
-   cuenta de developer). Es EL bloqueante de la Ruta 1.
+1. **App Review: presentado y en curso (2026-08-17)** — vigilar el panel de
+   Meta y responder si piden cambios; al aprobarse, seguir con **Access
+   Verification**. Sigue siendo EL bloqueante de la Ruta 1.
 2. **Un número +591 real de prueba** para el test de Embedded Signup +
    coexistencia (20 min, con la app WhatsApp Business instalada).
 3. **Decisión de pricing**: ¿existe un escalón "solo widget web" más barato
@@ -325,10 +419,8 @@ altas nuevas bajo nuestra WABA más allá de 3 pilotos.
 
 ---
 
-## 7. Sin verificar
+## 8. Sin verificar
 
-- Si el App Review de los 2 permisos **ya se presentó** o no (el runbook lo
-  marca NO VERIFICADO desde el 08-ago).
 - Que el Embedded Signup funcione en NUESTRO Chatwoot self-hosted concreto
   (reportes de popup que no abre en self-hosted; la prueba con número real
   es parte del encendido).
@@ -336,7 +428,8 @@ altas nuevas bajo nuestra WABA más allá de 3 pilotos.
   adapter solo se probó con WhatsApp).
 - **Coexistencia disponible en Bolivia**: probable (trackers de terceros la
   listan; cobertura global reportada), pero ninguna fuente oficial de Meta
-  publica la lista de países. Prueba de 20 min pendiente.
+  publica lista de países — re-confirmado 2026-08-17 (el doc de coexistencia
+  no tiene sección de países). Prueba de 20 min con +591 pendiente.
 - Fee exacto por mensaje de Twilio WhatsApp (no verificado en su pricing).
 - País/razón social de Forja/Horizontes IA (la web no lo publica).
 - Que `clinic_settings`/`/admin` sigan siendo el lugar donde aterrizan las
@@ -352,6 +445,9 @@ altas nuevas bajo nuestra WABA más allá de 3 pilotos.
 - Embedded Signup overview (v2 deprecada 15-oct-2026; límites 10→200/semana): <https://developers.facebook.com/documentation/business-messaging/whatsapp/embedded-signup/overview/>
 - Onboard WhatsApp Business app users (coexistencia): <https://developers.facebook.com/documentation/business-messaging/whatsapp/embedded-signup/onboarding-business-app-users/>
 - Messaging limits (250/24 h sin verificación del cliente): <https://developers.facebook.com/documentation/business-messaging/whatsapp/messaging-limits>
+- Migrar un número existente a la API (proceso, pérdida de historial, desregistro) — verificado 2026-08-17: <https://developers.facebook.com/docs/whatsapp/cloud-api/get-started/migrate-existing-whatsapp-number-to-a-business-account>
+- Phone numbers Cloud API (requisitos del número, baneados/apelación, migración entre WABAs, regla 30 días) — verificado 2026-08-17: <https://developers.facebook.com/docs/whatsapp/cloud-api/phone-numbers>
+- Pricing (por mensaje desde 1-jul-2025; sin cargo por número) — verificado 2026-08-17: <https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing>
 
 **Chatwoot:**
 - Embedded Signup self-hosted (3 env vars) — re-verificado 2026-08-17: <https://developers.chatwoot.com/self-hosted/configuration/features/integrations/whatsapp-embedded-signup>
