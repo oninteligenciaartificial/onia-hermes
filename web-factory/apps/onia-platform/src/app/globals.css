@@ -260,6 +260,32 @@ h3 {
   text-wrap: balance;
 }
 
+/*
+ * LEY DEL APRETADO (medida en fanvue.com con F12, 2026-08-18 — la ficha con los
+ * numeros exactos esta en web-factory/data/references/design-sources/
+ * fanvue-mecanica-medida.md).
+ *
+ * El line-height del display NO es fijo: BAJA cuando el titular crece. Medido en
+ * Fanvue: 1,00 a 50px -> 0,90 a 80px -> 0,80 a 106px. Sin esto, un titular
+ * gigante se lee como lineas separadas en vez de un bloque solido, y es la razon
+ * numero uno por la que un display grande "se ve amateur" con la misma fuente.
+ *
+ * El tracking tambien escala: -0,02em ya lo aplicamos arriba (equivale al -2%
+ * que Fanvue usa a 80px), y a tamanos chicos no se hereda.
+ */
+@media (min-width: 900px) {
+  .display {
+    line-height: 0.92;
+  }
+}
+
+@media (min-width: 1280px) {
+  .display {
+    line-height: 0.86;
+    letter-spacing: -0.025em;
+  }
+}
+
 /* Palabra suelta destacada dentro de un .display (el contraste de Fanvue,
    resuelto con color en vez de una 5ta familia tipografica). */
 .display em {
