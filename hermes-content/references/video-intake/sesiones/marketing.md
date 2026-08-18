@@ -120,6 +120,62 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## G3 · El cliente real con la pantalla sustituida — la prueba que ningún demo consigue
+
+```text
+Contexto: un reel sustituyo un auto barato por un deportivo DENTRO del mismo plano filmado
+con celular, conservando a la persona real, su ropa, sus gestos, el fondo, la luz y el
+movimiento de camara. Sintesis tecnica:
+hermes-content/references/video-intake/2026-08-18-sintesis-lote-17.md (tecnica T1)
+
+Por que importa mas que cualquier otra cosa del lote: la tecnica elimina el problema mas caro
+de la IA de video -- sostener una cara entre planos -- simplemente NO GENERANDO al humano. Y
+eso, traducido a lo nuestro, es el antes/despues de software EN UN SOLO PLANO:
+
+  filmamos al cliente real en su negocio real, con su realidad de HOY (el mostrador con
+  papeles, el cuaderno, la planilla impresa, la pantalla vieja) y sustituimos SOLO la
+  pantalla / el escritorio por el panel de ONIA corriendo.
+
+Mismo dueno, mismo local, misma luz, mismo movimiento de camara. La comparacion es
+irrefutable porque no hay nada actuado. Para venderle software a un dueno de negocio en
+Bolivia, eso pega mas fuerte que cualquier demo grabada.
+
+VERIFICADO contra la cuenta (no lo repitas, usalo):
+- seedance_2_5, modo video_edit: "edit one reference video (billed by that video's duration;
+  'duration' and 'aspect_ratio' are ignored)". 480p/720p/1080p, 9:16.
+- El creador afirma, verbatim: "Ya no hace falta que tengamos el celular en un tripode, lo
+  podemos agarrar con la mano y moverlo naturalmente y la camara entiende como se esta
+  moviendo." Eso es AFIRMADO, no verificado por nosotros. Probalo antes de prometerlo.
+- CUIDADO DE GASTO: video_edit se factura por la duracion del video FUENTE. Filma plantillas
+  CORTAS (5-8 s) y monta despues. Un plano de 30 s cuesta 4 veces uno de 8.
+
+Y la segunda mitad, que es montaje puro y cuesta cero: el BARRIDO SPLIT-SCREEN vertical.
+Izquierda la situacion real del cliente, derecha el mismo plano con ONIA, con la misma mano
+del que filma visible en las dos mitades. Sale con editor-videos / HyperFrames. Sirve igual
+para web-factory: la web vieja del cliente y la nueva, en el mismo plano.
+El truco de oficio en toda comparacion de un solo cuadro: la jerarquia, no el copy. El
+ganador va mas grande y mas arriba; el perdedor achicado y hundido. El ojo decide antes de leer.
+
+Tarea:
+1. Escribi el guion de rodaje: que 3 planos se le piden al cliente (5-8 s cada uno), en que
+   orden, y que se sustituye en cada uno. Sin jerga: el cliente filma con su celular.
+2. Deja el prompt de video_edit escrito y listo para cada plano.
+3. Deja la plantilla del barrido split-screen armada en HyperFrames, con un render de prueba
+   hecho con material que YA tengamos.
+4. Estima el costo en creditos de los 3 planos y ponelo al lado.
+
+NO GENERES NADA. Generar video = permiso explicito de Sergio, caso por caso. Entrega el
+guion, los prompts y el costo; el aprueba.
+
+PRECONDICION HONESTA: necesita un cliente real con el sistema andando. Si hoy no lo hay,
+marcalo como bloqueado por eso y NO lo simules -- fabricar un caso esta prohibido.
+
+LISTO = guion + prompts + plantilla split-screen con render de prueba + costo estimado. Cero
+generaciones pagas.
+```
+
+---
+
 ## A1 · Portafolio antes/despues — la que mas rapido toca la caja
 
 ```text

@@ -120,6 +120,90 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## G4 · La escalera de popups, del 0 al 10 — con las capturas reales
+
+```text
+Contexto: un reel puntua 8 popups de captura de email de tiendas reales, del 0 al 10, y dice
+por que en cada caso. Verbatim completo:
+hermes-content/references/video-intake/transcripciones/Instagram-DcEITCmoSHX.txt
+
+La escalera, textual del video:
+  0/10 -- "no te da nada a cambio del correo y tiene demasiados campos que llenar"
+  1/10 -- "demasiado copy innecesario"
+  3/10 -- buena oferta y pregunta que quiere el cliente, "pero no esta bien configurado"
+  5/10 -- "es simple y la oferta esta super clara"
+  6/10 -- "la tecnica de la ESCALERA DE SI: primero le preguntas al cliente si quiere la
+          oferta y LUEGO le pides el correo"
+  7/10 -- engagement: "rascas para revelar cual es tu oferta y le da un toque divertido"
+  9/10 -- consigue "una tasa de suscripcion increible si eres una marca dispuesta a probarlo"
+ 10/10 -- MULTI-PASO: "la oferta super clara, en el primer paso hacemos una PREGUNTA, luego
+          pedimos el correo y luego el numero de telefono, y en base a los datos que
+          recogimos podemos hacer correos personalizados"
+
+Lo que hay que entender, y es el eje entero: el paso 1 NO pide datos, pide un CLIC. Ese clic
+segmenta (te dice que quiere el cliente) y ademas es un microcompromiso que sube la
+conversion del paso 2. El email recien viene despues.
+
+Tarea:
+1. Verifica que tiene HOY web-factory en materia de captura: hay popup? de que nivel de la
+   escalera es? Abri la pantalla, no el codigo.
+2. Construi el de 10/10 como bloque reusable: paso 1 pregunta con 2-3 opciones -> paso 2
+   contacto -> guardar la respuesta del paso 1 junto al lead, porque sin eso la
+   personalizacion posterior no existe y el multi-paso no sirve de nada.
+3. ADAPTACION BOLIVIA: pedimos WHATSAPP, no SMS. Es el canal real del comprador aca.
+4. NADA de confirmshaming (el "no gracias, prefiero pagar precio completo"). No va con la
+   marca y es de las cosas que el propio video castiga.
+5. Respeta lo que ya existe: si hay atribucion de leads con ?src= viva en produccion, el
+   popup tiene que alimentar ESE circuito, no crear uno paralelo.
+6. Accesibilidad no es opcional: foco atrapado dentro del dialogo, cierre con Escape,
+   aria-label en cada opcion. Usa <dialog> nativo con showModal().
+   OJO con prefers-reduced-motion: poner transition-duration: 0.01ms ROMPE las propiedades
+   discretas y el dialogo queda abierto en opacity 0 (invisible pero capturando clics). Va
+   transition: none. Esto ya nos paso.
+
+LISTO = el popup de 2 pasos existe en web-factory, probado en pantalla, guardando la
+respuesta del paso 1 junto al lead, y con teclado y lector de pantalla verificados.
+```
+
+---
+
+## G5 · Secuencia de scroll con GSAP — el patrón de Apple
+
+```text
+Contexto: un tutorial en espanol recrea la animacion de scroll de los AirPods Pro de Apple y
+muestra el CODIGO literal en pantalla. Ficha y verbatim:
+hermes-content/references/video-intake/2026-08-18-sintesis-lote-17.md
+hermes-content/references/video-intake/transcripciones/Instagram-Db8hFCFFTZg.txt
+
+La tecnica: NO es un video. Es una secuencia de PNGs dibujada en un <canvas>, con el numero
+de frame atado al scroll por GSAP ScrollTrigger. Parametros que se ven en pantalla:
+  snap: "frame"   ease: "none"   scrub: 0.5   onUpdate: render
+
+Verificado en el repo: GSAP ya esta autorizado y las skills gsap-* estan instaladas. El
+patron NO existe todavia (grep de drawImage da 0).
+
+EL BLOQUEANTE REAL ES EL PESO, no el codigo: ~69 KB por frame. Una secuencia de 150 frames
+son ~10 MB, y el presupuesto de una landing es 150 KB de JS. Si no resolves esto, no lo
+construyas.
+
+Tarea:
+1. Antes de codear, resolve el peso. Opciones a evaluar con numeros, no a ojo: menos frames
+   con interpolacion, WebP/AVIF en vez de PNG, resolucion menor con escalado en canvas,
+   carga progresiva por tramos, y un tope duro de peso total.
+2. Recien con el numero decidido, arma el bloque reusable de web-factory. Carga las skills
+   gsap-scrolltrigger y gsap-core primero -- no improvises la API.
+3. prefers-reduced-motion: sin scrub, se muestra un frame fijo. Obligatorio.
+4. Medi Core Web Vitals antes y despues. Si empeora LCP o CLS, no entra.
+
+Esto es un TECHO visual, no una prioridad de venta. Si hay algo de la lista de web-factory
+que convierta (G4, C1), va primero. Deci explicitamente que dejaste de lado por hacer esto.
+
+LISTO = el bloque existe con el peso resuelto y medido, reduced-motion cubierto, y CWV que no
+empeoran. O la decision escrita de NO hacerlo, con el numero que la justifica.
+```
+
+---
+
 ## C1 · Indexabilidad — cerrar la casa antes de auditar la ajena
 
 Sale de [20 senales de web vibecodeada](../2026-08-12-20-senales-web-vibecodeada.md)

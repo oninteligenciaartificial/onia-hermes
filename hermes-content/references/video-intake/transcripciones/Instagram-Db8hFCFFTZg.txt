@@ -1,0 +1,7 @@
+[0] ¿Cómo hace la gente de Apple este efecto tan brutal?
+[2] Primero necesitas la biblioteca de GESAP, que es gratuita y de código abierto.
+[6] Después el truco es que en realidad no hay ningún 3D, toda la animación son 64 imágenes.
+[11] Ahora, creamos una lista con estas 64 imágenes y utilizando el plugin de scroll trigger,
+[15] detectamos la posición del scroll para saber qué frame es el que tenemos que cargar.
+[19] Y así queda esta animación tan espectacular.
+[22] Y si te gustan estos tutoriales, deja tu like.

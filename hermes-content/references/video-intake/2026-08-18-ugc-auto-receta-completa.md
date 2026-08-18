@@ -2,8 +2,9 @@
 
 - **Video:** https://www.instagram.com/reel/DcMW3Coi6BN/ · 47 s · 960×720 (4:3, no vertical)
 - **Carril A.** Sergio: *"aprende a hacer esto"*.
-- **Cobertura real:** **6 de 8 fotogramas leídos**. El audio está en transcripción; **todavía no lo
-  leí** — pero en este video el contenido está escrito en pantalla, incluido el prompt entero.
+- **Cobertura real:** **6 de 8 fotogramas leídos** + **audio 100%**
+  ([verbatim](transcripciones/Instagram-DcMW3Coi6BN.txt), apenas 4 líneas: el video es casi todo
+  texto en pantalla).
 - **Veredicto: SIRVE YA — es la segunda plantilla de prompt de video, y es distinta de la primera**
 
 ---
@@ -27,6 +28,23 @@ red-lit dials. Her hand sweeps frame; soft: "Look at this interior — barely dr
 ```
 
 *(El video corta antes del beat de 6-9 s; lo que sigue no se ve.)*
+
+## Verificado: el diálogo sale palabra por palabra
+
+El audio del video generado dice, textual:
+
+```
+[21] I'm selling my car.
+[22] Let me show you.
+[23] Look at this interior, barely driven.
+```
+
+Y el prompt pedía `"Okay — I'm SELLING my car. Let me show you."` y
+`"Look at this interior — barely driven."`
+
+**Coincide literal.** No es una interpretación del modelo: lo que va entre comillas en el prompt
+sale dicho tal cual. Eso convierte el mecanismo 6 de suposición en **hecho comprobado**, y
+significa que el guion se escribe en el prompt, no se corrige después.
 
 ## Los seis mecanismos, y por qué cada uno está ahí
 

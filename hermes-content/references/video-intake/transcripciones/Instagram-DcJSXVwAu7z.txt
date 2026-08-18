@@ -1,0 +1,7 @@
+[0] Usas CloudCode, necesitas este trucazo y es que puedes darle un nombre a cada gente
+[4] y fíjate que te lo indicará aquí, pero eso no es todo, vamos a abrir otro agente con otro nombre
+[9] Ahora tenemos Frontend y Backend
+[10] Ahora desde Frontend le podemos enviar un mensaje en tiempo real a la gente de Backend
+[15] y fíjate que nuestro otro agente recibe este mensaje de la gente de Frontend
+[19] y esto es lo que te permite dirigir tus agentes de forma que trabajen autónoma cuando van terminando tareas
+[24] y si te ha gustado te truco deja tu like y cuéntame si ya lo conocías

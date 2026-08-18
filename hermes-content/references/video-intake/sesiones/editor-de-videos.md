@@ -120,6 +120,38 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## G2 · El molde de anuncio UGC para un rubro nuestro
+
+```text
+Contexto: la receta completa del anuncio UGC esta en
+hermes-content/references/video-intake/2026-08-18-ugc-auto-receta-completa.md
+El arco del reel de origen: publicacion muerta ("Listed 30+ days ago, 2 views") -> anuncio UGC
+generado con IA -> ficha del vendedor. El gancho de apertura es un DM entrante de un cliente
+preguntando el precio.
+
+Tarea:
+1. Adapta el molde a UN rubro nuestro (comercio/gastronomia es el que mas material tiene).
+   Escribi el prompt completo con la plantilla UGC de 6 mecanismos, con beats cronometrados y
+   el dialogo entre comillas -- porque sale literal.
+2. Deja los insumos listos: que fotos de referencia hacen falta y de donde salen.
+3. Estima el costo en creditos y ponelo al lado del prompt.
+
+DOS GATES QUE NO SE SALTEAN:
+- La REGLA DE ORO: tabla de cortes + preview 360p a Sergio ANTES de aplicar cualquier corte.
+- ORTOGRAFIA EN SUBTITULOS QUEMADOS. En este lote un reel publico DOS faltas quemadas en 10
+  fotogramas ("A GENERADO" por "HA GENERADO", "ARANA" sin enye) -- salidas del
+  auto-transcriptor sin revisar. En B2B boliviano una falta quemada cuesta la credibilidad que
+  el video intenta construir. El SRT se revisa a ojo antes de quemarlo, con foco en enyes y
+  acentos. Esto entra como paso fijo del pipeline de embedded-captions, no como recordatorio.
+
+NO GENERES. Entrega prompt + insumos + costo. Sergio aprueba caso por caso.
+
+LISTO = prompt completo del rubro, lista de insumos, costo estimado, y el gate de ortografia
+agregado al pipeline de subtitulos.
+```
+
+---
+
 ## E8 · El formato slate/cara, como plantilla de HyperFrames
 
 ```text
