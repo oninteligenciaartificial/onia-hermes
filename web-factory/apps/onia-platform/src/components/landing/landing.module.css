@@ -807,10 +807,23 @@
   box-shadow: var(--shadow-pop);
   border-radius: 14px 14px 0 0;
   height: 100%;
+  /* la barra arriba, el cuerpo estira: la escena se CENTRA en el marco en vez
+     de dejar un vacio muerto abajo cuando la pantalla tiene pocas filas */
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
 }
 
 .fvis .shotBody {
-  align-content: start;
+  align-content: center;
+}
+
+.bHero .shotBody {
+  align-content: center;
+}
+
+.bHero .approval {
+  height: 100%;
+  align-content: center;
 }
 
 .fmeta {
@@ -1791,6 +1804,8 @@
 }
 
 .closeIn {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 1.6rem;
   justify-items: start;

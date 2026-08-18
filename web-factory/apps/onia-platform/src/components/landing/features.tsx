@@ -74,13 +74,13 @@ const TILES: readonly Tile[] = [
     id: "agentes",
     celda: "hero",
     tone: "soft",
-    aria: "Cola de aprobación de Onia: el agente Recall redactó un recordatorio para un paciente que no vuelve hace meses y el agente Cobrador preparó el reclamo de una deuda vencida; los botones Aprobar y Descartar esperan el OK del dueño.",
+    aria: "Cola de aprobación de Onia: el agente Recall redactó un recordatorio para un paciente que no vuelve hace meses, el agente Cobrador preparó el reclamo de una deuda vencida y hay un aviso de citas de mañana sin confirmar; los botones Aprobar y Descartar esperan el OK del dueño.",
     badge: "Nuevo",
     titulo: "Agentes con IA",
     beneficio:
       "Recall trae de vuelta al que se enfrió; Cobrador persigue la deuda vencida. Trabajan de noche y nada sale sin tu OK.",
     visual: (
-      <Shot title="Cola de aprobación" tag="2 pendientes">
+      <Shot title="Cola de aprobación" tag="3 pendientes">
         {/* el agente detecta, redacta, y RECIÉN ENTONCES pide tu OK: los
             botones entrando último son el human-in-the-loop, dibujado */}
         <Escena className={styles.approval} paso={0.55}>
@@ -100,6 +100,10 @@ const TILES: readonly Tile[] = [
           <StaggerItem as="span" className={styles.msg}>
             «Hola Carla, quedó pendiente el saldo de la limpieza. ¿Te paso el
             QR?»
+          </StaggerItem>
+          <StaggerItem as="span" className={styles.acts}>
+            <span className={styles.ok}>Aprobar</span>
+            <span className={styles.no}>Descartar</span>
           </StaggerItem>
         </Escena>
       </Shot>
@@ -123,6 +127,9 @@ const TILES: readonly Tile[] = [
           </StaggerItem>
           <StaggerItem>
             <Row time="11:15" name="Hueco de 45 minutos" state="free" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row time="15:00" name="Limpieza · C. Vaca" dur="30 min" />
           </StaggerItem>
         </Escena>
       </Shot>
@@ -148,6 +155,9 @@ const TILES: readonly Tile[] = [
           </StaggerGrid>
           <StaggerItem>
             <Row name="Elegiste 09:15 · Control" dur="30 min" state="on" />
+          </StaggerItem>
+          <StaggerItem>
+            <Row name="Confirmamos por WhatsApp" state="free" />
           </StaggerItem>
         </Escena>
       </Shot>
@@ -180,6 +190,9 @@ const TILES: readonly Tile[] = [
           <StaggerItem>
             <Row name="Cobrado con QR" dur="14:02" state="on" />
           </StaggerItem>
+          <StaggerItem>
+            <Row name="Listo para facturar" state="free" />
+          </StaggerItem>
         </Escena>
       </Shot>
     ),
@@ -202,6 +215,9 @@ const TILES: readonly Tile[] = [
           </StaggerItem>
           <StaggerItem as="span" className={styles.webCta}>
             Reservar hora
+          </StaggerItem>
+          <StaggerItem>
+            <Row name="Los horarios salen de tu agenda" state="free" />
           </StaggerItem>
         </Escena>
       </Shot>
