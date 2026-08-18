@@ -548,3 +548,64 @@ scratchpad de la sesión, `bot-cliente/`).
 
 Backups: motor `/opt/onia/bot/backups/20260817-185002/`; producto
 `app.env.bak-botknowledge-*` + `runtime-next.prev-20260817-*`.
+
+## Prueba E2E 2026-08-18 — resolución por INBOX: la conversación real ya resuelve sola su organización
+
+Cierra el pendiente de arriba ("el turno real todavía NO resuelve org"). El mapeo
+elegido es el que **ya existía**: `clinic_settings.chatwootInboxId` (el superadmin
+lo escribe al dar de alta) — no se inventó tabla nueva.
+
+### Qué quedó vivo
+
+1. **Producto (onia-platform, commit `0a4da68` en `master`, deployado):**
+   `GET /api/chatbot-knowledge/published` acepta **`?inboxId=N`** como alternativa
+   a `organizationId`: resuelve la org vía `clinic_settings.chatwootInboxId` y
+   devuelve el mismo shape **+ `organizationId` resuelto**. `organizationId`
+   explícito sigue mandando. ⚠️ `chatwootInboxId` NO es unique en el schema: si
+   dos orgs lo compartieran (error de alta) gana la fila más antigua (`createdAt
+   asc`, determinista). 4 tests nuevos; suite 1557 passed | 5 skipped; tsc limpio.
+2. **Motor (`/opt/onia/bot`, espejado acá):**
+   - `chatwoot-adapter.mjs` saca el inbox del webhook (`payload.inbox.id`, con
+     respaldo `conversation.inbox_id`; en `conversation_created` el `inbox_id`
+     plano) y lo pasa como `turn.inbox_id`.
+   - `knowledge.mjs` keyea la cache db también por `inbox:<id>` y le pregunta al
+     producto con `?inboxId=` — el motor NUNCA conoce el mapeo, lo resuelve el
+     producto. `getKnowledge()` sigue sincrónico (copia vieja + refresh aparte).
+   - **`ensureKnowledge()` (nuevo): la ÚNICA desviación del patrón sincrónico** —
+     con la cache FRÍA de ese inbox, `resolveConfig()` espera UNA lectura acotada
+     (5 s máx; en la práctica ~50 ms al contenedor de al lado) antes del primer
+     turno. Sin eso, el PRIMER mensaje del cliente de la ferretería salía con la
+     cara de Onia y recién el segundo con la suya. Después de ese primer intento
+     (bueno o fallido) es `getKnowledge()` puro: cero red en el turno.
+3. **Mapeo en la base de prod** (supabase-db, schema `public`, verificado que ES
+   la base del producto: alias docker `db`, puerto 54329): UPDATE quirúrgico
+   `chatwootInboxId=6` en la fila de `cmsvyguui000001ril9vhxbn2`, con backup CSV
+   en `/opt/onia/backups/db/clinic_settings_cmsvyguui_20260818-*.csv`.
+
+### La prueba (mirada, no supuesta)
+
+- **Conversación NUEVA en el widget de la ferretería** (página de prueba
+  `bot-cliente/ferreteria.html`, inbox 6) → "hola, qué venden?" → **la PRIMERA
+  respuesta ya dice "ZZ QA Ferreteria Tornillo es una plataforma por
+  módulos…"** — sin organizationId manual en ningún lado. Screenshots
+  `e2e-ferreteria-widget*.png` (scratchpad `bot-cliente/`).
+- **Regresión cero en el bot de leads:** curl al webhook con un `message_created`
+  sintético del inbox 5 (Onia WhatsApp, sin mapeo) → contesta **"Onia es una
+  plataforma por módulos…"** (el 404 del producto degrada a archivo/código como
+  siempre). El curl usó una conversación inexistente (990001) a propósito:
+  `posted:false`, nada llegó a ningún hilo real (quedó UNA fila QA
+  `chatwoot:990001` en `bot_conversations`).
+- Login de prod mirado renderizado post-deploy (iconos como iconos, 200).
+
+### Qué falta / no verificado
+
+- El primer turno WhatsApp real de un cliente (probado por widget y por curl
+  sintético; el canal WhatsApp usa el mismo adapter).
+- El alta de un cliente nuevo punta a punta (crear inbox + escribir
+  `chatwootInboxId` desde el panel superadmin) — hoy se cargó por SQL.
+- Los 2 tests de leads preexistentes siguen fallando (sin cambios); en el VPS
+  además fallan 4 tests db del conocimiento por el `knowledge.json` vivo en el
+  cwd (ambiental, idéntico ANTES y después — verificado contra backup).
+
+Backups: motor `/opt/onia/bot/backups/20260818-024342/`; producto
+`runtime-next.prev-20260818-024637/` + `build-src-0a4da68/`.

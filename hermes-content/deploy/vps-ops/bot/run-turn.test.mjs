@@ -19,8 +19,12 @@ import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 
 import { DEFAULT_CONFIG, slotsPending } from "./config.mjs";
-import { resetKnowledgeCache } from "./knowledge.mjs";
+import { resetKnowledgeCache, resetOrgKnowledgeCache } from "./knowledge.mjs";
 import { buildConfig, resolveConfig } from "./run-turn.mjs";
+
+test.afterEach(() => {
+  resetOrgKnowledgeCache();
+});
 
 const T0 = "2026-07-27T14:05:00Z";
 
@@ -92,6 +96,44 @@ test("resolveConfig: preserva el dry_run explicito del turno aunque Cal.com trai
   const config = await resolveConfig({ received_at: T0, dry_run: false }, { getAvailableSlots });
   assert.equal(config.dryRun, false);
   assert.deepEqual(config.slots, LIVE_SLOTS);
+});
+
+test("resolveConfig: el inbox del turno resuelve el conocimiento de ESE cliente desde el PRIMER mensaje", async () => {
+  // El fetch falso contesta como GET /published del producto cuando le preguntan por inbox.
+  const fetchDb = async (url) => {
+    assert.match(url, /inboxId=6/, "el motor pregunta por inbox; la org la resuelve el producto");
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        organizationId: "org_ferreteria",
+        data: {
+          schema: "onia.bot.knowledge/1",
+          version: "qa.1",
+          updatedBy: "test",
+          identity: { productName: "ZZ QA Ferreteria Tornillo" },
+        },
+        version: 1,
+        updatedBy: "test",
+      }),
+    };
+  };
+  const getAvailableSlots = async () => ({ slots: LIVE_SLOTS, source: "calcom", warnings: [] });
+  const config = await resolveConfig(
+    { received_at: T0, inbox_id: "6" },
+    { getAvailableSlots, knowledge: { dbUrl: "http://producto/published", dbSecret: "s3cr3t", fetch: fetchDb } },
+  );
+  assert.equal(config.identity.productName, "ZZ QA Ferreteria Tornillo", "la cara del cliente sale en el turno 1, no en el 2");
+  assert.deepEqual(config.slots, LIVE_SLOTS, "los horarios de Cal.com siguen entrando igual");
+
+  resetOrgKnowledgeCache();
+  // Sin mapeo (404 del producto): el mismo turno degrada al conocimiento de Onia, sin tirar.
+  const fetch404 = async () => ({ ok: false, status: 404, json: async () => ({}) });
+  const sinMapeo = await resolveConfig(
+    { received_at: T0, inbox_id: "99" },
+    { getAvailableSlots, knowledge: { dbUrl: "http://producto/published", dbSecret: "s3cr3t", fetch: fetch404 } },
+  );
+  assert.notEqual(sinMapeo.identity.productName, "ZZ QA Ferreteria Tornillo");
 });
 
 // ---------------------------------------------------------------------------

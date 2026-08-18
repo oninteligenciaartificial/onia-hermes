@@ -24,6 +24,7 @@ import {
   KNOWLEDGE_SCHEMA,
   applyKnowledge,
   checkCli,
+  ensureKnowledge,
   getKnowledge,
   getOrgKnowledge,
   knowledgeHealth,
@@ -820,12 +821,15 @@ test("db: ensureKnowledge espera la red SOLO con la cache fria; despues es getKn
   assert.equal(segunda.data.identity.productName, "Ferreteria", "la copia vieja sale YA");
 });
 
-test("db: inbox sin org (404) degrada a codigo y NO vuelve a esperar red en el turno siguiente", async () => {
+test("db: inbox sin org (404) degrada a archivo/codigo y NO vuelve a esperar red en el turno siguiente", async () => {
   const fetch = fetchFalso(null, { status: 404 });
-  const state = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "99", nowMs: NOW_MS });
+  // `path` inexistente a proposito: en el VPS SI existe knowledge.json al lado y la degradacion
+  // seria a "file" — lo que se prueba aca es que la fuente db no aporta nada, no que archivo haya.
+  const opts = { ...DB_OPTS, fetch, inboxId: "99", path: "/no/existe/knowledge.json" };
+  const state = await ensureKnowledge({ ...opts, nowMs: NOW_MS });
   assert.equal(state.source, "code", "inbox que no es de ningun cliente = bot de Onia, como siempre");
   assert.equal(state.error ?? null, null, "404 no es un error que gritar");
-  await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "99", nowMs: NOW_MS + 1000 });
+  await ensureKnowledge({ ...opts, nowMs: NOW_MS + 1000 });
   assert.equal(fetch.calls.length, 1, "el intento fallido tambien deja huella: una sola espera por proceso");
 });
 
