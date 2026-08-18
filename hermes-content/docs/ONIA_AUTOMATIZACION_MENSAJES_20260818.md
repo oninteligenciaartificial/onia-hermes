@@ -568,3 +568,89 @@ onia.com.bo/?src=...                              200 ✅
 cal.onia.com.bo/onia/consulta-inicial             200 ✅
 onia.com.bo/recursos/lista-por-donde-empezar.pdf  404 ❌
 ```
+
+---
+
+## 11. La tercera opción que faltaba: Meta lo da gratis y nativo
+
+> Investigado el 2026-08-18 por la tarde. En la versión de la mañana esto figuraba como
+> *"sin confirmar"* y era el único ítem que podía cambiar la recomendación entera. Cambió.
+
+### 11.1 — Qué da Meta sin cobrar
+
+Instagram + Meta Business Suite traen **7 herramientas de automatización gratis**. Dos nos sirven:
+
+| Herramienta | Qué hace | Dónde |
+|---|---|---|
+| **Comment to Message** | manda un DM disparado por un comentario en un post | Business Suite, **solo escritorio** |
+| **Custom Keywords** | responde automático a mensajes con palabras que elegís | Business Suite, **solo escritorio** |
+
+### 11.2 — Los límites, textuales
+
+| Límite | Valor |
+|---|---|
+| Palabras clave | **máximo 5** por cuenta |
+| **Retraso** | *"after 15 minutes unless you personally respond before then"* |
+| Coincidencia | **exacta y sensible a mayúsculas** — "sistema" no dispara si la palabra es "SISTEMA" |
+| Plataforma | escritorio únicamente |
+| Lógica condicional | no tiene |
+| Atribución a nivel post | no tiene |
+
+Fuente: [Instagram Built-In Automation — CreatorFlow](https://creatorflow.so/blog/instagram-built-in-automation/).
+⚠️ La página oficial de Meta ([ayuda](https://www.facebook.com/business/help/318238182723007)) existe
+pero no renderiza para lectura automática — el título confirma "en computadoras", el resto viene de
+fuente secundaria. **Verificar en el panel antes de prometerlo a un cliente.**
+
+**Dos matices que hay que leer bien:**
+
+1. **El retraso de 15 min está documentado para Custom Keywords.** Para Comment to Message no lo
+   pude verificar por separado. No asumir que es instantáneo.
+2. **"No tiene atribución" NO significa que perdamos el `?src=`.** El texto del DM lo escribimos
+   nosotros, así que el link `onia.com.bo/?src=...` viaja igual y el circuito a
+   `onia_center.leads` sigue midiendo. Lo que falta es atribución *por post*, y con 2 palabras
+   clave eso se resuelve con 2 mensajes distintos.
+
+### 11.3 — ManyChat: el plan gratis se murió en marzo
+
+**El 2026-03-02 ManyChat bajó el plan gratis de 1.000 a 25 contactos activos** — un recorte del
+97,5% — y pasó de 2 a 4 niveles (Free, Essential, Pro, Business).
+
+Fuentes: [Superpower](https://superpower.social/blogs/is-manychat-really-free-2026) ·
+[ReplyRush](https://www.replyrush.com/post/manychat-price-increase-2026) ·
+[SetSmart](https://setsmart.io/blog/manychat-pricing) ·
+[hilo en su propia comunidad](https://community.manychat.com/general-q-a-43/why-only-25-contacts-i-thought-i-was-gonna-get-1000-free-contacts-8194).
+
+Esto confirma el número que el doc traía de fuente secundaria y **cierra la contradicción**: quien
+diga "ManyChat gratis hasta 1.000" está citando datos anteriores a marzo de 2026.
+
+### 11.4 — La comparación final, con lo que sabemos hoy
+
+| | **Meta nativo** | **ManyChat** | **Nuestro n8n** |
+|---|---|---|---|
+| Costo | **$0 siempre** | $0 hasta 25 contactos → $17-39/mes **por cuenta** | **$0 siempre** |
+| Velocidad | ⚠️ 15 min documentado | instantáneo | **instantáneo** |
+| Palabras clave | 5, exactas, case-sensitive | ilimitadas | ilimitadas, ya hace coincidencia parcial |
+| Link `?src=` en el DM | ✅ (lo escribimos nosotros) | ✅ | ✅ |
+| Lógica condicional | ❌ | ✅ | ✅ |
+| ¿Sergio lo edita solo? | ✅ panel | ✅ builder visual | ❌ hay que tocar n8n |
+| Seguimiento conversacional | ❌ | ✅ | ⚠️ Chatwoot (ya corre) |
+| Multi-cliente | ❌ no aplica | costo **lineal** por cuenta | costo **plano** |
+| **¿Es producto vendible?** | ❌ | ❌ revendés ManyChat | ✅ **es nuestro** |
+| Estado hoy | sin configurar | sin conectar | **construido y probado; faltan 2 clics** |
+
+### 11.5 — ⚠️ No prender los dos a la vez
+
+Si Meta nativo y nuestro webhook quedan activos juntos, **un mismo comentario dispara los dos y la
+persona recibe dos DMs**. Meta nativo sirve como red de seguridad mientras el n8n no esté cerrado;
+apenas el n8n funcione, se apaga el nativo.
+
+### 11.6 — Recomendación
+
+**ManyChat: no.** Su único motivo era pedir prestada su app aprobada, y §10.1 probó que no hace
+falta. Sumado a 25 contactos gratis y facturación por cuenta, no queda argumento.
+
+**Meta nativo: sí, hoy, como puente.** 10 minutos de panel, $0, cero riesgo, y evita que los
+comentarios del primer carrusel (mié 19-ago) queden sin respuesta.
+
+**n8n: es el motor real y lo que se vende.** Instantáneo, sin techo de cuentas, y es lo único de
+los tres que se convierte en producto con costo plano.
