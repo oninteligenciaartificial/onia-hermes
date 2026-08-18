@@ -105,6 +105,12 @@ const TILES: readonly Tile[] = [
             <span className={styles.ok}>Aprobar</span>
             <span className={styles.no}>Descartar</span>
           </StaggerItem>
+          <StaggerItem as="span" className={styles.who}>
+            Aviso · 3 citas de mañana siguen sin confirmar
+          </StaggerItem>
+          <StaggerItem as="span" className={styles.msg}>
+            «¿Les mando el recordatorio ahora?»
+          </StaggerItem>
         </Escena>
       </Shot>
     ),
