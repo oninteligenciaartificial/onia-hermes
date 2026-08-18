@@ -6,7 +6,7 @@ y nuevos, en el orden en que conviene hacerlos. **No hace falta abrir otro archi
 
 Los dos archivos de origen siguen existiendo y son la fuente:
 [PROMPTS_POR_SESION.md](../PROMPTS_POR_SESION.md) (26 videos, hasta el 15-ago) y
-[PROMPTS_LOTE_2026-08-16.md](../PROMPTS_LOTE_2026-08-16.md) (E1–E11) y [PROMPTS_LOTE_2026-08-17.md](../PROMPTS_LOTE_2026-08-17.md) (F1–F2). Acá no hay nada nuevo:
+[PROMPTS_LOTE_2026-08-16.md](../PROMPTS_LOTE_2026-08-16.md) (E1–E11) y [PROMPTS_LOTE_2026-08-17.md](../PROMPTS_LOTE_2026-08-17.md) (F1–F3). Acá no hay nada nuevo:
 está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, no la copia.**
 
 ---
@@ -41,7 +41,7 @@ está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, 
 |---|---|---|---|
 | [crm-prospeccion.md](crm-prospeccion.md) | CRM / prospección | **C4 la ruta al primer cliente** · los 7 roles contra el Vendedor que ya corre | **C4** — es lo único que ataca la falta de clientes |
 | [propuestas.md](propuestas.md) | `propuestas` | C3 el costo de esperar | — |
-| [pendiente.md](pendiente.md) | `pendiente` | **F1 auditar los 11 agentes** · E4 el loop de 3 roles (corregido) · D2 fechas que corren · D3 búsqueda de marca · B3 intake de video · B4 probar los 6 patrones · E5 Strix | **F1** — antes de construir agentes nuevos, ver cuáles sobran |
+| [pendiente.md](pendiente.md) | `pendiente` | **F1 auditar los 11 agentes** · **F3 partir CLAUDE.md** · E4 el loop de 3 roles (corregido) · D2 fechas que corren · D3 búsqueda de marca · B3 intake de video · B4 probar los 6 patrones · E5 Strix | **F1** — antes de construir agentes nuevos, ver cuáles sobran |
 
 ---
 

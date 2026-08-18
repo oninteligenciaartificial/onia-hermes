@@ -1,4 +1,4 @@
-# Prompts del lote del 2026-08-17 — F1 y F2
+# Prompts del lote del 2026-08-17 — F1, F2 y F3
 
 Salen de **dos videos largos de X**, no de reels: un taller de **Code w/ Claude** (44 min,
 primera parte de Anthropic) y una clase de Karpathy (2 h 06). Fichas:
@@ -18,6 +18,7 @@ primera parte de Anthropic) y una clase de Karpathy (2 h 06). Fichas:
 |---|---|---|
 | **`pendiente`** (harness) | **F1** auditar los 11 agentes contra los 3 antipatrones | **antes que E4** — puede que sobren agentes en vez de faltar |
 | **`onia-plattform`** | **F2** evals para el agente que más corre | después de F1: F1 dice cuál medir |
+| **`pendiente`** (harness) | **F3** partir `CLAUDE.md` en lo que va siempre y lo que va como skill | independiente; se puede en paralelo con F1 |
 
 ---
 
@@ -102,6 +103,63 @@ NO esta verificado que la tengamos ni que cueste. Los tres principios SI son por
 
 LISTO = la tabla existe con TODOS los agentes, cada uno juzgado contra los tres antipatrones
 con motivo escrito, y la lista explicita de cuales sobran.
+```
+
+---
+
+## F3 · Partir CLAUDE.md: lo que va siempre y lo que va como skill
+
+```text
+Contexto: el taller de Code w/ Claude arranca describiendo un problema que es identico al
+nuestro, y lo dice con estas palabras:
+  "your system prompt had grown to become several hundred lines long. You have dozens of
+   tools and sub agents... and because of the complexity, you've started to see REGRESSIONS
+   in the areas that your agent was previously accelerating in."
+  "If this is you, you're not alone. We see this commonly with customers -- and actually
+   with ourselves included in that."
+Ficha: hermes-content/references/video-intake/2026-08-17-code-with-claude-stockpilot.md
+
+Lo arreglaron bajando el system prompt de ~400 lineas a ~50 (moviendo la logica a skills) y
+despues a 15. El criterio, textual y de una linea:
+
+  "LEAVE THE SYSTEM PROMPT ONLY FOR THE INFORMATION THAT CLAUDE NEEDS IN ITS MIND,
+   REGARDLESS OF THE TASK you give it. Skills are fantastic for packaging information that
+   Claude is going to need SOME of the time, not all of the time."
+
+Y la definicion de skill que usan: "packaged, composable information that Claude has the
+ability to pull into context whenever Claude realizes that it needs it".
+
+NUESTRO CASO: CLAUDE.md de proyecto carga en CADA sesion las reglas de propuestas
+comerciales, de video, de carriles, de git, del core, de cuando separar un repo, de pricing,
+y varias mas. Una sesion de video no necesita las reglas de propuestas; una de contabilidad
+no necesita las de video. Ademas ya existen skills propias (onia-router, onia-propuestas,
+onia-contabilidad-bolivia, onia-core, onia-web-factory, ver-videos, editor-videos) que en
+varios casos cubren el mismo contenido que el CLAUDE.md repite.
+
+Tarea:
+1. Medi primero: cuantas lineas y cuantos tokens aproximados carga hoy CLAUDE.md en cada
+   sesion. Numero concreto.
+2. Clasifica CADA seccion de CLAUDE.md en una de dos:
+   (a) SIEMPRE -- se necesita sin importar la tarea (ej: la regla de git autosync, el
+       objetivo por sesion, que main siempre compile)
+   (b) A VECES -- solo para cierto tipo de tarea (ej: propuestas, video, core, pricing)
+   Con el motivo en una linea por seccion. Si dudas, es (b).
+3. Para cada (b), verifica si YA existe una skill que lo cubre. Si existe, la seccion se
+   reemplaza por un puntero de una linea. Si no existe, decilo -- no la crees en esta pasada.
+4. Propone el CLAUDE.md corto, y deja el contenido movido en su skill, sin perder nada.
+   REGLA: no se borra informacion, se reubica. Si algo no tiene donde ir, se queda.
+5. Antes de aplicar, MOSTRALE A SERGIO el antes/despues: que secciones salen, a que skill
+   va cada una, y cuantas lineas quedan. No lo apliques sin que lo vea.
+
+Cuidado con dos cosas:
+- CLAUDE.md tiene reglas que nacieron de errores caros (nada a medias, main siempre compila,
+  gasto con permiso). Esas son (a) casi seguro: se necesitan aunque la tarea no las toque,
+  porque justamente evitan que alguien las ignore.
+- onia-router ya es el indice del stack de skills. Si el CLAUDE.md corto apunta bien a
+  onia-router, la mayoria del ruteo se resuelve solo.
+
+LISTO = el antes/despues esta escrito y mostrado, con la medicion de lineas/tokens de las dos
+versiones, y NADA se aplico sin aprobacion.
 ```
 
 ---

@@ -5,12 +5,12 @@
   Ponente en escenario con el logo de Anthropic detrás.
 - **Carril:** B (idea), **nivel de fuente: PRIMERA PARTE** — es Anthropic hablando de sus
   propias herramientas, con números medidos en pantalla.
-- **Cobertura real:** leído por fotograma **9 de 15 muestras** (1 cada 3 min) + **audio de los
-  últimos 14 min de 44** ([verbatim](transcripciones/X-code-with-claude-stockpilot.txt)).
-  Los primeros 30 min de audio **fallaron** en Speaches (`fetch failed`) y están en reintento.
-  Lo recuperado cubre justo el cierre: la doctrina de MCP, cuándo usar un subagente, y los tres
-  takeaways. **Falta el audio del arranque y de los ciclos 1 y 2.**
-- **Dónde:** Code w/ Claude **Londres**.
+- **Cobertura real: audio 100%** (5 de 5 chunks, 44 min —
+  [verbatim completo](transcripciones/X-code-with-claude-stockpilot.txt)) + **9 de 15 muestras
+  de fotograma**. Los primeros 3 chunks fallaron en Speaches (`fetch failed`) y se recuperaron
+  al reintentar.
+- **Quién habla:** **Will, del equipo Applied AI de Anthropic** — mitad ingeniería interna,
+  mitad construyendo agentes con clientes. Code w/ Claude **Londres**.
 - **Veredicto: SIRVE YA — es el hallazgo más aplicable de todo el corpus**
 
 ---
@@ -21,7 +21,9 @@
 
 | 15 | 5 | 0 | 92% |
 |---|---|---|---|
-| líneas de system prompt | skills (cargadas **bajo demanda**) | subagentes hardcodeados | eval score (11/12) |
+| líneas de system prompt (arrancaba en **~400**) | skills (cargadas **bajo demanda**) | subagentes hardcodeados | eval score (11/12) |
+
+> **Corrección a lo que escribí ayer:** puse el 92% sin la línea de base. La base documentada era 83%, pero **al correrla en vivo dio 62% (7 de 12)**: *“we ran them and we got 62%, which is worse than the 83% than we started with.”* El salto real es **62% → 92%**, no 83% → 92%. Y el system prompt bajó en dos pasos: **~400 → ~50** líneas al mover la lógica a skills, y **→ 15** al final.
 
 Arquitectura final: `StockPilot (Claude Managed Agents)` · `claude-sonnet-4-6` · system prompt
 de 15 líneas, con tres ramas:
@@ -138,8 +140,7 @@ prompt.
 
 ## Lo que falta verificar y lo digo
 
-- **No leí el audio todavía.** 18 chunks en transcripción; puede haber matices que los
-  fotogramas no muestran, sobre todo en el porqué de cada decisión.
+- ~~No leí el audio todavía.~~ **Resuelto:** audio 100% leído, verbatim guardado.
 - **Claude Managed Agents (CMA)** es la plataforma del taller. **No verifiqué si la tenemos
   disponible ni qué cuesta.** Los principios son portables a `.claude/agents/` + skills; la
   primitiva `callable_agents` puede no serlo.
@@ -151,6 +152,7 @@ prompt.
 |---|---|
 | **`pendiente`** (harness) | **F1** — auditar los 11 agentes contra los 3 antipatrones · y E4 corregido |
 | **`onia-plattform`** | **F2** — evals con tareas y graders para el agente que más corre |
+| **`pendiente`** (harness) | **F3** — partir `CLAUDE.md` en lo que va siempre y lo que va como skill |
 
 ---
 
@@ -238,3 +240,106 @@ agentes. `callable_agents` de CMA existe para resolver esa observabilidad.
 3. **Evals y hill climbing** — *"you establish a baseline, you then tweak your architecture and
    you rerun evals and you get better over time."* Con la condición que casi nadie cumple:
    *"make sure that your evals are **updated as your product capability expands**."*
+
+---
+
+# Lo que agregó la primera media hora de audio
+
+## El problema, planteado tal cual nos pasó a nosotros
+
+> *"imagine that you built and shipped an agent to solve a problem... it works so well that a few
+> weeks after shipping, you were asked to add some additional capability. A few weeks after that,
+> you received more business requirements and you added additional capability. This pattern
+> continued until before you know it, **your system prompt had grown to become several hundred
+> lines long. You have dozens of tools and sub agents**... and because of the complexity, **you've
+> started to see regressions in the areas that your agent was previously accelerating in**."*
+
+> *"If this is you, you're not alone. We see this type of scenario happen pretty commonly with
+> customers — **and actually with ourselves included in that**."*
+
+La pregunta que organiza todo el taller: **¿cuándo va una herramienta, cuándo una skill y
+cuándo un subagente?**
+
+## Las tres fallas y su causa raíz — el diagnóstico es lo transferible
+
+| Eval | Qué prueba | Por qué falla |
+|---|---|---|
+| **F1** | barrido diario de stock bajo | *"the agent is gonna do the right thing, but it's gonna take a **very winding path**"*. Llega al resultado correcto y **falla igual, por ineficiente** |
+| **F2** | pedido bajo promoción | *"the sub agent is actually **getting the task right, but there's a communication breakdown** between our sub agent and our orchestrator"* |
+| **R8** | pronóstico en mes de promo | **dos políticas en partes distintas del system prompt que se contradicen**. El agente saca bien la base (12 u/día) y bien el multiplicador (3,1×)… y después calcula con 1,35 |
+
+Y la frase que ordena todo el diagnóstico:
+
+> *"**this isn't a model problem, it's an issue with the information that we're surrounding the
+> model with**."*
+
+**F1 es la que más nos sirve:** que el eval castigue el **camino**, no solo el resultado. Un
+agente que llega bien pero dando vueltas está quemando plata, y sin medirlo no se nota.
+
+## La taxonomía de evals, para copiar
+
+- **R = regression** — tareas realistas de **un solo turno**: se le da una tarea, llama
+  herramientas, responde, se evalúa la respuesta.
+- **F = failure mode** — tareas **multi-turno** más complicadas.
+- **Graders determinísticos**: conteo de turnos, latencia y **tokens usados**, seguidos en el tiempo.
+- **Graders no determinísticos**: LLM-as-judge para personalidad, tono, estilo y calidad de salida.
+
+Y el estándar, que a nosotros nos aplica igual:
+
+> *"they're gonna pass up front at about 83%, which is okay, but **if you work in the world of
+> manufacturing, that is not okay. 17% failure is a really expensive failure percentage**."*
+
+## La técnica de trabajo: que Claude triage sus propios evals
+
+Corre los evals **desde Claude Code con bash** y le pide el diagnóstico. Los tres temas que
+Claude encontró solo:
+
+1. el modelo está **haciendo a mano trabajo para el que debería tener herramienta**
+2. problemas de **cumplimiento de la estructura de salida** — el modelo y los subagentes
+   devuelven una forma que no es la que se espera
+3. **conflictos de política** dentro del system prompt largo
+
+Config que usa, dicho al pasar y útil: **Opus 4.7 con effort en extra high**. *"I usually set
+effort as extra high with opus 4.7 and I forget about it."*
+
+## La definición de skill, y la regla de qué va dónde
+
+> *"skills are **packaged, composable information that Claude has the ability to pull into context
+> whenever Claude realizes that it needs that information** to complete a particular task."*
+
+> *"**Leave the system prompt only for the information that Claude needs in its mind, regardless
+> of the task** you give it. Skills are fantastic for packaging information that Claude is going
+> to need **some of the time, not all of the time**."*
+
+Esa frase es el criterio entero, y es de una línea.
+
+## Por qué primitivas y no herramientas a medida — el argumento estratégico
+
+> *"whenever we build agents, we lean into the same primitives that we as humans have access to...
+> With Claude Code we've just **given Claude access to a computer**. And this is really powerful
+> because **this allows us to drop in better versions of Claude as we release new models, and
+> Claude just uses those primitives better than it did before**."*
+
+La analogía: *"imagine yourself after this conference compared to when you walked in — same tools
+at your fingertips, but your brain's gonna be a little bigger, and you're gonna be more effective
+using the same tools."*
+
+**O sea: las primitivas no envejecen; una herramienta a medida sí.** Cada tool propia es deuda
+que hay que volver a validar con cada modelo nuevo.
+
+Y el ejemplo concreto: *"if you need Claude to look across the CSV, giving Claude a bash tool so
+that Claude can write a quick Python script and reason across the results **is much more effective
+than just uploading the entire CSV into Claude's context window**."*
+
+## Lo que esto dice de NUESTRO CLAUDE.md
+
+El taller describe el problema como *"stuffing requirement after requirement into my system
+prompt"* hasta llegar a 400 líneas, y lo arregla dejando 15 y moviendo el resto a skills.
+
+**Nuestro `CLAUDE.md` de proyecto es exactamente eso**: reglas de propuestas, de video, de
+carriles, de git, del core, de cuándo separar un repo — todo cargado en cada sesión,
+independientemente de la tarea. Por el criterio de arriba, la mayoría es información que hace
+falta **algunas veces, no todas**: las reglas de propuestas no sirven de nada en una sesión de
+video, y las de video no sirven en una de contabilidad.
+
+Sale como **F3**. No lo toco acá: esta sesión reparte.
