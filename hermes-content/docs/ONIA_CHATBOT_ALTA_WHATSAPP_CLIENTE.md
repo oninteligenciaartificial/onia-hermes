@@ -696,6 +696,87 @@ Backups: motor `/opt/onia/bot/backups/20260818-033640/`; fila knowledge QA
 `chatbot_knowledge_cmsvyguui_*.csv`; constraint viejo documentado en la
 migración.
 
+## Alta desde el panel (2026-08-18) — el inbox del cliente se crea en UN CLICK
+
+Cierra el pendiente de arriba ("el alta de un cliente nuevo punta a punta hoy se
+cargó por SQL"). El alta del chatbot de una organización ya NO toca SQL ni la
+consola de Chatwoot: es un botón del panel superadmin.
+
+### Qué quedó vivo (onia-platform, commit `c84a1c0` en `master`, deployado)
+
+1. **Pantalla `/admin/chatbots`** (SUPERADMIN): tabla de TODAS las orgs con su
+   estado — inbox vinculado (`clinic_settings.chatwootInboxId` o "Sin inbox"),
+   conocimiento (`vN · publicado` / "Sin publicar") y el `organizationId` en
+   mono para soporte (el editor `/settings/chatbot` vive en la sesión de cada
+   org: un link cross-tenant no abriría).
+2. **Fila "Bot de Onia (ventas)" arriba de la tabla**: inbox 5, modo venta, y el
+   estado EN VIVO del motor — fetch server-side a `http://onia-center:3020/health`
+   por la red easypanel (timeout 3 s; motor caído se MUESTRA caído, no rompe el
+   panel): ok/no, base con latencia, `knowledge.source/version`. Con la nota
+   honesta: su conocimiento vive en el `knowledge.json` del VPS y se edita por
+   deploy, no desde el panel (todavía).
+3. **`POST /api/admin/chatbots`** — el alta en un click, todo server-side:
+   crea el inbox **Website** en Chatwoot con el nombre de la org, agrega el
+   agent bot (user 3) como miembro (sin eso Chatwoot devuelve 401 al POST del
+   motor — incidente del 17-ago) y escribe `clinic_settings.chatwootInboxId`.
+   **Idempotente en dos capas**: org ya vinculada → no se toca Chatwoot; inbox
+   homónimo ya creado (alta anterior a medias) → se reusa, no se duplica. Sin
+   env de Chatwoot → 503 con el mensaje literal de qué falta. 9 tests nuevos;
+   suite 1566 passed | 5 skipped; tsc limpio.
+4. **Env reales en `/opt/onia-platform/app.env`** (antes eran placeholders
+   `https://app.chatwoot.com` / `SIN_CONFIGURAR`): `CHATWOOT_BASE_URL=
+   http://onia-chatbot_chatwoot:3000` (URL interna por la red easypanel —
+   verificada con curl desde el contenedor del producto), `CHATWOOT_API_TOKEN`
+   (token de ADMIN de la cuenta 2, extraído de la base de Chatwoot como hace
+   `chatwoot-onboard.sh` — nunca del repo), `CHATWOOT_ACCOUNT_ID=2`. Contenedor
+   `onia-platform` RECREADO (docker restart no relee env) con sus 3 redes;
+   backup `app.env.bak-chatwoot-*` + `container-env-backup-*.txt`.
+5. **Cuenta SUPERADMIN creada — no existía ninguna** (verificado en la base:
+   cero perfiles con ese rol). Acceso mínimo honesto: usuario
+   `superadmin@onia.com.bo` (GoTrue admin API) + org `Onia (interna)`
+   (slug `onia-interna`, onboarding marcado para que el layout no lo mande al
+   wizard) + perfil rol SUPERADMIN. La contraseña NO está en ningún repo:
+   `/root/onia-superadmin.credentials` en el VPS (chmod 600).
+
+### La prueba (mirada, no supuesta) — capturas `bot-cliente/0*.png`
+
+- Estado inicial honesto: se desvinculó la org QA (`chatwootInboxId=NULL`, backup
+  CSV `clinic_settings_cmsvyguui_pre-alta-panel_*.csv`) para probar el alta REAL.
+- Login superadmin → `/admin/chatbots`: fila del bot de Onia con **Motor OK ·
+  Base OK · 9 ms · Conocimiento: file · 2026-08-06.1** (captura
+  `01-admin-chatbots.png`).
+- Click **"Crear inbox web + vincular"** en ZZ QA Clinica Chatbot → la fila pasa
+  a **#7** y "Vinculada — el bot atiende su widget" (captura
+  `02-alta-vinculada.png`). Verificado en las DOS bases: `chatwootInboxId=7` en
+  clinic_settings; inbox 7 `Channel::WebWidget` con el user 3 como miembro en
+  Chatwoot.
+- Widget de ESA clínica (página de prueba con el `website_token` del inbox 7) →
+  "hola" → la PRIMERA respuesta es el **recepcionista** con el conocimiento
+  publicado de la org: "¡Hola! Soy el asistente de ZZ QA Ferreteria Tornillo 🙂…"
+  + botones Horarios/Servicios/Hablar con Sergio + pie "Desarrollado por Onia"
+  (capturas `03/04-widget-*.png`). ⚠️ Dice "Ferreteria Tornillo" porque ESE es el
+  `productName` dentro del knowledge v3 de la org `cmsvyguui…` (dato QA viejo);
+  la org en el producto se llama "ZZ QA Clinica Chatbot". No es un error de
+  ruteo — al contrario: probó que sirvió el conocimiento de ESA org resuelto por
+  inbox.
+- Post-deploy: login de prod mirado renderizado (iconos como iconos,
+  `05-login-postdeploy.png`); `docker logs` sin errores nuevos.
+
+### Qué falta / no verificado
+
+- El **inbox 6** ("ZZ QA Ferreteria") quedó huérfano en Chatwoot: ninguna org lo
+  mapea, así que una conversación ahí degradaría a la cara Onia (404 del
+  published). Basura QA inofensiva; borrarlo es decisión aparte.
+- El editor de conocimiento por org sigue siendo por sesión de la org; el panel
+  solo muestra el `organizationId`.
+- El conocimiento del bot de Onia sigue en `knowledge.json` (deploy) — editarlo
+  desde el panel es el paso siguiente natural.
+- WhatsApp real de un cliente: sin probar (mismo adapter que el widget).
+
+Backups: producto `runtime-next.prev-20260818-042252/` + `build-src-c84a1c0/`;
+env `app.env.bak-chatwoot-20260818-*`; fila QA
+`clinic_settings_cmsvyguui_pre-alta-panel_20260818-042151.csv`.
+
 ---
 
 ## Capacidades ricas del bot — factibilidad (imágenes · botones · comprar por chat)
