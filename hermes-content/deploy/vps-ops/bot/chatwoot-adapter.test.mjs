@@ -430,6 +430,99 @@ test("readPayload: sin stdin y sin CHATWOOT_WEBHOOK_B64, tira un error claro (lo
 });
 
 // ---------------------------------------------------------------------------
+// 2b. message_updated — EL CLICK DE UN BOTON (input_select) no crea mensaje nuevo:
+// Chatwoot escribe submitted_values SOBRE el mensaje saliente original (verificado en vivo
+// contra el 4.12.1 del VPS, 2026-08-18, conversacion 26 / mensaje 128).
+// ---------------------------------------------------------------------------
+
+/** La forma REAL: el mensaje del menu (outgoing) con items + submitted_values tras el click. */
+function buttonClickFixture(overrides = {}) {
+  return {
+    event: "message_updated",
+    id: 128,
+    content: "¡Hola! Soy el asistente de ZZ QA Ferreteria Tornillo 🙂",
+    content_type: "input_select",
+    content_attributes: {
+      items: [
+        { title: "Horarios", value: "horarios" },
+        { title: "Servicios", value: "servicios" },
+        { title: "Hablar con Sergio", value: "hablar con una persona" },
+      ],
+      submitted_values: [{ title: "Horarios", value: "horarios" }],
+    },
+    message_type: "outgoing", // el mensaje original es DEL BOT: el click no cambia eso
+    private: false,
+    created_at: "2026-08-18T04:30:40.000Z",
+    sender: { id: 3, name: "Onia Bot", type: "user" }, // el sender es el bot, NO el contacto
+    inbox: { id: 7, name: "ZZ QA Clinica Chatbot" },
+    account: { id: 2, name: "OnIA Agency" },
+    conversation: { id: 26, inbox_id: 7, contact_inbox: { source_id: "qa-widget" } },
+    ...overrides,
+  };
+}
+
+test("click de botón (message_updated con submitted_values) -> turno INBOUND con el título elegido", () => {
+  const parsed = parseChatwootWebhook(buttonClickFixture());
+  assert.equal(parsed.skip, false);
+  assert.equal(parsed.turn.text, "Horarios", "el título es lo que el contacto vio y lo que el motor rutea");
+  assert.equal(parsed.turn.kind, "text");
+  assert.equal(parsed.turn.contact_ref, "26");
+  assert.equal(parsed.turn.inbox_id, "7", "el inbox sigue resolviendo la org del cliente");
+  assert.equal(
+    parsed.turn.message_key,
+    "chatwoot:26:128:select:horarios",
+    "la clave lleva el valor elegido: un message_updated re-disparado no procesa el click dos veces",
+  );
+  assert.equal(parsed.meta.conversationId, "26");
+});
+
+test("message_updated SIN submitted_values (o sin botones) se skipea: solo el click entra al motor", () => {
+  const sinClick = parseChatwootWebhook(buttonClickFixture({ content_attributes: { items: [{ title: "Horarios", value: "horarios" }] } }));
+  assert.equal(sinClick.skip, true);
+  assert.equal(sinClick.reason, "sin_valor_elegido");
+
+  const textoPlano = parseChatwootWebhook(buttonClickFixture({ content_type: "text", content_attributes: {} }));
+  assert.equal(textoPlano.skip, true);
+  assert.equal(textoPlano.reason, "update_sin_botones", "editar un mensaje comun no dispara al bot");
+
+  const privado = parseChatwootWebhook(buttonClickFixture({ private: true }));
+  assert.equal(privado.skip, true);
+
+  const vacio = parseChatwootWebhook(buttonClickFixture({ content_attributes: { submitted_values: [] } }));
+  assert.equal(vacio.skip, true);
+});
+
+test("click de botón: corre el motor y postea la respuesta (orquestación completa)", async () => {
+  const { calls, client } = fakeClient2();
+  let visto = null;
+  const result = await runChatwootTurn(buttonClickFixture(), {
+    client,
+    runTurn: async (turn) => {
+      visto = turn;
+      return { ok: true, duplicate: false, send: [{ text: "Atendemos lun-vie, 8:00-18:00. ¿Te ayudo con algo más?" }], warnings: [] };
+    },
+  });
+  assert.equal(visto.text, "Horarios");
+  assert.equal(result.skipped, false);
+  assert.deepEqual(calls.map((c) => c.text), ["Atendemos lun-vie, 8:00-18:00. ¿Te ayudo con algo más?"]);
+});
+
+// fakeClient() se declara más abajo (sección 4); esta variante local evita mover código.
+function fakeClient2() {
+  const calls = [];
+  return {
+    calls,
+    client: {
+      warnings: [],
+      async sendMessage(conversationId, text) {
+        calls.push({ conversationId, text });
+        return { id: calls.length };
+      },
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
 // 3. createChatwootClient — el POST y la tolerancia
 // ---------------------------------------------------------------------------
 

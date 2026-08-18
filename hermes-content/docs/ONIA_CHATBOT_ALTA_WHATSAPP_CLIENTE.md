@@ -821,10 +821,16 @@ diagnostica — describe y ESCALA a humano igual. La visión vende en comercio
 **Chatwoot API: SÍ.** `POST /api/v1/accounts/{id}/conversations/{id}/messages`
 acepta `multipart/form-data` con `attachments[]` (binario), documentado en el
 API reference oficial, y autentica con `api_access_token` de usuario O de
-**agent bot** (developers.chatwoot.com, create-new-message, 2026-08-17). Hoy
-`createChatwootClient().sendMessage()` solo postea JSON `{content}` — falta una
-variante multipart (esfuerzo chico: un método más en el cliente + que el motor
-pueda emitir `{image}` además de `{text}` en `send[]`).
+**agent bot** (developers.chatwoot.com, create-new-message, 2026-08-17).
+
+**HECHO 2026-08-18 (plomería):** `createChatwootClient().sendAttachment(convId,
+{buffer, filename, contentType, caption})` en `chatwoot-adapter.mjs` — multipart
+`attachments[]` + `message_type=outgoing`, tolerante por contrato (sin token /
+sin bytes / 4xx ⇒ null + warning, nunca tira), con tests. **Sin uso automático
+todavía, a propósito (YAGNI):** ningún flujo del motor la llama — es la base
+lista para el QR del BCP y las fotos de catálogo. Falta la otra mitad del
+estimado original ("que el motor emita `{image}` en `send[]`"), que recién tiene
+sentido con un flujo real que mande imágenes.
 
 **WhatsApp Cloud API (developers.facebook.com, image-messages, 2026-08-17):**
 imágenes **JPEG/PNG únicamente, 8-bit RGB/RGBA, máx 5 MB**, caption hasta 1024
@@ -850,12 +856,33 @@ opciones clickeables en el widget Website Y Chatwoot lo convierte a **reply
 buttons** en el canal WhatsApp (PR #6886) — con el límite de 3. Los content
 types `cards`/`form` NO pasan al canal WhatsApp (issue #12572, confirmado en
 v4.6.0), y las listas con descripción todavía no (issue #14911 abierto). O sea:
-**un solo formato (`input_select`, ≤3 opciones) sirve para ambos canales** —
-esfuerzo chico en el motor (que `reply-builder` pueda emitir
-`content_type + content_attributes` y el adapter los postee). Más de 3 opciones
-en WhatsApp = pegarle directo a la Cloud API por fuera de Chatwoot (grande, no
-ahora) o degradar a "respondé 1, 2 o 3" en texto (que es lo que el guion ya
-hace hoy).
+**un solo formato (`input_select`, ≤3 opciones) sirve para ambos canales**.
+Más de 3 opciones en WhatsApp = pegarle directo a la Cloud API por fuera de
+Chatwoot (grande, no ahora) o degradar a "respondé 1, 2 o 3" en texto (que es
+lo que el guion ya hace hoy).
+
+**HECHO 2026-08-18 — botones VIVOS en el widget (modo recepcionista):**
+- **Motor:** el saludo `M0R` y el `R_DERIVA` del recepcionista salen con
+  `options` (3 botones: "Horarios" / "Servicios" / "Hablar con {{humano}}" —
+  si el nombre no entra en los 20 chars de Meta, cae entero a "Hablar con
+  alguien", nunca truncado). `recepcionista.mjs → botonesRecepcion()`. El
+  funnel de venta de Onia NO lleva botones. El click se rutea por match
+  EXACTO de título o value (`botonElegido`), y en handoff el click exacto de
+  un botón contesta la FAQ sin salir del handoff (texto libre sigue mudo).
+- **El hallazgo que no estaba en la doc:** el click de un botón del widget
+  **NO crea un `message_created`** — Chatwoot escribe
+  `content_attributes.submitted_values` SOBRE el mensaje saliente original y
+  dispara **`message_updated`** (verificado en vivo: mensaje 128, conv 26).
+  Dos consecuencias cableadas: (1) el webhook de la cuenta 2 quedó suscripto a
+  `message_created` **+ `message_updated`**; (2) el adapter mapea ese evento a
+  un turno inbound con el TÍTULO elegido como texto e idempotencia
+  `chatwoot:<conv>:<msg>:select:<value>` (`fromMessageUpdated`). Cualquier
+  otro `message_updated` (ediciones, estados) se skipea.
+- **Fallback limpio:** el texto de M0R ya dice las 3 opciones — un canal sin
+  interactivos muestra el texto plano de siempre.
+- **WhatsApp: queda "a probar cuando haya número"** — la traducción a reply
+  buttons (PR #6886) y la vuelta del click por ese canal no se miraron en un
+  teléfono real.
 
 ### F4. COMPRAR por el chat
 
@@ -920,8 +947,8 @@ opt-in explícito del dueño — decisión de Sergio, nunca default.
 |---|---|---|---|---|---|
 | Imagen entrante → reconocer + escalar a humano | ✅ ya existe | ✅ ya existe | **Cero** (mirar una foto real) | — | ✅ ya está |
 | Imagen entrante → visión IA | ✅ | ✅ | Mediano (2–3 días) | LiteLLM ya corre; ~USD 0,002–0,006/img | Después (comercio primero; en dental NO diagnostica) |
-| Imagen saliente (foto de catálogo) | ✅ | ✅ (JPEG/PNG ≤5 MB, ventana 24 h) | Chico (~1 día: multipart + `{image}` en `send[]`) | Fotos de producto en el knowledge de la org | ✅ MVP |
-| Botones (≤3 opciones) | ✅ `input_select` | ✅ (Chatwoot → reply buttons) | Chico (1–2 días motor) | — | ✅ MVP |
+| Imagen saliente (foto de catálogo) | ✅ | ✅ (JPEG/PNG ≤5 MB, ventana 24 h) | **Plomería HECHA** (`sendAttachment` multipart, con tests); falta `{image}` en `send[]` cuando haya flujo | Fotos de producto en el knowledge de la org | ✅ MVP |
+| Botones (≤3 opciones) | ✅ **HECHO y MIRADO** (E2E 2026-08-18: M0R con 3 botones, click "Horarios" → contesta) | A probar cuando haya número (Chatwoot → reply buttons, PR #6886) | — (hecho) | Webhook cuenta suscripto a `message_updated` (hecho) | ✅ MVP |
 | Listas (hasta 10 ítems) | ✅ (input_select rinde todos) | ✗ vía Chatwoot (solo directo a Cloud API) | Grande | App Review + carril paralelo a Chatwoot | Después |
 | Catálogo nativo Meta + carrito | n/a | Posible, NO vía Chatwoot | Grande | Catálogo Commerce Manager por cliente + App Review + Commerce Policy + prueba +591 | Después |
 | **Pedido por chat + QR BCP (aprobado por el dueño)** | ✅ | ✅ (QR como imagen) | Mediano (sobre imagen saliente + adaptador BCP ya estimado 3–5 días) | **Alta BCP** (nuestra; la del cliente para su cuenta) + aprobación dueño | ✅ **la joya** (gateada por el banco, no por código) |
@@ -934,7 +961,8 @@ opt-in explícito del dueño — decisión de Sergio, nunca default.
   WhatsApp Cloud de nuestro 4.12.1 (y el issue #12684 de media en plantillas
   fuera de ventana).
 - `input_select` → reply buttons en NUESTRA versión, mirado en un teléfono
-  real; y cómo renderiza exactamente en el widget (screenshot pendiente).
+  real (el lado widget YA se miró — E2E 2026-08-18 abajo; queda el lado
+  WhatsApp cuando haya número).
 - Carrito/product messages visibles para un usuario final en **Bolivia**
   (la doc de Meta no publica países; probar con +591).
 - Costo efectivo por imagen vía LiteLLM (depende del proveedor ruteado).
@@ -952,3 +980,82 @@ opt-in explícito del dueño — decisión de Sergio, nunca default.
 - ManyChat — Products/venta en Inbox (Stripe/PayPal, PRO): <https://help.manychat.com/hc/en-us/articles/14281089183260-Selling-products-via-Inbox>
 - BCP — QR con monto e imagen Base64: `hermes-content/docs/ONIA_BCP_API_QR_INTEGRACION.md` (§3.1, §3.3)
 - Motor local: `hermes-content/deploy/vps-ops/bot/` — `chatwoot-adapter.mjs` (kindOf, sendMessage JSON-only), `bot-engine.mjs` ~453 (`M_ATTACH_BODY` handoff), `audio-transcribe.mjs` (descarga de adjuntos con SSRF-guard), `run-turn.mjs:162` (`gpt-4o-mini` vía LiteLLM)
+
+## Prueba E2E 2026-08-18 — BOTONES vivos en el widget + plomería de attachments salientes
+
+MVP de capacidades ricas (del veredicto F1–F5 de arriba): botones en modo
+recepcionista y la plomería de imágenes salientes. Carril MOTOR únicamente
+(`/opt/onia/bot`, espejado acá); onia-platform no se tocó.
+
+### Qué quedó vivo (motor)
+
+1. **Botones en modo recepcionista** (`recepcionista.mjs → botonesRecepcion()`):
+   el saludo `M0R` y el `R_DERIVA` salen con 3 botones — "Horarios" /
+   "Servicios" / "Hablar con {{humano}}" (si el nombre no entra en los 20 chars
+   de Meta cae entero a "Hablar con alguien", nunca truncado). El click se rutea
+   por match EXACTO de título o value (`botonElegido`); en handoff el click
+   exacto contesta la FAQ sin salir del handoff ni generar efectos (texto libre
+   sigue mudo). El funnel de venta de Onia NO lleva botones (verificado con el
+   curl de no-regresión). Cadena: `options` viaja motor → `finalize` →
+   `send[]` de run-turn → adapter postea `content_type: "input_select"` +
+   `content_attributes.items` (recorta a 3). Fallback limpio: el texto de M0R ya
+   dice las 3 opciones; un canal sin interactivos muestra texto plano.
+2. **El hallazgo clave — el click NO es `message_created`:** Chatwoot escribe
+   `content_attributes.submitted_values` SOBRE el mensaje saliente del menú y
+   dispara **`message_updated`** (payload real capturado con un webhook espía
+   temporal, guardado en el scratchpad `bot-cliente/payload-real-message_updated.log`).
+   La forma real del click: `{event:"message_updated", id:<msg del menú>,
+   content_type:"input_select", message_type:"outgoing", sender:<el BOT>,
+   content_attributes:{items:[...], submitted_values:[{title:"Horarios",
+   value:"horarios"}]}, conversation:{...}, inbox:{id:7}}` — sin `updated_at`
+   top-level; el `sender` es el bot (por eso el adapter NO lo lee). Además
+   Chatwoot dispara `message_updated` por mensajes template/text/input_email y
+   por el propio input_select ANTES del click (sin `submitted_values`): las
+   guardas del adapter (`fromMessageUpdated`) los skipean todos. Idempotencia:
+   `chatwoot:<conv>:<msg>:select:<value>` (verificado en `bot_messages`:
+   `chatwoot:chatwoot:27:132:select:horarios`, UNA sola vez pese a los dos
+   `message_updated` del mismo mensaje). **Config Chatwoot:** el webhook de la
+   cuenta 2 quedó suscripto a `["message_created","message_updated"]`.
+3. **Plomería de attachments salientes** (`chatwoot-adapter.mjs →
+   createChatwootClient().sendAttachment()`): multipart `attachments[]` +
+   caption, tolerante por contrato, con tests. SIN uso automático (YAGNI hasta
+   el QR real del BCP) — ver F2.
+4. **Tests:** suite local **541/543** (solo los 2 de leads preexistentes; 14
+   tests nuevos: 7 de botones del motor, 3 de message_updated, 2 de
+   sendAttachment, 2 de input_select en el cliente/orquestación). VPS: misma
+   suite con los 4 ambientales conocidos de `knowledge.json`; adapter 63/63.
+   Guion `recepcionista-ferreteria` de `simulate.mjs` actualizado (click de
+   botón + click en handoff).
+
+### La prueba (mirada, no supuesta) — capturas `bot-cliente/e2e-botones-0*.png`
+
+Conversación NUEVA por el widget (inbox **7** "ZZ QA Clinica Chatbot" — ojo: el
+carril del producto movió el mapeo `clinic_settings.chatwootInboxId` de 6 → 7
+durante esta sesión; es la MISMA org QA de la ferretería, así que el E2E corrió
+por el inbox 7 sin tocar el mapeo del otro carril):
+
+- **"hola"** → M0R del recepcionista **con los 3 botones renderizados como
+  pastillas clickeables** ("Horarios" · "Servicios" · "Hablar con Sergio") —
+  captura `e2e-botones-01-saludo-con-botones.png`.
+- **Click "Horarios"** → el widget lo muestra como burbuja del cliente y el bot
+  contesta **"Atendemos lun-vie, 8:00-18:00. ¿Te ayudo con algo más?"** (del
+  knowledge v3) — captura `e2e-botones-03-respuesta-horario.png`.
+- **No-regresión del funnel de Onia:** curl sintético al webhook (inbox 5,
+  conversación inexistente 990003) → M0 con horarios reales de Cal.com + pitch
+  de Onia, `sent[]` SIN `options`, `posted:false` (nada llegó a un hilo real).
+
+### Qué falta / sin verificar
+
+- **WhatsApp: a probar cuando haya número.** La traducción input_select → reply
+  buttons (PR #6886) y la vuelta del click por ese canal no se miraron en un
+  teléfono real.
+- `sendAttachment` probado con tests (multipart correcto), NO contra el
+  Chatwoot vivo — se estrena cuando exista el primer flujo que mande imagen.
+- Rack::Attack de Chatwoot limita **5 sesiones nuevas de widget por IP por
+  hora** (`/widget` sin `cw_conversation`): los E2E repetidos se lo comen —
+  esta sesión se destrabó borrando el contador `rack::attack:*` en el Redis de
+  Chatwoot (inofensivo, es un contador efímero).
+- Filas QA nuevas: conversaciones 24-27 (inbox 6/7) y `chatwoot:990003` /
+  `chatwoot:990004` en `bot_conversations` — basura de prueba, inofensiva.
+
+Backups: motor `/opt/onia/bot/backups/20260818-002446/` (los 44 .mjs previos).

@@ -140,7 +140,9 @@ const SCRIPTS = {
     conocimiento: CONOCIMIENTO_FERRETERIA,
     turns: [
       { text: "hola" }, // M0R con el menu de BOTONES (input_select: Horarios/Servicios/humano)
-      { text: "Horarios" }, // click del boton: llega como el TITULO en el content del mensaje
+      // Click del boton: en el canal real llega como message_updated con submitted_values y el
+      // adapter lo convierte en un turno con el TITULO como texto — que es esto mismo.
+      { text: "Horarios" },
       { text: "que venden?" },
       { text: "quiero comprar 100 tornillos" }, // escala: lo confirma doña Marta
       { text: "cuanto cuestan?" }, // handoff en curso: el bot ya no habla encima del humano

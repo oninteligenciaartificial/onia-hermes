@@ -326,12 +326,64 @@ function fromConversationCreated(payload) {
 }
 
 /**
+ * EL CLICK DE UN BOTON (input_select) NO crea un mensaje nuevo: Chatwoot escribe
+ * `content_attributes.submitted_values` SOBRE el mensaje SALIENTE original y dispara
+ * `message_updated` (verificado en vivo contra el 4.12.1 del VPS, 2026-08-18: el mensaje del
+ * menu quedo con `items` + `submitted_values` y NINGUN message_created nuevo). Sin manejar este
+ * evento los botones se muestran pero clickearlos no hace nada — y el webhook de la cuenta
+ * tiene que estar suscripto a `message_updated` ademas de `message_created`.
+ *
+ * Guardas, en orden: no privado, content_type `input_select`, y `submitted_values` con algo.
+ * CUALQUIER otro message_updated (ediciones, cambios de estado) se skipea: este evento entra
+ * al motor unicamente como "el contacto eligio una opcion del menu".
+ *
+ * El turno es INBOUND con el TITULO elegido como texto (es lo que el contacto vio; el motor
+ * rutea titulo O value). El `sender` del payload NO se lee: en un mensaje saliente el sender es
+ * el propio bot, no el contacto. La clave de idempotencia lleva el valor elegido: un
+ * message_updated re-disparado por el mismo mensaje no procesa el click dos veces.
+ */
+function fromMessageUpdated(payload) {
+  const conversationId = payload?.conversation?.id ?? payload?.conversation_id ?? null;
+  if (!conversationId) return { skip: true, reason: "sin_conversation_id" };
+  if (payload.private === true) return { skip: true, reason: "nota_privada" };
+  if (payload.content_type !== "input_select") return { skip: true, reason: "update_sin_botones" };
+  const submitted = Array.isArray(payload?.content_attributes?.submitted_values)
+    ? payload.content_attributes.submitted_values.filter((v) => v && typeof v === "object" && (v.title || v.value))
+    : [];
+  if (!submitted.length) return { skip: true, reason: "sin_valor_elegido" };
+  if (!payload.id) return { skip: true, reason: "sin_message_id" };
+
+  const eleccion = submitted[submitted.length - 1];
+  const texto = String(eleccion.title || eleccion.value || "").trim();
+  if (!texto) return { skip: true, reason: "eleccion_vacia" };
+
+  const atribucion = attributionFrom(payload.conversation);
+  const inboxId = payload?.inbox?.id ?? payload?.conversation?.inbox_id ?? null;
+  return {
+    skip: false,
+    turn: {
+      channel: "chatwoot",
+      contact_ref: String(conversationId),
+      inbox_id: inboxId === undefined || inboxId === null || inboxId === "" ? null : String(inboxId),
+      kind: "text",
+      text: texto,
+      message_key: `chatwoot:${conversationId}:${payload.id}:select:${String(eleccion.value || eleccion.title).slice(0, 100)}`,
+      received_at: toIsoFlexible(payload.updated_at) || toIsoFlexible(payload.created_at) || new Date().toISOString(),
+      piece_key: atribucion.pieceKey,
+      source_campaign: atribucion.sourceCampaign,
+    },
+    meta: { conversationId: String(conversationId), messageId: String(payload.id), attachments: [] },
+  };
+}
+
+/**
  * Webhook crudo de Chatwoot -> { skip:true, reason } | { skip:false, turn, meta }.
  * PURO: no toca red, no llama al motor. Es lo primero que corre y lo mas facil de testear.
  */
 export function parseChatwootWebhook(payload) {
   const event = payload?.event;
   if (event === "message_created") return fromMessageCreated(payload);
+  if (event === "message_updated") return fromMessageUpdated(payload);
   if (event === "conversation_created") return fromConversationCreated(payload);
   return { skip: true, reason: `evento_no_manejado:${event || "desconocido"}` };
 }
