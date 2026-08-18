@@ -86,6 +86,11 @@ export function RubrosV2() {
                     <span className={styles.rubroQue}>{que}</span>
                   </li>
                 ))}
+                {/*
+                  Los que vienen NO repiten "todavía no se vende" cinco veces:
+                  la etiqueta de estado ya lo dice y el eco convertía la lista
+                  en ruido. La aclaración va una sola vez, debajo.
+                */}
                 {PRONTO.map((nombre) => (
                   <li
                     key={nombre}
@@ -93,10 +98,13 @@ export function RubrosV2() {
                   >
                     <span className={styles.rubroEstado}>Viene</span>
                     <span className={styles.rubroNombre}>{nombre}</span>
-                    <span className={styles.rubroQue}>Todavía no se vende</span>
                   </li>
                 ))}
               </ul>
+              <p className={styles.nota} style={{ marginTop: "1rem" }}>
+                Seis rubros vivos y vendibles hoy. Los cinco de abajo todavía no
+                se venden: el núcleo ya los contempla, falta encenderlos.
+              </p>
             </Reveal>
 
             <Reveal delay={0.06}>

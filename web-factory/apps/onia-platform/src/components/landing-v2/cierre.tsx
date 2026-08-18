@@ -19,7 +19,7 @@ export function CierreV2() {
         className={`${styles.section} ${styles.cierre}`}
         aria-labelledby="v2-cierre"
       >
-        <div className={styles.container}>
+        <div className={`${styles.container} ${styles.cierreGrid}`}>
           <Reveal>
             <h2 id="v2-cierre" className={`${styles.display} ${styles.heroTitulo}`}>
               Probalo <em>hoy</em>. Sin tarjeta.
@@ -40,6 +40,22 @@ export function CierreV2() {
                 Escribirnos por WhatsApp
               </a>
             </div>
+          </Reveal>
+          {/*
+            La foto no decora: llena la mitad muerta que dejaba el display a
+            1280 y cierra con la persona a la que le hablamos toda la página.
+            Mismo duotono que las de rubros — nunca stock a color pegado.
+          */}
+          <Reveal delay={0.06} className={styles.cierreFoto}>
+            <span className={styles.foto}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin optimizador */}
+              <img
+                src="/fotos/duena-telefono.webp"
+                alt="Dueña de un negocio revisando su teléfono."
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
           </Reveal>
         </div>
       </section>

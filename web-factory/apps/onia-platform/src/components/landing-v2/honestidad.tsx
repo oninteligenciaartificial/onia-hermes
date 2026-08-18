@@ -36,13 +36,24 @@ export function HonestidadV2() {
             id="v2-honestidad"
             className={`${styles.display} ${styles.heroTitulo}`}
           >
-            Lo que <em>todavía no</em> anda.
+            Lo que todavía <em>no anda</em>.
           </h2>
-          <p className={styles.lead}>{NOTA_FISCAL}</p>
+          <p className={styles.lead}>
+            {/* el número se cuenta solo: escrito a mano quedaba viejo apenas
+                alguien agregara o sacara un renglón de NO_INCLUYE */}
+            {NO_INCLUYE.length + 2} cosas que un vendedor no te diría hasta
+            después de firmar. Están acá arriba porque enterarte tarde sale más
+            caro que no vendernos.
+          </p>
         </Reveal>
 
         <Reveal delay={0.06}>
           <div className={styles.celdas}>
+            {/* el límite más grande primero: es el que más plata mueve */}
+            <div className={styles.celda}>
+              <h3>Factura con valor fiscal</h3>
+              <p>{NOTA_FISCAL}</p>
+            </div>
             {NO_INCLUYE.map((item) => (
               <div key={item.que} className={styles.celda}>
                 <h3>{item.que}</h3>

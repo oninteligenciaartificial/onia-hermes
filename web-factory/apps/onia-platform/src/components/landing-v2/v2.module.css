@@ -421,9 +421,15 @@
   padding-right: clamp(1rem, 2vw, 2rem);
 }
 
+/*
+ * Altura FIJA de la cinta: sin esto la manda la pieza más alta y los paneles
+ * anchos quedan recortados a un alto que nadie eligió. Con un alto declarado,
+ * el recorte de cada pieza es una decisión y la banda se lee pareja.
+ */
 .tira {
   flex: none;
   width: clamp(260px, 34vw, 460px);
+  height: clamp(210px, 25vw, 340px);
   display: flex;
   flex-direction: column;
 }
@@ -519,6 +525,26 @@
 
 .rubroPronto .rubroEstado {
   color: var(--v2-tenue);
+}
+
+/*
+ * En teléfono el "qué hace" no puede irse al margen derecho: se partía en dos
+ * renglones alineados a la derecha y la fila quedaba en escalera. Baja a su
+ * propio renglón, alineado con el nombre.
+ */
+@media (max-width: 699px) {
+  .rubroFila {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.15rem 0.8rem;
+    align-items: baseline;
+  }
+
+  .rubroQue {
+    grid-column: 2;
+    margin-left: 0;
+    text-align: left;
+  }
 }
 
 .rubrosFotos {
@@ -678,6 +704,22 @@
    no dos objetos gemelos */
 .botCapturas > :nth-child(2) {
   margin-top: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+/*
+ * En teléfono las dos capturas lado a lado caían a ~170 px de ancho: el chat
+ * dejaba de leerse y pasaba a ser textura. Apiladas ocupan el ancho completo
+ * y se leen — que es el único motivo por el que están.
+ */
+@media (max-width: 599px) {
+  .botCapturas {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .botCapturas > :nth-child(2) {
+    margin-top: 0;
+  }
 }
 
 .escalera {
@@ -907,6 +949,27 @@
 
 .cierre {
   padding-bottom: clamp(3rem, 2rem + 3vw, 5rem);
+}
+
+.cierreGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  gap: var(--v2-gap);
+  align-items: center;
+}
+
+.cierreFoto .foto {
+  aspect-ratio: 4/5;
+}
+
+@media (max-width: 899px) {
+  .cierreGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cierreFoto {
+    display: none;
+  }
 }
 
 .wordmarkStrip {

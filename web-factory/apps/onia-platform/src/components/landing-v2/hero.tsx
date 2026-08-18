@@ -52,6 +52,7 @@ export function HeroV2() {
         <Reveal delay={0.12} className={styles.heroShot}>
           <Pantalla
             src="/v2/editor-chatbot.webp"
+            srcMovil="/v2/editor-chatbot-movil.webp"
             alt="Pantalla del sistema: el editor del chatbot de Onia, con el formulario de identidad y horario a la izquierda y el probador a la derecha, donde el bot ya contestó el horario de atención."
             pie="Captura de producción · Configuración → Chatbot, con el probador contestando"
             ancho={1440}
