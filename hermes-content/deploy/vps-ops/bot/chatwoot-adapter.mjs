@@ -402,8 +402,13 @@ export function createChatwootClient(options = {}) {
    *   prospecto (a Meta el texto se lo da la plantilla aprobada, no esto).
    * @param {object|null} [templateParams]  ver whatsappTemplate(). Sin esto el POST es identico al
    *   de siempre — el 99% del trafico va dentro de la ventana y sigue siendo texto libre gratis.
+   * @param {object|null} [interactive]  { items: [{title, value}] } => el mensaje sale como
+   *   `content_type: "input_select"`. Es el UNICO content type que sirve en los DOS canales: el
+   *   widget Website lo renderiza como opciones clickeables y Chatwoot lo traduce a reply buttons
+   *   de WhatsApp (PR #6886, max 3 — por eso el slice). `cards`/`form` NO pasan al canal WhatsApp
+   *   (issue #12572), asi que no se usan. Sin items el POST es el texto plano de siempre.
    */
-  async function sendMessage(conversationId, text, templateParams = null) {
+  async function sendMessage(conversationId, text, templateParams = null, interactive = null) {
     const trimmed = String(text || "").trim();
     if (!trimmed) return null;
     if (!enabled) {
@@ -418,6 +423,9 @@ export function createChatwootClient(options = {}) {
           content: trimmed,
           message_type: "outgoing",
           ...(templateParams ? { template_params: templateParams } : {}),
+          ...(interactive && Array.isArray(interactive.items) && interactive.items.length
+            ? { content_type: "input_select", content_attributes: { items: interactive.items.slice(0, 3) } }
+            : {}),
         }),
         signal: AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : undefined,
       });
@@ -437,7 +445,60 @@ export function createChatwootClient(options = {}) {
     }
   }
 
-  return { enabled, warnings, sendMessage };
+  /**
+   * Manda una IMAGEN (o archivo) como mensaje del bot: `multipart/form-data` con `attachments[]`,
+   * la forma documentada del Create Message API (autentica con token de usuario O de agent bot).
+   *
+   * PLOMERIA SIN USO AUTOMATICO TODAVIA: es la base para el QR dinamico del BCP ("escanea y paga
+   * el monto exacto") y las fotos de catalogo — ver ONIA_CHATBOT_ALTA_WHATSAPP_CLIENTE.md §F2/F4b.
+   * Ningun flujo del motor la llama aun (YAGNI hasta que haya un QR real que mandar).
+   * Limites si el mensaje viaja por el canal WhatsApp de Chatwoot: JPEG/PNG 8-bit, max 5 MB,
+   * caption hasta 1024 chars, y fuera de la ventana de 24 h un adjunto libre NO sale. En el
+   * widget Website renderiza nativo, sin limites de Meta.
+   *
+   * @param {string|number} conversationId
+   * @param {object} file { buffer: Buffer|Uint8Array, filename?, contentType?, caption? }
+   * @returns {Promise<object|null>} el mensaje creado, o null (tolerante por contrato: nunca tira)
+   */
+  async function sendAttachment(conversationId, { buffer, filename = "imagen.png", contentType = "image/png", caption = "" } = {}) {
+    if (!enabled) {
+      warnings.push("chatwoot: sin token/config (modo sin envío)");
+      return null;
+    }
+    if (!buffer || !buffer.length) {
+      warnings.push("chatwoot: adjunto sin contenido, no se manda");
+      return null;
+    }
+    try {
+      const form = new FormData();
+      const texto = String(caption || "").trim();
+      if (texto) form.append("content", texto);
+      form.append("message_type", "outgoing");
+      form.append("attachments[]", new Blob([buffer], { type: contentType }), filename);
+      const res = await doFetch(`${baseUrl}/api/v1/accounts/${accountId}/conversations/${conversationId}/messages`, {
+        method: "POST",
+        // Sin Content-Type a mano: el boundary del multipart lo pone fetch al ver el FormData.
+        headers: { api_access_token: token },
+        body: form,
+        signal: AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : undefined,
+      });
+      const raw = await res.text();
+      if (!res.ok) {
+        warnings.push(`chatwoot: HTTP ${res.status} ${raw.slice(0, 160)}`);
+        return null;
+      }
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return {};
+      }
+    } catch (error) {
+      warnings.push(`chatwoot: ${error?.message || error}`);
+      return null;
+    }
+  }
+
+  return { enabled, warnings, sendMessage, sendAttachment };
 }
 
 // ---------------------------------------------------------------------------
@@ -533,13 +594,16 @@ export async function runChatwootTurn(payload, deps = {}) {
   if (turnResult && turnResult.ok !== false && Array.isArray(turnResult.send)) {
     for (const reply of turnResult.send) {
       if (!reply?.text) continue;
+      // Botones del motor (reply.options) => input_select. Se reportan en `sent` para que un
+      // curl de verificacion vea QUE botones habrian salido sin abrir el widget.
+      const interactive = Array.isArray(reply.options) && reply.options.length ? { items: reply.options } : null;
       if (dryRun) {
-        sent.push({ text: reply.text, posted: false, reason: "dry_run" });
+        sent.push({ text: reply.text, posted: false, reason: "dry_run", ...(interactive ? { options: reply.options } : {}) });
         continue;
       }
       // eslint-disable-next-line no-await-in-loop -- el orden de los mensajes importa (disclosure antes que cuerpo)
-      const posted = await client.sendMessage(parsed.meta.conversationId, reply.text);
-      sent.push({ text: reply.text, posted: Boolean(posted) });
+      const posted = await client.sendMessage(parsed.meta.conversationId, reply.text, null, interactive);
+      sent.push({ text: reply.text, posted: Boolean(posted), ...(interactive ? { options: reply.options } : {}) });
     }
   }
 

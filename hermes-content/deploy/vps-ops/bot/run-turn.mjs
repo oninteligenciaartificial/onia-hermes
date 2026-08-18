@@ -287,6 +287,8 @@ function buildResponse({ state, stageBefore, config, replies, result, applied, s
       replySource: reply.replySource,
       deliveryStatus: reply.deliveryStatus,
       guardrailOk: reply.guardrail ? reply.guardrail.ok !== false : true,
+      // Botones (input_select): el adapter de Chatwoot los postea; los demas canales los ignoran.
+      ...(reply.options ? { options: reply.options } : {}),
     })),
     notify: deferred.filter((effect) => effect.type === "notify_sergio").map((effect) => effect.payload),
     calendar: deferred.filter((effect) => effect.type === "calendar_event").map((effect) => effect.payload),

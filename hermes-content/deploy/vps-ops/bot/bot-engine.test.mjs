@@ -589,3 +589,80 @@ test("recepcionista: '¿cuánto dura la cita?' contesta duración/modalidad del 
   assert.deepEqual(keysOf(otra.turns[1]), ["R_NO_DATO"]);
   assert.ok(!/30 minutos/.test(textOf(otra.turns[1])), "no inventa la duración de la demo de Onia");
 });
+
+// ---------------------------------------------------------------------------
+// 8b. BOTONES del recepcionista (Chatwoot input_select -> reply buttons de WhatsApp)
+// ---------------------------------------------------------------------------
+// Un solo formato para los dos canales (PR #6886 de Chatwoot): por eso el tope de 3 opciones y
+// 20 caracteres por título son de Meta y se verifican acá, no en el adapter.
+
+test("recepcionista: el saludo M0R sale con el menú de 3 botones (títulos ≤20 chars)", () => {
+  const { turns } = runRecep(["hola"]);
+  const options = turns[0].replies[0].options;
+  assert.ok(Array.isArray(options), "M0R lleva options para el input_select");
+  assert.equal(options.length, 3, "reply buttons de WhatsApp: máximo 3");
+  // "Hablar con doña Marta" mide 21: NO entra en el límite de Meta y cae al genérico entero
+  // (nunca un título truncado a la vista del cliente).
+  assert.deepEqual(
+    options.map((option) => option.title),
+    ["Horarios", "Servicios", "Hablar con alguien"],
+  );
+  assert.ok(options.every((option) => option.title.length <= 20), "límite de título de Meta");
+  assert.ok(options.every((option) => option.value), "cada botón lleva su payload estable");
+});
+
+test("recepcionista: con un nombre corto el 3er botón SÍ nombra al humano", () => {
+  const conocimiento = { ...CONOCIMIENTO_FERRETERIA, identity: { ...CONOCIMIENTO_FERRETERIA.identity, humanName: "Sergio" } };
+  const config = asRecepcionista(applyKnowledge(CONFIG, conocimiento), conocimiento);
+  const { turns } = run(["hola"], { config });
+  assert.equal(turns[0].replies[0].options[2].title, "Hablar con Sergio");
+});
+
+test("recepcionista: click 'Horarios' (el título llega como texto del mensaje) contesta el horario", () => {
+  const { state, turns } = runRecep(["hola", "Horarios"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_HORARIO"]);
+  assert.match(textOf(turns[1]), /lun-sab, 8:00-19:00/);
+  assert.equal(state.botStage, "nuevo", "una FAQ no escala");
+});
+
+test("recepcionista: click 'Servicios' contesta el catálogo; el 3er botón deriva a humano", () => {
+  const servicios = runRecep(["hola", "Servicios"]);
+  assert.deepEqual(keysOf(servicios.turns[1]), ["R_SERVICIOS"]);
+  assert.match(textOf(servicios.turns[1]), /tornillería al por mayor y menor/);
+
+  const humano = runRecep(["hola", "Hablar con alguien"]);
+  assert.deepEqual(keysOf(humano.turns[1]), ["R_DERIVA"]);
+  assert.equal(humano.state.botStage, "handoff_humano");
+  assert.ok(effectsOf(humano.turns[1]).includes("notify_sergio"), "el handoff del botón es real");
+});
+
+test("recepcionista: R_DERIVA sale CON botones (menú de rescate); R_INTERES y R_PRECIO no", () => {
+  const deriva = runRecep(["hola", "che y hacen envíos a domicilio en moto?"]);
+  const reply = deriva.turns[1].replies.find((r) => r.templateKey === "R_DERIVA");
+  assert.equal(reply.options.length, 3, "el fuera de guion deja el menú a la vista");
+
+  const interes = runRecep(["hola", "quiero comprar 100 tornillos"]);
+  assert.ok(interes.turns[1].replies.every((r) => !r.options), "solo M0R y R_DERIVA llevan botones");
+  const precio = runRecep(["hola", "¿cuánto cuestan los tornillos?"]);
+  assert.ok(precio.turns[1].replies.every((r) => !r.options));
+});
+
+test("recepcionista: en handoff, el click EXACTO de un botón contesta la FAQ sin salir del handoff; texto libre sigue mudo", () => {
+  // R_DERIVA dejó los botones a la vista: clickearlos después del handoff no puede dar silencio.
+  const { state } = runRecep(["hola", "che y hacen envíos a domicilio en moto?"]);
+  assert.equal(state.botStage, "handoff_humano");
+
+  const click = run(["Horarios"], { config: CONFIG_FERRETERIA, state });
+  assert.deepEqual(keysOf(click.turns[0]), ["R_HORARIO"]);
+  assert.equal(click.state.botStage, "handoff_humano", "no sale del handoff: el humano sigue a cargo");
+  assert.deepEqual(click.turns[0].sideEffects, [], "solo lectura: cero efectos nuevos");
+
+  const libre = run(["y entonces? me contestan?"], { config: CONFIG_FERRETERIA, state });
+  assert.equal(libre.turns[0].replies.length, 0, "texto libre en handoff: silencio, como siempre");
+  assert.deepEqual(libre.turns[0].notes, ["silencio:handoff_en_curso"]);
+});
+
+test("venta: el funnel de Onia NO lleva botones — M0 sale plano como siempre", () => {
+  const venta = run(["DEMO"]);
+  assert.ok(venta.turns[0].replies.every((reply) => !reply.options));
+});

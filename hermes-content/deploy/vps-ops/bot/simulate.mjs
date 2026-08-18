@@ -139,11 +139,12 @@ const SCRIPTS = {
     startAt: "2026-07-27T14:05:00Z",
     conocimiento: CONOCIMIENTO_FERRETERIA,
     turns: [
-      { text: "hola" },
-      { text: "que dias atienden?" },
+      { text: "hola" }, // M0R con el menu de BOTONES (input_select: Horarios/Servicios/humano)
+      { text: "Horarios" }, // click del boton: llega como el TITULO en el content del mensaje
       { text: "que venden?" },
       { text: "quiero comprar 100 tornillos" }, // escala: lo confirma doña Marta
       { text: "cuanto cuestan?" }, // handoff en curso: el bot ya no habla encima del humano
+      { text: "Servicios" }, // click de boton EN handoff: la FAQ exacta si se contesta (solo lectura)
     ],
   },
 };
@@ -250,6 +251,7 @@ function printScript(run) {
       } else {
         console.log(indent(reply.text));
       }
+      if (reply.options) console.log(indent(`[botones] ${reply.options.map((option) => option.title).join(" · ")}`));
     }
     if (event.sideEffects.length) console.log(`    [efectos] ${event.sideEffects.join(", ")}`);
     if (event.notes.length) console.log(`    [notas] ${event.notes.join(", ")}`);
