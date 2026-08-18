@@ -174,7 +174,10 @@ VERIFICADO YA contra la cuenta (no lo repitas, usalo):
     (4-10 s) tambien tienen audio nativo.
   - CORRECCION al corpus: el tope de 15 s era de seedance_2_0. flux_3_video llega a 20 s.
   - unlim.available = false: HOY no hay generaciones ilimitadas. Cada generacion cuesta.
-  - "Seedance 2.5" NO existe en la cuenta. Es el sexto video que nombra un modelo fantasma.
+  - CORREGIDO EL 18-AGO: seedance_2_5 SI existe ahora en la cuenta, 4-30 s, con modos
+    video_edit y video_extension. Cuando se escribio este prompt no estaba. Volve a
+    consultar el catalogo vos mismo antes de usar cualquier dato de modelo de aca:
+    una verificacion tiene fecha de vencimiento.
 
 Tarea:
 1. Reescribi la plantilla de prompt de video que usemos hoy con los 5 bloques en orden, con

@@ -163,8 +163,6 @@ Tarea:
    cuales por dos lineas de bash. El objetivo es tener MENOS agentes, no mas.
 4. Medi lo que puedas medir sin gastar: cuantos tokens de contexto arrastra cada agente en
    una corrida tipica. Si no se puede medir, decilo; no estimes a ojo.
-5. Entrega una tabla: agente | antipatron detectado | reemplazo propuesto | ahorro esperado.
-
 6. LOS MCP TAMBIEN ENTRAN EN LA AUDITORIA. El taller da un orden explicito y advierte:
    "we see a lot of folks run towards MCP first, and a lot of our customers end up in this
    ecosystem where there's a lot of chaotic MCP servers... a lot of times they have overlap,
@@ -190,6 +188,9 @@ Tarea:
    taller advierte: "there are a lot of cases where you can just scrap the subagent entirely
    and give more flexibility to your main agent... frontier models have gotten intelligent
    enough where you just don't need as many subagents".
+
+8. Entrega UNA tabla con todo junto:
+   agente o MCP | antipatron detectado | cae en (a)/(b)? | reemplazo propuesto | ahorro esperado
 
 NO refactorices nada en esta pasada. Es diagnostico. El refactor sale despues, uno por uno.
 

@@ -47,8 +47,13 @@ en orden fijo.**
 
 ## ⚠️ La advertencia obligatoria
 
-El rótulo dice **"Seedance 2.5"**. **Ese modelo no existe en nuestra cuenta.** Ya lo verificamos:
-tenemos `seedance_2_0`. Es el **sexto video del corpus** que nombra un modelo que no está.
+El rótulo dice **"Seedance 2.5"**.
+
+> **CORREGIDO 2026-08-18.** Cuando escribí esto, `seedance_2_5` **no estaba** en la cuenta y lo
+> di por modelo fantasma — seis veces en el corpus. Volví a consultar el catálogo y **ahora sí
+> está**, con duración de **4 a 30 s** y modos `video_edit` / `video_extension`. Los videos
+> describían algo que todavía no nos había llegado. Detalle y la lección de método en
+> [la ficha del anuncio UGC](2026-08-18-ugc-auto-receta-completa.md).
 
 **Pero la estructura de 5 bloques no depende del modelo.** Es texto: funciona en cualquier
 imagen-a-video. Eso es lo que se lleva, no el nombre.
