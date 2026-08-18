@@ -495,20 +495,76 @@ destraba nuestro propio ciclo hoy** — y eso vale más que esperar.
 
 ## 9. Estado del doc
 
-- ✅ Verificado contra doc oficial de Meta: mecanismo de Private Replies, permisos exactos, ventana
-  de 7 días, un mensaje por comentario, Standard vs Advanced Access.
-- ✅ Verificado contra fuente del proveedor: Chatwoot no procesa comentarios públicos · ManyChat
-  factura por cuenta conectada.
-- ✅ Verificado en el repo: los 7 posts programados con SISTEMA/LISTA, el guion del DM manual, n8n y
-  el molde de webhook con secret server-side.
-- ⚠️ **Sin confirmar:** los precios exactos (fuentes secundarias; las páginas oficiales dan 403) ·
-  el trigger nativo de Instagram en Activepieces · el contenido literal de las páginas de ManyChat
-  sobre su status con Meta (403) · **la automatización nativa y gratis de Meta Business Suite**
-  ([desktop](https://www.facebook.com/business/help/318238182723007) ·
-  [Instagram](https://help.instagram.com/655277382759165/)) — las páginas oficiales existen pero no
-  renderizan para lectura automática. **Vale mirarlas desde `@oniahq` antes de conectar ManyChat:
-  si Meta ya lo da gratis y nativo, no hace falta ninguna herramienta.**
-- 🔬 **A probar, en este orden:** (1) ManyChat free en `@oniahq` · (2) Standard Access con app
-  propia (§2.3).
-- ❌ **No se hizo nada en vivo:** no se conectó ninguna cuenta, no se creó ninguna app de Meta, no se
-  envió ningún mensaje, no se contrató nada.
+> ⚠️ **Reescrito el 2026-08-18 por la tarde.** La versión de la mañana cerraba con
+> *"❌ No se hizo nada en vivo"*. Eso ya no es cierto: se probó contra la API de Meta con el
+> token real de `@oniahq` y **el hallazgo principal del doc quedó dado vuelta**. Ver §10.
+
+- ✅ Verificado contra doc oficial de Meta: mecanismo de Private Replies, permisos exactos,
+  ventana de 7 días, un mensaje por comentario, Standard vs Advanced Access.
+- ✅ Verificado contra fuente del proveedor: Chatwoot no procesa comentarios públicos ·
+  ManyChat factura por cuenta conectada.
+- ✅ Verificado en el repo: los 7 posts programados con SISTEMA/LISTA, el guion del DM manual,
+  n8n y el molde de webhook con secret server-side.
+- ✅ **Verificado EN VIVO contra la Graph API (§10).**
+- ⚠️ Sin confirmar: los precios exactos (fuentes secundarias; las páginas oficiales dan 403) ·
+  el trigger nativo de Instagram en Activepieces · la automatización nativa de Meta Business
+  Suite (las páginas oficiales no renderizan para lectura automática).
+
+---
+
+## 10. 🔬 Lo que se probó en vivo — 2026-08-18
+
+Todo con el token de `@oniahq` que ya tiene Postiz. Sin gastar un centavo, sin enviar ningún
+mensaje real.
+
+### 10.1 — El hallazgo que da vuelta el doc: S6 NO bloquea nuestras cuentas
+
+| Prueba | Llamada | Resultado | Qué prueba |
+|---|---|---|---|
+| Identidad | `GET /me` | `{"id":"27942557688720145","username":"oniahq","account_type":"BUSINESS"}` | el token vive y la cuenta es profesional |
+| **Mensajería** | `GET /me/conversations` | devuelve conversaciones reales | **`instagram_business_manage_messages` CONCEDIDO** — ese permiso *es* S6 |
+| Lectura de DMs | `GET /{conv}?fields=messages{...}` | historial real de junio | lectura completa del buzón |
+| **Envío** | `POST /me/messages` con `comment_id:"0"` | `{"code":100,"message":"Invalid comment_id parameter"}` | **código 100 = parámetro inválido, NO 200 (permiso) ni 190 (OAuth).** Meta validó el permiso y llegó a validar el parámetro → **el envío está habilitado** |
+| Webhooks | `GET /me/subscribed_apps` | `["messages"]` | faltaba `comments` |
+| **Suscripción** | `POST /me/subscribed_apps?subscribed_fields=messages,comments` | `{"success":true}` → verificado `["messages","comments"]` | **hecho, ya está suscrito** |
+
+> **Conclusión:** `@oniahq` tiene rol en nuestra propia app, y por eso opera con **Standard
+> Access**, que no pasa por App Review. **S6 nunca bloqueó nuestras cuentas — bloquea las de
+> clientes.** Estaban mezcladas en el tablero.
+>
+> **Consecuencia directa: no hace falta ManyChat para uso propio.** El §1.4 de este doc
+> recomendaba conectar ManyChat gratis para "pedir prestada" su app aprobada. Ese motivo
+> desapareció. Ahorro: ~USD 936/año con las dos cuentas en Pro.
+
+### 10.2 — El workflow, construido y probado
+
+`ONIA - Comentario IG -> DM (Private Reply)` — n8n `w1GUalEbvYnLROUI`, **activo**.
+URL de producción: `https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment`
+
+⚠️ La URL con el prefijo del `webhookId` **da 404**. La buena es la ruta simple, de arriba.
+
+| Camino probado | Payload | Resultado |
+|---|---|---|
+| Verificación de Meta (`GET hub.mode=subscribe`) | — | ✅ devolvió el `hub.challenge` intacto |
+| Comentario ajeno con SISTEMA | payload real de Meta | ⚠️ 200, llega al nodo SSH y muere: **`Host not found`** |
+| **Nuestro propio comentario** (el de hashtags que publica Postiz) | `from.id` = nuestro | ✅ **200 e ignorado** — el filtro anti-bucle funciona |
+
+**El filtro anti-bucle no es un detalle.** Postiz publica un comentario automático con los
+hashtags sobre nuestro propio post; sin ese filtro, el flujo se respondería a sí mismo.
+
+### 10.3 — Lo que falta, y es corto
+
+| # | Qué falta | Quién | Por qué |
+|---|---|---|---|
+| 1 | **Adjuntar 2 credenciales** al workflow: `ONIA VPS SSH` en *Leer token de Postiz* y `Telegram account` en *Avisar a Sergio* | Sergio, 2 clics | El MCP de n8n no las auto-asignó y su `update_workflow` no acepta el parámetro (bug de serialización). La API pública devuelve 401 con el `N8N_API_KEY` del contenedor |
+| 2 | **Apuntar el callback de la app de Meta** a `https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment` | Sergio, panel de Meta | No se pudo leer por API: `FACEBOOK_APP_ID` está vacío en Postiz y el secret de Instagram no firma contra el app de Facebook |
+| 3 | **Publicar el PDF de LISTA** | — | `onia.com.bo/recursos/lista-por-donde-empezar.pdf` → **404**. El PDF existe en el repo, no en la web. Por eso el workflow hoy solo acciona con SISTEMA |
+| 4 | Probar el Private Reply de verdad | mié 19-ago | `media_count: 0` — no hay ningún post donde comentar hasta que salga el primer carrusel |
+
+### 10.4 — Links del DM, verificados en vivo
+
+```
+onia.com.bo/?src=...                              200 ✅
+cal.onia.com.bo/onia/consulta-inicial             200 ✅
+onia.com.bo/recursos/lista-por-donde-empezar.pdf  404 ❌
+```
