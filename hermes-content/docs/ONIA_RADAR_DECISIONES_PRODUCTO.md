@@ -83,3 +83,21 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
    imágenes (catálogo con fotos, comprobantes), botones/listas interactivas,
    carrito/pedido por chat, y qué permite cada canal (widget web vs WhatsApp
    Cloud API — catálogo nativo de WhatsApp incluido).
+
+
+## 6. Webs CONECTADAS al sistema (2026-08-18) — tarea abierta
+
+Sergio: "quiero que toques cómo podemos conectar páginas webs a los sistemas; hacé la
+prueba con Bolivian Electric". Doc con los 4 circuitos y el plan de prueba:
+`ONIA_WEB_CONECTADA_AL_SISTEMA.md`. Resumen: el circuito 1 (formulario→lead) ya tiene
+precedente vivo (forms.onia.com.bo/alta → onia_center.leads); Bolivian Electric está
+HOY desconectado del sistema (verificado) y es el laboratorio ideal. Vender "web que
+alimenta el sistema" es terreno que ni Forges ni las agencias ocupan.
+
+## 7. ¿Factura de verdad? (2026-08-18) — auditoría en curso
+
+Sergio pidió verificar si el sistema factura realmente. Auditoría corriendo que separa
+tres cosas que no son lo mismo: factura interna del negocio (documento de cobro) ·
+factura FISCAL SIAT (bloqueada por NIT, a confirmar) · cobro de Onia a sus clientes
+(hoy comprobante manual). Sale en `ONIA_FACTURACION_ESTADO_REAL.md` con una respuesta
+clara para la venta: se puede decir "Onia te factura" SÍ/NO/con qué asterisco.
