@@ -882,3 +882,36 @@ test("preview: con organizationId el turno corre contra el conocimiento de ESA o
     delete process.env.ONIA_BOT_PREVIEW_SECRET;
   }
 });
+
+test("preview: el BORRADOR corre en modo RECEPCIONISTA — lo que el cliente final vera, con botones", async () => {
+  // Decision Sergio 2026-08-18: el probador del editor muestra el bot del NEGOCIO
+  // (M0R + pastillas), nunca el funnel de venta de Onia con el nombre cambiado.
+  process.env.ONIA_BOT_PREVIEW_SECRET = "prev";
+  try {
+    const doc = valido({
+      identity: { productName: "ZZ QA Ferreteria Tornillo", humanName: "Marta" },
+      empresa: { horario: { frase: "lun-vie, 9:00-18:00" } },
+    });
+    const out = await handlePreviewRequest({
+      rawBody: JSON.stringify({ message: "hola", knowledge: doc }),
+      headers: { authorization: "Bearer prev" },
+    });
+    assert.equal(out.status, 200);
+    assert.equal(out.body.conocimiento.fuente, "borrador");
+    assert.equal(out.body.respuestas[0].plantilla, "M0R", "borrador => recepcionista, no M0 de venta");
+    assert.match(out.body.respuestas[0].texto, /Soy el asistente de ZZ QA Ferreteria Tornillo/);
+    assert.doesNotMatch(out.body.respuestas[0].texto, /plataforma por módulos/i);
+    // Los botones input_select llegan como TITULOS para que el chat del editor los pinte.
+    assert.deepEqual(out.body.respuestas[0].opciones, ["Horarios", "Servicios", "Hablar con Marta"]);
+
+    // El click de una pastilla ("Horarios") contesta con el dato del borrador:
+    const horario = await handlePreviewRequest({
+      rawBody: JSON.stringify({ message: "Horarios", knowledge: doc }),
+      headers: { authorization: "Bearer prev" },
+    });
+    assert.equal(horario.status, 200);
+    assert.match(horario.body.respuestas.map((r) => r.texto).join("\n"), /lun-vie, 9:00-18:00/);
+  } finally {
+    delete process.env.ONIA_BOT_PREVIEW_SECRET;
+  }
+});

@@ -35,6 +35,10 @@ export async function handlePreviewRequest({ rawBody, headers }) {
     const verdict = validateKnowledge(payload.knowledge);
     if (!verdict.ok) return { status: 422, body: { ok: false, errores: verdict.errors } };
     config = applyKnowledge(createBotConfig(), payload.knowledge, { nowIso: new Date().toISOString() });
+    // Decision Sergio 2026-08-18: el borrador del editor ES el bot de una org cliente.
+    // El probador tiene que mostrar EXACTAMENTE lo que el cliente final vera (modo
+    // recepcionista con ese borrador), no el funnel de venta de Onia con el nombre cambiado.
+    config = asRecepcionista(config, payload.knowledge);
     conocimiento = { fuente: "borrador" };
   } else if (typeof payload.organizationId === "string" && payload.organizationId.trim()) {
     // Sin borrador: probar contra lo PUBLICADO de esa org (paso b — fuente db).
@@ -67,6 +71,11 @@ export async function handlePreviewRequest({ rawBody, headers }) {
       respuestas: result.replies.map((reply) => ({
         plantilla: reply.templateKey,
         texto: reply.text === LLM_PENDING ? reply.fallbackText : reply.text,
+        // Botones del recepcionista (input_select): al chat del editor le llegan como
+        // TITULOS para pintarlos como pastillas clickeables. Solo si la reply los trae.
+        ...(Array.isArray(reply.options) && reply.options.length
+          ? { opciones: reply.options.map((boton) => boton.title) }
+          : {}),
       })),
       etapa: result.nextState.botStage,
       notas: result.notes,
