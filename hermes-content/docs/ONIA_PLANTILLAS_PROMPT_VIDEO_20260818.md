@@ -167,6 +167,147 @@ badges. She shrugs, half-smile to lens: "Eso lo puede hacer un sistema solo. Te 
 
 ---
 
+## Ejemplo completo — Onia Comercio · "El mensaje de las nueve" · 15 s · 9:16
+
+> **PLANTILLA REUSABLE, no una pieza de cliente.** No hay ningún comercio real con el sistema
+> andando. Todo lo que se ve acá sale de material propio: la placa de venta aprobada, el
+> demo-tenant del producto y un Soul nuestro. Cuando exista un cliente, se reemplazan los dos
+> insumos marcados y sale igual.
+
+**Por qué comercio y no gastronomía (una línea):** comercio es el segundo vertical **ya decidido**
+con cuña ferretería y tiene material real —placa de venta con 4 dolores, agente Cobrador
+corriendo sobre comercio y demo-tenant con datos— mientras que gastronomía está **explícitamente
+descartada** como vertical en el mismo doc de decisión y solo tiene 3 funciones de catálogo sin
+una línea de código (`ONIA_DEFINICIONES_NAMING_RUBROS_WOW_20260726.md` §2 y §3).
+
+Lo que se reusa, con fuente:
+
+| Insumo | De dónde |
+|---|---|
+| Los 4 dolores y el CTA | `ONIA_KIT_VENTA_POR_RUBRO_20260815.md` §1, **PLACA 2 · COMERCIO MINORISTA** |
+| El agente que cierra la pieza | **Cobrador** sobre fiados de comercio — `getCollectorFeedComercio` en `onia-platform/lib/onia-core/modules/agents-runtime.ts` |
+| Vocabulario (casero, fiado, Bs) | `onia-platform/lib/onboarding/vocabulario.ts` (`gestios-general`) |
+| Producto, monto y la deuda de 25 días | `onia-platform/lib/comercio/demo-seed.ts` — demo-tenant nuestro |
+
+### Qué se adapta del reel de origen, y qué NO
+
+| Del reel de auto | Nuestra versión | Nota honesta |
+|---|---|---|
+| Publicación muerta — *"Listed 30+ days ago · 2 views"* | El mensaje de las 21:47 respondido a las 10:14 del día siguiente | Adaptado. Es el **dolor #3 de la PLACA 2 dramatizado**, no una métrica medida nuestra. La cifra del original es una captura del propio vendedor: la señal débil de siempre |
+| El anuncio UGC con IA como la solución | El **Cobrador** dejando el recordatorio escrito, que ella aprueba antes de que salga | Adaptado. Capacidad verificada en el producto, human-in-the-loop, sale por link `wa.me` que aprieta un humano |
+| El DM entrante **al que vende el servicio** (*"How much would they cost?"*) | El DM entrante **a la dueña de la tienda** preguntando el precio de un producto | Cambiado a propósito. Un DM a Onia preguntando precio sería **fabricar un prospecto**: hoy no hay ninguno. El DM del casero es dolor propio de ella, no prueba nuestra |
+| **La ficha del vendedor** que cierra el reel | **NO SE ADAPTA.** El cierre es el CTA de la PLACA 2, sin cifra ni plazo | Con **0 clientes pagando**, cerrar con una ficha/prueba es exactamente la captura del propio vendedor que la fuente marca como señal débil. No se fuerza |
+
+**Lo que la pieza NO promete:** que respondemos el precio a las nueve de la noche. En pantalla se
+resuelve **el fiado**, que es lo que el Cobrador hace hoy. El DM de precio abre la pieza como
+dolor, no como capacidad.
+
+### ⚠️ Desambiguación obligatoria del mecanismo 3 (acá el celular ES el gancho)
+
+En el molde, `phone never in frame, reflections, or her hands` apunta al **celular que filma**.
+En esta pieza hay un segundo celular que es **utilería** y lleva el gancho, así que el negativo
+escrito tal cual se pelea consigo mismo. Hay que partirlo en dos: se prohíbe el que filma, se
+permite el de utilería, y se prohíbe aparte que su pantalla tenga texto legible.
+
+*(El mismo choque late en el ejemplo de Lucía de arriba —cabecera con `phone never in frame` y
+beat 3 con `phone face up`—; no lo edito, lo dejo anotado. **Esta desambiguación no está probada:
+se verifica en el prototipo de 480p, no antes.**)*
+
+### El prompt
+
+```text
+Handheld friend-cam UGC, 9:16, 15s, iPhone back cam — grain, compression, wobble, autofocus
+hunts, no filters or grading. HARD CUTS only.
+The filming phone is never in frame, in reflections, or in her hands; the phone she handles at
+the counter is a separate prop and may be seen, but its screen stays an unreadable glow — no
+legible screen text, no readable UI, no on-screen text, no logos, no brand marks anywhere.
+Character = reference A (same woman in every shot, same hair, same faded work apron over a
+plain shirt): matte real skin — pores, redness, baby hairs, no glare, no retouch; natural
+blinks, micro-expressions.
+Location = reference B (same neighbourhood hardware-store counter in every shot: chipped wooden
+counter, cement bags stacked low at the left, lengths of PVC pipe standing in a corner bin,
+paint buckets and boxes of nails on steel shelves behind her, open roller shutter camera left).
+Spoken language: Bolivian Spanish from Santa Cruz, natural shop-counter register, not neutral
+dubbing Spanish.
+
+0-5s reference A behind the counter of reference B, mid-morning, hard daylight from the open
+roller shutter camera left, street noise outside. She holds the prop phone low in one hand,
+glances down at its glow, then looks straight to lens, flat and a little tired: "Este casero me
+preguntó el precio anoche a las nueve. Le contesté hoy."
+
+5-10s HARD CUT, tighter, over-the-shoulder onto the counter: the prop phone face up beside a
+spiral notebook open on a column of handwritten names and amounts; autofocus hunts once on the
+page then settles; her finger slides down the column and stops. She speaks from off the top of
+frame: "En el mismo chat está doña Carmen. Me debe hace veinticinco días."
+
+10-15s HARD CUT, wider, back to reference A behind the counter of reference B. The prop phone
+lies face up on the wood between her hands; she reads its glow for a beat, then lifts her eyes
+to lens with a small shrug and a half-smile: "El sistema ya me lo dejó escrito. Yo apruebo y
+recién ahí sale."
+```
+
+**Los seis mecanismos, dónde están:** (1) cabecera técnica, línea 1 · (2) defectos a propósito,
+línea 1 · (3) negativos del formato, líneas 3-5, **partidos en dos** · (4) anclas inline
+`reference A` / `reference B` repetidas en cada beat, como **texto nombrado** —no `<<<image>>>`—
+con las imágenes por `image_references` · (5) realismo de piel, bloque de personaje · (6) tres
+beats cronometrados con diálogo literal entre comillas. Más `HARD CUTS only` **una sola vez**,
+línea 2.
+
+**Diálogo:** seis oraciones completas, cero muletillas de apertura. Está documentado que las
+oraciones entre comillas salen palabra por palabra y que la interjección tipo `Okay —` se cae,
+así que no hay ninguna. Ella dice **"el sistema"**, nunca la marca: una cara generada por IA
+diciendo el nombre del producto se lee como testimonio falso — la marca va en el overlay.
+
+### El texto va encima (HyperFrames sobre el render, nunca pedido al modelo)
+
+| t | Overlay | Nota |
+|---|---|---|
+| 0,3-2,5 s | Burbuja de WhatsApp entrante: *"¿Cuánto está el balde de látex blanco?"* · **21:47** | El gancho. Producto tomado del demo-seed (Pintura látex blanca 18L, unidad "balde") |
+| 3,0-4,8 s | *"Respondido — 10:14"* | Dramatización del dolor #3 de la PLACA 2. **No es una métrica nuestra** |
+| 10,5-14,8 s | CTA: *"Comentá FIADO y te paso cómo se ordena tu cuaderno."* | CTA aprobado de la PLACA 2, sin cifra ni plazo |
+| 0-15 s | Etiqueta **contenido generado con IA** | Obligatoria, no se esconde |
+
+Si se quema un monto en Bs, va rotulado **"datos de ejemplo"**: sale del demo-tenant, no de un
+comercio real.
+
+### Insumos — de dónde sale exactamente cada uno
+
+| Insumo | Origen | Estado |
+|---|---|---|
+| **reference A** — still 9:16 de la dueña, mismo delantal | `soul_2` + `soul_id`. Candidata que **ya existe**: **Mara BO v2** `6c94bbf0-bc71-4fe1-841e-f366bdb00b6e` (boliviana mestiza, 27). Bloque de identidad congelado en `ONIA_MODELOS_RECETA_VISUAL_20260806.md` §2; stills previos en `hermes-content/references/modelos/mara-bo/perfil-20260806/` | ⚠️ **Decide Sergio.** El mostrador de ferretería **no está** en sus escenarios permitidos (*"interiores minimalistas luminosos… nunca exteriores caóticos"*) y el delantal no está en sus 3 atuendos. O se le suman escenario y atuendo a ese doc, o se entrena un Soul propio de la dueña (**25 cr**, permiso explícito) |
+| **reference B** — mostrador de ferretería de barrio en Santa Cruz | **No existe en el repo.** Verificado: no hay ninguna imagen de ferretería/comercio en `hermes-content/references/` | ⚠️ **Hay que conseguirla.** (a) **Sergio** saca 3 fotos de un mostrador real — encuadre genérico y con permiso: si el local se reconoce, insinúa una relación comercial que no existe; (b) generarla (costo aparte + permiso). **Si no se consigue, se corre sin reference B** y queda como ancla de texto: el punto frágil es la cara, no el lugar |
+| Copy de overlays y CTA | `ONIA_KIT_VENTA_POR_RUBRO_20260815.md` §1, PLACA 2 | Listo, ya escrito |
+| Producto, monto, deuda de 25 días, "doña Carmen" | `onia-platform/lib/comercio/demo-seed.ts` | Listo. Es **demo-tenant nuestro**, no un cliente |
+| Voz | Nativa del modelo (`generate_audio` true por defecto en `seedance_2_5`) | Listo. La voz de Lucía **no** se usa acá: es otra persona |
+
+### Costo — `seedance_2_5` en `omni_reference`
+
+Es el único que hace **15 s con `image_references` + audio nativo** (verificado hoy con
+`models_explore`; `unlim.available` sigue en `false`, así que todo consume créditos).
+
+| Escalón | Config | Créditos |
+|---|---|---|
+| **Prototipo** (el que se corre primero) | 480p, 15 s | **~15 cr** |
+| Publicable | 720p, 15 s | ~52,5 cr |
+| Premium | 1080p, 15 s | ~135 cr |
+| Aparte — still de reference A | `soul_2`, 3 imágenes | 0,36 cr |
+| Solo si Sergio elige Soul propio | entrenar Soul | **25 cr** |
+
+> ⚠️ **`seedance_2_5` no tiene precio medido.** Los tres números de arriba son la equivalencia
+> por segundo de la familia `seedance_2_0` (1,00 / 3,50 / 9,00 cr/s, tabla medida del 14-ago):
+> sirven para dimensionar, **no para autorizar**. Antes de tirar el job hay que preflightear con
+> **`generate_video` + `get_cost: true`** — es un parámetro de preflight, no un tool aparte, es
+> gratis y el 14-ago coincidió al centavo con el gasto real.
+
+**Gates antes de generar (los mismos de arriba, más uno):** cara desde Soul, etiqueta de IA,
+cero claim, prototipo en 480p mirado antes de subir de resolución — y **la desambiguación del
+celular se valida en ese prototipo**: si el modelo igual mete el celular que filma en el reflejo
+del mostrador, hay que reescribir el negativo antes de pagar 720p.
+
+**Nada generado. Nada gastado.** Esta sección es el prompt listo para que Sergio apruebe.
+
+---
+
 # Catálogo de modelos de video — consultado **2026-08-18**
 
 > **Este dato tiene fecha de vencimiento.** El 16-ago escribimos seis veces que `seedance_2_5`
