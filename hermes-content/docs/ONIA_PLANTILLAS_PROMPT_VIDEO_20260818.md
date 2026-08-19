@@ -169,6 +169,14 @@ badges. She shrugs, half-smile to lens: "Eso lo puede hacer un sistema solo. Te 
 
 ## Ejemplo completo — Onia Comercio · "El mensaje de las nueve" · 15 s · 9:16
 
+> 🔴 **DATOS DE PRODUCTO SIN VERIFICAR — 2026-08-18.** El producto, el monto y el nombre de
+> la clienta de este ejemplo se atribuyeron a `web-factory/apps/onia-platform/lib/comercio/demo-seed.ts`
+> y a `getCollectorFeedComercio`. **Ninguno de los dos existe**: verificado por ruta, por nombre de
+> archivo en todos los worktrees, y por contenido en todo el repo. Son cita fabricada.
+> **Antes de usar este prompt hay que reemplazar producto, monto, plazo y nombre por datos reales
+> del demo, o marcarlos en pantalla como ejemplo.** Lo demás del ejemplo (elección de rubro, PLACA 2,
+> estructura) sí se verificó contra fuente.
+
 > **PLANTILLA REUSABLE, no una pieza de cliente.** No hay ningún comercio real con el sistema
 > andando. Todo lo que se ve acá sale de material propio: la placa de venta aprobada, el
 > demo-tenant del producto y un Soul nuestro. Cuando exista un cliente, se reemplazan los dos
