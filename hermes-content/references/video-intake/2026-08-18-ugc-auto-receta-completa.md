@@ -29,6 +29,12 @@ red-lit dials. Her hand sweeps frame; soft: "Look at this interior — barely dr
 
 *(El video corta antes del beat de 6-9 s; lo que sigue no se ve.)*
 
+> **AMPLIADO 2026-08-19.** El análisis escena por escena de Higgsfield encontró **un tercer beat
+> de diálogo y una segunda secuencia entera** que la lectura por fotogramas se había perdido:
+> *"A hundred and ten thousand dollars, and it's yours!"*, y 9 segundos en un camino costero con
+> otra mujer y otra ropa. Las 25 escenas: [analisis/DcMW3Coi6BN-escenas.md](analisis/DcMW3Coi6BN-escenas.md).
+> Cómo se hizo y por qué cambia el ciclo: [ficha](2026-08-19-la-herramienta-lee-el-video.md).
+
 ## Verificado: el diálogo sale palabra por palabra
 
 El audio del video generado dice, textual:

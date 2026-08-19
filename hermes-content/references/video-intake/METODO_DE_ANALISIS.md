@@ -8,8 +8,24 @@ cometidos en el camino, que están nombrados abajo con su corrección.
 > [SKILLS_DEL_CARRIL.md](SKILLS_DEL_CARRIL.md). No opinar sobre UI sin `ui-ux-pro-max`, ni sobre
 > seguridad sin `security-review`, ni sobre pauta sin `ads`.
 
+> ## Corrección de fondo — 2026-08-19 (Sergio)
+>
+> *"Tenés que tener el criterio y saber y aprender cómo realmente lo hacen... y cómo puedes
+> replicarlo con nosotros. Y eso no se aplica solo a los videos de IA: también a los de páginas
+> web, a los de marketing, a los de los SaaS. Ver qué frentes toca realmente, qué se usa y cómo
+> lo podemos replicar."*
+>
+> **El método tenía un hueco:** solo exigía reconstruir el "cómo se hizo" cuando el video estaba
+> hecho con IA. Para todo lo demás me conformaba con extraer la idea. Eso está mal. **Todo video
+> tiene un cómo.** Lo que cambia es *dónde vive ese cómo*, y con qué herramienta nuestra se
+> reproduce. Ver [Las cuatro reconstrucciones](#las-cuatro-reconstrucciones) más abajo, que ahora
+> es la parte principal de este documento.
+
 **La primera pregunta, siempre:** ¿este video **muestra algo hecho con IA**, o **cuenta una
 idea**? De eso depende todo lo demás, porque son dos trabajos distintos.
+
+**Y la segunda, que antes no estaba:** ¿de qué **tipo** es lo que muestra — IA, interfaz web,
+producto/SaaS, o marketing? Porque de eso depende **qué se reconstruye y con qué lo repetimos**.
 
 ---
 
@@ -151,6 +167,103 @@ El otro lado, y el que más falló. Antes de dar por buena una ficha:
 | "Seedance 2.5 no existe", seis veces | era cierto al verificarlo y dejó de serlo. **La verificación venció y yo la seguí citando** |
 
 En todos, el dato correcto estaba a una consulta de distancia.
+
+---
+
+---
+
+# Las cuatro reconstrucciones
+
+**Regla:** todo video que llega se reconstruye. Nunca se despacha con un resumen. Lo único que
+cambia según el tipo es **qué** se reconstruye, **dónde vive** ese conocimiento en el repo, y
+**con qué herramienta nuestra** se reproduce.
+
+Antes de escribir la ficha hay que poder contestar las tres columnas de la derecha:
+
+| Tipo | Qué es "cómo se hizo" | Con qué NUESTRO se reproduce | A qué frente va |
+|---|---|---|---|
+| **IA** — video o imagen generada | modelo · insumos · prompt literal · cómo sostuvo la consistencia · qué se hizo FUERA del generador · cuántas generaciones | catálogo Higgsfield (`models_explore`, presets, Marketing Studio) + `editor-videos` / HyperFrames para lo de afuera | INFLUENCERS IA · editor de videos |
+| **WEB** — una interfaz, una animación, un componente | el patrón exacto: qué propiedad CSS, qué librería, qué truco de layout, qué evento. **No "se ve lindo": el mecanismo** | `image-to-code` para reconstruir desde fotograma · el pattern bank de motion · las skills gsap-* · `ui-ux-pro-max` para juzgarlo | web-factory |
+| **SaaS / producto** — un panel, un flujo, una app | la **máquina de estados** y las **entidades**: qué estados tiene una cosa, quién la mueve, qué pantalla resuelve qué trabajo, qué se deriva de qué | ONIA Core: ¿existe la entidad? ¿existe la capability? ¿está **encendida** en el producto? | onia-plattform · onia-core |
+| **MARKETING** — un anuncio, un gancho, una mecánica | el **molde**: estructura del guion segundo a segundo, dónde está el gancho, qué mecánica de conversión usa, qué pide y en qué orden | `copywriting` · `marketing-psychology` · `ads` · el motor de contenido | marketing · INFLUENCERS IA |
+
+## Las tres preguntas que cierran cualquier ficha
+
+Sea del tipo que sea, la ficha no está terminada hasta contestar estas tres. Si alguna queda
+vacía, el análisis está a medias:
+
+1. **¿Qué frente nuestro toca?** — nombrar la sesión, no "sirve para marketing".
+2. **¿Con qué herramienta NUESTRA se reproduce?** — nombrarla. Si no existe, decir que no existe;
+   eso también es un resultado.
+3. **¿Qué falta para poder hacerlo hoy?** — un dato, un permiso, un cliente, una credencial, o nada.
+
+## Lo que esto cambia en la práctica
+
+Un ejemplo real del corpus, para que se entienda la diferencia:
+
+- **Antes:** un reel mostraba dos paneles de comandas. Ficha: *"competidores directos, tienen
+  tablero kanban"*. Idea extraída. Fin.
+- **Con la reconstrucción SaaS:** ¿cuál es la máquina de estados? `Nuevo → En preparación → Listo
+  → Salió para entrega`, con reloj. ¿Qué entidades? pedido, ítem, cliente, producto con stock y
+  visibilidad. ¿Qué se deriva? el ticket para impresora. ¿Existe en nuestro core? ¿Está encendido
+  en el producto? **Eso es una tarea; lo otro era una observación.**
+
+Y otro:
+
+- **Antes:** *"el botón es lindo"*.
+- **Con la reconstrucción WEB:** ¿es `clip-path` animado con `@property`? ¿es un `<dialog>` nativo
+  con `showModal()`? ¿la transición está en `transform` y `opacity` o está animando `width` y por
+  eso salta? **Ese es el mecanismo, y es lo que se porta.**
+
+---
+
+# El atajo que descubrimos el 2026-08-19: la herramienta hace la ingeniería inversa
+
+Antes de leer 40 fotogramas a mano, hay que probar esto. **Verificado, y es gratis** (balance
+antes 2.567,78 · después 2.567,78):
+
+| Herramienta | Qué hace | Costo |
+|---|---|---|
+| **`video_analysis_create`** ([prueba medida](2026-08-19-la-herramienta-lee-el-video.md)) | análisis **escena por escena** de cualquier video. Acepta un video subido (`media_upload` → `media_confirm`) o una URL de YouTube. Tarda 3-5 min | **gratis** (medido) |
+| **`ad_reference`** (Marketing Studio) | analiza el **escenario** de un anuncio existente — composición de escenas, ritmo, gancho, narración — y después genera con NUESTRO producto y avatar | crear la referencia es gratis; **generar cuesta** |
+
+O sea, el ciclo entero del carril A se puede automatizar:
+
+```
+link → fetch-video.mjs → media_upload → video_analysis_create → escenas
+                                      → ad_reference → generar lo nuestro (esto SÍ gasta)
+```
+
+**Advertencia de la propia herramienta:** *"the longer the video, the less accurate the
+scene-by-scene analysis becomes — short clips give the most reliable results."* Para un reel de
+15-60 s es ideal. Para un taller de 44 min, no sirve: ahí siguen valiendo los fotogramas.
+
+Y no reemplaza leer el prompt en pantalla: el análisis describe **qué pasa**, no **con qué texto
+se generó**. Si el video muestra el prompt, hay que leerlo igual.
+
+---
+
+# ¿Conviene que Sergio mande el archivo en vez del link?
+
+Se preguntó el 2026-08-19. **La respuesta es no, salvo en cuatro casos.**
+
+Bajar el video **no es el cuello de botella**: `fetch-video.mjs` tarda ~1,7 s por reel. Y el link
+trae cosas que el archivo suelto pierde: **el caption, el autor y la fecha**. En varios carruseles
+el método completo estaba en el caption.
+
+**Mandá el archivo solo cuando el link no alcanza:**
+1. Es un mensaje directo o una historia que expira.
+2. La cuenta es privada.
+3. Lo hiciste vos (una salida de Higgsfield que querés que analice).
+4. El link ya falló.
+
+**Lo que SÍ limitaba la lectura, y son tres cosas mías, no del formato de entrada:**
+
+| Límite | Arreglo |
+|---|---|
+| Leo una **muestra** de fotogramas. En el reel del auto el prompt aparecía en UN cuadro: con muestreo más grueso lo perdía entero | muestrear **más denso donde hay texto en pantalla**, no a intervalo fijo |
+| **No leo el caption de los videos**, solo el de los carruseles | traerlo siempre; es gratis y a veces trae el prompt |
+| Whisper **degrada los términos técnicos**: "SIDANZ 2.5" = Seedance, "Hitsfield" = Higgsfield, "viesel" = VSL | **nunca citar un término técnico salido de transcripción sin contrastarlo con la imagen** |
 
 ---
 
