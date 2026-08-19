@@ -24,7 +24,7 @@ Routed through `/hyperframes`, the intent layer confirms only the input (which c
 The craft prose below is long; the **pipeline itself is short** — and everything deterministic is computed or compiled, never hand-written:
 
 1. **Decision gate** (refuse bad clips) → **pick ONE identity from [CATALOG.md](CATALOG.md)** (35 identities; engine/compiler derived by lookup — never surface a mode/category question)
-2. `hyperframes init` (skip it if the project dir already exists with the video inside — `matte.cjs`/`transcribe.cjs` adopt any video in the dir as source.mp4) → **`bash scripts/prepare.sh <project>`** (matte ∥ transcribe ∥ audio-envelope in parallel, then safe-zones v2 with scene palette/optics/lighting — one command, nothing forgotten)
+2. `hyperframes init` (skip it if the project dir already exists with the video inside — `matte.cjs`/`transcribe.cjs` adopt any video in the dir as source.mp4) → **`bash scripts/prepare.sh <project>`** (matte ∥ transcribe ∥ audio-envelope in parallel, then safe-zones v2 with scene palette/optics/lighting — one command, nothing forgotten) → **2b: proofread `transcript.json` by eye** (§ Step 2b — mandatory; the captions are only as correct as this file, and burned text can only be fixed by re-rendering)
 3. **author a small JSON of creative choices** (read `safe-zones.json` first): Cinematic → `plan.json` → `fill-timings.cjs` → `fit-fonts.cjs` → `make-composition.cjs`; Theme → `theme.json` → `make-theme.cjs` (rail/panel/poem/takeover paradigms; `anchor` is the quiet rail default)
 4. **Visual QA**: `node scripts/preview-frames.cjs <project>` → faithful composite previews in ~2s/frame (no render). Check § Visual QA before paying for a render.
 5. `render-and-composite.sh` → gates (timing / occlusion+hero / overflow / hand-off) → `final.mp4`
@@ -105,6 +105,8 @@ Read the samples. Refuse if:
 1. hyperframes init <project> --non-interactive --video <video.mp4>
 2. bash scripts/prepare.sh <project>       # matte ∥ transcribe (parallel) → safe-zones. One command.
                                            #   → frames_fg/ transcript.json safe-zones.json
+2b. [AGENT STEP — mandatory, no script] proofread transcript.json line by line: ñ, accents, a/ha,
+    proper nouns, technical terms. Fix it HERE, never only in the authored JSON. See § Step 2b.
 3. [AGENT STEP — the only creative step] author a small JSON; see below by mode
    Cinematic: author plan.json → node scripts/fill-timings.cjs → fit-fonts.cjs → make-composition.cjs
    Theme:     author theme.json → bash scripts/render-theme.sh <project>   (compiles + renders + plate fx)
@@ -115,6 +117,23 @@ Read the samples. Refuse if:
 ```
 
 Step 1's `init` checks the installed skills against the latest on GitHub and updates the global set if any are out of date.
+
+### Step 2b — Spelling gate (proofread `transcript.json` BEFORE authoring)
+
+**Mandatory, every clip, no script does it for you: read `transcript.json` by eye, line by line.** WhisperX is an auto-transcriber, not a copy editor — it emits confident, well-formed Spanish that is simply misspelled, and nothing downstream will catch it. A reel in the corpus shipped **two spelling errors burned across 10 frames** — `A GENERADO` for `HA GENERADO`, and `ARANA` with the ñ dropped — both straight out of the auto-transcript, unreviewed (`hermes-content/references/video-intake/2026-08-18-sintesis-lote-17.md` § 5.8). This is not the garbage-transcript refusal in the decision gate (that one _refuses_ gibberish); this gate is for the transcript that reads perfectly and is still wrong.
+
+**A burned caption cannot be patched — the only fix is a re-render.** Never touch up the final with a second pass or an overlay: correct the source, recompile, render again. In B2B a burned typo costs exactly the credibility the video was made to build, and the whole reason caption text lives in HTML rather than baked into a generated image is that here typography, colour and **spelling are deterministic** — a typo throws that away.
+
+**Fix it in `transcript.json`, never only in `cinematic.json` / `theme.json`.** Both matchers compare authored text to transcript words with accents and ñ preserved (`make-theme.cjs` `norm()` keeps `\p{L}`; `check-timing.cjs` normalizes the same way), so repairing only the authored file is a `cannot match authored word` compile error in Theme mode and a `NOT IN TRANSCRIPT` failure in Cinematic. Correct the source and every downstream gate agrees. (`CREATIVE_SUBS` is for deliberate substitutions like `15%` ← "fifteen percent" — not for spelling repairs.)
+
+Sweep for these in order — they are what the transcriber actually breaks:
+
+1. **ñ** — the most common loss (`ARANA`, `ANO`, `MANANA`). Read every word that should carry one; an all-caps rail hides nothing.
+2. **Accents** — `mas`/`más`, `esta`/`está`, `si`/`sí`, `el`/`él`. Whisper degrades Spanish diacritics hardest, and the meaning flips.
+3. **`a` vs `ha`** — the error that actually shipped. An `a` in front of a participle is `ha`.
+4. **Proper nouns and technical terms** — Whisper mangles them into plausible words. Measured in the same corpus (§ 5.3): `Seedance` → "see dance 2.0", `VSL` → "viesel", `TOFU/MOFU/BOFU` → "tofumo o furofumo", `Film 2 clips` → "Theme 2 clips". **Never take a technical term or a name from the transcript without contrasting it against what is on screen** or against the source that named it.
+
+Client names, product names and any number spoken on camera get read twice. If a correct spelling is genuinely unknown, ask — don't burn a guess.
 
 Step 3 differs by mode:
 
@@ -146,6 +165,7 @@ Check the previews (`<project>/preview/sheet.png`) against this list — these a
 3. **Reading order** — on-screen vertical order must match spoken order; the hero must not sit below later words.
 4. **Hero presence** — the climax should be BIG and visibly behind the subject (~30–55% occluded), not a floating label in a margin.
 5. **Balance** — one coherent column/band, not scattered fragments; margins breathing; nothing clipped.
+6. **Spelling, on the glyphs** — the § Step 2b sweep covered `transcript.json`; this is the last look at what will actually burn in, including the display forms YOU typed (`"text"` overrides, theme `lines`, hero substitutions), which never passed through a transcriber at all. Read every word in the sheet: ñ, accents, `a`/`ha`, names. A render is the point of no return.
 
 Then the **5 positive checks** in [references/reference-bar.md](references/reference-bar.md) (poster test · timid test · one-glance hierarchy · scene handshake · dead-air audit) — the failure list keeps a render from being broken; the positive list is what makes it _designed_. Ship when both pass.
 
