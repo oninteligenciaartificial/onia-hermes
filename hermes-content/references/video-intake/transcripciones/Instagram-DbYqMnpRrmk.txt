@@ -1,0 +1,20 @@
+[0] Nubank no es brasileño, el banco digital más grande de América Latina en el papel
+[5] es una empresa de las Islas Cayman y si vas a levantar plata de fondos para tu Startup
+[10] a vos te va a tocar lo mismo, se llama el Sandwich Cayman y es más simple de lo que
+[16] suena, son 3 pisos, arriba una Holding en Islas Cayman, la dueña de todo y ahí es
+[23] donde entran los inversionistas, en la mitad una LLC en Delaware en Estados Unidos y abajo
+[31] tu SAS colombiana, la que de verdad opera, factura y contrata la gente, 3 capas una encima
+[38] de la otra por eso le dicen sandwich y para que tanto enredo, porque los fondos de venture
+[43] capital casi nunca invierten directo en una se hace colombiana, no conocen nuestras reglas
+[48] y muchos tienen prohibido invertir directo en sociedades de latinoamérica, Cayman en cambio
+[53] es terreno conocido, es neutro en impuestos y les permite usar los documentos de siempre,
+[58] los safe, las acciones preferentes, el pool de opciones para empleados y la capa del medio,
+[64] la LLC de Delaware te sirve para moverte en Estados Unidos, facturarle a clientes de allá
+[69] y contratar gente allá y evita que la misma plata pague impuestos dos veces mientras sube de piso,
+[74] si tu empresa ya existe ese cambio de estructura tiene nombre, se llama flip,
+[79] ojo con dos cosas, eso sí, primero esto no es evasión ni plata escondida, tu SAS se sigue
+[84] pagando sus impuestos en Colombia como siempre, segundo si sos residente fiscal en Colombia,
+[89] esa holding en Cayman la tenés que declarar ante la DIAN y hay un régimen especial para las
+[94] sociedades que controlas por fuera, un sandwich mal armado sale más caro que no armarlo,
+[98] te quedó alguna duda con todo esto del sandwich Cayman, déjala en los comentarios que ahí
+[102] las vamos respondiendo.

@@ -142,3 +142,44 @@ Fichas y prompts: [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md)
 | [DcE1hSeIU3Y](https://www.instagram.com/p/DcE1hSeIU3Y/) algoritmo de X | B | **SIRVE** — premisa verificada, números dibujados | [ficha](2026-08-16-x-algoritmo-publico.md) |
 | [DcEVhfiomLo](https://www.instagram.com/p/DcEVhfiomLo/) estación de trabajo | B | HUMO de contenido · **SIRVE de formato** | [ficha](2026-08-16-descartados-y-formato.md) |
 | [DcCUoBgFflT](https://www.instagram.com/p/DcCUoBgFflT/) API regalada | B | **DESCARTADO** — exfiltración de datos | [ficha](2026-08-16-descartados-y-formato.md) |
+
+---
+
+# Lote 2026-08-17 — dos videos LARGOS de X (no son reels)
+
+| Video | Duración | Fuente | Veredicto | Ficha |
+|---|---|---|---|---|
+| [Code w/ Claude — StockPilot](https://x.com/0xrafy/status/2089395090506633621) | 44 min | **PRIMERA PARTE** (Anthropic, números medidos en pantalla) | **SIRVE YA — el hallazgo más aplicable del corpus** | [ficha](2026-08-17-code-with-claude-stockpilot.md) |
+| [Karpathy — cómo funciona un LLM](https://x.com/0xwhrrari/status/2089336474923667665) | 2 h 06 | primera parte de un experto, pero **del landscape de principios de 2025** | **SIRVE de formación · no genera tarea** | [ficha](2026-08-17-karpathy-como-funciona-un-llm.md) |
+
+Prompts: **F1** (auditar los 11 agentes contra los 3 antipatrones) y **F2** (evals) en
+[PROMPTS_LOTE_2026-08-17.md](PROMPTS_LOTE_2026-08-17.md). **F1 corrige a E4.**
+
+---
+
+# Lote 2026-08-18 — 18 items (11 reels + 7 carruseles)
+
+Síntesis técnica completa: [2026-08-18-sintesis-lote-17.md](2026-08-18-sintesis-lote-17.md) ·
+receta UGC: [2026-08-18-ugc-auto-receta-completa.md](2026-08-18-ugc-auto-receta-completa.md) ·
+prompts: [PROMPTS_LOTE_2026-08-18.md](PROMPTS_LOTE_2026-08-18.md) (G1–G6)
+
+| Item | Carril | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcMW3Coi6BN](https://www.instagram.com/reel/DcMW3Coi6BN/) anuncio UGC de auto | **A** | **SIRVE YA** | la plantilla UGC entera + diálogo verificado literal |
+| [DcJ2NFlCw9D](https://www.instagram.com/p/DcJ2NFlCw9D/) auto barato → deportivo | **A** | **SIRVE YA** | `video_edit`: sustituir el objeto conservando al humano real |
+| [DakoqucxYpW](https://www.instagram.com/p/DakoqucxYpW/) seca → empapada | **A** | **SIRVE YA** | dos keyframes + **cláusula de persistencia** literal |
+| [DbgN-8CDVc-](https://www.instagram.com/p/DbgN-8CDVc-/) 8 prompts de foto | **A** | **SIRVE YA** | 8 prompts completos + la estructura de 8 bloques |
+| [DcJSXVwAu7z](https://www.instagram.com/p/DcJSXVwAu7z/) `claude --name` | B | **SIRVE YA** | verificado en nuestra instalación |
+| [DcEITCmoSHX](https://www.instagram.com/p/DcEITCmoSHX/) popups 0→10 | B | **SIRVE YA** | la escalera entera, con el 10/10 multi-paso |
+| [Db8hFCFFTZg](https://www.instagram.com/p/Db8hFCFFTZg/) scroll AirPods | B | **SIRVE YA** | código GSAP literal; bloqueante = peso |
+| [Db3x_rPFHl8](https://www.instagram.com/p/Db3x_rPFHl8/) ideas de campaña | B | **SIRVE YA** | 5 dispositivos creativos reusables |
+| [Db6GCW8N6sz](https://www.instagram.com/p/Db6GCW8N6sz/) anuncio de Higgsfield | A | MEJORA | set de anclas de identidad |
+| [DcEIPU_keNv](https://www.instagram.com/p/DcEIPU_keNv/) AI UGC | A | MEJORA | 6 ejes de realismo sin prompt |
+| [DcDy6VVjsO7](https://www.instagram.com/p/DcDy6VVjsO7/) Realism Collection | A | MEJORA | elegir caras con edad y textura real |
+| [DcGfkVRCmiz](https://www.instagram.com/p/DcGfkVRCmiz/) color grading | A | MEJORA | se vende como grading y es edición generativa |
+| [DcGUUb9h3ZO](https://www.instagram.com/p/DcGUUb9h3ZO/) Ae vs Gemini | A | MEJORA | la lección es el error, no la promesa |
+| [DcAIGCCINJF](https://www.instagram.com/p/DcAIGCCINJF/) equipo de 7 agentes IA | B | MEJORA | solo la plantilla de carrusel |
+| [DcBOQF5t61t](https://www.instagram.com/p/DcBOQF5t61t/) 5 automatizaciones | B | MEJORA | solo el formato faceless de 5-8 s |
+| [DbYqMnpRrmk](https://www.instagram.com/p/DbYqMnpRrmk/) estructura societaria | B | MEJORA | **ley colombiana: no aplica** — se copia la forma |
+| [Db3AW3SooRl](https://www.instagram.com/p/Db3AW3SooRl/) video troyano | B | MEJORA | arquitectura 1+N; el disfraz choca con declarar |
+| [DbmN3AfiYPz](https://www.instagram.com/p/DbmN3AfiYPz/) noticiero IA | B | **HUMO** | contador roto, cero fuentes, caption pegado 8 veces |

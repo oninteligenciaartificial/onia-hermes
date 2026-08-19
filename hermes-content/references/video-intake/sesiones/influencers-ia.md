@@ -120,6 +120,114 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## G1 · Las dos plantillas de prompt, separadas — y Marketing Studio
+
+```text
+Contexto: dos reels mostraron prompts COMPLETOS en pantalla, y son estructuras DISTINTAS que
+no hay que mezclar. Fichas:
+hermes-content/references/video-intake/2026-08-18-ugc-auto-receta-completa.md
+hermes-content/references/video-intake/2026-08-16-carril-a-como-se-hicieron.md
+
+PLANTILLA A -- CINE (una sola toma, sin cortes, sin dialogo):
+  1. tipo de toma, una linea   2. entorno y atmosfera
+  3. RECORRIDO DE CAMARA -- la mitad del prompt, paso a paso en el espacio
+  4. detalles de movimiento (inercia, microcorrecciones, "speed contrast")
+  5. luz y color al final
+
+PLANTILLA B -- UGC (muchas tomas, cortes duros, el dialogo es el eje):
+  1. cabecera tecnica global: formato, duracion, que camara finge ser
+  2. DEFECTOS PEDIDOS A PROPOSITO: "grain, compression, wobble, autofocus hunts, no filters
+     or grading" -- se le pide fealdad al modelo, que por defecto tira a pulido
+  3. NEGATIVOS DEL FORMATO: "phone never in frame, reflections, or her hands"
+  4. anclas de consistencia INLINE, inyectadas en el punto del texto donde importan
+  5. realismo de piel con atributos concretos: "matte real skin -- pores, redness, baby
+     hairs, no glare, no retouch; natural blinks, micro-expressions"
+  6. beats con timestamp + referencia + DIALOGO LITERAL ENTRE COMILLAS
+
+  VERIFICADO: el dialogo entre comillas sale palabra por palabra en el video generado. Se
+  comparo el prompt con el audio del resultado y coincide literal. El guion se escribe en el
+  prompt, no se corrige despues.
+
+REGLA: si el video HABLA, es UGC. Si IMPRESIONA, es cine. Se elige antes de escribir.
+
+Y LA TERCERA VIA, que evita escribir el prompt: marketing_studio_video.
+  26 presets (ugc, ugc_direct_to_camera, ugc_selfie_testimonial, product_showcase,
+  ugc_before_and_after, ugc_how_to, tv_spot, wild_card...), 12-15 s.
+  hook_id = el "que" (la mecanica que frena el scroll) · setting_id = el "donde"
+  avatar_ids (max 1) · product_ids
+  ad_reference_id = le pasas un anuncio existente y REPLICA SU ESCENARIO (escenas, ritmo,
+    gancho, narracion). Es mutuamente excluyente con hook_id/setting_id.
+  OJO: avatar y producto NO se heredan de la referencia. Van explicitos SIEMPRE.
+
+Tarea:
+1. Guarda las dos plantillas como archivos separados donde ya viven las recetas de video
+   (hermes-content/docs/). Si ya hay un doc de prompts de video, EDITALO.
+2. Escribi un prompt de ejemplo completo con cada plantilla, para una pieza real nuestra.
+3. Actualiza el catalogo de modelos: consultalo vos mismo, no copies los datos de aca.
+4. Documenta cuando conviene Marketing Studio y cuando el prompt a mano.
+
+LO QUE ESTE LOTE NO RESUELVE, y hay que decirlo: en 17 items NINGUNO resolvio consistencia de
+cara generada. Las dos tecnicas que parecen resolverla usan METRAJE REAL -- no generan al
+humano. Para Lucia sigue valiendo Soul+texto; nada de este lote lo reemplaza.
+
+GASTO: no generes NADA. unlim.available = false. Entrega los prompts listos con el modelo y
+el costo estimado al lado, para que Sergio apruebe.
+
+LISTO = dos plantillas guardadas y separadas, un ejemplo de cada una, catalogo re-consultado
+por vos, y la nota de que Lucia sigue con Soul+texto. Cero generaciones.
+```
+
+---
+
+## G6 · La plantilla de foto realista — 8 bloques y la palanca de la suciedad
+
+```text
+Contexto: un carrusel regalo OCHO prompts completos de foto fotorrealista, todos con la misma
+estructura. Estan transcritos literales en:
+hermes-content/references/video-intake/2026-08-18-sintesis-lote-17.md (seccion 2)
+
+La estructura, identica en las 8 laminas:
+  1. apertura fija: "Ultra-realistic vertical [genero] photo of..."
+  2. sujeto con una ACCION concreta, no un adjetivo
+  3. rasgos fisicos enumerados (pelo, piel, maquillaje, expresion, direccion de la mirada)
+  4. vestuario prenda por prenda, con material y color
+  5. pose explicita, miembro por miembro
+  6. fondo como LISTA DE OBJETOS
+  7. bloque tecnico de camara/pelicula + una frase de referencia de genero
+  8. "Negative prompt:" -- bloque casi constante: CGI, cartoon, plastic skin, beauty filter,
+     over-retouched, bad anatomy, extra fingers, HDR, studio lighting, over-sharpening,
+     blurry subject, text, watermark + 2-3 terminos especificos del sujeto
+
+LA PALANCA DEL REALISMO, y es contraintuitiva: se PIDE SUCIEDAD y se PROHIBE LO PULIDO.
+Los prompts piden "scratches and dirt marks", "stained plush fur", "peeling paint, rust
+marks", "harsh direct camera flash", "slight film grain", "muted colors". Y el negative
+ataca justo lo contrario: "beauty filter", "clean costume", "perfect background",
+"studio lighting". Un modelo dejado solo tira a catalogo; hay que empujarlo a lo contrario.
+
+Dos atajos mas, leidos de las imagenes de otros dos carruseles del mismo lote:
+- seis ejes de realismo que funcionan sin tocar el prompt: imperfeccion de piel, luz dura de
+  sol, encuadre de selfie torcido, contexto banal verificable, marcas reales, defectos de camara.
+- el mas barato de todos: elegir caras con EDAD Y TEXTURA REAL en vez de modelos jovenes
+  perfectas. La cara vieja se ve real sin pelear con el modelo.
+
+Tarea:
+1. Guarda la plantilla de 8 bloques donde ya vivan las recetas de imagen. No crees carpeta nueva.
+2. PRIMERO verifica, con una consulta GRATIS al catalogo, cuales de nuestros motores de imagen
+   aceptan un campo "Negative prompt" SEPARADO. Varios lo ignoran o exigen meterlo en el
+   positivo, y la plantilla cambia segun eso. No asumas.
+3. Escribi 3 prompts de ejemplo con la plantilla, para necesidades reales nuestras (catalogo
+   de producto de un cliente, foto de ambiente para una web, imagen de campana).
+4. Anota la palanca de la suciedad como REGLA, no como dato suelto.
+
+Generacion de IMAGEN esta permitida y es barata. Aun asi: si vas a generar mas de unas pocas,
+avisa el costo antes.
+
+LISTO = plantilla guardada, campo negative verificado motor por motor, 3 ejemplos escritos, y
+la regla de la suciedad anotada.
+```
+
+---
+
 ## E9 · Los cinco bloques del prompt, y por qué el 3D estilizado gana
 
 ```text
@@ -168,6 +276,8 @@ VERIFICADO YA contra la cuenta (no lo repitas, usalo):
     con start_image + end_image la duracion tiene que ser exactamente 8.
   - kling3_0 IGNORA aspect_ratio y copia el 3:4 de la foto de entrada. Tarifario medido
     completo en references/modelos/lucia/prueba-lipsync-20260815/LEEME.md.
+  - LECCION QUE SE QUEDA (18-ago): volve a consultar el catalogo vos mismo antes de usar
+    cualquier dato de modelo de aca. Una verificacion tiene fecha de vencimiento.
 
 Tarea:
 1. Reescribi la plantilla de prompt de video que usemos hoy con los 5 bloques en orden, con

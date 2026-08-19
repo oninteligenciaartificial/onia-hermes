@@ -177,6 +177,8 @@ VERIFICADO YA contra la cuenta (no lo repitas, usalo):
   - ⚠️ CORRECCION 2026-08-16: decia que "Seedance 2.5 NO existe". ES FALSO — esta en la
     cuenta con video_edit y video_extension, hasta 30 s, y se pagaron creditos por usarlos.
     Lo que NO existe es el preset "Show Cinema". Ver LEEME de prueba-lipsync-20260815.
+  - LECCION QUE SE QUEDA (18-ago): volve a consultar el catalogo vos mismo antes de usar
+    cualquier dato de modelo de aca. Una verificacion tiene fecha de vencimiento.
 
 Tarea:
 1. Reescribi la plantilla de prompt de video que usemos hoy con los 5 bloques en orden, con
@@ -368,6 +370,27 @@ de desbloqueo escrita.
 # PENDIENTE (harness / infra)
 
 ## E4 · El loop de tres roles, guardado como artefacto
+
+> ### ⚠️ CORRECCIÓN 2026-08-17 — leé esto antes de hacer E4
+>
+> Un taller de **Code w/ Claude** (primera parte de Anthropic, con números medidos) cierra con
+> la lámina opuesta: **"One agent. Five skills. Subagents only when a skill says so. 0 hardcoded
+> subagents."** Y mide 28× menos tokens **al sacar** subagentes y herramientas, no al agregarlos.
+> Ficha: `hermes-content/references/video-intake/2026-08-17-code-with-claude-stockpilot.md`
+>
+> **E4 no se anula, se reordena:**
+> - El **evaluador** sigue en pie tal cual. Es el Gate 3 y es lo que más falta hace.
+> - **El evaluador queda VALIDADO por el propio taller**, no solo tolerado: *"I do not want to
+>   be the same person that is writing and also reviewing my code"*, y el revisor **no lleva el
+>   contexto** del que escribió. Ese era el rol correcto de E4; el error era hardcodear también
+>   al planeador y al ejecutador.
+> - **Planeador y ejecutador NO se crean como agentes hardcodeados.** Primero se prueban como
+>   **skills que se cargan cuando toca**. Si una skill alcanza, no hay agente.
+> - Un subagente entra **solo cuando una skill lo pide**, y devuelve **JSON con forma fija**,
+>   nunca prosa de la que haya que extraer un número.
+> - Antes de construir el loop, corré **F1** (auditar los agentes que ya existen contra los tres
+>   antipatrones). Puede que sobren agentes en vez de faltar.
+
 
 ```text
 Contexto: un reel describe el loop que usa quien lo publica, y por primera vez da la forma

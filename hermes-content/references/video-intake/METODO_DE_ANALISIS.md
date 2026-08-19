@@ -30,14 +30,35 @@ repetirlo con nuestra cuenta.
 | 6 | **¿Cuántas generaciones son?** | por el tope de duración del modelo. Un video de 20 s rara vez es una sola |
 | 7 | **¿Se puede repetir con lo que tenemos?** | contra la cuenta real, no contra lo que el video promete |
 
-## La regla que más veces salvó de un error
+## La regla que más veces salvó de un error — y su mitad que faltaba
 
 **Lo que el video dice del modelo se verifica contra la cuenta antes de escribirlo como
-posible.** Cinco videos distintos hablaron de "Seedance 2.5" y de "33 días ilimitado". Ninguna
-de las dos cosas existe en nuestra cuenta: hay `seedance_2_0`, tope 15 s por toma, sin ventana
-ilimitada. **Cinco fuentes repitiendo lo mismo no lo vuelven cierto para nosotros.**
+posible.** Consultar el catálogo y el saldo es **gratis**. Se hace antes de prometer nada.
 
-Consultar el catálogo y el saldo es **gratis**. Se hace antes de prometer nada.
+### La mitad que faltaba: una verificación tiene fecha de vencimiento
+
+El caso que originó esta regla terminó dándome vuelta, y conviene contarlo entero porque enseña
+más así:
+
+- Seis videos distintos hablaron de **"Seedance 2.5"** y de tomas de **30 segundos**. Verifiqué
+  contra la cuenta: no existía. Solo había `seedance_2_0`, tope 15 s. Lo escribí seis veces como
+  "modelo fantasma".
+- **El 2026-08-18 volví a consultar y `seedance_2_5` está, con duración de 4 a 30 s**, más los
+  modos `video_edit` y `video_extension`, y apareció `seedance_2_0_mini`.
+
+Los videos no mentían: **describían algo que aún no había llegado a nuestro catálogo.** Mi
+verificación era correcta el día que la hice, y quedó vieja igual.
+
+**Entonces la regla completa es:**
+
+1. Verificá contra la cuenta antes de prometer. (sigue igual)
+2. **Una verificación con fecha es un dato con fecha.** Si vas a apoyarte en una comprobación
+   anterior, **volvé a consultar** — no la cites. Es gratis.
+3. Y separá las dos cosas al escribir: *"no está en la cuenta **hoy**"* no es lo mismo que
+   *"no existe"*. La primera es un hecho fechado; la segunda es una afirmación que envejece mal.
+
+Lo que **no** cambia: cinco fuentes repitiendo lo mismo siguen sin ser prueba. La diferencia es
+que la conclusión correcta era *"todavía no lo tenemos"*, no *"es humo"*.
 
 ## El entregable del carril A
 
@@ -127,6 +148,7 @@ El otro lado, y el que más falló. Antes de dar por buena una ficha:
 | "Un prompt se perdió en un rebase" | nunca se perdió: leí el repo parado en otra rama |
 | "La seguridad de prod está pendiente" | cerrada y verificada días antes |
 | Forcé español en un video en inglés | Whisper no falla con idioma forzado: **traduce**, e inventa el verbatim |
+| "Seedance 2.5 no existe", seis veces | era cierto al verificarlo y dejó de serlo. **La verificación venció y yo la seguí citando** |
 
 En todos, el dato correcto estaba a una consulta de distancia.
 
