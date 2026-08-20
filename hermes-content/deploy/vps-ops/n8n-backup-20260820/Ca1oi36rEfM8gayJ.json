@@ -1,0 +1,176 @@
+{
+  "updatedAt": "2026-08-14T03:28:31.000Z",
+  "createdAt": "2026-08-14T03:23:14.068Z",
+  "id": "Ca1oi36rEfM8gayJ",
+  "name": "TEMP - Diagnostico cual Supabase cred = kvepqgikokjlacxngkiw",
+  "description": "Temporal: cual credencial supabaseApi autentica contra kvepqgikokjlacxngkiw. Borrar despues.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "4f04fea0-e9dd-460a-aaa0-b439e1f06b64",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "3466332f-e335-4eb4-bac5-c8f7b01dda22",
+      "name": "REST via Supabase account",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/organizations?select=id,name,createdAt&order=createdAt.asc&limit=20",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {},
+        "credentials": {
+          "supabaseApi": {
+            "id": "3nx0cdsBDL1lo1zX",
+            "name": "Supabase account"
+          }
+        }
+      },
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "supabaseApi": {
+          "id": "3nx0cdsBDL1lo1zX",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "id": "5a363d50-54a0-41e0-8e2b-ff858e374828",
+      "name": "REST via Supabase account 2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/organizations?select=id,name,createdAt&order=createdAt.asc&limit=20",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {},
+        "credentials": {
+          "supabaseApi": {
+            "id": "kXsaPlwveqzzNOmY",
+            "name": "Supabase account 2"
+          }
+        }
+      },
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "56792643-bb8f-46c0-9f88-7426ffd17e21",
+      "name": "REST via Supabase account 3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        400
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/organizations?select=id,name,createdAt&order=createdAt.asc&limit=20",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {},
+        "credentials": {
+          "supabaseApi": {
+            "id": "LuhRqFa3G5O8uRHW",
+            "name": "Supabase account 3"
+          }
+        }
+      },
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "supabaseApi": {
+          "id": "LuhRqFa3G5O8uRHW",
+          "name": "Supabase account 3"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "REST via Supabase account",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "REST via Supabase account 2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "REST via Supabase account 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "dd25095a-ea22-4b88-9342-38805021404a",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T03:23:14.081Z",
+      "createdAt": "2026-08-14T03:23:14.081Z",
+      "role": "workflow:owner",
+      "workflowId": "Ca1oi36rEfM8gayJ",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

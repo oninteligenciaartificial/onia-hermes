@@ -1,0 +1,131 @@
+{
+  "updatedAt": "2026-07-04T01:07:10.000Z",
+  "createdAt": "2026-03-22T03:28:47.714Z",
+  "id": "8Jb45VT5MgmrahPI",
+  "name": "Nodos Core y HTTP REQUEST",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4da7e975-3167-4461-bbe9-bc58b5f82e9c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.vapi.ai/call",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n\"Authorization\": \"Bearer 8a06557f-91ca-4a54-b039-d6903c0165ce\" \"Content-Type\": \"application/json\"\n}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"assistantId\": \"2cc93062-472e-4713-a091-51ca9a284b5a\",\n  \"phoneNumberId\": \"TU_PHONE_NUMBER_ID_AQUÍ\",\n  \"customer\": {\n    \"number\": \"+1234567890\",\n    \"name\": \"Nombre del Cliente\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        272,
+        0
+      ],
+      "id": "4bf438c0-d21e-44c5-910a-ad23229dbb71",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "https://api.vapi.ai/call",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "1"
+            },
+            {
+              "name": "assistantld",
+              "value": "=ASISTANT ID"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        480,
+        0
+      ],
+      "id": "92f5eaa8-e9a8-415f-9431-827a7841b874",
+      "name": "HTTP Request1"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "ce9ab7c4-cffa-4fce-bb80-56ba65142392",
+  "activeVersionId": null,
+  "versionCounter": 95,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-22T03:28:47.716Z",
+      "createdAt": "2026-03-22T03:28:47.716Z",
+      "role": "workflow:owner",
+      "workflowId": "8Jb45VT5MgmrahPI",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

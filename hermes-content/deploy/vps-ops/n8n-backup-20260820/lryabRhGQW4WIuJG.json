@@ -1,0 +1,385 @@
+{
+  "updatedAt": "2026-07-03T20:12:43.417Z",
+  "createdAt": "2026-06-02T03:22:00.783Z",
+  "id": "lryabRhGQW4WIuJG",
+  "name": "Hermes Radar Diario Creativo y Clientes",
+  "description": "Radar diario n8n para investigar novedades de IA/video/social/prospeccion y enviar un reporte seguro a Telegram. No publica ni contacta clientes.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "251199d9-b8fd-4245-8a0b-b4491e8e3fa6",
+      "name": "Sticky Note 4d26cb9b",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        410,
+        250
+      ],
+      "parameters": {
+        "content": "## Hermes Radar Diario\n\nSafe draft. Replace `REPLACE_WITH_TELEGRAM_CHAT_ID` in **Build Radar Brief** with the internal Telegram chat ID before publishing.\n\nThis workflow researches and reports only. It must not publish, contact prospects, deploy, or use Sergio face/voice.",
+        "color": 5,
+        "width": 1200,
+        "height": 220
+      }
+    },
+    {
+      "id": "8bcb8c6b-eeff-4f8d-bebc-66bd880d5c3f",
+      "name": "Manual Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        160,
+        200
+      ]
+    },
+    {
+      "id": "b8538aba-fee9-4c46-80b9-8715a1cdba91",
+      "name": "Build Radar Brief",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        460,
+        320
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "telegram-chat-id",
+              "name": "telegramChatId",
+              "value": "6830070978",
+              "type": "string"
+            },
+            {
+              "id": "radar-prompt",
+              "name": "radarPrompt",
+              "value": "=Ejecuta el radar diario de Hermes. Fecha: {{ $now.toISO() }}.\n\nReglas obligatorias:\n- Mantener separado: Sergio personal, ONIA empresa/consultoria, Higgsfield como motor/servicio, clientes/prospectos.\n- No publicar, no contactar prospectos, no usar cara/voz de Sergio, no desplegar, no imprimir secretos.\n\nInvestiga novedades actuales con busqueda web. Prioriza fuentes oficiales y recientes: Higgsfield, ElevenLabs, Instagram/Meta, TikTok Creative Center, YouTube, OpenAI, n8n, tendencias de IA video, UGC, social ads, automatizacion y prospeccion.\n\nFORMATO DE SALIDA OBLIGATORIO (muy importante):\n- Devuelve TEXTO PLANO para Telegram.\n- NO uses Markdown, NO uses asteriscos, NO uses guiones bajos, NO uses negritas.\n- NO incluyas enlaces ni citas tipo [texto](url) ni URLs entre parentesis. Si mencionas una fuente, escribe solo su nombre (ej: SearchEngineJournal), sin link.\n- Maximo 3500 caracteres.\n\nContenido en espanol, breve y accionable:\n1) Novedades utiles ordenadas por impacto.\n2) 3 ideas de contenido para Sergio personal.\n3) 3 ideas de contenido para ONIA.\n4) 2 mejoras de prompts/workflow para Higgsfield.\n5) 5 oportunidades o rubros de clientes a investigar sin contactar.\n6) Riesgos/claims a evitar.\n7) Acciones recomendadas.\n\nCierra con: No ejecute acciones client-facing.",
+              "type": "string"
+            }
+          ]
+        },
+        "telegramChatId": "6830070978"
+      }
+    },
+    {
+      "id": "e4b89657-30d7-4fc6-8081-4d13caeadd0b",
+      "name": "Telegram Chat Configured?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        760,
+        320
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "chat-id-not-placeholder",
+              "leftValue": "={{ $json.telegramChatId }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              },
+              "rightValue": "REPLACE_WITH_TELEGRAM_CHAT_ID"
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "299c03fb-1366-4612-8df3-45be02e64904",
+      "name": "Hermes Radar Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1060,
+        300
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.radarPrompt }}",
+        "options": {
+          "systemMessage": "Eres Hermes, operador de ONIA. Debes investigar con fuentes actuales cuando el tema cambie con el tiempo, separar marcas y devolver un reporte accionable para Telegram. No inventes resultados, no contactes clientes y no publiques nada.",
+          "maxIterations": 6,
+          "returnIntermediateSteps": false
+        }
+      }
+    },
+    {
+      "id": "a99fe2e6-a599-45b1-b2ea-064891a659d9",
+      "name": "OpenAI Web Research Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1060,
+        120
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gpt-5-mini"
+        },
+        "responsesApiEnabled": true,
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "medium",
+            "country": "US"
+          }
+        },
+        "options": {
+          "reasoningEffort": "low",
+          "maxTokens": 6000,
+          "timeout": 120000
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "oAEdJ5GA8hOYB83l",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "id": "1d9509ea-ab3c-40d9-ba5b-4645f37e95b5",
+      "name": "Send Telegram Radar",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1360,
+        300
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $(\"Build Radar Brief\").item.json.telegramChatId }}",
+        "text": "={{ ($json.output || '').toString().slice(0, 4000) }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "Markdown"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "e6a3bd53-425b-40d2-a2db-2522aea4c3ca"
+    },
+    {
+      "id": "4c709338-e8f5-499d-9cad-a56bcee851bf",
+      "name": "Missing Telegram Chat ID",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1060,
+        500
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "status",
+              "name": "status",
+              "value": "blocked_missing_telegram_chat_id",
+              "type": "string"
+            },
+            {
+              "id": "next-step",
+              "name": "nextStep",
+              "value": "Replace REPLACE_WITH_TELEGRAM_CHAT_ID in Build Radar Brief with the internal Telegram chat ID, then test and publish.",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "985fb769-8684-4f5b-9b9c-29acd1e764b6",
+      "name": "Daily 07:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        440
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 30 7 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "363d558a-5f12-46ed-8304-3c8674b5b3d9",
+      "name": "Send Radar Arthur",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1360,
+        480
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "8887222181",
+        "text": "={{ ($json.output || '').toString().slice(0, 4000) }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "2143ed3e-59ed-4cf6-9708-1b913f0f7816"
+    }
+  ],
+  "connections": {
+    "Manual Test": {
+      "main": [
+        [
+          {
+            "node": "Build Radar Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Radar Brief": {
+      "main": [
+        [
+          {
+            "node": "Telegram Chat Configured?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Chat Configured?": {
+      "main": [
+        [
+          {
+            "node": "Hermes Radar Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Missing Telegram Chat ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hermes Radar Agent": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram Radar",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Radar Arthur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Web Research Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Hermes Radar Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily 07:30": {
+      "main": [
+        [
+          {
+            "node": "Build Radar Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Daily 07:30": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "c4412906-7c2d-4128-bd94-d03edd4517c0",
+  "activeVersionId": null,
+  "versionCounter": 11,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-02T03:22:00.801Z",
+      "createdAt": "2026-06-02T03:22:00.801Z",
+      "role": "workflow:owner",
+      "workflowId": "lryabRhGQW4WIuJG",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

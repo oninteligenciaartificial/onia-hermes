@@ -1,0 +1,522 @@
+{
+  "updatedAt": "2026-08-07T15:10:13.582Z",
+  "createdAt": "2026-05-23T19:13:21.520Z",
+  "id": "JN4tcboVyFKv4qGA",
+  "name": "WF-10: WhatsApp Addon Onboarding",
+  "description": "Triggered al activar el add-on WhatsApp de una clinica: sync pacientes a Chatwoot, welcome email via Gmail Workspace, WA test message, marca onboarding (migrado 2026-08-07, sin $env). Mantener SIN publicar hasta revision.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "09f848d7-e85a-461e-a9db-90bc9b760d71",
+      "name": "WA Onboarding Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        288
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-onboarding",
+        "responseMode": "lastNode",
+        "responseData": "firstEntryJson"
+      },
+      "webhookId": "bd25a1e9-16aa-4f30-b7c3-61bb22114c57"
+    },
+    {
+      "id": "47372c4e-0482-45f9-9c37-3ace9cf59593",
+      "name": "Valid API Key?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        288
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "api-key-check",
+              "leftValue": "={{ $request.headers[\"x-api-key\"] }}",
+              "rightValue": "3660bd1a016be3a5d7c77b394f9bf76915bb0bd207833b34936f4832673399b3",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5c760f37-d1b8-4a0a-8a9b-8e9b4e47ae41",
+      "name": "Fetch Patients",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        448,
+        176
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT id, name, phone, email FROM patients WHERE \"organizationId\" = '{{ $json.body.organizationId }}' AND phone IS NOT NULL AND phone != '' LIMIT 5000"
+      },
+      "credentials": {
+        "postgres": {
+          "id": "1",
+          "name": "DentaGest Postgres"
+        }
+      }
+    },
+    {
+      "id": "dbecda8b-0dc7-4fb2-83ce-2d0a165228a0",
+      "name": "Save Context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        176
+      ],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1",
+              "name": "patientId",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "2",
+              "name": "patientName",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "3",
+              "name": "patientPhone",
+              "value": "={{ $json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "4",
+              "name": "patientEmail",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "5",
+              "name": "chatwootInboxId",
+              "value": "={{ $(\"WA Onboarding Trigger\").first().json.body.chatwootInboxId }}",
+              "type": "number"
+            },
+            {
+              "id": "6",
+              "name": "chatwootApiToken",
+              "value": "={{ $(\"WA Onboarding Trigger\").first().json.body.chatwootApiToken }}",
+              "type": "string"
+            },
+            {
+              "id": "7",
+              "name": "chatwootAccountId",
+              "value": "={{ $(\"WA Onboarding Trigger\").first().json.body.chatwootAccountId }}",
+              "type": "string"
+            },
+            {
+              "id": "8",
+              "name": "organizationId",
+              "value": "={{ $(\"WA Onboarding Trigger\").first().json.body.organizationId }}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7628460f-1564-4d12-88da-33e3f68b95af",
+      "name": "Contacts Synced",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1",
+              "name": "status",
+              "value": "contacts_synced",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "423b7975-54ba-4e0e-9510-9ff0782928ff",
+      "name": "Send WA Test Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1568,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v19.0/{{ $(\"WA Onboarding Trigger\").first().json.body.phoneNumberId }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $(\"WA Onboarding Trigger\").first().json.body.accessToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"messaging_product\":\"whatsapp\",\"to\":\"{{ $(\"WA Onboarding Trigger\").first().json.body.adminPhone }}\",\"type\":\"text\",\"text\":{\"body\":\"✅ Onia: Tu clínica {{ $(\\\"WA Onboarding Trigger\\\").first().json.body.clinicName }} ya está conectada a WhatsApp Business. Cuando tus pacientes escriban a este número, el bot de Onia los atenderá automáticamente.\"}}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a435e907-c30e-49aa-bb91-4bc6ccfba98d",
+      "name": "Mark Onboarding Complete",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1792,
+        0
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE clinic_settings SET \"whatsappOnboardingAt\" = NOW() WHERE \"organizationId\" = '{{ $(\"WA Onboarding Trigger\").first().json.body.organizationId }}'"
+      },
+      "credentials": {
+        "postgres": {
+          "id": "1",
+          "name": "DentaGest Postgres"
+        }
+      }
+    },
+    {
+      "id": "e48ac8f7-0008-4d79-abde-7bc92aabc73e",
+      "name": "Respond 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2016,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"organizationId\":\"{{ $(\"WA Onboarding Trigger\").first().json.body.organizationId }}\"}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "fafde11a-382d-4fda-9d17-438921a81933",
+      "name": "Create Chatwoot Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1120,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://app.chatwoot.com/api/v1/accounts/{{ $json.chatwootAccountId }}/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{ $json.chatwootApiToken }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"name\":\"{{ $json.patientName }}\",\"phone_number\":\"{{ $json.patientPhone }}\",\"email\":\"{{ $json.patientEmail }}\",\"identifier\":\"{{ $json.patientId }}\",\"inbox_id\":{{ $json.chatwootInboxId }}}",
+        "options": {
+          "timeout": 10000
+        }
+      }
+    },
+    {
+      "id": "af2ce597-0417-4aba-9ab7-0342b0910635",
+      "name": "Wait 1s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        224
+      ],
+      "parameters": {
+        "unit": "seconds",
+        "amount": 1,
+        "resume": "timeInterval"
+      },
+      "webhookId": "9803350d-956c-45cb-a82e-d4e42b32fa1e"
+    },
+    {
+      "id": "9ce6c67b-1b79-4ed2-9199-0df5852797bf",
+      "name": "Batch 50",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        176
+      ],
+      "parameters": {
+        "batchSize": 50
+      }
+    },
+    {
+      "id": "dfc8e65b-8a93-46e4-a6c7-838783d8a1dc",
+      "name": "Reject Unauthorized",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        368
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"error\":\"Unauthorized\"}",
+        "options": {
+          "responseCode": 401
+        }
+      }
+    },
+    {
+      "id": "101edde3-3e39-4bbf-9b4f-1b4bc6212000",
+      "name": "Gmail: Send Welcome Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1344,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $(\"WA Onboarding Trigger\").first().json.body.adminEmail }}",
+        "subject": "✅ Tu add-on WhatsApp está activado — próximos pasos",
+        "emailType": "html",
+        "message": "={{ '<h2>¡Bienvenido a WhatsApp Business con Onia!</h2><p>Tu clínica <strong>' + $(\"WA Onboarding Trigger\").first().json.body.clinicName + '</strong> ya está conectada.</p><h3>Último paso: registra el webhook en Meta</h3><ol><li>Ir a developers.facebook.com → tu App → WhatsApp → Configuration</li><li>Sección Webhook → Edit</li><li>Callback URL: https://app.onia.com.bo/api/webhooks/whatsapp</li><li>Verify Token: (Onia te lo indica)</li><li>Suscribirse a: messages</li></ol><p>Tiempo estimado: 5-10 minutos. Solo se hace una vez.</p>' }}",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "8ebcb8d4-8df1-411e-a0ca-c57e2a2c26c5"
+    }
+  ],
+  "connections": {
+    "WA Onboarding Trigger": {
+      "main": [
+        [
+          {
+            "node": "Valid API Key?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valid API Key?": {
+      "main": [
+        [
+          {
+            "node": "Fetch Patients",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reject Unauthorized",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Patients": {
+      "main": [
+        [
+          {
+            "node": "Save Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Context": {
+      "main": [
+        [
+          {
+            "node": "Batch 50",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contacts Synced": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Send Welcome Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WA Test Message": {
+      "main": [
+        [
+          {
+            "node": "Mark Onboarding Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Onboarding Complete": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Chatwoot Contact": {
+      "main": [
+        [
+          {
+            "node": "Wait 1s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1s": {
+      "main": [
+        [
+          {
+            "node": "Batch 50",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch 50": {
+      "main": [
+        [
+          {
+            "node": "Contacts Synced",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Chatwoot Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Send Welcome Email": {
+      "main": [
+        [
+          {
+            "node": "Send WA Test Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "1bce9212-9db5-4f8c-82f2-98a4ab0d5ebb",
+  "activeVersionId": null,
+  "versionCounter": 12,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-23T19:13:21.537Z",
+      "createdAt": "2026-05-23T19:13:21.537Z",
+      "role": "workflow:owner",
+      "workflowId": "JN4tcboVyFKv4qGA",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Send Welcome Email"
+  }
+}

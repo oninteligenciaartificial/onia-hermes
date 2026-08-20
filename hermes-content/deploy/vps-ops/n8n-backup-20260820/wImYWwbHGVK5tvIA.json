@@ -1,0 +1,273 @@
+{
+  "updatedAt": "2026-07-03T21:24:13.608Z",
+  "createdAt": "2026-06-02T17:45:24.762Z",
+  "id": "wImYWwbHGVK5tvIA",
+  "name": "WF-SENTRY-01 - Sentry Codex Triage",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "wf-sentry-webhook",
+      "name": "Webhook: Sentry Alert",
+      "webhookId": "sentry-codex-triage",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        120,
+        300
+      ],
+      "parameters": {
+        "path": "sentry-codex-triage",
+        "responseMode": "responseNode",
+        "options": {},
+        "httpMethod": "POST"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "wf-sentry-normalize",
+      "name": "Code: Normalize Sentry Payload",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        360,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const item = $input.first();\nconst body = item.json.body || item.json || {};\nconst headers = item.json.headers || {};\nconst event = body.event || body.data?.event || body.data || {};\nconst issue = body.issue || body.data?.issue || event.issue || {};\nconst project = body.project || body.data?.project || event.project || {};\nconst actor = body.actor || body.data?.actor || {};\nconst issueId = issue.id || body.issue_id || event.issue_id || event.groupID || null;\nconst issueShortId = issue.shortId || issue.short_id || event.short_id || null;\nconst title = issue.title || event.title || event.message || body.title || body.message || 'Sentry issue';\nconst culprit = issue.culprit || event.culprit || null;\nconst environment = event.environment || issue.environment || body.environment || null;\nconst level = event.level || issue.level || body.level || null;\nconst url = issue.permalink || body.url || event.web_url || event.url || null;\nconst projectSlug = project.slug || project.name || body.project_slug || null;\nconst safeShortId = issueShortId || issueId || 'unknown';\nconst githubTitle = `[Sentry] ${safeShortId} - ${title}`.slice(0, 250);\nconst githubBody = [\n  '## Sentry issue', '',\n  `- Issue: ${safeShortId}`,\n  `- Project: ${projectSlug || 'unknown'}`,\n  `- Environment: ${environment || 'unknown'}`,\n  `- Level: ${level || 'unknown'}`,\n  `- Culprit: ${culprit || 'unknown'}`,\n  `- URL: ${url || 'not provided'}`, '',\n  '## Required handling', '',\n  '- Follow AGENTS.md and docs/ORCHESTRATOR.md.',\n  '- Reproduce the issue or inspect the latest Sentry event.',\n  '- Patch the minimum safe change.',\n  '- Run npm run ci when code changes.',\n  '- Do not commit, push, deploy, or run destructive actions without owner confirmation.', '',\n  'Created automatically by n8n workflow WF-SENTRY-01.'\n].join('\\n');\nreturn [{ json: { source: 'sentry', receivedAt: new Date().toISOString(), project: projectSlug, issueId, issueShortId, title, culprit, environment, level, url, actor: actor.name || actor.email || null, githubTitle, githubBody, action: 'Review this issue in Sentry, reproduce in DentaGest, patch in repo, run npm run ci, do not commit/push/deploy without confirmation.', headersSeen: Object.keys(headers).sort() } }];"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "wf-sentry-if-github-token",
+      "name": "If: GitHub Token Present?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        600,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict",
+            "leftValue": "",
+            "caseSensitive": true
+          },
+          "conditions": [
+            {
+              "operator": {
+                "operation": "true",
+                "type": "boolean"
+              },
+              "rightValue": true,
+              "id": "github-token-present",
+              "leftValue": "={{ !!$env.GITHUB_TOKEN }}"
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "typeVersion": 2.2
+    },
+    {
+      "id": "wf-sentry-create-github-issue",
+      "name": "GitHub: Create Issue",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        860,
+        220
+      ],
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "value": "=Bearer {{ $env.GITHUB_TOKEN }}",
+              "name": "Authorization"
+            },
+            {
+              "value": "application/vnd.github+json",
+              "name": "Accept"
+            },
+            {
+              "value": "2022-11-28",
+              "name": "X-GitHub-Api-Version"
+            }
+          ]
+        },
+        "method": "POST",
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"title\": $json.githubTitle, \"body\": $json.githubBody } }}",
+        "url": "https://api.github.com/repos/oninteligenciaartificial/Dental-Gest/issues",
+        "sendHeaders": true,
+        "options": {},
+        "sendBody": true
+      },
+      "typeVersion": 4.2
+    },
+    {
+      "id": "wf-sentry-github-response",
+      "name": "Code: GitHub Issue Response",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1120,
+        220
+      ],
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nreturn [{ json: { success: true, workflow: 'WF-SENTRY-01', githubIssueCreated: Boolean(item.html_url), githubIssueUrl: item.html_url || null, githubIssueNumber: item.number || null, nextAction: 'GitHub issue created. Codex can now use the issue as the tracked repair task.' } }];"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "wf-sentry-missing-token-response",
+      "name": "Code: Missing GitHub Token Response",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        860,
+        420
+      ],
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nreturn [{ json: { success: true, workflow: 'WF-SENTRY-01', receivedAt: item.receivedAt, issueShortId: item.issueShortId, title: item.title, url: item.url, githubIssueCreated: false, githubIssueUrl: null, missingGitHubToken: true, nextAction: 'Set GITHUB_TOKEN in the n8n/EasyPanel environment to enable automatic GitHub issue creation.' } }];"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "wf-sentry-respond",
+      "name": "Respond: Triage Accepted",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1380,
+        300
+      ],
+      "parameters": {
+        "responseBody": "={{ $json }}",
+        "respondWith": "json",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "typeVersion": 1.1
+    }
+  ],
+  "connections": {
+    "Code: Missing GitHub Token Response": {
+      "main": [
+        [
+          {
+            "node": "Respond: Triage Accepted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook: Sentry Alert": {
+      "main": [
+        [
+          {
+            "node": "Code: Normalize Sentry Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: GitHub Issue Response": {
+      "main": [
+        [
+          {
+            "node": "Respond: Triage Accepted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Normalize Sentry Payload": {
+      "main": [
+        [
+          {
+            "node": "If: GitHub Token Present?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub: Create Issue": {
+      "main": [
+        [
+          {
+            "node": "Code: GitHub Issue Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: GitHub Token Present?": {
+      "main": [
+        [
+          {
+            "node": "GitHub: Create Issue",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code: Missing GitHub Token Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {},
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "9a4a1e1b-37b3-4828-9fae-f83ade2c94a8",
+  "activeVersionId": "9a4a1e1b-37b3-4828-9fae-f83ade2c94a8",
+  "versionCounter": 3,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:13.598Z",
+      "createdAt": "2026-07-03T21:24:13.598Z",
+      "id": "tIFA1hsctxUXU1EJ",
+      "name": "infra"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-06-02T17:45:24.766Z",
+      "createdAt": "2026-06-02T17:45:24.766Z",
+      "role": "workflow:owner",
+      "workflowId": "wImYWwbHGVK5tvIA",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

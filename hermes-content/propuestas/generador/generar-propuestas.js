@@ -160,6 +160,47 @@ function renderPortada(p, nombre) {
   </div>`;
 }
 
+// Bloque opcional: "El costo de esperar" — qué le cuesta al cliente NO hacer nada.
+// REGLA DURA: solo con datos REALES del cliente (sus horas, sus ventas, su grupo
+// SIAT). Sin datos cargados la sección NO se imprime: nada de cifras de ejemplo,
+// rangos genéricos ni placeholders. Ver skill propuestas-comerciales-onia §13.
+//
+// Fecha fiscal VERIFICADA (no tocar sin fuente): la RND 102600000007 (25-mar-2026)
+// amplió el plazo de facturación en línea al 30-sep-2026; desde el 1-oct-2026 los
+// grupos 9°-12° emiten SOLO por su modalidad en línea asignada. Fuente: nota de
+// prensa del SIN "El SIN amplía hasta el 30 de septiembre el plazo para la
+// implementación de la facturación en línea" (impuestos.gob.bo).
+// El grupo depende del NIT, NO del rubro → la línea solo se imprime si el cliente
+// confirmó SU grupo en su Oficina Virtual. Y siempre se dice la verdad completa:
+// el Portal Web del SIN cumple gratis (regla: nunca "por ley tenés que comprarnos").
+const SIAT_FECHA = '1 de octubre de 2026';
+
+function renderCostoEsperar(ce) {
+  if (!ce) return '';
+  const items = (ce.items || []).filter((it) => it && it.concepto && it.costo);
+  const siat = ce.siat && ce.siat.grupo
+    ? `<p style="margin-top:12px;"><b>Facturación en línea:</b> tu NIT está en el grupo ${esc(ce.siat.grupo)},
+       así que desde el ${SIAT_FECHA} solo podés emitir por la modalidad en línea
+       asignada (RND 102600000007). El Portal Web del SIN cumple gratis tipeando
+       factura por factura: lo que te ahorramos es tipear dos veces, no la obligación.</p>`
+    : '';
+  if (!items.length && !siat) return '';
+  const filas = items.map((it) => `
+    <tr><td><b>${esc(it.concepto)}</b>${it.dato ? `<br><span class="lim">${esc(it.dato)}</span>` : ''}</td>
+    <td class="num">${esc(it.costo)}</td></tr>`).join('');
+  const total = ce.total
+    ? `<tr class="rec"><td><b>${esc(ce.totalLabel || 'Lo que ya estás pagando por esperar')}</b></td><td class="num">${esc(ce.total)}</td></tr>`
+    : '';
+  const tabla = filas
+    ? `<table><tr><th>Qué pasa hoy</th><th class="num">Costo</th></tr>${filas}${total}</table>`
+    : '';
+  const intro = ce.intro ? `<p>${ce.intro}</p>` : '';
+  const nota = ce.nota ? `<p style="margin-top:10px;">${ce.nota}</p>` : '';
+  return `
+  <h2>El costo de esperar</h2>
+  <div class="card">${intro}${tabla}${siat}${nota}</div>`;
+}
+
 // Bloque opcional: requisitos a cargo del cliente (cobros online en Bolivia).
 // Ver hermes-content/propuestas/REQUISITOS_LEGALES_BOLIVIA_INTERNO.md
 function renderRequisitos(req) {
@@ -273,7 +314,7 @@ ${renderImagenes(c.imagenes)}
 
   <h2>Cómo lo construimos</h2>
   <div class="card">${renderSteps(c.pasos)}</div>
-${renderValor(c.valor)}${renderCasos(c.casos)}${renderComparativa(c.comparativa)}
+${renderValor(c.valor)}${renderCasos(c.casos)}${renderComparativa(c.comparativa)}${renderCostoEsperar(c.costoDeEsperar)}
   <h2>Paquetes — elegí el tuyo</h2>
   <table>
     <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (${esc(moneda)})</th></tr>

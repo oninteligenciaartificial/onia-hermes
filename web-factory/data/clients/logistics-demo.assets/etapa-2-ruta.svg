@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Marcador de imagen: etapa 2, ruta</title>
+  <desc id="d2">Placeholder geometrico en la paleta del sitio. Se reemplaza por la foto real de la flota en ruta.</desc>
+  <rect width="1600" height="1000" fill="#0E1116"/>
+  <path d="M0 1000 800 420 1600 1000Z" fill="#171C24"/>
+  <path d="M0 1000 800 420 1600 1000Z" fill="#1F2733" opacity=".5"/>
+  <g stroke="#3D7DFF" stroke-width="10" stroke-linecap="round" fill="none" opacity=".9">
+    <path d="M800 430 620 1000" stroke-dasharray="34 40"/>
+    <path d="M800 430 980 1000" stroke-dasharray="34 40"/>
+  </g>
+  <g fill="none" stroke="#8B95A5" stroke-width="2" opacity=".45">
+    <path d="M0 620h1600M0 700h1600M0 800h1600"/>
+  </g>
+  <g fill="#0E1116">
+    <rect x="620" y="620" width="360" height="180" rx="10"/>
+  </g>
+  <g fill="#8B95A5" opacity=".7">
+    <rect x="640" y="640" width="220" height="140" rx="6"/>
+  </g>
+  <g fill="#3D7DFF">
+    <rect x="880" y="676" width="86" height="104" rx="8"/>
+  </g>
+  <g fill="#0E1116" stroke="#8B95A5" stroke-width="6">
+    <circle cx="700" cy="808" r="26"/><circle cx="920" cy="808" r="26"/>
+  </g>
+  <rect x="1180" y="900" width="360" height="56" rx="28" fill="#0E1116" opacity=".9"/>
+  <text x="1360" y="937" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2" fill="#8FB6FF">IMAGEN DE MUESTRA</text>
+</svg>

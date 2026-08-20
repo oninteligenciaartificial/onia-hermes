@@ -1,6 +1,34 @@
 import { readFile } from "node:fs/promises";
 import { z } from "zod";
 
+// Single source of truth for template ids. This list used to be copy-pasted in
+// six places (generate, factory-build, auto-design, create-client, the intake
+// enum and the auto-designer type), which is how `landing-clinic` ended up
+// renderable but unreachable from the CLI and the intake.
+export const WEB_FACTORY_TEMPLATES = [
+  "landing",
+  "store",
+  "dashboard",
+  "landing-focus",
+  "landing-clinic",
+  "landing-realestate",
+  "landing-logistics",
+] as const;
+
+export type WebFactoryTemplate = (typeof WEB_FACTORY_TEMPLATES)[number];
+
+export function parseTemplate(value: string | undefined): WebFactoryTemplate | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  if ((WEB_FACTORY_TEMPLATES as readonly string[]).includes(value)) {
+    return value as WebFactoryTemplate;
+  }
+
+  throw new Error(`Unsupported template "${value}". Available: ${WEB_FACTORY_TEMPLATES.join(", ")}.`);
+}
+
 const hexColorSchema = z
   .string()
   .regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "Use a hex color like #0f766e.");
@@ -25,11 +53,40 @@ const serviceSchema = z.object({
   titulo: z.string().min(1),
   desc: z.string().min(1),
   icono: z.string().min(1).default("sparkles"),
+  // Per-service destination. Blocks that give every service its own next step
+  // (path-cards) use it; empty falls back to the site-wide CTA.
+  url: z.string().default(""),
 });
 
 const procesoPasoSchema = z.object({
   titulo: z.string().min(1),
   desc: z.string().min(1),
+  // A step can carry its own photo. That is what turns the process into a scene
+  // the visitor scrolls through (scroll-story-hero) instead of a list of words.
+  // Blocks that only render text ignore both fields.
+  imagen: optionalAssetSchema,
+  imagenAlt: z.string().default(""),
+});
+
+// Proof, and the model's rule with it: "SOLO con numeros reales del cliente.
+// Sin datos verificables, esta seccion se elimina, no se inventa." `fuente` is
+// where the number comes from; `esMuestra` tags a value the client has not
+// confirmed, and the block prints that tag on screen.
+const metricaSchema = z.object({
+  valor: z.string().min(1),
+  label: z.string().min(1),
+  fuente: z.string().default(""),
+  esMuestra: z.boolean().default(false),
+});
+
+const cotizacionCampoSchema = z.object({
+  nombre: z.string().min(1),
+  label: z.string().min(1),
+  tipo: z.enum(["text", "email", "tel", "number", "date", "textarea", "select"]).default("text"),
+  requerido: z.boolean().default(false),
+  opciones: z.array(z.string().min(1)).default([]),
+  placeholder: z.string().default(""),
+  autocomplete: z.string().default(""),
 });
 
 const faqItemSchema = z.object({
@@ -79,6 +136,10 @@ const productSchema = z.object({
   especificaciones: z.array(productSpecSchema).default([]),
   detalleImagenes: z.array(productDetailImageSchema).default([]),
   detalleNota: z.string().default(""),
+  // Sample item waiting for the client's real data. Blocks that render it MUST
+  // label it on screen, so a page built before the portfolio arrives can never
+  // be mistaken for a real listing.
+  esMuestra: z.boolean().default(false),
   ordenRutina: z.number().int().positive().optional(),
   destacadoMes: z.boolean().optional(),
   descuentoPorcentaje: z.number().min(0).max(100).optional(),
@@ -214,18 +275,52 @@ export const clientSchema = z.object({
       titulo: "Diagnostico claro",
       desc: "Explica que haces, para quien y por que conviene elegirte.",
       icono: "search",
+      url: "",
     },
     {
       titulo: "Oferta ordenada",
       desc: "Convierte servicios dispersos en una propuesta facil de entender.",
       icono: "layout",
+      url: "",
     },
     {
       titulo: "Contacto directo",
       desc: "Lleva al visitante a escribir, llamar o pedir una cotizacion.",
       icono: "message",
+      url: "",
     },
   ]),
+  // One line that reframes the rubro (editorial-statement). Optional: with no
+  // statement the section simply does not render.
+  statement: z.string().default(""),
+  statementAccent: z.string().default(""),
+  // Legal line for the footer. Client-supplied: the factory never guesses the
+  // holder or the year.
+  footerLegal: z.string().default(""),
+  newsletter: z
+    .object({
+      titulo: z.string().default(""),
+      texto: z.string().default(""),
+      // Form endpoint. Empty renders the band without a form instead of a dead input.
+      accion: z.string().default(""),
+      boton: z.string().default("Suscribirme"),
+      nota: z.string().default(""),
+    })
+    .default({ titulo: "", texto: "", accion: "", boton: "Suscribirme", nota: "" }),
+  metricas: z.array(metricaSchema).default([]),
+  // Inline quote (the conversion block for a rubro whose lead is a price, not a
+  // newsletter). Like the newsletter band: no `accion` or no `campos`, no form —
+  // the direct contact stays as the way in.
+  cotizacion: z
+    .object({
+      titulo: z.string().default(""),
+      texto: z.string().default(""),
+      accion: z.string().default(""),
+      boton: z.string().default("Pedir cotizacion"),
+      nota: z.string().default(""),
+      campos: z.array(cotizacionCampoSchema).default([]),
+    })
+    .default({ titulo: "", texto: "", accion: "", boton: "Pedir cotizacion", nota: "", campos: [] }),
   categorias: z.array(z.string().min(1)).default([]),
   productos: z.array(productSchema).default([]),
   beneficios: z.array(z.string().min(1)).default([]),

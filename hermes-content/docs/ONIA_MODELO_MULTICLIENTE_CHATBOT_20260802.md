@@ -46,6 +46,12 @@ Y hay un techo aún más duro que nadie esquiva: **la app móvil oficial se llam
 el punto del producto), su equipo va a ver esa marca sí o sí, salvo compilar
 una app propia — lo que exige Firebase y builds propias para iOS y Android.
 
+> ✅ **DECIDIDO POR SERGIO — 2026-08-16: se acepta. Vendemos el agente, no la bandeja.**
+> Confirmado contra producción ese mismo día: el rebranding a "Onia" aplicado el 15-ago **ya
+> se había revertido solo** (`INSTALLATION_NAME=Chatwoot`, `BRAND_NAME=Chatwoot`). Este doc
+> lo había predicho con la causa exacta. **Consecuencia:** no se vuelve a tocar el branding,
+> y el kit de venta dice que la bandeja es una herramienta open source de terceros.
+
 **Decisión recomendada: no pelear con esto. Posicionamiento honesto.** Lo que
 Onia vende es el **agente** (el bot que califica, agenda y deriva) y la
 integración, no la bandeja. La bandeja es "la herramienta profesional que

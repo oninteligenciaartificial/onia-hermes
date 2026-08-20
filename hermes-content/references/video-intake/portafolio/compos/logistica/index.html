@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <title>Antes/Despues — Logistica (Web Factory)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      body { margin: 0; background: #0b0f14; font-family: Roboto, "Segoe UI", system-ui, sans-serif; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .bg { position: absolute; inset: 0; }
+
+      .wf-page { position: absolute; top: 0; left: 0; width: 1080px; padding: 72px 64px; box-sizing: border-box; }
+      .b { background: #d7dce3; border-radius: 12px; }
+      .o { border: 3px solid #c6ccd5; border-radius: 16px; box-sizing: border-box; }
+      .row { display: flex; gap: 24px; }
+      .pill { border-radius: 999px; }
+
+      .cap-wrap { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 150px; box-sizing: border-box; }
+      .chip { background: #101418; color: #f2f4f7; font-size: 52px; font-weight: 650; line-height: 1.3;
+              padding: 30px 52px; border-radius: 36px; max-width: 880px; text-align: center;
+              box-shadow: 0 18px 50px rgba(0,0,0,0.35); }
+      .chip small { display: block; font-size: 34px; font-weight: 450; color: #aeb6c0; margin-bottom: 4px; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-fovc" id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="17">
+
+      <!-- ANTES: wireframe gris de nuestro diseno -->
+      <section data-hf-id="hf-tfln" id="wire" class="clip" data-start="0" data-duration="4.3" data-track-index="1">
+        <div data-hf-id="hf-6iln" class="bg" style="background:#eef0f4;"></div>
+        <div data-hf-id="hf-h5un" id="wire-page" class="wf-page" data-layout-allow-overflow="">
+          <div data-hf-id="hf-yr3l" class="wf-block b" style="width:320px; height:34px; margin-bottom:64px;"></div>
+          <div data-hf-id="hf-b7pk" class="wf-block b" style="height:380px; margin-bottom:52px; border-radius:20px;"></div>
+          <div data-hf-id="hf-z85g" class="wf-block b" style="width:420px; height:22px; margin-bottom:30px;"></div>
+          <div data-hf-id="hf-e4et" class="wf-block b" style="width:920px; height:60px; margin-bottom:18px;"></div>
+          <div data-hf-id="hf-y0zw" class="wf-block b" style="width:860px; height:60px; margin-bottom:18px;"></div>
+          <div data-hf-id="hf-6d86" class="wf-block b" style="width:400px; height:60px; margin-bottom:36px;"></div>
+          <div data-hf-id="hf-a2ma" class="wf-block b" style="width:930px; height:20px; margin-bottom:14px;"></div>
+          <div data-hf-id="hf-caly" class="wf-block b" style="width:880px; height:20px; margin-bottom:14px;"></div>
+          <div data-hf-id="hf-o3q4" class="wf-block b" style="width:560px; height:20px; margin-bottom:48px;"></div>
+          <div data-hf-id="hf-8co9" class="wf-block b pill" style="height:92px; margin-bottom:56px;"></div>
+          <div data-hf-id="hf-00i2" class="wf-block b" style="height:10px; border-radius:5px; margin-bottom:28px;"></div>
+          <div data-hf-id="hf-lccw" class="wf-block row" style="align-items:center; margin-bottom:22px;">
+            <div data-hf-id="hf-985h" class="b" style="width:44px; height:44px;"></div>
+            <div data-hf-id="hf-kbke" class="b" style="width:340px; height:26px;"></div>
+          </div>
+          <div data-hf-id="hf-wyaw" class="wf-block row" style="align-items:center; margin-bottom:22px;">
+            <div data-hf-id="hf-hd9p" class="o" style="width:44px; height:44px; border-radius:12px;"></div>
+            <div data-hf-id="hf-3u0t" class="b" style="width:260px; height:26px;"></div>
+          </div>
+          <div data-hf-id="hf-sx3u" class="wf-block row" style="align-items:center; margin-bottom:64px;">
+            <div data-hf-id="hf-zq5d" class="o" style="width:44px; height:44px; border-radius:12px;"></div>
+            <div data-hf-id="hf-p1dm" class="b" style="width:300px; height:26px;"></div>
+          </div>
+          <div data-hf-id="hf-hysm" class="wf-block o" style="height:300px; margin-bottom:28px;"></div>
+          <div data-hf-id="hf-oo2y" class="wf-block o" style="height:300px; margin-bottom:28px;"></div>
+          <div data-hf-id="hf-wrkz" class="wf-block o" style="height:300px; margin-bottom:56px;"></div>
+          <div data-hf-id="hf-4tiq" class="wf-block b" style="height:180px; margin-bottom:36px;"></div>
+          <div data-hf-id="hf-l1b7" class="wf-block b pill" style="width:440px; height:84px; margin:0 auto 80px;"></div>
+        </div>
+      </section>
+
+      <!-- DESPUES: la web real, scroll -->
+      <section data-hf-id="hf-tf51" id="web" class="clip" data-start="4.3" data-duration="12.7" data-track-index="2">
+        <div data-hf-id="hf-s3ph" class="bg" style="background:#0e1118;"></div>
+        <div data-hf-id="hf-nu5b" id="web-page" data-layout-allow-overflow="" style="position:absolute; top:0; left:0; width:1080px;">
+          <img data-hf-id="hf-qsw7" id="web-img" src="assets/page.png" width="1080" height="7718" style="display:block; width:1080px; height:auto;">
+        </div>
+      </section>
+
+      <!-- rotulos -->
+      <section data-hf-id="hf-vyeu" id="cap-antes" class="clip" data-start="0" data-duration="4.3" data-track-index="3">
+        <div data-hf-id="hf-69xp" class="cap-wrap">
+          <div data-hf-id="hf-2y2n" id="cap-antes-inner" class="chip"><small data-hf-id="hf-ledk">Cliente:</small>“necesito una web para mi empresa de logística”</div>
+        </div>
+      </section>
+      <section data-hf-id="hf-shru" id="cap-despues" class="clip" data-start="4.3" data-duration="12.7" data-track-index="3">
+        <div data-hf-id="hf-szcx" class="cap-wrap">
+          <div data-hf-id="hf-u2le" id="cap-despues-inner" class="chip">Después:</div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const SPAN = 7718 - 1920;
+      const tl = gsap.timeline({ paused: true });
+
+      tl.from(".wf-block", { y: 36, autoAlpha: 0, duration: 0.5, ease: "power2.out", stagger: { each: 0.03 } }, 0.15);
+      tl.fromTo("#cap-antes-inner", { y: 60, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5, ease: "back.out(1.5)" }, 0.8);
+      tl.to("#wire-page", { y: -420, duration: 1.95, ease: "power1.inOut" }, 1.8);
+      tl.to("#wire-page", { y: "-=380", duration: 0.55, ease: "power2.in" }, 3.75);
+      tl.to("#cap-antes-inner", { y: -140, duration: 0.4, ease: "power2.in" }, 3.9);
+
+      // SEAM 4.3s — misma direccion (arriba), entrada en pleno vuelo
+      tl.fromTo("#web-page", { y: 260 }, { y: 0, duration: 0.55, ease: "power3.out" }, 4.3);
+      tl.fromTo("#cap-despues-inner", { y: 90, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5, ease: "power3.out" }, 4.35);
+      tl.to("#web-page", { y: -SPAN, duration: 10.65, ease: "power1.inOut" }, 5.55);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

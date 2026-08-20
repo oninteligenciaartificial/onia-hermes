@@ -41,14 +41,20 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
                 Plataforma Onia · Versión {doc.meta.version} · Actualizado el{" "}
                 {formatLegalDate(doc.meta.updatedAt)}
               </p>
-              <div className={styles.draft} role="note">
-                <span className={styles.draftTag}>Borrador v{doc.meta.version}</span>
-                <p className={styles.draftText}>
-                  Pendiente de revisión por abogado. Este documento es un
-                  borrador de trabajo: no constituye asesoría legal y puede
-                  cambiar antes de su versión definitiva.
-                </p>
-              </div>
+              {/* El aviso estaba HARDCODEADO: salia aunque el documento ya
+                  estuviera vigente. Una politica de privacidad publicada como
+                  "borrador" no sirve para publicar una app en Meta ni para
+                  mostrarsela a una empresa. Ahora respeta el frontmatter. */}
+              {doc.meta.status === "borrador" && (
+                <div className={styles.draft} role="note">
+                  <span className={styles.draftTag}>Borrador v{doc.meta.version}</span>
+                  <p className={styles.draftText}>
+                    Pendiente de revisión por abogado. Este documento es un
+                    borrador de trabajo: no constituye asesoría legal y puede
+                    cambiar antes de su versión definitiva.
+                  </p>
+                </div>
+              )}
             </header>
           </Reveal>
 

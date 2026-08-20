@@ -1,0 +1,99 @@
+{
+  "updatedAt": "2026-08-14T03:48:14.000Z",
+  "createdAt": "2026-08-14T03:35:12.435Z",
+  "id": "FRobuOxGPFp0N1F2",
+  "name": "TEMP - Diagnostico red docker VPS para payalert",
+  "description": "Temporal: mapear red docker VPS para reconectar el aviso de pago a la base real. Borrar despues.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "1b38796b-dcd5-4038-85f6-f0539372fe0c",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "59c4ec13-0132-4e3c-9d18-9947fad40fc0",
+      "name": "SSH Diag VPS",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "cwd": "/root",
+        "command": "echo NETWORK_OK ; docker inspect n8n-sergio_n8n.1.mxzgjijuzqgbpz22nox7qmoa7 --format=\"{{json .NetworkSettings.Networks}}\" 2>&1"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "SSH Diag VPS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "3f96cee7-e738-48a8-949d-0165b8490a60",
+  "activeVersionId": null,
+  "versionCounter": 6,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T03:35:12.440Z",
+      "createdAt": "2026-08-14T03:35:12.440Z",
+      "role": "workflow:owner",
+      "workflowId": "FRobuOxGPFp0N1F2",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

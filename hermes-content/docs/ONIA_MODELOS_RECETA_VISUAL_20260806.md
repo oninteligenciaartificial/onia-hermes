@@ -114,3 +114,174 @@ Relacionado: `ONIA_MODELOS_PLAN_AUTOMATIZADO_20260806.md` (el plan que esto ejec
 `ONIA_MODELOS_IA_FICHAS_20260801.md` (fichas, precios, chips) ·
 `ONIA_EJERCITO_INFLUENCERS_IA_PLAN_20260806.md` (el ejército) ·
 `HIGGSFIELD_FULL_CAPABILITIES_MAP.md` (qué modelo usar para qué).
+
+
+---
+
+# PLANTILLA DE FOTO FOTORREALISTA — 8 bloques
+
+> Agregado 2026-08-18. Sale de 8 prompts completos que un carrusel dejó a la vista, transcritos
+> literales en `references/video-intake/2026-08-18-sintesis-lote-17.md` §2 (ítem DbgN-8CDVc-).
+> Las 8 láminas usan **la misma estructura, en el mismo orden**. Eso la vuelve plantilla y no anécdota.
+
+## 0. 🔴 VERIFICADO ANTES DE ESCRIBIR: no existe campo `negative_prompt`
+
+Consulta gratis al catálogo (`models_explore`, 2026-08-18). Revisados los `parameters` de **los 11
+motores de imagen de la cuenta**:
+
+| Motor | Parámetros que expone |
+|---|---|
+| `nano_banana_2` · `nano_banana_pro` | `resolution` |
+| `soul_2` · `soul_cinematic` | `quality`, `soul_id` |
+| `gpt_image_2` | `resolution`, `quality` |
+| `cinematic_studio_2_5` · `marketing_studio_image` | `resolution` |
+| `ms_image` | `style_id` (obligatorio), `brand_kit_id`, `resolution`, `quality`, `batch_size`, `product_ids` |
+| `image_auto` · `soul_location` | ninguno |
+| `soul_cast` | `budget` |
+
+**Ninguno tiene `negative_prompt`.** No es que "algunos lo ignoren": el campo **no existe en ningún
+motor de la cuenta**.
+
+**Consecuencia: el negativo va DENTRO del prompt positivo**, como último bloque, con el literal
+`Negative prompt:` delante. Es exactamente lo que hacen 7 de las 8 láminas fuente (la lámina 2 es la
+única sin negativo).
+
+⚠️ Eso significa que el negativo es **texto que el modelo interpreta**, no un filtro duro. Sesga, no
+garantiza. Si algo tiene que NO aparecer sí o sí, se resuelve en el positivo (describiendo lo que SÍ
+va) o recortando después.
+
+## 1. Los 8 bloques, en orden
+
+| # | Bloque | Regla |
+|---|---|---|
+| 1 | **Apertura fija** | `Ultra-realistic vertical [género] photo of...` — el género es la palanca: `editorial fashion`, `flash photo with a raw 35mm film look`, `wildlife portrait`, `studio fashion portrait`, `sci-fi editorial`, `street photo` |
+| 2 | **Sujeto con ACCIÓN** | un verbo concreto, no un adjetivo. *"sitting inside the open mouth"*, *"standing beside an open refrigerator"* — nunca *"una mujer elegante"* |
+| 3 | **Rasgos físicos enumerados** | pelo, piel, maquillaje, expresión y **dirección de la mirada** |
+| 4 | **Vestuario prenda por prenda** | con material y color: *"sheer pale-blue ruffled blouse, light denim shorts, beige slouchy knee-high boots"* |
+| 5 | **Pose explícita, miembro por miembro** | *"One leg is bent, the other extended forward"* · *"one hand relaxed near the floor"* |
+| 6 | **Fondo como LISTA DE OBJETOS** | no "un parque bonito": *"grass, swing set, houses, trees, blue sky"* |
+| 7 | **Bloque técnico + referencia de género** | luz, grano, profundidad de campo + una frase tipo *"realistic fashion-magazine feel"*, *"candid amateur-film aesthetic"* |
+| 8 | **`Negative prompt:`** | núcleo constante + 2-3 términos del sujeto |
+
+**Núcleo constante del negativo** (casi idéntico en las 7 láminas que lo traen):
+
+```
+Negative prompt: CGI, cartoon, plastic skin, beauty filter, over-retouched, bad anatomy,
+extra fingers, HDR, studio lighting, over-sharpening, blurry subject, text, watermark
+```
+
+Más 2-3 específicos del sujeto: `warped fridge, unreadable messy labels` · `distorted torch, messy
+jacket seams` · `fantasy horse, extra ears, distorted mane` · `unreadable shirt text, clean costume`.
+
+## 2. ⭐ REGLA DE LA SUCIEDAD — se pide fealdad y se prohíbe lo pulido
+
+**Un modelo de imagen dejado solo tira a catálogo. Hay que empujarlo al lado contrario, y se hace
+con dos fuerzas opuestas al mismo tiempo.**
+
+| En el POSITIVO se pide | En el NEGATIVO se prohíbe |
+|---|---|
+| `scratches and dirt marks` | `perfect background` |
+| `stained plush fur`, `torn in places` | `clean costume` |
+| `peeling paint, rust marks`, `trash, cigarette butts` | `glossy plastic` |
+| `harsh direct camera flash`, `strong shadows` | `studio lighting` |
+| `slight film grain`, `muted colors`, `soft focus edges` | `over-sharpening`, `HDR` |
+| `realistic skin texture`, `pores` | `beauty filter`, `over-retouched`, `plastic skin` |
+
+**No es decoración: es LA palanca del realismo.** Sin ella el motor entrega render de catálogo y se
+nota a un metro. Los 8 prompts fuente la aplican sin excepción.
+
+### 2-bis. Tres atajos que funcionan sin tocar el prompt
+
+1. **Seis ejes de realismo** (ítem DcEIPU_keNv): imperfección de piel · luz dura de sol · encuadre
+   de selfie torcido · contexto banal verificable · marcas reales · defectos de cámara.
+2. **El más barato de todos** (DcDy6VVjsO7): **elegir caras con edad y textura real** en vez de
+   modelos jóvenes perfectas. Una cara de 55 con arrugas se ve real sin pelear con el modelo; una de
+   22 impecable pelea siempre.
+3. **El texto NUNCA se hornea en la generación.** Regla ya fijada por el ítem DcGUUb9h3ZO, donde el
+   lado que se vendía como superior tenía el texto reventado y duplicado. El modelo genera **fondo y
+   sujeto**; el texto va en HTML sobre HyperFrames, donde tipografía, color y **ortografía** son
+   deterministas.
+
+## 3. Tres ejemplos escritos para necesidades reales nuestras
+
+> **Ninguno está generado.** Es texto listo para que Sergio apruebe. Costos medidos en
+> `web-factory/docs/MODELOS_IA_QUE_USAR_PARA_QUE.md`: `nano_banana_2` 2.00 cr · `gpt_image_2` low
+> 0.50 cr · `z_image` 0.15 cr · `soul_2` 0.12 cr.
+
+### 3.1 — Catálogo de producto · Nuvia (proyecto propio, catálogo real)
+
+Motor: **`nano_banana_2`** · 2.00 cr — hace falta fidelidad de producto, no cara.
+
+```
+Ultra-realistic vertical product photo of a skincare serum bottle standing on a worn marble
+bathroom shelf. The bottle is frosted glass with a matte black dropper cap, label facing the
+camera, with faint fingerprints on the glass and a single drop running down one side. Shelf
+surface shows water rings, a chipped edge, and fine dust in the corners. Background: tiled
+bathroom wall with visible grout lines, a folded cotton towel out of focus, morning light
+falling from a window at the left. Shot on a 50mm lens at f/2.8, natural window light with soft
+falloff, slight film grain, muted colors, realistic glass reflections, shallow depth of field,
+honest e-commerce product feel, not a rendered mockup. Negative prompt: CGI, 3D render, cartoon,
+plastic texture, floating product, perfect background, studio lighting, HDR, over-sharpening,
+watermark, text overlay, distorted label, unreadable label text.
+```
+
+*Por qué así:* el ancla de suciedad son las huellas, el anillo de agua y el borde saltado. Sin eso
+sale render de Behance. La etiqueta se declara `facing the camera` y se prohíbe distorsionarla, pero
+**el texto de la etiqueta se pone después en HyperFrames**, nunca se hornea.
+
+### 3.2 — Foto de ambiente para una web · rubro gastronomía
+
+Motor: **`gpt_image_2`** quality `low` · 0.50 cr — es fondo de hero, no necesita 2K.
+
+> ⚠️ **Es plantilla reusable, no un cliente.** Hoy no hay ningún restaurante cliente. Cuando lo haya,
+> se reemplaza por fotos reales de su local: una foto real siempre gana.
+
+```
+Ultra-realistic vertical interior photo of a small family restaurant in Santa Cruz de la Sierra
+at midday, empty of customers, seen from the doorway. Wooden tables with mismatched chairs, a
+plastic tablecloth with a worn pattern, salt shakers and a napkin holder on the nearest table, a
+ceiling fan turning, a chalkboard menu with smudged writing on the back wall. Tropical light comes
+hard through a side window and lands in a bright patch on the floor, leaving the back of the room
+in shadow. Scuffed tile floor, a fan cable taped along the wall, condensation on a glass. Shot
+handheld on a phone at eye level, natural harsh daylight, slight film grain, muted warm colors,
+realistic wear on every surface, documentary feel, not a hotel brochure. Negative prompt: CGI, 3D
+render, cartoon, perfect background, staged food styling, studio lighting, smiling stock models,
+HDR, over-sharpening, glossy floor, text, watermark, legible menu text.
+```
+
+*Por qué así:* `legible menu text` va al negativo **a propósito** — el texto horneado siempre sale
+mal, y una pizarra ilegible se lee como real. `not a hotel brochure` es la frase de género que
+corrige el sesgo a catálogo.
+
+### 3.3 — Imagen de campaña para `@oniahq` · el dolor del cuaderno
+
+Motor: **`z_image`** · 0.15 cr — nadie tiene que reconocer a una persona, es un plano de objeto.
+Regla vigente: si no hay que reconocer a nadie, no se paga caro.
+
+```
+Ultra-realistic vertical overhead photo of a worn spiral notebook open on a shop counter, used as
+a business ledger. The pages are filled with handwritten rows in blue and black ink, several
+entries crossed out, a coffee ring on the corner, a bent page edge, and pen marks in the margin.
+Beside it: a calculator with faded buttons, a cheap ballpoint pen, a stack of paper receipts held
+by a bulldog clip, and a phone face down. The counter surface is scratched laminate with a chipped
+corner. Hard overhead shop lighting from a single fluorescent tube, visible shadow under the
+notebook, slight film grain, muted colors, realistic paper texture and ink bleed, honest
+documentary snapshot, not a styled flat lay. Negative prompt: CGI, 3D render, cartoon, clean desk,
+perfect background, styled flat lay, studio lighting, HDR, over-sharpening, legible handwriting,
+readable numbers, text, watermark.
+```
+
+*Por qué así:* `legible handwriting, readable numbers` en el negativo — si los números se leen, se
+leen mal y matan la pieza. El cuaderno tiene que **parecer** usado, no ser legible. El titular de la
+campaña va en HyperFrames encima.
+
+## 4. Checklist antes de mandar a generar
+
+- [ ] ¿La apertura declara el género?
+- [ ] ¿El sujeto tiene un **verbo**, no un adjetivo?
+- [ ] ¿El fondo es una **lista de objetos**?
+- [ ] ¿Pedí suciedad explícita? (al menos 3 marcas concretas)
+- [ ] ¿El negativo ataca lo pulido? (`beauty filter`, `perfect background`, `studio lighting`)
+- [ ] ¿El `Negative prompt:` está **dentro** del prompt? (no hay campo aparte — §0)
+- [ ] ¿Ningún texto legible depende de la generación? (va en HyperFrames)
+- [ ] ¿Elegí el motor por si hace falta reconocer una cara, no por costumbre?

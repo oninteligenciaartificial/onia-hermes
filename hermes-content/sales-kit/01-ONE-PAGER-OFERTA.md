@@ -33,7 +33,10 @@
 | Inventario básico de insumos (stock mínimo → pendiente de reponer) | — | ✅ | ✅ |
 | Reactivación de pacientes inactivos | — | — | ✅ |
 | Aprobaciones (descuentos / anulaciones) | — | — | ✅ |
-| Multi-sillón / hasta 3 sucursales | — | — | ✅ |
+| Multi-sillón | — | — | ✅ |
+<!-- Sucursales: NO se promete todavia. El schema no tiene branchId; se esta
+     construyendo (decision 2026-08-15). Se re-agrega cuando este vivo y verificado. -->
+
 | Usuarios | 3 | 8 | 20 |
 | Soporte | correo | WhatsApp | WhatsApp directo |
 
@@ -47,7 +50,7 @@
 
 | Add-on | Precio |
 |---|---|
-| **Chatbot IA de WhatsApp** — responde, agenda, califica y deriva solo (el botón de WhatsApp simple ya va gratis en todos los planes) | Setup Bs 900–1.200 + Bs 450–600/mes |
+| **Chatbot WhatsApp con IA** — contesta, califica y hace seguimiento 24/7, con tu aprobación (el botón de WhatsApp simple ya va gratis en todos los planes). Incluye 500 conversaciones/mes; Meta por consumo. Lo que no entre en el estándar se define y se cotiza a medida | Bs 1.500 inst. + Bs 1.490/mes + Meta — fuente: `onia-platform/lib/pricing.ts` |
 | **Web de la clínica** — landing Bs 790 / web completa Bs 1.500 + Cuidado Web mensual | desde Bs 790 |
 | **Contador Pack** — RCV, vencimientos de NIT, radar normativo | a cotizar |
 

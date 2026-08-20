@@ -1,0 +1,99 @@
+{
+  "updatedAt": "2026-08-14T03:48:15.000Z",
+  "createdAt": "2026-08-14T03:38:05.139Z",
+  "id": "WICrWsMh5SOCGkms",
+  "name": "TEMP - Crear credencial Postgres VPS",
+  "description": "Temporal: crea la credencial Postgres VPS (dentalgest-staging) reusando DIRECT_URL de app.env. Se ejecuta una vez y se borra.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "7fb0ce98-b58e-4afb-bdb9-ff5197592bc9",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "fd7be086-1b58-4912-9883-6e2c0a0fbf28",
+      "name": "Create Postgres Cred",
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "resource": "credential",
+        "operation": "create",
+        "name": "Postgres VPS (dentalgest-staging)",
+        "credentialTypeName": "postgres",
+        "data": "{\"host\":\"dentalgest-staging-supabase-pooler\",\"database\":\"postgres\",\"user\":\"postgres.your-tenant-id\",\"password\":\"177c9fd897e52392106887f941544720\",\"port\":5432,\"ssl\":\"disable\"}"
+      },
+      "credentials": {
+        "n8nApi": {
+          "id": "W3ymDVxJLnMWgBmX",
+          "name": "n8n account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Create Postgres Cred",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "73143594-efde-4dc9-80ef-ffdc2ea0d9aa",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T03:38:05.145Z",
+      "createdAt": "2026-08-14T03:38:05.145Z",
+      "role": "workflow:owner",
+      "workflowId": "WICrWsMh5SOCGkms",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

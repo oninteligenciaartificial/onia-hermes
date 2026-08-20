@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Onia Platform · Tarjeta UI · Ingresos del mes</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* Tipografia e iconos del PRODUCTO (onia-platform), autohospedados. */
+      @font-face {
+        font-family: "Manrope";
+        src: url("fonts/Manrope-var-latin.woff2") format("woff2");
+        font-weight: 200 800;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("fonts/Inter-var-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Material Symbols Outlined";
+        src: url("fonts/material-symbols-outlined.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: block;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        font-family: "Material Symbols Outlined";
+        font-weight: normal;
+        font-style: normal;
+        font-feature-settings: "liga";
+        -webkit-font-feature-settings: "liga";
+        -webkit-font-smoothing: antialiased;
+        line-height: 1;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --primary: #027650;
+        --on-primary: #ffffff;
+        --primary-container: #d5f4e3;
+        --on-primary-container: #013925;
+        --verde-50: #edfbf3;
+        --verde-200: #b2eacd;
+        --verde-300: #86d9b0;
+        --surface: #f9fbfa;
+        --on-surface: #141a17;
+        --on-surface-variant: #424a46;
+        --surface-lowest: #ffffff;
+        --outline-variant: #b9bfbc;
+        --font-headline: "Manrope", sans-serif;
+        --font-sans: "Inter", sans-serif;
+      }
+
+      html,
+      body {
+        width: 1080px;
+        height: 1080px;
+      }
+      #stage {
+        position: relative;
+        width: 1080px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--surface);
+        font-family: var(--font-sans);
+        color: var(--on-surface);
+      }
+      .fill {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .glow {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 900px;
+        height: 900px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(2, 118, 80, 0.07) 0%, rgba(2, 118, 80, 0) 62%);
+      }
+
+      .card {
+        position: relative;
+        width: 720px;
+        border-radius: 28px;
+        background: var(--surface-lowest);
+        border: 1px solid var(--outline-variant);
+        box-shadow: 0 24px 60px rgba(1, 57, 37, 0.1);
+        padding: 56px 60px 56px;
+        opacity: 0;
+      }
+
+      .head {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .iconchip {
+        width: 80px;
+        height: 80px;
+        border-radius: 22px;
+        background: var(--primary-container);
+        color: var(--on-primary-container);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+      }
+      .iconchip .material-symbols-outlined {
+        font-size: 44px;
+      }
+      .head h1 {
+        font-family: var(--font-headline);
+        font-weight: 700;
+        font-size: 36px;
+        letter-spacing: -0.5px;
+        color: var(--on-surface-variant);
+      }
+
+      .kpirow {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        margin-top: 36px;
+      }
+      .kpi {
+        font-family: var(--font-headline);
+        font-weight: 800;
+        font-size: 82px;
+        letter-spacing: -2px;
+        /* una sola linea SIEMPRE: partir "Bs 12.450" en dos renglones rompe
+           la lectura de KPI (visto en el frame 1.1s del primer render) */
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .delta {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: 64px;
+        padding: 0 26px;
+        border-radius: 999px;
+        background: var(--primary);
+        color: var(--on-primary);
+        font-family: var(--font-headline);
+        font-weight: 800;
+        font-size: 30px;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .delta .material-symbols-outlined {
+        font-size: 36px;
+      }
+
+      /* mini grafico de barras: 6 meses de muestra, el ultimo es el vivo */
+      .chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 26px;
+        height: 220px;
+        margin-top: 48px;
+        padding-top: 32px;
+        border-top: 1px solid var(--verde-50);
+      }
+      .bar {
+        flex: 1;
+        border-radius: 12px 12px 4px 4px;
+        background: var(--verde-200);
+        /* estado inicial (scaleY 0) lo pone GSAP en t=0: un transform CSS aca
+           entra en conflicto con el tween (gsap_css_transform_conflict) */
+        transform-origin: bottom center;
+      }
+      .bar.hoy {
+        background: var(--primary);
+      }
+
+      .vs {
+        margin-top: 32px;
+        font-size: 26px;
+        color: var(--on-surface-variant);
+        opacity: 0;
+        visibility: hidden;
+      }
+      .vs b {
+        color: var(--on-surface);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="ingresos-contador"
+      data-theme="light"
+      data-start="0"
+      data-duration="4.5"
+      data-fps="30"
+      data-width="1080"
+      data-height="1080"
+    >
+      <div id="ic-clip" class="clip" data-start="0" data-duration="4.5" data-track-index="0">
+        <div class="fill">
+          <div class="glow"></div>
+          <div class="card" id="ic-card">
+            <div class="head" id="ic-head">
+              <div class="iconchip"><span class="material-symbols-outlined">payments</span></div>
+              <h1>Ingresos del mes</h1>
+            </div>
+            <div class="kpirow">
+              <div class="kpi" id="ic-kpi">Bs 0</div>
+              <div class="delta" id="ic-delta">
+                <span class="material-symbols-outlined">trending_up</span>
+                +18%
+              </div>
+            </div>
+            <div class="chart" id="ic-chart">
+              <div class="bar" style="height: 42%"></div>
+              <div class="bar" style="height: 58%"></div>
+              <div class="bar" style="height: 50%"></div>
+              <div class="bar" style="height: 66%"></div>
+              <div class="bar" style="height: 74%"></div>
+              <div class="bar hoy" id="ic-bar-hoy" style="height: 88%"></div>
+            </div>
+            <div class="vs" id="ic-vs">vs. mes anterior: <b>Bs 10.550</b></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // ============================================================
+        // Onia Platform · Tarjeta UI · "Ingresos del mes" — 4.5s, 1080x1080.
+        // Ruta sostenida: Sequenced UI life — el contador SUBE de verdad:
+        // el numero tickea hasta Bs 12.450, las barras crecen mes a mes,
+        // quietud, y el delta +18% llega junto al pulso de la barra de hoy.
+        // ============================================================
+        (function () {
+          "use strict";
+
+          function cubicBezier(x1, y1, x2, y2) {
+            var cx = 3 * x1,
+              bx = 3 * (x2 - x1) - cx,
+              ax = 1 - cx - bx;
+            var cy = 3 * y1,
+              by = 3 * (y2 - y1) - cy,
+              ay = 1 - cy - by;
+            function sampleX(t) {
+              return ((ax * t + bx) * t + cx) * t;
+            }
+            function sampleY(t) {
+              return ((ay * t + by) * t + cy) * t;
+            }
+            function sampleDX(t) {
+              return (3 * ax * t + 2 * bx) * t + cx;
+            }
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x,
+                i,
+                d,
+                dx;
+              for (i = 0; i < 8; i++) {
+                d = sampleX(t) - x;
+                if (Math.abs(d) < 1e-7) return sampleY(t);
+                dx = sampleDX(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0,
+                hi = 1;
+              t = x;
+              while (hi - lo > 1e-7) {
+                if (sampleX(t) < x) lo = t;
+                else hi = t;
+                t = (hi + lo) / 2;
+              }
+              return sampleY(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          // separador de miles "." (convencion boliviana), sin Intl
+          function formatBs(v) {
+            return "Bs " + String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+          }
+
+          var card = document.getElementById("ic-card");
+          var kpi = document.getElementById("ic-kpi");
+          var tl = gsap.timeline({ paused: true });
+
+          // ---- entrada de la tarjeta ------------------------------------------
+          tl.fromTo(
+            card,
+            { opacity: 0, y: 60, scale: 0.97 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "oniaOutExpo" },
+            0,
+          );
+
+          // ---- cascada: head -> kpi (waterfall) -------------------------------
+          var group = ["ic-head", "ic-kpi"];
+          var at = 0.12,
+            gap = 0.1;
+          group.forEach(function (id) {
+            var el = document.getElementById(id);
+            tl.set(el, { autoAlpha: 1 }, at);
+            tl.fromTo(el, { x: 34 }, { x: 0, duration: 0.5, ease: "oniaOutExpo" }, at);
+            at += gap;
+            gap *= 0.84;
+          });
+
+          // ---- el contador SUBE (0.25-1.45s) ----------------------------------
+          var counter = { v: 0 };
+          tl.to(
+            counter,
+            {
+              v: 12450,
+              duration: 1.2,
+              ease: "oniaOutExpo",
+              onUpdate: function () {
+                kpi.textContent = formatBs(counter.v);
+              },
+            },
+            0.25,
+          );
+
+          // ---- las barras crecen mes a mes, izquierda -> derecha --------------
+          var bars = document.querySelectorAll("#ic-chart .bar");
+          for (var i = 0; i < bars.length; i++) {
+            tl.set(bars[i], { scaleY: 0 }, 0);
+            tl.to(bars[i], { scaleY: 1, duration: 0.55, ease: "oniaOutExpo" }, 0.45 + i * 0.09);
+          }
+
+          // ---- quietud antes del climax (1.5-1.85s) ---------------------------
+
+          // ---- climax (1.85s): el delta LLEGA y la barra de hoy responde ------
+          var delta = document.getElementById("ic-delta");
+          var barHoy = document.getElementById("ic-bar-hoy");
+          tl.fromTo(
+            delta,
+            { autoAlpha: 0, y: 24, scale: 0.85 },
+            { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.5)" },
+            1.85,
+          );
+          // la barra de hoy acusa el dato en el MISMO frame: un pulso y asienta
+          tl.to(barHoy, { scaleY: 1.08, duration: 0.14, ease: "oniaOutQuart" }, 1.85);
+          tl.to(barHoy, { scaleY: 1, duration: 0.3, ease: "oniaOutExpo" }, 1.99);
+
+          // ---- revelado escalonado: la comparacion cierra el dato -------------
+          var vs = document.getElementById("ic-vs");
+          tl.set(vs, { visibility: "visible" }, 2.45);
+          tl.fromTo(
+            vs,
+            { opacity: 0, x: 24 },
+            { opacity: 1, x: 0, duration: 0.4, ease: "oniaOutExpo" },
+            2.45,
+          );
+
+          // ---- salida (4.0-4.5s): mismo vector -> loop natural ----------------
+          tl.to(card, { opacity: 0, y: 60, scale: 0.97, duration: 0.42, ease: "oniaOutQuart" }, 4.05);
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["ingresos-contador"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

@@ -8,17 +8,50 @@ import {
   renderLandingCss,
   renderLandingDocument,
   renderLandingFocusDocument,
+  renderLandingLogisticsCss,
+  renderLandingLogisticsDocument,
+  renderLandingRealestateCss,
+  renderLandingRealestateDocument,
   renderStoreCss,
   renderStoreDocument,
   renderStoreProductDocument,
   storeProductSlug,
 } from "@onia/templates";
-import { loadClientProfile } from "../data/schema";
+import {
+  loadClientProfile,
+  WEB_FACTORY_TEMPLATES,
+  type ClientProfile,
+  type WebFactoryTemplate,
+} from "../data/schema";
+
+// One entry per template id. A map instead of a ternary chain because the chain
+// had already lost a branch once: landing-focus fell through to the landing
+// stylesheet, and adding a sixth template made that easier, not harder, to repeat.
+type TemplateRenderer = {
+  html: (client: ClientProfile) => string;
+  css: (client: ClientProfile) => string;
+};
+
+const TEMPLATE_RENDERERS: Record<WebFactoryTemplate, TemplateRenderer> = {
+  landing: { html: renderLandingDocument, css: renderLandingCss },
+  "landing-focus": { html: renderLandingFocusDocument, css: renderLandingCss },
+  "landing-clinic": { html: renderLandingClinicDocument, css: renderLandingClinicCss },
+  "landing-realestate": {
+    html: renderLandingRealestateDocument,
+    css: renderLandingRealestateCss,
+  },
+  "landing-logistics": {
+    html: renderLandingLogisticsDocument,
+    css: renderLandingLogisticsCss,
+  },
+  store: { html: renderStoreDocument, css: renderStoreCss },
+  dashboard: { html: renderDashboardDocument, css: renderDashboardCss },
+};
 
 export type GenerateOptions = {
   rootDir?: string;
   outDir?: string;
-  template?: "landing" | "store" | "dashboard" | "landing-focus" | "landing-clinic";
+  template?: WebFactoryTemplate;
 };
 
 export type GenerateResult = {
@@ -40,8 +73,8 @@ export async function generateSite(
 
   const template = options.template ?? "landing";
 
-  if (!["landing", "store", "dashboard", "landing-focus", "landing-clinic"].includes(template)) {
-    throw new Error(`Unsupported template "${template}". Available: landing, store, dashboard, landing-focus, landing-clinic.`);
+  if (!(WEB_FACTORY_TEMPLATES as readonly string[]).includes(template)) {
+    throw new Error(`Unsupported template "${template}". Available: ${WEB_FACTORY_TEMPLATES.join(", ")}.`);
   }
 
   await mkdir(outputDir, { recursive: true });
@@ -50,27 +83,10 @@ export async function generateSite(
   const htmlPath = path.join(outputDir, "index.html");
   const cssPath = path.join(outputDir, "site.css");
 
-  const html =
-    template === "store"
-      ? renderStoreDocument(client)
-      : template === "dashboard"
-        ? renderDashboardDocument(client)
-        : template === "landing-focus"
-          ? renderLandingFocusDocument(client)
-          : template === "landing-clinic"
-            ? renderLandingClinicDocument(client)
-            : renderLandingDocument(client);
-  const css =
-    template === "store"
-      ? renderStoreCss(client)
-      : template === "dashboard"
-        ? renderDashboardCss(client)
-        : template === "landing-clinic"
-          ? renderLandingClinicCss(client)
-          : renderLandingCss(client);
+  const renderer = TEMPLATE_RENDERERS[template];
 
-  await writeFile(htmlPath, html, "utf8");
-  await writeFile(cssPath, css, "utf8");
+  await writeFile(htmlPath, renderer.html(client), "utf8");
+  await writeFile(cssPath, renderer.css(client), "utf8");
 
   const files = [htmlPath, cssPath];
   files.push(...(await copyDesignArtifacts(rootDir, outputDir, safeSlug)));

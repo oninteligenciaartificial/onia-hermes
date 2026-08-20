@@ -1,0 +1,239 @@
+{
+  "updatedAt": "2026-05-27T23:10:29.000Z",
+  "createdAt": "2026-05-26T04:07:42.071Z",
+  "id": "1Ci5Vt94VRN9sO3G",
+  "name": "WF-DISCORD-06 — Alertas de suscripciones próximas",
+  "description": "Cron diario 8am Bolivia (12:00 UTC). Consulta Supabase por suscripciones con cobro en 3 días y envía alerta a Discord si hay resultados.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "b93a03f7-388f-45fb-bc59-78d5072ad668",
+      "name": "Daily 8am Bolivia",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 12 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "d36efb5e-a9a1-45f8-9eb6-57f68f01dea0",
+      "name": "Fetch Subscriptions from Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/personal_subscriptions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "activa",
+              "value": "eq.true"
+            },
+            {
+              "name": "dia_cobro",
+              "value": "=eq.{{ $now.setZone(\"America/La_Paz\").plus({ days: 3 }).day }}"
+            },
+            {
+              "name": "select",
+              "value": "nombre,monto,moneda,frecuencia,dia_cobro"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "81402f47-60b6-49e1-88c9-9a1bc6856dce",
+      "name": "Check Has Subscriptions",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "993cfab6-f99c-406d-9c3f-8a487021e0fb",
+      "name": "Format Discord Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "jsCode": "\nconst items = $input.all();\n\nlet lines = [];\nlet totalsByCurrency = {};\n\nfor (const item of items) {\n  const { nombre, monto, moneda } = item.json;\n  lines.push('• ' + nombre + ' — $' + monto + ' ' + moneda);\n  if (!totalsByCurrency[moneda]) totalsByCurrency[moneda] = 0;\n  totalsByCurrency[moneda] += Number(monto);\n}\n\nconst totalsLine = Object.entries(totalsByCurrency)\n  .map(([currency, total]) => '$' + total + ' ' + currency)\n  .join(' + ');\n\nconst message = '💳 **Alerta de cobro próximo**\\nEn 3 días se cobrarán:\\n' + lines.join('\\n') + '\\n**Total: ' + totalsLine + '**';\n\nreturn [{ json: { message } }];\n"
+      }
+    },
+    {
+      "id": "3ebb957a-403c-4181-80d4-dc1c12a1e619",
+      "name": "Send Discord Alert",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "botToken",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571461663719454"
+        },
+        "sendTo": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571462196400303"
+        },
+        "content": "={{ $json.message }}"
+      },
+      "credentials": {
+        "discordBotApi": {
+          "id": "4K40hl2Un0aWGges",
+          "name": "Discord Bot account"
+        }
+      },
+      "webhookId": "23c8ecd9-3ccf-47fa-ad54-0fc7a5645ac4"
+    }
+  ],
+  "connections": {
+    "Daily 8am Bolivia": {
+      "main": [
+        [
+          {
+            "node": "Fetch Subscriptions from Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Subscriptions from Supabase": {
+      "main": [
+        [
+          {
+            "node": "Check Has Subscriptions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Has Subscriptions": {
+      "main": [
+        [
+          {
+            "node": "Format Discord Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Discord Message": {
+      "main": [
+        [
+          {
+            "node": "Send Discord Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "649f682c-844a-4778-b066-ae2ea07b9e66",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-26T04:07:42.073Z",
+      "createdAt": "2026-05-26T04:07:42.073Z",
+      "role": "workflow:owner",
+      "workflowId": "1Ci5Vt94VRN9sO3G",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

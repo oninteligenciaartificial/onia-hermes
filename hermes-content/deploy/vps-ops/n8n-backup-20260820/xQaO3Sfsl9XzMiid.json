@@ -1,0 +1,250 @@
+{
+  "updatedAt": "2026-07-07T01:34:57.800Z",
+  "createdAt": "2026-07-06T02:38:53.282Z",
+  "id": "xQaO3Sfsl9XzMiid",
+  "name": "ONIA - Reporte diario Sergio + Arthur",
+  "description": "Cron Lun-Sab 07:00: SSH docker exec onia-center arthur-report.mjs. Da las tareas del dia a Sergio y a Arthur (de las obligaciones del acuerdo 60 dias + CRM vivo) y verifica las ganancias de Arthur (payment_commissions por estado + ventas + progreso del tr",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "b38d48b9-40aa-42c8-b3da-fb065576a7d4",
+      "name": "Lun-Sab 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * 1-6"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "d8696d75-dc83-4e63-ae82-ad3fc031370b",
+      "name": "Reporte Sergio + Arthur (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "docker exec -i onia-center node - < /opt/onia/arthur-report.mjs",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "48518a4e-e1f5-4319-9658-096f3a597890",
+      "name": "Extraer texto",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "let pulse = {};\ntry {\n  const pulseRaw = (($('Leer repo pulse').first().json.stdout) || '{}').trim();\n  pulse = JSON.parse(pulseRaw) || {};\n} catch (e) {\n  pulse = {};\n}\nlet docsHygiene = {};\ntry {\n  const docsRaw = (($('Leer docs hygiene').first().json.stdout) || '{}').trim();\n  docsHygiene = JSON.parse(docsRaw) || {};\n} catch (e) {\n  docsHygiene = {};\n}\nconst raw = ($input.first().json.stdout || '').trim();\nlet s;\ntry { s = JSON.parse(raw.split('\\n').pop()); } catch (e) { s = { ok: false, error: 'parse' }; }\nlet text = s.ok ? s.text : ('Reporte Arthur - ERROR: ' + (s.error || 'desconocido'));\nif (s.ok && pulse && typeof pulse.totalCommits === 'number') {\n  const topLanes = (pulse.byLane || []).slice(0, 5).map((l) => `${l.lane} (${l.commits})`).join(', ');\n  const stale = (pulse.staleLanes || []).slice(0, 5).map((l) => `${l.lane}${l.daysSinceLastCommit != null ? ' (' + l.daysSinceLastCommit + 'd)' : ' (sin historial)'}`);\n  const lines = [`Repo (ultimas ${pulse.lookbackHours || '?'}h): ${pulse.totalCommits} commits.`];\n  if (topLanes) lines.push(`Carriles activos: ${topLanes}`);\n  if (stale.length) lines.push(`Sin actividad: ${stale.join(', ')}`);\n  text = text + '\\n\\n' + lines.join('\\n');\n}\nif (s.ok && docsHygiene && docsHygiene.totals) {\n  const t = docsHygiene.totals;\n  const dLines = [`Docs (limpieza diaria): ${t.identicalDeleted} auto-limpiados, ${t.divergent} divergentes, ${t.newInRoot} nuevos en raiz.`];\n  const topDiv = (docsHygiene.divergentFindings || []).slice(0, 5).map((f) => `  - ${f.relPath} vs ${(f.twins && f.twins[0] && f.twins[0].relPath) || '?'}`);\n  if (topDiv.length) { dLines.push('Divergentes (fusion manual):'); dLines.push(...topDiv); }\n  if ((docsHygiene.divergentFindings || []).length > 5) dLines.push(`  ...+${docsHygiene.divergentFindings.length - 5} mas`);\n  const topNew = (docsHygiene.newInRootFindings || []).slice(0, 5).map((f) => `  - ${f.relPath}`);\n  if (topNew.length) { dLines.push('Nuevos en raiz (mover a docs/):'); dLines.push(...topNew); }\n  if ((docsHygiene.newInRootFindings || []).length > 5) dLines.push(`  ...+${docsHygiene.newInRootFindings.length - 5} mas`);\n  text = text + '\\n\\n' + dLines.join('\\n');\n}\nreturn [{ json: { text: text } }];"
+      }
+    },
+    {
+      "id": "aadefb47-f5cb-4128-8def-0b67de96bebe",
+      "name": "Enviar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "5f271486-e242-4c8c-b380-44af914b8c3e"
+    },
+    {
+      "id": "90a5c93e-a1ad-405c-a092-c8fd87a28b6c",
+      "name": "Leer repo pulse",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        0,
+        160
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "cat /opt/onia/state/repo-pulse-latest.json 2>/dev/null || echo '{}'",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "74a20ee9-9c77-44dc-b20c-d61211017459",
+      "name": "Leer docs hygiene",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        0,
+        320
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "cat /opt/onia/state/docs-hygiene-latest.json 2>/dev/null || echo '{}'",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Reporte Sergio + Arthur (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Extraer texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer texto": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lun-Sab 07:00": {
+      "main": [
+        [
+          {
+            "node": "Leer repo pulse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer repo pulse": {
+      "main": [
+        [
+          {
+            "node": "Leer docs hygiene",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer docs hygiene": {
+      "main": [
+        [
+          {
+            "node": "Reporte Sergio + Arthur (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Lun-Sab 07:00": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "2f793dee-8c9a-4369-95fd-faf0d84fc277",
+  "activeVersionId": "2f793dee-8c9a-4369-95fd-faf0d84fc277",
+  "versionCounter": 5,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-06T02:38:53.284Z",
+      "createdAt": "2026-07-06T02:38:53.284Z",
+      "role": "workflow:owner",
+      "workflowId": "xQaO3Sfsl9XzMiid",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

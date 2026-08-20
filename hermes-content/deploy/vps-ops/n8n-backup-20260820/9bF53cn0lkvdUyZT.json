@@ -1,0 +1,282 @@
+{
+  "updatedAt": "2026-08-07T15:07:57.479Z",
+  "createdAt": "2026-05-14T02:24:34.577Z",
+  "id": "9bF53cn0lkvdUyZT",
+  "name": "WF-02: QR Payment Alerts",
+  "description": "Every 5 minutes checks for pending QR payments and alerts superadmin via Gmail Workspace (migrado 2026-08-07, sin $env).",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "e81445ac-718b-4355-8158-5382b2be3f80",
+      "name": "Schedule: Every 5min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        240
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/5 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a68663a0-54a9-439a-8868-b9341ff93333",
+      "name": "Supabase: Pending Payments",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        240
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_pending_qr_payments",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "49eca631-e4cb-4b5c-b711-40d11bb69e90",
+      "name": "If: Has Payments?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        240
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-count",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "bfcd7183-2058-45c2-867f-edbaee5ef542",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        896,
+        0
+      ]
+    },
+    {
+      "id": "7d8883c0-18d0-4ac7-9813-1cb59f242c53",
+      "name": "Split: Per Payment",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        96
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "0b9e47ea-47d3-4169-a5c0-b70d057976d1",
+      "name": "No Payments",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        288
+      ]
+    },
+    {
+      "id": "b87337d7-1d52-4dea-9061-4fc003f451d4",
+      "name": "Gmail: Alert SUPERADMIN",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "business@onia.com.bo",
+        "subject": "=Nuevo pago QR pendiente: {{ $json.clinicName }} - Bs. {{ $json.amount }}",
+        "emailType": "html",
+        "message": "=<p>Clinica: {{ $json.clinicName }}<br>Plan: {{ $json.plan }} ({{ $json.cycle }})<br>Monto: Bs. {{ $json.amount }}<br>Usuario: {{ $json.userName }}<br>Fecha: {{ $json.createdAt }}</p><p>Comprobante: {{ $json.receiptUrl || 'No adjunto' }}</p><p><a href='https://app.onia.com.bo/admin/payments'>Revisar y aprobar</a></p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "498aa2b9-1fe0-42d1-8f39-9145d3284403"
+    }
+  ],
+  "connections": {
+    "Schedule: Every 5min": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Pending Payments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Pending Payments": {
+      "main": [
+        [
+          {
+            "node": "If: Has Payments?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has Payments?": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Payment",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Payments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Payment": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail: Alert SUPERADMIN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Alert SUPERADMIN": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Payment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/La_Paz",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Every 5min": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "2d316073-ceb7-42c1-8a06-fa0f7f7e67cf",
+  "activeVersionId": "2d316073-ceb7-42c1-8a06-fa0f7f7e67cf",
+  "versionCounter": 34,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-14T02:24:34.579Z",
+      "createdAt": "2026-05-14T02:24:34.579Z",
+      "role": "workflow:owner",
+      "workflowId": "9bF53cn0lkvdUyZT",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Alert SUPERADMIN"
+  }
+}

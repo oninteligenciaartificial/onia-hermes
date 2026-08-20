@@ -2,7 +2,7 @@
 
 import * as m from "motion/react-m";
 import { useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 /**
  * Marquee — cinta horizontal infinita. Duplica el contenido y lo desplaza
@@ -32,7 +32,17 @@ export function Marquee({
   className,
   trackClassName,
 }: MarqueeProps) {
-  const reduced = useReducedMotion();
+  const prefiereReducido = useReducedMotion();
+  // La rama reducida recien DESPUES del mount: en el servidor useReducedMotion
+  // no puede saber la preferencia, asi que renderizaba la rama animada
+  // (overflow:hidden) y el cliente hidrataba la estatica (overflowX:auto) —
+  // mismatch de hidratacion en toda la home para quien pide menos movimiento.
+  // El primer render del cliente ahora coincide con el servidor y el cambio
+  // llega un frame despues, que es exactamente lo que ese usuario quiere ver:
+  // la cinta quieta.
+  const [montado, setMontado] = useState(false);
+  useEffect(() => setMontado(true), []);
+  const reduced = montado && prefiereReducido;
 
   if (reduced) {
     return (

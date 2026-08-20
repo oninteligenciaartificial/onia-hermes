@@ -1,0 +1,449 @@
+{
+  "updatedAt": "2026-08-07T15:10:15.839Z",
+  "createdAt": "2026-05-29T23:09:19.915Z",
+  "id": "7avrjjM6NoRnTUrL",
+  "name": "WF-11 Post-Treatment Follow-up",
+  "description": "Hourly: follow-up email (Gmail Workspace) + WhatsApp 23-25h after completed appointments. Deduped by followupSentAt (migrado 2026-08-07, sin $env).",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c389e463-01b0-4a2e-904e-6afead651ac7",
+      "name": "Schedule: Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        80
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "02e195fb-a51d-43df-a911-cb36ad3ef152",
+      "name": "If Has Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.patientEmail }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "a9f136f0-9a3a-44bd-8a2b-77012c7ca09e",
+      "name": "If Has WhatsApp?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.whatsappAddon }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            },
+            {
+              "leftValue": "={{ $json.patientPhone }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "619801e0-94e1-46ed-939d-6565eff14ab4",
+      "name": "App: WhatsApp Follow-up",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1344,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://dentalgest-onia.vercel.app/api/n8n/whatsapp/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-API-KEY",
+              "value": "3660bd1a016be3a5d7c77b394f9bf76915bb0bd207833b34936f4832673399b3"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"organizationId\":\"{{ $json.organizationId }}\",\"patientPhone\":\"{{ $json.patientPhone }}\",\"message\":\"Hola {{ $json.patientName }}, esperamos que tu cita con {{ $json.doctorName }} haya ido muy bien.\\n\\nTienes alguna consulta o molestia? Escribenos aqui y te atendemos.\\n\\n- {{ $json.clinicName }}\"}",
+        "options": {}
+      },
+      "disabled": true
+    },
+    {
+      "id": "59c1ba0d-1067-4151-9466-eccfd536ae37",
+      "name": "Split Appointments",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        80
+      ],
+      "parameters": {
+        "batchSize": 1
+      }
+    },
+    {
+      "id": "wf11-query-new",
+      "name": "Query Follow-ups",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        80
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_followup_due",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      }
+    },
+    {
+      "id": "wf11-mark-new",
+      "name": "Mark followupSentAt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        80
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_mark_followup_sent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"p_appointment_id\": \"{{ $json.appointmentId }}\"}",
+        "options": {}
+      },
+      "disabled": true
+    },
+    {
+      "id": "6b88eade-d041-49b8-9a55-4dc980a949e3",
+      "name": "DRY RUN Resumen Followup",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        360
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const items = $input.all();\nconst lines = items.map((i) => '- ' + (i.json.patientName || '?') + ' / ' + (i.json.clinicName || '?') + ' / Dr. ' + (i.json.doctorName || '?')).join('\\n');\nreturn [{ json: { summary: 'DRY-RUN DentalGest WF-11 (follow-up post-cita): ' + items.length + ' paciente(s) que el sistema contactaria. NO se envio nada.\\n\\n' + lines + '\\n\\nSi las listas estan bien, avisa para activar envio real.' } }];"
+      }
+    },
+    {
+      "id": "17fd13f0-62aa-40a2-a0d1-f9e6f13fb7f7",
+      "name": "DRY RUN Aviso Followup",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        360
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.summary }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "09f14450-9127-4a6f-8773-128205c7a933"
+    },
+    {
+      "id": "914d4884-2770-4f23-9d7c-7fdbef9652a2",
+      "name": "Gmail: Follow-up Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.patientEmail }}",
+        "subject": "=Como fue tu cita con {{ $json.doctorName }}?",
+        "emailType": "html",
+        "message": "=<p>Hola <strong>{{ $json.patientName }}</strong>,</p><p>Esperamos que tu cita con <strong>{{ $json.doctorName }}</strong> en <strong>{{ $json.clinicName }}</strong> haya sido excelente.</p><p>Tienes alguna consulta o molestia? No dudes en contactarnos.</p><p><a href='https://app.onia.com.bo/book/{{ $json.clinicSlug }}'>Agendar proxima cita</a></p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "disabled": true,
+      "webhookId": "d7d9856c-d2bf-4a90-a729-702d42d0e077"
+    }
+  ],
+  "connections": {
+    "If Has Email?": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Follow-up Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If Has WhatsApp?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Has WhatsApp?": {
+      "main": [
+        [
+          {
+            "node": "App: WhatsApp Follow-up",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark followupSentAt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Appointments": {
+      "main": [
+        [],
+        [
+          {
+            "node": "If Has Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule: Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Query Follow-ups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Follow-ups": {
+      "main": [
+        [
+          {
+            "node": "Split Appointments",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "DRY RUN Resumen Followup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "App: WhatsApp Follow-up": {
+      "main": [
+        [
+          {
+            "node": "Mark followupSentAt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DRY RUN Resumen Followup": {
+      "main": [
+        [
+          {
+            "node": "DRY RUN Aviso Followup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Follow-up Email": {
+      "main": [
+        [
+          {
+            "node": "If Has WhatsApp?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Every Hour": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "5b806e0c-f9b9-4cd1-a349-4802897aa22e",
+  "activeVersionId": null,
+  "versionCounter": 7,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-29T23:09:19.918Z",
+      "createdAt": "2026-05-29T23:09:19.918Z",
+      "role": "workflow:owner",
+      "workflowId": "7avrjjM6NoRnTUrL",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Follow-up Email"
+  }
+}

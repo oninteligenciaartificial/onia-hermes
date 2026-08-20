@@ -176,28 +176,70 @@ noche no aporta a eso y el gym compite con mil cuentas de fitness.
 
 ---
 
-## 3-bis. ✅ La voz — decidida el 2026-07-09, y sí está stackeada
+## 3-bis. ✅ La voz — **Marcela**, decidida el 2026-08-15
 
-`references/models/lucia-voice/` tiene 9 audios y su README. La oficial:
+> 🔄 **Actualizado el 2026-08-18.** Esta sección decía que la oficial era `Lucia-ONIA` y que
+> `86V9x9hr…` estaba truncado y no debía usarse. **Las dos cosas quedaron superadas** por la
+> decisión de Sergio del 15-ago, que nunca se reflejó acá. Se corrige con tres pruebas, no con
+> opinión.
 
 | | |
 |---|---|
-| **Nombre** | `Lucia-ONIA` |
-| **voice_id** | **`wrXs6GqcC7X03dDKMoeT`** (ElevenLabs, API REST — no hay MCP) |
-| Cómo nació | Voice Design de ElevenLabs, opción 2 de 3. **Es propia**: nadie más la tiene |
-| Muestra | `lucia-voz-OFICIAL.mp3` · modelo `eleven_multilingual_v2` |
+| **Nombre** | `Marcela - Colombian Girl` |
+| **voice_id** | **`86V9x9hrQds83qf7zaGn`** (ElevenLabs, professional, es-LATAM colombiano) |
+| Modelo | `eleven_multilingual_v2` |
 | En el VPS | `/root/.hermes/.env` → `LUCIA_ELEVENLABS_VOICE_ID` |
 
-### ⚠️ Conflicto de IDs — hay tres dando vueltas
+**Las tres pruebas de que ésta es la vigente:**
+
+1. **Sergio la eligió el 15-ago** — `prueba-lipsync-20260815/LEEME.md:83`: *"Sergio eligió
+   Marcela… `Lucia-ONIA` queda descartada."*
+2. **Es la que está cargada en producción**: `LUCIA_ELEVENLABS_VOICE_ID=86V9x9hrQds83qf7zaGn`
+   en el `.env` del VPS, verificado el 18-ago.
+3. **Responde en la API de ElevenLabs** y genera audio — probado el 18-ago. El ID completo
+   tiene 20 caracteres; **lo que fallaba era la versión truncada que circulaba en los docs**,
+   no el ID.
+
+### ⚠️ Los otros dos IDs — qué son y por qué NO van
 
 | ID | Qué es | Veredicto |
 |---|---|---|
-| `wrXs6GqcC7X03dDKMoeT` | ElevenLabs, voz propia de Lucía | ✅ **LA OFICIAL** |
-| `8de5db95-e898-46a6-bb68-26d02f311686` | Higgsfield `seed_audio`, clonada del preset **Isabella** | 🟡 Respaldo barato. Es **voz de base compartida**, no suya |
-| `86V9x9hr…` | Aparece **truncado** en varios docs | ⛔ Truncado = `Voice not found`. No usarlo |
+| `wrXs6GqcC7X03dDKMoeT` | `Lucia-ONIA`, Voice Design de ElevenLabs. **Sigue existiendo** en la cuenta | ⛔ **descartada por Sergio el 15-ago.** No borrarla, pero no usarla |
+| `8de5db95-e898-46a6-bb68-26d02f311686` | Higgsfield `seed_audio`, clonada del preset Isabella | 🟡 **no es de ElevenLabs.** Pasárselo a ElevenLabs da error |
 
-La entrega de video-intake cita `8de5db95` como "la voz de Lucía": está nombrando **el
-respaldo**, no la oficial. Los dos existen, pero solo uno es de ella.
+### 🔄 Lipsync — corregido el 2026-08-18
+
+**Lo que decía esta sección:** que `wan2_7` no sirve, y que los modelos que generan su propia
+voz (`kling3_0` · `veo3`) quedaban fuera para la voz de Lucía.
+
+**Lo que se midió el 18-ago, y por qué no se contradicen:**
+
+Son **dos mecanismos distintos** y el doc no los separaba:
+
+| Mecanismo | Qué es | Veredicto |
+|---|---|---|
+| **Lipsync sobre audio externo** (`audio_references`) | pasarle NUESTRO mp3 y que sincronice | ⛔ `wan2_7` acá **es malo** — el veredicto de Sergio del 15-ago sigue en pie |
+| **Habla nativa** (el modelo genera su voz) | se le da el guion en el prompt y lo dice él | ✅ `kling3_0_turbo` y `wan2_7` dicen **el guion literal en español**, verificado con Whisper |
+
+**Por eso `kling3_0_turbo` sale de la lista negra**, pero solo por una vía concreta:
+
+```
+kling3_0_turbo (guion en español)  →  sync_so remap con el mp3 de Marcela
+```
+
+El video queda con la boca ya articulando español real, y `sync_so` la **retimea** al audio de
+Marcela. Probado punta a punta el 18-ago.
+
+⚠️ **Montar el mp3 encima sin `sync_so` NO funciona** — se probó y quedó hasta **1,4 s** fuera
+de sincronía, porque el video y la voz son dos interpretaciones distintas del mismo guion.
+`sync_so` cuesta **18,15 cr medidos** y no se puede evitar si la voz tiene que ser Marcela.
+
+| Con qué voz | Costo 5 s |
+|---|---:|
+| La nativa del modelo | **7,50** |
+| **Marcela** (kling + ElevenLabs + `sync_so`) | **~28** |
+
+Detalle: `web-factory/docs/MODELOS_IA_QUE_USAR_PARA_QUE.md` §6.
 
 ### Cómo se usa
 

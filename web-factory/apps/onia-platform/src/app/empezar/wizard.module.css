@@ -22,14 +22,20 @@
   border-bottom: 1px solid var(--line-soft);
 }
 
+/* min-height 44px en los dos links del encabezado: son los unicos blancos
+   tactiles de esta barra y con el alto del texto quedaban en 24px. */
 .brand {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
   color: inherit;
   text-decoration: none;
 }
 
 .volver {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 0.9rem;
   color: var(--ink-soft);
   text-decoration: none;
@@ -51,7 +57,7 @@
 
 .footMicro {
   padding: 1rem clamp(1rem, 4vw, 2.5rem) 1.2rem;
-  font-size: 0.8rem;
+  font-size: max(0.8rem, var(--fs-micro-min));
   color: var(--ink-faint);
   text-align: center;
   border-top: 1px solid var(--line-soft);
@@ -89,7 +95,7 @@
 }
 
 .pasoLabel {
-  font-size: 0.72rem;
+  font-size: max(0.72rem, var(--fs-label-min));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -281,7 +287,7 @@
 
 .urlMicro {
   margin-top: 0.55rem;
-  font-size: 0.8rem;
+  font-size: max(0.8rem, var(--fs-micro-min));
   color: var(--ink-faint);
 }
 
@@ -342,7 +348,7 @@
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0.35em 0.9em;
-  font-size: 0.85rem;
+  font-size: max(0.85rem, var(--fs-micro-min));
   font-weight: 550;
   background: var(--surface);
 }
@@ -368,7 +374,7 @@
 }
 
 .blockTitle {
-  font-size: 0.72rem;
+  font-size: max(0.72rem, var(--fs-label-min));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -409,7 +415,7 @@
 
 .modTag {
   margin-top: 0.7rem;
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -488,7 +494,7 @@
 
 .aGhostNote {
   font-family: var(--font-mono), monospace;
-  font-size: 0.62rem;
+  font-size: max(0.62rem, var(--fs-label-min));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -514,7 +520,7 @@
 
 .ctaMicro {
   margin-top: 0.9rem;
-  font-size: 0.85rem;
+  font-size: max(0.85rem, var(--fs-micro-min));
   color: var(--ink-faint);
   max-width: 48ch;
 }

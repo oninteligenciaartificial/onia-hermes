@@ -1,0 +1,117 @@
+{
+  "updatedAt": "2026-07-22T18:32:22.482Z",
+  "createdAt": "2026-07-22T18:32:22.482Z",
+  "id": "ZjaHUEMJVMXkLlmO",
+  "name": "ONIA - Tareas diarias reales (CRM -> panel)",
+  "description": "Cron Lun-Sab 06:50 La Paz: corre daily-tasks-agent.mjs por SSH. Genera tareas REALES derivadas del estado del CRM (trabajar los N leads nuevos, revisar los N borradores en cola, revisar las N ideas), dedup por task_key=auto-<kind>-<fecha>. Reemplaza las t",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "a551831f-22de-408c-8120-329932b08e56",
+      "name": "Lun-Sab 06:50",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "50 6 * * 1-6"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "0b7f6c4e-aeef-46bd-9ff5-b4d481a5ae57",
+      "name": "Tareas reales del CRM (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/daily-tasks-agent-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Lun-Sab 06:50": {
+      "main": [
+        [
+          {
+            "node": "Tareas reales del CRM (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Lun-Sab 06:50": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "149a329e-07fb-45fc-b509-e8bdeecb3934",
+  "activeVersionId": "149a329e-07fb-45fc-b509-e8bdeecb3934",
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T18:32:22.485Z",
+      "createdAt": "2026-07-22T18:32:22.485Z",
+      "role": "workflow:owner",
+      "workflowId": "ZjaHUEMJVMXkLlmO",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Tareas reales v1",
+    "description": "Created with 2 nodes: Lun-Sab 06:50, Tareas reales del CRM (VPS)"
+  }
+}

@@ -1,0 +1,430 @@
+{
+  "updatedAt": "2026-05-20T02:22:00.000Z",
+  "createdAt": "2026-05-16T20:49:15.977Z",
+  "id": "8xbGEIiNh6ctwUEF",
+  "name": "WF-00: Appointment Reminders",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "schedule-trigger",
+      "name": "Schedule: Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        400
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "minutesInterval": 60
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "pg-24h",
+      "name": "Supabase: Get 24h Appointments",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        500,
+        200
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      },
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT a.id, a.\"dateTime\", a.status, p.name AS \"patientName\", p.email AS \"patientEmail\", o.name AS \"clinicName\", '24h' AS \"reminderType\" FROM appointments a JOIN patients p ON a.\"patientId\" = p.id JOIN organizations o ON a.\"organizationId\" = o.id WHERE a.\"dateTime\" BETWEEN NOW() + INTERVAL '23 hours' AND NOW() + INTERVAL '25 hours' AND a.status = 'CONFIRMADA' AND (a.\"reminder24Sent\" = false OR a.\"reminder24Sent\" IS NULL) LIMIT 100",
+        "options": {}
+      }
+    },
+    {
+      "id": "if-24h",
+      "name": "If: Has 24h Reminders",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-24h",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "split-24h",
+      "name": "Split: Per Reminder 24h",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1020,
+        200
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "brevo-24h",
+      "name": "Brevo: Send 24h Reminder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1280,
+        200
+      ],
+      "credentials": {
+        "sendInBlueApi": {
+          "id": "mI0Vd3e0dhXDryiR",
+          "name": "Brevo account"
+        }
+      },
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "sendInBlueApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sender\": { \"email\": \"{{ $env.BREVO_SENDER_EMAIL }}\", \"name\": \"{{ $env.BREVO_SENDER_NAME }}\" },\n  \"to\": [{ \"email\": \"{{ $json.patientEmail }}\" }],\n  \"subject\": \"Recordatorio: Tu cita en {{ $json.clinicName }} es manana\",\n  \"textContent\": \"Hola {{ $json.patientName }},\\n\\nTienes una cita manana {{ $json.dateTime }} en {{ $json.clinicName }}.\\n\\nSaludos,\\nEl equipo de {{ $json.clinicName }}\"\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "mark-24h",
+      "name": "Supabase: Mark reminder24Sent",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1540,
+        200
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      },
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE appointments SET \"reminder24Sent\" = true WHERE id = '{{ $json.id }}'",
+        "options": {}
+      }
+    },
+    {
+      "id": "pg-2h",
+      "name": "Supabase: Get 2h Appointments",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        500,
+        600
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      },
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT a.id, a.\"dateTime\", a.status, p.name AS \"patientName\", p.email AS \"patientEmail\", o.name AS \"clinicName\", '2h' AS \"reminderType\" FROM appointments a JOIN patients p ON a.\"patientId\" = p.id JOIN organizations o ON a.\"organizationId\" = o.id WHERE a.\"dateTime\" BETWEEN NOW() + INTERVAL '1 hour 45 minutes' AND NOW() + INTERVAL '2 hours 15 minutes' AND a.status = 'CONFIRMADA' AND (a.\"reminder2hSent\" = false OR a.\"reminder2hSent\" IS NULL) LIMIT 100",
+        "options": {}
+      }
+    },
+    {
+      "id": "if-2h",
+      "name": "If: Has 2h Reminders",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        600
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-2h",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "split-2h",
+      "name": "Split: Per Reminder 2h",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1020,
+        600
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "brevo-2h",
+      "name": "Brevo: Send 2h Reminder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1280,
+        600
+      ],
+      "credentials": {
+        "sendInBlueApi": {
+          "id": "mI0Vd3e0dhXDryiR",
+          "name": "Brevo account"
+        }
+      },
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "sendInBlueApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sender\": { \"email\": \"{{ $env.BREVO_SENDER_EMAIL }}\", \"name\": \"{{ $env.BREVO_SENDER_NAME }}\" },\n  \"to\": [{ \"email\": \"{{ $json.patientEmail }}\" }],\n  \"subject\": \"Tu cita en {{ $json.clinicName }} es en 2 horas\",\n  \"textContent\": \"Hola {{ $json.patientName }},\\n\\nRecuerda que tienes una cita en {{ $json.clinicName }} en aproximadamente 2 horas ({{ $json.dateTime }}).\\n\\nSaludos,\\nEl equipo de {{ $json.clinicName }}\"\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "mark-2h",
+      "name": "Supabase: Mark reminder2hSent",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1540,
+        600
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      },
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE appointments SET \"reminder2hSent\" = true WHERE id = '{{ $json.id }}'",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Schedule: Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Get 24h Appointments",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase: Get 2h Appointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Get 24h Appointments": {
+      "main": [
+        [
+          {
+            "node": "If: Has 24h Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has 24h Reminders": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Reminder 24h",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Split: Per Reminder 24h": {
+      "main": [
+        [
+          {
+            "node": "Brevo: Send 24h Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Brevo: Send 24h Reminder": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Mark reminder24Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Mark reminder24Sent": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Reminder 24h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Get 2h Appointments": {
+      "main": [
+        [
+          {
+            "node": "If: Has 2h Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has 2h Reminders": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Reminder 2h",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Split: Per Reminder 2h": {
+      "main": [
+        [
+          {
+            "node": "Brevo: Send 2h Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Brevo: Send 2h Reminder": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Mark reminder2hSent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Mark reminder2hSent": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Reminder 2h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule: Every Hour": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "9ca1d093-e46d-4942-b3ad-b1e07efb30d7",
+  "activeVersionId": null,
+  "versionCounter": 6,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-16T20:49:15.989Z",
+      "createdAt": "2026-05-16T20:49:15.989Z",
+      "role": "workflow:owner",
+      "workflowId": "8xbGEIiNh6ctwUEF",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

@@ -35,14 +35,17 @@ function assetUrl(p) {
   return fs.existsSync(abs) ? `file://${abs.replace(/\\/g, '/')}` : '';
 }
 
+// Chrome va PRIMERO: Edge headless en esta maquina genera PNGs de 0 bytes sin
+// error (verificado 2026-08-20, con y sin sandbox). CAROUSEL_BROWSER lo pisa todo.
 const BROWSER_CANDIDATES = [
+  process.env.CAROUSEL_BROWSER || '',
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
   'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
-  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   '/usr/bin/google-chrome',
   '/usr/bin/chromium',
   '/usr/bin/chromium-browser',
-];
+].filter(Boolean);
 
 const ACCOUNTS = {
   // Handle IG real de ONIA, confirmado por Sergio 2026-08-13.
@@ -109,7 +112,7 @@ html body .slide .dots { margin-top:56px; padding-top:0; }
 `;
 
 function parseArgs(argv) {
-  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', accent: '', format: 'feed' };
+  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', accent: '', format: 'feed', emph: 'marcador' };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--brief') a.brief = argv[++i];
@@ -120,11 +123,14 @@ function parseArgs(argv) {
     else if (k === '--object') a.object = argv[++i];
     else if (k === '--accent') a.accent = argv[++i];
     else if (k === '--format') a.format = argv[++i];
+    else if (k === '--emph') a.emph = argv[++i];
   }
   if (!FORMATS[a.format]) {
     throw new Error('Unknown --format: ' + a.format + ' (use ' + Object.keys(FORMATS).join('|') + ')');
   }
   FMT = FORMATS[a.format];
+  if (!EMPH[a.emph]) throw new Error('Unknown --emph: ' + a.emph + ' (use ' + Object.keys(EMPH).join('|') + ')');
+  EMPH_STYLE = a.emph;
   // --accent permite que una cuenta personal (una modelo) tenga SU color y no el
   // verde de la marca Onia. Sin el flag, nada cambia.
   if (a.accent && !/^#[0-9a-fA-F]{6}$/.test(a.accent)) {
@@ -178,10 +184,27 @@ function dots(idx, total) {
 
 // La palabra del trueque sale del propio cuerpo del ultimo slide ("Comentá *LISTA* y...").
 // Asi el ticket no puede desincronizarse del texto: hay una sola fuente.
+// La palabra del trueque sale del CUERPO del ultimo slide, y el campo `comment_trigger` del
+// brief queda como respaldo — en ese orden y no al reves.
+//
+// Parece contraintuitivo (un campo estructurado deberia ganarle a un regex) pero se midio el
+// 2026-08-17: **6 de 9 briefs tenian el campo podrido** con las palabras viejas — AUTO, COSTO,
+// MITO, ESCALA, ORDEN, LIBRE — que se eliminaron al unificar el sistema en SISTEMA y LISTA.
+// El cuerpo se reescribio en esa unificacion; el campo no. Leer el campo primero habria
+// impreso un boton pidiendo una palabra que ya no existe, que es peor que no tener boton.
+//
+// Si el cuerpo no dice "Comentá X", NO hay boton: es un cierre de guardado o de pregunta.
 function triggerWord(slide) {
   const m = String(slide.body || '').match(/Comentá\s+\*?([A-ZÁÉÍÓÚÑ]{3,})\*?/);
-  return m ? m[1] : '';
+  if (m) return m[1];
+  const fromBrief = String(slide.comment_trigger || '').replace(/^Comentá\s+/i, '').trim();
+  return /^[A-ZÁÉÍÓÚÑ]{3,}$/.test(fromBrief) ? fromBrief : '';
 }
+
+// Boton de accion, compartido. La slide de CTA es la de mayor intencion de todo el carrusel
+// y hasta el 2026-08-17 solo el pack `typographic` dibujaba algo que se leyera como "tocá acá";
+// los otros cuatro dejaban solo texto.
+const ctaButton = (word) => word ? `<div class="ctabtn">Comentá ${esc(word)}</div>` : '';
 
 // Itemizado con guia punteada, para el estatico "recibo". El motor solo tenia un <p> unico
 // como cuerpo (los saltos de linea colapsan), asi que una oferta no se podia desglosar.
@@ -363,13 +386,35 @@ ${safeAreaCss()}
 .footer .handle { font-family:var(--font-display); font-weight:500; font-size:30px;
   color:var(--ink); opacity:.7; }
 .slide.cover .point-h, .slide.cover .body { margin-top:0; }
-.g { color:var(--onia-green); }
-.slide.cta .g { color:var(--onia-ink); }
+.g { ${EMPH[EMPH_STYLE]} }
+/* El slide de CTA tiene fondo verde: un marcador verde ahi no se ve. Se invierte. */
+.slide.cta .g { background:var(--onia-ink); color:var(--onia-green); box-shadow:none; }
 </style></head>
 <body><div class="slide ${role}">${inner}</div></body></html>`;
 }
 
 // Escape, then turn *emphasis* into a green span (keyword highlight).
+
+// Formas de resaltar la palabra clave dentro de un titular. Hasta el 2026-08-17 habia una
+// sola —cursiva serif— y Sergio la descarto: "busca otra forma de resaltarlo pero que se vea
+// mejor". Cada una es un mecanismo distinto, no una variante estetica:
+//   marcador  el ojo lo lee como subrayado de libro. Es el mas usado en carruseles que venden
+//   subrayado afirma sin gritar; deja la palabra en el mismo plano que el resto
+//   color     el mas limpio; falla si la pieza ya usa el acento en otro lado
+//   caja      el mas fuerte; funciona cuando la palabra ES el producto
+// ⚠️ Accesibilidad: `color` solo depende del color, y esa es la unica que no conviene sola.
+const EMPH = {
+  serif:     `font-family:'Fraunces',Georgia,serif; font-style:italic; font-weight:600; color:var(--onia-green); letter-spacing:0;`,
+  // `white-space:nowrap` NO es cosmetico: sin el, una frase de dos palabras que corta de
+  // linea deja el articulo huerfano en su propio bloquecito verde ("a" arriba, "mano" abajo).
+  // Se vio el 2026-08-17 en "DEJA DE RESPONDER WHATSAPP *a mano*".
+  marcador:  `background:var(--onia-green); color:var(--onia-ink); padding:0 .16em; border-radius:.08em; white-space:nowrap; box-decoration-break:clone; -webkit-box-decoration-break:clone;`,
+  subrayado: `color:inherit; box-shadow:inset 0 -.22em 0 var(--onia-green); padding:0 .04em;`,
+  color:     `color:var(--onia-green);`,
+  caja:      `border:.09em solid var(--onia-green); color:var(--onia-green); padding:0 .18em; border-radius:.18em; box-decoration-break:clone; -webkit-box-decoration-break:clone;`,
+};
+let EMPH_STYLE = 'marcador';
+
 function emph(s) {
   return esc(s).replace(/\*([^*]+)\*/g, '<span class="g">$1</span>');
 }
@@ -623,7 +668,7 @@ html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
 .slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column; justify-content:flex-end;
-  background:var(--onia-ink); color:var(--onia-white); font-family:'Inter',var(--font-body); }
+  background:var(--onia-ink); color:var(--onia-white); font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif,'Segoe UI',system-ui,Arial,sans-serif; }
 .photo { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
 .scrim { position:absolute; inset:0; z-index:1;
   background:linear-gradient(180deg, rgba(10,15,13,.15) 0%, rgba(10,15,13,.55) 55%, rgba(10,15,13,.92) 100%); }
@@ -635,22 +680,24 @@ ${safeAreaCss()}
 .topbar { position:absolute; top:var(--pad); left:var(--pad); right:var(--pad);
   display:flex; align-items:flex-start; z-index:4; height:auto; pointer-events:none; }
 .captop { display:inline-flex; background:var(--onia-green); color:var(--onia-ink);
-  font-family:'Archivo'; font-weight:800; font-size:26px; letter-spacing:1px;
+  font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800; font-size:26px; letter-spacing:1px;
   text-transform:uppercase; padding:12px 24px; border-radius:100px; }
 
-.ed-h { font-family:'Archivo'; font-weight:900; font-size:96px; line-height:.98;
+.ed-h { font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:900; font-size:96px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; }
-.ed-h .g { font-family:'Fraunces'; font-style:italic; font-weight:600; text-transform:none;
-  color:var(--onia-green); letter-spacing:0; }
-.ed-body { font-family:'Inter'; font-weight:500; font-size:38px; line-height:1.4;
+.ed-h .g { text-transform:none; ${EMPH[EMPH_STYLE]} }
+.ed-body { font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif; font-weight:500; font-size:38px; line-height:1.4;
   margin-top:28px; max-width:880px; color:rgba(255,255,255,.85); }
-.ed-body .g { color:var(--onia-green); font-family:'Fraunces'; font-style:italic; }
-.swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo'; font-weight:800;
+.ed-body .g { ${EMPH[EMPH_STYLE]} }
+.swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
   font-size:26px; letter-spacing:3px; text-transform:uppercase; color:var(--onia-green); }
 
 .footer { display:flex; align-items:center; gap:16px; margin-top:40px; }
 .footer .mark { width:56px; height:56px; }
-.footer .handle { font-family:'Archivo'; font-weight:800; font-size:28px; opacity:.85; }
+.footer .handle { font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800; font-size:28px; opacity:.85; }
+.ctabtn { align-self:flex-start; margin-top:34px; background:var(--onia-green); color:var(--onia-ink);
+  font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:900; font-size:40px; letter-spacing:-0.5px;
+  padding:26px 46px; border-radius:100px; box-shadow:0 18px 48px rgba(0,0,0,.45); }
 </style></head>
 <body><div class="slide ${role}">
   ${photo}<div class="scrim"></div>
@@ -658,6 +705,7 @@ ${safeAreaCss()}
   ${pill}
   <${headTag} class="ed-h">${emph(slide.headline)}</${headTag}>
   ${body}
+  ${role === 'cta' ? ctaButton(triggerWord(slide)) : ''}
   ${last ? '' : '<div class="swipe">Deslizá →</div>'}
   <div class="footer">
     <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -791,7 +839,9 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
-  const slides = brief.slides || [];
+  const slides = (brief.slides || []).map((sl) => (
+    // El brief trae `comment_trigger` a nivel raiz; el render lo necesita por slide.
+    { ...sl, comment_trigger: sl.comment_trigger || brief.comment_trigger || '' }));
   if (!slides.length) throw new Error('brief has no slides');
   if (args.bg) args.bg = path.resolve(args.bg);
   if (args.object) args.object = path.resolve(args.object);
@@ -817,7 +867,10 @@ function render(args) {
       '--allow-file-access-from-files',
       '--force-device-scale-factor=1',
       `--window-size=${FMT.w},${FMT.h}`,
-      '--virtual-time-budget=4000',
+      // 10s, no 4s: con 4 las webfonts de Google no siempre llegaban y algunos slides
+      // salian con la fuente de respaldo. Se detecto el 2026-08-17 comparando dos slides
+      // del MISMO carrusel — uno en sans y el otro en serif.
+      '--virtual-time-budget=10000',
       `--screenshot=${png}`,
       `file://${htmlPath.replace(/\\/g, '/')}`,
     ], { stdio: 'ignore', timeout: 60000 });

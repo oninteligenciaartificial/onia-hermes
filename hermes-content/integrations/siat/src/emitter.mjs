@@ -98,7 +98,9 @@ export async function emitInvoice(context = {}, deps = {}) {
   }
 
   // 4. POST al SIN por el transporte inyectable.
-  const targetEndpoint = endpoint ?? soapEndpoint(environment, "FACTURACION_COMPUTARIZADA");
+  // Compra-venta (sector 1) va por su servicio DEDICADO: mandarla a
+  // ServicioFacturacionComputarizada devuelve SIN 995 (verificado en vivo 2026-08-06).
+  const targetEndpoint = endpoint ?? soapEndpoint(environment, "FACTURACION_COMPRA_VENTA");
   const result = await transport({ endpoint: targetEndpoint, envelope: material.recepcionRequest, token, soapAction });
 
   // 5. Interpretar.

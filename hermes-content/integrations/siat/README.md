@@ -57,7 +57,10 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
   tolerante. Operaciones y codigos VERIFICADOS 2026-07-22 contra los **WSDL v2 del
   piloto** + doc oficial: `codigoAmbiente` 1=prod/2=piloto (al reves de lo
   intuitivo), `codigoModalidad` 2=computarizada, archivo gzip+base64, `hashArchivo`
-  SHA-256. Auth por header HTTP `Authorization: Token X` (NO en el SOAP). El
+  SHA-256. Auth por header HTTP `apikey: TokenApi X` (NO en el SOAP) —
+  **verificado EN VIVO 2026-08-06 contra el piloto** (CUIS obtenido, leyendas
+  sincronizadas): el `Authorization: Token X` que sugiere la doc devuelve Fault
+  "EL SERVICIO REQUIERE API KEY". El
   transporte HTTP real queda fuera (capa aparte, necesita credenciales del piloto).
   Los nombres exactos de wrapper/namespace van `[VERIFICAR]` contra el WSDL de tipos.
   29 tests.
@@ -68,7 +71,7 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
   parametro (el `fechaHora` del CUF y el `<fechaEmision>` del XML calzan por
   construccion). 17 tests.
 - `src/soap-transport.mjs` — **transporte HTTP** con `fetch` INYECTABLE (testeable
-  sin red): `postSoap` (POST + `Authorization: Token` + timeout + reintentos/backoff
+  sin red): `postSoap` (POST + `apikey: TokenApi` + timeout + reintentos/backoff
   ante red/5xx, NO ante 4xx/fault de negocio) + `classifyResponse`
   (ok/network/server/soap_fault/business). 19 tests.
 - `src/catalog-store.mjs` — **store puro de las parametricas** sincronizadas (11

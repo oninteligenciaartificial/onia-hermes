@@ -1,0 +1,98 @@
+{
+  "updatedAt": "2026-08-14T03:28:31.000Z",
+  "createdAt": "2026-08-14T03:20:49.098Z",
+  "id": "AU2CUCAvmLBkFQeV",
+  "name": "TEMP - Diagnostico DB Postgres account",
+  "description": "Temporal: identificar a que base apunta la credencial Postgres account. Borrar despues.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "a786fde1-dfd6-4d98-aff6-d32bc2f689e2",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f69862f7-a796-4b89-a3b1-ebdb1ec627f0",
+      "name": "Identify DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "resource": "database",
+        "operation": "executeQuery",
+        "query": "SELECT (SELECT count(*)::int FROM subscription_payments WHERE id = 'test-payalert-check-002') AS payment_row, (SELECT count(*)::int FROM n8n_ops.payment_alerts_sent WHERE payment_id = 'test-payalert-check-002') AS tracking_row, (SELECT count(*)::int FROM subscription_payments) AS total_payments, (SELECT count(*)::int FROM subscription_payments WHERE status='PENDING') AS total_pending;",
+        "options": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "2P4w95n0vir90EkT",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Identify DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "f3e77cfe-9280-4a53-827c-a14f9a1921c6",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T03:20:49.103Z",
+      "createdAt": "2026-08-14T03:20:49.103Z",
+      "role": "workflow:owner",
+      "workflowId": "AU2CUCAvmLBkFQeV",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

@@ -265,13 +265,12 @@ function VarianteProximamente({
     <div>
       <p className="kicker">Tu recomendación</p>
       <h1 ref={h1Ref} tabIndex={-1} className={styles.q}>
-        Tu rubro está en construcción — sin humo.
+        Tu rubro se arma a medida, con vos.
       </h1>
       <p className={styles.sub}>
-        {arm.nombre} se está armando sobre el mismo motor que ya corre en el
-        pack dental. No vendemos lo que no existe ni le ponemos precio a lo que
-        no está listo: anotate y te avisamos apenas esté, con tu caso ya
-        registrado para que no repitas nada.
+        {arm.nombre} se monta sobre el mismo motor que ya corre en producción
+        para seis rubros. Dejanos tu caso: lo registramos y te contactamos con
+        la propuesta armada — sin que repitas nada.
       </p>
 
       {/* ensamblaje a medio armar — patrón aBlock/aGhost de rubros.tsx */}
@@ -289,7 +288,7 @@ function VarianteProximamente({
               <span className={styles.aDot} />
               {b}
               {ghost ? (
-                <span className={styles.aGhostNote}>en construcción</span>
+                <span className={styles.aGhostNote}>a medida</span>
               ) : null}
             </m.div>
           );

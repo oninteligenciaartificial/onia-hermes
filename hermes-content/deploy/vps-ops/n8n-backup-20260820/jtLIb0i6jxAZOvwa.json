@@ -1,0 +1,431 @@
+{
+  "updatedAt": "2026-07-03T21:24:12.881Z",
+  "createdAt": "2026-05-29T18:47:46.105Z",
+  "id": "jtLIb0i6jxAZOvwa",
+  "name": "WF-GS-05: BCP Auto Payment Confirmation",
+  "description": "Polls Gmail for BCP payment emails, extracts reference, queries Supabase, and auto-confirms pending payments to activate workspace plans.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## WF-GS-05: BCP Auto-Payment Confirmation\n\n**Trigger**: Gmail polls sergio.urcullo.m@gmail.com every minute\n**Filter**: from=BolBancaMov@bcp.com.bo + subject=\"Interbancaria QR\"\n\n**Flow**:\n1. Extract PAGO-XXXXX-timestamp from email body/snippet\n2. Lookup in Supabase: payment_requests WHERE reference=X AND status=PENDIENTE\n3. If found: PATCH payment to CONFIRMADO + PATCH organization.plan\n\n**Setup**: Configure \"Supabase GestiOS\" credential (supabaseApi type)\nand \"Gmail sergio.urcullo\" credential (Gmail OAuth2).",
+        "height": 200,
+        "width": 600,
+        "color": 2
+      },
+      "id": "335372f4-4043-4eb8-b532-00ef5c8a08ec",
+      "name": "Sticky Note f43106ab",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        880,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "readStatus": "unread",
+          "sender": "BolBancaMov@bcp.com.bo"
+        },
+        "options": {}
+      },
+      "id": "9bb2150a-6e4d-4948-b763-30ede8d9c243",
+      "name": "BCP Email Received",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        192
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "noe1vRlyVTHo74tB",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst snippet = item.snippet || \"\";\nconst bodyParts = item.payload?.parts || [];\nlet fullText = snippet;\nfor (const part of bodyParts) {\n  if (part.body?.data) {\n    try {\n      fullText += \" \" + Buffer.from(part.body.data, \"base64\").toString(\"utf8\");\n    } catch(e) {}\n  }\n}\nconst match = fullText.match(/PAGO-[A-Z0-9]+-\\d+/);\nconst reference = match ? match[0] : null;\nreturn [{ json: { reference, emailId: item.id, fullText: fullText.slice(0, 500) } }];"
+      },
+      "id": "5c7027e4-9027-4d86-ad7a-021872d6f432",
+      "name": "Extract Reference from Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.reference }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1027b4ba-a5bd-4bd6-b49f-bb564a521936",
+      "name": "Reference Found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://dlcwmqylhctpuimtfqrs.supabase.co/rest/v1/payment_requests?reference=eq.{{ $json.reference }}&status=eq.PENDIENTE&select=id,organizationId,plan,months,amountBOB,reference",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ca74fa67-765b-4347-ad82-bedd1208f1cf",
+      "name": "Lookup Payment in Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        672,
+        96
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "3nx0cdsBDL1lo1zX",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fcf10e35-34db-4735-9a3e-5d47baf3d6f3",
+      "name": "Payment Record Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://dlcwmqylhctpuimtfqrs.supabase.co/rest/v1/payment_requests?id=eq.{{ $json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{ \"status\": \"CONFIRMADO\", \"confirmedAt\": \"{{ $now.toISO() }}\", \"confirmedBy\": \"n8n-auto\" }",
+        "options": {}
+      },
+      "id": "f4c0e95d-2677-49d9-aab6-73d49c020561",
+      "name": "Mark Payment CONFIRMADO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1120,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "3nx0cdsBDL1lo1zX",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const pr = $input.first().json;\nconst expiry = new Date();\nexpiry.setMonth(expiry.getMonth() + (pr.months || 1));\nreturn [{ json: { organizationId: pr.organizationId, plan: pr.plan, planExpiresAt: expiry.toISOString(), months: pr.months } }];"
+      },
+      "id": "36d33e38-51ec-40da-a344-8739b67682ec",
+      "name": "Compute Plan Expiry",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://dlcwmqylhctpuimtfqrs.supabase.co/rest/v1/organizations?id=eq.{{ $json.organizationId }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"plan\": \"{{ $json.plan }}\", \"planExpiresAt\": \"{{ $json.planExpiresAt }}\" }",
+        "options": {}
+      },
+      "id": "db6f95c5-f957-4490-b403-a78725b33d6f",
+      "name": "Activate Org Plan in Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1568,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "3nx0cdsBDL1lo1zX",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "1cd879bb-ce0e-491f-98c5-80fa8839df15",
+      "name": "Skip - No Matching Payment",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        192
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "42f94aa2-6020-40c9-b6c3-14fdc52d96b7",
+      "name": "Skip - No Reference Found",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        288
+      ]
+    }
+  ],
+  "connections": {
+    "BCP Email Received": {
+      "main": [
+        [
+          {
+            "node": "Extract Reference from Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Reference from Email": {
+      "main": [
+        [
+          {
+            "node": "Reference Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reference Found?": {
+      "main": [
+        [
+          {
+            "node": "Lookup Payment in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skip - No Reference Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup Payment in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Payment Record Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Payment Record Exists?": {
+      "main": [
+        [
+          {
+            "node": "Mark Payment CONFIRMADO",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skip - No Matching Payment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Payment CONFIRMADO": {
+      "main": [
+        [
+          {
+            "node": "Compute Plan Expiry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Plan Expiry": {
+      "main": [
+        [
+          {
+            "node": "Activate Org Plan in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:BCP Email Received": {
+      "BCP Email Received": {
+        "lastTimeChecked": 1786074261,
+        "possibleDuplicates": [
+          "19fda526d27f33a6",
+          "19fd9445f9908426"
+        ]
+      }
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "22fd25d3-8f1e-4d1a-acbb-0004015b312c",
+  "activeVersionId": null,
+  "versionCounter": 13,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:12.870Z",
+      "createdAt": "2026-07-03T21:24:12.870Z",
+      "id": "uSo9L20O6HDN0QJE",
+      "name": "gestios"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-29T18:47:46.108Z",
+      "createdAt": "2026-05-29T18:47:46.108Z",
+      "role": "workflow:owner",
+      "workflowId": "jtLIb0i6jxAZOvwa",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

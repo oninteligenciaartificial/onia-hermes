@@ -1,0 +1,179 @@
+/**
+ * Webs — los stacks que vendemos, con los precios que ya están escritos.
+ *
+ * Fuentes (los cuatro coinciden entre sí; nada inventado):
+ *  - hermes-content/propuestas/ONIA_CATALOGO_PRECIOS_2026.md §2 y §6
+ *  - hermes-content/docs/ONIA_VENDOR_MANUAL_2026.md:181-193 (definiciones de
+ *    una línea de cada producto, regla 50/50 y prohibición de prometer
+ *    posicionamiento en Google)
+ *  - hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md §0
+ *  - web-factory/apps/site/src/app/vendedores/cotizador-data.ts:55-67
+ *
+ * Landing 790 · Web Profesional 1.500 · Web Pro Onia 2.900 · Cuidado Web
+ * 190/390/690 al mes.
+ *
+ * La TIENDA va sin precio a propósito: el único número escrito (Bs 2.500)
+ * dice "con pago (BCP + carrito)" y el generador NO tiene pasarela — el
+ * checkout sale por WhatsApp o email (web-factory/packages/templates/src/
+ * store.ts:1143-1159). Hasta que Sergio ratifique el precio sin esa promesa,
+ * se cotiza. No se publica una cifra que arrastra algo que no existe.
+ *
+ * Lo que incluye cada stack sale de lo que el generador hace hoy: bloques de
+ * la plantilla (packages/templates/src/landing.ts:38-42), suites de
+ * accesibilidad y performance (tests/e2e/a11y.spec.ts, perf.spec.ts) y el
+ * checkout por WhatsApp/email de la tienda. Lo que no está construido está en
+ * "no incluye": panel de edición, sitio en dos idiomas, blog y pasarela.
+ */
+
+export type WebStackId = "landing" | "profesional" | "pro" | "tienda";
+
+export interface WebStack {
+  readonly id: WebStackId;
+  readonly nombre: string;
+  /** Bs, pago único. null = se cotiza (no hay precio ratificado). */
+  readonly precio: number | null;
+  readonly paraQuien: string;
+  readonly resuelve: string;
+  readonly incluye: readonly string[];
+  readonly noIncluye: readonly string[];
+  readonly necesitasVos: readonly string[];
+  /** Qué plan de Cuidado Web le corresponde. */
+  readonly mensual: string;
+  readonly destacado?: boolean;
+}
+
+export const WEB_STACKS: readonly WebStack[] = [
+  {
+    id: "landing",
+    nombre: "Landing de Captación",
+    precio: 790,
+    paraQuien:
+      "El que no tiene nada todavía, o el que va a hacer pauta y necesita un solo lugar donde caer.",
+    resuelve:
+      "Un servicio, un objetivo, un botón. Que la gente que ya te está buscando te encuentre y te escriba.",
+    incluye: [
+      "Una página, sin menú, con un solo llamado a la acción",
+      "Botón que abre WhatsApp con el mensaje ya escrito (o formulario a tu email)",
+      "Diseño hecho a partir de tu marca, con versión clara y oscura",
+      "Accesibilidad y velocidad verificadas antes de publicar",
+      "SEO básico: título, descripción y la imagen que aparece al compartir el link",
+      "Publicación en tu dominio y tu hosting, a tu nombre",
+    ],
+    noIncluye: [
+      "Menú ni páginas internas",
+      "Blog, tienda ni carrito",
+      "Panel para que edites vos mismo",
+      "Sitio en dos idiomas",
+      "Dominio, hosting y fotos (van a tu nombre y se pagan aparte)",
+    ],
+    necesitasVos: [
+      "Qué hacés y de 3 a 6 servicios, cada uno con una frase",
+      "WhatsApp y/o email, dirección y horarios",
+      "Fotos propias en archivo original",
+    ],
+    mensual: "Cuidado Web Básico — Bs 190/mes",
+  },
+  {
+    id: "profesional",
+    nombre: "Web Profesional",
+    precio: 1500,
+    paraQuien:
+      "El negocio que ya opera y necesita que la web le explique todo y le filtre las consultas.",
+    resuelve:
+      "Contestar cien veces lo mismo. La web responde por vos y te llegan consultas más maduras.",
+    incluye: [
+      "Todo lo de la Landing",
+      "Página completa: portada, credenciales, servicios, cómo trabajás, preguntas frecuentes y pie",
+      "Botón de WhatsApp fijo que te sigue mientras la persona baja",
+      "Íconos por servicio y tus fotos optimizadas para que cargue rápido",
+    ],
+    noIncluye: [
+      "Tienda, carrito ni pasarela de pago",
+      "Chatbot (es otro servicio)",
+      "Blog y páginas separadas tipo Nosotros (se cotizan)",
+      "Envío automático de los contactos a un CRM (se agrega, se cotiza aparte)",
+    ],
+    necesitasVos: [
+      "Todo lo de la Landing",
+      "5 preguntas que te hacen tus clientes de verdad",
+      "Tus pruebas: números, logros o clientes con los que trabajaste (si no hay, no se inventan)",
+    ],
+    mensual: "Cuidado Web Básico Bs 190/mes o Crecimiento Bs 390/mes",
+    destacado: true,
+  },
+  {
+    id: "pro",
+    nombre: "Web Pro Onia",
+    precio: 2900,
+    paraQuien:
+      "El que compite por imagen y no puede parecerse a nadie, o el que va a invertir en pauta y quiere seguirle el rastro a los contactos.",
+    resuelve:
+      "Verse como la empresa que sos. Dirección de arte propia, no una plantilla reconocible.",
+    incluye: [
+      "Todo lo de la Web Profesional",
+      "Dirección de arte a medida",
+      "El copy lo escribimos nosotros a partir de tu material",
+      "Seguimiento básico de los contactos que entran",
+    ],
+    noIncluye: [
+      "Tienda ni pasarela de pago",
+      "Chatbot de WhatsApp",
+      "Pauta publicitaria y producción de fotos profesionales",
+    ],
+    necesitasVos: [
+      "Todo lo de la Web Profesional",
+      "Tu material real: brochure, fotos, precios, casos",
+      "Una persona que aprueba, una sola",
+    ],
+    mensual: "Cuidado Web Crecimiento Bs 390/mes o Pro Bs 690/mes",
+  },
+  {
+    id: "tienda",
+    nombre: "Tienda / catálogo online",
+    precio: null,
+    paraQuien: "El que vende productos y hoy los manda uno por uno por WhatsApp.",
+    resuelve:
+      "Que el cliente arme su pedido solo y te llegue completo, con productos, cantidades y subtotal.",
+    incluye: [
+      "Portada de tienda y una página por producto",
+      "Carrito que guarda la selección",
+      "El pedido te llega por WhatsApp o email con productos, cantidades y subtotal ya escritos",
+      "Si a un producto le falta precio, el sistema pasa solo a “pedir cotización”",
+    ],
+    noIncluye: [
+      "Cobro con tarjeta: NO hay pasarela online. Esto no existe en el sistema todavía",
+      "Cuenta para que cargues productos vos mismo",
+      "Migración de un catálogo grande (se cotiza aparte)",
+    ],
+    necesitasVos: [
+      "Tu lista de productos con nombre, categoría, precio y descripción",
+      "Una foto por producto",
+      "Tus métodos de pago y tus políticas de envío y devolución",
+    ],
+    mensual: "Cuidado Web Crecimiento Bs 390/mes o Pro Bs 690/mes",
+  },
+] as const;
+
+export interface CuidadoWeb {
+  readonly nombre: string;
+  readonly mensual: number;
+  readonly que: string;
+}
+
+/**
+ * Cuidado Web. Las definiciones son las que ya están escritas
+ * (ONIA_VENDOR_MANUAL_2026.md:185-187). El detalle de cuántos cambios entran
+ * por mes NO está escrito en ningún lado, así que no se publica un número:
+ * el alcance se fija por escrito en tu propuesta antes de arrancar.
+ */
+export const CUIDADO_WEB: readonly CuidadoWeb[] = [
+  { nombre: "Básico", mensual: 190, que: "Mantenimiento simple: tu sitio en línea y al día." },
+  { nombre: "Crecimiento", mensual: 390, que: "Cambios ligeros y una revisión mensual." },
+  { nombre: "Pro", mensual: 690, que: "Soporte más activo y mejoras pequeñas cada mes." },
+] as const;
+
+export function precioWeb(stack: WebStack): string {
+  return stack.precio === null
+    ? "Se cotiza con tu catálogo"
+    : `Bs ${stack.precio.toLocaleString("es-BO")} · pago único`;
+}

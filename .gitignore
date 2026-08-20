@@ -42,3 +42,7 @@ desktop.ini
 # pero tiene su propio git y su propio remoto. Si el autosync lo barre, entra a
 # main como gitlink roto o duplica contenido. Ver CLAUDE.md "Cuando separar un repo".
 onia-hermes-collab/
+
+# Web Factory: credenciales/estado de deploy por cliente (NUNCA al repo)
+*.deploy.json
+n8n-mcp-server/node_modules/

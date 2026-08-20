@@ -1,9 +1,9 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { loadClientProfile, type ClientProfile } from "../data/schema";
+import { loadClientProfile, type ClientProfile, type WebFactoryTemplate } from "../data/schema";
 import { parseSlug } from "../generate/generate";
 
-export type WebFactoryTemplate = "landing" | "store" | "dashboard" | "landing-focus";
+export type { WebFactoryTemplate };
 
 export type VerticalId =
   | "skincare-ecommerce"

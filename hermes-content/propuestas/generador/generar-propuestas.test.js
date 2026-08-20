@@ -145,6 +145,38 @@ test('buildHtml renderiza límite del paquete solo si existe', () => {
   assert.ok(html.includes('LIMITE-X'));
 });
 
+test('buildHtml: "El costo de esperar" solo con datos reales del cliente', () => {
+  // sin el campo → no se imprime (regla: no fabricar)
+  assert.ok(!buildHtml(base).includes('El costo de esperar'));
+  // con el campo vacío o con items incompletos → tampoco
+  assert.ok(!buildHtml({ ...base, costoDeEsperar: { items: [] } }).includes('El costo de esperar'));
+  assert.ok(!buildHtml({ ...base, costoDeEsperar: { intro: 'solo intro' } }).includes('El costo de esperar'));
+  assert.ok(!buildHtml({ ...base, costoDeEsperar: { items: [{ concepto: 'sin costo' }] } })
+    .includes('El costo de esperar'));
+  // con datos del cliente → se imprime con sus números
+  const c = { ...base, costoDeEsperar: {
+    items: [{ concepto: 'Tipeo manual', dato: 'DATO-X', costo: 'COSTO-X' }],
+    total: 'TOTAL-X',
+  } };
+  const html = buildHtml(c);
+  assert.ok(html.includes('El costo de esperar'));
+  assert.ok(html.includes('DATO-X') && html.includes('COSTO-X') && html.includes('TOTAL-X'));
+});
+
+test('buildHtml: la línea SIAT exige el grupo confirmado del cliente', () => {
+  const sinGrupo = { ...base, costoDeEsperar: {
+    items: [{ concepto: 'c', costo: 'x' }], siat: {},
+  } };
+  const h1 = buildHtml(sinGrupo);
+  assert.ok(h1.includes('El costo de esperar'));
+  assert.ok(!h1.includes('1 de octubre de 2026'), 'no debe citar la fecha sin grupo confirmado');
+  const conGrupo = { ...base, costoDeEsperar: { siat: { grupo: '10°' } } };
+  const h2 = buildHtml(conGrupo);
+  assert.ok(h2.includes('1 de octubre de 2026'));
+  assert.ok(h2.includes('RND 102600000007'));
+  assert.ok(h2.includes('Portal Web del SIN cumple gratis'), 'debe decir la verdad completa');
+});
+
 test('parseArgs: slug sin --track no se pierde', () => {
   const p = parseArgs(['dentalgest', '--pdf']);
   assert.deepStrictEqual(p.only, ['dentalgest']);

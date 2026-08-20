@@ -1,0 +1,179 @@
+{
+  "updatedAt": "2026-08-07T14:41:04.000Z",
+  "createdAt": "2026-08-07T14:26:53.406Z",
+  "id": "LMEFUMl4oiK8izNX",
+  "name": "ZZ TEST credenciales Gmail (borrar)",
+  "description": "Prueba temporal para identificar qué cuenta hay detrás de cada credencial Gmail OAuth2. Manda un correo por credencial a business@onia.com.bo con el nombre de la credencial en el asunto. BORRAR después de la migración de correo.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "0d47b83d-c014-4493-87ed-37253cf51058",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0ebafee4-8fe1-4c68-ba3f-7a30b9ad4392",
+      "name": "Test Gmail account",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "business@onia.com.bo",
+        "subject": "TEST credencial [Gmail account] — mira el remitente",
+        "emailType": "text",
+        "message": "Prueba de identidad de la credencial n8n \"Gmail account\". El remitente de ESTE correo es la cuenta detras de esa credencial.",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ku1kYKsZFvrrIJ9y",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "webhookId": "f6ad22a4-9b11-42b7-bef9-80681efedab2"
+    },
+    {
+      "id": "978ce7ac-9cb6-4b00-88b1-7eac20a65deb",
+      "name": "Test Gmail account 2",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "business@onia.com.bo",
+        "subject": "TEST credencial [Gmail account 2] — mira el remitente",
+        "emailType": "text",
+        "message": "Prueba de identidad de la credencial n8n \"Gmail account 2\". El remitente de ESTE correo es la cuenta detras de esa credencial.",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tuGzEvnSOkIP0ByK",
+          "name": "Gmail account 2"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "webhookId": "310da1e5-3bb7-4a8f-93d1-82e0b2c262c7"
+    },
+    {
+      "id": "cea0f24a-e2e8-4d51-a7a4-0c3a21b40698",
+      "name": "Test Gmail account 3",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "business@onia.com.bo",
+        "subject": "TEST credencial [Gmail account 3] — mira el remitente",
+        "emailType": "text",
+        "message": "Prueba de identidad de la credencial n8n \"Gmail account 3\". El remitente de ESTE correo es la cuenta detras de esa credencial.",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "noe1vRlyVTHo74tB",
+          "name": "Gmail account 3"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "webhookId": "22c200b3-6bb1-49b8-836b-ab5cd61d2666"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Test Gmail account",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test Gmail account": {
+      "main": [
+        [
+          {
+            "node": "Test Gmail account 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test Gmail account 2": {
+      "main": [
+        [
+          {
+            "node": "Test Gmail account 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "71690deb-eccb-463e-a902-fe42a233d477",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-07T14:26:53.427Z",
+      "createdAt": "2026-08-07T14:26:53.427Z",
+      "role": "workflow:owner",
+      "workflowId": "LMEFUMl4oiK8izNX",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

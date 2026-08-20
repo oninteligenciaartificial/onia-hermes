@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Marcador de imagen para el hero inmobiliario</title>
+  <desc id="desc">Placeholder geometrico en la paleta ONIA. Se reemplaza por una foto real de la cartera del cliente.</desc>
+  <rect width="1600" height="1000" fill="#0C110F"/>
+  <rect width="1600" height="1000" fill="#013925" opacity=".55"/>
+  <g opacity=".5" fill="none" stroke="#4DBD8C" stroke-width="2">
+    <path d="M0 720h1600M0 800h1600M0 880h1600"/>
+    <path d="M200 1000V520M420 1000V430M640 1000V600M860 1000V360M1080 1000V560M1300 1000V470"/>
+  </g>
+  <g opacity=".9">
+    <rect x="150" y="520" width="180" height="480" fill="#013925"/>
+    <rect x="380" y="430" width="200" height="570" fill="#0C110F"/>
+    <rect x="620" y="600" width="160" height="400" fill="#013925"/>
+    <rect x="820" y="360" width="220" height="640" fill="#004D32"/>
+    <rect x="1080" y="560" width="180" height="440" fill="#0C110F"/>
+    <rect x="1300" y="470" width="200" height="530" fill="#013925"/>
+  </g>
+  <g fill="#86D9B0" opacity=".55">
+    <rect x="180" y="560" width="26" height="34"/><rect x="230" y="560" width="26" height="34"/>
+    <rect x="180" y="630" width="26" height="34"/><rect x="230" y="630" width="26" height="34"/>
+    <rect x="410" y="470" width="26" height="34"/><rect x="460" y="470" width="26" height="34"/>
+    <rect x="410" y="540" width="26" height="34"/><rect x="510" y="540" width="26" height="34"/>
+    <rect x="850" y="400" width="26" height="34"/><rect x="900" y="400" width="26" height="34"/>
+    <rect x="850" y="470" width="26" height="34"/><rect x="950" y="470" width="26" height="34"/>
+    <rect x="1110" y="600" width="26" height="34"/><rect x="1160" y="600" width="26" height="34"/>
+    <rect x="1330" y="510" width="26" height="34"/><rect x="1380" y="510" width="26" height="34"/>
+  </g>
+  <rect x="1180" y="900" width="360" height="56" rx="28" fill="#0C110F" opacity=".82"/>
+  <text x="1360" y="937" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2" fill="#86D9B0">IMAGEN DE MUESTRA</text>
+</svg>

@@ -1,108 +1,54 @@
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
-import { APP_URL, WA_URL } from "@/lib/site";
+import { APP_URL } from "@/lib/site";
 import styles from "./site-header.module.css";
 
 /* hrefs absolutos ("/#...") para que la nav tambien funcione desde
-   las paginas legales (/terminos, /privacidad). */
+   /comparativa y las paginas legales. */
 const NAV = [
-  { href: "/#prueba", label: "La prueba" },
-  { href: "/#como-funciona", label: "Cómo funciona" },
-  { href: "/#rubros", label: "Rubros" },
-  { href: "/#precios", label: "Precios" },
-  { href: "/#preguntas", label: "Objeciones" },
+  { href: "/#como", label: "Cómo funciona" },
+  { href: "/#modulos", label: "Módulos" },
+  { href: "/chatbot", label: "Chatbot" },
+  { href: "/precios", label: "Precios" },
+  { href: "/nosotros", label: "Nosotros" },
 ] as const;
 
-function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark" | null>(null);
-
-  useEffect(() => {
-    const attr = document.documentElement.getAttribute("data-theme");
-    if (attr === "light" || attr === "dark") {
-      setTheme(attr);
-      return;
-    }
-    setTheme(
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light",
-    );
-  }, []);
-
-  const toggle = useCallback(() => {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem("onia-theme", next);
-    } catch {
-      /* almacenamiento bloqueado: el tema queda solo para esta vista */
-    }
-  }, [theme]);
-
-  return (
-    <button
-      type="button"
-      className={styles.themeBtn}
-      onClick={toggle}
-      aria-label={theme === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
-    >
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-        {theme === "dark" ? (
-          <circle cx="8" cy="8" r="4.2" stroke="currentColor" strokeWidth="1.6" />
-        ) : (
-          <path
-            d="M12.8 9.7A5.4 5.4 0 0 1 6.3 3.2a5.4 5.4 0 1 0 6.5 6.5Z"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinejoin="round"
-          />
-        )}
-      </svg>
-    </button>
-  );
-}
-
 /**
- * Header sticky delgado. Sin animacion de entrada — el header no compite.
- * El unico estado diseñado es el hover de los links: subrayado que corre
- * (transform scaleX desde la izquierda, ver CSS).
+ * Header — porte del mockup aprobado: marca, tres destinos y las dos acciones
+ * (entrar / probar). En movil quedan solo la marca y el CTA.
+ *
+ * Sin toggle de tema: la superficie publica es clara y el ritmo de tonalidades
+ * por seccion ES el diseno; dos temas lo romperian.
  */
 export function SiteHeader() {
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
-        <a href="/" className={styles.brand} aria-label="Onia — inicio">
-          <BrandLogo height={26} />
-          <span className={styles.tagline}>El sistema con IA para tu negocio</span>
+        <a href="/" className={styles.brand} aria-label="Onia Platform — inicio">
+          <BrandLogo height={24} />
+          <span className={styles.sub}>
+            Onia
+            <br />
+            Platform
+          </span>
         </a>
 
-        <nav aria-label="Secciones" className={styles.nav}>
+        <nav aria-label="Principal" className={styles.nav}>
           {NAV.map((item) => (
-            <a key={item.href} href={item.href} className={styles.navLink}>
+            <a key={item.href} href={item.href}>
               {item.label}
             </a>
           ))}
         </nav>
 
-        <div className={styles.actions}>
-          <ThemeToggle />
-          <a href={APP_URL} className={`btn btn-ghost btn-sm ${styles.appCta}`}>
-            Entrar a la app
-          </a>
-          {/* En pantallas de 320px el rotulo completo empujaba la fila fuera
-              del viewport y la pagina entera ganaba scroll horizontal. Ahi el
-              boton se queda en "WhatsApp": el verbo lo pone el contexto. */}
-          <a href={WA_URL} className="btn btn-wa btn-sm">
-            <span className="btn-dot" aria-hidden />
-            <span>
-              <span className={styles.ctaLargo}>{"Hablanos por "}</span>
-              WhatsApp
-            </span>
-          </a>
-        </div>
+        <a href={APP_URL} className={`${styles.btn} ${styles.ghost}`}>
+          Entrar
+        </a>
+        <a
+          href={`${APP_URL}/register`}
+          className={`${styles.btn} ${styles.primary}`}
+        >
+          Probar gratis
+        </a>
       </div>
     </header>
   );

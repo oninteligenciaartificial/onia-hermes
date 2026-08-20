@@ -1,0 +1,324 @@
+{
+  "updatedAt": "2026-08-07T15:07:59.116Z",
+  "createdAt": "2026-05-14T02:24:36.227Z",
+  "id": "DKSPEsrRYDtoSaG0",
+  "name": "WF-07: Payment Reconciliation",
+  "description": "Payment reconciliation: runs nightly, checks for mismatches, alerts superadmin via Gmail Workspace (migrado 2026-08-07, sin $env).",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "1bfd3577-1eb6-4935-adf6-ff9fefc3b7df",
+      "name": "Schedule: Daily 11PM La Paz",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 3 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "643fc5c4-f0c4-481c-8096-4a2535fbe65a",
+      "name": "Supabase: Last 24h Payments",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_last_24h_payments",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "executeOnce": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "93c74be9-7eeb-407e-8abe-476417dffc44",
+      "name": "Supabase: Paid Without Payment Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_paid_without_record",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "executeOnce": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "24b8a31f-7b51-4766-8f45-a64bc9fb1571",
+      "name": "Supabase: Payment Without Matching Invoice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        384
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_payment_without_invoice",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "executeOnce": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "38f24d0a-220d-4771-bec1-ee1669610b9e",
+      "name": "Code: Compare & Find Mismatches",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        192
+      ],
+      "parameters": {
+        "jsCode": "const payments = $('Supabase: Last 24h Payments').all();\nconst orphanPaid = $('Supabase: Paid Without Payment Record').all();\nconst orphanPayments = $('Supabase: Payment Without Matching Invoice').all();\n\nconst issues = [];\n\nif (orphanPaid.length > 0) {\n  for (const row of orphanPaid) {\n    issues.push({\n      type: 'PAID_WITHOUT_PAYMENT_RECORD',\n      severity: 'HIGH',\n      invoiceId: row.json.id,\n      clinicName: row.json.clinicName,\n      patientName: row.json.patientName,\n      amount: row.json.total,\n      detail: 'Factura marcada como PAGADA pero sin registro en payments table'\n    });\n  }\n}\n\nif (orphanPayments.length > 0) {\n  for (const row of orphanPayments) {\n    issues.push({\n      type: 'PAYMENT_WITHOUT_INVOICE',\n      severity: 'CRITICAL',\n      paymentId: row.json.id,\n      clinicName: row.json.clinicName || 'N/A',\n      amount: row.json.amount,\n      detail: 'Pago existe pero la factura no existe o esta en BORRADOR'\n    });\n  }\n}\n\nconst totalPaid = payments.reduce((s, p) => s + Number(p.json.amount || 0), 0);\n\nreturn {\n  json: {\n    totalPayments: payments.length,\n    totalAmount: totalPaid.toLocaleString('es-BO'),\n    issueCount: issues.length,\n    issues: JSON.stringify(issues, null, 2)\n  }\n};"
+      }
+    },
+    {
+      "id": "ebfd219a-737d-44b4-99a2-bf678904d257",
+      "name": "If: Has Issues?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        192
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-issues",
+              "leftValue": "={{ $json.issueCount }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "9d8163c7-325b-4bb9-8316-10f7f6a6e383",
+      "name": "Gmail: Alert SUPERADMIN",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "business@onia.com.bo",
+        "subject": "=Alerta de reconciliacion de pagos - {{ $json.issueCount }} discrepancias",
+        "emailType": "html",
+        "message": "=<pre>ALERTA DE RECONCILIACION DE PAGOS\n\nFecha: {{ $now.format('yyyy-MM-dd HH:mm') }}\n\nResumen de ultimas 24 horas:\n- Pagos registrados: {{ $json.totalPayments }}\n- Monto total: Bs. {{ $json.totalAmount }}\n- Discrepancias encontradas: {{ $json.issueCount }}\n\nDetalles:\n{{ $json.issues }}\n\nRevisar en Supabase: https://app.onia.com.bo/admin/payments\n\n- Sistema Onia</pre>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "a2042e58-0fd8-4610-be60-d68b8eb09844"
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 11PM La Paz": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Last 24h Payments",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase: Paid Without Payment Record",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase: Payment Without Matching Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Last 24h Payments": {
+      "main": [
+        [
+          {
+            "node": "Code: Compare & Find Mismatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Paid Without Payment Record": {
+      "main": [
+        [
+          {
+            "node": "Code: Compare & Find Mismatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Payment Without Matching Invoice": {
+      "main": [
+        [
+          {
+            "node": "Code: Compare & Find Mismatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Compare & Find Mismatches": {
+      "main": [
+        [
+          {
+            "node": "If: Has Issues?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has Issues?": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Alert SUPERADMIN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Daily 11PM La Paz": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "5c1ba780-0999-4ba1-9c89-b328a3aaf2ce",
+  "activeVersionId": "5c1ba780-0999-4ba1-9c89-b328a3aaf2ce",
+  "versionCounter": 24,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-14T02:24:36.230Z",
+      "createdAt": "2026-05-14T02:24:36.230Z",
+      "role": "workflow:owner",
+      "workflowId": "DKSPEsrRYDtoSaG0",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Alert SUPERADMIN"
+  }
+}

@@ -4,13 +4,15 @@
  *
  * Se disena con fetch INYECTABLE (opcion fetchImpl) para ser 100% testeable SIN
  * red: los tests pasan un mock. Reusa la capa PURA de soap-client.mjs
- * (buildAuthHeader para el header 'Authorization: Token X' y parseSoapResponse
+ * (buildAuthHeader para el header 'apikey: TokenApi X' y parseSoapResponse
  * para normalizar el body). El core nunca factura (external_gate: siat); esto NO
  * es asesoria fiscal.
  *
  * Responsabilidades:
  *   - POST del envelope con headers Content-Type 'text/xml; charset=UTF-8',
- *     SOAPAction ([VERIFICAR] abajo) y Authorization (via buildAuthHeader).
+ *     SOAPAction ([VERIFICAR] abajo) y apikey (via buildAuthHeader; VERIFICADO
+ *     EN VIVO 2026-08-06: 'apikey: TokenApi X' -> 200 COMUNICACION EXITOSA;
+ *     'Authorization: Token X' -> Fault "EL SERVICIO REQUIERE API KEY").
  *   - Timeout por intento (AbortController).
  *   - Reintentos con backoff EXPONENCIAL ante error de red o HTTP 5xx.
  *     NO reintenta ante 4xx ni ante fault de negocio (soap:Fault / transaccion:false).
@@ -181,7 +183,8 @@ export async function postSoap({
     "Content-Type": SOAP_CONTENT_TYPE,
     // [VERIFICAR el SOAPAction exacto contra el WSDL del piloto].
     SOAPAction: formatSoapAction(soapAction),
-    Authorization: buildAuthHeader(token), // 'Token X' (lanza si el token viene vacio)
+    // Clave 'apikey' (NO 'Authorization'): verificado en vivo 2026-08-06 vs piloto.
+    apikey: buildAuthHeader(token), // 'TokenApi X' (lanza si el token viene vacio)
   };
 
   const maxAttempts = Math.max(1, retries);

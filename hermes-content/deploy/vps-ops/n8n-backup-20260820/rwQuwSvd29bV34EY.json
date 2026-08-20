@@ -1,0 +1,376 @@
+{
+  "updatedAt": "2026-07-06T17:35:34.610Z",
+  "createdAt": "2026-07-05T22:58:09.673Z",
+  "id": "rwQuwSvd29bV34EY",
+  "name": "ONIA - Generar Propuesta (oficial)",
+  "description": "Webhook POST /generar-propuesta {slug,secret}. Valida secret (ONIA_CENTER_INTERNAL_API_KEY) y slug kebab-case, corre el generador oficial + PDF (chromium VPS) por SSH, y envia el PDF a Sergio por Telegram para revisar antes de enviar al cliente. Autonomo ",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "a7dbeb05-5d79-45a0-9e45-f5a0c2309d2e",
+      "name": "Webhook Propuesta",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generar-propuesta",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "09e70fa0-65f9-4800-b4b5-7e26a1145a06"
+    },
+    {
+      "id": "a673a66a-f641-41cf-b32c-ccff7dae1a95",
+      "name": "Autorizado y slug valido?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        192
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "cond-auth",
+              "leftValue": "={{ $json.stdout }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              },
+              "rightValue": "\"authorized\":true"
+            },
+            {
+              "id": "cond-slug",
+              "leftValue": "={{ $('Webhook Propuesta').item.json.body.slug }}",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              },
+              "rightValue": "^[a-z0-9-]{1,60}$"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a544fcfb-bb28-4053-8b50-5d76c4418f89",
+      "name": "Generar propuesta + PDF (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        448,
+        96
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "=bash /opt/onia/generar-propuesta-pdf.sh \"{{ $('Webhook Propuesta').item.json.body.slug }}\"",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "66c53340-c023-4ad2-b705-bfc2744072a6",
+      "name": "Preparar PDF binario",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        96
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const raw = ($input.first().json.stdout || '').trim();\nlet parsed;\ntry { parsed = JSON.parse(raw); } catch (e) { parsed = { ok: false, stage: 'parse' }; }\nif (!parsed || !parsed.ok) {\n  return [{ json: { ok: false, slug: (parsed && parsed.slug) || '', stage: (parsed && parsed.stage) || 'unknown' } }];\n}\nconst slug = parsed.slug;\nreturn [{ json: { ok: true, slug: slug }, binary: { data: { data: parsed.pdf_b64, fileName: 'propuesta-' + slug + '.pdf', mimeType: 'application/pdf', fileExtension: 'pdf' } } }];"
+      }
+    },
+    {
+      "id": "df7add9d-3991-4e30-9425-10c4fc1c9c8a",
+      "name": "PDF generado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        96
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "cond-ok",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "112a16f4-6d0b-4cd2-a171-01b710f5096f",
+      "name": "Enviar PDF a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendDocument",
+        "chatId": "6830070978",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "additionalFields": {
+          "caption": "=Propuesta {{ $json.slug }} generada por ONIA. Revisar antes de enviar al cliente.",
+          "fileName": "=propuesta-{{ $json.slug }}.pdf"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "6b45ee8f-979c-4e97-a345-b9f61398c34b"
+    },
+    {
+      "id": "dfea0c24-cebe-4389-91fe-1fdb55c54089",
+      "name": "Responder OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1344,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"ok\": true, \"slug\": $(\"Preparar PDF binario\").item.json.slug, \"delivered\": \"telegram\" } }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "5ac54e9c-6e17-44f1-817b-28029976a849",
+      "name": "Responder Fallo",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1120,
+        192
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"ok\": false, \"slug\": $json.slug, \"stage\": $json.stage } }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "072a4387-ed79-4971-aa1b-d1d2ca1055db",
+      "name": "Responder No Autorizado",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        448,
+        288
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"ok\": false, \"reason\": \"unauthorized_or_invalid_slug\" } }}",
+        "options": {
+          "responseCode": 401
+        }
+      }
+    },
+    {
+      "id": "8b32875b-4a1c-4eab-be62-ceef7ae39ee8",
+      "name": "Verificar secret",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        128,
+        384
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "=bash /opt/onia/check-secret.sh \"{{ $json.body.secret }}\"",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Autorizado y slug valido?": {
+      "main": [
+        [
+          {
+            "node": "Generar propuesta + PDF (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder No Autorizado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generar propuesta + PDF (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Preparar PDF binario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar PDF binario": {
+      "main": [
+        [
+          {
+            "node": "PDF generado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDF generado?": {
+      "main": [
+        [
+          {
+            "node": "Enviar PDF a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder Fallo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar PDF a Sergio": {
+      "main": [
+        [
+          {
+            "node": "Responder OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Propuesta": {
+      "main": [
+        [
+          {
+            "node": "Verificar secret",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar secret": {
+      "main": [
+        [
+          {
+            "node": "Autorizado y slug valido?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "0c52249a-5e4a-4e26-bc12-2f60cdb2d8fc",
+  "activeVersionId": "0c52249a-5e4a-4e26-bc12-2f60cdb2d8fc",
+  "versionCounter": 3,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-05T22:58:09.710Z",
+      "createdAt": "2026-07-05T22:58:09.710Z",
+      "role": "workflow:owner",
+      "workflowId": "rwQuwSvd29bV34EY",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

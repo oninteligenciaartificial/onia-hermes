@@ -1,0 +1,2704 @@
+{
+  "url": "https://agendapro.com",
+  "slug": "agendapro-com",
+  "medidoEl": "2026-08-20T21:59:18.409Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 13542,
+        "alturaPantallas": 16,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 13
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "main",
+          "clase": "",
+          "altoPx": 13542,
+          "altoPantallas": 16,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "El software n°1 para salones, spa, estética y salud",
+          "cta": "AgendaPro",
+          "imagenes": 197
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "bg-navy pt-18 relative",
+          "altoPx": 835,
+          "altoPantallas": 1,
+          "fondo": "rgb(29, 29, 61)",
+          "titular": "El software n°1 para salones, spa, estética y salud",
+          "cta": "AgendaPro",
+          "imagenes": 18
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "bg-navy py-14 sm:py-24",
+          "altoPx": 2227,
+          "altoPantallas": 2.6,
+          "fondo": "rgb(29, 29, 61)",
+          "titular": "AgendaPro hace crecer tu negocio",
+          "cta": "Prueba gratis",
+          "imagenes": 30
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "bg-gray-50 py-14 sm:py-20",
+          "altoPx": 3324,
+          "altoPantallas": 3.9,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "El único software que ordena tu negocio y acelera su crecimiento un 82%",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 6
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "bg-gray-50 py-14 sm:py-20",
+          "altoPx": 948,
+          "altoPantallas": 1.1,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "Un universo de herramientas para hacer crecer negocios de belleza y bienestar",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 6
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "overflow-hidden py-14 sm:py-20",
+          "altoPx": 940,
+          "altoPantallas": 1.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Hazlo simple, hazlo Pro.",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 4
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "py-14 sm:py-20 rounded-4xl",
+          "altoPx": 1310,
+          "altoPantallas": 1.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Más de 20.000 negocios como el tuyo ya confían en AgendaPro",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "bg-navy text-white rounded-4xl my-14 sm:my-20 grid grid-cols-1 lg:grid",
+          "altoPx": 644,
+          "altoPantallas": 0.8,
+          "fondo": "rgb(29, 29, 61)",
+          "titular": "Soporte 24/7 y acompañamiento gratis por siempre",
+          "cta": "Con AgendaPro vas de la mano",
+          "imagenes": 6
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "bg-gray-50",
+          "altoPx": 1134,
+          "altoPantallas": 1.3,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "Preguntas frecuentes",
+          "cta": "¿Qué es un software de gestión de citas?",
+          "imagenes": 16
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "bg-gray-50 overflow-hidden my-14 sm:my-20",
+          "altoPx": 440,
+          "altoPantallas": 0.5,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "AgendaPro se adapta a tu negocio",
+          "cta": "Salones de belleza",
+          "imagenes": 96
+        },
+        {
+          "orden": 10,
+          "etiqueta": "footer",
+          "clase": "p-0 lg:p-4",
+          "altoPx": 1342,
+          "altoPantallas": 1.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 12
+        },
+        {
+          "orden": 11,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 12,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 852,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 27,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "El software n°1 para salones, spa, estética y salud"
+          },
+          {
+            "nivel": 2,
+            "texto": "AgendaPro hace crecer tu negocio"
+          },
+          {
+            "nivel": 3,
+            "texto": "Centros de estética"
+          },
+          {
+            "nivel": 3,
+            "texto": "Spa"
+          },
+          {
+            "nivel": 3,
+            "texto": "Salones de belleza"
+          },
+          {
+            "nivel": 3,
+            "texto": "Manicure y pedicure"
+          },
+          {
+            "nivel": 3,
+            "texto": "Barbería"
+          },
+          {
+            "nivel": 3,
+            "texto": "Peluquería"
+          },
+          {
+            "nivel": 3,
+            "texto": "Cejas y pestañas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Salones de maquillaje"
+          },
+          {
+            "nivel": 3,
+            "texto": "Medicina alternativa"
+          },
+          {
+            "nivel": 3,
+            "texto": "Podología"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fisioterapia/ kinesiología"
+          },
+          {
+            "nivel": 3,
+            "texto": "Psicología"
+          },
+          {
+            "nivel": 3,
+            "texto": "Nutrición"
+          },
+          {
+            "nivel": 3,
+            "texto": "Clinicas"
+          },
+          {
+            "nivel": 2,
+            "texto": "El único software que ordena tu negocio y acelera su crecimiento un 82%"
+          },
+          {
+            "nivel": 2,
+            "texto": "Un universo de herramientas para hacer crecer negocios de belleza y bienestar"
+          },
+          {
+            "nivel": 2,
+            "texto": "Hazlo simple, hazlo Pro."
+          },
+          {
+            "nivel": 2,
+            "texto": "Más de 20.000 negocios como el tuyo ya confían en AgendaPro"
+          },
+          {
+            "nivel": 2,
+            "texto": "Soporte 24/7 y acompañamiento gratis por siempre"
+          },
+          {
+            "nivel": 2,
+            "texto": "Preguntas frecuentes"
+          },
+          {
+            "nivel": 2,
+            "texto": "AgendaPro se adapta a tu negocio"
+          },
+          {
+            "nivel": 3,
+            "texto": "Impulsado por"
+          },
+          {
+            "nivel": 3,
+            "texto": "Acerca de AgendaPro"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 500",
+            "veces": 96
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 80
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 400",
+            "veces": 41
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 600",
+            "veces": 18
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 300",
+            "veces": 14
+          },
+          {
+            "valor": "48px / lh 1.00 / ls -1.2px / w 600",
+            "veces": 12
+          },
+          {
+            "valor": "16px / lh 1.75 / ls normal / w 600",
+            "veces": 8
+          },
+          {
+            "valor": "24px / lh 1.33 / ls -0.6px / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.56 / ls -0.45px / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 300",
+            "veces": 6
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "30px / lh 1.20 / ls -0.75px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "14px / lh 1.25 / ls normal / w 500",
+            "veces": 4
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 600",
+            "veces": 3
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Poppins",
+            "veces": 320
+          },
+          {
+            "valor": "clashDisplaySemibold",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(27.1134 -0.956401 -12.3224)",
+            "veces": 96
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 75
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 57
+          },
+          {
+            "valor": "lab(35.6337 -1.58697 -10.8425)",
+            "veces": 43
+          },
+          {
+            "valor": "lab(8.11897 0.811279 -12.254)",
+            "veces": 18
+          },
+          {
+            "valor": "rgb(29, 29, 61)",
+            "veces": 14
+          },
+          {
+            "valor": "lab(1.90334 0.278696 -5.48866)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(47.7841 -0.393182 -10.0268)",
+            "veces": 4
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(29, 29, 61)",
+            "veces": 22
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 9
+          },
+          {
+            "valor": "oklab(0.539066 0.110937 -0.238265 / 0.2)",
+            "veces": 6
+          },
+          {
+            "valor": "lab(98.2596 -0.247031 -0.706708)",
+            "veces": 5
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455678 0.0000200868 / 0.4)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.372998 -0.00606386 -0.0334453 / 0.2)",
+            "veces": 3
+          },
+          {
+            "valor": "oklab(0.927998 -0.000581443 -0.00595063 / 0.7)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 118
+          },
+          {
+            "valor": "24px",
+            "veces": 59
+          },
+          {
+            "valor": "8px",
+            "veces": 33
+          },
+          {
+            "valor": "32px",
+            "veces": 26
+          },
+          {
+            "valor": "40px",
+            "veces": 17
+          },
+          {
+            "valor": "12px",
+            "veces": 16
+          },
+          {
+            "valor": "56px",
+            "veces": 10
+          },
+          {
+            "valor": "4px",
+            "veces": 9
+          },
+          {
+            "valor": "20px",
+            "veces": 8
+          },
+          {
+            "valor": "8px normal",
+            "veces": 6
+          },
+          {
+            "valor": "64px",
+            "veces": 5
+          },
+          {
+            "valor": "80px",
+            "veces": 5
+          },
+          {
+            "valor": "normal 4px",
+            "veces": 4
+          },
+          {
+            "valor": "6px",
+            "veces": 2
+          },
+          {
+            "valor": "-1px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 115
+          },
+          {
+            "valor": "16px",
+            "veces": 15
+          },
+          {
+            "valor": "12px",
+            "veces": 15
+          },
+          {
+            "valor": "8px",
+            "veces": 10
+          },
+          {
+            "valor": "50%",
+            "veces": 6
+          },
+          {
+            "valor": "32px",
+            "veces": 4
+          },
+          {
+            "valor": "32px 32px 0px 0px",
+            "veces": 4
+          },
+          {
+            "valor": "0px 0px 32px 32px",
+            "veces": 3
+          },
+          {
+            "valor": "6px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 9,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 113
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 17
+          },
+          {
+            "valor": "1",
+            "veces": 10
+          },
+          {
+            "valor": "-10",
+            "veces": 8
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          },
+          {
+            "valor": "-2",
+            "veces": 4
+          },
+          {
+            "valor": "-1",
+            "veces": 3
+          },
+          {
+            "valor": "0",
+            "veces": 2
+          },
+          {
+            "valor": "150",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 34
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 28
+          },
+          {
+            "valor": "filter 0.3s",
+            "veces": 10
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 9
+          },
+          {
+            "valor": "color 0.4s",
+            "veces": 7
+          },
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 5
+          },
+          {
+            "valor": "0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0, 0, 0.2, 1), translate 0.3s cubic-bezier",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.3s",
+            "veces": 2
+          },
+          {
+            "valor": "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 2
+          },
+          {
+            "valor": "background-color 0.3s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.3s cubi",
+            "veces": 1
+          },
+          {
+            "valor": "0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 14,
+        "hojasLeidas": 4,
+        "unidades": {
+          "em": 11,
+          "rem": 110,
+          "px": 400,
+          "clamp": 3,
+          "vw": 7
+        },
+        "keyframesDeclarados": 29,
+        "transitionAll": 5,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 1024,
+            "veces": 5
+          },
+          {
+            "px": 640,
+            "veces": 3
+          },
+          {
+            "px": 768,
+            "veces": 3
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 349,
+            "veces": 1
+          },
+          {
+            "px": 769,
+            "veces": 1
+          },
+          {
+            "px": 1536,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go2369186930",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go1348078617",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "844px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go613305155",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go471583506",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3921366393",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "844px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3967842156",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "844px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 59,
+        "ctasTop": [
+          {
+            "texto": "Centros de estética",
+            "veces": 9
+          },
+          {
+            "texto": "Salones de belleza",
+            "veces": 9
+          },
+          {
+            "texto": "Cejas y pestañas",
+            "veces": 9
+          },
+          {
+            "texto": "Salones de maquillaje",
+            "veces": 9
+          },
+          {
+            "texto": "Podología",
+            "veces": 9
+          },
+          {
+            "texto": "Salón de uñas",
+            "veces": 8
+          },
+          {
+            "texto": "Barberias",
+            "veces": 8
+          },
+          {
+            "texto": "Peluquerías",
+            "veces": 8
+          },
+          {
+            "texto": "Spas",
+            "veces": 8
+          },
+          {
+            "texto": "Fisioterapia",
+            "veces": 8
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 146,
+        "sinAlt": 0,
+        "altVacio": 101,
+        "sinDimensiones": 24,
+        "lazy": 140,
+        "conSrcset": 145,
+        "interactivos": 162,
+        "objetivosMenores44px": 18,
+        "idioma": "es",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(27.1134 -0.956401 -12.3224)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 1.57
+          },
+          {
+            "texto": "lab(27.1134 -0.956401 -12.3224)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 10.3
+          },
+          {
+            "texto": "lab(27.1134 -0.956401 -12.3224)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 9.86
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 1.3
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 20.1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 16.21
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 1.05
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 2.14
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 7.56
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 7.23
+          }
+        ],
+        "fondosTranslucidosOmitidos": 6
+      },
+      "rendimiento": {
+        "pesoTotalKb": 3638.1,
+        "porTipoKb": {
+          "document": 577.1,
+          "other": 0.1,
+          "image": 144.6,
+          "font": 61.9,
+          "stylesheet": 147.9,
+          "script": 2706.2,
+          "xhr": 0.2,
+          "fetch": 0,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 2,
+          "other": 1,
+          "image": 43,
+          "font": 6,
+          "stylesheet": 4,
+          "script": 50,
+          "xhr": 4,
+          "fetch": 24,
+          "ping": 1
+        },
+        "hostsDistintos": 28,
+        "terceros": [
+          {
+            "host": "cdn.agendapro-resources.com",
+            "pedidos": 31
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 19
+          },
+          {
+            "host": "www.google.com.bo",
+            "pedidos": 8
+          },
+          {
+            "host": "googleads.g.doubleclick.net",
+            "pedidos": 7
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 5
+          },
+          {
+            "host": "connect.facebook.net",
+            "pedidos": 4
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 3
+          },
+          {
+            "host": "js.hs-banner.com",
+            "pedidos": 2
+          }
+        ],
+        "fuentesCargadas": [
+          "Poppins 400 normal",
+          "Poppins 500 normal",
+          "Poppins 600 normal",
+          "Poppins 700 normal",
+          "Poppins Fallback normal normal",
+          "clashDisplayMedium 500 normal",
+          "clashDisplayMedium Fallback normal normal",
+          "clashDisplaySemibold 600 normal",
+          "clashDisplaySemibold Fallback normal normal",
+          "swiper-icons 400 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Software de Agendamiento de Citas - AgendaPro",
+        "descripcion": "Simplifica tu día a día y haz crecer tu negocio un 82% con el software para agendar citas todo en uno para centros de estética, salones de belleza y centros médicos. ¡Pide tu demo gratis!",
+        "canonical": "https://agendapro.com/es",
+        "og": 10,
+        "datosEstructurados": 3
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": true,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 12019,
+        "alturaPantallas": 11.7,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 11
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "main",
+          "clase": "",
+          "altoPx": 12019,
+          "altoPantallas": 11.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "El software n°1 para salones, spa, estética y salud",
+          "cta": "AgendaPro",
+          "imagenes": 197
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "bg-navy pt-18 relative",
+          "altoPx": 1075,
+          "altoPantallas": 1.1,
+          "fondo": "rgb(29, 29, 61)",
+          "titular": "El software n°1 para salones, spa, estética y salud",
+          "cta": "AgendaPro",
+          "imagenes": 18
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "bg-navy py-14 sm:py-24",
+          "altoPx": 2813,
+          "altoPantallas": 2.7,
+          "fondo": "rgb(29, 29, 61)",
+          "titular": "AgendaPro hace crecer tu negocio",
+          "cta": "Prueba gratis",
+          "imagenes": 30
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "bg-gray-50 py-14 sm:py-20",
+          "altoPx": 1860,
+          "altoPantallas": 1.8,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "El único software que ordena tu negocio y acelera su crecimiento un 82%",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 6
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "bg-gray-50 py-14 sm:py-20",
+          "altoPx": 692,
+          "altoPantallas": 0.7,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "Un universo de herramientas para hacer crecer negocios de belleza y bienestar",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 6
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "overflow-hidden py-14 sm:py-20",
+          "altoPx": 844,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Hazlo simple, hazlo Pro.",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 4
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "py-14 sm:py-20 rounded-4xl",
+          "altoPx": 1272,
+          "altoPantallas": 1.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Más de 20.000 negocios como el tuyo ya confían en AgendaPro",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "bg-navy text-white rounded-4xl my-14 sm:my-20 grid grid-cols-1 lg:grid",
+          "altoPx": 408,
+          "altoPantallas": 0.4,
+          "fondo": "rgb(29, 29, 61)",
+          "titular": "Soporte 24/7 y acompañamiento gratis por siempre",
+          "cta": "Con AgendaPro vas de la mano",
+          "imagenes": 6
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "bg-gray-50",
+          "altoPx": 914,
+          "altoPantallas": 0.9,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "Preguntas frecuentes",
+          "cta": "¿Qué es un software de gestión de citas?",
+          "imagenes": 16
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "bg-gray-50 overflow-hidden my-14 sm:my-20",
+          "altoPx": 480,
+          "altoPantallas": 0.5,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "AgendaPro se adapta a tu negocio",
+          "cta": "Salones de belleza",
+          "imagenes": 96
+        },
+        {
+          "orden": 10,
+          "etiqueta": "footer",
+          "clase": "p-0 lg:p-4",
+          "altoPx": 1118,
+          "altoPantallas": 1.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 12
+        }
+      ],
+      "encabezados": {
+        "total": 27,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "El software n°1 para salones, spa, estética y salud"
+          },
+          {
+            "nivel": 2,
+            "texto": "AgendaPro hace crecer tu negocio"
+          },
+          {
+            "nivel": 3,
+            "texto": "Centros de estética"
+          },
+          {
+            "nivel": 3,
+            "texto": "Spa"
+          },
+          {
+            "nivel": 3,
+            "texto": "Salones de belleza"
+          },
+          {
+            "nivel": 3,
+            "texto": "Manicure y pedicure"
+          },
+          {
+            "nivel": 3,
+            "texto": "Barbería"
+          },
+          {
+            "nivel": 3,
+            "texto": "Peluquería"
+          },
+          {
+            "nivel": 3,
+            "texto": "Cejas y pestañas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Salones de maquillaje"
+          },
+          {
+            "nivel": 3,
+            "texto": "Medicina alternativa"
+          },
+          {
+            "nivel": 3,
+            "texto": "Podología"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fisioterapia/ kinesiología"
+          },
+          {
+            "nivel": 3,
+            "texto": "Psicología"
+          },
+          {
+            "nivel": 3,
+            "texto": "Nutrición"
+          },
+          {
+            "nivel": 3,
+            "texto": "Clinicas"
+          },
+          {
+            "nivel": 2,
+            "texto": "El único software que ordena tu negocio y acelera su crecimiento un 82%"
+          },
+          {
+            "nivel": 2,
+            "texto": "Un universo de herramientas para hacer crecer negocios de belleza y bienestar"
+          },
+          {
+            "nivel": 2,
+            "texto": "Hazlo simple, hazlo Pro."
+          },
+          {
+            "nivel": 2,
+            "texto": "Más de 20.000 negocios como el tuyo ya confían en AgendaPro"
+          },
+          {
+            "nivel": 2,
+            "texto": "Soporte 24/7 y acompañamiento gratis por siempre"
+          },
+          {
+            "nivel": 2,
+            "texto": "Preguntas frecuentes"
+          },
+          {
+            "nivel": 2,
+            "texto": "AgendaPro se adapta a tu negocio"
+          },
+          {
+            "nivel": 3,
+            "texto": "Impulsado por"
+          },
+          {
+            "nivel": 3,
+            "texto": "Acerca de AgendaPro"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 500",
+            "veces": 96
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 80
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 400",
+            "veces": 41
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 600",
+            "veces": 17
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 300",
+            "veces": 14
+          },
+          {
+            "valor": "48px / lh 1.00 / ls -1.2px / w 600",
+            "veces": 12
+          },
+          {
+            "valor": "16px / lh 1.75 / ls normal / w 600",
+            "veces": 8
+          },
+          {
+            "valor": "36px / lh 1.11 / ls -0.9px / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.56 / ls -0.45px / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 300",
+            "veces": 6
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "14px / lh 1.25 / ls normal / w 500",
+            "veces": 4
+          },
+          {
+            "valor": "30px / lh 1.20 / ls -0.75px / w 500",
+            "veces": 4
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 600",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Poppins",
+            "veces": 320
+          },
+          {
+            "valor": "clashDisplaySemibold",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(27.1134 -0.956401 -12.3224)",
+            "veces": 96
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 75
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 57
+          },
+          {
+            "valor": "lab(35.6337 -1.58697 -10.8425)",
+            "veces": 43
+          },
+          {
+            "valor": "lab(8.11897 0.811279 -12.254)",
+            "veces": 18
+          },
+          {
+            "valor": "rgb(29, 29, 61)",
+            "veces": 14
+          },
+          {
+            "valor": "lab(1.90334 0.278696 -5.48866)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(47.7841 -0.393182 -10.0268)",
+            "veces": 4
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(29, 29, 61)",
+            "veces": 22
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 9
+          },
+          {
+            "valor": "oklab(0.539066 0.110937 -0.238265 / 0.2)",
+            "veces": 6
+          },
+          {
+            "valor": "lab(98.2596 -0.247031 -0.706708)",
+            "veces": 5
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455678 0.0000200868 / 0.4)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.372998 -0.00606386 -0.0334453 / 0.2)",
+            "veces": 3
+          },
+          {
+            "valor": "oklab(0.927998 -0.000581443 -0.00595063 / 0.7)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 117
+          },
+          {
+            "valor": "24px",
+            "veces": 60
+          },
+          {
+            "valor": "40px",
+            "veces": 33
+          },
+          {
+            "valor": "8px",
+            "veces": 31
+          },
+          {
+            "valor": "12px",
+            "veces": 16
+          },
+          {
+            "valor": "32px",
+            "veces": 11
+          },
+          {
+            "valor": "80px",
+            "veces": 11
+          },
+          {
+            "valor": "4px",
+            "veces": 9
+          },
+          {
+            "valor": "20px",
+            "veces": 8
+          },
+          {
+            "valor": "64px",
+            "veces": 6
+          },
+          {
+            "valor": "8px normal",
+            "veces": 6
+          },
+          {
+            "valor": "normal 4px",
+            "veces": 4
+          },
+          {
+            "valor": "6px",
+            "veces": 2
+          },
+          {
+            "valor": "-1px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "normal 24px",
+            "veces": 2
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 115
+          },
+          {
+            "valor": "16px",
+            "veces": 15
+          },
+          {
+            "valor": "12px",
+            "veces": 15
+          },
+          {
+            "valor": "8px",
+            "veces": 10
+          },
+          {
+            "valor": "50%",
+            "veces": 6
+          },
+          {
+            "valor": "32px",
+            "veces": 4
+          },
+          {
+            "valor": "0px 0px 32px",
+            "veces": 3
+          },
+          {
+            "valor": "32px 0px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "32px 32px 0px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "0px 32px 0px 0px",
+            "veces": 2
+          }
+        ],
+        "radiosDistintos": 12,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 113
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 17
+          },
+          {
+            "valor": "1",
+            "veces": 10
+          },
+          {
+            "valor": "-10",
+            "veces": 8
+          },
+          {
+            "valor": "0",
+            "veces": 2
+          },
+          {
+            "valor": "150",
+            "veces": 2
+          },
+          {
+            "valor": "-3",
+            "veces": 2
+          },
+          {
+            "valor": "-2",
+            "veces": 2
+          },
+          {
+            "valor": "-1",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), transform 0.4s cubic-be",
+            "veces": 45
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 30
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 28
+          },
+          {
+            "valor": "filter 0.3s",
+            "veces": 10
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 9
+          },
+          {
+            "valor": "color 0.4s",
+            "veces": 7
+          },
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 5
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0, 0, 0.2, 1), translate 0.3s cubic-bezier",
+            "veces": 4
+          },
+          {
+            "valor": "0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 3
+          },
+          {
+            "valor": "color 0.3s",
+            "veces": 2
+          },
+          {
+            "valor": "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 2
+          },
+          {
+            "valor": "background-color 0.3s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.3s cubi",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 15,
+        "hojasLeidas": 4,
+        "unidades": {
+          "em": 11,
+          "rem": 110,
+          "px": 400,
+          "clamp": 3,
+          "vw": 7
+        },
+        "keyframesDeclarados": 29,
+        "transitionAll": 5,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 1024,
+            "veces": 5
+          },
+          {
+            "px": 640,
+            "veces": 3
+          },
+          {
+            "px": 768,
+            "veces": 3
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 349,
+            "veces": 1
+          },
+          {
+            "px": 769,
+            "veces": 1
+          },
+          {
+            "px": 1536,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": []
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 59,
+        "ctasTop": [
+          {
+            "texto": "Centros de estética",
+            "veces": 9
+          },
+          {
+            "texto": "Salones de belleza",
+            "veces": 9
+          },
+          {
+            "texto": "Cejas y pestañas",
+            "veces": 9
+          },
+          {
+            "texto": "Salones de maquillaje",
+            "veces": 9
+          },
+          {
+            "texto": "Podología",
+            "veces": 9
+          },
+          {
+            "texto": "Salón de uñas",
+            "veces": 8
+          },
+          {
+            "texto": "Barberias",
+            "veces": 8
+          },
+          {
+            "texto": "Peluquerías",
+            "veces": 8
+          },
+          {
+            "texto": "Spas",
+            "veces": 8
+          },
+          {
+            "texto": "Fisioterapia",
+            "veces": 8
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 145,
+        "sinAlt": 0,
+        "altVacio": 100,
+        "sinDimensiones": 24,
+        "lazy": 140,
+        "conSrcset": 145,
+        "interactivos": 162,
+        "objetivosMenores44px": 24,
+        "idioma": "es",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(27.1134 -0.956401 -12.3224)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 1.57
+          },
+          {
+            "texto": "lab(27.1134 -0.956401 -12.3224)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 10.3
+          },
+          {
+            "texto": "lab(27.1134 -0.956401 -12.3224)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 9.86
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 1.3
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 20.1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 16.21
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 1.05
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 2.14
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 7.56
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 7.23
+          }
+        ],
+        "fondosTranslucidosOmitidos": 5
+      },
+      "rendimiento": {
+        "pesoTotalKb": 2915.5,
+        "porTipoKb": {
+          "document": 577.1,
+          "other": 0.1,
+          "font": 61.9,
+          "stylesheet": 147.9,
+          "image": 250.4,
+          "script": 1878.1,
+          "xhr": 0,
+          "fetch": 0
+        },
+        "pedidos": {
+          "document": 2,
+          "other": 1,
+          "font": 6,
+          "stylesheet": 4,
+          "image": 21,
+          "script": 29,
+          "xhr": 1,
+          "fetch": 9
+        },
+        "hostsDistintos": 7,
+        "terceros": [
+          {
+            "host": "cdn.agendapro-resources.com",
+            "pedidos": 31
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 4
+          },
+          {
+            "host": "static.cloudflareinsights.com",
+            "pedidos": 1
+          },
+          {
+            "host": "cdn.mxpnl.com",
+            "pedidos": 1
+          },
+          {
+            "host": "static.hotjar.com",
+            "pedidos": 1
+          },
+          {
+            "host": "ad.doubleclick.net",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Poppins 400 normal",
+          "Poppins 500 normal",
+          "Poppins 600 normal",
+          "Poppins 700 normal",
+          "Poppins Fallback normal normal",
+          "clashDisplayMedium 500 normal",
+          "clashDisplayMedium Fallback normal normal",
+          "clashDisplaySemibold 600 normal",
+          "clashDisplaySemibold Fallback normal normal",
+          "swiper-icons 400 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Software de Agendamiento de Citas - AgendaPro",
+        "descripcion": "Simplifica tu día a día y haz crecer tu negocio un 82% con el software para agendar citas todo en uno para centros de estética, salones de belleza y centros médicos. ¡Pide tu demo gratis!",
+        "canonical": "https://agendapro.com/es",
+        "og": 10,
+        "datosEstructurados": 3
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": true,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 11795,
+        "alturaPantallas": 13.1,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 13
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "main",
+          "clase": "",
+          "altoPx": 11795,
+          "altoPantallas": 13.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "El software n°1 para salones, spa, estética y salud",
+          "cta": "AgendaPro",
+          "imagenes": 197
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "bg-navy pt-18 relative",
+          "altoPx": 1199,
+          "altoPantallas": 1.3,
+          "fondo": "rgb(29, 29, 61)",
+          "titular": "El software n°1 para salones, spa, estética y salud",
+          "cta": "AgendaPro",
+          "imagenes": 18
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "bg-navy py-14 sm:py-24",
+          "altoPx": 2282,
+          "altoPantallas": 2.5,
+          "fondo": "rgb(29, 29, 61)",
+          "titular": "AgendaPro hace crecer tu negocio",
+          "cta": "Prueba gratis",
+          "imagenes": 30
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "bg-gray-50 py-14 sm:py-20",
+          "altoPx": 2361,
+          "altoPantallas": 2.6,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "El único software que ordena tu negocio y acelera su crecimiento un 82%",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 6
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "bg-gray-50 py-14 sm:py-20",
+          "altoPx": 604,
+          "altoPantallas": 0.7,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "Un universo de herramientas para hacer crecer negocios de belleza y bienestar",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 6
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "overflow-hidden py-14 sm:py-20",
+          "altoPx": 1032,
+          "altoPantallas": 1.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Hazlo simple, hazlo Pro.",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 4
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "py-14 sm:py-20 rounded-4xl",
+          "altoPx": 1362,
+          "altoPantallas": 1.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Más de 20.000 negocios como el tuyo ya confían en AgendaPro",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "bg-navy text-white rounded-4xl my-14 sm:my-20 grid grid-cols-1 lg:grid",
+          "altoPx": 452,
+          "altoPantallas": 0.5,
+          "fondo": "rgb(29, 29, 61)",
+          "titular": "Soporte 24/7 y acompañamiento gratis por siempre",
+          "cta": "Con AgendaPro vas de la mano",
+          "imagenes": 6
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "bg-gray-50",
+          "altoPx": 631,
+          "altoPantallas": 0.7,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "Preguntas frecuentes",
+          "cta": "¿Qué es un software de gestión de citas?",
+          "imagenes": 16
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "bg-gray-50 overflow-hidden my-14 sm:my-20",
+          "altoPx": 448,
+          "altoPantallas": 0.5,
+          "fondo": "lab(98.2596 -0.247031 -0.706708)",
+          "titular": "AgendaPro se adapta a tu negocio",
+          "cta": "Salones de belleza",
+          "imagenes": 96
+        },
+        {
+          "orden": 10,
+          "etiqueta": "footer",
+          "clase": "p-0 lg:p-4",
+          "altoPx": 840,
+          "altoPantallas": 0.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "Crea tu cuenta gratis",
+          "imagenes": 12
+        },
+        {
+          "orden": 11,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 12,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 909,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 27,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "El software n°1 para salones, spa, estética y salud"
+          },
+          {
+            "nivel": 2,
+            "texto": "AgendaPro hace crecer tu negocio"
+          },
+          {
+            "nivel": 3,
+            "texto": "Centros de estética"
+          },
+          {
+            "nivel": 3,
+            "texto": "Spa"
+          },
+          {
+            "nivel": 3,
+            "texto": "Salones de belleza"
+          },
+          {
+            "nivel": 3,
+            "texto": "Manicure y pedicure"
+          },
+          {
+            "nivel": 3,
+            "texto": "Barbería"
+          },
+          {
+            "nivel": 3,
+            "texto": "Peluquería"
+          },
+          {
+            "nivel": 3,
+            "texto": "Cejas y pestañas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Salones de maquillaje"
+          },
+          {
+            "nivel": 3,
+            "texto": "Medicina alternativa"
+          },
+          {
+            "nivel": 3,
+            "texto": "Podología"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fisioterapia/ kinesiología"
+          },
+          {
+            "nivel": 3,
+            "texto": "Psicología"
+          },
+          {
+            "nivel": 3,
+            "texto": "Nutrición"
+          },
+          {
+            "nivel": 3,
+            "texto": "Clinicas"
+          },
+          {
+            "nivel": 2,
+            "texto": "El único software que ordena tu negocio y acelera su crecimiento un 82%"
+          },
+          {
+            "nivel": 2,
+            "texto": "Un universo de herramientas para hacer crecer negocios de belleza y bienestar"
+          },
+          {
+            "nivel": 2,
+            "texto": "Hazlo simple, hazlo Pro."
+          },
+          {
+            "nivel": 2,
+            "texto": "Más de 20.000 negocios como el tuyo ya confían en AgendaPro"
+          },
+          {
+            "nivel": 2,
+            "texto": "Soporte 24/7 y acompañamiento gratis por siempre"
+          },
+          {
+            "nivel": 2,
+            "texto": "Preguntas frecuentes"
+          },
+          {
+            "nivel": 2,
+            "texto": "AgendaPro se adapta a tu negocio"
+          },
+          {
+            "nivel": 3,
+            "texto": "Impulsado por"
+          },
+          {
+            "nivel": 3,
+            "texto": "Acerca de AgendaPro"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 500",
+            "veces": 96
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 80
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 400",
+            "veces": 41
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 600",
+            "veces": 15
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 300",
+            "veces": 14
+          },
+          {
+            "valor": "60px / lh 1.00 / ls -1.5px / w 600",
+            "veces": 12
+          },
+          {
+            "valor": "16px / lh 1.75 / ls normal / w 600",
+            "veces": 8
+          },
+          {
+            "valor": "36px / lh 1.11 / ls -0.9px / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.56 / ls -0.45px / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 300",
+            "veces": 6
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "48px / lh 1.00 / ls -1.2px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 600",
+            "veces": 5
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "20px / lh 1.25 / ls normal / w 500",
+            "veces": 4
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 600",
+            "veces": 3
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Poppins",
+            "veces": 320
+          },
+          {
+            "valor": "clashDisplaySemibold",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(27.1134 -0.956401 -12.3224)",
+            "veces": 96
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 75
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 57
+          },
+          {
+            "valor": "lab(35.6337 -1.58697 -10.8425)",
+            "veces": 43
+          },
+          {
+            "valor": "lab(8.11897 0.811279 -12.254)",
+            "veces": 18
+          },
+          {
+            "valor": "rgb(29, 29, 61)",
+            "veces": 14
+          },
+          {
+            "valor": "lab(1.90334 0.278696 -5.48866)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(47.7841 -0.393182 -10.0268)",
+            "veces": 4
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(29, 29, 61)",
+            "veces": 22
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 9
+          },
+          {
+            "valor": "oklab(0.539066 0.110937 -0.238265 / 0.2)",
+            "veces": 6
+          },
+          {
+            "valor": "lab(98.2596 -0.247031 -0.706708)",
+            "veces": 5
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455678 0.0000200868 / 0.4)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.372998 -0.00606386 -0.0334453 / 0.2)",
+            "veces": 3
+          },
+          {
+            "valor": "oklab(0.927998 -0.000581443 -0.00595063 / 0.7)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 114
+          },
+          {
+            "valor": "24px",
+            "veces": 51
+          },
+          {
+            "valor": "40px",
+            "veces": 35
+          },
+          {
+            "valor": "8px",
+            "veces": 31
+          },
+          {
+            "valor": "12px",
+            "veces": 16
+          },
+          {
+            "valor": "32px",
+            "veces": 14
+          },
+          {
+            "valor": "80px",
+            "veces": 12
+          },
+          {
+            "valor": "64px",
+            "veces": 10
+          },
+          {
+            "valor": "4px",
+            "veces": 9
+          },
+          {
+            "valor": "20px",
+            "veces": 8
+          },
+          {
+            "valor": "8px normal",
+            "veces": 6
+          },
+          {
+            "valor": "normal 4px",
+            "veces": 4
+          },
+          {
+            "valor": "6px",
+            "veces": 2
+          },
+          {
+            "valor": "-1px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "56px",
+            "veces": 2
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 115
+          },
+          {
+            "valor": "16px",
+            "veces": 15
+          },
+          {
+            "valor": "12px",
+            "veces": 15
+          },
+          {
+            "valor": "8px",
+            "veces": 10
+          },
+          {
+            "valor": "50%",
+            "veces": 6
+          },
+          {
+            "valor": "32px",
+            "veces": 5
+          },
+          {
+            "valor": "0px 0px 32px",
+            "veces": 3
+          },
+          {
+            "valor": "32px 0px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "32px 32px 0px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "0px 32px 0px 0px",
+            "veces": 2
+          }
+        ],
+        "radiosDistintos": 13,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 113
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 17
+          },
+          {
+            "valor": "1",
+            "veces": 10
+          },
+          {
+            "valor": "-10",
+            "veces": 8
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          },
+          {
+            "valor": "-1",
+            "veces": 3
+          },
+          {
+            "valor": "0",
+            "veces": 2
+          },
+          {
+            "valor": "150",
+            "veces": 2
+          },
+          {
+            "valor": "-3",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), transform 0.4s cubic-be",
+            "veces": 45
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 30
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 28
+          },
+          {
+            "valor": "filter 0.3s",
+            "veces": 10
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 9
+          },
+          {
+            "valor": "color 0.4s",
+            "veces": 7
+          },
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 5
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0, 0, 0.2, 1), translate 0.3s cubic-bezier",
+            "veces": 4
+          },
+          {
+            "valor": "0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 3
+          },
+          {
+            "valor": "color 0.3s",
+            "veces": 2
+          },
+          {
+            "valor": "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 2
+          },
+          {
+            "valor": "background-color 0.3s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.3s cubi",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 15,
+        "hojasLeidas": 4,
+        "unidades": {
+          "em": 11,
+          "rem": 110,
+          "px": 400,
+          "clamp": 3,
+          "vw": 7
+        },
+        "keyframesDeclarados": 29,
+        "transitionAll": 5,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 1024,
+            "veces": 5
+          },
+          {
+            "px": 640,
+            "veces": 3
+          },
+          {
+            "px": 768,
+            "veces": 3
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 349,
+            "veces": 1
+          },
+          {
+            "px": 769,
+            "veces": 1
+          },
+          {
+            "px": 1536,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 60,
+            "navFija": false
+          },
+          {
+            "y": 2724,
+            "conTransform": 60,
+            "navFija": true
+          },
+          {
+            "y": 5239,
+            "conTransform": 60,
+            "navFija": true
+          },
+          {
+            "y": 7895,
+            "conTransform": 70,
+            "navFija": true
+          },
+          {
+            "y": 10534,
+            "conTransform": 70,
+            "navFija": true
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 5,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go2369186930",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go1348078617",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "900px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go613305155",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go471583506",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3921366393",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "900px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3967842156",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "900px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 59,
+        "ctasTop": [
+          {
+            "texto": "Centros de estética",
+            "veces": 9
+          },
+          {
+            "texto": "Salones de belleza",
+            "veces": 9
+          },
+          {
+            "texto": "Cejas y pestañas",
+            "veces": 9
+          },
+          {
+            "texto": "Salones de maquillaje",
+            "veces": 9
+          },
+          {
+            "texto": "Podología",
+            "veces": 9
+          },
+          {
+            "texto": "Salón de uñas",
+            "veces": 8
+          },
+          {
+            "texto": "Barberias",
+            "veces": 8
+          },
+          {
+            "texto": "Peluquerías",
+            "veces": 8
+          },
+          {
+            "texto": "Spas",
+            "veces": 8
+          },
+          {
+            "texto": "Fisioterapia",
+            "veces": 8
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 146,
+        "sinAlt": 0,
+        "altVacio": 101,
+        "sinDimensiones": 24,
+        "lazy": 140,
+        "conSrcset": 145,
+        "interactivos": 162,
+        "objetivosMenores44px": 31,
+        "idioma": "es",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(27.1134 -0.956401 -12.3224)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 1.57
+          },
+          {
+            "texto": "lab(27.1134 -0.956401 -12.3224)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 10.3
+          },
+          {
+            "texto": "lab(27.1134 -0.956401 -12.3224)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 9.86
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 1.3
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 20.1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 16.21
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 1.05
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(29, 29, 61)",
+            "ratio": 2.14
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 7.56
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "lab(98.2596 -0.247031 -0.706708)",
+            "ratio": 7.23
+          }
+        ],
+        "fondosTranslucidosOmitidos": 6
+      },
+      "rendimiento": {
+        "pesoTotalKb": 4297.9,
+        "porTipoKb": {
+          "document": 577.1,
+          "other": 0.1,
+          "stylesheet": 147.9,
+          "font": 61.9,
+          "script": 2802.4,
+          "image": 708.2,
+          "fetch": 0,
+          "ping": 0,
+          "xhr": 0.2
+        },
+        "pedidos": {
+          "document": 4,
+          "other": 8,
+          "stylesheet": 8,
+          "font": 12,
+          "script": 101,
+          "image": 138,
+          "fetch": 43,
+          "ping": 1,
+          "xhr": 8
+        },
+        "hostsDistintos": 29,
+        "terceros": [
+          {
+            "host": "cdn.agendapro-resources.com",
+            "pedidos": 36
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 17
+          },
+          {
+            "host": "www.google.com.bo",
+            "pedidos": 8
+          },
+          {
+            "host": "googleads.g.doubleclick.net",
+            "pedidos": 7
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 5
+          },
+          {
+            "host": "connect.facebook.net",
+            "pedidos": 4
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 3
+          },
+          {
+            "host": "j.clarity.ms",
+            "pedidos": 3
+          }
+        ],
+        "fuentesCargadas": [
+          "Poppins 400 normal",
+          "Poppins 500 normal",
+          "Poppins 600 normal",
+          "Poppins 700 normal",
+          "Poppins Fallback normal normal",
+          "clashDisplayMedium 500 normal",
+          "clashDisplayMedium Fallback normal normal",
+          "clashDisplaySemibold 600 normal",
+          "clashDisplaySemibold Fallback normal normal",
+          "swiper-icons 400 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Software de Agendamiento de Citas - AgendaPro",
+        "descripcion": "Simplifica tu día a día y haz crecer tu negocio un 82% con el software para agendar citas todo en uno para centros de estética, salones de belleza y centros médicos. ¡Pide tu demo gratis!",
+        "canonical": "https://agendapro.com/es",
+        "og": 10,
+        "datosEstructurados": 3
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": true,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 5,
+    "conTransicion": 0
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

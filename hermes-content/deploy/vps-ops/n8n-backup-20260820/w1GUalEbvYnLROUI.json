@@ -1,0 +1,376 @@
+{
+  "updatedAt": "2026-08-18T18:42:42.000Z",
+  "createdAt": "2026-08-18T17:49:31.272Z",
+  "id": "w1GUalEbvYnLROUI",
+  "name": "ONIA - Comentario IG -> DM (Private Reply)",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "9701e97e-5862-4c16-bcf5-ac7431eb3b39",
+      "name": "Webhook Comentario IG",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "multipleMethods": true,
+        "httpMethod": [
+          "GET",
+          "POST"
+        ],
+        "path": "ig-comment",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "15d6bf18-aaee-4f51-b521-28c02de4dca2"
+    },
+    {
+      "id": "09d2dec7-bd4d-43f1-8881-ce5a37386892",
+      "name": "Es verificacion de Meta?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-hub",
+              "leftValue": "={{ $json.query ? $json.query[\"hub.mode\"] : \"\" }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "rightValue": "subscribe"
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "d47bc243-20d3-4e4a-8eb7-28b00d5b8532",
+      "name": "Devolver challenge",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        460,
+        -140
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.query[\"hub.challenge\"] }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "11112f08-a2e3-466e-83dd-d67c615a11f3",
+      "name": "Parsear comentario",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        120
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const b = $('Webhook Comentario IG').first().json.body || {};\nconst ch = ((b.entry || [])[0] || {}).changes || [];\nconst c0 = ch[0] || {};\nconst v = c0.value || {};\nconst texto = String(v.text || '').toUpperCase();\nconst fromId = String((v.from || {}).id || '');\nconst MIOS = ['17841423363059652', '27942557688720145'];\nlet palabra = null;\nif (texto.includes('SISTEMA')) palabra = 'SISTEMA';\nelse if (texto.includes('LISTA')) palabra = 'LISTA';\nconst propio = MIOS.includes(fromId);\nconst esComentario = c0.field === 'comments';\nconst accionable = palabra === 'SISTEMA' && !propio && esComentario && Boolean(v.id);\nlet motivo = 'ok';\nif (!esComentario) motivo = 'no_es_comentario';\nelse if (propio) motivo = 'comentario_propio';\nelse if (!palabra) motivo = 'sin_palabra_clave';\nelse if (palabra === 'LISTA') motivo = 'LISTA_sin_pdf_publicado';\nreturn [{ json: { comment_id: v.id || '', texto: v.text || '', from_id: fromId, username: (v.from || {}).username || '', media_id: (v.media || {}).id || '', palabra: palabra, propio: propio, accionable: accionable, motivo: motivo } }];"
+      }
+    },
+    {
+      "id": "73869c26-aaae-425b-b5e5-63769083b861",
+      "name": "Accionable?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        700,
+        120
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-acc",
+              "leftValue": "={{ $json.accionable }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "99dcd339-fe1a-4788-86a5-94aa467c3720",
+      "name": "Leer token de Postiz",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        940,
+        20
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "docker exec postiz-postgres psql -U postiz-user -d postiz-db-local -t -A -c \"SELECT token FROM \\\"Integration\\\" WHERE id='cmsw091nx0001lq9c8kr6dsg8';\"",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "e6aca972-b74d-4672-8dc2-0c0f6011164c",
+      "name": "Enviar DM privado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1180,
+        20
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.instagram.com/v23.0/me/messages",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "={{ $json.stdout.trim() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ recipient: { comment_id: $(\"Parsear comentario\").item.json.comment_id }, message: { text: \"Hola! Vi tu comentario. Te dejo el link para agendar el diagnostico de 20 min: miramos tu operacion y te decimos que conviene automatizar primero, y que no vale la pena todavia. https://onia.com.bo/?src=onia-ig-sistema . Si preferis, contame en una linea a que se dedica tu negocio y te adelanto por aca.\" } }) }}",
+        "options": {}
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "f49bd678-406f-409b-8b84-2b6b7203f11a",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1420,
+        20
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "=IG comentario -> DM\n\n@{{ $(\"Parsear comentario\").item.json.username }} comento: \"{{ $(\"Parsear comentario\").item.json.texto }}\"\nPalabra: {{ $(\"Parsear comentario\").item.json.palabra }}\nRespuesta API: {{ JSON.stringify($json).slice(0, 300) }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "webhookId": "9f0f6a63-8827-4a90-ae53-2a4dbaa9f802"
+    },
+    {
+      "id": "e483dc80-e201-4fac-a96e-1e4974e91115",
+      "name": "Responder 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1660,
+        20
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "EVENT_RECEIVED",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "117c18f7-76f8-4d82-b2c0-18f6ec36aa5d",
+      "name": "Responder 200 (ignorado)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        940,
+        240
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "EVENT_RECEIVED",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Comentario IG": {
+      "main": [
+        [
+          {
+            "node": "Es verificacion de Meta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Es verificacion de Meta?": {
+      "main": [
+        [
+          {
+            "node": "Devolver challenge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parsear comentario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear comentario": {
+      "main": [
+        [
+          {
+            "node": "Accionable?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accionable?": {
+      "main": [
+        [
+          {
+            "node": "Leer token de Postiz",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder 200 (ignorado)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer token de Postiz": {
+      "main": [
+        [
+          {
+            "node": "Enviar DM privado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar DM privado": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar a Sergio": {
+      "main": [
+        [
+          {
+            "node": "Responder 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "cf1aef1f-d4d2-40a6-9c61-f91d3ab3314b",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-18T17:49:31.327Z",
+      "createdAt": "2026-08-18T17:49:31.327Z",
+      "role": "workflow:owner",
+      "workflowId": "w1GUalEbvYnLROUI",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

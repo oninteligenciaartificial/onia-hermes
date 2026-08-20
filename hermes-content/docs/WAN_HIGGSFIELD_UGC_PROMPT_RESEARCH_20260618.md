@@ -2,6 +2,10 @@
 
 Estado: interno, no publicado.
 
+> **Superseded para plantillas de prompt (2026-08-18).** El esquema de prompt vigente vive en
+> [`ONIA_PLANTILLAS_PROMPT_VIDEO_20260818.md`](ONIA_PLANTILLAS_PROMPT_VIDEO_20260818.md)
+> (plantillas CINE y UGC). Este doc queda como research de junio sobre Wan open source.
+
 Objetivo: recopilar los principios y prompts mas utiles para producir videos
 UGC con modelos IA de Onia usando primero Wan open source como laboratorio y
 despues Higgsfield como motor premium/final.

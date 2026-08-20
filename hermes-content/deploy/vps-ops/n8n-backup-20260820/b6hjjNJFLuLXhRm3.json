@@ -1,0 +1,181 @@
+{
+  "updatedAt": "2026-07-22T17:32:56.835Z",
+  "createdAt": "2026-07-22T17:32:56.835Z",
+  "id": "b6hjjNJFLuLXhRm3",
+  "name": "ONIA - Digest semanal (panel -> Telegram)",
+  "description": "Cron Domingo 19:00 La Paz: corre weekly-digest.mjs por SSH (READ-ONLY en onia-center), agrega la actividad de la semana del panel (leads nuevos, ideas y borradores para revisar, anomalias de caja) en UN mensaje y lo manda a Sergio por Telegram. Reemplaza ",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "ba45e0d3-d69e-487c-b179-f6b2e5091bed",
+      "name": "Domingo 19:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 19 * * 0"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a4307429-f5f3-4a66-9b01-a84c88b8fd6d",
+      "name": "Correr Digest (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/weekly-digest-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "0d8b1f81-446f-49c3-99c5-f1245b2f7bfc",
+      "name": "Extraer resumen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const NL=String.fromCharCode(10); const raw=($input.first().json.stdout||'').trim(); let s; try{ s=JSON.parse(raw.split(NL).pop()); }catch(e){ s={text:'Digest semanal ONIA: no pude leer el resumen del panel.'}; } return [{ json:{ text: String(s.text||'Digest semanal ONIA (sin contenido)').slice(0,3900) } }];"
+      }
+    },
+    {
+      "id": "f3c87721-656a-48ce-8a8b-6692376433a8",
+      "name": "Enviar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "93df1e49-4a65-405a-bbb0-3867d7023cbf"
+    }
+  ],
+  "connections": {
+    "Domingo 19:00": {
+      "main": [
+        [
+          {
+            "node": "Correr Digest (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correr Digest (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Extraer resumen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer resumen": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Domingo 19:00": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "e4e34477-e1ab-4340-92f3-8cff10544c97",
+  "activeVersionId": "e4e34477-e1ab-4340-92f3-8cff10544c97",
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T17:32:56.838Z",
+      "createdAt": "2026-07-22T17:32:56.838Z",
+      "role": "workflow:owner",
+      "workflowId": "b6hjjNJFLuLXhRm3",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Digest semanal v1",
+    "description": "Created with 4 nodes: Domingo 19:00, Correr Digest (VPS), Extraer resumen, Enviar a Sergio"
+  }
+}

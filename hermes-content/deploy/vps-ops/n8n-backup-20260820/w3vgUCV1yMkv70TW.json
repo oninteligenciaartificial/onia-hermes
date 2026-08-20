@@ -1,0 +1,143 @@
+{
+  "updatedAt": "2026-07-03T21:24:08.914Z",
+  "createdAt": "2026-06-16T02:45:49.560Z",
+  "id": "w3vgUCV1yMkv70TW",
+  "name": "ONIA Intake Cliente a Telegram",
+  "description": "Recibe el formulario de levantamiento de cliente (web-factory/intake-cliente.html) vía webhook y envía el resumen por Telegram a ONIA.",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "7f6c5dee-4737-419f-81bb-adc415c21d95",
+      "name": "Recibe Formulario Intake",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "intake-cliente",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "webhookId": "7cbb9cb4-3c1e-4276-a994-2c701c465043"
+    },
+    {
+      "id": "5b667dfe-b9fd-40cd-906a-b435c5b5a5cd",
+      "name": "Avisar a Sergio (Telegram)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.body.resumen }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "461a3ff2-5eb4-40c5-a54e-8b1b437b183c"
+    },
+    {
+      "id": "f1eec737-06b4-4098-ab03-ff12303fcf40",
+      "name": "Responder al Formulario",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "ok"
+      }
+    }
+  ],
+  "connections": {
+    "Recibe Formulario Intake": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio (Telegram)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar a Sergio (Telegram)": {
+      "main": [
+        [
+          {
+            "node": "Responder al Formulario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "2530383c-9cf7-4fea-b255-ba33e1e2bf5e",
+  "activeVersionId": "2530383c-9cf7-4fea-b255-ba33e1e2bf5e",
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:08.898Z",
+      "createdAt": "2026-07-03T21:24:08.898Z",
+      "id": "9vqqYakPrKMmiw0H",
+      "name": "onia-intake"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-06-16T02:45:49.562Z",
+      "createdAt": "2026-06-16T02:45:49.562Z",
+      "role": "workflow:owner",
+      "workflowId": "w3vgUCV1yMkv70TW",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

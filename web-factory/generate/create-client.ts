@@ -9,6 +9,7 @@ import {
   getMissingClientInputs,
   webFactoryIntakeSchema,
 } from "../data/intake-schema";
+import type { WebFactoryTemplate } from "../data/schema";
 import { sanitizeCliArgv } from "./argv";
 
 export type CreateClientOptions = {
@@ -21,7 +22,7 @@ export type CreateClientOptions = {
 
 export type CreateClientResult = {
   slug: string;
-  template: "landing" | "store" | "dashboard" | "landing-focus";
+  template: WebFactoryTemplate;
   profilePath: string;
   contextPath: string;
   missingInputs: string[];

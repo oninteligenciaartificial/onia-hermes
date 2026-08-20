@@ -1,0 +1,117 @@
+{
+  "updatedAt": "2026-07-22T17:00:49.400Z",
+  "createdAt": "2026-07-22T17:00:49.400Z",
+  "id": "ynNMGtW8TCDCBMdS",
+  "name": "ONIA - Agente Radar YT (ideas, panel-only)",
+  "description": "Cron Miercoles 07:45 La Paz: corre el Agente Radar YT por SSH (yt-dlp en el host + docker exec onia-center radar-yt-agent.mjs). Mira tendencias de YouTube (cero costo, sin API key), destila 3-6 ideas de contenido con LiteLLM y las deja en onia_center.idea",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c8691c57-c5b7-4e80-9eed-f0f41a6dd4a0",
+      "name": "Miercoles 07:45",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "45 7 * * 3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "9f8b6757-5616-4801-a472-a4b994c4a401",
+      "name": "Correr Radar YT (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "RADAR_DRY_RUN=false RADAR_LIMIT=6 bash /opt/onia/radar-yt-agent-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Miercoles 07:45": {
+      "main": [
+        [
+          {
+            "node": "Correr Radar YT (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Miercoles 07:45": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "6f33c328-31b0-48b6-8a4e-d9fd457bd079",
+  "activeVersionId": "6f33c328-31b0-48b6-8a4e-d9fd457bd079",
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T17:00:49.427Z",
+      "createdAt": "2026-07-22T17:00:49.427Z",
+      "role": "workflow:owner",
+      "workflowId": "ynNMGtW8TCDCBMdS",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Radar YT v1 panel-only",
+    "description": "Created with 2 nodes: Miercoles 07:45, Correr Radar YT (VPS)"
+  }
+}

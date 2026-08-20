@@ -1,3 +1,7 @@
+> ⚠️ **SUPERADO.** El estado vigente esta en `hermes-content/docs/ONIA_ESTADO_REAL_20260813.md`
+> y la apuesta vigente en `docs/platform/ONIA_DECISION_SAAS_CONSULTORIA_20260813.md`.
+> Este documento se conserva como historia: NO tomes decisiones con el.
+
 # Onia Propuestas v3 — Plan de mejora de diseño y conversión
 
 Fecha: 2026-07-05 · Carril C (`propuestas-v2`) · Estado: Fase 1 HECHA.

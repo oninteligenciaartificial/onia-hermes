@@ -1,0 +1,124 @@
+{
+  "updatedAt": "2026-08-07T15:08:05.935Z",
+  "createdAt": "2026-06-17T19:22:59.288Z",
+  "id": "mboH09gPgu5kAoHm",
+  "name": "Brief de Produccion ONIA → Correo",
+  "description": "Webhook POST del Brief de Produccion (brief-produccion.html). Recibe datos de construccion y los envia por Gmail Workspace a oninteligenciaartificial@gmail.com (migrado 2026-08-07, sin $env).",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "af1784b4-4a6c-4f1b-a66d-6e111fbefc55",
+      "name": "Brief Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "brief-produccion",
+        "responseMode": "onReceived",
+        "authentication": "none",
+        "options": {
+          "allowedOrigins": "*",
+          "responseCode": {
+            "values": {
+              "responseCode": 200
+            }
+          },
+          "responseData": "ok"
+        }
+      },
+      "webhookId": "f79288f1-9d80-4097-a894-ad07daff0250"
+    },
+    {
+      "id": "618a3562-b163-414c-bc20-d84e0355c8f3",
+      "name": "Gmail: Enviar Brief",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        540,
+        300
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "oninteligenciaartificial@gmail.com",
+        "subject": "={{ 'Brief de Produccion — ' + ($json.body.empresa || 'sin empresa') }}",
+        "emailType": "html",
+        "message": "={{ '<div style=\"font-family:Arial,sans-serif;color:#101827;max-width:660px\"><h2 style=\"color:#1e5bff;margin:0 0 4px\">Brief de Produccion — ONIA</h2>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Proyecto</h3><p><b>Empresa:</b> ' + ($json.body.empresa||'-') + '<br><b>Contacto:</b> ' + ($json.body.contacto||'-') + '<br><b>WhatsApp:</b> ' + ($json.body.whatsapp||'-') + '<br><b>Email:</b> ' + ($json.body.email||'-') + '<br><b>Paquete contratado:</b> ' + ($json.body.paquete||'-') + '<br><b>Tipo:</b> ' + (($json.body.tipo_proyecto||[]).join(', ')||'-') + '<br><b>Idiomas:</b> ' + ($json.body.idiomas||'-') + '<br><b>Plazo deseado:</b> ' + ($json.body.plazo||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Marca</h3><p><b>Logo/manual (links):</b> ' + ($json.body.logo_url||'-') + '<br><b>Colores:</b> ' + ($json.body.colores||'-') + '<br><b>Tipografia:</b> ' + ($json.body.tipografia||'-') + '<br><b>Referencias que le gustan:</b> ' + ($json.body.referencias||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Dominio y hosting</h3><p><b>Dominio:</b> ' + ($json.body.dominio||'-') + '<br><b>Hosting:</b> ' + ($json.body.hosting||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Estructura</h3><p><b>Paginas/secciones:</b> ' + ($json.body.paginas||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Contenido</h3><p><b>Sobre el negocio (copy):</b> ' + ($json.body.copy_sobre||'-') + '<br><b>Servicios (detalle):</b> ' + ($json.body.servicios_detalle||'-') + '<br><b>Beneficios:</b> ' + ($json.body.beneficios||'-') + '<br><b>Logros/numeros:</b> ' + ($json.body.logros||'-') + '<br><b>Testimonios:</b> ' + ($json.body.testimonios||'-') + '<br><b>Cartera/clientes:</b> ' + ($json.body.cartera||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Productos (si aplica)</h3><p><b>Categorias:</b> ' + ($json.body.categorias||'-') + '<br><b>Productos (lista/links):</b> ' + ($json.body.productos||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Media</h3><p><b>Fotos/videos/portafolio (links):</b> ' + ($json.body.media_url||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Sistema / integraciones</h3><p><b>Integraciones:</b> ' + (($json.body.integraciones||[]).join(', ')||'-') + '<br><b>Detalle integraciones:</b> ' + ($json.body.integraciones_notas||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">SEO y redes</h3><p><b>Redes (links):</b> ' + ($json.body.redes||'-') + '<br><b>Descripcion SEO:</b> ' + ($json.body.seo_desc||'-') + '<br><b>Palabras clave:</b> ' + ($json.body.keywords||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Cierre</h3><p><b>Responsable de contenidos:</b> ' + ($json.body.responsable||'-') + '<br><b>Notas extra:</b> ' + ($json.body.notas||'-') + '</p></div>' }}",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "2b3b275c-ab91-46d2-b791-7a85ca6c7831"
+    }
+  ],
+  "connections": {
+    "Brief Webhook": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Enviar Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "90033003-b29f-455e-8a47-6ad3325c1a99",
+  "activeVersionId": "90033003-b29f-455e-8a47-6ad3325c1a99",
+  "versionCounter": 3,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:08.898Z",
+      "createdAt": "2026-07-03T21:24:08.898Z",
+      "id": "9vqqYakPrKMmiw0H",
+      "name": "onia-intake"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-06-17T19:22:59.293Z",
+      "createdAt": "2026-06-17T19:22:59.293Z",
+      "role": "workflow:owner",
+      "workflowId": "mboH09gPgu5kAoHm",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Enviar Brief"
+  }
+}

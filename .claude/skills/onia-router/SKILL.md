@@ -7,7 +7,13 @@ description: Invocar al INICIO de cualquier trabajo en el monorepo onia-hermes. 
 
 Punto de entrada de toda sesión en `onia-hermes`. Antes de trabajar: identificá el
 carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa completo:
-`hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
+`hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES.md`.
+
+> 📇 **Mapa problema → skill: [`STACK-POR-DOMINIO.md`](STACK-POR-DOMINIO.md).**
+> Hay **196 skills globales + 9 plugins** instaladas. Esta tabla enruta por carril; ese
+> archivo enruta por dominio (contenido/marketing · diseño/UI/UX · frontend · backend ·
+> seguridad · research · proceso), que es como aparecen las tareas en la práctica.
+> **Abrirlo antes de escribir la primera línea.**
 
 ## Cómo usar
 1. **Identificá el carril** de la tarea (tabla abajo). Ante duda, ver
@@ -27,7 +33,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | Carril / Proyecto | Skills núcleo | Subagente | Skill ONIA propia |
 |---|---|---|---|
 | **A** onia-center (panel Next.js) | `impeccable` `ui-ux-pro-max` `taste-design` `frontend-design` `frontend-patterns` `react-components` `shadcn-ui` `ui-styling` `nextjs-turbopack` `design-review` `emil-design-eng` | `web-factory-builder` | `onia-web-factory` |
-| **B** wf-landing (landings cliente) | `impeccable` `taste-design` `design`/`design-md` `image-to-code` `web-artifacts-builder` `landing-report` `land-and-deploy` `imagegen-frontend-web` `banner-design` | `web-factory-builder` | `onia-web-factory` |
+| **B** wf-landing (landings cliente) | `impeccable` `taste-design` `design`/`design-md` `image-to-code` `web-artifacts-builder` `landing-report` `land-and-deploy` `imagegen-frontend-web` `banner-design` `design-dna` (teardown de referencia → JSON de tokens/estilo/efectos; tipografía SIEMPRE verificada contra el CSS real, no a ojo) `gsap-*` (plugin oficial GreenSock, scrollytelling) | `web-factory-builder` | `onia-web-factory` |
 | **C** propuestas (comercial) | `article-writing` `make-pdf` `slides` `document-generate` `brand` | `onia-propuestas` | `onia-propuestas` |
 | **D** DentaGest · **E** GestiOS *(repos aparte)* | `database-migrations` `postgres-patterns` `backend-patterns` `api-design` `security-review` | `dentalgest-migrations` · `onia-core-guardian` | `onia-core` |
 | **F** Bolivian Electric *(cliente, solo lectura)* | mismo stack backend | — | `onia-core` |
@@ -39,6 +45,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **onia-core** | `database-migrations` `postgres-patterns` `api-design` `backend-patterns` `verification-loop` | `onia-core-guardian` | `onia-core` |
 | **comercial/CRM** | `deep-research` (prospección con señal) | `onia-crm-prospeccion` | `onia-propuestas` |
 | **fiscal / contable (propio + features ERP)** | `deep-research` (validar RND/DS vigentes) | — | `onia-contabilidad-bolivia` |
+| **extracción web** (alta por URL · prospección) | **NO instalar scrapers nuevos** (ScrapeGraphAI evaluado y descartado). Crawl4AI del VPS + LiteLLM ya resuelven: `scripts/alta-por-extraccion.py`. Doc: `docs/platform/ONIA_EXTRACCION_WEB_DECISION.md` | `onia-crm-prospeccion` · `hermes-automation` | — |
 
 ## Reglas duras que aplican SIEMPRE (de CLAUDE.md)
 - **Objetivo único por sesión.** Definirlo al inicio; no descarrilar; terminarlo antes de cerrar.

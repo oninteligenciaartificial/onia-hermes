@@ -19,9 +19,18 @@ test.describe.configure({ mode: "serial" });
 const PAGES = [
   { name: "landing (demo)", url: "/demo/", schemes: ["light", "dark"] as const },
   { name: "landing-focus (demo-focus)", url: "/demo-focus/", schemes: ["light", "dark"] as const },
+  // The only landing demo carrying credenciales/proceso/faq, so it is the one
+  // that exercises the trust strip, the process list and the <details> FAQ.
+  { name: "landing + trust/process/faq (clinic-demo)", url: "/clinic-demo/", schemes: ["light", "dark"] as const },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", schemes: ["light", "dark"] as const },
   { name: "store (skincare-demo)", url: "/skincare-demo/", schemes: ["light"] as const },
   { name: "landing-clinic (dental-demo)", url: "/dental-demo/", schemes: ["light", "dark"] as const },
+  // Built from the learned model find-realestate-editorial: full-bleed media hero
+  // over a scrim, path cards, catalog grid and the inverted newsletter band.
+  { name: "landing-realestate (realestate-demo)", url: "/realestate-demo/", schemes: ["light", "dark"] as const },
+  // Built from unitedcarriers-logistics: scroll-scrubbed hero over a photo scrim,
+  // stat strip and the quote form (the only demo with a multi-field form).
+  { name: "landing-logistics (logistics-demo)", url: "/logistics-demo/", schemes: ["light", "dark"] as const },
 ];
 
 for (const target of PAGES) {

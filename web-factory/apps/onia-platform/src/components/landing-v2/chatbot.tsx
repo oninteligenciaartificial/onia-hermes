@@ -1,0 +1,110 @@
+import { Reveal } from "@/motion";
+import {
+  A_MEDIDA,
+  CHATBOT_STACKS,
+  CUPO_MENSUAL,
+  fmtBs,
+  META_MARKUP_PCT,
+} from "@/content/chatbot-precios";
+import { Pantalla } from "./pantalla";
+import styles from "./v2.module.css";
+
+/**
+ * 5. CHATBOT — un solo mensaje: el que escribe a las once ya tiene respuesta.
+ *
+ * Leyes aplicadas:
+ *  · §3 → dos capturas REALES del bot contestando (el saludo con botones y el
+ *    pedido derivado). Son la misma conversación en dos momentos, por eso la
+ *    segunda baja: dos momentos, no dos objetos gemelos.
+ *  · 5-6 → escalera de niveles como celdas de pelo sobre hairlines, sin
+ *    tarjetas; el texto en su propia medida.
+ *  · 2-3 → los títulos de nivel bajan del display con el mismo peso 500.
+ *
+ * Los montos NO viven acá: salen de src/content/chatbot-precios.ts, que a su
+ * vez cita `onia-platform/lib/pricing.ts → WHATSAPP_ADDON.tiers`. Un precio en
+ * la landing que no salga del código que cobra es un precio inventado.
+ */
+export function ChatbotV2() {
+  return (
+    <section className={styles.section} aria-labelledby="v2-bot">
+      <div className={styles.container}>
+        <Reveal>
+          <p className={styles.kicker}>Chatbot de WhatsApp</p>
+          <h2 id="v2-bot" className={`${styles.titulo} ${styles.medida}`}>
+            El que escribe a las once de la noche ya tiene respuesta.
+          </h2>
+          <p className={styles.lead}>
+            No es un menú de opciones: es un bot con IA entrenado con el
+            contenido real de tu negocio, que contesta, califica y te deriva el
+            caso con contexto. Se suma a cualquier plan.
+          </p>
+        </Reveal>
+
+        <div className={styles.botGrid}>
+          <Reveal delay={0.06}>
+            <div className={styles.botCapturas}>
+              <Pantalla
+                src="/v2/bot-saludo.webp"
+                alt="Conversación real: el bot de Onia se presenta como asistente del negocio, avisa que está respondiendo fuera de horario y ofrece los botones Horarios, Servicios y Hablar con el dueño."
+                ancho={406}
+                alto={656}
+              />
+              <Pantalla
+                src="/v2/bot-pedido.webp"
+                alt="Conversación real: el cliente escribe que quiere comprar 100 tornillos y el bot le confirma que ya le pasó el pedido al dueño por ese mismo chat."
+                ancho={406}
+                alto={656}
+              />
+            </div>
+            <p className={styles.pie}>
+              Conversación real con el bot de una cuenta de prueba, del saludo al
+              pedido derivado
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.12}>
+            <div className={styles.escalera}>
+              {CHATBOT_STACKS.map((stack) => (
+                <div
+                  key={stack.id}
+                  className={`${styles.escalon} ${
+                    stack.destacado ? styles.escalonDestacado : ""
+                  }`}
+                >
+                  <span className={styles.escalonNivel}>{stack.nivel}</span>
+                  <div>
+                    <h3>{stack.nombre}</h3>
+                    <p>{stack.resuelve}</p>
+                  </div>
+                  <p className={styles.escalonPrecio}>
+                    <b>
+                      {stack.setupDesde ? "Desde " : ""}Bs {fmtBs(stack.setup)}
+                    </b>
+                    instalación + Bs {fmtBs(stack.mensual)}/mes
+                  </p>
+                </div>
+              ))}
+            </div>
+            {/* La escalera de 3 niveles se retiro el 2026-08-15; este parrafo
+                la seguia contando. Sobre el excedente de Meta no se afirma ni
+                "al costo" ni "+20 %": pricing.ts hoy dice las DOS cosas
+                (fullLabel vs markupPct) y hasta que Sergio resuelva esa
+                contradiccion la landing no toma partido — dice solo lo que es
+                verdad en ambos casos. */}
+            <p className={styles.nota} style={{ marginTop: "1.2rem" }}>
+              {CUPO_MENSUAL} conversaciones por mes incluidas: al llegar, corta
+              — nunca una factura sorpresa. Lo que Meta cobre por los mensajes
+              que iniciás va aparte; responder dentro de las 24 horas desde que
+              el cliente escribe no lo cobra Meta. {A_MEDIDA}
+            </p>
+            <div className={styles.acciones}>
+              <a className={styles.link} href="/chatbot">
+                Ver el detalle y los requisitos →
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}

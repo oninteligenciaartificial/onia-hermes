@@ -1,18 +1,15 @@
 ---
 title: "Política de Privacidad"
 slug: "privacidad"
-status: "borrador"
-version: "0.2"
-updatedAt: "2026-07-25"
+status: "vigente"
+version: "1.0"
+updatedAt: "2026-08-13"
 ---
-
-> **BORRADOR — pendiente de revisión por abogado matriculado en Bolivia. No constituye asesoría legal.**
 
 # Política de Privacidad — Plataforma Onia
 
-Esta Política explica cómo la plataforma **Onia** (operada por **OniaAgency**
-[REVISAR ABOGADO: confirmar razón social exacta, NIT y domicilio legal], Santa
-Cruz de la Sierra, Estado Plurinacional de Bolivia) trata los datos personales
+Esta Política explica cómo la plataforma **Onia** (operada por **OniaAgency**, matrícula de comercio y NIT **5371375010**,
+con domicilio en Santa Cruz de la Sierra, Estado Plurinacional de Bolivia) trata los datos personales
 cuando presta su software de gestión. Documento complementario: los
 [Términos y Condiciones](/terminos).
 
@@ -29,8 +26,7 @@ En la práctica: **tu cliente es tu cliente, no de Onia**. Vos decidís qué
 registrás, a quién contactás y con qué consentimiento; Onia pone la herramienta y
 custodia los datos según esta Política y el contrato. Sos responsable de contar
 con la base o el consentimiento necesarios para cargar y tratar los datos de tus
-clientes o pacientes. [REVISAR ABOGADO: conveniencia de un anexo de tratamiento
-de datos firmado con cada cliente, en especial en salud.]
+clientes o pacientes.
 
 ## 2. Qué datos recogemos
 
@@ -74,12 +70,14 @@ responsabilidad.
 
 ## 4. Dónde viven los datos
 
-4.1. **Base de datos del producto:** en **Supabase**, un servicio de base de
-datos en la nube sobre infraestructura de proveedores cloud, con servidores
-ubicados fuera de Bolivia. [REVISAR ABOGADO: implicancias de la transferencia
-internacional de datos, en especial datos de salud.]
+4.1. **Base de datos del producto:** en un **servidor privado administrado por
+Onia**, sobre el que corre Supabase en su versión auto-hospedada. No usamos el
+servicio en la nube de Supabase para los datos del producto: la base vive en
+nuestra propia infraestructura, contratada a un proveedor de servidores
+internacional.
 
-4.2. **Automatización y agentes:** en un servidor privado administrado por Onia.
+4.2. **Automatización y agentes:** en el mismo servidor privado administrado por
+Onia.
 
 4.3. **Opción on-premise:** para clientes que lo requieran, Onia puede ofrecer
 instalación en infraestructura del propio cliente ("on-premise"), bajo cotización
@@ -93,12 +91,14 @@ y bajo sus propios compromisos de confidencialidad y seguridad:
 
 | Proveedor | Para qué | Notas |
 |---|---|---|
-| Hosting y base de datos en la nube (Supabase y proveedores de infraestructura) | Alojar y respaldar los datos del producto | Cifrado en tránsito y en reposo; aislamiento por cliente |
+| Proveedor del servidor donde Onia aloja la plataforma | Prestar la infraestructura física donde corren la base y los agentes | El proveedor no administra ni consulta los datos: la base la opera Onia sobre ese servidor |
 | Proveedores de modelos de IA (vía API) | Generar borradores y sugerencias | Solo modalidades que **no entrenan** con los datos enviados; se envía el mínimo contexto necesario |
 | WhatsApp (Meta) | Mensajería con tus clientes cuando activás ese canal | Los mensajes pasan por la infraestructura de Meta bajo sus propios términos |
 
 Onia mantendrá esta lista actualizada y avisará ante cambios de subprocesadores
-que traten datos de tus clientes. [REVISAR ABOGADO: mecanismo y plazo de aviso.]
+que traten datos de tus clientes: el aviso se envía al correo de contacto de la
+cuenta y se publica en esta página con **30 días de anticipación**, salvo que el
+cambio sea urgente por seguridad.
 
 ## 6. IA y tus datos
 
@@ -114,13 +114,23 @@ que traten datos de tus clientes. [REVISAR ABOGADO: mecanismo y plazo de aviso.]
 
 Medidas aplicadas (esfuerzo razonable, mejora continua):
 
-- Cifrado de datos **en tránsito** (TLS/HTTPS) y **en reposo**.
-- **Aislamiento por cliente** con reglas de acceso a nivel de fila en la base de
-  datos.
+- Cifrado de datos **en tránsito** (TLS/HTTPS) en todo el tráfico entre el
+  navegador y la plataforma, con certificados vigentes.
+- **Aislamiento por cliente** con reglas de acceso a nivel de fila (RLS) activas
+  en todas las tablas donde viven los datos de cliente.
 - Contraseñas con hash; accesos administrativos con principio de mínimo
-  privilegio.
-- **Copias de seguridad cifradas** y periódicas.
-- Registro de actividad para detectar accesos anómalos.
+  privilegio y roles por perfil.
+- **Copias de seguridad automáticas diarias**, con retención y verificación de
+  que el respaldo no salga vacío.
+- **Cortafuegos** en el servidor, bloqueo automático de intentos repetidos de
+  acceso, y una verificación diaria que comprueba que estas defensas siguen
+  activas y avisa si alguna se cae.
+- Registro de actividad (auditoría) para detectar accesos anómalos.
+
+Onia no afirma cifrado del disco en reposo ni certificaciones de seguridad
+(ISO 27001, SOC 2) porque hoy no las tiene: preferimos decirlo antes que
+prometerlo. Los clientes que requieran custodia física propia pueden optar por
+la modalidad on-premise (§4.3).
 
 Ningún sistema es infalible. Si ocurriera un incidente de seguridad que afecte
 datos personales, Onia lo notificará al cliente afectado sin demora indebida, con
@@ -134,10 +144,8 @@ lo que se sepa del alcance y las medidas tomadas.
 - **Al terminar el contrato:** podés exportar tus datos (formato CSV/JSON)
   dentro de los **30 días** posteriores a la terminación. Transcurridos **90
   días** desde la terminación, Onia elimina tus datos de los sistemas activos.
-  [REVISAR ABOGADO: validar plazos.]
-- **Backups:** las copias de seguridad cifradas rotan en un ciclo de hasta **30
-  días** adicionales; los datos eliminados desaparecen de los backups al
-  completarse la rotación.
+- **Backups:** las copias de seguridad rotan en un ciclo de **7 días**; los datos
+  eliminados desaparecen de los respaldos al completarse la rotación.
 - **Excepciones:** se conserva lo que la normativa boliviana aplicable exija
   retener (por ejemplo, registros de facturación) por el plazo correspondiente.
 - **Importante:** los plazos legales de conservación de registros del negocio
@@ -169,16 +177,14 @@ específica, adoptamos por contrato** los principios reconocidos
 internacionalmente (licitud, finalidad, minimización, seguridad, transparencia
 y derechos del titular), y Onia se compromete a adecuar esta Política a la ley
 boliviana de protección de datos cuando se promulgue. Las personas conservan
-en todo caso los derechos y acciones constitucionales mencionados. [REVISAR
-ABOGADO: confirmar el estado normativo al momento de publicar.]
+en todo caso los derechos y acciones constitucionales mencionados.
 
 ## 10. Menores de edad
 
 La plataforma no está dirigida a menores y Onia no recolecta datos de menores
 por cuenta propia. Los negocios clientes pueden registrar clientes o pacientes
 menores de edad como parte de su atención, bajo el consentimiento de sus padres
-o tutores, que es responsabilidad del negocio obtener y documentar. [REVISAR
-ABOGADO.]
+o tutores, que es responsabilidad del negocio obtener y documentar.
 
 ## 11. Cambios a esta Política
 
@@ -188,14 +194,84 @@ vigente y su fecha estarán siempre publicadas.
 
 ## 12. Contacto
 
-Solicitudes sobre datos personales: [REVISAR ABOGADO / COMPLETAR: correo oficial
-y teléfono/WhatsApp de contacto]. Santa Cruz de la Sierra, Estado Plurinacional
-de Bolivia.
+Solicitudes sobre datos personales: **business@onia.com.bo**. Santa Cruz de la Sierra,
+Estado Plurinacional de Bolivia.
+
+## 13. Chatbot de WhatsApp de Onia
+
+Onia atiende consultas comerciales por WhatsApp en el número **+591 75414930**
+mediante un **asistente automático (chatbot)**. El propio bot lo declara en su
+primer mensaje: quien escribe sabe desde el inicio que conversa con un sistema
+automatizado.
+
+Esta sección cubre los datos de **cualquier persona que escriba a ese número**,
+sea o no cliente de Onia:
+
+- **Qué recogemos:** tu número de WhatsApp y el nombre de tu perfil; el
+  contenido de los mensajes que envías; y, si nos lo contás durante la
+  conversación, el rubro de tu negocio, el tamaño de tu equipo, tu ciudad y qué
+  tareas te consumen tiempo. Si agendás una reunión, también el horario elegido.
+- **Notas de voz:** si enviás un audio, se transcribe a texto con un servicio
+  propio alojado en el servidor de Onia — el audio no se envía a servicios de
+  transcripción de terceros.
+- **Para qué:** atender tu consulta, entender si Onia le sirve a tu negocio y,
+  si querés, agendar una reunión. **No usamos estos datos para publicidad, no
+  los vendemos y no entrenamos modelos de IA con tus conversaciones** (misma
+  regla del §3).
+- **Dónde viven:** las conversaciones se gestionan con un sistema de atención
+  (Chatwoot) instalado en el **servidor propio de Onia** — no es un proveedor
+  externo —, y los datos de contacto y calificación se guardan en la base de
+  datos descrita en el §4 (Supabase).
+- **Terceros que necesariamente participan:** **Meta (WhatsApp)** transporta
+  los mensajes por su infraestructura y bajo sus propios términos; **Supabase**
+  aloja la base de datos; **Cal.com** gestiona la reserva cuando agendás una
+  reunión. Nadie más recibe estos datos.
+- **Cuánto los guardamos:** las conversaciones y los datos del contacto se
+  conservan hasta **24 meses después de tu última interacción**, o hasta que
+  pidas su eliminación (§14) — lo que ocurra primero. El registro de una baja
+  (número y estado) se conserva el tiempo necesario para respetarla y no volver
+  a contactarte.
+- **Darte de baja:** escribí **"BAJA"**, **"STOP"**, **"bajarme"** o **"dar de
+  baja"** al mismo WhatsApp y el bot deja de contactarte. La baja queda
+  registrada de inmediato.
+
+## 14. Eliminación de datos
+
+Cualquier persona puede pedir la eliminación de sus datos personales de los
+sistemas de Onia — tanto los del chatbot de WhatsApp (§13) como los de una
+cuenta de la plataforma (§8 y §9). El procedimiento:
+
+- Enviá tu solicitud al correo **business@onia.com.bo**, indicando el número de
+  WhatsApp o el correo con el que interactuaste con Onia.
+- Verificaremos que la solicitud venga del titular de los datos, para no
+  eliminar información de una persona a pedido de otra.
+- Eliminamos tus datos de los sistemas activos dentro de los **15 días
+  hábiles** siguientes (mismo plazo objetivo del §9), y de las copias de
+  seguridad al completarse su ciclo de rotación (§8).
+- **Excepciones:** se conserva lo que la normativa boliviana aplicable exija
+  retener (por ejemplo, registros de facturación) y el registro mínimo de una
+  baja de contacto, que se mantiene justamente para respetarla.
 
 ---
 
-> **BORRADOR — pendiente de revisión por abogado matriculado en Bolivia. No
-> constituye asesoría legal.** Las referencias normativas se hacen de forma
-> general ("normativa boliviana aplicable"); el abogado debe confirmar el marco
-> vigente de protección de datos en Bolivia y las normas sectoriales de salud
-> antes de publicar.
+## 15. Marco normativo
+
+Bolivia no cuenta hoy con una ley integral de protección de datos personales
+(existe un anteproyecto, todavía sin sancionar). Esta Política se rige por el
+marco vigente:
+
+- **Constitución Política del Estado**, arts. 21 (derecho a la privacidad e
+  intimidad) y 130–131 (Acción de Protección de Privacidad, que te habilita a
+  conocer, objetar, y pedir la eliminación o rectificación de tus datos).
+- **Ley N.º 164** de Telecomunicaciones y TIC (8 de agosto de 2011), en sus
+  disposiciones sobre inviolabilidad y secreto de las comunicaciones y sobre
+  servicios digitales.
+- **Decreto Supremo N.º 1793** (13 de noviembre de 2013), reglamento de la
+  Ley 164, en lo relativo al tratamiento de datos personales en servicios
+  digitales, que exige consentimiento para el tratamiento de datos personales.
+- Para los datos clínicos que cargan los profesionales de salud usuarios de la
+  plataforma, la normativa sectorial de salud que obliga al profesional a
+  mantener la confidencialidad del expediente clínico.
+
+Si una nueva ley de protección de datos entra en vigencia, esta Política se
+actualizará para cumplirla y el cambio se anunciará según el §11.

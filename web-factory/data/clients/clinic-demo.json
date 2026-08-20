@@ -55,6 +55,39 @@
     "Reserva directa",
     "Informacion clara"
   ],
+  "credenciales": [
+    "Registro sanitario vigente",
+    "Equipo con matricula profesional",
+    "Protocolos de bioseguridad"
+  ],
+  "proceso": [
+    {
+      "titulo": "Escribinos",
+      "desc": "Contanos que necesitas por WhatsApp y te orientamos."
+    },
+    {
+      "titulo": "Reservamos tu turno",
+      "desc": "Elegis dia y hora segun la agenda disponible."
+    },
+    {
+      "titulo": "Primera evaluacion",
+      "desc": "Diagnostico y plan de atencion explicado en tu idioma."
+    }
+  ],
+  "faq": [
+    {
+      "pregunta": "Atienden sin cita previa?",
+      "respuesta": "Priorizamos turnos agendados, pero guardamos cupos diarios para urgencias."
+    },
+    {
+      "pregunta": "Que necesito llevar a la primera consulta?",
+      "respuesta": "Documento de identidad y estudios previos si los tenes a mano."
+    },
+    {
+      "pregunta": "Trabajan con seguros?",
+      "respuesta": "Consultanos por WhatsApp: confirmamos cobertura antes de agendar."
+    }
+  ],
   "referencias": [
     {
       "title": "Zocdoc",

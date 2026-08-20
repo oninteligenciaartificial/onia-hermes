@@ -1,0 +1,431 @@
+{
+  "updatedAt": "2026-05-24T15:46:11.136Z",
+  "createdAt": "2026-05-24T15:30:15.514Z",
+  "id": "dybtwU9dejZXwYKF",
+  "name": "WF-GS-01 — Trial Expiry Warning- Gesti-os",
+  "description": "Daily 9AM LPZ: finds orgs with trial ending in 3 days, emails admin via Resend, optionally sends WhatsApp via Meta Graph API if addon active.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 13 * * *"
+            }
+          ]
+        }
+      },
+      "id": "dc81bbbf-d9c3-4eda-b6f6-2edac64a2b79",
+      "name": "Daily 9AM LPZ",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst plus3 = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);\nreturn [{ json: { nowISO: now.toISOString(), plus3ISO: plus3.toISOString() } }];"
+      },
+      "id": "7fb66af4-c7d4-441a-913d-802019430b38",
+      "name": "Calc Dates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "url": "='https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/organizations?trialEndsAt=gte.' + $('Calc Dates').first().json.nowISO + '&trialEndsAt=lte.' + $('Calc Dates').first().json.plus3ISO + '&select=id,name,plan,trialEndsAt,whatsappAddon'",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=$vars.SUPABASE_SERVICE_ROLE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b8b46de3-f9f3-4220-b0f7-c1589c8d04ff",
+      "name": "Fetch Trial Orgs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        272
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "8f2c5355-0b20-43af-aaf8-5d18f14a47fe",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        896,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "='https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/profiles?organizationId=eq.' + $json.id + '&role=eq.ADMIN&select=userId&limit=1'",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=$vars.SUPABASE_SERVICE_ROLE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8ffa00bd-e270-46e2-ade9-789f8b703670",
+      "name": "Fetch Admin Profile",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        896,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "url": "='https://jafxylfocvvlflpqfsix.supabase.co/auth/v1/admin/users/' + $json[0].userId",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=$vars.SUPABASE_SERVICE_ROLE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "65727628-a6ae-4953-ab1a-8df08a9a3cda",
+      "name": "Fetch Auth User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1120,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "='Bearer ' + $vars.RESEND_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=JSON.stringify({ from: 'GestiOS <' + $vars.GESTIOS_FROM_EMAIL + '>', to: [$('Fetch Auth User').first().json.email], subject: 'Tu trial de GestiOS vence pronto', html: '<h2>Hola! Tu período de prueba termina pronto.</h2><p>Tu organización <strong>' + $('For Each Org').first().json.name + '</strong> tiene su trial venciendo el <strong>' + new Date($(\\'For Each Org\\').first().json.trialEndsAt).toLocaleDateString(\\'es-BO\\') + '</strong>.</p><p>Activa tu plan para seguir sin interrupciones.</p><a href=\"https://' + $vars.GESTIOS_APP_URL + '/settings/billing\" style=\"background:#4F46E5;color:#fff;padding:10px 20px;text-decoration:none;border-radius:6px;\">Activar mi plan</a>' })",
+        "options": {}
+      },
+      "id": "4c6e6524-5df9-485f-a6b4-22a481b28e5e",
+      "name": "Send Trial Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1344,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "wa-check",
+              "leftValue": "=$('For Each Org').first().json.whatsappAddon",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "45e638d3-1f33-48a6-8732-1318542a7e4c",
+      "name": "Has WA Addon?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "url": "='https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/org_addons?organizationId=eq.' + $('For Each Org').first().json.id + '&addon=eq.WHATSAPP&active=eq.true&select=accessToken,phoneNumberId&limit=1'",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=$vars.SUPABASE_SERVICE_ROLE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7755d1e3-aa9a-46e0-a8c5-61831bafcb6e",
+      "name": "Fetch WA Addon",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1792,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "='https://graph.facebook.com/v20.0/' + $('Fetch WA Addon').first().json.phoneNumberId + '/messages'",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "='Bearer ' + $('Fetch WA Addon').first().json.accessToken"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=JSON.stringify({ messaging_product: 'whatsapp', to: $('Fetch Auth User').first().json.phone || '', type: 'text', text: { body: 'Hola! Tu trial de GestiOS vence pronto. Activa tu plan en: https://' + $vars.GESTIOS_APP_URL + '/settings/billing' } })",
+        "options": {}
+      },
+      "id": "a90bcdc8-8226-420a-bf1f-2b505f4c52e5",
+      "name": "Send WA Warning",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2016,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "1a686654-bee6-4384-8ece-b74ff65d03a8",
+      "name": "For Each Org",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        272
+      ]
+    }
+  ],
+  "connections": {
+    "Daily 9AM LPZ": {
+      "main": [
+        [
+          {
+            "node": "Calc Dates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calc Dates": {
+      "main": [
+        [
+          {
+            "node": "Fetch Trial Orgs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Trial Orgs": {
+      "main": [
+        [
+          {
+            "node": "For Each Org",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Admin Profile": {
+      "main": [
+        [
+          {
+            "node": "Fetch Auth User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Auth User": {
+      "main": [
+        [
+          {
+            "node": "Send Trial Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Trial Email": {
+      "main": [
+        [
+          {
+            "node": "Has WA Addon?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has WA Addon?": {
+      "main": [
+        [
+          {
+            "node": "Fetch WA Addon",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "For Each Org",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch WA Addon": {
+      "main": [
+        [
+          {
+            "node": "Send WA Warning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WA Warning": {
+      "main": [
+        [
+          {
+            "node": "For Each Org",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "For Each Org": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Admin Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "66145a40-0e44-4301-ba42-8d4db68c10da",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-24T15:30:15.517Z",
+      "createdAt": "2026-05-24T15:30:15.517Z",
+      "role": "workflow:owner",
+      "workflowId": "dybtwU9dejZXwYKF",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

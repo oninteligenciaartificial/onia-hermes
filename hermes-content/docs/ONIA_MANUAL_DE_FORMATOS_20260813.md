@@ -953,7 +953,7 @@ screen compuesto en HyperFrames, rótulos en código.
 marketing del proveedor y **nosotros no lo probamos**. Antes de ofrecérselo a un cliente hay que
 hacer UNA conversión con metraje propio y mirarla. Segunda: convertir metraje con personas
 identificables sin consentimiento. Tercera: el video de origen repite "Seedance 2.5" y "33 días
-ilimitado", las dos falsas para nuestra cuenta — una tercera fuente repitiéndolo no lo vuelve cierto.
+ilimitado" — el segundo sigue siendo falso, pero **"Seedance 2.5" dejó de serlo: al 15-ago existe en la cuenta** — una tercera fuente repitiéndolo no lo vuelve cierto.
 
 ---
 

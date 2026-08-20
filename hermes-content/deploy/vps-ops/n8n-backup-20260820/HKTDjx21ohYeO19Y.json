@@ -1,0 +1,89 @@
+{
+  "updatedAt": "2026-07-04T00:57:52.000Z",
+  "createdAt": "2026-05-15T22:02:05.431Z",
+  "id": "HKTDjx21ohYeO19Y",
+  "name": "udia",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -80,
+        -16
+      ],
+      "id": "e77ebaea-4e95-4627-a8b7-f1ffaecda798",
+      "name": "When chat message received",
+      "webhookId": "026adf97-e8f3-406b-8dc4-1f774a2db941"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        336,
+        -16
+      ],
+      "id": "c9cbd8ed-507c-4a6d-ad1a-a81cad972135",
+      "name": "AI Agent"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "22402fec-1537-45f7-833d-a385eba9efa8",
+  "activeVersionId": null,
+  "versionCounter": 7,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-15T22:02:05.433Z",
+      "createdAt": "2026-05-15T22:02:05.433Z",
+      "role": "workflow:owner",
+      "workflowId": "HKTDjx21ohYeO19Y",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

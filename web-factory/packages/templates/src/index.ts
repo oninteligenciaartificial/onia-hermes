@@ -29,3 +29,18 @@ export {
   renderLandingClinicCss,
   renderLandingClinicDocument,
 } from "./landing-clinic";
+export {
+  renderLandingRealestateBody,
+  renderLandingRealestateCss,
+  renderLandingRealestateDocument,
+  type RealestateClient,
+  type RealestateProperty,
+} from "./landing-realestate";
+export {
+  renderLandingLogisticsBody,
+  renderLandingLogisticsCss,
+  renderLandingLogisticsDocument,
+  type LogisticsClient,
+  type LogisticsMetric,
+  type LogisticsQuoteField,
+} from "./landing-logistics";

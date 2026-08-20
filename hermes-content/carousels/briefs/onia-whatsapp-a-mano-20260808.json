@@ -1,6 +1,6 @@
 {
   "title": "Dejá de responder WhatsApp a mano: estás perdiendo clientes mientras dormís",
-  "caption": "Nadie abre un negocio para vivir pegado al WhatsApp. Pero ahí estás: contestando lo mismo 40 veces, de día, de noche, los domingos. Y aun así se te escapan los que preguntan a las 11 p.m. El problema no sos vos ni tu esfuerzo: es que estás haciendo a mano algo que una IA hace sola, mejor y sin dormir. Guardá el test del slide 6 y comentá LIBRE: te muestro cómo se ve ese sistema montado para tu rubro.",
+  "caption": "Nadie abre un negocio para vivir pegado al WhatsApp. Pero ahí estás: contestando lo mismo 40 veces, de día, de noche, los domingos. Y aun así se te escapan los que preguntan a las 11 p.m. El problema no sos vos ni tu esfuerzo: es que estás haciendo a mano algo que una IA hace sola, mejor y sin dormir. Guardá el test del slide 6 y hacé la cuenta: ¿cuántos mensajes sin responder tenés ahora mismo? Contámelo acá abajo.",
   "hashtags": [
     "#automatizacion",
     "#IA",
@@ -10,8 +10,8 @@
     "#emprender",
     "#santacruz"
   ],
-  "comment_trigger": "Comentá LIBRE",
-  "cta": "Contame",
+  "comment_trigger": "",
+  "cta": "",
   "slides": [
     {
       "number": 1,
@@ -31,7 +31,7 @@
       "pill": "El problema",
       "headline": "El que pregunta a las *11 p.m.* no espera",
       "body": "Si no le respondés en minutos, ya le escribió a otro. No perdés por malo: perdés por lento.",
-      "callout": "El 40% de los leads no vuelve si no respondés en 5 min ↘",
+      "callout": "Mirá tu WhatsApp: ¿cuántos de anoche siguen sin respuesta? ↘",
       "save_worthy": false,
       "visual_prompt": "Alto contraste, acento verde en 11 p.m.",
       "alt_text": "El que pregunta a las 11pm no espera",
@@ -90,7 +90,7 @@
       "role": "point",
       "pill": "Ojo",
       "headline": "No es un bot *robótico*",
-      "body": "No hablamos del menú '1 para ventas, 2 para…'. Es una IA que entiende, responde natural y deriva a un humano cuando hace falta. El cliente ni se da cuenta.",
+      "body": "No hablamos del menú '1 para ventas, 2 para…'. Es una IA que entiende, responde natural y deriva a un humano cuando hace falta. El cliente ni se da cuenta. Lo raro viene después: te sobra tiempo y no sabés en qué usarlo.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Objeto 3D, acento verde en robótico.",
@@ -101,12 +101,12 @@
       "number": 8,
       "role": "cta",
       "pill": "Contame",
-      "headline": "Soltá el *WhatsApp*",
-      "body": "¿Cuántos mensajes sin responder tenés *ahora mismo*? Decime el número.",
+      "headline": "Contá los *no respondidos*",
+      "body": "¿Cuántos tenés ahora mismo sin contestar? Multiplicá por tu ticket promedio. Ese es el número. *Guardalo* y hacé la cuenta con calma.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte verde, acento en WhatsApp.",
-      "alt_text": "Comentá LIBRE",
+      "alt_text": "Contá los no respondidos",
       "bg": "hermes-content/assets/onia/heroes/wa-08.png"
     }
   ],

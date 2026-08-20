@@ -10,8 +10,8 @@
     "#santacruz",
     "#emprender"
   ],
-  "comment_trigger": "Comentá MITO",
-  "cta": "Guardalo",
+  "comment_trigger": "",
+  "cta": "",
   "slides": [
     {
       "number": 1,

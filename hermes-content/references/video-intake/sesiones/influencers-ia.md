@@ -300,12 +300,24 @@ VERIFICADO YA contra la cuenta (no lo repitas, usalo):
     referencias y CONTINUACION de video. Es el mejor para narrativa.
   - veo3 (variantes preview/fast), wan2_7 (2-15 s, consistencia de personaje), gemini_omni
     (4-10 s) tambien tienen audio nativo.
-  - CORRECCION al corpus: el tope de 15 s era de seedance_2_0. flux_3_video llega a 20 s.
+  - CORRECCION al corpus: el tope de 15 s era de seedance_2_0. flux_3_video llega a 20 s
+    y seedance_2_5 a 30 s. Y con seedance_2_5 mode=video_extension se encadena SIN TOPE:
+    devuelve solo el tramo nuevo y se pega con ffmpeg (probado, 10 s continuos).
   - unlim.available = false: HOY no hay generaciones ilimitadas. Cada generacion cuesta.
-  - CORREGIDO EL 18-AGO: seedance_2_5 SI existe ahora en la cuenta, 4-30 s, con modos
-    video_edit y video_extension. Cuando se escribio este prompt no estaba. Volve a
-    consultar el catalogo vos mismo antes de usar cualquier dato de modelo de aca:
-    una verificacion tiene fecha de vencimiento.
+  - ⚠️ CORRECCION 2026-08-16: este prompt decia que "Seedance 2.5 NO existe en la cuenta".
+    ES FALSO. Verificado con models_explore action=list el 15-ago: seedance_2_5 ESTA, con
+    modos t2v / omni_reference / video_edit / video_extension y hasta 30 s. Se usaron
+    video_edit y video_extension y se pagaron creditos por ellos. Lo que NO existe es el
+    preset "Show Cinema". No descartes seedance_2_5: hoy es la capacidad mas util que hay.
+  - video_edit re-renderiza un video real conservando movimiento y camara (cambiarle la ropa
+    a la persona salio identico, y reescalo 496x864 -> 726x1266). Es el pitch de "grabalo
+    con tu celular, yo lo convierto", ya probado.
+  - Para b-roll vertical barato: veo3_1_lite da 720x1280 REAL a 1 cr/s (8 s = 8 cr). Ojo,
+    con start_image + end_image la duracion tiene que ser exactamente 8.
+  - kling3_0 IGNORA aspect_ratio y copia el 3:4 de la foto de entrada. Tarifario medido
+    completo en references/modelos/lucia/prueba-lipsync-20260815/LEEME.md.
+  - LECCION QUE SE QUEDA (18-ago): volve a consultar el catalogo vos mismo antes de usar
+    cualquier dato de modelo de aca. Una verificacion tiene fecha de vencimiento.
 
 Tarea:
 1. Reescribi la plantilla de prompt de video que usemos hoy con los 5 bloques en orden, con

@@ -1,38 +1,38 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Archivo, Bricolage_Grotesque, DM_Sans, Spline_Sans_Mono } from "next/font/google";
+import { Archivo, Geist_Mono } from "next/font/google";
 import { MotionProvider } from "@/motion";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-/**
- * Titular grande condensado. Variable con eje de ancho (wdth 62-125), asi que
- * el condensed pesado sale del mismo archivo: cero peso extra por corte.
- * Es el sustituto libre (OFL) del Akzidenz-Grotesk Next Cnd de Fanvue.
- * Sistema completo: web-factory/docs/TIPOGRAFIA_SISTEMA_20260727.md
+/*
+ * DOS familias en todo el sitio, ni una mas
+ * (web-factory/docs/ONIA_MARCA_SISTEMA_20260726.md §3 "Tipografia").
+ *
+ * Antes eran CUATRO — Archivo en la landing y en el cromo, pero Bricolage +
+ * DM Sans + Spline Mono en /empezar, /nosotros, /precios, legales y servicios.
+ * El resultado era el que vio Sergio: la misma web con dos caras segun la
+ * seccion. Las tres se retiran; queda:
+ *
+ *  - Archivo variable para TODO. La jerarquia sale del TAMANO y del eje `wdth`,
+ *    nunca de sumar familias ni de pesos gordos (el sistema no pasa de 650).
+ *    Es la misma letra con la que se cortaron los SVG del wordmark
+ *    (wght 560 / wdth 96): logo y pagina son la misma tipografia.
+ *  - Geist Mono solo en micro-etiquetas <=12px MAYUSCULA con tracking abierto.
+ *
+ * Los ROLES (display / sans / mono) viven como tokens en globals.css; aca solo
+ * se cargan los archivos.
  */
 const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
-  variable: "--font-display-cnd",
+  variable: "--font-archivo",
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const splineMono = Spline_Sans_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-mono",
+  variable: "--font-geist-mono",
   display: "swap",
   preload: false,
 });
@@ -42,6 +42,14 @@ const SITE_DESCRIPTION =
   "Elegís tu rubro, tu cuenta queda lista y encendés módulos cuando los necesités: gestión, agentes con IA que esperan tu aprobación, chatbot de WhatsApp, facturación SIAT. Hecho en Bolivia.";
 
 export const metadata: Metadata = {
+  /*
+   * Base de TODA URL absoluta del sitio (canonical, OG, sitemap de metadata).
+   * Sin esto Next cae a `http://localhost:3000` y publica canonicals a
+   * localhost. Va en el layout raiz para que lo hereden todas las paginas;
+   * el `canonical` NO se pone aca a proposito: se declara por pagina, o cada
+   * ruta heredaria "/" como canonical y se desindexaria el sitio entero.
+   */
+  metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   // OG sin imagen a proposito: la imagen sera una captura REAL del sistema
@@ -85,7 +93,7 @@ export default function RootLayout({
     <html
       lang="es"
       suppressHydrationWarning
-      className={`${bricolage.variable} ${archivo.variable} ${dmSans.variable} ${splineMono.variable}`}
+      className={`${archivo.variable} ${geistMono.variable}`}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />

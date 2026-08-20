@@ -1,0 +1,2362 @@
+{
+  "url": "https://sendypro.com/",
+  "slug": "sendypro-com",
+  "medidoEl": "2026-08-20T16:52:04.009Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 5783,
+        "alturaPantallas": 6.9,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 9
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "bg-mesh",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 1,
+          "etiqueta": "section",
+          "clase": "hero",
+          "altoPx": 651,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "WhatsApp API Oficial + IA que vende por ti",
+          "cta": "✨ Empezar Gratis",
+          "imagenes": 1
+        },
+        {
+          "orden": 2,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 920,
+          "altoPantallas": 1.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Potenciado por Inteligencia Artificial",
+          "cta": "🤖 Chatbot IA",
+          "imagenes": 0
+        },
+        {
+          "orden": 3,
+          "etiqueta": "section",
+          "clase": "how-section",
+          "altoPx": 359,
+          "altoPantallas": 0.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Automatiza en minutos",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 4,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 1296,
+          "altoPantallas": 1.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "WhatsApp API Oficial + IA incluida",
+          "cta": "Elegir Plan",
+          "imagenes": 0
+        },
+        {
+          "orden": 5,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 813,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "+500 empresas confian en nosotros",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 6,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 622,
+          "altoPantallas": 0.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Preguntas frecuentes",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 7,
+          "etiqueta": "section",
+          "clase": "apps-section",
+          "altoPx": 286,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "▶ Disponible en Google Play",
+          "imagenes": 1
+        },
+        {
+          "orden": 8,
+          "etiqueta": "section",
+          "clase": "cta-section",
+          "altoPx": 454,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Listo para automatizar?",
+          "cta": "✨ Comenzar Gratis",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 22,
+        "h1": 1,
+        "saltos": 2,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "WhatsApp API Oficial + IA que vende por ti"
+          },
+          {
+            "nivel": 2,
+            "texto": "Potenciado por Inteligencia Artificial"
+          },
+          {
+            "nivel": 3,
+            "texto": "IA que responde con texto y audios realistas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Mensajeria Masiva"
+          },
+          {
+            "nivel": 3,
+            "texto": "CRM & Kanban"
+          },
+          {
+            "nivel": 3,
+            "texto": "Flujos Ilimitados"
+          },
+          {
+            "nivel": 3,
+            "texto": "Pagos Automaticos"
+          },
+          {
+            "nivel": 2,
+            "texto": "Automatiza en minutos"
+          },
+          {
+            "nivel": 4,
+            "texto": "Conecta"
+          },
+          {
+            "nivel": 4,
+            "texto": "Configura"
+          },
+          {
+            "nivel": 4,
+            "texto": "Activa"
+          },
+          {
+            "nivel": 4,
+            "texto": "Escala"
+          },
+          {
+            "nivel": 2,
+            "texto": "WhatsApp API Oficial + IA incluida"
+          },
+          {
+            "nivel": 2,
+            "texto": "+500 empresas confian en nosotros"
+          },
+          {
+            "nivel": 2,
+            "texto": "Preguntas frecuentes"
+          },
+          {
+            "nivel": 4,
+            "texto": "La IA cobra por mensaje?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Que diferencia hay entre los 2 planes?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Como suenan los audios de la IA?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Son partners oficiales de Meta?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Y WhatsApp Business?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Puedo cambiar de plan?"
+          },
+          {
+            "nivel": 2,
+            "texto": "Listo para automatizar?"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "13px / lh 1.60 / ls normal / w 400",
+            "veces": 57
+          },
+          {
+            "valor": "14px / lh 1.60 / ls normal / w 400",
+            "veces": 31
+          },
+          {
+            "valor": "14px / lh 1.60 / ls normal / w 600",
+            "veces": 26
+          },
+          {
+            "valor": "16px / lh 1.60 / ls normal / w 400",
+            "veces": 24
+          },
+          {
+            "valor": "12px / lh 1.60 / ls normal / w 400",
+            "veces": 22
+          },
+          {
+            "valor": "12px / lh 1.60 / ls normal / w 600",
+            "veces": 9
+          },
+          {
+            "valor": "24px / lh 1.60 / ls normal / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "18px / lh 1.60 / ls normal / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.60 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "13px / lh normal / ls normal / w 600",
+            "veces": 5
+          },
+          {
+            "valor": "28px / lh 1.60 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "22px / lh 1.60 / ls normal / w 700",
+            "veces": 5
+          },
+          {
+            "valor": "14px / lh 1.70 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "21px / lh 1.60 / ls normal / w 800",
+            "veces": 4
+          },
+          {
+            "valor": "11px / lh 1.60 / ls 0.5px / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "16px / lh 1.60 / ls normal / w 800",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Inter",
+            "veces": 247
+          },
+          {
+            "valor": "Arial",
+            "veces": 7
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 142
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.6)",
+            "veces": 65
+          },
+          {
+            "valor": "rgb(167, 139, 250)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(124, 58, 237)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(6, 182, 212)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(16, 185, 129)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(251, 191, 36)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(34, 197, 94)",
+            "veces": 3
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(255, 255, 255, 0.02)",
+            "veces": 28
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.08)",
+            "veces": 8
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.15)",
+            "veces": 5
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.05)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(6, 182, 212, 0.08)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(236, 72, 153, 0.08)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(16, 185, 129, 0.08)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(245, 158, 11, 0.08)",
+            "veces": 4
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "12px",
+            "veces": 98
+          },
+          {
+            "valor": "8px",
+            "veces": 49
+          },
+          {
+            "valor": "24px",
+            "veces": 42
+          },
+          {
+            "valor": "16px",
+            "veces": 38
+          },
+          {
+            "valor": "4px",
+            "veces": 24
+          },
+          {
+            "valor": "20px",
+            "veces": 24
+          },
+          {
+            "valor": "6px",
+            "veces": 20
+          },
+          {
+            "valor": "10px",
+            "veces": 16
+          },
+          {
+            "valor": "14px",
+            "veces": 7
+          },
+          {
+            "valor": "5px",
+            "veces": 6
+          },
+          {
+            "valor": "40px",
+            "veces": 6
+          },
+          {
+            "valor": "2px",
+            "veces": 4
+          },
+          {
+            "valor": "32px",
+            "veces": 3
+          },
+          {
+            "valor": "100px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "8px",
+            "veces": 49
+          },
+          {
+            "valor": "10px",
+            "veces": 15
+          },
+          {
+            "valor": "16px",
+            "veces": 13
+          },
+          {
+            "valor": "50%",
+            "veces": 9
+          },
+          {
+            "valor": "20px",
+            "veces": 6
+          },
+          {
+            "valor": "6px",
+            "veces": 6
+          },
+          {
+            "valor": "12px",
+            "veces": 6
+          },
+          {
+            "valor": "1px",
+            "veces": 3
+          },
+          {
+            "valor": "14px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 9,
+        "sombras": [
+          {
+            "valor": "rgba(124, 58, 237, 0.3) 0px 4px 20px 0px",
+            "veces": 7
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.435) 0px 0px 21.7362px 0px, rgba(6, 182",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.4) 0px 4px 15px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(124, 58, 237) 0px 0px 12px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(6, 182, 212) 0px 0px 8px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(236, 72, 153) 0px 0px 10px 0px",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 12,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 10
+          },
+          {
+            "valor": "0",
+            "veces": 1
+          },
+          {
+            "valor": "100",
+            "veces": 1
+          },
+          {
+            "valor": "200",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.3s",
+            "veces": 27
+          },
+          {
+            "valor": "0.5s ease-out",
+            "veces": 20
+          },
+          {
+            "valor": "color 0.3s",
+            "veces": 6
+          },
+          {
+            "valor": "transform 0.3s",
+            "veces": 6
+          },
+          {
+            "valor": "0.2s",
+            "veces": 5
+          }
+        ],
+        "transicionesDistintas": 5,
+        "hojasLeidas": 1,
+        "unidades": {
+          "em": 0,
+          "rem": 0,
+          "px": 0,
+          "clamp": 0,
+          "vw": 0
+        },
+        "keyframesDeclarados": 0,
+        "transitionAll": 0,
+        "tieneReducedMotion": false,
+        "breakpointsPx": []
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "bg-mesh",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-1",
+            "posicion": "fixed",
+            "alto": 6,
+            "top": "126.594px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-2",
+            "posicion": "fixed",
+            "alto": 4,
+            "top": "211px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-3",
+            "posicion": "fixed",
+            "alto": 5,
+            "top": "379.797px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-4",
+            "posicion": "fixed",
+            "alto": 4,
+            "top": "548.594px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-5",
+            "posicion": "fixed",
+            "alto": 6,
+            "top": "717.391px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "mobile-menu",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "header",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 61,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 26,
+        "ctasTop": [
+          {
+            "texto": "Probar gratis →",
+            "veces": 5
+          },
+          {
+            "texto": "Caracteristicas",
+            "veces": 2
+          },
+          {
+            "texto": "Precios",
+            "veces": 2
+          },
+          {
+            "texto": "App Android",
+            "veces": 2
+          },
+          {
+            "texto": "FAQ",
+            "veces": 2
+          },
+          {
+            "texto": "×",
+            "veces": 1
+          },
+          {
+            "texto": "Iniciar Sesion",
+            "veces": 1
+          },
+          {
+            "texto": "Comenzar Gratis",
+            "veces": 1
+          },
+          {
+            "texto": "SendyPro",
+            "veces": 1
+          },
+          {
+            "texto": "Login",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 4,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 4,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 34,
+        "objetivosMenores44px": 13,
+        "idioma": "es",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 5.7
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 2.43
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 3.53
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 3.01
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 1.68
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 2.12
+          },
+          {
+            "texto": "rgb(167, 139, 250)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 2.09
+          },
+          {
+            "texto": "rgb(167, 139, 250)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 1.12
+          },
+          {
+            "texto": "rgb(167, 139, 250)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 1.3
+          },
+          {
+            "texto": "rgb(124, 58, 237)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(124, 58, 237)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 2.35
+          },
+          {
+            "texto": "rgb(124, 58, 237)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 1.62
+          }
+        ],
+        "fondosTranslucidosOmitidos": 10
+      },
+      "rendimiento": {
+        "pesoTotalKb": 710.7,
+        "porTipoKb": {
+          "document": 46.8,
+          "script": 1.2,
+          "image": 601.1,
+          "stylesheet": 14.5,
+          "font": 47.1
+        },
+        "pedidos": {
+          "document": 1,
+          "script": 1,
+          "image": 2,
+          "stylesheet": 1,
+          "font": 1
+        },
+        "hostsDistintos": 3,
+        "terceros": [
+          {
+            "host": "fonts.googleapis.com",
+            "pedidos": 1
+          },
+          {
+            "host": "fonts.gstatic.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Inter 400 normal",
+          "Inter 500 normal",
+          "Inter 600 normal",
+          "Inter 700 normal",
+          "Inter 800 normal",
+          "Inter 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "SendyPro - WhatsApp API Oficial + IA con audios realistas | Partner Oficial de Meta",
+        "descripcion": "WhatsApp API oficial de Meta + IA que responde con texto y audios realistas. Sin pagar por mensaje. Desde $19/mes. Partner Oficial de Meta.",
+        "canonical": null,
+        "og": 5,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 4239,
+        "alturaPantallas": 4.1,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 9
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "bg-mesh",
+          "altoPx": 1024,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 1,
+          "etiqueta": "section",
+          "clase": "hero",
+          "altoPx": 569,
+          "altoPantallas": 0.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "WhatsApp API Oficial + IA que vende por ti",
+          "cta": "✨ Empezar Gratis",
+          "imagenes": 1
+        },
+        {
+          "orden": 2,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 693,
+          "altoPantallas": 0.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Potenciado por Inteligencia Artificial",
+          "cta": "🤖 Chatbot IA",
+          "imagenes": 0
+        },
+        {
+          "orden": 3,
+          "etiqueta": "section",
+          "clase": "how-section",
+          "altoPx": 235,
+          "altoPantallas": 0.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Automatiza en minutos",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 4,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 797,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "WhatsApp API Oficial + IA incluida",
+          "cta": "Elegir Plan",
+          "imagenes": 0
+        },
+        {
+          "orden": 5,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 538,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "+500 empresas confian en nosotros",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 6,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 449,
+          "altoPantallas": 0.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Preguntas frecuentes",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 7,
+          "etiqueta": "section",
+          "clase": "apps-section",
+          "altoPx": 265,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "▶ Disponible en Google Play",
+          "imagenes": 1
+        },
+        {
+          "orden": 8,
+          "etiqueta": "section",
+          "clase": "cta-section",
+          "altoPx": 401,
+          "altoPantallas": 0.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Listo para automatizar?",
+          "cta": "✨ Comenzar Gratis",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 22,
+        "h1": 1,
+        "saltos": 2,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "WhatsApp API Oficial + IA que vende por ti"
+          },
+          {
+            "nivel": 2,
+            "texto": "Potenciado por Inteligencia Artificial"
+          },
+          {
+            "nivel": 3,
+            "texto": "IA que responde con texto y audios realistas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Mensajeria Masiva"
+          },
+          {
+            "nivel": 3,
+            "texto": "CRM & Kanban"
+          },
+          {
+            "nivel": 3,
+            "texto": "Flujos Ilimitados"
+          },
+          {
+            "nivel": 3,
+            "texto": "Pagos Automaticos"
+          },
+          {
+            "nivel": 2,
+            "texto": "Automatiza en minutos"
+          },
+          {
+            "nivel": 4,
+            "texto": "Conecta"
+          },
+          {
+            "nivel": 4,
+            "texto": "Configura"
+          },
+          {
+            "nivel": 4,
+            "texto": "Activa"
+          },
+          {
+            "nivel": 4,
+            "texto": "Escala"
+          },
+          {
+            "nivel": 2,
+            "texto": "WhatsApp API Oficial + IA incluida"
+          },
+          {
+            "nivel": 2,
+            "texto": "+500 empresas confian en nosotros"
+          },
+          {
+            "nivel": 2,
+            "texto": "Preguntas frecuentes"
+          },
+          {
+            "nivel": 4,
+            "texto": "La IA cobra por mensaje?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Que diferencia hay entre los 2 planes?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Como suenan los audios de la IA?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Son partners oficiales de Meta?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Y WhatsApp Business?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Puedo cambiar de plan?"
+          },
+          {
+            "nivel": 2,
+            "texto": "Listo para automatizar?"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "13px / lh 1.60 / ls normal / w 400",
+            "veces": 57
+          },
+          {
+            "valor": "14px / lh 1.60 / ls normal / w 400",
+            "veces": 31
+          },
+          {
+            "valor": "14px / lh 1.60 / ls normal / w 600",
+            "veces": 26
+          },
+          {
+            "valor": "16px / lh 1.60 / ls normal / w 400",
+            "veces": 24
+          },
+          {
+            "valor": "12px / lh 1.60 / ls normal / w 400",
+            "veces": 22
+          },
+          {
+            "valor": "12px / lh 1.60 / ls normal / w 600",
+            "veces": 9
+          },
+          {
+            "valor": "31px / lh 1.60 / ls normal / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "18px / lh 1.60 / ls normal / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.60 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh normal / ls normal / w 600",
+            "veces": 5
+          },
+          {
+            "valor": "28px / lh 1.60 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "22px / lh 1.60 / ls normal / w 700",
+            "veces": 5
+          },
+          {
+            "valor": "14px / lh 1.70 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "23px / lh 1.60 / ls normal / w 800",
+            "veces": 4
+          },
+          {
+            "valor": "11px / lh 1.60 / ls 0.5px / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "16px / lh 1.60 / ls normal / w 800",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Inter",
+            "veces": 247
+          },
+          {
+            "valor": "Arial",
+            "veces": 7
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 142
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.6)",
+            "veces": 65
+          },
+          {
+            "valor": "rgb(167, 139, 250)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(124, 58, 237)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(6, 182, 212)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(16, 185, 129)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(251, 191, 36)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(34, 197, 94)",
+            "veces": 3
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(255, 255, 255, 0.02)",
+            "veces": 28
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.08)",
+            "veces": 8
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.15)",
+            "veces": 5
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.05)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(6, 182, 212, 0.08)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(236, 72, 153, 0.08)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(16, 185, 129, 0.08)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(245, 158, 11, 0.08)",
+            "veces": 4
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "12px",
+            "veces": 99
+          },
+          {
+            "valor": "8px",
+            "veces": 49
+          },
+          {
+            "valor": "24px",
+            "veces": 31
+          },
+          {
+            "valor": "16px",
+            "veces": 31
+          },
+          {
+            "valor": "20px",
+            "veces": 29
+          },
+          {
+            "valor": "4px",
+            "veces": 24
+          },
+          {
+            "valor": "6px",
+            "veces": 20
+          },
+          {
+            "valor": "10px",
+            "veces": 16
+          },
+          {
+            "valor": "32px",
+            "veces": 14
+          },
+          {
+            "valor": "14px",
+            "veces": 7
+          },
+          {
+            "valor": "5px",
+            "veces": 6
+          },
+          {
+            "valor": "60px",
+            "veces": 6
+          },
+          {
+            "valor": "2px",
+            "veces": 4
+          },
+          {
+            "valor": "120px",
+            "veces": 1
+          },
+          {
+            "valor": "40px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "8px",
+            "veces": 49
+          },
+          {
+            "valor": "10px",
+            "veces": 15
+          },
+          {
+            "valor": "16px",
+            "veces": 13
+          },
+          {
+            "valor": "50%",
+            "veces": 9
+          },
+          {
+            "valor": "20px",
+            "veces": 6
+          },
+          {
+            "valor": "6px",
+            "veces": 6
+          },
+          {
+            "valor": "12px",
+            "veces": 6
+          },
+          {
+            "valor": "1px",
+            "veces": 3
+          },
+          {
+            "valor": "14px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 9,
+        "sombras": [
+          {
+            "valor": "rgba(124, 58, 237, 0.3) 0px 4px 20px 0px",
+            "veces": 7
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.43) 0px 0px 21.4746px 0px, rgba(6, 182,",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.4) 0px 4px 15px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(124, 58, 237) 0px 0px 12px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(6, 182, 212) 0px 0px 8px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(236, 72, 153) 0px 0px 10px 0px",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 12,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 10
+          },
+          {
+            "valor": "0",
+            "veces": 1
+          },
+          {
+            "valor": "100",
+            "veces": 1
+          },
+          {
+            "valor": "200",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.3s",
+            "veces": 27
+          },
+          {
+            "valor": "0.5s ease-out",
+            "veces": 20
+          },
+          {
+            "valor": "color 0.3s",
+            "veces": 6
+          },
+          {
+            "valor": "transform 0.3s",
+            "veces": 6
+          },
+          {
+            "valor": "0.2s",
+            "veces": 5
+          }
+        ],
+        "transicionesDistintas": 5,
+        "hojasLeidas": 1,
+        "unidades": {
+          "em": 0,
+          "rem": 0,
+          "px": 0,
+          "clamp": 0,
+          "vw": 0
+        },
+        "keyframesDeclarados": 0,
+        "transitionAll": 0,
+        "tieneReducedMotion": false,
+        "breakpointsPx": []
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "bg-mesh",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-1",
+            "posicion": "fixed",
+            "alto": 6,
+            "top": "153.594px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-2",
+            "posicion": "fixed",
+            "alto": 4,
+            "top": "256px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-3",
+            "posicion": "fixed",
+            "alto": 5,
+            "top": "460.797px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-4",
+            "posicion": "fixed",
+            "alto": 4,
+            "top": "665.594px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-5",
+            "posicion": "fixed",
+            "alto": 6,
+            "top": "870.391px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "mobile-menu",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "header",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 65,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 26,
+        "ctasTop": [
+          {
+            "texto": "Probar gratis →",
+            "veces": 5
+          },
+          {
+            "texto": "Caracteristicas",
+            "veces": 2
+          },
+          {
+            "texto": "Precios",
+            "veces": 2
+          },
+          {
+            "texto": "App Android",
+            "veces": 2
+          },
+          {
+            "texto": "FAQ",
+            "veces": 2
+          },
+          {
+            "texto": "×",
+            "veces": 1
+          },
+          {
+            "texto": "Iniciar Sesion",
+            "veces": 1
+          },
+          {
+            "texto": "Comenzar Gratis",
+            "veces": 1
+          },
+          {
+            "texto": "SendyPro",
+            "veces": 1
+          },
+          {
+            "texto": "Login",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 4,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 4,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 34,
+        "objetivosMenores44px": 16,
+        "idioma": "es",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 5.7
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 2.43
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 3.53
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 3.01
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 1.68
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 2.12
+          },
+          {
+            "texto": "rgb(167, 139, 250)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 2.09
+          },
+          {
+            "texto": "rgb(167, 139, 250)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 1.12
+          },
+          {
+            "texto": "rgb(167, 139, 250)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 1.3
+          },
+          {
+            "texto": "rgb(124, 58, 237)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(124, 58, 237)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 2.35
+          },
+          {
+            "texto": "rgb(124, 58, 237)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 1.62
+          }
+        ],
+        "fondosTranslucidosOmitidos": 10
+      },
+      "rendimiento": {
+        "pesoTotalKb": 710.7,
+        "porTipoKb": {
+          "document": 46.8,
+          "script": 1.2,
+          "image": 601.1,
+          "stylesheet": 14.5,
+          "font": 47.1
+        },
+        "pedidos": {
+          "document": 1,
+          "script": 1,
+          "image": 2,
+          "stylesheet": 1,
+          "font": 1
+        },
+        "hostsDistintos": 3,
+        "terceros": [
+          {
+            "host": "fonts.googleapis.com",
+            "pedidos": 1
+          },
+          {
+            "host": "fonts.gstatic.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Inter 400 normal",
+          "Inter 500 normal",
+          "Inter 600 normal",
+          "Inter 700 normal",
+          "Inter 800 normal",
+          "Inter 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "SendyPro - WhatsApp API Oficial + IA con audios realistas | Partner Oficial de Meta",
+        "descripcion": "WhatsApp API oficial de Meta + IA que responde con texto y audios realistas. Sin pagar por mensaje. Desde $19/mes. Partner Oficial de Meta.",
+        "canonical": null,
+        "og": 5,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 4027,
+        "alturaPantallas": 4.5,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 9
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "bg-mesh",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 1,
+          "etiqueta": "section",
+          "clase": "hero",
+          "altoPx": 625,
+          "altoPantallas": 0.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "WhatsApp API Oficial + IA que vende por ti",
+          "cta": "✨ Empezar Gratis",
+          "imagenes": 1
+        },
+        {
+          "orden": 2,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 635,
+          "altoPantallas": 0.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Potenciado por Inteligencia Artificial",
+          "cta": "🤖 Chatbot IA",
+          "imagenes": 0
+        },
+        {
+          "orden": 3,
+          "etiqueta": "section",
+          "clase": "how-section",
+          "altoPx": 237,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Automatiza en minutos",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 4,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 776,
+          "altoPantallas": 0.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "WhatsApp API Oficial + IA incluida",
+          "cta": "Elegir Plan",
+          "imagenes": 0
+        },
+        {
+          "orden": 5,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 396,
+          "altoPantallas": 0.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "+500 empresas confian en nosotros",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 6,
+          "etiqueta": "section",
+          "clase": "",
+          "altoPx": 451,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Preguntas frecuentes",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 7,
+          "etiqueta": "section",
+          "clase": "apps-section",
+          "altoPx": 265,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "▶ Disponible en Google Play",
+          "imagenes": 1
+        },
+        {
+          "orden": 8,
+          "etiqueta": "section",
+          "clase": "cta-section",
+          "altoPx": 401,
+          "altoPantallas": 0.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Listo para automatizar?",
+          "cta": "✨ Comenzar Gratis",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 22,
+        "h1": 1,
+        "saltos": 2,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "WhatsApp API Oficial + IA que vende por ti"
+          },
+          {
+            "nivel": 2,
+            "texto": "Potenciado por Inteligencia Artificial"
+          },
+          {
+            "nivel": 3,
+            "texto": "IA que responde con texto y audios realistas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Mensajeria Masiva"
+          },
+          {
+            "nivel": 3,
+            "texto": "CRM & Kanban"
+          },
+          {
+            "nivel": 3,
+            "texto": "Flujos Ilimitados"
+          },
+          {
+            "nivel": 3,
+            "texto": "Pagos Automaticos"
+          },
+          {
+            "nivel": 2,
+            "texto": "Automatiza en minutos"
+          },
+          {
+            "nivel": 4,
+            "texto": "Conecta"
+          },
+          {
+            "nivel": 4,
+            "texto": "Configura"
+          },
+          {
+            "nivel": 4,
+            "texto": "Activa"
+          },
+          {
+            "nivel": 4,
+            "texto": "Escala"
+          },
+          {
+            "nivel": 2,
+            "texto": "WhatsApp API Oficial + IA incluida"
+          },
+          {
+            "nivel": 2,
+            "texto": "+500 empresas confian en nosotros"
+          },
+          {
+            "nivel": 2,
+            "texto": "Preguntas frecuentes"
+          },
+          {
+            "nivel": 4,
+            "texto": "La IA cobra por mensaje?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Que diferencia hay entre los 2 planes?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Como suenan los audios de la IA?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Son partners oficiales de Meta?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Y WhatsApp Business?"
+          },
+          {
+            "nivel": 4,
+            "texto": "Puedo cambiar de plan?"
+          },
+          {
+            "nivel": 2,
+            "texto": "Listo para automatizar?"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "13px / lh 1.60 / ls normal / w 400",
+            "veces": 57
+          },
+          {
+            "valor": "14px / lh 1.60 / ls normal / w 400",
+            "veces": 31
+          },
+          {
+            "valor": "14px / lh 1.60 / ls normal / w 600",
+            "veces": 26
+          },
+          {
+            "valor": "16px / lh 1.60 / ls normal / w 400",
+            "veces": 24
+          },
+          {
+            "valor": "12px / lh 1.60 / ls normal / w 400",
+            "veces": 22
+          },
+          {
+            "valor": "12px / lh 1.60 / ls normal / w 600",
+            "veces": 9
+          },
+          {
+            "valor": "32px / lh 1.60 / ls normal / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "18px / lh 1.60 / ls normal / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.60 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh normal / ls normal / w 600",
+            "veces": 5
+          },
+          {
+            "valor": "28px / lh 1.60 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "22px / lh 1.60 / ls normal / w 700",
+            "veces": 5
+          },
+          {
+            "valor": "14px / lh 1.70 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "24px / lh 1.60 / ls normal / w 800",
+            "veces": 4
+          },
+          {
+            "valor": "11px / lh 1.60 / ls 0.5px / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "16px / lh 1.60 / ls normal / w 800",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Inter",
+            "veces": 247
+          },
+          {
+            "valor": "Arial",
+            "veces": 7
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 142
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.6)",
+            "veces": 65
+          },
+          {
+            "valor": "rgb(167, 139, 250)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(124, 58, 237)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(6, 182, 212)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(16, 185, 129)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(251, 191, 36)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(34, 197, 94)",
+            "veces": 3
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(255, 255, 255, 0.02)",
+            "veces": 28
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.08)",
+            "veces": 8
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.15)",
+            "veces": 5
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.05)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(6, 182, 212, 0.08)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(236, 72, 153, 0.08)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(16, 185, 129, 0.08)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(245, 158, 11, 0.08)",
+            "veces": 4
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "12px",
+            "veces": 99
+          },
+          {
+            "valor": "8px",
+            "veces": 49
+          },
+          {
+            "valor": "24px",
+            "veces": 31
+          },
+          {
+            "valor": "16px",
+            "veces": 31
+          },
+          {
+            "valor": "20px",
+            "veces": 29
+          },
+          {
+            "valor": "4px",
+            "veces": 24
+          },
+          {
+            "valor": "6px",
+            "veces": 20
+          },
+          {
+            "valor": "10px",
+            "veces": 16
+          },
+          {
+            "valor": "32px",
+            "veces": 14
+          },
+          {
+            "valor": "14px",
+            "veces": 7
+          },
+          {
+            "valor": "5px",
+            "veces": 6
+          },
+          {
+            "valor": "60px",
+            "veces": 6
+          },
+          {
+            "valor": "2px",
+            "veces": 4
+          },
+          {
+            "valor": "120px",
+            "veces": 1
+          },
+          {
+            "valor": "40px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "8px",
+            "veces": 49
+          },
+          {
+            "valor": "10px",
+            "veces": 15
+          },
+          {
+            "valor": "16px",
+            "veces": 13
+          },
+          {
+            "valor": "50%",
+            "veces": 9
+          },
+          {
+            "valor": "20px",
+            "veces": 6
+          },
+          {
+            "valor": "6px",
+            "veces": 6
+          },
+          {
+            "valor": "12px",
+            "veces": 6
+          },
+          {
+            "valor": "1px",
+            "veces": 3
+          },
+          {
+            "valor": "14px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 9,
+        "sombras": [
+          {
+            "valor": "rgba(124, 58, 237, 0.3) 0px 4px 20px 0px",
+            "veces": 7
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.44) 0px 0px 22.0184px 0px, rgba(6, 182,",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(124, 58, 237, 0.4) 0px 4px 15px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(124, 58, 237) 0px 0px 12px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(6, 182, 212) 0px 0px 8px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(236, 72, 153) 0px 0px 10px 0px",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 12,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 10
+          },
+          {
+            "valor": "0",
+            "veces": 1
+          },
+          {
+            "valor": "100",
+            "veces": 1
+          },
+          {
+            "valor": "200",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.3s",
+            "veces": 27
+          },
+          {
+            "valor": "0.5s ease-out",
+            "veces": 20
+          },
+          {
+            "valor": "color 0.3s",
+            "veces": 6
+          },
+          {
+            "valor": "transform 0.3s",
+            "veces": 6
+          },
+          {
+            "valor": "0.2s",
+            "veces": 5
+          }
+        ],
+        "transicionesDistintas": 5,
+        "hojasLeidas": 1,
+        "unidades": {
+          "em": 0,
+          "rem": 0,
+          "px": 0,
+          "clamp": 0,
+          "vw": 0
+        },
+        "keyframesDeclarados": 0,
+        "transitionAll": 0,
+        "tieneReducedMotion": false,
+        "breakpointsPx": []
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 26,
+            "navFija": true
+          },
+          {
+            "y": 782,
+            "conTransform": 26,
+            "navFija": true
+          },
+          {
+            "y": 1564,
+            "conTransform": 26,
+            "navFija": true
+          },
+          {
+            "y": 2345,
+            "conTransform": 26,
+            "navFija": true
+          },
+          {
+            "y": 3127,
+            "conTransform": 26,
+            "navFija": true
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 5,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "bg-mesh",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-1",
+            "posicion": "fixed",
+            "alto": 6,
+            "top": "135px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-2",
+            "posicion": "fixed",
+            "alto": 4,
+            "top": "225px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-3",
+            "posicion": "fixed",
+            "alto": 5,
+            "top": "405px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-4",
+            "posicion": "fixed",
+            "alto": 4,
+            "top": "585px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "particle particle-5",
+            "posicion": "fixed",
+            "alto": 6,
+            "top": "765px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "mobile-menu",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "header",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 65,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 26,
+        "ctasTop": [
+          {
+            "texto": "Probar gratis →",
+            "veces": 5
+          },
+          {
+            "texto": "Caracteristicas",
+            "veces": 2
+          },
+          {
+            "texto": "Precios",
+            "veces": 2
+          },
+          {
+            "texto": "App Android",
+            "veces": 2
+          },
+          {
+            "texto": "FAQ",
+            "veces": 2
+          },
+          {
+            "texto": "×",
+            "veces": 1
+          },
+          {
+            "texto": "Iniciar Sesion",
+            "veces": 1
+          },
+          {
+            "texto": "Comenzar Gratis",
+            "veces": 1
+          },
+          {
+            "texto": "SendyPro",
+            "veces": 1
+          },
+          {
+            "texto": "Login",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 4,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 4,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 34,
+        "objetivosMenores44px": 16,
+        "idioma": "es",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 5.7
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 2.43
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 3.53
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 3.01
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 1.68
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 2.12
+          },
+          {
+            "texto": "rgb(167, 139, 250)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 2.09
+          },
+          {
+            "texto": "rgb(167, 139, 250)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 1.12
+          },
+          {
+            "texto": "rgb(167, 139, 250)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 1.3
+          },
+          {
+            "texto": "rgb(124, 58, 237)",
+            "fondo": "rgb(124, 58, 237)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(124, 58, 237)",
+            "fondo": "rgb(6, 182, 212)",
+            "ratio": 2.35
+          },
+          {
+            "texto": "rgb(124, 58, 237)",
+            "fondo": "rgb(236, 72, 153)",
+            "ratio": 1.62
+          }
+        ],
+        "fondosTranslucidosOmitidos": 10
+      },
+      "rendimiento": {
+        "pesoTotalKb": 710.7,
+        "porTipoKb": {
+          "document": 46.8,
+          "script": 1.2,
+          "image": 601.1,
+          "stylesheet": 14.5,
+          "font": 47.1
+        },
+        "pedidos": {
+          "document": 2,
+          "script": 2,
+          "image": 4,
+          "stylesheet": 2,
+          "font": 2
+        },
+        "hostsDistintos": 3,
+        "terceros": [
+          {
+            "host": "fonts.googleapis.com",
+            "pedidos": 1
+          },
+          {
+            "host": "fonts.gstatic.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Inter 400 normal",
+          "Inter 500 normal",
+          "Inter 600 normal",
+          "Inter 700 normal",
+          "Inter 800 normal",
+          "Inter 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "SendyPro - WhatsApp API Oficial + IA con audios realistas | Partner Oficial de Meta",
+        "descripcion": "WhatsApp API oficial de Meta + IA que responde con texto y audios realistas. Sin pagar por mensaje. Desde $19/mes. Partner Oficial de Meta.",
+        "canonical": null,
+        "og": 5,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 17,
+    "conTransicion": 64
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

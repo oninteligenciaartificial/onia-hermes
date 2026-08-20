@@ -1,0 +1,112 @@
+{
+  "updatedAt": "2026-07-04T01:01:50.000Z",
+  "createdAt": "2026-03-19T03:54:24.598Z",
+  "id": "Ex4Uf3PHb19tt3fz",
+  "name": "UDIA Bot telegram errores",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        -64
+      ],
+      "id": "7ea72b68-b258-463c-b6e7-30fc5380d5f6",
+      "name": "Telegram Trigger",
+      "webhookId": "aff2f813-7726-4665-b441-0c8d98248064",
+      "credentials": {
+        "telegramApi": {
+          "id": "PR6bb4aGfhM6xdGs",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.message.chat.id }}",
+        "text": "=Eco: {{ $json.message.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -32,
+        -64
+      ],
+      "id": "503be244-f74c-4327-abbc-9fcf540d2192",
+      "name": "Send a text message",
+      "webhookId": "0a24f5a0-a496-479d-8f43-616a8eddd1b8",
+      "credentials": {
+        "telegramApi": {
+          "id": "PR6bb4aGfhM6xdGs",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "486884f8-b94c-48e3-aaa2-90de619425b4",
+  "activeVersionId": null,
+  "versionCounter": 29,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-19T03:54:24.603Z",
+      "createdAt": "2026-03-19T03:54:24.603Z",
+      "role": "workflow:owner",
+      "workflowId": "Ex4Uf3PHb19tt3fz",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

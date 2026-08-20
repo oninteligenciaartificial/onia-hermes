@@ -1,0 +1,358 @@
+{
+  "updatedAt": "2026-07-04T01:07:56.000Z",
+  "createdAt": "2026-03-21T20:28:06.098Z",
+  "id": "A36FdAXRPKW6ULoM",
+  "name": "formularios con mensajes finales",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "ejercicio 1 data transformation",
+        "formDescription": "Llena estos datos para entrar en el sortero",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre"
+            },
+            {
+              "fieldLabel": "Apellidos"
+            },
+            {
+              "fieldLabel": "telefono"
+            },
+            {
+              "fieldLabel": "correo"
+            },
+            {
+              "fieldLabel": "trabajo"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "198d8614-e294-4b41-a077-5918b9eb97c4",
+      "name": "On form submission",
+      "webhookId": "3a44b1f1-6bbb-4e66-be82-b7196c80cc95"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9727bbe7-8d51-4306-95df-c17e3e9dbfd2",
+              "name": "Nombre",
+              "value": "={{ $json.Nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "ed9cb245-e946-42b2-a5ab-309526f6fad1",
+              "name": "Apellidos",
+              "value": "={{ $json.Apellidos }}",
+              "type": "string"
+            },
+            {
+              "id": "b75d6e16-6217-437f-8f52-984e2dda4f6d",
+              "name": "telefono",
+              "value": "={{ $json.telefono }}",
+              "type": "string"
+            },
+            {
+              "id": "d2a96ef0-6322-4994-bb35-7cac7c201073",
+              "name": "correo",
+              "value": "={{ $json.correo }}",
+              "type": "string"
+            },
+            {
+              "id": "050dec92-9e82-4c52-a349-b72411d48285",
+              "name": "ciudad",
+              "value": "santa cruz",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        0
+      ],
+      "id": "3933c7ae-853e-4e96-9cd9-bc7e1f6e92d0",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fbfda8e8-808c-4146-bb54-085ce1efdc19",
+              "name": "trabajo",
+              "value": "={{ $('On form submission').item.json.trabajo }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        208
+      ],
+      "id": "9191f8f4-f101-4513-89ab-7f52f8d5c278",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        624,
+        64
+      ],
+      "id": "c85b4df1-a658-4264-99f2-783936e74a7c",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "Nombre"
+            },
+            {
+              "fieldToAggregate": "Apellidos"
+            },
+            {
+              "fieldToAggregate": "telefono"
+            },
+            {
+              "fieldToAggregate": "correo"
+            },
+            {
+              "fieldToAggregate": "ciudad"
+            },
+            {
+              "fieldToAggregate": "trabajo"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        832,
+        64
+      ],
+      "id": "9979a9c3-4984-4546-a5b9-b90457e9dd3f",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "271e3629-4b90-4092-957f-3ac8d9f058fb",
+              "name": "Mensaje",
+              "value": "=El cleinte se llama  {{ $json.Nombre }} {{ $json.Apellidos }} su telefono es {{ $json.telefono[0] }}, su correo es {{ $json.correo[0] }}, vive en {{ $json.ciudad[0] }} y trabaja como {{ $json.trabajo[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        64
+      ],
+      "id": "29a86335-6fac-4fcf-a081-3e987b5c3e7a",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input1 = {\n  \"Nombre\": \"Ruddy\",\n  \"Apellidos\": \"Montenegro\",\n  \"telefono\": \"72136852\",\n  \"correo\": \"sergio@gmail.com\",\n  \"ciudad\": \"santa cruz\"\n};\n\nconst input2 = {\n  \"trabajo\": \"albañil\"\n};\n\n// Combinar los objetos\nconst resultado = { ...input1, ...input2 };\n\n// IMPORTANTE: n8n requiere retornar un array de objetos con la llave \"json\"\nreturn [\n  {\n    json: resultado\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        256
+      ],
+      "id": "dbd0771a-4c4b-4311-9873-e0cece99e028",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "271e3629-4b90-4092-957f-3ac8d9f058fb",
+              "name": "Mensaje",
+              "value": "=El cleinte se llama  {{ $json.Nombre }} {{ $json.Apellidos }} su telefono e{{ $json.telefono }}s, su correo es {{ $json.correo[0] }}, vive en {{ $json.ciudad[0] }} y trabaja como {{ $json.trabajo[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        256
+      ],
+      "id": "a7cddfc9-3f25-4012-a6d2-1290404f5caa",
+      "name": "Edit Fields3"
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "America/La_Paz",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Nombre": "Ruddy",
+          "Apellidos": "Montenegro",
+          "telefono": "72136852",
+          "correo": "sergio@gmail.com",
+          "trabajo": "albañil",
+          "submittedAt": "2026-03-21T16:36:07.396-04:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "023c1c36-0bdc-4eda-9a2a-009801cbcab7",
+  "activeVersionId": null,
+  "versionCounter": 100,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-21T20:28:06.102Z",
+      "createdAt": "2026-03-21T20:28:06.102Z",
+      "role": "workflow:owner",
+      "workflowId": "A36FdAXRPKW6ULoM",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

@@ -1,0 +1,2630 @@
+{
+  "url": "https://www.fanvue.com",
+  "slug": "fanvue-com",
+  "medidoEl": "2026-08-19T03:03:08.183Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 8622,
+        "alturaPantallas": 10.2,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 9
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 8621,
+          "altoPantallas": 10.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Earn from your fanbase faster with the No1 AI monetisation platform for creators.",
+          "cta": "",
+          "imagenes": 140
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "h-hero",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "Earn from your fanbase faster with the No1 AI monetisation platform for creators.",
+          "cta": "Become a creator",
+          "imagenes": 2
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "relative black flow",
+          "altoPx": 1401,
+          "altoPantallas": 1.7,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "Powering over $500m in creator payouts",
+          "cta": "Become a creator",
+          "imagenes": 11
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "overflow",
+          "altoPx": 705,
+          "altoPantallas": 0.8,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "Chosen by the creators redefining what’s possible.",
+          "cta": "",
+          "imagenes": 36
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "creator-ai",
+          "altoPx": 770,
+          "altoPantallas": 0.9,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "The Creator-AI Economy has arrived, and Fanvue hands you the tools to lead it.",
+          "cta": "Join the movement",
+          "imagenes": 3
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "every-niche",
+          "altoPx": 3376,
+          "altoPantallas": 4,
+          "fondo": "rgb(53, 65, 48)",
+          "titular": "Built for every niche. Trusted by icons.",
+          "cta": "Join the movement",
+          "imagenes": 37
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "relative",
+          "altoPx": 1350,
+          "altoPantallas": 1.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "FAQ",
+          "cta": "Become a creator",
+          "imagenes": 17
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 852,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 16,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Earn from your fanbase faster with the No1 AI monetisation platform for creators."
+          },
+          {
+            "nivel": 2,
+            "texto": "Powering over $500m in creator payouts"
+          },
+          {
+            "nivel": 2,
+            "texto": "01"
+          },
+          {
+            "nivel": 2,
+            "texto": "02"
+          },
+          {
+            "nivel": 2,
+            "texto": "03"
+          },
+          {
+            "nivel": 2,
+            "texto": "04"
+          },
+          {
+            "nivel": 2,
+            "texto": "05"
+          },
+          {
+            "nivel": 2,
+            "texto": "06"
+          },
+          {
+            "nivel": 2,
+            "texto": "06"
+          },
+          {
+            "nivel": 2,
+            "texto": "Chosen by the creators redefining what’s possible."
+          },
+          {
+            "nivel": 2,
+            "texto": "Chosen by the creators redefining what’s possible."
+          },
+          {
+            "nivel": 2,
+            "texto": "The Creator-AI Economy has arrived, and Fanvue hands you the tools to lead it."
+          },
+          {
+            "nivel": 2,
+            "texto": "The Creator-AI Economy has arrived, and Fanvue hands you the tools to lead it."
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for every niche. Trusted by icons."
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for every niche. Trusted by icons."
+          },
+          {
+            "nivel": 2,
+            "texto": "FAQ"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "13px / lh 1.20 / ls normal / w 500",
+            "veces": 36
+          },
+          {
+            "valor": "13px / lh 1.00 / ls -0.13px / w 400",
+            "veces": 24
+          },
+          {
+            "valor": "4px / lh 1.00 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "8px / lh 3.00 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "24px / lh 1.00 / ls -0.2px / w 500",
+            "veces": 18
+          },
+          {
+            "valor": "15px / lh 0.90 / ls normal / w 500",
+            "veces": 14
+          },
+          {
+            "valor": "51px / lh 1.00 / ls -0.1px / w 500",
+            "veces": 13
+          },
+          {
+            "valor": "24px / lh 1.00 / ls -0.48px / w 500",
+            "veces": 12
+          },
+          {
+            "valor": "13px / lh 1.50 / ls -0.1px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "18px / lh 1.00 / ls normal / w 400",
+            "veces": 7
+          },
+          {
+            "valor": "3px / lh 1.50 / ls 0.02925px / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "21px / lh 1.20 / ls -0.1px / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "15px / lh 1.10 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "51px / lh 1.00 / ls -0.3px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "59px / lh 0.85 / ls -0.3px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "26px / lh 1.10 / ls -0.1px / w 500",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Medium AG Next",
+            "veces": 160
+          },
+          {
+            "valor": "Akzidenz Grotesk Pro Med",
+            "veces": 65
+          },
+          {
+            "valor": "Akzidenz Grotesk Pro",
+            "veces": 13
+          },
+          {
+            "valor": "Akzidenz Grotesk Next",
+            "veces": 4
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 104
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.5)",
+            "veces": 42
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.6)",
+            "veces": 24
+          },
+          {
+            "valor": "rgb(252, 249, 240)",
+            "veces": 22
+          },
+          {
+            "valor": "rgba(22, 22, 19, 0.75)",
+            "veces": 20
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 15
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.5)",
+            "veces": 8
+          },
+          {
+            "valor": "rgba(252, 249, 240, 0.5)",
+            "veces": 4
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 19
+          },
+          {
+            "valor": "rgb(73, 242, 100)",
+            "veces": 17
+          },
+          {
+            "valor": "rgb(204, 204, 204)",
+            "veces": 13
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.2)",
+            "veces": 6
+          },
+          {
+            "valor": "rgba(239, 238, 236, 0.15)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(161, 255, 98)",
+            "veces": 6
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.15)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "12px",
+            "veces": 51
+          },
+          {
+            "valor": "20px",
+            "veces": 43
+          },
+          {
+            "valor": "16px",
+            "veces": 27
+          },
+          {
+            "valor": "1.31625px",
+            "veces": 24
+          },
+          {
+            "valor": "3.588px",
+            "veces": 18
+          },
+          {
+            "valor": "0.78px",
+            "veces": 18
+          },
+          {
+            "valor": "4px",
+            "veces": 14
+          },
+          {
+            "valor": "10px",
+            "veces": 14
+          },
+          {
+            "valor": "1.56px",
+            "veces": 12
+          },
+          {
+            "valor": "3px",
+            "veces": 12
+          },
+          {
+            "valor": "2.2503px",
+            "veces": 12
+          },
+          {
+            "valor": "50px",
+            "veces": 11
+          },
+          {
+            "valor": "6px",
+            "veces": 10
+          },
+          {
+            "valor": "auto",
+            "veces": 10
+          },
+          {
+            "valor": "14.235px",
+            "veces": 6
+          },
+          {
+            "valor": "1.95px",
+            "veces": 6
+          }
+        ],
+        "radios": [
+          {
+            "valor": "16px",
+            "veces": 20
+          },
+          {
+            "valor": "50%",
+            "veces": 18
+          },
+          {
+            "valor": "3.9px",
+            "veces": 12
+          },
+          {
+            "valor": "8px",
+            "veces": 11
+          },
+          {
+            "valor": "9px",
+            "veces": 10
+          },
+          {
+            "valor": "100%",
+            "veces": 10
+          },
+          {
+            "valor": "39px",
+            "veces": 8
+          },
+          {
+            "valor": "100px",
+            "veces": 6
+          },
+          {
+            "valor": "1.95px",
+            "veces": 6
+          },
+          {
+            "valor": "0.975px",
+            "veces": 6
+          }
+        ],
+        "radiosDistintos": 16,
+        "sombras": [],
+        "sombrasDistintas": 0,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 21
+          },
+          {
+            "valor": "9",
+            "veces": 18
+          },
+          {
+            "valor": "2",
+            "veces": 14
+          },
+          {
+            "valor": "-100",
+            "veces": 10
+          },
+          {
+            "valor": "3",
+            "veces": 6
+          },
+          {
+            "valor": "100",
+            "veces": 5
+          },
+          {
+            "valor": "900",
+            "veces": 4
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "opacity 0.3s, transform 0.3s",
+            "veces": 18
+          },
+          {
+            "valor": "transform 0.2s linear",
+            "veces": 12
+          },
+          {
+            "valor": "0.2s",
+            "veces": 9
+          },
+          {
+            "valor": "opacity 0.4s",
+            "veces": 6
+          },
+          {
+            "valor": "opacity 0.2s",
+            "veces": 6
+          },
+          {
+            "valor": "transform 0.2s",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 7,
+        "hojasLeidas": 4,
+        "unidades": {
+          "em": 1428,
+          "rem": 1001,
+          "px": 2492,
+          "clamp": 7,
+          "vw": 109
+        },
+        "keyframesDeclarados": 3,
+        "transitionAll": 22,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 479,
+            "veces": 5
+          },
+          {
+            "px": 767,
+            "veces": 5
+          },
+          {
+            "px": 991,
+            "veces": 5
+          },
+          {
+            "px": 1920,
+            "veces": 2
+          },
+          {
+            "px": 768,
+            "veces": 1
+          },
+          {
+            "px": 1440,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "nav-w",
+            "posicion": "fixed",
+            "alto": 57,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "mob-menu",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0%"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "en-sticky hdn-old",
+            "posicion": "sticky",
+            "alto": 0,
+            "top": "211px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "en-sticky",
+            "posicion": "sticky",
+            "alto": 327,
+            "top": "211px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "faq",
+            "posicion": "sticky",
+            "alto": 506,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go2369186930",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go1348078617",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "844px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go613305155",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go471583506",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3921366393",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "844px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3967842156",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "844px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 21,
+        "ctasTop": [
+          {
+            "texto": "Become a creator",
+            "veces": 4
+          },
+          {
+            "texto": "Fanvue AI",
+            "veces": 3
+          },
+          {
+            "texto": "Support",
+            "veces": 3
+          },
+          {
+            "texto": "Blog",
+            "veces": 3
+          },
+          {
+            "texto": "About",
+            "veces": 3
+          },
+          {
+            "texto": "Careers",
+            "veces": 3
+          },
+          {
+            "texto": "Login",
+            "veces": 3
+          },
+          {
+            "texto": "Sign up as a fan",
+            "veces": 3
+          },
+          {
+            "texto": "Features",
+            "veces": 2
+          },
+          {
+            "texto": "Sign up",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 118,
+        "sinAlt": 1,
+        "altVacio": 117,
+        "sinDimensiones": 117,
+        "lazy": 116,
+        "conSrcset": 34,
+        "interactivos": 67,
+        "objetivosMenores44px": 17,
+        "idioma": "en",
+        "landmarks": {
+          "header": 0,
+          "nav": 4,
+          "main": 0,
+          "footer": 0
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.48
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.61
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.5)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 5.32
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.5)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.18
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.5)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.29
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 7.37
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.23
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.35
+          },
+          {
+            "texto": "rgb(252, 249, 240)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 19.95
+          },
+          {
+            "texto": "rgb(252, 249, 240)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.41
+          },
+          {
+            "texto": "rgb(252, 249, 240)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.53
+          }
+        ],
+        "fondosTranslucidosOmitidos": 6
+      },
+      "rendimiento": {
+        "pesoTotalKb": 25526.2,
+        "porTipoKb": {
+          "document": 120.6,
+          "script": 4974.3,
+          "stylesheet": 526.7,
+          "font": 150.1,
+          "image": 678.9,
+          "media": 19062.2,
+          "fetch": 13.3,
+          "ping": 0,
+          "xhr": 0.1
+        },
+        "pedidos": {
+          "document": 1,
+          "script": 42,
+          "stylesheet": 4,
+          "font": 8,
+          "image": 37,
+          "media": 10,
+          "fetch": 11,
+          "ping": 6,
+          "xhr": 2
+        },
+        "hostsDistintos": 38,
+        "terceros": [
+          {
+            "host": "cdn.prod.website-files.com",
+            "pedidos": 58
+          },
+          {
+            "host": "cdn.jsdelivr.net",
+            "pedidos": 9
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 7
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 6
+          },
+          {
+            "host": "fonts.gstatic.com",
+            "pedidos": 5
+          },
+          {
+            "host": "cdn.amplitude.com",
+            "pedidos": 2
+          },
+          {
+            "host": "pagead2.googlesyndication.com",
+            "pedidos": 2
+          },
+          {
+            "host": "connect.facebook.net",
+            "pedidos": 2
+          }
+        ],
+        "fuentesCargadas": [
+          "webflow-icons normal normal",
+          "Space Grotesk 700 normal",
+          "Space Grotesk 600 normal",
+          "Space Grotesk 400 normal",
+          "Space Grotesk 500 normal",
+          "Space Grotesk 300 normal",
+          "Ebgaramond Variablefont Wght 400 800 italic",
+          "Ebgaramond 500 italic",
+          "Ebgaramond 700 normal",
+          "Ebgaramond 500 normal",
+          "Ebgaramond 600 italic",
+          "Basiercircle 700 normal",
+          "Basiercircle 400 normal",
+          "Basiercircle 700 italic",
+          "Basiercircle 400 italic",
+          "Basiercircle 600 normal",
+          "Akzidgrtsknext 700 normal",
+          "Akzidenz Grotesk Pro Med Cnd 400 normal",
+          "Akzidenz Grotesk Pro Cnd 400 normal",
+          "Akzidenz Grotesk Pro 700 italic"
+        ]
+      },
+      "seo": {
+        "titulo": "Fanvue",
+        "descripcion": "The creator subscription platform for the future. Take home 80% of your earnings from day 1.",
+        "canonical": "https://www.fanvue.com/",
+        "og": 4,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": true,
+        "react": false,
+        "gsap": true,
+        "swiper": true,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 8411,
+        "alturaPantallas": 8.2,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 10
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 8410,
+          "altoPantallas": 8.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Earn from your fanbase faster with the No1 AI monetisation platform for creators.",
+          "cta": "",
+          "imagenes": 154
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "h-hero",
+          "altoPx": 1024,
+          "altoPantallas": 1,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "Earn from your fanbase faster with the No1 AI monetisation platform for creators.",
+          "cta": "Become a creator",
+          "imagenes": 2
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "logos-marq",
+          "altoPx": 216,
+          "altoPantallas": 0.2,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 20
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "relative black flow",
+          "altoPx": 1437,
+          "altoPantallas": 1.4,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "Powering over $500m in creator payouts",
+          "cta": "Become a creator",
+          "imagenes": 11
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "overflow",
+          "altoPx": 789,
+          "altoPantallas": 0.8,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "Chosen by the creators redefining what’s possible.",
+          "cta": "",
+          "imagenes": 50
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "creator-ai",
+          "altoPx": 1053,
+          "altoPantallas": 1,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "The Creator-AI Economy has arrived, and Fanvue hands you the tools to lead it.",
+          "cta": "Join the movement",
+          "imagenes": 3
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "every-niche",
+          "altoPx": 2048,
+          "altoPantallas": 2,
+          "fondo": "rgb(53, 65, 48)",
+          "titular": "Built for every niche. Trusted by icons.",
+          "cta": "Join the movement",
+          "imagenes": 37
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "relative",
+          "altoPx": 1843,
+          "altoPantallas": 1.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "FAQ",
+          "cta": "Become a creator",
+          "imagenes": 17
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 1024,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 1034,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 16,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Earn from your fanbase faster with the No1 AI monetisation platform for creators."
+          },
+          {
+            "nivel": 2,
+            "texto": "Powering over $500m in creator payouts"
+          },
+          {
+            "nivel": 2,
+            "texto": "01"
+          },
+          {
+            "nivel": 2,
+            "texto": "02"
+          },
+          {
+            "nivel": 2,
+            "texto": "03"
+          },
+          {
+            "nivel": 2,
+            "texto": "04"
+          },
+          {
+            "nivel": 2,
+            "texto": "05"
+          },
+          {
+            "nivel": 2,
+            "texto": "06"
+          },
+          {
+            "nivel": 2,
+            "texto": "06"
+          },
+          {
+            "nivel": 2,
+            "texto": "Chosen by the creators redefining what’s possible."
+          },
+          {
+            "nivel": 2,
+            "texto": "Chosen by the creators redefining what’s possible."
+          },
+          {
+            "nivel": 2,
+            "texto": "The Creator-AI Economy has arrived, and Fanvue hands you the tools to lead it."
+          },
+          {
+            "nivel": 2,
+            "texto": "The Creator-AI Economy has arrived, and Fanvue hands you the tools to lead it."
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for every niche. Trusted by icons."
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for every niche. Trusted by icons."
+          },
+          {
+            "nivel": 2,
+            "texto": "FAQ"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "13px / lh 1.20 / ls normal / w 500",
+            "veces": 64
+          },
+          {
+            "valor": "28px / lh 1.00 / ls normal / w 500",
+            "veces": 32
+          },
+          {
+            "valor": "13px / lh 0.80 / ls -0.13px / w 400",
+            "veces": 24
+          },
+          {
+            "valor": "8px / lh 1.00 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "6px / lh 2.67 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "15px / lh 0.90 / ls normal / w 500",
+            "veces": 14
+          },
+          {
+            "valor": "51px / lh 1.00 / ls -0.1px / w 500",
+            "veces": 13
+          },
+          {
+            "valor": "24px / lh 1.00 / ls -0.48px / w 500",
+            "veces": 12
+          },
+          {
+            "valor": "21px / lh 1.10 / ls -0.1px / w 500",
+            "veces": 8
+          },
+          {
+            "valor": "13px / lh 1.50 / ls -0.1px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "35px / lh 1.00 / ls normal / w 400",
+            "veces": 7
+          },
+          {
+            "valor": "6px / lh 1.50 / ls 0.0576px / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "15px / lh 1.10 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "51px / lh 1.00 / ls -0.3px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "43px / lh 0.85 / ls -0.3px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "33px / lh 1.00 / ls -0.2px / w 500",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Medium AG Next",
+            "veces": 216
+          },
+          {
+            "valor": "Akzidenz Grotesk Pro Med",
+            "veces": 58
+          },
+          {
+            "valor": "Akzidenz Grotesk Pro",
+            "veces": 6
+          },
+          {
+            "valor": "Akzidenz Grotesk Next",
+            "veces": 4
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 118
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.5)",
+            "veces": 70
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.6)",
+            "veces": 24
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(252, 249, 240)",
+            "veces": 22
+          },
+          {
+            "valor": "rgba(22, 22, 19, 0.75)",
+            "veces": 20
+          },
+          {
+            "valor": "rgba(252, 249, 240, 0.5)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(73, 242, 100)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 19
+          },
+          {
+            "valor": "rgb(73, 242, 100)",
+            "veces": 17
+          },
+          {
+            "valor": "rgb(204, 204, 204)",
+            "veces": 13
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.2)",
+            "veces": 6
+          },
+          {
+            "valor": "rgba(239, 238, 236, 0.15)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(161, 255, 98)",
+            "veces": 6
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.15)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "12px",
+            "veces": 65
+          },
+          {
+            "valor": "20px",
+            "veces": 42
+          },
+          {
+            "valor": "3.9936px",
+            "veces": 32
+          },
+          {
+            "valor": "1.536px",
+            "veces": 32
+          },
+          {
+            "valor": "16px",
+            "veces": 27
+          },
+          {
+            "valor": "2.592px",
+            "veces": 24
+          },
+          {
+            "valor": "4px",
+            "veces": 14
+          },
+          {
+            "valor": "10px",
+            "veces": 14
+          },
+          {
+            "valor": "3.072px",
+            "veces": 12
+          },
+          {
+            "valor": "3px",
+            "veces": 12
+          },
+          {
+            "valor": "42px",
+            "veces": 12
+          },
+          {
+            "valor": "4.43136px",
+            "veces": 12
+          },
+          {
+            "valor": "50px",
+            "veces": 11
+          },
+          {
+            "valor": "6px",
+            "veces": 10
+          },
+          {
+            "valor": "auto",
+            "veces": 10
+          },
+          {
+            "valor": "28.032px",
+            "veces": 6
+          }
+        ],
+        "radios": [
+          {
+            "valor": "16px",
+            "veces": 30
+          },
+          {
+            "valor": "50%",
+            "veces": 18
+          },
+          {
+            "valor": "7.68px",
+            "veces": 12
+          },
+          {
+            "valor": "8px",
+            "veces": 11
+          },
+          {
+            "valor": "9px",
+            "veces": 10
+          },
+          {
+            "valor": "100px",
+            "veces": 6
+          },
+          {
+            "valor": "3.84px",
+            "veces": 6
+          },
+          {
+            "valor": "1.92px",
+            "veces": 6
+          },
+          {
+            "valor": "76.8px",
+            "veces": 6
+          },
+          {
+            "valor": "200px",
+            "veces": 5
+          }
+        ],
+        "radiosDistintos": 15,
+        "sombras": [],
+        "sombrasDistintas": 0,
+        "zIndex": [
+          {
+            "valor": "9",
+            "veces": 32
+          },
+          {
+            "valor": "1",
+            "veces": 21
+          },
+          {
+            "valor": "2",
+            "veces": 14
+          },
+          {
+            "valor": "-100",
+            "veces": 10
+          },
+          {
+            "valor": "3",
+            "veces": 6
+          },
+          {
+            "valor": "100",
+            "veces": 5
+          },
+          {
+            "valor": "900",
+            "veces": 4
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "opacity 0.3s, transform 0.3s",
+            "veces": 32
+          },
+          {
+            "valor": "transform 0.2s linear",
+            "veces": 12
+          },
+          {
+            "valor": "0.2s",
+            "veces": 9
+          },
+          {
+            "valor": "opacity 0.4s",
+            "veces": 6
+          },
+          {
+            "valor": "opacity 0.2s",
+            "veces": 6
+          },
+          {
+            "valor": "transform 0.2s",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 7,
+        "hojasLeidas": 4,
+        "unidades": {
+          "em": 1428,
+          "rem": 1001,
+          "px": 2492,
+          "clamp": 7,
+          "vw": 109
+        },
+        "keyframesDeclarados": 3,
+        "transitionAll": 22,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 479,
+            "veces": 5
+          },
+          {
+            "px": 767,
+            "veces": 5
+          },
+          {
+            "px": 991,
+            "veces": 5
+          },
+          {
+            "px": 1920,
+            "veces": 2
+          },
+          {
+            "px": 768,
+            "veces": 1
+          },
+          {
+            "px": 1440,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "nav-w",
+            "posicion": "fixed",
+            "alto": 57,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "mob-menu",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0%"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "en-sticky hdn-old",
+            "posicion": "sticky",
+            "alto": 0,
+            "top": "307.2px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "en-sticky",
+            "posicion": "sticky",
+            "alto": 410,
+            "top": "307.2px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "faq",
+            "posicion": "sticky",
+            "alto": 819,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go2369186930",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go1348078617",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "1024px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go613305155",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go471583506",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3921366393",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "1024px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3967842156",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "1024px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 21,
+        "ctasTop": [
+          {
+            "texto": "Become a creator",
+            "veces": 4
+          },
+          {
+            "texto": "Fanvue AI",
+            "veces": 3
+          },
+          {
+            "texto": "Support",
+            "veces": 3
+          },
+          {
+            "texto": "Blog",
+            "veces": 3
+          },
+          {
+            "texto": "About",
+            "veces": 3
+          },
+          {
+            "texto": "Careers",
+            "veces": 3
+          },
+          {
+            "texto": "Login",
+            "veces": 3
+          },
+          {
+            "texto": "Sign up as a fan",
+            "veces": 3
+          },
+          {
+            "texto": "Features",
+            "veces": 2
+          },
+          {
+            "texto": "Sign up",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 132,
+        "sinAlt": 1,
+        "altVacio": 131,
+        "sinDimensiones": 131,
+        "lazy": 130,
+        "conSrcset": 46,
+        "interactivos": 67,
+        "objetivosMenores44px": 17,
+        "idioma": "en",
+        "landmarks": {
+          "header": 0,
+          "nav": 4,
+          "main": 0,
+          "footer": 0
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.48
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.61
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.5)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 5.32
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.5)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.18
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.5)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.29
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 7.37
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.23
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.35
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 14.17
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 13.08
+          }
+        ],
+        "fondosTranslucidosOmitidos": 6
+      },
+      "rendimiento": {
+        "pesoTotalKb": 25970.3,
+        "porTipoKb": {
+          "document": 120.6,
+          "script": 4976.6,
+          "stylesheet": 526.7,
+          "font": 150.1,
+          "fetch": 13.3,
+          "ping": 0,
+          "image": 1120.7,
+          "media": 19062.2,
+          "xhr": 0.1
+        },
+        "pedidos": {
+          "document": 1,
+          "script": 43,
+          "stylesheet": 4,
+          "font": 8,
+          "fetch": 14,
+          "ping": 6,
+          "image": 39,
+          "media": 10,
+          "xhr": 2
+        },
+        "hostsDistintos": 41,
+        "terceros": [
+          {
+            "host": "cdn.prod.website-files.com",
+            "pedidos": 58
+          },
+          {
+            "host": "cdn.jsdelivr.net",
+            "pedidos": 9
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 7
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 6
+          },
+          {
+            "host": "fonts.gstatic.com",
+            "pedidos": 5
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 3
+          },
+          {
+            "host": "cdn.amplitude.com",
+            "pedidos": 2
+          },
+          {
+            "host": "analytics.google.com",
+            "pedidos": 2
+          }
+        ],
+        "fuentesCargadas": [
+          "webflow-icons normal normal",
+          "Space Grotesk 700 normal",
+          "Space Grotesk 600 normal",
+          "Space Grotesk 400 normal",
+          "Space Grotesk 500 normal",
+          "Space Grotesk 300 normal",
+          "Ebgaramond Variablefont Wght 400 800 italic",
+          "Ebgaramond 500 italic",
+          "Ebgaramond 700 normal",
+          "Ebgaramond 500 normal",
+          "Ebgaramond 600 italic",
+          "Basiercircle 700 normal",
+          "Basiercircle 400 normal",
+          "Basiercircle 700 italic",
+          "Basiercircle 400 italic",
+          "Basiercircle 600 normal",
+          "Akzidgrtsknext 700 normal",
+          "Akzidenz Grotesk Pro Med Cnd 400 normal",
+          "Akzidenz Grotesk Pro Cnd 400 normal",
+          "Akzidenz Grotesk Pro 700 italic"
+        ]
+      },
+      "seo": {
+        "titulo": "Fanvue",
+        "descripcion": "The creator subscription platform for the future. Take home 80% of your earnings from day 1.",
+        "canonical": "https://www.fanvue.com/",
+        "og": 4,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": true,
+        "react": false,
+        "gsap": true,
+        "swiper": true,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 12098,
+        "alturaPantallas": 13.4,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 10
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 12097,
+          "altoPantallas": 13.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Earn from your fanbase faster with the No1 AI monetisation platform for creators.",
+          "cta": "",
+          "imagenes": 154
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "h-hero",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "Earn from your fanbase faster with the No1 AI monetisation platform for creators.",
+          "cta": "Become a creator",
+          "imagenes": 2
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "logos-marq",
+          "altoPx": 242,
+          "altoPantallas": 0.3,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 20
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "relative black flow",
+          "altoPx": 1970,
+          "altoPantallas": 2.2,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "Powering over $500m in creator payouts",
+          "cta": "Become a creator",
+          "imagenes": 11
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "overflow",
+          "altoPx": 1047,
+          "altoPantallas": 1.2,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "Chosen by the creators redefining what’s possible.",
+          "cta": "",
+          "imagenes": 50
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "creator-ai",
+          "altoPx": 1048,
+          "altoPantallas": 1.2,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "The Creator-AI Economy has arrived, and Fanvue hands you the tools to lead it.",
+          "cta": "Join the movement",
+          "imagenes": 3
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "every-niche",
+          "altoPx": 5380,
+          "altoPantallas": 6,
+          "fondo": "rgb(53, 65, 48)",
+          "titular": "Built for every niche. Trusted by icons.",
+          "cta": "Join the movement",
+          "imagenes": 37
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "relative",
+          "altoPx": 1512,
+          "altoPantallas": 1.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "FAQ",
+          "cta": "Become a creator",
+          "imagenes": 17
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 909,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 16,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Earn from your fanbase faster with the No1 AI monetisation platform for creators."
+          },
+          {
+            "nivel": 2,
+            "texto": "Powering over $500m in creator payouts"
+          },
+          {
+            "nivel": 2,
+            "texto": "01"
+          },
+          {
+            "nivel": 2,
+            "texto": "02"
+          },
+          {
+            "nivel": 2,
+            "texto": "03"
+          },
+          {
+            "nivel": 2,
+            "texto": "04"
+          },
+          {
+            "nivel": 2,
+            "texto": "05"
+          },
+          {
+            "nivel": 2,
+            "texto": "06"
+          },
+          {
+            "nivel": 2,
+            "texto": "06"
+          },
+          {
+            "nivel": 2,
+            "texto": "Chosen by the creators redefining what’s possible."
+          },
+          {
+            "nivel": 2,
+            "texto": "Chosen by the creators redefining what’s possible."
+          },
+          {
+            "nivel": 2,
+            "texto": "The Creator-AI Economy has arrived, and Fanvue hands you the tools to lead it."
+          },
+          {
+            "nivel": 2,
+            "texto": "The Creator-AI Economy has arrived, and Fanvue hands you the tools to lead it."
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for every niche. Trusted by icons."
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for every niche. Trusted by icons."
+          },
+          {
+            "nivel": 2,
+            "texto": "FAQ"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "15px / lh 1.20 / ls normal / w 500",
+            "veces": 64
+          },
+          {
+            "valor": "28px / lh 1.00 / ls normal / w 500",
+            "veces": 32
+          },
+          {
+            "valor": "14px / lh 1.00 / ls normal / w 500",
+            "veces": 25
+          },
+          {
+            "valor": "15px / lh 0.96 / ls -0.14976px / w 400",
+            "veces": 24
+          },
+          {
+            "valor": "11px / lh 2.67 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "15px / lh 1.00 / ls -0.1px / w 500",
+            "veces": 13
+          },
+          {
+            "valor": "32px / lh 1.00 / ls -0.648px / w 500",
+            "veces": 12
+          },
+          {
+            "valor": "21px / lh 1.10 / ls -0.1px / w 500",
+            "veces": 8
+          },
+          {
+            "valor": "15px / lh 0.90 / ls normal / w 500",
+            "veces": 8
+          },
+          {
+            "valor": "12px / lh 1.50 / ls -0.1px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "65px / lh 1.00 / ls normal / w 400",
+            "veces": 7
+          },
+          {
+            "valor": "14px / lh 0.90 / ls normal / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "11px / lh 1.50 / ls 0.108px / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "15px / lh 1.10 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "90px / lh 1.00 / ls -0.3px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "81px / lh 0.85 / ls -0.3px / w 500",
+            "veces": 5
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Medium AG Next",
+            "veces": 216
+          },
+          {
+            "valor": "Akzidenz Grotesk Pro Med",
+            "veces": 58
+          },
+          {
+            "valor": "Akzidenz Grotesk Pro",
+            "veces": 6
+          },
+          {
+            "valor": "Akzidenz Grotesk Next",
+            "veces": 4
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 121
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.5)",
+            "veces": 70
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.6)",
+            "veces": 24
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 22
+          },
+          {
+            "valor": "rgba(22, 22, 19, 0.75)",
+            "veces": 20
+          },
+          {
+            "valor": "rgb(252, 249, 240)",
+            "veces": 20
+          },
+          {
+            "valor": "rgba(252, 249, 240, 0.5)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(73, 242, 100)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 17
+          },
+          {
+            "valor": "rgb(73, 242, 100)",
+            "veces": 16
+          },
+          {
+            "valor": "rgb(204, 204, 204)",
+            "veces": 13
+          },
+          {
+            "valor": "rgba(239, 238, 236, 0.15)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(161, 255, 98)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(56, 152, 236)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(13, 6, 40)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8.64px",
+            "veces": 33
+          },
+          {
+            "valor": "7.488px",
+            "veces": 32
+          },
+          {
+            "valor": "2.88px",
+            "veces": 32
+          },
+          {
+            "valor": "4.86px",
+            "veces": 24
+          },
+          {
+            "valor": "auto",
+            "veces": 17
+          },
+          {
+            "valor": "52.56px",
+            "veces": 12
+          },
+          {
+            "valor": "5.76px",
+            "veces": 12
+          },
+          {
+            "valor": "3px",
+            "veces": 12
+          },
+          {
+            "valor": "39.6px",
+            "veces": 12
+          },
+          {
+            "valor": "21.6px",
+            "veces": 12
+          },
+          {
+            "valor": "8.3088px",
+            "veces": 12
+          },
+          {
+            "valor": "20.016px",
+            "veces": 11
+          },
+          {
+            "valor": "15.984px",
+            "veces": 10
+          },
+          {
+            "valor": "15.025px",
+            "veces": 8
+          },
+          {
+            "valor": "19.7626px",
+            "veces": 8
+          },
+          {
+            "valor": "6px",
+            "veces": 7
+          }
+        ],
+        "radios": [
+          {
+            "valor": "16px",
+            "veces": 30
+          },
+          {
+            "valor": "50%",
+            "veces": 18
+          },
+          {
+            "valor": "14.4px",
+            "veces": 12
+          },
+          {
+            "valor": "8px",
+            "veces": 8
+          },
+          {
+            "valor": "100px",
+            "veces": 6
+          },
+          {
+            "valor": "7.2px",
+            "veces": 6
+          },
+          {
+            "valor": "3.6px",
+            "veces": 6
+          },
+          {
+            "valor": "144px",
+            "veces": 6
+          },
+          {
+            "valor": "4px",
+            "veces": 3
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          }
+        ],
+        "radiosDistintos": 14,
+        "sombras": [],
+        "sombrasDistintas": 0,
+        "zIndex": [
+          {
+            "valor": "9",
+            "veces": 32
+          },
+          {
+            "valor": "1",
+            "veces": 21
+          },
+          {
+            "valor": "2",
+            "veces": 14
+          },
+          {
+            "valor": "-100",
+            "veces": 10
+          },
+          {
+            "valor": "3",
+            "veces": 6
+          },
+          {
+            "valor": "900",
+            "veces": 4
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          },
+          {
+            "valor": "0",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "opacity 0.3s, transform 0.3s",
+            "veces": 32
+          },
+          {
+            "valor": "transform 0.2s linear",
+            "veces": 12
+          },
+          {
+            "valor": "0.2s",
+            "veces": 9
+          },
+          {
+            "valor": "opacity 0.4s",
+            "veces": 6
+          },
+          {
+            "valor": "opacity 0.2s",
+            "veces": 6
+          },
+          {
+            "valor": "transform 0.2s",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 7,
+        "hojasLeidas": 4,
+        "unidades": {
+          "em": 1428,
+          "rem": 1001,
+          "px": 2492,
+          "clamp": 7,
+          "vw": 109
+        },
+        "keyframesDeclarados": 3,
+        "transitionAll": 22,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 479,
+            "veces": 5
+          },
+          {
+            "px": 767,
+            "veces": 5
+          },
+          {
+            "px": 991,
+            "veces": 5
+          },
+          {
+            "px": 1920,
+            "veces": 2
+          },
+          {
+            "px": 768,
+            "veces": 1
+          },
+          {
+            "px": 1440,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 75,
+            "navFija": false
+          },
+          {
+            "y": 2800,
+            "conTransform": 75,
+            "navFija": false
+          },
+          {
+            "y": 5542,
+            "conTransform": 75,
+            "navFija": false
+          },
+          {
+            "y": 8313,
+            "conTransform": 75,
+            "navFija": false
+          },
+          {
+            "y": 11084,
+            "conTransform": 75,
+            "navFija": false
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 5,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "nav-w",
+            "posicion": "fixed",
+            "alto": 63,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "en-sticky hdn-old",
+            "posicion": "sticky",
+            "alto": 0,
+            "top": "135px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "en-sticky",
+            "posicion": "sticky",
+            "alto": 630,
+            "top": "135px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "faq",
+            "posicion": "sticky",
+            "alto": 612,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go2369186930",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go1348078617",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "900px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go613305155",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go471583506",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3921366393",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "900px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3967842156",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "900px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 21,
+        "ctasTop": [
+          {
+            "texto": "Become a creator",
+            "veces": 4
+          },
+          {
+            "texto": "Fanvue AI",
+            "veces": 3
+          },
+          {
+            "texto": "Support",
+            "veces": 3
+          },
+          {
+            "texto": "Blog",
+            "veces": 3
+          },
+          {
+            "texto": "About",
+            "veces": 3
+          },
+          {
+            "texto": "Careers",
+            "veces": 3
+          },
+          {
+            "texto": "Login",
+            "veces": 3
+          },
+          {
+            "texto": "Sign up as a fan",
+            "veces": 3
+          },
+          {
+            "texto": "Features",
+            "veces": 2
+          },
+          {
+            "texto": "Sign up",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 132,
+        "sinAlt": 1,
+        "altVacio": 131,
+        "sinDimensiones": 131,
+        "lazy": 130,
+        "conSrcset": 46,
+        "interactivos": 67,
+        "objetivosMenores44px": 23,
+        "idioma": "en",
+        "landmarks": {
+          "header": 0,
+          "nav": 4,
+          "main": 0,
+          "footer": 0
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.48
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.61
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.5)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 5.32
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.5)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.18
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.5)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.29
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 7.37
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 1.23
+          },
+          {
+            "texto": "rgba(255, 255, 255, 0.6)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 1.35
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(73, 242, 100)",
+            "ratio": 14.17
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(204, 204, 204)",
+            "ratio": 13.08
+          }
+        ],
+        "fondosTranslucidosOmitidos": 5
+      },
+      "rendimiento": {
+        "pesoTotalKb": 29232.9,
+        "porTipoKb": {
+          "document": 120.6,
+          "script": 4992.6,
+          "stylesheet": 526.7,
+          "font": 150.1,
+          "image": 3717.9,
+          "media": 19711.5,
+          "fetch": 13.3,
+          "xhr": 0.1,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 2,
+          "script": 86,
+          "stylesheet": 8,
+          "font": 16,
+          "image": 101,
+          "media": 24,
+          "fetch": 24,
+          "xhr": 4,
+          "ping": 7
+        },
+        "hostsDistintos": 39,
+        "terceros": [
+          {
+            "host": "cdn.prod.website-files.com",
+            "pedidos": 77
+          },
+          {
+            "host": "cdn.jsdelivr.net",
+            "pedidos": 9
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 7
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 6
+          },
+          {
+            "host": "fonts.gstatic.com",
+            "pedidos": 5
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 3
+          },
+          {
+            "host": "cdn.amplitude.com",
+            "pedidos": 2
+          },
+          {
+            "host": "www.google-analytics.com",
+            "pedidos": 2
+          }
+        ],
+        "fuentesCargadas": [
+          "webflow-icons normal normal",
+          "Space Grotesk 700 normal",
+          "Space Grotesk 600 normal",
+          "Space Grotesk 400 normal",
+          "Space Grotesk 500 normal",
+          "Space Grotesk 300 normal",
+          "Ebgaramond Variablefont Wght 400 800 italic",
+          "Ebgaramond 500 italic",
+          "Ebgaramond 700 normal",
+          "Ebgaramond 500 normal",
+          "Ebgaramond 600 italic",
+          "Basiercircle 700 normal",
+          "Basiercircle 400 normal",
+          "Basiercircle 700 italic",
+          "Basiercircle 400 italic",
+          "Basiercircle 600 normal",
+          "Akzidgrtsknext 700 normal",
+          "Akzidenz Grotesk Pro Med Cnd 400 normal",
+          "Akzidenz Grotesk Pro Cnd 400 normal",
+          "Akzidenz Grotesk Pro 700 italic"
+        ]
+      },
+      "seo": {
+        "titulo": "Fanvue",
+        "descripcion": "The creator subscription platform for the future. Take home 80% of your earnings from day 1.",
+        "canonical": "https://www.fanvue.com/",
+        "og": 4,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": true,
+        "react": false,
+        "gsap": true,
+        "swiper": true,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 2,
+    "conTransicion": 68
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

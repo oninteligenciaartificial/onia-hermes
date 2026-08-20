@@ -1,0 +1,298 @@
+{
+  "updatedAt": "2026-05-24T15:46:59.690Z",
+  "createdAt": "2026-05-24T15:27:48.362Z",
+  "id": "BUAMdJ1pz16CZ997",
+  "name": "WF-11: Patient Sync Incremental (Chatwoot)",
+  "description": "When a new patient is created in an org with whatsappAddon active, sync them as a Chatwoot contact in that org's inbox.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "afd876de-ff1c-4352-8032-fed177faab2f",
+      "name": "Patient Sync Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "patient-sync-chatwoot",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "webhookId": "07aadcfa-b4f4-4a39-a872-2a8336d2c292"
+    },
+    {
+      "id": "1f0bd4a6-cb3c-4922-891a-e205d81df4a2",
+      "name": "Validate API Key",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        192
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "api-key-check",
+              "leftValue": "={{ $request.headers[\"x-api-key\"] }}",
+              "rightValue": "={{ $env.N8N_API_KEY }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "bdc38e86-64a9-4f6c-a4c4-2251ae090202",
+      "name": "Fetch Clinic Settings",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        448,
+        96
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT cs.\"chatwootInboxId\", cs.\"chatwootApiToken\", cs.\"chatwootAccountId\" FROM clinic_settings cs JOIN organizations o ON o.id = cs.\"organizationId\" WHERE cs.\"organizationId\" = '{{ $json.body.organizationId }}' AND o.\"whatsappAddon\" = true"
+      },
+      "credentials": {
+        "postgres": {
+          "name": "DentaGest Postgres"
+        }
+      }
+    },
+    {
+      "id": "29ff6963-a985-468e-945d-38c7db28c493",
+      "name": "Has Inbox ID?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        96
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "inbox-check",
+              "leftValue": "={{ $json.chatwootInboxId }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "112f9630-ba53-4286-bc01-6d8d53d4766e",
+      "name": "Create Chatwoot Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://app.chatwoot.com/api/v1/accounts/{{ $json.chatwootAccountId || $env.CHATWOOT_ACCOUNT_ID }}/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{ $json.chatwootApiToken || $env.CHATWOOT_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"name\":\"{{ $('Patient Sync Webhook').item.json.body.name }}\",\"phone_number\":\"{{ $('Patient Sync Webhook').item.json.body.phone }}\",\"email\":\"{{ $('Patient Sync Webhook').item.json.body.email }}\",\"identifier\":\"{{ $('Patient Sync Webhook').item.json.body.patientId }}\",\"inbox_id\":{{ $json.chatwootInboxId }}}"
+      }
+    },
+    {
+      "id": "b90014ea-18e0-45b7-ab14-12ddc746396a",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"ok\":true}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "c89149e9-1947-485a-8518-f087c54f7604",
+      "name": "Respond No Inbox",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"ok\":false,\"reason\":\"no_inbox\"}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "6e836a8c-d841-4aa2-bbfc-107a11df7189",
+      "name": "Respond 401",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        288
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"ok\":false,\"reason\":\"unauthorized\"}",
+        "options": {
+          "responseCode": 401
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Patient Sync Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate API Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate API Key": {
+      "main": [
+        [
+          {
+            "node": "Fetch Clinic Settings",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 401",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Clinic Settings": {
+      "main": [
+        [
+          {
+            "node": "Has Inbox ID?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Inbox ID?": {
+      "main": [
+        [
+          {
+            "node": "Create Chatwoot Contact",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond No Inbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Chatwoot Contact": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "ab43afad-8aae-40f6-9930-ced5452b57e1",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-24T15:27:48.366Z",
+      "createdAt": "2026-05-24T15:27:48.366Z",
+      "role": "workflow:owner",
+      "workflowId": "BUAMdJ1pz16CZ997",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

@@ -10,6 +10,12 @@
 
 ---
 
+> ✏️ **P4 y P5 reescritos el 2026-08-20.** Pedían **MODELO** y **CLIENTES**, palabras eliminadas
+> al unificar el sistema en SISTEMA/LISTA. Regla aplicada (del plan 20-ago): un caption cierra con
+> palabra clave SOLO si hay un recurso automático detrás — Lucía no tiene palabras activas en el
+> workflow de DM, así que sus cierres son pregunta de engagement + derivación a `@oniahq`
+> (el tráfico va en una sola dirección: ella lo nombra, no al revés).
+
 ## 1. Lo que muestran los números (y desmiente la intuición)
 
 | Cuenta | Seguidores | Vistas prom. | Likes prom. | Engagement |
@@ -81,8 +87,8 @@ Todas las imágenes ya existen en `references/models/`. **No hace falta generar 
 | 1 | A | `lucia-pieza1-20260717/escena-A-bano-reveal.png` | **hace un año yo no existía** | Hace un año yo no existía. Hoy trabajo para una empresa boliviana mostrando cómo la IA le sirve a un negocio de verdad. Sí, soy un personaje digital creado por @oniahq — y no lo escondo. Seguime, que esto recién empieza. |
 | 2 | B | `lucia-content-bank-20260709/realism-cafe.png` | **martes, 10 de la mañana** | Trabajando desde un café mientras el sistema factura solo. Ese es el punto: el negocio no se detiene porque vos no estés sentado adelante. |
 | 3 | C | `lucia-wardrobe-locations-test/lucia-street-casual.png` | **el cartel lindo no salva nada** | Camino por el centro y veo lo mismo en cada negocio: cuaderno para las citas, WhatsApp para los pedidos, la factura en otro lado. Tres sistemas que no se hablan. La plata no se pierde en la publicidad — se pierde después. Comentá **SISTEMA** y te muestro cómo se ve todo junto. |
-| 4 | A | `lucia-content-bank-20260709/combo-gym-mirror.png` | **¿te diste cuenta que no soy real?** | Mirá bien la foto. No soy real. Y aun así podría estar vendiendo tu producto todos los días, sin sesión de fotos y sin agenda. Eso es lo que ONIA le arma a una marca. Comentá **MODELO** si querés la tuya. |
-| 5 | C | `lucia-content-bank-20260709/combo-cleangirl-kitchen.png` | **nadie volvió a escribirle** | La mayoría de los clientes que te escriben y no compran no se fueron con la competencia. Simplemente nadie les volvió a escribir. Eso no se arregla con más publicidad: se arregla con un sistema que te avise. Comentá **CLIENTES**. |
+| 4 | A | `lucia-content-bank-20260709/combo-gym-mirror.png` | **¿te diste cuenta que no soy real?** | Mirá bien la foto. No soy real. Y aun así podría estar vendiendo tu producto todos los días, sin sesión de fotos y sin agenda. Eso es lo que @oniahq le arma a una marca. ¿Vos le comprarías a una modelo que no existe? Te leo. |
+| 5 | C | `lucia-content-bank-20260709/combo-cleangirl-kitchen.png` | **nadie volvió a escribirle** | La mayoría de los clientes que te escriben y no compran no se fueron con la competencia. Simplemente nadie les volvió a escribir. Abrí tu WhatsApp y contá cuántos te escribieron este mes y quedaron en visto: ese número es plata. El sistema que lo arregla está en @oniahq. |
 | 6 | B | `lucia-content-bank-20260709/realism-goldenhour.png` | **la pregunta incómoda** | ¿Cuánto tardás en contestarle a un cliente nuevo? Si la respuesta es "depende", ahí está tu fuga. No es falta de ganas: es que estás haciendo a mano algo que ya se hace solo. |
 
 **Las 6 piezas están armadas y listas para subir** en

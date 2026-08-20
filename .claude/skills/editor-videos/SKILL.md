@@ -44,6 +44,42 @@ panel (`scripts/publish-cut-review.mjs` → `video_projects` status `cut_review`
 `video_cut`) y **se detiene ahí**. El ffmpeg del corte corre recién cuando Sergio **aprueba** en
 ONIA Center → Estudio de Contenido (Fase 5).
 
+## ⭐ REGLA DE ORO — ninguna falta de ortografía se quema
+Hermana de la de arriba, del mismo rango: **antes de quemar CUALQUIER texto en el cuadro, el
+transcript se lee a ojo, línea por línea.** Es paso obligatorio del pipeline (§5b), no un chequeo de
+buena voluntad: **no hay script que lo haga**. Whisper es auto-transcriptor, no corrector — devuelve
+español bien formado y mal escrito, y nada aguas abajo lo detecta.
+
+**Pasó de verdad.** Un reel del lote 17 publicó **dos faltas quemadas en 10 fotogramas**:
+`A GENERADO` por `HA GENERADO`, y `ARANA` sin la eñe — las dos salidas del auto-transcriptor sin
+revisar. La fuente le pone el gate a esta skill con nombre y apellido: *"el SRT se revisa a ojo antes
+de quemarlo, con foco en ñ y acentos"*
+(`hermes-content/references/video-intake/2026-08-18-sintesis-lote-17.md` §5.8). En B2B boliviano una
+falta quemada cuesta exactamente la credibilidad que el video intenta construir.
+
+**Quemado no se parchea: se re-renderiza.** Nunca tapar la falta con un overlay ni con una segunda
+pasada — se corrige la fuente, se recompila y se vuelve a renderizar. Si el gate encuentra algo, el
+pipeline **no avanza**: se corrige y se rehace desde el paso que quema. El texto vive en .ass/HTML y
+no horneado en una imagen justamente porque acá tipografía, color y **ortografía son deterministas**;
+una falta tira esa ventaja a la basura.
+
+**Se corrige en el TRANSCRIPT, no en la salida.** Karaoke → `scripts/segments.json` (de ahí sale
+`remap-transcript.mjs` y de ahí el .ass; `--fix "Fergio=Sergio"` parchea los tokens en el momento del
+quemado y **no persiste** — un re-render sin la misma bandera vuelve a quemar la falta). Embed
+cinematográfico → `transcript.json`, y ahí además es mecánico: los normalizadores conservan ñ y
+acentos (`make-theme.cjs` `norm()` mantiene `\p{L}`, `check-timing.cjs` normaliza igual), así que
+corregir solo el JSON autorado revienta el build (`cannot match authored word` en Theme,
+`NOT IN TRANSCRIPT` en Cinematic). Por eso el gate va **antes** de autorar.
+
+**⚠ Esta copia es la que manda.** `embedded-captions` tiene el mismo gate en su § Step 2b, pero esa
+skill es **upstream de HyperFrames**: su propio SKILL.md ordena correr `npx hyperframes skills update
+embedded-captions` al arrancar, y `hyperframes init` también refresca el set global — **un update
+puede pisar esa edición y el gate desaparece sin que nadie se entere**. `editor-videos` es nuestra y
+no la pisa nadie: si las dos difieren gana ésta, y si allá el gate ya no está, no es que se derogó —
+es que lo pisaron. El detalle largo (barrido completo + los términos que Whisper destroza medidos en
+el mismo corpus: `Seedance` → "see dance 2.0", `VSL` → "viesel") vive en
+`.agents/skills/embedded-captions/SKILL.md` § Step 2b, mientras siga ahí.
+
 ## 💸 Regla de gasto
 Generación paga (Higgsfield, AssemblyAI, ElevenLabs) = **permiso explícito de Sergio caso por
 caso** ([[gasto-plataformas-validar-primero]]). Por defecto todo gratis: Speaches (transcripción),
@@ -97,6 +133,18 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
    el VPS) y **aun así solo imprime el SQL** — la escritura a producción la aplica el orquestador por
    SSH a `supabase-db`. El render corre en la máquina de Sergio / la sesión Claude Code, **nunca en el
    VPS**. **Nunca cortar a ciegas ni antes del OK.**
+5b. **GATE DE ORTOGRAFÍA — obligatorio antes de quemar texto** (⭐ regla de oro; ningún script lo
+   hace, lo hace el agente a ojo). Leer línea por línea el transcript que va a alimentar el texto
+   quemado: karaoke → `scripts/segments.json` (o `segments-cut.json` si ya remapeaste); embed
+   cinematográfico → `transcript.json`. Barrido, en este orden — es lo que el transcriptor rompe:
+   **1) ñ** (`ARANA`, `ANO`, `MANANA`; la pérdida más común, y un rail en mayúsculas no la delata) ·
+   **2) acentos** (`mas`/`más`, `esta`/`está`, `si`/`sí`, `el`/`él` — cambia el significado) ·
+   **3) `a` vs `ha`** (la que efectivamente se publicó: una `a` delante de un participio es `ha`) ·
+   **4) nombres propios y términos técnicos**, que Whisper convierte en palabras plausibles —
+   contrastarlos contra lo que se ve en pantalla o contra la fuente que los nombró, nunca tomarlos
+   del transcript a ciegas. Nombres de cliente, marcas y todo número dicho en cámara se leen dos
+   veces. **Si no se puede verificar una grafía, se pregunta — no se quema una adivinanza.** La
+   corrección va en el transcript; recién con el barrido limpio se pasa al paso 6.
 6. **Subtítulos karaoke** (pieza propia, PROBADA). `node scripts/karaoke-captions.mjs --segments scripts/segments.json --video renders/cut.mp4 --out renders/karaoke.mp4 [--fix "Fergio=Sergio"]`
    → agrupa en frases de ≤4 palabras/1.6s y genera un **.ass** con la palabra activa resaltada
    (base blanco + activa amarillo, Arial Black escalado al alto del video, MarginV 220 en 9:16 para
@@ -301,6 +349,10 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 - **Publicar sin masterizar el audio.** Sale a −20 LUFS y en el feed suena bajo contra todo lo demás.
 - **Cortar sin publicar la review + mostrar la tabla + preview** (viola la regla de oro). Correr
   `publish-cut-review.mjs` y esperar el OK de Sergio en el panel; el ffmpeg del corte va DESPUÉS.
+- **Quemar texto sin leer el transcript a ojo** (viola la regla de oro de ortografía, §5b). El
+  auto-transcriptor entrega español bien formado y MAL ESCRITO — así se publicaron `A GENERADO` y
+  `ARANA` sin ñ. Y quemado no se parchea: se re-renderiza. Corregir en el transcript, no en la
+  salida (`--fix` no persiste; en embed, arreglar solo el JSON autorado revienta el build).
 - **Aplicar el SQL a producción desde la skill.** La skill es DRY-RUN (imprime SQL); lo aplica el
   orquestador por SSH a `supabase-db`.
 - **Subtitular todo como embed** — la mayoría va al rail; embed solo el pico (ver `embedded-captions`).

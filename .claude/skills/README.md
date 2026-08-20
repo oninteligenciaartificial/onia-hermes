@@ -21,4 +21,4 @@ generador de propuestas). Al cambiar una regla: **editar la fuente**, no duplica
 - `.claude/agents/` — subagentes para delegar (no skills).
 - `hermes-content/skills/` — docs que lee el bot Hermes en el VPS (no skills de Claude Code).
 
-Mapa completo + spec de repos separados: `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
+Mapa completo + spec de repos separados: `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES.md`.

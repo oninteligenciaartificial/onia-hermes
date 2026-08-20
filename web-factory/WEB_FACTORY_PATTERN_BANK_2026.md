@@ -312,7 +312,189 @@ Avoid: abstract AI glow, fake dashboards, vague automation claims, screenshots m
 
 Asset needs: real app screenshots, demo video, integration logos, security notes.
 
+### Tipografía de display — LEYES MEDIDAS (Fanvue, F12 2026-08-18)
+
+Canon para TODA superficie de Onia (landing y producto). Valores leídos del DOM, no
+opinión — detalle en `data/references/design-sources/fanvue-mecanica-medida.md`.
+
+1. **line-height ≤ 1,0 en display, y baja al crecer**: 1,00 a 50 px · 0,90 a 80 px ·
+   0,80 a 106 px. Un titular grande es un BLOQUE, no líneas.
+2. **tracking negativo proporcional**: −0,4 % a 50 px, **−2 % a 80 px** (`-0.02em`).
+3. **un solo peso de display, sostenido** — no se mezclan.
+   ⚠️ **Corregido 2026-08-20**: acá decía "peso 500, nunca 700/800". Medido en 6 sitios,
+   `componentry.fun` usa **900** y `efferd` **800** en su display, con muy buen resultado.
+   Era un rasgo de Fanvue, no una ley. El impacto puede venir del **tamaño** (peso 500,
+   camino Fanvue) o del **trazo** (800–900); las dos direcciones funcionan y hay que
+   ELEGIR una. Lo que no funciona es promediar.
+4. **cuerpo al 75 % de opacidad** sobre el fondo (off-black, no negro puro): el párrafo
+   cede jerarquía al titular.
+5. **medida de línea ≤ 900 px** aunque la sección sea de 2000: contenedor de texto propio.
+6. **superficies por transparencia (~15 %)**, no grises opacos: profundidad sin bordes.
+7. **gaps generosos** (48–115 px) y marquesina 35 s `linear infinite` para prueba social
+   REAL (nunca material inventado).
+⚠️ Sus fuentes (AG Next/Akzidenz) son de PAGO: en Onia se aplica la mecánica sobre
+**Archivo** (ya es la fuente de marca).
+
+### Ritmo anclado — la ley que hace que una web NO parezca hecha por IA
+
+> ⚠️ **Corregido 2026-08-20.** El título decía "Ritmo en `em`". Medido en 6 sitios, **4 de
+> 6 usan `rem`**, no `em` — y cumplen igual. La ley NO es la letra: es que **el espaciado
+> cuelgue de UN ancla** (`em` por sección o `rem` por documento) y que **`clamp()` sea
+> marginal**: 5 de 6 tienen ≤7 usos de `clamp()` en todo el sitio. Un sistema ya escrito en
+> `rem` **no se reescribe**: ya cumple. Detalle: `anatomia/SINTESIS.md` §A8 y §D1.
+
+Medido en el CSS real de Fanvue: **1.428 `em` contra 7 `clamp()`** en todas sus hojas
+(la primera pasada dio 98 vs 0 sobre una sola hoja; el barrido completo confirma la
+proporción y la agranda). Todo su espaciado vertical es `em` anclado a UN font-size que
+cambia por breakpoint (12,8px → 15 → 16 → 20). Cambian ese número y la página entera
+reescala en proporción.
+
+**Regla de la casa (adoptada 2026-08-18):**
+- El espaciado INTERNO de una sección va en `em` → hereda la proporción del sistema.
+- `clamp()` se reserva para el font-size de la sección y el ancho de contenedores.
+- El fondo base es CLARO; `.dark` es un MODIFICADOR de sección (lo confirma su CSS:
+  `.section{background:#ECEDEE}` + `.section.dark{background:#141414}`).
+- Hover de botón: `box-shadow .4s` (se levanta), no `transform` (se mueve).
+- Radios de píldora en `em` (`10em`), no en px.
+
+Por qué importa: cuando cada token escala por su cuenta (`5.6vw` acá, `4vw` allá), la
+relación entre título, texto y aire cambia según el ancho — y ESO es buena parte del
+"se ve raro / parece IA" que no se sabe explicar. Detalle: `design-sources/fanvue-mecanica-medida.md` §8.
+
+### Movimiento — receta medida (Fanvue F12, 2026-08-18)
+
+La landing más admirada del benchmark usa **2 keyframes en todo el sitio**. Canon:
+
+- **Revelado al entrar**: `opacity + transform`, **0,3 s**, una sola vez. Componente
+  nuestro: `<Reveal>` (`src/motion/reveal.tsx`, whileInView).
+- **Hover y micro-interacción**: **0,15 s con `cubic-bezier(0.4, 0, 0.2, 1)`** — color,
+  fondo, sombra. Es lo dominante en 5 de los 6 sitios medidos (en 10x lo llevan 151
+  elementos). Antes acá decía 0,2 s: la diferencia es la que separa un hover que se siente
+  instantáneo de uno perezoso.
+- **Easing, dos usos distintos**: nuestro `cubic-bezier(0.22, 1, 0.36, 1)` para
+  **entradas** (es expresivo y es marca — no aparece en ninguno de los 6, y está bien que
+  así sea) · `cubic-bezier(0.4, 0, 0.2, 1)` para **micro-interacciones**, donde el
+  estándar ya se fijó y pelearlo sólo se siente raro.
+- **Marquesina ambiental**: `35 s linear infinite`, `translateX(0 → calc(-100% - gap))`,
+  `will-change: transform`. Componente: `<Marquee>` (hoy 32 s — equivalente).
+- **Secciones pegadas** (`position: sticky`) para el relato: Fanvue tiene 10 elementos
+  `sticky`/`fixed`, entre ellos el conmutador de rubros (630 px de alto pegado a 135 px).
+- ❌ **PROHIBIDO**: animar layout, y `transition: all` (ellos lo arrastran por descuido de
+  Webflow en **889 elementos**: no se copia).
+
+Regla de la casa: **el movimiento se dispara al entrar o al hover; sólo se ata al scroll
+cuando el scroll ES el relato** (una sección pegada que cuenta algo), nunca por adorno.
+
+> ⚠️ **CORRECCIÓN 2026-08-19.** Acá decía "Fanvue no tiene NINGÚN parallax" y "2 keyframes
+> en todo el sitio". Las dos afirmaciones eran **falsas**, y salieron de mirar el sitio
+> antes y después de un solo scroll. Medido con `extract_web_anatomy.mjs` en 5 posiciones:
+> **sí tiene movimiento atado al scroll** (5 estados distintos), hay 3 `@keyframes`
+> declarados y 10 transiciones distintas. Y **no tiene `prefers-reduced-motion`**: con la
+> preferencia puesta, 68 elementos siguen animando. Eso último no se copia — es un defecto,
+> no una decisión.
+>
+> La regla de la casa (disparar al entrar, no atar al scroll por adorno) **se sostiene
+> igual**, pero por sus propios motivos: cuesta menos, no marea y no se rompe bajo
+> reduced-motion. No porque Fanvue lo haga, porque no lo hace.
+>
+> Lección: una medición floja no es neutra, **envenena el canon**. Protocolo completo en
+> [`docs/ANATOMIA_DE_UNA_WEB.md`](docs/ANATOMIA_DE_UNA_WEB.md).
+
+Detalle: `data/references/design-sources/fanvue-mecanica-medida.md` §7 ·
+medición completa: `data/references/design-sources/anatomia/fanvue-com.md`.
+
+### Captura — la escalera de popups (reel puntuado, 2026-08-18)
+
+Un reel puntúa 8 popups de tiendas reales del 0 al 10
+(`hermes-content/references/video-intake/transcripciones/Instagram-DcEITCmoSHX.txt`).
+La escalera, textual: **0** no da nada a cambio y pide demasiados campos · **1** demasiado
+copy · **3** buena oferta mal configurada · **5** simple y con la oferta clara · **6**
+escalera de sí · **7** engagement (rascar para revelar) · **9** formato arriesgado ·
+**10** multi-paso.
+
+**La ley, y es lo único que hay que retener: el paso 1 NO pide datos, pide un CLIC.**
+Ese clic hace dos cosas a la vez — segmenta (dice qué quiere la persona) y es un
+microcompromiso que sube la conversión del paso 2. El dato viene después.
+
+Corolario duro: **si la respuesta del paso 1 no se guarda junto al lead, el multi-paso no
+sirve de nada** — es un popup de email con un clic extra de fricción. Sin ese guardado, un
+10/10 vuelve a ser un 5/10.
+
+Bloque de la casa: `packages/blocks/src/two-step-popup.ts` (`renderTwoStepPopup`).
+Decisiones que van con él y no se revisan cada vez:
+
+- **WhatsApp, no SMS ni correo obligatorio.** En Bolivia el canal del comprador es
+  WhatsApp; el correo queda opcional porque dos campos obligatorios en el paso 2 tiran
+  abajo lo que ganó el paso 1.
+- **Cero confirmshaming.** El descarte dice "Ahora no". El "no gracias, prefiero pagar
+  precio completo" lo castiga el propio reel y no va con la marca.
+- **Nunca al instante ni a pantalla completa en móvil** (Google penaliza intersticiales
+  intrusivos): dispara por scroll/tiempo/salida y en móvil entra como hoja inferior.
+- **`<dialog>` nativo con `showModal()`**: el foco atrapado y el Escape vienen gratis. No
+  se reimplementan a mano.
+- **El descarte se recuerda en `cancel`, no solo en `close`.** El evento `close` se
+  dispara en tarea ENCOLADA: si la persona aprieta Escape y navega en el mismo instante,
+  el descarte se pierde y el popup la vuelve a interrumpir. `cancel` es síncrono.
+- **El bloque trae su propio `box-sizing: border-box`.** Un bloque que publica su hoja de
+  estilos no puede depender de que la página anfitriona traiga reset: sin esto el padding
+  se suma al 100 % y la hoja móvil se sale de pantalla llevándose el botón de cerrar.
+- **La atribución no se duplica**: `src` viaja como campo oculto y el runtime lo pisa con
+  el `?src=` de la URL, alimentando el MISMO circuito de leads que ya corre en producción.
+
+### Secuencia de scroll en canvas (el patrón de Apple) — DECISIÓN: NO se construye
+
+Un tutorial recrea la animación de los AirPods
+(`transcripciones/Instagram-Db8hFCFFTZg.txt`): no hay 3D ni video, son **64 imágenes**
+dibujadas en un `<canvas>`, con el frame atado al scroll por GSAP ScrollTrigger
+(`snap:"frame"`, `ease:"none"`, `scrub:0.5`, `onUpdate:render`). El código es trivial.
+
+**El bloqueante es el peso, y acá está medido sobre contenido nuestro** (una foto de
+`apps/onia-platform/public/fotos/`, reescalada y recomprimida con Pillow — la foto es el
+peor caso: un render sobre fondo plano comprime bastante mejor):
+
+| Por frame | PNG | WebP q75 | AVIF q50 |
+|---|---|---|---|
+| 1600×900 | 1.715 KB | 97 KB | 69 KB |
+| 1280×720 | 1.202 KB | 76 KB | **50 KB** |
+| 960×540 | 746 KB | 51 KB | **33 KB** |
+
+Secuencia de 64 frames: **75 MB** en PNG · 4,8 MB en WebP · 3,2 MB en AVIF a 1280 ·
+**2,1 MB** en AVIF a 960. Bajando a 48 frames (el piso antes de que el paso se vea a
+saltos): **1,6 MB**. Con un render sobre fondo plano, optimista: **~0,5 MB**.
+
+**Veredicto: no entra.** El presupuesto de una landing es 150 KB de JS + 30 KB de CSS;
+la versión más barata que sigue viéndose bien pesa entre **3,5× y 10× ese presupuesto
+entero**, y no convierte nada — es techo visual. Mientras tanto la indexabilidad (C1)
+sigue abierta, cuesta 0 KB y sí trae prospectos.
+
+Se reabre solo si: el producto del cliente **ES** el objeto (una máquina, un vehículo, un
+equipo) y la secuencia reemplaza a un video; y aun ahí va con carga progresiva por tramos
+(los primeros 8 frames eager, el resto en streaming, el canvas dibuja el más cercano
+cargado) y se mide LCP/CLS antes y después. Con `prefers-reduced-motion` es un frame fijo,
+sin scrub.
+
+⚠️ Dos cifras del prompt original no resistieron la verificación: el video dice **64
+imágenes**, no 150 frames; y "69 KB por frame" no es PNG (medido: 1.202 KB a 1280×720) —
+69 KB es más o menos lo que cuesta un **AVIF** a 1600.
+
 ### Dashboard / Analytics / Internal Tool
+
+**DIRECCIÓN ELEGIDA (Sergio, 2026-08-17): "libro mayor editorial" (v4→v5).**
+Los 5 patrones consagrados — todo dashboard nuevo de Onia parte de acá:
+1. **Jerarquía por tipografía, no por superficie**: numeral héroe (Bricolage ~260 de
+   peso óptico) SIN tarjeta, sobre lienzo claro único. (Ledgerix, Callivio — Behance)
+2. **El gráfico ES el control**: full-bleed tipo código de barras que además filtra
+   el rango (Hoy/7/30). Nunca gráfico decorativo + filtro aparte. (Ledgerix)
+3. **Propuestas del agente INLINE junto a su evidencia** (el recordatorio de una
+   factura vive bajo ESA factura) — el acierto de v4 que Sergio ratificó.
+4. **Estado global como píldora oscura flotante** (única superficie oscura de la
+   página): contador de decisiones + acceso al agente. (Ledgerix dock, Recent pill)
+5. **KPIs como celdas de pelo** (hairline, sin caja) y tablas restadas: solo lo que
+   decide una acción; lo secundario vive en su panel. (Convox; pasada sustractiva v5)
+Referencia viva: hermes-content/references/ui-patterns/panel-claro-premium/index-v4.html
+(+v5 sustractiva). Detalle crudo por galería: docs/DESIGN_LEARNED_2026.md §5b.
+
+
 
 Design read: status at a glance, dense but legible, action over decoration.
 Density is a feature here, not a flaw; the win is understanding state in seconds
@@ -338,6 +520,67 @@ License-clear sources (see design intelligence doc): Tremor (Apache-2.0),
 Tabler (MIT), shadcn/ui charts + dashboard-01 (MIT), Hugging Face Spaces
 (per-Space, review required). Extract structure and component taxonomy; never
 copy identity, proprietary data or assets.
+
+#### Composition patterns (reference-mined 2026-08, anti-generic kit)
+
+Mined from three hand-picked references for the Onia panel redesign. Extract
+STRUCTURE only; never copy identity, palette or assets. Each pattern names its
+source shot.
+
+From **Stakent Crypto Dashboard** (Awsmd, dribbble.com/shots/23902428):
+
+- **Chart as card anatomy, not widget.** The KPI card's area/line chart bleeds
+  to the card's bottom edge and sits UNDER the figure; a floating value chip
+  rides the line. The chart is part of the card, not a sibling in a grid.
+- **Numeric weight mixing inside one figure.** In a long number the significant
+  digits are heavy/bright and the tail (decimals, unit) drops weight and
+  contrast. One glance gives magnitude; precision stays available.
+- **One poster card among quiet cards.** A single card with a gradient accent
+  surface (their Liquid Staking promo) breaks an otherwise neutral rhythm.
+  Never more than one per view.
+- **Nav rows that carry data.** The active sidebar section expands into rows
+  with live amounts and a count badge; navigation doubles as a summary.
+- **Compact filter pills row** (time range, category, sort) right-aligned at
+  the section title, each a self-contained pill with caret.
+
+From **Healthcare Dashboard** (OnPoint Studio, dribbble.com/shots/25540988):
+
+- **Card-in-card metric tiles.** A parent panel holds nested mini-cards, each
+  with label + "detail" chip header, a goal/context chip, a big figure with a
+  small unit, and a micro-chart (bars/waveform) INLINE next to the figure.
+- **Selection = solid inversion.** In icon+title+description list rows, the
+  active row becomes a full accent-color pill with white text; inactive rows
+  stay white with icon-in-tinted-circle. State reads instantly.
+- **Depth by overlap.** A floating spec card overlaps the dominant visual
+  (their 3D organ); layers give the page a foreground and a background instead
+  of a flat card grid.
+- **Greeting as page title** with a count subline ("You have 3 appointments
+  today") and a right-aligned cluster of pill controls (date, range, mode).
+- **One dark anchor card** on a light canvas (their "Issue Found" alert) to
+  hold the composition's corner and flag what needs attention.
+
+From **Task Management Dashboard** (Fireart Studio,
+dribbble.com/shots/25241984):
+
+- **Hero KPI cell.** In a 4-cell KPI row, the FIRST cell is a solid dark
+  accent card (big figure, glow, delta badge); siblings stay white. Hierarchy
+  comes from surface, not from font size alone.
+- **Texture encodes state in charts.** Weekly bars: solid fills in two brand
+  shades for actual data, diagonal-hatch outline bars for future/pending
+  periods; a value tag chip marks the highlighted bar. Same trick in their
+  semi-donut gauge (hatched segment = pending). Charts get character AND a
+  semantic layer with zero extra ink.
+- **Dark utility tiles at the corners.** Small dark-surface cards (time
+  tracker, promo) with a subtle texture background frame the light canvas.
+- **People/progress rows with right-aligned status chips** (tinted Completed /
+  In Progress / Pending) and "working on X" metadata; scannable attribution.
+- **Circled-arrow affordance** top-right of every KPI card as the uniform
+  "go deeper" control.
+
+Web Factory carriers for these patterns (`packages/templates/src/dashboard.ts`):
+`DashboardKpi.variant: "accent"` (hero KPI cell), `DashboardKpi.spark`
+(chart-in-card), `DashboardPoint.pending` (hatched bars),
+`DashboardData.lists` / `DashboardProgressList` (rows with status chips).
 
 ### Legal / Finance / Consulting
 

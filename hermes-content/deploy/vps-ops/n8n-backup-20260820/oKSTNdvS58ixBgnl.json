@@ -1,0 +1,226 @@
+{
+  "updatedAt": "2026-07-09T21:14:53.623Z",
+  "createdAt": "2026-07-09T21:14:34.901Z",
+  "id": "oKSTNdvS58ixBgnl",
+  "name": "ONIA - Agente Finanzas y Fondo ONIA",
+  "description": "Cron Lun-Sab 07:15 La Paz: SSH docker exec onia-center finance-fund-agent.mjs. Agrega caja, ingresos del periodo, comisiones por estado y Fondo ONIA en onia_center.finance_summary (upsert diario) + agent_finance_fund 'ready'. Determinista, READ-ONLY. Avis",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "aa1e8686-b6f0-46ea-a83f-f0bf0262d204",
+      "name": "Lun-Sab 07:15",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "15 7 * * 1-6"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "36d03fd4-4ab6-4cf1-b506-4774d46d29e5",
+      "name": "Correr Agente Finanzas (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/finance-fund-agent-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "0b53e3e0-6625-415d-beab-702deebc606a",
+      "name": "Preparar aviso",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const raw = ($input.first().json.stdout || '').trim();\nlet s;\ntry { s = JSON.parse(raw.split('\\n').pop()); } catch (e) { s = { ok: false, fatal: 'parse', raw: raw.slice(0, 200) }; }\nconst notify = (!s.ok) || (s.notify === true);\nlet text;\nif (!s.ok) {\n  text = 'Agente Finanzas ONIA - ERROR: ' + (s.fatal || 'desconocido');\n} else {\n  const anomalies = Array.isArray(s.anomalies) ? s.anomalies : [];\n  text = (s.text || ('Agente Finanzas ONIA: resumen ' + (s.summary_key || '') + ' generado.')).slice(0, 3900);\n  if (anomalies.length) text = 'ANOMALIAS FINANZAS (' + anomalies.length + ') - accion requerida\\n\\n' + text;\n}\nreturn [{ json: { notify: notify, text: text } }];"
+      }
+    },
+    {
+      "id": "8d85a103-aeda-4e90-985c-9cecd898b004",
+      "name": "Hay anomalias que avisar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "cond-notify",
+              "leftValue": "={{ $json.notify }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "67965bc2-4d9b-42e7-8065-45eb62809893",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "533c99a2-d46e-4551-99d9-aa64a50e3077"
+    }
+  ],
+  "connections": {
+    "Lun-Sab 07:15": {
+      "main": [
+        [
+          {
+            "node": "Correr Agente Finanzas (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correr Agente Finanzas (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Preparar aviso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar aviso": {
+      "main": [
+        [
+          {
+            "node": "Hay anomalias que avisar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay anomalias que avisar?": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Lun-Sab 07:15": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "04a22531-fd20-41c9-8d1e-72685f61ecbf",
+  "activeVersionId": "04a22531-fd20-41c9-8d1e-72685f61ecbf",
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-09T21:14:34.905Z",
+      "createdAt": "2026-07-09T21:14:34.905Z",
+      "role": "workflow:owner",
+      "workflowId": "oKSTNdvS58ixBgnl",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

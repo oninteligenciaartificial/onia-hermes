@@ -1,0 +1,106 @@
+{
+  "updatedAt": "2026-06-02T17:47:23.000Z",
+  "createdAt": "2026-06-02T17:42:23.561Z",
+  "id": "Qa8DRaOMKb6D8E5h",
+  "name": "Hermes Drive Download Test IMG 0198",
+  "description": "Prueba manual segura para confirmar si MCP devuelve binarios descargados desde Google Drive.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "3db673be-ea96-479c-8aee-07f8eb40fe44",
+      "name": "Manual Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        200,
+        300
+      ]
+    },
+    {
+      "id": "a4e895c5-7db0-4afe-8ac5-60a131ba47e3",
+      "name": "Download IMG 0198 HEIC",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "resource": "file",
+        "operation": "download",
+        "authentication": "oAuth2",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1piYbtanSmw-Crd54nYQN9u6a253e4vua",
+          "cachedResultName": "IMG_0198.HEIC"
+        },
+        "options": {
+          "binaryPropertyName": "data",
+          "fileName": "IMG_0198.HEIC"
+        }
+      },
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qteuJV55AO0YnxB6",
+          "name": "Google Drive account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Test": {
+      "main": [
+        [
+          {
+            "node": "Download IMG 0198 HEIC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "697a8f10-409a-4261-b32f-56995ff4addb",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-02T17:42:23.566Z",
+      "createdAt": "2026-06-02T17:42:23.566Z",
+      "role": "workflow:owner",
+      "workflowId": "Qa8DRaOMKb6D8E5h",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

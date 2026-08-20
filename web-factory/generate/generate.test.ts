@@ -73,6 +73,67 @@ describe("generateSite", () => {
     expect((html.match(/wf-button-primary/g) ?? []).length).toBe(2);
   });
 
+  it("renders trust, process and faq on landing when the client has that data", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "full.json"),
+      JSON.stringify({
+        nombre: "Full Co",
+        slug: "full",
+        tagline: "Todo el recorrido",
+        descripcion: "Landing completa.",
+        beneficios: ["Respuesta en el dia"],
+        credenciales: ["Matricula profesional"],
+        proceso: [{ titulo: "Escribinos", desc: "Contanos que necesitas." }],
+        faq: [{ pregunta: "Cuanto tarda?", respuesta: "Entre 5 y 10 dias." }],
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("full", { rootDir });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+    const css = await readFile(path.join(result.outputDir, "site.css"), "utf8");
+
+    expect(html).toContain("wf-trust");
+    expect(html).toContain("Matricula profesional");
+    expect(html).toContain("wf-process");
+    expect(html).toContain("Escribinos");
+    expect(html).toContain("wf-faq");
+    expect(html).toContain("Cuanto tarda?");
+    // The strip and the hero panel must not print the same list twice.
+    expect((html.match(/Matricula profesional/g) ?? []).length).toBe(1);
+    expect((html.match(/Respuesta en el dia/g) ?? []).length).toBe(1);
+    // Every new section is styled; no browser-default bullets.
+    expect(css).toContain(".wf-trust-item");
+    expect(css).toContain(".wf-process-step");
+    expect(css).toContain(".wf-faq-item");
+  });
+
+  it("keeps landing unchanged for clients without trust, process or faq data", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "plain.json"),
+      JSON.stringify({
+        nombre: "Plain Co",
+        slug: "plain",
+        tagline: "Sin extras",
+        descripcion: "Landing basica.",
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("plain", { rootDir });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+
+    expect(html).not.toContain("wf-trust");
+    expect(html).not.toContain("wf-process");
+    expect(html).not.toContain("wf-faq");
+  });
+
   it("rejects unsafe slugs", () => {
     expect(() => parseSlug("../demo")).toThrow();
     expect(() => parseSlug("Demo")).toThrow();

@@ -1,0 +1,105 @@
+/* Requisitos en el punto de compra — visibles, no plegados. */
+
+.wrap {
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(1.3rem, 2.6vw, 2.2rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.titulo {
+  margin: 0;
+  font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.8rem);
+  line-height: 1.15;
+}
+
+.entrada {
+  margin: 0.6rem 0 0;
+  color: var(--ink-soft);
+  font-size: max(0.95rem, var(--fs-micro-min));
+  max-width: 58ch;
+  line-height: 1.55;
+}
+
+.bloques {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.6rem 2.2rem;
+  margin-top: 1.8rem;
+}
+
+.bloque {
+  border-top: 2px solid var(--line-soft);
+  padding-top: 0.9rem;
+}
+
+.bloqueTitulo {
+  margin: 0;
+  font-size: max(0.95rem, var(--fs-micro-min));
+  font-weight: 700;
+}
+
+.bloqueIntro {
+  margin: 0.45rem 0 0;
+  color: var(--ink-soft);
+  font-size: max(0.88rem, var(--fs-micro-min));
+  line-height: 1.5;
+}
+
+.items {
+  margin: 0.7rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.55rem;
+  color: var(--ink-soft);
+  font-size: max(0.88rem, var(--fs-micro-min));
+  line-height: 1.5;
+}
+
+.gate {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin-top: 2rem;
+  padding: 1rem 1.1rem;
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+}
+
+.check {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  margin-top: 0.1rem;
+  accent-color: var(--accent);
+}
+
+.checkLabel {
+  font-size: max(0.92rem, var(--fs-micro-min));
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.cta {
+  margin-top: 1.2rem;
+  background: var(--senal);
+  color: var(--tinta);
+}
+
+.cta[aria-disabled="true"] {
+  background: var(--surface-dim);
+  color: var(--ink-faint);
+  border-color: var(--line);
+  cursor: not-allowed;
+}
+
+.hint {
+  margin: 0.7rem 0 0;
+  color: var(--ink-faint);
+  font-size: max(0.85rem, var(--fs-micro-min));
+  line-height: 1.45;
+  max-width: 52ch;
+}

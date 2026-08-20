@@ -1,0 +1,249 @@
+{
+  "updatedAt": "2026-07-22T15:43:04.227Z",
+  "createdAt": "2026-07-22T15:38:22.020Z",
+  "id": "nkPMoUYQ9DMIL9gM",
+  "name": "ONIA - Agente Prospector (CRM)",
+  "description": "Cron Lun+Jue 07:40: rota rubro+ciudad y corre el Agente Prospector por SSH (docker exec onia-center prospector-agent.mjs). Descubre negocios reales de Bolivia desde OpenStreetMap (Overpass, cero costo, ODbL), prioriza los SIN web, enriquece con LiteLLM (s",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "57657bc3-7fe7-4a40-b713-4ce1f34ec14f",
+      "name": "Lun+Jue 07:40",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "40 7 * * 1,4"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "dc3acacf-9894-4d8e-af36-aed2225e3a66",
+      "name": "Elegir rubro y ciudad",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const combos=[{city:'santa_cruz',category:'dental'},{city:'santa_cruz',category:'estetica'},{city:'santa_cruz',category:'gastronomia'},{city:'la_paz',category:'dental'},{city:'cochabamba',category:'dental'},{city:'santa_cruz',category:'veterinaria'},{city:'la_paz',category:'estetica'},{city:'santa_cruz',category:'comercio'}]; const day=Math.floor(Date.now()/86400000); const c=combos[day%combos.length]; return [{ json: { city: c.city, category: c.category, limit: 8 } }];"
+      }
+    },
+    {
+      "id": "560d026e-9243-473d-9cd7-370874a28a85",
+      "name": "Correr Prospector (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "=PROSPECTOR_CITY={{ $json.city }} PROSPECTOR_CATEGORY={{ $json.category }} PROSPECTOR_LIMIT={{ $json.limit }} PROSPECTOR_ONLY_NO_WEB=true bash /opt/onia/prospector-agent-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "0f6d23eb-676c-4c5f-947f-805e356d1d0d",
+      "name": "Preparar aviso",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const NL=String.fromCharCode(10); const raw=($input.first().json.stdout||'').trim(); let s; try{ s=JSON.parse(raw.split(NL).pop()); }catch(e){ s={ok:false,fatal:'parse'}; } const prospects=Array.isArray(s.prospects)?s.prospects:[]; const notify=(!s.ok)||(s.inserted||0)>0; let text; if(!s.ok){ text='Prospector ONIA - ERROR: '+(s.fatal||'desconocido'); } else { const lines=['Prospector ONIA: '+(s.inserted||0)+' prospecto(s) nuevos en el CRM ('+(s.category||'')+' / '+String(s.city||'').replace(/_/g,' ')+'), de '+(s.found||0)+' encontrados.']; for(const p of prospects.slice(0,10)){ lines.push(''); lines.push('- '+p.company+' ['+(p.priority||'media')+']'+(p.has_web?'':' (sin web)')); if(p.suggested_service){ lines.push('  Servicio: '+String(p.suggested_service).split('_').join(' ')); } if(p.contact){ lines.push('  Contacto: '+p.contact); } lines.push('  '+String(p.why||'').slice(0,180)); } lines.push(''); lines.push('Revisa y aproba en ONIA Center. Nada se contacto.'); text=lines.join(NL).split('_').join(' ').slice(0,3900); } return [{ json:{ notify:notify, text:text } }];"
+      }
+    },
+    {
+      "id": "29e60b0a-6dab-4f8e-90c8-3468d04e03b0",
+      "name": "Hay algo que avisar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "cond-notify",
+              "leftValue": "={{ $json.notify }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "47d313ab-4a6e-48e8-967c-9925c006816f",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "cf908c42-19dc-41dc-bb92-481cccc2bddf"
+    }
+  ],
+  "connections": {
+    "Lun+Jue 07:40": {
+      "main": [
+        [
+          {
+            "node": "Elegir rubro y ciudad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Elegir rubro y ciudad": {
+      "main": [
+        [
+          {
+            "node": "Correr Prospector (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correr Prospector (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Preparar aviso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar aviso": {
+      "main": [
+        [
+          {
+            "node": "Hay algo que avisar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay algo que avisar?": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Lun+Jue 07:40": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "c1a5a09f-0ca2-44d7-bd1a-cf1e5fd3bdd4",
+  "activeVersionId": "c1a5a09f-0ca2-44d7-bd1a-cf1e5fd3bdd4",
+  "versionCounter": 3,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T15:38:22.025Z",
+      "createdAt": "2026-07-22T15:38:22.025Z",
+      "role": "workflow:owner",
+      "workflowId": "nkPMoUYQ9DMIL9gM",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Fix Telegram: sin cursiva por guiones bajos",
+    "description": "Updated nodes: Preparar aviso"
+  }
+}

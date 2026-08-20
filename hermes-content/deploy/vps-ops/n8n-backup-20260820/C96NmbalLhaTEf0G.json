@@ -1,0 +1,226 @@
+{
+  "updatedAt": "2026-07-22T16:42:38.571Z",
+  "createdAt": "2026-07-05T23:28:27.141Z",
+  "id": "C96NmbalLhaTEf0G",
+  "name": "ONIA - Agente Vendedor (borradores)",
+  "description": "Cron Lun-Sab 08:30: corre el Agente Vendedor por SSH (docker exec onia-center). Lee leads del CRM, califica+redacta con LiteLLM, y deja SOLO borradores (tarea + review_queue pending/sensitive/reviewer=sergio). Avisa a Sergio por Telegram. NO envia nada si",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "dc247522-2855-4fc8-987c-ba20cb488f20",
+      "name": "Lun-Sab 08:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 8 * * 1-6"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "04201d85-461a-489f-b2ca-4e88e400c541",
+      "name": "Correr Agente Vendedor (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/sales-agent-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "b7eda1b6-bfed-4ddd-89e2-63e38296e33d",
+      "name": "Preparar aviso",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const raw = ($input.first().json.stdout || '').trim();\nlet s;\ntry { s = JSON.parse(raw.split('\\n').pop()); } catch (e) { s = { ok: false, fatal: 'parse', raw: raw.slice(0, 200) }; }\nconst drafts = Array.isArray(s.drafts) ? s.drafts : [];\nconst errs = Array.isArray(s.errors) ? s.errors : [];\nconst notify = (!s.ok) || drafts.length > 0 || errs.length > 0;\nlet text;\nif (!s.ok) {\n  text = 'Agente Vendedor ONIA - ERROR: ' + (s.fatal || 'desconocido');\n} else {\n  const lines = ['Agente Vendedor ONIA: ' + drafts.length + ' borrador(es) para aprobar (' + (s.reviewsCreated || 0) + ' en cola, ' + (s.tasksCreated || 0) + ' tareas).'];\n  for (const d of drafts.slice(0, 8)) {\n    lines.push('');\n    lines.push('- ' + d.company + ' [' + d.qualification + '/' + d.priority + ']' + (d.has_proposal ? ' +propuesta' : ''));\n    lines.push('  Accion: ' + d.next_action);\n    lines.push('  Borrador: ' + (d.followup_preview || '').slice(0, 220));\n  }\n  if (errs.length) { lines.push(''); lines.push('Errores: ' + errs.length); }\n  lines.push('');\n  lines.push('Revisa y aproba en ONIA Center. Nada se envio.');\n  text = lines.join('\\n').slice(0, 3900);\n}\nreturn [{ json: { notify: notify, text: text } }];"
+      }
+    },
+    {
+      "id": "7ecc28b3-6d1d-426e-824e-15f9022ccfc8",
+      "name": "Hay algo que avisar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "cond-notify",
+              "leftValue": "={{ $json.notify }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4d6f2f2b-38b3-4ac1-a716-35350dfe75bf",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "fbe43b44-864d-492a-b14f-042e59d58ae2",
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Lun-Sab 08:30": {
+      "main": [
+        [
+          {
+            "node": "Correr Agente Vendedor (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correr Agente Vendedor (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Preparar aviso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar aviso": {
+      "main": [
+        [
+          {
+            "node": "Hay algo que avisar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay algo que avisar?": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Lun-Sab 08:30": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "bddc4c39-89ca-4c40-88ef-75b88273469e",
+  "activeVersionId": "bddc4c39-89ca-4c40-88ef-75b88273469e",
+  "versionCounter": 4,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-05T23:28:27.144Z",
+      "createdAt": "2026-07-05T23:28:27.144Z",
+      "role": "workflow:owner",
+      "workflowId": "C96NmbalLhaTEf0G",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Silenciar Telegram (panel-only)",
+    "description": "Updated workflow"
+  }
+}

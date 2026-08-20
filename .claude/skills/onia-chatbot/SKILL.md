@@ -54,12 +54,28 @@ prometer precios. `benchmark-models` — antes de cambiar de modelo, medir, no o
 `agentic-engineering` — si se agrega una herramienta que el bot pueda ejecutar.
 
 ### Panel del chatbot en la plataforma (la pantalla que edita el conocimiento)
-`impeccable` (cargar el register **product**) · `ui-ux-pro-max` · `frontend-patterns` ·
-`react-components` · `shadcn-ui` · `ui-styling` · `nextjs-turbopack` · `design-review`.
+
+> ⚠️ **El repo `onia-platform` tiene SUS PROPIAS skills y mandan sobre las genéricas.**
+> Viven en `onia-platform/.claude/skills/` y hay que cargarlas ANTES de tocar ese repo:
+> `onia-frontend` (dirección visual, vocabulario por rubro, nombres de plan) ·
+> `onia-backend` (API routes, server actions, multi-tenant, planes, Zod) ·
+> `onia-db` (schema, migraciones quirúrgicas, RLS) ·
+> `onia-seguridad` (auth, claves, env vars, webhooks) ·
+> `onia-deploy` (build en el VPS, gates del bundle) ·
+> `onia-verificacion` (qué cuenta como prueba antes de declarar terminado).
+
+Recién DESPUÉS, y solo si hace falta criterio de diseño que esas no cubran:
+`impeccable` (register **product**) · `ui-ux-pro-max` · `shadcn-ui` · `design-review` ·
+`frontend-patterns` · `react-components` · `ui-styling` · `nextjs-turbopack`.
 Regla del repo: nada que parezca template por defecto — ver `web-factory-disenos-genericos`.
 
+**Antes de crear una pantalla nueva, mirar si ya tiene casa.** Verificado 2026-08-16:
+`app/(dashboard)/communications/page.tsx` (230 líneas) es **diagnóstico de envíos**, no un
+editor; `app/(dashboard)/admin/organizations/[id]/WhatsAppOrgConfig.tsx` (263 líneas) ya
+configura WhatsApp por organización. El editor de conocimiento NO existe todavía.
+
 ### API que consuma la plataforma
-`api-design` · `backend-patterns`.
+`api-design` · `backend-patterns` — y `onia-backend` del propio repo, que manda.
 
 ### Infra, despliegue, crons
 `deployment-patterns` · `docker-patterns`.

@@ -1,0 +1,2451 @@
+{
+  "url": "https://www.fresha.com",
+  "slug": "fresha-com",
+  "medidoEl": "2026-08-20T22:00:00.199Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 5773,
+        "alturaPantallas": 6.8,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 8
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 5773,
+          "altoPantallas": 6.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Book local selfcare services",
+          "cta": "Fresha",
+          "imagenes": 474
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "bg-c_background.page",
+          "altoPx": 5773,
+          "altoPantallas": 6.8,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Book local selfcare services",
+          "cta": "Fresha",
+          "imagenes": 474
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_visible cq-t_inline-size",
+          "altoPx": 1828,
+          "altoPantallas": 2.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Book local selfcare services",
+          "cta": "Search Fresha",
+          "imagenes": 165
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size",
+          "altoPx": 765,
+          "altoPantallas": 0.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Download the Fresha app",
+          "cta": "Get the app",
+          "imagenes": 4
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size",
+          "altoPx": 458,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Reviews",
+          "cta": "Previous",
+          "imagenes": 172
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "pos_static ov_hidden cq-t_inline-size",
+          "altoPx": 584,
+          "altoPantallas": 0.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The top-rated destination for selfcare",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size bd-be-w_[1px] border-block-end",
+          "altoPx": 707,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Fresha for business",
+          "cta": "Find out more",
+          "imagenes": 9
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size",
+          "altoPx": 474,
+          "altoPantallas": 0.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Browse by City",
+          "cta": "Previous",
+          "imagenes": 112
+        }
+      ],
+      "encabezados": {
+        "total": 171,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Book local selfcare services"
+          },
+          {
+            "nivel": 2,
+            "texto": "Recommended"
+          },
+          {
+            "nivel": 2,
+            "texto": "New to Fresha"
+          },
+          {
+            "nivel": 2,
+            "texto": "Trending"
+          },
+          {
+            "nivel": 2,
+            "texto": "Download the Fresha app"
+          },
+          {
+            "nivel": 2,
+            "texto": "Reviews"
+          },
+          {
+            "nivel": 3,
+            "texto": "The best booking system"
+          },
+          {
+            "nivel": 3,
+            "texto": "Easy to use & explore"
+          },
+          {
+            "nivel": 3,
+            "texto": "Great for finding barbers"
+          },
+          {
+            "nivel": 3,
+            "texto": "My go-to for self-care"
+          },
+          {
+            "nivel": 3,
+            "texto": "Great way to discover new salons"
+          },
+          {
+            "nivel": 3,
+            "texto": "Sleek app"
+          },
+          {
+            "nivel": 3,
+            "texto": "All my clients love it"
+          },
+          {
+            "nivel": 3,
+            "texto": "So many great booking features"
+          },
+          {
+            "nivel": 3,
+            "texto": "I can book anytime I want"
+          },
+          {
+            "nivel": 3,
+            "texto": "Found my go-to masseuse"
+          },
+          {
+            "nivel": 3,
+            "texto": "Such a time-saver"
+          },
+          {
+            "nivel": 3,
+            "texto": "Great for finding nail salons near you"
+          },
+          {
+            "nivel": 3,
+            "texto": "Ten times better than other apps"
+          },
+          {
+            "nivel": 3,
+            "texto": "Best app for salons & spas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Hassle-free hair appointment bookings"
+          },
+          {
+            "nivel": 3,
+            "texto": "#1 app for salon online bookings"
+          },
+          {
+            "nivel": 3,
+            "texto": "Best for pedicure appointments"
+          },
+          {
+            "nivel": 3,
+            "texto": "Easy to find local beauty treatments"
+          },
+          {
+            "nivel": 3,
+            "texto": "New salons, new services"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 473
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 600",
+            "veces": 127
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 600",
+            "veces": 126
+          },
+          {
+            "valor": "13px / lh 1.23 / ls normal / w 600",
+            "veces": 80
+          },
+          {
+            "valor": "16px / lh 1.15 / ls normal / w 400",
+            "veces": 79
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 500",
+            "veces": 61
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 400",
+            "veces": 32
+          },
+          {
+            "valor": "19px / lh 1.26 / ls normal / w 600",
+            "veces": 28
+          },
+          {
+            "valor": "22px / lh 1.27 / ls normal / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "40px / lh 1.10 / ls normal / w 700",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "28px / lh 1.29 / ls normal / w 600",
+            "veces": 1
+          },
+          {
+            "valor": "40px / lh normal / ls normal / w 700",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "RoobertPRO",
+            "veces": 1022
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(13, 13, 13)",
+            "veces": 888
+          },
+          {
+            "valor": "rgb(118, 118, 118)",
+            "veces": 124
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 4
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(242, 242, 242)",
+            "veces": 51
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0.33)",
+            "veces": 48
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.7)",
+            "veces": 32
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 31
+          },
+          {
+            "valor": "rgb(13, 13, 13)",
+            "veces": 8
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0.25)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "2px",
+            "veces": 224
+          },
+          {
+            "valor": "8px",
+            "veces": 139
+          },
+          {
+            "valor": "-1px",
+            "veces": 104
+          },
+          {
+            "valor": "12px",
+            "veces": 80
+          },
+          {
+            "valor": "32px",
+            "veces": 57
+          },
+          {
+            "valor": "4px",
+            "veces": 37
+          },
+          {
+            "valor": "16px",
+            "veces": 33
+          },
+          {
+            "valor": "19px",
+            "veces": 31
+          },
+          {
+            "valor": "0px 12px",
+            "veces": 28
+          },
+          {
+            "valor": "20px",
+            "veces": 25
+          },
+          {
+            "valor": "24px",
+            "veces": 11
+          },
+          {
+            "valor": "normal 0px",
+            "veces": 10
+          },
+          {
+            "valor": "1px",
+            "veces": 5
+          },
+          {
+            "valor": "6px",
+            "veces": 3
+          },
+          {
+            "valor": "14px",
+            "veces": 3
+          },
+          {
+            "valor": "-24px",
+            "veces": 3
+          }
+        ],
+        "radios": [
+          {
+            "valor": "999px",
+            "veces": 122
+          },
+          {
+            "valor": "16px",
+            "veces": 77
+          },
+          {
+            "valor": "100%",
+            "veces": 56
+          },
+          {
+            "valor": "50%",
+            "veces": 48
+          },
+          {
+            "valor": "12px",
+            "veces": 4
+          },
+          {
+            "valor": "20px",
+            "veces": 1
+          },
+          {
+            "valor": "24px",
+            "veces": 1
+          },
+          {
+            "valor": "4px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 8,
+        "sombras": [
+          {
+            "valor": "rgba(19, 19, 19, 0.12) 0px 1px 6px 0px, rgba(19, 19, 19, 0.0",
+            "veces": 32
+          },
+          {
+            "valor": "rgb(229, 229, 229) 0px 0px 0px 1px inset",
+            "veces": 27
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(156, 156, 156, 0.08) 0px 0px 0px 6px inset",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0.08) 0px 2px 8px 0px, rgba(19, 19, 19, 0.1",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 5,
+        "zIndex": [
+          {
+            "valor": "2",
+            "veces": 28
+          },
+          {
+            "valor": "1",
+            "veces": 15
+          },
+          {
+            "valor": "-1",
+            "veces": 2
+          },
+          {
+            "valor": "100",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "transform 0.3s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 48
+          },
+          {
+            "valor": "background-color 0.1s cubic-bezier(0, 0.55, 0.45, 1), border-color 0.1",
+            "veces": 31
+          },
+          {
+            "valor": "opacity 0.1s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 27
+          },
+          {
+            "valor": "max-inline-size 0.2s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.05s linear",
+            "veces": 4
+          },
+          {
+            "valor": "block-size 0.2s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.85, 0, 0.15, 1) 0.2s",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 8,
+        "hojasLeidas": 10,
+        "unidades": {
+          "em": 21,
+          "rem": 11,
+          "px": 2640,
+          "clamp": 0,
+          "vw": 18
+        },
+        "keyframesDeclarados": 55,
+        "transitionAll": 12,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 206
+          },
+          {
+            "px": 1024,
+            "veces": 175
+          },
+          {
+            "px": 1440,
+            "veces": 37
+          },
+          {
+            "px": 512,
+            "veces": 21
+          },
+          {
+            "px": 1280,
+            "veces": 6
+          },
+          {
+            "px": 1920,
+            "veces": 6
+          },
+          {
+            "px": 767,
+            "veces": 3
+          },
+          {
+            "px": 2,
+            "veces": 1
+          },
+          {
+            "px": 22,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "Navigation-module-scss-module__zsnzra__self Navigation-modul",
+            "posicion": "sticky",
+            "alto": 72,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": false
+              }
+            ],
+            "boton": "Search Fresha"
+          }
+        ],
+        "dialogos": 2,
+        "ctasDistintos": 1034,
+        "ctasTop": [
+          {
+            "texto": "Previous",
+            "veces": 32
+          },
+          {
+            "texto": "Next",
+            "veces": 32
+          },
+          {
+            "texto": "Get the app",
+            "veces": 3
+          },
+          {
+            "texto": "Fresha",
+            "veces": 2
+          },
+          {
+            "texto": "Beauty Salons in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Nail Salons in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Hair Salons in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Barbers in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Eyebrows & Lashes in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Waxing Salons in Malta",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 80,
+        "sinAlt": 0,
+        "altVacio": 2,
+        "sinDimensiones": 80,
+        "lazy": 80,
+        "conSrcset": 48,
+        "interactivos": 512,
+        "objetivosMenores44px": 94,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 0,
+          "nav": 1,
+          "main": 1,
+          "footer": 2
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(13, 13, 13)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 17.36
+          },
+          {
+            "texto": "rgb(13, 13, 13)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.44
+          },
+          {
+            "texto": "rgb(13, 13, 13)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 4.06
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4.54
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 4.28
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 1.12
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 19.44
+          }
+        ],
+        "fondosTranslucidosOmitidos": 3
+      },
+      "rendimiento": {
+        "pesoTotalKb": 7794.3,
+        "porTipoKb": {
+          "document": 1144.7,
+          "stylesheet": 793,
+          "font": 292.9,
+          "script": 4615.4,
+          "media": 260.3,
+          "image": 374.9,
+          "fetch": 0.6,
+          "other": 312.4,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 2,
+          "stylesheet": 10,
+          "font": 6,
+          "script": 87,
+          "media": 1,
+          "image": 37,
+          "fetch": 19,
+          "other": 1,
+          "ping": 6
+        },
+        "hostsDistintos": 14,
+        "terceros": [
+          {
+            "host": "images.fresha.com",
+            "pedidos": 24
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 8
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 7
+          },
+          {
+            "host": "www.gstatic.com",
+            "pedidos": 5
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 3
+          },
+          {
+            "host": "b2c-web-ff.fresha.com",
+            "pedidos": 2
+          },
+          {
+            "host": "www.google.com.bo",
+            "pedidos": 2
+          },
+          {
+            "host": "ad.doubleclick.net",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "AktivGroteskVF 100 900 normal",
+          "Changa 200 800 normal",
+          "PlayfairDisplay 400 900 normal",
+          "RoobertPRO 700 normal",
+          "RoobertPRO 500 normal",
+          "RoobertPRO 400 normal",
+          "RoobertPRO 600 normal",
+          "Tartuffo 700 normal",
+          "Tartuffo 500 normal",
+          "Tartuffo 400 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Fresha - Instantly book salons and spas nearby",
+        "descripcion": "Find the best salons and spa in your area with Fresha salon booking software. Book now!",
+        "canonical": "https://www.fresha.com/",
+        "og": 4,
+        "datosEstructurados": 1
+      },
+      "tecnologia": {
+        "next": true,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 4999,
+        "alturaPantallas": 4.9,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 8
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 4999,
+          "altoPantallas": 4.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Book local selfcare services",
+          "cta": "Fresha",
+          "imagenes": 474
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "bg-c_background.page",
+          "altoPx": 4999,
+          "altoPantallas": 4.9,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Book local selfcare services",
+          "cta": "Fresha",
+          "imagenes": 474
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_visible cq-t_inline-size",
+          "altoPx": 1762,
+          "altoPantallas": 1.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Book local selfcare services",
+          "cta": "Search Fresha",
+          "imagenes": 165
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size",
+          "altoPx": 628,
+          "altoPantallas": 0.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Download the Fresha app",
+          "cta": "Get the app",
+          "imagenes": 4
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size",
+          "altoPx": 506,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Reviews",
+          "cta": "Previous",
+          "imagenes": 172
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "pos_static ov_hidden cq-t_inline-size",
+          "altoPx": 526,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The top-rated destination for selfcare",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size bd-be-w_[1px] border-block-end",
+          "altoPx": 459,
+          "altoPantallas": 0.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Fresha for business",
+          "cta": "Find out more",
+          "imagenes": 9
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size",
+          "altoPx": 530,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Browse by City",
+          "cta": "Previous",
+          "imagenes": 112
+        }
+      ],
+      "encabezados": {
+        "total": 171,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Book local selfcare services"
+          },
+          {
+            "nivel": 2,
+            "texto": "Recommended"
+          },
+          {
+            "nivel": 2,
+            "texto": "New to Fresha"
+          },
+          {
+            "nivel": 2,
+            "texto": "Trending"
+          },
+          {
+            "nivel": 2,
+            "texto": "Download the Fresha app"
+          },
+          {
+            "nivel": 2,
+            "texto": "Reviews"
+          },
+          {
+            "nivel": 3,
+            "texto": "The best booking system"
+          },
+          {
+            "nivel": 3,
+            "texto": "Easy to use & explore"
+          },
+          {
+            "nivel": 3,
+            "texto": "Great for finding barbers"
+          },
+          {
+            "nivel": 3,
+            "texto": "My go-to for self-care"
+          },
+          {
+            "nivel": 3,
+            "texto": "Great way to discover new salons"
+          },
+          {
+            "nivel": 3,
+            "texto": "Sleek app"
+          },
+          {
+            "nivel": 3,
+            "texto": "All my clients love it"
+          },
+          {
+            "nivel": 3,
+            "texto": "So many great booking features"
+          },
+          {
+            "nivel": 3,
+            "texto": "I can book anytime I want"
+          },
+          {
+            "nivel": 3,
+            "texto": "Found my go-to masseuse"
+          },
+          {
+            "nivel": 3,
+            "texto": "Such a time-saver"
+          },
+          {
+            "nivel": 3,
+            "texto": "Great for finding nail salons near you"
+          },
+          {
+            "nivel": 3,
+            "texto": "Ten times better than other apps"
+          },
+          {
+            "nivel": 3,
+            "texto": "Best app for salons & spas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Hassle-free hair appointment bookings"
+          },
+          {
+            "nivel": 3,
+            "texto": "#1 app for salon online bookings"
+          },
+          {
+            "nivel": 3,
+            "texto": "Best for pedicure appointments"
+          },
+          {
+            "nivel": 3,
+            "texto": "Easy to find local beauty treatments"
+          },
+          {
+            "nivel": 3,
+            "texto": "New salons, new services"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 471
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 600",
+            "veces": 128
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 600",
+            "veces": 127
+          },
+          {
+            "valor": "13px / lh 1.23 / ls normal / w 600",
+            "veces": 80
+          },
+          {
+            "valor": "16px / lh 1.15 / ls normal / w 400",
+            "veces": 79
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 500",
+            "veces": 61
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 400",
+            "veces": 32
+          },
+          {
+            "valor": "19px / lh 1.26 / ls normal / w 600",
+            "veces": 28
+          },
+          {
+            "valor": "22px / lh 1.27 / ls normal / w 600",
+            "veces": 5
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "40px / lh 1.10 / ls normal / w 700",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "28px / lh 1.29 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "40px / lh normal / ls normal / w 700",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "RoobertPRO",
+            "veces": 1022
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(13, 13, 13)",
+            "veces": 888
+          },
+          {
+            "valor": "rgb(118, 118, 118)",
+            "veces": 124
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 4
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(242, 242, 242)",
+            "veces": 49
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0.33)",
+            "veces": 48
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 32
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.7)",
+            "veces": 32
+          },
+          {
+            "valor": "rgb(13, 13, 13)",
+            "veces": 8
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0)",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0.25)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "2px",
+            "veces": 224
+          },
+          {
+            "valor": "8px",
+            "veces": 142
+          },
+          {
+            "valor": "-1px",
+            "veces": 104
+          },
+          {
+            "valor": "12px",
+            "veces": 81
+          },
+          {
+            "valor": "32px",
+            "veces": 68
+          },
+          {
+            "valor": "4px",
+            "veces": 37
+          },
+          {
+            "valor": "19px",
+            "veces": 33
+          },
+          {
+            "valor": "16px",
+            "veces": 33
+          },
+          {
+            "valor": "0px 12px",
+            "veces": 28
+          },
+          {
+            "valor": "24px",
+            "veces": 10
+          },
+          {
+            "valor": "normal 0px",
+            "veces": 10
+          },
+          {
+            "valor": "1px",
+            "veces": 5
+          },
+          {
+            "valor": "normal 12px",
+            "veces": 4
+          },
+          {
+            "valor": "48px",
+            "veces": 4
+          },
+          {
+            "valor": "20px",
+            "veces": 3
+          },
+          {
+            "valor": "6px",
+            "veces": 3
+          }
+        ],
+        "radios": [
+          {
+            "valor": "999px",
+            "veces": 126
+          },
+          {
+            "valor": "16px",
+            "veces": 77
+          },
+          {
+            "valor": "100%",
+            "veces": 56
+          },
+          {
+            "valor": "50%",
+            "veces": 48
+          },
+          {
+            "valor": "12px",
+            "veces": 4
+          },
+          {
+            "valor": "20px",
+            "veces": 1
+          },
+          {
+            "valor": "24px",
+            "veces": 1
+          },
+          {
+            "valor": "4px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 8,
+        "sombras": [
+          {
+            "valor": "rgba(19, 19, 19, 0.12) 0px 1px 6px 0px, rgba(19, 19, 19, 0.0",
+            "veces": 32
+          },
+          {
+            "valor": "rgb(229, 229, 229) 0px 0px 0px 1px inset",
+            "veces": 27
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(156, 156, 156, 0.08) 0px 0px 0px 6px inset",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0.08) 0px 2px 8px 0px, rgba(19, 19, 19, 0.1",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 5,
+        "zIndex": [
+          {
+            "valor": "2",
+            "veces": 28
+          },
+          {
+            "valor": "1",
+            "veces": 15
+          },
+          {
+            "valor": "-1",
+            "veces": 2
+          },
+          {
+            "valor": "100",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "transform 0.3s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 48
+          },
+          {
+            "valor": "background-color 0.1s cubic-bezier(0, 0.55, 0.45, 1), border-color 0.1",
+            "veces": 33
+          },
+          {
+            "valor": "opacity 0.1s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 27
+          },
+          {
+            "valor": "max-inline-size 0.2s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "transform 0.05s linear",
+            "veces": 4
+          },
+          {
+            "valor": "block-size 0.2s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.85, 0, 0.15, 1) 0.2s",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 8,
+        "hojasLeidas": 10,
+        "unidades": {
+          "em": 21,
+          "rem": 11,
+          "px": 2640,
+          "clamp": 0,
+          "vw": 18
+        },
+        "keyframesDeclarados": 55,
+        "transitionAll": 12,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 206
+          },
+          {
+            "px": 1024,
+            "veces": 175
+          },
+          {
+            "px": 1440,
+            "veces": 37
+          },
+          {
+            "px": 512,
+            "veces": 21
+          },
+          {
+            "px": 1280,
+            "veces": 6
+          },
+          {
+            "px": 1920,
+            "veces": 6
+          },
+          {
+            "px": 767,
+            "veces": 3
+          },
+          {
+            "px": 2,
+            "veces": 1
+          },
+          {
+            "px": 22,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "Navigation-module-scss-module__zsnzra__self Navigation-modul",
+            "posicion": "sticky",
+            "alto": 72,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": false
+              }
+            ],
+            "boton": "Search Fresha"
+          }
+        ],
+        "dialogos": 1,
+        "ctasDistintos": 1036,
+        "ctasTop": [
+          {
+            "texto": "Previous",
+            "veces": 32
+          },
+          {
+            "texto": "Next",
+            "veces": 32
+          },
+          {
+            "texto": "Get the app",
+            "veces": 3
+          },
+          {
+            "texto": "Fresha",
+            "veces": 2
+          },
+          {
+            "texto": "Beauty Salons in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Nail Salons in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Hair Salons in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Barbers in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Eyebrows & Lashes in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Waxing Salons in Malta",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 80,
+        "sinAlt": 0,
+        "altVacio": 2,
+        "sinDimensiones": 80,
+        "lazy": 80,
+        "conSrcset": 48,
+        "interactivos": 511,
+        "objetivosMenores44px": 94,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 0,
+          "nav": 1,
+          "main": 1,
+          "footer": 2
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(13, 13, 13)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 17.36
+          },
+          {
+            "texto": "rgb(13, 13, 13)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.44
+          },
+          {
+            "texto": "rgb(13, 13, 13)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 4.06
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4.54
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 4.28
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 1.12
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 19.44
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 8119.9,
+        "porTipoKb": {
+          "document": 1144.5,
+          "stylesheet": 793,
+          "font": 292.9,
+          "script": 4635.4,
+          "media": 260.3,
+          "image": 558,
+          "fetch": 123.3,
+          "ping": 0,
+          "other": 312.4
+        },
+        "pedidos": {
+          "document": 2,
+          "stylesheet": 10,
+          "font": 6,
+          "script": 86,
+          "media": 1,
+          "image": 42,
+          "fetch": 19,
+          "ping": 6,
+          "other": 1
+        },
+        "hostsDistintos": 15,
+        "terceros": [
+          {
+            "host": "images.fresha.com",
+            "pedidos": 27
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 8
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 7
+          },
+          {
+            "host": "www.gstatic.com",
+            "pedidos": 5
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 3
+          },
+          {
+            "host": "b2c-web-ff.fresha.com",
+            "pedidos": 2
+          },
+          {
+            "host": "www.google.com.bo",
+            "pedidos": 2
+          },
+          {
+            "host": "ad.doubleclick.net",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "AktivGroteskVF 100 900 normal",
+          "Changa 200 800 normal",
+          "PlayfairDisplay 400 900 normal",
+          "RoobertPRO 700 normal",
+          "RoobertPRO 500 normal",
+          "RoobertPRO 400 normal",
+          "RoobertPRO 600 normal",
+          "Tartuffo 700 normal",
+          "Tartuffo 500 normal",
+          "Tartuffo 400 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Fresha - Instantly book salons and spas nearby",
+        "descripcion": "Find the best salons and spa in your area with Fresha salon booking software. Book now!",
+        "canonical": "https://www.fresha.com/",
+        "og": 4,
+        "datosEstructurados": 1
+      },
+      "tecnologia": {
+        "next": true,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 5716,
+        "alturaPantallas": 6.4,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 8
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 5716,
+          "altoPantallas": 6.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Book local selfcare services",
+          "cta": "Fresha",
+          "imagenes": 475
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "bg-c_background.page",
+          "altoPx": 5716,
+          "altoPantallas": 6.4,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Book local selfcare services",
+          "cta": "Fresha",
+          "imagenes": 475
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_visible cq-t_inline-size",
+          "altoPx": 1952,
+          "altoPantallas": 2.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Book local selfcare services",
+          "cta": "Search",
+          "imagenes": 165
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size",
+          "altoPx": 810,
+          "altoPantallas": 0.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Download the Fresha app",
+          "cta": "",
+          "imagenes": 5
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size",
+          "altoPx": 542,
+          "altoPantallas": 0.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Reviews",
+          "cta": "Previous",
+          "imagenes": 172
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "pos_static ov_hidden cq-t_inline-size",
+          "altoPx": 660,
+          "altoPantallas": 0.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The top-rated destination for selfcare",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size bd-be-w_[1px] border-block-end",
+          "altoPx": 728,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Fresha for business",
+          "cta": "Find out more",
+          "imagenes": 9
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "pos_relative ov_hidden cq-t_inline-size",
+          "altoPx": 562,
+          "altoPantallas": 0.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Browse by City",
+          "cta": "Previous",
+          "imagenes": 112
+        }
+      ],
+      "encabezados": {
+        "total": 171,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Book local selfcare services"
+          },
+          {
+            "nivel": 2,
+            "texto": "Recommended"
+          },
+          {
+            "nivel": 2,
+            "texto": "New to Fresha"
+          },
+          {
+            "nivel": 2,
+            "texto": "Trending"
+          },
+          {
+            "nivel": 2,
+            "texto": "Download the Fresha app"
+          },
+          {
+            "nivel": 2,
+            "texto": "Reviews"
+          },
+          {
+            "nivel": 3,
+            "texto": "The best booking system"
+          },
+          {
+            "nivel": 3,
+            "texto": "Easy to use & explore"
+          },
+          {
+            "nivel": 3,
+            "texto": "Great for finding barbers"
+          },
+          {
+            "nivel": 3,
+            "texto": "My go-to for self-care"
+          },
+          {
+            "nivel": 3,
+            "texto": "Great way to discover new salons"
+          },
+          {
+            "nivel": 3,
+            "texto": "Sleek app"
+          },
+          {
+            "nivel": 3,
+            "texto": "All my clients love it"
+          },
+          {
+            "nivel": 3,
+            "texto": "So many great booking features"
+          },
+          {
+            "nivel": 3,
+            "texto": "I can book anytime I want"
+          },
+          {
+            "nivel": 3,
+            "texto": "Found my go-to masseuse"
+          },
+          {
+            "nivel": 3,
+            "texto": "Such a time-saver"
+          },
+          {
+            "nivel": 3,
+            "texto": "Great for finding nail salons near you"
+          },
+          {
+            "nivel": 3,
+            "texto": "Ten times better than other apps"
+          },
+          {
+            "nivel": 3,
+            "texto": "Best app for salons & spas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Hassle-free hair appointment bookings"
+          },
+          {
+            "nivel": 3,
+            "texto": "#1 app for salon online bookings"
+          },
+          {
+            "nivel": 3,
+            "texto": "Best for pedicure appointments"
+          },
+          {
+            "nivel": 3,
+            "texto": "Easy to find local beauty treatments"
+          },
+          {
+            "nivel": 3,
+            "texto": "New salons, new services"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 469
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 600",
+            "veces": 128
+          },
+          {
+            "valor": "22px / lh 1.00 / ls normal / w 600",
+            "veces": 127
+          },
+          {
+            "valor": "13px / lh 1.23 / ls normal / w 600",
+            "veces": 80
+          },
+          {
+            "valor": "16px / lh 1.15 / ls normal / w 400",
+            "veces": 79
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 500",
+            "veces": 56
+          },
+          {
+            "valor": "19px / lh 1.26 / ls normal / w 600",
+            "veces": 28
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 400",
+            "veces": 28
+          },
+          {
+            "valor": "28px / lh 1.29 / ls normal / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "40px / lh 1.10 / ls normal / w 700",
+            "veces": 4
+          },
+          {
+            "valor": "22px / lh 1.27 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "64px / lh 1.06 / ls normal / w 700",
+            "veces": 1
+          },
+          {
+            "valor": "68px / lh 1.06 / ls normal / w 700",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "RoobertPRO",
+            "veces": 1020
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(13, 13, 13)",
+            "veces": 887
+          },
+          {
+            "valor": "rgb(118, 118, 118)",
+            "veces": 124
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 3
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(19, 19, 19, 0.33)",
+            "veces": 48
+          },
+          {
+            "valor": "rgb(242, 242, 242)",
+            "veces": 48
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 33
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.7)",
+            "veces": 32
+          },
+          {
+            "valor": "rgb(13, 13, 13)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0)",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0.25)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "2px",
+            "veces": 224
+          },
+          {
+            "valor": "8px",
+            "veces": 146
+          },
+          {
+            "valor": "-1px",
+            "veces": 104
+          },
+          {
+            "valor": "12px",
+            "veces": 81
+          },
+          {
+            "valor": "32px",
+            "veces": 69
+          },
+          {
+            "valor": "4px",
+            "veces": 36
+          },
+          {
+            "valor": "16px",
+            "veces": 34
+          },
+          {
+            "valor": "19px",
+            "veces": 33
+          },
+          {
+            "valor": "0px 12px",
+            "veces": 28
+          },
+          {
+            "valor": "normal 0px",
+            "veces": 10
+          },
+          {
+            "valor": "1px",
+            "veces": 5
+          },
+          {
+            "valor": "24px",
+            "veces": 5
+          },
+          {
+            "valor": "normal 24px",
+            "veces": 4
+          },
+          {
+            "valor": "80px",
+            "veces": 4
+          },
+          {
+            "valor": "48px",
+            "veces": 4
+          },
+          {
+            "valor": "14px",
+            "veces": 3
+          }
+        ],
+        "radios": [
+          {
+            "valor": "999px",
+            "veces": 126
+          },
+          {
+            "valor": "16px",
+            "veces": 77
+          },
+          {
+            "valor": "100%",
+            "veces": 56
+          },
+          {
+            "valor": "50%",
+            "veces": 48
+          },
+          {
+            "valor": "100px",
+            "veces": 5
+          },
+          {
+            "valor": "12px",
+            "veces": 1
+          },
+          {
+            "valor": "24px",
+            "veces": 1
+          },
+          {
+            "valor": "4px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 8,
+        "sombras": [
+          {
+            "valor": "rgba(19, 19, 19, 0.12) 0px 1px 6px 0px, rgba(19, 19, 19, 0.0",
+            "veces": 32
+          },
+          {
+            "valor": "rgb(229, 229, 229) 0px 0px 0px 1px inset",
+            "veces": 27
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(156, 156, 156, 0.08) 0px 0px 0px 6px inset",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(19, 19, 19, 0.08) 0px 2px 8px 0px, rgba(19, 19, 19, 0.1",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 5,
+        "zIndex": [
+          {
+            "valor": "2",
+            "veces": 28
+          },
+          {
+            "valor": "1",
+            "veces": 15
+          },
+          {
+            "valor": "-1",
+            "veces": 2
+          },
+          {
+            "valor": "100",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "transform 0.3s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 48
+          },
+          {
+            "valor": "background-color 0.1s cubic-bezier(0, 0.55, 0.45, 1), border-color 0.1",
+            "veces": 33
+          },
+          {
+            "valor": "opacity 0.1s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 27
+          },
+          {
+            "valor": "max-inline-size 0.2s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "transform 0.05s linear",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.15s",
+            "veces": 2
+          },
+          {
+            "valor": "block-size 0.2s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.85, 0, 0.15, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.85, 0, 0.15, 1) 0.2s",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.75s, transform 0.75s",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.75s 0.35s, transform 0.75s 0.35s",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 11,
+        "hojasLeidas": 10,
+        "unidades": {
+          "em": 21,
+          "rem": 11,
+          "px": 2640,
+          "clamp": 0,
+          "vw": 18
+        },
+        "keyframesDeclarados": 55,
+        "transitionAll": 12,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 206
+          },
+          {
+            "px": 1024,
+            "veces": 175
+          },
+          {
+            "px": 1440,
+            "veces": 37
+          },
+          {
+            "px": 512,
+            "veces": 21
+          },
+          {
+            "px": 1280,
+            "veces": 6
+          },
+          {
+            "px": 1920,
+            "veces": 6
+          },
+          {
+            "px": 767,
+            "veces": 3
+          },
+          {
+            "px": 2,
+            "veces": 1
+          },
+          {
+            "px": 22,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 38,
+            "navFija": false
+          },
+          {
+            "y": 1204,
+            "conTransform": 38,
+            "navFija": false
+          },
+          {
+            "y": 2408,
+            "conTransform": 38,
+            "navFija": false
+          },
+          {
+            "y": 3612,
+            "conTransform": 38,
+            "navFija": false
+          },
+          {
+            "y": 4816,
+            "conTransform": 38,
+            "navFija": false
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 5,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "Navigation-module-scss-module__zsnzra__self Navigation-modul",
+            "posicion": "sticky",
+            "alto": 72,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": false
+              }
+            ],
+            "boton": "Search"
+          }
+        ],
+        "dialogos": 1,
+        "ctasDistintos": 1037,
+        "ctasTop": [
+          {
+            "texto": "Previous",
+            "veces": 32
+          },
+          {
+            "texto": "Next",
+            "veces": 32
+          },
+          {
+            "texto": "Fresha",
+            "veces": 2
+          },
+          {
+            "texto": "Get the app",
+            "veces": 2
+          },
+          {
+            "texto": "Beauty Salons in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Nail Salons in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Hair Salons in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Barbers in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Eyebrows & Lashes in Malta",
+            "veces": 2
+          },
+          {
+            "texto": "Waxing Salons in Malta",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 81,
+        "sinAlt": 0,
+        "altVacio": 3,
+        "sinDimensiones": 81,
+        "lazy": 81,
+        "conSrcset": 48,
+        "interactivos": 509,
+        "objetivosMenores44px": 93,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 0,
+          "nav": 1,
+          "main": 1,
+          "footer": 2
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(13, 13, 13)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 17.36
+          },
+          {
+            "texto": "rgb(13, 13, 13)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.44
+          },
+          {
+            "texto": "rgb(13, 13, 13)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 4.06
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4.54
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 4.28
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(242, 242, 242)",
+            "ratio": 1.12
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(13, 13, 13)",
+            "ratio": 19.44
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 8657.7,
+        "porTipoKb": {
+          "document": 1144.7,
+          "font": 292.9,
+          "stylesheet": 793,
+          "script": 4635.4,
+          "media": 460.8,
+          "image": 895.1,
+          "fetch": 123.4,
+          "ping": 0,
+          "other": 312.4
+        },
+        "pedidos": {
+          "document": 4,
+          "font": 12,
+          "stylesheet": 20,
+          "script": 169,
+          "media": 3,
+          "image": 87,
+          "fetch": 33,
+          "ping": 6,
+          "other": 1
+        },
+        "hostsDistintos": 15,
+        "terceros": [
+          {
+            "host": "images.fresha.com",
+            "pedidos": 27
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 8
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 7
+          },
+          {
+            "host": "www.gstatic.com",
+            "pedidos": 5
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 3
+          },
+          {
+            "host": "b2c-web-ff.fresha.com",
+            "pedidos": 2
+          },
+          {
+            "host": "analytics.google.com",
+            "pedidos": 2
+          },
+          {
+            "host": "www.google.com.bo",
+            "pedidos": 2
+          }
+        ],
+        "fuentesCargadas": [
+          "AktivGroteskVF 100 900 normal",
+          "Changa 200 800 normal",
+          "PlayfairDisplay 400 900 normal",
+          "RoobertPRO 700 normal",
+          "RoobertPRO 500 normal",
+          "RoobertPRO 400 normal",
+          "RoobertPRO 600 normal",
+          "Tartuffo 700 normal",
+          "Tartuffo 500 normal",
+          "Tartuffo 400 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Fresha - Instantly book salons and spas nearby",
+        "descripcion": "Find the best salons and spa in your area with Fresha salon booking software. Book now!",
+        "canonical": "https://www.fresha.com/",
+        "og": 4,
+        "datosEstructurados": 1
+      },
+      "tecnologia": {
+        "next": true,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 2,
+    "conTransicion": 31
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

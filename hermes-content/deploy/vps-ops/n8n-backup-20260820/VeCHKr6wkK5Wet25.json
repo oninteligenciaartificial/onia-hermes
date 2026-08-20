@@ -1,0 +1,858 @@
+{
+  "updatedAt": "2026-07-05T22:45:40.000Z",
+  "createdAt": "2026-06-06T03:29:26.493Z",
+  "id": "VeCHKr6wkK5Wet25",
+  "name": "ONIA - Scheduled Operations Pack",
+  "description": "Dispara recordatorios internos por Telegram para radar creativo, cola diaria, CRM, Video Lab, Higgsfield, copy y registro. No contacta clientes ni publica contenido.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "3fc91dfe-0d23-43a1-abbe-bd32cd40a737",
+      "name": "07:30 Radar creativo",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        120
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 7,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "disabled": true
+    },
+    {
+      "id": "35bada9f-058e-41e7-9cdb-6e06b7fd1a16",
+      "name": "Set Radar creativo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        120
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat-id-radar",
+              "name": "chatId",
+              "value": "6830070978",
+              "type": "string"
+            },
+            {
+              "id": "command-radar",
+              "name": "command",
+              "value": "Radar creativo ONIA",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "75188807-06b0-4fcd-9b7f-228a3b227bdc",
+      "name": "Format Telegram Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        660
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const item = $input.first().json;\nconst stdout = item.stdout || '';\nconst stderr = item.stderr || '';\nlet parsed = {};\ntry { parsed = JSON.parse(stdout); } catch (error) { parsed = {}; }\nlet text = parsed.telegram_reply || parsed.error || stdout || stderr || 'Hermes no devolvio respuesta.';\nif (text.length > 3600) text = text.slice(0, 3600) + '\\n\\n[recortado por Telegram]';\nreturn [{ json: { chatId: '6830070978', text, command: parsed.action || 'scheduled', ok: parsed.ok ?? (item.code === 0) } }];"
+      }
+    },
+    {
+      "id": "d88f045b-2434-4592-8800-f8cc53f5d126",
+      "name": "Send Telegram Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1340,
+        660
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "webhookId": "b29ac97e-c27b-4335-a689-00ad0cf96987",
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "845f2624-4744-49f5-81c0-348de2145499",
+      "name": "08:00 Cola contenido",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "08e65c3c-0d1f-4709-80ac-98655b07a010",
+      "name": "Set Cola contenido",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat-id-queue",
+              "name": "chatId",
+              "value": "6830070978",
+              "type": "string"
+            },
+            {
+              "id": "command-queue",
+              "name": "command",
+              "value": "Cola contenido diaria",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "18cccb35-7f5f-4f17-8762-e14f01144aec",
+      "name": "08:30 Seguimientos CRM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        480
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 8,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1ad452a8-42a8-47f6-83c3-140c111a511b",
+      "name": "Set Seguimientos CRM",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        480
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat-id-crm",
+              "name": "chatId",
+              "value": "6830070978",
+              "type": "string"
+            },
+            {
+              "id": "command-crm",
+              "name": "command",
+              "value": "Seguimientos ONIA hoy",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a3c49343-eb09-449c-94cd-493919333f26",
+      "name": "10:00 Recordatorios Video Lab",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        660
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 10,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "577222fe-ca9f-422b-8209-92c3c85d3159",
+      "name": "Set Recordatorios Video Lab",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        660
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat-id-approvals",
+              "name": "chatId",
+              "value": "6830070978",
+              "type": "string"
+            },
+            {
+              "id": "command-approvals",
+              "name": "command",
+              "value": "Recordatorios Video Lab",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3e356ec0-c57a-42d8-8f0c-acb19bc60e02",
+      "name": "15:00 Copy plataformas",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        840
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 15,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7152c8a3-e91a-4fa0-8747-5147debb612b",
+      "name": "Set Copy plataformas",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        840
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat-id-copy",
+              "name": "chatId",
+              "value": "6830070978",
+              "type": "string"
+            },
+            {
+              "id": "command-copy",
+              "name": "command",
+              "value": "Platform Copy Queue",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "431b1d36-26bd-4727-b674-e3331109a6e9",
+      "name": "17:00 Watcher Higgsfield",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        1020
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 17,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b8ee5618-caf7-4ea3-a50d-a04928187dca",
+      "name": "Set Watcher Higgsfield",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        1020
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat-id-higgsfield",
+              "name": "chatId",
+              "value": "6830070978",
+              "type": "string"
+            },
+            {
+              "id": "command-higgsfield",
+              "name": "command",
+              "value": "Watcher Higgsfield",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "bca99e03-181f-4b0f-a642-d45c02b4f9cb",
+      "name": "21:00 Registro Hermes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        1200
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 21,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "44362ae5-c707-45d5-a653-4905ee15d124",
+      "name": "Set Registro Hermes",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        1200
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat-id-log",
+              "name": "chatId",
+              "value": "6830070978",
+              "type": "string"
+            },
+            {
+              "id": "command-log",
+              "name": "command",
+              "value": "Registro Hermes",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "9f69d4bc-5e86-4fa2-a459-ddce4d6bcb3a",
+      "name": "Sticky Note b4e79c2a",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        130,
+        70
+      ],
+      "parameters": {
+        "content": "## ONIA Scheduled Operations Pack\nInternal Telegram reminders only. This workflow never contacts prospects, never publishes content and never sends WhatsApp messages. Notion sync uses Hermes local outbox until a Notion credential exists in n8n.",
+        "color": 5,
+        "width": 300,
+        "height": 1280
+      }
+    },
+    {
+      "id": "e8f6b3cc-b8dd-4f49-a6d9-fac8cbe404dd",
+      "name": "Lunes 09:00 Digest",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        1400
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 13 * * 1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "be33e2ac-28a2-4e49-a62a-c08b6b7d372b",
+      "name": "Build Digest Pipeline",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        1400
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const fecha = new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz', day: '2-digit', month: 'long', year: 'numeric' });\nconst clientes = [\n  { emoji: '🎬', nombre: 'Epic Motion Group', detalle: 'web premium + portafolio AV (en desarrollo)' },\n  { emoji: '🏛️', nombre: 'DeMolay Bolivia', detalle: 'Sistema Nacional actas — piloto Grigotá 476' }\n];\nlet msg = '📊 <b>Pipeline ONIA — semana del ' + fecha + '</b>\\n\\n';\nmsg += 'Revisar estado de cada cliente y alinear prioridades. Responder por Alfredhq.\\n\\n';\nfor (const c of clientes) {\n  msg += c.emoji + ' <b>' + c.nombre + '</b>\\n   ' + c.detalle + '\\n   estado: ___  |  próximo paso: ___\\n\\n';\n}\nmsg += '➕ Nuevos leads / otros: ___\\n\\n🤝 Sergio + Arthur: definir foco de la semana.';\nconst destinatarios = ['6830070978', '8887222181'];\nreturn destinatarios.map(chatId => ({ json: { chatId, text: msg } }));"
+      }
+    },
+    {
+      "id": "d3fc9c61-a9f7-482a-a560-cab455816fb0",
+      "name": "Send Digest Clientes",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        780,
+        1400
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "192d9e05-c8f1-43dc-a314-9d41d7680046"
+    },
+    {
+      "id": "df6c6caa-c002-4f4b-a834-3a44e3632d2b",
+      "name": "Es CRM o Cola?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1340,
+        860
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "crm",
+              "leftValue": "={{ $json.command }}",
+              "rightValue": "Seguimientos ONIA hoy",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "cola",
+              "leftValue": "={{ $json.command }}",
+              "rightValue": "Cola contenido diaria",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ffcfbc66-c15c-4fb6-b583-3ca0224f6b7c",
+      "name": "Send Reply Arthur",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1620,
+        860
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "8887222181",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "0361c187-985b-4f33-974b-a8c2f2f0a3b2"
+    },
+    {
+      "id": "930cd500-030e-43f0-83eb-9b411db955cb",
+      "name": "Run Hermes Scheduled Command",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        780,
+        660
+      ],
+      "parameters": {
+        "jsCode": "// Migracion 2026-07-03: reemplaza el nodo SSH \"Run Hermes Scheduled Command\"\n// que corria `hermes-command telegram --message` en el VPS via la credencial\n// rota `SSH Password account`. Los 7 comandos programados devuelven texto\n// DETERMINISTA (ver scripts/hermes_command_center.py: _creative_radar,\n// _daily_content_queue, _crm_followups_today, _quiet_video_reply,\n// _platform_copy_queue, _notion_outbox_status), asi que se portan en n8n sin\n// dependencia de SSH ni del VPS. Los comandos que en el router dependian de\n// estado de Video Lab estan en modo quiet por diseno; para estado detallado en\n// vivo usar el comando interactivo del Command Center.\nconst command = ($json.command || '').toString().trim();\n\nconst radar = [\n  'Radar creativo ONIA:',\n  '- Buscar hoy: IA aplicada a negocios, Reels/Shorts de demos, UGC B2B, automatizacion y casos reales.',\n  '- Producir primero: 1 pieza Sergio mostrando proceso real y 1 pieza ONIA mostrando sistema.',\n  '- Angulos utiles: dolor visible, antes/despues operativo, pantalla limpia, costo de seguir en Excel/WhatsApp.',\n  '- No copiar creadores: extraer hook, ritmo, escenas, retencion y CTA.',\n  '',\n  'Ideas seguras para guardar, no producir automatico:',\n  '1. Sergio: por que un sistema simple vende mas que responder a mano',\n  '2. ONIA: DentalGest agenda y seguimiento | pedir demo corta',\n  '3. ONIA: Gesti-OS convierte Excel en tablero operativo | ver tablero simple',\n  '4. Prepara consultoria ONIA: clinica dental | agenda, seguimiento y captacion',\n  '',\n  'Si quieres producir video, pide manualmente: Siguiente Video Lab o Genera video Sergio: <idea>.',\n  '',\n  'Nota: este radar es seguro/local. Para tendencias virales exactas, investigar fuentes actuales antes de usar claims.',\n].join('\\n');\n\nconst cola = [\n  'Cola diaria de contenido ONIA:',\n  '1. Sergio: pieza fundador/proceso. Prioridad: confianza y construccion real.',\n  '   Accion segura: guardar idea en ONIA Center o escribir hook corto.',\n  '2. ONIA: pieza demo/sistema. Prioridad: vender DentalGest, Gesti-OS o automatizacion.',\n  '   Accion segura: preparar guion o carrusel, no generar video automaticamente.',\n  '3. Cliente/servicio: si hay prospecto caliente, preparar UGC seguro.',\n  '   Accion segura: brief interno con aprobacion antes de Video Lab.',\n  '4. Reutilizacion: convertir una pieza aprobada en caption IG, TikTok, Shorts y LinkedIn.',\n  '',\n  'Regla: Higgsfield queda manual/quiet. No genera, no publica y no contacta sin aprobacion.',\n  '',\n  'Estado detallado de Video Lab: usar el comando interactivo \"Siguiente Video Lab\".',\n].join('\\n');\n\nconst crm = [\n  'Seguimientos ONIA hoy:',\n  '- Revisar CRM/Notion: prospectos con siguiente contacto vencido o caliente.',\n  '- Preparar mensaje humano por canal; no enviar automatico.',\n  '- Registrar vendedor_origen, responsable_actual, estado, proximo paso y fecha.',\n  '- Prioridad: DentalGest clinicas, Gesti-OS pymes con Excel, webs sin captacion, auditorias y n8n simple.',\n  '',\n  'Comandos utiles:',\n  'Prepara venta DentalGest: <clinica>',\n  'Prepara venta Gestios: <empresa>',\n  'Prepara venta Web ONIA: <negocio>',\n  'Prepara consultoria ONIA: <negocio> | <dolor o proceso>',\n  '',\n  'Pendiente tecnico: n8n no tiene credencial Notion conectada. Hermes deja outbox local para sincronizar cuando exista.',\n].join('\\n');\n\nconst quietVideo = (kind) => [\n  kind + ': modo quiet activo.',\n  'No voy a empujar Higgsfield ni Video Lab por horario.',\n  'Esto evita quemar tokens/atencion sin decision activa de producir.',\n  '',\n  'Comandos manuales permitidos:',\n  '- Siguiente Video Lab',\n  '- Recordatorios Video Lab detalle',\n  '- Watcher Higgsfield detalle',\n  '- Genera video Sergio: <idea>',\n].join('\\n');\n\nconst copy = [\n  'Platform Copy Queue:',\n  '- Instagram: caption con hook, valor, CTA y 3-8 hashtags utiles.',\n  '- TikTok: descripcion corta, lenguaje directo, CTA simple.',\n  '- YouTube Shorts: titulo claro + descripcion con contexto y tags.',\n  '- LinkedIn: aprendizaje/negocio, no solo promo.',\n  '- WhatsApp automatico sigue bloqueado hasta verificacion Meta.',\n  '',\n  'Piezas listas para adaptar: usar el comando interactivo \"Platform Copy Queue\" en el Command Center.',\n].join('\\n');\n\nconst registro = [\n  'Registro Hermes:',\n  '- Outbox local en el VPS: /root/.hermes/notion-outbox/command-center-events.jsonl',\n  '- n8n todavia no tiene credencial Notion; por eso no sincronizo directo.',\n  '- Cuando exista credencial Notion en n8n, crear workflow: outbox -> Notion CRM/Tareas/Reportes.',\n].join('\\n');\n\nconst R = {\n  'Radar creativo ONIA': { action: 'creative_radar', text: radar },\n  'Cola contenido diaria': { action: 'daily_content_queue', text: cola },\n  'Seguimientos ONIA hoy': { action: 'crm_followups_today', text: crm },\n  'Recordatorios Video Lab': { action: 'video_approval_reminders', text: quietVideo('Recordatorios Video Lab') },\n  'Platform Copy Queue': { action: 'platform_copy_queue', text: copy },\n  'Watcher Higgsfield': { action: 'higgsfield_watcher', text: quietVideo('Watcher Higgsfield') },\n  'Registro Hermes': { action: 'notion_outbox_status', text: registro },\n};\n\nconst entry = R[command] || { action: 'unknown_scheduled', text: 'Comando programado no reconocido: ' + command };\nconst payload = { ok: true, action: entry.action, telegram_reply: entry.text };\n// Mismo shape que devolvia el nodo SSH para que \"Format Telegram Reply\" no cambie.\nreturn [{ json: { stdout: JSON.stringify(payload), code: 0, command } }];\n"
+      }
+    }
+  ],
+  "connections": {
+    "07:30 Radar creativo": {
+      "main": [
+        [
+          {
+            "node": "Set Radar creativo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Telegram Reply": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram Reply",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Es CRM o Cola?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "08:00 Cola contenido": {
+      "main": [
+        [
+          {
+            "node": "Set Cola contenido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "08:30 Seguimientos CRM": {
+      "main": [
+        [
+          {
+            "node": "Set Seguimientos CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10:00 Recordatorios Video Lab": {
+      "main": [
+        [
+          {
+            "node": "Set Recordatorios Video Lab",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15:00 Copy plataformas": {
+      "main": [
+        [
+          {
+            "node": "Set Copy plataformas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "17:00 Watcher Higgsfield": {
+      "main": [
+        [
+          {
+            "node": "Set Watcher Higgsfield",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "21:00 Registro Hermes": {
+      "main": [
+        [
+          {
+            "node": "Set Registro Hermes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lunes 09:00 Digest": {
+      "main": [
+        [
+          {
+            "node": "Build Digest Pipeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Digest Pipeline": {
+      "main": [
+        [
+          {
+            "node": "Send Digest Clientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Es CRM o Cola?": {
+      "main": [
+        [
+          {
+            "node": "Send Reply Arthur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Radar creativo": {
+      "main": [
+        [
+          {
+            "node": "Run Hermes Scheduled Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Cola contenido": {
+      "main": [
+        [
+          {
+            "node": "Run Hermes Scheduled Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Seguimientos CRM": {
+      "main": [
+        [
+          {
+            "node": "Run Hermes Scheduled Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Recordatorios Video Lab": {
+      "main": [
+        [
+          {
+            "node": "Run Hermes Scheduled Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Copy plataformas": {
+      "main": [
+        [
+          {
+            "node": "Run Hermes Scheduled Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Watcher Higgsfield": {
+      "main": [
+        [
+          {
+            "node": "Run Hermes Scheduled Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Registro Hermes": {
+      "main": [
+        [
+          {
+            "node": "Run Hermes Scheduled Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Hermes Scheduled Command": {
+      "main": [
+        [
+          {
+            "node": "Format Telegram Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:07:30 Radar creativo": {
+      "recurrenceRules": []
+    },
+    "node:08:00 Cola contenido": {
+      "recurrenceRules": []
+    },
+    "node:08:30 Seguimientos CRM": {
+      "recurrenceRules": []
+    },
+    "node:10:00 Recordatorios Video Lab": {
+      "recurrenceRules": []
+    },
+    "node:15:00 Copy plataformas": {
+      "recurrenceRules": []
+    },
+    "node:17:00 Watcher Higgsfield": {
+      "recurrenceRules": []
+    },
+    "node:21:00 Registro Hermes": {
+      "recurrenceRules": []
+    },
+    "node:Lunes 09:00 Digest": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "adeb8cbe-308f-4df2-a937-178f60c87c88",
+  "activeVersionId": null,
+  "versionCounter": 12,
+  "triggerCount": 7,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-06T03:29:26.509Z",
+      "createdAt": "2026-06-06T03:29:26.509Z",
+      "role": "workflow:owner",
+      "workflowId": "VeCHKr6wkK5Wet25",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

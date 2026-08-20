@@ -74,6 +74,41 @@ que se generan desde el JSON del cliente.
 
 ---
 
+## Checklist de pre-entrega (gate)
+
+Ningún sitio — de cliente o propio — se declara "listo" sin pasar estos 17 puntos.
+Complementa los gates automatizados del e2e (a11y, visual, performance CWV) y los gates
+por carril (`tsc --noEmit` + build verde). Se verifica sobre el sitio **construido**
+(`next build` + servir), no sobre el dev server.
+
+1. [ ] `robots.txt` responde y anuncia el sitemap (`app/robots.ts`).
+2. [ ] `sitemap.xml` responde y lista TODAS las páginas publicadas (página nueva sin
+       entrada = página que el buscador encuentra tarde o nunca).
+3. [ ] 404 propio (`app/not-found.tsx`): con marca, en español y con salida (link al
+       inicio / CTA). Nunca la pantalla por defecto de Next.
+4. [ ] `canonical` por página (`alternates.canonical` en cada `page.tsx`, nunca en el
+       layout: puesto ahí, el 404 y toda ruta heredan el canonical del home).
+5. [ ] Favicon presente (`app/icon.svg` o `favicon.ico`) y visible en la pestaña.
+6. [ ] OG tags (title, description, type, locale, siteName) — **SIN inventar la imagen**:
+       `og:image` solo cuando exista una captura REAL del producto. Nunca mockups falsos.
+7. [ ] `metadataBase` declarado en el layout (sin él, Next arma canonical y OG contra
+       `http://localhost:3000`).
+8. [ ] `<html lang="...">` correcto (es / es-BO según el sitio).
+9. [ ] `title` y `description` propios POR página (no heredar el del home en todas).
+10. [ ] Viewport correcto (default de Next o `export const viewport`), sin
+        `maximum-scale=1` ni `user-scalable=no`.
+11. [ ] `theme-color` declarado (light y dark si el sitio tiene ambos temas).
+12. [ ] Manifest (`app/manifest.ts`) si el sitio se instala como PWA — si no aplica,
+        marcar N/A consciente, no olvidado.
+13. [ ] Toda imagen con `alt` (vacío `alt=""` solo si es decorativa).
+14. [ ] Cero links rotos: internos (rutas que existen) y externos (responden).
+15. [ ] Headings jerárquicos: un solo `h1` por página, sin saltos de nivel.
+16. [ ] URLs absolutas siempre en `https://` (nunca `http://` en canonical, OG, sitemap
+        ni links).
+17. [ ] Cero `console.log` en el código que se entrega.
+
+---
+
 ## Reglas de fuentes
 
 - Solo se cablean las fuentes listadas en `SOURCES.md`. No agregar otras sin avisar.

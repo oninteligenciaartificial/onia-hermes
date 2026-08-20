@@ -1,0 +1,248 @@
+{
+  "updatedAt": "2026-08-07T15:08:02.383Z",
+  "createdAt": "2026-05-15T01:40:09.865Z",
+  "id": "cA7PMtzHFR47NR9W",
+  "name": "WF-09: Trial Expired Alert",
+  "description": "Checks for expired trials daily and alerts SUPERADMIN per expired clinic via Gmail Workspace (migrado 2026-08-07, sin $env).",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "bf0d9366-a451-4a81-b4a1-af04ef7eb8d7",
+      "name": "Schedule: Daily 6AM La Paz",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 10 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ac1f679b-80bc-4d51-a26e-b744f8be4270",
+      "name": "Supabase: Expired Trials",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_expired_trials",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "6a658d3a-5fdf-47fa-bf63-daea2a5b4dd2",
+      "name": "If: Has Expired?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-count",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "81d21eba-a78b-4d21-8098-59be971c7918",
+      "name": "Split: Per Expired",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "1b6a3995-96bc-4652-90e5-454cc8c42509",
+      "name": "Gmail: Alert SUPERADMIN",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "business@onia.com.bo",
+        "subject": "=Trial vencido: {{ $json.clinicName }}",
+        "emailType": "html",
+        "message": "=<pre>Trial vencido - Accion requerida:\n\nClinica: {{ $json.clinicName }}\nAdmin: {{ $json.adminName }} ({{ $json.email }})\nVencio: {{ $json.trialEnd }}\nSlug: {{ $json.slug }}\n\nAcciones posibles:\n- Contactar al admin para convertir a plan pago\n- Extender trial si corresponde\n- Bloquear acceso si no paga\n\nGestionar: https://app.onia.com.bo/admin/organizations/{{ $json.id }}</pre>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "b5878835-b9ea-4c06-b83c-815542e0b4da"
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 6AM La Paz": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Expired Trials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Expired Trials": {
+      "main": [
+        [
+          {
+            "node": "If: Has Expired?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has Expired?": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Expired",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Expired": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Gmail: Alert SUPERADMIN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Alert SUPERADMIN": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Expired",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Daily 6AM La Paz": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "b5239631-70b0-48e1-a599-328436d4afc8",
+  "activeVersionId": "b5239631-70b0-48e1-a599-328436d4afc8",
+  "versionCounter": 19,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-15T01:40:09.867Z",
+      "createdAt": "2026-05-15T01:40:09.867Z",
+      "role": "workflow:owner",
+      "workflowId": "cA7PMtzHFR47NR9W",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Alert SUPERADMIN"
+  }
+}
