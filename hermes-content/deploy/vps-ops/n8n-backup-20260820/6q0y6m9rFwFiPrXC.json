@@ -1,0 +1,191 @@
+{
+  "updatedAt": "2026-07-22T22:25:58.093Z",
+  "createdAt": "2026-07-22T22:25:58.093Z",
+  "id": "6q0y6m9rFwFiPrXC",
+  "name": "ONIA - Agenda + energia del dia",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "37a9b604-d8d3-4073-843b-f904309c1c02",
+      "name": "Lun-Sab 07:05",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "5 7 * * 1-6"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ec037fc5-1fdc-41d3-8f4e-76872756fe84",
+      "name": "Reuniones de hoy",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "oninteligenciaartificial@gmail.com"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.setZone(\"America/La_Paz\").startOf(\"day\").toISO() }}",
+        "timeMax": "={{ $now.setZone(\"America/La_Paz\").endOf(\"day\").toISO() }}",
+        "options": {
+          "singleEvents": true,
+          "orderBy": "startTime"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "a3FResZHqQ32ptyt",
+          "name": "Google Calendar account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "id": "03a4f24d-1357-445c-97f5-f77136f3d0bb",
+      "name": "Armar agenda del dia",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const items = $input.all();\nconst evs = items.map(i => i.json).filter(e => e && (e.start || e.summary));\nfunction fmt(e) {\n  let hora = \"todo el dia\";\n  if (e.start && e.start.dateTime) {\n    hora = new Date(e.start.dateTime).toLocaleTimeString(\"es-BO\", { timeZone: \"America/La_Paz\", hour: \"2-digit\", minute: \"2-digit\" });\n  }\n  return \"• \" + hora + \" - \" + (e.summary || \"(sin titulo)\");\n}\nevs.sort((a, b) => String((a.start && a.start.dateTime) || \"\").localeCompare(String((b.start && b.start.dateTime) || \"\")));\nconst hoy = new Date().toLocaleDateString(\"es-BO\", { timeZone: \"America/La_Paz\", weekday: \"long\", day: \"2-digit\", month: \"long\" });\nconst L = [];\nL.push(\"☀️ Arranque del dia - \" + hoy);\nL.push(\"\");\nif (evs.length === 0) {\n  L.push(\"Hoy no tenes reuniones agendadas. Dia despejado para foco profundo.\");\n} else {\n  L.push(\"Tu agenda de hoy (\" + evs.length + \"):\");\n  for (const e of evs) L.push(fmt(e));\n}\nL.push(\"\");\nconst focos = [\"Energia: bloquea 90 min sin notificaciones para lo que mueve la aguja.\", \"Foco: elegi UNA cosa que si la cerras hoy, el dia valio.\", \"Responder no es avanzar; avanza primero lo importante.\", \"Antes de abrir el chat, define el resultado del dia en una frase.\"];\nL.push(\"💡 \" + focos[new Date().getDate() % focos.length]);\nreturn { json: { text: L.join(String.fromCharCode(10)).slice(0, 3900), chatId: \"6830070978\", count: evs.length } };"
+      }
+    },
+    {
+      "id": "5caeb6cb-0ae9-475a-a318-910bfac8c152",
+      "name": "Enviar agenda a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "0cb80d62-9d01-49a5-b2c9-c867eafdc6d0"
+    }
+  ],
+  "connections": {
+    "Lun-Sab 07:05": {
+      "main": [
+        [
+          {
+            "node": "Reuniones de hoy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reuniones de hoy": {
+      "main": [
+        [
+          {
+            "node": "Armar agenda del dia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar agenda del dia": {
+      "main": [
+        [
+          {
+            "node": "Enviar agenda a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Lun-Sab 07:05": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "6c663fcb-e21d-48db-a875-0e88621721a4",
+  "activeVersionId": "6c663fcb-e21d-48db-a875-0e88621721a4",
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T22:25:58.131Z",
+      "createdAt": "2026-07-22T22:25:58.131Z",
+      "role": "workflow:owner",
+      "workflowId": "6q0y6m9rFwFiPrXC",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Agenda matutina v1",
+    "description": "Cron Lun-Sab 07:05 La Paz: lee las reuniones de hoy de Google Calendar, arma UN mensaje de arranque del dia (agenda + linea de foco/energia) y lo manda a Sergio por Telegram. Dia sin reuniones = mensaje 'despejado'."
+  }
+}

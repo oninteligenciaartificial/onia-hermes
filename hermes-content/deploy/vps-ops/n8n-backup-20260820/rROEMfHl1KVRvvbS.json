@@ -1,0 +1,740 @@
+{
+  "updatedAt": "2026-08-07T15:09:45.099Z",
+  "createdAt": "2026-05-15T01:39:28.991Z",
+  "id": "rROEMfHl1KVRvvbS",
+  "name": "WF-00: Appointment Reminders",
+  "description": "Appointment reminders 24h/2h (email Gmail Workspace + WhatsApp opcional). Migrado 2026-08-07, sin $env. OJO: duplica el cron de recordatorios del PRODUCTO — mantener apagado salvo decision explicita.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "5e7b9fa1-7592-439b-9f70-c7254bffc59a",
+      "name": "Schedule: Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        368
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5f4f2c5f-ab05-4f35-85e9-30267e166e4e",
+      "name": "Supabase: Reminders 24h",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        144
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_reminders_24h",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "c6791921-f58b-48ff-b283-24a6a72416e4",
+      "name": "If: Has 24h?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        144
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-24h",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "9d4285f6-c82c-455b-959b-e9c6383965ea",
+      "name": "If: Has WhatsApp 24h?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "wa-24h",
+              "leftValue": "={{ $json.whatsappAddon }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            },
+            {
+              "id": "phone-24h",
+              "leftValue": "={{ $json.patientPhone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "79f16ef5-8e8b-4818-8be1-1a189d41322d",
+      "name": "WhatsApp: Reminder 24h",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1344,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.whatsappPhoneNumberId }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"Bearer \" + $json.whatsappAccessToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.patientPhone }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"Hola {{ $json.patientName }}, te recordamos que tienes una cita manana en {{ $json.clinicName }}. Fecha y hora: {{ $json.dateTime }}. Si necesitas cancelar, contacta a tu clinica.\" }\n}",
+        "options": {}
+      },
+      "disabled": true
+    },
+    {
+      "id": "70af6f5a-d6c8-40e8-80e0-7bb4ade77494",
+      "name": "Supabase: Mark reminder24Sent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1568,
+        144
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_mark_reminder24_sent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\"p_id\":\"{{ $json.id }}\"}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "id": "e934d70c-2b4b-4e8d-bd62-049e86e90f99",
+      "name": "Split: Per Appointment 24h",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        144
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "e4c0693a-71eb-4c6b-bb64-7123db0afdee",
+      "name": "Supabase: Reminders 2h",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_reminders_2h",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "78e2ce2d-aa1c-4259-8349-1116d2fc1097",
+      "name": "If: Has 2h?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        560
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-2h",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "6172636a-eb82-4120-8bab-e9bd086bbcd8",
+      "name": "If: Has WhatsApp 2h?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        480
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "wa-2h",
+              "leftValue": "={{ $json.whatsappAddon }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            },
+            {
+              "id": "phone-2h",
+              "leftValue": "={{ $json.patientPhone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a7796786-bfed-4c91-a3ca-66690a0c15ce",
+      "name": "WhatsApp: Reminder 2h",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1344,
+        416
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.whatsappPhoneNumberId }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"Bearer \" + $json.whatsappAccessToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.patientPhone }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"Hola {{ $json.patientName }}, tu cita en {{ $json.clinicName }} es en aproximadamente 2 horas ({{ $json.dateTime }}). Te esperamos!\" }\n}",
+        "options": {}
+      },
+      "disabled": true
+    },
+    {
+      "id": "073384a6-c71c-40cd-ad60-bb3b62ca8a92",
+      "name": "Supabase: Mark reminder2hSent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1568,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_mark_reminder2h_sent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\"p_id\":\"{{ $json.id }}\"}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "id": "a7a35bd5-a5a8-4db5-805f-d83ec03e92ad",
+      "name": "Split: Per Appointment 2h",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        560
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "812c9b0e-beee-4818-9a8b-fd8cafb36332",
+      "name": "DRY RUN Resumen 24h",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        320
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const items = $input.all();\nconst lines = items.map((i) => '- ' + (i.json.patientName || '?') + ' / ' + (i.json.clinicName || '?') + ' / ' + (i.json.dateTime || '?')).join('\\n');\nreturn [{ json: { summary: 'DRY-RUN DentalGest WF-00 (recordatorios 24h): ' + items.length + ' paciente(s) que el sistema contactaria. NO se envio nada.\\n\\n' + lines + '\\n\\nSi las listas estan bien, avisa para activar envio real.' } }];"
+      }
+    },
+    {
+      "id": "4780aacd-66c7-45be-a354-4e82a0554e78",
+      "name": "DRY RUN Aviso 24h",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        320
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.summary }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "c37895bd-1542-4183-ba83-048dcda53563"
+    },
+    {
+      "id": "b8b5988b-72c9-4834-a85b-7df285b3b312",
+      "name": "Gmail: Reminder 24h",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        80
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.patientEmail }}",
+        "subject": "=Recordatorio: Cita manana en {{ $json.clinicName }}",
+        "emailType": "html",
+        "message": "=<p>Hola <strong>{{ $json.patientName }}</strong>,</p><p>Te recordamos que tienes una cita manana en <strong>{{ $json.clinicName }}</strong>.</p><p><strong>Fecha y hora:</strong> {{ $json.dateTime }}</p><p>Si necesitas cancelar o reprogramar, contacta a tu clinica con anticipacion.</p><p>- {{ $json.clinicName }} via Onia</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "disabled": true,
+      "webhookId": "1cbd505b-2c47-4b76-8912-05b1712f7d7b"
+    },
+    {
+      "id": "38636a1a-46da-44b1-9a9a-523a9f5425d2",
+      "name": "Gmail: Reminder 2h",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        480
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.patientEmail }}",
+        "subject": "=Tu cita es en 2 horas - {{ $json.clinicName }}",
+        "emailType": "html",
+        "message": "=<p>Hola <strong>{{ $json.patientName }}</strong>,</p><p>Tu cita en <strong>{{ $json.clinicName }}</strong> es en aproximadamente 2 horas.</p><p><strong>Fecha y hora:</strong> {{ $json.dateTime }}</p><p>Te esperamos!</p><p>- {{ $json.clinicName }} via Onia</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "disabled": true,
+      "webhookId": "203fef4d-8b19-412e-a7e3-a85a37d54063"
+    }
+  ],
+  "connections": {
+    "Schedule: Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Reminders 24h",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase: Reminders 2h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Reminders 24h": {
+      "main": [
+        [
+          {
+            "node": "If: Has 24h?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has 24h?": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Appointment 24h",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "DRY RUN Resumen 24h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has WhatsApp 24h?": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp: Reminder 24h",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase: Mark reminder24Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp: Reminder 24h": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Mark reminder24Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Mark reminder24Sent": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Appointment 24h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Appointment 24h": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Gmail: Reminder 24h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Reminders 2h": {
+      "main": [
+        [
+          {
+            "node": "If: Has 2h?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has 2h?": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Appointment 2h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has WhatsApp 2h?": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp: Reminder 2h",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase: Mark reminder2hSent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp: Reminder 2h": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Mark reminder2hSent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Mark reminder2hSent": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Appointment 2h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Appointment 2h": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Gmail: Reminder 2h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DRY RUN Resumen 24h": {
+      "main": [
+        [
+          {
+            "node": "DRY RUN Aviso 24h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Reminder 24h": {
+      "main": [
+        [
+          {
+            "node": "If: Has WhatsApp 24h?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Reminder 2h": {
+      "main": [
+        [
+          {
+            "node": "If: Has WhatsApp 2h?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Every Hour": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "85b25ce2-b162-407f-b2ab-bf6358d1f6ca",
+  "activeVersionId": null,
+  "versionCounter": 20,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-15T01:39:28.996Z",
+      "createdAt": "2026-05-15T01:39:28.996Z",
+      "role": "workflow:owner",
+      "workflowId": "rROEMfHl1KVRvvbS",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Reminder 24h, Gmail: Reminder 2h"
+  }
+}

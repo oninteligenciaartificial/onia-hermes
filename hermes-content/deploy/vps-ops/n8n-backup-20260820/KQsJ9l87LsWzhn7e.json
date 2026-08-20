@@ -1,0 +1,240 @@
+{
+  "updatedAt": "2026-06-09T22:21:19.000Z",
+  "createdAt": "2026-05-26T16:32:02.274Z",
+  "id": "KQsJ9l87LsWzhn7e",
+  "name": "WF-DISCORD-04: Alertas Tareas Notion",
+  "description": "Cron diario 9am Bolivia → busca todas las páginas en Notion → filtra tareas pendientes (excluye Done/Completado) → formatea lista → envía a Discord solo si hay tareas pendientes.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "405dd214-737a-4e97-81e0-d9f2e526dccd",
+      "name": "Daily 9am Bolivia",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        96
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 13,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "501a51fa-2640-4aad-8390-5207b7c150c8",
+      "name": "Buscar Tareas en Notion",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        96
+      ],
+      "parameters": {
+        "resource": "page",
+        "operation": "search",
+        "returnAll": true,
+        "simple": false,
+        "options": {
+          "filter": {
+            "filters": {
+              "property": "object",
+              "value": "page"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "bde1347f-0a26-4c94-8c9f-59723a76336f",
+      "name": "Formatear Mensaje",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        96
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "\nconst items = $input.all();\n\n// Filter out pages where Status is \"Done\" or \"Completado\"\nconst pendingTasks = items.filter(item => {\n  const props = item.json.properties || {};\n  \n  // Check common status property names\n  const statusProp = props.Status || props.Estado || props.status || props.estado;\n  \n  if (!statusProp) return true; // Include if no status property found\n  \n  let statusValue = '';\n  \n  if (statusProp.select) {\n    statusValue = statusProp.select?.name || '';\n  } else if (statusProp.status) {\n    statusValue = statusProp.status?.name || '';\n  } else if (typeof statusProp === 'string') {\n    statusValue = statusProp;\n  }\n  \n  const doneStatuses = ['done', 'completado', 'completed', 'terminado', 'finalizado'];\n  return !doneStatuses.includes(statusValue.toLowerCase());\n});\n\nif (pendingTasks.length === 0) {\n  return [{ json: { skip: true, message: '' } }];\n}\n\n// Extract task names\nconst taskLines = pendingTasks.map(item => {\n  const props = item.json.properties || {};\n  \n  // Try different common title property names\n  const nameProp = props.Name || props.Nombre || props.Title || props.Titulo || props.name || props.title;\n  \n  let taskName = 'Sin título';\n  \n  if (nameProp) {\n    if (nameProp.title && Array.isArray(nameProp.title)) {\n      taskName = nameProp.title.map(t => t.plain_text || '').join('') || 'Sin título';\n    } else if (nameProp.rich_text && Array.isArray(nameProp.rich_text)) {\n      taskName = nameProp.rich_text.map(t => t.plain_text || '').join('') || 'Sin título';\n    } else if (typeof nameProp === 'string') {\n      taskName = nameProp;\n    }\n  }\n  \n  return '• ' + taskName;\n});\n\nconst message = '📋 **Tareas pendientes de hoy**\\n\\n' + taskLines.join('\\n') + '\\n\\nTotal: ' + pendingTasks.length + ' tareas';\n\nreturn [{ json: { skip: false, message: message, taskCount: pendingTasks.length } }];\n"
+      }
+    },
+    {
+      "id": "3002cf33-b0dd-4557-9475-cdf68b1d16cc",
+      "name": "Hay Tareas Pendientes?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        96
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "check-skip",
+              "leftValue": "={{ $json.skip }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "false"
+              },
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "91b0e8dd-7123-4574-bea0-01097353ce6f",
+      "name": "Enviar a Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "botToken",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571461663719454"
+        },
+        "sendTo": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571462196400303"
+        },
+        "content": "={{ $json.message }}"
+      },
+      "webhookId": "7c6747c1-4018-412f-a49d-37e9e631e27a",
+      "credentials": {
+        "discordBotApi": {
+          "id": "4K40hl2Un0aWGges",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "id": "998963d8-9cf5-460a-9e2a-a0ba27167cae",
+      "name": "Sin Tareas Pendientes",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Daily 9am Bolivia": {
+      "main": [
+        [
+          {
+            "node": "Buscar Tareas en Notion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Tareas en Notion": {
+      "main": [
+        [
+          {
+            "node": "Formatear Mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatear Mensaje": {
+      "main": [
+        [
+          {
+            "node": "Hay Tareas Pendientes?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay Tareas Pendientes?": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Discord",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sin Tareas Pendientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "58d7a279-a85a-4cbd-803c-26708d9e2818",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-26T16:32:02.277Z",
+      "createdAt": "2026-05-26T16:32:02.277Z",
+      "role": "workflow:owner",
+      "workflowId": "KQsJ9l87LsWzhn7e",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

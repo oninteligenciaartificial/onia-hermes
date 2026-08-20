@@ -1,0 +1,133 @@
+{
+  "updatedAt": "2026-08-07T14:50:25.000Z",
+  "createdAt": "2026-08-07T14:49:44.428Z",
+  "id": "MqKr54wUwAkXEGPy",
+  "name": "ZZ TEST remitentes Gmail ronda 2 (borrar)",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "47b3f636-fb4a-4653-99a9-2408c3e4f15c",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        96
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "ea9a6f1e-4f6d-480b-a17b-ebb886f237e4",
+      "name": "Test Gmail account",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "oninteligenciaartificial@gmail.com",
+        "subject": "TEST remitente [Gmail account]",
+        "emailType": "text",
+        "message": "Prueba de remitente de la credencial \"Gmail account\" (Ku1kYKsZFvrrIJ9y). Borrar."
+      },
+      "webhookId": "c751425a-e644-49cb-a604-698eac5400d5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ku1kYKsZFvrrIJ9y",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "70b540a8-a1a3-45cf-8ca0-0e6cf565ae64",
+      "name": "Test Gmail account 3",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        192
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "oninteligenciaartificial@gmail.com",
+        "subject": "TEST remitente [Gmail account 3]",
+        "emailType": "text",
+        "message": "Prueba de remitente de la credencial \"Gmail account 3\" (noe1vRlyVTHo74tB). Borrar."
+      },
+      "webhookId": "9a719b24-396b-4016-8a38-41b7acf46da9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "noe1vRlyVTHo74tB",
+          "name": "Gmail account 3"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Test Gmail account",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Test Gmail account 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "415b36f0-ad18-4d38-a143-35317a4ba103",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-07T14:49:44.435Z",
+      "createdAt": "2026-08-07T14:49:44.435Z",
+      "role": "workflow:owner",
+      "workflowId": "MqKr54wUwAkXEGPy",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

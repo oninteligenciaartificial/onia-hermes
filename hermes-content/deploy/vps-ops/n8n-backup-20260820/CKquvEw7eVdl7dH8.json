@@ -1,0 +1,361 @@
+{
+  "updatedAt": "2026-05-15T20:17:49.000Z",
+  "createdAt": "2026-03-30T04:44:22.871Z",
+  "id": "CKquvEw7eVdl7dH8",
+  "name": "chatbot onia",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "onia-chatwoot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "0aaed21b-4566-4efa-895a-cfc94b6f3268",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1792,
+        352
+      ],
+      "webhookId": "15cc744a-7e5a-4f5d-a8ab-407668b1fa8f",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "message_created",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "3914a70b-1a7d-4687-884a-b9fefc68ea29",
+              "leftValue": "message_type",
+              "rightValue": "outgoing",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d80b2f6e-83b4-46ff-babb-564ee8c9d021",
+      "name": "Filter",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1568,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $json.content || '';\nconst conversationId = $json.conversation_id || $json.id;\nconst accountId = $json.account_id || 1;\n\nconst clean = content.trim().toLowerCase();\nconst isEmpty = clean.length < 3 || /^(ok|dale|gracias|jaja)$/.test(clean);\n\nreturn [{\n  json: {\n    conversation_id: conversationId,\n    account_id: accountId,\n    content: content,\n    is_empty: isEmpty\n  }\n}];"
+      },
+      "id": "202ccb68-c001-4c9b-b661-91ab751f99d2",
+      "name": "Parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1344,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "c2",
+              "leftValue": "={{ $json.is_empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "38d2eedb-d5b3-49e1-bfac-ae14bc7f7619",
+      "name": "Not Empty?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1136,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const systemPrompt = `Eres el Asistente de OnIA, agencia de IA en Santa Cruz, Bolivia.\n\n  SERVICIOS Y PRECIOS:\n  - Web Sencilla: Bs 1200 (trimestral)\n  - Web Media: Bs 1800 (trimestral)\n  - Web Premium: Bs 2400 (trimestral)\n  - Campaña Marketing: Bs 400 (mensual)\n  - Chatbot con IA: desde Bs 800\n\n  CONTACTO:\n  - Teléfono: +591 76155816\n  - Email: oninteligenciaartificial@gmail.com\n  - Web: onia.com.bo\n  - Horario: Lun-Vie 9:00-19:00\n\n  REGLAS:\n  - Responde corto (2-3 oraciones)\n  - Tono amigable y cercano\n  - Usa emojis ocasionalmente\n  - SIEMPRE termina con una pregunta\n\n  EJEMPLO: \"¡Hola! Somos OnIA. ¿Qué servicio te interesa: web, chatbot o marketing?\"`;\n\n  return [{\n    json: {\n      system_prompt: systemPrompt,\n      user_message: $json.content,\n      conversation_id: $json.conversation_id,\n      account_id: $json.account_id\n    }\n  }];"
+      },
+      "id": "009717fe-4c75-4866-b9af-d0496f702315",
+      "name": "Build Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -912,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=={{ $json.system_prompt }}",
+              "role": "system"
+            },
+            {
+              "content": "=={{ $json.user_message }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {
+          "maxTokens": 250,
+          "temperature": 0.7
+        }
+      },
+      "id": "e6460cc4-e8ad-4f2c-9b9c-714030743bc5",
+      "name": "OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        -688,
+        240
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "oAEdJ5GA8hOYB83l",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"success\"}",
+        "options": {}
+      },
+      "id": "3af4c826-0fe5-4873-9305-212b174d572a",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/public/api/v1/accounts/{{ $json.account_id }}/conversations/{{ $json.conversation_id }}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Chatwoot Auth",
+              "value": "M8fUCHzf1Br4nBw7TYJ86p3S"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "=={{ $json.content }}"
+            },
+            {
+              "name": "message_type",
+              "value": "outgoing"
+            },
+            {
+              "name": "private",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -352,
+        240
+      ],
+      "id": "cbe25ee4-53b2-4c1e-8cbb-7e5e4746b8e7",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "mjKIy6ei1TffIZnW",
+          "name": "Header Auth account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Parse",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse": {
+      "main": [
+        [
+          {
+            "node": "Not Empty?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Not Empty?": {
+      "main": [
+        [
+          {
+            "node": "Build Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Prompt": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "d7a2cd43-a7e4-41a7-acc9-2405690b627d",
+  "activeVersionId": null,
+  "versionCounter": 112,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-30T04:44:22.877Z",
+      "createdAt": "2026-03-30T04:44:22.877Z",
+      "role": "workflow:owner",
+      "workflowId": "CKquvEw7eVdl7dH8",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

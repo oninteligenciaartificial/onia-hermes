@@ -1,0 +1,150 @@
+{
+  "updatedAt": "2026-06-04T05:02:38.105Z",
+  "createdAt": "2026-06-03T22:22:32.547Z",
+  "id": "H1PDrinGPYtBcyhw",
+  "name": "WF-GS-ERR-01: Sentry to GitHub Issue Draft",
+  "description": "Draft GestiOS monitoring repair flow: Sentry webhook -> redacted GitHub Issue payload -> GitHub issue node. Not published; credential must be selected manually before production.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gestios/sentry-production-error",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "bd3710f6-c44d-47f6-a27f-575ab04d2ce8",
+      "name": "Sentry production webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "4fa13d22-1da9-4427-bc57-cde37981c9a6"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst item = $input.first().json;\nconst payload = item.body ?? item;\nconst issue = payload?.data?.issue ?? {};\nconst event = payload?.data?.event ?? payload?.data?.event_alert?.event ?? {};\nconst transaction = event.transaction ?? 'unknown transaction';\nconst level = String(issue.level ?? event.level ?? '').toLowerCase();\nconst severity = level === 'fatal' ? 'P0' : (/checkout|pos|billing|auth|orders|ventas/i.test(transaction) || level === 'error' ? 'P1' : 'P2');\nconst type = issue.metadata?.type ?? 'Sentry issue';\nconst title = '[Sentry][' + severity + '] ' + type + ' en ' + transaction;\nconst body = '## Sentry\\n\\n'\n  + '- Issue: ' + (issue.permalink ?? 'N/A') + '\\n'\n  + '- Issue ID: ' + (issue.id ?? 'N/A') + '\\n'\n  + '- Event ID: ' + (event.event_id ?? 'N/A') + '\\n'\n  + '- Environment: ' + (event.environment ?? 'N/A') + '\\n'\n  + '- Release: ' + (event.release ?? 'N/A') + '\\n\\n'\n  + '## Instruccion para Codex\\n\\n'\n  + 'Seguir AGENTS.md, docs/ORCHESTRATOR.md y docs/MONITORING_REPAIR_FLOW.md. Esperar aprobacion humana antes de commit, push, PR o deploy.\\n';\nreturn [{ json: { ok: true, dryRun: true, githubIssue: { owner: 'oninteligenciaartificial', repo: 'Gestios', title, labels: ['sentry', 'production', 'needs-triage', severity.toLowerCase()], body } } }];\n"
+      },
+      "id": "2d35d23c-6d06-4ab8-bd99-784fbb5158c5",
+      "name": "Build GitHub issue payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/repos/oninteligenciaartificial/Gestios/issues",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2022-11-28"
+            },
+            {
+              "name": "User-Agent",
+              "value": "n8n-gestios-monitoring"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.githubIssue }}",
+        "options": {}
+      },
+      "id": "de1fbed5-533e-47ff-8755-b16c2a548e68",
+      "name": "Create GitHub issue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        0
+      ],
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "m7UmZOpSnXOuGNTn",
+          "name": "Bearer Auth account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Sentry production webhook": {
+      "main": [
+        [
+          {
+            "node": "Build GitHub issue payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build GitHub issue payload": {
+      "main": [
+        [
+          {
+            "node": "Create GitHub issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "876817af-405f-4cac-ac2a-11559252d99a",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-03T22:22:32.552Z",
+      "createdAt": "2026-06-03T22:22:32.552Z",
+      "role": "workflow:owner",
+      "workflowId": "H1PDrinGPYtBcyhw",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

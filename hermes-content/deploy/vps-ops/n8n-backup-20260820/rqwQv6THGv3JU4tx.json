@@ -1,0 +1,250 @@
+{
+  "updatedAt": "2026-06-09T22:21:32.000Z",
+  "createdAt": "2026-05-26T16:32:36.635Z",
+  "id": "rqwQv6THGv3JU4tx",
+  "name": "WF-DISCORD-03 Crear Evento desde Discord",
+  "description": "Webhook recibe texto libre de Discord, AI extrae datos del evento con GPT-4o-mini, crea evento en Google Calendar y confirma en canal Discord.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "0ded9e29-4a3b-400b-bbc3-f27d3f63bd90",
+      "name": "Recibir Texto Discord",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "discord-crear-evento",
+        "responseMode": "onReceived"
+      },
+      "webhookId": "7727052d-605f-4e4c-9b9e-5dc3fcddb67b"
+    },
+    {
+      "id": "4a5d779b-3dfe-4df6-b366-27aa77cc8b50",
+      "name": "Preparar Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const texto = $input.first().json.body.texto;\nconst usuario = $input.first().json.body.usuario;\nconst ahora = new Date().toISOString();\nreturn [{ json: { texto, usuario, fechaActual: ahora,\n  systemPrompt: \"Eres un asistente que extrae datos de eventos de calendario a partir de texto libre en español. La fecha y hora actual es: \" + ahora + \" (zona horaria America/La_Paz, UTC-4). Extrae del texto el evento y responde ÚNICAMENTE con un JSON válido con esta estructura: {\\\"titulo\\\": string, \\\"inicio\\\": string ISO8601 con offset -04:00, \\\"fin\\\": string ISO8601 con offset -04:00 (1 hora después del inicio si no se especifica), \\\"descripcion\\\": string}. No incluyas explicaciones, solo el JSON.\",\n  userMessage: \"Extrae los datos del evento del siguiente texto: \" + texto\n} }];"
+      }
+    },
+    {
+      "id": "b640ee31-9f8d-46d5-8638-e27b32e92e20",
+      "name": "Llamar OpenAI API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_OPENAI_KEY__"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"gpt-4o-mini\", \"temperature\": 0, \"messages\": [ { \"role\": \"system\", \"content\": $json.systemPrompt }, { \"role\": \"user\", \"content\": $json.userMessage } ] } }}"
+      }
+    },
+    {
+      "id": "e866b1d8-8c32-4ef5-955b-c05a0c71fbca",
+      "name": "Parsear Respuesta OpenAI",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const respuesta = $input.first().json.choices[0].message.content;\nlet eventoJSON;\ntry {\n  const limpio = respuesta.replace(/```json\\n?/g, '').replace(/```/g, '').trim();\n  eventoJSON = JSON.parse(limpio);\n} catch (e) {\n  throw new Error('No se pudo parsear el JSON del evento: ' + respuesta);\n}\nreturn [{ json: { titulo: eventoJSON.titulo, inicio: eventoJSON.inicio, fin: eventoJSON.fin, descripcion: eventoJSON.descripcion || '' } }];"
+      }
+    },
+    {
+      "id": "b0b18cf8-c630-45f8-8dd0-d2559e63dc2b",
+      "name": "Crear Evento Google Calendar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "create",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "business@onia.com.bo"
+        },
+        "start": "={{ $json.inicio }}",
+        "end": "={{ $json.fin }}",
+        "additionalFields": {
+          "summary": "={{ $json.titulo }}",
+          "description": "={{ $json.descripcion }}"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "AIf6aLd0Q1yAqXKj",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "id": "e6b53ce3-1e95-4f16-860f-56e8e22f56e2",
+      "name": "Confirmar en Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "botToken",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571461663719454"
+        },
+        "sendTo": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571462196400303"
+        },
+        "content": "={{ \"✅ Evento creado: \" + $(\"Parsear Respuesta OpenAI\").item.json.titulo + \" — \" + $(\"Parsear Respuesta OpenAI\").item.json.inicio }}"
+      },
+      "webhookId": "a6055a8d-94f5-4c8b-8b06-263630b97beb",
+      "credentials": {
+        "discordBotApi": {
+          "id": "4K40hl2Un0aWGges",
+          "name": "Discord Bot account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Recibir Texto Discord": {
+      "main": [
+        [
+          {
+            "node": "Preparar Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Prompt": {
+      "main": [
+        [
+          {
+            "node": "Llamar OpenAI API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Llamar OpenAI API": {
+      "main": [
+        [
+          {
+            "node": "Parsear Respuesta OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Respuesta OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Crear Evento Google Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Evento Google Calendar": {
+      "main": [
+        [
+          {
+            "node": "Confirmar en Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "a2f97308-356a-4cba-a3d9-74357a85cbf4",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-26T16:32:36.637Z",
+      "createdAt": "2026-05-26T16:32:36.637Z",
+      "role": "workflow:owner",
+      "workflowId": "rqwQv6THGv3JU4tx",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

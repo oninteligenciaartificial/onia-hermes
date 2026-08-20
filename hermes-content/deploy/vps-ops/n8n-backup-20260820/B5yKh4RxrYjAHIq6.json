@@ -1,0 +1,399 @@
+{
+  "updatedAt": "2026-06-04T05:03:14.000Z",
+  "createdAt": "2026-05-23T04:59:10.993Z",
+  "id": "B5yKh4RxrYjAHIq6",
+  "name": "WF-PROSP-02: Email Scraping Retry",
+  "description": "Reintenta scraping de email para leads con website pero sin email. Todo hardcodeado. Corre 9AM La Paz.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "db8bc4b7-5866-4ee1-831f-31a7e416a2fd",
+      "name": "Schedule: Daily 9AM La Paz",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        272
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 13 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "15dd0baf-aa29-41a8-85ec-d6195281b5b5",
+      "name": "Supabase: Fetch Leads Sin Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        272
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/prospect_leads",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "estado",
+              "value": "eq.Nuevo"
+            },
+            {
+              "name": "website",
+              "value": "not.is.null"
+            },
+            {
+              "name": "email",
+              "value": "is.null"
+            },
+            {
+              "name": "select",
+              "value": "id,nombre,website,producto,ciudad"
+            },
+            {
+              "name": "limit",
+              "value": "30"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "7cd0d8b2-3f8d-4a56-89ee-7fb0cce650c1",
+      "name": "Resend: Enrichment Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer re_NnNmyeqG_Kqp9FVX2VKsg2FuanBxcAzog"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"from\": \"noreply@onia.com.bo\", \"to\": [\"oninteligenciaartificial@gmail.com\"], \"subject\": \"Enriquecimiento completado — \" + $now.toFormat(\"dd/MM/yyyy\"), \"text\": \"Scraping de emails terminó. Revisa el dashboard para ver qué prospectos tienen email.\" } }}",
+        "options": {}
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "9c7d221e-8339-42f6-9dd8-f4a37704b72a",
+      "name": "HTTP: Scrape Website",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        192
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.website }}",
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "timeout": 8000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "c2689167-c52f-4b46-847e-b7de833397d6",
+      "name": "Code: Extract Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "let email = null;\ntry {\n  const html = $json.data || $json.body || JSON.stringify($json) || '';\n  const emailRegex = /[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}/g;\n  const found = (html.match(emailRegex) || []).filter(e =>\n    !e.includes('example') && !e.includes('sentry') &&\n    !e.includes('jquery') && !e.includes('schema.org') &&\n    !e.endsWith('.png') && !e.endsWith('.jpg') &&\n    !e.endsWith('.svg') && !e.endsWith('.js') &&\n    e.length < 80\n  );\n  email = found.length > 0 ? found[0] : null;\n} catch(e) { email = null; }\nconst prev = $('Supabase: Fetch Leads Sin Email').item.json;\nreturn [{\n  json: {\n    lead_id: prev.id,\n    found_email: email\n  }\n}];"
+      }
+    },
+    {
+      "id": "4ee50eaf-0b6e-43d5-a4d3-40071feddb3d",
+      "name": "IF: Encontró Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        192
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.found_email }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "40b5e8e0-cf1a-47c0-97d5-5198cca6532b",
+      "name": "Supabase: Update Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1344,
+        272
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/prospect_leads?id=eq.{{ $json.lead_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"email\": $json.found_email } }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "b2a452c4-f4f0-46ac-8a35-a0b358d64b48",
+      "name": "Split: Per Lead",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        272
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "1270c9e2-a244-4135-97bc-0f195f2cddb4",
+      "name": "Sticky Note 4b6cdb79",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        672,
+        336
+      ],
+      "parameters": {
+        "content": {
+          "config": {
+            "name": "Sticky Note Setup",
+            "parameters": {
+              "content": "## WF-PROSP-02: Email Scraping Retry\nReintenta scraping de email para leads con website pero sin email.\nCorre a las 9AM La Paz (13:00 UTC).",
+              "color": 3,
+              "width": 300,
+              "height": 160
+            },
+            "position": [
+              560,
+              440
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 9AM La Paz": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Fetch Leads Sin Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Fetch Leads Sin Email": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP: Scrape Website": {
+      "main": [
+        [
+          {
+            "node": "Code: Extract Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Extract Email": {
+      "main": [
+        [
+          {
+            "node": "IF: Encontró Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Encontró Email?": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Update Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split: Per Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Update Email": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Lead": {
+      "main": [
+        [
+          {
+            "node": "Resend: Enrichment Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP: Scrape Website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Daily 9AM La Paz": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "87359a45-ea85-4032-9bbb-376fc0c2564f",
+  "activeVersionId": null,
+  "versionCounter": 17,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-23T04:59:11.003Z",
+      "createdAt": "2026-05-23T04:59:11.003Z",
+      "role": "workflow:owner",
+      "workflowId": "B5yKh4RxrYjAHIq6",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

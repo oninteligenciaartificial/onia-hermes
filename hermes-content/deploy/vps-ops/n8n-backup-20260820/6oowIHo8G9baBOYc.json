@@ -1,0 +1,276 @@
+{
+  "updatedAt": "2026-08-07T15:10:58.510Z",
+  "createdAt": "2026-05-25T02:29:22.729Z",
+  "id": "6oowIHo8G9baBOYc",
+  "name": "GestiOS — Weekly Admin Digest [WF-GS-04]",
+  "description": "Weekly Monday 9am: org stats + revenue from Supabase → email digest to business@onia.com.bo via Resend.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "d413c1d5-4185-45f1-baa5-d92b0e89389e",
+      "name": "scheduleTrigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "9bd5f29f-9eab-4077-b858-56f9a89791e7",
+      "name": "fetchOrgStats",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/organizations?select=id,plan,createdAt",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            },
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            }
+          ]
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "81c08992-f5b6-451a-8737-83212f898b84",
+      "name": "buildDigest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        192
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const orgs = $('fetchOrgStats').all().map(i => i.json);\nconst newOrgs = $('fetchNewOrgs').all().map(i => i.json);\nconst orders = $('fetchRevenueStats').all().map(i => i.json);\nconst totalOrgs = orgs.length;\nconst newOrgsCount = newOrgs.length;\nconst totalRevenue = orders.reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0);\nconst totalOrders = orders.length;\nconst planCount = {};\nfor (const org of orgs) { planCount[org.plan] = (planCount[org.plan] || 0) + 1; }\nconst planSummary = Object.entries(planCount).map(([p,c]) => `${p}: ${c}`).join(', ');\nconst newOrgsList = newOrgs.length > 0 ? newOrgs.map(o => `• ${o.name} (${o.plan})`).join('\\n') : '• Ninguno';\nconst emailHtml = `<h2>📊 Resumen Semanal GestiOS</h2><ul><li>Orgs activas: <strong>${totalOrgs}</strong></li><li>Nuevas esta semana: <strong>${newOrgsCount}</strong></li><li>Ventas entregadas: <strong>${totalOrders} pedidos — Bs ${totalRevenue.toFixed(2)}</strong></li><li>Planes: ${planSummary}</li></ul><h3>Nuevas orgs</h3><pre>${newOrgsList}</pre><p><a href=\"https://gesti-os.vercel.app\">Ver Dashboard</a></p>`;\nreturn [{ json: { emailHtml, totalOrgs, newOrgsCount, totalRevenue, totalOrders } }];"
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "a3e59936-4bcc-43d2-aa0d-3ca15ee04ef9",
+      "name": "fetchNewOrgs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        192
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/organizations?select=id,name,plan,businessType,createdAt&createdAt=gte.{{ new Date(Date.now()-7*24*60*60*1000).toISOString() }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            },
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            }
+          ]
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "8e3e7187-5ecc-43b4-b05d-fcc92889e1f5",
+      "name": "fetchRevenueStats",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        384
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/orders?select=id,total,createdAt,organizationId&status=eq.ENTREGADO&createdAt=gte.{{ new Date(Date.now()-7*24*60*60*1000).toISOString() }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            },
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            }
+          ]
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "2482f612-4b7e-4b2c-8e6d-a566e2613a84",
+      "name": "Gmail: Send Digest",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        672,
+        192
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "business@onia.com.bo",
+        "subject": "📊 Resumen Semanal GestiOS",
+        "emailType": "html",
+        "message": "={{ $('buildDigest').item.json.emailHtml }}",
+        "options": {
+          "senderName": "GestiOS"
+        }
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "executeOnce": true,
+      "webhookId": "d7dc445d-c63d-476b-918b-a6e0757aa958"
+    }
+  ],
+  "connections": {
+    "scheduleTrigger": {
+      "main": [
+        [
+          {
+            "node": "fetchOrgStats",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "fetchNewOrgs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "fetchRevenueStats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetchOrgStats": {
+      "main": [
+        [
+          {
+            "node": "buildDigest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetchNewOrgs": {
+      "main": [
+        [
+          {
+            "node": "buildDigest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetchRevenueStats": {
+      "main": [
+        [
+          {
+            "node": "buildDigest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "buildDigest": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Send Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:scheduleTrigger": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "7f78d14e-7aa5-4e66-8f8d-fbc7ea024723",
+  "activeVersionId": null,
+  "versionCounter": 8,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-25T02:29:22.730Z",
+      "createdAt": "2026-05-25T02:29:22.730Z",
+      "role": "workflow:owner",
+      "workflowId": "6oowIHo8G9baBOYc",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Resend reemplazado por Gmail business",
+    "description": "Reemplaza el HTTP Request a api.resend.com (key hardcodeada) por nodo Gmail con la credencial nueva dxyxCorebAZWPl6f (business@onia.com.bo). Mismo destinatario, subject y cuerpo (emailHtml de buildDigest)."
+  }
+}

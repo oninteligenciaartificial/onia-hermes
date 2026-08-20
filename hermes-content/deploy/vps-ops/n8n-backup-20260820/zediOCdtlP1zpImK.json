@@ -1,0 +1,169 @@
+{
+  "updatedAt": "2026-06-15T04:08:36.096Z",
+  "createdAt": "2026-06-09T17:51:55.150Z",
+  "id": "zediOCdtlP1zpImK",
+  "name": "Mara Daily Content — Trend Research",
+  "description": "Diario 9am Bolivia: investiga trends TikTok skincare, genera brief UGC Mara Vale via hermes, envia a Sergio por Telegram para aprobar. No publica sin aprobacion.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "4a17f8f7-9cb2-4406-978d-4efe873c9cad",
+      "name": "Daily 9am Bolivia",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 13 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "475c2f85-6f78-4863-977f-99ad90eeabc8",
+      "name": "Build Mara Command",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        96
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "hermes-command",
+              "name": "hermesCommand",
+              "value": "=Genera video Lucia Fontana diario {{ $now.toISO().substring(0,10) }}: investiga con SearXNG los 3 trends mas virales skincare/beauty/UGC TikTok hoy en Latinoamerica. Elige el mejor hook. Personaje: Lucia Fontana (latina 26 anos, pecas, piel real no plastica, UGC cercano tipo amiga que sabe de piel, storytime de bano con luz natural). Mercado: solo Bolivia (sol de altura, piel grasa por clima, envios locales). Producto propio a vender: protector solar SPF y/o limpiador facial. Usa media references Higgsfield: limpiador 69196a1a-c2e9-434f-9a4b-0de752dc8255, SPF fe6ed358-45d0-4b51-9bad-8e3beba259d8, imagen base personaje job e2d0df73-922d-4073-aaad-1a082f7e8d04. Elige uno de los 5 pilares (problema-solucion, rutina, mitos, antes-despues, educacion rapida). Escribe guion de 15-20 segundos a camara con CTA 'link abajo, envios a Bolivia'. Evita: tripode o camara visibles, zoom-out brusco, sobreactuacion, datos exagerados. Crea brief completo en Video Lab con prompt Higgsfield (Seedance 2.0, 9:16, 15s, audio ON). Enviame por Telegram para aprobar. No publiques sin aprobacion.",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4ef44e11-f0fc-4f8b-a452-ab928566836b",
+      "name": "Run Hermes — Mara Daily",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        448,
+        96
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "password",
+        "cwd": "/root/.hermes",
+        "command": "=python3 - <<'PY'\nimport json\nimport subprocess\nimport urllib.parse\n\nencoded = '''{{ encodeURIComponent($json.hermesCommand) }}'''\nmsg = urllib.parse.unquote(encoded)\n\ntry:\n    proc = subprocess.run(\n        [\"hermes-command\", \"telegram\", \"--message\", msg],\n        cwd=\"/root/.hermes\",\n        capture_output=True,\n        text=True,\n        timeout=180,\n    )\n    stdout = (proc.stdout or \"\").strip()\n    stderr = (proc.stderr or \"\").strip()\n    try:\n        payload = json.loads(stdout) if stdout else {}\n    except Exception:\n        payload = {}\n    if not isinstance(payload, dict):\n        payload = {\"raw_stdout\": stdout}\n    payload.setdefault(\"ok\", proc.returncode == 0)\n    if not payload.get(\"telegram_reply\"):\n        payload[\"telegram_reply\"] = stdout or stderr or f\"Done. Code: {proc.returncode}\"\n    payload[\"exit_code\"] = proc.returncode\nexcept Exception as exc:\n    payload = {\"ok\": False, \"telegram_reply\": \"Error: \" + str(exc)}\n\nprint(json.dumps(payload, ensure_ascii=False))\nPY"
+      },
+      "credentials": {
+        "sshPassword": {
+          "id": "ASl7h9O7hilJX6g5",
+          "name": "SSH Password account"
+        }
+      }
+    },
+    {
+      "id": "ea606ced-ef45-4f76-a9b9-945c811d5afc",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Daily 9am Bolivia": {
+      "main": [
+        [
+          {
+            "node": "Build Mara Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Mara Command": {
+      "main": [
+        [
+          {
+            "node": "Run Hermes — Mara Daily",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Mara Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Daily 9am Bolivia": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "d72ed773-b056-47e1-a886-6eb72811c933",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-09T17:51:55.158Z",
+      "createdAt": "2026-06-09T17:51:55.158Z",
+      "role": "workflow:owner",
+      "workflowId": "zediOCdtlP1zpImK",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

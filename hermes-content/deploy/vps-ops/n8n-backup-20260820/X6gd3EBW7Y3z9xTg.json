@@ -1,0 +1,193 @@
+{
+  "updatedAt": "2026-07-04T17:52:06.069Z",
+  "createdAt": "2026-06-09T22:07:23.518Z",
+  "id": "X6gd3EBW7Y3z9xTg",
+  "name": "ONIA - Agenda: Cal.com Booking",
+  "description": "Recibe webhook de Cal.com cuando cliente agenda, crea evento en Google Calendar y notifica a Sergio por Telegram.",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "cf53cea8-a879-42a3-9105-c71db26aecb1",
+      "name": "Cal.com Booking Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "calcom-booking",
+        "responseMode": "onReceived"
+      },
+      "webhookId": "5d5df130-b0d2-47ea-8a90-f280d0831c84"
+    },
+    {
+      "id": "1799947c-abe3-4c9d-9182-63ae74cc0185",
+      "name": "Parsear Booking CalCom",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Guard de tipo de evento: solo BOOKING_CREATED debe crear evento en Google\n// Calendar. Cal.com puede enviar tambien BOOKING_REQUESTED / CANCELLED /\n// RESCHEDULED / REJECTED; si el workflow los procesara, crearia eventos\n// incorrectos en GCal (ver ONIA_N8N_TELEGRAM_CLEANUP_20260630.md, problema #4\n// y \"Salida objetivo pendiente\" en ONIA_CALCOM_SELF_HOST_RUNBOOK_2026.md).\nconst body = $input.first().json.body || $input.first().json;\nconst triggerEvent = body.triggerEvent || (body.payload && body.payload.triggerEvent) || '';\nif (triggerEvent && triggerEvent !== 'BOOKING_CREATED') {\n  // Ignorar silenciosamente cualquier otro evento: no crear GCal, no notificar.\n  return [];\n}\nconst payload = body.payload || body;\nconst attendees = payload.attendees || [];\nconst attendeeName = attendees[0] && attendees[0].name ? attendees[0].name : 'Cliente';\nconst attendeeEmail = attendees[0] && attendees[0].email ? attendees[0].email : '';\nconst titulo = payload.title || ('Reunion con ' + attendeeName);\nreturn [{\n  json: {\n    titulo,\n    startISO: payload.startTime,\n    endISO: payload.endTime,\n    descripcion: (payload.description || '') + '\\nCliente: ' + attendeeName + ' (' + attendeeEmail + ')',\n    attendeeName,\n    attendeeEmail\n  }\n}];\n"
+      }
+    },
+    {
+      "id": "f75981bc-a133-4d46-9793-f59458b45a17",
+      "name": "Armar Notificacion",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const parsed = $input.first().json;\nconst startStr = parsed.startISO ? new Date(parsed.startISO).toLocaleString('es-BO', { timeZone: 'America/La_Paz', weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';\nconst msg = '📅 <b>Nueva reunión agendada por cliente</b>\\n\\n' +\n  '👤 ' + parsed.attendeeName + (parsed.attendeeEmail ? ' (' + parsed.attendeeEmail + ')' : '') + '\\n' +\n  '📋 ' + parsed.titulo + '\\n' +\n  '⏰ ' + startStr + '\\n' +\n  '🗓️ Evento creado en tu Google Calendar por Cal.';\nconst destinatarios = ['6830070978', '8887222181'];\nreturn destinatarios.map(chatId => ({ json: { mensaje: msg, chatId } }));\n"
+      }
+    },
+    {
+      "id": "9fcfef4f-588a-4f4b-916e-cd2388d7ae23",
+      "name": "Notificar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.mensaje }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "7a7942b2-9264-4b73-bdb6-c14ac014244c"
+    },
+    {
+      "id": "deb319bf-4b23-45d5-82fc-16940ca580cc",
+      "name": "Validar firma Cal (OFF)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        180
+      ],
+      "parameters": {
+        "jsCode": "// [DESHABILITADO] Validacion de firma del webhook Cal.com. Activar SOLO cuando\n// el secret este seteado en Cal admin Y en n8n. Pasos:\n// 1) Cal admin (cal.onia.com.bo/settings/developer/webhooks): generar/pegar secret.\n// 2) n8n: cargar env var CALCOM_WEBHOOK_SECRET con ese mismo valor.\n// 3) Habilitar este nodo.\n// Cal firma con X-Cal-Signature-256 = HMAC-SHA256(body crudo, secret).\n// NOTA: el HMAC es sobre el body CRUDO. Si la firma no coincide, habilitar\n// \"Raw Body\" en el nodo Webhook y usar el string crudo aca y en el parse.\nconst crypto = require(\"crypto\");\nconst secret = $env.CALCOM_WEBHOOK_SECRET;\nif (!secret) { throw new Error(\"Falta CALCOM_WEBHOOK_SECRET en n8n\"); }\nconst headers = $json.headers || {};\nconst sig = headers[\"x-cal-signature-256\"] || headers[\"X-Cal-Signature-256\"] || \"\";\nconst raw = typeof $json.body === \"string\" ? $json.body : JSON.stringify($json.body);\nconst expected = crypto.createHmac(\"sha256\", secret).update(raw).digest(\"hex\");\nif (sig !== expected) { throw new Error(\"Firma Cal invalida\"); }\nreturn $input.all();"
+      },
+      "disabled": true,
+      "notes": "Deshabilitado. Activar tras setear CALCOM_WEBHOOK_SECRET en Cal y n8n. Ver route/ONIA_CALCOM runbook."
+    }
+  ],
+  "connections": {
+    "Armar Notificacion": {
+      "main": [
+        [
+          {
+            "node": "Notificar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cal.com Booking Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validar firma Cal (OFF)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar firma Cal (OFF)": {
+      "main": [
+        [
+          {
+            "node": "Parsear Booking CalCom",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Booking CalCom": {
+      "main": [
+        [
+          {
+            "node": "Armar Notificacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "363e934e-d269-4087-9fbd-56c4356c2738",
+  "activeVersionId": "363e934e-d269-4087-9fbd-56c4356c2738",
+  "versionCounter": 9,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:07.419Z",
+      "createdAt": "2026-07-03T21:24:07.419Z",
+      "id": "XBK6IoQ3GTHTpDnq",
+      "name": "onia-ops"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-06-09T22:07:23.534Z",
+      "createdAt": "2026-06-09T22:07:23.534Z",
+      "role": "workflow:owner",
+      "workflowId": "X6gd3EBW7Y3z9xTg",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

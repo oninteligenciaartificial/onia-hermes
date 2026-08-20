@@ -1,0 +1,98 @@
+{
+  "updatedAt": "2026-08-14T03:48:16.000Z",
+  "createdAt": "2026-08-14T03:39:07.312Z",
+  "id": "7DLfsyV1qPlTfsTI",
+  "name": "TEMP - Test credencial Postgres VPS",
+  "description": "Temporal: probar la credencial Postgres VPS contra dentalgest-staging-supabase-pooler. Borrar despues.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "11b2ee1f-a67e-4f9f-aa3e-520e8d16c2d9",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "26135679-5d45-4781-814f-7d0ea18eb730",
+      "name": "Identify VPS DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "resource": "database",
+        "operation": "executeQuery",
+        "query": "SELECT (SELECT count(*)::int FROM subscription_payments WHERE id = 'test-payalert-vps-003') AS payment_row, (SELECT count(*)::int FROM n8n_ops.payment_alerts_sent WHERE payment_id = 'test-payalert-vps-003') AS tracking_row, (SELECT count(*)::int FROM subscription_payments WHERE status='PENDING') AS total_pending, (SELECT count(*)::int FROM organizations) AS org_count;",
+        "options": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "ecF3x3SGUrT0hBbm",
+          "name": "Postgres VPS (dentalgest-staging)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Identify VPS DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "66e4eab9-522c-4c62-a4d5-a0e290a2fcf4",
+  "activeVersionId": null,
+  "versionCounter": 6,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T03:39:07.320Z",
+      "createdAt": "2026-08-14T03:39:07.320Z",
+      "role": "workflow:owner",
+      "workflowId": "7DLfsyV1qPlTfsTI",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

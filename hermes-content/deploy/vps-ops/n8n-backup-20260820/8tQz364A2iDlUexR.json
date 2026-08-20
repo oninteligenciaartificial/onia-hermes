@@ -1,0 +1,63 @@
+{
+  "updatedAt": "2026-07-04T01:00:28.000Z",
+  "createdAt": "2026-02-21T19:21:57.555Z",
+  "id": "8tQz364A2iDlUexR",
+  "name": "UDIA Workflow de Prueba",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "274f916a-f0d8-41c5-9292-e12ac5fc6a83",
+  "activeVersionId": null,
+  "versionCounter": 10,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-02-21T19:22:48.687Z",
+      "createdAt": "2026-02-21T19:22:48.687Z",
+      "id": "qteETPDMRdwpfyrM",
+      "name": "🧠Udia"
+    },
+    {
+      "updatedAt": "2026-02-21T19:23:06.629Z",
+      "createdAt": "2026-02-21T19:23:06.629Z",
+      "id": "yO4okswcmpfNlhjw",
+      "name": "🔴Desarrollo"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-02-21T19:21:57.558Z",
+      "createdAt": "2026-02-21T19:21:57.558Z",
+      "role": "workflow:owner",
+      "workflowId": "8tQz364A2iDlUexR",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

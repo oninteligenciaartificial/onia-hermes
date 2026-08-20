@@ -1,0 +1,152 @@
+{
+  "updatedAt": "2026-07-26T15:46:03.664Z",
+  "createdAt": "2026-07-26T15:46:03.664Z",
+  "id": "bJhSGHPYsaICEeKm",
+  "name": "ONIA - Chatbot Demo (Chatwoot)",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "wh-chatwoot-1",
+      "name": "Webhook Chatwoot",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "onia-chatbot-demo",
+        "responseMode": "onReceived"
+      },
+      "webhookId": "a416f3d6-3e68-4d5e-8638-757ad9770dd6"
+    },
+    {
+      "id": "code-normalizar-1",
+      "name": "Normalizar webhook",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Un solo lugar arma el contrato de entrada de chatwoot-adapter.mjs: el webhook crudo\n// de Chatwoot, en base64 (el nodo SSH no tiene stdin).\nconst raw = $json.body || $json;\nreturn [{ json: { b64: Buffer.from(JSON.stringify(raw)).toString('base64') } }];\n"
+      }
+    },
+    {
+      "id": "ssh-correr-1",
+      "name": "Correr adaptador (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "cwd": "/root",
+        "command": "=CHATWOOT_WEBHOOK_B64='{{ $json.b64 }}' bash /opt/onia/bot/chatwoot-adapter.sh < /dev/null"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "code-leer-1",
+      "name": "Leer resultado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Parsea el stdout de chatwoot-adapter.mjs (que ya posteo la respuesta a Chatwoot el solo,\n// esto es solo para ver el resultado en la ejecucion de n8n: ok / skipped / duplicate / sent / warnings).\nconst raw = ($input.first().json.stdout || '').trim();\nlet r;\ntry { r = JSON.parse(raw.split('\n').pop()); }\ncatch (e) { r = { ok: false, skipped: false, duplicate: false, sent: [], error: 'stdout ilegible: ' + raw.slice(0, 300) }; }\nreturn [{ json: r }];\n"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Chatwoot": {
+      "main": [
+        [
+          {
+            "node": "Normalizar webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar webhook": {
+      "main": [
+        [
+          {
+            "node": "Correr adaptador (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correr adaptador (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Leer resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "b6425fc2-a616-4821-aeed-937f4789e2da",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-26T15:46:03.668Z",
+      "createdAt": "2026-07-26T15:46:03.668Z",
+      "role": "workflow:owner",
+      "workflowId": "bJhSGHPYsaICEeKm",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

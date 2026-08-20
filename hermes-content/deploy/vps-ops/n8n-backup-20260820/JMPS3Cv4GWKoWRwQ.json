@@ -1,0 +1,455 @@
+{
+  "updatedAt": "2026-06-04T05:03:14.000Z",
+  "createdAt": "2026-05-23T04:56:33.121Z",
+  "id": "JMPS3Cv4GWKoWRwQ",
+  "name": "WF-PROSP-01: Daily Lead Finder Bolivia",
+  "description": "Bolivia only. Google Maps + Place Details + scraping email. Todo hardcodeado, sin dependencias de credenciales. Corre 7AM La Paz.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "4c2398f1-20a3-449d-bc6a-3f7ca4049057",
+      "name": "Schedule: Daily 7AM La Paz",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 11 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3cd4c326-c7ab-47e9-ab37-d26a01e2a2e7",
+      "name": "Code: Generate Searches",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        192
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const searches = [\n  { query: 'clinica dental odontologia', city: 'Santa Cruz de la Sierra', pais: 'Bolivia', product: 'DentalGest' },\n  { query: 'consultorio dental odontologico', city: 'La Paz', pais: 'Bolivia', product: 'DentalGest' },\n  { query: 'clinica odontologica dentista', city: 'Cochabamba', pais: 'Bolivia', product: 'DentalGest' },\n  { query: 'consultorio odontologia dental', city: 'Sucre', pais: 'Bolivia', product: 'DentalGest' },\n  { query: 'distribuidora mayorista productos', city: 'Santa Cruz de la Sierra', pais: 'Bolivia', product: 'Gesti-OS' },\n  { query: 'tienda comercio retail minorista', city: 'Santa Cruz de la Sierra', pais: 'Bolivia', product: 'Gesti-OS' },\n  { query: 'almacen distribucion ferreteria', city: 'La Paz', pais: 'Bolivia', product: 'Gesti-OS' },\n];\nreturn searches.map(s => ({ json: s }));"
+      }
+    },
+    {
+      "id": "f66cb2d0-f4fc-4028-8152-1895a85e3813",
+      "name": "Resend: Summary Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer re_NnNmyeqG_Kqp9FVX2VKsg2FuanBxcAzog"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"from\": \"noreply@onia.com.bo\", \"to\": [\"oninteligenciaartificial@gmail.com\"], \"subject\": \"Prospectos Bolivia — \" + $now.toFormat(\"dd/MM/yyyy\"), \"text\": \"Lead Finder terminó. Nuevos prospectos de Bolivia guardados con teléfono, website y email cuando fue posible.\" } }}",
+        "options": {}
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "025855d3-4e53-4d1d-868e-219e0a050bda",
+      "name": "HTTP: Google Maps Places",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        192
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://maps.googleapis.com/maps/api/place/textsearch/json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $json.query + \" \" + $json.city }}"
+            },
+            {
+              "name": "language",
+              "value": "es"
+            },
+            {
+              "name": "key",
+              "value": "__REDACTED_GOOGLE_KEY__"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "115495b8-8341-446d-9c70-ee6ea49f5a24",
+      "name": "Code: Expand Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const results = $json.results || [];\nconst batchItem = $('Split: Per Search').item.json;\nreturn results.slice(0, 5).map(r => ({\n  json: {\n    place_id: r.place_id,\n    nombre: r.name,\n    direccion: r.formatted_address || '',\n    producto: batchItem.product,\n    ciudad: batchItem.city,\n    pais: batchItem.pais,\n    estado: 'Nuevo',\n    fuente: 'Google Maps',\n    fecha_creacion: new Date().toISOString().split('T')[0]\n  }\n}));"
+      }
+    },
+    {
+      "id": "0ca30eea-3313-41c8-952b-4c2e5c1b10ff",
+      "name": "HTTP: Place Details",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        192
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://maps.googleapis.com/maps/api/place/details/json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "place_id",
+              "value": "={{ $json.place_id }}"
+            },
+            {
+              "name": "fields",
+              "value": "name,formatted_phone_number,international_phone_number,website,formatted_address"
+            },
+            {
+              "name": "language",
+              "value": "es"
+            },
+            {
+              "name": "key",
+              "value": "__REDACTED_GOOGLE_KEY__"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "735a6eb2-1892-4993-b1be-4029dfc0ee60",
+      "name": "Code: Merge Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        192
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const details = $json.result || {};\nconst prev = $('Code: Expand Results').item.json;\nreturn [{\n  json: {\n    nombre: details.name || prev.nombre,\n    direccion: details.formatted_address || prev.direccion,\n    telefono: details.international_phone_number || details.formatted_phone_number || null,\n    website: details.website || null,\n    producto: prev.producto,\n    ciudad: prev.ciudad,\n    pais: prev.pais,\n    estado: prev.estado,\n    fuente: prev.fuente,\n    fecha_creacion: prev.fecha_creacion\n  }\n}];"
+      }
+    },
+    {
+      "id": "10130d52-09f3-4a63-8f75-6424809f6e6a",
+      "name": "HTTP: Scrape Website",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        192
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.website || \"https://httpstat.us/204\" }}",
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "timeout": 8000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "5fafc04d-d8ae-4064-b961-ca8884450f82",
+      "name": "Code: Extract Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        192
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "let email = null;\ntry {\n  const html = $json.data || $json.body || JSON.stringify($json) || '';\n  const emailRegex = /[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}/g;\n  const found = (html.match(emailRegex) || []).filter(e =>\n    !e.includes('example') && !e.includes('sentry') &&\n    !e.includes('jquery') && !e.includes('schema.org') &&\n    !e.endsWith('.png') && !e.endsWith('.jpg') &&\n    !e.endsWith('.svg') && !e.endsWith('.js') &&\n    e.length < 80\n  );\n  email = found.length > 0 ? found[0] : null;\n} catch(e) { email = null; }\nconst prev = $('Code: Merge Details').item.json;\nreturn [{\n  json: {\n    nombre: prev.nombre,\n    direccion: prev.direccion,\n    telefono: prev.telefono,\n    website: prev.website,\n    email: email,\n    producto: prev.producto,\n    ciudad: prev.ciudad,\n    pais: prev.pais,\n    estado: prev.estado,\n    fuente: prev.fuente,\n    fecha_creacion: prev.fecha_creacion\n  }\n}];"
+      }
+    },
+    {
+      "id": "6110518c-b246-49e2-aaeb-288b6a10398e",
+      "name": "Supabase: Insert Prospect",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2016,
+        272
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/prospect_leads",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=ignore-duplicates,return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"nombre\": $json.nombre, \"email\": $json.email, \"telefono\": $json.telefono, \"website\": $json.website, \"producto\": $json.producto, \"ciudad\": $json.ciudad, \"pais\": $json.pais, \"estado\": $json.estado, \"fuente\": $json.fuente, \"fecha_creacion\": $json.fecha_creacion } }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "4eca4286-ede2-4966-b57c-eebf0ab851c9",
+      "name": "Split: Per Search",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        192
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "aedb96bb-dd6a-4ab9-b189-5591da6ee225",
+      "name": "Sticky Note 89a95656",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        336
+      ],
+      "parameters": {
+        "content": {
+          "config": {
+            "name": "Sticky Note Setup",
+            "parameters": {
+              "content": "## WF-PROSP-01: Daily Lead Finder Bolivia\nBusca clinicas dentales y negocios en Bolivia.\nGoogle Maps Text Search + Place Details + Scraping email.\nCorre a las 7AM La Paz (11:00 UTC).",
+              "color": 3,
+              "width": 300,
+              "height": 180
+            },
+            "position": [
+              560,
+              440
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 7AM La Paz": {
+      "main": [
+        [
+          {
+            "node": "Code: Generate Searches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Generate Searches": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP: Google Maps Places": {
+      "main": [
+        [
+          {
+            "node": "Code: Expand Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Expand Results": {
+      "main": [
+        [
+          {
+            "node": "HTTP: Place Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP: Place Details": {
+      "main": [
+        [
+          {
+            "node": "Code: Merge Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Merge Details": {
+      "main": [
+        [
+          {
+            "node": "HTTP: Scrape Website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP: Scrape Website": {
+      "main": [
+        [
+          {
+            "node": "Code: Extract Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Extract Email": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Insert Prospect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Insert Prospect": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Search": {
+      "main": [
+        [
+          {
+            "node": "Resend: Summary Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP: Google Maps Places",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule: Daily 7AM La Paz": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "f0db063e-779c-4c91-a13d-e7dabc11dc59",
+  "activeVersionId": null,
+  "versionCounter": 21,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-23T04:56:33.130Z",
+      "createdAt": "2026-05-23T04:56:33.130Z",
+      "role": "workflow:owner",
+      "workflowId": "JMPS3Cv4GWKoWRwQ",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

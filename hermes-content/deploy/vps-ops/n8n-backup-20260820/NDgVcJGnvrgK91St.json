@@ -1,0 +1,295 @@
+{
+  "updatedAt": "2026-08-07T15:09:46.488Z",
+  "createdAt": "2026-05-14T02:24:34.202Z",
+  "id": "NDgVcJGnvrgK91St",
+  "name": "WF-01: Trial Warnings",
+  "description": "Avisos diarios de vencimiento de trial (3 días o menos) por Gmail Workspace. Migrado de Resend 2026-08-07; sin $env (URLs fijas). APAGADO hasta tener clientes: duplica el trial-drip del producto.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "56fa7d49-c879-4292-aab8-dbedd6da9683",
+      "name": "Schedule: Daily 9AM La Paz",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        272
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 13 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "47d8e605-f862-484c-859e-3ade6a092ee6",
+      "name": "Supabase: Trial Orgs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        272
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_trial_warnings",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "527aef39-1144-4266-a90a-769e93a0be7f",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ]
+    },
+    {
+      "id": "21afd6cc-f789-423c-8f22-da70d4247fac",
+      "name": "Code: Calc Days",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        192
+      ],
+      "parameters": {
+        "jsCode": "const trialEnd = new Date($json.trialEnd);\nconst now = new Date();\nconst daysRemaining = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));\nreturn { json: { ...$json, daysRemaining } };"
+      }
+    },
+    {
+      "id": "26552762-bf58-4cae-8f37-f227f2173e89",
+      "name": "If: Days Remaining",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-days",
+              "leftValue": "={{ $json.daysRemaining }}",
+              "rightValue": 3,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "e94d394c-ee77-49c2-b025-3626fdff9d55",
+      "name": "Split: Per Org",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        272
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "4379a1c5-6337-4941-a0e1-18bb013f3e63",
+      "name": "Gmail: Send Warning Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1120,
+        272
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.email }}",
+        "subject": "={{ $json.daysRemaining === 1 ? 'Último día de tu prueba en Onia' : $json.daysRemaining === 2 ? 'Quedan 2 días — no pierdas tus datos' : 'Tu prueba de Onia termina en 3 días' }}",
+        "emailType": "html",
+        "message": "=<p>Hola {{ $json.adminName }},</p><p>Tu período de prueba termina en {{ $json.daysRemaining }} día(s) ({{ $json.trialEnd }}). Elegí tu plan para no perder acceso: <a href=\"https://app.onia.com.bo/checkout\">app.onia.com.bo/checkout</a></p><p>— Onia</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "35783231-dea8-4889-8775-3e370e91014f"
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 9AM La Paz": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Trial Orgs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Trial Orgs": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Org",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Calc Days": {
+      "main": [
+        [
+          {
+            "node": "If: Days Remaining",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Days Remaining": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Send Warning Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split: Per Org",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Org": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code: Calc Days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Send Warning Email": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Org",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Daily 9AM La Paz": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "d3ae1974-f199-4409-b13b-4d213eefb3f1",
+  "activeVersionId": null,
+  "versionCounter": 30,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-14T02:24:34.213Z",
+      "createdAt": "2026-05-14T02:24:34.213Z",
+      "role": "workflow:owner",
+      "workflowId": "NDgVcJGnvrgK91St",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Send Warning Email"
+  }
+}

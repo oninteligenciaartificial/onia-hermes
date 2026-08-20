@@ -1,0 +1,284 @@
+{
+  "updatedAt": "2026-07-04T01:00:58.000Z",
+  "createdAt": "2026-02-21T19:32:49.329Z",
+  "id": "jVrufLM0aWnYLj8c",
+  "name": "[UDIA] Mi primer workflow",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "66476a07-3332-4b43-ac82-6cc6a88d0ea4",
+              "name": "language",
+              "value": "spanisg",
+              "type": "string"
+            },
+            {
+              "id": "e75ae626-d188-4a44-9451-75ca45f79802",
+              "name": "type",
+              "value": "article",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        528,
+        -176
+      ],
+      "id": "328b8762-40d2-4914-b9ac-06780ff03ec2",
+      "name": "VariablesIniciales"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f2fea3e0-bda8-4c78-a99e-5593de89503d",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        752,
+        48
+      ],
+      "id": "49c71ae6-109d-4eeb-a729-1c69e44ff195",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "66476a07-3332-4b43-ac82-6cc6a88d0ea4",
+              "name": "language",
+              "value": "spanisg",
+              "type": "string"
+            },
+            {
+              "id": "e75ae626-d188-4a44-9451-75ca45f79802",
+              "name": "type",
+              "value": "article",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        -176
+      ],
+      "id": "f2d2fa81-87fc-4d12-a817-d300957fb04d",
+      "name": "VariablesIniciales1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "66476a07-3332-4b43-ac82-6cc6a88d0ea4",
+              "name": "language",
+              "value": "spanisg",
+              "type": "string"
+            },
+            {
+              "id": "e75ae626-d188-4a44-9451-75ca45f79802",
+              "name": "type",
+              "value": "article",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1200,
+        -176
+      ],
+      "id": "3fd84ab2-7a42-4117-b043-08fc79d9f585",
+      "name": "VariablesIniciales2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        752,
+        -176
+      ],
+      "id": "61522fbb-a799-45f6-a141-68ca291d4f5f",
+      "name": "Wait",
+      "webhookId": "37be1617-2057-42c1-951b-894d8ea61e2d"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        528,
+        48
+      ],
+      "id": "b0ace4bd-760a-4e28-a850-fbe717526939",
+      "name": "Wait1",
+      "webhookId": "6f4d2b80-60fe-419a-a458-0d29cadb5f60"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        192,
+        -64
+      ],
+      "id": "b78de4a8-ce52-45cb-8c80-6c89b22cc649",
+      "name": "When chat message received",
+      "webhookId": "11186fcd-b49e-4be2-955d-e1ddc14ddd05"
+    }
+  ],
+  "connections": {
+    "VariablesIniciales": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        []
+      ]
+    },
+    "VariablesIniciales1": {
+      "main": [
+        [
+          {
+            "node": "VariablesIniciales2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "VariablesIniciales1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VariablesIniciales2": {
+      "main": [
+        []
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "VariablesIniciales",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "America/La_Paz",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "d7c73fda-f40e-4256-88d6-006f13edcdee",
+  "activeVersionId": null,
+  "versionCounter": 77,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-02-21T19:32:49.332Z",
+      "createdAt": "2026-02-21T19:32:49.332Z",
+      "role": "workflow:owner",
+      "workflowId": "jVrufLM0aWnYLj8c",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

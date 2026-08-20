@@ -1,0 +1,203 @@
+{
+  "updatedAt": "2026-08-16T04:42:21.966Z",
+  "createdAt": "2026-08-16T04:42:21.966Z",
+  "id": "O0NHmyqP6Fyk4f0b",
+  "name": "Alta de Cliente ONIA → CRM + Correo",
+  "description": "Webhook POST del Formulario de Alta de Cliente (alta-cliente.html en onia-forms). Responde 200 con CORS abierto, inserta el alta como lead Ganado en onia_center.leads via SSH (lead-insert.mjs, payload completo en raw.alta) y envia el resumen por Gmail a o",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "5254f151-627c-42cc-a9d0-3aad2bcc94f9",
+      "name": "Webhook Alta Cliente",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alta-cliente",
+        "responseMode": "onReceived",
+        "authentication": "none",
+        "options": {
+          "allowedOrigins": "*",
+          "responseCode": {
+            "values": {
+              "responseCode": 200
+            }
+          },
+          "responseData": "ok"
+        }
+      },
+      "webhookId": "b299e62e-a1a9-49bd-b2c7-aa95fa12c392"
+    },
+    {
+      "id": "607f653c-7826-4f2c-90d0-0ce13997f24d",
+      "name": "Armar lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const b = $('Webhook Alta Cliente').first().json.body || {};\nconst negocio = String(b.negocio || '').trim();\nif (!negocio) { return [{ json: { ok: false, b64: '', error: 'no_negocio' } }]; }\nconst servicios = Array.isArray(b.servicios) ? b.servicios : [];\nconst notas = [\n  'Alta de cliente via forms.',\n  'Servicios: ' + servicios.map(s => (s.nombre || '') + (s.precio ? ' Bs ' + s.precio : '')).join(' | '),\n  'La web debe: ' + (Array.isArray(b.objetivo_web) ? b.objetivo_web.join(', ') : ''),\n  'Atiende WhatsApp: ' + (b.quien_atiende || '-'),\n].join('\\n');\nconst lead = {\n  company: negocio,\n  contact: [b.contacto_nombre, b.whatsapp, b.email].filter(Boolean).join(' - '),\n  channel: 'Alta cliente',\n  source: 'alta-form',\n  pipeline_status: 'Ganado',\n  business_type: b.rubro || 'pendiente',\n  notes: notas.slice(0, 2000),\n  alta: b,\n};\nconst b64 = Buffer.from(JSON.stringify(lead)).toString('base64');\nreturn [{ json: { ok: true, b64: b64 } }];"
+      }
+    },
+    {
+      "id": "be8622af-e673-4ba4-ac4e-b74323ac3ea6",
+      "name": "Insertar en CRM (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "=docker exec -e LEAD_B64=\"{{ $json.b64 }}\" -i onia-center node - < /opt/onia/lead-insert.mjs",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "61afd41f-11c0-4e74-a0f3-1bb6a6c3423a",
+      "name": "Preparar correo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const b = $('Webhook Alta Cliente').first().json.body || {};\nlet ins = { ok: false, error: 'sin salida del insert' };\ntry { ins = JSON.parse(String($input.first().json.stdout || '').trim().split('\\n').pop()); } catch (e) { ins = { ok: false, error: 'parse stdout' }; }\nconst esc = (v) => String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst li = (k, v) => v ? '<b>' + k + ':</b> ' + esc(v) + '<br>' : '';\nconst h3 = (t) => '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">' + t + '</h3>';\nconst servicios = (Array.isArray(b.servicios) ? b.servicios : []).map(s => '&bull; ' + esc(s.nombre) + (s.precio ? ' &mdash; Bs ' + esc(s.precio) : '')).join('<br>');\nconst faqs = (Array.isArray(b.faqs) ? b.faqs : []).map(f => '&bull; ' + esc(f.pregunta) + '<br>&nbsp;&nbsp;&rarr; ' + esc(f.respuesta)).join('<br>');\nconst estado = ins.ok ? 'Guardado en el CRM (' + esc(ins.lead_key) + ')' : 'NO se guardo en el CRM: ' + esc(ins.error || 'error desconocido');\nconst html = '<div style=\"font-family:Arial,sans-serif;color:#101827;max-width:640px\">' +\n  '<h2 style=\"color:#1e5bff;margin:0 0 4px\">Alta de cliente &mdash; ONIA</h2>' +\n  '<p style=\"color:' + (ins.ok ? '#0f8b62' : '#b23c3c') + ';font-weight:bold\">' + estado + '</p>' +\n  h3('Negocio') + '<p>' + li('Negocio', b.negocio) + li('Rubro', b.rubro) + li('Ciudad', b.ciudad) + li('NIT', b.nit) + li('Contacto', b.contacto_nombre) + li('WhatsApp', b.whatsapp) + li('Correo', b.email) + '</p>' +\n  h3('Para el bot') + '<p>' + (servicios ? '<b>Servicios:</b><br>' + servicios + '<br>' : '') + li('Horarios', b.horarios) + li('Direccion', b.direccion) + li('Tono', b.tono) + (faqs ? '<b>Preguntas frecuentes:</b><br>' + faqs + '<br>' : '') + '</p>' +\n  h3('Para la web') + '<p>' + li('Logo', b.tiene_logo) + li('Fotos', b.tiene_fotos) + li('Colores', b.colores) + li('Redes', b.redes) + li('La web debe', (b.objetivo_web || []).join(', ')) + '</p>' +\n  h3('Operacion') + '<p>' + li('Cobra por', (b.como_cobra || []).join(', ')) + li('Atiende WhatsApp', b.quien_atiende) + li('Extra', b.extra) + '</p>' +\n  '</div>';\nconst subject = 'Alta de cliente - ' + (b.negocio || 'sin nombre') + ' (' + (b.rubro || 'sin rubro') + ')' + (ins.ok ? '' : ' [ERROR CRM]');\nreturn [{ json: { subject: subject, html: html, insert_ok: Boolean(ins.ok), lead_key: ins.lead_key || null } }];"
+      }
+    },
+    {
+      "id": "c6bb2bc3-7b19-4df2-9ef7-45b8c97cd4c5",
+      "name": "Gmail: Enviar alta",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "oninteligenciaartificial@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "e5f7df57-493d-41ca-b2c9-5ae2bd400f2e"
+    }
+  ],
+  "connections": {
+    "Webhook Alta Cliente": {
+      "main": [
+        [
+          {
+            "node": "Armar lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar lead": {
+      "main": [
+        [
+          {
+            "node": "Insertar en CRM (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insertar en CRM (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Preparar correo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar correo": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Enviar alta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "ceeb8ff9-a07f-44e2-8cd8-f5e47027db18",
+  "activeVersionId": "ceeb8ff9-a07f-44e2-8cd8-f5e47027db18",
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-16T04:42:22.011Z",
+      "createdAt": "2026-08-16T04:42:22.011Z",
+      "role": "workflow:owner",
+      "workflowId": "O0NHmyqP6Fyk4f0b",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Alta inicial: webhook + insert CRM + correo",
+    "description": "Created with 5 nodes: Webhook Alta Cliente, Armar lead, Insertar en CRM (VPS), Preparar correo, Gmail: Enviar alta"
+  }
+}

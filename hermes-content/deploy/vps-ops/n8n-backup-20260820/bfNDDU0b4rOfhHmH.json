@@ -1,0 +1,370 @@
+{
+  "updatedAt": "2026-05-24T02:59:31.433Z",
+  "createdAt": "2026-05-24T00:47:41.875Z",
+  "id": "bfNDDU0b4rOfhHmH",
+  "name": "WF-08: GestiOS WhatsApp Onboarding",
+  "description": "Onboarding al activar WhatsApp add-on: sincroniza contactos a Chatwoot, envía email de bienvenida + WA de prueba, marca onboardingAt en DB.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "980bbbc2-dc6a-45f0-81b0-25eb38ac62df",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        144
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gestios-whatsapp-onboarding",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "a18e202d-679a-4c8e-bc3a-40ad7935044d"
+    },
+    {
+      "id": "25717795-d389-41e7-a795-8665d9a54c4c",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        144
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"ok\":true}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "4f75f7ae-eb91-414b-b789-007d5554e6bf",
+      "name": "Fetch Customers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        144
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "='https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/customers?organizationId=eq.' + $('Webhook Trigger').first().json.organizationId + '&select=id,name,phone,email&limit=1000'",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=$vars.SUPABASE_SERVICE_ROLE"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "182f780b-0a98-4cbd-b6ff-4eb404bdfd0d",
+      "name": "Fetch WA Addon",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "='https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/org_addons?organizationId=eq.' + $('Webhook Trigger').first().json.organizationId + '&addon=eq.WHATSAPP&active=eq.true&select=accessToken,phoneNumberId,chatwootInboxId&limit=1'",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=$vars.SUPABASE_SERVICE_ROLE"
+            }
+          ]
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "5afb0059-983d-4aa5-bd4c-09da0db76918",
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "fromEmail": "=$vars.GESTIOS_FROM_EMAIL",
+        "toEmail": "=$('Webhook Trigger').first().json.adminEmail",
+        "subject": "='¡WhatsApp activado para ' + $('Webhook Trigger').first().json.orgName + '!'",
+        "emailFormat": "html",
+        "html": "='<h2>¡Tu add-on de WhatsApp está listo!</h2><p>Hola, tu organización <strong>' + $('Webhook Trigger').first().json.orgName + '</strong> ya tiene WhatsApp Business activo en GestiOS.</p><h3>Próximos pasos:</h3><ol><li>Configura tu webhook en Meta: <strong>https://gestios.app/api/webhooks/whatsapp</strong></li><li>Suscríbete a: <strong>messages</strong></li></ol><p>Tus conversaciones aparecerán automáticamente en GestiOS y Chatwoot.</p>'"
+      },
+      "executeOnce": true,
+      "webhookId": "d1267039-b51b-4cfc-8709-514cca05adec"
+    },
+    {
+      "id": "a82e9aab-3625-4397-a8d0-7999cd8d8032",
+      "name": "Send WA Test",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1344,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "='https://graph.facebook.com/v20.0/' + $('Fetch WA Addon').first().json.phoneNumberId + '/messages'",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "='Bearer ' + $('Fetch WA Addon').first().json.accessToken"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": {
+          "mode": "raw",
+          "rawBody": "=JSON.stringify({ messaging_product: 'whatsapp', to: $vars.WA_ONBOARDING_TEST_PHONE, type: 'text', text: { body: '✅ GestiOS: WhatsApp add-on activado para ' + $('Webhook Trigger').first().json.orgName } })"
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "4e74c79d-6f5e-41cb-88f4-4d6e71f20ce9",
+      "name": "Mark Onboarding Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1568,
+        0
+      ],
+      "parameters": {
+        "method": "PATCH",
+        "url": "='https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/org_addons?organizationId=eq.' + $('Webhook Trigger').first().json.organizationId + '&addon=eq.WHATSAPP'",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=$vars.SUPABASE_SERVICE_ROLE"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": {
+          "mode": "raw",
+          "rawBody": "=JSON.stringify({ onboardingAt: new Date().toISOString() })"
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "b2443055-fd21-4053-9cf9-8a3dd51341e2",
+      "name": "Sync Contact to Chatwoot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "='https://app.chatwoot.com/api/v1/accounts/' + $vars.CHATWOOT_ACCOUNT_ID + '/contacts'",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "body": {
+          "mode": "raw",
+          "rawBody": "=JSON.stringify({ name: $json.name, phone_number: $json.phone, identifier: $json.id })"
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": {
+            "name": "api_access_token"
+          },
+          "name": "Chatwoot API Token"
+        }
+      }
+    },
+    {
+      "id": "afc56d7a-ecb2-46da-8b5b-17733cb8f969",
+      "name": "Batch Customers",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        144
+      ],
+      "parameters": {
+        "batchSize": 10
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond OK": {
+      "main": [
+        [
+          {
+            "node": "Fetch Customers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Customers": {
+      "main": [
+        [
+          {
+            "node": "Batch Customers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch WA Addon": {
+      "main": [
+        [
+          {
+            "node": "Send Welcome Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Welcome Email": {
+      "main": [
+        [
+          {
+            "node": "Send WA Test",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WA Test": {
+      "main": [
+        [
+          {
+            "node": "Mark Onboarding Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sync Contact to Chatwoot": {
+      "main": [
+        [
+          {
+            "node": "Batch Customers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch Customers": {
+      "main": [
+        [
+          {
+            "node": "Fetch WA Addon",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sync Contact to Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "cd503b52-1cc2-467c-ae04-e67f195c2e07",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-24T00:47:41.881Z",
+      "createdAt": "2026-05-24T00:47:41.881Z",
+      "role": "workflow:owner",
+      "workflowId": "bfNDDU0b4rOfhHmH",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

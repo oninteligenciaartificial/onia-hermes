@@ -1,0 +1,313 @@
+{
+  "updatedAt": "2026-07-04T01:05:57.000Z",
+  "createdAt": "2026-03-21T21:11:36.621Z",
+  "id": "t17aey6LEAhAITWp",
+  "name": "Ejercicio flujo de datos",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Flujo de Datos Udia",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre"
+            },
+            {
+              "fieldLabel": "Correo"
+            },
+            {
+              "fieldLabel": "Telefono"
+            },
+            {
+              "fieldLabel": "Edad",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Ciudad"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -160,
+        0
+      ],
+      "id": "d3eec410-751d-4ee3-a9a9-33623763370b",
+      "name": "On form submission",
+      "webhookId": "1b67f8d7-791f-41ff-8cb8-167cd554b29f"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0c7ad69b-1c42-4eaf-a700-0bf9f4d3c460",
+              "name": "Nombre",
+              "value": "={{ $json.Nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "8ab0db6c-4d55-4413-8866-84eb2af76b18",
+              "name": "Edad",
+              "value": "={{ $json.Edad }}",
+              "type": "number"
+            },
+            {
+              "id": "de8a5648-7e50-4dc9-992c-8ba85daf1fdd",
+              "name": "Ciudad",
+              "value": "={{ $json.Ciudad }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        0
+      ],
+      "id": "c42f507f-f76f-4543-aeb2-b25336251f7e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8dec2c30-8c34-4caf-9d2d-9d86d05dff52",
+              "leftValue": "={{ $json.Edad }}",
+              "rightValue": 18,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        288,
+        0
+      ],
+      "id": "6f7b8006-a3bd-449a-bece-5e5b65c20016",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Ciudad }}",
+                    "rightValue": "SCZ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d7414a7c-97f6-4193-90ba-ea8d94f55621"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "SCZ"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "489053d1-7d07-4597-a28b-4b134df77212",
+                    "leftValue": "={{ $json.Ciudad }}",
+                    "rightValue": "La Paz",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "La Paz"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "bc89a673-24eb-4259-9410-c722f9926ed3",
+                    "leftValue": "={{ $json.Ciudad }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Otro"
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        0
+      ],
+      "id": "c5dc5c94-a520-477a-892d-fa429df810a4",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7c21b132-cb6a-4754-a58c-fa5d45151fad",
+              "name": "Mensaje",
+              "value": "=Lo siento  {{ $('On form submission').item.json.Nombre }}, tienes {{ $('On form submission').item.json.Edad }} por lo que eres menor de edad y no puedes continuar",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        208
+      ],
+      "id": "8dd72131-1dda-4a45-baa8-3f1cf1a61f9b",
+      "name": "Edit Fields1"
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "9aec200e-0406-4a12-b275-83a3ddec8b82",
+  "activeVersionId": null,
+  "versionCounter": 84,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-21T21:11:36.623Z",
+      "createdAt": "2026-03-21T21:11:36.623Z",
+      "role": "workflow:owner",
+      "workflowId": "t17aey6LEAhAITWp",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

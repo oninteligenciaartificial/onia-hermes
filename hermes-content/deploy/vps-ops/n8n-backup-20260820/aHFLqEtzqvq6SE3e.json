@@ -1,0 +1,304 @@
+{
+  "updatedAt": "2026-07-22T16:45:29.226Z",
+  "createdAt": "2026-07-04T15:25:21.349Z",
+  "id": "aHFLqEtzqvq6SE3e",
+  "name": "ONIA - Web Factory VPS Radar",
+  "description": "Corre el worker de Web Factory en el VPS por SSH (Lun-Sab 07:10 La Paz), normaliza el resultado y notifica a Sergio por Telegram. Nodo SSH usa credencial ONIA VPS SSH. Comando: node scripts/web-factory-vps-automation.mjs --mode daily en /opt/onia-hermes/w",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "b2d1b67f-33ea-49ae-8e71-8614397394c1",
+      "name": "Lunes a sabado 07:10",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "10 7 * * 1-6"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c194269a-4e01-4539-95aa-c1fc5623ba38",
+      "name": "Run Web Factory worker on VPS",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        540,
+        300
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "cwd": "/opt/onia-hermes/web-factory",
+        "command": "cd /opt/onia-hermes/web-factory && node scripts/web-factory-vps-automation.mjs --mode daily"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "b1d0b04b-36d8-47a4-a081-f6eb9a89de47",
+      "name": "Normalize worker result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        840,
+        300
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const raw = items[0]?.json || {};\nconst stdout = String(raw.stdout || '').trim();\nlet parsed = null;\ntry {\n  const start = stdout.indexOf('{');\n  parsed = start >= 0 ? JSON.parse(stdout.slice(start)) : null;\n} catch (error) {\n  parsed = null;\n}\nconst report = parsed || {};\nconst steps = Array.isArray(report.steps) ? report.steps : [];\nconst failedStep = steps.find((step) => !step.ok);\nconst exitCode = typeof raw.code === 'number' ? raw.code : (typeof raw.exitCode === 'number' ? raw.exitCode : 1);\nconst ok = exitCode === 0 && report.ok !== false && !failedStep;\nconst lines = [\n  ok ? 'ONIA Web Factory VPS: OK' : 'ONIA Web Factory VPS: FALLO',\n  `mode=${report.mode || 'daily'} runId=${report.runId || 'sin-run-id'}`,\n  `exitCode=${exitCode} report=${report.reportPath || '/var/log/onia/web-factory/latest-web-factory-vps-automation.json'}`,\n  failedStep ? `failedStep=${failedStep.id || 'unknown'}` : `steps=${steps.length}`,\n];\nif (raw.stderr) lines.push(String(raw.stderr).slice(-800));\nreturn [{ json: { ok, exitCode, runId: report.runId || '', reportPath: report.reportPath || '', failedStep: failedStep?.id || '', message: lines.join('\\n').slice(0, 3900) } }];"
+      }
+    },
+    {
+      "id": "defc5280-33af-4677-9eda-2c1337d0e5a8",
+      "name": "Telegram configured?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1140,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "telegram-env-ready",
+              "leftValue": "={{ Boolean($env.TELEGRAM_BOT_TOKEN && $env.TELEGRAM_SERGIO_CHAT_ID) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "f116541f-3bc0-45be-b3fc-def6f7d83eb7",
+      "name": "Worker OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1440,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "worker-ok",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "36369ec6-81ca-402c-b6f5-c85bf00b21a0",
+      "name": "Notify success Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1740,
+        180
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://api.telegram.org/bot' + $env.TELEGRAM_BOT_TOKEN + '/sendMessage' }}",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { chat_id: $env.TELEGRAM_SERGIO_CHAT_ID, text: $json.message, disable_web_page_preview: true } }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "disabled": true
+    },
+    {
+      "id": "7ed3ca0a-cc50-4360-8720-a70b52cd2ce0",
+      "name": "Notify failure Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1740,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://api.telegram.org/bot' + $env.TELEGRAM_BOT_TOKEN + '/sendMessage' }}",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { chat_id: $env.TELEGRAM_SERGIO_CHAT_ID, text: $json.message, disable_web_page_preview: true } }}",
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "id": "5e1a00c9-c543-4e54-a2ab-a6bba03f1ad0",
+      "name": "Sticky Note 6b06c6fa",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1090,
+        250
+      ],
+      "parameters": {
+        "content": "## Telegram no configurado\nSi TELEGRAM_BOT_TOKEN o TELEGRAM_SERGIO_CHAT_ID faltan, el workflow ejecuta el worker pero no notifica. Mantener logs en /var/log/onia/web-factory.",
+        "color": 3,
+        "width": 300,
+        "height": 200
+      }
+    }
+  ],
+  "connections": {
+    "Lunes a sabado 07:10": {
+      "main": [
+        [
+          {
+            "node": "Run Web Factory worker on VPS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Web Factory worker on VPS": {
+      "main": [
+        [
+          {
+            "node": "Normalize worker result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize worker result": {
+      "main": [
+        [
+          {
+            "node": "Telegram configured?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram configured?": {
+      "main": [
+        [
+          {
+            "node": "Worker OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Worker OK?": {
+      "main": [
+        [
+          {
+            "node": "Notify success Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify failure Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Lunes a sabado 07:10": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "70ba0a3f-f869-4e69-87f9-4632baee4f9e",
+  "activeVersionId": "70ba0a3f-f869-4e69-87f9-4632baee4f9e",
+  "versionCounter": 4,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-04T15:25:21.352Z",
+      "createdAt": "2026-07-04T15:25:21.352Z",
+      "role": "workflow:owner",
+      "workflowId": "aHFLqEtzqvq6SE3e",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Silenciar OK diario (dejar solo FALLO)",
+    "description": "Updated workflow"
+  }
+}

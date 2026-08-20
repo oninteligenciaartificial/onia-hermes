@@ -1,0 +1,97 @@
+{
+  "updatedAt": "2026-08-14T03:48:15.000Z",
+  "createdAt": "2026-08-14T03:36:56.981Z",
+  "id": "ygAvtixiBfOKLFhO",
+  "name": "TEMP - Schema credencial postgres",
+  "description": "Temporal: leer el schema del tipo de credencial postgres. Borrar despues.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "dcfe252e-8fce-41c1-9195-13c49282a63e",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "5af9bd3b-c92c-4d48-8b1a-c88cf892c883",
+      "name": "Get Postgres Cred Schema",
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "resource": "credential",
+        "operation": "getSchema",
+        "credentialTypeName": "postgres"
+      },
+      "credentials": {
+        "n8nApi": {
+          "id": "W3ymDVxJLnMWgBmX",
+          "name": "n8n account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Get Postgres Cred Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "b9cb3810-a821-44a9-b001-94d499a64e3e",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T03:36:56.983Z",
+      "createdAt": "2026-08-14T03:36:56.983Z",
+      "role": "workflow:owner",
+      "workflowId": "ygAvtixiBfOKLFhO",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

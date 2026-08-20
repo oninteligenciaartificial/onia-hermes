@@ -1,0 +1,177 @@
+{
+  "updatedAt": "2026-03-29T13:48:59.000Z",
+  "createdAt": "2026-03-28T12:38:53.577Z",
+  "id": "Se3ue1V8HOtdcie1",
+  "name": "Novedades IA Diarias - Perplexity a ClickUp",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "expression": "9"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger-1",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$credentials.perplexityApi.apiKey}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "sonar"
+            },
+            {
+              "name": "messages",
+              "value": "[{\"role\":\"system\",\"content\":\"Eres un experto en inteligencia artificial. Resume las noticias de forma clara y profesional.\"},{\"role\":\"user\",\"content\":\"Busca y resume las principales novedades sobre inteligencia artificial del día anterior ({{$today.minus(1, 'days').format('YYYY-MM-DD')}}). Incluye: 1) Títulos de las noticias más importantes, 2) Breve descripción de cada una, 3) Enlaces a las fuentes. Organiza todo de forma clara y profesional.\"}]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-request-1",
+      "name": "Perplexity AI Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json;\nconst content = response.choices?.[0]?.message?.content || 'No se encontraron resultados';\n\nconst today = new Date();\nconst yesterday = new Date(today);\nyesterday.setDate(yesterday.getDate() - 1);\nconst formattedDate = yesterday.toLocaleDateString('es-ES', {\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\nreturn [{\n  json: {\n    taskName: `🤖 Novedades IA - ${formattedDate}`,\n    description: content,\n    date: formattedDate\n  }\n}];"
+      },
+      "id": "code-1",
+      "name": "Formatear Noticias",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "team": "={{$credentials.clickupApi.teamId}}",
+        "space": "={{$credentials.clickupApi.spaceId}}",
+        "list": "={{$credentials.clickupApi.listId}}",
+        "name": "={{$json.taskName}}",
+        "description": "={{$json.description}}"
+      },
+      "id": "clickup-1",
+      "name": "ClickUp",
+      "type": "n8n-nodes-base.clickUp",
+      "typeVersion": 1,
+      "position": [
+        850,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Perplexity AI Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perplexity AI Search": {
+      "main": [
+        [
+          {
+            "node": "Formatear Noticias",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatear Noticias": {
+      "main": [
+        [
+          {
+            "node": "ClickUp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "a8b45870-5216-4e67-b295-d405d241382e",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-28T12:38:53.588Z",
+      "createdAt": "2026-03-28T12:38:53.588Z",
+      "role": "workflow:owner",
+      "workflowId": "Se3ue1V8HOtdcie1",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

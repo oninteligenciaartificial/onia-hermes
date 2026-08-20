@@ -1,0 +1,408 @@
+{
+  "updatedAt": "2026-08-18T23:06:31.000Z",
+  "createdAt": "2026-08-18T18:47:18.454Z",
+  "id": "mxl618u4eT209hTc",
+  "name": "ONIA - Comentario IG -> DM (Private Reply)",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "c1c36825-942a-432f-a678-677868722019",
+      "name": "Webhook Comentario IG",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "multipleMethods": true,
+        "httpMethod": [
+          "GET",
+          "POST"
+        ],
+        "path": "ig-comment",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "94d9b856-7a59-41f2-9a16-c3671914d356"
+    },
+    {
+      "id": "a0344c94-0d7c-4cbb-883e-bad124a053db",
+      "name": "Devolver challenge",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        300,
+        -180
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.query[\"hub.challenge\"] }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "104297a2-6952-4f05-928d-52783c77f785",
+      "name": "Parsear comentario",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        140
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const b = $('Webhook Comentario IG').first().json.body || {};\nconst ch = ((b.entry || [])[0] || {}).changes || [];\nconst c0 = ch[0] || {};\nconst v = c0.value || {};\nconst texto = String(v.text || '').toUpperCase();\nconst fromId = String((v.from || {}).id || '');\nconst MIOS = ['17841423363059652', '27942557688720145'];\nlet palabra = null;\nif (texto.includes('SISTEMA')) palabra = 'SISTEMA';\nelse if (texto.includes('LISTA')) palabra = 'LISTA';\nconst propio = MIOS.includes(fromId);\nconst esComentario = c0.field === 'comments';\nconst accionable = palabra === 'SISTEMA' && !propio && esComentario && Boolean(v.id) && /^[0-9]+$/.test(fromId);\nlet motivo = 'ok';\nif (!esComentario) motivo = 'no_es_comentario';\nelse if (propio) motivo = 'comentario_propio';\nelse if (!palabra) motivo = 'sin_palabra_clave';\nelse if (palabra === 'LISTA') motivo = 'LISTA_sin_pdf_publicado';\nreturn [{ json: { comment_id: v.id || '', texto: v.text || '', from_id: fromId, username: (v.from || {}).username || '', media_id: (v.media || {}).id || '', palabra: palabra, propio: propio, accionable: accionable, motivo: motivo } }];"
+      }
+    },
+    {
+      "id": "90341aee-4a03-488e-83d1-b5e628404eec",
+      "name": "Accionable?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        540,
+        140
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-acc",
+              "leftValue": "={{ $json.accionable }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "c6ee5f0f-08fc-406e-8bf2-531a48d87655",
+      "name": "Token o freno 24h",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        780,
+        40
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "=bash /opt/onia/ig-dm-token.sh \"{{ $json.from_id }}\"",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "f5127d2b-0569-4009-a609-efeb7081340a",
+      "name": "Permite enviar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1000,
+        40
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-env",
+              "leftValue": "={{ JSON.parse($json.stdout).enviar }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "7e11a7bd-0b34-4ee2-af42-4b964aa4c39a",
+      "name": "Enviar DM privado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        -40
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.instagram.com/v23.0/me/messages",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "={{ JSON.parse($json.stdout).token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ recipient: { comment_id: $(\"Parsear comentario\").item.json.comment_id }, message: { text: \"Hola! Vi tu comentario. Te dejo el link para agendar el diagnostico de 20 min: miramos tu operacion y te decimos que conviene automatizar primero, y que no vale la pena todavia. https://onia.com.bo/?src=onia-ig-sistema . Si preferis, contame en una linea a que se dedica tu negocio y te adelanto por aca.\" } }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "c2b8684f-6833-47c6-9c7c-622a565413c1",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1480,
+        -40
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "=IG comentario -> DM\n\n@{{ $(\"Parsear comentario\").item.json.username }} comento: \"{{ $(\"Parsear comentario\").item.json.texto }}\"\nPalabra: {{ $(\"Parsear comentario\").item.json.palabra }}\nMeta respondio: {{ JSON.stringify($json).slice(0, 300) }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "webhookId": "cbd273e8-8c1e-4bf6-8991-e123e9f3b71e"
+    },
+    {
+      "id": "57fb8ac1-344b-4346-a381-3158ed603867",
+      "name": "Responder 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1720,
+        -40
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "EVENT_RECEIVED",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "91b82e3d-1ebd-4d6f-a06f-3611d5356ff0",
+      "name": "Responder 200 (freno 24h)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1240,
+        160
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "EVENT_RECEIVED",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "73c8b5bd-424e-4abd-bd51-2339a38308fb",
+      "name": "Responder 200 (ignorado)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        780,
+        300
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "EVENT_RECEIVED",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Comentario IG": {
+      "main": [
+        [
+          {
+            "node": "Devolver challenge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parsear comentario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear comentario": {
+      "main": [
+        [
+          {
+            "node": "Accionable?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accionable?": {
+      "main": [
+        [
+          {
+            "node": "Token o freno 24h",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder 200 (ignorado)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Token o freno 24h": {
+      "main": [
+        [
+          {
+            "node": "Permite enviar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Permite enviar?": {
+      "main": [
+        [
+          {
+            "node": "Enviar DM privado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder 200 (freno 24h)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar DM privado": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar a Sergio": {
+      "main": [
+        [
+          {
+            "node": "Responder 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "aba71063-1a9d-4dcf-b39b-e0cf6d51b00c",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-18T18:47:18.457Z",
+      "createdAt": "2026-08-18T18:47:18.457Z",
+      "role": "workflow:owner",
+      "workflowId": "mxl618u4eT209hTc",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

@@ -1,0 +1,605 @@
+{
+  "updatedAt": "2026-07-22T22:16:31.467Z",
+  "createdAt": "2026-06-02T22:49:27.618Z",
+  "id": "vuicWsvh0hwqKhYs",
+  "name": "ONIA - Telegram Command Center",
+  "description": "Recibe comandos Hermes/ONIA por Telegram, ejecuta `hermes-command telegram --message` por SSH en el VPS y devuelve `telegram_reply`. Enruta Video Lab, proyectos, plan semanal y estado; no publica ni contacta sin aprobacion explicita.",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "dd9baf05-f7f6-4c90-8766-decde5d3e85e",
+      "name": "Telegram Video Lab Command",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "PR6bb4aGfhM6xdGs",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "a0a456e5-d39d-4dec-bb6d-b82bb6d92735",
+      "disabled": true
+    },
+    {
+      "id": "3b8cca2e-3ee4-4f1e-80e7-5ebe98a5ef9f",
+      "name": "Normalize Video Lab Command",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        300
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": true,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat-id",
+              "name": "chatId",
+              "value": "={{ $json.message?.chat?.id ?? \"\" }}",
+              "type": "string"
+            },
+            {
+              "id": "command",
+              "name": "command",
+              "value": "={{ $json.message?.text ?? \"Siguiente Video Lab\" }}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "73bd0d7b-b05d-4e21-b723-ceb21a5f5dea",
+      "name": "Format Telegram Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        500
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const body = $json.body || $json;\nconst text = body.telegram_reply || body.error || \"Hermes no devolvio respuesta.\";\nreturn { json: { chatId: $(\"Normalize Video Lab Command\").item.json.chatId, text, command: $(\"Normalize Video Lab Command\").item.json.command, ok: body.ok ?? true } };"
+      }
+    },
+    {
+      "id": "0ea10792-cdf7-4974-a297-197a1b162e1d",
+      "name": "Send Video Lab Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1640,
+        500
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "4a7efe95-de00-4e28-a781-317ed88bd36a"
+    },
+    {
+      "id": "59e59bc6-e088-4183-9c0b-234c830fa02c",
+      "name": "Es /agendar? CC",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        800,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.command }}",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              },
+              "rightValue": "/agendar"
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "113d54b8-0368-46b3-a45c-c55a19d1f9cb",
+      "name": "Parsear Agenda CC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        100
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const msg = $input.first().json.command;\nconst chatId = String($input.first().json.chatId);\nconst partes = msg.replace(/^\\/agendar\\s*/i, '').split('|').map(p => p.trim());\nconst titulo = partes[0] || 'Sin título';\nconst fechaHora = partes[1] || '';\nconst descripcion = partes[2] || '';\n\nfunction parseFecha(texto) {\n  const dias = { lunes: 1, martes: 2, miercoles: 3, miércoles: 3, jueves: 4, viernes: 5, sabado: 6, sábado: 6, domingo: 0 };\n  const lower = texto.toLowerCase();\n  const fecha = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/La_Paz' }));\n  if (lower.includes('mañana') || lower.includes('manana')) {\n    fecha.setDate(fecha.getDate() + 1);\n  } else {\n    for (const [nombre, num] of Object.entries(dias)) {\n      if (lower.includes(nombre)) {\n        const hoy = fecha.getDay();\n        let diff = num - hoy;\n        if (diff <= 0) diff += 7;\n        fecha.setDate(fecha.getDate() + diff);\n        break;\n      }\n    }\n    const matchSlash = texto.match(/(\\d{1,2})\\/(\\d{1,2})/);\n    if (matchSlash) { fecha.setMonth(parseInt(matchSlash[2]) - 1); fecha.setDate(parseInt(matchSlash[1])); }\n  }\n  return fecha;\n}\n\nfunction parseHora(texto) {\n  const match = texto.match(/(\\d{1,2})(?::(\\d{2}))?\\s*(am|pm)?/i);\n  if (!match) return { h: 9, m: 0 };\n  let h = parseInt(match[1]);\n  const m = parseInt(match[2] || '0');\n  const ampm = (match[3] || '').toLowerCase();\n  if (ampm === 'pm' && h < 12) h += 12;\n  if (ampm === 'am' && h === 12) h = 0;\n  return { h, m };\n}\n\nconst fecha = parseFecha(fechaHora);\nconst rangoMatch = fechaHora.match(/([\\d:apm]+)\\s*-\\s*([\\d:apm]+)/i);\nlet startH = { h: 9, m: 0 }, endH = { h: 10, m: 0 };\nif (rangoMatch) { startH = parseHora(rangoMatch[1]); endH = parseHora(rangoMatch[2]); }\n\nconst startDate = new Date(fecha);\nstartDate.setHours(startH.h, startH.m, 0, 0);\nconst endDate = new Date(fecha);\nendDate.setHours(endH.h, endH.m, 0, 0);\n\nconst resumen = titulo + ' — ' + startDate.toLocaleString('es-BO', { timeZone: 'America/La_Paz', weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });\nreturn [{ json: { titulo, descripcion, startISO: startDate.toISOString(), endISO: endDate.toISOString(), chatId, resumen } }];"
+      }
+    },
+    {
+      "id": "e4458596-d1ca-4917-bbe5-fe82ffdd2dd2",
+      "name": "Crear Evento GCal CC",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1360,
+        100
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "create",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "oninteligenciaartificial@gmail.com"
+        },
+        "start": "={{ $json.startISO }}",
+        "end": "={{ $json.endISO }}",
+        "additionalFields": {
+          "summary": "={{ $json.titulo }}",
+          "description": "={{ $json.descripcion }}"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "a3FResZHqQ32ptyt",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "id": "08a8ab88-6073-4290-918c-fd546fef6eb4",
+      "name": "Confirmar Agenda CC",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1640,
+        100
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $node[\"Parsear Agenda CC\"].json.chatId }}",
+        "text": "={{ \"✅ Evento agendado:\\n📅 <b>\" + $json.summary + \"</b>\\n⏰ \" + $node[\"Parsear Agenda CC\"].json.resumen }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "494b974e-977c-4cd9-a22f-9085cee029a0"
+    },
+    {
+      "id": "72c36946-b0cf-4706-a96a-3c20bfe9f127",
+      "name": "Alfred Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        80
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "telegram-alfred",
+        "responseMode": "onReceived"
+      },
+      "webhookId": "560890ad-9b46-4cc0-9fe1-fe0910baf476"
+    },
+    {
+      "id": "f58a2d48-85bd-40e8-8e3c-957097731c6a",
+      "name": "Unwrap Update",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        80
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "msg",
+              "name": "message",
+              "value": "={{ $json.body.message }}",
+              "type": "object"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8fd2a664-9636-4c22-800e-d32e2a974f9b",
+      "name": "Call ONIA Center Command",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        500
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.ONIA_CENTER_BASE_URL + \"/api/onia-center/command\"}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{\"Bearer \" + $env.ONIA_CENTER_INTERNAL_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { message: $json.command } }}",
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "id": "5e3e1d2c-1107-46dd-90c7-e9828963b954",
+      "name": "Es nota de voz CC",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        740,
+        460
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "is-voice",
+              "leftValue": "={{ ($json.message && $json.message.voice) ? 'voice' : 'text' }}",
+              "rightValue": "voice",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "e7cb8242-dd4b-4339-97f0-563f5cce9384",
+      "name": "Bajar nota de voz CC",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        960,
+        400
+      ],
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "download": true
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "017f0752-626e-4480-adfa-c5bcd4032e23"
+    },
+    {
+      "id": "ae1710c4-64ef-464f-b50f-bd6fcc9a74c6",
+      "name": "Voz a base64 CC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        400
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const bin = $input.item.binary && $input.item.binary.data;\nconst audioB64 = bin && bin.data ? bin.data : \"\";\nconst m = $('Unwrap Update').item.json.message;\nconst chatId = String((m && m.chat && m.chat.id) || \"\");\nreturn { json: { audioB64, chatId } };"
+      }
+    },
+    {
+      "id": "8b80b4e4-c34b-46ed-9c46-66cba16163bd",
+      "name": "Transcribir voz VPS CC",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        400
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "=printf '%s' '{{ $json.audioB64 }}' | /opt/onia/voice-transcribe-run.sh voice.oga",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "bb5949db-b424-4779-9076-02170552f2fa",
+      "name": "Comando desde voz CC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        400
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "let text = \"\";\ntry {\n  const out = JSON.parse(String($json.stdout || \"\").trim());\n  if (out && out.ok && out.text) text = String(out.text).trim();\n} catch (e) { text = \"\"; }\nconst chatId = String($('Voz a base64 CC').item.json.chatId || \"\");\nif (!text) text = \"No entendi la nota de voz, la repetis?\";\nreturn { json: { message: { text: text, chat: { id: chatId } } } };"
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Video Lab Command": {
+      "main": [
+        [
+          {
+            "node": "Normalize Video Lab Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Telegram Reply": {
+      "main": [
+        [
+          {
+            "node": "Send Video Lab Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Video Lab Command": {
+      "main": [
+        [
+          {
+            "node": "Es /agendar? CC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Es /agendar? CC": {
+      "main": [
+        [
+          {
+            "node": "Parsear Agenda CC",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call ONIA Center Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Agenda CC": {
+      "main": [
+        [
+          {
+            "node": "Crear Evento GCal CC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Evento GCal CC": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Agenda CC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alfred Webhook": {
+      "main": [
+        [
+          {
+            "node": "Unwrap Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call ONIA Center Command": {
+      "main": [
+        [
+          {
+            "node": "Format Telegram Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unwrap Update": {
+      "main": [
+        [
+          {
+            "node": "Es nota de voz CC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Es nota de voz CC": {
+      "main": [
+        [
+          {
+            "node": "Bajar nota de voz CC",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Normalize Video Lab Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bajar nota de voz CC": {
+      "main": [
+        [
+          {
+            "node": "Voz a base64 CC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voz a base64 CC": {
+      "main": [
+        [
+          {
+            "node": "Transcribir voz VPS CC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribir voz VPS CC": {
+      "main": [
+        [
+          {
+            "node": "Comando desde voz CC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comando desde voz CC": {
+      "main": [
+        [
+          {
+            "node": "Normalize Video Lab Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "2359d22d-2d7b-4819-8d52-22fc3e6ac5c0",
+  "activeVersionId": "2359d22d-2d7b-4819-8d52-22fc3e6ac5c0",
+  "versionCounter": 12,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:07.419Z",
+      "createdAt": "2026-07-03T21:24:07.419Z",
+      "id": "XBK6IoQ3GTHTpDnq",
+      "name": "onia-ops"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-06-02T22:49:27.621Z",
+      "createdAt": "2026-06-02T22:49:27.621Z",
+      "role": "workflow:owner",
+      "workflowId": "vuicWsvh0hwqKhYs",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Rama de voz (STT) aditiva",
+    "description": "Agrega rama de voz: detecta nota de voz, baja el audio con la credencial Telegram, lo transcribe en el VPS (Whisper self-hosted) y mete el texto al mismo ruteo. El camino de texto queda intacto (rama aditiva). Webhook sin tocar."
+  }
+}

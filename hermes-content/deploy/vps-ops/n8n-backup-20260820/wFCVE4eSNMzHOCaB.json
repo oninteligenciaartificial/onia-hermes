@@ -1,0 +1,126 @@
+{
+  "updatedAt": "2026-08-18T18:42:46.000Z",
+  "createdAt": "2026-07-23T21:31:45.111Z",
+  "id": "wFCVE4eSNMzHOCaB",
+  "name": "BE - SLA reassign (test, cada 2 min)",
+  "description": "Cada 2 min pega al endpoint /api/cron/sla-reassign del chatbot Bolivian Electric en el canal de PRUEBA (bolivian-electric-os-test). Alerta a gerencia (nota+label) y reasigna cuando un vendedor no responde dentro del SLA. Apunta al contenedor de prueba; re",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "d70809b9-676f-441a-bf14-84c7e1454888",
+      "name": "Cada 2 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5e0559b1-044d-4f22-8503-35a385ebedb3",
+      "name": "BE SLA reassign (test)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://os-test-187-77-251-218.sslip.io/api/cron/sla-reassign",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-cron-secret",
+              "value": "be-cron-test-secret"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cada 2 min": {
+      "main": [
+        [
+          {
+            "node": "BE SLA reassign (test)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cada 2 min": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "de5ec044-5116-41b7-a290-4f376172c0e4",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-23T21:31:45.117Z",
+      "createdAt": "2026-07-23T21:31:45.117Z",
+      "role": "workflow:owner",
+      "workflowId": "wFCVE4eSNMzHOCaB",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

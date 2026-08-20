@@ -1,0 +1,288 @@
+{
+  "updatedAt": "2026-07-04T01:04:57.000Z",
+  "createdAt": "2026-03-21T20:11:44.953Z",
+  "id": "mrwDIycuY7SgkFG0",
+  "name": "prueba de datos",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        0
+      ],
+      "id": "ffdbab67-ff9a-416e-a758-12f775a62089",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -192
+      ],
+      "id": "a264bb01-fa57-4604-b5b0-942359b9cef5",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df4a2218-10cd-466d-993c-82c996a7f2af",
+              "name": "telefono",
+              "value": "=71654992",
+              "type": "string"
+            },
+            {
+              "id": "6939378f-9815-4563-b439-927be1b33d1e",
+              "name": "correo",
+              "value": "sergio.urcullo.m@gmail.com",
+              "type": "string"
+            },
+            {
+              "id": "564b484f-78a4-4e36-b703-837f321be05d",
+              "name": "nombre",
+              "value": "sergio",
+              "type": "string"
+            },
+            {
+              "id": "9358815e-f587-4f8d-a4d7-094c584ab217",
+              "name": "apellidos",
+              "value": "urcullo mercado",
+              "type": "string"
+            },
+            {
+              "id": "1d8fc72b-68ad-4c4a-934b-5077ed5644cb",
+              "name": "",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "2fd39106-3e6d-4603-8b2f-390e6e145350",
+              "name": "edad",
+              "value": "20",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "0f6e5733-ab47-49f4-a763-8020ef29ed78",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "564b484f-78a4-4e36-b703-837f321be05d",
+              "name": "nombre",
+              "value": "sergio",
+              "type": "string"
+            },
+            {
+              "id": "9358815e-f587-4f8d-a4d7-094c584ab217",
+              "name": "apellidos",
+              "value": "urcullo mercado",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        160
+      ],
+      "id": "7dd1de5c-caa2-4972-b39a-927fa8b2860b",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "persona",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        368,
+        160
+      ],
+      "id": "a5760e61-f09e-4ac7-9065-c91cb3b499ab",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "persona",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        576,
+        160
+      ],
+      "id": "7bed76d0-ac12-43cb-89a6-5cbb6f719e59",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        896,
+        16
+      ],
+      "id": "8c2a5fe5-b0c4-4266-ae74-e490e564b9a8",
+      "name": "Merge"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        16
+      ],
+      "id": "aeda7bed-acb5-46f6-8c1f-08e90400a32e",
+      "name": "Limit"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "America/La_Paz",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "6fc78af7-75b3-43b0-a436-9df8faf9dff1",
+  "activeVersionId": null,
+  "versionCounter": 58,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-21T20:11:44.957Z",
+      "createdAt": "2026-03-21T20:11:44.957Z",
+      "role": "workflow:owner",
+      "workflowId": "mrwDIycuY7SgkFG0",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

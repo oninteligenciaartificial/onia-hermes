@@ -1,0 +1,324 @@
+{
+  "updatedAt": "2026-07-06T17:32:07.750Z",
+  "createdAt": "2026-07-06T02:22:49.136Z",
+  "id": "WA6VkNu5OHo6Npem",
+  "name": "ONIA - Nuevo Lead (speed-to-lead)",
+  "description": "Webhook POST /nuevo-lead {secret,company,contact,channel,message}. Cuando entra un inbound (formulario/WhatsApp/Hermes): crea el lead en onia_center.leads, lo califica + redacta la primera respuesta con LiteLLM, deja tarea + borrador en review_queue (pend",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "1ad4cba8-2f35-4e1a-a2ec-5db611cec6a9",
+      "name": "Webhook Nuevo Lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        96
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nuevo-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "ed597679-6cef-4587-8dd0-225d278e977a"
+    },
+    {
+      "id": "ce604827-3ed5-4daa-a319-1c66c739f70f",
+      "name": "Autorizado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        96
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "cond-auth",
+              "leftValue": "={{ $json.stdout }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              },
+              "rightValue": "\"authorized\":true"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7a8eb325-8dbf-40da-97d7-1791edaa9b3d",
+      "name": "Encode lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const b = $('Webhook Nuevo Lead').first().json.body || {};\nconst lead = { company: b.company, contact: b.contact || null, channel: b.channel || 'Inbound', message: b.message || null, source: b.source || 'webhook' };\nif (!lead.company) { return [{ json: { ok: false, b64: '', error: 'no_company' } }]; }\nconst b64 = Buffer.from(JSON.stringify(lead)).toString('base64');\nreturn [{ json: { ok: true, b64: b64 } }];"
+      }
+    },
+    {
+      "id": "e068da98-504c-42b7-942a-48d861a1040e",
+      "name": "Crear + calificar lead (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "=bash /opt/onia/intake-lead-run.sh \"{{ $json.b64 }}\"",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "22ed6524-aa78-4f7e-8bb3-bd6edd6a8ded",
+      "name": "Preparar aviso",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const raw = ($input.first().json.stdout || '').trim();\nlet s;\ntry { s = JSON.parse(raw.split('\\n').pop()); } catch (e) { s = { ok: false, error: 'parse' }; }\nlet text;\nif (!s.ok) {\n  text = 'Nuevo Lead - ERROR: ' + (s.error || 'desconocido');\n} else {\n  text = ('Nuevo lead: ' + s.company + ' [' + s.qualification + '/' + s.priority + ']' + (s.has_proposal ? ' +propuesta' : '') + '\\n\\nAccion: ' + s.next_action + '\\n\\nBorrador de respuesta:\\n' + (s.followup_preview || '') + '\\n\\nAprobalo en ONIA Center -> Revisiones. Nada se envio.').slice(0, 3900);\n}\nreturn [{ json: { ok: Boolean(s.ok), text: text, summary: s } }];"
+      }
+    },
+    {
+      "id": "7322d998-224e-4bbb-9f8e-fedd5b5362ee",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "471303da-451a-4202-8090-987533a3e984"
+    },
+    {
+      "id": "717ac917-506e-49da-a220-9432af9fbc21",
+      "name": "Responder OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1344,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $(\"Preparar aviso\").item.json.summary }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "834e13fe-a7c3-4e74-afbe-e3802012ee68",
+      "name": "Responder No Autorizado",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        448,
+        192
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"ok\": false, \"reason\": \"unauthorized\" } }}",
+        "options": {
+          "responseCode": 401
+        }
+      }
+    },
+    {
+      "id": "6d564463-9690-4898-8a6d-9eda0414efcf",
+      "name": "Verificar secret",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        128,
+        288
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "=bash /opt/onia/check-secret.sh \"{{ $json.body.secret }}\"",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Autorizado?": {
+      "main": [
+        [
+          {
+            "node": "Encode lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder No Autorizado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encode lead": {
+      "main": [
+        [
+          {
+            "node": "Crear + calificar lead (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear + calificar lead (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Preparar aviso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar aviso": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar a Sergio": {
+      "main": [
+        [
+          {
+            "node": "Responder OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Nuevo Lead": {
+      "main": [
+        [
+          {
+            "node": "Verificar secret",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar secret": {
+      "main": [
+        [
+          {
+            "node": "Autorizado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "24c8edfe-7fee-425e-bcd0-05ccb9f808ba",
+  "activeVersionId": "24c8edfe-7fee-425e-bcd0-05ccb9f808ba",
+  "versionCounter": 4,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-06T02:22:49.144Z",
+      "createdAt": "2026-07-06T02:22:49.144Z",
+      "role": "workflow:owner",
+      "workflowId": "WA6VkNu5OHo6Npem",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

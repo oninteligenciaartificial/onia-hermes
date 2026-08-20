@@ -1,0 +1,101 @@
+{
+  "updatedAt": "2026-08-18T18:42:44.000Z",
+  "createdAt": "2026-08-07T15:06:15.777Z",
+  "id": "2m9l8UCZObqEF8eM",
+  "name": "ZZ TEST remitente credencial nueva (borrar)",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "73162ac8-91f7-4aff-afdd-925b2fa42bda",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a6f12de5-f478-40fa-a57b-94ae7a34b7f2",
+      "name": "Test credencial nueva",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "oninteligenciaartificial@gmail.com",
+        "subject": "TEST remitente [credencial nueva business]",
+        "emailType": "text",
+        "message": "Prueba de remitente de la credencial nueva (dxyxCorebAZWPl6f). Borrar."
+      },
+      "webhookId": "b9cd084d-4d6f-46e1-9c90-44a943a47919",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Test credencial nueva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "93f2da7d-e09d-42b8-bd5b-6db662640b89",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-07T15:06:15.782Z",
+      "createdAt": "2026-08-07T15:06:15.782Z",
+      "role": "workflow:owner",
+      "workflowId": "2m9l8UCZObqEF8eM",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

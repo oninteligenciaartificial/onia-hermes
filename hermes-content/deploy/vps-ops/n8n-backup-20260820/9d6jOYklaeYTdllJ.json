@@ -1,0 +1,167 @@
+{
+  "updatedAt": "2026-07-04T01:01:24.000Z",
+  "createdAt": "2026-02-21T20:13:11.819Z",
+  "id": "9d6jOYklaeYTdllJ",
+  "name": "[UDIA] Primer flujo sencillo",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Newsletter Udia N8N",
+        "formDescription": "Las ultimas noticias de N8N en tu Email",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre",
+              "placeholder": "Aqui tu nombre",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "Tu email",
+              "requiredField": true
+            },
+            {
+              "fieldType": "html",
+              "elementName": "Política de Privacidad",
+              "html": "<form>\n  <label style=\"display:flex; gap:10px; align-items:center;\">\n    <input type=\"checkbox\" id=\"privacidad\" name=\"privacidad\" required>\n    <span>\n      Acepto la\n      <a href=\"/politica-de-privacidad\" target=\"_blank\" rel=\"noopener noreferrer\">\n        política de privacidad\n      </a>\n    </span>\n  </label>\n\n  \n"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -224,
+        -16
+      ],
+      "id": "d126219c-9eff-4159-a1ac-589e0c1273f2",
+      "name": "On form submission",
+      "webhookId": "33405723-eb64-47aa-9f54-4437f1ccfd26"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/10fJvsW2ECzm8Cobla1_9am5GbX4G6PSVbaBm-ijWwgA/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10fJvsW2ECzm8Cobla1_9am5GbX4G6PSVbaBm-ijWwgA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        32,
+        0
+      ],
+      "id": "d24da7b8-defe-4140-8f97-e25e5567d2e1",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "lNCddhnqz1SYmW1k",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        240,
+        0
+      ],
+      "id": "3db63e9f-fad1-469d-ae17-b276cf644c02",
+      "name": "AI Agent"
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "d5a8d0e3-4cbb-417b-924f-a08060ddae1d",
+  "activeVersionId": null,
+  "versionCounter": 60,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-02-21T20:13:11.821Z",
+      "createdAt": "2026-02-21T20:13:11.821Z",
+      "role": "workflow:owner",
+      "workflowId": "9d6jOYklaeYTdllJ",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

@@ -1,0 +1,233 @@
+{
+  "updatedAt": "2026-07-05T22:45:37.000Z",
+  "createdAt": "2026-06-15T04:10:09.741Z",
+  "id": "rGvQb4CRBdJPwrp1",
+  "name": "ONIA - Prospeccion Diaria",
+  "description": "Días laborales 8am Bolivia: busca con web 5 prospectos reales en Bolivia (clínicas dentales, pymes, negocios sin web), recomienda producto ONIA y ángulo, y envía a Sergio por Telegram para aprobar antes de contactar. No contacta a nadie.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "30a72ea7-0316-49f5-aac4-0ecb4c6aa34b",
+      "name": "Diario 8am Bolivia",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        112
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 12 * * 1-5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "94abcade-eb14-41df-beeb-e8dc59f80870",
+      "name": "Brief de Prospeccion",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        112
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat",
+              "name": "telegramChatId",
+              "value": "6830070978",
+              "type": "string"
+            },
+            {
+              "id": "prompt",
+              "name": "prospectPrompt",
+              "value": "=Eres el prospector de ONIA (agencia de IA, automatizacion y software en Bolivia). Fecha {{ $now.toISO().substring(0,10) }}.\n\nUsa busqueda web para encontrar 5 negocios REALES en Bolivia (Santa Cruz, La Paz o Cochabamba) que sean buenos prospectos para ONIA. Rota el rubro cada dia entre: clinicas dentales (producto DentalGest), pymes/comercios que necesitan orden (GestiOS), y negocios sin sitio web (paginas web).\n\nPara cada prospecto entrega en TEXTO PLANO (sin markdown, sin enlaces [texto](url)):\n- Nombre del negocio y ciudad.\n- Rubro y por que es buen fit (1 linea).\n- Senal de dolor detectada (sin web, mala presencia, agenda manual, etc).\n- Producto ONIA recomendado y precio de referencia.\n- Angulo de primer contacto sugerido (1 frase), SIN contactar todavia.\n- Fuente publica donde lo viste (solo el nombre, sin URL).\n\nReglas: NO inventes negocios ni datos de contacto; si no estas seguro, dilo. NO contactes a nadie. Maximo 3500 caracteres. Cierra con: Revisar y aprobar antes de contactar.",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "24430de6-3821-495e-b45a-bdd690253f89",
+      "name": "Agente Prospector ONIA",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        448,
+        112
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prospectPrompt }}",
+        "options": {
+          "systemMessage": "Eres el prospector de ONIA. Investigas con fuentes actuales, no inventas negocios ni contactos, y entregas prospectos accionables para aprobacion humana. Nunca contactas a nadie.",
+          "maxIterations": 6
+        }
+      }
+    },
+    {
+      "id": "64bc555d-6162-4040-a1a7-5fc5bc017d26",
+      "name": "OpenAI Prospeccion Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        336
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gpt-5-mini"
+        },
+        "responsesApiEnabled": true,
+        "builtInTools": {
+          "webSearch": {
+            "searchContextSize": "medium",
+            "country": "US"
+          }
+        },
+        "options": {
+          "reasoningEffort": "low",
+          "maxTokens": 6000,
+          "timeout": 120000
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "oAEdJ5GA8hOYB83l",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "id": "c759335d-bbe8-47c2-a6cb-9444372a63bc",
+      "name": "Enviar Prospectos a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        112
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $(\"Brief de Prospeccion\").item.json.telegramChatId }}",
+        "text": "={{ ('Prospectos ONIA del dia:\\n\\n' + ($json.output || 'Sin resultados')).toString().slice(0, 4000) }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "984d74c6-72e2-42c4-944f-4177725aa360"
+    }
+  ],
+  "connections": {
+    "Diario 8am Bolivia": {
+      "main": [
+        [
+          {
+            "node": "Brief de Prospeccion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Brief de Prospeccion": {
+      "main": [
+        [
+          {
+            "node": "Agente Prospector ONIA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente Prospector ONIA": {
+      "main": [
+        [
+          {
+            "node": "Enviar Prospectos a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Prospeccion Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Prospector ONIA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Diario 8am Bolivia": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "6ee2c306-5ed0-43e9-8649-40acc718b749",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-15T04:10:09.743Z",
+      "createdAt": "2026-06-15T04:10:09.743Z",
+      "role": "workflow:owner",
+      "workflowId": "rGvQb4CRBdJPwrp1",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

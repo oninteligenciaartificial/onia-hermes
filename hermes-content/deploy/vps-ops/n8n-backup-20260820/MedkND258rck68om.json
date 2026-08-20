@@ -1,0 +1,194 @@
+{
+  "updatedAt": "2026-06-09T22:21:14.000Z",
+  "createdAt": "2026-05-26T02:55:44.210Z",
+  "id": "MedkND258rck68om",
+  "name": "WF-DISCORD-01: Resumen Diario de Agenda",
+  "description": "Cada mañana a las 8am Bolivia envía al canal Discord un resumen de los eventos del día desde Google Calendar.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "aa21f5ed-3070-46bd-8adc-8e57dde5f6c0",
+      "name": "Cada mañana 8am Bolivia",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 12,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "2b91e5d4-9103-447f-a15e-24e04a91ed41",
+      "name": "Obtener eventos del día",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "business@onia.com.bo"
+        },
+        "returnAll": false,
+        "limit": 25,
+        "timeMin": "={{ $now.setZone(\"America/La_Paz\").startOf(\"day\").toISO() }}",
+        "timeMax": "={{ $now.setZone(\"America/La_Paz\").endOf(\"day\").toISO() }}",
+        "options": {
+          "singleEvents": true,
+          "orderBy": "startTime"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "AIf6aLd0Q1yAqXKj",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "id": "c21853c0-f722-44e7-8577-b5928a7c6484",
+      "name": "Formatear resumen diario",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const events = $input.all();\nconst today = DateTime.now().setZone('America/La_Paz');\nconst months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];\nconst days = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];\nconst dayName = days[today.weekday % 7];\nconst dateStr = dayName + ' ' + today.day + ' de ' + months[today.month - 1];\nlet message = '📅 **Agenda del día — ' + dateStr.charAt(0).toUpperCase() + dateStr.slice(1) + '**\\n\\n';\nif (events.length === 0) {\n  message += '✅ No tienes eventos hoy. ¡Día libre!';\n} else {\n  message += 'Tienes **' + events.length + '** evento(s) hoy:\\n\\n';\n  for (const item of events) {\n    const e = item.json;\n    let timeStr = 'Todo el día';\n    if (e.start && e.start.dateTime) {\n      const startDT = DateTime.fromISO(e.start.dateTime).setZone('America/La_Paz');\n      timeStr = startDT.toFormat('HH:mm');\n      if (e.end && e.end.dateTime) {\n        const endDT = DateTime.fromISO(e.end.dateTime).setZone('America/La_Paz');\n        timeStr += ' - ' + endDT.toFormat('HH:mm');\n      }\n    }\n    message += '🕐 **' + (e.summary || 'Sin título') + '**\\n';\n    message += '⏰ ' + timeStr + '\\n';\n    if (e.description) { message += '📝 ' + e.description.substring(0, 150) + '\\n'; }\n    message += '\\n';\n  }\n}\nreturn [{ json: { message } }];"
+      }
+    },
+    {
+      "id": "dfda44bc-a408-425d-8f26-a7a49337c0d2",
+      "name": "Enviar resumen a Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "botToken",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571461663719454"
+        },
+        "sendTo": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571462196400303"
+        },
+        "content": "={{ $json.message }}"
+      },
+      "webhookId": "9cf8d23e-2985-4512-b8ae-81bc66439fa3",
+      "credentials": {
+        "discordBotApi": {
+          "id": "4K40hl2Un0aWGges",
+          "name": "Discord Bot account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cada mañana 8am Bolivia": {
+      "main": [
+        [
+          {
+            "node": "Obtener eventos del día",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener eventos del día": {
+      "main": [
+        [
+          {
+            "node": "Formatear resumen diario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatear resumen diario": {
+      "main": [
+        [
+          {
+            "node": "Enviar resumen a Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Cada mañana 8am Bolivia": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "cbd0b083-e703-437a-b227-68b44bea53b3",
+  "activeVersionId": null,
+  "versionCounter": 10,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-26T02:55:44.221Z",
+      "createdAt": "2026-05-26T02:55:44.221Z",
+      "role": "workflow:owner",
+      "workflowId": "MedkND258rck68om",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}
