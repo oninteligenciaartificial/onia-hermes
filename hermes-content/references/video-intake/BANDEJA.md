@@ -183,3 +183,15 @@ prompts: [PROMPTS_LOTE_2026-08-18.md](PROMPTS_LOTE_2026-08-18.md) (G1–G6)
 | [DbYqMnpRrmk](https://www.instagram.com/p/DbYqMnpRrmk/) estructura societaria | B | MEJORA | **ley colombiana: no aplica** — se copia la forma |
 | [Db3AW3SooRl](https://www.instagram.com/p/Db3AW3SooRl/) video troyano | B | MEJORA | arquitectura 1+N; el disfraz choca con declarar |
 | [DbmN3AfiYPz](https://www.instagram.com/p/DbmN3AfiYPz/) noticiero IA | B | **HUMO** | contador roto, cero fuentes, caption pegado 8 veces |
+
+---
+
+# Lote 2026-08-19
+
+| Item | Reconstrucción | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcJQRi7NPvw](https://www.instagram.com/reel/DcJQRi7NPvw/) portal de onboarding K100 | **SaaS** | **SIRVE YA** | [spec completa](2026-08-19-portal-cliente-onboarding-spec.md): entidades, máquina de estados, y por qué NO copiamos su bóveda de credenciales |
+| (no es un reel) el hallazgo del análisis por escenas | — | **SIRVE YA** | [ficha](2026-08-19-la-herramienta-lee-el-video.md) — gratis, medido |
+
+Prompts: [PROMPTS_LOTE_2026-08-19.md](PROMPTS_LOTE_2026-08-19.md) — **I1** e I2 (portal),
+H1 (intake), H2 (ad_reference), H3 (molde de 6 actos).

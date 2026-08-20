@@ -120,6 +120,50 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## I2 · Usarlo primero para nosotros — la lista real de lo que se le pide a un cliente de web
+
+```text
+Contexto: se especifico un modulo de onboarding de cliente que reemplaza perseguir por WhatsApp:
+hermes-content/references/video-intake/2026-08-19-portal-cliente-onboarding-spec.md
+El modulo lo construye la sesion onia-plattform (prompt I1). Esta tarea es la otra mitad: SIN
+LA LISTA REAL DE REQUERIMIENTOS, el modulo es una tabla vacia.
+
+Y web-factory es quien mas sufre el problema: cada web de cliente necesita logo, textos, fotos,
+acceso al dominio, acceso a las redes -- y hoy todo eso se persigue a mano.
+
+Tarea:
+1. Escribi la lista COMPLETA de lo que se le pide a un cliente para una web, sacada de los
+   proyectos REALES que ya hicimos, no inventada. Por cada item:
+     - tipo: documento / respuesta / firma / acceso
+     - en que fase del proyecto se pide (no todo al principio: eso abruma y frena)
+     - si bloquea o no bloquea el avance
+     - como se verifica que esta bien (un logo en JPG de 200px no sirve, y eso hay que decirlo
+       ANTES, no despues)
+2. Para los de tipo ACCESO, escribi el instructivo por plataforma: que tiene que hacer el
+   cliente, paso a paso, para darnos acceso DELEGADO sin pasarnos su contrasena. Uno por
+   plataforma: dominio, hosting, Google Business, Instagram/Meta, y lo que aparezca.
+   Este instructivo es lo que reemplaza la boveda de credenciales. Es lo mas valioso de la tarea.
+3. Escribi el Cuestionario Maestro de una web: las preguntas que de verdad cambian el resultado.
+   Referencia del video: el suyo tarda 45-60 min y se guarda solo entre sesiones.
+   REGLA DE CLAUDE.md que esto hace cumplir: "No fabricar. Si falta dato del cliente, no
+   inventar -- pedirlo o marcarlo". Este cuestionario ES el mecanismo de pedirlo.
+4. Ordena las preguntas por cuanto cambian el diseno. Las que no cambian nada, sacalas.
+
+NO construyas la UI. Esta tarea entrega el CONTENIDO que el modulo va a servir. Si I1 todavia
+no corrio, igual sirve: la lista y los instructivos valen solos, y hoy se pueden mandar por
+correo mientras tanto.
+
+Cuidado con dos cosas:
+- Nunca le digas al cliente que usamos plantillas. Es regla.
+- El dominio y el hosting van a nombre del CLIENTE. El instructivo tiene que reforzar eso, no
+  pedirle que nos los transfiera.
+
+LISTO = la lista completa con tipo/fase/bloqueante/verificacion, un instructivo de acceso
+delegado por plataforma, y el cuestionario ordenado por impacto en el diseno.
+```
+
+---
+
 ## G4 · La escalera de popups, del 0 al 10 — con las capturas reales
 
 ```text

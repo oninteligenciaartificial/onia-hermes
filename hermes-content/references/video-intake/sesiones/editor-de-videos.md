@@ -120,6 +120,46 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## H3 · El molde de anuncio en 6 actos, medido
+
+```text
+Contexto: el analisis escena por escena de un anuncio real dio, gratis, una taxonomia de funcion
+narrativa que no teniamos. Los labels que devuelve la herramienta:
+  Opening Hook · Product Information · Product Selling Points · Real Experience ·
+  Usage Scenarios · Call to Action
+Ordenados, son el molde completo de una pieza de 46 s. Tiempos medidos en
+hermes-content/references/video-intake/analisis/DcMW3Coi6BN-escenas.md
+
+Lo contraintuitivo del reparto, y es lo que hay que respetar:
+- el gancho dura DOS segundos
+- el producto "bonito" en estudio se lleva 7 s
+- la persona hablando a camara se lleva 8 s y trae TRES frases, no un monologo
+- hay un SEGUNDO escenario (9 s) que muestra el producto EN USO, distinto del primero
+- la prueba social va casi al final, no al principio
+- el CTA son 2 segundos y son tres logos
+
+Tarea:
+1. Convertilo en plantilla de HyperFrames parametrizable: 6 tramos con su duracion objetivo y
+   que va en cada uno. Que se pueda cambiar el reparto de segundos sin rehacer nada.
+2. Los tramos que NO necesitan generacion (Opening Hook con el producto sobre fondo blanco,
+   Product Information con capturas de pantalla, el CTA de logos) se arman con HyperFrames a
+   costo cero. Dejalos resueltos.
+3. Render de prueba con material que YA tengamos, aunque los tramos de video queden como
+   placeholder. La idea es ver el RITMO.
+4. NO reinventes el motor: revisá .claude/skills/ (talking-head-recut, embedded-captions,
+   captions-overlay, media-use) y usá lo que existe.
+
+Dos gates que no se saltean:
+- La REGLA DE ORO: tabla de cortes + preview 360p a Sergio ANTES de aplicar cualquier corte.
+- El gate de ortografia en subtitulos quemados: el SRT se revisa a ojo antes de quemarlo, con
+  foco en enyes y acentos. En el corpus hubo un reel con DOS faltas quemadas en 10 fotogramas.
+
+LISTO = plantilla de 6 tramos parametrizable, con los tramos de costo cero ya resueltos y un
+render de prueba que deje ver el ritmo.
+```
+
+---
+
 ## G2 · El molde de anuncio UGC para un rubro nuestro
 
 ```text
