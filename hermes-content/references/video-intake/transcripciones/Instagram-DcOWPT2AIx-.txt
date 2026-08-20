@@ -1,0 +1,15 @@
+[0] The art of the B2B SaaS pricing page.
+[2] Start with three plans, starter, $19 a month.
+[6] Make sure it does basically nothing.
+[7] Pro, $49 a month.
+[9] Make sure it has almost everything,
+[11] except the one feature people actually want.
+[13] You put that on the business plan,
+[14] which is $299 a month, filled annually,
+[17] and start moving normal features
+[18] to the business plan as well.
+[20] Need single sign on?
+[21] Enterprise, more than five users?
+[22] Enterprise, wanna export your own data?
+[25] Enterprise, do not show the enterprise price.
+[27] Leave it at let's talk, follow for more.

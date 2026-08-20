@@ -183,3 +183,39 @@ prompts: [PROMPTS_LOTE_2026-08-18.md](PROMPTS_LOTE_2026-08-18.md) (G1–G6)
 | [DbYqMnpRrmk](https://www.instagram.com/p/DbYqMnpRrmk/) estructura societaria | B | MEJORA | **ley colombiana: no aplica** — se copia la forma |
 | [Db3AW3SooRl](https://www.instagram.com/p/Db3AW3SooRl/) video troyano | B | MEJORA | arquitectura 1+N; el disfraz choca con declarar |
 | [DbmN3AfiYPz](https://www.instagram.com/p/DbmN3AfiYPz/) noticiero IA | B | **HUMO** | contador roto, cero fuentes, caption pegado 8 veces |
+
+---
+
+# Lote 2026-08-19
+
+| Item | Reconstrucción | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcJQRi7NPvw](https://www.instagram.com/reel/DcJQRi7NPvw/) portal de onboarding K100 | **SaaS** | **SIRVE YA** | [spec completa](2026-08-19-portal-cliente-onboarding-spec.md): entidades, máquina de estados, y por qué NO copiamos su bóveda de credenciales |
+| (no es un reel) el hallazgo del análisis por escenas | — | **SIRVE YA** | [ficha](2026-08-19-la-herramienta-lee-el-video.md) — gratis, medido |
+
+Prompts: [PROMPTS_LOTE_2026-08-19.md](PROMPTS_LOTE_2026-08-19.md) — **I1** e I2 (portal),
+H1 (intake), H2 (ad_reference), H3 (molde de 6 actos).
+
+---
+
+# Lote 2026-08-20 — 13 items (7 reels + 6 carruseles)
+
+Síntesis: [2026-08-20-sintesis-lote-13.md](2026-08-20-sintesis-lote-13.md) ·
+datos: [analisis/2026-08-20-items.json](analisis/2026-08-20-items.json) ·
+prompts: [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4)
+
+| Item | Tipo | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcEYP7tjsIA](https://www.instagram.com/p/DcEYP7tjsIA/) Nano Banana interiores | IA | **SIRVE YA** | 4 recetas image-to-image + los 4 mecanismos de referencia |
+| [DcOMYo8MdLD](https://www.instagram.com/p/DcOMYo8MdLD/) reto de diseño aleatorio | WEB | **SIRVE YA** | el prompt literal + el molde de 7 puntos (J2) |
+| [DcAAUevMTG6](https://www.instagram.com/p/DcAAUevMTG6/) anuncio sin cara ni voz | MARKETING | **SIRVE YA** | 7 beats + hilo de color + carrier element (J3) |
+| [DcOs3VwRK0B](https://www.instagram.com/p/DcOs3VwRK0B/) 7 herramientas de landing | WEB | MEJORA | DESIGN.md como formato (J1) · `impeccable` ya la teníamos |
+| [DcOWPT2AIx-](https://www.instagram.com/p/DcOWPT2AIx-/) pricing B2B satírico | SAAS | MEJORA | **destapó los 6 tiers apagados (J4)** |
+| [DbWx7fsD1_k](https://www.instagram.com/p/DbWx7fsD1_k/) 8 agentes de marketing | MARKETING | MEJORA | el molde de carrusel; **solo 1 de 10 láminas trae prompt** |
+| [DcJJyh4CbtT](https://www.instagram.com/p/DcJJyh4CbtT/) ángulos de cámara | IA | MEJORA | la taxonomía ángulo→uso comercial |
+| [DcL4yjRTNV0](https://www.instagram.com/p/DcL4yjRTNV0/) DCF en 20 min | MARKETING | MEJORA | molde de reel-tutorial; el .xlsx nunca se muestra |
+| [DcKABGBRkdY](https://www.instagram.com/p/DcKABGBRkdY/) panel Radar Viral | SAAS | MEJORA | "5x más alcance" **contradicho por su propia captura** |
+| [DcMEQtYMn_4](https://www.instagram.com/p/DcMEQtYMn_4/) estático→video | IA | MEJORA | sin comparativa; cebo de comentario |
+| [DbQVVldE9ty](https://www.instagram.com/p/DbQVVldE9ty/) campaña transparente | IA | MEJORA | dirección de arte, sin prompts |
+| [DcLw-KHkcfU](https://www.instagram.com/p/DcLw-KHkcfU/) modelos IA | MARKETING | MEJORA | el mismo pitch ya fichado |
+| [DcPf2NwCaDK](https://www.instagram.com/p/DcPf2NwCaDK/) 5 empleados IA | MARKETING | MEJORA | molde de carrusel; usa foto de personaje de TV |

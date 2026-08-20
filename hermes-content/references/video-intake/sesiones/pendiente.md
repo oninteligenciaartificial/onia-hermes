@@ -120,6 +120,51 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## H1 · Cablear el análisis por escenas al intake de video
+
+```text
+Contexto: se descubrio y se MIDIO que video_analysis_create (MCP de Higgsfield, ya conectado)
+hace analisis escena por escena de cualquier video, gratis. Prueba completa:
+hermes-content/references/video-intake/2026-08-19-la-herramienta-lee-el-video.md
+Ejemplo de salida: hermes-content/references/video-intake/analisis/DcMW3Coi6BN-escenas.md
+
+Lo medido: 25 escenas en 55 segundos, creditos 2.567,78 antes y 2.567,78 despues. Cada escena
+trae timestamp_start, timestamp_end, shot_type, label de funcion narrativa, descripcion visual
+y descripcion del AUDIO. Encontro cinco cosas que la lectura manual de fotogramas se habia
+perdido, incluida una secuencia entera de 9 segundos.
+
+Hoy el intake (scripts/video-intake.mjs) hace: fetch -> Gemini -> Whisper -> ficha. NO usa el
+analisis por escenas. Se pierde gratis.
+
+Tarea:
+1. Agrega el paso: media_upload -> media_confirm -> video_analysis_create -> poll de
+   video_analysis_status hasta completed -> guardar las escenas en
+   hermes-content/references/video-intake/analisis/<shortcode>-escenas.md, con el mismo formato
+   de tabla del ejemplo.
+2. El poll tarda 3-5 min. Que NO bloquee: encolar y seguir con Whisper mientras tanto.
+3. TOPE POR CORRIDA. Una corrida salio gratis; NO esta probado que cien tambien. Limite
+   configurable (arranca en 10) y logueá cuantas se hicieron. Si el balance baja despues de un
+   analisis, que corte y avise.
+4. Solo para videos de menos de 3 minutos. La propia herramienta advierte: "the longer the
+   video, the less accurate the scene-by-scene analysis becomes". Los largos se saltean.
+
+Y tres arreglos del mismo pipeline, del mismo diagnostico:
+5. MUESTREO DE FOTOGRAMAS POR TEXTO, no a intervalo fijo. Hoy se saca 1 cuadro cada N segundos
+   y por poco se pierde un prompt completo que aparecia en UN solo cuadro. Detecta los cuadros
+   con mucho texto (varianza de bordes, o un OCR barato) y muestrea denso ahi.
+6. TRAER EL CAPTION DE LOS VIDEOS. Hoy solo se baja para carruseles (ig-carousel.mjs ya lo
+   hace). Varios creadores ponen el prompt en el caption y lo estamos tirando. Es gratis.
+7. Nota fija al pie de cada .txt: Whisper degrada los terminos tecnicos. Casos medidos:
+   "SIDANZ 2.5" = Seedance, "Hitsfield" = Higgsfield, "viesel" = VSL. Ningun termino tecnico
+   de la transcripcion se cita sin contrastarlo con la imagen.
+
+LISTO = un video nuevo entra por el pipeline y deja, sin intervencion: el mp4, el verbatim, el
+caption, los fotogramas muestreados por densidad de texto, y el archivo de escenas. Con el
+contador de analisis logueado.
+```
+
+---
+
 ## F1 · Auditar los 11 agentes contra los tres antipatrones
 
 ```text

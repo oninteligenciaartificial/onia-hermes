@@ -1,0 +1,10 @@
+[0] Here's 7 tools to make your ViCoded landing pages actually look good.
+[4] 1. Integrate high-quality design assets with 21st.dev
+[7] 2. Steal any famous design system with GetDesign.md
+[11] 3. Create insane web animations with WebGPU
+[15] 4. Utilize world-class design prompting with Impeccable.style
+[20] 5. Recreate any landing page with this GitHub repo
+[23] 6. Break down the design blocks of any brand with awesome Dash Design
+[27] 7. Give Claude actual taste with this GitHub repo
+[31] If you drop the word Claude and drop me a follow, I will send you all 7 tools.
+[34] Thanks so much for watching and until next time my friend.

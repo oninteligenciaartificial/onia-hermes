@@ -120,6 +120,46 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## H2 · El primer `ad_reference` — que la herramienta replique el escenario
+
+```text
+Contexto: Marketing Studio tiene ad_reference_id, que "follows the analyzed scenario of an
+existing reference video (scene composition, pacing, hook, narration) instead of inventing a
+structure from the prompt alone". Hoy tenemos CERO referencias creadas (la lista vuelve vacia).
+
+Y ya hay un anuncio analizado escena por escena, con su estructura medida:
+hermes-content/references/video-intake/analisis/DcMW3Coi6BN-escenas.md
+
+Su molde, en 6 actos y 46 segundos:
+  0:00-0:02  Opening Hook           -- el producto sobre fondo blanco, logos flotando
+  0:02-0:12  Product Information    -- la herramienta funcionando, capturas de pantalla
+  0:12-0:19  Product Selling Points -- el producto en estudio: revelado, detalles, texturas
+  0:19-0:27  Real Experience        -- la persona hablando a camara, 3 beats de dialogo
+  0:27-0:36  Usage Scenarios        -- SEGUNDO escenario, el producto EN USO
+  0:36-0:46  Real Experience -> CTA -- la prueba social (chat con "delivered") y los logos
+
+Tarea, en este orden:
+1. Crea el ad_reference a partir de ese anuncio (show_marketing_studio con type='ad_reference').
+   Crear la referencia es GRATIS. Verificá el balance antes y despues y anotá el numero.
+2. Prepara la generacion de UNA pieza nuestra con ese escenario: elegi el rubro, el producto y
+   el avatar. RECORDA, esta en la doc del propio parametro: avatar y producto NO se heredan de
+   la referencia, van explicitos SIEMPRE (avatars / product_ids).
+3. ad_reference_id es MUTUAMENTE EXCLUYENTE con hook_id y setting_id. Un camino, nunca los dos.
+4. Estima el costo en creditos de esa generacion y PARA. No generes.
+
+GASTO: generar video = permiso explicito de Sergio, caso por caso. La referencia es gratis; el
+video no.
+
+Un limite honesto que hay que verificar y no asumir: no esta probado si ad_reference acepta un
+video que NO generamos nosotros, ni si hay restriccion por derechos. Averigualo antes de subir
+material ajeno; si no queda claro, usá material propio.
+
+LISTO = el ad_reference existe (la lista ya no vuelve vacia), la llamada de generacion esta
+escrita con avatar y producto explicitos, el costo estimado al lado, y NO se genero nada.
+```
+
+---
+
 ## G1 · Las dos plantillas de prompt, separadas — y Marketing Studio
 
 ```text
