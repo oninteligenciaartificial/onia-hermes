@@ -1,0 +1,3330 @@
+{
+  "url": "https://www.housecallpro.com",
+  "slug": "housecallpro-com",
+  "medidoEl": "2026-08-20T21:59:16.874Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 12004,
+        "alturaPantallas": 14.2,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 9
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "main",
+          "clase": "homepage-template",
+          "altoPx": 8543,
+          "altoPantallas": 10.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Everything to run and grow your business",
+          "cta": "Start Free Trial",
+          "imagenes": 131
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 8543,
+          "altoPantallas": 10.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Everything to run and grow your business",
+          "cta": "Start Free Trial",
+          "imagenes": 131
+        },
+        {
+          "orden": 2,
+          "etiqueta": "footer",
+          "clase": "site-footer",
+          "altoPx": 3374,
+          "altoPantallas": 4,
+          "fondo": "rgb(19, 25, 30)",
+          "titular": "",
+          "cta": "Features",
+          "imagenes": 5
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "dialog-wrapper",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.4)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 0
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "dialog",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 0
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "dialog-wrapper",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.4)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "dialog",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "dialog-wrapper",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.4)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "dialog",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        }
+      ],
+      "encabezados": {
+        "total": 86,
+        "h1": 1,
+        "saltos": 6,
+        "lista": [
+          {
+            "nivel": 5,
+            "texto": "Customer Service Rep AI"
+          },
+          {
+            "nivel": 5,
+            "texto": "New: Business Coaching"
+          },
+          {
+            "nivel": 5,
+            "texto": "Commercial Services"
+          },
+          {
+            "nivel": 5,
+            "texto": "How to price window cleaning jobs (202..."
+          },
+          {
+            "nivel": 5,
+            "texto": "The best plumbing dispatch and invoici..."
+          },
+          {
+            "nivel": 1,
+            "texto": "Everything to run and grow your business"
+          },
+          {
+            "nivel": 3,
+            "texto": "Landscaping & Lawncare"
+          },
+          {
+            "nivel": 3,
+            "texto": "Plumbing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Electrical"
+          },
+          {
+            "nivel": 3,
+            "texto": "Handyman"
+          },
+          {
+            "nivel": 3,
+            "texto": "Home Cleaning"
+          },
+          {
+            "nivel": 3,
+            "texto": "HVAC"
+          },
+          {
+            "nivel": 3,
+            "texto": "General Contractor"
+          },
+          {
+            "nivel": 3,
+            "texto": "Appliance"
+          },
+          {
+            "nivel": 3,
+            "texto": "Window Cleaning"
+          },
+          {
+            "nivel": 3,
+            "texto": "Landscaping & Lawncare"
+          },
+          {
+            "nivel": 3,
+            "texto": "Plumbing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Electrical"
+          },
+          {
+            "nivel": 3,
+            "texto": "Handyman"
+          },
+          {
+            "nivel": 3,
+            "texto": "Home Cleaning"
+          },
+          {
+            "nivel": 3,
+            "texto": "HVAC"
+          },
+          {
+            "nivel": 3,
+            "texto": "General Contractor"
+          },
+          {
+            "nivel": 3,
+            "texto": "Appliance"
+          },
+          {
+            "nivel": 3,
+            "texto": "Window Cleaning"
+          },
+          {
+            "nivel": 3,
+            "texto": "Landscaping & Lawncare"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 193
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 700",
+            "veces": 74
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 55
+          },
+          {
+            "valor": "11px / lh 1.64 / ls normal / w 400",
+            "veces": 45
+          },
+          {
+            "valor": "18px / lh 1.20 / ls normal / w 700",
+            "veces": 39
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 400",
+            "veces": 15
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 15
+          },
+          {
+            "valor": "22px / lh 1.45 / ls -0.3px / w 700",
+            "veces": 14
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "18px / lh 1.50 / ls normal / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "48px / lh 1.25 / ls normal / w 700",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 700",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.50 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "28px / lh 1.26 / ls normal / w 700",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Open Sans",
+            "veces": 567
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 105
+          },
+          {
+            "valor": "rgb(0, 41, 66)",
+            "veces": 83
+          },
+          {
+            "valor": "rgb(19, 25, 30)",
+            "veces": 64
+          },
+          {
+            "valor": "rgb(102, 102, 102)",
+            "veces": 61
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.87)",
+            "veces": 60
+          },
+          {
+            "valor": "rgb(8, 21, 30)",
+            "veces": 56
+          },
+          {
+            "valor": "rgb(33, 33, 33)",
+            "veces": 46
+          },
+          {
+            "valor": "rgb(117, 117, 117)",
+            "veces": 21
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 70
+          },
+          {
+            "valor": "rgb(222, 240, 255)",
+            "veces": 54
+          },
+          {
+            "valor": "rgba(33, 33, 33, 0.2)",
+            "veces": 15
+          },
+          {
+            "valor": "rgb(10, 36, 67)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(255, 183, 6)",
+            "veces": 8
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.2)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(245, 245, 245)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(0, 85, 255)",
+            "veces": 5
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 486
+          },
+          {
+            "valor": "16px",
+            "veces": 131
+          },
+          {
+            "valor": "24px",
+            "veces": 72
+          },
+          {
+            "valor": "2px",
+            "veces": 66
+          },
+          {
+            "valor": "12px",
+            "veces": 37
+          },
+          {
+            "valor": "15px",
+            "veces": 30
+          },
+          {
+            "valor": "20px",
+            "veces": 20
+          },
+          {
+            "valor": "10px",
+            "veces": 11
+          },
+          {
+            "valor": "32px",
+            "veces": 10
+          },
+          {
+            "valor": "4px",
+            "veces": 9
+          },
+          {
+            "valor": "40px",
+            "veces": 9
+          },
+          {
+            "valor": "-1px",
+            "veces": 7
+          },
+          {
+            "valor": "1px",
+            "veces": 7
+          },
+          {
+            "valor": "30px",
+            "veces": 5
+          },
+          {
+            "valor": "9px",
+            "veces": 5
+          },
+          {
+            "valor": "6px",
+            "veces": 5
+          }
+        ],
+        "radios": [
+          {
+            "valor": "8px",
+            "veces": 297
+          },
+          {
+            "valor": "50%",
+            "veces": 39
+          },
+          {
+            "valor": "16px",
+            "veces": 9
+          },
+          {
+            "valor": "200px",
+            "veces": 9
+          },
+          {
+            "valor": "28px",
+            "veces": 8
+          },
+          {
+            "valor": "100px",
+            "veces": 8
+          },
+          {
+            "valor": "4px",
+            "veces": 4
+          },
+          {
+            "valor": "8px 8px 0px 0px",
+            "veces": 4
+          },
+          {
+            "valor": "20px",
+            "veces": 4
+          },
+          {
+            "valor": "0px 0px 7.36px 7.36px",
+            "veces": 4
+          }
+        ],
+        "radiosDistintos": 17,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0.15) 0px 4px 12px 0px",
+            "veces": 39
+          },
+          {
+            "valor": "rgba(33, 33, 33, 0.08) 0px 4px 9px -2px, rgba(33, 33, 33, 0.",
+            "veces": 6
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.25) 0px 4px 8px 0px",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.15) 1px 1px 20px 0px",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.32) 0px 0px 16px 4px, rgba(33, 33, 33,",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+            "veces": 2
+          }
+        ],
+        "sombrasDistintas": 10,
+        "zIndex": [
+          {
+            "valor": "2",
+            "veces": 41
+          },
+          {
+            "valor": "1000",
+            "veces": 13
+          },
+          {
+            "valor": "1",
+            "veces": 7
+          },
+          {
+            "valor": "999999",
+            "veces": 4
+          },
+          {
+            "valor": "1500",
+            "veces": 2
+          },
+          {
+            "valor": "2147482997",
+            "veces": 2
+          },
+          {
+            "valor": "-1",
+            "veces": 2
+          },
+          {
+            "valor": "4",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.3s",
+            "veces": 167
+          },
+          {
+            "valor": "0.2s ease-in-out",
+            "veces": 96
+          },
+          {
+            "valor": "opacity 0.3s",
+            "veces": 79
+          },
+          {
+            "valor": "0.1s ease-in",
+            "veces": 70
+          },
+          {
+            "valor": "0.25s",
+            "veces": 54
+          },
+          {
+            "valor": "0.2s",
+            "veces": 26
+          },
+          {
+            "valor": "0.4s",
+            "veces": 16
+          },
+          {
+            "valor": "border-color 0.4s, background-color 0.4s",
+            "veces": 6
+          },
+          {
+            "valor": "font-size 0.4s, transform 0.4s, font-weight 0.4s",
+            "veces": 6
+          },
+          {
+            "valor": "background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ",
+            "veces": 5
+          },
+          {
+            "valor": "visibility 0.25s linear, opacity 0.25s, transform 0.25s",
+            "veces": 4
+          },
+          {
+            "valor": "0.1s",
+            "veces": 3
+          }
+        ],
+        "transicionesDistintas": 24,
+        "hojasLeidas": 14,
+        "unidades": {
+          "em": 47,
+          "rem": 45,
+          "px": 2044,
+          "clamp": 9,
+          "vw": 20
+        },
+        "keyframesDeclarados": 3,
+        "transitionAll": 40,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 576,
+            "veces": 112
+          },
+          {
+            "px": 768,
+            "veces": 105
+          },
+          {
+            "px": 992,
+            "veces": 52
+          },
+          {
+            "px": 1200,
+            "veces": 11
+          },
+          {
+            "px": 1024,
+            "veces": 5
+          },
+          {
+            "px": 380,
+            "veces": 4
+          },
+          {
+            "px": 600,
+            "veces": 4
+          },
+          {
+            "px": 1440,
+            "veces": 4
+          },
+          {
+            "px": 575,
+            "veces": 3
+          },
+          {
+            "px": 610,
+            "veces": 3
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "hcp-site-header",
+            "posicion": "sticky",
+            "alto": 64,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "nav",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "hcp-product-tour-widget hcp-widget collapsed position-bottom",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "auto"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "exit-intent-popup",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "exit-intent-popup exit-intent-popup--card",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "video-modal",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "grecaptcha-badge",
+            "posicion": "fixed",
+            "alto": 60,
+            "top": "770px"
+          },
+          {
+            "etiqueta": "button",
+            "clase": "spara-scrape-exclude spara-nav-mode-preview",
+            "posicion": "fixed",
+            "alto": 40,
+            "top": "788px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "first_name",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "last_name",
+                "requerido": true
+              },
+              {
+                "tipo": "tel",
+                "nombre": "phone",
+                "requerido": true
+              },
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "company_name",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "number_of_employees",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "industry",
+                "requerido": true
+              },
+              {
+                "tipo": "checkbox",
+                "nombre": "sw_pro",
+                "requerido": false
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "how_did_you_hear_about_us",
+                "requerido": false
+              }
+            ],
+            "boton": "Book a Demo"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "first_name",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "last_name",
+                "requerido": true
+              },
+              {
+                "tipo": "tel",
+                "nombre": "phone",
+                "requerido": true
+              },
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "company_name",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "number_of_employees",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "industry",
+                "requerido": true
+              },
+              {
+                "tipo": "checkbox",
+                "nombre": "sw_pro",
+                "requerido": false
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "how_did_you_hear_about_us",
+                "requerido": false
+              }
+            ],
+            "boton": "Book a Demo"
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 159,
+        "ctasTop": [
+          {
+            "texto": "Start free trial",
+            "veces": 4
+          },
+          {
+            "texto": "Start Free Trial",
+            "veces": 4
+          },
+          {
+            "texto": "858-923-4952",
+            "veces": 4
+          },
+          {
+            "texto": "Privacy Policy",
+            "veces": 3
+          },
+          {
+            "texto": "×",
+            "veces": 3
+          },
+          {
+            "texto": "Book a Demo",
+            "veces": 3
+          },
+          {
+            "texto": "Login",
+            "veces": 2
+          },
+          {
+            "texto": "Pressure Washing",
+            "veces": 2
+          },
+          {
+            "texto": "Pricing",
+            "veces": 2
+          },
+          {
+            "texto": "Resource Center",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 74,
+        "sinAlt": 3,
+        "altVacio": 8,
+        "sinDimensiones": 40,
+        "lazy": 62,
+        "conSrcset": 13,
+        "interactivos": 278,
+        "objetivosMenores44px": 191,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 1.17
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(10, 36, 67)",
+            "ratio": 15.6
+          },
+          {
+            "texto": "rgb(0, 41, 66)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 15.04
+          },
+          {
+            "texto": "rgb(0, 41, 66)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 12.91
+          },
+          {
+            "texto": "rgb(0, 41, 66)",
+            "fondo": "rgb(10, 36, 67)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "rgb(19, 25, 30)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 17.71
+          },
+          {
+            "texto": "rgb(19, 25, 30)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 15.2
+          },
+          {
+            "texto": "rgb(19, 25, 30)",
+            "fondo": "rgb(10, 36, 67)",
+            "ratio": 1.14
+          },
+          {
+            "texto": "rgb(102, 102, 102)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 5.74
+          },
+          {
+            "texto": "rgb(102, 102, 102)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 4.93
+          },
+          {
+            "texto": "rgb(102, 102, 102)",
+            "fondo": "rgb(10, 36, 67)",
+            "ratio": 2.72
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 8883.5,
+        "porTipoKb": {
+          "document": 548.2,
+          "script": 5219.8,
+          "stylesheet": 648.3,
+          "image": 1441.8,
+          "other": 628.7,
+          "fetch": 2.3,
+          "xhr": 1.3,
+          "font": 393.1,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 4,
+          "script": 136,
+          "stylesheet": 32,
+          "image": 40,
+          "other": 3,
+          "fetch": 30,
+          "xhr": 11,
+          "font": 8,
+          "ping": 7
+        },
+        "hostsDistintos": 46,
+        "terceros": [
+          {
+            "host": "app.spara.co",
+            "pedidos": 75
+          },
+          {
+            "host": "segment-tracking-proxy.housecallpro.com",
+            "pedidos": 8
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 7
+          },
+          {
+            "host": "www.gstatic.com",
+            "pedidos": 7
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 7
+          },
+          {
+            "host": "amplitude.housecallpro.com",
+            "pedidos": 5
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 4
+          },
+          {
+            "host": "js.callrail.com",
+            "pedidos": 3
+          }
+        ],
+        "fuentesCargadas": [
+          "Oswald 400 normal",
+          "Open Sans 400 normal",
+          "Open Sans 500 normal",
+          "Open Sans 600 normal",
+          "Open Sans 700 normal",
+          "Open Sans 800 normal",
+          "Open Sans 400 italic",
+          "Headline Gothic ATF 400 normal",
+          "Headline Gothic ATF Rough No. 1 400 normal",
+          "Plus Jakarta Sans 200 800 normal",
+          "Plus Jakarta Sans 200 800 italic",
+          "Manrope 700 800 normal",
+          "Manrope 400 normal",
+          "Manrope 600 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Home Services Business Management Software - Housecall Pro",
+        "descripcion": "Housecall Pro is a top-rated software solution for home service businesses. Over 200,000 field service professionals trust Housecall Pro. Join them today.",
+        "canonical": "https://www.housecallpro.com/",
+        "og": 8,
+        "datosEstructurados": 8
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 9221,
+        "alturaPantallas": 9,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 11
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "main",
+          "clase": "homepage-template",
+          "altoPx": 7165,
+          "altoPantallas": 7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Everything to run and grow your business",
+          "cta": "Start Free Trial",
+          "imagenes": 82
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 7165,
+          "altoPantallas": 7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Everything to run and grow your business",
+          "cta": "Start Free Trial",
+          "imagenes": 82
+        },
+        {
+          "orden": 2,
+          "etiqueta": "footer",
+          "clase": "site-footer",
+          "altoPx": 1928,
+          "altoPantallas": 1.9,
+          "fondo": "rgb(19, 25, 30)",
+          "titular": "",
+          "cta": "Features",
+          "imagenes": 5
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "dialog-wrapper",
+          "altoPx": 1024,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.4)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 0
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "dialog",
+          "altoPx": 336,
+          "altoPantallas": 0.3,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 0
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "dialog-wrapper",
+          "altoPx": 1024,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.4)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "dialog",
+          "altoPx": 880,
+          "altoPantallas": 0.9,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "dialog-wrapper",
+          "altoPx": 1024,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.4)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "dialog",
+          "altoPx": 880,
+          "altoPantallas": 0.9,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "waiting spara-scrape-exclude spara-navigator-right spara-nav-mode-prev",
+          "altoPx": 234,
+          "altoPantallas": 0.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 1
+        },
+        {
+          "orden": 10,
+          "etiqueta": "iframe",
+          "clase": "",
+          "altoPx": 234,
+          "altoPantallas": 0.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 16,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 5,
+            "texto": "Customer Service Rep AI"
+          },
+          {
+            "nivel": 5,
+            "texto": "New: Business Coaching"
+          },
+          {
+            "nivel": 5,
+            "texto": "Commercial Services"
+          },
+          {
+            "nivel": 5,
+            "texto": "How to price window cleaning jobs (202..."
+          },
+          {
+            "nivel": 5,
+            "texto": "The best plumbing dispatch and invoici..."
+          },
+          {
+            "nivel": 1,
+            "texto": "Everything to run and grow your business"
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for how you actually work"
+          },
+          {
+            "nivel": 2,
+            "texto": "Trusted by 200K+ pros. Tailored for teams of 1 to 100+."
+          },
+          {
+            "nivel": 2,
+            "texto": "A community built by Pros, for Pros"
+          },
+          {
+            "nivel": 2,
+            "texto": "Top-rated software for the trades"
+          },
+          {
+            "nivel": 2,
+            "texto": "Hear from Housecall Pros"
+          },
+          {
+            "nivel": 2,
+            "texto": "Your business,at its best."
+          },
+          {
+            "nivel": 4,
+            "texto": "Get in touch:"
+          },
+          {
+            "nivel": 4,
+            "texto": "Follow our Socials:"
+          },
+          {
+            "nivel": 2,
+            "texto": "Get a $50 gift card"
+          },
+          {
+            "nivel": 2,
+            "texto": "Get $50 gift card"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 190
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 700",
+            "veces": 68
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 57
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 700",
+            "veces": 44
+          },
+          {
+            "valor": "11px / lh 1.64 / ls normal / w 400",
+            "veces": 41
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 400",
+            "veces": 21
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "24px / lh 1.25 / ls normal / w 800",
+            "veces": 9
+          },
+          {
+            "valor": "18px / lh 1.50 / ls normal / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "12px / lh 1.50 / ls 1px / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "38px / lh 1.26 / ls -0.3px / w 800",
+            "veces": 6
+          },
+          {
+            "valor": "28px / lh 1.21 / ls -0.3px / w 800",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.50 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "17px / lh 1.50 / ls normal / w 400",
+            "veces": 6
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Open Sans",
+            "veces": 435
+          },
+          {
+            "valor": "Manrope",
+            "veces": 129
+          },
+          {
+            "valor": "Headline Gothic ATF Rough No. 1",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 108
+          },
+          {
+            "valor": "rgb(0, 41, 66)",
+            "veces": 80
+          },
+          {
+            "valor": "rgb(102, 102, 102)",
+            "veces": 61
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.87)",
+            "veces": 60
+          },
+          {
+            "valor": "rgb(8, 21, 30)",
+            "veces": 56
+          },
+          {
+            "valor": "rgb(19, 25, 30)",
+            "veces": 54
+          },
+          {
+            "valor": "rgb(33, 33, 33)",
+            "veces": 46
+          },
+          {
+            "valor": "rgb(117, 117, 117)",
+            "veces": 22
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 65
+          },
+          {
+            "valor": "rgb(222, 240, 255)",
+            "veces": 54
+          },
+          {
+            "valor": "rgb(15, 45, 86)",
+            "veces": 36
+          },
+          {
+            "valor": "rgb(245, 245, 245)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(42, 56, 69)",
+            "veces": 12
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.4)",
+            "veces": 8
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.18)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(255, 183, 6)",
+            "veces": 5
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 541
+          },
+          {
+            "valor": "16px",
+            "veces": 93
+          },
+          {
+            "valor": "24px",
+            "veces": 88
+          },
+          {
+            "valor": "12px",
+            "veces": 66
+          },
+          {
+            "valor": "2px",
+            "veces": 64
+          },
+          {
+            "valor": "4px",
+            "veces": 56
+          },
+          {
+            "valor": "10px",
+            "veces": 18
+          },
+          {
+            "valor": "40px",
+            "veces": 17
+          },
+          {
+            "valor": "15px",
+            "veces": 16
+          },
+          {
+            "valor": "32px",
+            "veces": 16
+          },
+          {
+            "valor": "20px",
+            "veces": 12
+          },
+          {
+            "valor": "18px",
+            "veces": 11
+          },
+          {
+            "valor": "30px",
+            "veces": 8
+          },
+          {
+            "valor": "-1px",
+            "veces": 7
+          },
+          {
+            "valor": "4px 0px",
+            "veces": 6
+          },
+          {
+            "valor": "6px",
+            "veces": 6
+          }
+        ],
+        "radios": [
+          {
+            "valor": "8px",
+            "veces": 199
+          },
+          {
+            "valor": "16px",
+            "veces": 89
+          },
+          {
+            "valor": "50%",
+            "veces": 33
+          },
+          {
+            "valor": "4px",
+            "veces": 8
+          },
+          {
+            "valor": "100px",
+            "veces": 8
+          },
+          {
+            "valor": "200px",
+            "veces": 5
+          },
+          {
+            "valor": "12px",
+            "veces": 5
+          },
+          {
+            "valor": "100px 0px 0px 100px",
+            "veces": 4
+          },
+          {
+            "valor": "0px 100px 100px 0px",
+            "veces": 4
+          },
+          {
+            "valor": "28px",
+            "veces": 4
+          }
+        ],
+        "radiosDistintos": 14,
+        "sombras": [
+          {
+            "valor": "rgba(33, 33, 33, 0.1) 0px 12px 16px -4px, rgba(33, 33, 33, 0",
+            "veces": 37
+          },
+          {
+            "valor": "rgba(33, 33, 33, 0.08) 0px 4px 9px -2px, rgba(33, 33, 33, 0.",
+            "veces": 6
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.07) 0px 2px 12px 0px",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.32) 0px 0px 16px 4px, rgba(33, 33, 33,",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.1) 0px 4px 8px 0px",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 8,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 27
+          },
+          {
+            "valor": "1000",
+            "veces": 13
+          },
+          {
+            "valor": "5",
+            "veces": 3
+          },
+          {
+            "valor": "1500",
+            "veces": 2
+          },
+          {
+            "valor": "2147482997",
+            "veces": 2
+          },
+          {
+            "valor": "-1",
+            "veces": 2
+          },
+          {
+            "valor": "2",
+            "veces": 1
+          },
+          {
+            "valor": "99",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.2s ease-in-out",
+            "veces": 92
+          },
+          {
+            "valor": "0.1s ease-in",
+            "veces": 70
+          },
+          {
+            "valor": "0.25s",
+            "veces": 54
+          },
+          {
+            "valor": "transform 0.16s, box-shadow 0.16s",
+            "veces": 36
+          },
+          {
+            "valor": "transform 0.16s",
+            "veces": 36
+          },
+          {
+            "valor": "0.4s",
+            "veces": 16
+          },
+          {
+            "valor": "transform 0.25s",
+            "veces": 15
+          },
+          {
+            "valor": "background 0.2s, transform 0.2s",
+            "veces": 9
+          },
+          {
+            "valor": "border-color 0.4s, background-color 0.4s",
+            "veces": 6
+          },
+          {
+            "valor": "font-size 0.4s, transform 0.4s, font-weight 0.4s",
+            "veces": 6
+          },
+          {
+            "valor": "background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ",
+            "veces": 5
+          },
+          {
+            "valor": "visibility 0.25s linear, opacity 0.25s, transform 0.25s",
+            "veces": 4
+          }
+        ],
+        "transicionesDistintas": 28,
+        "hojasLeidas": 27,
+        "unidades": {
+          "em": 58,
+          "rem": 90,
+          "px": 2777,
+          "clamp": 19,
+          "vw": 32
+        },
+        "keyframesDeclarados": 6,
+        "transitionAll": 51,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 141
+          },
+          {
+            "px": 576,
+            "veces": 130
+          },
+          {
+            "px": 992,
+            "veces": 91
+          },
+          {
+            "px": 1200,
+            "veces": 14
+          },
+          {
+            "px": 767,
+            "veces": 7
+          },
+          {
+            "px": 1024,
+            "veces": 5
+          },
+          {
+            "px": 376,
+            "veces": 4
+          },
+          {
+            "px": 380,
+            "veces": 4
+          },
+          {
+            "px": 600,
+            "veces": 4
+          },
+          {
+            "px": 1440,
+            "veces": 4
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "hcp-site-header",
+            "posicion": "sticky",
+            "alto": 104,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "nav",
+            "clase": "active",
+            "posicion": "fixed",
+            "alto": 56,
+            "top": "104px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "hcp-product-tour-widget hcp-widget collapsed position-bottom",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "auto"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "exit-intent-popup",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "exit-intent-popup exit-intent-popup--card",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "video-modal",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "grecaptcha-badge",
+            "posicion": "fixed",
+            "alto": 60,
+            "top": "950px"
+          },
+          {
+            "etiqueta": "button",
+            "clase": "spara-scrape-exclude spara-nav-mode-preview",
+            "posicion": "fixed",
+            "alto": 50,
+            "top": "949px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "first_name",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "last_name",
+                "requerido": true
+              },
+              {
+                "tipo": "tel",
+                "nombre": "phone",
+                "requerido": true
+              },
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "company_name",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "number_of_employees",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "industry",
+                "requerido": true
+              },
+              {
+                "tipo": "checkbox",
+                "nombre": "sw_pro",
+                "requerido": false
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "how_did_you_hear_about_us",
+                "requerido": false
+              }
+            ],
+            "boton": "Book a Demo"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "first_name",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "last_name",
+                "requerido": true
+              },
+              {
+                "tipo": "tel",
+                "nombre": "phone",
+                "requerido": true
+              },
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "company_name",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "number_of_employees",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "industry",
+                "requerido": true
+              },
+              {
+                "tipo": "checkbox",
+                "nombre": "sw_pro",
+                "requerido": false
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "how_did_you_hear_about_us",
+                "requerido": false
+              }
+            ],
+            "boton": "Book a Demo"
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 170,
+        "ctasTop": [
+          {
+            "texto": "Electrical",
+            "veces": 5
+          },
+          {
+            "texto": "HVAC",
+            "veces": 5
+          },
+          {
+            "texto": "Handyman",
+            "veces": 5
+          },
+          {
+            "texto": "Home Cleaning",
+            "veces": 5
+          },
+          {
+            "texto": "Appliance",
+            "veces": 5
+          },
+          {
+            "texto": "Plumbing",
+            "veces": 5
+          },
+          {
+            "texto": "Window Cleaning",
+            "veces": 5
+          },
+          {
+            "texto": "General Contractor",
+            "veces": 5
+          },
+          {
+            "texto": "Start free trial",
+            "veces": 4
+          },
+          {
+            "texto": "Start Free Trial",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 43,
+        "sinAlt": 3,
+        "altVacio": 17,
+        "sinDimensiones": 25,
+        "lazy": 36,
+        "conSrcset": 1,
+        "interactivos": 291,
+        "objetivosMenores44px": 119,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 1,
+          "nav": 2,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 1.17
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(15, 45, 86)",
+            "ratio": 13.73
+          },
+          {
+            "texto": "rgb(0, 41, 66)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 15.04
+          },
+          {
+            "texto": "rgb(0, 41, 66)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 12.91
+          },
+          {
+            "texto": "rgb(0, 41, 66)",
+            "fondo": "rgb(15, 45, 86)",
+            "ratio": 1.1
+          },
+          {
+            "texto": "rgb(102, 102, 102)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 5.74
+          },
+          {
+            "texto": "rgb(102, 102, 102)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 4.93
+          },
+          {
+            "texto": "rgb(102, 102, 102)",
+            "fondo": "rgb(15, 45, 86)",
+            "ratio": 2.39
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.87)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 16.1
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.87)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 14.18
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.87)",
+            "fondo": "rgb(15, 45, 86)",
+            "ratio": 1.48
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 9972.7,
+        "porTipoKb": {
+          "document": 548.2,
+          "script": 5017.2,
+          "stylesheet": 648.3,
+          "image": 2362,
+          "other": 628.7,
+          "fetch": 2.3,
+          "xhr": 1.3,
+          "ping": 0,
+          "font": 764.7
+        },
+        "pedidos": {
+          "document": 4,
+          "script": 140,
+          "stylesheet": 32,
+          "image": 58,
+          "other": 3,
+          "fetch": 30,
+          "xhr": 11,
+          "ping": 7,
+          "font": 10
+        },
+        "hostsDistintos": 46,
+        "terceros": [
+          {
+            "host": "app.spara.co",
+            "pedidos": 75
+          },
+          {
+            "host": "segment-tracking-proxy.housecallpro.com",
+            "pedidos": 8
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 7
+          },
+          {
+            "host": "www.gstatic.com",
+            "pedidos": 7
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 7
+          },
+          {
+            "host": "amplitude.housecallpro.com",
+            "pedidos": 5
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 4
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 4
+          }
+        ],
+        "fuentesCargadas": [
+          "Oswald 400 normal",
+          "Open Sans 400 normal",
+          "Open Sans 500 normal",
+          "Open Sans 600 normal",
+          "Open Sans 700 normal",
+          "Open Sans 800 normal",
+          "Open Sans 400 italic",
+          "Headline Gothic ATF 400 normal",
+          "Headline Gothic ATF Rough No. 1 400 normal",
+          "Plus Jakarta Sans 200 800 normal",
+          "Plus Jakarta Sans 200 800 italic",
+          "Manrope 700 800 normal",
+          "Manrope 400 normal",
+          "Manrope 600 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Home Services Business Management Software - Housecall Pro",
+        "descripcion": "Housecall Pro is a top-rated software solution for home service businesses. Over 200,000 field service professionals trust Housecall Pro. Join them today.",
+        "canonical": "https://www.housecallpro.com/",
+        "og": 8,
+        "datosEstructurados": 5
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 7625,
+        "alturaPantallas": 8.5,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 11
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "main",
+          "clase": "homepage-template",
+          "altoPx": 6254,
+          "altoPantallas": 6.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Everything to run and grow your business",
+          "cta": "Start Free Trial",
+          "imagenes": 127
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 6254,
+          "altoPantallas": 6.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Everything to run and grow your business",
+          "cta": "Start Free Trial",
+          "imagenes": 127
+        },
+        {
+          "orden": 2,
+          "etiqueta": "footer",
+          "clase": "site-footer",
+          "altoPx": 1243,
+          "altoPantallas": 1.4,
+          "fondo": "rgb(19, 25, 30)",
+          "titular": "",
+          "cta": "Features",
+          "imagenes": 5
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "dialog-wrapper",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.4)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 0
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "dialog",
+          "altoPx": 338,
+          "altoPantallas": 0.4,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 0
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "dialog-wrapper",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.4)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "dialog",
+          "altoPx": 832,
+          "altoPantallas": 0.9,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "dialog-wrapper",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.4)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "dialog",
+          "altoPx": 832,
+          "altoPantallas": 0.9,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "",
+          "cta": "×",
+          "imagenes": 3
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "waiting spara-scrape-exclude spara-navigator-right spara-nav-mode-prev",
+          "altoPx": 234,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 1
+        },
+        {
+          "orden": 10,
+          "etiqueta": "iframe",
+          "clase": "",
+          "altoPx": 234,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 82,
+        "h1": 1,
+        "saltos": 6,
+        "lista": [
+          {
+            "nivel": 5,
+            "texto": "Customer Service Rep AI"
+          },
+          {
+            "nivel": 5,
+            "texto": "New: Business Coaching"
+          },
+          {
+            "nivel": 5,
+            "texto": "Commercial Services"
+          },
+          {
+            "nivel": 5,
+            "texto": "How to price window cleaning jobs (202..."
+          },
+          {
+            "nivel": 5,
+            "texto": "The best plumbing dispatch and invoici..."
+          },
+          {
+            "nivel": 1,
+            "texto": "Everything to run and grow your business"
+          },
+          {
+            "nivel": 3,
+            "texto": "Landscaping & Lawncare"
+          },
+          {
+            "nivel": 3,
+            "texto": "Plumbing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Electrical"
+          },
+          {
+            "nivel": 3,
+            "texto": "Handyman"
+          },
+          {
+            "nivel": 3,
+            "texto": "Home Cleaning"
+          },
+          {
+            "nivel": 3,
+            "texto": "HVAC"
+          },
+          {
+            "nivel": 3,
+            "texto": "General Contractor"
+          },
+          {
+            "nivel": 3,
+            "texto": "Appliance"
+          },
+          {
+            "nivel": 3,
+            "texto": "Window Cleaning"
+          },
+          {
+            "nivel": 3,
+            "texto": "Landscaping & Lawncare"
+          },
+          {
+            "nivel": 3,
+            "texto": "Plumbing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Electrical"
+          },
+          {
+            "nivel": 3,
+            "texto": "Handyman"
+          },
+          {
+            "nivel": 3,
+            "texto": "Home Cleaning"
+          },
+          {
+            "nivel": 3,
+            "texto": "HVAC"
+          },
+          {
+            "nivel": 3,
+            "texto": "General Contractor"
+          },
+          {
+            "nivel": 3,
+            "texto": "Appliance"
+          },
+          {
+            "nivel": 3,
+            "texto": "Window Cleaning"
+          },
+          {
+            "nivel": 3,
+            "texto": "Landscaping & Lawncare"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 188
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 700",
+            "veces": 68
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 54
+          },
+          {
+            "valor": "11px / lh 1.64 / ls normal / w 400",
+            "veces": 45
+          },
+          {
+            "valor": "18px / lh 1.20 / ls normal / w 700",
+            "veces": 39
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 400",
+            "veces": 15
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 15
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "18px / lh 1.50 / ls normal / w 400",
+            "veces": 13
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "22px / lh 1.45 / ls -0.3px / w 700",
+            "veces": 10
+          },
+          {
+            "valor": "18px / lh 1.50 / ls normal / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "48px / lh 1.25 / ls normal / w 700",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 700",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 400",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Open Sans",
+            "veces": 562
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 101
+          },
+          {
+            "valor": "rgb(0, 41, 66)",
+            "veces": 80
+          },
+          {
+            "valor": "rgb(19, 25, 30)",
+            "veces": 64
+          },
+          {
+            "valor": "rgb(102, 102, 102)",
+            "veces": 61
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.87)",
+            "veces": 60
+          },
+          {
+            "valor": "rgb(8, 21, 30)",
+            "veces": 56
+          },
+          {
+            "valor": "rgb(33, 33, 33)",
+            "veces": 46
+          },
+          {
+            "valor": "rgb(117, 117, 117)",
+            "veces": 21
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 69
+          },
+          {
+            "valor": "rgb(222, 240, 255)",
+            "veces": 54
+          },
+          {
+            "valor": "rgba(33, 33, 33, 0.2)",
+            "veces": 16
+          },
+          {
+            "valor": "rgb(10, 36, 67)",
+            "veces": 12
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.2)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(245, 245, 245)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(255, 183, 6)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(0, 85, 255)",
+            "veces": 5
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 614
+          },
+          {
+            "valor": "16px",
+            "veces": 110
+          },
+          {
+            "valor": "2px",
+            "veces": 66
+          },
+          {
+            "valor": "24px",
+            "veces": 44
+          },
+          {
+            "valor": "12px",
+            "veces": 30
+          },
+          {
+            "valor": "30px",
+            "veces": 21
+          },
+          {
+            "valor": "20px",
+            "veces": 20
+          },
+          {
+            "valor": "32px",
+            "veces": 18
+          },
+          {
+            "valor": "15px",
+            "veces": 15
+          },
+          {
+            "valor": "10px",
+            "veces": 10
+          },
+          {
+            "valor": "40px",
+            "veces": 10
+          },
+          {
+            "valor": "4px",
+            "veces": 8
+          },
+          {
+            "valor": "-1px",
+            "veces": 7
+          },
+          {
+            "valor": "1px",
+            "veces": 6
+          },
+          {
+            "valor": "56px",
+            "veces": 5
+          },
+          {
+            "valor": "18px",
+            "veces": 5
+          }
+        ],
+        "radios": [
+          {
+            "valor": "8px",
+            "veces": 226
+          },
+          {
+            "valor": "16px",
+            "veces": 68
+          },
+          {
+            "valor": "50%",
+            "veces": 39
+          },
+          {
+            "valor": "28px",
+            "veces": 8
+          },
+          {
+            "valor": "0px 0px 16px 16px",
+            "veces": 6
+          },
+          {
+            "valor": "200px",
+            "veces": 5
+          },
+          {
+            "valor": "100px",
+            "veces": 5
+          },
+          {
+            "valor": "100px 0px 0px 100px",
+            "veces": 4
+          },
+          {
+            "valor": "0px 100px 100px 0px",
+            "veces": 4
+          },
+          {
+            "valor": "4px",
+            "veces": 4
+          }
+        ],
+        "radiosDistintos": 18,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0.15) 0px 4px 12px 0px",
+            "veces": 39
+          },
+          {
+            "valor": "rgba(33, 33, 33, 0.08) 0px 4px 9px -2px, rgba(33, 33, 33, 0.",
+            "veces": 6
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.25) 0px 4px 8px 0px",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.15) 1px 1px 20px 0px",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.32) 0px 0px 16px 4px, rgba(33, 33, 33,",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+            "veces": 2
+          }
+        ],
+        "sombrasDistintas": 10,
+        "zIndex": [
+          {
+            "valor": "2",
+            "veces": 41
+          },
+          {
+            "valor": "1000",
+            "veces": 13
+          },
+          {
+            "valor": "1",
+            "veces": 7
+          },
+          {
+            "valor": "5",
+            "veces": 3
+          },
+          {
+            "valor": "1500",
+            "veces": 2
+          },
+          {
+            "valor": "2147482997",
+            "veces": 2
+          },
+          {
+            "valor": "-1",
+            "veces": 2
+          },
+          {
+            "valor": "4",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.3s",
+            "veces": 167
+          },
+          {
+            "valor": "0.2s ease-in-out",
+            "veces": 96
+          },
+          {
+            "valor": "opacity 0.3s",
+            "veces": 79
+          },
+          {
+            "valor": "0.1s ease-in",
+            "veces": 70
+          },
+          {
+            "valor": "0.25s",
+            "veces": 54
+          },
+          {
+            "valor": "0.2s",
+            "veces": 22
+          },
+          {
+            "valor": "0.4s",
+            "veces": 16
+          },
+          {
+            "valor": "border-color 0.4s, background-color 0.4s",
+            "veces": 6
+          },
+          {
+            "valor": "font-size 0.4s, transform 0.4s, font-weight 0.4s",
+            "veces": 6
+          },
+          {
+            "valor": "background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ",
+            "veces": 5
+          },
+          {
+            "valor": "visibility 0.25s linear, opacity 0.25s, transform 0.25s",
+            "veces": 4
+          },
+          {
+            "valor": "0.1s",
+            "veces": 3
+          }
+        ],
+        "transicionesDistintas": 24,
+        "hojasLeidas": 26,
+        "unidades": {
+          "em": 50,
+          "rem": 68,
+          "px": 2730,
+          "clamp": 12,
+          "vw": 25
+        },
+        "keyframesDeclarados": 4,
+        "transitionAll": 51,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 141
+          },
+          {
+            "px": 576,
+            "veces": 130
+          },
+          {
+            "px": 992,
+            "veces": 90
+          },
+          {
+            "px": 1200,
+            "veces": 14
+          },
+          {
+            "px": 767,
+            "veces": 7
+          },
+          {
+            "px": 1024,
+            "veces": 5
+          },
+          {
+            "px": 376,
+            "veces": 4
+          },
+          {
+            "px": 380,
+            "veces": 4
+          },
+          {
+            "px": 600,
+            "veces": 4
+          },
+          {
+            "px": 1440,
+            "veces": 4
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 3,
+            "navFija": true
+          },
+          {
+            "y": 1681,
+            "conTransform": 3,
+            "navFija": true
+          },
+          {
+            "y": 3363,
+            "conTransform": 3,
+            "navFija": true
+          },
+          {
+            "y": 5044,
+            "conTransform": 3,
+            "navFija": true
+          },
+          {
+            "y": 6811,
+            "conTransform": 3,
+            "navFija": true
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": false,
+        "posicionesDistintas": 1,
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "hcp-site-header",
+            "posicion": "sticky",
+            "alto": 104,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "a",
+            "clase": "close-dialog",
+            "posicion": "fixed",
+            "alto": 32,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "hcp-product-tour-widget hcp-widget collapsed position-bottom",
+            "posicion": "fixed",
+            "alto": 64,
+            "top": "820px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "exit-intent-popup",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "exit-intent-popup exit-intent-popup--card",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "dialog-wrapper",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "video-modal",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "grecaptcha-badge",
+            "posicion": "fixed",
+            "alto": 60,
+            "top": "826px"
+          },
+          {
+            "etiqueta": "button",
+            "clase": "spara-scrape-exclude spara-nav-mode-preview",
+            "posicion": "fixed",
+            "alto": 50,
+            "top": "825px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              }
+            ],
+            "boton": "Start Free Trial"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "first_name",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "last_name",
+                "requerido": true
+              },
+              {
+                "tipo": "tel",
+                "nombre": "phone",
+                "requerido": true
+              },
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "company_name",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "number_of_employees",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "industry",
+                "requerido": true
+              },
+              {
+                "tipo": "checkbox",
+                "nombre": "sw_pro",
+                "requerido": false
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "how_did_you_hear_about_us",
+                "requerido": false
+              }
+            ],
+            "boton": "Book a Demo"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "first_name",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "last_name",
+                "requerido": true
+              },
+              {
+                "tipo": "tel",
+                "nombre": "phone",
+                "requerido": true
+              },
+              {
+                "tipo": "email",
+                "nombre": "email",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "company_name",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "number_of_employees",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "industry",
+                "requerido": true
+              },
+              {
+                "tipo": "checkbox",
+                "nombre": "sw_pro",
+                "requerido": false
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "how_did_you_hear_about_us",
+                "requerido": false
+              }
+            ],
+            "boton": "Book a Demo"
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 159,
+        "ctasTop": [
+          {
+            "texto": "Start free trial",
+            "veces": 4
+          },
+          {
+            "texto": "Start Free Trial",
+            "veces": 4
+          },
+          {
+            "texto": "858-330-6696",
+            "veces": 4
+          },
+          {
+            "texto": "Privacy Policy",
+            "veces": 3
+          },
+          {
+            "texto": "×",
+            "veces": 3
+          },
+          {
+            "texto": "Book a Demo",
+            "veces": 3
+          },
+          {
+            "texto": "Login",
+            "veces": 2
+          },
+          {
+            "texto": "Pressure Washing",
+            "veces": 2
+          },
+          {
+            "texto": "Pricing",
+            "veces": 2
+          },
+          {
+            "texto": "Resource Center",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 70,
+        "sinAlt": 3,
+        "altVacio": 8,
+        "sinDimensiones": 40,
+        "lazy": 58,
+        "conSrcset": 9,
+        "interactivos": 274,
+        "objetivosMenores44px": 121,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 1.17
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(10, 36, 67)",
+            "ratio": 15.6
+          },
+          {
+            "texto": "rgb(0, 41, 66)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 15.04
+          },
+          {
+            "texto": "rgb(0, 41, 66)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 12.91
+          },
+          {
+            "texto": "rgb(0, 41, 66)",
+            "fondo": "rgb(10, 36, 67)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "rgb(19, 25, 30)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 17.71
+          },
+          {
+            "texto": "rgb(19, 25, 30)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 15.2
+          },
+          {
+            "texto": "rgb(19, 25, 30)",
+            "fondo": "rgb(10, 36, 67)",
+            "ratio": 1.14
+          },
+          {
+            "texto": "rgb(102, 102, 102)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 5.74
+          },
+          {
+            "texto": "rgb(102, 102, 102)",
+            "fondo": "rgb(222, 240, 255)",
+            "ratio": 4.93
+          },
+          {
+            "texto": "rgb(102, 102, 102)",
+            "fondo": "rgb(10, 36, 67)",
+            "ratio": 2.72
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 8521.1,
+        "porTipoKb": {
+          "document": 548.4,
+          "script": 4990.4,
+          "stylesheet": 648.3,
+          "image": 1308.6,
+          "other": 628.7,
+          "fetch": 2.3,
+          "xhr": 1.3,
+          "font": 393.1,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 7,
+          "script": 203,
+          "stylesheet": 60,
+          "image": 119,
+          "other": 6,
+          "fetch": 45,
+          "xhr": 18,
+          "font": 15,
+          "ping": 16
+        },
+        "hostsDistintos": 46,
+        "terceros": [
+          {
+            "host": "app.spara.co",
+            "pedidos": 75
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 13
+          },
+          {
+            "host": "segment-tracking-proxy.housecallpro.com",
+            "pedidos": 8
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 7
+          },
+          {
+            "host": "www.gstatic.com",
+            "pedidos": 7
+          },
+          {
+            "host": "amplitude.housecallpro.com",
+            "pedidos": 5
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 4
+          },
+          {
+            "host": "js.callrail.com",
+            "pedidos": 3
+          }
+        ],
+        "fuentesCargadas": [
+          "Oswald 400 normal",
+          "Open Sans 400 normal",
+          "Open Sans 500 normal",
+          "Open Sans 600 normal",
+          "Open Sans 700 normal",
+          "Open Sans 800 normal",
+          "Open Sans 400 italic",
+          "Headline Gothic ATF 400 normal",
+          "Headline Gothic ATF Rough No. 1 400 normal",
+          "Plus Jakarta Sans 200 800 normal",
+          "Plus Jakarta Sans 200 800 italic",
+          "Manrope 700 800 normal",
+          "Manrope 400 normal",
+          "Manrope 600 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Home Services Business Management Software - Housecall Pro",
+        "descripcion": "Housecall Pro is a top-rated software solution for home service businesses. Over 200,000 field service professionals trust Housecall Pro. Join them today.",
+        "canonical": "https://www.housecallpro.com/",
+        "og": 8,
+        "datosEstructurados": 8
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 0,
+    "conTransicion": 490
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}
