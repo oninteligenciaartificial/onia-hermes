@@ -611,8 +611,6 @@ tabla sin reservar ni escribir, y recién después el workflow con `ONIA_BOT_DRY
 
 ---
 
-<<<<<<< HEAD
-=======
 ## 5C. Workflow D — cierre post-demo (¿cómo salió la reunión?)
 
 **El script ya existe:** `postdemo-run.mjs` + `postdemo-run.sh`. **Falta el disparador en n8n.**
@@ -661,7 +659,6 @@ cerraría y leer el aviso, y recién después el workflow con `--emit`.
 
 ---
 
->>>>>>> origin/main
 ## 6. Cómo se toma la conversación un humano
 
 `human_took_over = true` significa **el bot no vuelve a hablar en esa conversación, nunca**, y sólo

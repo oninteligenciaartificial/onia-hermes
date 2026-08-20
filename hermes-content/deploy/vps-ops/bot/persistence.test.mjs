@@ -24,10 +24,7 @@ import {
   PIPELINE_STATUSES,
   buildLeadRow,
   INBOUND_BODY_PLACEHOLDER,
-<<<<<<< HEAD
-=======
   RUBRO_SIN_DEFINIR,
->>>>>>> origin/main
   buildMessageRow,
   createStore,
   leadKeyFor,
@@ -421,14 +418,9 @@ test("el lead se inserta una vez y despues se PATCHea (no se duplica ni se pisan
   assert.equal(await nuevo.store.upsertLead({ pipelineStatus: "Contactado" }, state), "bot-telegram-777");
   assert.equal(nuevo.requests[1].method, "POST");
   assert.equal(nuevo.requests[1].body.pipeline_status, "Contactado");
-<<<<<<< HEAD
-  // El rubro sale de la calificacion, ya no se asume dental para todos.
-  assert.equal(nuevo.requests[1].body.business_type, null);
-=======
   // El rubro sale de la calificacion, ya no se asume dental para todos. Sin calificar va el
   // centinela (la columna es NOT NULL: con null moria el insert entero y no se creaba el lead).
   assert.equal(nuevo.requests[1].body.business_type, RUBRO_SIN_DEFINIR);
->>>>>>> origin/main
   assert.equal(nuevo.requests[1].body.city, "Santa Cruz");
 
   const viejo = recorder([{ status: 200, body: [{ lead_key: "bot-telegram-777", raw: { humano: "no tocar" } }] }, { status: 200, body: [{}] }]);
@@ -526,15 +518,11 @@ test("al agendar la demo el lead queda en 'Reunion' (valor exacto del CHECK del 
 test("el lead nunca inventa el nombre NI el rubro del negocio", () => {
   const anonimo = buildLeadRow({}, createState({ channel: "telegram", contactRef: "777" }));
   assert.match(anonimo.company_name, /sin nombre/);
-<<<<<<< HEAD
-  assert.equal(anonimo.business_type, null, "sin rubro capturado no se inventa uno");
-=======
   // La regla NO cambio: sigue prohibido inventar un rubro. Cambio el valor con que se dice "no se":
   // era null y `leads.business_type` es NOT NULL sin default, asi que el insert entero moria con
   // 23502 y el lead no llegaba NUNCA al CRM. Se marca ausente explicito, el mismo patron que
   // `company_name` ya usa arriba con "sin nombre". Se corrige solo cuando el prospecto dice el rubro.
   assert.equal(anonimo.business_type, RUBRO_SIN_DEFINIR, "sin rubro capturado se marca ausente, no se inventa uno");
->>>>>>> origin/main
 
   // El bot atiende cualquier rubro: llamar "Clinica de X" a una ferreteria metia un dato falso
   // en el CRM. Ahora el nombre lleva el rubro real cuando esta, y nada cuando no.

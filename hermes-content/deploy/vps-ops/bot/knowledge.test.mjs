@@ -24,28 +24,14 @@ import {
   KNOWLEDGE_SCHEMA,
   applyKnowledge,
   checkCli,
-<<<<<<< HEAD
-  ensureKnowledge,
   getKnowledge,
-  getOrgKnowledge,
-=======
-  getKnowledge,
->>>>>>> origin/main
   knowledgeHealth,
   parseKnowledge,
   readKnowledgeFile,
   resetKnowledgeCache,
-<<<<<<< HEAD
-  resetOrgKnowledgeCache,
   validateKnowledge,
   withKnowledge,
 } from "./knowledge.mjs";
-import { handlePreviewRequest } from "./preview-route.mjs";
-=======
-  validateKnowledge,
-  withKnowledge,
-} from "./knowledge.mjs";
->>>>>>> origin/main
 import { step, createState } from "./bot-engine.mjs";
 import { normalize } from "./guardrails.mjs";
 import { findIndustry, industryLabel } from "./intents.mjs";
@@ -101,14 +87,7 @@ function conArchivo(contenido, run) {
   return salida;
 }
 
-<<<<<<< HEAD
-test.afterEach(() => {
-  resetKnowledgeCache();
-  resetOrgKnowledgeCache();
-});
-=======
 test.afterEach(() => resetKnowledgeCache());
->>>>>>> origin/main
 
 // ---------------------------------------------------------------------------
 // 1. DEGRADACION — el bot no se cae ni queda mudo
@@ -719,216 +698,3 @@ test("renderTemplate sigue siendo el ultimo paso: los {{ }} del conocimiento se 
   assert.match(config.script.M_SIAT_BODY, /\{\{humano\}\}/, "el texto guardado conserva la variable");
   assert.match(renderTemplate(config.script.M_SIAT_BODY, { humano: "Sergio" }), /Sergio en la demo/);
 });
-<<<<<<< HEAD
-
-// ---------------------------------------------------------------------------
-// FUENTE "DB" (paso b): la fila publicada POR ORGANIZACION, via HTTP al producto
-// ---------------------------------------------------------------------------
-// Lo que se prueba es el mismo contrato que el archivo, pero con red en el medio:
-// nunca tira, degrada a archivo/codigo, valida TODO O NADA, y el fetch roto no
-// borra la ultima copia buena de la org.
-
-const ORG = "org_ferreteria";
-
-/** Un fetch falso que contesta como el endpoint /published del producto. */
-function fetchFalso(doc, { status = 200, fallar = false } = {}) {
-  const fn = async (url, init) => {
-    fn.calls.push({ url, init });
-    if (fallar) throw new Error("red caida");
-    return {
-      ok: status >= 200 && status < 300,
-      status,
-      json: async () => ({ data: doc, version: 1, updatedBy: "test" }),
-    };
-  };
-  fn.calls = [];
-  return fn;
-}
-
-const DB_OPTS = { dbUrl: "http://producto/api/chatbot-knowledge/published", dbSecret: "s3cr3t" };
-
-test("db: la fila publicada de la org se aplica, source dice 'db' y el Bearer viaja", async () => {
-  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo" } });
-  const fetch = fetchFalso(doc);
-  const state = await getOrgKnowledge(ORG, { ...DB_OPTS, fetch });
-  assert.equal(state.source, "db");
-  assert.match(fetch.calls[0].url, /organizationId=org_ferreteria/);
-  assert.equal(fetch.calls[0].init.headers.authorization, "Bearer s3cr3t");
-  const config = applyKnowledge(createBotConfig(), state.data);
-  assert.equal(config.identity.productName, "ZZ QA Ferreteria Tornillo");
-});
-
-test("db: dentro del TTL NO se vuelve a pedir (la red no esta en el camino de la respuesta)", async () => {
-  const fetch = fetchFalso(valido());
-  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch, nowMs: NOW_MS });
-  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch, nowMs: NOW_MS + 1000 });
-  assert.equal(fetch.calls.length, 1);
-});
-
-test("db: sin URL o sin secreto la fuente esta APAGADA y se sigue con el archivo/codigo", async () => {
-  const state = await getOrgKnowledge(ORG, { fetch: fetchFalso(valido()), dbUrl: "", dbSecret: "" });
-  assert.equal(state.source, "code");
-  assert.equal(state.error, null, "apagado no es un error que gritar");
-});
-
-test("db: red caida, HTTP roto o 404 degradan a codigo SIN tirar", async () => {
-  for (const opts of [
-    { fetch: fetchFalso(null, { fallar: true }) },
-    { fetch: fetchFalso(null, { status: 500 }) },
-    { fetch: fetchFalso(null, { status: 404 }) },
-  ]) {
-    resetOrgKnowledgeCache();
-    const state = await getOrgKnowledge(ORG, { ...DB_OPTS, ...opts });
-    assert.equal(state.data, null);
-    assert.equal(state.source, "code");
-  }
-});
-
-test("db: un documento con precio se rechaza ENTERO — el mismo candado que el archivo", async () => {
-  const doc = valido({ productos: [{ key: "dental", nombre: "Dental", queResuelve: "todo por 390 Bs" }] });
-  const state = await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(doc) });
-  assert.equal(state.data, null, "ni un campo del documento entra");
-});
-
-test("db: un fetch roto CONSERVA la ultima copia buena de la org (no la borra)", async () => {
-  const bueno = fetchFalso(valido({ identity: { productName: "Ferreteria" } }));
-  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: bueno, nowMs: NOW_MS });
-  const state = await getOrgKnowledge(ORG, {
-    ...DB_OPTS,
-    fetch: fetchFalso(null, { fallar: true }),
-    nowMs: NOW_MS + DEFAULT_TTL_MS + 1,
-  });
-  assert.equal(state.source, "db");
-  assert.equal(state.data.identity.productName, "Ferreteria");
-});
-
-// --- keying por INBOX: la conversacion real trae inbox, no organizationId ---
-
-test("db: keying por inbox — el fetch va con ?inboxId= y el producto resuelve la org", async () => {
-  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo" } });
-  const fetch = fetchFalso(doc);
-  const state = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "6" });
-  assert.equal(state.source, "db");
-  assert.match(fetch.calls[0].url, /inboxId=6/);
-  assert.doesNotMatch(fetch.calls[0].url, /organizationId=/, "el motor NO conoce la org: la resuelve el producto");
-  // y la copia queda cacheada para el camino SINCRONICO del turno:
-  const sync = getKnowledge({ ...DB_OPTS, fetch, inboxId: "6", nowMs: NOW_MS });
-  assert.equal(sync.source, "db");
-  assert.equal(sync.data.identity.productName, "ZZ QA Ferreteria Tornillo");
-});
-
-test("db: organizationId explicito le gana al inbox (misma regla que el endpoint)", async () => {
-  const fetch = fetchFalso(valido());
-  await ensureKnowledge({ ...DB_OPTS, fetch, organizationId: ORG, inboxId: "6" });
-  assert.match(fetch.calls[0].url, /organizationId=org_ferreteria/);
-  assert.doesNotMatch(fetch.calls[0].url, /inboxId=/);
-});
-
-test("db: ensureKnowledge espera la red SOLO con la cache fria; despues es getKnowledge", async () => {
-  const fetch = fetchFalso(valido({ identity: { productName: "Ferreteria" } }));
-  // 1a vez (fria): espera UNA lectura y ya sirve la copia db — el primer mensaje del
-  // cliente no puede salir con la cara de Onia.
-  const primera = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "6", nowMs: NOW_MS });
-  assert.equal(primera.source, "db");
-  assert.equal(fetch.calls.length, 1);
-  // 2a vez (caliente, TTL vencido): NO espera — sirve la copia vieja ya y refresca aparte.
-  const segunda = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "6", nowMs: NOW_MS + DEFAULT_TTL_MS + 1 });
-  assert.equal(segunda.data.identity.productName, "Ferreteria", "la copia vieja sale YA");
-});
-
-test("db: inbox sin org (404) degrada a archivo/codigo y NO vuelve a esperar red en el turno siguiente", async () => {
-  const fetch = fetchFalso(null, { status: 404 });
-  // `path` inexistente a proposito: en el VPS SI existe knowledge.json al lado y la degradacion
-  // seria a "file" — lo que se prueba aca es que la fuente db no aporta nada, no que archivo haya.
-  const opts = { ...DB_OPTS, fetch, inboxId: "99", path: "/no/existe/knowledge.json" };
-  const state = await ensureKnowledge({ ...opts, nowMs: NOW_MS });
-  assert.equal(state.source, "code", "inbox que no es de ningun cliente = bot de Onia, como siempre");
-  assert.equal(state.error ?? null, null, "404 no es un error que gritar");
-  await ensureKnowledge({ ...opts, nowMs: NOW_MS + 1000 });
-  assert.equal(fetch.calls.length, 1, "el intento fallido tambien deja huella: una sola espera por proceso");
-});
-
-test("db: getKnowledge (sincronico) sirve la copia db ya cacheada sin esperar red", async () => {
-  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(valido({ identity: { productName: "Ferreteria" } })), nowMs: NOW_MS });
-  const state = getKnowledge({ organizationId: ORG, nowMs: NOW_MS + 1000 });
-  assert.equal(state.source, "db");
-  // y sin copia todavia, cae al archivo/codigo de siempre (jamas espera):
-  resetOrgKnowledgeCache();
-  assert.equal(getKnowledge({ organizationId: "org_sin_cache", dbUrl: "", dbSecret: "" }).source, "code");
-});
-
-test("db: withKnowledge con fuente db enciende el MODO RECEPCIONISTA — y solo con fuente db", async () => {
-  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo", humanName: "Marta" } });
-  await getOrgKnowledge("org_modo_recep", { ...DB_OPTS, fetch: fetchFalso(doc), nowMs: NOW_MS });
-  const config = withKnowledge(DEFAULT_CONFIG, { organizationId: "org_modo_recep", nowMs: NOW_MS + 1000 });
-  assert.equal(config.modo, "recepcionista", "org cliente = el bot del negocio, no el funnel de Onia");
-  assert.equal(config.conocimiento.identity.productName, "ZZ QA Ferreteria Tornillo");
-  // ... y el turno entero ya contesta como recepcionista, no con el pitch de venta:
-  const result = step(createState(), { text: "hola", receivedAt: T0 }, { config });
-  assert.equal(result.replies[0].templateKey, "M0R");
-  assert.doesNotMatch(result.replies[0].text, /plataforma por módulos/i);
-
-  // Fuente archivo/codigo (la cara de Onia): NADA de modo — el funnel de venta sigue intacto.
-  resetOrgKnowledgeCache();
-  resetKnowledgeCache();
-  const deOnia = withKnowledge(DEFAULT_CONFIG, { path: "/no/existe/knowledge.json" });
-  assert.equal(deOnia.modo, undefined);
-});
-
-test("preview: con organizationId el turno corre contra el conocimiento de ESA org", async () => {
-  process.env.ONIA_BOT_PREVIEW_SECRET = "prev";
-  try {
-    // Cache caliente de la org (como quedaria tras el primer turno real):
-    const doc = valido({
-      identity: { productName: "ZZ QA Ferreteria Tornillo" },
-      productos: [{ key: "tornillos", tipo: "servicio", nombre: "tornillos al por mayor" }],
-    });
-    await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(doc), nowMs: Date.now() });
-
-    const out = await handlePreviewRequest({
-      rawBody: JSON.stringify({ message: "y que hacen exactamente?", organizationId: ORG }),
-      headers: { authorization: "Bearer prev" },
-    });
-    assert.equal(out.status, 200);
-    assert.equal(out.body.conocimiento.fuente, "db");
-    const texto = out.body.respuestas.map((r) => r.texto).join("\n");
-    assert.match(texto, /tornillos al por mayor/);
-  } finally {
-    delete process.env.ONIA_BOT_PREVIEW_SECRET;
-  }
-});
-
-test("preview: el BORRADOR corre en modo RECEPCIONISTA — lo que el cliente final vera, con botones", async () => {
-  // Decision Sergio 2026-08-18: el probador del editor muestra el bot del NEGOCIO
-  // (M0R + pastillas), nunca el funnel de venta de Onia con el nombre cambiado.
-  process.env.ONIA_BOT_PREVIEW_SECRET = "prev";
-  try {
-    const doc = valido({
-      identity: { productName: "ZZ QA Ferreteria Tornillo", humanName: "Marta" },
-      empresa: { horario: { frase: "lun-vie, 9:00-18:00" } },
-    });
-    const out = await handlePreviewRequest({
-      rawBody: JSON.stringify({ message: "hola", knowledge: doc }),
-      headers: { authorization: "Bearer prev" },
-    });
-    assert.equal(out.status, 200);
-    assert.equal(out.body.conocimiento.fuente, "borrador");
-    assert.equal(out.body.respuestas[0].plantilla, "M0R", "borrador => recepcionista, no M0 de venta");
-    assert.match(out.body.respuestas[0].texto, /Soy el asistente de ZZ QA Ferreteria Tornillo/);
-    assert.doesNotMatch(out.body.respuestas[0].texto, /plataforma por módulos/i);
-    // Los botones input_select llegan como TITULOS para que el chat del editor los pinte.
-    assert.deepEqual(out.body.respuestas[0].opciones, ["Horarios", "Servicios", "Hablar con Marta"]);
-
-    // El click de una pastilla ("Horarios") contesta con el dato del borrador:
-    const horario = await handlePreviewRequest({
-      rawBody: JSON.stringify({ message: "Horarios", knowledge: doc }),
-      headers: { authorization: "Bearer prev" },
-    });
-    assert.equal(horario.status, 200);
-    assert.match(horario.body.respuestas.map((r) => r.texto).join("\n"), /lun-vie, 9:00-18:00/);
-  } finally {
-    delete process.env.ONIA_BOT_PREVIEW_SECRET;
-  }
-});
-=======
->>>>>>> origin/main

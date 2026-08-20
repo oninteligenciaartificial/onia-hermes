@@ -20,11 +20,8 @@
  *   <h1 class="wf-type-slam wf-onload">…</h1>           headline slams in on load
  *   <div class="wf-parallax" data-wf-parallax="0.2">…</div>        scroll parallax
  *   <article class="wf-hover-lift">…</article>          hover lift (cards)
-<<<<<<< HEAD
  *   <div data-wf-scrub><figure class="wf-frame">…</figure>…</div>  scroll advances the scene
  *   <span class="wf-count" data-wf-count="4200">4.200</span>       count-up in view
-=======
->>>>>>> origin/main
  */
 
 /** The factory's editorial easing, shared with the React side (ui.tsx EASE). */
@@ -62,7 +59,6 @@ export const MOTION_CSS = `
 /* parallax elements are moved inline by the runtime; keep them from clipping */
 .wf-parallax{will-change:transform}
 
-<<<<<<< HEAD
 /* scroll-linked scene (pattern bank P3, sticky + scrub): the frames of a
    [data-wf-scrub] track cross-fade as the visitor scrolls through it, so scroll
    progress IS the story advancing. Frame 0 is visible with no JS at all; the
@@ -74,18 +70,13 @@ export const MOTION_CSS = `
    motion); the runtime only animates toward the value already written. */
 .wf-count{font-variant-numeric:tabular-nums}
 
-=======
->>>>>>> origin/main
 /* reduced motion: everything final, no movement */
 @media (prefers-reduced-motion: reduce){
   .wf-reveal,.wf-clip-reveal,.wf-scale-in,.wf-slide-left,.wf-slide-right,.wf-type-slam,.wf-zoom,.wf-stagger>*{
     opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}
   .wf-hover-lift:hover{transform:none}
   .wf-parallax{transform:none!important}
-<<<<<<< HEAD
   .wf-frame{transition:none}
-=======
->>>>>>> origin/main
 }
 `.trim();
 
@@ -119,7 +110,6 @@ export const MOTION_RUNTIME_JS = `
     var onS=function(){var s=window.scrollY>8;st.forEach(function(el){el.classList.toggle('wf-scrolled',s);});};
     window.addEventListener('scroll',onS,{passive:true});onS();
   }
-<<<<<<< HEAD
   var scenes=[].slice.call(document.querySelectorAll('[data-wf-scrub]'));
   if(scenes.length){
     var onScrub=function(){scenes.forEach(function(track){
@@ -151,8 +141,6 @@ export const MOTION_RUNTIME_JS = `
       if(e.isIntersecting){cio.unobserve(e.target);count(e.target);}});},{rootMargin:'0px 0px -15% 0px'});
     cs.forEach(function(el){cio.observe(el);});
   }
-=======
->>>>>>> origin/main
 })();
 `.trim();
 
@@ -168,11 +156,8 @@ export const MOTION_PRIMITIVES = [
   { primitive: "scroll-parallax", motionSpec: "parallax on media", class: "wf-parallax + data-wf-parallax='0.2'", trigger: "scroll-linked" },
   { primitive: "hover-lift", motionSpec: "card lift on hover", class: "wf-hover-lift", trigger: "hover" },
   { primitive: "sticky-nav", motionSpec: "sticky nav with scrolled state", class: "wf-sticky (+ .wf-scrolled)", trigger: "scroll-linked" },
-<<<<<<< HEAD
   { primitive: "scroll-scrub", motionSpec: "el scroll avanza la escena por etapas", class: "data-wf-scrub (track) + .wf-frame / .wf-step", trigger: "scroll-linked" },
   { primitive: "count-up", motionSpec: "la metrica cuenta hasta su valor real", class: "wf-count + data-wf-count='4200'", trigger: "in-view" },
-=======
->>>>>>> origin/main
 ] as const;
 
 export function renderMotionStyles(): string {

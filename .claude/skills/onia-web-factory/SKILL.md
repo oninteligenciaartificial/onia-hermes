@@ -83,10 +83,6 @@ Mis diseños salen genéricos. ANTES de construir: usar la galería interna
 (design-stack cache, `data/references`, Pattern Bank) + skills de diseño, y exigir
 **≥4 Required Qualities** (bento, depth/layering, editorial, motion, jerarquía por escala).
 
-<<<<<<< HEAD
-## Flujo de skills de diseño (en orden)
-
-=======
 ## Biblioteca de patrones propia (mirar ANTES de inventar)
 
 `hermes-content/references/ui-patterns/` — patrones de interfaz **vistos en video y
@@ -115,7 +111,6 @@ Reglas de motion que salieron de reconstruirlos, y que aplican a TODA web nueva:
 - Corpus transversal de la tanda: `hermes-content/references/ui-patterns/APRENDIZAJE_WEBS.md`.
 
 ## Flujo de skills (en orden)
->>>>>>> origin/main
 1. **Intake + dirección:** `brainstorming` → definir estilo concreto (no "clean minimal").
 2. **Investigar patrones:** **primero `ui-patterns/` (propio)**, después browser
    (Awwwards/referencias) + `data/references` internas.

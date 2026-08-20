@@ -20,10 +20,6 @@ import {
 } from "./config.mjs";
 import { enforceGuardrails, normalize, SAFE_REPLY } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
-<<<<<<< HEAD
-import { recepcionistaStep } from "./recepcionista.mjs";
-=======
->>>>>>> origin/main
 // COMO se escribe cada respuesta vive en reply-builder.mjs; aca queda QUE rama se toma.
 import {
   ESPERA_HORARIO_STAGES,
@@ -241,9 +237,6 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
       stageBefore: prev.botStage,
       stageAfter: next.botStage,
       ...(reply.pending ? { pending: true, llmRequest: reply.llmRequest, fallbackText: reply.fallbackText } : {}),
-      // Botones (Chatwoot input_select): viajan pegados a la respuesta hasta el adapter. El
-      // texto plano sigue siendo la base — un canal sin interactivos simplemente los ignora.
-      ...(reply.options ? { options: reply.options } : {}),
     };
   });
 
@@ -276,17 +269,9 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
 // ---------------------------------------------------------------------------
 
 /**
-<<<<<<< HEAD
- * @param {string|{key:string, options?:Array}} [bodyKey]  el mensaje con el que se anuncia el
- *   handoff. Por defecto M5 ("eso lo ve un humano"); el camino de SOPORTE usa el suyo porque
- *   decirle "eso lo ve Sergio en la demo" a un cliente que pide ayuda es contestarle con el
- *   guion de venta. Como objeto `{key, options}` permite colgarle botones al anuncio (R_DERIVA
- *   del recepcionista) sin duplicar los efectos de esta funcion.
-=======
  * @param {string} [bodyKey]  el mensaje con el que se anuncia el handoff. Por defecto M5 ("eso lo
  *   ve un humano"); el camino de SOPORTE usa el suyo porque decirle "eso lo ve Sergio en la demo"
  *   a un cliente que pide ayuda es contestarle con el guion de venta.
->>>>>>> origin/main
  */
 function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
   const { config, prev, msg } = ctx;
@@ -306,13 +291,7 @@ function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
     { type: "notify_sergio", payload: { kind: "handoff", reason, conversationKey: next.conversationKey, text: summary } },
     auditEffect(prev, next, reason),
   ];
-<<<<<<< HEAD
-  const spec = typeof bodyKey === "string" ? { key: bodyKey } : bodyKey;
-  const body = { ...say(spec.key, next, config), ...(spec.options ? { options: spec.options } : {}) };
-  return finalize(ctx, next, [...leadingReplies, body], effects, [`handoff:${reason}`]);
-=======
   return finalize(ctx, next, [...leadingReplies, say(bodyKey, next, config)], effects, [`handoff:${reason}`]);
->>>>>>> origin/main
 }
 
 /**
@@ -436,14 +415,6 @@ export function step(state, incoming, options = {}) {
 
   // --- Barrera 1: un humano tomo la conversacion. El bot NO habla. Falla hacia el SILENCIO.
   if (state.humanTookOver) return finalize(ctx, base, [], [], ["silencio:humano_a_cargo"]);
-
-  // --- MODO RECEPCIONISTA: el bot de un CLIENTE de Onia (conocimiento con fuente "db").
-  // Va ANTES de la barrera de opt-out porque la reapertura por "DEMO" es del funnel de venta;
-  // el recepcionista maneja su propio opt-out (silencio, sin reapertura). Todo el guion de
-  // leads de abajo queda EXCLUSIVO del modo venta. Ver recepcionista.mjs.
-  if (config.modo === "recepcionista") {
-    return recepcionistaStep(ctx, base, { finalize, handoffResult, say });
-  }
 
   // --- Barrera 2: opt-out previo. Solo el disparador DEMO puede reabrir (lo dice M6).
   // El opt-out le gana SIEMPRE al disparador: "ya no me mandes mas info" trae la palabra "info"

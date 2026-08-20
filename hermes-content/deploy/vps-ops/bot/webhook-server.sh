@@ -166,9 +166,6 @@ docker exec -d \
   -e ONIA_N8N_ENABLED="${ONIA_N8N_ENABLED:-false}" \
   -e ONIA_N8N_EVENT_URL="${ONIA_N8N_EVENT_URL:-}" \
   -e ONIA_N8N_EVENT_SECRET="${ONIA_N8N_EVENT_SECRET:-}" \
-  -e ONIA_BOT_PREVIEW_SECRET="${ONIA_BOT_PREVIEW_SECRET:-}" \
-  -e ONIA_BOT_KNOWLEDGE_URL="${ONIA_BOT_KNOWLEDGE_URL:-http://onia-platform:3000/api/chatbot-knowledge/published}" \
-  -e BOT_KNOWLEDGE_SECRET="${BOT_KNOWLEDGE_SECRET:-}" \
   -e LITELLM_BASE="${LITELLM_BASE:-http://onia_selfhosted-litellm-1:4000/v1}" \
   -e LITELLM_KEY="$MK" \
   -e ONIA_BOT_MODEL="${ONIA_BOT_MODEL:-gpt-4o-mini}" \

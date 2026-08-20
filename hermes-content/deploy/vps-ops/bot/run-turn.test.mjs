@@ -19,16 +19,8 @@ import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 
 import { DEFAULT_CONFIG, slotsPending } from "./config.mjs";
-<<<<<<< HEAD
-import { resetKnowledgeCache, resetOrgKnowledgeCache } from "./knowledge.mjs";
-=======
 import { resetKnowledgeCache } from "./knowledge.mjs";
->>>>>>> origin/main
 import { buildConfig, resolveConfig } from "./run-turn.mjs";
-
-test.afterEach(() => {
-  resetOrgKnowledgeCache();
-});
 
 const T0 = "2026-07-27T14:05:00Z";
 
@@ -102,50 +94,6 @@ test("resolveConfig: preserva el dry_run explicito del turno aunque Cal.com trai
   assert.deepEqual(config.slots, LIVE_SLOTS);
 });
 
-<<<<<<< HEAD
-test("resolveConfig: el inbox del turno resuelve el conocimiento de ESE cliente desde el PRIMER mensaje", async () => {
-  // El fetch falso contesta como GET /published del producto cuando le preguntan por inbox.
-  const fetchDb = async (url) => {
-    assert.match(url, /inboxId=6/, "el motor pregunta por inbox; la org la resuelve el producto");
-    return {
-      ok: true,
-      status: 200,
-      json: async () => ({
-        organizationId: "org_ferreteria",
-        data: {
-          schema: "onia.bot.knowledge/1",
-          version: "qa.1",
-          updatedBy: "test",
-          identity: { productName: "ZZ QA Ferreteria Tornillo" },
-        },
-        version: 1,
-        updatedBy: "test",
-      }),
-    };
-  };
-  const getAvailableSlots = async () => ({ slots: LIVE_SLOTS, source: "calcom", warnings: [] });
-  const config = await resolveConfig(
-    { received_at: T0, inbox_id: "6" },
-    { getAvailableSlots, knowledge: { dbUrl: "http://producto/published", dbSecret: "s3cr3t", fetch: fetchDb } },
-  );
-  assert.equal(config.identity.productName, "ZZ QA Ferreteria Tornillo", "la cara del cliente sale en el turno 1, no en el 2");
-  // CAMBIO 2026-08-17 (modo recepcionista): un inbox de cliente ya NO consulta Cal.com — el
-  // recepcionista no agenda demos de Onia. Antes este assert exigia LIVE_SLOTS.
-  assert.equal(config.modo, "recepcionista", "org cliente = el bot del negocio");
-  assert.deepEqual(config.slots, DEFAULT_CONFIG.slots, "sin demo de Onia no se pide disponibilidad");
-
-  resetOrgKnowledgeCache();
-  // Sin mapeo (404 del producto): el mismo turno degrada al conocimiento de Onia, sin tirar.
-  const fetch404 = async () => ({ ok: false, status: 404, json: async () => ({}) });
-  const sinMapeo = await resolveConfig(
-    { received_at: T0, inbox_id: "99" },
-    { getAvailableSlots, knowledge: { dbUrl: "http://producto/published", dbSecret: "s3cr3t", fetch: fetch404 } },
-  );
-  assert.notEqual(sinMapeo.identity.productName, "ZZ QA Ferreteria Tornillo");
-});
-
-=======
->>>>>>> origin/main
 // ---------------------------------------------------------------------------
 // PARIDAD local / VPS — la grieta que hacia valer un verde que no valia
 // ---------------------------------------------------------------------------
