@@ -1,6 +1,6 @@
 {
   "title": "Automatizar es caro. Hacerlo a mano te cuesta más",
-  "caption": "Cada vez que decimos automatización, alguien contesta: 'debe ser carísimo'. Pero nadie saca la otra cuenta: cuánto te cuesta HOY hacerlo a mano. Las horas que pasás contestando lo mismo. Los que preguntaron y nunca volvieron porque tardaste. Ese costo no aparece en ninguna factura, pero lo pagás todos los meses. Sacá tu número con el test del slide 5 y comentá COSTO: te hago la cuenta para tu rubro, sin compromiso.",
+  "caption": "Cada vez que decimos automatización, alguien contesta: 'debe ser carísimo'. Pero nadie saca la otra cuenta: cuánto te cuesta HOY hacerlo a mano. Las horas que pasás contestando lo mismo. Los que preguntaron y nunca volvieron porque tardaste. Ese costo no aparece en ninguna factura, pero lo pagás todos los meses. Sacá tu número con el test del slide 5 y guardalo. ¿Te dio más o menos de lo que esperabas?",
   "hashtags": [
     "#automatizacion",
     "#IA",
@@ -10,8 +10,8 @@
     "#santacruz",
     "#emprender"
   ],
-  "comment_trigger": "Comentá COSTO",
-  "cta": "Guardalo",
+  "comment_trigger": "",
+  "cta": "",
   "slides": [
     {
       "number": 1,
@@ -78,7 +78,7 @@
       "role": "point",
       "pill": "El cambio",
       "headline": "No es un gasto: es un *empleado*",
-      "body": "Uno que trabaja 24/7, no se enferma, no pide aumento y nunca se olvida de un seguimiento. Se paga solo con los clientes que hoy se te escapan.",
+      "body": "Uno que trabaja 24/7, no se enferma, no pide aumento y nunca se olvida de un seguimiento. Se paga solo con los clientes que hoy se te escapan. Lo incómodo es cuánto cuesta menos de lo que pensás.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Silueta digital trabajando de noche.",

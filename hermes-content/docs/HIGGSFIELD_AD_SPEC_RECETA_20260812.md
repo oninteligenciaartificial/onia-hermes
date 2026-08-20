@@ -160,7 +160,7 @@ repita la equivocada.
 
 | Lo que decían los videos | Lo que tiene la cuenta |
 |---|---|
-| "Seedance **2.5**" | **NO existe en el catálogo.** Lo expuesto es `seedance_2_0` y `seedance_2_0_mini` |
+| "Seedance **2.5**" | ~~NO existe en el catálogo~~ → **al 15-ago SÍ existe**, con `video_edit`, `video_extension` y hasta 30 s. La verificación del 12-ago fue correcta ESE día; el catálogo cambió |
 | "hasta **30 segundos** por toma" | **4 a 15 s** por toma (`duration` min 4, max 15) |
 | "**33 DAYS UNLIMITED**" | `unlim: {available: false, remaining: null, expires_at: null}` → **no aplica a nosotros** |
 

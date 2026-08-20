@@ -16,6 +16,23 @@
 
 Fuera de acá no se planifica contenido. Si aparece una idea, va al archivo de su cuenta.
 
+## Qué leer ANTES de producir (no después)
+
+Estos tres archivos dicen **qué se publica**. Los bancos de patrones dicen **cómo se hace**, y
+se abren antes de tocar el motor o generar un solo crédito:
+
+| Voy a producir… | Abro primero |
+|---|---|
+| Un carrusel o un estático | [`../../web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md`](../../web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md) — el molde de 8 slides, los ganchos, y la **§9** con lo que aprendió el motor |
+| Video o cualquier pieza de Lucía | [`../../web-factory/docs/LUCIA_PATTERN_BANK_2026.md`](../../web-factory/docs/LUCIA_PATTERN_BANK_2026.md) — tarifario medido, las 3 vías de generar, el checklist |
+| **Elegir el modelo de IA** (imagen o video, cualquier cuenta) | [`../../web-factory/docs/MODELOS_IA_QUE_USAR_PARA_QUE.md`](../../web-factory/docs/MODELOS_IA_QUE_USAR_PARA_QUE.md) — tabla de decisión por acción, movimiento y entorno, con costos medidos |
+| **Generar con IA — antes de gastar un crédito** | [`../../web-factory/docs/LUCIA_BANCO_DE_PRUEBAS_2026.md`](../../web-factory/docs/LUCIA_BANCO_DE_PRUEBAS_2026.md) — la rúbrica de 9 criterios (4 eliminatorios), los prompts listos, y las frases prohibidas que producen look de estudio |
+| Una pieza de pauta | [`../../web-factory/docs/ADS_PATTERN_BANK_2026.md`](../../web-factory/docs/ADS_PATTERN_BANK_2026.md) |
+| Movimiento entre planos | [`../../web-factory/docs/MOTION_PATTERN_BANK_2026.md`](../../web-factory/docs/MOTION_PATTERN_BANK_2026.md) |
+
+**Cada banco termina con "lo que sigue sin resolver".** Esa sección es la lista de trabajo real,
+no una nota al pie.
+
 ---
 
 ## 1. Las dos cuentas no son la misma marca con dos nombres
@@ -89,7 +106,7 @@ qué mandar quema la única conversación que el contenido consiguió.
 | Palabra | Qué se manda | Estado |
 |---|---|---|
 | **SISTEMA** | diagnóstico de 20 min — link de Cal con `?src=` | ✅ vivo y probado punta a punta |
-| **LISTA** | PDF de una página: por dónde empezar a automatizar, con anclas de precio | ✅ `recursos/lista-por-donde-empezar.pdf` |
+| **LISTA** | PDF de una página: por dónde empezar a automatizar, con anclas de precio | ✅ publicado en vivo: `onia.com.bo/recursos/lista-por-donde-empezar.pdf` (200, verificado 20-ago; fuente en `hermes-content/recursos/`) |
 
 ✅ **Las dos palabras tienen recurso.** Ya no hay piezas bloqueadas por falta de qué mandar.
 

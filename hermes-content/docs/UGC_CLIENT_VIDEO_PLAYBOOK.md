@@ -123,6 +123,9 @@ Avoid unless proven:
 
 ## Prompt Pattern For Higgsfield
 
+> **Estructura de prompt vigente: [`ONIA_PLANTILLAS_PROMPT_VIDEO_20260818.md`](ONIA_PLANTILLAS_PROMPT_VIDEO_20260818.md).**
+> Lo de abajo son los bloques de brief del cliente, no la plantilla de prompt.
+
 ```text
 Create a vertical 9:16 UGC-style ad for <business>. Offer: <offer>. Target:
 <audience>. Style: natural phone video, human, direct, believable, modern,

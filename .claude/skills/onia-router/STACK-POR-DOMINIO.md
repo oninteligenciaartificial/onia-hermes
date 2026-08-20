@@ -10,6 +10,18 @@
 **Regla de uso:** antes de escribir la primera línea de cualquier tarea, buscá el dominio acá
 y cargá las 2-3 skills de la fila. No las 10 — las que aplican.
 
+> ⚠️ **Existe un segundo ruteo y NO es el mismo:**
+> `hermes-content/references/video-intake/SKILLS_DEL_CARRIL.md` (rama
+> `claude/analizar-reels-videos-67f762`, todavía sin mergear).
+>
+> | | Responde a |
+> |---|---|
+> | **ese** | *"estoy analizando un video — ¿qué skill cargo según el TEMA del video?"* |
+> | **este** | *"voy a hacer X trabajo — ¿qué skill cargo según el DOMINIO?"* |
+>
+> Se escribieron el mismo día sin saber uno del otro. Solapan ~60% de los nombres. **Al
+> editar uno, mirar el otro** — si vuelven a divergir, se fusionan y queda uno solo.
+
 ---
 
 ## 1. Contenido con IA — marketing e influencers
@@ -38,6 +50,20 @@ que uno realmente va a hacer.
 | Recurso descargable a cambio de un dato | `lead-magnets` |
 | Correo frío / secuencia | `cold-email` · `emails` · `sms` |
 
+### 1.2-bis 🔴 Los bancos de patrones — se abren ANTES que la skill
+
+El conocimiento de qué funciona **ya está escrito y medido**. Abrir la skill sin leer el banco
+es opinar cuando hay datos:
+
+| Pieza | Banco |
+|---|---|
+| carrusel / estático | `web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md` |
+| video · Lucía | `web-factory/docs/LUCIA_PATTERN_BANK_2026.md` |
+| pauta | `web-factory/docs/ADS_PATTERN_BANK_2026.md` |
+| movimiento | `web-factory/docs/MOTION_PATTERN_BANK_2026.md` |
+
+Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendiente real.
+
 ### 1.3 Imagen y pieza gráfica
 
 | Cuándo | Skills |
@@ -54,6 +80,8 @@ que uno realmente va a hacer.
 | Video programático (React) | `remotion` · `remotion-video-creation` |
 | Video en general / edición | `video` + skills propias `editor-videos` · `ver-videos` |
 | Motor HTML→MP4 | `hyperframes*` (viven en `.agents/skills/`) |
+| **Juzgar el movimiento y la continuidad entre planos** | `motion-doctrine` · `cut-the-curve` · `seam-craft` (propias) |
+| Reconstruir un componente desde fotogramas | `image-to-code` |
 
 **Generativo (Higgsfield):** no es skill, es MCP. Tarifario medido y las 3 vías
 (`start_image` · `image_references` · `video_extension`) en

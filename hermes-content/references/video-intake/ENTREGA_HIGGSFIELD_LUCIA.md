@@ -8,10 +8,13 @@ cuenta o si es **afirmación de un video sin comprobar**.
 
 ## 1. Los datos duros de la cuenta (verificados 2026-08-12, consulta gratis)
 
+> ⚠️ **CORRECCION 2026-08-16 — `seedance_2_5` SI EXISTE.** Verificado con `models_explore action=list` el 15-ago: esta en la cuenta con modos `t2v` / `omni_reference` / `video_edit` / `video_extension` y hasta **30 s**. Se usaron `video_edit` y `video_extension` y se pagaron creditos por ellos. Lo que sigue vigente de la afirmacion vieja: la ventana de **33 dias ilimitado** NO aplica (`unlim.available = false`) y el preset **Show Cinema** no existe. Tarifario medido: `references/modelos/lucia/prueba-lipsync-20260815/LEEME.md`.
+
 ```
 plan:     ultra
 créditos: 2.862,68
-modelos:  seedance_2_0 · seedance_2_0_mini   ← "Seedance 2.5" NO existe en la cuenta
+modelos:  seedance_2_0 · seedance_2_0_mini · seedance_2_5 (aparecio el 15-ago) · veo3_1_lite
+          flux_3_video · kling3_0 · sync_so (lipsync) · minimax_h3 · wan2_6/2_7 · gemini_omni
 tope:     4 a 15 s por toma                  ← NO 30 s
 unlim:    available = false                  ← la "ventana de 33 días" NO aplica
 ```
@@ -25,8 +28,13 @@ start_image · end_image · image_references · video_references · audio_refere
 Tags del modelo: `reference · identity · consistent · product · multi-sku · e-commerce`.
 Resolución hasta `4k` con `mode: std`; `mode: fast` es más barato y llega a 720p.
 
-**Tres videos distintos dijeron "Seedance 2.5" y "33 días ilimitado".** Los tres se equivocan
-para nuestra cuenta. Tercera fuente repitiendo lo mismo no lo vuelve cierto.
+**Tres videos distintos dijeron "Seedance 2.5" y "33 días ilimitado".** El 12-ago las dos eran
+falsas para nuestra cuenta. Al 15-ago solo una lo sigue siendo: **lo ilimitado no aplica**
+(`unlim.available = false`), pero **Seedance 2.5 apareció**.
+
+La lección de método no cambia: se verifica contra la cuenta, no contra el reel. Lo que se
+agrega es que **una verificación tiene fecha de vencimiento** — esta duró tres días. Antes de
+planificar sobre un dato de catálogo, re-listar.
 
 ## 2. La receta de 3 insumos — el hallazgo principal
 

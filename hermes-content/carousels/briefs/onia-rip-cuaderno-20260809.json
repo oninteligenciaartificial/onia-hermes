@@ -1,6 +1,6 @@
 {
   "title": "R.I.P. al cuaderno: tu negocio ya no entra ahí",
-  "caption": "El cuaderno te sirvió para arrancar. El Excel te aguantó un tiempo. Pero si hoy tenés que abrir tres archivos y llamar a dos personas para saber cuánto vendiste ayer, tu negocio ya no entra ahí. No es que seas desordenado: es que creciste y las herramientas no crecieron con vos. Guardá las 3 señales del slide 5 y comentá ORDEN: te muestro cómo se ve tu negocio con todo en un solo lugar.",
+  "caption": "El cuaderno te sirvió para arrancar. El Excel te aguantó un tiempo. Pero si hoy tenés que abrir tres archivos y llamar a dos personas para saber cuánto vendiste ayer, tu negocio ya no entra ahí. No es que seas desordenado: es que creciste y las herramientas no crecieron con vos. Guardá las 3 señales del slide 5. Y decime una cosa: ¿cuaderno, Excel o memoria? Porque los tres fallan igual.",
   "hashtags": [
     "#automatizacion",
     "#IA",
@@ -10,8 +10,8 @@
     "#santacruz",
     "#gestion"
   ],
-  "comment_trigger": "Comentá ORDEN",
-  "cta": "Contame",
+  "comment_trigger": "",
+  "cta": "",
   "slides": [
     {
       "number": 1,
@@ -78,7 +78,7 @@
       "role": "point",
       "pill": "Ojo",
       "headline": "No necesitás un sistema *carísimo*",
-      "body": "No se empieza comprando todo. Se empieza por lo que hoy te duele: ventas, stock o cobranzas. Un módulo, funcionando en días.",
+      "body": "No se empieza comprando todo. Se empieza por lo que hoy te duele: ventas, stock o cobranzas. Un módulo, funcionando en días. Cuál va primero no lo decide el precio: lo decide una sola pregunta.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Tablet con panel simple y ordenado, verde.",
@@ -89,12 +89,12 @@
       "number": 7,
       "role": "cta",
       "pill": "Contame",
-      "headline": "Poné tu negocio en *orden*",
-      "body": "¿Cuaderno, Excel o memoria? Decime cuál sos y te digo por dónde empezar.",
+      "headline": "Cuaderno, Excel o *memoria*",
+      "body": "Decime cuál sos. Y cuántas veces este mes cobraste de menos porque algo no quedó anotado. *Guardalo* antes de que se te olvide el número.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Emprendedor tranquilo con todo ordenado.",
-      "alt_text": "Comentá ORDEN",
+      "alt_text": "Cuaderno, Excel o memoria",
       "bg": "hermes-content/assets/onia/heroes/rip-07.png"
     }
   ],

@@ -122,3 +122,100 @@ delante. Cuando uno se procesa, se le escribe su ficha y se mueve a [INDEX.md](I
 - [Lectura + verbatim](transcripciones/2026-08-15-Instagram-DbvlW-_sj_f.md)
 - Resumen: El video presenta la herramienta de inteligencia artificial **Higgsfield Seedance 2.5** para generación de video hiperrealista. Muestra sus capacidades para modificar elementos individuales en escenas conservando el resto y generar clips de hasta 30 segundos por prompt. Finaliza ofreciendo una promoción de 33 días d...
 - **Veredicto: PENDIENTE**
+
+---
+
+# Lote 2026-08-16 — 11 videos, procesados con el método de dos carriles
+
+Fichas y prompts: [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md)
+
+| Video | Carril | Veredicto | Ficha |
+|---|---|---|---|
+| [DcB6PoXkql2](https://www.instagram.com/p/DcB6PoXkql2/) app de nutrición | B | **SIRVE YA** — el molde de un rubro entero | [ficha](2026-08-16-nutriapp-modulo-vertical.md) |
+| [DcCSKN8CDon](https://www.instagram.com/p/DcCSKN8CDon/) comandas DougMenu (AR) | B | **SIRVE YA** — competidor directo | [ficha](2026-08-16-comandas-competidores.md) |
+| [DaaAYsRA1mp](https://www.instagram.com/p/DaaAYsRA1mp/) panel comandas (BR) | B | **SIRVE YA** — competidor directo | [ficha](2026-08-16-comandas-competidores.md) |
+| [Dbt8cuwIqV1](https://www.instagram.com/p/Dbt8cuwIqV1/) loop de 3 agentes | B | **SIRVE YA** — planeador/ejecutador/evaluador | [ficha](2026-08-16-loop-tres-agentes.md) |
+| [DcEcRmFMaAx](https://www.instagram.com/p/DcEcRmFMaAx/) prompt en pantalla | **A** | **SIRVE YA** — los 5 bloques del prompt | [ficha](2026-08-16-carril-a-como-se-hicieron.md) |
+| [DcEUi_cKwmj](https://www.instagram.com/p/DcEUi_cKwmj/) sketch 3D con diálogo | **A** | **SIRVE** — el 3D estilizado esconde los defectos | [ficha](2026-08-16-carril-a-como-se-hicieron.md) |
+| [Dbv2IrORksG](https://www.instagram.com/p/Dbv2IrORksG/) formato gemelo | **A** (truco, no IA) | **SIRVE YA** — costo cero | [ficha](2026-08-16-carril-a-como-se-hicieron.md) |
+| [Db9TebcvW51](https://www.instagram.com/p/Db9TebcvW51/) 5 plugins | B | **SIRVE** — 1 hallazgo de 5: Strix | [ficha](2026-08-16-cinco-plugins-strix.md) |
+| [DcE1hSeIU3Y](https://www.instagram.com/p/DcE1hSeIU3Y/) algoritmo de X | B | **SIRVE** — premisa verificada, números dibujados | [ficha](2026-08-16-x-algoritmo-publico.md) |
+| [DcEVhfiomLo](https://www.instagram.com/p/DcEVhfiomLo/) estación de trabajo | B | HUMO de contenido · **SIRVE de formato** | [ficha](2026-08-16-descartados-y-formato.md) |
+| [DcCUoBgFflT](https://www.instagram.com/p/DcCUoBgFflT/) API regalada | B | **DESCARTADO** — exfiltración de datos | [ficha](2026-08-16-descartados-y-formato.md) |
+
+---
+
+# Lote 2026-08-17 — dos videos LARGOS de X (no son reels)
+
+| Video | Duración | Fuente | Veredicto | Ficha |
+|---|---|---|---|---|
+| [Code w/ Claude — StockPilot](https://x.com/0xrafy/status/2089395090506633621) | 44 min | **PRIMERA PARTE** (Anthropic, números medidos en pantalla) | **SIRVE YA — el hallazgo más aplicable del corpus** | [ficha](2026-08-17-code-with-claude-stockpilot.md) |
+| [Karpathy — cómo funciona un LLM](https://x.com/0xwhrrari/status/2089336474923667665) | 2 h 06 | primera parte de un experto, pero **del landscape de principios de 2025** | **SIRVE de formación · no genera tarea** | [ficha](2026-08-17-karpathy-como-funciona-un-llm.md) |
+
+Prompts: **F1** (auditar los 11 agentes contra los 3 antipatrones) y **F2** (evals) en
+[PROMPTS_LOTE_2026-08-17.md](PROMPTS_LOTE_2026-08-17.md). **F1 corrige a E4.**
+
+---
+
+# Lote 2026-08-18 — 18 items (11 reels + 7 carruseles)
+
+Síntesis técnica completa: [2026-08-18-sintesis-lote-17.md](2026-08-18-sintesis-lote-17.md) ·
+receta UGC: [2026-08-18-ugc-auto-receta-completa.md](2026-08-18-ugc-auto-receta-completa.md) ·
+prompts: [PROMPTS_LOTE_2026-08-18.md](PROMPTS_LOTE_2026-08-18.md) (G1–G6)
+
+| Item | Carril | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcMW3Coi6BN](https://www.instagram.com/reel/DcMW3Coi6BN/) anuncio UGC de auto | **A** | **SIRVE YA** | la plantilla UGC entera + diálogo verificado literal |
+| [DcJ2NFlCw9D](https://www.instagram.com/p/DcJ2NFlCw9D/) auto barato → deportivo | **A** | **SIRVE YA** | `video_edit`: sustituir el objeto conservando al humano real |
+| [DakoqucxYpW](https://www.instagram.com/p/DakoqucxYpW/) seca → empapada | **A** | **SIRVE YA** | dos keyframes + **cláusula de persistencia** literal |
+| [DbgN-8CDVc-](https://www.instagram.com/p/DbgN-8CDVc-/) 8 prompts de foto | **A** | **SIRVE YA** | 8 prompts completos + la estructura de 8 bloques |
+| [DcJSXVwAu7z](https://www.instagram.com/p/DcJSXVwAu7z/) `claude --name` | B | **SIRVE YA** | verificado en nuestra instalación |
+| [DcEITCmoSHX](https://www.instagram.com/p/DcEITCmoSHX/) popups 0→10 | B | **SIRVE YA** | la escalera entera, con el 10/10 multi-paso |
+| [Db8hFCFFTZg](https://www.instagram.com/p/Db8hFCFFTZg/) scroll AirPods | B | **SIRVE YA** | código GSAP literal; bloqueante = peso |
+| [Db3x_rPFHl8](https://www.instagram.com/p/Db3x_rPFHl8/) ideas de campaña | B | **SIRVE YA** | 5 dispositivos creativos reusables |
+| [Db6GCW8N6sz](https://www.instagram.com/p/Db6GCW8N6sz/) anuncio de Higgsfield | A | MEJORA | set de anclas de identidad |
+| [DcEIPU_keNv](https://www.instagram.com/p/DcEIPU_keNv/) AI UGC | A | MEJORA | 6 ejes de realismo sin prompt |
+| [DcDy6VVjsO7](https://www.instagram.com/p/DcDy6VVjsO7/) Realism Collection | A | MEJORA | elegir caras con edad y textura real |
+| [DcGfkVRCmiz](https://www.instagram.com/p/DcGfkVRCmiz/) color grading | A | MEJORA | se vende como grading y es edición generativa |
+| [DcGUUb9h3ZO](https://www.instagram.com/p/DcGUUb9h3ZO/) Ae vs Gemini | A | MEJORA | la lección es el error, no la promesa |
+| [DcAIGCCINJF](https://www.instagram.com/p/DcAIGCCINJF/) equipo de 7 agentes IA | B | MEJORA | solo la plantilla de carrusel |
+| [DcBOQF5t61t](https://www.instagram.com/p/DcBOQF5t61t/) 5 automatizaciones | B | MEJORA | solo el formato faceless de 5-8 s |
+| [DbYqMnpRrmk](https://www.instagram.com/p/DbYqMnpRrmk/) estructura societaria | B | MEJORA | **ley colombiana: no aplica** — se copia la forma |
+| [Db3AW3SooRl](https://www.instagram.com/p/Db3AW3SooRl/) video troyano | B | MEJORA | arquitectura 1+N; el disfraz choca con declarar |
+| [DbmN3AfiYPz](https://www.instagram.com/p/DbmN3AfiYPz/) noticiero IA | B | **HUMO** | contador roto, cero fuentes, caption pegado 8 veces |
+
+---
+
+# Lote 2026-08-19
+
+| Item | Reconstrucción | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcJQRi7NPvw](https://www.instagram.com/reel/DcJQRi7NPvw/) portal de onboarding K100 | **SaaS** | **SIRVE YA** | [spec completa](2026-08-19-portal-cliente-onboarding-spec.md): entidades, máquina de estados, y por qué NO copiamos su bóveda de credenciales |
+| (no es un reel) el hallazgo del análisis por escenas | — | **SIRVE YA** | [ficha](2026-08-19-la-herramienta-lee-el-video.md) — gratis, medido |
+
+Prompts: [PROMPTS_LOTE_2026-08-19.md](PROMPTS_LOTE_2026-08-19.md) — **I1** e I2 (portal),
+H1 (intake), H2 (ad_reference), H3 (molde de 6 actos).
+
+---
+
+# Lote 2026-08-20 — 13 items (7 reels + 6 carruseles)
+
+Síntesis: [2026-08-20-sintesis-lote-13.md](2026-08-20-sintesis-lote-13.md) ·
+datos: [analisis/2026-08-20-items.json](analisis/2026-08-20-items.json) ·
+prompts: [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4)
+
+| Item | Tipo | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcEYP7tjsIA](https://www.instagram.com/p/DcEYP7tjsIA/) Nano Banana interiores | IA | **SIRVE YA** | 4 recetas image-to-image + los 4 mecanismos de referencia |
+| [DcOMYo8MdLD](https://www.instagram.com/p/DcOMYo8MdLD/) reto de diseño aleatorio | WEB | **SIRVE YA** | el prompt literal + el molde de 7 puntos (J2) |
+| [DcAAUevMTG6](https://www.instagram.com/p/DcAAUevMTG6/) anuncio sin cara ni voz | MARKETING | **SIRVE YA** | 7 beats + hilo de color + carrier element (J3) |
+| [DcOs3VwRK0B](https://www.instagram.com/p/DcOs3VwRK0B/) 7 herramientas de landing | WEB | MEJORA | DESIGN.md como formato (J1) · `impeccable` ya la teníamos |
+| [DcOWPT2AIx-](https://www.instagram.com/p/DcOWPT2AIx-/) pricing B2B satírico | SAAS | MEJORA | **destapó los 6 tiers apagados (J4)** |
+| [DbWx7fsD1_k](https://www.instagram.com/p/DbWx7fsD1_k/) 8 agentes de marketing | MARKETING | MEJORA | el molde de carrusel; **solo 1 de 10 láminas trae prompt** |
+| [DcJJyh4CbtT](https://www.instagram.com/p/DcJJyh4CbtT/) ángulos de cámara | IA | MEJORA | la taxonomía ángulo→uso comercial |
+| [DcL4yjRTNV0](https://www.instagram.com/p/DcL4yjRTNV0/) DCF en 20 min | MARKETING | MEJORA | molde de reel-tutorial; el .xlsx nunca se muestra |
+| [DcKABGBRkdY](https://www.instagram.com/p/DcKABGBRkdY/) panel Radar Viral | SAAS | MEJORA | "5x más alcance" **contradicho por su propia captura** |
+| [DcMEQtYMn_4](https://www.instagram.com/p/DcMEQtYMn_4/) estático→video | IA | MEJORA | sin comparativa; cebo de comentario |
+| [DbQVVldE9ty](https://www.instagram.com/p/DbQVVldE9ty/) campaña transparente | IA | MEJORA | dirección de arte, sin prompts |
+| [DcLw-KHkcfU](https://www.instagram.com/p/DcLw-KHkcfU/) modelos IA | MARKETING | MEJORA | el mismo pitch ya fichado |
+| [DcPf2NwCaDK](https://www.instagram.com/p/DcPf2NwCaDK/) 5 empleados IA | MARKETING | MEJORA | molde de carrusel; usa foto de personaje de TV |

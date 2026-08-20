@@ -1,0 +1,23 @@
+[0] Este es uno de los skills de ella que más demandado va a estar en Wall Street en 2027
+[4] y es crear un DCF completo de manera automatizada y así es como puedes crear uno en 20 minutos.
+[9] Lo primero que tienes que hacer es venir a Cloud, clicar en proyectos y después empezar
+[13] uno nuevo.
+[14] Después lo que vas a hacer es venir a Perplexity y pedirle que te de todos los reportes necesarios
+[18] para poder analizar una empresa como por ejemplo Berkshire Hathaway y te va a dar reportes
+[22] anuales, presentaciones a inversores, proxy statements, literalmente todo lo que necesites.
+[27] Así que solo tienes que descargártelo y meterlo dentro del proyecto.
+[30] En el paso 3 lo que vas a hacer es irte a otra ella como puedes ser ChatGPT y pedirle
+[34] que te cree un prompt extremadamente detallado para crear un DCF paso a paso.
+[38] Pídele que te incluya proyecciones de Revenue, Expenses, Working Capital, que te incluya
+[43] también un WAC estimado, un Terminal Value, en fin, todo lo que necesitas para un DCF.
+[47] En el paso 4 asegúrate de que dentro del prompt le dices que lo quieres en formato Excel y
+[52] que te ponga todo en fórmulas que no hayan números fijos para que luego tú puedas ir
+[56] y cambiarlos supuestos.
+[57] Lo bueno es que después de todo esto el proyecto ya se queda montado, con lo cual la próxima
+[61] vez que la empresa saque resultados lo único que tienes que hacer es darle el documento
+[65] de nuevo al proyecto y decirle que te update el modelo.
+[67] Eso sí, en 20 minutos tienes un borrador, no un modelo completo, luego lógicamente
+[72] tienes que ir tú y te puedes aprovechar de otra ella para hacer toda la parte del research
+[76] y poner tú tus propios supuestos.
+[78] Y como tip te digo que revises el crecimiento terminal ya que es en lo que más suele fallar.
+[82] Y no te olvides de seguirme para más tips de ella y finanzas como este.

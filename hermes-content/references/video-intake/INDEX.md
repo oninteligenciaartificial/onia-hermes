@@ -11,6 +11,19 @@
 > auditar frentes, verificar cuentas, escribir manuales de produccion. Si algo de eso hace
 > falta, se anota en la ficha y se manda a su sesion. Esta sesion no ejecuta: reparte.
 
+> **Cómo se analiza:** [METODO_DE_ANALISIS.md](METODO_DE_ANALISIS.md) — dos carriles (video
+> hecho con IA / video que cuenta una idea) y dos filtros (calidad de la fuente, calidad de mi
+> entrega). Antes de escribir una ficha se carga la skill del tema:
+> [SKILLS_DEL_CARRIL.md](SKILLS_DEL_CARRIL.md).
+>
+> **Prompts que salen de acá — para pegar:** [`sesiones/`](sesiones/README.md) tiene **un
+> archivo por sesión**, autocontenido (preámbulo + gates + todos sus prompts, en orden). Es lo
+> que se abre para trabajar.
+>
+> **La fuente de esos prompts:** [PROMPTS_POR_SESION.md](PROMPTS_POR_SESION.md) (lotes hasta el
+> 15-ago) · [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md) (E1–E11) · [PROMPTS_LOTE_2026-08-17.md](PROMPTS_LOTE_2026-08-17.md) (F1–F3) · [PROMPTS_LOTE_2026-08-18.md](PROMPTS_LOTE_2026-08-18.md) (G1–G6) · [PROMPTS_LOTE_2026-08-19.md](PROMPTS_LOTE_2026-08-19.md) (H1–H3, I1–I2) · [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4). Si cambia una
+> regla, se edita acá, no la copia de `sesiones/`.
+
 Bandeja de entrada de videos para **extraer información y decidir si sirve**. Distinta de
 `../creator-video-references/`, que estudia patrones creativos (hook, ritmo, CTA); acá el
 eje es **¿nos sirve, mejora algo nuestro, o es humo?**

@@ -2,13 +2,8 @@
 /**
  * Onia carousel render engine.
  *
-<<<<<<< HEAD
- * brief JSON (from carousel_generator.py) -> branded PNG slides.
- * Formats: feed 1080x1350 (default) | cuadrado 1080x1080 | story 1080x1920.
-=======
  * brief JSON -> branded PNG slides en 3 formatos (--format feed|square|story).
  * feed 1080x1350 (4:5, default) · square 1080x1080 · story 1080x1920.
->>>>>>> origin/main
  * Zero external deps: builds one HTML per slide and screenshots it with
  * Edge/Chrome headless (same approach as the propuestas generador).
  *
@@ -20,7 +15,7 @@
  *   cta    -> CTA motor + comment trigger (regla 5)
  *
  * Usage:
- *   node carousel_render.js --brief brief.json --out ./out [--account onia|arthur|sergio] [--bg path.jpg] [--formato feed|cuadrado|story]
+ *   node carousel_render.js --brief brief.json --out ./out [--account onia|arthur|sergio] [--bg path.jpg]
  *
  * Node >= 18, CommonJS.
  */
@@ -40,14 +35,17 @@ function assetUrl(p) {
   return fs.existsSync(abs) ? `file://${abs.replace(/\\/g, '/')}` : '';
 }
 
+// Chrome va PRIMERO: Edge headless en esta maquina genera PNGs de 0 bytes sin
+// error (verificado 2026-08-20, con y sin sandbox). CAROUSEL_BROWSER lo pisa todo.
 const BROWSER_CANDIDATES = [
+  process.env.CAROUSEL_BROWSER || '',
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
   'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
-  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   '/usr/bin/google-chrome',
   '/usr/bin/chromium',
   '/usr/bin/chromium-browser',
-];
+].filter(Boolean);
 
 const ACCOUNTS = {
   // Handle IG real de ONIA, confirmado por Sergio 2026-08-13.
@@ -87,23 +85,6 @@ const esc = (s) => String(s == null ? '' : s)
 
 const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'bright-retail'];
 
-<<<<<<< HEAD
-// Formatos de salida. 'feed' (1080x1350) es el default historico: quien llama
-// sin --formato sigue recibiendo exactamente lo mismo de siempre.
-const FORMATS = {
-  feed: { w: 1080, h: 1350 },
-  cuadrado: { w: 1080, h: 1080 },
-  story: { w: 1080, h: 1920 },
-};
-
-// Resuelve el formato desde args (o el default). Todas las plantillas lo usan.
-function fmtOf(args) {
-  return FORMATS[(args && args.formato) || 'feed'] || FORMATS.feed;
-}
-
-function parseArgs(argv) {
-  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', formato: 'feed' };
-=======
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
 const FORMATS = {
@@ -131,8 +112,7 @@ html body .slide .dots { margin-top:56px; padding-top:0; }
 `;
 
 function parseArgs(argv) {
-  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', accent: '', format: 'feed' };
->>>>>>> origin/main
+  const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '', accent: '', format: 'feed', emph: 'marcador' };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--brief') a.brief = argv[++i];
@@ -141,26 +121,24 @@ function parseArgs(argv) {
     else if (k === '--bg') a.bg = argv[++i];
     else if (k === '--pack') a.pack = argv[++i];
     else if (k === '--object') a.object = argv[++i];
-<<<<<<< HEAD
-    else if (k === '--formato') a.formato = argv[++i];
-=======
     else if (k === '--accent') a.accent = argv[++i];
     else if (k === '--format') a.format = argv[++i];
+    else if (k === '--emph') a.emph = argv[++i];
   }
   if (!FORMATS[a.format]) {
     throw new Error('Unknown --format: ' + a.format + ' (use ' + Object.keys(FORMATS).join('|') + ')');
   }
   FMT = FORMATS[a.format];
+  if (!EMPH[a.emph]) throw new Error('Unknown --emph: ' + a.emph + ' (use ' + Object.keys(EMPH).join('|') + ')');
+  EMPH_STYLE = a.emph;
   // --accent permite que una cuenta personal (una modelo) tenga SU color y no el
   // verde de la marca Onia. Sin el flag, nada cambia.
   if (a.accent && !/^#[0-9a-fA-F]{6}$/.test(a.accent)) {
     throw new Error('--accent debe ser hex #RRGGBB, recibi: ' + a.accent);
->>>>>>> origin/main
   }
   if (!a.brief) throw new Error('Missing --brief <file.json>');
   if (!ACCOUNTS[a.account]) throw new Error('Unknown account: ' + a.account);
   if (!PACKS.includes(a.pack)) throw new Error('Unknown --pack: ' + a.pack + ' (use ' + PACKS.join('|') + ')');
-  if (!FORMATS[a.formato]) throw new Error('Unknown --formato: ' + a.formato + ' (use ' + Object.keys(FORMATS).join('|') + ')');
   return a;
 }
 
@@ -206,10 +184,27 @@ function dots(idx, total) {
 
 // La palabra del trueque sale del propio cuerpo del ultimo slide ("Comentá *LISTA* y...").
 // Asi el ticket no puede desincronizarse del texto: hay una sola fuente.
+// La palabra del trueque sale del CUERPO del ultimo slide, y el campo `comment_trigger` del
+// brief queda como respaldo — en ese orden y no al reves.
+//
+// Parece contraintuitivo (un campo estructurado deberia ganarle a un regex) pero se midio el
+// 2026-08-17: **6 de 9 briefs tenian el campo podrido** con las palabras viejas — AUTO, COSTO,
+// MITO, ESCALA, ORDEN, LIBRE — que se eliminaron al unificar el sistema en SISTEMA y LISTA.
+// El cuerpo se reescribio en esa unificacion; el campo no. Leer el campo primero habria
+// impreso un boton pidiendo una palabra que ya no existe, que es peor que no tener boton.
+//
+// Si el cuerpo no dice "Comentá X", NO hay boton: es un cierre de guardado o de pregunta.
 function triggerWord(slide) {
   const m = String(slide.body || '').match(/Comentá\s+\*?([A-ZÁÉÍÓÚÑ]{3,})\*?/);
-  return m ? m[1] : '';
+  if (m) return m[1];
+  const fromBrief = String(slide.comment_trigger || '').replace(/^Comentá\s+/i, '').trim();
+  return /^[A-ZÁÉÍÓÚÑ]{3,}$/.test(fromBrief) ? fromBrief : '';
 }
+
+// Boton de accion, compartido. La slide de CTA es la de mayor intencion de todo el carrusel
+// y hasta el 2026-08-17 solo el pack `typographic` dibujaba algo que se leyera como "tocá acá";
+// los otros cuatro dejaban solo texto.
+const ctaButton = (word) => word ? `<div class="ctabtn">Comentá ${esc(word)}</div>` : '';
 
 // Itemizado con guia punteada, para el estatico "recibo". El motor solo tenia un <p> unico
 // como cuerpo (los saltos de linea colapsan), asi que una oferta no se podia desglosar.
@@ -232,11 +227,10 @@ function logoFooter(account) {
   </div>`;
 }
 
-function slideHtml(slide, idx, total, account, bg, formato) {
+function slideHtml(slide, idx, total, account, bg) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
-  const { w: W, h: H } = fmtOf({ formato });
   const bgLayer = bg
     ? `<div class="bgphoto" style="background-image:url('file://${bg.replace(/\\/g, '/')}')"></div><div class="bgscrim"></div>`
     : '';
@@ -305,16 +299,10 @@ function slideHtml(slide, idx, total, account, bg, formato) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-<<<<<<< HEAD
-html,body { width:${W}px; height:${H}px; }
-.slide {
-  position:relative; width:${W}px; height:${H}px; overflow:hidden;
-=======
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
 .slide {
   position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
->>>>>>> origin/main
   padding:var(--pad); display:flex; flex-direction:column;
   font-family:var(--font-body);
   --ink:var(--onia-ink);
@@ -398,13 +386,35 @@ ${safeAreaCss()}
 .footer .handle { font-family:var(--font-display); font-weight:500; font-size:30px;
   color:var(--ink); opacity:.7; }
 .slide.cover .point-h, .slide.cover .body { margin-top:0; }
-.g { color:var(--onia-green); }
-.slide.cta .g { color:var(--onia-ink); }
+.g { ${EMPH[EMPH_STYLE]} }
+/* El slide de CTA tiene fondo verde: un marcador verde ahi no se ve. Se invierte. */
+.slide.cta .g { background:var(--onia-ink); color:var(--onia-green); box-shadow:none; }
 </style></head>
 <body><div class="slide ${role}">${inner}</div></body></html>`;
 }
 
 // Escape, then turn *emphasis* into a green span (keyword highlight).
+
+// Formas de resaltar la palabra clave dentro de un titular. Hasta el 2026-08-17 habia una
+// sola —cursiva serif— y Sergio la descarto: "busca otra forma de resaltarlo pero que se vea
+// mejor". Cada una es un mecanismo distinto, no una variante estetica:
+//   marcador  el ojo lo lee como subrayado de libro. Es el mas usado en carruseles que venden
+//   subrayado afirma sin gritar; deja la palabra en el mismo plano que el resto
+//   color     el mas limpio; falla si la pieza ya usa el acento en otro lado
+//   caja      el mas fuerte; funciona cuando la palabra ES el producto
+// ⚠️ Accesibilidad: `color` solo depende del color, y esa es la unica que no conviene sola.
+const EMPH = {
+  serif:     `font-family:'Fraunces',Georgia,serif; font-style:italic; font-weight:600; color:var(--onia-green); letter-spacing:0;`,
+  // `white-space:nowrap` NO es cosmetico: sin el, una frase de dos palabras que corta de
+  // linea deja el articulo huerfano en su propio bloquecito verde ("a" arriba, "mano" abajo).
+  // Se vio el 2026-08-17 en "DEJA DE RESPONDER WHATSAPP *a mano*".
+  marcador:  `background:var(--onia-green); color:var(--onia-ink); padding:0 .16em; border-radius:.08em; white-space:nowrap; box-decoration-break:clone; -webkit-box-decoration-break:clone;`,
+  subrayado: `color:inherit; box-shadow:inset 0 -.22em 0 var(--onia-green); padding:0 .04em;`,
+  color:     `color:var(--onia-green);`,
+  caja:      `border:.09em solid var(--onia-green); color:var(--onia-green); padding:0 .18em; border-radius:.18em; box-decoration-break:clone; -webkit-box-decoration-break:clone;`,
+};
+let EMPH_STYLE = 'marcador';
+
 function emph(s) {
   return esc(s).replace(/\*([^*]+)\*/g, '<span class="g">$1</span>');
 }
@@ -412,34 +422,23 @@ function emph(s) {
 // Continuation curve: a green stroke that bleeds off the right edge on
 // non-last slides (and enters from the left on non-first), giving the
 // Solaris-style panorama / swipe cue. Alternates arc direction by parity.
-// The y coordinates were authored for the 1350px feed canvas; they scale with
-// the format height so the band keeps its relative position (and the viewBox
-// matches the slide, avoiding any stretch).
-function continuationCurve(idx, total, formato) {
-  const { w: W, h: H } = fmtOf({ formato });
-  const k = H / 1350;
-  const y = (v) => Math.round(v * k);
+function continuationCurve(idx, total) {
   const last = idx === total - 1;
   const first = idx === 0;
   const down = idx % 2 === 0;
-  // Curve stays in the UPPER band (y 300-640 at feed height), the
-  // floating-object zone, and never dips into the headline/body area at the
-  // bottom — so it reads as a continuous panorama behind the 3D object
-  // without crossing the text.
+  // Curve stays in the UPPER band (y 300-640), the floating-object zone, and
+  // never dips into the headline/body area at the bottom — so it reads as a
+  // continuous panorama behind the 3D object without crossing the text.
   // enter from left (unless first), exit right (unless last)
   const enter = first ? '' : (down
-    ? `M -60 ${y(300)} C 220 ${y(300)} 260 ${y(560)} 540 ${y(560)}`
-    : `M -60 ${y(600)} C 220 ${y(600)} 260 ${y(340)} 540 ${y(340)}`);
+    ? 'M -60 300 C 220 300 260 560 540 560'
+    : 'M -60 600 C 220 600 260 340 540 340');
   const exit = last ? '' : (down
-    ? `M 540 ${y(560)} C 860 ${y(560)} 940 ${y(320)} 1140 ${y(320)}`
-    : `M 540 ${y(340)} C 860 ${y(340)} 940 ${y(600)} 1140 ${y(600)}`);
+    ? 'M 540 560 C 860 560 940 320 1140 320'
+    : 'M 540 340 C 860 340 940 600 1140 600');
   const paths = [enter, exit].filter(Boolean)
     .map((d) => `<path d="${d}" />`).join('');
-<<<<<<< HEAD
-  return `<svg class="curve" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
-=======
   return `<svg class="curve" viewBox="0 0 ${FMT.w} ${FMT.h}" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
->>>>>>> origin/main
 }
 
 // Pack: dark-product (Solaris-style). Black canvas, pills, continuation curve,
@@ -448,7 +447,6 @@ function darkProductHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
-  const { w: W, h: H } = fmtOf(args);
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
   const object = args && args.object
     ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
@@ -482,14 +480,9 @@ function darkProductHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-<<<<<<< HEAD
-html,body { width:${W}px; height:${H}px; }
-.slide { position:relative; width:${W}px; height:${H}px; overflow:hidden;
-=======
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
 .slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
->>>>>>> origin/main
   padding:var(--pad); display:flex; flex-direction:column;
   background:var(--onia-ink); color:var(--onia-white);
   font-family:'Inter',var(--font-body); }
@@ -497,11 +490,7 @@ ${safeAreaCss()}
 .g { color:var(--onia-green); }
 .slide.cta .g { color:var(--onia-ink); -webkit-text-stroke:0; background:var(--onia-ink); color:var(--onia-green); padding:0 .12em; }
 
-<<<<<<< HEAD
-.curve { position:absolute; inset:0; width:${W}px; height:${H}px; z-index:0; pointer-events:none; }
-=======
 .curve { position:absolute; inset:0; width:${FMT.w}px; height:${FMT.h}px; z-index:0; pointer-events:none; }
->>>>>>> origin/main
 .curve path { fill:none; stroke:var(--onia-green); stroke-width:16; stroke-linecap:round; opacity:.95; }
 .slide.cta .curve path { stroke:var(--onia-ink); opacity:.5; }
 .slide > *:not(.curve) { position:relative; z-index:2; }
@@ -540,7 +529,7 @@ ${safeAreaCss()}
 .slide.cta .footer .handle { color:var(--onia-ink); }
 </style></head>
 <body><div class="slide ${role}">
-  ${continuationCurve(idx, total, args && args.formato)}
+  ${continuationCurve(idx, total)}
   ${pills}
   ${object}
   ${block}
@@ -562,7 +551,6 @@ ${safeAreaCss()}
 function darkNeonHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const acc = ACCOUNTS[account];
-  const { w: W, h: H } = fmtOf(args);
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
   const object = args && args.object
     ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
@@ -589,14 +577,9 @@ function darkNeonHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-<<<<<<< HEAD
-html,body { width:${W}px; height:${H}px; }
-.slide { position:relative; width:${W}px; height:${H}px; overflow:hidden;
-=======
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
 .slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
->>>>>>> origin/main
   padding:var(--pad); display:flex; flex-direction:column;
   background:#05080A; color:var(--onia-white); font-family:'Inter',var(--font-body); }
 .grid { position:absolute; inset:0; z-index:0;
@@ -659,7 +642,6 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
-  const { w: W, h: H } = fmtOf(args);
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
   const rawBg = slide.bg || (args && args.bg) || '';
   const bg = rawBg ? path.resolve(rawBg).replace(/\\/g, '/') : '';
@@ -682,16 +664,11 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
 ${tokens}
 ${accentVar}
 * { margin:0; padding:0; box-sizing:border-box; }
-<<<<<<< HEAD
-html,body { width:${W}px; height:${H}px; }
-.slide { position:relative; width:${W}px; height:${H}px; overflow:hidden;
-=======
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
 .slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
->>>>>>> origin/main
   padding:var(--pad); display:flex; flex-direction:column; justify-content:flex-end;
-  background:var(--onia-ink); color:var(--onia-white); font-family:'Inter',var(--font-body); }
+  background:var(--onia-ink); color:var(--onia-white); font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif,'Segoe UI',system-ui,Arial,sans-serif; }
 .photo { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
 .scrim { position:absolute; inset:0; z-index:1;
   background:linear-gradient(180deg, rgba(10,15,13,.15) 0%, rgba(10,15,13,.55) 55%, rgba(10,15,13,.92) 100%); }
@@ -703,22 +680,24 @@ ${safeAreaCss()}
 .topbar { position:absolute; top:var(--pad); left:var(--pad); right:var(--pad);
   display:flex; align-items:flex-start; z-index:4; height:auto; pointer-events:none; }
 .captop { display:inline-flex; background:var(--onia-green); color:var(--onia-ink);
-  font-family:'Archivo'; font-weight:800; font-size:26px; letter-spacing:1px;
+  font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800; font-size:26px; letter-spacing:1px;
   text-transform:uppercase; padding:12px 24px; border-radius:100px; }
 
-.ed-h { font-family:'Archivo'; font-weight:900; font-size:96px; line-height:.98;
+.ed-h { font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:900; font-size:96px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; }
-.ed-h .g { font-family:'Fraunces'; font-style:italic; font-weight:600; text-transform:none;
-  color:var(--onia-green); letter-spacing:0; }
-.ed-body { font-family:'Inter'; font-weight:500; font-size:38px; line-height:1.4;
+.ed-h .g { text-transform:none; ${EMPH[EMPH_STYLE]} }
+.ed-body { font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif; font-weight:500; font-size:38px; line-height:1.4;
   margin-top:28px; max-width:880px; color:rgba(255,255,255,.85); }
-.ed-body .g { color:var(--onia-green); font-family:'Fraunces'; font-style:italic; }
-.swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo'; font-weight:800;
+.ed-body .g { ${EMPH[EMPH_STYLE]} }
+.swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
   font-size:26px; letter-spacing:3px; text-transform:uppercase; color:var(--onia-green); }
 
 .footer { display:flex; align-items:center; gap:16px; margin-top:40px; }
 .footer .mark { width:56px; height:56px; }
-.footer .handle { font-family:'Archivo'; font-weight:800; font-size:28px; opacity:.85; }
+.footer .handle { font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800; font-size:28px; opacity:.85; }
+.ctabtn { align-self:flex-start; margin-top:34px; background:var(--onia-green); color:var(--onia-ink);
+  font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:900; font-size:40px; letter-spacing:-0.5px;
+  padding:26px 46px; border-radius:100px; box-shadow:0 18px 48px rgba(0,0,0,.45); }
 </style></head>
 <body><div class="slide ${role}">
   ${photo}<div class="scrim"></div>
@@ -726,6 +705,7 @@ ${safeAreaCss()}
   ${pill}
   <${headTag} class="ed-h">${emph(slide.headline)}</${headTag}>
   ${body}
+  ${role === 'cta' ? ctaButton(triggerWord(slide)) : ''}
   ${last ? '' : '<div class="swipe">Deslizá →</div>'}
   <div class="footer">
     <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -742,15 +722,13 @@ ${safeAreaCss()}
 // Ribbon multicolor continuo (eco de las franjas del logo Nuvia). Fluye de
 // borde a borde y cambia de fase por slide -> sensación de panorama/peek entre
 // slides, como la curva verde del pack dark-product de Onia.
-function nuviaRibbon(idx, total, stripes, onAccent, formato) {
-  const { w: W, h: H } = fmtOf({ formato });
-  const k = H / 1350; // alturas autoradas para el feed de 1350px; escalan con el formato
+function nuviaRibbon(idx, total, stripes, onAccent) {
   const first = idx === 0;
   const last = idx === total - 1;
   // S-curve base que entra por izquierda y sale por derecha; alterna altura.
   const up = idx % 2 === 0;
-  const yA = Math.round((up ? 430 : 980) * k);
-  const yB = Math.round((up ? 980 : 430) * k);
+  const yA = up ? 430 : 980;
+  const yB = up ? 980 : 430;
   const base = `M -120 ${yA} C 260 ${yA} 320 ${yB} 560 ${yB} S 900 ${yA} 1200 ${yA}`;
   const cols = onAccent
     ? ['rgba(255,255,255,.9)', 'rgba(255,255,255,.6)', 'rgba(255,255,255,.35)', 'rgba(255,255,255,.2)', 'rgba(255,255,255,.12)']
@@ -760,11 +738,7 @@ function nuviaRibbon(idx, total, stripes, onAccent, formato) {
   ).join('');
   // En cover/cta el ribbon va más visible; en el resto, sutil al fondo.
   const op = onAccent ? 0.9 : (first || last ? 0.5 : 0.28);
-<<<<<<< HEAD
-  return `<svg class="ribbon" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="opacity:${op}">${paths}</svg>`;
-=======
   return `<svg class="ribbon" viewBox="0 0 ${FMT.w} ${FMT.h}" xmlns="http://www.w3.org/2000/svg" style="opacity:${op}">${paths}</svg>`;
->>>>>>> origin/main
 }
 
 // Pack: bright-retail (Nuvia-style). Marca clara/multicolor, amigable, con
@@ -773,7 +747,6 @@ function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account] || ACCOUNTS.onia;
-  const { w: W, h: H } = fmtOf(args);
   const brand = BRANDS[account] || BRANDS.nuvia;
   const accent = brand.accents[idx % brand.accents.length];
   const stripes = brand.stripes || brand.accents;
@@ -800,24 +773,15 @@ function brightRetailHtml(slide, idx, total, account, args) {
 <style>
 ${tokens}
 * { margin:0; padding:0; box-sizing:border-box; }
-<<<<<<< HEAD
-html,body { width:${W}px; height:${H}px; }
-.slide { position:relative; width:${W}px; height:${H}px; overflow:hidden;
-=======
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
 .slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
->>>>>>> origin/main
   padding:var(--pad); display:flex; flex-direction:column;
   font-family:'Inter',system-ui,sans-serif;
   --accent:${accent};
   background:${coverLike ? accent : brand.bg};
   color:${coverLike ? '#FFFFFF' : brand.ink}; }
-<<<<<<< HEAD
-.ribbon { position:absolute; inset:0; width:${W}px; height:${H}px; z-index:0; pointer-events:none; }
-=======
 .ribbon { position:absolute; inset:0; width:${FMT.w}px; height:${FMT.h}px; z-index:0; pointer-events:none; }
->>>>>>> origin/main
 .slide > *:not(.ribbon) { position:relative; z-index:2; }
 .g { color:var(--accent); }
 .slide.cover .g, .slide.cta .g { color:#fff; text-decoration:underline; text-decoration-thickness:9px; text-underline-offset:8px; }
@@ -855,7 +819,7 @@ ${safeAreaCss()}
 ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-size:58px;font-weight:900;color:${coverLike ? '#fff' : accent}}`}
 </style></head>
 <body><div class="slide ${role}">
-  ${nuviaRibbon(idx, total, stripes, coverLike, args && args.formato)}
+  ${nuviaRibbon(idx, total, stripes, coverLike)}
   <div class="topbar"><span class="kicker">${esc(acc.name)}</span></div>
   <div class="main">
     ${object}
@@ -875,7 +839,9 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
-  const slides = brief.slides || [];
+  const slides = (brief.slides || []).map((sl) => (
+    // El brief trae `comment_trigger` a nivel raiz; el render lo necesita por slide.
+    { ...sl, comment_trigger: sl.comment_trigger || brief.comment_trigger || '' }));
   if (!slides.length) throw new Error('brief has no slides');
   if (args.bg) args.bg = path.resolve(args.bg);
   if (args.object) args.object = path.resolve(args.object);
@@ -890,23 +856,21 @@ function render(args) {
     else if (args.pack === 'dark-neon') html = darkNeonHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'editorial-photo') html = editorialPhotoHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'bright-retail') html = brightRetailHtml(slide, idx, slides.length, args.account, args);
-    else html = slideHtml(slide, idx, slides.length, args.account, args.bg, args.formato);
+    else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
     fs.writeFileSync(htmlPath, html, 'utf8');
     const png = path.resolve(args.out, `slide-${String(idx + 1).padStart(2, '0')}.png`);
-    const fmt = fmtOf(args);
     execFileSync(browser, [
       '--headless=new',
       '--disable-gpu',
       '--hide-scrollbars',
       '--allow-file-access-from-files',
       '--force-device-scale-factor=1',
-<<<<<<< HEAD
-      `--window-size=${fmt.w},${fmt.h}`,
-=======
       `--window-size=${FMT.w},${FMT.h}`,
->>>>>>> origin/main
-      '--virtual-time-budget=4000',
+      // 10s, no 4s: con 4 las webfonts de Google no siempre llegaban y algunos slides
+      // salian con la fuente de respaldo. Se detecto el 2026-08-17 comparando dos slides
+      // del MISMO carrusel — uno en sans y el otro en serif.
+      '--virtual-time-budget=10000',
       `--screenshot=${png}`,
       `file://${htmlPath.replace(/\\/g, '/')}`,
     ], { stdio: 'ignore', timeout: 60000 });
@@ -935,12 +899,8 @@ if (require.main === module) {
   }
 }
 
-<<<<<<< HEAD
-module.exports = { slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml, emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS };
-=======
 module.exports = {
   slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml,
   emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };
->>>>>>> origin/main

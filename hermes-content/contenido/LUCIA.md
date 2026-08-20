@@ -10,8 +10,8 @@
 
 | | |
 |---|---|
-| Correo | ✅ `lucia@onia.com.bo` — alias creado y **probado punta a punta** el 2026-08-16 |
-| Cuenta de Instagram | 🔴 **no existe todavía** |
+| Correo | ✅ **decidido 2026-08-17: Gmail propio.** El alias `lucia@onia.com.bo` recibe pero NO es identidad separada, y eso es lo que Meta necesita. Un Gmail lo es, cuesta cero y se delega a Arthur. La dirección del dominio se puede sumar después sin rehacer la cuenta. Contexto: [`../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md`](../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md) |
+| Cuenta de Instagram | ✅ **existe desde el 2026-08-20**: `@lucia.antelo.oficial` (IG id `28357585133845376`, tipo Creador), conectada a Postiz (`cmt1sv4eh001alq9cl3y6q7es`) y a la app de Meta con `messages`+`comments` suscritos y mensajería verificada. 0 posts, 0 seguidores |
 | Voz | ✅ Marcela `86V9x9hrQds83qf7zaGn` (ElevenLabs), cargada en el VPS |
 | Identidad visual | ✅ ancla, paleta hex, vestuario y molde de 11 bloques cerrados |
 | Video | ✅ tarifario medido — antes era el bloqueo, ya no |
@@ -64,6 +64,21 @@ texto ni comunicados — en el benchmark, un comunicado sacó **4 likes**.
 
 ---
 
+## 3-bis. Dos carruseles heredados de @oniahq (2026-08-16)
+
+Se produjeron para ONIA y **fallaron la prueba del vendedor** allá: hablan de la IA en
+abstracto, no del negocio del que mira. Acá funcionan tal cual, sin reescribir — son
+exactamente el pilar informativo genérico.
+
+| Pieza | Estado |
+|---|---|
+| **Mitos de la IA** — *"Nadie te cuenta esto sobre la IA"* | renderizada, hay que re-renderizar con `--account lucia` |
+| **5 tareas que la IA hace mejor** | ídem. Cierra pidiendo **LISTA**, y el PDF ya existe |
+
+El re-render es un flag (`--account lucia`) y cambia el handle del pie. **No se puede hacer
+hasta que la cuenta exista** y sepamos su @ real: hoy `carousel_render.js` tiene
+`@lucia.antelo.oficial` hardcodeado y nadie confirmó ese handle.
+
 ## 4. Las primeras piezas — ya están armadas
 
 Las 6 imágenes existen en `references/modelos/lucia/posts-20260807/` con sus captions
@@ -89,12 +104,13 @@ costo cero.
 Su plan decía 70% reel y no tenía ninguno porque el costo no estaba medido. Ahora sí:
 
 ```
+kling3_0_turbo      5 s hablando en español, voz nativa  7,50 cr
 veo3_1_lite         8 s a 720×1280, 9:16 real           8 cr
-video_extension     encadena sin el tope de 15 s        ~12 cr por tramo
+video_extension     encadena sin el tope de 15 s        ~12 cr por tramo ⚠️ devolvió 16:9
 sync_so (remap)     lipsync con la voz de Marcela       ~18 cr / 5 s
 ```
 
-**~48 cr** una pieza de 32 s de b-roll con voz montada encima.
+**~35 cr** una pieza de 32 s de b-roll (4 planos de 8 s) con voz montada encima.
 
 **El lipsync no es el default** — cuesta ~5× más que montar la voz. Se usa solo donde ella
 mira a cámara y habla, que es exactamente el pilar A.
@@ -108,9 +124,9 @@ mira a cámara y habla, que es exactamente el pilar A.
 | # | Qué | Quién |
 |---|---|---|
 | 1 | **El origen de los videos de los que sale su cara.** La regla propia dice *"nunca foto de una persona real sin consentimiento"* y el material vino de más de una fuente | **solo Sergio** |
-| 2 | Crear la cuenta de Instagram con `lucia@onia.com.bo` | Sergio |
+| 2 | Crear el Gmail de Lucía y con eso la cuenta de Instagram | Sergio |
 | 3 | Decidir el % del pilar informativo genérico | Sergio |
-| 4 | Reescribir los cierres de P4 y P5 | yo |
+| 4 | ~~Reescribir los cierres de P4 y P5~~ ✅ hecho 2026-08-20 — cierran con pregunta + @oniahq, sin palabra clave (Lucía no tiene palabras activas en el DM) | yo |
 
 El **1 no se resuelve trabajando más**. Y es el que no conviene descubrir con la cuenta ya
 pública.

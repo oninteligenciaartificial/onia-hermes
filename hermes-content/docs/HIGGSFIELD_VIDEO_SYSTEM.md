@@ -422,6 +422,9 @@ For companies, Hermes should choose one of these:
 
 ## Prompt Package For Higgsfield
 
+> **Estructura del prompt en sí: [`ONIA_PLANTILLAS_PROMPT_VIDEO_20260818.md`](ONIA_PLANTILLAS_PROMPT_VIDEO_20260818.md)**
+> (plantillas CINE y UGC). Lo de abajo es el sobre del job, no el texto del prompt.
+
 Every generation request should include:
 
 ```json

@@ -1,0 +1,7 @@
+[0.0] Así es simple que puedes organizar todas las comandas de tu negocio.
+[3.0] Cuando entro en pedido, te aparece la comanda con todos los detalles,
+[5.9] que pidió, dirección y método de pago,
+[7.9] y a medida que avanza, simplemente mueves la tarjeta para actualizar su estado.
+[11.2] Menos cabos y pedidos, muchos más organizados.
+[13.2] Quieres conocer todo lo que puedes hacer con esta aplicación,
+[15.7] visita nuestra web y descubrí más.

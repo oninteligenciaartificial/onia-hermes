@@ -1,0 +1,33 @@
+[0.0] Hablemos de los loops. Pon atención.
+[5.2] Esa persona fue el que creó Cloud Code.
+[7.4] Ok, pero realmente ¿a qué se refería?
+[9.3] Un loop esencialmente va a ser una inteligencia artificial
+[11.9] que va a estar revisando el trabajo de otra inteligencia artificial.
+[15.4] O sea, te reemplaza a ti, tú ya no tienes que estar revisando.
+[18.2] En un buen loop vas a tener diferentes inteligencias artificiales
+[21.7] con diferentes memorias, diferentes instrucciones, diferentes objetivos.
+[25.6] Este es el loop que yo estoy usando actualmente y se compone de tres agentes.
+[28.9] Un planeador, un ejecutador y un evaluador.
+[31.9] Aquí está mi loop.
+[32.6] Aquí tengo a los tres agentes,
+[34.1] cada uno con sus propias instrucciones
+[36.2] y sus propios objetivos, contexto, memoria, etc.
+[39.8] O sea, velo como un equipo de agentes
+[41.3] que van a trabajar por un objetivo,
+[43.4] se van a estar revisando,
+[44.6] van a estar haciendo las correcciones
+[46.0] para que tú solo tengas que revisar el resultado
+[48.6] y tú puedes dormir mientras hace todo eso.
+[51.2] Ahora, estos loops pueden estar corriendo por mucho tiempo,
+[54.2] desde horas, días o incluso semanas
+[56.5] lo que dicen los ingenieros de Antropiq.
+[58.6] Ahora, cuidado, si no sabes diseñar un buen loop,
+[61.1] esto te puede costar muy caro
+[62.5] porque los loops consumen muchos tokens.
+[64.7] Pero si te importa el tiempo,
+[66.0] quieres trabajar en múltiples proyectos
+[67.7] y no estás revisando las cosas,
+[69.2] entonces sí deberías por lo menos probarlos.
+[71.2] Si quieres ver el video donde te enseño a diseñar tu primer loop,
+[74.0] simplemente comenta esta palabra y te lo mando.
+[76.1] Bye.

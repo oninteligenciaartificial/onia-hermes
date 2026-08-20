@@ -1,0 +1,11 @@
+[0] Perseguir a un cliente para que te mande sus credenciales y documentos es de las tareas
+[4] que más tiempo roba un equipo.
+[6] Nosotros dejamos que eso pase solo.
+[8] Dentro de la plataforma el cliente sube su documentación, firma el contrato o da acceso
+[12] a las herramientas que necesitamos.
+[13] Y cada una de esas acciones dispara una notificación automática clasificada directamente en su perfil.
+[19] El equipo asignado a ese cliente recibe la alerta exacta de que se completó, sin tener
+[24] que revisar carpetas sueltas ni preguntar por whatsapp si ya se envió algo.
+[29] Cada mensaje que tu equipo manda para pedir, oye ya me enviaste esto, es tiempo que un
+[33] sistema bien construido te devuelve.
+[35] Comenta la palabra equipo y te muestro que necesitas para construir este sistema.
