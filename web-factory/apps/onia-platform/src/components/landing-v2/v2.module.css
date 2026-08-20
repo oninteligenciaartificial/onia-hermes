@@ -450,108 +450,267 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* 3. Rubros — columna pegada (sticky), sin scrub                          */
+/* 3. Rubros — conmutador pegado al scroll (Fanvue, MEDIDO)                */
+/*                                                                         */
+/* Portado del bloque vanilla packages/blocks/src/sticky-niche-switcher.ts */
+/* y de su ficha data/references/design-sources/fanvue-secciones/          */
+/* sticky-niche-switcher.md. Los números (331 px de slot, 0.853 de ratio,  */
+/* 750 px por rubro, .5s easeOutQuad, 1/.25 de opacidad, píldora de        */
+/* 28.8 px) son medidos, no inventados. El JS solo escribe --niche-i;      */
+/* todo lo demás se deriva acá.                                            */
 /* ---------------------------------------------------------------------- */
 
-.rubrosGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: var(--v2-gap);
-  align-items: start;
+.nicheRunway {
+  --niche-i: 0;
+  --niche-step: 750px; /* scroll por rubro medido en >=1440; piso 600 */
+  --niche-slot: 331px; /* alto de tarjeta medido: 331,19 px */
+  --niche-stage: 630px; /* alto del pegado medido */
+  --niche-dur: 0.5s; /* duración declarada en los 28 tweens del original */
+  --niche-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --niche-pill-h: 28.8px; /* ventana de la píldora = line-height del ítem */
+
+  /*
+   * El runway es el único alto del bloque: reparto alto/(n+1) — el +1 compra
+   * los dos colchones medidos (leer el 1º antes de conmutar, no evaporar el
+   * último). NINGÚN ancestro puede llevar overflow hidden (.page usa clip).
+   */
+  position: relative;
+  height: calc(var(--niche-step) * var(--niche-run));
+  margin-top: var(--v2-gap-corto);
+}
+
+.nicheMarks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
 /*
- * `position: sticky` a secas — es el patrón medido en Fanvue (`en-sticky`,
- * `faq`). NO se usa <StickyScene>: ese componente ata el progreso al scroll
- * (scrub) y la ficha lo prohíbe explícitamente.
+ * Cada banda mide UN rubro de alto, no 1 px: un centinela puntual se saltea
+ * en un scroll rápido entre dos frames y el índice queda clavado (bug medido
+ * en el bloque vanilla).
  */
-.rubrosAside {
+.nicheMark {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: var(--niche-step);
+}
+
+/* Pegado centrado en el viewport (el top:135px del original ES esta fórmula) */
+.nicheStage {
   position: sticky;
-  top: calc(var(--header-h) + 2.5rem);
+  top: max(calc(var(--header-h) + 16px), calc((100vh - var(--niche-stage)) / 2));
+  min-height: var(--niche-stage);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--v2-gap);
 }
 
-@media (max-width: 899px) {
-  .rubrosGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .rubrosAside {
-    position: static;
-  }
+.nicheMid {
+  text-align: center;
 }
 
-.rubrosLista {
-  list-style: none;
+.nicheWords {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.29em; /* 23,4 px sobre 81 px medidos */
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--v2-vidrio-borde);
+  list-style: none;
 }
 
-.rubroFila {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  padding: clamp(1.1rem, 2vw, 1.6rem) 0;
-  border-bottom: 1px solid var(--v2-vidrio-borde);
-}
-
-.rubroNombre {
+/* Tipografía medida: peso 500, line-height .85, tracking negativo */
+.nicheWord {
+  display: block;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.4rem);
+  font-size: clamp(1.9rem, 1rem + 3.4vw, 3.6rem);
   font-weight: 500;
+  line-height: 0.85;
   letter-spacing: -0.02em;
-  line-height: 1;
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.25; /* opacidad inactiva medida */
+  transition: opacity var(--niche-dur) var(--niche-ease);
 }
 
-.rubroQue {
-  color: var(--v2-tenue);
-  font-size: max(0.88rem, var(--fs-micro-min));
-  margin-left: auto;
-  text-align: right;
+.nicheWord[aria-current="true"] {
+  opacity: 1;
 }
 
-.rubroPronto .rubroNombre {
-  color: var(--v2-tenue);
+.nicheWord:hover {
+  opacity: 0.7;
 }
 
-.rubroEstado {
-  font-family: var(--font-mono), monospace;
-  font-size: max(0.62rem, var(--fs-label-min));
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent-ink);
-  flex: none;
+.nicheWord[aria-current="true"]:hover {
+  opacity: 1;
 }
 
-.rubroPronto .rubroEstado {
-  color: var(--v2-tenue);
+.nicheWord:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: 6px;
+  opacity: 1;
 }
 
 /*
- * En teléfono el "qué hace" no puede irse al margen derecho: se partía en dos
- * renglones alineados a la derecha y la fila quedaba en escalera. Baja a su
- * propio renglón, alineado con el nombre.
+ * La tarjeta ES la ventana: overflow hidden + una tira que se traslada un
+ * slot exacto por rubro (rodillo medido, no cross-fade).
  */
-@media (max-width: 699px) {
-  .rubroFila {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 0.15rem 0.8rem;
-    align-items: baseline;
-  }
+.nicheCard {
+  position: relative;
+  width: calc(var(--niche-slot) * 0.853); /* relación medida 282,59/331,19 */
+  height: var(--niche-slot);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface-dim);
+}
 
-  .rubroQue {
-    grid-column: 2;
-    margin-left: 0;
-    text-align: left;
+.nicheRoll {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--niche-i) * var(--niche-slot) * -1));
+  transition: transform var(--niche-dur) var(--niche-ease);
+}
+
+.nicheShot {
+  display: block;
+  width: 100%;
+  height: var(--niche-slot);
+  object-fit: cover;
+  /* duotono de la casa: nunca stock pegado a color */
+  filter: grayscale(1) contrast(1.05);
+}
+
+/*
+ * Píldora: ventana de 28,8 px con el rodillo de NOMBRES DE RUBRO adentro.
+ * Nunca un negocio inventado ni una métrica fabricada (cero clientes pagando).
+ */
+.nichePill {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  height: var(--niche-pill-h);
+  max-width: calc(100% - 20px);
+  padding: 0 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--tinta) 42%, transparent);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  overflow: hidden;
+}
+
+/* La regla que hace el rodillo: alto de ventana == line-height de la fila */
+.nicheWin {
+  display: block;
+  height: var(--niche-pill-h);
+  overflow: hidden;
+}
+
+.nicheRows {
+  display: block;
+  transform: translateY(calc(var(--niche-i) * var(--niche-pill-h) * -1));
+  transition: transform var(--niche-dur) var(--niche-ease);
+}
+
+.nicheRow {
+  display: block;
+  height: var(--niche-pill-h);
+  line-height: var(--niche-pill-h);
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.68rem, var(--fs-label-min));
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 1023px) {
+  .nicheRunway {
+    --niche-slot: 250px;
+    --niche-stage: 520px;
   }
 }
 
-.rubrosFotos {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(0.5rem, 1vw, 0.9rem);
-  margin-top: var(--v2-gap-corto);
+/*
+ * Apilado: en teléfono la tarjeta no entra al lado de las palabras, y el
+ * mismo apilado sirve para reduced-motion. Las bandas se apagan: sin ellas
+ * el índice vuelve a 0 y --niche-i deja de mover nada.
+ */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .nicheRunway {
+    height: auto;
+  }
+
+  .nicheMarks {
+    display: none;
+  }
+
+  .nicheStage {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: var(--v2-gap-corto);
+  }
+
+  /*
+   * Las palabras PRIMERO. En el DOM la tarjeta va antes (columna izquierda
+   * en escritorio); apilado tal cual, el visitante se come las 6 fotos antes
+   * de leer un solo rubro.
+   */
+  .nicheMid {
+    order: -1;
+  }
+
+  /* Todas las palabras legibles: sin conmutador nadie pierde un rubro */
+  .nicheWord {
+    opacity: 1;
+  }
+
+  /* La tarjeta deja de ser ventana y muestra la tira entera, foto k = palabra k */
+  .nicheCard {
+    width: min(100%, 282px);
+    height: auto;
+    margin: 0 auto;
+    overflow: visible;
+    background: none;
+  }
+
+  .nicheRoll {
+    transform: none;
+  }
+
+  .nicheShot {
+    height: auto;
+    aspect-ratio: 282 / 331;
+    margin-bottom: 12px;
+    border-radius: 16px;
+  }
+
+  .nichePill {
+    display: none;
+  }
+}
+
+/*
+ * transition: none — NUNCA 0.01ms: con 0.01ms las propiedades discretas
+ * siguen animando y el estado queda a medio camino, invisible pero vivo.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .nicheWord,
+  .nicheRoll,
+  .nicheRows {
+    transition: none;
+    animation: none;
+  }
+
+  .nichePill {
+    backdrop-filter: none;
+  }
 }
 
 .foto {

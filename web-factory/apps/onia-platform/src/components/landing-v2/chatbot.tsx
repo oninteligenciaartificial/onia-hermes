@@ -1,5 +1,6 @@
 import { Reveal } from "@/motion";
 import {
+  A_MEDIDA,
   CHATBOT_STACKS,
   CUPO_MENSUAL,
   fmtBs,
@@ -84,16 +85,21 @@ export function ChatbotV2() {
                 </div>
               ))}
             </div>
+            {/* La escalera de 3 niveles se retiro el 2026-08-15; este parrafo
+                la seguia contando. Sobre el excedente de Meta no se afirma ni
+                "al costo" ni "+20 %": pricing.ts hoy dice las DOS cosas
+                (fullLabel vs markupPct) y hasta que Sergio resuelva esa
+                contradiccion la landing no toma partido — dice solo lo que es
+                verdad en ambos casos. */}
             <p className={styles.nota} style={{ marginTop: "1.2rem" }}>
-              {CUPO_MENSUAL} mensajes salientes por mes, el mismo tope en los
-              tres niveles: al llegar, corta. Desde el N2, lo que Meta te cobre
-              por los mensajes que iniciás va aparte, a su costo más{" "}
-              {META_MARKUP_PCT} %. Responder dentro de las 24 horas desde que el
-              cliente escribe no lo cobra Meta.
+              {CUPO_MENSUAL} conversaciones por mes incluidas: al llegar, corta
+              — nunca una factura sorpresa. Lo que Meta cobre por los mensajes
+              que iniciás va aparte; responder dentro de las 24 horas desde que
+              el cliente escribe no lo cobra Meta. {A_MEDIDA}
             </p>
             <div className={styles.acciones}>
               <a className={styles.link} href="/chatbot">
-                Ver los tres niveles en detalle →
+                Ver el detalle y los requisitos →
               </a>
             </div>
           </Reveal>

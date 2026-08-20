@@ -2,7 +2,7 @@
 
 import * as m from "motion/react-m";
 import { useReducedMotion } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useScroll, useTransform } from "motion/react";
 
 /**
@@ -50,7 +50,13 @@ type BleedWordmarkProps = {
 
 export function BleedWordmark({ className, shift = 6 }: BleedWordmarkProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const prefiereReducido = useReducedMotion();
+  // Igual que en Marquee: el servidor no conoce la preferencia y renderiza el
+  // parallax (translateY(6%)); si el cliente hidrata directo con "0%", React
+  // avisa mismatch en toda la home. La rama reducida entra tras el mount.
+  const [montado, setMontado] = useState(false);
+  useEffect(() => setMontado(true), []);
+  const reduced = montado && prefiereReducido;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end end"],
