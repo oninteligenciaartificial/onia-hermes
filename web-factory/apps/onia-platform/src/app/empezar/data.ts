@@ -61,7 +61,7 @@ export function esRubroDisponible(rubro: Rubro): boolean {
 }
 
 export const NOTA_PROXIMAMENTE =
-  "Este rubro está en construcción — sin humo. Igual seguí: te avisamos apenas esté, con tu caso ya anotado.";
+  "Este rubro lo armamos con vos, sobre el motor que ya corre. Seguí: registramos tu caso y te contactamos con la propuesta armada.";
 
 export const ESCAPE_WA_URL = waLink(
   "Hola, mi rubro no está en la lista de Onia. Mi negocio es: ",

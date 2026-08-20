@@ -17,13 +17,10 @@ const RUBROS_VIVOS = [
   "Servicios",
 ] as const;
 
-const RUBROS_PRONTO = [
-  "Gastronomía",
-  "Construcción",
-  "Educación",
-  "Turismo",
-  "Ganadería",
-] as const;
+// REGLA de Sergio (2026-08-20): en la venta NUNCA se muestra lo que esta en
+// construccion — "muy pronto" le dice al cliente "esto no esta listo" y un solo
+// cartel contamina la percepcion del producto entero. Lo que no existe no se
+// nombra; la demanda de otros rubros se captura con un "escribinos".
 
 /**
  * Escena — los pasos de la pantalla entran EN ORDEN cada vez que la tarjeta
@@ -289,12 +286,9 @@ export function Features() {
               {rubro}
             </span>
           ))}
-          <span className={styles.rubrosLabel}>Muy pronto</span>
-          {RUBROS_PRONTO.map((rubro) => (
-            <span key={rubro} className={styles.rubroSoon}>
-              {rubro}
-            </span>
-          ))}
+          <a className={styles.rubroSoon} href="/prueba-gratis">
+            ¿Otro rubro? Escribinos
+          </a>
         </Reveal>
       </div>
 
