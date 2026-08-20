@@ -106,7 +106,7 @@ qué mandar quema la única conversación que el contenido consiguió.
 | Palabra | Qué se manda | Estado |
 |---|---|---|
 | **SISTEMA** | diagnóstico de 20 min — link de Cal con `?src=` | ✅ vivo y probado punta a punta |
-| **LISTA** | PDF de una página: por dónde empezar a automatizar, con anclas de precio | ✅ `recursos/lista-por-donde-empezar.pdf` |
+| **LISTA** | PDF de una página: por dónde empezar a automatizar, con anclas de precio | ✅ publicado en vivo: `onia.com.bo/recursos/lista-por-donde-empezar.pdf` (200, verificado 20-ago; fuente en `hermes-content/recursos/`) |
 
 ✅ **Las dos palabras tienen recurso.** Ya no hay piezas bloqueadas por falta de qué mandar.
 

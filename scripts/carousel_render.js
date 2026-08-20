@@ -35,14 +35,17 @@ function assetUrl(p) {
   return fs.existsSync(abs) ? `file://${abs.replace(/\\/g, '/')}` : '';
 }
 
+// Chrome va PRIMERO: Edge headless en esta maquina genera PNGs de 0 bytes sin
+// error (verificado 2026-08-20, con y sin sandbox). CAROUSEL_BROWSER lo pisa todo.
 const BROWSER_CANDIDATES = [
+  process.env.CAROUSEL_BROWSER || '',
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
   'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
-  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   '/usr/bin/google-chrome',
   '/usr/bin/chromium',
   '/usr/bin/chromium-browser',
-];
+].filter(Boolean);
 
 const ACCOUNTS = {
   // Handle IG real de ONIA, confirmado por Sergio 2026-08-13.
