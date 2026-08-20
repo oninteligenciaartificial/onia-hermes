@@ -126,7 +126,7 @@ mira a cámara y habla, que es exactamente el pilar A.
 | 1 | **El origen de los videos de los que sale su cara.** La regla propia dice *"nunca foto de una persona real sin consentimiento"* y el material vino de más de una fuente | **solo Sergio** |
 | 2 | Crear el Gmail de Lucía y con eso la cuenta de Instagram | Sergio |
 | 3 | Decidir el % del pilar informativo genérico | Sergio |
-| 4 | Reescribir los cierres de P4 y P5 | yo |
+| 4 | ~~Reescribir los cierres de P4 y P5~~ ✅ hecho 2026-08-20 — cierran con pregunta + @oniahq, sin palabra clave (Lucía no tiene palabras activas en el DM) | yo |
 
 El **1 no se resuelve trabajando más**. Y es el que no conviene descubrir con la cuenta ya
 pública.
