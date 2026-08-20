@@ -402,3 +402,44 @@ con fetch simple — se leyeron con navegador renderizando la página.
 - Elegibilidad de Bolivia en el selector "Primary Developer Location"
 - Parámetros de las tools TikTok del MCP de Higgsfield (esquemas vacíos)
 - Si Higgsfield publica con app propia auditada o con credenciales del usuario
+
+---
+
+## ADDENDUM — 2026-08-20: el trámite de developer puede sobrar
+
+> Verificado en vivo con el MCP de Higgsfield **después** de escribir lo de arriba.
+> Cambia el camino recomendado, no los veredictos.
+
+### El hallazgo
+
+`tiktok_connect` devuelve una URL de autorización de la **app propia de Higgsfield**
+(`client_key=7641488082520244240`) que pide estos scopes:
+
+```
+video.publish · video.upload              ← publicar
+comment.list · comment.list.manage        ← leer Y gestionar comentarios
+video.list · video.insights · user.insights · user.info.*
+biz.spark.auth · biz.creator.info · biz.creator.insights · biz.brand.insights
+```
+
+**Es una app ya aprobada, de nivel business.** Conectar una cuenta ahí da acceso a publicar y a
+gestionar comentarios **sin pasar por nuestro propio registro de developer** — los 3 días hábiles
+y el trámite descritos arriba dejan de ser el único camino.
+
+`tiktok_accounts` → `{"accounts":[]}`: no hay ninguna cuenta conectada todavía.
+
+### Lo que esto NO cambia
+
+- **Comentario → DM sigue siendo NO.** `comment.list.manage` no es *Comment-to-Message*. El gate
+  geográfico (Vietnam, Indonesia, Tailandia) no lo levanta ningún scope.
+- **No verificado: que el MCP EXPONGA la gestión de comentarios como herramienta.** Las tools
+  visibles son `tiktok_accounts`, `tiktok_connect`, `tiktok_publish`, `tiktok_prepare_publish`,
+  `tiktok_publish_status`, `tiktok_music_trending`, `tiktok_reconnect`. **Ninguna de comentarios.**
+  Puede que el permiso esté y la herramienta no. Se sabe conectando una cuenta, no leyendo docs.
+
+### Consecuencia práctica
+
+**Orden correcto: probar Higgsfield primero, y recién si no alcanza, hacer el trámite.**
+Media hora contra tres días. El trámite queda como plan B, no como paso 1.
+
+⚠️ La URL de autorización lleva PKCE y **vence en horas**. Se regenera con `tiktok_connect`.
