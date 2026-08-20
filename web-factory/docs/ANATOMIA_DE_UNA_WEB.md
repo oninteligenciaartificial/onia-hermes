@@ -193,3 +193,7 @@ que uno incompleto: se lee como si estuviera completo.
    presupuesto al nuestro.
 5. Si el patrón se vuelve bloque: va a `packages/blocks/src/` con test y aparece solo en la
    galería (`pnpm blocks:demo`).
+6. **Si el sitio medido es un cliente entregado**: emitir su contrato visual con
+   `node harvester/vision/emit_design_md.mjs --slug <slug>` →
+   `data/clients/<slug>.design.md`. Es una vista generada de esta anatomía, no una
+   tercera fuente — formato y prueba en [DESIGN_MD_CLIENTES.md](DESIGN_MD_CLIENTES.md).
