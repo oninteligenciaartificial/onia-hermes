@@ -82,6 +82,11 @@ Instrucciones de proyecto. Override sobre defaults.
 - **Medir peso y tiempo real**, no solo que responda. Un 200 lento es un fallo con cara
   de éxito (la fuente de iconos pesaba 3,9 MB y tardaba 117 s).
 - Un `grep` sirve para **descartar**, nunca para **confirmar** que algo se ve bien.
+- **Un dato heredado no se ejecuta sin CONTARLO de nuevo.** El 2026-08-20 mi propio
+  veredicto decía "de 136 workflows de n8n quedan 2" y "las 3 orgs son de QA": contados
+  en vivo, 44 workflows estaban ACTIVOS (borrarlos apagaba producción) y una de las orgs
+  tenía el único SUPERADMIN. Repetir una conclusión propia anterior también es repetir
+  sin verificar.
 - **El login NO prueba la base**: entra por Supabase Auth vía HTTPS, no por Prisma.
 
 ## Nada a medias — cerrar antes de abrir (REGLA)
@@ -111,6 +116,22 @@ Instrucciones de proyecto. Override sobre defaults.
   detalle en la skill `onia-frontend`).
 - ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero son **legado**: no se les agrega
   nada sin decidir si se archivan o se absorben.
+
+## La venta nunca exhibe obra (REGLA)
+
+> Sergio, 2026-08-20: *"no entiendo por qué dices si es que estamos construyendo algo que
+> aún no está listo… hace escapar a los clientes porque hacen creer que el sistema no
+> funciona. Como regla nunca hagas eso."* La banda de Módulos de la landing tenía CINCO
+> "muy pronto" en la pantalla de venta.
+
+- En toda superficie que ve un cliente está PROHIBIDO comunicar estado de obra: "muy
+  pronto", "en construcción", "beta", "próximamente", banners de borrador, listas de lo
+  que falta. Un solo cartel contamina la percepción del producto entero.
+- Lo que no está listo **no se nombra**. La demanda futura se captura sin admitir:
+  "¿Otro rubro? Escribinos".
+- Convive con "no fabricar": ni prometer lo inexistente NI exhibir lo incompleto — se
+  habla solo de lo vivo. Docs internos y política de privacidad siguen siendo honestos
+  sobre límites; la VENTA no.
 
 ## ONIA Core (REGLA)
 
@@ -156,6 +177,11 @@ Instrucciones de proyecto. Override sobre defaults.
 - **Auto-sync activado**: al terminar, commitear y pushear sin que lo pidan (hook `Stop`
   → `node scripts/git-autosync.js`).
 - Respeta `.gitignore`: nunca sube `.env`, claves ni `node_modules`. Assets y outputs sí.
+- ⚠️ **Un merge con conflictos NUNCA se deja abierto al cerrar un turno.** El hook Stop
+  corre el autosync, y `add -A` + commit convirtió 17 archivos CON marcadores `<<<<<<<`
+  en un "resuelto" que hizo fast-forward a main (2026-08-20; el CI lo contuvo). El
+  autosync ya tiene la guarda (se niega con MERGE_HEAD/paths unmerged), pero la regla es
+  del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores con grep.
 - ⚠️ **Nunca buildear producción con un `.env.local` presente**: Next hornea los
   `NEXT_PUBLIC_*` en el bundle y publica `127.0.0.1`. Buildear en el VPS con `app.env`,
   y verificar el bundle antes del swap.
@@ -169,6 +195,11 @@ Instrucciones de proyecto. Override sobre defaults.
 - **Decidir y actuar.** Verificación fuerte solo para lo que toca producción, plata o
   `main`. Lo reversible y de bajo riesgo: hacerlo y seguir.
 - **No re-hacer lo aprobado.** Diseño o plan ya aprobado se porta fiel, no se reabre.
+- **Una superficie viva no se reemplaza sin que Sergio VEA la pieza terminada.** El
+  2026-08-20 interpreté "ya te di todo lo que quería" como OK para publicar la landing
+  v2: la rechazó entera al verla ("Nada se te escapa no vende nada") y hubo que revertir
+  en producción. Un rediseño se muestra renderizado y se espera el OK explícito sobre
+  ESA pieza; construir y publicar son dos permisos distintos.
 
 ## Dónde va cada cosa (REGLA)
 
