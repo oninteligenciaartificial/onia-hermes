@@ -219,3 +219,8 @@ prompts: [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4)
 | [DbQVVldE9ty](https://www.instagram.com/p/DbQVVldE9ty/) campaña transparente | IA | MEJORA | dirección de arte, sin prompts |
 | [DcLw-KHkcfU](https://www.instagram.com/p/DcLw-KHkcfU/) modelos IA | MARKETING | MEJORA | el mismo pitch ya fichado |
 | [DcPf2NwCaDK](https://www.instagram.com/p/DcPf2NwCaDK/) 5 empleados IA | MARKETING | MEJORA | molde de carrusel; usa foto de personaje de TV |
+
+| [DcPXfcCvYFO](https://www.instagram.com/reel/DcPXfcCvYFO/) lista sobre b-roll | MARKETING | **SIRVE YA** | [molde R1](2026-08-20-lista-sobre-broll.md) — costo cero; el registro NO se copia |
+| [DbtRIfTojBt](https://www.instagram.com/reel/DbtRIfTojBt/) lista sobre b-roll | MARKETING | **SIRVE YA** | mismo molde, segundo ejemplo |
+
+➡️ **Nuevo:** [BANCO_DE_REPLICABLES.md](BANCO_DE_REPLICABLES.md) — la cola de producción.

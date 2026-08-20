@@ -16,6 +16,8 @@
 > entrega). Antes de escribir una ficha se carga la skill del tema:
 > [SKILLS_DEL_CARRIL.md](SKILLS_DEL_CARRIL.md).
 >
+> **Lo que vamos a PRODUCIR nosotros:** [BANCO_DE_REPLICABLES.md](BANCO_DE_REPLICABLES.md) — los formatos del corpus ordenados por qué tan rápido podemos hacer uno igual y subirlo. Es una **cola de producción**, no una bandeja de análisis.
+>
 > **Prompts que salen de acá — para pegar:** [`sesiones/`](sesiones/README.md) tiene **un
 > archivo por sesión**, autocontenido (preámbulo + gates + todos sus prompts, en orden). Es lo
 > que se abre para trabajar.
