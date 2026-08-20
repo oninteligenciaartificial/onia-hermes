@@ -1,5 +1,16 @@
 # Postiz: qué puede y qué no con comentarios, DM y flujos
 
+> 🔴 **DESACTUALIZADO EN LO QUE SIGUE — corregido el 2026-08-20.**
+> Este doc dice que el ciclo comentario→DM está bloqueado por **S6**. **Es falso desde el
+> 2026-08-18.** S6 nunca bloqueó nuestras propias cuentas: `@oniahq` tiene rol en nuestra app y
+> opera con **Standard Access**, que no pasa por App Review. El ciclo está **vivo y probado en
+> producción** (workflow n8n `gWrVHU8OxI9yugc4`, 4 eventos reales de Meta el 18-ago).
+> S6 bloquea las cuentas de **clientes**, que es otra cosa.
+> Fuente vigente: `ONIA_AUTOMATIZACION_MENSAJES_20260818.md` §10 y §14 · mapa completo:
+> `ONIA_RECORRIDO_24_7_20260820.md`.
+> Lo demás de este doc (qué puede y qué no puede Postiz) sigue vigente.
+
+
 > 2026-08-17. Pregunta de Sergio: *"¿en Postiz podés responder comentarios y hacer flujos de
 > mensajes y enviar videos a DMs en IG, o en qué redes se puede?"*
 >
