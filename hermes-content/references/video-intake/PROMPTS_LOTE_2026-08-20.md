@@ -248,3 +248,54 @@ Dos gates que no se saltean:
 LISTO = guion de 7 beats con hilo de color y carrier element definidos, la division entre filmado
 y generado, y el costo estimado. Cero generaciones.
 ```
+
+---
+
+# CONTENIDO
+
+## K1 · Radar de ganchos — herramienta INTERNA, decidido por Sergio el 2026-08-20
+
+```text
+Contexto: un reel muestra un panel de marca personal con un modulo "Radar Viral" que rastrea
+ganchos que estan funcionando y los sugiere. Ficha y datos:
+hermes-content/references/video-intake/2026-08-20-sintesis-lote-13.md (item DcKABGBRkdY)
+
+DECISION DE SERGIO, ya tomada, no la vuelvas a abrir: ES UNA HERRAMIENTA INTERNA DEL CARRIL DE
+CONTENIDO. NO es un modulo de ONIA Platform, no va al core, no se le vende a nadie. Eso simplifica
+todo: no necesita entidad en el core, ni RLS multi-tenant, ni pantalla de producto.
+
+LO PRIMERO, Y ES UNA ADVERTENCIA SOBRE LA FUENTE: el video afirma "5 veces mas alcance" y su
+PROPIA CAPTURA lo contradice — muestra 43 mil vistas en el titulo descriptivo contra 11,2 mil en
+el titulo con el gancho copiado, o sea 3,8x MENOS, con un asterisco "2 dias despues" sin fechas
+ni linea de base. NO REPITAS ESA CIFRA NI NINGUNA PARECIDA. Copiar un gancho no multiplica nada
+por si solo; lo unico que sabemos es que el gancho es UNA de las variables.
+
+QUE TIENE QUE HACER, en su version mas chica que sirva:
+1. Juntar ganchos que ya funcionaron, de fuentes que YA TENEMOS y son gratis:
+   - los reels que Sergio manda (ya estan analizados: hermes-content/references/video-intake/)
+   - nuestras propias publicaciones y sus numeros reales
+   - la biblioteca de anuncios de Meta, que es publica y gratis (ver prompt D4)
+2. Guardar por gancho: el texto literal, el formato en el que aparecio, la fecha, y la fuente.
+   NADA de metricas ajenas sin fuente verificable. Si no podes verificar el numero, no lo guardes:
+   guarda el gancho igual, sin numero.
+3. Poder buscarlo por tema y por formato cuando toca escribir una pieza.
+
+QUE NO HAGAS:
+- NO construyas un panel. Un archivo estructurado en el repo alcanza y es lo que se mantiene solo.
+  Si termina siendo una tabla en markdown o un JSON, mejor.
+- NO scrapees Instagram con automatizacion que viole ToS. La biblioteca de anuncios de Meta es
+  publica y tiene API; los reels que analizamos ya estan en el repo.
+- NO inventes metricas. Un gancho sin numero sigue sirviendo; un numero inventado envenena todo.
+- NO lo llames "viral". Se llama radar de ganchos.
+
+BUSCA PRIMERO DONDE VIVE: el carril ya tiene el corpus analizado y una sintesis por lote. Si el
+radar se puede armar leyendo lo que YA esta escrito en video-intake/, no hace falta una fuente
+nueva. Ese es el camino barato y es el que hay que probar primero.
+
+LISTO = existe un archivo con los ganchos que ya tenemos identificados del corpus, cada uno con
+su texto literal, formato, fecha y fuente, y se puede buscar por tema. Sin panel, sin metricas
+inventadas, y con el metodo escrito para agregarle uno nuevo cuando aparezca.
+```
+
+---
+

@@ -115,10 +115,15 @@ replicar:
 - **las fichas `2026-08-*.md`** — cómo está hecho cada uno
 - **este archivo** — qué producimos y en qué orden
 
-**Pendiente de decisión tuya:** si querés que los MP4 se guarden de forma permanente (no sólo la
-carpeta temporal), hay que elegir dónde — el repo los rechaza por peso y son material ajeno. La
-opción sana es una carpeta en el VPS o en Drive, con el catálogo apuntando ahí. **No lo hice
-solo: decime si lo querés y dónde.**
+**Los MP4 viven en Drive** (decidido por Sergio, 2026-08-20):
+[ONIA — Banco de videos de referencia](https://drive.google.com/drive/folders/18txLEUYsU2Kt_N65emU6QnWZUTFDMCMD)
+
+Están **recomprimidos a 480p**: la referencia es el **formato**, no la calidad de imagen. A 480p
+se ve el encuadre, el ritmo, los cortes y los textos, que es lo que se copia. El original pesaba
+166 MB; el banco pesa 57 MB y sirve igual.
+
+En la carpeta hay además un `00 — LEEME` con las reglas y el `01 — Banco de replicables`, que es
+una copia de este archivo. **La versión viva es esta, la del repo**; la de Drive es una foto.
 
 ---
 
