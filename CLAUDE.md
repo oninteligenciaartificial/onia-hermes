@@ -47,9 +47,17 @@ Instrucciones de proyecto. Override sobre defaults.
 > 900-1.200+450-600 en el one-pager de la vendedora) y 95 documentos hablando de precios.
 > Con eso, cualquier sesión elige mal.
 
-- **Precios: manda `onia-platform/lib/pricing.ts`.** Es el único archivo que cobra de
-  verdad (lo valida el checkout). Ningún doc, propuesta, one-pager ni cotizador define
-  precio: lo LEEN de ahí. Si un material dice otro número, está roto.
+- **Precios: mandan DOS archivos, y cada uno sobre lo suyo.** Ningún doc, propuesta,
+  one-pager ni cotizador define precio: lo LEEN de ahí. Si un material dice otro número,
+  está roto.
+  - **Planes de suscripción → `onia-platform/lib/subscription-plans.ts`**
+    (`DEFAULT_PLAN_AMOUNTS`): es el que valida el pago y el que se pisa por env var.
+  - **Add-ons, empezando por el chatbot → `onia-platform/lib/pricing.ts`**.
+
+  ⚠️ **Corregido 2026-08-20.** Acá decía que mandaba `pricing.ts` a secas, y es falso para
+  los planes: `pricing.ts` sólo tiene add-ons y `subscription-plans.ts` se declara a sí
+  mismo "FUENTE ÚNICA de los montos". La regla escrita mal mandaba a cada sesión al archivo
+  equivocado — justo el error que esta regla existe para evitar.
 - **Qué se vende: manda `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`**, con el estado
   real (vivo / construido sin probar / futuro).
 - **Un tema = un archivo sin fecha.** Si cambia, se EDITA ese archivo; no se crea uno
