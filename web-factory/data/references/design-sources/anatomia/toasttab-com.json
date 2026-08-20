@@ -1,0 +1,708 @@
+{
+  "url": "https://pos.toasttab.com",
+  "slug": "toasttab-com",
+  "medidoEl": "2026-08-20T23:40:28.334Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 844,
+        "alturaPantallas": 1,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 2
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "main-wrapper FGnL3",
+          "altoPx": 774,
+          "altoPantallas": 0.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "pos.toasttab.com",
+          "cta": "",
+          "imagenes": 1
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "main-content",
+          "altoPx": 268,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "pos.toasttab.com",
+          "cta": "",
+          "imagenes": 1
+        }
+      ],
+      "encabezados": {
+        "total": 3,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "pos.toasttab.com"
+          },
+          {
+            "nivel": 2,
+            "texto": "Performing security verification"
+          },
+          {
+            "nivel": 2,
+            "texto": "Verification successful. Waiting for pos.toasttab.com to respond"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "12px / lh 1.50 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "24px / lh 1.25 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "16px / lh 1.15 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "40px / lh 1.25 / ls normal / w 600",
+            "veces": 1
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "system-ui",
+            "veces": 10
+          },
+          {
+            "valor": "monospace",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(49, 49, 49)",
+            "veces": 9
+          },
+          {
+            "valor": "rgb(0, 0, 238)",
+            "veces": 2
+          }
+        ],
+        "fondos": [],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 4
+          },
+          {
+            "valor": "8px",
+            "veces": 2
+          },
+          {
+            "valor": "32px",
+            "veces": 2
+          },
+          {
+            "valor": "128px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "50%",
+            "veces": 4
+          }
+        ],
+        "radiosDistintos": 1,
+        "sombras": [],
+        "sombrasDistintas": 0,
+        "zIndex": []
+      },
+      "movimiento": {
+        "transiciones": [],
+        "transicionesDistintas": 0,
+        "hojasLeidas": 0,
+        "unidades": {
+          "em": 0,
+          "rem": 0,
+          "px": 0,
+          "clamp": 0,
+          "vw": 0
+        },
+        "keyframesDeclarados": 0,
+        "transitionAll": 0,
+        "tieneReducedMotion": false,
+        "breakpointsPx": []
+      },
+      "scroll": {
+        "pegados": []
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 2,
+        "ctasTop": [
+          {
+            "texto": "Cloudflare",
+            "veces": 1
+          },
+          {
+            "texto": "Privacy",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 1,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 1,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 3,
+        "objetivosMenores44px": 2,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 0,
+          "nav": 0,
+          "main": 0,
+          "footer": 0
+        },
+        "contrastes": [],
+        "fondosTranslucidosOmitidos": 0
+      },
+      "rendimiento": {
+        "pesoTotalKb": 1152.2,
+        "porTipoKb": {
+          "document": 537.2,
+          "script": 610.8,
+          "xhr": 0,
+          "fetch": 0,
+          "image": 4.2
+        },
+        "pedidos": {
+          "document": 5,
+          "script": 11,
+          "xhr": 5,
+          "fetch": 1,
+          "image": 1
+        },
+        "hostsDistintos": 3,
+        "terceros": [
+          {
+            "host": "challenges.cloudflare.com",
+            "pedidos": 9
+          }
+        ],
+        "fuentesCargadas": []
+      },
+      "seo": {
+        "titulo": "Just a moment...",
+        "descripcion": "",
+        "canonical": null,
+        "og": 0,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 1024,
+        "alturaPantallas": 1,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 2
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "main-wrapper FGnL3",
+          "altoPx": 954,
+          "altoPantallas": 0.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "pos.toasttab.com",
+          "cta": "",
+          "imagenes": 1
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "main-content",
+          "altoPx": 244,
+          "altoPantallas": 0.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "pos.toasttab.com",
+          "cta": "",
+          "imagenes": 1
+        }
+      ],
+      "encabezados": {
+        "total": 3,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "pos.toasttab.com"
+          },
+          {
+            "nivel": 2,
+            "texto": "Performing security verification"
+          },
+          {
+            "nivel": 2,
+            "texto": "Verification successful. Waiting for pos.toasttab.com to respond"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "12px / lh 1.50 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "24px / lh 1.25 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "16px / lh 1.15 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "40px / lh 1.25 / ls normal / w 600",
+            "veces": 1
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "system-ui",
+            "veces": 10
+          },
+          {
+            "valor": "monospace",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(49, 49, 49)",
+            "veces": 9
+          },
+          {
+            "valor": "rgb(0, 0, 238)",
+            "veces": 2
+          }
+        ],
+        "fondos": [],
+        "escalaEspaciado": [
+          {
+            "valor": "24px",
+            "veces": 2
+          },
+          {
+            "valor": "16px",
+            "veces": 2
+          },
+          {
+            "valor": "8px",
+            "veces": 2
+          },
+          {
+            "valor": "32px",
+            "veces": 2
+          },
+          {
+            "valor": "128px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "50%",
+            "veces": 4
+          }
+        ],
+        "radiosDistintos": 1,
+        "sombras": [],
+        "sombrasDistintas": 0,
+        "zIndex": []
+      },
+      "movimiento": {
+        "transiciones": [],
+        "transicionesDistintas": 0,
+        "hojasLeidas": 0,
+        "unidades": {
+          "em": 0,
+          "rem": 0,
+          "px": 0,
+          "clamp": 0,
+          "vw": 0
+        },
+        "keyframesDeclarados": 0,
+        "transitionAll": 0,
+        "tieneReducedMotion": false,
+        "breakpointsPx": []
+      },
+      "scroll": {
+        "pegados": []
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 2,
+        "ctasTop": [
+          {
+            "texto": "Cloudflare",
+            "veces": 1
+          },
+          {
+            "texto": "Privacy",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 1,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 1,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 3,
+        "objetivosMenores44px": 2,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 0,
+          "nav": 0,
+          "main": 0,
+          "footer": 0
+        },
+        "contrastes": [],
+        "fondosTranslucidosOmitidos": 0
+      },
+      "rendimiento": {
+        "pesoTotalKb": 1162.4,
+        "porTipoKb": {
+          "document": 545.6,
+          "script": 613.5,
+          "xhr": 0,
+          "fetch": 0,
+          "image": 3.3
+        },
+        "pedidos": {
+          "document": 5,
+          "script": 12,
+          "xhr": 5,
+          "fetch": 2,
+          "image": 1
+        },
+        "hostsDistintos": 3,
+        "terceros": [
+          {
+            "host": "challenges.cloudflare.com",
+            "pedidos": 10
+          }
+        ],
+        "fuentesCargadas": []
+      },
+      "seo": {
+        "titulo": "Just a moment...",
+        "descripcion": "",
+        "canonical": null,
+        "og": 0,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 900,
+        "alturaPantallas": 1,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 2
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "main-wrapper FGnL3",
+          "altoPx": 830,
+          "altoPantallas": 0.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "pos.toasttab.com",
+          "cta": "",
+          "imagenes": 1
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "main-content",
+          "altoPx": 244,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "pos.toasttab.com",
+          "cta": "",
+          "imagenes": 1
+        }
+      ],
+      "encabezados": {
+        "total": 3,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "pos.toasttab.com"
+          },
+          {
+            "nivel": 2,
+            "texto": "Performing security verification"
+          },
+          {
+            "nivel": 2,
+            "texto": "Verification successful. Waiting for pos.toasttab.com to respond"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "12px / lh 1.50 / ls normal / w 400",
+            "veces": 5
+          },
+          {
+            "valor": "24px / lh 1.25 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "16px / lh 1.15 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "40px / lh 1.25 / ls normal / w 600",
+            "veces": 1
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "system-ui",
+            "veces": 10
+          },
+          {
+            "valor": "monospace",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(49, 49, 49)",
+            "veces": 9
+          },
+          {
+            "valor": "rgb(0, 0, 238)",
+            "veces": 2
+          }
+        ],
+        "fondos": [],
+        "escalaEspaciado": [
+          {
+            "valor": "32px",
+            "veces": 4
+          },
+          {
+            "valor": "16px",
+            "veces": 2
+          },
+          {
+            "valor": "8px",
+            "veces": 2
+          },
+          {
+            "valor": "128px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "50%",
+            "veces": 4
+          }
+        ],
+        "radiosDistintos": 1,
+        "sombras": [],
+        "sombrasDistintas": 0,
+        "zIndex": []
+      },
+      "movimiento": {
+        "transiciones": [],
+        "transicionesDistintas": 0,
+        "hojasLeidas": 0,
+        "unidades": {
+          "em": 0,
+          "rem": 0,
+          "px": 0,
+          "clamp": 0,
+          "vw": 0
+        },
+        "keyframesDeclarados": 0,
+        "transitionAll": 0,
+        "tieneReducedMotion": false,
+        "breakpointsPx": []
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 0,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 0,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 0,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 0,
+            "conTransform": 0,
+            "navFija": false
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": false,
+        "posicionesDistintas": 1,
+        "pegados": []
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 2,
+        "ctasTop": [
+          {
+            "texto": "Cloudflare",
+            "veces": 1
+          },
+          {
+            "texto": "Privacy",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 1,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 1,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 3,
+        "objetivosMenores44px": 2,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 0,
+          "nav": 0,
+          "main": 0,
+          "footer": 0
+        },
+        "contrastes": [],
+        "fondosTranslucidosOmitidos": 0
+      },
+      "rendimiento": {
+        "pesoTotalKb": 1153.3,
+        "porTipoKb": {
+          "document": 535.2,
+          "script": 610.5,
+          "xhr": 0,
+          "fetch": 0,
+          "image": 7.6
+        },
+        "pedidos": {
+          "document": 7,
+          "script": 18,
+          "xhr": 8,
+          "fetch": 2,
+          "image": 2
+        },
+        "hostsDistintos": 3,
+        "terceros": [
+          {
+            "host": "challenges.cloudflare.com",
+            "pedidos": 12
+          }
+        ],
+        "fuentesCargadas": []
+      },
+      "seo": {
+        "titulo": "Just a moment...",
+        "descripcion": "",
+        "canonical": null,
+        "og": 0,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 4,
+    "conTransicion": 0
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}
