@@ -13,7 +13,7 @@ const ENTRADA = CHATBOT_STACKS[0];
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: "Chatbot de WhatsApp — tres stacks, precio publicado | Onia",
-  description: `Tres stacks de WhatsApp: recordatorios que no se olvidan, IA que responde 24/7 e IA que agenda sola. Desde Bs ${fmtBs(ENTRADA.setup)} de instalación + Bs ${fmtBs(ENTRADA.mensual)}/mes. Los requisitos, a la vista antes de contratar. Hecho en Bolivia.`,
+  description: `Chatbot de WhatsApp con IA: responde, recuerda citas y cobros, y capta 24/7. Bs ${fmtBs(ENTRADA.setup)} de instalación + Bs ${fmtBs(ENTRADA.mensual)}/mes + Meta. Los requisitos, a la vista antes de contratar. Hecho en Bolivia.`,
   alternates: { canonical: "/chatbot" },
   openGraph: {
     type: "website",
@@ -46,7 +46,7 @@ const JSON_LD = {
       name: "Chatbot de WhatsApp para negocios",
       serviceType: "Automatización de WhatsApp con inteligencia artificial",
       description:
-        "Tres stacks de WhatsApp: N1 recordatorios de cita y cobro con reglas fijas; N2 IA que responde, califica y deriva 24/7; N3 IA que agenda, crea tareas y hace seguimiento.",
+        "Chatbot de WhatsApp con IA: responde con el contenido real del negocio, recuerda citas y cobros, califica y deriva 24/7. Lo que salga del alcance se cotiza a medida.",
       provider: { "@type": "Organization", name: "Onia", url: `${SITE_URL}/` },
       areaServed: { "@type": "Country", name: "Bolivia" },
       url: `${SITE_URL}/chatbot`,
@@ -92,7 +92,7 @@ export default function ChatbotPage() {
           <div className="container">
             <p className="kicker">Chatbot WhatsApp</p>
             <h1 className="h2">
-              Tres stacks de WhatsApp. Elegís el que resuelve tu problema.
+              Un solo nivel, con IA. Lo que salga del alcance se cotiza a medida.
             </h1>
             <p className="lead">
               No es un menú de funciones sueltas: cada stack resuelve una cosa

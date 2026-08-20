@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { Hero } from "@/components/landing/hero";
-import { HowItWorks } from "@/components/landing/how-it-works";
-import { Features } from "@/components/landing/features";
-import { ChatbotCta } from "@/components/landing/chatbot-cta";
-import { Pricing } from "@/components/landing/pricing";
-import { ComparativaTeaser } from "@/components/landing/comparativa-teaser";
-import { Closing } from "@/components/landing/closing";
-import { Faq, FAQS } from "@/components/landing/faq";
-import { BleedWordmark } from "@/motion";
-import { MobileBar } from "@/components/landing/mobile-bar";
-import styles from "@/components/landing/landing.module.css";
+import { HeroV2 } from "@/components/landing-v2/hero";
+import { BandaV2 } from "@/components/landing-v2/banda";
+import { RubrosV2 } from "@/components/landing-v2/rubros";
+import { AgentesV2 } from "@/components/landing-v2/agentes";
+import { ChatbotV2 } from "@/components/landing-v2/chatbot";
+import { PreciosV2 } from "@/components/landing-v2/precios";
+import { HonestidadV2 } from "@/components/landing-v2/honestidad";
+import { CierreV2 } from "@/components/landing-v2/cierre";
+import styles from "@/components/landing-v2/v2.module.css";
 
 const SITE_URL = "https://onia.com.bo/";
 const TITLE = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";
@@ -99,35 +97,27 @@ const JSON_LD = {
         availability: "https://schema.org/InStock",
       })),
     },
-    {
-      "@type": "FAQPage",
-      // Mismo texto que la seccion <Faq/> — una sola fuente (FAQS).
-      mainEntity: FAQS.map((item) => ({
-        "@type": "Question",
-        name: item.q,
-        acceptedAnswer: { "@type": "Answer", text: item.a },
-      })),
-    },
   ],
 };
 
 /**
- * Landing Onia Platform — rediseno post-hero pedido por Sergio (2026-08-18,
- * "se ven demasiado simples, demasiada cara de IA"). El hero es el aprobado
- * y no se toca. Orden de secciones:
+ * Landing Onia Platform — la v2 promovida a home (recambio 2026-08-20, pedido
+ * por Sergio: "hiciste el recambio de la landing? ya te di todo lo que
+ * queria").
  *
- *   hero (promesa + una pantalla)
- *   -> como funciona (3 pasos con numerales editoriales; el 03 se TOCA)
- *   -> modulos (bento desigual sobre verde hondo; los rubros, banda de estado)
- *   -> chatbot (seccion propia: telefono vivo + escalera N1-N3 con precios)
- *   -> precios (Pro en tinta; listas largas plegadas, nada borrado)
- *   -> comparativa (teaser en tinta de /comparativa, con fuentes y fecha)
- *   -> preguntas (dos columnas, aside sticky con salida a WhatsApp)
- *   -> cierre (foto a sangre + display + las tres garantias sobre hairline).
+ * Por que gano la v2 sobre el rediseno v1 (los dos convivieron para comparar):
+ *  1. Esta construida sobre las LEYES MEDIDAS de Fanvue (tipografia lh<=1,
+ *     tracking proporcional, ritmo anclado, secciones de UN mensaje) — el
+ *     canon de web-factory/WEB_FACTORY_PATTERN_BANK_2026.md.
+ *  2. Densidad de MEDIA REAL: 29 imagenes de produccion contra 8 maquetas
+ *     dibujadas en HTML de la v1.
+ *  3. Sus precios citan la fuente que cobra (lib/pricing y chatbot-precios,
+ *     corregido hoy al nivel unico ratificado 2026-08-15 — la v1 publicaba la
+ *     escalera N1/N2/N3 RETIRADA).
  *
- * La garantia ya no es seccion aparte: sus tres promesas viven en el cierre,
- * al lado del boton que pide el salto. La comparacion completa sigue en
- * /comparativa; el home muestra el teaser con los datos de lib/proof.ts.
+ * La v1 queda en git (components/landing/*) y la ruta /v2 se elimina: la
+ * landing es UNA, y dos versiones vivas del mismo mensaje es el bug de las
+ * cuatro listas de precios con otra cara.
  */
 export default function Home() {
   return (
@@ -136,37 +126,29 @@ export default function Home() {
         Saltar al contenido
       </a>
       {/*
-        Sin JS no puede quedar una seccion en blanco (regla del mockup y
-        anti-referencia de la casa: nada de contenido escondido detras de una
-        animacion). Los reveal salen del servidor con opacity:0 en linea, asi
-        que el unico que puede ganarles es un !important.
+        Sin JS ninguna seccion puede quedar en blanco. Los <Reveal> salen del
+        servidor con `opacity:0` en linea, asi que el unico que les gana es un
+        !important. Acotado a esta pagina.
       */}
       <noscript>
         <style>{`.${styles.page} [style*="opacity:0"]{opacity:1!important;transform:none!important}`}</style>
       </noscript>
-      <SiteHeader />
-      <main id="contenido" className={styles.page}>
-        <Hero />
-        <HowItWorks />
-        <Features />
-        <ChatbotCta />
-        <Pricing />
-        <ComparativaTeaser />
-        <Faq />
-        <Closing />
-        {/* Remate editorial: el nombre a escala descarada, cortado por el
-            borde — una sola vez por pagina, siempre al final (doctrina del
-            componente). */}
-        <div className={styles.wordmarkStrip}>
-          <BleedWordmark className={styles.wordmark} />
-        </div>
-      </main>
-      <SiteFooter />
-      <MobileBar />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
       />
+      <SiteHeader />
+      <main id="contenido" className={styles.page}>
+        <HeroV2 />
+        <BandaV2 />
+        <RubrosV2 />
+        <AgentesV2 />
+        <ChatbotV2 />
+        <PreciosV2 />
+        <HonestidadV2 />
+        <CierreV2 />
+      </main>
+      <SiteFooter />
     </>
   );
 }

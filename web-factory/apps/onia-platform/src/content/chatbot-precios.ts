@@ -1,34 +1,29 @@
 /**
- * Chatbot de WhatsApp — los 3 stacks vigentes.
+ * Chatbot de WhatsApp — UN nivel con IA + trabajo a medida.
  *
- * FUENTE ÚNICA de los montos del chatbot: /chatbot, el configurador y el
- * resumen que se manda por WhatsApp leen de este archivo.
+ * FUENTE ÚNICA de los montos del chatbot en la web: /chatbot, el configurador,
+ * las landings y el resumen que se manda por WhatsApp leen de este archivo.
+ * Y este archivo copia a `onia-platform/lib/pricing.ts → WHATSAPP_ADDON`
+ * (**ratificado 2026-08-15**), que es el código que cobra.
  *
- * Los precios salen del código que cobra: `onia-platform/lib/pricing.ts` →
- * `WHATSAPP_ADDON.tiers` (ratificado 2026-07-09, reemplaza el add-on anterior
- * de setup 650 + 350/mes):
- *   N1 Recordatorios ....... Bs 300 inst. + Bs 200/mes · `ai: false`
- *   N2 IA responde y capta . Bs 1.500 inst. + Bs 550/mes + Meta · `star: true`
- *   N3 IA opera ............ desde Bs 3.500 inst. + Bs 900/mes + Meta
- * Cupo operativo: 200 mensajes salientes/mes, IGUAL para los tres niveles y
- * fail-closed — al llegar corta el envío (`WHATSAPP_ADDON.meta
- * .operationalMonthlyLimit` + `lib/plan-limits.ts`). Markup sobre Meta: 20%
- * (`WHATSAPP_ADDON.meta.markupPct`).
+ * ⚠️ Corregido 2026-08-20. Acá vivía la escalera N1/N2/N3 (300+200 / 1.500+550 /
+ * 3.500+900), RETIRADA en esa ratificación — y las dos landings y /chatbot la
+ * siguieron publicando durante cinco días. Por qué se retiró (del propio
+ * pricing.ts): los 3 niveles eran INFACTURABLES — la organización guarda
+ * `whatsappAddon` como Boolean, no existe `whatsappTier`, y el cupo era
+ * idéntico en los tres; el equilibrio real es el SOPORTE HUMANO, no el volumen
+ * de mensajes; y la IA es una fracción del costo (medido 2026-08-20: 0,4–2,2 %)
+ * — el flete de Meta es lo caro.
  *
- * Se sacó lo que no existe: los add-ons "Cobros con QR" (gatewayEnabled es
- * false en los cinco planes) y "Notas de voz" (cero manejo de audio en el
- * webhook de WhatsApp del producto), y el precio de Bs 350/mes + Bs 1.000 de
- * instalación, retirado el 2026-07-09.
- *
- * No se publica tarifa por mensaje de Meta: el CSV oficial no se pudo
- * verificar y los bolivianos que hay en el código están mal calculados.
+ * Referencia de valor: Bs 1.490 es el 45 % del salario mínimo 2026 (Bs 3.300,
+ * DS 5516), sin aguinaldo ni domingos, por algo que atiende 24/7.
  */
 
-export type StackId = "n1" | "n2" | "n3";
+export type StackId = "ia";
 
 export interface ChatbotStack {
   readonly id: StackId;
-  /** N1 / N2 / N3 — la escalera. */
+  /** Etiqueta corta de la celda ("IA"). Ya no hay escalera. */
   readonly nivel: string;
   readonly nombre: string;
   readonly paraQuien: string;
@@ -47,90 +42,49 @@ export interface ChatbotStack {
 
 export const CHATBOT_STACKS: readonly ChatbotStack[] = [
   {
-    id: "n1",
-    nivel: "N1",
-    nombre: "No se me olvida nadie",
-    paraQuien: "El que tiene agenda y pierde turnos: consultorio chico, veterinaria, taller.",
-    resuelve:
-      "El no-show y la cobranza que se olvida. Plata que ya estaba ganada y se pierde.",
-    incluye: [
-      "Recordatorios automáticos de cita y de cobro, con reglas fijas",
-      "Los 200 mensajes del mes van incluidos: acá no hay factura de Meta aparte",
-      "Configuración del número y plantillas aprobadas por Meta",
-    ],
-    noIncluye: [
-      "No conversa: avisa. No tiene IA",
-      "No responde consultas ni califica clientes",
-    ],
-    necesitasVos: [
-      "Un número que Meta pueda verificar",
-      "La agenda cargada en Onia — sin agenda no hay qué recordar",
-    ],
-    setup: 300,
-    setupDesde: false,
-    mensual: 200,
-    metaAparte: false,
-  },
-  {
-    id: "n2",
-    nivel: "N2",
+    id: "ia",
+    nivel: "IA",
     nombre: "No pierdo al que escribe",
-    paraQuien: "El que recibe consultas y las está perdiendo fuera de horario.",
+    paraQuien:
+      "El que recibe consultas y las está perdiendo fuera de horario: consultorio, comercio, importadora.",
     resuelve:
       "El mensaje de las 11 de la noche, el del domingo, el del feriado. El que preguntó, nadie contestó y se fue a otro lado.",
     incluye: [
       "IA que responde, entrenada con el contenido real de tu negocio",
+      "Recordatorios automáticos de cita y de cobro",
       "Califica al cliente y te deriva al humano con el contexto",
-      "Responder es gratis: toda respuesta dentro de las 24 h desde que el cliente escribe no la cobra Meta",
-      "Hasta 200 mensajes salientes por mes (los que inicia tu negocio)",
+      "500 conversaciones por mes incluidas",
+      "Configuración del número y plantillas aprobadas por Meta",
     ],
     noIncluye: [
-      "No agenda solo ni crea tareas — eso es el N3",
       "No cobra con tarjeta: la pasarela no existe en el sistema todavía",
+      "Lo que salga de este alcance (integraciones, flujos propios) se cotiza a medida",
     ],
     necesitasVos: [
-      "Un número dedicado para el bot",
+      "Un número que Meta pueda verificar",
       "Tus preguntas frecuentes con tus respuestas reales",
       "Alguien que atienda lo que el bot derive",
     ],
     setup: 1500,
     setupDesde: false,
-    mensual: 550,
+    mensual: 1490,
     metaAparte: true,
     destacado: true,
   },
-  {
-    id: "n3",
-    nivel: "N3",
-    nombre: "El chat opera",
-    paraQuien:
-      "El que ya tiene volumen y a quien le sale más caro el tiempo del equipo que el bot.",
-    resuelve:
-      "El tiempo de la recepcionista. No es que no contesten: contestar, agendar y hacer seguimiento consume una persona entera.",
-    incluye: [
-      "Todo lo del N2",
-      "Agenda sola dentro de las reglas que vos escribís",
-      "Crea tareas y hace seguimiento",
-    ],
-    noIncluye: [
-      "No cobra con tarjeta: la pasarela no existe en el sistema todavía",
-      "No decide nada fuera de las reglas que acordamos por escrito",
-    ],
-    necesitasVos: [
-      "Todo lo del N2",
-      "La agenda y los servicios cargados en Onia",
-      "Reglas escritas de qué puede agendar solo y qué no",
-      "Plan Pro o superior",
-    ],
-    setup: 3500,
-    setupDesde: true,
-    mensual: 900,
-    metaAparte: true,
-  },
 ] as const;
 
-/** Mensajes salientes por mes. Mismo tope para los tres niveles; al llegar, corta. */
-export const CUPO_MENSUAL = 200;
+/** El único stack. Alias para las pantallas que muestran una sola tarjeta. */
+export const CHATBOT_PLAN = CHATBOT_STACKS[0];
+
+/**
+ * Lo que no entra en el nivel único no se infla a un "N3": se cotiza a medida.
+ * Texto compartido para que las pantallas no lo redacten cada una distinto.
+ */
+export const A_MEDIDA =
+  "¿Necesitás flujos propios, integraciones o más volumen? Se cotiza a medida.";
+
+/** Conversaciones al mes incluidas (WHATSAPP_ADDON: 500). Al llegar, corta. */
+export const CUPO_MENSUAL = 500;
 
 /** Markup sobre el costo que cobra Meta (WHATSAPP_ADDON.meta.markupPct). */
 export const META_MARKUP_PCT = 20;
@@ -139,7 +93,7 @@ export function fmtBs(v: number): string {
   return Math.round(v).toLocaleString("es-BO");
 }
 
-/** "Bs 1.500 de instalación + Bs 550/mes" — una sola forma de decir el precio. */
+/** "Bs 1.500 de instalación + Bs 1.490/mes" — una sola forma de decir el precio. */
 export function precioStack(stack: ChatbotStack): string {
   const setup = `${stack.setupDesde ? "Desde Bs " : "Bs "}${fmtBs(stack.setup)}`;
   return `${setup} de instalación + Bs ${fmtBs(stack.mensual)}/mes${

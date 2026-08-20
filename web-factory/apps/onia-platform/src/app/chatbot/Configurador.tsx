@@ -24,7 +24,7 @@ import styles from "./configurador.module.css";
  * ningún número.
  */
 export function Configurador() {
-  const [elegido, setElegido] = useState<StackId>("n2");
+  const [elegido, setElegido] = useState<StackId>("ia");
   const stack =
     CHATBOT_STACKS.find((s) => s.id === elegido) ?? CHATBOT_STACKS[0];
 
@@ -153,7 +153,7 @@ export function Configurador() {
             instalación, una sola vez.
           </p>
           <p className={styles.ctaMicro}>
-            Envía hasta {CUPO_MENSUAL} mensajes salientes por mes; al llegar al
+            Envía hasta {CUPO_MENSUAL} conversaciones por mes; al llegar al
             tope se frena hasta el mes siguiente.{" "}
             {stack.metaAparte
               ? `Responder a quien te escribe es gratis. Cada mensaje que tu negocio inicia lo cobra Meta y se factura aparte, a su costo más ${META_MARKUP_PCT}%.`

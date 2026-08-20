@@ -5,7 +5,8 @@ import styles from "./landing.module.css";
 /**
  * Chatbot de WhatsApp — seccion propia (antes era una card perdida en el
  * carrusel). Split editorial: el telefono con la conversacion VIVA a la
- * izquierda, la escalera N1-N2-N3 como celdas de pelo a la derecha.
+ * izquierda, la tarjeta del nivel unico a la derecha (la escalera N1-N2-N3
+ * se retiro el 2026-08-15; ver src/content/chatbot-precios.ts).
  *
  * Reglas que no se negocian:
  *  - Los montos salen de src/content/chatbot-precios.ts (fuente unica).
