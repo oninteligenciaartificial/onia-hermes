@@ -1,0 +1,106 @@
+{
+  "title": "Lo que tu competencia hace mientras vos contestás WhatsApp",
+  "caption": "Las horas que pasás contestando el chat no desaparecen: se convierten en la ventaja de otro. Mientras vos respondés '¿cuánto cuesta?' por décima vez, otro dueño está mirando sus números, ajustando precios o yendo a buscar al cliente grande. No trabaja más que vos — trabaja en otra cosa. Guardá el test del slide 6 y hacelo mañana: anotá en qué se te fue cada media hora, y contá cuántas fueron horas de dueño.",
+  "hashtags": [
+    "#negocios",
+    "#pymes",
+    "#bolivia",
+    "#santacruz",
+    "#emprender",
+    "#automatizacion",
+    "#productividad"
+  ],
+  "comment_trigger": "",
+  "cta": "",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "La cuenta",
+      "headline": "Mientras vos contestás, tu competencia *decide*",
+      "body": "Lo que hace un dueño cuando suelta lo operativo.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Dos escritorios en contraste: uno enterrado en chats, otro mirando un tablero.",
+      "alt_text": "Mientras vos contestás, tu competencia decide"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El costo",
+      "headline": "Tu hora es la más *cara* del negocio",
+      "body": "Y la estás gastando en la tarea más barata: repetir respuestas. Contá cuántas horas al día se te van en el chat y multiplicá por lo que vale tu hora.",
+      "callout": "La cuenta es tuya: tus horas, tu precio ↘",
+      "save_worthy": false,
+      "visual_prompt": "Reloj y billetes, alto contraste.",
+      "alt_text": "Tu hora es la más cara del negocio"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Por qué pasa",
+      "headline": "Nadie te avisó cuándo *soltar*",
+      "body": "Contestar todo vos era lo correcto al principio. El negocio creció y las preguntas crecieron con él. No es un problema de esfuerzo: es que la tarea cambió de tamaño y el método no.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Un negocio chico volviéndose grande, la misma persona en el medio.",
+      "alt_text": "Nadie te avisó cuándo soltar"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Mientras tanto 1",
+      "headline": "El que soltó mira sus *números*",
+      "body": "Sabe qué producto deja margen y cuál solo mueve caja. Vos también tenés esos datos — están en el chat y en el cuaderno, donde no se pueden leer.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Tablero de números limpio vs papeles sueltos.",
+      "alt_text": "El que soltó mira sus números"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Mientras tanto 2",
+      "headline": "Sale a *buscar* clientes",
+      "body": "Visita, cotiza, cierra. El que está pegado al teléfono solo atiende a los que llegan solos. El que no, va por los que compran más.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Puerta abierta, dueño saliendo a la calle.",
+      "alt_text": "Sale a buscar clientes"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Framework",
+      "headline": "El test de la *agenda*",
+      "body": "Mañana anotá en qué usaste cada media hora. Marcá las que SOLO vos podés hacer: decidir, negociar, cerrar. Lo que quede sin marcar es lo primero que se automatiza o se delega.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Tarjeta framework con agenda marcada.",
+      "alt_text": "El test de la agenda"
+    },
+    {
+      "number": 7,
+      "role": "point",
+      "pill": "La pregunta",
+      "headline": "¿Cuántas horas de *dueño* tuviste hoy?",
+      "body": "No las de atender: las de decidir. Restale al día las horas de chat, de caja y de apagar incendios. Lo que queda es lo que tu competencia usa entero.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Un día partido en bloques, casi todos ocupados.",
+      "alt_text": "Cuántas horas de dueño tuviste hoy"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "Guardalo",
+      "headline": "Hacé el test *mañana*",
+      "body": "*Guardalo* y anotá tu día de mañana, media hora por media hora. La cuenta de las horas de dueño la hacés vos — y suele doler.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "CTA fuerte.",
+      "alt_text": "Hacé el test mañana"
+    }
+  ],
+  "job": "educacional"
+}

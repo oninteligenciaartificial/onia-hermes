@@ -1,0 +1,106 @@
+{
+  "title": "Las 5 preguntas que te hacen siempre (y podés dejar de contestar)",
+  "caption": "Precio, horario, ubicación, stock y formas de pago. Las contestás todos los días, varias veces, desde hace años. Ninguna necesita que seas vos: una página con la info a la vista y un botón de WhatsApp las contesta solas, y tu chat queda para los que ya quieren comprar. Guardá el checklist del slide 6 y contame acá abajo: ¿cuál de las 5 te escriben más?",
+  "hashtags": [
+    "#negocios",
+    "#pymes",
+    "#bolivia",
+    "#santacruz",
+    "#emprender",
+    "#whatsapp",
+    "#automatizacion"
+  ],
+  "comment_trigger": "",
+  "cta": "",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "El chat",
+      "headline": "Las *5 preguntas* que contestás todos los días",
+      "body": "Y que podrías no contestar nunca más.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Chat repetido: la misma pregunta cinco veces.",
+      "alt_text": "Las 5 preguntas que contestás todos los días"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El costo",
+      "headline": "Cada una parece *un minuto*",
+      "body": "Contá cuántas veces respondiste hoy '¿cuánto cuesta?' y multiplicá por los días del mes: eso es tiempo tuyo. Y el que pregunta y no recibe respuesta rápida compra donde sí le contestan.",
+      "callout": "Abrí tu chat y contá las de hoy ↘",
+      "save_worthy": false,
+      "visual_prompt": "Minutos sumándose hasta volverse horas.",
+      "alt_text": "Cada una parece un minuto"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Por qué pasa",
+      "headline": "La info vive solo en tu *cabeza*",
+      "body": "La gente no pregunta por molestar: pregunta porque no hay dónde mirar. Si el precio, el horario y la ubicación no están publicados, el único canal sos vos.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Persona como único punto de información del negocio.",
+      "alt_text": "La info vive solo en tu cabeza"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Se contestan solas 1",
+      "headline": "Precio y stock, *publicados*",
+      "body": "Un catálogo con precios a la vista contesta '¿cuánto cuesta?' y '¿hay?' sin que toques el teléfono. El que mira y le sirve te escribe para comprar, no para preguntar.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Catálogo simple con precios visibles.",
+      "alt_text": "Precio y stock publicados"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Se contestan solas 2",
+      "headline": "Horario, ubicación y *pago*, una sola vez",
+      "body": "Se escriben una vez en tu página y quedan contestadas para siempre. El botón de WhatsApp queda para lo que sí vale tu tiempo: cerrar la venta.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Página simple con los tres datos fijos y un botón.",
+      "alt_text": "Horario, ubicación y pago, una sola vez"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Framework",
+      "headline": "El checklist de las *5*",
+      "body": "1) ¿Cuánto cuesta? 2) ¿Qué horario tienen? 3) ¿Dónde están? 4) ¿Hay stock? 5) ¿Cómo pago? Al lado de cada una escribí DÓNDE está publicada. Si la respuesta es 'en ningún lado', esa te cuesta tiempo todos los días.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Checklist de 5 con columna 'dónde está publicada'.",
+      "alt_text": "El checklist de las 5"
+    },
+    {
+      "number": 7,
+      "role": "point",
+      "pill": "La pregunta",
+      "headline": "¿Cuántas seguís contestando *a mano*?",
+      "body": "De las 5, marcá las que todavía salen de tu teclado. Cada una es una interrupción por cliente, todos los días, hasta que la publiques.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Teclado con las mismas frases gastadas.",
+      "alt_text": "Cuántas seguís contestando a mano"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "Contame",
+      "headline": "¿Cuál te escriben *más*?",
+      "body": "Contame acá abajo cuál de las 5 te llega más veces al día. Y *guardá* el checklist para tacharlas una por una.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "CTA de pregunta.",
+      "alt_text": "Cuál te escriben más"
+    }
+  ],
+  "job": "engagement"
+}
