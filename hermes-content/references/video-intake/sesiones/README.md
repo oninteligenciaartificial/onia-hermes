@@ -45,6 +45,15 @@ está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, 
 
 ---
 
+## ¿Cuáles ya se usaron?
+
+**[ESTADO_DE_LOS_PROMPTS.md](../ESTADO_DE_LOS_PROMPTS.md)** — verificado contra el repo el
+2026-08-20, prompt por prompt: 23 ejecutados, 12 parciales, 3 bloqueados y **22 sin usar**.
+Ojo: este worktree está atrasado respecto de `origin/main`, así que antes de encolar algo
+hay que mirar `main`, no el checkout local.
+
+---
+
 ## El orden entre sesiones, si hay que elegir
 
 1. **`chatbot` → D1** y **`onia-plattform` → J4.** Los dos únicos defectos en producción:
