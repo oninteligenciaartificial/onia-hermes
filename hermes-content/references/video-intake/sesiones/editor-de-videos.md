@@ -120,6 +120,61 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## J3 · El anuncio sin cara y sin voz — el formato más barato que tenemos
+
+```text
+Contexto: un reel de 33 s es un anuncio de marca completo SIN UNA SOLA CARA y SIN LOCUCION.
+Reconstruccion beat por beat en
+hermes-content/references/video-intake/2026-08-20-sintesis-lote-13.md
+
+POR QUE IMPORTA MAS QUE CUALQUIER OTRO FORMATO DEL CORPUS: sin cara = SIN EL PROBLEMA DE
+CONSISTENCIA DE ROSTRO, que es exactamente lo que mas nos frena en video generativo. En 30 items
+analizados, ninguno resolvio sostener una cara IA entre planos. Este formato lo esquiva por
+diseno.
+
+EL MOLDE, 7 beats en 33 s:
+  0-5 s   GANCHO CINETICO: contrapicado pegado al piso, plano PARCIAL (piernas, torso), un
+          objeto cruzando el cuadro en whip con motion blur. Sin cara, sin producto, sin texto.
+          El gancho es MOVIMIENTO, no informacion.
+  5-10 s  BEAT SURREAL: una imagen imposible pero fisica (lee como prop practico, no como
+          generado). Es el "wait, what" que compra los segundos siguientes.
+  10-14 s LA ACCION DE PRODUCTO: una sola en toda la pieza. Un vertido, un encendido, un clic.
+  14-19 s ASPIRACION: vende el MUNDO, no el producto. Gente, lugar, luz.
+  19-24 s HERO A CONTRALUZ: el producto a hora dorada, con flare.
+  24-29 s BODEGON CENITAL: el producto terminado rodeado de los objetos del mundo.
+  29-33 s PLACA: el logo, translucido, sobre el ultimo plano.
+
+LAS 5 REGLAS PORTABLES:
+  1. NINGUN plano muestra una cara. Solo manos, piernas, torso y objetos.
+  2. La marca aparece UNA vez, en el ultimo segundo. El producto recien al tercio.
+     Orden: mundo -> producto -> marca.
+  3. La cohesion NO viene de un relato ni de un personaje: viene de un HILO DE COLOR repetido
+     plano a plano. Un color se pasa de objeto en objeto como una posta.
+  4. CARRIER ELEMENT: un mismo elemento grafico cruza el encuadre en varios planos (en el
+     original, la sombra de una red). Es el pegamento entre tomas que no comparten nada mas.
+  5. Sin voz. La musica lleva el ritmo y los cortes caen con ella.
+
+Tarea:
+1. Adaptá el molde a UN producto nuestro o de un cliente. Escribí los 7 beats con su duracion y
+   que se ve en cada uno.
+2. Defini el HILO DE COLOR y el CARRIER ELEMENT antes de escribir un solo prompt. Sin esos dos,
+   los 7 planos no van a pegar.
+3. Deci que planos se pueden filmar de verdad (manos y objetos con un celular es barato) y cuales
+   necesitan generacion. Cuantos menos generados, mejor.
+4. Estimá el costo en creditos de los generados y ponelo al lado.
+
+NO GENERES. Entrega el guion de 7 beats, el hilo de color, el carrier element y el costo.
+
+Dos gates que no se saltean:
+- La REGLA DE ORO: tabla de cortes + preview 360p a Sergio ANTES de aplicar cualquier corte.
+- Si lleva texto en pantalla, el gate de ortografia antes de quemarlo.
+
+LISTO = guion de 7 beats con hilo de color y carrier element definidos, la division entre filmado
+y generado, y el costo estimado. Cero generaciones.
+```
+
+---
+
 ## H3 · El molde de anuncio en 6 actos, medido
 
 ```text

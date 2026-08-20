@@ -120,6 +120,46 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## J4 · Los 6 tiers construidos y apagados
+
+```text
+Contexto: analizando un reel sobre empaquetado de precios B2B, el analisis fue a verificar
+contra nuestro repo si teniamos la entidad, y encontro un defecto de produccion:
+
+  business-tiers.json tiene 6 tiers definidos.
+  tierMeetsLimits() esta implementada y probada con tests y validador propio.
+  Y tiene CERO callers fuera de onia-core.
+  Mientras tanto, la landing usa un CAMPO DE TEXTO LIBRE para el mismo dato.
+
+Sintesis donde salio: hermes-content/references/video-intake/2026-08-20-sintesis-lote-13.md
+
+Esto es, textual, la definicion de "construido != terminado" del CLAUDE.md, y es la SEGUNDA vez
+que se encuentra el mismo patron (la primera fue la capa multi-rubro con PLATFORM_LAYER vacio en
+produccion). No es una idea de un video: es trabajo hecho con valor cero.
+
+Tarea:
+1. VERIFICALO VOS PRIMERO. Abri business-tiers.json, contá los tiers, y buscá los callers de
+   tierMeetsLimits() en todo el repo, no solo en onia-core. Si el analisis se equivoco, decilo
+   y pará ahi. Si tiene razon, seguí.
+2. Segui el dato en produccion: cuando alguien se registra por la landing, ¿donde termina lo que
+   escribe en ese campo de texto libre? ¿Se mapea a un tier o queda como string suelto?
+   Verificalo en la base de produccion, no en el codigo.
+3. Conecta el campo libre al tier. La landing tiene que ofrecer los tiers que EXISTEN, y lo que
+   el usuario elige tiene que ser el mismo dato que tierMeetsLimits() lee.
+4. Si algun tier de los 6 no corresponde a nada vendible hoy, sacalo o marcalo. Seis tiers
+   definidos y ninguno usado es peor que dos usados.
+
+OJO CON LOS PRECIOS: hay varias listas conviviendo en el repo (memoria
+pricing-dentalgest-ratificado menciona 10). Esta tarea NO decide precios: conecta la entidad.
+Si te topas con contradicciones de precio, anotalas y seguí; el precio lo decide Sergio.
+
+LISTO = el registro por la landing escribe un tier real, verificado abriendo la pantalla y
+mirando la fila en la base. Con la lista de callers antes y despues. Si queda detras de un flag
+apagado, NO cuenta como hecho y hay que decirlo.
+```
+
+---
+
 ## I1 · El módulo de onboarding de cliente — dejar de perseguir por WhatsApp
 
 ```text

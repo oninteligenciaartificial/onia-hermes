@@ -120,6 +120,125 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## J1 · DESIGN.md por cliente — el sistema de diseño como archivo del repo
+
+```text
+Contexto: un reel muestra 7 herramientas para que una landing hecha con IA no salga generica, y
+el nucleo real de tres de ellas es UN FORMATO DE ARCHIVO, no una libreria.
+
+EL ARTEFACTO: DESIGN.md. Verbatim del README que se ve en pantalla:
+  "Copy a DESIGN.md into your project, tell your AI agent 'build me a page that looks like this,'
+   and generate high-quality UI that stays visually consistent with the design language"
+  "Built with real design depth - including analyzed patterns, tokens, and rules - for
+   high-quality UI generation, not surface-level outputs"
+  "A collection of DESIGN.md files analyzed by popular brand design systems. Drop one into your
+   project and let coding agents generate a matching UI"
+
+Un markdown por marca, versionado EN EL REPO del proyecto, con tokens (color, tipografia,
+espaciado), patrones analizados y reglas. Sin instalacion, sin dependencia, sin build. No toca el
+runtime: cambia el prompt.
+
+Y el oficio esta en como describen cada sistema — una linea que captura el lenguaje visual:
+  "Nintendo (2001): Y2K console chrome web. Brushed-periwinkle metal panels, amber nav on a
+   slotted carbon bar, outlined Arial-Black box-art type"
+  "Dell (1996): Catalog-era PC retail web. Black page frame, flat color-block ribbon cards,
+   Helvetica-Black over Times Roman"
+  "BMW M: Motorsport automotive. Pure track canvas, M tricolor stripe accents, full-bleed
+   photography"
+Repo publico visible en pantalla: YakAgent/awesome-design-md. Catalogo de 300+ sitios.
+
+LO QUE YA TENEMOS, verificado leyendo ~/.claude/skills (no de memoria):
+- `impeccable` ES LITERALMENTE la herramienta #4 del video, ya instalada, y ya es regla de
+  entrada obligatoria en CLAUDE.md para todo trabajo de UI. El reel la vende como hallazgo y para
+  nosotros es el default desde hace semanas.
+- `design-dna` extrae tokens, estilo y efectos desde imagenes o URLs de referencia a un JSON de
+  3 dimensiones: es funcionalmente un DESIGN.md.
+- `stitch-extract-design-md` y `design-md` tambien estan instaladas.
+Osea: NO hay que construir el generador. Hay que DECIDIR EL FORMATO y usarlo.
+
+Tarea:
+1. Decidi el formato unico de DESIGN.md de web-factory y donde vive: uno por cliente, versionado
+   con el proyecto del cliente. Buscá primero si ya existe algo asi en
+   web-factory/data/references/ antes de crear nada.
+2. Generá el DESIGN.md de UN cliente real que ya tengamos entregado, usando design-dna o
+   stitch-extract-design-md sobre su web. No inventes tokens: extraelos.
+3. Probalo: pedile a un agente que genere una pagina nueva con ese DESIGN.md y compará contra el
+   sitio real. Si no se parece, el formato esta mal, no el agente.
+4. Conectalo al pipeline de learned models que YA existe
+   (web-factory/data/references/reels/models/ + harvester/reels/build-web-models.mjs). Un
+   learned model y un DESIGN.md son casi lo mismo: no armes un segundo sistema al lado.
+
+Este es el error mas caro del preambulo: escribir un doc "al lado" del sistema que ya existe.
+Si terminas con dos formatos que describen lo mismo, la tarea salio mal.
+
+LISTO = un DESIGN.md de un cliente real existe, una pagina generada con el se parece al sitio, y
+esta conectado al pipeline de learned models, no al lado.
+```
+
+---
+
+## J2 · El bucle de práctica de diseño — brief aleatorio, referencia, prototipo
+
+```text
+Contexto: un reel muestra un bucle de practica de diseno completo, y las tres piezas son
+reproducibles hoy sin construir casi nada. Reconstruccion detallada en
+hermes-content/references/video-intake/2026-08-20-sintesis-lote-13.md
+
+(1) EL GENERADOR DE BRIEFS es un ARTIFACT de Claude publicado — no una app aparte. Titulo
+"Random Project Generator", plantilla de dos ranuras "Design a [tipo] For [rubro]", y dos botones:
+"Randomize" y "Go Crazy". El mecanismo de la animacion, leido cuadro a cuadro: RULETA VERTICAL
+tipo slot machine con DOS ranuras INDEPENDIENTES y FRENADO ESCALONADO — la ranura de arriba frena
+primero (valor en negro solido y nitido) mientras la de abajo sigue girando. El desenfoque es de
+MOVIMIENTO en el eje Y, no opacidad. Eso es lo que se porta, no "se ve lindo".
+
+(2) REFERENCIA ANTES DE DISENAR. Antes de tocar nada: un caso de estudio del lider del rubro y un
+tablero de Pinterest. Las pestanas del navegador delatan el resto del metodo: "mesh gradients",
+"mac pointer cursor png", "React Bits Particles". El fondo y el cursor grande de los planos de
+zoom salen de ahi.
+
+(3) EL PROMPT, literal de la pantalla:
+   "I want your help in creating a booking page for car rentals. I want you to go towards the
+    theme of what Uber does aesthetically. Something that Uber is good at in smoothness and user
+    experience to create the best experience for the user with minimal elements and an aesthetic
+    design with modern stylings and typography taken care of the most. Help me with a mobile
+    experience for this layout in light theme. I like the colors where dark and black collide
+    with each other in a nice contrasting way. I also want all the unnecessary elements on that
+    particular step to be hidden. In case there is a car selected, the user can even drop down on
+    that particular car to see what car it is, the model, and everything there. Basically, it
+    should be a nice two- or three-step flow. Let's go ahead and create that. Give me a nice
+    prototype so I can preview it here."
+   Configuracion visible en el compositor: modelo Opus 5, esfuerzo "high".
+
+EL MOLDE DEL PROMPT, que es el hallazgo:
+  a. nombra un PRODUCTO REAL como referencia estetica en vez de adjetivos ("what Uber does
+     aesthetically"). Delega el estilo en algo que el modelo ya conoce.
+  b. dice el DISPOSITIVO y el TEMA (movil, light theme)
+  c. da una regla de color en lenguaje humano, no en hex
+  d. pide ESCONDER lo innecesario en cada paso — o sea, define jerarquia por sustraccion
+  e. nombra UNA interaccion concreta (el desplegable del auto elegido)
+  f. acota el flujo a 2-3 pasos
+  g. cierra pidiendo un prototipo previsualizable
+
+Tarea:
+1. Armá el generador de briefs como Artifact: dos ranuras (tipo de pantalla x rubro), con los
+   rubros REALES que vendemos en Bolivia. La ruleta con frenado escalonado y blur direccional.
+   Una tarde, costo cero.
+2. Escribí la plantilla de prompt con los 7 puntos de arriba, para reusar en cada practica.
+3. Corré el bucle UNA vez de punta a punta y guardá el resultado en la galeria interna
+   (web-factory/data/references/design-sources/gallery-examples/). Cargá `impeccable` y
+   `web-design-guidelines` ANTES de generar, y `ui-ux-pro-max` para juzgar el resultado.
+4. Exigí las >=4 Required Qualities de la regla anti-template. Si no las cumple, no entra a la
+   galeria.
+
+Esto NO es una prioridad de venta: es entrenamiento y banco de referencias. Si hay algo de
+web-factory que convierta (G4, C1, J1), va primero. Deci que dejaste de lado por hacer esto.
+
+LISTO = el generador existe como Artifact con nuestros rubros, la plantilla de prompt escrita, y
+UNA pieza completa en la galeria que pase las >=4 Required Qualities.
+```
+
+---
+
 ## I2 · Usarlo primero para nosotros — la lista real de lo que se le pide a un cliente de web
 
 ```text
