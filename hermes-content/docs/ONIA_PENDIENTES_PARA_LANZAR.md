@@ -7,7 +7,7 @@
 
 | # | Qué | Estado exacto | Quién |
 |---|---|---|---|
-| ~~1~~ | ~~**Factura no se crea sin fecha de vencimiento**~~ | ✅ **ARREGLADO 2026-08-19**, en rama `fix/factura-sin-vencimiento` (commit `e0033b4`), **no en producción todavía**. Era `.optional()` en Zod, que acepta `undefined` y rechaza `null`. Se arregló la clase entera, no el campo del reporte: facturas (`dueDate`, `notes`, `treatmentId`) y el POST de recurrentes (`endDate`, `notes`), que rechazaba justo lo que su propio PATCH ya aceptaba — el mismo bug esperando turno. Y el 400 ahora **nombra el campo**. Suite 1581 → 1587. Falta: mergear y deployar | Nosotros — deploy |
+| ~~1~~ | ~~**Factura no se crea sin fecha de vencimiento**~~ | ✅ **ARREGLADO 2026-08-19**, en rama `fix/factura-sin-vencimiento` (commit `e0033b4`), **no en producción todavía**. Era `.optional()` en Zod, que acepta `undefined` y rechaza `null`. Se arregló la clase entera, no el campo del reporte: facturas (`dueDate`, `notes`, `treatmentId`) y el POST de recurrentes (`endDate`, `notes`), que rechazaba justo lo que su propio PATCH ya aceptaba — el mismo bug esperando turno. Y el 400 ahora **nombra el campo**. Suite 1581 → 1587. Mergeado a master (e8fc111) junto con tour+bot de ayuda, FAQ por rubro y roles con nombre — 1635 tests. **Deploy al VPS en curso** (runbook con gates + rollback) | Nosotros — en vuelo |
 | 2 | **Dos políticas de privacidad vivas y contradictorias** | `onia.com.bo/privacidad` v1.0 (OniaAgency, NIT correcto) vs `app.onia.com.bo/privacy` v2026.06.03 con razón social **que no existe en SEPREC** y Gmail personal — y esa es la que el cliente ACEPTA al registrarse | Nosotros escribimos, Sergio ratifica |
 | 3 | **Portabilidad prometida que no existe** | Los Términos §4.2 prometen exportar datos; el único export real es CSV de facturas (y gateado por plan). Cero export de pacientes/historias/citas. Choca con Ley 3131 art. 10 | Nosotros |
 | 4 | **Cobro del add-on chatbot** | Contratar = link de WhatsApp + activación manual del superadmin. Sin circuito de pago | Nosotros (estaba en construcción, cayó por 529) |
@@ -21,8 +21,7 @@
 | **Nota de crédito** | Nace BORRADOR y el RCV excluye borradores → **anular no baja el débito fiscal** |
 | **Compras / crédito fiscal** | Una clínica no tiene por dónde cargar compras → su crédito fiscal es estructuralmente 0 |
 | **WhatsApp del cliente** | App Review de Meta EN CURSO (~20 días). Mientras, el bot vive en el widget web (que funciona) |
-| **Landing v2 (Fanvue)** | Construida en `/v2`, con las 7 leyes medidas y media real. **Espera tu OK** para reemplazar la actual |
-| **Landing v1 rediseñada** | Todas las secciones post-hero rehechas, en local. Espera OK |
+| ~~**Landing v2 (Fanvue)**~~ | ✅ **VIVA en onia.com.bo desde el 2026-08-20**, verificada mirando producción: v2 promovida a `/`, conmutador de rubros estilo Fanvue andando, precio nuevo del chatbot (Bs 1.490), cero escalera N1/N2/N3 (seguía publicada con precios retirados). La v1 queda en git |
 | **Notificaciones entre equipo** | Centro de notificaciones y Web Push existen en código; **NO verificado entre dos usuarios reales**. Es la prueba que falta para decir "así funciona en una empresa" |
 | **Poda de agentes/MCP** | 6 agentes de proyecto retirados (reversible). Faltan ~24 globales, 7 jobs y la lista de MCP a desconectar |
 | **Loops sin promptear** | Investigación pendiente (cayó por 529). El workflow de 3 roles ya existe y funciona |
