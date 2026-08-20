@@ -83,6 +83,32 @@ export {
   type QuoteField,
   type QuoteFieldType,
 } from "./inline-quote-form";
+export {
+  renderTwoStepPopup,
+  renderTwoStepPopupScript,
+  TWO_STEP_POPUP_CSS,
+  TWO_STEP_POPUP_JS,
+  type TwoStepPopupOption,
+  type TwoStepPopupProps,
+} from "./two-step-popup";
+
+export {
+  renderStickyNicheSwitcher,
+  renderStickyNicheSwitcherScript,
+  STICKY_NICHE_SWITCHER_CSS,
+  STICKY_NICHE_SWITCHER_JS,
+  type NicheItem,
+  type NichePhoto,
+  type StickyNicheSwitcherProps,
+} from "./sticky-niche-switcher";
+export {
+  renderPanoramaSlider3D,
+  renderPanoramaSlider3DScript,
+  PANORAMA_SLIDER_3D_CSS,
+  PANORAMA_SLIDER_3D_JS,
+  type PanoramaCard,
+  type PanoramaSlider3DProps,
+} from "./panorama-slider-3d";
 
 export { renderClinicHero } from "./clinic-hero";
 export { renderClinicServices } from "./clinic-services";

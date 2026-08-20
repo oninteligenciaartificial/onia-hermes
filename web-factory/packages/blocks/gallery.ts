@@ -33,7 +33,12 @@ import {
   renderScrollStoryHero,
   renderStatStrip,
   renderStickyCta,
+  renderPanoramaSlider3D,
+  renderPanoramaSlider3DScript,
+  renderStickyNicheSwitcher,
+  renderStickyNicheSwitcherScript,
   renderTrust,
+  renderTwoStepPopup,
 } from "./src/index";
 import { SAMPLE_CLIENT } from "./sample-client";
 
@@ -80,6 +85,11 @@ export const NON_BLOCK_RENDER_EXPORTS = [
   "renderMotionStyles",
   "renderMotionScript",
   "renderMotionAssets",
+  // El popup publica su runtime como script aparte, no es un bloque del catalogo.
+  "renderTwoStepPopupScript",
+  // Los dos bloques de Fanvue publican su runtime como script aparte.
+  "renderStickyNicheSwitcherScript",
+  "renderPanoramaSlider3DScript",
 ] as const;
 
 const SAMPLE_COPY = "Copy de muestra: aca va el dato real del cliente.";
@@ -412,6 +422,85 @@ export const GALLERY: readonly GalleryBlock[] = [
       note: "Nota de muestra: a que se esta suscribiendo el visitante.",
       source: "blocks-demo",
     }),
+  },
+  {
+    id: "two-step-popup",
+    fn: "renderTwoStepPopup",
+    file: "packages/blocks/src/two-step-popup.ts",
+    props: "({ offer, question, options, action, source?, email?, trigger?, dismissDays?, previewOpen?, ... })",
+    family: "model",
+    css: "TWO_STEP_POPUP_CSS (mismo archivo) + TWO_STEP_POPUP_JS",
+    note: "Captura de 2 pasos (10/10 de la escalera del reel): paso 1 un CLIC que segmenta, paso 2 el WhatsApp. La respuesta del paso 1 viaja con el lead; el src= mantiene la atribucion. Aca se muestra abierto (previewOpen).",
+    html: renderTwoStepPopup({
+      offer: "10% en tu primera compra",
+      offerNote: "Sample copy: la oferta va antes de pedir nada.",
+      question: "¿Que estas buscando?",
+      options: [
+        { value: "para-mi", label: "Para mi", hint: "Compra personal" },
+        { value: "para-mi-negocio", label: "Para mi negocio", hint: "Compra por volumen" },
+      ],
+      action: "#top",
+      source: "blocks-demo",
+      note: "Nota de muestra: que recibe la persona y cada cuanto.",
+      previewOpen: true,
+      id: "oferta-demo",
+    }),
+  },
+  {
+    id: "sticky-niche-switcher",
+    fn: "renderStickyNicheSwitcher",
+    file: "packages/blocks/src/sticky-niche-switcher.ts",
+    props: "({ niches, eyebrow?, scrollPerNiche?, label?, id? })",
+    family: "model",
+    css: "STICKY_NICHE_SWITCHER_CSS (mismo archivo) + STICKY_NICHE_SWITCHER_JS",
+    note: "Conmutador de rubros pegado al scroll: una palabra activa y el resto al 25 por ciento, con rodillos de foto a los costados. Es \"un producto, muchos rubros\" en una sola pantalla. 366 B de JS gzip (0,42 del presupuesto). Aca se ve estatico: el rodillo necesita el scroll de una pagina real.",
+    html:
+      renderStickyNicheSwitcher({
+        eyebrow: "Copy de muestra",
+        niches: [
+          { id: "dental", word: "Dental", href: "#dental", business: "Clinica Ejemplo",
+            photoLeft: { src: "assets/rubro-dentista.webp", alt: "Negocio del rubro dental" } },
+          { id: "comercio", word: "Comercio", href: "#comercio", business: "Tienda Ejemplo",
+            photoLeft: { src: "assets/rubro-ferreteria.webp", alt: "Negocio del rubro comercio" } },
+          { id: "importadora", word: "Importadora", href: "#importadora", business: "Importadora Ejemplo",
+            photoLeft: { src: "assets/rubro-importadora.webp", alt: "Negocio del rubro importadora" } },
+          { id: "estetica", word: "Estetica", href: "#estetica", business: "Centro Ejemplo",
+            photoLeft: { src: "assets/rubro-estetica.webp", alt: "Negocio del rubro estetica" } },
+          { id: "veterinaria", word: "Veterinaria", href: "#veterinaria", business: "Veterinaria Ejemplo",
+            photoLeft: { src: "assets/rubro-veterinaria.webp", alt: "Negocio del rubro veterinaria" } },
+          { id: "servicios", word: "Servicios", href: "#servicios", business: "Taller Ejemplo",
+            photoLeft: { src: "assets/rubro-duena-telefono.webp", alt: "Negocio del rubro servicios" } },
+        ],
+      }) + renderStickyNicheSwitcherScript(),
+  },
+  {
+    id: "panorama-slider-3d",
+    fn: "renderPanoramaSlider3D",
+    file: "packages/blocks/src/panorama-slider-3d.ts",
+    props: "({ items, heading?, intro?, autoplay?, id? })",
+    family: "model",
+    css: "PANORAMA_SLIDER_3D_CSS (mismo archivo) + PANORAMA_SLIDER_3D_JS",
+    note: "Carrusel panoramico en cilindro, SIN Swiper ni GSAP (con ellos serian 265 KB, 177 por ciento del presupuesto). Menos de 5 tarjetas devuelve cadena vacia: eso es una grilla, no un cilindro. Sin JS degrada a fila con scroll-snap nativo.",
+    html:
+      renderPanoramaSlider3D({
+        heading: "Titular de muestra",
+        intro: "Copy de muestra: aca va el dato real del cliente.",
+        autoplay: false,
+        items: [
+          { title: "Agenda" },
+          { title: "Clientes" },
+          { title: "Tratamientos" },
+          { title: "Inventario" },
+          { title: "Facturacion" },
+          { title: "Contabilidad" },
+          { title: "Agentes" },
+          { title: "Chatbot" },
+          { title: "Reportes" },
+          { title: "Compras" },
+          { title: "Recurrentes" },
+          { title: "Equipo" },
+        ],
+      }) + renderPanoramaSlider3DScript(),
   },
   {
     id: "footer-brand",

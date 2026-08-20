@@ -52,6 +52,11 @@ import {
   renderMotionStyles,
   SCROLL_STORY_HERO_CSS,
   STAT_STRIP_CSS,
+  PANORAMA_SLIDER_3D_CSS,
+  renderTwoStepPopup,
+  renderTwoStepPopupScript,
+  STICKY_NICHE_SWITCHER_CSS,
+  TWO_STEP_POPUP_CSS,
 } from "./src/index";
 
 /**
@@ -71,6 +76,9 @@ const MODEL_BLOCK_CSS = [
   SCROLL_STORY_HERO_CSS,
   STAT_STRIP_CSS,
   INLINE_QUOTE_FORM_CSS,
+  TWO_STEP_POPUP_CSS,
+  STICKY_NICHE_SWITCHER_CSS,
+  PANORAMA_SLIDER_3D_CSS,
 ] as const;
 
 function modelFamilyCss(client: RealestateClient): string {
@@ -90,6 +98,14 @@ const SAMPLE_ASSETS: ReadonlyArray<readonly [string, string]> = [
   ["data/clients/logistics-demo.assets/etapa-1-deposito.svg", "etapa-1-deposito.svg"],
   ["data/clients/logistics-demo.assets/etapa-2-ruta.svg", "etapa-2-ruta.svg"],
   ["data/clients/logistics-demo.assets/etapa-3-entrega.svg", "etapa-3-entrega.svg"],
+  // Las 6 fotos de rubro de la landing viva: el switcher exige una columna
+  // COMPLETA de fotos, y sin ellas devuelve "" (su contrato, no un bug).
+  ["apps/onia-platform/public/fotos/dentista.webp", "rubro-dentista.webp"],
+  ["apps/onia-platform/public/fotos/ferreteria.webp", "rubro-ferreteria.webp"],
+  ["apps/onia-platform/public/fotos/importadora.webp", "rubro-importadora.webp"],
+  ["apps/onia-platform/public/fotos/estetica.webp", "rubro-estetica.webp"],
+  ["apps/onia-platform/public/fotos/veterinaria.webp", "rubro-veterinaria.webp"],
+  ["apps/onia-platform/public/fotos/duena-telefono.webp", "rubro-duena-telefono.webp"],
 ];
 
 type FamilyMeta = {
@@ -394,10 +410,60 @@ async function build(): Promise<string> {
 
   const file = path.join(OUT_DIR, "index.html");
   await writeFile(file, page, "utf8");
+  await buildPopupHarness(clientTokenCss(SAMPLE_CLIENT));
 
   process.stdout.write(
     `${file}\n${GALLERY.length} bloques · ${orphans.length} huerfanos (${orphans.map((b) => b.id).join(", ") || "-"}) · ${gaps.length} por construir\n`,
   );
+  return file;
+}
+
+/**
+ * Banco de pruebas del popup: la galeria lo muestra ABIERTO y en flujo
+ * (previewOpen), que sirve para verlo pero no prueba nada del comportamiento.
+ * Esta pagina lo monta como en produccion — cerrado, con su runtime y con
+ * pagina larga para que el disparo por scroll tenga donde ocurrir — y es contra
+ * ella que corre tests/e2e/two-step-popup.spec.ts: teclado, Escape, foco
+ * atrapado, el paso 1 guardando la respuesta y el src= de la URL.
+ */
+async function buildPopupHarness(tokens: string): Promise<string> {
+  const popup = renderTwoStepPopup({
+    offer: "10% en tu primera compra",
+    offerNote: "Sample copy: la oferta va antes de pedir nada.",
+    question: "¿Que estas buscando?",
+    options: [
+      { value: "para-mi", label: "Para mi", hint: "Compra personal" },
+      { value: "para-mi-negocio", label: "Para mi negocio", hint: "Compra por volumen" },
+    ],
+    action: "#enviado",
+    source: "harness",
+    note: "Nota de muestra: que recibe la persona y cada cuanto.",
+    trigger: { scroll: 40, exitIntent: true },
+    id: "oferta",
+  });
+
+  const page = `<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Banco de pruebas · two-step-popup</title>
+    <style>${tokens}</style>
+    <style>body{margin:0;font-family:var(--font-body);background:var(--color-bg);color:var(--color-fg)}
+    .h{padding:40px 20px}.tall{height:280vh;padding:0 20px;color:color-mix(in srgb,var(--color-fg) 60%,transparent)}</style>
+    <style>${TWO_STEP_POPUP_CSS}</style>
+  </head>
+  <body>
+    <div class="h"><h1>Banco de pruebas del popup</h1><p>Pagina larga a proposito: el popup dispara al 40% del scroll.</p></div>
+    <div class="tall"><p>Contenido de relleno.</p>
+    <a id="fondo" href="#fondo">Enlace del fondo (el foco NUNCA debe llegar aca con el popup abierto)</a></div>
+    ${popup}
+    ${renderTwoStepPopupScript()}
+  </body>
+</html>
+`;
+  const file = path.join(OUT_DIR, "popup.html");
+  await writeFile(file, page, "utf8");
   return file;
 }
 

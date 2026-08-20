@@ -1,0 +1,1544 @@
+{
+  "url": "https://motion-primitives.com/",
+  "slug": "motion-primitives-com",
+  "medidoEl": "2026-08-19T03:01:52.826Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 7698,
+        "alturaPantallas": 9.1,
+        "anchoBody": 380,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 2
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "isolate min-h-screen",
+          "altoPx": 7698,
+          "altoPantallas": 9.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "UI kit to make beautiful, animated interfaces, faster.",
+          "cta": "motion-primitivesbeta",
+          "imagenes": 39
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "px-6 py-4 pb-20",
+          "altoPx": 7622,
+          "altoPantallas": 9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "UI kit to make beautiful, animated interfaces, faster.",
+          "cta": "Explore Docs",
+          "imagenes": 35
+        }
+      ],
+      "encabezados": {
+        "total": 1,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "UI kit to make beautiful, animated interfaces, faster."
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 30
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 4
+          },
+          {
+            "valor": "10px / lh 1.50 / ls normal / w 500",
+            "veces": 1
+          },
+          {
+            "valor": "36px / lh 1.11 / ls normal / w 500",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "__Inter_f367f3",
+            "veces": 43
+          },
+          {
+            "valor": "__GeistMono_c1e5c9",
+            "veces": 3
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(9, 9, 11)",
+            "veces": 26
+          },
+          {
+            "valor": "oklch(0.141 0.005 285.823)",
+            "veces": 5
+          },
+          {
+            "valor": "oklch(0.37 0.013 285.805)",
+            "veces": 4
+          },
+          {
+            "valor": "oklch(0.274 0.006 286.033)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 2
+          },
+          {
+            "valor": "oklch(0.552 0.016 285.938)",
+            "veces": 2
+          },
+          {
+            "valor": "oklch(0.985 0 0)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.442 0.017 285.786)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "oklch(0.985 0 0)",
+            "veces": 13
+          },
+          {
+            "valor": "oklch(0.442 0.017 285.786)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 4
+          },
+          {
+            "valor": "oklch(0.92 0.004 286.32)",
+            "veces": 2
+          },
+          {
+            "valor": "oklch(0.274 0.006 286.033)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.21 0.006 285.885)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.552 0.016 285.938)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.967 0.003 264.542)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 22
+          },
+          {
+            "valor": "128px",
+            "veces": 12
+          },
+          {
+            "valor": "32px",
+            "veces": 7
+          },
+          {
+            "valor": "24px",
+            "veces": 4
+          },
+          {
+            "valor": "2px",
+            "veces": 3
+          },
+          {
+            "valor": "6px",
+            "veces": 3
+          },
+          {
+            "valor": "8px",
+            "veces": 3
+          },
+          {
+            "valor": "20px",
+            "veces": 2
+          },
+          {
+            "valor": "-1px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "12px",
+            "veces": 2
+          },
+          {
+            "valor": "80px",
+            "veces": 1
+          },
+          {
+            "valor": "48px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "4px",
+            "veces": 21
+          },
+          {
+            "valor": "9.6px",
+            "veces": 13
+          },
+          {
+            "valor": "13.6px",
+            "veces": 12
+          },
+          {
+            "valor": "7.6px",
+            "veces": 4
+          },
+          {
+            "valor": "8px",
+            "veces": 2
+          },
+          {
+            "valor": "5.6px",
+            "veces": 1
+          },
+          {
+            "valor": "12px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 7,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 12
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.5) 0px 0px 60px 30px, rgba(0, 0, 0, 0.",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 2,
+        "zIndex": [
+          {
+            "valor": "-1",
+            "veces": 12
+          },
+          {
+            "valor": "10",
+            "veces": 5
+          },
+          {
+            "valor": "50",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 2,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 86,
+          "rem": 61,
+          "px": 239,
+          "clamp": 0,
+          "vw": 2
+        },
+        "keyframesDeclarados": 6,
+        "transitionAll": 0,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 2
+          },
+          {
+            "px": 768,
+            "veces": 2
+          },
+          {
+            "px": 1024,
+            "veces": 2
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 1536,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed left-0 top-0 z-50",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 16,
+        "ctasTop": [
+          {
+            "texto": "Explore Docs",
+            "veces": 2
+          },
+          {
+            "texto": "GitHubStar on GitHub",
+            "veces": 2
+          },
+          {
+            "texto": "motion-primitivesbeta",
+            "veces": 1
+          },
+          {
+            "texto": "AI",
+            "veces": 1
+          },
+          {
+            "texto": "Advanced",
+            "veces": 1
+          },
+          {
+            "texto": "Components",
+            "veces": 1
+          },
+          {
+            "texto": "X",
+            "veces": 1
+          },
+          {
+            "texto": "GitHub",
+            "veces": 1
+          },
+          {
+            "texto": "Toggle theme",
+            "veces": 1
+          },
+          {
+            "texto": "EB27Edouard Wilfrid Buquet",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 28,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 28,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 19,
+        "objetivosMenores44px": 15,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 2,
+          "main": 0,
+          "footer": 0
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(9, 9, 11)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "rgb(9, 9, 11)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 2.58
+          },
+          {
+            "texto": "rgb(9, 9, 11)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.9
+          },
+          {
+            "texto": "oklch(0.141 0.005 285.823)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "oklch(0.141 0.005 285.823)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 2.58
+          },
+          {
+            "texto": "oklch(0.141 0.005 285.823)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.9
+          },
+          {
+            "texto": "oklch(0.37 0.013 285.805)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 9.99
+          },
+          {
+            "texto": "oklch(0.37 0.013 285.805)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 1.35
+          },
+          {
+            "texto": "oklch(0.37 0.013 285.805)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 10.43
+          },
+          {
+            "texto": "oklch(0.274 0.006 286.033)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 14.27
+          },
+          {
+            "texto": "oklch(0.274 0.006 286.033)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 1.93
+          },
+          {
+            "texto": "oklch(0.274 0.006 286.033)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 14.89
+          }
+        ],
+        "fondosTranslucidosOmitidos": 0
+      },
+      "rendimiento": {
+        "pesoTotalKb": 8740.9,
+        "porTipoKb": {
+          "document": 74.3,
+          "script": 665.1,
+          "font": 104,
+          "stylesheet": 102.9,
+          "image": 7794.7,
+          "fetch": 0
+        },
+        "pedidos": {
+          "document": 1,
+          "script": 16,
+          "font": 2,
+          "stylesheet": 2,
+          "image": 22,
+          "fetch": 1
+        },
+        "hostsDistintos": 5,
+        "terceros": [
+          {
+            "host": "images.beta.cosmos.so",
+            "pedidos": 14
+          },
+          {
+            "host": "i.scdn.co",
+            "pedidos": 6
+          },
+          {
+            "host": "assets.onedollarstats.com",
+            "pedidos": 1
+          },
+          {
+            "host": "i.pinimg.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "__Inter_f367f3 100 900 normal",
+          "__Inter_Fallback_f367f3 normal normal",
+          "__GeistMono_c1e5c9 100 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Motion-Primitives - UI kit to make beautiful, animated interfaces, faster.",
+        "descripcion": "Motion-Primitives is an open-source UI kit to make beautiful, animated interfaces, faster. Built for React, Next.js, and Tailwind CSS.",
+        "canonical": null,
+        "og": 6,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 7614,
+        "alturaPantallas": 7.4,
+        "anchoBody": 758,
+        "desbordeHorizontal": true,
+        "seccionesDetectadas": 2
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "isolate min-h-screen",
+          "altoPx": 7614,
+          "altoPantallas": 7.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "UI kit to make beautiful, animated interfaces, faster.",
+          "cta": "motion-primitivesbeta",
+          "imagenes": 39
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "px-6 py-4 pb-20",
+          "altoPx": 7538,
+          "altoPantallas": 7.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "UI kit to make beautiful, animated interfaces, faster.",
+          "cta": "Explore Docs",
+          "imagenes": 35
+        }
+      ],
+      "encabezados": {
+        "total": 1,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "UI kit to make beautiful, animated interfaces, faster."
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 30
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 4
+          },
+          {
+            "valor": "10px / lh 1.50 / ls normal / w 500",
+            "veces": 1
+          },
+          {
+            "valor": "36px / lh 1.11 / ls normal / w 500",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "__Inter_f367f3",
+            "veces": 43
+          },
+          {
+            "valor": "__GeistMono_c1e5c9",
+            "veces": 3
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(9, 9, 11)",
+            "veces": 26
+          },
+          {
+            "valor": "oklch(0.141 0.005 285.823)",
+            "veces": 5
+          },
+          {
+            "valor": "oklch(0.37 0.013 285.805)",
+            "veces": 4
+          },
+          {
+            "valor": "oklch(0.274 0.006 286.033)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 2
+          },
+          {
+            "valor": "oklch(0.552 0.016 285.938)",
+            "veces": 2
+          },
+          {
+            "valor": "oklch(0.985 0 0)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.442 0.017 285.786)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "oklch(0.985 0 0)",
+            "veces": 13
+          },
+          {
+            "valor": "oklch(0.442 0.017 285.786)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 4
+          },
+          {
+            "valor": "oklch(0.92 0.004 286.32)",
+            "veces": 2
+          },
+          {
+            "valor": "oklch(0.274 0.006 286.033)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.21 0.006 285.885)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.552 0.016 285.938)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.967 0.003 264.542)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 22
+          },
+          {
+            "valor": "128px",
+            "veces": 12
+          },
+          {
+            "valor": "80px",
+            "veces": 5
+          },
+          {
+            "valor": "24px",
+            "veces": 4
+          },
+          {
+            "valor": "2px",
+            "veces": 3
+          },
+          {
+            "valor": "6px",
+            "veces": 3
+          },
+          {
+            "valor": "8px",
+            "veces": 3
+          },
+          {
+            "valor": "32px",
+            "veces": 3
+          },
+          {
+            "valor": "20px",
+            "veces": 2
+          },
+          {
+            "valor": "-1px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "12px",
+            "veces": 2
+          },
+          {
+            "valor": "48px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "4px",
+            "veces": 21
+          },
+          {
+            "valor": "9.6px",
+            "veces": 13
+          },
+          {
+            "valor": "13.6px",
+            "veces": 12
+          },
+          {
+            "valor": "7.6px",
+            "veces": 4
+          },
+          {
+            "valor": "8px",
+            "veces": 2
+          },
+          {
+            "valor": "5.6px",
+            "veces": 1
+          },
+          {
+            "valor": "12px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 7,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 12
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.5) 0px 0px 60px 30px, rgba(0, 0, 0, 0.",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 2,
+        "zIndex": [
+          {
+            "valor": "-1",
+            "veces": 12
+          },
+          {
+            "valor": "10",
+            "veces": 5
+          },
+          {
+            "valor": "50",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 2,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 86,
+          "rem": 61,
+          "px": 239,
+          "clamp": 0,
+          "vw": 2
+        },
+        "keyframesDeclarados": 6,
+        "transitionAll": 0,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 2
+          },
+          {
+            "px": 768,
+            "veces": 2
+          },
+          {
+            "px": 1024,
+            "veces": 2
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 1536,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed left-0 top-0 z-50",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 16,
+        "ctasTop": [
+          {
+            "texto": "Explore Docs",
+            "veces": 2
+          },
+          {
+            "texto": "GitHubStar on GitHub",
+            "veces": 2
+          },
+          {
+            "texto": "motion-primitivesbeta",
+            "veces": 1
+          },
+          {
+            "texto": "AI",
+            "veces": 1
+          },
+          {
+            "texto": "Advanced",
+            "veces": 1
+          },
+          {
+            "texto": "Components",
+            "veces": 1
+          },
+          {
+            "texto": "X",
+            "veces": 1
+          },
+          {
+            "texto": "GitHub",
+            "veces": 1
+          },
+          {
+            "texto": "Toggle theme",
+            "veces": 1
+          },
+          {
+            "texto": "EB27Edouard Wilfrid Buquet",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 28,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 28,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 19,
+        "objetivosMenores44px": 18,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 2,
+          "main": 0,
+          "footer": 0
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(9, 9, 11)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "rgb(9, 9, 11)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 2.58
+          },
+          {
+            "texto": "rgb(9, 9, 11)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.9
+          },
+          {
+            "texto": "oklch(0.141 0.005 285.823)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "oklch(0.141 0.005 285.823)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 2.58
+          },
+          {
+            "texto": "oklch(0.141 0.005 285.823)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.9
+          },
+          {
+            "texto": "oklch(0.37 0.013 285.805)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 9.99
+          },
+          {
+            "texto": "oklch(0.37 0.013 285.805)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 1.35
+          },
+          {
+            "texto": "oklch(0.37 0.013 285.805)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 10.43
+          },
+          {
+            "texto": "oklch(0.274 0.006 286.033)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 14.27
+          },
+          {
+            "texto": "oklch(0.274 0.006 286.033)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 1.93
+          },
+          {
+            "texto": "oklch(0.274 0.006 286.033)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 14.89
+          }
+        ],
+        "fondosTranslucidosOmitidos": 0
+      },
+      "rendimiento": {
+        "pesoTotalKb": 8773.1,
+        "porTipoKb": {
+          "document": 74.3,
+          "image": 7794.7,
+          "font": 104,
+          "stylesheet": 102.9,
+          "script": 697.2,
+          "fetch": 0
+        },
+        "pedidos": {
+          "document": 1,
+          "image": 22,
+          "font": 2,
+          "stylesheet": 2,
+          "script": 19,
+          "fetch": 2
+        },
+        "hostsDistintos": 5,
+        "terceros": [
+          {
+            "host": "images.beta.cosmos.so",
+            "pedidos": 14
+          },
+          {
+            "host": "i.scdn.co",
+            "pedidos": 6
+          },
+          {
+            "host": "assets.onedollarstats.com",
+            "pedidos": 1
+          },
+          {
+            "host": "i.pinimg.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "__Inter_f367f3 100 900 normal",
+          "__Inter_Fallback_f367f3 normal normal",
+          "__GeistMono_c1e5c9 100 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Motion-Primitives - UI kit to make beautiful, animated interfaces, faster.",
+        "descripcion": "Motion-Primitives is an open-source UI kit to make beautiful, animated interfaces, faster. Built for React, Next.js, and Tailwind CSS.",
+        "canonical": null,
+        "og": 6,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 7602,
+        "alturaPantallas": 8.4,
+        "anchoBody": 1430,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 2
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "isolate min-h-screen",
+          "altoPx": 7602,
+          "altoPantallas": 8.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "UI kit to make beautiful, animated interfaces, faster.",
+          "cta": "motion-primitivesbeta",
+          "imagenes": 39
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "px-6 py-4 pb-20",
+          "altoPx": 7538,
+          "altoPantallas": 8.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "UI kit to make beautiful, animated interfaces, faster.",
+          "cta": "Explore Docs",
+          "imagenes": 35
+        }
+      ],
+      "encabezados": {
+        "total": 1,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "UI kit to make beautiful, animated interfaces, faster."
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 30
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 4
+          },
+          {
+            "valor": "10px / lh 1.50 / ls normal / w 500",
+            "veces": 1
+          },
+          {
+            "valor": "36px / lh 1.11 / ls normal / w 500",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "__Inter_f367f3",
+            "veces": 43
+          },
+          {
+            "valor": "__GeistMono_c1e5c9",
+            "veces": 3
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(9, 9, 11)",
+            "veces": 26
+          },
+          {
+            "valor": "oklch(0.141 0.005 285.823)",
+            "veces": 5
+          },
+          {
+            "valor": "oklch(0.37 0.013 285.805)",
+            "veces": 4
+          },
+          {
+            "valor": "oklch(0.274 0.006 286.033)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 2
+          },
+          {
+            "valor": "oklch(0.552 0.016 285.938)",
+            "veces": 2
+          },
+          {
+            "valor": "oklch(0.985 0 0)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.442 0.017 285.786)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "oklch(0.985 0 0)",
+            "veces": 13
+          },
+          {
+            "valor": "oklch(0.442 0.017 285.786)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 4
+          },
+          {
+            "valor": "oklch(0.92 0.004 286.32)",
+            "veces": 2
+          },
+          {
+            "valor": "oklch(0.274 0.006 286.033)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.21 0.006 285.885)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.552 0.016 285.938)",
+            "veces": 1
+          },
+          {
+            "valor": "oklch(0.967 0.003 264.542)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 22
+          },
+          {
+            "valor": "128px",
+            "veces": 12
+          },
+          {
+            "valor": "80px",
+            "veces": 5
+          },
+          {
+            "valor": "32px",
+            "veces": 4
+          },
+          {
+            "valor": "2px",
+            "veces": 3
+          },
+          {
+            "valor": "6px",
+            "veces": 3
+          },
+          {
+            "valor": "24px",
+            "veces": 3
+          },
+          {
+            "valor": "8px",
+            "veces": 3
+          },
+          {
+            "valor": "-1px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "12px",
+            "veces": 2
+          },
+          {
+            "valor": "48px",
+            "veces": 1
+          },
+          {
+            "valor": "20px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "4px",
+            "veces": 21
+          },
+          {
+            "valor": "9.6px",
+            "veces": 13
+          },
+          {
+            "valor": "13.6px",
+            "veces": 12
+          },
+          {
+            "valor": "7.6px",
+            "veces": 4
+          },
+          {
+            "valor": "8px",
+            "veces": 2
+          },
+          {
+            "valor": "5.6px",
+            "veces": 1
+          },
+          {
+            "valor": "12px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 7,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 12
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.5) 0px 0px 60px 30px, rgba(0, 0, 0, 0.",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 2,
+        "zIndex": [
+          {
+            "valor": "-1",
+            "veces": 12
+          },
+          {
+            "valor": "10",
+            "veces": 5
+          },
+          {
+            "valor": "50",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 2,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 86,
+          "rem": 61,
+          "px": 239,
+          "clamp": 0,
+          "vw": 2
+        },
+        "keyframesDeclarados": 6,
+        "transitionAll": 0,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 2
+          },
+          {
+            "px": 768,
+            "veces": 2
+          },
+          {
+            "px": 1024,
+            "veces": 2
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 1536,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 12,
+            "navFija": false
+          },
+          {
+            "y": 1676,
+            "conTransform": 12,
+            "navFija": false
+          },
+          {
+            "y": 3351,
+            "conTransform": 12,
+            "navFija": false
+          },
+          {
+            "y": 5027,
+            "conTransform": 12,
+            "navFija": false
+          },
+          {
+            "y": 6702,
+            "conTransform": 12,
+            "navFija": false
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 5,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed left-0 top-0 z-50",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 16,
+        "ctasTop": [
+          {
+            "texto": "Explore Docs",
+            "veces": 2
+          },
+          {
+            "texto": "GitHubStar on GitHub",
+            "veces": 2
+          },
+          {
+            "texto": "motion-primitivesbeta",
+            "veces": 1
+          },
+          {
+            "texto": "AI",
+            "veces": 1
+          },
+          {
+            "texto": "Advanced",
+            "veces": 1
+          },
+          {
+            "texto": "Components",
+            "veces": 1
+          },
+          {
+            "texto": "X",
+            "veces": 1
+          },
+          {
+            "texto": "GitHub",
+            "veces": 1
+          },
+          {
+            "texto": "Toggle theme",
+            "veces": 1
+          },
+          {
+            "texto": "EB27Edouard Wilfrid Buquet",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 28,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 28,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 19,
+        "objetivosMenores44px": 18,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 2,
+          "main": 0,
+          "footer": 0
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(9, 9, 11)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "rgb(9, 9, 11)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 2.58
+          },
+          {
+            "texto": "rgb(9, 9, 11)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.9
+          },
+          {
+            "texto": "oklch(0.141 0.005 285.823)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "oklch(0.141 0.005 285.823)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 2.58
+          },
+          {
+            "texto": "oklch(0.141 0.005 285.823)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.9
+          },
+          {
+            "texto": "oklch(0.37 0.013 285.805)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 9.99
+          },
+          {
+            "texto": "oklch(0.37 0.013 285.805)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 1.35
+          },
+          {
+            "texto": "oklch(0.37 0.013 285.805)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 10.43
+          },
+          {
+            "texto": "oklch(0.274 0.006 286.033)",
+            "fondo": "oklch(0.985 0 0)",
+            "ratio": 14.27
+          },
+          {
+            "texto": "oklch(0.274 0.006 286.033)",
+            "fondo": "oklch(0.442 0.017 285.786)",
+            "ratio": 1.93
+          },
+          {
+            "texto": "oklch(0.274 0.006 286.033)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 14.89
+          }
+        ],
+        "fondosTranslucidosOmitidos": 0
+      },
+      "rendimiento": {
+        "pesoTotalKb": 8773.1,
+        "porTipoKb": {
+          "document": 74.3,
+          "stylesheet": 102.9,
+          "font": 104,
+          "script": 697.2,
+          "image": 7794.7,
+          "fetch": 0
+        },
+        "pedidos": {
+          "document": 2,
+          "stylesheet": 4,
+          "font": 4,
+          "script": 38,
+          "image": 44,
+          "fetch": 4
+        },
+        "hostsDistintos": 5,
+        "terceros": [
+          {
+            "host": "images.beta.cosmos.so",
+            "pedidos": 14
+          },
+          {
+            "host": "i.scdn.co",
+            "pedidos": 6
+          },
+          {
+            "host": "assets.onedollarstats.com",
+            "pedidos": 1
+          },
+          {
+            "host": "i.pinimg.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "__Inter_f367f3 100 900 normal",
+          "__Inter_Fallback_f367f3 normal normal",
+          "__GeistMono_c1e5c9 100 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Motion-Primitives - UI kit to make beautiful, animated interfaces, faster.",
+        "descripcion": "Motion-Primitives is an open-source UI kit to make beautiful, animated interfaces, faster. Built for React, Next.js, and Tailwind CSS.",
+        "canonical": null,
+        "og": 6,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 1,
+    "conTransicion": 5
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

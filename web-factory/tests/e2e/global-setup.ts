@@ -18,4 +18,9 @@ export default async function globalSetup(): Promise<void> {
   await generateSite("dental-demo", { rootDir, template: "landing-clinic" });
   await generateSite("realestate-demo", { rootDir, template: "landing-realestate" });
   await generateSite("logistics-demo", { rootDir, template: "landing-logistics" });
+
+  // La galeria de bloques y su banco de pruebas del popup (out/blocks-demo/):
+  // importar el modulo LO construye (demo.ts corre build() al cargarse), asi el
+  // spec del popup nunca corre contra un out/ viejo.
+  await import("../../packages/blocks/demo");
 }

@@ -295,7 +295,12 @@ opinión — detalle en `data/references/design-sources/fanvue-mecanica-medida.m
 1. **line-height ≤ 1,0 en display, y baja al crecer**: 1,00 a 50 px · 0,90 a 80 px ·
    0,80 a 106 px. Un titular grande es un BLOQUE, no líneas.
 2. **tracking negativo proporcional**: −0,4 % a 50 px, **−2 % a 80 px** (`-0.02em`).
-3. **peso 500, nunca 700/800**: el impacto sale del tamaño y el apretado.
+3. **un solo peso de display, sostenido** — no se mezclan.
+   ⚠️ **Corregido 2026-08-20**: acá decía "peso 500, nunca 700/800". Medido en 6 sitios,
+   `componentry.fun` usa **900** y `efferd` **800** en su display, con muy buen resultado.
+   Era un rasgo de Fanvue, no una ley. El impacto puede venir del **tamaño** (peso 500,
+   camino Fanvue) o del **trazo** (800–900); las dos direcciones funcionan y hay que
+   ELEGIR una. Lo que no funciona es promediar.
 4. **cuerpo al 75 % de opacidad** sobre el fondo (off-black, no negro puro): el párrafo
    cede jerarquía al titular.
 5. **medida de línea ≤ 900 px** aunque la sección sea de 2000: contenedor de texto propio.
@@ -305,11 +310,19 @@ opinión — detalle en `data/references/design-sources/fanvue-mecanica-medida.m
 ⚠️ Sus fuentes (AG Next/Akzidenz) son de PAGO: en Onia se aplica la mecánica sobre
 **Archivo** (ya es la fuente de marca).
 
-### Ritmo en `em` — la ley que hace que una web NO parezca hecha por IA
+### Ritmo anclado — la ley que hace que una web NO parezca hecha por IA
 
-Medido en el CSS real de Fanvue: 98 `em` contra 0 `clamp()` en sus clases de layout.
-Todo su espaciado vertical es `em` anclado a UN font-size que cambia por breakpoint
-(12,8px → 15 → 16 → 20). Cambian ese número y la página entera reescala en proporción.
+> ⚠️ **Corregido 2026-08-20.** El título decía "Ritmo en `em`". Medido en 6 sitios, **4 de
+> 6 usan `rem`**, no `em` — y cumplen igual. La ley NO es la letra: es que **el espaciado
+> cuelgue de UN ancla** (`em` por sección o `rem` por documento) y que **`clamp()` sea
+> marginal**: 5 de 6 tienen ≤7 usos de `clamp()` en todo el sitio. Un sistema ya escrito en
+> `rem` **no se reescribe**: ya cumple. Detalle: `anatomia/SINTESIS.md` §A8 y §D1.
+
+Medido en el CSS real de Fanvue: **1.428 `em` contra 7 `clamp()`** en todas sus hojas
+(la primera pasada dio 98 vs 0 sobre una sola hoja; el barrido completo confirma la
+proporción y la agranda). Todo su espaciado vertical es `em` anclado a UN font-size que
+cambia por breakpoint (12,8px → 15 → 16 → 20). Cambian ese número y la página entera
+reescala en proporción.
 
 **Regla de la casa (adoptada 2026-08-18):**
 - El espaciado INTERNO de una sección va en `em` → hereda la proporción del sistema.
@@ -329,17 +342,115 @@ La landing más admirada del benchmark usa **2 keyframes en todo el sitio**. Can
 
 - **Revelado al entrar**: `opacity + transform`, **0,3 s**, una sola vez. Componente
   nuestro: `<Reveal>` (`src/motion/reveal.tsx`, whileInView).
-- **Hover**: `transform 0,2 s linear` (media/cards) · `color 0,3 s
-  cubic-bezier(.25,.46,.45,.94)` (links).
+- **Hover y micro-interacción**: **0,15 s con `cubic-bezier(0.4, 0, 0.2, 1)`** — color,
+  fondo, sombra. Es lo dominante en 5 de los 6 sitios medidos (en 10x lo llevan 151
+  elementos). Antes acá decía 0,2 s: la diferencia es la que separa un hover que se siente
+  instantáneo de uno perezoso.
+- **Easing, dos usos distintos**: nuestro `cubic-bezier(0.22, 1, 0.36, 1)` para
+  **entradas** (es expresivo y es marca — no aparece en ninguno de los 6, y está bien que
+  así sea) · `cubic-bezier(0.4, 0, 0.2, 1)` para **micro-interacciones**, donde el
+  estándar ya se fijó y pelearlo sólo se siente raro.
 - **Marquesina ambiental**: `35 s linear infinite`, `translateX(0 → calc(-100% - gap))`,
   `will-change: transform`. Componente: `<Marquee>` (hoy 32 s — equivalente).
-- **Secciones pegadas** (`position: sticky`) para el relato, NO scroll-scrub.
-- ❌ **PROHIBIDO**: parallax en imágenes (Fanvue no tiene NINGUNO — medido antes/después
-  de scrollear), animar layout, y `transition: all` (ellos lo arrastran por descuido de
-  Webflow en 940 elementos: no se copia).
+- **Secciones pegadas** (`position: sticky`) para el relato: Fanvue tiene 10 elementos
+  `sticky`/`fixed`, entre ellos el conmutador de rubros (630 px de alto pegado a 135 px).
+- ❌ **PROHIBIDO**: animar layout, y `transition: all` (ellos lo arrastran por descuido de
+  Webflow en **889 elementos**: no se copia).
 
-Regla: **el movimiento se dispara al entrar o al hover; nunca se ata al dedo del scroll.**
-Detalle completo: `data/references/design-sources/fanvue-mecanica-medida.md` §7.
+Regla de la casa: **el movimiento se dispara al entrar o al hover; sólo se ata al scroll
+cuando el scroll ES el relato** (una sección pegada que cuenta algo), nunca por adorno.
+
+> ⚠️ **CORRECCIÓN 2026-08-19.** Acá decía "Fanvue no tiene NINGÚN parallax" y "2 keyframes
+> en todo el sitio". Las dos afirmaciones eran **falsas**, y salieron de mirar el sitio
+> antes y después de un solo scroll. Medido con `extract_web_anatomy.mjs` en 5 posiciones:
+> **sí tiene movimiento atado al scroll** (5 estados distintos), hay 3 `@keyframes`
+> declarados y 10 transiciones distintas. Y **no tiene `prefers-reduced-motion`**: con la
+> preferencia puesta, 68 elementos siguen animando. Eso último no se copia — es un defecto,
+> no una decisión.
+>
+> La regla de la casa (disparar al entrar, no atar al scroll por adorno) **se sostiene
+> igual**, pero por sus propios motivos: cuesta menos, no marea y no se rompe bajo
+> reduced-motion. No porque Fanvue lo haga, porque no lo hace.
+>
+> Lección: una medición floja no es neutra, **envenena el canon**. Protocolo completo en
+> [`docs/ANATOMIA_DE_UNA_WEB.md`](docs/ANATOMIA_DE_UNA_WEB.md).
+
+Detalle: `data/references/design-sources/fanvue-mecanica-medida.md` §7 ·
+medición completa: `data/references/design-sources/anatomia/fanvue-com.md`.
+
+### Captura — la escalera de popups (reel puntuado, 2026-08-18)
+
+Un reel puntúa 8 popups de tiendas reales del 0 al 10
+(`hermes-content/references/video-intake/transcripciones/Instagram-DcEITCmoSHX.txt`).
+La escalera, textual: **0** no da nada a cambio y pide demasiados campos · **1** demasiado
+copy · **3** buena oferta mal configurada · **5** simple y con la oferta clara · **6**
+escalera de sí · **7** engagement (rascar para revelar) · **9** formato arriesgado ·
+**10** multi-paso.
+
+**La ley, y es lo único que hay que retener: el paso 1 NO pide datos, pide un CLIC.**
+Ese clic hace dos cosas a la vez — segmenta (dice qué quiere la persona) y es un
+microcompromiso que sube la conversión del paso 2. El dato viene después.
+
+Corolario duro: **si la respuesta del paso 1 no se guarda junto al lead, el multi-paso no
+sirve de nada** — es un popup de email con un clic extra de fricción. Sin ese guardado, un
+10/10 vuelve a ser un 5/10.
+
+Bloque de la casa: `packages/blocks/src/two-step-popup.ts` (`renderTwoStepPopup`).
+Decisiones que van con él y no se revisan cada vez:
+
+- **WhatsApp, no SMS ni correo obligatorio.** En Bolivia el canal del comprador es
+  WhatsApp; el correo queda opcional porque dos campos obligatorios en el paso 2 tiran
+  abajo lo que ganó el paso 1.
+- **Cero confirmshaming.** El descarte dice "Ahora no". El "no gracias, prefiero pagar
+  precio completo" lo castiga el propio reel y no va con la marca.
+- **Nunca al instante ni a pantalla completa en móvil** (Google penaliza intersticiales
+  intrusivos): dispara por scroll/tiempo/salida y en móvil entra como hoja inferior.
+- **`<dialog>` nativo con `showModal()`**: el foco atrapado y el Escape vienen gratis. No
+  se reimplementan a mano.
+- **El descarte se recuerda en `cancel`, no solo en `close`.** El evento `close` se
+  dispara en tarea ENCOLADA: si la persona aprieta Escape y navega en el mismo instante,
+  el descarte se pierde y el popup la vuelve a interrumpir. `cancel` es síncrono.
+- **El bloque trae su propio `box-sizing: border-box`.** Un bloque que publica su hoja de
+  estilos no puede depender de que la página anfitriona traiga reset: sin esto el padding
+  se suma al 100 % y la hoja móvil se sale de pantalla llevándose el botón de cerrar.
+- **La atribución no se duplica**: `src` viaja como campo oculto y el runtime lo pisa con
+  el `?src=` de la URL, alimentando el MISMO circuito de leads que ya corre en producción.
+
+### Secuencia de scroll en canvas (el patrón de Apple) — DECISIÓN: NO se construye
+
+Un tutorial recrea la animación de los AirPods
+(`transcripciones/Instagram-Db8hFCFFTZg.txt`): no hay 3D ni video, son **64 imágenes**
+dibujadas en un `<canvas>`, con el frame atado al scroll por GSAP ScrollTrigger
+(`snap:"frame"`, `ease:"none"`, `scrub:0.5`, `onUpdate:render`). El código es trivial.
+
+**El bloqueante es el peso, y acá está medido sobre contenido nuestro** (una foto de
+`apps/onia-platform/public/fotos/`, reescalada y recomprimida con Pillow — la foto es el
+peor caso: un render sobre fondo plano comprime bastante mejor):
+
+| Por frame | PNG | WebP q75 | AVIF q50 |
+|---|---|---|---|
+| 1600×900 | 1.715 KB | 97 KB | 69 KB |
+| 1280×720 | 1.202 KB | 76 KB | **50 KB** |
+| 960×540 | 746 KB | 51 KB | **33 KB** |
+
+Secuencia de 64 frames: **75 MB** en PNG · 4,8 MB en WebP · 3,2 MB en AVIF a 1280 ·
+**2,1 MB** en AVIF a 960. Bajando a 48 frames (el piso antes de que el paso se vea a
+saltos): **1,6 MB**. Con un render sobre fondo plano, optimista: **~0,5 MB**.
+
+**Veredicto: no entra.** El presupuesto de una landing es 150 KB de JS + 30 KB de CSS;
+la versión más barata que sigue viéndose bien pesa entre **3,5× y 10× ese presupuesto
+entero**, y no convierte nada — es techo visual. Mientras tanto la indexabilidad (C1)
+sigue abierta, cuesta 0 KB y sí trae prospectos.
+
+Se reabre solo si: el producto del cliente **ES** el objeto (una máquina, un vehículo, un
+equipo) y la secuencia reemplaza a un video; y aun ahí va con carga progresiva por tramos
+(los primeros 8 frames eager, el resto en streaming, el canvas dibuja el más cercano
+cargado) y se mide LCP/CLS antes y después. Con `prefers-reduced-motion` es un frame fijo,
+sin scrub.
+
+⚠️ Dos cifras del prompt original no resistieron la verificación: el video dice **64
+imágenes**, no 150 frames; y "69 KB por frame" no es PNG (medido: 1.202 KB a 1280×720) —
+69 KB es más o menos lo que cuesta un **AVIF** a 1600.
 
 ### Dashboard / Analytics / Internal Tool
 

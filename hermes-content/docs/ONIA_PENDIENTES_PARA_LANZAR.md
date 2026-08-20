@@ -7,7 +7,7 @@
 
 | # | Qué | Estado exacto | Quién |
 |---|---|---|---|
-| 1 | **Factura no se crea sin fecha de vencimiento** | El cliente manda `dueDate: null` y el Zod del servidor es `.optional()` (rechaza null) → **400 "Datos inválidos"** sin decir el campo. Es el primer clic del módulo que vendemos | Nosotros — 1 hora |
+| ~~1~~ | ~~**Factura no se crea sin fecha de vencimiento**~~ | ✅ **ARREGLADO 2026-08-19**, en rama `fix/factura-sin-vencimiento` (commit `e0033b4`), **no en producción todavía**. Era `.optional()` en Zod, que acepta `undefined` y rechaza `null`. Se arregló la clase entera, no el campo del reporte: facturas (`dueDate`, `notes`, `treatmentId`) y el POST de recurrentes (`endDate`, `notes`), que rechazaba justo lo que su propio PATCH ya aceptaba — el mismo bug esperando turno. Y el 400 ahora **nombra el campo**. Suite 1581 → 1587. Falta: mergear y deployar | Nosotros — deploy |
 | 2 | **Dos políticas de privacidad vivas y contradictorias** | `onia.com.bo/privacidad` v1.0 (OniaAgency, NIT correcto) vs `app.onia.com.bo/privacy` v2026.06.03 con razón social **que no existe en SEPREC** y Gmail personal — y esa es la que el cliente ACEPTA al registrarse | Nosotros escribimos, Sergio ratifica |
 | 3 | **Portabilidad prometida que no existe** | Los Términos §4.2 prometen exportar datos; el único export real es CSV de facturas (y gateado por plan). Cero export de pacientes/historias/citas. Choca con Ley 3131 art. 10 | Nosotros |
 | 4 | **Cobro del add-on chatbot** | Contratar = link de WhatsApp + activación manual del superadmin. Sin circuito de pago | Nosotros (estaba en construcción, cayó por 529) |
@@ -51,9 +51,26 @@ checkout.
 | **"ONIA CORE BETA" / "MODULO GERENCIAL"** como kicker | Vocabulario interno de ingeniería expuesto al dueño del negocio |
 | **"Inventario simple"** en el menú | El "simple" es una nota para nosotros, no un nombre de módulo para el cliente |
 
+## Web Factory — cerrado el 2026-08-19/20 (en rama, sin deployar)
+
+| Qué | Estado |
+|---|---|
+| **Popup de captura de 2 pasos** (`packages/blocks/src/two-step-popup.ts`) | El 10/10 de la escalera: paso 1 un clic que segmenta, paso 2 el WhatsApp. La respuesta del paso 1 viaja con el lead por el circuito `?src=` que ya corre en prod. 153/153 unit · 16/16 e2e (escritorio y móvil) · mirado renderizado |
+| **Secuencia de scroll estilo Apple** | **Decidido que NO se construye**, con el número medido: la versión más barata que se ve bien pesa 1,6 MB (0,5 MB optimista con render sobre fondo plano) contra un presupuesto de 150 KB de JS |
+| **Extractor de anatomía web** (`harvester/vision/extract_web_anatomy.mjs`) | Mide las 15 capas de un sitio vivo. Contrato en `web-factory/docs/ANATOMIA_DE_UNA_WEB.md`. Ya corrió sobre 6 sitios |
+| **Síntesis cruzada** (`anatomia/SINTESIS.md`) | 9 leyes por mayoría, 4 defectos que no se copian, y **6 correcciones a nuestro propio pattern bank** |
+| **Indexabilidad (C1)** | Ya estaba hecha. El encargo pedía `canonical` en el layout raíz, que **habría desindexado el sitio entero**. Sólo faltaba el checklist: `web-factory/docs/CHECKLIST_PRE_ENTREGA.md` |
+| **Web de Bolivian Electric** | Rediseñada en el repo correcto (`C:\dev\clientes\bolivian-electric-web`, rama `feat/rediseno-leyes-web-factory`): `transition:all` 57 → 0, catálogo de 14 cajas iguales → índice técnico con cifras reales, JS −5,4 kB, sin desborde en 8 combinaciones. **Sin deployar** |
+
+⚠️ **Lección de método, 2026-08-19**: el extractor tumbó 6 afirmaciones que yo mismo había
+escrito como canon (entre ellas "Fanvue no tiene ningún parallax" y "peso 500, nunca
+700/800"). Todas salían de mediciones flojas. **Una medición floja no es neutra: envenena
+el canon**, y después se construye sobre eso. Protocolo: `docs/ANATOMIA_DE_UNA_WEB.md`.
+
 ## Orden sugerido para lanzar
 
-1. Bug de la factura (1 h) → el módulo deja de morir en el primer clic.
+1. ~~Bug de la factura~~ → **hecho en rama; falta mergear y deployar.** Hasta que no esté
+   en producción y verificado ahí, sigue valiendo cero: está construido, no terminado.
 2. Política de privacidad única + portabilidad honesta (riesgo legal real, barato).
 3. Dashboard: acentos + `PLAN_LABELS` + matar las 6 tarjetas iguales (porte de v5).
 4. Cobro del add-on.

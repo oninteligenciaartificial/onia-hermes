@@ -1,0 +1,2138 @@
+{
+  "url": "https://www.componentry.fun/",
+  "slug": "www-componentry-fun",
+  "medidoEl": "2026-08-19T03:02:09.547Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 5041,
+        "alturaPantallas": 6,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "isolate relative flex min-h-svh flex-col",
+          "altoPx": 5041,
+          "altoPantallas": 6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Beautiful Animated UIComponents for React",
+          "cta": "COMPONENTRY",
+          "imagenes": 127
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "relative min-h-screen w-full overflow-x-hidden bg-white dark:bg-backgr",
+          "altoPx": 5041,
+          "altoPantallas": 6,
+          "fondo": "rgb(18, 18, 18)",
+          "titular": "Beautiful Animated UIComponents for React",
+          "cta": "COMPONENTRY",
+          "imagenes": 127
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "px-[max(1rem,calc((100vw-1440px)/2))] w-full min-w-0",
+          "altoPx": 2427,
+          "altoPantallas": 2.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Beautiful Animated UIComponents for React",
+          "cta": "Backed byVercel OSSProgram",
+          "imagenes": 13
+        }
+      ],
+      "encabezados": {
+        "total": 7,
+        "h1": 2,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Beautiful Animated UIComponents for React"
+          },
+          {
+            "nivel": 2,
+            "texto": "Loved by builders with taste"
+          },
+          {
+            "nivel": 2,
+            "texto": "Need something custom?"
+          },
+          {
+            "nivel": 3,
+            "texto": "Product"
+          },
+          {
+            "nivel": 3,
+            "texto": "Resources"
+          },
+          {
+            "nivel": 3,
+            "texto": "Connect"
+          },
+          {
+            "nivel": 1,
+            "texto": "COMPONENTRY"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.53 / ls normal / w 400",
+            "veces": 40
+          },
+          {
+            "valor": "14px / lh 1.29 / ls normal / w 600",
+            "veces": 40
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 40
+          },
+          {
+            "valor": "36px / lh 1.11 / ls -1.8px / w 900",
+            "veces": 16
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "10px / lh 1.50 / ls normal / w 700",
+            "veces": 12
+          },
+          {
+            "valor": "15px / lh 1.60 / ls normal / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 8
+          },
+          {
+            "valor": "13px / lh 1.54 / ls normal / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "16px / lh 1.54 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "15px / lh 1.50 / ls normal / w 600",
+            "veces": 3
+          },
+          {
+            "valor": "14px / lh 1.00 / ls -0.35px / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "35px / lh 0.98 / ls -1.2285px / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 2.4px / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "30px / lh 1.20 / ls -1.5px / w 700",
+            "veces": 2
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 2.16px / w 600",
+            "veces": 2
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Geist",
+            "veces": 222
+          },
+          {
+            "valor": "JetBrains Mono",
+            "veces": 2
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 94
+          },
+          {
+            "valor": "color(srgb 0.50631 0.506393 0.506368)",
+            "veces": 40
+          },
+          {
+            "valor": "lab(65.6464 1.53497 -5.42429)",
+            "veces": 38
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 21
+          },
+          {
+            "valor": "lab(96.1634 0.0993311 -0.364041)",
+            "veces": 8
+          },
+          {
+            "valor": "oklab(0.984998 -0.00000956655 0.0000230074 / 0.55)",
+            "veces": 4
+          },
+          {
+            "valor": "lab(35.1166 1.78212 -6.1173)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.984998 -0.00000956654 0.0000230074 / 0.8)",
+            "veces": 3
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(113, 113, 122, 0.5)",
+            "veces": 60
+          },
+          {
+            "valor": "lab(6.3189 0 0 / 0.85)",
+            "veces": 40
+          },
+          {
+            "valor": "rgb(18, 18, 18)",
+            "veces": 17
+          },
+          {
+            "valor": "lab(15.7305 0.613764 -2.16959)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(22, 22, 22)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.984998 -0.00000956655 0.0000230074 / 0.2)",
+            "veces": 3
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455678 0.0000200868 / 0.08)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 88
+          },
+          {
+            "valor": "6px",
+            "veces": 65
+          },
+          {
+            "valor": "4px",
+            "veces": 60
+          },
+          {
+            "valor": "12px",
+            "veces": 46
+          },
+          {
+            "valor": "2px",
+            "veces": 41
+          },
+          {
+            "valor": "normal 14px",
+            "veces": 40
+          },
+          {
+            "valor": "8px",
+            "veces": 30
+          },
+          {
+            "valor": "10px",
+            "veces": 12
+          },
+          {
+            "valor": "24px",
+            "veces": 7
+          },
+          {
+            "valor": "20px",
+            "veces": 7
+          },
+          {
+            "valor": "14px",
+            "veces": 5
+          },
+          {
+            "valor": "-1px",
+            "veces": 2
+          },
+          {
+            "valor": "32px",
+            "veces": 2
+          },
+          {
+            "valor": "28px",
+            "veces": 2
+          },
+          {
+            "valor": "144px",
+            "veces": 1
+          },
+          {
+            "valor": "40px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 85
+          },
+          {
+            "valor": "14px",
+            "veces": 43
+          },
+          {
+            "valor": "16px",
+            "veces": 22
+          },
+          {
+            "valor": "10px",
+            "veces": 13
+          },
+          {
+            "valor": "2px",
+            "veces": 6
+          },
+          {
+            "valor": "8px",
+            "veces": 4
+          },
+          {
+            "valor": "6px",
+            "veces": 2
+          },
+          {
+            "valor": "1px",
+            "veces": 2
+          },
+          {
+            "valor": "21.6px",
+            "veces": 2
+          },
+          {
+            "valor": "24px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 10,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 109
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.08) 0px 4px 12px 0px, rgba(255, 255, 255, 0.",
+            "veces": 5
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0) 0px 0px 0px 0px",
+            "veces": 5
+          }
+        ],
+        "sombrasDistintas": 3,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 49
+          },
+          {
+            "valor": "60",
+            "veces": 2
+          },
+          {
+            "valor": "61",
+            "veces": 2
+          },
+          {
+            "valor": "70",
+            "veces": 2
+          },
+          {
+            "valor": "0",
+            "veces": 1
+          },
+          {
+            "valor": "50",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "background-color 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ",
+            "veces": 40
+          },
+          {
+            "valor": "opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 40
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 17
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 7
+          },
+          {
+            "valor": "box-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1), transform 0.3s cubic-b",
+            "veces": 7
+          },
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0, 0, 0.2, 1), opacity 0.2s cubic-bezier(0, 0,",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 3
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 2
+          },
+          {
+            "valor": "box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 16,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 87,
+          "rem": 176,
+          "px": 981,
+          "clamp": 38,
+          "vw": 81
+        },
+        "keyframesDeclarados": 7,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 4
+          },
+          {
+            "px": 1024,
+            "veces": 4
+          },
+          {
+            "px": 768,
+            "veces": 3
+          },
+          {
+            "px": 1280,
+            "veces": 3
+          },
+          {
+            "px": 1536,
+            "veces": 2
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed inset-y-0 z-[60] hidden w-px bg-li",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed inset-y-0 z-[60] hidden w-px bg-li",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed top-14 z-[61] hidden size-2.5 -tra",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "56px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed top-14 z-[61] hidden size-2.5 tran",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "56px"
+          },
+          {
+            "etiqueta": "header",
+            "clase": "fixed top-0 left-0 right-0 z-50 w-full border-b border-line ",
+            "posicion": "fixed",
+            "alto": 57,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 33,
+        "ctasTop": [
+          {
+            "texto": "“very nice stuff!”Pasquale Vitiello@paco",
+            "veces": 4
+          },
+          {
+            "texto": "“what is going on @shadcn? In just a few",
+            "veces": 4
+          },
+          {
+            "texto": "“updated my portfolio 404 page with @har",
+            "veces": 4
+          },
+          {
+            "texto": "“Top notch work.”Mikhan@mmikhan_",
+            "veces": 4
+          },
+          {
+            "texto": "“image ripple effect — another Component",
+            "veces": 4
+          },
+          {
+            "texto": "“Congrats on the Vercel OSS program.”Jal",
+            "veces": 4
+          },
+          {
+            "texto": "3",
+            "veces": 1
+          },
+          {
+            "texto": "COMPONENTRY",
+            "veces": 1
+          },
+          {
+            "texto": "Docs",
+            "veces": 1
+          },
+          {
+            "texto": "Blocks",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 29,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 29,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 60,
+        "objetivosMenores44px": 24,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 17.95
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 14.27
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 17.34
+          },
+          {
+            "texto": "color(srgb 0.50631 0.506393 0.506368)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 4.81
+          },
+          {
+            "texto": "color(srgb 0.50631 0.506393 0.506368)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 3.82
+          },
+          {
+            "texto": "color(srgb 0.50631 0.506393 0.506368)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 4.65
+          },
+          {
+            "texto": "lab(65.6464 1.53497 -5.42429)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 7.14
+          },
+          {
+            "texto": "lab(65.6464 1.53497 -5.42429)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 5.68
+          },
+          {
+            "texto": "lab(65.6464 1.53497 -5.42429)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 6.9
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 18.73
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 14.89
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 18.1
+          }
+        ],
+        "fondosTranslucidosOmitidos": 9
+      },
+      "rendimiento": {
+        "pesoTotalKb": 1798,
+        "porTipoKb": {
+          "document": 186.8,
+          "font": 82.8,
+          "stylesheet": 260.7,
+          "script": 1157.6,
+          "image": 106.4,
+          "fetch": 3.7
+        },
+        "pedidos": {
+          "document": 2,
+          "font": 3,
+          "stylesheet": 2,
+          "script": 19,
+          "image": 6,
+          "fetch": 10
+        },
+        "hostsDistintos": 7,
+        "terceros": [
+          {
+            "host": "componentry.dev",
+            "pedidos": 32
+          },
+          {
+            "host": "unavatar.io",
+            "pedidos": 5
+          },
+          {
+            "host": "cloud.umami.is",
+            "pedidos": 1
+          },
+          {
+            "host": "cdn.shadcnblocks.com",
+            "pedidos": 1
+          },
+          {
+            "host": "api.github.com",
+            "pedidos": 1
+          },
+          {
+            "host": "gateway.umami.is",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Geist 100 900 normal",
+          "Geist Fallback normal normal",
+          "JetBrains Mono 100 800 normal",
+          "JetBrains Mono Fallback normal normal",
+          "Instrument Serif 400 normal",
+          "Instrument Serif Fallback normal normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Componentry — Beautiful Animated UI Components for React",
+        "descripcion": "Beautiful, animated React UI components with styling and motion already handled. Built with Tailwind CSS, TypeScript, and Framer Motion.",
+        "canonical": "https://componentry.dev/",
+        "og": 11,
+        "datosEstructurados": 5
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 3624,
+        "alturaPantallas": 3.5,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "isolate relative flex min-h-svh flex-col",
+          "altoPx": 3624,
+          "altoPantallas": 3.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Beautiful Animated UIComponents for React",
+          "cta": "COMPONENTRY",
+          "imagenes": 127
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "relative min-h-screen w-full overflow-x-hidden bg-white dark:bg-backgr",
+          "altoPx": 3624,
+          "altoPantallas": 3.5,
+          "fondo": "rgb(18, 18, 18)",
+          "titular": "Beautiful Animated UIComponents for React",
+          "cta": "COMPONENTRY",
+          "imagenes": 127
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "px-[max(1rem,calc((100vw-1440px)/2))] w-full min-w-0",
+          "altoPx": 1381,
+          "altoPantallas": 1.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Beautiful Animated UIComponents for React",
+          "cta": "Backed byVercel OSSProgram",
+          "imagenes": 13
+        }
+      ],
+      "encabezados": {
+        "total": 7,
+        "h1": 2,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Beautiful Animated UIComponents for React"
+          },
+          {
+            "nivel": 2,
+            "texto": "Loved by builders with taste"
+          },
+          {
+            "nivel": 2,
+            "texto": "Need something custom?"
+          },
+          {
+            "nivel": 3,
+            "texto": "Product"
+          },
+          {
+            "nivel": 3,
+            "texto": "Resources"
+          },
+          {
+            "nivel": 3,
+            "texto": "Connect"
+          },
+          {
+            "nivel": 1,
+            "texto": "COMPONENTRY"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.53 / ls normal / w 400",
+            "veces": 40
+          },
+          {
+            "valor": "14px / lh 1.29 / ls normal / w 600",
+            "veces": 40
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 40
+          },
+          {
+            "valor": "96px / lh 1.00 / ls -4.8px / w 900",
+            "veces": 16
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "10px / lh 1.50 / ls normal / w 700",
+            "veces": 12
+          },
+          {
+            "valor": "15px / lh 1.60 / ls normal / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 8
+          },
+          {
+            "valor": "13px / lh 1.54 / ls normal / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "15px / lh 1.50 / ls normal / w 600",
+            "veces": 3
+          },
+          {
+            "valor": "14px / lh 1.00 / ls -0.35px / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "60px / lh 0.98 / ls -2.1px / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 2.4px / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "36px / lh 1.11 / ls -1.8px / w 700",
+            "veces": 2
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 2.16px / w 600",
+            "veces": 2
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Geist",
+            "veces": 222
+          },
+          {
+            "valor": "JetBrains Mono",
+            "veces": 2
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 94
+          },
+          {
+            "valor": "color(srgb 0.50631 0.506393 0.506368)",
+            "veces": 40
+          },
+          {
+            "valor": "lab(65.6464 1.53497 -5.42429)",
+            "veces": 38
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 21
+          },
+          {
+            "valor": "lab(96.1634 0.0993311 -0.364041)",
+            "veces": 8
+          },
+          {
+            "valor": "oklab(0.984998 -0.00000956655 0.0000230074 / 0.55)",
+            "veces": 4
+          },
+          {
+            "valor": "lab(35.1166 1.78212 -6.1173)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.984998 -0.00000956654 0.0000230074 / 0.8)",
+            "veces": 3
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(113, 113, 122, 0.5)",
+            "veces": 110
+          },
+          {
+            "valor": "lab(6.3189 0 0 / 0.85)",
+            "veces": 40
+          },
+          {
+            "valor": "rgb(18, 18, 18)",
+            "veces": 17
+          },
+          {
+            "valor": "lab(15.7305 0.613764 -2.16959)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(22, 22, 22)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.984998 -0.00000956655 0.0000230074 / 0.2)",
+            "veces": 3
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455678 0.0000200868 / 0.08)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 89
+          },
+          {
+            "valor": "6px",
+            "veces": 66
+          },
+          {
+            "valor": "4px",
+            "veces": 60
+          },
+          {
+            "valor": "12px",
+            "veces": 46
+          },
+          {
+            "valor": "2px",
+            "veces": 41
+          },
+          {
+            "valor": "normal 14px",
+            "veces": 40
+          },
+          {
+            "valor": "8px",
+            "veces": 29
+          },
+          {
+            "valor": "10px",
+            "veces": 12
+          },
+          {
+            "valor": "24px",
+            "veces": 10
+          },
+          {
+            "valor": "14px",
+            "veces": 5
+          },
+          {
+            "valor": "20px",
+            "veces": 3
+          },
+          {
+            "valor": "-1px",
+            "veces": 2
+          },
+          {
+            "valor": "48px",
+            "veces": 2
+          },
+          {
+            "valor": "32px",
+            "veces": 2
+          },
+          {
+            "valor": "40px",
+            "veces": 2
+          },
+          {
+            "valor": "28px",
+            "veces": 2
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 85
+          },
+          {
+            "valor": "14px",
+            "veces": 43
+          },
+          {
+            "valor": "16px",
+            "veces": 22
+          },
+          {
+            "valor": "10px",
+            "veces": 13
+          },
+          {
+            "valor": "2px",
+            "veces": 6
+          },
+          {
+            "valor": "8px",
+            "veces": 4
+          },
+          {
+            "valor": "6px",
+            "veces": 2
+          },
+          {
+            "valor": "1px",
+            "veces": 2
+          },
+          {
+            "valor": "21.6px",
+            "veces": 2
+          },
+          {
+            "valor": "24px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 10,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 109
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.08) 0px 4px 12px 0px, rgba(255, 255, 255, 0.",
+            "veces": 5
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0) 0px 0px 0px 0px",
+            "veces": 5
+          }
+        ],
+        "sombrasDistintas": 3,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 49
+          },
+          {
+            "valor": "60",
+            "veces": 2
+          },
+          {
+            "valor": "61",
+            "veces": 2
+          },
+          {
+            "valor": "70",
+            "veces": 2
+          },
+          {
+            "valor": "0",
+            "veces": 1
+          },
+          {
+            "valor": "50",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "background-color 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ",
+            "veces": 40
+          },
+          {
+            "valor": "opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 40
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 17
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 7
+          },
+          {
+            "valor": "box-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1), transform 0.3s cubic-b",
+            "veces": 7
+          },
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0, 0, 0.2, 1), opacity 0.2s cubic-bezier(0, 0,",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 3
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 2
+          },
+          {
+            "valor": "box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 16,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 87,
+          "rem": 176,
+          "px": 981,
+          "clamp": 38,
+          "vw": 81
+        },
+        "keyframesDeclarados": 7,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 4
+          },
+          {
+            "px": 1024,
+            "veces": 4
+          },
+          {
+            "px": 768,
+            "veces": 3
+          },
+          {
+            "px": 1280,
+            "veces": 3
+          },
+          {
+            "px": 1536,
+            "veces": 2
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed inset-y-0 z-[60] hidden w-px bg-li",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed inset-y-0 z-[60] hidden w-px bg-li",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed top-14 z-[61] hidden size-2.5 -tra",
+            "posicion": "fixed",
+            "alto": 10,
+            "top": "56px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed top-14 z-[61] hidden size-2.5 tran",
+            "posicion": "fixed",
+            "alto": 10,
+            "top": "56px"
+          },
+          {
+            "etiqueta": "header",
+            "clase": "fixed top-0 left-0 right-0 z-50 w-full border-b border-line ",
+            "posicion": "fixed",
+            "alto": 57,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 33,
+        "ctasTop": [
+          {
+            "texto": "“very nice stuff!”Pasquale Vitiello@paco",
+            "veces": 4
+          },
+          {
+            "texto": "“what is going on @shadcn? In just a few",
+            "veces": 4
+          },
+          {
+            "texto": "“updated my portfolio 404 page with @har",
+            "veces": 4
+          },
+          {
+            "texto": "“Top notch work.”Mikhan@mmikhan_",
+            "veces": 4
+          },
+          {
+            "texto": "“image ripple effect — another Component",
+            "veces": 4
+          },
+          {
+            "texto": "“Congrats on the Vercel OSS program.”Jal",
+            "veces": 4
+          },
+          {
+            "texto": "3",
+            "veces": 1
+          },
+          {
+            "texto": "COMPONENTRY",
+            "veces": 1
+          },
+          {
+            "texto": "Docs",
+            "veces": 1
+          },
+          {
+            "texto": "Blocks",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 29,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 29,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 60,
+        "objetivosMenores44px": 29,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 17.95
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 14.27
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 17.34
+          },
+          {
+            "texto": "color(srgb 0.50631 0.506393 0.506368)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 4.81
+          },
+          {
+            "texto": "color(srgb 0.50631 0.506393 0.506368)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 3.82
+          },
+          {
+            "texto": "color(srgb 0.50631 0.506393 0.506368)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 4.65
+          },
+          {
+            "texto": "lab(65.6464 1.53497 -5.42429)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 7.14
+          },
+          {
+            "texto": "lab(65.6464 1.53497 -5.42429)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 5.68
+          },
+          {
+            "texto": "lab(65.6464 1.53497 -5.42429)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 6.9
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 18.73
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 14.89
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 18.1
+          }
+        ],
+        "fondosTranslucidosOmitidos": 9
+      },
+      "rendimiento": {
+        "pesoTotalKb": 1959.2,
+        "porTipoKb": {
+          "document": 186.8,
+          "stylesheet": 260.7,
+          "font": 82.8,
+          "script": 1314.9,
+          "image": 106.4,
+          "fetch": 7.6
+        },
+        "pedidos": {
+          "document": 2,
+          "stylesheet": 2,
+          "font": 3,
+          "script": 22,
+          "image": 6,
+          "fetch": 22
+        },
+        "hostsDistintos": 7,
+        "terceros": [
+          {
+            "host": "componentry.dev",
+            "pedidos": 47
+          },
+          {
+            "host": "unavatar.io",
+            "pedidos": 5
+          },
+          {
+            "host": "cdn.shadcnblocks.com",
+            "pedidos": 1
+          },
+          {
+            "host": "cloud.umami.is",
+            "pedidos": 1
+          },
+          {
+            "host": "api.github.com",
+            "pedidos": 1
+          },
+          {
+            "host": "gateway.umami.is",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Geist 100 900 normal",
+          "Geist Fallback normal normal",
+          "JetBrains Mono 100 800 normal",
+          "JetBrains Mono Fallback normal normal",
+          "Instrument Serif 400 normal",
+          "Instrument Serif Fallback normal normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Componentry — Beautiful Animated UI Components for React",
+        "descripcion": "Beautiful, animated React UI components with styling and motion already handled. Built with Tailwind CSS, TypeScript, and Framer Motion.",
+        "canonical": "https://componentry.dev/",
+        "og": 11,
+        "datosEstructurados": 5
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 3454,
+        "alturaPantallas": 3.8,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "isolate relative flex min-h-svh flex-col",
+          "altoPx": 3454,
+          "altoPantallas": 3.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Beautiful Animated UIComponents for React",
+          "cta": "COMPONENTRY",
+          "imagenes": 127
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "relative min-h-screen w-full overflow-x-hidden bg-white dark:bg-backgr",
+          "altoPx": 3454,
+          "altoPantallas": 3.8,
+          "fondo": "rgb(18, 18, 18)",
+          "titular": "Beautiful Animated UIComponents for React",
+          "cta": "COMPONENTRY",
+          "imagenes": 127
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "px-[max(1rem,calc((100vw-1440px)/2))] w-full min-w-0",
+          "altoPx": 1381,
+          "altoPantallas": 1.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Beautiful Animated UIComponents for React",
+          "cta": "Backed byVercel OSSProgram",
+          "imagenes": 13
+        }
+      ],
+      "encabezados": {
+        "total": 7,
+        "h1": 2,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Beautiful Animated UIComponents for React"
+          },
+          {
+            "nivel": 2,
+            "texto": "Loved by builders with taste"
+          },
+          {
+            "nivel": 2,
+            "texto": "Need something custom?"
+          },
+          {
+            "nivel": 3,
+            "texto": "Product"
+          },
+          {
+            "nivel": 3,
+            "texto": "Resources"
+          },
+          {
+            "nivel": 3,
+            "texto": "Connect"
+          },
+          {
+            "nivel": 1,
+            "texto": "COMPONENTRY"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.53 / ls normal / w 400",
+            "veces": 40
+          },
+          {
+            "valor": "14px / lh 1.29 / ls normal / w 600",
+            "veces": 40
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 40
+          },
+          {
+            "valor": "96px / lh 1.00 / ls -4.8px / w 900",
+            "veces": 16
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "10px / lh 1.50 / ls normal / w 700",
+            "veces": 12
+          },
+          {
+            "valor": "15px / lh 1.60 / ls normal / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 8
+          },
+          {
+            "valor": "13px / lh 1.54 / ls normal / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "15px / lh 1.50 / ls normal / w 600",
+            "veces": 3
+          },
+          {
+            "valor": "14px / lh 1.00 / ls -0.35px / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "60px / lh 0.98 / ls -2.1px / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 2.4px / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "36px / lh 1.11 / ls -1.8px / w 700",
+            "veces": 2
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 2.16px / w 600",
+            "veces": 2
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Geist",
+            "veces": 222
+          },
+          {
+            "valor": "JetBrains Mono",
+            "veces": 2
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 94
+          },
+          {
+            "valor": "color(srgb 0.50631 0.506393 0.506368)",
+            "veces": 40
+          },
+          {
+            "valor": "lab(65.6464 1.53497 -5.42429)",
+            "veces": 38
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 21
+          },
+          {
+            "valor": "lab(96.1634 0.0993311 -0.364041)",
+            "veces": 8
+          },
+          {
+            "valor": "oklab(0.984998 -0.00000956655 0.0000230074 / 0.55)",
+            "veces": 4
+          },
+          {
+            "valor": "lab(35.1166 1.78212 -6.1173)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.984998 -0.00000956654 0.0000230074 / 0.8)",
+            "veces": 3
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(113, 113, 122, 0.5)",
+            "veces": 110
+          },
+          {
+            "valor": "lab(6.3189 0 0 / 0.85)",
+            "veces": 40
+          },
+          {
+            "valor": "rgb(18, 18, 18)",
+            "veces": 17
+          },
+          {
+            "valor": "lab(15.7305 0.613764 -2.16959)",
+            "veces": 12
+          },
+          {
+            "valor": "rgb(22, 22, 22)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.984998 -0.00000956655 0.0000230074 / 0.2)",
+            "veces": 3
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455678 0.0000200868 / 0.08)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 89
+          },
+          {
+            "valor": "6px",
+            "veces": 66
+          },
+          {
+            "valor": "4px",
+            "veces": 60
+          },
+          {
+            "valor": "12px",
+            "veces": 46
+          },
+          {
+            "valor": "2px",
+            "veces": 41
+          },
+          {
+            "valor": "normal 14px",
+            "veces": 40
+          },
+          {
+            "valor": "8px",
+            "veces": 29
+          },
+          {
+            "valor": "10px",
+            "veces": 12
+          },
+          {
+            "valor": "24px",
+            "veces": 9
+          },
+          {
+            "valor": "14px",
+            "veces": 5
+          },
+          {
+            "valor": "20px",
+            "veces": 3
+          },
+          {
+            "valor": "-1px",
+            "veces": 2
+          },
+          {
+            "valor": "48px",
+            "veces": 2
+          },
+          {
+            "valor": "32px",
+            "veces": 2
+          },
+          {
+            "valor": "40px",
+            "veces": 2
+          },
+          {
+            "valor": "28px",
+            "veces": 2
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 85
+          },
+          {
+            "valor": "14px",
+            "veces": 43
+          },
+          {
+            "valor": "16px",
+            "veces": 22
+          },
+          {
+            "valor": "10px",
+            "veces": 13
+          },
+          {
+            "valor": "2px",
+            "veces": 6
+          },
+          {
+            "valor": "8px",
+            "veces": 4
+          },
+          {
+            "valor": "6px",
+            "veces": 2
+          },
+          {
+            "valor": "1px",
+            "veces": 2
+          },
+          {
+            "valor": "21.6px",
+            "veces": 2
+          },
+          {
+            "valor": "24px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 10,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 109
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.08) 0px 4px 12px 0px, rgba(255, 255, 255, 0.",
+            "veces": 5
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0) 0px 0px 0px 0px",
+            "veces": 5
+          }
+        ],
+        "sombrasDistintas": 3,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 49
+          },
+          {
+            "valor": "60",
+            "veces": 2
+          },
+          {
+            "valor": "61",
+            "veces": 2
+          },
+          {
+            "valor": "70",
+            "veces": 2
+          },
+          {
+            "valor": "0",
+            "veces": 1
+          },
+          {
+            "valor": "50",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "background-color 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ",
+            "veces": 40
+          },
+          {
+            "valor": "opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 40
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 17
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 7
+          },
+          {
+            "valor": "box-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1), transform 0.3s cubic-b",
+            "veces": 7
+          },
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0, 0, 0.2, 1), opacity 0.2s cubic-bezier(0, 0,",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 3
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 2
+          },
+          {
+            "valor": "box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 16,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 87,
+          "rem": 176,
+          "px": 981,
+          "clamp": 38,
+          "vw": 81
+        },
+        "keyframesDeclarados": 7,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 4
+          },
+          {
+            "px": 1024,
+            "veces": 4
+          },
+          {
+            "px": 768,
+            "veces": 3
+          },
+          {
+            "px": 1280,
+            "veces": 3
+          },
+          {
+            "px": 1536,
+            "veces": 2
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 7,
+            "navFija": true
+          },
+          {
+            "y": 639,
+            "conTransform": 7,
+            "navFija": true
+          },
+          {
+            "y": 1277,
+            "conTransform": 7,
+            "navFija": true
+          },
+          {
+            "y": 1916,
+            "conTransform": 6,
+            "navFija": true
+          },
+          {
+            "y": 2554,
+            "conTransform": 6,
+            "navFija": true
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 5,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed inset-y-0 z-[60] hidden w-px bg-li",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed inset-y-0 z-[60] hidden w-px bg-li",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed top-14 z-[61] hidden size-2.5 -tra",
+            "posicion": "fixed",
+            "alto": 10,
+            "top": "56px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "pointer-events-none fixed top-14 z-[61] hidden size-2.5 tran",
+            "posicion": "fixed",
+            "alto": 10,
+            "top": "56px"
+          },
+          {
+            "etiqueta": "header",
+            "clase": "fixed top-0 left-0 right-0 z-50 w-full border-b border-line ",
+            "posicion": "fixed",
+            "alto": 57,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 33,
+        "ctasTop": [
+          {
+            "texto": "“very nice stuff!”Pasquale Vitiello@paco",
+            "veces": 4
+          },
+          {
+            "texto": "“what is going on @shadcn? In just a few",
+            "veces": 4
+          },
+          {
+            "texto": "“updated my portfolio 404 page with @har",
+            "veces": 4
+          },
+          {
+            "texto": "“Top notch work.”Mikhan@mmikhan_",
+            "veces": 4
+          },
+          {
+            "texto": "“image ripple effect — another Component",
+            "veces": 4
+          },
+          {
+            "texto": "“Congrats on the Vercel OSS program.”Jal",
+            "veces": 4
+          },
+          {
+            "texto": "3",
+            "veces": 1
+          },
+          {
+            "texto": "COMPONENTRY",
+            "veces": 1
+          },
+          {
+            "texto": "Docs",
+            "veces": 1
+          },
+          {
+            "texto": "Blocks",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 29,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 29,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 60,
+        "objetivosMenores44px": 29,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 17.95
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 14.27
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 17.34
+          },
+          {
+            "texto": "color(srgb 0.50631 0.506393 0.506368)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 4.81
+          },
+          {
+            "texto": "color(srgb 0.50631 0.506393 0.506368)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 3.82
+          },
+          {
+            "texto": "color(srgb 0.50631 0.506393 0.506368)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 4.65
+          },
+          {
+            "texto": "lab(65.6464 1.53497 -5.42429)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 7.14
+          },
+          {
+            "texto": "lab(65.6464 1.53497 -5.42429)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 5.68
+          },
+          {
+            "texto": "lab(65.6464 1.53497 -5.42429)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 6.9
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(18, 18, 18)",
+            "ratio": 18.73
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "lab(15.7305 0.613764 -2.16959)",
+            "ratio": 14.89
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(22, 22, 22)",
+            "ratio": 18.1
+          }
+        ],
+        "fondosTranslucidosOmitidos": 9
+      },
+      "rendimiento": {
+        "pesoTotalKb": 2014.5,
+        "porTipoKb": {
+          "document": 186.8,
+          "stylesheet": 260.7,
+          "font": 82.8,
+          "script": 1367.7,
+          "image": 106.4,
+          "fetch": 10.1
+        },
+        "pedidos": {
+          "document": 4,
+          "stylesheet": 4,
+          "font": 6,
+          "script": 46,
+          "image": 12,
+          "fetch": 51
+        },
+        "hostsDistintos": 7,
+        "terceros": [
+          {
+            "host": "componentry.dev",
+            "pedidos": 56
+          },
+          {
+            "host": "unavatar.io",
+            "pedidos": 5
+          },
+          {
+            "host": "cdn.shadcnblocks.com",
+            "pedidos": 1
+          },
+          {
+            "host": "cloud.umami.is",
+            "pedidos": 1
+          },
+          {
+            "host": "api.github.com",
+            "pedidos": 1
+          },
+          {
+            "host": "gateway.umami.is",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Geist 100 900 normal",
+          "Geist Fallback normal normal",
+          "JetBrains Mono 100 800 normal",
+          "JetBrains Mono Fallback normal normal",
+          "Instrument Serif 400 normal",
+          "Instrument Serif Fallback normal normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Componentry — Beautiful Animated UI Components for React",
+        "descripcion": "Beautiful, animated React UI components with styling and motion already handled. Built with Tailwind CSS, TypeScript, and Framer Motion.",
+        "canonical": "https://componentry.dev/",
+        "og": 11,
+        "datosEstructurados": 5
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 4,
+    "conTransicion": 143
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}
