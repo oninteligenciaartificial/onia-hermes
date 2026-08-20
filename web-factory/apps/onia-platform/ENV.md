@@ -4,12 +4,12 @@
 
 | Variable | Obligatoria | Que hace |
 |---|---|---|
-| `NEXT_PUBLIC_WA_PHONE` | No (tiene default) | Numero de WhatsApp al que apuntan todos los CTA (`wa.me`). Solo digitos, con codigo de pais: `59178491375`. Si no se define, `src/lib/site.ts` cae al numero confirmado por Sergio el 2026-07-26 — el mismo del portfolio de Meta y del pie legal. Definirla sirve para apuntar a otro numero (staging, o el numero del chatbot) sin tocar codigo. |
+| `NEXT_PUBLIC_WA_PHONE` | No (tiene default) | Numero de WhatsApp al que apuntan TODOS los CTA (`wa.me`), incluidas las paginas de servicios. Solo digitos, con codigo de pais. Si no se define, `src/lib/site.ts` cae a `59175414930` — el numero que esta en WhatsApp Cloud API con el chatbot atendiendo. Definirla sirve para apuntar a otro numero (staging) sin tocar codigo. **Es build-time: cambiarla exige reconstruir y redesplegar, no alcanza con reiniciar el contenedor.** |
 
 Ejemplo de `.env.local`:
 
 ```
-NEXT_PUBLIC_WA_PHONE=59178491375
+NEXT_PUBLIC_WA_PHONE=59175414930
 ```
 
 Pendiente conocido (no es una variable todavia): **no hay destino de agenda

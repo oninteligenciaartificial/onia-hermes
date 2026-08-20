@@ -1,0 +1,238 @@
+{
+  "updatedAt": "2026-07-10T00:30:15.000Z",
+  "createdAt": "2026-07-04T02:46:09.325Z",
+  "id": "NDXLJiR00ciQx72V",
+  "name": "ONIA - Guiones Diarios de Contenido",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "4b975501-bae5-4b8b-94ec-e85a220625fa",
+      "name": "Lunes a sabado 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * 1-6"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "019de882-d4ab-4cf6-b8eb-fc2024635145",
+      "name": "Fecha + pilar del dia",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const date = new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz' });\nconst pilares = ['Dolor real (proceso manual que pierde plata/tiempo)','Antes/Despues (sin metricas falsas)','Caso de uso concreto (chatbot / web que capta / automatizacion)','Educativo o mito de IA para pyme','Detras de escena de ONIA','Autoridad Sergio fundador'];\nconst i = Math.floor(Date.now()/86400000) % pilares.length;\nreturn [{ json: { date, pilarDelDia: pilares[i] } }];"
+      }
+    },
+    {
+      "id": "7eb19797-d5ee-45e2-880b-60c5477671b0",
+      "name": "Generar guiones (OpenAI)",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "resource": "text",
+        "operation": "response",
+        "modelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gpt-4o-mini"
+        },
+        "responses": {
+          "values": [
+            {
+              "type": "text",
+              "role": "system",
+              "content": "Eres el guionista de contenido propio de ONIA, agencia de IA practica para negocios de Bolivia. Escribes guiones listos para producir, claros y directos, sin humo. REGLAS: no inventes testimonios, metricas, resultados ni precios; antes/despues sin numeros falsos; inspiracion estructural, nunca copiar identidad; nada se publica sin aprobacion; cara/voz IA de Sergio solo con aprobacion. Formato de CADA guion: GUION N - [Pilar] - [Formato] / Gancho (0-3s): / Desarrollo: / Cierre + CTA: / Texto en pantalla: / Prompt visual: / Voz-tono: / Duracion."
+            },
+            {
+              "type": "text",
+              "role": "user",
+              "content": "='Genera 3 guiones ONIA para hoy ' + $json.date + '. Guion 1 = Reel priorizando el pilar: ' + $json.pilarDelDia + '. Guion 2 = Carrusel. Guion 3 = Historia. Cierra con \"Guion recomendado para hoy:\" y \"Siguiente comando:\".'"
+            }
+          ]
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "oAEdJ5GA8hOYB83l",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "id": "d4a153bb-8a65-4e56-b6ae-1a1b1eea9925",
+      "name": "Preparar mensaje Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const j = items[0].json || {};\nconst content = j.content || j.output || j.text || j.response || (j.message && j.message.content) || (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '';\nconst NL = String.fromCharCode(10);\nconst date = new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz' });\nconst body = typeof content === 'string' ? content : JSON.stringify(content);\nconst head = 'ONIA | Guiones de contenido ' + date;\nconst foot = 'Nada se publica sin tu OK. Para producir: Genera Reel ONIA: <tema>.';\nconst text = body ? (head + NL + NL + body + NL + NL + foot) : (head + NL + 'No se pudo generar. Revisar nodo OpenAI en n8n.');\nreturn [{ json: { text: text.slice(0, 3900) } }];\n"
+      }
+    },
+    {
+      "id": "12d47ed1-2544-40c3-ad9e-dd28756849eb",
+      "name": "Enviar guiones a Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "e23a2556-e547-49f9-aa06-c0efb2cb1b8d"
+    }
+  ],
+  "connections": {
+    "Lunes a sabado 07:00": {
+      "main": [
+        [
+          {
+            "node": "Fecha + pilar del dia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fecha + pilar del dia": {
+      "main": [
+        [
+          {
+            "node": "Generar guiones (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generar guiones (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Preparar mensaje Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar mensaje Telegram": {
+      "main": [
+        [
+          {
+            "node": "Enviar guiones a Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Lunes a sabado 07:00": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "6b162ae4-a4cd-4a61-9e42-9d4e9793eafe",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-04T02:46:39.808Z",
+      "createdAt": "2026-07-04T02:46:39.808Z",
+      "id": "DgTugYGe5NXKaxS1",
+      "name": "content"
+    },
+    {
+      "updatedAt": "2026-07-03T21:24:07.419Z",
+      "createdAt": "2026-07-03T21:24:07.419Z",
+      "id": "XBK6IoQ3GTHTpDnq",
+      "name": "onia-ops"
+    },
+    {
+      "updatedAt": "2026-06-29T19:46:07.422Z",
+      "createdAt": "2026-06-29T19:46:07.422Z",
+      "id": "Z19qYmxQJ5R8bVE9",
+      "name": "safe-automation"
+    },
+    {
+      "updatedAt": "2026-06-29T19:46:07.419Z",
+      "createdAt": "2026-06-29T19:46:07.419Z",
+      "id": "oGpBCMbz4g6tFsIK",
+      "name": "daily-briefing"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-07-04T02:46:09.328Z",
+      "createdAt": "2026-07-04T02:46:09.328Z",
+      "role": "workflow:owner",
+      "workflowId": "NDXLJiR00ciQx72V",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

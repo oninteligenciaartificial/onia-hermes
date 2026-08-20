@@ -545,6 +545,26 @@ export const clinicCss = `
 
 @media (min-width: 841px) { .wf-sticky-cta { right: 24px; bottom: 24px; } }
 
+/* The bar is position:fixed with nothing reserving its space, so at 390px it
+   overlapped real content at every scroll position (hero chip 39x38px, service
+   h3 + copy 111px wide, body copy 136x48px, and the last 64px of the footer).
+   Below 560px it becomes a full-bleed conversion bar — readable as page chrome
+   instead of a pill floating mid-paragraph — and the page reserves its height
+   so the end of the document always clears it. */
+@media (max-width: 560px) {
+  .wf-sticky-cta {
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    justify-content: center;
+    min-height: 52px;
+  }
+
+  .wf-clinic-page {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 /* ---------- Motion: IO reveals (visible-by-default fallback) ---------- */
 .wf-clinic-motion [data-reveal] { opacity: 0; transform: translateY(22px); }
 .wf-clinic-motion [data-reveal].is-revealed {

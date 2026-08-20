@@ -8,19 +8,25 @@
  */
 
 /**
- * Numero de WhatsApp del negocio.
- *
- * Sale de `NEXT_PUBLIC_WA_PHONE` (solo digitos, con codigo de pais). Si el
- * entorno no la define se usa el numero confirmado por Sergio 2026-07-26, que
- * es el mismo que figura en el portfolio de Meta y en el pie legal: si cambia,
- * hay que cambiarlo en los tres lados o la verificacion de Meta deja de cruzar.
- * El fallback existe para no dejar la web sin CTA; el override por entorno es
- * para poder apuntar a otro numero (staging, chatbot) sin tocar codigo.
+ * Origen publico del sitio. Lo usan las TRES cosas que tienen que coincidir o
+ * la indexacion se rompe: `metadataBase` (de donde salen los canonical y las
+ * URLs absolutas de OG), el `sitemap.xml` y la linea `Sitemap:` de robots.txt.
+ * Estaba escrito tres veces a mano; ahora se declara una sola.
  */
-// 2026-08-07: pasa a ser el 75414930, el numero del CHATBOT. El 78491375 quedo
-// atrapado en un portfolio fantasma de Meta y NO tiene bot atendiendo: cada
-// visitante que tocaba el boton de WhatsApp caia en un numero que nadie mira.
-// El 75414930 esta en Cloud API con el bot vivo y la app de Meta publicada.
+export const SITE_URL = "https://onia.com.bo";
+
+/**
+ * Numero de WhatsApp del negocio (el que ATIENDE los mensajes).
+ *
+ * Sale de `NEXT_PUBLIC_WA_PHONE` (solo digitos, con codigo de pais). Esa
+ * variable NO esta definida en ningun lado hoy, asi que en la practica manda
+ * este fallback.
+ *
+ * 2026-08-08: el numero anterior se retiro por completo (habia quedado en un
+ * portfolio fantasma de Meta, sin bot atendiendo). Este esta en WhatsApp Cloud
+ * API con el chatbot vivo y la app publicada, y es el UNICO numero de la web:
+ * enlaces wa.me, paginas de servicios y datos de contacto salen todos de aca.
+ */
 const WA_PHONE_FALLBACK = "59175414930";
 
 export const WA_PHONE =
@@ -34,6 +40,15 @@ export function waLink(text: string): string {
 /** CTA general de toda la pagina. */
 export const WA_URL = waLink("Hola, quiero conocer Onia");
 
+/**
+ * CTA de la landing. El texto lo fijo el mockup aprobado: entra ya diciendo
+ * de donde viene y que quiere resolver, para que la respuesta arranque en el
+ * problema y no en "hola, en que te ayudo".
+ */
+export const WA_URL_LANDING = waLink(
+  "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio.",
+);
+
 export const WA_TEXT_COMERCIO =
   "Hola, quiero que me avisen cuando Onia para comercio esté listo";
 export const WA_TEXT_SERVICIOS =
@@ -43,6 +58,17 @@ export const WA_TEXT_PROVEEDORES =
 
 export const APP_URL = "https://app.onia.com.bo";
 export const DENTALGEST_URL = "https://dentalgest.app";
+
+/**
+ * CTA de las paginas de servicios (chatbot, marketing IA, consultoria).
+ *
+ * Usa `WA_PHONE`, el MISMO numero que el resto de la web. Antes esto tenia su
+ * propia constante y las dos divergieron: la portada mandaba a un numero y las
+ * paginas de servicios a otro. Un solo numero, un solo lugar donde cambiarlo.
+ */
+export function waServiciosLink(text: string): string {
+  return `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(text)}`;
+}
 
 /**
  * Agenda propia (Cal.com self-hosted en el VPS, cuenta `onia`).

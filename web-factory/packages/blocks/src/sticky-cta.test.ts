@@ -7,7 +7,7 @@ const base = {
   redes: { ig: "", fb: "", linkedin: "", x: "" },
   servicios: [{ titulo: "s", desc: "d", icono: "x" }],
   cta: { texto: "Agendar cita", url: "https://wa.me/59170000000" },
-} as const;
+};
 
 describe("renderStickyCta", () => {
   it("renders a fixed CTA pointing at the real channel", () => {

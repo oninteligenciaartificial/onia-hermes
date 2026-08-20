@@ -1,0 +1,111 @@
+{
+  "updatedAt": "2026-07-05T18:56:24.881Z",
+  "createdAt": "2026-07-05T18:56:24.881Z",
+  "id": "UMpcKi7wfMmC9KCw",
+  "name": "ONIA - Propuesta Abierta (pixel)",
+  "description": "Pixel de apertura de propuestas comerciales. El HTML trackeado (generador --track) llama GET /webhook/propuesta-abierta?t=<token>&s=<slug> y avisa a Sergio por Telegram. Runbook: hermes-content/docs/ONIA_PROPUESTAS_V3_PLAN_20260705.md",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "d3037c7d-4bab-46c2-8b53-49c6b3313a17",
+      "name": "Pixel Propuesta Abierta",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "propuesta-abierta",
+        "responseMode": "onReceived",
+        "options": {
+          "ignoreBots": true,
+          "noResponseBody": true
+        }
+      },
+      "webhookId": "efec475b-21fc-45ff-ad3c-2828e8e877a5"
+    },
+    {
+      "id": "4d6c07ca-e4b4-4156-9a0e-5b8244adcc11",
+      "name": "Telegram a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        540,
+        300
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "=PROPUESTA ABIERTA\n\nProspecto: {{ $json.query.t || \"sin token\" }}\nPropuesta: {{ $json.query.s || \"?\" }}\nHora: {{ $now.setZone(\"America/La_Paz\").toFormat(\"dd/MM/yyyy HH:mm\") }} (La Paz)\nDispositivo: {{ ($json.headers[\"user-agent\"] || \"\").slice(0, 80) }}\n\nSeguimiento: escribile mientras la tiene abierta.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "bf24af36-b226-4255-b19c-22ab39dec451"
+    }
+  ],
+  "connections": {
+    "Pixel Propuesta Abierta": {
+      "main": [
+        [
+          {
+            "node": "Telegram a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "334e8b99-548f-44e2-a2a3-508fe9666a5b",
+  "activeVersionId": "334e8b99-548f-44e2-a2a3-508fe9666a5b",
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-05T18:56:24.895Z",
+      "createdAt": "2026-07-05T18:56:24.895Z",
+      "role": "workflow:owner",
+      "workflowId": "UMpcKi7wfMmC9KCw",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

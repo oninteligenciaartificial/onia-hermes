@@ -1,0 +1,222 @@
+{
+  "updatedAt": "2026-08-14T03:45:34.544Z",
+  "createdAt": "2026-08-14T03:05:08.352Z",
+  "id": "2gk5aOIvIHBbttqJ",
+  "name": "ONIA - Aviso de pago QR (Telegram)",
+  "description": "Cada 5 min busca subscription_payments status=PENDING que no esten en n8n_ops.payment_alerts_sent (tabla de vistos, evita duplicados) y avisa a Sergio por Telegram (chat 6830070978). Reemplaza el aviso in-app roto por SMTP (Brevo 535). Marca el pago como ",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "60b84cf2-94f9-4380-900b-82ed70f1a327",
+      "name": "Cada 5 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/5 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4be7ecc9-1fa2-48d3-9060-45cb45f98b3e",
+      "name": "Asegurar tabla de vistos",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "resource": "database",
+        "operation": "executeQuery",
+        "query": "CREATE SCHEMA IF NOT EXISTS n8n_ops;\nCREATE TABLE IF NOT EXISTS n8n_ops.payment_alerts_sent (\n  payment_id text PRIMARY KEY,\n  notified_at timestamptz NOT NULL DEFAULT now()\n);",
+        "options": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "ecF3x3SGUrT0hBbm",
+          "name": "Postgres VPS (dentalgest-staging)"
+        }
+      }
+    },
+    {
+      "id": "559003a1-320f-4145-865f-f48c1b7ed97b",
+      "name": "Pagos QR pendientes sin avisar",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "resource": "database",
+        "operation": "executeQuery",
+        "query": "SELECT\n  sp.id,\n  sp.plan,\n  sp.cycle,\n  sp.amount,\n  COALESCE(sp.\"payerName\", 'N/D') AS \"payerName\",\n  COALESCE(sp.\"bankName\", 'N/D') AS \"bankName\",\n  COALESCE(sp.\"transactionRef\", 'N/D') AS \"transactionRef\",\n  sp.\"receiptUrl\",\n  sp.\"createdAt\",\n  o.name AS \"clinicName\",\n  o.slug\nFROM subscription_payments sp\nJOIN organizations o ON o.id = sp.\"organizationId\"\nWHERE sp.status = 'PENDING'\n  AND NOT EXISTS (\n    SELECT 1 FROM n8n_ops.payment_alerts_sent a WHERE a.payment_id = sp.id\n  )\nORDER BY sp.\"createdAt\" ASC;",
+        "options": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "ecF3x3SGUrT0hBbm",
+          "name": "Postgres VPS (dentalgest-staging)"
+        }
+      }
+    },
+    {
+      "id": "e6596d57-3b0f-4e46-9d4c-f9bf1e4a532e",
+      "name": "Avisar a Sergio (Telegram)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "=Nuevo pago QR pendiente\n\nClinica: {{ $json.clinicName }} ({{ $json.slug }})\nPagador: {{ $json.payerName }}\nPlan: {{ $json.plan }} ({{ $json.cycle }})\nMonto: Bs. {{ $json.amount }}\nBanco: {{ $json.bankName }}\nRef: {{ $json.transactionRef }}\nFecha: {{ $json.createdAt }}\n\nComprobante: {{ $json.receiptUrl || \"no adjunto\" }}\n\nRevisar y aprobar: https://app.onia.com.bo/admin/payments",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "9cc9868a-7fa4-4d89-8a56-399280b04d30"
+    },
+    {
+      "id": "974d940e-b698-45ef-a1b0-0ff066107288",
+      "name": "Marcar aviso enviado",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        960,
+        0
+      ],
+      "parameters": {
+        "resource": "database",
+        "operation": "executeQuery",
+        "query": "INSERT INTO n8n_ops.payment_alerts_sent (payment_id) VALUES ($1) ON CONFLICT (payment_id) DO NOTHING;",
+        "options": {
+          "queryReplacement": "={{ $('Pagos QR pendientes sin avisar').item.json.id }}"
+        }
+      },
+      "credentials": {
+        "postgres": {
+          "id": "ecF3x3SGUrT0hBbm",
+          "name": "Postgres VPS (dentalgest-staging)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cada 5 min": {
+      "main": [
+        [
+          {
+            "node": "Asegurar tabla de vistos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Asegurar tabla de vistos": {
+      "main": [
+        [
+          {
+            "node": "Pagos QR pendientes sin avisar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pagos QR pendientes sin avisar": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio (Telegram)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar a Sergio (Telegram)": {
+      "main": [
+        [
+          {
+            "node": "Marcar aviso enviado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cada 5 min": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "6b12d22f-0718-4631-ba73-7f26ff6e688c",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T03:05:08.363Z",
+      "createdAt": "2026-08-14T03:05:08.363Z",
+      "role": "workflow:owner",
+      "workflowId": "2gk5aOIvIHBbttqJ",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Updated Asegurar tabla de vistos, Pagos QR pendientes sin avisar, Marcar aviso …",
+    "description": "Updated nodes: Asegurar tabla de vistos, Pagos QR pendientes sin avisar, Marcar aviso enviado"
+  }
+}

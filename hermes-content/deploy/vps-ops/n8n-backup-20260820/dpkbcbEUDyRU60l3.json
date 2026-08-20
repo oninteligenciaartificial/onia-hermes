@@ -1,0 +1,49 @@
+{
+  "updatedAt": "2026-03-21T20:06:40.000Z",
+  "createdAt": "2026-03-21T20:03:26.261Z",
+  "id": "dpkbcbEUDyRU60l3",
+  "name": "My workflow 2",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "8bc86bd4-1caa-415b-b3ab-a21b0d02e7e2",
+  "activeVersionId": null,
+  "versionCounter": 15,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-21T20:03:26.264Z",
+      "createdAt": "2026-03-21T20:03:26.264Z",
+      "role": "workflow:owner",
+      "workflowId": "dpkbcbEUDyRU60l3",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

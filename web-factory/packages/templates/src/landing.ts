@@ -1,4 +1,12 @@
-import { renderFeatures, renderFooter, renderHero, type SiteClient } from "@onia/blocks";
+import {
+  renderFaq,
+  renderFeatures,
+  renderFooter,
+  renderHero,
+  renderProcess,
+  renderTrust,
+  type SiteClient,
+} from "@onia/blocks";
 import { clientTokenCss } from "@onia/tokens";
 
 export type LandingClient = SiteClient & {
@@ -21,11 +29,17 @@ export type LandingClient = SiteClient & {
   };
 };
 
+// Each block below returns "" when the client has no data for it, so the
+// composition is data-driven: a client with credenciales/proceso/faq gets those
+// sections, one without them gets exactly the page it got before.
 export function renderLandingBody(client: LandingClient): string {
   return `
     <main class="wf-page" id="top">
       ${renderHero(client)}
+      ${renderTrust(client)}
       ${renderFeatures(client)}
+      ${renderProcess(client)}
+      ${renderFaq(client)}
       ${renderFooter(client)}
     </main>
   `;
@@ -262,6 +276,38 @@ h1 {
   display: block;
 }
 
+/* renderHero emits this list whenever the client has credenciales/beneficios
+   (the common path), so leaving it unstyled shipped browser-default discs with
+   40px of indent inside a designed panel. */
+.wf-proof-points {
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  list-style: none;
+}
+
+.wf-proof-points li {
+  position: relative;
+  padding-left: 28px;
+  color: color-mix(in srgb, var(--color-fg) 80%, var(--color-bg));
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+/* Check drawn in CSS: no glyph, no icon font, no extra markup. */
+.wf-proof-points li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.34em;
+  width: 13px;
+  height: 7px;
+  border-left: 2.5px solid var(--color-primary);
+  border-bottom: 2.5px solid var(--color-primary);
+  transform: rotate(-45deg);
+}
+
 .wf-proof-panel strong {
   display: block;
   margin-top: 18px;
@@ -319,8 +365,19 @@ h1 {
   font-weight: 850;
 }
 
+.wf-feature-icon .wf-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* The number is an eyebrow above the title, but it is the 2nd of 4 flex
+   children: "margin-top: auto" pushed it AND everything after it to the bottom
+   of the card, so a card with a 1-line description sat 27px lower than its
+   2-line neighbours (measured on restaurant/saas/engineering demos).
+   Note: no backticks in this file's CSS comments -- it lives inside a template
+   literal and a stray backtick ends the string mid-stylesheet. */
 .wf-feature-number {
-  margin-top: auto;
+  margin-top: 14px;
 }
 
 .wf-feature h3 {
@@ -378,6 +435,121 @@ h1 {
   max-width: 720px;
 }
 
+/* Trust strip: credenciales as chips, right under the hero. */
+.wf-trust {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 18px 0;
+  border-top: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+}
+
+.wf-trust-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.wf-trust-item {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 26%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary) 7%, transparent);
+  color: color-mix(in srgb, var(--color-fg) 82%, var(--color-bg));
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+/* Process: numbered steps, no list markers. */
+.wf-process-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.wf-process-step {
+  padding-top: 18px;
+  border-top: 3px solid color-mix(in srgb, var(--color-primary) 34%, transparent);
+}
+
+.wf-process-number {
+  display: block;
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 850;
+}
+
+.wf-process-title {
+  margin-top: 10px;
+  color: var(--color-secondary);
+  font-size: 1.2rem;
+}
+
+.wf-process-step p {
+  margin-top: 8px;
+  color: color-mix(in srgb, var(--color-fg) 68%, var(--color-bg));
+  line-height: 1.65;
+}
+
+/* FAQ: native <details>, keyboard accessible with zero JS. */
+.wf-faq-list {
+  display: grid;
+  gap: 10px;
+  max-width: 820px;
+}
+
+.wf-faq-item {
+  border: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+}
+
+.wf-faq-question {
+  padding: 16px 18px;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 750;
+  list-style: none;
+}
+
+.wf-faq-question::-webkit-details-marker {
+  display: none;
+}
+
+.wf-faq-question::after {
+  content: "+";
+  float: right;
+  color: var(--color-primary);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.wf-faq-item[open] .wf-faq-question::after {
+  content: "\\2212";
+}
+
+.wf-faq-question:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.wf-faq-answer {
+  padding: 0 18px 18px;
+  color: color-mix(in srgb, var(--color-fg) 68%, var(--color-bg));
+  line-height: 1.65;
+}
+
 @media (max-width: 840px) {
   .wf-hero {
     min-height: auto;
@@ -402,7 +574,8 @@ h1 {
 @media (max-width: 520px) {
   .wf-hero,
   .wf-section,
-  .wf-footer {
+  .wf-footer,
+  .wf-trust {
     width: min(100% - 24px, 1120px);
   }
 

@@ -1,0 +1,767 @@
+{
+  "updatedAt": "2026-08-07T15:09:53.702Z",
+  "createdAt": "2026-05-14T02:24:35.577Z",
+  "id": "Zzc1PgVzaKxOPxck",
+  "name": "WF-05: Birthday & Cleaning Reminder",
+  "description": "Birthday & cleaning reminders (email Gmail Workspace + WhatsApp opcional) por paciente via splitInBatches (migrado 2026-08-07, sin $env). Mantener SIN publicar hasta revision.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c6a4c674-0cc2-44a6-b137-90a69a119e72",
+      "name": "Schedule: Daily 8AM La Paz",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        656
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 12 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "336e529b-3ab8-47a1-8b02-cb78f0324c69",
+      "name": "Supabase: Today's Birthdays",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        368
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_today_birthdays",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "f5caaa24-8101-418d-8199-65ac2858fa02",
+      "name": "If: Has Birthdays?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        368
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-count",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a5bf500b-9e1d-4ad6-859a-23912fe05fac",
+      "name": "Birthday Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "96eef38e-37e7-4a58-9518-6a1f89f0af4e",
+      "name": "If: Has WhatsApp (Birthday)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        192
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "wa-bday",
+              "leftValue": "={{ $json.whatsappAddon }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            },
+            {
+              "id": "phone-bday",
+              "leftValue": "={{ $json.phone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "5e530587-fc9c-4738-94b8-6ee9f3ee6d3a",
+      "name": "WhatsApp: Birthday",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1344,
+        240
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://dentalgest-onia.vercel.app/api/n8n/whatsapp/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-API-KEY",
+              "value": "3660bd1a016be3a5d7c77b394f9bf76915bb0bd207833b34936f4832673399b3"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"organizationId\": \"{{ $json.organizationId }}\",\n  \"patientPhone\": \"{{ $json.phone }}\",\n  \"message\": \"🎂 ¡Feliz cumpleaños {{ $json.name }}!\\n\\nTodo el equipo de {{ $json.clinicName }} te desea lo mejor hoy.\\n\\nComo regalo: consulta de evaluación gratis este mes.\\n👉 https://app.onia.com.bo/book/{{ $json.clinicSlug }}\"\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "18af75d1-758a-4d88-9301-879ae166081b",
+      "name": "Split: Per Birthday",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        272
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "4b34ada5-3220-4bc8-943e-2598cae81898",
+      "name": "No Birthdays",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        480
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "17b700db-f9ae-4224-b7e6-afab6ccb25db",
+      "name": "Supabase: Cleaning Due 6+ Months",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        944
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_cleaning_due",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "b40b076d-3937-46d2-b75b-7ba832a0139f",
+      "name": "If: Has Cleaning Due?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        944
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-count",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "f893c786-07f5-4a1c-b7e4-48adfa8c38d2",
+      "name": "Cleaning Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        896,
+        576
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "2214f986-34c3-403d-bc5f-02b3233cbda2",
+      "name": "If: Has WhatsApp (Cleaning)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        768
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "wa-clean",
+              "leftValue": "={{ $json.whatsappAddon }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            },
+            {
+              "id": "phone-clean",
+              "leftValue": "={{ $json.phone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "d66b57e8-e27b-4e3c-8f85-d93693abd66c",
+      "name": "WhatsApp: Cleaning Reminder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1344,
+        816
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://dentalgest-onia.vercel.app/api/n8n/whatsapp/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-API-KEY",
+              "value": "3660bd1a016be3a5d7c77b394f9bf76915bb0bd207833b34936f4832673399b3"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"organizationId\": \"{{ $json.organizationId }}\",\n  \"patientPhone\": \"{{ $json.phone }}\",\n  \"message\": \"🦷 Hola {{ $json.name }}, han pasado más de 6 meses desde tu última limpieza en {{ $json.clinicName }}.\\n\\nAgenda tu cita:\\n👉 https://app.onia.com.bo/book/{{ $json.clinicSlug }}\"\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "bd5e535e-30bf-4ece-9df1-394eb79d3b78",
+      "name": "Split: Per Cleaning",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        848
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "dca5710a-ebca-4e31-9c41-9b9ec553d51c",
+      "name": "No Cleaning",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        1040
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "9bb02b45-8410-4714-9de0-5129e392300d",
+      "name": "Cleaning: Tiene Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        780,
+        768
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "has-email-clean",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "35a78615-8565-4ab4-acae-8d2741efce7d",
+      "name": "Birthday: Tiene Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        780,
+        192
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "has-email-bday",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "5767e464-2cbb-44fa-b907-c02d8833a572",
+      "name": "Gmail: Birthday Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.email }}",
+        "subject": "=Feliz cumpleanos, {{ $json.name }}!",
+        "emailType": "html",
+        "message": "=<p>Hola {{ $json.name }},</p><p>Desde {{ $json.clinicName }} te deseamos un muy feliz cumpleanos.</p><p>Como regalo, te ofrecemos una consulta de evaluacion sin costo. <a href=\"https://app.onia.com.bo/book/{{ $json.clinicSlug }}\">Agenda tu cita</a></p><p>- {{ $json.clinicName }}</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "3a569080-cf6f-415e-9dbf-6a3b88197a7c"
+    },
+    {
+      "id": "8cf4bfa0-ceea-4ff6-9e47-5a625808cea7",
+      "name": "Gmail: Cleaning Reminder Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        768
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.email }}",
+        "subject": "Es hora de tu limpieza dental",
+        "emailType": "html",
+        "message": "=<p>Hola {{ $json.name }},</p><p>Han pasado mas de 6 meses desde tu ultima visita a {{ $json.clinicName }}.</p><p>Los dentistas recomiendan una limpieza cada 6 meses para mantener tu salud bucal.</p><p><a href=\"https://app.onia.com.bo/book/{{ $json.clinicSlug }}\">Agendar cita</a></p><p>- {{ $json.clinicName }}</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "523cf4a2-ab2c-486a-b973-1912880798a7"
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 8AM La Paz": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Today's Birthdays",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase: Cleaning Due 6+ Months",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Today's Birthdays": {
+      "main": [
+        [
+          {
+            "node": "If: Has Birthdays?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has Birthdays?": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Birthday",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Birthdays",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has WhatsApp (Birthday)?": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp: Birthday",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split: Per Birthday",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp: Birthday": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Birthday",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Birthday": {
+      "main": [
+        [
+          {
+            "node": "Birthday Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Birthday: Tiene Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Cleaning Due 6+ Months": {
+      "main": [
+        [
+          {
+            "node": "If: Has Cleaning Due?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has Cleaning Due?": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Cleaning",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Cleaning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has WhatsApp (Cleaning)?": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp: Cleaning Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split: Per Cleaning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp: Cleaning Reminder": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Cleaning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Cleaning": {
+      "main": [
+        [
+          {
+            "node": "Cleaning Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cleaning: Tiene Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cleaning: Tiene Email?": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Cleaning Reminder Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If: Has WhatsApp (Cleaning)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Birthday: Tiene Email?": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Birthday Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If: Has WhatsApp (Birthday)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Birthday Email": {
+      "main": [
+        [
+          {
+            "node": "If: Has WhatsApp (Birthday)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Cleaning Reminder Email": {
+      "main": [
+        [
+          {
+            "node": "If: Has WhatsApp (Cleaning)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Daily 8AM La Paz": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "ad60dfe4-3d23-469d-b910-19d7ddc4b781",
+  "activeVersionId": null,
+  "versionCounter": 34,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-14T02:24:35.580Z",
+      "createdAt": "2026-05-14T02:24:35.580Z",
+      "role": "workflow:owner",
+      "workflowId": "Zzc1PgVzaKxOPxck",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Birthday Email, Gmail: Cleaning Reminder Email"
+  }
+}

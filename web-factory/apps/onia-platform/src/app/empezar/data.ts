@@ -25,21 +25,40 @@ export const RUBRO_OPTIONS: readonly RubroOption[] = [
     id: "comercio",
     nombre: "Comercio",
     desc: "Tiendas y comercios",
-    disponible: false,
+    disponible: true,
   },
   {
+    // Autorizado 2026-08-15 tras QA del embudo completo en produccion: registro,
+    // onboarding con vocabulario propio, panel, /agenda y /comercio/caja
+    // operativos, cero errores HTTP. El registro del producto lo vende.
     id: "servicios",
     nombre: "Servicios",
-    desc: "Negocios de servicios",
-    disponible: false,
+    desc: "Estudios y profesionales que agendan y cobran",
+    disponible: true,
   },
   {
     id: "proveedores",
     nombre: "Importadora",
     desc: "Importadoras y distribuidoras",
-    disponible: false,
+    disponible: true,
+  },
+  {
+    // Tambien contratable (QA 2026-08-15). El wizard no la listaba.
+    id: "estetica",
+    nombre: "Estética y spa",
+    desc: "Centros de estética, spas y peluquerías",
+    disponible: true,
   },
 ] as const;
+
+/**
+ * Unica fuente de verdad de "que rubro se puede contratar hoy". La usan el
+ * selector del wizard y `recomendar()`; antes `recommend.ts` lo tenia
+ * hardcodeado en "dental" y los dos datos se contradecian.
+ */
+export function esRubroDisponible(rubro: Rubro): boolean {
+  return RUBRO_OPTIONS.some((o) => o.id === rubro && o.disponible);
+}
 
 export const NOTA_PROXIMAMENTE =
   "Este rubro está en construcción — sin humo. Igual seguí: te avisamos apenas esté, con tu caso ya anotado.";
@@ -73,11 +92,10 @@ export const TIENE_OPTIONS: readonly {
  * son los mismos publicados en /#precios y salen de lib/pricing.ts.
  */
 export const PRECIO_COPY: Record<Precio, string> = {
-  pro: "Bs 750/mes — precio de lanzamiento (la lista es Bs 890). Anual: pagás 10 meses.",
-  full: "Bs 1.500/mes — precio de lanzamiento (la lista es Bs 1.990). Anual: pagás 10 meses.",
-  // [FALTA PRECIO] — el plan de grupo clinico no tiene tarifa publicada.
+  pro: "Bs 750/mes — 5 usuarios y hasta 1.500 fichas. Semanal Bs 199 o anual Bs 7.500 (pagás 10 meses).",
+  full: "Bs 1.500/mes — usuarios y fichas sin límite. Anual Bs 15.000 (pagás 10 meses); este plan no se cobra semanal.",
   "a-medida":
-    "Grupo clínico: con ese tamaño el precio se arma con vos. Todavía no publicamos tarifa de grupo — no inventamos una.",
+    "Grupo / Empresarial: Bs 2.900/mes (anual Bs 29.000) más implementación desde Bs 3.500. No se compra en línea — se cotiza con tu caso.",
 };
 
 export const PLAN_INCLUYE: readonly string[] = [
@@ -88,7 +106,7 @@ export const PLAN_INCLUYE: readonly string[] = [
 ] as const;
 
 export const NOTA_DOWNSELL =
-  "Si te queda grande, hay un plan de entrada de Bs 320/mes que ordena la agenda y las fichas — el agente que reprograma no viene ahí.";
+  "Si te queda grande, hay un plan de entrada de Bs 320/mes (2 usuarios, hasta 300 fichas) que ordena la agenda y las fichas — los agentes de IA no vienen ahí.";
 
 export const NOTA_CUADERNO =
   "El cuaderno se jubila: agenda digital con recordatorios, sin pasar nada en limpio.";
@@ -99,15 +117,17 @@ export const NOTA_FACTURACION =
 export const FALTA_COPY: Record<"web" | "chatbot", { nombre: string; copy: string }> = {
   web: {
     nombre: "Página web",
-    copy: "Tu presencia online conectada al sistema: lo que publicás y lo que agendás viven en el mismo lugar.",
+    copy: "Tu presencia online conectada al sistema: lo que publicás y lo que agendás viven en el mismo lugar. Desde Bs 790, pago único.",
   },
   chatbot: {
-    nombre: "Chatbot de WhatsApp",
-    copy: "El botón de WhatsApp va gratis con la web. Esto es otra cosa: un bot que conversa por vos, responde consultas y te deriva los que valen la pena.",
+    nombre: "Chatbot de WhatsApp con IA",
+    // Precio ratificado 2026-08-15 — fuente: onia-platform/lib/pricing.ts
+    // (WHATSAPP_ADDON). El "desde Bs 300 + 200/mes" era el nivel N1 retirado.
+    copy: "El botón de WhatsApp va gratis con la web. Esto es otra cosa: un bot con IA que contesta, califica, agenda y hace seguimiento 24/7, con tu aprobación. Bs 1.500 de instalación + Bs 1.490/mes (500 conversaciones incluidas). Lo que no entre en el estándar se define con vos y se cotiza a medida.",
   },
 };
 
-export const FALTA_TAG = "módulo aparte, a cotizar";
+export const FALTA_TAG = "servicio aparte, con su propio precio";
 
 /**
  * Ensamblaje a medio armar de la variante B — mismos labels que
@@ -148,6 +168,16 @@ export const PROXIMO_ASSEMBLY: Record<
     ],
     built: 1,
   },
+  estetica: {
+    nombre: "Estética y spa",
+    blocks: [
+      "Cuenta y usuarios (base común)",
+      "Agenda y clientas",
+      "Tratamientos",
+      "Caja y cobros",
+    ],
+    built: 1,
+  },
 };
 
 /** Lo que SÍ existe hoy para rubros en construcción (se cotiza, sin cifras). */
@@ -164,6 +194,7 @@ export const RUBRO_MSG: Record<Rubro, string> = {
   comercio: "comercio",
   servicios: "servicios",
   proveedores: "importadora / material eléctrico",
+  estetica: "estética y spa",
 };
 
 export const EQUIPO_MSG: Record<Equipo, string> = {

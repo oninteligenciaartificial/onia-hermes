@@ -1,0 +1,226 @@
+{
+  "updatedAt": "2026-07-10T01:02:43.643Z",
+  "createdAt": "2026-07-10T01:02:30.119Z",
+  "id": "XRS9fWY4yFMQQftF",
+  "name": "ONIA - Agente Building in Public",
+  "description": "DESACTIVADO (vacaciones, 2026-07-10). Cron Lunes 07:25 La Paz: SSH docker exec onia-center building-public-agent.mjs. Lee repo-pulse, escribe onia_center.dev_pulse (visibilidad de desarrollo) y deja contenido building-in-public SANITIZADO (sin clientes) e",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "9e195c19-b1cf-44f6-9eac-46ff788eb7cb",
+      "name": "Lunes 07:25",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "25 7 * * 1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ebe08333-5c63-4f76-8031-d7c9d8e83d0b",
+      "name": "Correr Building in Public (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/building-public-agent-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "7c94163a-1e49-4322-9e42-f0e9113fba37",
+      "name": "Preparar aviso",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const raw = ($input.first().json.stdout || '').trim();\nlet s;\ntry { s = JSON.parse(raw.split('\\n').pop()); } catch (e) { s = { ok: false, fatal: 'parse', raw: raw.slice(0, 200) }; }\nconst esc = (t) => String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst notify = (!s.ok) || (s.notify === true);\nlet text;\nif (!s.ok) {\n  text = 'Building in Public ONIA - ERROR: ' + esc(s.fatal || 'desconocido');\n} else {\n  const p = s.preview || {};\n  const sc = p.script || {};\n  const c = p.carousel || {};\n  const L = [];\n  L.push('<b>Building in Public ONIA — ' + esc(s.day || '') + '</b>');\n  if (s.devText) L.push(esc(s.devText));\n  if (sc.hook || sc.body) {\n    L.push('');\n    L.push('<b>GUION (' + esc(sc.format || 'Reel') + ' · ' + esc(sc.duration || '') + ')</b>');\n    if (sc.hook) L.push('Gancho: ' + esc(sc.hook));\n    if (sc.body) L.push('Desarrollo: ' + esc(sc.body));\n    if (sc.cta) L.push('CTA: ' + esc(sc.cta));\n    if (sc.on_screen) L.push('En pantalla: ' + esc(sc.on_screen));\n    if (sc.visual_prompt) L.push('Prompt visual: ' + esc(sc.visual_prompt));\n    if (sc.voice_tone) L.push('Voz/tono: ' + esc(sc.voice_tone));\n  }\n  if (c && (c.title || (Array.isArray(c.slides) && c.slides.length))) {\n    L.push('');\n    L.push('<b>CARRUSEL: ' + esc(c.title || '') + '</b>');\n    const sl = Array.isArray(c.slides) ? c.slides : [];\n    for (let j = 0; j < sl.length; j++) L.push((j + 1) + '. ' + esc(sl[j]));\n    if (c.cta) L.push('CTA: ' + esc(c.cta));\n  }\n  L.push('');\n  L.push((s.reviewsCreated || 0) + ' borrador(es) building-in-public en revision en ONIA Center. Nada se publica sin tu OK.');\n  text = L.join('\\n').slice(0, 3900);\n}\nreturn [{ json: { notify: notify, text: text } }];"
+      }
+    },
+    {
+      "id": "909f0985-0caf-49f7-a676-b9ea20c5daf1",
+      "name": "Hay algo que avisar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "cond-notify",
+              "leftValue": "={{ $json.notify }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b8389b03-75b8-486f-af7b-9d8c93254677",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "4d19e4b1-0241-4178-94b2-051a98778d79"
+    }
+  ],
+  "connections": {
+    "Lunes 07:25": {
+      "main": [
+        [
+          {
+            "node": "Correr Building in Public (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correr Building in Public (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Preparar aviso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar aviso": {
+      "main": [
+        [
+          {
+            "node": "Hay algo que avisar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay algo que avisar?": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Lunes 07:25": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "5617dd77-fb92-4101-b419-d0820164943b",
+  "activeVersionId": "5617dd77-fb92-4101-b419-d0820164943b",
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-10T01:02:30.126Z",
+      "createdAt": "2026-07-10T01:02:30.126Z",
+      "role": "workflow:owner",
+      "workflowId": "XRS9fWY4yFMQQftF",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

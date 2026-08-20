@@ -1,0 +1,296 @@
+{
+  "updatedAt": "2026-08-13T12:21:26.817Z",
+  "createdAt": "2026-08-11T03:14:58.181Z",
+  "id": "AooUOwSMSAaFLQnA",
+  "name": "ONIA - Chatbot: seguimiento y recordatorio",
+  "description": "Cada hora 8-20 La Paz corre los dos barridos del chatbot en el VPS (followup-run.sh y reminder-run.sh, ambos con --emit y envio real) y avisa a Sergio por Telegram SOLO si hubo mensajes enviados, envios fallidos, o un barrido que no pudo mirar la base. Un",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "0d5fa46a-db1b-44da-a414-85f3cef654dc",
+      "name": "Cada hora 8-20",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8-20 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c2e9c65a-f396-4fdf-8a12-713a6ac8502f",
+      "name": "Barrer seguimiento",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "cwd": "/root",
+        "command": "ONIA_BOT_DRY_RUN=false bash /opt/onia/bot/followup-run.sh --emit"
+      },
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "b78402e5-3f87-4eba-979c-c7c9f28150d8",
+      "name": "Barrer recordatorio",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "cwd": "/root",
+        "command": "ONIA_BOT_DRY_RUN=false bash /opt/onia/bot/reminder-run.sh --emit"
+      },
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "19c14f89-27de-4035-9ba7-bac7fc1149c1",
+      "name": "Resumir barridos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Avisa SOLO si hay algo que contar: mensajes enviados, envios fallidos, demos que terminaron, o\n// un barrido que no pudo mirar la base. Un 'cero' limpio NO manda nada: una alerta diaria que no\n// dice nada se ignora en una semana.\nconst NL = String.fromCharCode(10);\nconst leer = (nombre) => {\n  try {\n    const raw = String($(nombre).first().json.stdout || '').trim();\n    const linea = raw.split(NL).filter((l) => l.trim().startsWith('{')).pop();\n    return linea ? JSON.parse(linea) : null;\n  } catch (e) { return null; }\n};\nconst partes = [];\nlet avisar = false;\nconst barridos = [['Seguimiento', leer('Barrer seguimiento')], ['Recordatorio', leer('Barrer recordatorio')], ['Demos terminadas', leer('Cerrar demos pasadas')]];\nfor (const par of barridos) {\n  const etiqueta = par[0];\n  const res = par[1];\n  if (!res) { partes.push(etiqueta + ': NO se pudo leer el resultado del barrido (revisar el script en el VPS)'); avisar = true; continue; }\n  if (res.ok === false) { partes.push(etiqueta + ': FALLO - ' + String(res.error || 'sin detalle')); avisar = true; continue; }\n  const send = Array.isArray(res.send) ? res.send : [];\n  const warns = Array.isArray(res.warnings) ? res.warnings : [];\n  if (etiqueta === 'Demos terminadas') {\n    // Este barrido no entrega mensajes: cada item es una demo que hay que cerrar a mano. El texto\n    // completo con las tres opciones lo manda el propio efecto notify_sergio del barrido.\n    if (send.length) { partes.push(etiqueta + ': ' + send.length + ' demo(s) esperando que digas como salio'); avisar = true; }\n  } else {\n    const enviados = send.filter((s) => s.deliveryStatus === 'sent');\n    const fallidos = send.filter((s) => s.deliveryStatus === 'failed');\n    const pagos = send.filter((s) => s.sendKind === 'plantilla');\n    if (enviados.length) { partes.push(etiqueta + ': ' + enviados.length + ' mensaje(s) ENVIADO(s)' + (pagos.length ? ' (' + pagos.length + ' por plantilla PAGA)' : '')); avisar = true; }\n    if (fallidos.length) { partes.push(etiqueta + ': ' + fallidos.length + ' NO salieron (la reserva ya se gasto: no se reintenta, para no mandar dos)'); avisar = true; }\n  }\n  if (warns.length) { partes.push(etiqueta + ' - avisos: ' + warns.join(' | ').slice(0, 300)); avisar = true; }\n}\nconst text = ('Chatbot - barridos' + NL + NL + partes.join(NL)).slice(0, 3900);\nreturn [{ json: { avisar: avisar, text: text } }];"
+      }
+    },
+    {
+      "id": "651188df-7326-4bc2-bde3-eb4d85d478af",
+      "name": "Hay algo que contar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "avisar",
+              "leftValue": "={{ $json.avisar }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              },
+              "rightValue": true
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "daca8990-fccc-4eb1-9f2f-e2700146b271",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "webhookId": "7a99bcdd-631a-4750-ab70-30a6341e724e",
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "7b86894f-df34-4cc7-a4eb-0b8f647fe10b",
+      "name": "Cerrar demos pasadas",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "cwd": "/root",
+        "command": "ONIA_BOT_DRY_RUN=false bash /opt/onia/bot/postdemo-run.sh --emit"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cada hora 8-20": {
+      "main": [
+        [
+          {
+            "node": "Barrer seguimiento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Barrer seguimiento": {
+      "main": [
+        [
+          {
+            "node": "Barrer recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resumir barridos": {
+      "main": [
+        [
+          {
+            "node": "Hay algo que contar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay algo que contar?": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Barrer recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Cerrar demos pasadas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerrar demos pasadas": {
+      "main": [
+        [
+          {
+            "node": "Resumir barridos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "timezone": "America/La_Paz",
+    "saveDataErrorExecution": "all",
+    "executionTimeout": 600
+  },
+  "staticData": {
+    "node:Cada hora 8-20": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "264c3e93-f2da-4ff8-8184-71304401b145",
+  "activeVersionId": "264c3e93-f2da-4ff8-8184-71304401b145",
+  "versionCounter": 4,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-11T03:14:58.232Z",
+      "createdAt": "2026-08-11T03:14:58.232Z",
+      "role": "workflow:owner",
+      "workflowId": "AooUOwSMSAaFLQnA",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Suma el cierre post-demo",
+    "description": "Tercer barrido: postdemo-run.sh marca las demos terminadas como realizadas y le pregunta a Sergio como salio. No le manda NADA al prospecto y no toca el pipeline, asi que es gratis y seguro; viaja con los otros dos."
+  }
+}

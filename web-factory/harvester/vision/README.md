@@ -41,6 +41,7 @@ Rules:
 - Retokenize all colors to `packages/tokens` CSS variables before a block ships.
 - Keep generated blocks in review until a human approves client-facing use.
 - Use Playwright to extract structure, headings, CTAs and component taxonomy. Do not store full HTML/CSS from third-party sites.
+- Use `extract_web_anatomy.mjs` for the FULL anatomy of one live site (15 layers: tokens, layout, scroll, motion, conversion, performance, a11y, SEO). It is the deep version of `capture_reference_bank.mjs` and its contract is `web-factory/docs/ANATOMIA_DE_UNA_WEB.md`. It stores inventories and aggregates only, never third-party HTML/CSS.
 - Use `capture_reference_bank.mjs` for standalone capture when Playwright is installed; otherwise use Codex desktop `node_repl`.
 - Use `index_licensed_code.mjs` to classify cloned repositories before adapting code.
 - Use `scrape_gallery_examples.mjs` for deep gallery capture. It stores many lightweight `candidates` and a smaller set of opened `examples` with desktop/mobile screenshots, section extraction, CTAs, palette, layout signals, code links and optional code blocks.

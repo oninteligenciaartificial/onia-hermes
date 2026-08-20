@@ -1,3 +1,7 @@
+> ⚠️ **SUPERADO.** El estado vigente esta en `hermes-content/docs/ONIA_ESTADO_REAL_20260813.md`
+> y la apuesta vigente en `docs/platform/ONIA_DECISION_SAAS_CONSULTORIA_20260813.md`.
+> Este documento se conserva como historia: NO tomes decisiones con el.
+
 # Onia — Prompts de arranque por sesión (2026-07-05)
 
 Copiá/pegá el bloque al abrir cada sesión. Cada carril = 1 sesión = 1 worktree =

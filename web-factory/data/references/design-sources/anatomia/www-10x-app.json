@@ -1,0 +1,1818 @@
+{
+  "url": "https://www.10x.app/",
+  "slug": "www-10x-app",
+  "medidoEl": "2026-08-19T02:59:06.472Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 3186,
+        "alturaPantallas": 3.8,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "relative bg-base [--screen-pad:16px] md:[--screen-pad:24px] lg:[--scre",
+          "altoPx": 3186,
+          "altoPantallas": 3.8,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "What would you like to build?What would you like to build?",
+          "cta": "",
+          "imagenes": 86
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 420,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 3
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "relative z-10",
+          "altoPx": 3186,
+          "altoPantallas": 3.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "What would you like to build?What would you like to build?",
+          "cta": "",
+          "imagenes": 81
+        }
+      ],
+      "encabezados": {
+        "total": 3,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "What would you like to build?What would you like to build?"
+          },
+          {
+            "nivel": 2,
+            "texto": "Features"
+          },
+          {
+            "nivel": 2,
+            "texto": "FAQs"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 400",
+            "veces": 64
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 500",
+            "veces": 13
+          },
+          {
+            "valor": "13px / lh 1.63 / ls normal / w 400",
+            "veces": 13
+          },
+          {
+            "valor": "12px / lh 1.50 / ls normal / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "13px / lh 1.50 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "15px / lh 1.50 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "15px / lh 1.25 / ls -0.375px / w 600",
+            "veces": 3
+          },
+          {
+            "valor": "11px / lh 1.50 / ls normal / w 400",
+            "veces": 3
+          },
+          {
+            "valor": "15px / lh 1.50 / ls -0.375px / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "28px / lh 1.50 / ls -0.7px / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "20px / lh 1.50 / ls -0.5px / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "13px / lh 1.45 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 600",
+            "veces": 1
+          },
+          {
+            "valor": "14px / lh 1.14 / ls normal / w 400",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "-apple-system",
+            "veces": 125
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgba(0, 0, 0, 0.5)",
+            "veces": 88
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.85)",
+            "veces": 25
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.3)",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(17, 17, 17)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 68
+          },
+          {
+            "valor": "color(srgb 0.113725 0.619608 0.458824 / 0.15)",
+            "veces": 16
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.3)",
+            "veces": 14
+          },
+          {
+            "valor": "color(srgb 0.368627 0.603922 0.121569 / 0.15)",
+            "veces": 10
+          },
+          {
+            "valor": "color(srgb 0.729412 0.458824 0.0901961 / 0.15)",
+            "veces": 8
+          },
+          {
+            "valor": "color(srgb 0.635294 0.294118 0.752941 / 0.15)",
+            "veces": 8
+          },
+          {
+            "valor": "color(srgb 0.215686 0.541176 0.866667 / 0.15)",
+            "veces": 6
+          },
+          {
+            "valor": "color(srgb 0.847059 0.352941 0.188235 / 0.15)",
+            "veces": 6
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "6px",
+            "veces": 138
+          },
+          {
+            "valor": "8px",
+            "veces": 77
+          },
+          {
+            "valor": "16px",
+            "veces": 21
+          },
+          {
+            "valor": "12px",
+            "veces": 11
+          },
+          {
+            "valor": "20px",
+            "veces": 10
+          },
+          {
+            "valor": "4px",
+            "veces": 6
+          },
+          {
+            "valor": "24px",
+            "veces": 6
+          },
+          {
+            "valor": "40px",
+            "veces": 5
+          },
+          {
+            "valor": "32px",
+            "veces": 3
+          },
+          {
+            "valor": "14px",
+            "veces": 3
+          },
+          {
+            "valor": "30.25px",
+            "veces": 3
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "76px",
+            "veces": 1
+          },
+          {
+            "valor": "-1px",
+            "veces": 1
+          },
+          {
+            "valor": "2px",
+            "veces": 1
+          },
+          {
+            "valor": "-24px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 73
+          },
+          {
+            "valor": "6px",
+            "veces": 65
+          },
+          {
+            "valor": "22%",
+            "veces": 6
+          },
+          {
+            "valor": "28px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 1
+          },
+          {
+            "valor": "16px",
+            "veces": 1
+          },
+          {
+            "valor": "34px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 7,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 12
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.06) 0px 0px 0px 1px inset",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.06) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.0",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 3,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 2
+          },
+          {
+            "valor": "30",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic",
+            "veces": 151
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 7
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.19, 1, 0.22, 1)",
+            "veces": 7
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 6
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 6
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ",
+            "veces": 1
+          },
+          {
+            "valor": "margin-bottom 0.15s cubic-bezier(0.65, 0, 0.4, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "grid-template-rows 0.15s cubic-bezier(0.65, 0, 0.4, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), height 0.26s cubic-bezi",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 11,
+        "hojasLeidas": 5,
+        "unidades": {
+          "em": 37,
+          "rem": 63,
+          "px": 2597,
+          "clamp": 0,
+          "vw": 37
+        },
+        "keyframesDeclarados": 43,
+        "transitionAll": 1,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 7
+          },
+          {
+            "px": 1024,
+            "veces": 5
+          },
+          {
+            "px": 768,
+            "veces": 4
+          },
+          {
+            "px": 560,
+            "veces": 2
+          },
+          {
+            "px": 360,
+            "veces": 1
+          },
+          {
+            "px": 480,
+            "veces": 1
+          },
+          {
+            "px": 481,
+            "veces": 1
+          },
+          {
+            "px": 639,
+            "veces": 1
+          },
+          {
+            "px": 767,
+            "veces": 1
+          },
+          {
+            "px": 1280,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 420,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "z-30 flex justify-center px-3 pt-3 sm:px-6 fixed inset-x-0 t",
+            "posicion": "fixed",
+            "alto": 60,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 52,
+        "ctasTop": [
+          {
+            "texto": "Crypto portfolio tracker",
+            "veces": 4
+          },
+          {
+            "texto": "Pomodoro timer with analytics",
+            "veces": 4
+          },
+          {
+            "texto": "National parks checklist",
+            "veces": 4
+          },
+          {
+            "texto": "Meditation timer with breathing",
+            "veces": 4
+          },
+          {
+            "texto": "Movie watchlist with ratings",
+            "veces": 4
+          },
+          {
+            "texto": "Side hustle income dashboard",
+            "veces": 4
+          },
+          {
+            "texto": "Hydration coach with smart reminders",
+            "veces": 2
+          },
+          {
+            "texto": "Workout recommendation engine",
+            "veces": 2
+          },
+          {
+            "texto": "Meal plan with grocery list",
+            "veces": 2
+          },
+          {
+            "texto": "Road trip planner with fuel stops",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 6,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 0,
+        "lazy": 6,
+        "conSrcset": 6,
+        "interactivos": 105,
+        "objetivosMenores44px": 86,
+        "idioma": "en",
+        "landmarks": {
+          "header": 2,
+          "nav": 2,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgba(0, 0, 0, 0.5)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.5)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 1.06
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.85)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 15.13
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.85)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 1.09
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.3)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 2.12
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.3)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 18.88
+          }
+        ],
+        "fondosTranslucidosOmitidos": 12
+      },
+      "rendimiento": {
+        "pesoTotalKb": 27051.9,
+        "porTipoKb": {
+          "document": 27.4,
+          "stylesheet": 276,
+          "script": 5506.4,
+          "image": 3816.5,
+          "fetch": 44.5,
+          "media": 17381.2
+        },
+        "pedidos": {
+          "document": 1,
+          "stylesheet": 5,
+          "script": 56,
+          "image": 135,
+          "fetch": 6,
+          "media": 10
+        },
+        "hostsDistintos": 6,
+        "terceros": [
+          {
+            "host": "is1-ssl.mzstatic.com",
+            "pedidos": 128
+          },
+          {
+            "host": "auth.10x.app",
+            "pedidos": 8
+          },
+          {
+            "host": "ggrgdcfzzsrvpjggxtyq.supabase.co",
+            "pedidos": 2
+          },
+          {
+            "host": "code.trygravity.ai",
+            "pedidos": 1
+          },
+          {
+            "host": "api.10x.app",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": []
+      },
+      "seo": {
+        "titulo": "10x — Build native apps from a prompt",
+        "descripcion": "Describe your app and 10x builds it — native, App Store–ready, from the first pass.",
+        "canonical": null,
+        "og": 8,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 2900,
+        "alturaPantallas": 2.8,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "relative bg-base [--screen-pad:16px] md:[--screen-pad:24px] lg:[--scre",
+          "altoPx": 2900,
+          "altoPantallas": 2.8,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "What would you like to build?What would you like to build?",
+          "cta": "",
+          "imagenes": 86
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 420,
+          "altoPantallas": 0.4,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 3
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "relative z-10",
+          "altoPx": 2900,
+          "altoPantallas": 2.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "What would you like to build?What would you like to build?",
+          "cta": "",
+          "imagenes": 81
+        }
+      ],
+      "encabezados": {
+        "total": 3,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "What would you like to build?What would you like to build?"
+          },
+          {
+            "nivel": 2,
+            "texto": "Features"
+          },
+          {
+            "nivel": 2,
+            "texto": "FAQs"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 400",
+            "veces": 64
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 500",
+            "veces": 13
+          },
+          {
+            "valor": "13px / lh 1.63 / ls normal / w 400",
+            "veces": 13
+          },
+          {
+            "valor": "12px / lh 1.50 / ls normal / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "13px / lh 1.50 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "28px / lh 1.50 / ls -0.7px / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "17px / lh 1.50 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "17px / lh 1.25 / ls -0.425px / w 600",
+            "veces": 3
+          },
+          {
+            "valor": "11px / lh 1.50 / ls normal / w 400",
+            "veces": 3
+          },
+          {
+            "valor": "15px / lh 1.50 / ls -0.375px / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "13px / lh 1.45 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 600",
+            "veces": 1
+          },
+          {
+            "valor": "14px / lh 1.14 / ls normal / w 400",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "-apple-system",
+            "veces": 125
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgba(0, 0, 0, 0.5)",
+            "veces": 88
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.85)",
+            "veces": 25
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.3)",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(17, 17, 17)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 68
+          },
+          {
+            "valor": "color(srgb 0.113725 0.619608 0.458824 / 0.15)",
+            "veces": 18
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.3)",
+            "veces": 14
+          },
+          {
+            "valor": "color(srgb 0.0784314 0.721569 0.65098 / 0.15)",
+            "veces": 10
+          },
+          {
+            "valor": "color(srgb 0.831373 0.32549 0.494118 / 0.15)",
+            "veces": 10
+          },
+          {
+            "valor": "color(srgb 0.729412 0.458824 0.0901961 / 0.15)",
+            "veces": 6
+          },
+          {
+            "valor": "color(srgb 0.215686 0.541176 0.866667 / 0.15)",
+            "veces": 6
+          },
+          {
+            "valor": "color(srgb 0.635294 0.294118 0.752941 / 0.15)",
+            "veces": 6
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "6px",
+            "veces": 135
+          },
+          {
+            "valor": "8px",
+            "veces": 79
+          },
+          {
+            "valor": "24px",
+            "veces": 14
+          },
+          {
+            "valor": "16px",
+            "veces": 13
+          },
+          {
+            "valor": "12px",
+            "veces": 10
+          },
+          {
+            "valor": "20px",
+            "veces": 10
+          },
+          {
+            "valor": "14px",
+            "veces": 5
+          },
+          {
+            "valor": "4px",
+            "veces": 4
+          },
+          {
+            "valor": "32px",
+            "veces": 4
+          },
+          {
+            "valor": "40px",
+            "veces": 4
+          },
+          {
+            "valor": "30.25px",
+            "veces": 3
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "18px",
+            "veces": 1
+          },
+          {
+            "valor": "76px",
+            "veces": 1
+          },
+          {
+            "valor": "-1px",
+            "veces": 1
+          },
+          {
+            "valor": "2px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 73
+          },
+          {
+            "valor": "6px",
+            "veces": 65
+          },
+          {
+            "valor": "22%",
+            "veces": 6
+          },
+          {
+            "valor": "28px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 1
+          },
+          {
+            "valor": "16px",
+            "veces": 1
+          },
+          {
+            "valor": "34px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 7,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 12
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.06) 0px 0px 0px 1px inset",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.06) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.0",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 3,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 2
+          },
+          {
+            "valor": "30",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic",
+            "veces": 151
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 7
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.19, 1, 0.22, 1)",
+            "veces": 7
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 6
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 6
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ",
+            "veces": 1
+          },
+          {
+            "valor": "margin-bottom 0.15s cubic-bezier(0.65, 0, 0.4, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "grid-template-rows 0.15s cubic-bezier(0.65, 0, 0.4, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), height 0.26s cubic-bezi",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 11,
+        "hojasLeidas": 5,
+        "unidades": {
+          "em": 37,
+          "rem": 63,
+          "px": 2597,
+          "clamp": 0,
+          "vw": 37
+        },
+        "keyframesDeclarados": 43,
+        "transitionAll": 1,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 7
+          },
+          {
+            "px": 1024,
+            "veces": 5
+          },
+          {
+            "px": 768,
+            "veces": 4
+          },
+          {
+            "px": 560,
+            "veces": 2
+          },
+          {
+            "px": 360,
+            "veces": 1
+          },
+          {
+            "px": 480,
+            "veces": 1
+          },
+          {
+            "px": 481,
+            "veces": 1
+          },
+          {
+            "px": 639,
+            "veces": 1
+          },
+          {
+            "px": 767,
+            "veces": 1
+          },
+          {
+            "px": 1280,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 420,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "z-30 flex justify-center px-3 pt-3 sm:px-6 fixed inset-x-0 t",
+            "posicion": "fixed",
+            "alto": 60,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 53,
+        "ctasTop": [
+          {
+            "texto": "Medication reminder and refill log",
+            "veces": 4
+          },
+          {
+            "texto": "Fridge inventory with expiry alerts",
+            "veces": 4
+          },
+          {
+            "texto": "Closet organizer",
+            "veces": 4
+          },
+          {
+            "texto": "Volunteer opportunity finder",
+            "veces": 4
+          },
+          {
+            "texto": "Plant care reminder",
+            "veces": 4
+          },
+          {
+            "texto": "Gym PR tracker",
+            "veces": 2
+          },
+          {
+            "texto": "Habit tracker with streaks",
+            "veces": 2
+          },
+          {
+            "texto": "Posture break coach for desk work",
+            "veces": 2
+          },
+          {
+            "texto": "Morning routine builder",
+            "veces": 2
+          },
+          {
+            "texto": "AI calorie tracker from photos",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 6,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 0,
+        "lazy": 6,
+        "conSrcset": 6,
+        "interactivos": 105,
+        "objetivosMenores44px": 88,
+        "idioma": "en",
+        "landmarks": {
+          "header": 2,
+          "nav": 2,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgba(0, 0, 0, 0.5)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.5)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 1.06
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.85)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 15.13
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.85)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 1.09
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.3)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 2.12
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.3)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 18.88
+          }
+        ],
+        "fondosTranslucidosOmitidos": 12
+      },
+      "rendimiento": {
+        "pesoTotalKb": 27019.9,
+        "porTipoKb": {
+          "document": 27.4,
+          "stylesheet": 276,
+          "script": 5506.4,
+          "image": 3816.5,
+          "media": 17349.2,
+          "fetch": 44.5
+        },
+        "pedidos": {
+          "document": 1,
+          "stylesheet": 5,
+          "script": 56,
+          "image": 135,
+          "media": 10,
+          "fetch": 6
+        },
+        "hostsDistintos": 6,
+        "terceros": [
+          {
+            "host": "is1-ssl.mzstatic.com",
+            "pedidos": 128
+          },
+          {
+            "host": "auth.10x.app",
+            "pedidos": 8
+          },
+          {
+            "host": "ggrgdcfzzsrvpjggxtyq.supabase.co",
+            "pedidos": 2
+          },
+          {
+            "host": "code.trygravity.ai",
+            "pedidos": 1
+          },
+          {
+            "host": "api.10x.app",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": []
+      },
+      "seo": {
+        "titulo": "10x — Build native apps from a prompt",
+        "descripcion": "Describe your app and 10x builds it — native, App Store–ready, from the first pass.",
+        "canonical": null,
+        "og": 8,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 2776,
+        "alturaPantallas": 3.1,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "relative bg-base [--screen-pad:16px] md:[--screen-pad:24px] lg:[--scre",
+          "altoPx": 2776,
+          "altoPantallas": 3.1,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "What would you like to build?What would you like to build?",
+          "cta": "",
+          "imagenes": 86
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 420,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 3
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "relative z-10",
+          "altoPx": 2776,
+          "altoPantallas": 3.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "What would you like to build?What would you like to build?",
+          "cta": "",
+          "imagenes": 81
+        }
+      ],
+      "encabezados": {
+        "total": 3,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "What would you like to build?What would you like to build?"
+          },
+          {
+            "nivel": 2,
+            "texto": "Features"
+          },
+          {
+            "nivel": 2,
+            "texto": "FAQs"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 400",
+            "veces": 64
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 500",
+            "veces": 13
+          },
+          {
+            "valor": "13px / lh 1.63 / ls normal / w 400",
+            "veces": 13
+          },
+          {
+            "valor": "12px / lh 1.50 / ls normal / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "13px / lh 1.50 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "28px / lh 1.50 / ls -0.7px / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "17px / lh 1.50 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "17px / lh 1.25 / ls -0.425px / w 600",
+            "veces": 3
+          },
+          {
+            "valor": "11px / lh 1.50 / ls normal / w 400",
+            "veces": 3
+          },
+          {
+            "valor": "15px / lh 1.50 / ls -0.375px / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "13px / lh 1.45 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 600",
+            "veces": 1
+          },
+          {
+            "valor": "14px / lh 1.14 / ls normal / w 400",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "-apple-system",
+            "veces": 125
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgba(0, 0, 0, 0.5)",
+            "veces": 88
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.85)",
+            "veces": 25
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.3)",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(17, 17, 17)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 68
+          },
+          {
+            "valor": "color(srgb 0.729412 0.458824 0.0901961 / 0.15)",
+            "veces": 14
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.3)",
+            "veces": 14
+          },
+          {
+            "valor": "color(srgb 0.368627 0.603922 0.121569 / 0.15)",
+            "veces": 12
+          },
+          {
+            "valor": "color(srgb 0.847059 0.352941 0.188235 / 0.15)",
+            "veces": 8
+          },
+          {
+            "valor": "color(srgb 0.215686 0.541176 0.866667 / 0.15)",
+            "veces": 6
+          },
+          {
+            "valor": "color(srgb 0.831373 0.32549 0.494118 / 0.15)",
+            "veces": 6
+          },
+          {
+            "valor": "color(srgb 0.113725 0.619608 0.458824 / 0.15)",
+            "veces": 6
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "6px",
+            "veces": 135
+          },
+          {
+            "valor": "8px",
+            "veces": 79
+          },
+          {
+            "valor": "16px",
+            "veces": 13
+          },
+          {
+            "valor": "24px",
+            "veces": 12
+          },
+          {
+            "valor": "12px",
+            "veces": 10
+          },
+          {
+            "valor": "20px",
+            "veces": 10
+          },
+          {
+            "valor": "40px",
+            "veces": 6
+          },
+          {
+            "valor": "14px",
+            "veces": 5
+          },
+          {
+            "valor": "4px",
+            "veces": 4
+          },
+          {
+            "valor": "32px",
+            "veces": 4
+          },
+          {
+            "valor": "30.25px",
+            "veces": 3
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "18px",
+            "veces": 1
+          },
+          {
+            "valor": "76px",
+            "veces": 1
+          },
+          {
+            "valor": "-1px",
+            "veces": 1
+          },
+          {
+            "valor": "2px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 73
+          },
+          {
+            "valor": "6px",
+            "veces": 65
+          },
+          {
+            "valor": "22%",
+            "veces": 6
+          },
+          {
+            "valor": "28px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 1
+          },
+          {
+            "valor": "16px",
+            "veces": 1
+          },
+          {
+            "valor": "34px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 7,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 12
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.06) 0px 0px 0px 1px inset",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.06) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.0",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 3,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 2
+          },
+          {
+            "valor": "30",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic",
+            "veces": 151
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 7
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.19, 1, 0.22, 1)",
+            "veces": 7
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 6
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 6
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ",
+            "veces": 1
+          },
+          {
+            "valor": "margin-bottom 0.15s cubic-bezier(0.65, 0, 0.4, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "grid-template-rows 0.15s cubic-bezier(0.65, 0, 0.4, 1)",
+            "veces": 1
+          },
+          {
+            "valor": "box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), height 0.26s cubic-bezi",
+            "veces": 1
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 11,
+        "hojasLeidas": 5,
+        "unidades": {
+          "em": 37,
+          "rem": 63,
+          "px": 2597,
+          "clamp": 0,
+          "vw": 37
+        },
+        "keyframesDeclarados": 43,
+        "transitionAll": 1,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 7
+          },
+          {
+            "px": 1024,
+            "veces": 5
+          },
+          {
+            "px": 768,
+            "veces": 4
+          },
+          {
+            "px": 560,
+            "veces": 2
+          },
+          {
+            "px": 360,
+            "veces": 1
+          },
+          {
+            "px": 480,
+            "veces": 1
+          },
+          {
+            "px": 481,
+            "veces": 1
+          },
+          {
+            "px": 639,
+            "veces": 1
+          },
+          {
+            "px": 767,
+            "veces": 1
+          },
+          {
+            "px": 1280,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 4,
+            "navFija": false
+          },
+          {
+            "y": 469,
+            "conTransform": 4,
+            "navFija": false
+          },
+          {
+            "y": 938,
+            "conTransform": 4,
+            "navFija": false
+          },
+          {
+            "y": 1407,
+            "conTransform": 4,
+            "navFija": false
+          },
+          {
+            "y": 1876,
+            "conTransform": 4,
+            "navFija": false
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 5,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 420,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "z-30 flex justify-center px-3 pt-3 sm:px-6 fixed inset-x-0 t",
+            "posicion": "fixed",
+            "alto": 60,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 55,
+        "ctasTop": [
+          {
+            "texto": "Debt payoff snowball planner",
+            "veces": 4
+          },
+          {
+            "texto": "Cocktail recipe book",
+            "veces": 4
+          },
+          {
+            "texto": "Tax-deduction receipt scanner",
+            "veces": 4
+          },
+          {
+            "texto": "Flight deal tracker",
+            "veces": 2
+          },
+          {
+            "texto": "Coding challenge tracker",
+            "veces": 2
+          },
+          {
+            "texto": "Road trip planner with fuel stops",
+            "veces": 2
+          },
+          {
+            "texto": "Habit tracker with streaks",
+            "veces": 2
+          },
+          {
+            "texto": "Roommate chore tracker",
+            "veces": 2
+          },
+          {
+            "texto": "Expense splitter for friend groups",
+            "veces": 2
+          },
+          {
+            "texto": "Coffee brewing guide",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 6,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 0,
+        "lazy": 6,
+        "conSrcset": 6,
+        "interactivos": 105,
+        "objetivosMenores44px": 88,
+        "idioma": "en",
+        "landmarks": {
+          "header": 2,
+          "nav": 2,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgba(0, 0, 0, 0.5)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.5)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 1.06
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.85)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 15.13
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.85)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 1.09
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.3)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 2.12
+          },
+          {
+            "texto": "rgba(0, 0, 0, 0.3)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(17, 17, 17)",
+            "ratio": 18.88
+          }
+        ],
+        "fondosTranslucidosOmitidos": 12
+      },
+      "rendimiento": {
+        "pesoTotalKb": 32200,
+        "porTipoKb": {
+          "document": 27.4,
+          "stylesheet": 276,
+          "script": 5508.3,
+          "image": 3816.5,
+          "fetch": 46,
+          "media": 22525.7
+        },
+        "pedidos": {
+          "document": 2,
+          "stylesheet": 10,
+          "script": 113,
+          "image": 142,
+          "fetch": 19,
+          "media": 15
+        },
+        "hostsDistintos": 6,
+        "terceros": [
+          {
+            "host": "is1-ssl.mzstatic.com",
+            "pedidos": 128
+          },
+          {
+            "host": "auth.10x.app",
+            "pedidos": 10
+          },
+          {
+            "host": "ggrgdcfzzsrvpjggxtyq.supabase.co",
+            "pedidos": 2
+          },
+          {
+            "host": "code.trygravity.ai",
+            "pedidos": 1
+          },
+          {
+            "host": "api.10x.app",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": []
+      },
+      "seo": {
+        "titulo": "10x — Build native apps from a prompt",
+        "descripcion": "Describe your app and 10x builds it — native, App Store–ready, from the first pass.",
+        "canonical": null,
+        "og": 8,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 2,
+    "conTransicion": 74
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

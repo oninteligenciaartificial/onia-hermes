@@ -1,0 +1,205 @@
+{
+  "updatedAt": "2026-05-27T23:11:35.000Z",
+  "createdAt": "2026-05-26T04:07:47.414Z",
+  "id": "s7Ha6NlI3p51bEmQ",
+  "name": "WF-DISCORD-04 — Alertas de Tareas Pendientes en Notion",
+  "description": "Busca diariamente tareas pendientes en Notion a las 9am Bolivia (13:00 UTC) y envía un resumen al canal de Discord configurado.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "aeb9ff7c-3332-4506-84bf-f864478bb5ba",
+      "name": "Sticky Note 9e8c4dcc",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        336,
+        64
+      ],
+      "parameters": {
+        "content": "## WF-DISCORD-04 — Alertas de Tareas Pendientes en Notion\n\n**Trigger:** Diario a las 9:00am Bolivia (UTC-4) = 13:00 UTC\n\n**Flujo:**\n1. Cron dispara cada día a las 13:00 UTC\n2. Notion busca páginas con texto \"pendiente\"\n3. Se formatea la lista de tareas en un mensaje\n4. El mensaje se envía al canal Discord configurado\n\n**Credenciales necesarias:**\n- Notion API Key\n- Discord Bot OnIA (botToken)",
+        "color": 3,
+        "width": 1200,
+        "height": 200
+      }
+    },
+    {
+      "id": "b8f275f6-727f-478b-a3cc-e521507b0c35",
+      "name": "Cron 9am Bolivia (13:00 UTC)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 13,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a1a3f3ed-589c-4d5e-9c9a-d566b7403529",
+      "name": "Buscar Tareas Pendientes en Notion",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "page",
+        "operation": "search",
+        "authentication": "apiKey",
+        "text": "pendiente",
+        "returnAll": true,
+        "simple": false,
+        "options": {
+          "filter": {
+            "filters": {
+              "property": "object",
+              "value": "page"
+            }
+          },
+          "sort": {
+            "sortValue": {
+              "direction": "descending",
+              "timestamp": "last_edited_time"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "2afdea56-f7d1-463e-ba0e-b630dedf19da",
+      "name": "Formatear Lista de Tareas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "\nconst items = $input.all();\nconst today = new Date().toLocaleDateString('es-BO', { \n  timeZone: 'America/La_Paz',\n  weekday: 'long', \n  year: 'numeric', \n  month: 'long', \n  day: 'numeric' \n});\n\nlet message = `📋 **Alertas de Tareas Pendientes** — ${today}\n\n`;\n\nif (items.length === 0) {\n  message += '✅ No hay tareas pendientes en Notion. ¡Todo al día!';\n} else {\n  message += `Se encontraron **${items.length}** tarea(s) pendiente(s):\n\n`;\n  items.forEach((item, index) => {\n    const name = item.json.name || item.json.title || '(Sin título)';\n    const url = item.json.url || '';\n    message += `${index + 1}. **${name}**`;\n    if (url) message += ` → ${url}`;\n    message += '\n';\n  });\n  message += '\n> Revisa y actualiza tus tareas en Notion.';\n}\n\nreturn [{ json: { message, taskCount: items.length } }];\n"
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "2051acf3-be2b-42af-bd0f-0858fc46fa67",
+      "name": "Enviar Alerta a Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "botToken",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571461663719454"
+        },
+        "sendTo": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571462196400303"
+        },
+        "content": "={{ $json.message }}"
+      },
+      "credentials": {
+        "discordBotApi": {
+          "id": "4K40hl2Un0aWGges",
+          "name": "Discord Bot account"
+        }
+      },
+      "webhookId": "a33b3376-a33a-4637-8552-b973992870a7"
+    }
+  ],
+  "connections": {
+    "Cron 9am Bolivia (13:00 UTC)": {
+      "main": [
+        [
+          {
+            "node": "Buscar Tareas Pendientes en Notion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Tareas Pendientes en Notion": {
+      "main": [
+        [
+          {
+            "node": "Formatear Lista de Tareas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatear Lista de Tareas": {
+      "main": [
+        [
+          {
+            "node": "Enviar Alerta a Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "ff050429-8b18-4047-9dcf-ec09c2379274",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-26T04:07:47.415Z",
+      "createdAt": "2026-05-26T04:07:47.415Z",
+      "role": "workflow:owner",
+      "workflowId": "s7Ha6NlI3p51bEmQ",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

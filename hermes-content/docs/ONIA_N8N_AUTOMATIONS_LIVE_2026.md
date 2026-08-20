@@ -176,6 +176,139 @@ puede aprobar borradores: Agente Contenido (`nZkaXaZVKzgtwUqU`), Agente Vendedor
 sin necesitar a Sergio): Agente Finanzas (`oKSTNdvS58ixBgnl`, solo avisa por anomalias), backup,
 healthcheck, VPS radar, tipo de cambio, etc. Reactivar con `publish_workflow` al volver.
 
+## Aviso de pago QR por Telegram, sin depender del correo (2026-08-14)
+
+**El problema:** un cliente sube el comprobante de pago QR
+(`POST /api/subscription-payment` en `onia-platform`, tabla `subscription_payments`,
+`status='PENDING'` por default) y la propia ruta intenta avisar por email a
+`ADMIN_NOTIFICATION_EMAIL` con `getEmailClient()` (`lib/email.ts`). En produccion
+`EMAIL_PROVIDER=smtp` cae a Nodemailer contra `smtp-relay.brevo.com`, que devuelve
+`535 5.7.8 Authentication failed` — la credencial depende de Sergio y no esta. El
+envio esta en un `try/catch` que solo hace `console.error`: **si falla, nadie se
+entera nunca**, ni el pago ni el error quedan visibles en ningun lado.
+
+Tambien existe `WF-02: QR Payment Alerts` (`9bF53cn0lkvdUyZT`, activo, tag
+`dentalgest`, ver `N8N_AUTOMATIONS.md`) — poll cada 5 min contra la RPC de Supabase
+`n8n_pending_qr_payments` y manda un email por Gmail a `business@onia.com.bo`. Sigue
+activo y sin tocar. Pero **es otro canal de correo**, y Sergio no revisa esa bandeja
+en tiempo real — el pedido explicito fue un canal que no dependa del correo en
+absoluto.
+
+**Disparador elegido: polling directo a Postgres, no webhook.** Un webhook exigiria
+tocar el codigo de `onia-platform` (agregar un `fetch()` en
+`app/api/subscription-payment/route.ts` hacia n8n) — carril de infra no toca ese
+repo. El polling contra la base **no requiere ningun cambio en el producto**.
+
+**Historial de la identidad de la base (dos correcciones, la segunda es la que
+vale) — dejarlo escrito para que el proximo que lea esto no repita el error:**
+
+1. Primer intento: usar la credencial `Postgres account` (`2P4w95n0vir90EkT`) ya
+   cargada en n8n, asumiendo que apuntaba al VPS. **Mal.** Esa credencial resulto
+   apuntar a Supabase Cloud (`kvepqgikokjlacxngkiw`, IPv6 en bloque AWS, Postgres
+   17.6 aarch64/Graviton, `org_count=9`) — un proyecto cloud verificado por cruce
+   con la REST API publica (mismos `id`/`createdAt` exactos), pero que **no es donde
+   escribe la app real**. La confusion vino de docs viejos de `onia-platform`
+   (`CREDENTIALS_GUIDE.md`, `SUPABASE_SELFHOST_MIGRATION_PLAN.md` del 29/30-jun) que
+   describian el plan de migracion self-host **antes del corte** — el corte ya se
+   hizo despues y esos docs quedaron desactualizados.
+2. **Verificacion real, hecha desde el propio VPS (por el dueño del producto):**
+   registro de organizaciones **entrando por `https://app.onia.com.bo/register`**
+   (la app en vivo) y las encontro en el contenedor `dentalgest-staging-supabase-db`
+   del VPS (a pesar del nombre "staging", es la base que la app usa hoy) — no en la
+   nube. Dato irrefutable: una organizacion con `verticalTrackId=ganadero-offline`
+   (rubro encendido en el codigo ESE MISMO DIA) aparecio ahi y en ningun otro lado.
+3. Se repitio la identificacion **contra esa base real**: `org_count=17`, con
+   `ZZ QA Estancia Ganadero | ZZ QA clinico | ZZ QA comercio | ZZ QA administracion |
+   ...` entre los nombres — coincide exacto con lo reportado. `inet_server_port()=55329`
+   (Postgres, dentro del contenedor, escucha en 55329, no en el 5432 por defecto).
+
+**Por que `Postgres account` no la alcanzaba y como se resolvio:** el n8n del VPS
+corre como servicio Docker Swarm (`n8n-sergio_n8n`) en las redes `easypanel` /
+`easypanel-n8n-sergio`; el stack Supabase de DentalGest (`dentalgest-staging-supabase-*`,
+red `dentalgest-staging-supabase_default`, driver `bridge` local) es una red aparte —
+por eso el host del contenedor no resolvia (`Host not found`). Se conecto el
+contenedor de n8n a esa red (`docker network connect dentalgest-staging-supabase_default
+n8n-sergio_n8n...`, no destructivo, solo agrega una interfaz de red mas) y se creo una
+credencial n8n nueva, **`Postgres VPS (dentalgest-staging)`** (id `ecF3x3SGUrT0hBbm`),
+con los mismos datos de conexion que usa la app real (`DIRECT_URL` de
+`/opt/onia-platform/app.env`: host `dentalgest-staging-supabase-pooler`, puerto `5432`,
+usuario `postgres.your-tenant-id`) — la contraseña se leyo una sola vez por SSH para
+crear la credencial y no quedo en ningun archivo del repo ni del scratchpad.
+**Nota de infraestructura pendiente:** la conexion de red se hizo a mano sobre el
+contenedor en ejecucion; si Easypanel redespliega el servicio de n8n, hay que
+reconectarlo (`docker network connect dentalgest-staging-supabase_default <contenedor
+n8n>`) o agregarlo de forma persistente en la config del stack.
+
+**Conclusion final: `Postgres account` (cloud) NO sirve para este workflow.** El
+workflow usa `Postgres VPS (dentalgest-staging)`, contra la base real (17
+organizaciones, confirmado). La prueba funcional completa (mas abajo) se corrio
+contra esta base.
+
+**Sin duplicados: tabla de vistos, no "probablemente no pase".** Antes de cada
+`SELECT`, un nodo Postgres corre `CREATE SCHEMA IF NOT EXISTS n8n_ops; CREATE TABLE
+IF NOT EXISTS n8n_ops.payment_alerts_sent (payment_id text PRIMARY KEY, notified_at
+timestamptz DEFAULT now())` — un schema propio de n8n, fuera de las migraciones de
+Prisma, no toca ninguna tabla del producto. El `SELECT` trae `subscription_payments`
+con `status='PENDING'` y `NOT EXISTS (SELECT 1 FROM n8n_ops.payment_alerts_sent WHERE
+payment_id = sp.id)`. Recien **despues** de que el nodo Telegram devuelve `ok:true`
+corre el `INSERT ... ON CONFLICT (payment_id) DO NOTHING` que lo marca como avisado.
+Si el envio a Telegram falla, el `INSERT` no corre y el siguiente barrido reintenta
+— duplicado solo si dos barridos se solapan (imposible aqui: intervalo de 5 min
+&gt;&gt; tiempo de ejecucion) o si dos items del mismo barrido fallan a mitad de
+lote (borde de baja probabilidad dado el volumen; no se construyo aislamiento por
+item para esto).
+
+**Workflow:** `ONIA - Aviso de pago QR (Telegram)`, id `2gk5aOIvIHBbttqJ`, activo.
+
+| # | Nodo | Tipo | Que hace |
+|---|---|---|---|
+| 1 | `Cada 5 min` | `scheduleTrigger` (`*/5 * * * *`) | Dispara el barrido |
+| 2 | `Asegurar tabla de vistos` | `postgres` executeQuery | DDL idempotente (schema `n8n_ops`) |
+| 3 | `Pagos QR pendientes sin avisar` | `postgres` executeQuery | `SELECT` con anti-join contra la tabla de vistos, `JOIN organizations` |
+| 4 | `Avisar a Sergio (Telegram)` | `telegram` sendMessage | Credencial `Telegram account` (`r8y2CN5RyOEIDce3`), chat `6830070978` hardcodeado. Clinica, pagador, plan, monto, banco, ref, comprobante y link a `/admin/payments` |
+| 5 | `Marcar aviso enviado` | `postgres` executeQuery | `INSERT ... ON CONFLICT DO NOTHING` referenciando `$('Pagos QR pendientes sin avisar').item.json.id` |
+
+Credenciales: `Postgres VPS (dentalgest-staging)` (id `ecF3x3SGUrT0hBbm`, postgres,
+nodos 2/3/5 — **nueva, creada en esta sesion**, ver justificacion arriba) y
+`Telegram account` (telegramApi, nodo 4 — ya existia, reusada tal cual).
+
+**Prueba real end-to-end contra la base correcta (2026-08-14), no simulada:**
+
+1. Antes: `SELECT count(*) FROM organizations` = 17 (confirma la base). 0 filas
+   `PENDING` en `subscription_payments`.
+2. Insert de prueba: fila `PENDING` real (`id=test-payalert-vps-003`, org
+   `ZZ QA clinico`, monto 320.00, banco BNB) — la misma query trajo `org_count=17`
+   pegado a la fila insertada, para dejar la identidad de la base atada a la prueba.
+3. Ejecucion manual del workflow: Telegram respondio `ok:true`, `message_id:1608`,
+   `chat:{id:6830070978,first_name:"Sergio",last_name:"Urcullo"}` — mensaje real
+   entregado. El `INSERT` de marcado corrio despues, `success:true`.
+4. Segunda ejecucion inmediata: `SELECT` devuelve `[]` — el pago ya estaba en
+   `n8n_ops.payment_alerts_sent` (creada de cero en esta base), **no se mando un
+   segundo mensaje**.
+5. Limpieza: `DELETE` de la fila de prueba y de su entrada en
+   `n8n_ops.payment_alerts_sent`. Verificado: `payment_row=0, tracking_row=0,
+   total_pending=0, org_count=17`.
+
+Workflow publicado (`publish_workflow`) recien despues de que esta prueba salio bien.
+
+**Nota historica (no borrar, para que no se repita el error):** antes de esto se
+corrieron dos "pruebas completas" (`message_id` 1606 y 1607) contra la credencial
+`Postgres account` — Telegram tambien las entrego, pero estaban corriendo contra
+Supabase Cloud (`kvepqgikokjlacxngkiw`, `org_count=9`), **no la base donde escribe la
+app real**. Que el mensaje de Telegram llegue no prueba que la base sea la correcta;
+lo unico que prueba eso es el conteo de organizaciones (o un dato equivalente,
+verificable independientemente) contra el numero real que reporta quien tiene acceso
+directo al VPS.
+
+**No verificado:** no se confirmo en produccion el error exacto `535` del SMTP de
+Brevo (no hay acceso a las env vars de runtime de `onia-platform` en Vercel desde
+este carril) — se tomo como dato de entrada del pedido. Tampoco se confirmo si
+`WF-02`/Gmail efectivamente le llega a alguien: solo se confirmo que el `SELECT`
+corre y devuelve `[]` (no hubo pagos reales que probaran el envio de Gmail). `WF-02`
+sigue usando la RPC de Supabase Cloud (`kvepqgikokjlacxngkiw`) sin tocar — si esa
+tambien deberia apuntar al VPS es una pregunta abierta, fuera del alcance de esta
+sesion.
+
 ## Scripts de ops (en el VPS bajo /opt/onia/)
 
 Fuente en este repo: `hermes-content/deploy/vps-ops/`. Se despliegan al VPS a

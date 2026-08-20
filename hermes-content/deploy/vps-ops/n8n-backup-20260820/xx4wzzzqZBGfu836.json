@@ -1,0 +1,268 @@
+{
+  "updatedAt": "2026-05-27T16:16:30.691Z",
+  "createdAt": "2026-05-25T02:27:23.827Z",
+  "id": "xx4wzzzqZBGfu836",
+  "name": "GestiOS — Plan Expiry WA [WF-GS-02]",
+  "description": "Daily 12PM: fetches orgs with plan expiring in 7 days, sends WA reminder using each org's own WhatsApp Business credentials.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "3036c716-1605-4a67-8184-41c00b72fbdb",
+      "name": "Daily 12PM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        80
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 12 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "db5e7f5d-58dc-41fb-9647-ea93db32273f",
+      "name": "Calc Dates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        80
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const now = new Date();\nconst in7 = new Date(now.getTime() + 7*24*60*60*1000).toISOString();\nreturn [{ json: { now: now.toISOString(), in7Days: in7 } }];"
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "9fbaa786-29c1-4fe3-a91e-3f2097a1f485",
+      "name": "Fetch Expiring Orgs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        448,
+        80
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/organizations?select=id,name,phone,plan,planExpiresAt&planExpiresAt=lte.{{ $('Calc Dates').item.json.in7Days }}&planExpiresAt=gte.{{ $('Calc Dates').item.json.now }}&phone=not.is.null",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            },
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            }
+          ]
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "id": "ec8e53cf-f4e0-4edb-9d91-c70557028c23",
+      "name": "Fetch WA Addon",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://jafxylfocvvlflpqfsix.supabase.co/rest/v1/org_addons?select=phoneNumberId,accessToken&organizationId=eq.{{ $json.id }}&addon=eq.WHATSAPP&active=eq.true",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer __REDACTED_JWT__"
+            },
+            {
+              "name": "apikey",
+              "value": "__REDACTED_JWT__"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3a6485a6-c934-48ea-9961-1366767194a4",
+      "name": "Send WA Expiry",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1120,
+        80
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/{{ $(\"Fetch WA Addon\").item.json.phoneNumberId }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $(\"Fetch WA Addon\").item.json.accessToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"messaging_product\": \"whatsapp\", \"to\": \"{{ $(\\\"Fetch Expiring Orgs\\\").item.json.phone }}\", \"type\": \"text\", \"text\": { \"body\": \"Hola {{ $(\\\"Fetch Expiring Orgs\\\").item.json.name }}, tu plan {{ $(\\\"Fetch Expiring Orgs\\\").item.json.plan }} en GestiOS vence pronto. Renuévalo en https://gesti-os.vercel.app/\" } }"
+      }
+    },
+    {
+      "id": "dfef8fd4-0ef2-42a3-ba4e-de2ccbc7038c",
+      "name": "For Each Org",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        80
+      ],
+      "parameters": {
+        "batchSize": 5
+      }
+    }
+  ],
+  "connections": {
+    "Daily 12PM": {
+      "main": [
+        [
+          {
+            "node": "Calc Dates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calc Dates": {
+      "main": [
+        [
+          {
+            "node": "Fetch Expiring Orgs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Expiring Orgs": {
+      "main": [
+        [
+          {
+            "node": "For Each Org",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch WA Addon": {
+      "main": [
+        [
+          {
+            "node": "Send WA Expiry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WA Expiry": {
+      "main": [
+        [
+          {
+            "node": "For Each Org",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "For Each Org": {
+      "main": [
+        [
+          {
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch WA Addon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Daily 12PM": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "d08df668-616e-48d0-bda2-10b822800fdc",
+  "activeVersionId": null,
+  "versionCounter": 6,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-25T02:27:23.829Z",
+      "createdAt": "2026-05-25T02:27:23.829Z",
+      "role": "workflow:owner",
+      "workflowId": "xx4wzzzqZBGfu836",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

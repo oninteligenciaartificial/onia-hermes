@@ -1,0 +1,381 @@
+{
+  "updatedAt": "2026-08-07T15:09:48.638Z",
+  "createdAt": "2026-05-14T02:24:34.892Z",
+  "id": "C9wNxI78lJUrcU4n",
+  "name": "WF-03: Recurring Invoice Delivery",
+  "description": "Hourly delivery of recurring invoices to patients via Gmail Workspace, then marks them as sent in Supabase (migrado 2026-08-07, sin $env).",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "3b20dab6-4bf4-4958-b413-84f59bdaddec",
+      "name": "Schedule: Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        288
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cdc2c9d3-39ca-4f91-acf6-b3d7c9a7e85d",
+      "name": "Supabase: Draft Recurring",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        288
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_draft_recurring_invoices",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "20dd8abc-f8c5-4f17-8915-4040edfa0adb",
+      "name": "If: Has Drafts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        288
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-count",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "601a31c9-3b0d-4588-81ce-cbce592d32cf",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        896,
+        0
+      ]
+    },
+    {
+      "id": "c614a46c-8991-422f-bc92-c464121cd5e6",
+      "name": "Supabase: Mark SENT",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1120,
+        224
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_mark_invoice_sent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{\"p_id\":\"={{ $json.id }}\"}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "id": "4801793a-39bd-43d7-913b-7c2e3fa13ea0",
+      "name": "Split: Per Invoice",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        176
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "bffc46af-da72-468b-a869-d59deca6a39f",
+      "name": "No Drafts",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        368
+      ]
+    },
+    {
+      "id": "b18d47b5-026b-4718-a1e2-9a7ac973e655",
+      "name": "DRY RUN Resumen Facturas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        480
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const items = $input.all();\nconst lines = items.map((i) => '- ' + (i.json.patientName || '?') + ' / ' + (i.json.clinicName || '?') + ' / Bs. ' + (i.json.total || '?') + ' / vence ' + (i.json.dueDate || '?')).join('\\n');\nreturn [{ json: { summary: 'DRY-RUN DentalGest WF-03 (facturas recurrentes): ' + items.length + ' factura(s) que el sistema enviaria. NO se envio nada.\\n\\n' + lines + '\\n\\nSi las listas estan bien, avisa para activar envio real.' } }];"
+      }
+    },
+    {
+      "id": "debedf37-d358-4836-870e-ca55f1dbdd9a",
+      "name": "DRY RUN Aviso Facturas",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        480
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.summary }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "493a6c4d-312d-4a32-8fed-cb2ead30d277"
+    },
+    {
+      "id": "b1b2c737-694c-43bc-aec9-e1c197a02e30",
+      "name": "Gmail: Send to Patient",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.patientEmail }}",
+        "subject": "=Factura de {{ $json.clinicName }} - Bs. {{ $json.total }}",
+        "emailType": "html",
+        "message": "=<p>Hola {{ $json.patientName }},</p><p>Tu factura de {{ $json.clinicName }} esta lista.</p><p>Total: Bs. {{ $json.total }}<br>Vencimiento: {{ $json.dueDate }}</p><p><a href='https://app.onia.com.bo/print/invoice/{{ $json.id }}'>Ver factura</a></p><p>- {{ $json.clinicName }} via Onia</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "disabled": true,
+      "webhookId": "bcac3017-be8f-47d9-9ca4-92feb1d5c44a"
+    }
+  ],
+  "connections": {
+    "Schedule: Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Draft Recurring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Draft Recurring": {
+      "main": [
+        [
+          {
+            "node": "If: Has Drafts?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has Drafts?": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Invoice",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "DRY RUN Resumen Facturas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Mark SENT": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Invoice": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail: Send to Patient",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DRY RUN Resumen Facturas": {
+      "main": [
+        [
+          {
+            "node": "DRY RUN Aviso Facturas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Send to Patient": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Mark SENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/La_Paz",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Every Hour": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "07565d49-ba17-4f47-afa3-21a5e99e38ff",
+  "activeVersionId": null,
+  "versionCounter": 34,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-14T02:24:34.894Z",
+      "createdAt": "2026-05-14T02:24:34.894Z",
+      "role": "workflow:owner",
+      "workflowId": "C9wNxI78lJUrcU4n",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Send to Patient"
+  }
+}

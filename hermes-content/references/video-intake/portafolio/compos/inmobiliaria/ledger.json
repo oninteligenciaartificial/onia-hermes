@@ -1,0 +1,12 @@
+{
+  "fps": 30,
+  "seams": [
+    {
+      "id": "wireframe→web",
+      "cut": 4.3,
+      "technique": "scroll continuation UP",
+      "exit": { "selector": "#wire-page", "axis": "y", "dir": -1 },
+      "entry": { "selector": "#web-page", "axis": "y", "dir": -1 }
+    }
+  ]
+}

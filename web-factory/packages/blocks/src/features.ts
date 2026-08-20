@@ -1,4 +1,5 @@
 import { escapeHtml } from "./escape";
+import { renderIcon } from "./icons";
 import type { SiteClient } from "./types";
 
 export function renderFeatures(client: SiteClient): string {
@@ -6,7 +7,7 @@ export function renderFeatures(client: SiteClient): string {
     .map(
       (service, index) => `
         <article class="wf-feature">
-          <span class="wf-feature-icon" aria-hidden="true">${escapeHtml(service.icono.slice(0, 2).toUpperCase())}</span>
+          <span class="wf-feature-icon" aria-hidden="true">${renderIcon(service.icono)}</span>
           <span class="wf-feature-number">${String(index + 1).padStart(2, "0")}</span>
           <h3>${escapeHtml(service.titulo)}</h3>
           <p>${escapeHtml(service.desc)}</p>

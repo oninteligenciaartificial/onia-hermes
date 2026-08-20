@@ -1,0 +1,196 @@
+{
+  "updatedAt": "2026-08-07T15:08:01.297Z",
+  "createdAt": "2026-05-15T01:40:10.703Z",
+  "id": "F0HOvw0lpGqTdpQS",
+  "name": "WF-08: Welcome Email for New Patients",
+  "description": "Sends a welcome email via Gmail Workspace when a new patient is created via webhook (migrado 2026-08-07, sin $env).",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "9c0595d0-447b-4a53-a0ba-89ba97cda187",
+      "name": "Webhook: Patient Created",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        80
+      ],
+      "parameters": {
+        "path": "patient-created",
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "patient-created"
+    },
+    {
+      "id": "a344f830-86f1-4167-b773-6faf77b5bbb2",
+      "name": "If: Has Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-email",
+              "leftValue": "={{ $json.body.patientEmail }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "417940dc-9002-4d81-8ddc-b45526d694d4",
+      "name": "Respond: OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        80
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"success\": true}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "f58b864f-45fe-4caf-8dbf-cb632d5800b6",
+      "name": "Gmail: Welcome Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.body.patientEmail }}",
+        "subject": "=Bienvenido/a a {{ $json.body.clinicName }}",
+        "emailType": "html",
+        "message": "=<p>Hola {{ $json.body.patientName }},</p><p>Bienvenido/a a {{ $json.body.clinicName }}. Nos alegra tenerte como paciente.</p><p>Puedes ver tus citas y facturas en linea aqui:<br>https://app.onia.com.bo/patient/{{ $json.body.clinicSlug }}</p><p>Cualquier consulta, estamos a tu disposicion.</p><p>- {{ $json.body.clinicName }} via Onia</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "3503297b-143f-440e-bc5c-5ae7997f3b53"
+    }
+  ],
+  "connections": {
+    "Webhook: Patient Created": {
+      "main": [
+        [
+          {
+            "node": "If: Has Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has Email?": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Welcome Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Welcome Email": {
+      "main": [
+        [
+          {
+            "node": "Respond: OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "d4a2fb96-594b-4722-b4c2-e2e0b5ad15ad",
+  "activeVersionId": "d4a2fb96-594b-4722-b4c2-e2e0b5ad15ad",
+  "versionCounter": 15,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-15T01:40:10.705Z",
+      "createdAt": "2026-05-15T01:40:10.705Z",
+      "role": "workflow:owner",
+      "workflowId": "F0HOvw0lpGqTdpQS",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Welcome Email"
+  }
+}

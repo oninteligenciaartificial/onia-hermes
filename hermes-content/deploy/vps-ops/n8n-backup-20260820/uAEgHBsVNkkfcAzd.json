@@ -1,0 +1,245 @@
+{
+  "updatedAt": "2026-08-07T15:10:17.228Z",
+  "createdAt": "2026-05-24T15:28:31.512Z",
+  "id": "uAEgHBsVNkkfcAzd",
+  "name": "WF-12: Plan Activation Confirmation",
+  "description": "Al activar un plan, envia confirmacion al admin de la clinica via Gmail Workspace. Valida API key hardcodeada, arma plan label, responde 200 (migrado 2026-08-07, sin $env). Mantener SIN publicar hasta revision.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "cf5f4e4c-fb1f-4681-a0c5-aae344bc9eb7",
+      "name": "Plan Activation Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        96
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "plan-activation-confirm",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "webhookId": "2d6c9c0b-022d-4e1d-b089-d0ef2e841090"
+    },
+    {
+      "id": "feac9db9-4b07-443a-8028-e77e25a4d302",
+      "name": "Validate API Key",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        96
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "api-key-check",
+              "leftValue": "={{ $request.headers['x-api-key'] }}",
+              "rightValue": "3660bd1a016be3a5d7c77b394f9bf76915bb0bd207833b34936f4832673399b3",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "39ca40d3-1e63-470d-9f9c-25c74f720303",
+      "name": "Build Plan Label",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "plan-label",
+              "name": "planLabel",
+              "value": "={{ {\"basic\":\"Basic\",\"professional\":\"Professional\",\"clinic\":\"Clínica\"}[$json.body.plan] ?? $json.body.plan }}",
+              "type": "string"
+            },
+            {
+              "id": "founder-line",
+              "name": "founderLine",
+              "value": "={{ $json.body.isFounder ? '<p>🎉 Eres uno de nuestros clientes fundadores — tienes precio bloqueado por 6 meses.</p>' : '' }}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a5cf3183-b386-4a53-a49d-17e5c89a901a",
+      "name": "Respond 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 200,
+        "responseBody": "{\"ok\":true}"
+      }
+    },
+    {
+      "id": "a04929a8-83f9-4cbb-adce-758987a29f48",
+      "name": "Respond 401",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        192
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 401,
+        "responseBody": "{\"error\":\"Unauthorized\"}"
+      }
+    },
+    {
+      "id": "06f7be02-33ff-4669-9119-d92679a9c1b1",
+      "name": "Gmail: Send Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $(\"Plan Activation Webhook\").item.json.body.adminEmail }}",
+        "subject": "={{ '✅ Tu plan ' + $json.planLabel + ' está activo — Bienvenido a Onia' }}",
+        "emailType": "html",
+        "message": "={{ '<h2 style=\"color:#2563eb\">¡Tu plan está activo!</h2><p>Hola ' + $(\"Plan Activation Webhook\").item.json.body.adminName + ',</p><p>Tu clínica <strong>' + $(\"Plan Activation Webhook\").item.json.body.clinicName + '</strong> ya tiene el plan <strong>' + $json.planLabel + '</strong> activo.</p><p>Acceso hasta: <strong>' + $(\"Plan Activation Webhook\").item.json.body.planEnd + '</strong></p>' + $json.founderLine + '<p><a href=\"https://app.onia.com.bo/dashboard\" style=\"background:#2563eb;color:white;padding:10px 20px;border-radius:6px;text-decoration:none\">Ir a tu dashboard →</a></p><p>Cualquier consulta escríbenos por WhatsApp.</p>' }}",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "178d84c4-0cff-43b4-a760-6921151195cc"
+    }
+  ],
+  "connections": {
+    "Plan Activation Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate API Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate API Key": {
+      "main": [
+        [
+          {
+            "node": "Build Plan Label",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 401",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Plan Label": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Send Email": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "b7350be7-ec46-4130-9393-963e18b83946",
+  "activeVersionId": null,
+  "versionCounter": 12,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-24T15:28:31.514Z",
+      "createdAt": "2026-05-24T15:28:31.514Z",
+      "role": "workflow:owner",
+      "workflowId": "uAEgHBsVNkkfcAzd",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Send Email"
+  }
+}

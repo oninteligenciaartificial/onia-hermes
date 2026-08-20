@@ -1,0 +1,355 @@
+{
+  "updatedAt": "2026-08-07T15:10:12.139Z",
+  "createdAt": "2026-05-14T02:24:35.911Z",
+  "id": "3VUUpM6FRTXzTSdA",
+  "name": "WF-06: Weekly Clinic Digest",
+  "description": "Weekly per-clinic digest: iterates clinics, fetches appointments/revenue/new-patients, sends digest per clinic via Gmail Workspace (migrado 2026-08-07, sin $env).",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "b9e7435d-4beb-4f3a-9185-40e0df2872b8",
+      "name": "Schedule: Monday 7AM La Paz",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 11 * * 1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7e05d3b9-4a03-4166-96bc-4e3be00d31b3",
+      "name": "Supabase: Active Clinics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_active_clinics",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}"
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "b71aff7e-80f3-4fbf-8077-63c75030c217",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e4f0ec9b-a3b2-4926-939c-afb3f702ddcd",
+      "name": "Supabase: Weekly Appointments",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        672,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_weekly_appointments",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\"p_org_id\":\"{{ $('Split: Per Clinic').first().json.id }}\"}"
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "e0a6c670-eee3-4952-9560-9574a5833043",
+      "name": "Supabase: Weekly Revenue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_weekly_revenue",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\"p_org_id\":\"{{ $('Split: Per Clinic').first().json.id }}\"}"
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "42fce8ae-8458-40bf-9dc9-9ea63131f326",
+      "name": "Supabase: New Patients",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1120,
+        192
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_new_patients",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\"p_org_id\":\"{{ $('Split: Per Clinic').first().json.id }}\"}"
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "a836362e-8656-482a-845b-33f12905954f",
+      "name": "Code: Aggregate Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        192
+      ],
+      "parameters": {
+        "jsCode": "const apt = $('Supabase: Weekly Appointments').first().json;\nconst rev = $('Supabase: Weekly Revenue').first().json;\nconst pat = $('Supabase: New Patients').first().json;\n\nconst total = apt.total_appointments || 0;\nconst noShowRate = total > 0 ? Math.round(((apt.no_shows || 0) / total) * 100) : 0;\n\nreturn {\n  json: {\n    clinicName: $('Split: Per Clinic').first().json.clinicName,\n    clinicSlug: $('Split: Per Clinic').first().json.slug,\n    adminName: $('Split: Per Clinic').first().json.adminName,\n    adminEmail: $('Split: Per Clinic').first().json.adminEmail,\n    totalAppointments: total,\n    completed: apt.completed || 0,\n    cancelled: apt.cancelled || 0,\n    noShows: apt.no_shows || 0,\n    noShowRate: noShowRate + '%',\n    revenuePaid: Number(rev.paid || 0).toLocaleString('es-BO'),\n    revenuePending: Number(rev.pending || 0).toLocaleString('es-BO'),\n    paidInvoices: rev.paid_count || 0,\n    pendingInvoices: rev.pending_count || 0,\n    newPatients: pat.new_patients || 0,\n  }\n};"
+      }
+    },
+    {
+      "id": "ef3ea8a9-3843-4207-899d-394fe592b6d6",
+      "name": "Split: Per Clinic",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        192
+      ],
+      "parameters": {
+        "batchSize": 1
+      }
+    },
+    {
+      "id": "c6be7f9c-bbe0-4671-a737-590f544e226a",
+      "name": "Gmail: Send Weekly Digest",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1568,
+        272
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.adminEmail }}",
+        "subject": "=Reporte semanal de {{ $json.clinicName }}",
+        "emailType": "html",
+        "message": "=<h2>Reporte semanal de {{ $json.clinicName }}</h2><p>Hola {{ $json.adminName }},</p><h3>CITAS</h3><ul><li>Total: {{ $json.totalAppointments }}</li><li>Completadas: {{ $json.completed }}</li><li>Canceladas: {{ $json.cancelled }}</li><li>No-shows: {{ $json.noShows }} ({{ $json.noShowRate }})</li></ul><h3>INGRESOS</h3><ul><li>Facturas pagadas: {{ $json.paidInvoices }} (Bs. {{ $json.revenuePaid }})</li><li>Facturas pendientes: {{ $json.pendingInvoices }} (Bs. {{ $json.revenuePending }})</li></ul><h3>PACIENTES</h3><ul><li>Nuevos esta semana: {{ $json.newPatients }}</li></ul><p><a href=\"https://app.onia.com.bo/dashboard\">Ver dashboard completo</a></p><p>- Onia</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "93e77944-ed7d-4123-87e2-48919f1d5116"
+    }
+  ],
+  "connections": {
+    "Schedule: Monday 7AM La Paz": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Active Clinics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Active Clinics": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Clinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Weekly Appointments": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Weekly Revenue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Weekly Revenue": {
+      "main": [
+        [
+          {
+            "node": "Supabase: New Patients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: New Patients": {
+      "main": [
+        [
+          {
+            "node": "Code: Aggregate Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Aggregate Stats": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Send Weekly Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Clinic": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase: Weekly Appointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Send Weekly Digest": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Clinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Monday 7AM La Paz": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "bb420966-9ee5-4bfc-8c30-6a5945587cc1",
+  "activeVersionId": null,
+  "versionCounter": 25,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-14T02:24:35.912Z",
+      "createdAt": "2026-05-14T02:24:35.912Z",
+      "role": "workflow:owner",
+      "workflowId": "3VUUpM6FRTXzTSdA",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Send Weekly Digest"
+  }
+}

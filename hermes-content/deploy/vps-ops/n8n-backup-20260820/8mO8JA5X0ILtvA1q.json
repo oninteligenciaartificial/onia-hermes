@@ -1,0 +1,857 @@
+{
+  "updatedAt": "2026-08-07T15:09:51.536Z",
+  "createdAt": "2026-05-14T02:24:35.231Z",
+  "id": "8mO8JA5X0ILtvA1q",
+  "name": "WF-04: Overdue Invoice Dunning",
+  "description": "Overdue invoice dunning via Gmail Workspace (3 niveles) + WhatsApp opcional por factura, con credenciales por clinica en $json (migrado 2026-08-07, sin $env).",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "b542d873-51fe-425a-8ec7-74c449c6026d",
+      "name": "Schedule: Daily 10AM La Paz",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        528
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 14 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fa15b43c-4eed-4b2c-8d1c-9fe86c357c6a",
+      "name": "Supabase: Overdue Invoices",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        528
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_overdue_invoices",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "931b1962-06c9-4647-b91c-649a5d5b64d3",
+      "name": "If: Has Overdue?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        528
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-count",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "f1a801eb-4890-4cf2-bcb8-78a94b9283eb",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        896,
+        224
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "799654e5-450f-4b28-bbe2-28092041f309",
+      "name": "Code: Calculate Days Overdue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        416
+      ],
+      "parameters": {
+        "jsCode": "const dueDate = new Date($json.dueDate);\nconst now = new Date();\nconst daysOverdue = Math.floor((now - dueDate) / 86400000);\nconst currentLevel = $json.dunningLevel || 0;\nconst calculatedLevel = daysOverdue >= 1 && daysOverdue <= 3 ? 1\n  : daysOverdue >= 4 && daysOverdue <= 7 ? 2\n  : daysOverdue >= 8 && daysOverdue <= 15 ? 3\n  : daysOverdue > 15 ? 4 : 0;\nconst dunningLevel = Math.max(currentLevel, calculatedLevel);\nreturn { json: { ...$json, daysOverdue, dunningLevel } };"
+      }
+    },
+    {
+      "id": "5b0bc305-318f-4d82-8043-00fd0778fa4a",
+      "name": "Switch: Dunning Level",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        448
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "lvl1",
+                    "leftValue": "={{ $json.dunningLevel }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equal"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "level1"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "lvl2",
+                    "leftValue": "={{ $json.dunningLevel }}",
+                    "rightValue": 2,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equal"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "level2"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "lvl3",
+                    "leftValue": "={{ $json.dunningLevel }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equal"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "level3"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "lvl4",
+                    "leftValue": "={{ $json.dunningLevel }}",
+                    "rightValue": 4,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "level4"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "62a81ca4-dfc3-4a03-a02a-ef6222dae550",
+      "name": "If: Has WhatsApp (L1)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "wa-lvl1",
+              "leftValue": "={{ $json.whatsappAddon }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            },
+            {
+              "id": "phone-lvl1",
+              "leftValue": "={{ $json.patientPhone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "0b1001fc-8f32-426d-a19b-cc3c14f9f9e6",
+      "name": "WhatsApp: Friendly Reminder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1792,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.whatsappPhoneNumberId }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"Bearer \" + $json.whatsappAccessToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.patientPhone }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"Hola {{ $json.patientName }}, te recordamos que tienes una factura pendiente de {{ $json.clinicName }} por Bs. {{ $json.total }}. Vencimiento: {{ $json.dueDate }}. Ver y pagar: https://app.onia.com.bo/print/invoice/{{ $json.id }}\" }\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "d102f186-93b3-4d97-8d89-035124df5610",
+      "name": "Supabase: Update Level",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        2016,
+        432
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://kvepqgikokjlacxngkiw.supabase.co/rest/v1/rpc/n8n_update_dunning_level",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\"p_id\":\"{{ $json.id }}\",\"p_level\":{{ $json.dunningLevel }}}",
+        "options": {}
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "kXsaPlwveqzzNOmY",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "0a6705fa-c8c5-4ec2-8bf0-1e88142fa435",
+      "name": "If: Has WhatsApp (L2)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        368
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "wa-lvl2",
+              "leftValue": "={{ $json.whatsappAddon }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            },
+            {
+              "id": "phone-lvl2",
+              "leftValue": "={{ $json.patientPhone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "7f88a071-ff80-427a-95df-0dc925b6c7a8",
+      "name": "WhatsApp: Second Notice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1792,
+        288
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.whatsappPhoneNumberId }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"Bearer \" + $json.whatsappAccessToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.patientPhone }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"Hola {{ $json.patientName }}, tu factura de {{ $json.clinicName }} por Bs. {{ $json.total }} tiene {{ $json.daysOverdue }} dias de vencida. Pagar: https://app.onia.com.bo/print/invoice/{{ $json.id }}.\" }\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "c62dd5f7-22a1-4577-971e-5d5143250ff4",
+      "name": "If: Has WhatsApp (L3)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        656
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "wa-lvl3",
+              "leftValue": "={{ $json.whatsappAddon }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            },
+            {
+              "id": "phone-lvl3",
+              "leftValue": "={{ $json.patientPhone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "ee861b68-00c0-46c4-9f76-0e7959ffc952",
+      "name": "WhatsApp: Urgent Notice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1792,
+        576
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.whatsappPhoneNumberId }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"Bearer \" + $json.whatsappAccessToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.patientPhone }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"URGENTE: {{ $json.patientName }}, tu factura de {{ $json.clinicName }} por Bs. {{ $json.total }} tiene {{ $json.daysOverdue }} dias vencida. Regulariza tu pago. Pagar: https://app.onia.com.bo/print/invoice/{{ $json.id }}\" }\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "6a78f8bc-a2d4-4b80-9074-63fdd25e74e6",
+      "name": "Split: Per Invoice",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        432
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "c23f72fb-8cd2-4619-98e7-f5d08812605d",
+      "name": "No Overdue",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        624
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "5d199ac1-6cc6-4c21-b245-42d4a04510b4",
+      "name": "Gmail: Friendly Reminder",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1344,
+        80
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.patientEmail }}",
+        "subject": "=Recordatorio: Factura pendiente de {{ $json.clinicName }}",
+        "emailType": "html",
+        "message": "=<p>Hola {{ $json.patientName }},</p><p>Este es un recordatorio amable de que tienes una factura pendiente de {{ $json.clinicName }} por Bs. {{ $json.total }}.</p><p>Vencimiento: {{ $json.dueDate }}</p><p><a href=\"https://app.onia.com.bo/print/invoice/{{ $json.id }}\">Ver y pagar</a></p><p>Si ya realizaste el pago, envianos tu comprobante.</p><p>- {{ $json.clinicName }}</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "c33702dc-5d66-4afd-b8b9-69a1a83fc0e4"
+    },
+    {
+      "id": "56fc9e65-5b41-484d-adc9-5a09def8af97",
+      "name": "Gmail: Second Notice",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1344,
+        368
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.patientEmail }}",
+        "subject": "=Segundo aviso: Factura vencida - {{ $json.clinicName }}",
+        "emailType": "html",
+        "message": "=<p>Hola {{ $json.patientName }},</p><p>Tu factura de {{ $json.clinicName }} por Bs. {{ $json.total }} tiene {{ $json.daysOverdue }} dias de vencida.</p><p><a href=\"https://app.onia.com.bo/print/invoice/{{ $json.id }}\">Pagar ahora</a></p><p>Ya pagaste? Envianos tu comprobante.</p><p>- {{ $json.clinicName }}</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "14843620-ca63-4ea1-9a88-2cdae52e59fa"
+    },
+    {
+      "id": "b93d890b-a375-4e47-8cd0-3f5dc16c523a",
+      "name": "Gmail: Urgent Notice",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1344,
+        656
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.patientEmail }}",
+        "subject": "=URGENTE: Factura con {{ $json.daysOverdue }} dias vencida",
+        "emailType": "html",
+        "message": "=<p>Hola {{ $json.patientName }},</p><p>Tu factura de {{ $json.clinicName }} por Bs. {{ $json.total }} tiene {{ $json.daysOverdue }} dias de vencida.</p><p>Por favor, regulariza tu pago lo antes posible.</p><p><a href=\"https://app.onia.com.bo/print/invoice/{{ $json.id }}\">Pagar ahora</a></p><p>- {{ $json.clinicName }}</p>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "a8a43222-ac8e-4f95-9450-c8f7255f006f"
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 10AM La Paz": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Overdue Invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Overdue Invoices": {
+      "main": [
+        [
+          {
+            "node": "If: Has Overdue?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has Overdue?": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Overdue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Calculate Days Overdue": {
+      "main": [
+        [
+          {
+            "node": "Switch: Dunning Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch: Dunning Level": {
+      "main": [
+        [
+          {
+            "node": "Split: Per Invoice",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Gmail: Friendly Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail: Second Notice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail: Urgent Notice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase: Update Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has WhatsApp (L1)?": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp: Friendly Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase: Update Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp: Friendly Reminder": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Update Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has WhatsApp (L2)?": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp: Second Notice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase: Update Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp: Second Notice": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Update Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Has WhatsApp (L3)?": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp: Urgent Notice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase: Update Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp: Urgent Notice": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Update Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split: Per Invoice": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code: Calculate Days Overdue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Friendly Reminder": {
+      "main": [
+        [
+          {
+            "node": "If: Has WhatsApp (L1)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Second Notice": {
+      "main": [
+        [
+          {
+            "node": "If: Has WhatsApp (L2)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Urgent Notice": {
+      "main": [
+        [
+          {
+            "node": "If: Has WhatsApp (L3)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule: Daily 10AM La Paz": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "9fd31ac8-a072-46d0-8cdf-fab8d3dc30a5",
+  "activeVersionId": null,
+  "versionCounter": 33,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:09.548Z",
+      "createdAt": "2026-07-03T21:24:09.548Z",
+      "id": "qnJO8BWSws98ZW2x",
+      "name": "dentalgest"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-05-14T02:24:35.233Z",
+      "createdAt": "2026-05-14T02:24:35.233Z",
+      "role": "workflow:owner",
+      "workflowId": "8mO8JA5X0ILtvA1q",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Friendly Reminder, Gmail: Second Notice, Gmail: Urgent Notice"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "updatedAt": "2026-06-02T19:22:51.000Z",
+  "createdAt": "2026-06-02T19:18:20.010Z",
+  "id": "QsYDofU4pRy3fZPp",
+  "name": "Hermes Temporary Drive Download Bridge",
+  "description": "Puente temporal para descargar archivos privados de Drive a la maquina local de Hermes; se desactiva/archiva tras uso.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "028fb889-dfc8-4a49-aaad-3fffbb32c99b",
+      "name": "Private Drive Download Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        200,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "hermes-drive-private-dl-20260602-c3a8f7d1b2464d0c91a9b7e42f0a29e4",
+        "authentication": "none",
+        "responseMode": "responseNode"
+      },
+      "webhookId": "d70cc1f8-e251-4543-9b9d-1294e1e8ed31"
+    },
+    {
+      "id": "92590d52-cf1d-4849-8faa-babb925dccdf",
+      "name": "Download Drive File",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "resource": "file",
+        "operation": "download",
+        "authentication": "oAuth2",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.query.fileId }}",
+          "cachedResultName": "Drive file"
+        },
+        "options": {
+          "binaryPropertyName": "data",
+          "fileName": "={{ $json.query.name || 'drive-file.bin' }}"
+        }
+      },
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "qteuJV55AO0YnxB6",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "id": "7a492181-19aa-412a-a61b-43089839c341",
+      "name": "Return Binary File",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        720,
+        300
+      ],
+      "parameters": {
+        "respondWith": "binary",
+        "responseDataSource": "set",
+        "inputFieldName": "data",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Private Drive Download Webhook": {
+      "main": [
+        [
+          {
+            "node": "Download Drive File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Drive File": {
+      "main": [
+        [
+          {
+            "node": "Return Binary File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "ddcc8bde-e3ce-4677-8892-0aef3cc96bd8",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-02T19:18:20.014Z",
+      "createdAt": "2026-06-02T19:18:20.014Z",
+      "role": "workflow:owner",
+      "workflowId": "QsYDofU4pRy3fZPp",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

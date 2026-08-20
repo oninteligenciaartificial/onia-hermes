@@ -1,0 +1,117 @@
+{
+  "updatedAt": "2026-07-22T23:17:52.510Z",
+  "createdAt": "2026-07-22T23:17:52.510Z",
+  "id": "jcmJ509pTJeqJU0Z",
+  "name": "ONIA - Sync gasto IA (LiteLLM -> panel)",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "577c9eee-7ed3-48dd-9d9f-d51226f5481b",
+      "name": "Cada 6h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 */6 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "97602739-2735-45f4-a75c-4feeaa52eea6",
+      "name": "Sync gasto IA (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/ai-spend-sync.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cada 6h": {
+      "main": [
+        [
+          {
+            "node": "Sync gasto IA (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cada 6h": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "389f1064-0eae-4a4c-8f85-1156ce56dcd8",
+  "activeVersionId": "389f1064-0eae-4a4c-8f85-1156ce56dcd8",
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T23:17:52.596Z",
+      "createdAt": "2026-07-22T23:17:52.596Z",
+      "role": "workflow:owner",
+      "workflowId": "jcmJ509pTJeqJU0Z",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Sync gasto IA v1",
+    "description": "Cron cada 6h: corre ai-spend-sync.sh por SSH. Lee el gasto del mes de LiteLLM (LiteLLM_SpendLogs) y lo escribe en onia_center.cost_items (openai_api) para que la vista Finanzas muestre el gasto IA en vivo. Silencioso, sin Telegram."
+  }
+}

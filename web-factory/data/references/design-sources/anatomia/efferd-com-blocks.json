@@ -1,0 +1,2017 @@
+{
+  "url": "https://efferd.com/blocks",
+  "slug": "efferd-com-blocks",
+  "medidoEl": "2026-08-19T03:02:30.620Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 1963,
+        "alturaPantallas": 2.3,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 4
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "relative flex min-h-screen flex-col overflow-hidden supports-[overflow",
+          "altoPx": 1963,
+          "altoPantallas": 2.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Explore beautiful shadcn blocks",
+          "cta": "Efferd",
+          "imagenes": 24
+        },
+        {
+          "orden": 1,
+          "etiqueta": "main",
+          "clase": "site-container relative grow before:absolute before:-inset-y-full befo",
+          "altoPx": 1486,
+          "altoPantallas": 1.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Explore beautiful shadcn blocks",
+          "cta": "Auth14 blocks",
+          "imagenes": 9
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "relative mx-auto min-h-screen max-w-6xl",
+          "altoPx": 1486,
+          "altoPantallas": 1.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Explore beautiful shadcn blocks",
+          "cta": "Auth14 blocks",
+          "imagenes": 9
+        },
+        {
+          "orden": 3,
+          "etiqueta": "footer",
+          "clase": "text-xs md:text-sm",
+          "altoPx": 420,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 11
+        }
+      ],
+      "encabezados": {
+        "total": 24,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Explore beautiful shadcn blocks"
+          },
+          {
+            "nivel": 2,
+            "texto": "Marketing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Auth"
+          },
+          {
+            "nivel": 3,
+            "texto": "Blog Sections"
+          },
+          {
+            "nivel": 3,
+            "texto": "Contact"
+          },
+          {
+            "nivel": 3,
+            "texto": "Call to Action"
+          },
+          {
+            "nivel": 3,
+            "texto": "Faqs"
+          },
+          {
+            "nivel": 3,
+            "texto": "Features"
+          },
+          {
+            "nivel": 3,
+            "texto": "Footer"
+          },
+          {
+            "nivel": 3,
+            "texto": "Header"
+          },
+          {
+            "nivel": 3,
+            "texto": "Hero Sections"
+          },
+          {
+            "nivel": 3,
+            "texto": "Image Gallery"
+          },
+          {
+            "nivel": 3,
+            "texto": "Integrations"
+          },
+          {
+            "nivel": 3,
+            "texto": "Logo Cloud"
+          },
+          {
+            "nivel": 3,
+            "texto": "Not Found"
+          },
+          {
+            "nivel": 3,
+            "texto": "Pricing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Testimonials"
+          },
+          {
+            "nivel": 3,
+            "texto": "More"
+          },
+          {
+            "nivel": 2,
+            "texto": "App / Dashboard"
+          },
+          {
+            "nivel": 3,
+            "texto": "App Shell"
+          },
+          {
+            "nivel": 3,
+            "texto": "Dashboard"
+          },
+          {
+            "nivel": 3,
+            "texto": "More"
+          },
+          {
+            "nivel": 4,
+            "texto": "Product"
+          },
+          {
+            "nivel": 4,
+            "texto": "Resources"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 67
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 23
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 8
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "13px / lh 1.50 / ls normal / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.43 / ls 0.35px / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 0.3px / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "30px / lh 1.20 / ls normal / w 700",
+            "veces": 1
+          },
+          {
+            "valor": "48px / lh 1.00 / ls normal / w 800",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Geist",
+            "veces": 108
+          },
+          {
+            "valor": "Outfit",
+            "veces": 22
+          },
+          {
+            "valor": "Geist Mono",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(1.5609 0 0)",
+            "veces": 94
+          },
+          {
+            "valor": "lab(48.496 0 0)",
+            "veces": 27
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(86.0279 1.77148 0.600767)",
+            "veces": 1
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.25)",
+            "veces": 1
+          },
+          {
+            "valor": "oklab(0.12 -0.00000116229 0.00000281632 / 0.8)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 52
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.2)",
+            "veces": 51
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.1)",
+            "veces": 29
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.15)",
+            "veces": 20
+          },
+          {
+            "valor": "oklab(0.205 -0.00000207871 0.00000478327 / 0.2)",
+            "veces": 16
+          },
+          {
+            "valor": "lab(88.4 0 0.0000119209)",
+            "veces": 14
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.25)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(100 0 0)",
+            "veces": 5
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "4px",
+            "veces": 56
+          },
+          {
+            "valor": "8px",
+            "veces": 44
+          },
+          {
+            "valor": "1px",
+            "veces": 30
+          },
+          {
+            "valor": "6px",
+            "veces": 25
+          },
+          {
+            "valor": "16px",
+            "veces": 17
+          },
+          {
+            "valor": "10px",
+            "veces": 9
+          },
+          {
+            "valor": "12px",
+            "veces": 8
+          },
+          {
+            "valor": "2px",
+            "veces": 7
+          },
+          {
+            "valor": "20px",
+            "veces": 6
+          },
+          {
+            "valor": "normal 8px",
+            "veces": 4
+          },
+          {
+            "valor": "32px",
+            "veces": 4
+          },
+          {
+            "valor": "24px",
+            "veces": 3
+          },
+          {
+            "valor": "40px",
+            "veces": 3
+          },
+          {
+            "valor": "-10px",
+            "veces": 2
+          },
+          {
+            "valor": "3px",
+            "veces": 2
+          },
+          {
+            "valor": "-1px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 87
+          },
+          {
+            "valor": "8.4px",
+            "veces": 30
+          },
+          {
+            "valor": "6.4px",
+            "veces": 28
+          },
+          {
+            "valor": "2px",
+            "veces": 25
+          },
+          {
+            "valor": "2px 2px 0px 0px",
+            "veces": 15
+          },
+          {
+            "valor": "10.4px",
+            "veces": 5
+          },
+          {
+            "valor": "4px",
+            "veces": 2
+          },
+          {
+            "valor": "8.4px 8.4px 0px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "6.4px 6.4px 0px 0px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 9,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 5
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 21
+          },
+          {
+            "valor": "10",
+            "veces": 6
+          },
+          {
+            "valor": "2",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 7
+          },
+          {
+            "valor": "0.5s",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 2,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 11,
+          "rem": 263,
+          "px": 2605,
+          "clamp": 0,
+          "vw": 14
+        },
+        "keyframesDeclarados": 10,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 47
+          },
+          {
+            "px": 768,
+            "veces": 42
+          },
+          {
+            "px": 1024,
+            "veces": 3
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 1536,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": []
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 29,
+        "ctasTop": [
+          {
+            "texto": "Blocks",
+            "veces": 2
+          },
+          {
+            "texto": "Pricing",
+            "veces": 2
+          },
+          {
+            "texto": "Docs",
+            "veces": 2
+          },
+          {
+            "texto": "Changelog",
+            "veces": 2
+          },
+          {
+            "texto": "Efferd",
+            "veces": 1
+          },
+          {
+            "texto": "Log In",
+            "veces": 1
+          },
+          {
+            "texto": "Get access",
+            "veces": 1
+          },
+          {
+            "texto": "Auth14 blocks",
+            "veces": 1
+          },
+          {
+            "texto": "Blog Sections5 blocks",
+            "veces": 1
+          },
+          {
+            "texto": "Contact11 blocks",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 1,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 0,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 38,
+        "objetivosMenores44px": 17,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 0,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(1.5609 0 0)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 19.41
+          },
+          {
+            "texto": "lab(1.5609 0 0)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 15.06
+          },
+          {
+            "texto": "lab(1.5609 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 20.26
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 4.54
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 3.52
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 4.74
+          },
+          {
+            "texto": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 3.14
+          },
+          {
+            "texto": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 2.63
+          },
+          {
+            "texto": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 3.23
+          },
+          {
+            "texto": "lab(86.0279 1.77148 0.600767)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 1.38
+          },
+          {
+            "texto": "lab(86.0279 1.77148 0.600767)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 1.07
+          },
+          {
+            "texto": "lab(86.0279 1.77148 0.600767)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 1.44
+          }
+        ],
+        "fondosTranslucidosOmitidos": 9
+      },
+      "rendimiento": {
+        "pesoTotalKb": 6238.6,
+        "porTipoKb": {
+          "document": 192.3,
+          "font": 404.9,
+          "stylesheet": 1494,
+          "script": 4120.7,
+          "image": 17.6,
+          "fetch": 9.1
+        },
+        "pedidos": {
+          "document": 1,
+          "font": 13,
+          "stylesheet": 2,
+          "script": 40,
+          "image": 3,
+          "fetch": 69
+        },
+        "hostsDistintos": 5,
+        "terceros": [
+          {
+            "host": "cdn.affonso.io",
+            "pedidos": 2
+          },
+          {
+            "host": "connect.facebook.net",
+            "pedidos": 2
+          },
+          {
+            "host": "github.com",
+            "pedidos": 1
+          },
+          {
+            "host": "avatars.githubusercontent.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Geist 100 900 normal",
+          "Geist Fallback normal normal",
+          "Geist Mono 400 normal",
+          "Geist Mono Fallback normal normal",
+          "Geist Mono 100 900 normal",
+          "Roboto 100 900 normal",
+          "Roboto Fallback normal normal",
+          "Raleway 100 900 normal",
+          "Raleway Fallback normal normal",
+          "DM Sans 100 1000 normal",
+          "DM Sans Fallback normal normal",
+          "Public Sans 100 900 normal",
+          "Public Sans Fallback normal normal",
+          "Outfit 100 900 normal",
+          "Outfit Fallback normal normal",
+          "Inter 100 900 normal",
+          "Inter Fallback normal normal",
+          "Noto Sans 100 900 normal",
+          "Noto Sans Fallback normal normal",
+          "Nunito Sans 200 1000 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Beautiful Shadcn Blocks - Efferd",
+        "descripcion": "Discover beautifully crafted shadcn blocks — ready to copy, customize, and drop into your next shadcn project.",
+        "canonical": "https://efferd.com/blocks",
+        "og": 3,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 1684,
+        "alturaPantallas": 1.6,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 4
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "relative flex min-h-screen flex-col overflow-hidden supports-[overflow",
+          "altoPx": 1684,
+          "altoPantallas": 1.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Explore beautiful shadcn blocks",
+          "cta": "Efferd",
+          "imagenes": 24
+        },
+        {
+          "orden": 1,
+          "etiqueta": "main",
+          "clase": "site-container relative grow before:absolute before:-inset-y-full befo",
+          "altoPx": 1369,
+          "altoPantallas": 1.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Explore beautiful shadcn blocks",
+          "cta": "Auth14 blocks",
+          "imagenes": 9
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "relative mx-auto min-h-screen max-w-6xl",
+          "altoPx": 1369,
+          "altoPantallas": 1.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Explore beautiful shadcn blocks",
+          "cta": "Auth14 blocks",
+          "imagenes": 9
+        },
+        {
+          "orden": 3,
+          "etiqueta": "footer",
+          "clase": "text-xs md:text-sm",
+          "altoPx": 258,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 11
+        }
+      ],
+      "encabezados": {
+        "total": 24,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Explore beautiful shadcn blocks"
+          },
+          {
+            "nivel": 2,
+            "texto": "Marketing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Auth"
+          },
+          {
+            "nivel": 3,
+            "texto": "Blog Sections"
+          },
+          {
+            "nivel": 3,
+            "texto": "Contact"
+          },
+          {
+            "nivel": 3,
+            "texto": "Call to Action"
+          },
+          {
+            "nivel": 3,
+            "texto": "Faqs"
+          },
+          {
+            "nivel": 3,
+            "texto": "Features"
+          },
+          {
+            "nivel": 3,
+            "texto": "Footer"
+          },
+          {
+            "nivel": 3,
+            "texto": "Header"
+          },
+          {
+            "nivel": 3,
+            "texto": "Hero Sections"
+          },
+          {
+            "nivel": 3,
+            "texto": "Image Gallery"
+          },
+          {
+            "nivel": 3,
+            "texto": "Integrations"
+          },
+          {
+            "nivel": 3,
+            "texto": "Logo Cloud"
+          },
+          {
+            "nivel": 3,
+            "texto": "Not Found"
+          },
+          {
+            "nivel": 3,
+            "texto": "Pricing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Testimonials"
+          },
+          {
+            "nivel": 3,
+            "texto": "More"
+          },
+          {
+            "nivel": 2,
+            "texto": "App / Dashboard"
+          },
+          {
+            "nivel": 3,
+            "texto": "App Shell"
+          },
+          {
+            "nivel": 3,
+            "texto": "Dashboard"
+          },
+          {
+            "nivel": 3,
+            "texto": "More"
+          },
+          {
+            "nivel": 4,
+            "texto": "Product"
+          },
+          {
+            "nivel": 4,
+            "texto": "Resources"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 67
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 22
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 19
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 9
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "13px / lh 1.50 / ls normal / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.43 / ls 0.35px / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 0.3px / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "36px / lh 1.11 / ls normal / w 700",
+            "veces": 1
+          },
+          {
+            "valor": "48px / lh 1.00 / ls normal / w 800",
+            "veces": 1
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Geist",
+            "veces": 108
+          },
+          {
+            "valor": "Outfit",
+            "veces": 22
+          },
+          {
+            "valor": "Geist Mono",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(1.5609 0 0)",
+            "veces": 94
+          },
+          {
+            "valor": "lab(48.496 0 0)",
+            "veces": 27
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(86.0279 1.77148 0.600767)",
+            "veces": 1
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.25)",
+            "veces": 1
+          },
+          {
+            "valor": "oklab(0.12 -0.00000116229 0.00000281632 / 0.8)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 52
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.2)",
+            "veces": 51
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.1)",
+            "veces": 29
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.15)",
+            "veces": 20
+          },
+          {
+            "valor": "oklab(0.205 -0.00000207871 0.00000478327 / 0.2)",
+            "veces": 16
+          },
+          {
+            "valor": "lab(88.4 0 0.0000119209)",
+            "veces": 14
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.25)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(100 0 0)",
+            "veces": 5
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "4px",
+            "veces": 43
+          },
+          {
+            "valor": "8px",
+            "veces": 41
+          },
+          {
+            "valor": "1px",
+            "veces": 30
+          },
+          {
+            "valor": "16px",
+            "veces": 29
+          },
+          {
+            "valor": "6px",
+            "veces": 25
+          },
+          {
+            "valor": "20px",
+            "veces": 12
+          },
+          {
+            "valor": "10px",
+            "veces": 9
+          },
+          {
+            "valor": "2px",
+            "veces": 7
+          },
+          {
+            "valor": "12px",
+            "veces": 6
+          },
+          {
+            "valor": "normal 8px",
+            "veces": 4
+          },
+          {
+            "valor": "32px",
+            "veces": 4
+          },
+          {
+            "valor": "24px",
+            "veces": 3
+          },
+          {
+            "valor": "40px",
+            "veces": 3
+          },
+          {
+            "valor": "-10px",
+            "veces": 2
+          },
+          {
+            "valor": "3px",
+            "veces": 2
+          },
+          {
+            "valor": "-1px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 87
+          },
+          {
+            "valor": "8.4px",
+            "veces": 30
+          },
+          {
+            "valor": "6.4px",
+            "veces": 28
+          },
+          {
+            "valor": "2px",
+            "veces": 25
+          },
+          {
+            "valor": "2px 2px 0px 0px",
+            "veces": 15
+          },
+          {
+            "valor": "10.4px",
+            "veces": 5
+          },
+          {
+            "valor": "4px",
+            "veces": 2
+          },
+          {
+            "valor": "8.4px 8.4px 0px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "6.4px 6.4px 0px 0px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 9,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 5
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 21
+          },
+          {
+            "valor": "10",
+            "veces": 6
+          },
+          {
+            "valor": "2",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 7
+          },
+          {
+            "valor": "0.5s",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 2,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 11,
+          "rem": 263,
+          "px": 2605,
+          "clamp": 0,
+          "vw": 14
+        },
+        "keyframesDeclarados": 10,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 47
+          },
+          {
+            "px": 768,
+            "veces": 42
+          },
+          {
+            "px": 1024,
+            "veces": 3
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 1536,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": []
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 29,
+        "ctasTop": [
+          {
+            "texto": "Blocks",
+            "veces": 2
+          },
+          {
+            "texto": "Pricing",
+            "veces": 2
+          },
+          {
+            "texto": "Docs",
+            "veces": 2
+          },
+          {
+            "texto": "Changelog",
+            "veces": 2
+          },
+          {
+            "texto": "Efferd",
+            "veces": 1
+          },
+          {
+            "texto": "Log In",
+            "veces": 1
+          },
+          {
+            "texto": "Get access",
+            "veces": 1
+          },
+          {
+            "texto": "Auth14 blocks",
+            "veces": 1
+          },
+          {
+            "texto": "Blog Sections5 blocks",
+            "veces": 1
+          },
+          {
+            "texto": "Contact11 blocks",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 1,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 0,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 38,
+        "objetivosMenores44px": 20,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 0,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(1.5609 0 0)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 19.41
+          },
+          {
+            "texto": "lab(1.5609 0 0)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 15.06
+          },
+          {
+            "texto": "lab(1.5609 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 20.26
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 4.54
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 3.52
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 4.74
+          },
+          {
+            "texto": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 3.14
+          },
+          {
+            "texto": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 2.63
+          },
+          {
+            "texto": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 3.23
+          },
+          {
+            "texto": "lab(86.0279 1.77148 0.600767)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 1.38
+          },
+          {
+            "texto": "lab(86.0279 1.77148 0.600767)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 1.07
+          },
+          {
+            "texto": "lab(86.0279 1.77148 0.600767)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 1.44
+          }
+        ],
+        "fondosTranslucidosOmitidos": 9
+      },
+      "rendimiento": {
+        "pesoTotalKb": 5957.2,
+        "porTipoKb": {
+          "document": 192.3,
+          "script": 3837.6,
+          "font": 404.9,
+          "stylesheet": 1494,
+          "image": 17.6,
+          "fetch": 10.8
+        },
+        "pedidos": {
+          "document": 1,
+          "script": 41,
+          "font": 13,
+          "stylesheet": 2,
+          "image": 3,
+          "fetch": 84
+        },
+        "hostsDistintos": 5,
+        "terceros": [
+          {
+            "host": "cdn.affonso.io",
+            "pedidos": 2
+          },
+          {
+            "host": "connect.facebook.net",
+            "pedidos": 2
+          },
+          {
+            "host": "github.com",
+            "pedidos": 1
+          },
+          {
+            "host": "avatars.githubusercontent.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Geist 100 900 normal",
+          "Geist Fallback normal normal",
+          "Geist Mono 400 normal",
+          "Geist Mono Fallback normal normal",
+          "Geist Mono 100 900 normal",
+          "Roboto 100 900 normal",
+          "Roboto Fallback normal normal",
+          "Raleway 100 900 normal",
+          "Raleway Fallback normal normal",
+          "DM Sans 100 1000 normal",
+          "DM Sans Fallback normal normal",
+          "Public Sans 100 900 normal",
+          "Public Sans Fallback normal normal",
+          "Outfit 100 900 normal",
+          "Outfit Fallback normal normal",
+          "Inter 100 900 normal",
+          "Inter Fallback normal normal",
+          "Noto Sans 100 900 normal",
+          "Noto Sans Fallback normal normal",
+          "Nunito Sans 200 1000 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Beautiful Shadcn Blocks - Efferd",
+        "descripcion": "Discover beautifully crafted shadcn blocks — ready to copy, customize, and drop into your next shadcn project.",
+        "canonical": "https://efferd.com/blocks",
+        "og": 3,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 1471,
+        "alturaPantallas": 1.6,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 4
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "relative flex min-h-screen flex-col overflow-hidden supports-[overflow",
+          "altoPx": 1471,
+          "altoPantallas": 1.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Explore beautiful shadcn blocks",
+          "cta": "Efferd",
+          "imagenes": 24
+        },
+        {
+          "orden": 1,
+          "etiqueta": "main",
+          "clase": "site-container relative grow before:absolute before:-inset-y-full befo",
+          "altoPx": 1156,
+          "altoPantallas": 1.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Explore beautiful shadcn blocks",
+          "cta": "Auth14 blocks",
+          "imagenes": 9
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "relative mx-auto min-h-screen max-w-6xl",
+          "altoPx": 1156,
+          "altoPantallas": 1.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Explore beautiful shadcn blocks",
+          "cta": "Auth14 blocks",
+          "imagenes": 9
+        },
+        {
+          "orden": 3,
+          "etiqueta": "footer",
+          "clase": "text-xs md:text-sm",
+          "altoPx": 258,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 11
+        }
+      ],
+      "encabezados": {
+        "total": 24,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Explore beautiful shadcn blocks"
+          },
+          {
+            "nivel": 2,
+            "texto": "Marketing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Auth"
+          },
+          {
+            "nivel": 3,
+            "texto": "Blog Sections"
+          },
+          {
+            "nivel": 3,
+            "texto": "Contact"
+          },
+          {
+            "nivel": 3,
+            "texto": "Call to Action"
+          },
+          {
+            "nivel": 3,
+            "texto": "Faqs"
+          },
+          {
+            "nivel": 3,
+            "texto": "Features"
+          },
+          {
+            "nivel": 3,
+            "texto": "Footer"
+          },
+          {
+            "nivel": 3,
+            "texto": "Header"
+          },
+          {
+            "nivel": 3,
+            "texto": "Hero Sections"
+          },
+          {
+            "nivel": 3,
+            "texto": "Image Gallery"
+          },
+          {
+            "nivel": 3,
+            "texto": "Integrations"
+          },
+          {
+            "nivel": 3,
+            "texto": "Logo Cloud"
+          },
+          {
+            "nivel": 3,
+            "texto": "Not Found"
+          },
+          {
+            "nivel": 3,
+            "texto": "Pricing"
+          },
+          {
+            "nivel": 3,
+            "texto": "Testimonials"
+          },
+          {
+            "nivel": 3,
+            "texto": "More"
+          },
+          {
+            "nivel": 2,
+            "texto": "App / Dashboard"
+          },
+          {
+            "nivel": 3,
+            "texto": "App Shell"
+          },
+          {
+            "nivel": 3,
+            "texto": "Dashboard"
+          },
+          {
+            "nivel": 3,
+            "texto": "More"
+          },
+          {
+            "nivel": 4,
+            "texto": "Product"
+          },
+          {
+            "nivel": 4,
+            "texto": "Resources"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 67
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 22
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 19
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 9
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "13px / lh 1.50 / ls normal / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.43 / ls 0.35px / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 0.3px / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "36px / lh 1.11 / ls normal / w 700",
+            "veces": 1
+          },
+          {
+            "valor": "48px / lh 1.00 / ls normal / w 800",
+            "veces": 1
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Geist",
+            "veces": 108
+          },
+          {
+            "valor": "Outfit",
+            "veces": 22
+          },
+          {
+            "valor": "Geist Mono",
+            "veces": 1
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(1.5609 0 0)",
+            "veces": 94
+          },
+          {
+            "valor": "lab(48.496 0 0)",
+            "veces": 27
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(86.0279 1.77148 0.600767)",
+            "veces": 1
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.25)",
+            "veces": 1
+          },
+          {
+            "valor": "oklab(0.12 -0.00000116229 0.00000281632 / 0.8)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 52
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.2)",
+            "veces": 51
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.1)",
+            "veces": 29
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.15)",
+            "veces": 20
+          },
+          {
+            "valor": "oklab(0.205 -0.00000207871 0.00000478327 / 0.2)",
+            "veces": 16
+          },
+          {
+            "valor": "lab(88.4 0 0.0000119209)",
+            "veces": 14
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.25)",
+            "veces": 7
+          },
+          {
+            "valor": "lab(100 0 0)",
+            "veces": 5
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "4px",
+            "veces": 43
+          },
+          {
+            "valor": "8px",
+            "veces": 41
+          },
+          {
+            "valor": "1px",
+            "veces": 30
+          },
+          {
+            "valor": "16px",
+            "veces": 25
+          },
+          {
+            "valor": "6px",
+            "veces": 25
+          },
+          {
+            "valor": "20px",
+            "veces": 12
+          },
+          {
+            "valor": "10px",
+            "veces": 9
+          },
+          {
+            "valor": "24px",
+            "veces": 7
+          },
+          {
+            "valor": "2px",
+            "veces": 7
+          },
+          {
+            "valor": "12px",
+            "veces": 6
+          },
+          {
+            "valor": "normal 8px",
+            "veces": 4
+          },
+          {
+            "valor": "32px",
+            "veces": 4
+          },
+          {
+            "valor": "40px",
+            "veces": 3
+          },
+          {
+            "valor": "-10px",
+            "veces": 2
+          },
+          {
+            "valor": "3px",
+            "veces": 2
+          },
+          {
+            "valor": "-1px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 87
+          },
+          {
+            "valor": "8.4px",
+            "veces": 30
+          },
+          {
+            "valor": "6.4px",
+            "veces": 28
+          },
+          {
+            "valor": "2px",
+            "veces": 25
+          },
+          {
+            "valor": "2px 2px 0px 0px",
+            "veces": 15
+          },
+          {
+            "valor": "10.4px",
+            "veces": 5
+          },
+          {
+            "valor": "4px",
+            "veces": 2
+          },
+          {
+            "valor": "8.4px 8.4px 0px 0px",
+            "veces": 1
+          },
+          {
+            "valor": "6.4px 6.4px 0px 0px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 9,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 5
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 21
+          },
+          {
+            "valor": "10",
+            "veces": 6
+          },
+          {
+            "valor": "2",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 7
+          },
+          {
+            "valor": "0.5s",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 2,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 11,
+          "rem": 263,
+          "px": 2605,
+          "clamp": 0,
+          "vw": 14
+        },
+        "keyframesDeclarados": 10,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 47
+          },
+          {
+            "px": 768,
+            "veces": 42
+          },
+          {
+            "px": 1024,
+            "veces": 3
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 1536,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 143,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 286,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 428,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 571,
+            "conTransform": 0,
+            "navFija": false
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": false,
+        "posicionesDistintas": 1,
+        "pegados": []
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 29,
+        "ctasTop": [
+          {
+            "texto": "Blocks",
+            "veces": 2
+          },
+          {
+            "texto": "Pricing",
+            "veces": 2
+          },
+          {
+            "texto": "Docs",
+            "veces": 2
+          },
+          {
+            "texto": "Changelog",
+            "veces": 2
+          },
+          {
+            "texto": "Efferd",
+            "veces": 1
+          },
+          {
+            "texto": "Log In",
+            "veces": 1
+          },
+          {
+            "texto": "Get access",
+            "veces": 1
+          },
+          {
+            "texto": "Auth14 blocks",
+            "veces": 1
+          },
+          {
+            "texto": "Blog Sections5 blocks",
+            "veces": 1
+          },
+          {
+            "texto": "Contact11 blocks",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 1,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 0,
+        "lazy": 0,
+        "conSrcset": 0,
+        "interactivos": 38,
+        "objetivosMenores44px": 20,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 0,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(1.5609 0 0)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 19.41
+          },
+          {
+            "texto": "lab(1.5609 0 0)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 15.06
+          },
+          {
+            "texto": "lab(1.5609 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 20.26
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 4.54
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 3.52
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 4.74
+          },
+          {
+            "texto": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 3.14
+          },
+          {
+            "texto": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 2.63
+          },
+          {
+            "texto": "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 3.23
+          },
+          {
+            "texto": "lab(86.0279 1.77148 0.600767)",
+            "fondo": "lab(98.26 0 0)",
+            "ratio": 1.38
+          },
+          {
+            "texto": "lab(86.0279 1.77148 0.600767)",
+            "fondo": "lab(88.4 0 0.0000119209)",
+            "ratio": 1.07
+          },
+          {
+            "texto": "lab(86.0279 1.77148 0.600767)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 1.44
+          }
+        ],
+        "fondosTranslucidosOmitidos": 9
+      },
+      "rendimiento": {
+        "pesoTotalKb": 5961.8,
+        "porTipoKb": {
+          "document": 192.3,
+          "script": 3840.5,
+          "font": 404.9,
+          "stylesheet": 1494,
+          "image": 17.6,
+          "fetch": 12.5
+        },
+        "pedidos": {
+          "document": 2,
+          "script": 70,
+          "font": 26,
+          "stylesheet": 4,
+          "image": 6,
+          "fetch": 129
+        },
+        "hostsDistintos": 5,
+        "terceros": [
+          {
+            "host": "cdn.affonso.io",
+            "pedidos": 2
+          },
+          {
+            "host": "connect.facebook.net",
+            "pedidos": 2
+          },
+          {
+            "host": "github.com",
+            "pedidos": 1
+          },
+          {
+            "host": "avatars.githubusercontent.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Geist 100 900 normal",
+          "Geist Fallback normal normal",
+          "Geist Mono 400 normal",
+          "Geist Mono Fallback normal normal",
+          "Geist Mono 100 900 normal",
+          "Roboto 100 900 normal",
+          "Roboto Fallback normal normal",
+          "Raleway 100 900 normal",
+          "Raleway Fallback normal normal",
+          "DM Sans 100 1000 normal",
+          "DM Sans Fallback normal normal",
+          "Public Sans 100 900 normal",
+          "Public Sans Fallback normal normal",
+          "Outfit 100 900 normal",
+          "Outfit Fallback normal normal",
+          "Inter 100 900 normal",
+          "Inter Fallback normal normal",
+          "Noto Sans 100 900 normal",
+          "Noto Sans Fallback normal normal",
+          "Nunito Sans 200 1000 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Beautiful Shadcn Blocks - Efferd",
+        "descripcion": "Discover beautifully crafted shadcn blocks — ready to copy, customize, and drop into your next shadcn project.",
+        "canonical": "https://efferd.com/blocks",
+        "og": 3,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 2,
+    "conTransicion": 9
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

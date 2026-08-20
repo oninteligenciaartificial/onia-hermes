@@ -1,0 +1,223 @@
+{
+  "updatedAt": "2026-07-04T01:44:58.000Z",
+  "createdAt": "2026-06-09T22:06:29.778Z",
+  "id": "PEo2XKM1l1bgEwIr",
+  "name": "ONIA - Agenda: Crear Evento",
+  "description": "Escucha Telegram por comandos /agendar, parsea fecha/hora, crea evento en Google Calendar y confirma al usuario.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "c27eba93-546e-4724-81a5-6c882d12b520",
+      "name": "Telegram Mensajes",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "24db0ce4-53e5-4c27-a420-b9d7e9e1437f"
+    },
+    {
+      "id": "619309c1-5f11-4baa-800f-ec9bda479be3",
+      "name": "Es /agendar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.message.text ?? \"\" }}",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              },
+              "rightValue": "/agendar"
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "57b3d964-466d-4057-8c36-0ccedbf21dea",
+      "name": "Parsear Evento",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const msg = $input.first().json.message.text;\nconst chatId = String($input.first().json.message.chat.id);\nconst partes = msg.replace(/^\\/agendar\\s*/i, '').split('|').map(p => p.trim());\nconst titulo = partes[0] || 'Sin título';\nconst fechaHora = partes[1] || '';\nconst descripcion = partes[2] || '';\n\nfunction parseFecha(texto) {\n  const dias = { lunes: 1, martes: 2, miercoles: 3, miércoles: 3, jueves: 4, viernes: 5, sabado: 6, sábado: 6, domingo: 0 };\n  const lower = texto.toLowerCase();\n  const fecha = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/La_Paz' }));\n  if (lower.includes('mañana') || lower.includes('manana')) {\n    fecha.setDate(fecha.getDate() + 1);\n  } else {\n    for (const [nombre, num] of Object.entries(dias)) {\n      if (lower.includes(nombre)) {\n        const hoy = fecha.getDay();\n        let diff = num - hoy;\n        if (diff <= 0) diff += 7;\n        fecha.setDate(fecha.getDate() + diff);\n        break;\n      }\n    }\n    const matchSlash = texto.match(/(\\d{1,2})\\/(\\d{1,2})/);\n    if (matchSlash) { fecha.setMonth(parseInt(matchSlash[2]) - 1); fecha.setDate(parseInt(matchSlash[1])); }\n  }\n  return fecha;\n}\n\nfunction parseHora(texto) {\n  const match = texto.match(/(\\d{1,2})(?::(\\d{2}))?\\s*(am|pm)?/i);\n  if (!match) return { h: 9, m: 0 };\n  let h = parseInt(match[1]);\n  const m = parseInt(match[2] || '0');\n  const ampm = (match[3] || '').toLowerCase();\n  if (ampm === 'pm' && h < 12) h += 12;\n  if (ampm === 'am' && h === 12) h = 0;\n  return { h, m };\n}\n\nconst fecha = parseFecha(fechaHora);\nconst rangoMatch = fechaHora.match(/([\\d:apm]+)\\s*-\\s*([\\d:apm]+)/i);\nlet startH = { h: 9, m: 0 }, endH = { h: 10, m: 0 };\nif (rangoMatch) { startH = parseHora(rangoMatch[1]); endH = parseHora(rangoMatch[2]); }\n\nconst startDate = new Date(fecha);\nstartDate.setHours(startH.h, startH.m, 0, 0);\nconst endDate = new Date(fecha);\nendDate.setHours(endH.h, endH.m, 0, 0);\n\nconst resumen = titulo + ' — ' + startDate.toLocaleString('es-BO', { timeZone: 'America/La_Paz', weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });\nreturn [{ json: { titulo, descripcion, startISO: startDate.toISOString(), endISO: endDate.toISOString(), chatId, resumen } }];"
+      }
+    },
+    {
+      "id": "7cb54b5d-eaaa-4e9c-98ce-bce5eac23884",
+      "name": "Crear Evento GCal",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "create",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "oninteligenciaartificial@gmail.com"
+        },
+        "start": "={{ $json.startISO }}",
+        "end": "={{ $json.endISO }}",
+        "additionalFields": {
+          "summary": "={{ $json.titulo }}",
+          "description": "={{ $json.descripcion }}"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "a3FResZHqQ32ptyt",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "id": "83117836-783e-4bc1-a58c-11e8bc0fbdab",
+      "name": "Confirmar Evento",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $node[\"Parsear Evento\"].json.chatId }}",
+        "text": "={{ \"✅ Evento agendado:\\n📅 <b>\" + $json.summary + \"</b>\\n⏰ \" + $node[\"Parsear Evento\"].json.resumen }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "740d0940-31a9-4b95-a2d4-67a4233ddfd8"
+    }
+  ],
+  "connections": {
+    "Telegram Mensajes": {
+      "main": [
+        [
+          {
+            "node": "Es /agendar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Es /agendar?": {
+      "main": [
+        [
+          {
+            "node": "Parsear Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Evento": {
+      "main": [
+        [
+          {
+            "node": "Crear Evento GCal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Evento GCal": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "d33ba702-dfa6-4077-8d73-d360c6de859b",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-09T22:06:29.780Z",
+      "createdAt": "2026-06-09T22:06:29.780Z",
+      "role": "workflow:owner",
+      "workflowId": "PEo2XKM1l1bgEwIr",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

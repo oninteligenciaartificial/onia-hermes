@@ -1,0 +1,1155 @@
+/*
+ * Landing /v2 — OPCIÓN 2: la mecánica MEDIDA de Fanvue (F12, 2026-08-18)
+ * aplicada sobre Archivo, con la dirección clara de Onia.
+ *
+ * Fuente de los números, sin excepción:
+ *   web-factory/data/references/design-sources/fanvue-mecanica-medida.md
+ *   web-factory/WEB_FACTORY_PATTERN_BANK_2026.md §"Tipografía de display —
+ *   LEYES MEDIDAS" y §"Movimiento — receta medida".
+ *
+ * Las 7 leyes portadas, y dónde vive cada una en este archivo:
+ *   1. line-height ≤1,0 que BAJA al crecer (1,00 → 0,90 → 0,80) .... .display
+ *   2. tracking negativo proporcional (−2 % a 80 px) ............... .display
+ *   3. peso 500, jamás 700/800 ..................................... .display
+ *   4. cuerpo al 75 % de opacidad .................................. --v2-cuerpo
+ *   5. medida de línea ≤900 px, independiente de la sección ........ .medida
+ *   6. superficies por TRANSPARENCIA, no grises opacos ............. --v2-vidrio*
+ *   7. gaps 48–115 px .............................................. --v2-gap*
+ *
+ * Lo que NO se porta (decidido en la ficha): fondo negro total — la dirección
+ * de Onia es claro premium y el negro es ANCLA de sección (§4 agentes, §7
+ * honestidad); las fuentes AG Next/Akzidenz son de PAGO → Archivo, que ya es
+ * la fuente de marca; y los 940 `transition: all` que Fanvue arrastra por
+ * descuido de Webflow.
+ *
+ * MOVIMIENTO (§7 de la ficha): el revelado lo hace <Reveal> (opacity+transform,
+ * una sola vez), la banda usa <Marquee duration={35}>, el hover es
+ * `transform .2s linear` en media y `color .3s cubic-bezier(.25,.46,.45,.94)`
+ * en links, y las columnas pegadas son `position: sticky` a secas.
+ * CERO parallax, CERO scroll-scrub, CERO `transition: all`.
+ *
+ * La v1 (src/components/landing/*) no se toca: /v2 existe para comparar las
+ * dos en el mismo build.
+ */
+
+.page {
+  /* --- tipografía ------------------------------------------------------ */
+
+  /*
+   * Display GIGANTE. El techo de la v1 es 6rem (96px); acá sube a 8,5rem
+   * (136px) porque la ley 1 solo se aprecia de verdad pasados los 80px: es
+   * el tamaño el que manda, no el grosor (ley 3).
+   */
+  --v2-display: clamp(2.9rem, 0.4rem + 9.2vw, 8.5rem);
+  --v2-titulo: clamp(2rem, 1.1rem + 3.6vw, 4.2rem);
+  --v2-sub: clamp(1.15rem, 1.05rem + 0.6vw, 1.5rem);
+
+  /*
+   * LEY 4 — el cuerpo NO es tinta plena: 75 % sobre el fondo. Fanvue mide
+   * rgba(22,22,19,0.75). Acá se compone contra --ink para que el token siga
+   * siendo uno solo y el ancla oscura pueda invertirlo sin duplicar reglas.
+   */
+  --v2-cuerpo: color-mix(in srgb, var(--ink) 75%, transparent);
+  --v2-tenue: color-mix(in srgb, var(--ink) 55%, transparent);
+
+  /*
+   * LEY 6 — superficies por transparencia, no grises opacos. Fanvue usa
+   * blanco al 15 % SOBRE NEGRO. Sobre papel el equivalente óptico es tinta a
+   * ~6 % (15 % de tinta sobre claro se lee como un gris sucio, no como
+   * profundidad): misma mecánica, valor traducido al fondo claro.
+   */
+  --v2-vidrio: color-mix(in srgb, var(--ink) 6%, transparent);
+  --v2-vidrio-borde: color-mix(in srgb, var(--ink) 10%, transparent);
+
+  /* LEY 7 — gaps generosos medidos: 46,7 · 71,2 · 115,6 px */
+  --v2-gap: clamp(3rem, 1.5rem + 4vw, 7.2rem); /* 48 → 115 px */
+  --v2-gap-corto: clamp(1.6rem, 1rem + 2vw, 3rem);
+  --v2-aire: clamp(6rem, 4rem + 8vw, 13rem); /* aire vertical de sección */
+
+  /* ease medido para hover de links (easeOutQuad) */
+  --v2-ease-link: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  --gutter: max(calc(clamp(1.5rem, 6vw, 5rem) / 2), calc((100vw - 1240px) / 2));
+
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-stretch: 100%;
+  font-weight: 450;
+  /* clip y no hidden: recorta el sangrado sin crear contenedor de scroll ni
+     romper el `position: sticky` de la sección de rubros */
+  overflow-x: clip;
+}
+
+/* ---------------------------------------------------------------------- */
+/* LEYES 1-3 — el display                                                  */
+/* ---------------------------------------------------------------------- */
+
+.display {
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--v2-display);
+  /*
+   * LEY 3 — peso 500. La v1 usa 650; Fanvue mide 500 en TODOS sus titulares
+   * (400 en el de 106 px). El impacto sale del tamaño y del apretado.
+   */
+  font-weight: 500;
+  font-stretch: 100%;
+  /* LEY 2 — −2 % (el valor medido a 80 px) */
+  letter-spacing: -0.02em;
+  /* LEY 1 — punto de partida: 1,00 (el valor medido a 50 px) */
+  line-height: 1;
+  text-wrap: balance;
+  margin: 0;
+}
+
+/*
+ * LEY 1, la parte que casi nadie aplica: el line-height BAJA cuando el
+ * titular crece — 1,00 a 50 px · 0,90 a 80 px · 0,80 a 106 px.
+ *
+ * `.page .display` y no `.display`: la regla base de globals.css `h1,h2,h3`
+ * tiene especificidad (0,0,3) y `.display` sola (0,1,0) sí le gana, pero el
+ * módulo de la v1 ya se topó con que un selector de clase suelta pierde
+ * contra `.page h1` (0,1,1) y el ratio se quedaba en 1,00 sin avisar. Se
+ * reusa acá el mismo patrón de especificidad en vez de redescubrirlo.
+ */
+@media (min-width: 900px) {
+  .page .display {
+    line-height: 0.9;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page .display {
+    /* a 8,5rem (136 px) el titular pasa los 106 px medidos: 0,80 */
+    line-height: 0.8;
+    letter-spacing: -0.028em;
+  }
+}
+
+.display em {
+  font-style: normal;
+  color: var(--accent-ink);
+}
+
+/* título de sección: el mismo sistema, un escalón abajo */
+.titulo {
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--v2-titulo);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-wrap: balance;
+  margin: 0;
+}
+
+@media (min-width: 1280px) {
+  .page .titulo {
+    line-height: 0.88;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Estructura                                                              */
+/* ---------------------------------------------------------------------- */
+
+.container {
+  width: min(1240px, 100% - clamp(1.5rem, 6vw, 5rem));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--v2-aire);
+}
+
+/*
+ * LEY 5 — medida de línea propia, INDEPENDIENTE del ancho de sección. La
+ * sección puede medir 1240 px; el texto nunca cruza los 900.
+ */
+.medida {
+  max-width: 900px;
+}
+
+.medidaCorta {
+  max-width: 620px;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.72rem, var(--fs-label-min));
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v2-tenue);
+  margin-bottom: clamp(1.2rem, 2vw, 2rem);
+}
+
+.kicker::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--senal);
+  flex: none;
+}
+
+.lead {
+  /* LEY 4 en uso */
+  color: var(--v2-cuerpo);
+  font-size: var(--v2-sub);
+  line-height: 1.45;
+  margin: clamp(1.4rem, 2.5vw, 2.4rem) 0 0;
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+.nota {
+  color: var(--v2-tenue);
+  font-size: max(0.88rem, var(--fs-micro-min));
+  line-height: 1.5;
+  max-width: 62ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Botones y links                                                         */
+/* ---------------------------------------------------------------------- */
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: clamp(1.8rem, 3vw, 2.8rem);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 50px;
+  padding: 0.85em 1.6em;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  background: var(--senal);
+  color: var(--tinta);
+  /* movimiento medido: hover de superficie = transform .2s linear. Nunca
+     `transition: all` (el descuido de Webflow que Fanvue arrastra). */
+  transition:
+    transform 0.2s linear,
+    background-color 0.2s linear;
+}
+
+.btn:hover {
+  background: #00be5f;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btnGhost {
+  background: transparent;
+  border-color: var(--v2-vidrio-borde);
+  color: var(--ink);
+}
+
+.btnGhost:hover {
+  background: var(--v2-vidrio);
+  border-color: color-mix(in srgb, var(--ink) 30%, transparent);
+}
+
+/* hover de texto/link: color .3s easeOutQuad — el valor medido */
+.link {
+  color: var(--accent-ink);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s var(--v2-ease-link);
+}
+
+.link:hover {
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Media — la diferencia grande con la v1: pantallas REALES, no dibujos     */
+/* ---------------------------------------------------------------------- */
+
+/*
+ * Marco de pantalla. Sin cromo falso de navegador (ni puntitos de macOS):
+ * la captura es de verdad, no necesita disfraz. Solo sombra y radio.
+ */
+.marco {
+  position: relative;
+  display: block;
+  border-radius: clamp(12px, 1.4vw, 20px);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow:
+    0 1px 2px rgb(20 26 23 / 0.06),
+    0 40px 90px -40px rgb(20 26 23 / 0.35);
+  /* hover de media: transform .2s linear (valor medido) */
+  transition: transform 0.2s linear;
+}
+
+.marco img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.marcoHover:hover {
+  transform: translateY(-4px);
+}
+
+/* pie de foto honesto: qué es exactamente lo que se está viendo */
+.pie {
+  margin: 0.9rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.68rem, var(--fs-label-min));
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v2-tenue);
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 1. Hero                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.hero {
+  padding-top: clamp(3rem, 2rem + 5vw, 7rem);
+  padding-bottom: clamp(3rem, 2rem + 4vw, 5.5rem);
+}
+
+.heroTitulo {
+  /* LEY 5: el titular tampoco cruza la pantalla entera */
+  max-width: 14ch;
+}
+
+.heroBajo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--v2-gap-corto);
+}
+
+.heroChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.4rem;
+  list-style: none;
+  margin: clamp(1.6rem, 2.5vw, 2.4rem) 0 0;
+  padding: 0;
+  font-size: max(0.85rem, var(--fs-micro-min));
+  color: var(--v2-tenue);
+}
+
+.heroChips li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.heroChips li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--senal);
+  flex: none;
+}
+
+/* la pantalla del hero sangra el margen derecho: profundidad sin decorar */
+.heroShot {
+  margin-top: clamp(2.5rem, 5vw, 5rem);
+}
+
+@media (min-width: 1100px) {
+  .heroShot {
+    margin-right: calc(var(--gutter) * -0.5);
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 2. Banda de media (marquesina 35 s)                                     */
+/* ---------------------------------------------------------------------- */
+
+.banda {
+  padding-block: clamp(3rem, 2rem + 3vw, 5rem);
+  border-block: 1px solid var(--v2-vidrio-borde);
+  background: var(--bg-deep);
+}
+
+.bandaCabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: clamp(1.8rem, 3vw, 2.8rem);
+}
+
+.bandaCabeza h2 {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+
+.marquesina {
+  /* el track es un flex que corre; el gap entre piezas sale de acá */
+  padding-block: 0.5rem;
+}
+
+.marquesinaTrack {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(1rem, 2vw, 2rem);
+  padding-right: clamp(1rem, 2vw, 2rem);
+}
+
+/*
+ * Altura FIJA de la cinta: sin esto la manda la pieza más alta y los paneles
+ * anchos quedan recortados a un alto que nadie eligió. Con un alto declarado,
+ * el recorte de cada pieza es una decisión y la banda se lee pareja.
+ */
+.tira {
+  flex: none;
+  width: clamp(260px, 34vw, 460px);
+  height: clamp(210px, 25vw, 340px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* las dos capturas del bot son verticales: se les da menos ancho */
+.tiraAlta {
+  width: clamp(170px, 20vw, 230px);
+}
+
+.tira .marco {
+  height: 100%;
+}
+
+.tira .marco img {
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 3. Rubros — conmutador pegado al scroll (Fanvue, MEDIDO)                */
+/*                                                                         */
+/* Portado del bloque vanilla packages/blocks/src/sticky-niche-switcher.ts */
+/* y de su ficha data/references/design-sources/fanvue-secciones/          */
+/* sticky-niche-switcher.md. Los números (331 px de slot, 0.853 de ratio,  */
+/* 750 px por rubro, .5s easeOutQuad, 1/.25 de opacidad, píldora de        */
+/* 28.8 px) son medidos, no inventados. El JS solo escribe --niche-i;      */
+/* todo lo demás se deriva acá.                                            */
+/* ---------------------------------------------------------------------- */
+
+.nicheRunway {
+  --niche-i: 0;
+  --niche-step: 750px; /* scroll por rubro medido en >=1440; piso 600 */
+  --niche-slot: 331px; /* alto de tarjeta medido: 331,19 px */
+  --niche-stage: 630px; /* alto del pegado medido */
+  --niche-dur: 0.5s; /* duración declarada en los 28 tweens del original */
+  --niche-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --niche-pill-h: 28.8px; /* ventana de la píldora = line-height del ítem */
+
+  /*
+   * El runway es el único alto del bloque: reparto alto/(n+1) — el +1 compra
+   * los dos colchones medidos (leer el 1º antes de conmutar, no evaporar el
+   * último). NINGÚN ancestro puede llevar overflow hidden (.page usa clip).
+   */
+  position: relative;
+  height: calc(var(--niche-step) * var(--niche-run));
+  margin-top: var(--v2-gap-corto);
+}
+
+.nicheMarks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/*
+ * Cada banda mide UN rubro de alto, no 1 px: un centinela puntual se saltea
+ * en un scroll rápido entre dos frames y el índice queda clavado (bug medido
+ * en el bloque vanilla).
+ */
+.nicheMark {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: var(--niche-step);
+}
+
+/* Pegado centrado en el viewport (el top:135px del original ES esta fórmula) */
+.nicheStage {
+  position: sticky;
+  top: max(calc(var(--header-h) + 16px), calc((100vh - var(--niche-stage)) / 2));
+  min-height: var(--niche-stage);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--v2-gap);
+}
+
+.nicheMid {
+  text-align: center;
+}
+
+.nicheWords {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.29em; /* 23,4 px sobre 81 px medidos */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Tipografía medida: peso 500, line-height .85, tracking negativo */
+.nicheWord {
+  display: block;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.9rem, 1rem + 3.4vw, 3.6rem);
+  font-weight: 500;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.25; /* opacidad inactiva medida */
+  transition: opacity var(--niche-dur) var(--niche-ease);
+}
+
+.nicheWord[aria-current="true"] {
+  opacity: 1;
+}
+
+.nicheWord:hover {
+  opacity: 0.7;
+}
+
+.nicheWord[aria-current="true"]:hover {
+  opacity: 1;
+}
+
+.nicheWord:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: 6px;
+  opacity: 1;
+}
+
+/*
+ * La tarjeta ES la ventana: overflow hidden + una tira que se traslada un
+ * slot exacto por rubro (rodillo medido, no cross-fade).
+ */
+.nicheCard {
+  position: relative;
+  width: calc(var(--niche-slot) * 0.853); /* relación medida 282,59/331,19 */
+  height: var(--niche-slot);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface-dim);
+}
+
+.nicheRoll {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--niche-i) * var(--niche-slot) * -1));
+  transition: transform var(--niche-dur) var(--niche-ease);
+}
+
+.nicheShot {
+  display: block;
+  width: 100%;
+  height: var(--niche-slot);
+  object-fit: cover;
+  /* duotono de la casa: nunca stock pegado a color */
+  filter: grayscale(1) contrast(1.05);
+}
+
+/*
+ * Píldora: ventana de 28,8 px con el rodillo de NOMBRES DE RUBRO adentro.
+ * Nunca un negocio inventado ni una métrica fabricada (cero clientes pagando).
+ */
+.nichePill {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  height: var(--niche-pill-h);
+  max-width: calc(100% - 20px);
+  padding: 0 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--tinta) 42%, transparent);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  overflow: hidden;
+}
+
+/* La regla que hace el rodillo: alto de ventana == line-height de la fila */
+.nicheWin {
+  display: block;
+  height: var(--niche-pill-h);
+  overflow: hidden;
+}
+
+.nicheRows {
+  display: block;
+  transform: translateY(calc(var(--niche-i) * var(--niche-pill-h) * -1));
+  transition: transform var(--niche-dur) var(--niche-ease);
+}
+
+.nicheRow {
+  display: block;
+  height: var(--niche-pill-h);
+  line-height: var(--niche-pill-h);
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.68rem, var(--fs-label-min));
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 1023px) {
+  .nicheRunway {
+    --niche-slot: 250px;
+    --niche-stage: 520px;
+  }
+}
+
+/*
+ * Apilado: en teléfono la tarjeta no entra al lado de las palabras, y el
+ * mismo apilado sirve para reduced-motion. Las bandas se apagan: sin ellas
+ * el índice vuelve a 0 y --niche-i deja de mover nada.
+ */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .nicheRunway {
+    height: auto;
+  }
+
+  .nicheMarks {
+    display: none;
+  }
+
+  .nicheStage {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: var(--v2-gap-corto);
+  }
+
+  /*
+   * Las palabras PRIMERO. En el DOM la tarjeta va antes (columna izquierda
+   * en escritorio); apilado tal cual, el visitante se come las 6 fotos antes
+   * de leer un solo rubro.
+   */
+  .nicheMid {
+    order: -1;
+  }
+
+  /* Todas las palabras legibles: sin conmutador nadie pierde un rubro */
+  .nicheWord {
+    opacity: 1;
+  }
+
+  /* La tarjeta deja de ser ventana y muestra la tira entera, foto k = palabra k */
+  .nicheCard {
+    width: min(100%, 282px);
+    height: auto;
+    margin: 0 auto;
+    overflow: visible;
+    background: none;
+  }
+
+  .nicheRoll {
+    transform: none;
+  }
+
+  .nicheShot {
+    height: auto;
+    aspect-ratio: 282 / 331;
+    margin-bottom: 12px;
+    border-radius: 16px;
+  }
+
+  .nichePill {
+    display: none;
+  }
+}
+
+/*
+ * transition: none — NUNCA 0.01ms: con 0.01ms las propiedades discretas
+ * siguen animando y el estado queda a medio camino, invisible pero vivo.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .nicheWord,
+  .nicheRoll,
+  .nicheRows {
+    transition: none;
+    animation: none;
+  }
+
+  .nichePill {
+    backdrop-filter: none;
+  }
+}
+
+.foto {
+  aspect-ratio: 3/4;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface-dim);
+  display: block;
+}
+
+.foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* duotono de la casa: nunca stock pegado a color */
+  filter: grayscale(1) contrast(1.05);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 4 y 7. Ancla oscura                                                     */
+/* ---------------------------------------------------------------------- */
+
+/*
+ * El negro es ANCLA, no base (decisión de Sergio, en la ficha: "la dirección
+ * de Onia es claro premium"). Acá sí valen los 15 % literales de Fanvue,
+ * porque el fondo vuelve a ser oscuro.
+ */
+.ancla {
+  background: var(--tinta);
+  color: #edf1ef;
+  --v2-cuerpo: rgb(237 241 239 / 0.75);
+  --v2-tenue: rgb(237 241 239 / 0.55);
+  --v2-vidrio: rgb(239 238 236 / 0.15);
+  --v2-vidrio-borde: rgb(239 238 236 / 0.15);
+}
+
+.ancla .display,
+.ancla .titulo {
+  color: #fff;
+}
+
+.ancla .display em {
+  color: var(--senal);
+}
+
+.ancla .kicker {
+  color: var(--v2-tenue);
+}
+
+.ancla .btnGhost {
+  color: #fff;
+  border-color: rgb(255 255 255 / 0.3);
+}
+
+.ancla .btnGhost:hover {
+  background: rgb(255 255 255 / 0.08);
+  border-color: #fff;
+}
+
+.ancla .link {
+  color: var(--verde-300);
+}
+
+.ancla .link:hover {
+  color: #fff;
+}
+
+.anclaGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: var(--v2-gap);
+  align-items: center;
+  margin-top: var(--v2-gap-corto);
+}
+
+@media (max-width: 979px) {
+  .anclaGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* celdas de pelo sobre el ancla: sin tarjetas */
+.celdas {
+  display: grid;
+  gap: 0;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--v2-vidrio-borde);
+}
+
+.celda {
+  padding: clamp(1.2rem, 2vw, 1.8rem) 0;
+  border-bottom: 1px solid var(--v2-vidrio-borde);
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 1rem clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+
+.celda h3 {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.45rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.celda p {
+  margin: 0;
+  color: var(--v2-cuerpo);
+  font-size: max(0.95rem, var(--fs-micro-min));
+  line-height: 1.5;
+  max-width: 58ch;
+}
+
+@media (max-width: 699px) {
+  .celda {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 5. Chatbot                                                              */
+/* ---------------------------------------------------------------------- */
+
+.botGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: var(--v2-gap);
+  align-items: center;
+  margin-top: var(--v2-gap-corto);
+}
+
+@media (max-width: 899px) {
+  .botGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.botCapturas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.7rem, 1.5vw, 1.2rem);
+  align-items: start;
+}
+
+/* la segunda captura baja un poco: dos momentos de la MISMA conversación,
+   no dos objetos gemelos */
+.botCapturas > :nth-child(2) {
+  margin-top: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+/*
+ * En teléfono las dos capturas lado a lado caían a ~170 px de ancho: el chat
+ * dejaba de leerse y pasaba a ser textura. Apiladas ocupan el ancho completo
+ * y se leen — que es el único motivo por el que están.
+ */
+@media (max-width: 599px) {
+  .botCapturas {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .botCapturas > :nth-child(2) {
+    margin-top: 0;
+  }
+}
+
+.escalera {
+  border-top: 1px solid var(--v2-vidrio-borde);
+}
+
+.escalon {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.4rem clamp(1rem, 2vw, 1.6rem);
+  align-items: start;
+  padding: clamp(1.2rem, 2vw, 1.7rem) 0;
+  border-bottom: 1px solid var(--v2-vidrio-borde);
+}
+
+.escalonNivel {
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.72rem, var(--fs-label-min));
+  letter-spacing: 0.1em;
+  color: var(--accent-ink);
+  padding-top: 0.35em;
+}
+
+.escalon h3 {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.05rem, 1rem + 0.4vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.escalon p {
+  margin: 0.35rem 0 0;
+  color: var(--v2-cuerpo);
+  font-size: max(0.88rem, var(--fs-micro-min));
+  line-height: 1.5;
+  max-width: 46ch;
+}
+
+.escalonPrecio {
+  grid-column: 3;
+  text-align: right;
+  font-size: max(0.85rem, var(--fs-micro-min));
+  color: var(--v2-tenue);
+  white-space: nowrap;
+  padding-top: 0.2em;
+}
+
+.escalonPrecio b {
+  display: block;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.escalonDestacado {
+  background: linear-gradient(90deg, var(--accent-soft), transparent 78%);
+  margin-inline: calc(clamp(0.7rem, 1.5vw, 1.1rem) * -1);
+  padding-inline: clamp(0.7rem, 1.5vw, 1.1rem);
+  border-radius: 12px;
+  border-bottom-color: var(--accent);
+}
+
+@media (max-width: 599px) {
+  .escalon {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .escalonPrecio {
+    grid-column: 2;
+    text-align: left;
+    white-space: normal;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 6. Precios                                                              */
+/* ---------------------------------------------------------------------- */
+
+.precios {
+  background: var(--bg-deep);
+}
+
+.planes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.6rem);
+  margin-top: var(--v2-gap-corto);
+  align-items: stretch;
+}
+
+@media (max-width: 899px) {
+  .planes {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: clamp(1.4rem, 2.4vw, 2.2rem);
+  border-radius: 18px;
+  /* LEY 6: superficie por transparencia, no un gris opaco con borde duro */
+  background: var(--v2-vidrio);
+  box-shadow: inset 0 0 0 1px var(--v2-vidrio-borde);
+}
+
+.planDestacado {
+  background: var(--tinta);
+  color: #edf1ef;
+  box-shadow: 0 2px 4px rgb(20 26 23 / 0.09), 0 30px 70px -28px rgb(20 26 23 / 0.4);
+  --v2-cuerpo: rgb(237 241 239 / 0.78);
+  --v2-tenue: rgb(237 241 239 / 0.55);
+}
+
+.planPaso {
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.66rem, var(--fs-label-min));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--v2-tenue);
+}
+
+.plan h3 {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+
+.planDestacado h3 {
+  color: #fff;
+}
+
+/*
+ * Numeral editorial: grande y FINO. Mismo criterio que el display (el peso
+ * no es lo que da magnitud) llevado al extremo en la cifra.
+ */
+.planPrecio {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+
+.planNumero {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 380;
+  font-size: clamp(3rem, 2rem + 3.4vw, 4.6rem);
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.planUnidad {
+  color: var(--v2-tenue);
+  font-size: max(0.85rem, var(--fs-micro-min));
+}
+
+.planResultado {
+  color: var(--v2-cuerpo);
+  font-size: max(0.95rem, var(--fs-micro-min));
+  line-height: 1.5;
+  margin: 0.4rem 0 0;
+  min-height: 4.4em;
+}
+
+.planLista {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+  color: var(--v2-cuerpo);
+  font-size: max(0.9rem, var(--fs-micro-min));
+}
+
+.planLista li {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  gap: 0.35rem;
+  line-height: 1.4;
+}
+
+.planLista li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 0.55em;
+}
+
+.planDestacado .planLista li::before {
+  background: var(--senal);
+}
+
+.planPie {
+  margin-top: auto;
+  padding-top: 1.2rem;
+}
+
+.planPie .btn {
+  width: 100%;
+}
+
+.preciosPie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+  margin-top: var(--v2-gap-corto);
+  padding-top: clamp(1.2rem, 2vw, 1.8rem);
+  border-top: 1px solid var(--v2-vidrio-borde);
+}
+
+.preciosPie p {
+  margin: 0 auto 0 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 8. Cierre                                                               */
+/* ---------------------------------------------------------------------- */
+
+.cierre {
+  padding-bottom: clamp(3rem, 2rem + 3vw, 5rem);
+}
+
+.cierreGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  gap: var(--v2-gap);
+  align-items: center;
+}
+
+.cierreFoto .foto {
+  aspect-ratio: 4/5;
+}
+
+@media (max-width: 899px) {
+  .cierreGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cierreFoto {
+    display: none;
+  }
+}
+
+.wordmarkStrip {
+  padding-top: clamp(2rem, 6vw, 5rem);
+  padding-inline: var(--gutter);
+}
+
+.wordmark {
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .marco,
+  .link {
+    transition: none;
+  }
+
+  .marcoHover:hover {
+    transform: none;
+  }
+}

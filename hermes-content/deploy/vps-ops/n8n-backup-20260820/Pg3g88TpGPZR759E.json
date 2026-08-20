@@ -1,0 +1,98 @@
+{
+  "updatedAt": "2026-08-14T03:09:20.000Z",
+  "createdAt": "2026-08-14T03:02:15.210Z",
+  "id": "Pg3g88TpGPZR759E",
+  "name": "TEMP - Smoketest Payment Alert DB",
+  "description": "Temporal: probar conexion Postgres antes de construir el workflow real. Borrar despues.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "6b15583f-441a-4427-832d-af60a305bcfb",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "f90f3761-ef66-4215-9297-20c7bbbe6c49",
+      "name": "Probe DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "resource": "database",
+        "operation": "executeQuery",
+        "query": "SELECT (SELECT count(*)::int FROM subscription_payments WHERE id = 'test-payalert-telegram-check-001') AS payment_row, (SELECT count(*)::int FROM n8n_ops.payment_alerts_sent WHERE payment_id = 'test-payalert-telegram-check-001') AS tracking_row, (SELECT count(*)::int FROM subscription_payments) AS total_payments;",
+        "options": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "2P4w95n0vir90EkT",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Probe DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "80617173-c81d-4038-85b5-d412ac669192",
+  "activeVersionId": null,
+  "versionCounter": 5,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T03:02:15.240Z",
+      "createdAt": "2026-08-14T03:02:15.240Z",
+      "role": "workflow:owner",
+      "workflowId": "Pg3g88TpGPZR759E",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

@@ -1,0 +1,484 @@
+{
+  "updatedAt": "2026-07-05T23:00:52.000Z",
+  "createdAt": "2026-06-09T22:13:27.527Z",
+  "id": "FGqyNTrQfMIFiVG2",
+  "name": "ONIA — Pipeline Llamada → Propuesta",
+  "description": "Receives Telegram voice notes, transcribes with Whisper, extracts client data with GPT-4o-mini, generates an HTML proposal, and sends both a summary and the proposal file back via Telegram.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "db4a3c5f-4219-4924-84f4-75b1444dce1e",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        96
+      ],
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "1a6a2f0d-9b6c-4306-ad4d-89575027b97e"
+    },
+    {
+      "id": "48b57a0f-d4a4-4273-80bf-bc77a1ef4e26",
+      "name": "¿Es audio?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        96
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-voice",
+              "leftValue": "={{ $json.message?.voice?.file_id ?? $json.message?.audio?.file_id ?? '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "17087ef1-5ecc-42cb-9c32-2dc74c0ab05b",
+      "name": "Webhook — Pipeline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:3031/pipeline",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"file_id\": \"{{ $json.message?.voice?.file_id ?? $json.message?.audio?.file_id }}\",\n  \"chat_id\": \"{{ $json.message.chat.id }}\"\n}",
+        "options": {
+          "timeout": 120000
+        }
+      }
+    },
+    {
+      "id": "dd371dfe-248b-4e5d-978e-d13128f2337f",
+      "name": "Telegram — Resumen",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.resumen }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        },
+        "resource": "message",
+        "operation": "sendMessage"
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "59289187-3a96-45ad-8abb-23982b7b3da3"
+    },
+    {
+      "id": "45ef77aa-2324-41a3-a9c9-acd106b9caa9",
+      "name": "Descargar HTML",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Webhook — Pipeline').item.json.html_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "0d5b9c91-88ab-43ae-8987-898da658426e",
+      "name": "Telegram — Propuesta HTML",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "additionalFields": {
+          "caption": "={{ '📑 Propuesta para ' + $('Webhook — Pipeline').item.json.datos.empresa }}",
+          "fileName": "={{ 'propuesta-' + ($('Webhook — Pipeline').item.json.datos.empresa || 'cliente').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.html' }}"
+        },
+        "resource": "message",
+        "operation": "sendDocument"
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "7cd88bd6-ab52-4be7-b744-6efa5d975d8c"
+    },
+    {
+      "id": "994346db-93cd-4e0c-807f-33406329a727",
+      "name": "Telegram — No es audio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        470
+      ],
+      "parameters": {
+        "chatId": "={{ $json.message.chat.id }}",
+        "text": "⚠️ No detecté audio. Enviame una nota de voz con la grabación de la llamada.",
+        "additionalFields": {},
+        "resource": "message",
+        "operation": "sendMessage"
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "84573eca-19f1-488f-847b-4c6b70c21fcd"
+    },
+    {
+      "id": "54d52634-46f6-444b-a628-9c365cb02953",
+      "name": "¿Es texto largo?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        340
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "cond-text",
+              "leftValue": "={{ ($json.message?.text ?? '').length }}",
+              "rightValue": 100,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "6512af1f-b1c7-4a87-8c43-961b5ebc935a",
+      "name": "Webhook — Analizar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        672,
+        340
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:3031/analizar",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"transcript\": \"{{ $('Telegram Trigger').item.json.message.text }}\"\n}",
+        "options": {
+          "timeout": 120000
+        }
+      }
+    },
+    {
+      "id": "2e17e62e-497a-4987-9e5e-70156605600d",
+      "name": "Telegram — Resumen Análisis",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        340
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.resumen }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "565fb818-a90f-4c4a-bf45-fabee4a7e6b2"
+    },
+    {
+      "id": "464c66df-2e4f-4442-ad9d-5aaf4bc1d53d",
+      "name": "Descargar HTML Análisis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1120,
+        340
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Webhook — Analizar').item.json.html_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "900c267c-1d1d-4dee-80cf-e4a5cca0c742",
+      "name": "Telegram — Propuesta Análisis",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1344,
+        340
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendDocument",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "additionalFields": {
+          "caption": "={{ '📑 Propuesta para ' + $('Webhook — Analizar').item.json.datos.empresa }}",
+          "fileName": "={{ 'propuesta-' + ($('Webhook — Analizar').item.json.datos.empresa || 'cliente').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.html' }}"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "2f0208af-8d3d-47e2-8943-86088ce757b3"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "¿Es audio?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es audio?": {
+      "main": [
+        [
+          {
+            "node": "Webhook — Pipeline",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "¿Es texto largo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook — Pipeline": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Resumen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram — Resumen": {
+      "main": [
+        [
+          {
+            "node": "Descargar HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar HTML": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Propuesta HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es texto largo?": {
+      "main": [
+        [
+          {
+            "node": "Webhook — Analizar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram — No es audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook — Analizar": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Resumen Análisis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram — Resumen Análisis": {
+      "main": [
+        [
+          {
+            "node": "Descargar HTML Análisis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar HTML Análisis": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Propuesta Análisis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "0d68359a-224e-42bb-8298-57a338c483fc",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-09T22:13:27.536Z",
+      "createdAt": "2026-06-09T22:13:27.536Z",
+      "role": "workflow:owner",
+      "workflowId": "FGqyNTrQfMIFiVG2",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

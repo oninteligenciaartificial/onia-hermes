@@ -1,0 +1,124 @@
+{
+  "updatedAt": "2026-08-07T15:08:06.931Z",
+  "createdAt": "2026-06-16T20:45:54.860Z",
+  "id": "SemAJNk7ZoZxA8D7",
+  "name": "Cuestionario Cliente ONIA → Correo",
+  "description": "Webhook POST del cuestionario de cliente (cuestionario-cliente.html). Responde 200 con CORS abierto y envia las respuestas por Gmail Workspace a oninteligenciaartificial@gmail.com (migrado 2026-08-07, sin $env).",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "13d60a1a-657e-49dc-a9b9-2fc50bb7520c",
+      "name": "Cuestionario Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cuestionario-cliente",
+        "responseMode": "onReceived",
+        "authentication": "none",
+        "options": {
+          "allowedOrigins": "*",
+          "responseCode": {
+            "values": {
+              "responseCode": 200
+            }
+          },
+          "responseData": "ok"
+        }
+      },
+      "webhookId": "a412fd6b-a589-4b42-b4bf-ba05017fee65"
+    },
+    {
+      "id": "f6aa4997-9cd8-4733-a076-850fd0947f51",
+      "name": "Gmail: Enviar Lead",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        540,
+        300
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "oninteligenciaartificial@gmail.com",
+        "subject": "={{ 'Nuevo cliente — ' + ($json.body.empresa || 'sin empresa') + ' (' + ($json.body.ciudad || '') + ')' }}",
+        "emailType": "html",
+        "message": "={{ '<div style=\"font-family:Arial,sans-serif;color:#101827;max-width:640px\"><h2 style=\"color:#1e5bff;margin:0 0 4px\">Nuevo cliente — Cuestionario ONIA</h2>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Contacto</h3><p><b>Nombre:</b> ' + ($json.body.nombre||'-') + '<br><b>Empresa:</b> ' + ($json.body.empresa||'-') + '<br><b>WhatsApp:</b> ' + ($json.body.whatsapp||'-') + '<br><b>Email:</b> ' + ($json.body.email||'-') + '<br><b>Ciudad:</b> ' + ($json.body.ciudad||'-') + '<br><b>Rubro:</b> ' + ($json.body.rubro||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Negocio</h3><p><b>Qué vende:</b> ' + ($json.body.que_vende||'-') + '<br><b>Antigüedad:</b> ' + ($json.body.antiguedad||'-') + '<br><b>Equipo:</b> ' + ($json.body.equipo||'-') + '<br><b>Cliente típico:</b> ' + ($json.body.cliente_tipico||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Cómo vende</h3><p><b>Canales:</b> ' + (($json.body.canales||[]).join(', ')||'-') + '<br><b>Web/redes:</b> ' + ($json.body.links||'-') + '<br><b>Cómo llegan clientes:</b> ' + ($json.body.como_llegan||'-') + '<br><b>Cómo cobra:</b> ' + ($json.body.como_cobra||'-') + '<br><b>Herramientas:</b> ' + ($json.body.herramientas||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Problema</h3><p><b>Principal problema:</b> ' + ($json.body.dolor||'-') + '<br><b>Dónde pierde ventas:</b> ' + ($json.body.perdida||'-') + '<br><b>Qué intentó antes:</b> ' + ($json.body.intentos||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Qué busca</h3><p><b>Le interesa:</b> ' + (($json.body.interes||[]).join(', ')||'-') + '<br><b>Objetivo 3 meses:</b> ' + ($json.body.objetivo||'-') + '<br><b>Urgencia:</b> ' + ($json.body.urgencia||'-') + '<br><b>Presupuesto:</b> ' + ($json.body.presupuesto||'-') + '</p>' + '<h3 style=\"border-bottom:2px solid #1e5bff;padding-bottom:4px\">Para construir</h3><p><b>Referencias que le gustan:</b> ' + ($json.body.referencias||'-') + '<br><b>Tiene logo/marca:</b> ' + ($json.body.tiene_logo||'-') + '<br><b>Tiene dominio:</b> ' + ($json.body.tiene_dominio||'-') + '<br><b>Notas extra:</b> ' + ($json.body.extra||'-') + '</p></div>' }}",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      },
+      "webhookId": "7e7a2608-743e-4cbb-aeb6-d4ead1a8ca9f"
+    }
+  ],
+  "connections": {
+    "Cuestionario Webhook": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Enviar Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "2faefa14-ff60-473a-9ad0-0527ca7c54bb",
+  "activeVersionId": "2faefa14-ff60-473a-9ad0-0527ca7c54bb",
+  "versionCounter": 7,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:08.898Z",
+      "createdAt": "2026-07-03T21:24:08.898Z",
+      "id": "9vqqYakPrKMmiw0H",
+      "name": "onia-intake"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-06-16T20:45:54.868Z",
+      "createdAt": "2026-06-16T20:45:54.868Z",
+      "role": "workflow:owner",
+      "workflowId": "SemAJNk7ZoZxA8D7",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Gmail: Enviar Lead"
+  }
+}

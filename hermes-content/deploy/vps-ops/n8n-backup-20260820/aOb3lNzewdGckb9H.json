@@ -1,0 +1,164 @@
+{
+  "updatedAt": "2026-06-16T02:21:20.210Z",
+  "createdAt": "2026-06-16T02:21:20.210Z",
+  "id": "aOb3lNzewdGckb9H",
+  "name": "ONIA - Demo Cliente New Sakura",
+  "description": "Demo personalizado de venta para New Sakura (restaurante Calacoto, La Paz): briefing matutino con clima La Paz + alerta lluvia/terraza + reservas (ejemplo) + tip de restaurante, a Telegram. Para mostrar al prospecto cómo se vería su asistente.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c27c9af6-00b8-411c-a6cb-deb8c591c7b2",
+      "name": "Cron 7am Bolivia",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 11,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "6681ebfe-7b93-464f-bcbf-bfaa142dc6a8",
+      "name": "Clima La Paz",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=-16.5&longitude=-68.15&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=America%2FLa_Paz&forecast_days=1"
+      }
+    },
+    {
+      "id": "83f63322-3213-4af3-82c4-f44bda7e3a06",
+      "name": "Armar Briefing New Sakura",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const d = $input.first().json;\nconst c = d.current || {};\nconst day = d.daily || {};\nconst max = Array.isArray(day.temperature_2m_max) ? day.temperature_2m_max[0] : '--';\nconst min = Array.isArray(day.temperature_2m_min) ? day.temperature_2m_min[0] : '--';\nconst lluvia = Array.isArray(day.precipitation_probability_max) ? day.precipitation_probability_max[0] : '--';\nconst codes = {0:'Despejado',1:'Mayormente despejado',2:'Parcialmente nublado',3:'Nublado',45:'Niebla',51:'Llovizna',61:'Lluvia ligera',63:'Lluvia',65:'Lluvia fuerte',71:'Nieve',80:'Chubascos',95:'Tormenta'};\nconst estado = codes[c.weather_code] || 'Variable';\nconst fecha = new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz', weekday: 'long', day: 'numeric', month: 'long' });\nconst tips = [\n  'Sugiere el plato del dia por WhatsApp a tus clientes frecuentes.',\n  'Confirma por WhatsApp las reservas de hoy: reduce las mesas vacias.',\n  'Sube 1 foto del plato estrella a Google: mas clics que cualquier texto.',\n  'Pide resena a la ultima mesa contenta: sube tu ranking en Google.',\n  'Revisa el stock de tus 3 platos mas pedidos antes del mediodia.'\n];\nconst tip = tips[new Date().getDate() % tips.length];\nlet msg = '🍣 <b>Buen dia, New Sakura — ' + fecha + '</b>\\n\\n';\nmsg += '🌡️ <b>Clima La Paz (Calacoto):</b> ' + (c.temperature_2m ?? '--') + '°C, ' + estado + '\\n';\nmsg += '   Maxima ' + max + '°C · Minima ' + min + '°C · Prob. lluvia ' + lluvia + '%\\n';\nmsg += (lluvia >= 50 ? '   ⚠️ Alta chance de lluvia: prepara el delivery y mesas internas.\\n' : '   ✅ Buen dia para la terraza.\\n');\nmsg += '\\n📋 <b>Reservas de hoy:</b> (se conecta a tu agenda/WhatsApp)\\n   • 13:00 — Mesa 4, 6 personas\\n   • 20:30 — Mesa 2, aniversario\\n\\n';\nmsg += '💡 <b>Tip del dia:</b> ' + tip + '\\n\\n';\nmsg += '🤖 <i>Asistente ONIA para New Sakura — llega solo cada manana. Esto es un demo; con tus datos reales muestra reservas, pedidos y ventas.</i>';\nreturn [{ json: { mensaje: msg } }];"
+      }
+    },
+    {
+      "id": "c0824ea2-ce97-4e2b-bfd5-0c86837754f0",
+      "name": "Enviar a Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.mensaje }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "73a06ce8-ad1a-434f-9678-d89791f918bc"
+    }
+  ],
+  "connections": {
+    "Cron 7am Bolivia": {
+      "main": [
+        [
+          {
+            "node": "Clima La Paz",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clima La Paz": {
+      "main": [
+        [
+          {
+            "node": "Armar Briefing New Sakura",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar Briefing New Sakura": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "408ec3c4-6076-46d5-8bad-770fb8d0d859",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-16T02:21:20.213Z",
+      "createdAt": "2026-06-16T02:21:20.213Z",
+      "role": "workflow:owner",
+      "workflowId": "aOb3lNzewdGckb9H",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

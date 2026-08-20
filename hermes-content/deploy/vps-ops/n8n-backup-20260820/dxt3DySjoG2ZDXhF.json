@@ -1,0 +1,299 @@
+{
+  "updatedAt": "2026-05-15T20:17:43.000Z",
+  "createdAt": "2026-03-29T13:57:21.748Z",
+  "id": "dxt3DySjoG2ZDXhF",
+  "name": "My workflow 3",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Flujo de Datos",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre"
+            },
+            {
+              "fieldLabel": "Correo"
+            },
+            {
+              "fieldLabel": "Telefono"
+            },
+            {
+              "fieldLabel": "Edad",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Ciudad"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -480,
+        -16
+      ],
+      "id": "42fee857-0865-4595-9a49-d93740d960fa",
+      "name": "On form submission",
+      "webhookId": "15a89a0e-6f53-4b6f-bfb5-3c5847d083e8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ae65929f-2c1c-4c37-8a72-5ee679d33b27",
+              "name": "Nomre",
+              "value": "={{ $json.Nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "fbd994cf-e424-4ed5-9344-5fc50b76c833",
+              "name": "Edad",
+              "value": "={{ $json.Edad }}",
+              "type": "number"
+            },
+            {
+              "id": "af41d35a-4a2d-4749-8255-52eed041f093",
+              "name": "Ciudad",
+              "value": "={{ $json.Ciudad }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -272,
+        -16
+      ],
+      "id": "34fc0db1-b222-4ff6-9d0f-525707bfda92",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "137b7dc4-77c4-4dea-9ccd-6e8b1bac801e",
+              "leftValue": "={{ $json.Edad }}",
+              "rightValue": 18,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -64,
+        -16
+      ],
+      "id": "ba8feb84-11a1-4652-a71f-33c47bb156ed",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Ciudad }}",
+                    "rightValue": "Madrid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "a3b2485a-8aad-4a8f-84cc-8c0982e8307d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Madrid"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "bfb37d81-f094-40e8-931a-5997ef9fc913",
+                    "leftValue": "={{ $json.Ciudad }}",
+                    "rightValue": "scz",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "scz"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "560c075b-5219-4b3c-83f3-03fdc86ad675",
+                    "leftValue": "={{ $json.Ciudad }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Otro"
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        -144
+      ],
+      "id": "3f6998ce-71ae-4bf2-ac1d-e326b01eac87",
+      "name": "Switch"
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Nombre": "Sergio",
+          "Correo": "sergio@gmail.com",
+          "Telefono": "7381783",
+          "Edad": 19,
+          "Ciudad": "scz",
+          "submittedAt": "2026-03-29T10:16:48.299-04:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "e4e8aa7f-0b5c-4c0e-9603-4d7b25e2cb01",
+  "activeVersionId": null,
+  "versionCounter": 64,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-29T13:57:21.750Z",
+      "createdAt": "2026-03-29T13:57:21.750Z",
+      "role": "workflow:owner",
+      "workflowId": "dxt3DySjoG2ZDXhF",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

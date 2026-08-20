@@ -1,0 +1,144 @@
+{
+  "updatedAt": "2026-07-03T21:24:07.622Z",
+  "createdAt": "2026-06-11T01:57:46.826Z",
+  "id": "kB10A8oLWioS8lXP",
+  "name": "ONIA - Agenda Create API",
+  "description": "Webhook POST /agendar-create: recibe titulo/startISO/endISO/descripcion, crea evento en Google Calendar y responde JSON con htmlLink. Llamado por Hermes VPS.",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "2ef0be14-8b03-4328-b9ae-3c9b1a682068",
+      "name": "Agendar Create Hook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agendar-create",
+        "responseMode": "responseNode"
+      },
+      "webhookId": "f0ab1aae-60c6-43fd-b67c-9d1a2301bc3f"
+    },
+    {
+      "id": "8558e753-d616-49e4-a733-00239ea8c2d4",
+      "name": "Crear Evento GCal",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "create",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "oninteligenciaartificial@gmail.com"
+        },
+        "start": "={{ $json.body.startISO }}",
+        "end": "={{ $json.body.endISO }}",
+        "additionalFields": {
+          "summary": "={{ $json.body.titulo }}",
+          "description": "={{ $json.body.descripcion }}"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "a3FResZHqQ32ptyt",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "id": "de1a9685-f56d-4469-83f9-d55dd05100c3",
+      "name": "Responder JSON",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, summary: $json.summary, htmlLink: $json.htmlLink, id: $json.id }) }}"
+      }
+    }
+  ],
+  "connections": {
+    "Agendar Create Hook": {
+      "main": [
+        [
+          {
+            "node": "Crear Evento GCal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Evento GCal": {
+      "main": [
+        [
+          {
+            "node": "Responder JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "3f90acf1-18c0-4e01-b087-999eb4f52ff1",
+  "activeVersionId": "3f90acf1-18c0-4e01-b087-999eb4f52ff1",
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:07.419Z",
+      "createdAt": "2026-07-03T21:24:07.419Z",
+      "id": "XBK6IoQ3GTHTpDnq",
+      "name": "onia-ops"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-06-11T01:57:46.846Z",
+      "createdAt": "2026-06-11T01:57:46.846Z",
+      "role": "workflow:owner",
+      "workflowId": "kB10A8oLWioS8lXP",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "updatedAt": "2026-07-04T01:11:56.000Z",
+  "createdAt": "2026-06-02T17:14:00.616Z",
+  "id": "T3qtKnj94fBXQsxY",
+  "name": "Hermes Telegram Chat ID Capture",
+  "description": "Captura mensajes entrantes del bot de Telegram y responde el chat_id necesario para conectar el radar diario de Hermes.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "85aed810-1129-4ca7-930e-c7f0d5d5e1b7",
+      "name": "Telegram Message Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        200,
+        280
+      ],
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "c392c7b3-f989-40ad-aa84-207e5420a3b1"
+    },
+    {
+      "id": "c7b38949-d382-46fc-9329-f333a1b7d9bc",
+      "name": "Normalize Chat ID",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        460,
+        280
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": true,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "chat-id",
+              "name": "chatId",
+              "value": "={{ $json.message.chat.id }}",
+              "type": "string"
+            },
+            {
+              "id": "chat-type",
+              "name": "chatType",
+              "value": "={{ $json.message.chat.type }}",
+              "type": "string"
+            },
+            {
+              "id": "message-id",
+              "name": "messageId",
+              "value": "={{ $json.message.message_id }}",
+              "type": "number"
+            },
+            {
+              "id": "received-text",
+              "name": "receivedText",
+              "value": "={{ $json.message.text || $json.message.caption || '[sin texto]' }}",
+              "type": "string"
+            },
+            {
+              "id": "from-user",
+              "name": "fromUser",
+              "value": "={{ $json.message.from.username || $json.message.from.first_name || 'unknown' }}",
+              "type": "string"
+            },
+            {
+              "id": "radar-workflow-id",
+              "name": "radarWorkflowId",
+              "value": "lryabRhGQW4WIuJG",
+              "type": "string"
+            },
+            {
+              "id": "captured-at",
+              "name": "capturedAt",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c901dd5d-dd26-4354-8c86-09d56554b104",
+      "name": "Reply With Chat ID",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        280
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ 'Chat ID capturado: ' + $json.chatId + '\\nTipo de chat: ' + $json.chatType + '\\nUsuario/texto: ' + $json.fromUser + ' / ' + $json.receivedText + '\\n\\nSiguiente paso: usar este chat_id para activar el workflow Hermes Radar Diario Creativo y Clientes (' + $json.radarWorkflowId + ').' }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "reply_to_message_id": "={{ $json.messageId }}"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "4e83807c-23d4-4534-ac99-0a82c4aeea11"
+    }
+  ],
+  "connections": {
+    "Telegram Message Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalize Chat ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Chat ID": {
+      "main": [
+        [
+          {
+            "node": "Reply With Chat ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "9404a06c-6fcf-414a-ab73-6b4ce0cb8fc0",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-02T17:14:00.622Z",
+      "createdAt": "2026-06-02T17:14:00.622Z",
+      "role": "workflow:owner",
+      "workflowId": "T3qtKnj94fBXQsxY",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

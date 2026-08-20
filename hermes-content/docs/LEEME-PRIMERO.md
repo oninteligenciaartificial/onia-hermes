@@ -44,7 +44,7 @@ Todo lo demás está parqueado a propósito.
 
 ## Dónde está el resto
 
-- **`_historico/`** — lo que fue verdad y ya no se consulta. No se borró nada; está ahí.
+- **`historial/`** — lo que fue verdad y ya no se consulta. No se borró nada; está ahí.
 - **`research/`** — investigación de fondo.
 - **`../sales-kit/`** — material comercial listo para usar.
 - **`../propuestas/`** — el generador de propuestas. Nunca escribir HTML de propuesta a mano.
@@ -52,5 +52,5 @@ Todo lo demás está parqueado a propósito.
 ## Regla para no volver a llenar esto de ruido
 
 **Un doc nuevo se crea solo si alguien lo va a leer para decidir algo.** Si es un reporte de
-algo ya ejecutado, va directo a `_historico/`. Si reemplaza a otro, se anota el reemplazo en
+algo ya ejecutado, va directo a `historial/`. Si reemplaza a otro, se anota el reemplazo en
 la primera línea del viejo y se archiva — no se dejan los dos vivos diciendo cosas distintas.

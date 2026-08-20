@@ -1,0 +1,519 @@
+{
+  "updatedAt": "2026-06-09T22:21:30.000Z",
+  "createdAt": "2026-05-26T16:33:18.051Z",
+  "id": "kfE43OhmczUkAKiN",
+  "name": "WF-DISCORD-05 Asistente Discord",
+  "description": "Webhook recibe texto libre, OpenAI lo clasifica como evento/tarea/nota, guarda en Google Calendar o Notion y confirma en Discord.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "38d18c02-2198-49eb-b337-cb3236da9623",
+      "name": "Recibir Texto Discord",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        288
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "discord-asistente",
+        "responseMode": "onReceived"
+      },
+      "webhookId": "941080a9-088c-49dc-9464-1f6046bd0f0a"
+    },
+    {
+      "id": "42685adb-7178-4245-b232-1c19228370a7",
+      "name": "Clasificar con OpenAI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        224,
+        288
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={ \"model\": \"gpt-4o-mini\", \"messages\": [ { \"role\": \"system\", \"content\": \"Eres un asistente. Analiza el texto y devuelve JSON con: {tipo: 'evento'|'tarea'|'nota'|'desconocido', titulo: string, descripcion: string, inicio: ISO8601|null, fin: ISO8601|null}. La fecha de hoy es {{ $now.setZone('America/La_Paz').toISO() }}\" }, { \"role\": \"user\", \"content\": \"{{ $('Recibir Texto Discord').item.json.body.texto }}\" } ] }"
+      }
+    },
+    {
+      "id": "b4d76157-c0ad-42b3-8b6b-7fb61a1e89e0",
+      "name": "Parsear Respuesta IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        288
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "\nconst items = $input.all();\nconst result = [];\n\nfor (const item of items) {\n  const rawContent = item.json.choices[0].message.content;\n  \n  let parsed;\n  try {\n    const jsonMatch = rawContent.match(/\\{[\\s\\S]*\\}/);\n    if (jsonMatch) {\n      parsed = JSON.parse(jsonMatch[0]);\n    } else {\n      parsed = { tipo: 'desconocido', titulo: 'Sin título', descripcion: rawContent, inicio: null, fin: null };\n    }\n  } catch (e) {\n    parsed = { tipo: 'desconocido', titulo: 'Sin título', descripcion: rawContent, inicio: null, fin: null };\n  }\n\n  result.push({\n    json: {\n      tipo: parsed.tipo || 'desconocido',\n      titulo: parsed.titulo || 'Sin título',\n      descripcion: parsed.descripcion || '',\n      inicio: parsed.inicio || null,\n      fin: parsed.fin || null,\n    }\n  });\n}\n\nreturn result;\n"
+      }
+    },
+    {
+      "id": "7e17656c-d1b7-41a0-aff3-4375be7782a9",
+      "name": "Rutear por Tipo",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        256
+      ],
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.tipo }}",
+                    "rightValue": "evento",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.tipo }}",
+                    "rightValue": "tarea",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.tipo }}",
+                    "rightValue": "nota",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      }
+    },
+    {
+      "id": "647e2c11-e214-4bb3-8976-a06de995a3ad",
+      "name": "Crear Evento en Calendar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "create",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "business@onia.com.bo"
+        },
+        "start": "={{ $json.inicio }}",
+        "end": "={{ $json.fin }}",
+        "additionalFields": {
+          "summary": "={{ $json.titulo }}",
+          "description": "={{ $json.descripcion }}"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "AIf6aLd0Q1yAqXKj",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "id": "6b3b0f72-34ef-479f-ab36-396d63b310ad",
+      "name": "Confirmar Evento Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "botToken",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571461663719454"
+        },
+        "sendTo": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571462196400303"
+        },
+        "content": "={{ \"✅ Evento creado: \" + $(\"Parsear Respuesta IA\").item.json.titulo }}"
+      },
+      "credentials": {
+        "discordBotApi": {
+          "id": "4K40hl2Un0aWGges",
+          "name": "Discord Bot account"
+        }
+      },
+      "webhookId": "9d4eed92-f03a-4b8b-9adb-23f227f82211"
+    },
+    {
+      "id": "20988ad8-db0a-4fa0-9d8f-4f34b96b5f21",
+      "name": "Crear Tarea en Notion",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        192
+      ],
+      "parameters": {
+        "resource": "page",
+        "operation": "create",
+        "authentication": "apiKey",
+        "pageId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "<__PLACEHOLDER_VALUE__ID de la base de datos de tareas en Notion__>"
+        },
+        "title": "={{ $json.titulo }}",
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "paragraph",
+              "richText": false,
+              "textContent": "={{ $json.descripcion }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "0cff6287-a86e-4e9f-8b9c-3787ea401c10",
+      "name": "Confirmar Tarea Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        192
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "botToken",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571461663719454"
+        },
+        "sendTo": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571462196400303"
+        },
+        "content": "={{ \"✅ Tarea guardada en Notion: \" + $(\"Parsear Respuesta IA\").item.json.titulo }}"
+      },
+      "credentials": {
+        "discordBotApi": {
+          "id": "4K40hl2Un0aWGges",
+          "name": "Discord Bot account"
+        }
+      },
+      "webhookId": "d4648c01-025c-44da-9016-6bfd9f697d71"
+    },
+    {
+      "id": "aeecd09c-0561-4113-8396-45362ce2b30f",
+      "name": "Crear Nota en Notion",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        384
+      ],
+      "parameters": {
+        "resource": "page",
+        "operation": "create",
+        "authentication": "apiKey",
+        "pageId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "<__PLACEHOLDER_VALUE__ID de la base de datos de notas en Notion__>"
+        },
+        "title": "={{ $json.titulo }}",
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "paragraph",
+              "richText": false,
+              "textContent": "={{ $json.descripcion }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "79f27f30-1992-4ceb-9f11-cfbd0121706b",
+      "name": "Confirmar Nota Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        384
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "botToken",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571461663719454"
+        },
+        "sendTo": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571462196400303"
+        },
+        "content": "={{ \"✅ Nota guardada: \" + $(\"Parsear Respuesta IA\").item.json.titulo }}"
+      },
+      "credentials": {
+        "discordBotApi": {
+          "id": "4K40hl2Un0aWGges",
+          "name": "Discord Bot account"
+        }
+      },
+      "webhookId": "4a1b4102-ff92-4ee1-b685-490ed6b61d3a"
+    },
+    {
+      "id": "f9fd5401-541f-491a-8ccb-452ecc1fe9c7",
+      "name": "Respuesta Desconocida Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        896,
+        576
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "botToken",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571461663719454"
+        },
+        "sendTo": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1508571462196400303"
+        },
+        "content": "❓ No entendí. Intenta ser más específico."
+      },
+      "credentials": {
+        "discordBotApi": {
+          "id": "4K40hl2Un0aWGges",
+          "name": "Discord Bot account"
+        }
+      },
+      "webhookId": "cfb636f6-e38c-4523-ac20-183bf635eff2"
+    }
+  ],
+  "connections": {
+    "Recibir Texto Discord": {
+      "main": [
+        [
+          {
+            "node": "Clasificar con OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clasificar con OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Parsear Respuesta IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Respuesta IA": {
+      "main": [
+        [
+          {
+            "node": "Rutear por Tipo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rutear por Tipo": {
+      "main": [
+        [
+          {
+            "node": "Crear Evento en Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Crear Tarea en Notion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Crear Nota en Notion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respuesta Desconocida Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Evento en Calendar": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Evento Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Tarea en Notion": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Tarea Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Nota en Notion": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Nota Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "b5661a5e-64ba-41e7-9175-eead810fd22d",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-26T16:33:18.059Z",
+      "createdAt": "2026-05-26T16:33:18.059Z",
+      "role": "workflow:owner",
+      "workflowId": "kfE43OhmczUkAKiN",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

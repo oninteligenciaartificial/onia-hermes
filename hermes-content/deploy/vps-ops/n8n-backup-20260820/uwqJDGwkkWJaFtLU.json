@@ -1,0 +1,197 @@
+{
+  "updatedAt": "2026-07-03T21:24:07.430Z",
+  "createdAt": "2026-06-09T22:07:13.090Z",
+  "id": "uwqJDGwkkWJaFtLU",
+  "name": "ONIA - Agenda: Recordatorios",
+  "description": "Cada 30 minutos revisa Google Calendar por eventos próximos y envía recordatorio por Telegram a Sergio.",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "52a7ad79-1b1e-4a2b-baf5-64d91f2fb4b0",
+      "name": "Cada 30 Minutos",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cdc6de36-6d59-4875-9b57-03fc8072ce04",
+      "name": "Eventos Proximos 30min",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "oninteligenciaartificial@gmail.com"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.toISO() }}",
+        "timeMax": "={{ $now.plus({ minutes: 30 }).toISO() }}",
+        "options": {
+          "singleEvents": true,
+          "orderBy": "startTime"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "a3FResZHqQ32ptyt",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "id": "88a9467f-4faf-4b87-bbd4-a29ddae0dc52",
+      "name": "Formatear Recordatorio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const items = $input.all();\nif (items.length === 0) { return []; }\nlet msg = '🔔 <b>Recordatorio — próximos 30 min:</b>\\n\\n';\nfor (const item of items) {\n  const ev = item.json;\n  const s = ev.start && ev.start.dateTime ? new Date(ev.start.dateTime).toLocaleTimeString('es-BO', { timeZone: 'America/La_Paz', hour: '2-digit', minute: '2-digit' }) : 'Pronto';\n  msg += '📌 ' + s + '  <b>' + (ev.summary || 'Sin título') + '</b>\\n';\n}\nreturn [{ json: { mensaje: msg } }];"
+      }
+    },
+    {
+      "id": "907302a6-ee31-40e8-ad00-965a419f1a7f",
+      "name": "Recordatorio a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.mensaje }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "ee5e379f-45e8-4bf5-83e6-e4d72b55e91a"
+    }
+  ],
+  "connections": {
+    "Cada 30 Minutos": {
+      "main": [
+        [
+          {
+            "node": "Eventos Proximos 30min",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eventos Proximos 30min": {
+      "main": [
+        [
+          {
+            "node": "Formatear Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatear Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Recordatorio a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cada 30 Minutos": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "f3e33014-915f-423c-8e83-8c821f60910c",
+  "activeVersionId": "f3e33014-915f-423c-8e83-8c821f60910c",
+  "versionCounter": 6,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:07.419Z",
+      "createdAt": "2026-07-03T21:24:07.419Z",
+      "id": "XBK6IoQ3GTHTpDnq",
+      "name": "onia-ops"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-06-09T22:07:13.092Z",
+      "createdAt": "2026-06-09T22:07:13.092Z",
+      "role": "workflow:owner",
+      "workflowId": "uwqJDGwkkWJaFtLU",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

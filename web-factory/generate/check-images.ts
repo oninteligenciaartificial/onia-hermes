@@ -9,12 +9,9 @@ import { parseSlug } from "./generate";
 
 async function collectAssets(dir: string, baseDir = dir): Promise<AssetInfo[]> {
   const assets: AssetInfo[] = [];
-  let entries: Awaited<ReturnType<typeof readdir>>;
-  try {
-    entries = await readdir(dir, { withFileTypes: true });
-  } catch {
-    return assets;
-  }
+  // Inferred, not annotated: `Awaited<ReturnType<typeof readdir>>` resolves to the
+  // Buffer overload of readdir, which does not match { withFileTypes: true }.
+  const entries = await readdir(dir, { withFileTypes: true }).catch(() => []);
 
   for (const entry of entries) {
     const full = path.join(dir, entry.name);

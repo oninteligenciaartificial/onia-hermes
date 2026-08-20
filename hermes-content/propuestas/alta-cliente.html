@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alta de Cliente ONIA — Armemos tu sistema</title>
+<style>
+  :root{
+    --ink:#0d1320;--muted:#5a6675;--soft:#8493a3;--line:#e3e9f1;--line2:#eef2f7;
+    --blue:#1e5bff;--blue-dark:#1239a8;--green:#0f8b62;--amber:#a75b00;
+    --bg:#f5f7fb;--white:#fff;--accent:#1e5bff;
+    --shadow:0 1px 2px rgba(13,19,32,.04),0 8px 24px rgba(13,19,32,.05);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;letter-spacing:-.01em;}
+  .page{max-width:880px;margin:0 auto;padding:48px 28px 96px;}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0f1a 0%,#11203b 55%,#0d3f30 150%);
+    color:#fff;border-radius:22px;padding:52px 46px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .hero::after{content:"";position:absolute;top:-40%;right:-10%;width:380px;height:380px;
+    background:radial-gradient(circle,rgba(30,91,255,.35),transparent 65%);pointer-events:none;}
+  .kicker{position:relative;color:#9fc0ff;font-size:11.5px;font-weight:800;text-transform:uppercase;
+    letter-spacing:.16em;margin-bottom:16px;}
+  .hero h1{position:relative;font-size:clamp(30px,5.4vw,50px);line-height:1.05;margin:0 0 16px;
+    font-weight:800;letter-spacing:-.025em;}
+  .hero p{position:relative;color:#cdd9ec;font-size:17.5px;line-height:1.6;max-width:60ch;margin:0;}
+  .meta{position:relative;margin-top:24px;display:flex;gap:18px;flex-wrap:wrap;
+    color:#7f93b0;font-size:13px;font-weight:600;}
+  .meta b{color:#cdd9ec;}
+
+  /* SECTIONS */
+  section{margin-top:34px;}
+  .shead{display:flex;align-items:center;gap:14px;margin:0 0 16px;}
+  .snum{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;
+    font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(30,91,255,.35);}
+  .shead h2{font-size:21px;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
+  .shead .sdesc{font-size:13px;color:var(--soft);font-weight:500;margin-top:2px;}
+
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;box-shadow:var(--shadow);}
+
+  /* FIELDS */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;}
+  .field{display:flex;flex-direction:column;}
+  .field+.field,.grid+.field,.field+.grid,.grid+.grid{margin-top:18px;}
+  label.lbl{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 7px;line-height:1.3;}
+  label.lbl .req{color:var(--blue);font-weight:800;}
+  label.lbl .opt{color:var(--soft);font-weight:600;font-size:12px;}
+  .hint{display:block;font-size:12px;font-weight:500;color:var(--soft);margin:-3px 0 7px;line-height:1.4;}
+  input,select,textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fafbfd;
+    border:1px solid var(--line);border-radius:11px;padding:12px 14px;line-height:1.4;transition:.14s;letter-spacing:-.01em;}
+  input::placeholder,textarea::placeholder{color:#aab6c4;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:#fff;
+    box-shadow:0 0 0 3.5px rgba(30,91,255,.13);}
+  textarea{min-height:84px;resize:vertical;}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235a6675' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 15px center;padding-right:38px;}
+
+  /* CHIPS */
+  .chips{display:flex;flex-wrap:wrap;gap:9px;}
+  .chip{position:relative;}
+  .chip input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0;}
+  .chip span{display:inline-block;padding:9px 16px;border:1px solid var(--line);border-radius:999px;
+    background:#fafbfd;font-size:14px;color:var(--muted);cursor:pointer;transition:.14s;font-weight:600;}
+  .chip input:checked+span{background:#eef3ff;border-color:var(--accent);color:var(--blue-dark);
+    box-shadow:0 0 0 1px var(--accent) inset;}
+  .chip span:hover{border-color:#c3d0e2;}
+
+  /* REPEATABLE ROWS */
+  .rows{display:flex;flex-direction:column;gap:10px;}
+  .row{display:grid;grid-template-columns:1fr 130px 38px;gap:10px;align-items:center;}
+  .row-faq{display:grid;grid-template-columns:1fr;gap:8px;border:1px dashed var(--line);
+    border-radius:12px;padding:12px;position:relative;}
+  .row-faq .rm{position:absolute;top:8px;right:8px;}
+  .rm{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:#fff;
+    color:var(--soft);font-size:17px;font-weight:700;cursor:pointer;transition:.14s;line-height:1;}
+  .rm:hover{border-color:#e0a0a0;color:#b23c3c;}
+  .add{margin-top:12px;border:1.5px dashed #c3d0e2;border-radius:11px;background:none;color:var(--blue-dark);
+    font-family:inherit;font-size:14px;font-weight:700;padding:11px 16px;cursor:pointer;transition:.14s;width:100%;}
+  .add:hover{border-color:var(--accent);background:#f4f7ff;}
+
+  /* ACTIONS */
+  .err{display:none;align-items:center;gap:8px;background:#fff3e6;color:var(--amber);
+    border:1px solid #f5d9b8;border-radius:12px;padding:13px 16px;font-size:14px;font-weight:700;margin-top:18px;}
+  .actions{position:sticky;bottom:0;z-index:5;margin-top:26px;padding:20px 0 6px;
+    background:linear-gradient(180deg,rgba(245,247,251,0),var(--bg) 38%);display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{flex:1;min-width:210px;border:none;border-radius:13px;padding:17px 22px;font-size:15.5px;
+    font-weight:800;cursor:pointer;text-decoration:none;text-align:center;letter-spacing:-.01em;
+    transition:.16s;box-shadow:var(--shadow);}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{background:#1748d6;}
+  .btn-ghost{background:var(--white);color:var(--blue-dark);border:1.5px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--accent);}
+  .btn:hover{transform:translateY(-2px);}
+
+  .foot{margin-top:34px;border-top:1px solid var(--line);padding-top:20px;}
+  .foot .big{font-size:18px;color:var(--ink);font-weight:800;letter-spacing:-.02em;margin:0 0 6px;}
+  .foot p{font-size:13px;color:var(--soft);margin:0;line-height:1.6;}
+
+  @media(max-width:620px){
+    .page{padding:32px 18px 90px;}
+    .hero{padding:40px 26px;}
+    .card{padding:20px;}
+    .grid{grid-template-columns:1fr;}
+    .row{grid-template-columns:1fr 96px 38px;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Alta de cliente · ONIA Inteligencia Artificial</div>
+    <h1>¡Bienvenido!<br>Armemos tu sistema</h1>
+    <p>Con estos datos construimos tu web y dejamos a tu asistente listo para responder como si trabajara en tu negocio. Llenalo una sola vez, desde el celular si querés — las marcadas con <b style="color:#9fc0ff">*</b> son las clave, el resto es opcional.</p>
+    <div class="meta"><span>⏱ <b>10 min</b></span><span>🔒 <b>Privado</b></span><span>📎 Logo y fotos <b>por WhatsApp</b>, acá no subís archivos</span></div>
+  </div>
+
+  <form id="form">
+
+    <section>
+      <div class="shead"><div class="snum">1</div><div><h2>Tu negocio</h2><div class="sdesc">Los datos base para tu ficha.</div></div></div>
+      <div class="card">
+        <div class="grid">
+          <div class="field"><label class="lbl">Nombre del negocio <span class="req">*</span></label><input name="negocio" required placeholder="ej. Clínica Dental Sonría"></div>
+          <div class="field"><label class="lbl">Rubro <span class="req">*</span></label>
+            <select name="rubro" required>
+              <option value="">Elegí tu rubro</option>
+              <option>Dental / salud</option>
+              <option>Comercio / tienda</option>
+              <option>Importadora</option>
+              <option>Estética / belleza</option>
+              <option>Servicios profesionales</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="field"><label class="lbl">Ciudad <span class="req">*</span></label><input name="ciudad" required placeholder="ej. Santa Cruz"></div>
+          <div class="field"><label class="lbl">NIT <span class="opt">(opcional)</span></label><span class="hint">Si facturás, lo usamos para tus documentos</span><input name="nit" inputmode="numeric"></div>
+        </div>
+        <div class="grid">
+          <div class="field"><label class="lbl">¿Con quién coordinamos? <span class="req">*</span></label><span class="hint">Nombre y apellido</span><input name="contacto_nombre" required></div>
+          <div class="field"><label class="lbl">WhatsApp <span class="req">*</span></label><span class="hint">Con código de país, ej. +591…</span><input name="whatsapp" required inputmode="tel"></div>
+        </div>
+        <div class="field"><label class="lbl">Correo <span class="opt">(opcional)</span></label><input name="email" type="email"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">2</div><div><h2>Para tu asistente</h2><div class="sdesc">Con esto el bot responde como alguien de tu equipo.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">Tus servicios o productos, con precio <span class="req">*</span></label>
+          <span class="hint">Los principales. El precio es referencial — si varía, poné "desde…". Agregá los que necesités.</span>
+          <div class="rows" id="servicios"></div>
+          <button type="button" class="add" onclick="addServicio()">＋ Agregar otro servicio</button>
+        </div>
+        <div class="grid">
+          <div class="field"><label class="lbl">Horarios de atención <span class="req">*</span></label><input name="horarios" required placeholder="ej. Lun–Vie 9:00–19:00, Sáb 9:00–13:00"></div>
+          <div class="field"><label class="lbl">Dirección / ubicación <span class="opt">(opcional)</span></label><span class="hint">Podés pegar el link de Google Maps</span><input name="direccion"></div>
+        </div>
+        <div class="field"><label class="lbl">Las preguntas que más te hacen tus clientes <span class="opt">(opcional, hasta 5)</span></label>
+          <span class="hint">Con tu respuesta tal como la darías vos. Son oro para que el asistente responda bien desde el día uno.</span>
+          <div class="rows" id="faqs"></div>
+          <button type="button" class="add" id="addFaqBtn" onclick="addFaq()">＋ Agregar otra pregunta</button>
+        </div>
+        <div class="field"><label class="lbl">¿Cómo querés que hable tu asistente?</label>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="tono" value="Cercano" checked><span>Cercano, como un amigo</span></label>
+            <label class="chip"><input type="radio" name="tono" value="Formal"><span>Formal, de usted</span></label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">3</div><div><h2>Para tu web</h2><div class="sdesc">Lo que tenés y lo que querés que haga.</div></div></div>
+      <div class="card">
+        <div class="grid">
+          <div class="field"><label class="lbl">¿Tenés logo?</label>
+            <select name="tiene_logo">
+              <option value="">Elegí una opción</option>
+              <option>Sí, en buena calidad</option>
+              <option>Sí, pero solo una imagen chica</option>
+              <option>No tengo, necesito uno</option>
+            </select>
+          </div>
+          <div class="field"><label class="lbl">¿Tenés fotos de tu negocio o productos?</label>
+            <select name="tiene_fotos">
+              <option value="">Elegí una opción</option>
+              <option>Sí, fotos buenas</option>
+              <option>Algunas, del celular</option>
+              <option>No tengo</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label class="lbl">Colores de tu marca <span class="opt">(opcional)</span></label><input name="colores" placeholder="ej. verde y blanco — o los códigos si los sabés"></div>
+        <div class="field"><label class="lbl">Tus redes <span class="opt">(opcional)</span></label><span class="hint">Pegá los links: Instagram, Facebook, TikTok…</span><textarea name="redes"></textarea></div>
+        <div class="field"><label class="lbl">¿Qué querés que haga tu web? <span class="req">*</span></label>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="objetivo_web" value="Captar consultas"><span>Captar consultas</span></label>
+            <label class="chip"><input type="checkbox" name="objetivo_web" value="Mostrar catálogo"><span>Mostrar catálogo</span></label>
+            <label class="chip"><input type="checkbox" name="objetivo_web" value="Reservas / citas"><span>Reservas / citas</span></label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">4</div><div><h2>Cómo operás hoy</h2><div class="sdesc">Para conectar el sistema a tu día a día real.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">¿Cómo cobrás hoy?</label>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="como_cobra" value="QR"><span>QR</span></label>
+            <label class="chip"><input type="checkbox" name="como_cobra" value="Efectivo"><span>Efectivo</span></label>
+            <label class="chip"><input type="checkbox" name="como_cobra" value="Transferencia"><span>Transferencia</span></label>
+            <label class="chip"><input type="checkbox" name="como_cobra" value="Tarjeta"><span>Tarjeta</span></label>
+          </div>
+        </div>
+        <div class="field"><label class="lbl">¿Quién atiende el WhatsApp del negocio hoy? <span class="req">*</span></label><input name="quien_atiende" required placeholder="ej. yo mismo, mi secretaria, nadie fijo…"></div>
+        <div class="field"><label class="lbl">¿Algo más que debamos saber? <span class="opt">(opcional)</span></label><textarea name="extra"></textarea></div>
+      </div>
+    </section>
+
+    <div class="err" id="err">⚠ Faltan campos clave (marcados con *). Revisá arriba.</div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="btnEnviar" onclick="enviar()">✅ Enviar mis datos</button>
+      <button type="button" class="btn btn-ghost" onclick="enviarWhatsApp()">📲 Mejor por WhatsApp</button>
+    </div>
+  </form>
+
+  <div id="ok" style="display:none;text-align:center;padding:40px 20px;">
+    <div style="font-size:46px;margin-bottom:8px;">✅</div>
+    <p class="big" style="font-size:22px;margin:0 0 6px;">¡Listo! Recibimos tus datos.</p>
+    <p style="color:var(--soft);">Con esto armamos tu web y entrenamos a tu asistente. Te escribimos por WhatsApp para pedirte el logo y las fotos.</p>
+  </div>
+
+  <div class="foot">
+    <p class="big">Llenás esto una vez y no te volvemos a marear con preguntas.</p>
+    <p>ONIA — Sistemas, automatización y contenido para negocios · onia.com.bo · +591 75470140</p>
+  </div>
+
+</div>
+
+<script>
+  // ===== Configurá aquí a dónde llegan las respuestas =====
+  const WEBHOOK_URL      = "https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/alta-cliente";
+  const WHATSAPP_DESTINO = "59175470140"; // respaldo, sin + ni espacios
+  const MAX_FAQS         = 5;
+  // ========================================================
+
+  function addServicio(nombre, precio){
+    const div = document.createElement('div');
+    div.className = 'row';
+    div.innerHTML =
+      '<input class="srv-nombre" placeholder="ej. Limpieza dental" value="">' +
+      '<input class="srv-precio" placeholder="Bs" inputmode="decimal" value="">' +
+      '<button type="button" class="rm" title="Quitar" onclick="rmRow(this)">×</button>';
+    if(nombre) div.querySelector('.srv-nombre').value = nombre;
+    if(precio) div.querySelector('.srv-precio').value = precio;
+    document.getElementById('servicios').appendChild(div);
+  }
+  function addFaq(){
+    const cont = document.getElementById('faqs');
+    if(cont.children.length >= MAX_FAQS) return;
+    const div = document.createElement('div');
+    div.className = 'row-faq';
+    div.innerHTML =
+      '<button type="button" class="rm" title="Quitar" onclick="rmRow(this)">×</button>' +
+      '<input class="faq-p" placeholder="Pregunta — ej. ¿Atienden los sábados?">' +
+      '<textarea class="faq-r" placeholder="Tu respuesta, tal como la dirías vos" style="min-height:56px"></textarea>';
+    cont.appendChild(div);
+    if(cont.children.length >= MAX_FAQS) document.getElementById('addFaqBtn').style.display='none';
+  }
+  function rmRow(btn){
+    const cont = btn.closest('.rows');
+    btn.closest('.row, .row-faq').remove();
+    if(cont && cont.id === 'faqs' && cont.children.length < MAX_FAQS)
+      document.getElementById('addFaqBtn').style.display='';
+  }
+  // filas iniciales
+  addServicio(); addServicio(); addServicio();
+  addFaq(); addFaq();
+
+  function recolectar(){
+    const fd = new FormData(document.getElementById('form'));
+    const val = (k)=> (fd.get(k)||'').trim();
+    const servicios = [...document.querySelectorAll('#servicios .row')]
+      .map(r=>({ nombre:r.querySelector('.srv-nombre').value.trim(), precio:r.querySelector('.srv-precio').value.trim() }))
+      .filter(s=>s.nombre);
+    const faqs = [...document.querySelectorAll('#faqs .row-faq')]
+      .map(r=>({ pregunta:r.querySelector('.faq-p').value.trim(), respuesta:r.querySelector('.faq-r').value.trim() }))
+      .filter(f=>f.pregunta);
+    return {
+      negocio:val('negocio'), rubro:val('rubro'), nit:val('nit'), ciudad:val('ciudad'),
+      contacto_nombre:val('contacto_nombre'), whatsapp:val('whatsapp'), email:val('email'),
+      servicios, horarios:val('horarios'), direccion:val('direccion'), faqs,
+      tono:val('tono'),
+      tiene_logo:val('tiene_logo'), tiene_fotos:val('tiene_fotos'), colores:val('colores'),
+      redes:val('redes'), objetivo_web:fd.getAll('objetivo_web'),
+      como_cobra:fd.getAll('como_cobra'), quien_atiende:val('quien_atiende'), extra:val('extra')
+    };
+  }
+  function validar(d){
+    const req = ['negocio','rubro','ciudad','contacto_nombre','whatsapp','horarios','quien_atiende'];
+    if(req.some(k=>!d[k])) return false;
+    return d.servicios.length>0 && d.objetivo_web.length>0;
+  }
+  function armarTexto(d){
+    let t = "ALTA DE CLIENTE — ONIA\n\n";
+    t += `• Negocio: ${d.negocio} (${d.rubro})\n• Ciudad: ${d.ciudad}\n`;
+    if(d.nit) t += `• NIT: ${d.nit}\n`;
+    t += `• Contacto: ${d.contacto_nombre} — ${d.whatsapp}\n`;
+    if(d.email) t += `• Correo: ${d.email}\n`;
+    t += `\nSERVICIOS:\n` + d.servicios.map(s=>`• ${s.nombre}${s.precio?` — Bs ${s.precio}`:''}`).join('\n') + '\n';
+    t += `\n• Horarios: ${d.horarios}\n`;
+    if(d.direccion) t += `• Dirección: ${d.direccion}\n`;
+    if(d.faqs.length) t += `\nPREGUNTAS FRECUENTES:\n` + d.faqs.map(f=>`• ${f.pregunta}\n  → ${f.respuesta}`).join('\n') + '\n';
+    t += `• Tono del asistente: ${d.tono}\n`;
+    if(d.tiene_logo) t += `• Logo: ${d.tiene_logo}\n`;
+    if(d.tiene_fotos) t += `• Fotos: ${d.tiene_fotos}\n`;
+    if(d.colores) t += `• Colores: ${d.colores}\n`;
+    if(d.redes) t += `• Redes: ${d.redes}\n`;
+    t += `• La web debe: ${d.objetivo_web.join(', ')}\n`;
+    if(d.como_cobra.length) t += `• Cobra por: ${d.como_cobra.join(', ')}\n`;
+    t += `• Atiende WhatsApp: ${d.quien_atiende}\n`;
+    if(d.extra) t += `• Extra: ${d.extra}\n`;
+    return t;
+  }
+  function mostrarOk(){
+    document.getElementById('form').style.display='none';
+    document.getElementById('ok').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  async function enviar(){
+    const d = recolectar();
+    const err = document.getElementById('err');
+    if(!validar(d)){ err.style.display='flex'; window.scrollTo({top:0,behavior:'smooth'}); return; }
+    err.style.display='none';
+    const btn = document.getElementById('btnEnviar');
+    btn.disabled = true; btn.textContent = 'Enviando…';
+    try{
+      const r = await fetch(WEBHOOK_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(d)
+      });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      mostrarOk();
+    }catch(e){
+      btn.disabled=false; btn.textContent='✅ Enviar mis datos';
+      err.textContent='No se pudo enviar. Probá de nuevo o usá el botón de WhatsApp.';
+      err.style.display='flex';
+    }
+  }
+
+  function enviarWhatsApp(){
+    const d = recolectar();
+    const err = document.getElementById('err');
+    if(!validar(d)){ err.style.display='flex'; window.scrollTo({top:0,behavior:'smooth'}); return; }
+    err.style.display='none';
+    window.open(`https://wa.me/${WHATSAPP_DESTINO}?text=${encodeURIComponent(armarTexto(d))}`,'_blank');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+{
+  "updatedAt": "2026-07-22T22:34:08.841Z",
+  "createdAt": "2026-07-22T22:34:08.841Z",
+  "id": "Su4vVZCB9rtJ3gAy",
+  "name": "ONIA - Agente CEO Mensual",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "38bcca1e-c63e-47d5-9996-5ef7f6596a4f",
+      "name": "Dia 1, 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 1 * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8faf5006-dc6c-4e65-90ff-f46b5eaf443d",
+      "name": "Correr CEO Mensual (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/ceo-monthly-agent-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "20c1a835-a29d-4070-9a46-cf0a6106bd83",
+      "name": "Extraer informe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const NL = String.fromCharCode(10);\nconst raw = ($input.first().json.stdout || \"\").trim();\nlet s;\ntry { s = JSON.parse(raw.split(NL).pop()); } catch (e) { s = { text: \"Agente ONIA: no pude leer la salida.\", notify: true }; }\nreturn [{ json: { text: String(s.text || \"(sin contenido)\").slice(0, 3900), notify: s.notify === true } }];"
+      }
+    },
+    {
+      "id": "f29535c0-62de-4a7b-9f2e-a273c91cd8c1",
+      "name": "Hay que avisar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "notify",
+              "leftValue": "={{ $json.notify ? 'yes' : 'no' }}",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "ddda6311-4352-473c-a4a3-bbe4f221108d",
+      "name": "Enviar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "514d884b-800d-43c7-a422-858c7e20edc0"
+    }
+  ],
+  "connections": {
+    "Dia 1, 08:00": {
+      "main": [
+        [
+          {
+            "node": "Correr CEO Mensual (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correr CEO Mensual (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Extraer informe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer informe": {
+      "main": [
+        [
+          {
+            "node": "Hay que avisar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay que avisar?": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Dia 1, 08:00": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "8a58d7cf-85c1-4ca5-b64d-61c0e051655e",
+  "activeVersionId": "8a58d7cf-85c1-4ca5-b64d-61c0e051655e",
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T22:34:08.845Z",
+      "createdAt": "2026-07-22T22:34:08.845Z",
+      "role": "workflow:owner",
+      "workflowId": "Su4vVZCB9rtJ3gAy",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "CEO Mensual v1",
+    "description": "Cron dia 1 de cada mes 08:00 La Paz: corre ceo-monthly-agent.mjs por SSH (agrega el mes de onia_center + LiteLLM redacta informe estrategico corto) y lo manda a Sergio por Telegram. READ-ONLY."
+  }
+}

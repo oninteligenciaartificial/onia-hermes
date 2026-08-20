@@ -1,6 +1,28 @@
 # Web Factory Design Stack
 
-Last audit: 2026-06-16
+Last audit: 2026-08-16
+
+## Mapa del conocimiento de diseño — EMPEZAR ACÁ (orden de carga)
+
+1. **Skills** (cargar ANTES de diseñar, en este orden): `impeccable` (craft y
+   anti-patterns) · `ui-ux-pro-max` (estructura, a11y, interacción) ·
+   `~/.claude/rules/web/design-quality.md` (≥4 Required Qualities, banned
+   patterns) · para gráficos/KPIs: `dataviz` · para motion: skills gsap-* y
+   `motion-doctrine`. El resto de las skills de abajo se elige con
+   `web-factory-design-director`, no se cargan todas.
+2. **Patrones destilados** (la verdad operativa, citar por sección):
+   `WEB_FACTORY_PATTERN_BANK_2026.md` (composición: landing · dashboard) ·
+   `docs/MOTION_PATTERN_BANK_2026.md` (movimiento).
+3. **Aprendizaje crudo**: `docs/DESIGN_LEARNED_2026.md` (qué funciona/qué no, por
+   cosecha: 15 fuentes 2026-08-16 + galerías) · `data/references/design-sources/*.md`
+   (ficha por fuente) · `data/references/reels/models/` (learned models de reels).
+4. **Encarnación**: `packages/tokens` → `packages/blocks` (22) → `packages/templates`
+   (dashboard.ts, landing-realestate.ts). Un patrón "aprendido" que no llegó a
+   packages/ todavía no es de la factory.
+
+**Regla de orden**: el aprendizaje nuevo entra por (3) con fuente citada; se destila a
+(2) cuando se repite o se usa; se encarna en (4) cuando una superficie real lo pide.
+Nunca al revés, nunca doc suelto fuera de esta cadena.
 
 This file records the design sources that can inform generated client websites. The global clone cache lives at:
 

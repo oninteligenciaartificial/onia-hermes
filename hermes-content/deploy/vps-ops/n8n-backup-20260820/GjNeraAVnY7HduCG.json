@@ -1,0 +1,222 @@
+{
+  "updatedAt": "2026-07-22T22:34:30.360Z",
+  "createdAt": "2026-07-22T22:34:30.360Z",
+  "id": "GjNeraAVnY7HduCG",
+  "name": "ONIA - Agente Integraciones self-hosted",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "681199c9-67b4-4d07-a830-1bb8eb472b61",
+      "name": "Cada 6h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 */6 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4fca6c12-9e34-4840-a3a3-013273b0267c",
+      "name": "Correr chequeo (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/selfhosted-health-agent-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "4a074d35-94fb-4034-b7db-888fbd50b261",
+      "name": "Extraer estado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const NL = String.fromCharCode(10);\nconst raw = ($input.first().json.stdout || \"\").trim();\nlet s;\ntry { s = JSON.parse(raw.split(NL).pop()); } catch (e) { s = { text: \"Agente ONIA: no pude leer la salida.\", notify: true }; }\nreturn [{ json: { text: String(s.text || \"(sin contenido)\").slice(0, 3900), notify: s.notify === true } }];"
+      }
+    },
+    {
+      "id": "22b74027-49c3-4d67-b365-1ee928dfc778",
+      "name": "Algo caido?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "notify",
+              "leftValue": "={{ $json.notify ? 'yes' : 'no' }}",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "9dbb6a7e-7139-4ed4-ae0e-354471d61b9b",
+      "name": "Enviar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "4355cbd2-801e-4100-9581-47c005b44116"
+    }
+  ],
+  "connections": {
+    "Cada 6h": {
+      "main": [
+        [
+          {
+            "node": "Correr chequeo (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correr chequeo (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Extraer estado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer estado": {
+      "main": [
+        [
+          {
+            "node": "Algo caido?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Algo caido?": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cada 6h": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "f9592a67-9708-4824-a587-005627647f71",
+  "activeVersionId": "f9592a67-9708-4824-a587-005627647f71",
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T22:34:30.364Z",
+      "createdAt": "2026-07-22T22:34:30.364Z",
+      "role": "workflow:owner",
+      "workflowId": "GjNeraAVnY7HduCG",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Integraciones self-hosted v1",
+    "description": "Cron cada 6h La Paz: corre selfhosted-health-agent.mjs por SSH (chequea Speaches/LiteLLM/Supabase, actualiza integration_connectors del panel). Avisa a Sergio por Telegram SOLO si algo self-hosted esta caido."
+  }
+}

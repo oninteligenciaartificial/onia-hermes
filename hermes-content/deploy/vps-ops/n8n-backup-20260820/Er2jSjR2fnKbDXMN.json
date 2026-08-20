@@ -1,0 +1,117 @@
+{
+  "updatedAt": "2026-07-22T18:29:55.195Z",
+  "createdAt": "2026-07-22T18:29:55.195Z",
+  "id": "Er2jSjR2fnKbDXMN",
+  "name": "ONIA - Sync estado agentes (24/7 real)",
+  "description": "Cron cada hora: corre operating-agents-sync.mjs por SSH. Restaura en onia_center.operating_agents el contrato de estado vivo (status=ready + raw.live + raw.cadence_label + last_run) que los runtimes de agentes (Contenido/Finanzas) borran al reescribir raw",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "19e2939f-1b85-448e-b729-4bcb38208f1c",
+      "name": "Cada hora :05",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "5 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c17dd0a0-e241-4a29-a5d6-9e753cfead18",
+      "name": "Sync estado agentes (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/operating-agents-sync-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cada hora :05": {
+      "main": [
+        [
+          {
+            "node": "Sync estado agentes (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cada hora :05": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "6c8ce014-2b2a-4ab0-b3a2-b74ef2eeb2ef",
+  "activeVersionId": "6c8ce014-2b2a-4ab0-b3a2-b74ef2eeb2ef",
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T18:29:55.198Z",
+      "createdAt": "2026-07-22T18:29:55.198Z",
+      "role": "workflow:owner",
+      "workflowId": "Er2jSjR2fnKbDXMN",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Sync agentes v1",
+    "description": "Created with 2 nodes: Cada hora :05, Sync estado agentes (VPS)"
+  }
+}

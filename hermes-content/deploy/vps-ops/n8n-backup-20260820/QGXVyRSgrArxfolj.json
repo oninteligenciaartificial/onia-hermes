@@ -1,0 +1,222 @@
+{
+  "updatedAt": "2026-07-22T23:05:17.435Z",
+  "createdAt": "2026-07-22T23:05:17.435Z",
+  "id": "QGXVyRSgrArxfolj",
+  "name": "ONIA - Radar de Novedades IA",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "2e053392-9b5c-4bd7-ad5f-609f63110b90",
+      "name": "Cada 2h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 */2 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3a19a77e-a696-4588-b7cd-1823517b8e5b",
+      "name": "Correr Radar IA (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "bash /opt/onia/ai-news-radar-run.sh",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      }
+    },
+    {
+      "id": "cd7be66f-b6dd-4b6e-83ea-8fa63be87db6",
+      "name": "Extraer novedades",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const NL = String.fromCharCode(10);\nconst raw = ($input.first().json.stdout || \"\").trim();\nlet s;\ntry { s = JSON.parse(raw.split(NL).pop()); } catch (e) { s = { text: \"Radar IA: no pude leer la salida.\", notify: true }; }\nreturn [{ json: { text: String(s.text || \"(sin contenido)\").slice(0, 3900), notify: s.notify === true } }];"
+      }
+    },
+    {
+      "id": "fd9d7469-fd24-49bf-982e-ebb1b445a8fe",
+      "name": "Hay lanzamiento grande?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "notify",
+              "leftValue": "={{ $json.notify ? 'yes' : 'no' }}",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "fcfc8a02-c68e-437a-a2b7-862ed05f0536",
+      "name": "Enviar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "a7f577fe-9f52-4231-aa6c-389468ccc7b3"
+    }
+  ],
+  "connections": {
+    "Cada 2h": {
+      "main": [
+        [
+          {
+            "node": "Correr Radar IA (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correr Radar IA (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Extraer novedades",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer novedades": {
+      "main": [
+        [
+          {
+            "node": "Hay lanzamiento grande?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay lanzamiento grande?": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cada 2h": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "1a118463-54f4-4cc7-930a-85a98aba78cb",
+  "activeVersionId": "1a118463-54f4-4cc7-930a-85a98aba78cb",
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-22T23:05:17.438Z",
+      "createdAt": "2026-07-22T23:05:17.438Z",
+      "role": "workflow:owner",
+      "workflowId": "QGXVyRSgrArxfolj",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Radar novedades IA v1",
+    "description": "Cron cada 2h La Paz: corre ai-news-radar.mjs por SSH (lee feeds RSS de IA, deduplica, clasifica con LiteLLM, guarda en onia_center.ai_radar_items para el panel). Avisa a Sergio por Telegram SOLO los lanzamientos grandes (major), con por-que-importa + gancho de contenido."
+  }
+}

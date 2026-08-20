@@ -45,7 +45,18 @@ descartamos: Oswald (sobreusado), Anton (un solo peso), Bebas Neue (solo mayúsc
 
 ## 2. El teardown de Fanvue — qué usan realmente
 
-No usan una tipografía: usan **siete**, con roles separados.
+> ⚠️ **CORRECCIÓN 2026-08-01 — este teardown quedó VIEJO.** Medido en vivo con el
+> CSS computado de fanvue.com: hoy usan **UNA sola familia para todo** (h1, cuerpo,
+> botones): `"Medium AG Next"` = **Akzidenz-Grotesk Next Medium, ANCHO NORMAL** —
+> weight 500, line-height 1.0 (igual al font-size), letter-spacing −0.2px,
+> minúsculas con punto final. **NO es condensada ni Extra Bold**: esa lectura era
+> de su CSS viejo de Webflow (las 7 familias de abajo siguen declaradas pero
+> `unloaded`). El equivalente OFL del look actual: **Archivo a wdth 100,
+> weight 500-600, lh ~1.0** — no la clase `.display` condensada (esa queda como
+> recurso propio de Onia, pero atribuírsela a Fanvue es incorrecto; Sergio la
+> rechazó al verla: "la tipografía de Fanvue no es esa").
+
+Lo que sigue es el teardown del CSS viejo (Webflow), útil como historia:
 
 | Rol | Fuente | Selectores reales |
 |---|---|---|

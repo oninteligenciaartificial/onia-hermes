@@ -1,0 +1,144 @@
+{
+  "updatedAt": "2026-08-07T15:10:59.697Z",
+  "createdAt": "2026-07-04T15:21:33.508Z",
+  "id": "XxiHPNgpsL5FsHct",
+  "name": "DentalGest - Email Intake (ONIA Core)",
+  "description": "Correo → pendiente con dueño. Gmail trigger → payload intake normalizado → POST /api/onia-core/intake (dedupe + ruteo). Piloto: org-demo-001. Falta credencial Header Auth \"DentalGest Intake Secret\" (x-intake-secret).",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "id": "905716c8-3094-4c42-acac-60a8655daa42",
+      "name": "Buzon Gmail",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dxyxCorebAZWPl6f",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Mapea correo -> intake normalizado (contrato ONIA Core v0.5.0).\n// ORG_BY_MAILBOX: buzon destino -> organizationId de DentalGest.\n// PILOTO: org-demo-001 (Clinica Dental Demo). Agregar clinicas reales aqui.\nconst ORG_BY_MAILBOX = {\n  'oninteligenciaartificial@gmail.com': 'org-demo-001',\n};\nconst DEFAULT_ORG_ID = 'org-demo-001';\n\nconst results = [];\nfor (const item of $input.all()) {\n  const email = item.json;\n  // Gmail trigger (simple) y formato completo: extraccion defensiva\n  const toRaw = String(email.to?.value?.[0]?.address ?? email.To ?? email.to ?? '').toLowerCase();\n  const fromAddress = String(email.from?.value?.[0]?.address ?? email.From ?? email.from ?? '').toLowerCase().replace(/.*<([^>]+)>.*/, '$1').trim();\n  const fromName = String(email.from?.value?.[0]?.name ?? '').trim() || undefined;\n  const subject = String(email.subject ?? email.Subject ?? '(sin asunto)');\n  const bodyText = String(email.textPlain ?? email.snippet ?? email.text ?? '').slice(0, 1500);\n\n  const mailboxKey = Object.keys(ORG_BY_MAILBOX).find((mb) => toRaw.includes(mb));\n  const organizationId = mailboxKey ? ORG_BY_MAILBOX[mailboxKey] : DEFAULT_ORG_ID;\n\n  results.push({\n    json: {\n      organizationId,\n      channel: 'email_shared',\n      message: (subject + '\\n\\n' + bodyText).trim(),\n      contact: { name: fromName, email: fromAddress || undefined },\n      receivedAt: email.date ? new Date(email.date).toISOString() : new Date().toISOString(),\n    },\n  });\n}\nreturn results;"
+      },
+      "id": "4a9088b9-e6d2-4d50-90c8-4be57414a56b",
+      "name": "Correo a payload intake",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.dentalgest.app/api/onia-core/intake",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "933be86f-176f-41dc-baa9-59cd907450e2",
+      "name": "POST intake DentalGest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        448,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "M2RTTEXWWdRlNKCo",
+          "name": "Header Auth account 3"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Buzon Gmail": {
+      "main": [
+        [
+          {
+            "node": "Correo a payload intake",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correo a payload intake": {
+      "main": [
+        [
+          {
+            "node": "POST intake DentalGest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "a072ef9c-04ef-4734-9215-38c63450e2ae",
+  "activeVersionId": null,
+  "versionCounter": 5,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-04T15:21:33.512Z",
+      "createdAt": "2026-07-04T15:21:33.512Z",
+      "role": "workflow:owner",
+      "workflowId": "XxiHPNgpsL5FsHct",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Recable a credencial Gmail business nueva",
+    "description": "Updated nodes: Buzon Gmail"
+  }
+}

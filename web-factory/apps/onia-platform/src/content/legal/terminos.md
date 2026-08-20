@@ -1,18 +1,15 @@
 ---
 title: "Términos y Condiciones"
 slug: "terminos"
-status: "borrador"
-version: "0.2"
-updatedAt: "2026-07-25"
+status: "vigente"
+version: "1.0"
+updatedAt: "2026-08-15"
 ---
-
-> **BORRADOR — pendiente de revisión por abogado matriculado en Bolivia. No constituye asesoría legal.**
 
 # Términos y Condiciones de Uso — Plataforma Onia
 
 Estos Términos regulan el uso de la plataforma de software de gestión **Onia**
-(operada por **OniaAgency** [REVISAR ABOGADO: confirmar razón social exacta, NIT y
-domicilio legal], Santa Cruz de la Sierra, Estado Plurinacional de Bolivia).
+(operada por **OniaAgency**, NIT 5371375010, Santa Cruz de la Sierra, Estado Plurinacional de Bolivia).
 Documento complementario: la [Política de Privacidad](/privacidad).
 
 Al crear una cuenta, contratar un plan o usar la plataforma, aceptás estos
@@ -53,8 +50,7 @@ correspondiente, y a que vos cumplás tus requisitos como contribuyente (NIT
 activo, modalidad habilitada, credenciales vigentes). Mientras esa homologación
 no esté vigente, la plataforma solo **prepara** la información de tus ventas —
 no emite facturas en tu nombre. El portal web gratuito del SIN está siempre
-disponible para emitir tus facturas directamente. [REVISAR ABOGADO: estado de
-homologación al momento de publicar.]
+disponible para emitir tus facturas directamente.
 
 ## 2. Tu cuenta y tu responsabilidad
 
@@ -74,16 +70,19 @@ incumplimiento grave de estos Términos, avisándote salvo urgencia justificada.
 (Bs)**, según el plan contratado en la propuesta u orden de servicio vigente. Los
 planes y precios publicados pueden ser precios de lanzamiento.
 
-3.2. **Cobro.** El servicio se cobra por **trimestre adelantado**, mediante
-**pago QR** u otro medio que Onia habilite y comunique. El acceso al período se
-habilita una vez confirmado el pago. Onia emite la factura que corresponda
-conforme a la normativa boliviana aplicable. [REVISAR ABOGADO: texto exacto de
-facturación según modalidad vigente.]
+3.2. **Cobro.** El servicio se cobra **por adelantado**, en el ciclo que elijas
+entre los que ofrece tu plan: **semanal, mensual o anual** (el ciclo semanal no
+está disponible en todos los planes). El medio es **pago QR** u otro que Onia
+habilite y comunique. El acceso al período se habilita una vez confirmado el
+pago. Onia emite el documento que corresponda conforme a la normativa boliviana
+aplicable.
 
-3.3. **Renovación.** Al vencer cada trimestre, el servicio se renueva por un
+3.3. **Renovación.** Al vencer cada período, el servicio se renueva por un
 período igual al precio vigente. Onia envía el aviso de renovación con
 anticipación razonable. Podés no renovar avisando antes del inicio del nuevo
-trimestre; **no hay penalidad por no renovar**.
+período; **no hay penalidad por no renovar**. No hay contrato de permanencia:
+lo pagado cubre el período en curso y no se reembolsa de forma anticipada,
+salvo el caso de discontinuación del servicio previsto en §10.2.
 
 3.4. **Mora y suspensión — nunca borrado inmediato.** Si el pago de renovación no
 se confirma al vencimiento:
@@ -95,8 +94,6 @@ se confirma al vencimiento:
   eliminar cualquier dato aplican el derecho de exportación (§4.2) y los plazos
   de retención de la Política de Privacidad.
 
-[REVISAR ABOGADO: plazos exactos de gracia, suspensión y terminación por mora.]
-
 3.5. **Ajuste de precios.** Por la volatilidad cambiaria e inflacionaria, los
 precios en Bs no son fijos de por vida — en especial los precios de
 lanzamiento. Onia puede ajustar los precios **como máximo una vez por
@@ -106,8 +103,7 @@ por el **Banco Central de Bolivia (BCB)**, y (b) el **Índice de Precios al
 Consumidor** publicado por el **Instituto Nacional de Estadística (INE)**. Todo
 ajuste se avisa con al menos **30 días** de anticipación y rige recién desde la
 **siguiente renovación** (nunca dentro de un período ya pagado). Si no aceptás
-el nuevo precio, podés no renovar sin penalidad. [REVISAR ABOGADO: mecánica y
-exigibilidad de la cláusula de ajuste indexada.]
+el nuevo precio, podés no renovar sin penalidad.
 
 3.6. **Costos de terceros excluidos.** Salvo pacto expreso, no están incluidos en
 el precio: dominio y hosting web del cliente, comisiones de pasarelas de pago,
@@ -193,9 +189,6 @@ contrato, sin perjuicio de las acciones legales que correspondan.
 
 ## 9. Limitación de responsabilidad
 
-[REVISAR ABOGADO: validar alcance y tope de esta cláusula frente a la normativa
-boliviana de protección al consumidor.]
-
 9.1. El servicio se presta "tal cual" y "según disponibilidad", con el alcance de
 los §1 y §7. En la máxima medida permitida por la ley boliviana:
 
@@ -235,8 +228,7 @@ de precio se rigen por el §3.5.
 
 Estos Términos se rigen por las leyes del **Estado Plurinacional de Bolivia**.
 Toda controversia que no se resuelva de forma amistosa se someterá a los jueces y
-tribunales competentes de la ciudad de Santa Cruz de la Sierra. [REVISAR
-ABOGADO: evaluar cláusula de conciliación/arbitraje como alternativa.]
+tribunales competentes de la ciudad de Santa Cruz de la Sierra.
 
 ## 13. Disposiciones finales
 
@@ -249,12 +241,19 @@ ABOGADO: evaluar cláusula de conciliación/arbitraje como alternativa.]
 
 ## 14. Contacto
 
-[REVISAR ABOGADO / COMPLETAR: correo oficial y teléfono/WhatsApp de contacto.]
+Correo: **business@onia.com.bo** · WhatsApp: **+591 75414930**.
 Santa Cruz de la Sierra, Estado Plurinacional de Bolivia.
 
 ---
 
-> **BORRADOR — pendiente de revisión por abogado matriculado en Bolivia. No
-> constituye asesoría legal.** Las referencias normativas se hacen de forma
-> general ("normativa boliviana aplicable"); el abogado debe identificar y citar
-> las normas exactas antes de publicar.
+## Marco normativo
+
+Estos Términos se rigen por la legislación del Estado Plurinacional de Bolivia:
+el **Código Civil** en materia de contratos, la **Ley N.º 164** de
+Telecomunicaciones y TIC y su reglamento **D.S. N.º 1793** en lo relativo a
+servicios digitales y tratamiento de datos, y la **Constitución Política del
+Estado** (arts. 21 y 130–131) en materia de privacidad. Bolivia no cuenta hoy
+con una ley integral de protección de datos personales; si una entra en
+vigencia, estos Términos se adecuarán y el cambio se anunciará como indica la
+sección de modificaciones. Toda controversia se somete a los tribunales de
+Santa Cruz de la Sierra, Bolivia.

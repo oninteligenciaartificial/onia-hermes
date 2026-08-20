@@ -16,15 +16,16 @@ import styles from "./proof.module.css";
 /**
  * Seccion "La prueba" — va TEMPRANO, antes de cualquier promesa larga.
  *
- * Onia tiene cero clientes: no hay testimonios ni logos, y esta prohibido
- * inventarlos. Entonces la prueba son dos cosas comprobables:
+ * Prohibido inventar prueba social (clientes, logos, testimonios, metricas).
+ * Y prohibido tambien lo contrario: PROCLAMAR la debilidad. La seccion no
+ * anuncia que no hay clientes — muestra las dos cosas comprobables:
  *
  *  1. El mapa de la categoria con nombres y precios PUBLICOS de la competencia.
  *     El visitante puede abrir cada web y verificarlo. Ahi se ve el hueco: los
  *     que facturan no agendan, los que agendan no facturan en Bolivia.
  *  2. Nuestro propio renglon con la factura fiscal marcada EN TRAMITE, y un
- *     ledger de lo que todavia no hace. Decirlo primero es lo que hace creible
- *     todo lo demas.
+ *     ledger de lo que el sistema todavia no hace. Decirlo primero es lo que
+ *     hace creible todo lo demas: es un estado del producto, no una disculpa.
  *
  * Forma: un ledger de filas, no una grilla de cards. Cada fila es un
  * contendiente; los tres ejes se leen como una fila de senales encendidas o
@@ -88,15 +89,18 @@ export function Proof() {
         <div className={styles.head}>
           <Reveal>
             <h2 className={`h2 ${styles.title}`}>
-              No tenemos clientes que te recomienden. Tenemos esto.
+              No te pedimos que nos creas. Abrí las webs y comprobalo.
             </h2>
           </Reveal>
           <Reveal delay={0.08} className={styles.headAside}>
             <p className={styles.headLead}>
-              Es la primera pregunta que nos hacen y la contestamos derecho:{" "}
-              <strong>Onia está arrancando y todavía no hay clientes</strong>. En
-              vez de inventar testimonios, te dejamos lo que sí podés
-              comprobar vos mismo — abrí cualquiera de estas webs y mirá.
+              Acá no hay testimonios: hay{" "}
+              <strong>
+                precios y capacidades publicados por cada proveedor
+              </strong>
+              , con nombre y fecha de consulta. Y si querés probar el nuestro
+              en vez de leerlo, son 14 días con el sistema completo, sin
+              tarjeta y sin permanencia.
             </p>
           </Reveal>
         </div>

@@ -1,0 +1,2118 @@
+{
+  "url": "https://ui.shadcn.com/",
+  "slug": "ui-shadcn-com",
+  "medidoEl": "2026-08-19T03:01:33.795Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 1019,
+        "alturaPantallas": 1.2,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "group/layout relative z-10 flex min-h-svh flex-col bg-background has-d",
+          "altoPx": 1019,
+          "altoPantallas": 1.2,
+          "fondo": "lab(100 0 0)",
+          "titular": "The Foundation for your Design System",
+          "cta": "Toggle MenuMenu",
+          "imagenes": 57
+        },
+        {
+          "orden": 1,
+          "etiqueta": "main",
+          "clase": "flex min-h-0 flex-1 flex-col",
+          "altoPx": 907,
+          "altoPantallas": 1.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The Foundation for your Design System",
+          "cta": "New Questionnaire component",
+          "imagenes": 52
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "flex flex-1 flex-col",
+          "altoPx": 907,
+          "altoPantallas": 1.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The Foundation for your Design System",
+          "cta": "New Questionnaire component",
+          "imagenes": 52
+        }
+      ],
+      "encabezados": {
+        "total": 1,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "The Foundation for your Design System"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 57
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 39
+          },
+          {
+            "valor": "14px / lh 1.38 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 0.6px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "12px / lh 2.00 / ls normal / w 500",
+            "veces": 3
+          },
+          {
+            "valor": "30px / lh 1.20 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.56 / ls -0.45px / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.63 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.00 / ls normal / w 500",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Geist",
+            "veces": 194
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(2.75381 0 0)",
+            "veces": 79
+          },
+          {
+            "valor": "lab(48.496 0 0)",
+            "veces": 66
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 21
+          },
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 15
+          },
+          {
+            "valor": "lab(7.78201 -0.0000149012 0)",
+            "veces": 5
+          },
+          {
+            "valor": "lab(0 0 0)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.145 -0.00000143796 0.00000340492 / 0.7)",
+            "veces": 4
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "lab(96.52 -0.0000298023 0.0000119209)",
+            "veces": 244
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.15)",
+            "veces": 91
+          },
+          {
+            "valor": "lab(100 0 0)",
+            "veces": 54
+          },
+          {
+            "valor": "lab(48.496 0 0)",
+            "veces": 25
+          },
+          {
+            "valor": "lab(7.78201 -0.0000149012 0)",
+            "veces": 19
+          },
+          {
+            "valor": "oklab(0.969998 -0.00000959635 0.0000227094 / 0.5)",
+            "veces": 13
+          },
+          {
+            "valor": "oklab(0.921998 -0.00000908971 0.0000215769 / 0.5)",
+            "veces": 10
+          },
+          {
+            "valor": "lab(0 0 0)",
+            "veces": 7
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 189
+          },
+          {
+            "valor": "20px",
+            "veces": 165
+          },
+          {
+            "valor": "12px",
+            "veces": 100
+          },
+          {
+            "valor": "16px",
+            "veces": 69
+          },
+          {
+            "valor": "6px",
+            "veces": 60
+          },
+          {
+            "valor": "10px",
+            "veces": 45
+          },
+          {
+            "valor": "4px",
+            "veces": 45
+          },
+          {
+            "valor": "14px",
+            "veces": 26
+          },
+          {
+            "valor": "-1px",
+            "veces": 18
+          },
+          {
+            "valor": "24px",
+            "veces": 14
+          },
+          {
+            "valor": "32px",
+            "veces": 14
+          },
+          {
+            "valor": "2px",
+            "veces": 9
+          },
+          {
+            "valor": "48px",
+            "veces": 4
+          },
+          {
+            "valor": "1px",
+            "veces": 4
+          },
+          {
+            "valor": "-4px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "8px",
+            "veces": 194
+          },
+          {
+            "valor": "10px",
+            "veces": 63
+          },
+          {
+            "valor": "18px",
+            "veces": 56
+          },
+          {
+            "valor": "24px",
+            "veces": 38
+          },
+          {
+            "valor": "24px 24px 0px 0px",
+            "veces": 33
+          },
+          {
+            "valor": "6px 6px 0px 0px",
+            "veces": 32
+          },
+          {
+            "valor": "14px",
+            "veces": 26
+          },
+          {
+            "valor": "19.6px",
+            "veces": 24
+          },
+          {
+            "valor": "0px 0px 24px 24px",
+            "veces": 22
+          },
+          {
+            "valor": "3.35544e+07px",
+            "veces": 21
+          }
+        ],
+        "radiosDistintos": 19,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 50
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 3
+          },
+          {
+            "valor": "50",
+            "veces": 2
+          },
+          {
+            "valor": "1",
+            "veces": 1
+          },
+          {
+            "valor": "20",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 46
+          },
+          {
+            "valor": "width 0.2s cubic-bezier(0.4, 0, 0.2, 1), height 0.2s cubic-bezier(0.4,",
+            "veces": 20
+          },
+          {
+            "valor": "color 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.1s cubic-b",
+            "veces": 13
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(",
+            "veces": 11
+          },
+          {
+            "valor": "box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "margin 0.2s linear, opacity 0.2s linear",
+            "veces": 4
+          },
+          {
+            "valor": "0.1s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 2
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezie",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 10,
+        "hojasLeidas": 4,
+        "unidades": {
+          "em": 70,
+          "rem": 322,
+          "px": 1157,
+          "clamp": 3,
+          "vw": 6
+        },
+        "keyframesDeclarados": 12,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 18
+          },
+          {
+            "px": 1024,
+            "veces": 9
+          },
+          {
+            "px": 1600,
+            "veces": 8
+          },
+          {
+            "px": 640,
+            "veces": 4
+          },
+          {
+            "px": 1280,
+            "veces": 3
+          },
+          {
+            "px": 1536,
+            "veces": 3
+          },
+          {
+            "px": 2000,
+            "veces": 3
+          },
+          {
+            "px": 448,
+            "veces": 1
+          },
+          {
+            "px": 480,
+            "veces": 1
+          },
+          {
+            "px": 560,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "sticky top-0 z-50 w-full bg-background",
+            "posicion": "sticky",
+            "alto": 56,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "span",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "span",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "span",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [],
+            "boton": ""
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 60,
+        "ctasTop": [
+          {
+            "texto": "Home",
+            "veces": 2
+          },
+          {
+            "texto": "Docs",
+            "veces": 2
+          },
+          {
+            "texto": "Open in",
+            "veces": 2
+          },
+          {
+            "texto": "Toggle MenuMenu",
+            "veces": 1
+          },
+          {
+            "texto": "Components",
+            "veces": 1
+          },
+          {
+            "texto": "Blocks",
+            "veces": 1
+          },
+          {
+            "texto": "Charts",
+            "veces": 1
+          },
+          {
+            "texto": "Directory",
+            "veces": 1
+          },
+          {
+            "texto": "Typeset",
+            "veces": 1
+          },
+          {
+            "texto": "Create",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 2,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 0,
+        "lazy": 0,
+        "conSrcset": 2,
+        "interactivos": 87,
+        "objetivosMenores44px": 9,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 2,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(2.75381 0 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 18.16
+          },
+          {
+            "texto": "lab(2.75381 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 19.8
+          },
+          {
+            "texto": "lab(2.75381 0 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 4.18
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 4.35
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 4.74
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 19.26
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 4.43
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 4.54
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 17910.4,
+        "porTipoKb": {
+          "document": 739.9,
+          "stylesheet": 613.6,
+          "image": 311.1,
+          "font": 133.6,
+          "script": 16112.2,
+          "fetch": 0
+        },
+        "pedidos": {
+          "document": 1,
+          "stylesheet": 4,
+          "image": 2,
+          "font": 5,
+          "script": 146,
+          "fetch": 8
+        },
+        "hostsDistintos": 1,
+        "terceros": [],
+        "fuentesCargadas": [
+          "Geist 100 900 normal",
+          "Geist Fallback normal normal",
+          "Geist Mono 400 normal",
+          "Geist Mono Fallback normal normal",
+          "Noto Sans Arabic 100 900 normal",
+          "Noto Sans Arabic Fallback normal normal",
+          "Noto Sans Hebrew 100 900 normal",
+          "Noto Sans Hebrew Fallback normal normal"
+        ]
+      },
+      "seo": {
+        "titulo": "The Foundation for your Design System - shadcn/ui",
+        "descripcion": "A set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own. Open Source. Open Code.",
+        "canonical": null,
+        "og": 3,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 1805,
+        "alturaPantallas": 1.8,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "group/layout relative z-10 flex min-h-svh flex-col bg-background has-d",
+          "altoPx": 1805,
+          "altoPantallas": 1.8,
+          "fondo": "lab(100 0 0)",
+          "titular": "The Foundation for your Design System",
+          "cta": "Toggle MenuMenu",
+          "imagenes": 57
+        },
+        {
+          "orden": 1,
+          "etiqueta": "main",
+          "clase": "flex min-h-0 flex-1 flex-col",
+          "altoPx": 1693,
+          "altoPantallas": 1.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The Foundation for your Design System",
+          "cta": "New Questionnaire component",
+          "imagenes": 52
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "flex flex-1 flex-col",
+          "altoPx": 1693,
+          "altoPantallas": 1.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The Foundation for your Design System",
+          "cta": "New Questionnaire component",
+          "imagenes": 52
+        }
+      ],
+      "encabezados": {
+        "total": 1,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "The Foundation for your Design System"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 57
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 39
+          },
+          {
+            "valor": "14px / lh 1.38 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 0.6px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "14px / lh 2.00 / ls normal / w 500",
+            "veces": 3
+          },
+          {
+            "valor": "30px / lh 1.20 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.56 / ls -0.45px / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.63 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.00 / ls normal / w 500",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Geist",
+            "veces": 194
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(2.75381 0 0)",
+            "veces": 79
+          },
+          {
+            "valor": "lab(48.496 0 0)",
+            "veces": 66
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 23
+          },
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 13
+          },
+          {
+            "valor": "lab(7.78201 -0.0000149012 0)",
+            "veces": 5
+          },
+          {
+            "valor": "lab(0 0 0)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.145 -0.00000143796 0.00000340492 / 0.7)",
+            "veces": 4
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "lab(96.52 -0.0000298023 0.0000119209)",
+            "veces": 244
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.15)",
+            "veces": 91
+          },
+          {
+            "valor": "lab(100 0 0)",
+            "veces": 56
+          },
+          {
+            "valor": "lab(48.496 0 0)",
+            "veces": 25
+          },
+          {
+            "valor": "lab(7.78201 -0.0000149012 0)",
+            "veces": 19
+          },
+          {
+            "valor": "oklab(0.969998 -0.00000959635 0.0000227094 / 0.5)",
+            "veces": 13
+          },
+          {
+            "valor": "oklab(0.921998 -0.00000908971 0.0000215769 / 0.5)",
+            "veces": 10
+          },
+          {
+            "valor": "lab(90.952 0 -0.0000119209)",
+            "veces": 7
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 189
+          },
+          {
+            "valor": "20px",
+            "veces": 165
+          },
+          {
+            "valor": "12px",
+            "veces": 100
+          },
+          {
+            "valor": "16px",
+            "veces": 68
+          },
+          {
+            "valor": "6px",
+            "veces": 59
+          },
+          {
+            "valor": "10px",
+            "veces": 46
+          },
+          {
+            "valor": "4px",
+            "veces": 45
+          },
+          {
+            "valor": "14px",
+            "veces": 26
+          },
+          {
+            "valor": "-1px",
+            "veces": 18
+          },
+          {
+            "valor": "24px",
+            "veces": 14
+          },
+          {
+            "valor": "32px",
+            "veces": 13
+          },
+          {
+            "valor": "2px",
+            "veces": 9
+          },
+          {
+            "valor": "48px",
+            "veces": 4
+          },
+          {
+            "valor": "1px",
+            "veces": 4
+          },
+          {
+            "valor": "64px",
+            "veces": 1
+          },
+          {
+            "valor": "-4px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "8px",
+            "veces": 194
+          },
+          {
+            "valor": "10px",
+            "veces": 63
+          },
+          {
+            "valor": "18px",
+            "veces": 56
+          },
+          {
+            "valor": "24px",
+            "veces": 38
+          },
+          {
+            "valor": "24px 24px 0px 0px",
+            "veces": 33
+          },
+          {
+            "valor": "6px 6px 0px 0px",
+            "veces": 32
+          },
+          {
+            "valor": "14px",
+            "veces": 26
+          },
+          {
+            "valor": "19.6px",
+            "veces": 24
+          },
+          {
+            "valor": "0px 0px 24px 24px",
+            "veces": 22
+          },
+          {
+            "valor": "3.35544e+07px",
+            "veces": 21
+          }
+        ],
+        "radiosDistintos": 19,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 50
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 3
+          },
+          {
+            "valor": "50",
+            "veces": 2
+          },
+          {
+            "valor": "1",
+            "veces": 1
+          },
+          {
+            "valor": "20",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 46
+          },
+          {
+            "valor": "width 0.2s cubic-bezier(0.4, 0, 0.2, 1), height 0.2s cubic-bezier(0.4,",
+            "veces": 20
+          },
+          {
+            "valor": "color 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.1s cubic-b",
+            "veces": 13
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(",
+            "veces": 11
+          },
+          {
+            "valor": "box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "margin 0.2s linear, opacity 0.2s linear",
+            "veces": 4
+          },
+          {
+            "valor": "0.1s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 2
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezie",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 10,
+        "hojasLeidas": 4,
+        "unidades": {
+          "em": 70,
+          "rem": 322,
+          "px": 1157,
+          "clamp": 3,
+          "vw": 6
+        },
+        "keyframesDeclarados": 12,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 18
+          },
+          {
+            "px": 1024,
+            "veces": 9
+          },
+          {
+            "px": 1600,
+            "veces": 8
+          },
+          {
+            "px": 640,
+            "veces": 4
+          },
+          {
+            "px": 1280,
+            "veces": 3
+          },
+          {
+            "px": 1536,
+            "veces": 3
+          },
+          {
+            "px": 2000,
+            "veces": 3
+          },
+          {
+            "px": 448,
+            "veces": 1
+          },
+          {
+            "px": 480,
+            "veces": 1
+          },
+          {
+            "px": 560,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "sticky top-0 z-50 w-full bg-background",
+            "posicion": "sticky",
+            "alto": 56,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "span",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "span",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "span",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [],
+            "boton": ""
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 60,
+        "ctasTop": [
+          {
+            "texto": "Home",
+            "veces": 2
+          },
+          {
+            "texto": "Docs",
+            "veces": 2
+          },
+          {
+            "texto": "Open in",
+            "veces": 2
+          },
+          {
+            "texto": "Toggle MenuMenu",
+            "veces": 1
+          },
+          {
+            "texto": "Components",
+            "veces": 1
+          },
+          {
+            "texto": "Blocks",
+            "veces": 1
+          },
+          {
+            "texto": "Charts",
+            "veces": 1
+          },
+          {
+            "texto": "Directory",
+            "veces": 1
+          },
+          {
+            "texto": "Typeset",
+            "veces": 1
+          },
+          {
+            "texto": "Create",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 2,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 0,
+        "lazy": 0,
+        "conSrcset": 2,
+        "interactivos": 87,
+        "objetivosMenores44px": 48,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 2,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(2.75381 0 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 18.16
+          },
+          {
+            "texto": "lab(2.75381 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 19.8
+          },
+          {
+            "texto": "lab(2.75381 0 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 4.18
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 4.35
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 4.74
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 19.26
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 4.43
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 4.54
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 17910.4,
+        "porTipoKb": {
+          "document": 739.9,
+          "stylesheet": 613.6,
+          "font": 133.6,
+          "image": 311.1,
+          "script": 16112.2,
+          "fetch": 0
+        },
+        "pedidos": {
+          "document": 1,
+          "stylesheet": 4,
+          "font": 5,
+          "image": 2,
+          "script": 146,
+          "fetch": 8
+        },
+        "hostsDistintos": 1,
+        "terceros": [],
+        "fuentesCargadas": [
+          "Geist 100 900 normal",
+          "Geist Fallback normal normal",
+          "Geist Mono 400 normal",
+          "Geist Mono Fallback normal normal",
+          "Noto Sans Arabic 100 900 normal",
+          "Noto Sans Arabic Fallback normal normal",
+          "Noto Sans Hebrew 100 900 normal",
+          "Noto Sans Hebrew Fallback normal normal"
+        ]
+      },
+      "seo": {
+        "titulo": "The Foundation for your Design System - shadcn/ui",
+        "descripcion": "A set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own. Open Source. Open Code.",
+        "canonical": null,
+        "og": 3,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 1888,
+        "alturaPantallas": 2.1,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "group/layout relative z-10 flex min-h-svh flex-col bg-background has-d",
+          "altoPx": 1888,
+          "altoPantallas": 2.1,
+          "fondo": "lab(100 0 0)",
+          "titular": "The Foundation for your Design System",
+          "cta": "Toggle MenuMenu",
+          "imagenes": 57
+        },
+        {
+          "orden": 1,
+          "etiqueta": "main",
+          "clase": "flex min-h-0 flex-1 flex-col",
+          "altoPx": 1728,
+          "altoPantallas": 1.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The Foundation for your Design System",
+          "cta": "New Questionnaire component",
+          "imagenes": 52
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "flex flex-1 flex-col",
+          "altoPx": 1728,
+          "altoPantallas": 1.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The Foundation for your Design System",
+          "cta": "New Questionnaire component",
+          "imagenes": 52
+        }
+      ],
+      "encabezados": {
+        "total": 1,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "The Foundation for your Design System"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 57
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 39
+          },
+          {
+            "valor": "14px / lh 1.38 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 0.6px / w 500",
+            "veces": 5
+          },
+          {
+            "valor": "14px / lh 2.00 / ls normal / w 500",
+            "veces": 3
+          },
+          {
+            "valor": "30px / lh 1.20 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.56 / ls -0.45px / w 500",
+            "veces": 2
+          },
+          {
+            "valor": "14px / lh 1.63 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 600",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.00 / ls normal / w 500",
+            "veces": 1
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Geist",
+            "veces": 194
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "lab(2.75381 0 0)",
+            "veces": 79
+          },
+          {
+            "valor": "lab(48.496 0 0)",
+            "veces": 66
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 23
+          },
+          {
+            "valor": "lab(98.26 0 0)",
+            "veces": 13
+          },
+          {
+            "valor": "lab(7.78201 -0.0000149012 0)",
+            "veces": 5
+          },
+          {
+            "valor": "lab(0 0 0)",
+            "veces": 4
+          },
+          {
+            "valor": "oklab(0.145 -0.00000143796 0.00000340492 / 0.7)",
+            "veces": 4
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "lab(96.52 -0.0000298023 0.0000119209)",
+            "veces": 244
+          },
+          {
+            "valor": "oklab(0.555999 -0.00000530481 0.000012964 / 0.15)",
+            "veces": 91
+          },
+          {
+            "valor": "lab(100 0 0)",
+            "veces": 56
+          },
+          {
+            "valor": "lab(48.496 0 0)",
+            "veces": 25
+          },
+          {
+            "valor": "lab(7.78201 -0.0000149012 0)",
+            "veces": 19
+          },
+          {
+            "valor": "oklab(0.969998 -0.00000959635 0.0000227094 / 0.5)",
+            "veces": 13
+          },
+          {
+            "valor": "oklab(0.921998 -0.00000908971 0.0000215769 / 0.5)",
+            "veces": 10
+          },
+          {
+            "valor": "lab(90.952 0 -0.0000119209)",
+            "veces": 7
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 188
+          },
+          {
+            "valor": "20px",
+            "veces": 165
+          },
+          {
+            "valor": "12px",
+            "veces": 100
+          },
+          {
+            "valor": "16px",
+            "veces": 67
+          },
+          {
+            "valor": "6px",
+            "veces": 59
+          },
+          {
+            "valor": "10px",
+            "veces": 46
+          },
+          {
+            "valor": "4px",
+            "veces": 45
+          },
+          {
+            "valor": "24px",
+            "veces": 31
+          },
+          {
+            "valor": "14px",
+            "veces": 26
+          },
+          {
+            "valor": "-1px",
+            "veces": 18
+          },
+          {
+            "valor": "2px",
+            "veces": 9
+          },
+          {
+            "valor": "1px",
+            "veces": 4
+          },
+          {
+            "valor": "48px",
+            "veces": 2
+          },
+          {
+            "valor": "80px",
+            "veces": 1
+          },
+          {
+            "valor": "-4px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "8px",
+            "veces": 194
+          },
+          {
+            "valor": "10px",
+            "veces": 63
+          },
+          {
+            "valor": "18px",
+            "veces": 56
+          },
+          {
+            "valor": "24px",
+            "veces": 38
+          },
+          {
+            "valor": "24px 24px 0px 0px",
+            "veces": 33
+          },
+          {
+            "valor": "6px 6px 0px 0px",
+            "veces": 32
+          },
+          {
+            "valor": "14px",
+            "veces": 26
+          },
+          {
+            "valor": "19.6px",
+            "veces": 24
+          },
+          {
+            "valor": "0px 0px 24px 24px",
+            "veces": 22
+          },
+          {
+            "valor": "3.35544e+07px",
+            "veces": 21
+          }
+        ],
+        "radiosDistintos": 19,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 50
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 3
+          },
+          {
+            "valor": "50",
+            "veces": 2
+          },
+          {
+            "valor": "1",
+            "veces": 1
+          },
+          {
+            "valor": "20",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 46
+          },
+          {
+            "valor": "width 0.2s cubic-bezier(0.4, 0, 0.2, 1), height 0.2s cubic-bezier(0.4,",
+            "veces": 20
+          },
+          {
+            "valor": "color 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.1s cubic-b",
+            "veces": 13
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(",
+            "veces": 11
+          },
+          {
+            "valor": "box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 6
+          },
+          {
+            "valor": "margin 0.2s linear, opacity 0.2s linear",
+            "veces": 4
+          },
+          {
+            "valor": "0.1s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 2
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), translate 0.15s cubic-be",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezie",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 10,
+        "hojasLeidas": 5,
+        "unidades": {
+          "em": 70,
+          "rem": 322,
+          "px": 1157,
+          "clamp": 3,
+          "vw": 6
+        },
+        "keyframesDeclarados": 12,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 18
+          },
+          {
+            "px": 1024,
+            "veces": 9
+          },
+          {
+            "px": 1600,
+            "veces": 8
+          },
+          {
+            "px": 640,
+            "veces": 4
+          },
+          {
+            "px": 1280,
+            "veces": 3
+          },
+          {
+            "px": 1536,
+            "veces": 3
+          },
+          {
+            "px": 2000,
+            "veces": 3
+          },
+          {
+            "px": 448,
+            "veces": 1
+          },
+          {
+            "px": 480,
+            "veces": 1
+          },
+          {
+            "px": 560,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 0,
+            "navFija": true
+          },
+          {
+            "y": 247,
+            "conTransform": 0,
+            "navFija": true
+          },
+          {
+            "y": 494,
+            "conTransform": 0,
+            "navFija": true
+          },
+          {
+            "y": 741,
+            "conTransform": 0,
+            "navFija": true
+          },
+          {
+            "y": 988,
+            "conTransform": 0,
+            "navFija": true
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": false,
+        "posicionesDistintas": 1,
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "sticky top-0 z-50 w-full bg-background",
+            "posicion": "sticky",
+            "alto": 64,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "span",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "span",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "span",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 1,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "input",
+            "clase": "",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [],
+            "boton": ""
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 60,
+        "ctasTop": [
+          {
+            "texto": "Home",
+            "veces": 2
+          },
+          {
+            "texto": "Docs",
+            "veces": 2
+          },
+          {
+            "texto": "Open in",
+            "veces": 2
+          },
+          {
+            "texto": "Toggle MenuMenu",
+            "veces": 1
+          },
+          {
+            "texto": "Components",
+            "veces": 1
+          },
+          {
+            "texto": "Blocks",
+            "veces": 1
+          },
+          {
+            "texto": "Charts",
+            "veces": 1
+          },
+          {
+            "texto": "Directory",
+            "veces": 1
+          },
+          {
+            "texto": "Typeset",
+            "veces": 1
+          },
+          {
+            "texto": "Create",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 2,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 0,
+        "lazy": 0,
+        "conSrcset": 2,
+        "interactivos": 87,
+        "objetivosMenores44px": 70,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 2,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "lab(2.75381 0 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 18.16
+          },
+          {
+            "texto": "lab(2.75381 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 19.8
+          },
+          {
+            "texto": "lab(2.75381 0 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 4.18
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 4.35
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 4.74
+          },
+          {
+            "texto": "lab(48.496 0 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 19.26
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 4.43
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(96.52 -0.0000298023 0.0000119209)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(100 0 0)",
+            "ratio": 1.04
+          },
+          {
+            "texto": "lab(98.26 0 0)",
+            "fondo": "lab(48.496 0 0)",
+            "ratio": 4.54
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 40886.6,
+        "porTipoKb": {
+          "document": 739.9,
+          "stylesheet": 663.5,
+          "font": 986.3,
+          "image": 311.1,
+          "script": 38184.9,
+          "fetch": 1
+        },
+        "pedidos": {
+          "document": 2,
+          "stylesheet": 10,
+          "font": 60,
+          "image": 6,
+          "script": 372,
+          "fetch": 46
+        },
+        "hostsDistintos": 1,
+        "terceros": [],
+        "fuentesCargadas": [
+          "Geist 100 900 normal",
+          "Geist Fallback normal normal",
+          "Geist Mono 400 normal",
+          "Geist Mono Fallback normal normal",
+          "Noto Sans Arabic 100 900 normal",
+          "Noto Sans Arabic Fallback normal normal",
+          "Noto Sans Hebrew 100 900 normal",
+          "Noto Sans Hebrew Fallback normal normal"
+        ]
+      },
+      "seo": {
+        "titulo": "The Foundation for your Design System - shadcn/ui",
+        "descripcion": "A set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own. Open Source. Open Code.",
+        "canonical": null,
+        "og": 3,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 304,
+    "conTransicion": 107
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

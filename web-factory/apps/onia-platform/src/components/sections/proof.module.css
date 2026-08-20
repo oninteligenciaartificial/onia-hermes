@@ -137,7 +137,7 @@
 
 .ejemplos {
   margin-top: 0.4rem;
-  font-size: 0.76rem;
+  font-size: max(0.76rem, var(--fs-micro-min));
   color: var(--ink-soft);
   letter-spacing: 0.01em;
 }
@@ -150,7 +150,7 @@
 
 .precioNota {
   margin-top: 0.2rem;
-  font-size: 0.82rem;
+  font-size: max(0.82rem, var(--fs-micro-min));
   color: var(--ink-soft);
   max-width: 34ch;
 }
@@ -199,7 +199,7 @@
 }
 
 .marcaEstado {
-  font-size: 0.76rem;
+  font-size: max(0.76rem, var(--fs-label-min));
   letter-spacing: 0.06em;
   text-transform: uppercase;
   flex: none;
@@ -235,7 +235,7 @@
 
 .fuente {
   margin-top: 1.4rem;
-  font-size: 0.78rem;
+  font-size: max(0.78rem, var(--fs-micro-min));
   color: var(--ink-soft);
   max-width: 68ch;
 }

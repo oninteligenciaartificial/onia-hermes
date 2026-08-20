@@ -77,6 +77,32 @@ Cliente nuevo = agregar un objeto a `clientes.json` y correr el generador.
 12. **No fabricar.** Si falta dato del cliente (brochure, sector), pedirlo o
     marcarlo. Personalizar con datos reales (cartera, números, sector).
 
+13. **"El costo de esperar" — solo con números DEL CLIENTE** (`costoDeEsperar`).
+    El competidor real no es otra agencia: es que el cliente no haga nada. Eso se
+    cuantifica con SUS datos (horas de tipeo por semana, ventas perdidas por
+    responder tarde el WhatsApp, plata parada en fiado).
+    **REGLA DURA: sin datos reales del cliente la sección NO se imprime.** Nada de
+    números de ejemplo, rangos genéricos, promedios del rubro ni placeholders — un
+    costo de esperar inventado es fabricar, y con el comprador B2B formal es lo que
+    nos saca de la mesa. El generador ya lo fuerza: sin `items` válidos (cada uno
+    con `concepto` + `costo`) y sin `siat.grupo`, el bloque no se renderiza.
+    - Preguntar los números en la reunión y citarlos como del cliente
+      (`dato: "6 h/semana de tu recepcionista, dato que nos diste"`). Si un número
+      no le cierra, se corrige y se rehace la cuenta: es **su** cuenta.
+    - **Línea fiscal (`siat.grupo`):** solo si el cliente confirmó SU grupo en la
+      Oficina Virtual — el grupo depende del NIT, no del rubro. Sin grupo
+      confirmado, la línea no se imprime y no se cita la fecha.
+      Fecha verificada: **RND 102600000007 (25-mar-2026)** amplió el plazo al
+      **30-sep-2026**; desde el **1-oct-2026** los grupos **9°–12°** emiten solo por
+      su modalidad en línea asignada
+      ([nota de prensa SIN](https://www.impuestos.gob.bo/index.php/nota_prensa/el-sin-amplia-hasta-el-30-de-septiembre-el-plazo-para-la-implementacion-de-la-facturacion-en-linea/)).
+      La fecha vive en el generador (`SIAT_FECHA`), no en `clientes.json`: se
+      actualiza en UN lugar y con RND citada. Antes de tocarla, cargar la skill
+      `onia-contabilidad-bolivia`.
+    - **Nunca "por ley tenés que comprarnos".** Siempre la verdad completa: el
+      Portal Web del SIN cumple gratis; lo que vendemos es no tipear dos veces.
+      Es timing, no miedo (ver memoria `siat-pitch-portal-gratis`).
+
 ## Secciones v3 del generador (usar cuando suman, no por default)
 
 Campos opcionales de `clientes.json` (data: imágenes +72% cierre, prueba
@@ -90,6 +116,9 @@ social +34%, CTA claro convierte lectura en respuesta):
 - `casos[]` — prueba social SOLO con casos reales; vacío hasta tener el caso
   fundador (Bolivian Electric).
 - `comparativa` — tabla vs. statu quo (ej. TR4 vs ONIA) ANTES del pricing.
+- `costoDeEsperar` — `{ intro?, items[{concepto, dato?, costo}], total?, totalLabel?,
+  siat?{grupo}, nota? }`. Va justo antes de los paquetes (ancla el precio contra lo
+  que ya pierde). Solo números del cliente — ver regla 13.
 - `proximosPasos[]` + `ctaWhatsapp` — 3 pasos + botón wa.me prefilleado.
 - `portada` + `resumenEjecutivo` — solo propuestas enterprise/formales.
 - `moneda` — header de precios en USD o mixto.

@@ -1,0 +1,191 @@
+{
+  "updatedAt": "2026-07-03T21:24:07.860Z",
+  "createdAt": "2026-06-15T03:34:42.999Z",
+  "id": "drFWP7nttzvtZzso",
+  "name": "ONIA - Monitor de Salud n8n",
+  "description": "Cada hora revisa ejecuciones fallidas en n8n y avisa a Sergio por Telegram solo si hubo fallos en los últimos 70 min. Observabilidad para detectar workflows rotos (ej. credenciales caídas).",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "5e5f5b48-5703-4b07-a7a5-9b4475343cd3",
+      "name": "Cada Hora",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "08e9ef14-7ef8-4f36-a1a0-9bcd3061e0fe",
+      "name": "Buscar Ejecuciones Fallidas",
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "execution",
+        "operation": "getAll",
+        "returnAll": false,
+        "limit": 100,
+        "filters": {
+          "status": "error"
+        }
+      },
+      "credentials": {
+        "n8nApi": {
+          "id": "W3ymDVxJLnMWgBmX",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "id": "16cc4941-912a-4030-a231-5ac8b09646a4",
+      "name": "Filtrar Ultima Hora y Formatear",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const now = Date.now();\nconst windowMs = 70 * 60 * 1000;\nconst recent = $input.all().filter((i) => {\n  const t = i.json.stoppedAt || i.json.startedAt;\n  return t && (now - new Date(t).getTime()) <= windowMs;\n});\nif (recent.length === 0) { return []; }\nconst lines = recent.map((i) => '- ' + (i.json.workflowId || 'desconocido') + ' (exec ' + i.json.id + ') ' + i.json.startedAt);\nconst message = 'ONIA - ' + recent.length + ' workflow(s) fallaron en la ultima hora:\\n\\n' + lines.join('\\n') + '\\n\\nRevisa n8n -> Executions (status: error) y arregla la causa raiz.';\nreturn [{ json: { alertCount: recent.length, message } }];"
+      }
+    },
+    {
+      "id": "6622a499-4718-46c4-8bc4-f1f9406ed807",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.message }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "aaac7bb5-a002-4ffc-8177-440811f17646"
+    }
+  ],
+  "connections": {
+    "Cada Hora": {
+      "main": [
+        [
+          {
+            "node": "Buscar Ejecuciones Fallidas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Ejecuciones Fallidas": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Ultima Hora y Formatear",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Ultima Hora y Formatear": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cada Hora": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "f44afc71-edbf-4452-8282-f5e7ecd95e0a",
+  "activeVersionId": "f44afc71-edbf-4452-8282-f5e7ecd95e0a",
+  "versionCounter": 2,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [
+    {
+      "updatedAt": "2026-07-03T21:24:07.419Z",
+      "createdAt": "2026-07-03T21:24:07.419Z",
+      "id": "XBK6IoQ3GTHTpDnq",
+      "name": "onia-ops"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-06-15T03:34:43.009Z",
+      "createdAt": "2026-06-15T03:34:43.009Z",
+      "role": "workflow:owner",
+      "workflowId": "drFWP7nttzvtZzso",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

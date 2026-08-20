@@ -1,0 +1,100 @@
+{
+  "updatedAt": "2026-06-05T14:59:43.000Z",
+  "createdAt": "2026-06-05T14:40:49.978Z",
+  "id": "p581sT9qsuJWJwZm",
+  "name": "Hermes TEMP - Apply DentalGest Safe RPC Stubs",
+  "description": "Temporary manual workflow to apply non-destructive no-op/empty RPC compatibility functions for DentalGest n8n workflows.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "4c714ce6-5960-404a-8706-8f8cb2822e8e",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "052afb09-1835-4d56-8e14-a92d65626b64",
+      "name": "Apply Safe RPC Stubs",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        540,
+        300
+      ],
+      "parameters": {
+        "resource": "database",
+        "operation": "executeQuery",
+        "query": "\nCREATE OR REPLACE FUNCTION public.n8n_reminders_24h()\nRETURNS TABLE (\n  id text,\n  \"organizationId\" text,\n  \"patientName\" text,\n  \"patientEmail\" text,\n  \"patientPhone\" text,\n  \"doctorName\" text,\n  \"clinicName\" text,\n  \"dateTime\" timestamptz,\n  \"whatsappAddon\" boolean,\n  \"whatsappPhoneNumberId\" text,\n  \"whatsappAccessToken\" text\n)\nLANGUAGE sql\nSECURITY DEFINER\nSET search_path = public\nAS $$\n  SELECT\n    NULL::text AS id,\n    NULL::text AS \"organizationId\",\n    NULL::text AS \"patientName\",\n    NULL::text AS \"patientEmail\",\n    NULL::text AS \"patientPhone\",\n    NULL::text AS \"doctorName\",\n    NULL::text AS \"clinicName\",\n    NULL::timestamptz AS \"dateTime\",\n    false AS \"whatsappAddon\",\n    NULL::text AS \"whatsappPhoneNumberId\",\n    NULL::text AS \"whatsappAccessToken\"\n  WHERE false;\n$$;\n\nCREATE OR REPLACE FUNCTION public.n8n_reminders_2h()\nRETURNS TABLE (\n  id text,\n  \"organizationId\" text,\n  \"patientName\" text,\n  \"patientEmail\" text,\n  \"patientPhone\" text,\n  \"doctorName\" text,\n  \"clinicName\" text,\n  \"dateTime\" timestamptz,\n  \"whatsappAddon\" boolean,\n  \"whatsappPhoneNumberId\" text,\n  \"whatsappAccessToken\" text\n)\nLANGUAGE sql\nSECURITY DEFINER\nSET search_path = public\nAS $$\n  SELECT\n    NULL::text AS id,\n    NULL::text AS \"organizationId\",\n    NULL::text AS \"patientName\",\n    NULL::text AS \"patientEmail\",\n    NULL::text AS \"patientPhone\",\n    NULL::text AS \"doctorName\",\n    NULL::text AS \"clinicName\",\n    NULL::timestamptz AS \"dateTime\",\n    false AS \"whatsappAddon\",\n    NULL::text AS \"whatsappPhoneNumberId\",\n    NULL::text AS \"whatsappAccessToken\"\n  WHERE false;\n$$;\n\nCREATE OR REPLACE FUNCTION public.n8n_mark_reminder24_sent(p_id text)\nRETURNS jsonb\nLANGUAGE plpgsql\nSECURITY DEFINER\nSET search_path = public\nAS $$\nBEGIN\n  RETURN jsonb_build_object('ok', true, 'id', p_id, 'mode', 'noop');\nEND;\n$$;\n\nCREATE OR REPLACE FUNCTION public.n8n_mark_reminder2h_sent(p_id text)\nRETURNS jsonb\nLANGUAGE plpgsql\nSECURITY DEFINER\nSET search_path = public\nAS $$\nBEGIN\n  RETURN jsonb_build_object('ok', true, 'id', p_id, 'mode', 'noop');\nEND;\n$$;\n\nCREATE OR REPLACE FUNCTION public.n8n_pending_qr_payments()\nRETURNS TABLE (\n  id text,\n  \"clinicName\" text,\n  amount numeric,\n  plan text,\n  cycle text,\n  \"userName\" text,\n  \"createdAt\" timestamptz,\n  \"receiptUrl\" text\n)\nLANGUAGE sql\nSECURITY DEFINER\nSET search_path = public\nAS $$\n  SELECT\n    NULL::text AS id,\n    NULL::text AS \"clinicName\",\n    NULL::numeric AS amount,\n    NULL::text AS plan,\n    NULL::text AS cycle,\n    NULL::text AS \"userName\",\n    NULL::timestamptz AS \"createdAt\",\n    NULL::text AS \"receiptUrl\"\n  WHERE false;\n$$;\n\nCREATE OR REPLACE FUNCTION public.n8n_draft_recurring_invoices()\nRETURNS TABLE (\n  id text,\n  \"patientName\" text,\n  \"patientEmail\" text,\n  \"clinicName\" text,\n  total numeric,\n  \"dueDate\" timestamptz\n)\nLANGUAGE sql\nSECURITY DEFINER\nSET search_path = public\nAS $$\n  SELECT\n    NULL::text AS id,\n    NULL::text AS \"patientName\",\n    NULL::text AS \"patientEmail\",\n    NULL::text AS \"clinicName\",\n    NULL::numeric AS total,\n    NULL::timestamptz AS \"dueDate\"\n  WHERE false;\n$$;\n\nCREATE OR REPLACE FUNCTION public.n8n_mark_invoice_sent(p_id text)\nRETURNS jsonb\nLANGUAGE plpgsql\nSECURITY DEFINER\nSET search_path = public\nAS $$\nBEGIN\n  RETURN jsonb_build_object('ok', true, 'id', p_id, 'mode', 'noop');\nEND;\n$$;\n\nCREATE OR REPLACE FUNCTION public.n8n_expired_trials()\nRETURNS TABLE (\n  id text,\n  \"clinicName\" text,\n  \"adminName\" text,\n  email text,\n  \"trialEnd\" timestamptz,\n  slug text\n)\nLANGUAGE sql\nSECURITY DEFINER\nSET search_path = public\nAS $$\n  SELECT\n    NULL::text AS id,\n    NULL::text AS \"clinicName\",\n    NULL::text AS \"adminName\",\n    NULL::text AS email,\n    NULL::timestamptz AS \"trialEnd\",\n    NULL::text AS slug\n  WHERE false;\n$$;\n\nCREATE OR REPLACE FUNCTION public.n8n_followup_due()\nRETURNS TABLE (\n  \"appointmentId\" text,\n  \"organizationId\" text,\n  \"patientName\" text,\n  \"patientEmail\" text,\n  \"patientPhone\" text,\n  \"doctorName\" text,\n  \"clinicName\" text,\n  \"clinicSlug\" text,\n  \"whatsappAddon\" boolean\n)\nLANGUAGE sql\nSECURITY DEFINER\nSET search_path = public\nAS $$\n  SELECT\n    NULL::text AS \"appointmentId\",\n    NULL::text AS \"organizationId\",\n    NULL::text AS \"patientName\",\n    NULL::text AS \"patientEmail\",\n    NULL::text AS \"patientPhone\",\n    NULL::text AS \"doctorName\",\n    NULL::text AS \"clinicName\",\n    NULL::text AS \"clinicSlug\",\n    false AS \"whatsappAddon\"\n  WHERE false;\n$$;\n\nCREATE OR REPLACE FUNCTION public.n8n_mark_followup_sent(p_appointment_id text)\nRETURNS jsonb\nLANGUAGE plpgsql\nSECURITY DEFINER\nSET search_path = public\nAS $$\nBEGIN\n  RETURN jsonb_build_object('ok', true, 'appointmentId', p_appointment_id, 'mode', 'noop');\nEND;\n$$;\n\nGRANT EXECUTE ON FUNCTION public.n8n_reminders_24h() TO anon, authenticated, service_role;\nGRANT EXECUTE ON FUNCTION public.n8n_reminders_2h() TO anon, authenticated, service_role;\nGRANT EXECUTE ON FUNCTION public.n8n_mark_reminder24_sent(text) TO anon, authenticated, service_role;\nGRANT EXECUTE ON FUNCTION public.n8n_mark_reminder2h_sent(text) TO anon, authenticated, service_role;\nGRANT EXECUTE ON FUNCTION public.n8n_pending_qr_payments() TO anon, authenticated, service_role;\nGRANT EXECUTE ON FUNCTION public.n8n_draft_recurring_invoices() TO anon, authenticated, service_role;\nGRANT EXECUTE ON FUNCTION public.n8n_mark_invoice_sent(text) TO anon, authenticated, service_role;\nGRANT EXECUTE ON FUNCTION public.n8n_expired_trials() TO anon, authenticated, service_role;\nGRANT EXECUTE ON FUNCTION public.n8n_followup_due() TO anon, authenticated, service_role;\nGRANT EXECUTE ON FUNCTION public.n8n_mark_followup_sent(text) TO anon, authenticated, service_role;\n\nNOTIFY pgrst, 'reload schema';\n\nSELECT count(*)::int AS function_count\nFROM pg_proc p\nJOIN pg_namespace n ON n.oid = p.pronamespace\nWHERE n.nspname = 'public'\n  AND p.proname IN (\n    'n8n_reminders_24h',\n    'n8n_reminders_2h',\n    'n8n_mark_reminder24_sent',\n    'n8n_mark_reminder2h_sent',\n    'n8n_pending_qr_payments',\n    'n8n_draft_recurring_invoices',\n    'n8n_mark_invoice_sent',\n    'n8n_expired_trials',\n    'n8n_followup_due',\n    'n8n_mark_followup_sent'\n  );\n",
+        "options": {
+          "queryBatching": "single"
+        }
+      },
+      "credentials": {
+        "postgres": {
+          "id": "2P4w95n0vir90EkT",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Apply Safe RPC Stubs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "4aee8d60-7c71-4a3a-9b66-071f48529179",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-05T14:40:49.981Z",
+      "createdAt": "2026-06-05T14:40:49.981Z",
+      "role": "workflow:owner",
+      "workflowId": "p581sT9qsuJWJwZm",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

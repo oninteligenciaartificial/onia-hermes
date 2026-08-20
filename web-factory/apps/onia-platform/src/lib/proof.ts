@@ -1,9 +1,15 @@
 /**
- * La prueba — cuando no hay clientes, la prueba no puede ser un testimonio.
+ * La prueba — sin testimonios, con datos que el visitante puede abrir y ver.
  *
- * Onia tiene CERO clientes pagando. Regla dura de la casa: no se inventan
- * clientes, logos, casos ni metricas. Entonces la prueba se construye con las
- * dos unicas cosas que si son verificables por el visitante:
+ * DOS reglas duras, y la segunda se olvida seguido:
+ *  a) no se inventan clientes, logos, casos ni metricas;
+ *  b) tampoco se PROCLAMA la debilidad. Que no haya testimonios se resuelve
+ *     mostrando otra prueba, no anunciando en la portada que no hay clientes
+ *     (2026-08-15, pedido de Sergio). Lo que sigue diciendose de frente es el
+ *     estado del PRODUCTO — la factura fiscal en tramite y el ledger de abajo.
+ *
+ * La prueba se construye con las dos unicas cosas verificables por el
+ * visitante:
  *
  *  1. DATO DE TERCEROS — precios y capacidades publicados por la competencia,
  *     con nombre propio, cifra y fecha de consulta. El visitante puede abrir
@@ -96,7 +102,7 @@ export const CONTENDIENTES: readonly Contendiente[] = [
   {
     id: "onia",
     quien: "Onia",
-    ejemplos: "el pack dental, andando hoy",
+    ejemplos: "una plataforma, el rubro dental andando hoy",
     precio: "Bs 320 – 1.500 / mes",
     precioNota: "precio de lanzamiento, publicado más abajo",
     estados: { gestion: "si", siat: "tramite", agentes: "si" },
@@ -114,8 +120,12 @@ export const HUECO =
   "No existe un solo software vendido en Bolivia que cruce agenda + ficha del cliente + factura SIAT.";
 
 /**
- * El ledger de honestidad. Cada linea es una cosa que HOY no funciona, dicha
- * por nosotros primero. Verificado contra ONIA_PLATFORM_ESTRUCTURA_20260730 §3.
+ * El ledger de honestidad. Cada linea es una cosa DEL PRODUCTO que HOY no
+ * funciona, dicha por nosotros primero. Verificado contra
+ * ONIA_PLATFORM_ESTRUCTURA_20260730 §3.
+ *
+ * Es un ledger de producto, no de la empresa: acá van funciones que faltan, no
+ * "somos nuevos" ni "no tenemos clientes".
  */
 export interface Pendiente {
   que: string;
@@ -123,11 +133,6 @@ export interface Pendiente {
 }
 
 export const TODAVIA_NO: readonly Pendiente[] = [
-  {
-    que: "Clientes: cero.",
-    detalle:
-      "Estamos arrancando. No hay testimonios en esta página porque no hay a quién pedírselos, y no los vamos a inventar. Serías de las primeras clínicas.",
-  },
   {
     que: "La factura fiscal todavía no sale de Onia.",
     detalle:

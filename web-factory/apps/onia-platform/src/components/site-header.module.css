@@ -1,133 +1,124 @@
+/*
+ * Header del sitio — porte del mockup aprobado (2026-08-01).
+ * Delgado, sticky, con blur. No compite: el unico estado disenado es el
+ * subrayado verde del hover en la nav.
+ *
+ * Lo comparten la landing, /comparativa y las paginas legales: por eso los
+ * hrefs son absolutos ("/#...") y estos estilos no dependen de la landing.
+ */
+
 .header {
+  font-family: var(--font-sans), system-ui, sans-serif;
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 30;
   height: var(--header-h);
-  background: color-mix(in oklab, var(--bg) 82%, transparent);
-  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line-soft);
 }
 
+/* sin width:100% a proposito: el ancho lo pone .container (global), asi la
+   marca y el CTA quedan alineados con el resto de la pagina. En el mockup ese
+   100% pisaba al container y la marca terminaba pegada al borde. */
 .inner {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: clamp(1rem, 3vw, 2.5rem);
   height: 100%;
 }
 
+/* min-height 44px: el logo es el link "volver al inicio" y con 26px de alto
+   era el blanco mas chico del header. Entra dentro de los 60px del header. */
 .brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  text-decoration: none;
-}
-
-.tagline {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.62rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: var(--ink-faint);
-  max-width: 14ch;
-  line-height: 1.25;
-}
-
-.nav {
-  display: none;
-  gap: 1.4rem;
-  margin-inline: auto;
-}
-
-.navLink {
-  position: relative;
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: var(--ink-soft);
-  text-decoration: none;
-  padding-block: 0.3em;
-}
-
-/* subrayado que corre: entra desde la izquierda, sale hacia la derecha */
-.navLink::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.navLink:hover {
-  color: var(--ink);
-}
-
-.navLink:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .navLink::after {
-    transition: none;
-  }
-}
-
-.actions {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin-left: auto;
+  text-decoration: none;
+  margin-right: auto;
+  min-height: 44px;
 }
 
-.themeBtn {
-  display: inline-grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  background: transparent;
+.sub {
+  font-size: max(0.62rem, var(--fs-label-min));
+  line-height: 1.25;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+  max-width: 9ch;
+}
+
+.nav {
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 1.75rem);
+}
+
+.nav a {
+  text-decoration: none;
+  font-size: 0.95rem;
   color: var(--ink-soft);
-  cursor: pointer;
+  padding: 0.75rem 0.1rem;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.16s ease,
+    border-color 0.16s ease;
 }
 
-.themeBtn:hover {
+.nav a:hover {
   color: var(--ink);
-  border-color: var(--ink-faint);
+  border-bottom-color: var(--accent);
 }
 
-.appCta {
-  display: none;
+/* botones del cromo: el par de marca del CTA (senal + tinta), igual que la
+   landing. Radio 10px, no pastilla: es el sistema nuevo. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease;
 }
 
-@media (min-width: 700px) {
-  .appCta {
-    display: inline-flex;
-  }
+.primary {
+  background: var(--senal);
+  color: var(--tinta);
 }
 
-@media (min-width: 1060px) {
-  .nav {
-    display: flex;
-  }
+.primary:hover {
+  background: #00be5f;
 }
 
-@media (max-width: 480px) {
-  .tagline {
+.ghost {
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.ghost:hover {
+  border-color: var(--ink);
+}
+
+@media (max-width: 899px) {
+  .nav,
+  .sub,
+  .ghost {
     display: none;
   }
 }
 
-.ctaLargo {
-  display: none;
-}
-
-@media (min-width: 400px) {
-  .ctaLargo {
-    display: inline;
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .nav a {
+    transition: none;
   }
 }

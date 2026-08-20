@@ -16,3 +16,5 @@ data/references/product-sources/*.backup-*
 data/automation-runs/
 
 .vercel
+# Scripts de medicion de una sola pasada (Playwright contra sitios de referencia).
+.tmp/

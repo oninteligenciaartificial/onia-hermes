@@ -64,7 +64,22 @@ function main() {
     return;
   }
 
-  // 3. ¿Hay cambios?
+  // 3. ¿Merge a medias? NO tocar nada.
+  // 2026-08-20: un merge con conflictos quedo abierto al cerrar el turno, el
+  // hook Stop corrio esto, y `add -A` + commit convirtieron los marcadores
+  // <<<<<<< en un commit "resuelto" que ademas hizo fast-forward a MAIN.
+  // 17 archivos con marcadores publicados. `add -A` marca como resuelto lo que
+  // no lo esta: si hay MERGE_HEAD o paths unmerged, esto no es un auto-sync,
+  // es una resolucion — y las resoluciones son de un humano o del agente, no
+  // de un cron.
+  const merging = tryGit('rev-parse -q --verify MERGE_HEAD');
+  const unmerged = tryGit('diff --name-only --diff-filter=U');
+  if ((merging.ok && merging.out) || (unmerged.ok && unmerged.out)) {
+    console.log('[autosync] merge sin resolver — omito TODO (resolver a mano y recien commitear)');
+    return;
+  }
+
+  // 4. ¿Hay cambios?
   const status = tryGit('status --porcelain');
   if (status.ok && status.out) {
     tryGit('add -A');

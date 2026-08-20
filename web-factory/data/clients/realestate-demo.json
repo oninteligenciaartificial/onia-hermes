@@ -1,0 +1,169 @@
+{
+  "nombre": "Inmobiliaria Demo",
+  "slug": "realestate-demo",
+  "tagline": "Encontrar donde vivir no deberia ser un tramite",
+  "descripcion": "Sitio de demostracion del modelo find-realestate-editorial. Toda la cartera, los precios y las respuestas son de muestra: se reemplazan con los datos reales del cliente antes de publicar.",
+  "logo": "ID",
+  "heroPoster": "assets/hero-placeholder.svg",
+  "colores": {
+    "primary": "#027650",
+    "secondary": "#013925",
+    "accent": "#089868",
+    "bg": "#F9FBFA",
+    "fg": "#0C110F"
+  },
+  "tipografia": {
+    "heading": "Bricolage Grotesque",
+    "body": "DM Sans"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "",
+    "direccion": "Santa Cruz de la Sierra, Bolivia"
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "statement": "Mudarse no es una transaccion:",
+  "statementAccent": "es el ano que viene de tu vida.",
+  "servicios": [
+    {
+      "titulo": "Comprar",
+      "desc": "Te mostramos solo lo que entra en tu presupuesto y en tu zona, con la documentacion revisada antes de la visita.",
+      "icono": "map-pin",
+      "url": ""
+    },
+    {
+      "titulo": "Vender",
+      "desc": "Tasacion, fotos y publicacion. Vos decidis el precio; nosotros filtramos a los curiosos y te traemos ofertas reales.",
+      "icono": "award",
+      "url": ""
+    },
+    {
+      "titulo": "Alquilar",
+      "desc": "Contratos claros y garantias explicadas antes de firmar, para inquilinos y para propietarios.",
+      "icono": "clock",
+      "url": ""
+    }
+  ],
+  "productos": [
+    {
+      "titulo": "Departamento — ficha de muestra",
+      "categoria": "Zona a definir",
+      "precio": "Precio a confirmar",
+      "desc": "Ficha de muestra. Se reemplaza con la propiedad real de la cartera.",
+      "imagen": "assets/propiedad-placeholder.svg",
+      "imagenAlt": "Marcador de foto: aca va la foto real del departamento",
+      "esMuestra": true,
+      "especificaciones": [
+        { "label": "dormitorios", "value": "—" },
+        { "label": "banos", "value": "—" },
+        { "label": "m2", "value": "—" }
+      ]
+    },
+    {
+      "titulo": "Casa — ficha de muestra",
+      "categoria": "Zona a definir",
+      "precio": "Precio a confirmar",
+      "desc": "Ficha de muestra. Se reemplaza con la propiedad real de la cartera.",
+      "imagen": "assets/propiedad-placeholder.svg",
+      "imagenAlt": "Marcador de foto: aca va la foto real de la casa",
+      "esMuestra": true,
+      "especificaciones": [
+        { "label": "dormitorios", "value": "—" },
+        { "label": "banos", "value": "—" },
+        { "label": "m2 terreno", "value": "—" }
+      ]
+    },
+    {
+      "titulo": "Oficina — ficha de muestra",
+      "categoria": "Zona a definir",
+      "precio": "Precio a confirmar",
+      "desc": "Ficha de muestra. Se reemplaza con la propiedad real de la cartera.",
+      "imagen": "assets/propiedad-placeholder.svg",
+      "imagenAlt": "Marcador de foto: aca va la foto real de la oficina",
+      "esMuestra": true,
+      "especificaciones": [
+        { "label": "ambientes", "value": "—" },
+        { "label": "m2", "value": "—" }
+      ]
+    },
+    {
+      "titulo": "Terreno — ficha de muestra",
+      "categoria": "Zona a definir",
+      "precio": "Precio a confirmar",
+      "desc": "Ficha de muestra. Se reemplaza con la propiedad real de la cartera.",
+      "imagen": "assets/propiedad-placeholder.svg",
+      "imagenAlt": "Marcador de foto: aca va la foto real del terreno",
+      "esMuestra": true,
+      "especificaciones": [
+        { "label": "m2", "value": "—" },
+        { "label": "frente", "value": "—" }
+      ]
+    },
+    {
+      "titulo": "Local comercial — ficha de muestra",
+      "categoria": "Zona a definir",
+      "precio": "Precio a confirmar",
+      "desc": "Ficha de muestra. Se reemplaza con la propiedad real de la cartera.",
+      "imagen": "assets/propiedad-placeholder.svg",
+      "imagenAlt": "Marcador de foto: aca va la foto real del local",
+      "esMuestra": true,
+      "especificaciones": [
+        { "label": "m2", "value": "—" },
+        { "label": "vidriera", "value": "—" }
+      ]
+    },
+    {
+      "titulo": "Departamento amoblado — ficha de muestra",
+      "categoria": "Zona a definir",
+      "precio": "Precio a confirmar",
+      "desc": "Ficha de muestra. Se reemplaza con la propiedad real de la cartera.",
+      "imagen": "assets/propiedad-placeholder.svg",
+      "imagenAlt": "Marcador de foto: aca va la foto real del departamento amoblado",
+      "esMuestra": true,
+      "especificaciones": [
+        { "label": "dormitorios", "value": "—" },
+        { "label": "m2", "value": "—" }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "pregunta": "¿Cobran algo por mostrarme una propiedad?",
+      "respuesta": "Respuesta de muestra: aca va la politica real de la inmobiliaria. No se publica hasta que el cliente la confirme."
+    },
+    {
+      "pregunta": "¿Que documentos necesito para alquilar?",
+      "respuesta": "Respuesta de muestra: aca va el listado real de requisitos y garantias que pide la inmobiliaria."
+    },
+    {
+      "pregunta": "¿Como tasan una propiedad para venderla?",
+      "respuesta": "Respuesta de muestra: aca va el metodo real de tasacion y los plazos que maneja la inmobiliaria."
+    },
+    {
+      "pregunta": "¿Trabajan en otras ciudades?",
+      "respuesta": "Respuesta de muestra: aca va la cobertura real. Se completa con las zonas donde la inmobiliaria opera de verdad."
+    }
+  ],
+  "newsletter": {
+    "titulo": "Lo que se mueve en el mercado, una vez al mes",
+    "texto": "Zonas, precios y oportunidades antes de que se publiquen. Sin spam y te podes dar de baja cuando quieras.",
+    "accion": "/api/onia-center/leads/intake",
+    "boton": "Quiero recibirlo",
+    "nota": "Demo: el formulario apunta al intake de leads de ONIA (?src= por slug). Requiere el sitio servido desde el panel para responder."
+  },
+  "footerLegal": "Sitio de demostracion de ONIA Web Factory. Los datos de contacto, la cartera y las respuestas son de muestra.",
+  "cta": {
+    "texto": "Hablar con un asesor",
+    "url": "#novedades"
+  },
+  "seo": {
+    "title": "Inmobiliaria Demo — modelo find-realestate-editorial",
+    "description": "Demostracion del modelo inmobiliario editorial de ONIA Web Factory, con tokens ONIA y datos de muestra marcados."
+  }
+}

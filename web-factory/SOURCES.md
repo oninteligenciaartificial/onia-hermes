@@ -301,3 +301,51 @@ UNSPLASH_ACCESS_KEY=    # unsplash.com/developers
 PEXELS_API_KEY=         # pexels.com/api (opcional)
 GITHUB_TOKEN=           # github.com/settings/tokens, scope public_repo (opcional; o `gh auth login`)
 ```
+
+---
+
+## 7. Cosecha 2026-08-16 — fuentes nuevas y correcciones
+
+Detalle por grupo en `data/references/design-sources/*.md` (librerias-componentes,
+inspiracion-landings, motion-y-3d, herramientas-builders, dashboards-y-blocks,
+skill-uiux-y-movil). Síntesis: `docs/DESIGN_LEARNED_2026.md`.
+
+### Fuentes NUEVAS
+
+| Fuente | Para | Licencia | Veredicto |
+|---|---|---|---|
+| Tremor Blocks (blocks.tremor.so) | 300+ bloques data-UI: KPI cards, filterbars, tablas, empty states, billing | free open-source (verificar LICENSE al importar cada bloque) | Adoptar — capa data-UI por defecto, copy-paste + retokenizar |
+| MotionScore (motion.dev) | Auditoría S–F de performance de animación desktop+mobile | gratis | Adoptar como gate de QA pre-ship |
+| Motion+ (motion.dev) | Componentes motion premium (AnimateNumber, Ticker, Cursor, Curtains) | £299 pago único; cláusula Builder's License si se revenden capacidades | NO comprar — P1–P22 del banco lo cubren |
+| Motion UI (motion.dev) | ~30 secciones animadas prefab | pago | Descartada — viola anti-template policy |
+| Rotato (app.rotato.app) | Mockups 3D de dispositivo (imagen/video) para propuestas y reels | pago único ~USD 79–199 (sin confirmar); trial web gratis; EULA de exports por revisar | Adoptar-condicional — app nativa Mac-only; probar web beta en Windows; compra = permiso de Sergio |
+| Haikei (haikei.app) | SVG generativos: waves, blobs, blurry gradients, low-poly (< 10 KB) | gratis con límites; ToS NO licencia el output explícitamente | Inspirar — recolorear con CSS vars; a mediano plazo script propio paramétrico |
+| 10x App Builder (github.com/10x-app-builder/10x) | Builder agéntico de apps SwiftUI con loop plan→build→verify-screenshot | PolyForm Noncommercial 1.0.0 — RECHAZADA | Descartar código; inspirar solo su loop de verificación visual |
+| Stripe Dashboard | Referencia gold-standard de analytics: 4-6 KPI, drill-down, empty states | propietario | Reference-only (como Awwwards/Mobbin) |
+| PostHog | Modelo insight-como-unidad, feed personalizado, shell único | MIT parcial + carpetas EE propietarias | Reference-only — no importar código (base Ant Design) |
+| ui-ux-pro-max (SKILL.md, contenido extraído) | 12 reglas numéricas de QA + CLI `--design-system` | MIT (skill instalada en `C:\Users\PC\.claude\skills\ui-ux-pro-max`) | Adoptar — ya estaba como puntero en §2b; ahora citable por reglas |
+| Research móvil 2026 (Muzli, GenDesigns, UXPin, DesignStudio) | Bottom sheets con detents, tab bar, thumb-zone, swipe actions | research gratuito | Inspirar — solo estructura; implementar con shadcn/vaul propios |
+
+### Correcciones a filas existentes (pendiente editar en el cuerpo)
+
+- **§5b Componentry**: licencia CONFIRMADA MIT (repo `harshjdhv/componentry`) →
+  promover de "revisar licencia" a allowed-after-review y clonar al design-stack.
+- **§3 Efferd**: NO es "free" — es mix free/pro (~180 bloques; ej. Hero 9 pro + 3
+  free). Usar solo bloques free, como shadcnblocks. Su valor distintivo: categorías
+  App Shell (10) y Dashboard (10).
+- **§5b Fontpair**: cosechados 10 pares concretos mapeados a rubros ONIA (ver
+  `docs/DESIGN_LEARNED_2026.md` §4). Trampa: el par Montserrat+"Google Sans" incluye
+  fuente propietaria que NO está en Google Fonts — sustituir body por Inter/Figtree.
+- **§5b Lapa Ninja**: identificada como la fuente "7.300+ landing examples" (no
+  Landingfolio). Devuelve 403 a WebFetch (Cloudflare) — cosechar con Playwright y
+  navegador real. Colecciones tipográficas (712 typography / 172 serif / 77 mono) y
+  metadata de paleta+fuente por ejemplo sirven como validador de brand-kit por rubro.
+- **§5 Stitch**: rol asignado — intake visual (cierra el stub `harvester/vision/`) +
+  `generate_variants` pre-código + preview para propuestas. Nunca código final (HTML
+  no token-native; cuota Labs 350/50 gen/mes).
+- **§5b 10x.app**: esa entrada es la LANDING del 10x App Builder (arriba); la
+  referencia estructural sigue vigente, el producto queda rechazado por licencia.
+- **§1 shadcn/ui**: novedades 2025-2026 — Questionnaire (ago-2026), Toast con
+  promise-state (jul-2026), calendar/sidebar/dashboard blocks, Base UI reemplazó a
+  Radix como default (ojo mezcla de bases), registries desde GitHub (jun-2026) y MCP
+  server oficial.

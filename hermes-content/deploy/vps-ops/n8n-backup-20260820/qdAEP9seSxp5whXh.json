@@ -1,0 +1,187 @@
+{
+  "updatedAt": "2026-07-04T01:10:27.000Z",
+  "createdAt": "2026-06-09T22:05:32.376Z",
+  "id": "qdAEP9seSxp5whXh",
+  "name": "ONIA - Agenda: Briefing Diario",
+  "description": "Briefing diario 8am Bolivia: lee Google Calendar del día y envía resumen por Telegram a Sergio.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "cf0ae23b-cac8-40f5-98e6-81273fa92ffb",
+      "name": "Cron 8am Bolivia",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 12,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "00988989-3d34-42b8-bef8-5002e3390854",
+      "name": "Eventos Hoy",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "event",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "oninteligenciaartificial@gmail.com"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.setZone('America/La_Paz').startOf('day').toISO() }}",
+        "timeMax": "={{ $now.setZone('America/La_Paz').endOf('day').toISO() }}",
+        "options": {
+          "singleEvents": true,
+          "orderBy": "startTime"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "a3FResZHqQ32ptyt",
+          "name": "Google Calendar account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "id": "d50ce735-6e60-410f-8a58-ee66e459cf51",
+      "name": "Formatear Agenda",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const items = $input.all();\nconst hoy = new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });\nlet msg = '📅 <b>Agenda ' + hoy + '</b>\\n\\n';\nconst eventos = items.filter(i => i.json.id);\nif (eventos.length === 0) {\n  msg += '✅ Día libre — sin eventos agendados.';\n} else {\n  for (const item of eventos) {\n    const ev = item.json;\n    const s = ev.start && ev.start.dateTime ? new Date(ev.start.dateTime).toLocaleTimeString('es-BO', { timeZone: 'America/La_Paz', hour: '2-digit', minute: '2-digit' }) : 'Todo el día';\n    const e = ev.end && ev.end.dateTime ? new Date(ev.end.dateTime).toLocaleTimeString('es-BO', { timeZone: 'America/La_Paz', hour: '2-digit', minute: '2-digit' }) : '';\n    msg += '⏰ ' + s + (e ? ' - ' + e : '') + '  <b>' + (ev.summary || 'Sin título') + '</b>\\n';\n  }\n}\nreturn [{ json: { mensaje: msg } }];"
+      }
+    },
+    {
+      "id": "73eea54a-c8e5-446a-a5b4-629b6c8b08b0",
+      "name": "Briefing a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.mensaje }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "04e73596-8c44-4753-9035-01992cabfe95"
+    }
+  ],
+  "connections": {
+    "Cron 8am Bolivia": {
+      "main": [
+        [
+          {
+            "node": "Eventos Hoy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eventos Hoy": {
+      "main": [
+        [
+          {
+            "node": "Formatear Agenda",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatear Agenda": {
+      "main": [
+        [
+          {
+            "node": "Briefing a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cron 8am Bolivia": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "796b810c-f0d2-495b-b99b-5c4f42c644f6",
+  "activeVersionId": null,
+  "versionCounter": 5,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-09T22:05:32.382Z",
+      "createdAt": "2026-06-09T22:05:32.382Z",
+      "role": "workflow:owner",
+      "workflowId": "qdAEP9seSxp5whXh",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

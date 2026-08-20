@@ -21,7 +21,7 @@
 
 .metaLine {
   margin-top: 1.1rem;
-  font-size: 0.78rem;
+  font-size: max(0.78rem, var(--fs-micro-min));
   letter-spacing: 0.05em;
   color: var(--ink-faint);
 }
@@ -41,7 +41,7 @@
 
 .draftTag {
   font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
+  font-size: max(0.7rem, var(--fs-label-min));
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -114,7 +114,7 @@
 
 .tocTitle {
   font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
+  font-size: max(0.7rem, var(--fs-label-min));
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -128,7 +128,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
-  font-size: 0.86rem;
+  font-size: max(0.86rem, var(--fs-micro-min));
   line-height: 1.45;
 }
 
@@ -144,6 +144,17 @@
 .tocList a:hover {
   color: var(--ink);
   background: var(--surface-dim);
+}
+
+/* El indice es una lista de navegacion que se toca con el pulgar: 44px por
+   entrada, incluido el <summary> que la abre. */
+@media (max-width: 599px) {
+  .tocTitle,
+  .tocList a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
 }
 
 /* ---------- articulo ---------- */
@@ -234,7 +245,7 @@
 
 .table th {
   font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;

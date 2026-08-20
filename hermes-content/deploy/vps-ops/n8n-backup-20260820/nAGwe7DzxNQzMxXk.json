@@ -1,0 +1,180 @@
+{
+  "updatedAt": "2026-08-12T23:37:52.618Z",
+  "createdAt": "2026-08-12T23:37:39.556Z",
+  "id": "nAGwe7DzxNQzMxXk",
+  "name": "ONIA - Video Intake (link por Telegram)",
+  "description": "Sergio manda un link de IG/TikTok/YouTube por Telegram y dispara el workflow video-intake de GitHub Actions (repository_dispatch), que baja el video, lo ve, lo transcribe y commitea la ficha. El token de GitHub va como CREDENCIAL Header Auth, nunca en el ",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "34f104c0-71fb-4904-ad4c-291ebdc2819a",
+      "name": "Link por Telegram",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "76d269dd-4abf-418a-abb4-1c813fb07ddf"
+    },
+    {
+      "id": "8987134b-fbcb-4a2d-a8c9-060fda9ba780",
+      "name": "Extraer links de video",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const m = $input.first().json.message || {};\nconst texto = (m.text || '') + ' ' + (m.caption || '');\nconst encontrados = texto.match(/https?:\\/\\/\\S*?(?:instagram\\.com|tiktok\\.com|youtube\\.com|youtu\\.be)\\S*/gi) || [];\nif (!encontrados.length) return [];\nreturn [{ json: { urls: encontrados.join(' '), cuantos: encontrados.length, chatId: m.chat.id } }];"
+      }
+    },
+    {
+      "id": "862b3341-4af1-4dd2-aad3-ea3a455c3694",
+      "name": "Disparar video-intake en GitHub",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/repos/oninteligenciaartificial/onia-hermes/dispatches",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "onia-n8n"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ event_type: \"video-intake\", client_payload: { urls: $json.urls } }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "4c266770-39f8-4f6a-b1d8-514846febff5",
+      "name": "Avisar que entro",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "chatId": "={{ $(\"Extraer links de video\").first().json.chatId }}",
+        "text": "={{ \"Recibido: \" + $(\"Extraer links de video\").first().json.cuantos + \" link(s). Bajando y leyendo el video; la ficha se commitea en hermes-content/references/video-intake/ y te aviso al terminar.\" }}",
+        "additionalFields": {},
+        "resource": "message",
+        "operation": "sendMessage"
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "8be82a96-4ec1-4487-ad5d-193a98965fb0"
+    }
+  ],
+  "connections": {
+    "Link por Telegram": {
+      "main": [
+        [
+          {
+            "node": "Extraer links de video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer links de video": {
+      "main": [
+        [
+          {
+            "node": "Disparar video-intake en GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disparar video-intake en GitHub": {
+      "main": [
+        [
+          {
+            "node": "Avisar que entro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "75dd74f2-d786-40b2-a466-1d5b9d511e04",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-12T23:37:39.564Z",
+      "createdAt": "2026-08-12T23:37:39.564Z",
+      "role": "workflow:owner",
+      "workflowId": "nAGwe7DzxNQzMxXk",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Fix: resource/operation del nodo de Telegram",
+    "description": "El nodo de aviso no declaraba resource=message / operation=sendMessage, que el validador marcaba como discriminador faltante."
+  }
+}

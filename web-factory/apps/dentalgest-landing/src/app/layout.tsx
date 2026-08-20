@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Fraunces, Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import { SITE_URL } from "@/lib/constants";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -29,6 +30,13 @@ const SITE_DESCRIPTION =
   "Agenda, historias clínicas, facturación SIAT y un agente que reprograma a los pacientes que te fallan — todo por WhatsApp, sin planillas ni cuaderno.";
 
 export const metadata: Metadata = {
+  /*
+   * Base de toda URL absoluta (canonical y OG). Sin esto Next arma los
+   * canonical contra `http://localhost:3000` y WhatsApp no resuelve rutas
+   * relativas al armar el preview. El `canonical` en si se declara POR PAGINA
+   * (ver `page.tsx`): puesto aca, el 404 heredaria el canonical del home.
+   */
+  metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   // OG sin imagen a proposito: la imagen sera una captura REAL del sistema

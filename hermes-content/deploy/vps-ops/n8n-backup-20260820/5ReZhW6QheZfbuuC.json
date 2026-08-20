@@ -1,0 +1,243 @@
+{
+  "updatedAt": "2026-08-12T22:53:00.597Z",
+  "createdAt": "2026-08-07T19:47:51.827Z",
+  "id": "5ReZhW6QheZfbuuC",
+  "name": "ONIA - Vigilante del chatbot (alerta Telegram)",
+  "description": "Cada 10 min chequea el bot de WhatsApp (+591 75414930) corriendo /opt/onia/bot/webhook-server.sh status por SSH, y avisa a Sergio por Telegram SOLO si algo esta mal: no responde / JSON ilegible, ok distinto de true, o knowledge.source distinto de file. Oj",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "da7a45a2-6277-499f-a936-2f6e86374913",
+      "name": "Cada 10 minutos",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/10 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "6d2a32f4-9f0d-4a08-9bc1-40851a1bac60",
+      "name": "Estado del bot (VPS)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "command",
+        "operation": "execute",
+        "authentication": "privateKey",
+        "command": "/opt/onia/bot/webhook-server.sh status",
+        "cwd": "/root"
+      },
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "4XKauEX3b6cqaDhW",
+          "name": "ONIA VPS SSH"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "f3db8b42-3c8d-4c5d-a5eb-b6c7114136c1",
+      "name": "Evaluar estado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const NL = String.fromCharCode(10);\nconst raw = items[0] ? items[0].json : {};\nconst stdout = String(raw.stdout || '').trim();\nconst stderr = String(raw.stderr || '').trim();\nconst sshError = raw.error ? String(raw.error.message || raw.error) : '';\nconst limpiar = (v) => String(v === null || v === undefined ? '' : v).replace(/[<>&]/g, ' ');\nconst ahora = new Date().toLocaleString('es-BO', { timeZone: 'America/La_Paz', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });\nlet h = null;\ntry {\n  const a = stdout.indexOf('{');\n  const b = stdout.lastIndexOf('}');\n  if (a >= 0 && b > a) h = JSON.parse(stdout.slice(a, b + 1));\n} catch (e) { h = null; }\nconst PIE = NL + 'Detectado: ' + ahora + ' (el chequeo corre cada 10 min, o sea empezo hace 10 min o menos)' + NL + 'Ver estado: /opt/onia/bot/webhook-server.sh status' + NL + 'Ver logs:   /opt/onia/bot/webhook-server.sh logs 50';\nlet alert = false;\nlet motivo = 'ok';\nlet texto = '';\nif (sshError || !stdout || !h) {\n  alert = true;\n  motivo = 'sin_respuesta';\n  const detalle = sshError || stderr || stdout || '(sin salida)';\n  texto = 'BOT DE WHATSAPP CAIDO' + NL + NL + 'El chequeo no devolvio un estado legible. Nadie esta atendiendo a quien escriba al +591 75414930.' + NL + NL + 'Salida cruda: ' + limpiar(detalle).slice(-400) + NL + PIE;\n} else if (h.db && h.db.ok !== true) {\n  // VA ANTES que el chequeo de `ok`: con la base caida `ok` tambien es false, y el texto generico\n  // diria \"no recibe respuesta\", que es MENTIRA — el bot contesta igual. Este es el modo de falla\n  // que costo 5 dias en agosto sin que nadie se enterara.\n  alert = true;\n  motivo = 'db_caida';\n  texto = 'EL BOT CONTESTA PERO NO GUARDA NADA' + NL + NL + 'La base no responde. El bot sigue respondiendo de memoria, asi que desde afuera parece sano, pero: cada mensaje reinicia la conversacion desde cero, un reintento de Chatwoot le manda la misma respuesta DOS VECES al prospecto, y NINGUN lead esta llegando al CRM.' + NL + NL + 'Error: ' + limpiar(h.db.error || 'sin detalle') + NL + 'Latencia: ' + limpiar(h.db.latencyMs === undefined ? '?' : h.db.latencyMs) + ' ms' + NL + NL + 'Revisar primero: el firewall entre contenedores (la regla ONIA-BLOCK-3000 corta el puerto de PostgREST), y que supabase-rest y supabase-kong esten arriba.' + NL + PIE;\n} else if (h.ok !== true) {\n  alert = true;\n  motivo = 'ok_false';\n  const razon = h.reason ? h.reason : ((h.auth && h.auth.aviso) ? h.auth.aviso : 'sin motivo declarado');\n  texto = 'BOT DE WHATSAPP NO ESTA ATENDIENDO' + NL + NL + 'El servidor respondio ok:false. Quien escriba al +591 75414930 no recibe respuesta.' + NL + NL + 'Motivo: ' + limpiar(razon) + NL + PIE;\n} else if (((h.knowledge || {}).source) !== 'file') {\n  alert = true;\n  motivo = 'knowledge_no_file';\n  const k = h.knowledge || {};\n  texto = 'EL BOT PERDIO LA CAPA DE CONOCIMIENTO' + NL + NL + 'El bot responde, pero volvio a los valores del CODIGO: lo que se edito en knowledge.json NO se esta aplicando a lo que contesta.' + NL + NL + 'knowledge.source: ' + limpiar(k.source || '(ausente)') + '  (deberia ser: file)' + NL + 'Version cargada: ' + limpiar(k.version || 'sin version') + NL + (k.loadedAt ? 'Cargada el: ' + limpiar(k.loadedAt) + NL : '') + (k.lastError ? 'Ultimo error: ' + limpiar(k.lastError) + NL : '') + 'Reaplicar: /opt/onia/bot/webhook-server.sh knowledge' + NL + PIE;\n}\nreturn [{ json: { alert: alert, motivo: motivo, ok: h ? h.ok === true : false, db: (h && h.db) ? h.db.ok === true : null, source: (h && h.knowledge) ? h.knowledge.source : null, text: texto.slice(0, 3900) } }];"
+      }
+    },
+    {
+      "id": "51ef854f-f061-4912-9803-c1d49a00d947",
+      "name": "Hay problema?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "alerta",
+              "leftValue": "={{ $json.alert }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "d3095b15-23f3-49c4-87d3-35eb6dc0af7c",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        -80
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "73cd8eeb-5e27-4312-bf08-f22e3c967fe5"
+    },
+    {
+      "id": "c4ea64c6-c712-49e7-b93b-aeda17fc0ac4",
+      "name": "Sticky Note 77c55298",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -50,
+        -130
+      ],
+      "parameters": {
+        "content": "## Vigilante del chatbot de WhatsApp\n\nCada 10 min corre `webhook-server.sh status` por SSH y avisa a Sergio SOLO si algo esta mal.\n\n**Tres condiciones de alerta:** (1) no responde / JSON ilegible, (2) `ok` distinto de true, (3) `knowledge.source` distinto de `file`.\n\n**Ojo:** `status` SIEMPRE sale con codigo 0, incluso con el bot caido (imprime `ok:false` con el motivo). Por eso la decision se toma leyendo el JSON, NUNCA el exit code.\n\n**Cero variables de entorno:** el plan VPS de n8n no las soporta y resuelven vacio en silencio (asi se rompieron 20 workflows). El token va por la credencial `Telegram account`; el chat ID y el comando estan escritos en el nodo.\n\nSi no hay problema, no manda nada. Una alerta que llega todos los dias se ignora en una semana.",
+        "color": 3,
+        "width": 1196,
+        "height": 280
+      }
+    }
+  ],
+  "connections": {
+    "Cada 10 minutos": {
+      "main": [
+        [
+          {
+            "node": "Estado del bot (VPS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Estado del bot (VPS)": {
+      "main": [
+        [
+          {
+            "node": "Evaluar estado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluar estado": {
+      "main": [
+        [
+          {
+            "node": "Hay problema?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay problema?": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Cada 10 minutos": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "c9dac193-0b11-4636-9d93-4ae856927c6a",
+  "activeVersionId": "c9dac193-0b11-4636-9d93-4ae856927c6a",
+  "versionCounter": 3,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-08-07T19:47:51.838Z",
+      "createdAt": "2026-08-07T19:47:51.838Z",
+      "role": "workflow:owner",
+      "workflowId": "5ReZhW6QheZfbuuC",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Alerta propia para base caida",
+    "description": "Con el /health nuevo, si la base no responde `ok` ya pasa a false — pero el texto seria falso (\"no recibe respuesta\": mentira, el bot contesta) y sin motivo. Se agrega una rama ANTES que dice lo que realmente pasa: contesta pero no guarda nada, ni leads. Incluye el error y la latencia, y apunta al firewall del puerto 3000, que es lo que lo causo en agosto."
+  }
+}

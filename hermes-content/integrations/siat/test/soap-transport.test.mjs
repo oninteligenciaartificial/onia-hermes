@@ -1,7 +1,8 @@
 /*
  * Tests de la capa de TRANSPORTE HTTP del cliente SOAP del SIAT (Bolivia).
  * fetchImpl es un MOCK: NO se toca la red real. Se verifica el header
- * Authorization, la logica de reintentos (5xx si, 4xx no), el manejo de timeout
+ * apikey (TokenApi; verificado en vivo 2026-08-06 contra el piloto), la
+ * logica de reintentos (5xx si, 4xx no), el manejo de timeout
  * como error de red y la clasificacion en 5 casos. El SOAPAction exacto queda
  * [VERIFICAR] contra el WSDL -- ver cabecera de src/soap-transport.mjs.
  * Run: node --test hermes-content/integrations/siat/test/soap-transport.test.mjs
@@ -34,18 +35,20 @@ function fixedFetch(status, body = "") {
 }
 
 describe("postSoap: headers", () => {
-  it("el header Authorization sale 'Token XYZ' (via buildAuthHeader)", async () => {
+  it("el header apikey sale 'TokenApi X' y NO viaja Authorization (verificado en vivo 2026-08-06)", async () => {
     const fetchImpl = fixedFetch(200, "<r><transaccion>true</transaccion></r>");
     await postSoap({
       endpoint: "https://siat.example/v2/FacturacionCodigos",
       envelope: "<soapenv:Envelope/>",
-      token: "XYZ",
+      token: "TOKEN_FAKE",
       soapAction: "cuis",
       fetchImpl,
       sleepImpl: noSleep,
     });
     assert.equal(fetchImpl.calls.length, 1);
-    assert.equal(fetchImpl.calls[0].opts.headers.Authorization, "Token XYZ");
+    assert.equal(fetchImpl.calls[0].opts.headers.apikey, "TokenApi TOKEN_FAKE");
+    // 'Authorization: Token X' devuelve Fault "EL SERVICIO REQUIERE API KEY".
+    assert.equal(fetchImpl.calls[0].opts.headers.Authorization, undefined);
   });
 
   it("manda Content-Type SOAP 1.1, SOAPAction entrecomillado y method POST", async () => {

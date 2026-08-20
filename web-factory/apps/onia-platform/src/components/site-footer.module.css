@@ -1,63 +1,84 @@
+/*
+ * Pie — sitemap agrupado por sustantivos: la marca y la identidad legal a la
+ * izquierda, tres columnas de destinos a la derecha. Reemplaza a la fila
+ * plana de 13 links que quebraba en dos lineas desparejas.
+ */
+
 .footer {
+  font-family: var(--font-sans), system-ui, sans-serif;
   border-top: 1px solid var(--line-soft);
-  background: var(--bg-deep);
-  padding-block: clamp(3rem, 2rem + 3vw, 5rem) 2rem;
-}
-
-.toggleRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.2rem 2rem;
-  padding-bottom: 2.4rem;
-  border-bottom: 1px solid var(--line-soft);
-}
-
-.toggleItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  padding-block: clamp(2.5rem, 5vw, 4rem) 3rem;
   color: var(--ink-faint);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.4rem;
-  padding-block: 2.6rem;
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  gap: 2rem clamp(1.5rem, 4vw, 4rem);
+  align-items: start;
 }
 
-@media (min-width: 760px) {
+@media (max-width: 899px) {
   .grid {
-    grid-template-columns: 1.4fr 1fr 1.2fr 1.1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .brandCol {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 479px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.brandCol {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: start;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
 }
 
-.blurb {
-  margin-top: 0.8rem;
+.firma {
+  font-size: max(0.9rem, var(--fs-micro-min));
   color: var(--ink-soft);
-  max-width: 34ch;
-  font-size: 0.95rem;
+  max-width: 26ch;
+  text-wrap: pretty;
+  margin: 0;
 }
 
-.col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.7rem;
-  font-size: 0.93rem;
+/* etiqueta de grupo: el mismo gesto mono de los kickers, sin el punto */
+.colTitulo {
+  font-family: var(--font-mono), monospace;
+  font-size: max(0.68rem, var(--fs-label-min));
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 0.4rem;
+}
+
+.col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
 }
 
 .col a {
   color: var(--ink-soft);
   text-decoration: none;
+  font-size: max(0.9rem, var(--fs-micro-min));
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
 }
 
 .col a:hover {
@@ -66,53 +87,14 @@
   text-underline-offset: 3px;
 }
 
-.colTitle {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin-bottom: 0.3rem;
-}
-
-.soon {
-  color: var(--ink-faint);
-}
-
-.legal {
-  border-top: 1px solid var(--line-soft);
-  padding-top: 1.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.82rem;
-  color: var(--ink-faint);
-}
-
-.legalNav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.1rem;
-}
-
-.legalNav a {
-  color: var(--ink-faint);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.legalNav a:hover {
-  color: var(--ink);
-}
-
-/* Identidad legal (razon social, NIT, contacto). Mas chica y atenuada que el
-   resto del pie: es informacion de cumplimiento, no de venta. */
 .legalId {
   font-style: normal;
-  font-size: 0.75rem;
+  font-size: max(0.75rem, var(--fs-label-min));
   line-height: 1.7;
   color: var(--ink-faint);
   text-wrap: pretty;
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.6rem;
 }
 
 .legalId a {
@@ -126,14 +108,11 @@
   color: var(--ink);
 }
 
-@media (min-width: 900px) {
-  .legal {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .legal p {
-    max-width: 44ch;
+/* En el telefono el mail se toca con el pulgar: 44px de area tactil. */
+@media (max-width: 899px) {
+  .legalId a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 }

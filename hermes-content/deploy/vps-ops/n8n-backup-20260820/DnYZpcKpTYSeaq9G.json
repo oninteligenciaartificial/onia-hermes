@@ -1,0 +1,100 @@
+{
+  "updatedAt": "2026-07-04T01:11:11.000Z",
+  "createdAt": "2026-06-05T14:37:35.915Z",
+  "id": "DnYZpcKpTYSeaq9G",
+  "name": "Hermes TEMP - DentalGest PostgREST Status Check",
+  "description": "Temporary manual read-only check for DentalGest PostgREST/Data API configuration and public.n8n_* function visibility.",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "id": "5f468805-29e3-4319-94ac-2d46908cb802",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0bfb88e8-82df-40e5-9f63-e345dd4d12c4",
+      "name": "Check DentalGest Database",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        540,
+        300
+      ],
+      "parameters": {
+        "resource": "database",
+        "operation": "executeQuery",
+        "query": "WITH role_config AS (\n  SELECT coalesce(array_to_string(rolconfig, E'\\n'), '') AS authenticator_config\n  FROM pg_roles\n  WHERE rolname = 'authenticator'\n), function_count AS (\n  SELECT count(*)::int AS n8n_function_count\n  FROM pg_proc p\n  JOIN pg_namespace n ON n.oid = p.pronamespace\n  WHERE n.nspname = 'public'\n    AND p.proname LIKE 'n8n_%'\n)\nSELECT\n  (SELECT authenticator_config FROM role_config) AS authenticator_config,\n  (SELECT n8n_function_count FROM function_count) AS n8n_function_count,\n  now() AS checked_at;",
+        "options": {
+          "queryBatching": "single"
+        }
+      },
+      "credentials": {
+        "postgres": {
+          "id": "2P4w95n0vir90EkT",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Check DentalGest Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "a27e869a-5a63-4dab-9719-ac98ff61a335",
+  "activeVersionId": null,
+  "versionCounter": 6,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-06-05T14:37:35.937Z",
+      "createdAt": "2026-06-05T14:37:35.937Z",
+      "role": "workflow:owner",
+      "workflowId": "DnYZpcKpTYSeaq9G",
+      "projectId": "E5l9mqZKAKdwFaMd",
+      "project": {
+        "updatedAt": "2026-02-13T21:54:25.926Z",
+        "createdAt": "2026-02-13T14:56:49.118Z",
+        "id": "E5l9mqZKAKdwFaMd",
+        "name": "On IA <oninteligenciaartificial@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "68ecdb69-2928-42bf-9360-5d2274e25447"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

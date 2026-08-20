@@ -101,8 +101,13 @@ export const quoteGroups: QuoteGroup[] = [
     title: "Add-ons",
     hint: "Se venden despues del primer cierre. Terceros los paga el cliente.",
     components: [
-      { id: "wa-operativo-dental-setup", label: "WhatsApp operativo Onia Dental (instalacion + Meta)", price: 650, kind: "oneoff", category: "addon", commissionRate: 0.1, needsApproval: true, note: "650 inst. + 350/mes + costos Meta. Requiere aprobacion." },
-      { id: "wa-operativo-dental-mes", label: "WhatsApp operativo Onia Dental (mensual)", price: 350, kind: "monthly", category: "addon", commissionRate: 0, needsApproval: true },
+      // Precio ratificado 2026-08-15. Fuente de verdad: onia-platform/lib/pricing.ts
+      // (WHATSAPP_ADDON) — es el unico archivo que cobra de verdad. Antes vivia aca un
+      // 650 inst. + 350/mes que se habia retirado y quedo cotizable durante semanas, en
+      // una pagina publica sin auth ni noindex.
+      { id: "wa-chatbot-setup", label: "Chatbot WhatsApp con IA (instalacion)", price: 1500, kind: "oneoff", category: "addon", commissionRate: 0.1, needsApproval: true, note: "Bs 1.500 inst. + Bs 1.490/mes. Incluye 500 conversaciones/mes; el excedente de Meta va al costo." },
+      { id: "wa-chatbot-mes", label: "Chatbot WhatsApp con IA (mensual)", price: 1490, kind: "monthly", category: "addon", commissionRate: 0, needsApproval: true },
+      { id: "wa-chatbot-medida", label: "Chatbot a medida (integracion o flujo propio)", price: 0, kind: "oneoff", category: "addon", commissionRate: 0.1, needsApproval: true, note: "No se cotiza de lista: se define el alcance con el cliente y recien ahi se pone precio." },
       { id: "agenda-publica", label: "Agenda publica Onia Dental", price: 150, kind: "monthly", category: "addon", commissionRate: 0.1 },
       { id: "usuario-extra", label: "Usuario extra Onia Dental", price: 70, kind: "monthly", category: "addon", commissionRate: 0.1 },
       { id: "insumos-dental", label: "Insumos Onia Dental", price: 80, kind: "monthly", category: "addon", commissionRate: 0.1 },
@@ -128,5 +133,7 @@ export const quoteRules: string[] = [
   "La vendedora lidera llamadas y seguimiento. Sergio entra en casos importantes o cierres complejos.",
   "Prometer solo alcance confirmado. WhatsApp conversacional u operativo: sujeto a validacion Meta y costos de mensajeria.",
   "Terceros los paga el cliente: dominio, hosting, pasarela, QR, Meta, IA, pauta, migracion grande.",
-  "Auditoria y diagnostico son gancho gratis por ahora. Videos IA / Higgsfield pausados como producto.",
+  "Auditoria por Zoom: GRATIS, 30 minutos. La consultoria personalizada que busca fallas en la empresa SI se cobra, y el precio se define caso por caso con Sergio (no hay tarifa de lista todavia).",
+  "Videos IA / Higgsfield: pausados como producto, no se cotizan.",
+  "Chatbot: hay UN precio con IA. Lo que no entre en el estandar no se descuenta ni se improvisa — se define el alcance y se cotiza a medida.",
 ];
