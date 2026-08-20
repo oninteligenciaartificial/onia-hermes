@@ -2,12 +2,14 @@ import type { OperatingAgent, SergioScheduleBlock } from "@/app/onia-center/type
 import type { RuntimeReview, RuntimeTask } from "@/lib/onia-center-store";
 import type { LiveAgentStatus, ReviewBody } from "@/app/onia-center/live/live-runtime";
 import { AgentRosterTile } from "./AgentRosterTile";
+import { BookingsTile } from "./BookingsTile";
+import type { CalcomBooking } from "@/lib/onia-center-store";
 import { DayTimeline } from "./DayTimeline";
 import { KpiStrip, type KpiItem } from "./KpiStrip";
-import { ReviewQueueTile } from "./ReviewQueueTile";
 import { TeamWorkPanel } from "./TeamWorkPanel";
 
 interface HoyViewProps {
+  bookings?: CalcomBooking[];
   agents: OperatingAgent[];
   liveInfo?: Record<string, LiveAgentStatus>;
   kpis?: KpiItem[];
@@ -35,6 +37,7 @@ function todayLabel(referenceDate: Date): string {
 }
 
 export function HoyView({
+  bookings = [],
   agents,
   liveInfo,
   kpis,
@@ -65,7 +68,7 @@ export function HoyView({
 
       <div className="grid items-start gap-[18px] lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
         <div className="grid content-start gap-[18px]">
-          <ReviewQueueTile reviews={reviews} bodies={reviewBodies} canApprove={canApprove} />
+          <BookingsTile bookings={bookings} />
           {showSchedule ? <DayTimeline blocks={scheduleBlocks} referenceDate={referenceDate} /> : null}
         </div>
         <div className="grid content-start gap-[18px]">

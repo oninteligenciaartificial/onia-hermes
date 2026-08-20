@@ -1,0 +1,102 @@
+{
+  "title": "Nadie te cuenta esto sobre automatizar con IA",
+  "caption": "Casi todos los que no automatizan no es porque no quieran: es porque creen tres cosas que no son ciertas. Que la IA va a reemplazar a su gente. Que eso es solo para empresas grandes. Que tarda meses en funcionar. Ninguna de las tres se sostiene, y mientras tanto siguen perdiendo clientes por responder tarde. Guardá el slide 5 y comentá MITO: te digo cuál de los tres te está frenando a vos.",
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#pymes",
+    "#negocios",
+    "#santacruz",
+    "#emprender"
+  ],
+  "comment_trigger": "Comentá MITO",
+  "cta": "Guardalo",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "La verdad",
+      "headline": "Nadie te cuenta esto sobre la *IA*",
+      "body": "Tres mitos que te están costando clientes.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Persona pensativa, luz verde, misterio.",
+      "alt_text": "Nadie te cuenta esto sobre la IA",
+      "bg": "hermes-content/assets/onia/heroes/mito-01.png"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El freno",
+      "headline": "No es el precio: es el *miedo*",
+      "body": "La mayoría no automatiza por lo que cree, no por lo que cuesta. Y mientras duda, sigue contestando a mano y perdiendo a los que preguntan de noche.",
+      "callout": "Tres creencias que no se sostienen ↘",
+      "save_worthy": false,
+      "visual_prompt": "Persona dudando frente a puerta con luz verde.",
+      "alt_text": "No es el precio es el miedo",
+      "bg": "hermes-content/assets/onia/heroes/mito-02.png"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Mito 1",
+      "headline": "«Va a reemplazar a mi *gente*»",
+      "body": "Al revés: les saca lo repetitivo. Tu equipo deja de copiar datos y contestar lo mismo, y se dedica a vender y atender bien.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Equipo humano trabajando contento con pantallas verdes.",
+      "alt_text": "Mito va a reemplazar a mi gente",
+      "bg": "hermes-content/assets/onia/heroes/mito-03.png"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Mito 2",
+      "headline": "«Eso es para empresas *grandes*»",
+      "body": "Justo al contrario. La empresa grande tiene 20 personas para contestar. Vos no. Sos el que más necesita que el sistema trabaje solo.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Negocio pequeño de barrio, luz verde, humilde pero digno.",
+      "alt_text": "Mito es para empresas grandes",
+      "bg": "hermes-content/assets/onia/heroes/mito-04.png"
+    },
+    {
+      "number": 5,
+      "role": "save",
+      "pill": "Framework",
+      "headline": "Los 3 mitos y la *verdad*",
+      "body": "1) No reemplaza: libera. 2) No es para grandes: el chico lo necesita más. 3) No tarda meses: el primer proceso arranca en días. ¿Cuál te frenaba a vos?",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Tarjeta framework, tres puntos.",
+      "alt_text": "Los 3 mitos y la verdad",
+      "bg": "hermes-content/assets/onia/heroes/mito-05.png"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Mito 3",
+      "headline": "«Tarda *meses* en funcionar»",
+      "body": "El primer proceso — responder y seguir a los que preguntan — arranca en días. No se automatiza todo de golpe: se empieza por el que hoy te frena.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Calendario con pocos dias marcados en verde.",
+      "alt_text": "Mito tarda meses en funcionar",
+      "bg": "hermes-content/assets/onia/heroes/mito-06.png"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Guardalo",
+      "headline": "¿Cuál te frena a *vos*?",
+      "body": "*Guardalo* para la próxima vez que alguien te diga cualquiera de los tres.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "CTA fuerte.",
+      "alt_text": "Comentá MITO",
+      "bg": "hermes-content/assets/onia/heroes/mito-07.png"
+    }
+  ],
+  "job": "educacional"
+}

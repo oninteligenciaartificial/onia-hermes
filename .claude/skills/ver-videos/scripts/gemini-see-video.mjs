@@ -10,8 +10,27 @@
 // Env: GEMINI_API_KEY (gratis, aistudio.google.com/apikey). GEMINI_MODEL (default gemini-2.5-flash).
 //   GEMINI_MEDIA_RES=low  -> ~100 tok/s en vez de ~300 (videos largos, ahorra cuota).
 import { readFile, stat } from "node:fs/promises";
+import { readFileSync, existsSync } from "node:fs";
+import { dirname, join } from "node:path";
 
-const API_KEY = process.env.GEMINI_API_KEY || "";
+// Sin GEMINI_API_KEY en el env, buscar un .env subiendo desde este script y
+// desde el cwd (el del repo esta gitignoreado). Asi "node gemini-see-video.mjs"
+// funciona solo, sin exportar nada a mano.
+function envKeyFromDotenv() {
+  const roots = new Set();
+  for (let d of [dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), process.cwd()]) {
+    for (let i = 0; i < 8; i++) { roots.add(d); const up = dirname(d); if (up === d) break; d = up; }
+  }
+  for (const root of roots) {
+    const p = join(root, ".env");
+    if (!existsSync(p)) continue;
+    const m = readFileSync(p, "utf8").match(/^GEMINI_API_KEY=(.+)$/m);
+    if (m) return m[1].trim();
+  }
+  return "";
+}
+
+const API_KEY = process.env.GEMINI_API_KEY || envKeyFromDotenv();
 // gemini-flash-latest = alias al flash actual (no se deprecia; las cuentas nuevas ya no
 // tienen gemini-2.5-flash). Override con GEMINI_MODEL (ej. gemini-3.6-flash, gemini-flash-lite-latest).
 const MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";

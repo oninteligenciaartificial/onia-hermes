@@ -132,6 +132,7 @@ const SCRIPTS = {
     turns: [
       { text: "DEMO" },
       { text: "ya soy cliente y el sistema no me anda, como configuro los recordatorios?" },
+<<<<<<< HEAD
     ],
   },
   "recepcionista-ferreteria": {
@@ -147,6 +148,8 @@ const SCRIPTS = {
       { text: "quiero comprar 100 tornillos" }, // escala: lo confirma doña Marta
       { text: "cuanto cuestan?" }, // handoff en curso: el bot ya no habla encima del humano
       { text: "Servicios" }, // click de boton EN handoff: la FAQ exacta si se contesta (solo lectura)
+=======
+>>>>>>> origin/main
     ],
   },
 };

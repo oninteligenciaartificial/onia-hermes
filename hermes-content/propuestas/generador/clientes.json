@@ -1138,5 +1138,297 @@
       "texto": "Agendar diagnóstico sin costo →"
     },
     "_todo": "RATIFICADO 2026-07-05: E1 (4.900+490) ofertable YA — propuesta LISTA para enviar. E2/E3 se muestran como referencia/ancla pero NO se firman sin recotizar tras el cierre de Bolivian Electric fase 1."
+  },
+  {
+    "slug": "premium-cars",
+    "nombre": "Premium Cars",
+    "accent": "#d9a400",
+    "heroGrad": "linear-gradient(135deg,#14100a 0%,#2a2410 55%,#d9a400 160%)",
+    "titulo": "Premium Cars — Chatbot IA en WhatsApp que filtra clientes y te deja solo los que van en serio",
+    "subtitulo": "Un asistente con IA que responde precios, requisitos y condiciones 24/7, pregunta qué vehículo busca el cliente, para qué fecha y si lo quiere con entrega a domicilio — y te pasa solo al interesado real, con su ficha lista.",
+    "resumenEjecutivo": "Premium Cars atiende hoy todo por WhatsApp, a mano. Esta propuesta convierte ese canal en uno que trabaja solo, en tres etapas: <b>(1) el chatbot IA</b> que responde y filtra clientes 24/7 — exactamente lo que pediste; <b>(2) tu página web</b> con la flota, para que te encuentren en Google y el bot reciba también clientes nuevos, no solo los que ya tienen tu número; <b>(3) a futuro, el sistema de gestión Onia</b>: reservas, contratos, cobros y recordatorios en un solo lugar. Cada etapa funciona por sí sola — empezás por el bot.",
+    "problema": "Cada consulta de alquiler llega a tu WhatsApp y casi todas preguntan lo mismo: precio, requisitos, condiciones. Entre curiosos y clientes serios, atender a mano quema horas — y el que escribe de noche o en fin de semana no espera: alquila con otra rentadora. Montamos un <b>chatbot con IA en tu WhatsApp</b> que responde al instante, hace las preguntas clave (vehículo, fechas, entrega o recojo) y te deja solo al cliente que en verdad está interesado — 24/7.",
+    "incluye": [
+      {
+        "tag": "Atención 24/7",
+        "tagClass": "",
+        "titulo": "Chatbot IA en WhatsApp",
+        "items": [
+          "Responde solo precios, requisitos y condiciones de alquiler",
+          "Pregunta qué tipo de vehículo busca, para qué fecha lo desea y si lo quiere con entrega a domicilio o recogerlo de la empresa",
+          "Filtra: te deriva solo al cliente que en verdad está interesado, con su ficha lista",
+          "Atiende de madrugada, feriados y fines de semana sin perder consultas"
+        ]
+      },
+      {
+        "tag": "Orden",
+        "tagClass": "green",
+        "titulo": "Cada consulta registrada",
+        "items": [
+          "Toda conversación queda registrada, ninguna se enfría",
+          "Responde con tu flota, tus tarifas y tus condiciones reales — nada inventado",
+          "Deriva a tu teléfono cuando el cliente lo pide o el caso lo amerita",
+          "Reportes: qué vehículos piden más y para qué fechas — para decidir tu flota"
+        ]
+      }
+    ],
+    "pasos": [
+      {
+        "titulo": "Levantamiento",
+        "detalle": "Relevamos tu flota, tarifas por día, requisitos (licencia, garantía, edad mínima) y condiciones — las preguntas que hoy respondés a mano."
+      },
+      {
+        "titulo": "Entreno del bot",
+        "detalle": "Cargamos tus vehículos, precios y condiciones reales para que responda con precisión. Vos aprobás los textos antes de encender nada."
+      },
+      {
+        "titulo": "Calificación y filtro",
+        "detalle": "El bot pregunta vehículo, fechas y entrega o recojo, califica al cliente y te deriva solo a los interesados reales."
+      },
+      {
+        "titulo": "Conexión y reportes",
+        "detalle": "Conectamos tu número de WhatsApp (te guiamos con la verificación de Meta) y activamos los reportes de consultas y demanda."
+      }
+    ],
+    "valor": [
+      {
+        "titulo": "No perdés al que escribe a medianoche",
+        "detalle": "El que consulta a la 1am o en feriado recibe respuesta al instante y deja sus datos. Antes, ese cliente se iba con otra rentadora."
+      },
+      {
+        "titulo": "Solo atendés a los que van en serio",
+        "detalle": "El bot resuelve las dudas repetidas y filtra curiosos; a tu teléfono llega el cliente calificado, con vehículo, fechas y entrega ya definidos."
+      },
+      {
+        "titulo": "Respuesta inmediata = más alquileres",
+        "detalle": "En alquiler de autos gana el que contesta primero. El bot contesta en segundos, siempre — vos cerrás el trato."
+      },
+      {
+        "titulo": "Sabés qué te piden",
+        "detalle": "Reportes de qué vehículos y qué fechas piden más: decidís flota y tarifas con datos, no a ojo."
+      }
+    ],
+    "comparativa": {
+      "titulo": "Atender a mano vs. con Onia",
+      "columnas": [
+        "Hoy (a mano)",
+        "Con Onia"
+      ],
+      "filas": [
+        [
+          "Consulta a medianoche o feriado",
+          "Espera horas o se va con otra",
+          "Respondida al instante, 24/7"
+        ],
+        [
+          "Curiosos que preguntan de todo",
+          "Te queman tiempo igual que un cliente",
+          "El bot los atiende; vos ni te enterás"
+        ],
+        [
+          "Datos del cliente",
+          "Preguntás todo a mano, cada vez",
+          "Ficha lista: vehículo, fechas, entrega o recojo"
+        ],
+        [
+          "Presencia en internet",
+          "Solo WhatsApp",
+          "Web propia que trae clientes desde Google"
+        ],
+        [
+          "Reservas y seguimiento",
+          "En tu cabeza y en el chat",
+          "Registradas, con seguimiento automático"
+        ]
+      ]
+    },
+    "plazoEntrega": "1 a 2 semanas",
+    "paquetes": [
+      {
+        "nombre": "Bot Respuestas",
+        "incluye": "Responde precios, requisitos y condiciones en tu WhatsApp 24/7 · incluye 800 mensajes/mes",
+        "resultado": "Atención inmediata, ninguna consulta sin respuesta.",
+        "limite": "Responde, pero no pregunta ni filtra — los curiosos siguen llegando a tu teléfono.",
+        "precio": "1,500 + 490/mes",
+        "recomendado": false
+      },
+      {
+        "nombre": "Bot Calificador",
+        "incluye": "Lo anterior + pregunta vehículo, fechas y entrega o recojo, filtra y te deriva solo interesados reales con ficha lista · incluye 1.500 mensajes/mes",
+        "resultado": "Tu teléfono suena solo con clientes listos para alquilar.",
+        "limite": "No registra reservas ni persigue al que quedó en 'lo pienso'.",
+        "precio": "2,900 + 890/mes",
+        "recomendado": true
+      },
+      {
+        "nombre": "Bot Reservas + Seguimiento",
+        "incluye": "Lo anterior + registra la solicitud de reserva, hace seguimiento automático al que no cerró y entrega reportes de demanda · incluye 3.000 mensajes/mes",
+        "resultado": "Capta, califica, reserva y hace seguimiento — sin trabajo manual.",
+        "precio": "5,900 + 1,890/mes",
+        "recomendado": false
+      }
+    ],
+    "notaPaquetes": "Diferencia clave: <b>Respuestas</b> = responde solo · <b>Calificador</b> = filtra y te pasa el cliente listo · <b>Reservas</b> = además registra la reserva y persigue al indeciso. Recomendado: <b>Calificador</b>. El mensual incluye la IA y la bolsa de mensajes indicada. Plan anual = 10 meses (2 gratis). El número de WhatsApp y la cuenta quedan a nombre de Premium Cars.",
+    "addons": [
+      {
+        "nombre": "Página web de Premium Cars — tu flota con fotos, tarifas, requisitos y botón directo al bot (hoy no aparecés en Google; tus competidoras sí)",
+        "setup": "790",
+        "mensual": "—"
+      },
+      {
+        "nombre": "Web Pro — multipágina: flota completa, condiciones, zonas de entrega y solicitud de reserva online",
+        "setup": "1,500",
+        "mensual": "—"
+      },
+      {
+        "nombre": "Cuidado Web — hosting gestionado, cambios y respaldos",
+        "setup": "—",
+        "mensual": "190–690"
+      },
+      {
+        "nombre": "Sistema de gestión Onia — reservas, flota, contratos, cobros y recordatorios en un solo panel (siguiente etapa, cuando el bot y la web ya estén rindiendo)",
+        "setup": "a convenir",
+        "mensual": "desde 350"
+      }
+    ],
+    "proximosPasos": [
+      "Elegís el paquete del bot (recomendado: Calificador) y confirmamos con el 50% de anticipo.",
+      "Nos pasás flota, tarifas, requisitos y condiciones; te guiamos paso a paso con la verificación del número en Meta (se necesita NIT y datos del negocio).",
+      "En 1–2 semanas probás el bot vos mismo — recién con tu OK lo encendemos con clientes reales."
+    ],
+    "ctaWhatsapp": {
+      "url": "https://wa.me/59175414930?text=Hola%20Onia%2C%20quiero%20el%20chatbot%20para%20Premium%20Cars",
+      "texto": "Quiero el chatbot para Premium Cars →"
+    },
+    "terceros": "No incluidos: excedentes de mensajería de WhatsApp Business API por encima de la bolsa del plan, campañas de marketing por WhatsApp (van siempre aparte), y dominio + hosting de la web (a nombre de Premium Cars; te guiamos en la compra). El número de WhatsApp y la cuenta Meta Business quedan a nombre de Premium Cars.",
+    "_todo": [
+      "Confirmar ciudad y link de Facebook/Instagram de Premium Cars (no se encontró presencia digital indexada — refuerza la venta de la web)",
+      "S1: validar con Sergio los precios Esencial/Comercial/Full del chatbot antes de enviar",
+      "Confirmar con el dueño: coexistencia con su WhatsApp Business actual (+591 75625187) o número nuevo"
+    ],
+    "ctaAgenda": {
+      "url": "https://wa.me/59175414930?text=Hola%20Onia%2C%20quiero%20agendar%20una%20llamada%20por%20la%20propuesta%20de%20Premium%20Cars",
+      "texto": "Agendá una llamada"
+    }
+  },
+  {
+    "slug": "franco-marin",
+    "nombre": "Franco Marín · Century 21 Home",
+    "accent": "#b48b2f",
+    "heroGrad": "linear-gradient(135deg,#0e1f2e 0%,#16344c 55%,#b48b2f 160%)",
+    "titulo": "Franco Marín — Tu web de marca personal + tu sistema privado de propietarios",
+    "subtitulo": "Una página profesional con tus propiedades, tus logros de Century 21, tus ventas y tu lado humano — y un panel privado, solo tuyo, que ordena a tus propietarios y te avisa solo cada cumpleaños.",
+    "problema": "Hoy tus propiedades y tu trayectoria en <b>Century 21 Home</b> viven en portales y en WhatsApp, donde compiten con cientos de avisos y se pierden. Una <b>web propia</b> reúne tus inmuebles, tus premios, tus ventas y tus clientes en un solo lugar que da autoridad y capta consultas. Y un <b>panel privado</b> convierte tu agenda mental de propietarios en un sistema que recuerda por vos: teléfonos, notas y <b>alertas automáticas de cumpleaños</b> para que nunca pierdas el contacto que trae la próxima venta.",
+    "incluye": [
+      {
+        "tag": "Marca personal",
+        "tagClass": "",
+        "titulo": "Tu web profesional",
+        "items": [
+          "Catálogo de propiedades con fotos, fichas y buscador",
+          "Logros y premios de Century 21 (con foto de cada certificado)",
+          "Inmuebles vendidos y clientes satisfechos",
+          "Tu historia y tu lado humano — fotos cerrando negocios"
+        ]
+      },
+      {
+        "tag": "Tu sistema privado",
+        "tagClass": "green",
+        "titulo": "Panel solo para vos",
+        "items": [
+          "Acceso privado con clave (solo lo ves vos)",
+          "Base de propietarios: teléfono, cumpleaños y notas",
+          "Alertas automáticas cuando es el cumpleaños de un propietario",
+          "Formulario que ordena cada consulta que entra"
+        ]
+      }
+    ],
+    "pasos": [
+      {
+        "titulo": "Tu marca y tus propiedades",
+        "detalle": "Montamos el sitio con tu identidad Century 21 Home, tu catálogo de inmuebles y el buscador."
+      },
+      {
+        "titulo": "Autoridad: logros, ventas y clientes",
+        "detalle": "Cargamos tus premios y certificados, tus inmuebles vendidos y los testimonios de tus clientes."
+      },
+      {
+        "titulo": "Tu panel privado + alertas",
+        "detalle": "Creamos el acceso privado con tu base de propietarios y la automatización que te avisa cada cumpleaños."
+      },
+      {
+        "titulo": "Publicación y puesta en marcha",
+        "detalle": "Conectamos WhatsApp, optimizamos para Google, publicamos en tu dominio y te dejamos operando."
+      }
+    ],
+    "valor": [
+      {
+        "titulo": "Autoridad que cierra ventas",
+        "detalle": "Tu web con tus premios de Century 21, tus ventas y tus clientes te posiciona por encima del agente que solo tiene Instagram."
+      },
+      {
+        "titulo": "Nunca más pierdas un cumpleaños",
+        "detalle": "El sistema te avisa solo cada cumpleaños de tus propietarios — el detalle que mantiene la relación y trae la próxima exclusiva."
+      },
+      {
+        "titulo": "Tus propietarios ordenados en un solo lugar",
+        "detalle": "Dejás la agenda mental y los papeles: teléfonos, notas y seguimiento de cada propietario, privado y siempre a mano."
+      },
+      {
+        "titulo": "Dejás de depender de los portales",
+        "detalle": "El cliente te encuentra a vos en Google, con tu marca y tu catálogo, en vez de perderse entre avisos de la competencia."
+      }
+    ],
+    "plazoEntrega": "2 a 3 semanas",
+    "paquetes": [
+      {
+        "nombre": "Presencia",
+        "incluye": "Web profesional con tu catálogo de propiedades + contacto + botón de WhatsApp",
+        "resultado": "Estás online con tu marca y toda consulta llega a un solo lugar.",
+        "limite": "sin secciones de autoridad ni panel privado — la gestión de propietarios sigue a mano.",
+        "precio": "1.900 + 190/mes",
+        "recomendado": false
+      },
+      {
+        "nombre": "Marca Personal",
+        "incluye": "Web completa: propiedades + logros y premios + inmuebles vendidos + clientes satisfechos + tu lado humano + formulario de captación",
+        "resultado": "Tu autoridad de Century 21 en un sitio que capta consultas.",
+        "limite": "la web capta, pero el seguimiento de propietarios y cumpleaños lo hacés vos a mano.",
+        "precio": "3.900 + 390/mes",
+        "recomendado": false
+      },
+      {
+        "nombre": "Marca + Sistema privado",
+        "incluye": "Todo lo anterior + panel privado con base de propietarios (teléfono, cumpleaños, notas) + alertas automáticas de cumpleaños",
+        "resultado": "No es solo tu web: es tu sistema de trabajo que recuerda y te avisa solo.",
+        "limite": "el alcance del panel se define por escrito antes de arrancar.",
+        "precio": "7.900 + 890/mes",
+        "recomendado": true
+      }
+    ],
+    "notaPaquetes": "Diferencia clave: <b>Presencia</b> = estar online · <b>Marca Personal</b> = tu autoridad convertida en consultas · <b>Marca + Sistema privado</b> = tu web + tu sistema propio (login, base de propietarios y alertas automáticas). El salto del Nivel 3 es porque ya no es una web: es <b>desarrollo a medida</b> — un panel privado con base de datos y automatización. Un sistema así se cotiza en Bolivia desde <b>Bs 22.000</b>; este es tu <b>precio de cliente fundador</b> por ser el primer agente inmobiliario de ONIA, y queda fijo para vos. Recomendado: <b>Marca + Sistema privado</b>. El mensual mantiene tu sistema al día y te sale <b>menos que un CRM extranjero en dólares</b>. Pago: 50% de anticipo para arrancar y 50% contra entrega. <b>Dominio y hosting a cargo de Franco</b> (a su nombre).",
+    "addons": [
+      {
+        "nombre": "Chatbot WhatsApp con IA — responde y califica consultas solo (el botón de WhatsApp ya viene incluido en la web)",
+        "setup": "desde 1.900",
+        "mensual": "150"
+      },
+      {
+        "nombre": "Conexión Instagram / Facebook (publicación)",
+        "setup": "690",
+        "mensual": "150"
+      }
+    ],
+    "terceros": "No incluidos en el proyecto (a cargo de Franco): dominio y hosting (a su nombre), créditos de IA y mensajería de WhatsApp pagada. Las alertas de cumpleaños llegan por Telegram o correo; WhatsApp automático depende de verificación de Meta.",
+    "proximosPasos": [
+      "Confirmás el paquete (recomendado: Marca + Sistema privado) y afinamos el alcance del panel.",
+      "Nos pasás tus premios/certificados (fotos), inmuebles vendidos y 2-3 testimonios.",
+      "Con el anticipo (50%) arrancamos; en 2-3 semanas tenés tu web y tu panel operando."
+    ],
+    "ctaWhatsapp": {
+      "url": "https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20avanzar%20con%20mi%20web%20%2B%20panel%20privado%20(Franco%20Mar%C3%ADn)",
+      "texto": "Avanzar con mi web + sistema →"
+    },
+    "_todo": "BORRADOR 2026-07 — precios CALIBRADOS al mercado boliviano (investigacion 2026): sistema web+panel login/BD se cotiza desde Bs 22.000 (agencia 23-69k / freelance 9-29k, Syncra). N3 fundador = 7.900 + 890/mes, pago 50/50 (SIN cuotas en la propuesta — Sergio guarda la facilidad de pago como palanca de cierre verbal si Franco objeta el precio). Sergio bajo el setup para ASEGURAR el 1er cierre inmobiliario; ~64% bajo mercado 22.000, cerca del costo (build 5-7 dias) — OK solo por ser primer caso/portafolio + reusable como InmoGest; MENSUAL 890 protegido = ahi vive el margen. TC actual ~Bs 11,5/USD (no 6,96). Sergio confirma numeros finales antes de enviar (regla S1). Falta contenido real de Franco (premios/vendidos/testimonios). NO enviar sin OK de Sergio."
   }
 ]

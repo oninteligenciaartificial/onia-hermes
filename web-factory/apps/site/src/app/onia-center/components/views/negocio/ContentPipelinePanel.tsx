@@ -14,7 +14,7 @@ export function ContentPipelinePanel({ counts }: ContentPipelinePanelProps) {
     <SurfaceCard title="Contenido" subtitle="Pipeline en vivo: lo que espera revision." contentClassName="">
       <dl className="grid grid-cols-2 gap-px bg-[color:var(--line-soft)]">
         <Stat label="Ideas pendientes" value={counts.ideasPending} hint="Por revisar en el inbox" />
-        <Stat label="Borradores" value={counts.draftsPending} hint="En cola de aprobacion" />
+        <Stat label="Borradores" value={counts.draftsPending} hint="Esperando OK de Sergio" />
       </dl>
     </SurfaceCard>
   );

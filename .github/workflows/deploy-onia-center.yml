@@ -58,6 +58,15 @@ jobs:
           DEPLOY_REF: ${{ github.sha }}
         run: bash scripts/deploy-onia-center.sh
 
+      - name: Deploy landing (onia.com.bo)
+        env:
+          VPS_HOST: "187.77.16.63"
+          VPS_USER: "root"
+          VPS_KEY: "/tmp/vps_key"
+          DEPLOY_SWAP: ${{ github.event_name == 'push' && 'true' || inputs.swap }}
+          DEPLOY_REF: ${{ github.sha }}
+        run: bash scripts/deploy-onia-landing.sh
+
       - name: Notify Sergio (Telegram)
         if: always()
         env:

@@ -1,4 +1,4 @@
-# Identity Bible — Mara (ONIA modelo 1)
+﻿# Identity Bible — Mara (ONIA modelo 1)
 
 > Fuente de verdad de identidad de la modelo IA "Mara". Toda generacion usa su Soul.
 > Ficticia. No es una persona real. No publicar sin aprobacion de Sergio.
@@ -7,7 +7,7 @@
 - **Nombre:** Mara
 - **Rol:** modelo IA / influencer de skincare-beauty y ecommerce (Nuvia y clientes).
 - **Estado:** Soul entrenado y en uso. Video Nuvia/ISDIN v1 producido.
-- **Higgsfield Soul:** `b8f5c353-faaf-44eb-ae5a-4e0bacfd333f` (`soul_2` / Soul V2). Gen ~0.12cr/img.
+- **Higgsfield Soul:** `6c94bbf0-bc71-4fe1-841e-f366bdb00b6e` (`soul_2` / Soul V2). Gen ~0.12cr/img.
 - **Banco de identidad:** `hermes-content/references/ai-ecommerce-model/identity-bank-50/`.
 
 ## Rostro (face lock)

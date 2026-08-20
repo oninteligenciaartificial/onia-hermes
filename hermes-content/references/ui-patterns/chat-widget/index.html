@@ -1,0 +1,364 @@
+<!-- Patron: widget de chat embebible (burbuja flotante + panel de conversacion).
+     Referencia: https://www.instagram.com/p/DbsUAxCgA3W/ (el video NO da el codigo, lo
+     gatea detras de "comment Code": esto esta reconstruido mirando los fotogramas).
+
+     Que se cambio a proposito respecto del original: el reel muestra una app de
+     mensajeria de dos columnas (lista de hilos + conversacion). Aca se reconstruye SOLO
+     la conversacion y se le agrega el lanzador flotante, porque el destino es la LANDING
+     de un cliente: el visitante tiene una sola conversacion, una lista de hilos no aplica.
+     No reemplaza a Chatwoot (ahi vive el chatbot real): esto es la superficie que se pega
+     en la web y despues apunta a donde haga falta.
+
+     El panel es un popover="manual" NATIVO: top layer (sin guerra de z-index contra el
+     sitio del cliente) y el boton lo abre/cierra con popovertarget, cero JS. Es "manual"
+     y no "auto" a proposito: con "auto" cualquier clic en la landing cerraria el chat
+     mientras el visitante lee. Escape lo cerramos nosotros, son 3 lineas.
+
+     Solo animan transform y opacity. -->
+
+<div class="cw-landing">
+  <p class="cw-landing__eyebrow">Demo de integracion</p>
+  <h2 class="cw-landing__title">El widget se pega en cualquier landing</h2>
+  <p class="cw-landing__txt">
+    Este bloque es la pagina del cliente. El chat vive en el <em>top layer</em> del
+    navegador, asi que no pelea con el z-index ni con el overflow del sitio. Hace falta
+    una sola cosa: pegar el HTML antes de <code>&lt;/body&gt;</code>.
+  </p>
+  <p class="cw-landing__txt">
+    Probalo: abrilo con la burbuja de abajo a la derecha, o esperá unos segundos y va a
+    entrar un mensaje solo (asi se ve el contador y el <code>aria-live</code>).
+  </p>
+</div>
+
+<button class="cw-launcher" id="cw-launcher" type="button"
+        popovertarget="cw-panel" aria-expanded="false" aria-label="Abrir chat">
+  <!-- las dos siluetas van apiladas y cruzan opacidad: no salta el layout. Ambas son
+       aria-hidden y el nombre accesible real lo pone el JS en el aria-label del boton. -->
+  <span class="cw-launcher__ico" aria-hidden="true">
+    <svg data-i="chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 01-9 8.4 9 9 0 01-3.9-.9L3 20.5l1.6-4.7A8.4 8.4 0 013.6 11 8.4 8.4 0 0112 2.6a8.4 8.4 0 019 8.9z"/></svg>
+    <svg data-i="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </span>
+  <span class="cw-launcher__badge" id="cw-badge" data-on="0" aria-hidden="true">1</span>
+</button>
+
+<div class="cw-panel" id="cw-panel" popover="manual" role="dialog" aria-label="Chat con Onia">
+  <header class="cw-head">
+    <span class="cw-head__av" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 4.3v8.6L12 20.2 4.5 15.9V7.3z"/><path d="M12 12l7.5-4.3M12 12v8.2M12 12L4.5 7.7"/></svg>
+    </span>
+    <span class="cw-head__id">
+      <strong>Onia · Asistente</strong>
+      <small><i class="cw-head__on" aria-hidden="true"></i> En linea · responde en minutos</small>
+    </span>
+    <!-- cerrar sin JS: popovertargetaction="hide" -->
+    <button class="cw-head__x" type="button" popovertarget="cw-panel" popovertargetaction="hide" aria-label="Cerrar chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </header>
+
+  <!-- role="log" + aria-live="polite": el lector anuncia SOLO lo que se agrega.
+       Por eso los mensajes se agregan con insertBefore y nunca se repinta la lista
+       entera (repintarla haria que se lea toda la conversacion de nuevo). -->
+  <div class="cw-log" id="cw-log" role="log" aria-live="polite" aria-label="Conversacion">
+    <p class="cw-day">Hoy</p>
+
+    <div class="cw-msg cw-msg--ellos">
+      <p>Hola, soy el asistente de Onia. ¿En que te ayudo?</p>
+      <span class="cw-msg__meta">10:24</span>
+    </div>
+    <div class="cw-msg cw-msg--yo">
+      <p>Quiero un sistema para mi clinica.</p>
+      <span class="cw-msg__meta">10:25 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13l4 4 8-9"/><path d="M11 15l2 2 9-10"/></svg></span>
+    </div>
+    <div class="cw-msg cw-msg--ellos">
+      <p>Perfecto. Agenda, historia clinica y facturacion SIAT, todo en el mismo lugar.</p>
+      <span class="cw-msg__meta">10:25</span>
+    </div>
+
+    <!-- el "escribiendo" vive dentro del log para que empuje el scroll como un mensaje
+         mas, pero va aria-hidden: un nodo oculto que se agrega no se anuncia. -->
+    <div class="cw-typing" id="cw-typing" hidden aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div class="cw-chips" role="group" aria-label="Respuestas rapidas" id="cw-chips">
+    <button type="button">¿Cuanto cuesta?</button>
+    <button type="button">Quiero una demo</button>
+    <button type="button">Hablar con alguien</button>
+  </div>
+
+  <form class="cw-form" id="cw-form">
+    <input class="cw-form__in" id="cw-input" type="text" autocomplete="off"
+           placeholder="Escribi tu mensaje…" aria-label="Escribi tu mensaje">
+    <button class="cw-form__go" type="submit" aria-label="Enviar mensaje">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 8 6 8z"/></svg>
+    </button>
+  </form>
+</div>
+
+<style>
+  .cw-landing, .cw-launcher, .cw-panel {
+    --carmin: #e11d48;
+    --carmin-hondo: #9f1239;
+    --gris-burb: #f1f0f3;
+    --tinta: #1b1a1d;
+    --gris: #6d6a72;
+    --curva: cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  /* --- pagina de demostracion (es el sitio del cliente, no el patron) --- */
+  .cw-landing {
+    padding: clamp(24px, 5vw, 48px) clamp(16px, 4vw, 34px) 150px;
+    background: #fbfbfc; border-radius: 18px; color: var(--tinta);
+  }
+  .cw-landing__eyebrow { margin: 0 0 4px; color: var(--carmin); font-size: .72rem; font-weight: 700; letter-spacing: .16em; }
+  .cw-landing__title { margin: 0 0 14px; font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem); letter-spacing: -0.02em; }
+  .cw-landing__txt { max-width: 58ch; margin: 0 0 10px; color: var(--gris); line-height: 1.6; }
+  .cw-landing code { padding: 1px 5px; border-radius: 5px; background: #eeedf1; font-size: .86em; }
+
+  /* --- burbuja lanzadora --- */
+  .cw-launcher {
+    position: fixed; right: clamp(14px, 3vw, 28px); bottom: clamp(14px, 3vw, 28px);
+    z-index: 10;
+    display: grid; place-items: center;
+    width: 58px; height: 58px; border: 0; border-radius: 50%; cursor: pointer;
+    background: linear-gradient(140deg, var(--carmin), var(--carmin-hondo));
+    color: #fff;
+    box-shadow: 0 16px 30px -12px rgb(225 29 72 / .7);
+    transition: transform .55s var(--curva), box-shadow .55s var(--curva);
+  }
+  .cw-launcher:hover { transform: translateY(-3px) scale(1.05); }
+  .cw-launcher:active { transform: scale(.95); }
+  .cw-launcher__ico { display: grid; width: 25px; height: 25px; }
+  .cw-launcher__ico svg {
+    grid-area: 1 / 1; width: 100%; height: 100%;
+    transition: opacity .4s ease, transform .6s var(--curva);
+  }
+  .cw-launcher__ico [data-i="x"] { opacity: 0; transform: rotate(-90deg) scale(.6); }
+  .cw-launcher[aria-expanded="true"] .cw-launcher__ico [data-i="chat"] { opacity: 0; transform: rotate(90deg) scale(.6); }
+  .cw-launcher[aria-expanded="true"] .cw-launcher__ico [data-i="x"] { opacity: 1; transform: none; }
+
+  .cw-launcher__badge {
+    position: absolute; top: -2px; right: -2px;
+    display: grid; place-items: center;
+    min-width: 21px; height: 21px; padding: 0 5px; border-radius: 999px;
+    background: #fff; color: var(--carmin);
+    font-size: .72rem; font-weight: 700; line-height: 1;
+    box-shadow: 0 0 0 2px var(--carmin-hondo);
+    opacity: 0; transform: scale(.3);
+    transition: opacity .35s ease, transform .6s var(--curva);
+  }
+  .cw-launcher__badge[data-on="1"] { opacity: 1; transform: none; }
+
+  /* --- panel: popover nativo, anclado a la burbuja --- */
+  .cw-panel {
+    position: fixed; inset: auto; margin: 0;
+    right: clamp(14px, 3vw, 28px); bottom: calc(clamp(14px, 3vw, 28px) + 70px);
+    width: min(372px, calc(100vw - 28px)); height: min(74dvh, 560px);
+    padding: 0; border: 0; border-radius: 22px; overflow: hidden;
+    flex-direction: column;
+    background: #fff; color: var(--tinta);
+    box-shadow: 0 34px 64px -26px rgb(28 10 18 / .55), 0 2px 8px rgb(28 10 18 / .1);
+    transform-origin: 100% 100%;
+    opacity: 0; transform: translateY(22px) scale(.9);
+    transition: opacity .45s ease, transform .75s var(--curva),
+                overlay .75s allow-discrete, display .75s allow-discrete;
+  }
+  /* el display va SOLO en el estado abierto. Si se declara display:flex en la regla base,
+     pisa el "display:none" que el navegador le da a un popover cerrado (una regla de autor
+     le gana a la del user-agent aunque tenga menos especificidad) y el panel queda
+     ocupando lugar, invisible pero clickeable, con el chat "cerrado". */
+  .cw-panel:popover-open { display: flex; opacity: 1; transform: none; }
+  /* @starting-style da el estado inicial de la apertura; sin soporte, entra seco */
+  @starting-style { .cw-panel:popover-open { opacity: 0; transform: translateY(22px) scale(.9); } }
+
+  .cw-head {
+    display: flex; align-items: center; gap: 10px; flex: none;
+    padding: 13px 12px 13px 14px;
+    background: linear-gradient(120deg, #e8194f, #a8154a);
+    color: #fff;
+  }
+  .cw-head__av { display: grid; place-items: center; width: 36px; height: 36px; flex: none; border-radius: 50%; background: rgb(255 255 255 / .18); }
+  .cw-head__av svg { width: 20px; height: 20px; }
+  .cw-head__id { display: grid; flex: 1; min-width: 0; line-height: 1.25; }
+  .cw-head__id strong { font-size: .94rem; }
+  .cw-head__id small { display: flex; align-items: center; gap: 5px; font-size: .72rem; opacity: .8; }
+  .cw-head__on { width: 7px; height: 7px; border-radius: 50%; background: #6ee7b7; }
+  .cw-head__x {
+    display: grid; place-items: center; flex: none;
+    width: 30px; height: 30px; border: 0; border-radius: 50%; cursor: pointer;
+    background: rgb(255 255 255 / .16); color: #fff;
+    transition: transform .45s var(--curva), background-color .3s ease;
+  }
+  .cw-head__x:hover { background: rgb(255 255 255 / .3); transform: rotate(90deg); }
+  .cw-head__x svg { width: 14px; height: 14px; }
+
+  .cw-log {
+    flex: 1; overflow-y: auto; scrollbar-width: thin;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+    padding: 16px 14px;
+  }
+  .cw-day {
+    align-self: center; margin: 0 0 4px;
+    color: var(--gris); font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  }
+
+  .cw-msg {
+    max-width: 82%; padding: 9px 13px;
+    border-radius: 17px 17px 17px 5px;
+    background: var(--gris-burb);
+    animation: cw-in .5s var(--curva) backwards;
+  }
+  .cw-msg--yo {
+    align-self: flex-end;
+    border-radius: 17px 17px 5px 17px;
+    background: linear-gradient(120deg, #ec1c52, #c9164a);
+    color: #fff;
+  }
+  .cw-msg p { margin: 0; font-size: .89rem; line-height: 1.45; overflow-wrap: anywhere; }
+  .cw-msg__meta { display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: 3px; color: var(--gris); font-size: .66rem; }
+  .cw-msg--yo .cw-msg__meta { color: rgb(255 255 255 / .72); }
+  .cw-msg__meta svg { width: 13px; height: 13px; }
+  @keyframes cw-in { from { opacity: 0; transform: translateY(12px) scale(.94) } }
+
+  .cw-typing { display: flex; gap: 4px; padding: 12px 14px; border-radius: 17px 17px 17px 5px; background: var(--gris-burb); }
+  .cw-typing[hidden] { display: none; }
+  .cw-typing span {
+    width: 7px; height: 7px; border-radius: 50%; background: #9d9aa4;
+    animation: cw-bota 1.1s var(--curva) infinite;
+  }
+  .cw-typing span:nth-child(2) { animation-delay: .15s; }
+  .cw-typing span:nth-child(3) { animation-delay: .3s; }
+  @keyframes cw-bota { 0%, 60%, 100% { transform: none; opacity: .45 } 30% { transform: translateY(-5px); opacity: 1 } }
+
+  .cw-chips { display: flex; flex: none; gap: 6px; padding: 0 14px 10px; overflow-x: auto; scrollbar-width: none; }
+  .cw-chips button {
+    flex: none; padding: 7px 13px; border: 1px solid #efd5dd; border-radius: 999px; cursor: pointer;
+    background: #fff5f7; color: var(--carmin-hondo); font: inherit; font-size: .78rem; font-weight: 600; white-space: nowrap;
+    transition: transform .45s var(--curva), background-color .3s ease;
+  }
+  .cw-chips button:hover { background: #fde7ec; transform: translateY(-2px); }
+
+  .cw-form { display: flex; align-items: center; flex: none; gap: 8px; padding: 10px 12px; border-top: 1px solid #eeedf1; }
+  .cw-form__in {
+    flex: 1; min-width: 0; height: 38px; padding: 0 14px;
+    border: 1px solid #e5e3e9; border-radius: 999px;
+    background: #f7f6f9; color: var(--tinta); font: inherit; font-size: .88rem;
+    transition: border-color .3s ease, background-color .3s ease;
+  }
+  .cw-form__in:focus { outline: none; border-color: var(--carmin); background: #fff; }
+  .cw-form__go {
+    display: grid; place-items: center; flex: none;
+    width: 38px; height: 38px; border: 0; border-radius: 50%; cursor: pointer;
+    background: linear-gradient(140deg, var(--carmin), var(--carmin-hondo)); color: #fff;
+    transition: transform .5s var(--curva);
+  }
+  .cw-form__go:hover { transform: scale(1.09) rotate(8deg); }
+  .cw-form__go svg { width: 17px; height: 17px; margin-left: -1px; }
+
+  :is(.cw-launcher, .cw-panel) :focus-visible,
+  .cw-launcher:focus-visible { outline: 2px solid var(--carmin); outline-offset: 2px; }
+
+  /* en pantalla chica el panel toma casi todo el alto, como cualquier widget real */
+  @media (max-width: 460px) {
+    .cw-panel { right: 8px; left: 8px; width: auto; height: min(80dvh, 620px); bottom: 84px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cw-launcher, .cw-launcher__ico svg, .cw-launcher__badge,
+    .cw-head__x, .cw-chips button, .cw-form__in, .cw-form__go { transition: none !important; }
+    /* el popover va con transition: none, NO con duracion 0.01ms: una transicion discreta
+       de display/overlay de 0.01ms deja el panel a medio camino (abierto y opacity 0). */
+    .cw-panel { transition: none !important; }
+    .cw-msg, .cw-typing span { animation: none !important; }
+  }
+</style>
+
+<script>
+  (() => {
+    const $ = (s) => document.querySelector(s);
+    const panel = $('#cw-panel'), launcher = $('#cw-launcher'), log = $('#cw-log');
+    const typing = $('#cw-typing'), input = $('#cw-input'), badge = $('#cw-badge');
+
+    let sinLeer = 0, timerBot;
+    const hora = () => new Date().toLocaleTimeString('es-BO', { hour: '2-digit', minute: '2-digit' });
+    const tildes = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13l4 4 8-9"/><path d="M11 15l2 2 9-10"/></svg>';
+
+    function burbuja(texto, quien) {
+      const el = document.createElement('div');
+      el.className = 'cw-msg cw-msg--' + quien;
+      el.innerHTML = `<p></p><span class="cw-msg__meta">${hora()}${quien === 'yo' ? ' ' + tildes : ''}</span>`;
+      el.querySelector('p').textContent = texto;   // texto del visitante: nunca innerHTML
+      log.insertBefore(el, typing);                // insertBefore, no repintar: el aria-live
+      log.scrollTop = log.scrollHeight;            // solo debe anunciar lo nuevo
+    }
+
+    const guion = [
+      [/precio|costo|cu[aá]nto|plan/i, 'Los planes arrancan en Bs 320/mes con la instalacion incluida. ¿Te paso el detalle por WhatsApp?'],
+      [/demo|prueba|ver/i, 'Listo: la demo dura 20 minutos y se hace sobre tus propios datos. ¿Que dia te queda comodo?'],
+      [/humano|persona|alguien|hablar/i, 'Te derivo con una persona del equipo. Dejame tu numero y te escriben hoy mismo.'],
+      [/factur|siat|impuesto/i, 'Emitimos factura electronica contra el SIAT y guardamos el CUF de cada documento.'],
+      [/hola|buenas|buenos/i, '¡Hola! Contame de que rubro es tu negocio y te digo que modulos te sirven.']
+    ];
+    const responder = (t) => (guion.find(([re]) => re.test(t)) || [, '¿Querés que un humano siga la conversacion? Te leo igual por aca.'])[1];
+
+    function bot(texto) {
+      typing.hidden = false;
+      log.scrollTop = log.scrollHeight;
+      clearTimeout(timerBot);
+      timerBot = setTimeout(() => {
+        typing.hidden = true;
+        burbuja(texto, 'ellos');
+        if (!panel.matches(':popover-open')) {
+          badge.textContent = ++sinLeer;
+          badge.dataset.on = '1';
+        }
+      }, 1200);
+    }
+
+    function enviar(texto) {
+      const t = texto.trim();
+      if (!t) return;
+      burbuja(t, 'yo');
+      bot(responder(t));
+    }
+
+    $('#cw-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      enviar(input.value);
+      input.value = '';
+    });
+    $('#cw-chips').addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (b) { enviar(b.textContent); input.focus(); }
+    });
+
+    // abrir/cerrar lo hace popovertarget solo; aca solo se sincroniza el nombre accesible,
+    // el foco y el contador de no leidos.
+    panel.addEventListener('toggle', (e) => {
+      const abierto = e.newState === 'open';
+      launcher.setAttribute('aria-expanded', String(abierto));
+      launcher.setAttribute('aria-label', abierto ? 'Cerrar chat' : 'Abrir chat');
+      if (abierto) {
+        sinLeer = 0;
+        badge.dataset.on = '0';
+        input.focus();
+        log.scrollTop = log.scrollHeight;
+      } else {
+        const a = document.activeElement;
+        if (!a || a === document.body || panel.contains(a)) launcher.focus();
+      }
+    });
+
+    // popover="manual" no cierra con Escape (eso lo trae solo "auto", que tambien cerraria
+    // el chat con cualquier clic en la landing). Lo agregamos a mano.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && panel.matches(':popover-open')) panel.hidePopover();
+    });
+
+    // mensaje entrante estando cerrado: prueba el aria-live y el contador sin tocar nada
+    setTimeout(() => bot('¿Seguis ahi? Si me decis tu rubro te armo el presupuesto.'), 3200);
+  })();
+</script>

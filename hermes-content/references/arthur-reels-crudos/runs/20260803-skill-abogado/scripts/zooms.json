@@ -1,0 +1,8 @@
+{
+  "_nota": "Ken burns solo en los dos bloques de CARA. El tramo del medio queda estatico porque va tapado por los clips de pantalla sobre fondo desenfocado.",
+  "zooms": [
+    { "start": 0.00,  "end": 10.90, "from": 1.00, "to": 1.09, "anchor": "top" },
+    { "start": 10.90, "end": 44.47, "from": 1.05, "to": 1.05, "anchor": "top" },
+    { "start": 44.47, "end": 49.21, "from": 1.10, "to": 1.01, "anchor": "top" }
+  ]
+}

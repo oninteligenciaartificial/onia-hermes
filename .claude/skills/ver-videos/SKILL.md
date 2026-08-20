@@ -36,6 +36,110 @@ GEMINI_API_KEY=... node scripts/gemini-see-video.mjs /ruta/video.mp4
 - Devuelve resumen + timeline por secciones + texto en pantalla, todo con timestamps. Eso ES "ver el video".
 - Si falla (sin key, cuota, error) → usar el FALLBACK de abajo. Nunca se rompe.
 
+
+## Bajar el MP4 — `scripts/fetch-video.mjs` (ruta por DEFECTO, 2026-08-09)
+
+**Sin abrir el navegador del usuario.** Un solo comando para TikTok, YouTube e Instagram:
+
+```bash
+node .claude/skills/ver-videos/scripts/fetch-video.mjs <url> [<url>...] --out DIR
+node .claude/skills/ver-videos/scripts/fetch-video.mjs --login   # 1 sola vez, para IG
+```
+
+Imprime `<url>\t<ruta del mp4>` por linea. Varias URLs bajan en paralelo.
+
+Medido 2026-08-09: TikTok 5,4 MB en **3,9 s**; reel de IG 15 s / 1,9 MB (h264+aac, con
+audio) en **1,7 s**. Ambos sin abrir el navegador.
+
+- **TikTok / YouTube:** `yt-dlp` directo, cero cookies, cero navegador.
+- **Instagram:** exige sesion. Usa un **perfil de Chromium propio de Playwright**
+  (`.hermes/ig-session/profile`, gitignoreado) — NO el Chrome del usuario. Las cookies
+  se leen por CDP (`context.cookies()`), asi que el cifrado en disco no estorba.
+  Login manual **una vez** (`--login`, ventana headed); despues headless ~1 s y jar
+  reusado 12 h. `--sleep-requests 2` para no gatillar rate limit de IG.
+
+**Por que NO usar `--cookies-from-browser` (medido en la maquina de Sergio, 2026-08-09):**
+
+| Fuente | Resultado |
+| --- | --- |
+| `firefox` | lee 109 cookies, pero **no hay sesion de IG** ahi (solo `csrftoken`/`mid` anonimos) |
+| `chrome` / `brave` | `Could not copy Chrome cookie database` — base bloqueada con el navegador abierto; y aun cerrandolo, ABE |
+| `edge` | `Failed to decrypt with DPAPI` — App-Bound Encryption (Chrome 127+) |
+
+**Trampas conocidas:** no devolver la URL firmada del CDN (el filtro del MCP la bloquea);
+no volcar el video en base64 al contexto; nunca escribir la contrasena de IG — el login
+lo hace Sergio en la ventana.
+
+## Carruseles de imágenes — `scripts/ig-carousel.mjs` (2026-08-11)
+
+**yt-dlp NO puede con ellos**: falla con `No video formats found!` porque solo entiende de
+video, y encima resuelve un shortcode interno distinto al del link (esa es la firma de un
+carrusel). Perderlos es caro: **un carrusel suele ser el formato MÁS denso en información**
+de todo Instagram — una idea por lámina, más el caption, que muchas veces trae el contenido
+entero escrito.
+
+```bash
+node .claude/skills/ver-videos/scripts/ig-carousel.mjs <url|shortcode> [...] --out DIR
+```
+
+Pide `carousel_media` a la API interna de IG con el mismo `cookies.txt`, baja **todas** las
+láminas en su mayor resolución, guarda los slides que sean video como mp4, y escribe siempre
+`caption.txt`. Después las láminas se leen con visión directa (tool Read) — sin Gemini.
+
+**Trampas resueltas (medidas 2026-08-11, 6 carruseles / 55 láminas):**
+- **Leer el caption PRIMERO.** Es texto, es barato, y en 4 de 6 casos traía el contenido
+  completo; las láminas solo confirmaban. Leer 55 imágenes cuando el caption ya lo dice es
+  quemar contexto.
+- **No mandar el jar de cookies entero**: la cookie `rur` trae comillas y escapes `\054` que
+  undici rechaza (`invalid header value`). Whitelist: `sessionid`, `csrftoken`, `ds_user_id`,
+  `mid`, `ig_did`.
+- **Partir por `/\r?\n/`**: en Windows el `cookies.txt` queda con CRLF y el `\r` se cuela en
+  el valor de la última columna → mismo error de header, con causa distinta.
+
+## Cómo "ver" cuando NO hay Gemini (orden real de preferencia)
+
+Gemini no es la capacidad: es un atajo barato. La visión propia es el piso y nunca se cae.
+
+| Orden | Camino | Cuándo | Costo |
+| --- | --- | --- | --- |
+| 1 | **Gemini nativo** | video con audio y timeline que importa | gratis hasta ~20 videos/día (después: `You exceeded your current quota`, y es DIARIO — reintentar no sirve) |
+| 2 | **Whisper/Speaches + fotogramas leídos con visión** | cuota agotada, o hace falta verbatim exacto para citar | gratis, sin límite |
+| 3 | **Solo fotogramas con visión** | video mudo, carrusel, captura de pantalla | gratis; cuesta CONTEXTO, no dinero |
+| 4 | **Caption / texto** | carruseles y posts: casi siempre el 80% del contenido | gratis y barato — probar SIEMPRE primero |
+
+Regla: reportar la cobertura real de cada camino ("audio 100%, 5 de 7 láminas"), nunca decir
+"vi el video" desde dos cuadros.
+
+## Instagram por MCP de navegador (ruta VIEJA — solo si falla la de arriba)
+
+**El problema, para no volver a chocar:** IG no reproduce reels sin sesion; el `<video>` usa
+MSE (blob, no descargable); `yt-dlp` necesita cookies y **desde Chrome 127 estan cifradas con
+App-Bound Encryption** -> falla con `Failed to decrypt with DPAPI` aunque le pases un snapshot
+de la base. Capturar fotogramas por canvas da imagen pero **NO audio**.
+
+**La ruta que SI funciona** (probada con 2 reels: 70 s / 10,3 MB y 32 s / 4,1 MB):
+
+1. Navegador **con sesion iniciada** (MCP `claude-in-chrome`). Si hay varios navegadores
+   conectados, preguntar cual — la herramienta lo exige.
+2. `navigate` -> `https://www.instagram.com/reel/<SHORTCODE>/`
+3. `javascript_exec` con el cuerpo de `scripts/ig-media-url.js`: convierte el shortcode a
+   `media_id`, pide `/api/v1/media/<id>/info/` con `credentials:'include'` y el header
+   `x-ig-app-id: 936619743392459`, y **dispara la descarga dentro de la pagina**.
+4. Mover el MP4 de la carpeta de descargas al scratchpad.
+5. `node scripts/gemini-see-video.mjs <archivo.mp4>` -> resumen + timeline + **narracion** +
+   texto en pantalla.
+
+**Trampas aprendidas:**
+- **NO devolver la URL del CDN** como valor de retorno: lleva query string firmada y el filtro
+  de seguridad del MCP la bloquea. Descargar SIEMPRE dentro de la pagina.
+- **NO devolver el base64** del video: 10 MB de video son 14 MB de base64 y revientan el
+  contexto. El `<a download>` con blob es el camino.
+- Las pestanas del MCP se reciclan entre llamadas: **usar `browser_batch`** para encadenar
+  navigate + script en un solo viaje.
+- `snapshot-cookies.ps1` (en esta misma carpeta) resuelve el **lock** de la base de cookies
+  del navegador abierto, pero no el cifrado ABE. Sirve para navegadores viejos o Firefox.
+- Nunca iniciar sesion ni escribir contrasenas: la sesion la pone el usuario en su navegador.
+
 ## FALLBACK — frames + transcript (sin key)
 1. **Conseguir el video.**
    - URL (YouTube/etc.): `yt-dlp -f 18 -o in.mp4 "<url>"` (instalar: `pip install -U yt-dlp`; formato 18 = mp4 360p, liviano y suficiente para leer). Para mejor imagen: `-f "b[height<=720]"`.

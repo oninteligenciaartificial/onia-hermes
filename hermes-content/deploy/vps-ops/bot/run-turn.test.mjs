@@ -19,7 +19,11 @@ import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 
 import { DEFAULT_CONFIG, slotsPending } from "./config.mjs";
+<<<<<<< HEAD
 import { resetKnowledgeCache, resetOrgKnowledgeCache } from "./knowledge.mjs";
+=======
+import { resetKnowledgeCache } from "./knowledge.mjs";
+>>>>>>> origin/main
 import { buildConfig, resolveConfig } from "./run-turn.mjs";
 
 test.afterEach(() => {
@@ -98,6 +102,7 @@ test("resolveConfig: preserva el dry_run explicito del turno aunque Cal.com trai
   assert.deepEqual(config.slots, LIVE_SLOTS);
 });
 
+<<<<<<< HEAD
 test("resolveConfig: el inbox del turno resuelve el conocimiento de ESE cliente desde el PRIMER mensaje", async () => {
   // El fetch falso contesta como GET /published del producto cuando le preguntan por inbox.
   const fetchDb = async (url) => {
@@ -139,6 +144,8 @@ test("resolveConfig: el inbox del turno resuelve el conocimiento de ESE cliente 
   assert.notEqual(sinMapeo.identity.productName, "ZZ QA Ferreteria Tornillo");
 });
 
+=======
+>>>>>>> origin/main
 // ---------------------------------------------------------------------------
 // PARIDAD local / VPS — la grieta que hacia valer un verde que no valia
 // ---------------------------------------------------------------------------

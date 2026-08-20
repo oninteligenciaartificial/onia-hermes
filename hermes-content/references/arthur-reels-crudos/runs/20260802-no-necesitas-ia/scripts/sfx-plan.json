@@ -1,0 +1,25 @@
+{
+  "sfx": [
+    {
+      "_nota": "entra el keyword de la contradicción del hook",
+      "asset": "C:/dev/proyectos/HERMES/onia-hermes/.claude/skills/editor-videos/assets/sfx/whoosh.wav",
+      "at": 5.05,
+      "gain": -13,
+      "duck": true
+    },
+    {
+      "_nota": "entra la tarjeta de dato 4 LISTAS · 0 REGISTRO",
+      "asset": "C:/dev/proyectos/HERMES/onia-hermes/.claude/skills/editor-videos/assets/sfx/whoosh.wav",
+      "at": 18.85,
+      "gain": -12,
+      "duck": true
+    },
+    {
+      "_nota": "entra el CTA final",
+      "asset": "C:/dev/proyectos/HERMES/onia-hermes/.claude/skills/editor-videos/assets/sfx/whoosh.wav",
+      "at": 42.85,
+      "gain": -13,
+      "duck": true
+    }
+  ]
+}

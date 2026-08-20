@@ -6,6 +6,9 @@
 *.pem
 *_token.txt
 **/credentials.json
+# Sesion de Instagram de fetch-video.mjs: perfil de Chromium + cookies.txt con
+# el sessionid. Es una credencial viva — jamas al repo.
+.hermes/ig-session/
 
 # Dependencias (se reinstalan con npm install; no se sincronizan)
 node_modules/

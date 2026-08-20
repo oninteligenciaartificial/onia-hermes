@@ -594,6 +594,7 @@ test("whatsappTemplate arma el formato `enhanced` que espera Chatwoot: claves de
   assert.deepEqual(Object.keys(whatsappTemplate("x", ["a", "b"]).processed_params.body), ["1", "2"]);
 });
 
+<<<<<<< HEAD
 test("con `interactive`, el POST sale como input_select: content_type + content_attributes.items (y recorta a 3)", async () => {
   // input_select es el UNICO content type que sirve en los DOS canales: el widget lo renderiza
   // como opciones y Chatwoot lo traduce a reply buttons de WhatsApp (PR #6886, max 3).
@@ -688,6 +689,8 @@ test("sendAttachment es tolerante: sin token o sin bytes devuelve null con el mo
   assert.match(rechaza.warnings[0], /HTTP 401/);
 });
 
+=======
+>>>>>>> origin/main
 test("sendMessage con texto vacio no llama a la red", async () => {
   const requests = [];
   const client = createChatwootClient({

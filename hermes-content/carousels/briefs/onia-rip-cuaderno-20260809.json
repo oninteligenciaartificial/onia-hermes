@@ -1,0 +1,102 @@
+{
+  "title": "R.I.P. al cuaderno: tu negocio ya no entra ahí",
+  "caption": "El cuaderno te sirvió para arrancar. El Excel te aguantó un tiempo. Pero si hoy tenés que abrir tres archivos y llamar a dos personas para saber cuánto vendiste ayer, tu negocio ya no entra ahí. No es que seas desordenado: es que creciste y las herramientas no crecieron con vos. Guardá las 3 señales del slide 5 y comentá ORDEN: te muestro cómo se ve tu negocio con todo en un solo lugar.",
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#pymes",
+    "#negocios",
+    "#santacruz",
+    "#gestion"
+  ],
+  "comment_trigger": "Comentá ORDEN",
+  "cta": "Contame",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Se acabó",
+      "headline": "R.I.P. al *cuaderno*",
+      "body": "Tu negocio ya no entra ahí.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Funeral simbólico de un cuaderno y una calculadora vieja.",
+      "alt_text": "RIP al cuaderno",
+      "bg": "hermes-content/assets/onia/heroes/rip-01.png"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "Si el dato está en tu *cabeza*, no existe",
+      "body": "Cuánto te deben, qué stock queda, a quién había que llamar. Si solo lo sabés vos, el negocio se para cuando vos no estás.",
+      "callout": "¿Cuánto vendiste ayer? ¿Podés responder ya? ↘",
+      "save_worthy": false,
+      "visual_prompt": "Escritorio con papeles desordenados y post-its.",
+      "alt_text": "Si el dato esta en tu cabeza no existe",
+      "bg": "hermes-content/assets/onia/heroes/rip-02.png"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "La trampa",
+      "headline": "El Excel te *miente*",
+      "body": "No porque esté mal hecho: porque siempre está desactualizado. Cada uno tiene su versión y ninguna es la verdadera.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Planilla caotica en pantalla, luz verde.",
+      "alt_text": "El Excel te miente",
+      "bg": "hermes-content/assets/onia/heroes/rip-03.png"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "El costo",
+      "headline": "Lo que no medís, no *crece*",
+      "body": "Sin números claros no sabés qué producto te deja plata, qué cliente vuelve ni en qué se va tu mes. Decidís a ciegas.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Persona caminando a oscuras con linterna tenue.",
+      "alt_text": "Lo que no medis no crece",
+      "bg": "hermes-content/assets/onia/heroes/rip-04.png"
+    },
+    {
+      "number": 5,
+      "role": "save",
+      "pill": "Framework",
+      "headline": "3 señales de que ya te *quedó chico*",
+      "body": "1) Preguntás a alguien para saber un número. 2) El mismo dato está en dos lugares distintos. 3) Si te vas una semana, nadie sabe dónde está todo. Con una sola, ya te quedó chico.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Tarjeta framework, 3 señales.",
+      "alt_text": "3 senales de que ya te quedo chico",
+      "bg": "hermes-content/assets/onia/heroes/rip-05.png"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Ojo",
+      "headline": "No necesitás un sistema *carísimo*",
+      "body": "No se empieza comprando todo. Se empieza por lo que hoy te duele: ventas, stock o cobranzas. Un módulo, funcionando en días.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Tablet con panel simple y ordenado, verde.",
+      "alt_text": "No necesitas un sistema carisimo",
+      "bg": "hermes-content/assets/onia/heroes/rip-06.png"
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Contame",
+      "headline": "Poné tu negocio en *orden*",
+      "body": "¿Cuaderno, Excel o memoria? Decime cuál sos y te digo por dónde empezar.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Emprendedor tranquilo con todo ordenado.",
+      "alt_text": "Comentá ORDEN",
+      "bg": "hermes-content/assets/onia/heroes/rip-07.png"
+    }
+  ],
+  "job": "engagement"
+}

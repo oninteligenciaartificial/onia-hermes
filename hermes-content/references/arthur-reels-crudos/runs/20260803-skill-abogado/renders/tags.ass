@@ -1,0 +1,23 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.709
+
+; Mismo tratamiento que el reel anterior: panel oscuro semitransparente, blanco hueso
+; con tracking, guion de acento verde. En un tutorial los pasos numerados no son adorno:
+; marcan avance y dejan seguir el video sin perderse.
+; Van arriba (an8, MarginV 230) — el panel de pantalla arranca en y=378 como mínimo.
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Tag,Bricolage Grotesque,54,&H00F4F5F2,&H00F4F5F2,&H1E0D0F0A,&H1E0D0F0A,-1,0,0,0,100,100,5,0,3,22,0,8,50,50,230,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:11.00,0:00:15.20,Tag,,0,0,0,,{\an8\move(540,254,540,230,0,260)\fad(220,200)}{\c&H006AD200&}—{\c&H00F4F5F2&}  PASO 1: CREAR LA SKILL
+Dialogue: 0,0:00:21.40,0:00:26.00,Tag,,0,0,0,,{\an8\move(540,254,540,230,0,260)\fad(220,200)}{\c&H006AD200&}—{\c&H00F4F5F2&}  PASO 2: LAS TRES REGLAS
+Dialogue: 0,0:00:31.40,0:00:35.20,Tag,,0,0,0,,{\an8\move(540,254,540,230,0,260)\fad(220,200)}{\c&H006AD200&}—{\c&H00F4F5F2&}  PASO 3: TIRALE UNA IDEA
+Dialogue: 0,0:00:36.60,0:00:41.00,Tag,,0,0,0,,{\an8\move(540,254,540,230,0,260)\fad(220,200)}{\c&H006AD200&}—{\c&H00F4F5F2&}  NO TE APLAUDE. TE CORRIGE.
+Dialogue: 0,0:00:45.60,0:00:48.62,Tag,,0,0,0,,{\an8\move(540,254,540,230,0,260)\fad(220,0)}{\c&H006AD200&}—{\c&H00F4F5F2&}  COMENTÁ SKILLS

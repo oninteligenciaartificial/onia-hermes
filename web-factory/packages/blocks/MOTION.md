@@ -6,11 +6,15 @@ professional — the same movement observed in the learned reel models
 
 Generated sites are static HTML with `wf-*` classes, so this ships as plain CSS +
 a tiny vanilla runtime — **zero deps, zero React**. Source: `src/motion.ts`.
+<<<<<<< HEAD
 
 Live demo: run `pnpm blocks:demo` and open `out/blocks-demo/index.html`. Every
 block in the gallery has the toolkit wired, and the primitives table is read from
 `MOTION_PRIMITIVES` at build time. (It replaced `motion-demo.html`, a hand-kept
 copy of `MOTION_CSS` that had already drifted from the source it mirrored.)
+=======
+Live demo (self-contained, no network): open `motion-demo.html` in a browser.
+>>>>>>> origin/main
 
 ## Wire it once per generated page
 
@@ -36,6 +40,7 @@ Then any block opts into motion by adding a class. That's it.
 | `wf-parallax` + `data-wf-parallax="0.2"` | media moves slower than scroll | scroll-linked |
 | `wf-hover-lift` | card lifts + shadow on hover | hover |
 | `wf-sticky` | sticky nav (+ `wf-scrolled` state) | scroll-linked |
+<<<<<<< HEAD
 | `data-wf-scrub` (on a tall track) + `wf-frame` / `wf-step` children | el scroll avanza la escena por etapas (sticky + scrub, patrón P3) | scroll-linked |
 | `wf-count` + `data-wf-count="4200"` | la métrica cuenta hasta su valor real | in view |
 
@@ -49,6 +54,8 @@ puede tener ningún ancestro con `overflow:hidden` o `transform` (mata el sticky
 motion); el runtime sólo anima hacia el valor que ya está escrito y lo restaura
 exacto al terminar. Regla 7 del banco de patrones: montos y cifras fiscales no
 bailan — el bloque decide qué es contable, la primitiva no adivina.
+=======
+>>>>>>> origin/main
 
 Add `wf-onload` to any reveal class to fire it immediately instead of on scroll.
 Tune per element with inline `--wf-dur` (duration) and `--wf-stag` (stagger step).

@@ -132,7 +132,7 @@ const projectOptions = [
   { id: "project-webs", label: "Webs Onia" },
   { id: "project-chatbots", label: "Chatbots" },
   { id: "project-automations", label: "Automatizaciones" },
-  { id: "project-dentagest", label: "DentalGest" },
+  { id: "project-dentagest", label: "Onia Dental" },
   { id: "project-gestios", label: "GestiOS" },
   { id: "project-bolivian-os", label: "Bolivian Electric" },
   { id: "project-content", label: "Contenido" },

@@ -1,11 +1,11 @@
-# Pipeline: lip sync estable + produccion masiva 24/7 (2026-07-06)
+﻿# Pipeline: lip sync estable + produccion masiva 24/7 (2026-07-06)
 
 Objetivo de Sergio: modelos con **rasgos definidos y estables** (no se rompen), **lip sync** real,
 y **produccion 24/7**. Tiene **ElevenLabs**.
 
 ## Por que "se rompia" antes
 Los videos previos (Seedance 2.0) derivaban la identidad y desincronizaban la voz. Fix base:
-1. **Soul entrenado por modelo** = identidad estable (Mara `b8f5c353`, Lucia `9a0d6953`).
+1. **Soul entrenado por modelo** = identidad estable (Mara `6c94bbf0`, Lucia `9a0d6953`).
 2. Video con **modelo que hace lip sync**, no un img2video generico.
 
 ## Opciones de lip sync (con Soul + voz)

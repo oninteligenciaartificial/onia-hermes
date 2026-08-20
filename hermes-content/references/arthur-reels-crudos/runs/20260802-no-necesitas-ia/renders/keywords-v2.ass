@@ -1,0 +1,21 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.709
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Key,Bricolage Grotesque,66,&H000D0F0A,&H000D0F0A,&H006AD200,&H006AD200,-1,0,0,0,100,100,3,0,3,18,0,8,50,50,250,1
+Style: KeyDark,Bricolage Grotesque,66,&H00F2F5F4,&H00F2F5F4,&H000D0F0A,&H000D0F0A,-1,0,0,0,100,100,3,0,3,18,0,8,50,50,250,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:05.10,0:00:08.40,KeyDark,,0,0,0,,{\fad(160,160)}Y TRABAJO DE ESTO
+Dialogue: 0,0:00:14.30,0:00:18.20,KeyDark,,0,0,0,,{\fad(160,160)}¿DÓNDE ANOTÁN?
+Dialogue: 0,0:00:18.90,0:00:23.30,Key,,0,0,0,,{\fad(160,160)}4 LISTAS · 0 REGISTRO
+Dialogue: 0,0:00:32.40,0:00:35.60,KeyDark,,0,0,0,,{\fad(160,160)}MÁS RÁPIDO ≠ MEJOR
+Dialogue: 0,0:00:36.50,0:00:40.60,Key,,0,0,0,,{\fad(160,160)}PASO 1: ORDENAR
+Dialogue: 0,0:00:42.90,0:00:44.45,Key,,0,0,0,,{\fad(160,0)}COMENTÁ ACÁ ↓

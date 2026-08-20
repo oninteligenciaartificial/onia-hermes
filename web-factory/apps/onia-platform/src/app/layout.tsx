@@ -78,6 +78,14 @@ export const viewport: Viewport = {
 /** Aplica el tema guardado antes del primer paint (toggle manual sobre prefers-color-scheme). */
 const themeInit = `(function(){try{var t=localStorage.getItem("onia-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}})();`;
 
+/**
+ * Chatbot de Onia: widget de Chatwoot (self-hosted en el VPS). Es el MISMO motor que atiende
+ * WhatsApp — califica (rubro/equipo/ciudad), agenda la demo con reserva real en Cal.com y
+ * deriva a humano — expuesto como inbox web (id 4). Carga async despues del load para no
+ * tocar LCP; si Chatwoot esta caido, el sitio ni se entera.
+ */
+const chatwootInit = `window.addEventListener("load",function(){var BASE_URL="https://onia-chatbot-chatwoot.hqdqgh.easypanel.host";var g=document.createElement("script");g.src=BASE_URL+"/packs/js/sdk.js";g.defer=true;g.async=true;g.onload=function(){window.chatwootSDK.run({websiteToken:"9k5i7xnAgCbSse1EZwVChZLw",baseUrl:BASE_URL})};document.body.appendChild(g);});`;
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
@@ -90,6 +98,7 @@ export default function RootLayout({
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <MotionProvider>{children}</MotionProvider>
+        <script dangerouslySetInnerHTML={{ __html: chatwootInit }} />
       </body>
     </html>
   );

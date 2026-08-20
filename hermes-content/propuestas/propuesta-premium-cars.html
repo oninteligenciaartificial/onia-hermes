@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta Onia — Premium Cars</title>
+<style>
+  :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
+    --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#d9a400;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  .page{max-width:900px;margin:0 auto;padding:40px 28px;}
+  .hero{background:linear-gradient(135deg,#14100a 0%,#2a2410 55%,#d9a400 160%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
+  .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.02;margin:0 0 14px;}
+  h2{font-size:26px;margin:34px 0 14px;border-bottom:3px solid var(--accent);padding-bottom:8px;}
+  h3{font-size:18px;margin:0 0 8px;}
+  p{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 10px;}
+  .hero p{color:#e6eefb;font-size:18px;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+  th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;}
+  td.num,th.num{text-align:right;white-space:nowrap;}
+  .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+  .tag.green{background:#e3f4ec;color:var(--green);}
+  .tag.amber{background:#fbeede;color:var(--amber);}
+  ul{margin:6px 0 0;padding-left:20px;}
+  li{font-size:15px;color:var(--muted);line-height:1.5;margin-bottom:5px;}
+  .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13px;color:var(--muted);}
+  .big{font-size:20px;color:var(--ink);font-weight:800;}
+  .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  tr.rec td{background:#fff7ed;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);}
+  tr.rec td.num{font-size:17px;font-weight:800;}
+  .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .lim{color:var(--muted);font-size:12px;}
+  .step p{margin:0;color:var(--ink);}
+  .step h3 + p{color:var(--muted);}
+  .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
+  .vcard h3{color:var(--ink);}
+  figure{margin:18px 0;}
+  figure img{width:100%;border-radius:14px;display:block;}
+  figcaption{font-size:13px;color:var(--muted);margin-top:6px;text-align:center;}
+  table.comp td.win{background:#e3f4ec;color:var(--ink);font-weight:600;}
+  a.cta{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:16px;padding:12px 22px;border-radius:10px;text-decoration:none;}
+  .cover{background:linear-gradient(135deg,#14100a 0%,#2a2410 55%,#d9a400 160%);color:#fff;border-radius:18px;padding:60px 48px;min-height:88vh;display:flex;align-items:center;margin-bottom:28px;page-break-after:always;}
+  .cover p{color:#e6eefb;font-size:19px;}
+  .cover .meta{margin-top:26px;font-size:15px;color:#cfe0ff;}
+  @media print{
+    .page{max-width:100%;}body{background:#fff;}
+    .card,table,figure,.vcard,.step{page-break-inside:avoid;}
+    h2{page-break-after:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Propuesta comercial · Onia Inteligencia Artificial</div>
+    <h1>Premium Cars — Chatbot IA en WhatsApp que filtra clientes y te deja solo los que van en serio</h1>
+    <p>Un asistente con IA que responde precios, requisitos y condiciones 24/7, pregunta qué vehículo busca el cliente, para qué fecha y si lo quiere con entrega a domicilio — y te pasa solo al interesado real, con su ficha lista.</p>
+  </div>
+
+  <h2>Resumen ejecutivo</h2>
+  <div class="card"><p>Premium Cars atiende hoy todo por WhatsApp, a mano. Esta propuesta convierte ese canal en uno que trabaja solo, en tres etapas: <b>(1) el chatbot IA</b> que responde y filtra clientes 24/7 — exactamente lo que pediste; <b>(2) tu página web</b> con la flota, para que te encuentren en Google y el bot reciba también clientes nuevos, no solo los que ya tienen tu número; <b>(3) a futuro, el sistema de gestión Onia</b>: reservas, contratos, cobros y recordatorios en un solo lugar. Cada etapa funciona por sí sola — empezás por el bot.</p></div>
+  <h2>Qué problema resolvemos</h2>
+  <div class="card"><p>Cada consulta de alquiler llega a tu WhatsApp y casi todas preguntan lo mismo: precio, requisitos, condiciones. Entre curiosos y clientes serios, atender a mano quema horas — y el que escribe de noche o en fin de semana no espera: alquila con otra rentadora. Montamos un <b>chatbot con IA en tu WhatsApp</b> que responde al instante, hace las preguntas clave (vehículo, fechas, entrega o recojo) y te deja solo al cliente que en verdad está interesado — 24/7.</p></div>
+
+  <h2>Qué incluye</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="tag ">Atención 24/7</div>
+      <h3>Chatbot IA en WhatsApp</h3>
+      <ul><li>Responde solo precios, requisitos y condiciones de alquiler</li><li>Pregunta qué tipo de vehículo busca, para qué fecha lo desea y si lo quiere con entrega a domicilio o recogerlo de la empresa</li><li>Filtra: te deriva solo al cliente que en verdad está interesado, con su ficha lista</li><li>Atiende de madrugada, feriados y fines de semana sin perder consultas</li></ul>
+    </div>
+    <div class="card">
+      <div class="tag green">Orden</div>
+      <h3>Cada consulta registrada</h3>
+      <ul><li>Toda conversación queda registrada, ninguna se enfría</li><li>Responde con tu flota, tus tarifas y tus condiciones reales — nada inventado</li><li>Deriva a tu teléfono cuando el cliente lo pide o el caso lo amerita</li><li>Reportes: qué vehículos piden más y para qué fechas — para decidir tu flota</li></ul>
+    </div></div>
+
+  <h2>Cómo lo construimos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div>
+      <h3>Levantamiento</h3><p>Relevamos tu flota, tarifas por día, requisitos (licencia, garantía, edad mínima) y condiciones — las preguntas que hoy respondés a mano.</p>
+    </div></div>
+    <div class="step"><div class="n">2</div><div>
+      <h3>Entreno del bot</h3><p>Cargamos tus vehículos, precios y condiciones reales para que responda con precisión. Vos aprobás los textos antes de encender nada.</p>
+    </div></div>
+    <div class="step"><div class="n">3</div><div>
+      <h3>Calificación y filtro</h3><p>El bot pregunta vehículo, fechas y entrega o recojo, califica al cliente y te deriva solo a los interesados reales.</p>
+    </div></div>
+    <div class="step"><div class="n">4</div><div>
+      <h3>Conexión y reportes</h3><p>Conectamos tu número de WhatsApp (te guiamos con la verificación de Meta) y activamos los reportes de consultas y demanda.</p>
+    </div></div></div>
+
+  <h2>Por qué te conviene</h2>
+  <div class="grid vgrid">
+    <div class="vcard">
+      <h3>No perdés al que escribe a medianoche</h3>
+      <p>El que consulta a la 1am o en feriado recibe respuesta al instante y deja sus datos. Antes, ese cliente se iba con otra rentadora.</p>
+    </div>
+    <div class="vcard">
+      <h3>Solo atendés a los que van en serio</h3>
+      <p>El bot resuelve las dudas repetidas y filtra curiosos; a tu teléfono llega el cliente calificado, con vehículo, fechas y entrega ya definidos.</p>
+    </div>
+    <div class="vcard">
+      <h3>Respuesta inmediata = más alquileres</h3>
+      <p>En alquiler de autos gana el que contesta primero. El bot contesta en segundos, siempre — vos cerrás el trato.</p>
+    </div>
+    <div class="vcard">
+      <h3>Sabés qué te piden</h3>
+      <p>Reportes de qué vehículos y qué fechas piden más: decidís flota y tarifas con datos, no a ojo.</p>
+    </div></div>
+  <h2>Atender a mano vs. con Onia</h2>
+  <table class="comp">
+    <tr><th></th><th>Hoy (a mano)</th><th>Con Onia</th></tr>
+    <tr><td><b>Consulta a medianoche o feriado</b></td><td>Espera horas o se va con otra</td><td class="win">Respondida al instante, 24/7</td></tr><tr><td><b>Curiosos que preguntan de todo</b></td><td>Te queman tiempo igual que un cliente</td><td class="win">El bot los atiende; vos ni te enterás</td></tr><tr><td><b>Datos del cliente</b></td><td>Preguntás todo a mano, cada vez</td><td class="win">Ficha lista: vehículo, fechas, entrega o recojo</td></tr><tr><td><b>Presencia en internet</b></td><td>Solo WhatsApp</td><td class="win">Web propia que trae clientes desde Google</td></tr><tr><td><b>Reservas y seguimiento</b></td><td>En tu cabeza y en el chat</td><td class="win">Registradas, con seguimiento automático</td></tr>
+  </table>
+  <h2>Paquetes — elegí el tuyo</h2>
+  <table>
+    <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (Bs)</th></tr>
+    <tr><td><b>Bot Respuestas</b></td><td>Responde precios, requisitos y condiciones en tu WhatsApp 24/7 · incluye 800 mensajes/mes<br><span class="res">→ Atención inmediata, ninguna consulta sin respuesta.</span><br><span class="lim">Tope: Responde, pero no pregunta ni filtra — los curiosos siguen llegando a tu teléfono.</span></td><td class="num">1,500 + 490/mes</td></tr><tr class="rec"><td><b>Bot Calificador</b> ⭐</td><td>Lo anterior + pregunta vehículo, fechas y entrega o recojo, filtra y te deriva solo interesados reales con ficha lista · incluye 1.500 mensajes/mes<br><span class="res">→ Tu teléfono suena solo con clientes listos para alquilar.</span><br><span class="lim">Tope: No registra reservas ni persigue al que quedó en 'lo pienso'.</span></td><td class="num">2,900 + 890/mes</td></tr><tr><td><b>Bot Reservas + Seguimiento</b></td><td>Lo anterior + registra la solicitud de reserva, hace seguimiento automático al que no cerró y entrega reportes de demanda · incluye 3.000 mensajes/mes<br><span class="res">→ Capta, califica, reserva y hace seguimiento — sin trabajo manual.</span></td><td class="num">5,900 + 1,890/mes</td></tr>
+  </table>
+  <p style="margin-top:10px;">Diferencia clave: <b>Respuestas</b> = responde solo · <b>Calificador</b> = filtra y te pasa el cliente listo · <b>Reservas</b> = además registra la reserva y persigue al indeciso. Recomendado: <b>Calificador</b>. El mensual incluye la IA y la bolsa de mensajes indicada. Plan anual = 10 meses (2 gratis). El número de WhatsApp y la cuenta quedan a nombre de Premium Cars.</p>
+  <p style="margin-top:6px;"><b>Plazo de entrega estimado:</b> 1 a 2 semanas desde el anticipo y la entrega de contenidos.</p>
+
+  <h2>Add-ons (opcionales)</h2>
+  <table>
+    <tr><th>Add-on</th><th class="num">Setup (Bs)</th><th class="num">Mensual (Bs)</th></tr>
+    <tr><td>Página web de Premium Cars — tu flota con fotos, tarifas, requisitos y botón directo al bot (hoy no aparecés en Google; tus competidoras sí)</td><td class="num">790</td><td class="num">—</td></tr><tr><td>Web Pro — multipágina: flota completa, condiciones, zonas de entrega y solicitud de reserva online</td><td class="num">1,500</td><td class="num">—</td></tr><tr><td>Cuidado Web — hosting gestionado, cambios y respaldos</td><td class="num">—</td><td class="num">190–690</td></tr><tr><td>Sistema de gestión Onia — reservas, flota, contratos, cobros y recordatorios en un solo panel (siguiente etapa, cuando el bot y la web ya estén rindiendo)</td><td class="num">a convenir</td><td class="num">desde 350</td></tr>
+  </table>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="tag amber">Importante — costos de terceros</div>
+    <p>No incluidos: excedentes de mensajería de WhatsApp Business API por encima de la bolsa del plan, campañas de marketing por WhatsApp (van siempre aparte), y dominio + hosting de la web (a nombre de Premium Cars; te guiamos en la compra). El número de WhatsApp y la cuenta Meta Business quedan a nombre de Premium Cars.</p>
+  </div>
+
+  <h2>Próximos pasos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div><p>Elegís el paquete del bot (recomendado: Calificador) y confirmamos con el 50% de anticipo.</p></div></div>
+    <div class="step"><div class="n">2</div><div><p>Nos pasás flota, tarifas, requisitos y condiciones; te guiamos paso a paso con la verificación del número en Meta (se necesita NIT y datos del negocio).</p></div></div>
+    <div class="step"><div class="n">3</div><div><p>En 1–2 semanas probás el bot vos mismo — recién con tu OK lo encendemos con clientes reales.</p></div></div><p style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;"><a class="cta" href="https://wa.me/59175414930?text=Hola%20Onia%2C%20quiero%20el%20chatbot%20para%20Premium%20Cars">Quiero el chatbot para Premium Cars →</a><a class="cta" href="https://wa.me/59175414930?text=Hola%20Onia%2C%20quiero%20agendar%20una%20llamada%20por%20la%20propuesta%20de%20Premium%20Cars">Agendá una llamada</a></p></div>
+  <div class="foot">
+    <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
+    <p>Onia — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
+  </div>
+
+</div>
+</body>
+</html>

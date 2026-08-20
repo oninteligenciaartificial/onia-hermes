@@ -1,0 +1,24 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.709
+
+; Tratamiento ÚNICO para los 6 tags — la consistencia es lo que se lee como marca.
+; Panel oscuro semitransparente (alpha 1E) + texto blanco hueso 54pt con tracking 5 +
+; guion de acento verde al inicio. Nada de dibujos \p1: libass descarta la línea entera.
+; El verde queda como ACENTO (unos pocos píxeles), no como relleno — regla de marca.
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Tag,Bricolage Grotesque,54,&H00F4F5F2,&H00F4F5F2,&H1E0D0F0A,&H1E0D0F0A,-1,0,0,0,100,100,5,0,3,22,0,8,50,50,250,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:05.10,0:00:08.40,Tag,,0,0,0,,{\fad(220,220)}{\c&H006AD200&}—{\c&H00F4F5F2&}  YO TRABAJO CON ESTO
+Dialogue: 0,0:00:14.30,0:00:18.20,Tag,,0,0,0,,{\fad(220,220)}{\c&H006AD200&}—{\c&H00F4F5F2&}  ¿DÓNDE ANOTÁN?
+Dialogue: 0,0:00:18.90,0:00:23.30,Tag,,0,0,0,,{\fad(220,220)}{\c&H006AD200&}—{\c&H00F4F5F2&}  4 LISTAS · 0 REGISTRO
+Dialogue: 0,0:00:32.40,0:00:35.60,Tag,,0,0,0,,{\fad(220,220)}{\c&H006AD200&}—{\c&H00F4F5F2&}  MÁS RÁPIDO NO ES MEJOR
+Dialogue: 0,0:00:36.50,0:00:40.60,Tag,,0,0,0,,{\fad(220,220)}{\c&H006AD200&}—{\c&H00F4F5F2&}  PASO 1: ORDENAR
+Dialogue: 0,0:00:42.90,0:00:44.45,Tag,,0,0,0,,{\fad(220,0)}{\c&H006AD200&}—{\c&H00F4F5F2&}  COMENTÁ ACÁ ABAJO

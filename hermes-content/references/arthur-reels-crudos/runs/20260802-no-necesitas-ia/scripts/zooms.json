@@ -1,0 +1,11 @@
+{
+  "_nota": "Ken burns por bloque en lugar del punch estático. Cada bloque arranca en un tamaño distinto (eso sigue disimulando el jump cut) Y ADEMÁS se mueve durante todo el bloque, alternando push-in / pull-out para que nunca quede quieto ni derive siempre hacia adentro. Anchor top: en 9:16 la cara vive arriba. Ventanas = los 6 bloques del cutplan, en la línea de tiempo YA CORTADA.",
+  "zooms": [
+    { "start": 0.00,  "end": 13.41, "from": 1.00, "to": 1.09, "anchor": "top" },
+    { "start": 13.41, "end": 18.58, "from": 1.14, "to": 1.05, "anchor": "top" },
+    { "start": 18.58, "end": 19.72, "from": 1.07, "to": 1.11, "anchor": "top" },
+    { "start": 19.72, "end": 23.97, "from": 1.16, "to": 1.07, "anchor": "top" },
+    { "start": 23.97, "end": 34.20, "from": 1.02, "to": 1.13, "anchor": "top" },
+    { "start": 34.20, "end": 44.52, "from": 1.12, "to": 1.03, "anchor": "top" }
+  ]
+}

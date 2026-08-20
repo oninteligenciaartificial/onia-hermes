@@ -1,20 +1,28 @@
 {
   "title": "3 procesos que tu negocio ya no debería hacer a mano",
   "caption": "Si todavía respondés cada consulta, agendás a mano y persigues cobros uno por uno, no tenés un negocio: tenés un trabajo que no podés dejar. Estos 3 procesos son los primeros que automatizamos en ONIA porque son los que más plata y tiempo te están costando hoy. Guardá el checklist y comentá AUTO: te mando el diagnóstico de cuál automatizar primero en tu caso.",
-  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#pymes", "#whatsapp", "#santacruz"],
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#pymes",
+    "#whatsapp",
+    "#santacruz"
+  ],
   "comment_trigger": "Comentá AUTO",
-  "cta": "Comentá AUTO",
+  "cta": "Guardalo",
   "slides": [
     {
       "number": 1,
       "role": "cover",
-      "pill": "Automatización",
+      "pill": "La verdad",
       "headline": "3 procesos que ya no hacés *a mano*",
       "body": "Tu competencia ya los soltó.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Fondo ink ONIA, tipografía grande, acento verde en 'a mano'. Sin foto.",
-      "alt_text": "Portada: 3 procesos que ya no hacés a mano"
+      "alt_text": "Portada: 3 procesos que ya no hacés a mano",
+      "bg": "hermes-content/assets/onia/heroes/pro-01.png"
     },
     {
       "number": 2,
@@ -25,7 +33,8 @@
       "callout": "El 40% de los leads no vuelve si no respondés en 5 min ↘",
       "save_worthy": false,
       "visual_prompt": "Alto contraste, dato grande 40%, acento verde.",
-      "alt_text": "Hacerlo a mano te cuesta clientes"
+      "alt_text": "Hacerlo a mano te cuesta clientes",
+      "bg": "hermes-content/assets/onia/heroes/pro-02.png"
     },
     {
       "number": 3,
@@ -36,7 +45,8 @@
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Mockup chat WhatsApp, acento verde.",
-      "alt_text": "Proceso 1: responder consultas automatizado"
+      "alt_text": "Proceso 1: responder consultas automatizado",
+      "bg": "hermes-content/assets/onia/heroes/pro-03.png"
     },
     {
       "number": 4,
@@ -47,7 +57,8 @@
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "Flujo n8n simple, nodos, acento verde.",
-      "alt_text": "Proceso 2: seguimiento automático"
+      "alt_text": "Proceso 2: seguimiento automático",
+      "bg": "hermes-content/assets/onia/heroes/pro-04.png"
     },
     {
       "number": 5,
@@ -58,18 +69,21 @@
       "callout": "Guardá esto ↗",
       "save_worthy": true,
       "visual_prompt": "Tarjeta FRAMEWORK con 3 ítems checklist, barra inferior 'Guardá esto'.",
-      "alt_text": "Checklist de qué automatizar primero"
+      "alt_text": "Checklist de qué automatizar primero",
+      "bg": "hermes-content/assets/onia/heroes/pro-05.png"
     },
     {
       "number": 6,
       "role": "cta",
-      "pill": "Empezá hoy",
+      "pill": "Guardalo",
       "headline": "Pedí tu *diagnóstico* gratis",
-      "body": "Comentá *AUTO* y te mando cuál de los 3 procesos automatizar primero en tu negocio.",
+      "body": "*Guardalo* y arrancá por el primero. Ese solo ya te devuelve la semana.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte, acento verde en AUTO.",
-      "alt_text": "Comentá AUTO para tu diagnóstico gratis"
+      "alt_text": "Comentá AUTO para tu diagnóstico gratis",
+      "bg": "hermes-content/assets/onia/heroes/pro-06.png"
     }
-  ]
+  ],
+  "job": "educacional"
 }

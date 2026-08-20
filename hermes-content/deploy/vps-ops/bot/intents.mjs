@@ -134,6 +134,7 @@ export function asksWhatWeDo(norm) {
 }
 
 // ---------------------------------------------------------------------------
+<<<<<<< HEAD
 // MODO RECEPCIONISTA (el bot de un CLIENTE de Onia). Solo lo consulta
 // recepcionista.mjs: el funnel de venta no pasa por aca.
 // ---------------------------------------------------------------------------
@@ -175,6 +176,8 @@ export function wantsToOrder(norm) {
 }
 
 // ---------------------------------------------------------------------------
+=======
+>>>>>>> origin/main
 // SEGUNDO CAMINO: soporte (no venta)
 // ---------------------------------------------------------------------------
 // Quien YA es cliente no viene a comprar: viene a que algo funcione. Ofrecerle la demo comercial

@@ -399,7 +399,11 @@ export function readKnowledgeFile(path, deps = {}) {
 
 const EMPTY = Object.freeze({
   data: null,
+<<<<<<< HEAD
   source: "code", // "db" | "file" | "code". "db" = la fila publicada POR ORG (paso b), delante del archivo.
+=======
+  source: "code", // "file" | "code". El paso (b) del diseño agrega "db" adelante del archivo.
+>>>>>>> origin/main
   version: null,
   updatedBy: null,
   loadedAt: null,
@@ -480,6 +484,7 @@ function scheduleRefresh(path, nowMs, options = {}) {
     });
 }
 
+<<<<<<< HEAD
 // ---------------------------------------------------------------------------
 // Fuente "db" (paso b): la fila publicada POR ORGANIZACION, via HTTP al producto
 // ---------------------------------------------------------------------------
@@ -643,12 +648,17 @@ export async function ensureKnowledge(options = {}) {
  *   - con `options.organizationId` (o `options.inboxId`) y copia db en cache: la copia
  *     de ESA org (vencido el TTL se sirve la vieja y se refresca aparte);
  *   - sin copia db (o sin organizationId/inboxId): el archivo local de siempre;
+=======
+/**
+ * El conocimiento vigente. SINCRONICO y tolerante: nunca tira y nunca espera red.
+>>>>>>> origin/main
  *   - primera vez (o cambio de ruta): lectura sincronica del archivo local (arranque);
  *   - TTL vigente: devuelve el cache;
  *   - TTL vencido: DEVUELVE LA COPIA VIEJA YA y dispara la relectura aparte.
  */
 export function getKnowledge(options = {}) {
   try {
+<<<<<<< HEAD
     const orgKey = cacheKeyOf(options);
     if (orgKey) {
       const orgNow = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
@@ -659,6 +669,8 @@ export function getKnowledge(options = {}) {
       if (org?.data) return org;
       // sin copia db todavia: sigue el camino del archivo/codigo de siempre
     }
+=======
+>>>>>>> origin/main
     const path = knowledgePath(options);
     const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
     if (CACHE.path !== path) {
@@ -762,6 +774,7 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
 }
 
 /**
+<<<<<<< HEAD
  * MODO RECEPCIONISTA: la config del bot de un CLIENTE de Onia. Se activa SOLO cuando el
  * conocimiento vino de la fila publicada de una org (fuente "db" con org/inbox resuelto) —
  * nunca por el archivo local ni por el codigo, que son la cara de Onia. `conocimiento` viaja
@@ -776,13 +789,21 @@ export function asRecepcionista(config, data) {
  * La config del turno con los hechos editables aplicados. Es LO UNICO que llaman run-turn.mjs y
  * followup-run.mjs. Sin archivo (el estado de hoy) devuelve la misma config que recibio.
  * Con fuente "db" (org cliente) ademas enciende el modo recepcionista.
+=======
+ * La config del turno con los hechos editables aplicados. Es LO UNICO que llaman run-turn.mjs y
+ * followup-run.mjs. Sin archivo (el estado de hoy) devuelve la misma config que recibio.
+>>>>>>> origin/main
  */
 export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
   try {
     const state = getKnowledge(options);
+<<<<<<< HEAD
     if (!state.data) return config;
     const applied = applyKnowledge(config, state.data, options);
     return state.source === "db" ? asRecepcionista(applied, state.data) : applied;
+=======
+    return state.data ? applyKnowledge(config, state.data, options) : config;
+>>>>>>> origin/main
   } catch {
     return config;
   }

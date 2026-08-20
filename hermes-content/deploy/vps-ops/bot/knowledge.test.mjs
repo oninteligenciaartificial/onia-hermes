@@ -24,18 +24,28 @@ import {
   KNOWLEDGE_SCHEMA,
   applyKnowledge,
   checkCli,
+<<<<<<< HEAD
   ensureKnowledge,
   getKnowledge,
   getOrgKnowledge,
+=======
+  getKnowledge,
+>>>>>>> origin/main
   knowledgeHealth,
   parseKnowledge,
   readKnowledgeFile,
   resetKnowledgeCache,
+<<<<<<< HEAD
   resetOrgKnowledgeCache,
   validateKnowledge,
   withKnowledge,
 } from "./knowledge.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
+=======
+  validateKnowledge,
+  withKnowledge,
+} from "./knowledge.mjs";
+>>>>>>> origin/main
 import { step, createState } from "./bot-engine.mjs";
 import { normalize } from "./guardrails.mjs";
 import { findIndustry, industryLabel } from "./intents.mjs";
@@ -91,10 +101,14 @@ function conArchivo(contenido, run) {
   return salida;
 }
 
+<<<<<<< HEAD
 test.afterEach(() => {
   resetKnowledgeCache();
   resetOrgKnowledgeCache();
 });
+=======
+test.afterEach(() => resetKnowledgeCache());
+>>>>>>> origin/main
 
 // ---------------------------------------------------------------------------
 // 1. DEGRADACION — el bot no se cae ni queda mudo
@@ -705,6 +719,7 @@ test("renderTemplate sigue siendo el ultimo paso: los {{ }} del conocimiento se 
   assert.match(config.script.M_SIAT_BODY, /\{\{humano\}\}/, "el texto guardado conserva la variable");
   assert.match(renderTemplate(config.script.M_SIAT_BODY, { humano: "Sergio" }), /Sergio en la demo/);
 });
+<<<<<<< HEAD
 
 // ---------------------------------------------------------------------------
 // FUENTE "DB" (paso b): la fila publicada POR ORGANIZACION, via HTTP al producto
@@ -915,3 +930,5 @@ test("preview: el BORRADOR corre en modo RECEPCIONISTA — lo que el cliente fin
     delete process.env.ONIA_BOT_PREVIEW_SECRET;
   }
 });
+=======
+>>>>>>> origin/main

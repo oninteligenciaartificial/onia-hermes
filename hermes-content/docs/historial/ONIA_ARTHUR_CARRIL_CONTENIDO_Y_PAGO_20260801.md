@@ -1,4 +1,4 @@
-# Arthur — carril contenido y cómo se le paga con plata de Onia Platform
+﻿# Arthur — carril contenido y cómo se le paga con plata de Onia Platform
 
 > **2026-08-01.** Sergio: *"hay que darle trabajo y cómo pagarle en base a lo que genere
 > Onia Platform, porque va a entrar ingreso de ahí y no sé cómo pagarle."*
@@ -47,7 +47,7 @@ Ninguna capa es sueldo. Las tres se pagan con plata que **ya entró**.
 
 ### Capa 1 — Bounty por demo atribuible (el puente)
 
-**Bs 50 por cada demo atribuible que efectivamente se realizó.** Tope 12/mes (Bs 600).
+**Bs 50 por cada demo atribuible que efectivamente se realizó.** ~~Tope 12/mes~~ **SIN tope** (Sergio 2026-08-01: "hay que ganar lo que se tenga que ganar").
 
 Es la métrica que ya se decidió el 26-jul ("demos agendadas atribuibles") y es lo único que
 le paga **antes** de que exista una venta. Barato: 12 demos = Bs 600, y 12 demos con este
@@ -89,7 +89,21 @@ cosas buenas de golpe:
 
 Al mes 7 el cliente queda 100% de Onia. Arthur no cobra renta infinita por un trabajo de una vez.
 
-### Capa 3 — Bonos por hito (contra el desfase y por el objetivo)
+**Esto aplica a cualquier rubro de la plataforma** (dental, comercio, distribución), no solo
+dental.
+
+**Los servicios (T2) NO cambian: sigue la tabla ya firmada.** Web, Cuidado Web, n8n, chatbot y
+marketing se pagan como están en el acuerdo (5% si solo trae el contacto, 12% si trae y
+cierra, 18% si además ayuda con brief y copy, 50% si vende y produce completo sin
+rescate — números únicos, ver §9.1). No se toca nada de eso. Y es importante que quede separado: **T2 le puede pagar en
+la primera semana**, mucho antes de que la plataforma cierre a nadie. Una Web Pro de Bs 1.500
+que él vende y produce = Bs 750 para él. Eso es más que 5 meses de comisión de una suscripción
+Pro.
+
+### Capa 3 — Bonos por hito ~~(tabla fija)~~ → DISCRECIONALES (ver §9.6-ter)
+
+> **Corregido 2026-08-01:** la tabla de abajo quedó como referencia histórica. El bono es
+> mensual y discrecional de Sergio, decidido con el trabajo registrado en el panel.
 
 | Bono | Se gatilla | Monto |
 |---|---|---:|
@@ -103,6 +117,53 @@ El "objetivo de la casa" es a propósito **independiente de quién lo trajo** �
 lo suyo, deja de importarle si Onia llega o no.
 
 Se pagan con semáforo verde (el Fondo ya cubrió herramientas y reserva), igual que hoy.
+
+### Cómo se combinan las tres (la pregunta de Sergio: "¿gana por porcentaje o por bono?")
+
+**Por las dos, y cada una paga por una cosa distinta.**
+
+| Concepto | Tipo | Cuánto | Se cobra |
+|---|---|---|---|
+| Reunión atribuible que se hizo | **Monto fijo por unidad** | Bs 50 (tope 600/mes) | Aunque nadie compre |
+| Venta de servicio (web, n8n, chatbot) | **Porcentaje del cobro, una vez** | número fijo por caso (tabla §9.1) | Cuando el cliente paga |
+| Suscripción de plataforma | **Porcentaje mensual, 6 meses** | 20% de la base repartible | Cada mes que el cliente paga |
+| Hitos | **Bono fijo** | 300 / 150 / 500 | Cuando ocurre el hito |
+
+Por qué las tres y no una sola:
+
+- **Solo porcentaje** = cobra Bs 0 durante las primeras semanas. El contenido tarda. Se va antes de cobrar el primero.
+- **Solo bono** = no escala. Si trae 10 clientes en vez de 2, un monto fijo no lo premia.
+- **Solo monto por reunión** = le conviene el volumen de reuniones, no que alguien compre.
+
+Traducido: **el monto fijo es el piso, el porcentaje es el motor, el bono es el empujón** en los
+tres momentos que el porcentaje no premia solo (el primer cliente, que el cliente se quede, y
+que Onia llegue a la meta).
+
+### Ejemplo de un mes real
+
+Arthur saca 8 reuniones, vende y produce una Web Pro, y una de esas reuniones se convierte en
+una clínica que toma el plan Pro.
+
+| Origen | Tipo | Bs |
+|---|---|---:|
+| 8 reuniones × 50 | fijo | 400 |
+| Web Pro 1.500, la vende y la produce (50%) | porcentaje | 750 |
+| Clínica Pro 750/mes, primer mes (20%) | porcentaje | 135 |
+| Bono primer cliente atribuible | bono | 300 |
+| **Total del mes** | | **1.585** |
+
+Y así siguen los meses:
+
+| Mes | Qué cobra | Bs |
+|---|---|---:|
+| 2 | 8 reuniones + la suscripción que sigue viva | 535 |
+| 3 | igual + bono de retención (la clínica llegó al 3er mes) | 685 |
+| 4-6 | igual, y sube por cada cliente nuevo que se acumula | 535+ |
+
+**Lo que muestra el ejemplo:** la plata grande del mes 1 vino del **servicio** (Bs 750), no de
+la plataforma (Bs 135). Eso es correcto y es el diseño: los servicios pagan rápido mientras la
+suscripción se acumula. Al 4º cliente de plataforma vivo, la suscripción ya le paga sola sin
+depender de vender una web nueva cada mes.
 
 ### La escalera (esto no es bono, es estructura)
 
@@ -159,12 +220,35 @@ habitación #2 antes de tener inquilino en la #1.
 
 ### Abiertos — acá va su semana
 
+**Corrección 2026-08-01 (Sergio): "NO solo vendemos a clínicas dentales."** Es cierto y este
+doc lo tenía mal. Onia vende dos cosas distintas a dos compradores distintos, y Arthur genera
+demanda para **las dos**:
+
+| Carril | Qué se vende | A quién | Cuánto tarda en pagar |
+|---|---|---|---|
+| **T1 · Plataforma** | Suscripción 320-1.500/mes | Negocio formal con volumen: clínica, **ferretería, distribuidora** | Semanas-meses |
+| **T2 · Servicios** | Web 790/1.500/2.900 · Cuidado Web 190-690/mes · n8n 790-1.900 · chatbot | Cualquier negocio (cliente B) | **Días** |
+
+**Dental va primero en T1 por una razón operativa, no porque sea el único rubro:** el producto
+está terminado, hay 150 prospectos listados y 5 leads tibios. Comercio y distribución están
+gateados hasta 3 clínicas pagando (regla de la habitación #1), pero **el contenido base sirve
+igual a los tres**: el dolor es el mismo (clientes que no vuelven, cobros que se olvidan,
+facturas tipeadas a mano). Cambia el ejemplo en pantalla, no el mensaje.
+
+**T2 no es un premio consuelo: es lo que paga en días.** Y resuelve el desfase mejor que
+cualquier bounty, porque una web cobrada esta semana es plata esta semana.
+
 | # | Frente | Qué produce | Se mide en |
 |---|---|---|---|
-| **A1** | **Serie dental "Clínicas Sin Pacientes Perdidos"** | 8-10 piezas/semana con la fábrica ya construida (Estudio, HyperFrames, editor-videos) | Demos atribuibles |
-| **A2** | **Material de venta** | Demo de 15 min grabada, clips de las 10 objeciones del kit, casos | Uso real en ventas |
-| **A3** | **Outreach con el contenido como prueba** | DMs a las 50 clínicas del CSV + comentarios/comunidad, con mensaje aprobado | Demos atribuibles |
-| **A4** | **Contenido a clientes B** *(caja)* | Solo paquetes que ya existen, sin inventar servicios nuevos | Bs cobrados |
+| **A1** | **Contenido T1** (plataforma) | El dolor del dueño de negocio, con ejemplo dental por ahora | Demos atribuibles |
+| **A2** | **Material de venta T1** | Demo de 15 min grabada, clips de las 10 objeciones del kit | Uso real en ventas |
+| **A3** | **Contenido T2** (servicios) | Casos de web, antes/después, "tu negocio sin web", automatización que ahorra horas | Reuniones + Bs cobrados |
+| **A4** | **Outreach a los dos carriles** | T1: los 150 prospectos dentales listados. T2: negocios sin web o con web muerta, que es **cualquier rubro** | Reuniones atribuibles |
+
+⚠️ **Hueco real:** las 150 listas de prospectos que existen son **todas dentales**. Para T2 y
+para los rubros nuevos no hay lista. Armarla es parte del trabajo de Arthur, no un
+prerrequisito que lo frene: para T2 el criterio es simple y se ve desde el celular (negocio
+que factura y no tiene web, o la tiene muerta).
 
 **A3 no es un desvío del carril: es la parte que da resultado rápido.** Contenido desde cero
 tarda semanas en traer una demo; el outreach trae demos esta semana y el contenido lo hace
@@ -172,6 +256,11 @@ creíble. Detalle a resolver antes: los mensajes del kit están escritos en prim
 Sergio (*"soy Sergio de ONIA"*) — hay que hacer la versión de Arthur o mandar como Onia.
 
 ### Gateados — se preparan ahora, se disparan cuando se destrabe
+
+> **AMPLIACIÓN DE ALCANCE (Sergio, 2026-08-06): "Arthur hará lo de las modelos, Higgsfield y
+> Meta Ads."** Los tres frentes que estaban abajo como gateados pasan a ser SUYOS. Lo que
+> cambia es el dueño, no los bloqueos: siguen bloqueados por lo mismo, pero ahora él es quien
+> los prepara y quien avisa cuando se destraban. Detalle operativo en §5-ter.
 
 | # | Frente | Por qué está frenado | Gatillo |
 |---|---|---|---|
@@ -201,6 +290,153 @@ No está prohibido para siempre — está gateado por el mismo número que todo 
 | 1 (ago) | 4 |
 | 2 (sep) | 8 |
 | 3 (oct) | 12 |
+
+---
+
+---
+
+## 5-ter. Los tres frentes nuevos de Arthur (Sergio, 2026-08-06)
+
+> *"Arthur hará lo de las modelos y Higgsfield y Meta Ads."*
+
+Esto **amplía su alcance**, no cambia cómo gana (§9.6-ter sigue vigente: la producción no
+paga por unidad, se gana por resultado y sin topes).
+
+### F1 · Las modelos (Lucía y Mara)
+
+| Qué es suyo | Qué NO |
+|---|---|
+| Generar el contenido de las dos con sus Souls, manteniendo el bloque de identidad fijo | **Crear las cuentas** — es de Sergio (email, SIM, BM, etiqueta IA en la bio) |
+| Armar el banco y el calendario, cada pieza con su `?src=` | Publicar sin aprobación de Sergio |
+| Proponer escenas y guiones dentro del posicionamiento ya definido | Cambiar el posicionamiento de las modelos |
+
+- Souls aprobados: **Lucía `36305a9b`** y **Mara `6c94bbf0`**.
+- ⛔ **PROHIBIDO el Soul de Sergio** (decisión suya del 2026-08-06: *"es horrible"*). Su marca
+  personal se hace con cara real grabada, nunca generada.
+- **Etiqueta de IA obligatoria** en las bios de las modelos, y jamás testimonios de resultados
+  (FTC). Lucía nunca testimonia.
+
+### F2 · Higgsfield
+
+Cuenta **ULTRA con ~2.990 créditos**. Costo medido: **imagen Soul 2K = 0,12 créditos**.
+
+| Regla | Detalle |
+|---|---|
+| **Imágenes: libre** | A 0,12 créditos, un lote de 20 cuesta 2,4. Deja de ser una decisión de gasto. Solo con Souls aprobados |
+| **Video: OK por lote** | Cotizar con `get_cost` ANTES de generar y pedir el OK a Sergio con el número |
+| **Tope de referencia** | 65 créditos/mes por modelo. Si un mes se pasa, se avisa y se explica |
+| **Registro** | Cada lote: objetivo, cuántas piezas, para qué cuenta. Sin registro no se repone presupuesto |
+
+### F3 · Meta Ads
+
+⚠️ **La pauta NO se puede activar hoy: ninguna cuenta tiene método de pago.** Lo que Arthur
+hace mientras tanto es real y sirve igual:
+
+| Puede hacer YA | Bloqueado |
+|---|---|
+| Research en la **Ad Library** (qué corre, qué hooks, qué ofertas) | Publicar cualquier anuncio pagado |
+| Preparar creativos y públicos listos para cargar | Gastar un solo peso |
+| Los 5 formatos estáticos S-Tier del `ADS_PATTERN_BANK_2026.md` | — |
+| Avisar cuando algo orgánico ya convierte (eso es lo que se amplifica después) | — |
+
+**Dos fechas que él tiene que vigilar:**
+- ⚠️ **El token USER de ads vence el 2026-09-05.** Migrar a System User es de Sergio (necesita
+  admin del BM), pero Arthur avisa si se acerca sin resolverse.
+- La cuenta **ONIA Ads** (USD) permite desde $1/día; la personal (BOB) desde ~Bs 11/día.
+
+### El orden correcto, para que esto no sea humo
+
+1. Primero **orgánico con `?src=`** hasta que un ángulo traiga reuniones.
+2. Recién ahí se pauta **ese** ángulo, con presupuesto chico y fecha de corte.
+3. Nunca pauta a puerta fría: es la forma más rápida de gastar sin aprender.
+
+
+## 5-bis. El backlog concreto — en qué trabaja, pieza por pieza
+
+> "8-10 piezas por semana" es una cuota, no trabajo. Esto es el trabajo.
+
+**El hallazgo que ahorra dos semanas:** la serie *"Clínicas Sin Pacientes Perdidos"* está
+nombrada en la estrategia pero **nunca se escribió** — no hay episodios ni calendario. Y no
+hace falta inventarla: **el kit de ventas ya la contiene.** Las 10 objeciones de
+`ONIA_KIT_VENTA_DENTAL_20260727.md` §3 son 10 videos con el guion ya escrito y aprobado; el
+guion de demo §2 son 6 clips (está partido minuto a minuto); el orden de contacto §4 es la
+lista de distribución. **Son ~20 piezas sin inventar una sola línea.**
+
+### Su stack es gratis por defecto
+
+Esto importa para el volumen: casi todo se produce **sin quemar créditos**.
+
+| Herramienta | Qué hace | Costo |
+|---|---|---|
+| **HyperFrames** (`scripts/hyperframes/compositions/`) | Video por código. Ya existen: `keyword`, `trazo`, `tag`, `lista`, `escena`, `stat`, `quote`, `scoreboard`, `lower-third`, `browser`, `phone` | **0** |
+| **`editor-videos`** (skill) | Corta silencios y muletillas, subtítulos karaoke, overlays sincronizados a la palabra, zoom-punch | **0** |
+| **`ver-videos`** + Speaches | Transcribe con timestamps en el VPS | **0** |
+| **Estudio de Contenido** (panel) | Cola de piezas y aprobación | **0** |
+| Higgsfield / ElevenLabs / imagen paga | Generación | **OK por pieza** |
+
+### Semana 1 (3-9 ago) — que exista el material y la atribución
+
+| # | Entregable | Usa | Listo cuando |
+|---|---|---|---|
+| 1 | **Links `?src=` por pieza + fuente en Onia Center** | Landing con Cal.com (ya está) | Una demo agendada muestra de qué pieza vino |
+| 2 | **Grabar la demo de 15 min con Sergio** | Guion §2 del kit, minuto a minuto | Master en bruto |
+| 3 | **6 clips del master** (uno por bloque del guion) | `editor-videos` | 6 MP4 verticales con subtítulos |
+| 4 | **Outreach a los 5 tibios REALES** — Ianclinic, Mila dent, clínica uwu, Dr. Manzanillo, Clínica Camila | Mensaje §1.3 (ya corregido) | 5 conversaciones abiertas |
+
+**Meta: 2 demos.** Los 5 tibios valen más que las 50 frías: ya se registraron y se fueron.
+Saber por qué se fueron es lo más barato que podemos aprender.
+
+### Semana 2 (10-16 ago) — las objeciones
+
+| # | Entregable | Usa |
+|---|---|---|
+| 5 | **10 videos de 30-45 s**, uno por objeción §3.1-3.10 | Guion ya escrito · `keyword` + `tag` + `trazo` sobre talking-head |
+| 6 | **Outreach a las 12 primeras clínicas** del §4 del kit | Mensaje §1.1 (el de frío, el único validado) |
+
+**Meta: 3 demos.** Ojo con §3.1 y §3.10: son las del SIAT. Se usa la versión corregida —
+emisor en homologación, Portal Web gratis mientras tanto. **Nunca "obligatorio por ley".**
+
+### Semana 3 (17-23 ago) — la cuenta, y abrir T2
+
+| # | Entregable | Usa |
+|---|---|---|
+| 7 | **Piezas de número**: "una silla vacía te cuesta Bs X al mes" | `stat` + `scoreboard` · supuestos de `ONIA_PRICING_MODELO_20260730.md`, **marcados como supuestos** |
+| 8 | **Demo pública de 40 s**: el agente en `/pending` | `browser` + `phone` (mockups por código) · es el minuto 7-11 del guion, el momento que cierra |
+| 9 | **3 piezas de T2 (servicios)**: antes/después de una web, "tu negocio sin web", una automatización que ahorra horas | Galería de Web Factory · `browser` · casos ya construidos |
+| 10 | **Outreach T2**: 15 negocios sin web o con web muerta, **cualquier rubro** | Mensaje corto propio, aprobado por Sergio |
+
+**Meta: 3 demos de plataforma + 2 reuniones de servicios.** T2 entra en la semana 3 y no
+antes por una razón: primero hay que tener piezas y atribución andando. Si en las semanas 1-2
+el carril dental no da señales, T2 se adelanta.
+
+### Semana 4 (24-30 ago) — la ventana
+
+| # | Entregable | Usa |
+|---|---|---|
+| 9 | **La fecha del 1-oct**: qué cambia y qué no | El pitch es *"no tengas que tipear"*, jamás *"es obligatorio"* — el Portal del SIN es gratis y cumple |
+| 10 | **Caso o building-in-public** | Si hay cliente, el caso. Si no, la serie del marcador que ya arrancó Sergio (`scoreboard`) |
+
+**Meta: 4 demos.**
+
+### Continuo, todas las semanas
+
+- Operar la cola del **Estudio** del panel: nada se publica sin aprobación de Sergio.
+- **Reporte del viernes** con la tabla de atribución: pieza → fuente → demo → estado.
+- **Definición de "pieza terminada"** (para que las tareas terminen y paren): MP4 vertical +
+  copy + link `?src=` propio + registrada en el Estudio + aprobada. Sin las cinco, no cuenta.
+
+### Lo que NO hace este mes (y por qué)
+
+| Tentación | Por qué no |
+|---|---|
+| **Serie "Radar IA"** (ep.001 producido, espera aprobación) | Le habla a la audiencia **D**, no al dueño de clínica. No trae demos |
+| **Lucía / roster** | No publica hasta el token de IG. Cola sí, publicación no |
+| **Canal de salud** | Parqueado: audiencia que nunca convierte a Onia |
+| **Meta Ads** | Sin caja aprobada y sin embudo probado, es quemar plata |
+| **Nuvia** | Es su negocio lateral 50/50, no cuenta como carril Onia |
+
+Son cinco cosas atractivas y ninguna acerca un pago en agosto. Se anotan y se retoman con su
+gatillo — la misma regla que aplica a todo lo demás.
 
 ---
 
@@ -283,6 +519,225 @@ Tope duro **Bs 600/mes**. Eso es lo peor que puede pasar si no entra un solo pes
 **Se puede arrancar hoy sin esperar D1-D4:** los links `?src=` por pieza y el registro de
 fuente en Onia Center. Sin eso ningún modelo de atribución se puede liquidar, y es media hora
 de trabajo.
+
+---
+
+## 9. Ventana de validación: 30 días (lunes 3-ago al martes 1-sep)
+
+> Sergio 2026-08-01: *"definamos porcentajes, hitos y metas para 30 días, ahí validamos si lo
+> metemos."* Esto es esa ventana. Al día 30 hay una decisión de tres salidas, no una charla.
+
+**Nota de calendario:** el acuerdo viejo cumple su día 60 el **19-ago**, que cae adentro de
+esta ventana (día 17). Ese día no se decide nada: solo se confirma que seguimos con este plan
+hasta el 1-sep. La decisión real se corre al día 30.
+
+### 9.1 Los porcentajes, todos juntos
+
+Se calculan sobre el ingreso neto (cobro menos costos directos), con Fondo Onia 40% separado
+primero. Eso no cambia. Solo la línea de plataforma es nueva; el resto viene del acuerdo.
+
+**Regla anti-discusión (Sergio 2026-08-01): un solo número por caso, nunca un rango.** Los
+rangos del acuerdo viejo ("12-15%") se fijan acá en un número único. El número solo baja por
+la escala de intervención de Sergio (que ya está definida en el acuerdo), nunca se negocia
+por venta.
+
+| Línea de ingreso | Qué hizo Arthur | Se lleva |
+|---|---|---:|
+| **Plataforma** (dental, comercio, distribución) | Trajo la reunión; Sergio cierra y entrega | **20% mensual × 6 meses** |
+| **Plataforma** | Trajo, calificó y acompañó el cierre | **25% mensual × 6 meses** |
+| Web (790 / 1.500 / 2.900) | Solo pasó el contacto | 5% |
+| Web | Trajo y cerró; Onia produce | 12% |
+| Web | Cerró y aportó brief, copy y contenido | 18% |
+| Web | Vendió y produjo completa, sin rescate | 50% |
+| Automatización n8n (790-1.900) | Vendió; Sergio entrega | 12% |
+| Automatización n8n | La hizo funcionando y documentada | 30% |
+| Automatización n8n | Vendió y entregó completa | 50% |
+| Cuidado Web mensual (190-690) | Gestiona y reporta | 15% mensual mientras gestione |
+| Contenido a cliente | Produjo las piezas | 20% |
+| Contenido mensual a cliente | Gestiona, publica y reporta | 15% mensual mientras gestione |
+| Pack de video IA (Higgsfield) | Guion, generación, edición y entrega | 25% |
+| Pack de video IA | Vendió y entregó todo | 50% |
+| Reunión atribuible realizada | Cualquier carril | Bs 50 fijos (tope 600/mes) |
+
+### 9.2 Las metas de los 30 días
+
+| Meta | Número | Por qué ese número |
+|---|---:|---|
+| Reuniones atribuibles **realizadas** | **8** | 2 por semana partiendo de cero audiencia |
+| **Ventas de servicio cobradas** | **1** | Es la prueba de que puede generar plata, no solo actividad |
+| Clientes de plataforma cerrados | 1 | Con 8 reuniones, 1 es realista. Si sale 0 pero hay pipeline, cuenta como amarillo |
+| Piezas publicadas y aprobadas | 16 | 4 por semana con la fábrica gratis |
+| Prospectos nuevos listados **fuera de dental** | 60 | Hoy no existe ninguna lista que no sea dental |
+| Reportes de viernes entregados | 4 de 4 | Sin esto no se puede liquidar nada, y es causal de no pago |
+
+### 9.3 Los hitos
+
+| Día | Fecha | Hito |
+|---:|---|---|
+| 7 | 9-ago | Atribución andando (`?src=`), demo de 15 min grabada, los 5 tibios contactados |
+| 14 | 16-ago | 10 videos de objeciones publicados, 4 reuniones acumuladas |
+| 17 | 19-ago | Día 60 del acuerdo viejo: se confirma continuidad con este plan, no se decide |
+| 21 | 23-ago | T2 abierto: 15 negocios contactados, 1 propuesta de web o n8n enviada |
+| 30 | 1-sep | Cierre y decisión |
+
+### 9.4 El semáforo del día 30
+
+| Resultado | Qué pasó | Decisión |
+|---|---|---|
+| **Verde** | 8+ reuniones **y** 1+ venta cobrada **y** CRM al día | **Entra.** Se firma el modelo completo y se abre la escalera del §2 |
+| **Amarillo** | 4-7 reuniones, o venta no cerrada pero con pipeline real y registrado | Se extiende 30 días con metas ajustadas |
+| **Rojo** | Menos de 4 reuniones, sin venta, sin registro | **No entra.** Vuelve a pago por tarea puntual |
+
+La venta de servicio es el filtro duro. Ocho reuniones sin una sola venta en 30 días no es un
+problema de Arthur: es la señal de que el carril de contenido no está trayendo compradores.
+
+### 9.5 Higgsfield: presupuesto cerrado y para qué
+
+Sergio pidió meterlo. Entra así, no como barra libre:
+
+- **Presupuesto cerrado** para los 30 días, definido antes de arrancar (propuesta: el
+  equivalente a **6 piezas**). Se acaba y no se repone hasta el día 30.
+- **Solo para lo que no se puede grabar ni hacer por código.** Los mockups, textos, marcadores
+  y overlays ya salen gratis con HyperFrames. Higgsfield es para el hook imposible: la silla
+  vacía, el escritorio con facturas, el b-roll que no tenemos.
+- Cada pieza con objetivo, costo estimado y aprobación **antes** de generar. Regla vigente.
+- **Prohibido:** pruebas de estilo, experimentos y piezas sin destino en el embudo.
+
+Entregable de Higgsfield en los 30 días: **4 hooks** para la serie de plataforma + **1 pieza
+de marca** + la cola de Lucía preparada sin publicar.
+
+### 9.5-bis. ¿Para qué cuenta es cada cosa? (definido de una vez)
+
+Regla: **el crédito pago se gasta solo donde hay embudo con atribución. Hoy eso es la cuenta
+de Onia y nada más.**
+
+| Cuenta | De quién es | ¿Higgsfield/crédito pago? | Qué publica Arthur ahí |
+|---|---|---|---|
+| **Onia** (IG/TikTok/FB) | Onia | **SÍ — acá va TODO el presupuesto de los 30 días** | Serie plataforma, 10 objeciones, demo 40 s, piezas T2, SIAT. Todo con `?src=` |
+| **Marca personal de Sergio** | Sergio (sirve a Onia) | **NO** — es cara real grabada con celular, costo 0. Higgsfield no aporta ahí | Edita los crudos de Sergio con `editor-videos` (cortes+subtítulos). Sergio graba, Arthur monta |
+| **Lucía** (@lu.antelo) | Onia (activo) | Solo si sobra presupuesto — **cola sin publicar** hasta token IG (S6) | Nada publicado. Cola lista |
+| **Cuenta personal de Arthur** | Arthur | **NO — nunca con crédito de Onia** | Lo que quiera por su cuenta; si menciona Onia, con aprobación |
+| **Canales YT** (Onia Media) | Onia | NO — parqueados | Solo guiones en cola, gratis |
+
+Tres consecuencias:
+- El bounty y la atribución **solo corren en la cuenta de Onia** — es la única con links `?src=`.
+- La marca personal de Sergio no es carril de Arthur: es materia prima (Sergio graba) + montaje
+  (Arthur edita, gratis). Sin generación paga.
+- Si un crédito se gasta en una cuenta que no es Onia sin OK escrito, se descuenta de su
+  liquidación como costo directo (regla vigente del acuerdo).
+
+### 9.6 El trabajo que siembra lo que viene
+
+Esto es lo que hace con el tiempo que le sobra, y es lo que lo conecta con las metas futuras.
+Nada de acá se mide en el semáforo del día 30: son activos, no resultados.
+
+| Proyecto futuro | Qué hace ahora | Por qué ahora |
+|---|---|---|
+| **Onia Comercio** (2º vertical) | La lista de 60 ferreterías y distribuidoras con señal de dolor | Cuando se abra el vertical, la lista ya existe. Hoy no hay ninguna |
+| **Módulo "Onia te publica"** | Banco de contenido reusable + plantillas por rubro | Es el add-on que después le paga 20% × 12 meses. Le conviene que quede bien |
+| **Canal "Onia Automatiza"** | 8 guiones en cola, sin publicar | Cuando Sergio abra el canal y el OAuth, se publica de una |
+| **Lucía / roster** | Cola de piezas sin publicar | Destraba con el token de IG (S6) |
+| **Taller "facturación en línea"** | Piezas de promoción y guion del taller | Es el gancho del SIAT y la ventana se cierra el 1-oct |
+| **Casos y testimonios** | Grabar al primer cliente que entre | Sin caso, la objeción "¿quién más lo usa?" no tiene respuesta |
+
+### 9.6-bis. Cuánto gana Arthur, realistamente — y qué anota para cobrar cada peso
+
+**Regla madre (ya firmada, acá aplicada):** *si no está registrado en Onia Center, no existe
+y no se paga.* Sin excepción, sin memoria, sin WhatsApp suelto.
+
+#### La tabla de ganar: concepto → qué tiene que pasar → qué anota ÉL para cobrarlo
+
+| # | Concepto | Gana | Qué tiene que pasar | Qué anota Arthur (sin esto NO se paga) |
+|---|---|---:|---|---|
+| 1 | Reunión realizada | Bs 50 | Dueño/socio, perfil correcto, Sergio estuvo | **Antes:** lead en Captura + reunión con fuente (`?src=` o outreach). **Después (mismo día):** nota con resultado y próximo paso |
+| 2 | Web que él vende, Onia produce | 12% | Cobro real | Lead → pipeline al día → propuesta enviada → cobro en Ingresos con comprobante y monto neto |
+| 3 | Web que él vende Y produce | 50% | Cobro + entrega aprobada sin rescate | Lo de #2 + brief, archivos, checklist de entrega y aprobación de Sergio registrados |
+| 4 | Suscripción plataforma, mes a mes | 20% (25% si acompañó el cierre) × 6 meses | El cliente pagó ESE mes | Origen atribuible registrado desde el día 0 + cada cobro mensual en Ingresos. Se corta el mes que el cliente no paga |
+| 5 | Cuidado Web / contenido mensual | 15%/mes | Gestionó y reportó ese mes | Calendario cumplido + piezas aprobadas + reporte del mes. Mes sin reporte = mes sin cobro |
+| 6 | Pack video IA | 25% (50% si vendió y entregó todo) | Vendido, entregado, aprobado | Lo de #2 + costo Higgsfield registrado ANTES de generar (objetivo, piezas, OK de Sergio) |
+| 7 | Bono primer cliente | Bs 300 | Primera venta atribuible de plataforma | La atribución de #4 completa |
+| 8 | Bono retención | Bs 150 | Cliente atribuible llega al 3er mes pagado | Los 3 cobros mensuales registrados |
+| 9 | Bono objetivo casa | Bs 500 | Onia llega a 3 clientes de plataforma | Nada extra — lo gatilla la casa |
+| 10 | Bono calidad | Bs 150 | Mes sin reclamos ni rescates | CRM 100% + 4/4 reportes de viernes |
+
+#### Mes 1 realista, en números (ventana 3-ago → 1-sep, desde cero audiencia)
+
+| Escenario | Qué pasó | Cobra |
+|---|---|---:|
+| **Flojo** | 4 reuniones, 0 ventas | **Bs 200** |
+| **Base** | 8 reuniones + 1 web 1.500 vendida y producida + 1 clínica Pro cerrada fin de mes | 400 + 750 + 135 + 300 = **Bs 1.585** |
+| **Bueno** | 12 reuniones + esa web + otra web solo vendida (15%) + la clínica + calidad | 600 + 750 + 225 + 435 + 150 = **Bs 2.160** |
+
+Y lo que el mes 1 no muestra: en el escenario base, los meses 2-6 arrancan con **Bs 135/mes**
+ya ganados de la suscripción viva — antes de mover un dedo. Eso es lo que se acumula.
+
+#### El seguimiento que lo hace cobrable (no es burocracia: es su liquidación)
+
+| Ritmo | Qué hace | Si falta |
+|---|---|---|
+| Antes de contactar | Lead completo en Captura | El contacto no cuenta para nada |
+| Antes de cada reunión | Reunión registrada con fuente | No hay bounty aunque la reunión ocurra |
+| Después de cada contacto | Nota + próximo paso CON FECHA en pipeline | Lead 7 días sin seguimiento = se reasigna y **pierde el origen** (regla vigente) |
+| Antes de generar con crédito | Objetivo + costo + OK de Sergio | El costo se le descuenta de su liquidación |
+| Cada cobro | Monto, comprobante, costos directos en Ingresos | La comisión queda **Retenida** hasta completar |
+| Viernes | Reporte: piezas → fuente → reuniones → estado pipeline | Semana no cuenta para bonos; 2 seguidas = causal de pausa |
+| Fin de mes | Cierre con Sergio: aprueba/retiene/descuenta | Sin cierre no hay pago, solo el adelanto quincenal ≤20% |
+
+### 9.6-ter. El modelo FINAL de pago (Sergio, 2026-08-01 — segunda corrección)
+
+> Sergio: *"no tiene que tener un tope, hay que ganar lo que se tenga que ganar. No hay que
+> pagarle por las demos grabadas ni por las piezas que publica — eso es su trabajo, quiere
+> ser socio de Onia. Va a ganar en base a lo que trabaje. Y si trabaja muy bien el mes, yo
+> puedo ver de darle un bono."*
+>
+> Esto REEMPLAZA la versión anterior de esta sección (pagos por tarea + bonos en escalera).
+
+**El principio:** la **producción no se paga por unidad**. Grabar demos, publicar piezas,
+armar listas: eso ES el rol de alguien que quiere ser socio. Se gana por lo que ese trabajo
+**genera** — y sin techo.
+
+| Concepto | Paga | Tope |
+|---|---:|---|
+| Reunión atribuible REALIZADA (registrada antes, con fuente, con quien decide) | **Bs 50** | **SIN tope** |
+| Suscripción de plataforma atribuible | **20% × 6 meses** (25% si acompañó el cierre) | **SIN tope** |
+| Servicios (web, n8n, chatbot, packs) | según la tabla §9.1 | **SIN tope** |
+| Retención: cliente atribuible que llega al 3er mes pagado | **Bs 150 por cliente** | SIN tope |
+| **Bono mensual** | **DISCRECIONAL de Sergio** — lo decide a fin de mes viendo el trabajo registrado en el panel | — |
+
+**Lo que NO paga (porque es el rol):** piezas publicadas, demos grabadas, clips, guiones,
+listas de prospectos, reportes. Todo eso es la obligación semanal del scorecard — la
+condición para estar en el juego, no un ítem facturable.
+
+**El bono discrecional no es una fórmula a gamear:** Sergio mira el mes completo en el
+panel (tareas hechas, calidad, registro, reuniones, ventas) y decide monto y si hay bono.
+Se paga con semáforo verde, como todo.
+
+**Por qué sin topes es sano igual:** todo lo que paga está atado a un resultado que a Onia
+le conviene multiplicar. Más reuniones reales = más ventas; más comisión = más cobrado. El
+único pago sin venta detrás es el de reunión — y una reunión real con un dueño que decide
+vale más que Bs 50.
+
+#### Dónde vive en producción (para usarlo, no leerlo)
+
+| Qué | Dónde |
+|---|---|
+| **Vista Equipo** (nueva): scorecard + plan de tareas + leads con fuente + bounty estimado del mes | Panel → pestaña **Equipo** — Sergio ve todo, incluida la liquidación estimada |
+| Sus 12 tareas de las 4 semanas | Panel → tareas (proyecto `content_onia`, revisor Sergio) |
+| Catálogo de precios y comisiones | Panel → reglas de comisión |
+| Pipeline con fuente (`src:`) | Panel → pipeline |
+| Registro de cobros | Panel → ingresos |
+
+### 9.7 Cuánto le cuesta a Onia esta ventana
+
+| Concepto | Peor caso (cero ventas) |
+|---|---:|
+| Reuniones (8 × 50) | Bs 400 |
+| Tope del bounty si saca 12 | Bs 600 |
+| Higgsfield (6 piezas) | según presupuesto que fije Sergio |
+| Comisiones | Bs 0 (no hay ventas) |
+| **Exposición máxima** | **Bs 600 + Higgsfield** |
+
+Si vende, todo lo demás sale de plata que ya entró.
 
 ---
 

@@ -6,7 +6,10 @@ export { renderTrust } from "./trust";
 export { renderProcess } from "./process";
 export { renderFaq } from "./faq";
 export { renderStickyCta } from "./sticky-cta";
+<<<<<<< HEAD
 export { renderIcon, pickCredencialIcon, hasIcon } from "./icons";
+=======
+>>>>>>> origin/main
 export {
   WF_EASE,
   MOTION_CSS,
@@ -16,6 +19,7 @@ export {
   renderMotionScript,
   renderMotionAssets,
 } from "./motion";
+<<<<<<< HEAD
 
 // Model blocks: built from the learned catalog (docs/WEB_FACTORY_LEARNED_MODELS.md).
 // Each one ships its own token-only CSS so a template composes markup + styles
@@ -110,6 +114,9 @@ export {
   type PanoramaSlider3DProps,
 } from "./panorama-slider-3d";
 
+=======
+export { renderIcon, pickCredencialIcon } from "./icons";
+>>>>>>> origin/main
 export { renderClinicHero } from "./clinic-hero";
 export { renderClinicServices } from "./clinic-services";
 export { renderClinicProcess } from "./clinic-process";

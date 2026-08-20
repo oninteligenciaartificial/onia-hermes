@@ -9,6 +9,12 @@ Punto de entrada de toda sesión en `onia-hermes`. Antes de trabajar: identific�
 carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa completo:
 `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES.md`.
 
+> 📇 **Mapa problema → skill: [`STACK-POR-DOMINIO.md`](STACK-POR-DOMINIO.md).**
+> Hay **196 skills globales + 9 plugins** instaladas. Esta tabla enruta por carril; ese
+> archivo enruta por dominio (contenido/marketing · diseño/UI/UX · frontend · backend ·
+> seguridad · research · proceso), que es como aparecen las tareas en la práctica.
+> **Abrirlo antes de escribir la primera línea.**
+
 ## Cómo usar
 1. **Identificá el carril** de la tarea (tabla abajo). Ante duda, ver
    `CLAUDE.md` §"Desarrollo en paralelo — carriles" y `COORDINATION_MANIFEST.md`.
@@ -31,6 +37,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **C** propuestas (comercial) | `article-writing` `make-pdf` `slides` `document-generate` `brand` | `onia-propuestas` | `onia-propuestas` |
 | **D** DentaGest · **E** GestiOS *(repos aparte)* | `database-migrations` `postgres-patterns` `backend-patterns` `api-design` `security-review` | `dentalgest-migrations` · `onia-core-guardian` | `onia-core` |
 | **F** Bolivian Electric *(cliente, solo lectura)* | mismo stack backend | — | `onia-core` |
+| **chatbot** (motor, guion, conocimiento, voz) | **cargar `onia-chatbot`** — ese archivo nombra el stack completo del carril | `hermes-automation` · `onia-integrations` | `onia-chatbot` |
 | **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | `hermes-automation` · `onia-integrations` | — |
 | **H** contenido · **J** video-remotion | `remotion` `remotion-video-creation` `video-editing` `banner-design` `brand` + Higgsfield MCP | `onia-creative-radar` | — |
 | **I** research/estrategia | `deep-research` `exa-search` `market-research` `iterative-retrieval` `office-hours` | — | — |
@@ -55,6 +62,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 
 ## Skills ONIA propias (este repo, `.claude/skills/`)
 - `onia-router` — este índice.
+- `onia-chatbot` — stack del carril del chatbot (motor, conocimiento, canal, modelo, voz).
 - `onia-propuestas` — propuestas comerciales (generador oficial, nunca HTML a mano).
 - `onia-contabilidad-bolivia` — fiscalidad boliviana propia + features contables de los ERPs.
 - `onia-core` — contrato del núcleo, adapters, adopción en productos.

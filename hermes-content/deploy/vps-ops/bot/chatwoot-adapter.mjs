@@ -165,7 +165,11 @@ function kindOf(text, attachments) {
   return pickAudioAttachment(list) ? "voice" : "attachment";
 }
 
+<<<<<<< HEAD
 function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation, inboxId }) {
+=======
+function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation }) {
+>>>>>>> origin/main
   const text = String(content || "").trim();
   const atribucion = attributionFrom(conversation);
   return {
@@ -175,10 +179,13 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
       // OJO: `contact_ref` es la IDENTIDAD de la conversación (de acá sale `conversationKey`).
       // Cambiarlo rompe todas las conversaciones vivas. El teléfono va aparte, en `public_contact`.
       contact_ref: String(conversationId),
+<<<<<<< HEAD
       // DE QUE INBOX vino: es lo que resuelve "de que cliente es esta conversación" (el
       // cargador de knowledge keyea por inbox y el producto lo traduce a organización).
       // null = comportamiento de siempre (conocimiento de Onia, archivo/código).
       inbox_id: inboxId === undefined || inboxId === null || inboxId === "" ? null : String(inboxId),
+=======
+>>>>>>> origin/main
       public_contact: phoneOf(sender),
       display_name: displayNameOf(sender),
       kind: kindOf(text, attachments),
@@ -292,9 +299,12 @@ function fromMessageCreated(payload) {
     // La atribución vive en la CONVERSACIÓN, no en el mensaje: `payload.additional_attributes` de
     // este nivel es del mensaje (campaign_id / template_params de Chatwoot) y no sirve para esto.
     conversation: payload.conversation,
+<<<<<<< HEAD
     // En message_created el inbox viene TOP-LEVEL ({ inbox: { id } }, capturado en vivo el
     // 2026-07-26); `conversation.inbox_id` es el respaldo por si algún evento no lo trae.
     inboxId: payload?.inbox?.id ?? payload?.conversation?.inbox_id ?? null,
+=======
+>>>>>>> origin/main
   });
 }
 
@@ -320,8 +330,11 @@ function fromConversationCreated(payload) {
     createdAtIso: toIsoFlexible(first.created_at),
     // En `conversation_created` el payload ES la conversación, así que se pasa entero.
     conversation: payload,
+<<<<<<< HEAD
     // ... y el inbox es el de la conversación misma (`inbox_id` plano en push_event_data).
     inboxId: payload?.inbox_id ?? payload?.inbox?.id ?? null,
+=======
+>>>>>>> origin/main
   });
 }
 
@@ -454,6 +467,7 @@ export function createChatwootClient(options = {}) {
    *   prospecto (a Meta el texto se lo da la plantilla aprobada, no esto).
    * @param {object|null} [templateParams]  ver whatsappTemplate(). Sin esto el POST es identico al
    *   de siempre — el 99% del trafico va dentro de la ventana y sigue siendo texto libre gratis.
+<<<<<<< HEAD
    * @param {object|null} [interactive]  { items: [{title, value}] } => el mensaje sale como
    *   `content_type: "input_select"`. Es el UNICO content type que sirve en los DOS canales: el
    *   widget Website lo renderiza como opciones clickeables y Chatwoot lo traduce a reply buttons
@@ -461,6 +475,10 @@ export function createChatwootClient(options = {}) {
    *   (issue #12572), asi que no se usan. Sin items el POST es el texto plano de siempre.
    */
   async function sendMessage(conversationId, text, templateParams = null, interactive = null) {
+=======
+   */
+  async function sendMessage(conversationId, text, templateParams = null) {
+>>>>>>> origin/main
     const trimmed = String(text || "").trim();
     if (!trimmed) return null;
     if (!enabled) {
@@ -475,9 +493,12 @@ export function createChatwootClient(options = {}) {
           content: trimmed,
           message_type: "outgoing",
           ...(templateParams ? { template_params: templateParams } : {}),
+<<<<<<< HEAD
           ...(interactive && Array.isArray(interactive.items) && interactive.items.length
             ? { content_type: "input_select", content_attributes: { items: interactive.items.slice(0, 3) } }
             : {}),
+=======
+>>>>>>> origin/main
         }),
         signal: AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : undefined,
       });
@@ -551,6 +572,65 @@ export function createChatwootClient(options = {}) {
   }
 
   return { enabled, warnings, sendMessage, sendAttachment };
+}
+
+// ---------------------------------------------------------------------------
+// Nota de voz -> texto
+// ---------------------------------------------------------------------------
+
+/**
+ * Si el mensaje es una nota de voz, la transcribe con Speaches y la devuelve pegada al turno como
+ * `transcript`. Si NO es voz, o si la transcripción falla, devuelve el turno intacto: el motor ve
+ * un audio sin texto y contesta M_AUDIO_FAIL, exactamente como antes de que esto existiera. Que se
+ * rompa Speaches no puede dejar al prospecto sin ninguna respuesta.
+ *
+ * @returns {Promise<{turn: object, voice: object|null, warnings: string[]}>}
+ */
+async function transcribeIfVoice(parsed, deps = {}) {
+  const turn = parsed.turn;
+  if (turn.kind !== "voice" || String(turn.text || "").trim()) {
+    return { turn, voice: null, warnings: [] };
+  }
+
+  const transcribeFn = typeof deps.transcribeAudio === "function" ? deps.transcribeAudio : transcribeChatwootAudio;
+  let stt;
+  try {
+    stt = await transcribeFn(
+      {
+        attachments: parsed.meta.attachments,
+        // Mismas fuentes que createChatwootClient. El token NO se guarda en ningún objeto que se
+        // serialice después: se pasa, se usa en un header y se olvida.
+        token: String(deps.token ?? ENV_TOKEN()),
+        // `||` y NO `??`: con `??`, un `deps.baseUrl` vacío ("" de una env sin completar) pasaría
+        // tal cual y desarmaría la defensa contra SSRF del adjunto. Vacío = usar el default.
+        chatwootBaseUrl: String(deps.baseUrl || ENV_BASE_URL()),
+      },
+      deps,
+    );
+  } catch (error) {
+    // `transcribeChatwootAudio` promete no tirar, pero esta es la red de contención: acá adentro
+    // una excepción se propagaría hasta el servidor de webhook y el prospecto se quedaría MUDO
+    // por un audio. El bot tiene que poder decir "escribímelo" aunque Speaches explote.
+    stt = { ok: false, text: "", reason: "transcripcion_exploto", warnings: [`audio: ${String(error?.message || error).slice(0, 200)}`] };
+  }
+
+  // Un transcriptor que devuelve `undefined` (un mock mal escrito, una versión futura) no puede
+  // tumbar el turno con un "cannot read properties of undefined" a esta altura del pipeline.
+  if (!stt || typeof stt !== "object") stt = { ok: false, text: "", reason: "respuesta_invalida", warnings: [] };
+
+  const warnings = [...(stt.warnings || [])];
+  if (!stt.ok || !stt.text) {
+    warnings.push(`audio: sin transcripción (${stt.reason}) — se le pide el texto al prospecto`);
+    return { turn, voice: { transcribed: false, reason: stt.reason }, warnings };
+  }
+
+  return {
+    turn: { ...turn, transcript: stt.text },
+    // Se reporta que hubo transcripción y CUÁNTO, nunca QUÉ dijo: la respuesta del webhook la
+    // puede loguear Chatwoot, y las palabras del prospecto no tienen por qué salir del sistema.
+    voice: { transcribed: true, reason: stt.reason, chars: stt.text.length },
+    warnings,
+  };
 }
 
 // ---------------------------------------------------------------------------

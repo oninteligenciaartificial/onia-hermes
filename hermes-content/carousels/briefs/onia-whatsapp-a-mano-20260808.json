@@ -1,0 +1,114 @@
+{
+  "title": "Dejá de responder WhatsApp a mano: estás perdiendo clientes mientras dormís",
+  "caption": "Nadie abre un negocio para vivir pegado al WhatsApp. Pero ahí estás: contestando lo mismo 40 veces, de día, de noche, los domingos. Y aun así se te escapan los que preguntan a las 11 p.m. El problema no sos vos ni tu esfuerzo: es que estás haciendo a mano algo que una IA hace sola, mejor y sin dormir. Guardá el test del slide 6 y comentá LIBRE: te muestro cómo se ve ese sistema montado para tu rubro.",
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#whatsapp",
+    "#bolivia",
+    "#negocios",
+    "#emprender",
+    "#santacruz"
+  ],
+  "comment_trigger": "Comentá LIBRE",
+  "cta": "Contame",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "La verdad",
+      "headline": "Dejá de responder WhatsApp *a mano*",
+      "body": "Estás perdiendo clientes mientras dormís.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Hero conceptual: persona ahogada en mensajes de WhatsApp de noche.",
+      "alt_text": "Dejá de responder WhatsApp a mano",
+      "bg": "hermes-content/assets/onia/heroes/wa-01.png"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "El que pregunta a las *11 p.m.* no espera",
+      "body": "Si no le respondés en minutos, ya le escribió a otro. No perdés por malo: perdés por lento.",
+      "callout": "El 40% de los leads no vuelve si no respondés en 5 min ↘",
+      "save_worthy": false,
+      "visual_prompt": "Alto contraste, acento verde en 11 p.m.",
+      "alt_text": "El que pregunta a las 11pm no espera",
+      "bg": "hermes-content/assets/onia/heroes/wa-02.png"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "El paradigma",
+      "headline": "El problema no es tu *esfuerzo*",
+      "body": "Podés contestar más rápido, quedarte hasta tarde, no soltar el teléfono. Igual no alcanza. No es un problema de voluntad: es de método.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D, acento verde en esfuerzo.",
+      "alt_text": "El problema no es tu esfuerzo",
+      "bg": "hermes-content/assets/onia/heroes/wa-03.png"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Qué cambia",
+      "headline": "Una IA que responde y *califica* sola",
+      "body": "Contesta al instante 24/7, responde lo de siempre, separa al que compra del que solo mira y te la agenda. Vos entrás únicamente a cerrar.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D, acento verde en califica.",
+      "alt_text": "Una IA que responde y califica sola",
+      "bg": "hermes-content/assets/onia/heroes/wa-04.png"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "El momento",
+      "headline": "A las *3 a.m.* ya vendiste",
+      "body": "Mientras dormís, alguien preguntó, el sistema respondió, lo calificó y lo agendó. Te despertás con la reunión puesta. Vos nunca podrías. Tu sistema sí.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D con glow, acento verde en 3 a.m.",
+      "alt_text": "A las 3am ya vendiste",
+      "bg": "hermes-content/assets/onia/heroes/wa-05.png"
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "pill": "Framework",
+      "headline": "El test del WhatsApp *libre*",
+      "body": "1) ¿Respondés vos cada consulta? 2) ¿Se te escapan los de la noche y el finde? 3) ¿Contestás lo mismo una y otra vez? Cada 'sí' es tiempo y plata que una IA te devuelve.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Tarjeta framework, 3 preguntas.",
+      "alt_text": "El test del WhatsApp libre",
+      "bg": "hermes-content/assets/onia/heroes/wa-06.png"
+    },
+    {
+      "number": 7,
+      "role": "point",
+      "pill": "Ojo",
+      "headline": "No es un bot *robótico*",
+      "body": "No hablamos del menú '1 para ventas, 2 para…'. Es una IA que entiende, responde natural y deriva a un humano cuando hace falta. El cliente ni se da cuenta.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D, acento verde en robótico.",
+      "alt_text": "No es un bot robotico",
+      "bg": "hermes-content/assets/onia/heroes/wa-07.png"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "Contame",
+      "headline": "Soltá el *WhatsApp*",
+      "body": "¿Cuántos mensajes sin responder tenés *ahora mismo*? Decime el número.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "CTA fuerte verde, acento en WhatsApp.",
+      "alt_text": "Comentá LIBRE",
+      "bg": "hermes-content/assets/onia/heroes/wa-08.png"
+    }
+  ],
+  "job": "engagement"
+}

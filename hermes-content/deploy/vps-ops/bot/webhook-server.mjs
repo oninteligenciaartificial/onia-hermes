@@ -44,7 +44,10 @@ import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
 import { knowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
+<<<<<<< HEAD
 import { handlePreviewRequest } from "./preview-route.mjs";
+=======
+>>>>>>> origin/main
 
 export const DEFAULT_PORT = 3020;
 export const DEFAULT_MAX_BODY_BYTES = 1024 * 1024;
@@ -415,6 +418,7 @@ export function createWebhookServer(deps = {}) {
         estado = { ok: false, service: "onia-chatbot-webhook", error: String(error?.message || error).slice(0, 200) };
       }
       writeJson(res, 200, estado);
+<<<<<<< HEAD
       return;
     }
 
@@ -431,6 +435,8 @@ export function createWebhookServer(deps = {}) {
         out = { status: 500, body: { ok: false, error: String(error?.message || error).slice(0, 200) } };
       }
       writeJson(res, out.status, out.body);
+=======
+>>>>>>> origin/main
       return;
     }
 

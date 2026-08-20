@@ -50,14 +50,16 @@
 //     Mismo plan → mismos PNGs, byte a byte.
 //   · LEGIBILIDAD MÓVIL (piso duro, el auto-ajuste nunca baja de acá):
 //     título ≥ 64px · cuerpo ≥ 34px · margen ≥ 64px · contraste alto siempre.
-//   · Sin dependencias nuevas: playwright se resuelve desde el workspace del panel.
+//   · Sin dependencias nuevas: playwright se resuelve desde el workspace del repo
+//     (ver resolve-playwright.mjs: ancla RELATIVA a este archivo, nunca una ruta
+//     absoluta de una sola máquina).
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { resolve, join, extname } from "node:path";
-import { createRequire } from "node:module";
+import { resolveChromium, launchChromium } from "./resolve-playwright.mjs";
 
-const require = createRequire("C:/dev/proyectos/onia-hermes/web-factory/apps/site/package.json");
-const { chromium } = require("playwright");
+// Si playwright no está, esto corta acá con el comando exacto para instalarlo.
+const chromium = resolveChromium("make-carousel");
 
 // ---- args ------------------------------------------------------------------
 const argv = process.argv.slice(2);
@@ -485,7 +487,7 @@ const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
 const outAbs = resolve(OUT_DIR);
 await mkdir(outAbs, { recursive: true });
 
-const browser = await chromium.launch({
+const browser = await launchChromium("make-carousel", chromium, {
   args: ["--force-color-profile=srgb", "--hide-scrollbars", "--font-render-hinting=none"],
 });
 const written = [];
