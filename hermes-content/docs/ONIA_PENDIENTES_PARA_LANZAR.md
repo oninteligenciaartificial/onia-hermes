@@ -28,6 +28,21 @@
 | **Loops sin promptear** | Investigación pendiente (cayó por 529). El workflow de 3 roles ya existe y funciona |
 | **Webs conectadas al sistema** | 4 circuitos documentados; Bolivian Electric es el laboratorio. Sin empezar |
 
+## 🟠 Decisión de Sergio — dos catálogos del mismo empaquetado (2026-08-20)
+
+Un análisis mandó a "conectar los tiers al registro"; verificado, la premisa era falsa
+(el registro YA valida el rubro contra el enum del core). Lo REAL que apareció:
+
+- **`lib/subscription-plans.ts`** (producto, lo que cobra): `basic/professional/clinic/enterprise`
+  @ 320/750/1.500/2.900 — lanzamiento congelado 12 meses.
+- **`onia-core/business-tiers.json`** (core, sin UN caller fuera del core): `ordenado/profesional/empresa`
+  @ 390/890/1.990 + `e1/e2/e3` en USD.
+
+Mismo empaquetado, ids y montos distintos, y `tierMeetsLimits()` construida y testeada con
+valor cero — el patrón "construido ≠ terminado" por tercera vez. La pregunta que solo vos
+respondés: **¿los ids de plan del producto adoptan los ids de tier del core, o se escribe un
+mapeo explícito plan↔tier?** Hasta entonces, nadie escribe código sobre esa entidad.
+
 ## 🟢 Vivo y verificado en producción (no tocar salvo bug)
 
 Registro y onboarding multi-rubro · 6 rubros · agenda/citas/pacientes/tratamientos ·
