@@ -538,7 +538,7 @@ mensaje real.
 
 ### 10.2 — El workflow, construido y PROBADO DE PUNTA A PUNTA
 
-`ONIA - Comentario IG -> DM (Private Reply)` — n8n **`gWrVHU8OxI9yugc4`**, activo.
+`ONIA - Comentario IG -> DM (Private Reply)` — n8n **`QPMbnfnZQtB1WmOQ`** (v7 multi-cuenta), activo.
 
 ```
 https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment
@@ -937,3 +937,32 @@ sobre la alternativa gratis, y apareció en el primer comentario real de un huma
 | Probar la palabra **LISTA** con un comentario real | pendiente — el freno de 24 h es por persona, así que hace falta una cuenta distinta a la de Sergio |
 | Filtrar por `entry_id` | ahora se conoce el valor real: `17841423363059652`. Ya se puede exigir que coincida |
 | Calendario | el carrusel #1 salió el 18-ago en vez del 19. Los otros 6 quedan como estaban (21, 24, 26, 28, 31-ago, 02-sep) |
+
+---
+
+## 15. Multi-cuenta — 2026-08-20
+
+Lucia (`lucia.antelo.oficial`, IG id `28357585133845376`, integ Postiz `cmt1sv4eh001alq9cl3y6q7es`)
+quedo conectada a la app de Meta y a Postiz, con `messages`+`comments` suscritos y el permiso de
+mensajeria verificado (Standard Access heredado, `/me/conversations` responde sin error).
+
+El workflow paso a **v7 (`QPMbnfnZQtB1WmOQ`)** con ruteo por `entry_id`:
+
+- `CUENTAS[entry_id]` decide integracion (token) y palabras. oniahq mantiene SISTEMA/LISTA.
+- **Lucia sin palabras activas** hasta que tenga contenido que prometa algo. Un comentario con
+  palabra en su cuenta NO envia nada: avisa por Telegram con el `entry_id` real para fijarlo
+  (el entry_id de webhook de Lucia aun no se observo; oniahq usa `17841...`, distinto del id de
+  `/me` — puede pasar lo mismo con ella).
+- Anti-bucle con los 3 ids propios. `/opt/onia/ig-dm-token.sh` acepta `consume <from> <integ>`;
+  freno de 24 h por persona, global entre cuentas (conservador a proposito).
+
+Probado (execs 56024-56026): oniahq+SISTEMA → DM intentado con su token · cuenta desconocida+
+SISTEMA → nada enviado + Telegram fijar entry_id · comentario propio de Lucia → anti-bucle, sin
+avisos.
+
+### ⚠️ Leccion de operacion n8n (costo: una version)
+
+**Editar `workflow_entity.nodes` por sqlite y hacer unpublish+publish NO aplica el cambio**: el
+publish reactiva el snapshot de la version publicada (mismo `activeVersionId`). Los `settings` si
+se leen de la entidad, los NODOS no. Para cambiar nodos por codigo: version nueva con
+`create_workflow_from_code` y archivar la anterior.
