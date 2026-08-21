@@ -51,7 +51,14 @@ export default function PreviewAgentes() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape tone="signal" ratio="4 / 3" tag="Pendientes" />
+            <Shape
+              tone="signal"
+              ratio="4 / 3"
+              src="/v2/capturas/pendientes.webp"
+              width={1680}
+              height={1260}
+              alt="Pantalla de pendientes de Onia: cada propuesta del sistema espera el boton de aprobar y ninguna sale sola."
+            />
           </Reveal>
         </div>
       </Block>

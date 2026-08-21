@@ -68,7 +68,14 @@ export default function PreviewLanding() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape tone="green" ratio="4 / 3" tag="Panel" />
+            <Shape
+              tone="green"
+              ratio="4 / 3"
+              src="/v2/capturas/panel.webp"
+              width={2160}
+              height={1620}
+              alt="Panel de Onia mostrando el dia de una ferreteria: Bs 4.633,40 cobrados en 11 tickets, como le pagaron, el corte de caja y una propuesta del agente esperando aprobacion."
+            />
           </Reveal>
         </div>
       </Block>
@@ -152,7 +159,14 @@ export default function PreviewLanding() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape tone="signal" ratio="4 / 3" tag="Agentes" />
+            <Shape
+              tone="signal"
+              ratio="4 / 3"
+              src="/v2/capturas/agentes.webp"
+              width={1680}
+              height={1260}
+              alt="Pantalla de agentes de Onia con las propuestas que dejaron trabajando de noche, cada una esperando que el dueno apruebe."
+            />
           </Reveal>
         </div>
       </Block>
@@ -180,7 +194,14 @@ export default function PreviewLanding() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape tone="green" ratio="4 / 3" tag="WhatsApp" />
+            <Shape
+              tone="green"
+              ratio="4 / 3"
+              src="/v2/capturas/whatsapp.webp"
+              width={2160}
+              height={1620}
+              alt="Editor del chatbot de WhatsApp en Onia: el negocio escribe su horario, sus servicios y como habla, y el bot contesta con eso."
+            />
           </Reveal>
         </div>
       </Block>

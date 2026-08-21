@@ -1392,3 +1392,17 @@
     backdrop-filter: none;
   }
 }
+
+/* La captura dentro del bloque: el color queda de marco (mecanica Fanvue —
+   el bloque plano contiene, no decora). Inset chico para que se lea como
+   pieza enmarcada y no como imagen pegada al borde. */
+.shapeShot {
+  position: absolute;
+  inset: 0.5em;
+  width: calc(100% - 1em);
+  height: calc(100% - 1em);
+  object-fit: cover;
+  object-position: top left;
+  border-radius: calc(var(--radio) * 0.6);
+  display: block;
+}

@@ -36,26 +36,54 @@ export function Shape({
   ratio = "4 / 3",
   tag,
   bars = true,
+  src,
+  alt,
+  width,
+  height,
 }: {
   tone?: Tone;
   ratio?: string;
   tag?: string;
   bars?: boolean;
+  /** Captura real del producto. Sin src, el bloque es forma+color (la ranura reservada). */
+  src?: string;
+  /** Obligatorio cuando hay src: con imagen el bloque deja de ser decorativo. */
+  alt?: string;
+  width?: number;
+  height?: number;
 }) {
+  // Con imagen el bloque NO es decorativo: se le saca aria-hidden y las barras
+  // de relleno, y el color pasa a ser el marco. Sin imagen sigue siendo la
+  // ranura reservada — mismo ratio, asi que cablear la captura no mueve nada.
+  const conImagen = Boolean(src);
   return (
     <div
       className={toneClass[tone]}
       style={{ "--shape-ratio": ratio } as CSSProperties}
-      aria-hidden="true"
+      aria-hidden={conImagen ? undefined : "true"}
     >
-      {bars && (
-        <div className={s.shapeBars}>
-          <span className={s.shapeBar} />
-          <span className={s.shapeBar} />
-          <span className={s.shapeBar} />
-        </div>
+      {conImagen ? (
+        <img
+          src={src}
+          alt={alt ?? ""}
+          width={width}
+          height={height}
+          loading="lazy"
+          decoding="async"
+          className={s.shapeShot}
+        />
+      ) : (
+        <>
+          {bars && (
+            <div className={s.shapeBars}>
+              <span className={s.shapeBar} />
+              <span className={s.shapeBar} />
+              <span className={s.shapeBar} />
+            </div>
+          )}
+          {tag && <span className={s.shapeTag}>{tag}</span>}
+        </>
       )}
-      {tag && <span className={s.shapeTag}>{tag}</span>}
     </div>
   );
 }
