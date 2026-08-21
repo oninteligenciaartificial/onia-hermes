@@ -574,3 +574,29 @@ historias sirve, para reels el 720p de veo lite rinde más por crédito.
 - El costo con audio de seedance se paga aunque el reel lleve música encima: **generate_audio:
   false siempre** en B-roll (la voz va aparte, ElevenLabs).
 - Verificar SIEMPRE la duración/resolución del mp4 con ffprobe al bajar.
+
+---
+
+# §10. UGC — selfie hablando a cámara (probado 21-ago, 14 cr total)
+
+**Motor oficial de B-roll ratificado por Sergio: veo3_1_lite.** (El A/B contra seedance mini
+480p con prompt IDÉNTICO salió lento en seedance — el modelo obedece menos el ritmo, no era
+el prompt.)
+
+## Receta UGC (2 pasos)
+
+1. **Selfie image (nano_banana_2 + ancla, 2 cr):** "A casual handheld selfie video still of
+   this exact woman holding the phone with one extended arm, talking directly to the camera
+   mid-sentence, mouth slightly open as if speaking" + escena casual (cama/cocina/calle) +
+   las líneas fijas de color natural y cara idéntica del §9.
+2. **veo3_1_lite 8 s + `generate_audio: true` (12 cr):** el prompt lleva el DIÁLOGO entre
+   comillas y el idioma: `She speaks in Latin American Spanish, warm conversational tone,
+   and says: "..."` + `Her lips sync naturally with the words`. ~15-20 palabras caben en 8 s.
+
+## Límites conocidos
+
+- **La voz NO es la Marcela oficial** — veo inventa una voz. Para piezas donde la voz importa
+  (reel de lanzamiento), la vía sigue siendo video mudo + ElevenLabs + lipsync (sync_so,
+  18.15 cr). El UGC barato sirve para historias, pruebas de gancho y volumen.
+- Audio nativo duplica el costo de veo lite (8 s: 8 → 12 cr).
+- El diálogo generado hay que ESCUCHARLO antes de aprobar: acento y pronunciación varían.
