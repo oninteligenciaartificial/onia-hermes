@@ -1,0 +1,1075 @@
+/*
+ * PREVIEW (v3) — rediseño de la landing con la MECÁNICA de Fanvue sobre los
+ * tokens de marca de Onia (globals.css). Ruta de preview, noindex, NO toca `/`.
+ *
+ * Qué se copia de Fanvue (medido en data/references/design-sources/anatomia/
+ * fanvue-com.md + SINTESIS.md) y qué NO:
+ *
+ *  · BLOQUES GRANDES Y PLANOS, CERO SOMBRAS. La profundidad sale de color,
+ *    solape y escala — nunca de una sombra (Fanvue: 0 sombras). Acá no hay una
+ *    sola `box-shadow`.
+ *  · RITMO ANCLADO A `em`. Un único `font-size` por breakpoint en `.page`
+ *    reescala tipografía y espaciado en proporción. Cero `clamp()` disperso
+ *    (Fanvue ancla a 1428 `em`; la síntesis A8 confirma: ancla única, clamp
+ *    marginal).
+ *  · UN SOLO SISTEMA DE RADIOS (Fanvue tenía 14 = caos): --r-block y --r-pill.
+ *  · DISPLAY APRETADO: peso 500-600, line-height ≤1, tracking negativo leve.
+ *  · EL VERDE VA EN FORMAS Y BLOQUES, jamás texto blanco sobre verde (ese par
+ *    de Fanvue da 1.48:1). Texto claro solo sobre tinta/verde-900 (>10:1);
+ *    texto oscuro (tinta) sobre el verde señal (>9:1).
+ *  · NO se copia el peso: Fanvue pesa 29 MB. Acá, cero imágenes y CSS chico.
+ *
+ * Movimiento: entrada in-view con <Reveal> (motion.dev, reducedMotion="user"),
+ * hover de color 0.15s. Cero parallax, cero scroll-scrub salvo el conmutador de
+ * rubros (umbral discreto, medido). reduced-motion = `transition: none`, nunca
+ * 0.01ms.
+ */
+
+/* ---------------------------------------------------------------------- */
+/* Ancla del ritmo — UN font-size por breakpoint reescala todo (em)        */
+/* ---------------------------------------------------------------------- */
+
+.page {
+  /* el número que reescala la página entera */
+  font-size: 16px;
+
+  /* UN solo sistema de radios */
+  --r-block: 1.4rem;
+  --r-pill: 999px;
+
+  /* superficies planas de marca (globals.css) */
+  --paper: var(--bg);
+  --ink-block: var(--tinta); /* #12100e */
+  --green-deep: var(--verde-900); /* #013925 */
+  --green-mid: var(--verde-700);
+  --signal: var(--senal); /* #00d26a */
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 450;
+  font-stretch: 100%;
+  /* clip (no hidden): recorta el sangrado sin crear scroll container ni
+     romper el position:sticky del conmutador de rubros */
+  overflow-x: clip;
+}
+
+@media (min-width: 768px) {
+  .page {
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page {
+    font-size: 18px;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bloques planos — la profundidad es el CAMBIO DE TONO entre bloques       */
+/* ---------------------------------------------------------------------- */
+
+.block {
+  /* aire de sección en em: media pantalla de respiro que reescala */
+  padding-block: 6.5em;
+  /* el color se declara por variante; nunca hay sombra */
+}
+
+.block:first-child {
+  padding-top: 8em;
+}
+
+.inner {
+  width: min(74rem, 100% - 2.4rem);
+  margin-inline: auto;
+}
+
+/* columna de lectura, pegada al borde del inner */
+.measure {
+  max-width: 34em;
+}
+.measureWide {
+  max-width: 46em;
+}
+
+/* variantes de superficie — cada una fija su par texto/fondo accesible */
+.paper {
+  background: var(--paper);
+  color: var(--ink);
+}
+.paperDim {
+  background: var(--bg-deep);
+  color: var(--ink);
+}
+.ink {
+  background: var(--ink-block);
+  color: #edf1ef;
+}
+.green {
+  background: var(--green-deep);
+  color: #eafaf1;
+}
+.signalBlock {
+  /* verde señal como BLOQUE, con texto OSCURO (tinta): >9:1. Nunca blanco. */
+  background: var(--signal);
+  color: var(--tinta);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tipografía — todo en em, escala anclada al font-size de .page           */
+/* ---------------------------------------------------------------------- */
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin: 0 0 1.4em;
+}
+
+.kicker::before {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: var(--signal);
+  flex: none;
+}
+
+/* el kicker sobre bloques oscuros: el punto sigue verde, el texto aclara */
+.ink .kicker,
+.green .kicker {
+  color: color-mix(in srgb, currentColor 72%, transparent);
+}
+.signalBlock .kicker {
+  color: color-mix(in srgb, var(--tinta) 78%, transparent);
+}
+.signalBlock .kicker::before {
+  background: var(--tinta);
+}
+
+/* DISPLAY — el gesto grande. line-height ≤1, tracking leve, peso 550. */
+.display {
+  font-family: var(--font-display), sans-serif;
+  font-size: 3.1em;
+  font-weight: 550;
+  font-stretch: 100%;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-wrap: balance;
+  margin: 0;
+  max-width: 15ch;
+}
+
+@media (min-width: 768px) {
+  .display {
+    font-size: 3.9em;
+    line-height: 0.9;
+  }
+}
+
+@media (min-width: 1280px) {
+  .display {
+    font-size: 4.6em;
+    line-height: 0.86;
+    letter-spacing: -0.025em;
+  }
+}
+
+/* palabra destacada dentro del display: color, no una 5ta fuente */
+.display em {
+  font-style: normal;
+  color: var(--accent-ink);
+}
+.ink .display em,
+.green .display em {
+  color: var(--verde-300);
+}
+.signalBlock .display em {
+  color: #fff;
+}
+
+/* título de sección: un escalón abajo del display */
+.h2 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 2.1em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-wrap: balance;
+  margin: 0;
+  max-width: 18ch;
+}
+@media (min-width: 768px) {
+  .h2 {
+    font-size: 2.5em;
+    line-height: 0.95;
+  }
+}
+
+.h3 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.3em;
+  font-weight: 550;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.lead {
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 1.15em;
+  line-height: 1.45;
+  margin: 1.3em 0 0;
+  max-width: 30em;
+  text-wrap: pretty;
+}
+
+.body {
+  color: color-mix(in srgb, currentColor 80%, transparent);
+  font-size: 1em;
+  line-height: 1.55;
+  margin: 0.6em 0 0;
+  max-width: 42em;
+  text-wrap: pretty;
+}
+
+.note {
+  color: color-mix(in srgb, currentColor 62%, transparent);
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+
+.mono {
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Botones y links — un CTA primario, repetido idéntico                    */
+/* ---------------------------------------------------------------------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  margin-top: 2em;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 44px;
+  padding: 0.8em 1.5em;
+  border-radius: var(--r-pill);
+  border: 1.5px solid transparent;
+  font-weight: 600;
+  font-size: 1em;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  /* CTA de la casa: verde señal sobre tinta (9,2:1) */
+  background: var(--signal);
+  color: var(--tinta);
+  transition: background-color 0.15s var(--ease), transform 0.15s var(--ease);
+}
+.btn:hover {
+  background: #00be5f;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* sobre un bloque de verde señal el botón invierte: tinta sólida */
+.signalBlock .btn {
+  background: var(--tinta);
+  color: #fff;
+}
+.signalBlock .btn:hover {
+  background: #000;
+}
+
+.btnLine {
+  background: transparent;
+  border-color: color-mix(in srgb, currentColor 30%, transparent);
+  color: inherit;
+}
+.btnLine:hover {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  border-color: currentColor;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  color: var(--accent-ink);
+  text-decoration: none;
+  font-weight: 600;
+  transition: gap 0.15s var(--ease), color 0.15s var(--ease);
+}
+.link:hover {
+  gap: 0.6em;
+}
+.ink .link,
+.green .link {
+  color: var(--verde-300);
+}
+.ink .link:hover,
+.green .link:hover {
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Placeholder de FORMA — reserva el ratio del clip futuro (cero CLS)       */
+/*                                                                         */
+/* No es "imagen próximamente": es composición de bloques planos de marca. */
+/* El contenedor declara aspect-ratio, así el clip real entra sin mover     */
+/* nada. Cero sombra: la profundidad es solape de rectángulos.             */
+/* ---------------------------------------------------------------------- */
+
+.shape {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--shape-ratio, 4 / 3);
+  border-radius: var(--r-block);
+  overflow: hidden;
+  background: var(--green-deep);
+  isolation: isolate;
+}
+.shapeInk {
+  background: var(--ink-block);
+}
+.shapePaper {
+  background: var(--bg-deep);
+  border: 1px solid var(--line-soft);
+}
+.shapeSignal {
+  background: var(--signal);
+}
+
+/* rectángulo grande (la "superficie") — solapa desde una esquina */
+.shape::before {
+  content: "";
+  position: absolute;
+  inset: 14% 10% 26% 12%;
+  border-radius: calc(var(--r-block) * 0.7);
+  background: color-mix(in srgb, var(--signal) 22%, transparent);
+}
+.shapePaper::before {
+  background: color-mix(in srgb, var(--verde-700) 14%, transparent);
+}
+.shapeSignal::before {
+  background: color-mix(in srgb, var(--tinta) 12%, transparent);
+}
+
+/* rectángulo chico (la "tarjeta") solapado — el solape ES la profundidad */
+.shape::after {
+  content: "";
+  position: absolute;
+  right: 8%;
+  bottom: 14%;
+  width: 42%;
+  height: 40%;
+  border-radius: calc(var(--r-block) * 0.55);
+  background: var(--signal);
+}
+.shapePaper::after {
+  background: var(--verde-500);
+}
+.shapeSignal::after {
+  background: var(--tinta);
+}
+
+/* barras/pastilla internas: composición, no ruido */
+.shapeBars {
+  position: absolute;
+  left: 16%;
+  top: 22%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  width: 40%;
+  z-index: 1;
+}
+.shapeBar {
+  height: 0.55em;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, #fff 80%, transparent);
+}
+.shapeBar:nth-child(2) {
+  width: 72%;
+}
+.shapeBar:nth-child(3) {
+  width: 54%;
+}
+.shapePaper .shapeBar {
+  background: color-mix(in srgb, var(--ink) 32%, transparent);
+}
+.shapeSignal .shapeBar {
+  background: color-mix(in srgb, var(--tinta) 55%, transparent);
+}
+
+/* etiqueta de categoría (caption, NO estado de obra) */
+.shapeTag {
+  position: absolute;
+  left: 8%;
+  bottom: 8%;
+  z-index: 2;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #fff 82%, transparent);
+}
+.shapePaper .shapeTag {
+  color: var(--ink-faint);
+}
+.shapeSignal .shapeTag {
+  color: color-mix(in srgb, var(--tinta) 80%, transparent);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Layout dos columnas (bloque de resultado / hero)                        */
+/* ---------------------------------------------------------------------- */
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3em;
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 4em;
+  }
+  .splitFlip > :first-child {
+    order: 2;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Banda de prueba — solo hechos verificables, sin logos ni testimonios    */
+/* ---------------------------------------------------------------------- */
+
+.trust {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  border-radius: var(--r-block);
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .trust {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.trustCell {
+  padding: 1.6em 1.4em;
+  border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  border-left: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+}
+.trustCell:nth-child(-n + 2) {
+  border-top: 0;
+}
+@media (min-width: 768px) {
+  .trustCell {
+    border-top: 0;
+  }
+  .trustCell:first-child {
+    border-left: 0;
+  }
+}
+.trustNum {
+  font-family: var(--font-display), sans-serif;
+  font-size: 2em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.trustLabel {
+  color: color-mix(in srgb, currentColor 65%, transparent);
+  font-size: 0.9em;
+  line-height: 1.4;
+  margin-top: 0.5em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bloques de resultado — grilla de celdas planas con hairline             */
+/* ---------------------------------------------------------------------- */
+
+.cells {
+  display: grid;
+  gap: 0;
+  margin-top: 3em;
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.cell {
+  padding: 1.6em 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4em;
+}
+@media (min-width: 700px) {
+  .cell {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: 1em 3em;
+    align-items: start;
+  }
+}
+.cell p {
+  margin: 0;
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 1em;
+  line-height: 1.5;
+  max-width: 52ch;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Precios — tarjetas planas (borde, cero sombra); Pro = bloque de tinta   */
+/* ---------------------------------------------------------------------- */
+
+.plans {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1em;
+  margin-top: 3em;
+  align-items: stretch;
+}
+@media (min-width: 900px) {
+  .plans {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 1.8em;
+  border-radius: var(--r-block);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+}
+.planStar {
+  background: var(--ink-block);
+  color: #edf1ef;
+  border-color: var(--ink-block);
+}
+.planStep {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, currentColor 55%, transparent);
+}
+.planName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.7em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0.2em 0 0;
+}
+.planPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+  margin-top: 0.5em;
+}
+.planNum {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: 3.4em;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.planUnit {
+  color: color-mix(in srgb, currentColor 60%, transparent);
+  font-size: 0.9em;
+}
+.planResult {
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 0.98em;
+  line-height: 1.5;
+  margin: 0.6em 0 0;
+}
+.planList {
+  list-style: none;
+  margin: 1em 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5em;
+  color: color-mix(in srgb, currentColor 82%, transparent);
+  font-size: 0.95em;
+}
+.planList li {
+  display: grid;
+  grid-template-columns: 1.1em 1fr;
+  gap: 0.4em;
+  line-height: 1.4;
+}
+.planList li::before {
+  content: "";
+  width: 0.4em;
+  height: 0.4em;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 0.55em;
+}
+.planStar .planList li::before {
+  background: var(--signal);
+}
+.planFoot {
+  margin-top: auto;
+  padding-top: 1.4em;
+}
+.planFoot .btn {
+  width: 100%;
+}
+
+/* fila de datos (add-ons, no incluye, condiciones) */
+.rows {
+  display: grid;
+  gap: 0;
+  margin-top: 2.4em;
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.row {
+  padding: 1.3em 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.3em 2em;
+}
+@media (min-width: 700px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto;
+    align-items: baseline;
+  }
+}
+.rowName {
+  font-weight: 600;
+}
+.rowText {
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin: 0;
+}
+.rowPrice {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.9em;
+  white-space: nowrap;
+  color: color-mix(in srgb, currentColor 85%, transparent);
+}
+@media (min-width: 700px) {
+  .rowPrice {
+    text-align: right;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* FAQ — <details> nativo, cero JS, no esconde contenido                   */
+/* ---------------------------------------------------------------------- */
+
+.faq {
+  display: grid;
+  gap: 0;
+  margin-top: 3em;
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.faqItem {
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.faqQ {
+  cursor: pointer;
+  list-style: none;
+  padding: 1.2em 2em 1.2em 0;
+  position: relative;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.15em;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.faqQ::-webkit-details-marker {
+  display: none;
+}
+.faqQ::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: 1.1em;
+  font-weight: 400;
+  font-size: 1.2em;
+  color: var(--accent-ink);
+  transition: transform 0.15s var(--ease);
+}
+.faqItem[open] .faqQ::after {
+  transform: rotate(45deg);
+}
+.faqA {
+  margin: 0;
+  padding: 0 2em 1.4em 0;
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 1em;
+  line-height: 1.55;
+  max-width: 62ch;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Header / footer del preview — chrome slim, CTA siempre visible           */
+/* ---------------------------------------------------------------------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line-soft);
+}
+.headerInner {
+  width: min(74rem, 100% - 2.4rem);
+  margin-inline: auto;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.wordmark {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 1.4rem;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.wordmark b {
+  color: var(--signal);
+}
+.nav {
+  display: none;
+  gap: 1.4rem;
+  margin-left: auto;
+  font-size: 0.95rem;
+}
+@media (min-width: 860px) {
+  .nav {
+    display: flex;
+    align-items: center;
+  }
+}
+.navLink {
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+.navLink:hover {
+  color: var(--ink);
+}
+.headerCta {
+  margin-left: auto;
+}
+@media (min-width: 860px) {
+  .headerCta {
+    margin-left: 0.5rem;
+  }
+}
+
+.footer {
+  background: var(--ink-block);
+  color: color-mix(in srgb, #edf1ef 75%, transparent);
+  padding-block: 3.5em;
+  font-size: 0.95rem;
+}
+.footerInner {
+  width: min(74rem, 100% - 2.4rem);
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
+  align-items: center;
+}
+.footer a {
+  color: #edf1ef;
+  text-decoration: none;
+}
+.footer a:hover {
+  color: #fff;
+}
+.footerNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-left: auto;
+}
+
+/* eyebrow de preview (interno, no venta) */
+.previewFlag {
+  background: var(--verde-900);
+  color: #eafaf1;
+  text-align: center;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.5em 1rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Conmutador de RUBROS — mecánica MEDIDA de Fanvue, portada del bloque     */
+/* vanilla (packages/blocks/src/sticky-niche-switcher.ts) y de la versión   */
+/* React verificada (components/landing-v2/rubros.tsx). El JS solo escribe   */
+/* --niche-i; el CSS deriva el rodillo, la opacidad de las palabras y la     */
+/* píldora. Cero GSAP: conmutador DISCRETO por umbral. Acá el rodillo NO      */
+/* lleva fotos (regla: sin imágenes) — lleva bloques de forma/color por       */
+/* rubro, que es justo el juego de formas de Fanvue.                         */
+/* ---------------------------------------------------------------------- */
+
+.runway {
+  --niche-i: 0;
+  --niche-step: 720px; /* scroll por rubro */
+  --niche-slot: 340px; /* alto de la tarjeta-ventana */
+  --niche-stage: 620px; /* alto del pegado */
+  --niche-dur: 0.5s;
+  --niche-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* alto de la píldora en px FIJO: ventana, fila y traslado comparten esta
+     unidad. En em se compondría contra font-size distintos y la ventana
+     mostraría dos filas a la vez (bug medido en el primer render). */
+  --pill-h: 30px;
+  position: relative;
+  height: calc(var(--niche-step) * var(--niche-run));
+  margin-top: 2.4em;
+}
+.marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* cada banda mide UN rubro de alto, no 1px: un centinela puntual se saltea
+   entre dos frames y el índice queda clavado (bug medido en el vanilla) */
+.mark {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: var(--niche-step);
+}
+.stage {
+  position: sticky;
+  top: max(calc(var(--header-h) + 16px), calc((100vh - var(--niche-stage)) / 2));
+  min-height: var(--niche-stage);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 3em;
+}
+.stageMid {
+  text-align: center;
+}
+.words {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.29em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.word {
+  display: block;
+  font-family: var(--font-display), sans-serif;
+  font-size: 2em;
+  font-weight: 550;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.25;
+  transition: opacity var(--niche-dur) var(--niche-ease);
+}
+@media (min-width: 768px) {
+  .word {
+    font-size: 3em;
+  }
+}
+.word[aria-current="true"] {
+  opacity: 1;
+}
+.word:hover {
+  opacity: 0.7;
+}
+.word[aria-current="true"]:hover {
+  opacity: 1;
+}
+.word:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: 6px;
+  opacity: 1;
+}
+/* la tarjeta ES la ventana: overflow hidden + una tira que se traslada un
+   slot exacto por rubro (rodillo medido, no cross-fade) */
+.card {
+  position: relative;
+  width: calc(var(--niche-slot) * 0.853);
+  height: var(--niche-slot);
+  border-radius: var(--r-block);
+  overflow: hidden;
+  background: var(--surface-dim);
+}
+.roll {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--niche-i) * var(--niche-slot) * -1));
+  transition: transform var(--niche-dur) var(--niche-ease);
+}
+/* cada "foto" es un bloque de forma+color del rubro, no una imagen */
+.slot {
+  position: relative;
+  width: 100%;
+  height: var(--niche-slot);
+  overflow: hidden;
+}
+.slotShape {
+  position: absolute;
+  inset: 0;
+}
+.slotShape::before {
+  content: "";
+  position: absolute;
+  inset: 16% 14% 30% 16%;
+  border-radius: calc(var(--r-block) * 0.6);
+  background: color-mix(in srgb, #fff 24%, transparent);
+}
+.slotShape::after {
+  content: "";
+  position: absolute;
+  right: 14%;
+  bottom: 16%;
+  width: 44%;
+  height: 34%;
+  border-radius: calc(var(--r-block) * 0.5);
+  background: color-mix(in srgb, #fff 42%, transparent);
+}
+.pill {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  height: var(--pill-h);
+  max-width: calc(100% - 24px);
+  padding: 0 0.7rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--tinta) 50%, transparent);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  overflow: hidden;
+  z-index: 1;
+}
+.pillWin {
+  display: block;
+  height: var(--pill-h);
+  overflow: hidden;
+}
+.pillRows {
+  display: block;
+  transform: translateY(calc(var(--niche-i) * var(--pill-h) * -1));
+  transition: transform var(--niche-dur) var(--niche-ease);
+}
+.pillRow {
+  display: block;
+  height: var(--pill-h);
+  line-height: var(--pill-h);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 1023px) {
+  .runway {
+    --niche-slot: 250px;
+    --niche-stage: 520px;
+  }
+}
+
+/* apilado: en teléfono la tarjeta no entra al lado; mismo apilado sirve para
+   reduced-motion. Las bandas se apagan, el índice vuelve a 0 solo. */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .runway {
+    height: auto;
+  }
+  .marks {
+    display: none;
+  }
+  .stage {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: 2em;
+  }
+  /* palabras PRIMERO: la afirmación antes que la prueba */
+  .stageMid {
+    order: -1;
+  }
+  .word {
+    opacity: 1;
+  }
+  .card {
+    width: min(100%, 320px);
+    height: auto;
+    margin: 0 auto;
+    overflow: visible;
+    background: none;
+  }
+  .roll {
+    transform: none;
+  }
+  .slot {
+    height: auto;
+    aspect-ratio: 282 / 331;
+    margin-bottom: 12px;
+    border-radius: var(--r-block);
+  }
+  .pill {
+    display: none;
+  }
+}
+
+/* transition: none — NUNCA 0.01ms (con 0.01ms las propiedades discretas
+   siguen animando y el estado queda a medio camino, invisible pero vivo) */
+@media (prefers-reduced-motion: reduce) {
+  .word,
+  .roll,
+  .pillRows,
+  .btn,
+  .link,
+  .faqQ::after {
+    transition: none;
+    animation: none;
+  }
+  .pill {
+    backdrop-filter: none;
+  }
+}

@@ -1,0 +1,282 @@
+import { Reveal } from "@/motion";
+import { PLANES, PRUEBA, bs } from "@/lib/pricing";
+import { CHATBOT_PLAN, precioStack } from "@/content/chatbot-precios";
+import { HUECO, FECHA_CONSULTA } from "@/lib/proof";
+import { WA_URL_LANDING } from "@/lib/site";
+import { Block, Shape, Btn, Kicker } from "./ui";
+import { Switcher } from "./switcher";
+import s from "./preview.module.css";
+
+/**
+ * Landing preview (v3) — el ORDEN es el argumento (como Fanvue):
+ *   hero (promesa de resultado) → banda de prueba verificable → hecho fuerte →
+ *   manifiesto → agentes → chatbot → SWITCHER de rubros (estrella) →
+ *   precios → FAQ → cierre.
+ *
+ * Cero imágenes: donde va un clip, un placeholder de forma+color con el ratio
+ * reservado. Precios y capacidades salen SOLO de las fuentes (lib/pricing.ts,
+ * content/chatbot-precios.ts, lib/proof.ts) — cero cifras a mano.
+ */
+
+/* FAQ del preview — respuestas con los números TRAÍDOS de las fuentes.
+   La fuente final de copy es components/landing/faq.tsx (FAQS). */
+const FAQ = [
+  {
+    q: "¿Necesito tarjeta para probar?",
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: te registrás, elegís tu rubro y usás el sistema completo.`,
+  },
+  {
+    q: "¿La factura al SIN ya funciona?",
+    a: "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. Mientras tanto cada venta queda lista y facturás en el Portal Web del SIN, gratis y legal. Te avisamos apenas concluya.",
+  },
+  {
+    q: "¿El chatbot de WhatsApp está incluido?",
+    a: `No: es un servicio aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
+  },
+  {
+    q: "¿Mis datos son míos?",
+    a: "Sí. Los exportás en CSV cuando quieras, en cualquier plan pago. No vendemos datos ni entrenamos modelos con ellos.",
+  },
+];
+
+export default function PreviewLanding() {
+  return (
+    <>
+      {/* 1 · HERO — promesa de RESULTADO, no de categoría abstracta */}
+      <Block surface="paper">
+        <div className={s.split}>
+          <Reveal>
+            <div>
+              <Kicker>Software de gestión con IA · Bolivia</Kicker>
+              <h1 className={s.display}>
+                Tu negocio no pierde <em>citas ni cobros</em> mientras dormís.
+              </h1>
+              <p className={s.lead}>
+                Onia agenda las citas, persigue los cobros y hace volver al
+                cliente que se enfrió. Vos aprobás; el sistema hace.
+              </p>
+              <div className={s.actions}>
+                <Btn href="/prueba-gratis">Probá {PRUEBA.dias} días gratis</Btn>
+                <Btn href="/preview/precios" variant="line">
+                  Ver precios
+                </Btn>
+              </div>
+              <p className={s.note} style={{ marginTop: "1.2em" }}>
+                Sin tarjeta · sin implementación · tus datos se exportan en CSV
+              </p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <Shape tone="green" ratio="4 / 3" tag="Panel" />
+          </Reveal>
+        </div>
+      </Block>
+
+      {/* 2 · BANDA DE PRUEBA — solo hechos verificables, cero logos/testimonios */}
+      <Block surface="paperDim">
+        <Reveal>
+          <div className={s.trust}>
+            <div className={s.trustCell}>
+              <div className={s.trustNum}>6</div>
+              <p className={s.trustLabel}>rubros vivos en producción hoy</p>
+            </div>
+            <div className={s.trustCell}>
+              <div className={s.trustNum}>24/7</div>
+              <p className={s.trustLabel}>agentes que trabajan y esperan tu aprobación</p>
+            </div>
+            <div className={s.trustCell}>
+              <div className={s.trustNum}>{PRUEBA.dias} días</div>
+              <p className={s.trustLabel}>de prueba, sin tarjeta</p>
+            </div>
+            <div className={s.trustCell}>
+              <div className={s.trustNum}>CSV</div>
+              <p className={s.trustLabel}>tus datos salen cuando quieras</p>
+            </div>
+          </div>
+        </Reveal>
+      </Block>
+
+      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts) */}
+      <Block surface="green" labelledBy="hecho">
+        <Reveal>
+          <Kicker>El hueco</Kicker>
+          <p id="hecho" className={s.h2} style={{ maxWidth: "22ch" }}>
+            {HUECO}
+          </p>
+          <p className={s.body} style={{ fontSize: "1.15em" }}>
+            Onia unifica la gestión y los agentes con IA en un solo sistema,
+            hecho para Bolivia.
+          </p>
+          <p className={s.note} style={{ marginTop: "1.6em" }}>
+            Comparación de precios y capacidades publicadas por la competencia,
+            consultadas el {FECHA_CONSULTA}.
+          </p>
+        </Reveal>
+      </Block>
+
+      {/* 4 · MANIFIESTO — qué es Onia, en una frase */}
+      <Block surface="paper" labelledBy="que-es">
+        <Reveal>
+          <p id="que-es" className={s.h2} style={{ maxWidth: "24ch" }}>
+            Onia es un solo sistema de gestión con IA: agenda, clientes, cobros y
+            contabilidad, con agentes que esperan tu aprobación.
+          </p>
+        </Reveal>
+      </Block>
+
+      {/* 5 · AGENTES — bloque de resultado (ancla oscura) → apartado */}
+      <Block surface="ink" labelledBy="agentes">
+        <div className={s.split}>
+          <Reveal>
+            <div>
+              <Kicker>Agentes con IA</Kicker>
+              <h2 id="agentes" className={s.h2}>
+                Trabajan de noche. No <em>deciden</em> solos.
+              </h2>
+              <p className={s.body}>
+                Revisan tus datos con el negocio cerrado y dejan un borrador
+                esperando: a quién llamar, a quién cobrarle. A la mañana aprobás
+                lo que sirve y se manda. La decisión sigue siendo tuya.
+              </p>
+              <div className={s.actions}>
+                <a className={s.link} href="/preview/agentes">
+                  Ver cómo funcionan los agentes →
+                </a>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <Shape tone="signal" ratio="4 / 3" tag="Agentes" />
+          </Reveal>
+        </div>
+      </Block>
+
+      {/* 6 · CHATBOT — bloque de resultado → apartado */}
+      <Block surface="paper" labelledBy="chatbot">
+        <div className={`${s.split} ${s.splitFlip}`}>
+          <Reveal>
+            <div>
+              <Kicker>Chatbot de WhatsApp</Kicker>
+              <h2 id="chatbot" className={s.h2}>
+                El que escribe a las once ya tiene respuesta.
+              </h2>
+              <p className={s.body}>
+                Un bot con IA entrenado con el contenido real de tu negocio:
+                contesta, califica y te deriva el caso con contexto. Se suma a
+                cualquier plan.
+              </p>
+              <div className={s.actions}>
+                <a className={s.link} href="/preview/chatbot">
+                  Ver el chatbot y sus requisitos →
+                </a>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <Shape tone="green" ratio="4 / 3" tag="WhatsApp" />
+          </Reveal>
+        </div>
+      </Block>
+
+      {/* 7 · SWITCHER DE RUBROS — la sección estrella */}
+      <Block surface="paper" labelledBy="rubros">
+        <Reveal>
+          <Kicker>Un solo sistema</Kicker>
+          <h2 id="rubros" className={s.h2}>
+            Elegís tu rubro y la cuenta ya viene armada.
+          </h2>
+          <p className={s.lead}>
+            No es un software distinto por industria: es el mismo núcleo con
+            módulos y vocabulario propios. Un dentista ve pacientes; una
+            ferretería ve productos y fiados.
+          </p>
+        </Reveal>
+        <Switcher />
+        <Reveal>
+          <p className={s.note}>Seis rubros vivos y vendibles hoy.</p>
+          <div className={s.actions}>
+            <a className={s.link} href="/preview/rubros">
+              Ver los rubros por dentro →
+            </a>
+          </div>
+        </Reveal>
+      </Block>
+
+      {/* 8 · PRECIOS — resumen (fuente: lib/pricing.ts) → apartado */}
+      <Block surface="paperDim" labelledBy="precios">
+        <Reveal>
+          <Kicker>Precios claros</Kicker>
+          <h2 id="precios" className={s.h2}>
+            Tres pasos. Sin implementación, sin permanencia.
+          </h2>
+        </Reveal>
+        <Reveal>
+          <div className={s.plans}>
+            {PLANES.map((plan) => (
+              <div
+                key={plan.id}
+                className={`${s.plan} ${plan.destacado ? s.planStar : ""}`}
+              >
+                <span className={s.planStep}>
+                  {plan.paso} · {plan.salto}
+                </span>
+                <h3 className={s.planName}>{plan.nombre}</h3>
+                <div className={s.planPrice}>
+                  <span className={s.planNum}>{bs(plan.mensual)}</span>
+                  <span className={s.planUnit}>Bs / mes</span>
+                </div>
+                <p className={s.planResult}>{plan.resultado}</p>
+                <ul className={s.planList}>
+                  {plan.incluye.slice(0, 4).map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <div className={s.planFoot}>
+                  <Btn href="/prueba-gratis">Probar {plan.nombre}</Btn>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className={s.actions}>
+            <a className={s.link} href="/preview/precios">
+              Ver precios completos, add-ons y lo que no incluye →
+            </a>
+          </div>
+        </Reveal>
+      </Block>
+
+      {/* 9 · FAQ — objeciones reales, respuestas honestas */}
+      <Block surface="paper" labelledBy="faq">
+        <Reveal>
+          <Kicker>Preguntas frecuentes</Kicker>
+          <h2 id="faq" className={s.h2}>
+            Lo que preguntan antes de empezar.
+          </h2>
+          <div className={s.faq}>
+            {FAQ.map((item) => (
+              <details key={item.q} className={s.faqItem}>
+                <summary className={s.faqQ}>{item.q}</summary>
+                <p className={s.faqA}>{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </Reveal>
+      </Block>
+
+      {/* 10 · CIERRE — una frase + el mismo CTA, en verde señal (texto oscuro) */}
+      <Block surface="signal" labelledBy="cierre">
+        <Reveal>
+          <h2 id="cierre" className={s.display} style={{ maxWidth: "18ch" }}>
+            Probá Onia {PRUEBA.dias} días. Sin tarjeta.
+          </h2>
+          <div className={s.actions}>
+            <Btn href="/prueba-gratis">Empezá gratis</Btn>
+            <Btn href={WA_URL_LANDING} variant="line" external>
+              Hablar por WhatsApp
+            </Btn>
+          </div>
+        </Reveal>
+      </Block>
+    </>
+  );
+}
