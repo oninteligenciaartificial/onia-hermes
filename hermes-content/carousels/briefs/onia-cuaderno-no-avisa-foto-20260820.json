@@ -23,7 +23,7 @@
       "save_worthy": false,
       "visual_prompt": "Cuaderno de ventas gastado, cerrado, en penumbra.",
       "alt_text": "Tu cuaderno no miente pero tampoco avisa",
-      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/lucia-mostrador.png"
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/lucia-mostrador-v2.png"
     },
     {
       "number": 2,
@@ -107,7 +107,7 @@
       "save_worthy": false,
       "visual_prompt": "CTA fuerte.",
       "alt_text": "Sumalo esta noche",
-      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/lucia-mostrador.png"
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/lucia-mostrador-v2.png"
     }
   ],
   "job": "educacional"
