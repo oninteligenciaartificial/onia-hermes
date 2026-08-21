@@ -1,0 +1,114 @@
+{
+  "title": "Tu cuaderno no miente, pero tampoco avisa",
+  "caption": "Tu cuaderno anota bien. El problema es lo que nunca te va a decir: quién dejó de venir, qué se vende junto y cuánto suma el fiado hoy. Nada de eso está en una página — está repartido en cien, y juntarlo es trabajo tuyo. Guardá las 3 preguntas del slide 6 y hacé la primera esta noche: sumá el fiado. Ese número ya es tuyo, solo falta cobrarlo.",
+  "hashtags": [
+    "#negocios",
+    "#pymes",
+    "#bolivia",
+    "#santacruz",
+    "#comercio",
+    "#emprender",
+    "#automatizacion"
+  ],
+  "comment_trigger": "",
+  "cta": "",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "El registro",
+      "headline": "Tu cuaderno no miente. Pero tampoco *avisa*",
+      "body": "Lo que el registro a mano nunca te va a decir.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Cuaderno de ventas gastado, cerrado, en penumbra.",
+      "alt_text": "Tu cuaderno no miente pero tampoco avisa",
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/lucia-mostrador.png"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El costo",
+      "headline": "Guarda lo que *pasó*, no lo que está pasando",
+      "body": "El cuaderno anota bien la venta de ayer. Lo que no te dice es quién dejó de venir, qué dejás de ofrecer y cuánta plata tuya está en la calle.",
+      "callout": "Y lo que no avisa, se paga ↘",
+      "save_worthy": false,
+      "visual_prompt": "Páginas de ayer, negocio de hoy.",
+      "alt_text": "Guarda lo que pasó, no lo que está pasando",
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/cuaderno-cenital.png"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Por qué pasa",
+      "headline": "El papel no *cruza* datos",
+      "body": "No es prolijidad — anotás bien. Es que ninguna página habla con la otra: la venta de hoy no sabe nada de la del mes pasado. Cruzar es trabajo que el papel te deja a vos.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Páginas sueltas que no se conectan entre sí.",
+      "alt_text": "El papel no cruza datos",
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/tienda-cierre.png"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "No te avisa 1",
+      "headline": "Quién *no volvió*",
+      "body": "La última compra de cada cliente está anotada. Pero ningún cuaderno te va a decir 'hace 3 meses que no aparece'. Y traer de vuelta a uno que ya te compró cuesta menos que conseguir uno nuevo.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Silla de cliente vacía, nombre anotado en una página vieja.",
+      "alt_text": "Quién no volvió",
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/cuaderno-cenital.png"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "No te avisa 2",
+      "headline": "Qué se vende *junto*",
+      "body": "El que lleva una cosa casi siempre lleva otra — eso está en tus páginas, repartido. Verlo es una venta más en el mismo mostrador. El papel no lo suma, así que nadie lo ofrece.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Dos productos juntos en el mostrador.",
+      "alt_text": "Qué se vende junto",
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/tienda-cierre.png"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "Framework",
+      "headline": "Las 3 preguntas a tu *registro*",
+      "body": "1) ¿Quién no me compra hace 90 días? 2) ¿Qué productos salen juntos? 3) ¿Cuánto suma mi fiado HOY? Si para responder tenés que hojear, tu registro no te está avisando: te está archivando.",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Tarjeta framework con las 3 preguntas.",
+      "alt_text": "Las 3 preguntas a tu registro",
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/mano-telefono.png"
+    },
+    {
+      "number": 7,
+      "role": "point",
+      "pill": "La pregunta",
+      "headline": "¿Cuánto suma tu *fiado* hoy?",
+      "body": "Está repartido en cien páginas y el total no existe hasta que lo sumás. Mientras no existe, no se cobra. ¿Te animás a sumarlo esta noche?",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Números sueltos en muchas páginas, sin total.",
+      "alt_text": "Cuánto suma tu fiado hoy",
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/cuaderno-cenital.png"
+    },
+    {
+      "number": 8,
+      "role": "cta",
+      "pill": "Guardalo",
+      "headline": "Sumalo esta *noche*",
+      "body": "*Guardalo*, agarrá el cuaderno y sumá el fiado de verdad. Ese número es tuyo y ya lo prestaste — lo único pendiente es cobrarlo.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "CTA fuerte.",
+      "alt_text": "Sumalo esta noche",
+      "bg": "hermes-content/carousels/briefs/assets/onia-cuaderno-20260820/lucia-mostrador.png"
+    }
+  ],
+  "job": "educacional"
+}
