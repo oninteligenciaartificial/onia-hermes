@@ -19,6 +19,46 @@ Fecha de medición: **2026-08-20**.
 
 ---
 
+## 0.b El gasto fijo mensual (Sergio, 2026-08-21)
+
+Lo que sale de la caja todos los meses, dicho por Sergio. Separado en dos, porque
+para decidir precios **no es lo mismo lo que cuesta OPERAR que lo que cuesta CONSTRUIR**.
+
+| Concepto | USD/mes | Bs/mes (11,52) | ¿Escala con clientes? |
+|---|---|---|---|
+| **VPS** (Hostinger KVM, 4 vCPU / 16 GB, 41 contenedores) | **40** | 461 | No — aguanta decenas de orgs |
+| API del chatbot | 0,07–2 **por cliente** | **0,80–23 por cliente** | Sí, y es despreciable |
+| API de los agentes (Recall/Cobrador/Captador) | **0** | **0** | No llaman a ningún modelo |
+| **Subtotal OPERAR** | **~40 + centavos/cliente** | **~461** | |
+| Claude Max (desarrollo) | **200** | 2.304 | No — es construir, no operar |
+| Higgsfield (contenido/marketing) | ⚠️ **falta el número** | — | No |
+| **Subtotal CONSTRUIR** | **200 + Higgsfield** | **2.304 +** | |
+
+⚠️ **Corrección al doc viejo:** decía "VPS ~US$12–15/mes" tomado del tarifario público de
+Hostinger. El real que paga Sergio es **US$40**. Dato heredado que no se había contado.
+
+### Lo que esto significa para el precio
+
+- **Operar el producto cuesta Bs ~461 al mes, sin importar cuántos clientes haya.** Un solo
+  cliente en el plan más barato (Bs 320) casi lo cubre; dos lo cubren con sobra.
+- **El gasto grande es construir, y no escala con clientes.** Claude Max no sube si entran
+  20 clientes; baja cuando el producto esté terminado. No hay que trasladarlo al precio de
+  cada cliente: hay que amortizarlo con volumen.
+- **Punto de equilibrio de TODO el gasto conocido (US$240 = Bs 2.765/mes):**
+
+  | Escenario | Clientes para cubrir Bs 2.765 |
+  |---|---|
+  | Solo chatbot a Bs 390 | **8** |
+  | Solo plan Pro a Bs 750 | **4** |
+  | Plan Pro + chatbot (Bs 1.140) | **3** |
+
+  **Tres clientes completos pagan todo lo que gastamos hoy.** Ese es el número que importa.
+- El margen del chatbot es ~94% en cualquier precio arriba de Bs 300: el costo variable
+  (Bs 23 en el peor caso) es ruido. **El precio no lo decide el costo, lo decide el mercado
+  y el valor** — ver `ONIA_PSICOLOGIA_PRECIOS_COMPETENCIA.md`.
+
+---
+
 ## 1. Qué hay realmente encendido (verificado en el VPS, 2026-08-20)
 
 | Cosa | Estado | Evidencia |
