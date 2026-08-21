@@ -399,7 +399,7 @@ export function readKnowledgeFile(path, deps = {}) {
 
 const EMPTY = Object.freeze({
   data: null,
-  source: "code", // "file" | "code". El paso (b) del diseño agrega "db" adelante del archivo.
+  source: "code", // "db" | "file" | "code". "db" = la fila publicada POR ORG (paso b), delante del archivo.
   version: null,
   updatedBy: null,
   loadedAt: null,
@@ -480,14 +480,185 @@ function scheduleRefresh(path, nowMs, options = {}) {
     });
 }
 
+// ---------------------------------------------------------------------------
+// Fuente "db" (paso b): la fila publicada POR ORGANIZACION, via HTTP al producto
+// ---------------------------------------------------------------------------
+// El motor NO toca la base del producto: el producto expone la fila publicada en
+// GET /api/chatbot-knowledge/published (Bearer BOT_KNOWLEDGE_SECRET) y aca solo
+// se consume. Mismo contrato que el archivo: TTL, degradacion a archivo/codigo,
+// y el MISMO validador — un documento que el archivo rechazaria, la db tampoco entra.
+
+const DB_TIMEOUT_MS = 5000;
+const ORG_CACHE = new Map(); // clave (org o "inbox:<id>") -> mismo shape que CACHE, con source "db"
+const orgRefreshing = new Set();
+
+/**
+ * La clave de cache de la copia db. `organizationId` explicito manda (/preview);
+ * sin el, el inbox de Chatwoot que trajo la conversacion keyea como "inbox:<id>"
+ * y ES EL PRODUCTO quien lo resuelve a una org (clinic_settings.chatwootInboxId)
+ * — el motor no conoce el mapeo y no lo duplica.
+ */
+function cacheKeyOf(options = {}) {
+  const org = String(options.organizationId || "").trim();
+  if (org) return org;
+  const inbox = String(options.inboxId ?? "").trim();
+  return inbox ? `inbox:${inbox}` : "";
+}
+
+/** La query que entiende GET /published segun la clave: org directa o inbox a resolver. */
+function publishedQuery(key) {
+  return key.startsWith("inbox:")
+    ? `inboxId=${encodeURIComponent(key.slice("inbox:".length))}`
+    : `organizationId=${encodeURIComponent(key)}`;
+}
+
+/** Para los tests: olvida todas las copias por organizacion. */
+export function resetOrgKnowledgeCache() {
+  ORG_CACHE.clear();
+  orgRefreshing.clear();
+}
+
+function dbConfig(options = {}) {
+  return {
+    url: String(options.dbUrl ?? process.env.ONIA_BOT_KNOWLEDGE_URL ?? "").trim(),
+    secret: String(options.dbSecret ?? process.env.BOT_KNOWLEDGE_SECRET ?? "").trim(),
+    timeoutMs: Number.isFinite(options.dbTimeoutMs) ? options.dbTimeoutMs : DB_TIMEOUT_MS,
+    fetch: options.fetch || globalThis.fetch,
+  };
+}
+
+/** Sin URL o sin secreto la fuente esta APAGADA y eso NO es un error: es el estado de hoy. */
+async function fetchOrgKnowledge(key, options = {}) {
+  const { url, secret, timeoutMs, fetch: doFetch } = dbConfig(options);
+  if (!url || !secret || typeof doFetch !== "function") return { data: null, error: null, missing: true };
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    let res;
+    try {
+      res = await doFetch(`${url}?${publishedQuery(key)}`, {
+        headers: { authorization: `Bearer ${secret}` },
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+    if (res.status === 404) return { data: null, error: null, missing: true }; // org sin fila publicada
+    if (!res.ok) return { data: null, error: `la db contesto HTTP ${res.status}` };
+    const body = await res.json();
+    const verdict = validateKnowledge(body?.data);
+    if (!verdict.ok) {
+      return { data: null, error: `RECHAZADO (${verdict.errors.length}): ${verdict.errors.join(" · ")}`.slice(0, 600) };
+    }
+    return { data: body.data, error: null };
+  } catch (error) {
+    return { data: null, error: `no se pudo leer la db: ${String(error?.message || error).slice(0, 160)}` };
+  }
+}
+
+/** Igual que nextCache: un fetch fallido CONSERVA la ultima copia buena de esa org. */
+function nextOrgCache(prev, result, organizationId, nowMs) {
+  if (result.data) {
+    return Object.freeze({
+      data: result.data,
+      source: "db",
+      version: typeof result.data.version === "string" ? result.data.version : null,
+      updatedBy: typeof result.data.updatedBy === "string" ? result.data.updatedBy : null,
+      loadedAt: new Date(nowMs).toISOString(),
+      checkedAt: nowMs,
+      path: `db:${organizationId}`,
+      error: null,
+    });
+  }
+  const base = prev || EMPTY;
+  return Object.freeze({
+    ...base,
+    source: base.data ? base.source : "code",
+    checkedAt: nowMs,
+    path: `db:${organizationId}`,
+    error: result.missing ? null : result.error || base.error,
+  });
+}
+
+function scheduleOrgRefresh(key, nowMs, options = {}) {
+  if (orgRefreshing.has(key)) return;
+  orgRefreshing.add(key);
+  Promise.resolve()
+    .then(() => fetchOrgKnowledge(key, options))
+    .then((result) => {
+      ORG_CACHE.set(key, nextOrgCache(ORG_CACHE.get(key), result, key, nowMs));
+    })
+    .catch(() => {})
+    .finally(() => {
+      orgRefreshing.delete(key);
+    });
+}
+
+/**
+ * La fila publicada de UNA organizacion, ESPERANDO la red si hace falta.
+ * La usa /preview (que no esta en el camino del mensaje). El camino del turno
+ * usa getKnowledge(), que jamas espera red. Degradacion: sin datos de la db
+ * (fuente apagada, 404, HTTP roto, documento invalido) cae al archivo/codigo.
+ */
+export async function getOrgKnowledge(organizationId, options = {}) {
+  try {
+    // Acepta la org directa (asi la llama /preview) o, sin ella, la clave que salga de
+    // options (organizationId u inboxId) — misma clave que usa el camino sincronico.
+    const key = String(organizationId || "").trim() || cacheKeyOf(options);
+    if (!key) return getKnowledge(options);
+    const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+    const prev = ORG_CACHE.get(key);
+    if (!prev || prev.checkedAt === null || nowMs - prev.checkedAt >= ttlMs(options)) {
+      ORG_CACHE.set(key, nextOrgCache(prev, await fetchOrgKnowledge(key, options), key, nowMs));
+    }
+    const state = ORG_CACHE.get(key);
+    return state.data ? state : getKnowledge(options);
+  } catch {
+    return getKnowledge(options);
+  }
+}
+
+/**
+ * Como getKnowledge(), pero si esa org/inbox NUNCA se consulto en este proceso, espera UNA
+ * lectura de red (acotada por el timeout de la db, 5 s max) antes de contestar.
+ *
+ * POR QUE EXISTE: con la cache fria, el camino 100% sincronico serviria el archivo/codigo de
+ * Onia — o sea que el PRIMER mensaje del cliente de una ferreteria saldria con la cara de Onia,
+ * que es exactamente lo que la resolucion por inbox existe para evitar. Despues de ese primer
+ * intento (bueno O fallido: la entrada queda en cache igual) esto ES getKnowledge: sincronico,
+ * copia vieja + refresh en background. Una espera acotada por inbox por proceso, nada mas.
+ */
+export async function ensureKnowledge(options = {}) {
+  try {
+    const key = cacheKeyOf(options);
+    if (key && !ORG_CACHE.has(key)) return await getOrgKnowledge(key, options);
+    return getKnowledge(options);
+  } catch {
+    return getKnowledge(options);
+  }
+}
+
 /**
  * El conocimiento vigente. SINCRONICO y tolerante: nunca tira y nunca espera red.
+ *   - con `options.organizationId` (o `options.inboxId`) y copia db en cache: la copia
+ *     de ESA org (vencido el TTL se sirve la vieja y se refresca aparte);
+ *   - sin copia db (o sin organizationId/inboxId): el archivo local de siempre;
  *   - primera vez (o cambio de ruta): lectura sincronica del archivo local (arranque);
  *   - TTL vigente: devuelve el cache;
  *   - TTL vencido: DEVUELVE LA COPIA VIEJA YA y dispara la relectura aparte.
  */
 export function getKnowledge(options = {}) {
   try {
+    const orgKey = cacheKeyOf(options);
+    if (orgKey) {
+      const orgNow = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+      const org = ORG_CACHE.get(orgKey);
+      if (!org || org.checkedAt === null || orgNow - org.checkedAt >= ttlMs(options)) {
+        scheduleOrgRefresh(orgKey, orgNow, options);
+      }
+      if (org?.data) return org;
+      // sin copia db todavia: sigue el camino del archivo/codigo de siempre
+    }
     const path = knowledgePath(options);
     const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
     if (CACHE.path !== path) {
@@ -591,13 +762,27 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
 }
 
 /**
+ * MODO RECEPCIONISTA: la config del bot de un CLIENTE de Onia. Se activa SOLO cuando el
+ * conocimiento vino de la fila publicada de una org (fuente "db" con org/inbox resuelto) —
+ * nunca por el archivo local ni por el codigo, que son la cara de Onia. `conocimiento` viaja
+ * entero (el documento validado "onia.bot.knowledge/1") para que el motor renderice SOLO
+ * hechos de la org y pueda ser honesto cuando un campo falta. Ver recepcionista.mjs.
+ */
+export function asRecepcionista(config, data) {
+  return createBotConfig({ modo: "recepcionista", conocimiento: data }, config);
+}
+
+/**
  * La config del turno con los hechos editables aplicados. Es LO UNICO que llaman run-turn.mjs y
  * followup-run.mjs. Sin archivo (el estado de hoy) devuelve la misma config que recibio.
+ * Con fuente "db" (org cliente) ademas enciende el modo recepcionista.
  */
 export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
   try {
     const state = getKnowledge(options);
-    return state.data ? applyKnowledge(config, state.data, options) : config;
+    if (!state.data) return config;
+    const applied = applyKnowledge(config, state.data, options);
+    return state.source === "db" ? asRecepcionista(applied, state.data) : applied;
   } catch {
     return config;
   }
