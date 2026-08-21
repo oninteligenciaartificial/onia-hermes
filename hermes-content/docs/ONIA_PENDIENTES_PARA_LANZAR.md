@@ -75,6 +75,29 @@ mapeo explícito plan↔tier?** Hasta entonces, nadie escribe código sobre esa 
 - **E5** — Strix estimado US$10–25/corrida; recomendación: no gastar hoy (cero clientes).
 - **payment-proofs** — bucket verificado, cero comprobantes perdidos.
 
+## DEPLOY 2026-08-21 20:04 UTC (56604e4) — recordatorios, precio 390 y la PWA instalable
+
+Swap sin rollback. **1.804 tests** (la suma cierra exacta: 1746 + 16 + 42), tsc limpio.
+Verificado MIRANDO sin sesion:
+- **`/manifest.json` da 200** (era 307). La PWA es instalable: hay icono en el celular sin
+  pasar por ninguna tienda. Cadena completa viva (sw.js, los 4 iconos, el `<link rel=manifest>`).
+- **`/register`** sin una sola palabra de obra, con "¿Otro rubro? Escribinos", 5 rubros y los
+  5 llegan al paso 2.
+- **`/icon.svg`** verde. La fuente de iconos pesa 243 KB / 0,07 s (era 3,9 MB / 117 s).
+- **El cron de recordatorios quedo instalado y ya disparo solo** (20:15:01, entrada unica).
+
+⚠️ **Bug cazado instalando el cron, y era serio:** el script salia del repo con **CRLF**
+(`core.autocrlf` en Windows), asi que el shebang quedaba `#!/bin/sh`+CR y el script
+**no ejecutaba en absoluto** — "cannot execute: required file not found". Habria fallado en
+silencio 96 veces por dia, justo en el cron que este deploy existia para encender. Corregido
+con `*.sh text eol=lf` en `.gitattributes` y las dos trampas escritas en la skill onia-deploy.
+
+🔶 **Lo mas debil de este deploy, dicho explicito:** todo lo que vive detras del login
+(la fuga dental del Sidebar, los 6 rotulos de facturacion, las 9 tildes, la BottomNav por
+rubro, el shell sin glass y las pantallas del chatbot a Bs 390) descansa en 96 tests
+unitarios, **no en una pantalla de produccion mirada**. Y el camino de envio de
+recordatorios nunca corrio contra datos reales: produccion tiene 0 citas.
+
 ## 2026-08-21 — el dia que la venta empezo a decir la verdad
 
 **Lo que se descubrio midiendo (no suponiendo):**
