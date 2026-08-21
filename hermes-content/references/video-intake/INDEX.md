@@ -23,7 +23,7 @@
 > que se abre para trabajar.
 >
 > **La fuente de esos prompts:** [PROMPTS_POR_SESION.md](PROMPTS_POR_SESION.md) (lotes hasta el
-> 15-ago) · [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md) (E1–E11) · [PROMPTS_LOTE_2026-08-17.md](PROMPTS_LOTE_2026-08-17.md) (F1–F3) · [PROMPTS_LOTE_2026-08-18.md](PROMPTS_LOTE_2026-08-18.md) (G1–G6) · [PROMPTS_LOTE_2026-08-19.md](PROMPTS_LOTE_2026-08-19.md) (H1–H3, I1–I2) · [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4). Si cambia una
+> 15-ago) · [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md) (E1–E11) · [PROMPTS_LOTE_2026-08-17.md](PROMPTS_LOTE_2026-08-17.md) (F1–F3) · [PROMPTS_LOTE_2026-08-18.md](PROMPTS_LOTE_2026-08-18.md) (G1–G6) · [PROMPTS_LOTE_2026-08-19.md](PROMPTS_LOTE_2026-08-19.md) (H1–H3, I1–I2) · [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4) · [PROMPTS_LOTE_2026-08-21.md](PROMPTS_LOTE_2026-08-21.md) (L1–L3). Si cambia una
 > regla, se edita acá, no la copia de `sesiones/`.
 
 Bandeja de entrada de videos para **extraer información y decidir si sirve**. Distinta de

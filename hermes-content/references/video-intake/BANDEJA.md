@@ -240,3 +240,19 @@ queda la imagen, que es lo que `sacar-prompt` convierte.
 | [DcI9w9GEnZH](https://www.instagram.com/p/DcI9w9GEnZH/) `bluuu.ai` | **9 escenas "CAUGHT LIVING" tuneadas para Higgsfield Soul 2.0** — el motor de Lucía | 12 láminas bajadas · prompts a reconstruir |
 | [DcLiEpCGJne](https://www.instagram.com/p/DcLiEpCGJne/) `luxry.ai` | escenas de restaurante desde un solo prompt; **muestra el prompt sobre la imagen** | 9 láminas bajadas |
 | [DcPTX07yAOA](https://www.instagram.com/p/DcPTX07yAOA/) `prompts.ig` | video 35 s | bajado, sin analizar |
+
+## Lote 2026-08-21 — 9 items · 5 SIRVE YA · 4 con prompt en pantalla
+
+Prompts: [PROMPTS_LOTE_2026-08-21.md](PROMPTS_LOTE_2026-08-21.md) (L1–L3)
+
+| Item | Tipo | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcQvRrGM-wm](https://www.instagram.com/p/DcQvRrGM-wm/) avatar "Carla" de cero | IA | **SIRVE YA** | **el esqueleto de 6 bloques + los 10 chips + Pinterest como director de fotografía** (L1) |
+| [DcI9w9GEnZH](https://www.instagram.com/p/DcI9w9GEnZH/) CAUGHT LIVING | IA | **SIRVE YA** | 9 escenas de vida cotidiana tuneadas para Soul 2.0 (L2) |
+| [DcLiEpCGJne](https://www.instagram.com/p/DcLiEpCGJne/) luxry.ai | IA | **SIRVE YA** | prompt en pantalla + 7 escenas de cena |
+| [DcPTX07yAOA](https://www.instagram.com/p/DcPTX07yAOA/) UGC de producto | IA | **SIRVE YA** | receta de UGC sintético con producto real |
+| [DcQiDM_o06I](https://www.instagram.com/p/DcQiDM_o06I/) reel-portafolio mudo | MARKETING | **SIRVE YA** | 12 s, sin voz: gancho POV + tres piezas |
+| [DcJe7nLpuOA](https://www.instagram.com/p/DcJe7nLpuOA/) QR dinámico | SAAS | MEJORA | módulo recurrente que **no existe en el core** (L3) |
+| [DcRJIrdDs7m](https://www.instagram.com/p/DcRJIrdDs7m/) `fx` de Vercel Labs | SAAS | MEJORA | agente de código, binario de 6,39 MiB |
+| [DZI1Fg8J_RE](https://www.instagram.com/p/DZI1Fg8J_RE/) live commerce TikTok Shop | SAAS | MEJORA | operación de live shop brasilera |
+| [DcLqjb6slaV](https://www.instagram.com/p/DcLqjb6slaV/) "iba a contratar a alguien" | MARKETING | MEJORA | talking-head caminando |
