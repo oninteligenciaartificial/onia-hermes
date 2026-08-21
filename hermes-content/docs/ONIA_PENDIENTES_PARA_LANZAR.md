@@ -59,6 +59,22 @@ mapeo explícito plan↔tier?** Hasta entonces, nadie escribe código sobre esa 
   `/root/.bash_history` que tiene tokens de Meta en texto plano + rotarlos. Recrea
   contenedores: necesita ventana.
 
+## Cola de sesión cerrada 2026-08-21 (diagnósticos + fixes)
+
+- **/book — fuga de datos, en deploy AHORA**: el índice público publicaba el listado
+  completo de clientes (nombre, teléfono, email) sin auth, además de "cita dental" a
+  rubros no dentales. Fix: el índice ya no consulta la base ni lista orgs; cada negocio
+  comparte su link directo gateado. Daño real acotado (solo 2 orgs QA en prod, cero
+  clientes reales), pero se cierra antes del primer cliente. 1746 tests.
+- **B4** — los 6 patrones de UI vistos; checkout-card tenía el bug del `0.01ms` en
+  reduced-motion (se copiaba a bloques) → `transition: none` + spinner quieto.
+- **F2** — 12 evals del bot; 11 gratis verde, la del modelo real estimada en US$0,00034 y
+  NO corrida (permiso). Suite en `bot/evals/`.
+- **E3** — 9 features de comandas verificadas; la máquina de estados y el pack de
+  gastronomía YA existen en el core, encender el track es el paso 0.
+- **E5** — Strix estimado US$10–25/corrida; recomendación: no gastar hoy (cero clientes).
+- **payment-proofs** — bucket verificado, cero comprobantes perdidos.
+
 ## 🟢 Vivo y verificado en producción (no tocar salvo bug)
 
 Registro y onboarding multi-rubro · 6 rubros · agenda/citas/pacientes/tratamientos ·
