@@ -28,7 +28,7 @@ const FAQ = [
   },
   {
     q: "¿La factura al SIN ya funciona?",
-    a: "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. Mientras tanto cada venta queda lista y facturás en el Portal Web del SIN, gratis y legal. Te avisamos apenas concluya.",
+    a: "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. Mientras tanto cada venta queda lista y facturás en el Portal Web del SIN, gratis y legal. Te avisamos apenas concluya. Está contado entero, con las resoluciones y las fechas, en la página de facturación.",
   },
   {
     q: "¿El chatbot de WhatsApp está incluido?",
@@ -112,6 +112,11 @@ export default function PreviewLanding() {
             Comparación de precios y capacidades publicadas por la competencia,
             consultadas el {FECHA_CONSULTA}.
           </p>
+          <div className={s.actions}>
+            <a className={s.link} href="/preview/comparativa">
+              Ver la comparación, con nombres y precios →
+            </a>
+          </div>
         </Reveal>
       </Block>
 
@@ -275,6 +280,11 @@ export default function PreviewLanding() {
             <Btn href={WA_URL_LANDING} variant="line" external>
               Hablar por WhatsApp
             </Btn>
+          </div>
+          <div className={s.actions} style={{ marginTop: "1.2em" }}>
+            <a className={s.link} href="/preview/contacto">
+              O agendá una demo con horario →
+            </a>
           </div>
         </Reveal>
       </Block>

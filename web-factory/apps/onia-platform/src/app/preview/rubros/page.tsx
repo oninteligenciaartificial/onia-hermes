@@ -8,16 +8,16 @@ import s from "../preview.module.css";
 /**
  * Apartado de RUBROS. Un producto, muchos rubros — el conmutador es la estrella.
  * Seis rubros vivos y vendibles hoy; el vocabulario por rubro es lo que cada
- * negocio ve en la misma base (no son productos distintos). Solo dental tiene
- * página propia hoy (/modulos/dental): el resto se nombra, no se linkea a una
- * URL muerta. Cero "muy pronto" (regla: la venta nunca exhibe obra).
+ * negocio ve en la misma base (no son productos distintos). Ningún rubro
+ * linkea afuera: /modulos/dental es la web VIEJA — otro cromo, sin retorno —
+ * y mandar ahí al visitante era la fuga del embudo. Cero "muy pronto"
+ * (regla: la venta nunca exhibe obra).
  */
 
-const RUBROS: readonly { nombre: string; ve: string; href?: string }[] = [
+const RUBROS: readonly { nombre: string; ve: string }[] = [
   {
     nombre: "Dental",
     ve: "Pacientes, tratamientos, odontograma y agenda por sillón.",
-    href: "/modulos/dental",
   },
   { nombre: "Comercio", ve: "Productos, stock, ventas y fiados." },
   { nombre: "Importadora", ve: "Depósito, lotes, proveedores y costos de importación." },
@@ -53,15 +53,7 @@ export default function PreviewRubros() {
           <div className={s.cells}>
             {RUBROS.map((r) => (
               <div key={r.nombre} className={s.cell}>
-                <h3 className={s.h3}>
-                  {r.href ? (
-                    <a className={s.link} href={r.href}>
-                      {r.nombre} →
-                    </a>
-                  ) : (
-                    r.nombre
-                  )}
-                </h3>
+                <h3 className={s.h3}>{r.nombre}</h3>
                 <p>{r.ve}</p>
               </div>
             ))}
