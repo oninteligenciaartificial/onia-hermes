@@ -11,6 +11,7 @@ import {
 } from "@/lib/pricing";
 import { CHATBOT_PLAN, fmtBs } from "@/content/chatbot-precios";
 import { WA_URL_LANDING } from "@/lib/site";
+import { EMPEZAR_URL } from "../nav";
 import { Block, Btn, Kicker } from "../ui";
 import s from "../preview.module.css";
 
@@ -76,7 +77,7 @@ export default function PreviewPrecios() {
                   {plan.cuando}
                 </p>
                 <div className={s.planFoot}>
-                  <Btn href="/prueba-gratis">Probar {plan.nombre}</Btn>
+                  <Btn href={EMPEZAR_URL}>Probar {plan.nombre}</Btn>
                 </div>
               </div>
             ))}
@@ -176,7 +177,7 @@ export default function PreviewPrecios() {
             {NOTA_FISCAL}
           </p>
           <div className={s.actions}>
-            <Btn href="/prueba-gratis">Probá {PRUEBA.dias} días gratis</Btn>
+            <Btn href={EMPEZAR_URL}>Probá {PRUEBA.dias} días gratis</Btn>
           </div>
         </Reveal>
       </Block>

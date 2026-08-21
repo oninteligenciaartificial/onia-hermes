@@ -3,6 +3,7 @@ import { PLANES, PRUEBA, bs } from "@/lib/pricing";
 import { CHATBOT_PLAN, precioStack } from "@/content/chatbot-precios";
 import { HUECO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING } from "@/lib/site";
+import { EMPEZAR_URL } from "./nav";
 import { Block, Shape, Btn, Kicker } from "./ui";
 import { Switcher } from "./switcher";
 import s from "./preview.module.css";
@@ -56,7 +57,7 @@ export default function PreviewLanding() {
                 cliente que se enfrió. Vos aprobás; el sistema hace.
               </p>
               <div className={s.actions}>
-                <Btn href="/prueba-gratis">Probá {PRUEBA.dias} días gratis</Btn>
+                <Btn href={EMPEZAR_URL}>Probá {PRUEBA.dias} días gratis</Btn>
                 <Btn href="/preview/precios" variant="line">
                   Ver precios
                 </Btn>
@@ -232,7 +233,7 @@ export default function PreviewLanding() {
                   ))}
                 </ul>
                 <div className={s.planFoot}>
-                  <Btn href="/prueba-gratis">Probar {plan.nombre}</Btn>
+                  <Btn href={EMPEZAR_URL}>Probar {plan.nombre}</Btn>
                 </div>
               </div>
             ))}
@@ -270,7 +271,7 @@ export default function PreviewLanding() {
             Probá Onia {PRUEBA.dias} días. Sin tarjeta.
           </h2>
           <div className={s.actions}>
-            <Btn href="/prueba-gratis">Empezá gratis</Btn>
+            <Btn href={EMPEZAR_URL}>Empezá gratis</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Hablar por WhatsApp
             </Btn>

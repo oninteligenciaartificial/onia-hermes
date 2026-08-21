@@ -1,5 +1,6 @@
 import { Reveal } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
+import { EMPEZAR_URL } from "../nav";
 import { Block, Btn, Kicker } from "../ui";
 import { Switcher } from "../switcher";
 import s from "../preview.module.css";
@@ -79,7 +80,7 @@ export default function PreviewRubros() {
             Armá tu cuenta con tu rubro.
           </h2>
           <div className={s.actions}>
-            <Btn href="/prueba-gratis">Probá {PRUEBA.dias} días gratis</Btn>
+            <Btn href={EMPEZAR_URL}>Probá {PRUEBA.dias} días gratis</Btn>
           </div>
         </Reveal>
       </Block>

@@ -1,5 +1,6 @@
 import { Reveal } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
+import { EMPEZAR_URL } from "../nav";
 import { Block, Shape, Btn, Kicker } from "../ui";
 import s from "../preview.module.css";
 
@@ -42,7 +43,7 @@ export default function PreviewAgentes() {
                 aprobás lo que te sirve y se manda.
               </p>
               <div className={s.actions}>
-                <Btn href="/prueba-gratis">Probá {PRUEBA.dias} días gratis</Btn>
+                <Btn href={EMPEZAR_URL}>Probá {PRUEBA.dias} días gratis</Btn>
                 <Btn href="/preview/precios" variant="line">
                   Ver desde qué plan
                 </Btn>

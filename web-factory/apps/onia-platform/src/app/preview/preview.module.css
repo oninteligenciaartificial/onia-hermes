@@ -771,7 +771,9 @@
   margin-left: auto;
   font-size: 0.95rem;
 }
-@media (min-width: 860px) {
+/* 940px y no 860: con cinco apartados + Entrar + CTA, a 860 la fila se
+   desborda y el boton se cae (medido). Debajo manda la hamburguesa. */
+@media (min-width: 940px) {
   .nav {
     display: flex;
     align-items: center;
@@ -785,28 +787,218 @@
 .navLink:hover {
   color: var(--ink);
 }
+
 .headerCta {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
-@media (min-width: 860px) {
+@media (min-width: 940px) {
   .headerCta {
-    margin-left: 0.5rem;
+    margin-left: 1.4rem;
   }
 }
 
+/* "Entrar" solo en escritorio: en telefono vive dentro del menu */
+.headerLogin {
+  display: none;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: color 0.15s var(--ease);
+}
+.headerLogin:hover {
+  color: var(--ink);
+}
+@media (min-width: 940px) {
+  .headerLogin {
+    display: inline-flex;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Menu de telefono — boton plano + <dialog> modal                          */
+/* ---------------------------------------------------------------------- */
+
+.burger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s var(--ease);
+}
+.burger:hover {
+  background: var(--bg-deep);
+}
+@media (min-width: 940px) {
+  .burger {
+    display: none;
+  }
+}
+.burgerBars {
+  display: grid;
+  gap: 3px;
+  width: 15px;
+}
+.burgerBars > span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+/* La hoja. Bloque plano a pantalla completa, cero sombra. El navegador pone
+   el foco atrapado, el Escape y el fondo inerte — por eso es <dialog>. */
+.sheet {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+.sheet::backdrop {
+  background: color-mix(in srgb, #12100e 55%, transparent);
+}
+.sheetInner {
+  width: min(74rem, 100% - 2.4rem);
+  margin-inline: auto;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-block: 0.65rem 2.4rem;
+}
+.sheetTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 60px;
+}
+.sheetClose {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s var(--ease);
+}
+.sheetClose:hover {
+  background: var(--bg-deep);
+}
+.sheetNav {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.2rem;
+}
+.sheetGroup {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 1.6rem 0 0.3rem;
+}
+.sheetGroup:first-child {
+  margin-top: 0;
+}
+.sheetLink {
+  display: block;
+  padding: 0.7rem 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-soft);
+  transition: color 0.15s var(--ease);
+}
+.sheetLink:hover {
+  color: var(--accent-ink);
+}
+.sheetFoot {
+  margin-top: auto;
+  padding-top: 2rem;
+  display: grid;
+  gap: 0.7rem;
+}
+.sheetLegal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+.sheetLegal a {
+  color: var(--ink-faint);
+  text-decoration: underline;
+}
+
+/* foco visible en TODO el preview, una sola regla (el <dialog> tambien
+   cuelga de .page aunque se pinte en el top layer) */
+.page a:focus-visible,
+.page button:focus-visible,
+.page summary:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Pie — mapa completo del sitio (en telefono era el UNICO acceso)          */
+/* ---------------------------------------------------------------------- */
+
 .footer {
   background: var(--ink-block);
-  color: color-mix(in srgb, #edf1ef 75%, transparent);
-  padding-block: 3.5em;
+  color: color-mix(in srgb, #edf1ef 78%, transparent);
+  padding-block: 3.5em 2.4em;
   font-size: 0.95rem;
 }
 .footerInner {
   width: min(74rem, 100% - 2.4rem);
   margin-inline: auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem 2.5rem;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.4rem;
+}
+@media (min-width: 700px) {
+  .footerInner {
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 3rem;
+  }
+}
+.footerBrand {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+.footerTag {
+  margin: 0;
+  max-width: 24ch;
 }
 .footer a {
   color: #edf1ef;
@@ -814,12 +1006,126 @@
 }
 .footer a:hover {
   color: #fff;
+  text-decoration: underline;
 }
 .footerNav {
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+  justify-items: start;
+}
+.footerGroup {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #edf1ef 70%, transparent);
+  margin: 0 0 0.2rem;
+}
+.footerLegal {
+  width: min(74rem, 100% - 2.4rem);
+  margin: 2.4rem auto 0;
+  padding-top: 1.4rem;
+  border-top: 1px solid color-mix(in srgb, #edf1ef 20%, transparent);
   display: flex;
   flex-wrap: wrap;
-  gap: 1.2rem;
-  margin-left: auto;
+  gap: 1.4rem;
+  font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Comparativa — una fila plana por contendiente. Nada de tabla ancha: a    */
+/* 390px una tabla de cinco columnas desborda si o si.                      */
+/* ---------------------------------------------------------------------- */
+
+.cmp {
+  display: grid;
+  gap: 0;
+  margin-top: 3em;
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.cmpRow {
+  padding: 1.9em 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2em;
+}
+@media (min-width: 800px) {
+  .cmpRow {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: 1em 3em;
+  }
+}
+/* la fila de Onia cambia de TONO, que es como este sistema hace profundidad */
+.cmpOnia {
+  background: var(--ink-block);
+  color: #edf1ef;
+  border-bottom: 0;
+  border-radius: var(--r-block);
+  padding: 1.9em 1.6em;
+  margin-top: 0.8em;
+}
+.cmpEjemplos {
+  margin: 0.5em 0 0;
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  font-size: 0.9em;
+  line-height: 1.45;
+}
+.cmpPrecio {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.6em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0.7em 0 0;
+}
+.cmpVeredicto {
+  margin: 0;
+  color: color-mix(in srgb, currentColor 85%, transparent);
+  font-size: 1em;
+  line-height: 1.55;
+  max-width: 52ch;
+}
+.ejes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin: 1em 0 0;
+  padding: 0;
+  list-style: none;
+}
+.eje {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  padding: 0.4em 0.8em;
+  border-radius: var(--r-pill);
+  border: 1px solid color-mix(in srgb, currentColor 26%, transparent);
+  font-size: 0.85em;
+  line-height: 1.3;
+  color: color-mix(in srgb, currentColor 85%, transparent);
+}
+.ejeMark {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.85em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+.cmpOnia .ejeMark {
+  color: var(--verde-300);
+}
+.ejeOff .ejeMark {
+  color: color-mix(in srgb, currentColor 70%, transparent);
+}
+
+/* dos tarjetas en vez de tres (contacto) */
+@media (min-width: 900px) {
+  .plansTwo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* eyebrow de preview (interno, no venta) */
@@ -1065,6 +1371,11 @@
   .pillRows,
   .btn,
   .link,
+  .navLink,
+  .headerLogin,
+  .burger,
+  .sheetClose,
+  .sheetLink,
   .faqQ::after {
     transition: none;
     animation: none;

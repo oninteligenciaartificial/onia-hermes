@@ -28,14 +28,12 @@ import s from "./preview.module.css";
 type Rubro = {
   id: string;
   palabra: string;
-  /** solo donde la página existe de verdad */
-  href?: string;
   /** color del bloque del rubro (tokens de marca, nunca un hex suelto) */
   bg: string;
 };
 
 const RUBROS: readonly Rubro[] = [
-  { id: "dental", palabra: "Dental", href: "/modulos/dental", bg: "var(--verde-800)" },
+  { id: "dental", palabra: "Dental", bg: "var(--verde-800)" },
   { id: "comercio", palabra: "Comercio", bg: "var(--verde-900)" },
   { id: "importadora", palabra: "Importadora", bg: "var(--tinta)" },
   { id: "estetica", palabra: "Estética", bg: "var(--verde-700)" },
@@ -127,22 +125,12 @@ export function Switcher() {
           <ol className={s.words} aria-label="Rubros vivos hoy">
             {RUBROS.map((r, k) => (
               <li key={r.id}>
-                {r.href ? (
-                  <a
-                    className={s.word}
-                    href={r.href}
-                    aria-current={k === activo ? "true" : "false"}
-                  >
-                    {r.palabra}
-                  </a>
-                ) : (
-                  <span
-                    className={s.word}
-                    aria-current={k === activo ? "true" : "false"}
-                  >
-                    {r.palabra}
-                  </span>
-                )}
+                <span
+                  className={s.word}
+                  aria-current={k === activo ? "true" : "false"}
+                >
+                  {r.palabra}
+                </span>
               </li>
             ))}
           </ol>
