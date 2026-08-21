@@ -512,3 +512,65 @@ Este archivo manda. Los de abajo se conservan porque **cada uno tiene algo que n
 Evidencia: `prueba-motor-20260813/` (la prueba que fijó el método) ·
 `INVENTARIO-caras.jpg` y `INVENTARIO-ropa.jpg` (qué imagen es cada ID) ·
 `docs/ONIA_MODELOS_RECETA_VISUAL_20260806.md` (calibración de 30 imágenes).
+
+---
+
+# §9. RECETA B-ROLL — cómo se hicieron los 4 videos que le encantaron a Sergio (21-ago)
+
+> Sergio: "me encantó el resultado, haz lo mismo pero más barato y aprende cómo los hiciste."
+> Esta sección ES ese aprendizaje. Para B-roll de Lucía, seguir esto al pie.
+
+## El pipeline (2 pasos, ~6-8 cr por escena)
+
+**PASO 1 — Imagen de escena (nano_banana_2, 2.00 cr, NO se puede abaratar):**
+- Prompt = `<<<452d8375-fb67-4df7-9ae0-8f1b257aa51f>>>` + molde §6, con estas líneas fijas:
+  - `A casual candid snapshot of this exact woman [ACCIÓN] in [LUGAR]`
+  - vestuario + `small gold hoop earrings`
+  - `Natural true-to-life colors, no color grading, no filter look, accurate white balance`
+  - `Shot on a phone camera, slight natural grain, [ÁNGULO], [ENCUADRE]`
+  - `Her face stays identical to the reference. No beauty filter, no skin smoothing, no text anywhere`
+- ⚠️ z_image (0.15 cr) NO sirve: no acepta referencia → pierde la cara. El precio de la
+  identidad es 2 cr, no se negocia.
+- **MIRAR la imagen antes de animar** (Read del PNG). Si la cara derivó, regenerar imagen;
+  nunca "arreglar en video".
+
+**PASO 2 — Animar (veo3_1_lite, 1 cr/segundo; duraciones 4/6/8 s):**
+- `medias: [{value: <job_id de la imagen>, role: "start_image"}]`
+- `declined_preset_id: "24bae836-2c4a-48e0-89b6-49fcc0b21612"` SIEMPRE (si no, el preset
+  "IN THE DARK" intercepta el request)
+- Prompt de video, 4 líneas fijas + 1 variable:
+  1. `Natural true-to-life colors, no color grading, no filter look, accurate white balance exactly as the source image.`
+  2. `Natural real-time speed, no slow motion.` ← el fix del slow motion (21-ago)
+  3. [LA ACCIÓN, en ritmo normal: "at a normal everyday pace", "at real wind speed"]
+  4. `Handheld micro-shake only, no camera travel.` (o `Handheld tracking backward smoothly` si camina)
+  5. `Photorealistic, her face stays identical, no morphing.`
+
+## Checklist antes de CADA generación (la regla de los 3 errores)
+
+1. ¿Alguna palabra en MAYÚSCULAS que pueda hornearse como texto? → quitarla
+2. ¿Algún "slowly/softly/gently" que el modelo lea como cámara lenta? → reemplazar por "at a normal pace"
+3. ¿Alguna restricción de paleta que actúe de filtro? → fuera; color natural siempre
+
+## Tarifa medida por clip (21-ago, todos con get_cost)
+
+| Motor | Config | 5-6 s | Nota |
+|---|---|---|---|
+| **veo3_1_lite** | 720p | **4 cr (4s) / 6 cr (6s)** | EL ELEGIDO. 1 cr/s exacto |
+| **seedance_2_0_mini** | **480p sin audio** | **5 cr** | el más barato por clip; 496×864, más blando |
+| seedance_2_0_mini | 720p con audio | 12.5 cr | el audio+resolución duplican el precio |
+| grok_video | 720p | 7.5 cr | sin probar calidad |
+| kling3_0_turbo | 720p | 7.5 cr | mejor movimiento (test 21-ago), backup |
+| happy_horse / grok 1.5 | — | 12.5 cr | caros para B-roll |
+| flux_3_video | 720p | 27.5 cr | descartado para B-roll |
+
+**Configuración "más barato" pedida por Sergio:** imagen 2 cr + veo lite 4 s = **6 cr/escena**
+(vs 8 del test original). Alternativa mini-480p: 7 cr con cara sostenida pero 480p — para
+historias sirve, para reels el 720p de veo lite rinde más por crédito.
+
+## Reglas duras aprendidas
+
+- **NSFW en video ≠ NSFW en imagen**: el traje de baño pasó como imagen y el modelo de VIDEO
+  lo bloqueó. Playa/deporte para animar: ropa cubierta DESDE la imagen (vestido, remera).
+- El costo con audio de seedance se paga aunque el reel lleve música encima: **generate_audio:
+  false siempre** en B-roll (la voz va aparte, ElevenLabs).
+- Verificar SIEMPRE la duración/resolución del mp4 con ffprobe al bajar.
