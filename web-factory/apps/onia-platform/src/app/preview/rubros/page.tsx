@@ -22,7 +22,6 @@ const RUBROS: readonly { nombre: string; ve: string }[] = [
   { nombre: "Comercio", ve: "Productos, stock, ventas y fiados." },
   { nombre: "Importadora", ve: "Depósito, lotes, proveedores y costos de importación." },
   { nombre: "Estética", ve: "Clientes, sesiones, paquetes y recordatorios." },
-  { nombre: "Veterinaria", ve: "Animales, fichas, vacunas y control de peso." },
   { nombre: "Servicios", ve: "Clientes, trabajos, cotizaciones y cobros." },
 ];
 

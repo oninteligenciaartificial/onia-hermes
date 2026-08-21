@@ -37,7 +37,6 @@ const RUBROS: readonly Rubro[] = [
   { id: "comercio", palabra: "Comercio", bg: "var(--verde-900)" },
   { id: "importadora", palabra: "Importadora", bg: "var(--tinta)" },
   { id: "estetica", palabra: "Estética", bg: "var(--verde-700)" },
-  { id: "veterinaria", palabra: "Veterinaria", bg: "var(--verde-800)" },
   { id: "servicios", palabra: "Servicios", bg: "var(--verde-900)" },
 ];
 

@@ -17,11 +17,13 @@ import s from "../preview.module.css";
  * que serlo — el registro real del producto (app.onia.com.bo/register).
  *
  * Los tres pasos son el texto ya escrito y publicado en /prueba-gratis; no se
- * redactó nada nuevo. Lo que NO se trae es la lista de rubros de esa página:
- * enumera seis (con Veterinaria) y el registro entrega cinco. Acá el dato es
- * crítico — es la pantalla anterior al clic — así que no se enumera ninguno:
- * el rubro se elige en la primera pantalla del registro, que es la verdad.
- * (Hueco abierto, decisión de Sergio: seis vendidos vs cinco entregados.)
+ * redactó nada nuevo. Tampoco se enumeran rubros acá: el rubro se elige en la
+ * primera pantalla del registro, que es la verdad.
+ *
+ * Cerrado 2026-08-21: Veterinaria se saco de toda la web. Sergio: "aun no
+ * terminemos los que ya tenemos". El sitio vende los CINCO que el registro
+ * entrega (dental, comercio, importadora, estetica, servicios) — vender un
+ * sexto que el alta no puede dar es perder al lead en el ultimo clic.
  */
 
 export const metadata: Metadata = {
