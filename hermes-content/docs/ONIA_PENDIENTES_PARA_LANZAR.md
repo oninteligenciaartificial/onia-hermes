@@ -75,6 +75,26 @@ mapeo explícito plan↔tier?** Hasta entonces, nadie escribe código sobre esa 
 - **E5** — Strix estimado US$10–25/corrida; recomendación: no gastar hoy (cero clientes).
 - **payment-proofs** — bucket verificado, cero comprobantes perdidos.
 
+## DEPLOY 2026-08-21 21:43 UTC (353f685) — los 3 defectos que solo se ven con datos reales
+
+Segundo swap del dia, sin rollback. 1804 tests, tsc limpio.
+- El panel ya no imprime la **razon de ruteo interna** junto a cada propuesta de los agentes
+  ("accion sensible (contacta/publica/cobra/gasta/scraping)"). Se sigue auditando.
+- Los agentes escribian **"285 BOB" y "hace 10 dias"** en el texto que le sale al CLIENTE
+  FINAL por WhatsApp. Ahora "Bs 285" y con tildes.
+- Cuatro rotulos de facturacion decian "paciente" a rubros que no son clinicas.
+
+El gate del LF paso en los 3 puntos (archive local, tarball, extraido en el VPS): el CRLF
+que ayer dejo el cron sin ejecutar no vuelve. Cron verificado post-swap, corrida limpia.
+
+🔶 **Los 3 arreglos NO se pudieron mirar**: viven detras del login. Lo que si esta probado es
+que el runtime sirve el codigo nuevo (`Bs. 3.900` con punto en 15 archivos del runtime y 0 en
+el backup; al reves con la version vieja de coma). Es prueba del intercambio, no de la pantalla.
+
+📌 Pendiente anotado, no urgente: 9 backups `runtime-next.prev-*` acumulados, /opt/onia-platform
+pesa 19 GB (disco al 59%, 79 GB libres). Conviene dejar 2-3 y borrar el resto — **no lo hice
+solo**: borrar backups es destructivo y va con permiso.
+
 ## DEPLOY 2026-08-21 20:04 UTC (56604e4) — recordatorios, precio 390 y la PWA instalable
 
 Swap sin rollback. **1.804 tests** (la suma cierra exacta: 1746 + 16 + 42), tsc limpio.
