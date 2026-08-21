@@ -42,6 +42,23 @@ valor cero — el patrón "construido ≠ terminado" por tercera vez. La pregunt
 respondés: **¿los ids de plan del producto adoptan los ids de tier del core, o se escribe un
 mapeo explícito plan↔tier?** Hasta entonces, nadie escribe código sobre esa entidad.
 
+## Deploy combinado 2026-08-21 01:09 UTC (8fe8cb5) — I1 + enchufe BCP
+
+- **Portal de requerimientos EN PRODUCCIÓN** (I1, el "primero de todo" del carril): la
+  máquina de estados YA EXISTÍA en el core — fue encender, no construir. Cero tablas
+  nuevas. Un "acceso" jamás se auto-acepta. 1736 tests.
+- **Enchufe BCP dormido en producción**: sin env de BCP el checkout es idéntico a ayer;
+  el día que el banco entregue credenciales se enciende por configuración. Las 8
+  preguntas técnicas para el ejecutivo viven en la cabecera de `lib/gateway/bcp-qr.ts`.
+- **Hallazgo grave arreglado en caliente**: `payment-proofs` NO EXISTÍA en prod — el
+  bucket de los comprobantes de pago. Subir un comprobante casi seguro fallaba desde
+  siempre. Creado (privado, 5 MB, espejo del código) y probado con subida+borrado real.
+- Pendiente de deploy (en master): fix de hidratación del checkout (`b822c1d`).
+- 🔴 **Operación de rotación pendiente (planificada, no de apuro)**: password de
+  Postgres del VPS (fragmento expuesto en un chat de agente) + limpiar
+  `/root/.bash_history` que tiene tokens de Meta en texto plano + rotarlos. Recrea
+  contenedores: necesita ventana.
+
 ## 🟢 Vivo y verificado en producción (no tocar salvo bug)
 
 Registro y onboarding multi-rubro · 6 rubros · agenda/citas/pacientes/tratamientos ·
