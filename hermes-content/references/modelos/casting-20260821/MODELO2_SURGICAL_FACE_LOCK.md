@@ -45,3 +45,29 @@ un rasgo, se rechaza y se regenera.** El QA lo hace Sergio mirando el set comple
 
 Las tomas aprobadas reemplazan las medias del Element v3 (o forman el v4 definitivo), y ese
 Element pasa a ser LA identidad para toda generación de imagen y todo video de ella.
+
+
+---
+
+## 🔴 v1 RECHAZADA por Sergio — y la corrección que SÍ funcionó (v2, 21-ago)
+
+**El QA de Sergio sobre la v1: "todas las imágenes son diferentes, te las inventaste todas".
+Tenía razón.** Causa raíz: la v1 usó el Element que mezcla 3 bases sintéticas — mezclar 3
+caras promedia, y promediar deriva. Cada job re-interpretó la mezcla por su lado.
+
+**La v2 aplica el mecanismo de encadenado** (el mismo de las recetas de interiores, regla c):
+*la consistencia la sostiene LA REFERENCIA, no el texto*. UNA imagen maestra (la cara aprobada
+por Sergio, job `c2f93622`) referenciada DIRECTO en cada toma, con `gpt_image_2` (el motor que
+Sergio eligió, y el único que venía sosteniendo identidad en derivaciones).
+
+Verificado comparando tomas entre sí: **misma persona en la v2** (`surgical-v2/`).
+Nota de QA: en la 06 el verde del ojo tira a avellana — dentro de la variación de luz por
+ángulo que el propio FACE_LOCK de Lucía documenta como normal.
+
+**REGLA QUE QUEDA:**
+1. Para identidad NUEVA (sin frame real): imagen maestra ÚNICA + referencia directa por
+   imagen en CADA generación + gpt_image_2. Los Elements multi-base se usan para VARIEDAD
+   de escena, nunca para el lock de identidad.
+2. Curiosidad del guardrail: el shot 2 (sonrisa suave, musculosa) rebotó como nsfw en el
+   primer intento — falso positivo; reformulado como "professional headshot, white t-shirt"
+   pasó. Anotado para no perder tiempo la próxima.
