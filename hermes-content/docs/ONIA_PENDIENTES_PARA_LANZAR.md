@@ -75,6 +75,39 @@ mapeo explícito plan↔tier?** Hasta entonces, nadie escribe código sobre esa 
 - **E5** — Strix estimado US$10–25/corrida; recomendación: no gastar hoy (cero clientes).
 - **payment-proofs** — bucket verificado, cero comprobantes perdidos.
 
+## 2026-08-21 — el dia que la venta empezo a decir la verdad
+
+**Lo que se descubrio midiendo (no suponiendo):**
+- El material del chatbot **vendia cosas que el codigo no hace**: "IA entrenada con tu
+  contenido" (el modo cliente no usa LLM), "recordatorios de cita y de cobro" (no existian),
+  "agenda" (no agenda), "500 conversaciones, al llegar corta" (no hay contador). Se
+  construyeron los recordatorios y se corrigio el texto del resto.
+- **El correo estaba ROTO desde el 20-ago y la app decia "enviado".** Causa: `mail.onia.com.bo`
+  resolvia a Cloudflare y Gmail rechaza si la vuelta del DNS no cierra (FCrDNS). Sergio lo
+  corrigio; verificado que ahora cierra. Ademas `lib/email.ts` ahora detecta destinatarios
+  rechazados — antes nodemailer no lanzaba y la app mentia.
+- 🔴 **SPF NO autoriza al VPS** (hallazgo nuevo): `v=spf1 include:_spf.mx.cloudflare.net ~all`
+  no incluye 187.77.16.63. Todo nuestro correo falla SPF. Falta agregar `ip4:187.77.16.63`.
+- **El merge a medias del 20-ago habia borrado el modo recepcionista del bot** — 187 lineas,
+  sin romper ningun test. El proximo deploy le cambiaba el bot a los clientes por el guion de
+  venta de Onia. Recuperado. Leccion: los marcadores se ven con grep, la perdida semantica no.
+- La PWA no era instalable por **una linea**: `/manifest.json` daba 307. Eso respondia solo la
+  pregunta de las tiendas — con el manifest publico hay icono en el celular sin Play Store.
+
+**Decisiones de Sergio:**
+- **Chatbot Bs 390/mes, sin instalacion**, anual 3.900. El cliente le paga a Meta directo
+  (se cae el +20%). Derivado de competencia (Xmart boliviano cobra 173-288), valor medido y
+  canibalizacion con el plan Full. Detalle en la memoria `precio-chatbot-390-sin-instalacion`.
+- **Veterinaria fuera de la web** hasta que el registro la entregue ("aun no terminemos los
+  que ya tenemos"). La venta se alinea a la entrega, no al reves.
+- **Tile verde** canonico; se borro el `app/icon.svg` naranja que lo tapaba.
+- **Motor de video: HyperFrames.** Remotion queda como baseline historico y no se reabre.
+- **No ir a las tiendas** por ahora: la PWA instalable da lo mismo sin cuota ni comision, y
+  Apple obliga a su cobro para suscripciones (nombra "QR codes" como metodo prohibido).
+
+**Gasto fijo real:** VPS US$40 (el doc decia 12-15) + Claude Max US$200 + Higgsfield
+(pendiente). Operar cuesta ~Bs 461/mes; **3 clientes con plan Pro + chatbot cubren todo**.
+
 ## 🟢 Vivo y verificado en producción (no tocar salvo bug)
 
 Registro y onboarding multi-rubro · 6 rubros · agenda/citas/pacientes/tratamientos ·
