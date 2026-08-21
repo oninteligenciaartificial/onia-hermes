@@ -47,6 +47,21 @@ La cara es 100% sintética. Regla del repo sostenida.
   v1 `9d81f43c` (mono-referencia, derivaba en escena).
 - La cara definitiva es la del test D/gpt (sonrisa grande, castaño claro), no B2.
 
+## ✅ ANCLA DEFINITIVA v3 — el esquema de Lucía completo (2026-08-21, noche)
+
+**Element vigente: `06404192-fe02-48e6-9ce8-3e146f977f67`** (`modelo2-ancla-v3-bases`).
+Igual que las fotos base de Lucía: **3 bases SERIAS** derivadas de la cara aprobada
+(try gpt high `c2f93622`):
+
+| Base | Archivo | Equivale a |
+|---|---|---|
+| Selfie de espejo, seria | `BASE-1-espejo-seria.png` | el ancla de Lucía (selfie espejo) |
+| Frontal canon, fondo neutro | `BASE-2-frontal-seria.png` | el surgical-anchor de Lucía |
+| Tres cuartos | `BASE-3-trescuartos-seria.png` | el ángulo que triangula |
+
+Uso: `<<<06404192-fe02-48e6-9ce8-3e146f977f67>>>` en el prompt, motor `gpt_image_2`.
+Las anclas v1 (`9d81f43c`) y v2 (`213993a2`) quedan obsoletas — no usar.
+
 ## Pendiente
 
 1. **Nombre** (Sergio) — ojo: ya existe un Element viejo "Valentina ONIA v1" en la cuenta;
