@@ -83,7 +83,7 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'bright-retail'];
+const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
@@ -719,6 +719,95 @@ ${safeAreaCss()}
 </div></body></html>`;
 }
 
+
+// Pack: editorial-clean (2026-08-20, pedido de Sergio: "menos cargado, letras mas
+// atractivas, que venda"). Serif editorial en caja mixta sobre foto full-bleed.
+// Diferencias contra editorial-photo: sin pill con caja, sin "Desliza" en cada
+// slide, sin logo en el footer, cuerpo mas liviano. El CTA SIEMPRE pide la
+// palabra: si el brief no la trae, el render FALLA a proposito (regla de Sergio).
+function editorialCleanHtml(slide, idx, total, account, args) {
+  const role = roleFor(slide, idx, total);
+  const last = idx === total - 1;
+  const acc = ACCOUNTS[account];
+  const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
+  const rawBg = slide.bg || (args && args.bg) || '';
+  const bg = rawBg ? path.resolve(rawBg).replace(/\\/g, '/') : '';
+  const photo = bg
+    ? `<div class="photo" style="background-image:url('file://${bg}')"></div>`
+    : '';
+  const accentVar = (args && args.accent)
+    ? `:root, .slide { --onia-green: ${args.accent}; }` : '';
+
+  if (role === 'cta' && !triggerWord(slide)) {
+    throw new Error(`editorial-clean: la slide CTA no pide ninguna palabra (regla: siempre se pide comentar). Slide: ${slide.headline}`);
+  }
+
+  const headTag = role === 'cover' ? 'h1' : 'h2';
+  const kicker = slide.pill
+    ? `<div class="kicker"><span class="dot"></span>${esc(slide.pill)}</div>` : '';
+  const body = slide.body ? `<p class="cl-body">${emph(slide.body)}</p>` : '';
+  const word = triggerWord(slide);
+  const cta = role === 'cta'
+    ? `<div class="cl-cta">Comentá&nbsp;<b>${esc(word)}</b></div>` : '';
+
+  return `<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+${tokens}
+${accentVar}
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:${FMT.w}px; height:${FMT.h}px; }
+${safeAreaCss()}
+.slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
+  padding:calc(var(--pad) * 1.2); display:flex; flex-direction:column; justify-content:flex-end;
+  background:var(--onia-ink); color:var(--onia-white); font-family:'Inter',system-ui,Arial,sans-serif; }
+.photo { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
+.scrim { position:absolute; inset:0; z-index:1;
+  background:linear-gradient(180deg, rgba(10,15,13,.05) 0%, rgba(10,15,13,.38) 52%, rgba(10,15,13,.88) 100%); }
+.grain { position:absolute; inset:0; z-index:2; opacity:.06; mix-blend-mode:overlay; }
+.slide > *:not(.photo):not(.scrim):not(.grain):not(.kicker):not(.cl-arrow) { position:relative; z-index:3; }
+.kicker, .cl-arrow { z-index:4; }
+
+.kicker { position:absolute; top:calc(var(--pad) * 1.2); left:calc(var(--pad) * 1.2);
+  display:flex; align-items:center; gap:14px; font-weight:600; font-size:24px;
+  letter-spacing:5px; text-transform:uppercase; color:rgba(255,255,255,.92); }
+.kicker .dot { width:12px; height:12px; border-radius:50%; background:var(--onia-green); }
+
+.cl-h { font-family:'Instrument Serif',Georgia,serif; font-weight:400; font-size:118px;
+  line-height:1.02; letter-spacing:-1px; max-width:920px; text-wrap:balance; }
+.cl-h .g { font-style:italic; color:var(--onia-green); background:none; padding:0;
+  box-shadow:none; border-radius:0; }
+.cl-body { font-weight:400; font-size:33px; line-height:1.5; margin-top:30px;
+  max-width:780px; color:rgba(255,255,255,.78); }
+.cl-body .g { background:none; padding:0; box-shadow:none; color:var(--onia-white);
+  font-weight:600; }
+.cl-body b, .cl-body strong { color:var(--onia-white); font-weight:600; }
+
+.cl-cta { align-self:flex-start; margin-top:38px; display:flex; align-items:baseline;
+  background:var(--onia-green); color:var(--onia-ink); font-size:42px; font-weight:400;
+  font-family:'Instrument Serif',Georgia,serif; font-style:italic;
+  padding:24px 48px; border-radius:100px; box-shadow:0 18px 48px rgba(0,0,0,.4); }
+.cl-cta b { font-family:'Inter',sans-serif; font-style:normal; font-weight:700;
+  letter-spacing:1px; }
+
+.cl-arrow { position:absolute; right:calc(var(--pad) * 1.2); bottom:calc(var(--pad) * 1.2);
+  font-size:52px; color:var(--onia-green); font-family:Georgia,serif; }
+.cl-handle { margin-top:44px; font-size:24px; letter-spacing:2px; font-weight:600;
+  color:rgba(255,255,255,.55); }
+</style></head>
+<body><div class="slide ${role}">
+  ${photo}<div class="scrim"></div>
+  <svg class="grain" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="300" height="300" filter="url(#n)"/></svg>
+  ${kicker}
+  <${headTag} class="cl-h">${emph(slide.headline)}</${headTag}>
+  ${body}
+  ${cta}
+  <div class="cl-handle">${esc(acc.handle)}</div>
+  ${last ? '' : '<div class="cl-arrow">&#8594;</div>'}
+</div></body></html>`;
+}
+
 // Ribbon multicolor continuo (eco de las franjas del logo Nuvia). Fluye de
 // borde a borde y cambia de fase por slide -> sensación de panorama/peek entre
 // slides, como la curva verde del pack dark-product de Onia.
@@ -855,6 +944,7 @@ function render(args) {
     if (args.pack === 'dark-product') html = darkProductHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'dark-neon') html = darkNeonHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'editorial-photo') html = editorialPhotoHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'editorial-clean') html = editorialCleanHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'bright-retail') html = brightRetailHtml(slide, idx, slides.length, args.account, args);
     else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
@@ -900,7 +990,7 @@ if (require.main === module) {
 }
 
 module.exports = {
-  slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml,
+  slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
   emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };

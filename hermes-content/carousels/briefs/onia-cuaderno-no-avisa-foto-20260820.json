@@ -1,6 +1,6 @@
 {
   "title": "Tu cuaderno no miente, pero tampoco avisa",
-  "caption": "Tu cuaderno anota bien. El problema es lo que nunca te va a decir: quién dejó de venir, qué se vende junto y cuánto suma el fiado hoy. Nada de eso está en una página — está repartido en cien, y juntarlo es trabajo tuyo. Guardá las 3 preguntas del slide 6 y hacé la primera esta noche: sumá el fiado. Ese número ya es tuyo, solo falta cobrarlo.",
+  "caption": "Tu cuaderno anota bien. El problema es lo que nunca te va a decir: quién dejó de venir, qué se vende junto y cuánto suma el fiado hoy. Nada de eso está en una página — está repartido en cien, y juntarlo es trabajo tuyo. Comentá LISTA y te mando el PDF con las 6 tareas por donde empezar a automatizar.",
   "hashtags": [
     "#negocios",
     "#pymes",
@@ -100,9 +100,9 @@
     {
       "number": 8,
       "role": "cta",
-      "pill": "Guardalo",
-      "headline": "Sumalo esta *noche*",
-      "body": "*Guardalo*, agarrá el cuaderno y sumá el fiado de verdad. Ese número es tuyo y ya lo prestaste — lo único pendiente es cobrarlo.",
+      "pill": "El siguiente paso",
+      "headline": "Ese número ya es *tuyo*",
+      "body": "Comentá *LISTA* y te mando el PDF con las 6 tareas por donde conviene empezar a automatizar — la primera es exactamente esta: que el fiado se sume solo.",
       "callout": "",
       "save_worthy": false,
       "visual_prompt": "CTA fuerte.",
