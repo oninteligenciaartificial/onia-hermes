@@ -14,6 +14,19 @@
 > `t2v` NO acepta `start_image` — hay que pasar `mode: "omni_reference"` explícito; (2) el
 > preflight también dispara la recomendación de preset y hay que declinarla igual que al generar.
 
+> 🔴 **ERROR RECURRENTE ANOTADO (Sergio, 21-ago): videos en cámara lenta.** La causa está en
+> MIS prompts: escribí "turns her head slowly", "hair moving softly" — y el modelo obedece
+> literal: pedí lento, entregó lento. REGLA: los prompts de video de piezas normales llevan
+> SIEMPRE `natural real-time speed, no slow motion` y se prohíben "slowly/softly/gently" salvo
+> que la pieza PIDA cámara lenta a propósito.
+>
+> **Y el patrón de fondo, que es el error real:** vengo horneando instrucciones en los prompts
+> sin auditar sus efectos secundarios (el "CLOSED" horneado, la paleta que era un filtro, el
+> "slowly" que es slow motion). CHECKLIST DE PROMPT antes de generar: (1) ¿alguna palabra en
+> MAYÚSCULAS que pueda hornearse como texto? (2) ¿algún adverbio de velocidad/suavidad que
+> cambie el movimiento? (3) ¿alguna restricción de paleta que actúe de filtro? Tres preguntas,
+> diez segundos, y esta clase de error muere.
+
 ## 1. La pregunta que decide todo
 
 > **¿Alguien tiene que reconocer a una persona específica en este plano?**
