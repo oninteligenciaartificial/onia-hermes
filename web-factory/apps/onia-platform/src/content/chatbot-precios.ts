@@ -57,7 +57,6 @@ export const CHATBOT_STACKS: readonly ChatbotStack[] = [
       "Configuración del número y plantillas aprobadas por Meta",
     ],
     noIncluye: [
-      "No cobra con tarjeta: la pasarela no existe en el sistema todavía",
       "Lo que salga de este alcance (integraciones, flujos propios) se cotiza a medida",
     ],
     necesitasVos: [

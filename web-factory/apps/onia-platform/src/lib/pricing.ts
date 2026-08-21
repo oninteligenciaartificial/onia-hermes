@@ -220,11 +220,6 @@ export const NO_INCLUYE: readonly Excluido[] = [
       "Si contratás el chatbot, Meta cobra por cada mensaje que TU negocio le manda primero al cliente. Se factura aparte, al costo de Meta más 20%.",
   },
   {
-    que: "Cobro con tarjeta desde el sistema",
-    detalle:
-      "Todavía no existe: hoy Onia deja la venta y el cobro registrados, pero la pasarela no está encendida en ningún plan. No la cobramos.",
-  },
-  {
     que: "Pauta publicitaria",
     detalle: "Si hacés campañas, el presupuesto de anuncios es tuyo y va directo a la plataforma.",
   },
