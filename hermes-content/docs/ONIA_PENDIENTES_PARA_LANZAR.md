@@ -61,7 +61,7 @@ mapeo explícito plan↔tier?** Hasta entonces, nadie escribe código sobre esa 
 
 ## Cola de sesión cerrada 2026-08-21 (diagnósticos + fixes)
 
-- **/book — fuga de datos, en deploy AHORA**: el índice público publicaba el listado
+- **/book — fuga de datos CERRADA en prod** (swap 2026-08-21 02:19 UTC, sin rollback; verificado sin sesion: 0 emails/telefonos/orgs en el payload y el DOM): el índice público publicaba el listado
   completo de clientes (nombre, teléfono, email) sin auth, además de "cita dental" a
   rubros no dentales. Fix: el índice ya no consulta la base ni lista orgs; cada negocio
   comparte su link directo gateado. Daño real acotado (solo 2 orgs QA en prod, cero
