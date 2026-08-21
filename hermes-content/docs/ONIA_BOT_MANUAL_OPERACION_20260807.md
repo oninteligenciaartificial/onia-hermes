@@ -336,6 +336,39 @@ nano /opt/onia/bot/knowledge.json
 Los dos últimos son de solo lectura: muestran a quién le escribirían y por qué
 descartan al resto. **Corrélos antes de encender cualquier envío automático.**
 
+### 7.1 Medir el bot: los tres niveles
+
+El bot es el único agente nuestro que corre con un modelo pago de verdad
+(`gpt-4.1-mini` vía LiteLLM — verificado en `/opt/onia/bot/webhook.env`). Los tres
+agentes del producto (Recall/Cobrador/Captador) redactan con plantillas y cuestan
+USD 0,00: a esos los cubren sus tests unitarios y no hay nada de modelo que medir.
+
+```bash
+cd hermes-content/deploy/vps-ops/bot
+
+# 1. Tests unitarios (505): que el código haga lo que dice el código.
+node --test *.test.mjs
+
+# 2. Banco de decisión (62 casos): qué RUTA toma con mensajes reales de dueños.
+node bench.mjs
+
+# 3. Evals (12 tareas, método StockPilot): el TEXTO que sale, las cifras del
+#    conocimiento publicado, el contrato JSON de n8n y la rama del modelo.
+#    Imprime tabla: PASS/FAIL por tarea, tokens y ms.
+node --test evals/evals.test.mjs
+```
+
+Las 11 tareas deterministas de los evals son **gratis** y corren siempre. La única
+cara (E12, la rama off-guion contra `gpt-4.1-mini` real) está **gateada**: sin
+`ONIA_EVAL_LLM=1` + `LITELLM_KEY` se reporta `NO CORRIDO` con el costo estimado
+(~199 tokens de entrada + ≤160 de salida ≈ **USD 0,00034 por corrida**, precio
+gpt-4.1-mini 0,40/1,60 USD por millón, tabla de LiteLLM leída el 2026-08-20).
+Es trivial, pero la regla es la regla: **gasto de modelo = permiso explícito de
+Sergio**, y un número no corrido se reporta como no corrido, nunca inventado.
+
+Baseline del 2026-08-20 (código `34704261cca8`): 505/505 tests · 62/62 banco ·
+11/11 evals deterministas · E12 estimada, no corrida.
+
 ---
 
 ## 8. Accesos
