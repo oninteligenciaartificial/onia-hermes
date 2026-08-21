@@ -65,7 +65,9 @@ try {
 
   const media = cuadros.reduce((a, c) => a + c.s, 0) / cuadros.length;
   const desv = Math.sqrt(cuadros.reduce((a, c) => a + (c.s - media) ** 2, 0) / cuadros.length);
-  const umbral = media + 0.5 * desv;
+  // Piso absoluto ademas del umbral relativo: en un video PLANO (varianza ~0) el umbral
+  // relativo marcaba "texto" en cuadros negros. Texto real mide >10; vacio mide ~0.
+  const umbral = Math.max(media + 0.5 * desv, 2);
 
   // Greedy: mejores primero, separados >= GAP, hasta MAX. Solo por encima del umbral:
   // en un video sin texto no se inventa nada.
