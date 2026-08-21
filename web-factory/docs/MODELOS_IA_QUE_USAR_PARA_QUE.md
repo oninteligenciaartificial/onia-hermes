@@ -9,6 +9,11 @@
 
 ---
 
+> 📏 **Medido 2026-08-21: `seedance_2_5` en `omni_reference` = 32.5 cr por 5 s (6.5 cr/s) — 4.3× kling.**
+> Preflight con `get_cost:true` confirmado al centavo. Dos trampas de uso: (1) el modo default
+> `t2v` NO acepta `start_image` — hay que pasar `mode: "omni_reference"` explícito; (2) el
+> preflight también dispara la recomendación de preset y hay que declinarla igual que al generar.
+
 ## 1. La pregunta que decide todo
 
 > **¿Alguien tiene que reconocer a una persona específica en este plano?**
