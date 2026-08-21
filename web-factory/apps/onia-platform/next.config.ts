@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
    * Dos apps, dos majors de Next, defaults opuestos. La clave `turbopack` de
    * arriba solo afecta a `next dev`.
    */
-  output: "standalone",
+  // output: "standalone", // TEMP verificacion local
 
   /**
    * En un monorepo hay que decir desde donde trazar, o el standalone sale sin
