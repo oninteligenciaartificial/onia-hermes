@@ -12,14 +12,14 @@ const ENTRADA = CHATBOT_STACKS[0];
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
-  title: "Chatbot de WhatsApp — tres stacks, precio publicado | Onia",
-  description: `Chatbot de WhatsApp con IA: responde, recuerda citas y cobros, y capta 24/7. Bs ${fmtBs(ENTRADA.setup)} de instalación + Bs ${fmtBs(ENTRADA.mensual)}/mes + Meta. Los requisitos, a la vista antes de contratar. Hecho en Bolivia.`,
+  title: "Chatbot de WhatsApp — precio publicado | Onia",
+  description: `Chatbot de WhatsApp que contesta 24/7 con la información real de tu negocio y deriva a una persona lo que necesite decisión. Bs ${fmtBs(ENTRADA.mensual)}/mes, sin instalación. Los requisitos, a la vista antes de contratar. Hecho en Bolivia.`,
   alternates: { canonical: "/chatbot" },
   openGraph: {
     type: "website",
     locale: "es_BO",
-    title: "Chatbot de WhatsApp — tres stacks, precio publicado",
-    description: `Recordatorios, IA que responde o IA que opera. Desde Bs ${fmtBs(ENTRADA.mensual)}/mes, con los requisitos publicados.`,
+    title: "Chatbot de WhatsApp — precio publicado",
+    description: `Contesta al instante a cualquier hora con lo que vos cargaste, y deriva el resto. Bs ${fmtBs(ENTRADA.mensual)}/mes, con los requisitos publicados.`,
     url: "/chatbot",
   },
 };
@@ -46,7 +46,7 @@ const JSON_LD = {
       name: "Chatbot de WhatsApp para negocios",
       serviceType: "Automatización de WhatsApp con inteligencia artificial",
       description:
-        "Chatbot de WhatsApp con IA: responde con el contenido real del negocio, recuerda citas y cobros, califica y deriva 24/7. Lo que salga del alcance se cotiza a medida.",
+        "Chatbot de WhatsApp que contesta 24/7 con la información real que el negocio publicó y deriva a una persona lo que no sabe. Lo que salga del alcance se cotiza a medida.",
       provider: { "@type": "Organization", name: "Onia", url: `${SITE_URL}/` },
       areaServed: { "@type": "Country", name: "Bolivia" },
       url: `${SITE_URL}/chatbot`,

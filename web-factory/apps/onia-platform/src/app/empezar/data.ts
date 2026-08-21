@@ -6,6 +6,7 @@
 
 import { waLink } from "@/lib/site";
 import type { Equipo, Precio, Rubro, Tiene } from "./recommend";
+import { precioStack } from "@/content/chatbot-precios";
 
 export interface RubroOption {
   id: Rubro;
@@ -120,10 +121,11 @@ export const FALTA_COPY: Record<"web" | "chatbot", { nombre: string; copy: strin
     copy: "Tu presencia online conectada al sistema: lo que publicás y lo que agendás viven en el mismo lugar. Desde Bs 790, pago único.",
   },
   chatbot: {
-    nombre: "Chatbot de WhatsApp con IA",
-    // Precio ratificado 2026-08-15 — fuente: onia-platform/lib/pricing.ts
-    // (WHATSAPP_ADDON). El "desde Bs 300 + 200/mes" era el nivel N1 retirado.
-    copy: "El botón de WhatsApp va gratis con la web. Esto es otra cosa: un bot con IA que contesta, califica, agenda y hace seguimiento 24/7, con tu aprobación. Bs 1.500 de instalación + Bs 1.490/mes (500 conversaciones incluidas). Lo que no entre en el estándar se define con vos y se cotiza a medida.",
+    nombre: "Chatbot de WhatsApp",
+    // El precio NO se escribe acá: sale de content/chatbot-precios.ts, la
+    // fuente única. Este texto llegó a ser el CUARTO precio vivo del mismo
+    // add-on (2026-08-21).
+    copy: `El botón de WhatsApp va gratis con la web. Esto es otra cosa: contesta al instante a cualquier hora con la información real que vos publicaste, y lo que no sabe te lo pasa con la conversación entera. ${precioStack()}. Lo que no entre en el estándar se define con vos y se cotiza a medida.`,
   },
 };
 

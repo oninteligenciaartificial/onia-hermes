@@ -2,9 +2,8 @@ import { Reveal } from "@/motion";
 import {
   A_MEDIDA,
   CHATBOT_STACKS,
-  CUPO_MENSUAL,
+  META_NOTA,
   fmtBs,
-  META_MARKUP_PCT,
 } from "@/content/chatbot-precios";
 import { Pantalla } from "./pantalla";
 import styles from "./v2.module.css";
@@ -77,25 +76,17 @@ export function ChatbotV2() {
                     <p>{stack.resuelve}</p>
                   </div>
                   <p className={styles.escalonPrecio}>
-                    <b>
-                      {stack.setupDesde ? "Desde " : ""}Bs {fmtBs(stack.setup)}
-                    </b>
-                    instalación + Bs {fmtBs(stack.mensual)}/mes
+                    <b>Bs {fmtBs(stack.mensual)}/mes</b>
+                    sin instalación
                   </p>
                 </div>
               ))}
             </div>
-            {/* La escalera de 3 niveles se retiro el 2026-08-15; este parrafo
-                la seguia contando. Sobre el excedente de Meta no se afirma ni
-                "al costo" ni "+20 %": pricing.ts hoy dice las DOS cosas
-                (fullLabel vs markupPct) y hasta que Sergio resuelva esa
-                contradiccion la landing no toma partido — dice solo lo que es
-                verdad en ambos casos. */}
+            {/* 2026-08-21: se cayo el cupo de 500 conversaciones (no hay
+                contador ni corte en el codigo) y el +20 % sobre Meta (el
+                cliente le paga a Meta directo). El texto sale de META_NOTA. */}
             <p className={styles.nota} style={{ marginTop: "1.2rem" }}>
-              {CUPO_MENSUAL} conversaciones por mes incluidas: al llegar, corta
-              — nunca una factura sorpresa. Lo que Meta cobre por los mensajes
-              que iniciás va aparte; responder dentro de las 24 horas desde que
-              el cliente escribe no lo cobra Meta. {A_MEDIDA}
+              {META_NOTA} {A_MEDIDA}
             </p>
             <div className={styles.acciones}>
               <a className={styles.link} href="/chatbot">

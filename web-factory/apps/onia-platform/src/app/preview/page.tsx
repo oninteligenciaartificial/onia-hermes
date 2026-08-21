@@ -167,9 +167,10 @@ export default function PreviewLanding() {
                 El que escribe a las once ya tiene respuesta.
               </h2>
               <p className={s.body}>
-                Un bot con IA entrenado con el contenido real de tu negocio:
-                contesta, califica y te deriva el caso con contexto. Se suma a
-                cualquier plan.
+                Contesta al instante con la información real que vos
+                publicaste. No inventa ni cotiza por su cuenta: lo que no sabe
+                te lo pasa con la conversación entera. Se suma a cualquier
+                plan.
               </p>
               <div className={s.actions}>
                 <a className={s.link} href="/preview/chatbot">

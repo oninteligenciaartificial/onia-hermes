@@ -9,7 +9,6 @@ import {
   NOTA_FISCAL,
   bs,
 } from "@/lib/pricing";
-import { CHATBOT_PLAN, fmtBs } from "@/content/chatbot-precios";
 import { WA_URL_LANDING } from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
 import { Block, Btn, Kicker } from "../ui";
@@ -17,16 +16,11 @@ import s from "../preview.module.css";
 
 /**
  * Apartado de PRECIOS. Cada número sale de lib/pricing.ts (planes, add-ons, no
- * incluye, condiciones, nota fiscal). El add-on del chatbot es la ÚNICA
- * excepción: pricing.ts → ADDONS trae el precio viejo (300+200); la fuente
- * ratificada del chatbot es content/chatbot-precios.ts (1.500+1.490), y es la
- * que muestra /preview/chatbot — así que acá se toma de ahí para no publicar dos
- * precios distintos del mismo chatbot. Cero cifras a mano.
+ * incluye, condiciones, nota fiscal). El add-on del chatbot ya no es excepción:
+ * desde 2026-08-21 pricing.ts → ADDONS LEE su precio de
+ * content/chatbot-precios.ts, así que esta pantalla, la landing y
+ * /preview/chatbot muestran el mismo número sin que nadie lo copie a mano.
  */
-
-function chatbotAddonPrecio(): string {
-  return `Bs ${fmtBs(CHATBOT_PLAN.setup)} + Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes`;
-}
 
 export default function PreviewPrecios() {
   return (
@@ -125,9 +119,7 @@ export default function PreviewPrecios() {
                     )}
                   </span>
                   <p className={s.rowText}>{addon.copy}</p>
-                  <span className={s.rowPrice}>
-                    {esChatbot ? chatbotAddonPrecio() : addon.precio}
-                  </span>
+                  <span className={s.rowPrice}>{addon.precio}</span>
                 </div>
               );
             })}

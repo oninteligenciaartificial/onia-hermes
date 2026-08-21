@@ -16,10 +16,13 @@
  *    recurringInvoicesEnabled desde professional · inventoryIncluded en todos)
  *  - contabilidad y RRHH ..... lib/plan-limits.ts:416-435 (basico desde Basico,
  *    completa desde Profesional — montan sobre los mismos umbrales de reportes)
- *  - add-ons ................. lib/pricing.ts (chatbot 300+200 / 1.500+550 /
- *    desde 3.500+900 · agenda publica 150 · usuario extra 70 (max 3 en Basico) ·
- *    inventario avanzado 180 · instancia privada desde 4.500+900 · Grupo
- *    implementacion desde 3.500)
+ *  - add-ons ................. lib/pricing.ts (agenda publica 150 · usuario
+ *    extra 70 (max 3 en Basico) · inventario avanzado 180 · instancia privada
+ *    desde 4.500+900 · Grupo implementacion desde 3.500). El CHATBOT no vive
+ *    aca: su precio sale de content/chatbot-precios.ts, que es su fuente unica
+ *    (2026-08-21: Bs 390/mes sin instalacion; antes este archivo publicaba
+ *    "desde 300+200" y chatbot-precios.ts "1.500+1.490" — dos precios vivos
+ *    del mismo add-on).
  *  - prueba gratis ........... lib/subscription/plan-state.ts (14 dias sin
  *    tarjeta, corriendo con plan `professional`; al vencer queda en solo
  *    lectura, no se borra nada)
@@ -36,6 +39,8 @@
  * digitales como salto de plan (no estan gateados por plan), y la pasarela de
  * cobro (`gatewayEnabled: false` en los cinco planes).
  */
+
+import { precioAddonChatbot } from "@/content/chatbot-precios";
 
 export type PlanId = "basico" | "pro" | "full";
 
@@ -173,8 +178,8 @@ export interface AddOn {
 export const ADDONS: readonly AddOn[] = [
   {
     nombre: "Chatbot de WhatsApp",
-    copy: "Tres niveles, desde recordatorios con reglas fijas hasta un bot con IA que responde, califica y agenda. Se suma a cualquier plan.",
-    precio: "Desde Bs 300 de instalación + Bs 200/mes",
+    copy: "Contesta al instante a cualquier hora con la información real de tu negocio, y pasa a una persona lo que necesite decisión. Se suma a cualquier plan.",
+    precio: precioAddonChatbot(),
   },
   {
     nombre: "Reservas online",
@@ -217,7 +222,7 @@ export const NO_INCLUYE: readonly Excluido[] = [
   {
     que: "Los mensajes que WhatsApp te cobra",
     detalle:
-      "Si contratás el chatbot, Meta cobra por cada mensaje que TU negocio le manda primero al cliente. Se factura aparte, al costo de Meta más 20%.",
+      "Si contratás el chatbot, Meta cobra por cada mensaje que TU negocio le manda primero al cliente. Eso lo pagás directo a Meta, en tu propia cuenta: no lo facturamos nosotros ni le sumamos nada encima.",
   },
   {
     que: "Pauta publicitaria",

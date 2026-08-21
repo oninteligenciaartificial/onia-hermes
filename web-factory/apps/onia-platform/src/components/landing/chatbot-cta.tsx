@@ -85,13 +85,8 @@ export function ChatbotCta() {
                     <p>{stack.resuelve}</p>
                   </div>
                   <div className={styles.stackPrecio}>
-                    <b className={styles.mono}>
-                      {stack.setupDesde ? "desde " : ""}Bs {fmtBs(stack.setup)} inst.
-                    </b>
-                    <span className={styles.mono}>
-                      + Bs {fmtBs(stack.mensual)}/mes
-                      {stack.metaAparte ? " + Meta" : ""}
-                    </span>
+                    <b className={styles.mono}>Bs {fmtBs(stack.mensual)}/mes</b>
+                    <span className={styles.mono}>sin instalación</span>
                   </div>
                 </div>
               ))}

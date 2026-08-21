@@ -1,5 +1,6 @@
 import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { WA_URL_LANDING } from "@/lib/site";
+import { precioStack } from "@/content/chatbot-precios";
 import styles from "./landing.module.css";
 
 /**
@@ -28,7 +29,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿El chatbot de WhatsApp está incluido?",
-    a: "No, y no viene incluido en ningún plan: es un servicio aparte, con tres stacks desde Bs 300 de instalación + Bs 200/mes. El botón de WhatsApp de tu web sí va gratis. Antes de contratarlo publicamos los requisitos: necesitás un número dedicado, y los mensajes que tu negocio inicia los cobra Meta aparte.",
+    a: `No, y no viene incluido en ningún plan: es un servicio aparte, ${precioStack()}. El botón de WhatsApp de tu web sí va gratis. Antes de contratarlo publicamos los requisitos: necesitás un número dedicado, y los mensajes que tu negocio inicia se los pagás directo a Meta.`,
   },
   {
     q: "¿Mis datos son míos?",

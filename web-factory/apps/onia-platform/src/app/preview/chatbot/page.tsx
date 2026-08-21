@@ -2,7 +2,8 @@ import { Reveal } from "@/motion";
 import {
   CHATBOT_PLAN,
   precioStack,
-  CUPO_MENSUAL,
+  precioAnual,
+  META_NOTA,
   A_MEDIDA,
 } from "@/content/chatbot-precios";
 import { WA_URL_LANDING } from "@/lib/site";
@@ -10,9 +11,11 @@ import { Block, Shape, Btn, Kicker } from "../ui";
 import s from "../preview.module.css";
 
 /**
- * Apartado del CHATBOT. Montos SOLO de content/chatbot-precios.ts (que copia
- * onia-platform/lib/pricing.ts → WHATSAPP_ADDON, ratificado 2026-08-15). Sin
- * imágenes: la conversación se reserva como forma para un clip futuro.
+ * Apartado del CHATBOT. Montos y promesa SOLO de content/chatbot-precios.ts,
+ * que es la fuente única (pricing.ts → ADDONS lee de ahí). El copy vende lo
+ * que el bot HACE — contesta a cualquier hora con la info que el negocio
+ * cargó, no inventa, y deriva a una persona — y no nombra lo que no existe.
+ * Sin imágenes: la conversación se reserva como forma para un clip futuro.
  */
 export default function PreviewChatbot() {
   const bot = CHATBOT_PLAN;
@@ -27,9 +30,10 @@ export default function PreviewChatbot() {
                 El que escribe a las once ya tiene <em>respuesta</em>.
               </h1>
               <p className={s.lead}>
-                No es un menú de opciones: es un bot con IA entrenado con el
-                contenido real de tu negocio, que contesta, califica y te deriva
-                el caso con contexto.
+                Contesta al instante a cualquier hora —también el domingo y el
+                feriado— con la información real que vos publicaste. Y cuando
+                el caso necesita una persona, te lo pasa con la conversación
+                entera.
               </p>
               <div className={s.actions}>
                 <Btn href={WA_URL_LANDING} external>
@@ -114,10 +118,7 @@ export default function PreviewChatbot() {
             {precioStack(bot)}.
           </p>
           <p className={s.body} style={{ maxWidth: "48em" }}>
-            {CUPO_MENSUAL} conversaciones por mes incluidas: al llegar, corta —
-            nunca una factura sorpresa. Lo que Meta cobre por los mensajes que
-            iniciás va aparte; responder dentro de las 24 horas desde que el
-            cliente escribe no lo cobra Meta. {A_MEDIDA}
+            O {precioAnual(bot)}. {META_NOTA} {A_MEDIDA}
           </p>
           <div className={s.actions}>
             <Btn href={WA_URL_LANDING} external>

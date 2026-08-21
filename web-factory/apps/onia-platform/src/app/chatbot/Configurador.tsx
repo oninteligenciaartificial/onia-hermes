@@ -4,9 +4,9 @@ import { useState } from "react";
 import { CountUp } from "@/motion";
 import {
   CHATBOT_STACKS,
-  CUPO_MENSUAL,
-  META_MARKUP_PCT,
+  META_NOTA,
   fmtBs,
+  precioAnual,
   precioStack,
   type StackId,
 } from "@/content/chatbot-precios";
@@ -24,7 +24,7 @@ import styles from "./configurador.module.css";
  * ningún número.
  */
 export function Configurador() {
-  const [elegido, setElegido] = useState<StackId>("ia");
+  const [elegido, setElegido] = useState<StackId>("whatsapp");
   const stack =
     CHATBOT_STACKS.find((s) => s.id === elegido) ?? CHATBOT_STACKS[0];
 
@@ -58,10 +58,7 @@ export function Configurador() {
                   {s.destacado ? " · el más pedido" : ""}
                 </span>
                 <span className={styles.presetNombre}>{s.nombre}</span>
-                <span className={styles.presetRes}>
-                  {s.setupDesde ? "desde " : ""}Bs {fmtBs(s.setup)} inst. + Bs{" "}
-                  {fmtBs(s.mensual)}/mes
-                </span>
+                <span className={styles.presetRes}>{precioStack(s)}</span>
               </button>
             ))}
           </div>
@@ -130,10 +127,8 @@ export function Configurador() {
               </span>
             </li>
             <li className={styles.linea}>
-              <span>Instalación, una sola vez</span>
-              <span className={styles.lineaMonto}>
-                {stack.setupDesde ? "desde " : ""}Bs {fmtBs(stack.setup)}
-              </span>
+              <span>Instalación</span>
+              <span className={styles.lineaMonto}>sin costo</span>
             </li>
           </ul>
           <p className={styles.total} aria-hidden>
@@ -146,19 +141,12 @@ export function Configurador() {
               estático es el que cambia una vez por interacción. */}
           <span className={styles.srOnly} aria-live="polite">
             {stack.nivel}, {stack.nombre}: {fmtBs(stack.mensual)} bolivianos al
-            mes más {fmtBs(stack.setup)} de instalación
+            mes, sin costo de instalación
           </span>
           <p className={styles.instalacion}>
-            + {stack.setupDesde ? "desde " : ""}Bs {fmtBs(stack.setup)} de
-            instalación, una sola vez.
+            Sin costo de instalación. O {precioAnual(stack)}.
           </p>
-          <p className={styles.ctaMicro}>
-            Envía hasta {CUPO_MENSUAL} conversaciones por mes; al llegar al
-            tope se frena hasta el mes siguiente.{" "}
-            {stack.metaAparte
-              ? `Responder a quien te escribe es gratis. Cada mensaje que tu negocio inicia lo cobra Meta y se factura aparte, a su costo más ${META_MARKUP_PCT}%.`
-              : "Esos mensajes van incluidos: en este stack no hay factura de Meta aparte."}
-          </p>
+          <p className={styles.ctaMicro}>{META_NOTA}</p>
           <p className={styles.ctaMicro}>
             El pedido se manda abajo, con los requisitos a la vista.
           </p>
