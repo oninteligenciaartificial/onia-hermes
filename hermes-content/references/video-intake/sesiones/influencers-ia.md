@@ -120,6 +120,62 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## J6 · La biblioteca de encuadres — nueve angulos con su uso comercial
+
+```text
+Contexto: un carrusel muestra NUEVE angulos de camara sostenidos sobre la MISMA modelo, y cada
+uno viene emparejado con su USO COMERCIAL. Los prompts estan detras del cebo, pero la taxonomia
+esta entera en las laminas -- y la taxonomia es la mitad que casi nadie escribe.
+
+LOS NUEVE PARES angulo -> uso, leidos de las laminas:
+  low angle         -> poder / lujo    (contrapicado desde escalon inferior, lineas de
+                                        arquitectura convergiendo)
+  high angle        -> lifestyle       (picado 45 grados sobre mesa, sujeto mirando desde abajo)
+  over-the-shoulder -> narrativa       (sujeto de espaldas 3/4, la MESA es la protagonista)
+  extreme close-up  -> belleza         (media cara, poro y textura visibles)
+  eye-level         -> editorial       (simetria frontal, fondo neutro)
+  dutch             -> streetwear      (horizonte inclinado ~15 grados, neon mojado)
+  wide              -> campana         (figura entera chica dentro de un interior grande)
+  side profile      -> perfume         (perfil puro 90 grados sobre color plano saturado)
+  bird's-eye        -> editorial       (cenital cerrado, la clavicula abre el encuadre)
+
+DOS OBSERVACIONES QUE VALEN MAS QUE LA LISTA:
+1. El EXTREME CLOSE-UP es la toma que DELATA al generador. Si vas a usarla, es donde mas hay que
+   mirar el resultado antes de publicar.
+2. La consistencia de cara SE SOSTIENE EN LAS TOMAS DE ESTUDIO Y SE DEGRADA EN LAS DE ESCENARIO.
+   En las de fondo neutro la cara aguanta; en la escalera y en la calle la estructura del rostro
+   y la edad aparente se corren. Regla: CUANDO LA ESCENA MANDA MAS QUE LA REFERENCIA, LA CARA SE
+   PIERDE. Para Lucia, priorizar fondos simples cuando la cara tiene que ser reconocible.
+
+METODO DEL CARRUSEL, que tambien se copia: la lamina 2 fija el CANON (retrato frontal, fondo
+blanco liso, blazer negro) y recien despues vienen las variaciones. La referencia primero, las
+derivadas despues.
+
+Tarea:
+1. Escribi la biblioteca de encuadres: los 9, cada uno como un FRAGMENTO DE TEXTO fijo listo para
+   concatenar al prompt base de Lucia, con su caso de uso al lado. Guardala donde ya vivan las
+   recetas -- candidata: junto al molde de 11 bloques que ya esta en LUCIA.md. NO crees carpeta
+   nueva y NO armes un doc al lado del que manda.
+2. Anota las dos observaciones de arriba como reglas, sobre todo la de escena vs referencia.
+3. Marca cuales de los 9 NO convienen para Lucia y por que.
+
+OJO, ANTES DE ESCRIBIR: el archivo que manda sobre Lucia es
+hermes-content/references/modelos/lucia/LUCIA.md y su §6 ya tiene un molde de 11 bloques con 4
+colas de camara (R1 Feed / R2 Copy-space / R3 UGC / R4 Beauty). Los 9 encuadres se suman a ESO,
+no lo reemplazan. Si algo choca, gana LUCIA.md.
+
+Consistencia de cara: el unico metodo verificado sigue siendo el ancla + Element. Nada de este
+lote lo reemplaza.
+
+GASTO: no generes. La biblioteca es texto y sale gratis. La tanda de prueba con la cara de Lucia
+necesita OK explicito de Sergio, caso por caso.
+
+LISTO = los 9 encuadres escritos como fragmentos concatenables con su uso comercial, sumados al
+molde que ya existe en LUCIA.md, las dos reglas anotadas, y la lista de cuales no van para Lucia.
+```
+
+---
+
 ## H2 · El primer `ad_reference` — que la herramienta replique el escenario
 
 ```text
@@ -378,7 +434,7 @@ concretos a como publicamos.
 ## A4 · Estructura de escenas para video IA — preparar, no generar
 
 ```text
-Sesion: marketing (Arthur). git branch --show-current primero.
+Sesion: marketing. git branch --show-current primero.
 TAREA UNICA: escribir UN guion con la estructura de escenas que encontramos, SIN generar nada.
 Formato (de 2026-08-11-seedance-prompt-por-escenas-timestamps.md, sale de una sola foto):
     Scene N — <nombre> (Xs-Ys)

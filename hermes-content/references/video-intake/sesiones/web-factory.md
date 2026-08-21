@@ -120,6 +120,71 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## J5 · Interiores con Nano Banana — cuatro recetas image-to-image
+
+```text
+Contexto: un carrusel regala CUATRO recetas image-to-image de diseno de interiores, con los
+prompts literales. Ficha y datos:
+hermes-content/references/video-intake/2026-08-20-sintesis-lote-13.md
+hermes-content/references/video-intake/analisis/2026-08-20-items.json (item DcEYP7tjsIA)
+
+LOS CUATRO PROMPTS, literales de las laminas:
+  1. clay/wireframe 3D -> foto fotorrealista del MISMO encuadre:
+     "show me the AD magazine photography version of image 1."
+  2. cambiar TODO el mobiliario contra un moodboard:
+     "in image 1, swap all furniture with the furniture shown in image 2"
+  3. moodboard de productos -> escena amueblada desde cero:
+     "In a minimalist dark wooden living room, add all products and furniture shown on image 1.
+      Add also other objects to make the space feels alive."
+  4. plano 2D de linea -> render cenital tipo casa de munecas: mismo prompt que el 3, cambiando
+     la descripcion del ambiente.
+
+LOS CUATRO MECANISMOS — esto es el conocimiento, no los prompts:
+  a. El catalogo de muebles va como UNA SOLA IMAGEN-COLLAGE, no como N referencias sueltas.
+  b. El prompt direcciona POR INDICE ("image 1", "image 2"), asi que EL ORDEN DE CARGA de las
+     referencias es parte del prompt. Cambiar el orden cambia el resultado.
+  c. ENCADENA: la salida de un paso es la "image 1" del siguiente. Asi conserva la arquitectura
+     (paneles, cuadro, curva del cielorraso) mientras reemplaza todo el mobiliario.
+     LA CONSISTENCIA NO LA SOSTIENE EL TEXTO NI EL SEED: LA SOSTIENE LA REFERENCIA.
+  d. El texto es CORTO y SIN JERGA FOTOGRAFICA: ni lente, ni f-stop, ni esquema de luz. La
+     instruccion de estilo entera es un nombre propio -- "the AD magazine photography version".
+     Delega el estilo en una referencia cultural que el modelo ya tiene, en vez de describirla.
+
+  OJO, TENSION A PROPOSITO con el prompt G6 (plantilla de foto realista de 8 bloques largos con
+  negative prompt): las dos sirven, para cosas distintas. Bloques largos = generar desde cero.
+  Referencia nombrada + frase corta = EDITAR sobre algo que ya existe. No las mezcles.
+
+VERIFICADO EN LA CUENTA el 2026-08-20 (volve a consultarlo vos: una verificacion tiene fecha de
+vencimiento): existen nano_banana, nano_banana_pro, nano_banana_2, nano_banana_2_lite y
+nano_banana_2_shots, todos de Google, con rol image_references SIN tope declarado de cantidad --
+que es exactamente lo que estos prompts necesitan para direccionar "image 1" e "image 2".
+nano_banana_2 y nano_banana_pro dan 1k/2k/4k. Alternativa para el swap: seedream_v5_pro tiene
+flag is_inpaint.
+
+POR QUE ESTO ES DE WEB-FACTORY Y NO DE INFLUENCERS: es un SERVICIO VENDIBLE a un rubro que
+existe en Bolivia -- inmobiliaria, estudio de arquitectura, muebleria. Y el insumo es lo que el
+cliente YA TIENE: un plano, una foto del ambiente vacio, un catalogo de productos. No hace falta
+sesion de fotos ni render 3D pago.
+
+Tarea:
+1. Escribi la receta de las 4 transformaciones como doc reusable, donde ya vivan las recetas de
+   imagen. Busca primero; no crees carpeta nueva.
+2. Anota los 4 mecanismos como REGLAS, no como datos sueltos. El (b) y el (c) son los que nadie
+   escribe y los que hacen la diferencia.
+3. Preparalo como oferta: que le pedimos al cliente (plano / foto / catalogo), que le devolvemos,
+   y en cuantas pasadas. Sin precio -- eso lo decide Sergio.
+4. Verifica vos el catalogo antes de prometer nada, y anota la fecha de tu verificacion.
+
+GASTO: generar imagen esta permitido y es barato. Aun asi, si vas a hacer una tanda de prueba,
+avisa el costo estimado antes. unlim.available devolvio false, o sea cada generacion sale de
+creditos.
+
+LISTO = la receta de 4 transformaciones escrita con sus 4 mecanismos como reglas, el catalogo
+re-verificado por vos con fecha, y la oferta descrita en terminos de que pide y que entrega.
+```
+
+---
+
 ## J1 · DESIGN.md por cliente — el sistema de diseño como archivo del repo
 
 ```text

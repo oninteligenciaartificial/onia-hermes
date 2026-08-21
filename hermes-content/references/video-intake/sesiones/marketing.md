@@ -1,4 +1,4 @@
-# Sesión marketing (Arthur)
+# Sesión marketing
 
 > **Este archivo es la raíz de la sesión `marketing`.** Todo lo que esta sesión tiene que hacer
 > de lo que salió del análisis de reels está acá, completo. No hace falta abrir otro archivo.
@@ -179,7 +179,7 @@ generaciones pagas.
 ## A1 · Portafolio antes/despues — la que mas rapido toca la caja
 
 ```text
-Sesion: marketing (Arthur). git branch --show-current primero.
+Sesion: marketing. git branch --show-current primero.
 TAREA UNICA: 3 piezas verticales antes/despues de webs YA entregadas. Nada mas.
 Formato (de hermes-content/references/video-intake/2026-08-09-web-antes-despues-find-real-estate.md):
   0-4 s wireframe gris de NUESTRO diseno, rotulo "Cliente: necesito una web de X"
@@ -270,7 +270,7 @@ Sale de [8 industrias = 8 agentes](../2026-08-12-ocho-industrias-ocho-agentes-ia
 del generador de propuestas que ya existe. Cero creditos, cero plataformas, cero token bloqueado.
 
 ```text
-Sesion: marketing (Arthur) / ventas. git branch --show-current primero.
+Sesion: marketing / ventas. git branch --show-current primero.
 TAREA UNICA: escribir el material de venta de los SEIS rubros vendibles con dos moldes ajenos
 verificados, sin abrir rubros nuevos ni generar video.
   1. Una placa por rubro (dental · comercio minorista · importadora · estetica · veterinaria ·
@@ -297,7 +297,7 @@ El copy original es rioplatense: reescribir en uso boliviano antes de que lo vea
 ## A2 · Motor comentario->DM, arrancando a mano
 
 ```text
-Sesion: marketing (Arthur). git branch --show-current primero.
+Sesion: marketing. git branch --show-current primero.
 TAREA UNICA: montar UN ciclo completo de captacion por comentario, manual.
 Hallazgo que lo justifica: 4 de 6 reels analizados cierran igual — "comenta X y te mando la
 guia". Convierte contenido en lead con nombre, no en like. Y varios de los recursos que ellos
@@ -318,7 +318,7 @@ que termine en WhatsApp cambia de costo ese dia.
 ## A3 · Carruseles con el pipeline propio (y cerrar el gap de formatos)
 
 ```text
-Sesion: marketing (Arthur). git branch --show-current primero.
+Sesion: marketing. git branch --show-current primero.
 TAREA UNICA: producir 2 carruseles con el sistema que YA tenemos
 (hermes-content/carousels/CAROUSEL_SYSTEM.md + scripts/carousel_render.js + skill carruseles-onia),
 y de paso cerrar un gap real: los 4 packs estan fijos en 1080x1350; faltan cuadrado (1080x1080)
@@ -336,7 +336,7 @@ gasto y duplicacion. Analizado y descartado en 2026-08-11-open-carrusel-claude-v
 ## A5 · Meta Ads — dejar todo listo sin encender nada
 
 ```text
-Sesion: marketing (Arthur). git branch --show-current primero.
+Sesion: marketing. git branch --show-current primero.
 TAREA UNICA: dejar preparadas creatividades y publicos para la primera campana. SIN lanzar.
 LISTO = un set de creatividades (copy + imagen, imagen es gasto cero) y la definicion de
 publico escrita, todo revisable por Sergio.
@@ -357,7 +357,7 @@ Esto responde a la pregunta de Sergio: si, sirve ahora. Reconstruir un reel de U
 si mismo material publicable, y es el mas barato que tenemos — sin cara, sin voz, sin creditos.
 
 ```text
-Sesion: marketing (Arthur). git branch --show-current primero.
+Sesion: marketing. git branch --show-current primero.
 TAREA UNICA: 3 piezas verticales a partir de los patrones ya reconstruidos en
 hermes-content/references/ui-patterns/ (upload-button, checkout-card, floating-cart,
 dropzone-progress, chat-widget, sidebar-nav).

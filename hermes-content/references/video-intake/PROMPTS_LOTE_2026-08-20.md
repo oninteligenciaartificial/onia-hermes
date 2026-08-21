@@ -299,3 +299,125 @@ inventadas, y con el metodo escrito para agregarle uno nuevo cuando aparezca.
 
 ---
 
+
+## J5 · Interiores con Nano Banana — cuatro recetas image-to-image
+
+```text
+Contexto: un carrusel regala CUATRO recetas image-to-image de diseno de interiores, con los
+prompts literales. Ficha y datos:
+hermes-content/references/video-intake/2026-08-20-sintesis-lote-13.md
+hermes-content/references/video-intake/analisis/2026-08-20-items.json (item DcEYP7tjsIA)
+
+LOS CUATRO PROMPTS, literales de las laminas:
+  1. clay/wireframe 3D -> foto fotorrealista del MISMO encuadre:
+     "show me the AD magazine photography version of image 1."
+  2. cambiar TODO el mobiliario contra un moodboard:
+     "in image 1, swap all furniture with the furniture shown in image 2"
+  3. moodboard de productos -> escena amueblada desde cero:
+     "In a minimalist dark wooden living room, add all products and furniture shown on image 1.
+      Add also other objects to make the space feels alive."
+  4. plano 2D de linea -> render cenital tipo casa de munecas: mismo prompt que el 3, cambiando
+     la descripcion del ambiente.
+
+LOS CUATRO MECANISMOS — esto es el conocimiento, no los prompts:
+  a. El catalogo de muebles va como UNA SOLA IMAGEN-COLLAGE, no como N referencias sueltas.
+  b. El prompt direcciona POR INDICE ("image 1", "image 2"), asi que EL ORDEN DE CARGA de las
+     referencias es parte del prompt. Cambiar el orden cambia el resultado.
+  c. ENCADENA: la salida de un paso es la "image 1" del siguiente. Asi conserva la arquitectura
+     (paneles, cuadro, curva del cielorraso) mientras reemplaza todo el mobiliario.
+     LA CONSISTENCIA NO LA SOSTIENE EL TEXTO NI EL SEED: LA SOSTIENE LA REFERENCIA.
+  d. El texto es CORTO y SIN JERGA FOTOGRAFICA: ni lente, ni f-stop, ni esquema de luz. La
+     instruccion de estilo entera es un nombre propio -- "the AD magazine photography version".
+     Delega el estilo en una referencia cultural que el modelo ya tiene, en vez de describirla.
+
+  OJO, TENSION A PROPOSITO con el prompt G6 (plantilla de foto realista de 8 bloques largos con
+  negative prompt): las dos sirven, para cosas distintas. Bloques largos = generar desde cero.
+  Referencia nombrada + frase corta = EDITAR sobre algo que ya existe. No las mezcles.
+
+VERIFICADO EN LA CUENTA el 2026-08-20 (volve a consultarlo vos: una verificacion tiene fecha de
+vencimiento): existen nano_banana, nano_banana_pro, nano_banana_2, nano_banana_2_lite y
+nano_banana_2_shots, todos de Google, con rol image_references SIN tope declarado de cantidad --
+que es exactamente lo que estos prompts necesitan para direccionar "image 1" e "image 2".
+nano_banana_2 y nano_banana_pro dan 1k/2k/4k. Alternativa para el swap: seedream_v5_pro tiene
+flag is_inpaint.
+
+POR QUE ESTO ES DE WEB-FACTORY Y NO DE INFLUENCERS: es un SERVICIO VENDIBLE a un rubro que
+existe en Bolivia -- inmobiliaria, estudio de arquitectura, muebleria. Y el insumo es lo que el
+cliente YA TIENE: un plano, una foto del ambiente vacio, un catalogo de productos. No hace falta
+sesion de fotos ni render 3D pago.
+
+Tarea:
+1. Escribi la receta de las 4 transformaciones como doc reusable, donde ya vivan las recetas de
+   imagen. Busca primero; no crees carpeta nueva.
+2. Anota los 4 mecanismos como REGLAS, no como datos sueltos. El (b) y el (c) son los que nadie
+   escribe y los que hacen la diferencia.
+3. Preparalo como oferta: que le pedimos al cliente (plano / foto / catalogo), que le devolvemos,
+   y en cuantas pasadas. Sin precio -- eso lo decide Sergio.
+4. Verifica vos el catalogo antes de prometer nada, y anota la fecha de tu verificacion.
+
+GASTO: generar imagen esta permitido y es barato. Aun asi, si vas a hacer una tanda de prueba,
+avisa el costo estimado antes. unlim.available devolvio false, o sea cada generacion sale de
+creditos.
+
+LISTO = la receta de 4 transformaciones escrita con sus 4 mecanismos como reglas, el catalogo
+re-verificado por vos con fecha, y la oferta descrita en terminos de que pide y que entrega.
+```
+
+---
+
+## J6 · La biblioteca de encuadres — nueve angulos con su uso comercial
+
+```text
+Contexto: un carrusel muestra NUEVE angulos de camara sostenidos sobre la MISMA modelo, y cada
+uno viene emparejado con su USO COMERCIAL. Los prompts estan detras del cebo, pero la taxonomia
+esta entera en las laminas -- y la taxonomia es la mitad que casi nadie escribe.
+
+LOS NUEVE PARES angulo -> uso, leidos de las laminas:
+  low angle         -> poder / lujo    (contrapicado desde escalon inferior, lineas de
+                                        arquitectura convergiendo)
+  high angle        -> lifestyle       (picado 45 grados sobre mesa, sujeto mirando desde abajo)
+  over-the-shoulder -> narrativa       (sujeto de espaldas 3/4, la MESA es la protagonista)
+  extreme close-up  -> belleza         (media cara, poro y textura visibles)
+  eye-level         -> editorial       (simetria frontal, fondo neutro)
+  dutch             -> streetwear      (horizonte inclinado ~15 grados, neon mojado)
+  wide              -> campana         (figura entera chica dentro de un interior grande)
+  side profile      -> perfume         (perfil puro 90 grados sobre color plano saturado)
+  bird's-eye        -> editorial       (cenital cerrado, la clavicula abre el encuadre)
+
+DOS OBSERVACIONES QUE VALEN MAS QUE LA LISTA:
+1. El EXTREME CLOSE-UP es la toma que DELATA al generador. Si vas a usarla, es donde mas hay que
+   mirar el resultado antes de publicar.
+2. La consistencia de cara SE SOSTIENE EN LAS TOMAS DE ESTUDIO Y SE DEGRADA EN LAS DE ESCENARIO.
+   En las de fondo neutro la cara aguanta; en la escalera y en la calle la estructura del rostro
+   y la edad aparente se corren. Regla: CUANDO LA ESCENA MANDA MAS QUE LA REFERENCIA, LA CARA SE
+   PIERDE. Para Lucia, priorizar fondos simples cuando la cara tiene que ser reconocible.
+
+METODO DEL CARRUSEL, que tambien se copia: la lamina 2 fija el CANON (retrato frontal, fondo
+blanco liso, blazer negro) y recien despues vienen las variaciones. La referencia primero, las
+derivadas despues.
+
+Tarea:
+1. Escribi la biblioteca de encuadres: los 9, cada uno como un FRAGMENTO DE TEXTO fijo listo para
+   concatenar al prompt base de Lucia, con su caso de uso al lado. Guardala donde ya vivan las
+   recetas -- candidata: junto al molde de 11 bloques que ya esta en LUCIA.md. NO crees carpeta
+   nueva y NO armes un doc al lado del que manda.
+2. Anota las dos observaciones de arriba como reglas, sobre todo la de escena vs referencia.
+3. Marca cuales de los 9 NO convienen para Lucia y por que.
+
+OJO, ANTES DE ESCRIBIR: el archivo que manda sobre Lucia es
+hermes-content/references/modelos/lucia/LUCIA.md y su §6 ya tiene un molde de 11 bloques con 4
+colas de camara (R1 Feed / R2 Copy-space / R3 UGC / R4 Beauty). Los 9 encuadres se suman a ESO,
+no lo reemplazan. Si algo choca, gana LUCIA.md.
+
+Consistencia de cara: el unico metodo verificado sigue siendo el ancla + Element. Nada de este
+lote lo reemplaza.
+
+GASTO: no generes. La biblioteca es texto y sale gratis. La tanda de prueba con la cara de Lucia
+necesita OK explicito de Sergio, caso por caso.
+
+LISTO = los 9 encuadres escritos como fragmentos concatenables con su uso comercial, sumados al
+molde que ya existe en LUCIA.md, las dos reglas anotadas, y la lista de cuales no van para Lucia.
+```
+
+---
+

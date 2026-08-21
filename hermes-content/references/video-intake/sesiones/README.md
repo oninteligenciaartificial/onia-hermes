@@ -31,7 +31,7 @@ está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, 
 
 | Archivo | Sesión | Qué lleva | Primero |
 |---|---|---|---|
-| [marketing.md](marketing.md) | marketing (Arthur) | **G3 el cliente real con la pantalla sustituida** · A1 portafolio · E7 demo de 17 s · D4 espiar la pauta · C2 kit por rubro · A2 comentario→DM · A3 carruseles · A5 Meta Ads · A6 patrones como contenido · E11 demo en una toma | **G3** — la prueba de venta que ningún demo consigue; después A1 |
+| [marketing.md](marketing.md) | marketing | **G3 el cliente real con la pantalla sustituida** · A1 portafolio · E7 demo de 17 s · D4 espiar la pauta · C2 kit por rubro · A2 comentario→DM · A3 carruseles · A5 Meta Ads · A6 patrones como contenido · E11 demo en una toma | **G3** — la prueba de venta que ningún demo consigue; después A1 |
 | [influencers-ia.md](influencers-ia.md) | `INFLUENCERS IA` | **H2 primer ad_reference** · **G1 las dos plantillas + Marketing Studio** · **G6 foto realista** · E9 los 5 bloques del prompt + 3D estilizado · E6 la etiqueta de IA · A4 escenas · guion por escenas · los 12 puntos de Higgsfield | **G1** — separa cine de UGC antes de escribir nada |
 | [editor-de-videos.md](editor-de-videos.md) | `editor de videos` | **J3 anuncio sin cara ni voz** · **H3 molde de 6 actos** · **G2 molde UGC de anuncio** · E8 slate/cara con HyperFrames · E10 formato gemelo · animar interfaz | cualquiera: los dos cuestan **cero créditos** |
 
