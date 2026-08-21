@@ -1,7 +1,7 @@
 # LUCÍA — archivo único
 
 > **Este archivo manda.** Todo lo que se decide sobre Lucía se escribe acá. Si otro doc dice
-> algo distinto, gana este. Última edición: 2026-08-13.
+> algo distinto, gana este. Última edición: 2026-08-20.
 >
 > Las decisiones abiertas están marcadas 🟡 con opciones numeradas. Cuando Sergio elige, se
 > reemplaza el bloque por la elegida y se marca ✅ con la fecha.
@@ -369,6 +369,62 @@ texture with visible pores. She wears a cream linen shirt, straight jeans and a 
 chain necklace, seen from the waist up, mid-sentence talking. Available window light only,
 slightly imperfect handheld framing, everyday vertical phone photo.
 ```
+
+---
+
+## 6-bis. Biblioteca de encuadres (2026-08-20) — se SUMA al molde, no lo reemplaza
+
+Nueve pares **ángulo → uso comercial** leídos de un carrusel ajeno (los prompts estaban detrás
+del cebo; la taxonomía no, y la taxonomía es la mitad que nadie escribe). Cada encuadre
+aprobado es un **fragmento fijo** que va en el hueco `[cámara]` del molde del §6, igual que
+R1–R4. **Si algo choca con el §6, gana el §6.**
+
+| Encuadre | Uso comercial | Para Lucía | Cola de cámara (texto fijo) |
+|---|---|---|---|
+| **E1 eye-level** | editorial | ✅ | `Eye-level frontal shot, symmetrical composition, she looks straight into the camera, plain neutral background, 50mm` |
+| **E2 high angle** | lifestyle | ✅ | `High angle from about 45 degrees above her table, she looks up at the camera, her notebook and a terracotta mug on the table, 35mm` |
+| **E3 over-the-shoulder** | narrativa | ✅ | `Over-the-shoulder shot from behind her at a three-quarter angle, her back and shoulder framing the foreground, focus on the worn wooden table she is working at, 35mm` |
+| **E4 wide** | campaña | ✅ | `Wide shot, her full figure small within a large interior, generous negative space around her, 35mm` |
+| **E5 side profile** | perfume → acá, portadas | ✅ | `Pure 90-degree side profile, head and shoulders, against a flat saturated terracotta wall, soft even light, 85mm` |
+| **E6 bird's-eye** | editorial | ✅ con QA doble | `Overhead bird's-eye view, tight framing on her face and collarbone, she lies on a plain light fabric background, 50mm` |
+| extreme close-up (media cara) | belleza | ⛔ | — |
+| low angle | poder / lujo | ⛔ | — |
+| dutch (~15°, neón mojado) | streetwear | ⛔ | — |
+
+Notas de uso: **E1** empalma con R2 (fondo neutro = la cara aguanta, ver regla 2). **E2/E3**
+son las que muestran a Lucía *trabajando* sin nombrar pantallas — la mesa es la protagonista.
+**E4** es la base para texto encima con HyperFrames; a esa distancia la cara no carga la
+identidad: la cargan pelo, postura y el terracota en cuadro. **E5** se QA-ea contra los 2
+perfiles del stack de 10 ángulos. **E6** lleva QA reforzada: el escorzo cenital es donde más
+se deforma un rostro generado.
+
+### Los tres que NO van, y por qué
+
+| Encuadre | Motivo |
+|---|---|
+| **Extreme close-up media cara** | Es la toma que más delata al generador (regla 1). Y el uso "belleza" **ya está cubierto por R4** (§6), que es primer plano cabeza-hombros probado el 15-ago. La versión más cerrada no aporta un uso que R4 no tenga y suma el máximo riesgo. R4 queda; esto no lo reemplaza |
+| **Low angle poder/lujo** | El molde entero está construido para leer "foto de celular sacada por una amiga" (bloques 8, 9 y 11 del §6). Un contrapicado con arquitectura convergiendo lee campaña de lujo — o sea humo, exactamente contra lo que Lucía dice estar (§1-bis) |
+| **Dutch con neón mojado** | El neón nocturno no existe en su paleta fija (§1-quater) ni en su luz (cálida, diurna, Santa Cruz). Su streetwear aprobado es de día: mercado, vereda, café (§3). Es la misma razón por la que `nightout` quedó en reserva |
+
+### Dos reglas que valen más que la lista
+
+1. **El extreme close-up delata al generador.** Cuanto más cerca, más se ve lo sintético:
+   poro, vello, transición pelo-piel. R4 sigue vigente porque está probado, pero **toda pieza
+   R4 pasa el QA del §8 con doble atención antes de publicar** — es la toma donde más hay que
+   mirar.
+2. **La cara aguanta en estudio y se corre en escenario.** Fondo neutro: la estructura del
+   rostro se sostiene. Escalera, calle, interior cargado: la estructura y la edad aparente se
+   corren. **Cuando la escena manda más que la referencia, la cara se pierde.** Para Lucía:
+   cara reconocible (primeros planos, portadas) = fondo simple (E1, E5, R2, R4); escena
+   cargada = cara chica en cuadro (E4) o de espaldas (E3).
+
+### El método del carrusel confirma el nuestro, no lo cambia
+
+El carrusel fija primero el **canon** (retrato frontal, fondo liso) y recién después deriva
+las variaciones. Es exactamente el esquema que Lucía ya tiene: ancla `452d8375` para generar
+(§2) + stack de 10 ángulos como vara (§8). **Nada de este lote reemplaza al ancla: el único
+método verificado de consistencia de cara sigue siendo ancla + molde §6 + QA §8.** Los
+encuadres son colas de cámara, no un método nuevo.
 
 ---
 
