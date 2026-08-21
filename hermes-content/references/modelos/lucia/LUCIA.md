@@ -345,6 +345,13 @@ generada, que es **la luz demasiado perfecta y la óptica demasiado limpia.**
 | 8 | **Luz como DEFECTO** | `Imperfect available light: strong highlights, slightly washed-out tones, uneven exposure across the frame, one side of her face brighter than the other.` |
 | 9 | **Óptica de celular** | `Minor chromatic aberration at the image edges, characteristic of a modern smartphone camera with a slightly wide lens. Slight motion softness, no tripod steadiness.` |
 | 10 | **Paleta** | `Color palette limited to #C89F82 #8A5A3B #E4714E #EFE7DA #D8C9B0 #B08246 #4E8C87 #2E2A26.` |
+
+> ⚠️ **Bloque 10 y la mitad del 8, OPCIONALES desde el 2026-08-21.** Sergio detectó que las
+> imágenes salían "con un filtro de color": lo causan la paleta limitada de 8 tonos (bloque 10)
+> y el *"slightly washed-out tones"* del bloque 8 — juntos producen un grade editorial fade.
+> Para el feed natural de Lucía: **omitir el bloque 10** y reemplazar esa frase del 8 por
+> `NATURAL TRUE-TO-LIFE COLORS, no color grading, no filter look, accurate white balance`.
+> El bloque 10 queda solo para piezas que PIDEN grade (campaña, carrusel con overlay).
 | 11 | Cierre | `Shot on iPhone, natural light, slight film grain, no beauty filter, no smoothing. Not a 3D render, not AI-looking, not plastic, not doll-like, not airbrushed. No brand logos, no text, no watermark.` |
 
 ⚠️ El bloque 11 lleva **negaciones**: funcionan en la vía `nano_banana_2` + Element. Con
