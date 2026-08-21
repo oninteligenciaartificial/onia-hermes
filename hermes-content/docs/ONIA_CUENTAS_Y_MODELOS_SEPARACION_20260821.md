@@ -49,3 +49,40 @@ Costo del casting: 3 × 2.00 cr. Costo del ancla: se cotiza al elegir.
 - La etiqueta de IA es obligatoria en toda cara sintética publicada.
 - Los Souls de Sergio siguen prohibidos para generación.
 - Generación de video sigue siendo caso por caso con OK explícito.
+
+---
+
+# ACTUALIZACION 21-ago (noche): entra la 3ra cuenta — la marca personal de Sergio
+
+Sergio pasó el plan "Sistema Sergio" de Samuel Aguilera (19-ago): marca personal
+`@sergio_urcullo` (IG 410 seg.) + `@sergiourcullom` (TikTok 574 seg.), 8 videos
+guionizados el mes 1, 2/semana, reto de los $5.000 al 31-dic. Samuel produce; nuestro
+sistema orquesta la infraestructura (comentario→DM, medición, comunidad).
+
+## El mapa completo de cuentas
+
+| | @oniahq | Lucía | Sergio (personal) |
+|---|---|---|---|
+| **Qué es** | LA marca. Vende sistemas | Influencer IA declarada. Alcance | Autoridad personal. 16 años + reto $5.000 |
+| **Quién produce** | Yo (motor carruseles + fotos) | Yo (ancla + kling natural / veo lite) | **Samuel** (graba Sergio real) |
+| **Pilares** | dolor→sistema, prueba, educación | "soy IA", detrás de escena, IA sin humo | 5/8 adaptadas · 1/8 historia · 2/8 informativas |
+| **Palabras CTA** | LISTA · SISTEMA | SISTEMA (con su voz) | EDICIÓN·SISTEMA·RETO·HIGGSFIELD·SKILL·CURSOS·RANKING |
+| **Destino del DM** | PDF/recursos + pipeline | recursos + `?src=lucia-ig-sistema` | comunidad WhatsApp del reto |
+| **Estado hoy** | ✅ cola llena hasta 09-sep | 🟡 lista para lanzar (falta OK) | 🔴 guiones listos, falta grabar + conectar DM |
+| **Identidad visual** | tokens Onia (tile verde) | natural, sin filtro | paleta Samuel: #0B0D0D/#17F28A, Archivo Black |
+
+## ⚠️ Colisión de palabra detectada: SISTEMA vive en las TRES cuentas
+
+El video 2 de Sergio pide SISTEMA; @oniahq y Lucía ya la usan. **Técnicamente no choca**
+(el workflow v8 rutea por entry_id de cada cuenta), pero el DM debe ser distinto por
+cuenta y la medición separa por cuenta. Regla nueva: **antes de asignar palabra a un
+video nuevo, revisar esta tabla** — la unicidad es POR CUENTA, no global.
+
+## Qué le falta a la cuenta de Sergio para enchufarse al sistema
+
+1. Conectar su IG/FB al workflow comentario→DM v8 (entry_id + 7 respuestas por palabra) —
+   necesita su cuenta como activo en el Business Manager o token propio.
+2. Comunidad de WhatsApp del reto creada (destino de TODOS sus DMs).
+3. UTM por video y por red (`?src=sergio-ig-reto` etc.) si el destino tiene link.
+4. Tracker público del reto $5.000 (módulo 08 del plan de Samuel) — candidato: página en
+   onia.com.bo o Notion público.
