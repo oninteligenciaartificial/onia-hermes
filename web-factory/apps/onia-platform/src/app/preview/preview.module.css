@@ -332,6 +332,14 @@
 .green .link:hover {
   color: #fff;
 }
+/* sobre el verde senal el link va en TINTA. Con --accent-ink daba 3,74:1
+   (medido con Playwright a 390/768/1440); en tinta pasa de 9:1. */
+.signalBlock .link {
+  color: var(--tinta);
+}
+.signalBlock .link:hover {
+  color: #000;
+}
 
 /* ---------------------------------------------------------------------- */
 /* Placeholder de FORMA — reserva el ratio del clip futuro (cero CLS)       */

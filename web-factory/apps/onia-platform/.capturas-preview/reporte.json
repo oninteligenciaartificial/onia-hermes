@@ -13,15 +13,6 @@
           "min": 3,
           "fg": "rgb(0, 210, 106)",
           "bg": "rgb(249,251,250)"
-        },
-        {
-          "texto": "O agendá una demo con horario →",
-          "cls": "preview_link__wgp8D",
-          "px": 16,
-          "ratio": 3.74,
-          "min": 4.5,
-          "fg": "rgb(1, 97, 65)",
-          "bg": "rgb(0,210,106)"
         }
       ]
     },
@@ -151,15 +142,6 @@
           "min": 4.5,
           "fg": "rgb(255, 255, 255)",
           "bg": "rgb(243,245,244)"
-        },
-        {
-          "texto": "O agendá una demo con horario →",
-          "cls": "preview_link__wgp8D",
-          "px": 17,
-          "ratio": 3.74,
-          "min": 4.5,
-          "fg": "rgb(1, 97, 65)",
-          "bg": "rgb(0,210,106)"
         }
       ]
     },
@@ -289,15 +271,6 @@
           "min": 4.5,
           "fg": "rgb(255, 255, 255)",
           "bg": "rgb(243,245,244)"
-        },
-        {
-          "texto": "O agendá una demo con horario →",
-          "cls": "preview_link__wgp8D",
-          "px": 18,
-          "ratio": 3.74,
-          "min": 4.5,
-          "fg": "rgb(1, 97, 65)",
-          "bg": "rgb(0,210,106)"
         }
       ]
     },
