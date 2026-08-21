@@ -606,12 +606,19 @@ el prompt.)
 - **gemini_omni (24 cr): el mejor resultado** ("espectacular") — candidato, NO oficial
   todavía por costo. kling3 (16 cr): bien pero se equivoca frases y va más lento.
   veo lite (12 cr): movimientos raros al hablar.
-- **NINGÚN motor de video usa la voz oficial.** La voz de Lucía es el element
-  `8de5db95-e898-46a6-bb68-26d02f311686` ("Lucia-voz", la Marcela) y entra SOLO por
-  el pipeline de 3 pasos:
+- **NINGÚN motor de video usa la voz oficial.** ⚠️ CORREGIDO mismo día: la voz element de
+  Higgsfield `8de5db95-...` ("Lucia-voz") está **DESCARTADA desde el 25-jul** — Sergio: "robótica".
+  **La voz oficial es "Marcela" de ElevenLabs (`86V9x9hrQds83qf7zaGn`, colombiana es-LATAM)**,
+  se genera LOCAL con `.claude/skills/editor-videos/scripts/tts-elevenlabs.mjs` (default=marcela)
+  y se sube a Higgsfield con media_upload+media_confirm. El pipeline queda:
+  1. Video hablado con el motor elegido (la voz nativa es descartable)
+  2. `tts-elevenlabs.mjs --text "..."` → mp3 con Marcela (usa el cupo ElevenLabs, no créditos)
+  3. media_upload + media_confirm del mp3 → media_id
+  4. `sync_so` input_video + input_audio, probar `sync_mode: remap` (cut_off quedó desincronizado)
   1. Video hablado con el motor elegido (la voz nativa es descartable)
   2. `seed_audio` con `voice_type: element` + UUID COMPLETO de la voz (~2.4 cr)
   3. `sync_so` con `input_video` + `input_audio`, `sync_mode: cut_off` (18.15 cr)
-  Probado 21-ago: VID-08-UGC-gemini-VOZ-LUCIA.mp4 (~21 cr los pasos 2+3).
+  VID-08 (voz element, cut_off) = RECHAZADO por Sergio: voz equivocada y desincronizado.
+  VID-09 (voz Marcela real, remap) = el intento corregido.
 - Costo UGC completo con voz oficial: gemini 24 + voz 2.4 + sync 18.15 ≈ **45 cr por pieza**.
   Para volumen barato sin voz oficial: historias mudas con subtítulos.
