@@ -47,3 +47,4 @@ onia-hermes-collab/
 # Web Factory: credenciales/estado de deploy por cliente (NUNCA al repo)
 *.deploy.json
 n8n-mcp-server/node_modules/
+.tmp/
