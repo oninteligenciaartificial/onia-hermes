@@ -39,7 +39,7 @@ const geistMono = Geist_Mono({
 
 const SITE_TITLE = "Onia — El sistema con IA que maneja tu negocio completo";
 const SITE_DESCRIPTION =
-  "Elegís tu rubro, tu cuenta queda lista y encendés módulos cuando los necesités: gestión, agentes con IA que esperan tu aprobación, chatbot de WhatsApp, facturación SIAT. Hecho en Bolivia.";
+  "Elegís tu rubro, te entregamos el sistema configurado y encendés módulos cuando los necesités: gestión, agentes con IA que esperan tu aprobación, chatbot de WhatsApp, facturación SIAT. Hecho en Bolivia.";
 
 export const metadata: Metadata = {
   /*

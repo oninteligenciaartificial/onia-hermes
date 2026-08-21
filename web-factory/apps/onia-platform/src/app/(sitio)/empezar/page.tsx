@@ -18,6 +18,12 @@ import s from "../sitio.module.css";
  * redactó nada nuevo. Tampoco se enumeran rubros acá: el rubro se elige en la
  * primera pantalla del registro, que es la verdad.
  *
+ * Cerrado 2026-08-21 (b): Sergio cerro el alta automatica. /register ya no
+ * crea cuentas: dice "Pedi tu acceso" y cada cuenta se activa acompanada.
+ * Por eso aca no se dice mas "Crear mi cuenta gratis" ni "tu cuenta queda
+ * lista" — prometer un alta instantanea que el producto no da es perder al
+ * lead justo en el ultimo clic. La prueba de 14 dias SI sigue siendo cierta.
+ *
  * Cerrado 2026-08-21: Veterinaria se saco de toda la web. Sergio: "aun no
  * terminemos los que ya tenemos". El sitio vende los CINCO que el registro
  * entrega (dental, comercio, importadora, estetica, servicios) — vender un
@@ -26,14 +32,14 @@ import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
   title: `Prueba gratis de ${PRUEBA.dias} días — Onia, sin tarjeta`,
-  description: `Registrate en minutos, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: agenda, clientes, caja, inventario, contabilidad Bolivia y agentes con IA. Sin tarjeta y sin permanencia.`,
+  description: `Pedí tu acceso, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: agenda, clientes, caja, inventario, contabilidad Bolivia y agentes con IA. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/empezar" },
   openGraph: {
     type: "website",
     locale: "es_BO",
     title: `Probá Onia gratis ${PRUEBA.dias} días`,
     description:
-      "Sistema completo, sin tarjeta. Elegís tu rubro y quedás andando en un día.",
+      "Sistema completo, sin tarjeta. Elegís tu rubro y te lo entregamos configurado.",
     url: "/empezar",
   },
 };
@@ -65,12 +71,12 @@ const PASOS: readonly { titulo: string; detalle: string }[] = [
   {
     titulo: "Elegí tu rubro",
     detalle:
-      "Onia se arma para el tuyo: pantallas, vocabulario y agentes a tu medida. El rubro se elige en la primera pantalla del registro.",
+      "Onia se arma para el tuyo: pantallas, vocabulario y agentes a tu medida. El rubro lo elegís en el mismo formulario de acceso.",
   },
   {
-    titulo: "Tu cuenta queda lista",
+    titulo: "Te la entregamos configurada",
     detalle:
-      "Sin instalación ni proyecto de meses. Le das el nombre de tu negocio y el sistema busca y carga tus datos.",
+      "Sin instalación ni proyecto de meses: te entregamos el sistema con la configuración de tu rubro puesta y alguien que te la explica.",
   },
   {
     titulo: `Usalo de verdad ${PRUEBA.dias} días`,
@@ -89,7 +95,7 @@ export default function Empezar() {
             <div>
               <Kicker>Empezá</Kicker>
               <h1 className={s.display}>
-                Creá tu cuenta y usala <em>de verdad</em> {PRUEBA.dias} días.
+                Pedí tu acceso y usalo <em>de verdad</em> {PRUEBA.dias} días.
               </h1>
               <p className={s.lead}>
                 No es una demo recortada: es tu cuenta real, con todos los
@@ -97,7 +103,7 @@ export default function Empezar() {
                 tus datos los exportás cuando quieras.
               </p>
               <div className={s.actions}>
-                <Btn href={REGISTRO_URL}>Crear mi cuenta gratis</Btn>
+                <Btn href={REGISTRO_URL}>Pedir mi acceso</Btn>
                 <Btn href="/contacto" variant="line">
                   Prefiero hablar antes
                 </Btn>
@@ -158,10 +164,10 @@ export default function Empezar() {
       <Block surface="signal" labelledBy="cierre-empezar">
         <Reveal>
           <h2 id="cierre-empezar" className={s.display} style={{ maxWidth: "16ch" }}>
-            Creá tu cuenta. Sin tarjeta.
+            Pedí tu acceso. Sin tarjeta.
           </h2>
           <div className={s.actions}>
-            <Btn href={REGISTRO_URL}>Crear mi cuenta gratis</Btn>
+            <Btn href={REGISTRO_URL}>Pedir mi acceso</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Hablar por WhatsApp
             </Btn>
