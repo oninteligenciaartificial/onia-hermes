@@ -182,3 +182,32 @@ Speaches gratis alcanza para casi todo. `scripts/transcribe.sh` usa ese camino (
 
 ## Relacionadas
 `editor-videos` (edita lo que esta skill deja transcrito) · `embedded-captions` · [[onia-video-hyperframes]].
+
+## Cosechar un chat entero — cuando mandar los links de a uno se hace pesado
+
+`scripts/cosechar-dm.mjs` trae **todos los posts compartidos de una conversación** de Instagram,
+con autor, caption y tipo. Sergio se loguea **una sola vez** y después no toca nada más.
+
+```bash
+node cosechar-dm.mjs --login        # una vez, con la cuenta que tiene la conversación
+node cosechar-dm.mjs --hilos        # lista las conversaciones y su id
+node cosechar-dm.mjs <threadId> --out DIR
+```
+
+Deja `dm-compartidos.json` (con caption y autor) y `dm-compartidos.txt` (solo URLs, listo para
+pasarle a `fetch-video.mjs`).
+
+**Cómo funciona, y por qué así.** No le pide nada a la API de Instagram: **escucha lo que la
+propia página ya pide** mientras scrollea. Es leer, no llamar.
+
+Lo que se probó y NO sirve, para no repetirlo:
+
+| Intento | Resultado |
+|---|---|
+| leer el `href` del post compartido en el DOM | **no existe** — solo se expone el link del autor |
+| clic por coordenada fija | la lista es **virtualizada**: cae siempre en el mismo |
+| `scrollTop` del contenedor | no se mueve |
+| llamar a `/api/v1/direct_v2/threads/…` | **500**, y el navegador lo bloquea por cookie/query string |
+
+Usa un perfil **aparte** (`.hermes/ig-session/profile-dm`): el de `fetch-video.mjs` está logueado
+con otra cuenta y pisarlo dejaría el intake sin sesión.
