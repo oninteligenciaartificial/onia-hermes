@@ -600,3 +600,18 @@ el prompt.)
   18.15 cr). El UGC barato sirve para historias, pruebas de gancho y volumen.
 - Audio nativo duplica el costo de veo lite (8 s: 8 → 12 cr).
 - El diálogo generado hay que ESCUCHARLO antes de aprobar: acento y pronunciación varían.
+
+## §10-bis. Veredicto UGC de Sergio (21-ago, noche) + LA VOZ
+
+- **gemini_omni (24 cr): el mejor resultado** ("espectacular") — candidato, NO oficial
+  todavía por costo. kling3 (16 cr): bien pero se equivoca frases y va más lento.
+  veo lite (12 cr): movimientos raros al hablar.
+- **NINGÚN motor de video usa la voz oficial.** La voz de Lucía es el element
+  `8de5db95-e898-46a6-bb68-26d02f311686` ("Lucia-voz", la Marcela) y entra SOLO por
+  el pipeline de 3 pasos:
+  1. Video hablado con el motor elegido (la voz nativa es descartable)
+  2. `seed_audio` con `voice_type: element` + UUID COMPLETO de la voz (~2.4 cr)
+  3. `sync_so` con `input_video` + `input_audio`, `sync_mode: cut_off` (18.15 cr)
+  Probado 21-ago: VID-08-UGC-gemini-VOZ-LUCIA.mp4 (~21 cr los pasos 2+3).
+- Costo UGC completo con voz oficial: gemini 24 + voz 2.4 + sync 18.15 ≈ **45 cr por pieza**.
+  Para volumen barato sin voz oficial: historias mudas con subtítulos.
