@@ -12,7 +12,7 @@ import {
 import { WA_URL_LANDING } from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
 import { Block, Btn, Kicker } from "../ui";
-import s from "../preview.module.css";
+import s from "../sitio.module.css";
 
 /**
  * Apartado de PRECIOS. Cada número sale de lib/pricing.ts (planes, add-ons, no
@@ -111,7 +111,7 @@ export default function PreviewPrecios() {
                 <div key={addon.nombre} className={s.row}>
                   <span className={s.rowName}>
                     {esChatbot ? (
-                      <a className={s.link} href="/preview/chatbot">
+                      <a className={s.link} href="/chatbot">
                         {addon.nombre} →
                       </a>
                     ) : (

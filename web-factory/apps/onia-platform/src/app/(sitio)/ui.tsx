@@ -8,7 +8,7 @@ import {
   LOGIN_URL,
 } from "./nav";
 import { MobileMenu } from "./menu";
-import s from "./preview.module.css";
+import s from "./sitio.module.css";
 
 /**
  * Primitivas del preview (v3). Componentes de servidor puros — sin estado ni
@@ -150,7 +150,7 @@ export function PreviewHeader() {
   return (
     <header className={s.header}>
       <div className={s.headerInner}>
-        <a className={s.wordmark} href="/preview" aria-label="Onia — inicio del preview">
+        <a className={s.wordmark} href="/" aria-label="Onia — inicio del preview">
           Onia<b>.</b>
         </a>
         <nav className={s.nav} aria-label="Secciones">

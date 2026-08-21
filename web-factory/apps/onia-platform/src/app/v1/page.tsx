@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { Hero } from "@/components/landing/hero";
-import { HowItWorks } from "@/components/landing/how-it-works";
-import { Features } from "@/components/landing/features";
-import { ChatbotCta } from "@/components/landing/chatbot-cta";
-import { Pricing } from "@/components/landing/pricing";
-import { ComparativaTeaser } from "@/components/landing/comparativa-teaser";
-import { Closing } from "@/components/landing/closing";
-import { Faq, FAQS } from "@/components/landing/faq";
+import { Hero } from "@/components/landing-v1/hero";
+import { HowItWorks } from "@/components/landing-v1/how-it-works";
+import { Features } from "@/components/landing-v1/features";
+import { ChatbotCta } from "@/components/landing-v1/chatbot-cta";
+import { Pricing } from "@/components/landing-v1/pricing";
+import { ComparativaTeaser } from "@/components/landing-v1/comparativa-teaser";
+import { Closing } from "@/components/landing-v1/closing";
+import { Faq, FAQS } from "@/components/landing-v1/faq";
 import { BleedWordmark } from "@/motion";
-import { MobileBar } from "@/components/landing/mobile-bar";
-import styles from "@/components/landing/landing.module.css";
+import { MobileBar } from "@/components/landing-v1/mobile-bar";
+import styles from "@/components/landing-v1/landing.module.css";
 
 const SITE_URL = "https://onia.com.bo/";
 const TITLE = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";

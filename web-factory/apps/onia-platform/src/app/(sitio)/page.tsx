@@ -6,7 +6,7 @@ import { WA_URL_LANDING } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
 import { Block, Shape, Btn, Kicker } from "./ui";
 import { Switcher } from "./switcher";
-import s from "./preview.module.css";
+import s from "./sitio.module.css";
 
 /**
  * Landing preview (v3) — el ORDEN es el argumento (como Fanvue):
@@ -58,7 +58,7 @@ export default function PreviewLanding() {
               </p>
               <div className={s.actions}>
                 <Btn href={EMPEZAR_URL}>Probá {PRUEBA.dias} días gratis</Btn>
-                <Btn href="/preview/precios" variant="line">
+                <Btn href="/precios" variant="line">
                   Ver precios
                 </Btn>
               </div>
@@ -120,7 +120,7 @@ export default function PreviewLanding() {
             consultadas el {FECHA_CONSULTA}.
           </p>
           <div className={s.actions}>
-            <a className={s.link} href="/preview/comparativa">
+            <a className={s.link} href="/comparativa">
               Ver la comparación, con nombres y precios →
             </a>
           </div>
@@ -152,7 +152,7 @@ export default function PreviewLanding() {
                 lo que sirve y se manda. La decisión sigue siendo tuya.
               </p>
               <div className={s.actions}>
-                <a className={s.link} href="/preview/agentes">
+                <a className={s.link} href="/agentes">
                   Ver cómo funcionan los agentes →
                 </a>
               </div>
@@ -187,7 +187,7 @@ export default function PreviewLanding() {
                 plan.
               </p>
               <div className={s.actions}>
-                <a className={s.link} href="/preview/chatbot">
+                <a className={s.link} href="/chatbot">
                   Ver el chatbot y sus requisitos →
                 </a>
               </div>
@@ -223,7 +223,7 @@ export default function PreviewLanding() {
         <Reveal>
           <p className={s.note}>Seis rubros vivos y vendibles hoy.</p>
           <div className={s.actions}>
-            <a className={s.link} href="/preview/rubros">
+            <a className={s.link} href="/rubros">
               Ver los rubros por dentro →
             </a>
           </div>
@@ -266,7 +266,7 @@ export default function PreviewLanding() {
             ))}
           </div>
           <div className={s.actions}>
-            <a className={s.link} href="/preview/precios">
+            <a className={s.link} href="/precios">
               Ver precios completos, add-ons y lo que no incluye →
             </a>
           </div>
@@ -304,7 +304,7 @@ export default function PreviewLanding() {
             </Btn>
           </div>
           <div className={s.actions} style={{ marginTop: "1.2em" }}>
-            <a className={s.link} href="/preview/contacto">
+            <a className={s.link} href="/contacto">
               O agendá una demo con horario →
             </a>
           </div>

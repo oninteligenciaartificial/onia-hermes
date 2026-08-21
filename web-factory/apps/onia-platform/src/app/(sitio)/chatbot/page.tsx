@@ -8,7 +8,7 @@ import {
 } from "@/content/chatbot-precios";
 import { WA_URL_LANDING } from "@/lib/site";
 import { Block, Shape, Btn, Kicker } from "../ui";
-import s from "../preview.module.css";
+import s from "../sitio.module.css";
 
 /**
  * Apartado del CHATBOT. Montos y promesa SOLO de content/chatbot-precios.ts,
@@ -39,7 +39,7 @@ export default function PreviewChatbot() {
                 <Btn href={WA_URL_LANDING} external>
                   Pedir el chatbot
                 </Btn>
-                <Btn href="/preview/precios" variant="line">
+                <Btn href="/precios" variant="line">
                   Ver precios
                 </Btn>
               </div>

@@ -4,7 +4,7 @@ import { PRUEBA } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
 import { REGISTRO_URL } from "../nav";
 import { Block, Shape, Btn, Kicker } from "../ui";
-import s from "../preview.module.css";
+import s from "../sitio.module.css";
 
 /**
  * /preview/empezar — la pantalla de ARRANQUE del preview.
@@ -67,7 +67,7 @@ export default function PreviewEmpezar() {
               </p>
               <div className={s.actions}>
                 <Btn href={REGISTRO_URL}>Crear mi cuenta gratis</Btn>
-                <Btn href="/preview/contacto" variant="line">
+                <Btn href="/contacto" variant="line">
                   Prefiero hablar antes
                 </Btn>
               </div>
@@ -116,7 +116,7 @@ export default function PreviewEmpezar() {
             {PRUEBA.copy}
           </p>
           <div className={s.actions}>
-            <a className={s.link} href="/preview/precios">
+            <a className={s.link} href="/precios">
               Ver los precios antes de entrar →
             </a>
           </div>

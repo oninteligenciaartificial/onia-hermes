@@ -9,7 +9,7 @@ import {
 } from "@/lib/siat";
 import { WA_URL_LANDING } from "@/lib/site";
 import { Block, Btn, Kicker } from "../ui";
-import s from "../preview.module.css";
+import s from "../sitio.module.css";
 
 /**
  * /preview/facturacion — con el 1-oct-2026 encima, "¿y la factura?" decide la
@@ -110,7 +110,7 @@ export default function PreviewFacturacion() {
             Dejá tu operación lista antes del plazo.
           </h2>
           <div className={s.actions}>
-            <Btn href="/preview/empezar">Empezá gratis</Btn>
+            <Btn href="/empezar">Empezá gratis</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Preguntanos tu caso por WhatsApp
             </Btn>

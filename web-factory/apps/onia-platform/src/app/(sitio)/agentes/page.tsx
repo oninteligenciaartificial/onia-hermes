@@ -2,7 +2,7 @@ import { Reveal } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
 import { EMPEZAR_URL } from "../nav";
 import { Block, Shape, Btn, Kicker } from "../ui";
-import s from "../preview.module.css";
+import s from "../sitio.module.css";
 
 /**
  * Apartado de AGENTES. Copy verificado contra la pantalla real de Agentes del
@@ -44,7 +44,7 @@ export default function PreviewAgentes() {
               </p>
               <div className={s.actions}>
                 <Btn href={EMPEZAR_URL}>Probá {PRUEBA.dias} días gratis</Btn>
-                <Btn href="/preview/precios" variant="line">
+                <Btn href="/precios" variant="line">
                   Ver desde qué plan
                 </Btn>
               </div>
@@ -94,7 +94,7 @@ export default function PreviewAgentes() {
             está adentro del plan.
           </p>
           <div className={s.actions}>
-            <a className={s.link} href="/preview/precios">
+            <a className={s.link} href="/precios">
               Ver los planes →
             </a>
           </div>

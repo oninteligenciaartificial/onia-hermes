@@ -3,7 +3,7 @@ import { PRUEBA } from "@/lib/pricing";
 import { EMPEZAR_URL } from "../nav";
 import { Block, Btn, Kicker } from "../ui";
 import { Switcher } from "../switcher";
-import s from "../preview.module.css";
+import s from "../sitio.module.css";
 
 /**
  * Apartado de RUBROS. Un producto, muchos rubros — el conmutador es la estrella.

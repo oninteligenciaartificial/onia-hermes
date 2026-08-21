@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { Pricing } from "@/components/landing/pricing";
-import { Faq } from "@/components/landing/faq";
+import { Pricing } from "@/components/landing-v1/pricing";
+import { Faq } from "@/components/landing-v1/faq";
 import { Reveal } from "@/motion";
 
 const SITE_URL = "https://onia.com.bo";

@@ -9,7 +9,7 @@ import {
   type Estado,
 } from "@/lib/proof";
 import { Block, Btn, Kicker } from "../ui";
-import s from "../preview.module.css";
+import s from "../sitio.module.css";
 
 /**
  * /preview/comparativa — la pantalla que mata la objeción boliviana.
@@ -126,7 +126,7 @@ export default function PreviewComparativa() {
             fechas, en la página de facturación.
           </p>
           <div className={s.actions}>
-            <Btn href="/preview/facturacion" variant="line">
+            <Btn href="/facturacion" variant="line">
               Ver qué exige el SIN
             </Btn>
           </div>
@@ -139,8 +139,8 @@ export default function PreviewComparativa() {
             Comparalo con tu propio negocio adentro.
           </h2>
           <div className={s.actions}>
-            <Btn href="/preview/empezar">Empezá gratis</Btn>
-            <Btn href="/preview/precios" variant="line">
+            <Btn href="/empezar">Empezá gratis</Btn>
+            <Btn href="/precios" variant="line">
               Ver precios
             </Btn>
           </div>

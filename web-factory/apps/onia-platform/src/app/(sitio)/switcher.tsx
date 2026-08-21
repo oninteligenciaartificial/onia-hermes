@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import s from "./preview.module.css";
+import s from "./sitio.module.css";
 
 /**
  * Conmutador de rubros — LA sección estrella (Fanvue le da 6 pantallas de alto

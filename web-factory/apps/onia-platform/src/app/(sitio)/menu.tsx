@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { NAV_PRODUCTO, NAV_DECIDIR, NAV_LEGAL, EMPEZAR_URL, LOGIN_URL } from "./nav";
-import s from "./preview.module.css";
+import s from "./sitio.module.css";
 
 /**
  * Menú de teléfono. `<dialog>` + `showModal()` a propósito: el navegador ya

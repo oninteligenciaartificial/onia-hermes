@@ -3,7 +3,7 @@ import { Reveal } from "@/motion";
 import { CAL_DEMO_URL, CAL_CONSULTA_URL, WA_URL_LANDING } from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
 import { Block, Btn, Kicker } from "../ui";
-import s from "../preview.module.css";
+import s from "../sitio.module.css";
 
 /**
  * /preview/contacto — hasta acá, el que no se registra sin hablar con alguien
@@ -124,7 +124,7 @@ export default function PreviewContacto() {
           </h2>
           <div className={s.actions}>
             <Btn href={EMPEZAR_URL}>Empezá gratis</Btn>
-            <Btn href="/preview/precios" variant="line">
+            <Btn href="/precios" variant="line">
               Ver precios
             </Btn>
           </div>
