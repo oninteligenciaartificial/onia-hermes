@@ -167,7 +167,18 @@ export function bs(n: number): string {
   return n.toLocaleString("es-BO");
 }
 
-/* ---------- add-ons con precio en el codigo ---------- */
+/* ---------- add-ons con precio en el codigo ----------
+ *
+ * SOLO software que se enciende sobre la suscripcion, con precio recurrente
+ * que el sistema cobra. "Web del negocio" se retiro el 2026-08-21 (decision de
+ * Sergio): es pago unico y ademas es trabajo de agencia, no software — puesta
+ * al lado de "usuario adicional" hacia leer el servicio como una casilla de
+ * autoservicio y ensuciaba la tabla. Se sigue vendiendo, pero en su propia
+ * pagina (/servicios/webs) y cotizada.
+ *
+ * Grupo / Empresarial con su implementacion NO es un add-on y por eso no esta
+ * en esta lista: vive arriba, en GRUPO, y es un proyecto cotizado.
+ */
 
 export interface AddOn {
   nombre: string;
@@ -195,11 +206,6 @@ export const ADDONS: readonly AddOn[] = [
     nombre: "Inventario avanzado",
     copy: "Compras, proveedores, vencimientos y alertas avanzadas, por encima del inventario simple que ya viene incluido.",
     precio: "Desde Bs 180/mes",
-  },
-  {
-    nombre: "Web del negocio",
-    copy: "Tu presencia online, construida por nosotros. Landing de captación, web profesional o web a medida.",
-    precio: "Desde Bs 790, pago único",
   },
 ] as const;
 

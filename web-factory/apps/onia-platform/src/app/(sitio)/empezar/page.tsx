@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
-import { WA_URL_LANDING } from "@/lib/site";
+import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { REGISTRO_URL } from "../nav";
-import { Block, Shape, Btn, Kicker } from "../ui";
+import { Block, Shape, Btn, Kicker, JsonLd } from "../ui";
 import s from "../sitio.module.css";
 
 /**
- * /preview/empezar — la pantalla de ARRANQUE del preview.
+ * /empezar — la pantalla de ARRANQUE del sitio.
  *
- * Por qué existe: los once CTA del preview apuntaban a `/prueba-gratis`, que es
- * la web VIEJA — otro header, otro pie, cero retorno. El visitante hacía clic
- * en el botón principal y se iba del sitio nuevo. Ahora el embudo termina
- * adentro: esta página vive bajo el layout del preview, así que hereda su
- * cromo sin portar una línea, y el ÚNICO salto hacia afuera es el que tiene
- * que serlo — el registro real del producto (app.onia.com.bo/register).
+ * Hereda el embudo de la vieja `/prueba-gratis`, que ya no existe como página:
+ * esa URL circula en firmas, anuncios y enlaces externos, así que redirige acá
+ * con 308 (next.config.ts). El ÚNICO salto hacia afuera es el que tiene que
+ * serlo — el registro real del producto (app.onia.com.bo/register).
  *
  * Los tres pasos son el texto ya escrito y publicado en /prueba-gratis; no se
  * redactó nada nuevo. Tampoco se enumeran rubros acá: el rubro se elige en la
@@ -27,10 +25,42 @@ import s from "../sitio.module.css";
  */
 
 export const metadata: Metadata = {
-  title: "Empezá — preview del rediseño",
+  title: `Prueba gratis de ${PRUEBA.dias} días — Onia, sin tarjeta`,
+  description: `Registrate en minutos, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: agenda, clientes, caja, inventario, contabilidad Bolivia y agentes con IA. Sin tarjeta y sin permanencia.`,
+  alternates: { canonical: "/empezar" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: `Probá Onia gratis ${PRUEBA.dias} días`,
+    description:
+      "Sistema completo, sin tarjeta. Elegís tu rubro y quedás andando en un día.",
+    url: "/empezar",
+  },
 };
 
-/** Copiado tal cual de app/prueba-gratis/page.tsx (PASOS). */
+/** Breadcrumb + Offer del trial: venían de /prueba-gratis, con la ruta nueva. */
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "Empezar", item: `${SITE_URL}/empezar` },
+      ],
+    },
+    {
+      "@type": "Offer",
+      name: `Prueba gratis de ${PRUEBA.dias} días de Onia`,
+      price: "0",
+      priceCurrency: "BOB",
+      url: `${SITE_URL}/empezar`,
+      availability: "https://schema.org/InStock",
+    },
+  ],
+};
+
+/** Copiado tal cual de la vieja /prueba-gratis (PASOS). */
 const PASOS: readonly { titulo: string; detalle: string }[] = [
   {
     titulo: "Elegí tu rubro",
@@ -49,9 +79,10 @@ const PASOS: readonly { titulo: string; detalle: string }[] = [
   },
 ];
 
-export default function PreviewEmpezar() {
+export default function Empezar() {
   return (
     <>
+      <JsonLd data={JSON_LD} />
       <Block surface="paper">
         <div className={s.split}>
           <Reveal>

@@ -12,27 +12,37 @@ import { Block, Btn, Kicker } from "../ui";
 import s from "../sitio.module.css";
 
 /**
- * /preview/comparativa — la pantalla que mata la objeción boliviana.
+ * /comparativa — la pantalla que mata la objeción boliviana.
  *
  * Las tres objeciones reales ("el Portal del SIN es gratis", "ya tengo
  * facturador", "el de afuera es mejor") son EXACTAMENTE las tres primeras
  * filas de CONTENDIENTES en lib/proof.ts, con precio publicado, nombre propio
- * y fecha de consulta. Cero cifras a mano: todo sale de la fuente, igual que
- * en la /comparativa de producción.
+ * y fecha de consulta. Cero cifras a mano: todo sale de la fuente.
  *
  * No es una tabla. Una tabla de cinco columnas desborda a 390px y Bolivia
  * entra por teléfono: es una fila plana por contendiente, y la de Onia cambia
  * de tono en vez de llevar sombra.
  *
  * El ledger de honestidad (TODAVIA_NO) NO se trae acá: dos de sus tres líneas
- * ya viven donde corresponde — la fiscal en /preview/facturacion y en el
- * bloque fiscal de /preview/precios — y la tercera anuncia obra en curso, que
+ * ya viven donde corresponde — la fiscal en /facturacion y en el bloque
+ * fiscal de /precios — y la tercera anuncia obra en curso, que
  * en una superficie de venta está prohibida. El veredicto de la fila de Onia
  * ya dice de frente lo del trámite.
  */
 
 export const metadata: Metadata = {
-  title: "Comparativa — preview del rediseño",
+  title: "Onia comparada con los sistemas que se venden en Bolivia",
+  description:
+    "Precios y capacidades publicados por el Portal del SIN, los facturadores bolivianos y el software dental de la región, con fecha de consulta. Y lo que Onia todavía no hace.",
+  alternates: { canonical: "/comparativa" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: "Onia comparada con lo que hoy se vende en Bolivia",
+    description:
+      "Nombres propios, precios públicos y fecha de consulta. Comprobalo vos mismo.",
+    url: "/comparativa",
+  },
 };
 
 /** Cómo se dice cada estado. Palabras, no símbolos: se leen en voz alta. */
@@ -42,7 +52,7 @@ const MARCA: Record<Estado, string> = {
   tramite: "En trámite",
 };
 
-export default function PreviewComparativa() {
+export default function Comparativa() {
   return (
     <>
       <Block surface="paper">

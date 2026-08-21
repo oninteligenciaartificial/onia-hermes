@@ -38,7 +38,7 @@ export default function NotFound() {
             <a href="/precios" className="btn btn-ghost">
               Ver precios
             </a>
-            <a href="/prueba-gratis" className="btn btn-ghost">
+            <a href="/empezar" className="btn btn-ghost">
               Probar gratis
             </a>
           </div>

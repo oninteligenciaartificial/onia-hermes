@@ -1,26 +1,72 @@
+import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import { PLANES, PRUEBA, bs } from "@/lib/pricing";
 import { CHATBOT_PLAN, precioStack } from "@/content/chatbot-precios";
 import { HUECO, FECHA_CONSULTA } from "@/lib/proof";
-import { WA_URL_LANDING } from "@/lib/site";
+import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
-import { Block, Shape, Btn, Kicker } from "./ui";
+import { Block, Shape, Btn, Kicker, JsonLd } from "./ui";
 import { Switcher } from "./switcher";
 import s from "./sitio.module.css";
 
 /**
- * Landing preview (v3) — el ORDEN es el argumento (como Fanvue):
+ * Portada del sitio (v3) — el ORDEN es el argumento (como Fanvue):
  *   hero (promesa de resultado) → banda de prueba verificable → hecho fuerte →
  *   manifiesto → agentes → chatbot → SWITCHER de rubros (estrella) →
  *   precios → FAQ → cierre.
  *
- * Cero imágenes: donde va un clip, un placeholder de forma+color con el ratio
- * reservado. Precios y capacidades salen SOLO de las fuentes (lib/pricing.ts,
+ * Las tres pantallas del hero, agentes y chatbot son CAPTURAS REALES del
+ * producto. Donde todavía no hay clip va un placeholder de forma+color con el
+ * ratio ya reservado, así el material real entra sin CLS. Precios y
+ * capacidades salen SOLO de las fuentes (lib/pricing.ts,
  * content/chatbot-precios.ts, lib/proof.ts) — cero cifras a mano.
  */
 
-/* FAQ del preview — respuestas con los números TRAÍDOS de las fuentes.
-   La fuente final de copy es components/landing/faq.tsx (FAQS). */
+/**
+ * La imagen social es una captura REAL del sistema (el selector de rubro de
+ * app.onia.com.bo), no un mockup. Regla de la casa: nada de pantallas
+ * dibujadas haciendo de prueba. Viene de la v1 y se conserva.
+ */
+const OG_IMAGE = "/og/onia-rubros.jpg";
+
+const TITULO = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";
+const DESCRIPCION =
+  "Onia es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y agentes que trabajan 24/7 con tu aprobación. Desde Bs 320 al mes. Probalo 14 días gratis, sin tarjeta.";
+const OG_TITULO = "Tu negocio no pierde citas ni cobros — Onia, Bolivia";
+const OG_DESCRIPCION =
+  "Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs 320/mes, 14 días gratis.";
+
+export const metadata: Metadata = {
+  title: TITULO,
+  description: DESCRIPCION,
+  // Canonical POR PÁGINA, nunca en el layout: si viviera arriba, las nueve
+  // rutas heredarían "/" y el sitio entero se desindexaría.
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    siteName: "Onia",
+    title: OG_TITULO,
+    description: OG_DESCRIPCION,
+    url: "/",
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Pantalla real de Onia: elegís el rubro de tu negocio al crear la cuenta.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: OG_TITULO,
+    description: OG_DESCRIPCION,
+    images: [OG_IMAGE],
+  },
+};
+
+/* FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes. */
 const FAQ = [
   {
     q: "¿Necesito tarjeta para probar?",
@@ -40,9 +86,61 @@ const FAQ = [
   },
 ];
 
-export default function PreviewLanding() {
+/**
+ * Datos estructurados heredados de la v1 — Organization + SoftwareApplication
+ * con los tres precios en BOB + FAQPage. Los montos NO se escriben acá: salen
+ * de PLANES (lib/pricing.ts), que es la fuente única, y las preguntas salen
+ * del mismo array FAQ que renderiza la sección.
+ */
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#org`,
+      name: "Onia",
+      legalName: "OniaAgency",
+      url: `${SITE_URL}/`,
+      areaServed: { "@type": "Country", name: "Bolivia" },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Santa Cruz de la Sierra",
+        addressCountry: "BO",
+      },
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "Onia",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      url: `${SITE_URL}/`,
+      publisher: { "@id": `${SITE_URL}/#org` },
+      description:
+        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, facturación y agentes con aprobación humana.",
+      offers: PLANES.map((plan) => ({
+        "@type": "Offer",
+        name: plan.nombre,
+        price: String(plan.mensual),
+        priceCurrency: "BOB",
+        category: "Suscripción mensual",
+        availability: "https://schema.org/InStock",
+      })),
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQ.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    },
+  ],
+};
+
+export default function Portada() {
   return (
     <>
+      <JsonLd data={JSON_LD} />
       {/* 1 · HERO — promesa de RESULTADO, no de categoría abstracta */}
       <Block surface="paper">
         <div className={s.split}>

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import {
   CHATBOT_PLAN,
@@ -5,10 +6,56 @@ import {
   precioAnual,
   META_NOTA,
   A_MEDIDA,
+  fmtBs,
 } from "@/content/chatbot-precios";
-import { WA_URL_LANDING } from "@/lib/site";
-import { Block, Shape, Btn, Kicker } from "../ui";
+import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
+import { Block, Shape, Btn, Kicker, JsonLd } from "../ui";
 import s from "../sitio.module.css";
+
+export const metadata: Metadata = {
+  title: "Chatbot de WhatsApp — precio publicado | Onia",
+  description: `Chatbot de WhatsApp que contesta 24/7 con la información real de tu negocio y deriva a una persona lo que necesite decisión. Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes, sin instalación. Los requisitos, a la vista antes de contratar. Hecho en Bolivia.`,
+  alternates: { canonical: "/chatbot" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: "Chatbot de WhatsApp — precio publicado",
+    description: `Contesta al instante a cualquier hora con lo que vos cargaste, y deriva el resto. Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes, con los requisitos publicados.`,
+    url: "/chatbot",
+  },
+};
+
+/** Breadcrumb + Service: venían de la v1 (/chatbot) y se conservan tal cual. */
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "Chatbot WhatsApp", item: `${SITE_URL}/chatbot` },
+      ],
+    },
+    {
+      "@type": "Service",
+      name: "Chatbot de WhatsApp para negocios",
+      serviceType: "Automatización de WhatsApp con inteligencia artificial",
+      description:
+        "Chatbot de WhatsApp que contesta 24/7 con la información real que el negocio publicó y deriva a una persona lo que no sabe. Lo que salga del alcance se cotiza a medida.",
+      provider: { "@type": "Organization", name: "Onia", url: `${SITE_URL}/` },
+      areaServed: { "@type": "Country", name: "Bolivia" },
+      url: `${SITE_URL}/chatbot`,
+      offers: {
+        "@type": "Offer",
+        name: CHATBOT_PLAN.nombre,
+        price: String(CHATBOT_PLAN.mensual),
+        priceCurrency: "BOB",
+        category: "Suscripción mensual",
+        availability: "https://schema.org/InStock",
+      },
+    },
+  ],
+};
 
 /**
  * Apartado del CHATBOT. Montos y promesa SOLO de content/chatbot-precios.ts,
@@ -17,10 +64,11 @@ import s from "../sitio.module.css";
  * cargó, no inventa, y deriva a una persona — y no nombra lo que no existe.
  * Sin imágenes: la conversación se reserva como forma para un clip futuro.
  */
-export default function PreviewChatbot() {
+export default function Chatbot() {
   const bot = CHATBOT_PLAN;
   return (
     <>
+      <JsonLd data={JSON_LD} />
       <Block surface="paper">
         <div className={s.split}>
           <Reveal>

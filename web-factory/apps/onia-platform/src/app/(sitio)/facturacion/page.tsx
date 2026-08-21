@@ -7,16 +7,17 @@ import {
   SIAT_FAQ,
   SIAT_FUENTES,
 } from "@/lib/siat";
-import { WA_URL_LANDING } from "@/lib/site";
-import { Block, Btn, Kicker } from "../ui";
+import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
+import { Block, Btn, Kicker, JsonLd } from "../ui";
 import s from "../sitio.module.css";
 
 /**
- * /preview/facturacion — con el 1-oct-2026 encima, "¿y la factura?" decide la
- * compra en Bolivia. El contenido NO se redactó acá: es el mismo que ya vive
- * en /funciones/facturacion-electronica-siat, movido a lib/siat.ts para que
- * las dos páginas lean la misma ley (una norma copiada en dos lugares dice dos
- * cosas distintas en seis meses).
+ * /facturacion — con el 1-oct-2026 encima, "¿y la factura?" decide la
+ * compra en Bolivia. El contenido NO se redactó acá: vive en lib/siat.ts, que
+ * era la fuente compartida con la vieja /funciones/facturacion-electronica-siat.
+ * Esa URL ya no existe: redirige acá con 308 (next.config.ts) para no partir en
+ * dos el posicionamiento de la búsqueda del plazo, que es la más valiosa del
+ * sitio.
  *
  * La nota fiscal honesta —emisor en trámite de homologación, y mientras tanto
  * facturás en el Portal del SIN que es gratuito— SE MANTIENE y va en su propio
@@ -26,16 +27,69 @@ import s from "../sitio.module.css";
  */
 
 export const metadata: Metadata = {
-  title: "Facturación SIAT — preview del rediseño",
+  title:
+    "Facturación en línea obligatoria en Bolivia: qué exige el SIN desde el 1 de octubre de 2026",
+  description:
+    "Los grupos 9° al 12° de contribuyentes deben emitir por facturación en línea desde el 01-10-2026 (RND 102600000007). Qué significa, las opciones que tenés — incluido el portal gratuito del SIN — y cómo saber tu grupo.",
+  alternates: { canonical: "/facturacion" },
+  openGraph: {
+    type: "article",
+    locale: "es_BO",
+    title: "Facturación en línea obligatoria: lo que cambia el 1 de octubre de 2026",
+    description:
+      "La guía honesta: qué exige el SIN, quiénes están alcanzados y las opciones reales — incluida la gratuita.",
+    url: "/facturacion",
+  },
+};
+
+/**
+ * Breadcrumb + Article + FAQPage: los tres venían de
+ * /funciones/facturacion-electronica-siat. La URL cambia; el marcado se
+ * conserva entero, apuntando a la ruta nueva.
+ */
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Facturación electrónica SIAT",
+          item: `${SITE_URL}/facturacion`,
+        },
+      ],
+    },
+    {
+      "@type": "Article",
+      headline:
+        "Facturación en línea obligatoria en Bolivia: lo que cambia el 1 de octubre de 2026",
+      inLanguage: "es-BO",
+      datePublished: "2026-08-07",
+      author: { "@type": "Organization", name: "Onia" },
+      url: `${SITE_URL}/facturacion`,
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: SIAT_FAQ.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    },
+  ],
 };
 
 /* Los tres bloques del argumento, en el orden de la fuente:
    1) podés cumplir gratis · 2) qué resuelve un sistema · 3) dónde está Onia. */
 const [GRATIS, RETIPEO, DONDE_ESTA] = SIAT_BLOQUES;
 
-export default function PreviewFacturacion() {
+export default function Facturacion() {
   return (
     <>
+      <JsonLd data={JSON_LD} />
       <Block surface="paper">
         <Reveal>
           <Kicker>Facturación electrónica · SIAT</Kicker>

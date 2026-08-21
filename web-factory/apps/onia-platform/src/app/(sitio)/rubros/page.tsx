@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
 import { EMPEZAR_URL } from "../nav";
@@ -5,13 +6,29 @@ import { Block, Btn, Kicker } from "../ui";
 import { Switcher } from "../switcher";
 import s from "../sitio.module.css";
 
+export const metadata: Metadata = {
+  title: "Un sistema por rubro — dental, comercio, importadora y más | Onia",
+  description:
+    "Elegís tu rubro y la cuenta viene armada con sus pantallas y su vocabulario: pacientes y odontograma en dental, productos y fiados en comercio, lotes y costos en importadora. El mismo núcleo, hecho para Bolivia.",
+  alternates: { canonical: "/rubros" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: "Elegís tu rubro y la cuenta ya viene armada",
+    description:
+      "No es un software distinto por industria: es el mismo núcleo con módulos y vocabulario propios de tu negocio.",
+    url: "/rubros",
+  },
+};
+
 /**
  * Apartado de RUBROS. Un producto, muchos rubros — el conmutador es la estrella.
  * Seis rubros vivos y vendibles hoy; el vocabulario por rubro es lo que cada
  * negocio ve en la misma base (no son productos distintos). Ningún rubro
- * linkea afuera: /modulos/dental es la web VIEJA — otro cromo, sin retorno —
- * y mandar ahí al visitante era la fuga del embudo. Cero "muy pronto"
- * (regla: la venta nunca exhibe obra).
+ * linkea afuera: la vieja /modulos/dental ya no existe como página — redirige
+ * acá (308 en next.config.ts) porque mandar al visitante a otro cromo sin
+ * retorno era la fuga del embudo. Cero "muy pronto" (regla: la venta nunca
+ * exhibe obra).
  */
 
 const RUBROS: readonly { nombre: string; ve: string }[] = [
@@ -25,7 +42,7 @@ const RUBROS: readonly { nombre: string; ve: string }[] = [
   { nombre: "Servicios", ve: "Clientes, trabajos, cotizaciones y cobros." },
 ];
 
-export default function PreviewRubros() {
+export default function Rubros() {
   return (
     <>
       <Block surface="paper">

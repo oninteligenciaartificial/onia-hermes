@@ -1,8 +1,24 @@
+import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
 import { EMPEZAR_URL } from "../nav";
 import { Block, Shape, Btn, Kicker } from "../ui";
 import s from "../sitio.module.css";
+
+export const metadata: Metadata = {
+  title: "Agentes con IA que proponen y esperan tu aprobación | Onia",
+  description:
+    "Recall detecta al cliente que no vuelve y Cobrador detecta la deuda vencida: los dos redactan el mensaje y lo dejan en Pendientes. Nada sale sin tu OK. Incluidos desde el plan Pro.",
+  alternates: { canonical: "/agentes" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: "Trabajan de noche. No deciden solos.",
+    description:
+      "Los agentes revisan tus datos con el negocio cerrado y dejan un borrador esperando. A la mañana aprobás lo que sirve.",
+    url: "/agentes",
+  },
+};
 
 /**
  * Apartado de AGENTES. Copy verificado contra la pantalla real de Agentes del
@@ -26,7 +42,7 @@ const CELDAS: readonly [string, string][] = [
   ],
 ];
 
-export default function PreviewAgentes() {
+export default function Agentes() {
   return (
     <>
       <Block surface="ink">

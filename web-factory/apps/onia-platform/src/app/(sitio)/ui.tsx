@@ -11,8 +11,9 @@ import { MobileMenu } from "./menu";
 import s from "./sitio.module.css";
 
 /**
- * Primitivas del preview (v3). Componentes de servidor puros — sin estado ni
- * efectos; el único cliente del preview es el conmutador de rubros.
+ * Primitivas del sitio público (v3). Componentes de servidor puros — sin
+ * estado ni efectos; el único cliente de este árbol es el conmutador de
+ * rubros.
  */
 
 /* ---------- placeholder de FORMA (reserva el ratio del clip futuro) ------- */
@@ -144,13 +145,29 @@ export function Kicker({ children }: { children: ReactNode }) {
   return <p className={s.kicker}>{children}</p>;
 }
 
+/* ---------- datos estructurados ----------------------------------------- */
+
+/**
+ * Inyecta el JSON-LD de la página. Existía en la v1 (Organization,
+ * SoftwareApplication, Service, Article, FAQPage, BreadcrumbList) y NO se
+ * pierde en el rediseño: cada página trae el suyo con la ruta nueva.
+ */
+export function JsonLd({ data }: { data: unknown }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
 /* ---------- chrome ------------------------------------------------------ */
 
-export function PreviewHeader() {
+export function Header() {
   return (
     <header className={s.header}>
       <div className={s.headerInner}>
-        <a className={s.wordmark} href="/" aria-label="Onia — inicio del preview">
+        <a className={s.wordmark} href="/" aria-label="Onia — inicio">
           Onia<b>.</b>
         </a>
         <nav className={s.nav} aria-label="Secciones">
@@ -172,7 +189,7 @@ export function PreviewHeader() {
   );
 }
 
-export function PreviewFooter() {
+export function Footer() {
   return (
     <footer className={s.footer}>
       <div className={s.footerInner}>

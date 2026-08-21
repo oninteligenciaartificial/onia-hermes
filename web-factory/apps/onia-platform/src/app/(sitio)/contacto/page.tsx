@@ -6,7 +6,7 @@ import { Block, Btn, Kicker } from "../ui";
 import s from "../sitio.module.css";
 
 /**
- * /preview/contacto — hasta acá, el que no se registra sin hablar con alguien
+ * /contacto — hasta acá, el que no se registra sin hablar con alguien
  * solo tenía WhatsApp.
  *
  * Los dos eventos son la agenda PROPIA (Cal.com self-hosted en el VPS, cuenta
@@ -19,7 +19,18 @@ import s from "../sitio.module.css";
  */
 
 export const metadata: Metadata = {
-  title: "Contacto — preview del rediseño",
+  title: "Hablemos — agendá una demo de Onia | Bolivia",
+  description:
+    "Elegí el horario en nuestra agenda: 20 minutos de consulta comercial para saber si Onia te sirve, o 45 minutos de demo con tu caso adelante. También podés escribirnos por WhatsApp.",
+  alternates: { canonical: "/contacto" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: "Elegí el horario y hablamos — Onia",
+    description:
+      "No hay formulario que caiga en un buzón: elegís vos el día y la hora, y del otro lado hay alguien que conoce el sistema.",
+    url: "/contacto",
+  },
 };
 
 const CITAS = [
@@ -49,7 +60,7 @@ const CITAS = [
   },
 ] as const;
 
-export default function PreviewContacto() {
+export default function Contacto() {
   return (
     <>
       <Block surface="paper">

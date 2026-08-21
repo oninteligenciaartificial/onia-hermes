@@ -153,7 +153,7 @@ export default function NosotrosPage() {
             </Reveal>
             <Reveal className="actions">
               <PressableCta>
-                <a className="btn" href="/prueba-gratis">
+                <a className="btn" href="/empezar">
                   Probar el sistema
                 </a>
               </PressableCta>

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import {
   PLANES,
@@ -9,9 +10,9 @@ import {
   NOTA_FISCAL,
   bs,
 } from "@/lib/pricing";
-import { WA_URL_LANDING } from "@/lib/site";
+import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
-import { Block, Btn, Kicker } from "../ui";
+import { Block, Btn, Kicker, JsonLd } from "../ui";
 import s from "../sitio.module.css";
 
 /**
@@ -19,12 +20,57 @@ import s from "../sitio.module.css";
  * incluye, condiciones, nota fiscal). El add-on del chatbot ya no es excepción:
  * desde 2026-08-21 pricing.ts → ADDONS LEE su precio de
  * content/chatbot-precios.ts, así que esta pantalla, la landing y
- * /preview/chatbot muestran el mismo número sin que nadie lo copie a mano.
+ * /chatbot muestran el mismo número sin que nadie lo copie a mano.
  */
 
-export default function PreviewPrecios() {
+export const metadata: Metadata = {
+  title: "Precios de Onia — planes en bolivianos, publicados",
+  description:
+    "Básico Bs 320, Pro Bs 750 y Full Bs 1.500 al mes (o semanal desde Bs 89). Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. 14 días gratis.",
+  alternates: { canonical: "/precios" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: "Precios de Onia — en bolivianos, publicados",
+    description:
+      "Básico 320 · Pro 750 · Full 1.500 Bs/mes. 14 días gratis sin tarjeta, sin permanencia.",
+    url: "/precios",
+  },
+};
+
+/** Breadcrumb + SoftwareApplication con los montos: heredado de la v1. */
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "Precios", item: `${SITE_URL}/precios` },
+      ],
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "Onia",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      url: `${SITE_URL}/precios`,
+      offers: PLANES.map((plan) => ({
+        "@type": "Offer",
+        name: plan.nombre,
+        price: String(plan.mensual),
+        priceCurrency: "BOB",
+        category: "Suscripción mensual",
+        availability: "https://schema.org/InStock",
+      })),
+    },
+  ],
+};
+
+export default function Precios() {
   return (
     <>
+      <JsonLd data={JSON_LD} />
       <Block surface="paper">
         <Reveal>
           <Kicker>Precios claros</Kicker>

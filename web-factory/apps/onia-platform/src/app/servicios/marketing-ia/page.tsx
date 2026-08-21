@@ -176,7 +176,7 @@ export default function MarketingIaPage() {
                   Pedir propuesta por WhatsApp
                 </a>
               </PressableCta>
-              <a className="btn btn-ghost" href="/prueba-gratis">
+              <a className="btn btn-ghost" href="/empezar">
                 Conocer el sistema — 14 días gratis
               </a>
             </Reveal>

@@ -6,6 +6,11 @@ import styles from "./site-footer.module.css";
  * grupos con etiqueta, no una fila plana de 13 links que quebraba raro).
  * Toda pagina publica del sitio conserva su destino aca.
  *
+ * Cromo LEGADO (ver site-header.tsx): solo lo usan /nosotros, /servicios/*,
+ * los legales y el 404. Sus destinos se actualizaron a las rutas de la v3 el
+ * 2026-08-21 — /prueba-gratis, /modulos/dental y
+ * /funciones/facturacion-electronica-siat ya no existen como paginas.
+ *
  * La identidad legal NO se toca: la verificacion de negocio de Meta cruza el
  * sitio contra el documento del SEPREC, y el numero es el mismo que figura
  * en el portfolio. Si se borra, se cae esa verificacion.
@@ -18,10 +23,11 @@ const GRUPOS: readonly {
     titulo: "Producto",
     links: [
       { href: "/precios", label: "Precios" },
-      { href: "/prueba-gratis", label: "Prueba gratis" },
+      { href: "/empezar", label: "Prueba gratis" },
+      { href: "/rubros", label: "Rubros" },
+      { href: "/agentes", label: "Agentes" },
       { href: "/comparativa", label: "Comparación" },
-      { href: "/modulos/dental", label: "Módulo dental" },
-      { href: "/funciones/facturacion-electronica-siat", label: "Facturación SIAT" },
+      { href: "/facturacion", label: "Facturación SIAT" },
     ],
   },
   {
@@ -36,6 +42,7 @@ const GRUPOS: readonly {
   {
     titulo: "Empresa",
     links: [
+      { href: "/contacto", label: "Contacto" },
       { href: "/nosotros", label: "Nosotros" },
       { href: "/terminos", label: "Términos" },
       { href: "/privacidad", label: "Privacidad" },
