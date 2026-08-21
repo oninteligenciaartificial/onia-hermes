@@ -13,6 +13,11 @@
 
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+
+// Tambien es libreria: video-intake.mjs importa shortcodeOf/cookieHeader/fetchMediaItem
+// para bajar el caption de un reel. Sin este guard, importar ejecutaba el CLI entero.
+const esMain = process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
 
 const REPO = path.resolve(import.meta.dirname, '../../../..');
 const JAR = path.join(REPO, '.hermes', 'ig-session', 'cookies.txt');
@@ -24,21 +29,21 @@ const OUT = outIdx === -1 ? process.cwd() : args[outIdx + 1];
 const inputs = args.filter((a, i) => !a.startsWith('--') && !(outIdx !== -1 && i === outIdx + 1));
 
 /** Shortcode de Instagram -> media_id (base64 propio de IG, 64 simbolos). */
-function shortcodeToMediaId(shortcode) {
+export function shortcodeToMediaId(shortcode) {
   const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
   let n = 0n;
   for (const ch of shortcode) n = n * 64n + BigInt(ALPHABET.indexOf(ch));
   return n.toString();
 }
 
-const shortcodeOf = (s) => s.match(/\/(?:p|reel|tv)\/([^/?#]+)/)?.[1] || s;
+export const shortcodeOf = (s) => s.match(/\/(?:p|reel|tv)\/([^/?#]+)/)?.[1] || s;
 
 // Solo estas hacen falta para autenticar el GET. Mandar el jar entero rompe: la cookie
 // `rur` trae comillas y escapes \054 que undici rechaza como header invalido.
 const NECESARIAS = new Set(['sessionid', 'csrftoken', 'ds_user_id', 'mid', 'ig_did']);
 
 /** cookies.txt (Netscape) -> header Cookie con lo minimo de instagram.com. */
-function cookieHeader() {
+export function cookieHeader() {
   if (!existsSync(JAR)) throw new Error(`no hay cookies: ${JAR}\ncorre: node fetch-video.mjs --login`);
   const pares = readFileSync(JAR, 'utf8')
     // \r?\n: en Windows el jar queda con CRLF y el \r se cuela en el valor de la ultima
@@ -57,7 +62,8 @@ function cookieHeader() {
 const best = (node) =>
   (node.image_versions2?.candidates || []).sort((a, b) => b.width * b.height - a.width * a.height)[0];
 
-async function bajar(input, cookie) {
+/** El item completo de la API de IG (trae caption, slides, video_versions...). */
+export async function fetchMediaItem(input, cookie) {
   const sc = shortcodeOf(input);
   const res = await fetch(`https://www.instagram.com/api/v1/media/${shortcodeToMediaId(sc)}/info/`, {
     headers: { cookie, 'x-ig-app-id': IG_APP_ID, 'user-agent': 'Mozilla/5.0' },
@@ -66,6 +72,12 @@ async function bajar(input, cookie) {
 
   const item = (await res.json()).items?.[0];
   if (!item) throw new Error('la API no devolvio item');
+  return item;
+}
+
+async function bajar(input, cookie) {
+  const sc = shortcodeOf(input);
+  const item = await fetchMediaItem(sc, cookie);
 
   const slides = item.carousel_media || [item];
   const dir = path.join(OUT, sc);
@@ -90,21 +102,23 @@ async function bajar(input, cookie) {
   return { sc, dir, slides: escritos.length, tipo: item.carousel_media ? 'carrusel' : 'simple', caption: !!caption };
 }
 
-if (!inputs.length) {
-  console.error('uso: node ig-carousel.mjs <url|shortcode> [...] --out DIR');
-  process.exit(1);
-}
-const cookie = cookieHeader();
-mkdirSync(OUT, { recursive: true });
-
-const res = await Promise.allSettled(inputs.map((u) => bajar(u, cookie)));
-let fail = 0;
-res.forEach((r, i) => {
-  if (r.status === 'fulfilled')
-    console.log(`OK\t${r.value.sc}\t${r.value.tipo}\t${r.value.slides} laminas\tcaption:${r.value.caption ? 'si' : 'no'}\t${r.value.dir}`);
-  else {
-    fail++;
-    console.error(`FALLO\t${inputs[i]}\t${r.reason.message}`);
+if (esMain) {
+  if (!inputs.length) {
+    console.error('uso: node ig-carousel.mjs <url|shortcode> [...] --out DIR');
+    process.exit(1);
   }
-});
-process.exit(fail === inputs.length ? 1 : 0);
+  const cookie = cookieHeader();
+  mkdirSync(OUT, { recursive: true });
+
+  const res = await Promise.allSettled(inputs.map((u) => bajar(u, cookie)));
+  let fail = 0;
+  res.forEach((r, i) => {
+    if (r.status === 'fulfilled')
+      console.log(`OK\t${r.value.sc}\t${r.value.tipo}\t${r.value.slides} laminas\tcaption:${r.value.caption ? 'si' : 'no'}\t${r.value.dir}`);
+    else {
+      fail++;
+      console.error(`FALLO\t${inputs[i]}\t${r.reason.message}`);
+    }
+  });
+  process.exit(fail === inputs.length ? 1 : 0);
+}

@@ -14,3 +14,5 @@
 [47] Luego pedimos el correo y luego el número de teléfono
 [50] y en base a los datos que recogimos podemos hacer correos personalizados
 [53] en base a las respuestas que nos dio el cliente.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

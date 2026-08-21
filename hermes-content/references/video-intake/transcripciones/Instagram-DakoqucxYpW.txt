@@ -8,3 +8,5 @@
 [29] Wait a couple of minutes and you will get a result like this on the first try.
 [33] This is insane, save it to your gallery and you are done.
 [37] Comment renoise below and I will send you the exact prompt I used.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

@@ -8,3 +8,5 @@
 [27] 7. Give Claude actual taste with this GitHub repo
 [31] If you drop the word Claude and drop me a follow, I will send you all 7 tools.
 [34] Thanks so much for watching and until next time my friend.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

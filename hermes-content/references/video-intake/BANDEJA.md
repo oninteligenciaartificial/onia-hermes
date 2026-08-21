@@ -224,3 +224,10 @@ prompts: [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4)
 | [DbtRIfTojBt](https://www.instagram.com/reel/DbtRIfTojBt/) lista sobre b-roll | MARKETING | **SIRVE YA** | mismo molde, segundo ejemplo |
 
 ➡️ **Nuevo:** [BANCO_DE_REPLICABLES.md](BANCO_DE_REPLICABLES.md) — la cola de producción.
+
+## 2026-08-21-20260605-mara-beauty-serum-controversial-hook-veo-lite-v1-final
+
+- local:20260605-mara-beauty-serum-controversial-hook-veo-lite-v1-final.mp4 · 8 s
+- [Lectura + verbatim](transcripciones/2026-08-21-20260605-mara-beauty-serum-controversial-hook-veo-lite-v1-final.md)
+- Resumen: El video es un anuncio de cuidado facial que cuestiona las rutinas complejas de belleza. Muestra a una mujer pelirroja aplicando un producto en serum y luciendo una piel luminosa. El mensaje central propone simplificar el cuidado de la piel con menos pasos para lograr mejores resultados ("Barrier Glow").
+- **Veredicto: PENDIENTE**

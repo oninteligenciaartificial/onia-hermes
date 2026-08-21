@@ -9,3 +9,5 @@
 [29] Cada mensaje que tu equipo manda para pedir, oye ya me enviaste esto, es tiempo que un
 [33] sistema bien construido te devuelve.
 [35] Comenta la palabra equipo y te muestro que necesitas para construir este sistema.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

@@ -155,7 +155,33 @@ de la base. Capturar fotogramas por canvas da imagen pero **NO audio**.
 5. **Resumir:** qué se **dice** (transcript) + qué se **muestra** (cuadros clave con su minuto) +
    un **timeline por secciones**. Reportá la cobertura real.
 
-## Intervalo de fotogramas (heurística)
+## Análisis escena por escena — Higgsfield `video_analysis_create` (2026-08-20)
+
+**GRATIS y mejor que leer fotogramas a ciegas** (medido: 25 escenas en 55 s, balance idéntico —
+ficha: `hermes-content/references/video-intake/2026-08-19-la-herramienta-lee-el-video.md`).
+Solo videos **< 3 min**: la propia herramienta degrada en largos. NO reemplaza leer el texto en
+pantalla: el prompt se lee con los ojos, siempre.
+
+El MCP de Higgsfield vive solo en sesiones de Claude (OAuth; no hay API key). Por eso
+`scripts/video-intake.mjs` **encola** (`.hermes/video-intake/scenes-queue.jsonl`) y una sesión
+con el MCP **drena** con `scripts/video-scenes.mjs` (flujo exacto en su cabecera): `next` →
+`media_upload` + curl PUT + `media_confirm` → `balance` ANTES → `video_analysis_create` →
+`mark` → seguir con otra cosa (3-5 min) → `video_analysis_status` → `balance` DESPUÉS → `save`.
+Tope por corrida `ONIA_SCENES_TOPE` (default 10); si el balance BAJA, `save` corta la cola
+(`scenes-PAUSADO`) y `next` se niega hasta revisión humana. Log: `analisis/CORRIDAS.log`.
+
+## Fotogramas por densidad de texto — `scripts/text-frames.mjs` (2026-08-20)
+
+```bash
+node scripts/text-frames.mjs <video.mp4> --out DIR [--max 12]
+```
+Escanea **cuadro por cuadro** (320px gris + edgedetect; fps=4 solo en >5 min) y extrae los
+picos de densidad de bordes a 960px — proxy de "hay texto/UI en pantalla". Nació de casi
+perder un prompt que aparecía en UN solo cuadro con el muestreo a intervalo fijo. El intake
+lo corre solo (deja los cuadros en `.hermes/video-intake/frames/<id>/`, local). Preferilo
+sobre el intervalo fijo cuando el objetivo es **leer texto en pantalla**.
+
+## Intervalo de fotogramas (heurística del FALLBACK)
 | Duración | fps de extracción | intervalo | cuadros aprox |
 | --- | --- | --- | --- |
 | < 2 min | 1/5 | 5 s | 24-72 |
@@ -163,7 +189,8 @@ de la base. Capturar fotogramas por canvas da imagen pero **NO audio**.
 | 10-30 min | 1/25 | 25 s | 24-72 |
 | > 30 min | 1/45 | 45 s | 40+ |
 
-`see-video.sh` calcula esto solo desde la duración (ffprobe).
+`see-video.sh` calcula esto solo desde la duración (ffprobe). Para cazar texto en pantalla
+usá `text-frames.mjs` (arriba), que muestrea por densidad y no por reloj.
 
 ## Transcripción — opciones
 | Camino | Costo | Timestamps | Cuándo |

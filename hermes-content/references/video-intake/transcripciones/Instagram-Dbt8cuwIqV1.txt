@@ -31,3 +31,5 @@
 [71.2] Si quieres ver el video donde te enseño a diseñar tu primer loop,
 [74.0] simplemente comenta esta palabra y te lo mando.
 [76.1] Bye.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

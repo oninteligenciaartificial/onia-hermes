@@ -15,3 +15,5 @@
 [66.5] todavía utilizar cloud, acabo de crear un curso gratuito completo de cero para
 [72.0] que puedas aprender las bases y puedas empezar a utilizar esta inteligencia
 [76.4] artificial, deja la palabra cloud
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

@@ -5,3 +5,5 @@
 [15] y fíjate que nuestro otro agente recibe este mensaje de la gente de Frontend
 [19] y esto es lo que te permite dirigir tus agentes de forma que trabajen autónoma cuando van terminando tareas
 [24] y si te ha gustado te truco deja tu like y cuéntame si ya lo conocías
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

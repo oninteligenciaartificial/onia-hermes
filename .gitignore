@@ -29,6 +29,7 @@ build/
 # `node scripts/hyperframes/render.mjs --comp Scoreboard`. Son 155 dias: si se
 # suben, el repo se llena de artefactos reconstruibles.
 .hermes/video-lab/overlay/
+.hermes/video-intake/
 
 # OS
 .DS_Store
