@@ -1,5 +1,13 @@
 # Modelo 2 — nacida del casting del 2026-08-21
 
+> 🟡 **ESTADO 2026-08-21 (decisión de Sergio): MODELO INTERNA, EN PAUSA.**
+> El resultado aún no lo convence; NO se lanza como Lucía. Queda como activo interno
+> (pruebas, mockups, material de laboratorio) sin cuenta ni nombre público. No gastar más
+> créditos en su cara hasta nueva orden. Lo construido queda: ficha de rasgos, imagen maestra
+> (`c2f93622`), surgical-v2 con el método de encadenado, y la regla de identidad que salió
+> de su proceso (imagen maestra única + referencia directa).
+
+
 > Elegida por Sergio: **candidata B2** (playa, cara fina). Nombre PENDIENTE — lo decide Sergio.
 > Rol decidido en `docs/ONIA_CUENTAS_Y_MODELOS_SEPARACION_20260821.md`: **cara de PAUTA**,
 > no publica orgánico propio (eso evita que los anuncios quemen la marca de Lucía).
