@@ -1,4 +1,13 @@
 import type { CSSProperties, ReactNode } from "react";
+import {
+  NAV_HEADER,
+  NAV_PRODUCTO,
+  NAV_DECIDIR,
+  NAV_LEGAL,
+  EMPEZAR_URL,
+  LOGIN_URL,
+} from "./nav";
+import { MobileMenu } from "./menu";
 import s from "./preview.module.css";
 
 /**
@@ -109,13 +118,6 @@ export function Kicker({ children }: { children: ReactNode }) {
 
 /* ---------- chrome ------------------------------------------------------ */
 
-const NAV = [
-  { href: "/preview/rubros", label: "Rubros" },
-  { href: "/preview/chatbot", label: "Chatbot" },
-  { href: "/preview/agentes", label: "Agentes" },
-  { href: "/preview/precios", label: "Precios" },
-] as const;
-
 export function PreviewHeader() {
   return (
     <header className={s.header}>
@@ -124,14 +126,18 @@ export function PreviewHeader() {
           Onia<b>.</b>
         </a>
         <nav className={s.nav} aria-label="Secciones">
-          {NAV.map((item) => (
+          {NAV_HEADER.map((item) => (
             <a key={item.href} className={s.navLink} href={item.href}>
               {item.label}
             </a>
           ))}
         </nav>
         <div className={s.headerCta}>
-          <Btn href="/prueba-gratis">Probá gratis</Btn>
+          <a className={s.headerLogin} href={LOGIN_URL}>
+            Entrar
+          </a>
+          <Btn href={EMPEZAR_URL}>Probá gratis</Btn>
+          <MobileMenu />
         </div>
       </div>
     </header>
@@ -142,17 +148,40 @@ export function PreviewFooter() {
   return (
     <footer className={s.footer}>
       <div className={s.footerInner}>
-        <span className={s.wordmark} style={{ color: "#fff" }}>
-          Onia<b>.</b>
-        </span>
-        <span style={{ opacity: 0.7 }}>Sistema de gestión con IA · Bolivia</span>
-        <nav className={s.footerNav} aria-label="Secciones">
-          {NAV.map((item) => (
+        <div className={s.footerBrand}>
+          <span className={s.wordmark} style={{ color: "#fff" }}>
+            Onia<b>.</b>
+          </span>
+          <p className={s.footerTag}>Sistema de gestión con IA · Bolivia</p>
+        </div>
+
+        <nav className={s.footerNav} aria-label="Producto">
+          <p className={s.footerGroup}>Producto</p>
+          {NAV_PRODUCTO.map((item) => (
             <a key={item.href} href={item.href}>
               {item.label}
             </a>
           ))}
         </nav>
+
+        <nav className={s.footerNav} aria-label="Decidir">
+          <p className={s.footerGroup}>Decidir</p>
+          {NAV_DECIDIR.map((item) => (
+            <a key={item.href} href={item.href}>
+              {item.label}
+            </a>
+          ))}
+          <a href={LOGIN_URL}>Entrar</a>
+        </nav>
+      </div>
+
+      <div className={s.footerLegal}>
+        {/* Los legales viven UNA vez, en el producto. Acá se linkean. */}
+        {NAV_LEGAL.map((item) => (
+          <a key={item.href} href={item.href}>
+            {item.label}
+          </a>
+        ))}
       </div>
     </footer>
   );
