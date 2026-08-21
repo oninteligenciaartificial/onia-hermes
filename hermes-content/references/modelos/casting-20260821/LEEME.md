@@ -39,6 +39,14 @@ La cara es 100% sintética. Regla del repo sostenida.
 - ancla canon: job `3f5ea350` (en el historial de Higgsfield y en el Element)
 - ronda 1 y 2 completas en esta carpeta
 
+## ✅ Actualización 2026-08-21 (noche)
+
+- **Motor elegido por Sergio: gpt_image_2** (ganó el test multi-modelo de la ficha).
+- **Ancla v2 MULTI-REFERENCIA creada**: Element `213993a2-620f-4e73-b105-8eed91d5bc51`
+  (`modelo2-ancla-v2-gpt`) = canon frontal gpt + la toma ganadora del auto. Reemplaza a la
+  v1 `9d81f43c` (mono-referencia, derivaba en escena).
+- La cara definitiva es la del test D/gpt (sonrisa grande, castaño claro), no B2.
+
 ## Pendiente
 
 1. **Nombre** (Sergio) — ojo: ya existe un Element viejo "Valentina ONIA v1" en la cuenta;
