@@ -30,6 +30,9 @@
 > ni el research de coexistencia (`ONIA_MODELO_MULTICLIENTE_CHATBOT_20260802`,
 > hoy solo en historia de git — commit `456c2bc8`). Este doc COMPARA las rutas
 > y DECIDE la secuencia. Investigación externa: 2026-08-17.
+> **Estado de los trámites de Meta re-verificado el 2026-08-21** mirando el panel logueado
+> + Graph API: App Review **aprobado**; lo único abierto es la **Access Verification, que
+> vence el 20-oct-2026** — tabla en §1.
 >
 > Precio que esto entrega: **Chatbot WhatsApp con IA — Bs 1.500 inst. +
 > Bs 1.490/mes + Meta por consumo** (manda `onia-platform/lib/pricing.ts`,
@@ -47,11 +50,13 @@ developers.facebook.com y developers.chatwoot.com:
 
 | Requisito | ¿De quién? | Estado |
 |---|---|---|
-| Ser **Tech Provider** (auto-servicio, no hay que ser BSP ni entrar a un programa de partners) | Nuestro, UNA vez | En curso |
-| Business Verification de la agencia | Nuestro | ✅ aprobada 31-jul-2026 |
-| App con caso de uso WhatsApp en live mode | Nuestro | ✅ "Onia Bot" (1078962684709749) |
-| App Review: **2 videos** (enviar mensaje desde la app; crear plantilla) para Advanced Access a `whatsapp_business_messaging` + `whatsapp_business_management` | Nuestro | ✅ **PRESENTADO Y EN CURSO** al 2026-08-17 (visto por Sergio en el panel de Meta: `whatsapp_business_messaging` + `whatsapp_business_management` + `public_profile`; plazo típico ~20 días) |
-| Access Verification (formulario) | Nuestro | Pendiente, ~5 días |
+| Ser **Tech Provider** (auto-servicio, no hay que ser BSP ni entrar a un programa de partners) | Nuestro, UNA vez | En curso — falta solo la Access Verification |
+| Business Verification de la agencia | Nuestro | ✅ aprobada 31-jul-2026 · re-verificado 2026-08-21: OniaAgency (1451773736711697), `verification_status: verified` |
+| App con caso de uso WhatsApp en live mode | Nuestro | ✅ "Onia Bot" (1078962684709749), publicada, **0 acciones requeridas** (2026-08-21) |
+| App Review: **2 videos** (enviar mensaje desde la app; crear plantilla) para Advanced Access a `whatsapp_business_messaging` + `whatsapp_business_management` | Nuestro | ✅ **APROBADO el 2026-08-21 09:59 GMT-4** — `whatsapp_business_messaging`, `whatsapp_business_management` y `public_profile`, los tres en **acceso avanzado** (`live`) |
+| **Access Verification (formulario)** | Nuestro | 🔴 **NO INICIADA · vence el 20-oct-2026** — Meta avisa textual que **restringe la app** si no se completa. Tarda ~5 días. **Es el ÚNICO trámite de Meta que queda abierto** |
+| Configuración "Inicio de sesión con Facebook para empresas" (de ahí sale el `WHATSAPP_CONFIGURATION_ID`) | Nuestro | 🔴 **no existe ninguna** al 2026-08-21 ⇒ sin Configuration ID no hay popup |
+| Las 3 env vars en Chatwoot + dominio del JS SDK autorizado | Nuestro | 🔴 `WHATSAPP_APP_ID`, `WHATSAPP_APP_SECRET` y `WHATSAPP_CONFIGURATION_ID` están **VACÍAS** (2026-08-21) |
 | Embedded Signup **v4** (v2 se deprecia el **15-oct-2026** — nunca implementar v2) | Nuestro | Pendiente (lo trae Chatwoot, ver abajo) |
 | Business Verification **del cliente** | Del cliente | **NO necesaria para arrancar**: sin verificar puede iniciar conversaciones a 250 clientes únicos/24 h y responder SIN límite lo que le escriban. Verificarse solo le hace falta para escalar difusiones y para el display name oficial / check verde |
 
@@ -71,6 +76,12 @@ número: automáticos. **La ruta es "encender en nuestro Chatwoot", no
 construir.** Riesgo conocido self-hosted: reportes de popup que no abre
 (exige HTTPS válido y cookies de terceros) — la prueba real con un número
 +591 es parte del encendido, no un opcional.
+
+**⚠️ Hostname sin resolver (2026-08-21):** el mismo Chatwoot responde por **dos**
+hostnames — `chat.onia.com.bo` y el de Easypanel (que es el que tiene apuntado el
+webhook). El JS SDK del Embedded Signup exige el dominio autorizado en la app de Meta y
+**autorizar uno solo puede no alcanzar**. Antes de darlo por hecho hay que abrir el panel
+y **mirar desde cuál hostname se sirve el popup**.
 
 **Tiempos:** trabajo nuestro restante ~1 día + espera de Meta 1–7 días.
 Hasta completar los 3 gates: techo de **10 clientes nuevos por semana**
@@ -166,8 +177,9 @@ ni resuelve Meta: su WhatsApp también termina en un BSP de terceros.**
 **Lectura:** todos resuelven el alta con el MISMO Embedded Signup que
 nosotros vamos a encender gratis en Chatwoot. Pagar €49/número/mes o un 20%
 de markup por mensaje sería duplicar costo para tercerizar un trámite que ya
-tenemos a medio hacer (business verification aprobada). **Veredicto: solo
-plan B si App Review se empantana semanas Y hay un cliente grande esperando
+tenemos casi terminado (business verification y App Review aprobados; falta
+la Access Verification). **Veredicto: solo plan B si la Access Verification
+se empantana semanas Y hay un cliente grande esperando
 — y con permiso de gasto explícito (regla: nada pago sin aprobación).**
 
 ---
@@ -370,6 +382,14 @@ pricing; fechar cada afirmación al citarla. El checkpoint del 1-sep-2026
 
 ## 6. Recomendación (alta + canal, en secuencia)
 
+**Lo que se le puede prometer a un cliente HOY:** el bot atendiendo su WhatsApp con el
+alta hecha por nosotros (R3 / §1.2). Nuestra WABA está viva: **+591 75414930**, calidad
+**GREEN**, tier **250**, `can_send_message: AVAILABLE` (verificado 2026-08-21). **No** se
+promete todavía el botón de auto-conexión, ni la WABA propia del cliente, ni coexistencia:
+faltan el Configuration ID, las env vars y la Access Verification. Lo que no está
+encendido no se nombra — nada de "muy pronto". Tabla completa en
+`ONIA_CHATBOT_LINEA_DE_ENTREGA.md` §0.1.
+
 **Hoy (esta semana, con 0–3 clientes):**
 1. **Canal: encender B1** — crear un inbox Website en Chatwoot, colgarle el
    agent bot y MIRAR una conversación completa (verificación real, no grep).
@@ -377,14 +397,16 @@ pricing; fechar cada afirmación al citarla. El checkpoint del 1-sep-2026
 2. **Alta WhatsApp: R3 done-for-you** en la cuenta del cliente (partner
    access, runbook ya escrito). Nuestra WABA solo si es piloto y firma
    consentimiento.
-3. **En paralelo, destrabar R1**: App Review **ya presentado y en curso**
-   (2026-08-17, ~20 días típicos) → seguirlo en el panel y responder rápido
-   si Meta pide cambios → Access Verification → Configuration ID → 3 env
-   vars → **probar el popup con un +591 real** (la prueba de coexistencia de
+3. **En paralelo, destrabar R1**: App Review ✅ **APROBADO el 2026-08-21** (los
+   3 permisos en acceso avanzado) → 🔴 **Access Verification: NO INICIADA y vence
+   el 20-oct-2026** (~5 días; si se pasa, Meta restringe la app) — arrancarla ya
+   → Configuration ID (hoy no existe ninguna configuración) → dominio del JS SDK
+   (resolver antes cuál de los dos hostnames sirve el popup) → 3 env vars (hoy
+   vacías) → **probar el popup con un +591 real** (la prueba de coexistencia de
    20 min incluida — nunca prometer coexistencia a un boliviano sin haberla
    pasado).
 
-**Cuando el botón funcione (estimado 2–6 semanas, casi todo espera de Meta):**
+**Cuando el botón funcione (ya no espera App Review: quedan ~1 día nuestro + ~5 días de Access Verification):**
 4. **R1 Embedded Signup pasa a ser el camino estándar** y R3 queda como
    "asistencia guiada" en videollamada para el cliente no técnico (mismo
    popup, nosotros mirando). El costo de alta por cliente cae a minutos.
@@ -402,9 +424,10 @@ altas nuevas bajo nuestra WABA más allá de 3 pilotos.
 
 ## 7. Qué depende de Sergio
 
-1. **App Review: presentado y en curso (2026-08-17)** — vigilar el panel de
-   Meta y responder si piden cambios; al aprobarse, seguir con **Access
-   Verification**. Sigue siendo EL bloqueante de la Ruta 1.
+1. **App Review: ✅ APROBADO (2026-08-21 09:59 GMT-4)** — ya no hay nada que
+   vigilar ahí. 🔴 **Lo que manda ahora es la Access Verification: NO INICIADA y
+   vence el 20-oct-2026.** Si se pasa esa fecha Meta **restringe la app** y se cae
+   la Ruta 1 entera. Tarda ~5 días: se presenta esta semana, no en octubre.
 2. **Un número +591 real de prueba** para el test de Embedded Signup +
    coexistencia (20 min, con la app WhatsApp Business instalada).
 3. **Decisión de pricing**: ¿existe un escalón "solo widget web" más barato
@@ -421,6 +444,10 @@ altas nuevas bajo nuestra WABA más allá de 3 pilotos.
 
 ## 8. Sin verificar
 
+- **Desde cuál de los dos hostnames del Chatwoot se sirve el popup** del Embedded
+  Signup (`chat.onia.com.bo` vs. el de Easypanel, que es el del webhook). Define
+  qué dominio se autoriza en el JS SDK de la app; autorizar uno solo puede no
+  alcanzar.
 - Que el Embedded Signup funcione en NUESTRO Chatwoot self-hosted concreto
   (reportes de popup que no abre en self-hosted; la prueba con número real
   es parte del encendido).

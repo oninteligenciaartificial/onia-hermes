@@ -29,13 +29,42 @@
 2. **Plantilla de bot por cliente sobre el motor BOT-ONIA** — un `config` por cliente + script de alta (inbox, webhook, agentes, n8n).
 3. **Siembra automática desde el formulario de intake** — intake → config del bot + prueba de humo. Sin sesión artesanal.
 
-**🔴 Fecha que manda: 1-oct-2026.** Meta empieza a cobrar las respuestas dentro de la
+**🔴 Fecha que manda #1 — 20-oct-2026: Access Verification.** El App Review de la app
+"Onia Bot" quedó **APROBADO** el 2026-08-21 (§1.1), pero Meta exige además completar la
+**Access Verification** antes del **20-oct-2026** o **restringe la app** — así lo dice Meta,
+textual, en el panel. Hoy está **NO INICIADA** y el trámite tarda ~5 días. Si se pasa esa
+fecha no hay botón de auto-conexión y el alta vuelve a ser 100% manual. Es el único trámite
+de Meta que queda abierto.
+
+**🔴 Fecha que manda #2 — 1-oct-2026.** Meta empieza a cobrar las respuestas dentro de la
 ventana de 24 h (~USD 0,0113/mensaje, misma tarifa que utility — tarifa definitiva la
 publica Meta antes del 1-sep-2026). Fuente:
 [Upcoming pricing updates](https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing/non-template-messages)
 y `historial/ONIA_META_WHATSAPP_CLIENTES_20260808.md` §4. **Consecuencia para la línea:**
 toda alta debe terminar con el cliente en SU propia WABA y con SU método de pago cargado
 en WhatsApp Manager — ese costo es del cliente, no nuestro (así está vendido: "+ Meta").
+
+---
+
+## 0.1 Qué se le puede prometer HOY a un cliente (sin mentir)
+
+Verificado 2026-08-21 mirando el panel de Meta logueado + Graph API.
+
+| Se puede prometer | Por qué es cierto hoy |
+|---|---|
+| "Tu chatbot atiende tu WhatsApp" | Nuestra WABA está viva y sana: número **+591 75414930**, calidad **GREEN**, tier **250** destinatarios/24 h, `can_send_message: AVAILABLE`. El alta manual (§1.2) funciona y ya se ejecutó dos veces |
+| "Lo dejamos andando en días, no semanas" | La línea de §4 por el camino manual: ~4–6 h nuestras, 2–4 días calendario |
+| "Vos no tocas nada de Meta" | En el camino de hoy el alta la hacemos nosotros (§1.2 / done-for-you) |
+
+| NO se puede prometer todavía | Qué falta |
+|---|---|
+| "Conectas tu número solo, desde un botón, en 15 minutos" | Falta la Configuración de "Inicio de sesión con Facebook para empresas" (no existe ⇒ no hay `WHATSAPP_CONFIGURATION_ID`), las 3 env vars de Chatwoot (hoy **vacías**) y la Access Verification (§1.1) |
+| "Tu propia WABA con tu propia factura de Meta" | Depende del mismo botón. Hoy el número entra bajo NUESTRA WABA, y eso tiene techos duros (§1.2): solo pilotos con consentimiento escrito |
+| "Coexistencia: seguís usando tu app de WhatsApp Business" | Llega con el Embedded Signup, y además nunca se probó con un +591 |
+
+**Regla:** lo que no está encendido **no se nombra** delante del cliente. Nada de "muy
+pronto vas a poder conectarlo solo": se vende el alta hecha por nosotros, que es lo que
+hoy funciona y funciona bien.
 
 ---
 
@@ -65,18 +94,26 @@ mismo número (exige app ≥ 2.24.17; desvincula WhatsApp Web/Desktop y fija thr
 **Prerrequisito (UNA vez, no por cliente): Tech Provider aprobado.**
 Runbook completo en `historial/ONIA_META_WHATSAPP_CLIENTES_20260808.md` §2. Resumen:
 
-| Paso | Estado | Tiempo de Meta |
+| Paso | Estado — verificado 2026-08-21 (panel de Meta logueado + Graph API) | Tiempo de Meta |
 |---|---|---|
-| Verificación del negocio | ✅ aprobada | — |
-| App "Onia Bot" (1078962684709749) en live mode | ✅ | — |
-| App Review de `whatsapp_business_management` + `whatsapp_business_messaging` (2 screencasts, uno por permiso; no pedir más) | **NO VERIFICADO si ya se presentó** | ~24 h de revisión (dato oficial Meta) |
-| Access Verification (formulario) | NO VERIFICADO | ~5 días |
-| Configuración "Facebook Login for Business" → sacar el `WHATSAPP_CONFIGURATION_ID` | pendiente | ~30 min nuestro |
-| Setear las 3 env vars + **probar el flujo con un número real** | pendiente | ~2–4 h nuestro (una vez) |
+| Verificación del negocio (OniaAgency, 1451773736711697) | ✅ `verification_status: verified` | — |
+| App "Onia Bot" (1078962684709749) en live mode | ✅ publicada, **0 acciones requeridas** | — |
+| App Review de `whatsapp_business_messaging` + `whatsapp_business_management` + `public_profile` | ✅ **APROBADO el 2026-08-21 09:59 GMT-4** — los tres en **acceso avanzado** (`live`) | — (ya salió) |
+| **Access Verification (formulario)** | 🔴 **NO INICIADA · vence el 20-oct-2026.** Meta avisa textual que **restringe la app** si no se completa | ~5 días |
+| Configuración "Inicio de sesión con Facebook para empresas" → de ahí sale el `WHATSAPP_CONFIGURATION_ID` | 🔴 **no existe ninguna** ⇒ hoy no hay Configuration ID | ~30 min nuestro |
+| Dominio del JS SDK autorizado en la app | 🔴 pendiente (ver la ambigüedad de hostname abajo) | ~10 min nuestro |
+| Las 3 env vars de Chatwoot (`WHATSAPP_APP_ID`, `WHATSAPP_APP_SECRET`, `WHATSAPP_CONFIGURATION_ID`) + **probar el flujo con un número real** | 🔴 las tres están **VACÍAS** | ~2–4 h nuestro (una vez) |
 
-Sin App Review aprobado se pueden onboardear igual **10 clientes por semana** (cupo default
-documentado por Meta); con todo aprobado, 200/semana. O sea: el trámite no bloquea vender,
-bloquea el *botón*.
+Con el App Review aprobado el techo de onboarding sube (10/semana por default → 200/semana
+con los gates completos), pero **eso no encendió el botón**: sin Configuration ID y sin env
+vars el Embedded Signup no existe en nuestro Chatwoot. El trámite nunca bloqueó vender;
+sigue bloqueando el *botón*.
+
+**⚠️ Ambigüedad a resolver ANTES de autorizar el dominio:** hay **dos hostnames del mismo
+Chatwoot** — `chat.onia.com.bo` y el de Easypanel (que es al que apunta el webhook).
+Autorizar uno solo puede no alcanzar: el popup del Embedded Signup lo abre el JS SDK desde
+el host donde está abierto el panel, no desde el del webhook. Hay que **determinar mirando
+desde cuál se sirve el popup** antes de dar el dominio por hecho.
 
 **NO VERIFICADO en nuestra instancia:** que el Embedded Signup funcione en nuestro Chatwoot
 concreto. La función existe desde ~v4.5–4.11 y corremos 4.12.1, pero hay reportes de fallas
@@ -110,9 +147,12 @@ escrito**, no más.
 ### 1.3 Veredicto
 
 - **Hoy:** manual bajo nuestra WABA, solo para cerrar los primeros pilotos. ~1 h nuestra por número.
-- **Camino real (2–6 semanas de trámite en el peor caso, casi todo espera de Meta):**
-  Embedded Signup vía Chatwoot. Costo nuestro por cliente: ~5 min. Costo del cliente: ~15 min.
-  **Es lo más fácil y rápido "desde Meta" que existe, y ya está instalado.**
+- **Camino real (ya no depende del App Review — salió aprobado el 2026-08-21):** Embedded
+  Signup vía Chatwoot. Lo que queda es ~1 día de trabajo NUESTRO (Configuration ID +
+  dominio + 3 env vars + prueba con un número real) más la **Access Verification**: ~5 días
+  de espera de Meta y **vence el 20-oct-2026**. Costo por cliente una vez encendido: ~5 min
+  nuestros, ~15 min del cliente. **Es lo más fácil y rápido "desde Meta" que existe, y ya
+  está instalado.**
 
 ---
 
@@ -213,20 +253,24 @@ intake completo.** ¿En 1 día calendario? Sí, si el cliente hace su parte el m
 **textos aprobados por el dueño** — por eso el intake pide respuestas YA aprobadas (§3.6),
 no borradores.
 
-Restricción de volumen: hasta tener App Review aprobado, máx. 10 onboardings/semana
-(cupo default de Meta, §1.1) — sobra para el arranque.
+Restricción de volumen: el App Review salió aprobado el 2026-08-21, así que el techo deja
+de ser el default de 10 onboardings/semana y sube hacia 200 a medida que se cierran los
+gates que faltan (§1.1). Con 0–3 clientes, ninguno de los dos números aprieta.
 
 ---
 
 ## 5. Qué falta construir (poco), por impacto
 
 1. **Encender Embedded Signup en Chatwoot** — *destraba la conexión en minutos y la WABA
-   propia del cliente antes del 1-oct.* (a) presentar App Review de los 2 permisos con sus
-   2 screencasts (guion listo en `historial/ONIA_META_WHATSAPP_CLIENTES_20260808.md` §2 —
-   **verificar primero si ya se presentó**); (b) Access Verification; (c) crear la
-   configuración de Facebook Login for Business y setear las 3 env vars; (d) **probar el
-   flujo completo con un número real y MIRARLO** (riesgo self-hosted §1.1).
-   Trabajo nuestro: ~1 día. Espera de Meta: 1–7 días. Código: cero.
+   propia del cliente antes del 1-oct.* (a) App Review ✅ **aprobado el 2026-08-21**, los 3
+   permisos en acceso avanzado — este paso ya no existe; (b) 🔴 **Access Verification: NO
+   INICIADA, vence el 20-oct-2026** (~5 días; Meta restringe la app si se pasa) — es el
+   único trámite abierto y arranca esta semana, no en octubre; (c) crear la Configuración
+   de "Inicio de sesión con Facebook para empresas" (hoy no existe ninguna), autorizar el
+   dominio del JS SDK — resolviendo antes cuál de los dos hostnames sirve el popup (§1.1) —
+   y setear las 3 env vars, hoy vacías; (d) **probar el flujo completo con un número real y
+   MIRARLO** (riesgo self-hosted §1.1).
+   Trabajo nuestro: ~1 día. Espera de Meta: ~5 días (Access Verification). Código: cero.
 
 2. **Plantilla de bot por cliente sobre BOT-ONIA + script de alta** — *convierte el alta en
    un comando.* Un `config-<cliente>.mjs` generado desde plantilla por rubro + script que
@@ -252,5 +296,5 @@ vive en Chatwoot mientras tanto) y guardar `Conversation`/`Message` en el produc
 - Chatwoot WhatsApp canal manual: <https://www.chatwoot.com/hc/user-guide/articles/1677832735-how-to-setup-a-whats_app-channel>
 - Fallas conocidas self-hosted: <https://github.com/orgs/chatwoot/discussions/13899> · <https://github.com/chatwoot/chatwoot/issues/13154>
 - Meta pricing (corte 1-oct-2026): <https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing/non-template-messages>
-- Meta Access Verification: <https://developers.facebook.com/docs/development/release/access-verification>
+- Meta Access Verification (deadline 20-oct-2026 para nuestra app; estado verificado 2026-08-21 en el panel): <https://developers.facebook.com/docs/development/release/access-verification>
 - Internos: `historial/ONIA_META_WHATSAPP_CLIENTES_20260808.md` (runbook Tech Provider completo) · `historial/ONIA_PRICING_CHATBOT_20260815.md` (inventario de los 4 bots + costo por conversación) · `historial/ONIA_PLATAFORMA_CANALES_Y_CONTENIDO_20260808.md` (decisión Chatwoot A→B) · repo BE `docs/product/bot-configuration-questionnaire.md` y `docs/operations/datos-requeridos-chatbot.md`

@@ -1,7 +1,8 @@
 # ONIA — Fechas críticas que corren solas
 
 > Fuente de verdad (sin fecha en el nombre): se EDITA este archivo cuando algo cambie.
-> Última verificación contra fuentes externas: **2026-08-17**.
+> Última verificación contra fuentes externas: **2026-08-17** · trámites de Meta
+> re-verificados el **2026-08-21** (panel logueado + Graph API).
 > Regla de la skill fiscal: toda obligación con RND/DS citado; sin fuente = "sin verificar".
 
 ---
@@ -14,6 +15,7 @@
 | **30-sep-2026** | Vence la prórroga de **facturación en línea** para los grupos **9°, 10°, 11° y 12°** de contribuyentes (**RND 102600000007**, 25-mar-2026). Desde el **1-oct-2026** esos NITs solo pueden emitir por Electrónica en Línea, Computarizada en Línea o **Portal Web en Línea** | El SIN. Del lado ONIA: Sergio decide el pitch de venta; cada cliente verifica su NIT | (a) Verificar el NIT de cada prospecto contra los anexos de los grupos (RND 102400000004 / 05 / 12 / 25) antes de vender "obligatorio por ley" — **prohibido venderlo como obligación universal** (regla vigente). (b) ONIA propio ya cumple: emite por SIAT Portal Web, que ES modalidad en línea |
 | **1-oct-2026** | Se acaba la ventana gratis de WhatsApp: Meta empieza a cobrar **por mensaje** los service messages (gratis desde nov-2024) y las plantillas utility dentro de la ventana de 24 h (gratis desde 1-jul-2025). La promesa pública *"Responder es gratis"* de onia.com.bo/chatbot se vuelve falsa | Sergio (aprueba textos) + quien edite `web-factory/apps/onia-platform/src/content/chatbot-precios.ts` | (1) Sacar la frase "Responder es gratis" de `chatbot-precios.ts` — 10 min. (2) Que el contador de cupo cuente también las respuestas (hoy no descuenta y desde oct son facturables sin tope). (3) Corregir `utilityBob: 0.113` en `onia-platform/lib/pricing.ts` (implica TC 10,0; el TCO BCB es 12,08). Detalle: `historial/ONIA_PRICING_CHATBOT_20260815.md` §3.6 |
 | **~mediados de octubre 2026** | **Runway.** Última cifra en el repo: caja Bs 15.000 − deuda Bs 4.000 = **Bs 11.000 netos al 2026-07-26** (≈11 semanas desde esa fecha). Cae casi el mismo día que la ventana SIAT | Sergio (solo clientes pagando lo mueven) | **Sin dato financiero actualizado a agosto en el repo** — la cifra vigente es la del 26-jul. Actualizar caja/deuda en este doc cuando haya número nuevo |
+| **20-oct-2026** | **Access Verification de Meta.** Si no se completa el formulario, Meta **restringe la app "Onia Bot"** (1078962684709749) — así lo dice el panel, textual. Con la app restringida se cae el Embedded Signup, y con él la WABA propia del cliente, la coexistencia y el alta en minutos: el alta vuelve a ser manual bajo NUESTRA WABA, con techo de 20 números y la factura de Meta a nuestro nombre | Sergio (es un formulario de la empresa) | Presentarla **ya**: tarda ~5 días y al **2026-08-21 está NO INICIADA** (verificado en el panel de Meta). El App Review salió **aprobado ese mismo día** con los 3 permisos en acceso avanzado, así que este es el único trámite abierto. Detalle: `ONIA_CHATBOT_LINEA_DE_ENTREGA.md` §1.1 |
 
 ---
 
@@ -85,4 +87,5 @@ El choque runway + fin de ventana SIAT en la misma quincena es el pico de riesgo
 - [SIN — índice RND 2026](https://www.impuestos.gob.bo/index.php/rnd-2026/)
 - [Meta — Pricing on the WhatsApp Business Platform](https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing)
 - [Meta — Upcoming pricing updates (service/utility, 1-oct-2026)](https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing/non-template-messages)
+- [Meta — Access Verification (deadline 20-oct-2026 para la app "Onia Bot")](https://developers.facebook.com/docs/development/release/access-verification)
 - Internos: `ONIA_SIAT_HABILITAR_FACTURACION_CHECKLIST_2026.md` · `historial/ONIA_PRICING_CHATBOT_20260815.md` · `historial/ONIA_META_WHATSAPP_CLIENTES_20260808.md` · `historial/ONIA_ESTADO_Y_RUMBO_20260726.md` · `ONIA_BITACORA_155_DIAS.md`

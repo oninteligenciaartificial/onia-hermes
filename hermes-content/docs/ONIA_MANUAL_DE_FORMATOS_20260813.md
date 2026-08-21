@@ -1112,6 +1112,7 @@ puede filmar su propio pipeline corriendo.
 | **Publicación automática de carruseles** | `carousel_publish.js` sirve los PNG desde el VPS por el puerto **8099**, que se cerró en el endurecimiento de seguridad | Probar el circuito con un carrusel de prueba **antes** de prometerlo |
 | **Filmar un flujo de pago propio** | No hay pasarela en producción | Filmar el **patrón** y decir que es un patrón, no un producto nuestro andando |
 | **`seedance_2_5` · "33 días ilimitados" · `Show Cinema`** | **Ninguno existe en nuestra cuenta** (verificado 2026-08-13). Tres fuentes distintas del corpus lo repiten y sigue siendo falso | `seedance_2_0` / `_mini`, 4-15 s, `soul_location` para escenarios |
+| **P02, P04, P05, P11, P12 y P23 tal como están escritos** | **Los tres archivos de §7 NO EXISTEN:** `scripts/capture-web.mjs`, `scripts/film-pattern.mjs` y `hermes-content/references/ui-patterns/_reel.html` (verificado 2026-08-21 con `find` sobre todo el repo: cero resultados). Las recetas de §3 los invocan por línea de comandos como si estuvieran escritos | Escribirlos (§7: ~105-165 líneas en total, ~2,5 h). Mientras tanto: capturas a mano + `make-mockup.mjs`, y **no prometer esos formatos como "un comando por pieza"** |
 
 ---
 
@@ -1139,9 +1140,16 @@ puede filmar su propio pipeline corriendo.
 
 ---
 
-## 7. Lo que se escribe una sola vez (y después no se vuelve a tocar)
+## 7. Lo que se escribe una sola vez (y después no se vuelve a tocar) — 🔴 NINGUNO ESTÁ ESCRITO
 
-Tres archivos, ~105-165 líneas en total. Con ellos, siete formatos salen a un comando por pieza.
+> **Verificado 2026-08-21 (`find` sobre todo el repo, cero resultados): los tres archivos de
+> esta sección NO EXISTEN.** La tabla de abajo es la **especificación de lo que hay que
+> escribir**, no un inventario de herramental disponible. Toda receta de §3 que invoque
+> `capture-web.mjs`, `film-pattern.mjs` o `_reel.html` **hoy no corre**. El `*` de la tabla
+> de decisión (§2) ya lo avisaba, pero esta sección y las recetas se leen como si
+> existieran — por eso queda dicho acá también.
+
+Tres archivos, ~105-165 líneas en total. Con ellos, siete formatos saldrían a un comando por pieza.
 
 | Archivo | Líneas | Qué hace | Destraba |
 |---|---|---|---|

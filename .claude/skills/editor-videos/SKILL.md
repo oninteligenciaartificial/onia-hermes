@@ -162,9 +162,14 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
    `mix-blend-mode:multiply` sobre la foto en `grayscale(1) contrast(1.45)`; borde de recorte =
    `clip-path: polygon(...)` con puntos irregulares FIJOS; papel = dos `repeating-linear-gradient`;
    sello = borde + rotación + `multiply`.
-   Apoyo **animado** (contar un número, revelar texto): `scripts/hyperframes/render.mjs` (motor de la casa,
-   default) o `scripts/remotion/render.mjs` — las MISMAS 5 composiciones en los dos motores
-   (`Stat · Browser · Phone · Quote · LowerThird`), salida secuencia PNG con alpha.
+   Apoyo **animado** (contar un número, revelar texto): `scripts/hyperframes/render.mjs`.
+   **Decisión CERRADA (A/B medido 2026-07-30): el motor es HyperFrames. No se reabre.**
+   `scripts/remotion/render.mjs` corre las MISMAS 5 composiciones
+   (`Stat · Browser · Phone · Quote · LowerThird`) pero es **baseline histórico**, no una
+   alternativa a elegir: HyperFrames es Apache-2.0 y Remotion es gratis solo hasta 3
+   empleados (desde el 4º, Company License paga — eso lo decide Sergio). Motivos, números
+   y fuentes: `scripts/hyperframes/README.md`, sección "Motor de la casa".
+   Salida: secuencia PNG con alpha.
    `node scripts/overlay-visuals.mjs --video in.mp4 --plan overlay-plan.json --out out.mp4`
    → superpone los PNG con timing y fade (`{overlays:[{asset,start,end,position,scale,fade}]}`); `--dry-run` imprime el ffmpeg.
    Para overlays animados/kinéticos más elaborados: `talking-head-recut` (HyperFrames).
@@ -291,7 +296,7 @@ el modelo la deforma.
 | **Narración / voz** (Lucía = **Marcela**) | `scripts/tts-elevenlabs.mjs` (ElevenLabs `eleven_multilingual_v2`) | plan starter ~69k chars/mes |
 | Subtítulos karaoke (word-level) | `scripts/karaoke-captions.mjs` (.ass + ffmpeg) | gratis (local) |
 | Mockups / tarjetas de dato / marcos | `scripts/make-mockup.mjs` (HTML+CSS → PNG alpha) | gratis (local) |
-| **Apoyo ANIMADO (mismas 5 comps, 2 motores)** | `scripts/hyperframes/render.mjs` · `scripts/remotion/render.mjs` | gratis (local) |
+| **Apoyo ANIMADO** (motor único: HyperFrames; `scripts/remotion/` es baseline histórico) | `scripts/hyperframes/render.mjs` | gratis (local) |
 | **Timing de los apoyos por PALABRA** | `scripts/sync-plan.mjs` (storyboard en palabras → plan) | gratis (local) |
 | **Zooms (punch-in por bloque / ken animado)** | `scripts/zoom-punch.mjs` | gratis (local) |
 | Montar overlays con timing y fade | `scripts/overlay-visuals.mjs` | gratis (local) |
