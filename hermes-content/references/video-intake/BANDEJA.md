@@ -224,3 +224,19 @@ prompts: [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4)
 | [DbtRIfTojBt](https://www.instagram.com/reel/DbtRIfTojBt/) lista sobre b-roll | MARKETING | **SIRVE YA** | mismo molde, segundo ejemplo |
 
 ➡️ **Nuevo:** [BANCO_DE_REPLICABLES.md](BANCO_DE_REPLICABLES.md) — la cola de producción.
+
+---
+
+# 2026-08-21 — la fuente: el chat con `mrsatiras__`
+
+Ficha: [2026-08-21-chat-mrsatiras-fuente.md](2026-08-21-chat-mrsatiras-fuente.md)
+
+Se entró al IG de Sergio. **Guardados vacío**: todo lo que le interesa está en ese chat.
+Las cuentas que le mandan (`luxry.ai`, `bluuu.ai`, `prompts.ig`) **gatean el prompt** — solo
+queda la imagen, que es lo que `sacar-prompt` convierte.
+
+| Item | Qué es | Estado |
+|---|---|---|
+| [DcI9w9GEnZH](https://www.instagram.com/p/DcI9w9GEnZH/) `bluuu.ai` | **9 escenas "CAUGHT LIVING" tuneadas para Higgsfield Soul 2.0** — el motor de Lucía | 12 láminas bajadas · prompts a reconstruir |
+| [DcLiEpCGJne](https://www.instagram.com/p/DcLiEpCGJne/) `luxry.ai` | escenas de restaurante desde un solo prompt; **muestra el prompt sobre la imagen** | 9 láminas bajadas |
+| [DcPTX07yAOA](https://www.instagram.com/p/DcPTX07yAOA/) `prompts.ig` | video 35 s | bajado, sin analizar |
