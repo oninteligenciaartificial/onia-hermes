@@ -1,0 +1,40 @@
+[0] This is crazy. This bearded dude used AI to sell Pilates grip socks and reportedly generated $271 million in 30 days.
+[7] The product cost around $1,150 and sold for 29 points by $99. That's almost a 20 times markup.
+[12] He pulled off a total of six brilliant moves. The first step, he started by looking for a growth market.
+[17] Instead of asking AI what he should sell, he checked Google Trends to see the trends.
+[20] He discovered that the Pilates market has been consistently rising, with search volume increasing year after year, showing a five-year compound growth rate of about 11.5%.
+[28] Then for the second step, he used AI to find specific products.
+[31] He went on YouTube and searched for a day in the life of a Pilates girl, looked for long videos with high likes and view counts, and then scraped all the subtitles and fed them into chat GPT.
+[38] Then he asked a very simple question, which products appeared repeatedly in these videos.
+[42] The AI gave him a list and the most popular one was Pilates grip socks.
+[45] He then put this term back into Google Trends and discovered that the search volume for this term was just starting to pick up, just beginning to rise.
+[51] Then in the third step, he discovered a brand vacuum.
+[54] All these Pilates girls were saying in their videos was, I need a pair of grip socks,
+[57] but they didn't say I want to buy Nike grip socks, nor did they say I want to buy Lululemon grip socks.
+[62] What does this indicate?
+[63] This means the demand already exists, but there isn't a strong brand occupying the user's mind yet.
+[68] Then in the fourth step, he used AI to define the target audience and the brand's aesthetic.
+[72] He had chat GPT analyze the subtitles of these videos and then distill the identity labels of these girls.
+[76] The AI came up with the term that girl, which refers to a type of girl who lives an exquisite self-discipline life, works out, drinks healthy smoothies, and prefers a clean aesthetic.
+[84] Then he continued to ask the AI which brands fit the, that girl vibe.
+[88] The AI found him a skincare brand called Glossier.
+[90] He then inferred the brand's visual style, pink and white, clean, dreamy and cloud-like,
+[94] and applied this entire aesthetic to the product details of his own compression sock brand.
+[97] Finally, he named the brand Glow Get It.
+[99] Then for the fifth step, instead of building his own factory or stocking up on inventory,
+[103] he went to Alibaba to find Chinese suppliers and used AI to organize the quotes, materials, minimum order quantities, and lead times.
+[109] Then for the sixth step, he used short videos to test and then used ads to scale up.
+[112] He didn't just dump a huge budget into ads right away.
+[115] Instead, he first made a short video where the first three seconds showed a Pilates girl almost slipping, which immediately grabbed attention and then he cut to how the grip sock solved the problem.
+[123] This video alone got over 2.1 million views.
+[126] Once it performed well, he then targeted ads to the people who had watched 95% of the video.
+[130] These people had already been filtered by the content and had a very strong interest.
+[134] In the end, his ad conversion rate reached 7.19%, whereas typical e-commerce conversion rates might only be 1% to 2%.
+[141] As a result, he generated $2.71 million in sales in the single month of April.
+[146] So the core of his success wasn't about which AI tool he used, but rather that he first identified a genuine demand, then used AI to handle research, positioning, branding, page creation, and sales materials.
+[154] He then used short videos to test the demand, ads to scale it up and relied on external supply chains or even factories in China to handle fulfillment.
+[161] If you have skills, services, products, or professional experience, you can use the same logic.
+[165] First identify the demand, then use content to acquire customers, then use AI to reduce production and delivery costs,
+[170] and finally standardize the entire process.
+[172] I have put the complete method in the Instagram money-making system.
+[175] If you are interested, you can check it out at wanghang.store.

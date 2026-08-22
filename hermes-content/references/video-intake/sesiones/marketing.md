@@ -120,6 +120,38 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## M5 · La escalera 0→10, otra vez — ahora sobre correos de bienvenida
+
+```text
+Contexto: el MISMO molde que ya fichamos con los popups, aplicado a correos de bienvenida: se
+puntuan 6 ejemplos ajenos de 0 a 10 y se dice por que. Ficha:
+hermes-content/references/video-intake/analisis/2026-08-22-items.json (item DcS3tJno9ZT)
+
+Que el molde aparezca DOS VECES en el corpus, en temas distintos, es el dato: es un formato
+reusable, no un video suelto. Sirve para cualquier cosa que se pueda mostrar y puntuar —
+correos, popups, landings, fichas de producto, carritos.
+
+LA COMPOSICION: dos columnas. Captura escalada a la izquierda, video de cara a la derecha, badge
+de puntaje absoluto fijo. Es HTML: sale de HyperFrames a costo cero.
+
+EL BLOQUEO ES EL MATERIAL, no la tecnica: hacen falta 6 correos de bienvenida REALES,
+ordenables de 0 a 10. Costo cero y medio dia: suscribirse con un mail limpio a 6 negocios y
+esperar. NO se inventan capturas.
+
+Tarea:
+1. Junta los 6 correos reales. Preferí negocios del rubro que vendemos y de Bolivia si se puede.
+2. Puntualos con criterio propio y escribi el POR QUE de cada uno en una linea. El valor del
+   formato esta ahi, no en el numero.
+3. Armá la plantilla de dos columnas en HyperFrames, parametrizada, para reusarla con popups,
+   landings o lo que venga.
+4. Cuidado con exponer marcas de terceros: se puede mostrar y criticar, pero sin inventar datos
+   y sin ensanar. Si un correo es de un cliente potencial, no lo uses.
+
+LISTO = plantilla de dos columnas reusable + 6 correos reales puntuados con su motivo escrito.
+```
+
+---
+
 ## G3 · El cliente real con la pantalla sustituida — la prueba que ningún demo consigue
 
 ```text

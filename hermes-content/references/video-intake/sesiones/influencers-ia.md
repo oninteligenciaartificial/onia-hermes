@@ -120,6 +120,64 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## M1 · Bloques con nombre, sobrecobertura y la regla de texto
+
+```text
+Contexto: un reel de 12 s muestra su prompt ENTERO en pantalla. Es plantilla CINE pura (nadie
+habla, impresiona) y trae tres cosas que el banco no tenia. Ficha y prompt literal completo:
+hermes-content/references/video-intake/analisis/2026-08-22-items.json (item DcMX7O8i6CZ)
+
+LA ARQUITECTURA: siete bloques con NOMBRE EN MAYUSCULAS ENTRE CORCHETES, y cada uno es una
+REGLA, no una descripcion:
+  [STYLE]                   camara + stock + set + paleta + TRES PROHIBICIONES explicitas
+  [MODE — READ THIS FIRST]  como quiere el material entregado
+  [THE OBJECT]              el sujeto, con un nivel de detalle textil
+  [DISTRESS RULE]           la transformacion que tiene que verse ocurrir
+  [TEXT RULE — MANDATORY]   que hacer con el texto en cuadro
+  [HANDS RULE]              que se ve y que no de las personas
+  [BEATS]                   los planos
+
+TRES PALANCAS NUEVAS:
+
+1. LA CAMARA SE ESPECIFICA, NO SE ADJETIVA: "Arri Alexa 35 and a Laowa 24mm f/14 probe lens".
+   Un lente probe es exactamente el que produce esos macros volando sobre la tela. Nombrar el
+   equipo real es mas preciso que cualquier adjetivo.
+
+2. SOBRECOBERTURA A PROPOSITO, literal del prompt:
+   "Fast-cut montage. I am cutting it myself in post. Deliberately overload it — more shots than
+    fit, extra angles I did not ask for, alternate coverage of every beat, inserts, overshoots,
+    impact frames. Every beat is a new shot. Nothing holds."
+   Es lo CONTRARIO de pedir la toma exacta: se pide una hoja de contactos y se corta despues.
+   Con un tope de 30 s por generacion, esto multiplica lo aprovechable por corrida.
+
+3. LA REGLA DE TEXTO, que resuelve el defecto mas conocido de la IA:
+   "Abstract invented serif forms and a numeral in an oval, not any existing brand name, city
+    name or wordmark. They read as typographic shapes, never as language. Legibility not required
+    at any point. Never garble or change. No other text anywhere."
+   En vez de pelear porque el modelo no sabe escribir, se le pide que NO ESCRIBA: formas
+   tipograficas, no lenguaje. Esto tambien explica el garabato del libro que vimos en otro item.
+
+VERIFICADO EN LA CUENTA el 2026-08-22 (re-verificalo vos, tiene fecha de vencimiento):
+seedance_2_5, modo omni_reference, 4-30 s, 9:16, hasta 1080p, generate_audio. El reel se hizo con
+UNA sola imagen de referencia, UNA sola generacion de 12 s. unlim.available = false: gasta.
+
+Tarea:
+1. Incorpora los siete bloques con nombre a la plantilla CINE que ya tenemos. NO armes una
+   plantilla nueva al lado: la de 5 bloques del 16-ago es la misma cosa con menos estructura.
+   Esto la reemplaza o la absorbe; decidilo y decilo.
+2. Anota las tres palancas como REGLAS en LUCIA.md y en la receta de video. Sobre todo la de
+   texto: nos ahorra el defecto mas visible.
+3. Escribi UN prompt completo con la arquitectura para una pieza real nuestra — producto de
+   cliente o pieza de marca.
+
+GASTO: no generes. Entrega el prompt, el modelo, la config exacta y el costo estimado.
+
+LISTO = la plantilla CINE actualizada con los bloques con nombre (una sola plantilla, no dos),
+las tres palancas anotadas como reglas, y un prompt de ejemplo escrito. Cero generaciones.
+```
+
+---
+
 ## L1 · El esqueleto de prompt UGC, regalado entero
 
 ```text

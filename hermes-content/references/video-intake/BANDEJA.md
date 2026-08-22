@@ -256,3 +256,24 @@ Prompts: [PROMPTS_LOTE_2026-08-21.md](PROMPTS_LOTE_2026-08-21.md) (L1–L3)
 | [DcRJIrdDs7m](https://www.instagram.com/p/DcRJIrdDs7m/) `fx` de Vercel Labs | SAAS | MEJORA | agente de código, binario de 6,39 MiB |
 | [DZI1Fg8J_RE](https://www.instagram.com/p/DZI1Fg8J_RE/) live commerce TikTok Shop | SAAS | MEJORA | operación de live shop brasilera |
 | [DcLqjb6slaV](https://www.instagram.com/p/DcLqjb6slaV/) "iba a contratar a alguien" | MARKETING | MEJORA | talking-head caminando |
+
+## Lote 2026-08-22 — 14 items · **9 SIRVE YA**, el mejor rendimiento del corpus
+
+Prompts: [PROMPTS_LOTE_2026-08-22.md](PROMPTS_LOTE_2026-08-22.md) (M1–M5)
+
+| Item | Tipo | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcMX7O8i6CZ](https://www.instagram.com/p/DcMX7O8i6CZ/) film de producto | IA | **SIRVE YA** | **prompt CINE literal con 7 bloques con nombre + sobrecobertura + regla de texto** (M1) |
+| [DZGa5cbJT3n](https://www.instagram.com/p/DZGa5cbJT3n/) edición por prompt | IA | **SIRVE YA** | `video_edit` sobre metraje real; **el corte se esconde en un whip pan** (M2) |
+| [DcNIJtpltiI](https://www.instagram.com/p/DcNIJtpltiI/) carrusel que vende | MARKETING | **SIRVE YA** | molde A/B "ABURRE vs VENDE" (M3) |
+| [DYIRUT2Mwwj](https://www.instagram.com/p/DYIRUT2Mwwj/) 5 footers | WEB | **SIRVE YA** | 3 de 5 son CSS sobre el bloque que ya existe (M4) |
+| [DcS3tJno9ZT](https://www.instagram.com/p/DcS3tJno9ZT/) escalera de correos | MARKETING | **SIRVE YA** | el molde 0→10 **por segunda vez**: es formato reusable (M5) |
+| [DcRu-G4gpvu](https://www.instagram.com/p/DcRu-G4gpvu/) PunchPass NFC | SAAS | **SIRVE YA** | fidelización con sello por NFC; el molde sí, el módulo no existe |
+| [Db-nd-CEtP3](https://www.instagram.com/p/Db-nd-CEtP3/) retratos GPT Image 2 | IA | **SIRVE YA** | 6 retratos, prompts reconstruidos |
+| [DbYd82HE7sV](https://www.instagram.com/p/DbYd82HE7sV/) campaña de silla | IA | **SIRVE YA** | 8 tomas editoriales de producto |
+| [DcJbwUSSuPf](https://www.instagram.com/p/DcJbwUSSuPf/) terror doméstico | IA | **SIRVE YA** | 4 planos, 19 s, mudo |
+| [DcLNV1dOO8U](https://www.instagram.com/p/DcLNV1dOO8U/) caso de 6 pasos | MARKETING | MEJORA | minería de demanda por subtítulos de YouTube |
+| [DcVxcj5M-BQ](https://www.instagram.com/p/DcVxcj5M-BQ/) spec ad Nike | IA | MEJORA | abre mostrando que es IA |
+| [DcEOqoYBIwP](https://www.instagram.com/p/DcEOqoYBIwP/) agente de voz | MARKETING | MEJORA | demo de Fish Audio |
+| [DcUSkXRiJKD](https://www.instagram.com/p/DcUSkXRiJKD/) 10 nichos aburridos | MARKETING | MEJORA | servicios de campo |
+| [Da1OHOlIHhF](https://www.instagram.com/p/Da1OHOlIHhF/) gancho POV | MARKETING | MEJORA | 2 s a sangre + pieza ajena |

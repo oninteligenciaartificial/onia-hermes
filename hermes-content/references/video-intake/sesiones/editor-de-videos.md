@@ -120,6 +120,78 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## M2 · Editar metraje real por prompt — y dónde se esconde el corte
+
+```text
+Contexto: un reel muestra edicion VIDEO-A-VIDEO sobre metraje propio: la misma toma de espejo
+con celular, y por prompt le cambian la ropa, decoran el cuarto, y despues reemplazan el
+escenario entero por una tribuna de estadio. Ficha:
+hermes-content/references/video-intake/analisis/2026-08-22-items.json (item DZGa5cbJT3n)
+
+LA PRUEBA DE QUE ES EDICION Y NO GENERACION NUEVA, y es lo que hay que saber mirar: entre
+variantes, el mobiliario secundario NO SE MUEVE (el aparador, la lampara, la mesita, la alfombra
+son identicos) y SE CONSERVA EL TEMBLOR DE LA MANO. Si fuera generacion nueva, todo eso cambiaria.
+
+EL OFICIO, y es lo que se copia: EL CORTE ENTRE GENERACIONES SE ESCONDE EN UN WHIP PAN. Hay un
+barrido de camara borroso justo donde cambia el material. No hay disolvencias, no hay cortes
+secos visibles. Es la costura, y esta tapada con movimiento.
+
+VERIFICADO HOY 2026-08-22 contra el catalogo: seedance_2_5 tiene mode `video_edit`, 4-30 s,
+480p/720p/1080p. Y AVISA que en video_edit SE FACTURA POR LA DURACION DEL VIDEO FUENTE, y que
+duration y aspect_ratio se ignoran. Alternativas con rol video_references hoy: gemini_omni
+(4-10 s, supports_unlim), wan2_6 (5/10/15 s), seedance_2_0 y _mini (supports_unlim).
+NO hay Runway Aleph en el catalogo.
+
+CONSECUENCIA DE COSTO, y es la regla operativa: se filma CORTO. Un plano de 30 s cuesta cuatro
+veces uno de 8. Se graban tomas de 5-8 s y se montan despues.
+
+Tarea:
+1. Escribi el procedimiento: que se filma (una toma fija, celular, 5-8 s), que se pide cambiar,
+   y como se encadenan las variantes.
+2. Deja la plantilla de montaje con el WHIP PAN como transicion entre variantes. Ese es el
+   entregable tecnico: sin eso, se ven las costuras.
+3. Probalo con material que YA tengamos, aunque las variantes queden como placeholder.
+4. NO reinventes el motor: revisá .claude/skills/ (editor-videos, talking-head-recut,
+   embedded-captions, media-use).
+
+Esto se cruza con el prompt G3 (el cliente real con la pantalla sustituida), que usa el MISMO
+modo video_edit. Si G3 ya corrio, esto lo extiende; si no, este procedimiento le sirve.
+
+GASTO: video_edit gasta y se factura por el fuente. Entrega el procedimiento y el costo
+estimado por plano; no generes.
+
+LISTO = el procedimiento escrito, la plantilla de montaje con whip pan probada con material
+propio, y el costo por plano calculado.
+```
+
+---
+
+## M3 · El carrusel que vende — molde A/B
+
+```text
+Contexto: un carrusel en espanol ataca justo nuestro error: "la mayoria de los carruseles no
+consiguen ventas porque los hacen 100% para informar, no para convertir. Si tu contenido parece
+un folleto corporativo aburrido, la gente hace scroll en 0.1 segundos."
+Ficha: hermes-content/references/video-intake/analisis/2026-08-22-items.json (item DcNIJtpltiI)
+
+EL MOLDE: 7 laminas. Cinco de ellas son PARES A/B — "ABURRE vs VENDE" — con LA MISMA FOTO de los
+dos lados y solo cambia la palabra. Un nicho por lamina.
+
+Tarea:
+1. Armalo como plantilla de HyperFrames: 7 laminas 1080x1350, las 5 gemelas generadas desde un
+   ARRAY de datos, no maquetadas a mano. Es el uso mas barato del motor: cero creditos, cero
+   render de video.
+2. Escribi los 5 pares para NUESTROS rubros, con las skills copywriting y marketing-psychology.
+3. EL BLOQUEO REAL NO ES TECNICO: es no fabricar. El original usa un caso ficticio. Nosotros no
+   inventamos clientes ni resultados. Los 5 pares tienen que apoyarse en algo que sea cierto:
+   una capacidad real del producto, un dolor real del rubro, o nada.
+
+LISTO = plantilla parametrizada por array + los 5 pares escritos sobre hechos, no sobre casos
+inventados.
+```
+
+---
+
 ## K1 · Radar de ganchos — herramienta INTERNA, decidido por Sergio el 2026-08-20
 
 ```text

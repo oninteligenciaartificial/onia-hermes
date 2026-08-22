@@ -120,6 +120,32 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## M4 · Los cinco estilos de footer
+
+```text
+Contexto: un reel muestra 5 estilos de footer como mockups: centrado, silueta, tipografia
+gigante, y dos mas. Ficha:
+hermes-content/references/video-intake/analisis/2026-08-22-items.json (item DYIRUT2Mwwj)
+
+YA TENEMOS MEDIO CAMINO, verificado en el repo: web-factory/packages/blocks/src/footer-brand.ts
+implementa el de tipografia gigante — su propio comentario dice "the band variant is the grid
+with no groups: the oversized wordmark carries it". Pero tiene dos diferencias contra el reel;
+el analisis las tiene anotadas.
+
+Tarea:
+1. Compará footer-brand.ts contra los 5 del reel y deci cuales faltan.
+2. Los que son solo CSS (3 de 5) agregalos como variantes del bloque que YA existe. NO crees un
+   bloque nuevo al lado.
+3. El de SILUETA necesita un SVG que hay que dibujar. Para Onia no van arboles: skyline de Santa
+   Cruz o algo del rubro del cliente. Decilo como pendiente, no lo improvises.
+4. Respeta el presupuesto de la landing y las reglas de motion del pattern bank.
+
+LISTO = las variantes que son CSS agregadas al bloque existente y probadas, y el SVG anotado
+como pendiente con su propuesta.
+```
+
+---
+
 ## J5 · Interiores con Nano Banana — cuatro recetas image-to-image
 
 ```text

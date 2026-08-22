@@ -1,0 +1,7 @@
+[0] Not every footer should look the same.
+[2] Here are 5 footer styles you can actually use.
+[4] Here a footer with a centred heading and subheading, contact info and quick links.
+[8] CityWet footer uses an illustration turned into a cityWet as the background.
+[11] Large type footer takes the brand logo and scales it up to fill the empty space.
+[16] Negative footer places a logo type or brand element so it blends into the background.
+[20] Grounded footer uses an image at the bottom with an open space above.

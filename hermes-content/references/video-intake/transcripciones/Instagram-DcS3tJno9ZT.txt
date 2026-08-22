@@ -1,0 +1,8 @@
+[0] Este email de bienvenida es un 0 de 10, no hay mucho que decir.
+[3] Este correo de bienvenida es un 2 de 10, no hay muchas visuales, hay que scrolliar para encontrar el descuento y no te educan sobre la marca.
+[9] Este es un 4 de 10, te saturan con muchas cosas que hacer y no hay un mensaje ni un objetivo claro.
+[14] Este correo de bienvenida es un 6 de 10, por lo menos el diseño está acorde a la marca, te educan un poco sobre el producto y su filosofía y te dan algunas opciones de productos para comprar.
+[22] Este correo de bienvenida es un 8 de 10, te dan el código de descuento justo en tu cara, te educan sobre la marca, te muestran testimonios de sus clientes,
+[30] lo que sí el diseño pudiera ser más limpio y además mostrarte opciones de productos para comprar.
+[35] Y este es un 10 de 10, tiene una identidad de marca sólida, te muestran el código de descuento con un botón bien grande justo arriba,
+[41] te educan sobre su marca y te muestran varios productos con sus botones individuales para ir a comprar.
