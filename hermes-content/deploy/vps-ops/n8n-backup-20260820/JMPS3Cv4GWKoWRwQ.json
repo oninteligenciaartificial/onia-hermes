@@ -58,7 +58,7 @@
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Bearer re_NnNmyeqG_Kqp9FVX2VKsg2FuanBxcAzog"
+              "value": "Bearer REDACTED_RESEND_API_KEY"
             },
             {
               "name": "Content-Type",
