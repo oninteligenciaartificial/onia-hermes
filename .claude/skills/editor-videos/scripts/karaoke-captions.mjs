@@ -89,8 +89,16 @@ function toAssColor(v, fallback) {
   console.error(`color inválido "${v}" → uso ${fallback}`);
   return fallback;
 }
-const BASE_COLOR = toAssColor(flag("base-color", null), "&H00FFFFFF&");   // BLANCO
-const ACTIVE_COLOR = toAssColor(flag("active-color", null), "&H0000FFFF&"); // AMARILLO (BGR)
+// Palabra activa en VERDE DE MARCA (#10C26B, tokens.css --onia-green). Antes era
+// amarillo genérico: Sergio 2026-08-22 — "que sea verde por Onia, ese mismo color".
+// El subtítulo es la única superficie de marca que el reel tiene en cuadro; si el
+// resaltado no es el verde, el video no se lee como nuestro.
+// ⚠️ El default va como VALOR del flag, no como fallback: toAssColor() devuelve el
+// fallback TAL CUAL, sin convertir. Un "#10C26B" ahí llega crudo al .ass, libass no
+// lo entiende y pinta la palabra de NEGRO (bug real, 22-ago — se vio en el frame).
+// El fallback queda ya en formato ASS (&HAABBGGRR&, o sea BGR invertido).
+const BASE_COLOR = toAssColor(flag("base-color", "#FFFFFF"), "&H00FFFFFF&");   // BLANCO
+const ACTIVE_COLOR = toAssColor(flag("active-color", "#10C26B"), "&H006BC210&"); // VERDE ONIA
 
 // ---------------------------------------------------------------- ffprobe: dimensiones + audio
 function probe(entries, stream) {
@@ -105,7 +113,10 @@ else console.error("aviso: ffprobe no devolvió dimensiones → asumo 1080x1920"
 const audioCodec = (probe("stream=codec_name", "a:0") || [])[0] || null;
 
 // Tamaño de fuente relativo al alto (1920 → 72px). Borde/sombra escalan con la fuente.
-const FONT_SIZE = Math.round(Number(flag("font-size", String(Math.max(18, Math.round(H * 0.0375))))));
+// 0.042 del alto (1920 → 81px). Antes 0.0375 (72px): en el feed, compitiendo con
+// el resto del scroll, leía chico y sin presencia. El rail de karaoke es el titular
+// del reel — tiene que pesar.
+const FONT_SIZE = Math.round(Number(flag("font-size", String(Math.max(18, Math.round(H * 0.042))))));
 const OUTLINE = Number(flag("outline", String(Math.max(2, Math.round(FONT_SIZE / 18)))));   // 4 @ 72px
 const SHADOW = Number(flag("shadow", String(Math.max(1, Math.round(FONT_SIZE / 36)))));     // 2 @ 72px
 // Bold=-1 pide una cara bold REAL. La estática que enviamos ya está marcada como
@@ -242,8 +253,15 @@ for (let p = 0; p < phrases.length; p++) {
     if (end - start < MIN_LINE_DUR) { dropped++; continue; }  // timestamps duplicados del ASR
     // La palabra activa va envuelta en el override de color; el resto queda en el color base
     // del estilo. Los tags {\c...} se agregan DESPUÉS de escapar (si no, se escaparían sus llaves).
+    // La palabra activa cambia SOLO de color de relleno (\1c), al verde de marca.
+    // ⚠️ Probado y descartado el 22-ago: engrosar el borde de la activa (\bord ×1.35)
+    // la tapa por completo — con 4px de outline negro sobre 72px de fuente, el trazo
+    // se come el glifo y la palabra sale como un bloque negro. Se vio en el frame de
+    // control, no en el código. El énfasis lo hace el color; el borde no se toca.
+    // Tampoco \alpha (setea los cuatro canales, incluido el del borde) ni \fscx
+    // (re-centra la línea y hace saltar las palabras).
     const text = joinWords(ws, (word, j) =>
-      j === i ? `{\\c${ACTIVE_COLOR}}${escAss(word)}{\\c${BASE_COLOR}}` : escAss(word));
+      j === i ? `{\\1c${ACTIVE_COLOR}}${escAss(word)}{\\1c${BASE_COLOR}}` : escAss(word));
     events.push(`Dialogue: 0,${assTime(start)},${assTime(end)},K,,0,0,0,,${text}`);
   }
 }

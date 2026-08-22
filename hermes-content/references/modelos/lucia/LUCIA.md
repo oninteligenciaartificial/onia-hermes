@@ -639,3 +639,61 @@ el prompt.)
   mensual), CERO créditos de Higgsfield.
 - Los cortes de video se recalculan a los tiempos REALES de la narración (Whisper local
   word-level + límites en el punto medio entre beats) — el audio manda, el video obedece.
+
+---
+
+# §12. Arquitectura de PROMPT por bloques — adoptada del lote M1 (22-ago)
+
+> Origen: `video-intake/PROMPTS_LOTE_2026-08-22.md` (M1, carril INFLUENCERS IA, commit
+> 819c84b9). Prompt recuperado literal de pantalla de un reel que rinde. Se adopta acá
+> porque resuelve DOS errores que ya nos costaron generaciones: el texto horneado
+> ("CLOSED" en la tapa del cuaderno) y las manos deformes.
+
+## La regla madre: bloques con NOMBRE, y cada bloque es una REGLA, no una descripción
+
+Los nombres en MAYÚSCULAS ENTRE CORCHETES ordenan la lectura del modelo. Molde de Lucía:
+
+```
+[IDENTIDAD]              <<<452d8375-...>>> + "this exact woman", rasgos sagrados
+[CÁMARA]                 equipo REAL nombrado (ver palanca 1)
+[ESCENA]                 lugar, luz, vestuario, hora del día
+[COLOR RULE]             natural true-to-life colors, no grading, no filter, accurate WB
+[TEXT RULE — MANDATORY]  ver palanca 2 — el arreglo del texto horneado
+[HANDS RULE]             qué se ve y qué NO de las manos
+[MOVIMIENTO]             solo en video: ritmo real, sin adverbios de lentitud
+```
+
+## Las tres palancas
+
+**1 · La cámara se ESPECIFICA, no se adjetiva.** Nombrar el equipo real es más preciso que
+cualquier adjetivo. Para Lucía:
+- Feed casual / "foto de celular": `shot on an iPhone 15 Pro main camera, 24mm`
+- Pieza cine / hero: `Arri Alexa 35 with a 35mm prime, T2.8`
+- Macro de producto o detalle: `Laowa 24mm f/14 probe lens` (es EL lente de esos macros)
+
+**2 · TEXT RULE — el arreglo del texto en IA.** En vez de pelear porque el modelo no sabe
+escribir, se le prohíbe escribir. Literal del prompt fuente:
+> *"They read as typographic shapes, never as language. Legibility not required at any point."*
+
+Molde para nuestras piezas: `[TEXT RULE — MANDATORY] No legible text anywhere in frame. Any
+lettering on props reads as abstract typographic shapes, never as language.`
+→ Esto es lo que habría evitado el "CLOSED" horneado en la tapa del cuaderno.
+
+**3 · SOBRECOBERTURA a propósito** (para modelos que dan 10-30 s: kling, seedance, minimax):
+> *"Fast-cut montage. I am cutting it myself in post. Deliberately overload it — more shots
+> than fit, extra angles I did not ask for, alternate coverage of every beat, inserts,
+> overshoots, impact frames. Every beat is a new shot. Nothing holds."*
+
+Se pide una **hoja de contactos**, no la toma exacta, y se corta en post. Multiplica lo
+aprovechable por corrida — clave para bajar el costo por pieza publicada.
+⚠️ NO aplica a `veo3_1_lite` (4/6/8 s: no hay lugar para sobrecobertura). Sí a la pieza
+"hero" mensual, donde una sola generación larga puede rendir 4-5 planos utilizables.
+
+## Checklist de prompt, actualizado
+
+1. ¿Alguna palabra en MAYÚSCULAS que pueda hornearse como texto? → fuera
+2. ¿Adverbio de velocidad/suavidad que se lea como cámara lenta? → "at a normal pace"
+3. ¿Restricción de paleta que actúe de filtro? → fuera, color natural
+4. **¿Está el `[TEXT RULE — MANDATORY]`?** → si hay props con letras, es obligatorio
+5. **¿La cámara está nombrada o adjetivada?** → nombrar equipo real
+6. **¿El modelo da ≥10 s?** → pedir sobrecobertura y cortar en post
