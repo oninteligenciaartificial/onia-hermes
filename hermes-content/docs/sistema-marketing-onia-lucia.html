@@ -1,0 +1,228 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistema Onia × Lucía</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap');
+  :root{
+    --bg:#0a0d0b; --surface:#121712; --surface-2:#182019; --border:#26332a; --border-soft:#1c261f;
+    --text:#eef4ef; --dim:#9fb3a6; --faint:#5f7568; --accent:#1ef28f; --accent-soft:rgba(30,242,143,.12);
+    --amber:#e8b34d; --max:1080px;
+    --mono:'Bebas Neue',Impact,sans-serif; --display:'Archivo Black','Arial Black',sans-serif; --body:'Inter',-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(ellipse 900px 500px at 15% -5%,rgba(30,242,143,.05),transparent 60%),var(--bg);
+    color:var(--text);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--accent);color:#04120a}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  section{padding:72px 0}
+  section.divider{border-top:1px solid var(--border-soft)}
+  .eyebrow{font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  h2.title{font-family:var(--display);font-size:clamp(26px,4vw,40px);line-height:1.1;margin-top:10px}
+  h2.title em{font-style:normal;color:var(--accent)}
+  .lede{font-size:16px;color:var(--dim);max-width:62ch;margin-top:12px;line-height:1.6}
+  .hero{padding:88px 0 56px}
+  .brand{font-family:var(--mono);font-size:20px;letter-spacing:.06em}
+  .brand span{color:var(--accent)}
+  .hero h1{font-family:var(--display);font-size:clamp(34px,6vw,66px);line-height:1.04;margin-top:36px;max-width:18ch}
+  .hero h1 .hl{color:var(--accent)}
+  .hero-sub{margin-top:20px;font-size:17px;color:var(--dim);max-width:58ch}
+  .stats{margin-top:44px;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border-soft);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .stat{padding:20px;border-right:1px solid var(--border-soft)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:var(--mono);font-size:clamp(24px,3vw,34px);color:var(--accent)}
+  .stat .lbl{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;margin-top:5px}
+  @media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}.stat{border-bottom:1px solid var(--border-soft)}}
+  .formula{margin-top:30px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:clamp(19px,3vw,28px)}
+  .formula .op{color:var(--faint);font-size:.7em}
+  .formula .acc{color:var(--accent)}
+  /* escalera */
+  .ladder{margin-top:40px;display:grid;gap:0;border:1px solid var(--border-soft);border-radius:14px;overflow:hidden}
+  .rung{display:grid;grid-template-columns:110px 1fr 1.2fr;gap:16px;padding:18px 22px;background:var(--surface);align-items:center}
+  .rung:not(:last-child){border-bottom:1px solid var(--border-soft)}
+  .rung .k{font-family:var(--mono);font-size:17px;color:var(--accent);letter-spacing:.05em}
+  .rung .t{font-weight:700;font-size:14.5px}
+  .rung .t small{display:block;font-weight:400;color:var(--faint);font-size:12px;margin-top:3px}
+  .rung .gate{font-size:12.5px;color:var(--dim);border-left:2px solid var(--border);padding-left:14px}
+  .rung .gate b{color:var(--accent);font-weight:600}
+  @media(max-width:700px){.rung{grid-template-columns:1fr}.rung .gate{border-left:none;padding-left:0}}
+  /* personajes */
+  .cast{margin-top:36px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:820px){.cast{grid-template-columns:1fr}}
+  .who{padding:22px;border-radius:14px;background:var(--surface);border:1px solid var(--border-soft)}
+  .who.hot{border-color:rgba(30,242,143,.35)}
+  .who .role{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.08em}
+  .who h4{font-family:var(--display);font-size:17px;margin-top:8px}
+  .who p{margin-top:8px;font-size:13px;color:var(--dim)}
+  .who .no{margin-top:10px;font-size:11.5px;color:var(--faint)}
+  .who .no b{color:var(--amber);font-weight:700}
+  /* pilares */
+  .pillar-bar{margin-top:30px;display:flex;height:48px;border-radius:10px;overflow:hidden;border:1px solid var(--border-soft)}
+  .seg{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:14px;color:#04120a}
+  .legend{margin-top:14px;display:flex;gap:24px;flex-wrap:wrap;font-size:12.5px;color:var(--dim)}
+  .legend .dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  /* tabla palabras */
+  .kw{margin-top:26px;border:1px solid var(--border-soft);border-radius:12px;overflow:hidden}
+  .kw-row{display:grid;grid-template-columns:1fr 1.1fr 2fr .8fr;gap:12px;padding:12px 18px;align-items:center}
+  .kw-row:not(:last-child){border-bottom:1px solid var(--border-soft)}
+  .kw-row.head{background:var(--surface-2);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint)}
+  .kw-row .cta{font-family:var(--mono);font-size:15px;color:var(--accent)}
+  .kw-row .cuenta{font-size:12.5px;color:var(--dim)}
+  .kw-row .rec{font-size:12.5px;color:var(--dim)}
+  .kw-row .st{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-align:center;letter-spacing:.05em}
+  .st.on{background:var(--accent-soft);color:var(--accent);border:1px solid rgba(30,242,143,.3)}
+  .st.off{background:var(--surface-2);color:var(--faint);border:1px solid var(--border-soft)}
+  @media(max-width:680px){.kw-row{grid-template-columns:1fr 1fr}.kw-row.head{display:none}}
+  /* grid piezas */
+  .vgrid{margin-top:28px;display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+  @media(max-width:940px){.vgrid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.vgrid{grid-template-columns:1fr}}
+  .vcard{background:var(--surface);border:1px solid var(--border-soft);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:9px;min-height:150px}
+  .vcard .vn{font-family:var(--mono);font-size:20px;color:var(--faint)}
+  .vcard .cat{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em}
+  .vcard .vt{font-size:13.5px;font-weight:700;line-height:1.35}
+  .vcard .hook{font-size:11.5px;color:var(--dim);line-height:1.45}
+  .vcard .tag{margin-top:auto;align-self:flex-start;font-size:10px;padding:3px 8px;border-radius:5px;background:var(--surface-2);color:var(--accent);border:1px solid rgba(30,242,143,.25);letter-spacing:.03em}
+  .vcard.ready{border-color:rgba(30,242,143,.4)}
+  /* metricas */
+  .metrics{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+  @media(max-width:860px){.metrics{grid-template-columns:1fr 1fr}}
+  .metric{padding:18px;border-radius:13px;background:var(--surface);border:1px solid var(--border-soft)}
+  .metric .mk{font-family:var(--mono);font-size:13px;color:var(--accent)}
+  .metric h5{font-size:13.5px;margin-top:6px}
+  .metric p{font-size:11.5px;color:var(--faint);margin-top:5px}
+  /* roadmap */
+  .rm{margin-top:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  @media(max-width:760px){.rm{grid-template-columns:1fr}}
+  .stop{position:relative;padding:18px;border-radius:13px;background:var(--surface);border:1px solid var(--border-soft)}
+  .stop.now{border-color:rgba(30,242,143,.4);background:linear-gradient(160deg,rgba(30,242,143,.07),var(--surface) 60%)}
+  .stop .when{font-family:var(--mono);font-size:13px;color:var(--faint)}
+  .stop.now .when{color:var(--accent)}
+  .stop h4{font-family:var(--display);font-size:15px;margin-top:6px}
+  .stop p{font-size:12px;color:var(--dim);margin-top:6px}
+  .close{margin-top:56px;padding:28px;border-radius:16px;border:1px solid rgba(30,242,143,.22);background:linear-gradient(160deg,rgba(30,242,143,.06),transparent 60%)}
+  .close p{font-size:15px;max-width:64ch}
+  .close p+p{margin-top:10px;color:var(--dim);font-size:13.5px}
+  footer{padding:36px 0 56px;border-top:1px solid var(--border-soft);margin-top:16px;font-size:12px;color:var(--faint)}
+</style></head><body>
+
+<div class="wrap hero">
+  <div class="brand">SISTEMA<span>_</span>ONIA <span>×</span> LUCÍA</div>
+  <h1>Llenar. Comunidad. Curso. <span class="hl">Producto.</span></h1>
+  <p class="hero-sub">El mismo sistema que la marca personal de Sergio, para las otras dos cuentas: Lucía trae el alcance, @oniahq cierra. Cada fase se abre con una métrica, no con ansiedad.</p>
+  <div class="stats">
+    <div class="stat"><div class="num">3</div><div class="lbl">cuentas, un sistema</div></div>
+    <div class="stat"><div class="num">8</div><div class="lbl">piezas de Lucía, mes 1</div></div>
+    <div class="stat"><div class="num">~100</div><div class="lbl">créditos el mes 1 de Lucía</div></div>
+    <div class="stat"><div class="num">4</div><div class="lbl">fases de la escalera</div></div>
+  </div>
+  <div class="formula" style="margin-top:40px">
+    <span class="acc">Autoridad</span><span class="op">+</span><span>Nicho</span><span class="op">×</span><span>Tiempo</span><span class="op">=</span><span class="acc">Confianza</span>
+  </div>
+  <p class="lede">El 90% de la audiencia está en nivel 0-1: no sabe que quiere automatizar. Todo el mes 1 entra por ahí — cero venta, pura autoridad y curiosidad.</p>
+</div>
+
+<section class="divider"><div class="wrap">
+  <div class="eyebrow">Módulo 01</div>
+  <h2 class="title">La escalera. Cada fase abre <em>con su métrica.</em></h2>
+  <div class="ladder">
+    <div class="rung"><div class="k">FASE 1</div><div class="t">LLENAR las cuentas<small>contenido diario, palabras→DM automático</small></div><div class="gate">Se abre: <b>ahora</b>. La cola de @oniahq ya corre; Lucía lanza con el reel "No soy real".</div></div>
+    <div class="rung"><div class="k">FASE 2</div><div class="t">COMUNIDAD WhatsApp<small>"IA para tu negocio — Bolivia" · una sola, compartida</small></div><div class="gate">Se abre con: <b>ratio de interés &gt;12%</b> y palabras/semana creciendo (~semana 3).</div></div>
+    <div class="rung"><div class="k">FASE 3</div><div class="t">CURSO low-ticket<small>"IA aplicada a tu negocio" — el CÓMO, con casos bolivianos</small></div><div class="gate">Se abre con: <b>100+ miembros activos</b> pidiendo el paso siguiente. Pre-venta por lista de espera ANTES de grabar.</div></div>
+    <div class="rung"><div class="k">FASE 4</div><div class="t">PRODUCTO: Onia Platform<small>el CON QUIÉN — diagnóstico 20 min → cierre</small></div><div class="gate">Continuo desde fase 2: <b>cada pieza de @oniahq</b> empuja al diagnóstico. Ads amplifican lo probado.</div></div>
+  </div>
+</div></section>
+
+<section class="divider"><div class="wrap">
+  <div class="eyebrow">Módulo 02</div>
+  <h2 class="title">Tres personajes, <em>un funnel.</em></h2>
+  <div class="cast">
+    <div class="who hot"><div class="role">EL ALCANCE</div><h4>Lucía</h4><p>Personaje digital declarado. Ataca nivel 0-1 con curiosidad — su transparencia ES el gancho (caso Aitana: revelar la IA fue su mayor crecimiento).</p><div class="no"><b>Nunca:</b> testificar como usuaria · esconder que es IA · más de 1 deriva a @oniahq por pieza</div></div>
+    <div class="who"><div class="role">EL CIERRE</div><h4>@oniahq</h4><p>La marca. Dolor→sistema, prueba con números, oferta. Recibe el tráfico de Lucía y lo convierte en diagnósticos.</p><div class="no"><b>Nunca:</b> humo · precios en post</div></div>
+    <div class="who"><div class="role">LA AUTORIDAD</div><h4>Sergio</h4><p>La historia real: 16 años, reto $5.000. Sistema propio con Samuel — comunidad del reto separada.</p><div class="no"><b>Nunca:</b> vender en mes 1</div></div>
+  </div>
+  <p class="lede" style="margin-top:24px">Dato del research: el engagement de influencers IA es de <b style="color:var(--text)">curiosidad (~5,9%), no de confianza</b>. Por eso Lucía trae y Onia cierra — nunca al revés.</p>
+</div></section>
+
+<section class="divider"><div class="wrap">
+  <div class="eyebrow">Módulo 03</div>
+  <h2 class="title">Pilares en proporción exacta.</h2>
+  <p class="lede">Lucía — 6 piezas por semana:</p>
+  <div class="pillar-bar">
+    <div class="seg" style="background:var(--accent);width:50%">3/6 IA sin humo</div>
+    <div class="seg" style="background:#4f8a6d;width:33.3%">2/6 el personaje</div>
+    <div class="seg" style="background:#2c3c33;color:var(--dim);width:16.7%">1/6</div>
+  </div>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--accent)"></span>Herramientas reales, prompts, números medidos</span>
+    <span><span class="dot" style="background:#4f8a6d"></span>Su vida serializada en escenarios bolivianos</span>
+    <span><span class="dot" style="background:#2c3c33"></span>Detrás de escena: cómo la hacen</span>
+  </div>
+  <p class="lede" style="margin-top:28px">@oniahq — 3 piezas por semana:</p>
+  <div class="pillar-bar">
+    <div class="seg" style="background:var(--accent);width:66.6%">2/3 dolor → sistema</div>
+    <div class="seg" style="background:#4f8a6d;width:33.3%">1/3 prueba</div>
+  </div>
+</div></section>
+
+<section class="divider"><div class="wrap">
+  <div class="eyebrow">Módulo 04</div>
+  <h2 class="title">Palabras clave: <em>una palabra, un recurso real.</em></h2>
+  <p class="lede">Comentás la palabra → DM automático con lo prometido (workflow vivo, freno 24h, medición por src=). Unicidad por cuenta.</p>
+  <div class="kw">
+    <div class="kw-row head"><div>Palabra</div><div>Cuenta</div><div>Entrega</div><div>Estado</div></div>
+    <div class="kw-row"><div class="cta">LISTA</div><div class="cuenta">@oniahq</div><div class="rec">PDF: las 6 tareas por donde empezar</div><div class="st on">VIVO</div></div>
+    <div class="kw-row"><div class="cta">SISTEMA</div><div class="cuenta">@oniahq</div><div class="rec">Diagnóstico de 20 minutos</div><div class="st on">VIVO</div></div>
+    <div class="kw-row"><div class="cta">SISTEMA</div><div class="cuenta">Lucía</div><div class="rec">Mapa del negocio, con su voz, vía @oniahq</div><div class="st on">VIVO</div></div>
+    <div class="kw-row"><div class="cta">HUMO</div><div class="cuenta">Lucía</div><div class="rec">PDF: 5 herramientas IA que SÍ sirven en Bolivia</div><div class="st off">CREAR PDF</div></div>
+    <div class="kw-row"><div class="cta">COMUNIDAD</div><div class="cuenta">Lucía</div><div class="rec">Invitación al WhatsApp (fase 2)</div><div class="st off">FASE 2</div></div>
+    <div class="kw-row"><div class="cta">CURSO</div><div class="cuenta">@oniahq</div><div class="rec">Lista de espera del curso (fase 3)</div><div class="st off">FASE 3</div></div>
+  </div>
+</div></section>
+
+<section class="divider"><div class="wrap">
+  <div class="eyebrow">Módulo 05</div>
+  <h2 class="title">Mes 1 de Lucía: <em>8 piezas.</em></h2>
+  <div class="vgrid">
+    <div class="vcard ready"><div class="vn">L1</div><div class="cat">👤 personaje</div><div class="vt">Reel "No soy real"</div><div class="hook">La revelación ES el gancho. Voz v3 dirigida, b-roll, 22s. LISTO — espera OK.</div><div class="tag">seguime</div></div>
+    <div class="vcard ready"><div class="vn">L2</div><div class="cat">👤 personaje</div><div class="vt">Carrusel fijado "¿Quién es Lucía?"</div><div class="hook">Las 5 preguntas obvias respondidas. Brief listo, falta render.</div><div class="tag">—</div></div>
+    <div class="vcard"><div class="vn">L3</div><div class="cat">🎬 detrás de escena</div><div class="vt">"Me crearon con estas 3 herramientas"</div><div class="hook">Meta-contenido: la IA que muestra su propia fábrica.</div><div class="tag">HUMO</div></div>
+    <div class="vcard"><div class="vn">L4</div><div class="cat">👤 personaje</div><div class="vt">"Un día en mi vida (que no existe)"</div><div class="hook">Humor + escenarios bolivianos reconocibles.</div><div class="tag">—</div></div>
+    <div class="vcard"><div class="vn">L5</div><div class="cat">⚡ IA sin humo</div><div class="vt">"El negocio que atiende solo"</div><div class="hook">Demo del chatbot con número medido.</div><div class="tag">SISTEMA</div></div>
+    <div class="vcard"><div class="vn">L6</div><div class="cat">⚡ IA sin humo</div><div class="vt">Carrusel "5 señales de que necesitás un sistema"</div><div class="hook">Dolor reconocible, editorial-clean.</div><div class="tag">SISTEMA</div></div>
+    <div class="vcard"><div class="vn">L7</div><div class="cat">⚡ IA sin humo</div><div class="vt">"Lo que la IA NO puede hacer por tu negocio"</div><div class="hook">Contracorriente — del radar de ganchos.</div><div class="tag">HUMO</div></div>
+    <div class="vcard"><div class="vn">L8</div><div class="cat">🎬 detrás de escena</div><div class="vt">Dueto conceptual con @oniahq</div><div class="hook">El personaje conoce a sus creadores.</div><div class="tag">SISTEMA</div></div>
+  </div>
+  <p class="lede" style="margin-top:20px">Producción: receta B-roll + voz v3 dirigida ≈ 6-12 cr/pieza · <b style="color:var(--text)">mes 1 completo ≈ 80-100 créditos</b>. Todo pasa por QC de Sergio antes de la cola.</p>
+</div></section>
+
+<section class="divider"><div class="wrap">
+  <div class="eyebrow">Módulo 06</div>
+  <h2 class="title">Qué se mide, semana a semana.</h2>
+  <div class="metrics">
+    <div class="metric"><div class="mk">01</div><h5>Ratio de interés por cuenta</h5><p>Views ÷ seguidores. Detecta enfriamiento antes de que se note.</p></div>
+    <div class="metric"><div class="mk">02</div><h5>Comentarios por palabra</h5><p>Qué pieza generó intención real — la tabla maestra content_pieces.</p></div>
+    <div class="metric"><div class="mk">03</div><h5>Miembros nuevos / semana</h5><p>Y qué pieza los trajo (src= por video y por red).</p></div>
+    <div class="metric"><div class="mk">04</div><h5>Actividad del grupo</h5><p>Respuestas reales. Grupo mudo = alerta, no éxito.</p></div>
+    <div class="metric"><div class="mk">05</div><h5>Tema que convierte</h5><p>El top 10-20% se re-graba en otro formato. Doblar apuesta.</p></div>
+    <div class="metric"><div class="mk">06</div><h5>Diagnósticos → cierres</h5><p>La caja real: leads calificados de @oniahq.</p></div>
+  </div>
+</div></section>
+
+<section class="divider"><div class="wrap">
+  <div class="eyebrow">Módulo 07</div>
+  <h2 class="title">Roadmap.</h2>
+  <div class="rm">
+    <div class="stop now"><div class="when">AHORA</div><h4>Llenar</h4><p>Lanzar Lucía (reel listo) · cola @oniahq corre sola · producir L3-L8 · crear PDF de HUMO.</p></div>
+    <div class="stop"><div class="when">SEMANA 3</div><h4>Comunidad</h4><p>Abrir el WhatsApp de Onia · palabra COMUNIDAD activa · cadencia interna semanal.</p></div>
+    <div class="stop"><div class="when">MES 2-3</div><h4>Curso</h4><p>Lista de espera con CURSO → se graba SOLO si valida. Precio ancla Bs 150-250 (decide Sergio).</p></div>
+    <div class="stop"><div class="when">CONTINUO</div><h4>Producto</h4><p>Diagnóstico → cierre. Ads amplifican lo orgánico probado (falta: tarjeta ONIA Ads).</p></div>
+  </div>
+  <div class="close">
+    <p>Cada palabra tiene un recurso real detrás, cada fase tiene su métrica de apertura, y cada pieza sabe a qué cuenta pertenece y a quién le habla.</p>
+    <p>Esto no se construyó para un mes: es la escalera completa de alcance → confianza → comunidad → curso → producto, corriendo sobre la infraestructura que ya está viva.</p>
+  </div>
+</div></section>
+
+<footer><div class="wrap">Sistema Onia × Lucía — documento vivo · fuente de verdad: ONIA_SISTEMA_MARKETING_LUCIA_ONIA.md</div></footer>
+</body></html>
