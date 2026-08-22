@@ -613,6 +613,9 @@ el prompt.)
   y se sube a Higgsfield con media_upload+media_confirm. El pipeline queda:
   1. Video hablado con el motor elegido (la voz nativa es descartable)
   2. `tts-elevenlabs.mjs --text "..."` → mp3 con Marcela (usa el cupo ElevenLabs, no créditos)
+     ⚠️ **SIN voice_settings** (aprobado por Sergio 22-ago): los ajustes stability/style que
+     el script forzaba le CAMBIABAN el timbre ("esa no es la voz"). La voz aprobada del
+     casting sale con los DEFAULTS de la API — el script ya fue corregido para no forzar nada.
   3. media_upload + media_confirm del mp3 → media_id
   4. `sync_so` input_video + input_audio, probar `sync_mode: remap` (cut_off quedó desincronizado)
   1. Video hablado con el motor elegido (la voz nativa es descartable)
