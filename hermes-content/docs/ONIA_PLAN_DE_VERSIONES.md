@@ -66,6 +66,26 @@ no cachea nada) · más rubros, encendidos desde el core y no escritos de cero.
 
 ---
 
+## ✅ v1.0 CERRADA — 2026-08-22 00:22 UTC
+
+Los cuatro bloqueantes murieron el mismo dia:
+
+| Era bloqueante | Estado |
+|---|---|
+| La web nueva sin publicar | **Publicada** en onia.com.bo (swap 23:50 UTC). 9 rutas 200, redirecciones de las URLs viejas, la v1 archivada en `/v1` con noindex. Y se corrigio que los CTA decian "Crea tu cuenta" cuando el producto ya pedia acceso |
+| El alta automatica abierta | **Cerrada** (swap 23:17). `/register` es "Pedi tu acceso": 6 campos, guarda el interesado con su atribucion, cero lenguaje de obra. Reabrir = `ONIA_ALTA_AUTOMATICA=abierta`, un solo cambio |
+| Un pedido no avisaba a nadie | **Avisa por correo** al Gmail del dueno, con estado Pendiente/Contactado en `/admin/solicitudes` y los pendientes ordenados primero |
+| El correo sin una entrega comprobada | **PROBADO**: `to=<oninteligenciaartificial@gmail.com> ... status=sent` a las 00:22:08 UTC. Gmail lo acepto. Es la primera entrega exitosa desde que se arreglo el FCrDNS |
+
+Verificado despues del corte de la sesion: contenedor arriba con **0 errores**, `/register`
+renderizado muestra "Pedi tu acceso a Onia" con sus 6 campos y el boton correcto, la columna
+`contactedAt` aplicada en la base, y la tabla de pedidos **limpia** (la fila de prueba se borro).
+
+**El circuito de venta esta completo:** te encuentran en la web nueva -> piden acceso ->
+te llega el correo -> los activas acompanado.
+
+---
+
 ## Lo que bloquea vender v1.0, hoy
 
 1. 🟡 **SPF** — el correo sale pero falla autenticación. Un TXT en Cloudflare: `v=spf1 ip4:187.77.16.63 include:_spf.mx.cloudflare.net ~all`. **Pendiente de Sergio.**
