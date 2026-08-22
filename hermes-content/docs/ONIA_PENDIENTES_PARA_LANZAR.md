@@ -11,8 +11,8 @@
 |---|---|---|---|---|
 | 1 | Deploy lotes 1+2 (formato Bs, nombres de plan, jerga) | — | ✅ CERRADO 22-ago 19:38 UTC | `/contact` renderizado: `Completo — Bs 1.500/mes` ✓ |
 | 2 | Lote 3: calendario, 6 tablas móvil, ayuda por rubro, voseo | ~21 | ✅ CERRADO 22-ago 20:42 UTC | prod verificado: registro y booking vosean ('Elegí tu profesional'), 1923 tests |
-| 3 | **Caja con carrito** multi-línea + ticket del día + anular | 16 | 🟡 EN VUELO (loop-tres-roles) | venta de 3 productos en un ticket, lista del día, anulación revierte stock y caja; mirado renderizado |
-| 4 | **Panel propio de importadora** (cotizaciones/embarques/costeo) | 16 | cola | el dashboard de importadora no menciona caja ni mostrador; sus accesos van a SUS pantallas |
+| 3 | **Caja con carrito** multi-línea + ticket del día + anular | 16 | 🟡 CONSTRUIDO (loop convergió en 2 vueltas, 744acaf, 1939 en master) — deploy en vuelo | venta de 3 productos en un ticket, lista del día, anulación revierte stock y caja; mirado renderizado |
+| 4 | **Panel propio de importadora** (cotizaciones/embarques/costeo) | 16 | 🟡 EN VUELO (loop-tres-roles) | el dashboard de importadora no menciona caja ni mostrador; sus accesos van a SUS pantallas |
 | 5 | Rediseño panel dental (el rubro vivo, su pantalla más floja) | 16 | cola | hero con el día andando, sin columna vacía, pendientes con jerarquía |
 | 6 | Datos fotografiables: día vivo dental+importadora en el seed, fuera "Demo ·"/"#DEMO-", restos dentales en settings/team de comercio | 9 | cola | panel de los 3 rubros sin ceros y sin palabra Demo |
 | 7 | Estados vacíos + banda negra + **resto lote 4 chico**: 4 tuteos en /login, 'esta' sin tilde en footer de booking | 7 | cola | vacío que invita en vez de parecer error |
