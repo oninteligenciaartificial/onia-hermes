@@ -45,22 +45,25 @@ const U = {
 const SUPERFICIES = process.env.MIRAR_SUPERFICIES
   ? JSON.parse(process.env.MIRAR_SUPERFICIES)
   : [
+      // textoEsperado: copia que un deploy roto o revertido se lleva puesta.
+      // minIconos: medido en vivo el 2026-08-22 (login 5, register 3, web 0);
+      // el piso en 1 delata que la banda de iconos desaparecio entera.
       {
         nombre: "app/login",
         url: "https://app.onia.com.bo/login",
-        textoEsperado: ["Iniciar sesión"],
+        textoEsperado: ["Hola de nuevo", "Iniciar sesión"],
         minIconos: 1,
       },
       {
         nombre: "app/register",
         url: "https://app.onia.com.bo/register",
         textoEsperado: ["Pedí tu acceso"],
-        minIconos: 0,
+        minIconos: 1,
       },
       {
         nombre: "web",
         url: "https://onia.com.bo/",
-        textoEsperado: ["Onia"],
+        textoEsperado: ["Tu negocio no pierde"],
         minIconos: 0,
       },
     ];
@@ -224,7 +227,11 @@ async function main() {
     const titulo = rotas.length
       ? `🔴 <b>Onia — lo que ve el cliente esta ROTO</b> (${rotas.length}/${resultados.length})`
       : "🟢 <b>Onia — las pantallas del cliente volvieron a estar bien</b>";
-    await telegram(`${titulo}\n\n${resumen}`);
+    const mensaje = `${titulo}\n\n${resumen}`;
+    const enviado = await telegram(mensaje);
+    console.error(`[mirar] aviso a Telegram: ${enviado ? "ENVIADO" : "FALLO"}\n${mensaje}`);
+  } else {
+    console.error(`[mirar] sin aviso (roto=${rotas.length > 0}, previo=${previo.roto})`);
   }
 
   writeFileSync(
