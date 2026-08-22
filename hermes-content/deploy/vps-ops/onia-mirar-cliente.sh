@@ -37,4 +37,11 @@ else
   rm -f /root/.onia-mirar-crash-avisado
 fi
 
+# El JSON completo de cada corrida sirve para el forense, pero 96 corridas al dia
+# engordan el log sin freno. Se conservan las ultimas ~2000 lineas (medio dia).
+LOG=/var/log/onia-mirar-cliente.log
+if [ -f "$LOG" ] && [ "$(wc -l < "$LOG")" -gt 4000 ]; then
+  tail -n 2000 "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"
+fi
+
 exit "$codigo"
