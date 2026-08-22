@@ -625,3 +625,17 @@ el prompt.)
   VID-09 (voz Marcela real, remap) = el intento corregido.
 - Costo UGC completo con voz oficial: gemini 24 + voz 2.4 + sync 18.15 ≈ **45 cr por pieza**.
   Para volumen barato sin voz oficial: historias mudas con subtítulos.
+
+## §11. LA VOZ, decidida y cerrada (22-ago, decisión de Sergio + técnica elegida por mí)
+
+- **Voz: Marcela** (`86V9x9hrQds83qf7zaGn`, "Native Colombian", la #1 de la Voice Library
+  con 96.7K usuarios). Ratificada en recasting contra las 5 finalistas.
+- **Técnica de entonación: `eleven_v3` con dirección de actuación** — UNA sola llamada con
+  TODA la narración (nunca por pedazos: cada llamada renderiza prosodia distinta y los
+  tonos saltan) + etiquetas de dirección por frase que NO se pronuncian:
+  `[intrigante]` `[cálida, sonriendo]` `[segura, conversacional]` `[cómplice]` `[entusiasta]`
+- **"Onia" se escribe `Onnia` en el texto del TTS** (fonético; el subtítulo dice Onia).
+- Sin voice_settings. Costo: caracteres del plan (narración ≈ 500 chars ≈ 0.7% del cupo
+  mensual), CERO créditos de Higgsfield.
+- Los cortes de video se recalculan a los tiempos REALES de la narración (Whisper local
+  word-level + límites en el punto medio entre beats) — el audio manda, el video obedece.
