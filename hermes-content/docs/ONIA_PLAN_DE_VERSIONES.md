@@ -34,7 +34,7 @@
 | Capacidad | Qué falta para poder afirmarla |
 |---|---|
 | **Recordatorios de cita por email** (24 h y 2 h antes) | El cron corre desde hoy, pero producción no tenía citas cuando se probó. Se confirma con la primera cita real. |
-| Correo transaccional (bienvenida, drip, factura) | El DNS se arregló hoy; falta ver una entrega exitosa a Gmail. **Y falta el SPF** (pendiente de Sergio) |
+| Correo transaccional (bienvenida, drip, factura) | ✅ **Entrega confirmada** — Gmail acepto un envio a las 00:22 UTC del 22-ago. Queda el SPF pendiente (no bloquea, pero lastra) |
 
 ### Lo que NO se nombra en v1.0
 
@@ -86,12 +86,21 @@ te llega el correo -> los activas acompanado.
 
 ---
 
-## Lo que bloquea vender v1.0, hoy
+## Lo que queda pendiente
 
-1. 🟡 **SPF** — el correo sale pero falla autenticación. Un TXT en Cloudflare: `v=spf1 ip4:187.77.16.63 include:_spf.mx.cloudflare.net ~all`. **Pendiente de Sergio.**
-2. 🟡 **La web nueva** está lista en el repo y **sin desplegar**. Ojo: `onia.com.bo` NO lo sirve Vercel — lo sirve el contenedor `onia-landing` del VPS. Necesita build y swap, no basta con pushear a main.
-3. 🟡 **Acceso acompañado** — el alta automática se cierra por decisión de Sergio (*"no dejes que se registren, aún no está listo"*) y pasa a solicitud con activación manual. En construcción.
-4. 🔴 **Hay un usuario real esperando.** Ver abajo.
+1. 🔴 **Contactar a clinica klein.** Es de Sergio y es lo mas urgente — ver abajo.
+2. 🟡 **SPF** — el correo YA entrega (Gmail acepto a las 00:22 UTC), pero el dominio no
+   autoriza al VPS: `v=spf1 include:_spf.mx.cloudflare.net ~all` no incluye la IP. Falla
+   SPF y eso lastra la entregabilidad a la larga. El TXT correcto:
+   `v=spf1 ip4:187.77.16.63 include:_spf.mx.cloudflare.net ~all`. **Pendiente de Sergio.**
+3. 🟡 **Dos numeros de WhatsApp conviven**: la web usa +591 75414930 y `/register` muestra
+   +591 78491375. Hay que decidir cual es el bueno.
+4. 🟡 **Los recordatorios nunca corrieron contra una cita real** (produccion tenia 0 citas).
+   Se confirman con el primer cliente que agende.
+
+⚠️ Nota de topologia, aprendida a los golpes: `onia.com.bo` **NO lo sirve Vercel** — lo sirve
+el contenedor `onia-landing` del VPS. Pushear a main no publica nada; hay que buildear y
+hacer swap, igual que el producto.
 
 ---
 
