@@ -17,4 +17,24 @@ set -a
 . /root/.hermes/.env
 set +a
 
-exec node /root/bin/onia-mirar-cliente.mjs "$@"
+node /root/bin/onia-mirar-cliente.mjs "$@"
+codigo=$?
+
+# Un monitor que se muere en silencio es peor que no tener monitor: pareceria
+# que todo esta bien. exit 0 = sano, 1 = detecto un fallo (ya aviso el .mjs),
+# >=2 = el monitor mismo se rompio. Ese caso se avisa aca, como mucho cada 6 h
+# para no convertir una rotura persistente en spam.
+if [ "$codigo" -ge 2 ]; then
+  AVISADO=/root/.onia-mirar-crash-avisado
+  if [ ! -f "$AVISADO" ] || [ "$(find "$AVISADO" -mmin +360 2>/dev/null)" ]; then
+    curl -s -o /dev/null --max-time 20 \
+      "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+      -d chat_id="${TELEGRAM_HOME_CHANNEL}" -d parse_mode=HTML \
+      --data-urlencode text="🟠 <b>Onia — el monitor de pantallas se cayo</b> (exit ${codigo}). Nadie esta mirando el login: ver /var/log/onia-mirar-cliente.log"
+    touch "$AVISADO"
+  fi
+else
+  rm -f /root/.onia-mirar-crash-avisado
+fi
+
+exit "$codigo"

@@ -309,6 +309,83 @@ sigue usando la RPC de Supabase Cloud (`kvepqgikokjlacxngkiw`) sin tocar — si 
 tambien deberia apuntar al VPS es una pregunta abierta, fuera del alcance de esta
 sesion.
 
+## Monitor que MIRA las pantallas del cliente (2026-08-22, sesion infra)
+
+**Por que existe:** los monitores de arriba vigilan contenedores, chatbot, n8n, demos
+y backup. **Ninguno abria una pantalla de cliente.** El fallo del login que mostraba
+`credit_card_off` y `verified_user` como TEXTO (fuente de iconos de 3,9 MB, 117 s)
+**devolvia HTTP 200** y fue invisible para los cinco; lo encontro Sergio. Con un
+cliente real adentro (clinica klein, prueba hasta el 4-sep) ese fallo es caro.
+
+**No es n8n:** es un cron plano en el VPS. No hace falta n8n para esto y un workflow
+mas seria una pieza mas que se puede caer sin avisar.
+
+| Que | Donde |
+|---|---|
+| Chequeo | `/root/bin/onia-mirar-cliente.mjs` |
+| Wrapper de cron | `/root/bin/onia-mirar-cliente.sh` |
+| Prueba de fallo | `/root/bin/onia-mirar-cliente-prueba.sh` |
+| Cron | `*/15 * * * * /root/bin/onia-mirar-cliente.sh >> /var/log/onia-mirar-cliente.log 2>&1` |
+| Log | `/var/log/onia-mirar-cliente.log` |
+| Estado (anti-ruido) | `/root/.onia-mirar-estado.json` |
+| Fuente en el repo | `hermes-content/deploy/vps-ops/onia-mirar-cliente*` |
+
+**Como se apaga:** `crontab -e` y comentar la linea `onia-mirar-cliente`. Los scripts
+quedan; no borra nada. Para volver a avisar sobre un fallo ya avisado:
+`rm /root/.onia-mirar-estado.json`.
+
+**Vive en `/root/bin` y no en `/opt/onia`** a proposito: el `.mjs` importa
+`playwright-core` y node lo resuelve subiendo desde la carpeta DEL ARCHIVO, o sea
+`/root/node_modules` (que ya lo tiene). Desde `/opt/onia` no lo encontraria.
+
+**Metodo — mide geometria, no HTML.** Renderiza con Chromium headless
+(`playwright-core` + `chrome-headless-shell` **ya instalados**, `/root/.cache/ms-playwright`),
+espera `document.fonts.ready` y mide el ancho del glifo contra su `font-size` con un
+`Range` sobre el nodo de texto. Un icono correcto da razon **1,00**; la palabra
+`credit_card_off` a 24px da **6,15**. Umbral 2,5, justo en el hueco. Se usa `Range` y
+no el rect del elemento porque los iconos viven en cajas de ancho fijo (`w-9`): el
+rect mediria la caja y la palabra desbordando seguiria dando 36px.
+
+**Lo que NO cubre (honesto):** solo paginas publicas sin sesion; un solo navegador y
+un solo viewport; no detecta icono equivocado-pero-angosto, color roto, solapamientos
+ni ninguna regresion visual que no sea de ancho de glifo; no mira el dashboard.
+
+**Superficies y umbrales** (calibrados contra lo medido en sano el 2026-08-22):
+
+| Superficie | Texto que se exige | Iconos | Medido en sano |
+|---|---|---|---|
+| `https://app.onia.com.bo/login` | "Hola de nuevo", "Iniciar sesión" | >= 1 | 200, 1,5 s, 5 iconos razon 1,00 |
+| `https://app.onia.com.bo/register` | "Pedí tu acceso" | >= 1 | 200, 1,2 s, 3 iconos razon 1,00 |
+| `https://onia.com.bo/` | "Tu negocio no pierde" | — | 200, 0,8 s |
+
+Umbrales: razon de glifo > 2,5 · carga > 15 s · fuente de iconos > 1,5 MB o > 10 s
+(la rota pesaba 3,9 MB y tardaba 117 s; la sana pesa 243 KB en 0,3 s).
+
+**Anti-ruido** (un monitor que grita cada 15 min se ignora): reintenta una vez a los
+5 s antes de declarar fallo; avisa solo al **cambiar** de estado; recuerda cada 6 h si
+sigue roto; avisa la recuperacion. Si el monitor **mismo** se cae (exit >= 2) el
+wrapper avisa aparte, como mucho cada 6 h — un monitor muerto en silencio parece que
+todo esta bien.
+
+**Telegram:** mismo bot del guardian (`TELEGRAM_BOT_TOKEN` + `TELEGRAM_HOME_CHANNEL`
+de `/root/.hermes/.env`), **no** se creo uno nuevo. `parse_mode=HTML` obligatorio: los
+mensajes citan ligaduras como `credit_card_off` y con Markdown un guion bajo suelto
+abre cursiva, Telegram responde 400 y el mensaje **no llega nunca**.
+
+**Probado 2026-08-22:** sano dos corridas seguidas -> 0 mensajes (`exit=0`). Fallo
+inyectado (pagina real con la fuente de iconos ausente + URL 404) -> `exit=1` y
+Telegram **ENVIADO** con `"credit_card_off" (x6.15), "verified_user" (x5.28)`.
+Recuperacion -> mensaje verde. Monitor caido (`MIRAR_CHROME=/no/existe`) -> `exit=2` y
+aviso de caida. Re-verificar cuando se quiera: `/root/bin/onia-mirar-cliente-prueba.sh`.
+
+### ⚠️ Correccion: en ESTE n8n `$env` SI funciona
+
+Arriba dice "REGLA: no usar `$env`". **Verificado en vivo el 2026-08-22:** el
+contenedor n8n tiene `N8N_BLOCK_ENV_ACCESS_IN_NODE=false`, o sea `$env` **esta
+habilitado**. La regla de arriba sigue siendo buena practica (un redeploy puede
+perder vars, y para secretos van credenciales de n8n), pero como **hecho tecnico**
+era falsa y mandaba a cada sesion a hardcodear sin necesidad.
+
 ## Scripts de ops (en el VPS bajo /opt/onia/)
 
 Fuente en este repo: `hermes-content/deploy/vps-ops/`. Se despliegan al VPS a
