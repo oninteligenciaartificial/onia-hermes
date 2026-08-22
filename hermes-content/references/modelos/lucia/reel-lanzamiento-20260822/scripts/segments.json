@@ -1,0 +1,276 @@
+{
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 2.76,
+   "text": "No soy real. Mirá bien: no existo."
+  },
+  {
+   "start": 2.78,
+   "end": 7.6,
+   "text": "Soy Lucía. Un personaje digital, creado en Bolivia por el equipo de Onia."
+  },
+  {
+   "start": 8.16,
+   "end": 13.78,
+   "text": "Estoy acá para mostrarte, sin humo, cómo la inteligencia artificial le sirve a un negocio de verdad."
+  },
+  {
+   "start": 14.58,
+   "end": 18.76,
+   "text": "No escondo lo que soy. Vos tampoco deberías perderte lo que viene. Seguime."
+  }
+ ],
+ "words": [
+  {
+   "start": 0.0,
+   "end": 0.16,
+   "word": "No"
+  },
+  {
+   "start": 0.16,
+   "end": 0.32,
+   "word": "soy"
+  },
+  {
+   "start": 0.32,
+   "end": 0.68,
+   "word": "real."
+  },
+  {
+   "start": 1.12,
+   "end": 1.38,
+   "word": "Mirá"
+  },
+  {
+   "start": 1.38,
+   "end": 1.5,
+   "word": "bien:"
+  },
+  {
+   "start": 1.6,
+   "end": 1.66,
+   "word": "no"
+  },
+  {
+   "start": 1.66,
+   "end": 2.76,
+   "word": "existo."
+  },
+  {
+   "start": 2.78,
+   "end": 2.96,
+   "word": "Soy"
+  },
+  {
+   "start": 2.96,
+   "end": 3.44,
+   "word": "Lucía."
+  },
+  {
+   "start": 3.86,
+   "end": 3.94,
+   "word": "Un"
+  },
+  {
+   "start": 3.94,
+   "end": 4.4,
+   "word": "personaje"
+  },
+  {
+   "start": 4.4,
+   "end": 4.98,
+   "word": "digital,"
+  },
+  {
+   "start": 5.54,
+   "end": 5.9,
+   "word": "creado"
+  },
+  {
+   "start": 5.9,
+   "end": 6.02,
+   "word": "en"
+  },
+  {
+   "start": 6.02,
+   "end": 6.38,
+   "word": "Bolivia"
+  },
+  {
+   "start": 6.38,
+   "end": 6.6,
+   "word": "por"
+  },
+  {
+   "start": 6.6,
+   "end": 6.7,
+   "word": "el"
+  },
+  {
+   "start": 6.7,
+   "end": 6.94,
+   "word": "equipo"
+  },
+  {
+   "start": 6.94,
+   "end": 7.2,
+   "word": "de"
+  },
+  {
+   "start": 7.2,
+   "end": 7.6,
+   "word": "Onia."
+  },
+  {
+   "start": 8.16,
+   "end": 8.34,
+   "word": "Estoy"
+  },
+  {
+   "start": 8.34,
+   "end": 8.52,
+   "word": "acá"
+  },
+  {
+   "start": 8.52,
+   "end": 8.74,
+   "word": "para"
+  },
+  {
+   "start": 8.74,
+   "end": 9.42,
+   "word": "mostrarte,"
+  },
+  {
+   "start": 9.58,
+   "end": 9.64,
+   "word": "sin"
+  },
+  {
+   "start": 9.64,
+   "end": 9.96,
+   "word": "humo,"
+  },
+  {
+   "start": 9.96,
+   "end": 10.24,
+   "word": "cómo"
+  },
+  {
+   "start": 10.24,
+   "end": 10.64,
+   "word": "la"
+  },
+  {
+   "start": 10.64,
+   "end": 11.16,
+   "word": "inteligencia"
+  },
+  {
+   "start": 11.16,
+   "end": 11.7,
+   "word": "artificial"
+  },
+  {
+   "start": 11.7,
+   "end": 12.32,
+   "word": "le"
+  },
+  {
+   "start": 12.32,
+   "end": 12.64,
+   "word": "sirve"
+  },
+  {
+   "start": 12.64,
+   "end": 12.7,
+   "word": "a"
+  },
+  {
+   "start": 12.7,
+   "end": 12.86,
+   "word": "un"
+  },
+  {
+   "start": 12.86,
+   "end": 13.32,
+   "word": "negocio"
+  },
+  {
+   "start": 13.32,
+   "end": 13.46,
+   "word": "de"
+  },
+  {
+   "start": 13.46,
+   "end": 13.78,
+   "word": "verdad."
+  },
+  {
+   "start": 14.58,
+   "end": 14.76,
+   "word": "No"
+  },
+  {
+   "start": 14.76,
+   "end": 15.04,
+   "word": "escondo"
+  },
+  {
+   "start": 15.04,
+   "end": 15.2,
+   "word": "lo"
+  },
+  {
+   "start": 15.2,
+   "end": 15.38,
+   "word": "que"
+  },
+  {
+   "start": 15.38,
+   "end": 15.66,
+   "word": "soy."
+  },
+  {
+   "start": 16.08,
+   "end": 16.18,
+   "word": "Vos"
+  },
+  {
+   "start": 16.18,
+   "end": 16.38,
+   "word": "tampoco"
+  },
+  {
+   "start": 16.38,
+   "end": 16.84,
+   "word": "deberías"
+  },
+  {
+   "start": 16.84,
+   "end": 17.44,
+   "word": "perderte"
+  },
+  {
+   "start": 17.44,
+   "end": 17.6,
+   "word": "lo"
+  },
+  {
+   "start": 17.6,
+   "end": 17.76,
+   "word": "que"
+  },
+  {
+   "start": 17.76,
+   "end": 18.04,
+   "word": "viene."
+  },
+  {
+   "start": 18.44,
+   "end": 18.76,
+   "word": "Seguime."
+  }
+ ]
+}
