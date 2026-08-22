@@ -10,7 +10,7 @@
 | # | Ítem | Horas | Estado | LISTO = |
 |---|---|---|---|---|
 | 1 | Deploy lotes 1+2 (formato Bs, nombres de plan, jerga) | — | ✅ CERRADO 22-ago 19:38 UTC | `/contact` renderizado: `Completo — Bs 1.500/mes` ✓ |
-| 2 | Lote 3: calendario, 6 tablas móvil, ayuda por rubro, voseo | ~21 | 🟡 EN VUELO (worktree) | capturas 390 con columnas clave visibles; suite ≥1872 |
+| 2 | Lote 3: calendario, 6 tablas móvil, ayuda por rubro, voseo | ~21 | 🟡 MERGEADO (f8b30c1, 1923 tests) — deploy en vuelo | capturas 390 con columnas clave visibles ✓; falta verlo en prod |
 | 3 | **Caja con carrito** multi-línea + ticket del día + anular | 16 | 🟡 EN VUELO (loop-tres-roles) | venta de 3 productos en un ticket, lista del día, anulación revierte stock y caja; mirado renderizado |
 | 4 | **Panel propio de importadora** (cotizaciones/embarques/costeo) | 16 | cola | el dashboard de importadora no menciona caja ni mostrador; sus accesos van a SUS pantallas |
 | 5 | Rediseño panel dental (el rubro vivo, su pantalla más floja) | 16 | cola | hero con el día andando, sin columna vacía, pendientes con jerarquía |
