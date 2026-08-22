@@ -1,5 +1,38 @@
 # Pendientes para lanzar — qué está a medias y en qué orden se mata
 
+## LA COLA DE TERMINACIÓN — 2026-08-22 (orden de Sergio: "terminar el servicio, uno por uno")
+
+> Regla de la cola: **un ítem a la vez en cada carril, nada nuevo hasta cerrar el anterior.**
+> Cada ítem grande corre con el loop de tres roles (planeador→ejecutador→evaluador,
+> `Workflow loop-tres-roles`) con su "LISTO =" verificable. Decisión de Sergio implícita en
+> la orden: la caja con carrito y el panel de importadora SE CONSTRUYEN (no esperan a v1.1).
+
+| # | Ítem | Horas | Estado | LISTO = |
+|---|---|---|---|---|
+| 1 | Deploy lotes 1+2 (formato Bs, nombres de plan, jerga) | — | 🟡 EN VUELO (4º intento) | `/contact` dice `Completo · Bs 1.500/mes` en prod |
+| 2 | Lote 3: calendario, 6 tablas móvil, ayuda por rubro, voseo | ~21 | 🟡 EN VUELO (worktree) | capturas 390 con columnas clave visibles; suite ≥1872 |
+| 3 | **Caja con carrito** multi-línea + ticket del día + anular | 16 | ⏭️ SIGUIENTE | venta de 3 productos en un ticket, lista del día, anulación revierte stock y caja; mirado renderizado |
+| 4 | **Panel propio de importadora** (cotizaciones/embarques/costeo) | 16 | cola | el dashboard de importadora no menciona caja ni mostrador; sus accesos van a SUS pantallas |
+| 5 | Rediseño panel dental (el rubro vivo, su pantalla más floja) | 16 | cola | hero con el día andando, sin columna vacía, pendientes con jerarquía |
+| 6 | Datos fotografiables: día vivo dental+importadora en el seed, fuera "Demo ·"/"#DEMO-", restos dentales en settings/team de comercio | 9 | cola | panel de los 3 rubros sin ceros y sin palabra Demo |
+| 7 | Estados vacíos (inventario dental) + banda negra del panel | 6 | cola | vacío que invita en vez de parecer error |
+| 8 | **Fotografiar los 5 rubros** → llenar el hueco de la landing (44% de la página) | 3 | cola | la sección de rubros muestra el panel real de cada uno, mirado en las 5 paradas |
+| 9 | v1.1: chatbot Bs 390 + WhatsApp por cliente + conversaciones en el panel | ~24 | tras v1.0 | ver ONIA_PLAN_DE_VERSIONES |
+
+**Los loops que revisan todo el tiempo (vivos hoy):**
+- Monitor de pantalla del cliente — cada 15 min, mide glifos/peso/texto, avisa a Telegram. VIVO.
+- Guardián del VPS — cada 10 min, autocura contenedores. VIVO.
+- Higiene de docs — diario 06:10. VIVO.
+- Recordatorios de cita — cada 15 min. VIVO.
+- El driver de esta sesión: wakeup que encadena la cola — cuando un ítem aterriza, lanza el
+  siguiente sin esperar orden humana. El "LISTO =" de cada fila es lo que el evaluador
+  del loop verifica antes de dar por cerrado.
+
+**De Sergio (nada me bloquea):** números del plan nuevo de Higgsfield · rotaciones cuando
+tenga su laptop · esperar la Access Verification de Meta (~5 días) · los 12 workflows n8n
+dudosos.
+
+
 > Doc VIVO. Estado verificado el 2026-08-18 mirando producción, no de memoria.
 > Regla: nada acá se declara "listo" si no está encendido en prod y visto.
 
