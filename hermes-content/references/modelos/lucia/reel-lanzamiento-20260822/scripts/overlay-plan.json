@@ -1,10 +1,10 @@
 {
   "overlays": [
-    { "asset": "apoyos/a1-quien.png",  "start": 4.60, "end": 7.20,
-      "position": "top", "scale": 0.80, "fade": 0.28 },
-    { "asset": "apoyos/a3-handle.png", "start": 7.45, "end": 9.30,
-      "position": "top", "scale": 0.80, "fade": 0.25 },
-    { "asset": "apoyos/a2-web.png",    "start": 12.40, "end": 16.20,
-      "position": "top", "scale": 0.78, "fade": 0.30 }
+    { "asset": "apoyos/a1-quien.png",  "start": 4.70, "end": 7.10,
+      "position": "top", "scale": 0.52, "fade": 0.25 },
+    { "asset": "apoyos/a3-handle.png", "start": 7.55, "end": 9.20,
+      "position": "top", "scale": 0.46, "fade": 0.22 },
+    { "asset": "apoyos/b1-web.png",    "start": 12.30, "end": 16.30,
+      "position": "center", "scale": 0.62, "fade": 0.30 }
   ]
 }
