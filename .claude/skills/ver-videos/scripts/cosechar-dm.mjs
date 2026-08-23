@@ -14,7 +14,7 @@
 // no llamar. Los posts compartidos NO exponen su URL en el DOM (por eso el clic no sirve),
 // pero SÍ vienen completos en esas respuestas.
 import { chromium } from 'playwright';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, existsSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -58,6 +58,55 @@ function extraerDeItem(it) {
   };
 }
 
+// Los hilos NO vienen en `inbox.threads` (esa forma murió). Hoy llegan por GraphQL, anidados en
+// rutas que cambian solas — vistas el 2026-08-23:
+//   data.fetch__SlideMailbox.threads_by_system_folder_and_ig_inbox_folder.edges[].node.as_ig_direct_thread
+//   data.get_slide_mailbox_for_iris_subscription.threads_by_folder.edges[].node.as_ig_direct_thread
+//   data.get_slide_thread_nullable.as_ig_direct_thread
+// Por eso NO se hardcodea la ruta: se recorre todo y se junta lo que TENGA FORMA de hilo.
+function recorrerHilos(obj, hilos) {
+  if (!obj || typeof obj !== 'object') return;
+  if (Array.isArray(obj)) { obj.forEach((o) => recorrerHilos(o, hilos)); return; }
+  if (obj.thread_id || obj.thread_key) {
+    const quien = obj.thread_title
+      || (obj.users || []).map((u) => u.username).filter(Boolean).join(', ')
+      || null;
+    // el id que sirve en /direct/t/<id> es el corto (thread_key / id), no el largo de 39 digitos
+    const nav = obj.thread_key || obj.id || obj.thread_fbid || obj.thread_id;
+    if (nav && quien) {
+      hilos.set(String(nav), {
+        quien,
+        ts: obj.last_activity_timestamp_ms ? Number(obj.last_activity_timestamp_ms) : 0,
+        grupo: !!obj.is_group,
+        ids: [obj.thread_key, obj.id, obj.thread_fbid, obj.thread_id].filter(Boolean).map(String),
+      });
+    }
+  }
+  Object.values(obj).forEach((v) => recorrerHilos(v, hilos));
+}
+
+// FORMA NUEVA (verificada el 2026-08-23). Un post compartido en un DM ya NO llega como
+// `media_share`/`clip`: llega como **XMA** (SlideMessagePortraitXMA), y el unico lugar donde
+// esta el shortcode es `target_url`:
+//   target_url        https://www.instagram.com/reel/Db9jbZtumB7/?id=3962479061820399739_652...
+//   target_id         3962479061820399739          <- id interno, NO el shortcode
+//   header_title_text stj.taneja                   <- el autor
+// El caption NO viene: hay que traerlo despues con ig-carousel.mjs o fetch-video.mjs.
+function extraerDeXma(x) {
+  const u = String(x?.target_url || '');
+  const m = u.match(/instagram\.com\/(?:p|reel|tv)\/([A-Za-z0-9_-]{5,20})/);
+  if (!m) return null;
+  return {
+    code: m[1],
+    url: `https://www.instagram.com/p/${m[1]}/`,
+    autor: x.header_title_text || null,
+    tipo: /\/reel\//.test(u) ? 'video' : null,
+    laminas: null,
+    caption: x.header_subtitle_text || null,
+    ts: null,
+  };
+}
+
 function recorrer(obj, encontrados) {
   if (!obj || typeof obj !== 'object') return;
   if (Array.isArray(obj)) { obj.forEach((o) => recorrer(o, encontrados)); return; }
@@ -65,20 +114,42 @@ function recorrer(obj, encontrados) {
     const e = extraerDeItem(obj);
     if (e && !encontrados.has(e.code)) encontrados.set(e.code, e);
   }
+  if (obj.xma) {
+    for (const x of (Array.isArray(obj.xma) ? obj.xma : [obj.xma])) {
+      const e = extraerDeXma(x);
+      if (e && !encontrados.has(e.code)) encontrados.set(e.code, e);
+    }
+  }
   Object.values(obj).forEach((v) => recorrer(v, encontrados));
 }
 
 (async () => {
   if (wantLogin) {
+    // NO se espera a que el humano cierre la ventana. Esa version costo una sesion entera el
+    // 2026-08-23: las cookies se vuelcan al disco SOLO cuando el contexto se cierra limpio, asi
+    // que si el proceso muere (o la ventana queda abierta), el perfil queda con CERO cookies
+    // aunque el login se haya hecho. Ahora se sondea `sessionid` y se cierra solo.
+    for (const f of ['lockfile', 'SingletonLock', 'SingletonCookie', 'SingletonSocket']) {
+      const p = path.join(PROFILE_DIR, f);
+      if (existsSync(p)) { try { rmSync(p, { force: true, recursive: true }); } catch {} }
+    }
     const ctx = await abrir(false);
-    const page = await ctx.newPage();
-    await page.goto('https://www.instagram.com/accounts/login/');
-    console.error('\n  Logueate con la cuenta que tiene la conversación (sergio_urcullo).');
-    console.error('  Cuando veas tu feed, CERRÁ la ventana. La sesión queda guardada.\n');
-    await page.waitForEvent('close', { timeout: 0 }).catch(() => {});
-    await ctx.close();
-    console.error('sesión guardada en ' + PROFILE_DIR);
-    return;
+    const page = ctx.pages()[0] || (await ctx.newPage());
+    await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'domcontentloaded' });
+    console.error('\n  Entrá con la cuenta que tiene la conversación (sergio_urcullo).');
+    console.error('  NO cierres nada: apenas detecte la sesión, se cierra solo.\n');
+    const t0 = Date.now(), MAX = 450000;
+    let ok = false;
+    while (Date.now() - t0 < MAX) {
+      const ck = await ctx.cookies('https://www.instagram.com').catch(() => []);
+      if (ck.find((c) => c.name === 'sessionid' && c.value) && ck.find((c) => c.name === 'ds_user_id' && c.value)) { ok = true; break; }
+      if (page.isClosed()) break;
+      await page.waitForTimeout(2000);
+    }
+    if (ok) await page.waitForTimeout(3000);
+    await ctx.close(); // esto es lo que escribe las cookies al disco
+    console.error(ok ? 'sesión guardada en ' + PROFILE_DIR : 'NO se detectó sesión — volvé a intentar');
+    process.exit(ok ? 0 : 1);
   }
 
   const ctx = await abrir(true);
@@ -91,14 +162,7 @@ function recorrer(obj, encontrados) {
     if (!/direct_v2|graphql/.test(u)) return;
     let j; try { j = await res.json(); } catch { return; }
     recorrer(j, encontrados);
-    // para --hilos: quedarse con id + nombre de cada conversación
-    const inbox = j?.inbox?.threads || j?.viewer?.threads || null;
-    if (Array.isArray(inbox)) {
-      inbox.forEach((t) => {
-        const quien = (t.users || []).map((x) => x.username).join(', ') || t.thread_title;
-        if (t.thread_id) hilos.set(t.thread_id, quien);
-      });
-    }
+    recorrerHilos(j, hilos);
   });
 
   const destino = wantHilos
@@ -113,9 +177,17 @@ function recorrer(obj, encontrados) {
   }
 
   if (wantHilos) {
-    await page.mouse.wheel(0, 4000).catch(() => {});
-    await page.waitForTimeout(2500);
-    console.log(JSON.stringify([...hilos.entries()].map(([id, quien]) => ({ id, quien })), null, 1));
+    // scrollear la lista de conversaciones para que pida más allá de las primeras
+    for (let i = 0; i < 6; i++) {
+      await page.mouse.move(300, 500);
+      await page.mouse.wheel(0, 2500).catch(() => {});
+      await page.waitForTimeout(1500);
+    }
+    const lista = [...hilos.entries()]
+      .map(([id, v]) => ({ id, quien: v.quien, grupo: v.grupo, ultima: v.ts ? new Date(v.ts).toISOString() : null, ids: v.ids }))
+      .sort((a, b) => (b.ultima || '').localeCompare(a.ultima || ''));
+    console.log(JSON.stringify(lista, null, 1));
+    console.error(`\n${lista.length} conversaciones. Para cosechar una:\n  node cosechar-dm.mjs <id> --out DIR\n`);
     await ctx.close(); return;
   }
 
