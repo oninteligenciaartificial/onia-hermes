@@ -1176,7 +1176,10 @@
 .runway {
   --niche-i: 0;
   --niche-step: 720px; /* scroll por rubro */
-  --niche-slot: 340px; /* alto de la tarjeta-ventana */
+  /* Alto de la tarjeta-ventana. Era 340: ahi la captura entraba al 45% y el
+     texto de 16px caia a 7px — ilegible, que es por lo que las capturas
+     anteriores "se veian muy mal". A 560 el recorte va casi 1:1 y se lee. */
+  --niche-slot: 560px;
   --niche-stage: 620px; /* alto del pegado */
   --niche-dur: 0.5s;
   --niche-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1256,6 +1259,10 @@
 }
 /* la tarjeta ES la ventana: overflow hidden + una tira que se traslada un
    slot exacto por rubro (rodillo medido, no cross-fade) */
+/* La tarjeta tiene que leerse como una VENTANA al producto. Con el bloque de
+   color se leia sola; con la captura real —que es casi blanca— se fundia con el
+   fondo claro de la seccion y el contenido quedaba flotando sin marco. El borde
+   y la sombra devuelven ese limite sin robarle protagonismo a la foto. */
 .card {
   position: relative;
   width: calc(var(--niche-slot) * 0.853);
@@ -1263,6 +1270,10 @@
   border-radius: var(--r-block);
   overflow: hidden;
   background: var(--surface-dim);
+  border: 1px solid color-mix(in srgb, var(--tinta) 12%, transparent);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--tinta) 6%, transparent),
+    0 18px 40px -12px color-mix(in srgb, var(--tinta) 18%, transparent);
 }
 .roll {
   display: flex;
@@ -1277,26 +1288,27 @@
   height: var(--niche-slot);
   overflow: hidden;
 }
+/* Color del rubro DEBAJO de la foto: es lo que se ve mientras carga y evita el
+   destello blanco. Antes llevaba dos rectangulos translucidos encima que
+   simulaban una interfaz; con la captura real ya no hacen falta, y sin la foto
+   se leian como una imagen rota. */
 .slotShape {
   position: absolute;
   inset: 0;
 }
-.slotShape::before {
-  content: "";
-  position: absolute;
-  inset: 16% 14% 30% 16%;
-  border-radius: calc(var(--r-block) * 0.6);
-  background: color-mix(in srgb, #fff 24%, transparent);
+/* Etiqueta por captura: invisible en desktop, donde la palabra activa ya esta
+   gigante al lado del rodillo. Se enciende en el layout apilado. */
+.slotNombre {
+  display: none;
 }
-.slotShape::after {
-  content: "";
+.slotFoto {
   position: absolute;
-  right: 14%;
-  bottom: 16%;
-  width: 44%;
-  height: 34%;
-  border-radius: calc(var(--r-block) * 0.5);
-  background: color-mix(in srgb, #fff 42%, transparent);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  display: block;
 }
 .pill {
   position: absolute;
@@ -1337,7 +1349,7 @@
 
 @media (max-width: 1023px) {
   .runway {
-    --niche-slot: 250px;
+    --niche-slot: 420px;
     --niche-stage: 520px;
   }
 }
@@ -1383,6 +1395,21 @@
   }
   .pill {
     display: none;
+  }
+  .slotNombre {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 1;
+    display: block;
+    padding: 0.28rem 0.6rem;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--tinta) 82%, transparent);
+    color: #fff;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 }
 

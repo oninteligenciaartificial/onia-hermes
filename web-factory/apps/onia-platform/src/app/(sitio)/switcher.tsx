@@ -19,10 +19,22 @@ import s from "./sitio.module.css";
  *    y la píldora. Conmutador DISCRETO por umbral (sin scrub, sin pin, sin GSAP).
  *  · Apilado (móvil / reduced-motion) las palabras van ANTES de las formas.
  *
- * Diferencia con el original: el rodillo NO lleva fotos (regla de esta sesión:
- * sin imágenes). Lleva un bloque de forma+color por rubro — el "juego de formas
- * y colores" de Fanvue que pidió Sergio. Cada rubro reserva su ratio para que un
- * clip real entre después sin CLS.
+ * El rodillo ya lleva la CAPTURA REAL de cada rubro. Antes llevaba un bloque de
+ * forma+color —dos rectangulos translucidos sobre el color del rubro— que se leia
+ * como una imagen que no cargo. La ranura estaba reservada con el ratio exacto,
+ * asi que cablear la foto no movio nada: cero CLS.
+ *
+ * El color sigue debajo de la foto a proposito: es lo que se ve mientras carga,
+ * y evita el destello blanco.
+ *
+ * Cada rubro muestra la pantalla que cuenta SU historia, no la misma para todos
+ * —agenda, caja, cotizaciones, contabilidad—: en un conmutador que existe para
+ * probar que el sistema cambia por rubro, cinco fotos parecidas prueban lo
+ * contrario. Se generan con prisma/seed-demo.ts de onia-platform + el recorte de
+ * .verif-tmp/recortes-rubro.mjs, a 2x del tamano de la tarjeta.
+ *
+ * `<img>` a secas y no next/image: el build es `output: standalone` sobre el VPS
+ * y ahi next/image no optimiza (misma decision que landing-v2/pantalla.tsx).
  */
 
 type Rubro = {
@@ -30,15 +42,20 @@ type Rubro = {
   palabra: string;
   /** color del bloque del rubro (tokens de marca, nunca un hex suelto) */
   bg: string;
+  /** que se ve en la captura — es el alt, asi que describe la pantalla */
+  alt: string;
 };
 
 const RUBROS: readonly Rubro[] = [
-  { id: "dental", palabra: "Dental", bg: "var(--verde-800)" },
-  { id: "comercio", palabra: "Comercio", bg: "var(--verde-900)" },
-  { id: "importadora", palabra: "Importadora", bg: "var(--tinta)" },
-  { id: "estetica", palabra: "Estética", bg: "var(--verde-700)" },
-  { id: "servicios", palabra: "Servicios", bg: "var(--verde-900)" },
+  { id: "dental", palabra: "Dental", bg: "var(--verde-800)", alt: "Agenda del día de una clínica dental: tres citas con hora, duración, motivo y teléfono." },
+  { id: "comercio", palabra: "Comercio", bg: "var(--verde-900)", alt: "Caja de una ferretería: total del día por método de pago y las ventas una por una." },
+  { id: "importadora", palabra: "Importadora", bg: "var(--tinta)", alt: "Cotizaciones B2B de una importadora, con su estado y su monto en bolivianos." },
+  { id: "estetica", palabra: "Estética", bg: "var(--verde-700)", alt: "Agenda del día de un centro de estética: sesiones de láser y controles post-tratamiento." },
+  { id: "servicios", palabra: "Servicios", bg: "var(--verde-900)", alt: "Contabilidad de un estudio profesional: IVA e IT del mes y registro de ventas." },
 ];
+
+/** 2x del tamaño de la tarjeta: alcanza para retina sin pagar un archivo enorme. */
+const FOTO = { w: 956, h: 1120 } as const;
 
 export function Switcher() {
   const runwayRef = useRef<HTMLDivElement | null>(null);
@@ -103,21 +120,31 @@ export function Switcher() {
                   style={{ background: r.bg } as CSSProperties}
                   aria-hidden="true"
                 />
+                {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
+                <img
+                  src={`/rubros/${r.id}.webp`}
+                  alt={r.alt}
+                  width={FOTO.w}
+                  height={FOTO.h}
+                  loading="lazy"
+                  decoding="async"
+                  className={s.slotFoto}
+                />
+                {/* Solo en el layout APILADO (movil / reduced-motion). Ahi las
+                    cinco capturas se ven a la vez y, sin esto, nada dice cual es
+                    cual: la lista de palabras esta arriba y la correspondencia
+                    queda librada a que el lector cuente posiciones. En desktop
+                    sobra —la palabra activa esta gigante al lado— y por eso el
+                    CSS la esconde. */}
+                <span className={s.slotNombre} aria-hidden="true">
+                  {r.palabra}
+                </span>
               </div>
             ))}
           </div>
-          {/* decorativa: duplica la palabra activa, nunca un negocio inventado */}
-          <div className={s.pill} aria-hidden="true">
-            <span className={s.pillWin}>
-              <span className={s.pillRows}>
-                {RUBROS.map((r) => (
-                  <span key={r.id} className={s.pillRow}>
-                    {r.palabra}
-                  </span>
-                ))}
-              </span>
-            </span>
-          </div>
+          {/* La pildora con el nombre del rubro se quito al cablear la foto: sobre
+              el bloque de color se leia, pero sobre una captura clara tapaba una
+              fila de datos para repetir la palabra que ya esta gigante al lado. */}
         </div>
 
         <div className={s.stageMid}>
