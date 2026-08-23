@@ -1,0 +1,25 @@
+{
+  "caption": "Ninguna de estas la aprendí leyendo. Todas me costaron tiempo perdido. ¿Cuál agregarías vos?",
+  "hashtags": ["#bolivia", "#santacruz", "#emprendimiento", "#software", "#ia"],
+  "src": false,
+  "slides": [
+    { "number":1, "role":"cover", "pill":"18 meses construyendo",
+      "headline":"Lo que aprendí *construyendo* software en Bolivia",
+      "body":"Ninguna la aprendí leyendo. Todas me costaron tiempo." },
+    { "number":2, "role":"point", "pill":"01",
+      "headline":"Un cliente real *>* cien encuestas",
+      "body":"Preguntarle a la gente si pagaría no sirve. Sirve pedirle que pague. La primera respuesta es cortesía; la segunda es información." },
+    { "number":3, "role":"point", "pill":"02",
+      "headline":"Publicar *>* pulir",
+      "body":"Pasé días perfeccionando cosas que nadie llegó a ver. Lo que no está publicado no existe, por más lindo que esté." },
+    { "number":4, "role":"point", "pill":"03",
+      "headline":"Mirarlo *>* que compile",
+      "body":"Un sistema puede responder OK y estar roto igual. Si nadie abre la pantalla y la mira, nadie sabe si funciona." },
+    { "number":5, "role":"point", "pill":"04",
+      "headline":"Cerrar *>* empezar",
+      "body":"Tres proyectos al 80% valen cero. Uno al 100% ya se puede cobrar. Abrir un frente nuevo es la forma más entretenida de no terminar nada." },
+    { "number":6, "role":"cta", "pill":"Tu turno",
+      "headline":"¿Cuál *agregarías* vos?",
+      "body":"Escribila en los comentarios. Las mejores las robo para el próximo." }
+  ]
+}

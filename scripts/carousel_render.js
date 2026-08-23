@@ -51,7 +51,10 @@ const ACCOUNTS = {
   // Handle IG real de ONIA, confirmado por Sergio 2026-08-13.
   onia: { handle: '@oniahq', name: 'Onia', personal: false },
   arthur: { handle: '@arthur', name: 'Arthur', personal: true },
-  sergio: { handle: '@sergio', name: 'Sergio', personal: true },
+  // Handle REAL verificado por Graph API el 2026-08-23 (id 37718852144430113,
+  // MEDIA_CREATOR, 36 posts, 411 seguidores). Antes decia '@sergio', que no existe:
+  // cualquier pieza suya salia firmada con un handle inventado.
+  sergio: { handle: '@sergio_urcullo', name: 'Sergio Urcullo', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
   lucia: { handle: '@lucia.antelo.oficial', name: 'Lucía Antelo', personal: true },
 };
@@ -217,6 +220,22 @@ function commentReward(slide) {
   return r || '';
 }
 
+// La linea de "guardalo" del cierre. Mismo problema que commentReward y misma solucion.
+//
+// Estaba hardcodeada como "Gratis. Guardalo para cuando te sientes a resolverlo.", que solo
+// tiene sentido cuando la pieza REGALA algo. En un carrusel cuyo cierre es una pregunta
+// abierta ("¿cuál agregarías vos?") no hay nada gratis ni nada que guardar: la linea
+// aparecia igual y prometia un regalo inexistente.
+//
+// Regla: si el brief trae `save_hint`, se usa. Si no, solo se dibuja la linea clasica
+// cuando ADEMAS hay un regalo declarado (`comment_reward`). Sin regalo, no hay "gratis".
+function saveHint(slide) {
+  const explicit = String(slide.save_hint || '').trim();
+  if (explicit) return `<p class="savehint">${esc(explicit)}</p>`;
+  if (commentReward(slide)) return `<p class="savehint">Gratis. Guardalo para cuando te sientes a resolverlo.</p>`;
+  return '';
+}
+
 // Boton de accion, compartido. La slide de CTA es la de mayor intencion de todo el carrusel
 // y hasta el 2026-08-17 solo el pack `typographic` dibujaba algo que se leyera como "tocá acá";
 // los otros cuatro dejaban solo texto.
@@ -284,7 +303,7 @@ function slideHtml(slide, idx, total, account, bg) {
         </div>
       </div>` : ''}
       ${word ? `<div class="ctabtn">Comentá ${esc(word)}</div>` : ''}
-      <p class="savehint">Gratis. Guardalo para cuando te sientes a resolverlo.</p>
+      ${saveHint(slide)}
       ${logoFooter(account)}`;
   } else if (role === 'save') {
     inner = `

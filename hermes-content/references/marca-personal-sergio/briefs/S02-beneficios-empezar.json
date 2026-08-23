@@ -1,0 +1,25 @@
+{
+  "caption": "Lo más caro que hice fue esperar a estar listo. ¿Qué estás por empezar?",
+  "hashtags": ["#bolivia", "#emprendimiento", "#disciplina", "#santacruz"],
+  "src": false,
+  "slides": [
+    { "number":1, "role":"cover", "pill":"Lo leí tarde",
+      "headline":"Lo que pasa cuando *empezás*",
+      "body":"Aunque sea mal. Aunque sea hoy." },
+    { "number":2, "role":"point", "pill":"1 minuto",
+      "headline":"Se te apaga la *cabeza*",
+      "body":"El minuto que tardás en abrir el archivo es el que venías postergando hace tres semanas. Apenas empieza, el ruido se corta." },
+    { "number":3, "role":"point", "pill":"1 día",
+      "headline":"Dejás de *dudar* de vos",
+      "body":"Un día haciendo algo pesa más que un mes pensándolo. No porque avances mucho: porque probás que podés." },
+    { "number":4, "role":"point", "pill":"1 semana",
+      "headline":"Aparece el primer *comentario* real",
+      "body":"Alguien que no te conoce te dice qué está mal. Eso vale más que todo lo que imaginaste solo." },
+    { "number":5, "role":"point", "pill":"1 mes",
+      "headline":"Ya sabés qué *sirve*",
+      "body":"Y sobre todo qué no. Ese mapa no se compra ni se lee: solo lo tiene el que hizo el mes." },
+    { "number":6, "role":"cta", "pill":"Tu turno",
+      "headline":"¿Qué estás por *empezar*?",
+      "body":"Contámelo en un comentario. A veces escribirlo ya es empezar." }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "caption": "Sin equipo, sin oficina, sin inversión. Esto es literalmente todo lo que uso. ¿Qué le sacarías?",
+  "hashtags": ["#ia", "#software", "#bolivia", "#herramientas", "#productividad"],
+  "src": false,
+  "slides": [
+    { "number":1, "role":"cover", "pill":"Sin equipo",
+      "headline":"Todo lo que uso para *construir solo*",
+      "body":"Nada de esto es magia. Todo se aprende." },
+    { "number":2, "role":"point", "pill":"Para escribir código",
+      "headline":"Una IA que *ejecuta*, no que sugiere",
+      "body":"La diferencia no es que te escriba la función. Es que abra los archivos, corra las pruebas y te diga cuando se equivocó." },
+    { "number":3, "role":"point", "pill":"Para el producto",
+      "headline":"Lo *aburrido* y probado",
+      "body":"Next.js y Postgres. Nada exótico. Elegir tecnología rara es pagar con noches lo que ahorraste en curiosidad." },
+    { "number":4, "role":"point", "pill":"Para el contenido",
+      "headline":"Código, no *editor*",
+      "body":"Los carruseles y los videos salen de un script. Este que estás leyendo también. Diseñar a mano una vez está bien; cien veces es un trabajo." },
+    { "number":5, "role":"point", "pill":"Lo que NO uso",
+      "headline":"Nada que cobre por *usuario*",
+      "body":"Cuando sos uno, cada herramienta por asiento parece barata. Cuando sumás seis, ya pagás un sueldo en software que casi no abrís." },
+    { "number":6, "role":"cta", "pill":"Tu turno",
+      "headline":"¿Qué le *sacarías*?",
+      "body":"O qué me falta. Los comentarios corrigen mejor que yo." }
+  ]
+}
