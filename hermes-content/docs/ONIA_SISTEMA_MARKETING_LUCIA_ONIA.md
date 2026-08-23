@@ -59,7 +59,7 @@ Unicidad POR CUENTA (el workflow rutea por entry_id).
 | oniahq | LISTA | PDF 6 tareas | 🟢 vivo |
 | oniahq | SISTEMA | diagnóstico 20 min | 🟢 vivo |
 | Lucía | SISTEMA | mapa del negocio (vía @oniahq) | 🟢 vivo |
-| Lucía | HUMO | (fase 1b) lista "5 herramientas IA que sí sirven en Bolivia" | 🔴 crear PDF |
+| Lucía | HUMO | PDF "5 herramientas de IA que sí sirven en un negocio boliviano" | 🟢 **vivo** (23-ago) |
 | Lucía | COMUNIDAD | (fase 2) invitación WhatsApp | 🔴 crear grupo |
 | oniahq | CURSO | (fase 3) lista de espera del curso | 🔴 futuro |
 

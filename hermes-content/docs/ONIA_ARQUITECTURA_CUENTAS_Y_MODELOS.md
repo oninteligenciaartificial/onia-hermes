@@ -165,3 +165,23 @@ permisos corren en modo desarrollo porque Sergio es admin de la página — la m
 desbloqueó Instagram (`dev_mode`, no App Review).
 
 ⚠️ El App Secret **nunca viaja por chat**: se carga en Easypanel o por SSH con entrada oculta.
+
+---
+
+## 8. ⚠️ Los PDF de recursos: dos trampas descubiertas al publicar el de HUMO (23-ago)
+
+**1. El PDF de LISTA no estaba versionado.** Vivía SOLO dentro del contenedor `onia-landing`
+(`/app/apps/onia-platform/public/recursos/`), subido a mano. El próximo deploy lo borraba y la
+palabra LISTA empezaba a responder 404 sin que nadie se enterara. Se rescató del contenedor y
+se commiteó en `onia-platform/public/recursos/` junto con el nuevo.
+
+**2. Next cachea el índice de `public/` AL ARRANCAR.** Copiar un archivo al contenedor no
+alcanza: sigue dando 404 hasta reiniciar el proceso. Medido al segundo — el contenedor arrancó
+01:31, el PDF que funcionaba se había subido 01:23 (antes) y el nuevo 02:55 (después). No eran
+permisos (se probó `chown`) ni caché de Cloudflare (`cf-cache-status: BYPASS`).
+
+**Receta para publicar un recurso nuevo:**
+1. Commitear el archivo en `onia-platform/public/recursos/` — sin esto, el deploy lo borra.
+2. Copiarlo al contenedor vivo si hace falta que funcione YA.
+3. **`docker restart onia-landing`** (sin esto responde 404).
+4. Verificar con `curl` que devuelve **200** ANTES de encender la palabra en n8n.
