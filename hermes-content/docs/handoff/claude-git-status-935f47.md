@@ -39,6 +39,24 @@ Es la única de las 6 sin cara, y el doc de imágenes la asigna al **hero** (§7
 cableó porque el hero es un `<Shape>` de `(sitio)/ui.tsx`, y ese archivo era de otro carril
 durante la sesión. **Necesita el carril dueño de `ui.tsx`**, que ahora está libre.
 
+### 2-bis. ⚠️ La sección de add-ons nunca se vio en un navegador NORMAL
+Las capturas buenas (`OK-*.png`) se sacaron **forzando los `Reveal`**, porque en el entorno de
+captura no disparan. Midiendo desde acá con el panel del navegador oculto, el envoltorio
+`Reveal` de `.offerStar` daba `opacity: 0` con el elemento **dentro del viewport**.
+
+**No se concluyó que sea un bug**, y no se debe reportar como tal sin más evidencia: una página
+que no compone frames no dispara `IntersectionObserver`, así que `whileInView` no corre nunca —
+eso **solo** ya explica lo medido. Además `motion-provider.tsx` usa `reducedMotion="user"`, que
+desactiva transform pero **mantiene la opacidad animando**, así que en un navegador real debería
+verse.
+
+**Lo que falta:** abrirla en un navegador de verdad, visible, y mirarla — con y sin
+`reduced-motion`. Hasta entonces esta sección está **construida y no verificada**.
+
+⚠️ Ojo con el precedente: en `/servicios/webs` SÍ hubo un `Reveal` realmente roto (medía
+~5.000 px y `viewportOnce` exige 30% visible, así que nunca disparaba). Ese era determinista.
+Este no está demostrado. **No confundirlos.**
+
 ### 3. Bugs pre-existentes encontrados y NO arreglados (fuera de carril)
 - **`ui.tsx:72` fuerza `loading="lazy"` siempre.** Las ranuras de hero deberían cargar eager.
   Falta una prop `eager`/`priority`. Afecta también a la home.
