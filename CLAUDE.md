@@ -99,19 +99,14 @@ Instrucciones de proyecto. Override sobre defaults.
   llama son trabajo con valor **cero**.
 - **Prohibido reportar como hecho lo que está detrás de un flag apagado.**
 - **Antes de abrir un frente nuevo se cierra el anterior**, o se anota con su estado exacto.
-- **Al cerrar la sesión, se escribe el handoff del carril** en
-  `.claude/handoff/<rama-con-guiones>.md`, con los **7 campos** de
-  [`hermes-content/docs/HANDOFF_DE_SESION.md`](hermes-content/docs/HANDOFF_DE_SESION.md).
-  Un archivo por rama: dos carriles nunca comparten archivo, y se borra al mergear.
-  La sesión siguiente arranca leyéndolo.
-  ⚠️ **Corregido 2026-08-22.** Acá decía solo *"dejar el estado escrito: qué quedó en
-  producción, qué quedó a medias y dónde, y qué depende de Sergio"* — la regla correcta,
-  pero **sin plantilla y sin archivo**, así que se cumplía a ojo. Los tres campos siguen
-  siendo obligatorios; ahora son 3 de 7. **El que faltaba y más vale es "intentos
-  fallidos"**: sin él, la sesión siguiente vuelve a entrar al mismo callejón.
-  Y ojo: `/save-session` y `/context-save` **no** sirven para esto — escriben en el `$HOME`
-  de una máquina, fuera del repo. Se midieron: 104 archivos de este repo, ninguno desde el
-  25-jul.
+- **Al cerrar la sesión, escribir el HANDOFF del carril** en
+  `hermes-content/docs/handoff/<carril>.md` — plantilla y decisiones en el README de esa
+  carpeta. Siete campos: objetivo · qué quedó **en producción** · qué quedó a medias y dónde ·
+  archivos · **intentos fallidos** · qué depende de Sergio · próximos pasos.
+  Un archivo por carril, así dos worktrees abiertos no chocan al mergear.
+  ⚠️ **No alcanza con confiar en la compactación**: el resumen es fiel pero no ELIGE — devuelve
+  cada error y cada método descartado con el mismo peso que el estado actual. El campo de
+  **intentos fallidos** es el que casi nadie escribe y el que evita repetir el callejón.
 
 ---
 
@@ -219,6 +214,7 @@ Nada suelto en la raíz.
 | Qué | Dónde |
 |---|---|
 | Doc de proceso o decisión | `hermes-content/docs/` (sin fecha si es fuente de verdad) |
+| **Estado al cerrar un carril** | `hermes-content/docs/handoff/<carril>.md` (uno por carril, sin fecha) |
 | Foto de un día | `hermes-content/docs/historial/` |
 | Investigación | `hermes-content/docs/research/` |
 | Competencia guardada | `hermes-content/research/competencia/` |
@@ -226,7 +222,6 @@ Nada suelto en la raíz.
 | Patrón de movimiento | `web-factory/docs/MOTION_PATTERN_BANK_2026.md` |
 | Análisis de video | `hermes-content/references/video-intake/` |
 | Código de herramienta | `scripts/` o `.claude/skills/<skill>/scripts/` |
-| Estado de un carril al cerrar | `.claude/handoff/<rama>.md` ([formato](hermes-content/docs/HANDOFF_DE_SESION.md)) — se borra al mergear |
 
 Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 
