@@ -41,6 +41,7 @@
  */
 
 import { precioAddonChatbot } from "@/content/chatbot-precios";
+import { WEB_STACKS } from "@/content/webs";
 
 export type PlanId = "basico" | "pro" | "full";
 
@@ -167,23 +168,53 @@ export function bs(n: number): string {
   return n.toLocaleString("es-BO");
 }
 
-/* ---------- add-ons con precio en el codigo ----------
+/* ---------- lo que se suma sobre la suscripcion ----------
  *
- * SOLO software que se enciende sobre la suscripcion, con precio recurrente
- * que el sistema cobra. "Web del negocio" se retiro el 2026-08-21 (decision de
- * Sergio): es pago unico y ademas es trabajo de agencia, no software — puesta
- * al lado de "usuario adicional" hacia leer el servicio como una casilla de
- * autoservicio y ensuciaba la tabla. Se sigue vendiendo, pero en su propia
- * pagina (/servicios/webs) y cotizada.
+ * ⚠️ VUELVE "Web del negocio" (2026-08-22). El 2026-08-21 la habia sacado de
+ * esta lista por ser pago unico y trabajo de agencia, no software recurrente.
+ * Sergio lo revirtio mirando la portada: "solo veo 3 precios, hay que mostrar
+ * todo lo que ofrecemos". Una tabla prolija que esconde lo que si vendemos
+ * cuesta mas que una tabla mezclada. Entra con el precio de content/webs.ts
+ * (el stack mas barato) y diciendo en la misma celda que es pago unico, no
+ * suscripcion — que era la objecion real, y se resuelve con la etiqueta.
+ *
+ * `href` existe para que la pantalla no adivine a que fila le toca link:
+ * /precios preguntaba `addon.nombre.includes("Chatbot")`, y ese sniff se
+ * rompia con renombrar la fila.
  *
  * Grupo / Empresarial con su implementacion NO es un add-on y por eso no esta
  * en esta lista: vive arriba, en GRUPO, y es un proyecto cotizado.
  */
 
+/**
+ * El "desde" de la web sale de la fuente (content/webs.ts), no a mano: hoy es
+ * la Landing de Captacion. Si manana el catalogo cambia, esta celda cambia
+ * sola en lugar de quedar mintiendo.
+ *
+ * 🔴 OJO, PRECIO EN DISPUTA — NO se resuelve desde esta pantalla. El mismo
+ * 2026-08-22, hermes-content/docs/ONIA_WEB_COMO_SE_VENDE.md §8 dejo asentado
+ * que la linea 790/1.500/2.900 era una oferta de ARRANQUE "valida hasta
+ * 2026-07-31", que vencio sin sucesor, y que TODAS las propuestas reales del
+ * repo cotizan la linea premium (2.000/4.500). Son dos precios vivos del mismo
+ * servicio: exactamente lo que la regla de fuente unica existe para evitar.
+ *
+ * Se publica 790 y no otro numero por UNA razon: es el que /servicios/webs ya
+ * muestra en produccion hoy. Que la portada diga lo mismo mantiene el sitio
+ * coherente consigo mismo; elegir 2.000 desde aca seria tomar la decision de
+ * precio que ese doc §8.4 reserva EXPLICITAMENTE para Sergio. Cuando Sergio
+ * ratifique una sola linea, se corrige en content/webs.ts y las dos pantallas
+ * se mueven juntas — no se toca este archivo.
+ */
+const WEB_DESDE = Math.min(
+  ...WEB_STACKS.map((w) => w.precio).filter((p): p is number => p !== null),
+);
+
 export interface AddOn {
   nombre: string;
   copy: string;
   precio: string;
+  /** Apartado que cuenta el add-on entero. Sin href, la fila no linkea. */
+  href?: string;
 }
 
 export const ADDONS: readonly AddOn[] = [
@@ -191,6 +222,7 @@ export const ADDONS: readonly AddOn[] = [
     nombre: "Chatbot de WhatsApp",
     copy: "Contesta al instante a cualquier hora con la información real de tu negocio, y pasa a una persona lo que necesite decisión. Se suma a cualquier plan.",
     precio: precioAddonChatbot(),
+    href: "/chatbot",
   },
   {
     nombre: "Reservas online",
@@ -206,6 +238,12 @@ export const ADDONS: readonly AddOn[] = [
     nombre: "Inventario avanzado",
     copy: "Compras, proveedores, vencimientos y alertas avanzadas, por encima del inventario simple que ya viene incluido.",
     precio: "Desde Bs 180/mes",
+  },
+  {
+    nombre: "Web del negocio",
+    copy: "Tu sitio hecho por nosotros y publicado en tu dominio, con el botón de WhatsApp ya cableado. Es un proyecto que se cotiza y se paga una vez, no una suscripción más.",
+    precio: `Desde Bs ${bs(WEB_DESDE)} · pago único`,
+    href: "/servicios/webs",
   },
 ] as const;
 

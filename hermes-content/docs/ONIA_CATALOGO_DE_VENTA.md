@@ -9,6 +9,10 @@
 
 Verificado contra el código y la base de producción el 2026-08-15.
 
+> **Este archivo cubre la PLATAFORMA (rubros, módulos, add-ons).** Las **páginas web** son
+> otra línea y tienen su propio doc: `ONIA_WEB_COMO_SE_VENDE.md` — qué se vende, el proceso,
+> el plazo, cómo se compra y el precio con su fuente. No se duplica acá.
+
 ---
 
 ## Los tres estados (leer esto antes que nada)

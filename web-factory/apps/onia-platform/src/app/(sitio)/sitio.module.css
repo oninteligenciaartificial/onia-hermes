@@ -584,7 +584,10 @@
   font-size: 0.72em;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: color-mix(in srgb, currentColor 55%, transparent);
+  /* 55% daba 3,93:1 a 11,5px (medido con Playwright a 390 y 1440): por debajo
+     del 4,5:1 que exige el texto chico. A 62% pasa a 4,95:1 y el escalon sigue
+     leyendose como secundario. */
+  color: color-mix(in srgb, currentColor 62%, transparent);
 }
 .planName {
   font-family: var(--font-display), sans-serif;
@@ -666,9 +669,21 @@
   grid-template-columns: 1fr;
   gap: 0.3em 2em;
 }
+/*
+ * Las columnas se definen en .rows y cada fila las HEREDA con subgrid. Antes
+ * cada .row era su propia grilla: la columna del precio es `auto`, asi que se
+ * medía fila por fila y el arranque de la columna del medio bailaba hasta 45px
+ * entre filas (visto renderizado a 1440). Con subgrid la columna del precio se
+ * mide una vez contra la fila más larga y las tres columnas quedan a plomo.
+ */
 @media (min-width: 700px) {
-  .row {
+  .rows {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto;
+    column-gap: 2em;
+  }
+  .row {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
     align-items: baseline;
   }
 }

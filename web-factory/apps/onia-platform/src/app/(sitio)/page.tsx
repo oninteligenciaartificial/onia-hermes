@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { PLANES, PRUEBA, bs } from "@/lib/pricing";
+import { PLANES, ADDONS, GRUPO, PRUEBA, bs } from "@/lib/pricing";
 import { CHATBOT_PLAN, precioStack } from "@/content/chatbot-precios";
 import { HUECO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
@@ -363,16 +363,55 @@ export default function Portada() {
               </div>
             ))}
           </div>
+        </Reveal>
+      </Block>
+
+      {/* 9 · OFERTA COMPLETA — add-ons y Grupo. Sergio, 2026-08-22: "solo veo 3
+          precios, hay que mostrar todo lo que ofrecemos". Cada monto sale de la
+          MISMA fuente que /precios (lib/pricing.ts → ADDONS y GRUPO), así que
+          no puede haber dos números del mismo servicio. */}
+      <Block surface="paper" labelledBy="oferta">
+        <Reveal>
+          <Kicker>Todo lo que ofrecemos</Kicker>
+          <h2 id="oferta" className={s.h2}>
+            No son solo tres planes.
+          </h2>
+          <p className={s.lead}>
+            Sobre cualquier plan encendés lo que te haga falta y pagás solo eso.
+            Nada de saltar de plan para desbloquear una sola cosa.
+          </p>
+          <div className={s.rows}>
+            {ADDONS.map((addon) => (
+              <div key={addon.nombre} className={s.row}>
+                <span className={s.rowName}>
+                  {addon.href ? (
+                    <a className={s.link} href={addon.href}>
+                      {addon.nombre} →
+                    </a>
+                  ) : (
+                    addon.nombre
+                  )}
+                </span>
+                <p className={s.rowText}>{addon.copy}</p>
+                <span className={s.rowPrice}>{addon.precio}</span>
+              </div>
+            ))}
+          </div>
+          <p className={s.body} style={{ marginTop: "2.2em", maxWidth: "46em" }}>
+            <strong>{GRUPO.nombre}:</strong> {bs(GRUPO.mensual)} Bs/mes, con
+            implementación desde {bs(GRUPO.implementacionDesde)} Bs.{" "}
+            {GRUPO.copy}
+          </p>
           <div className={s.actions}>
             <a className={s.link} href="/precios">
-              Ver precios completos, add-ons y lo que no incluye →
+              Ver los precios completos y lo que no incluye →
             </a>
           </div>
         </Reveal>
       </Block>
 
-      {/* 9 · FAQ — objeciones reales, respuestas honestas */}
-      <Block surface="paper" labelledBy="faq">
+      {/* 10 · FAQ — objeciones reales, respuestas honestas */}
+      <Block surface="paperDim" labelledBy="faq">
         <Reveal>
           <Kicker>Preguntas frecuentes</Kicker>
           <h2 id="faq" className={s.h2}>
@@ -389,7 +428,7 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 10 · CIERRE — una frase + el mismo CTA, en verde señal (texto oscuro) */}
+      {/* 11 · CIERRE — una frase + el mismo CTA, en verde señal (texto oscuro) */}
       <Block surface="signal" labelledBy="cierre">
         <Reveal>
           <h2 id="cierre" className={s.display} style={{ maxWidth: "18ch" }}>

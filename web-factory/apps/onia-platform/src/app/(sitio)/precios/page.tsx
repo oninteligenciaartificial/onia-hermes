@@ -151,24 +151,21 @@ export default function Precios() {
             Lo que sumás cuando lo necesitás.
           </h2>
           <div className={s.rows}>
-            {ADDONS.map((addon) => {
-              const esChatbot = addon.nombre.includes("Chatbot");
-              return (
-                <div key={addon.nombre} className={s.row}>
-                  <span className={s.rowName}>
-                    {esChatbot ? (
-                      <a className={s.link} href="/chatbot">
-                        {addon.nombre} →
-                      </a>
-                    ) : (
-                      addon.nombre
-                    )}
-                  </span>
-                  <p className={s.rowText}>{addon.copy}</p>
-                  <span className={s.rowPrice}>{addon.precio}</span>
-                </div>
-              );
-            })}
+            {ADDONS.map((addon) => (
+              <div key={addon.nombre} className={s.row}>
+                <span className={s.rowName}>
+                  {addon.href ? (
+                    <a className={s.link} href={addon.href}>
+                      {addon.nombre} →
+                    </a>
+                  ) : (
+                    addon.nombre
+                  )}
+                </span>
+                <p className={s.rowText}>{addon.copy}</p>
+                <span className={s.rowPrice}>{addon.precio}</span>
+              </div>
+            ))}
           </div>
         </Reveal>
       </Block>
