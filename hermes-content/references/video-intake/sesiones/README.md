@@ -6,7 +6,7 @@ y nuevos, en el orden en que conviene hacerlos. **No hace falta abrir otro archi
 
 Los dos archivos de origen siguen existiendo y son la fuente:
 [PROMPTS_POR_SESION.md](../PROMPTS_POR_SESION.md) (26 videos, hasta el 15-ago) y
-[PROMPTS_LOTE_2026-08-16.md](../PROMPTS_LOTE_2026-08-16.md) (E1–E11) y [PROMPTS_LOTE_2026-08-17.md](../PROMPTS_LOTE_2026-08-17.md) (F1–F3) y [PROMPTS_LOTE_2026-08-18.md](../PROMPTS_LOTE_2026-08-18.md) (G1–G6) y [PROMPTS_LOTE_2026-08-19.md](../PROMPTS_LOTE_2026-08-19.md) (H1–H3, I1–I2) y [PROMPTS_LOTE_2026-08-20.md](../PROMPTS_LOTE_2026-08-20.md) (J1–J4) y [PROMPTS_LOTE_2026-08-21.md](../PROMPTS_LOTE_2026-08-21.md) (L1–L3). Acá no hay nada nuevo:
+[PROMPTS_LOTE_2026-08-16.md](../PROMPTS_LOTE_2026-08-16.md) (E1–E11) y [PROMPTS_LOTE_2026-08-17.md](../PROMPTS_LOTE_2026-08-17.md) (F1–F3) y [PROMPTS_LOTE_2026-08-18.md](../PROMPTS_LOTE_2026-08-18.md) (G1–G6) y [PROMPTS_LOTE_2026-08-19.md](../PROMPTS_LOTE_2026-08-19.md) (H1–H3, I1–I2) y [PROMPTS_LOTE_2026-08-20.md](../PROMPTS_LOTE_2026-08-20.md) (J1–J4) y [PROMPTS_LOTE_2026-08-21.md](../PROMPTS_LOTE_2026-08-21.md) (L1–L3) y [PROMPTS_LOTE_2026-08-22.md](../PROMPTS_LOTE_2026-08-22.md) (M1–M5 y N1–N3). Acá no hay nada nuevo:
 está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, no la copia.**
 
 ---
@@ -31,9 +31,9 @@ está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, 
 
 | Archivo | Sesión | Qué lleva | Primero |
 |---|---|---|---|
-| [marketing.md](marketing.md) | marketing | **G3 el cliente real con la pantalla sustituida** · A1 portafolio · E7 demo de 17 s · D4 espiar la pauta · C2 kit por rubro · A2 comentario→DM · A3 carruseles · A5 Meta Ads · A6 patrones como contenido · E11 demo en una toma | **G3** — la prueba de venta que ningún demo consigue; después A1 |
+| [marketing.md](marketing.md) | marketing | **G3 el cliente real con la pantalla sustituida** · **N3 el molde de 6 actos con el acto 2 largo** · **M5 la escalera 0→10** · A1 portafolio · E7 demo de 17 s · D4 espiar la pauta · C2 kit por rubro · A2 comentario→DM · A3 carruseles · A5 Meta Ads · A6 patrones como contenido · E11 demo en una toma | **G3** — la prueba de venta que ningún demo consigue; después A1 |
 | [influencers-ia.md](influencers-ia.md) | `INFLUENCERS IA` | **L1 esqueleto UGC + los 10 chips** · **L2 las 9 escenas de Lucía** · **H2 primer ad_reference** · **G1 las dos plantillas + Marketing Studio** · **G6 foto realista** · E9 los 5 bloques del prompt + 3D estilizado · E6 la etiqueta de IA · A4 escenas · guion por escenas · los 12 puntos de Higgsfield | **L1** — el bloque de cámara es el que hoy tenemos más flojo |
-| [editor-de-videos.md](editor-de-videos.md) | `editor de videos` | **J3 anuncio sin cara ni voz** · **H3 molde de 6 actos** · **G2 molde UGC de anuncio** · E8 slate/cara con HyperFrames · E10 formato gemelo · animar interfaz | cualquiera: los dos cuestan **cero créditos** |
+| [editor-de-videos.md](editor-de-videos.md) | `editor de videos` | **N2 el kit de sobreimpresión** · **M2 editar metraje real** · **M3 el carrusel que vende** · **J3 anuncio sin cara ni voz** · **H3 molde de 6 actos** · **G2 molde UGC de anuncio** · E8 slate/cara con HyperFrames · E10 formato gemelo · animar interfaz | **M2 → M3 → N2, nunca en paralelo** (los tres tocan la capa de sobreimpresión). N2 cuesta **cero créditos** |
 
 ## VENTA Y ADMINISTRACIÓN
 
@@ -41,7 +41,7 @@ está lo mismo, cortado por sesión. **Si cambia una regla, se edita el origen, 
 |---|---|---|---|
 | [crm-prospeccion.md](crm-prospeccion.md) | CRM / prospección | **C4 la ruta al primer cliente** · los 7 roles contra el Vendedor que ya corre | **C4** — es lo único que ataca la falta de clientes |
 | [propuestas.md](propuestas.md) | `propuestas` | C3 el costo de esperar | — |
-| [pendiente.md](pendiente.md) | `pendiente` | **H1 análisis por escenas al intake** · **F1 auditar los 11 agentes** · **F3 partir CLAUDE.md** · E4 el loop de 3 roles (corregido) · D2 fechas que corren · D3 búsqueda de marca · B3 intake de video · B4 probar los 6 patrones · E5 Strix | **F1** — antes de construir agentes nuevos, ver cuáles sobran |
+| [pendiente.md](pendiente.md) | `pendiente` | **N1 el estándar `HANDOFF.md`** · **H1 análisis por escenas al intake** · **F1 auditar los 11 agentes** · **F3 partir CLAUDE.md** · E4 el loop de 3 roles (corregido) · D2 fechas que corren · D3 búsqueda de marca · B3 intake de video · B4 probar los 6 patrones · E5 Strix | **N1** — cierra una regla del CLAUDE.md que lleva semanas sin artefacto, y es barato. Después **F1**. Ojo: **N1 y F3 tocan CLAUDE.md** — van seguidos, no en paralelo |
 
 ---
 
@@ -56,6 +56,9 @@ hay que mirar `main`, no el checkout local.
 
 ## El orden entre sesiones, si hay que elegir
 
+0. **`pendiente` → N1.** El más barato de todos y el único que arregla una regla **nuestra**:
+   CLAUDE.md manda "dejar el estado escrito al cerrar la sesión" y eso nunca se volvió un
+   archivo con plantilla. Cuesta casi nada y todas las demás sesiones cobran el beneficio.
 1. **`chatbot` → D1** y **`onia-plattform` → J4.** Los dos únicos defectos en producción:
    el bot no guarda mensajes, y hay 6 tiers definidos con cero callers mientras la landing
    usa un campo de texto libre para el mismo dato.
@@ -68,10 +71,12 @@ hay que mirar `main`, no el checkout local.
    que ningún demo grabado consigue. Bloqueado hasta que haya un cliente con el sistema andando.
 7. **marketing → A1.** Portafolio: costo cero, sube el precio.
 
-## Los dos choques a cuidar
+## Los choques a cuidar
 
 - **D1 y B3** son los dos de infra. No mandarlos juntos.
 - **E9 y E6** son la misma sesión y el mismo tema. Van seguidos, no en paralelo.
+- **N1 y F3** tocan los dos `CLAUDE.md`. Uno después del otro.
+- **M2, M3 y N2** son la misma capa de sobreimpresión de video. En ese orden, nunca a la vez.
 
 ## Lo que gatea gasto — no se ejecuta sin decir que sí
 

@@ -459,3 +459,81 @@ material comercial, revisá licencia primero; si hay duda, se replica con nuestr
 
 ---
 
+---
+
+> **Agregado 2026-08-22, segunda tanda.** Sale de
+> [DbT8hWPsyjN](https://www.instagram.com/reels/DbT8hWPsyjN/) ·
+> [ficha](../2026-08-22-handoff-context-rot.md).
+> **Va DESPUES de M2 y M3 y nunca en paralelo con ellos:** los tres tocan la capa de
+> sobreimpresion. Cuesta cero creditos.
+
+## N2 · El kit de sobreimpresión — terminal falsa, chip de glosario y subtítulos en dos registros
+
+```text
+Sesion: editor de videos. git branch --show-current primero.
+
+Contexto: un reel de cabeza parlante de 66 s sostiene todo el interes visual con TRES capas de
+sobreimpresion, ninguna generada con IA. Las tres son reproducibles con HyperFrames hoy y
+cuestan CERO creditos. Reconstruccion detallada, con los valores leidos de pantalla:
+hermes-content/references/video-intake/2026-08-22-handoff-context-rot.md seccion 4
+
+ANTES DE CODEAR: la skill hyperframes vive en .agents/skills/ y es regla de CLAUDE.md
+revisarla antes de tocar video. No reinventes el motor.
+
+--- PIEZA 1: LA VENTANA DE TERMINAL FALSA (la principal) ---
+Ventana estilo macOS sobre el tercio inferior, SEMITRANSPARENTE, que persiste ~25 s mientras
+su contenido se escribe, se borra y se reescribe.
+Valores recuperados de pantalla:
+  - tres semaforos rojo/amarillo/verde arriba a la izquierda
+  - titulo centrado en monoespaciada chica y gris (en el original decia "Claude Code")
+  - linea separadora de 1 px bajo el titulo
+  - fondo oscuro TRANSLUCIDO: se ve la mano de la persona a traves del panel
+  - esquinas redondeadas ~14 px
+  - el signo mayor-que del prompt en verde
+  - los argumentos tipo nombre-de-archivo en naranja ambar, el resto del texto en blanco
+  - salida de herramienta: vineta naranja + Write(archivo), y debajo la linea de resultado en
+    gris apagado con el caracter de rama
+  - cursor de bloque lleno, sin parpadeo
+
+DOS COSAS QUE SON EL OFICIO Y NO SE VEN A PRIMERA VISTA:
+  (a) NO esta trackeado a la escena. La mano pasa POR DETRAS del panel y el panel no se mueve
+      aunque la camara tiembla. Es una capa pegada al cuadro. Por eso es facil.
+  (b) NO es una ventana por beat. Es UNA sola ventana cuyo contenido se vacia a
+      prompt-mas-cursor entre bloques (verificable en el segundo 49 del original). Eso da
+      continuidad: se siente una sesion, no una secuencia de laminas. Si haces una ventana por
+      beat, perdiste el efecto entero.
+
+--- PIEZA 2: EL CHIP DE GLOSARIO ---
+Pastilla chica, oscura, monoespaciada, arriba del cuadro:  termino_en_ingles = traduccion
+El termino en rojo, la traduccion en blanco. Entra cuando la palabra se dice y sale cuando el
+tema cambia. Resuelve un problema que tenemos identico: explicar en espanol algo cuya jerga
+esta en ingles, sin gastar locucion en la definicion ni dejar a nadie afuera.
+
+--- PIEZA 3: SUBTITULOS EN DOS REGISTROS ---
+No es un solo estilo, son dos y la eleccion es deliberada:
+  - GANCHO (0-3 s): blanco pesado con contorno negro grueso, SIN fondo, estilo sticker. Mas
+    ruidoso, porque compite por la atencion.
+  - CUERPO: pastilla oscura translucida, esquinas redondeadas, blanco pesado, dos lineas
+    centradas.
+Y LA REGLA DE COLOR, que es lo que ata todo: UNA sola palabra coloreada por tarjeta, y el
+color sale de la paleta de la terminal (el mismo rojo, el mismo verde). No es decoracion:
+hace que las dos capas se lean como un solo diseno en vez de dos plugins encima del video.
+
+Tarea:
+1. Buscá primero si el kit de subtitulos quemados que ya tenemos cubre la pieza 3. Si lo cubre,
+   solo agregá la regla de una-palabra-coloreada y el estilo de gancho; NO escribas un segundo
+   sistema de subtitulos.
+2. Construí la ventana de terminal como componente PARAMETRIZADO: recibe el titulo, una lista
+   de bloques, y por bloque el texto y si se escribe letra por letra o aparece de golpe.
+   Que soporte vaciarse entre bloques sin desmontarse.
+3. Construí el chip de glosario como componente: termino, traduccion, entrada y salida.
+4. Probalo renderizando 15 s reales con los 5 campos del handoff como contenido. Ese es el
+   caso de prueba y ademas es una pieza que podemos publicar.
+5. MIRÁ EL MP4 RENDERIZADO antes de decir que funciona. Un render que termina sin error no es
+   verificacion — regla de CLAUDE.md.
+
+COSTO: cero creditos, todo es HyperFrames. No hay nada que aprobar.
+
+LISTO = los dos componentes parametrizados en el repo + un mp4 de 15 s renderizado y MIRADO,
+con la ventana persistiendo entre bloques y una sola palabra coloreada por tarjeta.
+```

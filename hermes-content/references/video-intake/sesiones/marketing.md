@@ -447,3 +447,57 @@ de desbloqueo escrita.
 
 ---
 
+---
+
+> **Agregado 2026-08-22, segunda tanda.** Sale de
+> [DbT8hWPsyjN](https://www.instagram.com/reels/DbT8hWPsyjN/) ·
+> [ficha](../2026-08-22-handoff-context-rot.md).
+> Independiente del resto de marketing. Escribir es gratis.
+
+## N3 · El molde de 6 actos — y el acto 2 es el más largo
+
+```text
+Sesion: marketing.
+
+Contexto: un reel educativo de 66 s en espanol usa una estructura que NO tenemos en el banco de
+moldes, y lo contraintuitivo es donde gasta el tiempo. Medido escena por escena:
+hermes-content/references/video-intake/2026-08-22-handoff-context-rot.md seccion 5
+
+EL MOLDE, con las duraciones reales:
+  1. SINTOMA               0-4 s    nombra el dolor con una palabra fuerte
+  2. MATAR LA SOLUCION     4-17 s   <-- EL MAS LARGO, 13 s, un cuarto del video
+     FALSA                          "lo que ya haces no lo arregla, y aca esta por que"
+  3. GIRO                  17-23 s  "pero tranquila" + nombra la solucion
+  4. EL METODO             23-45 s  los pasos, uno por beat, con la demo corriendo en paralelo
+  5. CIERRE DEL CICLO      45-61 s  que haces despues + el beneficio en tres palabras
+  6. CTA                   61-66 s  comenta una palabra
+
+POR QUE IMPORTA EL ACTO 2: los cinco moldes que ya tenemos en BANCO_DE_REPLICABLES.md abren
+mostrando la solucion. Este gasta 13 segundos enterrando la alternativa que el espectador YA
+usa. Sin ese acto el metodo suena a una opcion mas; con el, suena a la unica. Es la diferencia
+entre "mira esta herramienta" y "lo que haces esta mal".
+
+Tarea:
+1. Agregá el molde como el SEXTO a BANCO_DE_REPLICABLES.md, con las duraciones. Editá ese
+   archivo, no crees uno nuevo al lado.
+2. Escribí DOS guiones con el molde, de 60-70 s, para dos publicos distintos:
+   (a) Onia B2B, en el rubro que mejor conocemos. El acto 2 tiene que matar la solucion que el
+       cliente boliviano YA usa — la planilla de Excel, el cuaderno, el grupo de WhatsApp — y
+       matarla con respeto, explicando por que deja de servir al crecer, no burlandose de quien
+       la usa. Un dueno de negocio que se siente tonto no compra.
+   (b) La capa de marca personal de Sergio (contenido de IA en espanol). Ahi el molde entra
+       casi tal cual, porque el tema es el mismo tipo de tema.
+3. Marcá cual de los dos se produce primero y por que.
+
+DOS REGLAS QUE NO SE NEGOCIAN, las dos del CLAUDE.md:
+- NO FABRICAR: cero clientes pagando hoy, asi que ningun guion afirma resultados, testimonios
+  ni cifras que no tengamos.
+- LA VENTA NO EXHIBE OBRA: ningun guion nombra algo que no este vivo. Nada de "muy pronto".
+
+Y una del corpus: el original cierra con comentario->DM. Eso YA esta documentado como hallazgo
+transversal desde el 09-ago y sigue BLOQUEADO por el token de IG (S6). Manual funciona desde el
+primer dia. Los guiones pueden cerrar asi, sabiendo que la respuesta se manda a mano.
+
+LISTO = el sexto molde en BANCO_DE_REPLICABLES.md + dos guiones escritos con los seis actos
+marcados y cronometrados, y cual va primero.
+```

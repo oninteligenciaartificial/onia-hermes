@@ -277,3 +277,13 @@ Prompts: [PROMPTS_LOTE_2026-08-22.md](PROMPTS_LOTE_2026-08-22.md) (M1–M5)
 | [DcEOqoYBIwP](https://www.instagram.com/p/DcEOqoYBIwP/) agente de voz | MARKETING | MEJORA | demo de Fish Audio |
 | [DcUSkXRiJKD](https://www.instagram.com/p/DcUSkXRiJKD/) 10 nichos aburridos | MARKETING | MEJORA | servicios de campo |
 | [Da1OHOlIHhF](https://www.instagram.com/p/Da1OHOlIHhF/) gancho POV | MARKETING | MEJORA | 2 s a sangre + pieza ajena |
+
+## Segunda tanda del 2026-08-22 — 1 item suelto
+
+| Item | Carril | Veredicto | Qué deja |
+|---|---|---|---|
+| [DbT8hWPsyjN](https://www.instagram.com/reels/DbT8hWPsyjN/) handoff.md · [@juanaia_](https://www.instagram.com/juanaia_/) | MÉTODO | **SIRVE YA** | **los 5 campos del handoff de sesión** (N1) + el kit de sobreimpresión: terminal falsa persistente, chip de glosario, subtítulos en dos registros (N2) + el molde de 6 actos con el acto 2 largo (N3). [Ficha](2026-08-22-handoff-context-rot.md) |
+
+**Primer item del corpus que no toca un producto: toca cómo trabajamos.** Y el hallazgo
+incómodo es nuestro, no del video — CLAUDE.md línea 102 pide "dejar el estado escrito" desde
+hace semanas y nunca se convirtió en un archivo con plantilla.
