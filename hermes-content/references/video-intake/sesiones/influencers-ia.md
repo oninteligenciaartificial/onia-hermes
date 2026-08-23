@@ -120,6 +120,224 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## M1 · Bloques con nombre, sobrecobertura y la regla de texto
+
+```text
+Contexto: un reel de 12 s muestra su prompt ENTERO en pantalla. Es plantilla CINE pura (nadie
+habla, impresiona) y trae tres cosas que el banco no tenia. Ficha y prompt literal completo:
+hermes-content/references/video-intake/analisis/2026-08-22-items.json (item DcMX7O8i6CZ)
+
+LA ARQUITECTURA: siete bloques con NOMBRE EN MAYUSCULAS ENTRE CORCHETES, y cada uno es una
+REGLA, no una descripcion:
+  [STYLE]                   camara + stock + set + paleta + TRES PROHIBICIONES explicitas
+  [MODE — READ THIS FIRST]  como quiere el material entregado
+  [THE OBJECT]              el sujeto, con un nivel de detalle textil
+  [DISTRESS RULE]           la transformacion que tiene que verse ocurrir
+  [TEXT RULE — MANDATORY]   que hacer con el texto en cuadro
+  [HANDS RULE]              que se ve y que no de las personas
+  [BEATS]                   los planos
+
+TRES PALANCAS NUEVAS:
+
+1. LA CAMARA SE ESPECIFICA, NO SE ADJETIVA: "Arri Alexa 35 and a Laowa 24mm f/14 probe lens".
+   Un lente probe es exactamente el que produce esos macros volando sobre la tela. Nombrar el
+   equipo real es mas preciso que cualquier adjetivo.
+
+2. SOBRECOBERTURA A PROPOSITO, literal del prompt:
+   "Fast-cut montage. I am cutting it myself in post. Deliberately overload it — more shots than
+    fit, extra angles I did not ask for, alternate coverage of every beat, inserts, overshoots,
+    impact frames. Every beat is a new shot. Nothing holds."
+   Es lo CONTRARIO de pedir la toma exacta: se pide una hoja de contactos y se corta despues.
+   Con un tope de 30 s por generacion, esto multiplica lo aprovechable por corrida.
+
+3. LA REGLA DE TEXTO, que resuelve el defecto mas conocido de la IA:
+   "Abstract invented serif forms and a numeral in an oval, not any existing brand name, city
+    name or wordmark. They read as typographic shapes, never as language. Legibility not required
+    at any point. Never garble or change. No other text anywhere."
+   En vez de pelear porque el modelo no sabe escribir, se le pide que NO ESCRIBA: formas
+   tipograficas, no lenguaje. Esto tambien explica el garabato del libro que vimos en otro item.
+
+VERIFICADO EN LA CUENTA el 2026-08-22 (re-verificalo vos, tiene fecha de vencimiento):
+seedance_2_5, modo omni_reference, 4-30 s, 9:16, hasta 1080p, generate_audio. El reel se hizo con
+UNA sola imagen de referencia, UNA sola generacion de 12 s. unlim.available = false: gasta.
+
+Tarea:
+1. Incorpora los siete bloques con nombre a la plantilla CINE que ya tenemos. NO armes una
+   plantilla nueva al lado: la de 5 bloques del 16-ago es la misma cosa con menos estructura.
+   Esto la reemplaza o la absorbe; decidilo y decilo.
+2. Anota las tres palancas como REGLAS en LUCIA.md y en la receta de video. Sobre todo la de
+   texto: nos ahorra el defecto mas visible.
+3. Escribi UN prompt completo con la arquitectura para una pieza real nuestra — producto de
+   cliente o pieza de marca.
+
+GASTO: no generes. Entrega el prompt, el modelo, la config exacta y el costo estimado.
+
+LISTO = la plantilla CINE actualizada con los bloques con nombre (una sola plantilla, no dos),
+las tres palancas anotadas como reglas, y un prompt de ejemplo escrito. Cero generaciones.
+```
+
+---
+
+## L1 · El esqueleto de prompt UGC, regalado entero
+
+```text
+Contexto: un reel en espanol muestra como se crea un avatar UGC de cero ("Carla") y REGALA el
+metodo completo en laminas. Ficha y datos:
+hermes-content/references/video-intake/2026-08-21-sintesis-lote-9.md
+hermes-content/references/video-intake/analisis/2026-08-21-items.json (item DcQvRrGM-wm)
+
+EL ESQUELETO DE 6 BLOQUES, literal de la lamina:
+  "El orden importa. El modelo lee de arriba abajo y da mas peso a lo primero. Este es el
+   esqueleto que uso siempre, tanto en imagen como en video."
+
+  SUJETO       "Edad, tono de piel, pelo, expresion, que esta haciendo con las manos.
+                Concreto y corto."
+  VESTUARIO    "Prenda, tejido, brillo, color y estampado. Si es campana, aqui va el bloqueo
+                para que no cambie entre planos."
+  LOCALIZACION "Que hay delante, que hay detras y a que distancia. El fondo es la mitad de la
+                credibilidad."
+  CAMARA       "Aqui es donde se gana o se pierde el UGC. Optica, altura, distancia y quien
+                sujeta el movil."
+  LUZ Y TEXTURA "Hora del dia, dureza de la sombra, altas luces quemadas, ruido en las sombras."
+  NEGATIVOS    "Lo que no quieres ver. En UGC casi siempre es el propio movil, tripodes, palos
+                de selfie y reflejos."
+
+LOS 10 CHIPS QUE ACTIVAN EL MODO MOVIL, literales:
+  iPhone front camera · wide angle lens · handheld, slight tremor · arm's length selfie ·
+  focus hunting · blown highlights · crushed shadows · sensor noise · high dynamic range ·
+  no stabilisation
+  Y la lamina cierra: "Y estas las quitas siempre. Son las que te devuelven un anuncio en vez
+  de un video de alguien."
+
+PINTEREST ES TU DIRECTOR DE FOTOGRAFIA — esta es la parte que casi nadie escribe:
+  "No inventes el encuadre. Buscalo. Escribe beach selfie, mirror selfie, get ready with me o
+   instagram story aesthetic en Pinterest y tienes miles de fotos reales que la gente ya
+   publica todos los dias.
+   Lo que buscas en cada pin: donde esta el sol, como cae la sombra en la cara, a que altura
+   esta el movil, que se ve de fondo, que ropa lleva puesta. Eso lo traduces a prompt
+   LITERALMENTE. Cuanto mas aburrida y cotidiana sea la referencia, mejor funciona."
+
+VERIFICADO en la cuenta el 2026-08-21 (volve a consultarlo vos, tiene fecha de vencimiento):
+seedance_2_5 con duration 4-30 s, generate_audio true por defecto, y mode omni_reference con
+role image_references — que es exactamente el "bloqueo de personaje" que promete la lamina.
+
+Tarea:
+1. Cruza los 6 bloques del reel con los 8 de nuestra skill sacar-prompt. Son un SUBCONJUNTO:
+   no hay que cambiar de metodo. Lo que SI agregamos es (a) los 10 chips como lista fija y
+   (b) Pinterest como fuente de encuadres.
+2. Escribi el bloque de CAMARA de Lucia usando los chips. Es el bloque que el reel senala como
+   "donde se gana o se pierde el UGC" y el que hoy tenemos mas flojo.
+3. Agrega a LUCIA.md la fuente de referencias: que se busca en Pinterest y como se traduce.
+   OJO: LUCIA.md ya tiene un molde de 11 bloques con 4 colas de camara. Esto se SUMA, no lo
+   reemplaza. Si algo choca, gana LUCIA.md.
+4. NO crees un doc nuevo al lado. Es el error mas caro del preambulo.
+
+GASTO: no generes. Entrega los bloques escritos y el costo estimado si se fuera a probar.
+
+LISTO = los 10 chips y la fuente Pinterest incorporados a LUCIA.md sin duplicar el molde que ya
+existe, y el bloque de camara de Lucia reescrito.
+```
+
+---
+
+## L2 · Las 9 escenas de vida cotidiana — el pilar que Lucía no produce
+
+```text
+Contexto: bluuu.ai publico "CAUGHT LIVING", 9 escenas de vida cotidiana, y declara en el caption:
+  "9 AI prompts built around the moments you actually live. No sets. No studios. Just real
+   scenes, relit with editorial light. Every prompt is tuned for HIGGSFIELD SOUL 2.0."
+Soul es el motor que YA usamos para Lucia. Los prompts estan gateados detras de un cebo, asi
+que estan RECONSTRUIDOS desde las laminas en:
+hermes-content/references/video-intake/analisis/2026-08-21-items.json (item DcI9w9GEnZH)
+
+Las escenas, del caption literal: "Caught at the desk. On the rooftop. In the mirror. At the
+night market. In the lobby. At the pool's edge."
+
+POR QUE IMPORTA: el plan de Lucia tiene 4 pilares y el de vida cotidiana es el que NO produce.
+Estas 9 escenas son exactamente ese pilar, y estan pensadas para nuestro motor.
+
+Tarea:
+1. Adapta las 9 a Lucia: mismo tipo de momento, pero en SU mundo — Santa Cruz, no Nueva York.
+   El mercado nocturno, el lobby y la azotea existen aca; el resto se sustituye por lo que ella
+   si habitaria.
+2. Escribi cada una como fragmento concatenable al prompt base de Lucia, con el bloque de camara
+   usando los 10 chips del prompt L1.
+3. Respeta lo fijado en LUCIA.md y NO lo rediscutas: pecas inamovibles, argollas + cadenita,
+   algo terracota en cuadro, la paleta hex, el ancla que genera, y los 3 vestuarios del feed.
+4. Marca cuales de las 9 NO van para Lucia y por que.
+
+DOS REGLAS QUE SALEN DEL PROPIO CORPUS Y APLICAN ACA:
+- La consistencia de cara SE DEGRADA en las tomas de escenario y aguanta en las de fondo simple.
+  Cuando la escena manda mas que la referencia, la cara se pierde. Priorizar fondos simples
+  donde la cara tiene que ser reconocible.
+- En las laminas de bluuu.ai el TEXTO DE UN LIBRO SALE GARABATO. No poner texto legible en
+  cuadro salvo que se controle.
+
+GASTO: escribir es gratis. La tanda de prueba con la cara de Lucia necesita OK explicito de
+Sergio, caso por caso.
+
+LISTO = las 9 escenas adaptadas a Santa Cruz como fragmentos concatenables, sumadas a LUCIA.md,
+con las que se descartan y el motivo. Cero generaciones.
+```
+
+---
+
+## J6 · La biblioteca de encuadres — nueve angulos con su uso comercial
+
+```text
+Contexto: un carrusel muestra NUEVE angulos de camara sostenidos sobre la MISMA modelo, y cada
+uno viene emparejado con su USO COMERCIAL. Los prompts estan detras del cebo, pero la taxonomia
+esta entera en las laminas -- y la taxonomia es la mitad que casi nadie escribe.
+
+LOS NUEVE PARES angulo -> uso, leidos de las laminas:
+  low angle         -> poder / lujo    (contrapicado desde escalon inferior, lineas de
+                                        arquitectura convergiendo)
+  high angle        -> lifestyle       (picado 45 grados sobre mesa, sujeto mirando desde abajo)
+  over-the-shoulder -> narrativa       (sujeto de espaldas 3/4, la MESA es la protagonista)
+  extreme close-up  -> belleza         (media cara, poro y textura visibles)
+  eye-level         -> editorial       (simetria frontal, fondo neutro)
+  dutch             -> streetwear      (horizonte inclinado ~15 grados, neon mojado)
+  wide              -> campana         (figura entera chica dentro de un interior grande)
+  side profile      -> perfume         (perfil puro 90 grados sobre color plano saturado)
+  bird's-eye        -> editorial       (cenital cerrado, la clavicula abre el encuadre)
+
+DOS OBSERVACIONES QUE VALEN MAS QUE LA LISTA:
+1. El EXTREME CLOSE-UP es la toma que DELATA al generador. Si vas a usarla, es donde mas hay que
+   mirar el resultado antes de publicar.
+2. La consistencia de cara SE SOSTIENE EN LAS TOMAS DE ESTUDIO Y SE DEGRADA EN LAS DE ESCENARIO.
+   En las de fondo neutro la cara aguanta; en la escalera y en la calle la estructura del rostro
+   y la edad aparente se corren. Regla: CUANDO LA ESCENA MANDA MAS QUE LA REFERENCIA, LA CARA SE
+   PIERDE. Para Lucia, priorizar fondos simples cuando la cara tiene que ser reconocible.
+
+METODO DEL CARRUSEL, que tambien se copia: la lamina 2 fija el CANON (retrato frontal, fondo
+blanco liso, blazer negro) y recien despues vienen las variaciones. La referencia primero, las
+derivadas despues.
+
+Tarea:
+1. Escribi la biblioteca de encuadres: los 9, cada uno como un FRAGMENTO DE TEXTO fijo listo para
+   concatenar al prompt base de Lucia, con su caso de uso al lado. Guardala donde ya vivan las
+   recetas -- candidata: junto al molde de 11 bloques que ya esta en LUCIA.md. NO crees carpeta
+   nueva y NO armes un doc al lado del que manda.
+2. Anota las dos observaciones de arriba como reglas, sobre todo la de escena vs referencia.
+3. Marca cuales de los 9 NO convienen para Lucia y por que.
+
+OJO, ANTES DE ESCRIBIR: el archivo que manda sobre Lucia es
+hermes-content/references/modelos/lucia/LUCIA.md y su §6 ya tiene un molde de 11 bloques con 4
+colas de camara (R1 Feed / R2 Copy-space / R3 UGC / R4 Beauty). Los 9 encuadres se suman a ESO,
+no lo reemplazan. Si algo choca, gana LUCIA.md.
+
+Consistencia de cara: el unico metodo verificado sigue siendo el ancla + Element. Nada de este
+lote lo reemplaza.
+
+GASTO: no generes. La biblioteca es texto y sale gratis. La tanda de prueba con la cara de Lucia
+necesita OK explicito de Sergio, caso por caso.
+
+LISTO = los 9 encuadres escritos como fragmentos concatenables con su uso comercial, sumados al
+molde que ya existe en LUCIA.md, las dos reglas anotadas, y la lista de cuales no van para Lucia.
+```
+
+---
+
 ## H2 · El primer `ad_reference` — que la herramienta replique el escenario
 
 ```text
@@ -378,7 +596,7 @@ concretos a como publicamos.
 ## A4 · Estructura de escenas para video IA — preparar, no generar
 
 ```text
-Sesion: marketing (Arthur). git branch --show-current primero.
+Sesion: marketing. git branch --show-current primero.
 TAREA UNICA: escribir UN guion con la estructura de escenas que encontramos, SIN generar nada.
 Formato (de 2026-08-11-seedance-prompt-por-escenas-timestamps.md, sale de una sola foto):
     Scene N — <nombre> (Xs-Ys)
@@ -431,3 +649,172 @@ Los 12 puntos de [ENTREGA_HIGGSFIELD_LUCIA.md](../ENTREGA_HIGGSFIELD_LUCIA.md) v
 
 ---
 
+
+---
+
+# Lote del 2026-08-23 — 4 prompts
+
+> Fuente: [`PROMPTS_LOTE_2026-08-23.md`](../PROMPTS_LOTE_2026-08-23.md). Si cambia una regla,
+> se edita allá, no acá.
+>
+> ⚠️ Antes de tocar `MOTION_PATTERN_BANK_2026.md`, leer
+> [`2026-08-23-patrones-de-motion-deduplicados.md`](../2026-08-23-patrones-de-motion-deduplicados.md):
+> las 18 fichas propusieron ~25 entradas y son 7 patrones reales.
+
+## O12 · Reel ONIA con el molde POV-reveal: 8 s, cero cortes, una sola corriente
+
+- **Ficha:** [POV 10.000 reels: el reveal por zoom-out sin un solo corte](../2026-08-23-pov-10000-reels-reveal-zoom-out.md)
+- **Qué falta:** Para el reel: NADA. Se puede rodar hoy con un telefono contra un monitor, o renderizar entero con HyperFrames. Para la pantalla de flota de agentes: falta una decision de Sergio, no una credencial — y por regla, una superficie viva no se reemplaza sin que VEA la pieza renderizada primero. NO-VERIFICADO si ONIA Center ya tiene una vista parecida: no la abri en esta sesion.
+
+```text
+Construi UN reel vertical 1080x1920 de 8 segundos con el molde 'POV-reveal por zoom-out', copiado en FORMA (no en contenido) del reel IG DbtH7_nNRF0. Motor: HyperFrames (HTML->MP4). Carga ANTES de codear las skills hyperframes, hyperframes-core, motion-doctrine y cut-the-curve.
+
+CONTENIDO (nuestro, honesto, sin exhibir obra):
+Texto unico en pantalla: 'POV: tu clinica agenda sola mientras dormis'
+Lo que se revela por zoom-out: un grid denso de tarjetas de agenda/turnos confirmandose solos. Empeza con UNA tarjeta ocupando casi todo el cuadro y termina con cientos en un grid. Solo capacidades VIVAS: nada de 'muy pronto', 'beta' ni 'proximamente' en ningun pixel.
+
+LA FORMA (esto es lo que se copia, y es innegociable):
+1. CERO CORTES. Una sola toma continua de 8 s. Si aparece un corte, esta mal hecho.
+2. UNA SOLA CORRIENTE: todo el movimiento es scale-down continuo, en la misma direccion, de principio a fin. Nada entra desde un costado, nada rebota, nada hace idle wobble.
+3. Curva ease-out: los primeros 2 s recorren la mayor parte de la escala; despues desacelera. Los ultimos 1,5 s son QUIETUD casi total — el ojo tiene que alcanzar a contar.
+4. Escala EXPONENCIAL, no lineal: de 1 tarjeta visible a 300+. Que el salto se sienta multiplicativo.
+5. El texto NO se anima: aparece en el frame 1, se queda fijo en el tercio superior y nunca tapa el contenido que el espectador tiene que mirar. Ese contraste (texto quieto / todo lo demas moviendose) es lo que lo hace legible.
+6. Cero intro, cero logo al inicio, cero CTA, cero voz. El primer frame ya es el plano mas cerrado y mas intrigante, para que el loop reenganche.
+7. El plano NO es recto: inclina la escena ~10-15 grados. Recto se lee como screen recording y muere.
+
+ESTILO:
+- Texto: sans Black (~800), blanco puro, dos lineas centradas con quiebre manual, sombra difusa (sin caja, sin contorno duro).
+- Fondo casi negro (#0E0F10). Un solo color de acento en todo el cuadro, usado en no mas de tres sitios. Podes usar el verde lima de referencia (#86E57F) o el acento de marca de ONIA — decidilo leyendo los tokens del repo, NO inventes un color.
+- Agrega grano sutil y un halo/bloom leve en los acentos: sin textura se ve renderizado y limpio de mas, y pierde el efecto 'esto es real'.
+
+ANTES DE RENDERIZAR EN ALTA: mostrale a Sergio la tabla de cortes (aca: un solo bloque) y un preview 360p. Regla de oro del carril video: nunca se cierra a ciegas.
+
+LISTO = existe un MP4 de 1080x1920 y ~8 s renderizado con HyperFrames, con CERO cortes verificados, en el que el conteo de tarjetas visibles pasa de 1 en el primer segundo a mas de 100 en el ultimo, el ultimo 1,5 s tiene movimiento casi nulo, el texto esta fijo e identico del primer al ultimo frame, y no aparece la palabra 'pronto', 'beta' ni 'proximamente' en ningun fotograma. Preview 360p mostrado a Sergio y OK explicito recibido antes del render final.
+```
+
+## O13 · Vocera IA + producto: el molde de 22 s con CTA mudo
+
+- **Ficha:** [La vocera que no existe: 22 s de UGC con Seedance 2.0 seleccionado en pantalla](../2026-08-23-makeugc-vocera-ia-cerave-seedance-2-0.md)
+- **Qué falta:** 1) CREDITOS: models_explore devolvio unlim.available=false para nuestra cuenta hoy. seedance_2_0 admite generaciones ilimitadas de prueba pero nuestro saldo no las cubre ahora, asi que cada generacion se paga ⇒ permiso explicito de Sergio caso por caso (regla de gasto del carril). 2) Una foto de producto real de un cliente y una foto fija de vocera que sostenga la identidad entre clips — la cara NO la sostiene el prompt, la sostiene la misma imagen en image_references. Nada mas: el molde de guion, la tipografia, las dos posiciones de texto y el CTA mudo se montan hoy sin gastar.
+
+```text
+AVISO: esto es RECONSTRUIDO. El prompt original nunca aparece en el reel — el textarea de MakeUGC esta vacio (0/2000). Lo que sigue es un prompt nuevo escrito para dar el mismo resultado con nuestras herramientas.
+
+=== PASO 1 — los clips de la vocera (Higgsfield MCP, model_id: seedance_2_0) ===
+Parametros (verificados en el catalogo el 2026-08-23):
+  medias: [foto_vocera.jpg, foto_producto.png]  <- ambas como image_references
+  aspect_ratio: 9:16 · duration: 10 · resolution: 720p · mode: fast · generate_audio: true
+
+Prompt por clip:
+"Handheld selfie video, vertical. A woman in a white bathrobe stands in a warm beige plaster bathroom with low golden side light. She holds [PRODUCTO] up toward the camera with one hand and speaks directly to the lens, casual and unhurried. Natural skin texture with visible pores and highlights, shallow depth of field. No music, no on-screen text, no captions. She says: '[FRASE DE 12-15 PALABRAS]'."
+
+Generar 4 clips cambiando SOLO la frase hablada y el encuadre (espejo entero / espejo medio / macro de perfil / mano con producto). LA IDENTIDAD LA SOSTIENE LA MISMA FOTO EN image_references, NO EL TEXTO — no describir la cara en el prompt.
+
+=== PASO 2 — el molde de 22 s (HyperFrames + skill editor-videos) ===
+Nueve bloques, en este orden:
+  1. 0-4 s   clip 1 · caption apilada ARRIBA-IZQUIERDA: "DEJE DE PAGAR" / "INFLUENCERS REALES"
+  2. 4-5 s   macro de cara · caption CENTRADA: "Y DUPLIQUE MIS"
+  3. 5-6 s   carton blanco full-bleed con el logo, 1 s
+  4. 6-9 s   clip 2 · "ELLA GRABA CADA ANUNCIO" / "PARA MI TIENDA"
+  5. 9-10 s  carton blanco: "NO ES REAL"
+  6. 10-15 s CAPTURA DE PANTALLA REAL de la herramienta · "LA CREE ADENTRO"
+  7. 15-16 s carton blanco: "EL ANUNCIO EN MINUTOS"
+  8. 16-18,5 s clip 4 con producto en mano · "QUINCE ANUNCIOS POR SEMANA" / "MISMO PRESUPUESTO"
+  9. 18,5-22,3 s CTA MUDO: carton blanco, una sola linea, sin voz encima.
+
+=== REGLAS DEL MOLDE (leidas del reel, no inventadas) ===
+- Tipografia: grotesca condensada pesada, CAJA ALTA. Blanco puro (#FFFFFF) sobre video; negro (~#0B0B0B) sobre carton off-white (~#FDFCF7). Hex aproximados.
+- Dos posiciones de texto y solo dos: arriba-izquierda apilada (gancho) o centrada a media altura (cuerpo). NUNCA abajo.
+- Los subtitulos entran por grupo de palabras y de forma aditiva: la linea 1 se queda, aparece la linea 2, luego se reemplaza el par. Sin desplazamiento, sin escalado, sin wobble.
+- Los cartones blancos son la respiracion: separan cada afirmacion, duran ~1 s, una sola linea centrada.
+- Un corte cada ~1,8 s. Locucion a ~200 palabras/minuto: encimada, sin pausas habladas.
+- La captura de pantalla real es la UNICA textura fria del video. Ese contraste contra la piel calida es la prueba. No estilizarla.
+- El ultimo tramo va SIN VOZ. El CTA se lee, no se escucha.
+- Se admite que es IA dentro del propio video ("no es real"). No se esconde — regla de Lucia.
+- Cero carteles de estado de obra: nada de "beta", "muy pronto", "en construccion".
+- Prohibido inventar cifras de ventas. Si no hay dato real de un cliente, ese bloque no se pone.
+
+LISTO = un MP4 vertical 9:16 de 20-24 s con los 9 bloques en el orden de arriba, la MISMA cara reconocible en los 4 clips generados, el carton final sin voz encima ocupando >=3 s, texto solo en las dos posiciones permitidas, y cero carteles de estado de obra ni cifras no verificadas.
+```
+
+## O14 · Molde 'parar el corte sobre la petición' — episodio de marca con CTA comentario→DM
+
+- **Ficha:** [Lolo en La Velada: el anuncio de IA cabe dentro de un móvil](../2026-08-23-lolo-velada-higgsfield-marketing-studio.md)
+- **Qué falta:** Para el molde de guion, el corte y el CTA: NADA. Se puede hacer esta semana con lo que ya está encendido. Para el bloque UGC: solo el permiso de gasto por render, caso por caso según la regla — pero es UN render, no cuarenta; listar las plantillas ya está hecho y costó cero. Lo que NO se porta, y hay que decirlo sin rodeos: el acceso a un evento como La Velada, el traje físico y los invitados famosos; eso no se compra con créditos. Lo que sí se porta es el método: personaje propio y recurrente, venta en el mismo registro que el contenido, y la petición encima del único plano que no corta.
+
+```text
+Construí un episodio de marca de Onia de 90–170 s para publicación de feed en Instagram, siguiendo el molde medido en el reel DcYNrdROAyg (@yvan.thecreator × Higgsfield). No inventes el ritmo: replicá estas proporciones.
+
+ESTRUCTURA DEL GUION (respetá los porcentajes, no los segundos exactos):
+1. Gancho por fricción, primer 11% del metraje: dos personajes discutiendo algo humano (dinero, orgullo, un reproche). CERO producto, CERO marca en boca.
+2. Sembrá en el 11–17% el conflicto que vas a cobrar en el CTA final. Tiene que quedar abierto.
+3. Incidente en el 17–26%: alguien pide algo al protagonista y genera un conflicto emocional real, no publicitario.
+4. VENTA en el 30–41% del metraje, máximo 17 s. Reglas duras: (a) el registro NO cambia — se vende con el mismo tono con el que se hace comedia; (b) el beneficio se dice en lenguaje de estatus o vergüenza, nunca de eficiencia (el original dice 'parecéis una tienda de verdad y no un puesto del mercadillo', no dice 'ahorra en producción'); (c) si hay IA en la pieza, se declara en voz alta y se convierte en el chiste, no se esconde.
+5. Abandoná la venta por completo del 41% al 68% y volvé a la trama.
+6. Segundo toque de marca de ~7% del metraje, con el beneficio reformulado.
+7. Vuelta a la trama hasta el 87%.
+8. CTA del 87% al 94%.
+9. Placa negra final del 94% al 100% con SOLO subtítulo, para una segunda oferta distinta (share/historias).
+
+La marca se nombra DOS veces en todo el episodio. No más.
+
+REGLAS DE CORTE (esto es lo que hay que medir al final):
+- Mediana de duración de plano ≤ 3,5 s en todo el episodio.
+- UN solo plano, sin cortar, de duración ≥ 3× la mediana, y tiene que caer exactamente encima del CTA.
+- Ese plano del CTA es el único bloqueado en trípode; todo lo demás va en mano.
+- Un segundo plano largo (≥ 3× la mediana) puede usarse sobre el reveal de producto, y solo ahí.
+- Placa negra final de 8–12 s, luma < 0,06.
+
+SUBTÍTULOS (quemados, con editor-videos/HyperFrames):
+- Sans grotesca pesada, blanco, filo oscuro fino, SIN caja de fondo.
+- 2–4 palabras por tarjeta, siempre una línea.
+- Línea base al ~91% de la altura del cuadro.
+- Caja baja de frase en TODO el episodio, salvo la palabra clave del CTA en VERSALES. Un solo cambio tipográfico en todo el film.
+
+CTA: elegí una palabra clave de una sola pieza, en versales, y enganchala al circuito comentario→DM que ya está vivo en producción. La recompensa del DM tiene que ser el pago del conflicto sembrado en el paso 2.
+
+ENTREGABLE: guion con timecodes + tabla de cortes (in/out por plano) + el mp4 renderizado.
+
+LISTO = sobre el mp4 renderizado, `ffmpeg -i out.mp4 -filter:v "select='gt(scene,0.35)',showinfo" -f null -` da mediana de hueco entre cortes ≤ 3,5 s Y exactamente un hueco ≥ 3× esa mediana cuyo inicio cae dentro del bloque de CTA; y `ffmpeg -i out.mp4 -vf blackdetect=d=0.5:pix_th=0.06 -f null -` reporta un black_duration de entre 8 y 12 s terminando a menos de 0,5 s del final del archivo.
+```
+
+## O15 · Banco de 5 escenas de foto-de-celular para Lucía (sin generar nada)
+
+- **Ficha:** [Influencer Aesthetic — 5 escenas de foto de celular, con el prompt gateado](../2026-08-23-influencer-aesthetic-cinco-escenas-prompt-gateado.md)
+- **Qué falta:** Tres cosas. (1) Los prompts NO estan: el autor los gatea detras de comentar '8'. Hay que RECONSTRUIRLOS con nuestra anatomia de 11 bloques — no comentar, no pedirlos. (2) Generar imagenes es gasto pago: permiso explicito de Sergio, escena por escena, con costo estimado en creditos. (3) Una decision de Sergio: si las 5 escenas las protagoniza Lucia (exige sostener la misma cara, trabajo que el original nunca hizo) o si son 5 modelos distintas como aca.
+
+```text
+Objetivo: escribir el banco de escenas que le falta al brief de imagen de Lucía. Hoy tenemos la GRAMÁTICA pero no el VOCABULARIO — sabemos cómo se escribe un prompt de foto realista, pero no qué escena poner. Este carrusel aporta 5 arquetipos que funcionan.
+
+CONTEXTO OBLIGATORIO — leé estos dos archivos antes de escribir una palabra:
+- hermes-content/references/video-intake/2026-08-15-realismo-de-celular-prompts-soul.md (la anatomía de 11 bloques; en especial el 7 = la luz como DEFECTO, el 8 = firma óptica del celular, y el 11 = lista de hex explícitos)
+- hermes-content/references/video-intake/2026-08-23-influencer-aesthetic-cinco-escenas-prompt-gateado.md (las 5 escenas y su estilo)
+
+TAREA 1 — Instanciar las 5 escenas.
+Agregá al final de la ficha 2026-08-23-influencer-aesthetic-cinco-escenas-prompt-gateado.md una sección '## Las 5 escenas, instanciadas en los 11 bloques', con un prompt COMPLETO por escena (los 11 bloques, en orden, en inglés):
+- E1 · Tumbona en acantilado mediterráneo a mediodía — libro abierto tapando el torso, gafas oscuras, pelo mojado, sol duro cenital, altas luces quemadas
+- E2 · Espejo del baño de casa, sin maquillaje — pijama, taza en la mano, celular tapando medio rostro, luz cálida de aplique, desorden real en la mesada
+- E3 · Sala de cine vacía — butacas de terciopelo, pantalla encendida como ÚNICA fuente de luz, sujeto pequeño dentro del cuadro
+- E4 · Tienda de barrio de noche — neón, producto en la mano, risa a media carcajada, fondo cargado de mercadería
+- E5 · Terraza de azotea en hora dorada — sombrilla, vaso en la mano, azoteas y aires acondicionados de fondo
+
+TAREA 2 — Reglas duras al instanciar. No son opcionales:
+1. SIN MARCAS LEGIBLES. Los originales muestran Fanta, Doritos, Sprite, Adidas, Oakley y una tapa de libro real. Los nuestros describen el objeto genérico ('botella de gaseosa naranja sin etiqueta legible', 'zapatilla deportiva blanca lisa'). Agregá los negativos correspondientes.
+2. Oclusión parcial del rostro en al menos 3 de 5 (libro, celular, vaso). Menos superficie donde el modelo falla.
+3. Cada escena cierra con su lista de 10-13 hex, como manda el bloque 11.
+4. El defecto óptico va SIEMPRE (bloques 7 y 8). Prohibidas las palabras 'beautiful', 'perfect', 'flawless', 'cinematic'. Se pide suciedad, no belleza.
+
+TAREA 3 — Registrar el molde.
+Agregá una fila R14 a hermes-content/references/video-intake/BANCO_DE_REPLICABLES.md, en NIVEL 2 (🟡 crédito de imagen):
+R14 · Carrusel de 6 láminas con texto sólo en los extremos — gancho con título en lámina 1, 4 láminas MUDAS de puro material, CTA en lámina 6 con cebo de UN SOLO DÍGITO. Fuente: DcJbUL6CCp3 + su ficha. Insumo: 5 imágenes generadas + el circuito comentario→DM (ya vivo en prod desde el 18-ago).
+
+TAREA 4 — Anotar el hueco, no taparlo.
+Cerrá la sección con '### Lo que este banco NO resuelve': las 5 láminas originales usan 5 mujeres DISTINTAS; el autor nunca resolvió consistencia de cara porque su formato no la pide. Para Lucía hay que sostener la misma cara en las 5, y eso exige Soul + anclas de identidad (2026-08-15-bloquear-identidad-avatar-anclas.md). Dejalo escrito como trabajo pendiente, no lo des por resuelto.
+
+PROHIBIDO EN ESTA TAREA:
+- Generar una sola imagen. Generar es gasto pago. Dejá los prompts listos y pedile permiso explícito a Sergio, escena por escena, con el costo estimado en créditos.
+- Comentar '8' en el post original ni pedirle los prompts al autor. No hace falta: la anatomía ya la tenemos gratis de otra fuente, y los prompts se reconstruyen.
+- Crear archivos nuevos. Todo va en la ficha existente y en el banco existente.
+
+LISTO = la ficha 2026-08-23-influencer-aesthetic-cinco-escenas-prompt-gateado.md contiene una sección con los 5 prompts completos (11 bloques cada uno + su lista de hex), sin una sola marca legible en vestuario o props, con oclusión parcial de rostro en ≥3 de 5; BANCO_DE_REPLICABLES.md tiene la fila R14 en Nivel 2; existe la sección 'Lo que este banco NO resuelve'; y se generaron CERO imágenes.
+```
