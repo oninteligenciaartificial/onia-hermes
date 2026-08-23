@@ -99,8 +99,14 @@ Instrucciones de proyecto. Override sobre defaults.
   llama son trabajo con valor **cero**.
 - **Prohibido reportar como hecho lo que está detrás de un flag apagado.**
 - **Antes de abrir un frente nuevo se cierra el anterior**, o se anota con su estado exacto.
-- **Al cerrar la sesión, dejar el estado escrito:** qué quedó en producción, qué quedó a
-  medias y dónde, y qué depende de Sergio.
+- **Al cerrar la sesión, escribir el HANDOFF del carril** en
+  `hermes-content/docs/handoff/<carril>.md` — plantilla y decisiones en el README de esa
+  carpeta. Siete campos: objetivo · qué quedó **en producción** · qué quedó a medias y dónde ·
+  archivos · **intentos fallidos** · qué depende de Sergio · próximos pasos.
+  Un archivo por carril, así dos worktrees abiertos no chocan al mergear.
+  ⚠️ **No alcanza con confiar en la compactación**: el resumen es fiel pero no ELIGE — devuelve
+  cada error y cada método descartado con el mismo peso que el estado actual. El campo de
+  **intentos fallidos** es el que casi nadie escribe y el que evita repetir el callejón.
 
 ---
 
@@ -208,6 +214,7 @@ Nada suelto en la raíz.
 | Qué | Dónde |
 |---|---|
 | Doc de proceso o decisión | `hermes-content/docs/` (sin fecha si es fuente de verdad) |
+| **Estado al cerrar un carril** | `hermes-content/docs/handoff/<carril>.md` (uno por carril, sin fecha) |
 | Foto de un día | `hermes-content/docs/historial/` |
 | Investigación | `hermes-content/docs/research/` |
 | Competencia guardada | `hermes-content/research/competencia/` |
