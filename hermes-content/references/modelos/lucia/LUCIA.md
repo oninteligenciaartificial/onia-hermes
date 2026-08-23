@@ -697,3 +697,75 @@ aprovechable por corrida — clave para bajar el costo por pieza publicada.
 4. **¿Está el `[TEXT RULE — MANDATORY]`?** → si hay props con letras, es obligatorio
 5. **¿La cámara está nombrada o adjetivada?** → nombrar equipo real
 6. **¿El modelo da ≥10 s?** → pedir sobrecobertura y cortar en post
+
+---
+
+# §13. Guion MULTI-ESCENA — la continuidad se escribe, no se rescata en el editor
+
+> Del carril video-intake, sesión `influencers-ia` (commit 819c84b9). Diagnóstico literal del
+> doc, que describe exactamente cómo armamos el reel de lanzamiento: *"hoy se genera plano por
+> plano y la consistencia entre tomas se rompe. Acá la continuidad está escrita en el prompt."*
+
+## El formato (sale de un anuncio real generado desde UNA sola foto)
+
+```
+Scene N — <nombre> (Xs–Ys)
+  <encuadre y ángulo> · <comportamiento de cámara> · <qué queda en foco y qué sale>
+  · <calidad y dirección de la luz>
+```
+
+Los TRES campos que este formato aporta y que a nuestros prompts les faltan:
+**lock de vestuario · raccord de luz · timestamps.** Un guion de Lucía son 15-20 s divididos en
+escenas con sus rangos, en UN prompt — no N generaciones sueltas cosidas después.
+
+## El diálogo va LITERAL, entre comillas, dentro del beat
+
+Verificado en el corpus: *"el diálogo entre comillas sale palabra por palabra en el video
+generado. Se comparó el prompt con el audio del resultado y coincide literal. El guion se
+escribe en el prompt, no se corrige después."*
+
+→ Para piezas con audio nativo (`seedance_2_5`, `flux_3_video`, `veo3`, `gemini_omni`) el texto
+exacto va entre comillas en el beat y **no hace falta post de audio**.
+→ ElevenLabs/Marcela (§11) queda para cuando la VOZ específica importa: el reel de lanzamiento,
+las piezas de marca. Para volumen diario, el audio nativo alcanza.
+
+## CINE o UGC: se elige ANTES de escribir, y no se mezclan
+
+Regla binaria literal: **"si el video HABLA, es UGC. Si IMPRESIONA, es cine."**
+
+En modo CINE el **recorrido de cámara ocupa la mitad del prompt (~120 palabras)**: de dónde
+arranca, hacia dónde acelera, dónde se inclina, qué curva describe, dónde termina. El error
+nombrado, que es el nuestro: *"describimos la escena y le pedimos a la cámara movimiento
+cinematográfico. Por eso sale genérico. La cámara se COREOGRAFÍA."*
+
+## Dónde se pierde la cara — regla de selección de encuadre (va sobre §6-bis)
+
+Observado en dos lotes distintos: *"la consistencia de cara SE SOSTIENE EN LAS TOMAS DE ESTUDIO
+Y SE DEGRADA EN LAS DE ESCENARIO. En las de fondo neutro la cara aguanta; en la escalera y en la
+calle la estructura del rostro y la edad aparente se corren."*
+
+- Cara reconocible → **fondo simple**, siempre.
+- Escenario cargado (mercado, calle, lobby) → solo cuando la cara NO es el punto.
+- El **primer plano extremo es la toma que DELATA al generador**: si se usa, se mira cuadro a
+  cuadro antes de publicar.
+
+## Foto realista: pedir SUCIEDAD, prohibir lo pulido, y bloque negativo
+
+El molde §6 no tiene bloque negativo. Se agrega, casi constante:
+`Negative prompt: CGI, cartoon, plastic skin, beauty filter, over-retouched, bad anatomy,
+extra fingers, HDR, studio lighting, over-sharpening, blurry subject, text, watermark`
+
+Y la palanca contraintuitiva: se **pide** `slight film grain`, `harsh direct camera flash`,
+`muted colors`, marcas de uso — y se **prohíbe** `beauty filter`, `perfect background`,
+`studio lighting`. *"Un modelo dejado solo tira a catálogo; hay que empujarlo a lo contrario."*
+⚠️ Antes de aplicar: verificar con `models_explore` (gratis) qué motores aceptan campo negativo
+SEPARADO — varios lo ignoran y hay que meterlo en el positivo.
+
+## De dónde sale el encuadre: Pinterest es el director de fotografía
+
+*"No inventes el encuadre. Buscalo."* Queries: `beach selfie`, `mirror selfie`,
+`get ready with me`, `instagram story aesthetic`. De cada pin se extraen **5 datos**: dónde está
+el sol · cómo cae la sombra en la cara · a qué altura está el móvil · qué se ve de fondo · qué
+ropa lleva. Se traducen al prompt LITERAL.
+Criterio que contradice el instinto: *"cuanto más aburrida y cotidiana sea la referencia, mejor
+funciona"* — buscar referencias espectaculares es lo que hace que el UGC se vea a anuncio.

@@ -118,3 +118,76 @@ Mes 1 completo de Lucía ≈ **80-100 cr**.
 1. Tarjeta en ONIA Ads (amplificación, fase 1)
 2. OK final al reel v3 → publicar el lanzamiento
 3. Decisión de precio del curso (fase 3, sin apuro)
+
+---
+
+# 10. Formatos de pieza con molde medido (video-intake, commit 819c84b9)
+
+> Destilado de la sesión `marketing` del carril de análisis. Son moldes con cronómetro, no ideas:
+> cada uno con su reparto de segundos verificado sobre piezas reales.
+
+## 10.1 Demo de producto: **17 segundos exactos**
+
+Molde verificado a un competidor de comandas. La promesa va en el **segundo 1**:
+1. Promesa ("Así de simple podés organizar todas las comandas de tu negocio")
+2. Entra un pedido → se ve la tarjeta completa
+3. Se arrastra la tarjeta → cambia de estado
+4. El beneficio en UNA línea ("menos caos, pedidos mucho más organizados")
+5. CTA a la web
+
+**Nada más.** Es el formato para mostrar Onia Platform sin explicar nada.
+
+## 10.2 Gate de copy: **si no nombra el dolor EXACTO del rubro, no sale**
+
+Molde de placa por rubro (dental · comercio · importadora · estética · veterinaria · servicios):
+**4 dolores en segunda persona, escritos desde la silla del dueño y terminando en plata**, + UN
+agente con nombre de los que el módulo YA tiene. Si el rubro no tiene agente, la placa dice lo que
+hay — **no se inventa uno para llenar el molde**.
+
+## 10.3 Antes/después: el "antes" es SIEMPRE un wireframe gris NUESTRO
+
+`0-4 s` wireframe gris de nuestro diseño, rótulo "Cliente: necesito una web de X" ·
+`5-17 s` scroll de la web final, MISMO encuadre, rótulo "Después:" · sin voz, sin cara, música, 9:16.
+🔴 **Prohibido usar como "antes" la web vieja real de un cliente sin su OK**, y prohibido mostrar
+la plantilla base o decir que usamos una.
+
+## 10.4 La escalera 0→10 — formato recurrente de Lucía
+
+Aparece DOS veces en el corpus en temas distintos (popups y correos de bienvenida): eso lo vuelve
+**plantilla reusable**, no un video suelto. Sirve para todo lo puntuable: correos, popups,
+landings, fichas de producto, carritos. Composición: dos columnas — captura escalada a la
+izquierda, cara a la derecha, badge de puntaje. **6 ejemplos REALES**; el valor está en el porqué
+de una línea. **Jamás capturas inventadas.**
+
+Ejemplo ya destilado (popups): 0/10 = no da nada a cambio del correo y pide demasiados campos ·
+6/10 = escalera del sí (primero preguntar si quiere la oferta, DESPUÉS pedir el correo) ·
+10/10 = multi-paso donde **el paso 1 pide un CLIC, no datos** → pregunta → email → teléfono.
+
+## 10.5 Radar de pauta de la competencia — gratis y ya conectado
+
+Antes de evaluar cualquier herramienta paga de espionaje de ads: **la Biblioteca de Anuncios de
+Meta es pública y ya la tenemos por MCP (`ads_library_search`)**. Procedimiento: 3 competidores
+REALES y verificables que le vendan al mismo comprador en Bolivia (si no hay locales, 3 regionales
+de referencia — **no se inventan competidores**), y se mira qué pautan, desde cuándo y con qué
+creatividad. Insumo recurrente del plan de contenido.
+
+## 10.6 Los patrones de UI reconstruidos son contenido publicable
+
+`hermes-content/references/ui-patterns/` (upload-button, checkout-card, floating-cart,
+dropzone-progress, chat-widget, sidebar-nav) es material listo: grabación de pantalla 9:16, sin voz,
+sin cara. `0-3 s` el patrón funcionando en loop limpio · `3-8 s` una línea de por qué está bien
+hecho **con el dato técnico concreto** (ese es el diferencial) · `8-12 s` cierre pidiendo la
+palabra clave. Fuente siempre citada.
+
+---
+
+## ⚠️ Para el carril web-factory (NO se toca desde acá — avisar al dueño del carril)
+
+Dos hallazgos de la sesión `web-factory` del mismo commit, anotados para que no se pierdan:
+
+1. **BUG REAL — `prefers-reduced-motion`:** el truco habitual `transition-duration: 0.01ms` ROMPE
+   las propiedades discretas: un `<dialog>` queda abierto en `opacity: 0` — invisible pero
+   **capturando clics**. Va `transition: none`.
+2. **Gate de indexabilidad antes de entregar**: hoy el gate verifica que compile, no que sea
+   indexable. Faltan `robots.ts`, `sitemap.ts`, `not-found.tsx`, `metadataBase` + canonical, y se
+   verifican en el sitio SERVIDO (`/robots.txt` y `/sitemap.xml` responden), no en el repo.
