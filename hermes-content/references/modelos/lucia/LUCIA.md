@@ -782,7 +782,7 @@ funciona"* — buscar referencias espectaculares es lo que hace que el UGC se ve
 | Soul | id | Estado |
 |---|---|---|
 | `LUCIA-REAL-v2-clean` | `36305a9b-af24-4390-959b-885082dddd5d` | ⛔ **NO USAR.** Dos motivos: sale con la **piel roja** e **ignora el atuendo pedido** (§2), y fue entrenado con frames de **una persona real sin permiso documentado** |
-| **`LUCIA-SINTETICA-v3`** | `e6d8703c-ea48-4d37-9e66-afae59ebe84a` | 🟢 **EL NUEVO (22-ago).** Entrenado con 6 imágenes 100% GENERADAS desde el ancla: rooftop, oficina, café, gimnasio, playa y selfie UGC. Identidad sintética pura — sin deuda de consentimiento |
+| **`LUCIA-SINTETICA-v3`** | `e6d8703c-ea48-4d37-9e66-afae59ebe84a` | 🟡 **RESPALDO, no principal** — ver veredicto abajo. Entrenado con 6 imágenes 100% GENERADAS desde el ancla: rooftop, oficina, café, gimnasio, playa y selfie UGC. Identidad sintética pura — sin deuda de consentimiento |
 
 ⚠️ Un Soul solo corre en `soul_2` y `soul_cinema_studio`. Para nano_banana / gpt_image /
 kling / seedance sigue siendo el **Element ancla** el que manda.
@@ -820,3 +820,23 @@ b-roll actual y no tiene turnaround propio.
 - **Variedad de escena** → ancla + descripción de escena EN TEXTO. Nunca combinar cara +
   outfit-Element + lugar-Element en la misma pieza de feed: se promedian y la cara deriva.
 - **Soul nuevo** → solo con `soul_2`, y se valida contra el ancla antes de darlo por bueno.
+
+### Veredicto del Soul v3 — probado contra el ancla el 22-ago (no ganó)
+
+Misma escena, mismo prompt, dos vías. Resultado mirado, no supuesto
+(`prueba-soul-v3/A-soul-v3.png` vs `B-ancla-actual.png`):
+
+| | Soul v3 (`soul_2`) | **Ancla `452d8375` (`nano_banana_2`)** |
+|---|---|---|
+| Mirada a cámara (pedida en el prompt) | ❌ mira de costado | ✅ obedece |
+| Pecas (rasgo sagrado) | tenues | ✅ marcadas |
+| Estructura de cara | más angulosa, se corre del canon | ✅ fiel |
+| Media sonrisa característica | sonrisa amplia genérica | ✅ la suya |
+
+**Conclusión: el ANCLA sigue siendo la vía principal.** El Soul v3 mejora al viejo
+(`36305a9b`: adiós piel roja y adiós deuda de consentimiento) pero **no le gana al Element**
+en fidelidad ni en obediencia al prompt. Queda como respaldo para cuando algo exija
+`soul_2` sí o sí.
+
+Esto confirma el patrón que el archivo ya tenía escrito: **la identidad se sostiene en LA
+REFERENCIA, no en el entrenamiento.** Un Soul promedia; un Element se copia.
