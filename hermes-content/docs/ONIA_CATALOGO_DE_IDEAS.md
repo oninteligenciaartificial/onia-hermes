@@ -1,4 +1,36 @@
-# ONIA — Catálogo maestro de TODAS las ideas (2026-07-26)
+# ONIA — Catálogo maestro de TODAS las ideas
+
+> ⚠️ **Este archivo vivía en `historial/` con fecha en el nombre** (`ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md`).
+> Por la regla de `CLAUDE.md` §2, un doc en `historial/` es la foto de un día y **no es fuente de
+> verdad** — o sea que el catálogo escrito para que las ideas no se pierdan estaba guardado
+> justo donde se pierden. Se promovió a `hermes-content/docs/` sin fecha el 2026-08-23, con su
+> historia de git intacta y las 8 referencias entrantes actualizadas. **Un tema = un archivo sin
+> fecha: si cambia, se EDITA este.** Contenido original del 2026-07-26; los estados de abajo son
+> de esa fecha salvo donde diga otra cosa.
+
+---
+
+## Decisión abierta — los 3 candidatos (anotada 2026-08-23, NO perseguida)
+
+Sergio los puso sobre la mesa a mitad de la sesión del carril de la web y decidió
+**no cambiar de objetivo**: primero se cierra la web. Queda acá para retomarlo entero.
+
+| # | Candidato | Sección | Por qué está en la lista | Qué lo frena |
+|---|---|---|---|---|
+| 1 | **ONIA Motor Local** | §3.2 | Paquete de agencia (presencia + GBP + landing + CRM + n8n + reporte) en niveles Starter/Growth/Pro. Break-even ya calculado: **5 clientes Growth = Bs 9.500/mes = Onia se sostiene sola.** Reusa Web Factory y n8n: cero código nuevo. | Nada técnico. Desapareció de los planes **sin decisión explícita** — el catálogo lo marca 🔵 "olvidada, definida completa". |
+| 2 | **Tablero con alertas por umbral** | §7.5-bis | **La única con demanda observada, no supuesta**: dos personas distintas, de rubros distintos, pidieron lo mismo la misma semana. | Es producto dentro de Onia Platform: compite por las MISMAS horas de la cola de v1.0 que ya está en vuelo. No es "además", es "en vez de". |
+| 3 | **Landed cost / reprecio FX** | §2.14 | Marcado PERSEGUIR. Venture #1 para importadoras, con Bolivian Electric como caso 0. | Bloqueado por S4 (columnas TR4). No es un "ya" hoy, decida lo que decida. |
+
+**El agujero de la comparación** (lo que hay que resolver ANTES de elegir): los tres se están
+evaluando como si fueran la misma clase de apuesta y no lo son. **Motor Local cambia cómo
+cobrás** — es servicio, factura sin esperar que el producto avance. **Los otros dos cambian qué
+vendés.** Elegir entre ellos es primero decidir si el problema de este mes es **caja** o
+**producto**. Mientras esa pregunta no se conteste, la tabla no ordena nada.
+
+Ojo con la regla de §11 y con la de "nada a medias": abrir cualquiera de los tres **no** es
+compatible con dejar la cola de v1.0 por la mitad.
+
+---
 
 > Pedido de Sergio: "documentame todas las ideas que hemos tenido hasta el momento…
 > miles de ideas que tal vez no recuerdo". Este doc es el resultado de barrer los

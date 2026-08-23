@@ -134,7 +134,7 @@ export default function Contacto() {
             ¿Preferís probarlo solo? También se puede.
           </h2>
           <div className={s.actions}>
-            <Btn href={EMPEZAR_URL}>Empezá gratis</Btn>
+            <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
             <Btn href="/precios" variant="line">
               Ver precios
             </Btn>

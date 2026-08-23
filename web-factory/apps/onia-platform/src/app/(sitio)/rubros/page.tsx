@@ -31,15 +31,86 @@ export const metadata: Metadata = {
  * exhibe obra).
  */
 
-const RUBROS: readonly { nombre: string; ve: string }[] = [
+/**
+ * Los cinco rubros PUBLICADOS. No se agrega ninguno acá: la lista es la misma
+ * que el conmutador (switcher.tsx:49-55) y la misma que dice la portada
+ * ("cinco rubros vivos y vendibles hoy").
+ *
+ * `resultado` es lo que el negocio GANA; `ve` es lo que el sistema le pone
+ * delante. El resultado va primero porque un sustantivo no vende: cinco
+ * renglones de features seguidos se leen como un índice, no como una razón.
+ * Cada resultado sale de la pantalla real que ese rubro ya muestra en el
+ * conmutador — la fuente va anotada rubro por rubro.
+ *
+ * `foto` es una imagen de CONTEXTO: la persona en su negocio, sin ninguna
+ * pantalla legible. La captura del producto sigue estando arriba, en el
+ * conmutador. Reglas y gate:
+ * hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md
+ */
+const RUBROS: readonly {
+  id: string;
+  nombre: string;
+  resultado: string;
+  ve: string;
+  alt: string;
+  w: number;
+  h: number;
+}[] = [
   {
+    // switcher.tsx:50 — agenda del día con hora, motivo y teléfono.
+    id: "dental",
     nombre: "Dental",
+    resultado:
+      "Llegás a la mañana sabiendo quién viene, a qué hora y a qué teléfono llamar si no aparece.",
     ve: "Pacientes, tratamientos, odontograma y agenda por sillón.",
+    alt: "Recepcionista de un consultorio dental con el celular en una mano y el dedo siguiendo un renglón del cuaderno de citas abierto.",
+    w: 1280,
+    h: 960,
   },
-  { nombre: "Comercio", ve: "Productos, stock, ventas y fiados." },
-  { nombre: "Importadora", ve: "Depósito, lotes, proveedores y costos de importación." },
-  { nombre: "Estética", ve: "Clientes, sesiones, paquetes y recordatorios." },
-  { nombre: "Servicios", ve: "Clientes, trabajos, cotizaciones y cobros." },
+  {
+    // switcher.tsx:51 — caja: total del día por método de pago.
+    id: "comercio",
+    nombre: "Comercio",
+    resultado:
+      "Cerrás el día con la caja cuadrada y sabiendo quién te quedó debiendo.",
+    ve: "Productos, stock, ventas y fiados.",
+    alt: "Dueño de una ferretería detrás del mostrador, con el cuaderno de fiados abierto y una tablet apoyada boca abajo al lado.",
+    w: 1280,
+    h: 960,
+  },
+  {
+    // switcher.tsx:52 — cotizaciones B2B con su estado y su monto.
+    id: "importadora",
+    nombre: "Importadora",
+    resultado:
+      "Sabés cuánto te costó cada lote puesto en depósito y qué cotización sigue viva.",
+    ve: "Depósito, lotes, proveedores y costos de importación.",
+    alt: "Dueño de una importadora junto al rack del depósito, con una guía impresa en la mano y una laptop cerrada apoyada sobre una caja.",
+    w: 1280,
+    h: 874,
+  },
+  {
+    // switcher.tsx:53 — sesiones y controles post-tratamiento en la agenda.
+    id: "estetica",
+    nombre: "Estética",
+    resultado:
+      "Ninguna sesión del paquete queda en el aire: el control post-tratamiento entra en la agenda como una cita más.",
+    ve: "Clientes, sesiones, paquetes y recordatorios.",
+    alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
+    w: 1280,
+    h: 960,
+  },
+  {
+    // switcher.tsx:54 — IVA e IT del mes y registro de ventas.
+    id: "servicios",
+    nombre: "Servicios",
+    resultado:
+      "Llegás al cierre de mes con el IVA y el IT ya armados, en vez de juntando papeles.",
+    ve: "Clientes, trabajos, cotizaciones y cobros.",
+    alt: "Contadora trabajando de noche en su escritorio, con un archivador de palanca abierto, una calculadora y una lámpara encendida.",
+    w: 1280,
+    h: 1078,
+  },
 ];
 
 export default function Rubros() {
@@ -68,9 +139,24 @@ export default function Rubros() {
           </h2>
           <div className={s.cells}>
             {RUBROS.map((r) => (
-              <div key={r.nombre} className={s.cell}>
+              <div key={r.id} className={`${s.cell} ${s.cellFoto}`}>
                 <h3 className={s.h3}>{r.nombre}</h3>
-                <p>{r.ve}</p>
+                <div className={s.cellTexto}>
+                  <p className={s.rubroResultado}>{r.resultado}</p>
+                  <p>{r.ve}</p>
+                </div>
+                <div className={s.foto}>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
+                  <img
+                    src={`/contexto/${r.id}.webp`}
+                    alt={r.alt}
+                    width={r.w}
+                    height={r.h}
+                    loading="lazy"
+                    decoding="async"
+                    className={s.fotoImg}
+                  />
+                </div>
               </div>
             ))}
           </div>

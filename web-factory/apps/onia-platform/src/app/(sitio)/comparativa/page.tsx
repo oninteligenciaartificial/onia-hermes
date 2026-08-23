@@ -149,7 +149,7 @@ export default function Comparativa() {
             Comparalo con tu propio negocio adentro.
           </h2>
           <div className={s.actions}>
-            <Btn href="/empezar">Empezá gratis</Btn>
+            <Btn href="/empezar">Pedí tu acceso</Btn>
             <Btn href="/precios" variant="line">
               Ver precios
             </Btn>

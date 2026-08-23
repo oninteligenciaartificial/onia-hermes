@@ -25,10 +25,20 @@ export const NAV_PRODUCTO: readonly NavItem[] = [
   { href: "/precios", label: "Precios" },
 ];
 
-/** Decidir: las tres pantallas que matan la objeción y la que arranca. */
+/**
+ * Decidir: las pantallas que matan la objeción y la que arranca.
+ *
+ * `/nosotros` entra acá el 2026-08-23. Existía, estaba en el sitemap y no la
+ * linkeaba NINGÚN nav de la v3 — solo el header/pie viejos, que ya no envuelven
+ * al sitio: era inalcanzable. Con cero clientes pagando, "empresa boliviana,
+ * SEPREC, NIT, Santa Cruz" es el sustituto legítimo del testimonio, y es una
+ * objeción («¿quiénes son estos?»), no una hoja de producto: por eso Decidir y
+ * no Producto.
+ */
 export const NAV_DECIDIR: readonly NavItem[] = [
   { href: "/comparativa", label: "Comparativa" },
   { href: "/facturacion", label: "Facturación" },
+  { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
   { href: "/empezar", label: "Empezar" },
 ];

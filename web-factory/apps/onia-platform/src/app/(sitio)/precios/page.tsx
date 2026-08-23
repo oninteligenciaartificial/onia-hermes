@@ -113,6 +113,50 @@ export default function Precios() {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
+                {/* Lo que el nivel NO trae (pricing.ts → `sinEsto`, que estaba
+                    definido y nunca se pintaba). El que duda entre Básico y Pro
+                    decide ACÁ: "Agentes de IA (vienen desde Pro)" es el
+                    argumento que sube el ticket, y enterrarlo en la letra chica
+                    lo desperdicia.
+
+                    Jerarquía MENOR que `incluye` a propósito: `.note` (62 % de
+                    currentColor, 0.9em) contra `.planList` (82 %, 0.95em), y
+                    viñeta "—" en vez del punto de acento — el punto verde de
+                    `.planList` significa "incluido" y acá diría lo contrario.
+
+                    Sin encabezado visible: `sinEsto` de Pro y Full son frases
+                    de tranquilidad ("Nada del Básico se queda afuera"), y un
+                    título "No incluye" encima las volvería contradictorias. El
+                    contexto va en `aria-label`, que sí funciona para los tres.
+
+                    Las cuatro reglas inline existen porque `.note` es tipografía
+                    de párrafo, no de lista, y el módulo CSS es de otro carril
+                    (falta una clase `.planSinEsto` — anotado en el reporte). */}
+                <ul
+                  className={s.note}
+                  aria-label={`Lo que no trae el plan ${plan.nombre}`}
+                  style={{
+                    listStyle: "none",
+                    margin: "1em 0 0",
+                    padding: 0,
+                    display: "grid",
+                    gap: "0.35em",
+                  }}
+                >
+                  {plan.sinEsto.map((item) => (
+                    <li
+                      key={item}
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1.1em 1fr",
+                        gap: "0.4em",
+                      }}
+                    >
+                      <span aria-hidden="true">—</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
                 <p className={s.note} style={{ marginTop: "1em" }}>
                   {plan.cuando}
                 </p>

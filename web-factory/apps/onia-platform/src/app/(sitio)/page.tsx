@@ -66,11 +66,43 @@ export const metadata: Metadata = {
   },
 };
 
-/* FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes. */
+/**
+ * FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes.
+ *
+ * Cerrado 2026-08-23: el verbo se alineó con el destino. /register ya no crea
+ * cuentas (ver el comentario de (sitio)/empezar/page.tsx:21-25), así que acá no
+ * se dice más "te registrás y usás": se PIDE el acceso. La prueba de 14 días
+ * sin tarjeta sigue siendo cierta y es lo que se promete.
+ *
+ * Las cuatro preguntas nuevas (carga de datos, aprender a usarlo, dejar de
+ * pagar, rubro fuera de la lista) son las que frenan la compra. Ninguna
+ * respuesta se redactó de cero — cada una cita su fuente en el repo.
+ */
 const FAQ = [
   {
     q: "¿Necesito tarjeta para probar?",
-    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: te registrás, elegís tu rubro y usás el sistema completo.`,
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: pedís tu acceso, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
+  },
+  {
+    // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx:79 (paso 02).
+    q: "¿Los datos del Excel o del cuaderno los cargo yo?",
+    a: "No arrancás con la pantalla vacía: te entregamos el sistema con la configuración de tu rubro puesta y alguien que te la explica. En los tres planes no cobramos implementación ni migración — el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
+  },
+  {
+    // (sitio)/empezar/page.tsx:79 — "alguien que te la explica".
+    q: "¿Y si no sé de computación? ¿Quién me enseña?",
+    a: "Nadie instala nada ni arranca un proyecto de meses: te entregamos la cuenta con la configuración de tu rubro puesta y alguien que te la explica. Si te trabás después, escribinos por WhatsApp.",
+  },
+  {
+    // content/legal/terminos.md:83 (sin permanencia) y §3.4 (mora: gracia →
+    // suspensión con datos intactos, nunca borrado inmediato) + pricing.ts:284.
+    q: "¿Y si dejo de pagar, pierdo todo?",
+    a: "No. No hay contrato de permanencia: podés no renovar, sin penalidad. Si un pago no entra, primero hay un período de gracia con el servicio activo y avisos; después el acceso se suspende, pero tus datos se conservan intactos — la suspensión nunca implica borrarlos. Y los exportás en CSV desde el plan más chico.",
+  },
+  {
+    // (sitio)/rubros/page.tsx:78-80 y (sitio)/contacto/page.tsx:118-121.
+    q: "¿Sirve para mi rubro si no está en la lista?",
+    a: "Onia no es un software distinto por industria: es el mismo núcleo con módulos y vocabulario propios. Hoy la cuenta se arma sola para los cinco rubros que ves en Rubros. ¿El tuyo es otro? Escribinos por WhatsApp y lo vemos con tu caso.",
   },
   {
     q: "¿La factura al SIN ya funciona?",
@@ -85,6 +117,53 @@ const FAQ = [
     a: "Sí. Los exportás en CSV cuando quieras, en cualquier plan pago. No vendemos datos ni entrenamos modelos con ellos.",
   },
 ];
+
+/**
+ * "Un día con Onia" — las tres escenas que acompañan al manifiesto.
+ *
+ * El manifiesto era una frase suspendida: explicaba QUÉ ES el sistema y no
+ * mostraba nunca QUÉ PASA en un negocio. Sergio, textual: "mostrar usos
+ * prácticos".
+ *
+ * Son fotos de CONTEXTO, no de producto: una persona en su negocio, ningún
+ * dispositivo con pantalla legible. La interfaz sigue siendo captura REAL y
+ * vive en sus propios bloques (hero, agentes, chatbot, conmutador). Reglas,
+ * shot list y gate: hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md
+ *
+ * Cada línea es un RESULTADO, y cada resultado es una capacidad YA publicada
+ * en este mismo sitio — acá no se promete nada nuevo:
+ *   · mañana → switcher.tsx:50 (agenda del día: hora, motivo y teléfono)
+ *   · tarde  → switcher.tsx:51 (caja: total del día por método de pago)
+ *              + rubros/page.tsx:39 (fiados)
+ *   · noche  → rubros/page.tsx:41 (paquetes y sesiones) + la sección 5 de
+ *              este mismo archivo (el borrador que espera tu aprobación)
+ */
+const DIA = [
+  {
+    id: "dental",
+    momento: "Por la mañana",
+    texto:
+      "Sabés quién viene hoy sin descifrar el cuaderno: la agenda del día trae cada cita con su hora, su motivo y el teléfono para confirmarla.",
+    alt: "Recepcionista de un consultorio dental con el celular en una mano y el dedo siguiendo un renglón del cuaderno de citas abierto.",
+  },
+  {
+    id: "comercio",
+    momento: "A media tarde",
+    texto:
+      "Cerrás la caja sin sacar la calculadora: el total del día ya viene cortado por método de pago, y el fiado deja de vivir en el cuaderno.",
+    alt: "Dueño de una ferretería detrás del mostrador, con el cuaderno de fiados abierto y una tablet apoyada boca abajo al lado.",
+  },
+  {
+    id: "estetica",
+    momento: "De noche",
+    texto:
+      "Bajás la persiana y el paquete que quedó por la mitad no se pierde: a la mañana te espera el borrador de a quién llamar, para que lo apruebes.",
+    alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
+  },
+] as const;
+
+/** Las tres son 1280×960 (4/3), tal cual salieron a public/contexto/. */
+const FOTO_DIA = { w: 1280, h: 960 } as const;
 
 /**
  * Datos estructurados heredados de la v1 — Organization + SoftwareApplication
@@ -155,13 +234,18 @@ export default function Portada() {
                 cliente que se enfrió. Vos aprobás; el sistema hace.
               </p>
               <div className={s.actions}>
-                <Btn href={EMPEZAR_URL}>Probá {PRUEBA.dias} días gratis</Btn>
+                {/* El verbo tiene que ser el del destino: /empezar dice "Pedir
+                    mi acceso" porque /register ya no da alta automática.
+                    Prometer un botón que el producto no cumple pierde al lead
+                    en el último clic. Los días gratis bajan a la nota. */}
+                <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
                 <Btn href="/precios" variant="line">
                   Ver precios
                 </Btn>
               </div>
               <p className={s.note} style={{ marginTop: "1.2em" }}>
-                Sin tarjeta · sin implementación · tus datos se exportan en CSV
+                {PRUEBA.dias} días gratis · sin tarjeta · sin implementación ·
+                tus datos se exportan en CSV
               </p>
             </div>
           </Reveal>
@@ -225,13 +309,39 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 4 · MANIFIESTO — qué es Onia, en una frase */}
+      {/* 4 · UN DÍA CON ONIA — el manifiesto deja de estar suspendido: la
+          frase que dice QUÉ ES queda arriba, y debajo van tres momentos del
+          día que muestran QUÉ PASA. Fotos de contexto (ver DIA, arriba); la
+          interfaz sigue siendo captura real y vive en los otros bloques. */}
       <Block surface="paper" labelledBy="que-es">
         <Reveal>
+          <Kicker>Un día con Onia</Kicker>
           <p id="que-es" className={s.h2} style={{ maxWidth: "24ch" }}>
             Onia es un solo sistema de gestión con IA: agenda, clientes, cobros y
             contabilidad, con agentes que esperan tu aprobación.
           </p>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <div className={s.scenes}>
+            {DIA.map((escena) => (
+              <div key={escena.id}>
+                <div className={s.foto}>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
+                  <img
+                    src={`/contexto/${escena.id}.webp`}
+                    alt={escena.alt}
+                    width={FOTO_DIA.w}
+                    height={FOTO_DIA.h}
+                    loading="lazy"
+                    decoding="async"
+                    className={s.fotoImg}
+                  />
+                </div>
+                <p className={s.sceneHora}>{escena.momento}</p>
+                <p className={s.sceneTexto}>{escena.texto}</p>
+              </div>
+            ))}
+          </div>
         </Reveal>
       </Block>
 
@@ -357,8 +467,30 @@ export default function Portada() {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
+                {/* Lo que el nivel NO trae, dicho acá y no en la letra chica
+                    (lib/pricing.ts:65 lo define y hasta hoy solo lo renderizaba
+                    la landing vieja /v1). No es una advertencia: es lo que hace
+                    entender por qué existe el escalón de arriba. Por eso va
+                    debajo, más chico y más apagado que `incluye` — mismo
+                    componente de lista, jerarquía menor. */}
+                <p className={s.planStep} style={{ marginTop: "1.1em" }}>
+                  Qué no lleva
+                </p>
+                {/* opacity 0.85 y no menos: .planList ya viene a 82% de
+                    currentColor, así que esto queda en ~70% efectivo — por
+                    encima del 62% que .planStep midió en 4,95:1. Bajar a 0.7
+                    daría ~57% y caería del 4,5:1. La jerarquía la hace el
+                    tamaño, no apagar el texto hasta que no se lea. */}
+                <ul
+                  className={s.planList}
+                  style={{ marginTop: "0.35em", fontSize: "0.86em", opacity: 0.85 }}
+                >
+                  {plan.sinEsto.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
                 <div className={s.planFoot}>
-                  <Btn href={EMPEZAR_URL}>Probar {plan.nombre}</Btn>
+                  <Btn href={EMPEZAR_URL}>Pedir acceso al {plan.nombre}</Btn>
                 </div>
               </div>
             ))}
@@ -435,7 +567,7 @@ export default function Portada() {
             Probá Onia {PRUEBA.dias} días. Sin tarjeta.
           </h2>
           <div className={s.actions}>
-            <Btn href={EMPEZAR_URL}>Empezá gratis</Btn>
+            <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Hablar por WhatsApp
             </Btn>

@@ -94,5 +94,5 @@ Handles: Lucía = `@lucia.antelo.oficial` (definido). Mara = definir (propuesta:
 
 Relacionado: `ONIA_ENFOQUE_20260727.md` §5-bis (los 3 usos del contenido — este plan es el
 uso 1 y la semilla del 3 bien ordenada) · `ONIA_AI_INFLUENCERS_ACCOUNT_OPS_2026.md` (ops de
-cuentas) · `ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` §3.6-3.7, §6.4, §7 (los productos que
+cuentas) · `ONIA_CATALOGO_DE_IDEAS.md` §3.6-3.7, §6.4, §7 (los productos que
 este ejército vende) · memoria `higgsfield-estado-cuenta-2026-08` (créditos, Souls, costos).

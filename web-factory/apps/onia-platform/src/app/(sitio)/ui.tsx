@@ -181,7 +181,7 @@ export function Header() {
           <a className={s.headerLogin} href={LOGIN_URL}>
             Entrar
           </a>
-          <Btn href={EMPEZAR_URL}>Probá gratis</Btn>
+          <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
           <MobileMenu />
         </div>
       </div>

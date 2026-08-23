@@ -16,7 +16,7 @@
 ## 1. El hueco, dicho sin vueltas
 
 El 26-jul Sergio movió a Arthur del carril comercial al de **contenido**
-(`ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` §10). Pero el acuerdo firmado paga **ventas**:
+(`ONIA_CATALOGO_DE_IDEAS.md` §10). Pero el acuerdo firmado paga **ventas**:
 3-15% por lead que compra, 25-35% del primer mes de un SaaS, 50% si vende y entrega todo.
 
 **Arthur ya no vende. Genera demanda.** Con las reglas actuales pasa esto:
@@ -744,5 +744,5 @@ Si vende, todo lo demás sale de plata que ya entró.
 Relacionado: `ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md` (el acuerdo base que esto extiende) ·
 `ONIA_COLABORADORES_COMERCIALES_SIN_INVERSION_2026.md` (bonos y escalera vigentes) ·
 `ONIA_ENFOQUE_20260727.md` §5-bis (los tres usos del contenido) ·
-`ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` §10 (la división de trabajo del 26-jul) ·
+`ONIA_CATALOGO_DE_IDEAS.md` §10 (la división de trabajo del 26-jul) ·
 `ONIA_PRICING_MODELO_20260730.md` (los precios sobre los que se calcula todo).

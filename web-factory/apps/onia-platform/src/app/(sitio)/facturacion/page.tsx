@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import {
@@ -113,17 +114,46 @@ export default function Facturacion() {
         </Reveal>
       </Block>
 
-      {/* 2 · Qué resuelve un sistema */}
+      {/* 2 · Qué resuelve un sistema — el único bloque con imagen de la
+          página, y va justo acá porque acá está el DOLOR: tipear cada venta
+          dos veces. La foto es de CONTEXTO (una contadora de noche con el
+          archivador de papel), no de producto, y NO agrega ni una sola
+          afirmación fiscal: el texto sigue saliendo entero de lib/siat.ts y
+          la nota honesta del bloque 3 queda intacta. El alt describe la
+          escena y no dice que sea cliente de Onia. Reglas:
+          hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md */}
       <Block surface="ink" labelledBy="retipeo">
-        <Reveal>
-          <Kicker>Qué resuelve un sistema</Kicker>
-          <h2 id="retipeo" className={s.h2}>
-            {RETIPEO.titulo}
-          </h2>
-          <p className={s.body} style={{ fontSize: "1.1em", maxWidth: "50em" }}>
-            {RETIPEO.texto}
-          </p>
-        </Reveal>
+        <div className={s.split}>
+          <Reveal>
+            <div>
+              <Kicker>Qué resuelve un sistema</Kicker>
+              <h2 id="retipeo" className={s.h2}>
+                {RETIPEO.titulo}
+              </h2>
+              <p className={s.body} style={{ fontSize: "1.1em" }}>
+                {RETIPEO.texto}
+              </p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            {/* Ratio nativo de la foto (1280×1078): así no se recorta nada. */}
+            <div
+              className={s.foto}
+              style={{ "--foto-ratio": "640 / 539" } as CSSProperties}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
+              <img
+                src="/contexto/servicios.webp"
+                alt="Contadora trabajando de noche en su escritorio, con un archivador de palanca abierto, una calculadora y una lámpara encendida."
+                width={1280}
+                height={1078}
+                loading="lazy"
+                decoding="async"
+                className={s.fotoImg}
+              />
+            </div>
+          </Reveal>
+        </div>
       </Block>
 
       {/* 3 · Dónde está Onia — la nota fiscal honesta, sin maquillar */}

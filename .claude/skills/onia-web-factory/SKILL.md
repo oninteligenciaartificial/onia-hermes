@@ -181,3 +181,30 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
 - `packages/templates/src/store.ts` (~3.4k líneas) viola la regla de <800. No escribir otro
   template monolítico: un rubro nuevo sale de bloques, no de un archivo nuevo de 3.000 líneas.
 - `apps/onia-platform/**` es la landing en producción: carril aparte, no tocar de paso.
+
+## Fotos generadas por IA en una superficie de venta
+
+Decisión, dirección fotográfica, shot list y gate completos →
+**`hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md`**. Acá sólo lo que hace tropezar:
+
+- **La interfaz NUNCA la dibuja la IA.** La captura es real; la IA genera **contexto y uso**
+  (personas en su negocio). Una UI generada es *fabricar producto* y está prohibido. En la foto
+  el dispositivo va **boca abajo, cerrado o girado hacia la palma**.
+- **⚠️ En un modelo sin `negative_prompt`, la lista de "evitar" INVOCA lo que nombra.** `soul_2`
+  sólo acepta `quality` y `soul_id`: todo lo demás cae en el MISMO campo de texto. Un lote de 6
+  con sección `Avoid: dashboards, blue neon, candlestick charts, man in a suit pointing at a
+  whiteboard` devolvió exactamente eso — pantallas de datos azules, un gráfico de velas y el
+  señor de traje señalando la pizarra. **6/6 rechazadas.** El prompt se escribe **100%
+  afirmativo**: lo que no querés que aparezca no se nombra, se reemplaza por su opuesto descrito
+  como hecho físico (`a closed laptop rests shut on the box`, no `no readable screen`).
+- **Si el prompt describe ropa, el modelo le pone marca.** Ya pasó tres veces: logo de Nike,
+  gorra de NY, y un uniforme bordado **"BOLVIA"** (marca inventada con falta de ortografía).
+  Mirar pecho, gorra y taza de cada imagen antes de aprobar.
+- **Un asset generado que no pasó el gate no se deja tirado en `public/`.** Los
+  `public/fotos/*.webp` viejos (sonrisa a cámara, bata blanca, grade teal-naranja) sobrevivieron
+  meses ahí y la sesión siguiente casi los cablea creyéndolos material bueno. Si no se pueden
+  borrar porque algo los referencia, **queda escrito en el doc del tema por qué no sirven**.
+- **Una imagen se juzga MONTADA al tamaño real** en que se va a ver, no abierta a pantalla
+  completa. Un recorte nítido a 1434 px puede ser ilegible en una tarjeta de 290 px.
+- **Gasto:** imagen en lote chico = trivial y ya validado (~0,12 cr por imagen 2k). **Video =
+  permiso explícito de Sergio con `get_cost` por delante.** Registrar cada lote.

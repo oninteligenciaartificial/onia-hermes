@@ -468,7 +468,7 @@ Consecuencia de producto: el modulo vive en `onia-center` y reusa lo que ya exis
 | **Estudio gestionado** (recurrente, el que importa) | todo lo anterior + calendario + publicacion + reporte de leads atribuidos | pipeline completo + `virality_predictor` antes de publicar | presupuesto de creditos por cliente |
 
 **Precios: NO se inventan aca.** Salen del generador de propuestas (add-on "videos IA") y de
-`ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` §3.6-3.7. Este doc define el producto; el precio
+`ONIA_CATALOGO_DE_IDEAS.md` §3.6-3.7. Este doc define el producto; el precio
 vive en su fuente. Ver tambien `HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md` §2 (escalera de ofertas).
 
 ### Por que el margen es real

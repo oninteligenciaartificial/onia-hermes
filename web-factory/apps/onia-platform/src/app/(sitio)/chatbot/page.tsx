@@ -58,6 +58,27 @@ const JSON_LD = {
 };
 
 /**
+ * Anclaje de valor del precio. Estaba escrito desde el 2026-08-21 en un
+ * COMENTARIO de content/chatbot-precios.ts:33-34 y nunca se publicó: es el
+ * mejor argumento de precio del repo y no lo veía ningún comprador.
+ *
+ * Se puede publicar porque NO es una cifra inventada: el salario mínimo
+ * nacional 2026 es dato público con fuente legal (DS 5516), y por eso la
+ * fuente se muestra en pantalla junto al número.
+ *
+ * El porcentaje se DERIVA de `CHATBOT_PLAN.mensual` en vez de escribirse "12":
+ * si mañana cambia el precio en content/chatbot-precios.ts (la fuente única),
+ * la frase se mueve sola en lugar de quedar mintiendo. Hoy: 390 / 3.300 =
+ * 11,8 % → 12 %.
+ *
+ * ⚠️ La constante vive acá y no en content/chatbot-precios.ts —que es donde
+ * corresponde, al lado del precio del que es referencia— porque este carril
+ * solo toca las páginas del sitio. Anotado en el reporte.
+ */
+const SALARIO_MINIMO_2026 = 3300;
+const PCT_SALARIO = Math.round((CHATBOT_PLAN.mensual / SALARIO_MINIMO_2026) * 100);
+
+/**
  * Apartado del CHATBOT. Montos y promesa SOLO de content/chatbot-precios.ts,
  * que es la fuente única (pricing.ts → ADDONS lee de ahí). El copy vende lo
  * que el bot HACE — contesta a cualquier hora con la info que el negocio
@@ -94,7 +115,29 @@ export default function Chatbot() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape tone="green" ratio="3 / 4" tag="Conversación" />
+            {/* Ranura cableada con la ÚNICA captura publicable del chatbot.
+                Descartadas tras abrirlas: bot-saludo / bot-pedido /
+                editor-chatbot / editor-chatbot-movil son todas del lote viejo
+                (18-ago) y muestran datos de QA en pantalla — "ZZ QA Clinica
+                Chatbot", "ZZ QA Ferreteria Tornillo", el nombre de Sergio, un
+                "Atendemos Atendemos" duplicado y un "(aud 11:52)" de debug.
+                Publicar eso en la pantalla de venta es exhibir el banco de
+                pruebas. El lote de capturas/ (21-ago) es el limpio.
+
+                El ratio pasa de 3/4 a 4/3 porque es el del archivo: forzar un
+                4/3 dentro de un 3/4 con object-fit:cover + object-position:top
+                left recortaba justo la derecha, o sea el panel "Probá tu bot",
+                que es la mitad del argumento. Sigue siendo el <Shape> el que
+                reserva el ratio, así que CLS cero. Es además el ratio que usan
+                las otras cuatro capturas del sitio. */}
+            <Shape
+              tone="green"
+              ratio="4 / 3"
+              src="/v2/capturas/whatsapp.webp"
+              width={2160}
+              height={1620}
+              alt="Editor del chatbot de Onia: el negocio carga su nombre, a quién deriva, cómo se presenta el bot y sus horarios, y al lado lo prueba escribiendo como si fuera el cliente."
+            />
           </Reveal>
         </div>
       </Block>
@@ -164,6 +207,17 @@ export default function Chatbot() {
           <Kicker>Precio</Kicker>
           <p id="precio" className={s.h2} style={{ maxWidth: "20ch" }}>
             {precioStack(bot)}.
+          </p>
+          {/* El anclaje va ANTES de la letra chica de Meta: es lo que convierte
+              el número en una comparación, no un dato más. La fuente legal se
+              muestra — un anclaje sin fuente es una cifra inventada. */}
+          <p
+            className={s.body}
+            style={{ maxWidth: "44em", fontSize: "1.15em" }}
+          >
+            Es el {PCT_SALARIO} % del salario mínimo nacional 2026 (Bs{" "}
+            {fmtBs(SALARIO_MINIMO_2026)}, según el DS 5516), sin aguinaldo ni
+            domingos, por algo que atiende las 24 horas.
           </p>
           <p className={s.body} style={{ maxWidth: "48em" }}>
             O {precioAnual(bot)}. {META_NOTA} {A_MEDIDA}

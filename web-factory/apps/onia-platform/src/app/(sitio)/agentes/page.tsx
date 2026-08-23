@@ -59,11 +59,16 @@ export default function Agentes() {
                 aprobás lo que te sirve y se manda.
               </p>
               <div className={s.actions}>
-                <Btn href={EMPEZAR_URL}>Probá {PRUEBA.dias} días gratis</Btn>
+                <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
                 <Btn href="/precios" variant="line">
                   Ver desde qué plan
                 </Btn>
               </div>
+              {/* El boton dice el verbo real (/register ya no crea cuentas); la
+                  promesa de la prueba baja a la nota, como en la home. */}
+              <p className={s.note} style={{ marginTop: "1.2em" }}>
+                {PRUEBA.dias} días gratis · sin tarjeta
+              </p>
             </div>
           </Reveal>
           <Reveal delay={0.08}>

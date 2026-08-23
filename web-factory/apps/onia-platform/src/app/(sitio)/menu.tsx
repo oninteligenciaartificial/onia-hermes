@@ -69,7 +69,7 @@ export function MobileMenu() {
 
           <div className={s.sheetFoot}>
             <a className={s.btn} href={EMPEZAR_URL}>
-              Empezá gratis
+              Pedí tu acceso
             </a>
             <a className={`${s.btn} ${s.btnLine}`} href={LOGIN_URL}>
               Entrar

@@ -1440,6 +1440,12 @@
    pieza enmarcada y no como imagen pegada al borde. */
 .shapeShot {
   position: absolute;
+  /* z-index OBLIGATORIO: .shape::after pinta un rectángulo verde sólido
+     (42% x 40%, abajo a la derecha) que es composición de la ranura VACÍA.
+     Sin esto se apila encima de la captura y le tapa una esquina — estaba
+     vivo en producción (home y /agentes). .shapeBars y .shapeTag ya tenían
+     su z-index (1 y 2); a la imagen se le había olvidado. */
+  z-index: 1;
   inset: 0.5em;
   width: calc(100% - 1em);
   height: calc(100% - 1em);
@@ -1447,4 +1453,105 @@
   object-position: top left;
   border-radius: calc(var(--radio) * 0.6);
   display: block;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Fotos de CONTEXTO — la persona en su negocio, NUNCA pantalla de producto */
+/*                                                                         */
+/* La interfaz sigue siendo captura REAL y vive en .shape / .slotFoto.     */
+/* Estas fotos muestran el MOMENTO, no el sistema; ninguna tiene pantalla  */
+/* legible. Reglas, shot list y gate de aprobación:                        */
+/* hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md                    */
+/*                                                                         */
+/* El envoltorio declara aspect-ratio (cero CLS) y pinta el verde profundo */
+/* debajo: es lo que se ve mientras carga, y evita el destello blanco —    */
+/* misma decisión que .slotShape en el conmutador. La hairline existe      */
+/* porque las fotos vienen con los blancos frenados a ~96% y sin ella el   */
+/* borde se funde con el papel #F9FBFA. Cero sombra, como todo el archivo. */
+/* ---------------------------------------------------------------------- */
+
+.foto {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--foto-ratio, 4 / 3);
+  border-radius: var(--r-block);
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  overflow: hidden;
+  background: var(--green-deep);
+}
+
+.fotoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---- Portada · banda "un día con Onia": tres momentos en fila --------- */
+
+.scenes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.6em;
+  margin-top: 3.2em;
+}
+@media (min-width: 860px) {
+  .scenes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2em;
+  }
+}
+
+/* el momento del día: mismo registro tipográfico que el kicker, un escalón
+   abajo — es una marca de tiempo, no un segundo título de sección */
+.sceneHora {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.78em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin: 1.4em 0 0.5em;
+}
+
+.sceneTexto {
+  margin: 0;
+  color: color-mix(in srgb, currentColor 82%, transparent);
+  font-size: 1em;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* ---- /rubros · la foto del rubro entra como tercera columna ----------- */
+/* Modificador que se APLICA junto a .cell (no la redefine): la celda pasa
+   de dos columnas a tres y centra, porque con la foto la fila deja de ser
+   un renglón de texto y pasa a tener altura propia. */
+
+.cellFoto {
+  gap: 1.2em;
+  padding: 2em 0;
+}
+@media (min-width: 700px) {
+  .cellFoto {
+    /* la columna del nombre se aprieta a propósito: con la foto la fila gana
+       altura, y el gutter ancho que heredaba de .cell (0.7fr) dejaba un vacío
+       de ~220px entre el nombre y el texto que se leía como un error */
+    grid-template-columns: minmax(0, 0.32fr) minmax(0, 1.05fr) minmax(0, 0.8fr);
+    gap: 1em 2.4em;
+    align-items: center;
+  }
+}
+
+.cellTexto {
+  display: grid;
+  gap: 0.45em;
+}
+
+/* el RESULTADO manda sobre la lista de features: dos clases le ganan a la
+   regla `.cell p` que apaga el texto al 78% */
+.cellTexto .rubroResultado {
+  color: inherit;
+  font-size: 1.06em;
+  font-weight: 500;
+  line-height: 1.4;
 }

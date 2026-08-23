@@ -24,10 +24,9 @@ export function PedirWeb() {
 
   return (
     <>
-      <p className="kicker">Pedila</p>
-      <h2 className="h3">
-        ¿Cuál querés?
-      </h2>
+      {/* El kicker y el titular los pone la página, con la tipografía del
+          cromo v3. Acá vivían como clases globales de la v1 (`kicker`, `h3`) y
+          al portar la página quedaban en otro tamaño que el resto. */}
       <div className={styles.picker} role="radiogroup" aria-label="Elegí tu web">
         {WEB_STACKS.map((s) => {
           const on = s.id === elegido;

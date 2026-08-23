@@ -19,7 +19,7 @@ Todo lo demás está parqueado a propósito.
 | 3 | `ONIA_PARQUEADO_20260730.md` | Todo lo congelado, con dónde quedó cada cosa |
 | 4 | `ONIA_BCP_REUNION_20260805.md` | Qué preguntarle al banco. 53 marcas `[PREGUNTAR AL BANCO]` |
 | 5 | `ONIA_KIT_VENTA_DENTAL_20260727.md` | Mensajes, guion de demo y objeciones. **Ojo: corregir lo del SIAT antes de usar** |
-| 6 | `ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` | Todas las ideas y su estado (viva / parqueada con gatillo / descartada) |
+| 6 | `ONIA_CATALOGO_DE_IDEAS.md` | Todas las ideas y su estado (viva / parqueada con gatillo / descartada) |
 
 ## Las tres cosas que hay que tener siempre presentes
 

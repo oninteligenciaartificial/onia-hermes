@@ -114,7 +114,28 @@ export default function Empezar() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape tone="green" ratio="4 / 3" tag="Tu cuenta" />
+            {/* "Tu cuenta" con la cuenta de verdad. El copy de al lado promete
+                "tu cuenta real, con todos los módulos encendidos": panel.webp
+                es la captura que lo PRUEBA — la barra lateral muestra Catálogo,
+                Inventario, Caja, Fiados, Contabilidad, Equipo y Planilla todos
+                encendidos, y el día cerrado con su cobro y su propuesta de
+                agente esperando aprobación.
+
+                Descartadas tras abrirlas: pendientes.webp y agentes.webp son
+                una pantalla suelta, no "la cuenta", y ya ilustran /agentes;
+                panel-dental / panel-comercio / panel-contabilidad son del lote
+                viejo (18-ago) y encima atan la pantalla a UN rubro, justo
+                cuando el paso 01 de abajo dice que el rubro lo elige el
+                visitante. El ratio 4/3 ya reservado es el del archivo
+                (2160x1620): cablearlo no mueve nada. */}
+            <Shape
+              tone="green"
+              ratio="4 / 3"
+              src="/v2/capturas/panel.webp"
+              width={2160}
+              height={1620}
+              alt="Panel de Onia con el día de una ferretería: Bs 4.633,40 cobrados en 11 tickets, cómo le pagaron, el corte de caja y una propuesta del agente esperando aprobación."
+            />
           </Reveal>
         </div>
       </Block>

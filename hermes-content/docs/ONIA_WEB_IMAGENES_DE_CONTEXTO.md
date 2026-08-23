@@ -1,0 +1,229 @@
+# Imágenes de contexto de onia.com.bo
+
+> **Fuente de verdad** del tema "fotos humanas en la web de venta". Sin fecha en el nombre:
+> si cambia, se EDITA este archivo.
+> Superficie a la que aplica: `web-factory/apps/onia-platform/src/app/(sitio)/**`.
+
+---
+
+## 1. La decisión que gobierna todo
+
+La web es hoy 100% texto + interfaz: **explica el producto con precisión y no muestra ni una
+vez qué le PASA a un negocio.** Las fotos humanas cubren ese hueco.
+
+**La interfaz sigue siendo captura REAL.** Higgsfield genera **contexto y uso** — personas de
+Bolivia en su negocio —, nunca producto. Una UI dibujada por IA es *fabricar producto*, que
+está prohibido, y es exactamente lo que la home ya prohíbe por escrito:
+
+> `(sitio)/page.tsx` ~24: *"La imagen social es una captura REAL del sistema… Regla de la
+> casa: nada de pantallas dibujadas haciendo de prueba."*
+
+De ahí sale la regla operativa: **en la foto generada no hay pantalla legible.** El
+dispositivo va boca abajo, cerrado, o con la pantalla girada hacia la palma. Si una sección
+necesita mostrar la pantalla, la captura real se compone ENCIMA.
+
+---
+
+## 2. Reglas vinculantes (las que ya existen, aplicadas a imagen)
+
+| # | Regla | Cómo muerde en una foto |
+|---|---|---|
+| R1 | **No fabricar** (`CLAUDE.md` §5) | Una imagen es una AFIRMACIÓN. Prohibido: nombre de negocio, letrero, logo (real o inventado), cara recurrente que funcione como testimonio, cifra de resultado dentro de la escena. Permitido: negocio boliviano genérico, sin identidad. |
+| R1b | **Tampoco se PROCLAMA la debilidad** (`lib/proof.ts`) | Prohibido el disclaimer "imagen ilustrativa, no es un cliente real". La solución no es rotular la foto: es que **la foto no reclame nada** que haya que desmentir. |
+| R2 | **La venta nunca exhibe obra** (`CLAUDE.md` §3) | Sólo los **5 rubros publicados** (dental, comercio, importadora, estética, servicios). Ganadería, veterinaria y el resto **no aparecen ni de fondo**. Nada de watermark, "preview" o placeholder gris en producción. |
+| R3 | **Etiqueta "hecho con IA"** | Obligatoria en **Meta** (IG/FB, orgánico y pauta) si la imagen se reusa ahí. **NO existe ninguna regla que la exija en onia.com.bo** — se revisó CLAUDE.md, memoria y docs. No inventarla. La ausencia de etiqueta obliga MÁS a R1, no menos. |
+| R4 | **Gasto** | Imagen en lote chico = gasto trivial ya validado (~0,12 cr por imagen 2k). Video = permiso explícito con `get_cost` por delante. |
+| R5 | **Construir ≠ publicar** (`CLAUDE.md` §4) | Se genera, se cablea y se le muestra RENDERIZADO a Sergio. Pedir las imágenes **no** es aprobar esas imágenes en esa página. El 2026-08-20 esa confusión obligó a revertir la landing v2 en producción. |
+| R6 | **Caras** | Nunca la cara de Sergio ni sus Souls. Nunca Lucía ni Mara (son el canal D, no clientes). **Ninguna cara se repite en 3 secciones**: cuando se repite deja de ser ambiente y pasa a ser personaje, que es otro régimen entero. |
+| R7 | **Correlación** | Cada foto ilustra la capacidad que SU sección vende. El comprador es dueño de negocio formal que ya factura, 30-55 años — no el emprendimiento que arranca, no estética startup, no puesto informal. **Nada folclórico**: Bolivia se lee por el negocio y la gente. |
+| R8 | **Verificar es MIRAR** | Cada imagen se abre y se mira **montada al tamaño real** en que se va a ver, en móvil y desktop. Y se mide el peso: un lote de fotos es el camino corto a repetir el desastre de los 3,9 MB. |
+
+---
+
+## 3. Dirección fotográfica
+
+**Personas.** Bolivianos de 28-55, rasgos andinos/cruceños, piel morena, ropa de trabajo con
+uso. **Máximo 2 por foto**, una es mejor. Nadie mira a cámara, nadie sonríe a cámara, todas
+las manos están ocupadas con un objeto físico.
+
+**Luz.** Una sola fuente dominante y diegética. La Paz/Cochabamba → ventana de altura, fría,
+sombra dura. Santa Cruz → difusa tropical, cálida, ventilador o split en cuadro. Comercio →
+tubo fluorescente del local mezclado con luz de puerta; el verde-cian del fluorescente es
+marca de verdad. Nada de flash frontal ni rim-light de estudio.
+
+**Óptica.** 35 mm para contexto, 50 mm para una persona trabajando, 85 mm sólo para manos.
+f/2.8-f/4 (el fondo se lee: el negocio se reconoce). 1/60 para permitir barrido leve de mano.
+Grano fino tipo ISO 400.
+
+**Ángulo.** Altura de ojo, o a la altura del mostrador — el espectador queda **del lado del
+cliente**. Prohibido cenital heroico, dron, contrapicado.
+
+**Posado: cero.** Momento intermedio (agachándose, girando, tomando el celular), nunca la pose
+de llegada.
+
+**Color**, para convivir con `#F9FBFA` papel / `#12100e` tinta / `#013925`-`#00d26a` verde:
+saturación −12, rojos y naranjas otro −10, negros levantados apenas, blancos frenados a ~96%
+para que no se fundan con el papel. Sin viñeteo, sin HDR, sin split-toning.
+**Marca diegética: cada foto lleva un verde DENTRO de la escena** — mandil, balde, carpeta,
+planta — para que el verde Onia entre por el mundo real y no por un filtro encima.
+
+**Entrega.** WebP, 4:3 (`--shape-ratio`), más 16:9 para bandas anchas. El radio de esquina lo
+pone el CSS (`--r-block`), no la imagen.
+
+---
+
+## 4. ⚠️ La trampa del modelo: la lista de "evitar" INVOCA lo que nombra
+
+**`soul_2` no tiene parámetro `negative_prompt`.** Verificado con `models_explore get soul_2`:
+sus únicos parámetros son `quality` y `soul_id`. Todo lo que se escriba va al MISMO campo de
+texto — así que una sección "Avoid: dashboards, blue neon, candlestick charts, man in a suit
+pointing at a whiteboard" no prohíbe nada: **describe la imagen**.
+
+El primer lote de 6 lo demostró sin margen de duda. Cada elemento prohibido apareció, y salió
+textual de la lista de prohibidos:
+
+| Imagen | Qué apareció | De dónde salió |
+|---|---|---|
+| dental | monitor con código verde-azul + tablet con esfera de partículas azul | `blue neon`, `data visualization`, `holograms` |
+| servicios | gráfico de velas en la pared, señor de **traje y corbata roja señalando una pizarra** | `candlestick stock charts`, `handshake in a blue suit with a red tie`, `pointing at a whiteboard` |
+| hero | UI inventada en el celular + ícono azul de persona incrustado | `user interface`, `icons` |
+| 4 de 6 | firma/watermark de basura en el margen | `watermark` |
+
+**Regla:** con un modelo sin `negative_prompt`, el prompt se escribe **100% afirmativo**. Lo
+que no querés que aparezca **no se nombra**: se reemplaza por su opuesto descrito como hecho
+físico.
+
+- ❌ `no readable screen, no UI, no dashboards`
+- ✅ `a dark phone lying face down with its plain back panel facing up` · `a closed silver
+  laptop rests shut on the box` · `the screen turned toward her palm and away from view`
+- ❌ `not smiling at camera, no eye contact`
+- ✅ `she looks down at her own hands, her mouth relaxed and closed, concentrating`
+- ❌ `no group of people, alone`
+- ✅ `she stands alone behind the counter`
+- ❌ `no teal and orange, no HDR, no oversaturation`
+- ✅ `muted and desaturated, calm neutral colour, soft low contrast, lifted blacks, highlights
+  held below pure white`
+
+Los clisés de la §6 siguen siendo criterio de **rechazo al mirar la imagen**, no texto de
+prompt.
+
+---
+
+## 5. Plantilla de prompt (afirmativa)
+
+```
+Candid documentary photograph on 35mm film, f/3.2, 1/60s, ISO 400, fine natural grain.
+One dominant light source: <ventana lateral | tubo del local | portón abierto | lámpara de escritorio>.
+<PERSONA: boliviano/a de ~N años, rasgos andinos/cruceños, piel morena, pelo negro,
+ ropa de trabajo concreta>. <Está SOLO/A> en <LUGAR concreto y boliviano>.
+<MANOS: qué objeto sostiene cada una, a mitad de movimiento>.
+<DISPOSITIVO: boca abajo / cerrado / girado hacia la palma>.
+<MIRADA: looks down at ..., mouth closed, concentrating>.
+<ENTORNO: 8-12 objetos reales del rubro, incluido UN objeto verde>.
+The photograph is muted and desaturated, calm neutral colour, soft low contrast,
+lifted blacks, highlights held below pure white.
+Camera at eye level, framing slightly off-centre, <hombro> cropped by the <lado> edge.
+```
+
+Sin sección "Avoid". Sin negaciones.
+
+---
+
+## 6. Clisés = criterio de rechazo al MIRAR (no van al prompt)
+
+Traje, corbata, apretón de manos · oficina blanca vacía · sonrisa a cámara o cualquier mirada
+al lente · gráficos/dashboards/datos flotando, hologramas, nodos azules · pantalla o texto
+legible · grupo de 4+ aplaudiendo o alrededor de una laptop · post-it de colores en vidrio ·
+manos vacías gesticulando, manos gigantes en primer plano · cabezas de robot, cerebros de
+circuitos, azul cibernético · modelo de agencia (piel perfecta, ropa planchada, look Miami) ·
+skyline genérico, coworking con neón · latte art junto a laptop plateada · **billetes a la
+vista** (en Bolivia la plata no se exhibe) · contenedores, barco o grúa de puerto (Bolivia no
+tiene mar: delata banco de imágenes al instante).
+
+---
+
+## 7. Shot list — 6 imágenes, con su ubicación y su correlación
+
+Cada foto es **el segundo previo o posterior a la pantalla real que esa sección ya muestra**
+(`switcher.tsx` ~50-55), no una escena genérica del rubro.
+
+| # | Sección | Captura real que ya se muestra | El momento a fotografiar |
+|---|---|---|---|
+| 1 | `#rubros` dental | agenda del día con hora, motivo y **teléfono** | recepcionista de pie tras el mostrador, celular en una mano y la otra todavía sobre el cuaderno de citas abierto |
+| 2 | `#rubros` comercio | caja: total del día por método de pago | fin de la tarde, el dueño con el **cuaderno de fiados** abierto y la tablet boca abajo al lado |
+| 3 | `#rubros` importadora | cotizaciones B2B con estado y monto | de pie junto al rack, guía impresa en la mano, laptop cerrada sobre una caja |
+| 4 | `#rubros` estética | agenda: sesiones y controles post-tratamiento | entre clienta y clienta, camilla vacía con papel nuevo puesto |
+| 5 | `#rubros` servicios | contabilidad: IVA e IT del mes | de noche, archivador de palanca abierto, calculadora recién soltada |
+| 6 | Hero (junto a la captura real) | panel con lo cobrado del día | cenital del mostrador a las 7:40: celular boca abajo, café, cuaderno, manos entrando en cuadro |
+
+**Dolor real por rubro** (lo que la foto tiene que dejar entender sin leer): dental → el
+paciente que no vino y el sillón parado · comercio → el fiado en un cuaderno que se moja, y
+la caja que no cuadra entre efectivo, QR y transferencias · importadora → cotizar a mano
+abriendo el Excel del último contenedor, y no saber cuáles siguen vivas · estética → el
+paquete de 6 sesiones que quedó en 3 y la agenda viviendo en los DM · servicios → 25 NITs,
+el Libro de Ventas IVA y el vencimiento por último dígito del NIT.
+
+---
+
+## 8. Gate — cada imagen, una por una, antes de cablear
+
+1. ¿Hay texto o pantalla legible? → rechazar.
+2. ¿Alguien mira a cámara o sonríe posando? → rechazar.
+3. ¿Se reconoce el rubro en 0,3 s sin leer? → si no, rechazar.
+4. ¿Los rasgos son bolivianos/andinos? (el modelo deriva a otras regiones con facilidad) → si no, regenerar.
+5. ¿Hay un verde dentro de la escena? → si no, regenerar.
+6. ¿Las manos están bien y ocupadas? → **contar dedos**.
+7. ¿Hay firma o watermark de basura en el margen? → recortar.
+8. Puesta sobre `#F9FBFA` **al tamaño real de su ranura**: ¿el blanco se funde con el papel o pelea con el verde? → corregir en color, no regenerando.
+9. Peso: WebP, dimensiones explícitas, `loading="lazy"` fuera del hero.
+
+---
+
+## 9. Registro de lotes
+
+| Lote | Modelo | Imágenes | Costo aprox. | Resultado |
+|---|---|---|---|---|
+| 1 | `soul_2` 2k | 6 | ~0,7 cr | **6/6 rechazadas** — método con lista "Avoid" (§4) |
+| 2 | `soul_2` 2k | 6 | ~0,7 cr | **5/6 aprobadas**; dental rechazada |
+| 3 | `soul_2` 2k | 2 | ~0,25 cr | dental, dos variantes: **1 aprobada** |
+
+Total ~1,7 cr de un saldo de 2.178 (plan `ultra`).
+
+**Aprobadas y en `web-factory/apps/onia-platform/public/contexto/`** — 512 KB las seis:
+`dental.webp` 1280×960 · `comercio.webp` 1280×960 · `importadora.webp` 1280×874 ·
+`estetica.webp` 1280×960 · `servicios.webp` 1280×1078 · `mostrador.webp` 1280×720.
+Dos llevan recorte: `importadora` −9% abajo (etiqueta espejada en una caja) y `servicios` −11%
+a la izquierda (calendario de pared con texto basura).
+
+**Rechazos del lote 2-3, y por qué** — sirven de calibración:
+- *dental v2*: una **MacBook con el logo de Apple** en el mostrador (marca real en cuadro) y la
+  mano izquierda gesticulando al aire en vez de sobre un objeto.
+- *dental v3b*: el uniforme salió con un bordado **"BOLVIA"** — marca inventada, y encima con
+  falta de ortografía. Es el tercer caso del mismo tropiezo (antes fueron un logo de Nike y una
+  gorra de NY): **cuando el prompt describe ropa, el modelo le pone marca.** Mirar el pecho, la
+  gorra y la taza de cada imagen antes de aprobar.
+
+## 10. Qué material de `public/` es publicable y qué no
+
+| Carpeta | Estado | Detalle |
+|---|---|---|
+| `public/contexto/**` | ✅ **publicable** | Las 6 fotos de contexto de este doc. Gate de §8 pasado una por una. |
+| `public/v2/capturas/**` | ✅ **publicable** | Lote limpio del 21-ago. Es el único lote de capturas de producto que se puede mostrar. |
+| `public/v2/*.webp` (raíz) | 🔴 **NO publicable — material de QA** | Lote del 18-ago. `bot-saludo` tiene la cabecera "ZZ QA Clinica" con mensajes de "ZZ QA Ferreteria" (**inquilinos cruzados**); `bot-pedido` trae el **nombre de Sergio**; `editor-chatbot` y `editor-chatbot-movil` tienen "Atendemos Atendemos" duplicado y texto de debug "(aud 11:52)". Se ven bien de lejos y por eso son peligrosos. |
+| `public/fotos/*.webp` | 🔴 **NO pasan el gate** | Ver abajo. |
+| `public/rubros/*.webp` | ✅ publicable | Los 5 recortes del conmutador, ya cableados y esperando el OK de Sergio. |
+
+**Los `public/fotos/*.webp` viejos NO pasan el gate.** `dentista.webp` y `ferreteria.webp` son de
+un lote anterior: sonríen **a cámara**, bata blanca, grade teal-naranja. Son los dos clisés de
+rechazo automático. Sólo los usa `components/landing-v2/rubros.tsx`, que es la landing rechazada
+— no cablearlos en el sitio v3 creyendo que son material aprovechable.
+
+⚠️ **El esquema del MCP exige envoltorio `params`**: `generate_image({params:{model, prompt,
+aspect_ratio, quality}})`. Los parámetros sueltos devuelven `Input validation error: params:
+Invalid input`. Para varios prompts distintos va `generate_image_batch`; `count` es para
+variantes del MISMO prompt.
+
+⚠️ **El esquema del MCP exige envoltorio `params`**: `generate_image({params:{model, prompt,
+aspect_ratio, quality}})`. Los parámetros sueltos devuelven `Input validation error: params:
+Invalid input`. Para varios prompts distintos va `generate_image_batch`; `count` es para
+variantes del MISMO prompt.
