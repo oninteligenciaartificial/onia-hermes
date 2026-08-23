@@ -46,6 +46,12 @@ marketing de las tres cuentas escrito como fuente de verdad.
 - **MCP de Postiz agregado** a la config del proyecto — aparece al reiniciar Claude Code.
 - **Facebook en Postiz: cerrado como no-viable por API**, con salida elegida (cross-post
   nativo). No requiere más trabajo técnico, solo dos toques de Sergio en el celular.
+- **L6 "5 señales" RENDERIZADO y esperando OK** — `posts-20260807/render-l6/`, 7 slides.
+  **Costo 0 créditos**, no los ~4 estimados: todas las fotos del banco existente. Hoja de
+  contactos en `_CONTACTO-L6.png`. Verificado MIRANDO las 7.
+- **MCP de Postiz ACTIVO y probado** (paso 6 del handoff, cerrado): `integrationList` devuelve
+  las 3 cuentas (@oniahq, Sergio, Lucía) y el schema de `instagram-standalone` confirma que
+  **soporta `post_type: "story"`** — o sea que las historias se pueden programar por MCP sin SSH.
 - **L5 "El negocio que atiende solo": capturas reales tomadas, pieza SIN montar.** Carpeta
   `references/modelos/lucia/l5-negocio-atiende-solo-20260823/`. Hay 13 capturas verificadas y
   6 scripts de Playwright reusables. Falta el montaje de 17 s — se frenó al detectar que el

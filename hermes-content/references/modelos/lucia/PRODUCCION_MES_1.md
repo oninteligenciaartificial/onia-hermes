@@ -108,12 +108,22 @@ el inbox 4) pero **falta verificarlo MIRANDO**. Capturas y scripts ya hechos en
 ```
 Captura real de app.onia.com.bo (Playwright) — **cero generación, cero créditos**.
 
-## L6 · Carrusel "5 señales de que tu negocio necesita un sistema" — palabra SISTEMA
+## L6 · Carrusel "5 señales de que tu negocio necesita un sistema" — ✅ RENDERIZADO, espera OK
 
 Pack `editorial-clean`, 7 slides, fondo fotográfico del banco de Lucía.
 **Gate de copy (§10.2):** cada señal en segunda persona, desde la silla del dueño y
 terminando en plata. Si no nombra el dolor exacto, no sale.
-Costo: ~4 cr (fotos ya existentes) + render local.
+
+**Costo real: 0 créditos** (se estimaban ~4). Todas las fotos salieron del banco existente
+`tanda-20260821/`; el render es local con `scripts/carousel_render.js`. No hizo falta generar.
+
+- Brief: `posts-20260807/briefs/lucia-l6-cinco-senales.json`
+- Render: `posts-20260807/render-l6/slide-01..07.png` + `_CONTACTO-L6.png` (hoja de contactos)
+- Comando: `node scripts/carousel_render.js --brief <brief> --out <dir> --account lucia --pack editorial-clean --format feed`
+- ⚠️ **`--account lucia`**, no `onia`: con `onia` el pie sale `@oniahq` en una pieza de Lucía.
+- CTA: **SISTEMA** → entrega "mapa del negocio (vía @oniahq)", que está 🟢 vivo.
+- Las 5 señales nombran DOLOR, no prometen función: nada de factura electrónica, multi-sede,
+  offline ni cifras de resultados (§7 del catálogo de venta).
 
 ## L7 · "Lo que la IA NO puede hacer por tu negocio" — contracorriente · palabra HUMO
 
