@@ -39,23 +39,28 @@ Es la única de las 6 sin cara, y el doc de imágenes la asigna al **hero** (§7
 cableó porque el hero es un `<Shape>` de `(sitio)/ui.tsx`, y ese archivo era de otro carril
 durante la sesión. **Necesita el carril dueño de `ui.tsx`**, que ahora está libre.
 
-### 2-bis. ⚠️ La sección de add-ons nunca se vio en un navegador NORMAL
-Las capturas buenas (`OK-*.png`) se sacaron **forzando los `Reveal`**, porque en el entorno de
-captura no disparan. Midiendo desde acá con el panel del navegador oculto, el envoltorio
-`Reveal` de `.offerStar` daba `opacity: 0` con el elemento **dentro del viewport**.
+### 2-bis. ✅ CERRADO — la sección de add-ons SÍ se ve; no había bug
 
-**No se concluyó que sea un bug**, y no se debe reportar como tal sin más evidencia: una página
-que no compone frames no dispara `IntersectionObserver`, así que `whileInView` no corre nunca —
-eso **solo** ya explica lo medido. Además `motion-provider.tsx` usa `reducedMotion="user"`, que
-desactiva transform pero **mantiene la opacidad animando**, así que en un navegador real debería
-verse.
+Se había anotado como "construida y no verificada" porque un envoltorio `Reveal` medía
+`opacity: 0` con el elemento en pantalla. **Era artefacto del entorno de medición**, no un
+defecto: una página que no compone frames no dispara `IntersectionObserver`, así que
+`whileInView` nunca corre.
 
-**Lo que falta:** abrirla en un navegador de verdad, visible, y mirarla — con y sin
-`reduced-motion`. Hasta entonces esta sección está **construida y no verificada**.
+Verificado con Playwright en contexto real, forzando las dos preferencias de movimiento:
 
-⚠️ Ojo con el precedente: en `/servicios/webs` SÍ hubo un `Reveal` realmente roto (medía
-~5.000 px y `viewportOnce` exige 30% visible, así que nunca disparaba). Ese era determinista.
-Este no está demostrado. **No confundirlos.**
+| `reducedMotion` | bloques invisibles tras recorrer la página | envoltorio de `.offerStar` | desborde |
+|---|---|---|---|
+| `no-preference` | **0** | `opacity: 1` | no |
+| `reduce` | **0** | `opacity: 1` | no |
+
+`motion-provider.tsx` usa `reducedMotion="user"`, que apaga transform y **mantiene la opacidad
+animando** — se comporta como está documentado. **No tocar nada acá.**
+
+⚠️ **La lección de método, que es lo que hay que conservar:** un `opacity: 0` medido en un
+navegador oculto/headless **no prueba nada**. Antes de reportar un `Reveal` roto, reproducirlo
+en un contexto que componga frames. El caso de `/servicios/webs` SÍ era real y determinista
+(el `Reveal` medía ~5.000 px y `viewportOnce` exige 30% visible): ese se demuestra por
+geometría, sin depender del render. **No confundir los dos.**
 
 ### 3. Bugs pre-existentes encontrados y NO arreglados (fuera de carril)
 - **`ui.tsx:72` fuerza `loading="lazy"` siempre.** Las ranuras de hero deberían cargar eager.
@@ -94,6 +99,14 @@ Este no está demostrado. **No confundirlos.**
 
   **El error de concepto:** `reduced-motion` significa *no me animes*, no *mostrame una versión
   pobre*. Hoy se tira la función entera para evitar una animación.
+
+  🔴 **Corregido tras MIRARLO: no es "apila", es un layout ROTO.** Reproducido con
+  Playwright a 1440 px con `reducedMotion: 'reduce'` (`position: static`, `display: flex`
+  contra `sticky`/`grid` del caso sano). En la captura: la tarjeta **conserva ancho de
+  teléfono** en medio de una pantalla de escritorio, las capturas de producto quedan
+  **cortadas por la derecha**, las etiquetas de rubro **pisan** las imágenes y **media
+  pantalla queda vacía**. Estaba anotado como "fallback digno". No lo es.
+  Capturas: `scratchpad/verif/switcher-{normal,reduce}.png`.
 
   ### Comportamiento DEFINIDO (esto es lo que hay que construir)
 
