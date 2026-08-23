@@ -94,8 +94,13 @@ Instrucciones de proyecto. Override sobre defaults.
   llama son trabajo con valor **cero**.
 - **Prohibido reportar como hecho lo que está detrás de un flag apagado.**
 - **Antes de abrir un frente nuevo se cierra el anterior**, o se anota con su estado exacto.
-- **Al cerrar la sesión, dejar el estado escrito:** qué quedó en producción, qué quedó a
-  medias y dónde, y qué depende de Sergio.
+- **Al cerrar la sesión, escribir el HANDOFF** en
+  `hermes-content/docs/handoffs/<rama-saneada>.md` — un archivo por carril, así dos ramas
+  abiertas no se pisan. Seis campos, plantilla y decisión en el `README.md` de esa carpeta:
+  objetivo · **estado** (qué quedó EN PRODUCCIÓN y qué a medias, con el dónde) · archivos y
+  cambios · **intentos fallidos** (el que más vale: evita repetir el callejón) · próximos
+  pasos · qué depende de Sergio. Se commitea: el estado tiene que viajar con el repo, no
+  quedarse en `~/.claude/session-data/` de una máquina.
 
 ---
 
