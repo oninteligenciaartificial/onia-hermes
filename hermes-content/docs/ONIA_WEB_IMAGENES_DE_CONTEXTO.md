@@ -220,13 +220,25 @@ píxeles. Recortar a la región que el titular promete rinde más que subir la r
 
 | Qué | En el producto | En la marca |
 |---|---|---|
-| Logotipo | "onia" en minúscula, tipografía propia | "Onia." con el punto verde |
+| Logotipo | dibuja el SVG: `aria-label="onia"`, trazados, **minúscula** | **tipea** el wordmark: `Onia<b>.</b>` (`ui.tsx:171`) |
 | Verde | pastel / menta claro | `--senal #00d26a`, `--verde-700 #016141`, `--verde-900 #013925` |
 | Papel | blanco puro | `--bg #F9FBFA` / `--bg-deep #F3F5F4` |
 | Íconos y tipografía | otra familia, sin sistema | la del sitio |
 | Moneda | 🔴 `Bs 1.806` y `Bs 1.147,50` **en la misma tarjeta** | un solo formato |
 
-**Dos logos distintos conviven en la misma pantalla.** Eso solo ya rompe la correlación.
+⚠️ **Corregido 2026-08-23.** Acá decía *"dos logos distintos conviven en la misma pantalla"*.
+**Falso, y la verdad es más útil:** `onia-platform/public/onia-logo.svg` y el
+`brand/v2/onia-logo.svg` de la web son **byte a byte idénticos** (verificado con `cmp`). El
+archivo es el mismo.
+
+Lo que difiere es **cómo lo pinta cada superficie**: el producto **dibuja el SVG**
+(`BrandLogo.tsx:53` → `aria-label="onia"`, trazados, minúscula), y el sitio **tipea el
+wordmark como texto HTML** (`(sitio)/ui.tsx:171` → `Onia<b>.</b>`, mayúscula y punto en
+negrita). Por eso se ven distintos aunque el asset sea uno solo.
+
+**Decisión pendiente:** el wordmark es texto o es asset, pero no las dos cosas. Mientras
+convivan los dos caminos, cualquier cambio de tipografía los separa de nuevo — que es
+exactamente lo que pasó.
 
 ### 🔴 El límite: la interfaz NO se dibuja con IA
 
