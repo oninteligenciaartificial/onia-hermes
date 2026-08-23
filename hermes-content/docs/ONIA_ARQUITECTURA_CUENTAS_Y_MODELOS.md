@@ -125,3 +125,43 @@ comunidad todavía no.**
 - OK al reel → dispara todo.
 - Acceso/OK para conectar la página de Facebook de Onia a Postiz.
 - La tarjeta de ONIA Ads sigue siendo el bloqueo de amplificación.
+
+---
+
+## 7. Facebook en Postiz — diagnóstico cerrado y la salida elegida (22-ago)
+
+**Lo que Postiz pide, leído en su código** (`facebook.provider.js:184`):
+
+```js
+'https://www.facebook.com/v20.0/dialog/oauth'
+  + `?client_id=${FACEBOOK_APP_ID}`
+  + `&redirect_uri=${FRONTEND_URL}/integrations/social/facebook`
+  + `&state=…` + `&scope=${scopes}`
+```
+Scopes: `pages_show_list · pages_manage_posts · pages_manage_engagement ·
+pages_read_engagement · business_management · read_insights`
+
+Es el **Facebook Login CLÁSICO** (client_id + scope). La app "OnIA Social API" tiene
+**"Inicio de sesión con Facebook para empresas"**, que trabaja con `config_id` y ni siquiera
+muestra el campo de URIs de redireccionamiento. **Son incompatibles: cargar el App Secret no
+alcanza.**
+
+### La salida elegida: cross-posting nativo, no API
+
+Instagram publica en una Página de Facebook **de forma nativa**, sin API, sin app y sin
+revisión: la cuenta profesional vinculada a la página activa *Compartir en otras apps →
+Facebook*. Cada carrusel y reel que Postiz publica en @oniahq aparece también en la página.
+
+- **Costo:** cero. **Trabajo técnico:** cero. **Riesgo de romper Instagram:** cero.
+- **Límite conocido:** el caption es el mismo en las dos redes y no se puede programar
+  distinto. Para nuestro caso — misma pieza, superficie nueva donde está el comprador — es
+  exactamente lo que se quería.
+
+### Cuándo sí valdría crear la app
+
+Solo si más adelante hace falta **caption u horario distinto en Facebook**. Ahí: app NUEVA
+dedicada a Postiz con Facebook Login clásico (no tocar la de Instagram, que funciona), y los
+permisos corren en modo desarrollo porque Sergio es admin de la página — la misma lección que
+desbloqueó Instagram (`dev_mode`, no App Review).
+
+⚠️ El App Secret **nunca viaja por chat**: se carga en Easypanel o por SSH con entrada oculta.
