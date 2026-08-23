@@ -38,10 +38,31 @@ adaptan a material propio, o esperan.
 
 Ese es el hallazgo del lote, y ninguna ficha podía verlo sola.
 
-### 3 · Seis fichas piden **el mismo permiso de gasto**
+### 3 · Seis fichas piden el mismo permiso de gasto — y **la mitad ya no lo necesita**
 
 `DcWOss3RxMq`, `DcYNrdROAyg`, `DcJbUL6CCp3`, `Dbyx3bwE6Mp`, `DcWPKNoIEUE` y la variante Lucía de
-`Dax5wGigc30` piden créditos de Higgsfield. Otra decisión única que destraba un tercio del lote.
+`Dax5wGigc30` piden créditos de Higgsfield.
+
+> ⚠️ **Corregido contra `origin/main` el mismo 23-ago.** Las fichas se escribieron contra la regla
+> vieja (*"generación paga = permiso caso por caso"*, todo en la misma bolsa). `main` la separó en
+> dos (commit `f794ac6c`): **video generado** sigue requiriendo permiso explícito caso por caso,
+> cotizado con `get_cost:true`; **imagen en lote chico es gasto trivial y ya está validado**
+> (`soul_2` a 2k ≈ 0,12 créditos; un lote de 6 fotos cuesta menos de 1 crédito de un pool de
+> ~2.100), basta con registrar el lote.
+
+Con la regla vigente, el mapa real queda así:
+
+| Ficha | Qué genera | ¿Sigue bloqueada? |
+|---|---|---|
+| `DcJbUL6CCp3` | 5 escenas de **foto** para Lucía | **No.** Lote chico de imagen, ya autorizado |
+| `DcWPKNoIEUE` | packshots de catálogo (**imagen**) | **No**, mismo caso |
+| `DcYNrdROAyg` | nada: la mascota resultó ser **un disfraz filmado** | **No.** El bloqueo era un error de la primera pasada |
+| `Dbyx3bwE6Mp` | capturas de nuestro propio panel | **No.** No hay gasto |
+| `DcWOss3RxMq` | clips **de video** con `seedance_2_0` | **Sí** — video, permiso caso por caso |
+| `Dax5wGigc30` (variante Lucía) | depende de si sale a foto o a video | **Solo si es video** |
+
+**De seis, queda una y media.** Lo que parecía "una decisión que destraba un tercio del lote" era,
+en buena parte, una regla desactualizada y un error de lectura.
 
 ### 4 · El texto NO se anima — y eso choca con nuestra propia doctrina
 

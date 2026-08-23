@@ -67,6 +67,16 @@ Instrucciones de proyecto. Override sobre defaults.
   no tiene fecha.
 - Antes de escribir una cifra o una capacidad en material de cliente, **buscar si ya
   existe en otro lado**. Si hay dos versiones, no elegir la más linda: preguntar.
+- **Una promesa que cambia se barre en TODA la superficie, no solo donde la estabas
+  tocando.** Cuando cambia lo que el producto entrega, `grep` de la promesa vieja en todo
+  el material de cliente ANTES de dar el cambio por hecho.
+
+  > Nace del 2026-08-23: `/register` dejó de crear cuentas y el arreglo se hizo en
+  > `/empezar` ("Pedí tu acceso"). La home nunca se enteró: quedaron **cuatro botones y
+  > una FAQ** prometiendo "Probá 14 días gratis · te registrás y usás el sistema". El lead
+  > hace clic esperando entrar y encuentra un formulario de solicitud — la fricción más
+  > cara del sitio, en el último clic, y encima contradice el copy honesto de al lado.
+  > Arreglar el síntoma donde saltó y no los hermanos que llaman a lo mismo deja el bug vivo.
 
 ## Verificar es MIRAR, no suponer (REGLA)
 
@@ -252,8 +262,18 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 
 - **REGLA DE ORO: la tabla de cortes + preview 360p SIEMPRE se muestran a Sergio ANTES
   de aplicar el corte.** Nunca cortar a ciegas.
-- **Gasto:** generación paga (Higgsfield, ElevenLabs) = permiso explícito caso por caso.
-  Por defecto gratis (Speaches, HyperFrames).
+- **Gasto — imagen y video NO son el mismo permiso:**
+  - **VIDEO generado (Higgsfield, ElevenLabs, fal.ai): permiso explícito caso por caso**,
+    cotizado con `get_cost:true` ANTES de generar. Por defecto gratis (Speaches, HyperFrames).
+  - **IMAGEN en lote chico: gasto trivial, ya validado.** `soul_2` a 2k son ~0,12 créditos;
+    un lote de 6 fotos cuesta menos de 1 crédito de un pool de ~2.100. Se genera y se
+    **registra el lote** (prompts, modelo, costo). Sigue haciendo falta permiso para un
+    volumen grande o para dar de alta una plataforma nueva.
+
+  ⚠️ **Corregido 2026-08-23.** Acá decía "generación paga = permiso caso por caso" a secas,
+  metiendo imagen y video en la misma bolsa. Con eso, una sesión que ya tenía el pedido
+  ("las capturas hazlas con higgsfield") se frenaba a pedir permiso por 0,7 créditos. El
+  permiso caro es el del video; el de imagen chica ya estaba dado y la regla no lo decía.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
   **skills `ver-videos` y `editor-videos`** (HyperFrames vive en `.agents/skills/`:
   revisarlo ANTES de codear video).

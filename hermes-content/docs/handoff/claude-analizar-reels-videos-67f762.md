@@ -60,41 +60,45 @@ de intake completo, corrido de punta a punta dos veces (22-ago sobre `DbT8hWPsyj
    `CLAUDE.md`. Otro carril ya lo había resuelto y ya estaba en `main` (`dd4ab68d`, adoptado por
    `b55e41e9`), en `hermes-content/docs/handoff/<carril>.md`. Dos estándares rivales del mismo
    tema. **Se retiró el mío.** Antes de escribir una regla en un archivo raíz: mirar `origin/main`.
-2. **`ffmpeg -v error` para contar cortes.** `-v error` **silencia la salida de `showinfo`**, así
+2. **Copiar un archivo compartido de `main` ENTERO en vez de mergear.** Reemplacé `CLAUDE.md` con
+   la version de `main` y la congele en ese instante; `main` agrego despues dos reglas y mi rama
+   las habria borrado al mergear. Un reemplazo se ve como un diff limpio y esconde un borrado.
+   **Se re-sincroniza contra `origin/main` justo antes de commitear, y se mira el diff completo.**
+3. **`ffmpeg -v error` para contar cortes.** `-v error` **silencia la salida de `showinfo`**, así
    que *cualquier* video devuelve cero cortes. Publiqué "cero cortes, medido" y era falso; se lo
    pasé a los agentes rotulado como "ya medido". Un agente lo re-midió y encontró el corte real.
    **Va `-hide_banner`, nunca `-v error`.** Y una cifra "ya medida" que te pasan sigue siendo un
    dato heredado: se re-mide.
-3. **Tener las transcripciones y no pasárselas a los agentes.** Se les dio caption + fotogramas y
+4. **Tener las transcripciones y no pasárselas a los agentes.** Se les dio caption + fotogramas y
    nada más. **Seis videos tenían voz** (503, 234, 199, 93, 74 y 62 palabras) y se analizaron
    mudos; hubo que rehacer 8 fichas. Verificar qué insumos **llegan** al agente, no solo que
    existan en disco.
-4. **Concluir "el lote no tiene voz" desde una corrida parcial.** Los 3 videos que faltaban
+5. **Concluir "el lote no tiene voz" desde una corrida parcial.** Los 3 videos que faltaban
    transcribir eran justamente de los que más hablaban.
-5. **Cosechar los DMs clickeando por coordenadas.** Los posts compartidos no exponen su URL en el
+6. **Cosechar los DMs clickeando por coordenadas.** Los posts compartidos no exponen su URL en el
    DOM. Lo que funciona: escuchar `page.on('response')` sobre `direct_v2|graphql`.
-6. **`source` del `.env` raíz en bash**: tiene BOM UTF-8 y rompe con
+7. **`source` del `.env` raíz en bash**: tiene BOM UTF-8 y rompe con
    `syntax error near unexpected token '('`. Las vars ya están exportadas en el entorno.
-7. **Dar por vencida la falta de `GEMINI_API_KEY`.** La memoria decía que faltaba; estaba puesta.
+8. **Dar por vencida la falta de `GEMINI_API_KEY`.** La memoria decía que faltaba; estaba puesta.
    Alcanzó para 3 videos antes del 429 de cuota gratis.
-8. **Dejar archivos `.md` vacíos cuando Gemini falla.** Los agentes los leen como si tuvieran
+9. **Dejar archivos `.md` vacíos cuando Gemini falla.** Los agentes los leen como si tuvieran
    contenido. Borrarlos (`find -size 0 -delete`).
-9. **Forzar el idioma en Whisper**: traduce en vez de transcribir. Va `ONIA_AUDIO_STT_LANGUAGE=auto`.
-   Y sobre música alucina: devolvió francés inventado en un reel sin voz.
-10. **`git add -A <path>` con un pathspec que ya no existe**: falla entero y deja un commit
+10. **Forzar el idioma en Whisper**: traduce en vez de transcribir. Va `ONIA_AUDIO_STT_LANGUAGE=auto`.
+    Y sobre música alucina: devolvió francés inventado en un reel sin voz.
+11. **`git add -A <path>` con un pathspec que ya no existe**: falla entero y deja un commit
     incompleto que no coincide con su mensaje.
-11. **Trabajar contra el checkout local sin mirar `origin/main`.**
-12. **Generalizar desde una lámina** — y su gemelo de este lote: afirmar "jitter fotograma a
+12. **Trabajar contra el checkout local sin mirar `origin/main`.**
+13. **Generalizar desde una lámina** — y su gemelo de este lote: afirmar "jitter fotograma a
     fotograma" desde **7 de 406 fotogramas**.
-13. **Heredoc de bash con markdown largo**: se rompe. Para documentos, herramienta de escritura.
-14. **Salirse del carril.** Sergio: *"aquí solo hablamos de reels"*.
+14. **Heredoc de bash con markdown largo**: se rompe. Para documentos, herramienta de escritura.
+15. **Salirse del carril.** Sergio: *"aquí solo hablamos de reels"*.
 
 **Qué depende de Sergio**
 
 | Bloqueo | Qué hace falta |
 |---|---|
 | 🔴 **El lead magnet de Onia** | **UNA decisión que desbloquea 8 de los 18 prompts.** Los 8 usan comentario→DM y a los 8 les falta el mismo objeto: qué se manda por DM. |
-| 🔴 **Permiso de gasto en Higgsfield** | 6 fichas lo piden. Otra decisión única que destraba un tercio del lote. |
+| 🟡 **Permiso de gasto en Higgsfield — solo VIDEO** | 6 fichas lo pedían contra la regla vieja. `main` (`f794ac6c`) separó imagen de video: **imagen en lote chico ya está autorizada**. Queda 1 ficha y media, las que generan video. Ver síntesis §3. |
 | **Prueba de tercero** | 6 moldes de alta conversión se apoyan en un hito verificable declarado por un tercero, que Onia no tiene. No es técnico. |
 | **Cosecha automática de DMs** | correr una vez: `node .claude/skills/ver-videos/scripts/cosechar-dm.mjs --login` |
 | **MP4 al Drive** | arrastrar el zip de 57 MB |
@@ -103,7 +107,8 @@ de intake completo, corrido de punta a punta dos veces (22-ago sobre `DbT8hWPsyj
 
 **Próximos pasos**
 
-1. **Bajar la rama a `main`.** Son 12 commits de docs + skills y `main` corrió 69 por delante.
+1. **Bajar la rama a `main`.** Son 13 commits de docs + skills y `main` corrió 74 por delante — y sigue corriendo:
+   ya se re-sincronizó `CLAUDE.md` dos veces en un día.
    `CLAUDE.md` ya solo diverge en 4 líneas, en la sección de video: el merge es barato **hoy**.
 2. **Contar de nuevo si comentario→DM sigue vivo** antes de ejecutar cualquier O que dependa de él.
 3. **La sesión web-factory** toma `2026-08-23-patrones-de-motion-deduplicados.md` y decide qué
