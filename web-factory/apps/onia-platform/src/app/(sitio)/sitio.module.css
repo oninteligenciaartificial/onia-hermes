@@ -1555,3 +1555,220 @@
   font-weight: 500;
   line-height: 1.4;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Add-ons — el mostrador                                                  */
+/*                                                                         */
+/* Sergio, 2026-08-23: "dale más importancia a los add-ons, que se vean    */
+/* más, mirá cómo ofrecen las startups". Hasta hoy los add-ons eran filas  */
+/* de `.rows`: nombre en 600, copy al 72 % y el precio en mono 0.9em al    */
+/* 85 %, alineado a la derecha. Eso no es una oferta, es la letra chica de */
+/* un contrato — y ahí adentro vive el margen.                             */
+/*                                                                         */
+/* Lo que hacen las startups que venden bien no es agrandar la tabla: es   */
+/* ASIMETRÍA. Un add-on estrella con superficie propia (Intercom con Fin,  */
+/* Notion con AI) y el resto como carta de precios legible. Acá:           */
+/*                                                                         */
+/*   · `.offerStar` — panel de verde-900 DENTRO del bloque de tinta. La    */
+/*     profundidad es tono sobre tono y solape de superficie, nunca una    */
+/*     sombra (misma ley que el resto del archivo: cero `box-shadow`).     */
+/*   · `.offerList` — los otros cuatro, con el precio en verde señal y el  */
+/*     resultado en tipografía de lectura, no de nota al pie.              */
+/*                                                                         */
+/* LA REGLA QUE MANTIENE AL PLAN COMO LA COMPRA PRINCIPAL: en toda esta    */
+/* sección no hay un solo `.btn`. Botón = plan; link de texto = add-on. Y  */
+/* `.offerNum` es 3.2em contra los 3.4em de `.planNum`: el número del      */
+/* add-on se ve, pero nunca le gana al del plan.                          */
+/* ---------------------------------------------------------------------- */
+
+.offerStar {
+  margin-top: 3em;
+  padding: 1.8em;
+  border-radius: var(--r-block);
+  background: var(--green-deep);
+  color: #eafaf1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.6em;
+}
+@media (min-width: 860px) {
+  .offerStar {
+    /* asimétrica a propósito: el argumento pesa más que el número, pero el
+       número tiene columna propia y no queda de apéndice al final de un
+       párrafo (que es exactamente lo que hacía `.rowPrice`). */
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 3.2em;
+    padding: 2.8em 3em;
+    align-items: start;
+  }
+}
+
+/* el nombre del add-on es un RESULTADO, no una función: sale de
+   content/chatbot-precios.ts → `nombre` ("No pierdo al que escribe"), que es
+   como lo diría el dueño del negocio. Un escalón por debajo del `.h2` de la
+   sección (2.1/2.5em): el add-on es producto, no es el título. */
+.offerName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.8em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  margin: 0.35em 0 0;
+  max-width: 15ch;
+  text-wrap: balance;
+}
+@media (min-width: 860px) {
+  .offerName {
+    font-size: 2.1em;
+  }
+}
+
+/* el link del panel va en verde SEÑAL y no en el verde-300 que hereda de
+   `.ink .link`: sobre el verde-900 del panel, señal mide 8,9:1 contra los
+   5,6:1 del verde-300 — y es el único elemento accionable del bloque. */
+.offerStar .link {
+  color: var(--signal);
+}
+.offerStar .link:hover {
+  color: #fff;
+}
+
+/* columna del precio. El filete de 1px es REGLA DE COLUMNA (separa dos
+   columnas de igual jerarquía), no una barra de acento pegada al costado de
+   una tarjeta. */
+.offerRail {
+  border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  padding-top: 1.5em;
+}
+@media (min-width: 860px) {
+  .offerRail {
+    border-top: 0;
+    border-left: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+    padding-top: 0;
+    padding-left: 3em;
+  }
+}
+
+.offerPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+  flex-wrap: wrap;
+}
+.offerNum {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: 3.2em;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.offerUnit {
+  color: color-mix(in srgb, currentColor 74%, transparent);
+  font-size: 0.95em;
+}
+.offerNote {
+  margin: 0.8em 0 0;
+  color: color-mix(in srgb, currentColor 80%, transparent);
+  font-size: 0.95em;
+  line-height: 1.45;
+  max-width: 26em;
+}
+
+/* EL ANCLAJE. Un precio suelto es un costo; anclado a algo que el comprador
+   ya paga, es una comparación. La fuente legal se muestra en pantalla — un
+   anclaje sin fuente es una cifra inventada. */
+.offerAnchor {
+  margin: 1.3em 0 0;
+  padding-top: 1.3em;
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  font-size: 0.95em;
+  line-height: 1.5;
+  color: color-mix(in srgb, currentColor 82%, transparent);
+  max-width: 30em;
+  text-wrap: pretty;
+}
+.offerAnchor b {
+  color: var(--signal);
+  font-weight: 600;
+}
+
+/* ---- los otros add-ons: carta de precios, no nota al pie -------------- */
+
+.offerListLabel {
+  margin: 3.4em 0 0;
+}
+
+.offerList {
+  display: grid;
+  gap: 0;
+  margin-top: 1.2em;
+  border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+@media (min-width: 760px) {
+  .offerList {
+    /* dos columnas y no cuatro: cuatro celdas iguales en fila es la grilla de
+       tarjetas que este archivo evita en todas partes. En dos columnas cada
+       entrada conserva ancho de lectura y el bloque no se vuelve un menú. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 3.5em;
+  }
+}
+.offerItem {
+  padding: 1.5em 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+.offerItemHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35em 1.2em;
+}
+.offerItemName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.2em;
+  font-weight: 550;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0;
+}
+/* el link se lleva la tipografía del nombre en vez de volverse un `.link`
+   verde suelto: el add-on que tiene apartado propio se abre desde su NOMBRE,
+   que es donde el ojo ya está. */
+.offerItemName a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--signal) 55%, transparent);
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+.offerItemName a:hover {
+  color: var(--signal);
+  border-bottom-color: var(--signal);
+}
+/* el precio deja de ser mono 0.9em al 85 % alineado a la derecha: pasa a
+   verde señal, a tamaño de lectura y en la MISMA línea de base que el
+   nombre. Es lo primero que se ve de cada entrada después del nombre. */
+.offerItemPrice {
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.98em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  color: var(--signal);
+}
+.offerItemText {
+  margin: 0.6em 0 0;
+  color: color-mix(in srgb, currentColor 80%, transparent);
+  font-size: 0.96em;
+  line-height: 1.5;
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+/* cierre de la sección: Grupo y el link al detalle, separados por aire y no
+   por otro filete — el bloque ya tiene suficientes reglas horizontales. */
+.offerFoot {
+  margin-top: 2.6em;
+}
