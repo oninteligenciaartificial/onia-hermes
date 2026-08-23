@@ -579,3 +579,197 @@ security-review, verification-loop, ship.
 
 ---
 
+
+---
+
+# Lote del 2026-08-23 — 4 prompts
+
+> Fuente: [`PROMPTS_LOTE_2026-08-23.md`](../PROMPTS_LOTE_2026-08-23.md). Si cambia una regla,
+> se edita allá, no acá.
+>
+> ⚠️ Antes de tocar `MOTION_PATTERN_BANK_2026.md`, leer
+> [`2026-08-23-patrones-de-motion-deduplicados.md`](../2026-08-23-patrones-de-motion-deduplicados.md):
+> las 18 fichas propusieron ~25 entradas y son 7 patrones reales.
+
+## O1 · Portar los 4 mecanismos de OYLA al pattern bank y probarlos en un index.html de una pieza
+
+- **Ficha:** [OYLA — el index.html suelto que no parece hecho con IA](../2026-08-23-oyla-index-html-que-no-parece-ia.md)
+- **Qué falta:** Nada para portar los cuatro mecanismos y armar la pagina: son CSS + GSAP en un archivo suelto, sin credencial, sin permiso y sin gasto. Dos salvedades honestas: (a) para replicar el hero con imagineria propia hacen falta fotos reales del cliente o permiso explicito de gasto en generacion paga (Higgsfield), que por regla es caso por caso; (b) la 'free guide' del autor NO esta en el post — no hay link ni contenido, asi que se le copia el RESULTADO leido del render, no su workflow.
+
+```text
+OBJETIVO UNICO DE ESTA SESION: dejar bancados y PROBADOS los 4 mecanismos de scroll del sitio OYLA (referencia: hermes-content/references/video-intake/, ficha DaVV7JjIY9I), en un unico archivo HTML abierto y MIRADO renderizado.
+
+Contexto: es un reel de Instagram que filma una laptop mostrando un sitio de joyeria. El dato clave esta en la barra de URL del navegador: `file:///Users/dmitry/Downloads/oyla/index.html`. O sea el 'sitio' entero es UN archivo HTML estatico suelto, sin framework, sin build, sin deploy. Reproducilo igual: un solo index.html.
+
+ANTES de codear, cargar (no es opcional): skill `impeccable` + la galeria/tokens internos, y `gsap-scrolltrigger`. Direccion de estilo declarada: editorial de lujo claro, NO minimal generico.
+
+LOS 4 MECANISMOS A CONSTRUIR
+
+1. SPLIT STICKY (el mas valioso, y el unico VERIFICADO por comparacion directa de fotogramas). Grid de 2 columnas. La columna izquierda (titulo serif + 3 parrafos cortos + un boton de texto con un ⊕) queda CONGELADA con `position: sticky; top: 0` mientras la derecha desfila por 4 paneles apilados en flujo normal. Cada panel: un numero o frase grande en serif display + una linea de apoyo en sans chica. Sin JS.
+
+2. HERO PINNEADO CON MEDIA QUE ESCALA. Titular en versalitas serif clavado abajo-izquierda, mas un boton `DISCOVER ⊕`. Detras, media a pantalla completa que va de plano general a macro atado al progreso de scroll (`transform: scale()` sobre la media, o un <video> scrubbeado). El titular NO se mueve nunca. (Mecanismo reconstruido del render, no declarado por el autor.)
+
+3. REVELADO DE TITULAR CON DUPLICADO DESENFOCADO. Cada titular serif entra con una copia fantasma borrosa y desplazada que se le va alcanzando. Dos copias apiladas, la de atras con `filter: blur()` + `translateY` animando a 0. Aplicar SOLO a los titulares serif, nunca al sans — en el original el sans esta nitido y eso es lo que prueba que es animacion y no artefacto de camara.
+
+4. GRILLA DE 3 COLUMNAS CON FILETES DE 1px. Fondo hueso, filetes verticales de 1px como unica separacion (cero cards, cero sombras, cero bordes redondeados), producto flotando al centro ocupando ~15% de su celda, nombre + precio debajo en sans chica caja alta. La celda del medio se abre a media a sangre desbordando por arriba y por abajo a sus vecinas (hover-expand). Ademas crossfade entre dos sets de producto.
+
+TOKENS (hex leidos del fotograma, aproximados — ajustar con criterio, no clavar a ciegas)
+--bg: #F2EFEA; --surface: #F8F6F3; --ink: #1C1A18; --muted: #6E6A65; --rule: #DAD5CE; --accent: #7E1F2A
+REGLA DURA DE PALETA: el acento aparece UNA sola vez en toda la pagina (el logo). Todo lo demas es hueso, tinta y filete. Si aparece un segundo elemento con color, esta mal.
+
+TIPOGRAFIA: serif display de alto contraste (Didone/transicional) para titulares, versalitas con tracking ~0.04em. Grotesca neutra para micro-labels a ~10-11px CAJA ALTA con tracking ~0.14em, y para cuerpo a ~14-15px con interlineado 1.55 y medida ~55 caracteres. Dos familias, nada mas.
+
+MOTION: sin rebotes ni elasticos. Desaceleracion larga, `cubic-bezier(0.16, 1, 0.3, 1)`. Animar solo `transform`, `opacity`, `filter`. Respetar `prefers-reduced-motion`.
+
+VERIFICACION (regla del proyecto: verificar es MIRAR, no suponer)
+- Abrir el archivo renderizado en Chromium headless via Playwright y LEER las capturas. Un 200 y un grep no son verificacion.
+- Capturar 4 estados: hero al inicio, hero al final del scrub, split sticky con la derecha a mitad de camino (la izquierda TIENE que estar identica), y la grilla con la celda del medio abierta.
+- Comprobar que el body no scrollea en horizontal a 375, 768 y 1440.
+
+AL CERRAR
+- Los 4 patrones documentados en `web-factory/docs/MOTION_PATTERN_BANK_2026.md`, cada uno con su mecanismo en una linea y el snippet minimo.
+- El estilo (paleta, pairing tipografico, grilla de filetes) en `hermes-content/references/ui-patterns/editorial-hairline-joyeria/` junto al HTML probado.
+- Handoff del carril en `.claude/handoff/<rama-con-guiones>.md` con los 7 campos, incluido intentos fallidos.
+
+NO HACER: no inventar el prompt original (no aparece escrito en ningun fotograma del reel — todo esto es reconstruido leyendo el render). No usar imagineria generada paga sin permiso explicito: para probar, placeholders o fotos que ya tengamos.
+
+LISTO = existe un unico index.html que, abierto en Chromium headless y MIRADO en captura, muestra los 4 mecanismos funcionando (columna izquierda identica pixel a pixel entre dos posiciones de scroll distintas; titular del hero inmovil mientras la media cambia de escala; titulares serif con el duplicado desenfocado y el sans nitido; celda del medio abriendose a sangre), sin scroll horizontal a 375/768/1440, con el acento #7E1F2A apareciendo UNA sola vez en la pagina, y con los 4 patrones escritos en MOTION_PATTERN_BANK_2026.md.
+```
+
+## O2 · Patron 'canvas fijado + scrub amortiguado' con escalera de degradacion — al banco de motion y a una demo
+
+- **Ficha:** [Fable 5 vs GPT 5.6 Sol — la misma landing 3D de producto, y el patrón que se roba](../2026-08-23-fable5-vs-gpt56-landing-3d-dial.md)
+- **Qué falta:** Para el patron portable, NADA: el sticky + scrub + estados por seccion + la escalera de degradacion se ejecutan hoy con GSAP y sprites/video, sin 3D, sin credenciales y sin pedirle nada a Sergio. Lo que falta es solo para la version 3D literal: (a) decidir si abrimos el frente R3F, que no tenemos skill y ningun cliente actual pide (vendemos a clinicas, comercio e importadoras, no a fabricantes de hardware); (b) un modelo 3D del producto, que ningun cliente nuestro tiene.
+
+```text
+OBJETIVO DE ESTA SESION: dejar en el repo el patron de scroll de landing de producto que aprendimos del reel DbBUMU2qjfW, escrito en el banco y DEMOSTRADO funcionando, sin abrir el frente 3D.
+
+CONTEXTO — el mecanismo, ya reconstruido (no hace falta volver a mirar el video):
+
+1. Canvas/visual FIJADO con ScrollTrigger.pin. El producto no se mueve de su sitio; lo que entra y sale son los bloques de texto y el color de fondo. Principio literal del autor original: 'el dispositivo esta fijo, el mundo cambia'.
+2. Scrub AMORTIGUADO: scrub con valor numerico (arrancar en 0.8-1.2), NUNCA scrub:true. Sumar Lenis para el smooth scroll. Esta mezcla es la que produce la sensacion cara, mas que el modelo 3D.
+3. Estados por seccion sobre UNA sola pieza: la pantalla del producto cambia de contenido por seccion (no son N imagenes sueltas, es el mismo elemento con la capa de pantalla cambiando).
+4. Exploded view scrubbeada: las capas se separan sobre un eje vertical en funcion del progreso, con riel numerado 01..05 a la derecha (filete hairline + bajada de 2 lineas por item).
+5. Crossfade de fondo claro<->oscuro entre secciones.
+6. ESCALERA DE DEGRADACION (esto es lo que mas vale, y lo que desbloquea el 3D-look en nuestro presupuesto de performance): movil + prefers-reduced-motion + dispositivos debiles + WebGL por software reciben RENDERS ESTATICOS capturados de la escena real, 55-70 KB en WebP, con la maquetacion reordenada a 'texto arriba, producto abajo'. No es un fallback pobre: es la misma escena, congelada.
+
+SISTEMA TIPOGRAFICO que acompana (portarlo igual): eyebrow diminuto en ladrillo #B5514B sobre el titular; titular en grotesca pesada de display, 2-3 lineas, interlineado ~0.95, sentence case CON punto final; cuerpo gris #6B6B6B de 2-3 lineas maximo; pie de seccion en micro-tipografia con separadores de punto medio. Papel #F4F4F2, tinta #111111, seccion oscura #0A0A0A, acento naranja #E8641E usado SOLO dentro de la pantalla del producto y en el CTA (color semantico, no decorativo). Los hex son aproximados: ajustalos a los tokens de la marca del proyecto donde lo apliques.
+
+QUE HACER, en este orden:
+
+A. Cargar la skill 'gsap-scrolltrigger' y 'gsap-core' ANTES de escribir codigo. No improvisar el pin ni el scrub.
+B. Agregar el patron a web-factory/docs/MOTION_PATTERN_BANK_2026.md como entrada nueva, respetando el formato de las entradas que ya estan ahi. Incluir SI O SI la escalera de degradacion del punto 6 — es la parte que hace que este patron entre en nuestro presupuesto de performance (rules/web/performance.md: landing <=150 kb JS gzipped, LCP <2.5 s), y es exactamente lo que le faltaba a la ficha anterior 2026-08-11-web-3d-scrollytelling-united-carriers.md, que quedo en FUTURO por no tener respuesta de performance. Citar esa ficha y corregir su veredicto si corresponde: NO reescribirla al lado.
+C. Construir UNA demo de una sola pagina que pruebe el patron SIN 3D: producto = una secuencia de imagenes/sprite o un <video> con currentTime scrubbeado, pinneado, con 4 secciones de texto y crossfade de fondo. Mas la ruta degradada real (prefers-reduced-motion + un breakpoint movil) sirviendo el estatico.
+D. Verificar MIRANDO: abrir la demo renderizada con Playwright + Chromium headless y leer las capturas. Un 200 y un grep NO son verificacion. Capturar en 375 y 1440, y capturar tambien con prefers-reduced-motion forzado para probar que la ruta degradada se ve bien y no rota.
+E. Medir peso y tiempo reales del bundle, no solo que responda.
+
+LIMITES DUROS:
+- NO abrir el frente R3F / three.js. No tenemos skill de 3D en web y ningun cliente actual lo pide. Si te sale al paso, anotalo como pendiente y segui.
+- NO tocar main con WIP parcial: si un archivo nuevo importa otro archivo nuevo, van los dos o ninguno.
+- Rama propia, commits conventional, gates (tsc --noEmit, tests, code-reviewer) antes de mergear.
+- Si algo queda a medias, escribir el handoff en .claude/handoff/<rama-con-guiones>.md con los 7 campos de hermes-content/docs/HANDOFF_DE_SESION.md.
+
+LISTO = la entrada del patron esta en web-factory/docs/MOTION_PATTERN_BANK_2026.md con la escalera de degradacion incluida y citando la ficha de united-carriers; existe una demo que corre; y hay capturas hechas con Playwright a 375 y 1440 MAS una con prefers-reduced-motion, las tres miradas y descritas, mostrando el pin, el scrub y la ruta degradada funcionando — con el peso del JS gzipped medido y por debajo de 150 kb.
+```
+
+## O3 · Teaser de 15 s con filtro-como-transicion (HyperFrames)
+
+- **Ficha:** [ASCII Magic v2: el filtro como transicion (teaser de lanzamiento)](../2026-08-23-ascii-magic-v2-filtro-como-transicion.md)
+- **Qué falta:** Nada bloqueante: no hace falta credencial, permiso ni gasto (HyperFrames corre local y gratis). Faltan dos decisiones nuestras: (a) que material propio se procesa — capturas de la plataforma YA vivas, no mockups; (b) cortar el cierre 'coming soon', que viola la regla 'la venta nunca exhibe obra' del CLAUDE.md; se cierra en el nombre o en algo encendido en produccion.
+
+```text
+OBJETIVO: construir en HyperFrames un teaser de producto de ~15 s, 16:9, que use el patron 'filtro-como-transicion': UNA sola toma continua de camara, cero cortes a negro, cero fundidos, y las 'escenas' se separan cambiando el FILTRO aplicado encima del mismo movimiento.
+
+REFERENCIA: reel de ASCII Magic v2 (https://www.instagram.com/p/DbvxMwghtkA/). Ficha completa en hermes-content/references/video-intake/ascii-magic-v2-filtro-como-transicion.md. El estilo es RECONSTRUIDO a partir de 31 fotogramas: nadie publico el codigo ni el proyecto.
+
+ANTES DE CODEAR (obligatorio):
+1. Cargar las skills: hyperframes (entrada), hyperframes-core, hyperframes-animation, motion-doctrine, seam-craft, cut-the-curve.
+2. Buscar en el repo si YA existe un preset/filtro ASCII o halftone (grep por 'ascii', 'halftone', 'dither', 'scanline' en web-factory/ y en las skills de hyperframes). Si existe, reusarlo. Si no, recien ahi escribirlo.
+3. Leer web-factory/docs/MOTION_PATTERN_BANK_2026.md para no duplicar un patron que ya este anotado.
+
+QUE CONSTRUIR:
+
+A) Pipeline de filtros — un <canvas> que muestrea cada frame de un <video>/<img> de fondo y lo re-dibuja en una grilla de celdas de ~8x8 px. Cinco modos, todos sobre la misma grilla:
+   - ascii: luminancia media por celda -> caracter de la rampa '@M#x+0es. ' dibujado en monoespaciada blanca sobre negro.
+   - halftone: circulo por celda con radio proporcional a la luminancia. Dos variantes: dura (blanco sobre negro, sin glow) y con bloom radial (ambar #FFC24D -> #FF8A1F -> #E03A00).
+   - dither: Bayer 4x4, blanco y negro puro.
+   - edges: Sobel + umbral. Variante 1: contorno blanco de 1 px sobre negro. Variante 2 'blueprint': mismos bordes blancos sobre fondo azul plano #1533E0.
+   - glitch: desplazamiento horizontal aleatorio de bandas + separacion de canales RGB.
+   Encima de TODOS: scanlines con repeating-linear-gradient(0deg, rgba(0,0,0,.35) 0 1px, transparent 1px 3px).
+
+B) Capa de collage 3D (solo en 2 momentos): 8-12 paneles de captura colocados con transform: perspective() rotateX/rotateY translateZ sobre una superficie curva, sangrando por los cuatro bordes. La camara empuja hacia adentro. CSS 3D, NO WebGL.
+
+C) Capa HUD de falsa deteccion (solo sobre el collage): divs con border:1px solid #FF2B2B, punto #2BFF5C de 4 px en el centro de cada caja, etiqueta monoespaciada 'x: NNN y: NNN' pegada arriba-izquierda, y un SVG con stroke-dasharray de 1 px conectando cajas con curvas punteadas.
+
+D) Texto — LA REGLA MAS IMPORTANTE: el texto NO SE MUEVE NUNCA. Se revela caracter por caracter (typewriter a 10-12 caracteres/s) en su posicion final y se queda clavado en el eje vertical del centro (y = 50%) mientras los cinco fondos pasan por detras. El texto es el ancla; el fondo es lo que muta. Sobre fondo ruidoso, respaldarlo con una caja SOLIDA ceñida al texto (negra o blanca) — nunca degradado, nunca sombra. Tipografia: UNA monoespaciada blanca, regular, tracking 0.05em, ~5-6% del alto de cuadro, para todos los kickers; una grotesca semibold solo para el dato duro.
+
+E) Guion, 8 estados (adaptar los textos a lo que este VIVO en produccion, sin inventar cifras):
+   1. (0-2 s) una cifra sola, grande, negra sobre blanco, contando hacia arriba. Sin palabra que la explique.
+   2. (2-4 s) segunda cifra que sube la apuesta, sobre el collage 3D + HUD.
+   3. (4-5 s) el denominador de tiempo ('en N meses').
+   4. (5-7 s) una frase partida en DOS planos, que cruza el cambio de filtro.
+   5-7. tres kickers de 2-3 palabras, uno por plano, ~0,8-1 s cada uno, cada uno DEMOSTRADO por el fondo y no explicado.
+   8. (13-15 s) el nombre. Se cierra AHI.
+
+PROHIBIDO (regla dura del CLAUDE.md, 'La venta nunca exhibe obra'): no escribir 'coming soon', 'proximamente', 'muy pronto', 'beta', 'en construccion' ni ninguna palabra de estado de obra. El video se cierra en el nombre o en algo YA encendido en produccion. La referencia si lo hace; nosotros no.
+
+TAMBIEN PROHIBIDO: inventar cifras. Si no hay un numero real y verificable en produccion, el estado 1 y 2 se reemplazan por otra cosa; no se fabrica.
+
+AL TERMINAR: anotar los dos patrones en web-factory/docs/MOTION_PATTERN_BANK_2026.md ('filtro-como-transicion' y 'texto ancla / fondo mutante'), con el link a la ficha.
+
+LISTO = un MP4 renderizado por HyperFrames, 16:9, entre 14 y 16 s, verificado ABRIENDO el archivo y mirando fotogramas concretos: (a) al menos 4 de los 5 filtros aparecen, uno por escena; (b) el texto esta en la misma coordenada Y en los 8 estados; (c) no hay ningun fotograma completamente negro ni completamente blanco de transicion; (d) grep del HTML no encuentra 'soon', 'proximamente', 'beta' ni 'muy pronto'; (e) los dos patrones estan escritos en MOTION_PATTERN_BANK_2026.md.
+```
+
+## O4 · Auditoría anti-vibecoded — 30 señales
+
+- **Ficha:** [30 señales de sitio vibecoded](../2026-08-23-30-senales-sitio-vibecoded.md)
+- **Qué falta:** Para el checklist: NADA. Es leer los 30, escribirlos en design-quality.md y correrlo contra onia.com.bo y onia-platform; se cierra en una sesión. Para el reel: dos decisiones de Sergio, ninguna técnica. (a) La voz: Sergio a cámara (gratis, y el formato PIDE cara real) o Lucía por ElevenLabs (gasto → permiso explícito caso por caso). (b) La lista propia: los 30 de este video son tells del mercado gringo y varios no aplican — 'em dashes' es un tell de texto en inglés, 'inter/geist/space grotesk' es un tell del stack Vercel. Hay que escribir los ~20 que sí aplican a lo que se ve en Bolivia.
+
+```text
+Sos auditor de diseño. Vas a revisar la superficie web que te indique y decidir si delata que fue generada por IA sin criterio ('vibecoded').
+
+REGLA DE ENTRADA: verificás MIRANDO. Abrí la página renderizada con Playwright + Chromium headless, sacá capturas a 375, 768 y 1440 de ancho, y LEÉ las capturas. Un HTTP 200 y un grep NO son verificación. Un grep sirve para descartar, nunca para confirmar que algo se ve bien.
+
+Revisá estas 30 señales, una por una. Para cada una respondé SÍ (está presente) / NO / N-A, y si es SÍ citá el archivo y la línea o el selector exacto donde vive:
+
+ 1. Gradientes duros (saltos de tono agresivos, arcoíris de fondo)
+ 2. Íconos de la librería lucide sin retocar
+ 3. Fondo blanco puro (#FFF) sin capa ni temperatura
+ 4. Coloreado arcoíris (cada tarjeta un color distinto porque sí)
+ 5. Drop shadows genéricas en todo
+ 6. Tres feature cards en fila, iguales, sin jerarquía
+ 7. Emojis usados como íconos
+ 8. Liquid glass / glassmorphism sin profundidad real
+ 9. Rayas em (—) en el copy [ADAPTAR: en español el tell equivalente es el guion largo suelto y el 'no es X, es Y']
+10. Tipografía Inter, Geist o Space Grotesk usada por defecto y sin razón
+11. Franja de color al borde izquierdo de las tarjetas
+12. Testimonios inventados (nombre + cargo + empresa que no existen)
+13. Bento grid decorativo, sin contenido que lo justifique
+14. Ventana de terminal falsa mostrando un npx que nadie corre
+15. Construcción "no es X, es Y" en el copy
+16. Bullets con tilde verde ✓
+17. Tres planes de precio, siempre tres
+18. Cero demos reales del producto (mockups vacíos, 'coming soon')
+19. Border-radius suave y uniforme en absolutamente todo
+20. Paleta violeta + negro (ojo #8B5CF6 / #6D28D9 / #0A0A0A / #18181B, o sea violet-500/700 + zinc-900/950 de Tailwind)
+21. Sin skeleton loaders (spinner + 'Cargando...' en vez de esqueleto)
+22. Orbes radiales de fondo
+23. Retículas de puntos decorativas
+24. Íconos de chispita ✨ en los botones de IA
+25. Flechas → animadas en cada link
+26. Sin Términos y Condiciones enlazados en el footer  ← DEUDA LEGAL, no estética
+27. Sin Política de Privacidad enlazada en el footer  ← DEUDA LEGAL, no estética
+28. Animación de hover en absolutamente todo (típico: translateY(-16px) + scale(1.05))
+29. Colores neón
+30. Pastel básico (baby blue / blush pink / mint green / butter yellow)
+
+DESPUÉS de la tabla, entregá:
+- El CONTEO: cuántos SÍ sobre 30.
+- Los 26 y 27 aparte, marcados como bloqueantes legales si dan SÍ.
+- Para cada SÍ estético, UNA corrección concreta con el archivo y el cambio exacto. Nada de consejos genéricos.
+- Lo que NO pudiste verificar y por qué.
+
+NO inventes hallazgos. Si no lo viste en la captura, decí que no lo viste.
+
+LISTO = existe la tabla de 30 filas con archivo:línea citado en cada SÍ, las capturas a 375/768/1440 están guardadas en disco y referenciadas por ruta absoluta, los ítems 26 y 27 dan NO (o están abiertos como bloqueantes), y el conteo total de SÍ estéticos es ≤ 6.
+```

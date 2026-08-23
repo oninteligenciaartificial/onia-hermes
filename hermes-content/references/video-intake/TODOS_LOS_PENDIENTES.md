@@ -1188,11 +1188,11 @@ Archivo completo de la sesión: [sesiones/crm-prospeccion.md](sesiones/crm-prosp
 ## C4 · El hueco #1 no lo cierra ningun video ⛔ **BLOQUEADO**
 
 De los **45 videos ingresados, CERO** hablan de como conseguir el primer cliente pagando, B2B, en
-Bolivia (§6.1 de la [sintesis](../SINTESIS_CORPUS.md)). Las tres piezas de `BANDEJA.md` que parecian
+Bolivia (§6.1 de la [sintesis](SINTESIS_CORPUS.md)). Las tres piezas de `BANDEJA.md` que parecian
 tapar el hueco se procesaron el 12-ago y **ninguna lo tapo**:
-[8 industrias](../2026-08-12-ocho-industrias-ocho-agentes-ia.md) da copy, no ruta;
-[5 formatos](../2026-08-12-cinco-formatos-anuncio-estatico-meta.md) es ecommerce DTC gringo;
-[caso Climatic](../2026-08-12-caso-exito-ajeno-climatic-marca-propia.md) le vende asesoria a un
+[8 industrias](2026-08-12-ocho-industrias-ocho-agentes-ia.md) da copy, no ruta;
+[5 formatos](2026-08-12-cinco-formatos-anuncio-estatico-meta.md) es ecommerce DTC gringo;
+[caso Climatic](2026-08-12-caso-exito-ajeno-climatic-marca-propia.md) le vende asesoria a un
 aspirante a emprendedor. **Este hueco no se cierra mirando mas reels. Se cierra con fuentes.**
 
 ```text

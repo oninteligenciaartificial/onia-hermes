@@ -537,3 +537,144 @@ COSTO: cero creditos, todo es HyperFrames. No hay nada que aprobar.
 LISTO = los dos componentes parametrizados en el repo + un mp4 de 15 s renderizado y MIRADO,
 con la ventana persistiendo entre bloques y una sola palabra coloreada por tarjeta.
 ```
+
+---
+
+# Lote del 2026-08-23 — 3 prompts
+
+> Fuente: [`PROMPTS_LOTE_2026-08-23.md`](../PROMPTS_LOTE_2026-08-23.md). Si cambia una regla,
+> se edita allá, no acá.
+>
+> ⚠️ Antes de tocar `MOTION_PATTERN_BANK_2026.md`, leer
+> [`2026-08-23-patrones-de-motion-deduplicados.md`](../2026-08-23-patrones-de-motion-deduplicados.md):
+> las 18 fichas propusieron ~25 entradas y son 7 patrones reales.
+
+## O16 · Molde: pantalla filmada en diagonal (prueba de trabajo sin testimonio)
+
+- **Ficha:** [POV: el timeline como prueba de trabajo](../2026-08-23-pov-timeline-como-prueba-de-trabajo.md)
+- **Qué falta:** Tres cosas, la primera es bloqueo real. (1) NO tenemos testimonio de cliente: cero clientes pagando y la regla prohibe inventarlos, asi que el payload debe cambiar. La version honesta reemplaza el testimonial por una pantalla viva del producto (un alta de clinica, el chatbot contestando, el pipeline moviendose); el molde aguanta el cambio porque no depende del contenido, depende de que haya algo reproduciendose. (2) Falta decidir el end card: el original es solo un dominio en texto plano sobre negro; el nuestro seria onia.com.bo con el tile verde ya decidido. Decision de cinco minutos que nadie tomo. (3) Hay que reescribir el gancho: 'POV: trying to make X look cool' + 'How'd I do?' funciona en la cuenta de un editor freelance, pero en la cuenta de Onia 'como me salio?' suena a producto no terminado y choca con la regla de no exhibir obra. El gancho tiene que ir en afirmativo y sobre algo VIVO.
+
+```text
+Arma un reel vertical de 30 a 40 segundos que use el molde 'pantalla filmada en diagonal'. La idea entera es no producir nada nuevo: se filma trabajo que YA existe reproduciendose en una pantalla.
+
+REGLAS DEL MOLDE (no negociables, son lo que hace que funcione):
+
+1. UNA SOLA TOMA CONTINUA de telefono. Nada de cortes en la capa de afuera. Deriva de mano lenta, sin zoom, sin barrido. El paralaje entre el rotulo fijo y la pantalla viva es todo el movimiento que necesitas.
+
+2. FILMA EL MONITOR, no hagas captura de pantalla. El muare, el brillo del LCD y el grano de poca luz son la textura que dice 'esto es real'. Una captura limpia mata el efecto.
+
+3. EL DISPOSITIVO VA GIRADO 15 a 20 grados, nunca de frente. La pantalla tiene que cruzar el cuadro como una cinta en diagonal que se aleja en perspectiva. De frente es una captura aburrida; en angulo es un objeto.
+
+4. ENCUADRE 9:16: tercio superior para la pared y el rotulo, dos tercios inferiores para el dispositivo. Lo cercano desenfocado, lo importante al centro y a foco.
+
+5. UN SOLO ROTULO DE TEXTO, FIJO LOS 35 SEGUNDOS. Sans geometrica bold, dos lineas maximo, interlineado apretado, mayuscula solo inicial, sombra oscura suave. CERO animacion de texto. Nada de segundo bloque, nada de revelacion.
+
+6. FILMA DE NOCHE con una fuente calida en el fondo (lampara, neon, luz de cocina). La regla de color es CALIDO AFUERA, FRIO ADENTRO: la habitacion ambar, la pantalla gris azulada. Ese contraste de temperatura convierte la pantalla en una ventana sin ningun efecto.
+
+7. DOS SILENCIOS. Los primeros ~5 segundos sin audio del contenido, para que se lea el rotulo. Los ultimos ~3.5 segundos en negro con el end card, tambien en silencio.
+
+8. END CARD: onia.com.bo en texto blanco chico centrado sobre negro, mas el tile verde. Texto plano, sin animacion, sin claim.
+
+QUE SE REPRODUCE EN LA PANTALLA (esto es lo que cambia respecto del original):
+El original mete un testimonial de cliente sonando dentro del preview. NOSOTROS NO PODEMOS: cero clientes pagando, prohibido inventar testimonios. Reemplazalo por una pantalla VIVA del producto en produccion. Opciones, elegi una y una sola:
+  - el alta de una clinica en onia.com.bo, de principio a fin
+  - el chatbot de WhatsApp contestando una consulta real
+  - el pipeline de leads de ONIA Center moviendo una tarjeta
+  - el editor de conocimiento del chatbot guardando una fila
+
+EL GANCHO: escribilo en AFIRMATIVO y sobre algo que este VIVO en produccion. Nada de 'como me salio?', nada de 'estamos probando', nada de estado de obra. Prohibido 'muy pronto', 'beta', 'proximamente'.
+
+EL CAPTION: una sola pregunta corta que sea barata de contestar, mas nada. Sin hashtags de relleno.
+
+ANTES DE APLICAR CUALQUIER CORTE: mostrale a Sergio la tabla de cortes y un preview en 360p. Regla de oro del carril, no se saltea.
+
+HERRAMIENTAS: telefono para la toma; HyperFrames / editor-videos para el rotulo y el end card; ver-videos para revisar la pieza renderizada; Postiz o la ruta de Instagram para publicar. Cero gasto pago, cero Higgsfield, cero ElevenLabs.
+
+LISTO = existe un MP4 vertical 9:16 de entre 30 y 40 segundos, renderizado en disco, que cumple las 8 reglas del molde verificadas UNA POR UNA mirando la pieza renderizada (no el codigo, no un log): (a) cero cortes en la capa de afuera, (b) el dispositivo esta girado y la pantalla se lee en diagonal, (c) hay exactamente un rotulo de texto y no se mueve, (d) la pantalla reproduce una superficie de Onia que esta VIVA en produccion hoy, (e) el gancho no contiene ninguna palabra de estado de obra, (f) hay silencio al principio y al final, (g) el end card dice onia.com.bo, (h) Sergio vio la tabla de cortes y el preview 360p y dio OK explicito sobre ESA pieza.
+```
+
+## O17 · Reel 'lista densa contra reloj' — formato Onia, 58 s en una toma
+
+- **Ficha:** ["$70 millones de consejos de venta en 60 segundos" — el cronómetro está DENTRO del plano y no hay un solo corte](../2026-08-23-70-millones-consejos-venta-cronometro-en-plano.md)
+- **Qué falta:** (a) EL GUION, que no existe: ~24 frases-consejo en espanol boliviano sobre vender software a duenos de negocio, densas y sin relleno, que quepan en 58 s a 3,4 palabras/s (~200 palabras exactas). Ese es el trabajo real. (b) Decidir el par tipografico propio de Onia (una geometrica ligera + una didone) y fijarlo como tokens: copiar Futura+Playfair tal cual es copiar el estilo de otra marca. (c) EL NUMERO DEL GANCHO: Onia NO tiene un '$70 millones' y por la regla de no fabricar esta prohibido inventarlo — el banner debe apoyarse en la promesa de densidad o en una cifra sostenible. (d) EL CUELLO DE BOTELLA REAL: Sergio delante de camara 58 s sin cortarse. Una sola toma no perdona, y es la unica parte que no se automatiza.
+
+```text
+Armá un reel vertical de 58 segundos para Onia con el formato 'lista densa contra reloj'. Reproducí estas reglas EXACTAS, todas medidas de una pieza real, no estimadas:
+
+GRABACIÓN
+1. UNA SOLA TOMA, cero cortes. Nada de cortar silencios, nada de jump cuts, nada de b-roll. Si la toma se traba, se repite entera.
+2. Cámara fija, plano medio a la altura de una mesa/barra, la persona en el TERCIO DERECHO del cuadro mirando a lente.
+3. En el TERCIO INFERIOR IZQUIERDO va un portátil apoyado, reproduciendo a pantalla completa un video de cronómetro de 1 minuto (buscá '1 minute timer black background' en YouTube). En el primer segundo la persona SEÑALA el reloj con la mano: ese gesto es la apertura, no hay locución de arranque.
+4. Fondo oscuro y cálido, desenfocado, con un acento de luz cálida. Un solo color saturado en el cuadro (la ropa). Lavalier a la vista, no lo escondas.
+5. Voz sola: NADA de música de fondo. Normalizá la voz fuerte (~-18 dBFS RMS).
+
+GUION
+6. ~200 palabras exactas, habladas a 3,4 palabras por segundo. Eso es ~24 frases-consejo, una cada 2,4 segundos. Sin relleno, sin 'como les decía', sin transiciones.
+7. Estructura: 0-5 s tesis que descalifica el instinto del espectador · 5-9 s reencuadre emocional · 9-17 s UNA TAXONOMÍA (tipos de comprador) — es el tramo que la gente guarda · 17-27 s mecánica · 27-46 s objeciones · 46-58 s cierre con un remate que se CONTRADICE con el ritmo que acabás de ejecutar.
+8. CERO CTA. Nada de 'seguime', 'guardalo', 'comentá'. La conversión es la densidad: imposible retener todo en un pase, así que se rebobina.
+
+TEXTO EN PANTALLA
+9. BANNER FIJO desde el fotograma 0 hasta el último, nunca sale: versalitas negras en grotesca pesada sobre píldora blanca redondeada, dos líneas, centrado arriba (x 0,29-0,71 · y 0,216-0,270 del cuadro). Terminá el banner en DOS PUNTOS: prometen una lista. El número del banner tiene que ser VERDADERO — si no tenemos cifra, la promesa es de densidad, no de plata. Prohibido inventar.
+10. SUBTÍTULO: bloques de 4-5 palabras, mediana 1,30 s por bloque (rango 0,50-2,95 s). Dentro de cada bloque las palabras APARECEN DE A UNA siguiendo el habla real. Total: ~46 bloques en 58 s.
+11. CERO ANIMACIÓN. Cada palabra y cada bloque aparecen y desaparecen en UN SOLO FOTOGRAMA. Sin fundidos, sin pop, sin escalado, sin resaltado karaoke de la palabra activa. Si le ponés easing, arruinaste la pieza: a 0,29 s por evento el movimiento es ruido.
+12. DOS TIPOGRAFÍAS que se turnan por bloque, sin regla fija: una geométrica ligera en minúscula y una serif display en VERSALITAS. Blanco puro (#FBF7FA aprox.) con halo mínimo. Elegí el par propio de Onia y fijalo como token; no copies Futura+Playfair tal cual.
+13. ESCALERA: cada línea nueva del bloque se centra ~6% del ancho de cuadro más a la derecha que la anterior.
+14. El bloque vive en la banda y 0,33-0,40 del alto, en el vacío oscuro. NUNCA pisa la cara, NUNCA pisa el portátil, NUNCA pisa el banner.
+
+CIERRE
+15. Cortá con el reloj entre 0:01 y 0:03, NUNCA en 0:00. Sin outro, sin tarjeta final, sin CTA. El bucle queda abierto a propósito.
+
+Antes de aplicar cualquier corte o de renderizar, mostrale a Sergio la tabla de bloques + un preview 360p. Regla de oro del carril: nunca cortar a ciegas.
+
+LISTO = el mp4 exportado pasa las SEIS verificaciones medidas con ffmpeg/ffprobe sobre el archivo final, no sobre la intención: (1) `ffmpeg -vf "select='gt(scene,0.10)',showinfo"` devuelve 0 eventos de escena; (2) la duración está entre 55 y 60 s; (3) contando píxeles blancos en la región del subtítulo a 30 fps hay entre 40 y 50 caídas de tinta (bloques) con mediana entre 1,1 y 1,5 s; (4) ninguna caída ni subida de tinta tarda más de 1 fotograma (cero fundidos); (5) el piso de audio en su ventana de 100 ms más callada está por debajo de -45 dBFS (sin cama musical); (6) el último fotograma muestra el cronómetro entre 0:01 y 0:03. Y Sergio dio el OK explícito sobre ESA pieza renderizada, no sobre el plan.
+```
+
+## O18 · Carrusel-prueba de 4 láminas: el número que sube es el único argumento
+
+- **Ficha:** [TYCHS — el contador que sube es todo el argumento (carrusel de 4 láminas, conteo de papas con YOLO11 Nano + SAM 2)](../2026-08-23-tychs-contador-papas-yolo11-sam2.md)
+- **Qué falta:** Tres cosas concretas. (1) Un video fuente de 13-15 s de una pantalla real de ONIA con un número que suba solo — citas agendadas, mensajes respondidos por el agente, ítems procesados — en toma única con captura fija. (2) Definir el par de verdes: el verde de marca de Onia más un 'verde máquina' distinto para la salida del sistema; hoy ese segundo verde no existe. (3) Datos que se muevan: el alta está CERRADA hasta v1.0 y la cuenta de clinica klein se borró, así que hace falta un tenant demo con datos sembrados, y por la regla de no fabricar ese material se rotula demo. Lo que NO falta: el motor, el formato ni el permiso de gasto — es render local y gratis, no toca Higgsfield ni ElevenLabs.
+
+```text
+Armá un carrusel de Instagram de 4 láminas en 4:5 (1080x1350) que demuestre que [MÓDULO DE ONIA] funciona, sin una sola palabra hablada y sin exhibir obra.
+
+REGLAS DURAS
+- Prohibido "muy pronto", "beta", "en construcción", "próximamente", banners de borrador o listas de lo que falta.
+- Prohibido inventar testimonios, logos o cifras. Si es demo, se rotula demo.
+- Si aparece un precio, se LEE de onia-platform/lib/pricing.ts (add-ons) o lib/subscription-plans.ts (planes). No se escribe a mano.
+
+LÁMINA 1 — LA PRUEBA (video, 13-15 s, TOMA ÚNICA, cero cortes)
+- Captura de pantalla real de ONIA con UN número que sube solo (citas agendadas, mensajes respondidos por el agente, ítems procesados). Captura fija, sin paneo.
+- El número va en VERDE MÁQUINA (#00FF00 puro), posición FIJA, sin animación, sin easing, sin odómetro: se redibuja el entero crudo cada fotograma. El número ES el motion design. No agregues transiciones, zoom, parallax ni entradas de texto.
+- Si hay un estado o una región que importa, marcala con un polígono de trazo magenta (#FF00FF) y relleno traslúcido oscuro (#4A0F45 al ~55%), y cambiá el color de los elementos al entrar: un color fuera (violeta #6A3BC0), otro dentro (ámbar #C8873C).
+- Al pie: banda NEGRA SÓLIDA (#000000, NO degradado) ocupando ~28% del alto, con el titular QUEMADO en grotesca condensada black, TODO MAYÚSCULAS, tracking apretado, interlineado apretado, 4 líneas.
+- El titular alterna VERDE DE MARCA y BLANCO por BLOQUE DE SENTIDO, nunca por palabra suelta.
+- En la costura entre video y banda negra: el logo centrado, flanqueado por dos hairlines que llegan a los bordes.
+- Franja inferior fina: "DESLIZÁ PARA VER MÁS" en versalitas tracked-out + chip verde con ▶.
+- Audio: cama instrumental, sin voz, ~-16 dB medios. El post tiene que funcionar con el sonido apagado.
+
+LÁMINA 2 — EL MECANISMO, CON NOMBRES REALES
+- Imagen del cómo: la pantalla o el diagrama que muestra el mecanismo.
+- Titular en verde de marca, condensada black, máximo 2 líneas.
+- Debajo, banda negra con el cuerpo en ITÁLICA sentence-case (contraste deliberado contra el titular): UNA sola oración que NOMBRA las herramientas de verdad. Nada de "IA avanzada" ni "tecnología de punta": nombres propios o nada.
+
+LÁMINA 3 — LA PRUEBA OTRA VEZ, LIMPIA
+- El MISMO video de la lámina 1, mismo render del contador, pero SIN titular.
+- Metelo en una tarjeta de esquinas redondeadas con borde hairline blanco, centrada sobre un fondo oscuro que es el mismo video escalado y desenfocado. Logo arriba a la derecha.
+- Sirve para que quien ya leyó el titular pueda MIRAR sin texto encima.
+
+LÁMINA 4 — EL CIERRE
+- Foto ambiente amplia del contexto de uso.
+- Titular al pie alternando BLANCO y VERDE DE MARCA, condensada black, mayúsculas, 3 líneas.
+- UN solo pedido. Sin link, sin precio, sin lista de features.
+
+PALETA (ajustá el verde de marca al de Onia; el verde máquina queda como está)
+- Negro banda #000000 · Blanco #FFFFFF
+- Verde de marca ≈ #8CC63F (voz editorial)
+- Verde máquina #00FF00 (salida del sistema)
+- NUNCA usar el mismo verde para las dos cosas: esa separación es todo el truco.
+
+RENDER
+HyperFrames (HTML→MP4). El contador, el polígono, el titular y el chip de swipe son HTML/CSS sobre el video: no hace falta OpenCV ni ningún modelo de visión.
+
+LISTO = las 4 láminas exportadas en 4:5 (1080x1350); `ffmpeg -i sX.mp4 -vf "select=gt(scene\,0.15),showinfo" -f null -` devuelve CERO cortes en las láminas 1 y 3; el contador se lee con un valor en el primer fotograma y uno MAYOR y distinto en el último; un grep sobre todos los textos devuelve cero coincidencias de pronto|beta|construcción|próximamente; y las 4 láminas fueron ABIERTAS Y MIRADAS renderizadas (no solo exportadas) antes de publicar.
+```

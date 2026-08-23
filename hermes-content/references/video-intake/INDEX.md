@@ -23,9 +23,20 @@
 > que se abre para trabajar.
 >
 > **La fuente de esos prompts:** [PROMPTS_POR_SESION.md](PROMPTS_POR_SESION.md) (lotes hasta el
-> 15-ago) · [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md) (E1–E11) · [PROMPTS_LOTE_2026-08-17.md](PROMPTS_LOTE_2026-08-17.md) (F1–F3) · [PROMPTS_LOTE_2026-08-18.md](PROMPTS_LOTE_2026-08-18.md) (G1–G6) · [PROMPTS_LOTE_2026-08-19.md](PROMPTS_LOTE_2026-08-19.md) (H1–H3, I1–I2) · [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4) · [PROMPTS_LOTE_2026-08-21.md](PROMPTS_LOTE_2026-08-21.md) (L1–L3) · [PROMPTS_LOTE_2026-08-22.md](PROMPTS_LOTE_2026-08-22.md) (M1–M5 **y N1–N3**). Si cambia una
+> 15-ago) · [PROMPTS_LOTE_2026-08-16.md](PROMPTS_LOTE_2026-08-16.md) (E1–E11) · [PROMPTS_LOTE_2026-08-17.md](PROMPTS_LOTE_2026-08-17.md) (F1–F3) · [PROMPTS_LOTE_2026-08-18.md](PROMPTS_LOTE_2026-08-18.md) (G1–G6) · [PROMPTS_LOTE_2026-08-19.md](PROMPTS_LOTE_2026-08-19.md) (H1–H3, I1–I2) · [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4) · [PROMPTS_LOTE_2026-08-21.md](PROMPTS_LOTE_2026-08-21.md) (L1–L3) · [PROMPTS_LOTE_2026-08-22.md](PROMPTS_LOTE_2026-08-22.md) (M1–M5 **y N1–N3**) · [PROMPTS_LOTE_2026-08-23.md](PROMPTS_LOTE_2026-08-23.md) (**O1–O18**). Si cambia una
 > regla, se edita acá, no la copia de `sesiones/`.
 >
+> **El lote más grande hasta hoy — 18 posts del 23-ago:**
+> [síntesis](2026-08-23-sintesis-lote-18.md) (lo que ninguna ficha ve sola: 8 piezas esperan **un
+> solo** lead magnet, y 6 moldes dependen de una prueba de tercero que no tenemos) ·
+> [los 7 patrones de motion deduplicados](2026-08-23-patrones-de-motion-deduplicados.md)
+> (**leer antes de tocar `MOTION_PATTERN_BANK_2026.md`**: las 18 fichas propusieron ~25 entradas
+> del mismo puñado de mecanismos).
+>
+> **Desde el 23-ago cada ficha extrae también el ESTILO** — tipografía, paleta, composición, ritmo,
+> motion, textura — y dice a qué archivo nuestro se porta. Instrucción de Sergio: *"los reels
+> también son estilos y diseños, agarralos como conocimientos"*.
+
 > **El item que toca nuestro propio método:** [el documento
 > `handoff.md`](2026-08-22-handoff-context-rot.md) — el estándar vigente son los **7 campos** de
 > [`hermes-content/docs/handoff/README.md`](../../docs/handoff/README.md), que ya estaba en `main`

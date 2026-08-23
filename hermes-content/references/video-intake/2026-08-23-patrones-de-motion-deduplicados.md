@@ -48,7 +48,7 @@ que pasa **dentro del plano**. Es el patrón más repetido del lote y el más f�
 
 | Motor | Pieza | Medido |
 |---|---|---|
-| Contador ascendente 0 → 444 | `Dbyx3bwE6Mp` | 13,536 s, **0 cortes** (ffmpeg, umbral 0,3 y 0,15) |
+| Contador ascendente 0 → 444 | `Dbyx3bwE6Mp` | 13,536 s, **0 cortes** (re-medido con `-hide_banner`, umbral 0,3 y 0,15) |
 | Aceleración de escala (dolly-out + zoom interno a la vez) | `DbtH7_nNRF0` | ~8 s |
 | Filtro que cambia sobre la misma toma | `DbvxMwghtkA` | ~18 s, 13 estados |
 | Lista que se llena, ~1 ítem/s | `DcEJDHBTyPY` | ~29,4 s |
@@ -92,9 +92,20 @@ beat — nunca entre dos ideas**. No es una transición: es un signo de puntuaci
 - `DcWOss3RxMq` — tarjetas hueso (`NOT REAL`, `THE AD IN MINUTES`, `SIGN UP NOW FOR FREE`)
 - `DcPwVniOEKB` — el remate se resuelve invirtiendo cálido/frío en el corte, sin transición
 
-> **Corrección medida:** la ficha de `DcPwVniOEKB` afirmaba "un único corte a los ~3,7 s". Medido
-> con `ffmpeg select=gt(scene,X)` en X = 0,3 · 0,15 · 0,08: **cero cortes**, y la duración real es
-> **6,731 s**, no "~6 s". Ese corte no existe.
+> **Medido, y con una corrección de método que vale más que el dato:** el corte de `DcPwVniOEKB`
+> **existe y está en `pts_time` 3,800 s exactos** (score 0,485, igual a umbral 0,3 · 0,15 · 0,08).
+> La primera medición de esta sesión dijo "cero cortes" y era **falsa por un error de método**:
+> se corrió `ffmpeg -v error … showinfo`, y `-v error` **silencia la salida de `showinfo`**, con lo
+> que *cualquier* video devuelve cero. Lo detectó el agente de la ficha al re-medirlo en vez de
+> aceptar la cifra heredada.
+>
+> **La regla que deja:** `-v error` sirve para que ffmpeg no ensucie la salida, pero mata los
+> filtros que reportan por log. Para contar cortes va `-hide_banner`, nunca `-v error`. Y una
+> cifra "ya medida" que te pasan sigue siendo un dato heredado: se re-mide.
+>
+> Lo que sí quedó corregido de la ficha vieja: la duración de **video** es 6,600 s (198 fotogramas
+> a 30 fps); los 6,731 s son la pista de **audio**. Y el "push-in ~3% en ~2 s" no existe: PSNR de
+> 31,8 dB entre el fotograma 2 y el 110 en la banda de techo — cámara clavada.
 
 ---
 
