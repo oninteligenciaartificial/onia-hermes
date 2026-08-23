@@ -13,9 +13,9 @@
 | 2 | Lote 3: calendario, 6 tablas móvil, ayuda por rubro, voseo | ~21 | ✅ CERRADO 22-ago 20:42 UTC | prod verificado: registro y booking vosean ('Elegí tu profesional'), 1923 tests |
 | 3 | **Caja con carrito** multi-línea + ticket del día + anular | 16 | ✅ CERRADO 22-ago 21:01 UTC | loop 2 vueltas; en prod (page+route compilados, 16 tests); vive tras login — se mira con la primera sesión real | venta de 3 productos en un ticket, lista del día, anulación revierte stock y caja; mirado renderizado |
 | 4 | **Panel propio de importadora** | 16 | ✅ CERRADO 22-ago 21:58 UTC | en prod; mirado tras login con superadmin (app sana); la vista importadora se mira cuando exista una org de ese rubro | el dashboard de importadora no menciona caja ni mostrador; sus accesos van a SUS pantallas |
-| 5 | Rediseño panel dental | 16 | 🟡 CONSTRUIDO (loop 2 vueltas, d9aae50; 1958 en master 6a50bd4; capturas frescas del arbol commiteado) — deploy en vuelo | hero con el día andando, sin columna vacía, pendientes con jerarquía |
-| 6 | Datos fotografiables: día vivo dental+importadora en el seed, fuera "Demo ·"/"#DEMO-", restos dentales en settings/team de comercio | 9 | 🟡 EN VUELO (loop-tres-roles, en paralelo con el 5 — worktrees separados) | panel de los 3 rubros sin ceros y sin palabra Demo |
-| 7 | Lote final: vacío del inventario dental, 4 tuteos /login, tilde del booking, barrido | 7 | 🟡 EN VUELO (loop-tres-roles; la banda negra ya la cubrió el rediseño del 5) | vacío que invita en vez de parecer error |
+| 5 | Rediseño panel dental | 16 | 🟡 EN MASTER (6a50bd4) — deploy en vuelo junto al 6 | hero con el día andando, sin columna vacía, pendientes con jerarquía |
+| 6 | Datos fotografiables + comercio sin vocabulario dental | 9 | 🟡 EN MASTER (738d271, 1978 tests; dental Bs 942,50 e importadora Bs 21.633 verificados por el evaluador) — deploy en vuelo | panel de los 3 rubros sin ceros y sin palabra Demo |
+| 7 | Lote final: vacío del inventario dental, 4 tuteos /login, tilde del booking, barrido | 7 | 🟡 EN VUELO (loop relanzado tras morir por limite de modelo) | vacío que invita en vez de parecer error |
 | 8 | **Fotografiar los 5 rubros** → llenar el hueco de la landing (44% de la página) | 3 | cola | la sección de rubros muestra el panel real de cada uno, mirado en las 5 paradas |
 | 9 | v1.1: chatbot Bs 390 + WhatsApp por cliente + conversaciones en el panel | ~24 | tras v1.0 | ver ONIA_PLAN_DE_VERSIONES |
 
