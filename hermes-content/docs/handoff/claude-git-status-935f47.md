@@ -3,6 +3,128 @@
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
 > Última escritura: 2026-08-23.
 
+
+---
+
+# SEGUNDO OBJETIVO de la sesión (2026-08-23, tarde) — el producto a `main` y a producción
+
+> Cambio de objetivo pedido explícitamente por Sergio: *"deja el producto en main, ya es
+> vendible? que funciones tenemos y que funciones le arreglamos a una empresa… y ya
+> dejemos en produccion."*
+
+**Qué quedó EN PRODUCCIÓN (de este objetivo)**
+
+🔴 **NADA nuevo desplegado, y esta vez no fue una decisión: está BLOQUEADO por infra.**
+El código sí quedó en `master` de `onia-platform` (`8dc76c1`, pusheado, `0 0` contra
+`origin`). Pero el deploy no se puede ejecutar — ver abajo.
+
+**Gates corridos por mí, no heredados del subagente**
+
+| Gate | Resultado |
+|---|---|
+| `tsc --noEmit` | exit 0 |
+| Suite | 1991 passed, 5 skipped, 154 archivos, exit 0 |
+| `next build` | exit 0 (con `ENCRYPTION_KEY`; ver intentos fallidos) |
+| Marcadores de conflicto | cero |
+
+## 🔴 El VPS está siendo estrangulado por el proveedor
+
+Medido, no supuesto:
+
+- **4 vCPU, load average 110-120** sostenido.
+- **`st` = 93-96%** en `vmstat`. El hipervisor se queda con ~95% del CPU; la VM recibe ~5%.
+- TTFB de producción: `app.onia.com.bo/login` **6,3-9,3 s**; `onia.com.bo` **3,0-4,1 s**.
+  El objetivo de LCP es 2,5 s — acá el *primer byte* tarda más del triple.
+- **`docker` NO RESPONDE.** `docker ps` colgado en 4 intentos (60 s, 90 s, 240 s, 280 s),
+  cero salida. **Sin `docker`, no hay deploy ni swap posible.** Los contenedores siguen
+  corriendo (las webs responden), pero el daemon no atiende.
+
+**Lo que sí arreglé:** un `llama-server` (modelo `qwen2.5:3b` de Hermes, en CPU) llevaba
+**7h39m colgado quemando un núcleo entero**, con su único cliente —Hermes, pid 926— al
+0,6% de CPU. No respondía al `keep_alive:0` de la API de ollama ni a SIGTERM. SIGKILL
+liberó **2,1 GB** (memoria usada 10 Gi → 8,9 Gi) y bajó el login de 9,3 s a 5,4 s.
+`ollama serve` sigue vivo y lo respawnea en la próxima llamada de Hermes.
+
+**Ganó 2 segundos y ahí se acabó lo que se puede hacer desde adentro:** el steal siguió en
+95% DESPUÉS de liberar ese núcleo y esa memoria. La causa no es nuestra carga.
+
+## Verificado en producción (cierra el punto que la auditoría no pudo)
+
+`/opt/onia-platform/app.env`:
+
+- `PLATFORM_LAYER=1` ✅ y `AGENTS_RUNTIME=1` ✅ — el peor escenario que planteaba la
+  auditoría (capa multi-rubro apagada ⇒ todos los rubros viendo el menú dental ⇒ la capa
+  entera valiendo cero) **NO ocurre**.
+- `SIAT_EMISSION` ausente ⇒ el emisor fiscal es mock. Confirma el catálogo.
+- Hay dos `app.env`: `/opt/onia-landing/app.env` y `/opt/onia-platform/app.env`.
+
+## 🔴 Intentos FALLIDOS (el campo que nadie escribe)
+
+1. **Creí que el build estaba roto por la rama.** Falló con
+   `ENCRYPTION_KEY env var is required`. NO era la rama: `lib/encryption` ni figura en el
+   diff. Rebuildeando con una clave dummy pasa. **Antes de culpar a un diff, aislar el env.**
+2. **Un `awk` me dio un falso negativo y casi lo reporto.** Usé
+   `awk '/SERVICIOS_NAV_ITEMS/,/^]/'` para contar `/patients` y dio 1 — pero `awk` REABRE
+   el rango en cada mención, y la segunda (`nav: SERVICIOS_NAV_ITEMS`, línea 373) arrastró
+   otro bloque. El conteo real acotado a las líneas 340-357 es **0**. Un rango de `awk`
+   sobre un nombre que aparece dos veces no es un rango.
+3. **⚠️ ARREGLÉ MAL el defecto de servicios profesionales y lo tuve que revertir.**
+   Agregué `{ href: "/patients", label: "Clientes" }` al `SERVICIOS_NAV_ITEMS`. `tsc`
+   pasaba y mi guard nuevo pasaba — pero **rompió un test existente**:
+   `api-route-registry.test.ts` ("si el pack expone la pantalla, es dueño de su API").
+   **Por qué estaba mal:** `api-route-registry.ts:98-105` es deliberado — la *colección*
+   `patients` ya es de `CON_AGENDA` (incluye servicios, justo para alimentar el selector
+   de Citas), y la *ficha* `patients/[id]` + `medical-alerts` + `records` + `treatments` +
+   `import` son de `CLINICOS`. Exponer el segmento entero le da a un estudio contable la
+   ficha clínica con alertas médicas, y sus APIs le devolverían 403. **El gate de rutas
+   trabaja por `topSegment`, así que no se puede permitir la lista y bloquear la ficha por
+   esa vía.** Revertido; `master` quedó verde e intacto.
+
+## El defecto que queda vivo, con la evidencia
+
+**Servicios profesionales se vende y NO se puede usar.** Verificado tres veces:
+
+1. `lib/platform/vertical-pack.ts:340-357` — el nav tiene `/appointments` ("Citas") y
+   **cero** `/patients`.
+2. `lib/platform/route-access.ts:143-151` — `allowedSegmentsForPack` arma la lista blanca
+   desde `nav + quickActions + COMMON_SEGMENTS`, y `patients` no está en
+   `COMMON_SEGMENTS` (líneas 51-91). O sea la pantalla queda **BLOQUEADA**, no escondida.
+3. `app/(dashboard)/appointments/page.tsx:640-652` — el modal pinta
+   `<select required>` con los pacientes existentes y **no ofrece alta inline**.
+
+Cruzado contra los otros packs: solo servicios tiene Citas sin Clientes. `ELECTRICO` y
+`GESTIOS` no tienen ninguna de las dos (coherente); dental usa `navigation.ts`, que tiene
+ambas. **Es un defecto de un solo rubro.**
+
+Bug menor del mismo modal: los rótulos dicen **"Paciente *"** y **"Doctor *"** fijos, sin
+pasar por el vocabulario del rubro — un estudio contable ve "Paciente".
+
+**No lo arreglé porque la solución correcta es una decisión de producto, no una línea:**
+o se le da al modal un alta inline de cliente, o se le da a servicios una pantalla de
+clientes propia que no enlace la ficha clínica, o se saca "Citas" del rubro (lo que lo
+gutea). Las tres tocan una superficie viva.
+
+## Qué depende de Sergio
+
+1. **El VPS.** Steal del 95% con Docker caído no se arregla desde adentro. Ticket a
+   Hostinger o plan más grande. **Hasta que eso se resuelva no hay deploy.**
+2. **Servicios profesionales:** ¿se arregla o se saca de la oferta? Hoy se vende roto.
+3. **Moneda:** el producto escribe `Bs 390,00/mes` y la landing `Bs 390/mes`.
+   Mi recomendación: centavos DENTRO del producto (caja, factura), sin centavos en los
+   precios de venta. Son dos contextos, no una inconsistencia a unificar.
+4. **Add-on "Inventario avanzado":** `lib/platform/entitlements.ts:55` lo calcula y
+   **ningún archivo lo lee**. Cobrarlo hoy es cobrar un toggle.
+
+## Próximos pasos
+
+1. Destrabar el VPS (bloquea todo lo demás).
+2. Deploy de `onia-platform` con el runbook de la skill `onia-deploy` — ojo trampa 7:
+   `pgrep -af "npm install|next build"` antes, y `nohup … &` con log.
+3. Decidir servicios profesionales.
+4. Actualizar `ONIA_CATALOGO_DE_VENTA.md`: quedó desactualizado en varios puntos (el alta
+   automática está CERRADA y el §6 describe un embudo que no existe; multi-sede sigue sin
+   `branchId`, cero avance en 8 días).
+
 **Objetivo**
 
 Que la web de venta **muestre el uso real y deje de contradecirse**. *Hecho* = fotos de
