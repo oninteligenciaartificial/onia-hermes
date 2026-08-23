@@ -56,6 +56,7 @@ Todo bajo `hermes-content/references/video-intake/` salvo lo marcado.
 
 | Commit | Qué |
 |---|---|
+| `b198ccc4` | **el estándar de handoff + este archivo.** Fuera del carril, por pedido explícito de Sergio |
 | `b57b6cf1` | ficha `handoff.md` + verbatim + N1–N3 repartidos |
 | `819c84b9` | lote de 14 del 22-ago, M1–M5 |
 | `23bab36a` | lote de 9, L1–L3 |
@@ -70,6 +71,9 @@ producción R1–R13) · `METODO_DE_ANALISIS.md` · `BANDEJA.md` · `transcripci
 
 **Fuera del carril, tocado hoy por instrucción explícita:** `CLAUDE.md` (regla de cierre +
 fila en la tabla de ubicaciones) y `hermes-content/docs/HANDOFF_DE_SESION.md` (nuevo).
+
+⚠️ **`CLAUDE.md` es archivo raíz compartido por todos los carriles.** Cualquier otro carril
+abierto va a conflictuar ahí al mergear. Conviene bajar `b198ccc4` a `main` pronto.
 
 ---
 
