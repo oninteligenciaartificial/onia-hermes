@@ -1609,7 +1609,7 @@
    sección (2.1/2.5em): el add-on es producto, no es el título. */
 .offerName {
   font-family: var(--font-display), sans-serif;
-  font-size: 1.8em;
+  font-size: 1.7em;
   font-weight: 550;
   letter-spacing: -0.02em;
   line-height: 1.02;
@@ -1619,13 +1619,21 @@
 }
 @media (min-width: 860px) {
   .offerName {
-    font-size: 2.1em;
+    /* 1.95em y no 2.1em: contra el `.h2` de la sección (2.5em) el salto queda
+       en 1,28x — por encima del 1,25 que este sitio usa como mínimo entre
+       escalones. A 2.1em el salto caía a 1,19x y el nombre del add-on y el
+       título de la sección se leían como el mismo nivel. */
+    font-size: 1.95em;
   }
 }
 
-/* el link del panel va en verde SEÑAL y no en el verde-300 que hereda de
-   `.ink .link`: sobre el verde-900 del panel, señal mide 8,9:1 contra los
-   5,6:1 del verde-300 — y es el único elemento accionable del bloque. */
+/* El link del panel va en verde SEÑAL y no en el verde-300 que heredaría de
+   `.ink .link`. NO es por contraste: medidos con Playwright sobre el verde-900
+   del panel, verde-300 da 7,79:1 y señal 6,46:1 — gana el verde-300. Los dos
+   pasan AA de sobra, así que la decisión la toma el ROL: señal es el color de
+   lo accionable en todo el sitio (el `.btn`, el punto del kicker), y este link
+   es lo único accionable del bloque. Pintarlo del verde de texto lo escondería
+   justo donde el add-on tiene que poder abrirse. */
 .offerStar .link {
   color: var(--signal);
 }
@@ -1771,4 +1779,24 @@
    por otro filete — el bloque ya tiene suficientes reglas horizontales. */
 .offerFoot {
   margin-top: 2.6em;
+}
+
+/* El "+" que marca el precio como ADITIVO: se SUMA al plan, no lo reemplaza.
+   Robado literal de Shopify, que merchandisea su único add-on como `+$89/mo`
+   (shopify.com/pricing, banda "But wait, there's more"). Cuesta un
+   pseudo-elemento y le ahorra al lector la única objeción real de un add-on:
+   "¿esto reemplaza mi plan o se le suma?". En el número grande va elevado y
+   al 70 % para que no compita con la cifra; en la carta va a color pleno
+   porque ahí el precio ES el elemento que tiene que verse. */
+.offerNum::before {
+  content: "+";
+  font-size: 0.42em;
+  vertical-align: 0.95em;
+  margin-right: 0.1em;
+  color: color-mix(in srgb, currentColor 70%, transparent);
+}
+.offerItemPrice::before {
+  content: "+";
+  margin-right: 0.2em;
+  font-weight: 400;
 }

@@ -10,6 +10,7 @@ import {
   NOTA_FISCAL,
   bs,
 } from "@/lib/pricing";
+import { CHATBOT_PLAN, precioAnual, fmtBs } from "@/content/chatbot-precios";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
 import { Block, Btn, Kicker, JsonLd } from "../ui";
@@ -22,6 +23,35 @@ import s from "../sitio.module.css";
  * content/chatbot-precios.ts, así que esta pantalla, la landing y
  * /chatbot muestran el mismo número sin que nadie lo copie a mano.
  */
+
+/**
+ * El chatbot SALE de la lista de add-ons y pasa a ser el panel estrella: es el
+ * único con precio publicado, apartado propio (/chatbot) y anclaje de valor.
+ * Se filtra por `href` y NO por el nombre — lib/pricing.ts agregó ese campo
+ * justamente para que la pantalla no adivine a qué fila le toca link, y el
+ * sniff por `nombre.includes("Chatbot")` se rompía al renombrar la fila.
+ */
+const ADDONS_RESTO = ADDONS.filter((addon) => addon.href !== "/chatbot");
+
+/**
+ * Anclaje de valor del precio del chatbot. Un número suelto es un costo; el
+ * mismo número contra algo que el comprador YA paga es una comparación.
+ *
+ * Se publica porque no es una cifra inventada: el salario mínimo nacional 2026
+ * es dato público con fuente legal (DS 5516), y por eso la fuente se muestra
+ * en pantalla al lado del número. El porcentaje se DERIVA de
+ * `CHATBOT_PLAN.mensual` en vez de escribirse "12": si mañana cambia el precio
+ * en la fuente única, la frase se mueve sola en lugar de quedar mintiendo.
+ *
+ * ⚠️ DUPLICADO CONOCIDO. La misma constante vive en (sitio)/chatbot/page.tsx:78
+ * y en (sitio)/page.tsx. Le corresponde estar UNA vez, en
+ * content/chatbot-precios.ts, al lado del precio del que es referencia — pero
+ * ese archivo está fuera de este carril. Anotado en el reporte.
+ */
+const SALARIO_MINIMO_2026 = 3300;
+const PCT_SALARIO = Math.round(
+  (CHATBOT_PLAN.mensual / SALARIO_MINIMO_2026) * 100,
+);
 
 export const metadata: Metadata = {
   title: "Precios de Onia — planes en bolivianos, publicados",
@@ -169,8 +199,100 @@ export default function Precios() {
         </Reveal>
       </Block>
 
-      {/* Grupo / Empresarial */}
-      <Block surface="ink" labelledBy="grupo">
+      {/* Add-ons — SUBEN a pegarse a los planes, y dejan de ser una tabla.
+
+          Dos cambios, con un motivo cada uno.
+
+          EL ORDEN. Antes esta sección vivía DEBAJO de Grupo / Empresarial, que
+          es un proyecto cotizado que casi nadie compra. El add-on se decide
+          caliente, justo después de elegir el plan — no tres pantallas más
+          abajo. Es el orden que usan Intercom, Shopify y Notion en sus páginas
+          de precios: grilla de planes → add-ons → el resto de la letra chica.
+
+          LA FORMA. Era una tabla de cinco filas con el precio en mono 0.9em al
+          85 % contra el margen derecho. Ahora es asimétrica: el chatbot sale
+          de la lista y toma superficie propia, y los otros cuatro quedan como
+          carta de precios. Sacarlo de la lista es el punto — un add-on
+          estrella DENTRO de una lista de add-ons se lee como uno de cinco por
+          más que se lo maquille (Intercom promueve a Fin fuera de su sección
+          de add-ons por exactamente esa razón).
+
+          Ni un `.btn` en el bloque: botón = plan, link = add-on. Los montos
+          salen de lib/pricing.ts → ADDONS y de content/chatbot-precios.ts,
+          las mismas fuentes que la portada. */}
+      <Block surface="ink" labelledBy="addons">
+        <Reveal>
+          <Kicker>Se suma a cualquier plan</Kicker>
+          <h2 id="addons" className={s.h2}>
+            Lo que le sumás al plan, con su precio.
+          </h2>
+          <p className={s.lead}>
+            Se prende y se paga aparte. Ninguno te obliga a saltar de plan para
+            desbloquear una sola cosa.
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.06}>
+          <div className={s.offerStar}>
+            <div>
+              <span className={s.planStep}>Add-on · WhatsApp</span>
+              {/* El nombre es el RESULTADO y no lo redacta esta pantalla: sale
+                  de content/chatbot-precios.ts → `nombre`, la fuente única. */}
+              <h3 className={s.offerName}>{CHATBOT_PLAN.nombre}.</h3>
+              <p className={s.body}>{CHATBOT_PLAN.resuelve}</p>
+              <div className={s.actions}>
+                <a className={s.link} href="/chatbot">
+                  Ver el chatbot y sus requisitos →
+                </a>
+              </div>
+            </div>
+            <div className={s.offerRail}>
+              <div className={s.offerPrice}>
+                <span className={s.offerNum}>{bs(CHATBOT_PLAN.mensual)}</span>
+                <span className={s.offerUnit}>Bs / mes</span>
+              </div>
+              <p className={s.offerNote}>
+                Sin instalación. O {precioAnual(CHATBOT_PLAN)}.
+              </p>
+              <p className={s.offerAnchor}>
+                Es el <b>{PCT_SALARIO} % del salario mínimo nacional 2026</b>{" "}
+                (Bs {fmtBs(SALARIO_MINIMO_2026)}, según el DS 5516), sin
+                aguinaldo ni domingos, por algo que atiende las 24 horas.
+              </p>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.06}>
+          <p className={`${s.planStep} ${s.offerListLabel}`}>
+            Lo demás que se suma
+          </p>
+          <div className={s.offerList}>
+            {ADDONS_RESTO.map((addon) => (
+              <div key={addon.nombre} className={s.offerItem}>
+                <div className={s.offerItemHead}>
+                  <h3 className={s.offerItemName}>
+                    {addon.href ? (
+                      <a href={addon.href}>{addon.nombre}</a>
+                    ) : (
+                      addon.nombre
+                    )}
+                  </h3>
+                  <span className={s.offerItemPrice}>{addon.precio}</span>
+                </div>
+                <p className={s.offerItemText}>{addon.copy}</p>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </Block>
+
+      {/* Grupo / Empresarial — baja debajo de los add-ons: es un proyecto que
+          se cotiza, no una compra de esta página. Cambia de tinta a verde
+          porque los add-ons se quedaron con el bloque oscuro y dos bloques de
+          tinta seguidos borran el corte de tono, que es la ÚNICA profundidad
+          que usa este sitio (cero sombras en todo el archivo). */}
+      <Block surface="green" labelledBy="grupo">
         <Reveal>
           <Kicker>{GRUPO.nombre}</Kicker>
           <p id="grupo" className={s.h2} style={{ maxWidth: "22ch" }}>
@@ -183,33 +305,6 @@ export default function Precios() {
             <Btn href={WA_URL_LANDING} variant="line" external>
               Cotizar Grupo
             </Btn>
-          </div>
-        </Reveal>
-      </Block>
-
-      {/* Add-ons */}
-      <Block surface="paper" labelledBy="addons">
-        <Reveal>
-          <Kicker>Add-ons</Kicker>
-          <h2 id="addons" className={s.h2}>
-            Lo que sumás cuando lo necesitás.
-          </h2>
-          <div className={s.rows}>
-            {ADDONS.map((addon) => (
-              <div key={addon.nombre} className={s.row}>
-                <span className={s.rowName}>
-                  {addon.href ? (
-                    <a className={s.link} href={addon.href}>
-                      {addon.nombre} →
-                    </a>
-                  ) : (
-                    addon.nombre
-                  )}
-                </span>
-                <p className={s.rowText}>{addon.copy}</p>
-                <span className={s.rowPrice}>{addon.precio}</span>
-              </div>
-            ))}
           </div>
         </Reveal>
       </Block>
