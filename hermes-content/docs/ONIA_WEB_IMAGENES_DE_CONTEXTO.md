@@ -256,6 +256,74 @@ marca" **son el mismo problema**, y se resuelven en este orden:
 
 ---
 
+## 9-ter. Interfaz ILUSTRADA — decisión de Sergio, 2026-08-23
+
+> *"no debes usar fotos literales, puedes generar similares con el mismo estilo de marca desde
+> higgsfield"* → elegido explícitamente: **interfaz ilustrada (dibujo, no captura)**.
+
+Es compatible con la regla de §1: lo prohibido nunca fue **ilustrar**, fue **hacer pasar un
+dibujo por producto**. Una ilustración que se lee como diagrama de marca —y que nadie
+confundiría con un screenshot— no afirma nada falso.
+
+⚠️ **El bloque abstracto de forma+color YA SE PROBÓ Y FALLÓ.** `switcher.tsx` lo documenta:
+*"se leía como una imagen que no cargó"*. La ilustración tiene que ser **reconocible** como
+agenda, caja o panel. Formas abstractas no son una salida.
+
+### El modelo correcto: `recraft_v4_1`, no `soul_2`
+
+`soul_2` es para fotografía realista de personas — herramienta equivocada. `recraft_v4_1` con
+`model_type: "utility_vector"` resuelve el problema de raíz porque **acepta la marca como
+parámetro**, no como adjetivo:
+
+```
+model_type: "utility_vector"      → salida SVG real
+resolution: "1k"                   → 2,5 cr (a 2k son 10 cr, y 1024px sobra)
+background_color: "#F9FBFA"
+colors: ["#F9FBFA","#F3F5F4","#12100e","#00d26a","#013925","#016141","#86D9B0","#69716D"]
+```
+
+Verificado en el SVG generado: los fills salen **exactos** — `rgb(18,16,14)` = `--tinta`,
+`rgb(1,57,37)` = `--verde-900`, `rgb(0,210,106)` = `--senal`. La correlación de marca deja de
+depender de que el modelo "entienda" un adjetivo. **Y al ser SVG, un color que se escape se
+corrige con `sed`, sin regenerar.** Peso: 22-38 KB contra 148 KB de una captura webp.
+
+### 🔴 La trampa: el texto sale como TRAZADOS, no como `<text>`
+
+`grep -c "<text"` dio **0 en los tres** SVG… y al mirarlos tenían **"New Leads"**,
+**"Active Projects"**, **"Total Sales"**, **"Cash vs Card"** en inglés, más las cifras
+inventadas **"82K"** y **"745"**. Recraft **vectoriza el texto a paths**, así que el grep no lo
+ve nunca.
+
+Es la regla de la casa fallando por no aplicarla: **un grep sirve para DESCARTAR, nunca para
+CONFIRMAR.** El único chequeo válido es abrir la imagen y mirarla.
+
+### Qué separó el acierto del fallo
+
+De 3 pruebas, sólo pasó la que describía **exclusivamente formas**. Los dos fallos pedían
+"un numeral grande" y tarjetas con encabezado — y el modelo llenó esos huecos inventando.
+
+- ❌ `one very big geometric numeral as the hero figure` → devolvió "82K", "745"
+- ❌ `a card with a heading` → devolvió "Active Projects"
+- ✅ `two short rounded bars standing in place of a heading`
+- ✅ `every label, heading and figure is drawn as a plain rounded bar`
+- ✅ **cero numerales pedidos**: el gráfico de línea ascendente ya dice "sube" sin cifra
+
+### Registro
+
+| Lote | Modelo | Imágenes | Costo | Resultado |
+|---|---|---|---|---|
+| 4 | `recraft_v4_1` 1k | 3 | 7,5 cr | **1/3** — agenda ✅; caja y panel con texto inventado |
+| 5 | `recraft_v4_1` 1k | 2 | 5 cr | **2/2** ✅ con el método corregido |
+
+Aprobadas y sin cablear (scratchpad): `ui-agenda.svg` · `ui-caja2.svg` · `ui-panel2.svg`.
+Detalle menor pendiente: `ui-caja2` trae un glifo **`$`** en la banda inferior — en Bolivia la
+moneda es Bs. Cambiarlo por edición del SVG, no regenerando.
+
+**No están cableadas.** Reemplazar capturas reales por ilustración en una superficie de venta
+viva es cambio de pieza: necesita el OK de Sergio sobre ESA pieza (regla R5 de §2).
+
+---
+
 ## 10. Qué material de `public/` es publicable y qué no
 
 | Carpeta | Estado | Detalle |
