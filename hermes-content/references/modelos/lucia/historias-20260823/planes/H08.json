@@ -1,0 +1,13 @@
+{
+  "overlays": [
+    {
+      "asset": "hermes-content\\references\\modelos\\lucia\\historias-20260823\\placas\\H08.png",
+      "start": 0.4,
+      "end": 4.989,
+      "position": "bottom",
+      "scale": 0.82,
+      "fade": 0.35,
+      "marginY": 0.2
+    }
+  ]
+}

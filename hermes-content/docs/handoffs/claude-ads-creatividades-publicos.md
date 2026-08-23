@@ -46,6 +46,12 @@ marketing de las tres cuentas escrito como fuente de verdad.
 - **MCP de Postiz agregado** a la config del proyecto — aparece al reiniciar Claude Code.
 - **Facebook en Postiz: cerrado como no-viable por API**, con salida elegida (cross-post
   nativo). No requiere más trabajo técnico, solo dos toques de Sergio en el celular.
+- **8 HISTORIAS armadas y esperando OK** — `references/modelos/lucia/historias-20260823/final/`,
+  1080x1920, **0 créditos** (todo el b-roll ya estaba generado y pagado en `tanda-20260821`).
+  Las 5 primeras reciclan las señales de L6 para que la historia empuje al post.
+  Motor nuevo: `.claude/skills/editor-videos/scripts/story-batch.mjs` — encadena
+  `normalize-source` → `make-mockup` → `overlay-visuals`, con autochequeo.
+  Hoja de contactos `_CONTACTO-HISTORIAS.png` + `_SAFE-CHECK.png` (zonas de IG marcadas).
 - **L6 "5 señales" RENDERIZADO y esperando OK** — `posts-20260807/render-l6/`, 7 slides.
   **Costo 0 créditos**, no los ~4 estimados: todas las fotos del banco existente. Hoja de
   contactos en `_CONTACTO-L6.png`. Verificado MIRANDO las 7.
@@ -151,7 +157,8 @@ marketing de las tres cuentas escrito como fuente de verdad.
    están hechos; falta el montaje cuando el bot esté verificado punta a punta.
 3. Palabra clave en 5 de los 8 posts en cola de @oniahq + horario 19:00 → 20:00 Bolivia.
    *(Propuesto y sin respuesta explícita — no se tocó nada.)*
-4. Historias automatizadas: extender `postiz_schedule.mjs` con `post_type: story` + cron.
+4. Historias: **motor hecho y primera tanda de 8 armada**. Falta el OK y programarlas — el MCP
+   de Postiz ya acepta `post_type: story`, así que se programan sin SSH y sin cron propio.
 5. Limpiar versiones viejas de Lucía en Higgsfield, por la interfaz web.
 6. Cuando el MCP de Postiz esté activo (tras reiniciar), programar directo sin SSH.
 

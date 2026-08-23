@@ -1,0 +1,54 @@
+{
+  "_nota": "Tanda 1 de historias de Lucía. CERO créditos: todo el b-roll ya estaba generado y pagado en tanda-20260821. Las 5 primeras reciclan las señales del carrusel L6 para que la historia empuje al post. Copy en segunda persona, desde la silla del dueño, terminando en plata (gate §10.2).",
+  "accent": "#10C26B",
+  "stories": [
+    {
+      "id": "H01",
+      "clip": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/VID-02-estudiando-veo-6s.mp4",
+      "title": "El margen que calculás de memoria",
+      "subtitle": "es el que te está comiendo la ganancia"
+    },
+    {
+      "id": "H02",
+      "clip": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/VID-01-trabajando-veo-6s.mp4",
+      "title": "Te preguntan a las 10 de la noche",
+      "subtitle": "y le compran al que contestó primero"
+    },
+    {
+      "id": "H03",
+      "clip": "hermes-content/references/modelos/lucia/tanda-20260821/VIDEO-rooftop-veo-8s.mp4",
+      "title": "El fiado sin fecha no se cobra",
+      "subtitle": "se regala, todos los meses"
+    },
+    {
+      "id": "H04",
+      "clip": "hermes-content/references/modelos/lucia/tanda-20260821/VIDEO-rooftop-seedance-mini.mp4",
+      "title": "Si el stock lo sabe una sola persona",
+      "subtitle": "el día que falta, no vendés"
+    },
+    {
+      "id": "H05",
+      "clip": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/VID-01b-trabajando-seedance480p-5cr.mp4",
+      "title": "Tres días armando el cierre del mes",
+      "subtitle": "son tres días sin vender. Los pagás vos"
+    },
+    {
+      "id": "H06",
+      "clip": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/VID-04-gimnasio-veo-6s.mp4",
+      "title": "No me canso porque no existo",
+      "subtitle": "soy IA. Y no lo escondo"
+    },
+    {
+      "id": "H07",
+      "clip": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/VID-03-playa-veo-6s.mp4",
+      "title": "5 herramientas de IA que sí sirven acá",
+      "subtitle": "comentá HUMO en el último post y te las paso"
+    },
+    {
+      "id": "H08",
+      "clip": "hermes-content/references/modelos/lucia/tanda-20260821/VIDEO-rooftop-kling-natural.mp4",
+      "title": "Esta cara no existe",
+      "subtitle": "el negocio que la hizo, sí"
+    }
+  ]
+}

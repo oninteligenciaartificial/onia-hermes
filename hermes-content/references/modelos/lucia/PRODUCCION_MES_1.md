@@ -171,6 +171,13 @@ Publicación cruzada: colaboración en ambos feeds (gratis, aparece en los dos).
 Historias: 1-2/día desde el día 1 (recortes del b-roll ya generado + placas de código =
 **0 créditos**), escalando a 3-4/día cuando haya seguidores reales.
 
+✅ **Primera tanda de 8 ARMADA el 23-ago** — `historias-20260823/`, a 0 créditos como estaba
+previsto. Motor: `.claude/skills/editor-videos/scripts/story-batch.mjs` (plan JSON → MP4 9:16).
+🔴 **Zona segura de Instagram:** la barra de "Enviar mensaje" tapa el ~15% inferior y el header
+el ~10% superior. Con el margen por defecto de `overlay-visuals` (.08) la última línea de la
+placa queda DEBAJO de la barra — se ve perfecta en el render y cortada en el teléfono. El motor
+usa .20 y trae `--self-check` que falla si alguien lo baja.
+
 ## Costo total del mes 1
 
 | Concepto | Créditos |
