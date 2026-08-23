@@ -27,7 +27,9 @@
 > regla, se edita acá, no la copia de `sesiones/`.
 >
 > **El item que toca nuestro propio método:** [el documento
-> `handoff.md`](2026-08-22-handoff-context-rot.md) — los 5 campos con que se cierra una sesión,
+> `handoff.md`](2026-08-22-handoff-context-rot.md) — el estándar vigente son los **7 campos** de
+> [`hermes-content/docs/handoff/README.md`](../../docs/handoff/README.md), que ya estaba en `main`
+> cuando esta ficha se escribió. Lo que esta ficha aporta son los 5 campos del método público,
 > y por qué las cuatro herramientas que ya tenemos instaladas no alcanzan (escriben fuera del
 > repo).
 
