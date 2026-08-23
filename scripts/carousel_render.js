@@ -201,6 +201,22 @@ function triggerWord(slide) {
   return /^[A-ZÁÉÍÓÚÑ]{3,}$/.test(fromBrief) ? fromBrief : '';
 }
 
+// Que recibe el que comenta la palabra. SALE DEL BRIEF, nunca de una constante.
+//
+// Hasta el 2026-08-23 esto estaba hardcodeado: si la palabra no era SISTEMA, la slide
+// prometia "la lista con los costos" pasara lo que pasara. O sea que el carrusel de la
+// palabra HUMO — que entrega un PDF de herramientas de IA — le prometia al lector una
+// lista de costos que nadie iba a mandarle. El render inventaba una promesa que el brief
+// nunca declaro, que es exactamente lo que la regla de no fabricar prohibe.
+//
+// Ahora: si el brief no dice que se entrega, el ticket NO se dibuja. La slide sigue
+// pidiendo el comentario (titular + boton); lo unico que desaparece es la promesa que
+// nadie escribio. Mejor una slide con dos senales que una con una mentira.
+function commentReward(slide) {
+  const r = String(slide.comment_reward || '').trim();
+  return r || '';
+}
+
 // Boton de accion, compartido. La slide de CTA es la de mayor intencion de todo el carrusel
 // y hasta el 2026-08-17 solo el pack `typographic` dibujaba algo que se leyera como "tocá acá";
 // los otros cuatro dejaban solo texto.
@@ -257,14 +273,14 @@ function slideHtml(slide, idx, total, account, bg) {
       <h2 class="cta-h">${emph(slide.headline)}</h2>
       <p class="body">${emph(slide.body)}</p>
       ${itemLines(slide)}
-      ${word && !itemLines(slide) ? `<div class="ticket">
+      ${word && !itemLines(slide) && commentReward(slide) ? `<div class="ticket">
         <div class="ticket-l">
           <span class="ticket-k">Comentás</span>
           <span class="ticket-w">${esc(word)}</span>
         </div>
         <div class="ticket-r">
           <span class="ticket-k">Y recibís</span>
-          <span class="ticket-v">${word === 'SISTEMA' ? 'tu diagnóstico de 20 min' : 'la lista con los costos'}</span>
+          <span class="ticket-v">${esc(commentReward(slide))}</span>
         </div>
       </div>` : ''}
       ${word ? `<div class="ctabtn">Comentá ${esc(word)}</div>` : ''}

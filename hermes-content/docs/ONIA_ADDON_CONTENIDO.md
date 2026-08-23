@@ -55,6 +55,61 @@ Regla: **solo lo que ya existe**, con pegamento fino. Nada de pantalla nueva.
 
 **5 de 7 ya funcionan.** Lo que falta es la ficha de marca y el que propone.
 
+## Cómo se generan las piezas — y por qué Higgsfield queda afuera
+
+> Sergio, 2026-08-23: *"¿cómo generarías las piezas? ¿con Higgsfield? ¿y cómo lo
+> mantendrías?"*
+
+**No se generan: se COMPONEN.** Las piezas son HTML renderizado a PNG/MP4 con Chrome
+headless — `carousel_render.js`, `story-batch.mjs`, HyperFrames. Eso es CPU, no créditos.
+
+Prueba del mismo día: el carrusel L6 (7 slides) y las 8 historias de Lucía costaron **0
+créditos**. Lo único que costó créditos fue el b-roll generado, que ya estaba pago.
+
+### La cuenta que obliga a esto
+
+| | |
+|---|---|
+| Ingreso por cliente | **fijo**: Bs 390/mes |
+| Costo de generar | **escala con cada cliente y cada mes** |
+| Un reel generado (L1) | ~50 créditos |
+| El plan entero | ~3.000 créditos/mes |
+
+Si cada cliente necesitara generación, el techo sería ~20 clientes con el plan completo —
+y eso antes de nuestro propio contenido. Un abono plano contra un costo que crece por
+cliente es un negocio que empeora cuando funciona.
+
+**Higgsfield queda fuera del abono.** Se usa para Lucía (que es NUESTRA vitrina) y para
+ventas cotizadas aparte, como el personaje IA propio de un cliente. Nunca dentro de los
+Bs 390.
+
+### ¿Y si el cliente no tiene fotos?
+
+Probado el 2026-08-23 con un caso real de ferretería y **cero fotos**: el pack
+`typographic` no usa ninguna imagen y saca un carrusel publicable. De los 6 packs del
+renderizador, los tipográficos funcionan sin una sola foto.
+
+Orden de preferencia: fotos del cliente → packs tipográficos → **nunca** imágenes
+generadas dentro del abono.
+
+## Cómo se mantiene
+
+- **El código es nuestro y no depende de red.** `make-mockup.mjs` es self-contained por
+  diseño (bloquea cualquier pedido externo) y `carousel_render.js` no tiene dependencias.
+  No hay proveedor que pueda subir el precio ni apagar el servicio.
+- **Lo que se mantiene de verdad son los moldes por rubro**, y ahí está la palanca: es la
+  misma tesis de ONIA Core. El rubro #1 cuesta trabajo escribirlo; el cliente #50 de ese
+  rubro cuesta 0. Se mantiene una vez por rubro, no una vez por cliente.
+- **Lo que sí cambia solo es la API de Meta** — pero eso ya lo mantenemos para el chatbot
+  y el comentario→DM. No es costo nuevo del add-on.
+
+### 🔴 Hueco concreto encontrado al probarlo
+
+`carousel_render.js` resuelve la marca con un **mapa hardcodeado** de cuentas
+(`onia`/`arthur`/`sergio`/`nuvia`/`lucia`). Para clientes tiene que leer la ficha de marca
+del cliente — handle, logo, colores. Es exactamente la función #1 de la tabla de arriba, y
+es bloqueante: sin eso, todo carrusel de cliente sale firmado @oniahq.
+
 ## 🔴 La restricción que define el margen
 
 **El contenido del cliente se arma con las FOTOS REALES del cliente. No se genera.**
