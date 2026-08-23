@@ -15,7 +15,7 @@
 | 4 | **Panel propio de importadora** | 16 | ✅ CERRADO 22-ago 21:58 UTC | en prod; mirado tras login con superadmin (app sana); la vista importadora se mira cuando exista una org de ese rubro | el dashboard de importadora no menciona caja ni mostrador; sus accesos van a SUS pantallas |
 | 5 | Rediseño panel dental | 16 | ✅ CERRADO 23-ago 00:26 UTC | en prod (738d271). 🔶 Vive tras login: NADIE lo miró en producción todavía — lo mira Sergio al entrar | hero con el día andando, sin columna vacía, pendientes con jerarquía |
 | 6 | Datos fotografiables + comercio sin vocabulario dental | 9 | ✅ CERRADO 23-ago 00:26 UTC | en prod; verificado en local por el evaluador (dental Bs 942,50, importadora Bs 21.633) | panel de los 3 rubros sin ceros y sin palabra Demo |
-| 7 | Lote final: vacío del inventario dental, 4 tuteos /login, tilde del booking, barrido | 7 | 🟡 EN VUELO (loop relanzado tras morir por limite de modelo) | vacío que invita en vez de parecer error |
+| 7 | Lote final: vacío del inventario, voseo en TODO el producto, guards | 7 | 🟡 EN MASTER (e5950be, 1988 tests) — deploy en vuelo. El barrido hallo 84 tuteos y 17 tildes en 56 archivos | vacío que invita en vez de parecer error |
 | 8 | **Fotografiar los 5 rubros** → llenar el hueco de la landing (44% de la página) | 3 | cola | la sección de rubros muestra el panel real de cada uno, mirado en las 5 paradas |
 | 9 | v1.1: chatbot Bs 390 + WhatsApp por cliente + conversaciones en el panel | ~24 | tras v1.0 | ver ONIA_PLAN_DE_VERSIONES |
 
