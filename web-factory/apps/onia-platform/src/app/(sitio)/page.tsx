@@ -183,7 +183,7 @@ export default function Portada() {
         <Reveal>
           <div className={s.trust}>
             <div className={s.trustCell}>
-              <div className={s.trustNum}>6</div>
+              <div className={s.trustNum}>5</div>
               <p className={s.trustLabel}>rubros vivos en producción hoy</p>
             </div>
             <div className={s.trustCell}>
@@ -319,7 +319,7 @@ export default function Portada() {
         </Reveal>
         <Switcher />
         <Reveal>
-          <p className={s.note}>Seis rubros vivos y vendibles hoy.</p>
+          <p className={s.note}>Cinco rubros vivos y vendibles hoy.</p>
           <div className={s.actions}>
             <a className={s.link} href="/rubros">
               Ver los rubros por dentro →

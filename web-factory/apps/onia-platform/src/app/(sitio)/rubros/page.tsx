@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 /**
  * Apartado de RUBROS. Un producto, muchos rubros — el conmutador es la estrella.
- * Seis rubros vivos y vendibles hoy; el vocabulario por rubro es lo que cada
+ * Cinco rubros vivos y vendibles hoy; el vocabulario por rubro es lo que cada
  * negocio ve en la misma base (no son productos distintos). Ningún rubro
  * linkea afuera: la vieja /modulos/dental ya no existe como página — redirige
  * acá (308 en next.config.ts) porque mandar al visitante a otro cromo sin
@@ -75,7 +75,7 @@ export default function Rubros() {
             ))}
           </div>
           <p className={s.note} style={{ marginTop: "2em" }}>
-            Seis rubros vivos y vendibles hoy. ¿El tuyo es otro? Escribinos y lo
+            Cinco rubros vivos y vendibles hoy. ¿El tuyo es otro? Escribinos y lo
             vemos con tu caso.
           </p>
         </Reveal>
