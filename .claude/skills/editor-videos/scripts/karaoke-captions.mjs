@@ -118,7 +118,11 @@ const audioCodec = (probe("stream=codec_name", "a:0") || [])[0] || null;
 // del reel — tiene que pesar.
 const FONT_SIZE = Math.round(Number(flag("font-size", String(Math.max(18, Math.round(H * 0.042))))));
 const OUTLINE = Number(flag("outline", String(Math.max(2, Math.round(FONT_SIZE / 18)))));   // 4 @ 72px
-const SHADOW = Number(flag("shadow", String(Math.max(1, Math.round(FONT_SIZE / 36)))));     // 2 @ 72px
+// SIN sombra por defecto (Sergio, 22-ago: "hay subtitulos por detras de los subtitulos").
+// Con outline grueso + Shadow 2 la copia desplazada se lee como un SEGUNDO texto
+// fantasma detras del real. El outline negro ya da toda la legibilidad necesaria;
+// la sombra solo ensucia. Se puede reactivar con --shadow N si una pieza la pide.
+const SHADOW = Number(flag("shadow", "0"));
 // Bold=-1 pide una cara bold REAL. La estática que enviamos ya está marcada como
 // Bold (usWeightClass 700 + fsSelection), así que libass la matchea y NO aplica
 // engorde sintético — el trazo es el dibujo real del peso 700 del tipógrafo.

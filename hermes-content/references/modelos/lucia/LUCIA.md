@@ -769,3 +769,54 @@ el sol · cómo cae la sombra en la cara · a qué altura está el móvil · qu�
 ropa lleva. Se traducen al prompt LITERAL.
 Criterio que contradice el instinto: *"cuanto más aburrida y cotidiana sea la referencia, mejor
 funciona"* — buscar referencias espectaculares es lo que hace que el UGC se vea a anuncio.
+
+---
+
+# §14. INVENTARIO en Higgsfield — qué existe y qué se usa (22-ago)
+
+> Sergio: *"¿por qué no hay un character creado?"* — **sí había uno, y estaba descartado
+> a propósito.** Este inventario existe para que eso no vuelva a preguntarse.
+
+## Characters (Souls)
+
+| Soul | id | Estado |
+|---|---|---|
+| `LUCIA-REAL-v2-clean` | `36305a9b-af24-4390-959b-885082dddd5d` | ⛔ **NO USAR.** Dos motivos: sale con la **piel roja** e **ignora el atuendo pedido** (§2), y fue entrenado con frames de **una persona real sin permiso documentado** |
+| **`LUCIA-SINTETICA-v3`** | `e6d8703c-ea48-4d37-9e66-afae59ebe84a` | 🟢 **EL NUEVO (22-ago).** Entrenado con 6 imágenes 100% GENERADAS desde el ancla: rooftop, oficina, café, gimnasio, playa y selfie UGC. Identidad sintética pura — sin deuda de consentimiento |
+
+⚠️ Un Soul solo corre en `soul_2` y `soul_cinema_studio`. Para nano_banana / gpt_image /
+kling / seedance sigue siendo el **Element ancla** el que manda.
+
+## Elements de cara
+
+| Element | id | Uso |
+|---|---|---|
+| `lucia-ancla-2026-08` | `452d8375-…` | ✅ **VIGENTE** — el que va en `<<<UUID>>>` en todo prompt |
+| `lucia-surgical-anchor` | `902eeebb-…` | respaldo aprobado |
+| `ced20cc2` · `d5e323ef` · `de586dbb` · `fdf4b740` | — | ⛔ FUERA (frames de persona real / inconsistentes) |
+
+## Vestuario — YA EXISTE, 5 turnarounds v2 (categoría prop)
+
+| Look | id | Qué es |
+|---|---|---|
+| clean-girl | `cac118e1-a683-4874-b32a-eee4efbbed36` | top crema ribbed, pantalón beige, dorado mínimo, mocasines |
+| streetwear | `db9608fd-5f72-49df-b681-9414382c5cbb` | remera blanca, jean claro straight, gorra, zapatillas |
+| night-out | `3c9d1e87-ea1b-4ae1-8c5e-60683a848033` | vestido negro un-hombro midi, tacos, cartera |
+| loungewear | `23135bd8-8827-4bb5-9045-fe08ef80f9e1` | sweater crema + pantalón knit + pantuflas |
+| gym | `8352ef80-63b4-4cb1-be8b-b21cbacb22be` | top deportivo gris carbón + calza + zapatillas blancas |
+
+⚠️ Los 4 `lucia-outfit-*` viejos (sin `-v2`) quedan obsoletos: eran flatlays de Pinterest.
+🟡 **Falta el look de TRABAJO** (blazer beige + remera blanca), que es el que más usa el
+b-roll actual y no tiene turnaround propio.
+
+## Ambientes (categoría environment)
+
+`44a4686e` baño · `6a721405` dormitorio · `5cfbdab5` café · `cddfa484` calle · `2750ef8b` bar
+🟡 Faltan los que el b-roll ya usa: **rooftop atardecer · escritorio/oficina · gimnasio · playa**.
+
+## Cómo se combinan (regla que no cambia)
+
+- **Primer plano / cara reconocible** → Element ancla `452d8375` + `nano_banana_2`, fondo simple.
+- **Variedad de escena** → ancla + descripción de escena EN TEXTO. Nunca combinar cara +
+  outfit-Element + lugar-Element en la misma pieza de feed: se promedian y la cara deriva.
+- **Soul nuevo** → solo con `soul_2`, y se valida contra el ancla antes de darlo por bueno.
