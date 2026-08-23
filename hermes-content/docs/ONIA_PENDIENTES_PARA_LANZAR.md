@@ -15,8 +15,27 @@
 | 4 | **Panel propio de importadora** | 16 | ✅ CERRADO 22-ago 21:58 UTC | en prod; mirado tras login con superadmin (app sana); la vista importadora se mira cuando exista una org de ese rubro | el dashboard de importadora no menciona caja ni mostrador; sus accesos van a SUS pantallas |
 | 5 | Rediseño panel dental | 16 | ✅ CERRADO 23-ago 00:26 UTC | en prod (738d271). 🔶 Vive tras login: NADIE lo miró en producción todavía — lo mira Sergio al entrar | hero con el día andando, sin columna vacía, pendientes con jerarquía |
 | 6 | Datos fotografiables + comercio sin vocabulario dental | 9 | ✅ CERRADO 23-ago 00:26 UTC | en prod; verificado en local por el evaluador (dental Bs 942,50, importadora Bs 21.633) | panel de los 3 rubros sin ceros y sin palabra Demo |
-| 7 | Lote final: vacío del inventario, voseo en TODO el producto, guards | 7 | 🟡 EN MASTER (e5950be, 1988 tests) — deploy en vuelo. El barrido hallo 84 tuteos y 17 tildes en 56 archivos | vacío que invita en vez de parecer error |
-| 8 | **Fotografiar los 5 rubros** → llenar el hueco de la landing (44% de la página) | 3 | cola | la sección de rubros muestra el panel real de cada uno, mirado en las 5 paradas |
+| 7 | Lote final: vacío del inventario, voseo en TODO el producto, guards | 7 | ✅ CERRADO 23-ago — en prod y **mirado**: `/login` dice «Entrá a tu cuenta». Cola: `/contact` (ruta suelta) se había escapado del barrido y le hablaba **en dental a los 5 rubros** — arreglado y fijado con el guard 20 (2a2b77b) | vacío que invita en vez de parecer error |
+| 8 | **Fotografiar los 5 rubros** → llenar el hueco de la landing (40% de la página) | 3 | ✅ CERRADO 23-ago (8a2d74b6) — **falta que Sergio lo VEA antes de publicar** | la sección de rubros muestra el panel real de cada uno, mirado a 1440 y a 390 |
+
+### Lo que hubo que arreglar para poder fotografiar (ítem 8)
+
+Ninguna de las cuatro se veía leyendo el código; salieron de mirar la pantalla:
+
+1. **El sembrado tenía 3 inquilinos y la landing publica 5.** Estética y servicios no se
+   podían fotografiar porque no había cuenta que abrir. Ahora son cinco, con ruteo explícito
+   por track (el `else` final le habría sembrado embarques de aduana a una estética).
+2. **`seedDemoData` viene del core y parecía agnóstico: no lo es.** Sembraba el catálogo
+   dental para cualquier rubro — un estudio contable vendía "Resina compuesta".
+3. **Las marcas de utilería estaban a la vista, y de tres formas distintas**: `Demo · `,
+   `(demo)` y `(demo, hace 220 días)`, más "Paciente de demostración" en las notas — en
+   dental, que es el rubro vivo y el que más se fotografía.
+4. **Los cinco rubros compartían la misma clientela.** La agenda dental y la de estética
+   salían idénticas —mismo nombre, misma hora, mismo teléfono— y sólo cambiaba el motivo.
+
+Y el hallazgo que explica el "las capturas se ven muy mal" de Sergio: **no era el encuadre,
+era la escala.** La tarjeta medía 290×340 px; cualquier pantalla de gestión entraba ahí al
+45% y el texto de 16 px caía a 7 px. La tarjeta pasó a 478×560 y el recorte va casi 1:1.
 | 9 | v1.1: chatbot Bs 390 + WhatsApp por cliente + conversaciones en el panel | ~24 | tras v1.0 | ver ONIA_PLAN_DE_VERSIONES |
 
 **Los loops que revisan todo el tiempo (vivos hoy):**

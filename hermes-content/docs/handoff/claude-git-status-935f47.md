@@ -7,7 +7,9 @@
 
 Terminar el producto para poder venderlo y fotografiarlo, uno por uno, sin dejar nada a
 medias. *Hecho* = los 8 ítems de la cola de terminación cerrados y en producción
-(`ONIA_PENDIENTES_PARA_LANZAR.md` §"LA COLA DE TERMINACIÓN"). **7 de 8 cerrados.**
+(`ONIA_PENDIENTES_PARA_LANZAR.md` §"LA COLA DE TERMINACIÓN"). **Los 8 cerrados.**
+⚠️ El ítem 8 está cerrado en código pero **no publicado**: cambia una superficie viva y la
+regla es que Sergio VEA la pieza terminada antes del swap.
 
 **Qué quedó EN PRODUCCIÓN**
 
@@ -26,12 +28,13 @@ Ocho deploys limpios, cero rollbacks:
 
 **Qué quedó a medias, y dónde**
 
-- **Ítem 8 — el único abierto**: fotografiar los 5 rubros y llenar el hueco de la landing (la
-  sección de rubros ocupa **4.980 px, el 44% de la página**, con **cero imágenes**). No
-  empezado. Las capturas viejas (`public/v2/capturas/`) están **desactualizadas** (traen
-  `DEMO-414538-V` y "Dashboard" en inglés, ambos ya arreglados) y **mal encuadradas**.
-- **Deploy del lote final** (`e5950be`, 1988 tests): en vuelo al escribir esto. Verificar
-  `/login` → "Entrá a tu cuenta" antes de darlo por cerrado.
+- **Ítem 8 — hecho pero SIN PUBLICAR.** El conmutador ya muestra la captura real de los 5
+  rubros (`8a2d74b6`, worktree `skills-setup-config-8d4674`). Falta el OK de Sergio sobre la
+  pieza renderizada y después el swap en el VPS. Recordar: `onia.com.bo` **no lo sirve
+  Vercel** — pushear a main no publica nada.
+- **`/contact` y el guard 20** (`2a2b77b`) y **el seed de 5 inquilinos** (`6d34e62`) están en
+  master de `onia-platform`, **sin deployar**. Van juntos en el próximo swap; no hay apuro
+  porque ninguno cambia comportamiento en producción.
 - **Telegram para pedidos de acceso**: las variables están en `app.env` pero el contenedor no
   las tomó — `docker restart` no relee `--env-file`. Requiere recrear el contenedor (3 redes,
   hay datos de clientes). Hoy el aviso sale por correo, que funciona.
@@ -50,6 +53,17 @@ Ocho deploys limpios, cero rollbacks:
 - `onia-platform` master `e5950be`.
 
 **Intentos fallidos**
+
+- **Di por bueno un recorte mirándolo en el archivo, no en su destino.** Se veía nítido a
+  1434 px y era ilegible en la tarjeta de 290 px. La regla nueva está en la skill
+  `onia-verificacion`: una imagen se juzga montada al tamaño real en que se va a ver.
+- **Supuse que `seedDemoData` era agnóstico de rubro "porque viene del core".** Falso:
+  siembra el catálogo dental para cualquier track. Lo delató consultar la base, no leer.
+- **Creí que quitar la píldora del rubro empeoraba el móvil.** También falso: ya estaba en
+  `display:none` ahí desde antes. La comprobación evitó "arreglar" algo que no rompí — pero
+  sí destapó que en móvil nunca hubo etiqueta, y eso sí se agregó.
+- **El primer guard de fugas dentales mordió su propio comentario**: leía las líneas crudas
+  en vez de la fuente sin comentarios que usan los demás guards del archivo.
 
 - **Tres deploys murieron y el tercero tumbó el VPS entero.** Los `npm install` huérfanos se
   acumularon: load 18, npm de 40 minutos, 522 en todas las webs. Sergio reinició desde
@@ -83,10 +97,14 @@ Ocho deploys limpios, cero rollbacks:
 
 **Próximos pasos**
 
-1. Cerrar el deploy del lote final. *Listo* = `/login` dice "Entrá a tu cuenta" en producción.
-2. **Ítem 8**: recapturar los 5 rubros con el producto ya terminado, en **recortes** legibles,
-   y cablearlos al switcher. *Listo* = la sección de rubros muestra el panel real de cada uno,
-   mirado en las 5 paradas del scroll.
+1. **Que Sergio mire el conmutador con las fotos** y dé el OK. *Listo* = OK explícito sobre
+   esa pieza; recién ahí el swap de la landing en el VPS.
+2. Deployar `onia-platform`: `/contact` + guard 20 + seed de 5 inquilinos. *Listo* =
+   `/contact` renderizado sin vocabulario dental.
 3. Rediseñar el visual del login (los 4 defectos de arriba). *Listo* = capturas a 390 y 1440
    leídas, sin el vacío del medio ni el azul ajeno.
-4. Switcher móvil: que cambie de rubro al scrollear en el teléfono.
+4. Switcher móvil: que cambie de rubro al scrollear en vez de apilar. Hoy apila las cinco
+   capturas, cada una con su etiqueta — es un fallback digno, pero no es lo pedido.
+5. **Pendiente anotado, no perseguido**: dental, estética y servicios cierran el día en el
+   mismo Bs 942,50 porque comparten el fixture de cobros. No se ve en las fotos elegidas
+   (sólo comercio muestra el total), por eso no se tocó.
