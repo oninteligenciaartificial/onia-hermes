@@ -203,6 +203,59 @@ a la izquierda (calendario de pared con texto basura).
   gorra de NY): **cuando el prompt describe ropa, el modelo le pone marca.** Mirar el pecho, la
   gorra y la taza de cada imagen antes de aprobar.
 
+## 9-bis. Las capturas de PRODUCTO — por qué no se leen, y por qué NO se falsifican
+
+> Sergio, 2026-08-23: *"en las que muestras el sistema, mejora esas imágenes, no se llegan a
+> ver bien… puedes usar higgsfield para generarlas pero que tengan correlación o que sean
+> ilustrativas"* + *"mejores visualmente el sistema, no sigue la correlación de estilo de marca"*.
+
+**El diagnóstico, medido mirando el panel del hero a tamaño real (no supuesto):**
+
+**No es falta de resolución.** `public/v2/capturas/panel.webp` es **2160×1620** y se renderiza a
+~565 px. Píxeles sobran. Lo que pasa es que **el panel muestra una pantalla ENTERA de app en un
+espacio chico**: los rótulos secundarios quedan a 5-6 px reales. Sobra contenido, no faltan
+píxeles. Recortar a la región que el titular promete rinde más que subir la resolución.
+
+**Y el producto no sigue la marca.** Confirmado a la vista:
+
+| Qué | En el producto | En la marca |
+|---|---|---|
+| Logotipo | "onia" en minúscula, tipografía propia | "Onia." con el punto verde |
+| Verde | pastel / menta claro | `--senal #00d26a`, `--verde-700 #016141`, `--verde-900 #013925` |
+| Papel | blanco puro | `--bg #F9FBFA` / `--bg-deep #F3F5F4` |
+| Íconos y tipografía | otra familia, sin sistema | la del sitio |
+| Moneda | 🔴 `Bs 1.806` y `Bs 1.147,50` **en la misma tarjeta** | un solo formato |
+
+**Dos logos distintos conviven en la misma pantalla.** Eso solo ya rompe la correlación.
+
+### 🔴 El límite: la interfaz NO se dibuja con IA
+
+Se puede generar material **ilustrativo** con Higgsfield. **No** se puede generar una pantalla
+del sistema. Tres razones, ninguna estética:
+
+1. Es la regla escrita en el propio código de la home (`(sitio)/page.tsx` ~24): *"Regla de la
+   casa: nada de pantallas dibujadas haciendo de prueba."*
+2. Es *fabricar producto* — la misma familia de "no fabricar" que prohíbe testimonios y cifras.
+3. Ya costó caro: es lo que obligó a revertir la landing v2 en producción el 2026-08-20.
+
+### El orden correcto — lo fijó Sergio, no es invento
+
+De `landing-v3-aprobada-base-clara`: **"funcional + pestañas faltantes → restilar los dashboards
+→ recién entonces capturas"**. O sea que "las capturas se ven mal" y "el sistema no sigue la
+marca" **son el mismo problema**, y se resuelven en este orden:
+
+1. **Restilar el producto a la marca** — arreglando la CAPA (tokens, logotipo, familia de
+   íconos, formateador de moneda), no pantalla por pantalla. Un diff chico en la base y todas
+   las pantallas heredan. *En curso, carril `onia-platform`.*
+2. **Re-fotografiar**, esta vez **recortando a la región que el titular promete** en vez de
+   meter la app entera. Una tarjeta legible vale más que un escritorio completo ilegible.
+3. Recién ahí, evaluar si falta algo **ilustrativo** — y que sea ilustrativo de verdad
+   (diagrama, esquema, escena), nunca una UI dibujada.
+
+**Bloqueante:** el paso 2 no se hace antes del 1, o hay que fotografiar dos veces.
+
+---
+
 ## 10. Qué material de `public/` es publicable y qué no
 
 | Carpeta | Estado | Detalle |

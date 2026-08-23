@@ -17,6 +17,9 @@ carriles vivos no previene nada — de hecho hoy no previno nada (ver los tres c
 | Rama | Worktree | Dueño de archivos | Puerto |
 |---|---|---|---|
 | `claude/ads-creatividades-publicos` | `onia-hermes/` (checkout principal) | contenido/ads. **Entró a Chatwoot** y paró — ver `docs/handoff/chatbot.md` | — |
+| *(subagente)* **chatbot / infra** | worktree temporal | VPS + Chatwoot. **Tiene el turno de infra** | — |
+| *(subagente)* **producto → marca** | worktree temporal de `onia-platform` | repo `onia-platform`: capa de tokens, logotipo, íconos, formateador de moneda | 3340 |
+| *(subagente)* **add-ons** | `.claude/worktrees/skills-setup-config-8d4674` | `(sitio)/page.tsx` · `(sitio)/precios/page.tsx` · `sitio.module.css` | 3330 |
 | `claude/git-status-935f47` | `.claude/worktrees/skills-setup-config-8d4674` | `web-factory/apps/onia-platform/**` + `hermes-content/docs/**` | **3320** |
 | `claude/pending-tasks-review-fb0694` | `.claude/worktrees/amazing-bassi-44c97d` | 🔴 **SIN DECLARAR** | — |
 | `claude/onia-payment-structure-aecab8` | `.claude/worktrees/bolivia-product-import-6ae97c` | 🔴 **SIN DECLARAR** | — |
