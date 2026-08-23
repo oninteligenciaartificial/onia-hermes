@@ -149,3 +149,46 @@ sobre-sexualización (mata brand deals).
    la receta viral probada del nicho. (Candidatos: según calendario del mes.)
 6. **Arco narrativo semanal**: reunión editorial tipo The Clueless — YO la preparo cada
    domingo (qué le pasa a Lucía esta semana), Sergio aprueba en el mismo lote.
+
+---
+
+## 7. Música de Instagram por API — SÍ se puede, pero no con nuestra conexión (22-ago)
+
+Verificado leyendo `instagram.provider.js` de Postiz (no supuesto). El publicador arma
+`audio_configuration` con `audio_id`, `audio_volume` y `video_volume` — o sea que **permite
+mezclar la música con el audio propio del video**, que es justo lo que haría falta para un
+reel con narración.
+
+**Pero exige CUATRO condiciones a la vez** (líneas 481-486):
+
+```js
+settings.audio.id                      // hay un audio elegido
+&& type === 'graph.facebook.com'       // ⚠️ conexión via FACEBOOK GRAPH
+&& !isStory                            // no en historias
+&& media.length === 1                  // un solo archivo (no carrusel)
+&& hasExtension(path, 'mp4')           // es video
+```
+
+**El bloqueante es el segundo.** Nuestras tres cuentas están conectadas como
+`instagram-standalone` (Instagram API with Instagram Login) — el método que nos desbloqueó
+la publicación sin App Review. Con esa conexión, el audio **no se aplica**: Postiz ni siquiera
+arma el parámetro.
+
+### El trade-off, escrito para no volver a discutirlo
+
+| | Instagram Login (lo que tenemos) | Facebook Graph |
+|---|---|---|
+| Publica hoy | ✅ | requiere app con permisos de páginas |
+| App Review | no hace falta | sí, para permisos de páginas |
+| Música de IG por API | ❌ | ✅ |
+| Carruseles con música | ❌ (la API no lo permite en ningún caso) | ❌ |
+
+### Qué hacemos entonces
+
+1. **Reel de lanzamiento y piezas con VOZ → sin música, por API.** La narración ES el
+   contenido; una canción encima compite con ella. No perdemos nada.
+2. **Piezas MUDAS donde la música es el gancho** (b-roll de "un día en mi vida", memes) →
+   **se publican a mano desde el celular**, eligiendo audio en tendencia ahí. Son 2 minutos y
+   se gana el empuje algorítmico del audio trending, que por API no existe.
+3. **Migrar a Facebook Graph solo si** algún día el volumen de piezas mudas lo justifica. Es
+   el mismo camino de la app que hoy estamos evitando a propósito.
