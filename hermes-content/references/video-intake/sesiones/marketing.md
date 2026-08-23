@@ -778,3 +778,134 @@ Una sola composicion HyperFrames (skills hyperframes-core + slideshow): las 7 fi
 
 LISTO = los 9 PNG de 1080x1350 existen en disco renderizados por HyperFrames, la plantilla quedo guardada en hermes-content/references/ui-patterns/ficha-producto-catalogo/, y cada cifra de Onia que aparece en las laminas coincide caracter por caracter con su valor en subscription-plans.ts o pricing.ts (verificado con grep del numero contra el archivo fuente).
 ```
+
+---
+
+# Lote cosechado del DM — 2026-08-23 — 3 prompts
+
+> Fuente: [`PROMPTS_LOTE_2026-08-23-COSECHA.md`](../PROMPTS_LOTE_2026-08-23-COSECHA.md).
+> Sin transcripción de audio: Speaches falló. Texto en pantalla + caption + cortes medidos.
+
+## P6 · Molde B del banco de carruseles: la campaña conceptual (sándwich de 10 láminas)
+
+- **Ficha:** [El marco editorial que convierte 7 fotos sueltas en una campaña](../2026-08-23-cosecha-marco-editorial-carrusel-poster-adgod-rhode.md)
+- **Qué falta:** Tres cosas concretas: (a) decidir que es 'el producto' en nuestra version — Onia no vende un objeto fisico, el equivalente son capturas del producto, y los dashboards se restilan ANTES de sacar capturas (landing v3 aprobada); (b) permiso explicito de gasto si se generan las laminas fotorrealistas en Higgsfield (regla: generacion paga = permiso caso por caso); (c) la palabra-gatillo del comentario y el texto del DM, que hoy no existen escritos. ADVERTENCIA al portar: adgod usa una marca ajena real. Nosotros no podemos — la version legitima es la campana conceptual de la marca Onia misma o de un rubro nombrado en generico, nunca de un negocio identificable que no nos contrato.
+
+```text
+Objetivo de esta sesión: agregar un SEGUNDO molde de carrusel al banco, y dejar armados los dos pósters de sus extremos, sin gastar un crédito.
+
+Contexto. El carril video-intake analizó el carrusel https://www.instagram.com/p/Db2swVmk7eI/ de @adgod.ai (10 láminas, leídas todas). Descubrimiento: existe un molde de carrusel que es el OPUESTO del que ya tenemos en `web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md`. El nuestro (8 slides: hook→costo→causa→resolución→prueba→CTA) pone copy en todas las láminas y persuade con argumento. El de adgod pone copy SOLO en las dos primeras y la última, deja 7 láminas mudas en el medio, y persuade por demostración de capacidad. No es mejor ni peor: sirve para otro trabajo (mostrar que sabemos hacer algo, no explicar por qué duele un problema). La ficha completa está en `hermes-content/references/video-intake/` con el slug `marco-editorial-carrusel-poster-adgod-rhode`.
+
+QUÉ HACER
+
+1) Escribir la sección "Molde B — campaña conceptual" en `web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md`, debajo de la sección 2 (el molde de 8 slides), sin tocar ni contradecir lo que ya está. Debe decir explícitamente cuándo se usa cada molde: Molde A cuando vendemos la solución a un dolor; Molde B cuando mostramos capacidad de ejecución. La estructura del Molde B, exacta:
+   - Lámina 1: póster-portada. TODO el copy conceptual + la firma + el disclaimer de IA.
+   - Lámina 2: hoja de contactos. Co-branding arriba, grilla 3×2 de lo que viene, CTA blando al pie.
+   - Láminas 3-9: siete piezas visuales SIN una sola palabra sobreimpresa. Reparto obligatorio: 2 con persona / 5 de objeto, en 3 escalas distintas (plano medio, pieza entera, macro), y ninguna repite tipo de plano.
+   - Lámina 10: póster-cierre con el CTA duro de comentario.
+   La regla de una línea que resume el molde: **el texto vive solo en los extremos**.
+
+2) Construir la plantilla del póster (láminas 1 y 10) como HTML autocontenido en `hermes-content/references/ui-patterns/poster-editorial/`, 1440×1920 (3:4), lista para renderizar con HyperFrames. Especificación medida del original, respetala:
+   - Corchetes en las 4 esquinas a ~7% del borde; marcas de registro (crosshair de imprenta) a media altura izquierda y derecha.
+   - Rejilla de 3 columnas arriba y 3 al pie, con bullets `·` de separador.
+   - Dos bloques de metadatos flanqueando el centro, a la altura del sujeto.
+   - Titular único gigante (~85% del ancho) y TODO lo demás a cuerpo diminuto (~1,2% de la altura). Salto de escala ~20×, sin tamaños intermedios.
+   - El sujeto se SOLAPA sobre el titular, tapándole el centro. Ese solape es el único recurso de profundidad; no lo omitas.
+   - Grano de papel dentro de las letras del titular.
+   - Paleta del original, como referencia de estructura (los valores finales salen de la identidad Onia ya cerrada, no de acá): papel `#EDE4D7`, tinta `#1A1A18`, y un solo color caliente `#C40E19` usado EXCLUSIVAMENTE en los dos puntos de firma (logo del autor y tarjeta de CTA). La regla portable es esa: el color caliente marca dónde está la venta, y no aparece en ningún otro lado.
+
+3) Adaptar el copy del marco a Onia, respetando dos reglas duras del proyecto:
+   - **No fabricar.** adgod usa una marca ajena real (rhode) sin encargo. Nosotros NO. La campaña conceptual es de la marca Onia misma, o de un rubro nombrado en genérico ("módulo dental"). Jamás un negocio identificable que no nos contrató, ni testimonios, logos o cifras de clientes.
+   - **La venta nunca exhibe obra.** Nada de "muy pronto", "beta" ni "en construcción" en ninguna lámina.
+   El CTA de la lámina 10 va al lead magnet YA decidido: agendar demo en cal.onia.com.bo. Si usás la mecánica comentario→DM (el circuito IG comentario→DM está vivo en producción desde el 18-ago), lo que manda el DM es el link de la demo, NO un PDF ni una guía. Dejá escritas la palabra-gatillo y el texto exacto del DM, que hoy no existen.
+
+NO HAGAS
+- No generes imágenes en Higgsfield ni en ningún generador pago: eso requiere permiso explícito de Sergio, caso por caso. Esta sesión entrega el MARCO y el MOLDE; las 7 láminas del medio quedan anotadas como pendiente con su costo estimado.
+- No saques capturas de dashboards para las láminas del medio: los dashboards se restilan ANTES de las capturas (decisión de la landing v3 aprobada). Anotalo como dependencia.
+- No reescribas el molde de 8 slides que ya está en el banco. Se agrega, no se reemplaza.
+
+LISTO = `CAROUSEL_PATTERN_BANK_2026.md` tiene una sección "Molde B" con la tabla de 10 láminas y el criterio de cuándo usar A vs B; existe `hermes-content/references/ui-patterns/poster-editorial/` con el HTML renderizando las dos variantes (portada y cierre) a 1440×1920, ABIERTAS Y MIRADAS en el navegador (no solo un 200), con los corchetes, los crosshairs, el solape sujeto/titular y el color caliente apareciendo en exactamente dos lugares; y la palabra-gatillo + el texto del DM apuntando a cal.onia.com.bo están escritos en el mismo doc.
+```
+
+## P7 · Guion + plan de rodaje: el reel de demo en UNA sola toma para ONIA
+
+- **Ficha:** [Demo en una sola toma: visión por computadora sobre las cámaras que el cliente ya tiene](../2026-08-23-cosecha-demo-en-una-toma-vision-sobre-cctv.md)
+- **Qué falta:** Para el molde: NADA. Se graba hoy con un celular, el monitor y una cuenta de demo de ONIA Platform. Para el producto: falta todo lo caro — una decisión de Sergio sobre si Onia entra a video-analytics (vertical nuevo, no pack del core), un cliente real que preste su NVR, hardware de inferencia, y una postura legal sobre reidentificación de personas por nombre en Bolivia. Eso es BANCO, no descarte: la idea sirve, el momento no.
+
+```text
+Sos la sesión de marketing de ONIA. Objetivo único y verificable: dejar escrito, listo para apretar REC, UN guion de reel de 55-70 s que copie el molde verificado del reel de @supra_digitalsolutions (Instagram DadOo9Mo3AA), adaptado a ONIA Platform. No grabás nada en esta sesión: entregás el guion y el plan de rodaje.
+
+== CONTEXTO QUE NO SE NEGOCIA ==
+- Lead magnet decidido el 2026-08-23: AGENDAR UNA DEMO en cal.onia.com.bo. El CTA del reel es ESE. Ni PDF, ni 'escribinos', ni DM automático.
+- Regla 'no fabricar' (cero clientes pagando): prohibido inventar testimonios, logos, cifras de ROI, nombres de clientes o capturas de cuentas que no existan. Todo número que aparezca en pantalla sale de una cuenta de demo REAL de ONIA Platform.
+- Regla 'la venta nunca exhibe obra': cero 'muy pronto', 'beta', 'en construcción', 'próximamente'. Solo se nombra lo que está VIVO. Antes de nombrar un rubro, verificá su estado en hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md (dental está vivo; el resto, comprobalo, no lo supongas).
+- Precios: si el guion nombra un precio, se LEE de onia-platform/lib/subscription-plans.ts (planes) o onia-platform/lib/pricing.ts (add-ons). Recomendación fuerte: no nombrar precio en el reel.
+
+== EL MOLDE A COPIAR (5 bloques, en este orden) ==
+1. GANCHO POR PREGUNTA FRECUENTE (0-3 s). Literal del original: 'Muchas personas nos preguntan si nosotros hacemos este tipo de implementaciones'. Cero promesa, cero cifra, cero 'descubrí el secreto'. Abre con la duda del que mira y la responde MOSTRANDO. Adaptalo, no lo copies palabra por palabra.
+2. DEMOSTRACIÓN CON EL DEDO (3-30 s). La pantalla YA está corriendo cuando arranca el plano. Se enumeran capacidades señalándolas FÍSICAMENTE con la mano sobre el monitor, una por una, en frases cortas encadenadas con 'incluso también se puede…'. El original encadena 8 mediciones seguidas sin respirar.
+3. AMPLITUD DE RUBRO (30-40 s). El original: '…absolutamente todo en cualquier tipo de industria: de servicio, quioscos, almacenes, fábricas, centros logísticos, lo que vos necesites nosotros lo podemos medir.' Convierte un caso en un mercado. Para ONIA: nombrá SOLO rubros vivos, y cerrá la lista capturando demanda futura sin admitir obra ('¿otro rubro? escribinos').
+4. EL REMATE QUE VENDE (40-52 s). El original mete la salida por WhatsApp, dicha en primera persona del sistema: 'se puede configurar para que WhatsApp te envíe notificaciones… hey, hoy tuviste un día de productividad mucho más abajo que lo normal.' Es el único momento con una frase citada textual y por eso es el único que se recuerda. ONIA tiene ese canal VIVO (n8n + Chatwoot): usalo. El remate es que el sistema te HABLA, no que tiene pantallas.
+5. CIERRE A DEMO (52-65 s). El original: 'haceme el formulario… podemos hablar de hacer una demo totalmente gratis.' El nuestro: agendar en cal.onia.com.bo. Fricción baja, objeto claro, la palabra 'gratis' al FINAL y no al principio.
+
+== EL PLAN DE RODAJE (esto es lo que hace que el molde funcione) ==
+- UNA SOLA TOMA. El original mide 64,700 s con 0 cortes (medido con ffmpeg, umbral scene 0.3). No se corta: el ritmo lo dan la mano que entra a señalar y el contenido que cambia en la pantalla. Si el guion necesita un corte, el guion está mal escrito.
+- Cámara EN MANO filmando el monitor en DIAGONAL, nunca frontal. El monitor ocupa los dos tercios inferiores; arriba a la izquierda entra ventana/luz/planta para que no sea solo pantalla.
+- La MANO es el editor: entra en cuadro cada vez que la voz nombra algo nuevo. Reemplaza al corte, al zoom y al puntero animado.
+- PiP del hablante arriba a la derecha: rectángulo vertical de esquinas muy redondeadas, sin borde ni sombra. Puede flotar, no hace falta clavarlo.
+- Subtítulos quemados: 3 líneas máximo, caja negra OPACA POR RENGLÓN (no un rectángulo único), texto blanco, sans grotesca pesada, a ~75-80% de la altura. Bloque completo cada ~3 s, sin karaoke palabra por palabra.
+- Textura real: que se vean el moiré del monitor, los cables, el teclado. NO limpiar el set. Esa suciedad es lo que hace creíble que el sistema esté corriendo de verdad; limpio parece render.
+
+== ENTREGABLE ==
+Un archivo en hermes-content/docs/ (sin fecha en el nombre si es fuente de verdad; con fecha y en historial/ si es la foto de un día), que contenga:
+- El guion segundo a segundo, con los 5 bloques y sus tiempos.
+- Qué pantalla de ONIA Platform se muestra en cada segundo, nombrada por su RUTA en el repo, y con qué cuenta de demo.
+- El caption de Instagram.
+- La checklist de lo que hay que tener listo antes de apretar REC.
+
+LISTO = existe el archivo del guion en hermes-content/docs/, con los 5 bloques y sus tiempos sumando entre 55 y 70 s, con el CTA a cal.onia.com.bo escrito literal, con cada pantalla nombrada por su ruta dentro de onia-platform, con cero apariciones de 'muy pronto' / 'beta' / 'próximamente' / 'en construcción', y con cero cifras que no provengan de subscription-plans.ts, de pricing.ts o de una cuenta de demo real.
+```
+
+## P8 · Tres reels con el molde 'prompt en vivo' (screen recording + overlay estático)
+
+- **Ficha:** [Escribir el prompt en vivo es el reel entero](../2026-08-23-cosecha-prompt-en-vivo-canon-g7x-flash-chatgpt.md)
+- **Qué falta:** Nada para portar el molde. HyperFrames está instalado y probado, el editor de videos está completo y en main, la plataforma tiene rubros encendidos en producción para grabar, y el destino del CTA ya está decidido (demo en cal.onia.com.bo). El único límite es de contenido, no de herramienta: solo se graba lo que está VIVO en producción — nada detrás de un flag apagado y ningún cartel de 'muy pronto' en cámara.
+
+```text
+Objetivo único de la sesión: producir TRES reels verticales de Onia con el molde 'prompt en vivo', extraído de https://www.instagram.com/p/DbqmAEYhJsF/ (@marian.rojass). La ficha completa del análisis está en hermes-content/references/video-intake/ con el slug prompt-en-vivo-canon-g7x-flash-chatgpt — leela ANTES de empezar.
+
+EL MOLDE (cifras medidas con ffprobe sobre el original, no estimadas):
+1. Gancho de 4 palabras en overlay fijo, con la forma 'No tengo <lo caro> pero sí <Onia>'. Cuatro líneas, quiebre por sentido, centrado.
+2. 40-45% del metraje es UN SOLO PLANO continuo mostrando el trabajo en curso en pantalla. En el original son 9,5 s de tecleo sin un solo corte.
+3. La espera se MUESTRA, no se corta.
+4. UN solo corte (el original tiene 2, ambos en el mismo instante: 9,47 s y 9,80 s) y ahí entra el reveal a pantalla completa.
+5. Cierre: comparación antes/después y termina en el DESPUÉS.
+6. Duración total 13-15 s.
+
+ESPEC DEL OVERLAY (medido sobre el original, portalo tal cual):
+- Sans geométrica redondeada ExtraBold/Black, caja mixta, SIN contorno, SIN sombra, SIN caja de fondo.
+- Cuerpo = 2,7% de la altura del cuadro. Interlínea 1,1 (apretada).
+- Color #C042E5 (magenta-violeta) sobre fondo claro. UN SOLO acento, cero degradados, cero segundo color.
+- Bloque centrado, entre y=20% e y=30% de la altura.
+- CERO animación de entrada: el overlay es estático todo el video. El movimiento lo pone la UI grabada, no el editor. No agregues keyframes, no agregues transiciones.
+
+LOS TRES REELS (grabar pantalla de onia-platform en PRODUCCIÓN, con datos de prueba, nunca datos de un cliente real):
+A) 'No tengo recepcionista pero sí Onia' — grabar el editor de conocimiento del chatbot en vivo, escribiendo una respuesta y probándola en el probador.
+B) 'No tengo secretaria pero sí Onia' — grabar el alta de una cita en el módulo dental de punta a punta.
+C) Tercero a tu criterio, elegido SOLO entre capacidades encendidas y verificadas en producción hoy.
+
+REGLAS DURAS, no negociables:
+- Solo se graba lo que está VIVO en producción y verificado ahí. Nada detrás de un flag apagado. Si al ir a grabar algo no funciona, NO lo grabes: cambiá de reel y anotá el pendiente.
+- PROHIBIDO que aparezca en cámara 'muy pronto', 'beta', 'en construcción' o cualquier estado de obra. Un solo cartel contamina el producto entero.
+- No fabricar: cero testimonios, cero logos de clientes, cero cifras de resultados. No hay clientes pagando.
+- Datos en pantalla: inventados y obviamente de prueba. Ningún nombre, teléfono ni NIT real.
+- CTA: el objeto que mandamos es AGENDAR UNA DEMO en cal.onia.com.bo (decisión del 2026-08-23). NO un PDF. Va como última línea del caption, no como overlay en el video.
+- El original no tiene CTA porque su conversión es el guardado; el nuestro sí lo lleva.
+
+ENTREGABLES:
+- 3 MP4 verticales 1080x1920 renderizados con HyperFrames (leé la skill hyperframes ANTES de codear; no reinventes el motor).
+- 1 archivo de caption por reel, con el CTA a cal.onia.com.bo.
+- La tabla de cortes y el preview 360p de los tres, MOSTRADOS a Sergio ANTES de dar nada por cerrado (regla de oro del carril video: nunca cortar a ciegas).
+
+LISTO = los 3 MP4 existen en disco, ffprobe confirma en cada uno duración entre 13 y 15 s, resolución 1080x1920 y como máximo 2 cortes detectados con umbral scene 0.3; los 3 previews 360p y su tabla de cortes fueron mostrados a Sergio; y ningún fotograma de ningún reel contiene las cadenas 'muy pronto', 'beta', 'próximamente' ni 'en construcción'.
+```

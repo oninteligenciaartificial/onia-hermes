@@ -41,9 +41,14 @@ DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")
 echo "VIDEO: $F  ${DUR}s"
 
 # ---------- 2. fotogramas por densidad de texto ----------
+# COSTO (medido 2026-08-23): quien lee estos fotogramas es un modelo, y una imagen de 1080px
+# cuesta ~1.000-1.500 tokens. Con 40 densos por video eran ~50.000 tokens por agente SOLO en
+# mirar; un lote de 32 se iba a 4-5 M. A 640px y 3 ventanas (~24 densos) el texto en pantalla
+# se sigue leyendo igual y el costo baja a ~1/5. Si algun dia hace falta leer letra chica,
+# subir la escala para ESE video, no para todos.
 # Primero una pasada barata (1 cada 2 s). Despues se re-muestrea DENSO alrededor de los cuadros
 # con mas bordes — el texto en pantalla dispara la varianza de bordes muy por encima del video.
-ffmpeg -v error -i "$F" -vf "fps=1/2,scale=720:-1" -q:v 3 "$OUT/fotogramas/base_%03d.jpg" -y
+ffmpeg -v error -i "$F" -vf "fps=1/2,scale=640:-1" -q:v 3 "$OUT/fotogramas/base_%03d.jpg" -y
 
 BEST=""
 for img in "$OUT"/fotogramas/base_*.jpg; do
@@ -54,11 +59,11 @@ for img in "$OUT"/fotogramas/base_*.jpg; do
 done
 UMBRAL=$(printf '%s' "$BEST" | sort -rn | head -3 | tail -1 | cut -d' ' -f1)
 
-printf '%s' "$BEST" | sort -rn | head -5 | while read -r sz img; do
+printf '%s' "$BEST" | sort -rn | head -3 | while read -r sz img; do
   n=$(basename "$img" .jpg | sed 's/base_//')
   t=$(node -e "console.log(((parseInt('$n',10)-1)*2).toFixed(2))")
   # 4 cuadros por segundo en la ventana de 2 s alrededor del candidato
-  ffmpeg -v error -ss "$t" -t 2 -i "$F" -vf "fps=4,scale=1080:-1" -q:v 2 \
+  ffmpeg -v error -ss "$t" -t 2 -i "$F" -vf "fps=4,scale=640:-1" -q:v 2 \
     "$OUT/fotogramas/texto_${n}_%02d.jpg" -y 2>/dev/null
 done
 

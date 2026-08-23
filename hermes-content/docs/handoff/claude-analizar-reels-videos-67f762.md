@@ -34,6 +34,7 @@ de intake completo, corrido de punta a punta dos veces (22-ago sobre `DbT8hWPsyj
 
 | Qué | Dónde | Estado exacto |
 |---|---|---|
+| **Cosecha del DM — 32 items** | `PENDIENTE_COSECHA.md` | **15 con ficha (P1–P15), 17 sin analizar.** Se corto por COSTO, no por error. El material pesado ya esta bajado y medido. |
 | **Los 18 prompts O1–O18** | `PROMPTS_LOTE_2026-08-23.md` + copias en `sesiones/` | **repartidos, sin ejecutar.** Es lo correcto: este carril reparte. |
 | **~25 entradas al banco de motion** | `2026-08-23-patrones-de-motion-deduplicados.md` | deduplicadas a **7 patrones** y dejadas como propuesta. **Nadie escribió en `MOTION_PATTERN_BANK_2026.md`** — ese archivo es de la sesión web-factory. |
 | **Conflicto con `motion-doctrine`** | ver síntesis §4 | **9 de 14 videos contradicen la doctrina** (el texto no se anima, entra por corte duro). Anotado, no resuelto: es decisión del dueño de esa skill. |
@@ -54,6 +55,12 @@ de intake completo, corrido de punta a punta dos veces (22-ago sobre `DbT8hWPsyj
 | `06ae2b43` · `4214fcea` | skill `sacar-prompt` (nueva) + registrada en `CLAUDE.md` |
 
 **Intentos fallidos**
+
+0. **Analizar sin mirar lo que cuesta.** Cada agente lee 30-50 fotogramas JPEG a 1080px, y una
+   imagen asi cuesta ~1.000-1.500 tokens: **~50.000 tokens por agente solo en mirar**. Dos tandas
+   gastaron 3,20 M y 2,00 M, y la tercera iba a 4-5 M cuando Sergio la corto. Arreglado en
+   `preparar.sh`: 640px y 3 ventanas densas en vez de 5 → ~1/5 del costo, y el texto en pantalla
+   se lee igual. Detalle en `2026-08-23-costo-del-analisis.md`.
 
 1. **Inventar un estándar de handoff sin mirar `main` primero.** El 22-ago escribí
    `hermes-content/docs/HANDOFF_DE_SESION.md` + `.claude/handoff/<rama>.md` y una regla nueva en
@@ -110,7 +117,11 @@ de intake completo, corrido de punta a punta dos veces (22-ago sobre `DbT8hWPsyj
 
 1. ✅ **Bajada a `main`** el 2026-08-23 (`4e0d654c`). Único conflicto: `BANDEJA.md`, y era de unión
    (los dos lados sólo agregaron al final) — se quedaron las dos partes. Cero marcadores, verificado.
-2. **Contar de nuevo si comentario→DM sigue vivo** antes de ejecutar cualquier O que dependa de él.
+2. **Terminar los 17 de la cosecha** con el `preparar.sh` ya abaratado. Lista y contexto en
+   [`PENDIENTE_COSECHA.md`](../../references/video-intake/PENDIENTE_COSECHA.md).
+3. **Arreglar la transcripcion**: Speaches devolvio `fetch failed` para los 26 videos, en paralelo
+   y de a uno, aunque `/v1/models` responde OK. Todo el lote se analizo sin audio.
+4. **Contar de nuevo si comentario→DM sigue vivo** antes de ejecutar cualquier O que dependa de él.
 3. **La sesión web-factory** toma `2026-08-23-patrones-de-motion-deduplicados.md` y decide qué
    entra al banco. **No lo escribe este carril.**
 4. **El dueño de `motion-doctrine`** declara qué régimen gobierna montaje UGC vs motion graphics
