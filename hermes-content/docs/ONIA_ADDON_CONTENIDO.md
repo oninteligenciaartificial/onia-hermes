@@ -68,6 +68,52 @@ Regla: **solo lo que ya existe**, con pegamento fino. Nada de pantalla nueva.
 Si un cliente quiere su propio personaje IA, eso es otra venta, con otro precio, y se
 cotiza caso por caso.
 
+## ¿Quién hace las piezas? Ni nosotros ni ellos
+
+> Sergio, 2026-08-23: *"las piezas las hacemos nosotros o ellos"*.
+
+Las dos respuestas obvias están mal:
+
+| | Por qué no |
+|---|---|
+| **Las hacemos nosotros** | Es una agencia. Se vende por horas, no escala, y contradice la decisión de que Onia vende software y nunca horas |
+| **Las hace el cliente** | No las va a hacer. Si tuviera tiempo y criterio no contrataría a nadie. El resultado depende de su gusto y después le echa la culpa al producto |
+
+**Las hace el sistema, con la materia prima de ellos, y ellos aprueban la tanda.** Es el
+mismo patrón que ya usa toda la plataforma: *"el sistema trabajó por vos · propuestas
+esperando tu aprobación"*.
+
+| Lo pone el cliente | Lo pone el sistema |
+|---|---|
+| Sus fotos reales (una vez) | Qué decir, a quién y cuándo |
+| Colores, logo, rubro, tono (una vez) | El copy pasado por el gate §10.2 |
+| Un sí de 10 segundos por tanda | El render, la programación, el DM y el lead |
+
+### 🔴 La ventaja injusta: los datos que ya están en el ERP
+
+Esto es lo que ninguna agencia puede hacer, y no por talento sino por acceso.
+
+La plataforma **ya sabe** qué vende el negocio, a qué precio, qué stock tiene parado, quién
+le debe y a qué hora vende más — son módulos 🟢 vivos (Catálogo, Inventario, Caja, Fiados).
+El que propone lee eso:
+
+- 40 unidades de un producto sin moverse hace 90 días → propone la pieza de ese producto.
+- Hora pico a las 18 → programa ahí, no a una hora de manual.
+- Fiados vencidos subiendo → propone el contenido que empuja cobranza, no uno de marca.
+
+Una agencia te pregunta "¿qué querés publicar este mes?". El sistema **ya sabe** qué
+conviene publicar. Ese es el add-on, no el diseño de los carruseles.
+
+### ⚠️ Los primeros 3 los operamos a mano — y eso tiene fecha de vencimiento
+
+Para los 3 negocios de validación, el que propone todavía no existe: los operamos nosotros
+para aprender los moldes por rubro. **Eso es temporal a propósito.**
+
+Condición de salida, escrita para que no se olvide: **cuando el tercer negocio esté
+andando, el que propone tiene que estar hecho.** Si seguimos operando a mano después de
+eso, dejó de ser un add-on de software y se convirtió en una agencia sin que nadie lo
+decidiera.
+
 ## Automatización: qué ya corre solo y qué NO puede correr solo
 
 > Sergio, 2026-08-23: *"el sistema quiero que puedas automáticamente postear, enviar DMs
@@ -138,10 +184,26 @@ solo, y de rubros distintos para ver si el molde aguanta el cambio de vocabulari
 
 Se les cobra desde la primera pieza. Un "me interesa" gratis no es validación.
 
-## Pendiente de Sergio
+## Precio — decidido 2026-08-23
 
-- 🔴 **Precio del add-on.** No lo invento: los add-ons se definen en `lib/pricing.ts` y hoy
-  no existe una fila para contenido. Sin precio no se ofrece.
+**Bs 390/mes**, igual que el chatbot. Anual = 10 meses (Bs 3.900), **sin instalación**,
+mismo trato que el resto del catálogo.
+
+Por qué el mismo número: un solo precio de add-on es más fácil de recordar y de vender;
+el costo variable nuestro es ≈ 0 (fotos del cliente, renderizadores propios, publicación
+por Graph API); y quien lleva chatbot + contenido paga Bs 780, que sigue siendo menos que
+el plan Professional.
+
+**Volumen incluido: 8 piezas al feed por mes + historias diarias.** Es una cláusula de uso
+justo, no un límite de nuestro trabajo: como las piezas las arma el sistema, el costo de la
+número 9 es el mismo que el de la 1. El número existe para que el add-on no se convierta en
+"pedime todo lo que quiera", que es como un abono de software se transforma en un retainer
+de agencia.
+
+⚠️ **Falta escribirlo en `onia-platform/lib/pricing.ts`** — hasta que esa fila exista, el
+precio no es real y no se ofrece. Es otro carril (el producto), no éste.
+
+## Pendiente de Sergio
 - 🟡 Los 3 negocios concretos a los que se ofrece.
 - 🟡 Si la propuesta semanal la revisa Sergio antes de que la vea el cliente, o va directa.
 
