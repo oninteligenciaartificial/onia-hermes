@@ -634,7 +634,7 @@ LISTO = `ffprobe` reporta 198±3 fotogramas a 30 fps; `ffmpeg -i out.mp4 -vf "se
 
 ## O8 · Molde de 6 movimientos: gancho falso -> prueba cruda -> metodologia -> comentario
 
-- **Ficha:** Seedance 2.5 al estilo Batman: el gancho falso, la prueba cruda y el CTA que crece 3x
+- **Ficha:** [Seedance 2.5 al estilo Batman](../2026-08-23-seedance-25-batman-metodologia-comenta-seedance.md)
 - **Qué falta:** 1) Seedance 2.5 NO esta en nuestro stack: no lo tenemos ni lo probamos, y no se si aguanta consistencia de estilo animado entre planos. Hay que medir el analogo (Higgsfield/kling) antes de prometer nada; gasto = permiso explicito. 2) El preset de textura 'pantalla filmada' (halftone + viñeta + franja cromatica) no existe en editor-videos: es la pieza que mas unifica y la mas barata de agregar. 3) La config de karaoke actual no contempla grupos de 1-4 palabras con '...', ni el salto de escala del CTA, ni la regla de apagado cuando el grafico ya dice la palabra: tres parametros nuevos en captions-overlay. 4) El prompt de Seedance no esta en ningun lado del post; si queremos el estilo animado hay que RECONSTRUIRLO con la skill sacar-prompt y decir que es reconstruido.
 
 ```text

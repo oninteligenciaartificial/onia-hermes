@@ -6,6 +6,17 @@
 18 posts entraron, 18 salieron con prompt. Cada uno linkea a su ficha, que trae la
 reconstrucción completa, el estilo portable y lo que NO se puede afirmar.
 
+> ## ✅ El lead magnet YA está decidido — Sergio, 2026-08-23
+>
+> **Es agendar una demo.** Los prompts que usan comentario→DM (O1, O4, O6, O8, O9, O10, O14, O15)
+> mandan **el link de reserva**, no un PDF ni una plantilla: `cal.onia.com.bo` (Cal.com
+> self-hosted → n8n `/webhook/calcom-booking` → Google Calendar → Telegram → lead en ONIA Center).
+>
+> Donde una ficha diga *"falta decidir qué se manda por DM"*, ya está contestado. Lo que sigue
+> pendiente es **mirar** la página renderizada y reservar una vez de punta a punta antes de
+> apuntarle ocho publicaciones — hoy sólo está verificado que responde HTTP 200, y eso no es
+> verificación. Detalle en [la síntesis §1](2026-08-23-sintesis-lote-18.md).
+
 > ⚠️ **Antes de ejecutar cualquiera de estos: leer**
 > [`2026-08-23-patrones-de-motion-deduplicados.md`](2026-08-23-patrones-de-motion-deduplicados.md).
 > Las 18 fichas propusieron ~25 entradas al banco de motion sin leerse entre sí; ahí están
@@ -23,7 +34,7 @@ reconstrucción completa, el estilo portable y lo que NO se puede afirmar.
 | **O5** | [Daz0cVMBuD8](2026-08-23-molde-anuncio-prueba-externa-astrocat.md) | `marketing` | Plantilla de guion 'Hito con prueba externa' + preset de subtitulo ancla, renderizada en HyperFrames |
 | **O6** | [Db9jbZtumB7](2026-08-23-reel-10-laminas-plano-fijo-comment-to-dm.md) | `marketing` | Portar el molde 'plano fijo + N laminas' y el comment-to-DM a un reel de Onia |
 | **O7** | [DcPwVniOEKB](2026-08-23-meme-dos-cartas-setup-vivo-remate-congelado.md) | `marketing` | Meme de dos cartas — setup vivo / remate congelado |
-| **O8** | DcYiAvqsjij | `marketing` | Molde de 6 movimientos: gancho falso -> prueba cruda -> metodologia -> comentario |
+| **O8** | [DcYiAvqsjij](2026-08-23-seedance-25-batman-metodologia-comenta-seedance.md) | `marketing` | Molde de 6 movimientos: gancho falso -> prueba cruda -> metodologia -> comentario |
 | **O9** | [Db1b33RAh_H](2026-08-23-carrusel-playa-ecuacion-comenta-clase.md) | `marketing` | Carrusel Onia de 4 laminas con el molde gancho-ecuacion-comenta |
 | **O10** | [DcBWzXQF1_q](2026-08-23-carrusel-15-laminas-repos-nichados-buildercult.md) | `marketing` | Carrusel Onia de 15 laminas: molde BuilderCult portado al pack por rubro |
 | **O11** | [DcWPKNoIEUE](2026-08-23-carrusel-gastos-anclaje-precio-ficha-catalogo.md) | `marketing` | Carrusel "lo que cuesta operar" — molde de anclaje de precio con ficha de catalogo |

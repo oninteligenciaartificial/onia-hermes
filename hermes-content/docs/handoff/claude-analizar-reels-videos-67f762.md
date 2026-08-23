@@ -97,19 +97,19 @@ de intake completo, corrido de punta a punta dos veces (22-ago sobre `DbT8hWPsyj
 
 | Bloqueo | Qué hace falta |
 |---|---|
-| 🔴 **El lead magnet de Onia** | **UNA decisión que desbloquea 8 de los 18 prompts.** Los 8 usan comentario→DM y a los 8 les falta el mismo objeto: qué se manda por DM. |
+| ✅ **El lead magnet** | **RESUELTO el 2026-08-23: es agendar una demo.** El DM manda el link de `cal.onia.com.bo`, no un PDF. Desbloquea O1, O4, O6, O8, O9, O10, O14 y O15. Falta **mirar** la página renderizada y reservar una vez de punta a punta — hoy sólo se verificó HTTP 200, y eso no es verificación. Va a la sesión de infra/marketing, no a este carril. |
+| 🔴 **`CALCOM_WEBHOOK_SECRET`** | el webhook `calcom-booking` corre con la validación HMAC **apagada** por falta de esa variable en el contenedor de n8n. Con 8 posts mandando tráfico a la reserva, deja de ser un pendiente menor. |
 | 🟡 **Permiso de gasto en Higgsfield — solo VIDEO** | 6 fichas lo pedían contra la regla vieja. `main` (`f794ac6c`) separó imagen de video: **imagen en lote chico ya está autorizada**. Queda 1 ficha y media, las que generan video. Ver síntesis §3. |
 | **Prueba de tercero** | 6 moldes de alta conversión se apoyan en un hito verificable declarado por un tercero, que Onia no tiene. No es técnico. |
-| **Cosecha automática de DMs** | correr una vez: `node .claude/skills/ver-videos/scripts/cosechar-dm.mjs --login` |
+| **Cosecha automática de DMs** | correr una vez: `node .claude/skills/ver-videos/scripts/cosechar-dm.mjs --login`, **con la cuenta personal de Sergio** — ahí es donde viven los DMs con los reels (el chat con `mrsatiras__`). NO `@oniahq` ni la de Lucía: esas no reciben los links. |
 | **MP4 al Drive** | arrastrar el zip de 57 MB |
 | **Marca personal** | mandar la propuesta que le hicieron |
 | **3 decisiones abiertas** | % del pilar informativo de Lucía · cuenta propia vs `@oniahq` · QR dinámico core o add-on |
 
 **Próximos pasos**
 
-1. **Bajar la rama a `main`.** Son 13 commits de docs + skills y `main` corrió 74 por delante — y sigue corriendo:
-   ya se re-sincronizó `CLAUDE.md` dos veces en un día.
-   `CLAUDE.md` ya solo diverge en 4 líneas, en la sección de video: el merge es barato **hoy**.
+1. ✅ **Bajada a `main`** el 2026-08-23 (`4e0d654c`). Único conflicto: `BANDEJA.md`, y era de unión
+   (los dos lados sólo agregaron al final) — se quedaron las dos partes. Cero marcadores, verificado.
 2. **Contar de nuevo si comentario→DM sigue vivo** antes de ejecutar cualquier O que dependa de él.
 3. **La sesión web-factory** toma `2026-08-23-patrones-de-motion-deduplicados.md` y decide qué
    entra al banco. **No lo escribe este carril.**

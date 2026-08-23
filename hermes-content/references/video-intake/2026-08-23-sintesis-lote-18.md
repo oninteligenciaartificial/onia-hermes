@@ -25,6 +25,31 @@ separado como "decisión de Sergio", como si fueran cinco decisiones.
 
 **Es UNA sola: cuál es el lead magnet de Onia.** Tomada una vez, desbloquea ocho prompts.
 
+> ## ✅ DECIDIDO — Sergio, 2026-08-23: **el lead magnet es agendar una demo**
+>
+> El DM no manda un PDF ni una plantilla: manda **el link para reservar una demo**. Los ocho
+> prompts quedan desbloqueados y todos apuntan al mismo destino.
+>
+> **La maquinaria ya existe**, no hay que construirla: `cal.onia.com.bo` (Cal.com self-hosted,
+> [deploy kit](../../deploy/calcom/README.md)) → webhook n8n `/webhook/calcom-booking` → evento en
+> Google Calendar → aviso por Telegram a Sergio → **lead creado en ONIA Center**. Agenda base
+> lunes a sábado 14:00–20:00 (La Paz), 15 min de buffer, mínimo 4 h de aviso.
+>
+> **Por qué encaja mejor que un PDF:** un PDF se descarga y muere; una demo agendada es una
+> reunión en el calendario y un lead con seguimiento. Y esquiva el problema §2 de este mismo
+> lote — no promete un activo que habría que fabricar, ofrece lo único que Onia sí tiene de
+> sobra: el producto funcionando.
+>
+> ⚠️ **Antes de apuntar ocho publicaciones ahí, alguien tiene que MIRARLO.** Hoy sólo está
+> verificado que `cal.onia.com.bo` **responde HTTP 200 en 3,0 s** — y por la regla *"verificar es
+> MIRAR, no suponer"*, un 200 no es verificación. Falta abrir la página renderizada, reservar
+> una vez de punta a punta y confirmar que el lead llega a ONIA Center. **Eso no es de este
+> carril**: va a la sesión de infra/marketing.
+>
+> ⚠️ **Segundo pendiente conocido:** el webhook `calcom-booking` tiene la **validación HMAC
+> apagada** porque falta `CALCOM_WEBHOOK_SECRET` en el contenedor de n8n. Con ocho posts
+> mandando tráfico ahí, eso deja de ser un pendiente menor.
+
 ### 2 · Los moldes que más convierten se apoyan todos en una prueba de tercero que Onia no tiene
 
 `DZurBtZiT9X` (client testimonial) · `Dax5wGigc30` ("$70 MILLION") · `Daz0cVMBuD8` (featured por
