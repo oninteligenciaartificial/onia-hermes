@@ -57,8 +57,44 @@ durante la sesión. **Necesita el carril dueño de `ui.tsx`**, que ahora está l
 ### 4. Abierto de antes, no tocado
 - **Login visual**: diagnosticado, sin tocar. Panel izquierdo con un tercio vacío, verde de un
   solo tono, aviso de Supabase **azul** que rompe la paleta, tarjeta blanca sin presencia.
-- **Switcher de rubros en móvil**: apila en vez de cambiar al scrollear. Fallback digno, no es
-  lo que se pidió.
+- 🔴 **Switcher de rubros: apila también en ESCRITORIO** — diagnóstico corregido 2026-08-23.
+
+  Estaba anotado como "apila **en móvil**". **Es más grave.** Medido en vivo sobre el
+  componente renderizado:
+
+  ```
+  viewport 1394x918 · bp767 false · bp1023 false
+  prefers-reduced-motion: reduce → TRUE     ← el disparador real
+  stage.position static · stage.display flex · marks.display none
+  ```
+
+  No es el ancho. `sitio.module.css` apila con
+  `@media (max-width: 767px), (prefers-reduced-motion: reduce)`, y el comentario lo declara:
+  *"mismo apilado sirve para reduced-motion"*. **Cualquiera con las animaciones desactivadas en
+  su sistema operativo ve la sección estrella convertida en una lista** — en Windows ese check
+  es común. Se pierde justo el argumento de que el sistema cambia por rubro.
+
+  **El error de concepto:** `reduced-motion` significa *no me animes*, no *mostrame una versión
+  pobre*. Hoy se tira la función entera para evitar una animación.
+
+  ### Comportamiento DEFINIDO (esto es lo que hay que construir)
+
+  | Contexto | Layout | Cambio de rubro | Transición |
+  |---|---|---|---|
+  | Escritorio (≥768px), movimiento normal | dos columnas, `.stage` pegado | por scroll, discreto por umbral | rodillo animado (`--niche-dur .5s`) |
+  | **Escritorio, `reduced-motion`** | **igual: dos columnas y pegado** | **igual: por scroll** | **`transition: none`** — el rubro cambia de golpe |
+  | Teléfono (<768px) | apilado | — | — |
+
+  O sea: `reduced-motion` **sale** del selector de apilado y pasa a apagar **solo la
+  transición** de `.roll`, `.slotNombre` y la píldora. El apilado queda **únicamente** para
+  `max-width: 767px`, donde sí es cierto que la tarjeta no entra al lado.
+
+  ⚠️ Verificar el resultado **con reduced-motion activado a propósito** (Playwright:
+  `reducedMotion: 'reduce'` en el contexto). Con la preferencia apagada el bug es invisible —
+  por eso sobrevivió: todas las capturas anteriores se sacaron sin ella.
+
+  ⚠️ Al tocarlo se toca `switcher.tsx` / `sitio.module.css`, que están **esperando el OK de
+  Sergio sobre la pieza**. Coordinar: o entra en la misma revisión, o espera.
 - **Telegram para pedidos de acceso**: las variables están en `app.env` pero el contenedor no
   las tomó (`docker restart` no relee `--env-file`). Requiere recrear el contenedor (3 redes,
   hay datos de clientes). Hoy el aviso sale por correo, que funciona.
