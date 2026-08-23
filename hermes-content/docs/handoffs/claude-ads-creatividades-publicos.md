@@ -1,6 +1,6 @@
 # Handoff — carril `claude/ads-creatividades-publicos`
 
-> Última actualización: 2026-08-23, cierre de la sesión de contenido y lanzamiento de Lucía.
+> Última actualización: 2026-08-23 (2ª sesión del día). Antes: cierre de contenido y lanzamiento de Lucía.
 > Formato: los 6 campos de `README.md` de esta carpeta.
 
 ## 1. Objetivo
@@ -25,6 +25,18 @@ marketing de las tres cuentas escrito como fuente de verdad.
   commiteado en `onia-platform` (commit `06242bb` de ese repo).
 - **Cola de @oniahq** corriendo sola: 2 publicados + 8 en cola hasta el 9-sep.
 
+**EN PRODUCCIÓN — 2ª sesión del día (2026-08-23):**
+
+- 🔴 **El chat público de `onia.com.bo` nunca había respondido a nadie — arreglado.** Se descubrió
+  al intentar filmar L5 con capturas reales. El usuario bot (`users.id=3`) era miembro de los
+  inboxes 5, 6 y 7 pero **no del 4** (`Onia Web`, el widget de la web). Sin membresía, Chatwoot
+  rechaza el POST del motor y el adapter marca "sent" igual → el fallo era **invisible**.
+  Medido: inbox 4 = **3 entrantes / 0 salientes** en toda su historia, contra 25/43 del inbox 6.
+  Fix: una fila en `inbox_members` (id 9). Verificado: el bot ahora postea con HTTP 200.
+  Rollback: `delete from inbox_members where id=9;`
+  ⚠️ **Esto es del carril `chatbot`, no de éste.** Se aplicó solo el fix mínimo y se paró.
+  El resto quedó en una tarea aparte (ver campo 5).
+
 **A MEDIAS — con el dónde exacto:**
 
 - `reel-lanzamiento-20260822/final/lucia-lanzamiento.mp4` (v6, 22 s, master −14.33 LUFS):
@@ -34,6 +46,10 @@ marketing de las tres cuentas escrito como fuente de verdad.
 - **MCP de Postiz agregado** a la config del proyecto — aparece al reiniciar Claude Code.
 - **Facebook en Postiz: cerrado como no-viable por API**, con salida elegida (cross-post
   nativo). No requiere más trabajo técnico, solo dos toques de Sergio en el celular.
+- **L5 "El negocio que atiende solo": capturas reales tomadas, pieza SIN montar.** Carpeta
+  `references/modelos/lucia/l5-negocio-atiende-solo-20260823/`. Hay 13 capturas verificadas y
+  6 scripts de Playwright reusables. Falta el montaje de 17 s — se frenó al detectar que el
+  plano central (el bot contestando) dependía de otro carril.
 - Limpieza de versiones viejas de Lucía en Higgsfield: **imposible por API** (el MCP lista y
   crea, no borra). Queda para la interfaz web; la lista de qué se va está en `LUCIA.md §14`.
 
@@ -99,6 +115,22 @@ marketing de las tres cuentas escrito como fuente de verdad.
 - **Música de Instagram por API**: Postiz **sí** la soporta, pero exige
   `type === 'graph.facebook.com'` y nuestras cuentas usan `instagram-standalone`. Además nunca
   funciona en carruseles. Las piezas mudas con música se publican a mano.
+- **Me salí del carril persiguiendo una captura.** L5 pedía "captura real del chatbot
+  contestando". Al verificar MIRANDO, el bot no contestaba — y terminé diagnosticando Chatwoot,
+  el motor y los webhooks, que son del carril `chatbot`. Lo cortó Sergio.
+  **Regla que sale de acá: si una pieza de contenido necesita que OTRO carril funcione, eso es
+  una dependencia cruzada — se anota y se elige otra pieza, no se arregla el otro carril.**
+- **La "respuesta del bot" que filmé primero era un saludo estático.** El texto coincidía letra
+  por letra con `inboxes.greeting_message` de la base: era una plantilla de Chatwoot
+  (`message_type=3`), no el motor. Un segundo mensaje no recibió nada. **Para probar que un bot
+  contesta hay que mandarle DOS mensajes**: el primero siempre lo contesta la plantilla.
+- **`&locale=es` en la URL del widget NO traduce** el "We will be back as soon as possible".
+  Ese string viene del embed de la landing, no de la URL ni de `accounts.locale`.
+- **La API de Chatwoot no deja inyectar mensajes entrantes** en conversaciones de widget:
+  `422 {"error":"Incoming messages are only allowed in Api inboxes"}`. Para probar el widget
+  hay que usar el widget — y tiene rate limit por IP ("Retry later") tras pocas pruebas.
+- **`elementsFromPoint` no ve pseudo-elementos.** Diagnosticando el bloque verde del hero,
+  ningún elemento del DOM tenía ese color: lo pinta un `::before`/`::after`.
 - **Copiar un PDF al contenedor NO alcanza.** Next cachea el índice de `public/` al arrancar:
   medido al segundo (contenedor 01:31, PDF que funciona 01:23, PDF nuevo 02:55). Descartados
   permisos (`chown`) y caché de Cloudflare (`cf-cache-status: BYPASS`). Hay que reiniciar.
@@ -106,17 +138,32 @@ marketing de las tres cuentas escrito como fuente de verdad.
 ## 5. Próximos pasos
 
 1. **OK de Sergio al reel** → publicar el lanzamiento y disparar el calendario 23-30 ago.
-2. Piezas que faltan del mes 1: **L6** (carrusel "5 señales", ~4 cr) y **L5** (demo de producto
-   en 17 s con capturas reales, 0 cr). Después L3, L4, L7, L8.
+2. Piezas que faltan del mes 1: **L6** (carrusel "5 señales", ~4 cr — **necesita permiso de
+   gasto**) y **L5** (demo de producto, 0 cr). Después L3, L4, L7, L8.
+   ⚠️ **L5 está bloqueada por dependencia cruzada**: su plano central es el bot contestando, y
+   eso lo cierra el carril `chatbot` (tarea aparte, ver abajo). Las capturas y los scripts ya
+   están hechos; falta el montaje cuando el bot esté verificado punta a punta.
 3. Palabra clave en 5 de los 8 posts en cola de @oniahq + horario 19:00 → 20:00 Bolivia.
    *(Propuesto y sin respuesta explícita — no se tocó nada.)*
 4. Historias automatizadas: extender `postiz_schedule.mjs` con `post_type: story` + cron.
 5. Limpiar versiones viejas de Lucía en Higgsfield, por la interfaz web.
 6. Cuando el MCP de Postiz esté activo (tras reiniciar), programar directo sin SSH.
 
+**Levantado fuera de este carril (tareas propias, NO tocar desde acá):**
+- 🔴 **Cerrar el bot público de onia.com.bo** — carril `chatbot`. Falta verificación punta a
+  punta MIRANDO, el "Estamos ausentes" en inglés, el conocimiento por rubro que no se usa,
+  el motor corriendo desde `/tmp` y en bucle de reinicio, y la limpieza de conversaciones QA.
+- 🟡 **Bloque verde tapando el hero de `onia.com.bo`** — carril web-factory. Un pseudo-elemento
+  de `.sitio_shape` pinta un rect verde sobre el 40% de la captura del dashboard. El asset
+  `/v2/capturas/panel.webp` está perfecto (200, 152 KB, se ve completo): no es la imagen.
+
 ## 6. Qué depende de Sergio
 
 - 🔴 **OK al reel** — es lo único que bloquea todo el calendario de Lucía.
+- 🔴 **Confirmar que dejo puesto el fix del bot** (fila `inbox_members` id 9). Lo dejé puesto
+  porque revertirlo vuelve a dejar mudo el chat de la web. Si preferís revertirlo:
+  `delete from inbox_members where id=9;`
+- 🟡 **Permiso de gasto para L6**: ~4 créditos de Higgsfield (fotos ya existentes).
 - 🔴 **Rotar el token de Postiz**: se pegó en el chat y quedó en el transcript. Da acceso
   completo a la API.
 - 🟡 **Tarjeta en ONIA Ads** — bloqueo de amplificación desde hace días.

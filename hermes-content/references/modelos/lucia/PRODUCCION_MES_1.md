@@ -87,7 +87,17 @@ Costo: ~32 cr (4 escenas veo lite) o ~16 cr en una sola generación multi-escena
 ## L5 · "El negocio que atiende solo" — IA sin humo · palabra SISTEMA
 
 **Molde de demo: 17 SEGUNDOS EXACTOS** (§10.1 del sistema de marketing). La promesa va en
-el segundo 1. No es b-roll de Lucía: es captura de pantalla real del chatbot + su voz.
+el segundo 1. No es b-roll de Lucía: es captura de pantalla real del chatbot.
+
+⚠️ **Corregido 2026-08-23.** Acá decía "captura real del chatbot **+ su voz**", y contradecía
+sus propias dos fuentes: el molde §10.1 es **sin voz** (música + texto en pantalla) y la tabla
+de costos de este mismo archivo dice **0 créditos** — con voz de ElevenLabs no serían 0. **L5
+va sin voz.** Una línea suelta mandaba a gastar en una locución que el molde no pide.
+
+⚠️ **Dependencia cruzada:** el plano de 1-6 s exige que el bot conteste de verdad. Al 23-ago el
+chat público llevaba 0 respuestas en toda su historia; se arregló la causa (membresía del bot en
+el inbox 4) pero **falta verificarlo MIRANDO**. Capturas y scripts ya hechos en
+`l5-negocio-atiende-solo-20260823/`. No montar hasta que el bot esté verificado.
 
 ```
 0-1 s   Promesa: "Así de simple, tu negocio contesta solo."
