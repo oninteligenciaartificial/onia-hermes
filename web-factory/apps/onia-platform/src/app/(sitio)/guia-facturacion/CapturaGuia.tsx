@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import g from "./guia.module.css";
 
 /**
@@ -46,6 +46,7 @@ export function CapturaGuia() {
   const idCorreo = useId();
   const idWa = useId();
   const idError = useId();
+  const refCorreo = useRef<HTMLInputElement>(null);
 
   const [correo, setCorreo] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
@@ -58,6 +59,9 @@ export function CapturaGuia() {
 
     if (!correoPlausible(limpio)) {
       setError("Revisá el correo: falta el @ o el punto del dominio.");
+      // El role="alert" ya lo anuncia, pero el foco se quedaba en el botón:
+      // con teclado o lector de pantalla había que volver al campo a ciegas.
+      refCorreo.current?.focus();
       return;
     }
     setError("");
@@ -119,6 +123,7 @@ export function CapturaGuia() {
         </label>
         <input
           id={idCorreo}
+          ref={refCorreo}
           className={g.input}
           type="email"
           name="email"

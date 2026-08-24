@@ -21,9 +21,35 @@
 /* 1 · Captura — una sola acción en la primera pantalla                    */
 /* ---------------------------------------------------------------------- */
 
+/*
+ * El hero NO usa <Block>: es la única sección del sitio que no puede darse el
+ * aire de una portada. El sistema abre con 8em de padding superior, pensado
+ * para una página que se contempla; acá el visitante llega desde un anuncio o
+ * un DM a hacer UNA cosa, y con esos 8em el botón «Quiero la hoja» quedaba
+ * fuera de la primera pantalla de un teléfono de 812px de alto (medido). El
+ * resto del bloque —fondo papel, ancho del `inner`— es idéntico al del
+ * sistema, copiado en seis líneas para no editar `sitio.module.css`.
+ */
+.heroBlock {
+  background: var(--bg);
+  color: var(--ink);
+  padding: 2.6em 0 3.6em;
+}
+
+@media (min-width: 900px) {
+  .heroBlock {
+    padding: 5.5em 0 6em;
+  }
+}
+
+.heroInner {
+  width: min(74rem, 100% - 2.4rem);
+  margin-inline: auto;
+}
+
 .hero {
   display: grid;
-  gap: 2.6em;
+  gap: 1.9em;
 }
 
 /* En escritorio el formulario va al costado y el titular no se cae de la
@@ -399,7 +425,22 @@
      (h2, lead, body, notas) se recalcula sola desde acá. Ese es el número que
      se toca si la hoja se pasa de página. */
   :global(body):has(.hoja) :global(main) {
-    font-size: 8.9pt;
+    font-size: 8pt;
+  }
+
+  /* Los titulares se ajustan por ELEMENTO, no por clase: `.h2` vive en
+     `sitio.module.css` con nombre hasheado y ese archivo tiene otro dueño.
+     A 2,5em de la escala de pantalla cada h2 se comía 8mm de la hoja. */
+  :global(body):has(.hoja) :global(h2) {
+    font-size: 12pt !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.01em;
+    margin: 0 0 2mm !important;
+    max-width: none !important;
+  }
+
+  :global(body):has(.hoja) :global(main) :global(p) {
+    max-width: none !important;
   }
 
   :global(body):has(.hoja),
@@ -409,12 +450,19 @@
 
   /* Fuera el cromo del sitio, el formulario y los botones: la hoja es la
      guía, no la página de venta. El widget del chatbot se va con ellos. */
+  /* En su PROPIA regla, sin `:has()`. Una lista de selectores separada por
+     comas no es indulgente: si un solo selector es inválido, el navegador tira
+     la regla ENTERA. Mezclado con los de arriba, un navegador sin `:has()` se
+     llevaría puesto también esto y el formulario saldría impreso. */
+  .noPrint {
+    display: none !important;
+  }
+
   :global(body):has(.hoja) :global(header),
   :global(body):has(.hoja) :global(footer),
   :global(body):has(.hoja) :global(.skip-link),
   :global(body):has(.hoja) :global(.woot-widget-holder),
-  :global(body):has(.hoja) :global(.woot--bubble-holder),
-  .noPrint {
+  :global(body):has(.hoja) :global(.woot--bubble-holder) {
     display: none !important;
   }
 
@@ -424,7 +472,7 @@
     background: #fff !important;
     color: #101010 !important;
     padding-block: 0 !important;
-    margin-bottom: 4mm;
+    margin-bottom: 2mm;
     break-inside: avoid;
   }
 
@@ -434,23 +482,27 @@
   }
 
   .hoja {
-    display: block;
-    margin-bottom: 5mm;
-    padding-bottom: 2mm;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6mm;
+    margin-bottom: 3mm;
+    padding-bottom: 1.5mm;
     border-bottom: 1pt solid #101010;
   }
 
   .hojaTitulo {
     margin: 0;
     font-family: var(--font-display), sans-serif;
-    font-size: 12pt;
+    font-size: 11pt;
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.15;
   }
 
   .hojaFuente {
-    margin: 1mm 0 0;
+    margin: 0;
+    white-space: nowrap;
     font-family: var(--font-mono), monospace;
     font-size: 7.5pt;
     letter-spacing: 0.06em;
@@ -464,9 +516,14 @@
   }
 
   .paso {
-    padding: 2mm 0;
+    padding: 1.7mm 0;
     border-bottom: 0.6pt solid #d8d8d8;
     break-inside: avoid;
+  }
+
+  .pasoTitulo {
+    font-size: 9.4pt;
+    line-height: 1.15;
   }
 
   .pasoNum,
@@ -478,25 +535,55 @@
   .aManoItem,
   .frenaItem {
     color: #2b2b2b;
+    font-size: 8pt;
+    line-height: 1.35;
   }
 
   .aMano,
   .frena,
   .fuentes {
-    margin-top: 3mm;
+    margin-top: 2.5mm;
     gap: 1.6mm;
   }
 
+  /* En pantalla la casilla es un cuadrado redondeado; a 8pt esos 3px de radio
+     la convierten en un círculo. En papel es una casilla para tildar. */
   .aManoItem::before {
+    top: 0.35em;
     border-color: #101010;
+    border-width: 0.7pt;
+    border-radius: 0.5pt;
+  }
+
+  /* La medida de lectura del sistema (50em) es para pantalla: a 8pt son 141mm
+     y la lista quedaba cortada a media hoja mientras el resto usaba el ancho
+     entero. En papel el ancho lo fija el margen. */
+  .frena {
+    max-width: none;
   }
 
   .fuentes {
     font-size: 7.5pt;
   }
 
+  /* Los enlaces van en VERDE CLARO porque en pantalla viven sobre un bloque
+     verde hondo. Sobre papel blanco ese verde no se lee: en la hoja son texto
+     negro subrayado, que es lo que una fuente citada tiene que parecer. */
+  :global(body):has(.hoja) .fuentes :global(a) {
+    color: #101010 !important;
+    text-decoration: underline;
+  }
+
+  /* El titular del cierre es mobiliario de pantalla: en el papel el párrafo se
+     sostiene solo y ese h2 costaba 7mm de la ÚNICA hoja. Va anclado a `.hoja`
+     como todo lo demás — un `:global()` suelto no compila en un módulo CSS
+     («pure selectors must contain at least one local class»). */
+  :global(body):has(.hoja) :global(#cierre-guia) {
+    display: none !important;
+  }
+
   @page {
     size: A4;
-    margin: 13mm 14mm 11mm;
+    margin: 11mm 13mm 8mm;
   }
 }

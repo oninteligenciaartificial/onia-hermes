@@ -117,24 +117,26 @@ export default function GuiaFacturacion() {
           En teléfono el formulario entra justo debajo de la bajada; en
           escritorio va al costado, y el titular no se cae de la primera vista.
       ------------------------------------------------------------------- */}
-      <Block surface="paper">
-        <div className={`${g.hero} ${g.noPrint}`}>
-          <Reveal>
-            <div>
-              <Kicker>Facturación en línea · plazo 30-09-2026</Kicker>
-              <h1 className={s.display} style={{ maxWidth: "14ch" }}>
-                {SIAT_GUIA_TITULAR}
-              </h1>
-              <p className={s.lead} style={{ maxWidth: "34em" }}>
-                {SIAT_GUIA_BAJADA}
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <CapturaGuia />
-          </Reveal>
+      <section className={`${g.heroBlock} ${g.noPrint}`}>
+        <div className={g.heroInner}>
+          <div className={g.hero}>
+            <Reveal>
+              <div>
+                <Kicker>Plazo · 30-09-2026</Kicker>
+                <h1 className={s.display} style={{ maxWidth: "14ch" }}>
+                  {SIAT_GUIA_TITULAR}
+                </h1>
+                <p className={s.lead} style={{ maxWidth: "32em" }}>
+                  {SIAT_GUIA_BAJADA}
+                </p>
+              </div>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <CapturaGuia />
+            </Reveal>
+          </div>
         </div>
-      </Block>
+      </section>
 
       {/* Encabezado que SOLO existe en el papel: al imprimir desaparecen el
           cromo del sitio y el formulario, y la hoja necesita decir qué es y de
@@ -153,7 +155,9 @@ export default function GuiaFacturacion() {
       ------------------------------------------------------------------- */}
       <Block surface="signal" labelledBy="paso-0">
         <Reveal>
-          <Kicker>Antes de tocar nada</Kicker>
+          <div className={g.noPrint}>
+            <Kicker>Antes de tocar nada</Kicker>
+          </div>
           <h2 id="paso-0" className={s.h2} style={{ maxWidth: "20ch" }}>
             {SIAT_GUIA_PASO_0.titulo}
           </h2>
@@ -170,7 +174,9 @@ export default function GuiaFacturacion() {
       ------------------------------------------------------------------- */}
       <Block surface="paper" labelledBy="pasos">
         <Reveal>
-          <Kicker>El trámite</Kicker>
+          <div className={g.noPrint}>
+            <Kicker>El trámite</Kicker>
+          </div>
           <h2 id="pasos" className={s.h2} style={{ maxWidth: "22ch" }}>
             Seis pasos en la Oficina Virtual, en este orden.
           </h2>
@@ -193,7 +199,9 @@ export default function GuiaFacturacion() {
       ------------------------------------------------------------------- */}
       <Block surface="paperDim" labelledBy="a-mano">
         <Reveal>
-          <Kicker>Antes de empezar</Kicker>
+          <div className={g.noPrint}>
+            <Kicker>Antes de empezar</Kicker>
+          </div>
           <h2 id="a-mano" className={s.h2} style={{ maxWidth: "20ch" }}>
             Tené esto sobre la mesa.
           </h2>
@@ -213,7 +221,9 @@ export default function GuiaFacturacion() {
       ------------------------------------------------------------------- */}
       <Block surface="ink" labelledBy="frena">
         <Reveal>
-          <Kicker>Lo que te frena</Kicker>
+          <div className={g.noPrint}>
+            <Kicker>Lo que te frena</Kicker>
+          </div>
           <h2 id="frena" className={s.h2} style={{ maxWidth: "22ch" }}>
             Las tres formas de no llegar.
           </h2>
