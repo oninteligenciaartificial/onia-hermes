@@ -400,7 +400,12 @@ ${safeAreaCss()}
 .ln-d { flex:1; border-bottom:5px dotted currentColor; opacity:.32; }
 .ln-v { font-family:var(--font-display); font-weight:700; font-size:42px; white-space:nowrap; }
 .hook { font-family:var(--font-display); font-weight:700; font-size:118px;
-  line-height:1.02; letter-spacing:-3px; }
+  /* 1.02 era demasiado apretado: el fondo del marcador ocupa TODA la caja de linea,
+     asi que en un titular de 118px invadia la linea de arriba y CORTABA los
+     descendentes. "ya existe" se leia "ua existe" con la palabra resaltada debajo.
+     Medido el 2026-08-24 mirando el render, no el CSS. 1.14 deja aire para el
+     descendente sin aflojar el bloque de titulo. */
+  line-height:1.14; letter-spacing:-3px; }
 .coverline { font-size:42px; line-height:1.35; color:var(--onia-muted-dark); margin-top:40px; max-width:840px; }
 
 .pageno { font-family:var(--font-display); font-weight:500; font-size:28px;
