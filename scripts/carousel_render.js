@@ -475,12 +475,21 @@ function continuationCurve(idx, total) {
   // never dips into the headline/body area at the bottom — so it reads as a
   // continuous panorama behind the 3D object without crossing the text.
   // enter from left (unless first), exit right (unless last)
+  // Las Y estan escritas en el lienzo FEED (1350 de alto) y se escalan al formato
+  // activo. Sin esto la curva quedaba clavada en y=600 tanto en feed (44% de la
+  // altura) como en story (31%): el viewBox escalaba y la curva no, asi que en story
+  // la panoramica aparecia descolocada respecto del objeto y del texto.
+  // Roto desde que existe --format; no se veia porque el test que lo cazaba llevaba
+  // meses rojo por otras assertions viejas (arreglado 2026-08-23).
+  const sy = (y) => Math.round(y * FMT.h / FORMATS.feed.h);
+  const P = (...ys) => ys.map(sy);
+  const [y300, y560, y600, y340, y320] = P(300, 560, 600, 340, 320);
   const enter = first ? '' : (down
-    ? 'M -60 300 C 220 300 260 560 540 560'
-    : 'M -60 600 C 220 600 260 340 540 340');
+    ? `M -60 ${y300} C 220 ${y300} 260 ${y560} 540 ${y560}`
+    : `M -60 ${y600} C 220 ${y600} 260 ${y340} 540 ${y340}`);
   const exit = last ? '' : (down
-    ? 'M 540 560 C 860 560 940 320 1140 320'
-    : 'M 540 340 C 860 340 940 600 1140 600');
+    ? `M 540 ${y560} C 860 ${y560} 940 ${y320} 1140 ${y320}`
+    : `M 540 ${y340} C 860 ${y340} 940 ${y600} 1140 ${y600}`);
   const paths = [enter, exit].filter(Boolean)
     .map((d) => `<path d="${d}" />`).join('');
   return `<svg class="curve" viewBox="0 0 ${FMT.w} ${FMT.h}" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
@@ -861,8 +870,12 @@ function nuviaRibbon(idx, total, stripes, onAccent) {
   const last = idx === total - 1;
   // S-curve base que entra por izquierda y sale por derecha; alterna altura.
   const up = idx % 2 === 0;
-  const yA = up ? 430 : 980;
-  const yB = up ? 980 : 430;
+  // Mismo problema y mismo arreglo que la curva de dark-product: las alturas estan
+  // escritas en el lienzo FEED y hay que escalarlas al formato activo, o el ribbon
+  // queda descolocado en cuadrado y en story.
+  const syR = (y) => Math.round(y * FMT.h / FORMATS.feed.h);
+  const yA = syR(up ? 430 : 980);
+  const yB = syR(up ? 980 : 430);
   const base = `M -120 ${yA} C 260 ${yA} 320 ${yB} 560 ${yB} S 900 ${yA} 1200 ${yA}`;
   const cols = onAccent
     ? ['rgba(255,255,255,.9)', 'rgba(255,255,255,.6)', 'rgba(255,255,255,.35)', 'rgba(255,255,255,.2)', 'rgba(255,255,255,.12)']
