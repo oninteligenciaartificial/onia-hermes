@@ -36,15 +36,15 @@ post → comentario con palabra clave → DM automático con el recurso
 No vendemos contenido. Vendemos **que el contenido termine en un lead adentro del
 sistema**. La agencia te deja el lead en un DM que nadie mira.
 
-🔴 **CORREGIDO 2026-08-23 — y esto golpea al diferencial, así que va primero.**
-Acá decía que el circuito comentario→DM estaba "probado en nuestras propias cuentas".
-**No lo está.** Las 4 ejecuciones del workflow usan un comentario inventado y Meta las
-rechazó con `"The requested user cannot be found"`. El nodo silencia el error, así que
-figuraban como exitosas.
+✅ **Verificado en la bandeja el 2026-08-23** (y no por el registro de ejecuciones, que me
+hizo concluir mal dos veces): un comentario con la palabra el 18-ago a las 23:17:58 disparó
+el DM automático a las **23:18:04 — 6 segundos**. El circuito funciona.
 
-**Nadie recibió nunca un DM de este circuito.** El argumento de venta entero
-(post → comentario → DM → lead) descansa sobre una pieza **sin probar**.
-Hasta que un DM real llegue a una persona real, esto **no se menciona en una venta**.
+⚠️ **Lo que se puede decir vendiendo, y lo que no:** funciona **en nuestras propias cuentas**.
+Nunca corrió en la cuenta de un cliente, y para eso hace falta App Review. Se dice así.
+
+⚠️ Y el workflow que lo logró está **apagado**; el activo hoy solo fue probado con datos
+falsos. Antes de vender esto, el activo tiene que entregar un DM real.
 
 ## Alcance de la versión mínima
 

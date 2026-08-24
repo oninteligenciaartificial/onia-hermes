@@ -12,16 +12,30 @@ marketing de las tres cuentas escrito como fuente de verdad.
 
 **EN PRODUCCIÓN — encendido y verificado ahí:**
 
-- 🔴 **CORREGIDO 2026-08-23 — el circuito comentario→DM NUNCA entregó un DM real.**
-  Acá decía que estaba "vivo y probado en prod". No se sostiene. Evidencia:
-  las **4 ejecuciones** del workflow `1jS4jwmNmvcQpqqH` son del 21-ago y todas usan un
-  comentario **inventado** (`username: prueba_v8b`, `comment_id: 17999999999999922`).
-  Meta las rechazó: `"The requested user cannot be found"` (IGApiException 100/2534014).
-  El nodo "Enviar DM privado" tiene `neverError: true` + `onError: continueRegularOutput`,
-  **así que la ejecución figura "success" aunque Meta la rechace**. El único lugar donde
-  el fallo se ve es el aviso de Telegram.
-  Un intento manual con un `comment_id` REAL tampoco pasó: `OAuthException code 1`.
-  **Lo que sí está probado: que el workflow corre. Lo que NO: que un DM llegue a alguien.**
+- ✅ **El circuito comentario→DM SÍ funciona — verificado en la bandeja, 2026-08-23.**
+  Sergio comentó "sistema" el **18-ago 23:17:58** y el DM automático salió **23:18:04**:
+  **6 segundos**. Está en el hilo `oniahq ↔ sergio_urcullo`, leído por API.
+
+  ⚠️ **Dos correcciones mías del mismo día, escritas para que nadie repita el camino:**
+
+  1. Primero lo reporté como "un lead real perdido". Era Sergio probando.
+  2. Después lo reporté como "**nunca** entregó un DM". **También falso.** Me guié por las
+     ejecuciones del workflow ACTIVO (`1jS4jwmNmvcQpqqH`, creado el 21-ago), que en efecto
+     solo tiene pruebas con un comentario inventado. Pero el DM real del 18-ago lo mandó el
+     workflow **anterior** (`gWrVHU8OxI9yugc4`, creado 23:05 del 18-ago, hoy inactivo).
+
+  **La lección: mirar la BANDEJA, no el registro de ejecuciones.** Las ejecuciones dicen qué
+  corrió; solo la conversación dice qué llegó. Dos veces saqué la conclusión equivocada de
+  evidencia indirecta (la carpeta de marcadores, y después las ejecuciones).
+
+  **Lo que sí queda pendiente de verdad:** el workflow ACTIVO nunca fue ejercitado con un
+  comentario real. El que funcionó está apagado.
+
+- 🔴 **TRAMPA CARA: la API de private reply devuelve error y entrega igual.**
+  Los 3 intentos manuales del 23-ago devolvieron `OAuthException code 1` y **los 3 mensajes
+  llegaron**. Reintentar sobre ese error le mandó a Sergio **3 DMs idénticos**.
+  **Regla: ante un error al enviar un private reply, NO reintentar. Verificar primero en
+  `GET /me/conversations`** — el error de Meta no es prueba de que no se envió.
 
 - **Palabra HUMO viva** en la cuenta de Lucía (workflow v10 publicado). Entrega el PDF
   *"5 herramientas de IA que sí sirven en un negocio boliviano"*, verificado con HTTP 200 en
