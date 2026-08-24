@@ -31,6 +31,34 @@ marketing de las tres cuentas escrito como fuente de verdad.
   **Lo que sí queda pendiente de verdad:** el workflow ACTIVO nunca fue ejercitado con un
   comentario real. El que funcionó está apagado.
 
+- 🚨 **INCIDENTE 2026-08-24 02:00-02:37 — tormenta de reintentos que ahogó el VPS.**
+  **El workflow `1jS4jwmNmvcQpqqH` quedó APAGADO.** Reactivarlo sin arreglar lo de abajo
+  vuelve a tirar la máquina.
+
+  **El bucle, en orden:**
+  1. Se generan eventos de webhook de Instagram (en este caso, por 3 DMs enviados a mano).
+  2. Cada evento arranca una ejecución que, en el nodo Code, espera al *task runner* de n8n.
+  3. El nodo `Token o freno 24h` es un nodo **SSH al propio VPS**: cada ejecución abre una
+     conexión. Con la cola creciendo, se acumularon **más de 100 sesiones**.
+  4. El VPS se satura → **load average 158** → el task runner no alcanza a atender.
+  5. El nodo Code muere a los **120 s** (`Task request timed out`) → el workflow **nunca
+     devuelve 200**.
+  6. **Meta reintenta** → volver al paso 2. Se retroalimenta solo.
+
+  **Medido:** 81 ejecuciones fallidas, una cada 30-60 s desde las 01:46. Caían también el
+  vigilante del chatbot y otro workflow: **todo lo que tenga un nodo Code**.
+  Tras apagarlo: load 158 → 122 y **0 ejecuciones nuevas desde 02:37**.
+
+  **Las tres cosas a arreglar ANTES de reactivar:**
+  1. 🔴 **Responder 200 primero, trabajar después.** Hoy `responseMode: responseNode` hace
+     que el 200 salga al final del flujo. Cualquier lentitud = Meta reintenta. Un webhook de
+     Meta se contesta **inmediatamente** y el trabajo va después.
+  2. 🔴 **Sacar el nodo SSH del camino caliente.** Abrir una sesión SSH por evento es el
+     amplificador: convierte una cola en una carga que tumba la máquina. El freno de 24 h
+     tiene que resolverse con una llamada HTTP o dentro del propio nodo.
+  3. 🟡 **El nodo Code depende del task runner**, que es un punto único de falla para toda
+     la instancia. Si se puede resolver con nodos nativos, mejor.
+
 - 🔴 **TRAMPA CARA: la API de private reply devuelve error y entrega igual.**
   Los 3 intentos manuales del 23-ago devolvieron `OAuthException code 1` y **los 3 mensajes
   llegaron**. Reintentar sobre ese error le mandó a Sergio **3 DMs idénticos**.
