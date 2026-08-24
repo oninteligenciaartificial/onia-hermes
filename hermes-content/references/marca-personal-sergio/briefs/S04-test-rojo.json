@@ -1,0 +1,27 @@
+{
+ "caption": "Esto me pasó esta semana construyendo. Tres días con la suite en rojo, y el rojo no era el problema — era lo que tapaba. ¿Cuánto hace que no mirás por qué falla algo que \"siempre falla\"?",
+ "hashtags": ["#software", "#programacion", "#bolivia", "#aprendiendo"],
+ "src": false,
+ "slides": [
+  { "number":1, "role":"cover", "pill":"Me pasó esta semana",
+    "headline":"Mis tests llevaban 3 días en *rojo*",
+    "body":"Y el rojo no era el problema.",
+    "bg":"hermes-content/references/marca-personal-sergio/fondos/laptop-03.png" },
+  { "number":2, "role":"point", "pill":"01",
+    "headline":"Fallaban por algo *viejo*",
+    "body":"Alguien había renombrado una constante hacía días y nadie actualizó el test. El test seguía buscando un nombre que ya no existía." },
+  { "number":3, "role":"point", "pill":"02",
+    "headline":"Y yo ya no los *miraba*",
+    "body":"Cuando algo falla siempre, dejás de leerlo. Se vuelve ruido de fondo. Ese es exactamente el momento en que deja de servir." },
+  { "number":4, "role":"point", "pill":"03",
+    "headline":"Abajo había *dos bugs de verdad*",
+    "body":"Dos errores nuevos, reales, escondidos en el mismo rojo. Llevaban días ahí. Los encontré recién cuando arreglé los viejos." },
+  { "number":5, "role":"point", "pill":"La lección",
+    "headline":"Un test rojo por algo viejo es *peor* que no tener test",
+    "body":"Sin test sabés que no estás cubierto. Con uno roto creés que sí, y encima te tapa lo nuevo." },
+  { "number":6, "role":"cta", "pill":"Tu turno",
+    "headline":"¿Qué te *falla siempre* y ya ni mirás?",
+    "body":"En tu código, en tu negocio o en tu semana. Contámelo.",
+    "bg":"" }
+ ]
+}
