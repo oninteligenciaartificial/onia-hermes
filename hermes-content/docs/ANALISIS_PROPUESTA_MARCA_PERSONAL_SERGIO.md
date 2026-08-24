@@ -92,106 +92,95 @@ disposición del que se encargue, no como excusa para pagarle menos.
 
 ---
 
-# Contrapropuesta
+# Contrapropuesta (v3 — la buena)
 
-> ⚠️ **Corregida el 2026-08-24 por Sergio.** La primera versión proponía sacarles las
-> historias y los b-roll porque "los hacemos nosotros a 0 costo". **Estaba mal.**
+> **v1** proponía recortarles alcance porque "tenemos los motores". Mal: tener el motor no
+> es tener la cadencia.
+> **v2** corrigió eso y les sumaba DMs subiendo el fijo a Bs 2.500.
+> **v3** la reescribe con dos datos que cambian todo, ambos de Sergio el 2026-08-24:
 >
-> *"Es verdad, algunas cosas las puedo hacer yo, pero él estaría encargado."*
->
-> **Poder hacer algo no es que se haga.** El motor de historias existe y produjo 8 en un
-> día — pero pasó porque Sergio lo pidió en una sesión. Sin dueño no hay cadencia. Lo que
-> se compra al contratar no es la capacidad: es que **ocurra sin que él se acuerde**.
-> Ahorrar ~Bs 400 sacándoles entregables, y a cambio meter esas piezas en la cabeza de
-> Sergio, es un mal negocio.
+> 1. *"Lo que él no haga vos lo podés hacer, Claude."* → hay un dueño para lo que no filman.
+> 2. **La cadencia objetivo: 2 posts/día en marca personal, y mínimo 1/día en @oniahq y en
+>    Lucía.**
 
-## La pregunta de fondo: dónde va el tiempo de Sergio
+## El dato que reordena la negociación
 
-El dato que manda: **cero clientes pagando.** El producto está construido, el chatbot
-funciona, el motor de contenido funciona. Ninguna de esas cosas es el cuello de botella.
-**El cuello de botella es que nadie compró.**
-
-La marca personal es un activo que **compone**: suma credibilidad cuando un prospecto lo
-busca antes de decidir. Con 411 seguidores todavía **no es un canal de ventas**, y por lo
-tanto **no debería costarle dos días al mes**.
-
-| Solo lo puede hacer Sergio | Se delega completo |
+| | |
 |---|---|
-| Hablar con dueños de negocio reales | Ideas y guiones |
-| Decidir qué es cierto del negocio | Dirección y grabación |
-| Su cara y su voz | Edición, publicación, historias, b-roll |
-| Cerrar el primer cliente | Comentarios y DMs |
+| Cadencia objetivo | **120 piezas/mes** (60 personal + 30 @oniahq + 30 Lucía) |
+| Lo que la propuesta cubre | 38 piezas = **32 %** |
+| Lo que **realmente** necesita la cara de Sergio | **~30/mes** = 25 % |
+| Lo que se produce sin él, a 0 créditos | **~90/mes** = 75 % |
 
-## El cambio que de verdad importa: documentar, no producir
+**Su propuesta no es cara: es chica.** Cubre un tercio de lo que Sergio quiere publicar, y
+buena parte de ese tercio (historias, b-roll) es justo lo que sale de un motor.
 
-No es negociar el precio. Es cambiar el modelo:
+## Por qué el CPM ahora es directamente inaplicable
 
-**De "producir contenido" → a "documentar lo que ya está haciendo".**
+No es una objeción de precio. Es que **la atribución se rompe**.
 
-Sergio construye todos los días. Si el material sale de ahí, el contenido es un
-**subproducto de su trabajo real** en vez de una producción aparte. Baja de 2 días al mes a
-medio día, y sale mejor porque es verdad y no guion.
+Si el 75 % del feed lo produce otro, no hay forma de decir de quién son las vistas. Un video
+suyo que funciona levanta la cuenta entera; un carrusel nuestro que funciona, también.
+Facturar CPM sobre un feed que no producís es imposible de auditar — para ellos y para
+Sergio.
 
-Consecuencia práctica: **menos pilares y más documentación.** Veinte videos guionados al mes
-exigen veinte cosas que decir; diez pilares fuertes más veinte clips de lo que pasó esa
-semana es más contenido, más real y muchísimo menos tiempo suyo.
+**Se cae solo, sin necesidad de discutirlo como plata.**
 
-## Lo que se les propone, punto por punto
+## El reparto que sale de los números
 
-### 1. El alcance se mantiene completo — y se les suma lo que falta
+| Solo ellos | Solo Sergio | Yo |
+|---|---|---|
+| Dirigir y **filmar** a Sergio | Poner la cara y la voz | Carruseles y tipográficos |
+| Guion de las piezas habladas | Decidir qué es cierto | Historias en tanda |
+| Edición de esas piezas | Hablar con clientes | Demos de pantalla |
+| | Aprobar la tanda semanal | Programación y medición |
 
-Siguen a cargo de **todo**: estrategia, guiones, grabación, edición, historias, b-roll y
-publicación. No se les recorta nada.
+Se mantienen **sus 20 pilares tal cual los propusieron**, que es su especialidad y lo único
+que no se puede automatizar. Salen de su alcance las historias y el b-roll — pero **con
+dueño asignado**, que es lo que faltaba en la v1.
 
-**Y se les pide sumar lo que la propuesta no cubre y es donde nacen los leads:**
-responder comentarios y DMs, con un tiempo de respuesta acordado.
+## 🔴 La condición para que yo sea dueño de verdad
 
-### 2. Se rebalancea el mix, para bajar el tiempo de Sergio
+Sergio tuvo razón antes: un motor sin dueño no produce. Que ahora el dueño sea yo **no
+alcanza si depende de que él se acuerde de pedirlo**.
 
-| Propuesta original | Contrapropuesta |
-|---|---|
-| 20 videos pilar guionados | **10-12 pilares** |
-| 10 b-roll | **20 clips de documentación** (filmados mientras trabaja) |
-| 8 secuencias de historias | igual |
-| Máx. 2 sesiones de grabación | **1 sesión de guionados + acompañamiento de media jornada** |
+**Hace falta un ritual: una sesión semanal de producción.** Una vez por semana se producen
+y se programan 20-25 piezas de golpe. Los motores están hechos para lotes, no para pedidos
+sueltos.
 
-Mismo volumen publicado o más. **La mitad del tiempo de Sergio.**
+Sin ese ritual, las 90 piezas/mes no existen y esta contrapropuesta es humo.
 
-### 3. El fijo sube, y a propósito
+## Lo que se les propone
 
-Si se les suma DMs y comentarios, **Bs 2.000 queda corto**. Se propone **Bs 2.500** por el
-alcance ampliado.
+1. **Alcance:** 20 videos pilar/mes — exactamente lo que ya propusieron. Su especialidad.
+2. **Fijo: Bs 2.000/mes**, el que ellos pusieron. No se regatea.
+3. **Fuera el CPM**, por inaplicable (ver arriba). Si quieren variable, que sea por
+   **persona que entra a la comunidad**, que sí es atribuible al contenido con palabra clave.
+4. **Fuera de su alcance:** historias y b-roll. Sin bajar el fijo — se les paga lo mismo por
+   concentrarse en lo caro.
+5. **Las cinco cláusulas:** material crudo de Sergio · quién publica · quién responde DMs ·
+   fuente de verdad de métricas · plazo 3 meses con salida a 30 días.
+6. **Antes de firmar:** medir los 8 de la etapa 1, que cierran el 31-ago.
 
-**Por qué subirlo en vez de bajarlo:** pagar barato por algo mal alineado es la peor
-combinación. Lo que hay que arreglar es el variable, y se compra el derecho a hacerlo
-pagando mejor la parte fija.
+## ⚠️ La advertencia honesta sobre la cadencia
 
-### 4. El variable — acá está el único cambio no negociable
+Publicar 1/día en **Lucía (0 seguidores)** y en **@oniahq (25)** es producción para un feed
+que casi nadie ve todavía. El algoritmo puede repartir a no-seguidores, así que no es
+inútil — pero es la apuesta más riesgosa de las tres.
 
-Se reemplaza el CPM por **pago por persona que entra a la comunidad**: quien comenta la
-palabra clave, recibe el DM y queda en la lista. Es el objetivo que la propia propuesta
-declara, y el circuito **ya existe y ya se mide**.
+**La cuenta con audiencia real es la de Sergio (411).** Si hay que elegir dónde poner el
+esfuerzo las primeras semanas, va ahí.
 
-Es mejor para los dos: no premia vistas vacías, se autolimita, y si funciona de verdad
-cobran más que con CPM.
+## Créditos de Lucía a 1/día
 
-**Si prefieren mantener el CPM, dos condiciones:**
-- **Ventana de 30 días** por video (no "acumuladas" para siempre).
-- **Tope mensual igual al fijo.**
+| Escenario | Costo | Alcanza |
+|---|---|---|
+| Carruseles + banco existente | **0 cr/mes** | no se agota |
+| 1 reel generado por semana | 64 cr/mes | 33 meses |
+| 2 reels generados por semana | 128 cr/mes | 17 meses |
 
-### 5. Las cinco cláusulas que faltan
-
-Material crudo de Sergio · quién publica y cuándo · quién responde DMs y en cuánto ·
-fuente de verdad de las métricas · plazo de 3 meses con salida a 30 días.
-
-### 6. Antes de escalar: mirar los 8
-
-La etapa 1 termina el 31-ago. **Antes de comprometerse a un año de esto**, medir esos 8
-videos: vistas, seguidores nuevos y sobre todo **cuánta gente escribió**. Ya se puede medir.
-
----
+Saldo hoy: 2.134 créditos. **La cadencia de Lucía no tiene problema de presupuesto.**
 
 ## ⚠️ Antes de firmar cualquier cosa
 
-**Sergio es menor de edad.** Todo acto legal va por Leslie (su madre, titular en SEPREC).
-Un compromiso mensual con variable es un acto legal. Definir quién firma **antes**.
+**Sergio es menor de edad.** Todo acto legal va por Leslie. Definir quién firma antes.
