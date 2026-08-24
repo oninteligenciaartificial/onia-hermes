@@ -481,3 +481,16 @@ El motion no salva una pagina generica. Estas reglas son gate ANTES de animar:
 - [ ] 320px: sticky scenes y escenas didacticas no desbordan; el viaje del chip se re-mide al resize.
 - [ ] Cifras fiscales/precios sin count-up (regla 7).
 - [ ] Gate anti-IA de la seccion Direccion pasado (2+ sies = no shippea).
+
+---
+
+## Patrones documentados aparte (2026-08-23)
+
+Estos dos se escribieron como fichas propias en `hermes-content/references/ui-patterns/`
+porque llevan snippet, fallback y notas de accesibilidad — demasiado para una entrada del
+banco. **El banco sigue siendo el índice: se enlaza, no se duplica.**
+
+| Patrón | Ficha | Qué resuelve |
+|---|---|---|
+| Toggle "Lights" sobre grilla de productos | [`toggle-lights-grilla/`](../../hermes-content/references/ui-patterns/toggle-lights-grilla/README.md) | Cambio de estado de una grilla con el movimiento apagado bajo `prefers-reduced-motion`, sin perder el estado |
+| Eje que gira con el scroll + velocímetro | [`scroll-eje-y-velocimetro/`](../../hermes-content/references/ui-patterns/scroll-eje-y-velocimetro/README.md) | Rotación atada al progreso de scroll con `animation-timeline: view()` y fallback JS |
