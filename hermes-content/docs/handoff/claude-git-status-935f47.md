@@ -371,3 +371,52 @@ Todo en `web-factory/apps/onia-platform/` salvo donde se diga.
   captura**, así que arreglarla obliga a re-fotografiar el panel.
 - El `h2` del manifiesto ("Onia es un solo sistema de gestión con IA…") ocupa 5 renglones a
   tamaño display y pesa como un muro arriba de la banda. Es copy aprobado: **no se tocó**.
+
+---
+
+# TERCER OBJETIVO (2026-08-23, noche) — cerrar los frentes de producto
+
+Sergio: *"Esta bien, arregla esos frentes"* + *"para cada rubro que funciones se necesitan
+realmente y que innovaciónes podes colocar"*. El del VPS lo toma él.
+
+**En `master` de `onia-platform` y pusheado** (`73398cc`). Gates: `tsc` 0 · **2007 tests**
+(1991 base + 16 nuevos) · `next build` exit 0 real.
+
+| Frente | Qué se hizo |
+|---|---|
+| Servicios profesionales invendible | Alta inline de cliente en el modal de Citas (`ae2273d`) |
+| Rótulos fijos en dental | `vocabularioDeTrack` / `nombreDeRol` en el mismo modal |
+| Add-on inventario | Se sacaron de la copia las 2 promesas sin cablear (`73398cc`) |
+| Moneda | `formatPrecioVenta` (lista, sin centavos) vs `formatBs` (plata que se mueve) |
+
+## Intentos fallidos de esta tanda
+
+1. **Dije "las tablas de proveedores/compras/lotes no existen" y era FALSO.** Grepeé
+   `model (Supplier|Purchase|InventoryBatch)` — nombres en inglés — y me comí
+   `OniaCommercePurchase`, `OniaCommerceStockLot` y `OniaCoreBusinessPartner`. **En un repo
+   con nombres de dominio propios, un grep por nombre en inglés no descarta nada.**
+2. **`exit code 0` de un pipe NO es el exit del build.** `npx next build | tail -6` reporta
+   el exit de `tail`. Pasó DOS veces el mismo día. Redirigir a un log y capturar `$?`.
+3. **El build no corre en un worktree nuevo**: turbopack infiere mal la raíz (toma
+   `<worktree>/app`). El gate se corre en el checkout principal.
+4. **El checkout principal tiene `.env.local`** — hay que apartarlo antes de buildear y
+   restaurarlo después, o Next hornea `127.0.0.1` (el bug que rompió el login de prod).
+
+## Falsos positivos del gate del bundle (para no volver a asustarse)
+
+`grep 127.0.0.1` da 3 hits en `.map` de `node_modules` y 2 `localhost:8969/9999` que son
+defaults de Sentry Spotlight; el `127.0.0.1` del chunk de servidor es un fallback de
+`hostname()` de una librería. Ninguno es un valor de entorno horneado. La URL de Supabase
+en la nube que aparece sale de `.env` LOCAL, que está en `.gitignore` y **no versionado**:
+no llega al VPS. El build de producción usa `app.env` en el VPS.
+
+## Investigación por rubro
+
+Cuatro docs en `hermes-content/docs/research/rubro-*.md` (`a814fdde`). El patrón que se
+repite en tres de los cuatro: **está construido y apagado**, no falta.
+
+## Pendiente COMERCIAL de Sergio (no es un bug)
+
+El add-on "Inventario avanzado" cobra Bs 180/mes por tres funciones que hoy son **gratis**:
+`addon.inventory_advanced` se calcula en `entitlements.ts:55` y no lo lee nadie, y
+`/comercio/fiados` no tiene gate de plan ni de add-on. O se gatean, o no se cobra.
