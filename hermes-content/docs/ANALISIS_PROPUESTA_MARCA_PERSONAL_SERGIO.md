@@ -74,22 +74,21 @@ Faltan las cinco cláusulas que después se vuelven el conflicto:
 20 videos pilar en **2 sesiones** = ~10 grabaciones por sesión. Son dos días largos al mes
 frente a cámara, más la revisión de guiones.
 
-Con **0 clientes pagando** y ~11 semanas de runway, dos días al mes es una decisión de
-asignación de tiempo, no un detalle. **Los Bs 2.000 no son el costo real: los dos días lo son.**
+Con **0 clientes pagando**, dos días al mes es una decisión de asignación de tiempo, no un
+detalle. **Los Bs 2.000 no son el costo real: los dos días lo son.**
 
-## Lo que ya tenemos construido y ellos están cobrando
+## Lo que ya tenemos construido — y por qué NO se usa para recortarles
 
-Al 2026-08-23, en casa y funcionando:
+Al 2026-08-23 tenemos motores propios para historias (`story-batch.mjs`), b-roll
+(`overlay-visuals`), carruseles y programación, todos a 0 créditos. Además el circuito
+comentario→DM→lead, que la propuesta **no incluye**.
 
-| Entregable de la propuesta | Nuestro estado |
-|---|---|
-| 8 secuencias de historias/mes | ✅ Motor `story-batch.mjs` — 8 historias producidas hoy a **0 créditos** |
-| 10 videos b-roll | ✅ Montaje sobre material existente: mismo motor + `overlay-visuals` |
-| Preparación para redes | ✅ Programación por MCP de Postiz, probada |
-| — | ✅ Además: comentario→DM y lead al panel, que la propuesta **no incluye** |
+🔴 **Pero eso NO es argumento para bajarles el alcance.** Tener el motor no es tener la
+cadencia: las 8 historias del 23-ago salieron porque Sergio las pidió en una sesión. Sin
+dueño, no se producen solas. Lo que se contrata es **que ocurra sin que él se acuerde**.
 
-**Lo que ellos hacen y nosotros NO podemos:** dirigir y **grabar a Sergio**. Eso es lo
-valioso y es lo que hay que pagar.
+Sirve para otra cosa: **para que ellos produzcan más rápido**. Los motores quedan a
+disposición del que se encargue, no como excusa para pagarle menos.
 
 ---
 
