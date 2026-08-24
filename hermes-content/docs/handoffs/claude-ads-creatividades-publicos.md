@@ -12,6 +12,17 @@ marketing de las tres cuentas escrito como fuente de verdad.
 
 **EN PRODUCCIÓN — encendido y verificado ahí:**
 
+- 🔴 **CORREGIDO 2026-08-23 — el circuito comentario→DM NUNCA entregó un DM real.**
+  Acá decía que estaba "vivo y probado en prod". No se sostiene. Evidencia:
+  las **4 ejecuciones** del workflow `1jS4jwmNmvcQpqqH` son del 21-ago y todas usan un
+  comentario **inventado** (`username: prueba_v8b`, `comment_id: 17999999999999922`).
+  Meta las rechazó: `"The requested user cannot be found"` (IGApiException 100/2534014).
+  El nodo "Enviar DM privado" tiene `neverError: true` + `onError: continueRegularOutput`,
+  **así que la ejecución figura "success" aunque Meta la rechace**. El único lugar donde
+  el fallo se ve es el aviso de Telegram.
+  Un intento manual con un `comment_id` REAL tampoco pasó: `OAuthException code 1`.
+  **Lo que sí está probado: que el workflow corre. Lo que NO: que un DM llegue a alguien.**
+
 - **Palabra HUMO viva** en la cuenta de Lucía (workflow v10 publicado). Entrega el PDF
   *"5 herramientas de IA que sí sirven en un negocio boliviano"*, verificado con HTTP 200 en
   `onia.com.bo/recursos/5-herramientas-ia-bolivia.pdf`.
