@@ -40,13 +40,21 @@ marketing de las tres cuentas escrito como fuente de verdad.
   ejecuciones del workflow activo; el DM real lo mandó el workflow **anterior**, hoy
   inactivo). **Regla: las ejecuciones dicen qué corrió; solo la conversación dice qué llegó.**
 
-- 🚨 **Incidente 2026-08-24 02:00-02:37: el VPS llegó a load 158** por una tormenta de
-  reintentos de Meta amplificada por un nodo SSH. **El workflow `1jS4jwmNmvcQpqqH` quedó
-  APAGADO** y así debe seguir hasta que lo arreglen.
-  Detalle completo, el bucle paso a paso y las tres correcciones necesarias:
-  memoria `n8n-webhook-meta-tormenta-reintentos.md`.
-  ⚠️ Al soltar el carril el load **no se había recuperado del todo** (131 con el workflow
-  ya apagado) y `docker service ls` se colgaba: hay otra causa además de la tormenta.
+- 🚨 **Incidente 2026-08-24: el VPS estrangulado por Hostinger.** Load 158, y **la causa
+  NO era n8n**. Cadena real: `ollama` clavaba 2 de 4 núcleos las 24 h → CPU 100 % sostenido
+  → Hostinger aplicó una penalidad ("Límite de reinicios de CPU alcanzado") → **steal 93 %**,
+  o sea que la VM se quedó con ~7 % de su CPU → el task runner de n8n y `docker exec` se
+  mueren de hambre. n8n era el síntoma más visible, no el enfermo.
+
+  ⚠️ **Yo diagnostiqué mal dos veces acá** y la sesión de infra lo corrigió: culpé al nodo
+  SSH del workflow (la ejecución moría ANTES de llegar a él, y mi propio `runData` lo decía),
+  y llamé "comentarios" a eventos que eran `messaging` con `is_echo: true` — los ecos de mis
+  3 DMs, ni siquiera accionables.
+
+  🔴 **La penalidad no se levanta sola:** con ollama apagado el steal siguió en 93 %.
+  **Depende de un ticket a Hostinger.** Es la ruta crítica: sin CPU no hay verificación
+  posible de nada. Detalle en la memoria `n8n-webhook-meta-tormenta-reintentos.md`.
+  Carril de infra, con dueño asignado — **no se toca desde acá**.
 
 - 🔴 **TRAMPA CARA: la API de private reply devuelve error y entrega igual.**
   Los 3 intentos manuales del 23-ago devolvieron `OAuthException code 1` y **los 3 mensajes
