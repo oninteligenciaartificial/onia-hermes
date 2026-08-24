@@ -63,6 +63,24 @@ Si las tres cuentas se ven iguales, se lee como una sola marca haciendo ruido.
 mismo `typographic` que @oniahq — por eso sus piezas se ven como las de Onia.
 **Es la primera tarea técnica.**
 
+## 🔴 3.bis — Cómo se publica (cambió el 2026-08-24)
+
+Instagram le mostró a `@sergio_urcullo` un aviso de **comportamiento automatizado**. Es la
+única cuenta con audiencia real, así que la regla cambia:
+
+| Cuenta | Cómo se publica |
+|---|---|
+| **@sergio_urcullo** | 🔴 **A mano desde el teléfono**, dos semanas. Cadencia gradual, no 2/día de entrada |
+| @oniahq | Por API cuando Postiz vuelva |
+| Lucía | Por API, arrancando **bajo** — cuenta de 0 seguidores publicando por API es el mismo perfil de riesgo |
+
+**La regla general:** una cuenta joven o de bajo volumen que empieza a publicar seguido por
+API, con varias herramientas conectadas, **se ve como un bot** aunque el contenido sea
+legítimo. Una sola herramienta de publicación por cuenta, cadencia gradual, y parte del
+volumen a mano al principio.
+
+Detalle completo: `ONIA_AVISO_AUTOMATIZACION_IG.md`.
+
 ## 4. El calendario semanal — 21 piezas mías
 
 | Día | @sergio_urcullo (×2) | @oniahq (×1) | Lucía (×1) |
