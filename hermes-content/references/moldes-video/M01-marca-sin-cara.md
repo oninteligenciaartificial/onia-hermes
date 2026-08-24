@@ -4,9 +4,16 @@
 > (shortcode `DcAAUevMTG6`, veredicto SIRVE_YA), que además señalaba el hueco:
 > *"no tenemos un banco de MOLDES de anuncio estructurado — eso también es un resultado"*.
 >
-> **Por qué este molde antes que cualquier otro:** sin cara = sin el problema de
-> consistencia de rostro, que es lo que más nos frena. Y funciona **muteado**, que es como
-> se ve el 85 % del feed.
+> 🔴 **ALCANCE — corregido 2026-08-24 por Sergio.** Este molde es para **pieza de
+> ATMÓSFERA de un producto o servicio**. **NO sirve para marca personal**, y yo lo adapté
+> mal a eso en la primera versión de este archivo. Ver `M02-marca-personal.md`.
+>
+> El error de método vale más que el molde: tomé 5 reglas derivadas de UN anuncio de cóctel
+> y las traté como ley portable sin preguntarme si el género transfiere. La ficha original
+> ya avisaba que "no aplica a un ERP" — o sea que marcaba límites de género, y los ignoré.
+>
+> **Por qué igual sirve donde sirve:** sin cara = sin el problema de consistencia de rostro.
+> Y funciona **muteado**, que es como se ve la mayor parte del feed.
 
 ## Las 5 reglas portables
 
@@ -35,26 +42,11 @@ embudo alto puro; si hay pedido, vive en el caption.
 | 6 | **Bodegón cenital** | Todo junto, ordenado, desde arriba |
 | 7 | **Placa** | La marca, translúcida, un segundo |
 
-## Adaptación a marca personal de software (@sergio_urcullo)
+## La adaptación a marca personal que estaba acá se BORRÓ
 
-El molde original vende un producto físico. Para una marca personal de alguien que
-**construye software**, la traducción es directa — el "producto" es el trabajo:
-
-| Beat | Original (cóctel) | Traducción |
-|---|---|---|
-| 1 | Raqueta cruzando en whip | Una mano cerrando una laptop de golpe, contrapicado desde el borde del escritorio |
-| 2 | Cono de pelotas de tenis | Un cuaderno lleno de números a mano **al lado** de la pantalla — lo viejo y lo nuevo en el mismo plano |
-| 3 | El pour sobre las cuerdas | La única toma de pantalla real: algo ejecutándose |
-| 4 | Dos modelas, palmeras | La calle de Santa Cruz de noche desde la ventana — el mundo donde pasa |
-| 5 | Copa a contraluz | La laptop sola encendida a oscuras, contraluz |
-| 6 | Bodegón cenital | Cenital del escritorio: cuaderno, calculadora, taza, laptop |
-| 7 | Placa "CITRINE" | `@sergio_urcullo` en verde, translúcido, un segundo |
-
-- **Hilo de color:** el verde de marca (`#10C26B`) saltando de objeto en objeto —
-  luz de pantalla → un post-it → el cursor → la tipografía final.
-- **Carrier element:** la **luz de la pantalla** cruzando el encuadre. Aparece en 3 de los
-  7 planos y pega tomas que no comparten espacio.
-- **Cámara:** cenital y contrapicado, nunca a los ojos.
+Estaba mal. Traducía beat por beat el anuncio de cóctel a "alguien que construye software"
+manteniendo las 5 reglas, incluidas las dos que en marca personal se caen (sin cara, cámara
+nunca a los ojos). El molde correcto para eso vive en `M02-marca-personal.md`.
 
 ## Costo
 
