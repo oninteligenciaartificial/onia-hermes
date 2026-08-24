@@ -266,8 +266,18 @@ function slideHtml(slide, idx, total, account, bg) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
-  const bgLayer = bg
-    ? `<div class="bgphoto" style="background-image:url('file://${bg.replace(/\\/g, '/')}')"></div><div class="bgscrim"></div>`
+  // El fondo se puede fijar POR SLIDE (`slide.bg`) y no solo global (`--bg`).
+  //
+  // Hizo falta el 2026-08-23: el flag --bg pone la foto en la portada Y en el cierre.
+  // La slide de cierre de este pack es verde con texto NEGRO, asi que sobre una foto
+  // oscura el titular queda ilegible — se vio comparando renders, no leyendo el CSS.
+  // Ahora: `bg` global de base, `slide.bg` lo pisa, y `"slide.bg": ""` lo APAGA para
+  // esa slide. Asi la portada lleva foto y el cierre se queda limpio.
+  const bgSrc = Object.prototype.hasOwnProperty.call(slide, 'bg')
+    ? (slide.bg ? path.resolve(slide.bg) : '')
+    : bg;
+  const bgLayer = bgSrc
+    ? `<div class="bgphoto" style="background-image:url('file://${String(bgSrc).replace(/\\/g, '/')}')"></div><div class="bgscrim"></div>`
     : '';
 
   let inner = '';
