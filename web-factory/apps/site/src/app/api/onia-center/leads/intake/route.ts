@@ -48,15 +48,23 @@ export async function POST(request: Request) {
   const whatsapp = clean(body.whatsapp);
   const rubro = clean(body.rubro);
   const src = clean(body.src);
+  /*
+   * El correo se leía en ningún lado: el agenda-form nunca lo mandaba, así que
+   * el campo no existía acá. El lead magnet (/guia-facturacion) pide UN solo
+   * dato obligatorio y es este, así que sin leerlo un envío de solo-correo
+   * caía en `missing_fields` y el lead se perdía entero — 422 silencioso, con
+   * la persona viendo que todo salió bien.
+   */
+  const email = clean(body.email);
 
-  if (!business && !name) {
+  if (!business && !name && !email) {
     return NextResponse.json({ error: "missing_fields" }, { status: 422 });
   }
 
   const lead: RuntimeLead = {
     id: "",
-    company: business || name,
-    contact: [name, whatsapp].filter(Boolean).join(" · "),
+    company: business || name || email,
+    contact: [name, whatsapp, email].filter(Boolean).join(" · "),
     source: src || "landing",
     serviceId: "",
     status: "nuevo",
