@@ -14,7 +14,8 @@
    "role": "cover",
    "pill": "18 meses construyendo",
    "headline": "Lo que aprendí *construyendo* software en Bolivia",
-   "body": "Ninguna la aprendí leyendo. Todas me costaron tiempo."
+   "body": "Ninguna la aprendí leyendo. Todas me costaron tiempo.",
+   "bg": "hermes-content/references/marca-personal-sergio/fondos/desk-01.png"
   },
   {
    "number": 2,
@@ -52,5 +53,6 @@
    "body": "Escribila en los comentarios. Las mejores las robo para el próximo.",
    "bg": ""
   }
- ]
+ ],
+ "_render": "node scripts/carousel_render.js --brief hermes-content/references/marca-personal-sergio/briefs/S01-mayor-que.json --out hermes-content/references/marca-personal-sergio/render/S01 --account sergio --pack typographic --format feed"
 }

@@ -12,52 +12,41 @@ marketing de las tres cuentas escrito como fuente de verdad.
 
 **EN PRODUCCIÓN — encendido y verificado ahí:**
 
-- ✅ **El circuito comentario→DM SÍ funciona — verificado en la bandeja, 2026-08-23.**
-  Sergio comentó "sistema" el **18-ago 23:17:58** y el DM automático salió **23:18:04**:
-  **6 segundos**. Está en el hilo `oniahq ↔ sergio_urcullo`, leído por API.
+**LO DE ESTE CARRIL (contenido) — hecho el 23-ago:**
 
-  ⚠️ **Dos correcciones mías del mismo día, escritas para que nadie repita el camino:**
+- **Reel L1 v7** — `reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4`. Sergio pidió
+  cambiar el último clip: perdía las pecas, que son el marcador de identidad del ancla.
+  Reemplazado por `VIDEO-rooftop-veo-8s` (mira a cámara, pecas intactas, cierra donde abrió).
+  **0 créditos.** Audio remuxeado del master aprobado: −14,3 LUFS, intacto.
+- **Carrusel L6 "5 señales"** — 7 slides, **0 créditos** (se estimaban 4).
+- **8 historias** — `historias-20260823/final/`, **0 créditos**, motor `story-batch.mjs`.
+- **3 carruseles de marca personal de Sergio** — `marca-personal-sergio/render/S01..S03`,
+  formato @iampascio, con portada generada. **8 créditos** (4 imágenes a 2 cr).
+  Los briefs son **autocontenidos**: traen su propia portada, se re-renderizan sin flags.
+- **Medidor del circuito** — `scripts/ig_circuito_medir.mjs`, con `--self-check`.
+  Primera corrida real de @oniahq: alcance 73, 3 comentarios, 1 con palabra clave,
+  9 visitas al perfil, **0 seguidas**.
 
-  1. Primero lo reporté como "un lead real perdido". Era Sergio probando.
-  2. Después lo reporté como "**nunca** entregó un DM". **También falso.** Me guié por las
-     ejecuciones del workflow ACTIVO (`1jS4jwmNmvcQpqqH`, creado el 21-ago), que en efecto
-     solo tiene pruebas con un comentario inventado. Pero el DM real del 18-ago lo mandó el
-     workflow **anterior** (`gWrVHU8OxI9yugc4`, creado 23:05 del 18-ago, hoy inactivo).
+**TODO ESO ESPERA EL OK DE SERGIO PARA PUBLICARSE.** Nada se subió.
 
-  **La lección: mirar la BANDEJA, no el registro de ejecuciones.** Las ejecuciones dicen qué
-  corrió; solo la conversación dice qué llegó. Dos veces saqué la conclusión equivocada de
-  evidencia indirecta (la carpeta de marcadores, y después las ejecuciones).
+---
 
-  **Lo que sí queda pendiente de verdad:** el workflow ACTIVO nunca fue ejercitado con un
-  comentario real. El que funcionó está apagado.
+**LO DE INFRA — ENTREGADO A OTRA SESIÓN, no se toca desde acá:**
 
-- 🚨 **INCIDENTE 2026-08-24 02:00-02:37 — tormenta de reintentos que ahogó el VPS.**
-  **El workflow `1jS4jwmNmvcQpqqH` quedó APAGADO.** Reactivarlo sin arreglar lo de abajo
-  vuelve a tirar la máquina.
+- ✅ **El circuito comentario→DM funciona**, verificado **leyendo la bandeja** por API:
+  el comentario del 18-ago 23:17:58 recibió su DM a las **23:18:04** (6 segundos).
+  ⚠️ Antes de llegar a eso me equivoqué **dos veces** con evidencia indirecta: primero dije
+  "lead real perdido" (era Sergio probando) y después "nunca entregó un DM" (miré las
+  ejecuciones del workflow activo; el DM real lo mandó el workflow **anterior**, hoy
+  inactivo). **Regla: las ejecuciones dicen qué corrió; solo la conversación dice qué llegó.**
 
-  **El bucle, en orden:**
-  1. Se generan eventos de webhook de Instagram (en este caso, por 3 DMs enviados a mano).
-  2. Cada evento arranca una ejecución que, en el nodo Code, espera al *task runner* de n8n.
-  3. El nodo `Token o freno 24h` es un nodo **SSH al propio VPS**: cada ejecución abre una
-     conexión. Con la cola creciendo, se acumularon **más de 100 sesiones**.
-  4. El VPS se satura → **load average 158** → el task runner no alcanza a atender.
-  5. El nodo Code muere a los **120 s** (`Task request timed out`) → el workflow **nunca
-     devuelve 200**.
-  6. **Meta reintenta** → volver al paso 2. Se retroalimenta solo.
-
-  **Medido:** 81 ejecuciones fallidas, una cada 30-60 s desde las 01:46. Caían también el
-  vigilante del chatbot y otro workflow: **todo lo que tenga un nodo Code**.
-  Tras apagarlo: load 158 → 122 y **0 ejecuciones nuevas desde 02:37**.
-
-  **Las tres cosas a arreglar ANTES de reactivar:**
-  1. 🔴 **Responder 200 primero, trabajar después.** Hoy `responseMode: responseNode` hace
-     que el 200 salga al final del flujo. Cualquier lentitud = Meta reintenta. Un webhook de
-     Meta se contesta **inmediatamente** y el trabajo va después.
-  2. 🔴 **Sacar el nodo SSH del camino caliente.** Abrir una sesión SSH por evento es el
-     amplificador: convierte una cola en una carga que tumba la máquina. El freno de 24 h
-     tiene que resolverse con una llamada HTTP o dentro del propio nodo.
-  3. 🟡 **El nodo Code depende del task runner**, que es un punto único de falla para toda
-     la instancia. Si se puede resolver con nodos nativos, mejor.
+- 🚨 **Incidente 2026-08-24 02:00-02:37: el VPS llegó a load 158** por una tormenta de
+  reintentos de Meta amplificada por un nodo SSH. **El workflow `1jS4jwmNmvcQpqqH` quedó
+  APAGADO** y así debe seguir hasta que lo arreglen.
+  Detalle completo, el bucle paso a paso y las tres correcciones necesarias:
+  memoria `n8n-webhook-meta-tormenta-reintentos.md`.
+  ⚠️ Al soltar el carril el load **no se había recuperado del todo** (131 con el workflow
+  ya apagado) y `docker service ls` se colgaba: hay otra causa además de la tormenta.
 
 - 🔴 **TRAMPA CARA: la API de private reply devuelve error y entrega igual.**
   Los 3 intentos manuales del 23-ago devolvieron `OAuthException code 1` y **los 3 mensajes

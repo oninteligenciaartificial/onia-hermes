@@ -14,7 +14,8 @@
    "role": "cover",
    "pill": "Sin equipo",
    "headline": "Todo lo que uso para *construir solo*",
-   "body": "Nada de esto es magia. Todo se aprende."
+   "body": "Nada de esto es magia. Todo se aprende.",
+   "bg": "hermes-content/references/marca-personal-sergio/fondos/laptop-03.png"
   },
   {
    "number": 2,
@@ -52,5 +53,6 @@
    "body": "O qué me falta. Los comentarios corrigen mejor que yo.",
    "bg": ""
   }
- ]
+ ],
+ "_render": "node scripts/carousel_render.js --brief hermes-content/references/marca-personal-sergio/briefs/S03-stack.json --out hermes-content/references/marca-personal-sergio/render/S03 --account sergio --pack typographic --format feed"
 }

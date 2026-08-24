@@ -13,7 +13,8 @@
    "role": "cover",
    "pill": "Lo leí tarde",
    "headline": "Lo que pasa cuando *empezás*",
-   "body": "Aunque sea mal. Aunque sea hoy."
+   "body": "Aunque sea mal. Aunque sea hoy.",
+   "bg": "hermes-content/references/marca-personal-sergio/fondos/cuaderno-02.png"
   },
   {
    "number": 2,
@@ -51,5 +52,6 @@
    "body": "Contámelo en un comentario. A veces escribirlo ya es empezar.",
    "bg": ""
   }
- ]
+ ],
+ "_render": "node scripts/carousel_render.js --brief hermes-content/references/marca-personal-sergio/briefs/S02-beneficios-empezar.json --out hermes-content/references/marca-personal-sergio/render/S02 --account sergio --pack typographic --format feed"
 }
