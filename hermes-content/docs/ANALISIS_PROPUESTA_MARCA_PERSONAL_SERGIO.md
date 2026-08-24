@@ -95,57 +95,104 @@ valioso y es lo que hay que pagar.
 
 # Contrapropuesta
 
-La lógica: **pagarles por lo único que no podemos hacer nosotros, y arreglar el variable.**
-No es apretar el precio — es sacar de su factura el trabajo que ya tenemos automatizado.
+> ⚠️ **Corregida el 2026-08-24 por Sergio.** La primera versión proponía sacarles las
+> historias y los b-roll porque "los hacemos nosotros a 0 costo". **Estaba mal.**
+>
+> *"Es verdad, algunas cosas las puedo hacer yo, pero él estaría encargado."*
+>
+> **Poder hacer algo no es que se haga.** El motor de historias existe y produjo 8 en un
+> día — pero pasó porque Sergio lo pidió en una sesión. Sin dueño no hay cadencia. Lo que
+> se compra al contratar no es la capacidad: es que **ocurra sin que él se acuerde**.
+> Ahorrar ~Bs 400 sacándoles entregables, y a cambio meter esas piezas en la cabeza de
+> Sergio, es un mal negocio.
 
-### 1. El fijo se mantiene en Bs 2.000, pero por menos entregables
+## La pregunta de fondo: dónde va el tiempo de Sergio
 
-Ellos siguen con lo caro y lo que solo ellos hacen: **estrategia, guiones, dirección,
-grabación y edición de los 20 videos pilar**.
+El dato que manda: **cero clientes pagando.** El producto está construido, el chatbot
+funciona, el motor de contenido funciona. Ninguna de esas cosas es el cuello de botella.
+**El cuello de botella es que nadie compró.**
 
-Salen de su alcance: las **8 secuencias de historias** y los **10 b-roll**. Los hacemos
-nosotros con motores ya construidos, a costo 0.
+La marca personal es un activo que **compone**: suma credibilidad cuando un prospecto lo
+busca antes de decidir. Con 411 seguidores todavía **no es un canal de ventas**, y por lo
+tanto **no debería costarle dos días al mes**.
 
-**Por qué mantener el fijo completo:** es una mejora clara para ellos (mismo dinero, menos
-trabajo) y compra el derecho a pedir el cambio del variable, que es lo que de verdad importa.
+| Solo lo puede hacer Sergio | Se delega completo |
+|---|---|
+| Hablar con dueños de negocio reales | Ideas y guiones |
+| Decidir qué es cierto del negocio | Dirección y grabación |
+| Su cara y su voz | Edición, publicación, historias, b-roll |
+| Cerrar el primer cliente | Comentarios y DMs |
 
-### 2. El variable se ata al objetivo declarado, no a las vistas
+## El cambio que de verdad importa: documentar, no producir
 
-Se reemplaza el CPM por **pago por persona que entra a la comunidad** — el objetivo que la
-propia propuesta escribe. Se mide con la palabra clave en comentarios → DM → lista, que es
-un circuito que **ya existe y ya lo tenemos**.
+No es negociar el precio. Es cambiar el modelo:
 
-Es mejor para las dos partes: se autolimita solo, no premia vistas vacías, y si funciona de
-verdad pagan más que el CPM.
+**De "producir contenido" → a "documentar lo que ya está haciendo".**
 
-**Si prefieren quedarse con el CPM**, entonces dos condiciones no negociables:
-- **Ventana de 30 días** por video. Se cuentan las vistas de los primeros 30 días de cada
-  pieza, no "acumuladas" para siempre.
-- **Tope mensual = el fijo.** El variable nunca supera Bs 2.000, o sea techo de Bs 4.000/mes.
+Sergio construye todos los días. Si el material sale de ahí, el contenido es un
+**subproducto de su trabajo real** en vez de una producción aparte. Baja de 2 días al mes a
+medio día, y sale mejor porque es verdad y no guion.
 
-### 3. Las cinco cláusulas que faltan
+Consecuencia práctica: **menos pilares y más documentación.** Veinte videos guionados al mes
+exigen veinte cosas que decir; diez pilares fuertes más veinte clips de lo que pasó esa
+semana es más contenido, más real y muchísimo menos tiempo suyo.
 
-1. **El material crudo es de Sergio**, se entrega en bruto al cierre de cada mes.
-2. **Quién publica y con qué calendario**, por escrito.
-3. **Comentarios y DMs**: quién responde y en cuánto tiempo. Si no lo toman ellos, lo
-   tomamos nosotros — pero tiene que tener dueño.
-4. **Fuente de verdad de las métricas**: las analíticas nativas de las cuentas de Sergio,
-   con captura al cierre de mes.
-5. **Plazo de 3 meses con salida a 30 días de aviso**, de ambos lados.
+## Lo que se les propone, punto por punto
 
-### 4. Una prueba antes de escalar
+### 1. El alcance se mantiene completo — y se les suma lo que falta
 
-La etapa 1 (8 videos) termina el 31-ago. **Antes de comprometerse a 30 videos/mes, mirar qué
-pasó con esos 8**: vistas, seguidores nuevos, y sobre todo **cuántos escribieron**.
+Siguen a cargo de **todo**: estrategia, guiones, grabación, edición, historias, b-roll y
+publicación. No se les recorta nada.
 
-Ese dato ya se puede medir — el medidor del circuito existe y corre.
-Si los 8 no movieron nada, 30 al mes no lo van a arreglar: van a hacer el mismo ruido
-más fuerte.
+**Y se les pide sumar lo que la propuesta no cubre y es donde nacen los leads:**
+responder comentarios y DMs, con un tiempo de respuesta acordado.
+
+### 2. Se rebalancea el mix, para bajar el tiempo de Sergio
+
+| Propuesta original | Contrapropuesta |
+|---|---|
+| 20 videos pilar guionados | **10-12 pilares** |
+| 10 b-roll | **20 clips de documentación** (filmados mientras trabaja) |
+| 8 secuencias de historias | igual |
+| Máx. 2 sesiones de grabación | **1 sesión de guionados + acompañamiento de media jornada** |
+
+Mismo volumen publicado o más. **La mitad del tiempo de Sergio.**
+
+### 3. El fijo sube, y a propósito
+
+Si se les suma DMs y comentarios, **Bs 2.000 queda corto**. Se propone **Bs 2.500** por el
+alcance ampliado.
+
+**Por qué subirlo en vez de bajarlo:** pagar barato por algo mal alineado es la peor
+combinación. Lo que hay que arreglar es el variable, y se compra el derecho a hacerlo
+pagando mejor la parte fija.
+
+### 4. El variable — acá está el único cambio no negociable
+
+Se reemplaza el CPM por **pago por persona que entra a la comunidad**: quien comenta la
+palabra clave, recibe el DM y queda en la lista. Es el objetivo que la propia propuesta
+declara, y el circuito **ya existe y ya se mide**.
+
+Es mejor para los dos: no premia vistas vacías, se autolimita, y si funciona de verdad
+cobran más que con CPM.
+
+**Si prefieren mantener el CPM, dos condiciones:**
+- **Ventana de 30 días** por video (no "acumuladas" para siempre).
+- **Tope mensual igual al fijo.**
+
+### 5. Las cinco cláusulas que faltan
+
+Material crudo de Sergio · quién publica y cuándo · quién responde DMs y en cuánto ·
+fuente de verdad de las métricas · plazo de 3 meses con salida a 30 días.
+
+### 6. Antes de escalar: mirar los 8
+
+La etapa 1 termina el 31-ago. **Antes de comprometerse a un año de esto**, medir esos 8
+videos: vistas, seguidores nuevos y sobre todo **cuánta gente escribió**. Ya se puede medir.
 
 ---
 
 ## ⚠️ Antes de firmar cualquier cosa
 
 **Sergio es menor de edad.** Todo acto legal va por Leslie (su madre, titular en SEPREC).
-Un compromiso de Bs 2.000/mes + variable es un acto legal. Definir quién firma **antes** de
-acordar, no después.
+Un compromiso mensual con variable es un acto legal. Definir quién firma **antes**.
