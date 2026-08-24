@@ -86,6 +86,11 @@ que una imagen se vea bien.
    Se dirige por índice (`image 1`, `image 2`) y **el orden de carga es parte del prompt**.
 6. **Encadenar:** la salida de un paso es la `image 1` del siguiente. Así se conserva el
    escenario mientras cambia lo demás.
+7. 🔴 **Ojo con el texto en inglés.** El prompt corto delega el estilo a revistas anglosajonas,
+   y el modelo mete cartelería en inglés: salió un "CLOSED" grande en una tienda y una revista
+   "Grain & Good" sobre un mostrador. Para público boliviano eso rompe la autenticidad.
+   **Se resuelve eligiendo la toma o encuadrando el cartel afuera, no agregando "no text" al
+   prompt** — pedir ausencia es justo lo que produce imágenes muertas (ver regla 4).
 
 ⚠️ Estas reglas **contradicen** los prompts largos que se venían usando para el b-roll de
 Lucía. Ahí el prompt largo tiene una razón distinta (lock de vestuario y raccord entre
