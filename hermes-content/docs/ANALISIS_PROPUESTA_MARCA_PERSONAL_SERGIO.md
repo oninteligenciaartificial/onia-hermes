@@ -115,16 +115,28 @@ disposición del que se encargue, no como excusa para pagarle menos.
 **Su propuesta no es cara: es chica.** Cubre un tercio de lo que Sergio quiere publicar, y
 buena parte de ese tercio (historias, b-roll) es justo lo que sale de un motor.
 
-## Por qué el CPM ahora es directamente inaplicable
+## El CPM — ⚠️ mi objeción principal era FALSA
 
-No es una objeción de precio. Es que **la atribución se rompe**.
+Yo argumenté que el CPM era inaplicable porque "la atribución se rompe" si el 75 % del feed
+lo produce otro. **Sergio lo corrigió el 2026-08-24: el CPM se audita solo sobre SUS videos,
+en todas las redes.** Cada video es identificable. **La atribución no se rompe y ese
+argumento se cae.**
 
-Si el 75 % del feed lo produce otro, no hay forma de decir de quién son las vistas. Un video
-suyo que funciona levanta la cuenta entera; un carrusel nuestro que funciona, también.
-Facturar CPM sobre un feed que no producís es imposible de auditar — para ellos y para
-Sergio.
+Lo que **sí** queda en pie, y es mucho más chico:
 
-**Se cae solo, sin necesidad de discutirlo como plata.**
+1. **Sin tope.** El variable iguala al fijo a las ~251.000 vistas/mes y de ahí para arriba no
+   tiene techo. Se pide **tope mensual igual al fijo**.
+2. **"Acumuladas" es ambiguo.** Si son las vistas del mes, perfecto. Si son de por vida y se
+   facturan cada mes, se paga lo mismo muchas veces. **Se define por escrito, no se asume.**
+
+Con esas dos cosas resueltas, **el CPM es aceptable**.
+
+## Dos datos más que corrigió Sergio
+
+- **Las grabaciones son los sábados.** Día fijo, ya definido.
+- **Los b-roll no se graban**: son clips ya hechos, reutilizados. O sea que el b-roll es
+  volumen de bajo esfuerzo para ellos — lo cual justifica que su CPM sea menor ($0,60), y
+  quita peso al reclamo por esa parte.
 
 ## El reparto que sale de los números
 
