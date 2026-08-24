@@ -120,6 +120,62 @@ orquestador escribe los indices.** Ocho agentes en la misma carpeta no se pisaro
 
 ---
 
+## L3 · QR dinámico — una línea recurrente que no existe en el core
+
+```text
+Contexto: un reel desglosa un negocio de QR dinamico vendido por suscripcion. Reconstruccion
+SaaS completa (entidades + maquina de estados):
+hermes-content/references/video-intake/analisis/2026-08-21-items.json (item DcJe7nLpuOA)
+
+EL MECANISMO, en una linea: el QR gratis codifica el destino FINAL, por eso muere cuando el
+destino cambia. El QR de pago codifica un ENLACE PROPIO, asi que el destino es un campo
+editable. Lo que se cobra es MANTENER VIVO el redirect: si caduca la suscripcion, el QR ya
+impreso y pegado en las mesas deja de servir.
+
+ENTIDADES:
+  short_link   slug, destino_url (MUTABLE - ahi vive todo el producto), dueno, estado
+  qr_asset     DERIVADO, no entidad de negocio. Se genera UNA vez sobre el slug y nunca cambia:
+               es el objeto fisico ya pegado
+  scan_event   append-only: short_link_id, ts, user-agent, pais, referer
+  subscription dueno, plan, estado
+  El destino (la carta del restaurante) NO es entidad nuestra: es una URL del cliente. Por eso
+  es barato de operar.
+
+VERIFICADO CONTRA EL REPO (no lo repitas, confirmalo vos): onia-core NO tiene ninguna entidad de
+shortlink, redirect ni QR — cero coincidencias en contract.json y en todo onia-core/. Es entidad
+NUEVA, no una capability apagada.
+
+MVP con lo que YA corre: ruta /r/[slug] en web-factory/apps/site (Next.js, ya deploya a Vercel y
+al VPS) + dos tablas en Supabase + el paquete npm qrcode. Es chico.
+
+Tarea:
+1. Confirma vos que no existe nada de esto en el core antes de escribir una linea.
+2. Construi el MVP: crear enlace, editar destino, generar el PNG, contar escaneos.
+3. RLS por dueno, verificada en la base y no en el front.
+4. Rate limit en el endpoint de redirect: es publico y lo va a escanear cualquiera.
+
+DECISION QUE ES DE SERGIO Y BLOQUEA EL PRICING (no la tomes vos): el QR dinamico es un modulo
+del core con suscripcion propia, o un add-on mensual encima del Cuidado Web? Cambia donde vive
+el codigo y cuanto se cobra.
+
+Y UN DOMINIO CORTO para el redirect. El DNS lo controlamos en Cloudflare, pero ojo con el
+comodin * proxiado que hoy tapa toda la zona.
+
+LO QUE NO SE COPIA:
+- La cifra del reel ("1.324 suscripciones, $14.734 al mes") esta DIBUJADA, no es una captura.
+  No se repite.
+- Su canal de distribucion es r/smallbusiness: mercado gringo, y ese sub prohibe autopromocion.
+  Sustituir por el canal boliviano equivalente.
+- El "modo arte" (QR ilustrados) usa ControlNet QR Code Monster, un modelo de Stable Diffusion.
+  Higgsfield NO expone ControlNet. Hoy NO tenemos herramienta para eso: se vende el QR dinamico
+  sin el adorno, que igual es el 100% del valor recurrente.
+
+LISTO = crear un enlace, imprimir su QR, cambiarle el destino, y que el MISMO QR lleve al nuevo
+destino — verificado escaneandolo, no leyendo el codigo. Con RLS probada.
+```
+
+---
+
 ## J4 · Los 6 tiers construidos y apagados
 
 ```text

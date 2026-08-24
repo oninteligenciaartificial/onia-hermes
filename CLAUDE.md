@@ -289,3 +289,7 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
   **skills `ver-videos` y `editor-videos`** (HyperFrames vive en `.agents/skills/`:
   revisarlo ANTES de codear video).
+- **Sacar el PROMPT de una imagen o un video de referencia → skill `sacar-prompt`.**
+  Distingue **recuperar** (está en pantalla: se lee) de **reconstruir** (se escribe uno
+  parecido, y se dice que lo es). Regla de entrada: **si el video habla es UGC, si
+  impresiona es cine** — se elige la plantilla antes de escribir.

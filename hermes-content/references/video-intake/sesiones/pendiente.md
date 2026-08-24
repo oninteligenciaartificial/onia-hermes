@@ -531,3 +531,74 @@ IA que ya corre por cron cada 2 h. Si no aporta algo que el radar no cubra, se d
 
 ---
 
+---
+
+> **Agregado 2026-08-22, segunda tanda.** Sale de
+> [DbT8hWPsyjN](https://www.instagram.com/reels/DbT8hWPsyjN/) ·
+> [ficha](../2026-08-22-handoff-context-rot.md).
+> **Hacelo primero:** cierra la regla de CLAUDE.md linea 102, que lleva semanas sin
+> artefacto. No choca con nada de esta sesion.
+
+## N1 · El estándar `HANDOFF.md` — la regla que nunca se volvió archivo
+
+```text
+Sesion: pendiente (metodo). git branch --show-current primero.
+
+Contexto: un reel ensena a cerrar la sesion de Claude Code escribiendo un handoff.md con 5
+campos fijos, en vez de confiar en /compact. Ficha con el analisis y las verificaciones:
+hermes-content/references/video-intake/2026-08-22-handoff-context-rot.md
+
+LOS 5 CAMPOS, literales de la pantalla del video:
+  1) Objetivo
+  2) Estado en que termino
+  3) Archivos y cambios
+  4) Intentos fallidos        <- el que casi nadie escribe y el que mas vale
+  5) Proximos pasos
+
+POR QUE ESTO NO ES UNA IDEA NUEVA SINO UNA DEUDA NUESTRA:
+CLAUDE.md linea 102 YA dice "Al cerrar la sesion, dejar el estado escrito: que quedo en
+produccion, que quedo a medias y donde, y que depende de Sergio". Esa regla existe hace
+semanas y NUNCA se convirtio en un archivo con plantilla. El video aporta exactamente la
+plantilla que le falta.
+
+LO QUE YA ESTA INSTALADO (verificado leyendo los archivos, confirmalo vos igual):
+  - ~/.claude/commands/save-session.md  y  resume-session.md   -> escriben en ~/.claude/session-data/
+  - ~/.claude/skills/context-save/      y  context-restore/    -> escriben en ~/.gstack/sessions/
+Las CUATRO escriben FUERA del repo. Ese es el problema: el estado no se commitea, no viaja,
+no lo ve otra maquina y no lo ve otro carril. El aporte del video es que el archivo vive EN EL
+REPO.
+Y `grep -i handoff` en onia-hermes hoy solo devuelve las skills de video (handoff de
+movimiento entre escenas, otro sentido). No existe handoff de sesion.
+
+Tarea:
+1. VERIFICA VOS PRIMERO las 4 herramientas de arriba. Si alguna ya escribe dentro del repo,
+   el analisis se equivoco: decilo y pará. Si confirmas que todas escriben afuera, seguí.
+2. Decidi UNA sola cosa y escribila: reusamos save-session cambiandole el destino, o creamos
+   HANDOFF.md propio. NO construyas un quinto mecanismo al lado de los cuatro que ya hay —
+   ese es el error mas caro del preambulo y ya lo cometimos con otros temas.
+3. Define el formato uniendo los 5 campos del video con los 3 de CLAUDE.md linea 102. No son
+   incompatibles: los de CLAUDE.md son mas especificos de ONIA (que quedo EN PRODUCCION, que
+   depende de Sergio) y los del video son mas completos sobre el trabajo (intentos fallidos).
+   El resultado tiene que ser UNA lista, no dos pegadas.
+4. RESOLVE EL CHOQUE DE CARRILES, que el video no tiene porque el es una persona sola: aca
+   trabajamos con un worktree por carril y varios a la vez. Un HANDOFF.md en la raiz de cada
+   worktree choca al mergear a main. Decidi donde vive para que dos carriles abiertos no se
+   pisen, y respetá "nada suelto en la raiz" de la tabla de CLAUDE.md seccion 4.
+5. Escribi el HANDOFF de ESTA tarea usando el formato que definiste. Si el formato no sirve
+   para su propio cierre, esta mal.
+6. Actualiza CLAUDE.md linea 102 para que apunte al artefacto, en vez de pedir "el estado
+   escrito" en abstracto. Editá esa regla; no agregues una regla nueva abajo.
+
+EVIDENCIA PROPIA QUE VALE MAS QUE EL VIDEO: la sesion de analisis de reels se compacto hoy.
+El resumen que volvio traia el historial entero — cada error, cada correccion, cada metodo
+descartado — con el mismo peso que el estado actual. Fiel y larguisimo. La diferencia con un
+handoff no es el tamano: es que alguien ELIGE que importa. Un resumen no elige.
+
+OJO CON LA AFIRMACION DEL VIDEO: el audio dice que /compact "arrastra toda la conversacion
+vieja". Eso es FALSO — la compactacion resume y reemplaza. El caption del mismo post lo dice
+bien: "comprime la basura, no la saca". No repitas la version del audio en ningun doc nuestro.
+
+LISTO = un HANDOFF escrito con el formato nuevo, en la ubicacion decidida, que no choca entre
+carriles; CLAUDE.md linea 102 apuntando a el; y la decision escrita de si reusa save-session o
+no. Sin un quinto mecanismo huerfano.
+```
