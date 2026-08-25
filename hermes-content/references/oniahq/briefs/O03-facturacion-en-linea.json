@@ -1,36 +1,60 @@
 {
- "serie":"Bolivia al día",
- "episodio":"003",
- "comment_trigger":"SISTEMA",
- "comment_reward":"el checklist de qué mirar en tu Oficina Virtual",
- "caption":"El 30 de septiembre de 2026 se acaba el plazo: facturación en línea para todos.\n\nY antes de que alguien te venda humo, la verdad completa: el SIN tiene un Portal Web GRATIS donde cumplís tipeando factura por factura. No necesitás comprarle nada a nadie para estar en regla.\n\nLo que cuesta plata es tipear dos veces — una en tu cuaderno o sistema, otra en el portal. Eso es lo que resolvemos.\n\nY el plazo ya se corrió dos veces (RND 102500000036 y RND 102600000007). Puede correrse una tercera. No te apuramos con miedo.\n\nComentá SISTEMA y te paso el checklist de qué mirar en tu Oficina Virtual para saber en qué grupo caés.",
- "hashtags":["#facturacionelectronica","#impuestosbolivia","#siat","#negociosbolivia","#pyme"],
+ "serie": "Bolivia al día",
+ "episodio": "003",
+ "comment_trigger": "SISTEMA",
+ "comment_reward": "el checklist de qué mirar en tu Oficina Virtual",
+ "caption": "El 30 de septiembre de 2026 se acaba el plazo: facturación en línea para todos.\n\nY antes de que alguien te venda humo, la verdad completa: el SIN tiene un Portal Web GRATIS donde cumplís tipeando factura por factura. No necesitás comprarle nada a nadie para estar en regla.\n\nLo que cuesta plata es tipear dos veces — una en tu cuaderno o sistema, otra en el portal. Eso es lo que resolvemos.\n\nY el plazo ya se corrió dos veces (RND 102500000036 y RND 102600000007). Puede correrse una tercera. No te apuramos con miedo.\n\nComentá SISTEMA y te paso el checklist de qué mirar en tu Oficina Virtual para saber en qué grupo caés.",
+ "hashtags": [
+  "#facturacionelectronica",
+  "#impuestosbolivia",
+  "#siat",
+  "#negociosbolivia",
+  "#pyme"
+ ],
  "src": false,
- "slides":[
-  { "number":1,"role":"cover","pill":"Bolivia al día",
-    "headline":"Faltan *37 días* para el 30 de septiembre",
-    "body":"Y no, no tenés que comprarle nada a nadie.",
-    "object":"hermes-content/references/oniahq/fondos/estantes-03.png" },
-
-  { "number":2,"headline":"Lo que dice la norma, sin adorno",
-    "body":"Desde el {{30-sep-2026}} la facturación en línea alcanza a todos los contribuyentes. Tu grupo depende de tu NIT, no de tu rubro — miralo en tu Oficina Virtual, no le creas a nadie que te lo afirme sin verlo." },
-
-  { "number":3,"headline":"El SIN tiene un portal *gratis*",
-    "body":"Se llama Portal Web en Línea. Entrás, tipeás la factura, la emitís. Sin CUIS, sin CUFD, sin firma digital, sin pagarle a un proveedor. Con eso ya estás cumpliendo la ley." },
-
-  { "number":4,"headline":"Entonces, ¿dónde está el costo?",
-    "body":"En que tipeás *dos veces*. Una cuando hacés la venta y otra cuando la cargás al portal. Veinte facturas por día son {{40 cargas}} — y en cada una hay un dedo que se equivoca.",
-    "callout":"El problema no es emitir. Es re-tipear." },
-
-  { "number":5,"role":"save","headline":"El plazo ya se corrió *dos veces*",
-    "body":"1-oct-2025 → 1-abr-2026 por la RND 102500000036 → 30-sep-2026 por la RND 102600000007. Una tercera prórroga es posible. Nadie que te diga «es ahora o multa» te está informando: te está vendiendo." },
-
-  { "number":6,"headline":"Qué hacer esta semana",
-    "body":"1. Entrá a tu Oficina Virtual y mirá en qué grupo estás. 2. Probá el Portal Web gratis con una factura. 3. Recién ahí decidí si tipear dos veces te cuesta más que resolverlo." },
-
-  { "number":7,"role":"cta","pill":"20 minutos, gratis",
-    "headline":"Te paso el *checklist*, no la factura",
-    "body":"Comentá SISTEMA y te mando qué mirar en tu Oficina Virtual. Si con el portal gratis te alcanza, te lo voy a decir.",
-    "object":"hermes-content/references/oniahq/fondos/panel-real.png" }
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "pill": "Bolivia al día",
+   "headline": "El *30 de septiembre* se acaba el plazo",
+   "body": "Facturación en línea para todos. Y no, no tenés que comprarle nada a nadie.",
+   "object": "hermes-content/references/oniahq/fondos/estantes-03.png"
+  },
+  {
+   "number": 2,
+   "headline": "Lo que dice la norma, sin adorno",
+   "body": "Desde el {{30-sep-2026}} la facturación en línea alcanza a todos los contribuyentes. Tu grupo depende de tu NIT, no de tu rubro — miralo en tu Oficina Virtual, no le creas a nadie que te lo afirme sin verlo."
+  },
+  {
+   "number": 3,
+   "headline": "El SIN tiene un portal *gratis*",
+   "body": "Se llama Portal Web en Línea. Entrás, tipeás la factura, la emitís. Sin CUIS, sin CUFD, sin firma digital, sin pagarle a un proveedor. Con eso ya estás cumpliendo la ley."
+  },
+  {
+   "number": 4,
+   "headline": "Entonces, ¿dónde está el costo?",
+   "body": "En que tipeás *dos veces*. Una cuando hacés la venta y otra cuando la cargás al portal. Veinte facturas por día son {{40 cargas}} — y en cada una hay un dedo que se equivoca.",
+   "callout": "El problema no es emitir. Es re-tipear."
+  },
+  {
+   "number": 5,
+   "role": "save",
+   "headline": "El plazo ya se corrió *dos veces*",
+   "body": "1-oct-2025 → 1-abr-2026 por la RND 102500000036 → 30-sep-2026 por la RND 102600000007. Una tercera prórroga es posible. Nadie que te diga «es ahora o multa» te está informando: te está vendiendo."
+  },
+  {
+   "number": 6,
+   "headline": "Qué hacer esta semana",
+   "body": "1. Entrá a tu Oficina Virtual y mirá en qué grupo estás. 2. Probá el Portal Web gratis con una factura. 3. Recién ahí decidí si tipear dos veces te cuesta más que resolverlo."
+  },
+  {
+   "number": 7,
+   "role": "cta",
+   "pill": "20 minutos, gratis",
+   "headline": "Te paso el *checklist*, no la factura",
+   "body": "Comentá SISTEMA y te mando qué mirar en tu Oficina Virtual. Si con el portal gratis te alcanza, te lo voy a decir.",
+   "object": "hermes-content/references/oniahq/fondos/panel-real.png"
+  }
  ]
 }
