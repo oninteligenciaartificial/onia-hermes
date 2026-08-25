@@ -420,3 +420,53 @@ repite en tres de los cuatro: **está construido y apagado**, no falta.
 El add-on "Inventario avanzado" cobra Bs 180/mes por tres funciones que hoy son **gratis**:
 `addon.inventory_advanced` se calcula en `entitlements.ts:55` y no lo lee nadie, y
 `/comercio/fiados` no tiene gate de plan ni de add-on. O se gatean, o no se cobra.
+
+---
+
+# 2026-08-24 (noche) — el VPS destrabado y TODO desplegado
+
+**El VPS.** Hostinger tenía aplicado un límite del 20%: la máquina recibía ~7% de su CPU
+(`steal` 92-95%). Se corrigieron **tres causas propias** y un técnico (Ayrton) retiró el
+límite a mano — **no se iba a levantar solo**: el mecanismo automático estaba agotado
+("Maximum CPU resets reached") y la excepción manual es una cada 7 días, ya gastada.
+
+| | Peor momento | Ahora |
+|---|---|---|
+| `steal` | 95% | **9%** |
+| load | 171 | **1,2** |
+| `app.onia.com.bo/login` | 522 / 9 s | **0,39 s** |
+| `docker ps` | colgado 300 s | instantáneo |
+
+**Dato que zanjó la discusión:** el soporte leyó `vmstat` con las columnas corridas y
+concluyó que era `gu` (guest) y no `st` (steal). Se verificó contra `/proc/stat` crudo:
+`steal 92,2%`, `guest 0,0%`. Aceptaron la corrección. **Leer `vmstat` por posición es
+frágil — las columnas terminan en `... st gu`.**
+
+**Desplegado y verificado MIRANDO:**
+- **Producto** `03b410a` en `app.onia.com.bo` — 2040 tests. Se midió el ANCHO de los iconos
+  para probar que la fuente carga: `credit_card_off` (15 caracteres) y `bolt` (4) miden los
+  dos 36×36 px. Si la fuente fallara, el primero sería 3× más ancho. El bug histórico no está.
+- **Lead magnet** `/guia-facturacion` en `onia.com.bo` — 200 en 0,51 s, sin desborde en
+  móvil 390, cero precios en la página.
+- **Workflow IG → DM** publicado: **200 en 0,52 s**, GET de Meta devuelve el challenge,
+  token malo → 403, y 5/5 ejecuciones `success` en 38-57 ms. La prueba de que la tormenta
+  no vuelve: un evento eco muere en el IF nativo `Es comentario?` a los 14 ms y
+  `Parsear comentario` **nunca se ejecuta**.
+
+**Lo que queda de este carril**
+- El DM real con un comentario de verdad → es del carril de contenido, no de este.
+- Las dos pantallas nuevas (reprecio, vencimientos) sin probar con datos reales.
+- `docker update --restart=no` a Temporal/Elasticsearch/Speaches — ahora Docker responde.
+
+## 🔴 Hallazgo que dispara el ordenamiento de docs
+
+`pricing.ts` dice que el chatbot WhatsApp es **Bs 390/mes sin cargo inicial**. Pero
+`ONIA_CHATBOT_ALTA_WHATSAPP_CLIENTE.md` (líneas 37-38, 263, 274-285) y
+`ONIA_AGENTES_COSTO_API.md` escriben **Bs 1.500 instalación + Bs 1.490/mes**.
+
+Lo irónico: ese doc declara *"manda `pricing.ts`; aquí no se inventa ningún número nuevo"*
+y acto seguido escribe números que ya no son. **Es exactamente el fallo que la regla de
+fuente única existe para evitar**, y explica por qué cada sesión "da vueltas": lee un
+número distinto según qué archivo abra.
+
+Auditoría completa en curso (Fase 0 del plan de ordenamiento).
