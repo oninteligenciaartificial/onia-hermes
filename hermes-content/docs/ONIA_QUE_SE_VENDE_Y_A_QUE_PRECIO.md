@@ -109,8 +109,13 @@ tiene. Si algo la necesita, hoy no funciona para ningún cliente.
 ### 4.5 No hay fuente para webs ni consultoría
 `pricing.ts` y `subscription-plans.ts` cubren plataforma y add-ons. Las propuestas de web
 (Bs 2.000 / 4.500 / 6.900 / 250 por mes en el generador) **no tienen contra qué medirse**.
-No están mal — es que nadie puede verificarlas. Decisión pendiente: tercera fuente, o
-declarar explícito que esa línea se cotiza caso por caso.
+No están mal — es que nadie puede verificarlas.
+
+✅ **DECIDIDO 2026-08-24: la línea de webs y consultoría NO lleva lista de precios.** Se
+cotiza caso por caso, porque el alcance cambia con cada cliente y una lista fija obliga a
+estirar o a regalar. Detalle en `ONIA_WEB_COMO_SE_VENDE.md` §8.
+🔴 **Nadie debe "corregir" un precio de web contra `pricing.ts`**: ese archivo no cubre esta
+línea. Un barrido que las toque está rompiendo, no ordenando.
 
 ---
 

@@ -264,6 +264,28 @@ va a oler a agencia.
 
 ## 8. Decisiones que dependen de Sergio (nada de esto se decide solo)
 
+> ## ✅ DECIDIDO 2026-08-24 — la línea de webs NO tiene lista de precios
+>
+> **Cada web se cotiza caso por caso.** No hay ni va a haber un archivo que defina
+> `790/1.500/2.900` ni `2.000/4.500/7.500` como lista vigente. Eso resuelve §8.1 y §8.2 de
+> abajo: no es que el precio venció y nadie puso el siguiente — es que **esta línea no se
+> vende con lista**.
+>
+> **Por qué.** `pricing.ts` y `subscription-plans.ts` definen plataforma y add-ons porque
+> ahí el producto es idéntico para todos y **el monto valida el cobro**. Una web no: el
+> alcance cambia por cliente, y una lista fija obliga a estirar o a regalar.
+>
+> **Qué significa en la práctica:**
+> - Las cifras que aparecen en propuestas ya emitidas (AW Climatización, Premium Cars,
+>   Bolivian Electric…) **no están mal ni hay que "corregirlas"** contra ninguna fuente.
+>   Son cotizaciones de su caso.
+> - 🔴 **Nadie debe "arreglar" un precio de web contra `pricing.ts`.** Ese archivo no cubre
+>   esta línea. Un barrido de precios que las toque está rompiendo, no ordenando.
+> - Lo que sí conviene tener es un **rango de referencia interno** para no cotizar de cero
+>   cada vez — pero es una guía para el que cotiza, **no una lista publicable**.
+>
+> La regla de fuente única sigue intacta para lo que sí tiene lista: planes y add-ons.
+
 ### 8.1 🔴 El precio de arranque venció el 2026-07-31
 
 `ONIA_PRICING_2026.md` dice literalmente que la oferta de arranque es *"válida hasta

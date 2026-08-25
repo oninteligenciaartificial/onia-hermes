@@ -342,13 +342,18 @@ Nueve hallazgos. Los cuatro primeros son los que romperían una venta.
    — precios retirados. ⚠️ **Corregido 2026-08-24:** el add-on son **Bs 390/mes sin cargo
    inicial** (`WHATSAPP_ADDON`), no los Bs 1.490 que decía este doc — esa cifra vivía en 24
    archivos y ninguno era la fuente. Un superadmin lee 200/550/900 mientras el checkout cobra 390.
-3. 🔴 **Contradicción interna sobre Meta.** `WHATSAPP_ADDON.meta.markupPct: 20` con el
-   comentario *"Meta pass-through al costo + 20%"*, contra el `fullLabel` que le promete al
-   cliente *"el excedente de Meta va al costo"* y el `dashboardSummary` que dice *"Meta se
-   cobra por consumo"*. O se cobra +20% y se dice, o es a costo y se borra `markupPct`.
-   **Lety.ai vende literalmente "no hidden markup on tokens or WhatsApp" y "0% markup" como
-   su tesis central**: si Onia cobra 20% y dice que no, ese es el flanco más fácil de
-   atacar que tenemos.
+3. ✅ **RESUELTO — verificado 2026-08-24.** Acá decía que había una contradicción interna:
+   `markupPct: 20` en el código contra un `fullLabel` que promete el costo sin recargo.
+   **Ya no existe.** `grep markupPct` da cero coincidencias, y el comentario de
+   `lib/pricing.ts:45` dice literal *"las paga él en su cuenta. Por eso no hay markup"*.
+   Se resolvió en el commit `f9873ae`, llamado *"el chatbot pasa a Bs 390/mes sin
+   instalación, y salimos de la cadena de pago de Meta"* — la misma decisión que fijó los
+   Bs 390. Este doc describía el estado anterior a ese commit.
+
+   **Y eso convierte la debilidad en argumento.** Lety.ai vende *"0% markup"* como su tesis
+   central; nosotros ya estamos ahí y además cobramos en bolivianos. Decirlo así en la
+   página de precios: *"los mensajes te los cobra Meta directo en tu cuenta — nosotros no
+   ponemos un peso encima."*
 4. 🔴 **El plan `free` es un muro, no una demo.** 30 clientes, 1 usuario, 0 emails, sin
    agenda, sin reportes, sin agentes. **Ninguno de los siete comparables limita el gratis
    por volumen de datos del negocio** — limitan publicación y marca (§2.5). Un dentista con
