@@ -180,7 +180,6 @@ test('bright-retail cuadrado: ribbon con viewBox del formato y alturas escaladas
   assert.ok(html.includes('M -120 784'));
 });
 
-console.log(`\n${passed} passed`);
 
 // --- 2026-08-23: texto que la plantilla inventaba y el brief nunca declaraba ---
 
@@ -331,3 +330,7 @@ test('anotacion: sin marks no ensucia el marcado', () => {
   assert.ok(!body.includes('mk-pie'), 'sin marks no hay pie');
   assert.ok(!body.includes('class="marks"'), 'ni capa svg');
 });
+
+// El resumen va ultimo: si se agregan tests debajo, el contador los tiene que
+// incluir. Estuvo en el medio y reportaba 30 de 49.
+console.log(`\n${passed} passed`);
