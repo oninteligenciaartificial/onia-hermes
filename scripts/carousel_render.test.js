@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+const { roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
 
 let passed = 0;
 function test(name, fn) {
@@ -218,4 +218,30 @@ test('slide.bg vacio APAGA el fondo aunque haya --bg global', () => {
 test('handle real de Sergio, no el placeholder', () => {
   // Decia '@sergio', que no existe. Verificado por Graph API: @sergio_urcullo.
   assert.strictEqual(ACCOUNTS.sergio.handle, '@sergio_urcullo');
+});
+
+// --- 2026-08-24: marcador de serie en editorial-clean ---
+
+test('marcador de serie: dibuja nombre y episodio cuando el brief los trae', () => {
+  const html = editorialCleanHtml({ role: 'cover', headline: 'H', body: 'b', pill: 'P' }, 0, 5, 'onia',
+    { serie: 'Tu negocio, de noche', episodio: '001' });
+  assert.ok(html.includes('Tu negocio, de noche'), 'el nombre de serie va');
+  assert.ok(html.includes('// 001'), 'el episodio va con las barras');
+  assert.ok(html.includes(' has-serie"'), 'la slide se marca para que el kicker baje y no se pisen');
+});
+
+test('marcador de serie: sin datos no dibuja nada', () => {
+  const html = editorialCleanHtml({ role: 'cover', headline: 'H', body: 'b', pill: 'P' }, 0, 5, 'onia', {});
+  assert.ok(!html.includes('class="serie"'), 'sin serie no hay barra');
+  // Ojo: 'has-serie' tambien aparece en la REGLA CSS, que se emite siempre. Hay que mirar
+  // el atributo class del marcado. Mismo tropiezo que con 'bgphoto' — ya van dos.
+  assert.ok(!html.includes(' has-serie"'), 'ni marca en el class de la slide');
+});
+
+test('marcador de serie: NO lo pisa la regla que fuerza position:relative', () => {
+  // El bug real: `.slide > *:not(...)` forzaba position:relative en todo hijo no exceptuado,
+  // y .serie no estaba en la lista, asi que la barra se renderizaba y no se VEIA.
+  // Se encontro mirando el PNG, no leyendo el CSS.
+  const html = editorialCleanHtml({ role: 'cover', headline: 'H', body: 'b' }, 0, 5, 'onia', { serie: 'S' });
+  assert.ok(html.includes(':not(.serie)'), '.serie tiene que estar exceptuada de la regla');
 });

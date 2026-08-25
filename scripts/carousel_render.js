@@ -127,6 +127,8 @@ function parseArgs(argv) {
     else if (k === '--accent') a.accent = argv[++i];
     else if (k === '--format') a.format = argv[++i];
     else if (k === '--emph') a.emph = argv[++i];
+    else if (k === '--serie') a.serie = argv[++i];
+    else if (k === '--episodio') a.episodio = argv[++i];
   }
   if (!FORMATS[a.format]) {
     throw new Error('Unknown --format: ' + a.format + ' (use ' + Object.keys(FORMATS).join('|') + ')');
@@ -802,12 +804,22 @@ function editorialCleanHtml(slide, idx, total, account, args) {
   }
 
   const headTag = role === 'cover' ? 'h1' : 'h2';
+  // Marcador de SERIE. Adoptado de la referencia @josecarlosttb (2026-08-24): pone el
+  // nombre de la serie a la izquierda y el numero de episodio ("// 001") al lado. Convierte
+  // piezas sueltas en coleccion e invita a buscar la anterior — branding por repeticion.
+  // Se toma de `serie` y `episodio` del brief; si no estan, no se dibuja nada.
+  const serieTxt = String((args && args.serie) || '').trim();
+  const epTxt = String((args && args.episodio) || '').trim();
+  const serieBar = (serieTxt || epTxt)
+    ? `<div class="serie">${serieTxt ? `<span>${esc(serieTxt)}</span>` : '<span></span>'}${epTxt ? `<span class="ep">// ${esc(epTxt)}</span>` : ''}</div>`
+    : '';
   const kicker = slide.pill
     ? `<div class="kicker"><span class="dot"></span>${esc(slide.pill)}</div>` : '';
   const body = slide.body ? `<p class="cl-body">${emph(slide.body)}</p>` : '';
   const word = triggerWord(slide);
   const cta = role === 'cta'
     ? `<div class="cl-cta">Comentá&nbsp;<b>${esc(word)}</b></div>` : '';
+  const serie = serieBar;
 
   return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -825,7 +837,7 @@ ${safeAreaCss()}
 .scrim { position:absolute; inset:0; z-index:1;
   background:linear-gradient(180deg, rgba(10,15,13,.05) 0%, rgba(10,15,13,.38) 52%, rgba(10,15,13,.88) 100%); }
 .grain { position:absolute; inset:0; z-index:2; opacity:.06; mix-blend-mode:overlay; }
-.slide > *:not(.photo):not(.scrim):not(.grain):not(.kicker):not(.cl-arrow) { position:relative; z-index:3; }
+.slide > *:not(.photo):not(.scrim):not(.grain):not(.kicker):not(.cl-arrow):not(.serie) { position:relative; z-index:3; }
 .kicker, .cl-arrow { z-index:4; }
 
 .kicker { position:absolute; top:calc(var(--pad) * 1.2); left:calc(var(--pad) * 1.2);
@@ -854,10 +866,21 @@ ${safeAreaCss()}
   font-size:52px; color:var(--onia-green); font-family:Georgia,serif; }
 .cl-handle { margin-top:44px; font-size:24px; letter-spacing:2px; font-weight:600;
   color:rgba(255,255,255,.55); }
+/* Barra de serie: nombre a la izquierda, episodio a la derecha. Discreta a proposito —
+   es branding por repeticion, no un titular. */
+.serie { position:absolute; top:calc(var(--pad) * 1.2); left:calc(var(--pad) * 1.2);
+  right:calc(var(--pad) * 1.2); display:flex;
+  justify-content:space-between; align-items:baseline; font-family:'Inter',sans-serif;
+  font-weight:600; font-size:26px; letter-spacing:3px; text-transform:uppercase;
+  color:rgba(255,255,255,.62); z-index:3; }
+.serie .ep { color:var(--onia-green); letter-spacing:2px; }
+/* Con barra de serie, el kicker baja: si no, se pisan (los dos viven en el margen de arriba). */
+.slide.has-serie .kicker { top:calc(var(--pad) * 1.2 + 62px); }
 </style></head>
-<body><div class="slide ${role}">
+<body><div class="slide ${role}${serieBar ? ' has-serie' : ''}">
   ${photo}<div class="scrim"></div>
   <svg class="grain" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="300" height="300" filter="url(#n)"/></svg>
+  ${serie}
   ${kicker}
   <${headTag} class="cl-h">${emph(slide.headline)}</${headTag}>
   ${body}
@@ -995,6 +1018,10 @@ function render(args) {
     // El brief trae `comment_trigger` a nivel raiz; el render lo necesita por slide.
     { ...sl, comment_trigger: sl.comment_trigger || brief.comment_trigger || '' }));
   if (!slides.length) throw new Error('brief has no slides');
+  // La serie es del CARRUSEL, no de la slide: el brief es su lugar natural. La bandera
+  // de linea de comando sigue funcionando y gana, para poder probar sin editar el brief.
+  args.serie = args.serie || brief.serie || '';
+  args.episodio = args.episodio || brief.episodio || '';
   if (args.bg) args.bg = path.resolve(args.bg);
   if (args.object) args.object = path.resolve(args.object);
   fs.mkdirSync(args.out, { recursive: true });

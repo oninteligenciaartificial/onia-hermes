@@ -31,6 +31,16 @@ marketing de las tres cuentas escrito como fuente de verdad.
 
 ---
 
+- ✅ **Postiz revivido el 2026-08-24.** El VPS se recuperó (se reinició: load 0,49 contra
+  158, steal 2 % contra 93 %, docker con 22 contenedores). Pero Postiz seguía en 502: el
+  contenedor `postiz` estaba **Exited (255) hacía 19 h** — murió en el incidente y nunca
+  volvió solo. Su postgres y su redis estaban sanos todo el tiempo, que es por lo que el 502
+  parecía problema de aplicación. `docker start postiz` → healthy en 25 s, `/auth/login` 200.
+
+  ⚠️ **Patrón que ya se repitió dos veces** (22-ago y 24-ago): el VPS se reinicia y Postiz
+  queda muerto sin que nadie se entere, porque se mira el 502 del dominio y no el estado del
+  contenedor. **Primero `docker ps -a | grep postiz`, después cualquier otra hipótesis.**
+
 **LO DE INFRA — ENTREGADO A OTRA SESIÓN, no se toca desde acá:**
 
 - ✅ **El circuito comentario→DM funciona**, verificado **leyendo la bandeja** por API:
