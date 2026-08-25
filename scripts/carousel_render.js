@@ -439,6 +439,10 @@ ${safeAreaCss()}
   color:var(--ink); opacity:.7; }
 .slide.cover .point-h, .slide.cover .body { margin-top:0; }
 .g { ${EMPH[EMPH_STYLE]} }
+/* Dato con fondo propio (research 17-ago, ref Zenovent). El numero antes que la frase. */
+.dato { background:var(--onia-green); color:var(--onia-ink); font-weight:700;
+  font-size:.9em; padding:.05em .28em; border-radius:.2em; white-space:nowrap; }
+.slide.cta .dato { background:var(--onia-ink); color:var(--onia-green); }
 /* El slide de CTA tiene fondo verde: un marcador verde ahi no se ve. Se invierte. */
 .slide.cta .g { background:var(--onia-ink); color:var(--onia-green); box-shadow:none; }
 </style></head>
@@ -468,7 +472,14 @@ const EMPH = {
 let EMPH_STYLE = 'marcador';
 
 function emph(s) {
-  return esc(s).replace(/\*([^*]+)\*/g, '<span class="g">$1</span>');
+  // {{dato}} -> chip con fondo propio. Del research del 17-ago (referencia Zenovent),
+  // señalado como "aplicable directo" y nunca aplicado: hoy las cifras ("20 horas al mes",
+  // "40% no vuelve", los precios) son texto corrido en el body de 4 de 5 packs. Con fondo
+  // propio el numero se vuelve DATO-COMO-DISENO y se lee antes que la frase que lo rodea.
+  // Va antes que el *verde* para que un dato pueda ir dentro de una frase enfatizada.
+  return esc(s)
+    .replace(/\{\{([^}]+)\}\}/g, '<span class="dato">$1</span>')
+    .replace(/\*([^*]+)\*/g, '<span class="g">$1</span>');
 }
 
 // Continuation curve: a green stroke that bleeds off the right edge on
@@ -872,8 +883,15 @@ ${safeAreaCss()}
   right:calc(var(--pad) * 1.2); display:flex;
   justify-content:space-between; align-items:baseline; font-family:'Inter',sans-serif;
   font-weight:600; font-size:26px; letter-spacing:3px; text-transform:uppercase;
-  color:rgba(255,255,255,.62); z-index:3; }
+  /* .62 era ilegible sobre foto clara: el scrim de este pack pesa ABAJO (donde va el
+     texto) y arriba no cubre nada. Se vio en una portada con ventana. Sombra suave
+     ademas, para que aguante cualquier fondo. */
+  color:rgba(255,255,255,.88); text-shadow:0 1px 14px rgba(0,0,0,.6); z-index:3; }
 .serie .ep { color:var(--onia-green); letter-spacing:2px; }
+/* Dato con fondo propio: el numero se lee antes que la frase. */
+.dato { background:var(--onia-green); color:var(--onia-ink); font-family:'Inter',sans-serif;
+  font-weight:700; font-size:.86em; padding:.06em .3em; border-radius:.2em;
+  white-space:nowrap; letter-spacing:-.01em; }
 /* Con barra de serie, el kicker baja: si no, se pisan (los dos viven en el margen de arriba). */
 .slide.has-serie .kicker { top:calc(var(--pad) * 1.2 + 62px); }
 </style></head>

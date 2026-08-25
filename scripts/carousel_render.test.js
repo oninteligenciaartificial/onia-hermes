@@ -245,3 +245,15 @@ test('marcador de serie: NO lo pisa la regla que fuerza position:relative', () =
   const html = editorialCleanHtml({ role: 'cover', headline: 'H', body: 'b' }, 0, 5, 'onia', { serie: 'S' });
   assert.ok(html.includes(':not(.serie)'), '.serie tiene que estar exceptuada de la regla');
 });
+
+test('chip de dato: {{x}} se vuelve span.dato, y convive con *verde*', () => {
+  // Del research del 17-ago (ref Zenovent), senalado como aplicable directo y nunca
+  // aplicado: las cifras eran texto corrido en el body de 4 de 5 packs.
+  const out = emph('Perdes {{20 horas}} al mes en algo *repetido*');
+  assert.ok(out.includes('<span class="dato">20 horas</span>'));
+  assert.ok(out.includes('<span class="g">repetido</span>'));
+});
+
+test('chip de dato: escapa el HTML antes de convertir', () => {
+  assert.ok(emph('{{<b>5</b>}}').includes('&lt;b&gt;5&lt;/b&gt;'), 'no debe inyectar HTML');
+});
