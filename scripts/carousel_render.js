@@ -532,6 +532,85 @@ function continuationCurve(idx, total) {
 
 // Pack: dark-product (Solaris-style). Black canvas, pills, continuation curve,
 // condensed title with *green* keyword, optional 3D object, callout body.
+// ---------------------------------------------------------------------------
+// Capa de anotacion sobre la captura.
+//
+// Nace del 2026-08-25: de 28 laminas publicadas, UNA sola tenia una imagen que
+// probaba lo que decia su texto. El problema no era elegir mal la captura: era
+// mostrar la pantalla entera y esperar que el lector encuentre solo el dato del
+// que habla la frase. Una captura sin anotar no explica: decora.
+//
+// Se declara en el brief, en % del ancho/alto de la imagen (0-100), asi las
+// coordenadas no dependen del tamano al que termine dibujada:
+//
+//   marks: [
+//     { type:'box',   x:10, y:44, w:70, h:12 },
+//     { type:'spot',  x:58, y:36, w:22, h:9, label:'1 propuesta esperando' },
+//     { type:'badge', x:31, y:64, n:2 }
+//   ]
+//
+// `spot` oscurece TODO menos su recuadro: es la mas fuerte y por eso va sola.
+function annotate(marks) {
+  if (!Array.isArray(marks) || !marks.length) return { capa: '', pie: '' };
+  const num = (v, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
+  const spots = marks.filter((m) => m.type === 'spot');
+
+  // Mascara: el rect blanco deja pasar, el negro tapa. `fill-opacity` en vez de
+  // rgba(): SVG no acepta rgba() en el atributo fill de forma confiable, y por eso
+  // el primer spotlight se dibujaba sin oscurecer nada.
+  const mascara = spots.length ? `<mask id="mk">
+      <rect x="0" y="0" width="100" height="100" fill="#fff"/>
+      ${spots.map((m) => `<rect x="${num(m.x)}" y="${num(m.y)}" width="${num(m.w, 10)}" height="${num(m.h, 10)}" rx="1.2" fill="#000"/>`).join('')}
+    </mask>
+    <rect x="0" y="0" width="100" height="100" fill="#060A08" fill-opacity=".72" mask="url(#mk)"/>` : '';
+
+  // Solo los RECUADROS van en el SVG: son los unicos que tienen que deformarse
+  // junto con la imagen. Un circulo aca saldria elipse (preserveAspectRatio="none").
+  const cajas = marks.filter((m) => m.type === 'box' || m.type === 'spot').map((m) =>
+    `<rect x="${num(m.x)}" y="${num(m.y)}" width="${num(m.w, 10)}" height="${num(m.h, 10)}"
+      rx="1.2" fill="none" stroke="var(--onia-green)" stroke-width="0.6"
+      vector-effect="non-scaling-stroke"/>`).join('');
+
+  const capaSvg = (mascara || cajas)
+    ? `<svg class="marks" viewBox="0 0 100 100" preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg">${mascara}${cajas}</svg>` : '';
+
+  // Los badges van en HTML, no en SVG: tienen que quedar redondos pase lo que pase.
+  const badges = marks.filter((m) => m.type === 'badge').map((m) =>
+    `<span class="mk-badge" style="left:${num(m.x)}%;top:${num(m.y)}%">${esc(String(num(m.n, 1)))}</span>`
+  ).join('');
+
+  // 🔴 La etiqueta va DEBAJO de la imagen, nunca encima.
+  // Se intento ponerla flotando sobre la captura y tapaba justo el dato que estaba
+  // señalando: los recortes utiles son chatos (170 px de alto) y adentro no hay
+  // ningun "afuera" al que mandarla. Como pie no tapa nada y ademas se lee mejor.
+  const conLabel = marks.filter((m) => m.label);
+  const pie = conLabel.length
+    ? `<div class="mk-pie">${conLabel.map((m, i) =>
+        `<span>${m.type === 'badge' ? `<b>${esc(String(num(m.n, i + 1)))}</b>` : '<i>↑</i>'} ${esc(m.label)}</span>`
+      ).join('')}</div>`
+    : '';
+
+  return { capa: capaSvg + badges, pie };
+}
+
+// CSS de la capa. Se inyecta en los packs que dibujan `object`.
+const MARKS_CSS = `
+.shot { position:relative; display:block; }
+.shot .marks { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.mk-badge { position:absolute; transform:translate(-50%,-50%); width:46px; height:46px;
+  border-radius:50%; background:var(--onia-green); color:var(--onia-ink);
+  font:800 26px/46px 'Archivo', sans-serif; text-align:center;
+  box-shadow:0 0 0 5px rgba(6,10,8,.55); }
+.mk-pie { display:flex; flex-wrap:wrap; gap:10px 26px; margin:18px 0 0;
+  font-size:24px; line-height:1.25; color:var(--onia-green); font-weight:600; }
+.mk-pie span { display:flex; align-items:center; gap:9px; }
+.mk-pie b { display:inline-block; width:30px; height:30px; border-radius:50%;
+  background:var(--onia-green); color:var(--onia-ink); font:800 18px/30px 'Archivo', sans-serif;
+  text-align:center; }
+.mk-pie i { font-style:normal; opacity:.85; }
+`;
+
 function darkProductHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
@@ -541,8 +620,19 @@ function darkProductHtml(slide, idx, total, account, args) {
   // captura se repetia en las 7 laminas y el mockup dejaba de ser prueba para ser
   // relleno (visto en O04, 2026-08-24).
   const objSrc = (slide.object ? path.resolve(slide.object) : '') || (args && args.object);
+  // `bleed` manda la imagen a todo el ancho del lienzo. Existe porque el slot fijo
+  // de 620px dejaba el panel de 2160px a escala 0,26: la UI quedaba en ~8 px sobre un
+  // piso de legibilidad de 28. La portada que promete "te lo muestro con la pantalla"
+  // mostraba una mancha.
+  const bleed = slide.object_fit === 'bleed';
+  const anot = annotate(slide.marks);
   const object = objSrc
-    ? `<img class="object" src="file://${String(objSrc).replace(/\\/g, '/')}" alt="">`
+    ? `<figure class="shot${bleed ? ' bleed' : ''}">
+      <img class="object" src="file://${String(objSrc).replace(/\\/g, '/')}" alt="">
+      ${anot.capa}
+      </figure>
+      ${anot.pie}
+      `
     : '';
 
   // On save slides the savetag already labels "FRAMEWORK", so drop the top pill
@@ -584,7 +674,7 @@ ${safeAreaCss()}
 .slide.cta .g { color:var(--onia-ink); -webkit-text-stroke:0; background:var(--onia-ink); color:var(--onia-green); padding:0 .12em; }
 
 .curve { position:absolute; inset:0; width:${FMT.w}px; height:${FMT.h}px; z-index:0; pointer-events:none; }
-.curve path { fill:none; stroke:var(--onia-green); stroke-width:16; stroke-linecap:round; opacity:.95; }
+.curve path { fill:none; stroke:var(--onia-green); stroke-width:16; stroke-linecap:round; opacity:.42; }
 .slide.cta .curve path { stroke:var(--onia-ink); opacity:.5; }
 .slide > *:not(.curve) { position:relative; z-index:2; }
 
@@ -600,9 +690,21 @@ ${safeAreaCss()}
 
 .object { display:block; max-width:620px; max-height:420px; margin:24px auto;
   object-fit:contain; filter:drop-shadow(0 30px 60px rgba(0,0,0,.5)); }
+${MARKS_CSS}
+/* A sangre: la imagen manda y el texto se le pega abajo. El slot de 620px dejaba una
+   captura de 2160px a escala 0,26 — una mancha donde tenia que haber una prueba. */
+.shot.bleed { margin:0 calc(var(--pad) * -1); width:calc(100% + var(--pad) * 2); }
+.shot.bleed .object { max-width:none; max-height:620px; width:100%; margin:0;
+  object-fit:cover; border-radius:0; filter:none; }
 
 .dp-h { font-family:'Archivo'; font-weight:900; font-size:88px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; margin-top:auto; }
+/* Con imagen, el titular NO se va al piso: se pega a la prueba de la que habla. El
+   El margin-top:auto de arriba abria una banda muerta de hasta 520px entre la frase y
+   su evidencia — split-attention de manual. Sin imagen sigue bajando, que ahi si
+   funciona. */
+.slide.has-shot .dp-h { margin-top:36px; }
+.slide.has-shot .dp-body { margin-bottom:auto; }
 .dp-h.cta { font-size:80px; }
 .dp-body { font-family:'Inter'; font-weight:600; font-size:36px; line-height:1.38;
   margin-top:28px; max-width:880px; color:var(--onia-muted-dark); }
@@ -621,7 +723,7 @@ ${safeAreaCss()}
 .footer .mark circle[stroke="var(--ink)"] { stroke:var(--onia-white); }
 .slide.cta .footer .handle { color:var(--onia-ink); }
 </style></head>
-<body><div class="slide ${role}">
+<body><div class="slide ${role}${object ? ' has-shot' : ''}">
   ${continuationCurve(idx, total)}
   ${pills}
   ${object}
@@ -649,8 +751,19 @@ function darkNeonHtml(slide, idx, total, account, args) {
   // captura se repetia en las 7 laminas y el mockup dejaba de ser prueba para ser
   // relleno (visto en O04, 2026-08-24).
   const objSrc = (slide.object ? path.resolve(slide.object) : '') || (args && args.object);
+  // `bleed` manda la imagen a todo el ancho del lienzo. Existe porque el slot fijo
+  // de 620px dejaba el panel de 2160px a escala 0,26: la UI quedaba en ~8 px sobre un
+  // piso de legibilidad de 28. La portada que promete "te lo muestro con la pantalla"
+  // mostraba una mancha.
+  const bleed = slide.object_fit === 'bleed';
+  const anot = annotate(slide.marks);
   const object = objSrc
-    ? `<img class="object" src="file://${String(objSrc).replace(/\\/g, '/')}" alt="">`
+    ? `<figure class="shot${bleed ? ' bleed' : ''}">
+      <img class="object" src="file://${String(objSrc).replace(/\\/g, '/')}" alt="">
+      ${anot.capa}
+      </figure>
+      ${anot.pie}
+      `
     : '';
 
   const pills = (slide.pill && role !== 'save') ? `<div class="pills">
@@ -714,7 +827,7 @@ ${safeAreaCss()}
 .footer .mark { width:60px; height:60px; }
 .footer .handle { font-family:'Archivo'; font-weight:600; font-size:30px; opacity:.75; }
 </style></head>
-<body><div class="slide ${role}">
+<body><div class="slide ${role}${object ? ' has-shot' : ''}">
   <div class="grid"></div><div class="glow"></div><div class="halftone"></div>
   ${pills}
   ${object}

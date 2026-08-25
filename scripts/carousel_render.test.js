@@ -293,3 +293,41 @@ test('dark-neon: hereda el objeto por lamina', () => {
   const html = darkNeonHtml({ headline: 'H', object: 'a/uno.png' }, 1, 5, 'onia', {});
   assert.ok(html.includes('uno.png'), 'el mismo arreglo aplica a dark-neon');
 });
+
+test('anotacion: el pie va FUERA de la figura, nunca encima de la captura', () => {
+  // Se intento con la etiqueta flotando sobre la imagen y tapaba justo el dato que
+  // señalaba: los recortes utiles son chatos (170 px) y adentro no hay ningun
+  // "afuera". Se vio mirando el PNG, dos renders seguidos.
+  const html = darkProductHtml({ headline: 'H', object: 'x.png',
+    marks: [{ type: 'box', x: 10, y: 20, w: 30, h: 15, label: 'el dato esta aca' }] }, 1, 5, 'onia', {});
+  const mk = html.slice(html.indexOf('<body>'));
+  assert.ok(mk.includes('el dato esta aca'), 'la etiqueta se dibuja');
+  assert.ok(mk.indexOf('mk-pie') > mk.indexOf('</figure>'), 'y va despues de cerrar la figura');
+});
+
+test('anotacion: el badge es HTML, no SVG', () => {
+  // En SVG con preserveAspectRatio="none" un circulo sale elipse: los badges
+  // quedaban deformados y diminutos sobre recortes apaisados.
+  const mk = darkProductHtml({ headline: 'H', object: 'x.png',
+    marks: [{ type: 'badge', x: 50, y: 50, n: 2 }] }, 1, 5, 'onia', {});
+  const body = mk.slice(mk.indexOf('<body>'));
+  assert.ok(body.includes('class="mk-badge"'), 'el badge es un span posicionado');
+  assert.ok(!/<circle[^>]*class="mk/.test(body), 'y no un circle de SVG');
+});
+
+test('anotacion: spot oscurece con fill-opacity, no con rgba()', () => {
+  // SVG no acepta rgba() en el atributo fill de forma confiable: el primer
+  // spotlight se dibujaba sin oscurecer nada.
+  const mk = darkProductHtml({ headline: 'H', object: 'x.png',
+    marks: [{ type: 'spot', x: 20, y: 70, w: 60, h: 25 }] }, 1, 5, 'onia', {});
+  const body = mk.slice(mk.indexOf('<body>'));
+  assert.ok(body.includes('fill-opacity'), 'usa fill-opacity');
+  assert.ok(!body.includes('fill="rgba('), 'no usa rgba() en fill');
+});
+
+test('anotacion: sin marks no ensucia el marcado', () => {
+  const mk = darkProductHtml({ headline: 'H', object: 'x.png' }, 1, 5, 'onia', {});
+  const body = mk.slice(mk.indexOf('<body>'));
+  assert.ok(!body.includes('mk-pie'), 'sin marks no hay pie');
+  assert.ok(!body.includes('class="marks"'), 'ni capa svg');
+});

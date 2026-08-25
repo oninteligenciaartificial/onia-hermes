@@ -19,47 +19,106 @@
    "pill": "Lo que hace el sistema",
    "headline": "Nadie te explica *qué hace* la IA en tu negocio",
    "body": "Así que te lo muestro con la pantalla.",
-   "object": "hermes-content/references/oniahq/fondos/panel-real.png"
+   "object": "hermes-content/references/oniahq/fondos/panel-real.png",
+   "object_fit": "bleed",
+   "object_prueba": "«te lo muestro con la pantalla» — la pantalla entera, a sangre, es la prueba de la frase",
+   "marks": [
+    {
+     "type": "spot",
+     "x": 22,
+     "y": 72,
+     "w": 76,
+     "h": 27,
+     "label": "acá deja lo que hizo mientras no estabas"
+    }
+   ]
   },
   {
    "number": 2,
-   "headline": "No es un chat. Es una *bandeja*",
+   "headline": "Hay *una propuesta* esperando. No te la mandó: te la dejó",
    "body": "El sistema mira tus ventas, tu stock y tus cobros mientras vos hacés otra cosa. Cuando encuentra algo, no te avisa: te deja la propuesta armada.",
-   "object": "hermes-content/references/oniahq/fondos/panel-bandeja.png"
+   "object": "hermes-content/references/oniahq/fondos/panel-bandeja.png",
+   "object_prueba": "«una propuesta esperando» — el contador dice literalmente 1 propuesta esperando tu aprobación",
+   "marks": [
+    {
+     "type": "box",
+     "x": 72,
+     "y": 8,
+     "w": 13,
+     "h": 30,
+     "label": "una, y sigue esperando"
+    }
+   ]
   },
   {
    "number": 3,
    "headline": "Ejemplo real, de esta semana",
    "body": "«Cobranza: Maestro Julio Choque — saldo vencido {{Bs 285}} hace 10 días». El mensaje está escrito. El monto está calculado. Falta un botón.",
    "callout": "Esperando tu aprobación.",
-   "object": "hermes-content/references/oniahq/fondos/panel-ticket.png"
+   "object": "hermes-content/references/oniahq/fondos/panel-ticket.png",
+   "object_prueba": "el cuerpo CITA TEXTUAL la tarjeta que se muestra — es la única lámina que ya funcionaba",
+   "marks": [
+    {
+     "type": "badge",
+     "x": 57,
+     "y": 47,
+     "n": 1,
+     "label": "el monto ya está calculado"
+    },
+    {
+     "type": "badge",
+     "x": 54,
+     "y": 90,
+     "n": 2,
+     "label": "falta que lo aprietes vos"
+    }
+   ]
   },
   {
    "number": 4,
    "headline": "Lo que *no* hace, a propósito",
    "body": "No le escribe a tu cliente sin que vos mires. No cambia un precio solo. No manda un cobro solo. Un sistema que actúa solo te mete en un problema el día que se equivoca.",
-   "object": "hermes-content/references/oniahq/fondos/panel-fiado.png"
+   "object": "hermes-content/references/oniahq/fondos/panel-nada-sale.png",
+   "object_prueba": "la abstención está ESCRITA en el producto: «Nada sale sin que vos apriete el botón»",
+   "marks": [
+    {
+     "type": "box",
+     "x": 5,
+     "y": 31,
+     "w": 54,
+     "h": 30,
+     "label": "lo dice el producto, no yo"
+    }
+   ]
   },
   {
    "number": 5,
    "role": "save",
    "headline": "Por qué eso importa más que la IA",
-   "body": "El riesgo de automatizar no es que la máquina sea tonta. Es que sea rápida. Que espere tu aprobación convierte un error caro en un botón que no apretás.",
-   "object": "hermes-content/references/oniahq/fondos/panel-bandeja.png"
+   "body": "El riesgo de automatizar no es que la máquina sea tonta. Es que sea rápida. Que espere tu aprobación convierte un error caro en un botón que no apretás."
   },
   {
    "number": 6,
-   "headline": "Cuánto tiempo es esto, en serio",
-   "body": "Lo que te devuelve no son horas de trabajo: es la cabeza. Dejás de acordarte de a quién había que cobrarle y qué se estaba por acabar. Eso lo lleva el sistema.",
-   "object": "hermes-content/references/oniahq/fondos/panel-curva.png"
+   "headline": "No te devuelve *horas*. Te devuelve la cabeza",
+   "body": "Dejás de acordarte de a quién había que cobrarle y qué se estaba por acabar. Eso lo lleva el sistema.",
+   "object": "hermes-content/references/oniahq/fondos/panel-fiado.png",
+   "object_prueba": "«dejás de acordarte de a quién había que cobrarle» — la pantalla lo recuerda: vencido, cobrar ya",
+   "marks": [
+    {
+     "type": "box",
+     "x": 4,
+     "y": 43,
+     "w": 92,
+     "h": 15,
+     "label": "esto lo recuerda el sistema, no vos"
+    }
+   ]
   },
   {
    "number": 7,
    "role": "cta",
-   "pill": "20 minutos, gratis",
    "headline": "¿Qué delegarías *primero*?",
-   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca.",
-   "object": "hermes-content/references/oniahq/fondos/panel-pagos.png"
+   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca. 20 minutos, gratis, sin vender nada."
   }
  ]
 }
