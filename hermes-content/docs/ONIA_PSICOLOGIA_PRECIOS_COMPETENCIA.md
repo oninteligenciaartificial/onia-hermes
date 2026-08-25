@@ -305,7 +305,22 @@ Básico 300 / 2 / 200; Profesional 1.500 / 5 / 800; Completo y Empresa ilimitado
 5. **El señuelo de capacidad idéntica** (Lovable Pro $25 / Business $50, mismos créditos).
    `lib/subscription/plan-display.ts` ya lo prohíbe por escrito: *"no se distinguen por
    volumen sino por el salto"*, y exige que cada bullet sea cierto contra el código que
-   corre hoy. En esto ya estamos por encima de Lovable. No aflojar.
+   corre hoy.
+
+   🔴 **Corregido 2026-08-24: lo estamos haciendo.** Acá decía "en esto ya estamos por
+   encima de Lovable" y es falso. `PLAN_LIMITS` le da a **Completo (Bs 1.500) y Empresa
+   (Bs 2.900) límites IDÉNTICOS**: los dos con clientes, usuarios y correos ilimitados y
+   todas las funciones encendidas. **Bs 1.400 de diferencia sin una sola diferencia
+   funcional en el código.** Es exactamente el señuelo de Lovable, con peor relación.
+
+   Y lo que Empresa promete para justificarse —*"multi-sucursal, contabilidad avanzada,
+   instancia privada"*, de su `activationMessage`— no se sostiene: **multi-sucursal NO
+   EXISTE** (`branchId` da cero coincidencias), la contabilidad es transversal y la tienen
+   todos los planes, y la instancia privada es el add-on self-hosted que se cobra aparte.
+
+   **Empresa no se puede vender hasta que exista multi-sucursal.** Mientras tanto sirve
+   como ancla visible (§4.2.3) — mostrarlo hace que Bs 1.500 se lea barato — pero
+   mostrarlo NO es lo mismo que venderlo.
 6. **Cobrar en dólares.** Los siete comparables cotizan en USD (Wix incluso advierte
    *"Prices and currency vary by location"*). Con el boliviano devaluado, un precio atado
    al dólar **subió 63%** sin entregar nada nuevo. Cobrar en Bs es una ventaja competitiva
@@ -324,8 +339,9 @@ Nueve hallazgos. Los cuatro primeros son los que romperían una venta.
    Es exactamente el problema de los cuatro precios vivos, en versión chica.
 2. 🔴 **`ADMIN_ADDON_INFO` sigue publicando la escalera de 3 niveles retirada.**
    `label: "Chatbot WhatsApp (3 niveles)"`, `price: "N1 Bs. 200 · N2 Bs. 550 · N3 Bs. 900 /mes"`
-   — precios que el **encabezado del mismo archivo** declara reemplazados por Bs. 1.490. Un
-   superadmin lee 200/550/900 mientras el checkout cobra 1.490.
+   — precios retirados. ⚠️ **Corregido 2026-08-24:** el add-on son **Bs 390/mes sin cargo
+   inicial** (`WHATSAPP_ADDON`), no los Bs 1.490 que decía este doc — esa cifra vivía en 24
+   archivos y ninguno era la fuente. Un superadmin lee 200/550/900 mientras el checkout cobra 390.
 3. 🔴 **Contradicción interna sobre Meta.** `WHATSAPP_ADDON.meta.markupPct: 20` con el
    comentario *"Meta pass-through al costo + 20%"*, contra el `fullLabel` que le promete al
    cliente *"el excedente de Meta va al costo"* y el `dashboardSummary` que dice *"Meta se
@@ -349,7 +365,7 @@ Nueve hallazgos. Los cuatro primeros son los que romperían una venta.
    da 14 días de prueba sin tarjeta, Wix 14 de devolución, Shopify amortigua con $1/mes
    durante 3 meses. Nuestro trial de 14 días está bien; el corte al día siguiente, no.
 8. 🟡 **`PLAN_COMPARISON_ADDON_ROWS.whatsapp.label`** todavía dice *"(add-on, 3 niveles)"*
-   con el valor correcto (1.490) al lado. Etiqueta vieja, número nuevo.
+   con el valor al lado. ⚠️ El valor correcto es **Bs 390**, no 1.490 (corregido 2026-08-24).
 9. 🟡 **Nada en el producto nombra el descuento anual.** El 17% (10x = 2 meses gratis) vive
    como comentario en `subscription-plans.ts` y no aparece como argumento de venta.
 
