@@ -897,11 +897,11 @@
     },
     "paquetes": [
       {
-        "nombre": "Ordenado",
+        "nombre": "Básico",
         "incluye": "Panel del dueño + pendientes con responsable + agenda, pacientes e historial + 3 usuarios + soporte por correo",
         "resultado": "Sabés qué pasa en tu clínica cada día.",
         "limite": "las consultas se registran a mano (sin intake automático), sin Contador Pack ni inventario.",
-        "precio": "390/mes (anual 3.900)",
+        "precio": "320/mes (anual 3.200)",
         "recomendado": false
       },
       {
@@ -909,15 +909,15 @@
         "incluye": "Lo anterior + canales registrados → intake automático + roles finos + comentarios y consentimientos + Contador Pack INCLUIDO + inventario básico + 8 usuarios + soporte WhatsApp",
         "resultado": "Ningún paciente se escapa: cada consulta entra y se sigue sola.",
         "limite": "una sola sucursal, sin aprobaciones con SLA ni bot WhatsApp; SIAT va como add-on (+190/mes).",
-        "precio": "890/mes (anual 8.900)",
+        "precio": "750/mes (anual 7.500)",
         "recomendado": true
       },
       {
-        "nombre": "Empresa",
+        "nombre": "Completo",
         "incluye": "Lo anterior + aprobaciones con SLA + hasta 3 sucursales + 20 usuarios + soporte prioritario + bot WhatsApp incluido (se activa con la verificación de Meta) + inventario detallado con lotes y kardex (se libera en Q3-2026 sin costo extra) + facturación SIAT incluida (al certificar Onia ante el SIN)",
         "resultado": "Controlás sin estar encima: aprobaciones, sucursales y WhatsApp automatizados.",
         "limite": "hasta 3 sucursales (adicional Bs 490/mes c/u); bot, inventario detallado y SIAT entran según su fecha de liberación indicada.",
-        "precio": "1.990/mes (anual 19.900)",
+        "precio": "1.500/mes (anual 15.000)",
         "recomendado": false
       },
       {
@@ -929,7 +929,7 @@
         "recomendado": false
       }
     ],
-    "notaPaquetes": "Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = Onia lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal. <b>Precio de lanzamiento:</b> cerrando antes del 31-jul-2026 mantenés la lista anterior (320 / 750 / 1.500) congelada 12 meses.",
+    "notaPaquetes": "Diferencia clave: <b>Básico</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Completo</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = Onia lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal. <b>Precio de lanzamiento vigente:</b> 320 / 750 / 1.500, congelado 12 meses desde la firma (ratificado 2026-07-09 en <code>subscription-plans.ts</code>, que es lo que valida el cobro).",
     "addons": [
       {
         "nombre": "Facturación SIAT en línea (para plan Profesional; en Empresa va incluida)",
