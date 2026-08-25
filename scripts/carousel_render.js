@@ -62,6 +62,23 @@ const ACCOUNTS = {
 // Brand kits para packs no-Onia. Cada marca define superficie, tinta, acentos
 // y logo. El pack bright-retail los consume.
 const BRANDS = {
+  // Kit de Onia para bright-retail. Existe porque el pack caia a `BRANDS.nuvia`
+  // por defecto y firmaba las piezas de @oniahq con el logo, la paleta arcoiris
+  // y el tagline "EVERYTHING FOR EVERYONE" de OTRA marca (visto 2026-08-24).
+  // La paleta es verde escalonado a proposito: el arcoiris de Nuvia es de tienda,
+  // y Onia vende sistemas.
+  onia: {
+    name: 'Onia',
+    handle: '@oniahq',
+    tagline: 'SISTEMAS PARA NEGOCIOS BOLIVIANOS',
+    bg: '#FBFAF6',
+    surface2: '#FFFFFF',
+    ink: '#0A0F0D',
+    muted: '#5A6B63',
+    accents: ['#10C26B', '#0B8F4F', '#0A0F0D', '#10C26B'],
+    stripes: ['#0A0F0D', '#10C26B', '#0B8F4F', '#D6F5E5', '#10C26B'],
+    logo: path.join(BRAND, 'onia-logomark.svg'),
+  },
   nuvia: {
     name: 'Nuvia',
     handle: '@nuvia.bo',
@@ -520,8 +537,12 @@ function darkProductHtml(slide, idx, total, account, args) {
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
-  const object = args && args.object
-    ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
+  // Objeto por-lamina, con el global de --object como respaldo. Sin esto la MISMA
+  // captura se repetia en las 7 laminas y el mockup dejaba de ser prueba para ser
+  // relleno (visto en O04, 2026-08-24).
+  const objSrc = (slide.object ? path.resolve(slide.object) : '') || (args && args.object);
+  const object = objSrc
+    ? `<img class="object" src="file://${String(objSrc).replace(/\\/g, '/')}" alt="">`
     : '';
 
   // On save slides the savetag already labels "FRAMEWORK", so drop the top pill
@@ -624,8 +645,12 @@ function darkNeonHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const acc = ACCOUNTS[account];
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
-  const object = args && args.object
-    ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
+  // Objeto por-lamina, con el global de --object como respaldo. Sin esto la MISMA
+  // captura se repetia en las 7 laminas y el mockup dejaba de ser prueba para ser
+  // relleno (visto en O04, 2026-08-24).
+  const objSrc = (slide.object ? path.resolve(slide.object) : '') || (args && args.object);
+  const object = objSrc
+    ? `<img class="object" src="file://${String(objSrc).replace(/\\/g, '/')}" alt="">`
     : '';
 
   const pills = (slide.pill && role !== 'save') ? `<div class="pills">

@@ -257,3 +257,39 @@ test('chip de dato: {{x}} se vuelve span.dato, y convive con *verde*', () => {
 test('chip de dato: escapa el HTML antes de convertir', () => {
   assert.ok(emph('{{<b>5</b>}}').includes('&lt;b&gt;5&lt;/b&gt;'), 'no debe inyectar HTML');
 });
+
+test('bright-retail: @oniahq usa el kit de Onia, no el de Nuvia', () => {
+  // El bug real: BRANDS[account] caia a BRANDS.nuvia por defecto, asi que las piezas de
+  // @oniahq salian con el logo, la paleta arcoiris y el tagline "EVERYTHING FOR EVERYONE"
+  // de OTRA marca. Se vio mirando el PNG, no leyendo el codigo.
+  const html = brightRetailHtml({ role: 'cover', headline: 'H', body: 'b' }, 0, 5, 'onia', {});
+  assert.ok(!html.includes('EVERYTHING FOR EVERYONE'), 'no puede firmar con el tagline de Nuvia');
+  assert.ok(html.includes('SISTEMAS PARA NEGOCIOS BOLIVIANOS'), 'firma con el tagline de Onia');
+  assert.ok(BRANDS.onia && BRANDS.onia.handle === '@oniahq', 'el kit onia existe y trae su handle');
+});
+
+test('bright-retail: una cuenta sin kit propio sigue cayendo a Nuvia', () => {
+  // El respaldo tiene que seguir vivo: agregar el kit de Onia no debe romper Nuvia.
+  const html = brightRetailHtml({ role: 'cover', headline: 'H' }, 0, 5, 'nuvia', {});
+  assert.ok(html.includes('EVERYTHING FOR EVERYONE'), 'nuvia conserva lo suyo');
+});
+
+test('dark-product: el objeto se puede dar por lamina', () => {
+  // Sin esto la MISMA captura se repetia en las 7 laminas y el mockup dejaba de ser
+  // prueba para ser relleno.
+  const conSlide = darkProductHtml({ headline: 'H', object: 'a/uno.png' }, 1, 5, 'onia', { object: 'b/global.png' });
+  assert.ok(conSlide.includes('uno.png'), 'gana el objeto de la lamina');
+  assert.ok(!conSlide.includes('global.png'), 'no debe quedar tambien el global');
+});
+
+test('dark-product: sin objeto por lamina cae al global de --object', () => {
+  const soloGlobal = darkProductHtml({ headline: 'H' }, 1, 5, 'onia', { object: 'b/global.png' });
+  assert.ok(soloGlobal.includes('global.png'), 'el respaldo sigue funcionando');
+  const ninguno = darkProductHtml({ headline: 'H' }, 1, 5, 'onia', {});
+  assert.ok(!ninguno.includes('class="object"'), 'sin objeto no dibuja img');
+});
+
+test('dark-neon: hereda el objeto por lamina', () => {
+  const html = darkNeonHtml({ headline: 'H', object: 'a/uno.png' }, 1, 5, 'onia', {});
+  assert.ok(html.includes('uno.png'), 'el mismo arreglo aplica a dark-neon');
+});

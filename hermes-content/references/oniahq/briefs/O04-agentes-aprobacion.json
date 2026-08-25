@@ -1,0 +1,65 @@
+{
+ "serie": "Lo que hace el sistema",
+ "episodio": "004",
+ "comment_trigger": "SISTEMA",
+ "comment_reward": "las 6 tareas que conviene delegar primero",
+ "caption": "«IA para tu negocio» no significa nada hasta que ves qué hace exactamente.\n\nEsto es lo que hace: revisa tus ventas, tu stock y tus cobros, arma la propuesta, y te la deja esperando. No manda nada solo. Vos aprobás.\n\nEse detalle es todo. Un sistema que actúa solo te mete en un problema el día que se equivoca. Uno que propone y espera, no.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero — y las 3 que no conviene delegar nunca.",
+ "hashtags": [
+  "#automatizacion",
+  "#inteligenciaartificial",
+  "#negociosbolivia",
+  "#santacruz",
+  "#pyme"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "pill": "Lo que hace el sistema",
+   "headline": "Nadie te explica *qué hace* la IA en tu negocio",
+   "body": "Así que te lo muestro con la pantalla.",
+   "object": "hermes-content/references/oniahq/fondos/panel-real.png"
+  },
+  {
+   "number": 2,
+   "headline": "No es un chat. Es una *bandeja*",
+   "body": "El sistema mira tus ventas, tu stock y tus cobros mientras vos hacés otra cosa. Cuando encuentra algo, no te avisa: te deja la propuesta armada.",
+   "object": "hermes-content/references/oniahq/fondos/panel-bandeja.png"
+  },
+  {
+   "number": 3,
+   "headline": "Ejemplo real, de esta semana",
+   "body": "«Cobranza: Maestro Julio Choque — saldo vencido {{Bs 285}} hace 10 días». El mensaje está escrito. El monto está calculado. Falta un botón.",
+   "callout": "Esperando tu aprobación.",
+   "object": "hermes-content/references/oniahq/fondos/panel-ticket.png"
+  },
+  {
+   "number": 4,
+   "headline": "Lo que *no* hace, a propósito",
+   "body": "No le escribe a tu cliente sin que vos mires. No cambia un precio solo. No manda un cobro solo. Un sistema que actúa solo te mete en un problema el día que se equivoca.",
+   "object": "hermes-content/references/oniahq/fondos/panel-fiado.png"
+  },
+  {
+   "number": 5,
+   "role": "save",
+   "headline": "Por qué eso importa más que la IA",
+   "body": "El riesgo de automatizar no es que la máquina sea tonta. Es que sea rápida. Que espere tu aprobación convierte un error caro en un botón que no apretás.",
+   "object": "hermes-content/references/oniahq/fondos/panel-bandeja.png"
+  },
+  {
+   "number": 6,
+   "headline": "Cuánto tiempo es esto, en serio",
+   "body": "Lo que te devuelve no son horas de trabajo: es la cabeza. Dejás de acordarte de a quién había que cobrarle y qué se estaba por acabar. Eso lo lleva el sistema.",
+   "object": "hermes-content/references/oniahq/fondos/panel-curva.png"
+  },
+  {
+   "number": 7,
+   "role": "cta",
+   "pill": "20 minutos, gratis",
+   "headline": "¿Qué delegarías *primero*?",
+   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca.",
+   "object": "hermes-content/references/oniahq/fondos/panel-pagos.png"
+  }
+ ]
+}
