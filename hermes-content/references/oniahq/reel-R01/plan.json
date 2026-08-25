@@ -1,0 +1,6 @@
+{ "overlays": [
+  { "asset": "hermes-content/references/oniahq/reel-R01/placas/p1.png", "start": 0.4,  "end": 4.9,  "position": "bottom", "scale": 0.84, "fade": 0.3, "marginY": 0.20 },
+  { "asset": "hermes-content/references/oniahq/reel-R01/placas/p2.png", "start": 5.3,  "end": 9.9,  "position": "bottom", "scale": 0.84, "fade": 0.3, "marginY": 0.20 },
+  { "asset": "hermes-content/references/oniahq/reel-R01/placas/p3.png", "start": 10.3, "end": 14.9, "position": "bottom", "scale": 0.84, "fade": 0.3, "marginY": 0.20 },
+  { "asset": "hermes-content/references/oniahq/reel-R01/placas/p4.png", "start": 15.3, "end": 19.9, "position": "bottom", "scale": 0.84, "fade": 0.3, "marginY": 0.20 }
+] }
