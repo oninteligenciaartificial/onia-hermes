@@ -115,7 +115,19 @@
           <div class="field"><label class="lbl">Colores de marca</label><span class="hint">Códigos hex si los sabés, ej. #027650, #089868</span><input name="colores"></div>
           <div class="field"><label class="lbl">Tipografía preferida</label><span class="hint">Si tenés una, ej. Montserrat. Si no, lo elegimos.</span><input name="tipografia"></div>
         </div>
+        <div class="field"><label class="lbl">Eslogan o frase corta</label><span class="hint">Si tenés una, ej. "Tu sonrisa, nuestra obsesión". Si no, la proponemos.</span><input name="tagline"></div>
+        <div class="field"><label class="lbl">Estilo visual que buscás</label><span class="hint">Marcá 1 o 2 — más de dos se contradicen entre sí</span>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="estilo" value="Minimalista / limpio"><span>Minimalista</span></label>
+            <label class="chip"><input type="checkbox" name="estilo" value="Elegante / premium"><span>Elegante</span></label>
+            <label class="chip"><input type="checkbox" name="estilo" value="Moderno / tecnologico"><span>Moderno</span></label>
+            <label class="chip"><input type="checkbox" name="estilo" value="Calido / cercano"><span>Cálido</span></label>
+            <label class="chip"><input type="checkbox" name="estilo" value="Colorido / divertido"><span>Colorido</span></label>
+            <label class="chip"><input type="checkbox" name="estilo" value="Corporativo / serio"><span>Corporativo</span></label>
+          </div>
+        </div>
         <div class="field"><label class="lbl">Webs/marcas que te gustan (referencias)</label><span class="hint">1-3 enlaces de estilos que te encantan — define la dirección</span><textarea name="referencias"></textarea></div>
+        <div class="field"><label class="lbl">¿Qué NO querés en tu web?</label><span class="hint">Colores, estilos o elementos que odiás. Decirlo acá evita rehacer todo después.</span><textarea name="evitar"></textarea></div>
       </div>
     </section>
 
@@ -184,19 +196,47 @@
     </section>
 
     <section>
-      <div class="shead"><div class="snum">9</div><div><h2>SEO y redes</h2><div class="sdesc">Para que te encuentren en Google.</div></div></div>
+      <div class="shead"><div class="snum">9</div><div><h2>Qué debe lograr la web</h2><div class="sdesc">Sin esto la web informa, pero no vende.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">¿Qué querés que haga el visitante? <span class="req">*</span></label><span class="hint">Es la acción que la web tiene que provocar</span>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="cta_objetivo" value="Escribir por WhatsApp"><span>Escribir por WhatsApp</span></label>
+            <label class="chip"><input type="checkbox" name="cta_objetivo" value="Llamar por telefono"><span>Llamar</span></label>
+            <label class="chip"><input type="checkbox" name="cta_objetivo" value="Agendar una cita"><span>Agendar</span></label>
+            <label class="chip"><input type="checkbox" name="cta_objetivo" value="Comprar online"><span>Comprar online</span></label>
+            <label class="chip"><input type="checkbox" name="cta_objetivo" value="Dejar sus datos"><span>Dejar sus datos</span></label>
+            <label class="chip"><input type="checkbox" name="cta_objetivo" value="Visitar el local"><span>Visitar el local</span></label>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="field"><label class="lbl">Texto del botón principal</label><span class="hint">Lo que dice el botón, ej. "Pedir por WhatsApp", "Agendar evaluación"</span><input name="cta_texto" placeholder="ej. Agendar evaluación"></div>
+          <div class="field"><label class="lbl">¿A dónde lleva ese botón?</label><span class="hint">Link de WhatsApp, teléfono, o la página donde cae</span><input name="cta_destino" placeholder="ej. wa.me/59170000000"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">10</div><div><h2>SEO y redes</h2><div class="sdesc">Para que te encuentren en Google.</div></div></div>
       <div class="card">
         <div class="field"><label class="lbl">Tus redes (links)</label><span class="hint">Instagram, Facebook, LinkedIn, TikTok…</span><textarea name="redes"></textarea></div>
         <div class="grid">
           <div class="field"><label class="lbl">Descripción para Google</label><span class="hint">1-2 líneas de qué hacés y dónde</span><textarea name="seo_desc"></textarea></div>
           <div class="field"><label class="lbl">Palabras clave</label><span class="hint">Por qué te buscarían, ej. "dentista Santa Cruz"</span><textarea name="keywords"></textarea></div>
         </div>
+        <div class="grid">
+          <div class="field"><label class="lbl">Título para Google</label><span class="hint">Nombre + qué hacés, ej. "Clínica Sonría | Odontología en Santa Cruz"</span><input name="seo_title"></div>
+          <div class="field"><label class="lbl">Imagen para compartir en redes</label><span class="hint">La que aparece al pegar tu link en WhatsApp. Link a la imagen.</span><input name="og_image"></div>
+        </div>
       </div>
     </section>
 
     <section>
-      <div class="shead"><div class="snum">10</div><div><h2>Cierre</h2><div class="sdesc">Últimos detalles.</div></div></div>
+      <div class="shead"><div class="snum">11</div><div><h2>Cierre</h2><div class="sdesc">Últimos detalles.</div></div></div>
       <div class="card">
+        <div class="grid">
+          <div class="field"><label class="lbl">Teléfono para publicar</label><span class="hint">Fijo o celular, el que va visible en la web</span><input name="telefono" placeholder="ej. +591 3 3xx xxxx"></div>
+          <div class="field"><label class="lbl">¿Quién paga dominio y hosting?</label><span class="hint">Van a nombre tuyo: la web es tuya, no queda atada a nosotros</span><input name="paga_hosting" placeholder="ej. lo pago yo"></div>
+        </div>
         <div class="field"><label class="lbl">¿Quién aprueba los contenidos?</label><input name="responsable" placeholder="nombre y rol"></div>
         <div class="field"><label class="lbl">Notas extra / pedidos especiales</label><textarea name="notas"></textarea></div>
       </div>
@@ -231,8 +271,10 @@
     "logo_url","colores","tipografia","referencias","dominio","hosting","paginas",
     "copy_sobre","servicios_detalle","beneficios","logros","testimonios","cartera",
     "categorias","productos","media_url","integraciones","integraciones_notas",
-    "redes","seo_desc","keywords","responsable","notas"];
-  const MULTI = ["tipo_proyecto","integraciones"];
+    "redes","seo_desc","keywords","responsable","notas",
+    "tagline","estilo","evitar","cta_objetivo","cta_texto","cta_destino",
+    "seo_title","og_image","telefono","paga_hosting"];
+  const MULTI = ["tipo_proyecto","integraciones","estilo","cta_objetivo"];
 
   function recolectar(){
     const fd = new FormData(document.getElementById('form'));
@@ -243,6 +285,7 @@
   function validar(d){
     const req = ['empresa','contacto','whatsapp','paquete','logo_url','copy_sobre'];
     if(req.some(k=>!d[k])) return false;
+    if(!d.cta_objetivo.length) return false;
     return d.tipo_proyecto.length>0;
   }
   function mostrarOk(){

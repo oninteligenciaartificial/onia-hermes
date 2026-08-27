@@ -16,9 +16,11 @@
 > 🔗 **2026-08-27 — esto ya existe como formulario web.** `https://forms.onia.com.bo/brief`
 > cubre ~80% de estas 39 preguntas (41 campos), y `/alta` tapa varios huecos del brief
 > (rubro, ciudad, direccion, horarios, NIT) ademas de traer el repetidor de FAQ.
-> **Lo que no cubre ninguno: el CTA** (que debe hacer el visitante, texto y destino del
-> boton), **que NO quieren**, estilo visual explicito, tagline, titulo SEO e imagen OG.
-> Tabla completa en `hermes-content/docs/platform/ONIA_FORMS_DEPLOY_VPS.md`.
+> **2026-08-27: los huecos se cerraron.** Se le agregaron 10 campos al `/brief` — CTA
+> (objetivo obligatorio + texto y destino del boton), "que NO querés", estilo visual,
+> tagline, titulo SEO, imagen OG, telefono y quien paga el hosting. **El `/brief` ya cubre
+> este intake entero**: mandar el link en vez de copiar estas preguntas a mano.
+> Detalle en `hermes-content/docs/platform/ONIA_FORMS_DEPLOY_VPS.md`.
 
 ---
 

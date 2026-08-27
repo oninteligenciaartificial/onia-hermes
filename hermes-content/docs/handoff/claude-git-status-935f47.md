@@ -131,9 +131,10 @@ monitoreo que no se paga sola.
 contra las 39 preguntas de `web-factory/INTAKE_CLIENTE.md`: el brief cubre ~80%, y el alta
 tapa varios de sus huecos (rubro, ciudad, dirección, horarios, NIT, y el repetidor de FAQ).
 
-**Falta poco, y no es construir nada nuevo**: el CTA (qué debe hacer el visitante, texto y
-destino del botón) y "qué NO quieren" son los dos que duelen; después tagline, título SEO,
-imagen OG y estilo visual explícito. **~6 campos al `/brief`, no un formulario nuevo.**
+**✅ Cerrado el mismo día:** se agregaron **10 campos** al `/brief` (CTA con objetivo
+obligatorio + texto y destino del botón, "qué NO querés", estilo visual, tagline, título
+SEO, imagen OG, teléfono, quién paga el hosting). **El `/brief` ya cubre el intake
+entero** — se manda el link en vez de copiar 39 preguntas a mano.
 
 Casi lo estimo mal: por conteo de substring parecía que faltaban 15 campos y que el brief
 no tenía nada. `cta` matcheaba "conectar", `estilo` matcheaba "enlaces de estilos", y el
@@ -150,9 +151,7 @@ tamaño del trabajo de "formulario nuevo" a "seis campos".**
 3. **¿El markup de Meta es 20% o a costo?** `WHATSAPP_ADDON.meta.markupPct: 20` contradice
    la etiqueta que le promete al cliente que el excedente va al costo. Lety.ai vende
    "0% markup" como tesis central: es el ataque más fácil que nos pueden hacer.
-4. **¿Agrego los ~6 campos al `/brief`?** El CTA es el único que no puede faltar. Inflar
-   el `/alta` sería el error opuesto: ya tarda 10 minutos y es la puerta de entrada.
-5. **¿Se bajan las pantallas `/vendedores/*` de web-factory?** Son rutas publicadas
+4. **¿Se bajan las pantallas `/vendedores/*` de web-factory?** Son rutas publicadas
    hechas para un vendedor que no existe. Sacarlas es una decisión de superficie viva, no
    la tomo solo.
 

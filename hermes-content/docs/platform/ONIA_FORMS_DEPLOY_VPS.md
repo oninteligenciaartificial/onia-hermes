@@ -29,33 +29,54 @@ construir sin idas y vueltas:
 tapan huecos entre ellos: el brief no pide rubro, ciudad, direccion, horarios ni NIT, y
 el alta si.
 
-### Lo que NO tiene NINGUNO de los dos
+### RESUELTO 2026-08-27 — los huecos se cerraron en el `/brief`
 
-Verificado en contexto, no por conteo de substring (`cta` matcheaba "conectar", `estilo`
-matcheaba "enlaces de estilos"):
+Se agregaron **10 campos** al `/brief` (de 41 a 51 campos de formulario; 61 controles
+contando cada checkbox). Ahora el brief cubre el intake completo:
 
-| Falta | Mapea a | Gravedad |
+| Campo nuevo | Mapea a | Por que |
 |---|---|---|
-| **Que debe hacer el visitante + texto y destino del boton** | `cta.label`, `cta.url` | 🔴 **critico**: sin CTA la web informa pero no convierte |
-| **Que NO quieren** (colores, estilos, elementos) | — | 🔴 es lo que evita rehacer el trabajo entero |
-| Estilo visual explicito (minimalista / premium / calido…) | — | 🟡 parcialmente suplido por las referencias |
-| Tagline / eslogan | `tagline` | 🟡 |
-| Titulo SEO (tiene `seo_desc` y `keywords`, falta el title) | `seo.title` | 🟡 |
-| Imagen OG | `seo.ogImage` | 🟡 |
-| Telefono fijo (solo pide WhatsApp) | `contacto.tel` | 🟢 |
-| Quien paga dominio + hosting | — | 🟢 operativo |
+| `cta_objetivo` (chips, **obligatorio**) | — | que accion tiene que provocar la web |
+| `cta_texto` | `cta.label` | lo que dice el boton |
+| `cta_destino` | `cta.url` | a donde lleva |
+| `evitar` | — | que NO quieren: evita rehacer el trabajo entero |
+| `estilo` (6 chips) | — | direccion visual explicita |
+| `tagline` | `tagline` | eslogan |
+| `seo_title` | `seo.title` | titulo para Google |
+| `og_image` | `seo.ogImage` | la imagen que aparece al pegar el link en WhatsApp |
+| `telefono` | `contacto.tel` | el fijo, antes solo pedia WhatsApp |
+| `paga_hosting` | — | el dominio va a nombre del cliente |
 
-⚠️ **FAQ SI existe** — esta en el `/alta`, con repetidor de pregunta/respuesta (pensado
-para el bot, sirve igual para la seccion FAQ de la web). Se listaba como faltante por
-error.
+**`cta_objetivo` es el unico nuevo que se exige.** Es un clic en un chip — barato de
+responder — y sin el la web se construye sin saber que tiene que lograr. El resto queda
+opcional para no subirle la friccion a un formulario que ya es largo.
 
-### La decision que sale de esto
+⚠️ **La trampa de este formulario, y por que hay que releer esto antes de tocarlo:** el
+payload NO se arma con todo el `FormData`, sino recorriendo una **lista blanca `CAMPOS`**
+en el `<script>`. Un campo agregado al HTML que no este en esa lista **se dibuja y no se
+envia** — se ve perfecto y llega vacio. Los checkbox de valores multiples ademas tienen
+que estar en `MULTI`, o solo viaja el primero marcado.
 
-**NO hay que construir un formulario nuevo.** Hay que agregarle ~6 campos al `/brief`, y
-el CTA es el unico que no puede faltar. Inflar el `/alta` seria el error opuesto: ya
-tarda 10 minutos y es la puerta de entrada — subirle la friccion cuesta altas.
+Chequeo obligatorio despues de tocar el form (`viewport` sale como falso positivo, es la
+etiqueta `<meta>`):
 
-Pendiente de decision de Sergio: agregar esos campos al `/brief`.
+```bash
+python - <<'EOF'
+import re
+s=open("hermes-content/propuestas/brief-produccion.html",encoding="utf-8").read()
+html=set(re.findall(r'name="([a-z_]+)"',s))
+campos=set(re.findall(r'"([a-z_]+)"',re.search(r'const CAMPOS = \[(.*?)\];',s,re.S).group(1)))
+multi=set(re.findall(r'"([a-z_]+)"',re.search(r'const MULTI = \[(.*?)\];',s,re.S).group(1)))
+checks=set(re.findall(r'type="checkbox" name="([a-z_]+)"',s))
+print("se dibujan y NO se envian:", sorted(html-campos-{'viewport'}) or "ninguno")
+print("checkbox fuera de MULTI:", sorted(checks-multi) or "ninguno")
+EOF
+```
+
+### FAQ: ya existia
+
+Esta en el `/alta`, con repetidor de pregunta/respuesta (pensado para el bot, sirve igual
+para la seccion FAQ de la web). Se habia listado como faltante por error.
 
 ---
 
