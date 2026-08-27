@@ -196,3 +196,55 @@ Saldo hoy: 2.134 créditos. **La cadencia de Lucía no tiene problema de presupu
 ## ⚠️ Antes de firmar cualquier cosa
 
 **Sergio es menor de edad.** Todo acto legal va por Leslie. Definir quién firma antes.
+
+---
+
+# Verificación de la versión nueva del PDF (2026-08-27)
+
+> Sergio mandó `Propuesta (1).pdf` diciendo: *"el tope está puesto en su archivo que nos
+> envió Samuel"*.
+
+## 🔴 El tope NO está en el archivo
+
+Leído el PDF entero — **3 páginas, no hay una cuarta ni anexo**. La cláusula variable dice,
+textual y completa:
+
+> *"Compensación variable por rendimiento. Además de la inversión mensual, se mantiene un
+> modelo de compensación variable basado en las visualizaciones acumuladas de los contenidos:
+> Videos de contenido pilar: $0,75 CPM. Videos B-roll $0,60 CPM."*
+
+**Eso es todo lo que dice.** No hay techo mensual, ni por video, ni por campaña. Buscado en
+las 3 páginas: las únicas cifras de dinero del documento son **$0,75**, **$0,60** y
+**2.000 Bs**.
+
+**El único "máximo" del documento es "Máximo 2 sesiones de grabación al mes"** — y ese limita
+el trabajo de Samuel, no lo que vos pagás. Es fácil confundirlos leyendo rápido: aparece dos
+veces y con la palabra "máximo" bien visible.
+
+## Qué cambió y qué no, contra la versión anterior
+
+| | Antes | Esta versión |
+|---|---|---|
+| Fijo | Bs 2.000 | **Bs 2.000** (igual) |
+| CPM pilar / b-roll | $0,75 / $0,60 | **igual** |
+| "Acumuladas" | ambiguo | **sigue ambiguo** |
+| Tope | no había | **sigue sin haber** |
+| Volumen | 30 videos + 8 historias | **igual** |
+
+**No cambió nada de lo que había que negociar.** Lo que sí quedó más claro es el calendario
+(4 videos la semana del 24-ago, 4 la del 31-ago, etapa 2 desde el 5 de septiembre) y las
+redes incluidas (Instagram, TikTok, Facebook, YouTube Shorts).
+
+## Lo que hay que pedir por escrito, en una línea cada uno
+
+1. **Tope mensual al variable.** Sin techo, el variable iguala al fijo alrededor de las
+   251.000 vistas/mes y de ahí para arriba no para. Un solo video que se dispare a un millón
+   son ~Bs 5.220 por esa pieza sola.
+2. **Definir "acumuladas".** Es más grave que la falta de tope. Si significa el total
+   histórico facturado cada mes, se paga por las mismas vistas una y otra vez, y al mes 12 hay
+   360 videos acumulados sumando. Tiene que decir: **vistas nuevas del período**.
+3. **La fuente de verdad del número.** Quién reporta las vistas, desde qué panel, y con qué
+   captura. Hoy no está escrito.
+
+Ninguno de los tres cambia el precio: cambian el riesgo. Bs 2.000 por 38 piezas al mes está
+bien; lo que no está bien es una cláusula sin techo.

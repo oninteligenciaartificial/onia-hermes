@@ -62,13 +62,13 @@ Repo aparte → **paralelo libre**, nunca choca con contenido.
 | 🟡 | **El pack visual de Sergio no existe** — sus piezas se ven como las de Onia | nada, lo hago |
 | 🟡 | **La palabra STACK no tiene recurso** — S05 no se puede publicar sin él | nada, lo hago |
 | ⚪ | Las ~45 fotos de la lista de tomas | vos, una tarde |
-| ⚪ | Naming de la comunidad | **cerrado: Onia Community** |
+| ⚪ | Naming de la comunidad | **cerrado: Onia Community**, ya creada por WhatsApp |
 
 ### Fuera de mi carril (otras sesiones)
 
 | Carril | Qué está abierto |
 |---|---|
-| **Infra** | Postiz se muere solo cada vez que se reinicia el VPS (pasó 22 y 24-ago) · el ticket a Hostinger por el steal |
+| **Infra** | 🔴 **NO TOCAR desde este carril.** Es de otra sesión y el VPS ya funciona (Sergio, 27-ago) |
 | **Producto** | O01/O02 necesitan capturas nuevas del panel — y `panel-real.png` llega **cortado en origen** |
 | **Precios** | conviven 10 listas de precios distintas |
 
@@ -88,12 +88,10 @@ Repo aparte → **paralelo libre**, nunca choca con contenido.
 
 | Prioridad | Qué | Cuánto te lleva |
 |---|---|---|
-| 🔴 1 | **Tomar `@oniacommunity`** — verificado libre hoy | 2 minutos |
-| 🔴 2 | **Mirar las 17 piezas y decir sí o no.** Es el único cuello de botella real: puedo producir 90 al mes y no sirve de nada si no sale ninguna | una sentada |
-| 🔴 3 | **Las ~45 fotos** de la lista de tomas | una tarde |
-| 🟡 4 | Cerrar con Samuel: tope al CPM y definir "acumuladas" | esta semana |
-| 🟡 5 | Ticket a Hostinger por el steal del VPS | esta semana |
-| ⚪ 6 | Instagram → Apps y sitios web: sacar lo que no reconozcas | 5 minutos |
+| 🔴 1 | **Mirar las 17 piezas y decir sí o no.** Es el único cuello de botella real: puedo producir 90 al mes y no sirve de nada si no sale ninguna | una sentada |
+| 🔴 2 | **Las ~45 fotos** de la lista de tomas | una tarde |
+| 🟡 3 | Samuel: pedir el tope al CPM **por escrito** — verificado el 27-ago, NO está en su PDF | esta semana |
+| ⚪ 4 | Instagram → Apps y sitios web: sacar lo que no reconozcas | 5 minutos |
 
 ---
 
