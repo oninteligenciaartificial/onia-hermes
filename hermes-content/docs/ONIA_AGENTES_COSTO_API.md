@@ -13,9 +13,16 @@ Fecha de medición: **2026-08-20**.
 > **Los agentes que le hacen el trabajo más fácil al usuario (Recall, Cobrador, Captador) cuestan
 > USD 0,00 de API. No llaman a ningún modelo: redactan con plantillas en código.**
 > El único costo de API real está en los **chatbots**, y es de **Bs 0,80 a Bs 23 por cliente/mes**
-> — entre **0,05% y 1,5%** de los Bs 1.490 que cobra el add-on.
-> **Ningún plan pierde plata por API.** Lo que puede hacer perder plata es el soporte humano y el
-> transporte de Meta, no el modelo.
+> — entre **0,2% y 5,9%** de los Bs 390 que cobra el add-on.
+> **Ningún plan pierde plata por API.** Lo que puede hacer perder plata es el **soporte humano**, y
+> nada más: el transporte de Meta salió de nuestra cuenta el 2026-08-21.
+
+⚠️ **Cuentas rehechas el 2026-08-27.** Todo este doc calculaba contra **Bs 1.490**, el precio del
+add-on antes del 2026-08-21. Hoy la fuente (`pricing.ts`, `WHATSAPP_ADDON`) dice **Bs 390/mes sin
+cargo inicial**, y el consumo de Meta lo paga el cliente en SU cuenta. **No se reemplazaron
+números: se rehicieron los porcentajes, los márgenes y las dos conclusiones que cambiaron de
+signo** (§6). Los costos medidos —Bs 0,76 típico, Bs 22,66 pico, Bs 60,44 peor caso— NO cambian:
+son mediciones del 2026-08-20 contra producción, y siguen valiendo.
 
 ---
 
@@ -53,9 +60,9 @@ Hostinger. El real que paga Sergio es **US$40**. Dato heredado que no se había 
   | Plan Pro + chatbot (Bs 1.140) | **3** |
 
   **Tres clientes completos pagan todo lo que gastamos hoy.** Ese es el número que importa.
-- El margen del chatbot es ~94% en cualquier precio arriba de Bs 300: el costo variable
-  (Bs 23 en el peor caso) es ruido. **El precio no lo decide el costo, lo decide el mercado
-  y el valor** — ver `ONIA_PSICOLOGIA_PRECIOS_COMPETENCIA.md`.
+- El margen del chatbot a Bs 390 va de **99,8% (típico)** a **94,2% (pico de API)**. El costo
+  variable sigue siendo ruido incluso al precio nuevo. **El precio no lo decide el costo, lo
+  decide el mercado y el valor** — ver `ONIA_PSICOLOGIA_PRECIOS_COMPETENCIA.md`.
 
 ---
 
@@ -118,7 +125,7 @@ humano aprueba**. Nada se envía solo.
 |---|---|---|---|
 | **Recepcionista** (bot del cliente por Chatwoot) | `/opt/onia/bot/recepcionista.mjs` | **NO — cero LLM** | clientes de Onia |
 | **Venta** (embudo DEMO de Onia) | `/opt/onia/bot/bot-engine.mjs` → `run-turn.mjs` | Sí, **solo la rama fuera de guion** | Onia, no el cliente |
-| **WhatsApp de la plataforma** | `onia-platform/lib/whatsapp-bot.ts` → `whatsapp-ai.ts` | Sí, **solo el texto libre** | clientes de Onia — **este es el add-on de Bs 1.490** |
+| **WhatsApp de la plataforma** | `onia-platform/lib/whatsapp-bot.ts` → `whatsapp-ai.ts` | Sí, **solo el texto libre** | clientes de Onia — **este es el add-on de Bs 390** |
 
 El **recepcionista** es decisión explícita de diseño (`recepcionista.mjs`, regla 4: *"SIN LLM"*):
 lo que está fuera de guion se deriva al humano del negocio. Costo de API: **USD 0,00**.
@@ -267,7 +274,7 @@ Precios leídos de `onia-platform/lib/pricing.ts` y `lib/subscription-plans.ts`
 
 | Producto | Precio (Bs/mes) | Costo API típico | Costo API PICO | Margen s/API típico | Margen s/API pico |
 |---|---|---|---|---|---|
-| **Add-on Chatbot WhatsApp con IA** | **1.490** | Bs 0,76 (**0,05%**) | Bs 22,66 (**1,5%**) | **99,95%** | **98,5%** |
+| **Add-on Chatbot WhatsApp con IA** | **390** | Bs 0,76 (**0,19%**) | Bs 22,66 (**5,8%**) | **99,8%** | **94,2%** |
 | Plan Básico (agentes NO incluidos) | 320 | Bs 0 | Bs 0 | 100% | 100% |
 | Plan Profesional (agentes incluidos) | 750 | **Bs 0** | **Bs 0** | **100%** | **100%** |
 | Plan Completo (agentes incluidos) | 1.500 | **Bs 0** | **Bs 0** | **100%** | **100%** |
@@ -278,18 +285,28 @@ Precios leídos de `onia-platform/lib/pricing.ts` y `lib/subscription-plans.ts`
 # NO. Ninguno.
 
 Ni en el pico, ni con el modelo caro, ni combinando las dos cosas. El peor caso construible
-—cliente pico, `gpt-4.1-mini`, 9.000 mensajes al mes— da **Bs 60,44/mes contra Bs 1.490 cobrados: 4,1%**.
+—cliente pico, `gpt-4.1-mini`, 9.000 mensajes al mes— da **Bs 60,44/mes contra Bs 390 cobrados:
+15,5%**. Sigue sin perder plata, pero ya no es ruido: al precio viejo era 4,1%. **Es el único
+número de este doc que bajó de categoría al bajar el precio** — de despreciable a vigilable.
 
 **Lo que sí puede hacer perder plata (y no es la API):**
 
-1. **El soporte humano.** `pricing.ts:11` ya lo dice: a Bs 550/mes bastaban 5,5 h de soporte para
-   perder plata. A Bs 1.490 hay ~15 h de aire. **El equilibrio del add-on es soporte, no tokens.**
-2. **El transporte de Meta.** 500 conv × 3 msg × Bs 0,113 = **~Bs 170/mes (11% del precio)**. Es
-   **223× el costo de IA típico**.
-3. **🔴 El 1-oct-2026.** Meta termina la ventana gratuita de 24 h y pasa a cobrar también las
-   respuestas. La tarifa de `service` **todavía no está publicada**. `pricing.ts:33-36` marca el
-   cupo de 500 conversaciones como **provisional**. Ese cambio puede mover Bs 170 a bastante más;
-   la IA seguirá siendo ruido.
+1. **El soporte humano — y el margen se apretó 4×.** A Bs 100/h, el add-on aguanta **~3,9 h de
+   soporte al mes** antes de perder plata (**~3,7 h** descontando el pico de API). A Bs 1.490 el
+   aire era de ~15 h. **El equilibrio del add-on sigue siendo soporte, no tokens — pero ahora el
+   colchón es de horas, no de días.** Un cliente que llame dos veces por semana ya no deja margen.
+   Consecuencia operativa: el `knowledge.json` bien cargado dejó de ser una mejora y pasó a ser la
+   condición de rentabilidad del add-on.
+2. **El transporte de Meta — ya NO es nuestro, y por eso Bs 390 cierra.** 500 conv × 3 msg ×
+   Bs 0,113 = **~Bs 170/mes**. Al precio viejo eso era el 11% y se absorbía; **a Bs 390 sería el
+   43,6% del precio** y el add-on no cerraría. Desde el 2026-08-21 el cliente pone SU tarjeta en SU
+   cuenta de WhatsApp Business y Meta le cobra a él. **Bajar el precio y salir de la cadena de pago
+   de Meta no son dos decisiones: son una sola**, y separarlas rompe la cuenta.
+3. **🔴 El 1-oct-2026 — cambió de dueño el riesgo, no desapareció.** Meta termina la ventana
+   gratuita de 24 h y pasa a cobrar también las respuestas. La tarifa de `service` **todavía no
+   está publicada**. Ya no golpea nuestro margen: golpea **la factura del cliente**, que puede
+   subir sin que toquemos nada. Deja de ser un riesgo de margen y pasa a ser **riesgo de churn y
+   de reclamo** — hay que avisárselo ANTES de que le llegue, no después.
 
 ### Corrección a `pricing.ts`
 
@@ -297,16 +314,18 @@ El comentario de `pricing.ts:12` dice:
 
 > *"La IA es el 3-8% del costo; el 92-97% es el transporte de Meta."*
 
-**La dirección es correcta, la magnitud subestima el argumento.** Con números medidos:
+**La dirección era correcta y la magnitud sub estimaba el argumento** — pero desde el 2026-08-21
+la tabla cambió de forma, porque **Meta ya no es un costo nuestro**:
 
-| | IA | Meta | IA como % del costo variable |
+| | Lo paga | Típico | Pico |
 |---|---|---|---|
-| Típico | Bs 0,76 | Bs 170 | **0,4%** |
-| Pico | Bs 22,66 | Bs 1.017 | **2,2%** |
+| IA (OpenAI) | **Onia** | Bs 0,76 | Bs 22,66 |
+| Transporte Meta | **el cliente, en su cuenta** | ~Bs 170 | ~Bs 1.017 |
+| **Costo variable NUESTRO** | | **Bs 0,76** | **Bs 22,66** |
 
-O sea: **la IA es el 0,4–2,2% del costo variable, no el 3–8%.** La conclusión de negocio que
-`pricing.ts` sacó de ahí (cobrar el trabajo y pasar el flete de Meta al costo) **queda más
-justificada, no menos**.
+O sea: **el 100% de nuestro costo variable es IA, y son centavos.** El 92–97% que `pricing.ts`
+llamaba "transporte de Meta" no bajó ni se optimizó: **se movió a la cuenta del cliente**. La
+conclusión de negocio (cobrar el trabajo y no el flete) quedó más que justificada — se ejecutó.
 
 ---
 
@@ -340,8 +359,9 @@ justificada, no menos**.
    tres son de QA** (`ZZ QA Clinica Chatbot`, `ZZ QA Ferreteria Tornillo`, `Onia (interna)`), con
    0 y 1 tratamiento activo y `botPrompt` vacío. Los escenarios Alto y Pico son **construidos, no
    observados.**
-3. **Tarifa `service` de Meta post-1-oct-2026.** No publicada. Es la incógnita grande del margen, y
-   **no es de IA**.
+3. **Tarifa `service` de Meta post-1-oct-2026.** No publicada. Desde el 2026-08-21 **ya no es una
+   incógnita de NUESTRO margen**: cae en la factura que Meta le manda al cliente. Sigue siendo la
+   incógnita grande, pero de su cuenta, no de la nuestra — y **no es de IA**.
 4. **Precio del módulo de agentes por separado.** No existe: hoy va incluido en Profesional+
    (`PLAN_LIMITS.agentsIncluded`). Con costo variable cero, es 100% decisión de valor percibido.
 

@@ -50,13 +50,20 @@ cobrados:
 Regla: DentalGest y Gesti-OS mantienen su precio actual. Videos IA/Higgsfield no
 se venden como producto independiente por ahora.
 
-DentalGest:
+Onia Platform (el pack dental es un rubro, no un producto aparte):
 
-- Basico: Bs. 320/mes, sin setup obligatorio.
+- Básico: Bs. 320/mes, sin setup obligatorio.
 - Profesional: Bs. 750/mes, sin setup obligatorio.
-- Clinica: Bs. 1500/mes, sin setup obligatorio.
-- Onboarding opcional: Bs. 290, Bs. 690 o Bs. 1490.
-- WhatsApp: bloqueado hasta verificacion Meta.
+- Completo: Bs. 1.500/mes, sin setup obligatorio.
+- Empresa: Bs. 2.900/mes + implementación desde Bs. 3.500.
+- Anual = 10 meses. Semanal (Bs. 89 / Bs. 199) solo en Básico y Profesional.
+- Onboarding opcional: **cotizado por alcance** (`pricing.ts`: "Onboarding guiado — Cotizado por alcance"). Los montos fijos 290/690/1.490 no existen en el código.
+- Chatbot de WhatsApp: **Bs. 390/mes o Bs. 3.900/año, sin cargo inicial**; los mensajes se los
+  cobra Meta al cliente en su propia cuenta.
+
+⚠️ Corregido 2026-08-27: decía `Basico/Profesional/Clinica`, faltaba Empresa y listaba un
+onboarding de 290/690/1.490 que el código no tiene. Los montos se leen de
+`onia-platform/lib/subscription-plans.ts` y `lib/pricing.ts`.
 
 Gesti-OS:
 
@@ -101,7 +108,11 @@ Consultoria e implementaciones:
 - Acompanamiento Consultivo: Bs. 1200-2900/mes.
 - Transformacion Onia: desde Bs. 9500.
 
-Referencia canonica: `ONIA_PRICING_2026.md`.
+Referencia canonica de precios de PLATAFORMA: `onia-platform/lib/subscription-plans.ts`
+(planes) y `onia-platform/lib/pricing.ts` (add-ons), transcritos con sus funciones en
+`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`ONIA_PRICING_2026.md` quedó degradado el
+2026-08-27.)* Las cifras de web/consultoría de arriba no tienen fuente en código y **se
+cotizan caso por caso** (decisión 2026-08-24): no se corrigen contra `pricing.ts`.
 
 ## Que vender segun senal
 

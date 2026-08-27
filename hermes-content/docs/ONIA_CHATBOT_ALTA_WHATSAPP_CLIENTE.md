@@ -34,9 +34,14 @@
 > + Graph API: App Review **aprobado**; lo único abierto es la **Access Verification, que
 > vence el 20-oct-2026** — tabla en §1.
 >
-> Precio que esto entrega: **Chatbot WhatsApp con IA — Bs 1.500 inst. +
-> Bs 1.490/mes + Meta por consumo** (manda `onia-platform/lib/pricing.ts`,
-> `WHATSAPP_ADDON`; aquí no se inventa ningún número nuevo).
+> Precio que esto entrega: **Chatbot WhatsApp con IA — Bs 390/mes o Bs 3.900/año,
+> sin cargo inicial** (manda `onia-platform/lib/pricing.ts`, `WHATSAPP_ADDON`; aquí no
+> se inventa ningún número nuevo). Los mensajes los cobra Meta en la cuenta del cliente.
+>
+> ⚠️ **Corregido 2026-08-27.** Decía `Bs 1.500 inst. + Bs 1.490/mes`. Se eliminó el cobro
+> de instalación el 2026-08-21: un pago de entrada de Bs 2.990 para PROBAR un chatbot
+> frenaba la venta. Todo lo que en este doc se justificaba "con la instalación" ahora se
+> justifica con la mensualidad — por eso se reescribió §4 entera, no solo el número.
 
 ---
 
@@ -260,7 +265,7 @@ Meta/BSPs.]
 |---|---|---|---|---|---|---|
 | **R1 Embedded Signup (Chatwoot)** | Una vez: ~1 día trámite + prueba. Por cliente: **~5 min** | Popup ~15 min con su Facebook | Cero (Meta la paga el cliente) | Mismo día (tras encendido; hoy: +1–7 días de trámite) | Popup self-hosted puede fallar (probar); techo 10 altas/semana sin gates | ✗ |
 | **R2 Video tutorial pagado** | Grabar 1 vez | ALTÍSIMA: alta manual nivel developer | El cliente paga por trabarse | Días–semanas, si llega | Abandono + soporte + culpa nuestra | ✗ |
-| **R3 Done-for-you (cuenta del cliente)** | ~1–1,5 h + videollamada | 30 min de llamada, cero técnica | Cubierto por la instalación Bs 1.500 | 1–3 días (esperas Meta) | Esperas de verificación; depende de que el dueño del Facebook aparezca | ✗ |
+| **R3 Done-for-you (cuenta del cliente)** | ~1–1,5 h + videollamada | 30 min de llamada, cero técnica | Cubierto por la mensualidad (no hay cargo inicial) | 1–3 días (esperas Meta) | Esperas de verificación; depende de que el dueño del Facebook aparezca | ✗ |
 | **R3b Done-for-you (nuestra WABA)** | ~1 h | Cero | Factura Meta cae en NUESTRA tarjeta | 1 día | Techos duros: solo 1–3 pilotos | ✗ |
 | **R4 BSP (360dialog/Twilio/Wati)** | ~½ día integrar | Popup similar a R1 | €49/mes/número o ~20% markup/mensaje — recurrente | 1–7 días | Dependencia + costo recurrente por cliente; requiere permiso de gasto | ✗ |
 | **Canal B1: widget Chatwoot** | **~30 min por cliente** (+ 1 día de prueba una vez) | Pegar un snippet en su web (o lo pegamos nosotros) | Cero | **Mismo día** | Marca "Chatwoot" al pie; agent bot en Website sin verificar | ✅ |
@@ -271,18 +276,21 @@ Meta/BSPs.]
 
 ## 4. Qué cobramos en cada una
 
-Regla marco: el add-on ya está preciado (**Bs 1.500 instalación +
-Bs 1.490/mes + Meta por consumo**, `pricing.ts`). Ninguna ruta crea un
-precio nuevo sin decisión de Sergio.
+Regla marco: el add-on ya está preciado (**Bs 390/mes o Bs 3.900/año, sin cargo
+inicial**, `pricing.ts`). Ninguna ruta crea un precio nuevo sin decisión de Sergio.
+
+Sin instalación, el alta de Meta ya no tiene un cobro propio detrás: **es costo
+nuestro de onboarding**. Por eso la ruta barata en horas (R1, ~5 min) dejó de ser
+"margen sobre la instalación" y pasó a ser lo único que hace rentable el alta.
 
 | Ruta/canal | Qué se cobra |
 |---|---|
-| R1 Embedded Signup | Nada extra: el alta es parte de la instalación Bs 1.500 (y nos cuesta 5 min — margen puro sobre la instalación) |
+| R1 Embedded Signup | Nada extra: el alta va incluida en el add-on y nos cuesta ~5 min. Es la única ruta cuyo costo de alta se recupera en el primer mes |
 | R2 Video | **No se vende.** El video-guía del popup va incluido como material de onboarding |
-| R3 Done-for-you | Incluido en la instalación Bs 1.500 — es exactamente lo que esa instalación justifica hoy. **Excepción cotizable aparte:** rescate de cuentas Meta heredadas rotas (Business Manager perdido, verificación trabada, número secuestrado en otra WABA) = servicio técnico a medida, como ya contempla el pricing ("lo que no entre en el estándar se cotiza a medida") |
+| R3 Done-for-you | Incluido, sin cargo aparte — pero cuesta ~1–1,5 h nuestras y ya no hay instalación que las pague: son ~3 meses del add-on. Empujar a R1 siempre que se pueda. **Excepción cotizable aparte:** rescate de cuentas Meta heredadas rotas (Business Manager perdido, verificación trabada, número secuestrado en otra WABA) = servicio técnico a medida, como ya contempla el pricing ("lo que no entre en el estándar se cotiza a medida") |
 | R4 BSP | Si algún día se usa: el fee del BSP se traslada al cliente como **costo de terceros excluido** (regla dura de propuestas #5) — nunca absorberlo en el precio |
 | Canal widget (B1/C) | Mismo add-on: es el MISMO bot por otro canal. El botón wa.me sigue incluido gratis; lo cobrado es el bot con IA, salga por donde salga. Si Sergio quiere un escalón "solo widget web" más barato como puerta de entrada, es una decisión de pricing NUEVA → pendiente suyo, no de este doc |
-| Mensualidad Bs 1.490 | Cubre motor + bandeja + soporte del canal. El "+ Meta por consumo" queda en la WABA del cliente con SU tarjeta (crítico antes del 1-oct-2026, cuando Meta cobra la ventana de 24 h) |
+| Mensualidad Bs 390 | Cubre motor + bandeja + soporte del canal. El "+ Meta por consumo" queda en la WABA del cliente con SU tarjeta (crítico antes del 1-oct-2026, cuando Meta cobra la ventana de 24 h) |
 
 ---
 

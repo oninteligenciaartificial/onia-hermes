@@ -45,7 +45,7 @@ despues belleza. Primero conversion, despues fantasia visual.
 - `HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md`
 - `hermes-content/docs/UGC_CLIENT_VIDEO_PLAYBOOK.md`
 - `FINANCE_LOG_2026.md`
-- `ONIA_PRICING_2026.md`
+- **Precios: `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons)** — la fuente. Transcritos junto a sus funciones en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`ONIA_PRICING_2026.md` quedó degradado el 2026-08-27: es historia de junio, no fuente.)*
 - `ONIA_LEADS_PRIORITY_2026.md`
 - `hermes-content/references/sergio-approved-media/avatar-realism-lab-20260604.json`
 
