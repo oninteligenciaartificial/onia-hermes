@@ -511,33 +511,11 @@ function emph(s) {
 // Continuation curve: a green stroke that bleeds off the right edge on
 // non-last slides (and enters from the left on non-first), giving the
 // Solaris-style panorama / swipe cue. Alternates arc direction by parity.
-function continuationCurve(idx, total) {
-  const last = idx === total - 1;
-  const first = idx === 0;
-  const down = idx % 2 === 0;
-  // Curve stays in the UPPER band (y 300-640), the floating-object zone, and
-  // never dips into the headline/body area at the bottom — so it reads as a
-  // continuous panorama behind the 3D object without crossing the text.
-  // enter from left (unless first), exit right (unless last)
-  // Las Y estan escritas en el lienzo FEED (1350 de alto) y se escalan al formato
-  // activo. Sin esto la curva quedaba clavada en y=600 tanto en feed (44% de la
-  // altura) como en story (31%): el viewBox escalaba y la curva no, asi que en story
-  // la panoramica aparecia descolocada respecto del objeto y del texto.
-  // Roto desde que existe --format; no se veia porque el test que lo cazaba llevaba
-  // meses rojo por otras assertions viejas (arreglado 2026-08-23).
-  const sy = (y) => Math.round(y * FMT.h / FORMATS.feed.h);
-  const P = (...ys) => ys.map(sy);
-  const [y300, y560, y600, y340, y320] = P(300, 560, 600, 340, 320);
-  const enter = first ? '' : (down
-    ? `M -60 ${y300} C 220 ${y300} 260 ${y560} 540 ${y560}`
-    : `M -60 ${y600} C 220 ${y600} 260 ${y340} 540 ${y340}`);
-  const exit = last ? '' : (down
-    ? `M 540 ${y560} C 860 ${y560} 940 ${y320} 1140 ${y320}`
-    : `M 540 ${y340} C 860 ${y340} 940 ${y600} 1140 ${y600}`);
-  const paths = [enter, exit].filter(Boolean)
-    .map((d) => `<path d="${d}" />`).join('');
-  return `<svg class="curve" viewBox="0 0 ${FMT.w} ${FMT.h}" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
-}
+// La curva de continuacion se borro el 2026-08-27. Sergio: "cambia ese fondo con las
+// lineas por detras". Cruzaba por detras del cuerpo de texto; para que no se leyera como
+// un tachado hubo que bajarle la opacidad de .95 a .42, y a esa opacidad ya no aportaba
+// nada. Un adorno que hay que apagar para que no moleste no es un adorno: es ruido.
+// Estaba en `continuationCurve()` — recuperable del historial si alguna vez se revive.
 
 // Pack: dark-product (Solaris-style). Black canvas, pills, continuation curve,
 // condensed title with *green* keyword, optional 3D object, callout body.
@@ -734,7 +712,7 @@ ${MARKS_CSS}
 .slide.cta .footer .handle { color:var(--onia-ink); }
 </style></head>
 <body><div class="slide ${role}${object ? ' has-shot' : ''}">
-  ${continuationCurve(idx, total)}
+  <!-- sin curva de fondo: ver el comentario de continuationCurve() -->
   ${pills}
   ${object}
   ${block}

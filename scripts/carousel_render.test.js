@@ -106,10 +106,12 @@ test('editorial-photo without bg still renders (ink fallback)', () => {
   assert.ok(!html.includes('class="photo"'));
   assert.ok(html.includes('class="slide point"'));
 });
-test('dark-product cover renders pills, curve, footer, green keyword', () => {
+test('dark-product cover renders pills, footer, green keyword — y YA NO la curva', () => {
   const html = darkProductHtml({ role: 'cover', pill: 'Automatización', headline: 'Invertí en *captar*', body: 'x' }, 0, 5, 'onia', {});
   assert.ok(html.includes('class="pills"'));
-  assert.ok(html.includes('class="curve"'));
+  // Sergio la mando sacar el 2026-08-27: cruzaba por detras del texto y a la opacidad
+  // que hacia falta para no leerse como tachado, ya no aportaba nada.
+  assert.ok(!html.slice(html.indexOf('<body>')).includes('class="curve"'), 'sin curva de fondo');
   assert.ok(html.includes('<span class="g">captar</span>'));
   assert.ok(html.includes('Automatización'));
 });
@@ -117,15 +119,6 @@ test('dark-product save slide shows FRAMEWORK guardá tag', () => {
   const html = darkProductHtml({ role: 'save', headline: 'Checklist', body: 'x', save_worthy: true }, 3, 5, 'onia', {});
   assert.ok(html.includes('FRAMEWORK'));
   assert.ok(html.includes('Guardá esto'));
-});
-test('curve: first slide exit-only, middle has both, last entry-only', () => {
-  const curvePaths = (html) => {
-    const svg = html.slice(html.indexOf('class="curve"'), html.indexOf('</svg>'));
-    return (svg.match(/<path /g) || []).length;
-  };
-  assert.strictEqual(curvePaths(darkProductHtml({ role: 'cover', headline: 'H' }, 0, 3, 'onia', {})), 1);
-  assert.strictEqual(curvePaths(darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {})), 2);
-  assert.strictEqual(curvePaths(darkProductHtml({ role: 'cta', headline: 'H' }, 2, 3, 'onia', {})), 1);
 });
 test('dark-product object slot rendered when provided', () => {
   const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { object: '/tmp/panel.png' });
@@ -153,20 +146,18 @@ test('typographic square y story cambian el lienzo', () => {
   assert.ok(slideHtml({ headline: 'H', body: '' }, 0, 3, 'onia', '').includes('width:1080px; height:1920px'));
   setFormat('feed');   // dejarlo como estaba: setFormat muta estado del modulo
 });
-test('dark-product story: lienzo y viewBox de la curva escalan juntos', () => {
+test('dark-product story: el lienzo escala con --format', () => {
+  // Antes este test verificaba tambien el viewBox de la curva de fondo, que se borro
+  // el 2026-08-27. Lo que sigue importando es que el lienzo cambie con el formato:
+  // ese bug ya estuvo vivo meses sin que nadie lo viera.
   setFormat('story');
   const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
-  assert.ok(html.includes('width:1080px; height:1920px'));
-  assert.ok(html.includes('viewBox="0 0 1080 1920"'));
-  // idx impar entra por la rama de y 600 (feed), escalada a story: 600*1920/1350 = 853
-  assert.ok(html.includes('M -60 853'));
+  assert.ok(html.includes('width:1080px; height:1920px'), 'story = 1080x1920');
   setFormat('feed');
+  const feed = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
+  assert.ok(feed.includes('width:1080px; height:1350px'), 'feed = 1080x1350');
 });
-test('dark-product sin formato conserva el viewBox feed historico', () => {
-  const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
-  assert.ok(html.includes('viewBox="0 0 1080 1350"'));
-  assert.ok(html.includes('M -60 600'));
-});
+
 test('dark-neon y editorial-photo respetan el formato', () => {
   setFormat('square');
   const dn = darkNeonHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
