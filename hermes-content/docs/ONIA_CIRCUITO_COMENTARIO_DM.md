@@ -135,7 +135,17 @@ envío. Si Meta rechaza, esa persona queda bloqueada 24 h igual. Un lead real qu
 un mal momento se pierde por un día entero sin que nadie se entere (por H1). El `touch`
 debería ir después de confirmar `message_id`.
 
-**H3 — El PDF de la palabra HUMO da 404.**
+**H3 — El PDF de la palabra HUMO da 404. ✅ RESUELTO 2026-08-27.**
+> El archivo existia, pero en el repo del PRODUCTO (`onia-platform`), cuyo `/recursos` esta
+> detras de login. `onia.com.bo` lo sirve `onia-landing`, que se construye desde
+> `web-factory/apps/onia-platform/public/` — y ahi solo estaba el PDF de LISTA. Se copio a
+> esa fuente (durable, sobrevive el proximo deploy) y al runtime vivo.
+> **Ojo:** copiarlo no alcanzo — Next standalone indexa `public/` al arrancar y siguio
+> dando 404 hasta reiniciar el contenedor. Hoy responde **200, 306.319 bytes,
+> `application/pdf`**.
+>
+> Texto original del hallazgo:
+
 El DM de Lucía para HUMO manda a `onia.com.bo/recursos/5-herramientas-ia-bolivia.pdf`.
 **Hoy responde 404** (verificado desde el VPS y desde afuera). El propio comentario del
 workflow dice que la palabra se encendió el 23-ago porque "el PDF existe y responde 200 en

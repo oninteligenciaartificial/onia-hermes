@@ -173,6 +173,28 @@ escribir — ese archivo enruta TODOS los dominios y romperlo los tumba a todos.
 Un redirect que quizas haya que revertir va **302, nunca 301**: el permanente lo
 cachea el navegador y despues no hay vuelta atras sin limpiar cache del usuario.
 
+## 4.c Next standalone indexa `public/` al ARRANCAR
+
+> El 2026-08-27: el PDF de un lead magnet daba 404. Se copio al bind mount, el contenedor
+> lo veia (`ls` lo mostraba, `head -c 4` devolvia `%PDF`), permisos correctos... y Next
+> seguia devolviendo 404 **incluso con cache-buster**.
+
+Poner un archivo en `public/` de un Next standalone **no alcanza**: hay que **reiniciar el
+contenedor** para que lo tome. Un `ls` desde adentro demostrando que el archivo esta ahi
+NO prueba que se sirva.
+
+```bash
+docker restart onia-landing && sleep 12
+curl -s -o /dev/null -w "%{http_code} %{content_type}
+" "https://onia.com.bo/recursos/x.pdf?cb=$(date +%s)"
+```
+
+⚠️ Y el arreglo **no dura si solo se toca el runtime**: el deploy pisa `runtime-next`
+entero. El archivo tiene que ir a la FUENTE que construye ese sitio. Para `onia-landing`
+la fuente es **`web-factory/apps/onia-platform/public/`** del repo `onia-hermes` — nombre
+confuso: `apps/onia-platform` dentro de web-factory es la LANDING, no el producto. El
+producto es el repo `onia-platform`, y su `/recursos` esta detras de login (307).
+
 ## 5. Verificar contra el sistema CORRECTO
 
 Estos dieron diagnosticos falsos con evidencia que parecia buena:
