@@ -86,14 +86,28 @@ Verificado: las 22 pantallas del panel **leen datos reales**. Ninguna es maqueta
 ilimitados y todas las funciones encendidas. **Bs 1.400 de diferencia sin ninguna
 diferencia funcional en el código.**
 
-### 4.2 Empresa se justifica con lo único que no existe
+### 4.2 Empresa: la mitad operativa de su promesa ya existe, la fiscal no
 Su mensaje de activación promete *"multi-sucursal, contabilidad avanzada, instancia
-privada"*. Pero:
-- **multi-sucursal NO EXISTE** — `branchId` da cero coincidencias en todo el repo
+privada"*. Estado al **2026-08-25**, con el deploy `0fc7e39` en producción:
+
+- **Varios depósitos: SÍ, vivo.** Se dan de alta desde `/comercio/inventario`, el stock
+  y los lotes son por depósito, y hay **traspaso interno** entre ellos (el "pedido
+  interno" que traba la venta en Bolivian Electric). El buscador de producto muestra el
+  saldo **del depósito del que se saca**, no el total.
+- **Sucursal FISCAL ante el SIN: NO.** No hay entidad de sucursal con su código, su punto
+  de venta ni su CUF. Quedó afuera a propósito: el emisor SIAT todavía es mock, así que
+  modelarla ahora obligaría a migrar datos vivos después.
 - **contabilidad avanzada** es transversal (`COMMON_SEGMENTS`): la tienen todos los planes
 - **instancia privada** es el add-on self-hosted, que se cobra aparte
 
-🔴 **Hoy no se puede vender Empresa sin prometer algo que no entregamos.**
+⚠️ **Corregido 2026-08-25.** Acá decía "multi-sucursal NO EXISTE — `branchId` da cero
+coincidencias". El grep era cierto y la conclusión falsa: `branchId` no existe, pero
+`OniaCommerceWarehouse` sí, con el stock ya indexado por depósito desde el primer día.
+Lo que faltaba era el cableado al producto, no el motor. **Un grep sirve para descartar,
+nunca para confirmar** — y acá se usó al revés.
+
+🟡 **Empresa se puede vender por sus depósitos, NO por sucursales fiscales.** Decir
+"manejá tus sucursales ante Impuestos" sigue siendo prometer lo que no entregamos.
 
 ### 4.3 El inventario avanzado cobra por lo que ya es gratis
 De las cuatro cosas que promete: **compras a crédito, proveedores y alertas de stock bajo
@@ -132,15 +146,16 @@ enciende una capacidad para UNA organización desde `/admin/organizations/[id]/c
 2. **El salto real: Profesional Bs 750/mes.** Es el único escalón con diferencia funcional
    de verdad. Todo el argumento de venta vive acá.
 3. **Completo Bs 1.500** solo cuando los topes molestan de verdad — no como "el plan bueno".
-4. **Empresa Bs 2.900: no vender hasta que exista multi-sucursal.** Hoy su promesa no se
-   sostiene (§4.2).
+4. **Empresa Bs 2.900: vendible por depósitos, no por sucursales fiscales.** La parte
+   operativa (varios depósitos + traspaso interno) está viva desde el 2026-08-25; la
+   sucursal ante el SIN no existe. Vender lo primero, callar lo segundo (§4.2).
 5. **El chatbot Bs 390/mes se vende DESPUÉS del primer cierre**, sobre cualquier plan.
    Nunca en la primera conversación: duplica la superficie de promesa.
 
 ### Lo que no se promete
 
-Emitir factura electrónica (el emisor es mock) · multi-sede · modo offline · visión por
-computadora · cualquier cifra de resultados de Onia (**cero clientes pagando**: prohibido
+Emitir factura electrónica (el emisor es mock) · **sucursales fiscales ante el SIN**
+(los depósitos sí, la sucursal tributaria no) · modo offline · visión por computadora · cualquier cifra de resultados de Onia (**cero clientes pagando**: prohibido
 inventar testimonios, logos o porcentajes).
 
 ---

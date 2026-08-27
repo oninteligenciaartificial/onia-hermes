@@ -11,20 +11,27 @@ deseos. Estado del producto y del código medido el **2026-08-24**.
 
 ---
 
-## 1. La pieza que desbloquea dos cosas a la vez
+## 1. La pieza que desbloqueaba dos cosas — ✅ EN PRODUCCIÓN (2026-08-25, `0fc7e39`)
 
-**Multi-sucursal.** `branchId` da cero coincidencias en todo el repo, y de ella dependen:
+**Multi-almacén.** Encendido en producción. Desbloqueaba dos cosas y las desbloqueó:
 
-- **El plan Empresa (Bs 2.900).** Su `activationMessage` promete *"multi-sucursal"*. Sin
-  eso, hoy Completo y Empresa tienen **límites idénticos** — Bs 1.400 de diferencia por
-  nada. Es el señuelo de Lovable que nuestro propio doc jura no copiar.
-- **Bolivian Electric.** Su venta se traba exactamente ahí: *"si no te alcanzó en tu
-  almacén, tenés que hacer primero un pedido interno… y de ahí recién podés facturar."*
+- **El plan Empresa (Bs 2.900).** Ya tiene con qué diferenciarse de Completo por el lado
+  operativo: varios depósitos y traspaso entre ellos. ⚠️ La **sucursal fiscal ante el
+  SIN** sigue sin existir — Empresa se vende por depósitos, nunca por "sucursales ante
+  Impuestos" (detalle en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.2).
+- **Bolivian Electric.** El "pedido interno" que trababa su venta ya existe: sale del
+  origen al promedio vigente y entra al destino **al mismo costo**, con los lotes y sus
+  vencimientos viajando con la mercadería.
 
-**Una función, dos bloqueos.** Por eso va primera.
+**Qué se encontró al construirlo:** el motor estaba entero y desconectado. El stock ya
+era por depósito (`@@unique(organización, almacén, variante)`) y `applyTransfer` vivía
+probado en `kardex.ts` **sin un solo llamador**. El producto resolvía siempre el primer
+almacén activo porque no había pantalla ni API. Faltaba el cableado, no la funcionalidad
+— el mismo patrón de "construido y apagado" que ya nos mordió tres veces.
 
-**Qué incluye:** `branchId` en los modelos que corresponda · stock por almacén · pedido
-interno entre sucursales · que la factura espere el ingreso.
+**Lo que se llevó puesto de paso:** el buscador de producto sumaba el stock de TODOS los
+depósitos. Con uno solo daba igual; con varios, la **caja** ofrecía mercadería que está
+en otro lado y la venta rebotaba recién al confirmar. Corregido en la raíz.
 
 ---
 
@@ -34,7 +41,7 @@ interno entre sucursales · que la factura espere el ingreso.
 
 | # | Función | Por qué | Costo |
 |---|---|---|---|
-| 1 | **Multi-sucursal** | §1 | grande |
+| ~~1~~ | ~~**Multi-almacén**~~ | §1 | ✅ **en producción 2026-08-25** |
 | 2 | **Gatear lo que el add-on de inventario cobra** | Hoy compras, proveedores y alertas son **gratis para todos** (`/comercio/fiados` sin gate) y el add-on cobra Bs 180 por ellas | chico |
 | 3 | **Contador de uso visible** | `checkPatientLimit` devuelve `current` y `limit` y **nadie los muestra**: el cliente choca con un 403 sin aviso | chico |
 | 4 | **Techo blando** | aviso al 80% + un mes de tolerancia, en vez del rebote | medio |
@@ -75,7 +82,9 @@ Los mecanismos están en `ONIA_PSICOLOGIA_PRECIOS_COMPETENCIA.md`. Acá van ater
 checkout**. Ponerlo como cuarta columna "hablar con ventas" hace que **Bs 1.500 se lea
 barato sin cambiar un solo precio**. Es el movimiento de Webflow con Team $2.500 al lado de
 Premium $25.
-⚠️ **Mostrarlo NO es venderlo.** Mientras no exista multi-sucursal, es ancla y nada más.
+⚠️ **Mostrarlo NO es venderlo.** Desde el 2026-08-25 Empresa ya tiene diferencia real
+(varios depósitos + traspaso). Lo que sigue sin existir es la sucursal FISCAL: el ancla
+se muestra, y se vende por depósitos, nunca por "sucursales ante Impuestos".
 
 **El anual como número grande.** El descuento ya es ~17% (10 meses por 12) y **no lo decimos
 en ninguna parte**: vive como comentario en el código. Es la misma plata con mejor lectura,
@@ -127,14 +136,15 @@ markup.** Decisión pendiente.
 
 ## 4. El orden, en una línea
 
-**Multi-sucursal** (desbloquea Empresa y Bolivian Electric) → **los tres movimientos de
-precio que no cuestan código** → **llenar el conocimiento del bot** → **gatear el add-on de
+~~Multi-almacén~~ ✅ (hecho, en producción) → **los tres movimientos de precio que no
+cuestan código** → **llenar el conocimiento del bot** → **gatear el add-on de
 inventario** → **techo blando y contador visible**.
 
 ### Lo que espera decisión de Sergio
 
-1. **¿Empresa se construye o se saca de la oferta?** Hoy no se puede vender sin prometer
-   multi-sucursal.
+1. ~~¿Empresa se construye o se saca de la oferta?~~ **Resuelto 2026-08-25**: se
+   construyó la parte operativa. Queda decidir si la sucursal FISCAL se hace (depende de
+   que el emisor SIAT deje de ser mock) o si Empresa se redefine sin ella.
 2. **¿El markup de Meta es 20% o es a costo?** El código y la etiqueta dicen cosas distintas.
 3. **¿Los precios de webs y consultoría entran en la regla de fuente única?** Hoy no tienen
    contra qué medirse.
