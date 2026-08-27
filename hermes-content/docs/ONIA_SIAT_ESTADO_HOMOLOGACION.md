@@ -212,6 +212,51 @@ node src/fase1-runner.mjs --etapa IV       # una sola etapa
 Con `/opt/onia-siat/siat-piloto.env` cargado en el ambiente. El estado vive en
 `fase1-state.json` (checkpoint/resume) y el log por operación en `fase1-log.ndjson`.
 
+### Lo que reveló correrlo (2026-08-27)
+
+Se corrió contra el piloto y **cada combo devolvió un error distinto y útil**. Eso es el
+valor del cambio: antes un fallo mataba la etapa entera y no se sabía de cuál caso venía.
+
+| Combo | Qué dijo el SIN / el runner | Estado |
+|---|---|---|
+| `pv0-ds1-tf1` | — | **funciona** (125/125, el único que el SIN ya contaba) |
+| `pv1-*` (3 combos) | **`933 · EL PUNTO DE VENTA ES INEXISTENTE O INVALIDO`** | bloqueado: **falta crear el PdV 1** |
+| `pv0-ds17-tf1` | `995 · SERVICIO NO DISPONIBLE` → resuelto → `EL PARAMETRO ARCHIVO ES INVALIDO … cvc-elt.1.a` | falta el XML del sector |
+| `pv0-ds24-tf3` | `995 · SERVICIO NO DISPONIBLE` → resuelto → operaciones sin mapear | falta el servicio de ajuste |
+
+**Tres hallazgos que no se sabían:**
+
+1. **`933 · EL PUNTO DE VENTA ES INEXISTENTE O INVALIDO`.** El PdV 1 no existe. Confirmado
+   por el SIN, no inferido. **La mitad de la matriz depende de crearlo.**
+
+2. **Cada documento sector tiene su PROPIO servicio SOAP.** Mandarlos todos a
+   `ServicioFacturacionCompraVenta` devuelve `995 · SERVICIO NO DISPONIBLE: Para la
+   modalidad 2 y/o sector N`. Los nombres salen del PDF de la solicitud 9473 y se
+   confirmaron pidiendo el `?wsdl` de cada uno (los 4 responden 200):
+
+   | Sector | Servicio | Operación de emisión |
+   |---|---|---|
+   | 1 · compra-venta | `ServicioFacturacionCompraVenta` | `recepcionFactura` |
+   | 17 · hospitales/clínicas | `ServicioFacturacionComputarizada` | `recepcionFactura` |
+   | 24 · nota crédito-débito | `ServicioFacturacionDocumentoAjuste` | **`recepcionDocumentoAjuste`** |
+
+   El de ajuste **no comparte los nombres de operación**: son
+   `recepcionDocumentoAjuste`, `anulacionDocumentoAjuste`,
+   `reversionAnulacionDocumentoAjuste`, `verificacionEstadoDocumentoAjuste`.
+
+3. **El CUFD caduca a las 24h y el estado sobrevive días.** El guardado era del 6-ago y el
+   SIN respondía `CUFD FUERA DE TOLERANCIA`. Ahora `ensureCufd()` lo renueva solo antes de
+   emitir/anular/revertir, sin contarlo como prueba de la etapa III. **Verificado en vivo:
+   `cufd_refresh → ok=true`.**
+
+### Lo que falta para desbloquear cada combo
+
+| Combo | Qué falta | Quién |
+|---|---|---|
+| `pv1-*` (3) | Crear el **Punto de Venta 1** en SIAT | **Sergio** |
+| `pv0-ds17-tf1` | El XML del sector 17. `ROOT_ELEMENTS` en `xml-builder.mjs` solo tiene `facturaComputarizadaCompraVenta`; el SIN rechaza con `cvc-elt.1.a` (elemento no declarado). Hace falta el root element y los campos del XSD de hospitales/clínicas | dev |
+| `pv0-ds24-tf3` | Mapear el servicio de documento de ajuste: operaciones nuevas + su XML | dev |
+
 ---
 
 ## 8. Credenciales — ya las tenemos
@@ -302,8 +347,9 @@ gratuito y se refuta con un Google.
 
 ## 11. Lo que falta verificar
 
-- **Que exista el Punto de Venta 1** bajo la sucursal 0. Sin él la etapa I no cierra: el
-  CUIS se pide por sucursal+PdV.
+- ~~Que exista el Punto de Venta 1~~ → **RESUELTO: no existe.** El SIN devuelve
+  `933 · EL PUNTO DE VENTA ES INEXISTENTE O INVALIDO`. Hay que **crearlo** — bloquea la
+  mitad de la matriz.
 - **El desglose de las etapas VI y IX.** Sus totales (560, 160) se dividen limpio por 2
   puntos de venta, pero no abrimos su "Listado de Pruebas". Están marcadas `[VERIFICAR]`
   en `STAGE_PLAN`. El contador del portal es el árbitro.

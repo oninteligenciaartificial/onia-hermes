@@ -23,6 +23,9 @@ import {
   PUNTOS_VENTA,
   DOC_SECTOR_CASES,
   EMISION_CASES,
+  EMISION_CASES_SOPORTADOS,
+  SERVICIO_POR_DOC_SECTOR,
+  DOC_SECTOR_SIN_SOPORTE,
   DEFAULT_COMBO,
   comboId,
   migrateState,
@@ -34,6 +37,7 @@ import {
   buildTestInvoice,
   computeSinOffset,
   cufdVigenteDesde,
+  cufdVencido,
   errorKey,
   eventWindow,
   extractSyncItems,
@@ -708,12 +712,22 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
     return r;
   }
 
-  it("la etapa IV recorre los 6 combos, no 750 veces el mismo", async () => {
+  it("la etapa IV recorre TODOS los combos emitibles, no 750 veces el mismo", async () => {
     const r = runnerEspia();
     await r.etapaIV(1); // 1 emision por combo
     const combos = r.vistos.filter((v) => v.etapa === "IV").map((v) => v.combo);
-    assert.deepEqual(new Set(combos), new Set(EMISION_CASES.map(comboId)));
-    assert.equal(combos.length, 6);
+    assert.deepEqual(new Set(combos), new Set(EMISION_CASES_SOPORTADOS.map(comboId)));
+    assert.equal(combos.length, 4);
+  });
+
+  it("los combos del sector 24 se bloquean con el motivo, no en silencio", async () => {
+    const r = runnerEspia();
+    await r.etapaIV(1);
+    const bloqueados = Object.keys(r.state.etapas.IV.blockedCases);
+    assert.deepEqual(new Set(bloqueados), new Set(["pv0-ds24-tf3", "pv1-ds24-tf3"]));
+    for (const b of Object.values(r.state.etapas.IV.blockedCases)) {
+      assert.match(b.mensaje.descripcion, /recepcionDocumentoAjuste/);
+    }
   });
 
   it("cada emision queda etiquetada con su combo", async () => {
@@ -721,7 +735,7 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
     await r.etapaIV(1);
     assert.deepEqual(
       new Set(r.state.invoices.map((f) => f.combo)),
-      new Set(EMISION_CASES.map(comboId)),
+      new Set(EMISION_CASES_SOPORTADOS.map(comboId)),
     );
   });
 
@@ -734,7 +748,7 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
       // La anulada de cada combo tiene que ser la emitida bajo ese combo.
       assert.ok(EMISION_CASES.map(comboId).includes(emitidaEn));
     }
-    assert.equal(r.state.invoices.filter((f) => f.anulada).length, 6);
+    assert.equal(r.state.invoices.filter((f) => f.anulada).length, 4);
   });
 
   it("la reversion tambien respeta el combo", async () => {
@@ -742,7 +756,7 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
     await r.etapaIV(1);
     await r.etapaVII(1);
     await r.etapaXI(1);
-    assert.equal(r.state.invoices.filter((f) => f.revertida).length, 6);
+    assert.equal(r.state.invoices.filter((f) => f.revertida).length, 4);
   });
 
   it("anular sin haber emitido en ese combo falla claro, no toma la de otro", async () => {
@@ -780,5 +794,108 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
     };
     await r.etapaIII(1);
     assert.deepEqual(Object.keys(r.state.cufdByPv).sort(), ["0", "1"]);
+  });
+});
+
+describe("un caso con prerequisito faltante no mata la etapa", () => {
+  it("el throw se convierte en error de racha y los demas casos siguen", async () => {
+    const r = Object.create(Runner.prototype);
+    r.state = emptyState();
+    r.combo = { ...DEFAULT_COMBO };
+    r.log = () => {};
+    r.checkpoint = () => {};
+    const corridos = [];
+    // El primer caso revienta (como assembleEmission sin cufd.codigoControl);
+    // el segundo anda. Antes de la guarda, el primero abortaba la etapa entera.
+    for (const caso of ["rompe", "anda"]) {
+      await r.loop(
+        "IV",
+        1,
+        async () => {
+          corridos.push(caso);
+          if (caso === "rompe") throw new Error("assembleEmission requiere cufd.codigoControl");
+          return { ok: true, parsed: { transaccion: true } };
+        },
+        { caseId: caso },
+      );
+    }
+    assert.ok(corridos.includes("anda"), "el segundo caso nunca se intento");
+    assert.equal(r.state.etapas.IV.cases.anda, 1);
+    assert.ok(!r.state.etapas.IV.cases.rompe, "el caso roto no deberia contar");
+    // Y se bloquea EN EL ACTO: un prerequisito faltante no mejora reintentando.
+    assert.equal(corridos.filter((c) => c === "rompe").length, 1);
+    assert.match(r.state.etapas.IV.blockedCases.rompe.mensaje.descripcion, /codigoControl/);
+  });
+
+  it("un StopError sigue abortando (no se lo traga la guarda)", async () => {
+    const r = Object.create(Runner.prototype);
+    r.state = emptyState();
+    r.combo = { ...DEFAULT_COMBO };
+    r.log = () => {};
+    r.checkpoint = () => {};
+    await assert.rejects(
+      r.loop("IV", 1, async () => {
+        throw new StopError("IV", { key: "x", count: 5 }, null);
+      }),
+      StopError,
+    );
+  });
+});
+
+
+describe("cada documento sector tiene su propio servicio SOAP (SIN 995)", () => {
+  it("el ruteo cubre los 3 sectores de la solicitud 9473", () => {
+    assert.deepEqual(SERVICIO_POR_DOC_SECTOR, {
+      1: "FACTURACION_COMPRA_VENTA",
+      17: "FACTURACION_COMPUTARIZADA",
+      24: "FACTURACION_DOCUMENTO_AJUSTE",
+    });
+  });
+
+  it("compra-venta y salud resuelven servicio; el 24 explica por que no", () => {
+    const r = Object.create(Runner.prototype);
+    r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 1, tipoFacturaDocumento: 1 };
+    assert.equal(r.servicio, "FACTURACION_COMPRA_VENTA");
+    r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 17, tipoFacturaDocumento: 1 };
+    assert.equal(r.servicio, "FACTURACION_COMPUTARIZADA");
+    r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 24, tipoFacturaDocumento: 3 };
+    assert.throws(() => r.servicio, /recepcionDocumentoAjuste/);
+  });
+
+  it("un sector sin mapear no se manda al servicio equivocado", () => {
+    const r = Object.create(Runner.prototype);
+    r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 99, tipoFacturaDocumento: 1 };
+    assert.throws(() => r.servicio, /sin servicio SOAP mapeado/);
+  });
+
+  it("EMISION_CASES_SOPORTADOS deja afuera exactamente al sector 24", () => {
+    assert.equal(EMISION_CASES_SOPORTADOS.length, 4);
+    assert.ok(EMISION_CASES_SOPORTADOS.every((c) => !DOC_SECTOR_SIN_SOPORTE.has(c.codigoDocumentoSector)));
+  });
+});
+
+describe("cufdVencido — el CUFD del dia anterior no sirve", () => {
+  const ahora = 1_800_000_000_000;
+  const vivo = { codigo: "C", codigoControl: "A-1", obtenidoEn: ahora - 1000 };
+
+  it("un CUFD recien obtenido esta vigente", () => {
+    assert.equal(cufdVencido(vivo, ahora), false);
+  });
+
+  it("uno de hace mas de 24h esta vencido", () => {
+    assert.equal(cufdVencido({ ...vivo, obtenidoEn: ahora - CUFD_VIGENCIA_MS - 1 }, ahora), true);
+  });
+
+  it("justo en el limite de 24h ya no sirve (el SIN no da tolerancia)", () => {
+    assert.equal(cufdVencido({ ...vivo, obtenidoEn: ahora - CUFD_VIGENCIA_MS }, ahora), true);
+  });
+
+  it("sin codigoControl esta vencido: el CUF no se puede armar", () => {
+    assert.equal(cufdVencido({ codigo: "C", obtenidoEn: ahora }, ahora), true);
+  });
+
+  it("null / indefinido cuentan como vencido", () => {
+    assert.equal(cufdVencido(null, ahora), true);
+    assert.equal(cufdVencido(undefined, ahora), true);
   });
 });
