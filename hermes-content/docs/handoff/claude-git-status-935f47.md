@@ -27,6 +27,11 @@ diciendo lo mismo que el código.
 | **Buscador de producto scopeado al depósito** (la caja ya no ofrece stock ajeno) | 🟢 vivo |
 | Vencimientos por lote, reprecio por devaluación (deploy anterior `03b410a`) | 🟢 vivo |
 | **VPS sano** — steal 95% → 9%, load 171 → ~1, login 9,3 s → 0,14 s | 🟢 |
+| **`cal.onia.com.bo`** — daba 502; ahora redirige (302) a `onia.com.bo/empezar` | 🟢 vivo |
+| **`forms.onia.com.bo`** — daba 502; contenedor nginx recreado, 3 formularios y sus webhooks verificados | 🟢 vivo |
+| **Botón de Google en el login** — llevaba a un 400 crudo; ya no se dibuja | 🟢 |
+| **Add-on de inventario** — dejó de cobrarse; las funciones quedan visibles como incluidas | 🟢 |
+| **Contador de uso del plan** — el tope se ve antes del 403 | 🟢 |
 
 `BUILD_ID` en producción: `2v-oviM-B2TOEoIsxmdJW`.
 Backup del runtime anterior: `/opt/onia-platform/runtime-next.prev-20260825-204330`.
@@ -82,6 +87,21 @@ con cache-buster, o sea que el origen sirve el build nuevo y no es caché de Clo
 probada para el próximo deploy; copiarlos y cambiar el `COMMIT`.
 
 ---
+
+## 4.b Dos dominios publicados servían 502 sin que nadie lo supiera
+
+`cal.onia.com.bo` y `forms.onia.com.bo` estaban caídos hacía días. En los dos casos el
+contenedor había desaparecido y **la ruta de Traefik seguía publicada, con certificado
+válido**. Un `docker rm` no borra la ruta.
+
+- **cal**: los datos sobrevivieron pero **el `.env` no**, y Postgres ignora una contraseña
+  nueva sobre un volumen ya inicializado. Resucitarlo costaba cirugía + 3 contenedores para
+  correr una agenda que ya vendemos → **se redirige a `/empezar`** (302, reversible).
+- **forms**: no se había perdido nada. Los 3 HTML y la config de nginx seguían en
+  `/opt/onia-forms`. Faltaba **sólo volver a correr el contenedor**.
+
+La lección quedó en la skill `onia-infra` §4.b: publicar un dominio crea una deuda de
+monitoreo que no se paga sola.
 
 ## 5. Intentos fallidos (lo que NO hay que repetir)
 

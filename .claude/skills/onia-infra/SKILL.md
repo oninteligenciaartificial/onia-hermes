@@ -145,6 +145,34 @@ Ese dia habia **tres causas nuestras** comiendo CPU:
 
 ---
 
+## 4.b Las rutas de Traefik SOBREVIVEN al contenedor
+
+> El 2026-08-27 encontramos **DOS dominios publicos sirviendo 502 desde hacia dias**:
+> `cal.onia.com.bo` y `forms.onia.com.bo`. En los dos casos el contenedor habia
+> desaparecido y **la ruta seguia publicada**. Nadie se entero porque nadie los mira.
+
+Un `docker rm` no borra la ruta. El dominio queda vivo, con certificado valido, y
+devuelve 502 hasta que alguien lo abre. **Publicar un dominio crea una deuda de
+monitoreo que no se paga sola.**
+
+Al levantar o bajar cualquier cosa con dominio propio:
+
+```bash
+# que rutas hay, y a que servicio apuntan
+grep -oE 'Host\(`[^`]+`\)' /etc/easypanel/traefik/config/onia-manual-routes.yaml | sort -u
+# y despues: TODOS esos dominios, no solo el que tocaste
+for d in onia.com.bo app.onia.com.bo cal.onia.com.bo forms.onia.com.bo \
+         center.onia.com.bo chat.onia.com.bo postiz.onia.com.bo; do
+  curl -s -o /dev/null -w "  $d -> %{http_code}\n" --max-time 20 "https://$d"
+done
+```
+
+**Antes de editar ese archivo**: backup con el patron que ya existe
+(`onia-manual-routes.yaml.bak-<motivo>-<fecha>`), y validar que parsea ANTES de
+escribir — ese archivo enruta TODOS los dominios y romperlo los tumba a todos.
+Un redirect que quizas haya que revertir va **302, nunca 301**: el permanente lo
+cachea el navegador y despues no hay vuelta atras sin limpiar cache del usuario.
+
 ## 5. Verificar contra el sistema CORRECTO
 
 Estos dieron diagnosticos falsos con evidencia que parecia buena:

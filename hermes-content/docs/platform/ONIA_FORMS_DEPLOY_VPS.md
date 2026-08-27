@@ -1,5 +1,45 @@
 # Onia Forms — Deploy VPS (runbook)
 
+> ⚠️ **2026-08-27 — se cayo y se revivio.** El contenedor `onia-forms` DESAPARECIO
+> (probablemente en la limpieza del VPS durante la crisis de CPU). `forms.onia.com.bo`
+> quedo devolviendo **502 durante dias** y nadie se entero: la ruta de Traefik sigue
+> viva aunque el contenedor detras no exista.
+>
+> **Nada se habia perdido**: los 3 HTML seguian en `/opt/onia-forms/html`, la config de
+> nginx en `/opt/onia-forms/nginx/default.conf`, y la ruta en Traefik. Faltaba SOLO
+> volver a correr el contenedor. Comando exacto en "Como se levanta" abajo.
+>
+> **Cambio al revivirlo: ya NO se publica el puerto `8189`.** El firewall solo deja
+> 80/443, asi que ese puerto nunca sirvio para verificar y era exposicion al pedo.
+> Traefik llega por la red `easypanel`.
+
+## Como se levanta (probado 2026-08-27)
+
+```bash
+docker run -d --name onia-forms --network easypanel --restart unless-stopped   -v /opt/onia-forms/html:/usr/share/nginx/html:ro   -v /opt/onia-forms/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro   nginx:alpine
+```
+
+**Verificacion que SI cuenta** (un 200 no alcanza — el form puede renderizar y postear
+al vacio):
+
+```bash
+# 1. las 3 rutas responden
+for p in /cuestionario /brief /alta; do curl -s -o /dev/null -w "%{http_code}
+" https://forms.onia.com.bo$p; done
+
+# 2. el webhook de n8n sigue REGISTRADO (sin escribir datos):
+curl -s https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/alta-cliente
+# "not registered for GET ... did you mean POST?"  => el POST esta ACTIVO
+# "The requested webhook is not registered"        => el workflow esta APAGADO
+```
+
+Los 3 webhooks se verificaron activos el 2026-08-27.
+
+⚠️ **Ojo de marca:** el formulario es AZUL y la marca de Onia es verde. Queda anotado,
+no se toco: es decision de diseno, no un bug.
+
+---
+
 Cuestionario, brief y alta de clientes (`/cuestionario`, `/brief`, `/alta`),
 autohospedados en el VPS (`187.77.16.63`, Easypanel). Verificado en vivo
 2026-08-01; `/alta` agregado y verificado 2026-08-16.
