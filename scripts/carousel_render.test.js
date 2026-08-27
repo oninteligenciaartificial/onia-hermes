@@ -404,3 +404,20 @@ test('dato-ilustrado: titular serif y cuerpo sans, con salto de escala real', ()
   assert.ok(h.includes(".tit{font-family:'Fraunces',serif"), 'titular serif');
   assert.ok(tit / cuerpo >= 2, `la portada debe doblar al cuerpo (era ${tit}/${cuerpo})`);
 });
+
+test('dato-ilustrado: la lamina de solucion dibuja los items', () => {
+  // Sergio, 2026-08-27: "no dice exactamente que problema vas a solucionar... con Onia
+  // Platform solucionas esto, esto, esto". Las piezas planteaban el problema y nunca
+  // nombraban el producto: en la cuenta de la empresa eso es medio trabajo sin hacer.
+  const h = datoIlustradoHtml({ headline: 'Con *Onia Platform*',
+    solucion: ['Se descuenta solo', 'Te avisa antes', 'Queda registrada'] }, 4, 7, 'onia', {});
+  const b = h.slice(h.indexOf('<body>'));
+  assert.ok(b.includes('class="solucion"'), 'dibuja la lista');
+  assert.strictEqual((b.match(/<li>/g) || []).length, 3, 'un item por entrada');
+  assert.ok(b.includes('Te avisa antes'), 'con su texto');
+});
+
+test('dato-ilustrado: sin solucion no deja lista vacia', () => {
+  const h = datoIlustradoHtml({ headline: 'H', body: 'b' }, 1, 7, 'onia', {});
+  assert.ok(!h.slice(h.indexOf('<body>')).includes('class="solucion"'));
+});

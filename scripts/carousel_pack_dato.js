@@ -58,6 +58,15 @@ function crear({ esc, emph, roleFor, ACCOUNTS, BRAND, getFmt }) {
     const fuente = slide.fuente
       ? `<p class="fuente">${esc(slide.fuente)}</p>` : '';
 
+    // 🔴 La lamina que faltaba. Sergio, 2026-08-27: "no dice exactamente que problema vas
+    // a solucionar... con Onia Platform solucionas esto, esto, esto. Porque es contenido
+    // para la cuenta de Onia HQ".
+    // Las piezas anteriores planteaban bien el problema y NUNCA nombraban el producto:
+    // en la cuenta de la empresa, eso es la mitad del trabajo sin hacer.
+    const solucion = Array.isArray(slide.solucion) && slide.solucion.length
+      ? `<ul class="solucion">${slide.solucion.map((x) => `<li>${emph(x)}</li>`).join('')}</ul>`
+      : '';
+
     // Escalas de la investigacion, para un lienzo que se lee a 1/3 en el telefono:
     // portada 120-150px · titular interior 68-80 · cuerpo 32-36 · volante 22-24.
     const esPortada = role === 'cover';
@@ -112,6 +121,16 @@ html,body{width:${FMT.w}px;height:${FMT.h}px}
   letter-spacing:-.04em;font-feature-settings:"tnum" 1}
 .cifra .np{font-size:30px;font-weight:600;color:rgba(255,255,255,.82);max-width:13ch;line-height:1.25}
 
+/* LA SOLUCION — lo que resuelve Onia Platform, en items marcados. Va con el mismo
+   verde del acento porque es la unica parte de la pieza que habla del producto: si se
+   pierde entre el cuerpo, la pieza vuelve a ser un problema sin dueño. */
+.solucion{list-style:none;margin-top:28px;display:flex;flex-direction:column;gap:20px}
+.solucion li{position:relative;padding-left:46px;font-size:31px;line-height:1.28;
+  color:#fff;font-weight:500;max-width:26ch}
+.solucion li::before{content:"";position:absolute;left:0;top:.34em;width:24px;height:13px;
+  border-left:4px solid var(--onia-green);border-bottom:4px solid var(--onia-green);
+  transform:rotate(-45deg)}
+
 /* LA FUENTE — chica pero SIEMPRE presente. Es lo que separa un dato de un invento. */
 .fuente{margin-top:18px;font-size:22px;color:rgba(255,255,255,.52);font-weight:400;
   border-left:3px solid rgba(16,194,107,.55);padding-left:14px;max-width:34ch}
@@ -138,6 +157,7 @@ html,body{width:${FMT.w}px;height:${FMT.h}px}
   <h${esPortada ? 1 : 2} class="tit">${emph(slide.headline || '')}</h${esPortada ? 1 : 2}>
   ${bloqueDato}
   ${slide.body ? `<p class="cuerpo">${emph(slide.body)}</p>` : ''}
+  ${solucion}
   ${fuente}
   <div class="pie"><span class="handle">${esc(acc.handle)}</span><span>${idx + 1} / ${total}</span></div>
 </div></body></html>`;
