@@ -909,3 +909,97 @@ ENTREGABLES:
 
 LISTO = los 3 MP4 existen en disco, ffprobe confirma en cada uno duración entre 13 y 15 s, resolución 1080x1920 y como máximo 2 cortes detectados con umbral scene 0.3; los 3 previews 360p y su tabla de cortes fueron mostrados a Sergio; y ningún fotograma de ningún reel contiene las cadenas 'muy pronto', 'beta', 'próximamente' ni 'en construcción'.
 ```
+
+---
+
+# Lote del 2026-08-24 — 3 prompts
+
+> Fuente: [`prompts-lote-2026-08-24/`](../prompts-lote-2026-08-24/README.md). **Sin audio**:
+> Speaches falló en todo el lote.
+
+## Q02 · Los datos de Anthropic que sostienen el pitch de Onia: el experto de dominio gana
+
+- **Ficha:** [Los datos de Anthropic que sostienen el pitch de Onia: el experto de dominio gana](../2026-08-24-anthropic-economic-index-experto-de-dominio.md)
+- **Qué falta:** Nada. Los datos son públicos y citables.
+
+```text
+Objetivo único: convertir los datos del Anthropic Economic Index en el argumento de venta de Onia, con cita y sin fabricar.
+
+De dónde sale: ficha `anthropic-economic-index-experto-de-dominio` (IG DcgeR4tIPcx, cuenta oficial de Anthropic). Estudio sobre ~400.000 sesiones de Claude Code. Fuente: anthropic.com/research.
+
+Los datos que se pueden citar, leídos de las láminas:
+- casi la mitad de las sesiones NO son escribir ni arreglar código
+- éxito verificado: ocupaciones de software 30%, otras ocupaciones 26% — cinco puntos de diferencia
+- por ocupación (verificado/juzgado): management 37/55, legal 33/57, negocios y finanzas 29/54, salud 28/56, ventas 28/51, educación 27/52
+- los expertos de dominio tienen MÁS DEL DOBLE de éxito verificado que los novatos; pero un usuario competente rinde casi igual que un experto
+- decisiones de planificación: usuario 70% / Claude 30%. De ejecución: usuario 20% / Claude 80%
+- el valor de la tarea típica subió ~25% en siete meses (build +43%, operate +34%, fix +32%)
+
+Pasos:
+
+1) Escribir el argumento central en tres frases, para que Sergio lo diga en una reunión sin leer. La tesis: lo que decide el resultado no es saber programar, es conocer el rubro — y eso el cliente ya lo tiene.
+
+2) Traducir el reparto de decisiones a algo que un dueño de negocio entienda: qué sigue decidiendo él (el QUÉ, 70%) y qué delega (el CÓMO, 80%). Esto es lo que quita el miedo a "la IA me reemplaza".
+
+3) Elegir, para cada uno de nuestros rubros vivos, el número de la tabla que más le habla a ese comprador. Salud 28/56 para dental. Ventas 28/51 para comercio. Etcétera. Un número por rubro, no una lista.
+
+4) Producir 5 láminas de carrusel con el molde del original: fondo negro, tarjeta de gráfico gris oscuro, titular de dos líneas arriba, un solo dato por lámina, y SÓLO dos colores de dato. Renderizar con HyperFrames.
+
+5) REGLA DURA, no negociable: estos son datos de Anthropic sobre Claude Code, no resultados de Onia. Cada lámina lleva la atribución visible. Presentarlos como logro propio sería fabricar, y está prohibido.
+
+LISTO = las 5 láminas renderizadas con atribución visible en cada una, más el argumento de tres frases escrito, y la tabla de "un número por rubro".
+```
+
+## Q03 · Los negocios aburridos: la tesis que valida el vertical-first, y el molde de video-ensayo
+
+- **Ficha:** [Los negocios aburridos: la tesis que valida el vertical-first, y el molde de video-ensayo](../2026-08-24-negocios-aburridos-tesis-y-video-ensayo.md)
+- **Qué falta:** **Metraje propio.** El original usa clips de películas con derechos. Nosotros no podemos: hay que reemplazarlos por capturas de nuestros propios paneles, b-roll libre, o material generado.
+
+```text
+Objetivo único: producir un reel de 60 s con el molde "collage sobre blanco + karaoke palabra por palabra", usando la tesis de los negocios aburridos aplicada a Bolivia — y con metraje que podamos usar legalmente.
+
+De dónde sale: ficha `negocios-aburridos-tesis-y-video-ensayo` (IG Dcd-0PGzb8e).
+
+La tesis del original, literal: "everyone wants to build the next AI agent. that's probably the least interesting place to be. the bigger opportunity might be owning the boring businesses that agents are about to transform." Y su lámina final nombra cuatro rubros: plumbing, dispatch, dental, billing.
+
+Pasos:
+
+1) Escribir el guion, 60 s, en español boliviano. La tesis se ADAPTA, no se traduce: nosotros no compramos el negocio aburrido, le vendemos el sistema. El giro nuestro es "el dueño de la clínica no necesita volverse programador; necesita que su clínica deje de perder plata en lo repetitivo".
+
+2) Cerrar nombrando NUESTROS rubros vivos en una grilla, como hace el original con su 2x2. Solo rubros que estén realmente encendidos — la regla de no exhibir obra vale también acá.
+
+3) PROBLEMA DE MATERIAL, y hay que resolverlo antes de rodar: el original está armado con clips de películas con derechos (se reconocen The Social Network y otras). Nosotros NO podemos usar eso. Reemplazar por: capturas de nuestros propios paneles, b-roll de licencia libre verificada, o material generado. Si se genera video, eso es gasto y va con permiso explícito de Sergio, cotizado antes.
+
+4) Componer en HyperFrames con el molde observado: fondo BLANCO entre clips (no negro), los clips flotando como tarjetas letterboxed de proporciones distintas, karaoke palabra por palabra en blanco sobre el clip — no en una banda fija abajo.
+
+5) Antes de renderizar: tabla de cortes + preview 360p a Sergio. Es regla de oro del carril de video, nunca se corta a ciegas.
+
+LISTO = el guion de 60 s escrito, la lista de material con su origen y licencia declarada para cada pieza, y la tabla de cortes + preview mostrada a Sergio. El render final espera su OK.
+```
+
+## Q04 · Las vitaminas de marca: una mnemotecnia que convierte una lista en carrusel
+
+- **Ficha:** [Las vitaminas de marca: una mnemotecnia que convierte una lista en carrusel](../2026-08-24-vitaminas-de-marca-mnemotecnia-carrusel.md)
+- **Qué falta:** Nada técnico. Falta elegir la mnemotecnia nuestra, que es la parte difícil.
+
+```text
+Objetivo único: producir un carrusel de Onia con el molde de mnemotecnia, y dejar la plantilla reutilizable en el banco de patrones.
+
+De dónde sale: ficha `vitaminas-de-marca-mnemotecnia-carrusel` (IG DcYltt_IK30). El original agrupa 20 herramientas de marketing en cinco "vitaminas" (A a E), cuatro ítems por lámina, todos empezando con esa letra.
+
+Por qué funciona: una lista de 20 cosas es ilegible; la restricción arbitraria de la letra inicial es lo que la vuelve memorable. Y la plantilla es idéntica en las cinco láminas, así que a la tercera el ojo va directo a lo que cambia.
+
+Pasos:
+
+1) Elegir NUESTRA mnemotecnia. Es la parte difícil y es donde se gana o se pierde. Opciones a evaluar, no a asumir: las letras de O-N-I-A; los rubros vivos; las etapas del día de un dueño de negocio. Elegir una y justificar en dos líneas por qué esa.
+
+2) Llenar los grupos SOLO con capacidades que existan y estén encendidas. Regla dura del proyecto: la venta nunca exhibe obra. Nada de "muy pronto" ni de módulos a medio construir.
+
+3) Renderizar en HyperFrames con el molde observado: fondo de papel texturado hueso (#F2F0E9 aproximado, leído de pantalla), titular en serif clásica, palabra clave subrayada a mano con el color rotando por lámina, grilla 2x2 de ítems con icono ilustrado y rótulo subrayado.
+
+4) NO copiar el recurso de las métricas decorativas. El original pone "+15%", "+120%", "-15%" sin fuente: es textura de credibilidad, y para nosotros sería fabricar. Si va un número, va con su fuente; si no hay fuente, no va número.
+
+5) Dejar la plantilla en hermes-content/references/ui-patterns/carrusel-papel-subrayado/ para que el próximo carrusel no se arme de cero.
+
+LISTO = el carrusel renderizado con la mnemotecnia elegida y justificada, sin una sola capacidad no encendida y sin un solo número sin fuente, más la plantilla guardada en ui-patterns/.
+```

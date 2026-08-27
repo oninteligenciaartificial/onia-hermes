@@ -491,3 +491,106 @@ capacidad instalada.
 
 ---
 
+
+---
+
+# Lote del 2026-08-24 — 3 prompts
+
+> Fuente: [`prompts-lote-2026-08-24/`](../prompts-lote-2026-08-24/README.md). **Sin audio**:
+> Speaches falló en todo el lote.
+
+## Q07 · Checkout por visión: detecta el producto, decodifica el código y arma el recibo solo
+
+- **Ficha:** [Checkout por visión: detecta el producto, decodifica el código y arma el recibo solo](../2026-08-24-checkout-por-vision-recibo-en-vivo.md)
+- **Qué falta:** Una decisión, no una credencial: si el rubro comercio quiere caja por visión o le alcanza con lector de código. Es un salto grande de alcance.
+
+```text
+Objetivo único: contrastar el flujo de "checkout por visión" contra ONIA Core y decir qué existe, qué falta y si vale encenderlo — SIN construir nada todavía.
+
+De dónde sale: ficha de video-intake `checkout-por-vision-recibo-en-vivo` (IG DcRflPJDLhG). Un sistema que detecta productos que pasan por una cinta, decodifica su código de barras, lo matchea contra catálogo y arma un recibo en vivo con el total acumulando.
+
+Pasos:
+
+1) Escribir la MÁQUINA DE ESTADOS del flujo, tal como se observó: producto entra al campo -> detección con confianza -> localización del código dentro del recorte -> decodificación -> match contra catálogo (nombre + precio) -> línea al recibo -> recálculo de total. Marcar en cuál de esos pasos falla más seguido un sistema real y qué pasa cuando falla (producto no reconocido, código ilegible, dos productos a la vez).
+
+2) Contrastar contra el core, entidad por entidad. Para cada una decir EXISTE / NO EXISTE / EXISTE PERO APAGADA, citando el archivo:
+   - producto (código, nombre, precio, marca, stock)
+   - detección (id, confianza, bounding box)
+   - línea de recibo y recibo
+   - venta / cierre de caja
+   Usar el contract.json y el base-schema del core, no la memoria.
+
+3) Responder la pregunta de negocio, que es la que decide: para un comercio boliviano típico, ¿la caja por visión resuelve un dolor real, o el lector de código de barras de siempre ya lo resuelve por una fracción del costo? Ser honesto: si la respuesta es que no vale, decirlo y cerrar el tema.
+
+4) Si sí vale, escribir el camino mínimo: qué se enciende primero, con qué hardware, y qué se le promete al cliente. Si no vale, anotar en qué condición cambiaría (por ejemplo, un cliente con volumen alto y catálogo chico).
+
+NO se implementa nada en esta tarea. El entregable es la decisión escrita.
+
+LISTO = un documento con la máquina de estados, la tabla entidad-por-entidad contra el core con EXISTE/NO EXISTE/APAGADA citando archivos, y un veredicto de una línea: se enciende / no se enciende, con el motivo.
+```
+
+## Q08 · Receiptile: el recibo digital es la excusa, lo que capturan es al cliente
+
+- **Ficha:** [Receiptile: el recibo digital es la excusa, lo que capturan es al cliente](../2026-08-24-receiptile-recibo-digital-captura-cliente.md)
+- **Qué falta:** Nada técnico para la versión sin hardware (recibo por link + acciones). El tile NFC es otra conversación.
+
+```text
+Objetivo único: especificar el "recibo digital con acciones" para el rubro comercio, y decir qué parte ya existe en el core.
+
+De dónde sale: ficha `receiptile-recibo-digital-captura-cliente` (IG DcHc0iAE977). El hallazgo NO es el recibo: es que el recibo es la única pantalla que el cliente mira sí o sí después de pagar, y ahí se le pide reseña, email y fidelidad.
+
+Lo que hace el producto observado, verificado lámina por lámina:
+- recibo digital con logo, ítems, subtotal, impuesto, total, método de pago y código
+- exportar a Photos / PDF / Xero / Hubdoc / Dext / Expensify
+- "How was your experience?" con 5 estrellas -> botón "Leave us a review on Google"
+- captura de email: "Sign up for exclusive deals"
+- fidelidad: progreso "5/7 visitas, 2 más para tu premio"
+- cupón de envío gratis para la tienda online
+- "charge to your room" para hotelería
+
+Pasos:
+
+1) Contrastar contra ONIA Core: ¿existe la entidad venta con sus líneas? ¿existe cliente? ¿existe algo de fidelidad o de puntos? Citar archivos del core, no la memoria. Marcar EXISTE / NO EXISTE / EXISTE PERO APAGADA.
+
+2) Diseñar la versión SIN HARDWARE, que es la que se puede hacer ya: el recibo se manda por WhatsApp o por link corto después de cerrar la venta. Nada de NFC. Especificar la pantalla: qué se ve arriba (el recibo) y qué se apila debajo (reseña, email, fidelidad, cupón).
+
+3) Para Bolivia hay una restricción que el original no tiene y no se puede ignorar: la factura fiscal es la factura fiscal. Este recibo NO la reemplaza ni la simula. Dejar escrito cómo conviven — recibo digital de cortesía por un lado, documento fiscal por el otro. Si hay duda, consultar la skill de contabilidad boliviana antes de escribir una línea sobre esto.
+
+4) Priorizar las 4 acciones por retorno para un comercio chico y decir cuál se enciende primero. Mi lectura: la reseña de Google es la de mayor retorno y la más barata, porque no necesita CRM ni catálogo online.
+
+NO se implementa. El entregable es la especificación.
+
+LISTO = una spec con la tabla contra el core, el diseño de la pantalla sin hardware, el párrafo de convivencia con la factura fiscal boliviana, y las 4 acciones priorizadas con la primera elegida y justificada.
+```
+
+## Q09 · Datos sintéticos con Blender: cómo entrenar visión sin tener el dataset
+
+- **Ficha:** [Datos sintéticos con Blender: cómo entrenar visión sin tener el dataset](../2026-08-24-datos-sinteticos-blender-para-vision.md)
+- **Qué falta:** Nada para investigarlo. Para usarlo, primero hay que tener un caso real con cliente — no se construye un pipeline de dataset sin saber qué se va a detectar.
+
+```text
+Objetivo único: decidir si el pipeline de datos sintéticos con Blender resuelve el cuello de botella de nuestras features de visión, ANTES de que alguien prometa una.
+
+De dónde sale: ficha `datos-sinteticos-blender-para-vision` (IG DcL3pB5ANRH, @sigmoidal). Sergio lo marcó "investigar".
+
+La receta observada: se modela el objeto una vez en 3D y un script en Python (bpy) recorre posiciones de cámara, rotaciones e iluminaciones renderizando miles de imágenes YA ETIQUETADAS — la etiqueta es gratis porque vos pusiste el objeto ahí. Casos mostrados: detección de blancos militares (dataset sintético -> modelo VGG -> detección en imagen real) y reconstrucción 3D de microfósiles con NeRF.
+
+Por qué nos importa: tenemos dos frentes de visión posibles y los dos tienen el mismo cuello — nadie tiene el dataset. Conteo de ganado en el rubro ganadero, y reconocimiento de productos para el checkout por visión (ver ficha checkout-por-vision-recibo-en-vivo, del mismo lote).
+
+Pasos:
+
+1) Investigar de verdad, con fuentes citadas y fechadas — no de memoria. Tres preguntas:
+   - ¿Cuál es el estado del arte hoy en generación sintética con Blender para detección de objetos?
+   - ¿Cuánto de brecha sintético-a-real se reporta, y qué mezcla de sintético + real se recomienda? (el carrusel NO menciona esta brecha, y es el riesgo principal)
+   - ¿Hay algo más barato que resuelva lo mismo: modelos preentrenados, few-shot, servicios de etiquetado?
+
+2) Aterrizarlo a NUESTROS dos casos. Para cada uno: qué habría que modelar en 3D, cuántos renders harían falta según lo que reporta la literatura, y qué hardware. Con números, no con "sería posible".
+
+3) Comparar contra el atajo obvio: para contar ganado, ¿un modelo preentrenado tipo YOLO afinado con unos cientos de fotos reales alcanza? Si alcanza, el pipeline sintético es sobre-ingeniería y hay que decirlo.
+
+4) Veredicto de una línea por caso: vale / no vale / vale sólo si (condición concreta).
+
+REGLA: esto es investigación, no construcción. No se modela nada ni se renderiza nada en esta tarea. Y no se le promete visión a ningún cliente hasta que este documento exista.
+
+LISTO = un documento con las tres preguntas respondidas y fuentes citadas con fecha, la tabla de los dos casos nuestros con números, y un veredicto por caso.
+```
