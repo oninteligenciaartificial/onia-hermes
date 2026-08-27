@@ -1,0 +1,85 @@
+{
+ "serie": "Lo que hace el sistema",
+ "episodio": "005",
+ "comment_trigger": "SISTEMA",
+ "comment_reward": "las 6 tareas que conviene delegar primero",
+ "caption": "El nombre no es un invento de marketing: son las cuatro cosas que el sistema hace por tu negocio.\n\nOrdenar lo que está suelto. Notificar lo que no se ve. Informar lo que de verdad ganaste. Y esperar tu aprobación antes de mover un dedo.\n\nEsa última es la que más importa. Todo lo demás lo hacen veinte programas. Esperar tu botón, no.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca.",
+ "hashtags": ["#negociosbolivia", "#santacruz", "#pyme", "#ferreteria", "#automatizacion"],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "pill": "Lo que hace el sistema",
+   "headline": "Cuatro letras. *Cuatro cosas* que tu negocio necesita que alguien mire",
+   "body": "Y ninguna de las cuatro te las está mirando hoy."
+  },
+
+  {
+   "number": 2,
+   "letra": "O",
+   "headline": "*Ordenar* lo que está suelto",
+   "body": "Lo que hoy vive en un cuaderno, en el WhatsApp y en tu cabeza.",
+   "items": [
+    { "rotulo": "El catálogo", "nota": "con precio, costo y código" },
+    { "rotulo": "La caja del día", "nota": "efectivo, QR, tarjeta, transferencia" },
+    { "rotulo": "Los fiados", "nota": "con fecha, no de memoria" },
+    { "rotulo": "Quién te compró", "nota": "y qué se llevó" }
+   ]
+  },
+
+  {
+   "number": 3,
+   "letra": "N",
+   "headline": "*Notificar* lo que no se ve",
+   "body": "Los problemas que no aparecen en ningún reporte porque nadie los anota.",
+   "items": [
+    { "rotulo": "Se está por acabar", "nota": "antes de que el cliente venga" },
+    { "rotulo": "Vencido, cobrar ya", "nota": "el fiado que pasó su fecha" },
+    { "rotulo": "Lleva 90 días parado", "nota": "plata comprada juntando polvo" },
+    { "rotulo": "Alguien preguntó", "nota": "y sigue esperando respuesta" }
+   ]
+  },
+
+  {
+   "number": 4,
+   "letra": "I",
+   "headline": "*Informar* lo que de verdad ganaste",
+   "body": "Vender más y ganar lo mismo pasa siempre por el mismo lugar.",
+   "items": [
+    { "rotulo": "Cobrado hoy", "nota": "contra el mismo día de la semana pasada" },
+    { "rotulo": "Margen estimado", "nota": "no lo vendido: lo ganado" },
+    { "rotulo": "Ticket promedio", "nota": "cuánto deja cada cliente" },
+    { "rotulo": "La hora pico", "nota": "cuándo conviene tener gente" }
+   ]
+  },
+
+  {
+   "number": 5,
+   "letra": "A",
+   "headline": "*Aprobar* — y esto es lo que nos separa",
+   "body": "El sistema deja la propuesta armada. El botón lo apretás vos.",
+   "items": [
+    { "rotulo": "El mensaje escrito", "nota": "esperando que lo mandes" },
+    { "rotulo": "El monto calculado", "nota": "no lo inventa el sistema" },
+    { "rotulo": "Nada sale solo", "nota": "está escrito en la pantalla" },
+    { "rotulo": "Vos decidís", "nota": "el precio, el fiado, el reclamo" }
+   ]
+  },
+
+  {
+   "number": 6,
+   "role": "save",
+   "headline": "Por qué la *A* va última",
+   "body": "El riesgo de automatizar no es que la máquina sea tonta: es que sea rápida. Una persona que se equivoca manda un mensaje mal. Un sistema que se equivoca manda doscientos antes de que te enteres. Por eso propone y espera."
+  },
+
+  {
+   "number": 7,
+   "role": "cta",
+   "pill": "20 minutos, gratis",
+   "headline": "¿Cuál de las cuatro te falta *más*?",
+   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca. Sin vender nada."
+  }
+ ]
+}

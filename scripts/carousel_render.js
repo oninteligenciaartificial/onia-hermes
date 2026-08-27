@@ -103,7 +103,7 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail'];
+const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'papel-subrayado'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
@@ -1082,6 +1082,12 @@ function nuviaRibbon(idx, total, stripes, onAccent) {
 
 // Pack: bright-retail (Nuvia-style). Marca clara/multicolor, amigable, con
 // ribbon continuo, composición anclada y slot de producto por slide.
+// Pack de mnemotecnia, portado de la ficha Q04. Vive en su propio archivo porque
+// este ya pasa las 1200 lineas. Recibe los helpers en vez de duplicarlos.
+const papelSubrayadoHtml = require('./carousel_pack_papel').crear({
+  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
+});
+
 function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
@@ -1200,6 +1206,7 @@ function render(args) {
     else if (args.pack === 'editorial-photo') html = editorialPhotoHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'editorial-clean') html = editorialCleanHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'bright-retail') html = brightRetailHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'papel-subrayado') html = papelSubrayadoHtml(slide, idx, slides.length, args.account, args);
     else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
     fs.writeFileSync(htmlPath, html, 'utf8');
@@ -1245,6 +1252,7 @@ if (require.main === module) {
 
 module.exports = {
   slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
+  papelSubrayadoHtml,
   emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };

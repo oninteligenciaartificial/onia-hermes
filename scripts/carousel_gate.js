@@ -29,6 +29,8 @@ const CAPACIDADES = {
   'editorial-photo': { object: false, callout: false, marks: true },
   'editorial-clean': { object: false, callout: false, marks: false },
   'bright-retail': { object: true, callout: true, marks: true },
+  // Pack de mnemotecnia: no dibuja objeto ni callout, su prueba es la grilla 2x2.
+  'papel-subrayado': { object: false, callout: false, marks: false },
 };
 
 // Debajo de esta escala el texto de una captura de pantalla deja de leerse en el
