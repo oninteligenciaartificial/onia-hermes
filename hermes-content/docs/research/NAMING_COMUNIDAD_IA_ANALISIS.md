@@ -174,3 +174,104 @@ distintos.
 
 Con esas dos respuestas, la segunda vuelta arranca pidiendo **gentilicio** desde el ángulo de
 generación, que es lo que faltó.
+
+---
+
+# Segunda vuelta (2026-08-25) — con gentilicio, y verificada a mano
+
+Sergio fijó el marco: **"Bolivia ahora, LatAm después"** y **público mezclado** (dueños de
+negocio + gente que construye). Eso mata de entrada todo nombre con techo geográfico —
+incluido Motacú.
+
+La vuelta 2 se cortó a mitad: **límite semanal de la cuenta** (se resetea el 27-ago 4am).
+Terminaron 5 de 30 agentes. Quedaron los finalistas y el análisis de descartes; **no quedó
+ninguna verificación de disponibilidad ni ningún puntaje de juez**. Lo que sigue lo verifiqué
+a mano con el navegador.
+
+## Los 6 finalistas y su handle, verificados uno por uno
+
+Método: abrir el perfil en el navegador y comparar contra un handle de control inventado
+(`@zxqwmnbvlkjh9zz`), que devuelve *"Profile no está disponible"*. **`curl` no sirve: el
+login-wall da 200 para todos.**
+
+| Nombre | Handle | Estado | Qué se vio |
+|---|---|---|---|
+| Afinadores | `@afinadores` | 🔴 tomado | cuenta fantasma: 0 seguidores, 1 seguido, nombre "h" |
+| Sastres | `@sastres` | 🔴 tomado | "Christopher sastre", 6 seguidores |
+| Maquinistas | `@maquinistas` | 🔴 tomado | 16 seguidores |
+| Horneros | `@horneros` | 🔴 tomado | 24 seguidores, perfil privado |
+| Relojeros | `@relojeros` | 🔴 tomado | 21 seguidores, con publicaciones |
+| Tandero | `@tanderos` | ✅ libre | — |
+
+**Cinco de seis tomados.** Y no es casualidad: **toda palabra común del español, en plural y
+de una sola palabra, ya está tomada en Instagram.** Ese es el patrón, no la mala suerte.
+
+## 🔴 Tandero era el único libre, y está muerto
+
+"Tanda" es el ahorro rotativo colectivo latinoamericano — el **pasanaku** boliviano. Metáfora
+preciosa para una comunidad: gente que se junta por turnos y le toca a cada uno.
+
+**Pero "tandera" está en titulares mexicanos de enero de 2026 por un fraude de más de 20
+millones de pesos.** Es la palabra exacta con que la prensa nombró a la acusada. Para una
+comunidad donde se va a hablar de plata, eso es veneno.
+
+Es **la misma falla que hundió a Motacú**, pero peor: Motacú tenía una adyacencia lejana
+("mota" = marihuana en México); Tandero tiene la palabra literal en notas policiales
+recientes.
+
+## La recomendación: Afinadores, con handle de variante
+
+| | |
+|---|---|
+| **Nombre** | **Afinadores** |
+| **Handle** | `@losafinadores` — ✅ libre (verificado) |
+| **Dominio** | `losafinadores.com` — ✅ libre (RDAP Verisign) |
+| **La frase** | *"Soy afinador." · "Somos los afinadores."* |
+
+**Por qué gana:**
+
+1. **El gentilicio se dice sin explicar nada.** Es el criterio que faltó en la vuelta 1 y el
+   que mató a la mitad de la vuelta 2.
+2. **La metáfora es la del producto.** Afinar es poner a punto algo que ya tenés — no
+   reemplazarlo. Es exactamente lo que hace Onia con un negocio que ya funciona.
+3. **Le sirve a los dos públicos a la vez**, que era el requisito difícil. El ferretero
+   entiende "afinar el negocio". Y para el técnico, **afinar ES el vocabulario de la IA**:
+   *fine-tuning* se traduce literalmente como afinado. El mismo nombre, dos lecturas, ninguna
+   forzada.
+4. **Marca arbitraria para software** → registro fuerte en SENAPI clases 41/42.
+
+**Los defectos, dichos de frente:**
+
+- El handle exacto `@afinadores` está tomado (cuenta fantasma, pero tomada).
+- `afinadores.com` está **registrado desde 2004**. `losafinadores.com` sí está libre.
+- **En México "afinación" es abrumadoramente automotriz** — talleres, bujías, filtros.
+  "Los afinadores" va a llegar a México leyéndose como taller mecánico. No ofende y no
+  ensucia, pero es una imagen previa que hay que aceptar.
+- **No tiene puntaje de jueces.** El workflow murió antes de evaluarlo. Lo de arriba es
+  verificación de disponibilidad más criterio propio, no un panel.
+
+## El patrón que se repitió en las dos vueltas
+
+**Buscamos palabras que ya existen.** Toda palabra existente tiene dos problemas garantizados:
+su handle está tomado, y ya tiene dueño semántico en algún país. Motacú (8 negocios cruceños),
+Tandero (fraude en México), Afinadores (talleres en México), Sastres (un señor llamado
+Christopher).
+
+La única salida limpia es **inventar la palabra** — y de 6 finalistas de la vuelta 2, uno solo
+era inventado, porque los ángulos de generación pedían oficios reales. Si Afinadores no
+convence, la vuelta 3 tiene que generar **solo inventados con gentilicio incorporado**, y
+verificar el handle **antes** de evaluar, no después.
+
+## Método que quedó probado
+
+1. **Handle de Instagram:** abrir el perfil en navegador, comparar contra un control inventado.
+   Nunca `curl`.
+2. **Dominio:** RDAP de Verisign con el dominio **completo**
+   (`rdap.verisign.com/com/v1/domain/ejemplo.com`). Quitarle el `.com` da 404 y hace creer que
+   está libre — pasó en esta misma sesión. Y `nslookup` engaña: muchos DNS resuelven cualquier
+   cosa a una IP de búsqueda.
+3. **Sentido por país, ANTES de recomendar.** Buscar la palabra junto a "fraude", "estafa",
+   "droga" y su uso corriente en México, Argentina, Colombia y Brasil. Ese chequeo es el que
+   habría matado a Motacú y a Tandero en el minuto uno.
+4. **SENAPI no se puede verificar por web.** No hay buscador público. La búsqueda PI-112
+   (Bs 75) es el único paso real, y va antes de registrar.
