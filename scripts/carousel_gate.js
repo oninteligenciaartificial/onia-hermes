@@ -96,19 +96,25 @@ function revisar(brief, pack, baseDir = process.cwd()) {
       }
     }
 
-    if (!s.object) return;
+    // La imagen puede venir como objeto flotante (`object`) o como fondo (`bg`, que es
+    // como la usa `dato-ilustrado`). La regla de repeticion vale para las dos: se
+    // escribio mirando solo `object` y dejo pasar O03 con TRES pares repetidos.
+    const imagen = s.object || s.bg;
+    if (!imagen) return;
 
     // 2. La misma imagen dos veces: se lee como plantilla vacia, no como prueba.
     //    Caso real: O04 laminas 2 y 5 eran el mismo archivo de pixeles.
-    const prev = usados.get(s.object);
+    const prev = usados.get(imagen);
     if (prev) {
       problemas.push({
         nivel: 'error', regla: 'repetida', lamina: n,
-        msg: `usa la misma imagen que la lamina ${prev}: ${path.basename(s.object)}`,
+        msg: `usa la misma imagen que la lamina ${prev}: ${path.basename(imagen)}`,
       });
     } else {
-      usados.set(s.object, n);
+      usados.set(imagen, n);
     }
+
+    if (!s.object) return;
 
     // 3. Una captura achicada mas alla del piso es una mancha, no una prueba.
     const ruta = path.resolve(baseDir, s.object);
@@ -206,10 +212,15 @@ function selfCheck() {
   p = revisar({ comment_trigger: 'SISTEMA', slides: [] }, 'dark-product', tmp);
   assert.ok(p.some((x) => x.regla === 'recompensa'), 'palabra clave sin recompensa');
 
+  // La imagen de fondo cuenta igual que el objeto: mirando solo `object` se dejo pasar
+  // O03 con tres pares de laminas repitiendo la misma ilustracion.
+  p = revisar({ slides: [{ number: 2, bg: 'chico.png' }, { number: 3, bg: 'chico.png' }] }, 'dato-ilustrado', tmp);
+  assert.ok(p.some((x) => x.regla === 'repetida' && x.lamina === 3), 'caza el bg repetido');
+
   p = revisar({ comment_trigger: 'SISTEMA', comment_reward: 'la lista', slides: [] }, 'dark-product', tmp);
   assert.strictEqual(p.length, 0, 'un brief sano no debe dar nada');
 
-  console.log('self-check ok: 8 casos');
+  console.log('self-check ok: 9 casos');
 }
 
 function main() {

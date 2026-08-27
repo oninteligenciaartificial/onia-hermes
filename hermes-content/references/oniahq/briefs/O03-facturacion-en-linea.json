@@ -16,45 +16,55 @@
   {
    "number": 1,
    "role": "cover",
-   "pill": "Bolivia al día",
+   "kicker": "Bolivia al día",
    "headline": "El *30 de septiembre* se acaba el plazo",
    "body": "Facturación en línea para todos. Y no, no tenés que comprarle nada a nadie.",
-   "object": "hermes-content/references/oniahq/fondos/estantes-03.png"
+   "bg": "hermes-content/references/oniahq/ilustraciones/calendario-fiscal.png"
   },
   {
    "number": 2,
-   "headline": "Lo que dice la norma, sin adorno",
-   "body": "Desde el {{30-sep-2026}} la facturación en línea alcanza a todos los contribuyentes. Tu grupo depende de tu NIT, no de tu rubro — miralo en tu Oficina Virtual, no le creas a nadie que te lo afirme sin verlo."
+   "kicker": "Lo que dice la norma",
+   "headline": "Tu grupo depende del *NIT*, no del rubro",
+   "body": "Desde el 30-sep-2026 la facturación en línea alcanza a todos los contribuyentes. Miralo en tu Oficina Virtual — no le creas a nadie que te lo afirme sin verlo.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/nit-formulario.png"
   },
   {
    "number": 3,
+   "kicker": "Lo que casi nadie te dice",
    "headline": "El SIN tiene un portal *gratis*",
-   "body": "Se llama Portal Web en Línea. Entrás, tipeás la factura, la emitís. Sin CUIS, sin CUFD, sin firma digital, sin pagarle a un proveedor. Con eso ya estás cumpliendo la ley."
+   "body": "Se llama Portal Web en Línea. Entrás, tipeás la factura, la emitís. Sin CUIS, sin CUFD, sin firma digital, sin pagarle a un proveedor. Con eso ya estás cumpliendo la ley.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/talonario-impresora.png"
   },
   {
    "number": 4,
-   "headline": "Entonces, ¿dónde está el costo?",
-   "body": "En que tipeás *dos veces*. Una cuando hacés la venta y otra cuando la cargás al portal. Veinte facturas por día son {{40 cargas}} — y en cada una hay un dedo que se equivoca.",
-   "callout": "El problema no es emitir. Es re-tipear."
+   "kicker": "Entonces dónde está el costo",
+   "headline": "En que tipeás *dos veces*",
+   "dato": "40",
+   "dato_pie": "cargas por día si hacés 20 facturas: una al vender y otra al portal",
+   "fuente": "Aritmética simple: 20 ventas × 2 cargas. El Portal Web del SIN no se conecta con tu sistema.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/tipeando-dos-veces.png"
   },
   {
    "number": 5,
    "role": "save",
+   "kicker": "Guardá esto",
    "headline": "El plazo ya se corrió *dos veces*",
-   "body": "1-oct-2025 → 1-abr-2026 por la RND 102500000036 → 30-sep-2026 por la RND 102600000007. Una tercera prórroga es posible. Nadie que te diga «es ahora o multa» te está informando: te está vendiendo."
+   "body": "1-oct-2025 → 1-abr-2026 por la RND 102500000036 → 30-sep-2026 por la RND 102600000007. Una tercera prórroga es posible. Nadie que te diga «es ahora o multa» te está informando: te está vendiendo.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/cierre-tienda.png"
   },
   {
    "number": 6,
-   "headline": "Qué hacer esta semana",
-   "body": "1. Entrá a tu Oficina Virtual y mirá en qué grupo estás. 2. Probá el Portal Web gratis con una factura. 3. Recién ahí decidí si tipear dos veces te cuesta más que resolverlo."
+   "kicker": "Qué hacer esta semana",
+   "headline": "Probá el portal *antes* de comprar nada",
+   "body": "1. Entrá a tu Oficina Virtual y mirá en qué grupo estás. 2. Emití una factura de prueba en el Portal Web. 3. Recién ahí decidí si tipear dos veces te cuesta más que resolverlo.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/cuaderno-fiado.png"
   },
   {
    "number": 7,
    "role": "cta",
-   "pill": "20 minutos, gratis",
+   "kicker": "20 minutos, gratis",
    "headline": "Te paso el *checklist*, no la factura",
-   "body": "Comentá SISTEMA y te mando qué mirar en tu Oficina Virtual. Si con el portal gratis te alcanza, te lo voy a decir.",
-   "object": "hermes-content/references/oniahq/fondos/panel-real.png"
+   "body": "Comentá SISTEMA y te mando qué mirar en tu Oficina Virtual. Si con el portal gratis te alcanza, te lo voy a decir."
   }
  ]
 }
