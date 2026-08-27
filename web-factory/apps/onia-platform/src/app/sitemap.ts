@@ -20,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/chatbot", priority: 0.8 },
     { path: "/agentes", priority: 0.8 },
     { path: "/facturacion", priority: 0.8 },
+    { path: "/guia-facturacion", priority: 0.8 },
     { path: "/servicios/webs", priority: 0.8 },
     { path: "/comparativa", priority: 0.7 },
     { path: "/contacto", priority: 0.7 },

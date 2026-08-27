@@ -317,3 +317,65 @@ LiteLLM: `onia_selfhosted-litellm-1`, config en `/app/config.yaml` dentro de ese
   principio para el turno normal — probablemente el turno normal se escribió antes de que
   existiera ese patrón (nació para M9). No es información necesaria para el próximo paso,
   sólo contexto.
+
+---
+
+# 2026-08-24 — Comentario IG → DM: arreglado, SIN publicar, bloqueado por el VPS
+
+**Objetivo:** dejar encendido el workflow `1jS4jwmNmvcQpqqH` sin que vuelva a ahogar el VPS.
+**Resultado:** el workflow quedó arreglado y validado. **NO se publicó**, porque no se puede
+verificar: sin CPU en el VPS no hay token, y sin token no hay DM que mirar.
+
+## Qué se cambió (n8n, versiones guardadas)
+
+| # | Cambio | Por qué |
+|---|---|---|
+| 1 | Webhook **partido en dos nodos**: `Webhook Comentario IG` queda GET con `responseNode` (devuelve `hub.challenge`), y `Webhook IG POST` nuevo con `responseMode: onReceived` | `responseMode` es **por nodo, no por método**. El GET necesita cuerpo propio; el POST necesita 200 inmediato. Con un solo nodo era imposible tener las dos cosas |
+| 2 | **`Es comentario?`**, IF NATIVO antes del nodo Code | Los IF **no usan el task runner**; el Code sí. Filtrar acá hace que una tormenta de ecos no invoque el Code ni una vez |
+| 3 | Se borran los 3 `respondToWebhook` de la rama POST | Con `onReceived` sobran |
+| 4 | SSH: `timeout 15` en el comando + `onError: continueRegularOutput` | No puede colgar una ejecución para siempre |
+| 5 | `executionTimeout: 120` a nivel workflow | Techo duro |
+| 6 | `MIOS` suma `2935350173474443` | Es el `from.id` de @sergio_urcullo; sin él, un comentario suyo en un post de @oniahq le disparaba un DM a él mismo |
+
+⚠️ El `jsCode` también cambió `$('Webhook Comentario IG')` → `$('Webhook IG POST')`: el POST
+ahora entra por el nodo nuevo.
+
+## 🔴 DOS CORRECCIONES al diagnóstico original (verificadas en la ejecución 58028)
+
+1. **El nodo SSH NO fue la causa.** El encargo decía "abre una conexión por evento, se
+   acumularon más de 100 sesiones". Falso para esta tormenta: `lastNodeExecuted` es
+   `Parsear comentario` y el `runData` tiene **dos nodos**. La ejecución moría en el Code y
+   **nunca llegaba al SSH**, que está después del `Accionable?`. Es un riesgo latente, no la
+   causa.
+2. **Los eventos no eran comentarios.** Eran `messaging` con **`is_echo: true`** — los ecos
+   de 3 DMs enviados a mano. El código busca `entry[0].changes[0].field === 'comments'` y ahí
+   no hay `changes`. Ni siquiera eran accionables. **El único fallo real: el nodo Code no
+   consiguió task runner** (`Task request timed out`, 120 s, 76 veces).
+
+## Cómo verificarlo cuando el VPS responda
+
+1. `publish_workflow` sobre `1jS4jwmNmvcQpqqH`.
+2. **200 en menos de 1 s**: `curl -s -o /dev/null -w "%{http_code} %{time_total}\n" -X POST`
+   contra `https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment` con un payload
+   cualquiera. Con `onReceived` tiene que contestar sin importar lo que pase después.
+3. **El GET sigue verificando**: `?hub.verify_token=onia-ig-2026&hub.challenge=123` debe
+   devolver `123`.
+4. **El DM llegó**: leer la BANDEJA, no las ejecuciones — `GET /v23.0/me/conversations` y
+   después `/{conversation_id}/messages`. Las ejecuciones dicen qué corrió; solo la
+   conversación dice qué llegó.
+5. **Cero tormenta**: `search_workflow_executions` con status error. Una cada 30-60 s = volvió.
+
+⚠️ **NO reintentar un private reply que dé error.** La API devuelve `OAuthException code 1`
+Y ENTREGA EL MENSAJE IGUAL. Ya pasó: el destinatario recibió 3 DMs idénticos.
+
+## Qué bloquea
+
+El VPS recibe ~7% de su CPU (steal 92-95%), **y sobrevivió a un reinicio limpio**. `docker`
+no responde, así que `ig-dm-token.sh` (que hace `docker exec postiz-postgres`) se cuelga a
+los 60-100 s. Detalle y la cadena causal completa en la memoria
+`vps-saturado-deploy-bloqueado.md`. **Ruta crítica: ticket a Hostinger.**
+
+## Pendiente cuando Docker responda
+
+`docker update --restart=no` a Temporal, Elasticsearch y Speaches: se apagaron a mano pero
+**Elasticsearch vuelve solo** en cada reinicio del daemon (ya volvió dos veces).

@@ -1,6 +1,6 @@
 ---
 name: onia-core
-description: Invocar al tocar onia-core (contract.json, adapters, schema/base-schema.sql, módulos) o al adoptar el núcleo en un producto (DentaGest/GestiOS/ProveeGest/Ganadero OS). Garantiza el contrato, la sincronía de los 3 adapters y el validador verde antes de commitear.
+description: Invocar al tocar onia-core (contract.json, adapters, schema/base-schema.sql, módulos) o al adoptar el núcleo en un producto (los packs por rubro de Onia Platform). Garantiza el contrato, la sincronía de los 3 adapters y el validador verde antes de commitear.
 ---
 
 # ONIA Core — núcleo operativo común
@@ -25,8 +25,11 @@ Core + módulos (commerce/knowledge/accounting/invoicing/payroll/dental/automati
   crudos (CRLF en Windows rompe 2 tests). Suite objetivo 352/352, 4 validadores verdes.
 
 ## Orden de adopción
-DentaGest (beta, primer producto con adopción completa) → Bolivian Electric/ProveeGest →
-GestiOS → Ganadero OS (offline).
+⚠️ **Corregido 2026-08-24.** Acá se nombraban como productos separados. `CLAUDE.md` §3
+dice literal que **DentalGest, GestiOS, Ganadero OS y ProveeGest NO son productos ni
+marcas**: son nombres viejos de PACKS de un solo producto, Onia Platform. Al cliente se le
+nombra el rubro ("módulo dental"), nunca el pack.
+Orden de encendido de rubros: **dental (vivo) → comercio → importadora → el resto.**
 
 ## Al agregar/editar algo del core
 1. Delegá en `onia-core-guardian` o seguí su checklist.

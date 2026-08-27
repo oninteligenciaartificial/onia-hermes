@@ -143,6 +143,14 @@ formulario, sin "contáctanos".
 | **WhatsApp API** | **$19 USD/mes** | hasta **150 chats/día** | API oficial de Meta, IA por texto, audios con IA, flujos/CRM/campañas ilimitados, "bonus" WhatsApp Business por QR |
 | **WhatsApp API ∞** ← *Más Popular* | **$39 USD/mes** | **chats ilimitados** | lo mismo + soporte prioritario + onboarding |
 
+> **En bolivianos, al cambio oficial del 2026-08-24** (11,50 Bs/USD, verificado en
+> `bo.dolarapi.com`): su entrada son **Bs 218,50/mes** y su plan ilimitado **Bs 448,50/mes**.
+> Contra nuestros **Bs 390/mes** (`pricing.ts`, `WHATSAPP_ADDON`), su entrada es **44% más
+> barata** y su plan completo apenas 15% más caro.
+> **Nunca competir contra su plan de $19.** La comparación honesta es contra el de $39, y
+> ahí el argumento no es el precio: es que el suyo se paga por Yape, Plin o Binance —
+> métodos peruanos que un cliente boliviano no tiene cómo usar.
+
 Su propio FAQ: *"El plan de $19 permite hasta 150 chats por día con la API oficial. El de
 $39 es ilimitado. Lo demás (IA, audios, flujos, CRM) es idéntico."* Y: *"La IA y los audios
 realistas están totalmente incluidos. Sin pagar extra. Sin pagar por mensaje."*

@@ -220,13 +220,25 @@ píxeles. Recortar a la región que el titular promete rinde más que subir la r
 
 | Qué | En el producto | En la marca |
 |---|---|---|
-| Logotipo | "onia" en minúscula, tipografía propia | "Onia." con el punto verde |
+| Logotipo | dibuja el SVG: `aria-label="onia"`, trazados, **minúscula** | **tipea** el wordmark: `Onia<b>.</b>` (`ui.tsx:171`) |
 | Verde | pastel / menta claro | `--senal #00d26a`, `--verde-700 #016141`, `--verde-900 #013925` |
 | Papel | blanco puro | `--bg #F9FBFA` / `--bg-deep #F3F5F4` |
 | Íconos y tipografía | otra familia, sin sistema | la del sitio |
 | Moneda | 🔴 `Bs 1.806` y `Bs 1.147,50` **en la misma tarjeta** | un solo formato |
 
-**Dos logos distintos conviven en la misma pantalla.** Eso solo ya rompe la correlación.
+⚠️ **Corregido 2026-08-23.** Acá decía *"dos logos distintos conviven en la misma pantalla"*.
+**Falso, y la verdad es más útil:** `onia-platform/public/onia-logo.svg` y el
+`brand/v2/onia-logo.svg` de la web son **byte a byte idénticos** (verificado con `cmp`). El
+archivo es el mismo.
+
+Lo que difiere es **cómo lo pinta cada superficie**: el producto **dibuja el SVG**
+(`BrandLogo.tsx:53` → `aria-label="onia"`, trazados, minúscula), y el sitio **tipea el
+wordmark como texto HTML** (`(sitio)/ui.tsx:171` → `Onia<b>.</b>`, mayúscula y punto en
+negrita). Por eso se ven distintos aunque el asset sea uno solo.
+
+**Decisión pendiente:** el wordmark es texto o es asset, pero no las dos cosas. Mientras
+convivan los dos caminos, cualquier cambio de tipografía los separa de nuevo — que es
+exactamente lo que pasó.
 
 ### 🔴 El límite: la interfaz NO se dibuja con IA
 
@@ -253,6 +265,74 @@ marca" **son el mismo problema**, y se resuelven en este orden:
    (diagrama, esquema, escena), nunca una UI dibujada.
 
 **Bloqueante:** el paso 2 no se hace antes del 1, o hay que fotografiar dos veces.
+
+---
+
+## 9-ter. Interfaz ILUSTRADA — decisión de Sergio, 2026-08-23
+
+> *"no debes usar fotos literales, puedes generar similares con el mismo estilo de marca desde
+> higgsfield"* → elegido explícitamente: **interfaz ilustrada (dibujo, no captura)**.
+
+Es compatible con la regla de §1: lo prohibido nunca fue **ilustrar**, fue **hacer pasar un
+dibujo por producto**. Una ilustración que se lee como diagrama de marca —y que nadie
+confundiría con un screenshot— no afirma nada falso.
+
+⚠️ **El bloque abstracto de forma+color YA SE PROBÓ Y FALLÓ.** `switcher.tsx` lo documenta:
+*"se leía como una imagen que no cargó"*. La ilustración tiene que ser **reconocible** como
+agenda, caja o panel. Formas abstractas no son una salida.
+
+### El modelo correcto: `recraft_v4_1`, no `soul_2`
+
+`soul_2` es para fotografía realista de personas — herramienta equivocada. `recraft_v4_1` con
+`model_type: "utility_vector"` resuelve el problema de raíz porque **acepta la marca como
+parámetro**, no como adjetivo:
+
+```
+model_type: "utility_vector"      → salida SVG real
+resolution: "1k"                   → 2,5 cr (a 2k son 10 cr, y 1024px sobra)
+background_color: "#F9FBFA"
+colors: ["#F9FBFA","#F3F5F4","#12100e","#00d26a","#013925","#016141","#86D9B0","#69716D"]
+```
+
+Verificado en el SVG generado: los fills salen **exactos** — `rgb(18,16,14)` = `--tinta`,
+`rgb(1,57,37)` = `--verde-900`, `rgb(0,210,106)` = `--senal`. La correlación de marca deja de
+depender de que el modelo "entienda" un adjetivo. **Y al ser SVG, un color que se escape se
+corrige con `sed`, sin regenerar.** Peso: 22-38 KB contra 148 KB de una captura webp.
+
+### 🔴 La trampa: el texto sale como TRAZADOS, no como `<text>`
+
+`grep -c "<text"` dio **0 en los tres** SVG… y al mirarlos tenían **"New Leads"**,
+**"Active Projects"**, **"Total Sales"**, **"Cash vs Card"** en inglés, más las cifras
+inventadas **"82K"** y **"745"**. Recraft **vectoriza el texto a paths**, así que el grep no lo
+ve nunca.
+
+Es la regla de la casa fallando por no aplicarla: **un grep sirve para DESCARTAR, nunca para
+CONFIRMAR.** El único chequeo válido es abrir la imagen y mirarla.
+
+### Qué separó el acierto del fallo
+
+De 3 pruebas, sólo pasó la que describía **exclusivamente formas**. Los dos fallos pedían
+"un numeral grande" y tarjetas con encabezado — y el modelo llenó esos huecos inventando.
+
+- ❌ `one very big geometric numeral as the hero figure` → devolvió "82K", "745"
+- ❌ `a card with a heading` → devolvió "Active Projects"
+- ✅ `two short rounded bars standing in place of a heading`
+- ✅ `every label, heading and figure is drawn as a plain rounded bar`
+- ✅ **cero numerales pedidos**: el gráfico de línea ascendente ya dice "sube" sin cifra
+
+### Registro
+
+| Lote | Modelo | Imágenes | Costo | Resultado |
+|---|---|---|---|---|
+| 4 | `recraft_v4_1` 1k | 3 | 7,5 cr | **1/3** — agenda ✅; caja y panel con texto inventado |
+| 5 | `recraft_v4_1` 1k | 2 | 5 cr | **2/2** ✅ con el método corregido |
+
+Aprobadas y sin cablear (scratchpad): `ui-agenda.svg` · `ui-caja2.svg` · `ui-panel2.svg`.
+Detalle menor pendiente: `ui-caja2` trae un glifo **`$`** en la banda inferior — en Bolivia la
+moneda es Bs. Cambiarlo por edición del SVG, no regenerando.
+
+**No están cableadas.** Reemplazar capturas reales por ilustración en una superficie de venta
+viva es cambio de pieza: necesita el OK de Sergio sobre ESA pieza (regla R5 de §2).
 
 ---
 

@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import { PLANES, ADDONS, GRUPO, PRUEBA, bs } from "@/lib/pricing";
-import { CHATBOT_PLAN, precioStack } from "@/content/chatbot-precios";
+import {
+  CHATBOT_PLAN,
+  precioStack,
+  precioAnual,
+  fmtBs,
+} from "@/content/chatbot-precios";
 import { HUECO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
@@ -65,6 +70,36 @@ export const metadata: Metadata = {
     images: [OG_IMAGE],
   },
 };
+
+/**
+ * El chatbot SALE de la lista de add-ons y pasa a ser el panel estrella de la
+ * sección 9: es el único con precio publicado, apartado propio (/chatbot) y
+ * anclaje de valor. Se filtra por `href` y NO por el nombre — lib/pricing.ts
+ * agregó ese campo justamente para que la pantalla no adivine a qué fila le
+ * toca link, y ese sniff se rompía con renombrar la fila.
+ */
+const ADDONS_RESTO = ADDONS.filter((addon) => addon.href !== "/chatbot");
+
+/**
+ * Anclaje de valor del precio del chatbot. Un número suelto es un costo; el
+ * mismo número contra algo que el comprador YA paga es una comparación.
+ *
+ * Se puede publicar porque no es una cifra inventada: el salario mínimo
+ * nacional 2026 es dato público con fuente legal (DS 5516), y por eso la
+ * fuente se muestra en pantalla al lado del número. El porcentaje se DERIVA de
+ * `CHATBOT_PLAN.mensual` en vez de escribirse "12": si mañana cambia el precio
+ * en la fuente única, la frase se mueve sola en lugar de quedar mintiendo.
+ *
+ * ⚠️ DUPLICADO CONOCIDO. Esta misma constante vive en
+ * (sitio)/chatbot/page.tsx:78 y en (sitio)/precios/page.tsx. Le corresponde
+ * estar UNA vez, en content/chatbot-precios.ts, al lado del precio del que es
+ * referencia — pero ese archivo está fuera de este carril. Anotado en el
+ * reporte: mover la constante allá y que las tres pantallas la importen.
+ */
+const SALARIO_MINIMO_2026 = 3300;
+const PCT_SALARIO = Math.round(
+  (CHATBOT_PLAN.mensual / SALARIO_MINIMO_2026) * 100,
+);
 
 /**
  * FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes.
@@ -498,46 +533,106 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 9 · OFERTA COMPLETA — add-ons y Grupo. Sergio, 2026-08-22: "solo veo 3
-          precios, hay que mostrar todo lo que ofrecemos". Cada monto sale de la
-          MISMA fuente que /precios (lib/pricing.ts → ADDONS y GRUPO), así que
-          no puede haber dos números del mismo servicio. */}
-      <Block surface="paper" labelledBy="oferta">
+      {/* 9 · LO QUE SE SUMA AL PLAN — add-ons con peso de PRODUCTO.
+
+          Dos pedidos de Sergio, en orden. 2026-08-22: "solo veo 3 precios, hay
+          que mostrar todo lo que ofrecemos" — por eso la sección existe.
+          2026-08-23: "dale más importancia a los add-ons, que se vean más,
+          mirá cómo ofrecen las startups" — por eso dejó de ser una tabla.
+
+          Lo que era: cinco filas de `.rows` (nombre · copy al 72 % · precio en
+          mono 0.9em pegado al margen derecho). Se leía como la letra chica de
+          un contrato, y ahí adentro está el margen que la página escondía.
+
+          Lo que es: jerarquía ASIMÉTRICA, que es lo que hacen las startups que
+          venden bien. El chatbot se sale de la lista y toma superficie propia
+          —es el único con precio publicado, apartado propio (/chatbot) y
+          anclaje de valor—, y los otros cuatro quedan como carta de precios
+          legible en vez de nota al pie.
+
+          Ni un `.btn` en todo el bloque, a propósito: botón = plan, link de
+          texto = add-on. Es lo que evita que el add-on le robe la compra
+          principal al plan (que sigue arriba, en `paperDim`, con sus botones).
+
+          Cada monto sale de la MISMA fuente que /precios (lib/pricing.ts →
+          ADDONS y GRUPO; content/chatbot-precios.ts para el chatbot): no puede
+          haber dos números del mismo servicio. */}
+      <Block surface="ink" labelledBy="oferta">
         <Reveal>
-          <Kicker>Todo lo que ofrecemos</Kicker>
+          <Kicker>Se suma a cualquier plan</Kicker>
           <h2 id="oferta" className={s.h2}>
-            No son solo tres planes.
+            Sobre el plan encendés lo que te falta.
           </h2>
           <p className={s.lead}>
-            Sobre cualquier plan encendés lo que te haga falta y pagás solo eso.
-            Nada de saltar de plan para desbloquear una sola cosa.
+            Cada cosa se prende aparte y se paga aparte. No hay que saltar de
+            plan para desbloquear una sola.
           </p>
-          <div className={s.rows}>
-            {ADDONS.map((addon) => (
-              <div key={addon.nombre} className={s.row}>
-                <span className={s.rowName}>
-                  {addon.href ? (
-                    <a className={s.link} href={addon.href}>
-                      {addon.nombre} →
-                    </a>
-                  ) : (
-                    addon.nombre
-                  )}
-                </span>
-                <p className={s.rowText}>{addon.copy}</p>
-                <span className={s.rowPrice}>{addon.precio}</span>
+        </Reveal>
+
+        <Reveal delay={0.06}>
+          <div className={s.offerStar}>
+            <div>
+              <span className={s.planStep}>Add-on · WhatsApp</span>
+              {/* El nombre es el RESULTADO, no la función, y no lo redacta
+                  esta pantalla: sale de content/chatbot-precios.ts → `nombre`,
+                  que es la fuente única del chatbot. */}
+              <h3 className={s.offerName}>{CHATBOT_PLAN.nombre}.</h3>
+              <p className={s.body}>{CHATBOT_PLAN.resuelve}</p>
+              <div className={s.actions}>
+                <a className={s.link} href="/chatbot">
+                  Ver el chatbot y sus requisitos →
+                </a>
+              </div>
+            </div>
+            <div className={s.offerRail}>
+              <div className={s.offerPrice}>
+                <span className={s.offerNum}>{bs(CHATBOT_PLAN.mensual)}</span>
+                <span className={s.offerUnit}>Bs / mes</span>
+              </div>
+              <p className={s.offerNote}>
+                Sin instalación. O {precioAnual(CHATBOT_PLAN)}.
+              </p>
+              <p className={s.offerAnchor}>
+                Es el <b>{PCT_SALARIO} % del salario mínimo nacional 2026</b>{" "}
+                (Bs {fmtBs(SALARIO_MINIMO_2026)}, según el DS 5516), sin
+                aguinaldo ni domingos, por algo que atiende las 24 horas.
+              </p>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.06}>
+          <p className={`${s.planStep} ${s.offerListLabel}`}>
+            Lo demás que se suma
+          </p>
+          <div className={s.offerList}>
+            {ADDONS_RESTO.map((addon) => (
+              <div key={addon.nombre} className={s.offerItem}>
+                <div className={s.offerItemHead}>
+                  <h3 className={s.offerItemName}>
+                    {addon.href ? (
+                      <a href={addon.href}>{addon.nombre}</a>
+                    ) : (
+                      addon.nombre
+                    )}
+                  </h3>
+                  <span className={s.offerItemPrice}>{addon.precio}</span>
+                </div>
+                <p className={s.offerItemText}>{addon.copy}</p>
               </div>
             ))}
           </div>
-          <p className={s.body} style={{ marginTop: "2.2em", maxWidth: "46em" }}>
-            <strong>{GRUPO.nombre}:</strong> {bs(GRUPO.mensual)} Bs/mes, con
-            implementación desde {bs(GRUPO.implementacionDesde)} Bs.{" "}
-            {GRUPO.copy}
-          </p>
-          <div className={s.actions}>
-            <a className={s.link} href="/precios">
-              Ver los precios completos y lo que no incluye →
-            </a>
+          <div className={s.offerFoot}>
+            <p className={s.body} style={{ maxWidth: "46em" }}>
+              <strong>{GRUPO.nombre}:</strong> {bs(GRUPO.mensual)} Bs/mes, con
+              implementación desde {bs(GRUPO.implementacionDesde)} Bs.{" "}
+              {GRUPO.copy}
+            </p>
+            <div className={s.actions}>
+              <a className={s.link} href="/precios">
+                Ver los precios completos y lo que no incluye →
+              </a>
+            </div>
           </div>
         </Reveal>
       </Block>

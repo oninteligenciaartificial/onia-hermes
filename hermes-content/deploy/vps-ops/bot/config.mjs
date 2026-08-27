@@ -428,6 +428,15 @@ export const DEFAULT_CONFIG = Object.freeze({
 
   followUp: Object.freeze({
     maxSteps: 1, // regla N7: UN follow-up y despues silencio
+    // Nunca antes de las 08:00 de Bolivia (decision de Sergio, 2026-08-24). El barrido corre
+    // a los :17 de cada hora, asi que sin esto un seguimiento salia a las 6 de la manana y
+    // castigaba el quality rating de la cuenta.
+    // NO se pierde el seguimiento: el descarte es TRANSITORIO y va al final de skipReason,
+    // asi que la fila sigue elegible y sale en el primer barrido despues de las 08:00. Y si
+    // para entonces la ventana de 24 h de Meta ya cerro, sale igual como plantilla
+    // `seguimiento_demo`, que esta aprobada (ver outsideWindow en followup-run.mjs).
+    // El unico tope real sigue siendo `conversacion_muerta` a los staleAfterDays.
+    quietBeforeHour: 8,
     // 20 h, no 22 ni 24. La ventana de servicio de Meta se cuenta desde el ULTIMO MENSAJE
     // ENTRANTE (asi lo ancla followup-run.mjs, verificado). Con 22 quedaban 2 horas de colchon:
     // si el cron se atrasa, el mensaje cae fuera de la ventana y falla con 131047, y fuera de

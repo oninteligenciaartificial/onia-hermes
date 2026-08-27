@@ -50,6 +50,7 @@ import { withKnowledge } from "./knowledge.mjs";
 import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
 import { activeSlots, slotLabel } from "./reply-builder.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
+import { localHour } from "./reminder-run.mjs";
 import { createChatwootClient, whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 
@@ -162,6 +163,14 @@ export function skipReason(state, nowIso, config = DEFAULT_CONFIG) {
   // `seguimiento_demo` esta aprobada, asi que fuera de la ventana se manda ESA (ver outsideWindow).
   // Lo que sigue mandando es `conversacion_muerta`, arriba: a los 8 dias no se escribe ni con
   // plantilla — eso ya no es un seguimiento, es spam.
+
+  // TRANSITORIO y va al FINAL a proposito: si fuera antes, una conversacion muerta reportaria
+  // "horario_silencioso" en vez de su motivo real y el diagnostico mentiria. La fila sigue
+  // elegible y sale en el primer barrido despues de la hora de corte.
+  const hora = localHour(nowIso, config);
+  const desde = config.followUp?.quietBeforeHour ?? DEFAULT_CONFIG.followUp.quietBeforeHour;
+  if (hora !== null && desde != null && hora < desde) return `horario_silencioso:${hora}h`;
+
   return null;
 }
 

@@ -198,6 +198,18 @@ Instrucciones de proyecto. Override sobre defaults.
   en un "resuelto" que hizo fast-forward a main (2026-08-20; el CI lo contuvo). El
   autosync ya tiene la guarda (se niega con MERGE_HEAD/paths unmerged), pero la regla es
   del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores con grep.
+- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente.** El autosync corre
+  cuando un subagente termina su turno, no cuando el trabajo está terminado. El 2026-08-23
+  se llevó **217 líneas de CSS a `origin/main` antes de que existiera el markup que las
+  usa** (`e4e7fa2a`), a mitad de una sesión que todavía tenía dos archivos por escribir.
+  No rompió nada **por casualidad**: eran clases CSS sin usar, que no pueden romper un
+  build. Al revés — markup que importa un archivo que aún no se commiteó — rompe `main`,
+  que alimenta el deploy del VPS y el de Vercel.
+
+  **La regla:** un subagente que trabaja en varios archivos deja el árbol en un estado que
+  **compile solo** cada vez que suelta el turno, o no suelta el turno. Si un archivo nuevo
+  importa otro archivo nuevo, van los DOS o ninguno — y eso ahora aplica también a "los dos
+  todavía no están escritos". El orquestador verifica `git log origin/main` al cerrar.
 - ⚠️ **Nunca buildear producción con un `.env.local` presente**: Next hornea los
   `NEXT_PUBLIC_*` en el bundle y publica `127.0.0.1`. Buildear en el VPS con `app.env`,
   y verificar el bundle antes del swap.

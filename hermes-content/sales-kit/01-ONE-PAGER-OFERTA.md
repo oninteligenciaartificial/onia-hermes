@@ -50,7 +50,7 @@
 
 | Add-on | Precio |
 |---|---|
-| **Chatbot WhatsApp con IA** — contesta, califica y hace seguimiento 24/7, con tu aprobación (el botón de WhatsApp simple ya va gratis en todos los planes). Incluye 500 conversaciones/mes; Meta por consumo. Lo que no entre en el estándar se define y se cotiza a medida | Bs 1.500 inst. + Bs 1.490/mes + Meta — fuente: `onia-platform/lib/pricing.ts` |
+| **Chatbot WhatsApp con IA** — contesta, califica y hace seguimiento 24/7, con tu aprobación (el botón de WhatsApp simple ya va gratis en todos los planes). Incluye 500 conversaciones/mes; Meta por consumo. Lo que no entre en el estándar se define y se cotiza a medida | **Bs 390/mes** o Bs 3.900/año, **sin cargo inicial** + Meta por consumo — fuente: `onia-platform/lib/pricing.ts` (`WHATSAPP_ADDON`) |
 | **Web de la clínica** — landing Bs 790 / web completa Bs 1.500 + Cuidado Web mensual | desde Bs 790 |
 | **Contador Pack** — RCV, vencimientos de NIT, radar normativo | a cotizar |
 

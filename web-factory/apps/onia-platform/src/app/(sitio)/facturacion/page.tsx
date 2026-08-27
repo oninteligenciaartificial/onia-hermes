@@ -111,6 +111,15 @@ export default function Facturacion() {
           <p className={s.body} style={{ fontSize: "1.1em", maxWidth: "50em" }}>
             {GRATIS.texto}
           </p>
+          {/* La pregunta que aparece justo acá es «¿y cómo me habilito?», y
+              esta página no la responde: responde QUÉ EXIGE la norma. El
+              paso a paso vive en /guia-facturacion. Enlace cruzado en las
+              dos direcciones, canonical propio en cada una. */}
+          <div className={s.actions}>
+            <a className={s.link} href="/guia-facturacion">
+              Cómo habilitarte gratis, en 6 pasos →
+            </a>
+          </div>
         </Reveal>
       </Block>
 
