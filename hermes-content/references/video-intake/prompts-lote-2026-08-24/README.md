@@ -1,6 +1,6 @@
-# Lote del 2026-08-24 — Q01 a Q09
+# Lote del 2026-08-24 — Q01 a Q11
 
-11 links mandados por Sergio de a uno. **10 analizados, 1 sin señal.** Uno por archivo,
+11 links mandados por Sergio de a uno. **Los 11 analizados, los 11 con prompt.** Uno por archivo,
 para abrir y pegar de a uno.
 
 > ⚠️ **Sin audio en todo el lote.** Speaches devolvió `fetch failed` — el mismo fallo que dejó
@@ -46,7 +46,24 @@ para abrir y pegar de a uno.
 | **Q08** | [Receiptile: el recibo digital es la excusa, lo que capturan es al cliente](Q08-receiptile-recibo-digital-captura-cliente.md) | @Receiptile |
 | **Q09** | [Datos sintéticos con Blender: cómo entrenar visión sin tener el dataset](Q09-datos-sinteticos-blender-para-vision.md) | @sigmoidal |
 
-## Sin prompt
+## → `influencers-ia`
 
-- [Vender la fantasía, no la prenda: campaña de moda con IA](../2026-08-24-vender-la-fantasia-campana-moda-ia.md) — `Db_Hlc2jQg5`: **Parcial y lo digo: leí el caption completo y NO las 8 láminas.** El lote se estaba cortando por costo. La reconstrucción visual queda pendiente.
-- `DcgguUEilg2` — caption *"¿Alguien quiere?"*, sin señal. **No analizado**: no se le dedicó lectura.
+| | Prompt | Cuenta |
+|---|---|---|
+| **Q10** | [iklipse: cómo se vende un servicio de IA sin nombrar la herramienta](Q10-iklipse-vender-servicio-ia-sin-nombrar-herramienta.md) | @iklipse |
+
+## Cerrados en la segunda pasada
+
+`Q10` y `Q11` estaban sin analizar cuando se cortó el lote por costo. Se completaron después:
+
+- **Q10** era PARCIAL (solo caption). Leídas las 8 láminas, resultó el mejor molde de venta de
+  servicio del lote.
+- **Q11** estaba descartado por caption sin señal (*"¿Alguien quiere?"*). Al mirarlo, es un
+  portafolio con **cinco mecánicas de email**, una de ellas dinámica por clima. **Descartar por
+  caption es barato pero se equivoca**: acá el caption no decía nada y el contenido estaba entero
+  en pantalla.
+
+| | Prompt | Destino |
+|---|---|---|
+| **Q10** | [iklipse — venta de servicio en 4 usos](Q10-iklipse-vender-servicio-ia-sin-nombrar-herramienta.md) | `influencers-ia` |
+| **Q11** | [Portafolio de emails — cinco mecánicas](Q11-portafolio-emails-cinco-mecanicas.md) | `marketing` |
