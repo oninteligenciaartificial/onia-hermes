@@ -855,8 +855,14 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
   const rawBg = slide.bg || (args && args.bg) || '';
   const bg = rawBg ? path.resolve(rawBg).replace(/\\/g, '/') : '';
+  // La foto de fondo puede ser una CAPTURA DEL PRODUCTO, y entonces se puede anotar.
+  // Este pack no tiene slot de objeto flotante -es foto a sangre con texto encima-, y
+  // por eso O01 y O02 salieron con 14 laminas hablando de un sistema que no se ve:
+  // sus fotos eran ambiente decorativo. Anotando el fondo, la misma lamina pasa de
+  // decorada a demostrada, sin tocar el layout.
+  const anot = annotate(slide.marks);
   const photo = bg
-    ? `<div class="photo" style="background-image:url('file://${bg}')"></div>`
+    ? `<div class="photo" style="background-image:url('file://${bg}')">${anot.capa}</div>`
     : '';
 
   const headTag = role === 'cover' ? 'h1' : 'h2';
@@ -880,6 +886,8 @@ ${safeAreaCss()}
   padding:var(--pad); display:flex; flex-direction:column; justify-content:flex-end;
   background:var(--onia-ink); color:var(--onia-white); font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif,'Segoe UI',system-ui,Arial,sans-serif; }
 .photo { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
+${MARKS_CSS}
+.photo .marks { position:absolute; inset:0; width:100%; height:100%; }
 .scrim { position:absolute; inset:0; z-index:1;
   background:linear-gradient(180deg, rgba(10,15,13,.15) 0%, rgba(10,15,13,.55) 55%, rgba(10,15,13,.92) 100%); }
 .grain { position:absolute; inset:0; z-index:2; opacity:.10; mix-blend-mode:overlay; }
@@ -910,7 +918,7 @@ ${safeAreaCss()}
   padding:26px 46px; border-radius:100px; box-shadow:0 18px 48px rgba(0,0,0,.45); }
 </style></head>
 <body><div class="slide ${role}">
-  ${photo}<div class="scrim"></div>
+  ${photo}<div class="scrim"></div>${anot.pie}
   <svg class="grain" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="300" height="300" filter="url(#n)"/></svg>
   ${pill}
   <${headTag} class="ed-h">${emph(slide.headline)}</${headTag}>

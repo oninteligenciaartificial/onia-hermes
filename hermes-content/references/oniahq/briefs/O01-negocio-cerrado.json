@@ -22,8 +22,7 @@
    "role": "stakes",
    "pill": "El costo real",
    "headline": "El que pregunta a las 10 no *espera* a mañana",
-   "body": "Le escribe a tres. Compra al que contestó. No perdiste por precio ni por producto: perdiste por {{hora}}.",
-   "bg": "hermes-content/references/oniahq/fondos/cuaderno-02.png"
+   "body": "Le escribe a tres. Compra al que contestó. No perdiste por precio ni por producto: perdiste por {{hora}}."
   },
   {
    "number": 3,
@@ -47,7 +46,7 @@
    "pill": "03",
    "headline": "Avisarte lo que *no* se ve",
    "body": "Un fiado que venció. Un producto que se está por acabar. Plata parada hace {{90 días}}. Vos no lo mirás; el sistema sí.",
-   "bg": "hermes-content/references/oniahq/fondos/tienda-01.png"
+   "bg": "hermes-content/references/oniahq/fondos/estantes-03.png"
   },
   {
    "number": 6,

@@ -20,12 +20,15 @@ const path = require('path');
 // Que soporta cada pack. Medido ejecutando cada funcion con un slide que trae
 // object y callout, y mirando si sobreviven al HTML. No leido del codigo: probado.
 const CAPACIDADES = {
-  typographic: { object: false, callout: false },
-  'dark-product': { object: true, callout: true },
-  'dark-neon': { object: true, callout: true },
-  'editorial-photo': { object: false, callout: false },
-  'editorial-clean': { object: false, callout: false },
-  'bright-retail': { object: true, callout: true },
+  typographic: { object: false, callout: false, marks: false },
+  'dark-product': { object: true, callout: true, marks: true },
+  'dark-neon': { object: true, callout: true, marks: true },
+  // editorial-photo no tiene slot de objeto flotante: es foto a sangre. Pero desde
+  // 2026-08-25 la foto de fondo se puede anotar, asi que una captura del producto
+  // puesta de `bg` si funciona como prueba.
+  'editorial-photo': { object: false, callout: false, marks: true },
+  'editorial-clean': { object: false, callout: false, marks: false },
+  'bright-retail': { object: true, callout: true, marks: true },
 };
 
 // Debajo de esta escala el texto de una captura de pantalla deja de leerse en el
@@ -79,7 +82,7 @@ function revisar(brief, pack, baseDir = process.cwd()) {
     const n = s.number || i + 1;
 
     // 1. Lo que el pack tira en silencio. El peor de todos: no falla, desaparece.
-    for (const campo of ['object', 'callout']) {
+    for (const campo of ['object', 'callout', 'marks']) {
       if (s[campo] && !cap[campo]) {
         problemas.push({
           nivel: 'error', regla: 'capacidad', lamina: n,

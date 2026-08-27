@@ -532,3 +532,32 @@ Nada de esto se toca al arreglar el visual. Todo verificado sobre los PNG.
 `hermes-content/docs/ONIA_MANUAL_DE_FORMATOS_20260813.md` ·
 `hermes-content/carousels/CAROUSEL_SYSTEM.md` ·
 `hermes-content/references/carruseles-referencia/josecarlosttb/ANALISIS.md`
+
+---
+
+## 8. Qué pack para qué pieza — el hallazgo del 2026-08-25
+
+Se intentó arreglar O01 metiéndole la captura del chat como **fondo a sangre** en
+`editorial-photo`. **No funciona, y hay que dejarlo escrito para no repetirlo.**
+
+En `editorial-photo` el texto va **encima** de la foto. Una foto de ambiente sirve porque
+es oscura y difusa: el scrim la aplasta y el titular se lee limpio. Una **captura de
+producto tiene información** — texto de UI, burbujas, botones — y esa información **compite
+con el titular**. Resultado medido mirando el PNG: no se lee ni la captura ni el texto.
+
+**La regla, entonces, es de reparto, no de capacidad:**
+
+| Si la pieza… | Va en | Porque |
+|---|---|---|
+| Habla del **dolor** ("tu negocio pierde plata cerrado") | `editorial-photo` | El dolor se ilustra con ambiente. **No necesita producto** |
+| Habla de lo que **hace el producto** | `dark-product` | Imagen y texto tienen zonas separadas: la captura se lee y el titular también |
+| Es **informativa / fiscal** | `bright-retail` | Claro, de día, no dramático |
+
+**Corolario que corrige la sección 2:** "si la imagen no prueba la frase, no va imagen" sigue
+en pie — pero **no toda pieza necesita probar algo con una captura**. Una pieza de dolor con
+tres láminas negras y buena tipografía está *bien*, no incompleta. El error de O01 no era la
+falta de capturas: era que sus fotos eran de stock genérico con cartelería en inglés
+("CLOSED", "Grain & Good") bajo titulares que hablaban de otra cosa.
+
+La capacidad de anotar el fondo en `editorial-photo` **queda igual** en el motor: sirve para
+una foto con un detalle que señalar. Lo que no sirve es meter una captura de UI ahí.
