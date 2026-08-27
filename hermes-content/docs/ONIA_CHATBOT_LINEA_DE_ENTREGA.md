@@ -11,8 +11,13 @@
 > los trámites de Meta (se hacen UNA vez). Lo que queda por cliente es:
 > conexión + siembra + prueba.
 >
-> Precio que esto entrega: **Chatbot WhatsApp con IA — Bs 1.500 inst. + Bs 1.490/mes
-> + Meta por consumo** (fuente única: `onia-platform/lib/pricing.ts`, `WHATSAPP_ADDON`).
+> Precio que esto entrega: **Chatbot WhatsApp con IA — Bs 390/mes o Bs 3.900/año, sin
+> cargo inicial** (fuente única: `onia-platform/lib/pricing.ts`, `WHATSAPP_ADDON`).
+> Los mensajes se los cobra Meta al cliente en SU cuenta: Onia sale de esa cadena de pago.
+>
+> ⚠️ **Corregido 2026-08-27.** Acá decía `Bs 1.500 inst. + Bs 1.490/mes` **citando a
+> `pricing.ts` como fuente** — y la fuente decía otra cosa desde el 2026-08-21. Un doc que
+> cita bien y transcribe mal es peor que uno sin fuente: el que lo lee cree que verificó.
 
 ---
 
@@ -195,7 +200,7 @@ visible en `bot/config.mjs`):
   calificación, horarios, destino del handoff, horario de atención.
 
 BE demuestra el techo artesanal (catálogo grande) y aporta las piezas 2.1 que a BOT-ONIA le
-faltan (seller-router multi-vendedor, plantillas HSM, SLA). El bot estándar de Bs 1.490/mes
+faltan (seller-router multi-vendedor, plantillas HSM, SLA). El bot estándar de Bs 390/mes
 es BOT-ONIA parametrizado; el catálogo estilo BE es el "a medida" que ya contempla el
 pricing (`WHATSAPP_ADDON`: "Lo que no entre en el estándar se cotiza a medida").
 

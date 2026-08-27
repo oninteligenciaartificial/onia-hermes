@@ -1,8 +1,38 @@
-# Onia Pricing 2026
+# Onia Pricing 2026 — DEGRADADO, ya no es fuente
 
-Documento canonico de precios y comisiones comerciales. Uso interno.
+> 🔴 **Este documento NO define ningún precio. Degradado el 2026-08-27.**
+>
+> **Los precios se LEEN del código:**
+> - **Planes de suscripción → `onia-platform/lib/subscription-plans.ts`** (`DEFAULT_PLAN_AMOUNTS`).
+>   Es lo que **valida el cobro**: si un doc dice otro monto, el pago se rechaza.
+> - **Add-ons → `onia-platform/lib/pricing.ts`** (ahí también viven los nombres visibles de los
+>   planes, en `PLAN_LABELS`).
+>
+> **Para vender, andá a `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`:** una sola tabla con precio y
+> función, cruzada contra el código.
+>
+> **Por qué se degradó.** Este archivo se autodeclaraba *documento canónico de precios* — contra
+> `CLAUDE.md`, que dice que mandan los dos archivos de código. Tenía cifras de **junio** y era **el
+> doc más enlazado del repo (17 archivos entrantes)**, con su tabla clonada literal en otros dos.
+> Con eso, cualquier sesión elegía mal: así llegamos a tener **cuatro precios vivos del mismo
+> chatbot al mismo tiempo**, y un one-pager que citaba `pricing.ts` como fuente mientras escribía
+> otro número.
+>
+> **Qué sigue sirviendo acá:** las REGLAS comerciales (comisión sobre lo realmente cobrado, costos
+> de terceros excluidos, el precio se reserva solo con pago confirmado) y la línea de **webs,
+> consultoría y automatización**, que `pricing.ts` NO cubre.
+>
+> ⚠️ **Esa línea, por decisión del 2026-08-24, no lleva lista de precios: se cotiza caso por
+> caso** (`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.5). Las cifras de web y consultoría de abajo son
+> referencia histórica de rango, **no un tarifario**. 🔴 **Nadie debe corregirlas contra
+> `pricing.ts`: ese archivo no cubre esta línea.** Un barrido que las toque está rompiendo, no
+> ordenando.
+>
+> **Qué está MUERTO acá:** `GestiOS` no es un producto (es un rubro de Onia Platform; sus repos son
+> legado) · los nombres `DentalGest Basico / Profesional / Clinica` (hoy **Básico · Profesional ·
+> Completo · Empresa**, de `PLAN_LABELS`) · la vigencia *hasta 2026-07-31*.
 
-Ultima actualizacion: 2026-06-22
+Ultima actualizacion como fuente: 2026-06-22 · **Degradado: 2026-08-27**
 
 ## Veredicto contable
 
@@ -48,9 +78,9 @@ Vigencia:
 
 | Oferta | Precio de arranque | Comision vendedor |
 |---|---:|---:|
-| DentalGest Basico | Bs. 320/mes | Bs. 112.00 |
-| DentalGest Profesional | Bs. 750/mes | Bs. 262.50 |
-| DentalGest Clinica | Bs. 1,500/mes | Bs. 525.00 |
+| Plan Básico | Bs. 320/mes | Bs. 112.00 |
+| Plan Profesional | Bs. 750/mes | Bs. 262.50 |
+| Plan Completo | Bs. 1.500/mes | Bs. 525.00 |
 | GestiOS Basico | Bs. 350/mes | Bs. 122.50 |
 | GestiOS Crecer | Bs. 530/mes | Bs. 185.50 |
 | GestiOS Pro | Bs. 800/mes | Bs. 280.00 |
@@ -147,22 +177,25 @@ aprobacion de Onia.
 
 | Plan | Precio | Comision vendedor |
 |---|---:|---:|
-| DentalGest Basico | Bs. 320/mes | Bs. 112.00 |
-| DentalGest Profesional | Bs. 750/mes | Bs. 262.50 |
-| DentalGest Clinica | Bs. 1,500/mes | Bs. 525.00 |
+| Plan Básico | Bs. 320/mes | Bs. 112.00 |
+| Plan Profesional | Bs. 750/mes | Bs. 262.50 |
+| Plan Completo | Bs. 1.500/mes | Bs. 525.00 |
 | Onboarding express | Bs. 290 | Bs. 29.00 |
 | Configuracion asistida | Bs. 690 | Bs. 69.00 |
-| Migracion + capacitacion equipo | Bs. 1,490 | Bs. 149.00 |
-| Agenda publica en Basico | Bs. 150/mes | Bs. 52.50 |
+| Migracion + capacitacion equipo (onboarding guiado) | **cotizado por alcance** (`pricing.ts`) | 10% de lo cobrado |
+| Agenda publica en el plan Básico | Bs. 150/mes (incluida en Profesional y Completo) | Bs. 52.50 |
 | Usuario extra | Bs. 70/usuario/mes | Bs. 24.50 |
-| Insumos dentales en Basico | Bs. 80/mes | Bs. 28.00 |
-| WhatsApp operativo DentalGest | Bs. 650 inst. + Bs. 350/mes + consumo Meta | Requiere aprobacion |
+| ~~Insumos dentales en Basico~~ | 🔴 **NO EXISTE en `pricing.ts` — no cobrarlo (2026-08-27).** El inventario simple está incluido en todos los planes; lo que sí existe es el add-on **Inventario avanzado, Bs 180/mes** (compras a crédito, proveedores, vencimientos por lote y alertas de stock bajo). Vender un "módulo de insumos" a Bs 80 es cobrar por algo que ya es gratis. | — |
+| Inventario avanzado (add-on real) | Bs. 180/mes | 10% de lo cobrado |
+| Chatbot WhatsApp con IA (add-on de plataforma) | **Bs 390/mes o Bs 3.900/año, sin cargo inicial** — se lee de `pricing.ts` | Requiere aprobacion |
 
-WhatsApp operativo DentalGest no se vende como add-on simple hasta validar Meta,
-numero, plantillas, webhooks y costos por consumo. La referencia tecnica actual
-del producto es: instalacion Bs. 650, mensualidad operativa Bs. 350 y tarifas
-Meta variables por mensaje. No usar el precio antiguo de Bs. 80/mes para
-WhatsApp.
+⚠️ **Corregido 2026-08-27.** Acá decía `instalacion Bs. 650 + mensualidad Bs. 350 + tarifas
+Meta variables`. Eso murió el 2026-08-21: el add-on es **Bs 390/mes o Bs 3.900/año, SIN
+instalación**, y **el cliente le paga a Meta directo** con su propia tarjeta en su cuenta de
+WhatsApp Business — Onia sale de esa cadena de pago, y ningún texto puede decir que nosotros
+facturamos los mensajes. Fuente: `onia-platform/lib/pricing.ts`, `WHATSAPP_ADDON`.
+Se eliminó el cobro de instalación porque un pago de entrada de Bs 2.990 para PROBAR un
+chatbot frenaba la venta.
 
 ## GestiOS
 

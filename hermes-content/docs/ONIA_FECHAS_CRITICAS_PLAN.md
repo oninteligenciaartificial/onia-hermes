@@ -55,21 +55,34 @@ Fuente primaria, verificada 2026-08-17:
   Meta descargado el 2026-08-08 (`ONIA_META_WHATSAPP_CLIENTES_20260808.md`). La página
   pública solo ofrece el CSV descargable, no tabla inline — **re-descargar el 1-sep**.
 
-### ¿El add-on chatbot de Bs 1.490/mes con 500 conversaciones incluidas costea?
+### ¿El add-on chatbot de Bs 390/mes con 500 conversaciones incluidas costea?
 
-**Sí, con margen amplio en ambos regímenes.** Conversación típica = 1 plantilla utility +
+**Sí en el régimen elegido (B). NO en el peor caso del régimen A** — y esa es la
+diferencia que apareció al bajar el abono. Conversación típica = 1 plantilla utility +
 2 respuestas service + 10 turnos de IA propia (modelo de `ONIA_PRICING_CHATBOT_20260815.md` §2.4):
 
-| Régimen | Costo/conv post-oct | 500 conversaciones | % del abono Bs 1.490 | Margen bruto |
+| Régimen | Costo/conv post-oct | 500 conversaciones | % del abono Bs 390 | Margen bruto |
 |---|---:|---:|---:|---:|
-| **B — cliente paga Meta directo** (el modelo elegido: cada cliente su WABA) | Bs 0,036 (solo IA) | **Bs 18/mes** | 1,2% | Bs 1.472 |
-| A — Onia absorbe Meta, plantilla **utility** | Bs 0,45 | **Bs 225/mes** | 15% | Bs 1.265 |
-| A — peor caso: plantilla recategorizada a **marketing** | Bs 1,20 | **Bs 600/mes** | 40% | Bs 890 |
+| **B — cliente paga Meta directo** (el modelo elegido: cada cliente su WABA) | Bs 0,036 (solo IA) | **Bs 18/mes** | 4,6% | **Bs 372** |
+| A — Onia absorbe Meta, plantilla **utility** | Bs 0,45 | **Bs 225/mes** | 57,7% | Bs 165 |
+| A — peor caso: plantilla recategorizada a **marketing** | Bs 1,20 | **Bs 600/mes** | **154%** | **−Bs 210** |
 
-Punto de equilibrio del régimen A a Bs 1.490: ~1.485 mensajes/mes en marketing — con 500
-conversaciones incluidas no se toca. **Caveats:** (1) la tarifa service post-oct puede
-subir cuando Meta la publique (recalcular el 1-sep); (2) el tope real del régimen B es
-soporte humano: >15 h/mes de atención humana = cliente a pérdida (Bs 1.490 ÷ Bs 100/h).
+⚠️ **Cuenta rehecha el 2026-08-27, y una conclusión cambió de signo.** Estas cifras se
+calcularon contra un abono de Bs 1.490, que dejó de existir el 2026-08-21 (`pricing.ts`,
+`WHATSAPP_ADDON`: **Bs 390/mes sin cargo inicial**). Con el abono viejo el régimen A
+toleraba el peor caso con Bs 890 de margen; **con Bs 390 pierde Bs 210 por cliente**. El
+punto de equilibrio del régimen A cayó de ~1.240 a **325 conversaciones/mes** — por debajo
+de las 500 que el add-on incluye, o sea que **pierde plata dentro de su propio cupo**.
+
+**Lo que esto significa:** absorber el transporte de Meta dejó de ser una opción cara y
+pasó a ser una opción inviable. Bajar el abono a Bs 390 y sacar a Onia de la cadena de
+pago de Meta **no son dos decisiones separables**.
+
+**Caveats:** (1) la tarifa service post-oct puede subir cuando Meta la publique
+(recalcular el 1-sep) — ahora eso encarece la factura DEL CLIENTE, no la nuestra, así que
+el riesgo es de churn y hay que avisarle antes; (2) el tope real del régimen B es soporte
+humano, y se apretó 4×: **>3,9 h/mes de atención humana = cliente a pérdida**
+(Bs 390 ÷ Bs 100/h), contra las ~15 h que daba el abono viejo.
 
 ## 4. RUNWAY
 

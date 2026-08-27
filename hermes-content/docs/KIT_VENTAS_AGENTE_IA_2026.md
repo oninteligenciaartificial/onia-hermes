@@ -1,7 +1,13 @@
 # Kit de Ventas — Agente IA Onia (Sprint 15 días)
 
 > ⚠️ **PRECIOS DESACTUALIZADOS (corregido 2026-08-01).** Este doc cita Landing Bs 1.490 y
-> flujos a 1.800: son de la lista vieja. **Manda `PRICING_RATIONALE_INTERNO.md` §0**
+> flujos a 1.800: son de la lista vieja.
+>
+> 🔴 **Ojo, 2026-08-27: ese Bs 1.490 es un precio de WEB (landing), NO el del chatbot.**
+> Coincide por casualidad con el abono viejo del add-on de WhatsApp. **No lo "corrijas"
+> contra `pricing.ts`**: ese archivo no cubre la línea de webs, que por decisión del
+> 2026-08-24 **no lleva lista de precios y se cotiza caso por caso**
+> (`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.5). **Manda `PRICING_RATIONALE_INTERNO.md` §0**
 > (lanzamiento: Landing **790** · Web Pro **1.500**, desde 2026-07-03) y la tabla por caso
 > de `ONIA_SERVICIOS_POR_CASO_PRECIOS_20260801.md`. Los guiones y mensajes de acá siguen
 > siendo válidos — solo reemplazar el número al usarlos.

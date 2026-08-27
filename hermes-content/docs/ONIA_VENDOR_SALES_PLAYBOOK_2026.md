@@ -1,5 +1,24 @@
 # Onia Vendor Sales Playbook 2026
 
+> 🔴 **PRECIOS DE PLATAFORMA DESACTUALIZADOS — leer antes de cotizar (2026-08-27).**
+>
+> Las tablas de abajo son de junio y **no son fuente**. Los precios de la plataforma se LEEN de
+> `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons);
+> la versión vendible, con las funciones al lado, está en
+> **`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`**.
+>
+> Lo que hay que saber antes de abrir la boca con un cliente:
+> - Los planes son **Básico Bs 320 · Profesional Bs 750 · Completo Bs 1.500 · Empresa Bs 2.900**
+>   (mensual; anual = 10 meses). **Ya no se llaman DentalGest Basico/Profesional/Clinica**: Onia
+>   vende 7 rubros y el pack dental es uno.
+> - El **chatbot de WhatsApp** es **Bs 390/mes o Bs 3.900/año, sin cargo inicial**. Los mensajes se
+>   los cobra **Meta directamente al cliente** en su cuenta: nosotros no los facturamos ni los
+>   marcamos.
+> - **`GestiOS` no existe como producto.** Es un rubro de Onia Platform; sus repos son legado.
+> - Las líneas de **web, consultoría y automatización no llevan lista de precios**: se cotizan caso
+>   por caso (decisión 2026-08-24). Las cifras de abajo son rango histórico, no tarifario, y **no se
+>   corrigen contra `pricing.ts`** — ese archivo no cubre esa línea.
+
 ## Veredicto
 
 Onia vende sistemas de crecimiento, no piezas sueltas. El vendedor debe detectar
@@ -38,9 +57,9 @@ Condiciones:
 
 | Producto | Precio de arranque | Premio vendedor |
 |---|---:|---:|
-| DentalGest Basico | Bs. 320/mes | Bs. 112 |
-| DentalGest Profesional | Bs. 750/mes | Bs. 262,50 |
-| DentalGest Clinica | Bs. 1.500/mes | Bs. 525 |
+| Plan Básico | Bs. 320/mes | Bs. 112 |
+| Plan Profesional | Bs. 750/mes | Bs. 262,50 |
+| Plan Completo | Bs. 1.500/mes | Bs. 525 |
 | GestiOS Basico | Bs. 350/mes | Bs. 122,50 |
 | GestiOS Crecer | Bs. 530/mes | Bs. 185,50 |
 | GestiOS Pro | Bs. 800/mes | Bs. 280 |
@@ -69,16 +88,17 @@ precio vigente.
 
 | Producto | Precio | Premio vendedor |
 |---|---:|---:|
-| DentalGest Basico | Bs. 320/mes | Bs. 112 |
-| DentalGest Profesional | Bs. 750/mes | Bs. 262,50 |
-| DentalGest Clinica | Bs. 1.500/mes | Bs. 525 |
+| Plan Básico | Bs. 320/mes | Bs. 112 |
+| Plan Profesional | Bs. 750/mes | Bs. 262,50 |
+| Plan Completo | Bs. 1.500/mes | Bs. 525 |
 | Onboarding express DentalGest | Bs. 290 | Bs. 29 |
 | Configuracion asistida DentalGest | Bs. 690 | Bs. 69 |
-| Migracion + capacitacion DentalGest | Bs. 1.490 | Bs. 149 |
-| Agenda publica en DentalGest Basico | Bs. 150/mes | Bs. 52,50 |
+| Migracion + capacitacion (onboarding guiado) | **cotizado por alcance** (`pricing.ts`) | 10% de lo cobrado |
+| Agenda publica en el plan Básico | Bs. 150/mes (incluida en Profesional y Completo) | Bs. 52,50 |
 | Usuario extra DentalGest | Bs. 70/usuario/mes | Bs. 24,50 |
-| Insumos dentales en DentalGest Basico | Bs. 80/mes | Bs. 28 |
-| WhatsApp operativo DentalGest | Bs. 650 inst. + Bs. 350/mes + Meta | requiere aprobacion |
+| ~~Insumos dentales en Básico~~ | 🔴 **NO EXISTE en `pricing.ts` — no cobrarlo (2026-08-27).** El inventario simple está incluido en todos los planes; lo que sí existe es el add-on **Inventario avanzado, Bs 180/mes** (compras a crédito, proveedores, vencimientos por lote y alertas de stock bajo). Vender un "módulo de insumos" a Bs 80 es cobrar por algo que ya es gratis. | — |
+| Inventario avanzado (add-on real) | Bs. 180/mes | 10% de lo cobrado |
+| Chatbot WhatsApp con IA (add-on) | **Bs 390/mes o Bs 3.900/año, sin cargo inicial**; los mensajes los cobra Meta al cliente | requiere aprobacion |
 | GestiOS Basico | Bs. 350/mes | Bs. 122,50 |
 | GestiOS Crecer | Bs. 530/mes | Bs. 185,50 |
 | GestiOS Pro | Bs. 800/mes | Bs. 280 |

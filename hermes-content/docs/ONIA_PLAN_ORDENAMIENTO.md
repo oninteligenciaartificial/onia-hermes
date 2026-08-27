@@ -59,6 +59,14 @@ precios que no existen.**
 
 ### 1.2 Los internos (18 archivos)
 
+> ✅ **Hecho el 2026-08-27 para todo `hermes-content/docs/`** (carril `carril/precios-docs`).
+> Quedan fuera de ese barrido, a propósito: `historial/` (es historia), los `.html` (otro
+> carril), `hermes-content/propuestas/`, `hermes-content/skills/` y `onia-platform/docs/`.
+> Los dos que exigían REHACER la cuenta —`ONIA_AGENTES_COSTO_API.md` y
+> `ONIA_FECHAS_CRITICAS_PLAN.md`— se recalcularon enteros, y **dos conclusiones cambiaron de
+> signo**: a Bs 390 el régimen "Onia absorbe Meta" pierde plata dentro de su propio cupo, y
+> el colchón de soporte humano cayó de ~15 h/mes a ~3,9 h/mes.
+
 `ONIA_CHATBOT_LINEA_DE_ENTREGA.md:14,198` · `ONIA_CHATBOT_ALTA_WHATSAPP_CLIENTE.md:38,275,285` ·
 `ONIA_CHATBOT_ESTADO_LOOP.md:101,179` · `ONIA_AGENTES_COSTO_API.md:16,121,270,281,286` ·
 `ONIA_FECHAS_CRITICAS_PLAN.md:58,63,69,72` · `ONIA_RADAR_DECISIONES_PRODUCTO.md:59` ·
@@ -73,6 +81,16 @@ todo su cálculo de margen. Con Bs 390 las conclusiones cambian — **hay que re
 cuentas, no cambiar el número.**
 
 ### 1.3 Degradar al falso canónico
+
+> ✅ **Hecho el 2026-08-27.** `ONIA_PRICING_2026.md` ya no se declara canónico y arranca con el
+> aviso que manda a los dos archivos de código y a `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. Se
+> redirigieron sus enlaces entrantes dentro de `hermes-content/docs/` y se pusieron banners a
+> las dos copias de su tabla (`ONIA_VENDOR_MANUAL_2026.md`,
+> `ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md`) más `ONIA_VENDOR_SALES_PLAYBOOK_2026.md`.
+> **Faltan los punteros de fuera de esa carpeta**: `COORDINATION_MANIFEST.md`,
+> `docs/ORCHESTRATOR.md` (el de la raíz), `hermes-content/propuestas/{PRICING_RATIONALE_INTERNO,
+> BCP_PASARELA_CREDENCIALES_INTERNO}.md` y `hermes-content/skills/{consultoria-onia,
+> propuestas-comerciales-onia}.md`.
 
 `ONIA_PRICING_2026.md` deja de declararse canónico y pasa a apuntar a las dos fuentes.
 **Sus 17 enlaces entrantes hay que redirigirlos**, o el doc degradado se sigue leyendo.
@@ -103,8 +121,10 @@ nadie consume. **Escribir el equivalente para docs**: un script que falle si un 
 
 **Por qué segundo:** con los números correctos pero el índice roto, la sesión igual aterriza mal.
 
-- **Reescribir `LEEME-PRIMERO.md`** apuntando a los **17 docs que se declaran fuente** (§C
-  de la auditoría). Sacar los 5 punteros que van a `historial/`.
+- ✅ **`LEEME-PRIMERO.md` reescrito el 2026-08-27.** Ningún puntero va a `historial/`; arranca
+  por dónde viven los precios (los dos archivos de código) y ordena los docs vivos por venta,
+  plata/legal, infra y handoff. Corrige de paso el conteo (decía 163 documentos; son 390) y
+  cierra el ítem del tipo de cambio 6,96, que ya está arreglado en `fx.logic.mjs`.
 - **Enlazar los 4 huérfanos que SÍ mandan** — `ONIA_INFRA_LIMPIEZA_Y_ORDEN`,
   `ONIA_LEGAL_BOLIVIA_ESTADO`, `ONIA_WEB_FACTORY_Y_PRODUCTO_UI`,
   `ONIA_AGENTES_IA_DISENO_FUNCIONAL`. **No archivarlos: nadie los nombra pero mandan.**
@@ -167,9 +187,14 @@ Recién con lo anterior cerrado. Estado real al 2026-08-24:
 ### Decisiones que esperan a Sergio
 1. **La flecha**: ¿comercio de mostrador, o Bolivian Electric como piloto? Lo segundo tiene
    nombre, dolor relevado en 10 puestos y acceso directo — pero exige multi-almacén.
-2. **¿Los precios de webs y consultoría entran en la regla?** Hoy ninguna fuente los define.
-   Si entran, hace falta una tercera fuente; si no, hay que declararlo para que nadie los
-   "corrija" contra un archivo que no los cubre.
+2. ✅ **DECIDIDO (2026-08-24): los precios de webs y consultoría NO entran en la regla.** Esa
+   línea **no lleva lista de precios**: se cotiza caso por caso, porque el alcance cambia con
+   cada cliente y una lista fija obliga a estirar o a regalar
+   (`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.5, `ONIA_WEB_COMO_SE_VENDE.md` §8).
+   🔴 **Queda escrito para que nadie las "corrija" contra `pricing.ts`**: ese archivo no cubre
+   esta línea, y un barrido que las toque está rompiendo, no ordenando. Los avisos ya están
+   puestos en `ONIA_PRICING_2026.md`, `ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md`,
+   `KIT_VENTAS_AGENTE_IA_2026.md`, `PROJECTS_ORCHESTRATION.md` y los dos docs de vendedores.
 3. **El seguimiento del bot no tiene hora de silencio** — puede escribirle a un prospecto a
    las 6 de la mañana. Ponerle el freno achica la ventana de Meta. Está esperando desde el 16-ago.
 
