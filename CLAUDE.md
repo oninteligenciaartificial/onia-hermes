@@ -149,6 +149,26 @@ Instrucciones de proyecto. Override sobre defaults.
   habla solo de lo vivo. Docs internos y política de privacidad siguen siendo honestos
   sobre límites; la VENTA no.
 
+## No hay equipo de ventas (REGLA)
+
+> Sergio, 2026-08-27: *"ya no crees nada sobre vendedores, por el momento no tenemos
+> equipo de ventas"*.
+
+- **El que vende es Sergio.** No hay vendedora, ni colaboradores comerciales, ni nadie
+  externo vendiendo Onia.
+- **PROHIBIDO escribir material dirigido a un vendedor**: onboarding de vendedores,
+  tablas de comisión, decks de reclutamiento, CRM de fuerza de ventas, runbooks de acceso
+  para terceros. **Primero existe la persona, después el documento.** Al revés se llenó
+  media carpeta de material para un puesto que nunca se ocupó — y peor: manda a cada
+  sesión nueva a mantenerlo.
+- **Material sobre CÓMO vender sí sirve** (guion de demo, objeciones, scripts, one-pager):
+  lo usa Sergio. Vive en `hermes-content/sales-kit/`, con su README fijando el estado.
+- Lo que asumía un vendedor tercero se archivó en `hermes-content/docs/historial/`. Las
+  comisiones de `ONIA_WEB_COMO_SE_VENDE.md` quedan **suspendidas**, no borradas.
+- ⚠️ Queda una **superficie huérfana viva**: `/vendedores/cotizador` y `/vendedores/webs`
+  en `web-factory`. Son rutas publicadas para un puesto vacío. Bajarlas es decisión de
+  Sergio.
+
 ## ONIA Core (REGLA)
 
 - **Un rubro nuevo se ENCIENDE desde el core, no se escribe de cero.** Orden: dental

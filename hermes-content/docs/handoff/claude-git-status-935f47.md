@@ -49,8 +49,11 @@ con cache-buster, o sea que el origen sirve el build nuevo y no es caché de Clo
   en el server bundle, `307` al login sin sesión. Falta que Sergio la abra (§6).
 - 🟡 **~18 docs internos con precios viejos.** `ONIA_AGENTES_COSTO_API.md` necesita que se
   REHAGA la cuenta de margen, no un reemplazo de texto: Bs 1.490 es la base del cálculo.
-- 🟡 **Dos decks HTML de la vendedora** con tablas de precio viejas: falta decidir si se
-  reescriben, se archivan o se les pone banner.
+- ✅ **Material de vendedores: RESUELTO el 2026-08-27.** Sergio: no hay equipo de ventas.
+  Todo lo que asumía un vendedor tercero (packet, decks, runbook de acceso, CRM de
+  vendedores) se archivó en `historial/`. El `sales-kit/` se queda —enseña a vender y el
+  que vende es Sergio— con un README que fija el estado. Queda anotada una superficie
+  huérfana: `/vendedores/cotizador` y `/vendedores/webs` siguen VIVAS en web-factory.
 - 🟡 **`LEEME-PRIMERO.md`** por reescribir; `ONIA_PRICING_2026.md` por degradar y redirigir
   sus 17 enlaces entrantes.
 - 🟡 **Fix de hora de silencio del bot** (`quietBeforeHour: 8`) commiteado y **sin
@@ -111,7 +114,9 @@ probada para el próximo deploy; copiarlos y cambiar el `COMMIT`.
 3. **¿El markup de Meta es 20% o a costo?** `WHATSAPP_ADDON.meta.markupPct: 20` contradice
    la etiqueta que le promete al cliente que el excedente va al costo. Lety.ai vende
    "0% markup" como tesis central: es el ataque más fácil que nos pueden hacer.
-4. **Los dos decks HTML de la vendedora**: reescribir, archivar o poner banner.
+4. **¿Se bajan las pantallas `/vendedores/*` de web-factory?** Son rutas publicadas
+   hechas para un vendedor que no existe. Sacarlas es una decisión de superficie viva, no
+   la tomo solo.
 
 ---
 
