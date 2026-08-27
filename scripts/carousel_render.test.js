@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+const {
+  papelSubrayadoHtml, roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
 
 let passed = 0;
+process.on('exit', () => console.log(`
+${passed} passed`));
 function test(name, fn) {
   fn();
   passed++;
@@ -69,7 +72,8 @@ test('packs list includes all packs (incl. editorial-clean)', () => {
   // Rojo desde el 2026-08-20 hasta el 08-23: `editorial-clean` se agrego al motor y
   // nadie actualizo esta lista. Una suite roja por una razon vieja tapa las regresiones
   // nuevas — que es justo lo que un test existe para evitar.
-  assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail']);
+  assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo',
+    'editorial-clean', 'bright-retail', 'papel-subrayado']);
 });
 test('nuvia account + brand kit configured', () => {
   assert.strictEqual(ACCOUNTS.nuvia.handle, '@nuvia.bo');
@@ -331,6 +335,33 @@ test('anotacion: sin marks no ensucia el marcado', () => {
   assert.ok(!body.includes('class="marks"'), 'ni capa svg');
 });
 
-// El resumen va ultimo: si se agregan tests debajo, el contador los tiene que
-// incluir. Estuvo en el medio y reportaba 30 de 49.
-console.log(`\n${passed} passed`);
+
+test('papel-subrayado: la grilla sale con 4 items y el trazo rota de color', () => {
+  const html = papelSubrayadoHtml({
+    letra: 'O', headline: 'Ordenar', items: [
+      { rotulo: 'El catalogo', nota: 'con precio' }, { rotulo: 'La caja' },
+      { rotulo: 'Los fiados' }, { rotulo: 'Quien compro' }],
+  }, 1, 7, 'onia');
+  const mk = html.slice(html.indexOf('<body>'));
+  assert.ok(mk.includes('class="grilla"'), 'dibuja la grilla');
+  assert.strictEqual((mk.match(/class="celda"/g) || []).length, 4, 'exactamente 4 celdas');
+  assert.ok(mk.includes('con precio'), 'la nota del item se dibuja');
+  // Dos trazos seguidos con el mismo color delatan la plantilla: tienen que rotar.
+  const colores = [...mk.matchAll(/stroke="(#[0-9A-F]{6})"/gi)].map((m) => m[1]);
+  assert.ok(new Set(colores).size > 1, 'los subrayados rotan de color');
+});
+
+test('papel-subrayado: mas de 4 items se recortan, la grilla es 2x2 siempre', () => {
+  const mk = papelSubrayadoHtml({ letra: 'N', headline: 'H',
+    items: ['a', 'b', 'c', 'd', 'e', 'f'] }, 2, 7, 'onia');
+  const body = mk.slice(mk.indexOf('<body>'));
+  assert.strictEqual((body.match(/class="celda"/g) || []).length, 4, 'recorta a 4');
+  assert.ok(!body.includes('>e<'), 'el quinto no entra');
+});
+
+test('papel-subrayado: sin items no dibuja grilla vacia', () => {
+  const mk = papelSubrayadoHtml({ headline: 'Cierre' }, 6, 7, 'onia');
+  const body = mk.slice(mk.indexOf('<body>'));
+  assert.ok(!body.includes('class="grilla"'), 'sin items, sin grilla');
+});
+
