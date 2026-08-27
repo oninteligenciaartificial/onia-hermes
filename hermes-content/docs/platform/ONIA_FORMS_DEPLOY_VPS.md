@@ -13,6 +13,52 @@
 > 80/443, asi que ese puerto nunca sirvio para verificar y era exposicion al pedo.
 > Traefik llega por la red `easypanel`.
 
+## Que cubre cada formulario, y que falta para construir una web (2026-08-27)
+
+Sergio pregunto si lo que se pide alcanza para generar la web. **Medido contra las 39
+preguntas de `web-factory/INTAKE_CLIENTE.md`**, que es lo que el Lab necesita para
+construir sin idas y vueltas:
+
+| Formulario | Campos | Para que sirve DE VERDAD |
+|---|---|---|
+| `/alta` | 34 | **Alta en el sistema + configurar el bot.** Su seccion "para tu web" es superficial |
+| `/brief` | 41 | **Este SI es el levantamiento de web.** Cubre ~80% del intake |
+| `/cuestionario` | 40 | descubrimiento comercial |
+
+**El `/alta` solo NO alcanza para una web.** El `/brief` casi si — y los dos juntos se
+tapan huecos entre ellos: el brief no pide rubro, ciudad, direccion, horarios ni NIT, y
+el alta si.
+
+### Lo que NO tiene NINGUNO de los dos
+
+Verificado en contexto, no por conteo de substring (`cta` matcheaba "conectar", `estilo`
+matcheaba "enlaces de estilos"):
+
+| Falta | Mapea a | Gravedad |
+|---|---|---|
+| **Que debe hacer el visitante + texto y destino del boton** | `cta.label`, `cta.url` | 🔴 **critico**: sin CTA la web informa pero no convierte |
+| **Que NO quieren** (colores, estilos, elementos) | — | 🔴 es lo que evita rehacer el trabajo entero |
+| Estilo visual explicito (minimalista / premium / calido…) | — | 🟡 parcialmente suplido por las referencias |
+| Tagline / eslogan | `tagline` | 🟡 |
+| Titulo SEO (tiene `seo_desc` y `keywords`, falta el title) | `seo.title` | 🟡 |
+| Imagen OG | `seo.ogImage` | 🟡 |
+| Telefono fijo (solo pide WhatsApp) | `contacto.tel` | 🟢 |
+| Quien paga dominio + hosting | — | 🟢 operativo |
+
+⚠️ **FAQ SI existe** — esta en el `/alta`, con repetidor de pregunta/respuesta (pensado
+para el bot, sirve igual para la seccion FAQ de la web). Se listaba como faltante por
+error.
+
+### La decision que sale de esto
+
+**NO hay que construir un formulario nuevo.** Hay que agregarle ~6 campos al `/brief`, y
+el CTA es el unico que no puede faltar. Inflar el `/alta` seria el error opuesto: ya
+tarda 10 minutos y es la puerta de entrada — subirle la friccion cuesta altas.
+
+Pendiente de decision de Sergio: agregar esos campos al `/brief`.
+
+---
+
 ## Como se levanta (probado 2026-08-27)
 
 ```bash

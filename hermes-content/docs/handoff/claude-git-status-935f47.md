@@ -29,6 +29,7 @@ diciendo lo mismo que el código.
 | **VPS sano** — steal 95% → 9%, load 171 → ~1, login 9,3 s → 0,14 s | 🟢 |
 | **`cal.onia.com.bo`** — daba 502; ahora redirige (302) a `onia.com.bo/empezar` | 🟢 vivo |
 | **`forms.onia.com.bo`** — daba 502; contenedor nginx recreado, 3 formularios y sus webhooks verificados | 🟢 vivo |
+| **Los 3 formularios pasan al verde de Onia** — eran azules; fondo `#EDFBF3` + tinta negra (18,57:1) | 🟢 vivo |
 | **Botón de Google en el login** — llevaba a un 400 crudo; ya no se dibuja | 🟢 |
 | **Add-on de inventario** — dejó de cobrarse; las funciones quedan visibles como incluidas | 🟢 |
 | **Contador de uso del plan** — el tope se ve antes del 403 | 🟢 |
@@ -124,6 +125,21 @@ monitoreo que no se paga sola.
 
 ---
 
+## 5.b Lo que se midió y cambió una decisión
+
+**El formulario de alta NO alcanza para generar una web, y el `/brief` casi sí.** Medido
+contra las 39 preguntas de `web-factory/INTAKE_CLIENTE.md`: el brief cubre ~80%, y el alta
+tapa varios de sus huecos (rubro, ciudad, dirección, horarios, NIT, y el repetidor de FAQ).
+
+**Falta poco, y no es construir nada nuevo**: el CTA (qué debe hacer el visitante, texto y
+destino del botón) y "qué NO quieren" son los dos que duelen; después tagline, título SEO,
+imagen OG y estilo visual explícito. **~6 campos al `/brief`, no un formulario nuevo.**
+
+Casi lo estimo mal: por conteo de substring parecía que faltaban 15 campos y que el brief
+no tenía nada. `cta` matcheaba "conectar", `estilo` matcheaba "enlaces de estilos", y el
+FAQ que daba por faltante **ya existía** en el alta. **Verificar en contexto cambió el
+tamaño del trabajo de "formulario nuevo" a "seis campos".**
+
 ## 6. Qué depende de Sergio
 
 1. **Abrir `/comercio/inventario` logueado y mirar la sección "Almacenes".** Es lo único
@@ -134,7 +150,9 @@ monitoreo que no se paga sola.
 3. **¿El markup de Meta es 20% o a costo?** `WHATSAPP_ADDON.meta.markupPct: 20` contradice
    la etiqueta que le promete al cliente que el excedente va al costo. Lety.ai vende
    "0% markup" como tesis central: es el ataque más fácil que nos pueden hacer.
-4. **¿Se bajan las pantallas `/vendedores/*` de web-factory?** Son rutas publicadas
+4. **¿Agrego los ~6 campos al `/brief`?** El CTA es el único que no puede faltar. Inflar
+   el `/alta` sería el error opuesto: ya tarda 10 minutos y es la puerta de entrada.
+5. **¿Se bajan las pantallas `/vendedores/*` de web-factory?** Son rutas publicadas
    hechas para un vendedor que no existe. Sacarlas es una decisión de superficie viva, no
    la tomo solo.
 

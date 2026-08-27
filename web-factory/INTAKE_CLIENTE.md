@@ -13,6 +13,13 @@
 > Regla de oro (CLAUDE.md): **no inventar datos.** Lo que el cliente no responda
 > se deja vacío y se marca `PENDIENTE`, nunca se rellena con supuestos.
 
+> 🔗 **2026-08-27 — esto ya existe como formulario web.** `https://forms.onia.com.bo/brief`
+> cubre ~80% de estas 39 preguntas (41 campos), y `/alta` tapa varios huecos del brief
+> (rubro, ciudad, direccion, horarios, NIT) ademas de traer el repetidor de FAQ.
+> **Lo que no cubre ninguno: el CTA** (que debe hacer el visitante, texto y destino del
+> boton), **que NO quieren**, estilo visual explicito, tagline, titulo SEO e imagen OG.
+> Tabla completa en `hermes-content/docs/platform/ONIA_FORMS_DEPLOY_VPS.md`.
+
 ---
 
 ## 0. Identificación del proyecto (interno)
