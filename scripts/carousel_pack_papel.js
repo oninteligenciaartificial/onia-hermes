@@ -108,6 +108,10 @@ h1,h2{font-family:'Fraunces',serif;font-weight:700;letter-spacing:-.015em;
 .pie{display:flex;justify-content:space-between;align-items:center;
   border-top:2px solid #DAD5CA;padding-top:22px;font-size:24px;color:#8A8175}
 .pie .handle{font-weight:600;color:#4A423A}
+/* El chip de dato usa la TINTA de la lamina, no el verde de marca: sobre papel hueso
+   el verde Onia se lee digital y rompe lo artesanal, que es el punto del molde. */
+.dato{background:${tinta};color:#FBFAF7;font-weight:600;font-size:.94em;
+  padding:.06em .3em;border-radius:.2em;white-space:nowrap}
 .g{position:relative;display:inline-block}
 .g::after{content:"";position:absolute;left:-4px;right:-4px;bottom:2px;height:14px;
   background:${tinta};opacity:.28;z-index:-1;border-radius:3px}

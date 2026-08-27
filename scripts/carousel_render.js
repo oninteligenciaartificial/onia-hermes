@@ -35,6 +35,15 @@ function assetUrl(p) {
   return fs.existsSync(abs) ? `file://${abs.replace(/\\/g, '/')}` : '';
 }
 
+// Chip de dato ({{...}}), comun a todos los packs. Estaba definido solo en dos de
+// siete, asi que un {{Bs 285}} en un brief de dark-product salia como texto pelado:
+// el brief lo pedia y el pack lo ignoraba sin avisar (visto en O04 y O06).
+const DATO_CSS = `
+.dato { background:var(--onia-green); color:var(--onia-ink); font-weight:700;
+  font-size:.92em; padding:.05em .3em; border-radius:.2em; white-space:nowrap; }
+.slide.cta .dato { background:var(--onia-ink); color:var(--onia-green); }
+`;
+
 // Chrome va PRIMERO: Edge headless en esta maquina genera PNGs de 0 bytes sin
 // error (verificado 2026-08-20, con y sin sandbox). CAROUSEL_BROWSER lo pisa todo.
 const BROWSER_CANDIDATES = [
@@ -661,7 +670,7 @@ function darkProductHtml(slide, idx, total, account, args) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-${tokens}
+${tokens}${DATO_CSS}
 * { margin:0; padding:0; box-sizing:border-box; }
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
@@ -688,6 +697,7 @@ ${safeAreaCss()}
   letter-spacing:2px; color:var(--onia-green); }
 .slide.cta .pageno { color:var(--onia-ink); }
 
+${DATO_CSS}
 .object { display:block; max-width:620px; max-height:420px; margin:24px auto;
   object-fit:contain; filter:drop-shadow(0 30px 60px rgba(0,0,0,.5)); }
 ${MARKS_CSS}
@@ -785,7 +795,7 @@ function darkNeonHtml(slide, idx, total, account, args) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-${tokens}
+${tokens}${DATO_CSS}
 * { margin:0; padding:0; box-sizing:border-box; }
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
@@ -877,7 +887,7 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Fraunces:ital,wght@1,500;1,600&family=Inter:wght@500;600&display=swap" rel="stylesheet">
 <style>
-${tokens}
+${tokens}${DATO_CSS}
 ${accentVar}
 * { margin:0; padding:0; box-sizing:border-box; }
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
@@ -1116,7 +1126,7 @@ function brightRetailHtml(slide, idx, total, account, args) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
 <style>
-${tokens}
+${tokens}${DATO_CSS}
 * { margin:0; padding:0; box-sizing:border-box; }
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}

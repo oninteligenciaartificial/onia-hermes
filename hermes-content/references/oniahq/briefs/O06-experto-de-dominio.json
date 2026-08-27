@@ -1,0 +1,64 @@
+{
+ "serie": "Lo que dicen los datos",
+ "episodio": "006",
+ "comment_trigger": "SISTEMA",
+ "comment_reward": "las 6 tareas que conviene delegar primero",
+ "caption": "Anthropic miró 400.000 sesiones de gente usando IA para construir software. El resultado va contra lo que todos asumen.\n\nLos que NO son programadores rinden casi igual que los programadores: cinco puntos de diferencia. Y lo que separa a los que les sale de los que no, no es saber programar — es conocer el problema.\n\nUn experto en su rubro rinde más del doble que un novato.\n\nEso significa que usted, que conoce su negocio como nadie, ya tiene la parte difícil. Le falta alguien que la traduzca a un sistema.\n\n⚠️ Estos son datos de Anthropic sobre Claude Code, no resultados de Onia. Fuente: anthropic.com/research/claude-code-expertise\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero.",
+ "hashtags": [
+  "#inteligenciaartificial",
+  "#negociosbolivia",
+  "#santacruz",
+  "#pyme",
+  "#automatizacion"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "pill": "Anthropic · 400.000 sesiones",
+   "headline": "No gana el que sabe *programar*. Gana el que conoce el rubro",
+   "body": "Un estudio de 400.000 sesiones lo midió. El resultado va contra lo que todos asumen."
+  },
+  {
+   "number": 2,
+   "pill": "Anthropic, 2026",
+   "headline": "La diferencia es de *cinco puntos*",
+   "body": "Ingenieros de software: {{34 %}} de éxito verificado. Todas las demás ocupaciones: {{29 %}}. Cinco puntos, sobre 400.000 sesiones de 235.000 personas.",
+   "callout": "Casi lo mismo."
+  },
+  {
+   "number": 3,
+   "pill": "Anthropic, 2026",
+   "headline": "Lo que sí cambia el resultado *es otra cosa*",
+   "body": "Novato en su propio tema: {{15 %}}. Experto en su propio tema: {{28-33 %}}. Más del doble — y no hablamos de saber programar, sino de conocer el problema que se está resolviendo."
+  },
+  {
+   "number": 4,
+   "pill": "Anthropic, 2026",
+   "headline": "Y el grupo más alto *no fue software*",
+   "body": "Todas las ocupaciones quedaron dentro de 7 puntos de los ingenieros. El grupo con el rendimiento más alto de todos fue el de management: gente que dirige, no que programa."
+  },
+  {
+   "number": 5,
+   "role": "save",
+   "pill": "Anthropic, 2026",
+   "headline": "Quién decide *qué*, y quién decide *cómo*",
+   "body": "Anthropic midió que el usuario tomó el {{70 %}} de las decisiones de planificación — qué construir y cuándo está listo. La máquina, el {{80 %}} de las de ejecución. Usted sigue decidiendo el QUÉ.",
+   "callout": "No lo reemplaza. Le saca la parte que no le paga."
+  },
+  {
+   "number": 6,
+   "pill": "Lo que significa para usted",
+   "headline": "Usted ya tiene la parte *difícil*",
+   "body": "Conoce su rubro, sus clientes, sus márgenes y a quién le puede fiar. Eso es exactamente lo que el estudio dice que decide el resultado. Lo que falta es traducirlo a un sistema."
+  },
+  {
+   "number": 7,
+   "role": "cta",
+   "pill": "20 minutos, gratis",
+   "headline": "Traigamos eso *a su negocio*",
+   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca. Sin vender nada."
+  }
+ ]
+}

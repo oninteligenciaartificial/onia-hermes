@@ -365,3 +365,15 @@ test('papel-subrayado: sin items no dibuja grilla vacia', () => {
   assert.ok(!body.includes('class="grilla"'), 'sin items, sin grilla');
 });
 
+
+test('chip de dato: se estiliza en TODOS los packs, no solo en dos', () => {
+  // Estaba definido solo en typographic y editorial-clean, asi que un {{Bs 285}}
+  // escrito en un brief de dark-product salia como texto pelado: el brief lo pedia
+  // y el pack lo ignoraba en silencio (visto en O04 y O06, 2026-08-27).
+  const conDato = { headline: 'H', body: 'sube a {{34 %}} hoy' };
+  for (const [nombre, fn] of [['dark-product', darkProductHtml], ['dark-neon', darkNeonHtml]]) {
+    const html = fn(conDato, 1, 5, 'onia', {});
+    assert.ok(html.slice(html.indexOf('<body>')).includes('class="dato"'), nombre + ': marca el dato');
+    assert.ok(html.includes('.dato { background'), nombre + ': y lo estiliza');
+  }
+});
