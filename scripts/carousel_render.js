@@ -112,7 +112,7 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'papel-subrayado'];
+const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
@@ -1072,6 +1072,12 @@ function nuviaRibbon(idx, total, stripes, onAccent) {
 // ribbon continuo, composición anclada y slot de producto por slide.
 // Pack de mnemotecnia, portado de la ficha Q04. Vive en su propio archivo porque
 // este ya pasa las 1200 lineas. Recibe los helpers en vez de duplicarlos.
+// Pack del dato ilustrado: imagen a sangre + tipografia contrastante. Nace de las
+// cinco criticas de Sergio del 2026-08-27 a los carruseles anteriores.
+const datoIlustradoHtml = require('./carousel_pack_dato').crear({
+  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
+});
+
 const papelSubrayadoHtml = require('./carousel_pack_papel').crear({
   esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
 });
@@ -1195,6 +1201,7 @@ function render(args) {
     else if (args.pack === 'editorial-clean') html = editorialCleanHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'bright-retail') html = brightRetailHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'papel-subrayado') html = papelSubrayadoHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'dato-ilustrado') html = datoIlustradoHtml(slide, idx, slides.length, args.account, args);
     else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
     fs.writeFileSync(htmlPath, html, 'utf8');
@@ -1240,7 +1247,7 @@ if (require.main === module) {
 
 module.exports = {
   slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
-  papelSubrayadoHtml,
+  papelSubrayadoHtml, datoIlustradoHtml,
   emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };

@@ -2,7 +2,7 @@
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
 const {
-  papelSubrayadoHtml, roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+  papelSubrayadoHtml, datoIlustradoHtml, roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
 
 let passed = 0;
 process.on('exit', () => console.log(`
@@ -73,7 +73,7 @@ test('packs list includes all packs (incl. editorial-clean)', () => {
   // nadie actualizo esta lista. Una suite roja por una razon vieja tapa las regresiones
   // nuevas — que es justo lo que un test existe para evitar.
   assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo',
-    'editorial-clean', 'bright-retail', 'papel-subrayado']);
+    'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado']);
 });
 test('nuvia account + brand kit configured', () => {
   assert.strictEqual(ACCOUNTS.nuvia.handle, '@nuvia.bo');
@@ -367,4 +367,40 @@ test('chip de dato: se estiliza en TODOS los packs, no solo en dos', () => {
     assert.ok(html.slice(html.indexOf('<body>')).includes('class="dato"'), nombre + ': marca el dato');
     assert.ok(html.includes('.dato { background'), nombre + ': y lo estiliza');
   }
+});
+
+test('dato-ilustrado: una cifra SIN fuente no se dibuja', () => {
+  // No es validacion de forma: es la regla del catalogo. Con cero clientes pagando,
+  // una cifra sin fuente en material de cliente es fabricar. El motor lo impide.
+  const sin = datoIlustradoHtml({ headline: 'H', dato: '99 %' }, 1, 7, 'onia', {});
+  assert.ok(!sin.slice(sin.indexOf('<body>')).includes('class="cifra"'), 'sin fuente no hay cifra');
+  const con = datoIlustradoHtml({ headline: 'H', dato: '65 %', fuente: 'Management Science (2008)' }, 1, 7, 'onia', {});
+  const b = con.slice(con.indexOf('<body>'));
+  assert.ok(b.includes('class="cifra"'), 'con fuente si');
+  assert.ok(b.includes('Management Science'), 'y la fuente se dibuja');
+});
+
+test('dato-ilustrado: la imagen es FONDO, nunca objeto flotante', () => {
+  // "colocas imagenes sin sentido sobre imagenes" — Sergio, 2026-08-27. En este pack
+  // hay UNA sola imagen por lamina y ocupa el lienzo entero.
+  const h = datoIlustradoHtml({ headline: 'H', bg: 'x.png' }, 1, 7, 'onia', {});
+  const b = h.slice(h.indexOf('<body>'));
+  assert.ok(b.includes('class="foto"'), 'la imagen va de fondo');
+  assert.ok(b.includes('class="scrim"'), 'con su scrim');
+  assert.ok(!b.includes('class="object"'), 'y no hay objeto flotante');
+});
+
+test('dato-ilustrado: el CTA rompe el patron y va sin imagen', () => {
+  const h = datoIlustradoHtml({ role: 'cta', headline: 'H', bg: 'x.png' }, 6, 7, 'onia', {});
+  const b = h.slice(h.indexOf('<body>'));
+  assert.ok(!b.includes('class="foto"'), 'el cierre no lleva foto aunque el brief la declare');
+});
+
+test('dato-ilustrado: titular serif y cuerpo sans, con salto de escala real', () => {
+  // La regla: un salto de jerarquia cambia MUCHO un eje, no un poco cinco ejes.
+  const h = datoIlustradoHtml({ role: 'cover', headline: 'H', body: 'b' }, 0, 7, 'onia', {});
+  const tit = Number(/\.tit\{[^}]*font-size:(\d+)px/.exec(h)[1]);
+  const cuerpo = Number(/\.cuerpo\{font-size:(\d+)px/.exec(h)[1]);
+  assert.ok(h.includes(".tit{font-family:'Fraunces',serif"), 'titular serif');
+  assert.ok(tit / cuerpo >= 2, `la portada debe doblar al cuerpo (era ${tit}/${cuerpo})`);
 });

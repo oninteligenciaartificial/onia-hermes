@@ -31,6 +31,9 @@ const CAPACIDADES = {
   'bright-retail': { object: true, callout: true, marks: true },
   // Pack de mnemotecnia: no dibuja objeto ni callout, su prueba es la grilla 2x2.
   'papel-subrayado': { object: false, callout: false, marks: false },
+  // La imagen va de FONDO (slide.bg), no como objeto flotante: ese era el defecto
+  // que Sergio nombro — 'imagenes sin sentido sobre imagenes'.
+  'dato-ilustrado': { object: false, callout: false, marks: false },
 };
 
 // Debajo de esta escala el texto de una captura de pantalla deja de leerse en el

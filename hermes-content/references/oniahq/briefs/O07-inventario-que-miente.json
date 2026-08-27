@@ -1,0 +1,70 @@
+{
+ "serie": "Datos que no te contaron",
+ "episodio": "007",
+ "comment_trigger": "SISTEMA",
+ "comment_reward": "las 6 tareas que conviene delegar primero",
+ "caption": "Dos investigadores contaron a mano el inventario de 37 tiendas: casi 370.000 registros, uno por uno.\n\nEl 65% no coincidía con lo que había en el estante.\n\nNo era robo. Era que nadie lo estaba mirando: mercadería que llegó y no se cargó, una venta anotada mal, un producto guardado en el lugar equivocado. Errores chicos que se acumulan.\n\nY acá está lo que casi nadie sabe: cuando un cliente viene por algo que tu sistema dice que tenés y no está, esa venta perdida NO aparece en ningún reporte. Se fue y nunca existió en tus números. Por eso nadie la corrige.\n\n⚠️ El estudio es de DeHoratius y Raman, Management Science, 2008, sobre retail en Estados Unidos. No es un dato boliviano.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero.",
+ "hashtags": [
+  "#ferreteria",
+  "#inventario",
+  "#negociosbolivia",
+  "#santacruz",
+  "#pyme"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "kicker": "Dato que no te contaron",
+   "headline": "Tu sistema dice que lo *tenés*. El estante dice que no",
+   "body": "Dos investigadores contaron a mano el inventario de 37 tiendas. Casi 370.000 registros, uno por uno.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/estante-hueco.png"
+  },
+  {
+   "number": 2,
+   "kicker": "Lo que encontraron",
+   "headline": "De cada *diez* registros, seis estaban mal",
+   "dato": "65 %",
+   "dato_pie": "de los registros no coincidía con lo que había en el estante",
+   "fuente": "DeHoratius y Raman, «Inventory Record Inaccuracy», Management Science (2008) · retail de EE. UU.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/diez-cajas.png"
+  },
+  {
+   "number": 3,
+   "kicker": "Y no era robo",
+   "headline": "Son errores *chicos* que se acumulan",
+   "body": "Mercadería que llegó y no se cargó. Una venta anotada mal. Un producto guardado en el lugar equivocado. Ninguno es grave solo. Juntos, mueven el 65 %.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/deposito-iso.png"
+  },
+  {
+   "number": 4,
+   "kicker": "Lo que casi nadie sabe",
+   "headline": "La venta que perdiste *no aparece* en ningún reporte",
+   "body": "El cliente vino por algo que tu sistema decía tener. No estaba. Compró en la de al lado. *Esa venta nunca existió en tus números* — por eso nadie la corrige nunca.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/cuaderno-fiado.png"
+  },
+  {
+   "number": 5,
+   "role": "save",
+   "kicker": "Guardá esto",
+   "headline": "Las tres preguntas que lo destapan",
+   "body": "*1.* ¿Cuándo fue la última vez que contaste algo y coincidió? *2.* ¿Sabés qué producto no estaba cuando alguien lo vino a buscar? *3.* Si mañana falta algo, ¿te enterás vos o te lo dice el cliente?",
+   "bg": "hermes-content/references/oniahq/ilustraciones/cierre-tienda.png"
+  },
+  {
+   "number": 6,
+   "kicker": "Qué cambia con un sistema",
+   "headline": "No cuenta por vos. *Te avisa antes*",
+   "body": "Calcula sobre lo que se vendió y te avisa cuando algo está por acabarse, antes de que el cliente llegue. La venta perdida deja de ser invisible: aparece como un aviso, no como un hueco.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/estante-hueco.png"
+  },
+  {
+   "number": 7,
+   "role": "cta",
+   "kicker": "20 minutos, gratis",
+   "headline": "¿Cuándo contaste *por última vez*?",
+   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca. Sin vender nada."
+  }
+ ]
+}
