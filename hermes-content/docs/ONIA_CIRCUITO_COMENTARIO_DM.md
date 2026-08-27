@@ -121,7 +121,34 @@ Bien resuelto y bien documentado en el nodo. No es un pendiente.
 n8n estaba en solo lectura esta sesión (había un despliegue corriendo en el mismo VPS). Todo
 esto queda escrito, sin ejecutar.
 
-**H1 — Un fallo de envío se guarda como "success". CRÍTICO.**
+**H1 — Un fallo de envío se guarda como "success". ✅ RESUELTO 2026-08-27.**
+> Se agregaron 4 nodos al workflow `1jS4jwmNmvcQpqqH` (14 → 18, sigue activo):
+>
+> ```
+> Enviar DM privado → Se entrego?
+>    [SI]  → Avisar a Sergio
+>    [NO]  → Liberar freno 24h → Avisar FALLO → Marcar ejecucion fallida
+> ```
+>
+> - **`Se entrego?`** distingue `message_id` (entregó) de `error`. Es lo único que
+>   separaba las dos cosas y no existía.
+> - **`Liberar freno 24h`** llama a `ig-dm-token.sh release` — cierra H2: el lead deja de
+>   quedar bloqueado un día por un error que no fue suyo.
+> - **`Avisar FALLO`** manda un mensaje **distinto** al de éxito. Antes salía el mismo con
+>   el error adentro, así que un fallo se leía como un envío.
+> - **`Marcar ejecucion fallida`** deja la ejecución en estado **error**. Sin esto seguía
+>   en `success` y el monitor de salud (`drFWP7nttzvtZzso`) no la veía: busca errores, y
+>   nunca había ninguno. Va **último** para no perder ni la liberación ni el aviso.
+>
+> `neverError` se deja puesto a propósito: sirve para poder LEER la respuesta de Meta.
+> Lo que faltaba no era quitarlo, era **mirar lo que devuelve**.
+>
+> Verificado: webhook GET devuelve el challenge (200), token malo 403, POST 200, cero
+> conexiones rotas. Backup del workflow anterior en
+> `/opt/onia/n8n-bak-1jS4jwmNmvcQpqqH-20260827215700.json`.
+>
+> Texto original del hallazgo:
+
 El nodo `Enviar DM privado` tiene `neverError: true` y `onError: continueRegularOutput`. Meta
 devuelve un error, el workflow sigue como si nada y n8n marca la ejecución **success**. Por
 eso 5 rechazos seguidos nunca dispararon una alarma. Es literalmente "un 200 con cara de
@@ -146,8 +173,8 @@ ejecuciones en estado error. Falta un IF después del envío que distinga `messa
 > — vivia SOLO en el VPS siendo parte de un circuito vivo. No lleva secretos: el token
 > se lee de la base en tiempo de ejecucion.
 >
-> 🔶 **Falta la otra mitad**: que n8n LLAME a `release` en la rama de error. Eso va junto
-> con H1, porque la misma condicion (`message_id` vs `error`) sirve para las dos cosas.
+> ✅ **La otra mitad tambien quedo**: el nodo `Liberar freno 24h` del workflow llama a
+> `release` en la rama de fallo (ver H1).
 >
 > Texto original del hallazgo:
 

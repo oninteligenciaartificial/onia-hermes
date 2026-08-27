@@ -195,6 +195,32 @@ la fuente es **`web-factory/apps/onia-platform/public/`** del repo `onia-hermes`
 confuso: `apps/onia-platform` dentro de web-factory es la LANDING, no el producto. El
 producto es el repo `onia-platform`, y su `/recursos` esta detras de login (307).
 
+## 4.d La API de n8n: cual es la key de verdad
+
+En `/opt/onia-platform/app.env` hay **dos** variables que parecen la misma cosa:
+
+| Variable | Que es | Sirve para la API? |
+|---|---|---|
+| `N8N_API_KEY` | 64 chars, NO es un JWT | ❌ devuelve **401** |
+| **`N8N_MANAGEMENT_API_KEY`** | JWT de 267 chars | ✅ **esta es** |
+
+Una API key de n8n **siempre es un JWT**: empieza con `eyJ` y tiene dos puntos. Si el
+valor no tiene esa forma, no es una key de n8n por mas que se llame asi.
+
+```bash
+curl -s -H "X-N8N-API-KEY: $KEY"   https://n8n-sergio-n8n.hqdqgh.easypanel.host/api/v1/workflows?limit=1
+```
+
+Editar un workflow por API: `GET /api/v1/workflows/<id>`, modificar, y `PUT` mandando
+**solo** `name`, `nodes`, `connections`, `settings` (los demas campos los rechaza).
+Guardar el JSON original a un archivo ANTES: n8n tiene historial de versiones, pero un
+archivo no depende de que la UI abra.
+
+⚠️ El MCP de n8n **no** acepta un array de operaciones JSON para `update_workflow`:
+espera **codigo del SDK** (un subconjunto restringido de TypeScript). Para un cambio
+quirurgico sobre un workflow existente, la API REST es mas segura — reescribir 14 nodos
+en SDK arriesga perder un nodo Code grande.
+
 ## 5. Verificar contra el sistema CORRECTO
 
 Estos dieron diagnosticos falsos con evidencia que parecia buena:
