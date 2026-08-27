@@ -129,7 +129,28 @@ eso 5 rechazos seguidos nunca dispararon una alarma. Es literalmente "un 200 con
 ejecuciones en estado error. Falta un IF después del envío que distinga `message_id` de
 `error` y avise distinto.
 
-**H2 — El freno de 24 h se quema aunque el DM no salga.**
+**H2 — El freno de 24 h se quema aunque el DM no salga. ✅ RESUELTO 2026-08-27 (mitad).**
+> **NO se movio el `touch` a despues de confirmar**, aunque era lo obvio: si la
+> confirmacion fallara, la persona recibiria **DMs duplicados**, y eso Meta lo penaliza.
+> El freno preventivo protege contra el fallo caro.
+>
+> En cambio se agrego un modo **`release <from_id>`** a `/opt/onia/ig-dm-token.sh`, que
+> libera el freno cuando el envio NO salio. Si el `release` falla, degrada al
+> comportamiento de hoy (bloqueado 24 h): **falla hacia el lado seguro.**
+>
+> Probado en vivo: `consume` frena el segundo intento · `release` libera · `consume`
+> vuelve a dejar pasar. Valida el `from_id` (un `abc; rm -rf /` devuelve
+> `from_id_invalido`, no se ejecuta). Es idempotente.
+>
+> El script **ahora esta versionado** en `hermes-content/deploy/vps-ops/ig-dm-token.sh`
+> — vivia SOLO en el VPS siendo parte de un circuito vivo. No lleva secretos: el token
+> se lee de la base en tiempo de ejecucion.
+>
+> 🔶 **Falta la otra mitad**: que n8n LLAME a `release` en la rama de error. Eso va junto
+> con H1, porque la misma condicion (`message_id` vs `error`) sirve para las dos cosas.
+>
+> Texto original del hallazgo:
+
 `/opt/onia/ig-dm-token.sh` hace `touch` del archivo de la persona ANTES de que se intente el
 envío. Si Meta rechaza, esa persona queda bloqueada 24 h igual. Un lead real que comente en
 un mal momento se pierde por un día entero sin que nadie se entere (por H1). El `touch`
