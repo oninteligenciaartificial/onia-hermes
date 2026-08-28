@@ -18,6 +18,11 @@
 >
 > **Lo que vamos a PRODUCIR nosotros:** [BANCO_DE_REPLICABLES.md](BANCO_DE_REPLICABLES.md) — los formatos del corpus ordenados por qué tan rápido podemos hacer uno igual y subirlo. Es una **cola de producción**, no una bandeja de análisis.
 >
+> ## 📋 [`PROMPTS_TODOS.md`](PROMPTS_TODOS.md) — los 54 prompts en un solo índice
+>
+> Agrupados por sesión destino, con su lote y su ruta. Es el punto de entrada si no sabés
+> dónde está algo.
+>
 > **Prompts que salen de acá — para pegar:** [`sesiones/`](sesiones/README.md) tiene **un
 > archivo por sesión**, autocontenido (preámbulo + gates + todos sus prompts, en orden). Es lo
 > que se abre para trabajar.
