@@ -152,7 +152,7 @@ capturas.**
 
 | # | Tema |
 |---|---|
-| RL01 | Una herramienta de IA que sí sirve, en 20 s |
+| RL01 | Una herramienta de IA que sí sirve, en 20 s · 🟡 **tabla + preview listos, falta el OK para el corte final** |
 | RL02 | "Esta cara no existe" — cómo se hace, declarado · 🟡 **tabla + preview listos, falta el OK de Sergio para el corte final** |
 
 **Regla del video:** la tabla de cortes y el preview se le muestran a Sergio **antes** de
@@ -181,7 +181,14 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 13. RL02 🟡 preview listo, esperando OK
 14. ~~El ancla de Lucía con 7 ángulos~~ ✅ `lucia-skin-v1` `58bbd635`, probado con A/B
 15. ~~Un doc por tema sin contradicciones~~ ✅ ver abajo
-16. Seguir la tabla
+16. RL01 🟡 preview listo, esperando OK
+17. Seguir la tabla
+
+**Aprendido en RL01 — qué regla gana cuando dos se cruzan.** La regla "ninguna imagen repetida"
+es DENTRO de una pieza. Aplicarla también ENTRE piezas dejó tres de los cuatro planos en el
+mismo rooftop con la misma ropa: los últimos 15 segundos pasaban en un solo lugar. **La
+variedad de escenario dentro de una pieza pesa más que la no-repetición entre piezas**, que
+además se publican en momentos distintos. Se vio mirando la tira, no leyendo el plan.
 
 ## ✅ Acomodado el 2026-08-28 — qué manda sobre qué
 
