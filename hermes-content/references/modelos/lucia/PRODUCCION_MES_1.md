@@ -7,7 +7,7 @@
 
 ## Reglas que aplican a TODAS (de LUCIA.md §9, §11, §12, §13)
 
-- Identidad: ancla `452d8375-fb67-4df7-9ae0-8f1b257aa51f`, **fondo simple cuando la cara
+- Identidad: ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563`, **fondo simple cuando la cara
   tiene que ser reconocible**; escenario cargado solo si la cara no es el punto.
 - Color: `natural true-to-life colors, no color grading, no filter look, accurate white balance`.
 - Movimiento: `natural real-time speed, no slow motion` — sin adverbios de lentitud.

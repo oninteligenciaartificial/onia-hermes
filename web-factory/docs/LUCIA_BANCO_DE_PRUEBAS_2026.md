@@ -109,7 +109,7 @@ todos los modelos** — si cambia el prompt entre modelos, la comparación no va
 ### A. Imagen — primer plano hablando (el difícil)
 
 ```
-<<<452d8375-fb67-4df7-9ae0-8f1b257aa51f>>> Keep her face identical to the reference:
+<<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>> Keep her face identical to the reference:
 Bolivian woman, 26, warm tan skin with light freckles, long dark wavy hair, brown eyes,
 natural minimal makeup. Photorealistic real human skin with visible pores, fine peach fuzz,
 subtle texture and tiny imperfections; natural face asymmetry. Bright lively eyes with sharp

@@ -86,7 +86,7 @@ en ese orden.
 
 | Pos. | Element ID | Nombre | Qué es | Veredicto |
 |---|---|---|---|---|
-| **1** | `452d8375-fb67-4df7-9ae0-8f1b257aa51f` | `lucia-ancla-2026-08` | Selfie de espejo, argolla de oro. Generada | ✅ **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
+| **1** | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` | `lucia-ancla-2026-08` | Selfie de espejo, argolla de oro. Generada | ✅ **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
 | **2** | `902eeebb-89e9-4477-8426-c555b20f7ecc` | `lucia-surgical-anchor` | Photoshoot fondo blanco, sonrisa | ✅ La aprobaste el 7-jul. Salió 3ra |
 | **3** | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | `lucia-face-real-anchor` | Frame REAL del video, escalado 2K | ✅ **Verdad de terreno para QA.** No generar con ella |
 | 4 | `d5e323ef-4d0e-41bf-863e-ec30aede20ae` | `LUCIA-REAL-v2-clean` | Otro frame del MISMO video | ⛔ **FUERA** |
@@ -346,7 +346,7 @@ generada, que es **la luz demasiado perfecta y la óptica demasiado limpia.**
 
 | # | Bloque | Texto |
 |---|---|---|
-| 1 | Ancla | `<<<452d8375-fb67-4df7-9ae0-8f1b257aa51f>>>` |
+| 1 | Ancla | `<<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>>` |
 | 2 | Apertura | `One single continuous photograph, full bleed, filling the entire frame edge to edge.` |
 | 3 | Identidad | `Keep her face identical to the reference: Bolivian woman, 26, warm tan skin with light freckles, long dark wavy hair, brown eyes, natural minimal makeup.` |
 | 4 | Piel real | `Photorealistic real human skin with visible pores, fine peach fuzz, subtle texture and tiny imperfections; natural face asymmetry.` |
@@ -379,7 +379,7 @@ generada, que es **la luz demasiado perfecta y la óptica demasiado limpia.**
 
 **Ejemplo armado, el que ganó la prueba:**
 ```
-<<<452d8375-fb67-4df7-9ae0-8f1b257aa51f>>> A casual candid snapshot of this exact woman taken
+<<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>> A casual candid snapshot of this exact woman taken
 by a friend standing close to her in a bright tropical cafe in Santa Cruz de la Sierra,
 Bolivia, with potted monstera plants and a worn wooden table. Keep her face identical to the
 reference: warm tan skin with light freckles, long dark wavy hair, brown eyes, real skin
@@ -534,7 +534,7 @@ Evidencia: `prueba-motor-20260813/` (la prueba que fijó el método) ·
 ## El pipeline (2 pasos, ~6-8 cr por escena)
 
 **PASO 1 — Imagen de escena (nano_banana_2, 2.00 cr, NO se puede abaratar):**
-- Prompt = `<<<452d8375-fb67-4df7-9ae0-8f1b257aa51f>>>` + molde §6, con estas líneas fijas:
+- Prompt = `<<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>>` + molde §6, con estas líneas fijas:
   - `A casual candid snapshot of this exact woman [ACCIÓN] in [LUGAR]`
   - vestuario + `small gold hoop earrings`
   - `Natural true-to-life colors, no color grading, no filter look, accurate white balance`

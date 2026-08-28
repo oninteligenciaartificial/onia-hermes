@@ -28,8 +28,8 @@ nombre del archivo (`tanda-20260821/`). No son estimaciones de catálogo:
 
 ## Identidad — verificado hoy
 
-- Ancla vigente: **`452d8375-fb67-4df7-9ae0-8f1b257aa51f`** (`lucia-ancla-2026-08`), `status: completed`.
-- Se inyecta escribiendo **`<<<452d8375-fb67-4df7-9ae0-8f1b257aa51f>>>`** dentro del prompt.
+- Ancla vigente: **`58bbd635-9b90-4bd2-b08a-1cd4915bd563`** (`lucia-ancla-2026-08`), `status: completed`.
+- Se inyecta escribiendo **`<<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>>`** dentro del prompt.
 - El Soul `LUCIA-SINTETICA-v3` **NO se usa**: probado A/B, no le gana al Element (queda de respaldo).
 
 ## Las cuatro llamadas

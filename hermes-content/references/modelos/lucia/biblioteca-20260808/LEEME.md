@@ -21,7 +21,7 @@ recuperarlas cuando el CDN se normalice, sin volver a gastar créditos.
 | | |
 |---|---|
 | **Element** | `lucia-ancla-2026-08` |
-| **ID** | `452d8375-fb67-4df7-9ae0-8f1b257aa51f` |
+| **ID** | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` |
 | **Origen** | `references/models/lucia-pieza1-20260717/escena-A-bano-reveal.png` — la selfie de espejo que Sergio aprobó como la mejor calidad lograda |
 | **Para qué** | Todo primer plano y toda la biblioteca. Es el reemplazo de generar con el Soul, que en plano cerrado produce cara de IA |
 
