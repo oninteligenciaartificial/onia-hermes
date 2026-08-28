@@ -1,0 +1,84 @@
+{
+ "serie": "Datos que no te contaron",
+ "episodio": "011",
+ "comment_trigger": "SISTEMA",
+ "comment_reward": "las 6 tareas que conviene delegar primero",
+ "caption": "EL PROBLEMA: te escriben un martes a las 9 de la noche y contestás el jueves a mediodía.\n\nHay un estudio que midió exactamente esto. Investigadores de Harvard auditaron 2.241 empresas: mandaron una consulta de cliente real por la web de cada una y cronometraron la respuesta. El promedio, contando solo a las que contestaron dentro de los 30 días, fue de 42 horas.\n\nY el número que más duele: el 23 % nunca contestó. Ni tarde. Nunca.\n\nLo importante no es la tardanza en sí, es lo que se pierde con ella. Las empresas que contactaban dentro de la primera hora tenían casi 7 veces más probabilidad de calificar al cliente que las que contestaban una hora después. Y más de 60 veces que las que esperaban un día o más.\n\nNo es desidia. Es que el mensaje cae en un lugar que nadie mira: un WhatsApp personal, un Instagram que abre solo una persona, un formulario que llega a un correo que nadie revisa. Cuando lo ves, ya pasaron dos días.\n\nCON ONIA PLATFORM:\n\n✅ WhatsApp e Instagram entran a una sola bandeja, no a cinco teléfonos\n✅ Cada consulta queda como un contacto con su historial, no como un mensaje suelto\n✅ Sabés cuál quedó sin responder, que es justo la que no se ve\n✅ Si querés que lo repetido se conteste solo, el chatbot es un add-on aparte\n\n⚠️ El estudio es de 2011, sobre empresas de Estados Unidos. Es sobre tiempos de respuesta, no resultados de Onia.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero.",
+ "hashtags": [
+  "#whatsappbusiness",
+  "#negociosbolivia",
+  "#santacruz",
+  "#pyme",
+  "#ventas"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "kicker": "El problema",
+   "headline": "Te escriben un martes. Contestás *el jueves*",
+   "body": "Y para el jueves ya le compró a otro. No porque seas peor: porque el otro contestó primero.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/dos-celulares.png"
+  },
+  {
+   "number": 2,
+   "kicker": "Lo que dice el estudio",
+   "headline": "Lo que tarda una empresa promedio en *contestarte*",
+   "dato": "42 h",
+   "dato_pie": "tardaron en promedio 2.241 empresas auditadas con una consulta real",
+   "fuente": "Harvard Business Review · 2011, sobre empresas de EE. UU.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/tres-calendarios.png"
+  },
+  {
+   "number": 3,
+   "kicker": "Y el que más duele",
+   "headline": "Casi una de cada cuatro *no contestó nunca*",
+   "dato": "23 %",
+   "dato_pie": "de las empresas nunca respondió la consulta. Ni tarde: nunca",
+   "fuente": "Harvard Business Review, 2011 · auditoría sobre 2.241 empresas",
+   "bg": "hermes-content/references/oniahq/ilustraciones/cierre-tienda.png"
+  },
+  {
+   "number": 4,
+   "kicker": "Lo que se pierde",
+   "headline": "Contestar en la primera hora vale *siete veces* más",
+   "body": "Las que contactaban dentro de la hora tenían casi 7 veces más probabilidad de calificar al cliente que las que contestaban una hora más tarde. Y más de 60 veces que las que esperaban un día.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/qr-mostrador.png"
+  },
+  {
+   "number": 5,
+   "kicker": "Por qué pasa",
+   "headline": "No es desidia. El mensaje cae donde *nadie mira*",
+   "body": "Un WhatsApp personal, un Instagram que abre una sola persona, un formulario que llega a un correo que nadie revisa. Cuando lo ves, ya pasaron dos días y el cliente ya preguntó en otro lado.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/cuaderno-fiado.png"
+  },
+  {
+   "number": 6,
+   "kicker": "La solución",
+   "headline": "Con *Onia Platform*",
+   "solucion": [
+    "WhatsApp e Instagram entran a *una sola bandeja*, no a cinco teléfonos",
+    "Cada consulta queda como un *contacto con historial*, no un mensaje suelto",
+    "Sabés cuál quedó *sin responder*, que es justo la que no se ve",
+    "Si querés que lo repetido se conteste solo, el chatbot es un *add-on aparte*"
+   ],
+   "bg": "hermes-content/references/oniahq/ilustraciones/mostrador-ordenado.png"
+  },
+  {
+   "number": 7,
+   "role": "save",
+   "kicker": "Guardá esto",
+   "headline": "Tres preguntas para tus mensajes de hoy",
+   "body": "*1.* ¿Cuántos mensajes sin responder tenés ahora mismo, sin mirar el teléfono? *2.* Si mañana no venís, ¿quién los contesta? *3.* ¿Cuál fue el último que se te pasó del todo?",
+   "bg": "hermes-content/references/oniahq/ilustraciones/checklist-tres.png"
+  },
+  {
+   "number": 8,
+   "role": "cta",
+   "kicker": "20 minutos, gratis",
+   "headline": "El que contesta primero *no siempre es el mejor*",
+   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero en tu negocio, y las 3 que no conviene delegar nunca. Sin vender nada."
+  }
+ ]
+}

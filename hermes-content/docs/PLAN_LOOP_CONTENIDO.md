@@ -43,7 +43,7 @@ La lámina de solución **no es opcional**: sin ella la pieza es un problema sin
 | O08 | ~~**Fiado**: la mora del 3,0 %~~ 🔴 **el dato NO sirve para este tema**: la mora de ASFI es de BANCOS, no del fiado de una tienda. Estirarlo seria inventarlo. Hace falta otro dato o otro angulo | ⛔ |
 | O09 | **QR**: 891 M de pagos en 2025, el 88,4 % por menos de Bs 500 (Asoban) | ✅ verificado en fuente |
 | O10 | **La planilla que miente**: 84 % de 163 planillas auditadas tenían errores (Panko) | ✅ 8 láminas |
-| O11 | **42 horas** promedio para contestar a un cliente (HBR, 2011) | ⬜ |
+| O11 | **42 horas** promedio para contestar a un cliente (HBR, 2011) | ✅ 8 láminas · dato verificado en la fuente |
 
 ⚠️ **Los datos NO estaban todos verificados, contra lo que decía este plan.** El «94 % de
 Panko» que esta tabla citaba para O10 **no existe**: no aparece en su recopilación. Las cifras
@@ -151,7 +151,8 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 5. ~~El primer reel~~ ✅ R02-qr hecho · los de módulo, bloqueados por falta de capturas
 6. ~~L08 con la palabra HUMO~~ ✅ hecho
 7. ~~O10 (la planilla que miente)~~ ✅ hecho
-8. Seguir la tabla
+8. ~~O11 (las 42 horas)~~ ✅ hecho
+9. Seguir la tabla
 
 **Al terminar cada pieza:** tachar la línea de este archivo y commitear.
 
