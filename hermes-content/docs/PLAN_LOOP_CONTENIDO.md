@@ -46,7 +46,7 @@ La lámina de solución **no es opcional**: sin ella la pieza es un problema sin
 | O07 | Inventario que miente (65 %) | ✅ hecho, aprobado |
 | O03 | Facturación en línea | ✅ 8 láminas, con la solución honesta sobre el emisor |
 | O04 | Qué hace el sistema | ✅ 8 láminas · se queda en dark-product, que es el molde de producto |
-| O08 | ~~**Fiado**: la mora del 3,0 %~~ 🔴 **el dato NO sirve para este tema**: la mora de ASFI es de BANCOS, no del fiado de una tienda. Estirarlo seria inventarlo. Hace falta otro dato o otro angulo | ⛔ |
+| O08 | **Fiado** ⛔ **BLOQUEADA — se buscó y NO existe el dato.** Ver abajo | ⛔ |
 | O09 | **QR**: 891 M de pagos en 2025, el 88,4 % por menos de Bs 500 (Asoban) | ✅ verificado en fuente |
 | O10 | **La planilla que miente**: 84 % de 163 planillas auditadas tenían errores (Panko) | ✅ 8 láminas |
 | O11 | **42 horas** promedio para contestar a un cliente (HBR, 2011) | ✅ 8 láminas · dato verificado en la fuente |
@@ -57,6 +57,24 @@ reales, chequeadas en la fuente primaria (`panko.com/ssr/Audits.html`), son **84
 planillas** en nueve estudios y **91 % de 55** en los cinco de metodología más estricta, con
 auditorías de 1987 a 2001 en EE. UU., Reino Unido y Australia. **Antes de dibujar una cifra se
 va a la fuente, aunque este plan la dé por buena.**
+
+### ⛔ O08 (fiado) — por qué queda bloqueada, y qué se buscó
+
+Para que nadie repita la búsqueda a ciegas. **Buscado el 2026-08-28:**
+
+- Estudio del comercio minorista de La Paz y El Alto (IICCA) — el PDF existe pero pesa más de
+  10 MB y no se pudo leer entero; no aparece el fiado en lo indexado.
+- Censo de retail tradicional de Captura Consulting (2010) — habla de la estructura de las
+  tiendas, no del crédito a clientes.
+- Encuesta MYPES del INE (2007) — socioeconómica, sin el dato.
+
+**Lo único que sí existe es de Cali, Colombia** («Circuitos crediticios: el fiado en Cali»).
+Usarlo sería el mismo estiramiento que el de ASFI: un dato de otro país sobre otra economía,
+presentado como si describiera a una tienda boliviana.
+
+**Qué la destrabaría:** un dato boliviano real sobre crédito informal en comercio minorista, o
+cambiar el ángulo a algo que no necesite cifra — el fiado se puede contar con una escena
+(el cuaderno, el "te lo anoto") sin fingir que hay una estadística detrás.
 
 ## Cuenta 2 · @sergio_urcullo — el molde nuevo: **el equipo de empleados IA**
 
