@@ -170,6 +170,23 @@ function revisar(brief, pack, baseDir = process.cwd()) {
     });
   }
 
+  // 8. El titular no puede repetir el numero que la cifra gigante ya grita: en el molde
+  // se dibujan uno encima del otro y el titular queda tapado. Estaba escrito en el plan
+  // y aun asi se repitio en O10 y en O11 — una regla que solo vive en un doc se
+  // desobedece, asi que la comprueba el gate.
+  slides.forEach((s, i) => {
+    if (!s.dato || !s.headline) return;
+    const numero = String(s.dato).match(/[\d.,]+/);
+    if (!numero) return;
+    const limpio = (x) => String(x).replace(/[^\d]/g, '');
+    if (limpio(s.headline).includes(limpio(numero[0]))) {
+      problemas.push({
+        nivel: 'error', regla: 'numero-repetido', lamina: s.number || i + 1,
+        msg: `el titular repite "${numero[0]}", que la cifra grande ya muestra: se pisan`,
+      });
+    }
+  });
+
   // 7. Y una recompensa nombrada que NO existe en disco es peor: es incumplir en
   // publico, en la primera interaccion con un desconocido. La auditoria del 2026-08-27
   // encontro SEIS piezas de veintiuna pidiendo un comentario a cambio de un PDF que
@@ -194,6 +211,10 @@ function revisar(brief, pack, baseDir = process.cwd()) {
 function selfCheck() {
   const assert = require('node:assert');
   const tmp = path.join(require('os').tmpdir(), 'gate-selfcheck');
+  // El tmp sobrevive entre corridas: sin limpiarlo, el PDF que escribe el ultimo caso
+  // hace pasar al caso que justamente comprueba su ausencia. Un self-check que depende
+  // de si ya corrio antes no verifica nada.
+  fs.rmSync(path.join(tmp, 'hermes-content'), { recursive: true, force: true });
   fs.mkdirSync(tmp, { recursive: true });
   // PNG 1x1 valido, para las rutas que solo necesitan existir.
   const chico = path.join(tmp, 'chico.png');
@@ -248,7 +269,13 @@ function selfCheck() {
   p = revisar({ comment_trigger: 'SISTEMA', comment_reward: 'la lista', slides: [] }, 'dark-product', tmp);
   assert.strictEqual(p.length, 0, 'un brief sano no debe dar nada');
 
-  console.log('self-check ok: 11 casos');
+  // El titular que repite la cifra: pasa dos veces en un mismo dia, se automatiza.
+  p = revisar({ slides: [{ number: 2, dato: '42 h', headline: 'tardaron 42 horas' }] }, 'dato-ilustrado', tmp);
+  assert.ok(p.some((x) => x.regla === 'numero-repetido'), 'titular que repite la cifra');
+  p = revisar({ slides: [{ number: 2, dato: '42 h', headline: 'lo que tarda en contestarte' }] }, 'dato-ilustrado', tmp);
+  assert.ok(!p.some((x) => x.regla === 'numero-repetido'), 'sin el numero no debe marcar');
+
+  console.log('self-check ok: 13 casos');
 }
 
 function main() {
