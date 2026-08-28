@@ -73,8 +73,15 @@ Regla del repo: nada que parezca template por defecto — ver `web-factory-disen
 `app/(dashboard)/communications/page.tsx` (230 líneas) es **diagnóstico de envíos**, no un
 editor; `app/(dashboard)/admin/organizations/[id]/WhatsAppOrgConfig.tsx` (263 líneas) ya
 configura WhatsApp por organización. ⚠️ **Corregido 2026-08-24.** Acá decía que el editor de conocimiento NO existía.
-**Está EN PRODUCCIÓN**: pantalla, tabla y probador vivos. Lo único que falta es que el bot
-de WhatsApp lea la fila. Una sesión que lea la versión vieja lo construye por segunda vez.
+**Está EN PRODUCCIÓN**: pantalla, tabla y probador vivos. Una sesión que lea la versión
+vieja lo construye por segunda vez.
+⚠️ **Corregido 2026-08-28.** Acá decía "lo único que falta es que el bot de WhatsApp lea la
+fila" — **falso desde el 17/18-ago**: el motor lee la fila por organización (fuente "db") y
+resuelve la org por INBOX (`clinic_settings.chatwootInboxId`), con modo recepcionista vivo y
+verificado por widget + curl sintético. Lo que falta es MENOS: verificar el mismo circuito
+con un canal WhatsApp real de un cliente (mismo adapter). El circuito completo por cliente
+(editor → publicar → su bot contesta en su canal) EXISTE; desde el 28-ago el editor además
+abre PRE-ARMADO con la plantilla del rubro (`lib/chatbot/plantillas.ts`).
 
 ### API que consuma la plataforma
 `api-design` · `backend-patterns` — y `onia-backend` del propio repo, que manda.
