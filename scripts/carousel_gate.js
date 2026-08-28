@@ -235,21 +235,63 @@ function revisar(brief, pack, baseDir = process.cwd()) {
     }
   });
 
-  // 7. Y una recompensa nombrada que NO existe en disco es peor: es incumplir en
-  // publico, en la primera interaccion con un desconocido. La auditoria del 2026-08-27
-  // encontro SEIS piezas de veintiuna pidiendo un comentario a cambio de un PDF que
-  // nadie habia escrito. Declarar el campo no alcanza: el archivo tiene que estar.
-  if (brief.comment_trigger && brief.comment_reward) {
-    const carpeta = path.join(baseDir, 'hermes-content', 'recursos',
-      String(brief.comment_trigger).toLowerCase());
-    const hayPdf = fs.existsSync(carpeta)
-      && fs.readdirSync(carpeta).some((f) => f.toLowerCase().endsWith('.pdf'));
-    if (!hayPdf) {
+  // 7. La promesa se valida contra el registro de recompensas, no contra una carpeta.
+  // Tres cosas distintas, y las tres pasaron de verdad:
+  //   a) la recompensa no existe (seis piezas pedian un comentario a cambio de un PDF
+  //      que nadie habia escrito);
+  //   b) la palabra esta APAGADA en el circuito, asi que el lead comenta y no recibe
+  //      nada — el 26-ago alguien comento RANKING en un post de Sergio y se perdio en
+  //      silencio, sin aviso a nadie;
+  //   c) dos piezas prometen COSAS DISTINTAS con la MISMA palabra. Meta manda un solo
+  //      mensaje por comentario y se elige por palabra: la segunda promesa es
+  //      fisicamente incumplible. O03 pedia SISTEMA por "el checklist de tu Oficina
+  //      Virtual" mientras otras siete pedian SISTEMA por "las 6 tareas para delegar".
+  const registro = (() => {
+    try {
+      return JSON.parse(fs.readFileSync(path.join(__dirname, 'recompensas.json'), 'utf8'));
+    } catch { return null; }
+  })();
+  if (brief.comment_trigger && brief.comment_reward && registro) {
+    const clave = String(brief.comment_trigger).toUpperCase();
+    const r = registro.palabras[clave];
+    if (!r) {
       problemas.push({
-        nivel: 'error', regla: 'recompensa-inexistente',
-        msg: `promete "${brief.comment_trigger}" pero no hay ningun PDF en `
-           + `hermes-content/recursos/${String(brief.comment_trigger).toLowerCase()}/`,
+        nivel: 'error', regla: 'palabra-sin-registrar',
+        msg: `la palabra "${clave}" no esta en scripts/recompensas.json: declarala ahi antes de prometerla`,
       });
+    } else {
+      if (!r.activa) {
+        problemas.push({
+          nivel: 'error', regla: 'palabra-apagada',
+          msg: `"${clave}" esta apagada en el circuito: quien comente no recibe nada`
+             + (r._falta ? ` — falta: ${r._falta}` : ''),
+        });
+      }
+      if (r.tipo === 'pdf' && (!r.entrega || !fs.existsSync(path.join(baseDir, r.entrega)))) {
+        problemas.push({
+          nivel: 'error', regla: 'recompensa-inexistente',
+          msg: `"${clave}" promete un PDF que no esta en disco: ${r.entrega || '(sin declarar)'}`,
+        });
+      }
+      // Que el archivo este en el repo no le sirve de nada a quien comenta: lo unico
+      // que cuenta es que la URL responda. `node scripts/verificar_recompensas.js`
+      // lo comprueba en vivo y actualiza este campo.
+      if (r.publicado === false) {
+        problemas.push({
+          nivel: 'error', regla: 'recurso-no-publicado',
+          msg: `"${clave}" no esta publicado todavia${r.url ? ` (${r.url})` : ''}`
+             + (r._falta ? ` — ${r._falta}` : ''),
+        });
+      }
+      // Una palabra, UNA promesa. Se comparan normalizados para no fallar por comas.
+      const norm = (x) => String(x).toLowerCase().replace(/[^a-z0-9áéíóúñ ]/gi, '').trim();
+      if (norm(brief.comment_reward) !== norm(r.promete)) {
+        problemas.push({
+          nivel: 'error', regla: 'promesa-distinta',
+          msg: `promete "${brief.comment_reward}" pero "${clave}" entrega "${r.promete}": `
+             + 'Meta manda UN solo mensaje por palabra, asi que dos promesas no entran',
+        });
+      }
     }
   }
 
@@ -306,15 +348,34 @@ function selfCheck() {
   p = revisar({ slides: [{ number: 2, bg: 'chico.png' }, { number: 3, bg: 'chico.png' }] }, 'dato-ilustrado', tmp);
   assert.ok(p.some((x) => x.regla === 'repetida' && x.lamina === 3), 'caza el bg repetido');
 
-  // Declarar la recompensa no alcanza: el PDF tiene que existir. Sin el, la pieza
-  // incumple en publico ante un desconocido que comento de buena fe.
-  p = revisar({ comment_trigger: 'SISTEMA', comment_reward: 'la lista', slides: [] }, 'dark-product', tmp);
-  assert.ok(p.some((x) => x.regla === 'recompensa-inexistente'), 'promesa sin PDF en disco');
+  // La promesa se valida contra scripts/recompensas.json. Tres fallas distintas:
+  const REC = JSON.parse(fs.readFileSync(path.join(__dirname, 'recompensas.json'), 'utf8'));
+  const PROM = REC.palabras.SISTEMA.promete;
 
-  // Con el PDF puesto, el mismo brief pasa limpio.
-  fs.mkdirSync(path.join(tmp, 'hermes-content', 'recursos', 'sistema'), { recursive: true });
-  fs.writeFileSync(path.join(tmp, 'hermes-content', 'recursos', 'sistema', 'guia.pdf'), 'x');
-  p = revisar({ comment_trigger: 'SISTEMA', comment_reward: 'la lista', slides: [] }, 'dark-product', tmp);
+  // a) prometer algo distinto de lo que esa palabra entrega: imposible de cumplir,
+  //    porque Meta manda UN solo mensaje por palabra.
+  p = revisar({ comment_trigger: 'SISTEMA', comment_reward: 'otra cosa', slides: [] }, 'dark-product', tmp);
+  assert.ok(p.some((x) => x.regla === 'promesa-distinta'), 'una palabra, una promesa');
+
+  // b) una palabra apagada se come el lead en silencio.
+  p = revisar({ comment_trigger: 'STACK', comment_reward: REC.palabras.STACK.promete, slides: [] }, 'dark-product', tmp);
+  assert.ok(p.some((x) => x.regla === 'palabra-apagada'), 'palabra apagada no se publica');
+
+  // c) una palabra que nadie declaro.
+  p = revisar({ comment_trigger: 'INVENTADA', comment_reward: 'x', slides: [] }, 'dark-product', tmp);
+  assert.ok(p.some((x) => x.regla === 'palabra-sin-registrar'), 'palabra sin registrar');
+
+  // d) el archivo esta en el repo pero NO publicado: quien comenta recibe un 404.
+  p = revisar({ comment_trigger: 'SISTEMA', comment_reward: PROM, slides: [] }, 'dark-product', tmp);
+  assert.ok(p.some((x) => x.regla === 'recurso-no-publicado'), 'un recurso sin publicar no se promete');
+
+  // Y el caso sano: palabra activa, PDF en disco, promesa identica, recurso publicado.
+  fs.mkdirSync(path.join(tmp, path.dirname(REC.palabras.SISTEMA.entrega)), { recursive: true });
+  fs.writeFileSync(path.join(tmp, REC.palabras.SISTEMA.entrega), 'x');
+  const sano = REC.palabras.HUMO;
+  fs.mkdirSync(path.join(tmp, path.dirname(sano.entrega)), { recursive: true });
+  fs.writeFileSync(path.join(tmp, sano.entrega), 'x');
+  p = revisar({ comment_trigger: 'HUMO', comment_reward: sano.promete, slides: [] }, 'dark-product', tmp);
   assert.strictEqual(p.length, 0, 'un brief sano no debe dar nada');
 
   // El titular que repite la cifra: pasa dos veces en un mismo dia, se automatiza.
@@ -337,7 +398,7 @@ function selfCheck() {
   p = revisar({ slides: [{ number: 1, bg: RL + 'tanda-20260821/NO-EXISTE.png' }] }, 'editorial-photo', tmp);
   assert.ok(p.some((x) => x.regla === 'imagen-inexistente'), 'una ruta muerta no pasa');
 
-  console.log('self-check ok: 17 casos');
+  console.log('self-check ok: 21 casos');
 }
 
 function main() {

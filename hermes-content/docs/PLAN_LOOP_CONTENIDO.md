@@ -174,7 +174,39 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 8. ~~O11 (las 42 horas)~~ ✅ hecho
 9. ~~S07 (cinco cosas que parecían funcionar)~~ ✅ hecho
 10. ~~S08 (subió el dólar, no el software)~~ ✅ hecho · y la repetición de `quien-es-fijado` corregida
-11. Seguir la tabla
+11. ~~Escribir el recurso STACK~~ ⛔ **Sergio, 2026-08-28: "aún no armes los PDFs".**
+    Ningún recurso nuevo se escribe hasta que lo diga. Los que faltan quedan anotados,
+    no se producen.
+12. Seguir la tabla
+
+## 🔴 El circuito comentario → DM manda sobre los CTA (2026-08-28)
+
+Contexto que pasó Sergio, ya verificado en producción. **Cambia qué se puede prometer.**
+
+- **UN solo mensaje por comentario, para siempre**, y **solo texto**. No hay secuencia: todo
+  entra en ese único DM, y el recurso va como link.
+- **La respuesta de la persona abre una ventana de 24 h** — es el único modo de mandar
+  después el audio o el link de la comunidad. Por eso cada DM pide una respuesta concreta.
+- El mensaje se elige **por palabra clave**, así que **dos piezas con la misma palabra no
+  pueden prometer cosas distintas**. Pasaba: O03 pedía SISTEMA por "el checklist de tu Oficina
+  Virtual" y otras siete pedían SISTEMA por "las 6 tareas". O03 pasó a la palabra **FACTURA**.
+
+**Lo que destapó verificar las URLs en vivo:**
+
+| Palabra | Estado |
+|---|---|
+| SISTEMA | 🔴 **el PDF NO está publicado** — 404. La palabra está activa y **8 piezas la prometen**. Mismo bug que tuvo HUMO el 23-ago |
+| HUMO | ✅ 200, 306 KB |
+| LISTA | ✅ 200, 258 KB |
+| FACTURA | ✅ el recurso vive, 🔴 falta cargar la palabra en @oniahq |
+| STACK | 🔴 doble bloqueo: sin recurso **y** el mapa de Sergio vacío |
+
+Ahora lo comprueba el gate (`scripts/recompensas.json`) y hay un verificador en vivo:
+`node scripts/verificar_recompensas.js`. **Las 8 piezas de @oniahq quedan bloqueadas hasta
+que ese PDF esté publicado** — no es una opinión: hoy entregarían un 404.
+
+Los textos del único DM de cada palabra están escritos en
+`hermes-content/docs/ONIA_DM_POR_PALABRA.md`, listos para cargar en la tabla del circuito.
 
 **Al terminar cada pieza:** tachar la línea de este archivo y commitear.
 
