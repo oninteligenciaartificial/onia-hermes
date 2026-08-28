@@ -179,7 +179,26 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
     no se producen.
 12. ~~El acento de Lucía~~ ✅ **VERDE** — Sergio, 2026-08-28: *"usa color verde siempre"*
 13. RL02 🟡 preview listo, esperando OK
-14. Seguir la tabla
+14. ~~El ancla de Lucía con 7 ángulos~~ ✅ `lucia-skin-v1` `58bbd635`, probado con A/B
+15. ~~Un doc por tema sin contradicciones~~ ✅ ver abajo
+16. Seguir la tabla
+
+## ✅ Acomodado el 2026-08-28 — qué manda sobre qué
+
+| Tema | Manda | Qué se hizo |
+|---|---|---|
+| Qué foto de Lucía se usa | `references/modelos/lucia/BANCO-OFICIAL.md` | El gate lo valida como lista blanca |
+| Con qué se genera su cara | ese mismo · `lucia-skin-v1` `58bbd635`, **7 ángulos** | Reemplaza al ancla de 1 foto |
+| El color de las 3 cuentas | **verde `#00D26A`** | Sergio: *"usa color verde siempre"* |
+| Qué entrega cada palabra clave | `scripts/recompensas.json` | Gate + `verificar_recompensas.js` |
+| Personaje, voz, prompts | `LUCIA.md` (apunta al banco desde arriba) | — |
+
+**Cuatro docs SIN fecha decían "USAR ESTE" sobre el Soul prohibido** — `ONIA_MODELOS_RAIZ.md`
+(que además se autodeclara "este índice manda"), `lucia-onia-identity-bible.md`,
+`AVATAR-CONSISTENCY-SCHEME.md` y `LUCIA_CONTENT_SYSTEM.md`. Cualquier sesión que entrara por
+ahí habría generado la cara roja, que es exactamente lo que pasó. Los cuatro llevan ahora un
+aviso de superado **arriba del título** — si va después, se lee el título y se cierra el
+archivo. No se borran: su método sigue sirviendo, su instrucción de identidad no.
 
 **El color de Lucía es el VERDE de Onia.** Sergio, 2026-08-28: *"usa color verde siempre"*.
 Ese mismo día se habían pasado sus piezas a terracota porque `LUCIA.md` §1-quater lo pedía con
