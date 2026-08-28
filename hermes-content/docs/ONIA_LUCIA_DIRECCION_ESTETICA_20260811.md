@@ -102,7 +102,7 @@ Pelo suelto con ondas suaves o recogido descuidado. Maquillaje mínimo, piel rea
 
 ```
 A real photo taken on a phone, unposed.
-<<<452d8375-fb67-4df7-9ae0-8f1b257aa51f>>> [ESCENA + ACCIÓN].
+<<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>> [ESCENA + ACCIÓN].
 Keep her face exactly as in the reference: same bone structure, freckles, real skin texture.
 [ATUENDO A/B/C].
 Warm neutral palette: cream, linen, light oak, terracotta accents, real plants, thin gold jewelry.

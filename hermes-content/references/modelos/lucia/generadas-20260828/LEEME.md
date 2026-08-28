@@ -1,6 +1,6 @@
 # Generadas el 2026-08-28 — con el ancla oficial
 
-Imágenes nuevas hechas con el Element-ancla `452d8375-fb67-4df7-9ae0-8f1b257aa51f`, el que
+Imágenes nuevas hechas con el Element-ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563`, el que
 manda [`../BANCO-OFICIAL.md`](../BANCO-OFICIAL.md).
 
 | Archivo | Para qué | Verificado a ojo |

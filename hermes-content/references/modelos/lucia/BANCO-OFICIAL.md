@@ -19,8 +19,9 @@
 
 | Rol | Qué | ID |
 |---|---|---|
-| **ANCLA** — con esto se genera | `lucia-ancla-2026-08` · va como `<<<452d8375-…>>>` en el prompt, motor `nano_banana_2` @ 2k | `452d8375-fb67-4df7-9ae0-8f1b257aa51f` |
+| **ANCLA** — con esto se genera | `lucia-skin-v1` · **7 fotos**: frontal canon, 3/4 medio, casi frontal, casi perfil, 3/4 izq, 3/4 der y frontal alta. Va como `<<<58bbd635-…>>>`, motor `nano_banana_2` @ 2k | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` |
 | **RESPALDO** — si el ancla falla en un encuadre | `lucia-surgical-anchor` | `902eeebb-89e9-4477-8426-c555b20f7ecc` |
+| ⛔ **Jubilado** — 1 sola foto, inventaba el perfil | `lucia-ancla-2026-08` | `452d8375-…` |
 | **VARA de QA** — se compara, NO se genera | `STACK-rasgos-10-angulos.jpg` | — |
 
 ⛔ **Soul `36305a9b` (LUCIA-REAL-v2-clean): PROHIBIDO.** Sale con la piel roja, ignora el
@@ -42,7 +43,10 @@ cara más redonda · pelo más lacio y parejo. Es la piel de la persona real del
 ### Rasgos sagrados (nunca se limpian)
 
 `pecas` > `argollas de oro + cadenita` > `algo terracota #E4714E en cuadro`.
-⛔ El verde de ONIA `#00D26A` **no entra** en sus piezas: es de la marca, no de ella.
+
+✅ **El color de marca de sus piezas es el VERDE de Onia `#00D26A`.** Sergio, 2026-08-28:
+*"usa color verde siempre"* — *"Lucía es verde porque es de Onia y Onia es verde"*. El
+terracota es dirección de arte DENTRO de la foto (una taza, una pared), no el acento gráfico.
 
 ---
 
@@ -87,6 +91,24 @@ tienen piel roja; `P2`, `P4` y `P6` tienen deriva de estructura.
 - `docs/ONIA_FORMATOS_ADENDA_PERSONAJES.md` — del 24-ago, planifica con "Soul de Lucía".
 
 ---
+
+## Por qué el ancla tiene 7 fotos y no 1 (ni 30)
+
+Sergio, 2026-08-28: *"¿por qué en elements de Lucía solo hay una foto? ¿no tiene que haber la
+skin completa?"*. Tenía razón: con una sola selfie de espejo, **el modelo inventaba el perfil,
+el tres cuartos y las proporciones** en cada generación.
+
+Pero 30 fotos tampoco: **un Element no entrena, inyecta referencias en el momento de generar**,
+y ahí la variedad se promedia. Las 20-80 fotos son la receta de un *Soul*, que es otro
+mecanismo. El punto correcto son **5-7 imágenes muy coherentes entre sí** que cubran los
+ángulos que faltan — misma luz, misma piel, mismos rasgos.
+
+⚠️ **Un Element no se puede editar.** El enum es `list` / `get` / `create`: para cambiar las
+fotos hay que crear uno nuevo y actualizar el UUID en los docs. Por eso el viejo sigue vivo en
+el workspace y quedó marcado como jubilado arriba.
+
+⚠️ **`action: list` devuelve SOLO la primera media de cada element.** Verificar siempre con
+`action: get`, o un element de 7 fotos parece tener 1.
 
 ## Cómo se hace cumplir
 
