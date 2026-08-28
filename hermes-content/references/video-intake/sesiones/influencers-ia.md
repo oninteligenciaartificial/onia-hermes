@@ -854,3 +854,94 @@ Pasos:
 
 LISTO = las 8 láminas renderizadas para un rubro, con los 4 usos y sus chips, sin una sola capacidad no encendida, y el CTA apuntando a la reserva de demo.
 ```
+
+## R07 · UGC sintético con producto real: una foto de persona más una del producto
+
+- **Ficha:** [UGC sintético con producto real: una foto de persona más una del producto](../2026-08-28-ugc-sintetico-persona-mas-producto.md)
+- **Qué falta:** Un producto real con el que probar. Y generar video es gasto: permiso explícito caso por caso, cotizado antes.
+
+```text
+Objetivo único: montar el molde "una foto de persona + una foto de producto -> UGC" y dejarlo probado con un producto real, antes de ofrecérselo a nadie.
+
+De dónde sale: ficha `ugc-sintetico-persona-mas-producto` (IG Dcizfw5MI0h). El post muestra durante TODO el video, como overlay fijo, los dos insumos: la foto de la persona y la foto del producto, con un "+" entre ellas. El caption pone el número: una marca pagaba 4.000 euros y tres semanas por un shooting; esto son cuatro horas.
+
+Lo difícil, y es donde fallan la mayoría de los intentos: la persona sintética sostiene el producto REAL con el packaging legible, sin que el logo se deforme ni el envase se invente.
+
+Pasos:
+
+1) Elegir un producto real con packshot decente. Si hay un cliente o prospecto de comercio con catálogo, ese. Si no, un producto propio.
+
+2) Verificar EN VIVO el modelo antes de gastar: models_explore en Higgsfield, confirmar que seedance_2_0 sigue en catálogo y que acepta image_references. No heredar el dato de una ficha vieja: la verificación tiene fecha de vencimiento.
+
+3) COTIZAR ANTES DE GENERAR. Video generado es gasto y va con permiso explícito de Sergio, caso por caso, con get_cost:true por delante. Traer el número y esperar el OK. Sin eso no se genera nada.
+
+4) Con el permiso dado, generar UNA pieza corta y evaluar lo único que importa: ¿el packaging se lee sin deformarse? ¿la mano sostiene el producto de forma creíble? Si eso falla, el resto no importa.
+
+5) Copiar el recurso honesto del original: dejar el overlay fijo con los DOS insumos sobre el resultado. Mostrar la entrada mientras corre la salida es lo que hace creíble la demo, y nos protege de parecer que prometemos magia.
+
+6) Documentar el molde en la skill correspondiente: qué foto de persona sirve, qué packshot sirve, qué prompt, cuántas generaciones y cuánto costó de verdad.
+
+LISTO = una pieza generada con permiso previo cotizado, con el packaging legible verificado mirando el resultado, el overlay de insumos puesto, y el costo real anotado.
+```
+
+## R08 · Result / The Reference: b-roll de fabricación desde un packshot
+
+- **Ficha:** [Result / The Reference: b-roll de fabricación desde un packshot](../2026-08-28-result-the-reference-broll-desde-packshot.md)
+- **Qué falta:** Confirmar si `Seedance 2.5` existe en nuestra cuenta o si lo verificado es `2.0`. Y generar video es gasto con permiso.
+
+```text
+Objetivo único: probar si podemos generar b-roll de fabricación desde un packshot, y dejar la plantilla de demo "Result / The Reference".
+
+De dónde sale: ficha `result-the-reference-broll-desde-packshot` (IG DcXe68_pBpi, @higgsfield.creators). El post parte cada plano en dos: arriba el video generado rotulado "Result:", abajo el packshot sobre fondo blanco rotulado "The Reference:". Desde una foto de jean sobre fondo blanco sale la máquina de coser cosiendo ESE jean; desde una gorra, la bordadora haciendo ESE logo.
+
+Por qué vale: el b-roll de fábrica es lo más caro de conseguir para una marca chica. Esto lo saca de la foto que la marca ya tiene en su tienda online.
+
+Pasos:
+
+1) VERIFICAR EL MODELO ANTES QUE NADA. El sello del post dice "Seedance 2.5" y lo que está verificado en nuestro catálogo es seedance_2_0. Correr models_explore y decir cuál tenemos de verdad. Si solo tenemos 2.0, se prueba con 2.0 y se dice; no se promete 2.5.
+
+2) Elegir 2 o 3 packshots reales sobre fondo blanco. De un cliente de comercio si hay; si no, propios.
+
+3) COTIZAR CON get_cost:true Y ESPERAR EL OK DE SERGIO. Video generado es gasto explícito caso por caso. Traer el número antes de generar.
+
+4) Con el permiso, generar y evaluar una sola cosa: ¿el producto generado sigue siendo EL producto? El logo, el color, la etiqueta. Si el modelo inventa detalles, esto no se le puede vender a nadie y hay que decirlo.
+
+5) Montar la plantilla de presentación en HyperFrames: split vertical, "Result:" arriba y "The Reference:" abajo, rótulos sobrios en gris. Que quede reutilizable para cualquier demo futura.
+
+6) Si funciona, escribir la oferta en dos líneas para un comercio: "mandanos las fotos de tu catálogo y te devolvemos video de producto". Y anotar el costo real por pieza, que es lo que define si se puede vender.
+
+LISTO = la verificación del modelo escrita, la cotización aprobada antes de generar, 2-3 piezas generadas con veredicto sobre si el producto se mantiene fiel, y la plantilla Result/Reference lista para reusar.
+```
+
+## R09 · Pletor.ai: campaña de moda completa en tres pasos, con exportación a Shopify
+
+- **Ficha:** [Pletor.ai: campaña de moda completa en tres pasos, con exportación a Shopify](../2026-08-28-pletor-campana-moda-tres-pasos.md)
+- **Qué falta:** Nada para estudiarlo. Para replicar el flujo completo faltaría el puente al catálogo del cliente.
+
+```text
+Objetivo único: mapear el flujo de "sesión de fotos sintética para catálogo" contra lo que tenemos, y decir qué falta para ofrecérselo a un comercio.
+
+De dónde sale: ficha `pletor-campana-moda-tres-pasos` (IG DcjC1fvDP3X). Una herramienta de terceros (Pletor.ai) que hace campaña de moda en tres pasos:
+  1. Crear el modelo: describir tipo y subir la ropa, o subir un modelo existente. Campos leídos en su UI: género, edad, tipo de cuerpo, pelo, piel, pose, lente ("E-commerce studio"), luz ("Soft, even studio lighting").
+  2. Generar imágenes: plantilla "Ecom Pose Library" + modelo + imagen de referencia -> 30+ variantes de pose listas para ecommerce.
+  3. Exportar en un clic a Google Drive, Dropbox, Google Sheets, Airtable, SHOPIFY, API Keys y MCP.
+
+Lo que cambia la economía es el paso 2: no genera una foto, genera una sesión entera. Y el paso 3 es el que lo vuelve producto: las fotos entran al catálogo sin descargar y volver a subir.
+
+Pasos:
+
+1) Mapear los tres pasos contra lo nuestro, uno por uno, diciendo TENEMOS / NO TENEMOS y con qué:
+   - paso 1 (modelo sintético consistente): tenemos roster y esquema de consistencia de cara. ¿Alcanza para vestirlo con ropa real de un cliente?
+   - paso 2 (sesión de 30+ poses del mismo producto): ¿Higgsfield lo permite en lote? ¿a qué costo por pieza?
+   - paso 3 (exportar al catálogo del cliente): esto NO lo tenemos. Decir qué haría falta.
+
+2) Traducirlo a nuestro negocio. Onia no vende moda, pero vende a comercios con catálogo. El flujo es el mismo: producto -> sesión sintética -> catálogo. Escribir la versión nuestra en tres pasos.
+
+3) Calcular el costo real por producto en créditos de Higgsfield, con get_cost. Es el número que define si esto se puede vender o es un juguete.
+
+4) Anotar el detalle que casi nadie copia: Pletor tiene MCP entre sus conectores, o sea que un agente lo puede operar. Evaluar si ese es el camino en vez de construir el puente nosotros.
+
+5) NO generar nada en esta tarea salvo que se apruebe el gasto aparte. El entregable es el mapeo y el costo.
+
+LISTO = la tabla de los tres pasos con TENEMOS/NO TENEMOS y con qué, el costo por producto en créditos, y la versión de tres pasos escrita para comercio.
+```

@@ -1036,3 +1036,187 @@ REGLA: no se contrata ningún proveedor en esta tarea. El entregable es la decis
 
 LISTO = un documento que dice si el canal se abre o no y por qué, con el proveedor elegido y su criterio si se abre, la mecánica de arranque justificada, y el primer email escrito de punta a punta.
 ```
+
+## R01 · El equipo de contenido con IA: seis empleados, y el bucle gira sin vos
+
+- **Ficha:** [El equipo de contenido con IA: seis empleados, y el bucle gira sin vos](../2026-08-28-equipo-de-contenido-ia-seis-empleados.md)
+- **Qué falta:** Nada técnico. Falta decidir qué agentes NUESTROS están encendidos de verdad, porque solo esos pueden aparecer.
+
+```text
+Objetivo único: producir el carrusel "el equipo de Onia" con el molde de roles numerados, mostrando SOLO agentes que estén encendidos de verdad.
+
+De dónde sale: ficha `equipo-de-contenido-ia-seis-empleados` (IG DclP6haArSU). Sergio lo marcó "estilo de carrusel".
+
+El molde observado, que es lo que se porta: una lámina por rol, y cada lámina lleva SIEMPRE los mismos cuatro bloques —
+  - nombre del rol + una línea que dice qué hace ("El ganchero: es el dueño de los dos primeros segundos")
+  - CUATRO tareas, cada una con título corto en mayúsculas y una línea de descripción
+  - una banda "LO QUE ENTREGA" con los entregables concretos
+  - un ciclo de TRES verbos al pie (ESCRIBE -> CORTA -> ENTREGA)
+Cierra con una lámina de bucle y el remate "TU ÚNICO TRABAJO ES APROBAR".
+
+Pasos:
+
+1) CONTAR primero, escribir después. Listar qué agentes de Onia están realmente corriendo hoy — ONIA Center tiene varios por cron. Para cada uno: ¿está activo? ¿cuándo ejecutó por última vez? ¿qué entrega? Sin eso, el carrusel es fabricación.
+
+2) Quedarse SOLO con los que pasan. Si son cuatro, el carrusel es de cuatro. La regla de no exhibir obra manda: nada de agentes "casi listos".
+
+3) Para cada agente que queda, llenar la rejilla completa: cuatro tareas, entregables, ciclo de tres verbos. Si un agente no llena las cuatro tareas, es señal de que no está maduro y probablemente no debería estar en el carrusel.
+
+4) NO copiar el error del original: muestra 6 roles numerados pero dice "7 empleados", y el séptimo nunca tiene lámina. Nuestro número tiene que coincidir con nuestras láminas.
+
+5) Renderizar en HyperFrames con el sistema observado: fondo negro, un color por rol, numeral gigante en serif display, tarjetas de tarea en gris muy oscuro, banda de entrega con tinte, ciclo en serif contorneada. Y una lámina final de bucle con los colores invertidos.
+
+6) El CTA es el lead magnet ya decidido: agendar demo en cal.onia.com.bo. Mantener la forma de palabra clave por DM.
+
+LISTO = el carrusel renderizado con un rol por agente REALMENTE encendido, cada uno con sus 4 tareas y su ciclo, el número del titular coincidiendo con la cantidad de láminas, y la tabla de verificación de agentes activos adjunta.
+```
+
+## R02 · Las tres métricas de creativo de Meta que casi nadie mira — con fórmula y umbrales
+
+- **Ficha:** [Las tres métricas de creativo de Meta que casi nadie mira — con fórmula y umbrales](../2026-08-28-tres-metricas-creativo-meta-formulas.md)
+- **Qué falta:** Nada. Se crean hoy. Lo único a resolver es de dónde sale el 0,75 de la fórmula 03.
+
+```text
+Objetivo único: dejar creadas las tres columnas de diagnóstico de creativo en el Administrador de Anuncios, y escribir cómo se leen juntas.
+
+De dónde sale: ficha `tres-metricas-creativo-meta-formulas` (IG DcUTLF1FBf0). Las fórmulas y umbrales están LEÍDOS de pantalla, no inferidos:
+
+  MÉTRICA 01 — Play Rate do Hook: (Reproducciones de video ÷ Impresiones) × 100
+      mide el gancho VISUAL, los 3 primeros segundos
+      Malo < 30% · Medio 30-50% · Excelente > 70%
+
+  MÉTRICA 02 — Retención del Hook: % que sigue viendo DESPUÉS de los 3 primeros segundos
+      valida la promesa hablada
+      Malo < 20% · Medio 20-40% · Excelente > 60%
+
+  MÉTRICA 03 — Conversión del Body: (Compras ÷ (Thruplays × 0,75)) × 100
+      aísla la fuerza de la copy del cuerpo, sin la interferencia de edición ni formato
+      Tasa alta = argumentación validada
+
+Pasos:
+
+1) Crear las tres como COLUMNAS PERSONALIZADAS en el Administrador de Anuncios, usando métricas nativas de Meta en las fórmulas. No hay que construir nada: es configuración.
+
+2) Antes de dar por buena la 03: averiguar de dónde sale el factor 0,75. El carrusel NO lo explica. Si no se entiende, se documenta como supuesto del autor y NO se usa para decidir plata hasta verificarlo.
+
+3) Escribir la tabla de LECTURA CONJUNTA, que es donde está el valor real. Las tres juntas dicen qué parte del creativo cambiar:
+   - 01 bien + 02 mal  -> el gancho visual funciona, la promesa hablada no. Reescribir la promesa.
+   - 02 bien + 03 mal  -> se quedan pero no compran. El problema es la argumentación del cuerpo.
+   - 01 mal            -> ni siquiera frenan el scroll. Cambiar los 3 primeros segundos.
+   Completar los casos que falten.
+
+4) Documentar el hack de "Frankenstein": con el body validado, recombinar el mismo cuerpo con ganchos y avatares distintos SIN volver a grabar. Un creativo validado se vuelve decenas de variaciones. Escribir cómo se implementa con nuestro motor de Meta Ads.
+
+5) Correr las tres columnas sobre la campaña que ya tengamos datos y traer los números reales. Si no hay campaña con volumen suficiente, decirlo — es un resultado válido y evita conclusiones sobre tres impresiones.
+
+LISTO = las tres columnas creadas y visibles en el Administrador, la tabla de lectura conjunta escrita, el factor 0,75 explicado o marcado como no verificado, y los números reales de una campaña nuestra (o la constancia de que no hay volumen).
+```
+
+## R03 · Los pesos reales del algoritmo de X, leídos de su código público
+
+- **Ficha:** [Los pesos reales del algoritmo de X, leídos de su código público](../2026-08-28-pesos-algoritmo-x-codigo-publico.md)
+- **Qué falta:** Verificar los pesos contra el repo público antes de construir nada encima.
+
+```text
+Objetivo único: verificar los pesos del algoritmo de X contra el código público y, si se confirman, escribir el CTA que corresponde.
+
+De dónde sale: ficha `pesos-algoritmo-x-codigo-publico` (IG DcE8336Ixby). El reel muestra en pantalla el repo xai-org/x-algorithm (2.814 archivos) y esta tabla de pesos:
+
+  copiar el link ........ 20.0
+  reply (comentar) ...... 5.0
+  compartir por DM ...... 5.0
+  quote al tweet ........ 5.0
+  retweet ............... 1.0
+  like .................. 0.5
+  report ............... -234.0
+
+Y el fragmento: fn rank_post(p: &Post) { score += 20.0 * p.copy_link; score -= 234.0 * p.reports; }
+
+REGLA DE ENTRADA: esos números salen de una CAPTURA, no de haber abierto el repo. Son dato de segunda mano. Este prompt existe justamente para no construir estrategia sobre una captura.
+
+Pasos:
+
+1) Abrir el repo público xai-org/x-algorithm y buscar la función de ranking real. Confirmar o desmentir CADA peso, citando archivo y línea. Si el repo cambió o la función no existe con ese nombre, decirlo — eso también es un resultado.
+
+2) Anotar la FECHA de la verificación. Un algoritmo cambia; dentro de tres meses este documento es historia, no fuente.
+
+3) Si los pesos se confirman, escribir qué cambia para nosotros:
+   - el CTA en X deja de ser "dale like" y pasa a ser "copiá el link y mandáselo a alguien"
+   - compartir por DM vale lo mismo que comentar: pedir el DM explícitamente
+   - un report resta 234, o sea más de diez links copiados. Contenido polémico sale carísimo: definir qué NO publicamos
+
+4) Cerrar el pendiente viejo del corpus sobre este mismo repo, que quedó SIN EVIDENCIA porque nadie lo abrió. Enlazarlo.
+
+5) Si los pesos NO se confirman, escribir eso mismo con la misma claridad y descartar la ficha. Un desmentido documentado vale tanto como una confirmación.
+
+LISTO = un documento con cada peso confirmado o desmentido citando archivo y línea del repo, con fecha de verificación, y el CTA para X escrito (o la constancia de que los datos no se sostienen).
+```
+
+## R04 · Cuatro moldes de anuncio estático que no son "foto de producto"
+
+- **Ficha:** [Cuatro moldes de anuncio estático que no son "foto de producto"](../2026-08-28-cuatro-moldes-anuncio-estatico.md)
+- **Qué falta:** Nada técnico. El molde 4 requiere tener un dato real que otros oculten, o no se usa.
+
+```text
+Objetivo único: fundir los moldes de anuncio estático dispersos en UN banco, y producir dos piezas de Onia con los que apliquen.
+
+De dónde sale: ficha `cuatro-moldes-anuncio-estatico` (IG DbtVtpmT3ZU), que suma cuatro moldes a los cinco que ya están en 2026-08-12-cinco-formatos-anuncio-estatico-meta.md. Hoy están sueltos en dos fichas y nadie los va a encontrar.
+
+Los cuatro nuevos:
+1. PRUEBA SOCIAL APILADA — el producto es el fondo, el contenido son capturas de reseñas de 5 estrellas apiladas
+2. ÚLTIMA HORA + ANOTACIÓN A MANO — formato de alerta de noticias, con un círculo rojo trazado a mano sobre el detalle que justifica el precio
+3. NEGACIÓN REVERSA — "NO COMPRES ESTE JUGO... si disfrutas vivir con el cortisol alto", más badges de atributo verificables y calificación de un tercero (Trustpilot)
+4. EXPOSÉ CON TACHADO — texto con partes censuradas en negro, prometiendo información que "las marcas esconden"
+
+El hilo común de los cuatro: NINGUNO se ve como un anuncio. Cada uno le roba la forma a algo que el usuario ya consume sin defensas.
+
+Pasos:
+
+1) Leer las dos fichas y fundirlas en hermes-content/references/ui-patterns/moldes-anuncio-estatico/. Deduplicar: si dos moldes son el mismo mecanismo con otro nombre, queda uno. Ya nos pasó con el banco de motion — 25 propuestas eran 7 patrones.
+
+2) Para cada molde, escribir qué necesita para funcionar (una captura real, un dato de tercero, un detalle de producto) y en qué rubro nuestro aplica.
+
+3) Marcar cuáles NO podemos usar hoy y por qué:
+   - el molde 1 necesita reseñas reales. Con cero clientes pagando, no tenemos. Prohibido fabricarlas.
+   - el molde 3 necesita una calificación de tercero. Tampoco la tenemos.
+   - el molde 4 insinúa que otros esconden algo. Solo sirve si de verdad tenemos ese dato; si no, es fabricar.
+   Ser explícito: de cuatro moldes, probablemente hoy solo uno sea usable, y decirlo es más útil que forzar los cuatro.
+
+4) Producir DOS piezas reales con los moldes que sí apliquen, para un rubro vivo.
+
+LISTO = la carpeta moldes-anuncio-estatico/ con los moldes de las dos fichas fundidos y deduplicados, cada uno marcado usable/no usable hoy con su motivo, y dos piezas renderizadas.
+```
+
+## R05 · Un skill de Claude que hace anuncios estilo Vox desde la foto del producto
+
+- **Ficha:** [Un skill de Claude que hace anuncios estilo Vox desde la foto del producto](../2026-08-28-skill-claude-anuncios-estilo-vox.md)
+- **Qué falta:** Confirmar que el skill existe y es público. Y buscar fuente para el "formato de mejor rendimiento", que hoy es una afirmación sin respaldo.
+
+```text
+Objetivo único: reproducir el "estilo Vox" de anuncio editorial con nuestras propias herramientas, sin depender de un skill de terceros que está gateado.
+
+De dónde sale: ficha `skill-claude-anuncios-estilo-vox` (IG Dci8bI6MPnz). El post anuncia un skill de Claude que genera anuncios estilo Vox desde la sola foto del producto.
+
+Qué es el estilo Vox, según los ejemplos observados: anuncio editorial-infográfico que usa los recursos del periodismo explicativo en vez de la foto bonita —
+  - mapa vintage anotado con flechas rojas a mano y un punto circulado
+  - plano técnico del producto, acotado ("330ml GLASS BOTTLE")
+  - gráfico de barras comparativo contra la competencia ("MORE CAFFEINE: 25mg/100ml vs ~8mg")
+  - papel rasgado de color saturado con sellos circulares ("NO PLASTIC")
+Parece un artículo, no un anuncio. Ese es todo el truco.
+
+Pasos:
+
+1) Verificar dos cosas antes de invertir tiempo:
+   - ¿el skill existe y es público? El CTA lo gatea detrás de comentar "VOX", así que puede no estarlo.
+   - la afirmación "uno de los formatos de mejor rendimiento en Meta y Google" NO trae fuente. Buscarla. Si no aparece, tratarla como opinión del autor y decirlo.
+
+2) Independientemente de eso: el estilo se reproduce con HyperFrames. Son composiciones HTML — mapa con anotaciones, plano acotado, barra comparativa, papel rasgado con sello. Armar las cuatro plantillas.
+
+3) Producir un anuncio real de Onia con cada plantilla. El más prometedor es la BARRA COMPARATIVA: comparar algo nuestro contra la alternativa que el cliente usa hoy (papel, planilla, WhatsApp suelto). Pero solo con números que podamos sostener — sin dato real, no hay barra.
+
+4) Guardar las plantillas en hermes-content/references/ui-patterns/anuncio-editorial-vox/ para que el próximo no las rehaga.
+
+5) Conectar con la ficha hermana de este mismo lote (cuatro-moldes-anuncio-estatico): los dos posts describen el mismo mecanismo — robarle la forma a un formato que el usuario ya consume sin defensas. Anotarlo como principio, no como dos hallazgos sueltos.
+
+LISTO = las cuatro plantillas de estilo Vox en HyperFrames, un anuncio de Onia renderizado con la que mejor aplique y sin un solo número sin respaldo, y el veredicto escrito sobre si el skill de terceros existe y si su afirmación de rendimiento tiene fuente.
+```
