@@ -65,15 +65,15 @@ Guardada en `marca-personal-sergio/referencia-iampascio/`.
 humor, y **el contenido ya existe** — S05 tenía Zapier→n8n, Intercom→Chatwoot,
 Firebase→Supabase, Buffer→Postiz. Ese ES su equipo.
 
-**Lo que hay que construir:** un pack `tarjeta-empleado` en el motor. Tarjeta por lámina con
-número grande, nombre, cargo en versales, y la línea de qué hace.
+✅ **Pack `tarjeta-empleado` construido.** Azul noche + ámbar + Archivo condensado y mono —
+cero elementos compartidos con el sistema de Onia, que era el defecto a matar.
 
 ⚠️ **Los 5 carruseles viejos de Sergio (S01-S05) se ven idénticos a los de Onia.** Ese es su
 defecto principal y este molde lo arregla: nadie más va a tener tarjetas de empleado.
 
 | Pieza | Tema | Estado |
 |---|---|---|
-| S06 | **Mi equipo de 6 empleados que no cobran** — n8n, Chatwoot, Supabase, Postiz, Whisper, ffmpeg | ⬜ |
+| S06 | **Mi equipo de 6 empleados que no cobran** — n8n, Chatwoot, Supabase, Postiz, Whisper, ffmpeg | ✅ 9 láminas |
 | S07 | **Lo que me costó aprender** — errores reales del repo, con el commit | ⬜ |
 | S08 | **El software que pagás ya existe gratis** — port de S05 al molde nuevo | ⬜ |
 
@@ -129,7 +129,7 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 
 1. ~~L6 declarando IA~~ ✅ hecho
 2. ~~O03 y O04 con la lámina "Con Onia Platform"~~ ✅ hecho
-3. **El pack `tarjeta-empleado`** + **S06** — desbloquea la cuenta de Sergio entera
+3. ~~El pack `tarjeta-empleado` + S06~~ ✅ hecho
 4. **O08** (fiado) y **O09** (QR) — datos bolivianos ya verificados
 5. **R02** — el primer reel de módulo
 6. Seguir la tabla

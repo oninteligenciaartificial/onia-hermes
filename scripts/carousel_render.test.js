@@ -2,7 +2,7 @@
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
 const {
-  papelSubrayadoHtml, datoIlustradoHtml, roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
 
 let passed = 0;
 process.on('exit', () => console.log(`
@@ -73,7 +73,7 @@ test('packs list includes all packs (incl. editorial-clean)', () => {
   // nadie actualizo esta lista. Una suite roja por una razon vieja tapa las regresiones
   // nuevas — que es justo lo que un test existe para evitar.
   assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo',
-    'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado']);
+    'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado']);
 });
 test('nuvia account + brand kit configured', () => {
   assert.strictEqual(ACCOUNTS.nuvia.handle, '@nuvia.bo');
@@ -432,4 +432,33 @@ test('dark-product: tambien dibuja la lamina de solucion', () => {
   assert.strictEqual((b.match(/<li>/g) || []).length, 3);
   assert.ok(b.includes('Nada sale sin vos'));
   assert.ok(h.includes('.solucion li::before'), 'con su marca de verificacion');
+});
+
+test('tarjeta-empleado: la ficha lleva numero, nombre, cargo y a quien reemplaza', () => {
+  const h = tarjetaEmpleadoHtml({ headline: 'H', n: 1, nombre: 'n8n',
+    cargo: 'Jefe de operaciones', hace: 'Corre los flujos', reemplaza: 'Zapier' }, 1, 9, 'sergio');
+  const b = h.slice(h.indexOf('<body>'));
+  for (const t of ['class="ficha"', 'n8n', 'Jefe de operaciones', 'Corre los flujos', 'Zapier']) {
+    assert.ok(b.includes(t), 'falta ' + t);
+  }
+});
+
+test('tarjeta-empleado: respeta la grafia del nombre, no lo pasa a mayusculas', () => {
+  // n8n y ffmpeg van en minuscula SIEMPRE. El uppercase forzado escribia "N8N", y en
+  // una pieza que enseña herramientas eso resta la credibilidad que la pieza busca.
+  const h = tarjetaEmpleadoHtml({ headline: 'H', nombre: 'n8n', hace: 'x' }, 1, 9, 'sergio');
+  assert.ok(!/\.nombre\{[^}]*text-transform:uppercase/.test(h), 'sin uppercase en el nombre');
+});
+
+test('tarjeta-empleado: no comparte NADA del sistema visual de Onia', () => {
+  // El defecto principal de las piezas de Sergio era verse identicas a las de @oniahq.
+  const h = tarjetaEmpleadoHtml({ headline: 'H', nombre: 'x', hace: 'y' }, 1, 9, 'sergio');
+  assert.ok(h.includes('#101828'), 'azul noche, no el negro verdoso de Onia');
+  assert.ok(h.includes('#F59E0B'), 'ambar, no el verde de marca');
+  assert.ok(!h.includes("'Fraunces'"), 'sin la serif de Onia');
+});
+
+test('tarjeta-empleado: sin nombre no dibuja ficha vacia', () => {
+  const h = tarjetaEmpleadoHtml({ headline: 'Cierre', body: 'b' }, 8, 9, 'sergio');
+  assert.ok(!h.slice(h.indexOf('<body>')).includes('class="ficha"'));
 });

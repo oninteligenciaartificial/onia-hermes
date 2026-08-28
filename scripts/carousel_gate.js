@@ -34,6 +34,8 @@ const CAPACIDADES = {
   // La imagen va de FONDO (slide.bg), no como objeto flotante: ese era el defecto
   // que Sergio nombro — 'imagenes sin sentido sobre imagenes'.
   'dato-ilustrado': { object: false, callout: false, marks: false },
+  // El visual es la tarjeta de empleado; no lleva imagen de ningun tipo.
+  'tarjeta-empleado': { object: false, callout: false, marks: false },
 };
 
 // Debajo de esta escala el texto de una captura de pantalla deja de leerse en el
