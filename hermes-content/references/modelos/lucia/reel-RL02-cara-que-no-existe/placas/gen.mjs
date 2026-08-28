@@ -6,7 +6,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-const TERRACOTA = '#E4714E';
+const VERDE = '#00D26A'; // Sergio 2026-08-28: "usa color verde siempre"
 const PLACAS = [
   ['Esta cara', 'no existe'],
   ['No empieza con un texto.<br>Empieza con', 'una cara'],
@@ -25,7 +25,7 @@ html,body{width:1080px;height:1920px;background:transparent}
 p{font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 75,'wght' 800;
   font-size:96px;line-height:1.02;color:#fff;letter-spacing:-.02em;
   text-shadow:0 4px 40px rgba(0,0,0,.55)}
-mark{background:${TERRACOTA};color:#fff;padding:.02em .14em;border-radius:6px;
+mark{background:${VERDE};color:#fff;padding:.02em .14em;border-radius:6px;
   box-decoration-break:clone;-webkit-box-decoration-break:clone}
 </style><div class="wrap"><p>${normal} <mark>${marcado}</mark></p></div>`;
 

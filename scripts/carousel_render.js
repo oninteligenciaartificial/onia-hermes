@@ -65,14 +65,10 @@ const ACCOUNTS = {
   // cualquier pieza suya salia firmada con un handle inventado.
   sergio: { handle: '@sergio_urcullo', name: 'Sergio Urcullo', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
-  // El acento de Lucia es TERRACOTA, no el verde de Onia: `LUCIA.md` §1-quater lo dice
-  // con un simbolo de prohibido — "#00D26A (verde ONIA) no entra en sus piezas". El
-  // motor ya tenia `--accent` para esto y aun asi salieron cuatro piezas suyas en verde,
-  // o sea con la identidad de la empresa. Atado a la cuenta, ya no depende de acordarse.
-  lucia: {
-    handle: '@lucia.antelo.oficial', name: 'Lucía Antelo', personal: true,
-    accent: '#E4714E',
-  },
+  // Lucia va en el VERDE de Onia. Sergio, 2026-08-28: "usa color verde siempre".
+  // Deroga el §1-quater de LUCIA.md, que prohibia el verde en sus piezas y por el que
+  // se habian pasado a terracota ese mismo dia. Sin `accent` propio hereda el tema.
+  lucia: { handle: '@lucia.antelo.oficial', name: 'Lucía Antelo', personal: true },
 };
 
 /**

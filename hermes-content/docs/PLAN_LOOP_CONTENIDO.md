@@ -177,15 +177,17 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 11. ~~Escribir el recurso STACK~~ ⛔ **Sergio, 2026-08-28: "aún no armes los PDFs".**
     Ningún recurso nuevo se escribe hasta que lo diga. Los que faltan quedan anotados,
     no se producen.
-12. ~~El acento de Lucía~~ ✅ terracota, y ahora lo decide la cuenta
+12. ~~El acento de Lucía~~ ✅ **VERDE** — Sergio, 2026-08-28: *"usa color verde siempre"*
 13. RL02 🟡 preview listo, esperando OK
 14. Seguir la tabla
 
-**Aprendido en RL02 — la capacidad ya existía, otra vez.** El motor tenía `--accent` desde
-siempre, con un comentario que decía textual "permite que una cuenta personal (una modelo)
-tenga SU color y no el verde de la marca Onia". Y aun así salieron cuatro piezas de Lucía en
-verde. **Una capacidad que hay que recordar activar es una capacidad que va a fallar:** ahora
-el acento sale de `ACCOUNTS`, no de un flag.
+**El color de Lucía es el VERDE de Onia.** Sergio, 2026-08-28: *"usa color verde siempre"*.
+Ese mismo día se habían pasado sus piezas a terracota porque `LUCIA.md` §1-quater lo pedía con
+un ⛔; Sergio lo revirtió y el doc quedó corregido, para que nadie lo "arregle" de vuelta.
+
+Lo que sí queda del episodio: **el acento se resuelve desde `ACCOUNTS`, no desde un flag que
+haya que recordar.** Hoy ninguna cuenta declara color propio — todas heredan el verde — pero el
+mecanismo existe para el día que alguna lo necesite.
 
 Y dos trampas del render de video, para el próximo reel:
 - **Chrome captura antes de que baje la webfont.** Cuatro placas salieron en una sans genérica

@@ -485,12 +485,10 @@ test('tarjeta-empleado: el body respeta los parrafos', () => {
   assert.ok(h.includes('.sub + .sub'), 'y con separacion entre ellos');
 });
 
-test('el acento sale de la cuenta: Lucia en terracota, no en el verde de Onia', () => {
-  // LUCIA.md §1-quater: "#00D26A (verde ONIA) no entra en sus piezas". El motor ya
-  // tenia --accent y aun asi salieron cuatro piezas suyas en verde. Ahora lo decide
-  // la cuenta, no quien escribe el comando.
+test('Lucia va en el verde de Onia, no en terracota', () => {
+  // Sergio, 2026-08-28: "usa color verde siempre". Deroga el §1-quater de LUCIA.md.
+  // El mecanismo `acentoDe()` se conserva: sirve para cualquier cuenta que si necesite
+  // color propio, y hoy ninguna lo declara.
   const h = editorialPhotoHtml({ headline: 'H', bg: 'x.jpg' }, 0, 7, 'lucia');
-  assert.ok(h.includes('#E4714E'), 'Lucia lleva su terracota');
-  const o = editorialPhotoHtml({ headline: 'H', bg: 'x.jpg' }, 0, 7, 'onia');
-  assert.ok(!o.includes('#E4714E'), 'y Onia no la hereda');
+  assert.ok(!h.includes('#E4714E'), 'sin terracota');
 });
