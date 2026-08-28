@@ -81,13 +81,19 @@ defecto principal y este molde lo arregla: nadie más va a tener tarjetas de emp
 
 **Molde:** `editorial-photo` con su banco de fotos. Ya probado en L6.
 
+🔴 **Trampa del banco de fotos: varias tienen TEXTO GENERADO ILEGIBLE.** `L7` y `L8` traen
+párrafos sin sentido en la pared («Writhe LAlnaisnò de a Cnarvioa»), y `L6` tiene carteles de
+precio. Lucía declara que es IA de frente; que además se le note por un error de renderizado
+es lo contrario de eso. **Verificadas limpias: L1, L2, L3, L4, L5 y las de `biblioteca`.**
+Mirar la foto antes de usarla, siempre.
+
 🔴 **L6 no dice en ninguna lámina que Lucía es IA.** Es regla del proyecto y política de
 Meta. **Arreglarlo es lo primero de esta cuenta.**
 
 | Pieza | Tema | Estado |
 |---|---|---|
 | L6 | 5 señales | ✅ **declara la IA en la portada y en el cierre** |
-| L08 | **Herramientas que sí sirven** — con la palabra HUMO, que ya tiene su PDF | ⬜ |
+| L08 | **Herramientas que sí sirven** — con HUMO, que ya tiene su PDF | ✅ 7 láminas |
 | L09 | **Cómo se hace una cara que no existe** — detrás de escena, honesto | ⬜ |
 
 ---
@@ -137,7 +143,8 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 3. ~~El pack `tarjeta-empleado` + S06~~ ✅ hecho
 4. ~~O09 (QR)~~ ✅ hecho · **O08 bloqueado**: su dato no aplica al tema (ver la tabla)
 5. ~~El primer reel~~ ✅ R02-qr hecho · los de módulo, bloqueados por falta de capturas
-6. Seguir la tabla
+6. ~~L08 con la palabra HUMO~~ ✅ hecho
+7. Seguir la tabla
 
 **Al terminar cada pieza:** tachar la línea de este archivo y commitear.
 
