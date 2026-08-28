@@ -153,7 +153,7 @@ capturas.**
 | # | Tema |
 |---|---|
 | RL01 | Una herramienta de IA que sí sirve, en 20 s |
-| RL02 | "Esta cara no existe" — cómo se hace, declarado |
+| RL02 | "Esta cara no existe" — cómo se hace, declarado · 🟡 **tabla + preview listos, falta el OK de Sergio para el corte final** |
 
 **Regla del video:** la tabla de cortes y el preview se le muestran a Sergio **antes** de
 aplicar el corte. Nunca cortar a ciegas.
@@ -177,7 +177,22 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 11. ~~Escribir el recurso STACK~~ ⛔ **Sergio, 2026-08-28: "aún no armes los PDFs".**
     Ningún recurso nuevo se escribe hasta que lo diga. Los que faltan quedan anotados,
     no se producen.
-12. Seguir la tabla
+12. ~~El acento de Lucía~~ ✅ terracota, y ahora lo decide la cuenta
+13. RL02 🟡 preview listo, esperando OK
+14. Seguir la tabla
+
+**Aprendido en RL02 — la capacidad ya existía, otra vez.** El motor tenía `--accent` desde
+siempre, con un comentario que decía textual "permite que una cuenta personal (una modelo)
+tenga SU color y no el verde de la marca Onia". Y aun así salieron cuatro piezas de Lucía en
+verde. **Una capacidad que hay que recordar activar es una capacidad que va a fallar:** ahora
+el acento sale de `ACCOUNTS`, no de un flag.
+
+Y dos trampas del render de video, para el próximo reel:
+- **Chrome captura antes de que baje la webfont.** Cuatro placas salieron en una sans genérica
+  y la quinta en Archivo (por caché): dos tipografías en un mismo reel se leen como error, no
+  como estilo. Se arregla con `--virtual-time-budget=6000`.
+- **El scrim va en la placa, no en el video.** Oscurecer el clip entero apaga la cara; el
+  degradado dentro del PNG da contraste al texto y deja la cara limpia.
 
 ## 🔴 El circuito comentario → DM manda sobre los CTA (2026-08-28)
 
