@@ -1,5 +1,10 @@
 # LUCÍA — archivo único
 
+> 📌 **¿Solo venís a elegir una foto? Andá a [`BANCO-OFICIAL.md`](BANCO-OFICIAL.md).**
+> Este archivo tiene 50 KB y el dato de qué banco se usa estaba perdido en la línea 90: el
+> 28-ago se produjeron dos carruseles con fotos descartadas justamente por eso. `BANCO-OFICIAL.md`
+> es una pantalla, dice qué carpeta sí y cuál no, y el gate lo hace cumplir.
+
 > **Este archivo manda.** Todo lo que se decide sobre Lucía se escribe acá. Si otro doc dice
 > algo distinto, gana este. Última edición: 2026-08-20.
 >

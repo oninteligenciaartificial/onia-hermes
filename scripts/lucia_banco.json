@@ -1,0 +1,33 @@
+{
+  "_": "Banco oficial de imagenes de Lucia. Lo explica hermes-content/references/modelos/lucia/BANCO-OFICIAL.md — editar los dos juntos. El gate valida contra este archivo y falla ANTES de renderizar.",
+  "_motivo": "El 2026-08-28 se produjeron L08 y L09 con calibracion-20260806, un banco que Sergio habia descartado el 15-ago por piel roja: eran salidas del Soul 36305a9b, entrenado con frames de una persona real. La cara sale enrojecida y sin las argollas. LUCIA.md lo decia en la linea 90 de 50 KB, y aun asi se uso.",
+  "raiz": "hermes-content/references/modelos/lucia/",
+  "permitido": [
+    "tanda-20260821/",
+    "prueba-realismo-20260815/",
+    "generadas-20260828/",
+    "biblioteca-20260808/13-cafe-celular.jpg",
+    "biblioteca-20260808/14-cafe-tecleando.jpg",
+    "avatar-20260806/FOTO-PERFIL-LUCIA.jpg",
+    "historias-20260823/",
+    "reel-lanzamiento-20260822/final/",
+    "reel-lanzamiento-20260822/qc/",
+    "prueba-motor-20260813/C-elem-ancla-closeup.jpg",
+    "prueba-motor-20260813/D-elem-ancla-medio.jpg",
+    "prueba-motor-20260813/E-elem-surgical-closeup.jpg"
+  ],
+  "prohibido": {
+    "calibracion-20260806/": "piel roja del Soul 36305a9b, descartado por Sergio el 15-ago",
+    "perfil-20260806/": "misma rojez del Soul descartado",
+    "avatar-20260806/": "rojez, y dos archivos son otra cara — solo se salva FOTO-PERFIL-LUCIA.jpg",
+    "prueba-soul-v3/": "ojos gris azulados y pecas borradas: rompe un rasgo sagrado",
+    "prueba-motor-20260813/A-soul-medio.jpg": "toma del Soul perdedor",
+    "prueba-motor-20260813/B-soul-closeup.jpg": "toma del Soul perdedor",
+    "_ARCHIVO-NO-USAR/": "carpeta de archivo: nada de aca entra en una pieza",
+    "references/models/pecas-clean-v2/": "frames de una persona real, dejo de ser la vara el 15-ago",
+    "references/models/pecas-source-frames/": "frames crudos de video real, incluye una cuarentena",
+    "references/models/lucia-content-bank-20260709/": "banco viejo con look de IA, rechazado por Sergio",
+    "references/models/lucia-demos-20260709/": "banco viejo con look de IA, rechazado por Sergio"
+  },
+  "_nota_posts": "posts-20260807/ es el workspace activo (ahi viven los briefs), asi que no se prohibe entero. Pero su banco de fotos es mixto: P1 es canonica, P3 y P5 tienen piel roja, y P2/P4/P6 tienen deriva. Cualquier imagen suelta ahi se revisa a ojo antes de usar."
+}

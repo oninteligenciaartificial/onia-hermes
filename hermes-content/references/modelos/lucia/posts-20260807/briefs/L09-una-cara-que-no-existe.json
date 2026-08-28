@@ -15,21 +15,21 @@
    "pill": "Detrás de escena",
    "headline": "Esta cara *no existe*. Así se hace",
    "body": "Soy Lucía y soy inteligencia artificial. Te cuento el proceso completo, con el error incluido.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L14-snapshot-v3-9x16.jpg"
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L4-espejo-dormitorio.png"
   },
   {
    "number": 2,
    "pill": "Paso 1",
    "headline": "No empieza con un texto. Empieza con una *cara*",
    "body": "Se entrena un modelo de identidad con un puñado de fotos. Esas fotos son lo único que sostiene que yo me parezca a mí en la foto siguiente. El texto elige la ropa y el lugar; la cara ya estaba decidida antes.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L13-copyspace-v3-9x16.jpg"
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L6-copyspace.png"
   },
   {
    "number": 3,
    "pill": "El error",
    "headline": "Una de las ocho fotos era de *otra mujer*",
    "body": "Así se entrenó la primera versión de mi cara. Nadie miró las ocho de a una. Empecé a cambiar entre publicaciones: el pelo, la sonrisa, los dientes. No falló el modelo, falló una foto mal elegida entre ocho.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L15-cafe-copyspace-v3-3x4.jpg"
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L2b-cafe-natural.png"
   },
   {
    "number": 4,
@@ -43,14 +43,14 @@
    "pill": "La voz",
    "headline": "La voz es un trabajo *aparte*",
    "body": "No viene con la cara. La primera que probamos sonaba robótica y se descartó. La que uso ahora se eligió escuchando siete candidatas leyendo la misma frase, que es la única forma de comparar sin engañarse.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L2-coworking-3x4.jpg"
+   "bg": "hermes-content/references/modelos/lucia/prueba-realismo-20260815/r1-cafe.png"
   },
   {
    "number": 6,
    "pill": "Guardá esto",
    "headline": "Lo que *se me nota*",
-   "body": "Mirá las letras de arriba: parecen palabras y no dicen nada. Es lo que peor le sale a estos modelos. Cuando dudes de una imagen, leé el texto antes de mirar la cara.",
-   "bg": "hermes-content/references/modelos/lucia/posts-20260807/L09-assets/L8-texto-ilegible-visible.jpg"
+   "body": "Mirá la pizarra: \"Café con Leche\" está bien escrito, y dos renglones más abajo dice \"marnago\" y \"horchimos\", que no son palabras. Cuando dudes de una imagen, leé el texto antes de mirar la cara.",
+   "bg": "hermes-content/references/modelos/lucia/generadas-20260828/G01-cafe-pizarra-texto.png"
   },
   {
    "number": 7,
@@ -58,7 +58,7 @@
    "pill": "Sin esconderlo",
    "headline": "La cara no existe. El *equipo* que la hizo, sí",
    "body": "Somos Onia, y hacemos esto para negocios de Santa Cruz.\n\n¿Habías notado las letras antes de que te lo dijera?",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L3-calle-palmeras-3x4.jpg"
+   "bg": "hermes-content/references/modelos/lucia/prueba-realismo-20260815/r2-calle.png"
   }
  ]
 }

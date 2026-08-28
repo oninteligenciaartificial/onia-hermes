@@ -170,6 +170,54 @@ function revisar(brief, pack, baseDir = process.cwd()) {
     });
   }
 
+  // 9. Y ninguna imagen de Lucia fuera del banco oficial. El 2026-08-28 salieron dos
+  // piezas con `calibracion-20260806`, un banco que Sergio habia descartado el 15-ago:
+  // son salidas del Soul prohibido, con la cara enrojecida y sin las argollas. Estaba
+  // escrito en LUCIA.md, en la linea 90 de 50 KB. Un doc largo no evita el error; esto si.
+  const banco = (() => {
+    try {
+      return JSON.parse(fs.readFileSync(path.join(__dirname, 'lucia_banco.json'), 'utf8'));
+    } catch { return null; }
+  })();
+  if (banco) {
+    slides.forEach((s, i) => {
+      const rutas = [s.bg, s.object].filter(Boolean).map((x) => String(x).split('\\').join('/'));
+      rutas.forEach((ruta) => {
+        const veto = Object.keys(banco.prohibido).find((k) => ruta.includes(k));
+        if (veto) {
+          problemas.push({
+            nivel: 'error', regla: 'lucia-fuera-de-banco', lamina: s.number || i + 1,
+            msg: `${ruta} esta descartada: ${banco.prohibido[veto]}`,
+          });
+          return;
+        }
+        // Dentro de la carpeta de Lucia, lo que no esta permitido tampoco pasa: el banco
+        // es lista blanca, no lista negra. Una carpeta nueva sin revisar no se cuela.
+        if (ruta.includes(banco.raiz)) {
+          const rel = ruta.slice(ruta.indexOf(banco.raiz) + banco.raiz.length);
+          const ok = banco.permitido.some((a) => rel.startsWith(a))
+            || rel.startsWith('posts-20260807/');
+          if (!ok) {
+            problemas.push({
+              nivel: 'error', regla: 'lucia-fuera-de-banco', lamina: s.number || i + 1,
+              msg: `${rel} no esta en el banco oficial (BANCO-OFICIAL.md)`,
+            });
+            return;
+          }
+        }
+        // Y por ultimo que exista: al archivar el banco viejo, un brief quedo apuntando
+        // a una ruta muerta y el gate lo dejo pasar. Va DESPUES del banco a proposito —
+        // si la foto esta descartada, ese es el motivo util, no "falta el archivo".
+        if (!fs.existsSync(path.join(baseDir, ruta))) {
+          problemas.push({
+            nivel: 'error', regla: 'imagen-inexistente', lamina: s.number || i + 1,
+            msg: `${ruta} no existe en disco`,
+          });
+        }
+      });
+    });
+  }
+
   // 8. El titular no puede repetir el numero que la cifra gigante ya grita: en el molde
   // se dibujan uno encima del otro y el titular queda tapado. Estaba escrito en el plan
   // y aun asi se repitio en O10 y en O11 — una regla que solo vive en un doc se
@@ -275,7 +323,21 @@ function selfCheck() {
   p = revisar({ slides: [{ number: 2, dato: '42 h', headline: 'lo que tarda en contestarte' }] }, 'dato-ilustrado', tmp);
   assert.ok(!p.some((x) => x.regla === 'numero-repetido'), 'sin el numero no debe marcar');
 
-  console.log('self-check ok: 13 casos');
+  // El banco de Lucia: lo descartado no pasa, lo oficial si.
+  const RL = 'hermes-content/references/modelos/lucia/';
+  p = revisar({ slides: [{ number: 1, bg: RL + 'calibracion-20260806/L1-retrato-cafe-1x1.jpg' }] }, 'editorial-photo', tmp);
+  assert.ok(p.some((x) => x.regla === 'lucia-fuera-de-banco'), 'calibracion esta descartada');
+  p = revisar({ slides: [{ number: 1, bg: RL + 'tanda-20260821/L2b-cafe-natural.png' }] }, 'editorial-photo', tmp);
+  assert.ok(!p.some((x) => x.regla === 'lucia-fuera-de-banco'), 'la tanda vigente si pasa');
+  p = revisar({ slides: [{ number: 1, bg: RL + 'carpeta-nueva-sin-revisar/x.png' }] }, 'editorial-photo', tmp);
+  assert.ok(p.some((x) => x.regla === 'lucia-fuera-de-banco'), 'lista blanca: lo no listado tampoco pasa');
+
+  fs.mkdirSync(path.join(tmp, RL, 'tanda-20260821'), { recursive: true });
+  fs.copyFileSync(chico, path.join(tmp, RL, 'tanda-20260821', 'L2b-cafe-natural.png'));
+  p = revisar({ slides: [{ number: 1, bg: RL + 'tanda-20260821/NO-EXISTE.png' }] }, 'editorial-photo', tmp);
+  assert.ok(p.some((x) => x.regla === 'imagen-inexistente'), 'una ruta muerta no pasa');
+
+  console.log('self-check ok: 17 casos');
 }
 
 function main() {

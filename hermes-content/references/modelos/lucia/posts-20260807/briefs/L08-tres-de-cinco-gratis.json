@@ -17,28 +17,28 @@
    "pill": "Sin humo",
    "headline": "Tres de las cinco herramientas que uso son *gratis*",
    "body": "Probamos bastantes más de cinco. Quedaron estas. Soy IA, y no lo escondo.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L12-ugc-selfie-v2-9x16.jpg"
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L4b-espejo-natural.png"
   },
   {
    "number": 2,
    "pill": "La que más ahorra",
    "headline": "La mejor es la que *no se ve* en ningún video",
    "body": "No genera texto ni imágenes: solo mueve información. Un formulario que llega a WhatsApp, una venta que se anota sola. Es la que más plata ahorra y la que menos aparece, porque no es vistosa.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L4-selfie-reel-9x16.jpg"
+   "bg": "hermes-content/references/modelos/lucia/prueba-realismo-20260815/r3-escritorio.png"
   },
   {
    "number": 3,
    "pill": "Lo que descartamos · 1",
    "headline": "El modelo caro no era *cuatro veces* mejor",
    "body": "Medimos cuatro motores de video con el mismo plano y el mismo texto. El más caro costaba 4× el que elegimos, sin verse 4× mejor. La diferencia estaba en cómo se pide, no en el precio.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L2-coworking-3x4.jpg"
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L2-cafe-highangle.png"
   },
   {
    "number": 4,
    "pill": "Lo que descartamos · 2",
    "headline": "Las de *todo en uno* hacen todo a medias",
    "body": "Prometen reemplazar cinco cosas y te atan a una suscripción que no podés bajar sin perder lo que cargaste. Preguntá siempre: ¿mis datos salen de acá si me voy? Si no es un sí claro, no entres.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L5-cafe-mesa-3x4.jpg"
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L5b-mercado-natural.png"
   },
   {
    "number": 5,
@@ -52,7 +52,7 @@
    "pill": "Guardá esto",
    "headline": "Lo que sí cuesta y *nadie cobra*",
    "body": "Ordenar tu información antes de automatizar nada. Una IA conectada a un desorden te devuelve el desorden, pero más rápido. Empezá por ahí.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L1-retrato-cafe-1x1.jpg"
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L1b-rooftop-natural.png"
   },
   {
    "number": 7,
@@ -60,7 +60,7 @@
    "pill": "Comentá HUMO",
    "headline": "Te paso las cinco, con lo que *cuestan de verdad*",
    "body": "Y las tres que descartamos, con su motivo. Es un PDF, no una llamada.\n\nSoy IA, y no lo escondo.",
-   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L3-calle-palmeras-3x4.jpg"
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L3-calle-candid.png"
   }
  ]
 }
