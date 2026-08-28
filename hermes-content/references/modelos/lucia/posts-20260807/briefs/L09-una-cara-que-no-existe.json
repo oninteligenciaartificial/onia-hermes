@@ -1,0 +1,64 @@
+{
+ "caption": "Esta cara no existe. Te cuento exactamente cómo se hace, porque el detrás de escena enseña más que el resultado.\n\nNo empieza con un texto. Empieza con una cara: se entrena un modelo de identidad con un puñado de fotos, y esas fotos son lo único que sostiene que yo me parezca a mí en la foto siguiente.\n\nY ahí estuvo el error que más nos costó. La primera versión se entrenó con ocho fotos, y una era de otra mujer. Nadie las miró de a una. Resultado: mi cara empezó a cambiar entre publicaciones — el pelo, la sonrisa, los dientes. No fue el modelo: fue una foto mal elegida entre ocho.\n\nEl arreglo no fue un truco: fue mirar. La segunda versión se armó con dieciocho fotos sacadas de un solo video, revisadas una por una antes de entrenar nada.\n\nLa voz es un trabajo aparte. La primera que probamos sonaba robótica y se descartó; la que uso ahora se eligió escuchando siete candidatas con la misma frase.\n\nLo que todavía se me nota: las letras. En una de las láminas vas a ver un texto sobre la foto que parece un idioma y no dice nada — lo escribió el modelo. Es lo que peor le sale y lo más fácil de detectar: cuando dudes de una imagen, leé el texto antes de mirar la cara.\n\n🤖 Soy Lucía y soy inteligencia artificial. La cara no existe. El equipo que la hizo, sí.",
+ "hashtags": [
+  "#inteligenciaartificial",
+  "#detrasdecamaras",
+  "#iageneativa",
+  "#santacruz",
+  "#creadoresdecontenido"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "pill": "Detrás de escena",
+   "headline": "Esta cara *no existe*. Así se hace",
+   "body": "Soy Lucía y soy inteligencia artificial. Te cuento el proceso completo, con el error incluido.",
+   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L14-snapshot-v3-9x16.jpg"
+  },
+  {
+   "number": 2,
+   "pill": "Paso 1",
+   "headline": "No empieza con un texto. Empieza con una *cara*",
+   "body": "Se entrena un modelo de identidad con un puñado de fotos. Esas fotos son lo único que sostiene que yo me parezca a mí en la foto siguiente. El texto elige la ropa y el lugar; la cara ya estaba decidida antes.",
+   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L13-copyspace-v3-9x16.jpg"
+  },
+  {
+   "number": 3,
+   "pill": "El error",
+   "headline": "Una de las ocho fotos era de *otra mujer*",
+   "body": "Así se entrenó la primera versión de mi cara. Nadie miró las ocho de a una. Empecé a cambiar entre publicaciones: el pelo, la sonrisa, los dientes. No falló el modelo, falló una foto mal elegida entre ocho.",
+   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L15-cafe-copyspace-v3-3x4.jpg"
+  },
+  {
+   "number": 4,
+   "pill": "El arreglo",
+   "headline": "No fue un truco. Fue *mirar*",
+   "body": "La segunda versión se armó con dieciocho fotos de un solo video, revisadas una por una antes de entrenar nada. La consistencia no sale de una configuración escondida: sale de revisar el material de entrada.",
+   "bg": "hermes-content/references/modelos/lucia/biblioteca-20260808/14-cafe-tecleando.jpg"
+  },
+  {
+   "number": 5,
+   "pill": "La voz",
+   "headline": "La voz es un trabajo *aparte*",
+   "body": "No viene con la cara. La primera que probamos sonaba robótica y se descartó. La que uso ahora se eligió escuchando siete candidatas leyendo la misma frase, que es la única forma de comparar sin engañarse.",
+   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L2-coworking-3x4.jpg"
+  },
+  {
+   "number": 6,
+   "pill": "Guardá esto",
+   "headline": "Lo que *se me nota*",
+   "body": "Mirá las letras de arriba: parecen palabras y no dicen nada. Es lo que peor le sale a estos modelos. Cuando dudes de una imagen, leé el texto antes de mirar la cara.",
+   "bg": "hermes-content/references/modelos/lucia/posts-20260807/L09-assets/L8-texto-ilegible-visible.jpg"
+  },
+  {
+   "number": 7,
+   "role": "cta",
+   "pill": "Sin esconderlo",
+   "headline": "La cara no existe. El *equipo* que la hizo, sí",
+   "body": "Somos Onia, y hacemos esto para negocios de Santa Cruz.\n\n¿Habías notado las letras antes de que te lo dijera?",
+   "bg": "hermes-content/references/modelos/lucia/calibracion-20260806/L3-calle-palmeras-3x4.jpg"
+  }
+ ]
+}

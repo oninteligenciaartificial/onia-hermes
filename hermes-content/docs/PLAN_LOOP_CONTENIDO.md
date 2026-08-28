@@ -84,7 +84,9 @@ defecto principal y este molde lo arregla: nadie más va a tener tarjetas de emp
 🔴 **Trampa del banco de fotos: varias tienen TEXTO GENERADO ILEGIBLE.** `L7` y `L8` traen
 párrafos sin sentido en la pared («Writhe LAlnaisnò de a Cnarvioa»), y `L6` tiene carteles de
 precio. Lucía declara que es IA de frente; que además se le note por un error de renderizado
-es lo contrario de eso. **Verificadas limpias: L1, L2, L3, L4, L5 y las de `biblioteca`.**
+es lo contrario de eso. **Sucias también `L10` y `L11`**: traen una UI de Instagram falsa con texto inventado
+encima de la foto — se descubrieron en la iteración de L09, mirándolas.
+**Verificadas limpias: L1, L2, L3, L4, L5, L13, L14, L15 y las de `biblioteca`.**
 Mirar la foto antes de usarla, siempre.
 
 🔴 **L6 no dice en ninguna lámina que Lucía es IA.** Es regla del proyecto y política de
@@ -94,7 +96,7 @@ Meta. **Arreglarlo es lo primero de esta cuenta.**
 |---|---|---|
 | L6 | 5 señales | ✅ **declara la IA en la portada y en el cierre** |
 | L08 | **Herramientas que sí sirven** — con HUMO, que ya tiene su PDF | ✅ 7 láminas |
-| L09 | **Cómo se hace una cara que no existe** — detrás de escena, honesto | ⬜ |
+| L09 | **Cómo se hace una cara que no existe** — detrás de escena, honesto | ✅ 7 láminas · usa su propio defecto como prueba |
 
 ---
 
