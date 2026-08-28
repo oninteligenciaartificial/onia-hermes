@@ -1,0 +1,90 @@
+# Técnica de Higgsfield — lo que funciona, probado en la web
+
+> **Objetivo de este archivo:** que generar una imagen de Lucía que salga bien no dependa de
+> acordarse de nada. Todo lo de acá se probó en la cuenta de Sergio el 2026-08-28, mirando el
+> resultado. Lo que no se probó, dice que no se probó.
+>
+> 🔴 **Higgsfield se opera SOLO por navegador.** Sergio, 2026-08-28: *"no usarás MCP, harás todo
+> desde el navegador a mi cuenta, cometes muchos errores por MCP"*. Tenía razón: el MCP pedía
+> `nano_banana_2` y el servidor resolvía a `nano_banana_flash` sin avisar.
+
+---
+
+## El flujo, paso a paso
+
+1. `higgsfield.ai` → menú **Image** → **Create Image**.
+2. En el campo de prompt escribir **`@lucia`** — autocompleta a **`@lucia-skin-v1`**, el ancla
+   de 7 ángulos. Reemplaza al `<<<uuid>>>` que se usaba por MCP.
+3. Escribir el prompt **después** del `@` (ver la receta abajo).
+4. Modelo **Nano Banana Pro**, aspecto **3:4**, 1K.
+5. **Generate** — cuesta 2 créditos.
+6. **Mirar el resultado ampliado** contra los rasgos sagrados antes de darlo por bueno.
+
+### ⚠️ El toggle `Unlimited` NO es gratis
+
+Parece un interruptor y es una **venta**: abre un modal de **$5 por 1 día · $12 por 3 días ·
+$23 por 7 días**, pago aparte del plan. No tocarlo sin permiso de Sergio.
+
+*(Acá se había escrito antes que "la web no gasta créditos". Era falso, y se corrigió al
+tocar el toggle y ver el modal.)*
+
+### ⚠️ "Could not reach the server" es transitorio
+
+La primera generación falló con ese error. **El mismo prompt, reintentado sin cambiar nada,
+funcionó.** No es falta de saldo ni prompt inválido: reintentar antes de diagnosticar.
+
+---
+
+## La receta de prompt que funcionó
+
+Probada el 28-ago. Cinco bloques, en este orden:
+
+| Bloque | Ejemplo |
+|---|---|
+| **Quién** | `@lucia-skin-v1` |
+| **Escena boliviana concreta** | «sentada en el borde de una vereda de ladrillo en Santa Cruz de la Sierra, pared ocre descascarada detrás y un tajibo florecido» |
+| **Rasgos sagrados** | «argollas doradas chicas y cadenita fina. Pecas marcadas en nariz y mejillas» |
+| **Anti-plástico** | «piel con poro y textura real, tono parejo, sin retoque ni suavizado» |
+| **Cámara** | «shot on an iPhone 15 Pro main camera, 24mm, foto casual sacada por una amiga, no posada» |
+
+**Lo que más cambió el resultado fue el bloque 2.** `LUCIA.md` advierte que muchas fotos del
+banco «leen europeas» — ladrillo y biblioteca podrían ser de cualquier lado. Nombrar cosas que
+solo existen acá — **el tajibo florecido, la pared ocre descascarada, la vereda de ladrillo** —
+devolvió una foto que se lee de Santa Cruz sin decir «Bolivia» en ningún cartel.
+
+**Verificado ampliando la cara:** pecas en nariz y mejillas, argolla dorada, piel de tono
+parejo sin rojez, cejas gruesas, ojos marrones. El ancla de 7 ángulos sostiene la identidad.
+
+---
+
+## Lo que hay en la web y el MCP no mostraba
+
+Al pasar el mouse sobre una imagen generada aparecen tres acciones:
+
+- **Animate** — convierte la imagen en video. Es el camino corto para b-roll de reels sin
+  depender del banco viejo. **No probado todavía.**
+- **Reference** — usa esa imagen como referencia de la siguiente.
+- **Create 3D scene** — no probado.
+
+Y en el menú hay funciones que el MCP no expone: **AI Influencer** («create and manage your AI
+influencer»), Soul ID Character, Soul Moodboard, Canvas, Photodump, Relight, Marketing Studio,
+Viral Presets, Cinema Studio 4.0. **Ninguna probada aún** — la más prometedora para este carril
+es *AI Influencer*.
+
+---
+
+## Pendientes de esta técnica
+
+| Qué | Estado |
+|---|---|
+| El botón de descarga de la UI no bajó el archivo | 🔴 sin resolver — hay que encontrar cómo traer la imagen al repo |
+| Probar **Animate** para b-roll de reels | ⬜ |
+| Probar **AI Influencer** | ⬜ |
+| Borrar los dos elements `ZZ-TEST` del workspace | ⬜ el MCP no tiene delete; por web se puede |
+
+## Lo que NO se toca
+
+- El ancla vigente es **`lucia-skin-v1`** (`58bbd635-…`). El viejo `452d8375` tenía una sola
+  foto y queda jubilado.
+- Las fotos del banco se eligen desde [`BANCO-OFICIAL.md`](BANCO-OFICIAL.md), nunca a ojo.
+- El acento gráfico de las piezas es el **verde de Onia `#00D26A`**, en las tres cuentas.
