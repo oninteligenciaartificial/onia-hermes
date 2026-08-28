@@ -1,0 +1,76 @@
+{
+ "serie": "Datos que no te contaron",
+ "episodio": "009",
+ "comment_trigger": "SISTEMA",
+ "comment_reward": "las 6 tareas que conviene delegar primero",
+ "caption": "EL PROBLEMA: cobrás por QR todo el día, y esa plata entra al banco sin pasar por tu sistema.\n\nEn 2025 se hicieron 891 millones de pagos con QR en Bolivia, por 51.293 millones de dólares. El QR ya es el 94% de todas las transferencias electrónicas del país.\n\nY acá está el dato que cambia todo para un negocio chico: el 88,4% de esos pagos fue por menos de Bs 500, y casi la mitad — el 49,7% — por menos de Bs 50.\n\nO sea: la mayoría de lo que se cobra por QR son ventas chicas y frecuentes. Las tuyas.\n\nEl problema no es cobrar. Es que el QR te avisa CUÁNTO entró, nunca QUÉ vendiste. Al final del mes tenés el monto en la app del banco y no sabés qué producto lo generó, ni cuánto te dejó.\n\nCON ONIA PLATFORM:\n\n✅ Registrás la venta con el producto, y el cobro por QR queda pegado a ella\n✅ Sabés qué se vendió, no solo cuánto entró\n✅ El cierre del día te muestra efectivo, QR, tarjeta y transferencia por separado\n✅ El stock se descuenta con la venta, aunque el pago haya entrado por el banco\n\n⚠️ Los datos son de Asoban, publicados en febrero de 2026. Son del sistema financiero boliviano, no resultados de Onia.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero.",
+ "hashtags": [
+  "#qrsimple",
+  "#negociosbolivia",
+  "#santacruz",
+  "#pyme",
+  "#comercio"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "kicker": "El problema",
+   "headline": "El QR te dice *cuánto* entró. Nunca qué vendiste",
+   "body": "Cobrás todo el día y esa plata llega al banco sin pasar por tu sistema.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/qr-mostrador.png"
+  },
+  {
+   "number": 2,
+   "kicker": "Cuánto se mueve",
+   "headline": "El QR ya es *casi todo* el pago electrónico del país",
+   "dato": "891",
+   "dato_pie": "millones de pagos con QR en Bolivia durante 2025 — el 94 % de las transferencias electrónicas",
+   "fuente": "Asoban, difundido por ABI y medios nacionales, febrero de 2026",
+   "bg": "hermes-content/references/oniahq/ilustraciones/mostrador-ordenado.png"
+  },
+  {
+   "number": 3,
+   "kicker": "Y esto es lo tuyo",
+   "headline": "Casi la mitad fue por menos de *Bs 50*",
+   "dato": "88,4 %",
+   "dato_pie": "de los pagos QR fue por menos de Bs 500. Y el 49,7 % por menos de Bs 50",
+   "fuente": "Asoban, febrero de 2026 · son ventas chicas y frecuentes: las de un negocio de barrio"
+  },
+  {
+   "number": 4,
+   "kicker": "Lo que casi nadie mira",
+   "headline": "La plata entra por un lado y la venta *por otro*",
+   "body": "El banco te dice el monto. Tu cuaderno dice el producto — si alguien lo anotó. Nadie los junta, así que al cierre tenés un total que no sabés de dónde salió.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/dos-celulares.png"
+  },
+  {
+   "number": 5,
+   "kicker": "La solución",
+   "headline": "Con *Onia Platform*",
+   "solucion": [
+    "El cobro por QR queda *pegado* a la venta y al producto",
+    "Sabés qué se vendió, no solo *cuánto* entró",
+    "El cierre separa efectivo, QR, tarjeta y *transferencia*",
+    "El stock se descuenta igual, aunque el pago entre por el banco"
+   ],
+   "bg": "hermes-content/references/oniahq/ilustraciones/cierre-tienda.png"
+  },
+  {
+   "number": 6,
+   "role": "save",
+   "kicker": "Guardá esto",
+   "headline": "Tres preguntas para tu cierre de hoy",
+   "body": "*1.* ¿Cuánto cobraste por QR hoy, sin abrir la app del banco? *2.* ¿Qué producto generó ese cobro? *3.* Si te devuelven algo mañana, ¿sabés a qué venta corresponde?",
+   "bg": "hermes-content/references/oniahq/ilustraciones/cuaderno-fiado.png"
+  },
+  {
+   "number": 7,
+   "role": "cta",
+   "kicker": "20 minutos, gratis",
+   "headline": "Cobrar ya sabés. Falta *saber qué vendiste*",
+   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero en tu negocio, y las 3 que no conviene delegar nunca. Sin vender nada."
+  }
+ ]
+}

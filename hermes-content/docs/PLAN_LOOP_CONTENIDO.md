@@ -40,8 +40,8 @@ La lámina de solución **no es opcional**: sin ella la pieza es un problema sin
 | O07 | Inventario que miente (65 %) | ✅ hecho, aprobado |
 | O03 | Facturación en línea | ✅ 8 láminas, con la solución honesta sobre el emisor |
 | O04 | Qué hace el sistema | ✅ 8 láminas · se queda en dark-product, que es el molde de producto |
-| O08 | **Fiado**: la mora subió al 3,0 % en 2025, casi el doble que 2020 (ASFI) | ⬜ |
-| O09 | **QR**: 891 M de pagos en 2025, el 88,4 % por menos de Bs 500 (ABI/ASFI) | ⬜ |
+| O08 | ~~**Fiado**: la mora del 3,0 %~~ 🔴 **el dato NO sirve para este tema**: la mora de ASFI es de BANCOS, no del fiado de una tienda. Estirarlo seria inventarlo. Hace falta otro dato o otro angulo | ⛔ |
+| O09 | **QR**: 891 M de pagos en 2025, el 88,4 % por menos de Bs 500 (Asoban) | ✅ verificado en fuente |
 | O10 | **El Excel miente**: 94 % de las planillas auditadas tenían errores (Panko) | ⬜ |
 | O11 | **42 horas** promedio para contestar a un cliente (HBR, 2011) | ⬜ |
 
@@ -130,7 +130,7 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 1. ~~L6 declarando IA~~ ✅ hecho
 2. ~~O03 y O04 con la lámina "Con Onia Platform"~~ ✅ hecho
 3. ~~El pack `tarjeta-empleado` + S06~~ ✅ hecho
-4. **O08** (fiado) y **O09** (QR) — datos bolivianos ya verificados
+4. ~~O09 (QR)~~ ✅ hecho · **O08 bloqueado**: su dato no aplica al tema (ver la tabla)
 5. **R02** — el primer reel de módulo
 6. Seguir la tabla
 
