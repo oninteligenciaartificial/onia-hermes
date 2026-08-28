@@ -89,7 +89,13 @@ la cámara es casual pero la escena es de campaña. Nadie saca esa foto por casu
 | **Paleta** | armónica | que NO combine — la ropa no juega con la pared |
 | **Encuadre** | centrado | apretado o medio torcido, como quien saca rápido |
 
-✅ **Probado el 28-ago y funcionó.** Prompt: «parada en la fila de una farmacia de barrio
+✅ **Probado dos veces el 28-ago.** La mejor salió con la **parada de micro**
+(`generadas-20260828/G02-parada-de-micro.png`): cielo nublado sin sombras, poste con maraña de
+cables, muros descascarados rojo y amarillo, una señora esperando con su cartera, canasta de
+paja a los pies, remera gris y jean, mirando a la calle. Se lee boliviana y se lee normal — sin
+un solo elemento puesto para que quede linda.
+
+Prompt de la primera prueba (farmacia): «parada en la fila de una farmacia de barrio
 esperando su turno, mirando el celular. Luz de tubo fluorescente del techo, plana y fea, sin
 sombras lindas. Remera lisa gris… Detrás estantes llenos de productos y otra persona esperando,
 todo desordenado. No mira a la cámara. Encuadre apretado y medio torcido, foto sacada rápido
@@ -129,10 +135,20 @@ boliviano, sin depender del banco viejo.**
 en la pantalla, parpadea una vez. La cámara casi no se mueve, como un video sacado de parado.
 Nadie mira a la cámara.» — pedir movimiento MÍNIMO es lo que lo mantiene creíble.
 
-Y en el menú hay funciones que el MCP no expone: **AI Influencer** («create and manage your AI
-influencer»), Soul ID Character, Soul Moodboard, Canvas, Photodump, Relight, Marketing Studio,
-Viral Presets, Cinema Studio 4.0. **Ninguna probada aún** — la más prometedora para este carril
-es *AI Influencer*.
+### ⛔ AI Influencer Studio — probado, NO sirve para Lucía
+
+Sonaba a la función hecha para este carril. **No lo es.** Es un *constructor* para crear un
+personaje nuevo desde cero: un panel con Character Type, Gender y demás rasgos, y un botón
+«Generate Influencer» de 2 cr. Sirve para inventar una modelo nueva, no para producir contenido
+de una que ya existe y ya tiene su ancla.
+
+**Para Lucía el camino sigue siendo `Create Image` + `@lucia-skin-v1`.** Queda descartado para
+que nadie vuelva a gastar tiempo ahí. (Dato aparte: la pantalla ofrece un programa de
+monetización, «earn up to $3.500 with your AI influencer» — fuera de alcance hoy, pero anotado.)
+
+Sin probar todavía: Soul ID Character, Soul Moodboard, Canvas, Photodump, Relight, Marketing
+Studio, Viral Presets, Cinema Studio 4.0. Y en el menú aparecen además **Inpaint**, **Image
+Upscale**, **Face Swap** y **Character Swap**.
 
 ---
 
@@ -140,9 +156,9 @@ es *AI Influencer*.
 
 | Qué | Estado |
 |---|---|
-| Bajar lo generado al repo | ✅ **resuelto**: el botón de descarga del **panel derecho** (no el que aparece sobre la miniatura) sí baja el archivo a `Downloads`, y de ahí se copia al repo |
+| Bajar lo generado al repo | ✅ **resuelto**, y para las dos cosas: el icono de descarga que aparece al pasar el mouse sobre la imagen SÍ funciona —la primera vez falló por errarle a la posición, no por la función—, y para video está en el panel derecho. El archivo cae en `Downloads` y de ahí se copia |
 | Probar **Animate** para b-roll de reels | ✅ hecho — ver arriba |
-| Probar **AI Influencer** | ⬜ |
+| Probar **AI Influencer** | ✅ hecho — descartado, ver arriba |
 | Borrar los dos elements `ZZ-TEST` del workspace | ⬜ el MCP no tiene delete; por web se puede |
 
 ## Lo que NO se toca
