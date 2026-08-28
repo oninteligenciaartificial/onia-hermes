@@ -1,0 +1,77 @@
+{
+ "serie": "Lo que me costó aprender",
+ "episodio": "008",
+ "caption": "Tu software no subió de precio. Subió el dólar.\n\nEl boliviano estuvo clavado en 6,96 por dólar desde 2011. Con el régimen cambiario unificado de junio de 2026, el tipo oficial se mueve con el mercado: al 27 de agosto estaba en 11,71.\n\nEso significa que una suscripción de 30 dólares al mes, que te costaba unos Bs 209, hoy te cuesta más de Bs 350. El proveedor no te subió nada. Vos pagás 68 % más.\n\nY hay tres cosas que se pusieron caras al mismo tiempo, sin que llegue ningún aviso:\n\n1. La suscripción en dólares. El precio de lista es el mismo. Tu costo real no.\n2. El cobro por usuario. Crece justo cuando el negocio crece: contratás a alguien y la cuenta sube sola.\n3. Tus datos adentro. El costo de irte no está en la factura, pero existe: exportá una vez y fijate cuánto de lo tuyo sale de verdad.\n\nLo que estás pagando no es el programa. Casi todo lo que un negocio paga en dólares tiene un gemelo de código abierto que corre en un servidor propio. Lo que cobra la versión paga es la comodidad de que otro lo instale, lo actualice y lo levante cuando se cae.\n\nY por eso NO siempre conviene cambiarse: si no tenés a quién lo encienda y lo mantenga, la suscripción sale más barata. Yo elegí ser ese alguien; es una decisión, no un ahorro automático.\n\n⚠️ El tipo de cambio es del Banco Central de Bolivia, al 27 de agosto de 2026, y se mueve. La cuenta la podés rehacer con el dato del día.",
+ "hashtags": [
+  "#bolivia",
+  "#software",
+  "#opensource",
+  "#negociosbolivia",
+  "#suscripciones"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "kicker": "Lo que me costó aprender",
+   "headline": "Tu software no subió de precio. Subió *el dólar*",
+   "body": "El precio de lista es el mismo. Lo que pagás, no. Y no llegó ningún aviso."
+  },
+  {
+   "number": 2,
+   "kicker": "La cuenta",
+   "headline": "Lo mismo, *68 % más caro*",
+   "body": "El boliviano estuvo clavado en 6,96 desde 2011. Hoy el oficial se mueve con el mercado: 11,71 al 27 de agosto.\n\nUna suscripción de 30 dólares pasó de Bs 209 a más de Bs 350.\n\nBanco Central de Bolivia."
+  },
+  {
+   "number": 3,
+   "kicker": "Lo que se encareció · 01",
+   "headline": "El precio *no cambió*. Tu costo sí",
+   "n": 1,
+   "nombre": "La suscripción",
+   "cargo": "cobra en dólares",
+   "hace": "El proveedor no tocó su tarifa. La factura te llega igual de 30 dólares. Lo que cambió es cuántos bolivianos tenés que poner para pagarla.",
+   "creia": "que pagaba lo mismo todos los meses"
+  },
+  {
+   "number": 4,
+   "kicker": "Lo que se encareció · 02",
+   "headline": "Sube justo cuando *te va bien*",
+   "n": 2,
+   "nombre": "El cobro por usuario",
+   "cargo": "escala con tu equipo",
+   "hace": "Contratás a alguien y la cuenta sube sola, sin que nadie decida nada. Es el único gasto del negocio que se pone caro como castigo por crecer.",
+   "creia": "que era un costo fijo"
+  },
+  {
+   "number": 5,
+   "kicker": "Lo que se encareció · 03",
+   "headline": "El costo de irte *no está en la factura*",
+   "n": 3,
+   "nombre": "Tus datos adentro",
+   "cargo": "no figura en ningún plan",
+   "hace": "Probá exportar una vez y fijate cuánto de lo tuyo sale de verdad. Si la respuesta es incómoda, ese es el precio real de la herramienta.",
+   "creia": "que podía cambiar cuando quisiera"
+  },
+  {
+   "number": 6,
+   "kicker": "Lo que aprendí",
+   "headline": "No estás pagando *el programa*",
+   "body": "Casi todo lo que un negocio paga en dólares tiene un gemelo de código abierto que corre en un servidor propio. No es la versión barata: es el mismo software. Lo que cobra la versión paga es que otro lo instale, lo actualice y lo levante cuando se cae."
+  },
+  {
+   "number": 7,
+   "kicker": "Y la parte honesta",
+   "headline": "A veces *no conviene* cambiarse",
+   "body": "Si no tenés a quién lo encienda y lo mantenga, la suscripción sale más barata de verdad. El costo no desaparece: se mueve de una factura a una persona. Yo elegí ser esa persona, y es una decisión, no un ahorro automático."
+  },
+  {
+   "number": 8,
+   "role": "cta",
+   "kicker": "Tu turno",
+   "headline": "¿Cuánto pagás *en dólares* este mes?",
+   "body": "Sumá todas tus suscripciones y multiplicá por el dólar de hoy. Después por el de 2024. Esa diferencia no te la avisó nadie."
+  }
+ ]
+}

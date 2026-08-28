@@ -474,3 +474,13 @@ test('tarjeta-empleado: `creia` dibuja el tachado con su propia etiqueta', () =>
   assert.ok(h.includes('que funcionaba'), 'y muestra lo que se daba por cierto');
   assert.ok(!h.includes('reemplaza a'), 'sin `reemplaza` no dibuja esa etiqueta');
 });
+
+test('tarjeta-empleado: el body respeta los parrafos', () => {
+  // Un doble salto se dibujaba como un bloque unico, y la linea de fuente terminaba
+  // pegada al argumento — dejaba de leerse como fuente.
+  const h = tarjetaEmpleadoHtml(
+    { headline: 'H', body: 'El argumento.\n\nBanco Central de Bolivia.' }, 1, 8, 'sergio');
+  const parrafos = h.split('class="sub"').length - 1;
+  assert.strictEqual(parrafos, 2, 'dos parrafos, dos <p>');
+  assert.ok(h.includes('.sub + .sub'), 'y con separacion entre ellos');
+});
