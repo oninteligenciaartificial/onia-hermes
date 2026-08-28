@@ -105,11 +105,16 @@ placas de texto en 2ª persona. 20 s. Dos trampas ya documentadas en su `build.s
 
 | # | Módulo | Qué muestra |
 |---|---|---|
-| R02 | Catálogo | cargar un producto con precio y costo |
+| R02 | ~~Catálogo~~ | ⛔ **bloqueado: no existe captura del módulo.** Capturarla es del carril de producto |
 | R03 | Caja | el cierre del día, por método de pago |
 | R04 | Fiados | el vencido y el mensaje ya escrito |
 | R05 | Inventario | el aviso de "se está por acabar" |
 | R06 | Agentes | la propuesta esperando aprobación |
+
+✅ **R02-qr hecho** — 20 s con las ilustraciones de O09 y el dato de Asoban. Se hizo este en
+vez del de Catálogo porque un reel que dice mostrar un módulo sin mostrarlo es justo la falta
+que el gate existe para evitar. **Los reels de módulo quedan todos bloqueados hasta tener las
+capturas.**
 
 **Reels de Lucía** — con su banco de b-roll, que ya está pagado:
 
@@ -131,7 +136,7 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 2. ~~O03 y O04 con la lámina "Con Onia Platform"~~ ✅ hecho
 3. ~~El pack `tarjeta-empleado` + S06~~ ✅ hecho
 4. ~~O09 (QR)~~ ✅ hecho · **O08 bloqueado**: su dato no aplica al tema (ver la tabla)
-5. **R02** — el primer reel de módulo
+5. ~~El primer reel~~ ✅ R02-qr hecho · los de módulo, bloqueados por falta de capturas
 6. Seguir la tabla
 
 **Al terminar cada pieza:** tachar la línea de este archivo y commitear.
