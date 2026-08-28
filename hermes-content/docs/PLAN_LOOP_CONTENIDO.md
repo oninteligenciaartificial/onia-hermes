@@ -10,6 +10,12 @@
 
 ---
 
+## 🔴 Higgsfield se opera SOLO por navegador (2026-08-28)
+
+Sergio: *"no usarás MCP, harás todo desde el navegador a mi cuenta"*. El MCP sustituía el
+modelo en silencio (`nano_banana_2` → `nano_banana_flash`) y cobra créditos; la web deja
+elegir el modelo y tiene el toggle **`Unlimited`**. El flujo está en `BANCO-OFICIAL.md`.
+
 ## Las reglas que no se negocian
 
 Salen de errores ya cometidos en esta sesión. Romper una es repetir el error.
