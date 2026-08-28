@@ -42,11 +42,15 @@ La lámina de solución **no es opcional**: sin ella la pieza es un problema sin
 | O04 | Qué hace el sistema | ✅ 8 láminas · se queda en dark-product, que es el molde de producto |
 | O08 | ~~**Fiado**: la mora del 3,0 %~~ 🔴 **el dato NO sirve para este tema**: la mora de ASFI es de BANCOS, no del fiado de una tienda. Estirarlo seria inventarlo. Hace falta otro dato o otro angulo | ⛔ |
 | O09 | **QR**: 891 M de pagos en 2025, el 88,4 % por menos de Bs 500 (Asoban) | ✅ verificado en fuente |
-| O10 | **El Excel miente**: 94 % de las planillas auditadas tenían errores (Panko) | ⬜ |
+| O10 | **La planilla que miente**: 84 % de 163 planillas auditadas tenían errores (Panko) | ✅ 8 láminas |
 | O11 | **42 horas** promedio para contestar a un cliente (HBR, 2011) | ⬜ |
 
-**Los datos ya están verificados** — están en `ONIA_AUDITORIA_DE_LAS_21_PIEZAS.md` y en el
-journal del workflow. Cada uno con su fuente y su año.
+⚠️ **Los datos NO estaban todos verificados, contra lo que decía este plan.** El «94 % de
+Panko» que esta tabla citaba para O10 **no existe**: no aparece en su recopilación. Las cifras
+reales, chequeadas en la fuente primaria (`panko.com/ssr/Audits.html`), son **84 % de 163
+planillas** en nueve estudios y **91 % de 55** en los cinco de metodología más estricta, con
+auditorías de 1987 a 2001 en EE. UU., Reino Unido y Australia. **Antes de dibujar una cifra se
+va a la fuente, aunque este plan la dé por buena.**
 
 ## Cuenta 2 · @sergio_urcullo — el molde nuevo: **el equipo de empleados IA**
 
@@ -146,7 +150,8 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 4. ~~O09 (QR)~~ ✅ hecho · **O08 bloqueado**: su dato no aplica al tema (ver la tabla)
 5. ~~El primer reel~~ ✅ R02-qr hecho · los de módulo, bloqueados por falta de capturas
 6. ~~L08 con la palabra HUMO~~ ✅ hecho
-7. Seguir la tabla
+7. ~~O10 (la planilla que miente)~~ ✅ hecho
+8. Seguir la tabla
 
 **Al terminar cada pieza:** tachar la línea de este archivo y commitear.
 

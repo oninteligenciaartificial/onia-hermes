@@ -1,0 +1,84 @@
+{
+ "serie": "Datos que no te contaron",
+ "episodio": "010",
+ "comment_trigger": "SISTEMA",
+ "comment_reward": "las 6 tareas que conviene delegar primero",
+ "caption": "EL PROBLEMA: tu stock, tus precios y tus fiados viven en una planilla que nadie revisó nunca.\n\nHay investigación sobre esto desde hace décadas. Raymond Panko, de la Universidad de Hawái, juntó las auditorías hechas a planillas que ya estaban en uso dentro de empresas: en nueve estudios, sobre 163 planillas auditadas, el 84 % tenía errores. En los cinco estudios con la metodología más estricta, el 91 % de 55 planillas.\n\nY el detalle que más dice: las dos consultoras que se dedican a auditar planillas declararon que nunca auditaron un modelo sin encontrarle un error. Ni uno.\n\nNo es que seas malo con Excel. Es que una planilla no tiene quién le avise. Una fórmula arrastrada de más no da error: da un número. Una fila insertada en el lugar equivocado no se queja. Y el resultado sigue pareciendo un resultado.\n\nAsí que el error no se ve: se cobra. Vendés al precio viejo, pedís mercadería que ya tenías, cobrás un fiado que ya te pagaron.\n\nCON ONIA PLATFORM:\n\n✅ El precio y el stock viven en un solo lugar, no en una copia de una copia\n✅ La venta descuenta el stock sola: nadie arrastra una fórmula\n✅ Cada cambio queda con quién lo hizo y cuándo\n✅ El cierre del día se arma solo, no se tipea\n\n⚠️ Las auditorías son de 1987 a 2001, en empresas de Estados Unidos, Reino Unido y Australia. Son sobre planillas, no resultados de Onia.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero.",
+ "hashtags": [
+  "#excel",
+  "#negociosbolivia",
+  "#santacruz",
+  "#pyme",
+  "#inventario"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "kicker": "El problema",
+   "headline": "Tu negocio corre sobre una planilla que *nadie revisó*",
+   "body": "El stock, los precios y los fiados. Todo en un archivo que se copia, se arrastra y se tipea dos veces.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/tipeando-dos-veces.png"
+  },
+  {
+   "number": 2,
+   "kicker": "Lo que dice la investigación",
+   "headline": "Casi todas las planillas auditadas *tenían errores*",
+   "dato": "84 %",
+   "dato_pie": "de 163 planillas en uso real dentro de empresas tenían al menos un error",
+   "fuente": "Raymond Panko, Universidad de Hawái · nueve auditorías entre 1987 y 2001",
+   "bg": "hermes-content/references/oniahq/ilustraciones/diez-cajas.png"
+  },
+  {
+   "number": 3,
+   "kicker": "Y el dato que remata",
+   "headline": "Nunca encontraron una planilla *sana*",
+   "dato": "91 %",
+   "dato_pie": "de 55 planillas, en los cinco estudios de metodología más estricta",
+   "fuente": "Panko · ninguna auditora halló jamás un modelo sano",
+   "bg": "hermes-content/references/oniahq/ilustraciones/deposito-iso.png"
+  },
+  {
+   "number": 4,
+   "kicker": "Por qué pasa",
+   "headline": "No sos malo con Excel. La planilla *no avisa*",
+   "body": "Una fórmula arrastrada de más no da error: da un número. Una fila insertada donde no va no se queja. El resultado sigue pareciendo un resultado, y nadie tiene motivo para desconfiar de él.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/estante-hueco.png"
+  },
+  {
+   "number": 5,
+   "kicker": "Lo que casi nadie mira",
+   "headline": "El error no se ve. *Se cobra*",
+   "body": "Vendés al precio viejo porque la lista buena estaba en la otra copia. Pedís mercadería que ya tenías. Cobrás un fiado que ya te pagaron. Ninguna de las tres se siente como un error de planilla: se siente como un mal día.",
+   "bg": "hermes-content/references/oniahq/ilustraciones/dos-celulares.png"
+  },
+  {
+   "number": 6,
+   "kicker": "La solución",
+   "headline": "Con *Onia Platform*",
+   "solucion": [
+    "El precio y el stock viven en *un solo lugar*, no en una copia de una copia",
+    "La venta descuenta el stock *sola*: nadie arrastra una fórmula",
+    "Cada cambio queda con *quién* lo hizo y cuándo",
+    "El cierre del día se arma solo, *no se tipea*"
+   ],
+   "bg": "hermes-content/references/oniahq/ilustraciones/mostrador-ordenado.png"
+  },
+  {
+   "number": 7,
+   "role": "save",
+   "kicker": "Guardá esto",
+   "headline": "Tres preguntas para tu planilla de hoy",
+   "body": "*1.* ¿Cuál es la copia buena, y cómo lo sabés? *2.* Si un precio está mal, ¿en cuántos archivos hay que corregirlo? *3.* ¿Quién cambió el último número, y cuándo?",
+   "bg": "hermes-content/references/oniahq/ilustraciones/checklist-tres.png"
+  },
+  {
+   "number": 8,
+   "role": "cta",
+   "kicker": "20 minutos, gratis",
+   "headline": "La planilla no se equivoca sola. *Te deja solo*",
+   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero en tu negocio, y las 3 que no conviene delegar nunca. Sin vender nada."
+  }
+ ]
+}

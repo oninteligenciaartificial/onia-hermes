@@ -170,6 +170,24 @@ function revisar(brief, pack, baseDir = process.cwd()) {
     });
   }
 
+  // 7. Y una recompensa nombrada que NO existe en disco es peor: es incumplir en
+  // publico, en la primera interaccion con un desconocido. La auditoria del 2026-08-27
+  // encontro SEIS piezas de veintiuna pidiendo un comentario a cambio de un PDF que
+  // nadie habia escrito. Declarar el campo no alcanza: el archivo tiene que estar.
+  if (brief.comment_trigger && brief.comment_reward) {
+    const carpeta = path.join(baseDir, 'hermes-content', 'recursos',
+      String(brief.comment_trigger).toLowerCase());
+    const hayPdf = fs.existsSync(carpeta)
+      && fs.readdirSync(carpeta).some((f) => f.toLowerCase().endsWith('.pdf'));
+    if (!hayPdf) {
+      problemas.push({
+        nivel: 'error', regla: 'recompensa-inexistente',
+        msg: `promete "${brief.comment_trigger}" pero no hay ningun PDF en `
+           + `hermes-content/recursos/${String(brief.comment_trigger).toLowerCase()}/`,
+      });
+    }
+  }
+
   return problemas;
 }
 
@@ -219,10 +237,18 @@ function selfCheck() {
   p = revisar({ slides: [{ number: 2, bg: 'chico.png' }, { number: 3, bg: 'chico.png' }] }, 'dato-ilustrado', tmp);
   assert.ok(p.some((x) => x.regla === 'repetida' && x.lamina === 3), 'caza el bg repetido');
 
+  // Declarar la recompensa no alcanza: el PDF tiene que existir. Sin el, la pieza
+  // incumple en publico ante un desconocido que comento de buena fe.
+  p = revisar({ comment_trigger: 'SISTEMA', comment_reward: 'la lista', slides: [] }, 'dark-product', tmp);
+  assert.ok(p.some((x) => x.regla === 'recompensa-inexistente'), 'promesa sin PDF en disco');
+
+  // Con el PDF puesto, el mismo brief pasa limpio.
+  fs.mkdirSync(path.join(tmp, 'hermes-content', 'recursos', 'sistema'), { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'hermes-content', 'recursos', 'sistema', 'guia.pdf'), 'x');
   p = revisar({ comment_trigger: 'SISTEMA', comment_reward: 'la lista', slides: [] }, 'dark-product', tmp);
   assert.strictEqual(p.length, 0, 'un brief sano no debe dar nada');
 
-  console.log('self-check ok: 9 casos');
+  console.log('self-check ok: 11 casos');
 }
 
 function main() {
