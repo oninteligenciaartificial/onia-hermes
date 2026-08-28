@@ -7,7 +7,11 @@ import {
   renderClinicServices,
   renderFooter,
   renderIcon,
+  renderInlineQuoteForm,
   renderStickyCta,
+  INLINE_QUOTE_FORM_CSS,
+  type QuoteContact,
+  type QuoteField,
 } from "@onia/blocks";
 import { renderLandingCss, type LandingClient } from "./landing";
 import { clinicCss } from "./clinic-css";
@@ -74,6 +78,60 @@ function renderRevealScript(): string {
   return `<script>(function(){var r=document.querySelector('.wf-clinic-page');if(!r)return;var i=r.querySelectorAll('[data-reveal]');var m=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(m||!('IntersectionObserver' in window)){r.classList.add('wf-clinic-motion');i.forEach(function(e){e.classList.add('is-revealed')});return;}r.classList.add('wf-clinic-motion');var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-revealed');o.unobserve(e.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});i.forEach(function(e){o.observe(e)});setTimeout(function(){i.forEach(function(e){e.classList.add('is-revealed')})},1400);})();</script>`;
 }
 
+/* La conversion del clinic era SOLO WhatsApp. Con `cotizacion` cargada en el
+ * perfil, entre el FAQ y el cierre entra el bloque de pedido (inline-quote-form):
+ * el circuito web → sistema. Sus dos reglas de honestidad ya vienen del bloque —
+ * sin `accion` no hay form muerto (solo canales directos), y `src` viaja oculto
+ * con el slug para que el lead llegue atribuido. */
+
+function buildClinicQuoteFields(client: LandingClient): QuoteField[] {
+  return client.cotizacion.campos.map((field) => ({
+    name: field.nombre,
+    label: field.label,
+    type: field.tipo,
+    required: field.requerido,
+    options: field.opciones,
+    placeholder: field.placeholder || undefined,
+    autocomplete: field.autocomplete || undefined,
+  }));
+}
+
+function buildClinicDirectChannels(client: LandingClient): QuoteContact[] {
+  const wa = client.contacto.whatsapp?.trim() ?? "";
+  const waUrl = wa
+    ? wa.startsWith("http")
+      ? wa
+      : `https://wa.me/${wa.replace(/\D/g, "")}`
+    : "";
+  return [
+    waUrl ? { label: "WhatsApp", value: wa.startsWith("http") ? "Escribinos" : wa, url: waUrl } : null,
+    client.contacto.tel?.trim()
+      ? { label: "Teléfono", value: client.contacto.tel, url: `tel:${client.contacto.tel}` }
+      : null,
+    client.contacto.email?.trim()
+      ? { label: "Correo", value: client.contacto.email, url: `mailto:${client.contacto.email}` }
+      : null,
+  ].filter((item): item is QuoteContact => item !== null);
+}
+
+function renderClinicQuote(client: LandingClient): string {
+  if (!client.cotizacion.titulo.trim()) return "";
+  return `
+    <div class="wf-clinic-quote" data-reveal>
+      ${renderInlineQuoteForm({
+        heading: client.cotizacion.titulo,
+        copy: client.cotizacion.texto,
+        action: client.cotizacion.accion,
+        submitLabel: client.cotizacion.boton,
+        note: client.cotizacion.nota,
+        fields: buildClinicQuoteFields(client),
+        direct: buildClinicDirectChannels(client),
+        source: client.slug,
+      })}
+    </div>
+  `;
+}
+
 export function renderLandingClinicBody(client: LandingClient): string {
   return `
     <main class="wf-clinic-page">
@@ -83,6 +141,7 @@ export function renderLandingClinicBody(client: LandingClient): string {
       ${renderClinicFeature(client)}
       ${renderClinicProcess(client)}
       ${renderClinicFaq(client)}
+      ${renderClinicQuote(client)}
       ${renderClinicFinalCta(client)}
       ${renderFooter(client, { minimal: true })}
     </main>
@@ -94,7 +153,9 @@ export function renderLandingClinicBody(client: LandingClient): string {
 export function renderLandingClinicCss(client: LandingClient): string {
   return `${renderLandingCss(client)}
 
-${clinicCss}`;
+${clinicCss}
+
+${INLINE_QUOTE_FORM_CSS}`;
 }
 
 // La tipografia del perfil solo existe si el documento la CARGA: sin este link

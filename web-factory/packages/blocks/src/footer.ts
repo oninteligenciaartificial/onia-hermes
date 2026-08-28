@@ -24,10 +24,19 @@ export function renderFooter(client: SiteClient, options: FooterOptions = {}): s
     )
     .join("");
 
+  // El perfil guarda un TELEFONO en `contacto.whatsapp` ("+591…"): crudo en el
+  // href, el link "WhatsApp" quedaba roto en todos los sitios. Si ya viene una
+  // URL (wa.me pegado a mano en un perfil viejo), se respeta.
+  const waHref = client.contacto.whatsapp
+    ? client.contacto.whatsapp.startsWith("http")
+      ? client.contacto.whatsapp
+      : `https://wa.me/${client.contacto.whatsapp.replace(/\D/g, "")}`
+    : "";
+
   const contactItems = [
     client.contacto.email && `<a href="mailto:${escapeAttribute(client.contacto.email)}">${escapeHtml(client.contacto.email)}</a>`,
     client.contacto.tel && `<a href="tel:${escapeAttribute(client.contacto.tel)}">${escapeHtml(client.contacto.tel)}</a>`,
-    client.contacto.whatsapp && `<a href="${escapeAttribute(client.contacto.whatsapp)}">WhatsApp</a>`,
+    waHref && `<a href="${escapeAttribute(waHref)}" target="_blank" rel="noreferrer">WhatsApp</a>`,
     client.contacto.direccion && `<span>${escapeHtml(client.contacto.direccion)}</span>`,
   ]
     .filter(Boolean)

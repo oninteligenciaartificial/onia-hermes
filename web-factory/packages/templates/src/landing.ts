@@ -9,6 +9,16 @@ import {
 } from "@onia/blocks";
 import { clientTokenCss } from "@onia/tokens";
 
+export type LandingQuoteField = {
+  nombre: string;
+  label: string;
+  tipo: "text" | "email" | "tel" | "number" | "date" | "textarea" | "select";
+  requerido: boolean;
+  opciones: string[];
+  placeholder: string;
+  autocomplete: string;
+};
+
 export type LandingClient = SiteClient & {
   slug: string;
   tipografia: {
@@ -26,6 +36,17 @@ export type LandingClient = SiteClient & {
     title: string;
     description: string;
     ogImage: string;
+  };
+  /* El perfil (data/schema.ts) trae `cotizacion` para todo cliente; vivia solo
+   * en el tipo local de logistics y cada template que quisiera el circuito
+   * web → sistema tenia que re-declararla. */
+  cotizacion: {
+    titulo: string;
+    texto: string;
+    accion: string;
+    boton: string;
+    nota: string;
+    campos: LandingQuoteField[];
   };
 };
 

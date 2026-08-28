@@ -82,12 +82,56 @@
   },
   "metricas": [],
   "cotizacion": {
-    "titulo": "",
-    "texto": "",
+    "titulo": "Pedi tu presupuesto por escrito",
+    "texto": "Contanos que necesitas y te respondemos con el primer horario libre y el costo de la evaluacion. Sin compromiso y sin letra chica.",
     "accion": "",
-    "boton": "Pedir cotizacion",
-    "nota": "",
-    "campos": []
+    "boton": "Pedir presupuesto",
+    "nota": "Respondemos el mismo dia en horario de atencion.",
+    "campos": [
+      {
+        "nombre": "nombre",
+        "label": "Tu nombre",
+        "tipo": "text",
+        "requerido": true,
+        "opciones": [],
+        "placeholder": "",
+        "autocomplete": "name"
+      },
+      {
+        "nombre": "whatsapp",
+        "label": "Tu WhatsApp",
+        "tipo": "tel",
+        "requerido": true,
+        "opciones": [],
+        "placeholder": "+591",
+        "autocomplete": "tel"
+      },
+      {
+        "nombre": "tratamiento",
+        "label": "Que necesitas",
+        "tipo": "select",
+        "requerido": false,
+        "opciones": [
+          "Evaluacion y diagnostico",
+          "Limpieza y prevencion",
+          "Ortodoncia",
+          "Implantes y protesis",
+          "Endodoncia",
+          "Urgencia"
+        ],
+        "placeholder": "",
+        "autocomplete": ""
+      },
+      {
+        "nombre": "mensaje",
+        "label": "Contanos tu caso",
+        "tipo": "textarea",
+        "requerido": false,
+        "opciones": [],
+        "placeholder": "Que sentis, desde cuando, que te gustaria resolver",
+        "autocomplete": ""
+      }
+    ]
   },
   "categorias": [],
   "productos": [],

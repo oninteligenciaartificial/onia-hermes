@@ -267,6 +267,40 @@ export const webFactoryIntakeSchema = z.object({
       keywords: [],
       ogImage: "",
     }),
+  /* Pedido de cotizacion/contacto de la web (circuito web → sistema). Claves en
+   * espanol porque pasan TAL CUAL al perfil (misma forma que data/schema.ts);
+   * traducirlas aca solo fabricaria un mapeo mas que mantener. */
+  cotizacion: z
+    .object({
+      titulo: z.string().default(""),
+      texto: z.string().default(""),
+      accion: z.string().default(""),
+      boton: z.string().default("Pedir cotizacion"),
+      nota: z.string().default(""),
+      campos: z
+        .array(
+          z.object({
+            nombre: z.string().min(1),
+            label: z.string().min(1),
+            tipo: z
+              .enum(["text", "email", "tel", "number", "date", "textarea", "select"])
+              .default("text"),
+            requerido: z.boolean().default(false),
+            opciones: z.array(z.string().min(1)).default([]),
+            placeholder: z.string().default(""),
+            autocomplete: z.string().default(""),
+          }),
+        )
+        .default([]),
+    })
+    .default({
+      titulo: "",
+      texto: "",
+      accion: "",
+      boton: "Pedir cotizacion",
+      nota: "",
+      campos: [],
+    }),
   operations: z
     .object({
       domain: z.string().default(""),
@@ -372,6 +406,7 @@ export function buildClientProfileFromIntake(input: unknown): ClientProfile {
       pregunta: item.question,
       respuesta: item.answer,
     })),
+    cotizacion: intake.cotizacion,
     referencias: references,
     cta: {
       texto: intake.conversion.primaryCtaText,

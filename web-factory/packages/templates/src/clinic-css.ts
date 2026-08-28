@@ -433,6 +433,113 @@ export const clinicCss = `
 
 .wf-clinic-card p { margin: 6px 0 0; color: var(--muted-foreground); line-height: 1.55; }
 
+/* ---------- Pedido / cotizacion (inline-quote-form dentro del clinic) ------ */
+/* El bloque trae su CSS tokenizado; aca solo se asienta en el ritmo del
+   template: superficie propia que corta el papel y respiracion de seccion. */
+.wf-clinic-quote {
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-bg));
+  border-block: 1px solid color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.wf-clinic-quote .wf-qf-heading {
+  font-weight: 640;
+  letter-spacing: -0.015em;
+}
+
+/* Sin form (accion vacia) el bloque deja solo la columna de copy+canales: la
+   grilla de dos columnas dejaria media seccion vacia. Una columna por defecto;
+   dos SOLO cuando el form existe. */
+.wf-clinic-quote .wf-qf-inner {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 620px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.wf-clinic-quote .wf-qf-inner .wf-qf-heading {
+  max-width: none;
+  margin-inline: auto;
+}
+
+.wf-clinic-quote .wf-qf-inner .wf-qf-lede {
+  margin-inline: auto;
+}
+
+.wf-clinic-quote .wf-qf-direct-list {
+  justify-content: center;
+}
+
+.wf-clinic-quote .wf-qf-inner:has(.wf-qf-form) {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.wf-clinic-quote .wf-qf-inner:has(.wf-qf-form) .wf-qf-lede,
+.wf-clinic-quote .wf-qf-inner:has(.wf-qf-form) .wf-qf-heading {
+  margin-inline: 0;
+}
+
+.wf-clinic-quote .wf-qf-inner:has(.wf-qf-form) .wf-qf-direct-list {
+  justify-content: flex-start;
+}
+
+/* ---------- Footer (polish clinic) ---------- */
+/* El minimal compartido quedaba en dos columnas flojas. Dentro del clinic:
+   marca en serif con aire, contacto como columna etiquetada, borde superior
+   que cierra la pagina. Scoped a .wf-clinic-page: ningun otro template cambia. */
+.wf-clinic-page .wf-footer {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 72px) 0 clamp(28px, 4vw, 44px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+  border-top: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+}
+
+.wf-clinic-page .wf-footer > div > strong {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 640;
+  letter-spacing: -0.01em;
+}
+
+.wf-clinic-page .wf-footer > div > p {
+  margin: 10px 0 0;
+  max-width: 46ch;
+  color: color-mix(in srgb, var(--color-fg) 66%, var(--color-bg));
+  line-height: 1.6;
+}
+
+.wf-clinic-page .wf-footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.wf-clinic-page .wf-footer-links a {
+  color: var(--color-fg);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  transition: border-color 0.2s ease;
+}
+
+.wf-clinic-page .wf-footer-links a:hover,
+.wf-clinic-page .wf-footer-links a:focus-visible {
+  border-bottom-color: var(--color-accent);
+}
+
+.wf-clinic-page .wf-footer-links span {
+  color: color-mix(in srgb, var(--color-fg) 62%, var(--color-bg));
+}
+
+@media (max-width: 720px) {
+  .wf-clinic-page .wf-footer { grid-template-columns: 1fr; }
+}
+
 /* ---------- Process timeline ---------- */
 .wf-clinic-timeline {
   list-style: none;
