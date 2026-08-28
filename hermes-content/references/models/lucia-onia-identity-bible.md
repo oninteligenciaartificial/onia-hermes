@@ -1,3 +1,20 @@
+> ---
+> # 🔴 SUPERADO EN LA PARTE DE IDENTIDAD — 2026-08-28
+>
+> Este documento manda a usar el **Soul `36305a9b`** y/o el ancla de una sola foto
+> `452d8375`. **Las dos cosas están mal hoy:**
+>
+> - El Soul `36305a9b` está **PROHIBIDO**: sale con la piel roja, ignora el atuendo pedido y
+>   se entrenó con frames de una persona real sin permiso documentado.
+> - El ancla `452d8375` tenía **una sola foto**, así que el modelo inventaba el perfil y las
+>   proporciones. La reemplaza **`lucia-skin-v1` (`58bbd635-9b90-4bd2-b08a-1cd4915bd563`)**,
+>   con 7 ángulos.
+>
+> **Para cualquier decisión sobre qué cara usar y con qué generar, manda
+> [`references/modelos/lucia/BANCO-OFICIAL.md`](../modelos/lucia/BANCO-OFICIAL.md).**
+> Lo de acá abajo se conserva por su método y su historia, no como instrucción.
+> ---
+
 # Identity Bible — Lucia (ONIA modelo "pelinegra con pecas")
 
 > Identidad REAL elegida por Sergio (Mujer 1 de sus videos aprobados, tubo verde SVR).

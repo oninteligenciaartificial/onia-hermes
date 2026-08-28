@@ -1,3 +1,20 @@
+> ---
+> # 🔴 SUPERADO EN LA PARTE DE IDENTIDAD — 2026-08-28
+>
+> Este documento manda a usar el **Soul `36305a9b`** y/o el ancla de una sola foto
+> `452d8375`. **Las dos cosas están mal hoy:**
+>
+> - El Soul `36305a9b` está **PROHIBIDO**: sale con la piel roja, ignora el atuendo pedido y
+>   se entrenó con frames de una persona real sin permiso documentado.
+> - El ancla `452d8375` tenía **una sola foto**, así que el modelo inventaba el perfil y las
+>   proporciones. La reemplaza **`lucia-skin-v1` (`58bbd635-9b90-4bd2-b08a-1cd4915bd563`)**,
+>   con 7 ángulos.
+>
+> **Para cualquier decisión sobre qué cara usar y con qué generar, manda
+> [`references/modelos/lucia/BANCO-OFICIAL.md`](../references/modelos/lucia/BANCO-OFICIAL.md).**
+> Lo de acá abajo se conserva por su método y su historia, no como instrucción.
+> ---
+
 # RAÍZ — Modelos IA de ONIA (empezar acá)
 
 > **Este es el punto de entrada.** Si vas a trabajar en Lucía o Mara, leé esto primero y
@@ -79,7 +96,9 @@ corporativa. **No usar el tipográfico en las cuentas de modelo: las hace ver co
 de software.**
 
 **Acento de Lucía: `#E4714E`** (terracota, uno de los colores de su vestuario). El verde
-`#00D26A` es de ONIA y no va en sus piezas.
+~~`#00D26A` es de ONIA y no va en sus piezas.~~ ⚠️ **Revertido el 2026-08-28.** Sergio:
+*"Lucía es verde porque es de Onia y Onia es verde"* — el verde SÍ va, en las tres cuentas.
+El terracota queda como dirección de arte dentro de la foto, no como acento gráfico.
 
 ## 7. Lo que depende de Sergio
 
