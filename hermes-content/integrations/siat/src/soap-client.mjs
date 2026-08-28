@@ -61,6 +61,12 @@ export const SIAT_SERVICES = {
   FACTURACION_SINCRONIZACION: "FacturacionSincronizacion",
   FACTURACION_COMPRA_VENTA: "ServicioFacturacionCompraVenta",
   FACTURACION_COMPUTARIZADA: "ServicioFacturacionComputarizada",
+  // Notas de credito-debito (documento sector 24). Sus operaciones NO se llaman
+  // igual que las de factura: recepcionDocumentoAjuste / anulacionDocumentoAjuste
+  // / reversionAnulacionDocumentoAjuste (WSDL del piloto, leido 2026-08-27).
+  FACTURACION_DOCUMENTO_AJUSTE: "ServicioFacturacionDocumentoAjuste",
+  // Modalidad electronica en linea (etapa VIII, requiere firma digital).
+  FACTURACION_ELECTRONICA: "ServicioFacturacionElectronica",
   FACTURACION_OPERACIONES: "FacturacionOperaciones",
 };
 

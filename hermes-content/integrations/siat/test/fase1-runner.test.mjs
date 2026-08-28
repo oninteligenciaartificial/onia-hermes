@@ -17,7 +17,19 @@ import {
   parseArgs,
   SYNC_CASES,
   STAGE_TARGETS,
+  STAGE_TOTALS,
+  STAGE_PLAN,
   STAGE_ORDER,
+  PUNTOS_VENTA,
+  DOC_SECTOR_CASES,
+  EMISION_CASES,
+  EMISION_CASES_SOPORTADOS,
+  SERVICIO_POR_DOC_SECTOR,
+  DOC_SECTOR_SIN_SOPORTE,
+  DEFAULT_COMBO,
+  comboId,
+  migrateState,
+  emptyState,
   STOP_THRESHOLD,
   StopError,
   buildRunnerEnvelope,
@@ -25,6 +37,7 @@ import {
   buildTestInvoice,
   computeSinOffset,
   cufdVigenteDesde,
+  cufdVencido,
   errorKey,
   eventWindow,
   extractSyncItems,
@@ -457,9 +470,32 @@ describe("normalizeCuisResult (SIN 980 con CUIS vigente, verificado en vivo 2026
 });
 
 describe("plan de etapas", () => {
-  it("volumenes oficiales fase 1 computarizada (VIII y X no aplican)", () => {
-    assert.deepEqual(STAGE_TARGETS, { I: 2, II: 50, III: 100, IV: 500, V: 5, VI: 10, VII: 250, IX: 10, XI: 98 });
+  it("los targets son POR CASO, no totales (VIII y X no aplican)", () => {
+    assert.deepEqual(STAGE_TARGETS, {
+      I: 1, II: 50, III: 100, IV: 125, V: 5, VI: 280, VII: 125, IX: 80, XI: 125,
+    });
     assert.deepEqual(STAGE_ORDER, ["I", "II", "III", "IV", "V", "VI", "VII", "IX", "XI"]);
+  });
+
+  it("target x casos = el total que muestra el portal del SIN", () => {
+    // Lo que el "Listado de Etapas" mostraba el 2026-08-27. Si el SIN cambia
+    // un total, este test lo caza antes de quemar una corrida entera.
+    assert.deepEqual(STAGE_TOTALS, {
+      I: 2, II: 1800, III: 200, IV: 750, V: 70, VI: 560, VII: 750, IX: 160, XI: 750,
+    });
+    const pv = PUNTOS_VENTA.length;
+    const combos = EMISION_CASES.length;
+    const motivos = 7; // parametrica de eventos significativos del piloto
+    assert.equal(STAGE_TARGETS.I * pv, STAGE_TOTALS.I);
+    assert.equal(STAGE_TARGETS.II * SYNC_CASES.length * pv, STAGE_TOTALS.II);
+    assert.equal(STAGE_TARGETS.III * pv, STAGE_TOTALS.III);
+    assert.equal(STAGE_TARGETS.IV * combos, STAGE_TOTALS.IV);
+    assert.equal(STAGE_TARGETS.V * motivos * pv, STAGE_TOTALS.V);
+    assert.equal(STAGE_TARGETS.VI * pv, STAGE_TOTALS.VI);
+    assert.equal(STAGE_TARGETS.VII * combos, STAGE_TOTALS.VII);
+    assert.equal(STAGE_TARGETS.IX * pv, STAGE_TOTALS.IX);
+    assert.equal(STAGE_TARGETS.XI * combos, STAGE_TOTALS.XI);
+    assert.deepEqual(Object.keys(STAGE_PLAN).sort(), [...STAGE_ORDER].sort());
   });
 
   it("RUNNER_OPS cubre eventos, paquete, masiva y sus validaciones", () => {
@@ -504,5 +540,362 @@ describe("reintento de casos bloqueados (--retry-blocked)", () => {
     assert.equal(runner.state.etapas.V.done, 0); // el progreso no se toca
     const persisted = JSON.parse(readFileSync(stateFile, "utf8"));
     assert.deepEqual(persisted.etapas.V.blockedCases, {});
+  });
+});
+
+
+describe("matriz de casos del SIN (etapa IV, leida del portal 2026-08-27)", () => {
+  it("son 6 combos: 2 puntos de venta x 3 documentos sector", () => {
+    assert.deepEqual(PUNTOS_VENTA, [0, 1]);
+    assert.deepEqual(DOC_SECTOR_CASES.map((d) => d.codigoDocumentoSector), [1, 17, 24]);
+    assert.equal(EMISION_CASES.length, 6);
+  });
+
+  it("la nota credito-debito (24) va como documento de AJUSTE (tipo 3)", () => {
+    const nota = DOC_SECTOR_CASES.find((d) => d.codigoDocumentoSector === 24);
+    assert.equal(nota.tipoFacturaDocumento, 3);
+    // Los otros dos son factura con derecho a credito fiscal.
+    for (const ds of DOC_SECTOR_CASES.filter((d) => d.codigoDocumentoSector !== 24)) {
+      assert.equal(ds.tipoFacturaDocumento, 1);
+    }
+  });
+
+  it("reproduce exactamente los 6 casos que lista el portal", () => {
+    assert.deepEqual(new Set(EMISION_CASES.map(comboId)), new Set([
+      "pv0-ds1-tf1", "pv1-ds1-tf1",
+      "pv0-ds17-tf1", "pv1-ds17-tf1",
+      "pv0-ds24-tf3", "pv1-ds24-tf3",
+    ]));
+  });
+
+  it("el combo por defecto es el UNICO que el SIN dio por hecho (PdV 0, compra-venta)", () => {
+    assert.deepEqual(DEFAULT_COMBO, {
+      codigoPuntoVenta: 0, codigoDocumentoSector: 1, tipoFacturaDocumento: 1,
+    });
+  });
+
+  it("los comboId son unicos (sirven de caseId del checkpoint)", () => {
+    assert.equal(new Set(EMISION_CASES.map(comboId)).size, EMISION_CASES.length);
+  });
+});
+
+describe("migracion del checkpoint viejo", () => {
+  it("el CUIS/CUFD suelto del 6-ago pasa al mapa del PdV 0", () => {
+    const migrado = migrateState({
+      cuis: "97DA6A35",
+      cufd: { codigo: "ABC", codigoControl: "X-Y" },
+      invoices: [{ numero: 1, cuf: "F", anulada: false, revertida: false }],
+    });
+    assert.equal(migrado.cuisByPv["0"], "97DA6A35");
+    assert.equal(migrado.cufdByPv["0"].codigo, "ABC");
+    // Y no deja los campos viejos dando vueltas.
+    assert.equal(migrado.cuis, undefined);
+    assert.equal(migrado.cufd, undefined);
+  });
+
+  it("las facturas viejas quedan atribuidas al combo por defecto", () => {
+    const migrado = migrateState({ invoices: [{ numero: 7, cuf: "F" }] });
+    assert.equal(migrado.invoices[0].combo, comboId(DEFAULT_COMBO));
+  });
+
+  it("no pisa un estado que ya viene por punto de venta", () => {
+    const migrado = migrateState({ cuis: "VIEJO", cuisByPv: { "0": "NUEVO" } });
+    assert.equal(migrado.cuisByPv["0"], "NUEVO");
+  });
+
+  it("un estado vacio sobrevive sin inventar claves", () => {
+    const migrado = migrateState({});
+    assert.deepEqual(migrado.cuisByPv, {});
+    assert.deepEqual(migrado.cufdByPv, {});
+    assert.deepEqual(migrado.invoices, []);
+  });
+
+  it("emptyState ya no tiene cuis/cufd sueltos", () => {
+    const vacio = emptyState();
+    assert.ok(!("cuis" in vacio), "cuis suelto revive el bug de un solo PdV");
+    assert.ok(!("cufd" in vacio), "cufd suelto revive el bug de un solo PdV");
+  });
+});
+
+describe("el combo manda sobre los parametros del request", () => {
+  const runnerDePrueba = () => {
+    const r = Object.create(Runner.prototype);
+    r.nit = "5371375010";
+    r.codigoSistema = "SIS";
+    r.state = emptyState();
+    r.combo = { ...DEFAULT_COMBO };
+    return r;
+  };
+
+  it("baseParams y recepcionBase salen del combo actual, no de una constante", () => {
+    const r = runnerDePrueba();
+    r.combo = { codigoPuntoVenta: 1, codigoDocumentoSector: 24, tipoFacturaDocumento: 3 };
+    assert.equal(r.baseParams().codigoPuntoVenta, 1);
+    const base = r.recepcionBase();
+    assert.equal(base.codigoDocumentoSector, 24);
+    assert.equal(base.tipoFacturaDocumento, 3);
+  });
+
+  it("CUIS y CUFD se guardan y se leen POR punto de venta", () => {
+    const r = runnerDePrueba();
+    r.combo = { ...DEFAULT_COMBO, codigoPuntoVenta: 0 };
+    r.cuis = "CUIS-PV0";
+    r.combo = { ...DEFAULT_COMBO, codigoPuntoVenta: 1 };
+    assert.equal(r.cuis, null, "el PdV 1 arranca sin CUIS propio");
+    r.cuis = "CUIS-PV1";
+    r.combo = { ...DEFAULT_COMBO, codigoPuntoVenta: 0 };
+    assert.equal(r.cuis, "CUIS-PV0", "el CUIS del PdV 1 no debe pisar el del 0");
+  });
+
+  it("withCombo restaura el combo anterior aunque el callback lance", async () => {
+    const r = runnerDePrueba();
+    const previo = { ...r.combo };
+    await assert.rejects(
+      r.withCombo({ codigoPuntoVenta: 1 }, async () => {
+        throw new Error("boom");
+      }),
+      /boom/,
+    );
+    assert.deepEqual(r.combo, previo);
+  });
+
+  it("buildTestInvoice emite bajo el punto de venta que se le pasa", () => {
+    const catalogs = {
+      productos: [{ codigoProducto: 1, codigoActividad: "620100", descripcionProducto: "Software" }],
+      leyendas: [{ codigoActividad: "620100", descripcionLeyenda: "Ley 453" }],
+      unidadesMedida: [{ codigoClasificador: 58 }],
+      metodosPago: [{ codigoClasificador: 1 }],
+      tiposDocIdentidad: [{ codigoClasificador: 5, descripcion: "NIT" }],
+    };
+    const { payload } = buildTestInvoice({ catalogs, nit: "5371375010", index: 0, codigoPuntoVenta: 1 });
+    assert.equal(payload.emisor.puntoVentaCodigo, 1);
+  });
+});
+
+describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)", () => {
+  /** Runner con la red y el disco apagados: solo queremos ver QUE combos pide. */
+  function runnerEspia() {
+    const r = Object.create(Runner.prototype);
+    r.nit = "5371375010";
+    r.codigoSistema = "SIS";
+    r.pace = 0;
+    r.state = emptyState();
+    r.state.numeroFactura = 0;
+    r.state.catalogs = {
+      productos: [{ codigoProducto: 1, codigoActividad: "620100", descripcionProducto: "Software" }],
+      leyendas: [{ codigoActividad: "620100", descripcionLeyenda: "Ley 453" }],
+      unidadesMedida: [{ codigoClasificador: 58 }],
+      metodosPago: [{ codigoClasificador: 1 }],
+      tiposDocIdentidad: [{ codigoClasificador: 5, descripcion: "NIT" }],
+      motivosAnulacion: [{ codigoClasificador: 1 }],
+    };
+    r.combo = { ...DEFAULT_COMBO };
+    r.vistos = [];
+    r.log = () => {};
+    r.checkpoint = () => {};
+    // Todos los PdV ya tienen CUIS/CUFD: no es lo que se esta probando aca.
+    for (const pv of PUNTOS_VENTA) {
+      r.state.cuisByPv[String(pv)] = `CUIS-${pv}`;
+      r.state.cufdByPv[String(pv)] = {
+        codigo: `CUFD-${pv}`,
+        codigoControl: "AB-12",
+        obtenidoEn: Date.now(),
+      };
+    }
+    r.post = async (_service, _envelope, meta) => {
+      r.vistos.push({ etapa: meta.etapa, combo: comboId(r.combo) });
+      return {
+        ok: true,
+        parsed: { transaccion: true, codigoEstado: 908, codigoRecepcion: "R1" },
+      };
+    };
+    return r;
+  }
+
+  it("la etapa IV recorre TODOS los combos emitibles, no 750 veces el mismo", async () => {
+    const r = runnerEspia();
+    await r.etapaIV(1); // 1 emision por combo
+    const combos = r.vistos.filter((v) => v.etapa === "IV").map((v) => v.combo);
+    assert.deepEqual(new Set(combos), new Set(EMISION_CASES_SOPORTADOS.map(comboId)));
+    assert.equal(combos.length, 4);
+  });
+
+  it("los combos del sector 24 se bloquean con el motivo, no en silencio", async () => {
+    const r = runnerEspia();
+    await r.etapaIV(1);
+    const bloqueados = Object.keys(r.state.etapas.IV.blockedCases);
+    assert.deepEqual(new Set(bloqueados), new Set(["pv0-ds24-tf3", "pv1-ds24-tf3"]));
+    for (const b of Object.values(r.state.etapas.IV.blockedCases)) {
+      assert.match(b.mensaje.descripcion, /recepcionDocumentoAjuste/);
+    }
+  });
+
+  it("cada emision queda etiquetada con su combo", async () => {
+    const r = runnerEspia();
+    await r.etapaIV(1);
+    assert.deepEqual(
+      new Set(r.state.invoices.map((f) => f.combo)),
+      new Set(EMISION_CASES_SOPORTADOS.map(comboId)),
+    );
+  });
+
+  it("la anulacion toma una factura del MISMO combo", async () => {
+    const r = runnerEspia();
+    await r.etapaIV(1);
+    await r.etapaVII(1);
+    for (const f of r.state.invoices.filter((x) => x.anulada)) {
+      const emitidaEn = f.combo;
+      // La anulada de cada combo tiene que ser la emitida bajo ese combo.
+      assert.ok(EMISION_CASES.map(comboId).includes(emitidaEn));
+    }
+    assert.equal(r.state.invoices.filter((f) => f.anulada).length, 4);
+  });
+
+  it("la reversion tambien respeta el combo", async () => {
+    const r = runnerEspia();
+    await r.etapaIV(1);
+    await r.etapaVII(1);
+    await r.etapaXI(1);
+    assert.equal(r.state.invoices.filter((f) => f.revertida).length, 4);
+  });
+
+  it("anular sin haber emitido en ese combo falla claro, no toma la de otro", async () => {
+    const r = runnerEspia();
+    // Emitir SOLO en el combo por defecto (el escenario del 6-ago).
+    await r.withCombo(DEFAULT_COMBO, () => r.loop("IV", 1, (i) => r.emitOne(i)));
+    await assert.rejects(
+      r.withCombo(EMISION_CASES[2], () => r.anularOne()),
+      /sin facturas validadas del combo/,
+    );
+  });
+
+  it("la etapa I pide un CUIS por cada punto de venta", async () => {
+    const r = runnerEspia();
+    r.state.cuisByPv = {};
+    r.post = async (_s, _e, meta) => {
+      r.vistos.push({ etapa: meta.etapa, combo: comboId(r.combo) });
+      return { ok: true, parsed: { transaccion: true, codigo: `CUIS-${r.combo.codigoPuntoVenta}` } };
+    };
+    await r.etapaI(1);
+    const pvs = r.vistos.filter((v) => v.etapa === "I").map((v) => v.combo);
+    assert.equal(pvs.length, PUNTOS_VENTA.length);
+    assert.deepEqual(Object.keys(r.state.cuisByPv).sort(), ["0", "1"]);
+    // Y cada PdV se queda con SU codigo, no con el del ultimo que corrio.
+    assert.equal(r.state.cuisByPv["0"], "CUIS-0");
+    assert.equal(r.state.cuisByPv["1"], "CUIS-1");
+  });
+
+  it("la etapa III pide un CUFD por cada punto de venta", async () => {
+    const r = runnerEspia();
+    r.state.cufdByPv = {};
+    r.post = async (_s, _e, meta) => {
+      r.vistos.push({ etapa: meta.etapa, combo: comboId(r.combo) });
+      return { ok: true, parsed: { transaccion: true, codigo: "CUFD", codigoControl: "A-1" } };
+    };
+    await r.etapaIII(1);
+    assert.deepEqual(Object.keys(r.state.cufdByPv).sort(), ["0", "1"]);
+  });
+});
+
+describe("un caso con prerequisito faltante no mata la etapa", () => {
+  it("el throw se convierte en error de racha y los demas casos siguen", async () => {
+    const r = Object.create(Runner.prototype);
+    r.state = emptyState();
+    r.combo = { ...DEFAULT_COMBO };
+    r.log = () => {};
+    r.checkpoint = () => {};
+    const corridos = [];
+    // El primer caso revienta (como assembleEmission sin cufd.codigoControl);
+    // el segundo anda. Antes de la guarda, el primero abortaba la etapa entera.
+    for (const caso of ["rompe", "anda"]) {
+      await r.loop(
+        "IV",
+        1,
+        async () => {
+          corridos.push(caso);
+          if (caso === "rompe") throw new Error("assembleEmission requiere cufd.codigoControl");
+          return { ok: true, parsed: { transaccion: true } };
+        },
+        { caseId: caso },
+      );
+    }
+    assert.ok(corridos.includes("anda"), "el segundo caso nunca se intento");
+    assert.equal(r.state.etapas.IV.cases.anda, 1);
+    assert.ok(!r.state.etapas.IV.cases.rompe, "el caso roto no deberia contar");
+    // Y se bloquea EN EL ACTO: un prerequisito faltante no mejora reintentando.
+    assert.equal(corridos.filter((c) => c === "rompe").length, 1);
+    assert.match(r.state.etapas.IV.blockedCases.rompe.mensaje.descripcion, /codigoControl/);
+  });
+
+  it("un StopError sigue abortando (no se lo traga la guarda)", async () => {
+    const r = Object.create(Runner.prototype);
+    r.state = emptyState();
+    r.combo = { ...DEFAULT_COMBO };
+    r.log = () => {};
+    r.checkpoint = () => {};
+    await assert.rejects(
+      r.loop("IV", 1, async () => {
+        throw new StopError("IV", { key: "x", count: 5 }, null);
+      }),
+      StopError,
+    );
+  });
+});
+
+
+describe("cada documento sector tiene su propio servicio SOAP (SIN 995)", () => {
+  it("el ruteo cubre los 3 sectores de la solicitud 9473", () => {
+    assert.deepEqual(SERVICIO_POR_DOC_SECTOR, {
+      1: "FACTURACION_COMPRA_VENTA",
+      17: "FACTURACION_COMPUTARIZADA",
+      24: "FACTURACION_DOCUMENTO_AJUSTE",
+    });
+  });
+
+  it("compra-venta y salud resuelven servicio; el 24 explica por que no", () => {
+    const r = Object.create(Runner.prototype);
+    r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 1, tipoFacturaDocumento: 1 };
+    assert.equal(r.servicio, "FACTURACION_COMPRA_VENTA");
+    r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 17, tipoFacturaDocumento: 1 };
+    assert.equal(r.servicio, "FACTURACION_COMPUTARIZADA");
+    r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 24, tipoFacturaDocumento: 3 };
+    assert.throws(() => r.servicio, /recepcionDocumentoAjuste/);
+  });
+
+  it("un sector sin mapear no se manda al servicio equivocado", () => {
+    const r = Object.create(Runner.prototype);
+    r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 99, tipoFacturaDocumento: 1 };
+    assert.throws(() => r.servicio, /sin servicio SOAP mapeado/);
+  });
+
+  it("EMISION_CASES_SOPORTADOS deja afuera exactamente al sector 24", () => {
+    assert.equal(EMISION_CASES_SOPORTADOS.length, 4);
+    assert.ok(EMISION_CASES_SOPORTADOS.every((c) => !DOC_SECTOR_SIN_SOPORTE.has(c.codigoDocumentoSector)));
+  });
+});
+
+describe("cufdVencido — el CUFD del dia anterior no sirve", () => {
+  const ahora = 1_800_000_000_000;
+  const vivo = { codigo: "C", codigoControl: "A-1", obtenidoEn: ahora - 1000 };
+
+  it("un CUFD recien obtenido esta vigente", () => {
+    assert.equal(cufdVencido(vivo, ahora), false);
+  });
+
+  it("uno de hace mas de 24h esta vencido", () => {
+    assert.equal(cufdVencido({ ...vivo, obtenidoEn: ahora - CUFD_VIGENCIA_MS - 1 }, ahora), true);
+  });
+
+  it("justo en el limite de 24h ya no sirve (el SIN no da tolerancia)", () => {
+    assert.equal(cufdVencido({ ...vivo, obtenidoEn: ahora - CUFD_VIGENCIA_MS }, ahora), true);
+  });
+
+  it("sin codigoControl esta vencido: el CUF no se puede armar", () => {
+    assert.equal(cufdVencido({ codigo: "C", obtenidoEn: ahora }, ahora), true);
+  });
+
+  it("null / indefinido cuentan como vencido", () => {
+    assert.equal(cufdVencido(null, ahora), true);
+    assert.equal(cufdVencido(undefined, ahora), true);
   });
 });

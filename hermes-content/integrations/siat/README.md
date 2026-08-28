@@ -11,6 +11,10 @@ anulacion, `ActivityEvent` para todo).
 Diseno completo: `onia-core/ONIA_SIAT_CERTIFICACION_PLAN_2026.md` (tramite,
 arquitectura, cronograma). Esto es el arranque tecnico del servicio.
 
+> **Estado del TRAMITE (solicitud 9473, avance de la Fase 1, que falta para que
+> Onia Platform facture): `hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md`.**
+> Ese doc es la fuente de verdad; este README es el diseno del codigo.
+
 ## Estado (2026-07-08) — arranque, NO produccion
 
 **Listo (offline, sin depender del NIT ni del Anexo Tecnico):**
@@ -125,6 +129,51 @@ TODO el desarrollo tecnico de arriba (constantes, maquina de estados, builder
 XML, cliente SOAP contra el piloto con specs publicas) avanza en paralelo sin
 depender de ninguno de los dos.
 
+## Runner de la Fase 1 — la matriz de casos
+
+`src/fase1-runner.mjs` corre las pruebas de homologacion contra el piloto.
+
+**El SIN cuenta COBERTURA, no volumen.** La corrida del 6-ago mando 750 emisiones
+en la etapa IV y el portal contabilizo 125: las 750 eran el mismo combo. El
+"Listado de Pruebas" de cada etapa muestra los casos que exige, y son el producto
+de dos ejes:
+
+- **`PUNTOS_VENTA = [0, 1]`** — CUIS y CUFD se piden por sucursal+PdV. Correr
+  solo el PdV 0 deja las etapas I/II/III/V clavadas en 50%.
+- **`DOC_SECTOR_CASES`** — los 3 documentos sector de la solicitud 9473:
+  1 (compra-venta), 17 (hospitales/clinicas) y 24 (nota credito-debito, que va
+  como documento de AJUSTE: `tipoFacturaDocumento` 3).
+
+De ahi salen los **6 combos** de `EMISION_CASES`. Las etapas IV, VII y XI iteran
+sobre los 6; las demas, sobre los 2 puntos de venta.
+
+Consecuencias de diseno:
+
+- `PILOT` guarda solo lo invariante (ambiente, modalidad, sucursal). El combo en
+  curso es `this.combo`, y se cambia con `withCombo()` (restaura el anterior
+  aunque el callback lance).
+- El estado guarda **`cuisByPv` / `cufdByPv`**, no un CUIS y un CUFD sueltos.
+  `migrateState()` sube un checkpoint viejo sin perderlo.
+- **Cada factura recuerda su combo.** La anulacion y la reversion buscan una
+  factura del MISMO combo; si no hay, fallan con un mensaje que dice cual falta
+  en vez de anular la de otro caso (que no le suma a ningun contador del SIN).
+- `STAGE_TARGETS` es **por caso**; `STAGE_TOTALS` es lo que muestra el portal.
+  Un test verifica que `target x casos == total` en las 9 etapas: si el SIN
+  cambia un volumen, se caza antes de quemar una corrida.
+
+Etapa **VIII (firma digital, 690 casos)**: solo modalidad electronica, necesita
+certificado AGETIC. Este runner no la corre. Etapa **X** (masiva IEHD) no aplica
+a nuestro perfil — son 10 etapas, no 11.
+
+```bash
+node src/fase1-runner.mjs --etapa gate   # humo: 1 por combo. SIEMPRE primero
+node src/fase1-runner.mjs                # todas las etapas en orden
+node src/fase1-runner.mjs --etapa IV     # una sola
+```
+
+Flags: `--pace ms` (default 500) · `--state file` · `--log file` ·
+`--retry-blocked`. Requiere `/opt/onia-siat/siat-piloto.env` en el ambiente.
+
 ## Regla de secretos
 
 NIT, tokens delegados y credenciales SIAT viven SOLO en el env/vault del VPS
@@ -136,3 +185,5 @@ organizacion (lo genera el cliente en SIAT) y se guarda cifrado.
 ```bash
 node --test hermes-content/integrations/siat/test/*.test.mjs
 ```
+
+333 tests, todos sin red: transporte y `fetch` son inyectables.
