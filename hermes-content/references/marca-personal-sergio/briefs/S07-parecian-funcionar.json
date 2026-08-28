@@ -1,0 +1,85 @@
+{
+ "serie": "Lo que me costó aprender",
+ "episodio": "007",
+ "caption": "Cinco cosas de mi sistema que parecían funcionar. Ninguna funcionaba.\n\nY el detalle que las une: ninguna daba error. Todas informaban que sí.\n\n1. El DM automático de Instagram. Ocho documentos míos decían que estaba vivo y probado en producción. Lo fui a contar: de 105 ejecuciones, 6 intentaron enviar, Meta rechazó 5, y el único que llegó fue a mi propio usuario.\n\n2. El aviso de error. El nodo estaba configurado para no fallar nunca, así que Meta devolvía un rechazo, el flujo seguía y quedaba marcado como éxito. Cinco rechazos seguidos, cero alarmas. El monitor de salud buscaba ejecuciones en estado error, y nunca había ninguna.\n\n3. El PDF que prometí. Quien comentaba la palabra clave recibía un link muerto. Se verificó una vez el día que se encendió, y nunca más.\n\n4. El formulario. Si alguien dejaba solo el correo, el servidor lo rechazaba y el lead se perdía entero, mientras la persona veía en pantalla que todo había salido bien.\n\n5. La suite de tests. El contador se imprimía en el medio del archivo: decía 30 pasaron cuando corrían 49. Diecinueve que nadie contaba.\n\nLo que me costó aprender: un sistema no te avisa cuando está roto. Te avisa cuando alguien programó el aviso. Y esa es otra cosa que también puede estar rota.\n\nCada uno tiene su commit. Si algo tuyo lleva meses andando sin que nadie lo mire, andá a contarlo.",
+ "hashtags": [
+  "#automatizacion",
+  "#n8n",
+  "#bolivia",
+  "#desarrollo",
+  "#nocode"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "kicker": "Lo que me costó aprender",
+   "headline": "Cinco cosas que *parecían funcionar*",
+   "body": "Ninguna funcionaba. Y ninguna daba error: todas informaban que sí. Cada una con su commit."
+  },
+  {
+   "number": 2,
+   "kicker": "Caso 01",
+   "headline": "Ocho documentos lo daban por *vivo*",
+   "n": 1,
+   "nombre": "El DM automático",
+   "cargo": "commit b5ae35be",
+   "hace": "Lo fui a contar: de 105 ejecuciones, 6 intentaron enviar, Meta rechazó 5, y el único que llegó fue a mi propio usuario.",
+   "creia": "que estaba probado en producción"
+  },
+  {
+   "number": 3,
+   "kicker": "Caso 02",
+   "headline": "El que tenía que avisarme *no avisaba*",
+   "n": 2,
+   "nombre": "La alarma",
+   "cargo": "commit fddf7f55",
+   "hace": "El nodo estaba puesto para no fallar nunca. Meta rechazaba, el flujo seguía y quedaba marcado como éxito. Cinco rechazos, cero alarmas.",
+   "creia": "que si fallaba, me enteraba"
+  },
+  {
+   "number": 4,
+   "kicker": "Caso 03",
+   "headline": "Prometí un archivo y entregué un *link muerto*",
+   "n": 3,
+   "nombre": "El PDF",
+   "cargo": "commit 15cead0c",
+   "hace": "Quien comentaba la palabra clave recibía un 404. Se verificó una vez el día que se encendió, y nunca más.",
+   "creia": "que responder bien una vez alcanzaba"
+  },
+  {
+   "number": 5,
+   "kicker": "Caso 04",
+   "headline": "El lead se perdía y la pantalla decía *que todo salió bien*",
+   "n": 4,
+   "nombre": "El formulario",
+   "cargo": "commit 8939615b",
+   "hace": "Si alguien dejaba solo el correo, el servidor lo rechazaba y el lead se perdía entero. La persona veía que todo había salido bien.",
+   "creia": "que un formulario enviado era un lead"
+  },
+  {
+   "number": 6,
+   "kicker": "Caso 05",
+   "headline": "Decía *30*. Corrían 49",
+   "n": 5,
+   "nombre": "La suite de tests",
+   "cargo": "commit 70be96d5",
+   "hace": "El contador se imprimía en el medio del archivo, así que los tests agregados después corrían cuando el resumen ya estaba impreso. Diecinueve que nadie contaba.",
+   "creia": "que verde era verde"
+  },
+  {
+   "number": 7,
+   "kicker": "Lo que aprendí",
+   "headline": "Un sistema no avisa cuando *está roto*",
+   "body": "Avisa cuando alguien programó el aviso. Y ese aviso es otra cosa más que puede estar rota, sin avisar. Por eso los cinco duraron semanas: nadie estaba ignorando una alarma, no había alarma."
+  },
+  {
+   "number": 8,
+   "role": "cta",
+   "kicker": "Tu turno",
+   "headline": "¿Qué tenés andando que *nadie miró*?",
+   "body": "Si algo tuyo lleva meses funcionando sin que nadie lo abra, andá a contarlo. No preguntes si anda: contá cuántas veces anduvo."
+  }
+ ]
+}

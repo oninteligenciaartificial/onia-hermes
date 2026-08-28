@@ -77,8 +77,8 @@ defecto principal y este molde lo arregla: nadie más va a tener tarjetas de emp
 
 | Pieza | Tema | Estado |
 |---|---|---|
-| S06 | **Mi equipo de 6 empleados que no cobran** — n8n, Chatwoot, Supabase, Postiz, Whisper, ffmpeg | ✅ 9 láminas |
-| S07 | **Lo que me costó aprender** — errores reales del repo, con el commit | ⬜ |
+| S06 | **Mi equipo de 6 empleados que no cobran** — n8n, Chatwoot, Supabase, Postiz, Whisper, ffmpeg | 🔴 **BLOQUEADA**: promete STACK y ese PDF no existe. El gate lo marca solo |
+| S07 | **Cinco cosas que parecían funcionar** — 5 errores reales, cada uno con su commit | ✅ 8 láminas |
 | S08 | **El software que pagás ya existe gratis** — port de S05 al molde nuevo | ⬜ |
 
 ## Cuenta 3 · Lucía — editorial fotográfico, y **declarada IA siempre**
@@ -152,7 +152,8 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 6. ~~L08 con la palabra HUMO~~ ✅ hecho
 7. ~~O10 (la planilla que miente)~~ ✅ hecho
 8. ~~O11 (las 42 horas)~~ ✅ hecho
-9. Seguir la tabla
+9. ~~S07 (cinco cosas que parecían funcionar)~~ ✅ hecho
+10. Seguir la tabla
 
 **Al terminar cada pieza:** tachar la línea de este archivo y commitear.
 
