@@ -12,6 +12,10 @@
  * Le sirve a Sergio porque es primera persona, enseña algo concreto, tiene humor seco,
  * y el contenido ya existe — su S05 ya listaba n8n, Chatwoot, Supabase y Postiz.
  *
+ * ⚠️ 2026-08-28, Sergio: "sergio igual que use verde". El acento pasa de ambar a verde.
+ * El molde NO pierde su razon de ser: lo que lo separa de @oniahq nunca fue el color,
+ * son el azul noche, la trama de puntos, la ficha blanca y el Archivo condensado + mono.
+ *
  * 🔴 POR QUE EL ESTILO SE SEPARA A PROPOSITO DE ONIA:
  * El defecto principal de las piezas de Sergio era verse IDENTICAS a las de @oniahq:
  * mismo verde, mismas pildoras, mismo sans. Y el es la unica cuenta con audiencia real
@@ -19,11 +23,11 @@
  * de Onia:
  *
  *   Onia            -> negro verdoso / papel hueso · verde #10C26B · Fraunces + Inter
- *   Sergio (este)   -> azul noche · ambar #F59E0B · Archivo condensado + mono
+ *   Sergio (este)   -> azul noche · verde #00D26A · Archivo condensado + mono
  *
  * El brief declara por lamina: `n`, `nombre`, `cargo`, `hace`, y UNO de `reemplaza`
  * (la herramienta vieja, para el molde de empleados) o `creia` (lo que se daba por
- * cierto, para el molde de errores de S07). Los dos se dibujan igual: tachado en ambar,
+ * cierto, para el molde de errores de S07). Los dos se dibujan igual: tachado en verde,
  * que es el gesto que hace legible de un vistazo "esto ya no vale".
  */
 
@@ -73,12 +77,12 @@ html,body{width:${FMT.w}px;height:${FMT.h}px}
 .slide > *{position:relative;z-index:2}
 
 .kicker{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:23px;
-  letter-spacing:.12em;text-transform:uppercase;color:#F59E0B;margin-bottom:26px}
+  letter-spacing:.12em;text-transform:uppercase;color:#00D26A;margin-bottom:26px}
 
 h1,h2{font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 62.5,'wght' 900;
   font-size:${esPortada ? Math.round(FMT.w * 0.115) : Math.round(FMT.w * 0.072)}px;
   line-height:.94;letter-spacing:-.02em;text-transform:uppercase;max-width:16ch}
-h1 .g,h2 .g{color:#F59E0B}
+h1 .g,h2 .g{color:#00D26A}
 .sub{font-size:32px;line-height:1.4;color:#94A3B8;margin-top:20px;max-width:28ch;
   font-variation-settings:'wght' 600}
 /* Un body con doble salto se dibujaba como un solo bloque: la linea de fuente quedaba
@@ -91,7 +95,7 @@ h1 .g,h2 .g{color:#F59E0B}
   box-shadow:0 26px 60px rgba(0,0,0,.42)}
 .fila{display:flex;align-items:center;gap:26px}
 .num{font-family:'Archivo';font-variation-settings:'wdth' 62.5,'wght' 900;
-  font-size:96px;line-height:.8;color:#F59E0B}
+  font-size:96px;line-height:.8;color:#00D26A}
 .quien{display:flex;flex-direction:column;gap:6px}
 .nombre{font-family:'Archivo';font-variation-settings:'wdth' 62.5,'wght' 900;
   font-size:60px;line-height:1;letter-spacing:-.01em}
@@ -104,14 +108,14 @@ h1 .g,h2 .g{color:#F59E0B}
   font-family:'JetBrains Mono',monospace;font-size:23px}
 .reemplaza span{color:#64748B;text-transform:uppercase;letter-spacing:.06em}
 .reemplaza b{font-weight:700;color:#101828;text-decoration:line-through;
-  text-decoration-color:#F59E0B;text-decoration-thickness:3px}
+  text-decoration-color:#00D26A;text-decoration-thickness:3px}
 
 .pie{margin-top:auto;display:flex;justify-content:space-between;align-items:center;
   font-family:'JetBrains Mono',monospace;font-size:23px;color:#64748B}
 .pie .handle{color:#CBD5E1;font-weight:700}
 
-.slide.cta{background:#F59E0B;color:#101828}
-.slide.cta::before{background-image:radial-gradient(#D98806 1.5px, transparent 1.6px)}
+.slide.cta{background:#00D26A;color:#101828}
+.slide.cta::before{background-image:radial-gradient(#00A854 1.5px, transparent 1.6px)}
 .slide.cta h2{color:#101828}
 .slide.cta h2 .g{color:#F8FAFC}
 .slide.cta .sub{color:rgba(16,24,40,.78)}

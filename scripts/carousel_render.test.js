@@ -454,7 +454,7 @@ test('tarjeta-empleado: no comparte NADA del sistema visual de Onia', () => {
   // El defecto principal de las piezas de Sergio era verse identicas a las de @oniahq.
   const h = tarjetaEmpleadoHtml({ headline: 'H', nombre: 'x', hace: 'y' }, 1, 9, 'sergio');
   assert.ok(h.includes('#101828'), 'azul noche, no el negro verdoso de Onia');
-  assert.ok(h.includes('#F59E0B'), 'ambar, no el verde de marca');
+  assert.ok(h.includes('#00D26A'), 'verde: Sergio lo pidio el 2026-08-28');
   assert.ok(!h.includes("'Fraunces'"), 'sin la serif de Onia');
 });
 
