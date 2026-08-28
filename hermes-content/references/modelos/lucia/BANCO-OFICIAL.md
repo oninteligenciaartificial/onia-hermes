@@ -13,6 +13,29 @@
 
 ---
 
+## Cómo se genera — SOLO por navegador
+
+> 🔴 **Sergio, 2026-08-28: *"a partir de ahora no usarás MCP, harás todo desde el navegador a
+> mi cuenta de Higgsfield, cometes muchos errores por MCP"*.**
+>
+> Dos motivos, los dos verificados ese día: **(1)** el MCP pedía `nano_banana_2` y el servidor
+> resolvía a `nano_banana_flash` **sin avisar**; **(2)** la web tiene un toggle **`Unlimited`**
+> que no gasta créditos, y por MCP cada imagen cuesta 2.
+
+**El flujo, probado en vivo:**
+
+1. `higgsfield.ai` → **Image** → **Create Image**.
+2. En el prompt escribir `@` + el nombre: **`@lucia`** autocompleta a **`@lucia-skin-v1`**.
+   Reemplaza al `<<<uuid>>>` del MCP.
+3. Modelo **Nano Banana Pro**, aspecto 3:4.
+4. **Activar `Unlimited`** antes de generar.
+5. Generar y **mirar** el resultado.
+
+La web además tiene funciones que el MCP no expone: **AI Influencer**, Soul ID Character, Soul
+Moodboard, Canvas, Relight.
+
+---
+
 ## La cara
 
 **No se genera con Soul. Se genera con el Element-ancla.**
