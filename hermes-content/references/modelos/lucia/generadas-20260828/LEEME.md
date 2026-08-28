@@ -1,12 +1,32 @@
-# Generadas el 2026-08-28 — con el ancla oficial
+# Banco propio — generado el 2026-08-28 con el ancla oficial
 
-Imágenes nuevas hechas con el Element-ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563`, el que
-manda [`../BANCO-OFICIAL.md`](../BANCO-OFICIAL.md).
+Hecho con el Element **`lucia-skin-v1`** (`58bbd635-…`), el de 7 ángulos, **desde el navegador**
+(nunca por MCP). La técnica completa está en [`../TECNICA-HIGGSFIELD.md`](../TECNICA-HIGGSFIELD.md).
 
-| Archivo | Para qué | Verificado a ojo |
+Todas se miraron una por una antes de guardarlas: pecas, argollas doradas, cadenita, piel de
+tono parejo sin rojez.
+
+## Lo que hay
+
+| Archivo | Qué es | Por qué está |
 |---|---|---|
-| `G01-cafe-pizarra-texto.png` | L09 lámina 6: la pieza dice "mirá las letras" y necesita una imagen con texto generado por IA | Pecas contables, argollas doradas, cadenita, piel de tono parejo, taza terracota en cuadro. La pizarra escribe "Café con Leche" bien y abajo inventa *marnago* y *horchimos*: es justo la falla que la lámina señala |
+| `G01-cafe-pizarra-texto.png` | Café con pizarra de menú | Para la lámina 6 de L09: la pizarra escribe «Café con Leche» bien y dos renglones abajo inventa *marnago* y *horchimos*. **El defecto de la IA, a la vista y señalado** |
+| `G02-parada-de-micro.png` | Esperando el micro, cielo nublado | Primera de la **receta normal**: poste con maraña de cables, muros descascarados, una señora esperando, canasta a los pies |
+| `G03-mercado.png` | Comprando tomates, hablando con la casera | La mejor de la receta normal. Toldo verde, cajones de madera, bolsas negras colgando, delantal a cuadros. **Suma interacción con otra persona**, que es lo que más la aleja de una foto de campaña |
+| `V01-farmacia-animate-kling3.mp4` + `_V01-TIRA.jpg` | 5 s de b-roll en una farmacia | Hecho con **Animate** desde una imagen de receta normal. La cara aguanta los 5 s. 6,25 cr con el sonido apagado |
 
-⚠️ **El servidor resolvió el pedido a `nano_banana_flash`, no al `nano_banana_2` que pide el
-doc.** Salió con la cara correcta igual, pero se verificó mirándola, no se dio por buena: si un
-día una generación sale con la cara vieja, la pista es esa sustitución de modelo.
+## Por qué este banco existe
+
+El banco viejo (`tanda-20260821`) sirve, pero es **lifestyle bonito**: rooftop al atardecer,
+café con luz dorada, todo combinando. Sergio marcó el problema el 28-ago pasando la foto del
+gimnasio: *"siento que Lucía se ve muy realista, no tan normal como esta de aquí"*.
+
+Estas son el otro registro — **lugares donde nadie sacaría una foto linda**. Sirven para las
+piezas donde Lucía tiene que parecer una persona y no una modelo.
+
+## Lo que falta
+
+- Más lugares: adentro de un micro, una fila de trámite, una tienda de barrio.
+- Animar G02 y G03 para tener b-roll de esos escenarios.
+- Ninguna de estas está en la lista blanca de `scripts/lucia_banco.json` todavía —
+  `generadas-20260828/` sí está, así que el gate ya las acepta.
