@@ -484,3 +484,13 @@ test('tarjeta-empleado: el body respeta los parrafos', () => {
   assert.strictEqual(parrafos, 2, 'dos parrafos, dos <p>');
   assert.ok(h.includes('.sub + .sub'), 'y con separacion entre ellos');
 });
+
+test('el acento sale de la cuenta: Lucia en terracota, no en el verde de Onia', () => {
+  // LUCIA.md §1-quater: "#00D26A (verde ONIA) no entra en sus piezas". El motor ya
+  // tenia --accent y aun asi salieron cuatro piezas suyas en verde. Ahora lo decide
+  // la cuenta, no quien escribe el comando.
+  const h = editorialPhotoHtml({ headline: 'H', bg: 'x.jpg' }, 0, 7, 'lucia');
+  assert.ok(h.includes('#E4714E'), 'Lucia lleva su terracota');
+  const o = editorialPhotoHtml({ headline: 'H', bg: 'x.jpg' }, 0, 7, 'onia');
+  assert.ok(!o.includes('#E4714E'), 'y Onia no la hereda');
+});
