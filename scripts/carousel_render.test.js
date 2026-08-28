@@ -462,3 +462,15 @@ test('tarjeta-empleado: sin nombre no dibuja ficha vacia', () => {
   const h = tarjetaEmpleadoHtml({ headline: 'Cierre', body: 'b' }, 8, 9, 'sergio');
   assert.ok(!h.slice(h.indexOf('<body>')).includes('class="ficha"'));
 });
+
+test('tarjeta-empleado: `creia` dibuja el tachado con su propia etiqueta', () => {
+  // El molde de empleados sirve igual para el expediente de un error: mismo tachado
+  // ambar, pero la etiqueta cambia de "reemplaza a" a "yo creia". Es lo que permite
+  // que S07 use el mismo objeto visual sin forzar la semantica de "reemplaza".
+  const h = tarjetaEmpleadoHtml(
+    { headline: 'H', nombre: 'El DM', cargo: 'commit abc', hace: 'x', creia: 'que funcionaba' },
+    1, 8, 'sergio');
+  assert.ok(h.includes('yo creía'), 'la ficha de error dice "yo creia"');
+  assert.ok(h.includes('que funcionaba'), 'y muestra lo que se daba por cierto');
+  assert.ok(!h.includes('reemplaza a'), 'sin `reemplaza` no dibuja esa etiqueta');
+});

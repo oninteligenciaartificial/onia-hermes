@@ -21,7 +21,10 @@
  *   Onia            -> negro verdoso / papel hueso · verde #10C26B · Fraunces + Inter
  *   Sergio (este)   -> azul noche · ambar #F59E0B · Archivo condensado + mono
  *
- * El brief declara por lamina: `n`, `nombre`, `cargo`, `hace`, `reemplaza`.
+ * El brief declara por lamina: `n`, `nombre`, `cargo`, `hace`, y UNO de `reemplaza`
+ * (la herramienta vieja, para el molde de empleados) o `creia` (lo que se daba por
+ * cierto, para el molde de errores de S07). Los dos se dibujan igual: tachado en ambar,
+ * que es el gesto que hace legible de un vistazo "esto ya no vale".
  */
 
 const fs = require('fs');
@@ -49,6 +52,7 @@ function crear({ esc, emph, roleFor, ACCOUNTS, BRAND, getFmt }) {
         </div>
         <p class="hace">${emph(slide.hace || '')}</p>
         ${slide.reemplaza ? `<div class="reemplaza"><span>reemplaza a</span><b>${esc(slide.reemplaza)}</b></div>` : ''}
+        ${slide.creia ? `<div class="reemplaza"><span>yo creía</span><b>${esc(slide.creia)}</b></div>` : ''}
       </div>` : '';
 
     return `<!doctype html><html><head><meta charset="utf-8">
