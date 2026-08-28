@@ -523,7 +523,9 @@ export function main(deps = {}) {
   });
 
   server.listen(config.port, () => {
-    process.stdout.write(`[onia-webhook] escuchando en :${config.port}${WEBHOOK_PATH}\n`);
+    // Timestamp pedido por DOS handoffs (23-ago y 28-ago): el burst de 56 arranques
+    // fue irreconstruible sin la cadencia real. Un arranque sin hora no diagnostica.
+    process.stdout.write(`[onia-webhook] ${new Date().toISOString()} escuchando en :${config.port}${WEBHOOK_PATH}\n`);
     if (!auth.ok) process.stdout.write(`[onia-webhook] ${auth.aviso}\n`);
   });
 
