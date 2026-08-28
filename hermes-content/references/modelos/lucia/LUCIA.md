@@ -71,7 +71,13 @@ VESTUARIO       #EFE7DA crema · #D8C9B0 beige lino · #F4F1EC blanco roto · #6
 SANTA CRUZ      #B08246 ocre gastado · #4E8C87 turquesa descascarado · #2E2A26 sombra cálida
 ```
 
-⛔ `#00D26A` (verde ONIA) **no entra** en sus piezas.
+✅ **El verde de Onia `#00D26A` SÍ va en sus piezas.** Sergio, 2026-08-28: *"usa color
+verde siempre"*.
+
+⚠️ **Acá decía lo contrario** (⛔ "no entra en sus piezas"), y por eso ese mismo día sus cuatro
+carruseles se pasaron a terracota. Sergio lo revirtió. La paleta de arriba sigue valiendo para
+los PROMPTS de imagen — piel, pelo, vestuario, locación — que es de lo que trata esta sección;
+lo que no vale es extenderla al color de marca de las piezas.
 
 ## 2. ✅ DECIDIDO — El ancla de la cara (Sergio, 2026-08-15)
 
