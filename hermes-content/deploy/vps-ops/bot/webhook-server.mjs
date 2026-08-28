@@ -45,6 +45,8 @@ import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n
 import { knowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
+import { handleBcpCobrar, handleBcpCallback } from "./bcp-qr.mjs";
+import { createChatwootClient } from "./chatwoot-adapter.mjs";
 
 export const DEFAULT_PORT = 3020;
 export const DEFAULT_MAX_BODY_BYTES = 1024 * 1024;
@@ -427,6 +429,26 @@ export function createWebhookServer(deps = {}) {
         out = tooLarge
           ? { status: 413, body: { ok: false, error: "payload_demasiado_grande" } }
           : await handlePreviewRequest({ rawBody: body, headers: req.headers });
+      } catch (error) {
+        out = { status: 500, body: { ok: false, error: String(error?.message || error).slice(0, 200) } };
+      }
+      writeJson(res, out.status, out.body);
+      return;
+    }
+
+    // Cobro por QR del BCP: /bcp/cobrar lo dispara un humano; /bcp/callback lo
+    // llama el banco. Ambos usan el cliente Chatwoot real del server (deps.client).
+    const rutaBcp = req.method === "POST" ? url.split("?")[0].replace(/\/+$/, "") : null;
+    if (rutaBcp === "/bcp/cobrar" || rutaBcp === "/bcp/callback") {
+      let out;
+      try {
+        const { tooLarge, body } = await readBody(req, config.maxBodyBytes);
+        if (tooLarge) {
+          out = { status: 413, body: { ok: false, error: "payload_demasiado_grande" } };
+        } else {
+          const handler = rutaBcp === "/bcp/cobrar" ? handleBcpCobrar : handleBcpCallback;
+          out = await handler({ rawBody: body, headers: req.headers }, { client: deps.client || createChatwootClient() });
+        }
       } catch (error) {
         out = { status: 500, body: { ok: false, error: String(error?.message || error).slice(0, 200) } };
       }

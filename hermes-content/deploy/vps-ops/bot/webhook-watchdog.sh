@@ -55,6 +55,23 @@ if docker exec "$CONTAINER" sh -c "wget -qO- --timeout=5 http://127.0.0.1:$PORT/
     rm -f "$INCIDENTE"
     tg_error "✅ <b>Bot Onia recuperado</b> — el webhook volvio a responder."
   fi
+  # 2.b. El /health NO ve el camino bot->Chatwoot (la base va por otro puerto): el 2026-08-28
+  # el bot estuvo 4 dias calculando respuestas que Chatwoot nunca recibio (attachment overlay
+  # rancio tras el reboot). Chequeo directo; fix manual documentado en el handoff del carril:
+  # docker network disconnect easypanel onia-center && docker network connect --alias onia-center easypanel onia-center
+  INCIDENTE_CW="/var/lib/onia-bot-watchdog.incidente-chatwoot"
+  if docker exec "$CONTAINER" sh -c "timeout 5 wget -qO- http://onia-chatbot_chatwoot:3000/ >/dev/null 2>&1"; then
+    if [ -f "$INCIDENTE_CW" ]; then
+      rm -f "$INCIDENTE_CW"
+      tg_error "✅ <b>Bot Onia</b> — el camino a Chatwoot volvio: las respuestas salen de nuevo."
+    fi
+  else
+    log "ERROR: el bot NO llega a Chatwoot (respuestas mudas aunque /health este ok)"
+    if [ ! -f "$INCIDENTE_CW" ]; then
+      touch "$INCIDENTE_CW"
+      tg_error "🚨 <b>Bot Onia MUDO</b> — el proceso vive pero NO llega a Chatwoot: calcula respuestas que nadie recibe. Fix: reconectar onia-center a la red easypanel (comando en el watchdog y en el handoff del carril chatbot)."
+    fi
+  fi
   exit 0
 fi
 
