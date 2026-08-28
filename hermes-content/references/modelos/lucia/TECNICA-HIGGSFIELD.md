@@ -57,6 +57,43 @@ parejo sin rojez, cejas gruesas, ojos marrones. El ancla de 7 ángulos sostiene 
 
 ---
 
+## 🔴 «Realista» no es «normal» — lo que pidió Sergio el 28-ago
+
+Sergio pasó `IMG-04-gimnasio.png` (del propio banco) y dijo: *"siento que Lucía se ve muy
+realista, no tan normal como esta de aquí"*. Tiene razón, y la diferencia **no está en la piel**
+— eso ya sale bien. Está en la **dirección de arte de la escena**.
+
+| La de gimnasio — se lee NORMAL | La de la vereda que generé — se lee PRODUCIDA |
+|---|---|
+| Luz cenital de tubo fluorescente, plana y fea | Hora dorada de las cinco |
+| Pelo atado, mechones sueltos, algo sudado | Pelo suelto acomodado |
+| Cero maquillaje, pecas crudas | Igual, pero con luz que favorece |
+| Mira fuera de cuadro, sin pose | Sentada mirando a cámara |
+| Fondo mundano y desordenado: gente en cintas, mancuernas, espejos | Tajibo florecido = postal |
+| Nada combina: azul marino, negro, gris | Todo combina: crema, terracota, ocre |
+| Encuadre apretado, medio torcido | Composición ordenada |
+
+**La regla que sale de acá: para que se vea normal hay que RESTAR, no agregar.** El instinto
+de pedir «foto casual» y a la vez «luz cálida de las cinco» y «tajibo florecido» se contradice:
+la cámara es casual pero la escena es de campaña. Nadie saca esa foto por casualidad.
+
+**Receta «normal» — reemplaza al bloque de escena bonita:**
+
+| Bloque | En vez de… | Poner |
+|---|---|---|
+| **Luz** | «luz cálida y húmeda de las cinco» | «luz de tubo fluorescente de techo, plana» · «mediodía nublado, sin sombras lindas» |
+| **Momento** | un instante bonito | uno cualquiera: esperando, mirando el celular, a mitad de una frase |
+| **Fondo** | un elemento pintoresco | lo mundano que ya está: cables, sillas de plástico, una heladera de gaseosas |
+| **Pose** | mirando a cámara | mirando fuera de cuadro, sin registrar la foto |
+| **Paleta** | armónica | que NO combine — la ropa no juega con la pared |
+| **Encuadre** | centrado | apretado o medio torcido, como quien saca rápido |
+
+⚠️ **Lo que NO se toca**: los rasgos sagrados (pecas, argollas, cadenita) y el anti-plástico
+(«piel con poro y textura real, sin retoque»). Eso ya funciona. Lo que sobra es la belleza de
+la escena, no el realismo de la piel.
+
+---
+
 ## Lo que hay en la web y el MCP no mostraba
 
 Al pasar el mouse sobre una imagen generada aparecen tres acciones:
