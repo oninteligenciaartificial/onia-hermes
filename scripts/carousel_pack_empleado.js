@@ -81,6 +81,9 @@ h1,h2{font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 62.5,'wght
 h1 .g,h2 .g{color:#F59E0B}
 .sub{font-size:32px;line-height:1.4;color:#94A3B8;margin-top:20px;max-width:28ch;
   font-variation-settings:'wght' 600}
+/* Un body con doble salto se dibujaba como un solo bloque: la linea de fuente quedaba
+   pegada al argumento y dejaba de leerse como fuente. */
+.sub + .sub{margin-top:18px}
 
 /* LA FICHA. Blanco sobre azul: el contraste maximo va al unico elemento que importa. */
 .ficha{margin-top:52px;
@@ -119,7 +122,8 @@ h1 .g,h2 .g{color:#F59E0B}
 <body><div class="slide ${role}">
   ${slide.kicker ? `<div class="kicker">${esc(slide.kicker)}</div>` : ''}
   <${esPortada ? 'h1' : 'h2'}>${emph(slide.headline || '')}</${esPortada ? 'h1' : 'h2'}>
-  ${slide.body ? `<p class="sub">${emph(slide.body)}</p>` : ''}
+  ${slide.body ? String(slide.body).split(/\n\s*\n/).map(
+      (par) => `<p class="sub">${emph(par)}</p>`).join('') : ''}
   ${tarjeta}
   <div class="pie"><span class="handle">${esc(acc.handle)}</span>
     <span>${idx + 1} / ${total}</span></div>
