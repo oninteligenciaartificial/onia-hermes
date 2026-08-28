@@ -85,6 +85,26 @@ defecto principal y este molde lo arregla: nadie más va a tener tarjetas de emp
 
 **Molde:** `editorial-photo` con su banco de fotos. Ya probado en L6.
 
+## 🔴 LO PRIMERO: `references/modelos/lucia/BANCO-OFICIAL.md`
+
+**Antes de elegir una sola foto de Lucía se lee ese archivo.** Es una pantalla y dice qué
+carpeta se usa y cuál no. El 28-ago salieron L08 y L09 con `calibracion-20260806`, un banco que
+Sergio había descartado el 15-ago: son salidas del Soul prohibido y la cara sale **con las
+mejillas enrojecidas y sin las argollas de oro**. Sergio lo cazó de una: *"la skin de Lucía que
+usaste no es esa"*.
+
+El dato estaba en `LUCIA.md`… en la línea 90 de 50 KB. **Un doc largo no es una fuente
+consultable.** Ahora: el banco vive en `scripts/lucia_banco.json`, el gate lo valida como lista
+blanca y falla antes de renderizar, y lo descartado se movió a `_ARCHIVO-NO-USAR/`.
+
+**Cómo se reconoce la cara buena:** piel de tono parejo, **pecas contables**, **argollas
+doradas + cadenita**, algo terracota en cuadro. **Si la cara está roja, la foto está mal.**
+
+⬜ Pendiente encontrado al pasar el gate por todo: `lucia-quien-es-fijado.json` repite
+`IMG-05-ugc-selfie.png` en las láminas 1 y 6.
+
+---
+
 🔴 **Trampa del banco de fotos: varias tienen TEXTO GENERADO ILEGIBLE.** `L7` y `L8` traen
 párrafos sin sentido en la pared («Writhe LAlnaisnò de a Cnarvioa»), y `L6` tiene carteles de
 precio. Lucía declara que es IA de frente; que además se le note por un error de renderizado
@@ -99,8 +119,8 @@ Meta. **Arreglarlo es lo primero de esta cuenta.**
 | Pieza | Tema | Estado |
 |---|---|---|
 | L6 | 5 señales | ✅ **declara la IA en la portada y en el cierre** |
-| L08 | **Herramientas que sí sirven** — con HUMO, que ya tiene su PDF | ✅ 7 láminas |
-| L09 | **Cómo se hace una cara que no existe** — detrás de escena, honesto | ✅ 7 láminas · usa su propio defecto como prueba |
+| L08 | **Herramientas que sí sirven** — con HUMO, que ya tiene su PDF | ✅ 7 láminas · **rehecha con el banco oficial** |
+| L09 | **Cómo se hace una cara que no existe** — detrás de escena, honesto | ✅ 7 láminas · **rehecha con el banco oficial** + 1 imagen generada con el ancla |
 
 ---
 

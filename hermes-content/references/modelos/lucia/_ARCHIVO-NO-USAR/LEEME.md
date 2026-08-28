@@ -1,0 +1,25 @@
+# 🔴 Archivo — nada de acá entra en una pieza
+
+Todo lo que está en esta carpeta muestra una cara de Lucía que **Sergio descartó el
+2026-08-15**: *"esas no se usan, no son consistentes."*
+
+Son salidas del Soul `36305a9b`, que se entrenó con frames de un video de una persona real.
+De ahí sale el defecto que las delata: **mejillas y nariz enrojecidas**, con las pecas tapadas
+por la rojez, y sin las argollas doradas. Al lado de una foto del banco vigente se ve que son
+dos acabados distintos.
+
+Se archiva en vez de borrar porque documenta cómo NO tiene que verse, y porque el histórico
+del carril las cita.
+
+| Carpeta | Qué era |
+|---|---|
+| `calibracion-20260806/` | Las 15 de calibración (L1..L15). **Es la que rompió L08 y L09 el 28-ago** |
+| `perfil-20260806/` | Set de perfil con la misma rojez |
+| `avatar-20260806-descartes/` | Descartes de avatar. Dos de ellos son directamente otra cara |
+| `prueba-soul-v3/` | Soul v3: ojos gris azulados y pecas borradas. Perdió el A/B del 22-ago |
+| `prueba-motor-20260813-soul/` | Las dos tomas del Soul perdedor de esa prueba |
+| `L09-assets/` | Recorte de una foto de calibración, usado un día en L09 |
+
+**Lo que sí se usa está en [`../BANCO-OFICIAL.md`](../BANCO-OFICIAL.md).** El gate
+(`scripts/carousel_gate.js`) valida contra esa lista y falla antes de renderizar si alguien
+vuelve a agarrar algo de acá.
