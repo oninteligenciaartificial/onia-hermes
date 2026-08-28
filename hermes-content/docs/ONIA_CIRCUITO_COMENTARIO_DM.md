@@ -11,10 +11,24 @@
 
 ## 0. Veredicto en una línea
 
-**El circuito está ENCENDIDO y recibe eventos reales, pero NUNCA entregó un DM a un lead de
-verdad.** El único DM que Meta aceptó en toda la historia fue el 18-ago, dirigido a Sergio
-mismo, desde un workflow que hoy está APAGADO. El workflow que hoy está activo tiene 0 DMs
-entregados.
+✅ **CORREGIDO 2026-08-28: el circuito ENTREGA.** Ejecución `60728` del workflow activo
+(`1jS4jwmNmvcQpqqH`): `mrsatiras__` comentó "Sistema" en un post de @oniahq y Meta devolvió
+un `message_id` real, no un error. **Es la primera entrega verificada a alguien que no es
+Sergio.**
+
+⚠️ **Lo que cambió no fue el código: fue el comentario.** Los 5 rechazos anteriores tenían
+`from_id` de prueba inventados, que Meta rechaza (`error 100 / 2534014`). Hacía falta que
+comentara una persona real desde una cuenta real. Los arreglos del 27-ago (el IF `Se
+entregó?`, liberar el freno, marcar la ejecución fallida) no causaron la entrega — hacen que
+un fallo se VEA, que es otra cosa y sigue haciendo falta.
+
+> Texto original del veredicto, que quedó viejo y se conserva para que se entienda de dónde
+> venía el dato: *"El circuito está ENCENDIDO y recibe eventos reales, pero NUNCA entregó un
+> DM a un lead de verdad. El único DM que Meta aceptó en toda la historia fue el 18-ago,
+> dirigido a Sergio mismo, desde un workflow que hoy está APAGADO."*
+
+🔶 **Sigue faltando la respuesta pública** al comentario ("Enviado ✅ revisá tu DM"): es otra
+API (`POST /{comment_id}/replies`) y nunca se construyó. Sergio lo notó en la prueba.
 
 **OpenReply: robar idea, no adoptar.** Lo que pide de Meta ya lo tenemos resuelto, así que no
 nos ahorra el setup; lo que sí tiene (cola con reintentos y tope de 750/hora) son dos ideas
