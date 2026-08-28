@@ -278,10 +278,17 @@ gates que faltan (§1.1). Con 0–3 clientes, ninguno de los dos números apriet
    el workflow n8n de SLA. Trabajo: ~2–3 días. Incorporar de BE: seller-router y plantillas
    HSM (someter a Meta 3–4 plantillas base POR RUBRO una sola vez, no por cliente).
 
-3. **Siembra automática desde el intake** — *elimina la sesión artesanal.* Mapper
-   intake→config (tabla §3) + bench de humo por rubro que corre las 10 FAQs y la
-   calificación antes de encender. Trabajo: ~1–2 días. **Coordinar el contrato de campos
-   con el carril del formulario de intake (§3 es la lista mínima).**
+3. **Siembra automática desde el intake** — *elimina la sesión artesanal.*
+   ✅ **Primera mitad HECHA y en producción (2026-08-28):** el editor `/settings/chatbot`
+   abre **PRE-ARMADO con la plantilla del rubro** (`onia-platform/lib/chatbot/plantillas.ts`,
+   commits `bd2350c` + `9585db4`): identidad, horario, cita y servicios típicos del track,
+   con aviso de pre-armado; nada se persiste hasta Publicar, y toda plantilla pasa el
+   validador del motor tal cual (test). Verificado MIRANDO en prod con el probador
+   contestando el horario de la plantilla.
+   **Lo que queda:** mapper intake→config con los datos REALES del alta (tabla §3 — hoy la
+   plantilla usa defaults del rubro, no el horario que la org declaró en su onboarding) +
+   bench de humo por rubro antes de encender. **Coordinar el contrato de campos con el
+   carril del formulario de intake (§3 es la lista mínima).**
 
 Después de eso (no ahora): bandeja dentro de Onia Platform (decisión A→B ya tomada en
 `historial/ONIA_PLATAFORMA_CANALES_Y_CONTENIDO_20260808.md` — el historial del cliente
