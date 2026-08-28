@@ -71,6 +71,26 @@ reserva→agenda — falta widget) están en
 se editó desde acá). n8n tiene dueño de turno (sesión chatbot/infra): nada de
 workflows nuevos desde este carril.
 
+## Iteración 2 del mismo día (commit segundo, pusheado)
+
+Pedido de Sergio: *"tiene que poder conectarse al sistema — ¿cómo por API?"* +
+*"mejora tus diseños"*. Resuelto:
+
+- **Circuito web→sistema implementado hasta el borde del carril**: el template
+  clinic renderiza `inline-quote-form` con `cotizacion` del perfil (form con
+  `src=<slug>` de atribución; sin `accion` = invitación centrada con canales
+  directos, nunca un form muerto). Intake con passthrough de `cotizacion`.
+  Encender el form cuando exista el webhook = UNA línea en el intake.
+- **Blueprint API completo** en `web-factory/docs/CONEXION_WEB_SISTEMA_API.md`:
+  patrón verificado del producto (`lib/n8n-auth.ts`, header `X-N8N-API-KEY`,
+  superficie `/api/n8n/**`), payload propuesto, y TODO por carril: endpoint
+  `POST /api/n8n/web-leads` (~40 líneas, carril producto) + workflow `web-lead`
+  (carril infra, hoy con dueño de turno).
+- **Diseño**: footer clinic rediseñado (marca serif, contacto etiquetado, borde
+  de cierre, scoped), banda de pedido con superficie propia, y fix del link
+  WhatsApp roto en el footer compartido (teléfono crudo en href → wa.me).
+- Gates: 194 unit + 86 e2e verdes, 0 flaky en esta corrida.
+
 ## Próximos pasos del loop
 
 1. Investigar el flaky a11y dark (¿contraste real en dark?).
