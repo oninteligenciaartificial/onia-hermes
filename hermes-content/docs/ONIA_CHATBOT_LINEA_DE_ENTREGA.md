@@ -29,12 +29,11 @@
 2. **Plantilla de bot por cliente sobre el motor BOT-ONIA** — un `config` por cliente + script de alta (inbox, webhook, agentes, n8n).
 3. **Siembra automática desde el formulario de intake** — intake → config del bot + prueba de humo. Sin sesión artesanal.
 
-**🔴 Fecha que manda #1 — 20-oct-2026: Access Verification.** El App Review de la app
-"Onia Bot" quedó **APROBADO** el 2026-08-21 (§1.1), pero Meta exige además completar la
-**Access Verification** antes del **20-oct-2026** o **restringe la app** — así lo dice Meta,
-textual, en el panel. Hoy está **NO INICIADA** y el trámite tarda ~5 días. Si se pasa esa
-fecha no hay botón de auto-conexión y el alta vuelve a ser 100% manual. Es el único trámite
-de Meta que queda abierto.
+**✅ Fecha que mandaba #1 — CERRADA (2026-08-28).** La Access Verification está
+**VERIFICADA** ("Tu negocio se verificó como proveedor de tecnología", mirado en el panel;
+0 acciones requeridas). Con el App Review aprobado el 21-ago, **Meta no debe nada**: el
+deadline del 20-oct dejó de existir. Lo que bloquea el botón ahora es solo trabajo nuestro
+(§1.1: Configuration ID + dominio JS SDK + 3 env vars + prueba con +591).
 
 **🔴 Fecha que manda #2 — 1-oct-2026.** Meta empieza a cobrar las respuestas dentro de la
 ventana de 24 h (~USD 0,0113/mensaje, misma tarifa que utility — tarifa definitiva la
@@ -58,7 +57,7 @@ Verificado 2026-08-21 mirando el panel de Meta logueado + Graph API.
 
 | NO se puede prometer todavía | Qué falta |
 |---|---|
-| "Conectas tu número solo, desde un botón, en 15 minutos" | Falta la Configuración de "Inicio de sesión con Facebook para empresas" (no existe ⇒ no hay `WHATSAPP_CONFIGURATION_ID`), las 3 env vars de Chatwoot (hoy **vacías**) y la Access Verification (§1.1) |
+| "Conectas tu número solo, desde un botón, en 15 minutos" | Falta la Configuración de "Inicio de sesión con Facebook para empresas" (no existe ⇒ no hay `WHATSAPP_CONFIGURATION_ID`) y las 3 env vars de Chatwoot (hoy **vacías**). La Access Verification ya está ✅ (§1.1) |
 | "Tu propia WABA con tu propia factura de Meta" | Depende del mismo botón. Hoy el número entra bajo NUESTRA WABA, y eso tiene techos duros (§1.2): solo pilotos con consentimiento escrito |
 | "Coexistencia: seguís usando tu app de WhatsApp Business" | Llega con el Embedded Signup, y además nunca se probó con un +591 |
 
@@ -99,15 +98,15 @@ Runbook completo en `historial/ONIA_META_WHATSAPP_CLIENTES_20260808.md` §2. Res
 | Verificación del negocio (OniaAgency, 1451773736711697) | ✅ `verification_status: verified` | — |
 | App "Onia Bot" (1078962684709749) en live mode | ✅ publicada, **0 acciones requeridas** | — |
 | App Review de `whatsapp_business_messaging` + `whatsapp_business_management` + `public_profile` | ✅ **APROBADO el 2026-08-21 09:59 GMT-4** — los tres en **acceso avanzado** (`live`) | — (ya salió) |
-| **Access Verification (formulario)** | 🔴 **NO INICIADA · vence el 20-oct-2026.** Meta avisa textual que **restringe la app** si no se completa | ~5 días |
-| Configuración "Inicio de sesión con Facebook para empresas" → de ahí sale el `WHATSAPP_CONFIGURATION_ID` | 🔴 **no existe ninguna** ⇒ hoy no hay Configuration ID | ~30 min nuestro |
-| Dominio del JS SDK autorizado en la app | 🔴 pendiente (ver la ambigüedad de hostname abajo) | ~10 min nuestro |
-| Las 3 env vars de Chatwoot (`WHATSAPP_APP_ID`, `WHATSAPP_APP_SECRET`, `WHATSAPP_CONFIGURATION_ID`) + **probar el flujo con un número real** | 🔴 las tres están **VACÍAS** | ~2–4 h nuestro (una vez) |
+| **Access Verification (formulario)** | ✅ **VERIFICADA — mirada en el panel el 2026-08-28** ("proveedor de tecnología"; 0 acciones requeridas) | — (ya salió) |
+| Configuración "Inicio de sesión con Facebook para empresas" | ✅ **existe: "Onia Embedded Signup", ID `1824225392073753`** (variación Registro insertado de WhatsApp, token de system user que no caduca, activos Cuentas de WhatsApp — inspeccionada 2026-08-28) | — |
+| Dominio del JS SDK autorizado en la app | ✅ **hecho 2026-08-28**: toggle "Iniciar sesión con el SDK para JavaScript" en Sí + dominio `https://chat.onia.com.bo`. **Regla: el popup se abre SIEMPRE desde chat.onia.com.bo** (es el FRONTEND_URL de Chatwoot; la ambigüedad de hostname se resolvió por regla, no autorizando los dos) | — |
+| Las 3 env vars de Chatwoot (`WHATSAPP_APP_ID`, `WHATSAPP_APP_SECRET`, `WHATSAPP_CONFIGURATION_ID`) | ✅ **cargadas 2026-08-28** vía rails runner (InstallationConfig + clear_cache; el secret copiado server-side desde webhook.env, validado antes contra Graph). | — |
+| **Probar el flujo completo con un +591 real** (incluye la prueba de coexistencia de 20 min) | 🔴 **ÚNICO paso que falta — lo hace Sergio**: chat.onia.com.bo → Add Inbox → WhatsApp → "Connect with WhatsApp Business" | ~15 min |
 
-Con el App Review aprobado el techo de onboarding sube (10/semana por default → 200/semana
-con los gates completos), pero **eso no encendió el botón**: sin Configuration ID y sin env
-vars el Embedded Signup no existe en nuestro Chatwoot. El trámite nunca bloqueó vender;
-sigue bloqueando el *botón*.
+Con los gates completos el techo de onboarding sube (10/semana → 200/semana). **El botón quedó
+encendido el 2026-08-28** (Configuration ID + SDK/dominio + env vars): lo único sin verificar
+es el popup con un número real — hasta pasar esa prueba, NO se le promete a ningún cliente.
 
 **⚠️ Ambigüedad a resolver ANTES de autorizar el dominio:** hay **dos hostnames del mismo
 Chatwoot** — `chat.onia.com.bo` y el de Easypanel (que es al que apunta el webhook).
@@ -147,10 +146,9 @@ escrito**, no más.
 ### 1.3 Veredicto
 
 - **Hoy:** manual bajo nuestra WABA, solo para cerrar los primeros pilotos. ~1 h nuestra por número.
-- **Camino real (ya no depende del App Review — salió aprobado el 2026-08-21):** Embedded
-  Signup vía Chatwoot. Lo que queda es ~1 día de trabajo NUESTRO (Configuration ID +
-  dominio + 3 env vars + prueba con un número real) más la **Access Verification**: ~5 días
-  de espera de Meta y **vence el 20-oct-2026**. Costo por cliente una vez encendido: ~5 min
+- **Camino real (Meta completo: App Review 21-ago + Access Verification ✅ 28-ago):**
+  Embedded Signup vía Chatwoot. Lo que queda es ~1 día de trabajo NUESTRO (Configuration
+  ID + dominio + 3 env vars + prueba con un número real). Cero espera de Meta. Costo por cliente una vez encendido: ~5 min
   nuestros, ~15 min del cliente. **Es lo más fácil y rápido "desde Meta" que existe, y ya
   está instalado.**
 
@@ -262,15 +260,14 @@ gates que faltan (§1.1). Con 0–3 clientes, ninguno de los dos números apriet
 ## 5. Qué falta construir (poco), por impacto
 
 1. **Encender Embedded Signup en Chatwoot** — *destraba la conexión en minutos y la WABA
-   propia del cliente antes del 1-oct.* (a) App Review ✅ **aprobado el 2026-08-21**, los 3
-   permisos en acceso avanzado — este paso ya no existe; (b) 🔴 **Access Verification: NO
-   INICIADA, vence el 20-oct-2026** (~5 días; Meta restringe la app si se pasa) — es el
-   único trámite abierto y arranca esta semana, no en octubre; (c) crear la Configuración
+   propia del cliente antes del 1-oct.* (a) App Review ✅ **aprobado el 2026-08-21** — este
+   paso ya no existe; (b) ✅ **Access Verification VERIFICADA (2026-08-28, mirada en el
+   panel)** — tampoco existe ya; (c) crear la Configuración
    de "Inicio de sesión con Facebook para empresas" (hoy no existe ninguna), autorizar el
    dominio del JS SDK — resolviendo antes cuál de los dos hostnames sirve el popup (§1.1) —
    y setear las 3 env vars, hoy vacías; (d) **probar el flujo completo con un número real y
    MIRARLO** (riesgo self-hosted §1.1).
-   Trabajo nuestro: ~1 día. Espera de Meta: ~5 días (Access Verification). Código: cero.
+   Trabajo nuestro: ~1 día. Espera de Meta: CERO. Código: cero.
 
 2. **Plantilla de bot por cliente sobre BOT-ONIA + script de alta** — *convierte el alta en
    un comando.* Un `config-<cliente>.mjs` generado desde plantilla por rubro + script que

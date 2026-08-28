@@ -6,6 +6,65 @@
 
 ---
 
+> ⚠️ SEGUNDA PASADA del mismo dia (Sergio contesto las 5 preguntas y amplio el alcance).
+> Lo de abajo se conserva; esto es lo NUEVO de la tarde-noche:
+
+## Pasada 2 (2026-08-28 noche) — los 4 frentes de Sergio
+
+1. **Auto check-in (Embedded Signup): ENCENDIDO del lado servidor.** Verificado en el
+   panel de Meta con la sesion de Sergio: Access Verification ✅ ("proveedor de
+   tecnologia"), configuracion "Onia Embedded Signup" ya existia (ID 1824225392073753,
+   variacion Registro insertado de WhatsApp, token que no caduca). Hecho hoy: SDK de
+   JavaScript en Si + dominio `https://chat.onia.com.bo` autorizado (regla: el popup se
+   abre SIEMPRE desde ese host) + las 3 InstallationConfigs en Chatwoot via rails runner
+   (secret copiado server-side desde webhook.env, validado contra Graph antes; jamas
+   impreso). **FALTA SOLO: la prueba del popup con un +591 real — la hace Sergio**
+   (chat.onia.com.bo → Add Inbox → WhatsApp → Connect with WhatsApp Business).
+2. **FAQ del negocio (id "negocio") — VIVA punta a punta.** Motor: FAQ_TEMPLATE.negocio,
+   el recepcionista la consume como lista (tags = disparadores, match de palabra entera),
+   R_FAQ_NEGOCIO, checkFaqNegocio (sin disparador se rechaza entero). Platform: validador
+   espejo + Bloque E en el editor (pregunta/respuesta/palabras). Control de calidad =
+   guardrails en ambos lados + todo-o-nada + vigencia. E2E EN PROD: FAQ escrita en el
+   editor y contestada por el probador via el motor real. Commits: motor en este repo;
+   platform ef6cd06 (deployado, BUILD_ID XpAGQVBjukfE50fZacoBm).
+3. **Pagos QR BCP — circuito COMPLETO en mock.** /bcp/cobrar (humano, Bearer) genera QR
+   → imagen a la conversacion; /bcp/callback (Basic del banco) → "✅ Pago recibido" en el
+   mismo hilo. Contrato del banco calcado (State 000/003/099; Collectors llevan la
+   conversacion: stateless). Verificado MIRANDO en la conversacion QA 27 (msgs 186/187).
+   Para modo real faltan: credenciales del banco + mTLS (.pfx) — el codigo no cambia.
+   Env mock en webhook.env (BCP_MODE=mock + callback fake).
+4. **Telegram = SOLO errores.** Silenciado: reporte diario de seguridad (IPs baneadas),
+   digest semanal, briefing diario, agenda+energia, reporte Sergio+Arthur (Arthur ya no
+   colabora), vigilante n8n del chatbot (duplicaba al watchdog y daria falsa alarma con
+   source=db), barridos n8n (duplicaban el cron del VPS desde el 16-ago), building in
+   public (su propia descripcion decia DESACTIVADO). El watchdog ahora avisa: bot caido
+   (1/incidente + recuperacion) y BOT MUDO hacia Chatwoot (el fallo que /health no ve).
+   Mensaje de prueba enviado y confirmable en su Telegram.
+
+### 🔴 El hallazgo mas caro de la pasada 2
+
+**El bot estuvo MUDO hacia Chatwoot desde el reboot del 24-ago** — el proceso revivio a
+las 19:20 pero sus POST a Chatwoot (respuestas reales) y el fetch de conocimiento db
+(center→platform:3000) seguian rotos: el attachment de onia-center a la red overlay
+easypanel quedo rancio (resolvia la VIP 10.11.0.16 sin retorno). /health no lo ve (la
+base va por supabase-kong:8000). **Fix**: `docker network disconnect easypanel
+onia-center && docker network connect --alias onia-center easypanel onia-center`.
+El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
+
+### Pendientes que quedaron de la pasada 2
+
+- Los agentes n8n que SI trabajan (Vendedor, Contenido, Finanzas, Prospector, Radar IA,
+  Web Factory Radar) siguen avisando por Telegram al terminar — para silenciarlos hay que
+  editar cada workflow (no apagarlo: hacen trabajo). Decision de Sergio pendiente, igual
+  que los recordatorios de agenda cada 30 min.
+- Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
+  como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
+- La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- El QR mock y el "pago recibido" quedaron en la conversacion QA 27 (basura QA inofensiva,
+  misma limpieza pendiente de siempre).
+
+---
+
 **Objetivo**
 
 Entender el estado real del chatbot como producto de la plataforma contra los referentes
@@ -119,10 +178,10 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
 
 **Qué depende de Sergio**
 
-1. 🔴 **Access Verification de Meta — NO iniciada, vence el 20-oct** (~5 días de trámite; si
-   pasa la fecha, Meta restringe la app y se cae el Embedded Signup entero). Es EL bloqueo
-   del "auto check-in". Después quedan ~1 día nuestro (Configuration ID + dominio JS SDK +
-   3 env vars + prueba con un +591 real).
+1. ✅ **Access Verification de Meta: VERIFICADA** (mirada en el panel el 2026-08-28 con la
+   sesión de Sergio — "proveedor de tecnología", 0 acciones requeridas). Meta no debe nada.
+   Queda ~1 día nuestro (Configuration ID + dominio JS SDK + 3 env vars) + la prueba con un
+   +591 real de Sergio.
 2. **Alta bancaria BCP** — gatea "pagos en el chat" (QR dinámico como imagen + aprobación
    del dueño; la plomería del motor ya existe). Sin banco no hay código que lo destrabe.
 3. **Decisión FAQ genérica por cliente** (`id:"negocio"`): un commit al motor y las FAQs
