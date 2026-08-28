@@ -23,6 +23,7 @@
 
 import * as intents from "./intents.mjs";
 import { normalize } from "./guardrails.mjs";
+import { faqVigente } from "./knowledge.mjs";
 
 /**
  * El menu de BOTONES del recepcionista (Chatwoot `content_type: input_select`).
@@ -80,6 +81,28 @@ export function catalogoCliente(conocimiento) {
  * @param {object} base   estado con lastInboundAt ya actualizado
  * @param {object} motor  { finalize, handoffResult, say } — los helpers privados de bot-engine
  */
+/**
+ * La FAQ del negocio que matchea el mensaje, o null. Match de PALABRA ENTERA sobre el texto
+ * normalizado ("iva" no salta con "activa"); los tags los escribio el dueño y ya pasaron el
+ * guardrail al publicarse. Vigencia contra msg.receivedAt (el motor es determinista: cero
+ * Date.now()); una FAQ con vencimiento y sin fecha de mensaje NO se sirve (fail-closed).
+ */
+export function faqNegocioVigente(conocimiento, norm, nowIso) {
+  const items = Array.isArray(conocimiento?.faq) ? conocimiento.faq : [];
+  const texto = String(norm || "");
+  if (!texto) return null;
+  for (const item of items) {
+    if (!item || item.id !== "negocio" || !faqVigente(item, nowIso)) continue;
+    for (const tag of Array.isArray(item.tags) ? item.tags : []) {
+      const palabra = normalize(tag).trim();
+      if (palabra.length < 3) continue;
+      const escapada = [...palabra].map((c) => ("[](){}.*+?^$|\\".includes(c) ? "\\" + c : c)).join("");
+      if (new RegExp(`(^|[^a-z0-9])${escapada}([^a-z0-9]|$)`).test(texto)) return item;
+    }
+  }
+  return null;
+}
+
 export function recepcionistaStep(ctx, base, motor) {
   const { config, msg } = ctx;
   const { finalize, handoffResult, say } = motor;
@@ -165,6 +188,11 @@ export function recepcionistaStep(ctx, base, motor) {
       ? faq(say("R_SERVICIOS", next, config, { catalogo_cliente: catalogo }), "faq:servicios")
       : deriva("sin_dato_catalogo", "R_NO_DATO");
   }
+
+  // La FAQ editable del dueño — DESPUES de los candados del guion (precio/pedido/queja ganan
+  // siempre) y de las FAQ fijas, ANTES de derivar por fuera de guion.
+  const faqNegocio = faqNegocioVigente(k, msg.norm, msg.receivedAt);
+  if (faqNegocio) return faq(say("R_FAQ_NEGOCIO", next, config, { faq_respuesta: faqNegocio.body }), "faq:negocio");
 
   // "gracias" / "nos vemos": no es una consulta, no se molesta a nadie.
   if (intents.isCourtesy(msg.norm)) return finalize(ctx, next, [], [], ["cortesia_sin_respuesta"]);

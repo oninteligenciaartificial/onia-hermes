@@ -57,7 +57,14 @@ export const DEFAULT_KNOWLEDGE_FILE = fileURLToPath(new URL("./knowledge.json", 
  * Un `faq[].id` que no este aca RECHAZA el archivo: una FAQ sin consumidor es una edicion que no
  * hace nada, o sea el fallo silencioso que esta capa existe para evitar.
  */
-export const FAQ_TEMPLATE = Object.freeze({ siat: "M_SIAT_BODY" });
+export const FAQ_TEMPLATE = Object.freeze({
+  siat: "M_SIAT_BODY",
+  // "negocio": la FAQ editable del dueño (decision Sergio 2026-08-28). NO pisa un mensaje del
+  // guion: el recepcionista la consume como LISTA (varias FAQs, cada una con sus tags como
+  // disparadores) y la sirve via la plantilla R_FAQ_NEGOCIO. Control de calidad: guardrails
+  // sobre cada texto + checkFaqNegocio (sin disparador se rechaza) + vigencia.
+  negocio: "R_FAQ_NEGOCIO",
+});
 
 // ---------------------------------------------------------------------------
 // Allowlist estricto (el candado estructural)
@@ -349,6 +356,22 @@ function checkRubros(rubros, errors) {
  * @returns {{ok: boolean, errors: string[]}} `ok:false` = el archivo se descarta ENTERO.
  * Nunca tira: un JSON con un getter hostil no puede tumbar el bot.
  */
+/** La FAQ del negocio SIN palabras disparadoras nunca se va a servir: se rechaza al publicar,
+ *  con el motivo claro, en vez de aceptar una edicion que no hace nada (fallo silencioso). */
+function checkFaqNegocio(faq, errors) {
+  if (!Array.isArray(faq)) return;
+  faq.forEach((item, index) => {
+    if (!item || item.id !== "negocio") return;
+    const tags = Array.isArray(item.tags) ? item.tags : [];
+    const utiles = tags.filter((tag) => normalize(tag).trim().length >= MIN_LEXICON_WORD);
+    if (!utiles.length) {
+      errors.push(
+        `faq[${index}]: la FAQ del negocio necesita al menos una palabra disparadora de ${MIN_LEXICON_WORD}+ letras en tags — sin eso el bot nunca la usa`,
+      );
+    }
+  });
+}
+
 export function validateKnowledge(data) {
   const errors = [];
   try {
@@ -357,6 +380,7 @@ export function validateKnowledge(data) {
     checkDemo(data.demo, errors);
     checkProductos(data.productos, errors);
     checkRubros(data.rubrosExtra, errors);
+    checkFaqNegocio(data.faq, errors);
   } catch (error) {
     errors.push(`no se pudo validar: ${String(error?.message || error).slice(0, 160)}`);
   }
@@ -698,7 +722,7 @@ export function knowledgeHealth(options = {}) {
 // ---------------------------------------------------------------------------
 
 /** Una FAQ vencida NO se sirve: el bot afirmando algo que ya no es cierto es el peor daño. */
-function faqVigente(item, nowIso) {
+export function faqVigente(item, nowIso) {
   if (item.status !== "publicado") return false;
   if (!item.vigenteHasta) return true;
   const raw = String(item.vigenteHasta);
@@ -753,6 +777,9 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
 
   const script = {};
   for (const item of Array.isArray(data.faq) ? data.faq : []) {
+    // "negocio" NO pisa el guion: son N entradas y las consume el recepcionista como lista
+    // (recepcionista.mjs, faqNegocioVigente). Pisar script[R_FAQ_NEGOCIO] dejaria solo la ultima.
+    if (item?.id === "negocio") continue;
     const templateKey = FAQ_TEMPLATE[item?.id];
     if (templateKey && faqVigente(item, nowIso)) script[templateKey] = item.body;
   }

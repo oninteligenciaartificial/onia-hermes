@@ -44,6 +44,7 @@ import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
 import { knowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
+import { handlePreviewRequest } from "./preview-route.mjs";
 
 export const DEFAULT_PORT = 3020;
 export const DEFAULT_MAX_BODY_BYTES = 1024 * 1024;
@@ -414,6 +415,22 @@ export function createWebhookServer(deps = {}) {
         estado = { ok: false, service: "onia-chatbot-webhook", error: String(error?.message || error).slice(0, 200) };
       }
       writeJson(res, 200, estado);
+      return;
+    }
+
+    if (req.method === "POST" && url.split("?")[0].replace(/\/+$/, "") === "/preview") {
+      // Probador del editor de conocimiento: valida un BORRADOR y corre un turno
+      // real del motor contra el. Nunca toca la base ni conversaciones vivas.
+      let out;
+      try {
+        const { tooLarge, body } = await readBody(req, config.maxBodyBytes);
+        out = tooLarge
+          ? { status: 413, body: { ok: false, error: "payload_demasiado_grande" } }
+          : await handlePreviewRequest({ rawBody: body, headers: req.headers });
+      } catch (error) {
+        out = { status: 500, body: { ok: false, error: String(error?.message || error).slice(0, 200) } };
+      }
+      writeJson(res, out.status, out.body);
       return;
     }
 

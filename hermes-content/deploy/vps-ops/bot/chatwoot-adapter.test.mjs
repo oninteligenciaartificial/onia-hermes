@@ -136,8 +136,18 @@ test("message_created entrante -> turno correcto (channel/contact_ref/message_ke
   assert.equal(parsed.turn.message_key, "chatwoot:2:13");
   assert.equal(parsed.turn.received_at, "2026-07-26T15:24:09.329Z");
   assert.equal(parsed.turn.display_name, "Prospecto Prueba ONIA");
+  assert.equal(parsed.turn.inbox_id, "3", "el inbox top-level resuelve de que cliente es la conversacion");
   assert.equal(parsed.meta.conversationId, "2");
   assert.equal(parsed.meta.messageId, "13");
+});
+
+test("inbox_id: sin inbox top-level cae a conversation.inbox_id, y sin ninguno queda null", () => {
+  const sinTop = parseChatwootWebhook(incomingFixture({ inbox: undefined }));
+  assert.equal(sinTop.turn.inbox_id, "3", "respaldo: conversation.inbox_id");
+  const sinNada = parseChatwootWebhook(
+    incomingFixture({ inbox: undefined, conversation: { id: 2, contact_inbox: { source_id: "x" } } }),
+  );
+  assert.equal(sinNada.turn.inbox_id, null, "sin inbox el turno sigue: conocimiento de Onia como siempre");
 });
 
 test("REGLA DE ORO: message_created saliente se ignora (si no, el bot se contesta a si mismo)", () => {
@@ -287,6 +297,7 @@ test("conversation_created CON el primer mensaje embebido: arma el turno (messag
   assert.equal(parsed.turn.text, "info porfa");
   assert.equal(parsed.turn.message_key, "chatwoot:5:20");
   assert.equal(parsed.turn.received_at, "2026-07-26T15:24:09.000Z", "epoch-segundos convertido a ISO");
+  assert.equal(parsed.turn.inbox_id, "3", "en conversation_created el inbox es el de la conversacion misma");
 });
 
 test("conversation_created con el primer mensaje saliente embebido: se ignora igual", () => {
@@ -419,6 +430,99 @@ test("readPayload: sin stdin y sin CHATWOOT_WEBHOOK_B64, tira un error claro (lo
 });
 
 // ---------------------------------------------------------------------------
+// 2b. message_updated — EL CLICK DE UN BOTON (input_select) no crea mensaje nuevo:
+// Chatwoot escribe submitted_values SOBRE el mensaje saliente original (verificado en vivo
+// contra el 4.12.1 del VPS, 2026-08-18, conversacion 26 / mensaje 128).
+// ---------------------------------------------------------------------------
+
+/** La forma REAL: el mensaje del menu (outgoing) con items + submitted_values tras el click. */
+function buttonClickFixture(overrides = {}) {
+  return {
+    event: "message_updated",
+    id: 128,
+    content: "¡Hola! Soy el asistente de ZZ QA Ferreteria Tornillo 🙂",
+    content_type: "input_select",
+    content_attributes: {
+      items: [
+        { title: "Horarios", value: "horarios" },
+        { title: "Servicios", value: "servicios" },
+        { title: "Hablar con Sergio", value: "hablar con una persona" },
+      ],
+      submitted_values: [{ title: "Horarios", value: "horarios" }],
+    },
+    message_type: "outgoing", // el mensaje original es DEL BOT: el click no cambia eso
+    private: false,
+    created_at: "2026-08-18T04:30:40.000Z",
+    sender: { id: 3, name: "Onia Bot", type: "user" }, // el sender es el bot, NO el contacto
+    inbox: { id: 7, name: "ZZ QA Clinica Chatbot" },
+    account: { id: 2, name: "OnIA Agency" },
+    conversation: { id: 26, inbox_id: 7, contact_inbox: { source_id: "qa-widget" } },
+    ...overrides,
+  };
+}
+
+test("click de botón (message_updated con submitted_values) -> turno INBOUND con el título elegido", () => {
+  const parsed = parseChatwootWebhook(buttonClickFixture());
+  assert.equal(parsed.skip, false);
+  assert.equal(parsed.turn.text, "Horarios", "el título es lo que el contacto vio y lo que el motor rutea");
+  assert.equal(parsed.turn.kind, "text");
+  assert.equal(parsed.turn.contact_ref, "26");
+  assert.equal(parsed.turn.inbox_id, "7", "el inbox sigue resolviendo la org del cliente");
+  assert.equal(
+    parsed.turn.message_key,
+    "chatwoot:26:128:select:horarios",
+    "la clave lleva el valor elegido: un message_updated re-disparado no procesa el click dos veces",
+  );
+  assert.equal(parsed.meta.conversationId, "26");
+});
+
+test("message_updated SIN submitted_values (o sin botones) se skipea: solo el click entra al motor", () => {
+  const sinClick = parseChatwootWebhook(buttonClickFixture({ content_attributes: { items: [{ title: "Horarios", value: "horarios" }] } }));
+  assert.equal(sinClick.skip, true);
+  assert.equal(sinClick.reason, "sin_valor_elegido");
+
+  const textoPlano = parseChatwootWebhook(buttonClickFixture({ content_type: "text", content_attributes: {} }));
+  assert.equal(textoPlano.skip, true);
+  assert.equal(textoPlano.reason, "update_sin_botones", "editar un mensaje comun no dispara al bot");
+
+  const privado = parseChatwootWebhook(buttonClickFixture({ private: true }));
+  assert.equal(privado.skip, true);
+
+  const vacio = parseChatwootWebhook(buttonClickFixture({ content_attributes: { submitted_values: [] } }));
+  assert.equal(vacio.skip, true);
+});
+
+test("click de botón: corre el motor y postea la respuesta (orquestación completa)", async () => {
+  const { calls, client } = fakeClient2();
+  let visto = null;
+  const result = await runChatwootTurn(buttonClickFixture(), {
+    client,
+    runTurn: async (turn) => {
+      visto = turn;
+      return { ok: true, duplicate: false, send: [{ text: "Atendemos lun-vie, 8:00-18:00. ¿Te ayudo con algo más?" }], warnings: [] };
+    },
+  });
+  assert.equal(visto.text, "Horarios");
+  assert.equal(result.skipped, false);
+  assert.deepEqual(calls.map((c) => c.text), ["Atendemos lun-vie, 8:00-18:00. ¿Te ayudo con algo más?"]);
+});
+
+// fakeClient() se declara más abajo (sección 4); esta variante local evita mover código.
+function fakeClient2() {
+  const calls = [];
+  return {
+    calls,
+    client: {
+      warnings: [],
+      async sendMessage(conversationId, text) {
+        calls.push({ conversationId, text });
+        return { id: calls.length };
+      },
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
 // 3. createChatwootClient — el POST y la tolerancia
 // ---------------------------------------------------------------------------
 
@@ -488,6 +592,100 @@ test("whatsappTemplate arma el formato `enhanced` que espera Chatwoot: claves de
   });
   // Las claves son STRINGS "1"/"2" (JSON no distingue, pero el lado Ruby si).
   assert.deepEqual(Object.keys(whatsappTemplate("x", ["a", "b"]).processed_params.body), ["1", "2"]);
+});
+
+test("con `interactive`, el POST sale como input_select: content_type + content_attributes.items (y recorta a 3)", async () => {
+  // input_select es el UNICO content type que sirve en los DOS canales: el widget lo renderiza
+  // como opciones y Chatwoot lo traduce a reply buttons de WhatsApp (PR #6886, max 3).
+  const requests = [];
+  const client = createChatwootClient({
+    baseUrl: "https://sb.test",
+    accountId: "2",
+    token: "tok",
+    fetch: async (url, init) => {
+      requests.push(JSON.parse(init.body));
+      return { ok: true, status: 200, text: async () => "{}" };
+    },
+  });
+
+  const items = [
+    { title: "Horarios", value: "horarios" },
+    { title: "Servicios", value: "servicios" },
+    { title: "Hablar con Sergio", value: "hablar con una persona" },
+    { title: "Una cuarta de mas", value: "sobra" },
+  ];
+  await client.sendMessage("7", "¿En qué te ayudo?", null, { items });
+
+  assert.equal(requests[0].content_type, "input_select");
+  assert.deepEqual(requests[0].content_attributes.items, items.slice(0, 3), "reply buttons de WhatsApp: max 3");
+  assert.equal(requests[0].content, "¿En qué te ayudo?", "el texto sigue viajando: es la base si el canal no soporta interactivos");
+
+  await client.sendMessage("7", "texto plano");
+  assert.ok(!("content_type" in requests[1]), "sin items el POST es el de siempre");
+  assert.ok(!("content_attributes" in requests[1]));
+});
+
+// ---------------------------------------------------------------------------
+// 3b. sendAttachment — plomeria de adjuntos SALIENTES (QR del BCP / fotos de catalogo).
+// Sin uso automatico todavia: ningun flujo del motor la llama (YAGNI hasta el QR real).
+// ---------------------------------------------------------------------------
+
+test("sendAttachment arma el multipart: attachments[], message_type outgoing, token — y SIN Content-Type a mano", async () => {
+  const requests = [];
+  const client = createChatwootClient({
+    baseUrl: "https://sb.test",
+    accountId: "2",
+    token: "tok",
+    fetch: async (url, init) => {
+      requests.push({ url: String(url), init });
+      return { ok: true, status: 200, text: async () => JSON.stringify({ id: 71 }) };
+    },
+  });
+
+  const result = await client.sendAttachment("9", {
+    buffer: Buffer.from("png-bytes"),
+    filename: "qr-bcp.png",
+    contentType: "image/png",
+    caption: "Escaneá y pagá el monto exacto",
+  });
+
+  assert.deepEqual(result, { id: 71 });
+  const { url, init } = requests[0];
+  assert.equal(url, "https://sb.test/api/v1/accounts/2/conversations/9/messages");
+  assert.equal(init.method, "POST");
+  assert.equal(init.headers.api_access_token, "tok");
+  assert.ok(!("Content-Type" in init.headers), "el boundary del multipart lo pone fetch, no nosotros");
+  assert.ok(init.body instanceof FormData, "multipart/form-data, no JSON");
+  assert.equal(init.body.get("message_type"), "outgoing");
+  assert.equal(init.body.get("content"), "Escaneá y pagá el monto exacto");
+  const file = init.body.get("attachments[]");
+  assert.equal(file.name, "qr-bcp.png");
+  assert.equal(file.type, "image/png");
+  assert.equal(file.size, 9, "los bytes viajan completos");
+});
+
+test("sendAttachment es tolerante: sin token o sin bytes devuelve null con el motivo, sin tocar la red", async () => {
+  const nuncaLlama = async () => {
+    throw new Error("no debería llamar a la red");
+  };
+  const sinToken = createChatwootClient({ baseUrl: "https://sb.test", accountId: "2", token: "", fetch: nuncaLlama });
+  assert.equal(await sinToken.sendAttachment("9", { buffer: Buffer.from("x") }), null);
+  assert.match(sinToken.warnings[0], /sin token/);
+
+  const client = createChatwootClient({ baseUrl: "https://sb.test", accountId: "2", token: "tok", fetch: nuncaLlama });
+  assert.equal(await client.sendAttachment("9", { buffer: Buffer.alloc(0) }), null);
+  assert.equal(await client.sendAttachment("9", {}), null);
+  assert.match(client.warnings[0], /adjunto sin contenido/);
+
+  // Y un 4xx real tampoco tira: null + warning, mismo contrato que sendMessage.
+  const rechaza = createChatwootClient({
+    baseUrl: "https://sb.test",
+    accountId: "2",
+    token: "tok",
+    fetch: async () => ({ ok: false, status: 401, text: async () => "unauthorized" }),
+  });
+  assert.equal(await rechaza.sendAttachment("9", { buffer: Buffer.from("x") }), null);
+  assert.match(rechaza.warnings[0], /HTTP 401/);
 });
 
 test("sendMessage con texto vacio no llama a la red", async () => {
@@ -578,6 +776,35 @@ test("entrante: llama al motor UNA vez y postea cada mensaje de send[] en orden"
   assert.equal(result.sent.length, 2);
   assert.deepEqual(calls.map((c) => c.text), ["M0 disclosure", "M0 preguntas"]);
   assert.ok(calls.every((c) => c.conversationId === "2"));
+});
+
+test("una respuesta del motor CON `options` viaja como interactive al cliente y se reporta en sent[]", async () => {
+  const calls = [];
+  const client = {
+    warnings: [],
+    async sendMessage(conversationId, text, templateParams, interactive) {
+      calls.push({ conversationId, text, templateParams, interactive });
+      return { id: calls.length };
+    },
+  };
+  const options = [
+    { title: "Horarios", value: "horarios" },
+    { title: "Servicios", value: "servicios" },
+    { title: "Hablar con Sergio", value: "hablar con una persona" },
+  ];
+  const fakeRunTurn = async () => ({
+    ok: true,
+    duplicate: false,
+    send: [{ text: "¡Hola! ¿En qué te ayudo?", options }, { text: "texto plano sin botones" }],
+    warnings: [],
+  });
+
+  const result = await runChatwootTurn(incomingFixture(), { runTurn: fakeRunTurn, client });
+
+  assert.deepEqual(calls[0].interactive, { items: options }, "los botones llegan al POST del cliente");
+  assert.equal(calls[1].interactive, null, "la respuesta sin options sale plana");
+  assert.deepEqual(result.sent[0].options, options, "sent[] lo reporta: un curl de verificacion los ve sin abrir el widget");
+  assert.ok(!("options" in result.sent[1]));
 });
 
 test("saliente (eco del propio bot o de un humano en la UI): NO llama al motor ni al cliente — sin loop", async () => {

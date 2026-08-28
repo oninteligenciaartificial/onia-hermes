@@ -285,6 +285,71 @@ export const SCRIPT = Object.freeze({
   PENDING_CALIFICACION: "Volviendo a lo nuestro: me falta {{dato_faltante}} — ¿me lo pasás?",
   PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?",
   PENDING_AGENDADA: "Igual ya quedamos para **{{dia_hora_elegida}}**.",
+
+  // -------------------------------------------------------------------------
+  // MODO RECEPCIONISTA — el bot de un CLIENTE de Onia (config.modo === "recepcionista").
+  // Se activa SOLO cuando el conocimiento vino de la fila publicada de una org (fuente "db"):
+  // el bot se presenta como el asistente DEL NEGOCIO y atiende como recepcionista. El funnel de
+  // venta (DEMO, calificacion, M4) es EXCLUSIVO del modo venta y no aparece aca. {{producto}} y
+  // {{humano}} salen del knowledge de la org, no de Onia. Ver recepcionista.mjs.
+  // -------------------------------------------------------------------------
+
+  // M0R — saludo. Se declara bot (D2) y ofrece lo unico que sabe hacer: horarios, servicios,
+  // tomar un pedido. No promete agendar solo: lo confirma el humano del negocio.
+  M0R: [
+    "¡Hola! Soy el asistente de {{producto}} 🙂",
+    "",
+    "Te puedo contar nuestros horarios y qué ofrecemos, o tomar tu pedido para que te lo confirme {{humano}}.",
+    "",
+    "¿En qué te ayudo?",
+  ].join("\n"),
+
+  // M0R_INTRO — cuando el PRIMER mensaje ya trae una pregunta concreta: se contesta la pregunta,
+  // pero el bot igual se presenta como el asistente del negocio (D2, sin excepcion).
+  M0R_INTRO: "¡Hola! Soy el asistente de {{producto}} 🙂",
+
+  R_HORARIO: "Atendemos {{horario_frase}}. ¿Te ayudo con algo más?",
+
+  // La FAQ editable del dueño: el cuerpo YA paso el guardrail al publicarse (todo-o-nada);
+  // la plantilla solo lo sirve. Ver knowledge.mjs FAQ_TEMPLATE.negocio y recepcionista.mjs.
+  R_FAQ_NEGOCIO: "{{faq_respuesta}}",
+
+  // {{catalogo_cliente}} lo arma recepcionista.mjs desde `conocimiento.productos` (el catalogo
+  // publicado de la org). NO pasa por MODULOS_LISTOS: ese candado protege promesas de software
+  // de Onia; el catalogo de un cliente son hechos suyos ya validados por el guardrail.
+  R_SERVICIOS: [
+    "Esto es lo que ofrecemos:",
+    "",
+    "{{catalogo_cliente}}",
+    "",
+    "Si querés algo de esto, decime y te lo confirma {{humano}}.",
+  ].join("\n"),
+
+  R_CITA: "La cita dura {{demo_duracion}} y es por {{demo_modalidad}}. Si querés una, decime y te la coordina {{humano}}.",
+
+  // R_INTERES — pedido o cita: se ESCALA, el bot no agenda ni vende solo. La promesa "ya le paso
+  // tu pedido" es verdad: este mensaje solo sale junto con el handoff real (review_queue + aviso).
+  R_INTERES: [
+    "¡Buenísimo! Ya le paso tu pedido a {{humano}} — te confirma por este mismo chat.",
+    "",
+    "Si querés, dejame tu nombre y algún detalle más mientras tanto.",
+  ].join("\n"),
+
+  // R_PRECIO — JAMAS una cifra: el precio lo confirma el humano del negocio.
+  R_PRECIO: "Los precios te los confirma {{humano}} directamente — ya le pasé tu consulta y te responde por este mismo chat.",
+
+  // R_DERIVA — todo lo que el recepcionista no sabe contestar va a un humano. "Ya le pasé tu
+  // mensaje" solo se dice junto al handoff real (misma regla de honestidad que R_INTERES).
+  R_DERIVA: "Eso te lo confirma {{humano}} — ya le pasé tu mensaje y te responde por este mismo chat.",
+
+  // R_NO_DATO — el knowledge de la org NO trae ese campo: respuesta honesta + handoff. El bot
+  // nunca rellena con los datos de Onia (el horario de Onia no es el del negocio).
+  R_NO_DATO: "Eso no lo tengo acá para confirmártelo — te lo confirma {{humano}} por este mismo chat.",
+
+  R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
+
+  // M6R — opt-out en modo recepcionista. Sin "escribí DEMO": eso es del funnel de venta.
+  M6R: "Listo, no te escribo más por acá. ¡Gracias!",
 });
 
 // ---------------------------------------------------------------------------
@@ -428,15 +493,6 @@ export const DEFAULT_CONFIG = Object.freeze({
 
   followUp: Object.freeze({
     maxSteps: 1, // regla N7: UN follow-up y despues silencio
-    // Nunca antes de las 08:00 de Bolivia (decision de Sergio, 2026-08-24). El barrido corre
-    // a los :17 de cada hora, asi que sin esto un seguimiento salia a las 6 de la manana y
-    // castigaba el quality rating de la cuenta.
-    // NO se pierde el seguimiento: el descarte es TRANSITORIO y va al final de skipReason,
-    // asi que la fila sigue elegible y sale en el primer barrido despues de las 08:00. Y si
-    // para entonces la ventana de 24 h de Meta ya cerro, sale igual como plantilla
-    // `seguimiento_demo`, que esta aprobada (ver outsideWindow en followup-run.mjs).
-    // El unico tope real sigue siendo `conversacion_muerta` a los staleAfterDays.
-    quietBeforeHour: 8,
     // 20 h, no 22 ni 24. La ventana de servicio de Meta se cuenta desde el ULTIMO MENSAJE
     // ENTRANTE (asi lo ancla followup-run.mjs, verificado). Con 22 quedaban 2 horas de colchon:
     // si el cron se atrasa, el mensaje cae fuera de la ventana y falla con 131047, y fuera de

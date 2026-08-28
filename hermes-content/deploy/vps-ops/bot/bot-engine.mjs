@@ -238,6 +238,9 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
       stageBefore: prev.botStage,
       stageAfter: next.botStage,
       ...(reply.pending ? { pending: true, llmRequest: reply.llmRequest, fallbackText: reply.fallbackText } : {}),
+      // Botones (Chatwoot input_select): viajan pegados a la respuesta hasta el adapter. El
+      // texto plano sigue siendo la base — un canal sin interactivos simplemente los ignora.
+      ...(reply.options ? { options: reply.options } : {}),
     };
   });
 
@@ -270,9 +273,11 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
 // ---------------------------------------------------------------------------
 
 /**
- * @param {string} [bodyKey]  el mensaje con el que se anuncia el handoff. Por defecto M5 ("eso lo
- *   ve un humano"); el camino de SOPORTE usa el suyo porque decirle "eso lo ve Sergio en la demo"
- *   a un cliente que pide ayuda es contestarle con el guion de venta.
+ * @param {string|{key:string, options?:Array}} [bodyKey]  el mensaje con el que se anuncia el
+ *   handoff. Por defecto M5 ("eso lo ve un humano"); el camino de SOPORTE usa el suyo porque
+ *   decirle "eso lo ve Sergio en la demo" a un cliente que pide ayuda es contestarle con el
+ *   guion de venta. Como objeto `{key, options}` permite colgarle botones al anuncio (R_DERIVA
+ *   del recepcionista) sin duplicar los efectos de esta funcion.
  */
 function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
   const { config, prev, msg } = ctx;
@@ -292,7 +297,9 @@ function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
     { type: "notify_sergio", payload: { kind: "handoff", reason, conversationKey: next.conversationKey, text: summary } },
     auditEffect(prev, next, reason),
   ];
-  return finalize(ctx, next, [...leadingReplies, say(bodyKey, next, config)], effects, [`handoff:${reason}`]);
+  const spec = typeof bodyKey === "string" ? { key: bodyKey } : bodyKey;
+  const body = { ...say(spec.key, next, config), ...(spec.options ? { options: spec.options } : {}) };
+  return finalize(ctx, next, [...leadingReplies, body], effects, [`handoff:${reason}`]);
 }
 
 /**

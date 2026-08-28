@@ -165,7 +165,7 @@ function kindOf(text, attachments) {
   return pickAudioAttachment(list) ? "voice" : "attachment";
 }
 
-function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation }) {
+function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation, inboxId }) {
   const text = String(content || "").trim();
   const atribucion = attributionFrom(conversation);
   return {
@@ -175,6 +175,10 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
       // OJO: `contact_ref` es la IDENTIDAD de la conversación (de acá sale `conversationKey`).
       // Cambiarlo rompe todas las conversaciones vivas. El teléfono va aparte, en `public_contact`.
       contact_ref: String(conversationId),
+      // DE QUE INBOX vino: es lo que resuelve "de que cliente es esta conversación" (el
+      // cargador de knowledge keyea por inbox y el producto lo traduce a organización).
+      // null = comportamiento de siempre (conocimiento de Onia, archivo/código).
+      inbox_id: inboxId === undefined || inboxId === null || inboxId === "" ? null : String(inboxId),
       public_contact: phoneOf(sender),
       display_name: displayNameOf(sender),
       kind: kindOf(text, attachments),
@@ -288,6 +292,9 @@ function fromMessageCreated(payload) {
     // La atribución vive en la CONVERSACIÓN, no en el mensaje: `payload.additional_attributes` de
     // este nivel es del mensaje (campaign_id / template_params de Chatwoot) y no sirve para esto.
     conversation: payload.conversation,
+    // En message_created el inbox viene TOP-LEVEL ({ inbox: { id } }, capturado en vivo el
+    // 2026-07-26); `conversation.inbox_id` es el respaldo por si algún evento no lo trae.
+    inboxId: payload?.inbox?.id ?? payload?.conversation?.inbox_id ?? null,
   });
 }
 
@@ -313,7 +320,60 @@ function fromConversationCreated(payload) {
     createdAtIso: toIsoFlexible(first.created_at),
     // En `conversation_created` el payload ES la conversación, así que se pasa entero.
     conversation: payload,
+    // ... y el inbox es el de la conversación misma (`inbox_id` plano en push_event_data).
+    inboxId: payload?.inbox_id ?? payload?.inbox?.id ?? null,
   });
+}
+
+/**
+ * EL CLICK DE UN BOTON (input_select) NO crea un mensaje nuevo: Chatwoot escribe
+ * `content_attributes.submitted_values` SOBRE el mensaje SALIENTE original y dispara
+ * `message_updated` (verificado en vivo contra el 4.12.1 del VPS, 2026-08-18: el mensaje del
+ * menu quedo con `items` + `submitted_values` y NINGUN message_created nuevo). Sin manejar este
+ * evento los botones se muestran pero clickearlos no hace nada — y el webhook de la cuenta
+ * tiene que estar suscripto a `message_updated` ademas de `message_created`.
+ *
+ * Guardas, en orden: no privado, content_type `input_select`, y `submitted_values` con algo.
+ * CUALQUIER otro message_updated (ediciones, cambios de estado) se skipea: este evento entra
+ * al motor unicamente como "el contacto eligio una opcion del menu".
+ *
+ * El turno es INBOUND con el TITULO elegido como texto (es lo que el contacto vio; el motor
+ * rutea titulo O value). El `sender` del payload NO se lee: en un mensaje saliente el sender es
+ * el propio bot, no el contacto. La clave de idempotencia lleva el valor elegido: un
+ * message_updated re-disparado por el mismo mensaje no procesa el click dos veces.
+ */
+function fromMessageUpdated(payload) {
+  const conversationId = payload?.conversation?.id ?? payload?.conversation_id ?? null;
+  if (!conversationId) return { skip: true, reason: "sin_conversation_id" };
+  if (payload.private === true) return { skip: true, reason: "nota_privada" };
+  if (payload.content_type !== "input_select") return { skip: true, reason: "update_sin_botones" };
+  const submitted = Array.isArray(payload?.content_attributes?.submitted_values)
+    ? payload.content_attributes.submitted_values.filter((v) => v && typeof v === "object" && (v.title || v.value))
+    : [];
+  if (!submitted.length) return { skip: true, reason: "sin_valor_elegido" };
+  if (!payload.id) return { skip: true, reason: "sin_message_id" };
+
+  const eleccion = submitted[submitted.length - 1];
+  const texto = String(eleccion.title || eleccion.value || "").trim();
+  if (!texto) return { skip: true, reason: "eleccion_vacia" };
+
+  const atribucion = attributionFrom(payload.conversation);
+  const inboxId = payload?.inbox?.id ?? payload?.conversation?.inbox_id ?? null;
+  return {
+    skip: false,
+    turn: {
+      channel: "chatwoot",
+      contact_ref: String(conversationId),
+      inbox_id: inboxId === undefined || inboxId === null || inboxId === "" ? null : String(inboxId),
+      kind: "text",
+      text: texto,
+      message_key: `chatwoot:${conversationId}:${payload.id}:select:${String(eleccion.value || eleccion.title).slice(0, 100)}`,
+      received_at: toIsoFlexible(payload.updated_at) || toIsoFlexible(payload.created_at) || new Date().toISOString(),
+      piece_key: atribucion.pieceKey,
+      source_campaign: atribucion.sourceCampaign,
+    },
+    meta: { conversationId: String(conversationId), messageId: String(payload.id), attachments: [] },
+  };
 }
 
 /**
@@ -323,6 +383,7 @@ function fromConversationCreated(payload) {
 export function parseChatwootWebhook(payload) {
   const event = payload?.event;
   if (event === "message_created") return fromMessageCreated(payload);
+  if (event === "message_updated") return fromMessageUpdated(payload);
   if (event === "conversation_created") return fromConversationCreated(payload);
   return { skip: true, reason: `evento_no_manejado:${event || "desconocido"}` };
 }
@@ -393,8 +454,13 @@ export function createChatwootClient(options = {}) {
    *   prospecto (a Meta el texto se lo da la plantilla aprobada, no esto).
    * @param {object|null} [templateParams]  ver whatsappTemplate(). Sin esto el POST es identico al
    *   de siempre — el 99% del trafico va dentro de la ventana y sigue siendo texto libre gratis.
+   * @param {object|null} [interactive]  { items: [{title, value}] } => el mensaje sale como
+   *   `content_type: "input_select"`. Es el UNICO content type que sirve en los DOS canales: el
+   *   widget Website lo renderiza como opciones clickeables y Chatwoot lo traduce a reply buttons
+   *   de WhatsApp (PR #6886, max 3 — por eso el slice). `cards`/`form` NO pasan al canal WhatsApp
+   *   (issue #12572), asi que no se usan. Sin items el POST es el texto plano de siempre.
    */
-  async function sendMessage(conversationId, text, templateParams = null) {
+  async function sendMessage(conversationId, text, templateParams = null, interactive = null) {
     const trimmed = String(text || "").trim();
     if (!trimmed) return null;
     if (!enabled) {
@@ -409,6 +475,9 @@ export function createChatwootClient(options = {}) {
           content: trimmed,
           message_type: "outgoing",
           ...(templateParams ? { template_params: templateParams } : {}),
+          ...(interactive && Array.isArray(interactive.items) && interactive.items.length
+            ? { content_type: "input_select", content_attributes: { items: interactive.items.slice(0, 3) } }
+            : {}),
         }),
         signal: AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : undefined,
       });
@@ -428,7 +497,60 @@ export function createChatwootClient(options = {}) {
     }
   }
 
-  return { enabled, warnings, sendMessage };
+  /**
+   * Manda una IMAGEN (o archivo) como mensaje del bot: `multipart/form-data` con `attachments[]`,
+   * la forma documentada del Create Message API (autentica con token de usuario O de agent bot).
+   *
+   * PLOMERIA SIN USO AUTOMATICO TODAVIA: es la base para el QR dinamico del BCP ("escanea y paga
+   * el monto exacto") y las fotos de catalogo — ver ONIA_CHATBOT_ALTA_WHATSAPP_CLIENTE.md §F2/F4b.
+   * Ningun flujo del motor la llama aun (YAGNI hasta que haya un QR real que mandar).
+   * Limites si el mensaje viaja por el canal WhatsApp de Chatwoot: JPEG/PNG 8-bit, max 5 MB,
+   * caption hasta 1024 chars, y fuera de la ventana de 24 h un adjunto libre NO sale. En el
+   * widget Website renderiza nativo, sin limites de Meta.
+   *
+   * @param {string|number} conversationId
+   * @param {object} file { buffer: Buffer|Uint8Array, filename?, contentType?, caption? }
+   * @returns {Promise<object|null>} el mensaje creado, o null (tolerante por contrato: nunca tira)
+   */
+  async function sendAttachment(conversationId, { buffer, filename = "imagen.png", contentType = "image/png", caption = "" } = {}) {
+    if (!enabled) {
+      warnings.push("chatwoot: sin token/config (modo sin envío)");
+      return null;
+    }
+    if (!buffer || !buffer.length) {
+      warnings.push("chatwoot: adjunto sin contenido, no se manda");
+      return null;
+    }
+    try {
+      const form = new FormData();
+      const texto = String(caption || "").trim();
+      if (texto) form.append("content", texto);
+      form.append("message_type", "outgoing");
+      form.append("attachments[]", new Blob([buffer], { type: contentType }), filename);
+      const res = await doFetch(`${baseUrl}/api/v1/accounts/${accountId}/conversations/${conversationId}/messages`, {
+        method: "POST",
+        // Sin Content-Type a mano: el boundary del multipart lo pone fetch al ver el FormData.
+        headers: { api_access_token: token },
+        body: form,
+        signal: AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : undefined,
+      });
+      const raw = await res.text();
+      if (!res.ok) {
+        warnings.push(`chatwoot: HTTP ${res.status} ${raw.slice(0, 160)}`);
+        return null;
+      }
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return {};
+      }
+    } catch (error) {
+      warnings.push(`chatwoot: ${error?.message || error}`);
+      return null;
+    }
+  }
+
+  return { enabled, warnings, sendMessage, sendAttachment };
 }
 
 // ---------------------------------------------------------------------------
@@ -524,13 +646,16 @@ export async function runChatwootTurn(payload, deps = {}) {
   if (turnResult && turnResult.ok !== false && Array.isArray(turnResult.send)) {
     for (const reply of turnResult.send) {
       if (!reply?.text) continue;
+      // Botones del motor (reply.options) => input_select. Se reportan en `sent` para que un
+      // curl de verificacion vea QUE botones habrian salido sin abrir el widget.
+      const interactive = Array.isArray(reply.options) && reply.options.length ? { items: reply.options } : null;
       if (dryRun) {
-        sent.push({ text: reply.text, posted: false, reason: "dry_run" });
+        sent.push({ text: reply.text, posted: false, reason: "dry_run", ...(interactive ? { options: reply.options } : {}) });
         continue;
       }
       // eslint-disable-next-line no-await-in-loop -- el orden de los mensajes importa (disclosure antes que cuerpo)
-      const posted = await client.sendMessage(parsed.meta.conversationId, reply.text);
-      sent.push({ text: reply.text, posted: Boolean(posted) });
+      const posted = await client.sendMessage(parsed.meta.conversationId, reply.text, null, interactive);
+      sent.push({ text: reply.text, posted: Boolean(posted), ...(interactive ? { options: reply.options } : {}) });
     }
   }
 
