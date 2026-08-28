@@ -1,6 +1,6 @@
 # Todos los prompts del carril — índice único
 
-**54 prompts** repartidos en cuatro lotes. Este archivo es el **índice**: la fuente de
+**55 prompts** repartidos en cuatro lotes. Este archivo es el **índice**: la fuente de
 cada prompt sigue siendo su lote, y las copias para trabajar están en
 [`sesiones/`](sesiones/README.md). Si cambia una regla, se edita en el lote — no acá.
 
@@ -115,13 +115,14 @@ Copia para trabajar: [`sesiones/onia-plattform.md`](sesiones/onia-plattform.md)
 | **Q08** | [Receiptile: el recibo digital es la excusa, lo que capturan es al cliente](prompts-lote-2026-08-24/Q08-receiptile-recibo-digital-captura-cliente.md) | 24-ago |
 | **Q09** | [Datos sintéticos con Blender: cómo entrenar visión sin tener el dataset](prompts-lote-2026-08-24/Q09-datos-sinteticos-blender-para-vision.md) | 24-ago |
 
-## → `pendiente` — 1 prompts
+## → `pendiente` — 2 prompts
 
 Copia para trabajar: [`sesiones/pendiente.md`](sesiones/pendiente.md)
 
 | | Prompt | Lote |
 |---|---|---|
 | **R10** | [GitReverse: convierte un repositorio en el prompt que lo habría creado](prompts-lote-2026-08-28/R10-gitreverse-de-repo-a-prompt.md) | 28-ago |
+| **S01** | [Graphify: el mapa del repo que sobrevive a la sesión](prompts-lote-2026-08-28/S01-graphify-memoria-permanente-del-agente.md) | 28-ago |
 
 ---
 

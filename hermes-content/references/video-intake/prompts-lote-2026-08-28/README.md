@@ -1,6 +1,6 @@
-# Lote del 2026-08-28 — R01 a R10
+# Lote del 2026-08-28 — R01 a R10, y S01
 
-**13 links mandados de a uno. 10 nuevos analizados, 3 ya estaban.**
+**14 links mandados de a uno. 11 nuevos analizados, 3 ya estaban.**
 
 | Repetido | Dónde ya estaba |
 |---|---|
@@ -48,3 +48,11 @@
 |---|---|
 | **R10** | [GitReverse: convierte un repositorio en el prompt que lo habría creado](R10-gitreverse-de-repo-a-prompt.md) |
 
+
+## → `pendiente` (llegó después de cerrar el lote)
+
+| | Prompt |
+|---|---|
+| **S01** | [Graphify: el mapa del repo que sobrevive a la sesión](S01-graphify-memoria-permanente-del-agente.md) |
+
+Toca directamente el gasto de tokens que Sergio cortó el mismo día.
