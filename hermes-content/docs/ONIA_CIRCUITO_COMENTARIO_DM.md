@@ -224,6 +224,84 @@ cosa que manda un DM desde la cuenta equivocada el día que se conecte una cuart
 
 ---
 
+## 4.b El flujo de COMUNIDAD que pidio Sergio (2026-08-28)
+
+Sergio paso un PDF con el flujo manual que hace hoy y un audio de 24 s. **El flujo tal
+como esta dibujado NO se puede automatizar**, y el motivo esta en la documentacion de Meta.
+
+### Lo que pedia, y por que no entra
+
+| Paso del PDF | Se puede? |
+|---|---|
+| 1. Responder publicamente al comentario ("Enviado / revisa tu dm") | 🟡 si, pero es OTRA API (`POST /{comment_id}/replies`). Hoy no lo hacemos |
+| 2. DM corto de presentacion | 🟢 es lo que ya hacemos |
+| 3. Mandar el audio | 🔴 **NO.** La private reply de Instagram es **solo texto** |
+| 4. Si responde QUIERO ENTRAR, mandar el link | 🔴 falta suscribirse al webhook `messages` |
+
+🔴 **Y el bloqueo mayor: Meta permite UN solo mensaje por comentario.**
+> *"Only one message can be sent to the commenter"*
+
+Los pasos 2 y 3 son dos DMs desde el mismo comentario. **Nunca los dos.**
+
+### La salida, que ademas es mejor
+
+La misma doc de Meta la da:
+> *"Follow-up messages can only be sent if the recipient responds, and must be sent
+> within 24 hours of the response"*
+
+**La respuesta de la persona es la llave.** El flujo queda:
+
+1. **Respuesta publica** al comentario — nodo nuevo
+2. **UN DM de texto** que tiene que GANARSE la respuesta (es el unico disparo)
+3. Responden → se abre la ventana de 24 h → **ahi entra el audio** (mensaje normal, si
+   admite adjunto) y el link
+4. Todo dentro de esas 24 h
+
+**El audio no va primero: va despues de que respondan.** No es una concesion — se lo gana
+quien mostro interes, no cualquiera que escribio una palabra. Y el propio guion del audio
+ya pedia una respuesta, o sea que ya estaba pidiendo justo lo que abre la ventana.
+
+### Limites de Meta que hay que tener escritos
+
+- **1 private reply por comentario**, para siempre
+- **Solo texto** en la private reply
+- **7 dias** desde el comentario
+- Despues de que responden: ventana de **24 h**
+- **1 adjunto por mensaje**, y o texto o media, **nunca los dos**
+- 750 private replies/hora · audio y video 10/segundo
+
+### El texto propuesto para ese unico DM
+
+Pendiente de aprobacion de Sergio. Tiene que hacer el trabajo de los pasos 2 y 3 juntos:
+
+```
+Ey! Vi que comentaste SISTEMA 👋
+
+Estamos armando una comunidad para los que quieren usar IA de verdad, no para
+leer noticias sobre IA: herramientas, sistemas y cosas que aplicas el mismo dia.
+
+Respondeme QUIERO ENTRAR y te paso el acceso — te mando tambien un audio corto
+contandote como la venimos planteando.
+```
+
+⚠️ **El codigo NO debe exigir la frase exacta.** "QUIERO ENTRAR" es buena instruccion
+para el copy, pero cualquier respuesta abre la ventana de 24 h: quien escriba "quiero
+entrar", "dale", "me interesa" o un simple "si" tiene que recibir lo mismo. Exigir el
+match exacto pierde leads que ya dijeron que si.
+
+### Lo que falta para construirlo
+
+- 🔴 **Suscribirse al webhook `messages`.** Hoy solo escuchamos `comments`: **no nos
+  enteramos si alguien responde**, y sin eso los pasos 3 y 4 no existen. Es el bloqueo real.
+- Nodo de respuesta publica al comentario
+- El audio en una URL publica (`onia.com.bo/recursos/` ya sirve archivos, verificado)
+- Rama que detecta la respuesta afirmativa
+- **El link de la comunidad**: existe (grupo de WhatsApp, dado por Sergio el 2026-08-28).
+  🔴 **No se escribe en este doc ni en el nodo**: un link de invitacion es una credencial
+  — cualquiera que lo tenga entra. Va por `$env` en el contenedor de n8n, como el resto
+  de los secretos. Sergio puede rotarlo desde WhatsApp si se filtra.
+- La cuenta de Lucia necesita su propia voz: este texto esta escrito para @oniahq
+
 ## 5. El test de punta a punta — PREPARADO, pendiente de Sergio
 
 No lo ejecuté: publicar un comentario en Instagram es publicar contenido y necesita permiso
