@@ -18,9 +18,12 @@
 > 🔴 **Sergio, 2026-08-28: *"a partir de ahora no usarás MCP, harás todo desde el navegador a
 > mi cuenta de Higgsfield, cometes muchos errores por MCP"*.**
 >
-> Dos motivos, los dos verificados ese día: **(1)** el MCP pedía `nano_banana_2` y el servidor
-> resolvía a `nano_banana_flash` **sin avisar**; **(2)** la web tiene un toggle **`Unlimited`**
-> que no gasta créditos, y por MCP cada imagen cuesta 2.
+> El motivo verificado: el MCP pedía `nano_banana_2` y el servidor resolvía a
+> `nano_banana_flash` **sin avisar**. En la web el modelo se elige a mano.
+>
+> ⚠️ **Corregido el 2026-08-28**: acá decía que la web «no gasta créditos» por el toggle
+> `Unlimited`. **Es falso.** Ese toggle abre una venta de $5 a $23 por día o semana, aparte del
+> plan. Generar por web cuesta los mismos 2 créditos. No tocar el toggle sin permiso.
 
 **El flujo, probado en vivo:**
 
@@ -28,8 +31,9 @@
 2. En el prompt escribir `@` + el nombre: **`@lucia`** autocompleta a **`@lucia-skin-v1`**.
    Reemplaza al `<<<uuid>>>` del MCP.
 3. Modelo **Nano Banana Pro**, aspecto 3:4.
-4. **Activar `Unlimited`** antes de generar.
-5. Generar y **mirar** el resultado.
+4. Generar (2 créditos) y **mirar** el resultado ampliado.
+
+La receta de prompt que funciona está en [`TECNICA-HIGGSFIELD.md`](TECNICA-HIGGSFIELD.md).
 
 La web además tiene funciones que el MCP no expone: **AI Influencer**, Soul ID Character, Soul
 Moodboard, Canvas, Relight.
