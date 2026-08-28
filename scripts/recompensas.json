@@ -1,0 +1,65 @@
+{
+  "_": "Que entrega CADA palabra clave, y si el circuito puede entregarla hoy. El gate valida los briefs contra esto ANTES de renderizar. Las URLs se comprueban en vivo con `node scripts/verificar_recompensas.js`.",
+
+  "_por_que": [
+    "Meta permite UN SOLO mensaje por comentario, para siempre, y solo texto (doc del circuito, 2026-08-28). El mensaje se elige por palabra clave.",
+    "Consecuencia dura: DOS piezas con la MISMA palabra no pueden prometer cosas distintas — la segunda promesa es imposible de cumplir. Paso de verdad: O03 pedia comentar SISTEMA prometiendo 'el checklist de tu Oficina Virtual' mientras otras siete piezas prometian con esa misma palabra 'las 6 tareas para delegar'.",
+    "Una palabra apagada se come el lead en silencio: el 26-ago alguien comento RANKING en un post de Sergio, su mapa estaba vacio, la persona no recibio nada y Sergio tampoco se entero.",
+    "Y `activa` NO es lo mismo que `publicado`: la palabra puede responder y el archivo prometido no estar en la web. Le paso a HUMO el 23-ago (404 con la palabra encendida) y le pasa HOY a SISTEMA."
+  ],
+
+  "palabras": {
+    "SISTEMA": {
+      "promete": "las 6 tareas que conviene delegar primero",
+      "entrega": "hermes-content/recursos/sistema/onia-6-tareas-para-delegar.pdf",
+      "url": "https://onia.com.bo/recursos/6-tareas-para-delegar.pdf",
+      "tipo": "pdf",
+      "activa_en": ["@oniahq", "@lucia.antelo.oficial"],
+      "activa": true,
+      "publicado": false,
+      "_falta": "🔴 el PDF existe en el repo pero NO esta publicado: esa URL da 404 (verificado 2026-08-28). La palabra esta encendida y OCHO piezas la prometen. Hay que copiarlo a la landing igual que se hizo con HUMO en el commit 15cead0c — ojo que Next standalone indexa public/ al ARRANCAR, asi que hay que reiniciar el contenedor."
+    },
+    "HUMO": {
+      "promete": "el PDF con las cinco herramientas y lo que cuestan de verdad",
+      "entrega": "hermes-content/recursos/humo/onia-5-herramientas-ia-bolivia.pdf",
+      "url": "https://onia.com.bo/recursos/5-herramientas-ia-bolivia.pdf",
+      "tipo": "pdf",
+      "activa_en": ["@lucia.antelo.oficial"],
+      "activa": true,
+      "publicado": true,
+      "_verificado": "2026-08-28: 200, 306.319 bytes, application/pdf"
+    },
+    "LISTA": {
+      "promete": "la lista de por dónde empezar",
+      "entrega": "hermes-content/recursos/lista-por-donde-empezar.pdf",
+      "url": "https://onia.com.bo/recursos/lista-por-donde-empezar.pdf",
+      "tipo": "pdf",
+      "activa_en": ["@oniahq"],
+      "activa": true,
+      "publicado": true,
+      "_verificado": "2026-08-28: 200, 258.256 bytes, application/pdf"
+    },
+    "FACTURA": {
+      "promete": "la hoja para saber si te toca facturar en línea, y los 6 pasos para habilitarte gratis",
+      "entrega": null,
+      "url": "https://onia.com.bo/guia-facturacion",
+      "tipo": "pagina",
+      "_nota": "No tiene PDF A PROPOSITO: seria una segunda copia del texto fiscal, y dos copias de una norma terminan contradiciendose. La pagina es la fuente.",
+      "activa_en": [],
+      "activa": false,
+      "publicado": true,
+      "_verificado": "2026-08-28: 200, 56.400 bytes",
+      "_falta": "cargar la palabra FACTURA en el mapa de @oniahq. El recurso ya esta vivo; falta solo el circuito."
+    },
+    "STACK": {
+      "promete": "la lista con los links y lo que cuesta cada uno",
+      "entrega": null,
+      "url": null,
+      "tipo": "pdf",
+      "activa_en": [],
+      "activa": false,
+      "publicado": false,
+      "_falta": "DOS bloqueos, no uno: el recurso no existe Y el mapa de palabras de @sergio_urcullo esta vacio a proposito. Escribir el PDF no alcanza para poder publicar S06."
+    }
+  }
+}
