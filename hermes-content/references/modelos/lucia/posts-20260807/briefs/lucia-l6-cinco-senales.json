@@ -1,85 +1,85 @@
 {
-  "caption": "Ninguna de estas cinco es un problema de esfuerzo. Son todas el mismo problema: la información del negocio vive en tu cabeza y en un cuaderno. Contá cuántas te pasan y decime el número. Si contaste 3 o más, comentá SISTEMA y te paso el mapa de tu negocio — qué conviene ordenar primero y qué no vale la pena tocar todavía.",
-  "hashtags": [
-    "#negociosbolivia",
-    "#santacruz",
-    "#emprendedoresbolivia",
-    "#inteligenciaartificial",
-    "#gestion",
-    "#pyme"
-  ],
-  "src": false,
-  "slides": [
-    {
-      "number": 1,
-      "role": "cover",
-      "pill": "Diagnóstico en 30 segundos",
-      "headline": "5 señales de que no te falta *gente*",
-      "body": "Te falta sistema. Contá cuántas te pasan.",
-      "visual_prompt": "Retrato fuerte, mirada directa",
-      "alt_text": "Cinco senales de que no te falta gente, te falta sistema",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-05-ugc-selfie.png"
-    },
-    {
-      "number": 2,
-      "role": "point",
-      "pill": "Señal 1",
-      "headline": "Te escriben fuera de hora y contestás *vos*",
-      "body": "El que pregunta a las 10 de la noche compra al día siguiente. Si le contestás recién a la mañana, ya le compró al de al lado. Eso no es cansancio: es una venta menos por semana.",
-      "visual_prompt": "Ella de noche, luz de pantalla",
-      "alt_text": "Senal 1: contestas los mensajes fuera de hora vos mismo",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L2b-cafe-natural.png"
-    },
-    {
-      "number": 3,
-      "role": "point",
-      "pill": "Señal 2",
-      "headline": "Sabés cuánto vendiste, no cuánto *ganaste*",
-      "body": "Vender más y ganar lo mismo pasa siempre por el mismo lugar: el margen se calcula de memoria. Si no sabés cuánto deja cada producto, estás vendiendo barato sin enterarte.",
-      "visual_prompt": "Copy-space, tono sobrio",
-      "alt_text": "Senal 2: sabes cuanto vendiste pero no cuanto ganaste",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L6-copyspace.png"
-    },
-    {
-      "number": 4,
-      "role": "point",
-      "pill": "Señal 3",
-      "headline": "Fiaste y te acordás por la *cara*, no por la fecha",
-      "body": "El fiado sin fecha no se cobra: se regala. Y el que más te debe suele ser el que más confianza te da. Es plata tuya, en la calle, todos los meses.",
-      "visual_prompt": "Ella en la calle / mercado",
-      "alt_text": "Senal 3: fiaste y no recordas la fecha",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L5b-mercado-natural.png"
-    },
-    {
-      "number": 5,
-      "role": "point",
-      "pill": "Señal 4",
-      "headline": "El stock lo sabe una sola *persona*",
-      "body": "Si esa persona falta, no vendés. Y lo que sobra en el depósito no es inventario: es tu plata parada, comprada hace meses, juntando polvo.",
-      "visual_prompt": "Ella trabajando",
-      "alt_text": "Senal 4: el stock lo sabe una sola persona",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-01-trabajando.png"
-    },
-    {
-      "number": 6,
-      "role": "point",
-      "pill": "Señal 5",
-      "headline": "Cerrás el mes con la calculadora del *celular*",
-      "body": "Dos o tres días armando números que ya deberían estar armados. Ese tiempo lo pagás vos, y lo pagás con las horas en que podrías estar vendiendo.",
-      "visual_prompt": "Ella estudiando / concentrada",
-      "alt_text": "Senal 5: cerras el mes con la calculadora del celular",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-02-estudiando.png"
-    },
-    {
-      "number": 7,
-      "role": "cta",
-      "pill": "Si contaste 3 o más",
-      "headline": "Ninguna se arregla con *más esfuerzo*",
-      "body": "Te paso el mapa de tu negocio: qué conviene ordenar primero y qué no vale la pena tocar todavía. Sin vender nada.",
-      "comment_trigger": "SISTEMA",
-      "visual_prompt": "Retrato calmo, mirada a cámara",
-      "alt_text": "Comenta SISTEMA y te paso el mapa de tu negocio",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L1b-rooftop-natural.png"
-    }
-  ]
+ "caption": "Ninguna de estas cinco es un problema de esfuerzo. Son todas el mismo problema: la información del negocio vive en tu cabeza y en un cuaderno.\n\nContá cuántas te pasan y decime el número.\n\nSi contaste 3 o más, comentá SISTEMA y te paso el mapa de tu negocio — qué conviene ordenar primero y qué no vale la pena tocar todavía.\n\n🤖 Soy Lucía y soy inteligencia artificial. No lo escondo: la cara no existe, el negocio que la hizo sí.",
+ "hashtags": [
+  "#negociosbolivia",
+  "#santacruz",
+  "#emprendedoresbolivia",
+  "#inteligenciaartificial",
+  "#gestion",
+  "#pyme"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "pill": "Diagnóstico en 30 segundos",
+   "headline": "5 señales de que no te falta *gente*",
+   "body": "Te falta sistema. Contá cuántas te pasan. Soy IA, y no lo escondo.",
+   "visual_prompt": "Retrato fuerte, mirada directa",
+   "alt_text": "Cinco senales de que no te falta gente, te falta sistema",
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-05-ugc-selfie.png"
+  },
+  {
+   "number": 2,
+   "role": "point",
+   "pill": "Señal 1",
+   "headline": "Te escriben fuera de hora y contestás *vos*",
+   "body": "El que pregunta a las 10 de la noche compra al día siguiente. Si le contestás recién a la mañana, ya le compró al de al lado. Eso no es cansancio: es una venta menos por semana.",
+   "visual_prompt": "Ella de noche, luz de pantalla",
+   "alt_text": "Senal 1: contestas los mensajes fuera de hora vos mismo",
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L2b-cafe-natural.png"
+  },
+  {
+   "number": 3,
+   "role": "point",
+   "pill": "Señal 2",
+   "headline": "Sabés cuánto vendiste, no cuánto *ganaste*",
+   "body": "Vender más y ganar lo mismo pasa siempre por el mismo lugar: el margen se calcula de memoria. Si no sabés cuánto deja cada producto, estás vendiendo barato sin enterarte.",
+   "visual_prompt": "Copy-space, tono sobrio",
+   "alt_text": "Senal 2: sabes cuanto vendiste pero no cuanto ganaste",
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L6-copyspace.png"
+  },
+  {
+   "number": 4,
+   "role": "point",
+   "pill": "Señal 3",
+   "headline": "Fiaste y te acordás por la *cara*, no por la fecha",
+   "body": "El fiado sin fecha no se cobra: se regala. Y el que más te debe suele ser el que más confianza te da. Es plata tuya, en la calle, todos los meses.",
+   "visual_prompt": "Ella en la calle / mercado",
+   "alt_text": "Senal 3: fiaste y no recordas la fecha",
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L5b-mercado-natural.png"
+  },
+  {
+   "number": 5,
+   "role": "point",
+   "pill": "Señal 4",
+   "headline": "El stock lo sabe una sola *persona*",
+   "body": "Si esa persona falta, no vendés. Y lo que sobra en el depósito no es inventario: es tu plata parada, comprada hace meses, juntando polvo.",
+   "visual_prompt": "Ella trabajando",
+   "alt_text": "Senal 4: el stock lo sabe una sola persona",
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-01-trabajando.png"
+  },
+  {
+   "number": 6,
+   "role": "point",
+   "pill": "Señal 5",
+   "headline": "Cerrás el mes con la calculadora del *celular*",
+   "body": "Dos o tres días armando números que ya deberían estar armados. Ese tiempo lo pagás vos, y lo pagás con las horas en que podrías estar vendiendo.",
+   "visual_prompt": "Ella estudiando / concentrada",
+   "alt_text": "Senal 5: cerras el mes con la calculadora del celular",
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-02-estudiando.png"
+  },
+  {
+   "number": 7,
+   "role": "cta",
+   "pill": "Si contaste 3 o más",
+   "headline": "Ninguna se arregla con *más esfuerzo*",
+   "body": "Te paso el mapa de tu negocio: qué conviene ordenar primero y qué no vale la pena tocar todavía. Sin vender nada.\n\nSoy IA, y no lo escondo.",
+   "comment_trigger": "SISTEMA",
+   "visual_prompt": "Retrato calmo, mirada a cámara",
+   "alt_text": "Comenta SISTEMA y te paso el mapa de tu negocio",
+   "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L1b-rooftop-natural.png"
+  }
+ ]
 }

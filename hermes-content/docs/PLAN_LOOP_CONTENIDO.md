@@ -86,7 +86,7 @@ Meta. **Arreglarlo es lo primero de esta cuenta.**
 
 | Pieza | Tema | Estado |
 |---|---|---|
-| L6 | 5 señales | 🔄 **agregar la declaración de IA** |
+| L6 | 5 señales | ✅ **declara la IA en la portada y en el cierre** |
 | L08 | **Herramientas que sí sirven** — con la palabra HUMO, que ya tiene su PDF | ⬜ |
 | L09 | **Cómo se hace una cara que no existe** — detrás de escena, honesto | ⬜ |
 
@@ -127,7 +127,7 @@ aplicar el corte. Nunca cortar a ciegas.
 
 Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 
-1. **L6 declarando IA** — es un problema de política, va primero
+1. ~~L6 declarando IA~~ ✅ hecho
 2. **O03 y O04** con la lámina "Con Onia Platform" — ya tienen ilustraciones
 3. **El pack `tarjeta-empleado`** + **S06** — desbloquea la cuenta de Sergio entera
 4. **O08** (fiado) y **O09** (QR) — datos bolivianos ya verificados
