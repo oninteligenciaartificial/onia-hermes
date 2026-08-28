@@ -206,7 +206,20 @@ Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 14. ~~El ancla de Lucía con 7 ángulos~~ ✅ `lucia-skin-v1` `58bbd635`, probado con A/B
 15. ~~Un doc por tema sin contradicciones~~ ✅ ver abajo
 16. RL01 🟡 preview listo, esperando OK
-17. Seguir la tabla
+17. ~~O01 (imagen repetida)~~ ✅ desbloqueada
+18. Seguir la tabla
+
+**Aprendido en O01 — los `panel-*` son recortes, NO fondos.** Todos son apaisados (ratio 1,9
+a 8,6). Un `bg` va a sangre con cover: si la imagen es más apaisada que el lienzo 4:5, se
+**amplía** para cubrirlo. Un panel de 930×360 se ampliaba **3,75×** y salía un "40" gigante con
+las palabras cortadas. Ahora lo caza el gate (`bg-deformado`).
+
+**Y cómo se calibró ese umbral, que importa más que la regla.** Con el corte en 1,15× marcaba
+**18 fondos sanos** — las fotos de Lucía se amplían 1,2× y a ojo no se nota; se miraron los
+renders. Lo que rompía O01 era una **captura con texto** a 3,75×. Se subió a 1,5×: hoy marca
+cero falsos positivos. **Una regla con falsos positivos se termina ignorando, que es peor que
+no tenerla** — y eso solo se ve corriéndola sobre todo el inventario, no sobre el caso que la
+originó.
 
 **Aprendido en RL01 — qué regla gana cuando dos se cruzan.** La regla "ninguna imagen repetida"
 es DENTRO de una pieza. Aplicarla también ENTRE piezas dejó tres de los cuatro planos en el
