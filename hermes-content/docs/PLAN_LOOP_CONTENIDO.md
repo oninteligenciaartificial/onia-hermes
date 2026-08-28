@@ -38,7 +38,7 @@ La lámina de solución **no es opcional**: sin ella la pieza es un problema sin
 | Pieza | Tema | Estado |
 |---|---|---|
 | O07 | Inventario que miente (65 %) | ✅ hecho, aprobado |
-| O03 | Facturación en línea | 🔄 falta la lámina "Con Onia Platform" |
+| O03 | Facturación en línea | ✅ 8 láminas, con la solución honesta sobre el emisor |
 | O04 | Qué hace el sistema | 🔄 rehacer con el molde nuevo |
 | O08 | **Fiado**: la mora subió al 3,0 % en 2025, casi el doble que 2020 (ASFI) | ⬜ |
 | O09 | **QR**: 891 M de pagos en 2025, el 88,4 % por menos de Bs 500 (ABI/ASFI) | ⬜ |
@@ -128,7 +128,7 @@ aplicar el corte. Nunca cortar a ciegas.
 Cada iteración: **UNA pieza entera**, verificada mirando el render, commiteada.
 
 1. ~~L6 declarando IA~~ ✅ hecho
-2. **O03 y O04** con la lámina "Con Onia Platform" — ya tienen ilustraciones
+2. ~~O03 con la lámina "Con Onia Platform"~~ ✅ hecho · **O04** pendiente
 3. **El pack `tarjeta-empleado`** + **S06** — desbloquea la cuenta de Sergio entera
 4. **O08** (fiado) y **O09** (QR) — datos bolivianos ya verificados
 5. **R02** — el primer reel de módulo

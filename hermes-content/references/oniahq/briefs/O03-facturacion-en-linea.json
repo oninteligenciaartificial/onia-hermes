@@ -3,7 +3,7 @@
  "episodio": "003",
  "comment_trigger": "SISTEMA",
  "comment_reward": "el checklist de qué mirar en tu Oficina Virtual",
- "caption": "El 30 de septiembre de 2026 se acaba el plazo: facturación en línea para todos.\n\nY antes de que alguien te venda humo, la verdad completa: el SIN tiene un Portal Web GRATIS donde cumplís tipeando factura por factura. No necesitás comprarle nada a nadie para estar en regla.\n\nLo que cuesta plata es tipear dos veces — una en tu cuaderno o sistema, otra en el portal. Eso es lo que resolvemos.\n\nY el plazo ya se corrió dos veces (RND 102500000036 y RND 102600000007). Puede correrse una tercera. No te apuramos con miedo.\n\nComentá SISTEMA y te paso el checklist de qué mirar en tu Oficina Virtual para saber en qué grupo caés.",
+ "caption": "EL PROBLEMA: el 30 de septiembre de 2026 se acaba el plazo para facturar en línea. Y antes de que alguien te venda humo, la verdad completa.\n\nEl SIN tiene un Portal Web GRATIS donde cumplís tipeando factura por factura. Sin CUIS, sin CUFD, sin firma digital. No necesitás comprarle nada a nadie para estar en regla.\n\nLo que cuesta plata es tipear dos veces: una al vender y otra al portal. Veinte facturas por día son 40 cargas, y en cada una hay un dedo que se equivoca.\n\nCON ONIA PLATFORM:\n\n✅ Cargás la venta una sola vez, con el detalle que la factura necesita\n✅ Sabés qué facturaste y qué no, sin cruzar dos sistemas\n✅ El emisor del SIAT está en homologación ante el SIN — todavía no emite\n✅ Cuando salga, no vas a recargar nada: tus datos ya van a estar ordenados\n\nTe lo decimos de frente: hoy el emisor no está listo. Lo que sí podés hacer desde ahora es dejar de anotar dos veces.\n\nY el plazo ya se corrió dos veces (RND 102500000036 y RND 102600000007). Puede correrse una tercera. No te apuramos con miedo.\n\nComentá SISTEMA y te paso el checklist de qué mirar en tu Oficina Virtual.",
  "hashtags": [
   "#facturacionelectronica",
   "#impuestosbolivia",
@@ -46,6 +46,18 @@
   },
   {
    "number": 5,
+   "kicker": "La solución",
+   "headline": "Con *Onia Platform*",
+   "solucion": [
+    "Cargás la venta *una sola vez*, con el detalle que la factura necesita",
+    "Sabés qué facturaste y qué *no*, sin cruzar dos sistemas",
+    "El emisor del SIAT está *en homologación* ante el SIN",
+    "Cuando salga, *no vas a recargar nada*: los datos ya están"
+   ],
+   "bg": "hermes-content/references/oniahq/ilustraciones/mostrador-ordenado.png"
+  },
+  {
+   "number": 6,
    "role": "save",
    "kicker": "Guardá esto",
    "headline": "El plazo ya se corrió *dos veces*",
@@ -53,14 +65,14 @@
    "bg": "hermes-content/references/oniahq/ilustraciones/cierre-tienda.png"
   },
   {
-   "number": 6,
+   "number": 7,
    "kicker": "Qué hacer esta semana",
    "headline": "Probá el portal *antes* de comprar nada",
    "body": "1. Entrá a tu Oficina Virtual y mirá en qué grupo estás. 2. Emití una factura de prueba en el Portal Web. 3. Recién ahí decidí si tipear dos veces te cuesta más que resolverlo.",
    "bg": "hermes-content/references/oniahq/ilustraciones/cuaderno-fiado.png"
   },
   {
-   "number": 7,
+   "number": 8,
    "role": "cta",
    "kicker": "20 minutos, gratis",
    "headline": "Te paso el *checklist*, no la factura",
