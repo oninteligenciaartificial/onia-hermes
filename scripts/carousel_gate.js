@@ -126,6 +126,29 @@ function revisar(brief, pack, baseDir = process.cwd()) {
       usados.set(imagen, n);
     }
 
+    // Un `bg` va A SANGRE con cover: si la imagen es mas apaisada que el lienzo, se
+    // AMPLIA para cubrirlo y se destroza. Paso en O01: se puso un panel de 930x360 y
+    // salio un "40" gigante con las palabras cortadas. Todos los `panel-*` del banco son
+    // apaisados (ratio 1,9 a 8,6): son recortes para el slot de objeto, no fondos.
+    if (s.bg) {
+      const rutaBg = path.resolve(baseDir, s.bg);
+      const dimBg = fs.existsSync(rutaBg) ? dimensionesPng(rutaBg) : null;
+      if (dimBg) {
+        const esc = escalaEnLienzo(dimBg, { w: 1080, h: 1350 }, 'cover');
+        // 1,5 y no 1,15: las fotos verticales del banco de Lucia (896x1200) se amplian
+        // 1,2x y a ojo no se nota — se miraron los renders. Lo que rompio O01 fue una
+        // CAPTURA CON TEXTO ampliada 3,75x. Un umbral de 1,15 marcaba 18 fondos sanos:
+        // una regla con falsos positivos se termina ignorando, que es peor que no tenerla.
+        if (esc > 1.5) {
+          problemas.push({
+            nivel: 'error', regla: 'bg-deformado', lamina: n,
+            msg: `el fondo de ${dimBg.w}x${dimBg.h} se AMPLIA ${esc.toFixed(1)}x para cubrir `
+               + '4:5 y queda ilegible: usa una imagen vertical, o ponela como `object`',
+          });
+        }
+      }
+    }
+
     if (!s.object) return;
 
     // 3. Una captura achicada mas alla del piso es una mancha, no una prueba.
@@ -412,7 +435,21 @@ function selfCheck() {
   p = revisar({ caption: 'sin slides' }, 'dato-ilustrado', tmp);
   assert.ok(p.some((x) => x.regla === 'sin-slides'), 'un brief sin slides no pasa');
 
-  console.log('self-check ok: 22 casos');
+  // Un fondo apaisado a sangre en 4:5 se amplia hasta romperse.
+  const apaisado = path.join(tmp, 'apaisado.png');
+  const ba = Buffer.from(fs.readFileSync(chico));
+  ba.writeUInt32BE(930, 16); ba.writeUInt32BE(360, 20);
+  fs.writeFileSync(apaisado, ba);
+  p = revisar({ slides: [{ number: 1, bg: 'apaisado.png' }] }, 'dato-ilustrado', tmp);
+  assert.ok(p.some((x) => x.regla === 'bg-deformado'), 'un bg apaisado no pasa');
+  const vertical = path.join(tmp, 'vertical.png');
+  const bv = Buffer.from(fs.readFileSync(chico));
+  bv.writeUInt32BE(1856, 16); bv.writeUInt32BE(2304, 20);
+  fs.writeFileSync(vertical, bv);
+  p = revisar({ slides: [{ number: 1, bg: 'vertical.png' }] }, 'dato-ilustrado', tmp);
+  assert.ok(!p.some((x) => x.regla === 'bg-deformado'), 'uno vertical si pasa');
+
+  console.log('self-check ok: 24 casos');
 }
 
 function main() {
