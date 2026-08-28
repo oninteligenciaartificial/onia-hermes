@@ -65,8 +65,25 @@ const ACCOUNTS = {
   // cualquier pieza suya salia firmada con un handle inventado.
   sergio: { handle: '@sergio_urcullo', name: 'Sergio Urcullo', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
-  lucia: { handle: '@lucia.antelo.oficial', name: 'Lucía Antelo', personal: true },
+  // El acento de Lucia es TERRACOTA, no el verde de Onia: `LUCIA.md` §1-quater lo dice
+  // con un simbolo de prohibido — "#00D26A (verde ONIA) no entra en sus piezas". El
+  // motor ya tenia `--accent` para esto y aun asi salieron cuatro piezas suyas en verde,
+  // o sea con la identidad de la empresa. Atado a la cuenta, ya no depende de acordarse.
+  lucia: {
+    handle: '@lucia.antelo.oficial', name: 'Lucía Antelo', personal: true,
+    accent: '#E4714E',
+  },
 };
+
+/**
+ * El acento que le toca a una pieza: manda el flag si vino, y si no el color propio de
+ * la cuenta. Sin ninguno de los dos, el verde de Onia que ya trae el tema.
+ */
+function acentoDe(args, account) {
+  if (args && args.accent) return args.accent;
+  const acc = ACCOUNTS[account];
+  return (acc && acc.accent) || '';
+}
 
 // Brand kits para packs no-Onia. Cada marca define superficie, tinta, acentos
 // y logo. El pack bright-retail los consume.
@@ -876,8 +893,8 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
     ? `<div class="topbar"><span class="captop">${esc(slide.pill)}</span></div>` : '';
   const body = slide.body ? `<p class="ed-body">${emph(slide.body)}</p>` : '';
   // Acento propio de la cuenta (una modelo no lleva el verde de la marca Onia).
-  const accentVar = (args && args.accent)
-    ? `:root, .slide { --onia-green: ${args.accent}; }` : '';
+  const accentVar = acentoDe(args, account)
+    ? `:root, .slide { --onia-green: ${acentoDe(args, account)}; }` : '';
 
   return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -959,8 +976,8 @@ function editorialCleanHtml(slide, idx, total, account, args) {
   const photo = bg
     ? `<div class="photo" style="background-image:url('file://${bg}')"></div>`
     : '';
-  const accentVar = (args && args.accent)
-    ? `:root, .slide { --onia-green: ${args.accent}; }` : '';
+  const accentVar = acentoDe(args, account)
+    ? `:root, .slide { --onia-green: ${acentoDe(args, account)}; }` : '';
 
   if (role === 'cta' && !triggerWord(slide)) {
     throw new Error(`editorial-clean: la slide CTA no pide ninguna palabra (regla: siempre se pide comentar). Slide: ${slide.headline}`);
