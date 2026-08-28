@@ -82,7 +82,17 @@ function revisar(brief, pack, baseDir = process.cwd()) {
     return problemas;
   }
 
-  const slides = brief.slides || [];
+  // Un brief sin `slides` no es un brief sano: es uno que el gate no puede revisar. Antes
+  // devolvia cero problemas y se leia como aprobado — los seis lucia-p1..p6 pasaban asi.
+  // Un verificador que calla ante lo que no entiende es peor que no tenerlo.
+  if (!Array.isArray(brief.slides)) {
+    problemas.push({
+      nivel: 'error', regla: 'sin-slides',
+      msg: 'el brief no declara `slides`: el gate no puede revisar nada, no es que este bien',
+    });
+    return problemas;
+  }
+  const slides = brief.slides;
   const usados = new Map();
 
   slides.forEach((s, i) => {
@@ -398,7 +408,11 @@ function selfCheck() {
   p = revisar({ slides: [{ number: 1, bg: RL + 'tanda-20260821/NO-EXISTE.png' }] }, 'editorial-photo', tmp);
   assert.ok(p.some((x) => x.regla === 'imagen-inexistente'), 'una ruta muerta no pasa');
 
-  console.log('self-check ok: 21 casos');
+  // Lo que no se puede revisar no se aprueba.
+  p = revisar({ caption: 'sin slides' }, 'dato-ilustrado', tmp);
+  assert.ok(p.some((x) => x.regla === 'sin-slides'), 'un brief sin slides no pasa');
+
+  console.log('self-check ok: 22 casos');
 }
 
 function main() {
