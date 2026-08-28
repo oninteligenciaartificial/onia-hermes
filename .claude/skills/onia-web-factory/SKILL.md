@@ -6,7 +6,9 @@ description: Invocar al construir o rediseñar cualquier superficie web en onia-
 # ONIA — Web Factory (construir webs anti-template)
 
 Aplica a carriles A (onia-center) y B (landings/sitios cliente). Objetivo: que el output
-NO salga genérico. Subagente para delegar: `web-factory-builder`.
+NO salga genérico. ⚠️ El subagente `web-factory-builder` fue RETIRADO el 2026-08-18
+(cápsula congelada en `.claude/agents/_retirados/`): el trabajo lo hace la sesión con esta
+skill, no ese agente.
 
 ## Lo primero: la web de cliente NO se escribe a mano
 
@@ -58,8 +60,22 @@ pnpm factory:smoke                            # test + regenerar los 8 demos
 ```
 
 Templates válidos (`data/schema.ts` → `WEB_FACTORY_TEMPLATES`):
-`landing` · `store` · `dashboard` · `landing-focus` · `landing-clinic`.
+`landing` · `store` · `dashboard` · `landing-focus` · `landing-clinic` ·
+`landing-realestate` · `landing-logistics`.
 El de más calidad hoy es `landing-clinic` (dental-demo); `landing` es el más genérico.
+
+⚠️ Trampas aprendidas construyendo el cliente de prueba (2026-08-28):
+- **El intake SÍ mapea `trustProofs→credenciales`, `heroImage→imagenSecundaria` (si hay
+  heroPoster distinto), `content.proceso` y `content.faqs`** desde el fix de esta fecha.
+  Antes esos campos se tiraban en silencio y el template clinic salía sin feature, sin
+  proceso y sin FAQ — la página quedaba a la mitad y parecía culpa del template.
+- **Capturas fullPage mienten dos veces**: las imágenes `loading="lazy"` fuera del primer
+  viewport no cargan (pase de scroll antes de capturar) y las animaciones scroll-driven
+  (`animation-timeline: view()`) quedan congeladas a 0% fabricando huecos (capturar con
+  `reducedMotion: "reduce"`; el template tiene corto-circuito).
+- **El CSS del clinic pide `font-weight: 820`**: cargar la tipografía como rango variable
+  `wght@300..900` (un `<link>` por familia), no como escalera estática 400-700 — si no,
+  el hero cae al fallback del sistema y la receta de marca no existe en pantalla.
 
 `--dry-run` de `factory:build` imprime los **pending inputs** (logo, asset de hero, canal
 de conversión, dominio): ese listado es el checklist que se le pide al cliente, no se inventa.

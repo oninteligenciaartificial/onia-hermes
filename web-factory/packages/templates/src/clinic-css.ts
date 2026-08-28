@@ -270,7 +270,9 @@ export const clinicCss = `
   color: var(--ink-accent);
 }
 
-.wf-clinic-kicker::before { content: ""; width: 24px; height: 2px; background: var(--color-primary); }
+/* El guion del kicker es el punto de temperatura de la marca: acento, no
+   primario — si todo es primario, el acento del intake no existe en pantalla. */
+.wf-clinic-kicker::before { content: ""; width: 24px; height: 2px; background: var(--color-accent); }
 
 .wf-clinic-section-head h2 {
   margin: 0;
@@ -349,6 +351,7 @@ export const clinicCss = `
 }
 
 .wf-clinic-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -357,6 +360,39 @@ export const clinicCss = `
   border-radius: var(--radius);
   background: var(--card);
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* Franja de foto en la celda destacada: SOLO en el layout ancho donde la celda
+   es 2x2 y existe el vacio. La foto vive arriba y se funde al color de la
+   tarjeta antes de llegar al texto — el copy nunca pisa imagen. */
+@media (min-width: 1081px) {
+  .wf-clinic-card--media { overflow: hidden; }
+  .wf-clinic-card--media::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 58%;
+    background-image: var(--wf-card-media);
+    background-size: cover;
+    background-position: center 35%;
+  }
+  .wf-clinic-card--media::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 58%;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-primary) 26%, transparent),
+      color-mix(in srgb, var(--card) 40%, transparent) 70%,
+      var(--card) 99%
+    );
+  }
+  .wf-clinic-card--media .wf-clinic-card-icon,
+  .wf-clinic-card--media .wf-clinic-card-body {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .wf-clinic-card:hover {
@@ -433,7 +469,7 @@ export const clinicCss = `
   font-weight: 820;
   color: var(--ink-accent);
   background: var(--color-bg);
-  border: 2px solid color-mix(in srgb, var(--color-primary) 45%, var(--border));
+  border: 2px solid color-mix(in srgb, var(--color-accent) 55%, var(--border));
 }
 
 .wf-clinic-step h3 { margin: 0; font-size: 1.15rem; color: var(--color-fg); }

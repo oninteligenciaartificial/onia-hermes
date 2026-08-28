@@ -97,6 +97,34 @@ export function renderLandingClinicCss(client: LandingClient): string {
 ${clinicCss}`;
 }
 
+// La tipografia del perfil solo existe si el documento la CARGA: sin este link
+// todo cae al fallback del sistema (Segoe UI en Windows) y la receta de marca
+// queda en el papel. Mismo patron que logistics/realestate, pero derivado del
+// cliente en vez de hardcodear familias.
+function renderFontLinks(client: LandingClient): string {
+  const familias = [
+    ...new Set(
+      [client.tipografia.heading, client.tipografia.body]
+        .map((familia) => familia.trim())
+        .filter(Boolean),
+    ),
+  ];
+  if (familias.length === 0) return "";
+  // Un <link> POR familia y rango variable 300..900: el CSS del template pide
+  // pesos altos (hero 820) que una escalera estatica 400-700 no trae. Si una
+  // familia es solo-estatica, css2 devuelve 400 y muere SOLO ese link — la
+  // otra familia y el fallback stack siguen vivos.
+  const links = familias
+    .map(
+      (familia) =>
+        `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=${encodeURIComponent(familia).replace(/%20/g, "+")}:wght@300..900&display=swap">`,
+    )
+    .join("\n    ");
+  return `<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    ${links}`;
+}
+
 export function renderLandingClinicDocument(client: LandingClient): string {
   const ogImage = client.seo.ogImage
     ? `<meta property="og:image" content="${escapeHtml(client.seo.ogImage)}">`
@@ -112,6 +140,7 @@ export function renderLandingClinicDocument(client: LandingClient): string {
     <meta property="og:title" content="${escapeHtml(client.seo.title)}">
     <meta property="og:description" content="${escapeHtml(client.seo.description)}">
     ${ogImage}
+    ${renderFontLinks(client)}
     <link rel="stylesheet" href="./site.css">
   </head>
   <body>

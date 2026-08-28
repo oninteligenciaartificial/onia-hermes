@@ -1,0 +1,120 @@
+{
+  "project": {
+    "slug": "dental-amanecer",
+    "template": "landing-clinic",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "Clinica Dental Amanecer",
+    "industry": "clinica dental",
+    "offer": "odontologia integral en Santa Cruz con agenda directa por WhatsApp",
+    "tagline": "Tu proxima visita al dentista no tiene por que doler",
+    "description": "Clinica dental en Santa Cruz de la Sierra: evaluacion honesta, presupuesto antes de empezar y agenda directa por WhatsApp, sin llamadas en espera.",
+    "location": "Santa Cruz de la Sierra, Bolivia",
+    "hours": "Lun a Vie 8:30-19:30 · Sab 9:00-13:00",
+    "trustProofs": [
+      "Presupuesto por escrito antes de empezar",
+      "Esterilizacion certificada por ciclo",
+      "Urgencias con espacio reservado el mismo dia"
+    ]
+  },
+  "brand": {
+    "logoText": "DA",
+    "colors": {
+      "primary": "#0d6b5c",
+      "secondary": "#142320",
+      "accent": "#e46a4a",
+      "bg": "#f8f5ef",
+      "fg": "#172420"
+    },
+    "typography": {
+      "heading": "Fraunces",
+      "body": "DM Sans"
+    },
+    "styleKeywords": ["editorial", "calido", "clinico", "confiable", "sin azul dental generico"],
+    "references": [
+      {
+        "title": "Bench (piso de calidad interno)",
+        "url": "https://interno",
+        "type": "visual",
+        "use": "jerarquia por escala, ritmo, seriedad sin frialdad",
+        "avoid": "card-grid uniforme y hero generico"
+      }
+    ],
+    "antiReferences": [
+      {
+        "title": "Plantilla dental generica",
+        "url": "https://interno",
+        "type": "visual",
+        "use": "",
+        "avoid": "azul dental con dientes brillando y stock de doctores sonriendo a camara"
+      }
+    ]
+  },
+  "media": {
+    "heroPoster": "assets/hero-consultorio.webp",
+    "heroImage": "assets/detalle-atencion.webp",
+    "assetPermission": "client-owned",
+    "notes": "CLIENTE DE PRUEBA INTERNO. Assets reutilizados del set interno dental-demo (sin caras reconocibles). Para un cliente real: fotos propias del consultorio, nunca stock ni IA de producto."
+  },
+  "content": {
+    "services": [
+      { "title": "Evaluacion y diagnostico", "description": "Revision completa con radiografia si hace falta, y un plan por escrito antes de tocar nada.", "icon": "sparkles" },
+      { "title": "Limpieza y prevencion", "description": "Profilaxis, fluor y control periodico para no llegar tarde a la caries.", "icon": "shield" },
+      { "title": "Ortodoncia", "description": "Brackets metalicos, esteticos y alineadores, con control mensual incluido.", "icon": "smile" },
+      { "title": "Implantes y protesis", "description": "Reposicion de piezas con evaluacion osea y opciones de pago por etapas.", "icon": "tooth" },
+      { "title": "Endodoncia", "description": "Tratamiento de conducto en una o dos sesiones, con anestesia y sin sermones.", "icon": "star" },
+      { "title": "Urgencias", "description": "Dolor agudo o golpe: espacio reservado el mismo dia, tambien sabados.", "icon": "alert" }
+    ],
+    "benefits": ["Presupuesto antes de empezar", "Agenda por WhatsApp", "Pago por etapas"],
+    "proceso": [
+      { "title": "Escribinos por WhatsApp", "description": "Contanos que te pasa y elegimos juntos el primer horario libre que te sirva." },
+      { "title": "Evaluacion sin apuro", "description": "Revisamos tu caso, te mostramos lo que vemos y respondemos todas tus preguntas." },
+      { "title": "Presupuesto por escrito", "description": "Antes de empezar cualquier tratamiento tenes el plan con costos y tiempos, en tu mano." },
+      { "title": "Tratamiento y control", "description": "Hacemos el trabajo y agendamos el control para que el resultado dure." }
+    ],
+    "faqs": [
+      { "question": "Cuanto cuesta la primera consulta?", "answer": "La evaluacion inicial tiene precio fijo y te lo decimos por WhatsApp antes de agendar. El presupuesto del tratamiento va por escrito y no cambia a mitad de camino." },
+      { "question": "Duele el tratamiento?", "answer": "Trabajamos con anestesia local y al ritmo que tu caso permita. Si algo molesta, se para y se ajusta: venir al dentista no tiene por que ser una mala experiencia." },
+      { "question": "Atienden urgencias?", "answer": "Si. Reservamos espacio todos los dias para dolor agudo o golpes, tambien los sabados por la manana." },
+      { "question": "Puedo pagar en partes?", "answer": "Los tratamientos largos como ortodoncia o implantes se pagan por etapas, con el detalle en el presupuesto." },
+      { "question": "Necesito radiografia?", "answer": "Solo si tu caso la pide. Si hace falta, te lo decimos en la evaluacion y coordinamos donde hacerla." }
+    ]
+  },
+  "conversion": {
+    "primaryCtaText": "Agendar por WhatsApp",
+    "primaryCtaUrl": "",
+    "whatsappMessage": "Hola, vengo de la web de Clinica Dental Amanecer y quiero agendar una cita."
+  },
+  "contact": {
+    "email": "",
+    "phone": "",
+    "whatsapp": "+59170000001",
+    "address": "Av. Beni entre 2do y 3er anillo, Santa Cruz de la Sierra"
+  },
+  "social": {
+    "instagram": "",
+    "facebook": "",
+    "linkedin": "",
+    "x": "",
+    "tiktok": ""
+  },
+  "seo": {
+    "title": "Clinica Dental Amanecer | Dentista en Santa Cruz, agenda por WhatsApp",
+    "description": "Odontologia integral en Santa Cruz de la Sierra: evaluacion honesta, presupuesto por escrito antes de empezar y urgencias el mismo dia. Agenda directa por WhatsApp.",
+    "keywords": ["dentista santa cruz", "clinica dental santa cruz", "ortodoncia", "implantes", "urgencia dental"],
+    "ogImage": ""
+  },
+  "operations": {
+    "domain": "",
+    "hosting": "ONIA Web Factory",
+    "paymentMethods": [],
+    "legalName": "",
+    "taxId": "",
+    "missing": [
+      "CLIENTE DE PRUEBA INTERNO — no existe el negocio; numero de WhatsApp placeholder",
+      "para cliente real: dominio a su nombre, fotos propias, matricula visible, politica de datos"
+    ]
+  }
+}

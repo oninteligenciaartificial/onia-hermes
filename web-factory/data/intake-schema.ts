@@ -198,6 +198,14 @@ export const webFactoryIntakeSchema = z.object({
           }),
       )
         .default([]),
+      proceso: z
+        .array(
+          z.object({
+            title: z.string().min(1),
+            description: z.string().min(1),
+          }),
+        )
+        .default([]),
     })
     .default({
       services: [],
@@ -205,6 +213,7 @@ export const webFactoryIntakeSchema = z.object({
       categories: [],
       products: [],
       faqs: [],
+      proceso: [],
     }),
   conversion: z
     .object({
@@ -316,6 +325,15 @@ export function buildClientProfileFromIntake(input: unknown): ClientProfile {
     logoWide: intake.brand.logoWide,
     heroVideo: intake.media.heroVideo,
     heroPoster: intake.media.heroPoster || intake.media.heroImage,
+    // heroImage cumple doble rol: si no hay heroPoster, ES el hero (linea de
+    // arriba); si hay ambos y son distintos, pasa a ser la imagen secundaria
+    // (la que enciende la banda editorial del template clinic).
+    imagenSecundaria:
+      intake.media.heroPoster &&
+      intake.media.heroImage &&
+      intake.media.heroImage !== intake.media.heroPoster
+        ? intake.media.heroImage
+        : "",
     colores: {
       primary: intake.brand.colors.primary ?? "#0f766e",
       secondary: intake.brand.colors.secondary ?? "#1d4ed8",
@@ -345,6 +363,15 @@ export function buildClientProfileFromIntake(input: unknown): ClientProfile {
       : getUnique(products.map((product) => product.categoria)),
     productos: products,
     beneficios: intake.content.benefits,
+    credenciales: intake.business.trustProofs,
+    proceso: intake.content.proceso.map((paso) => ({
+      titulo: paso.title,
+      desc: paso.description,
+    })),
+    faq: intake.content.faqs.map((item) => ({
+      pregunta: item.question,
+      respuesta: item.answer,
+    })),
     referencias: references,
     cta: {
       texto: intake.conversion.primaryCtaText,

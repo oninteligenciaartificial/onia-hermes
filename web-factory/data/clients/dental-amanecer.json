@@ -1,0 +1,190 @@
+{
+  "nombre": "Clinica Dental Amanecer",
+  "slug": "dental-amanecer",
+  "tagline": "Tu proxima visita al dentista no tiene por que doler",
+  "descripcion": "Clinica dental en Santa Cruz de la Sierra: evaluacion honesta, presupuesto antes de empezar y agenda directa por WhatsApp, sin llamadas en espera.",
+  "logo": "DA",
+  "logoIcon": "",
+  "logoWide": "",
+  "heroVideo": "",
+  "heroPoster": "assets/hero-consultorio.webp",
+  "imagenSecundaria": "assets/detalle-atencion.webp",
+  "colores": {
+    "primary": "#0d6b5c",
+    "secondary": "#142320",
+    "accent": "#e46a4a",
+    "bg": "#f8f5ef",
+    "fg": "#172420"
+  },
+  "tipografia": {
+    "heading": "Fraunces",
+    "body": "DM Sans"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "+59170000001",
+    "direccion": "Av. Beni entre 2do y 3er anillo, Santa Cruz de la Sierra"
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Evaluacion y diagnostico",
+      "desc": "Revision completa con radiografia si hace falta, y un plan por escrito antes de tocar nada.",
+      "icono": "sparkles",
+      "url": ""
+    },
+    {
+      "titulo": "Limpieza y prevencion",
+      "desc": "Profilaxis, fluor y control periodico para no llegar tarde a la caries.",
+      "icono": "shield",
+      "url": ""
+    },
+    {
+      "titulo": "Ortodoncia",
+      "desc": "Brackets metalicos, esteticos y alineadores, con control mensual incluido.",
+      "icono": "smile",
+      "url": ""
+    },
+    {
+      "titulo": "Implantes y protesis",
+      "desc": "Reposicion de piezas con evaluacion osea y opciones de pago por etapas.",
+      "icono": "tooth",
+      "url": ""
+    },
+    {
+      "titulo": "Endodoncia",
+      "desc": "Tratamiento de conducto en una o dos sesiones, con anestesia y sin sermones.",
+      "icono": "star",
+      "url": ""
+    },
+    {
+      "titulo": "Urgencias",
+      "desc": "Dolor agudo o golpe: espacio reservado el mismo dia, tambien sabados.",
+      "icono": "alert",
+      "url": ""
+    }
+  ],
+  "statement": "",
+  "statementAccent": "",
+  "footerLegal": "",
+  "newsletter": {
+    "titulo": "",
+    "texto": "",
+    "accion": "",
+    "boton": "Suscribirme",
+    "nota": ""
+  },
+  "metricas": [],
+  "cotizacion": {
+    "titulo": "",
+    "texto": "",
+    "accion": "",
+    "boton": "Pedir cotizacion",
+    "nota": "",
+    "campos": []
+  },
+  "categorias": [],
+  "productos": [],
+  "beneficios": [
+    "Presupuesto antes de empezar",
+    "Agenda por WhatsApp",
+    "Pago por etapas"
+  ],
+  "credenciales": [
+    "Presupuesto por escrito antes de empezar",
+    "Esterilizacion certificada por ciclo",
+    "Urgencias con espacio reservado el mismo dia"
+  ],
+  "proceso": [
+    {
+      "titulo": "Escribinos por WhatsApp",
+      "desc": "Contanos que te pasa y elegimos juntos el primer horario libre que te sirva.",
+      "imagen": "",
+      "imagenAlt": ""
+    },
+    {
+      "titulo": "Evaluacion sin apuro",
+      "desc": "Revisamos tu caso, te mostramos lo que vemos y respondemos todas tus preguntas.",
+      "imagen": "",
+      "imagenAlt": ""
+    },
+    {
+      "titulo": "Presupuesto por escrito",
+      "desc": "Antes de empezar cualquier tratamiento tenes el plan con costos y tiempos, en tu mano.",
+      "imagen": "",
+      "imagenAlt": ""
+    },
+    {
+      "titulo": "Tratamiento y control",
+      "desc": "Hacemos el trabajo y agendamos el control para que el resultado dure.",
+      "imagen": "",
+      "imagenAlt": ""
+    }
+  ],
+  "faq": [
+    {
+      "pregunta": "Cuanto cuesta la primera consulta?",
+      "respuesta": "La evaluacion inicial tiene precio fijo y te lo decimos por WhatsApp antes de agendar. El presupuesto del tratamiento va por escrito y no cambia a mitad de camino."
+    },
+    {
+      "pregunta": "Duele el tratamiento?",
+      "respuesta": "Trabajamos con anestesia local y al ritmo que tu caso permita. Si algo molesta, se para y se ajusta: venir al dentista no tiene por que ser una mala experiencia."
+    },
+    {
+      "pregunta": "Atienden urgencias?",
+      "respuesta": "Si. Reservamos espacio todos los dias para dolor agudo o golpes, tambien los sabados por la manana."
+    },
+    {
+      "pregunta": "Puedo pagar en partes?",
+      "respuesta": "Los tratamientos largos como ortodoncia o implantes se pagan por etapas, con el detalle en el presupuesto."
+    },
+    {
+      "pregunta": "Necesito radiografia?",
+      "respuesta": "Solo si tu caso la pide. Si hace falta, te lo decimos en la evaluacion y coordinamos donde hacerla."
+    }
+  ],
+  "referencias": [
+    {
+      "title": "Bench (piso de calidad interno)",
+      "url": "https://interno",
+      "type": "visual",
+      "use": "jerarquia por escala, ritmo, seriedad sin frialdad",
+      "avoid": "card-grid uniforme y hero generico"
+    },
+    {
+      "title": "Plantilla dental generica",
+      "url": "https://interno",
+      "type": "visual",
+      "use": "",
+      "avoid": "azul dental con dientes brillando y stock de doctores sonriendo a camara"
+    }
+  ],
+  "cta": {
+    "texto": "Agendar por WhatsApp",
+    "url": "https://wa.me/59170000001?text=Hola%2C%20vengo%20de%20la%20web%20de%20Clinica%20Dental%20Amanecer%20y%20quiero%20agendar%20una%20cita."
+  },
+  "seo": {
+    "title": "Clinica Dental Amanecer | Dentista en Santa Cruz, agenda por WhatsApp",
+    "description": "Odontologia integral en Santa Cruz de la Sierra: evaluacion honesta, presupuesto por escrito antes de empezar y urgencias el mismo dia. Agenda directa por WhatsApp.",
+    "ogImage": ""
+  },
+  "dashboard": {
+    "title": "Panel de control",
+    "subtitle": "",
+    "nav": [],
+    "filters": [],
+    "kpis": [],
+    "charts": [],
+    "table": {
+      "title": "Detalle",
+      "columns": [],
+      "rows": []
+    }
+  }
+}
