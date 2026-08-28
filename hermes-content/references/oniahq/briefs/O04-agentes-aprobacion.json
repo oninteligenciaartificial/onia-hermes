@@ -3,7 +3,7 @@
  "episodio": "004",
  "comment_trigger": "SISTEMA",
  "comment_reward": "las 6 tareas que conviene delegar primero",
- "caption": "«IA para tu negocio» no significa nada hasta que ves qué hace exactamente.\n\nEsto es lo que hace: revisa tus ventas, tu stock y tus cobros, arma la propuesta, y te la deja esperando. No manda nada solo. Vos aprobás.\n\nEse detalle es todo. Un sistema que actúa solo te mete en un problema el día que se equivoca. Uno que propone y espera, no.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero — y las 3 que no conviene delegar nunca.",
+ "caption": "EL PROBLEMA: no comprás lo que no entendés. Y nadie te explica qué hace la IA en tu negocio — solo te dicen que la necesitás.\n\nAsí que te lo muestro con la pantalla.\n\nLo que hace: mira tus ventas, tu stock y tus cobros mientras vos atendés. Cuando encuentra algo, no te avisa: te deja la propuesta armada. «Cobranza: Maestro Julio Choque — saldo vencido Bs 285 hace 10 días». El mensaje escrito, el monto calculado. Falta un botón.\n\nY lo que NO hace, a propósito: no le escribe a tu cliente sin que vos mires, no cambia un precio solo, no manda un cobro solo. Está escrito en la propia pantalla.\n\nCON ONIA PLATFORM:\n\n✅ Tus agentes revisan ventas, stock y cobros mientras vos hacés otra cosa\n✅ Te dejan la propuesta armada, con el monto ya calculado\n✅ Nada sale sin que vos aprietes el botón\n✅ Lo que aprobaste queda registrado, no en tu memoria\n\nEl riesgo de automatizar no es que la máquina sea tonta: es que sea rápida. Una persona que se equivoca manda un mensaje mal. Un sistema que se equivoca manda doscientos antes de que te enteres. Por eso propone y espera.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca.",
  "hashtags": [
   "#automatizacion",
   "#inteligenciaartificial",
@@ -17,8 +17,8 @@
    "number": 1,
    "role": "cover",
    "pill": "Lo que hace el sistema",
-   "headline": "Nadie te explica *qué hace* la IA en tu negocio",
-   "body": "Así que te lo muestro con la pantalla.",
+   "headline": "No lo comprás porque *nadie te muestra* qué hace",
+   "body": "«IA para tu negocio» no significa nada. Así que te lo muestro con la pantalla.",
    "object": "hermes-content/references/oniahq/fondos/panel-real.png",
    "object_fit": "bleed",
    "object_prueba": "«te lo muestro con la pantalla» — la pantalla entera, a sangre, es la prueba de la frase",
@@ -93,12 +93,23 @@
   },
   {
    "number": 5,
+   "pill": "La solución",
+   "headline": "Con *Onia Platform*",
+   "solucion": [
+    "Tus agentes *revisan* ventas, stock y cobros mientras vos hacés otra cosa",
+    "Te dejan la propuesta *armada*, con el monto ya calculado",
+    "*Nada sale* sin que vos aprietes el botón",
+    "Y lo que aprobaste queda *registrado*, no en tu memoria"
+   ]
+  },
+  {
+   "number": 6,
    "role": "save",
    "headline": "Por qué eso importa más que la IA",
    "body": "El riesgo de automatizar no es que la máquina sea tonta. Es que sea rápida. Que espere tu aprobación convierte un error caro en un botón que no apretás."
   },
   {
-   "number": 6,
+   "number": 7,
    "headline": "No te devuelve *horas*. Te devuelve la cabeza",
    "body": "Dejás de acordarte de a quién había que cobrarle y qué se estaba por acabar. Eso lo lleva el sistema.",
    "object": "hermes-content/references/oniahq/fondos/panel-fiado.png",
@@ -115,7 +126,7 @@
    ]
   },
   {
-   "number": 7,
+   "number": 8,
    "role": "cta",
    "headline": "¿Qué delegarías *primero*?",
    "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca. 20 minutos, gratis, sin vender nada."

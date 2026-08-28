@@ -631,6 +631,12 @@ function darkProductHtml(slide, idx, total, account, args) {
   const callout = slide.callout
     ? `<div class="callout">${emph(slide.callout)}</div>` : '';
 
+  // La lamina "Con Onia Platform". Nace en `dato-ilustrado` pero el arco aprobado la
+  // exige en toda pieza de @oniahq: sin ella la pieza es un problema sin dueño.
+  const solucion = Array.isArray(slide.solucion) && slide.solucion.length
+    ? `<ul class="solucion">${slide.solucion.map((x) => `<li>${emph(x)}</li>`).join('')}</ul>`
+    : '';
+
   let block;
   if (role === 'save') {
     block = `<div class="savetag">FRAMEWORK · Guardá esto ↗</div>
@@ -643,6 +649,7 @@ function darkProductHtml(slide, idx, total, account, args) {
     block = `<h2 class="dp-h">${emph(slide.headline)}</h2>
       ${slide.body ? `<p class="dp-body">${emph(slide.body)}</p>` : ''}`;
   }
+  block += solucion;
 
   return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -694,6 +701,17 @@ ${MARKS_CSS}
 .slide.has-shot .dp-h { margin-top:36px; }
 .slide.has-shot .dp-body { margin-bottom:auto; }
 .dp-h.cta { font-size:80px; }
+/* La lista de "Con Onia Platform". Mismo lenguaje que en dato-ilustrado: la marca de
+   verificacion en verde es la unica parte de la pieza que habla del producto. */
+.solucion{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:18px}
+.solucion li{position:relative;padding-left:48px;font-family:'Inter';font-weight:600;
+  font-size:32px;line-height:1.3;color:#fff;max-width:26ch}
+.solucion li::before{content:"";position:absolute;left:0;top:.32em;width:24px;height:13px;
+  border-left:4px solid var(--onia-green);border-bottom:4px solid var(--onia-green);
+  transform:rotate(-45deg)}
+.slide.cta .solucion li{color:var(--onia-ink)}
+.slide.cta .solucion li::before{border-color:var(--onia-ink)}
+
 .dp-body { font-family:'Inter'; font-weight:600; font-size:36px; line-height:1.38;
   margin-top:28px; max-width:880px; color:var(--onia-muted-dark); }
 .slide.cta .dp-body { color:var(--onia-ink); opacity:.85; }

@@ -421,3 +421,15 @@ test('dato-ilustrado: sin solucion no deja lista vacia', () => {
   const h = datoIlustradoHtml({ headline: 'H', body: 'b' }, 1, 7, 'onia', {});
   assert.ok(!h.slice(h.indexOf('<body>')).includes('class="solucion"'));
 });
+
+test('dark-product: tambien dibuja la lamina de solucion', () => {
+  // El arco aprobado exige "Con Onia Platform" en toda pieza de @oniahq. dark-product
+  // es el molde de producto (capturas anotadas) y tambien la necesita: forzar O04 al
+  // molde ilustrado le habria sacado justamente su prueba.
+  const h = darkProductHtml({ headline: 'Con *Onia Platform*',
+    solucion: ['Revisan solos', 'Dejan la propuesta', 'Nada sale sin vos'] }, 4, 8, 'onia', {});
+  const b = h.slice(h.indexOf('<body>'));
+  assert.strictEqual((b.match(/<li>/g) || []).length, 3);
+  assert.ok(b.includes('Nada sale sin vos'));
+  assert.ok(h.includes('.solucion li::before'), 'con su marca de verificacion');
+});
