@@ -84,9 +84,17 @@ la cámara es casual pero la escena es de campaña. Nadie saca esa foto por casu
 | **Luz** | «luz cálida y húmeda de las cinco» | «luz de tubo fluorescente de techo, plana» · «mediodía nublado, sin sombras lindas» |
 | **Momento** | un instante bonito | uno cualquiera: esperando, mirando el celular, a mitad de una frase |
 | **Fondo** | un elemento pintoresco | lo mundano que ya está: cables, sillas de plástico, una heladera de gaseosas |
+| **Lugar** | el lindo | uno donde nadie sacaría una foto linda: la fila de una farmacia, un trámite, la parada |
 | **Pose** | mirando a cámara | mirando fuera de cuadro, sin registrar la foto |
 | **Paleta** | armónica | que NO combine — la ropa no juega con la pared |
 | **Encuadre** | centrado | apretado o medio torcido, como quien saca rápido |
+
+✅ **Probado el 28-ago y funcionó.** Prompt: «parada en la fila de una farmacia de barrio
+esperando su turno, mirando el celular. Luz de tubo fluorescente del techo, plana y fea, sin
+sombras lindas. Remera lisa gris… Detrás estantes llenos de productos y otra persona esperando,
+todo desordenado. No mira a la cámara. Encuadre apretado y medio torcido, foto sacada rápido
+con un celular, sin componer.» El resultado se lee como una foto que sacaría cualquiera, y
+sostiene los rasgos.
 
 ⚠️ **Lo que NO se toca**: los rasgos sagrados (pecas, argollas, cadenita) y el anti-plástico
 («piel con poro y textura real, sin retoque»). Eso ya funciona. Lo que sobra es la belleza de
@@ -94,14 +102,32 @@ la escena, no el realismo de la piel.
 
 ---
 
-## Lo que hay en la web y el MCP no mostraba
+## ✅ Animate — imagen a video, PROBADO el 28-ago
 
-Al pasar el mouse sobre una imagen generada aparecen tres acciones:
+Al pasar el mouse sobre una imagen generada aparecen **Reference · Animate · Create 3D scene**.
 
-- **Animate** — convierte la imagen en video. Es el camino corto para b-roll de reels sin
-  depender del banco viejo. **No probado todavía.**
-- **Reference** — usa esa imagen como referencia de la siguiente.
-- **Create 3D scene** — no probado.
+**Animate lleva al generador de video con la imagen ya cargada como frame inicial.** No hay
+que subir nada. Se escribe qué se mueve, y listo.
+
+**Costos medidos en pantalla (Kling 3.0, 5 s, 720p, 9:16):**
+
+| Configuración | Costo |
+|---|---|
+| Con sonido nativo | **8,75 cr** |
+| **Sin sonido** | **6,25 cr** |
+
+🔻 **Apagar el sonido ahorra 2,50 cr — un 29%.** Y para nuestras piezas el audio nativo es
+inútil: la voz de Lucía va aparte, en edición. **Apagarlo siempre.** El botón está debajo del
+campo de prompt y alterna `On` / `Off`.
+
+**Resultado verificado** (`generadas-20260828/V01-farmacia-animate-kling3.mp4`, con su tira de
+frames al lado): 5,04 s · 828×1108 · h264. La cara se mantiene en los cuatro frames —pecas,
+cadenita, argolla— con movimiento sutil de cabeza y mano. **Es b-roll propio, en escenario
+boliviano, sin depender del banco viejo.**
+
+**Prompt de movimiento que funcionó:** «Ella sigue mirando el celular y mueve apenas el pulgar
+en la pantalla, parpadea una vez. La cámara casi no se mueve, como un video sacado de parado.
+Nadie mira a la cámara.» — pedir movimiento MÍNIMO es lo que lo mantiene creíble.
 
 Y en el menú hay funciones que el MCP no expone: **AI Influencer** («create and manage your AI
 influencer»), Soul ID Character, Soul Moodboard, Canvas, Photodump, Relight, Marketing Studio,
@@ -114,8 +140,8 @@ es *AI Influencer*.
 
 | Qué | Estado |
 |---|---|
-| El botón de descarga de la UI no bajó el archivo | 🔴 sin resolver — hay que encontrar cómo traer la imagen al repo |
-| Probar **Animate** para b-roll de reels | ⬜ |
+| Bajar lo generado al repo | ✅ **resuelto**: el botón de descarga del **panel derecho** (no el que aparece sobre la miniatura) sí baja el archivo a `Downloads`, y de ahí se copia al repo |
+| Probar **Animate** para b-roll de reels | ✅ hecho — ver arriba |
 | Probar **AI Influencer** | ⬜ |
 | Borrar los dos elements `ZZ-TEST` del workspace | ⬜ el MCP no tiene delete; por web se puede |
 
