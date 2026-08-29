@@ -60,6 +60,15 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
 - Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
   como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
 - La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- ✅ PIEZA 5 CERRADA (2026-08-29): org QA con agenda REAL creada por protocolo (org
+  zzqa-horario-0001 "ZZ QA Horario", user oninteligenciaartificial+qahorario@gmail.com,
+  cred en /root/onia-qa-horario.credentials, 6 tramos lun-sab 08:30-18:30). MIRADO en
+  prod logueado como ese dueño: la plantilla abre con "lun-sáb, 8:30-18:30" (la doble
+  convención de dayOfWeek en vivo) y el canal web pasó por sus 3 estados — el click del
+  dueño lo encendió y mostró el snippet real con token. ⚠️ Data QA nueva para la limpieza
+  final del carril: la org + su usuario + el inbox "ZZ QA Horario" que creó el botón.
+  Intento fallido (no repetir): docker exec SIN -i con heredoc SQL = psql lee EOF y sale
+  0 sin ejecutar NADA — el alta pareció correr y solo el count lo delató.
 - ✅ PIEZA 4 CERRADA (2026-08-29): delivery_status HONESTO. run-turn expone messageKey
   en send[]; el adapter marca sent/failed tras cada POST real (patron M9), guard typeof
   para stores parciales. 5 tests nuevos (567/569). E2E en prod: POST rechazado => fila
