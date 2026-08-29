@@ -1,7 +1,7 @@
 # Handoff — carril fiscal
 
 **Repo:** `onia-platform` · **worktree:** `.claude/worktrees/fiscal-mock` · **rama:** `carril/fiscal-mock`
-**Última sesión:** 2026-08-28
+**Última sesión:** 2026-08-29
 
 ---
 
@@ -15,7 +15,18 @@ leyenda en pantalla y en la vista de impresión.
 
 ## 2. Qué quedó en producción
 
-**NADA, y es a propósito.** Todo esto es local. Los tres gates (`SIAT_EMISSION=1`,
+**Mergeado a `master` el 2026-08-29** (PR #49 y #50), con OK explícito de Sergio sabiendo
+que un merge dispara deploy a `dentalgest.app`. Verificado después del merge: `tsc` exit 0,
+**2124 tests verdes**, el árbol local idéntico a `origin/master`, el sitio responde 200, y
+el check `Security` de CI pasó a verde después de más de un día en rojo.
+
+Se publicaron tres arreglos que NO eran del carril fiscal pero bloqueaban todo: el lockfile
+generado en Windows que rompía `npm ci` en Linux, un falso positivo de gitleaks, y el único
+error de lint. Los tres venían heredados de un master que estaba rojo y que nadie miraba.
+
+**De la capa fiscal NO se encendió nada.** Los tres gates (`SIAT_EMISSION`,
+`PLATFORM_LAYER`, entitlement) siguen apagados en producción: viven sólo en el `.env.local`,
+que no se commitea. Lo que se mergeó es el entorno local y los tests, no la emisión. Los tres gates (`SIAT_EMISSION=1`,
 `PLATFORM_LAYER=1`, entitlement `module.invoicing`) están encendidos SOLO en el
 `.env.local` de ese worktree, que no se commitea. En producción siguen apagados.
 
