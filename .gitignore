@@ -48,3 +48,4 @@ onia-hermes-collab/
 *.deploy.json
 n8n-mcp-server/node_modules/
 .tmp/
+test-results/
