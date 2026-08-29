@@ -670,3 +670,26 @@ Best for: engineering, clinics, B2B service, high-ticket local services.
 - [ ] Motion has reduced-motion fallback.
 - [ ] LCP, INP and CLS targets are considered before large video/image choices.
 - [ ] Client risks are visible: payment, WhatsApp, legal claims, credentials, stock, delivery or approvals.
+
+## Salud premium — patrones medidos (2026-08-29)
+
+Fuente: despiece computado de One Medical + Parsley Health, ficha completa en
+`data/references/design-sources/2026-08-29-salud-premium.md`. Confirmado en DOS
+referentes independientes; aplicado ya al template clinic (pesos) y a la demo
+dental-amanecer (acento miel).
+
+- **Serif de display LIVIANA (300–500) a tamano grande** + sans geometrica de
+  cuerpo. La negrita 700+ mata la direccion premium del rubro persona-salud.
+- **Acento tierra desaturado (miel/caramelo #bf7e3d–#ffc776)**, nunca coral/rojo
+  saturado. Verde profundo o petroleo como superficie Y como CTA pill.
+- **Cifra-editorial**: un numero enorme en serif como seccion propia. SOLO con
+  dato real del cliente (regla de la casa: sin dato verificable, la seccion no
+  existe — no se inventa).
+- **Quote unica centrada en banda de color suave** (menta/crema), no carrusel de
+  testimonios.
+- **Retrato con recorte organico (circulo/arco) sobre banda plana** — humaniza
+  sin stock ni caras generadas.
+- **Tabla comparativa con columna propia destacada** al final del scroll, antes
+  del FAQ (Parsley) — misma mecanica que la /comparativa de Onia.
+- Ritmo de superficies planas claro/oscuro como profundidad (ya era regla; las
+  dos referencias lo confirman).
