@@ -282,6 +282,16 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   36/36 con registry, tsc limpio.
 - Fase C (candado motor) → Fase D (UI /inbox) → Fase E (gates+deploy+MIRAR) pendientes.
 
+### Vision ampliada (Sergio 2026-08-29, "paso a paso primero que funcione")
+
+- BANDEJA/BOT MULTIMEDIA (backlog v5, NO empezar hasta cerrar v4): que la bandeja
+  muestre fotos/videos/enlaces de WhatsApp y widget (attachments de Chatwoot), y que
+  el BOT los entienda (vision LLM — pieza nueva real, medir costo antes).
+- COBRO QR EN EL CHAT: YA CONSTRUIDO en mock (28-ago: /bcp/cobrar + /bcp/callback,
+  contrato BCP calcado, verificado MIRANDO). Encenderlo = credenciales del banco +
+  mTLS .pfx (tramite de Sergio); el codigo no cambia. Fase 2 natural post-bandeja:
+  boton "Cobrar" DENTRO de la conversacion de la bandeja.
+
 **Archivos y cambios**
 
 - `onia-platform` (master → origin): `bd2350c` plantillas + `9585db4` fix ancho.
