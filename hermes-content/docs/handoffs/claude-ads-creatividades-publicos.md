@@ -1,7 +1,76 @@
 # Handoff — carril `claude/ads-creatividades-publicos`
 
-> Última actualización: 2026-08-23 (2ª sesión del día). Antes: cierre de contenido y lanzamiento de Lucía.
+> Última actualización: **2026-08-29**. Lo de ese día está acá arriba; de "Sesiones anteriores"
+> para abajo es historia y no manda.
 > Formato: los 6 campos de `README.md` de esta carpeta.
+
+---
+
+# Sesión 2026-08-29
+
+## 1. Objetivo
+
+Cerrar la alerta de automatización de Meta sobre `@sergio_urcullo` — Sergio lo eligió por encima
+de seguir con Lucía/Higgsfield. Después, arreglar SISTEMA. Recién después, retomar contenido.
+
+## 2. Estado
+
+**Nada nuevo se publicó.** Todos los cambios son de repo. No se tocó el VPS ni se mutó n8n.
+
+- **Causa de la alerta: identificada mirando las pantallas.** En Facebook (no Instagram) →
+  Integraciones comerciales hay **seis accesos** sobre su cuenta, y **cuatro son apps de Meta
+  nuestras** apiladas desde mayo. Detalle en `ONIA_AVISO_AUTOMATIZACION_IG.md`.
+- 🔴 **Sergio decidió NO eliminar ninguna** (29-ago), aunque se verificó que era seguro.
+  **No volver a proponerlo.**
+- **SISTEMA arreglado del lado de las piezas.** Siete briefs de @oniahq prometían "las 6 tareas
+  para delegar" y el DM manda un link para agendar. Ahora prometen lo que el DM entrega.
+- **Cinco bugs del gate**, todos de la misma familia (dar por bueno sin mirar): el self-check
+  colgado del dato vivo (dos veces), el contador escrito a mano, el gate ciego a los triggers
+  dentro de la lámina, y una sola frase admitida por palabra cuando Lucía y @oniahq tienen voces
+  distintas para la misma oferta.
+- **Blindaje**: `postiz_schedule.mjs` rechaza el integration id de Sergio.
+
+## 3. Archivos y cambios
+
+`9b0a9774` guard de Postiz · `ba489288` corrección de SISTEMA + self-check desacoplado ·
+`326794dc` doc del aviso reescrito · `37e0219b` seguridad de borrado verificada ·
+`cc3a0af4` contradicción del doc · `6bf6660c` verificación de negocio + línea de tiempo ·
+`aad6c03c` 7 briefs alineados + 3 bugs del gate.
+
+## 4. Intentos fallidos — lo que más vale
+
+- **Lancé un Workflow entero con premisas falsas** (que Samuel usaba ManyChat sobre nuestras
+  cuentas, y que la app estaba sin verificar). Las dos eran mentira. Se pagó y se tiró.
+  **Verificar las premisas ANTES de abrir un workflow.**
+- **Casi apago SISTEMA en n8n con una premisa falsa.** El registro decía que mandaba un 404.
+  Leer el workflow vivo antes de tocarlo lo evitó — apagarla habría sido la peor de las salidas.
+- **El panel de Integraciones comerciales NO se puede leer**: vive en un iframe cross-origin, no
+  lo ve el árbol de accesibilidad ni el DOM de la página madre. La única vía es clickear por
+  coordenada, y **"Eliminar" está pegado a "Ver y editar"** en su cuenta personal. Se resolvió por
+  otra puerta: `developers.facebook.com/apps/` da los modos y casos de uso sin botones peligrosos.
+- **Mi propio barrido de guardián dio 12 rojos y 8 eran falsos**: corrí el gate de carrusel sobre
+  briefs de **video** (`video-brief-template`, `futbol-lab-…`) y de **post simple**
+  (`lucia-p1..p6`), que no tienen `slides` por diseño. **Un barrido que grita 12 esconde los 3
+  que importan.** Filtrar por briefs que declaren `slides`.
+- Cuatro hipótesis sobre la alerta murieron por lo mismo: **opinar sin abrir la pantalla**.
+
+## 5. Próximos pasos
+
+Retomar Higgsfield por navegador, en orden: animar `G02-parada-de-micro` (la única de receta
+normal sin animar) · una escena con interacción en un lugar nuevo · probar Recreate para variantes
+· usar el banco propio en una pieza real del plan.
+
+## 6. Qué depende de Sergio
+
+- **FACTURA**: el recurso está vivo (200) pero la palabra no está cargada en el mapa de @oniahq.
+  Es una edición de n8n — no se hace desde acá sin su OK. **O03 está bloqueada por esto.**
+- **STACK**: doble bloqueo, el PDF no existe Y el mapa de @sergio_urcullo está vacío a propósito.
+  **S05 y S06 bloqueadas.** El gate las marca en rojo con razón.
+- Publicar lo que ya está aprobado y sin subir.
+
+---
+
+# Sesiones anteriores
 
 ## 1. Objetivo
 
