@@ -39,10 +39,9 @@ balde agujereado. **Supuesto fatal de la propuesta.**
   (pilar) / Bs 300 (B-roll). Máximo variable = 20×375 + 10×300 = **Bs 10.500/mes**; con el
   fijo, **hasta Bs 12.500/mes**, con runway hasta ~mediados de octubre y cero clientes
   pagando. Sigue faltando el tope mensual TOTAL.
-- **Yapping multiplica la factura si no se acota:** Samuel hace variantes de un mismo video
-  para trial reels. Si cada variante cuenta como "video" con su propio tope de 50k, un solo
-  contenido puede facturar 3-5 veces — y los trial reels están diseñados justamente para
-  farmear vistas de no-seguidores (vistas baratas, poco calificadas).
+- ~~Yapping multiplica la factura~~ **Resuelto (Sergio, 2026-08-29): las variantes de
+  yapping/trial reels NO generan CPM — solo el video oficial cuenta.** Queda solo dejarlo
+  por escrito en el acuerdo.
 - **Medición indefinida:** ¿vista de qué plataforma, sumadas las 4? ¿ventana de conteo?
   (un video acumula vistas por meses — ¿cada "cierre mensual" recuenta lo viejo?). Y lo
   mide el que cobra, en un sheet manual.
@@ -79,8 +78,8 @@ de caja. Y la audiencia "aprendé herramientas IA" compra cursos, no el SaaS B2B
 2. **Techo y medición** (la moneda ya se cerró: TC 10 → pilar Bs 7,5/1.000, B-roll
    Bs 6/1.000): **tope mensual TOTAL del variable** (ej. Bs 3.000-4.000); medición =
    snapshot a 30 días del publish, suma de las 4 plataformas, contra analytics nativas
-   (API/captura), no sheet a mano; **las variantes de yapping/trial reels comparten UN
-   solo tope de 50k con su video madre** — es el mismo contenido, no 5 videos.
+   (API/captura), no sheet a mano; **las variantes de yapping/trial reels no generan
+   CPM: solo el video oficial cuenta** (ya acordado verbalmente — va por escrito).
 3. **Realinear el variable:** mitad por vistas, mitad por resultado — Bs por miembro nuevo
    de comunidad atribuido (`?src=`/palabra) o por demo agendada. Si su contenido convierte
    como promete, Samuel gana MÁS que con CPM puro.
@@ -232,8 +231,8 @@ comunidad. Decidimos sobre datos.
 **2. Reglas del CPM (TC 10 como quedamos):**
 - Tope mensual total del variable: Bs 3.500. Si lo superamos, lo celebramos y para el
   mes siguiente renegociamos hacia arriba — el techo me deja presupuestar.
-- Las variantes de yapping/trial reels comparten UN solo tope de 50.000 vistas con su
-  video madre: es el mismo contenido, no videos distintos.
+- Como hablamos: las variantes de yapping/trial reels no generan CPM — solo el video
+  oficial cuenta, con su tope de 50.000. Lo dejamos por escrito.
 - Vistas = suma de las 4 plataformas, foto a los 30 días de publicado cada video,
   verificada contra las analytics nativas (capturas o API). Así ninguno de los dos duda.
 - El CPM aplica solo a tus 30 piezas y sus variantes. Los cortes extra que yo saque de
