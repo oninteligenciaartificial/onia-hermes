@@ -266,3 +266,62 @@ se prueba y se anota qué hace, qué cuesta y para qué sirve en este carril.
   foto y queda jubilado.
 - Las fotos del banco se eligen desde [`BANCO-OFICIAL.md`](BANCO-OFICIAL.md), nunca a ojo.
 - El acento gráfico de las piezas es el **verde de Onia `#00D26A`**, en las tres cuentas.
+
+---
+
+# Sesión 2026-08-29 — intento de animar G02: qué se aprendió (0 créditos gastados)
+
+**No se animó G02.** Se frenó antes de generar porque el frame cargado no era el correcto, y
+generar con el frame equivocado es tirar créditos. Lo que sigue es lo que salió del intento, que
+es más de lo que hubiera dado el video.
+
+## 🔴 1. El `Generate` de la landing NO genera nada
+
+`higgsfield.ai/ai-video` tiene un composer completo —imagen, prompt, modelo, duración, aspecto,
+sonido— y un botón `Generate`. **Ese botón no gasta créditos: es un embudo.** Solo traslada los
+ajustes al workspace real (`/ai/video?duration=5&aspect_ratio=9%3A16&audio=off`) y ahí hay que
+volver a apretar. El prompt viaja; **la imagen NO viaja**.
+
+Se descubrió porque después de "generar" apareció el botón real diciendo **30 créditos**.
+
+## 🔴 2. Trampa de costo: el workspace arranca en 4K
+
+**5 s con Kling 3.0 a 4K = 30 créditos** (≈ Bs 11,2). Las V01-V03 del 28-ago costaron **~6,25**
+porque estaban a **720p** (≈ Bs 2,3). **Es 5x de diferencia y la resolución viene alta por
+defecto.** Bajarla ANTES de apretar Generate.
+
+## 🔴 3. No se puede subir una imagen del disco al frame
+
+El input existe (`input[type=file]`, dos en la página) y la subida reporta éxito, pero **la app
+limpia el input y el frame sigue mostrando el anterior**. El frame se elige de los assets de la
+cuenta, no de disco. Si la imagen fue generada en Higgsfield ya está adentro; si viene de afuera,
+hay que subirla por otra puerta.
+
+## 🔴 4. El bloqueo real: el grid de Assets no renderiza miniaturas
+
+Con **738 assets**, `higgsfield.ai/asset/all` deja los placeholders **en negro** y el renderer se
+congela: `Page.captureScreenshot` dio timeout de 30 s **tres veces**. El buscador tampoco recibe
+el texto. **Sin miniaturas no se puede elegir una imagen a ojo, y ese es el cuello de botella
+de todo el flujo de Animate.**
+
+**Qué probar la próxima:** filtrar por `Image` (592) o por proyecto antes de que cargue todo ·
+vista `List` en vez de `Grid` · o guardar el **asset id / URL de detalle** de cada imagen buena
+en el momento de generarla, para volver por URL directa y no por el grid. **Esto último es lo que
+hay que empezar a hacer siempre.**
+
+## ✅ 5. Pendiente 3 contestado: NO existe Recreate
+
+El panel de detalle de una imagen tiene exactamente: **Animate · Open in · Reference · Upscale ·
+Download**. No hay Recreate. **Para variantes de una foto que gustó, la función es `Reference`.**
+Queda como el próximo experimento en lugar de Recreate.
+
+## Detalles chicos que cuestan tiempo si no se saben
+
+- **Apagar el sonido pide confirmación**: sale un diálogo *"Turn sound off?"* con Cancel / Turn
+  off. Un solo click no alcanza; hay que confirmar.
+- **Kling 3.0 no ofrece 3:4.** Solo **16:9, 9:16 y 1:1**. Las fotos 3:4 del banco se recortan a
+  9:16 (se pierden los costados).
+- **Las coordenadas NO son estables entre capturas** en este sitio: el layout se re-dibuja a
+  escalas distintas y un click de una captura anterior cae en otro lado. **Usar refs o el DOM,
+  nunca coordenadas**, sobre todo si hay un botón destructivo cerca.
+- Duración: al elegir Kling 3.0 se puso **5s** solo. Rango 3-15 s.
