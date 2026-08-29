@@ -218,6 +218,44 @@ De mi lado quedo con lo que hablamos: mis videos extra, los crudos para la comun
 responder la comunidad y las historias diarias. Cerrando estos puntos, fijá vos el día
 de la sesión mensual.
 
+## Segunda pasada (2026-08-29) — lo que aún faltaba
+
+### Para el acuerdo con Samuel (agregar al mensaje / contrato)
+
+1. **Cuándo se paga qué.** La foto a 30 días crea un desfase: un video subido el día 28
+   cierra su conteo el día 58. Definir: **fijo al inicio del mes; variable al cierre del
+   mes siguiente**, cuando todas las fotos de 30 días existen. Al terminar el contrato,
+   los últimos videos cierran su foto y ahí muere el CPM. Sin esto, la primera factura
+   es la primera pelea.
+2. **Entrega mínima / prorrateo.** ¿Qué pasa si entrega 18 de 30? El fijo se prorratea
+   (Bs 2.000/30 ≈ Bs 66 por pieza faltante) o hay mínimo de entrega (25) para cobrar
+   completo. Hoy el fijo no tiene ninguna condición de entrega.
+3. **Guiones 3-5 días antes de la sesión.** En la sesión se graba TODO el mes: un guion
+   con cifra falsa o promesa que no cumplimos se graba mal y se paga igual. Revisión
+   previa de Sergio = el mecanismo que hace cumplible la regla "cifras con fuente".
+4. Menores (al contrato, no al mensaje): confidencialidad simple (ve métricas y
+   estrategia); crudos entregados a carpeta compartida dentro de las 48 h post-sesión
+   (la propiedad sin mecanismo es papel); identidad visual según plantillas nuestras.
+
+### Tarea NUESTRA antes del día 1 (nada de esto es de Samuel)
+
+5. **Elegir la plataforma de la comunidad — con costo.** Skool cuesta ~$99/mes (≈ Bs 990
+   al TC 10): sumaría otro "Samuel" mensual de gasto. Con el comprador boliviano viviendo
+   en WhatsApp, la opción sensata hoy es **Comunidad de WhatsApp** (gratis, admin Sergio,
+   contactos exportables por diseño) o Telegram. Decidir ANTES de firmar: la promesa de
+   los 30 videos apunta ahí.
+6. **Embudo vivo:** test comentario→DM desde cuenta de tercero + quitar el `neverError`
+   (que un rechazo de Meta ALARME) + `cal.onia.com.bo` arriba y una reserva de punta a
+   punta mirada. Firmar con esto roto = tirar fijo y variable.
+7. **Nuestro tablero, no el suyo:** 3 KPIs propios desde el día 1 — miembros nuevos de
+   comunidad/semana, solicitudes en `/admin/solicitudes` con `src` de videos, demos
+   agendadas. Si en el cierre del mes 1 solo existen las vistas de Samuel, no vamos a
+   poder decidir si renovar. El dashboard lo armamos nosotros (ya existe `?src=` y el
+   radar); Samuel valida sus vistas contra él.
+8. **Logística de la sesión:** 20 pilares + 2-3 h de crudo en un día son 5-7 h de
+   grabación. Considerar 2 medias jornadas; teleprompter ayuda (referencia earshot en
+   video-intake, 28-ago).
+
 ## Pendientes que este doc deja a Sergio
 
 - Correr el test de tercero: comentar `SISTEMA` en `instagram.com/p/DcUd8uakZsk/` desde
