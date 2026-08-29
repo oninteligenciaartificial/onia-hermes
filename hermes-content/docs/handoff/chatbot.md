@@ -217,12 +217,15 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
 
 **Qué quedó a medias, y dónde**
 
-> ⚠️ Bloque saneado 2026-08-29: lo que decía acá ya se saldó en el backlog v2 (ver arriba):
+> ⚠️ Bloque saneado 2026-08-29 (2ª pasada): TODO lo que decía acá está saldado:
 > plantilla bebe horario real ✅ · LiteLLM diagnosticado ✅ · delivery_status honesto ✅ ·
-> limpieza QA ✅ · watchdog ERROR→Telegram cableado ✅. Queda UNO vivo:
-
-- **El probador con borrador corre el funnel de VENTA, no el modo recepcionista** cuando el
-  doc viene explícito — pendiente documentado de antes (decidir si simula recepcionista).
+> limpieza QA ✅ · watchdog ERROR→Telegram cableado ✅ · y el "probador con borrador corre
+> funnel de venta" era FALSO desde el 18-ago: preview-route.mjs aplica asRecepcionista al
+> borrador (decisión Sergio en el propio código) y knowledge.test.mjs lo fija con test
+> ("borrador => recepcionista, no M0 de venta", M0R + pastillas + dato del borrador).
+> Lección: un pendiente heredado se verifica CONTRA EL CÓDIGO antes de copiarlo a un backlog
+> — este sobrevivió dos saneos por repetirse sin contar de nuevo. BACKLOG v3 tarea 2: tachada
+> sin trabajo (ya existía).
 
 **Archivos y cambios**
 
