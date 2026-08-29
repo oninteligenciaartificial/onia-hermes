@@ -75,6 +75,16 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
 
 ### Intentos fallidos de esta mitad
 
+- 🔴 **Una falsa alarma casi apaga dos embudos vivos.** `verificar_recompensas.js` dio timeout en
+  SISTEMA y HUMO; el runbook manda apagar la palabra en ese caso. **No se apagó**: se comprobó por
+  fuera con `curl` y las tres URLs daban 200 en 0,7 s. Era un hipo de red. El chequeo no tenía
+  reintento, así que **el remedio de la falsa alarma era peor que la falsa alarma**. Ahora
+  reintenta una vez.
+- Y al cablear ese reintento se introdujo un bug —la función se llamaba a sí misma— que **la
+  corrida normal no detectaba**, porque ese código solo se ejecuta cuando algo falla. Por eso el
+  script ahora tiene `--self-check` que prueba el reintento contra un host inexistente y mide que
+  de verdad espere.
+
 - **El grid de `/asset/all` no carga miniaturas** con 738 assets y cuelga el renderer (timeout de
   30 s, tres veces). Se perdió una vuelta entera ahí. **La puerta buena es el historial del
   workspace**, que sí renderiza.
@@ -145,6 +155,21 @@ pilar C. Tenemos el vehículo y lo estamos usando de cartel.
 
 **Formato:** el sistema pide **70% reel / 30% carrusel**. Tenemos 6 carruseles y 1 reel: al revés.
 Y hay **5 videos** (V01-V05) del banco sin usar en ninguna pieza.
+
+### 1-bis-a. ✅ Pilar B: hecho — tanda 2 de historias
+
+`historias-20260829/`: **H09 farmacia · H10 mercado · H11 tienda · H12 oficina**, 9:16, 5 s,
+sin audio. **0 créditos**: recicla los videos del banco ya pagos. **Sin palabra clave ni CTA** a
+propósito — el pilar B no vende, y si estas también piden algo la cuenta entera es un embudo.
+V04-parada quedó afuera: es la única animación fallida del banco.
+
+Mezcla ahora: **2 A · 4 C · 4 B**. Sigue faltando reel (el sistema pide 70%).
+
+⚠️ Sergio marcó que el texto se veía chico y tenía razón: la plantilla `quote` trataba el
+subtítulo como **firma de autor** (47% del titular, gris) cuando se usa como **remate**. Corregido
+a 68% y color de texto en `.claude/skills/editor-videos/scripts/make-mockup.mjs` — otro carril,
+pero él lo pidió y `story-batch.mjs` es su único consumidor. **Lección: para juzgar tipografía hay
+que mirar el recorte 1:1, no la hoja de contacto al 31%.**
 
 ### 1-ter. Lo que agregan las dos referencias que pasó Sergio (29-ago)
 
