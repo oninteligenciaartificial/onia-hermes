@@ -127,6 +127,37 @@ para un dato que el panel de apps daba igual de bien y sin botones destructivos 
 
 ---
 
+## ✅ El negocio SÍ está verificado — y la línea de tiempo completa
+
+Leído el 29-ago en el buzón de alertas de `Onia Bot`. **Corrige algo que este mismo doc dijo mal
+antes**: se escribió "la app no es Proveedor de tecnología" como si faltara todo el trámite.
+
+> **24 de agosto — "Resultado de verificación de acceso: verificación realizada".**
+> *"Tu empresa, OniaAgency, fue verificada como proveedora de servicio y no se requiere ninguna
+> acción adicional."*
+
+**La distinción que importa:** el **negocio** está verificado ✅. Lo que no está hecho es
+**inscribir la app `OnIA Social API`** en el camino de Proveedor de tecnología — su panel todavía
+ofrece "Conviértete en proveedor de tecnología". O sea que la parte cara ya está pagada, y
+habilitar el circuito para **clientes** cuesta mucho menos de lo que se creía.
+
+### Línea de tiempo
+
+| Fecha | Qué pasó |
+|---|---|
+| 7 ago | `Onia Bot` pasa a modo activo |
+| **13 ago** | **`OnIA Social API` pasa a modo activo** |
+| 16 ago | App enviada a revisión |
+| 21 ago | Resultados de App Review · renovación de acceso a datos completada · verificación de acceso enviada |
+| **24 ago** | **Verificación de acceso APROBADA** — y **el mismo día, primer aviso a Sergio** |
+| 28 ago | Segundo aviso |
+
+Que el primer aviso caiga el mismo día que se aprueba la verificación es llamativo, pero **no hay
+evidencia de que estén conectados** y no se debe tratar como causa. La causa sostenida sigue
+siendo la de arriba: seis accesos apilados.
+
+---
+
 ## Lo que sigue vigente del plan de contenido
 
 **En `@sergio_urcullo` se publica A MANO desde el teléfono**, y la cadencia sube gradual. Una
@@ -153,5 +184,5 @@ explícito, para que un `--integration` copiado y pegado no publique en su cuent
 - **La lista de apps del lado de Instagram** — `instagram.com/accounts/manage_access/` pidió
   login y no se inició sesión. No hace falta igual: la app usa **Facebook Login for Business**,
   así que los permisos que importan viven del lado de Facebook.
-- **Si la app debería ser Proveedor de tecnología** — hoy no lo es. Eso limita venderle el
-  circuito a **clientes**, no el uso sobre las cuentas propias.
+- **Si conviene inscribir `OnIA Social API` como Proveedor de tecnología.** El trámite caro ya
+  está hecho (ver abajo); falta la decisión de si se necesita.
