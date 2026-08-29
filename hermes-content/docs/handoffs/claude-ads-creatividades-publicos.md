@@ -209,13 +209,38 @@ están ellas: muchas, y comercialmente muertas.
 - **STACK**: doble bloqueo (no existe el PDF y el mapa de @sergio_urcullo está vacío a propósito).
   **Bloquea S05 y S06.**
 
-### 3. Advanced Access — lo único con reloj (~20 días)
-Verificado el 29-ago: los permisos están en **"Listo para la prueba"** (acceso estándar, solo
-cuentas propias). ⚠️ Que `instagram_business_manage_messages` figure como "Agregar" **NO significa
-que los DMs no salgan** — se descartó con evidencia (hay un DM entregado en las ejecuciones). Esa
-lista es la de **Facebook Login**; el circuito usa **Instagram Login**, otra configuración.
-**Sin esto no hay cliente posible.** Arranca en paralelo con el 1. Necesita screencast del flujo,
-política de privacidad y casos de uso escritos.
+### 3. Advanced Access — lo único con reloj
+
+**Qué es:** Meta tiene dos niveles por permiso. En **Standard Access** (lo que el panel llama
+*"Listo para la prueba"*, donde estamos) el permiso solo funciona en **cuentas con rol en la app**:
+las nuestras. En **Advanced Access** funciona en la cuenta de un cliente. **Sin eso el add-on de
+Bs 390 no se puede cumplir**, por buenas que sean las piezas.
+
+**Cinco requisitos YA cumplidos** (verificado 29-ago contra la doc de Meta y contra la app):
+≥1 llamada API por permiso (127·37·19·19) · verificación de negocio (24-ago) · privacidad
+`onia.com.bo/privacidad` **200** · términos `/terminos` **200** · email `business@onia.com.bo`.
+Categoría "Negocios y páginas" ✅.
+
+🔴 **Cuatro campos vacíos que hay que llenar ANTES de enviar** (editarlos después dispara
+re-verificación) — **son de Sergio, no se tocaron**:
+
+| Campo | Estado |
+|---|---|
+| Ícono de la app | vacío |
+| Dominios de la app | vacío (debería ser `onia.com.bo`) |
+| Plataforma declarada | ninguna |
+| Dirección / país | vacía, y el país en **Estados Unidos** |
+
+⚠️ **El país es el riesgo real.** Meta, textual: *"Check that the details you enter exactly match
+the details of your legal business entity"*. El negocio verificado es boliviano (SEPREC 5371375010,
+Santa Cruz). Ya nos rebotó por algo así en julio (teléfono y nombre del sitio).
+
+**Y el trabajo real:** **un screencast POR PERMISO** de punta a punta, instrucciones de prueba paso
+a paso para el revisor, y descripción del caso de uso. Meta pide interfaz en inglés y subtítulos si
+no se explica solo.
+
+⚠️ El **"~20 días"** que citábamos **no está en la doc de Meta** — no dan plazo. Es estimación
+nuestra, no dato.
 
 ### 4. Demo de Marketing Studio
 Sirve dos veces: pieza de venta del Higgsfield cotizado **y** screencast para App Review.
