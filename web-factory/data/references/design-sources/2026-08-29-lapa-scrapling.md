@@ -51,8 +51,22 @@ Fuentes vacías en el scrape: cargan por CSS externo (no inline), así que el
 `@font-face` no entra al HTML servido — para tipografía exacta hace falta
 seguir el CSS o mirar renderizado. Colores sí salen del HTML servido.
 
+### Par tipográfico exacto (siguiendo el CSS de Webflow con Scrapling)
+
+Frequency Breathwork: **Aime** (serif de display, Georgia como fallback — 9
+usos, ESCASA) + **Neue Montreal** (sans geométrica de cuerpo, Arial fallback —
+38 usos, dominante). Ratio ~1:4 serif:sans. Es LITERALMENTE el patrón
+salud-premium: serif escasa de carácter para títulos, geométrica limpia para
+todo lo demás. Valida el par de la demo (Fraunces + DM Sans) como equivalente
+libre en Google Fonts (Aime y Neue Montreal son de pago; Fraunces+DM Sans dan
+el mismo gesto sin licencia).
+
+**Método probado**: Scrapling sigue el CSS externo (Webflow/CDN) y saca el
+`font-family` real — el navegador headless no hacía falta para esto. Queda como
+receta: HTML servido para colores, CSS externo seguido para tipografía.
+
 ## Próximo (cola del loop)
 
-- Seguir el CSS externo de Frequency Breathwork para el par tipográfico exacto.
 - Despiece de 1 ecommerce (Magnet Lover) y 1 food (Caphe Roasters) para esos
   rubros del motor.
+- ¿Sumar Aime→Fraunces como mapeo pago→libre en el pattern bank tipográfico?
