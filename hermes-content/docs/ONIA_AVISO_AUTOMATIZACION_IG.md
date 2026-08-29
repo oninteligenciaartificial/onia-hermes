@@ -72,10 +72,25 @@ planeadas, empieza a mandar Private Replies automáticos desde su cuenta.
 **La acción es una sola y es de Sergio** (o de una sesión con su navegador, con su OK explícito):
 sacar de **Integraciones comerciales** las apps que no se usan.
 
-- **Eliminar:** `ONIA Marketing API`, `OnIA Agency`, `Onia Agency Chatbots`.
-- **Dejar:** `OnIA Social API` — la que mueve @oniahq.
-- **Los dos MCP de Claude:** decisión de Sergio. Si no los usa desde otro lado, fuera también:
-  serían 5 accesos menos de 6.
+🔴 **DECISIÓN DE SERGIO, 2026-08-29: NO SE ELIMINA NADA.** Se verificó que borrar las tres apps
+viejas era seguro (ver abajo) y aun así decidió no tocarlas. **No volver a proponerlo**: la
+próxima sesión que lea este doc va a encontrar el análisis completo y le va a dar la tentación de
+"terminar el trabajo". No está pendiente — está decidido que no.
+
+Lo que sigue vigente igual, porque no depende de borrar nada:
+
+- **En `@sergio_urcullo` se publica A MANO**, con cadencia gradual.
+- **No se conecta ninguna herramienta nueva** a esa cuenta.
+- **No se activan sus palabras clave** hasta que exista el recurso detrás.
+
+<details>
+<summary>El análisis de qué se podría eliminar, por si algún día se retoma (decisión: no)</summary>
+
+- Candidatas: `ONIA Marketing API`, `OnIA Agency`, `Onia Agency Chatbots`.
+- A conservar: `OnIA Social API` — la que mueve @oniahq.
+- Los dos MCP de Claude quedaban a criterio de Sergio.
+
+</details>
 
 ### ✅ Verificado el 29-ago: borrar las tres es seguro
 

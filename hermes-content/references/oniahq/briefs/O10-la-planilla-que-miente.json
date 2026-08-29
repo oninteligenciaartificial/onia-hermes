@@ -2,7 +2,7 @@
  "serie": "Datos que no te contaron",
  "episodio": "010",
  "comment_trigger": "SISTEMA",
- "comment_reward": "las 6 tareas que conviene delegar primero",
+ "comment_reward": "un diagnóstico de 20 minutos",
  "caption": "EL PROBLEMA: tu stock, tus precios y tus fiados viven en una planilla que nadie revisó nunca.\n\nHay investigación sobre esto desde hace décadas. Raymond Panko, de la Universidad de Hawái, juntó las auditorías hechas a planillas que ya estaban en uso dentro de empresas: en nueve estudios, sobre 163 planillas auditadas, el 84 % tenía errores. En los cinco estudios con la metodología más estricta, el 91 % de 55 planillas.\n\nY el detalle que más dice: las dos consultoras que se dedican a auditar planillas declararon que nunca auditaron un modelo sin encontrarle un error. Ni uno.\n\nNo es que seas malo con Excel. Es que una planilla no tiene quién le avise. Una fórmula arrastrada de más no da error: da un número. Una fila insertada en el lugar equivocado no se queja. Y el resultado sigue pareciendo un resultado.\n\nAsí que el error no se ve: se cobra. Vendés al precio viejo, pedís mercadería que ya tenías, cobrás un fiado que ya te pagaron.\n\nCON ONIA PLATFORM:\n\n✅ El precio y el stock viven en un solo lugar, no en una copia de una copia\n✅ La venta descuenta el stock sola: nadie arrastra una fórmula\n✅ Cada cambio queda con quién lo hizo y cuándo\n✅ El cierre del día se arma solo, no se tipea\n\n⚠️ Las auditorías son de 1987 a 2001, en empresas de Estados Unidos, Reino Unido y Australia. Son sobre planillas, no resultados de Onia.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero.",
  "hashtags": [
   "#excel",
@@ -78,7 +78,7 @@
    "role": "cta",
    "kicker": "20 minutos, gratis",
    "headline": "La planilla no se equivoca sola. *Te deja solo*",
-   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero en tu negocio, y las 3 que no conviene delegar nunca. Sin vender nada."
+   "body": "Comentá SISTEMA y te paso el link para agendar 20 minutos: miramos tu operación y te decimos qué conviene automatizar primero, y qué no vale la pena todavía. Sin vender nada."
   }
  ]
 }

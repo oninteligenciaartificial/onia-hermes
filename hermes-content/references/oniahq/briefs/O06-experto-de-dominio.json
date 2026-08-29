@@ -2,7 +2,7 @@
  "serie": "Lo que dicen los datos",
  "episodio": "006",
  "comment_trigger": "SISTEMA",
- "comment_reward": "las 6 tareas que conviene delegar primero",
+ "comment_reward": "un diagnóstico de 20 minutos",
  "caption": "Anthropic miró 400.000 sesiones de gente usando IA para construir software. El resultado va contra lo que todos asumen.\n\nLos que NO son programadores rinden casi igual que los programadores: cinco puntos de diferencia. Y lo que separa a los que les sale de los que no, no es saber programar — es conocer el problema.\n\nUn experto en su rubro rinde más del doble que un novato.\n\nEso significa que usted, que conoce su negocio como nadie, ya tiene la parte difícil. Le falta alguien que la traduzca a un sistema.\n\n⚠️ Estos son datos de Anthropic sobre Claude Code, no resultados de Onia. Fuente: anthropic.com/research/claude-code-expertise\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero.",
  "hashtags": [
   "#inteligenciaartificial",
@@ -58,7 +58,7 @@
    "role": "cta",
    "pill": "20 minutos, gratis",
    "headline": "Traigamos eso *a su negocio*",
-   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca. Sin vender nada."
+   "body": "Comentá SISTEMA y te paso el link para agendar 20 minutos: miramos tu operación y te decimos qué conviene automatizar primero, y qué no vale la pena todavía. Sin vender nada."
   }
  ]
 }

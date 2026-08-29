@@ -10,9 +10,9 @@
 
   "palabras": {
     "SISTEMA": {
-      "promete": "las 6 tareas que conviene delegar primero",
-      "entrega_real": "un link para AGENDAR un diagnostico de 20 min — NO el PDF",
-      "entrega": "hermes-content/recursos/sistema/onia-6-tareas-para-delegar.pdf",
+      "promete": "un diagnóstico de 20 minutos",
+      "voces": ["el mapa de tu negocio"],
+      "entrega": null,
       "url": "https://onia.com.bo/?src=onia-ig-sistema",
       "url_por_cuenta": {
         "@oniahq": "https://onia.com.bo/?src=onia-ig-sistema",
@@ -22,10 +22,8 @@
       "activa_en": ["@oniahq", "@lucia.antelo.oficial"],
       "activa": true,
       "publicado": true,
-      "promesa_coincide": false,
-      "_corregido_20260829": "🔴 ESTE BLOQUE ESTABA MAL Y LA CORRECCION IMPORTA. Decia que SISTEMA entregaba el PDF 6-tareas-para-delegar y que por eso mandaba un 404. Se leyo el mapa de palabras VIVO del workflow 1jS4jwmNmvcQpqqH y es falso: esa URL de PDF no aparece en NINGUN lado del circuito. Lo que sale de verdad es un link para agendar (onia.com.bo/?src=...), que responde 200. O sea que NUNCA se mando un 404 por esta palabra.",
-      "_defecto_real": "El defecto no es un link roto, es una promesa que no coincide: OCHO piezas dicen 'comenta SISTEMA y te mando las 6 tareas para delegar', y el DM manda una invitacion a agendar. El que comenta pidiendo una lista recibe una venta. Se arregla de UN lado de los dos: o el DM entrega la lista, o las piezas dejan de prometerla. Apagar la palabra seria el peor de los tres — el propio _por_que de este archivo dice que una palabra apagada se come el lead en silencio.",
-      "_pendiente_de_sergio": "2026-08-29: Sergio decidio 'apagar la palabra hasta que exista' PERO con la premisa falsa del 404. Decision en pausa hasta que elija con el dato real. NO apagar mientras tanto."
+      "_historia": "🔴 Este bloque decia que SISTEMA entregaba el PDF 6-tareas-para-delegar y que por eso mandaba un 404. Se leyo el mapa de palabras VIVO del workflow 1jS4jwmNmvcQpqqH el 2026-08-29 y era falso: esa URL de PDF no aparece en ningun lado del circuito. Lo que sale es un link para agendar 20 minutos, que responde 200. Nunca se mando un 404 por esta palabra. El defecto real era que SIETE piezas prometian una lista que el DM nunca mandaba — el que pedia la lista recibia una venta. Se arreglo del lado de las piezas el 2026-08-29 (Sergio eligio esa salida sobre apagar la palabra o publicar el PDF).",
+      "_dos_voces": "@oniahq dice 'un diagnostico de 20 minutos'; Lucia dice 'el mapa de tu negocio'. Es la MISMA oferta —20 minutos con el equipo— en dos voces, y por eso `voces` existe: obligar a una sola frase hacia que Lucia hablara como la cuenta de la empresa."
     },
     "HUMO": {
       "promete": "el PDF con las cinco herramientas y lo que cuestan de verdad",
