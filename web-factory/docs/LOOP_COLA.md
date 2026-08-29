@@ -26,10 +26,13 @@
 
 ## Cola (orden = prioridad)
 
-- [ ] **Minado lapa espaciado**: 1 categoría por run (máx 2 requests), guardar
-      3 mejores landings del rubro con nota en la ficha del barrido. Categorías
-      pendientes: food/restaurant, commerce, beauty, services (los slugs se
-      descubren desde la portada, que responde 200).
+- [ ] **Minado lapa con Scrapling** (decisión Sergio 2026-08-29): usar el venv/
+      user-site con Scrapling y `scratchpad/scrapling-harvest.py <categoria>` —
+      1 categoría por run, pasa el 403 de Cloudflare que frenaba el headless.
+      Guardar 3 mejores landings del rubro con nota en la ficha del barrido.
+      Categorías: health, ecommerce, services, beauty, food. Si Scrapling no
+      está instalado en el run, saltear esta tarea (no instalar en un run
+      desatendido) y pasar a la siguiente.
 - [ ] **Update skill ui-ux-pro-max**: el repo va por v2.13 con `gallery/` y
       `stack/` nuevos; la instalada es anterior. Ver mecanismo oficial
       (`uipro-cli` npm, MIT) y actualizar SOLO la skill local.

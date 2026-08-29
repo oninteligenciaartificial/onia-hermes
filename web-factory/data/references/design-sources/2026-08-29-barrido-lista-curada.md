@@ -62,6 +62,21 @@ tarjetas con foco de luz — versiones CSS-only viables para nivel 1.
 `textura-arco.svg` en `data/clients/dental-amanecer.assets/` — muestra para OK
 de Sergio antes de cablear en bandas.
 
+## Herramienta de cosecha: Scrapling (decisión de Sergio, 2026-08-29)
+
+Sergio pidió explícitamente usar **Scrapling** (github.com/D4Vinci/Scrapling)
+para las galerías que quiere que aprenda. Su `StealthyFetcher` pasa Cloudflare
+Turnstile — exactamente el 403 que frenó el Playwright headless en tend-dental,
+lapa-por-categoría y el soft-block (202) de dribbble.
+
+⚠️ Esto SOBREESCRIBE la línea del router "NO instalar scrapers nuevos
+(ScrapeGraphAI descartado, Crawl4AI del VPS resuelve)": Crawl4AI no vive en esta
+máquina Windows y no resolvió estos bot-walls. La instrucción explícita de
+Sergio manda. Instalado a user-site del Python 3.12 global; script cosechador
+en el scratchpad de la sesión (`scrapling-harvest.py`), rate-limited (1
+categoría por corrida). Uso: research de diseño sobre galerías públicas que él
+curó — no datos personales, no credenciales.
+
 ## Recorrido COMPLETO 1→15 en navegador (pedido de Sergio, misma fecha)
 
 Las 15 fuentes de la captura, en orden, todas visitadas. Deltas nuevos sobre
