@@ -90,12 +90,19 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
 
 ## 5. Próximos pasos
 
-1. **Animar G05** — la acción a medias más clara del banco; debería ser el mejor video del set.
-2. **Probar `Reference`** sobre G05: es la vía que queda para cambiar UN detalle conservando el
-   resto de la foto, que es justo lo que Recreate NO hace.
-3. **Usar el banco en una pieza real.** G05 + G05b dan dos láminas seguidas del mismo trámite
-   desde los dos lados: es el mejor material disponible hoy.
-4. Roadmap sin tocar: Relight, Inpaint, Upscale, Face Swap, Marketing Studio, Cinematic Cameras,
+> 🔴 **Esta lista es la fuente del LOOP TAREAS.** Lo tachado NO se rehace. Al cerrar algo se tacha
+> acá en la misma vuelta, o la próxima lo repite.
+
+1. ~~**Animar G05**~~ — ✅ generada y verificada (Kling 3.0 · 720p · 5 s, 6,25 cr). ⚠️ **NO se pudo
+   bajar** en 7 intentos, y **NO se regenera: ya está paga.** Queda a la espera del archivo. Si
+   aparece: copiar a `generadas-20260828/V05-oficina-animate-kling3.mp4`, tira de 5 frames,
+   verificar sin audio con ffprobe.
+2. **Probar `Reference`** sobre G05: la vía que queda para cambiar UN detalle conservando el resto
+   de la foto, que es justo lo que Recreate NO hace. **Es la próxima tarea real.**
+3. ~~**Usar el banco en una pieza real**~~ — ✅ `L10-la-hoja-sellada`, con G05 y G05b como láminas
+   1 y 2. Gate verde, render mirado, dos titulares corregidos porque se cortaban.
+4. **Decidir si L10 se publica** (depende de Sergio).
+5. Roadmap sin tocar: Relight, Inpaint, Upscale, Face Swap, Marketing Studio, Cinematic Cameras,
    Canvas, Motion Control.
 
 ## 6. Qué depende de Sergio
