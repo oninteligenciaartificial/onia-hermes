@@ -1,122 +1,129 @@
-# Aviso de automatización en @sergio_urcullo — qué pasó y qué cambia
+# Aviso de automatización en @sergio_urcullo — la causa, verificada
 
-> 2026-08-24. Instagram le mostró a Sergio: *"We suspect automated behavior on your account.
-> To prevent your account from being temporarily restricted or permanently disabled, ensure
-> that no other users or tools have access to your account…"*
->
-> **La cuenta afectada es `@sergio_urcullo`** — la única de las tres con audiencia real (411).
+> **Estado: causa identificada mirando las pantallas el 2026-08-29.** Este doc se reescribió
+> entero ese día. Todo lo anterior eran hipótesis, y las cuatro principales resultaron falsas.
+> Se borraron a propósito: un doc que conserva hipótesis muertas manda a la próxima sesión al
+> mismo callejón.
 
-## 🔴 SEGUNDO AVISO — 2026-08-28. Y la medida del primero NO tocó la causa
+Instagram le mostró a Sergio, dos veces (**24-ago** y **28-ago-2026**):
 
-Meta le mandó el mismo aviso otra vez. Se rastreó el 29-ago y **la causa sigue encendida**:
+> *"We suspect automated behavior on your account. To prevent your account from being
+> temporarily restricted or permanently disabled, ensure that no other users or tools have
+> access to your account…"*
 
-> **La app «OnIA Social API» (`2160241918102061`) sigue suscrita a los comentarios de su
-> cuenta y los recibe en tiempo real.** No es una sospecha: la ejecución **60926** de n8n, del
-> **2026-08-29 a las 03:23 UTC**, trae un comentario de `@ecommerce_th` en un reel suyo,
-> firmado por los servidores de Meta (`x-hub-signature-256`, IP `66.220.149.25` = fb.me).
-
-**Eso es literalmente lo que la alerta nombra:** *«ensure that no other users or tools have
-access to your account»*. La medida que se tomó tras el primer aviso —publicar a mano— **no
-tocó ese acceso**, y por eso el aviso volvió.
-
-### Lo que NO está pasando, para no apagar de más
-
-Desde su cuenta **no sale ningún DM ni publicación automática**. Su bloque en el workflow tiene
-el mapa de palabras **vacío**, así que los comentarios entran, se parsean y mueren en
-`sin_palabra_clave` — el 28-ago alguien comentó «Reto» y no recibió nada. **Es un arma
-cargada, no un arma disparando:** el día que se active una de sus 7 palabras planeadas, empieza
-a mandar Private Replies automáticos desde su cuenta.
-
-### La acción correcta, que es UNA sola
-
-**Instagram de Sergio → Configuración → Apps y sitios web → sacar «OnIA Social API» y la
-conexión de Postiz.** Desde el teléfono, un minuto. Corta los dos accesos de un golpe, es lo
-que Meta espera ver, y **no rompe el circuito de @oniahq**, que es la única cuenta donde el
-comentario→DM está entregando algo.
-
-⚠️ **NO apagar el workflow entero** (`1jS4jwmNmvcQpqqH`): eso mataría también @oniahq.
-
-🔴 **Y NO borrar el bloque de su `entry_id` del nodo «Parsear comentario».** Sin ese bloque sus
-comentarios caen en la cuenta por defecto (**Lucía**), que **sí** tiene SISTEMA y HUMO activas
-— y ahí sí empezaría a mandarle DMs a quien comente en su cuenta. **Sería empeorarlo creyendo
-que se arregla.**
-
-### Lo que quedó sin cerrar
-
-- **El equipo de Samuel** publica la etapa 1 (8 videos desde el 19-ago, 2 por semana) y **no
-  sabemos con qué herramienta**. Si usan un programador propio además de Postiz, son **dos
-  herramientas de publicación sobre la misma cuenta** — la hipótesis #2 del primer aviso.
-  **Esta pregunta está abierta desde el 24-ago y sigue sin respuesta.**
-- La lista definitiva de apps con acceso solo se ve **en el teléfono**: el MCP de Meta DevTools
-  pide autorización interactiva.
-- El plazo de publicar a mano vence el **07-sep**.
-
-### Blindaje puesto del lado del repo
-
-`scripts/postiz_schedule.mjs` ahora **rechaza** su integration id (`cmt39kug…`) con un error
-explícito, para que un `--integration` copiado y pegado no publique en su cuenta sin querer.
+**La cuenta afectada es `@sergio_urcullo`** — la única de las tres con audiencia real (411).
 
 ---
 
-## Mi huella real sobre esa cuenta
+## La causa: seis integraciones, cuatro apps nuestras
 
-**Una sola llamada de lectura** (`GET /me`, para averiguar su handle). No se publicó, no se
-mandaron DMs y no se programó nada desde ella.
+En **Facebook** (no en Instagram) → Configuración y privacidad → Configuración →
+**Integraciones comerciales** — `facebook.com/settings?tab=business_tools`:
 
-⚠️ **Corrección a mi primera hipótesis.** Dije "apuesto a los 3 DMs duplicados". Esos
-salieron **desde @oniahq hacia él**: Sergio fue el receptor, no el emisor. **No explican un
-aviso en su cuenta.** El error fue no separar quién emitió de quién recibió antes de opinar.
+| App | Conectada desde | Qué es |
+|---|---|---|
+| ads MCP server | 6 ago 2026 | conector de Claude (Meta Ads) |
+| Developer Tools MCP | 3 ago 2026 | conector de Claude (Meta DevTools) |
+| ONIA Marketing API | 6 jul 2026 | app nuestra |
+| **OnIA Social API** | 30 may 2026 | app nuestra — **la única viva** |
+| OnIA Agency | 19 may 2026 | app nuestra |
+| Onia Agency Chatbots | 1 may 2026 | app nuestra |
 
-## Qué toca esa cuenta — son tres partes a la vez
+**Cuatro apps de Meta distintas creadas una encima de otra desde mayo**, más dos conectores.
+Seis cosas con acceso a la misma cuenta. El aviso dice literal *"no other users or tools have
+access"*: le estamos dando exactamente esa lectura.
 
-| Quién | Acceso |
+**Y la secuencia cierra.** La app pasó a modo activo el **13-ago** (única alerta en su buzón de
+desarrollador). Primer aviso: **24-ago**. Segundo: **28-ago**.
+
+La otra lista, "Apps y sitios web", solo tiene **Garena Free Fire** de dic-2020, caducada.
+Irrelevante.
+
+---
+
+## 🔴 Las cuatro hipótesis que se cayeron
+
+Se guardan porque saber qué NO es vale tanto como saber qué sí.
+
+| Hipótesis | Por qué se cayó |
 |---|---|
-| **Postiz** | Cuenta conectada (integración `cmt39kug00022lq9cnw5z12wb`) |
-| **Nuestra app de Meta** | Suscrita a sus comentarios por webhook (`entry_id 17841441395192146`) |
-| **El equipo de Samuel** | Publicando la etapa 1 — 8 videos desde el 19-ago |
+| **"La app está en modo desarrollo / el negocio sin verificar"** | El panel dice **Publicada**, sin acciones requeridas. La verificación estaba hecha hacía rato. Lo dijo Sergio y la pantalla lo confirmó |
+| **"El equipo de Samuel publica con otra herramienta"** (ManyChat) | Sergio, 29-ago: *"no usan ManyChat con nosotros, él no usa nada con nosotros"*. Cero herramientas de terceros sobre la cuenta |
+| **"Es volumen de API"** | Límite de frecuencia de la app: **0% usado** |
+| **"Fueron los 3 DMs duplicados"** (24-ago) | Salieron **desde @oniahq hacia él**: Sergio fue el receptor, no el emisor. No explican un aviso en su cuenta |
 
-El aviso dice textual *"no other users or tools have access"*. **Tres partes operando la
-misma cuenta.**
+El patrón del error, las cuatro veces, fue el mismo: **opinar sin abrir la pantalla**.
 
-## Hipótesis, ordenadas
+---
 
-1. 🔴 **Salto brusco de actividad + varias herramientas conectadas.** La cuenta pasó de
-   publicar poco a 8 videos en una semana, con 3 accesos de terceros encima. Es el patrón
-   clásico.
-2. 🟡 **Con qué publica el equipo de Samuel.** Si usan otro programador además de Postiz, se
-   suma una conexión más.
-3. ⚪ Haber recibido 3 DMs idénticos. Débil, pero no cero.
+## Lo que NO está pasando, para no apagar de más
 
-**No se puede afirmar la causa:** Instagram no dice qué lo disparó. Se actúa sobre las tres.
+Desde su cuenta **no sale ningún DM ni publicación automática**. Su bloque en el workflow
+`1jS4jwmNmvcQpqqH` tiene el mapa de palabras **vacío a propósito**, así que los comentarios
+entran, se parsean y mueren en `sin_palabra_clave`.
 
-## 🔴 Lo que CAMBIA en el plan de contenido
+Es un **arma cargada, no un arma disparando**. El día que se active una de sus 7 palabras
+planeadas, empieza a mandar Private Replies automáticos desde su cuenta.
 
-**En `@sergio_urcullo`, las próximas dos semanas se publica A MANO desde el teléfono.**
-Yo sigo produciendo las piezas; solo cambia quién aprieta el botón.
+---
 
-**Y la cadencia sube gradual, no arranca en 2/día.** Publicar alto volumen por API sobre una
-cuenta ya advertida es pedirle a Instagram que la restrinja — y es justo la cuenta que no
-podemos permitirnos perder.
+## Qué hacer
 
-| Cuenta | Cómo se publica ahora |
-|---|---|
-| **@sergio_urcullo** | 🔴 **A mano, desde el teléfono.** Cadencia gradual |
-| @oniahq | Por API cuando Postiz vuelva |
-| Lucía | Por API, pero **arrancando bajo** — cuenta nueva de 0 seguidores publicando por API es el mismo perfil de riesgo |
+**La acción es una sola y es de Sergio** (o de una sesión con su navegador, con su OK explícito):
+sacar de **Integraciones comerciales** las apps que no se usan.
 
-## Regla general que sale de esto
+- **Eliminar:** `ONIA Marketing API`, `OnIA Agency`, `Onia Agency Chatbots`.
+- **Dejar:** `OnIA Social API` — la que mueve @oniahq.
+- **Los dos MCP de Claude:** decisión de Sergio. Si no los usa desde otro lado, fuera también:
+  serían 5 accesos menos de 6.
 
-**Una cuenta joven o de bajo volumen que empieza a publicar seguido por API, con varias
-herramientas conectadas, se ve como un bot.** No importa que el contenido sea legítimo.
+### ⚠️ Verificar ANTES de borrar — el riesgo real
 
-- **Una sola herramienta de publicación conectada por cuenta.** No dos.
-- **La cadencia se sube gradual**, no se arranca en el objetivo.
-- **Parte del volumen se publica a mano**, sobre todo al principio y sobre todo en las
-  cuentas nuevas.
+El circuito de DMs manda con un token que sale de `/opt/onia/ig-dm-token.sh` **en el VPS**, y
+desde el repo **no se puede saber qué app lo emitió**. Si lo emitió una de las tres viejas,
+borrarla mata el circuito de @oniahq.
 
-## Lo que Sergio tiene que revisar
+**Se comprueba sin tocar el VPS:** en Integraciones comerciales, cada app tiene **"Ver y editar"**,
+que muestra los permisos concedidos. La que tenga los de mensajes y comentarios de Instagram es
+la que está en uso. **Mirar eso primero.**
 
-1. **Instagram → Configuración → Apps y sitios web.** Sacar lo que no reconozca o no use.
-2. **Preguntarle a Samuel con qué publica.** Si hay un tercer programador, elegir uno solo.
-3. **La contraseña NO se cambia todavía.** Si el acceso es de herramientas propias, cambiarla
-   rompe los tokens y no arregla nada. Solo si aparece una app desconocida.
+Búsqueda hecha el 29-ago: en el repo **no hay nada vivo** que nombre a las tres viejas — solo
+docs de `historial/`. Ojo con el falso positivo: *"OnIA Agency"* aparece en
+`ONIA_CHATBOT_LINEA_DE_ENTREGA.md` y en `N8N_WORKFLOW.md`, pero ahí es el nombre de la **cuenta
+de Chatwoot**, no de la app de Meta. Distinta cosa.
+
+### 🔴 Dos trampas — no "arreglar" empeorando
+
+1. **NO apagar el workflow entero** (`1jS4jwmNmvcQpqqH`): mata también @oniahq, la única cuenta
+   donde el comentario→DM entrega algo.
+2. **NO borrar el bloque de su `entry_id` del nodo «Parsear comentario».** Sin ese bloque sus
+   comentarios caen en la cuenta por defecto (**Lucía**), que **sí** tiene SISTEMA y HUMO activas
+   — y ahí sí empezaría a mandarle DMs a quien comente en su cuenta.
+
+---
+
+## Lo que sigue vigente del plan de contenido
+
+**En `@sergio_urcullo` se publica A MANO desde el teléfono**, y la cadencia sube gradual. Una
+cuenta advertida publicando alto volumen por API es pedirle a Instagram que la restrinja.
+
+**Regla general que sale de esto:** *una sola herramienta de publicación conectada por cuenta, y
+las apps de Meta viejas se dan de baja cuando se reemplazan.* Cuatro apps acumuladas en cuatro
+meses es lo que se ve desde afuera como una cuenta comprometida.
+
+---
+
+## Blindaje ya puesto en el repo
+
+`scripts/postiz_schedule.mjs` **rechaza** el integration id de Sergio (`cmt39kug…`) con un error
+explícito, para que un `--integration` copiado y pegado no publique en su cuenta sin querer.
+
+## Lo que no se pudo verificar
+
+- **Qué app emitió el token del circuito** — necesita el VPS (carril de otra sesión) o el
+  "Ver y editar" de cada integración.
+- **La lista de apps del lado de Instagram** — `instagram.com/accounts/manage_access/` pidió
+  login y no se inició sesión. No hace falta igual: la app usa **Facebook Login for Business**,
+  así que los permisos que importan viven del lado de Facebook.
+- **Si la app debería ser Proveedor de tecnología** — hoy no lo es. Eso limita venderle el
+  circuito a **clientes**, no el uso sobre las cuentas propias.
