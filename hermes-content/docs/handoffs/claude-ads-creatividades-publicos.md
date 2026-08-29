@@ -211,7 +211,9 @@ están ellas: muchas, y comercialmente muertas.
 
 ### 3. Advanced Access — lo único con reloj (~20 días)
 Verificado el 29-ago: los permisos están en **"Listo para la prueba"** (acceso estándar, solo
-cuentas propias) y `instagram_business_manage_messages` ni siquiera está agregado al caso de uso.
+cuentas propias). ⚠️ Que `instagram_business_manage_messages` figure como "Agregar" **NO significa
+que los DMs no salgan** — se descartó con evidencia (hay un DM entregado en las ejecuciones). Esa
+lista es la de **Facebook Login**; el circuito usa **Instagram Login**, otra configuración.
 **Sin esto no hay cliente posible.** Arranca en paralelo con el 1. Necesita screencast del flujo,
 política de privacidad y casos de uso escritos.
 
