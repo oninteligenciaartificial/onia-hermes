@@ -13,7 +13,7 @@ import {
   type QuoteContact,
   type QuoteField,
 } from "@onia/blocks";
-import { renderLandingCss, type LandingClient } from "./landing";
+import { renderLandingCss, type LandingClient, type LandingQuoteField } from "./landing";
 import { clinicCss } from "./clinic-css";
 
 // Clinic/Health vertical, editorial direction. Hero (media + glass card) ->
@@ -84,8 +84,8 @@ function renderRevealScript(): string {
  * sin `accion` no hay form muerto (solo canales directos), y `src` viaja oculto
  * con el slug para que el lead llegue atribuido. */
 
-function buildClinicQuoteFields(client: LandingClient): QuoteField[] {
-  return client.cotizacion.campos.map((field) => ({
+function buildClinicQuoteFields(campos: LandingQuoteField[]): QuoteField[] {
+  return campos.map((field) => ({
     name: field.nombre,
     label: field.label,
     type: field.tipo,
@@ -103,28 +103,36 @@ function buildClinicDirectChannels(client: LandingClient): QuoteContact[] {
       ? wa
       : `https://wa.me/${wa.replace(/\D/g, "")}`
     : "";
-  return [
-    waUrl ? { label: "WhatsApp", value: wa.startsWith("http") ? "Escribinos" : wa, url: waUrl } : null,
-    client.contacto.tel?.trim()
-      ? { label: "Teléfono", value: client.contacto.tel, url: `tel:${client.contacto.tel}` }
-      : null,
-    client.contacto.email?.trim()
-      ? { label: "Correo", value: client.contacto.email, url: `mailto:${client.contacto.email}` }
-      : null,
-  ].filter((item): item is QuoteContact => item !== null);
+  // Array por push y no ternarios-a-null + filter: el type-predicate narroweaba
+  // en local y NO en el TS del build de Vercel (apps/site), y tumbaba el deploy.
+  // Esta forma tipa igual en cualquier compilador.
+  const channels: QuoteContact[] = [];
+  if (waUrl) {
+    channels.push({ label: "WhatsApp", value: wa.startsWith("http") ? "Escribinos" : wa, url: waUrl });
+  }
+  const tel = client.contacto.tel?.trim();
+  if (tel) {
+    channels.push({ label: "Teléfono", value: tel, url: `tel:${tel}` });
+  }
+  const email = client.contacto.email?.trim();
+  if (email) {
+    channels.push({ label: "Correo", value: email, url: `mailto:${email}` });
+  }
+  return channels;
 }
 
 function renderClinicQuote(client: LandingClient): string {
-  if (!client.cotizacion.titulo.trim()) return "";
+  const cotizacion = client.cotizacion;
+  if (!cotizacion || !cotizacion.titulo.trim()) return "";
   return `
     <div class="wf-clinic-quote" data-reveal>
       ${renderInlineQuoteForm({
-        heading: client.cotizacion.titulo,
-        copy: client.cotizacion.texto,
-        action: client.cotizacion.accion,
-        submitLabel: client.cotizacion.boton,
-        note: client.cotizacion.nota,
-        fields: buildClinicQuoteFields(client),
+        heading: cotizacion.titulo,
+        copy: cotizacion.texto,
+        action: cotizacion.accion,
+        submitLabel: cotizacion.boton,
+        note: cotizacion.nota,
+        fields: buildClinicQuoteFields(cotizacion.campos),
         direct: buildClinicDirectChannels(client),
         source: client.slug,
       })}

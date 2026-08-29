@@ -40,7 +40,7 @@ export type LandingClient = SiteClient & {
   /* El perfil (data/schema.ts) trae `cotizacion` para todo cliente; vivia solo
    * en el tipo local de logistics y cada template que quisiera el circuito
    * web → sistema tenia que re-declararla. */
-  cotizacion: {
+  cotizacion?: {
     titulo: string;
     texto: string;
     accion: string;
