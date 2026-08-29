@@ -91,6 +91,13 @@ conocido, `PushNotification` a Sergio. Nunca inventar.
 
 ## Hechas (por runs o por la sesión madre)
 
+- [x] **Re-cosecha CSS/fuentes de los 14 sitios `fonts:[]`** (2026-08-29). Los
+      builder/Next ocultan la fuente en `var()` + archivos hasheados; se saca del
+      `<link rel=preload as=font>`. Hallazgo: "PP Fragment Glare" era real, de
+      **readily.ai (SaaS)**, mal-atribuida a dental — corregido en el libro de
+      límites. Método anotado en la ficha lapa-scrapling. Next hasheados
+      (joindawn) = no recuperables por HTTP: se dice, no se inventa.
+
 - [x] **Minado lapa con Scrapling** — tanda 1 `health-fitness` hecha (2026-08-29).
       El 403 lo pasa `Fetcher.get(impersonate="chrome")`, NO el StealthyFetcher
       (no arranca acá: `spawn UNKNOWN` bajo el contenedor MSIX). Slugs reales +

@@ -8,12 +8,15 @@ como advertencia y cola de cosecha.
 
 ## Fabricaciones cazadas (anti-invento)
 
-1. ✅ **CORREGIDO — fuente inventada.** `vertical-playbooks §1 Dental` decía par
-   tipográfico "PP Fragment Glare (serif con ink-traps, corpus)". Ese nombre NO
-   existe en ningún HTML del corpus. Reemplazado por "Fraunces (derivado, SIN
-   ancla)". Es el tipo exacto de invento que la disciplina anti-plantilla debe
-   frenar, y se coló porque 11 sitios vinieron con `fonts:[]` (fuentes en CSS
-   externo no seguido) y se rellenó por analogía.
+1. ✅ **CORREGIDO — fuente MAL ATRIBUIDA (matiz, verificado 2026-08-29).** El
+   par dental decía "PP Fragment Glare (serif con ink-traps, corpus)". El
+   crítico grepeó "Fragment Glare" (con espacio) → 0, y lo llamó invento. La
+   re-cosecha del `<link rel=preload as=font>` en los crudos aclara: **PP
+   Fragment Glare SÍ existe** — es el archivo `/assets/fonts/PPFragment-Glare*.woff2`
+   de **readily.ai (SaaS)**, NO de un sitio dental. O sea: fuente real,
+   atribuida al rubro equivocado. El fix está bien igual (dental no la usa;
+   queda Fraunces marcado SIN ancla). Lección: el nombre humano no aparece en
+   `font-family:` (usan `var()`), pero el **filename del preload sí lo revela**.
 2. **Ease canónica sobre N=1.** "34 usos de `(.19,1,.22,1)` del corpus" → los 34
    están TODOS en un solo archivo (floema). Es literal pero NO es validación
    transversal. La ease sigue siendo buena, pero está anclada en un sitio, no en

@@ -65,6 +65,14 @@ el mismo gesto sin licencia).
 `font-family` real — el navegador headless no hacía falta para esto. Queda como
 receta: HTML servido para colores, CSS externo seguido para tipografía.
 
+**Corrección de método (2026-08-29):** en sitios Next.js/Astro/builder la fuente
+NO se recupera por `font-family:` (usan `var(--font-x)`) ni por `@font-face`
+(archivos hasheados). Se saca del **`<link rel="preload" as="font" href="...">`**:
+el filename lleva el nombre real (readily → `PPFragment-Glare`, scoutmotors →
+`ScoutSansV4`). Los Next.js con fuente hasheada (`/_next/static/media/68d4...woff2`,
+joindawn) NO son recuperables por HTTP — ahí se dice "no recuperable", no se
+inventa. **De no seguir esta regla salió la fuente mal-atribuida del crítico.**
+
 ## Próximo (cola del loop)
 
 - Despiece de 1 ecommerce (Magnet Lover) y 1 food (Caphe Roasters) para esos
