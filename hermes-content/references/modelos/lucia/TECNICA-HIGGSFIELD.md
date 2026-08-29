@@ -28,6 +28,13 @@ $23 por 7 días**, pago aparte del plan. No tocarlo sin permiso de Sergio.
 *(Acá se había escrito antes que "la web no gasta créditos". Era falso, y se corrigió al
 tocar el toggle y ver el modal.)*
 
+### ⚠️ Esperar a que la página termine de cargar — y VERIFICARLO
+
+Escribir en el campo mientras la página aún carga no hace nada: queda el prompt anterior y se
+genera lo de la vez pasada. Pasó dos veces. **No alcanza con esperar N segundos** —18 no
+bastaron una vez—: hay que mirar la pantalla y confirmar que el spinner se fue y el campo
+responde antes de escribir.
+
 ### ⚠️ "Could not reach the server" es transitorio
 
 La primera generación falló con ese error. **El mismo prompt, reintentado sin cambiar nada,
@@ -85,6 +92,7 @@ la cámara es casual pero la escena es de campaña. Nadie saca esa foto por casu
 | **Momento** | un instante bonito | uno cualquiera: esperando, mirando el celular, a mitad de una frase |
 | **Fondo** | un elemento pintoresco | lo mundano que ya está: cables, sillas de plástico, una heladera de gaseosas |
 | **Lugar** | el lindo | uno donde nadie sacaría una foto linda: la fila de una farmacia, un trámite, la parada |
+| **Acción** | una pose | **algo a medio pasar con otra persona**: recibir el vuelto, que le acerquen un tomate, que le hablen. Es lo que más aleja la foto de una campaña — y además la vuelve la mejor base para animar |
 | **Pose** | mirando a cámara | mirando fuera de cuadro, sin registrar la foto |
 | **Paleta** | armónica | que NO combine — la ropa no juega con la pared |
 | **Encuadre** | centrado | apretado o medio torcido, como quien saca rápido |
