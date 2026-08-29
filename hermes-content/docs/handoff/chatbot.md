@@ -444,3 +444,17 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   persiste). Luego B (UI panel "Enseñale conversando" con chips) y C (gates + deploy +
   MIRAR con instruccion real publicada). D: gancho pricing (Sergio quiere usar esto
   para armar precios del add-on).
+- ✅ Fases A-plataforma, B y C CERRADAS (2026-08-30) — EDITOR CONVERSACIONAL COMPLETO
+  Y VIVO EN PROD (BUILD_ID TGfCVs-ptY5aaWL9tvvyt, platform 070458e). Ruta
+  /api/chatbot-knowledge/sugerir (requireAdmin, doble candado motor+espejo, diff en
+  español con el shape REAL: title/body, demo, rubrosExtra, dias numericos — 8 tests)
+  + panel "Enséñale conversando" en /settings/chatbot (chips, tarjeta de cambios,
+  Aplicar al formulario SIN publicar; aplicarDoc espeja los initializers). Prompt del
+  motor corregido al schema real + regla de slug (el 1er smoke fallo EXACTO como debia:
+  validador mato un key con guion). VERIFICADO MIRANDO en prod: "atende tambien los
+  domingos hasta mediodia" → tarjeta con el cambio de horario en español → Aplicar
+  cargo el form. BONUS: el flujo corrigio la incoherencia del doc QA (frase 9:00 vs
+  campo desde=8) y limpio el "(aud 11:52)". Captura enviada a Sergio. Suite 2236.
+  Decision Sergio del dia: TODO USABLE PRIMERO, la app movil despues (v7 = push "te
+  escribieron" + banner instalar; base PWA YA existe: manifest+SW+push+BottomNav).
+  Cadencia loop tareas bajada a 1min a pedido de Sergio (cron 018db731).
