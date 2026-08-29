@@ -60,6 +60,13 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
 - Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
   como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
 - La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- ✅ PIEZA 3 CERRADA (2026-08-29 00:55): el canal web quedo en manos del DUEÑO. Boton
+  "Encender mi canal web" + snippet listo para pegar, en /settings/chatbot (card al pie),
+  gate por add-on activo (403 honesto sin contratarlo). Nucleo compartido con el alta
+  superadmin extraido a lib/chatbot/canal-web.ts (sus 9 tests intactos) + 9 tests nuevos.
+  Deploy ab863de con el runner atomico deploy-gates-swap.sh (5 gates → swap, BUILD_ID
+  NpXP1o6K). MIRADO en prod: estado "Contratar el chatbot" con Onia (interna); los
+  estados encender/snippet quedan por mirar con la org QA de la pieza 5.
 - ✅ LIMPIEZA QA EJECUTADA (2026-08-29 00:40, aprobada por Sergio): Chatwoot 10 conversaciones
   (23-27, 29, 31-33) + inbox 6 huerfano destruidos via rails (cascada completa); bot 12
   bot_conversations + 52 bot_messages sinteticos. Backups CSV en
