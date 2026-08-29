@@ -24,6 +24,33 @@
 6. Contexto del carril: `hermes-content/docs/handoff/web-factory-cliente-prueba.md`
    y fichas en `web-factory/data/references/design-sources/2026-08-29-*.md`.
 
+## Disciplina del loop (del ejemplo del carril chatbot, 2026-08-29)
+
+- **UNA fase/tarea por vuelta**, la primera no-bloqueada. No abrir dos frentes.
+- **Las tachadas NO se rehacen.** Lo marcado `[x]` está hecho; no se re-audita.
+- **Bloqueado con decisión de Sergio → `PushNotification` y seguir con lo
+  desbloqueado.** El loop nunca se frena esperando; salta a la próxima tarea.
+- **Gates antes de dar por hecho** (regla 4). Verificar MIRANDO cuando toca UI.
+- **Nada de cirugía inventada**: si una tarea no tiene receta clara, no se
+  improvisa — se anota y se avisa.
+
+## Runbook de salud (auto-REMEDIAR, no solo mirar)
+
+Cada ítem: verificar → si roto, aplicar el arreglo conocido → si no hay arreglo
+conocido, `PushNotification` a Sergio. Nunca inventar.
+
+1. **Server 4319**: `curl -s -o /dev/null -w "%{http_code}" http://localhost:4319/dental-amanecer/`
+   ≠200 → `node scripts/serve-out.mjs 4319` en background desde `web-factory/`.
+2. **Rama pusheada**: `git log origin/claude/onia-web-architecture-b37eca -1` debe
+   igualar `git log HEAD -1`. Si hay commits locales sin push → `git push`. Si
+   árbol sucio de OTRA mano (cambios que no hice este run) → NO commitear, avisar.
+3. **typecheck:packages verde**: desde `web-factory/` `pnpm typecheck:packages`.
+   Rojo → arreglar la causa mínima en zona propia y commitear el fix con su
+   porqué. Si el error es fuera de zona → PushNotification.
+4. **Sin zombies**: procesos node de corridas de test viejas colgadas → matar.
+5. **Prueba**: cerrar con la línea de estado + el código real que la respalda
+   (200, hash del push, exit 0). Un grep no es prueba.
+
 ## Cola (orden = prioridad)
 
 - [ ] **Minado lapa — tandas siguientes** (misma receta que la tanda 1, ver
