@@ -2,6 +2,24 @@
 
 > Relevado en vivo el 2026-08-29 a pedido de Sergio ("es un sistema que no se usa, eliminalo").
 > **Conclusión corta: el sitio se puede bajar; el contenedor NO se puede borrar.**
+>
+> ✅ **EJECUTADO el 2026-08-29.** Sergio pausó el proyecto de Vercel, y se dieron de baja los dos
+> routers de `center.onia.com.bo` en `/etc/easypanel/traefik/config/onia-manual-routes.yaml`.
+> Traefik relee ese archivo en caliente: **no se tocó el contenedor ni se reinició nada.**
+>
+> Verificado después: el dominio da **404** y el host de Vercel **503**, o sea la cotización con
+> el precio viejo (Bs 1.500 + 1.490 contra los Bs 390 reales) dejó de ser pública en los dos
+> lados. El chatbot sigue `ok:true` con la base a 22 ms y el contenedor `Up 4 days` — nunca se
+> reinició, porque Chatwoot le pega por la red interna (`onia-center:3020`) y no por el dominio.
+> Los otros cinco dominios siguen en 200.
+>
+> Se comprobó antes de tirar, y no se asumió: **0 de 37 workflows activos** de n8n llaman a ese
+> dominio, y la tienda Nuvia no depende de él (el propio middleware la redirige afuera).
+>
+> Revertir es un comando — el respaldo quedó como
+> `onia-manual-routes.yaml.bak-bajar-center-20260829165348`.
+>
+> **Sigue en pie el resto del informe:** el contenedor NO se borra.
 
 ## 1. Veredicto
 
