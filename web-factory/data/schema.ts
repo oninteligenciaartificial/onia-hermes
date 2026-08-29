@@ -152,6 +152,11 @@ const dashboardKpiSchema = z.object({
   delta: z.string().default(""),
   trend: z.enum(["up", "down", "flat"]).default("flat"),
   context: z.string().default(""),
+  // Celda hero (card oscura de acento) y sparkline integrada en el KPI — el
+  // template ya los soporta; el schema los dejaba caer. Aprendido de Tabler/
+  // shadcn: el KPI cuenta la tendencia en la propia tarjeta, no en otro chart.
+  variant: z.enum(["default", "accent"]).optional(),
+  spark: z.array(z.number()).optional(),
 });
 
 const dashboardPointSchema = z.object({

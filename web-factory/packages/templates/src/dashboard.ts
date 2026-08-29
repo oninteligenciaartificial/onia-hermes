@@ -9,7 +9,7 @@ export type DashboardKpi = {
   /** "accent": hero KPI cell as a solid dark accent card (pattern bank: Fireart 25241984). */
   variant?: "default" | "accent";
   /** Integrated sparkline drawn inside the card, under the figure (pattern bank: Stakent 23902428). */
-  spark?: DashboardPoint[];
+  spark?: number[];
 };
 
 /** `pending: true` renders the point as a diagonal-hatch outline bar (pattern bank: Fireart 25241984). */
@@ -533,26 +533,25 @@ function renderSparkline(chart: DashboardChart): string {
 
 /** Sparkline drawn inside a KPI card, under the figure (pattern bank: Stakent 23902428).
  *  Uses currentColor so it inherits the card's ink (accent variant included). */
-function renderKpiSpark(points: DashboardPoint[], label: string): string {
-  const values = points.map((point) => point.value);
+function renderKpiSpark(values: number[], label: string): string {
   const max = Math.max(...values, 1);
   const min = Math.min(...values, 0);
   const range = max - min || 1;
   const width = 320;
   const height = 44;
   const pad = 4;
-  const count = points.length;
+  const count = values.length;
 
   const xFor = (index: number): number =>
     pad + (count <= 1 ? (width - 2 * pad) / 2 : (index / (count - 1)) * (width - 2 * pad));
   const yFor = (value: number): number =>
     height - pad - ((value - min) / range) * (height - 2 * pad);
 
-  const line = points.map((point, index) => `${xFor(index).toFixed(1)},${yFor(point.value).toFixed(1)}`).join(" ");
+  const line = values.map((v, index) => `${xFor(index).toFixed(1)},${yFor(v).toFixed(1)}`).join(" ");
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
-  const last = points[count - 1];
-  const dot = last
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="currentColor"></circle>`
+  const last = count ? values[count - 1] : undefined;
+  const dot = last !== undefined
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="3" fill="currentColor"></circle>`
     : "";
 
   return `<svg class="wf-kpi-spark" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttribute(

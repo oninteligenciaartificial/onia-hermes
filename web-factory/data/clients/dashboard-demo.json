@@ -9,11 +9,11 @@
   "heroVideo": "",
   "heroPoster": "",
   "colores": {
-    "primary": "#4f46e5",
-    "secondary": "#0f172a",
-    "accent": "#22c55e",
-    "bg": "#f8fafc",
-    "fg": "#0f172a"
+    "primary": "#0d6b5c",
+    "secondary": "#0b3b32",
+    "accent": "#0d6b5c",
+    "bg": "#f6f2ea",
+    "fg": "#172420"
   },
   "tipografia": {
     "heading": "Onest",
@@ -90,28 +90,33 @@
         "value": "Bs. 48.2k",
         "delta": "12.4%",
         "trend": "up",
-        "context": "vs periodo anterior"
+        "context": "Mejor mes del trimestre",
+        "variant": "accent",
+        "spark": [31, 34, 33, 38, 36, 42, 40, 45, 44, 48]
       },
       {
         "label": "Clientes nuevos",
         "value": "184",
         "delta": "8.1%",
         "trend": "up",
-        "context": "vs periodo anterior"
+        "context": "Crecimiento sostenido",
+        "spark": [120, 132, 128, 145, 150, 162, 170, 184]
       },
       {
         "label": "Ticket promedio",
         "value": "Bs. 262",
         "delta": "1.9%",
         "trend": "down",
-        "context": "vs periodo anterior"
+        "context": "Leve baja este periodo",
+        "spark": [278, 272, 268, 270, 265, 260, 264, 262]
       },
       {
         "label": "Tasa de cierre",
         "value": "34%",
         "delta": "0.0%",
         "trend": "flat",
-        "context": "estable"
+        "context": "Estable vs meta",
+        "spark": [33, 34, 34, 33, 35, 34, 34, 34]
       }
     ],
     "charts": [
