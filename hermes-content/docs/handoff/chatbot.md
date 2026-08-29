@@ -60,6 +60,11 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
 - Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
   como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
 - La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- ✅ PIEZA 4 CERRADA (2026-08-29): delivery_status HONESTO. run-turn expone messageKey
+  en send[]; el adapter marca sent/failed tras cada POST real (patron M9), guard typeof
+  para stores parciales. 5 tests nuevos (567/569). E2E en prod: POST rechazado => fila
+  failed (verificado leyendo la fila; antes mentia sent). El pendiente B del handoff
+  del 23-ago queda saldado.
 - ✅ PIEZA 3 CERRADA (2026-08-29 00:55): el canal web quedo en manos del DUEÑO. Boton
   "Encender mi canal web" + snippet listo para pegar, en /settings/chatbot (card al pie),
   gate por add-on activo (403 honesto sin contratarlo). Nucleo compartido con el alta
