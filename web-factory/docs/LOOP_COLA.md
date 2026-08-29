@@ -91,6 +91,10 @@ conocido, `PushNotification` a Sergio. Nunca inventar.
 
 ## Hechas (por runs o por la sesión madre)
 
+- [x] **Estética/beauty anclada** (2026-08-29). Cosechada categoría `beauty` de
+      lapa; despiece de ONSKN (onskn.com) = primer dato real del sub-eje
+      skincare (nude cálido + blush + charcoal), distinto del wellness crema.
+      Inyectado en §2 del playbook. N=1: cosechar 2-3 skincare más.
 - [x] **Re-cosecha CSS/fuentes de los 14 sitios `fonts:[]`** (2026-08-29). Los
       builder/Next ocultan la fuente en `var()` + archivos hasheados; se saca del
       `<link rel=preload as=font>`. Hallazgo: "PP Fragment Glare" era real, de

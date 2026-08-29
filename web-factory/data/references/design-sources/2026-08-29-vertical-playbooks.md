@@ -54,6 +54,13 @@ Dos sub-ejes según público — el contraste está literalmente en el corpus.
 - **Hero:** editorial de ambiente, alto contraste tipográfico, mucho aire (ritmo largo, pocas secciones grandes).
 - **Motion:** PREMIUM. frequencybreathwork es el arquetipo cine: SplitText en el titular (`stagger 0.08-0.12`), ScrollTrigger scrub, Lenis smooth-scroll. Ducking suave, quietud entre golpes — nunca estridente.
 - **Exemplars:** https://frequencybreathwork.com/ (Aime + Neue Montreal, stack GSAP+Lenis completo) · https://joindawn.com/ (crema pura, ritmo sereno)
+- **⚠️ Sub-eje ESTÉTICA/BELLEZA (distinto de wellness) — ancla real 2026-08-29:**
+  wellness = calma/crema; **estética/skincare = nude cálido + blush + charcoal.**
+  Ancla: **ONSKN** (onskn.com, cosechado con Scrapling): `#F2CDA0`/`#E8BD8B`
+  (nude/arena cálida) + `#FFD9D2` (blush rosado) + `#32373C` (charcoal) + negro.
+  Es más sensorial y con color de piel/producto, no el crema monástico del
+  wellness. N=1 real todavía — cosechar 2-3 skincare más para hacerlo ley
+  (estética es rubro VIVO de Onia: esteticagest).
 
 ---
 
