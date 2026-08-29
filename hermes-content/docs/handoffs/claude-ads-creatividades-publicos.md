@@ -54,11 +54,49 @@ de seguir con Lucía/Higgsfield. Después, arreglar SISTEMA. Recién después, r
   que importan.** Filtrar por briefs que declaren `slides`.
 - Cuatro hipótesis sobre la alerta murieron por lo mismo: **opinar sin abrir la pantalla**.
 
+### Segunda mitad del 29-ago — Higgsfield por navegador
+
+**Banco de Lucía, piezas nuevas:** `G05-oficina-de-tramites` (la mejor del set: dos manos sobre un
+formulario sellado, acción a medias inconfundible), `G05b` (Recreate de G05, el mismo trámite desde
+el otro lado del vidrio) y `V04-parada` (animación de G02).
+
+**Tres cosas aprendidas, todas escritas en `TECNICA-HIGGSFIELD.md`:**
+
+1. **La regla de la acción a medias quedó cerrada por sus dos lados.** Con acción clara el modelo
+   la CONTINÚA (V02, V03). Sin ella la INVENTA, y lo que inventa es hablar o darse vuelta (V04, que
+   se generó a propósito sabiendo que iba a salir mal). **No animar retratos ni esperas.**
+2. **Recreate no da variantes**: recarga la receta y produce otra toma del mismo guion — cambia
+   secundario, ángulo y arquitectura; conserva personaje, lugar, acción y luz. Sirve para conseguir
+   un PAR coherente, no para retocar una foto.
+3. **Trampa de costo:** el workspace de video arranca en **4K = 30 créditos**; a 720p son 6,25.
+   Es 5x por el mismo video.
+
+**Gasto del día en Higgsfield: ~16,5 créditos (≈ Bs 6,2).**
+
+### Intentos fallidos de esta mitad
+
+- **El grid de `/asset/all` no carga miniaturas** con 738 assets y cuelga el renderer (timeout de
+  30 s, tres veces). Se perdió una vuelta entera ahí. **La puerta buena es el historial del
+  workspace**, que sí renderiza.
+- **No se puede subir una imagen de disco al frame de video**: la app limpia el input aunque la
+  subida reporte éxito.
+- **Dije "no existe Recreate" mirando el panel equivocado** (el reducido del workspace de video).
+  Existe. Corregido el mismo día.
+- **El banco entero no estaba en el repo**: `.gitignore` ignora `*.png` a propósito y yo guardé
+  todo solo como PNG. Lo cazó el guardián. Ahora hay `scripts/verificar_banco.js` que falla si un
+  asset documentado no está versionado.
+- **Mi propio barrido de guardián marcó los 5 PNG como error.** Estaba mal el chequeo, no el repo.
+  Un guardián que grita por lo que está bien deja de leerse.
+
 ## 5. Próximos pasos
 
-Retomar Higgsfield por navegador, en orden: animar `G02-parada-de-micro` (la única de receta
-normal sin animar) · una escena con interacción en un lugar nuevo · probar Recreate para variantes
-· usar el banco propio en una pieza real del plan.
+1. **Animar G05** — la acción a medias más clara del banco; debería ser el mejor video del set.
+2. **Probar `Reference`** sobre G05: es la vía que queda para cambiar UN detalle conservando el
+   resto de la foto, que es justo lo que Recreate NO hace.
+3. **Usar el banco en una pieza real.** G05 + G05b dan dos láminas seguidas del mismo trámite
+   desde los dos lados: es el mejor material disponible hoy.
+4. Roadmap sin tocar: Relight, Inpaint, Upscale, Face Swap, Marketing Studio, Cinematic Cameras,
+   Canvas, Motion Control.
 
 ## 6. Qué depende de Sergio
 
