@@ -227,6 +227,16 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
 > — este sobrevivió dos saneos por repetirse sin contar de nuevo. BACKLOG v3 tarea 2: tachada
 > sin trabajo (ya existía).
 
+- BRANDING Chatwoot COMPLETO (2026-08-29, pedido directo de Sergio al ver el logo Chatwoot
+  en chat.onia.com.bo/app/login): ahora son SEIS installation_configs, no tres —
+  BRAND_NAME=Onia, INSTALLATION_NAME=Onia, WIDGET_BRAND_URL=https://onia.com.bo,
+  LOGO=https://app.onia.com.bo/onia-logo.svg (wordmark tinta, fondo claro),
+  LOGO_DARK=https://app.onia.com.bo/onia-logo-white.svg (wordmark claro, fondo oscuro),
+  LOGO_THUMBNAIL=https://onia.com.bo/apple-icon.png (tile on). GlobalConfig.clear_cache
+  despues de tocar. VERIFICADO MIRANDO: captura headless del login dark = wordmark onia
+  claro + punto verde, cero Chatwoot. Si el reconcile nocturno revierte (canario del loop
+  de orden: brand distinto de Onia), re-aplicar LOS SEIS.
+
 **Archivos y cambios**
 
 - `onia-platform` (master → origin): `bd2350c` plantillas + `9585db4` fix ancho.
