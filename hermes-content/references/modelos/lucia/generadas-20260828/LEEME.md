@@ -17,6 +17,8 @@ tono parejo sin rojez.
 | `V01-farmacia-animate-kling3.mp4` + `_V01-TIRA.jpg` | 5 s de b-roll en una farmacia | Hecho con **Animate** desde una imagen de receta normal. La cara aguanta los 5 s. 6,25 cr con el sonido apagado |
 | `V02-mercado-animate-kling3.mp4` + `_V02-TIRA.jpg` | 5 s en el mercado, con la casera | **El mejor de los dos.** La foto ya tenía una acción a medias —la mano acercando el tomate— y el modelo solo la continuó. Animar una escena con interacción sale mejor que animar un retrato quieto |
 
+| `V03-tienda-animate-kling3.mp4` + `_V03-TIRA.jpg` | 5 s en la tienda, el vuelto | Animado desde G04. El intercambio de monedas **se desarrolla** en los 5 s: él entrega, ella recibe. Confirma la regla — cuanto más clara la acción a medias, mejor el video |
+
 ## Por qué este banco existe
 
 El banco viejo (`tanda-20260821`) sirve, pero es **lifestyle bonito**: rooftop al atardecer,
@@ -29,6 +31,6 @@ piezas donde Lucía tiene que parecer una persona y no una modelo.
 ## Lo que falta
 
 - Más lugares: adentro de un micro, una fila de trámite en una oficina.
-- Animar G02 (la parada) para tener b-roll de ese escenario. G03 ya está animada.
+- Animar G02 (la parada). G03 y G04 ya están animadas.
 - Ninguna de estas está en la lista blanca de `scripts/lucia_banco.json` todavía —
   `generadas-20260828/` sí está, así que el gate ya las acepta.
