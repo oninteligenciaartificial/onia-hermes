@@ -108,6 +108,20 @@ export function markHumanTakeover(state, atIso = null) {
   return { ...state, humanTookOver: true, humanTookOverAt: atIso || state.humanTookOverAt };
 }
 
+/**
+ * El DESARME del takeover (bandeja nativa 2026-08-29): resolver la conversacion
+ * se la devuelve al bot. Tambien resetea el handoff del recepcionista — ambos
+ * candados significan "humano a cargo", y resolver significa "termine".
+ */
+export function clearHumanTakeover(state) {
+  return {
+    ...state,
+    humanTookOver: false,
+    humanTookOverAt: null,
+    botStage: state.botStage === "handoff_humano" ? "nuevo" : state.botStage,
+  };
+}
+
 /** Fila lista para onia_center.bot_conversations. */
 export function toConversationRow(state) {
   return {

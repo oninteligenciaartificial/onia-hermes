@@ -299,6 +299,30 @@ function fromMessageCreated(payload) {
   });
 }
 
+/**
+ * RESOLVER = devolverle la conversacion al bot (bandeja nativa 2026-08-29).
+ * No es un mensaje: es un turno de sistema que solo limpia el candado del
+ * takeover. El dedup usa el timestamp del evento para que resolver dos veces
+ * (reabrir y volver a resolver) genere claves distintas.
+ */
+function fromConversationResolved(payload) {
+  const conversationId = payload?.id ?? payload?.conversation?.id ?? null;
+  if (!conversationId) return { skip: true, reason: "sin_conversation_id" };
+  return {
+    skip: false,
+    turn: {
+      channel: "chatwoot",
+      contact_ref: String(conversationId),
+      kind: "system",
+      text: "",
+      human_takeover_clear: true,
+      message_key: `chatwoot:resolved:${conversationId}:${payload?.timestamp ?? "s/ts"}`,
+      received_at: toIsoFlexible(payload?.timestamp) || new Date().toISOString(),
+    },
+    meta: { conversationId: String(conversationId), messageId: "", attachments: [], resolved: true },
+  };
+}
+
 function fromConversationCreated(payload) {
   const conversationId = payload?.id ?? null;
   if (!conversationId) return { skip: true, reason: "sin_conversation_id" };
@@ -386,6 +410,13 @@ export function parseChatwootWebhook(payload) {
   if (event === "message_created") return fromMessageCreated(payload);
   if (event === "message_updated") return fromMessageUpdated(payload);
   if (event === "conversation_created") return fromConversationCreated(payload);
+  if (event === "conversation_resolved") return fromConversationResolved(payload);
+  if (event === "conversation_status_changed") {
+    // Solo el paso a resolved desarma; reabrir (open) no toca nada — el proximo
+    // outgoing humano re-arma el takeover solo si el dueno vuelve a hablar.
+    if (String(payload?.status || "") === "resolved") return fromConversationResolved(payload);
+    return { skip: true, reason: `status_no_desarma:${payload?.status || "desconocido"}` };
+  }
   return { skip: true, reason: `evento_no_manejado:${event || "desconocido"}` };
 }
 

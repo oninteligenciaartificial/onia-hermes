@@ -46,7 +46,8 @@ import { pathToFileURL } from "node:url";
 
 import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
 import { ensureKnowledge, withKnowledge } from "./knowledge.mjs";
-import { createState, step, markHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
+import { createState, step, markHumanTakeover,
+  clearHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
 import { createStore } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 import { createBooking, buildBookingNotes, meetingLink } from "./calcom-booking.mjs";
@@ -322,6 +323,28 @@ export async function runTurn(input, deps = {}) {
   let state = fillFromSeed(loaded || createState(seed), seed);
   if (!loaded && store.enabled) store.warnings.push("estado en memoria: la conversación no se pudo cargar");
   if (input.human_takeover === true && !state.humanTookOver) state = markHumanTakeover(state, nowIso);
+
+  // El DESARME (conversacion resuelta desde la bandeja): limpiar el candado,
+  // guardar y salir. No es un mensaje — no corre step, no crea filas, no manda.
+  if (input.human_takeover_clear === true) {
+    const limpio = clearHumanTakeover(state);
+    const saved = await store.saveConversation(limpio);
+    return {
+      ok: true,
+      duplicate: false,
+      conversationKey: limpio.conversationKey,
+      channel: limpio.channel,
+      contactRef: limpio.contactRef,
+      stageBefore: state.botStage,
+      stageAfter: limpio.botStage,
+      send: [],
+      notify: [],
+      calendar: [],
+      notes: ["takeover_desarmado"],
+      saved,
+      warnings: store.warnings,
+    };
+  }
 
   // 2. step() es PURO: correrlo dos veces (con y sin LLM) no tiene efecto de red.
   const incoming = incomingFrom(input, nowIso);
