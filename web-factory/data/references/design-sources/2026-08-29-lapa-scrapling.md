@@ -28,7 +28,31 @@ rubro, con href al caso + thumbnail).
 - **business**: United Carriers (ya es nuestro learned model de logistics) ·
   RRE · Make Good · Overlay · Ape AI.
 
+## Despiece computado de 2 sitios VIVOS health-fitness (Scrapling directo)
+
+URLs reales resueltas desde la ficha de lapa (botón "Visit website") y
+despiezadas con `Fetcher.get(impersonate=chrome)` sobre el HTML servido.
+
+**Frequency Breathwork** (frequencybreathwork.com) — h1 "HEALING BEGINS":
+paleta `#242424` (tinta) + `#DFD7C8` / `#F2EFE9` / `#d5d1c7` (hueso/crema
+cálidos). **CERO azul, cero gris frío.** Es EXACTAMENTE la familia salud-premium
+ya aplicada a la demo (neutros cálidos + tinta) — tercera confirmación
+independiente (van One Medical, Parsley, y ahora esta). La dirección de
+dental-amanecer está validada por el mercado real, no por opinión.
+
+**Maxima Therapy** (maximatherapy.com) — h1 "The First Years Matter Most":
+`#006AFF` azul eléctrico + `#FF2700` rojo + `#FDCB40` amarillo sobre `#050505`.
+Es terapia INFANTIL: paleta de juego, alto contraste, primaria saturada — el
+opuesto del premium adulto. Lección: dentro de "health" el sub-nicho manda la
+paleta (pediátrico = primario vivo; adulto/wellness = neutro cálido). Ir a
+buscar el rubro exacto del cliente, no "salud" a secas.
+
+Fuentes vacías en el scrape: cargan por CSS externo (no inline), así que el
+`@font-face` no entra al HTML servido — para tipografía exacta hace falta
+seguir el CSS o mirar renderizado. Colores sí salen del HTML servido.
+
 ## Próximo (cola del loop)
 
-Despiece computado (tokens: tipo/color/CTA) de 2 landings health-fitness con
-Scrapling `Fetcher` + parseo, para subir el patrón al pattern bank con fuente.
+- Seguir el CSS externo de Frequency Breathwork para el par tipográfico exacto.
+- Despiece de 1 ecommerce (Magnet Lover) y 1 food (Caphe Roasters) para esos
+  rubros del motor.
