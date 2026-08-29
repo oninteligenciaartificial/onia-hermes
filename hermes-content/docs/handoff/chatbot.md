@@ -280,7 +280,18 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   GET+POST /api/bandeja/[id] (Zod discriminado responder/estado, 404 tenencia — no 403
   para no confirmar existencia, 502 honesto). Registradas comunes. 22 tests nuevos,
   36/36 con registry, tsc limpio.
-- Fase C (candado motor) → Fase D (UI /inbox) → Fase E (gates+deploy+MIRAR) pendientes.
+- Fase D (UI /inbox) → Fase E (gates+deploy+MIRAR) pendientes.
+- ✅ Fase C (candado bot-humano) CERRADA (2026-08-29): el ARMADO ya existia entero
+  (takeoverTurn del adapter + markHumanTakeover + silencio:humano_a_cargo, env
+  CHATWOOT_BOT_AGENT_ID=3 verificado en vivo). Lo construido: el DESARME — resolver
+  la conversacion se la devuelve al bot (un hilo de WhatsApp es eterno; takeover
+  para-siempre mataba al bot para ese cliente). conversation_resolved /
+  conversation_status_changed=resolved → turno human_takeover_clear → clearHumanTakeover
+  (limpia flag + resetea handoff_humano→nuevo) → saveConversation, sin step ni filas
+  nuevas. Suite motor 576/576. Deploy scp+restart con backup. Webhook cuenta 2
+  suscrito a conversation_status_changed (antes solo message_*). E2E EN PROD:
+  conv 38 resuelta → fila chatwoot:38 quedo bot_stage=nuevo, human_took_over=f.
+  Flujo bandeja completo: responder ARMA el candado, Resolver lo DESARMA.
 
 ### Vision ampliada (Sergio 2026-08-29, "paso a paso primero que funcione")
 
