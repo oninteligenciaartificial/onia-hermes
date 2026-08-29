@@ -104,6 +104,14 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
    encuadre, y aplicó el único cambio pedido (ella levanta la vista al funcionario). Es la
    herramienta para variantes; Recreate no. ⚠️ El archivo (G05c) **no se pudo bajar** — quedó en
    la cuenta, ya pago, **no regenerar**.
+2c. ✅ **DESBLOQUEADO el 29-ago**: Sergio habilitó las descargas. Verificado con el txt de 15 bytes.
+   - ✅ **G05c ya está en el repo** (`a44dae81`), traída con `scripts/traer_descarga.js`, que en su
+     primer uso real confirmó 0 min de antigüedad y devolvió el asset id.
+   - ⚠️ **Falta V05**: su historial en `/ai/video` no cargaba (spinner infinito). Reintentar.
+     **NO regenerar: ya está paga.**
+   - 📌 Afinado al verla a resolución completa: **Reference conserva casi cada píxel** y cambia solo
+     lo pedido. G05 + G05c = antes/después del mismo instante.
+
 2b. ✅ **Causa encontrada: no es Higgsfield, es Chrome.** Un `.txt` de 15 bytes con `data:` URI
    tampoco baja ⇒ Chrome bloquea las descargas del origen `higgsfield.ai` (bloqueo de descargas
    múltiples). **Lo destraba Sergio en 10 s:** icono a la izquierda de la barra de direcciones →
