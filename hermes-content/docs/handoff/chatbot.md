@@ -81,6 +81,11 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
   Trampas pagadas (no repetir): docker exec sin -i con heredoc = ejecuta NADA con exit 0
   (segunda vez hoy); docker cp de un SQLite en WAL copia SIN los cambios — verificar
   SIEMPRE dentro del contenedor; n8n import:workflow del CLI NO pisa por id.
+- ✅ BACKLOG v2 tarea 7 (2026-08-29): RUNBOOK ESCRITO del traslado del 75414930 a
+  coexistencia — hermes-content/docs/ONIA_RUNBOOK_COEXISTENCIA_75414930.md (deregister→
+  app→QR del popup, PIN de dos pasos como prerequisito duro, rollback = register con pin,
+  regla 30 dias = jamas borrar del WABA). La EJECUCION sigue GATEADA: OK explicito de
+  Sergio + ventana acordada + ensayo del chip nuevo pasado.
 - ✅ BACKLOG v2 tarea 6 (2026-08-29): n8n inactivos ARCHIVADOS (decision Sergio). Conteo
   EN VIVO: 34 inactivos → 27 archivados (WF-* dentalgest/gestios legacy, demos New
   Sakura/Mara/Atlas, drafts Sentry, duplicados IG-DM y Web Factory Radar, prospeccion v1,
