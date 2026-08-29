@@ -101,9 +101,12 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
    encuadre, y aplicó el único cambio pedido (ella levanta la vista al funcionario). Es la
    herramienta para variantes; Recreate no. ⚠️ El archivo (G05c) **no se pudo bajar** — quedó en
    la cuenta, ya pago, **no regenerar**.
-2b. 🔴 **Las descargas de Higgsfield se degradaron**: a la mañana bajaba todo, a la tarde nada
-   (9 intentos entre video e imagen). Bloquea traer piezas al repo. **Depende de Sergio** o de
-   que se recupere solo.
+2b. ✅ **Causa encontrada: no es Higgsfield, es Chrome.** Un `.txt` de 15 bytes con `data:` URI
+   tampoco baja ⇒ Chrome bloquea las descargas del origen `higgsfield.ai` (bloqueo de descargas
+   múltiples). **Lo destraba Sergio en 10 s:** icono a la izquierda de la barra de direcciones →
+   Configuración del sitio → **Descargas automáticas → Permitir**.
+   ⚠️ Si él aprieta descargar en ese mismo Chrome tampoco baja, y parece que sí (pasó con V05).
+   **Bloquea traer al repo:** V05 (6,25 cr) y G05c (2 cr), ambas pagas. **No regenerar.**
 3. ~~**Usar el banco en una pieza real**~~ — ✅ `L10-la-hoja-sellada`, con G05 y G05b como láminas
    1 y 2. Gate verde, render mirado, dos titulares corregidos porque se cortaban.
 4. **Decidir si L10 se publica** (depende de Sergio).

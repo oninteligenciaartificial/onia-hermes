@@ -481,7 +481,40 @@ Element— y la identidad igual se sostuvo, porque **la cara viene de la referen
 ⇒ **Regla práctica:** para variantes de una foto que ya gustó, `Reference` y no `Recreate`.
 Y con Reference **no hace falta el Element**: la referencia ya trae la cara.
 
-## 🔴 Las descargas se degradaron durante la sesión
+## ✅ RESUELTO — no era Higgsfield: Chrome bloquea las descargas del sitio
+
+**Diagnóstico, en un paso.** Se disparó desde la propia página una descarga de un `.txt` de **15
+bytes** con un `data:` URI —sin red, sin servidor, sin Higgsfield de por medio— y **tampoco bajó**.
+
+⇒ **El problema no es Higgsfield ni el archivo ni el botón: es Chrome bloqueando las descargas del
+origen `higgsfield.ai`.** Es el bloqueo de "descargas automáticas múltiples", que Chrome aplica
+solo después de varias descargas seguidas del mismo sitio. Por eso a la mañana bajaba todo y a la
+tarde nada: **no se degradó, se cruzó un umbral.**
+
+**El arreglo lo hace Sergio, una vez, en 10 segundos:** en Chrome, con `higgsfield.ai` abierto →
+**icono a la izquierda de la barra de direcciones** → *Configuración del sitio* → **Descargas
+automáticas → Permitir**. (También suele aparecer un icono de descarga bloqueada a la derecha de
+la barra.)
+
+⚠️ **Ojo con la trampa:** si Sergio aprieta descargar en ESE mismo Chrome, tampoco baja, y parece
+que sí. Fue lo que pasó con V05: dijo *"ya lo descargué"* y el archivo nunca llegó al disco.
+
+**Cómo se comprueba que quedó arreglado**, sin gastar un crédito:
+
+```js
+const a=document.createElement('a');
+a.href='data:text/plain;base64,'+btoa('ok');
+a.download='ONIA-prueba-descarga.txt'; document.body.appendChild(a); a.click();
+```
+
+Si aparece `ONIA-prueba-descarga.txt` en Descargas, las piezas también van a bajar.
+
+### Lo que quedó pendiente por este bloqueo
+
+- **V05** (`oficina` animada, 6,25 cr) y **G05c** (`Reference` sobre G05, 2 cr): generadas, pagas,
+  **en la cuenta y NO en el repo**. **No regenerar.**
+
+## Historia — cómo se veía antes de entender el bloqueo
 
 G05 y G05b bajaron sin problema a la mañana. A la tarde **dejó de bajar todo**: video (7 intentos)
 e imagen (2 más). El archivo de G05c **quedó en la cuenta y no en el repo**. La comparación de
