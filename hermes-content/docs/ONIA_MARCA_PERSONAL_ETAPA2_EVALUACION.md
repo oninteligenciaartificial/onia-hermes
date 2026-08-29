@@ -34,10 +34,15 @@ balde agujereado. **Supuesto fatal de la propuesta.**
   audiencia calificada. Sergio es la capa de CREDIBILIDAD, no de alcance
   (`ONIA_ESTRUCTURA_TRES_CAPAS_20260820.md`); pagarle a la máquina por vistas lo empuja
   a ser un canal de alcance.
-- **Exposición sin techo total:** máximo teórico = 20×$37,50 + 10×$30 = **$1.050/mes**.
-  El CPM está en USD y el fee en Bs, **sin tipo de cambio definido**: al oficial (6,96)
-  son Bs 7.300; al real (~11,37) Bs 11.900. Con el fijo: **hasta ~Bs 14.000/mes**, con
-  runway hasta ~mediados de octubre y cero clientes pagando.
+- **Exposición sin techo total:** TC acordado con Samuel = **10** (confirmado por Sergio
+  2026-08-29) → pilar Bs 7,5/1.000 vistas, B-roll Bs 6/1.000; tope por video = Bs 375
+  (pilar) / Bs 300 (B-roll). Máximo variable = 20×375 + 10×300 = **Bs 10.500/mes**; con el
+  fijo, **hasta Bs 12.500/mes**, con runway hasta ~mediados de octubre y cero clientes
+  pagando. Sigue faltando el tope mensual TOTAL.
+- **Yapping multiplica la factura si no se acota:** Samuel hace variantes de un mismo video
+  para trial reels. Si cada variante cuenta como "video" con su propio tope de 50k, un solo
+  contenido puede facturar 3-5 veces — y los trial reels están diseñados justamente para
+  farmear vistas de no-seguidores (vistas baratas, poco calificadas).
 - **Medición indefinida:** ¿vista de qué plataforma, sumadas las 4? ¿ventana de conteo?
   (un video acumula vistas por meses — ¿cada "cierre mensual" recuenta lo viejo?). Y lo
   mide el que cobra, en un sheet manual.
@@ -71,10 +76,11 @@ de caja. Y la audiencia "aprendé herramientas IA" compra cursos, no el SaaS B2B
 1. **Gate de arranque:** cierre de Etapa 1 con números reales (vistas, comentarios por
    palabra, miembros) + test del comentario→DM desde una cuenta de un tercero + página de
    demo viva y reservada una vez de punta a punta. El fee no corre hasta ese gate.
-2. **Moneda y techo:** CPM en Bs (pilar Bs 5/1.000, B-roll Bs 4/1.000 — equivalen a sus
-   tarifas al oficial) o TC fijado por contrato; **tope mensual TOTAL del variable**
-   (ej. Bs 3.000); medición = snapshot a 30 días del publish, suma de las 4 plataformas,
-   contra analytics nativas (captura/API), no sheet a mano.
+2. **Techo y medición** (la moneda ya se cerró: TC 10 → pilar Bs 7,5/1.000, B-roll
+   Bs 6/1.000): **tope mensual TOTAL del variable** (ej. Bs 3.000-4.000); medición =
+   snapshot a 30 días del publish, suma de las 4 plataformas, contra analytics nativas
+   (API/captura), no sheet a mano; **las variantes de yapping/trial reels comparten UN
+   solo tope de 50k con su video madre** — es el mismo contenido, no 5 videos.
 3. **Realinear el variable:** mitad por vistas, mitad por resultado — Bs por miembro nuevo
    de comunidad atribuido (`?src=`/palabra) o por demo agendada. Si su contenido convierte
    como promete, Samuel gana MÁS que con CPM puro.
@@ -134,6 +140,35 @@ cláusula, duplicar el volumen con la máquina duplica la factura de Samuel.
 **"Qué tanto nos cumple":** el repo no tiene registro de resultados de la Etapa 1 (los 8
 videos de agosto: vistas, comentarios por palabra, miembros). No se puede evaluar su
 cumplimiento sin ese cierre — otra razón para el gate del punto 1.
+
+## ¿Lo vale? — escenarios al TC acordado (10)
+
+Reparto confirmado por Sergio (2026-08-29): Samuel hace SOLO sus 30 videos + yapping
+(variantes para trial reels) + comunidad texto diario; Sergio hace los videos extra, los
+videos crudos para la comunidad, responde la comunidad y sube las historias. Etapa 1 ya
+costó **Bs 800** (pagados) y no tiene cierre con números.
+
+| Escenario | Vistas promedio/video | Variable | Total mes |
+|---|---|---|---|
+| Piso (cuenta chica, nicho Bolivia) | ~3.000 | ~Bs 630 | **~Bs 2.600** |
+| Medio (contenido funciona) | ~10.000 | ~Bs 2.100 | **~Bs 4.100** |
+| Techo (todos los videos al tope 50k) | 50.000 | Bs 10.500 | **Bs 12.500** |
+
+- **El fijo de Bs 2.000 es justo o barato** por el paquete: guion + dirección de grabación +
+  edición de 30 piezas + yapping + subida + comunidad texto. Un editor suelto cobra
+  Bs 30-80/pieza solo por editar; una agencia, varias veces esto.
+- **Lo que NO es barato es el variable sin candados**: sin tope mensual total y con
+  variantes de yapping contando cada una por separado, el caso techo (Bs 12.500) equivale
+  a ~2 meses del runway que queda.
+- **El presupuesto esperado honesto: Bs 3.000-4.500/mes.** La pregunta no es si Samuel es
+  caro — es si ese gasto mensual acerca la venta del SaaS en las ~6 semanas que definen
+  todo. No la acerca directo (la marca personal apunta al curso futuro); es inversión de
+  largo plazo con caja corta. Vale SI el embudo funciona y SI Etapa 1 muestra números.
+- **Gatillo de decisión:** los Bs 800 de Etapa 1 ya compraron el derecho a ver números.
+  Si el cierre de Etapa 1 muestra tracción real (vistas totales, comentarios por palabra,
+  miembros de comunidad ≥ algo medible), avanzá con los candados. Si no hay números o son
+  malos, renegociá a solo-fee (sin CPM) o pausá — no dejes que los Bs 800 hundidos
+  arrastren Bs 2.600-4.100 mensuales.
 
 ## Veredicto
 
