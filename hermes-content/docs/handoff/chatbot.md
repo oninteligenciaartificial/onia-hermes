@@ -217,16 +217,12 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
 
 **Qué quedó a medias, y dónde**
 
-- **Segunda mitad de la siembra (§5.3 de la línea de entrega)**: la plantilla usa defaults
-  del rubro; falta que beba del alta real de la org (horario declarado en onboarding —
-  cuidado: DOS convenciones de dayOfWeek conviven, ver skill `onia-backend`) + bench de humo.
+> ⚠️ Bloque saneado 2026-08-29: lo que decía acá ya se saldó en el backlog v2 (ver arriba):
+> plantilla bebe horario real ✅ · LiteLLM diagnosticado ✅ · delivery_status honesto ✅ ·
+> limpieza QA ✅ · watchdog ERROR→Telegram cableado ✅. Queda UNO vivo:
+
 - **El probador con borrador corre el funnel de VENTA, no el modo recepcionista** cuando el
   doc viene explícito — pendiente documentado de antes (decidir si simula recepcionista).
-- **Los 3 pendientes heredados del handoff anterior siguen**: latencia LiteLLM (piso 11-13 s
-  fuera de guion), bug `delivery_status` optimista (propuesta exacta en el handoff del
-  23-ago, en git), limpieza de conversaciones QA (29/31/32/33 + inbox 6 huérfano).
-- **Nadie se enteró de 4 días de caída** → el watchdog loguea a un archivo que nadie mira.
-  Falta cablear su ERROR a Telegram (el guardián ya tiene canal). Anotado, no hecho.
 
 **Archivos y cambios**
 
