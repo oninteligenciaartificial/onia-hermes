@@ -296,6 +296,26 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   revisar si R_HORARIO antepone "Atendemos" a una frase que ya lo trae (candidato
   backlog v5 junto a multimedia + boton Cobrar QR en la conversacion).
 - ✅ Fase D (pantalla /inbox) CERRADA (2026-08-29): commit onia-platform 8a2f26c.
+
+## BACKLOG v5 (2026-08-29, "haremos que vea fotos videos enlaces" + cobro QR)
+
+- ✅ Pieza 2 CERRADA: MULTIMEDIA EN LA BANDEJA — attachments de Chatwoot tipados
+  (imagen/video/audio/archivo, data_url + thumb) del backend a /inbox: imagen inline
+  lazy con miniatura clickeable, players nativos de video/audio, link de archivo, y la
+  lista describe el ultimo mensaje solo-adjunto ("📷 Foto"/"🎥 Video"). Platform
+  d5c8b53, deploy runner BUILD_ID ksDIEIZaicbJXyT2esTcI. VERIFICADO MIRANDO: foto real
+  adjuntada a la conv 39 (msg 201) y renderizada en la captura de /inbox.
+- ✅ Pieza 3 CERRADA: "Atendemos Atendemos" ERA BUG DEL MOTOR (no solo doc QA) —
+  R_HORARIO antepone el verbo y el dueno escribe su horario como oracion completa.
+  Fix en reply-builder (strip del prefijo, las plantillas ponen contexto). Y BUG
+  HERMANO cazado en la misma verificacion: recepcionista sin humanName decia
+  "SERGIO te confirma" al cliente final de OTRO negocio (fallback del funnel de
+  venta) — asRecepcionista ahora cae a "el equipo". Motor 581/581, ambos deployados
+  con backup y verificados por /preview vivo (cero duplicado, cero Sergio ajeno).
+  Espejo cdb9c224 + a6c01257.
+- Pieza 4 pendiente: propuesta vision LLM (bot ENTIENDE fotos) con costo medido — NO
+  implementar sin decision de Sergio. Pieza 5 GATEADA: boton "Cobrar con QR" en la
+  conversacion (espera credenciales BCP de Sergio).
   app/(dashboard)/inbox/ (page server con gate bandejaProfile + InboxClient):
   lista con no-leidos y estado, detalle con burbujas cliente/asistente/vos,
   responder con Enter (arma el candado — copy honesto "tu asistente se hace a un
