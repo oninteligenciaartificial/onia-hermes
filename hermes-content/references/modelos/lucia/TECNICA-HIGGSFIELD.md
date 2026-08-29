@@ -465,6 +465,13 @@ formulario y mira a la funcionaria a los ojos."*
 | La funcionaria (misma señora, mismo lanyard) | ✔ | **la misma** |
 | Remera gris, argollas, cadenita, pecas | ✔ | **iguales** |
 
+> ⚡ **AFINADO el 29-ago, con las dos a resolución completa lado a lado:** decir "conserva la
+> escena" se queda corto. **Conserva casi cada píxel** — las grietas de la pared, la señora de rojo
+> del fondo, el hombre sentado a la izquierda, el sello del formulario, la posición de las manos— y
+> cambia **solo la mirada**. No es "otra generación coherente": es **edición quirúrgica de la misma
+> imagen**. Por eso G05 + G05c funcionan como **antes/después de un mismo instante**, algo que
+> ninguna otra función del set puede dar.
+>
 > **Reference conserva la foto y aplica el cambio.** Es exactamente lo que Recreate NO hace:
 > Recreate cambia el secundario, el ángulo y la arquitectura; Reference deja todo quieto y mueve
 > solo lo que le pedís.
