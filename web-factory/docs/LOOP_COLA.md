@@ -26,13 +26,11 @@
 
 ## Cola (orden = prioridad)
 
-- [ ] **Minado lapa con Scrapling** (decisión Sergio 2026-08-29): usar el venv/
-      user-site con Scrapling y `scratchpad/scrapling-harvest.py <categoria>` —
-      1 categoría por run, pasa el 403 de Cloudflare que frenaba el headless.
-      Guardar 3 mejores landings del rubro con nota en la ficha del barrido.
-      Categorías: health, ecommerce, services, beauty, food. Si Scrapling no
-      está instalado en el run, saltear esta tarea (no instalar en un run
-      desatendido) y pasar a la siguiente.
+- [ ] **Minado lapa — tandas siguientes** (misma receta que la tanda 1, ver
+      ficha del barrido): 1 categoría por run, en orden `ecommerce` →
+      `agency`/`business` → `beauty` → `food-drinks`. Usar
+      `Fetcher.get(stealthy_headers=True, impersonate="chrome")`; el script
+      vive en el scratchpad de la sesión.
 - [ ] **Update skill ui-ux-pro-max**: el repo va por v2.13 con `gallery/` y
       `stack/` nuevos; la instalada es anterior. Ver mecanismo oficial
       (`uipro-cli` npm, MIT) y actualizar SOLO la skill local.
@@ -49,5 +47,11 @@
 
 ## Hechas (por runs o por la sesión madre)
 
+- [x] **Minado lapa con Scrapling** — tanda 1 `health-fitness` hecha (2026-08-29).
+      El 403 lo pasa `Fetcher.get(impersonate="chrome")`, NO el StealthyFetcher
+      (no arranca acá: `spawn UNKNOWN` bajo el contenedor MSIX). Slugs reales +
+      3 mejores landings del rubro salud (Baba Care · Frequency Breathwork ·
+      Dawn) en la ficha del barrido. Quedan tandas: `ecommerce`,
+      `agency`/`business`, `beauty`, `food-drinks` — se reponen abajo.
 - [x] 2026-08-29 sesión: dirección salud-premium (pesos+miel) · spotlight card ·
       banda tinta · circuito API clinic · fixes Vercel/tsc · barrido 1→15.

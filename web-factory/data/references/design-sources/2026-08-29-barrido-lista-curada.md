@@ -113,3 +113,51 @@ lo ya fichado arriba:
   entra en la PROPUESTA de bloques para OK de Sergio (junto a cifra-editorial
   y quote-única).
 - Haikei: generar 2-3 texturas SVG de prueba para bandas del clinic.
+
+## Minado lapa por categoría — tanda 1: `health-fitness` (run del loop)
+
+**Cómo se cosechó (corrige lo que decía arriba):** el 403 de Cloudflare cae con
+`Fetcher.get(stealthy_headers=True, impersonate="chrome")` de Scrapling — httpx
+puro, sin navegador. El `StealthyFetcher` **no arranca en esta máquina**:
+`launch_persistent_context: spawn UNKNOWN` (el driver de patchright no puede
+spawnear el chromium bajo el contenedor MSIX de la app; `launch()` normal sí
+funciona, y pasar `user_data_dir` propio NO lo arregla). Conclusión práctica:
+para galerías, **primera opción `Fetcher.get` impersonate**, no el navegador.
+
+**Slugs reales** (el `health` de la cola daba 404): son **83** y están todos en
+`all_category_slugs` del JSON de la cosecha. Los de la cola mapean así:
+health→`health-fitness` · ecommerce→`ecommerce` · services→no existe, lo cubren
+`agency`/`business`/`corporate` · beauty→`beauty` · food→`food-drinks`.
+
+12 landings en `2026-08-29-lapa-health-fitness.json` (con tokens medidos de 6,
+capturadas a 1440px y miradas una por una).
+
+### Las 3 mejores del rubro salud — y qué me llevo de cada una
+
+1. **Baba Care** (callbaba.com) — *la más portable a un cliente nuestro.*
+   Rojo pleno de marca en TODO el hero (no un acento tímido), display grotesca
+   pesada sobre él, y a la derecha una foto con **píldoras flotantes que narran
+   el servicio** ("Medication refill coordinated", "Car booked to appointment").
+   Eso es exactamente nuestro spotlight/banda tinta pero con **prueba de
+   servicio encima de la foto** — barato de replicar y mata el "grid de 3 cards".
+   Doble CTA asimétrico (sólido + fantasma) y teléfono en el nav: patrón de
+   clínica que convierte.
+2. **Frequency Breathwork** (frequencybreathwork.com) — *serif + video calmo.*
+   Serif alta en MAYÚSCULA centrada sobre video de bosque, crema `#F2EFE9` y
+   arcos finos de línea al borde. Valida la dirección salud-premium de la demo
+   y aporta el recurso "**arcos de línea como marco**" (nuestro `textura-arco.svg`
+   ya apunta ahí). Nav flotante en pill con toggle de sonido.
+3. **Dawn** (joindawn.com) — *split editorial 50/50.*
+   Fondo marrón oscuro `rgb(50,28,4)` con dos paneles redondeados: gradiente
+   amanecer + foto, y **el titular partido en dos mitades que se completan**
+   ("Your mind is always on." / "Your support should be, too."). Source Serif 4
+   + Figtree. Es un hero de dos columnas con carga editorial: candidato directo
+   a variante de nuestro hero para clientes con una sola foto buena.
+
+**Descartadas y por qué:** Rise Plasma = página muerta (aviso de
+"restructuring", no es una landing). Nudge = uniforme dev (Inter + pill), justo
+lo que evitamos. Maxima Therapy queda de suplente: display `Robuck Rounded` a
+214px sobre verde pleno con ilustración plana — impacto altísimo, pero registro
+infantil/ONG, no clínica privada.
+
+**Próximas tandas (orden de la cola):** `ecommerce` · `agency`/`business` · `beauty` · `food-drinks`.
