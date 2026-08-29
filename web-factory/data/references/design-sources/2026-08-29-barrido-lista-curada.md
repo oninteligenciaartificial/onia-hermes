@@ -62,6 +62,34 @@ tarjetas con foco de luz — versiones CSS-only viables para nivel 1.
 `textura-arco.svg` en `data/clients/dental-amanecer.assets/` — muestra para OK
 de Sergio antes de cablear en bandas.
 
+## Recorrido COMPLETO 1→15 en navegador (pedido de Sergio, misma fecha)
+
+Las 15 fuentes de la captura, en orden, todas visitadas. Deltas nuevos sobre
+lo ya fichado arriba:
+
+- **[2] repo ui-ux-pro-max**: vivo, v2.13.0, 123k⭐; carpetas nuevas `gallery/`
+  y `stack/` (starter kit) → **candidato a actualizar la skill instalada**
+  (publica `uipro-cli` en npm).
+- **[4] Fontpair**: los "brand kits" (pairing+paleta) traen destacado
+  **Fraunces + Sora sobre verde-oliva** — valida la dirección tipográfica de la
+  demo desde la propia fuente. Formato brand-kit = nuestro design.json.
+- **[8] efferd**: conteo por categoría — CTA 20 · Auth 14 · Footer 14 ·
+  Integrations 12 · Contact 11 · Features 10 · App Shell 10 · Dashboard 10 ·
+  Hero 9 (+3 free) · Testimonials 8 · Pricing 7 · FAQs 8. Los FREE son los
+  legalmente estudiables.
+- **[10] Componentry**: MIT, instalable vía `npx shadcn add @componentry/...`;
+  catálogo wow: matrix-rain, scroll-velocity, infinite-icon-field,
+  magnet-lines, dither-gradient, magnetic-dock. Nivel 2 directo; inspiración
+  CSS-only para nivel 1.
+- **[11] lapa (galería mirada)**: tendencia dominante del muestrario:
+  **monocolor pleno + display gigante como identidad entera** (A Love Story
+  rojo, Magnet Lover violeta) — dirección de alto impacto, barata con nuestro
+  motor (banda plena + serif variable) para clientes de marca fuerte.
+- **[13] Watermelon**: SPA registry premium (dashboards/blocks React);
+  licencia se verifica por bloque (audit 2026-06-15 la marcó unverified).
+- [1,3,5,6,7,9,12,14,15] ya fichadas arriba (21st, motion docs, Stitch,
+  Axion, Rotato, shadcn, Motion-Primitives, 10x, Haikei) — validadas en vivo.
+
 ## Pendiente para próximas vueltas del loop
 
 - Minar lapa.ninja por categoría (restaurante, comercio, servicios) para el
