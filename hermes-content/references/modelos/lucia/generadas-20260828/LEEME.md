@@ -6,6 +6,21 @@ Hecho con el Element **`lucia-skin-v1`** (`58bbd635-…`), el de 7 ángulos, **d
 Todas se miraron una por una antes de guardarlas: pecas, argollas doradas, cadenita, piel de
 tono parejo sin rojez.
 
+## 🔴 Los PNG NO están en el repo — los JPG sí
+
+`hermes-content/references/modelos/.gitignore` ignora `*.png` a propósito: *"Originales PNG de la
+generación (pesados, quedan locales). Los JPG q3 son los assets usables."*
+
+**Se rompió esa convención el 29-ago**: G01-G05 se guardaron solo como PNG, así que este LEEME
+las documentaba y **ninguna estaba en el repo**. Un clon limpio no tenía una sola imagen del banco.
+Lo cazó el guardián. Ya están los JPG y **una pieza (L09) apuntaba al PNG ignorado**: reapuntada.
+
+**Regla: al bajar una pieza, guardar el PNG (local, original) Y generar su JPG (el que se
+commitea y el que usan los briefs).** Las rutas de los briefs van SIEMPRE al `.jpg`.
+
+⚠️ **G01-G04 están a 1K (896×1200); G05 es la primera a 2K (1792×2400).** El 2K cuesta lo mismo
+—2 créditos— así que no hay razón para volver a generar a 1K.
+
 ## Lo que hay
 
 | Archivo | Qué es | Por qué está |
