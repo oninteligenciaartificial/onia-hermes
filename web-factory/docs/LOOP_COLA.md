@@ -93,6 +93,25 @@ conocido, `PushNotification` a Sergio. Nunca inventar.
 - [ ] **Dark de la demo**: capturar dental-amanecer con prefers-color-scheme
       dark (los tokens traen bloque dark) y mirar contraste banda tinta/strip.
 
+## TAREA GRANDE — Dashboards (pedido Sergio 2026-08-29)
+
+Aprender de ~30 dashboards reales para MEJORAR el nuestro y cambiarlo.
+- [x] Baseline capturado: nuestro `dashboard-demo` (template `dashboard.ts`) —
+      funciona pero genérico (acento violeta, no la marca Onia).
+      Captura: `scratchpad/dash/nuestro-actual.png`.
+- [ ] Cosechar ~30 referencias (Grafana Play, shadcn examples, Tremor, admin
+      templates, demos analytics) — `scratchpad/shoot-dash.js`. Renderizan por
+      navegador (no Scrapling). Guardar en `scratchpad/dash/refs/`.
+- [ ] Analizar: jerarquía info, fila de KPIs, estado por forma+color, sparklines/
+      charts, color semántico ≠ acento, densidad. Cruzar con
+      `docs/DASHBOARD_PATTERN_BANK_2026.md` (ya existe) + skill `dataviz`.
+- [ ] Mejorar el template `packages/templates/src/dashboard.ts` (NUESTRA zona) a
+      la marca Onia (verde/warm) + los patrones aprendidos; demo renderizado y
+      mirado.
+- [ ] PROPUESTA de rediseño del dashboard de Onia Platform (admin real) — ese
+      vive en `onia-platform`/`onia-center` (OTRA lane): se propone y se coordina,
+      no se toca desde acá.
+
 ## Bloqueadas (esperan a Sergio)
 
 - [ ] Bloques nuevos: cifra-editorial · quote-única · features numeradas+device
