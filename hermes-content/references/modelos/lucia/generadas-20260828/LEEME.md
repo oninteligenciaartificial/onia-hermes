@@ -14,6 +14,7 @@ tono parejo sin rojez.
 | `G02-parada-de-micro.png` | Esperando el micro, cielo nublado | Primera de la **receta normal**: poste con maraña de cables, muros descascarados, una señora esperando, canasta a los pies |
 | `G03-mercado.png` | Comprando tomates, hablando con la casera | La mejor de la receta normal. Toldo verde, cajones de madera, bolsas negras colgando, delantal a cuadros. **Suma interacción con otra persona**, que es lo que más la aleja de una foto de campaña |
 | `G04-tienda-de-barrio.png` | Pagando, el tendero le da el vuelto | **La más lograda del banco.** Heladera de Coca-Cola, estantes atiborrados hasta el techo, foco colgando de un cable, mostrador gastado. La acción a medias es el intercambio de monedas — imposible de leer como pose |
+| `G05-oficina-de-tramites.png` | Fila de trámite, la funcionaria le pasa un formulario sellado | **La mejor del banco, supera a G04.** Cartel de TURNOS escrito a mano y pegado con cinta, tubos fluorescentes, sillas de plástico blancas, paredes beige descascaradas, ventanilla de vidrio rayado. La acción a medias es inconfundible: **dos manos sobre el mismo formulario**, la de ella y la de la funcionaria, con el sello azul a la vista. Es imposible leerla como pose. Y el lugar es on-brand: el trámite es justo el dolor que Onia resuelve. Asset id `1f9bd463-4c89-40f7-af4b-225d34502fd3` |
 | `V01-farmacia-animate-kling3.mp4` + `_V01-TIRA.jpg` | 5 s de b-roll en una farmacia | Hecho con **Animate** desde una imagen de receta normal. La cara aguanta los 5 s. 6,25 cr con el sonido apagado |
 | `V02-mercado-animate-kling3.mp4` + `_V02-TIRA.jpg` | 5 s en el mercado, con la casera | **El mejor de los dos.** La foto ya tenía una acción a medias —la mano acercando el tomate— y el modelo solo la continuó. Animar una escena con interacción sale mejor que animar un retrato quieto |
 
@@ -31,6 +32,8 @@ piezas donde Lucía tiene que parecer una persona y no una modelo.
 ## Lo que falta
 
 - Más lugares: adentro de un micro, una fila de trámite en una oficina.
-- Animar G02 (la parada). G03 y G04 ya están animadas.
+- Animar G02 (la parada) y G05 (la oficina). G03 y G04 ya están animadas.
+- **Guardar el asset id de cada pieza nueva**: viene en el nombre del archivo que descarga
+  Higgsfield (`hf_<fecha>_<hora>_<uuid>.png`). Sin eso hay que buscarla en un grid que no carga.
 - Ninguna de estas está en la lista blanca de `scripts/lucia_banco.json` todavía —
   `generadas-20260828/` sí está, así que el gate ya las acepta.
