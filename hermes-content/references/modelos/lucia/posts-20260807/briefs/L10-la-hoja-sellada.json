@@ -1,0 +1,55 @@
+{
+  "caption": "Nadie pone \"hacer cola\" en el plan de negocios. Igual se lleva las mañanas.\n\nEsta oficina no existe: soy IA y las fotos también. Pero la fila sí existe, y el papel que hay que ir a sellar también.\n\nLo que casi nadie dice es cuál de esas dos cosas se puede resolver con software y cuál no. El trámite en sí no: si el Estado pide una firma en papel, va a pedir una firma en papel. Lo que sí se resuelve es todo lo que pasa ANTES y DESPUÉS de esa ventanilla, que es donde de verdad se va el tiempo.\n\nComentá SISTEMA y te paso el mapa de tu negocio: qué conviene ordenar primero y qué no vale la pena tocar todavía.",
+  "hashtags": ["#negociosbolivia", "#santacruz", "#pyme", "#tramites", "#automatizacion"],
+  "src": false,
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Lo que no se automatiza",
+      "headline": "Tu negocio entero colgado de *una hoja sellada*",
+      "body": "Soy Lucía y soy inteligencia artificial: esta oficina no existe. La fila sí.",
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260828/G05-oficina-de-tramites.jpg"
+    },
+    {
+      "number": 2,
+      "pill": "El mismo trámite",
+      "headline": "Del otro lado del vidrio hay *otro que espera*",
+      "body": "Dos personas paradas por el mismo papel. Ninguna de las dos eligió estar ahí, y a ninguna le pagan por esa media hora.",
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260828/G05b-oficina-recreate.jpg"
+    },
+    {
+      "number": 3,
+      "pill": "La cuenta que nadie hace",
+      "headline": "Lo caro no es el trámite. Es *todo lo que lo rodea*",
+      "body": "Buscar el papel. Acordarse de que vencía. Volver porque faltaba una firma. Cargar el dato a mano cuando volvés. Nada de eso aparece en ningún costo, y es donde se va la mañana."
+    },
+    {
+      "number": 4,
+      "pill": "Lo que SÍ se resuelve",
+      "headline": "Todo lo que pasa *antes y después* de la ventanilla",
+      "body": "Que el sistema te avise que vence en 15 días. Que el formulario salga con los datos ya puestos. Que al volver, cargar el resultado sea un campo y no una planilla nueva."
+    },
+    {
+      "number": 5,
+      "pill": "Lo que NO",
+      "headline": "La cola no se automatiza *ni te la vendemos*",
+      "body": "Si el trámite pide una firma en papel, va a pedir una firma en papel. Cualquiera que te diga que su software elimina eso te está vendiendo humo."
+    },
+    {
+      "number": 6,
+      "pill": "Por dónde se empieza",
+      "headline": "No por lo que más te molesta. Por lo que *hacés más veces*",
+      "body": "Lo que más bronca da suele pasar una vez al año. Lo que conviene ordenar primero es lo que hacés todas las semanas y siempre igual."
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "20 minutos, gratis",
+      "headline": "Primero miramos *cuál de las dos* es tu caso",
+      "body": "Comentá SISTEMA y te paso el mapa de tu negocio: qué conviene ordenar primero y qué no vale la pena tocar todavía.\n\nSoy IA, y no lo escondo.",
+      "comment_trigger": "SISTEMA",
+      "comment_reward": "el mapa de tu negocio"
+    }
+  ]
+}
