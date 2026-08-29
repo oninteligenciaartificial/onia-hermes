@@ -280,7 +280,21 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   GET+POST /api/bandeja/[id] (Zod discriminado responder/estado, 404 tenencia — no 403
   para no confirmar existencia, 502 honesto). Registradas comunes. 22 tests nuevos,
   36/36 con registry, tsc limpio.
-- Fase E (gates+deploy+MIRAR) pendiente.
+- ✅ Fase E CERRADA (2026-08-29) — BACKLOG v4 COMPLETO: LA BANDEJA NATIVA ESTA VIVA
+  EN PRODUCCION. Deploy 1: 8a2f26c (BUILD_ID LQiBVaxIRU8LY0skG4vAA, runner 5 gates).
+  Review de seguridad (subagente): 0 CRITICAL; HIGH corregido (la lista revalida
+  tenencia con esDeInbox fila por fila — no se le delega a Chatwoot), MEDIUM (404
+  uniforme, sin oraculo de enumeracion), LOW (botUserId blindado a NaN). Deploy 2
+  con los fixes: 897e586 (BUILD_ID U0UUnMU3by8I-V9rVP-UG), 24/24 tests bandeja.
+  VERIFICADO MIRANDO con ciclo real: conversacion creada en inbox QA 7 (conv 39)
+  → bot contesto M0R recepcionista → login como dueno QA (cred nueva en
+  /root/onia-qa-chatbot.credentials chmod 600) → /inbox pinto lista+burbujas →
+  respuesta desde la UI → candado ARMADO (human_took_over=t) → "Marcar resuelta"
+  desde la UI → DESARMADO (f). Capturas /tmp/bandeja-*.png; la 3 enviada a Sergio.
+  Hallazgo colateral (data QA, no motor): el doc publicado de la org QA tiene texto
+  sucio ("Atendemos Atendemos", markdown _..._ sin render) — limpiar el doc QA o
+  revisar si R_HORARIO antepone "Atendemos" a una frase que ya lo trae (candidato
+  backlog v5 junto a multimedia + boton Cobrar QR en la conversacion).
 - ✅ Fase D (pantalla /inbox) CERRADA (2026-08-29): commit onia-platform 8a2f26c.
   app/(dashboard)/inbox/ (page server con gate bandejaProfile + InboxClient):
   lista con no-leidos y estado, detalle con burbujas cliente/asistente/vos,
