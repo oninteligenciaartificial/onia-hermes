@@ -96,10 +96,8 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
 > 🔴 **Esta lista es la fuente del LOOP TAREAS.** Lo tachado NO se rehace. Al cerrar algo se tacha
 > acá en la misma vuelta, o la próxima lo repite.
 
-1. ~~**Animar G05**~~ — ✅ generada y verificada (Kling 3.0 · 720p · 5 s, 6,25 cr). ⚠️ **NO se pudo
-   bajar** en 7 intentos, y **NO se regenera: ya está paga.** Queda a la espera del archivo. Si
-   aparece: copiar a `generadas-20260828/V05-oficina-animate-kling3.mp4`, tira de 5 frames,
-   verificar sin audio con ffprobe.
+1. ~~**Animar G05**~~ — ✅ **cerrado**: `V05-oficina-animate-kling3.mp4` en el repo, con tira de
+   frames, sin audio confirmado por ffprobe y asset id anotado. El mejor video del banco.
 2. ~~**Probar `Reference`**~~ — ✅ **hace exactamente eso**: conservó lugar, ropa, personas y
    encuadre, y aplicó el único cambio pedido (ella levanta la vista al funcionario). Es la
    herramienta para variantes; Recreate no. ⚠️ El archivo (G05c) **no se pudo bajar** — quedó en
@@ -107,8 +105,9 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
 2c. ✅ **DESBLOQUEADO el 29-ago**: Sergio habilitó las descargas. Verificado con el txt de 15 bytes.
    - ✅ **G05c ya está en el repo** (`a44dae81`), traída con `scripts/traer_descarga.js`, que en su
      primer uso real confirmó 0 min de antigüedad y devolvió el asset id.
-   - ⚠️ **Falta V05**: su historial en `/ai/video` no cargaba (spinner infinito). Reintentar.
-     **NO regenerar: ya está paga.**
+   - ✅ **V05 también está en el repo.** Es 🏆 **el mejor video del banco**: el modelo COMPLETA la
+     acción a medias (la funcionaria suelta, ella toma el papel y lo lee) sin inventar habla ni
+     giros. Cierra la regla por el lado positivo, contra V04 que la cierra por el negativo.
    - 📌 Afinado al verla a resolución completa: **Reference conserva casi cada píxel** y cambia solo
      lo pedido. G05 + G05c = antes/después del mismo instante.
 
