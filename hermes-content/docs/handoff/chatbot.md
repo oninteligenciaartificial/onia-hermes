@@ -237,6 +237,16 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   claro + punto verde, cero Chatwoot. Si el reconcile nocturno revierte (canario del loop
   de orden: brand distinto de Onia), re-aplicar LOS SEIS.
 
+- BACKLOG v3 tarea 3 CERRADA (2026-08-29): CANARIO DE AUTH vivo en el VPS —
+  /opt/onia/auth-canary.sh (espejo hermes-content/deploy/vps-ops/), cron */5 min.
+  Prueba el CAMINO real que fallo el 16-ago: onia-center → supabase-kong:8000
+  /auth/v1/settings (anon key del app.env, atraviesa el alias auth) + login publico 200.
+  Telegram SOLO errores, 1 aviso/incidente + recuperacion (marcador /var/lib), runbook
+  del alias en el propio mensaje de alerta. Probado en vivo: camino feliz, rama de error
+  (marcador creado) y recuperacion (marcador limpio) — las 3 verdes.
+- BACKLOG v3 tarea 4 CERRADA (2026-08-29): clon local onia-platform master al dia con
+  origin (FF limpio, 0-0). Lo ajeno era el merge del PR 51 fix/ui-traga-el-403.
+
 **Archivos y cambios**
 
 - `onia-platform` (master → origin): `bd2350c` plantillas + `9585db4` fix ancho.
