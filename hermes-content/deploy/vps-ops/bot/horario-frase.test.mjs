@@ -38,3 +38,20 @@ test("frase sin verbo queda igual que siempre", () => {
   const texto = respuestaHorario(configCon("lun-vie, 9:00-18:00"));
   assert.match(texto, /Atendemos lun-vie, 9:00-18:00/);
 });
+
+test("recepcionista sin humanName del cliente: jamas 'Sergio' — cae a 'el equipo'", () => {
+  const doc = { schema: "onia.bot.knowledge/1", identity: { productName: "Negocio Sin Humano" } };
+  assert.equal(validateKnowledge(doc).ok, true);
+  const config = asRecepcionista(applyKnowledge(createBotConfig(), doc), doc);
+  assert.equal(config.identity.humanName, "el equipo");
+  // Fuera de horario (domingo 03:00 La Paz): el sufijo M7 usa {{humano}}.
+  const r = step(createState({}), { text: "Horarios", receivedAt: "2026-08-30T07:00:00Z" }, { config });
+  const texto = r.replies.map((x) => x.text).join("\n");
+  assert.doesNotMatch(texto, /Sergio/);
+});
+
+test("recepcionista CON humanName del cliente lo respeta", () => {
+  const doc = { schema: "onia.bot.knowledge/1", identity: { productName: "Negocio", humanName: "Marta" } };
+  const config = asRecepcionista(applyKnowledge(createBotConfig(), doc), doc);
+  assert.equal(config.identity.humanName, "Marta");
+});

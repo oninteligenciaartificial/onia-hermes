@@ -796,7 +796,16 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
  * hechos de la org y pueda ser honesto cuando un campo falta. Ver recepcionista.mjs.
  */
 export function asRecepcionista(config, data) {
-  return createBotConfig({ modo: "recepcionista", conocimiento: data }, config);
+  const base = createBotConfig({ modo: "recepcionista", conocimiento: data }, config);
+  // Sin humanName del cliente, el fallback heredado era "Sergio" (el humano del
+  // funnel de VENTA de Onia): un negocio ajeno decia "Sergio te confirma" delante
+  // de su cliente final (visto en prod, 2026-08-29). Neutro: "el equipo" — M7 dice
+  // "el equipo te confirma" y el boton queda "Hablar con el equipo".
+  const humanoDelCliente = String(data?.identity?.humanName || "").trim();
+  if (!humanoDelCliente) {
+    return { ...base, identity: { ...base.identity, humanName: "el equipo" } };
+  }
+  return base;
 }
 
 /**
