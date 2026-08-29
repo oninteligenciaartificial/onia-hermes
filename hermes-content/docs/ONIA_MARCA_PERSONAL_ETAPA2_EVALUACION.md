@@ -350,9 +350,45 @@ Leslie · 2 medias jornadas de grabación.
 | Historias: 2 ejemplos completos, no 8 estructuras | Volvió a su posición original | **Menor. Partir la diferencia:** 2 ejemplos completos + cada semana el tema y el hook de las 2 secuencias (4 líneas). "Estrategia" es SU línea del acuerdo. |
 | **Crudos en su resguardo**; editado tuyo "una vez pagado el mes" | Revierte la entrega de crudos | 🔴 **NO ceder. Es EL punto.** Todo el plan de 2-3 videos/día depende de cortar derivados del crudo (que él ya aceptó que no generan CPM — cláusula que queda VACÍA si él retiene el material). Además: bus factor (si se va al mes 2, no queda nada) y rehén de disputas de pago. Contra: **copia a carpeta de Sergio dentro de las 48 h post-sesión; él conserva su copia también** ("resguardo doble nos protege a los dos"). Nota: se contradijo — en su punto 4 aceptó "crudos a las 48h" y en el 5 los retiene. Innegociable: es la cara de Sergio, en sus cuentas, pagado por él. |
 
-**Respuesta enviada (borrador):** aceptar todo lo suyo salvo crudos (copia compartida
-48 h, innegociable), historias (2 ejemplos + tema/hook semanal) y SLA de guiones (48 h o
-aprobado). Texto completo en el hilo de la sesión 2026-08-29.
+**Respuesta de Sergio (ronda 2, enviada):** yapping a MITAD de tarifa (decisión de Sergio:
+trabajo marginal = tarifa marginal; oficial pleno, variantes Bs 3,75/1.000 pilar y
+Bs 3/1.000 B-roll, tope 50k combinado) · crudos con copia compartida a 48 h (condición
+para firmar) · historias 2 ejemplos + tema/hook semanal · SLA guiones 48 h o aprobado ·
+fiscal en regla. Fallback si Samuel se planta en tarifa plena para variantes: cederla a
+cambio de bajar el tope mensual a Bs 3.000. Texto completo:
+
+> Samuel, buenísimo — cerramos casi todo. Tres ajustes y firmamos:
+>
+> **1. Yapping:** acepto que sumen, pero a mitad de tarifa: el video oficial cobra pleno
+> y sus variantes la mitad del CPM (pilar Bs 3,75/1.000, B-roll Bs 3/1.000), todo
+> compartiendo el mismo tope de 50.000 combinado. La lógica es la tuya misma: es una
+> modificación del mismo video, no una pieza nueva — sale del mismo edit en un saque,
+> así que trabajo marginal, tarifa marginal. Pero cobra, porque las vistas son reales.
+> En el sheet, cada contenido con sus variantes listadas (links). Y de acuerdo con la
+> revisión automática si el tope se supera 2 meses seguidos.
+>
+> **2. Crudos:** esto sí lo necesito distinto. Copia de todo el crudo a mi carpeta dentro
+> de las 48 h de cada sesión — y vos guardás tu copia también: resguardo doble nos
+> protege a los dos. Es mi cara, en mis cuentas, y los cortes extra que yo haga ya
+> quedamos que no te generan CPM ni te quitan nada — pero sin el material no existen.
+> Este punto es condición para firmar.
+>
+> **3. Historias:** te acepto los 2 ejemplos completos si cada semana me pasás el tema +
+> hook de las 2 secuencias (4 líneas, nada más). Con esa base las produzco yo.
+>
+> Y un detalle operativo: guiones 5 días antes y yo respondo en 48 h — si no respondo en
+> 48 h, van como aprobados. Así mi demora nunca te frena, y el prorrateo solo aplica si
+> la falta es tuya, como dijiste.
+>
+> Fiscal: mi mamá confirma el porcentaje de retención y lo cruzamos con lo tuyo antes
+> del primer pago. El pago sale en regla desde Onia — factura o retención, lo que salga
+> de las dos consultas.
+>
+> El resto queda exactamente como lo escribiste: cierre de Etapa 1 con números, tope
+> mensual Bs 3.500, fijo al inicio + variable al cierre de cada foto de 30 días, mitad
+> de pilares a dueños de negocio, accesos por rol, imagen solo en cuentas acordadas,
+> curso mío con tu CPM como compensación, 3 meses con salida mensual firmado por mi
+> mamá, 2 medias jornadas. Pasame los números de Etapa 1 y las fechas.
 
 **Vigilar (no responder por escrito):** su framing fiscal — "el trabajo es para tu marca
 personal, no para Onia (que sí está registrada)" — apunta hacia el pago informal. Lo que
