@@ -60,6 +60,16 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
 - Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
   como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
 - La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- ✅ PIEZA 6 CERRADA (2026-08-29) — BACKLOG COMPLETO. Endurecimiento del alta: honeypot
+  "sitioWeb" invisible en los DOS formularios + exito FALSO en las DOS rutas (bot ciego,
+  cero filas — probado contra prod: 201 y count intacto), y limitSeguro() con fail-open
+  (Upstash caido ya no tumba el alta). El switch ONIA_ALTA_AUTOMATICA=abierta (del 21-ago)
+  queda listo: abrir = una env + recrear contenedor, ya blindado. /register MIRADO: identico,
+  cero cartel de obra. Deploy e151b78 (BUILD_ID sKVWnaQ9P_EI0i_Rc67lM).
+  CHOQUE RESUELTO por el libro: dos carriles ajenos (copy-vendible, fiscal-mock) mergearon a
+  master en el medio — rebase encima, suite 2126 del arbol combinado, push, build relanzado.
+  DECISION PENDIENTE DE SERGIO antes de abrir: verificacion de correo real (hoy
+  email_confirm:true — cualquiera registra con cualquier email).
 - ✅ PIEZA 5 CERRADA (2026-08-29): org QA con agenda REAL creada por protocolo (org
   zzqa-horario-0001 "ZZ QA Horario", user oninteligenciaartificial+qahorario@gmail.com,
   cred en /root/onia-qa-horario.credentials, 6 tramos lun-sab 08:30-18:30). MIRADO en
