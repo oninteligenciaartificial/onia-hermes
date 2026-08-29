@@ -60,6 +60,19 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
 - Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
   como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
 - La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- ✅ BACKLOG v2 tarea 4 (2026-08-29): claves hardcodeadas de n8n SANEADAS — conteo EN VIVO
+  dio 4 workflows con secretos (la memoria decia 7: vieja), TODOS inactivos legacy
+  (WF-GS-02/03/04 + WF-11): JWTs de Supabase CLOUD. Redactadas 27 ocurrencias via sqlite3
+  DENTRO del contenedor (BEGIN IMMEDIATE), verificado WAL-aware: 0 secretos en 87 workflows.
+  Los 4 ARCHIVADOS. Backup completo (4 JSON + database.sqlite.pre-redact, chmod 600) en
+  /root/n8n-backup-secretos-20260829-152708/ — FUERA del repo.
+  HALLAZGOS para Sergio: proyecto Supabase cloud Dental-gest (kvepqgikokjlacxngkiw)
+  sigue ACTIVE_HEALTHY (el cloud muerto no esta muerto — decidir pausar/borrar);
+  Gesti-Os (jafxylfocvvlflpqfsix) INACTIVE con su service_role expuesto en esos JSON:
+  si algun dia se reactiva, ROTAR la clave primero.
+  Trampas pagadas (no repetir): docker exec sin -i con heredoc = ejecuta NADA con exit 0
+  (segunda vez hoy); docker cp de un SQLite en WAL copia SIN los cambios — verificar
+  SIEMPRE dentro del contenedor; n8n import:workflow del CLI NO pisa por id.
 - ✅ BACKLOG v2 tarea 3 (2026-08-29): confirmacion de correo real DETRAS DE SWITCH
   (ONIA_REGISTRO_CONFIRMA_CORREO=si → signUp de GoTrue + mail de confirmacion; 409 por
   respuesta ofuscada; sin welcome en ese camino; el front ya lo manejaba via
