@@ -178,6 +178,46 @@ clipper/editor — pero el variable está desalineado y sin blindar, y el sistem
 descansa en un embudo que hoy no entrega un solo DM. Primero el gate (punto 1), después
 la firma con los puntos 2-5, y la mezcla del punto 6 como dirección editorial.
 
+## Anexo — mensaje para Samuel (redactado 2026-08-29, listo para enviar)
+
+> Nota interna: el mensaje NO menciona el circuito comentario→DM roto — esa automatización
+> es responsabilidad de Sergio en el acuerdo, se arregla de nuestro lado antes de que
+> arranque el mes. Tampoco menciona runway ni caja.
+
+Samuel, revisé la propuesta de la Etapa 2 con calma. El sistema me gusta y quiero
+avanzar — el fijo de Bs 2.000 por los 30 videos me parece correcto y el modelo CPM me
+cierra. Para arrancar necesito que cerremos 5 puntos:
+
+**1. Cierre de Etapa 1 con números.** Antes de arrancar el plan de 30 días: vistas por
+video, comentarios por palabra clave y miembros que entraron a la comunidad. Así
+decidimos sobre datos.
+
+**2. Reglas del CPM (TC 10 como quedamos):**
+- Tope mensual total del variable: Bs 3.500. Si un mes lo superamos, lo celebramos y
+  renegociamos hacia arriba el siguiente — el techo me deja presupuestar.
+- Las variantes de yapping/trial reels comparten UN tope de 50.000 vistas con su video
+  madre (es el mismo contenido, no videos distintos).
+- Vistas = suma de las 4 plataformas, foto a los 30 días de publicado cada video, contra
+  las analytics nativas (capturas o API). Así ninguno de los dos duda del número.
+- El CPM aplica a las 30 piezas que entregás (más sus variantes). Los cortes extra que yo
+  saque de los crudos van por mi cuenta y no generan CPM.
+
+**3. Propiedad y accesos.** Los crudos y editados quedan míos. La comunidad con admin mío
+y export de miembros. Subís a mis cuentas por rol (Meta Business Suite / herramienta de
+publicación), sin compartir contraseñas.
+
+**4. Entregables.** Las 8 estructuras de historias del mes completas (no solo 2 ejemplos —
+con la estructura yo las grabo todas). De los 20 pilares, la mitad apuntados a dueños de
+negocio en Bolivia (mi comprador), el resto autoridad amplia. Cifras en guiones con
+fuente antes de publicar.
+
+**5. Formalidad.** Acuerdo simple de 3 meses con salida mensual, firmado por mi madre
+(soy menor — todo lo legal va por ella, mismo marco que uso para todo).
+
+De mi lado quedo con lo que hablamos: mis videos extra, los crudos para la comunidad,
+responder la comunidad y las historias diarias. Cerrando estos puntos, fijá vos el día
+de la sesión mensual.
+
 ## Pendientes que este doc deja a Sergio
 
 - Correr el test de tercero: comentar `SISTEMA` en `instagram.com/p/DcUd8uakZsk/` desde
