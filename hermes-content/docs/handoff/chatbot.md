@@ -325,6 +325,17 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   attachment, R_ATTACHMENT); esto le agrega entender QUE hay en la foto. Falta SOLO
   el go de Sergio. Nota de la vuelta: red LOCAL intermitente (100% packet loss a
   ratos, VPS sano todo el tiempo) — la medicion tardo 3 intentos.
+- ✅ VISION IMPLEMENTADA Y VIVA (2026-08-30, go de Sergio: "pagamos api nomas de
+  modelo barato" — local descartado: ollama ya estrangulo el VPS). vision.mjs (calco
+  del contrato de audio: fail-open, SSRF-safe, timeout 8s) + describeIfImage en el
+  adapter + R_ATTACH_VISTO en recepcionista. DOBLE FILTRO a la descripcion: guardrails
+  + cero digitos (una foto puede colar un precio). 589/589. E2E EN PROD (conv 39 msg
+  206): el bot contesto "Recibi tu foto (Pantalla de sistema de gestion con menu
+  lateral...)" y derivo. La secuencia ademas RE-VERIFICO el desarme (204 resolved →
+  bot volvio). TRAMPA DE DIAGNOSTICO PAGADA (no repetir): Message de Chatwoot tiene
+  default_scope por created_at ASC — `.order(id: :desc)` NO lo pisa y devuelve los
+  PRIMEROS mensajes como si fueran los ultimos; usar SIEMPRE `.reorder`. Media hora
+  de "el bot no contesta" que era un espejismo del query.
 - Pieza 5 GATEADA: boton "Cobrar con QR" en la conversacion (espera credenciales BCP).
   conversacion (espera credenciales BCP de Sergio).
   app/(dashboard)/inbox/ (page server con gate bandejaProfile + InboxClient):
