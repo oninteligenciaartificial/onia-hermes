@@ -648,6 +648,7 @@ Best for: engineering, clinics, B2B service, high-ticket local services.
 | Education/event | Clear, energetic, schedule-led | 5 | 4 |
 | SaaS/AI | Product proof, structured, interactive | 5 | 5 |
 | Legal/finance | Conservative, high contrast, credible | 5 | 2 |
+| Performance (gym/auto/importadora tech) | Dark-performance: condensada MAYUSCULA gigante, negro + UN acento quemado, bento de metricas-instrumento (medido en Axion 2026-08-29) | 6 | 5 |
 
 ## Current Trends Worth Using Carefully
 
