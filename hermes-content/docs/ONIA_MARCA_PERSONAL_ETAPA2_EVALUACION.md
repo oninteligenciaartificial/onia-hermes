@@ -91,6 +91,50 @@ de caja. Y la audiencia "aprendé herramientas IA" compra cursos, no el SaaS B2B
    futuro. Las cifras de los guiones se verifican con fuente antes de publicar (regla de la
    casa, ya flageada en Etapa 1).
 
+## Capacidad: qué promete Samuel vs la carga total (objetivo de Sergio: 2-3 videos/día)
+
+Compromisos EXACTOS de Samuel en el PDF: (1) estrategia/ideas/temas, (2) guion de cada
+video, (3) grabar en LA sesión mensual, (4) editar los 30, (5) subirlos, (6) subir a diario
+a la comunidad lo prometido en formato texto+links, (7) estructura de historias + 1-2
+ejemplos, (8) trackear su propio CPM en el sheet. **Su único trabajo diario es el punto 6 —
+texto reciclado de sus propios videos. Todo lo demás es batch mensual.**
+
+Lo que la propuesta NO asigna a nadie (y por default cae en Sergio):
+
+| Hueco | Quién debería |
+|---|---|
+| **Responder** comentarios, DMs y preguntas de la comunidad | sin asignar — es gestión diaria real y crece con la audiencia |
+| **Moderar/gestionar** la comunidad (bienvenidas, engagement) | sin asignar — el punto 6 de Samuel es broadcast, no gestión |
+| Videos 31-90 del mes (si el objetivo es 2-3/día) | sin asignar — la propuesta cubre 1/día |
+| Reaccionar a tendencias (el batch mensual = cero reactividad) | sin asignar — el radar de tendencias es nuestro |
+| Analítica del embudo (qué convierte, no solo cuántas vistas) | sin asignar — Samuel solo mide lo que cobra |
+| Producción diaria de historias y del visual de comunidad | asignado a Sergio explícitamente |
+
+**El reparto que cierra (2-3 videos/día sin matar a Sergio):**
+
+- **Samuel (sin cambios de precio):** sus 8 puntos + las 8 estructuras de historias +
+  en la sesión mensual grabar ADEMÁS 2-3 horas de crudo largo (tutoriales, builds,
+  respuestas) — materia prima para derivados.
+- **Máquina Onia (costo ~0, ya probada):** cortar 1-2 clips/día del crudo y de los
+  pilares (editor-videos + HyperFrames), carruseles y visual diario de la comunidad
+  desde plantillas, programación vía Postiz, métricas por API (reemplaza el sheet),
+  y los 3 reels/semana de Lucía.
+- **Sergio (≈1 h/día, time-boxed):** 30-45 min responder (comunidad + DMs de venta —
+  responder ES vender), 1 batch semanal de 20 min grabando las 2 secuencias de historias,
+  aprobar la cola de Postiz 2×/semana, 1 día/mes sesión con Samuel.
+
+Así el plan tal cual (1-2 h/día de producción manual para Sergio) baja a ~1 h/día de
+gestión, y el volumen sube de 30 a 60-90 piezas/mes sin tocar el fee.
+
+**Cláusula nueva obligatoria — derivados:** el CPM aplica SOLO a las 30 piezas que Samuel
+entrega. Los clips/derivados que la máquina Onia corte del crudo (grabado en su sesión)
+**no generan CPM** — por eso los crudos son de Sergio (punto 5 del blindaje). Sin esta
+cláusula, duplicar el volumen con la máquina duplica la factura de Samuel.
+
+**"Qué tanto nos cumple":** el repo no tiene registro de resultados de la Etapa 1 (los 8
+videos de agosto: vistas, comentarios por palabra, miembros). No se puede evaluar su
+cumplimiento sin ese cierre — otra razón para el gate del punto 1.
+
 ## Veredicto
 
 **Avanzá cambiando, no firmes tal cual.** La base es razonable — Bs 2.000 por 30 videos
