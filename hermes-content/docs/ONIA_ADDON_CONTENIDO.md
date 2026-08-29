@@ -298,7 +298,36 @@ vivo.
 Review que este doc marcaba **sigue abierto**, aunque la app esté Publicada y el negocio
 verificado como proveedor de servicio (24-ago).
 
-### Higgsfield: NO es contradicción, son dos ofertas distintas
+#### Qué es Advanced Access, y el paquete que pide — verificado 29-ago
+
+Meta tiene **dos niveles** por permiso. En **Standard Access** (lo que el panel llama *"Listo para
+la prueba"*, donde estamos) el permiso **solo funciona en cuentas que tienen un rol en la app**:
+las nuestras. En **Advanced Access** funciona en la cuenta de cualquiera que lo autorice: un
+cliente. **Sin eso no se puede publicar, responder comentarios ni mandar DMs en la cuenta de un
+cliente, por buenas que sean las piezas.**
+
+**Requisitos, de la doc de Meta (`developers.facebook.com/docs/instagram-platform/app-review`):**
+
+| Requisito | Estado |
+|---|---|
+| Al menos **1 llamada API exitosa** por permiso | ✅ tenemos 127 · 37 · 19 · 19 |
+| **Verificación de negocio** | ✅ aprobada el 24-ago |
+| **Política de privacidad** publicada | ✅ `onia.com.bo/privacidad` responde **200** |
+| **Términos** y **borrado de datos de usuario** | ✅ `/terminos` 200, borrado apunta a `/privacidad` |
+| **Email comercial** | ✅ `business@onia.com.bo` |
+| **Icono 1024×1024** y categoría de app | ⬜ sin verificar |
+| **Screencast por permiso**, de punta a punta | ⬜ **es el trabajo real** |
+| **Instrucciones de prueba** paso a paso para el revisor | ⬜ |
+| **Descripción del caso de uso** por permiso | ⬜ |
+
+⚠️ **El "~20 días" que este doc citaba NO está en la documentación de Meta.** No dan plazo. Se
+deja como estimación nuestra, no como dato.
+
+**Lo que falta es contenido, no trámite:** cuatro screencasts (uno por permiso), las instrucciones
+de prueba y la descripción de uso. Meta pide interfaz en inglés y subtítulos si no se explica solo.
+El demo de Marketing Studio (punto 4) sirve de material para esto.
+
+## Higgsfield: NO es contradicción, son dos ofertas distintas
 
 Sergio, 29-ago: *"Higgsfield y el marketing es uno de nuestros servicios"*. Es compatible con
 "Higgsfield queda fuera del abono", y conviene decirlo junto para que nadie lo mezcle:
@@ -324,7 +353,7 @@ puede ahorrarnos todo lo demás.
 **2. Destrabar lo que ya está a medias**, que bloquea piezas terminadas:
 FACTURA (recurso vivo, falta cargar la palabra — bloquea O03) · STACK (bloquea S05 y S06).
 
-**3. Pedir Advanced Access. Es lo único con reloj de ~20 días.** Arranca en paralelo con el 1:
+**3. Pedir Advanced Access. Es lo único con reloj.** Arranca en paralelo con el 1:
 no depende de la demanda, y sin él no hay cliente posible. Necesita screencast del flujo,
 política de privacidad y los casos de uso escritos.
 
