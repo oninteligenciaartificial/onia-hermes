@@ -313,8 +313,19 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   venta) — asRecepcionista ahora cae a "el equipo". Motor 581/581, ambos deployados
   con backup y verificados por /preview vivo (cero duplicado, cero Sergio ajeno).
   Espejo cdb9c224 + a6c01257.
-- Pieza 4 pendiente: propuesta vision LLM (bot ENTIENDE fotos) con costo medido — NO
-  implementar sin decision de Sergio. Pieza 5 GATEADA: boton "Cobrar con QR" en la
+- ✅ Pieza 4 CERRADA (solo propuesta, decision de Sergio pendiente): VISION LLM MEDIDA
+  EN VIVO con el modelo del bot (gpt-4.1-mini via LiteLLM del VPS). Una foto real
+  (screenshot 1280x800, detail low): 1640 tokens de entrada + 24 de salida =
+  US$ 0,0007 por imagen (~Bs 0,008). Un negocio con 20 fotos/dia ≈ Bs 5/mes; cien
+  clientes asi ≈ US$ 42/mes total — trivial contra el plan de Bs 390, y capeable por
+  plan como los 200 msgs de WhatsApp. PROPUESTA: implementarlo con la misma regla del
+  motor (la descripcion de la foto entra como CONTEXTO para derivar mejor al humano
+  — "el cliente mando una foto de una muela rota" — JAMAS diagnostica ni cotiza por
+  foto; los guardrails mandan). El bot ya CONTESTA a los adjuntos hoy (kind
+  attachment, R_ATTACHMENT); esto le agrega entender QUE hay en la foto. Falta SOLO
+  el go de Sergio. Nota de la vuelta: red LOCAL intermitente (100% packet loss a
+  ratos, VPS sano todo el tiempo) — la medicion tardo 3 intentos.
+- Pieza 5 GATEADA: boton "Cobrar con QR" en la conversacion (espera credenciales BCP).
   conversacion (espera credenciales BCP de Sergio).
   app/(dashboard)/inbox/ (page server con gate bandejaProfile + InboxClient):
   lista con no-leidos y estado, detalle con burbujas cliente/asistente/vos,
