@@ -11,14 +11,21 @@
   "palabras": {
     "SISTEMA": {
       "promete": "las 6 tareas que conviene delegar primero",
+      "entrega_real": "un link para AGENDAR un diagnostico de 20 min — NO el PDF",
       "entrega": "hermes-content/recursos/sistema/onia-6-tareas-para-delegar.pdf",
-      "url": "https://onia.com.bo/recursos/6-tareas-para-delegar.pdf",
-      "tipo": "pdf",
+      "url": "https://onia.com.bo/?src=onia-ig-sistema",
+      "url_por_cuenta": {
+        "@oniahq": "https://onia.com.bo/?src=onia-ig-sistema",
+        "@lucia.antelo.oficial": "https://onia.com.bo/?src=lucia-ig-sistema"
+      },
+      "tipo": "pagina",
       "activa_en": ["@oniahq", "@lucia.antelo.oficial"],
-      "activa": false,
-      "publicado": false,
-      "_apagada": "🔴 APAGADA por decision de Sergio el 2026-08-29. Estaba encendida prometiendo un PDF que da 404: quien comentaba SISTEMA recibia un link roto. Apagar es reversible y honesto; entregar aire no. Se vuelve a encender el dia que la URL responda 200 — no antes, y se verifica con verificar_recompensas.js, no de memoria.",
-      "_falta": "🔴 el PDF existe en el repo pero NO esta publicado: esa URL da 404 (verificado 2026-08-28). La palabra esta encendida y OCHO piezas la prometen. Hay que copiarlo a la landing igual que se hizo con HUMO en el commit 15cead0c — ojo que Next standalone indexa public/ al ARRANCAR, asi que hay que reiniciar el contenedor."
+      "activa": true,
+      "publicado": true,
+      "promesa_coincide": false,
+      "_corregido_20260829": "🔴 ESTE BLOQUE ESTABA MAL Y LA CORRECCION IMPORTA. Decia que SISTEMA entregaba el PDF 6-tareas-para-delegar y que por eso mandaba un 404. Se leyo el mapa de palabras VIVO del workflow 1jS4jwmNmvcQpqqH y es falso: esa URL de PDF no aparece en NINGUN lado del circuito. Lo que sale de verdad es un link para agendar (onia.com.bo/?src=...), que responde 200. O sea que NUNCA se mando un 404 por esta palabra.",
+      "_defecto_real": "El defecto no es un link roto, es una promesa que no coincide: OCHO piezas dicen 'comenta SISTEMA y te mando las 6 tareas para delegar', y el DM manda una invitacion a agendar. El que comenta pidiendo una lista recibe una venta. Se arregla de UN lado de los dos: o el DM entrega la lista, o las piezas dejan de prometerla. Apagar la palabra seria el peor de los tres — el propio _por_que de este archivo dice que una palabra apagada se come el lead en silencio.",
+      "_pendiente_de_sergio": "2026-08-29: Sergio decidio 'apagar la palabra hasta que exista' PERO con la premisa falsa del 404. Decision en pausa hasta que elija con el dato real. NO apagar mientras tanto."
     },
     "HUMO": {
       "promete": "el PDF con las cinco herramientas y lo que cuestan de verdad",
