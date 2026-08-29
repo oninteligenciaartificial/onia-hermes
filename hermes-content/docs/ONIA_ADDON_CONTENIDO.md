@@ -333,6 +333,20 @@ El negocio verificado es boliviano (SEPREC, matrícula 5371375010, Santa Cruz) y
 Estados Unidos con la dirección vacía. **Es la clase de discrepancia que hace rebotar una revisión
 sin explicar por qué.**
 
+#### Los cuatro campos, con el valor exacto que va en cada uno
+
+`developers.facebook.com/apps/2160241918102061/settings/basic/`
+
+| Campo | Qué poner | Para qué lo pide Meta |
+|---|---|---|
+| **Ícono de la app** | `hermes-content/assets/onia/onia-app-icon-1024.png` — 1024×1024, generado del `icon.svg` del sitio, así que es **el mismo logo que ve la calle** | Es la cara de la app en la pantalla de permisos que ve el cliente al conectar su Instagram. Vacío, el cliente ve un cuadro gris pidiéndole acceso a su cuenta |
+| **Dominios de la app** | `onia.com.bo` | Meta solo permite redirigir el login a dominios declarados. Sin esto, el OAuth del cliente puede rebotar |
+| **Plataforma** | *Agregar plataforma* → **Sitio web** → `https://onia.com.bo` | Le dice al revisor **dónde probar la app**. Meta exige poder cargarla y probarla desde afuera |
+| **Dirección** | Calle Tulipanes Nro. 9, Zona Norte · Ciudad: **Santa Cruz de la Sierra** · Región: **Santa Cruz** · País: **Bolivia** | Se cruza contra el negocio verificado (SEPREC 5371375010). Hoy dice **Estados Unidos** con la dirección vacía |
+
+⚠️ **El país es el único que puede hacer rebotar la revisión sin decir por qué.** Los otros tres
+son requisitos de formulario; ese es una **contradicción** con la entidad legal ya verificada.
+
 🔴 **Ninguno de esos cuatro se tocó.** Son cambios de configuración de la app de Sergio y los
 decide él. Además, editar datos del negocio DESPUÉS de enviar dispara re-verificación — así que
 van todos ANTES de mandar nada.
