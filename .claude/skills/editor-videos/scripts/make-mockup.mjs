@@ -377,8 +377,14 @@ function tplQuote(width) {
              line-height: 1.16; letter-spacing: -.03em; text-wrap: balance; }
   .quote .who { position: relative; z-index: 1; }
   .quote p em { font-style: normal; color: var(--accent); }
-  .quote .who { display: flex; align-items: center; gap: calc(18*var(--u)); margin-top: calc(40*var(--u));
-                font-size: calc(29*var(--u)); font-weight: 500; color: var(--muted); letter-spacing: -.01em; }
+  /* 2026-08-29: era 29u y color muted, o sea una FIRMA DE AUTOR — que es para lo que se penso
+     la plantilla. Pero su unico consumidor, story-batch.mjs, la usa como REMATE: el titular
+     plantea y esta linea cierra ("Entras por una cosa" / "y salis con tres"). A 47% del titular
+     y en gris, el remate no se leia al pasar, que en una historia es todo el tiempo que hay.
+     Sube a 68% y a color de texto. Sergio lo marco mirando la tanda 2. */
+  .quote .who { display: flex; align-items: center; gap: calc(18*var(--u)); margin-top: calc(34*var(--u));
+                font-size: calc(42*var(--u)); font-weight: 600; color: var(--text); letter-spacing: -.01em;
+                line-height: 1.2; }
   .quote .who i { width: calc(58*var(--u)); height: calc(4*var(--u)); border-radius: 999px; background: var(--accent); }
   `;
   const body = `<div class="card quote">
