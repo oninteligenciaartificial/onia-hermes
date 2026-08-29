@@ -24,6 +24,13 @@
 6. Contexto del carril: `hermes-content/docs/handoff/web-factory-cliente-prueba.md`
    y fichas en `web-factory/data/references/design-sources/2026-08-29-*.md`.
 
+## Los dos loops (in-session, CronCreate)
+
+- **TAREAS / desarrollo — cada 5 min.** Hace UNA tarea de la Cola por vuelta.
+- **ANÁLISIS+DIRECCIÓN — cada 10 min.** Salud auto-remediable + analiza el
+  avance y **reordena esta Cola** poniendo lo más valioso primero (hoy: cerrar
+  los rubros SIN ANCLA del crítico). Es el que dirige; el de tareas ejecuta.
+
 ## Disciplina del loop (del ejemplo del carril chatbot, 2026-08-29)
 
 - **UNA fase/tarea por vuelta**, la primera no-bloqueada. No abrir dos frentes.
