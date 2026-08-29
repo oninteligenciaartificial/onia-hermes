@@ -280,7 +280,17 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   GET+POST /api/bandeja/[id] (Zod discriminado responder/estado, 404 tenencia — no 403
   para no confirmar existencia, 502 honesto). Registradas comunes. 22 tests nuevos,
   36/36 con registry, tsc limpio.
-- Fase D (UI /inbox) → Fase E (gates+deploy+MIRAR) pendientes.
+- Fase E (gates+deploy+MIRAR) pendiente.
+- ✅ Fase D (pantalla /inbox) CERRADA (2026-08-29): commit onia-platform 8a2f26c.
+  app/(dashboard)/inbox/ (page server con gate bandejaProfile + InboxClient):
+  lista con no-leidos y estado, detalle con burbujas cliente/asistente/vos,
+  responder con Enter (arma el candado — copy honesto "tu asistente se hace a un
+  lado"), Marcar resuelta (desarma: "tu asistente atiende de nuevo") y Reabrir.
+  Polling 15s lista / 5s detalle. Sin canal => CTA a /settings/chatbot. Nav
+  "Conversaciones" (icono forum): fixtures de la guardia 17→18 + snapshots
+  actualizados + SUBSET de iconos regenerado (258 usados, -94%). Suite completa
+  2161→2222 verde (rebase sobre PR 52 fiscal ajeno; tsc limpio). PENDIENTE
+  fase E: deploy runner + MIRAR /inbox en prod con conversacion real.
 - ✅ Fase C (candado bot-humano) CERRADA (2026-08-29): el ARMADO ya existia entero
   (takeoverTurn del adapter + markHumanTakeover + silencio:humano_a_cargo, env
   CHATWOOT_BOT_AGENT_ID=3 verificado en vivo). Lo construido: el DESARME — resolver
