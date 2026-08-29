@@ -27,12 +27,28 @@ brain dentro de la factory.
 
 ## Stack
 
-- Next.js 15 (App Router) + TypeScript
-- Tailwind CSS v4
-- shadcn/ui
-- pnpm (workspaces)
-- zod (validación de datos de empresa)
-- commander (CLI de generación)
+> Decidido 2026-08-29 con Sergio: el stack de CREACIÓN de webs es de **dos
+> niveles**, y elegir el nivel es parte de la frontera comercial (¿web o
+> sistema?). TypeScript en todo; "Java" no existe en este stack (era JavaScript).
+
+**Nivel 1 — Sitios de cliente (Landing / Web Profesional): HTML+CSS estático
+generado.** Sale de `packages/{tokens,blocks,templates}` + `generate/` (TS +
+zod + commander). Cero framework en runtime: peso mínimo, CWV perfectos,
+hosting trivial, y el e2e lo audita entero. **Es el default: una landing de
+cliente NUNCA arranca como app Next.**
+
+**Nivel 2 — Superficies con estado (Web Pro Onia con carrito, panel, portal):
+Next.js 15 (App Router) + React 19 + TypeScript.** Es lo que ya corre en
+`apps/site` (panel), `apps/onia-platform` (landing propia) y los storefronts
+Nuvia. Base de componentes aprobada: shadcn/ui; motion: motion.dev (la lib ya
+usada en `src/motion`); Tailwind CSS v4 donde la app ya lo trae.
+
+Herramientas transversales: pnpm (workspaces) · zod (validación de datos de
+empresa) · Playwright (gates) · Google Fonts por rango variable (un link por
+familia). Diseño-lado-fuente: la lista curada
+`data/references/design-sources/user-reference-urls.json` (Stitch para explorar
+direcciones, Haikei para SVG generativo propio, Rotato para mockups de
+dispositivo con capturas REALES).
 
 ---
 
