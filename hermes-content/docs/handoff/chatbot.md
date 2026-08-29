@@ -60,6 +60,11 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
 - Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
   como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
 - La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- ✅ LIMPIEZA QA EJECUTADA (2026-08-29 00:40, aprobada por Sergio): Chatwoot 10 conversaciones
+  (23-27, 29, 31-33) + inbox 6 huerfano destruidos via rails (cascada completa); bot 12
+  bot_conversations + 52 bot_messages sinteticos. Backups CSV en
+  /opt/onia/backups/db/qa-limpieza-20260829-003953/. Verificado: 0 restantes de la lista,
+  widget publico online, health ok. Quedan 26 conversaciones reales en la cuenta 2.
 - El QR mock y el "pago recibido" quedaron en la conversacion QA 27 (basura QA inofensiva,
   misma limpieza pendiente de siempre).
 
