@@ -166,7 +166,10 @@ export const PATH_CARDS_CSS = `
 }
 
 .wf-path-index {
-  color: color-mix(in srgb, var(--color-fg) 38%, var(--color-bg));
+  /* 62% y no menos: a 38% el numeral daba 2,52:1 sobre la tarjeta — invisible
+     para baja vision. aria-hidden lo saca del lector de pantalla, NO del ojo:
+     el contraste AA (4,5:1) aplica igual. El fantasma lo hace el tamano. */
+  color: color-mix(in srgb, var(--color-fg) 62%, var(--color-bg));
   font-family: var(--font-heading);
   font-size: 0.85rem;
   font-variant-numeric: tabular-nums;
