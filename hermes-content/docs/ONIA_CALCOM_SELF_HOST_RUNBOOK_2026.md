@@ -1,7 +1,15 @@
 # Onia Cal.com / Cal.diy self-host runbook 2026
 
-Estado: activo en dominio final y validado publicamente, agenda comercial
-configurada, event types iniciales activos, webhook Cal -> n8n creado.
+Estado: ⚠️ APAGADO (verificado en vivo 2026-08-29). El contenedor Cal ya NO corre en
+el VPS y `cal.onia.com.bo` redirige 302 al comodin (`onia.com.bo/empezar`). El workflow
+n8n `calcom-booking` quedo huerfano y EXPUESTO (cualquiera podia forjar un POST y generar
+un Telegram falso de "reunion agendada") — se DESPUBLICO el 2026-08-29 (0 ejecuciones en
+el historial retenido). Para REVIVIR Cal: levantar el compose, y ANTES de republicar el
+workflow habilitar el nodo "Validar firma Cal": el secret ya esta generado en
+`/root/.config/onia/calcom-webhook.secret` (chmod 600) — cargarlo en el webhook de Cal
+(Settings → Developer → Webhooks) Y como env CALCOM_WEBHOOK_SECRET del servicio n8n
+(`docker service update --env-add`, nunca docker restart). Lo de abajo describe el
+montaje original.
 Pendiente: prueba SMTP real, Google Calendar directo en Cal y flujo Telegram de
 aceptar/cancelar antes de abrirlo como canal masivo.
 Fecha: 2026-06-29.

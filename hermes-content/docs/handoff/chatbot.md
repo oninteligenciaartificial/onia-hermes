@@ -253,6 +253,14 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   del negocio. Resultado 6/6 verdes. Regenerar el fixture cuando cambie plantillas.ts
   (one-liner tsx en el header del script; tsx NO esta instalado en onia-platform, se usa
   npx -y y el -e evalua CJS: require, no import).
+- BACKLOG v3 tarea 6 CERRADA (2026-08-29) — con giro: la validacion HMAC de Cal.com
+  no tenia que encenderse sino que el WORKFLOW entero sobraba. Verificado en vivo:
+  Cal self-hosted YA NO CORRE en el VPS (el runbook decia "produccion activa" — realidad
+  distinta: cal.onia.com.bo redirige 302 al comodin) y el webhook calcom-booking llevaba
+  0 ejecuciones en el historial: huerfano y expuesto a POSTs forjados (Telegram falso de
+  "reunion agendada"). DESPUBLICADO. Secret listo para el renacimiento en
+  /root/.config/onia/calcom-webhook.secret; pasos exactos en el encabezado de
+  ONIA_CALCOM_SELF_HOST_RUNBOOK_2026.md. BACKLOG v3: 6/6 TERMINADO.
 
 **Archivos y cambios**
 
