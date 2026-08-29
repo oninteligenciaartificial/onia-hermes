@@ -422,3 +422,25 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
    env vars + prueba +591) — ruta y gates ya escritos en `ONIA_CHATBOT_ALTA_WHATSAPP_CLIENTE.md`.
 5. Los dos fixes de fondo del motor propuestos el 23-ago (timestamp en listen(),
    `markMessageDelivered` en el turno normal) siguen esperando su sesión.
+
+
+## BACKLOG v6 — EDITOR CONVERSACIONAL (go de Sergio 2026-08-30, referencia Sendy)
+
+- Decisiones de Sergio del 30-ago: ensayo popup "enseguida lo hago" (Monitor b5e9h7xe3
+  vigilando cada 45s, cuelga bot + push al nacer el inbox) · BCP sin credenciales aun ·
+  alta sigue cerrada · editor conversacional GO ("que lo configuren y armen como
+  quieran, asi armamos los precios").
+- ✅ Fase A-motor CERRADA: POST /editor-sugerir en el webhook-server (mismo Bearer del
+  preview). sugerirEdicion(): LiteLLM temp 0 + schema embebido + PROHIBIDO inventar
+  precios/campos → doc COMPLETO → validateKnowledge todo-o-nada → {ok, knowledge} o
+  fallo honesto (instruccion_rechazada trae el motivo del LLM). Vive en el MOTOR a
+  proposito: platform y litellm NO comparten red y meter envs nuevos al contenedor
+  platform exige recrearlo — cero cirugia eligiendo el motor. 595/595. SMOKE REAL EN
+  PROD: "atende tambien los domingos de 9 a 13" → frase "lun-sab, 9:00-18:00; dom,
+  9:00-13:00" (cambio exacto, resto identico).
+- Fase A-plataforma (siguiente): lib/chatbot/editor-conversacional.ts (fetch al motor
+  via BOT_PREVIEW_URL con ruta /editor-sugerir + validacion espejo + diffDeDocs en
+  español) + ruta /api/chatbot-knowledge/sugerir (requireAdmin, Zod, registry, NO
+  persiste). Luego B (UI panel "Enseñale conversando" con chips) y C (gates + deploy +
+  MIRAR con instruccion real publicada). D: gancho pricing (Sergio quiere usar esto
+  para armar precios del add-on).
