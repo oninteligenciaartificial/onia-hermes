@@ -385,3 +385,29 @@ Los cables, que el prompt pedía mover, no se mueven.
   3:4**: Kling respetó el ratio del frame de origen. Bueno para el banco (no recorta), pero no
   confiar en la etiqueta: **medir el archivo bajado**.
 - El mp4 salió **sin pista de audio**, confirmado con `ffprobe`. El "Off" funciona.
+
+---
+
+# 2026-08-29 — Recreate, probado: no hace lo que su nombre sugiere
+
+**`Recreate` no genera nada por sí solo.** Devuelve al composer el **prompt exacto y los ajustes**
+de esa generación, listos para re-correr. El costo aparece recién al apretar Generate (2 créditos).
+O sea que es un **"reusar esta receta"**, no un botón de variantes.
+
+## Y la salida NO es una variante de esa foto: es otra toma del mismo guion
+
+Probado sobre G05. Lo que **conserva**: el personaje (pecas, argollas, cadenita, remera gris), el
+tipo de lugar (oficina con cartel de TURNOS, pared descascarada, fluorescente, sillas de plástico),
+la acción (el formulario pasando de mano en mano) y la luz.
+
+Lo que **cambia, y cambia mucho**: el personaje secundario (la señora con lanyard se volvió un
+hombre), **el ángulo de cámara** (pasó a estar detrás del funcionario, así que ahora se le ve la
+cara a Lucía) y la arquitectura del lugar.
+
+> ⇒ **Para qué SÍ sirve:** conseguir **una segunda toma coherente de la misma escena**. G05 y G05b
+> funcionan como par —el mismo trámite visto desde los dos lados del vidrio— y eso da dos láminas
+> seguidas de un carrusel sin inventar nada.
+>
+> ⇒ **Para qué NO sirve:** cambiar un detalle chico y conservar el resto de la foto. Si eso es lo
+> que se busca, Recreate no es la herramienta. **Queda pendiente probar `Reference` y `Edit`/
+> Inpaint para ese caso.**
