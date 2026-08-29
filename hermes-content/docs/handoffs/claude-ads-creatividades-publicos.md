@@ -110,8 +110,15 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
 3. ~~**Usar el banco en una pieza real**~~ — ✅ `L10-la-hoja-sellada`, con G05 y G05b como láminas
    1 y 2. Gate verde, render mirado, dos titulares corregidos porque se cortaban.
 4. **Decidir si L10 se publica** (depende de Sergio).
-5. Roadmap sin tocar: Relight, Inpaint, Upscale, Face Swap, Marketing Studio, Cinematic Cameras,
-   Canvas, Motion Control.
+5. ~~Mapear el roadmap sin gastar créditos~~ — ✅ hecho mirando. Resultado:
+   - 🟢 **Marketing Studio es la próxima prueba real**: tiene slots de **AVATAR + PRODUCTO** y
+     plantillas de UGC/Ads/Posters. Es la forma del servicio que vamos a vender. 4 cr/imagen.
+     La prueba que decide: producto de un cliente real + avatar, ¿sale publicable sin retoque?
+   - 🔴 **Viral Presets: prioridad baja.** ~65 efectos de espectáculo, lo contrario de la receta
+     normal que costó encontrar. Sirven para marca de @oniahq, no para Lucía.
+   - Sin mirar todavía: Relight, Face Swap, Cinematic Cameras, Canvas, Motion Control.
+     Los que más prometen: **Inpaint** (arreglar el texto gibberish, el defecto más repetido del
+     banco) y **Upscale** (G01-G04 quedaron a 1K).
 
 ## 6. Qué depende de Sergio
 
