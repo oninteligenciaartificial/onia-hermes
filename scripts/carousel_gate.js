@@ -279,10 +279,17 @@ function revisar(brief, pack, baseDir = process.cwd()) {
   //      mensaje por comentario y se elige por palabra: la segunda promesa es
   //      fisicamente incumplible. O03 pedia SISTEMA por "el checklist de tu Oficina
   //      Virtual" mientras otras siete pedian SISTEMA por "las 6 tareas para delegar".
+  // El registro se busca primero bajo baseDir. En una corrida real baseDir es la raiz del
+  // repo y resuelve al MISMO scripts/recompensas.json, asi que no cambia nada. Existe para
+  // que el self-check pueda usar un fixture propio: hasta hoy sus casos leian el registro
+  // VIVO, y arreglar un dato real (SISTEMA, 2026-08-29) tumbaba el test. Un self-check que
+  // depende de la verdad del dia no prueba el codigo, prueba el dato.
   const registro = (() => {
-    try {
-      return JSON.parse(fs.readFileSync(path.join(__dirname, 'recompensas.json'), 'utf8'));
-    } catch { return null; }
+    for (const f of [path.join(baseDir, 'scripts', 'recompensas.json'),
+                     path.join(__dirname, 'recompensas.json')]) {
+      try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { /* siguiente */ }
+    }
+    return null;
   })();
   if (brief.comment_trigger && brief.comment_reward && registro) {
     const clave = String(brief.comment_trigger).toUpperCase();
@@ -382,7 +389,13 @@ function selfCheck() {
   assert.ok(p.some((x) => x.regla === 'repetida' && x.lamina === 3), 'caza el bg repetido');
 
   // La promesa se valida contra scripts/recompensas.json. Tres fallas distintas:
+  // Fixture propio: copia del registro real con SISTEMA forzada a "no publicado", que es el
+  // caso que el punto (d) necesita probar. Antes esto salia del archivo vivo y el test se
+  // caia el dia que esa palabra se arreglaba.
   const REC = JSON.parse(fs.readFileSync(path.join(__dirname, 'recompensas.json'), 'utf8'));
+  REC.palabras.SISTEMA = { ...REC.palabras.SISTEMA, activa: true, publicado: false };
+  fs.mkdirSync(path.join(tmp, 'scripts'), { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'scripts', 'recompensas.json'), JSON.stringify(REC));
   const PROM = REC.palabras.SISTEMA.promete;
 
   // a) prometer algo distinto de lo que esa palabra entrega: imposible de cumplir,
