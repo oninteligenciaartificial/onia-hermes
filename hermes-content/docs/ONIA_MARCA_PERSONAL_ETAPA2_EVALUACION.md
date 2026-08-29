@@ -178,11 +178,12 @@ clipper/editor — pero el variable está desalineado y sin blindar, y el sistem
 descansa en un embudo que hoy no entrega un solo DM. Primero el gate (punto 1), después
 la firma con los puntos 2-5, y la mezcla del punto 6 como dirección editorial.
 
-## Anexo — mensaje para Samuel (redactado 2026-08-29, listo para enviar)
+## Anexo — mensaje para Samuel (VERSIÓN FINAL consolidada, 2026-08-29)
 
-> Nota interna: el mensaje NO menciona el circuito comentario→DM roto — esa automatización
-> es responsabilidad de Sergio en el acuerdo, se arregla de nuestro lado antes de que
-> arranque el mes. Tampoco menciona runway ni caja.
+> Nota interna: NO menciona el circuito comentario→DM roto (es responsabilidad nuestra),
+> ni runway, ni caja. La comunidad quedó confirmada en WhatsApp. La versión enviable
+> definitiva es la del cierre de esta sección; la de abajo fue el primer borrador de 5
+> puntos y se conserva como historia de la negociación.
 
 Samuel, revisé la propuesta de la Etapa 2 con calma. El sistema me gusta y quiero
 avanzar — el fijo de Bs 2.000 por los 30 videos me parece correcto y el modelo CPM me
@@ -217,6 +218,56 @@ fuente antes de publicar.
 De mi lado quedo con lo que hablamos: mis videos extra, los crudos para la comunidad,
 responder la comunidad y las historias diarias. Cerrando estos puntos, fijá vos el día
 de la sesión mensual.
+
+### Versión final enviable (reemplaza a la anterior)
+
+Samuel, revisé bien la Etapa 2. El sistema me gusta y quiero arrancar — el fijo de
+Bs 2.000 me parece correcto y el CPM al cambio de 10 me cierra. Para cerrar el acuerdo
+necesito que dejemos estos puntos por escrito:
+
+**1. Cierre de Etapa 1.** Antes de arrancar el plan de 30 días, pasame los números del
+primer mes: vistas por video, comentarios por palabra clave y cuánta gente entró a la
+comunidad. Decidimos sobre datos.
+
+**2. Reglas del CPM (TC 10 como quedamos):**
+- Tope mensual total del variable: Bs 3.500. Si lo superamos, lo celebramos y para el
+  mes siguiente renegociamos hacia arriba — el techo me deja presupuestar.
+- Las variantes de yapping/trial reels comparten UN solo tope de 50.000 vistas con su
+  video madre: es el mismo contenido, no videos distintos.
+- Vistas = suma de las 4 plataformas, foto a los 30 días de publicado cada video,
+  verificada contra las analytics nativas (capturas o API). Así ninguno de los dos duda.
+- El CPM aplica solo a tus 30 piezas y sus variantes. Los cortes extra que yo saque de
+  los crudos van por mi cuenta y no generan CPM.
+
+**3. Pagos.** El fijo al inicio de cada mes; el variable se liquida al cierre del mes
+siguiente, cuando cada video ya cerró su foto de 30 días (un video subido el día 28
+recién cierra el día 58 — así ninguna factura queda coja). Al terminar el acuerdo, los
+últimos videos cierran su foto y ahí termina el CPM. Si un mes se entregan menos de 25
+piezas, el fijo se prorratea por pieza — confío en que nunca aplique. Y para pagarte en
+regla: factura, o se aplica la retención de ley — lo vemos antes del primer pago.
+
+**4. Entregables.** Guiones 3-5 días antes de la sesión para revisarlos juntos (lo que
+se graba ya va aprobado, y toda cifra con su fuente). Las 8 estructuras de historias del
+mes completas — con la estructura yo las grabo todas. De los 20 pilares, la mitad
+apuntados a dueños de negocio en Bolivia (mi comprador), el resto autoridad amplia.
+Crudos a la carpeta compartida dentro de las 48 h después de la sesión.
+
+**5. Propiedad y accesos.** Los crudos y editados quedan míos. La comunidad va por
+WhatsApp, con admin mío. Subís a mis cuentas por rol (Meta Business Suite / herramienta
+de publicación), sin compartir contraseñas. Mi imagen solo en las cuentas acordadas —
+si querés usarla en tu portfolio, me avisás antes.
+
+**6. El curso.** Que quede claro desde ya: el CPM es tu compensación por construir la
+audiencia; el curso es mío. Si preferís participar del curso, lo conversamos AHORA
+contra un CPM menor — no después.
+
+**7. Formalidad.** Acuerdo simple de 3 meses con salida mensual, firmado por mi madre
+(soy menor — todo lo legal va por ella, mismo marco que uso para todo).
+
+De mi lado quedo con lo que hablamos: mis videos extra, los crudos para la comunidad,
+responder la comunidad y las historias diarias. Cerrando esto, fijá vos las fechas —
+mejor 2 medias jornadas de grabación que 1 día entero, así los 20 pilares no salen
+cansados.
 
 ## Segunda pasada (2026-08-29) — lo que aún faltaba
 
