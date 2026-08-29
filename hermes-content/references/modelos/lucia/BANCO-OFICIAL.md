@@ -143,6 +143,25 @@ todos**, `@lucia-skin-v1` incluido.
 **Lo que esto habilita:** reforzar el ancla con las mejores fotos nuevas (G05, G05c) **sin crear
 un Element nuevo ni actualizar el UUID en todos los docs**, que era el costo que nos frenaba.
 
+### ⚠️ 29-ago: Sergio dijo "reforzá" — y G05/G05c NO son las fotos para eso
+
+Se frenó antes de ejecutarlo, con el criterio que este mismo archivo ya tiene escrito:
+
+> *"El punto correcto son **5-7 imágenes muy coherentes entre sí** que cubran los ángulos que
+> faltan — **misma luz, misma piel, mismos rasgos**."*
+
+**G05 y G05c son ESCENAS, no retratos.** Luz fluorescente plana, cara chica, una de perfil y la
+otra en tres cuartos, y con otra persona en cuadro. **No cubren un ángulo que falte: cubren un
+lugar.** Y como un Element **no entrena, inyecta referencias al generar**, más fotos no es mejor:
+más fotos COHERENTES es mejor. Dos inconsistentes empujan el promedio hacia esa luz.
+
+**Lo que sí reforzaría:** generar 2-3 retratos limpios **con el ancla actual** —frontal y tres
+cuartos, luz pareja—, mirarlos, y agregar esos. **2 créditos cada uno.** Es un bucle de refuerzo
+de verdad: el ancla mejora con su propia salida, filtrada por el ojo.
+
+⚠️ **Y falta un dato antes de tocar nada: no sabemos si una foto se puede QUITAR de un Element.**
+Si no se puede, una foto mala es permanente. Averiguarlo va primero.
+
 🔴 **Pero NO se hizo, y no se hace de paso.** Tocar el ancla cambia **toda** generación futura de
 su cara. Es una decisión de Sergio, con su prueba A/B antes y después. Queda anotado, no ejecutado.
 
