@@ -77,20 +77,45 @@ sacar de **Integraciones comerciales** las apps que no se usan.
 - **Los dos MCP de Claude:** decisión de Sergio. Si no los usa desde otro lado, fuera también:
   serían 5 accesos menos de 6.
 
-### ⚠️ Verificar ANTES de borrar — el riesgo real
+### ✅ Verificado el 29-ago: borrar las tres es seguro
 
-El circuito de DMs manda con un token que sale de `/opt/onia/ig-dm-token.sh` **en el VPS**, y
-desde el repo **no se puede saber qué app lo emitió**. Si lo emitió una de las tres viejas,
-borrarla mata el circuito de @oniahq.
+Había un riesgo real: el circuito manda con un token de `/opt/onia/ig-dm-token.sh` **en el VPS**,
+y desde el repo no se sabe qué app lo emitió. Si lo emitió una de las tres viejas, borrarla mata
+@oniahq.
 
-**Se comprueba sin tocar el VPS:** en Integraciones comerciales, cada app tiene **"Ver y editar"**,
-que muestra los permisos concedidos. La que tenga los de mensajes y comentarios de Instagram es
-la que está en uso. **Mirar eso primero.**
+**Se resolvió sin tocar el VPS y sin tocar la lista de integraciones** — mirando el panel de apps,
+`developers.facebook.com/apps/`. Hay **cinco** apps, no cuatro:
 
-Búsqueda hecha el 29-ago: en el repo **no hay nada vivo** que nombre a las tres viejas — solo
-docs de `historial/`. Ojo con el falso positivo: *"OnIA Agency"* aparece en
-`ONIA_CHATBOT_LINEA_DE_ENTREGA.md` y en `N8N_WORKFLOW.md`, pero ahí es el nombre de la **cuenta
-de Chatwoot**, no de la app de Meta. Distinta cosa.
+| App | ID | Modo | Caso de uso | Portfolio |
+|---|---|---|---|---|
+| **OnIA Social API** | `2160241918102061` | **Publicada** | Mensajes y contenido en **Instagram** | OniaAgency |
+| **Onia Bot** | `1078962684709749` | **Publicada** | Clientes por **WhatsApp** | OniaAgency |
+| ONIA Marketing API | `1562215408796050` | En desarrollo | — | OniaAgency |
+| OnIA Agency | `1003811625521832` | En desarrollo | — | OniaAgency |
+| Onia Agency Chatbots | `36422446950687488` | En desarrollo | — | **Onia Agency** ⚠️ |
+
+**El argumento que cierra:** una app **en modo desarrollo no puede sostener un circuito de
+producción** — solo actúa sobre usuarios con rol en la app. Las tres candidatas a borrar están
+las tres en desarrollo. Y de las dos publicadas, la única con el caso de uso de Instagram es
+**OnIA Social API**. El token del circuito sale de ahí.
+
+⇒ **Borrar `ONIA Marketing API`, `OnIA Agency` y `Onia Agency Chatbots` no rompe nada.**
+
+### Dos cosas que aparecieron de paso
+
+- **`Onia Bot` no estaba en la lista de integraciones de Sergio.** Está publicada y es la de
+  WhatsApp: no toca su cuenta personal. No hay que borrarla. Pero tiene **4 alertas sin leer** en
+  su buzón de desarrollador — pendiente, fuera de este frente.
+- **Hay DOS portfolios comerciales**, `OniaAgency` y `Onia Agency`. `Onia Agency Chatbots` cuelga
+  del segundo. Un portfolio duplicado es exactamente la clase de resto que después nadie sabe si
+  se puede tocar. Anotado, no resuelto acá.
+
+### Por qué NO se leyó "Ver y editar" de cada integración
+
+Era el plan. El panel de Integraciones comerciales vive en un **iframe cross-origin**: no lo lee
+el árbol de accesibilidad ni el DOM de la página madre. La única vía era clickear por coordenada,
+y **"Eliminar" está pegado a "Ver y editar"** en la cuenta personal de Sergio. No valía el riesgo
+para un dato que el panel de apps daba igual de bien y sin botones destructivos al lado.
 
 ### 🔴 Dos trampas — no "arreglar" empeorando
 
