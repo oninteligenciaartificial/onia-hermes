@@ -265,6 +265,68 @@ de agencia.
 ⚠️ **Falta escribirlo en `onia-platform/lib/pricing.ts`** — hasta que esa fila exista, el
 precio no es real y no se ofrece. Es otro carril (el producto), no éste.
 
+## Estado real y orden de lanzamiento — verificado 2026-08-29
+
+### Lo que YA está resuelto (y no hay que volver a tocar)
+
+**La producción.** La técnica de Lucía quedó cerrada: receta normal, la regla de la acción a
+medias probada por sus dos lados, `Recreate` (otra toma del mismo guion) contra `Reference`
+(edición quirúrgica de la misma foto). Banco de 7 imágenes + 5 videos. El motor de carruseles
+tiene 24 chequeos automáticos y tres scripts de verificación. **Producir ya no es el cuello.**
+
+### 🔴 El bloqueo duro, verificado en el panel de Meta
+
+Los permisos de la app `OnIA Social API` están **todos en "Listo para la prueba"** —
+`instagram_business_basic` (127 llamadas), `instagram_business_content_publish` (37),
+`instagram_business_manage_comments` (19), `instagram_business_manage_insights` (19)—, o sea
+**acceso estándar: solo funciona en cuentas con rol en la app**. Ninguno figura en acceso
+avanzado, y `instagram_business_manage_messages` **ni siquiera está agregado** al caso de uso.
+
+⇒ **Podemos operar NUESTRAS cuentas. No podemos operar la de un cliente.** El bloqueo de App
+Review que este doc marcaba **sigue abierto**, aunque la app esté Publicada y el negocio
+verificado como proveedor de servicio (24-ago).
+
+### Higgsfield: NO es contradicción, son dos ofertas distintas
+
+Sergio, 29-ago: *"Higgsfield y el marketing es uno de nuestros servicios"*. Es compatible con
+"Higgsfield queda fuera del abono", y conviene decirlo junto para que nadie lo mezcle:
+
+| | Add-on de contenido | Higgsfield, cotizado aparte |
+|---|---|---|
+| Qué entrega | Piezas **compuestas** (HTML→PNG), fotos del cliente o packs tipográficos | Piezas **generadas**: personaje IA propio, UGC con producto |
+| Costo variable | ≈ Bs 0 | **escala por cliente** (imagen 2 cr, video 5 s 6,25 cr, Marketing Studio 4 cr) |
+| Precio | Bs 390/mes | **sin definir** |
+| Estado | alcance escrito, falta la fila en `pricing.ts` | **sin precio y sin demo** |
+
+**Meter generación dentro de los Bs 390 rompe el margen** — está calculado en
+`ONIA_ADDON_CONTENIDO_VIABILIDAD.md`. Son dos productos.
+
+### El orden, y por qué es ese
+
+**1. Publicar lo de Lucía. Es el primer paso y no cuesta nada.** Este mismo doc dice que el
+lanzamiento de Lucía es *"el test de demanda"* y que *"si no traen nada, esta decisión se revisa
+antes de construir"*. **Ese test no se corrió: las piezas están hechas y sin publicar.** Estamos
+por construir sobre una demanda que nunca medimos. Va primero porque es gratis, es rápido y
+puede ahorrarnos todo lo demás.
+
+**2. Destrabar lo que ya está a medias**, que bloquea piezas terminadas:
+FACTURA (recurso vivo, falta cargar la palabra — bloquea O03) · STACK (bloquea S05 y S06).
+
+**3. Pedir Advanced Access. Es lo único con reloj de ~20 días.** Arranca en paralelo con el 1:
+no depende de la demanda, y sin él no hay cliente posible. Necesita screencast del flujo,
+política de privacidad y los casos de uso escritos.
+
+**4. El demo de Marketing Studio.** Sirve dos veces: es la pieza de venta del Higgsfield
+cotizado Y el screencast que pide App Review. Necesita un producto real.
+
+**5. La fila en `pricing.ts`.** Hasta que exista, el precio no es real. Otro carril.
+
+**6. El proponedor.** La viabilidad es tajante: sin él, 10 clientes son 50 h/mes a Bs 78/h —
+un empleo mal pago. Con él, 5 h a Bs 780/h. Vence en el tercer cliente.
+
+> **El orden en una línea:** medir demanda gratis → destrabar lo terminado → pedir el permiso que
+> tarda → armar el demo → poner el precio → automatizar antes del tercer cliente.
+
 ## Pendiente de Sergio
 - 🟡 Los 3 negocios concretos a los que se ofrece.
 - 🟡 Si la propuesta semanal la revisa Sergio antes de que la vea el cliente, o va directa.
