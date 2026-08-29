@@ -15,8 +15,9 @@
       "url": "https://onia.com.bo/recursos/6-tareas-para-delegar.pdf",
       "tipo": "pdf",
       "activa_en": ["@oniahq", "@lucia.antelo.oficial"],
-      "activa": true,
+      "activa": false,
       "publicado": false,
+      "_apagada": "🔴 APAGADA por decision de Sergio el 2026-08-29. Estaba encendida prometiendo un PDF que da 404: quien comentaba SISTEMA recibia un link roto. Apagar es reversible y honesto; entregar aire no. Se vuelve a encender el dia que la URL responda 200 — no antes, y se verifica con verificar_recompensas.js, no de memoria.",
       "_falta": "🔴 el PDF existe en el repo pero NO esta publicado: esa URL da 404 (verificado 2026-08-28). La palabra esta encendida y OCHO piezas la prometen. Hay que copiarlo a la landing igual que se hizo con HUMO en el commit 15cead0c — ojo que Next standalone indexa public/ al ARRANCAR, asi que hay que reiniciar el contenedor."
     },
     "HUMO": {
