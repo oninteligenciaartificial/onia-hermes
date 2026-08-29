@@ -396,6 +396,27 @@ export const clinicCss = `
   box-shadow: 0 20px 44px color-mix(in srgb, var(--color-fg) 12%, transparent);
 }
 
+/* Spotlight: foco de luz que sigue al puntero sobre la tarjeta (patron top de
+   21st.dev, version sin librerias). El script del template setea --wf-mx/--wf-my
+   por pointermove; solo en dispositivos con hover real. */
+@media (hover: hover) {
+  .wf-clinic-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      220px circle at var(--wf-mx, 50%) var(--wf-my, 50%),
+      color-mix(in srgb, var(--color-accent) 16%, transparent),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+  .wf-clinic-card:hover::after { opacity: 1; }
+}
+
 .wf-clinic-card--featured {
   grid-column: span 2;
   grid-row: span 2;
