@@ -37,6 +37,31 @@ referencias de salud premium, que hacen lo opuesto al uniforme dev).
 - Matrix: fila nueva "Performance (dark-performance)" con fuente citada.
 - Salud premium: aplicado ayer mismo a clinic + demo (ficha propia).
 
+## Segunda pasada EN VIVO (navegador, misma fecha)
+
+**Motion-Primitives — inventario completo (17 primitivas, del sidebar real):**
+accordion · animated-background · animated-group · border-trail · carousel ·
+cursor · dialog · disclosure · in-view · infinite-slider · transition-panel ·
+text-effect · text-loop · text-morph · text-roll · text-scramble · text-shimmer.
+Mapa a lo nuestro: `in-view`≈Reveal, `infinite-slider`≈marquee,
+`text-loop/roll`≈conmutador de rubros, `border-trail`=detalle premium para
+tarjeta destacada, `transition-panel`=tabs animadas (nivel 2).
+
+**21st.dev — taxonomía con volúmenes (demanda por bloque):** Heroes 1152 ·
+Grids&Bento 620 · CTA 501 · Features 318 · Stats 153 · Testimonials 161 ·
+FAQs 191 · Timelines 74. **Populares (señal de mercado HOY):** scroll-media-
+expansion hero (9k) · container-scroll animation (8.9k) · spotlight card
+(7.4k) · radial orbital timeline (6.5k) · testimonials columns (5.6k) ·
+background paths (4.9k). Lección: el mercado pide heroes scroll-driven y
+tarjetas con foco de luz — versiones CSS-only viables para nivel 1.
+
+**Lapa por categoría:** slugs de categoría no estándar + 403 al tercer hit
+(rate-limit). No se pelea; el minado fino queda para tandas espaciadas.
+
+**Texturas generativas (estilo Haikei, PROPIAS):** `textura-ondas.svg` y
+`textura-arco.svg` en `data/clients/dental-amanecer.assets/` — muestra para OK
+de Sergio antes de cablear en bandas.
+
 ## Pendiente para próximas vueltas del loop
 
 - Minar lapa.ninja por categoría (restaurante, comercio, servicios) para el
