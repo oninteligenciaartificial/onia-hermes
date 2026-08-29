@@ -60,6 +60,12 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
 - Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
   como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
 - La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- ✅ BACKLOG v2 tarea 3 (2026-08-29): confirmacion de correo real DETRAS DE SWITCH
+  (ONIA_REGISTRO_CONFIRMA_CORREO=si → signUp de GoTrue + mail de confirmacion; 409 por
+  respuesta ofuscada; sin welcome en ese camino; el front ya lo manejaba via
+  isEmailNotConfirmed). Deploy 953eaa2 (BUILD_ID whS_w1Go), suite 2129. ⚠️ ENCENDIDO REAL
+  al abrir el alta = DOS flips: el env de la app + GOTRUE_MAILER_AUTOCONFIRM=false en
+  supabase-auth2 (hoy true, verificado), recreando ese contenedor SIN perder aliases.
 - ✅ BACKLOG v2 (loops 5min tareas + 15min orden, 2026-08-29): tarea 2 CERRADA — los 2
   tests de leads preexistentes fijaban null pre-centinela; actualizados al contrato real
   (RUBRO_SIN_DEFINIR). Suite del motor 569/569, 100% verde por primera vez.
