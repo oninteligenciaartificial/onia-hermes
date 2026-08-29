@@ -16,13 +16,29 @@ const BASE = 'https://postiz.onia.com.bo/api/public/v1';
 // (Lucia: cmt1sv4eh001alq9cl3y6q7es).
 const INTEGRATION = 'cmsw091nx0001lq9c8kr6dsg8'; // @oniahq
 
+// 🔴 La cuenta PERSONAL de Sergio no se publica desde acá. Meta ya le mando DOS avisos de
+// "servicios de automatizacion no verificados" (24-ago y 28-ago), y publicar por una
+// herramienta conectada mientras el aviso esta abierto es reincidir. La decision del
+// 24-ago fue publicar su cuenta A MANO desde el telefono. Este guard existe para que un
+// `--integration` copiado y pegado no la rompa sin querer.
+const BLOQUEADAS = {
+  cmt39kug00022lq9cnw5z12wb:
+    '@sergio_urcullo — cuenta personal con aviso de automatizacion abierto en Meta. '
+    + 'Se publica A MANO desde el telefono. Ver hermes-content/docs/ONIA_AVISO_AUTOMATIZACION_IG.md',
+};
+
 function parseArgs(argv) {
   const a = { slides: '', image: '', captionFrom: '', date: '', keyFile: '', integration: '', list: false, delete: '' };
   for (let i = 2; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--slides') a.slides = argv[++i];
     else if (k === '--image') a.image = argv[++i];
-    else if (k === '--integration') a.integration = argv[++i];
+    else if (k === '--integration') {
+      a.integration = argv[++i];
+      if (BLOQUEADAS[a.integration]) {
+        throw new Error(`BLOQUEADA: ${BLOQUEADAS[a.integration]}`);
+      }
+    }
     else if (k === '--caption-from') a.captionFrom = argv[++i];
     else if (k === '--date') a.date = argv[++i];
     else if (k === '--key-file') a.keyFile = argv[++i];

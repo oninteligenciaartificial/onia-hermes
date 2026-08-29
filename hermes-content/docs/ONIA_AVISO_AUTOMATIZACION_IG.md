@@ -6,6 +6,58 @@
 >
 > **La cuenta afectada es `@sergio_urcullo`** — la única de las tres con audiencia real (411).
 
+## 🔴 SEGUNDO AVISO — 2026-08-28. Y la medida del primero NO tocó la causa
+
+Meta le mandó el mismo aviso otra vez. Se rastreó el 29-ago y **la causa sigue encendida**:
+
+> **La app «OnIA Social API» (`2160241918102061`) sigue suscrita a los comentarios de su
+> cuenta y los recibe en tiempo real.** No es una sospecha: la ejecución **60926** de n8n, del
+> **2026-08-29 a las 03:23 UTC**, trae un comentario de `@ecommerce_th` en un reel suyo,
+> firmado por los servidores de Meta (`x-hub-signature-256`, IP `66.220.149.25` = fb.me).
+
+**Eso es literalmente lo que la alerta nombra:** *«ensure that no other users or tools have
+access to your account»*. La medida que se tomó tras el primer aviso —publicar a mano— **no
+tocó ese acceso**, y por eso el aviso volvió.
+
+### Lo que NO está pasando, para no apagar de más
+
+Desde su cuenta **no sale ningún DM ni publicación automática**. Su bloque en el workflow tiene
+el mapa de palabras **vacío**, así que los comentarios entran, se parsean y mueren en
+`sin_palabra_clave` — el 28-ago alguien comentó «Reto» y no recibió nada. **Es un arma
+cargada, no un arma disparando:** el día que se active una de sus 7 palabras planeadas, empieza
+a mandar Private Replies automáticos desde su cuenta.
+
+### La acción correcta, que es UNA sola
+
+**Instagram de Sergio → Configuración → Apps y sitios web → sacar «OnIA Social API» y la
+conexión de Postiz.** Desde el teléfono, un minuto. Corta los dos accesos de un golpe, es lo
+que Meta espera ver, y **no rompe el circuito de @oniahq**, que es la única cuenta donde el
+comentario→DM está entregando algo.
+
+⚠️ **NO apagar el workflow entero** (`1jS4jwmNmvcQpqqH`): eso mataría también @oniahq.
+
+🔴 **Y NO borrar el bloque de su `entry_id` del nodo «Parsear comentario».** Sin ese bloque sus
+comentarios caen en la cuenta por defecto (**Lucía**), que **sí** tiene SISTEMA y HUMO activas
+— y ahí sí empezaría a mandarle DMs a quien comente en su cuenta. **Sería empeorarlo creyendo
+que se arregla.**
+
+### Lo que quedó sin cerrar
+
+- **El equipo de Samuel** publica la etapa 1 (8 videos desde el 19-ago, 2 por semana) y **no
+  sabemos con qué herramienta**. Si usan un programador propio además de Postiz, son **dos
+  herramientas de publicación sobre la misma cuenta** — la hipótesis #2 del primer aviso.
+  **Esta pregunta está abierta desde el 24-ago y sigue sin respuesta.**
+- La lista definitiva de apps con acceso solo se ve **en el teléfono**: el MCP de Meta DevTools
+  pide autorización interactiva.
+- El plazo de publicar a mano vence el **07-sep**.
+
+### Blindaje puesto del lado del repo
+
+`scripts/postiz_schedule.mjs` ahora **rechaza** su integration id (`cmt39kug…`) con un error
+explícito, para que un `--integration` copiado y pegado no publique en su cuenta sin querer.
+
+---
+
 ## Mi huella real sobre esa cuenta
 
 **Una sola llamada de lectura** (`GET /me`, para averiguar su handle). No se publicó, no se
