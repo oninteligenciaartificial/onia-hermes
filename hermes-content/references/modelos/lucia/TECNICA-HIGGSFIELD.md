@@ -411,3 +411,38 @@ cara a Lucía) y la arquitectura del lugar.
 > ⇒ **Para qué NO sirve:** cambiar un detalle chico y conservar el resto de la foto. Si eso es lo
 > que se busca, Recreate no es la herramienta. **Queda pendiente probar `Reference` y `Edit`/
 > Inpaint para ese caso.**
+
+---
+
+# 🔴 2026-08-29 — V05 generada pero NO se pudo bajar. Pendiente de Sergio
+
+**El video existe en la cuenta** (`Kling 3.0 · 720p · 5.0s`, generado el 29-ago desde G05 con el
+prompt del formulario) y **se verificó que es el correcto**: el primer frame muestra la oficina, la
+funcionaria detrás del vidrio y el formulario. **Se gastaron 6,25 créditos.**
+
+**Lo que no se logró: bajarlo a disco.** Seis intentos por la columna de acciones del reproductor.
+Nada llegó a `Downloads` ni a ninguna otra carpeta.
+
+## Las tres trampas que se descubrieron intentándolo
+
+1. **El toast «Download complete · Ready» NO es del navegador: es de Higgsfield**, y habla de que
+   la *generación* está lista, no de que se haya guardado un archivo. **Verlo y dar por bajado el
+   archivo es un falso positivo.** Siempre confirmar con `ls` en la carpeta de descargas.
+2. **Los iconos de acción sólo aparecen con el mouse encima del video.** Un click "a ciegas" en su
+   posición no hace nada porque los iconos ni existen todavía. **Hover primero, después click.**
+3. **Hay un spinner `animate-spin` en esa columna**: la descarga se prepara del lado del servidor.
+   Clickear de nuevo mientras gira parece encolar y trabar el proceso — la primera vez giró más de
+   30 s sin resolver.
+
+## Lo raro, y por eso no es un "no se puede"
+
+**V04 se bajó bien hace un rato por esta misma ruta**, y **las imágenes bajan siempre sin drama**
+(G05, G05b). O sea que el camino funciona y es **intermitente**, no imposible.
+
+## Qué hacer
+
+- **Reintentar en la próxima vuelta**, con UN solo click y esperando el spinner sin volver a tocar.
+- Si vuelve a fallar: **lo baja Sergio con un click** desde `/ai/video` y se copia al repo. Es más
+  barato que seguir peleando con el navegador.
+- ⚠️ **NO regenerar.** El video ya está pago; volver a apretar Generate son otros 6,25 créditos
+  por lo mismo.
