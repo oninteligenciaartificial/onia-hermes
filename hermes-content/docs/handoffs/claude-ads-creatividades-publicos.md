@@ -93,47 +93,60 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
 > 🛠️ **Para traer una pieza al repo usá `node scripts/traer_descarga.js --a <destino>`**: rechaza
 > la descarga vieja (la trampa que costó dos errores el 29-ago) e imprime el asset id.
 >
-> 🔴 **Esta lista es la fuente del LOOP TAREAS.** Lo tachado NO se rehace. Al cerrar algo se tacha
-> acá en la misma vuelta, o la próxima lo repite.
+> 🔴 **Esta lista es la fuente del LOOP TAREAS.** Lo tachado NO se rehace.
+>
+> 📌 **El ORDEN manda y está en `ONIA_ADDON_CONTENIDO.md` §"Estado real y orden de lanzamiento"**
+> (29-ago). Resumen: medir demanda gratis → destrabar lo terminado → pedir el permiso que tarda →
+> demo → precio → automatizar. **Producir más contenido NO está en la lista: producir dejó de ser
+> el cuello.**
 
-1. ~~**Animar G05**~~ — ✅ **cerrado**: `V05-oficina-animate-kling3.mp4` en el repo, con tira de
-   frames, sin audio confirmado por ffprobe y asset id anotado. El mejor video del banco.
-2. ~~**Probar `Reference`**~~ — ✅ **hace exactamente eso**: conservó lugar, ropa, personas y
-   encuadre, y aplicó el único cambio pedido (ella levanta la vista al funcionario). Es la
-   herramienta para variantes; Recreate no. ⚠️ El archivo (G05c) **no se pudo bajar** — quedó en
-   la cuenta, ya pago, **no regenerar**.
-2c. ✅ **DESBLOQUEADO el 29-ago**: Sergio habilitó las descargas. Verificado con el txt de 15 bytes.
-   - ✅ **G05c ya está en el repo** (`a44dae81`), traída con `scripts/traer_descarga.js`, que en su
-     primer uso real confirmó 0 min de antigüedad y devolvió el asset id.
-   - ✅ **V05 también está en el repo.** Es 🏆 **el mejor video del banco**: el modelo COMPLETA la
-     acción a medias (la funcionaria suelta, ella toma el papel y lo lee) sin inventar habla ni
-     giros. Cierra la regla por el lado positivo, contra V04 que la cierra por el negativo.
-   - 📌 Afinado al verla a resolución completa: **Reference conserva casi cada píxel** y cambia solo
-     lo pedido. G05 + G05c = antes/después del mismo instante.
+### 1. 🔴 PUBLICAR LO DE LUCÍA — es el test de demanda y está sin correr
 
-2b. ✅ **Causa encontrada: no es Higgsfield, es Chrome.** Un `.txt` de 15 bytes con `data:` URI
-   tampoco baja ⇒ Chrome bloquea las descargas del origen `higgsfield.ai` (bloqueo de descargas
-   múltiples). **Lo destraba Sergio en 10 s:** icono a la izquierda de la barra de direcciones →
-   Configuración del sitio → **Descargas automáticas → Permitir**.
-   ⚠️ Si él aprieta descargar en ese mismo Chrome tampoco baja, y parece que sí (pasó con V05).
-   **Bloquea traer al repo:** V05 (6,25 cr) y G05c (2 cr), ambas pagas. **No regenerar.**
-3. ~~**Usar el banco en una pieza real**~~ — ✅ `L10-la-hoja-sellada`, con G05 y G05b como láminas
-   1 y 2. Gate verde, render mirado, dos titulares corregidos porque se cortaban.
-4. **Decidir si L10 se publica** (depende de Sergio).
-4b. 🆕 **Decidir si se refuerza el ancla `@lucia-skin-v1`** (depende de Sergio). Se descubrió el
-   29-ago que **desde la web SÍ se pueden sumar fotos a un Element existente** (`…` → `Assign to
-   element`; ojo que el diálogo filtra "Empty elements only" por defecto y parece vacío). Eso
-   permitiría sumarle G05 y G05c sin crear un Element nuevo ni cambiar el UUID en los docs.
-   **No se ejecutó**: toca todas las generaciones futuras de su cara y necesita A/B antes/después.
-5. ~~Mapear el roadmap sin gastar créditos~~ — ✅ hecho mirando. Resultado:
-   - 🟢 **Marketing Studio es la próxima prueba real**: tiene slots de **AVATAR + PRODUCTO** y
-     plantillas de UGC/Ads/Posters. Es la forma del servicio que vamos a vender. 4 cr/imagen.
-     La prueba que decide: producto de un cliente real + avatar, ¿sale publicable sin retoque?
-   - 🔴 **Viral Presets: prioridad baja.** ~65 efectos de espectáculo, lo contrario de la receta
-     normal que costó encontrar. Sirven para marca de @oniahq, no para Lucía.
-   - Sin mirar todavía: Relight, Face Swap, Cinematic Cameras, Canvas, Motion Control.
-     Los que más prometen: **Inpaint** (arreglar el texto gibberish, el defecto más repetido del
-     banco) y **Upscale** (G01-G04 quedaron a 1K).
+`ONIA_ADDON_CONTENIDO.md` dice que el lanzamiento de Lucía *es* el test de demanda y que si no
+trae nada, la decisión del add-on **se revisa antes de construir**. Nunca se corrió.
+
+**Lo que está hecho, pago y sin publicar:**
+
+| Pieza | Palabra | Estado |
+|---|---|---|
+| `render-fijado` — quién es Lucía | — | 7 láminas, es el post fijado |
+| `render-l6` — cinco señales | SISTEMA | 7 láminas |
+| `render-l07` — tres gratis | HUMO | 7 láminas |
+| `render-l08` — tres de cinco gratis | HUMO | 7 láminas |
+| `L09` — una cara que no existe | — | 7 láminas |
+| `render-l10` — la hoja sellada | SISTEMA | 7 láminas, con el banco propio |
+| reel de lanzamiento v7 | — | `reel-lanzamiento-20260822/final/` |
+| 8 historias | — | `historias-20260823/final/` |
+
+**SISTEMA y HUMO están activas en su cuenta y sus recursos responden 200**, así que el circuito
+comentario→DM funciona para las cuatro piezas que lo usan. **Falta solo el OK de Sergio y el orden
+de publicación.**
+
+### 2. Destrabar lo terminado (bloquea piezas ya hechas)
+- **FACTURA**: el recurso está vivo (200) pero la palabra no está en el mapa de @oniahq. Es una
+  edición de n8n, no se hace desde este carril sin OK. **Bloquea O03.**
+- **STACK**: doble bloqueo (no existe el PDF y el mapa de @sergio_urcullo está vacío a propósito).
+  **Bloquea S05 y S06.**
+
+### 3. Advanced Access — lo único con reloj (~20 días)
+Verificado el 29-ago: los permisos están en **"Listo para la prueba"** (acceso estándar, solo
+cuentas propias) y `instagram_business_manage_messages` ni siquiera está agregado al caso de uso.
+**Sin esto no hay cliente posible.** Arranca en paralelo con el 1. Necesita screencast del flujo,
+política de privacidad y casos de uso escritos.
+
+### 4. Demo de Marketing Studio
+Sirve dos veces: pieza de venta del Higgsfield cotizado **y** screencast para App Review.
+**Bloqueado**: falta que Sergio diga con qué producto.
+
+### 5. Decisiones sueltas de Sergio
+- ¿Se publica L10?
+- ¿Se refuerza el ancla `@lucia-skin-v1` con G05/G05c? (se puede desde la web; toca todas las
+  generaciones futuras, necesita A/B).
+
+### 6. Roadmap Higgsfield sin tocar
+Relight, Inpaint (arreglaría el texto gibberish, el defecto más repetido), Upscale (G01-G04 están
+a 1K), Face Swap, Cinematic Cameras, Canvas, Motion Control. **Prioridad baja hasta que haya
+demanda medida.**
 
 ## 6. Qué depende de Sergio
 
