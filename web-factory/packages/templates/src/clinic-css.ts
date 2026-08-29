@@ -11,7 +11,6 @@ export const clinicCss = `
 }
 
 .wf-clinic-section,
-.wf-clinic-strip,
 .wf-clinic-final {
   width: var(--wrap);
   margin-inline: auto;
@@ -222,36 +221,32 @@ export const clinicCss = `
 }
 
 /* ---------- Benefits strip ---------- */
+/* Antes: tarjeta glass flotando sobre el hero (blur + sombra + pills). Se leia
+   como widget suelto y era el unico elemento con sombra dura de la pagina.
+   Ahora: banda editorial full-bleed en la tinta de marca, pegada al hero — el
+   corte de color ES la profundidad, y las tres promesas quedan como micro-
+   etiquetas de manifiesto, no como chips de app. */
 .wf-clinic-strip {
-  position: relative;
-  z-index: 2;
-  margin-top: clamp(-34px, -3vw, -22px);
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px clamp(18px, 4vw, 56px);
   justify-content: center;
-  padding: 18px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 22px 50px color-mix(in srgb, var(--color-fg) 12%, transparent);
+  padding: 16px clamp(16px, 4vw, 48px);
+  background: var(--color-secondary);
 }
 
 .wf-clinic-chip {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 9px 15px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg));
-  color: color-mix(in srgb, var(--color-fg) 85%, var(--color-bg));
+  gap: 10px;
+  color: color-mix(in srgb, var(--color-bg) 92%, var(--color-secondary));
+  font-size: 0.8rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-.wf-clinic-chip .wf-icon { color: color-mix(in srgb, var(--color-accent) 60%, var(--color-fg)); }
+.wf-clinic-chip .wf-icon { color: var(--color-accent); }
 
 /* ---------- Section head ---------- */
 .wf-clinic-section { padding-block: clamp(48px, 7vw, 92px); }
