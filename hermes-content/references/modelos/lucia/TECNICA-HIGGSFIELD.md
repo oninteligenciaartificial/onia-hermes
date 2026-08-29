@@ -135,6 +135,15 @@ boliviano, sin depender del banco viejo.**
 en la pantalla, parpadea una vez. La cámara casi no se mueve, como un video sacado de parado.
 Nadie mira a la cámara.» — pedir movimiento MÍNIMO es lo que lo mantiene creíble.
 
+### 🔑 Animar una escena CON interacción sale mejor que animar un retrato
+
+Segunda prueba (`V02-mercado-animate-kling3.mp4`): la del mercado, donde la casera le habla.
+**Salió mejor que la de la farmacia**, y el motivo es concreto: en la foto ya había una acción
+a medias —una mano acercando un tomate, alguien hablando— y el modelo solo tuvo que
+*continuarla*. En un retrato quieto tiene que inventar qué pasa, y ahí es donde se pone raro.
+
+**Regla: al elegir qué foto animar, preferir una donde algo esté por terminar de pasar.**
+
 ### ⛔ AI Influencer Studio — probado, NO sirve para Lucía
 
 Sonaba a la función hecha para este carril. **No lo es.** Es un *constructor* para crear un
