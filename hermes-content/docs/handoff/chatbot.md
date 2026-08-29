@@ -60,6 +60,9 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
 - Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
   como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
 - La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- ✅ BACKLOG v2 (loops 5min tareas + 15min orden, 2026-08-29): tarea 2 CERRADA — los 2
+  tests de leads preexistentes fijaban null pre-centinela; actualizados al contrato real
+  (RUBRO_SIN_DEFINIR). Suite del motor 569/569, 100% verde por primera vez.
 - ✅ PIEZA 6 CERRADA (2026-08-29) — BACKLOG COMPLETO. Endurecimiento del alta: honeypot
   "sitioWeb" invisible en los DOS formularios + exito FALSO en las DOS rutas (bot ciego,
   cero filas — probado contra prod: 201 y count intacto), y limitSeguro() con fail-open
