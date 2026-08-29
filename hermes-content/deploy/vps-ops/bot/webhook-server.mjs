@@ -45,6 +45,7 @@ import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n
 import { knowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
+import { handleEditorRequest } from "./editor-sugerir.mjs";
 import { handleBcpCobrar, handleBcpCallback } from "./bcp-qr.mjs";
 import { createChatwootClient } from "./chatwoot-adapter.mjs";
 
@@ -417,6 +418,22 @@ export function createWebhookServer(deps = {}) {
         estado = { ok: false, service: "onia-chatbot-webhook", error: String(error?.message || error).slice(0, 200) };
       }
       writeJson(res, 200, estado);
+      return;
+    }
+
+    if (req.method === "POST" && url.split("?")[0].replace(/\/+$/, "") === "/editor-sugerir") {
+      // Editor conversacional (v6): la IA propone un doc, validateKnowledge manda,
+      // NADA se persiste aca — la plataforma muestra el diff y el dueño publica.
+      let out;
+      try {
+        const { tooLarge, body } = await readBody(req, config.maxBodyBytes);
+        out = tooLarge
+          ? { status: 413, body: { ok: false, error: "payload_demasiado_grande" } }
+          : await handleEditorRequest({ rawBody: body, headers: req.headers });
+      } catch (error) {
+        out = { status: 500, body: { ok: false, error: String(error?.message || error).slice(0, 200) } };
+      }
+      writeJson(res, out.status, out.body);
       return;
     }
 
