@@ -60,6 +60,14 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
 - Pricing "solo widget web": pregunta aclarada (la burbuja de chat en la web del cliente,
   como la de onia.com.bo); Sergio decide si existe un escalon mas barato sin WhatsApp.
 - La FAQ de prueba del E2E quedo SIN publicar (solo borrador del probador) — cero basura.
+- ✅ BACKLOG v2 tarea 5 (2026-08-29): latencia LiteLLM — DIAGNOSTICO CERRADO, nada que
+  tocar. Medido desagregado desde el contenedor litellm: DNS 20ms, TCP 7ms, TLS 23ms al
+  api.openai.com; upstream directo 1.6s fria / 726ms keep-alive; via LiteLLM 633-779ms;
+  desde el MOTOR (red overlay, gpt-4.1-mini del bot) 1005ms fria / 481ms caliente.
+  EL PISO DE 11-13s DEL 23-AGO ERA EL VPS ESTRANGULADO (steal 93%), no LiteLLM — con el
+  VPS sano el camino entero anda en ~0.5-1s. Propuesta a Sergio: NO tocar config; si el
+  sintoma reaparece, re-correr esta medicion (el script quedo en el handoff/chat). El
+  pendiente #1 del handoff del 23-ago (investigar LiteLLM→OpenAI) queda SALDADO.
 - ✅ BACKLOG v2 tarea 4 (2026-08-29): claves hardcodeadas de n8n SANEADAS — conteo EN VIVO
   dio 4 workflows con secretos (la memoria decia 7: vieja), TODOS inactivos legacy
   (WF-GS-02/03/04 + WF-11): JWTs de Supabase CLOUD. Redactadas 27 ocurrencias via sqlite3
