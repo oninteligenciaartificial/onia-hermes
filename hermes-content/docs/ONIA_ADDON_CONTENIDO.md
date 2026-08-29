@@ -279,8 +279,20 @@ tiene 24 chequeos automáticos y tres scripts de verificación. **Producir ya no
 Los permisos de la app `OnIA Social API` están **todos en "Listo para la prueba"** —
 `instagram_business_basic` (127 llamadas), `instagram_business_content_publish` (37),
 `instagram_business_manage_comments` (19), `instagram_business_manage_insights` (19)—, o sea
-**acceso estándar: solo funciona en cuentas con rol en la app**. Ninguno figura en acceso
-avanzado, y `instagram_business_manage_messages` **ni siquiera está agregado** al caso de uso.
+**acceso estándar: solo funciona en cuentas con rol en la app**. Ninguno figura en acceso avanzado.
+
+⚠️ **Un dato que parece alarmante y NO lo es:** en esa lista
+`instagram_business_manage_messages` figura como *"Agregar"*, o sea sin agregar al caso de uso.
+Se persiguió como hipótesis —"si falta ese permiso, los DMs nunca salieron"— y **se descartó con
+evidencia**: una ejecución del workflow trae un eco con un DM que SÍ se entregó
+(*"Comentaste SISTEMA hace unos días…"*). La lista que se lee corresponde a la configuración de
+**Facebook Login**; el circuito manda por `graph.instagram.com`, que es la de **Instagram Login**,
+con su propio juego de permisos. **No confundir las dos configuraciones del mismo caso de uso.**
+
+⚠️ Y los **72 errores** del workflow `1jS4jwmNmvcQpqqH` **no son rechazos de Meta**: son
+`Task request timed out` del task runner de n8n, todos del **24-ago**, la tormenta ya documentada
+y ya mitigada con el IF que descarta los ecos antes de invocar el nodo Code. No es un problema
+vivo.
 
 ⇒ **Podemos operar NUESTRAS cuentas. No podemos operar la de un cliente.** El bloqueo de App
 Review que este doc marcaba **sigue abierto**, aunque la app esté Publicada y el negocio
