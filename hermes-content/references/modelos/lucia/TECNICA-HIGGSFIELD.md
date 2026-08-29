@@ -16,9 +16,25 @@
 2. En el campo de prompt escribir **`@lucia`** — autocompleta a **`@lucia-skin-v1`**, el ancla
    de 7 ángulos. Reemplaza al `<<<uuid>>>` que se usaba por MCP.
 3. Escribir el prompt **después** del `@` (ver la receta abajo).
-4. Modelo **Nano Banana Pro**, aspecto **3:4**, 1K.
+4. Modelo **Nano Banana Pro**, aspecto **3:4**, y **calidad 2K** (ver abajo — sale igual que 1K).
 5. **Generate** — cuesta 2 créditos.
 6. **Mirar el resultado ampliado** contra los rasgos sagrados antes de darlo por bueno.
+
+### 🔻 Generar SIEMPRE en 2K — cuesta lo mismo que 1K
+
+El selector de calidad ofrece **1K · 2K · 4K**. Con 2K puesto, el botón sigue diciendo
+**Generate ✨2**: **mismo precio, el doble de resolución.**
+
+| | |
+|---|---|
+| 1K | 896×1200 |
+| 2K | 1856×2304 |
+
+Importa concretamente: **el render de carrusel es 1080×1350**, así que una foto de 1K se
+**amplía** 1,2× para cubrirlo y una de 2K entra holgada y se reduce.
+
+⚠️ **Las 4 fotos del banco propio se generaron en 1K por no haber mirado este selector.**
+Sirven, pero conviene regenerar las que se usen en piezas finales — son 2 cr cada una.
 
 ### ⚠️ El toggle `Unlimited` NO es gratis
 
@@ -208,6 +224,32 @@ revisión, no los créditos.
 distinto del toggle `Unlimited` del generador, que es la venta suelta de $5–$23.)*
 
 ---
+
+## Recorrido de funciones — qué falta probar
+
+Encargo de Sergio (2026-08-29): *"perfeccionar a Lucía viendo todas las funciones de
+Higgsfield (NAVEGADOR)"*, probando enfoques distintos y cuidando costo y documentación. Lo que
+se aprenda acá **es lo que después se vende como servicio de contenido**, así que cada función
+se prueba y se anota qué hace, qué cuesta y para qué sirve en este carril.
+
+| Función | Estado | Qué se sabe |
+|---|---|---|
+| Create Image + `@element` | ✅ | El camino principal. 2 cr, 2K al mismo precio |
+| Animate (imagen → video) | ✅ | 6,25 cr sin sonido. Mejor con acción a medias |
+| AI Influencer | ✅ | ⛔ Descartado: crea personajes nuevos, no sirve para Lucía |
+| Recreate | 🟡 | No concluyente — el clic llevó a otra imagen del historial. Reintentar |
+| Reference | ⬜ | Usar una imagen propia como referencia de la siguiente |
+| Cinematic Cameras | ⬜ | Generación con control de cámara |
+| Soul ID Character / Soul Moodboard | ⬜ | Otra vía de identidad; el Soul está prohibido, pero ver qué hacen |
+| Canvas | ⬜ | «Visual ideation meets repeatable AI workflows» |
+| Photodump | ⬜ | Suena a lote de fotos de una misma estética — **potencialmente el más útil** |
+| Relight | ⬜ | Cambiar la luz de una foto ya hecha. Podría convertir una foto linda en una «normal» |
+| Inpaint | ⬜ | Editar una zona. Sirve para arreglar manos o texto sin regenerar |
+| Image Upscale | ⬜ | Subir resolución de las 1K que ya están |
+| Face Swap / Character Swap | ⬜ | Ojo: puede ser una vía más simple que el element |
+| Motion Control / Edit Video / Multi-shot / End frame | ⬜ | Control fino del video |
+| Marketing Studio | ⬜ | El doc viejo lo daba como el de mejor consistencia, con voz propia |
+| Viral Presets · Cinema Studio 4.0 · Supercomputer | ⬜ | Sin explorar |
 
 ## Pendientes de esta técnica
 
