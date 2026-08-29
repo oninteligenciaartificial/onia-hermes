@@ -1,6 +1,14 @@
 # WEB FACTORY — LA FÓRMULA (2026)
 
 > Receta paso a paso para diseñar CUALQUIER sitio de cliente de Onia sin re-investigar.
+>
+> 🔴 **ANTES DE USARLA, LEÉ LOS LÍMITES:** `2026-08-29-critico-limites.md` (en
+> `data/references/design-sources/`). Un crítico adversarial verificó cada
+> afirmación contra el corpus: LISTA para 5 rubros bien anclados (SaaS,
+> ecommerce, cálido-premium/gastronomía, editorial/moda, brutalist/agencia);
+> NO es ley universal — ganadero, importadora y dental-adulto están recitados
+> por analogía SIN ancla y hay que cosecharlos. El gate `validate_palette.js`
+> ya existe (`scripts/`). No trates lo marcado "SIN ANCLA" como verdad.
 > Destilada del corpus real (≈29 sitios únicos analizados con 6 lentes: color, tipografía,
 > arquitectura, layout, motion, código). Cada regla trae su rango del corpus y su ancla.
 > Un agente futuro sigue los 8 pasos EN ORDEN y sale con un sitio vendible, no una plantilla.

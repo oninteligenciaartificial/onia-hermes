@@ -53,6 +53,16 @@ conocido, `PushNotification` a Sergio. Nunca inventar.
 
 ## Cola (orden = prioridad)
 
+- [ ] **P0 cosecha SIN-ancla** (cierra los huecos del crítico, ver
+      `2026-08-29-critico-limites.md`): con `scratchpad/corpus-harvest.py`
+      ampliar CATS a rubros que faltan y correr 1 tanda por vuelta —
+      `dental real` (clínicas dentales, no salud mental), `ganadero/agtech`,
+      `importadora/logística B2B`, `IA/agentes`. Despiezar 2 por rubro
+      (Scrapling Fetcher + seguir CSS externo para tipografía real) y
+      reescribir la sección de ese rubro en `2026-08-29-vertical-playbooks.md`
+      cambiando "SIN ANCLA" por el dato real. Re-cosechar también el CSS de los
+      11 sitios con `fonts:[]` (getnudge, maxima, maticrobots, readily, sutera…).
+
 - [ ] **Minado lapa — tandas siguientes** (misma receta que la tanda 1, ver
       ficha del barrido): 1 categoría por run, en orden `ecommerce` →
       `agency`/`business` → `beauty` → `food-drinks`. Usar

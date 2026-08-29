@@ -38,7 +38,7 @@ Dos sub-ejes según público — el contraste está literalmente en el corpus.
 - **Infantil/familiar/lúdico:** primario saturado, hasta multi-primario.
   - Paleta: base color-block, azul `#006AFF`, rojo `#FF2700`/`#FD4401`, amarillo `#FDCB40`, magenta `#E31C78` (sat 85-100%).
 
-- **Par tipográfico:** `PP Fragment Glare` (serif con ink-traps, corpus) → **Fraunces** (SOFT alto, 400-600) titular + **Hanken Grotesk** body. Sin acento mono.
+- **Par tipográfico:** **Fraunces** (SOFT alto, 400-600) titular + **Hanken Grotesk** body. Sin acento mono. ⚠️ Derivado por rubro, SIN ancla en el corpus (el crítico cazó acá un nombre de fuente inventado, "PP Fragment Glare", presentado como corpus — no existía en ningún HTML). Pendiente: cosechar clínicas dentales reales.
 - **Orden de secciones (patrón servicio-clínica, N=3, hipótesis):** NAV → HERO editorial (ambiente/misión, no feature) → INTRO/FILOSOFÍA (encuadre humano) → SERVICIOS/PROGRAMAS → CÓMO TRANSFORMA (mecanismo) → AGENDA/HORARIOS → TESTIMONIOS → CTA "Agendar" → FOOTER. Abre con clima, no con promesa-CTA.
 - **Hero:** split editorial (C) o centrado clásico (D) con superficie cálida. Evitar hero-sin-H1.
 - **Motion:** MEDIO. Reveals in-view con blur (motion.dev `whileInView`), micro-springs en hover. El infantil sube a springs con rebote (`easeOutBack`).
