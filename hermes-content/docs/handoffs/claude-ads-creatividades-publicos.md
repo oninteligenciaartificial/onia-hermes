@@ -100,6 +100,42 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
 
 ## 5. Próximos pasos
 
+### 🟢 DECISIONES DE SERGIO — 29-ago, tarde
+
+1. **Publicar: SÍ, una pieza por día**, e historias con sentido del día. ⚠️ Con una condición que
+   él mismo planteó: *"revisá que no sea baneable"*. **Ver §Riesgo de publicación abajo.**
+2. **Los campos de la app: los cargo yo.** ⚠️ Se intentó y **se abortó**: la traversal del DOM cayó
+   en el input del App ID en vez del de dominios. No se rompió nada (ese campo es de solo lectura)
+   y se recargó sin guardar. **Los tres campos los carga Sergio a mano** — son 60 segundos y no
+   valen el riesgo de tantear en la app de producción. El **ícono ya está** en el repo.
+3. **Screencasts: no sabía qué eran.** Explicado; pendiente su OK para grabarlos.
+4. **Marketing Studio: probarlo con Lucía vendiendo Onia Platform.** ✅ autorizado, aunque él marcó
+   *"tal vez es muy caro pero probá"*.
+5. **FACTURA y STACK: pidió que le diga cómo se arreglan.** Ver §Cómo se destraban abajo.
+6. **Reforzar el ancla `@lucia-skin-v1`: SÍ.** ✅ autorizado.
+
+### 🔴 Riesgo de publicación — hay que decirlo antes de arrancar 1/día
+
+El aviso de cierre que le llega a Sergio es en **su cuenta personal**, y la causa ya está
+identificada: **seis apps conectadas** (no es Postiz solo — Postiz es una de las seis).
+
+Pero la advertencia aplica igual a Lucía por otro motivo: **es una cuenta nueva**. El propio doc
+del aviso dice que *"una cuenta joven que empieza a publicar seguido por API se ve como un bot"*.
+Arrancar en 1/día por API el primer día es el perfil de riesgo exacto.
+
+**Propuesta: 3 por semana las primeras dos semanas, y recién ahí 1/día.** Las historias sí pueden
+ser diarias desde el arranque: pesan menos y son el formato natural de la cuenta.
+
+### Cómo se destraban FACTURA y STACK
+
+- **FACTURA** — el recurso ya está vivo (`onia.com.bo/guia-facturacion` responde 200). Lo único
+  que falta es **cargar la palabra en el mapa del nodo «Parsear comentario»** del workflow
+  `1jS4jwmNmvcQpqqH`. Son ~5 líneas. **Es edición de n8n: hace falta el OK de Sergio.** Destraba O03.
+- **STACK** — doble bloqueo: el PDF no existe **y** el mapa de @sergio_urcullo está vacío a
+  propósito. La salida barata es la misma que se usó con SISTEMA: **cambiar la promesa de S05 y
+  S06** por algo que ya exista, en vez de escribir un PDF nuevo. No cuesta nada y desbloquea dos
+  piezas.
+
 > 🛠️ **Para traer una pieza al repo usá `node scripts/traer_descarga.js --a <destino>`**: rechaza
 > la descarga vieja (la trampa que costó dos errores el 29-ago) e imprime el asset id.
 >
