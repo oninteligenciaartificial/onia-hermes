@@ -309,7 +309,38 @@ vista `List` en vez de `Grid` · o guardar el **asset id / URL de detalle** de c
 en el momento de generarla, para volver por URL directa y no por el grid. **Esto último es lo que
 hay que empezar a hacer siempre.**
 
-## ✅ 5. Pendiente 3 contestado: NO existe Recreate
+## ⚠️ 5. CORREGIDO — Recreate SÍ existe (me equivoqué de panel)
+
+**Lo que decía este punto era falso y se corrige el mismo día.** Escribí "no existe Recreate"
+después de mirar el panel de detalle **del workspace de VIDEO**, que es una versión reducida.
+El panel de detalle **de una imagen, en el workspace de imagen**, sí lo tiene:
+
+> **Turn to video · Recreate · Reference · Download** (+ favorito, compartir, «…»).
+> Y sobre la imagen al pasar el mouse: **Reference · Animate · Create 3D scene**.
+
+Generalicé desde el panel equivocado. Es la misma trampa de siempre: mirar **una** pantalla y
+dar por sabidas las demás.
+
+**Consecuencias prácticas:**
+- **`Recreate`** es la vía para variantes de una foto que ya gustó. Sigue sin probarse.
+- **`Turn to video`** es cómo se anima una imagen desde su detalle: es la puerta buena para G02,
+  no el composer de `/ai/video`.
+
+## ✅ 5-bis. El asset id viene GRATIS en el nombre del archivo
+
+Higgsfield descarga como **`hf_<fecha>_<hora>_<uuid>.png`**. Ese uuid **es el asset id**. G05 salió
+como `hf_20260829_161913_1f9bd463-4c89-40f7-af4b-225d34502fd3.png`.
+
+⇒ **Regla nueva: al bajar una pieza buena, guardar su uuid en el LEEME del banco.** Resuelve el
+bloqueo del punto 4 sin depender de que el grid cargue.
+
+## ✅ 5-ter. El historial del workspace SÍ renderiza
+
+`higgsfield.ai/ai/image` muestra las generaciones anteriores **con miniaturas**, al lado del
+composer, y ahí se ve G02 perfectamente. **El grid de `/asset/all` es el que está roto, no la
+cuenta.** Para llegar a una imagen vieja: entrar por el workspace, no por Assets.
+
+## Nota histórica — lo que decía este punto antes
 
 El panel de detalle de una imagen tiene exactamente: **Animate · Open in · Reference · Upscale ·
 Download**. No hay Recreate. **Para variantes de una foto que gustó, la función es `Reference`.**
