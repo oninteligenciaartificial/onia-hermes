@@ -97,8 +97,13 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
    bajar** en 7 intentos, y **NO se regenera: ya está paga.** Queda a la espera del archivo. Si
    aparece: copiar a `generadas-20260828/V05-oficina-animate-kling3.mp4`, tira de 5 frames,
    verificar sin audio con ffprobe.
-2. **Probar `Reference`** sobre G05: la vía que queda para cambiar UN detalle conservando el resto
-   de la foto, que es justo lo que Recreate NO hace. **Es la próxima tarea real.**
+2. ~~**Probar `Reference`**~~ — ✅ **hace exactamente eso**: conservó lugar, ropa, personas y
+   encuadre, y aplicó el único cambio pedido (ella levanta la vista al funcionario). Es la
+   herramienta para variantes; Recreate no. ⚠️ El archivo (G05c) **no se pudo bajar** — quedó en
+   la cuenta, ya pago, **no regenerar**.
+2b. 🔴 **Las descargas de Higgsfield se degradaron**: a la mañana bajaba todo, a la tarde nada
+   (9 intentos entre video e imagen). Bloquea traer piezas al repo. **Depende de Sergio** o de
+   que se recupere solo.
 3. ~~**Usar el banco en una pieza real**~~ — ✅ `L10-la-hoja-sellada`, con G05 y G05b como láminas
    1 y 2. Gate verde, render mirado, dos titulares corregidos porque se cortaban.
 4. **Decidir si L10 se publica** (depende de Sergio).

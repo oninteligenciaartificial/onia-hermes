@@ -446,3 +446,46 @@ Nada llegó a `Downloads` ni a ninguna otra carpeta.
   barato que seguir peleando con el navegador.
 - ⚠️ **NO regenerar.** El video ya está pago; volver a apretar Generate son otros 6,25 créditos
   por lo mismo.
+
+---
+
+# 2026-08-29 — `Reference` probado: SÍ hace lo que Recreate no
+
+Probado sobre G05, cambiando **una sola cosa**: *"la misma foto de la referencia, sin cambiar nada
+del lugar, la ropa, las personas ni el encuadre. Lo único distinto: ella levanta la vista del
+formulario y mira a la funcionaria a los ojos."*
+
+**Resultado (mirado en pantalla, comparando contra G05):**
+
+| | G05 original | G05c con Reference |
+|---|---|---|
+| Su mirada | **abajo, al formulario** | **arriba, a la funcionaria** ✅ el cambio pedido |
+| Cartel TURNOS, pared descascarada, tubo fluorescente | ✔ | **idénticos** |
+| Ventanilla de vidrio rayado, sillas de plástico, gente esperando | ✔ | **idénticos** |
+| La funcionaria (misma señora, mismo lanyard) | ✔ | **la misma** |
+| Remera gris, argollas, cadenita, pecas | ✔ | **iguales** |
+
+> **Reference conserva la foto y aplica el cambio.** Es exactamente lo que Recreate NO hace:
+> Recreate cambia el secundario, el ángulo y la arquitectura; Reference deja todo quieto y mueve
+> solo lo que le pedís.
+
+## Cómo se usa
+
+Panel de detalle de la imagen → **Reference**. Eso agrega un **chip de imagen** al composer y
+conserva el prompt. Después se reescribe el prompt describiendo la foto Y el cambio.
+
+⚠️ **`Ctrl+A` + Delete en el prompt borra el chip del Element `@lucia-skin-v1`, pero NO el chip de
+la imagen de referencia.** Se pasó de 2 chips a 1. Para este test se dejó así a propósito —sin
+Element— y la identidad igual se sostuvo, porque **la cara viene de la referencia**.
+
+⇒ **Regla práctica:** para variantes de una foto que ya gustó, `Reference` y no `Recreate`.
+Y con Reference **no hace falta el Element**: la referencia ya trae la cara.
+
+## 🔴 Las descargas se degradaron durante la sesión
+
+G05 y G05b bajaron sin problema a la mañana. A la tarde **dejó de bajar todo**: video (7 intentos)
+e imagen (2 más). El archivo de G05c **quedó en la cuenta y no en el repo**. La comparación de
+arriba se hizo **mirando la pantalla**, que es válido, pero el asset falta.
+
+**No re-generar G05c: ya está paga.** Cuando baje, guardar como
+`generadas-20260828/G05c-oficina-reference.png` + su `.jpg` y anotar el asset id.
