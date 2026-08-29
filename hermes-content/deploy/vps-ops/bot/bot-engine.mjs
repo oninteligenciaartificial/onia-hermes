@@ -171,6 +171,7 @@ function readIncoming(incoming) {
     text,
     norm: normalize(text),
     hasText: text.trim().length > 0,
+    imageDescription: typeof raw.imageDescription === "string" ? raw.imageDescription : "",
     externalMessageId: raw.externalMessageId || null,
     receivedAt: raw.receivedAt || null,
     author: raw.author || "contact",
@@ -312,7 +313,7 @@ function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
     auditEffect(prev, next, reason),
   ];
   const spec = typeof bodyKey === "string" ? { key: bodyKey } : bodyKey;
-  const body = { ...say(spec.key, next, config), ...(spec.options ? { options: spec.options } : {}) };
+  const body = { ...say(spec.key, next, config, spec.vars || {}), ...(spec.options ? { options: spec.options } : {}) };
   return finalize(ctx, next, [...leadingReplies, body], effects, [`handoff:${reason}`]);
 }
 

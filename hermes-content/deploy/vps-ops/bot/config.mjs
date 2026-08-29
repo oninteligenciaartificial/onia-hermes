@@ -347,6 +347,9 @@ export const SCRIPT = Object.freeze({
   R_NO_DATO: "Eso no lo tengo acá para confirmártelo — te lo confirma {{humano}} por este mismo chat.",
 
   R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
+  // Vision (v5): cuando la foto se pudo describir SIN violar guardrails. La descripcion
+  // viene del LLM ya filtrada; si violaba una regla se descarto y sale R_ATTACH pelado.
+  R_ATTACH_VISTO: "Recibí tu foto ({{descripcion_foto}}). Se la paso a {{humano}}, que te confirma por acá.",
 
   // M6R — opt-out en modo recepcionista. Sin "escribí DEMO": eso es del funnel de venta.
   M6R: "Listo, no te escribo más por acá. ¡Gracias!",

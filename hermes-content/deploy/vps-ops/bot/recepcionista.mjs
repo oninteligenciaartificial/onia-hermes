@@ -18,6 +18,8 @@
 //      lo fuera de guion deriva al humano del negocio. Anotado como pendiente parametrizarlo.
 //
 // Determinista igual que el motor: cero Date.now(), cero I/O. Los helpers con estado
+import { checkGuardrails } from "./guardrails.mjs";
+
 // (finalize / handoffResult / say) llegan inyectados desde bot-engine.mjs para no duplicarlos
 // ni crear un import circular.
 
@@ -132,6 +134,19 @@ export function recepcionistaStep(ctx, base, motor) {
     return finalize(ctx, base, [say("M_AUDIO_FAIL", base, config)], [], ["audio_sin_transcripcion"]);
   }
   if (msg.kind === "attachment" && !msg.hasText) {
+    // Vision (v5): la descripcion de la foto SOLO se usa si pasa los guardrails —
+    // un LLM que alucine un precio o un diagnostico se descarta entero y el flujo
+    // queda identico al de siempre. El handoff al humano se hace igual con o sin.
+    const desc = String(msg.imageDescription || "").trim();
+    // Regla extra para vision: una descripcion con DIGITOS se descarta entera
+    // (precio, fecha, placa — el bot no repite cifras que no puede verificar).
+    // checkGuardrails caza las promesas; esto caza lo que una foto puede colar.
+    if (desc && !/\d/.test(desc) && checkGuardrails(desc).length === 0) {
+      return handoffResult(ctx, base, "archivo_adjunto_recepcion", [], {
+        key: "R_ATTACH_VISTO",
+        vars: { descripcion_foto: desc.replace(/\.$/, "") },
+      });
+    }
     return handoffResult(ctx, base, "archivo_adjunto_recepcion", [], "R_ATTACH");
   }
   if (!msg.hasText) return finalize(ctx, base, [], [], ["sin_texto"]);

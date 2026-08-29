@@ -234,6 +234,8 @@ export function incomingFrom(input, nowIso) {
     kind,
     text: String(input.text ?? ""),
     transcript: typeof input.transcript === "string" ? input.transcript : "",
+    imageDescription: typeof input.image_description === "string" ? input.image_description
+      : typeof input.imageDescription === "string" ? input.imageDescription : "",
     externalMessageId,
     receivedAt: input.received_at || input.receivedAt || nowIso,
     author: "contact",

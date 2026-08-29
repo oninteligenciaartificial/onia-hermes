@@ -47,6 +47,7 @@ import { pathToFileURL } from "node:url";
 import { runTurn as realRunTurn } from "./run-turn.mjs";
 import { createStore } from "./persistence.mjs";
 import { pickAudioAttachment, transcribeChatwootAudio } from "./audio-transcribe.mjs";
+import { describeChatwootImage } from "./vision.mjs";
 
 const ENV_BASE_URL = () => process.env.CHATWOOT_BASE_URL || "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host";
 const ENV_ACCOUNT_ID = () => process.env.CHATWOOT_ACCOUNT_ID || "2";
@@ -653,6 +654,42 @@ async function transcribeIfVoice(parsed, deps = {}) {
  * @param {object} [deps]   { client?, runTurn?, ...opciones de createChatwootClient/runTurn }
  * @returns {Promise<object>} { ok, skipped, reason?, duplicate, sent:[{text,posted}], warnings }
  */
+/**
+ * Vision (v5, go de Sergio): si el mensaje es una FOTO sin texto, la describe via
+ * LiteLLM y la pega al turno como `image_description`. Si NO es foto, no hay key,
+ * o la vision falla por lo que sea, devuelve el turno intacto: el motor contesta
+ * R_ATTACH pelado, exactamente como antes de que esto existiera.
+ */
+async function describeIfImage(parsed, deps = {}) {
+  const turn = parsed.turn;
+  if (turn.kind !== "attachment" || String(turn.text || "").trim()) {
+    return { turn, warnings: [] };
+  }
+  const describeFn = typeof deps.describeImage === "function" ? deps.describeImage : describeChatwootImage;
+  let vis;
+  try {
+    vis = await describeFn(
+      {
+        attachments: parsed.meta.attachments,
+        token: String(deps.token ?? ENV_TOKEN()),
+        chatwootBaseUrl: String(deps.baseUrl || ENV_BASE_URL()),
+      },
+      deps,
+    );
+  } catch (error) {
+    vis = { ok: false, description: "", reason: "vision_exploto", warnings: [`vision: ${String(error?.message || error).slice(0, 160)}`] };
+  }
+  if (!vis || typeof vis !== "object") vis = { ok: false, description: "", reason: "respuesta_invalida", warnings: [] };
+  const warnings = [...(vis.warnings || [])];
+  if (!vis.ok || !vis.description) {
+    if (vis.reason && vis.reason !== "sin_litellm_key" && vis.reason !== "sin_imagen") {
+      warnings.push(`vision: sin descripcion (${vis.reason})`);
+    }
+    return { turn, warnings };
+  }
+  return { turn: { ...turn, image_description: vis.description }, warnings };
+}
+
 export async function runChatwootTurn(payload, deps = {}) {
   const parsed = parseChatwootWebhook(payload);
   if (parsed.skip) {
@@ -666,8 +703,9 @@ export async function runChatwootTurn(payload, deps = {}) {
   // sigue normal: califica, agenda, todo. `kind` se deja en "voice" a propósito: en la bitácora
   // tiene que quedar que fue un audio, no una mentira de que escribió.
   const audio = await transcribeIfVoice(parsed, deps);
+  const visto = await describeIfImage({ ...parsed, turn: audio.turn }, deps);
   const runTurnFn = typeof deps.runTurn === "function" ? deps.runTurn : realRunTurn;
-  const turnResult = await runTurnFn(audio.turn, deps);
+  const turnResult = await runTurnFn(visto.turn, deps);
 
   const client = deps.client || createChatwootClient(deps);
   const store = deps.store || createStore();
