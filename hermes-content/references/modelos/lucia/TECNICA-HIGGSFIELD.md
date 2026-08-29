@@ -356,3 +356,32 @@ Queda como el próximo experimento en lugar de Recreate.
   escalas distintas y un click de una captura anterior cae en otro lado. **Usar refs o el DOM,
   nunca coordenadas**, sobre todo si hay un botón destructivo cerca.
 - Duración: al elegir Kling 3.0 se puso **5s** solo. Rango 3-15 s.
+
+---
+
+# 2026-08-29 — G02 animada: la regla de la acción a medias, probada al revés
+
+Se animó G02 (V04) **sabiendo que era la peor candidata**, para ver qué pasa cuando falta lo que
+hace buenos a los otros tres videos. Salió mal exactamente como se esperaba, y eso la vuelve el
+video más útil del banco para decidir qué animar.
+
+**Qué hizo el modelo sin una acción que continuar:** gira la cabeza, **abre la boca como si
+hablara** (no hay diálogo ni razón), y en el último segundo se da vuelta y **pierde la cara**.
+Los cables, que el prompt pedía mover, no se mueven.
+
+> **Regla, ahora con las dos caras:** con una acción a medias clara (V02 el tomate, V03 el vuelto,
+> G05 el formulario) el modelo **la continúa** y sale bien. Sin ella, el modelo **inventa una**, y
+> lo que inventa suele ser hablar o darse vuelta — las dos cosas que arruinan una pieza sin audio.
+>
+> ⇒ **No animar retratos ni esperas. Solo escenas donde algo está a mitad de pasar.**
+
+## Dos datos técnicos del flujo bueno
+
+- **La ruta correcta funciona y es corta:** `/ai/image` → click en la imagen del historial →
+  panel de detalle → **Turn to video** → bajar a **720p** → Generate. El prompt y el frame viajan
+  bien por acá (a diferencia del composer de `/ai-video`, que no lleva la imagen).
+- **La resolución bajó el costo de 30 a 6,25 créditos** — de Bs 11,2 a Bs 2,3 por el mismo video.
+- ⚠️ **El aspecto que muestra la UI miente.** Decía `9:16` y el archivo salió **828×1108, o sea
+  3:4**: Kling respetó el ratio del frame de origen. Bueno para el banco (no recorta), pero no
+  confiar en la etiqueta: **medir el archivo bajado**.
+- El mp4 salió **sin pista de audio**, confirmado con `ffprobe`. El "Off" funciona.
