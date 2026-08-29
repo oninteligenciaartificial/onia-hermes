@@ -1,0 +1,32 @@
+{
+  "_nota": "Tanda 2 de historias de Lucía — PILAR B (vida de dueña de negocio). CERO créditos: recicla los videos del banco generadas-20260828, ya generados y pagos. Existe porque el sistema (ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md) pide 30% de pilar B y teníamos CERO piezas de ese pilar, con cinco videos del banco sin usar. Es el vehículo: sin esto no hay a quién hablarle.",
+  "_por_que_sin_cta": "Pilar B NO vende. Las cuatro son observación pura, sin palabra clave y sin llamada a la acción — a diferencia de la tanda 1, cuyo copy iba 'desde la silla del dueño, terminando en plata'. Ese registro es el pilar C, y ya tenemos cuatro piezas ahí. Si estas también piden algo, la cuenta entera es un embudo y nadie sigue un embudo.",
+  "_descartado": "V04-parada quedó AFUERA a propósito: es la única animación fallida del banco (el modelo inventa que habla y se da vuelta perdiendo la cara). Cuatro buenas antes que cinco con una mala.",
+  "accent": "#00D26A",
+  "stories": [
+    {
+      "id": "H09",
+      "clip": "hermes-content/references/modelos/lucia/generadas-20260828/V01-farmacia-animate-kling3.mp4",
+      "title": "Entrás por una cosa",
+      "subtitle": "y salís con tres"
+    },
+    {
+      "id": "H10",
+      "clip": "hermes-content/references/modelos/lucia/generadas-20260828/V02-mercado-animate-kling3.mp4",
+      "title": "La casera te fía sin anotar nada",
+      "subtitle": "y se acuerda de todo"
+    },
+    {
+      "id": "H11",
+      "clip": "hermes-content/references/modelos/lucia/generadas-20260828/V03-tienda-animate-kling3.mp4",
+      "title": "El vuelto sale del cajón",
+      "subtitle": "y la cuenta, de la cabeza del tendero"
+    },
+    {
+      "id": "H12",
+      "clip": "hermes-content/references/modelos/lucia/generadas-20260828/V05-oficina-animate-kling3.mp4",
+      "title": "Media mañana en una fila",
+      "subtitle": "por una firma que tarda diez segundos"
+    }
+  ]
+}
