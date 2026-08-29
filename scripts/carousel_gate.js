@@ -252,6 +252,29 @@ function revisar(brief, pack, baseDir = process.cwd()) {
   }
 
   // 8. El titular no puede repetir el numero que la cifra gigante ya grita: en el molde
+  // El texto entre *asteriscos* se dibuja con fondo resaltado y NO se parte en dos lineas:
+  // si es largo, se corta y la palabra queda mutilada a la vista. Paso el 2026-08-29 en L10,
+  // en DOS laminas: "otra persona espera[ndo]" y "no te la vamos a ven[der]". El gate daba
+  // verde y el render tambien; solo aparecio al MIRAR el PNG. Medido en ese render: 20
+  // caracteres entran, 22 se cortan. Va como aviso y no como error porque el limite depende
+  // del pack y del ancho de las letras — pero un aviso mira el problema antes que el ojo.
+  slides.forEach((s, i) => {
+    for (const campo of ['headline', 'body']) {
+      const v = s[campo];
+      if (typeof v !== 'string') continue;
+      for (const m of v.match(/\*([^*]+)\*/g) || []) {
+        const texto = m.slice(1, -1);
+        if (campo === 'headline' && texto.length > 20) {
+          problemas.push({
+            nivel: 'aviso', regla: 'resaltado-largo', lamina: s.number || i + 1,
+            msg: `el resaltado "${texto}" tiene ${texto.length} caracteres: arriba de 20 se corta`
+               + ' y la palabra queda partida. Acortalo o sacale el resaltado',
+          });
+        }
+      }
+    }
+  });
+
   // se dibujan uno encima del otro y el titular queda tapado. Estaba escrito en el plan
   // y aun asi se repitio en O10 y en O11 — una regla que solo vive en un doc se
   // desobedece, asi que la comprueba el gate.
@@ -441,6 +464,13 @@ function selfCheck() {
   p = revisar({ slides: [{ role: 'cta', comment_trigger: 'SISTEMA', comment_reward: 'otra cosa' }] },
     'dark-product', tmp);
   ok(p.some((x) => x.regla === 'promesa-distinta'), 'el trigger dentro de la lamina tambien se revisa');
+
+  // c-ter) un resaltado que no entra en el ancho del titular.
+  p = revisar({ slides: [{ number: 1, headline: 'esto es *un resaltado larguisimo que no entra*' }] },
+    'dark-product', tmp);
+  ok(p.some((x) => x.regla === 'resaltado-largo'), 'un resaltado que se corta se avisa');
+  p = revisar({ slides: [{ number: 1, headline: 'esto es *corto y entra*' }] }, 'dark-product', tmp);
+  ok(!p.some((x) => x.regla === 'resaltado-largo'), 'un resaltado corto no molesta');
 
   // c) una palabra que nadie declaro.
   p = revisar({ comment_trigger: 'INVENTADA', comment_reward: 'x', slides: [] }, 'dark-product', tmp);
