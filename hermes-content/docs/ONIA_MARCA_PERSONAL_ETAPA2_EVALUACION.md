@@ -332,6 +332,35 @@ cansados.
 entrega, propiedad, embudo, fiscal, legal y operación. Los huecos que quedan son
 decisiones de Sergio, no análisis pendiente.
 
+## Ronda 2 — respuesta de Samuel (2026-08-29) y contrarrespuesta
+
+**Aceptó limpio:** cierre de Etapa 1 con números · tope mensual Bs 3.500 · foto a 30 días
+con analytics nativas · fijo al inicio + variable al cierre de cada foto · **curso 100%
+de Sergio, él solo CPM** (el punto más caro del acuerdo — cerrarlo POR ESCRITO ya) ·
+accesos por rol · imagen solo en cuentas acordadas · 3 meses salida mensual firmado por
+Leslie · 2 medias jornadas de grabación.
+
+**Sus contrapropuestas, evaluadas:**
+
+| Punto | Su pedido | Veredicto |
+|---|---|---|
+| Yapping | Madre + variantes SUMAN, tope combinado 50k (no "solo el oficial") | **Ceder.** Con el tope mensual de Bs 3.500 el costo extra es marginal y acotado; su lógica es defendible. Exigir: cada contenido lista sus variantes (links) en el sheet para poder verificar. **Con el tope mensual, la exposición máxima total ahora es Bs 5.500/mes (2.000 + 3.500) — ese es el número real del acuerdo.** |
+| Revisión automática del tope si se supera 2 meses seguidos | Cláusula de revisión | **Aceptar** — revisión = conversar, no ajuste automático de tarifa. Dejarlo redactado así. |
+| Prorrateo solo si la falta es suya | Excluir atrasos causados por Sergio | **Justo. Aceptar** — pero cerrar el agujero espejo: guiones 5 días antes, Sergio responde en 48 h, sin respuesta = aprobado. Sin ese SLA, "guion sin aprobar" se vuelve su excusa perpetua. |
+| Historias: 2 ejemplos completos, no 8 estructuras | Volvió a su posición original | **Menor. Partir la diferencia:** 2 ejemplos completos + cada semana el tema y el hook de las 2 secuencias (4 líneas). "Estrategia" es SU línea del acuerdo. |
+| **Crudos en su resguardo**; editado tuyo "una vez pagado el mes" | Revierte la entrega de crudos | 🔴 **NO ceder. Es EL punto.** Todo el plan de 2-3 videos/día depende de cortar derivados del crudo (que él ya aceptó que no generan CPM — cláusula que queda VACÍA si él retiene el material). Además: bus factor (si se va al mes 2, no queda nada) y rehén de disputas de pago. Contra: **copia a carpeta de Sergio dentro de las 48 h post-sesión; él conserva su copia también** ("resguardo doble nos protege a los dos"). Nota: se contradijo — en su punto 4 aceptó "crudos a las 48h" y en el 5 los retiene. Innegociable: es la cara de Sergio, en sus cuentas, pagado por él. |
+
+**Respuesta enviada (borrador):** aceptar todo lo suyo salvo crudos (copia compartida
+48 h, innegociable), historias (2 ejemplos + tema/hook semanal) y SLA de guiones (48 h o
+aprobado). Texto completo en el hilo de la sesión 2026-08-29.
+
+**Vigilar (no responder por escrito):** su framing fiscal — "el trabajo es para tu marca
+personal, no para Onia (que sí está registrada)" — apunta hacia el pago informal. Lo que
+define el tratamiento es QUIÉN PAGA: si paga OniaAgency, aplica factura o retención
+(~15,5%: IUE 12,5% + IT 3%, confirmar tasa vigente). No existe versión en negro: Onia
+vende formalización. Dato para Leslie: esa es la retención estándar a persona natural
+sin NIT por servicios.
+
 ## Pendientes que este doc deja a Sergio
 
 - Correr el test de tercero: comentar `SISTEMA` en `instagram.com/p/DcUd8uakZsk/` desde
