@@ -262,6 +262,26 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   /root/.config/onia/calcom-webhook.secret; pasos exactos en el encabezado de
   ONIA_CALCOM_SELF_HOST_RUNBOOK_2026.md. BACKLOG v3: 6/6 TERMINADO.
 
+## BACKLOG v4 — BANDEJA NATIVA (decision Sergio 2026-08-29)
+
+- ✅ Fase A (reconocimiento): arquitectura cerrada. Fuente = API Chatwoot cuenta 2
+  server-side (CHATWOOT_BASE_URL/API_TOKEN/ACCOUNT_ID ya en app.env; token JAMAS al
+  browser). Tenencia: org → clinic_settings.chatwootInboxId; toda op valida
+  conversacion.inbox_id === inbox de la org. Candado bot-humano: el motor YA tiene
+  handoff_humano pegajoso (silencio salvo click exacto de boton FAQ — recepcionista.mjs
+  L113); falta SOLO la entrada nueva: outgoing de agente humano (sender != bot user 3,
+  no private) ⇒ conversacion pasa a handoff_humano (fase C). El adapter ya normaliza
+  message_type string/numerico y sender.
+- ✅ Fase B (backend): commit onia-platform 741d56d. lib/chatwoot.ts + listConversations/
+  getConversation/listMessages/toggleConversationStatus (shapes crudos defensivos:
+  data.payload ?? payload; epoch y string). lib/chatbot/bandeja.ts puro (mapearResumen,
+  mapearMensaje cliente/bot/negocio, esDeInbox) + bandeja-auth.ts (bandejaProfile —
+  separado porque route.ts de Next solo exporta handlers). Rutas GET /api/bandeja,
+  GET+POST /api/bandeja/[id] (Zod discriminado responder/estado, 404 tenencia — no 403
+  para no confirmar existencia, 502 honesto). Registradas comunes. 22 tests nuevos,
+  36/36 con registry, tsc limpio.
+- Fase C (candado motor) → Fase D (UI /inbox) → Fase E (gates+deploy+MIRAR) pendientes.
+
 **Archivos y cambios**
 
 - `onia-platform` (master → origin): `bd2350c` plantillas + `9585db4` fix ancho.
