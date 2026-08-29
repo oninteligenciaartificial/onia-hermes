@@ -145,8 +145,11 @@ explícito, para que un `--integration` copiado y pegado no publique en su cuent
 
 ## Lo que no se pudo verificar
 
-- **Qué app emitió el token del circuito** — necesita el VPS (carril de otra sesión) o el
-  "Ver y editar" de cada integración.
+- ~~Qué app emitió el token del circuito~~ — **resuelto el 29-ago**, ver arriba: sale de
+  `OnIA Social API`, la única publicada con caso de uso de Instagram.
+- **Las 4 alertas sin leer de `Onia Bot`** (la app de WhatsApp). No se abrieron: fuera de este
+  frente.
+- **Los dos portfolios comerciales duplicados** (`OniaAgency` y `Onia Agency`). Sin resolver.
 - **La lista de apps del lado de Instagram** — `instagram.com/accounts/manage_access/` pidió
   login y no se inició sesión. No hace falta igual: la app usa **Facebook Login for Business**,
   así que los permisos que importan viven del lado de Facebook.
