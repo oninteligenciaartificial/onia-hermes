@@ -24,7 +24,7 @@ carriles vivos no previene nada — de hecho hoy no previno nada (ver los tres c
 | `claude/pending-tasks-review-fb0694` | `.claude/worktrees/amazing-bassi-44c97d` | 🔴 **SIN DECLARAR** | — |
 | `claude/onia-payment-structure-aecab8` | `.claude/worktrees/bolivia-product-import-6ae97c` | 🔴 **SIN DECLARAR** | — |
 | `claude/quizzical-leavitt-0c8543` | `.claude/worktrees/confident-dirac-a1b422` | 🔴 **SIN DECLARAR** | — |
-| `claude/onia-web-architecture-b37eca` | `.claude/worktrees/hyperframes-onia-export-formats-053cf9` | **web de cliente de prueba** — `web-factory/data/**` · `web-factory/packages/{blocks,templates,tokens}/**` · `web-factory/generate/**` · `web-factory/out/dental-amanecer/**` · `.claude/skills/onia-web-factory/**`. NO toca `web-factory/apps/**` ni `hermes-content/docs/**` | 4319 |
+| `claude/onia-web-architecture-b37eca` | `.claude/worktrees/hyperframes-onia-export-formats-053cf9` | **web de cliente de prueba** — `web-factory/data/**` · `web-factory/packages/{blocks,templates,tokens}/**` · `web-factory/generate/**` · `web-factory/out/dental-amanecer/**` · `web-factory/tests/**` · `web-factory/FACTORY.md` · `web-factory/docs/CONEXION_WEB_SISTEMA_API.md` · `.claude/skills/onia-web-factory/**`. NO toca `web-factory/apps/**` ni `hermes-content/docs/**` | 4319 |
 | `claude/analizar-reels-videos-67f762` | `.claude/worktrees/laughing-heyrovsky-0b48a0` | 🔴 **SIN DECLARAR** | — |
 | `claude/bolivia-product-import-6ae97c` | `.claude/worktrees/video-editor-improvements-428ade` | 🔴 **SIN DECLARAR** | — |
 

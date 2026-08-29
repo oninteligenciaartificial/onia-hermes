@@ -36,7 +36,12 @@ const PAGES = [
 for (const target of PAGES) {
   for (const scheme of target.schemes) {
     test(`accessibility: ${target.name} — ${scheme} — WCAG 2.2 AA`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: scheme });
+      // reducedMotion: sin esto, axe escanea con los reveals y animaciones
+      // scroll-driven a mitad de vuelo (opacidad/transform transitorios) y el
+      // muestreo de contraste flakea — el mismo test caia un dia en dental-dark
+      // y al siguiente en logistics-dark. Los templates cortocircuitan
+      // reduced-motion a estado final: se audita la pagina asentada.
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
       await page.goto(target.url);
       await page.waitForLoadState("networkidle");
 
