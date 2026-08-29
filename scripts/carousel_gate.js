@@ -291,8 +291,15 @@ function revisar(brief, pack, baseDir = process.cwd()) {
     }
     return null;
   })();
-  if (brief.comment_trigger && brief.comment_reward && registro) {
-    const clave = String(brief.comment_trigger).toUpperCase();
+  // El trigger vive en DOS formas en el repo: arriba del brief (O04..O11) o adentro de la
+  // lamina de CTA (O01, O02, lucia-l6). El gate solo miraba arriba, asi que esas tres
+  // pasaban VACIAS — no aprobadas, ni siquiera revisadas. Un gate que no ve una pieza es
+  // peor que uno que la rechaza: da el visto bueno sin haber mirado.
+  const cta = brief.comment_trigger
+    ? brief
+    : (brief.slides || []).find((s) => s && s.comment_trigger) || {};
+  if (cta.comment_trigger && cta.comment_reward && registro) {
+    const clave = String(cta.comment_trigger).toUpperCase();
     const r = registro.palabras[clave];
     if (!r) {
       problemas.push({
@@ -325,11 +332,18 @@ function revisar(brief, pack, baseDir = process.cwd()) {
       }
       // Una palabra, UNA promesa. Se comparan normalizados para no fallar por comas.
       const norm = (x) => String(x).toLowerCase().replace(/[^a-z0-9áéíóúñ ]/gi, '').trim();
-      if (norm(brief.comment_reward) !== norm(r.promete)) {
+      // Una palabra = UNA oferta, pero puede tener mas de una VOZ. SISTEMA sale con la voz de
+      // @oniahq ("un diagnostico de 20 minutos") y con la de Lucia ("el mapa de tu negocio"):
+      // son dos textos para la MISMA cosa, no dos promesas. Exigir una sola frase obligaba a
+      // que Lucia hablara como la cuenta de la empresa, que es justo lo que la separa.
+      // Las voces validas se declaran en `voces` — lo que sigue prohibido es prometer OTRA COSA.
+      const voces = [r.promete, ...(r.voces || [])].map(norm);
+      if (!voces.includes(norm(cta.comment_reward))) {
         problemas.push({
           nivel: 'error', regla: 'promesa-distinta',
-          msg: `promete "${brief.comment_reward}" pero "${clave}" entrega "${r.promete}": `
-             + 'Meta manda UN solo mensaje por palabra, asi que dos promesas no entran',
+          msg: `promete "${cta.comment_reward}" pero "${clave}" entrega "${r.promete}"`
+             + (r.voces ? ` (o, en otra voz: ${r.voces.map((v) => `"${v}"`).join(', ')})` : '')
+             + ': Meta manda UN solo mensaje por palabra, asi que dos promesas no entran',
         });
       }
     }
@@ -339,6 +353,12 @@ function revisar(brief, pack, baseDir = process.cwd()) {
 }
 
 function selfCheck() {
+  // El contador se cuenta solo. Antes el final decia 'self-check ok: 24 casos' con el 24
+  // ESCRITO A MANO: agregar un caso no cambiaba el numero, y sacar uno tampoco. Un
+  // contador que no cuenta es peor que no tenerlo, porque se lee como prueba.
+  let casos = 0;
+  const ok = (cond, msg) => { casos += 1; assert.ok(cond, msg); };
+
   const assert = require('node:assert');
   const tmp = path.join(require('os').tmpdir(), 'gate-selfcheck');
   // El tmp sobrevive entre corridas: sin limpiarlo, el PDF que escribe el ultimo caso
@@ -353,16 +373,16 @@ function selfCheck() {
     'base64'));
 
   let p = revisar({ slides: [{ number: 1, callout: 'x' }] }, 'editorial-photo', tmp);
-  assert.ok(p.some((x) => x.regla === 'capacidad'), 'debe cazar el callout que editorial-photo tira');
+  ok(p.some((x) => x.regla === 'capacidad'), 'debe cazar el callout que editorial-photo tira');
 
   p = revisar({ slides: [{ number: 1, callout: 'x' }] }, 'dark-product', tmp);
-  assert.ok(!p.some((x) => x.regla === 'capacidad'), 'dark-product si dibuja callout');
+  ok(!p.some((x) => x.regla === 'capacidad'), 'dark-product si dibuja callout');
 
   p = revisar({ slides: [
     { number: 2, object: 'chico.png', object_prueba: 'a' },
     { number: 5, object: 'chico.png', object_prueba: 'b' },
   ] }, 'dark-product', tmp);
-  assert.ok(p.some((x) => x.regla === 'repetida' && x.lamina === 5), 'debe cazar la imagen repetida');
+  ok(p.some((x) => x.regla === 'repetida' && x.lamina === 5), 'debe cazar la imagen repetida');
 
   // Una "captura" grande: header PNG de 2160x1620 alcanza, no hace falta la imagen real.
   const grande = path.join(tmp, 'grande.png');
@@ -370,30 +390,39 @@ function selfCheck() {
   b.writeUInt32BE(2160, 16); b.writeUInt32BE(1620, 20);
   fs.writeFileSync(grande, b);
   p = revisar({ slides: [{ number: 1, object: 'grande.png', object_prueba: 'x' }] }, 'dark-product', tmp);
-  assert.ok(p.some((x) => x.regla === 'ilegible'), 'debe cazar la captura achicada a 0,26');
+  ok(p.some((x) => x.regla === 'ilegible'), 'debe cazar la captura achicada a 0,26');
 
   // A sangre la caja es otra (1080x760, cover): la misma captura que era ilegible en el
   // slot de 620 aca se dibuja a escala 0,50 y se lee bien.
   p = revisar({ slides: [{ number: 1, object: 'grande.png', object_fit: 'bleed', object_prueba: 'x' }] }, 'dark-product', tmp);
-  assert.ok(!p.some((x) => x.regla === 'ilegible'), 'bleed no debe marcarse ilegible');
+  ok(!p.some((x) => x.regla === 'ilegible'), 'bleed no debe marcarse ilegible');
 
   p = revisar({ slides: [{ number: 1, object: 'chico.png' }] }, 'dark-product', tmp);
-  assert.ok(p.some((x) => x.regla === 'sin-prueba'), 'debe avisar si no declara que prueba');
+  ok(p.some((x) => x.regla === 'sin-prueba'), 'debe avisar si no declara que prueba');
 
   p = revisar({ comment_trigger: 'SISTEMA', slides: [] }, 'dark-product', tmp);
-  assert.ok(p.some((x) => x.regla === 'recompensa'), 'palabra clave sin recompensa');
+  ok(p.some((x) => x.regla === 'recompensa'), 'palabra clave sin recompensa');
 
   // La imagen de fondo cuenta igual que el objeto: mirando solo `object` se dejo pasar
   // O03 con tres pares de laminas repitiendo la misma ilustracion.
   p = revisar({ slides: [{ number: 2, bg: 'chico.png' }, { number: 3, bg: 'chico.png' }] }, 'dato-ilustrado', tmp);
-  assert.ok(p.some((x) => x.regla === 'repetida' && x.lamina === 3), 'caza el bg repetido');
+  ok(p.some((x) => x.regla === 'repetida' && x.lamina === 3), 'caza el bg repetido');
 
   // La promesa se valida contra scripts/recompensas.json. Tres fallas distintas:
   // Fixture propio: copia del registro real con SISTEMA forzada a "no publicado", que es el
   // caso que el punto (d) necesita probar. Antes esto salia del archivo vivo y el test se
   // caia el dia que esa palabra se arreglaba.
   const REC = JSON.parse(fs.readFileSync(path.join(__dirname, 'recompensas.json'), 'utf8'));
-  REC.palabras.SISTEMA = { ...REC.palabras.SISTEMA, activa: true, publicado: false };
+  // El fixture toma la FORMA de HUMO (palabra con archivo detras) y le pega la promesa de
+  // SISTEMA, forzada a 'no publicado'. Antes clonaba a SISTEMA tal cual, y el dia que
+  // SISTEMA dejo de ser un PDF para ser una pagina (entrega: null) el self-check reventó
+  // en path.dirname(null). Misma leccion de siempre: el fixture no se cuelga del dato vivo.
+  REC.palabras.SISTEMA = {
+    ...REC.palabras.HUMO,
+    promete: REC.palabras.SISTEMA.promete,
+    voces: REC.palabras.SISTEMA.voces,
+    activa: true, publicado: false,
+  };
   fs.mkdirSync(path.join(tmp, 'scripts'), { recursive: true });
   fs.writeFileSync(path.join(tmp, 'scripts', 'recompensas.json'), JSON.stringify(REC));
   const PROM = REC.palabras.SISTEMA.promete;
@@ -401,19 +430,25 @@ function selfCheck() {
   // a) prometer algo distinto de lo que esa palabra entrega: imposible de cumplir,
   //    porque Meta manda UN solo mensaje por palabra.
   p = revisar({ comment_trigger: 'SISTEMA', comment_reward: 'otra cosa', slides: [] }, 'dark-product', tmp);
-  assert.ok(p.some((x) => x.regla === 'promesa-distinta'), 'una palabra, una promesa');
+  ok(p.some((x) => x.regla === 'promesa-distinta'), 'una palabra, una promesa');
 
   // b) una palabra apagada se come el lead en silencio.
   p = revisar({ comment_trigger: 'STACK', comment_reward: REC.palabras.STACK.promete, slides: [] }, 'dark-product', tmp);
-  assert.ok(p.some((x) => x.regla === 'palabra-apagada'), 'palabra apagada no se publica');
+  ok(p.some((x) => x.regla === 'palabra-apagada'), 'palabra apagada no se publica');
+
+  // c-bis) el trigger adentro de la lamina, no arriba. Tres briefs reales lo tienen asi y el
+  //        gate no los miraba: pasaban sin revisar.
+  p = revisar({ slides: [{ role: 'cta', comment_trigger: 'SISTEMA', comment_reward: 'otra cosa' }] },
+    'dark-product', tmp);
+  ok(p.some((x) => x.regla === 'promesa-distinta'), 'el trigger dentro de la lamina tambien se revisa');
 
   // c) una palabra que nadie declaro.
   p = revisar({ comment_trigger: 'INVENTADA', comment_reward: 'x', slides: [] }, 'dark-product', tmp);
-  assert.ok(p.some((x) => x.regla === 'palabra-sin-registrar'), 'palabra sin registrar');
+  ok(p.some((x) => x.regla === 'palabra-sin-registrar'), 'palabra sin registrar');
 
   // d) el archivo esta en el repo pero NO publicado: quien comenta recibe un 404.
   p = revisar({ comment_trigger: 'SISTEMA', comment_reward: PROM, slides: [] }, 'dark-product', tmp);
-  assert.ok(p.some((x) => x.regla === 'recurso-no-publicado'), 'un recurso sin publicar no se promete');
+  ok(p.some((x) => x.regla === 'recurso-no-publicado'), 'un recurso sin publicar no se promete');
 
   // Y el caso sano: palabra activa, PDF en disco, promesa identica, recurso publicado.
   fs.mkdirSync(path.join(tmp, path.dirname(REC.palabras.SISTEMA.entrega)), { recursive: true });
@@ -426,27 +461,27 @@ function selfCheck() {
 
   // El titular que repite la cifra: pasa dos veces en un mismo dia, se automatiza.
   p = revisar({ slides: [{ number: 2, dato: '42 h', headline: 'tardaron 42 horas' }] }, 'dato-ilustrado', tmp);
-  assert.ok(p.some((x) => x.regla === 'numero-repetido'), 'titular que repite la cifra');
+  ok(p.some((x) => x.regla === 'numero-repetido'), 'titular que repite la cifra');
   p = revisar({ slides: [{ number: 2, dato: '42 h', headline: 'lo que tarda en contestarte' }] }, 'dato-ilustrado', tmp);
-  assert.ok(!p.some((x) => x.regla === 'numero-repetido'), 'sin el numero no debe marcar');
+  ok(!p.some((x) => x.regla === 'numero-repetido'), 'sin el numero no debe marcar');
 
   // El banco de Lucia: lo descartado no pasa, lo oficial si.
   const RL = 'hermes-content/references/modelos/lucia/';
   p = revisar({ slides: [{ number: 1, bg: RL + 'calibracion-20260806/L1-retrato-cafe-1x1.jpg' }] }, 'editorial-photo', tmp);
-  assert.ok(p.some((x) => x.regla === 'lucia-fuera-de-banco'), 'calibracion esta descartada');
+  ok(p.some((x) => x.regla === 'lucia-fuera-de-banco'), 'calibracion esta descartada');
   p = revisar({ slides: [{ number: 1, bg: RL + 'tanda-20260821/L2b-cafe-natural.png' }] }, 'editorial-photo', tmp);
-  assert.ok(!p.some((x) => x.regla === 'lucia-fuera-de-banco'), 'la tanda vigente si pasa');
+  ok(!p.some((x) => x.regla === 'lucia-fuera-de-banco'), 'la tanda vigente si pasa');
   p = revisar({ slides: [{ number: 1, bg: RL + 'carpeta-nueva-sin-revisar/x.png' }] }, 'editorial-photo', tmp);
-  assert.ok(p.some((x) => x.regla === 'lucia-fuera-de-banco'), 'lista blanca: lo no listado tampoco pasa');
+  ok(p.some((x) => x.regla === 'lucia-fuera-de-banco'), 'lista blanca: lo no listado tampoco pasa');
 
   fs.mkdirSync(path.join(tmp, RL, 'tanda-20260821'), { recursive: true });
   fs.copyFileSync(chico, path.join(tmp, RL, 'tanda-20260821', 'L2b-cafe-natural.png'));
   p = revisar({ slides: [{ number: 1, bg: RL + 'tanda-20260821/NO-EXISTE.png' }] }, 'editorial-photo', tmp);
-  assert.ok(p.some((x) => x.regla === 'imagen-inexistente'), 'una ruta muerta no pasa');
+  ok(p.some((x) => x.regla === 'imagen-inexistente'), 'una ruta muerta no pasa');
 
   // Lo que no se puede revisar no se aprueba.
   p = revisar({ caption: 'sin slides' }, 'dato-ilustrado', tmp);
-  assert.ok(p.some((x) => x.regla === 'sin-slides'), 'un brief sin slides no pasa');
+  ok(p.some((x) => x.regla === 'sin-slides'), 'un brief sin slides no pasa');
 
   // Un fondo apaisado a sangre en 4:5 se amplia hasta romperse.
   const apaisado = path.join(tmp, 'apaisado.png');
@@ -454,15 +489,15 @@ function selfCheck() {
   ba.writeUInt32BE(930, 16); ba.writeUInt32BE(360, 20);
   fs.writeFileSync(apaisado, ba);
   p = revisar({ slides: [{ number: 1, bg: 'apaisado.png' }] }, 'dato-ilustrado', tmp);
-  assert.ok(p.some((x) => x.regla === 'bg-deformado'), 'un bg apaisado no pasa');
+  ok(p.some((x) => x.regla === 'bg-deformado'), 'un bg apaisado no pasa');
   const vertical = path.join(tmp, 'vertical.png');
   const bv = Buffer.from(fs.readFileSync(chico));
   bv.writeUInt32BE(1856, 16); bv.writeUInt32BE(2304, 20);
   fs.writeFileSync(vertical, bv);
   p = revisar({ slides: [{ number: 1, bg: 'vertical.png' }] }, 'dato-ilustrado', tmp);
-  assert.ok(!p.some((x) => x.regla === 'bg-deformado'), 'uno vertical si pasa');
+  ok(!p.some((x) => x.regla === 'bg-deformado'), 'uno vertical si pasa');
 
-  console.log('self-check ok: 24 casos');
+  console.log(`self-check ok: ${casos} casos`);
 }
 
 function main() {

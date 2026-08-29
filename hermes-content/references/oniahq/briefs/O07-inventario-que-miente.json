@@ -2,7 +2,7 @@
  "serie": "Datos que no te contaron",
  "episodio": "007",
  "comment_trigger": "SISTEMA",
- "comment_reward": "las 6 tareas que conviene delegar primero",
+ "comment_reward": "un diagnóstico de 20 minutos",
  "caption": "EL PROBLEMA: perdés plata en el estante y no te enterás.\n\nDos investigadores contaron a mano el inventario de 37 tiendas — casi 370.000 registros, uno por uno. El 65% no coincidía con lo que había en el estante.\n\nY lo peor no es ese número. Es esto: cuando un cliente viene por algo que tu sistema dice que tenés y no está, esa venta perdida NO aparece en ningún reporte. Se fue, compró en la de al lado, y nunca existió en tus números. Por eso nadie la corrige nunca.\n\nCON ONIA PLATFORM:\n\n✅ Tu stock se descuenta solo con cada venta — no dependés de que alguien lo anote\n✅ Te avisa cuando algo está por acabarse, calculado sobre lo que se vendió de verdad\n✅ La venta que no pudiste hacer queda registrada como aviso, no como un hueco invisible\n✅ Sabés cuánto vale lo que tenés parado en el depósito, hoy\n\nNo tenés que contar todo de nuevo. Tenés que dejar de contar a mano.\n\n⚠️ El estudio es de DeHoratius y Raman, Management Science, 2008, sobre retail en Estados Unidos. No es un dato boliviano.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero en tu negocio.",
  "hashtags": ["#ferreteria", "#inventario", "#negociosbolivia", "#santacruz", "#pyme"],
  "src": false,
@@ -69,7 +69,7 @@
    "role": "cta",
    "kicker": "20 minutos, gratis",
    "headline": "No tenés que contar de nuevo. Tenés que dejar de contar *a mano*",
-   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero en tu negocio, y las 3 que no conviene delegar nunca. Sin vender nada."
+   "body": "Comentá SISTEMA y te paso el link para agendar 20 minutos: miramos tu operación y te decimos qué conviene automatizar primero, y qué no vale la pena todavía. Sin vender nada."
   }
  ]
 }

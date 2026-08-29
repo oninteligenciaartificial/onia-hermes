@@ -2,8 +2,8 @@
  "serie": "Lo que hace el sistema",
  "episodio": "005",
  "comment_trigger": "SISTEMA",
- "comment_reward": "las 6 tareas que conviene delegar primero",
- "caption": "El nombre no es un invento de marketing: son las cuatro cosas que el sistema hace por tu negocio.\n\nOrdenar lo que está suelto. Notificar lo que no se ve. Informar lo que de verdad ganaste. Y esperar tu aprobación antes de mover un dedo.\n\nEsa última es la que más importa. Todo lo demás lo hacen veinte programas. Esperar tu botón, no.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca.",
+ "comment_reward": "un diagnóstico de 20 minutos",
+ "caption": "El nombre no es un invento de marketing: son las cuatro cosas que el sistema hace por tu negocio.\n\nOrdenar lo que está suelto. Notificar lo que no se ve. Informar lo que de verdad ganaste. Y esperar tu aprobación antes de mover un dedo.\n\nEsa última es la que más importa. Todo lo demás lo hacen veinte programas. Esperar tu botón, no.\n\nComentá SISTEMA y te paso el link para agendar 20 minutos: miramos tu operación y te decimos qué conviene automatizar primero, y qué no vale la pena todavía.",
  "hashtags": ["#negociosbolivia", "#santacruz", "#pyme", "#ferreteria", "#automatizacion"],
  "src": false,
  "slides": [
@@ -79,7 +79,7 @@
    "role": "cta",
    "pill": "20 minutos, gratis",
    "headline": "¿Cuál de las cuatro te falta *más*?",
-   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca. Sin vender nada."
+   "body": "Comentá SISTEMA y te paso el link para agendar 20 minutos: miramos tu operación y te decimos qué conviene automatizar primero, y qué no vale la pena todavía. Sin vender nada."
   }
  ]
 }

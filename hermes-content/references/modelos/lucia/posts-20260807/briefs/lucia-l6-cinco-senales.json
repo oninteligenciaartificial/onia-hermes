@@ -77,6 +77,7 @@
    "headline": "Ninguna se arregla con *más esfuerzo*",
    "body": "Te paso el mapa de tu negocio: qué conviene ordenar primero y qué no vale la pena tocar todavía. Sin vender nada.\n\nSoy IA, y no lo escondo.",
    "comment_trigger": "SISTEMA",
+      "comment_reward": "el mapa de tu negocio",
    "visual_prompt": "Retrato calmo, mirada a cámara",
    "alt_text": "Comenta SISTEMA y te paso el mapa de tu negocio",
    "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L1b-rooftop-natural.png"

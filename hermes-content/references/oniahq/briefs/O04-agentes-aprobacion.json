@@ -2,8 +2,8 @@
  "serie": "Lo que hace el sistema",
  "episodio": "004",
  "comment_trigger": "SISTEMA",
- "comment_reward": "las 6 tareas que conviene delegar primero",
- "caption": "EL PROBLEMA: no comprás lo que no entendés. Y nadie te explica qué hace la IA en tu negocio — solo te dicen que la necesitás.\n\nAsí que te lo muestro con la pantalla.\n\nLo que hace: mira tus ventas, tu stock y tus cobros mientras vos atendés. Cuando encuentra algo, no te avisa: te deja la propuesta armada. «Cobranza: Maestro Julio Choque — saldo vencido Bs 285 hace 10 días». El mensaje escrito, el monto calculado. Falta un botón.\n\nY lo que NO hace, a propósito: no le escribe a tu cliente sin que vos mires, no cambia un precio solo, no manda un cobro solo. Está escrito en la propia pantalla.\n\nCON ONIA PLATFORM:\n\n✅ Tus agentes revisan ventas, stock y cobros mientras vos hacés otra cosa\n✅ Te dejan la propuesta armada, con el monto ya calculado\n✅ Nada sale sin que vos aprietes el botón\n✅ Lo que aprobaste queda registrado, no en tu memoria\n\nEl riesgo de automatizar no es que la máquina sea tonta: es que sea rápida. Una persona que se equivoca manda un mensaje mal. Un sistema que se equivoca manda doscientos antes de que te enteres. Por eso propone y espera.\n\nComentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca.",
+ "comment_reward": "un diagnóstico de 20 minutos",
+ "caption": "EL PROBLEMA: no comprás lo que no entendés. Y nadie te explica qué hace la IA en tu negocio — solo te dicen que la necesitás.\n\nAsí que te lo muestro con la pantalla.\n\nLo que hace: mira tus ventas, tu stock y tus cobros mientras vos atendés. Cuando encuentra algo, no te avisa: te deja la propuesta armada. «Cobranza: Maestro Julio Choque — saldo vencido Bs 285 hace 10 días». El mensaje escrito, el monto calculado. Falta un botón.\n\nY lo que NO hace, a propósito: no le escribe a tu cliente sin que vos mires, no cambia un precio solo, no manda un cobro solo. Está escrito en la propia pantalla.\n\nCON ONIA PLATFORM:\n\n✅ Tus agentes revisan ventas, stock y cobros mientras vos hacés otra cosa\n✅ Te dejan la propuesta armada, con el monto ya calculado\n✅ Nada sale sin que vos aprietes el botón\n✅ Lo que aprobaste queda registrado, no en tu memoria\n\nEl riesgo de automatizar no es que la máquina sea tonta: es que sea rápida. Una persona que se equivoca manda un mensaje mal. Un sistema que se equivoca manda doscientos antes de que te enteres. Por eso propone y espera.\n\nComentá SISTEMA y te paso el link para agendar 20 minutos: miramos tu operación y te decimos qué conviene automatizar primero, y qué no vale la pena todavía.",
  "hashtags": [
   "#automatizacion",
   "#inteligenciaartificial",
@@ -129,7 +129,7 @@
    "number": 8,
    "role": "cta",
    "headline": "¿Qué delegarías *primero*?",
-   "body": "Comentá SISTEMA y te paso las 6 tareas que conviene delegar primero, y las 3 que no conviene delegar nunca. 20 minutos, gratis, sin vender nada."
+   "body": "Comentá SISTEMA y te paso el link para agendar 20 minutos: miramos tu operación y te decimos qué conviene automatizar primero, y qué no vale la pena todavía. 20 minutos, gratis, sin vender nada."
   }
  ]
 }
