@@ -24,6 +24,16 @@
 6. Contexto del carril: `hermes-content/docs/handoff/web-factory-cliente-prueba.md`
    y fichas en `web-factory/data/references/design-sources/2026-08-29-*.md`.
 
+## 🔴 FUENTE DEL BACKLOG (no duplicar)
+
+El backlog REAL de web-factory, sacado del análisis de reels, vive en
+`hermes-content/references/video-intake/sesiones/web-factory.md` — 20 prompts
+ordenados (C1 → B1 → B2 → footers → popups → GSAP scroll → DESIGN.md → …) cada
+uno con su LISTO y sus gates. **Esa es la cola maestra.** Esta sección "Cola" de
+abajo es solo el frente de ESTA sesión (cliente de prueba + conocimiento); las
+tareas grandes se toman de allá, en su orden, aplicando su Gate 1 (¿ya está
+hecho? mirá el repo, no el prompt — varios bloques de B1 ya existen).
+
 ## Los dos loops (in-session, CronCreate)
 
 - **TAREAS / desarrollo — cada 5 min.** Hace UNA tarea de la Cola por vuelta.

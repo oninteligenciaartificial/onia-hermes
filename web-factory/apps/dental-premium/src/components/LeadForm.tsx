@@ -1,6 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+// Regla de UX 12 (@agenticmatt): autosave del draft — volver atrás no borra lo
+// tipeado. Se guarda en localStorage y se restaura al montar. Wrap en try/catch:
+// en modo privado o con storage bloqueado, no rompe.
+const DRAFT_KEY = "dp-lead-draft";
+function loadDraft(): Record<string, string> {
+  try {
+    return JSON.parse(localStorage.getItem(DRAFT_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+function saveDraft(data: Record<string, string>) {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+  } catch {
+    /* storage no disponible: el form sigue funcionando */
+  }
+}
+function clearDraft() {
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    /* noop */
+  }
+}
 
 // Formulario de pedido → POST a /api/lead (ruta server de ESTE sitio). El
 // navegador NUNCA lleva credencial: la ruta server reenvía a Onia Platform con
@@ -10,6 +36,26 @@ type Estado = "idle" | "enviando" | "ok" | "error";
 export function LeadForm() {
   const [estado, setEstado] = useState<Estado>("idle");
   const [error, setError] = useState("");
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  // Restaurar el draft al montar (regla 12).
+  useEffect(() => {
+    const draft = loadDraft();
+    const form = formRef.current;
+    if (!form) return;
+    for (const [k, v] of Object.entries(draft)) {
+      const field = form.elements.namedItem(k) as HTMLInputElement | null;
+      if (field && typeof v === "string") field.value = v;
+    }
+  }, []);
+
+  function onInput() {
+    const form = formRef.current;
+    if (!form) return;
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+    delete data.src; // el oculto no es draft
+    saveDraft(data);
+  }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -26,6 +72,7 @@ export function LeadForm() {
       if (!res.ok) throw new Error(`(${res.status})`);
       setEstado("ok");
       form.reset();
+      clearDraft();
     } catch (err) {
       setEstado("error");
       setError(
@@ -44,7 +91,7 @@ export function LeadForm() {
   }
 
   return (
-    <form className="lead-form" onSubmit={onSubmit}>
+    <form className="lead-form" ref={formRef} onSubmit={onSubmit} onInput={onInput}>
       <div className="lead-grid">
         <label className="lead-field">
           <span>Tu nombre</span>
