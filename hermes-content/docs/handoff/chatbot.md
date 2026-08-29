@@ -81,6 +81,15 @@ El watchdog ahora chequea ese camino cada 2 min y avisa por Telegram.
   Trampas pagadas (no repetir): docker exec sin -i con heredoc = ejecuta NADA con exit 0
   (segunda vez hoy); docker cp de un SQLite en WAL copia SIN los cambios — verificar
   SIEMPRE dentro del contenedor; n8n import:workflow del CLI NO pisa por id.
+- ✅ BACKLOG v2 tarea 6 (2026-08-29): n8n inactivos ARCHIVADOS (decision Sergio). Conteo
+  EN VIVO: 34 inactivos → 27 archivados (WF-* dentalgest/gestios legacy, demos New
+  Sakura/Mara/Atlas, drafts Sentry, duplicados IG-DM y Web Factory Radar, prospeccion v1,
+  tipo de cambio, reporte Arthur — obsoleto: Arthur ya no colabora) y 7 QUEDAN pausados
+  por decision reciente, visibles a proposito (digest, briefing, agenda+energia, barridos
+  chatbot, vigilante, building-public, video-intake). 25 via MCP; 2 sin acceso MCP
+  (Chatbot Demo, WF Radar viejo) via sqlite in-container con isArchived=1 y verificacion
+  DENTRO del contenedor: quedan exactamente 7 inactivos sin archivar. Archivar es
+  reversible desde la UI de n8n (filtro Archived).
 - ✅ BACKLOG v2 tarea 3 (2026-08-29): confirmacion de correo real DETRAS DE SWITCH
   (ONIA_REGISTRO_CONFIRMA_CORREO=si → signUp de GoTrue + mail de confirmacion; 409 por
   respuesta ofuscada; sin welcome en ese camino; el front ya lo manejaba via
