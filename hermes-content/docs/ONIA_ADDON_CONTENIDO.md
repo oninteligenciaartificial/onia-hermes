@@ -315,13 +315,27 @@ cliente, por buenas que sean las piezas.**
 | **Política de privacidad** publicada | ✅ `onia.com.bo/privacidad` responde **200** |
 | **Términos** y **borrado de datos de usuario** | ✅ `/terminos` 200, borrado apunta a `/privacidad` |
 | **Email comercial** | ✅ `business@onia.com.bo` |
-| **Icono 1024×1024** y categoría de app | ⬜ sin verificar |
+| **Categoría** de app | ✅ "Negocios y páginas" |
+| **Icono de la app** | 🔴 **VACÍO** — el campo dice "Arrastra y suelta el archivo" |
+| **Dominios de la app** | 🔴 **VACÍO** — debería tener `onia.com.bo` |
+| **Plataforma** declarada | 🔴 **ninguna** — el botón sigue en "Agregar plataforma" |
+| **Dirección del negocio** | 🔴 vacía, y el país quedó en **"Estados Unidos de América"** |
 | **Screencast por permiso**, de punta a punta | ⬜ **es el trabajo real** |
 | **Instrucciones de prueba** paso a paso para el revisor | ⬜ |
 | **Descripción del caso de uso** por permiso | ⬜ |
 
 ⚠️ **El "~20 días" que este doc citaba NO está en la documentación de Meta.** No dan plazo. Se
 deja como estimación nuestra, no como dato.
+
+⚠️ **El país en Estados Unidos es el que más preocupa.** El doc del 26-jul ya avisaba, citando a
+Meta: *"Check that the details you enter exactly match the details of your legal business entity"*.
+El negocio verificado es boliviano (SEPREC, matrícula 5371375010, Santa Cruz) y la app declara
+Estados Unidos con la dirección vacía. **Es la clase de discrepancia que hace rebotar una revisión
+sin explicar por qué.**
+
+🔴 **Ninguno de esos cuatro se tocó.** Son cambios de configuración de la app de Sergio y los
+decide él. Además, editar datos del negocio DESPUÉS de enviar dispara re-verificación — así que
+van todos ANTES de mandar nada.
 
 **Lo que falta es contenido, no trámite:** cuatro screencasts (uno por permiso), las instrucciones
 de prueba y la descripción de uso. Meta pide interfaz en inglés y subtítulos si no se explica solo.
