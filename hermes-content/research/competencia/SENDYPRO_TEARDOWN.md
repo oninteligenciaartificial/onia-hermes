@@ -76,3 +76,49 @@ nuestro atiende, la cita queda EN tu agenda y el cobro EN tu caja".
 - Gamificación/liga/mentores (es su comunidad, no nuestro producto).
 - IA sin guardrails deterministas ("la IA ajustará el guion" a secas).
 - WhatsApp-only.
+
+## Modelo de IA (mirado 2026-08-30, modal "Configurar IA")
+
+**BYOK — el cliente pone SU API key y paga SU consumo aparte.** "La API key la
+consigues gratis en tu cuenta de OpenAI" + botón "ver cómo obtenerla". Ofrecen
+elegir modelo con un "índice IA en puntos": GPT-5.6 Luna (51 pts, $0.20/M entrada,
+"recomendado") o GPT-5.6 Terra (55 pts, $2.00/M). Anthropic igual ("elige Haiku,
+Sonnet, Opus o Fable por nombre"). Sin key propia, el bot corre sin ese "cerebro
+extra". La IA se usa en "respuestas de venta, validación de pagos (comprobantes),
+memoria y más" — validan COMPROBANTES por visión.
+
+**Ventaja Onia**: nosotros ABSORBEMOS la IA (gpt-4.1-mini vía LiteLLM propio con tope
+de gasto; Bs 0,008/foto medido). Un dueño de negocio boliviano consiguiendo API key
+de OpenAI (cuenta + tarjeta internacional en USD) es fricción brutal — en Onia la IA
+"ya viene", cero configuración.
+
+## Cómo cobra (mirado 2026-08-30, /home/plan — la cuenta real paga Plan 0)
+
+- **21 NIVELES** de $19 a ~$800+/mes (precios en USD y soles — empresa peruana).
+- Plan 0 = $19/mes: 1 línea QR + 1 línea Cloud, **150 chats IA/día** (el límite es
+  SOLO del plan 0 — del 1 en adelante "chats con IA ilimitados"), 30 usuarios.
+- Escalera LINEAL: cada nivel suma ~$39 y agrega 1 línea QR + 1 Cloud + 1
+  "calentamiento" (API Cloud topada a 50 chats/día para madurar números nuevos).
+  Nivel 1 $39, 2 $78, 3 $117, 4 $156, 5 $195, 6 $234, 7 $273, 8 $312…
+- **Tres tipos de conexión**: WhatsApp Business por QR (NO oficial, sin límite),
+  API Cloud oficial de Meta, y Cloud "de calentamiento". Mezclan canal no-oficial
+  con oficial en el mismo producto.
+- **Cobro por Hotmart** (auto con tarjeta) o MANUAL: Yape/transferencia + subir foto
+  del comprobante. Contador de vencimiento visible siempre (presión de renovación).
+
+**Lectura para el pricing Onia**: Sendy cobra por CAPACIDAD (líneas y chats/día) y
+le pasa el costo de IA al cliente. Onia cobra Bs 390 el add-on con IA INCLUIDA y sin
+límite artificial de chats — el argumento de venta contra Sendy es directo:
+"$19 se te vuelven $19 + tu cuenta de OpenAI + el límite de 150 chats; acá son
+Bs 390 con todo adentro y tu sistema de gestión abajo".
+
+## Interfaz (lectura de diseño)
+
+Dark neón (verde flúor sobre negro), denso, estética gamer/infoproducto: badges,
+rangos ("TOP #476 Plata"), liga de vendedores, mentores, banners de urgencia, feed
+de noticias en el footer. MUY vendedora y con microcopy educativo bueno ("WhatsApp
+Business y la API Cloud no son lo mismo. Son dos productos distintos…"). Es UI de
+comunidad Hotmart más que de SaaS sobrio — funciona para su público (emprendedores
+e-commerce), NO es la dirección de Onia (claro premium, dueños de negocio formal).
+Lo copiable de su UI: el microcopy educativo en cada control y el estado del plan
+siempre visible.
