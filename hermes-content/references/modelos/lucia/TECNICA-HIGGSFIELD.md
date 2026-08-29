@@ -522,3 +522,49 @@ arriba se hizo **mirando la pantalla**, que es válido, pero el asset falta.
 
 **No re-generar G05c: ya está paga.** Cuando baje, guardar como
 `generadas-20260828/G05c-oficina-reference.png` + su `.jpg` y anotar el asset id.
+
+---
+
+# 2026-08-29 — Mapa del roadmap, sin gastar un crédito
+
+Con las descargas bloqueadas por Chrome no tiene sentido generar (no se puede traer nada al repo),
+así que se recorrieron las funciones pendientes **solo mirando**, para saber cuáles vale la pena
+probar cuando se destrabe. **Costo: 0 créditos.**
+
+## 🟢 Marketing Studio — es la que mapea al servicio de contenido que vamos a vender
+
+`higgsfield.ai/marketing-studio`. *"Turn any product into ready to post content."*
+
+El composer tiene dos slots que no existen en ningún otro lado: **AVATAR** y **PRODUCT**. O sea:
+la cara de un modelo + el producto del cliente → pieza lista para publicar. **Es exactamente la
+forma del servicio**, no una función de laboratorio.
+
+- Seis familias de plantillas: **Product shot · Motion · UGC · Ads · Posters · Marketplace**.
+- Toggle Image / Video en el mismo composer.
+- Modelo propio: `Marketing Studio Image`. Encuadre por preset (`Closeup`), 3:4, 1 a 4 salidas.
+- **Costo: 4 créditos por imagen** (Bs 1,50), el doble que el workspace de Image normal.
+
+⇒ **Es la próxima prueba real** apenas se destrabe la descarga: un producto de un cliente de verdad
++ un avatar, y medir si la salida es publicable sin retoque. Ese número —publicable sí/no— es el
+que decide si el servicio se puede vender.
+
+## 🔴 Viral Presets — casi todo va en contra de la receta que ya funciona
+
+~65 presets de efecto cinematográfico: `EARTH ZOOM`, `BULLET TIME`, `DOLPHIN RIDE`, `LAVA`,
+`MULTIVERSE`, `MIGHTY FIGHTER`, `ACID`, `PENGUIN RIDE`…
+
+**Son espectáculo, y lo que probamos que funciona para Lucía es exactamente lo contrario:** la
+receta NORMAL, lugares donde nadie sacaría una foto linda, acción a medias, sin dirección de arte.
+Meterle un preset viral a Lucía la devuelve al registro de "modelo de IA" del que costó sacarla.
+
+**Los pocos que sí podrían servir**, y para piezas de marca de @oniahq más que para Lucía:
+`MAGAZINE`, `NOIR`, `VINTAGE`, `ORBIT 360`, `MODERN`, `TWO COLOR`, `PAPER`.
+
+⇒ **Prioridad baja.** No es que sean malos: es que resuelven un problema que no tenemos.
+
+## Lo que queda sin mirar
+
+`Relight`, `Inpaint`, `Upscale`, `Face Swap`, `Cinematic Cameras`, `Canvas`, `Motion Control`.
+De esos, los que más prometen para lo nuestro son **Inpaint** (arreglar el texto gibberish de los
+formularios y pizarras, que es el defecto que más se repite en el banco) y **Upscale** (subir las
+G01-G04, que quedaron a 1K).
