@@ -283,6 +283,10 @@ function buildResponse({ state, stageBefore, config, replies, result, applied, s
     dryRun: Boolean(config.dryRun),
     send: replies.map((reply) => ({
       text: reply.text,
+      // La clave de SU fila en bot_messages: el adapter la usa para cerrar el
+      // circuito (markMessageDelivered) despues del POST real. Sin esto, un
+      // rechazo de Chatwoot dejaba la fila mintiendo "sent" para siempre.
+      messageKey: reply.messageKey,
       templateKey: reply.templateKey,
       replySource: reply.replySource,
       deliveryStatus: reply.deliveryStatus,

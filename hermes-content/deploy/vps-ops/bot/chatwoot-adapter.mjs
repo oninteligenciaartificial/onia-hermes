@@ -45,6 +45,7 @@
 import { pathToFileURL } from "node:url";
 
 import { runTurn as realRunTurn } from "./run-turn.mjs";
+import { createStore } from "./persistence.mjs";
 import { pickAudioAttachment, transcribeChatwootAudio } from "./audio-transcribe.mjs";
 
 const ENV_BASE_URL = () => process.env.CHATWOOT_BASE_URL || "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host";
@@ -638,6 +639,7 @@ export async function runChatwootTurn(payload, deps = {}) {
   const turnResult = await runTurnFn(audio.turn, deps);
 
   const client = deps.client || createChatwootClient(deps);
+  const store = deps.store || createStore();
   // Mismo "encendido en dos pasos" que Telegram (N8N_WORKFLOW.md §4.6): con ONIA_BOT_DRY_RUN=true
   // (el default) el motor SI calcula la respuesta real, pero acá no se postea nada a Chatwoot —
   // sólo se reporta qué se habría mandado. Recién con dryRun:false se llama a la API de verdad.
@@ -656,6 +658,19 @@ export async function runChatwootTurn(payload, deps = {}) {
       // eslint-disable-next-line no-await-in-loop -- el orden de los mensajes importa (disclosure antes que cuerpo)
       const posted = await client.sendMessage(parsed.meta.conversationId, reply.text, null, interactive);
       sent.push({ text: reply.text, posted: Boolean(posted), ...(interactive ? { options: reply.options } : {}) });
+      // El DESENLACE real sobre la fila que insertOutbound ya escribio como "sent"
+      // (fix del handoff 2026-08-23): si Chatwoot rechazo el POST, la fila pasa a
+      // "failed" — antes mentia para siempre y el bot estuvo mudo semanas sin que
+      // ninguna consulta a la base lo delatara. Tolerante: markMessageDelivered
+      // nunca tira, y una reply sin clave simplemente no se marca.
+      if (reply.messageKey && store && typeof store.markMessageDelivered === "function") {
+        // eslint-disable-next-line no-await-in-loop -- mismo orden que el envio
+        await store.markMessageDelivered(
+          reply.messageKey,
+          posted ? "sent" : "failed",
+          posted && posted.id != null ? posted.id : null,
+        );
+      }
     }
   }
 

@@ -1334,3 +1334,99 @@ test("VOZ: un transcriptor que devuelve basura tampoco tumba el turno", async ()
   assert.equal(result.voice.transcribed, false);
   assert.equal(posted.length, 1, "el prospecto igual recibe el M_AUDIO_FAIL");
 });
+
+// ---------------------------------------------------------------------------
+// delivery_status HONESTO (fix del handoff 2026-08-23, ejecutado 2026-08-29)
+// ---------------------------------------------------------------------------
+// insertOutbound escribe "sent" ANTES del POST real (bot-engine decide el estado
+// sin I/O, por contrato). Si Chatwoot rechaza el POST, la fila mentia para
+// siempre — el bot estuvo mudo semanas sin que ninguna consulta lo delatara.
+// Ahora el adapter cierra el circuito con markMessageDelivered tras CADA envio.
+
+function fakeStore() {
+  const marks = [];
+  return {
+    marks,
+    async markMessageDelivered(key, status, externalId = null) {
+      marks.push({ key, status, externalId });
+      return true;
+    },
+  };
+}
+
+test("delivery honesto: Chatwoot rechaza el POST → la fila pasa a failed (la mentira muere acá)", async () => {
+  const store = fakeStore();
+  const client = { warnings: [], sendMessage: async () => null }; // null = rechazo tolerante del cliente
+  const result = await runChatwootTurn(incomingFixture(), {
+    client,
+    store,
+    runTurn: async () => ({
+      ok: true,
+      duplicate: false,
+      dryRun: false,
+      send: [{ text: "hola", messageKey: "out:chatwoot:9:3" }],
+      warnings: [],
+    }),
+  });
+  assert.equal(result.sent[0].posted, false);
+  assert.deepEqual(store.marks, [{ key: "out:chatwoot:9:3", status: "failed", externalId: null }]);
+});
+
+test("delivery honesto: POST aceptado → confirma sent con el id externo del mensaje", async () => {
+  const store = fakeStore();
+  const client = { warnings: [], sendMessage: async () => ({ id: 777 }) };
+  await runChatwootTurn(incomingFixture(), {
+    client,
+    store,
+    runTurn: async () => ({
+      ok: true,
+      duplicate: false,
+      dryRun: false,
+      send: [{ text: "hola", messageKey: "out:chatwoot:9:4" }],
+      warnings: [],
+    }),
+  });
+  assert.deepEqual(store.marks, [{ key: "out:chatwoot:9:4", status: "sent", externalId: 777 }]);
+});
+
+test("delivery honesto: en dry run NO se marca nada (no hubo intento real)", async () => {
+  const store = fakeStore();
+  const client = { warnings: [], sendMessage: async () => ({ id: 1 }) };
+  await runChatwootTurn(incomingFixture(), {
+    client,
+    store,
+    runTurn: async () => ({
+      ok: true,
+      duplicate: false,
+      dryRun: true,
+      send: [{ text: "hola", messageKey: "out:chatwoot:9:5" }],
+      warnings: [],
+    }),
+  });
+  assert.deepEqual(store.marks, [], "dry run: la fila queda como la dejo insertOutbound (skipped)");
+});
+
+test("delivery honesto: una reply sin messageKey no marca (y no revienta el turno)", async () => {
+  const store = fakeStore();
+  const client = { warnings: [], sendMessage: async () => ({ id: 2 }) };
+  const result = await runChatwootTurn(incomingFixture(), {
+    client,
+    store,
+    runTurn: async () => ({ ok: true, duplicate: false, dryRun: false, send: [{ text: "hola" }], warnings: [] }),
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(store.marks, []);
+});
+
+test("delivery honesto: run-turn expone el messageKey en send[] (el eslabon que faltaba)", async () => {
+  // Test de contrato sobre run-turn real: el map de send debe llevar messageKey.
+  // Store REAL sin env: apagado por diseño (cero red) — la fake perfecta.
+  const { runTurn } = await import("./run-turn.mjs");
+  const { createStore } = await import("./persistence.mjs");
+  const out = await runTurn(
+    { channel: "sim", conversationId: "sim-keytest", text: "hola", messageId: "m1" },
+    { store: createStore({ url: "", serviceKey: "" }) },
+  );
+  assert.ok(Array.isArray(out.send) && out.send.length > 0, "el saludo sim genera respuesta");
+  assert.match(String(out.send[0].messageKey || ""), /^out:/, "send[] lleva el messageKey de la fila");
+});
