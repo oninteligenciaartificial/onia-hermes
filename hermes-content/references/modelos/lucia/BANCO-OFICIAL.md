@@ -130,9 +130,21 @@ y ahí la variedad se promedia. Las 20-80 fotos son la receta de un *Soul*, que 
 mecanismo. El punto correcto son **5-7 imágenes muy coherentes entre sí** que cubran los
 ángulos que faltan — misma luz, misma piel, mismos rasgos.
 
-⚠️ **Un Element no se puede editar.** El enum es `list` / `get` / `create`: para cambiar las
-fotos hay que crear uno nuevo y actualizar el UUID en los docs. Por eso el viejo sigue vivo en
-el workspace y quedó marcado como jubilado arriba.
+⚠️ **CORREGIDO el 2026-08-29: un Element SÍ se puede editar — pero solo desde la web.**
+
+Acá decía "no se puede editar, el enum es `list`/`get`/`create`". Eso es cierto **del MCP**, y yo
+lo generalicé a la herramienta entera. **La web sí puede**: en el menú `…` de cualquier imagen hay
+**`Assign to element`**, y también **`Create Element`**.
+
+🪤 **La trampa que lo escondía:** el diálogo abre con el filtro **"Empty elements only"** tildado,
+así que muestra *"No elements yet"* y parece que no hay a dónde asignar. **Destildándolo aparecen
+todos**, `@lucia-skin-v1` incluido.
+
+**Lo que esto habilita:** reforzar el ancla con las mejores fotos nuevas (G05, G05c) **sin crear
+un Element nuevo ni actualizar el UUID en todos los docs**, que era el costo que nos frenaba.
+
+🔴 **Pero NO se hizo, y no se hace de paso.** Tocar el ancla cambia **toda** generación futura de
+su cara. Es una decisión de Sergio, con su prueba A/B antes y después. Queda anotado, no ejecutado.
 
 ⚠️ **`action: list` devuelve SOLO la primera media de cada element.** Verificar siempre con
 `action: get`, o un element de 7 fotos parece tener 1.

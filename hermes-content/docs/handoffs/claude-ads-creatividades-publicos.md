@@ -120,6 +120,11 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
 3. ~~**Usar el banco en una pieza real**~~ — ✅ `L10-la-hoja-sellada`, con G05 y G05b como láminas
    1 y 2. Gate verde, render mirado, dos titulares corregidos porque se cortaban.
 4. **Decidir si L10 se publica** (depende de Sergio).
+4b. 🆕 **Decidir si se refuerza el ancla `@lucia-skin-v1`** (depende de Sergio). Se descubrió el
+   29-ago que **desde la web SÍ se pueden sumar fotos a un Element existente** (`…` → `Assign to
+   element`; ojo que el diálogo filtra "Empty elements only" por defecto y parece vacío). Eso
+   permitiría sumarle G05 y G05c sin crear un Element nuevo ni cambiar el UUID en los docs.
+   **No se ejecutó**: toca todas las generaciones futuras de su cara y necesita A/B antes/después.
 5. ~~Mapear el roadmap sin gastar créditos~~ — ✅ hecho mirando. Resultado:
    - 🟢 **Marketing Studio es la próxima prueba real**: tiene slots de **AVATAR + PRODUCTO** y
      plantillas de UGC/Ads/Posters. Es la forma del servicio que vamos a vender. 4 cr/imagen.
