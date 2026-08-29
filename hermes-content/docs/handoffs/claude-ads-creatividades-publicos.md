@@ -226,10 +226,10 @@ re-verificación) — **son de Sergio, no se tocaron**:
 
 | Campo | Estado |
 |---|---|
-| Ícono de la app | vacío |
-| Dominios de la app | vacío (debería ser `onia.com.bo`) |
-| Plataforma declarada | ninguna |
-| Dirección / país | vacía, y el país en **Estados Unidos** |
+| Ícono de la app | vacío — 🛠️ **ya está el archivo**: `hermes-content/assets/onia/onia-app-icon-1024.png`, generado del `icon.svg` del sitio, solo hay que arrastrarlo |
+| Dominios de la app | vacío → poner `onia.com.bo` |
+| Plataforma | ninguna → *Agregar plataforma* → **Sitio web** → `https://onia.com.bo` |
+| Dirección / país | vacía y país en **Estados Unidos** → Calle Tulipanes Nro. 9, Zona Norte · Santa Cruz de la Sierra · Santa Cruz · **Bolivia** |
 
 ⚠️ **El país es el riesgo real.** Meta, textual: *"Check that the details you enter exactly match
 the details of your legal business entity"*. El negocio verificado es boliviano (SEPREC 5371375010,
