@@ -169,6 +169,46 @@ Upscale**, **Face Swap** y **Character Swap**.
 
 ---
 
+## 💰 Qué cuesta cada cosa — verificado en la web el 2026-08-28
+
+**El plan actual es MAX**, no Pro ni Ultra: la página de planes muestra *«Change Commitment»*
+en MAX y *«Upgrade Plan»* en los demás, que es como se distingue el propio del resto.
+
+| | |
+|---|---|
+| Créditos | **3.600/mes** (el slider llega a 5.400) |
+| Precio | **$115/mes**, facturado anual (de $158, 27 % off) |
+| **Costo por crédito** | **$0,0319 ≈ Bs 0,374** |
+
+⚠️ **Esto corrige dos cosas que estaban escritas mal en el repo:** los docs decían plan
+**Ultra, 3.000 cr a Bs 1.365/mes** (Bs 0,455/cr), y en la conversación se había dicho que se
+bajó a **Pro con 900 cr**. Ninguna de las dos es el estado real. Con MAX **el crédito salió más
+barato** que en el cálculo viejo.
+
+### Costo real por pieza
+
+| Pieza | Créditos | Costo |
+|---|---|---|
+| Una imagen (`nano_banana_pro`) | 2,00 | **Bs 0,75** |
+| B-roll de 5 s **sin sonido** | 6,25 | **Bs 2,34** |
+| B-roll de 5 s con sonido | 8,75 | Bs 3,27 |
+| Voz de un reel de ~30 s | 3,50 | Bs 1,31 |
+| **Reel completo** | 25–30 | **Bs 9,35 – 11,22** |
+
+### Lo que entra en un mes
+
+**1.800 imágenes**, o **576 clips** de b-roll, o **~128 reels completos**. Y el cupo se comparte
+con los otros carriles.
+
+**Conclusión: el costo de generación NO es el cuello de este carril.** Un carrusel entero de
+Lucía, con foto propia por lámina, sale menos de Bs 6. El cuello es el criterio y el tiempo de
+revisión, no los créditos.
+
+*(El plan MAX incluye además «7-day unlimited» de Nano Banana Pro, Nano Banana 2 y Kling 3.0 —
+distinto del toggle `Unlimited` del generador, que es la venta suelta de $5–$23.)*
+
+---
+
 ## Pendientes de esta técnica
 
 | Qué | Estado |
@@ -176,7 +216,7 @@ Upscale**, **Face Swap** y **Character Swap**.
 | Bajar lo generado al repo | ✅ **resuelto**, y para las dos cosas: el icono de descarga que aparece al pasar el mouse sobre la imagen SÍ funciona —la primera vez falló por errarle a la posición, no por la función—, y para video está en el panel derecho. El archivo cae en `Downloads` y de ahí se copia |
 | Probar **Animate** para b-roll de reels | ✅ hecho — ver arriba |
 | Probar **AI Influencer** | ✅ hecho — descartado, ver arriba |
-| Borrar los dos elements `ZZ-TEST` del workspace | ⬜ el MCP no tiene delete; por web se puede |
+| Borrar los dos elements `ZZ-TEST` del workspace | 🔴 **sin resolver.** El MCP no tiene `delete`, y en la web **no aparece ninguna pantalla de gestión de elements**: el selector `@` del prompt solo permite elegir, no borrar, y Assets lista imágenes/videos/audios, no elements. Quedan ahí; son inofensivos salvo por el ruido en el selector |
 
 ## Lo que NO se toca
 
