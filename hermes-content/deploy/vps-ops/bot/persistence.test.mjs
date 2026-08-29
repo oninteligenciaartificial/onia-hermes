@@ -19,7 +19,7 @@ import assert from "node:assert/strict";
 import { createBotConfig } from "./config.mjs";
 import { createState } from "./bot-engine.mjs";
 import { runTurn } from "./run-turn.mjs";
-import {
+import { RUBRO_SIN_DEFINIR,
   DELIVERY_STATUSES,
   PIPELINE_STATUSES,
   buildLeadRow,
@@ -417,8 +417,10 @@ test("el lead se inserta una vez y despues se PATCHea (no se duplica ni se pisan
   assert.equal(await nuevo.store.upsertLead({ pipelineStatus: "Contactado" }, state), "bot-telegram-777");
   assert.equal(nuevo.requests[1].method, "POST");
   assert.equal(nuevo.requests[1].body.pipeline_status, "Contactado");
-  // El rubro sale de la calificacion, ya no se asume dental para todos.
-  assert.equal(nuevo.requests[1].body.business_type, null);
+  // El rubro sale de la calificacion, ya no se asume dental para todos. Sin rubro
+  // capturado va el CENTINELA (leads.business_type es NOT NULL sin default: null
+  // mataba el insert ENTERO con 23502 y ningun lead llegaba al CRM — fix 16-ago).
+  assert.equal(nuevo.requests[1].body.business_type, RUBRO_SIN_DEFINIR);
   assert.equal(nuevo.requests[1].body.city, "Santa Cruz");
 
   const viejo = recorder([{ status: 200, body: [{ lead_key: "bot-telegram-777", raw: { humano: "no tocar" } }] }, { status: 200, body: [{}] }]);
@@ -506,7 +508,9 @@ test("al agendar la demo el lead queda en 'Reunion' (valor exacto del CHECK del 
 test("el lead nunca inventa el nombre NI el rubro del negocio", () => {
   const anonimo = buildLeadRow({}, createState({ channel: "telegram", contactRef: "777" }));
   assert.match(anonimo.company_name, /sin nombre/);
-  assert.equal(anonimo.business_type, null, "sin rubro capturado no se inventa uno");
+  // "No inventar" hoy significa: el CENTINELA honesto, jamas un rubro real
+  // ("comercio", "dental"...). El null literal murio con el NOT NULL de la tabla.
+  assert.equal(anonimo.business_type, RUBRO_SIN_DEFINIR, "sin rubro capturado va el centinela, nunca un rubro real");
 
   // El bot atiende cualquier rubro: llamar "Clinica de X" a una ferreteria metia un dato falso
   // en el CRM. Ahora el nombre lleva el rubro real cuando esta, y nada cuando no.
