@@ -256,6 +256,32 @@ de la sesión mensual.
    grabación. Considerar 2 medias jornadas; teleprompter ayuda (referencia earshot en
    video-intake, 28-ago).
 
+## Tercera pasada (2026-08-29) — los últimos 3 huecos reales
+
+1. **El curso: pactar el reparto AHORA, no cuando exista.** El PDF lo deja en "se activa
+   más adelante". Cuando la audiencia esté construida, Samuel va a tener palanca para pedir
+   % — y va a argumentar que la audiencia la hizo él. Pactarlo hoy, que hay poca plata en
+   juego: **o el CPM es su compensación total (curso 100% de Sergio), o un % del curso
+   definido de entrada a cambio de menos CPM.** Dejarlo abierto es regalar la negociación
+   futura. Es EL punto que más plata puede mover de todo el acuerdo.
+2. **Fiscal: cómo se le paga a Samuel.** OniaAgency (NIT limpio, recién verificado) va a
+   pagarle Bs 2.000-5.500/mes. Si Samuel no emite factura, OniaAgency como pagador debe
+   **retener ~15,5%** (IUE servicios 12,5% + IT 3%, régimen de retenciones a personas
+   naturales sin NIT — confirmar tasas vigentes con `onia-contabilidad-bolivia` antes del
+   primer pago). Decidir: Samuel factura / se retiene y su neto baja / se "asume" la
+   retención y el costo real sube ~18%. Pagar en negro no es opción: Onia le vende
+   formalización a sus clientes.
+3. **Las 4 cuentas destino, listas antes del día 1.** La marca personal publica en
+   IG/TikTok/FB/Shorts de SERGIO: verificar que las 4 existan, con handle consistente,
+   bio, link a la comunidad (TikTok/Shorts no tienen comentario→DM: el link in bio es su
+   único embudo) y trial reels activado en IG. Y una línea de **uso de imagen** en el
+   contrato: la cara de Sergio (menor) solo para las cuentas acordadas — portfolio o casos
+   de estudio de Samuel, con permiso previo.
+
+**Cierre de la revisión:** con las tres pasadas, el acuerdo queda cubierto en economía,
+entrega, propiedad, embudo, fiscal, legal y operación. Los huecos que quedan son
+decisiones de Sergio, no análisis pendiente.
+
 ## Pendientes que este doc deja a Sergio
 
 - Correr el test de tercero: comentar `SISTEMA` en `instagram.com/p/DcUd8uakZsk/` desde
