@@ -246,6 +246,13 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   (marcador creado) y recuperacion (marcador limpio) — las 3 verdes.
 - BACKLOG v3 tarea 4 CERRADA (2026-08-29): clon local onia-platform master al dia con
   origin (FF limpio, 0-0). Lo ajeno era el merge del PR 51 fix/ui-traga-el-403.
+- BACKLOG v3 tarea 5 CERRADA (2026-08-29): BENCH DE HUMO de plantillas —
+  bot/humo-plantillas.mjs + fixture plantillas-humo.json (espejo y /opt/onia/bot/).
+  Corre las 6 plantillas reales del editor contra el motor REAL via handlePreviewRequest:
+  validateKnowledge + 'hola' debe contestar M0R recepcionista con botones y el nombre
+  del negocio. Resultado 6/6 verdes. Regenerar el fixture cuando cambie plantillas.ts
+  (one-liner tsx en el header del script; tsx NO esta instalado en onia-platform, se usa
+  npx -y y el -e evalua CJS: require, no import).
 
 **Archivos y cambios**
 
