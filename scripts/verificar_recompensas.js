@@ -21,6 +21,27 @@ const https = require('https');
 
 const REGISTRO = path.join(__dirname, 'recompensas.json');
 
+/**
+ * Pide la URL y REINTENTA una vez si falla por red.
+ *
+ * Nace del 2026-08-29: SISTEMA y HUMO dieron timeout en una corrida y las tres URLs
+ * respondieron 200 en 0,7 s con curl un minuto despues. Era un hipo de red. Pero el guardian
+ * ya habia gritado su alarma mas fuerte —"la palabra esta ACTIVA y su recurso no responde"—
+ * cuyo remedio escrito es APAGAR la palabra. O sea: un blip de red podia dejar sin embudo a
+ * dos cuentas vivas.
+ *
+ * Un 404 real falla las dos veces; un hipo, no. El remedio de una falsa alarma era peor que
+ * la falsa alarma.
+ */
+async function pedirConReintento(url) {
+  const r = await pedir(url);
+  const fueDeRed = r.statusCode === 0;
+  if (!fueDeRed) return r;
+  await new Promise((s) => setTimeout(s, 1500));
+  const r2 = await pedir(url);
+  return { ...r2, reintentado: true };
+}
+
 function pedir(url, redirecciones = 3) {
   return new Promise((resolve) => {
     const req = https.request(url, { method: 'GET', timeout: 15000 }, (res) => {
@@ -52,7 +73,7 @@ async function main() {
       if (r.activa) fallas++;
       continue;
     }
-    const res = await pedir(r.url);
+    const res = await pedirConReintento(r.url);
     const esPdf = r.tipo === 'pdf';
     const ok = res.statusCode === 200 && (!esPdf || res.tipo.includes('pdf'));
     const marca = ok ? 'OK ' : '🔴 ';
@@ -77,4 +98,34 @@ async function main() {
   process.exit(fallas ? 1 : 0);
 }
 
-main();
+/**
+ * Self-check del reintento. Existe porque este codigo SOLO corre cuando algo falla: en la
+ * corrida feliz no se ejecuta nunca, asi que un bug ahi vive escondido hasta el dia que
+ * importa. De hecho el 29-ago se introdujo uno —la funcion se llamaba a si misma— y la
+ * corrida normal daba verde igual.
+ */
+async function selfCheck() {
+  const assert = require('assert');
+  let casos = 0;
+  const ok = (c, m) => { casos += 1; assert.ok(c, m); };
+
+  // a) contra un host que no existe: falla, y TARDA de mas porque reintento
+  const t0 = Date.now();
+  const r = await pedirConReintento('https://no-existe-onia-' + 'x'.repeat(12) + '.invalid/x');
+  const ms = Date.now() - t0;
+  ok(r.statusCode === 0, 'un host inexistente da statusCode 0');
+  ok(r.reintentado === true, 'marca que reintento');
+  ok(ms >= 1500, `reintenta de verdad: tardo ${ms} ms, esperaba >= 1500`);
+
+  // b) contra una URL sana: NO reintenta y no pierde tiempo
+  const t1 = Date.now();
+  const s = await pedirConReintento('https://onia.com.bo/recursos/lista-por-donde-empezar.pdf');
+  ok(s.statusCode === 200, 'una URL sana responde 200');
+  ok(!s.reintentado, 'una URL sana NO reintenta');
+  ok(Date.now() - t1 < 1500, 'y no paga la espera del reintento');
+
+  console.log(`self-check ok: ${casos} casos`);
+}
+
+if (process.argv.includes('--self-check')) selfCheck().catch((e) => { console.error(e.message); process.exit(1); });
+else main();
