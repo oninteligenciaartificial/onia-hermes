@@ -1,6 +1,6 @@
 {
   "schemaVersion": "web-factory-auto-design-v1",
-  "generatedAt": "2026-08-29T13:57:17.829Z",
+  "generatedAt": "2026-08-29T15:49:04.938Z",
   "client": {
     "slug": "dental-amanecer",
     "name": "Clinica Dental Amanecer",
@@ -1087,7 +1087,7 @@
     "palette": {
       "primary": "#0d6b5c",
       "secondary": "#142320",
-      "accent": "#e46a4a",
+      "accent": "#c98a3b",
       "bg": "#f8f5ef",
       "fg": "#172420",
       "usage": [

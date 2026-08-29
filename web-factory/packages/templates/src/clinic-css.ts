@@ -25,7 +25,7 @@ export const clinicCss = `
   min-height: 52px;
   padding: 0 24px;
   border-radius: 999px;
-  font-weight: 750;
+  font-weight: 650;
   font-size: 1.02rem;
   cursor: pointer;
 }
@@ -171,7 +171,7 @@ export const clinicCss = `
   font-size: clamp(2.9rem, 7vw, 6rem);
   line-height: 0.96;
   letter-spacing: -0.025em;
-  font-weight: 820;
+  font-weight: 450;
   color: #fff;
   text-wrap: balance;
   text-shadow: 0 2px 34px rgba(6, 12, 18, 0.42);
@@ -437,7 +437,7 @@ export const clinicCss = `
 }
 
 .wf-clinic-quote .wf-qf-heading {
-  font-weight: 640;
+  font-weight: 480;
   letter-spacing: -0.015em;
 }
 
@@ -568,7 +568,7 @@ export const clinicCss = `
   height: 54px;
   border-radius: 50%;
   font-family: var(--font-heading);
-  font-weight: 820;
+  font-weight: 560;
   color: var(--ink-accent);
   background: var(--color-bg);
   border: 2px solid color-mix(in srgb, var(--color-accent) 55%, var(--border));

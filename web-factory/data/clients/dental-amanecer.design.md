@@ -1,6 +1,6 @@
 # Auto Design Recipe - Clinica Dental Amanecer
 
-Generated: 2026-08-29T13:57:17.829Z
+Generated: 2026-08-29T15:49:04.938Z
 
 ## Decision
 
@@ -63,7 +63,7 @@ Regla: usar estos archivos solo como referencia compatible despues de review, re
 - Heading: Fraunces
 - Body: DM Sans
 - Senales de fuentes: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif, Montserrat, sans-serif, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", Inter, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif, Inter, "Inter Fallback", system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, Geist, sans-serif, "Geist Mono", monospace, Geist, "Geist Fallback"
-- Paleta: primary #0d6b5c, secondary #142320, accent #e46a4a, bg #f8f5ef, fg #172420
+- Paleta: primary #0d6b5c, secondary #142320, accent #c98a3b, bg #f8f5ef, fg #172420
 
 ## Media
 
