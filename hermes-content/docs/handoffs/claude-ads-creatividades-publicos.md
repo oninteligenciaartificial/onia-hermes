@@ -90,6 +90,9 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
 
 ## 5. Próximos pasos
 
+> 🛠️ **Para traer una pieza al repo usá `node scripts/traer_descarga.js --a <destino>`**: rechaza
+> la descarga vieja (la trampa que costó dos errores el 29-ago) e imprime el asset id.
+>
 > 🔴 **Esta lista es la fuente del LOOP TAREAS.** Lo tachado NO se rehace. Al cerrar algo se tacha
 > acá en la misma vuelta, o la próxima lo repite.
 

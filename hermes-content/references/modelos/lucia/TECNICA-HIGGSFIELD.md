@@ -568,3 +568,27 @@ Meterle un preset viral a Lucía la devuelve al registro de "modelo de IA" del q
 De esos, los que más prometen para lo nuestro son **Inpaint** (arreglar el texto gibberish de los
 formularios y pizarras, que es el defecto que más se repite en el banco) y **Upscale** (subir las
 G01-G04, que quedaron a 1K).
+
+---
+
+# 2026-08-29 — `traer_descarga.js`: la trampa de la descarga vieja, ya no depende de acordarse
+
+```bash
+node scripts/traer_descarga.js --a hermes-content/references/modelos/lucia/generadas-20260828/V05.mp4
+```
+
+Copia al repo la última descarga **solo si de verdad es nueva** (10 min por defecto). Si el archivo
+más reciente es viejo, **no copia nada** y explica por qué. Al traerla, imprime el **asset id**
+sacado del nombre, listo para pegar en el LEEME.
+
+**Por qué existe:** el 29-ago el mismo error pasó DOS VECES en una tarde. Chrome bloqueaba las
+descargas, la UI de Higgsfield decía *"Download complete"* —que es **su** aviso de que la
+generación está lista, no del navegador— y yo copiaba al repo el archivo más reciente de Descargas
+creyendo que era el nuevo. Era el de la pieza anterior. La segunda vez casi queda un `V05` que en
+realidad era el mp4 de `V04`.
+
+> **Un archivo con el nombre equivocado es peor que uno faltante: el faltante se nota, el
+> equivocado se publica.**
+
+La regla estaba escrita ("confirmar con `ls`, nunca con el toast") y aun así se repitió el mismo
+día. Una regla que solo vive en un doc se desobedece; esta la comprueba el script.
