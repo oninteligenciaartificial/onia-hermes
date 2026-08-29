@@ -122,6 +122,62 @@ trae nada, la decisión del add-on **se revisa antes de construir**. Nunca se co
 comentario→DM funciona para las cuatro piezas que lo usan. **Falta solo el OK de Sergio y el orden
 de publicación.**
 
+### 1-bis. 🔴 La mezcla está mal, y se ve comparando con el sistema ya escrito
+
+`ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` define 4 pilares con reparto **30/30/30/10**:
+**A** meta-IA (que es IA y no lo esconde) · **B** vida de dueña de negocio · **C** el problema
+que resuelve Onia · **D** marca/producto.
+
+**Lo que hay construido:**
+
+| Pieza | Pilar |
+|---|---|
+| fijado (quién es Lucía) | A |
+| L09 (una cara que no existe) | A |
+| L6 · L07 · L08 · L10 | **C, las cuatro** |
+
+⇒ **Cero piezas del pilar B**, que el propio doc llama *"el vehículo. Sin esto no hay a quién
+hablarle"*. Y **cuatro de seis en C**, que es lo que vende.
+
+🪤 **La ironía:** el banco que se produjo el 29-ago —la parada de micro, el mercado, la tienda,
+la oficina— **es exactamente material de pilar B**, y la única pieza que lo usa (L10) es de
+pilar C. Tenemos el vehículo y lo estamos usando de cartel.
+
+**Formato:** el sistema pide **70% reel / 30% carrusel**. Tenemos 6 carruseles y 1 reel: al revés.
+Y hay **5 videos** (V01-V05) del banco sin usar en ninguna pieza.
+
+### 1-ter. Lo que agregan las dos referencias que pasó Sergio (29-ago)
+
+`instagram.com/p/DbdLhL7N-dw` y `/DchXc0rucRb`, de **@tomas_medinaa**: 622 comentarios en un
+post, casi todos **la misma palabra**, y **cada comentario con 1 respuesta**.
+
+Tres cosas que ellos hacen y nosotros no:
+
+1. **Responden en PÚBLICO además del DM.** Cada respuesta suma un comentario más: el post
+   duplica su señal de conversación. Nuestro circuito manda solo el Private Reply, así que el
+   comentario queda huérfano y el algoritmo no ve diálogo. **Es un nodo más en el mismo workflow
+   de n8n** — edición chica, impacto grande. Requiere OK (no se toca n8n desde este carril).
+2. **La palabra es el TEMA, no el producto.** La suya es "Influencer": es lo que el otro quiere
+   aprender. "SISTEMA" no significa nada para quien recién llega — hay que haber leído la lámina
+   para saber qué pedir. **Bajar la fricción de la palabra es gratis.**
+3. **El caption es mínimo** (*"Conocías todos?"*). El gancho vive en el video; el caption no
+   explica ni vende. Los nuestros son largos.
+
+### 1-quater. Vender pauta: ya está decidido cómo, y conviene no improvisarlo
+
+`ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` §5 lo resuelve: etiqueta de **Paid Partnership**
+obligatoria · **máximo 1 de cada 10 piezas** · gancho siempre, nunca lista de créditos ·
+**presenta y demuestra, jamás testimonia** · nada de salud ni promesas de resultado.
+
+Y la jugada que vale más: **cuando una marca pregunta el precio de un post, ya se calificó sola.
+La primera respuesta es "te hacemos tu propia modelo"**, que vale mucho más que el canje.
+
+⚠️ **Y el dato que ordena la ambición de seguidores:** en el benchmark del mismo doc,
+**@anora.creators con 20 mil seguidores le gana en vistas a @shudu.gram con 236 mil**, y tiene
+5-8× mejor engagement que las dos famosas. **El número de seguidores es vanidad**; lo que las
+mató fue el contenido de marca. Perseguir seguidores por seguidores nos lleva al lugar donde
+están ellas: muchas, y comercialmente muertas.
+
 ### 2. Destrabar lo terminado (bloquea piezas ya hechas)
 - **FACTURA**: el recurso está vivo (200) pero la palabra no está en el mapa de @oniahq. Es una
   edición de n8n, no se hace desde este carril sin OK. **Bloquea O03.**
