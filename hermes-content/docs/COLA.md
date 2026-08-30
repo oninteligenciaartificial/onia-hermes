@@ -183,7 +183,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 | # | Qué | Por qué necesita permiso |
 |---|---|---|
-| D1 | **Instalar los 2 crons que faltan en el VPS** (`recurring-invoices`, `onia-core-workitems`). Los scripts se están escribiendo siguiendo el patrón del que ya funciona | toca infra de producción |
+| D1 | ✅ **Los 2 crons ya están escritos y listos para instalar** — `hermes-content/infra/vps-ops/crons/` (2 scripts + `INSTALAR.md` con las líneas exactas, cómo verificar y cómo revertir). Con tu OK los instalo en 1 minuto | toca infra de producción |
 | D2 | **Dar de baja las cuentas que sobran en `onia_center`.** Contadas hoy: hay **4 activas** y sólo `sergio` debería quedar — `arthur` (ya no colabora, 23-ago), `seller_001` (Camila) y `seller_002` (Jerónimo), los dos vendedores, y **no hay equipo de ventas**. ⚠️ La versión anterior de este ítem decía "arthur y seller_001": se olvidaba de Jerónimo | es acceso de personas |
 | D3 | **Desplegar al VPS** cuando haya algo que valga el swap. Runbook y gates en la skill `onia-deploy` | toca producción |
 

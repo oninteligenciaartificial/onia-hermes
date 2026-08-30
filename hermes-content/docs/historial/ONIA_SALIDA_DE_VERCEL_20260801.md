@@ -110,7 +110,17 @@ Fase 0 no apaga ningún sitio. Es reversible.
 | `/api/cron/recurring-invoices` | `0 6 * * *` | **02:00** | Dejan de emitirse las facturas recurrentes. Falla de plata, silenciosa. |
 | `/api/cron/onia-core-workitems` | `0 11 * * *` | 07:00 | Dejan de generarse work items (no-asistió → seguimiento, factura vencida → cobro, presupuesto 7d) **y el recordatorio fiscal IVA/IT del Contador Pack**. |
 
-**Trampa de zona horaria:** los crons de Vercel corren en UTC. Si copiás los strings tal cual a un `crontab` del VPS, **los horarios se corren 4 horas**. `0 6 * * *` en UTC son las 02:00 de La Paz, no las 06:00. Si vas por crontab, poné `CRON_TZ=UTC`.
+**Trampa de zona horaria — ⚠️ CORREGIDO el 2026-08-30, esto era falso.** Acá decía que
+copiar los strings de `vercel.json` al crontab del VPS **corría los horarios 4 horas**.
+**No pasa:** medido en vivo, el host está en `Etc/UTC` (`date` y `date -u` dan lo mismo,
+`/etc/timezone` = `Etc/UTC`), así que los crons de Vercel y los del host **corren en la
+misma zona** y los strings se copian tal cual. `0 6 * * *` sigue siendo 02:00 de La Paz en
+los dos lados. `CRON_TZ=UTC` es innecesario.
+
+La advertencia sólo valdría si el host estuviera en hora local, que era la suposición no
+verificada con la que se escribió. Peligro real de dejarla: alguien la lee, "corrige" los
+horarios 4 horas, y los trabajos disparan cuando no deben. **Verificar siempre con
+`date -u; date` antes de instalar un cron.**
 
 **Cómo montarlos.** Las 4 rutas ya están listas para vivir fuera de Vercel: son `GET` y validan `Authorization: Bearer ${CRON_SECRET}`. No usan nada de Vercel.
 
