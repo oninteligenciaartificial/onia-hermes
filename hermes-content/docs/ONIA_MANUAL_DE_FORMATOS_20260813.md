@@ -1,5 +1,15 @@
 # Manual de formatos de video y carrusel — ONIA
 
+> 🔴 **AVISO (2026-08-30) — este doc nombra el Soul de Lucía, y el Soul está PROHIBIDO.**
+>
+> El Soul `36305a9b` (LUCIA-REAL-v2-clean) sale con **la piel roja**, ignora el atuendo pedido y se
+> entrenó con frames de una persona real sin permiso documentado. El Soul v3 `e6d8703c` perdió el
+> A/B del 22-ago y le cambia el color de ojos.
+>
+> **La cara de Lucía se genera con el Element-ancla `@lucia-skin-v1`
+> (`58bbd635-9b90-4bd2-b08a-1cd4915bd563`), NO con un Soul.** Manda
+> `references/modelos/lucia/BANCO-OFICIAL.md`. Señal rápida: **si la cara está roja, está mal.**
+
 *2026-08-13. Unifica las 6 anatomías parciales del corpus de `hermes-content/references/video-intake/`
 (46 fichas + transcripciones). Es un manual para PRODUCIR: se abre, se elige un formato en la tabla
 de decisión, se ejecuta la receta. Nada de lo que sigue pide investigar antes de filmar.*
