@@ -143,6 +143,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
+- [ ] 🔒 **La mina de `page_location` en GA (en arreglo ahora).** `GoogleAnalytics.tsx:64` manda
+      `window.location.href` **completo** — con todos los query params — anulando el allowlist
+      `safeQueryParams` que la línea de arriba aplica cuidadosamente a `page_path`. Hoy es
+      inofensivo porque GA está apagado, pero **encenderlo es una env var**, y el día que alguien
+      la ponga, un token en `/login?...` o `/register?...` se va a Google y no se puede deshacer.
+      Lo encontró el subagente que fue a decidir si GA era código muerto — no estaba en ninguna
+      lista.
+
 - [ ] **`DELETE /api/payments/[id]` sobre un mes ya declarado** devuelve la factura a BORRADOR y
       ese mes pierde la venta del CSV, sin nota de crédito de por medio. **No existe cierre de
       período**: el RCV se regenera on demand para cualquier mes. Borra débito real, no inventa
@@ -183,7 +191,13 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 - ~~**Vercel al tope (rate limit)**~~ — expiraba hoy **y además ya no publicamos**. Muerto por dos vías.
 - ~~**Renombrar el schema de producción**~~ — **ya estaba rechazado con motivo** en este mismo archivo (migración de datos vivos a cambio de prolijidad que ningún cliente ve). Estaba anotado como bloqueo y como rechazo al mismo tiempo.
-- ~~**GA4**~~ — el env de producción **no tiene ninguna variable de GA**, así que en prod no corre. Si el componente es inerte sin el ID, no es código muerto: es una capacidad apagada bien. Se está verificando.
+- ~~**GA4**~~ — **cerrado 2026-08-30: no es código muerto, es una perilla apagada bien.**
+  `GoogleAnalytics.tsx:96-99` hace early-return **antes** de montar el `<Script>` si falta
+  `NEXT_PUBLIC_GA_ID` (cero red, cero `dataLayer`, cero cookie), y encima el hijo filtra por un
+  allowlist de 6 rutas públicas, así que ni encendido rastrearía la app autenticada. La política
+  de privacidad ya está escrita **en condicional** (`app/privacy/page.tsx:92-95`), la CSP ya lo
+  contempla y `.env.example` lo trae vacío. **Encenderlo es UNA env var.** La entrada estaba mal
+  planteada: no había nada que sacar.
 - ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva web-factory. Estar en otra sesión no es estar bloqueado.
 
 ## Cerrado (2026-08-30) — no rehacer
