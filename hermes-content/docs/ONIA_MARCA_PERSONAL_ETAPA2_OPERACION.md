@@ -12,8 +12,8 @@
 | 2 | Plantilla de secuencia de historias | ✅ lista abajo | — |
 | 3 | Tablero de 3 KPIs (archivo, no panel) | ✅ esqueleto abajo — se llena semanal | loop |
 | 4 | Checklist de las 6 cuentas + link in bio | 🟡 abajo, con huecos por confirmar | Sergio confirma |
-| 5 | Runbook de derivados: crudo → clips (editor-videos + HyperFrames) | ⬜ | loop |
-| 6 | Plantillas de visual diario de comunidad (carruseles) | ⬜ | loop |
+| 5 | Runbook de derivados: crudo → clips (editor-videos + HyperFrames) | ✅ §5 abajo | loop |
+| 6 | Plantillas de visual diario de comunidad (carruseles) | 🟡 spec en §6 — se construyen recién cuando el acuerdo firme (regla: nada a medias antes del gate) | loop |
 | 7 | Embudo: quitar `neverError` del workflow comentario→DM activo (`1jS4jwmNmvcQpqqH`) para que un rechazo de Meta ALARME | ⬜ verificar que infra esté libre antes de tocar n8n | loop (infra) |
 | 8 | `cal.onia.com.bo` — diagnóstico del 502 y levantar | ⬜ infra VPS | loop (infra) |
 | 9 | Test comentario→DM desde cuenta de tercero | ⬜ | **Sergio** |
@@ -79,3 +79,37 @@ calendario de demos. El `?src=` ya está vivo en prod.
 
 Regla: handle lo más consistente posible en las 6; TODAS con el link de la comunidad en
 bio (en TikTok/Shorts/X es el único embudo — no hay comentario→DM ahí).
+
+## 5 · Runbook: crudo de Samuel → clips derivados (los videos extra de Sergio)
+
+Cuando lleguen los crudos a la carpeta compartida (48 h post-sesión). El CÓMO vive en las
+skills — este es el orden del carril:
+
+1. **Intake:** bajar el crudo local. Transcribir (skill `ver-videos`; Speaches en el VPS —
+   si devuelve `fetch failed` como el 23-ago, fallback Whisper local con
+   `ONIA_AUDIO_STT_LANGUAGE=auto`, nunca forzar idioma: traduce).
+2. **Minar segmentos:** de la transcripción, marcar candidatos a clip (30-60 s): una idea
+   completa + un gancho en los primeros 2 s. Objetivo: 8-15 candidatos por sesión de crudo
+   → cubre los 1-2 clips/día del mes.
+3. **REGLA DE ORO (no saltable):** tabla de cortes + preview 360p a Sergio ANTES de
+   aplicar cualquier corte. Nunca cortar a ciegas.
+4. **Producir** (skill `editor-videos`, pipeline sin editores humanos): corte → silencios
+   y muletillas fuera → subtítulos karaoke palabra por palabra (Inter, identidad de la
+   marca personal) → slate/CTA final → export vertical 9:16.
+5. **Cola:** programar en Postiz repartido en el mes (no dumps). Caption por plataforma
+   (LinkedIn profesional). Estos clips NO generan CPM a Samuel (acuerdo §3.6).
+6. **Registrar** cada clip publicado en el tablero de KPIs (§3) la semana que sale.
+
+## 6 · Visual diario de comunidad — spec de las 3 plantillas
+
+Se construyen (HyperFrames/HTML → PNG) recién cuando el acuerdo firme. Formatos:
+
+| Plantilla | Uso | Estructura |
+|---|---|---|
+| **Tip del día** | herramienta/skill concreta | título grande + 3 pasos numerados + captura + cierre "probalo hoy" |
+| **Lo que construí hoy** | build in public | captura del sistema + 3 líneas: qué es, qué resuelve, qué sigue |
+| **Recurso** | plantilla/prompt/checklist descargable | portada + qué incluye + cómo pedirlo |
+
+Materia prima de Sergio: captura + 3 líneas por día. La máquina hace el resto. Paleta:
+la de la marca personal (familia del verde Onia, distinta a propósito — doc de identidad
+de Etapa 1).
