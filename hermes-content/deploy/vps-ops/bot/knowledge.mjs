@@ -116,6 +116,17 @@ const SHAPE = Object.freeze({
       modalidad: { kind: "text", max: 140 },
     },
   },
+  // Insistencia (v6.6, decision Sergio 2026-08-30: ENCENDIDA por defecto): si el
+  // cliente deja de responder, el asistente insiste UNA vez pasadas `horas`.
+  // La ausencia del campo = encendida con 2 horas (el default vive en quien lo lee,
+  // no aca — un doc viejo sin el campo no debe fallar la validacion).
+  seguimiento: {
+    kind: "object",
+    fields: {
+      activo: { kind: "bool" },
+      horas: { kind: "int", min: 1, max: 48 },
+    },
+  },
 
   faq: {
     kind: "array",
@@ -231,6 +242,10 @@ function checkField(value, shape, path, errors) {
     case "int":
       if (!Number.isInteger(value)) return void errors.push(`${path}: tiene que ser un numero entero`);
       if (value < shape.min || value > shape.max) errors.push(`${path}: fuera de rango (${shape.min}-${shape.max})`);
+      return;
+
+    case "bool":
+      if (typeof value !== "boolean") errors.push(`${path}: tiene que ser true o false`);
       return;
 
     case "date":

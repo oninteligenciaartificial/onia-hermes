@@ -915,3 +915,12 @@ test("preview: el BORRADOR corre en modo RECEPCIONISTA — lo que el cliente fin
     delete process.env.ONIA_BOT_PREVIEW_SECRET;
   }
 });
+
+test("seguimiento (v6.6): activo bool + horas 1-48; tipos malos rechazan entero", () => {
+  const ok = validateKnowledge({ schema: "onia.bot.knowledge/1", seguimiento: { activo: true, horas: 2 } });
+  assert.equal(ok.ok, true);
+  const mal = validateKnowledge({ schema: "onia.bot.knowledge/1", seguimiento: { activo: "si" } });
+  assert.equal(mal.ok, false);
+  const rango = validateKnowledge({ schema: "onia.bot.knowledge/1", seguimiento: { activo: true, horas: 99 } });
+  assert.equal(rango.ok, false);
+});

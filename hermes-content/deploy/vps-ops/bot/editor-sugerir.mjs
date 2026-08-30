@@ -20,6 +20,7 @@ const SYSTEM = [
   "- identity: { productName, humanName, botName } (todos texto, opcionales)",
   "- empresa: { horario: { frase (texto humano), dias (lista de numeros 0=Lunes..6=Domingo), desde (hora numero), hasta (hora numero) } }",
   "- demo: { duracionMinutos (numero), duracionFrase (texto), modalidad (texto) } — la cita o visita",
+  "- seguimiento: { activo (true/false), horas (numero 1-48) } — si el asistente insiste cuando el cliente no responde",
   "- rubrosExtra: lista de { key (slug), label, fuerte (lista de palabras), debil (lista de palabras) }",
   "- productos: lista de { key (slug), tipo (\"modulo\" o \"servicio\"), nombre, queResuelve (texto) }",
   '- faq: lista de { id: "negocio", title (la pregunta), body (la respuesta), tags (lista de palabras de 3+ letras), status: "publicado" }',
