@@ -458,3 +458,21 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   Decision Sergio del dia: TODO USABLE PRIMERO, la app movil despues (v7 = push "te
   escribieron" + banner instalar; base PWA YA existe: manifest+SW+push+BottomNav).
   Cadencia loop tareas bajada a 1min a pedido de Sergio (cron 018db731).
+
+## BACKLOG v6.5 — pasos del guion + tutorial (2026-08-30) ✅ CERRADO
+
+- ✅ "Así atiende tu asistente": panel de pasos numerados EN VIVO junto al probador de
+  /settings/chatbot (1 Saluda y se presenta con los botones reales · 2 Contesta el
+  horario con la frase real · 3 Cuenta lo que ofreces · 4 Todo lo demas se lo pasa a
+  {encargado} con la promesa NUNCA-inventa y el candado humano). Commit 917adca.
+- ✅ Tutorial cubre el asistente: paso "Arma tu asistente" en la Guia de inicio (señal
+  real = fila en chatbot_knowledge, patron de señales del tour) + entrada en Ayuda +
+  bandeja "Conversaciones" en los menus de los 4 rubros. Commit 5ae52a7 (era 94c51f0
+  pre-rebase). Snapshots de pack/nav actualizados (18→19 items segun familia).
+- Deploy: BUILD_ID ybZijOFHCl9bJ7sakvV7N (la sesion previa murio a mitad del deploy y
+  otra instancia lo completo; VERIFICADO MIRANDO hoy: panel de pasos presente=true,
+  paso asistente en guia=true, capturas /tmp/v65-*.png, enviada a Sergio).
+- RECUPERACION de la muerte de sesion: monitor popup re-armado (by3aon06m), loop
+  perpetuo re-armado (678de3f1 cada 1min: analiza-y-desarrolla, nunca sin-novedad),
+  loop orden re-armado (63ae20ad cada 15min, ahora re-aplica LOS SEIS configs de
+  branding). Skill onia-deploy con leccion ajena preservada (a08a2d0).
