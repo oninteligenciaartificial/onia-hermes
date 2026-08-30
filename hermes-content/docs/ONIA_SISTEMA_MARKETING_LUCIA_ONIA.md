@@ -36,6 +36,57 @@ El engagement de influencers IA es de CURIOSIDAD (~5,9%), no de confianza → **
 el tráfico, @oniahq lo convierte.** La transparencia ES el gancho (caso Aitana: revelar
 que era IA fue su mayor evento de crecimiento).
 
+## 3-CERO. 🔴 HACIA DÓNDE VA EL CONTENIDO — y no va a donde dijimos (2026-08-30)
+
+Sergio, 29-ago: *"queremos que Lucía pueda vender publicidad para empresas, queremos que tenga
+muchos followers"*. **El contenido que existe no construye eso.** No es opinión, es el conteo de
+las 7 piezas escritas:
+
+| | Piezas | Cuáles |
+|---|---|---|
+| **Piden una reunión de Onia** | 2 | L6 · L10 |
+| **Dan un recurso de Onia** | 2 | L07 · L08 |
+| No piden nada, **pero nombran a Onia** | 2 | L09 · el fijado |
+| No nombran a Onia | **1** | L11 |
+
+**6 de 7 mencionan Onia. 4 de 7 mandan a Onia.** Eso no es una influencer: es **un catálogo con
+cara**. Y ninguna marca paga por aparecer en el catálogo de otra empresa.
+
+### Son dos negocios distintos, y hay que elegir
+
+| | **A — Lucía embudo de Onia** (lo que es hoy) | **B — Lucía medio** (lo que se dijo querer) |
+|---|---|---|
+| Cada pieza | pide o entrega algo de Onia | le sirve a SU audiencia |
+| Onia aparece como | el destino | quien la hace (mención), no el CTA |
+| Audiencia | chica y calificada | grande |
+| Cómo gana plata | leads para Onia | **marcas pagan por llegar a esa audiencia** |
+| Palabra clave | el producto (SISTEMA) | **el tema** |
+
+**No se pueden hacer las dos a full en la misma cuenta.** Hoy hacemos A y decimos B.
+
+La referencia que pasó Sergio (`@tomas_medinaa`, **622 comentarios en un post**) está haciendo B:
+su palabra clave es **el tema** («Influencer»), su contenido le enseña a su audiencia, y por eso
+la audiencia lo sigue a **él**. No reenvía a nadie.
+
+### El problema de fondo, que es el que hay que resolver primero
+
+**El tema de Lucía hoy ES el tema de Onia**: "IA para negocios bolivianos". Por eso todo termina
+en Onia — no es un error de redacción, es que **no tiene tema propio**. Sin tema propio no hay
+audiencia propia, y sin audiencia propia no hay publicidad que vender.
+
+### ⚠️ Y la pregunta incómoda antes de cambiar nada
+
+**B puede no valer la pena.** Vender publicidad requiere audiencia grande, y una IA nicho en
+Bolivia tarda meses en tenerla. Onia tiene **cero clientes pagando** y ~11 semanas de runway.
+**A —Lucía como embudo— da plata antes**, aunque sea menos ambicioso.
+
+⇒ **Decisión de Sergio, y define todo lo demás:** ¿Lucía es un canal de venta de Onia, o un medio
+que después vende publicidad? Si es lo primero, el contenido actual está bien y hay que publicarlo
+ya. Si es lo segundo, **hay que cambiar el tema y la proporción antes de publicar** — porque cada
+pieza que la muestre como vendedora de Onia le pone techo a la audiencia.
+
+**Regla si se elige B:** máximo **1 de cada 5** piezas manda a Onia. Hoy son 4 de 7.
+
 ## 3-BIS. 🔴 UNA SOLA TAXONOMÍA — dos ejes, no tres listas (2026-08-30)
 
 **El problema que esto arregla.** Había TRES formas de categorizar la misma pieza: los pilares de
