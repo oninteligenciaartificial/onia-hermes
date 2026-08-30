@@ -1,5 +1,9 @@
 # Onia - Acuerdo Arthur Fuentes 60 Dias
 
+> ⚠️ **AVISO (2026-08-30) — este doc le asigna trabajo o carril a Arthur, y Arthur YA NO COLABORA
+> con Onia** (dicho por Sergio el 23-ago). No le rutees tareas ni abras sesiones a su nombre.
+> El trabajo que este doc describe, si sigue vigente, lo toma el carril correspondiente de ONIA.
+
 Contrato privado operativo para ordenar trabajo, dinero, responsabilidades y
 crecimiento durante 60 dias. Es un acuerdo privado entre las partes; si alguna
 parte lo requiere, puede revisarse legal, contable o laboralmente antes de

@@ -1,5 +1,9 @@
 # Sesión `INFLUENCERS IA` / Higgsfield / Lucía
 
+> ⚠️ **AVISO (2026-08-30) — este doc le asigna trabajo o carril a Arthur, y Arthur YA NO COLABORA
+> con Onia** (dicho por Sergio el 23-ago). No le rutees tareas ni abras sesiones a su nombre.
+> El trabajo que este doc describe, si sigue vigente, lo toma el carril correspondiente de ONIA.
+
 > **Este archivo es la raíz de la sesión `INFLUENCERS IA`.** Todo lo que esta sesión tiene que hacer
 > de lo que salió del análisis de reels está acá, completo. No hace falta abrir otro archivo.
 >
