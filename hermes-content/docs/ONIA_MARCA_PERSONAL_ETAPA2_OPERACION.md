@@ -8,7 +8,7 @@
 
 | # | Ítem | Estado | Dueño |
 |---|---|---|---|
-| 1 | Textos de perfil X + LinkedIn | ✅ listos abajo — falta que Sergio los pegue | Sergio pega |
+| 1 | Textos de perfil X + LinkedIn | ✅ **APLICADOS en vivo 2026-08-30** — ver checklist §4 | hecho |
 | 2 | Plantilla de secuencia de historias | ✅ lista abajo | — |
 | 3 | Tablero de 3 KPIs (archivo, no panel) | ✅ esqueleto abajo — se llena semanal | loop |
 | 4 | Checklist de las 6 cuentas + link in bio | 🟡 abajo, con huecos por confirmar | Sergio confirma |
@@ -17,7 +17,9 @@
 | 7 | Embudo: quitar `neverError` del workflow comentario→DM activo (`1jS4jwmNmvcQpqqH`) para que un rechazo de Meta ALARME | ⬜ verificar que infra esté libre antes de tocar n8n | loop (infra) |
 | 8 | `cal.onia.com.bo` — diagnóstico del 502 y levantar | ⬜ infra VPS | loop (infra) |
 | 9 | Test comentario→DM desde cuenta de tercero | ⬜ | **Sergio** |
-| 10 | Setup manual del perfil X (handle, foto, borrar 3 posts) | ⬜ | **Sergio** (10 min) |
+| 10 | Setup del perfil X | ✅ hecho en vivo 2026-08-30 (queda: revisar/borrar los 3 posts viejos, banner) | — |
+| 11 | Foto de LinkedIn (diálogo nativo de Windows) + decidir visibilidad pública | ⬜ | **Sergio** (2 min) |
+| 12 | Link de comunidad WhatsApp → bio de las 6 plataformas | ⬜ esperando el link | **Sergio** pasa el link |
 
 ## 1 · Perfiles listos para pegar
 
@@ -74,8 +76,13 @@ calendario de demos. El `?src=` ya está vivo en prod.
 | TikTok | ¿? | 🟡 confirmar cuenta personal | handle consistente + bio + link |
 | Facebook | ¿? | 🟡 confirmar página/perfil | ídem |
 | YouTube Shorts | ¿? | 🟡 confirmar canal | ídem |
-| LinkedIn | no existe | ⬜ crear con textos de arriba | crear |
-| X | @sergioum432 (may-2021) | ✅ existe, antigüedad buena | setup de 10 min (ítem 10) |
+| LinkedIn | **linkedin.com/in/sergiourcullo** | ✅ **COMPLETADO 2026-08-30** (verificado en pantalla): titular "Fundador de Onia \| Desarrollo sistemas con IA para escalar tu negocio", Acerca de en español (conserva credencial La Galerie Parfums: 900+ decants), URL limpia | foto (clic manual de Sergio en "Cargar foto"), visibilidad pública (titular/extracto/experiencia OCULTOS para no-logueados — decisión de Sergio), banner con logo nuevo |
+| X | **@sergiourcullo** (may-2021) | ✅ **COMPLETADO 2026-08-30** (verificado en pantalla): handle cambiado, nombre "Sergio Urcullo", bio idéntica a IG, ubicación Santa Cruz, foto verde de IG subida | website (esperando link de comunidad WhatsApp), banner |
+
+> Bio unificada (decisión Sergio 2026-08-30): **la de IG** — "Desarrollo sistemas con IA
+> para escalar tu negocio / Fundador de @oniahq / Aprende IA gratis 👇". El link de bio
+> será el de la **comunidad de WhatsApp** en las 6 plataformas (pendiente: Sergio pasa el
+> link de invitación). La comunidad VIVE en WhatsApp (confirmado 2026-08-30).
 
 Regla: handle lo más consistente posible en las 6; TODAS con el link de la comunidad en
 bio (en TikTok/Shorts/X es el único embudo — no hay comentario→DM ahí).
