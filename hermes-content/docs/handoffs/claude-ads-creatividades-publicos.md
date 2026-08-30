@@ -146,7 +146,11 @@ ser diarias desde el arranque: pesan menos y son el formato natural de la cuenta
 >
 > 🔴 **Esta lista es la fuente del LOOP TAREAS.** Lo tachado NO se rehace.
 >
-> 📌 **El ORDEN manda y está en `ONIA_ADDON_CONTENIDO.md` §"Estado real y orden de lanzamiento"**
+> 🧭 **El ORDEN de trabajo vive en `ONIA_PLAN_AL_PRIMER_PESO.md`** (30-ago, 26 agentes con
+> refutador). Ahí están los 7 pasos con dueño y costo, los 3 descartes razonados (computer-use,
+> ads/ad-creative, abogado-del-diablo), los riesgos y las 9 preguntas para Sergio.
+>
+> 📌 **El orden de lanzamiento del add-on está en `ONIA_ADDON_CONTENIDO.md` §"Estado real y orden de lanzamiento"**
 > (29-ago). Resumen: medir demanda gratis → destrabar lo terminado → pedir el permiso que tarda →
 > demo → precio → automatizar. **Producir más contenido NO está en la lista: producir dejó de ser
 > el cuello.**
