@@ -10,6 +10,43 @@ vivo en producción** y nadie lo había contado. Esto es el inventario.
 
 ---
 
+## ⚠️ Medido de nuevo el 2026-08-30 — es peor que "un nombre viejo"
+
+Sergio pidió que dejaran de llegar los mails de Vercel, diciendo *"ya no usamos vercel"*.
+**Usamos.** Verificado en vivo, no de memoria:
+
+| Comprobación | Resultado |
+|---|---|
+| `curl -sI https://www.dentalgest.app` | `HTTP 200`, `Server: Vercel` |
+| `curl -sI https://www.dentalgest.app/login` | `HTTP 200` |
+| Proyecto Vercel `dental-gest` | último deploy `target=production`, `readyState=READY`, **del mismo día** |
+| Dominios del proyecto | `www.dentalgest.app`, `dentalgest.app`, `dental-gest-git-master-*` |
+| Pantalla **abierta y mirada** | login completo de Onia: "14 días gratis", **"Pedí tu acceso"** |
+
+**Y no es una copia inocente: apunta a OTRA base.** Su bundle referencia
+`kvepqgikokjlacxngkiw.supabase.co` — el Supabase **en la nube**. El bundle de
+`app.onia.com.bo` **no lo referencia**. La base de producción es la **self-hosted del
+VPS**.
+
+**Entonces hay dos producciones vivas del mismo producto, y la de Vercel se publica sola
+en cada push a `master`, conectada a un backend que no es producción.** Un lead que entre
+por `dentalgest.app` y toque "Pedí tu acceso" deja su solicitud en una base que nadie mira.
+
+Y hay un segundo efecto que nadie contó: **`vercel.json` agenda tres crons**
+(`appointment-reminders`, `recurring-invoices`, `onia-core-workitems`). En el VPS los
+mismos trabajos ya corren por el crontab del host. O sea que esos tres corren **en los dos
+lados**, cada uno contra su base.
+
+**Lo hecho:** `github.silent` en `vercel.json` (PR #58) corta los comentarios del bot —
+los mails— **sin tocar los deploys**. Es el arreglo del síntoma, a propósito: bajar
+`dentalgest.app` apaga una superficie viva y es decisión de Sergio.
+
+**Lo que falta decidir (Sergio):** desconectar el proyecto de Vercel y dejar
+`dentalgest.app` redirigiendo a `app.onia.com.bo`, o mantenerlo apuntado a la base correcta.
+Hoy es lo peor de los dos mundos: vendible y desconectado.
+
+---
+
 ## Dónde sigue vivo, medido el 2026-08-29
 
 | Superficie | Qué dice | Costo de cambiarlo | Riesgo |
