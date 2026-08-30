@@ -51,6 +51,33 @@ export type DashboardTable = {
   rows: string[][];
 };
 
+/**
+ * Familia mono de los datos. Nuestro propio banco de patrones lo pide para
+ * SaaS/producto ("datos Spline Sans Mono con tabular-nums") y ademas resuelve un
+ * defecto real: con UNA sola familia para todo, las cifras y las etiquetas pesan
+ * igual y el panel se lee plano. El mono separa el dato del texto sin gritar.
+ */
+const DASHBOARD_MONO = "Spline Sans Mono";
+
+/** Una propuesta del agente: SIEMPRE con la evidencia que la justifica al lado. */
+export type DashboardAgentAction = {
+  titulo: string;
+  detalle: string;
+  evidencia: string;
+  impacto: string;
+  urgencia: "alta" | "media" | "baja";
+  canal: string;
+};
+
+export type DashboardAgent = {
+  titulo: string;
+  resumen: string;
+  acciones: DashboardAgentAction[];
+};
+
+export type DashboardNote = { texto: string; meta: string; ancla: string };
+export type DashboardNotes = { titulo: string; items: DashboardNote[] };
+
 export type DashboardData = {
   title: string;
   subtitle: string;
@@ -60,6 +87,8 @@ export type DashboardData = {
   charts: DashboardChart[];
   table: DashboardTable;
   lists?: DashboardProgressList[];
+  agente?: DashboardAgent;
+  notas?: DashboardNotes;
 };
 
 export type DashboardClient = {
@@ -100,6 +129,7 @@ export function renderDashboardBody(client: DashboardClient): string {
       <div class="wf-dash-main">
         ${renderTopbar(client)}
         ${renderKpis(dash.kpis)}
+        ${renderAgentAndNotes(dash.agente, dash.notas)}
         ${renderCharts(dash.charts)}
         ${renderLists(dash.lists ?? [])}
         ${renderTable(dash.table)}
@@ -178,6 +208,96 @@ function renderKpis(kpis: DashboardKpi[]): string {
         </section>`;
 }
 
+/**
+ * Banda "que hago ahora": propuestas del agente + notas, lado a lado.
+ *
+ * Va ARRIBA de los graficos a proposito. Los KPI dicen que paso y los graficos
+ * como viene; esta banda es la unica parte del panel que dice QUE HACER, y es lo
+ * que el duenio mira cuando abre a la manana. Enterrarla abajo la vuelve adorno.
+ */
+function renderAgentAndNotes(agent?: DashboardAgent, notes?: DashboardNotes): string {
+  if (!agent && !notes) return "";
+  return `
+        <section class="wf-dash-act" aria-label="Acciones sugeridas y notas">
+          ${agent ? renderAgent(agent) : ""}
+          ${notes ? renderNotes(notes) : ""}
+        </section>`;
+}
+
+function renderAgent(agent: DashboardAgent): string {
+  if (!agent.acciones.length) {
+    return `<article class="wf-agent">
+            <div class="wf-agent-head">
+              <h2>${escapeHtml(agent.titulo)}</h2>
+            </div>
+            ${renderEmpty("Nada que aprobar", "Cuando el asistente encuentre algo que valga la pena, aparece aca.")}
+          </article>`;
+  }
+
+  const acciones = agent.acciones
+    .map(
+      (accion) => `
+              <li class="wf-agent-item wf-agent-item--${accion.urgencia}">
+                <div class="wf-agent-item-main">
+                  <p class="wf-agent-item-title">${escapeHtml(accion.titulo)}</p>
+                  ${accion.detalle ? `<p class="wf-agent-item-detail">${escapeHtml(accion.detalle)}</p>` : ""}
+                  ${
+                    accion.evidencia
+                      ? `<p class="wf-agent-item-why"><span class="wf-agent-why-label">Porque</span> ${escapeHtml(
+                          accion.evidencia,
+                        )}</p>`
+                      : ""
+                  }
+                </div>
+                <div class="wf-agent-item-side">
+                  ${accion.impacto ? `<span class="wf-agent-impact">${escapeHtml(accion.impacto)}</span>` : ""}
+                  ${accion.canal ? `<span class="wf-agent-channel">${escapeHtml(accion.canal)}</span>` : ""}
+                  <div class="wf-agent-actions">
+                    <button type="button" class="wf-agent-ok">Aprobar</button>
+                    <button type="button" class="wf-agent-no">Descartar</button>
+                  </div>
+                </div>
+              </li>`,
+    )
+    .join("");
+
+  return `
+          <article class="wf-agent" data-reveal>
+            <div class="wf-agent-head">
+              <h2>${escapeHtml(agent.titulo)}</h2>
+              ${agent.resumen ? `<p class="wf-agent-sub">${escapeHtml(agent.resumen)}</p>` : ""}
+            </div>
+            <ul class="wf-agent-list">${acciones}</ul>
+          </article>`;
+}
+
+function renderNotes(notes: DashboardNotes): string {
+  const items = notes.items.length
+    ? notes.items
+        .map(
+          (nota) => `
+              <li class="wf-note">
+                ${nota.ancla ? `<span class="wf-note-ancla">${escapeHtml(nota.ancla)}</span>` : ""}
+                <p class="wf-note-text">${escapeHtml(nota.texto)}</p>
+                ${nota.meta ? `<span class="wf-note-meta">${escapeHtml(nota.meta)}</span>` : ""}
+              </li>`,
+        )
+        .join("")
+    : "";
+
+  return `
+          <article class="wf-notes" data-reveal>
+            <div class="wf-notes-head">
+              <h2>${escapeHtml(notes.titulo)}</h2>
+            </div>
+            ${
+              items
+                ? `<ul class="wf-notes-list">${items}</ul>`
+                : renderEmpty("Sin notas", "Lo que anotes queda a la vista del equipo.")
+            }
+          </article>`;
+}
+
 function renderCharts(charts: DashboardChart[]): string {
   if (!charts.length) {
     return "";
@@ -186,7 +306,7 @@ function renderCharts(charts: DashboardChart[]): string {
   const cards = charts
     .map(
       (chart) => `
-          <article class="wf-chart-card" data-reveal>
+          <article class="wf-chart-card wf-chart-card--${chart.type}" data-reveal>
             <div class="wf-chart-head">
               <h2>${escapeHtml(chart.title)}</h2>
               ${chart.unit ? `<span class="wf-chart-unit">${escapeHtml(chart.unit)}</span>` : ""}
@@ -651,7 +771,7 @@ export function renderDashboardDocument(client: DashboardClient): string {
     <meta property="og:title" content="${escapeHtml(client.seo.title)}">
     <meta property="og:description" content="${escapeHtml(client.seo.description)}">
     ${ogImage}
-    ${renderFontLinks(client.tipografia)}
+    ${renderFontLinks(client.tipografia, [DASHBOARD_MONO])}
     <script>try{var t=localStorage.getItem("wf-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <link rel="stylesheet" href="./site.css">
   </head>
@@ -721,6 +841,7 @@ body {
   font-family: var(--font-body);
   --wf-pos: #166534;
   --wf-neg: #b91c1c;
+  --wf-font-mono: "${DASHBOARD_MONO}", ui-monospace, "SFMono-Regular", "Menlo", monospace;
 ${seriesVars("light")}
 }
 
@@ -974,12 +1095,223 @@ h1, h2, h3 {
 
 /* Cifras de ancho fijo: sin esto los digitos cambian de ancho al actualizarse y
    el numero "baila" en el lugar; en la tabla, ademas, las columnas no alinean.
-   7 de 8 dashboards del corpus lo hacen (2026-08-30-como-se-hace-un-dashboard). */
+   7 de 8 dashboards del corpus lo hacen (2026-08-30-como-se-hace-un-dashboard).
+   Y van en la familia MONO: con una sola familia para todo, cifra y etiqueta
+   pesan igual y el panel se lee plano. El mono separa el dato del texto. */
 .wf-kpi-value,
 .wf-kpi-delta,
 .wf-chart-axis,
+.wf-agent-impact {
+  font-family: var(--wf-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* La tabla lleva tabular-nums para que las columnas alineen, pero NO la familia
+   mono: las celdas mezclan cifras con nombres propios, y un "Marta Rios" en mono
+   parece un log de sistema. El mono es para el DATO, no para el texto. */
 .wf-dash-table td {
   font-variant-numeric: tabular-nums;
+}
+
+/* ── Banda "que hago ahora": agente + notas ───────────────────────────────
+   Grid 7/5 en vez de mitades: la columna del agente carga texto y botones, la
+   de notas es una lista corta. Partirlo por la mitad dejaba la izquierda
+   apretada y la derecha vacia. */
+.wf-dash-act {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+@media (max-width: 900px) {
+  .wf-dash-act {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wf-agent,
+.wf-notes {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  min-width: 0;
+}
+
+.wf-agent-head,
+.wf-notes-head {
+  margin-bottom: 12px;
+}
+
+.wf-agent-head h2,
+.wf-notes-head h2 {
+  font-size: 1.05rem;
+}
+
+.wf-agent-sub {
+  margin-top: 3px;
+  font-size: 0.82rem;
+  color: var(--muted-foreground);
+}
+
+.wf-agent-list,
+.wf-notes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wf-agent-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 0 14px 12px;
+  border-top: 1px solid var(--border);
+  /* La urgencia entra por una barra en el borde, no por el fondo de la fila:
+     un fondo tenido compite con la tinta de dato de los charts de al lado. */
+  border-left: 3px solid transparent;
+}
+
+.wf-agent-item:first-child {
+  border-top: 0;
+}
+
+.wf-agent-item--alta {
+  border-left-color: var(--wf-neg);
+}
+
+.wf-agent-item--media {
+  border-left-color: var(--wf-series-5);
+}
+
+.wf-agent-item--baja {
+  border-left-color: var(--border);
+}
+
+.wf-agent-item-main {
+  min-width: 0;
+}
+
+.wf-agent-item-title {
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.wf-agent-item-detail {
+  margin-top: 3px;
+  font-size: 0.86rem;
+  color: var(--muted-foreground);
+}
+
+/* La evidencia es lo que separa una propuesta de una corazonada con botones. */
+.wf-agent-item-why {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+
+.wf-agent-why-label {
+  font-weight: 600;
+  color: var(--color-fg);
+  opacity: 0.75;
+}
+
+.wf-agent-item-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.wf-agent-impact {
+  font-weight: 600;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.wf-agent-channel {
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.wf-agent-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.wf-agent-ok,
+.wf-agent-no {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  min-height: 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.wf-agent-ok {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: transparent;
+}
+
+.wf-agent-ok:hover {
+  background: color-mix(in srgb, var(--color-primary) 86%, var(--color-fg) 14%);
+}
+
+.wf-agent-no {
+  background: transparent;
+  color: var(--muted-foreground);
+}
+
+.wf-agent-no:hover {
+  background: color-mix(in srgb, var(--color-fg) 6%, transparent);
+}
+
+.wf-agent-ok:focus-visible,
+.wf-agent-no:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.wf-note {
+  padding: 11px 0;
+  border-top: 1px solid var(--border);
+}
+
+.wf-note:first-child {
+  border-top: 0;
+}
+
+.wf-note-ancla {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 3px;
+}
+
+.wf-note-text {
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.wf-note-meta {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.74rem;
+  color: var(--muted-foreground);
 }
 
 .wf-kpi-value {
@@ -1049,6 +1381,15 @@ h1, h2, h3 {
 .wf-chart-card .wf-chart,
 .wf-chart-card .wf-donut-wrap {
   margin-block: auto;
+}
+
+/* El sparkline es ancho y bajo: en una celda de un tercio quedaba solo en su
+   propia fila, con dos tercios vacios al lado. Ocupa dos columnas, que es la
+   forma que la serie larga pide (12 semanas no entran legibles en 365px). */
+@media (min-width: 901px) {
+  .wf-chart-card--sparkline {
+    grid-column: span 2;
+  }
 }
 
 .wf-chart-head,

@@ -11,9 +11,11 @@
 
 export type TipografiaCliente = { heading: string; body: string };
 
-export function renderFontLinks(tipografia: TipografiaCliente): string {
+export function renderFontLinks(tipografia: TipografiaCliente, extras: string[] = []): string {
   const familias = [
-    ...new Set([tipografia.heading, tipografia.body].map((familia) => familia.trim()).filter(Boolean)),
+    ...new Set(
+      [tipografia.heading, tipografia.body, ...extras].map((familia) => familia.trim()).filter(Boolean),
+    ),
   ];
   if (familias.length === 0) return "";
   // Un <link> POR familia y rango variable 300..900: los templates piden pesos

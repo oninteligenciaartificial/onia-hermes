@@ -79,6 +79,25 @@ para cerrar huecos que frenan el build.
       tenía `preserveAspectRatio="none"`, que deformaba el trazo y volvía elipse el
       punto final. Yo había justificado las barras verdes como "una serie no compite":
       el corpus y el propio demo lo desmienten.
+- [x] **W7 · Rediseño del panel: de demo genérico a panel de clínica** (2026-08-30,
+      pedido de Sergio: *"demasiado simple, tipografía muy genérica, métricas sin
+      sentido… apartado de IA, apartado de notas"*). Tenía razón y se puede probar:
+      el demo usaba **Onest para display Y body**, y `MOTION_PATTERN_BANK:462` prohíbe
+      literal *"mono-sans"* y nombra a **Onest** entre las prohibidas como display.
+      Ahora: Bricolage Grotesque (display) + DM Sans (body) + Spline Sans Mono (datos),
+      que es lo que ese mismo banco manda para SaaS/producto.
+      **KPIs que deciden**, no que decoran: cada uno lleva la plata o el tiempo en
+      juego ("11 h de sillón sin usar — unos Bs 3.300"), en vez de "ticket promedio".
+      **Apartado de IA**: bandeja de propuestas del agente, cada una pegada a la
+      evidencia que la justifica, con Aprobar/Descartar — human-in-the-loop, como el
+      módulo `agents` del core, y es el punto 3 de la dirección que Sergio ratificó el
+      17-ago. Las 4 propuestas salen de capacidades que el core YA declara
+      (`scheduling`+`whatsapp`, `relationships`, `sales_cash`), no de fantasía.
+      **Apartado de notas**: maqueta visual con ancla a paciente/proveedor.
+      ⚠️ **Defecto de MI método, no del producto**: la captura fullPage sin scrollear
+      dejaba el 4º chart y la tabla en `opacity:0` (nunca disparaba el reveal) y
+      parecía que faltaran. Toda captura de una página con `[data-reveal]` se scrollea
+      antes. Las capturas anteriores de esta sesión pudieron ocultar contenido.
 - [ ] **W3 · Bugs de dato (los que MIENTEN).** `Math.max(value, 0)` en tres lugares
       aplasta los negativos a cero mientras el `<title>` sigue mostrando el número
       real: un reembolso o un churn se dibuja como cero. + el último punto del eje X
