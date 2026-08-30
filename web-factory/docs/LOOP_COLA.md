@@ -1,141 +1,98 @@
-# Cola del loop de desarrollo — carril web-factory (cliente de prueba)
+# Loop web-factory — cola de trabajo (analizar ⇄ desarrollar)
 
-> La leen los runs del scheduled-task `web-factory-dev-loop` (sesiones frescas
-> sin contexto). Reglas primero, cola después. Se EDITA al completar tareas.
+> La leen los dos crons in-session. **Regla madre: el loop SIEMPRE trabaja** —
+> cada vuelta o DESARROLLA (construye) o ANALIZA (aprende) y refina. Nunca se
+> queda sin tarea: si un carril se vacía, el de análisis genera la próxima desde
+> el catálogo o los huecos del crítico.
+
+## FOCO (lo que perseguimos ahora)
+
+Convertir el **catálogo de técnicas verificado** (`docs/WEB_FACTORY_TECNICAS_2026.md`,
+`WEB_FACTORY_FORMULA_2026.md`, `2026-08-29-*.md`) en **webs y dashboard reales de
+Onia**: on-brand, animados (Next/React + motion.dev/GSAP, o estático CSS según
+tier), y **conectados a Onia Platform** (form → lead). Seguir aprendiendo solo
+para cerrar huecos que frenan el build.
 
 ## Reglas duras del run
 
 1. **Worktree**: `C:\dev\proyectos\onia-hermes\.claude\worktrees\hyperframes-onia-export-formats-053cf9`
-   — rama `claude/onia-web-architecture-b37eca`. NO trabajar en otro checkout.
-2. **Anti-choque**: si `git status --short` NO está limpio → hay otra mano en el
-   árbol: NO tocar código; solo verificar salud (regla 5) y salir.
-3. **Zona propia**: `web-factory/{data,packages,generate,out,tests,docs,FACTORY.md}`
-   + `.claude/skills/onia-web-factory/`. PROHIBIDO tocar `web-factory/apps/**`,
+   — rama `claude/onia-web-architecture-b37eca`. NO otro checkout.
+2. **Anti-choque**: `git status --short` sucio de OTRA mano → NO tocar código,
+   solo salud, y salir.
+3. **Zona propia**: `web-factory/{data,packages,generate,out,tests,docs,FACTORY.md,apps/dental-premium}`
+   + `.claude/skills/onia-web-factory/`. PROHIBIDO `web-factory/apps/{onia-platform,site,dentalgest-landing}`,
    `hermes-content/docs/**` (salvo `handoff/web-factory-cliente-prueba.md`) y n8n.
-4. **Una tarea por run**, la primera no-bloqueada de la cola. Gates antes de
-   commit: `pnpm typecheck:packages` + `pnpm test` (desde `web-factory/`), y si
-   se tocó template/bloque: rebuild demo
-   (`pnpm factory:build --input data/intakes/dental-amanecer.intake.json --force`)
-   + capturar con el script del scratchpad si existe, o al menos servir y mirar.
-   Commit conventional (sin firma de Claude) + push. Marcar la tarea `[x]` acá.
-5. **Salud** (siempre, aun con árbol sucio): server `http://localhost:4319/dental-amanecer/`
-   responde 200 (si no: `node scripts/serve-out.mjs 4319` en background desde
-   `web-factory/`); rama pusheada (`git log origin/... -1`).
-6. Contexto del carril: `hermes-content/docs/handoff/web-factory-cliente-prueba.md`
-   y fichas en `web-factory/data/references/design-sources/2026-08-29-*.md`.
+4. **UNA tarea por vuelta**, la primera no-bloqueada del carril que toque. Gates
+   antes de commit: `pnpm typecheck:packages` (+ `pnpm test` si tocás packages;
+   `tsc --noEmit` en `apps/dental-premium` si la tocás) + **mirar renderizado**.
+   Commit conventional (por qué, en español, sin firma) + push. Marcar `[x]`.
+5. **Tachadas NO se rehacen. Bloqueado por decisión de Sergio → PushNotification
+   y seguir con lo desbloqueado.** Nada de cirugía inventada.
 
-## 🔴 FUENTE DEL BACKLOG (no duplicar)
+## Runbook de salud (el cron de análisis lo corre; auto-REMEDIAR)
 
-El backlog REAL de web-factory, sacado del análisis de reels, vive en
-`hermes-content/references/video-intake/sesiones/web-factory.md` — 20 prompts
-ordenados (C1 → B1 → B2 → footers → popups → GSAP scroll → DESIGN.md → …) cada
-uno con su LISTO y sus gates. **Esa es la cola maestra.** Esta sección "Cola" de
-abajo es solo el frente de ESTA sesión (cliente de prueba + conocimiento); las
-tareas grandes se toman de allá, en su orden, aplicando su Gate 1 (¿ya está
-hecho? mirá el repo, no el prompt — varios bloques de B1 ya existen).
+1. Server `curl -s -o/dev/null -w "%{http_code}" http://localhost:4319/dental-amanecer/` ≠200
+   → `node scripts/serve-out.mjs 4319` en background desde `web-factory/`.
+2. Rama pusheada (`git log origin/… -1` == `git log HEAD -1`); commits locales → push.
+   Árbol sucio de otra mano → no commitear, avisar.
+3. `pnpm typecheck:packages` verde; rojo en zona → arreglar mínimo y commitear.
+4. Node zombies de tests viejos → matar. Cerrar con la prueba (200, hash, exit 0).
 
-## Los dos loops (in-session, CronCreate)
+---
 
-- **TAREAS / desarrollo — cada 5 min.** Hace UNA tarea de la Cola por vuelta.
-- **ANÁLISIS+DIRECCIÓN — cada 10 min.** Salud auto-remediable + analiza el
-  avance y **reordena esta Cola** poniendo lo más valioso primero (hoy: cerrar
-  los rubros SIN ANCLA del crítico). Es el que dirige; el de tareas ejecuta.
+## CARRIL A — DESARROLLAR (build; el cron de tareas tira de acá primero)
 
-## Disciplina del loop (del ejemplo del carril chatbot, 2026-08-29)
+- [ ] **A1 · Dashboard: charts a tema categórico + gauge.** Hoy las series salen
+      todas en verde de marca (Real/Meta y donut cuestan de distinguir — el
+      crítico lo marcó). Usar el theme categórico de la skill `dataviz`
+      (`references/palette.md`) para las series, correr `scripts/validate_palette.js`,
+      y agregar tipo `gauge`/radial para tasas. Rebuild + mirar.
+- [ ] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
+      `WEB_FACTORY_TECNICAS_2026.md`, las que 2+ sitios usan y son CSS-only o
+      motion.dev (feature-en-banda-de-color, statement full-screen, marquee CSS,
+      hover-lift). Una por vuelta: bloque tipado + tokens ONIA + reduced-motion +
+      render de prueba + `typecheck:packages`.
+- [ ] **A3 · Reproducir sitio #2 (estilo contrastante).** Un SaaS estilo Readily
+      o un editorial-bold, en `apps/dental-premium` (o app nueva), aplicando el
+      catálogo, conectado a Onia (`/api/lead`). Prueba de que el catálogo sirve
+      fuera del warm-premium. [entregable de Sergio]
+- [ ] **A4 · Pulido de dental-premium:** dark mode mirado + spotlight en touch +
+      cablear texturas SVG si Sergio dio OK.
 
-- **UNA fase/tarea por vuelta**, la primera no-bloqueada. No abrir dos frentes.
-- **Las tachadas NO se rehacen.** Lo marcado `[x]` está hecho; no se re-audita.
-- **Bloqueado con decisión de Sergio → `PushNotification` y seguir con lo
-  desbloqueado.** El loop nunca se frena esperando; salta a la próxima tarea.
-- **Gates antes de dar por hecho** (regla 4). Verificar MIRANDO cuando toca UI.
-- **Nada de cirugía inventada**: si una tarea no tiene receta clara, no se
-  improvisa — se anota y se avisa.
+## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
-## Runbook de salud (auto-REMEDIAR, no solo mirar)
+- [ ] **B1 · Cerrar rubros SIN-ANCLA** (`2026-08-29-critico-limites.md`): cosecha
+      dirigida (Scrapling `Fetcher.get(impersonate=chrome)` + seguir CSS/preload)
+      de `dental real`, `ganadero/agtech`, `importadora/logística B2B`, `IA`. 2
+      sitios por rubro; reescribir su sección del playbook cambiando "SIN ANCLA"
+      por dato real.
+- [ ] **B2 · Rubros flacos:** wellness quedó N=1; cosechar 2-3 más. Skincare +2.
+- [ ] **B3 · Update skill `ui-ux-pro-max`** a v2.13 (`uipro-cli`, MIT) — solo local.
 
-Cada ítem: verificar → si roto, aplicar el arreglo conocido → si no hay arreglo
-conocido, `PushNotification` a Sergio. Nunca inventar.
+## Regla de alternancia (cómo el loop "siempre trabaja")
 
-1. **Server 4319**: `curl -s -o /dev/null -w "%{http_code}" http://localhost:4319/dental-amanecer/`
-   ≠200 → `node scripts/serve-out.mjs 4319` en background desde `web-factory/`.
-2. **Rama pusheada**: `git log origin/claude/onia-web-architecture-b37eca -1` debe
-   igualar `git log HEAD -1`. Si hay commits locales sin push → `git push`. Si
-   árbol sucio de OTRA mano (cambios que no hice este run) → NO commitear, avisar.
-3. **typecheck:packages verde**: desde `web-factory/` `pnpm typecheck:packages`.
-   Rojo → arreglar la causa mínima en zona propia y commitear el fix con su
-   porqué. Si el error es fuera de zona → PushNotification.
-4. **Sin zombies**: procesos node de corridas de test viejas colgadas → matar.
-5. **Prueba**: cerrar con la línea de estado + el código real que la respalda
-   (200, hash del push, exit 0). Un grep no es prueba.
-
-## Cola (orden = prioridad)
-
-- [ ] **P0 cosecha SIN-ancla** (cierra los huecos del crítico, ver
-      `2026-08-29-critico-limites.md`): con `scratchpad/corpus-harvest.py`
-      ampliar CATS a rubros que faltan y correr 1 tanda por vuelta —
-      `dental real` (clínicas dentales, no salud mental), `ganadero/agtech`,
-      `importadora/logística B2B`, `IA/agentes`. Despiezar 2 por rubro
-      (Scrapling Fetcher + seguir CSS externo para tipografía real) y
-      reescribir la sección de ese rubro en `2026-08-29-vertical-playbooks.md`
-      cambiando "SIN ANCLA" por el dato real. Re-cosechar también el CSS de los
-      11 sitios con `fonts:[]` (getnudge, maxima, maticrobots, readily, sutera…).
-
-- [ ] **Minado lapa — tandas siguientes** (misma receta que la tanda 1, ver
-      ficha del barrido): 1 categoría por run, en orden `ecommerce` →
-      `agency`/`business` → `beauty` → `food-drinks`. Usar
-      `Fetcher.get(stealthy_headers=True, impersonate="chrome")`; el script
-      vive en el scratchpad de la sesión.
-- [ ] **Update skill ui-ux-pro-max**: el repo va por v2.13 con `gallery/` y
-      `stack/` nuevos; la instalada es anterior. Ver mecanismo oficial
-      (`uipro-cli` npm, MIT) y actualizar SOLO la skill local.
-- [ ] **Spotlight móvil**: verificar que en touch (sin hover) nada raro quede
-      renderizado (captura 360px y mirar).
-- [ ] **Dark de la demo**: capturar dental-amanecer con prefers-color-scheme
-      dark (los tokens traen bloque dark) y mirar contraste banda tinta/strip.
-
-## TAREA GRANDE — Dashboards (pedido Sergio 2026-08-29)
-
-Aprender de ~30 dashboards reales para MEJORAR el nuestro y cambiarlo.
-- [x] Baseline capturado: nuestro `dashboard-demo` (template `dashboard.ts`) —
-      funciona pero genérico (acento violeta, no la marca Onia).
-      Captura: `scratchpad/dash/nuestro-actual.png`.
-- [ ] Cosechar ~30 referencias (Grafana Play, shadcn examples, Tremor, admin
-      templates, demos analytics) — `scratchpad/shoot-dash.js`. Renderizan por
-      navegador (no Scrapling). Guardar en `scratchpad/dash/refs/`.
-- [ ] Analizar: jerarquía info, fila de KPIs, estado por forma+color, sparklines/
-      charts, color semántico ≠ acento, densidad. Cruzar con
-      `docs/DASHBOARD_PATTERN_BANK_2026.md` (ya existe) + skill `dataviz`.
-- [ ] Mejorar el template `packages/templates/src/dashboard.ts` (NUESTRA zona) a
-      la marca Onia (verde/warm) + los patrones aprendidos; demo renderizado y
-      mirado.
-- [ ] PROPUESTA de rediseño del dashboard de Onia Platform (admin real) — ese
-      vive en `onia-platform`/`onia-center` (OTRA lane): se propone y se coordina,
-      no se toca desde acá.
+- El **cron de tareas (5 min)** hace la próxima de **A**. Si A está todo `[x]` o
+  bloqueado, hace la próxima de **B**.
+- El **cron de análisis (10 min)** hace salud → analiza el avance → **reordena** y
+  **REFILL**: si A quedó corto, agrega la próxima tarea A concreta sacada del
+  catálogo (p.ej. "portar técnica T-N"); si B cerró un hueco, agrega el siguiente.
+  Nunca deja A y B vacíos a la vez.
+- Un hallazgo de B que desbloquea un build entra como tarea A. Un hueco que un
+  build A revela entra como tarea B. Los dos carriles se alimentan.
 
 ## Bloqueadas (esperan a Sergio)
 
-- [ ] Bloques nuevos: cifra-editorial · quote-única · features numeradas+device
-      (propuesta enviada; sin OK no se implementan — regla de formas nuevas).
-- [ ] Cablear texturas SVG (`textura-ondas.svg`/`textura-arco.svg`) en bandas.
+- [ ] Bloques cifra-editorial · quote-única · features+device (propuesta enviada).
+- [ ] Rediseño del dashboard admin real (onia-platform/onia-center = otra lane):
+      se propone y coordina, no se toca desde acá.
 
-## Hechas (por runs o por la sesión madre)
+## Hechas (no rehacer)
 
-- [x] **Estética/beauty anclada** (2026-08-29). Cosechada categoría `beauty` de
-      lapa; despiece de ONSKN (onskn.com) = primer dato real del sub-eje
-      skincare (nude cálido + blush + charcoal), distinto del wellness crema.
-      Inyectado en §2 del playbook. N=1: cosechar 2-3 skincare más.
-- [x] **Re-cosecha CSS/fuentes de los 14 sitios `fonts:[]`** (2026-08-29). Los
-      builder/Next ocultan la fuente en `var()` + archivos hasheados; se saca del
-      `<link rel=preload as=font>`. Hallazgo: "PP Fragment Glare" era real, de
-      **readily.ai (SaaS)**, mal-atribuida a dental — corregido en el libro de
-      límites. Método anotado en la ficha lapa-scrapling. Next hasheados
-      (joindawn) = no recuperables por HTTP: se dice, no se inventa.
-
-- [x] **Minado lapa con Scrapling** — tanda 1 `health-fitness` hecha (2026-08-29).
-      El 403 lo pasa `Fetcher.get(impersonate="chrome")`, NO el StealthyFetcher
-      (no arranca acá: `spawn UNKNOWN` bajo el contenedor MSIX). Slugs reales +
-      3 mejores landings del rubro salud (Baba Care · Frequency Breathwork ·
-      Dawn) en la ficha del barrido. Quedan tandas: `ecommerce`,
-      `agency`/`business`, `beauty`, `food-drinks` — se reponen abajo.
-- [x] 2026-08-29 sesión: dirección salud-premium (pesos+miel) · spotlight card ·
-      banda tinta · circuito API clinic · fixes Vercel/tsc · barrido 1→15.
+- [x] **Catálogo de técnicas de 16 sitios** verificado 2× por el crítico (LISTO,
+      cero inventos) + galería de 49 en `gallery-50/` + recetas + "cómo se hacen".
+- [x] **Dashboard v1**: marca Onia + sparkline-en-KPI + celda hero (bug del schema
+      que descartaba spark/variant, arreglado). Baseline/mejorado en `scratchpad/dash/`.
+- [x] **dental-premium**: sitio Next/React animado (motion.dev + GSAP) conectado a
+      Onia (`/api/lead`), autosave del form (regla UX 12), dirección salud-premium.
+- [x] Estética/beauty anclada (ONSKN) · re-cosecha fuentes por preload · tanda
+      health-fitness · barrido 1→15 · reglas UX @agenticmatt.
