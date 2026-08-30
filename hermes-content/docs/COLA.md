@@ -33,49 +33,59 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ---
 
-## Ahora — plan de features (2026-08-30)
+## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-Ordenado por plata. Los cuatro primeros son **agujeros que ya cuestan ventas**, verificados
-en vivo hoy, no heredados. Los dos últimos son desarrollo de verdad.
+> **Cuatro de los seis ítems del plan de la mañana murieron al verificarlos.** No estaban
+> hechos "más o menos": estaban hechos, o estaban decididos, o el costo era otro. Queda
+> escrito acá para que ninguna sesión los vuelva a abrir.
 
-- [ ] **F1 · El rubro de servicios profesionales no se puede vender.** Su nav tiene "Citas"
-      (`/appointments`) pero **no tiene `/patients`**, y la lista blanca de rutas se deriva
-      del nav (`declaredSegments`): la pantalla para cargar a quién citar queda bloqueada.
-      Un abogado o un contador entra, ve la agenda, y no tiene cómo cargar un cliente.
-      Es el rubro #4 y el que más negocios formales tiene en Bolivia.
-      **Arreglo:** sumar `/patients` a `SERVICIOS_NAV_ITEMS` en `lib/platform/vertical-pack.ts`
-      (línea ~353). El renombrado por vocabulario ya existe (`vertical-pack.ts:450` mapea
-      `/patients` → `vocab.clientes`). Test primero: que el gate deje pasar `/patients` para
-      `gestios-servicios-profesionales`. Después ABRIR la pantalla con sesión y MIRARLA.
-- [ ] **F2 · Tres llaves de add-on que se cobran y no abren nada.**
-      `addon.inventory_advanced`, `addon.chatbot` y `addon.web` se calculan en
-      `lib/platform/entitlements.ts` y se pueden encender por organización, pero **cero
-      referencias en `app/` y `components/`** — sólo aparecen en
-      `components/layout/navigation.test.ts`. Verificado hoy con grep. Encender el add-on
-      no cambia una sola pantalla. **Vender "inventario avanzado" hoy es cobrar por una
-      llave que no abre ninguna puerta.**
-      **Arreglo:** gatear el ítem de nav de cada uno por su clave (el precedente ya existe:
-      `/agents` se gatea con `module.agents`). Si un add-on no tiene pantalla propia todavía,
-      **sacarlo de la lista de precios** hasta que la tenga — no dejarlo cobrable.
-- [ ] **F3 · Un módulo entero es inalcanzable.** `/requerimientos` tiene portal público con
-      token, endpoints y e2e propios, y está en los segmentos comunes a todos los rubros.
-      **Cero `href` en todo el repo** (verificado hoy): sólo se llega tipeando la URL.
-      Es una capacidad ya construida y pagada que ningún cliente puede encontrar.
-      **Arreglo:** una entrada de nav en los packs que la usen, o una acción rápida. Barato.
-- [ ] **F4 · El agente que trae clientes nunca se enciende.** `/var/log/onia-agents-cron.log`
-      muestra 14 días seguidos de corridas OK, y en TODAS `captador` sale
-      `skippedReason: "kind_not_enabled"` para todas las orgs. Recall y cobrador corren; el
-      captador no. **Averiguar primero si es a propósito** (puede que dependa de un canal que
-      no está) antes de encenderlo.
-- [ ] **F5 · Separar paciente de responsable → desbloquea veterinaria (rubro #6).**
-      `Invoice.patientId` es obligatorio y la factura toma nombre y NIT **del paciente**: una
-      veterinaria no puede facturarle al dueño. Es el modelo, no un texto. Esto es desarrollo
-      de schema con migración — **no se toma en la misma vuelta que F1-F4**, y se decide con
-      Sergio si el 6to rubro vale la migración.
-- [ ] **F6 · El sistema no arranca vacío.** El cliente paga, entra, y ve cero filas: es el
-      momento donde se pierde la suscripción. **Gate 1 antes de codear:** ya existe
-      `lib/platform/demo-provisioning.ts` — leerlo y ver qué siembra hoy. Puede que esté
-      hecho y sólo no se dispare en el alta real.
+- [ ] **F2 · `/inbox` no está gateado y el chatbot SÍ se cobra.** Es el único de los tres
+      add-ons que cuesta plata de verdad. La bandeja del asistente entró al nav de **todos**
+      los packs el 2026-08-30 y **no tiene `requiresFeature`**: el que no paga los Bs 390 ve
+      la misma pantalla que el que sí. Además `addon.chatbot` **ni se deriva** en
+      `entitlements.ts` (sólo `inventoryAddon` se deriva).
+      **Arreglo:** derivar la clave y gatear el ítem de nav, con el precedente de `/agents`
+      (`requiresFeature: "module.agents"`). Test primero: un pack sin la clave no declara el
+      segmento `inbox`. Ojo con el fail-closed: gatear mal deja sin bandeja al que ya paga.
+- [ ] **F3 · `/requerimientos` sigue inalcanzable.** Portal público con token, endpoints y
+      e2e propios; **cero `href` en todo el repo** (verificado hoy). Una capacidad ya
+      construida que ningún cliente puede encontrar. Es el único ítem del plan que sobrevivió
+      entero a la verificación. Arreglo barato: una entrada de nav o una acción rápida.
+- [ ] **F5 · Veterinaria — COTIZADA el 2026-08-30, decide Sergio.** El bloqueo es real pero
+      **el costo estaba inflado**. No es "migrar datos vivos":
+      - La factura toma el CI del paciente en **un solo lugar**: `lib/fiscal/rcv-export.ts:148`
+        (`invoice.patient?.ci` → `nitCliente`).
+      - El arreglo mínimo son **columnas anulables** de responsable en `Patient` + una lectura
+        con fallback (`responsable?.ci ?? patient.ci`). **Cero backfill**: las filas que ya
+        existen se comportan igual que hoy.
+      - Superficie: `patientId` aparece 24 veces en `schema.prisma` y 49 archivos lo tocan,
+        **pero ninguno se toca en esta versión** — el fallback los deja intactos.
+      - Falta: el bloque "responsable / quién paga" en el alta de paciente, mostrado por
+        vocabulario sólo en el track veterinaria.
+      **Riesgo real: bajo.** Es una migración aditiva. Lo que hay que decidir no es el riesgo,
+      es si el 6to rubro vale la semana antes de estrenar los cinco que ya se venden.
+
+## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
+
+- **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
+  lo vi en rojo, hice el cambio — y **dos guardas del repo lo cazaron como regresión.**
+  El bug YA estaba arreglado el 2026-08-30, y **a propósito de otra forma**: la ficha
+  (`patients/[id]`, `medical-alerts`, `records`) es de los packs **clínicos**, así que abrir
+  el segmento le daba la ficha clínica a un estudio contable con sus APIs en 403. El arreglo
+  real es **alta inline del cliente en el modal de nueva cita** contra `/api/patients`
+  (`app/(dashboard)/appointments/page.tsx:129-143`). Revertido, árbol limpio.
+  **Lección:** hice grep del nav —que es estructura— y concluí sobre la capacidad. Es el
+  mismo error de "contar menciones de archivo en vez de capacidad" que ya me marcaron.
+- **F2 · Gatear `addon.inventory_advanced`.** Sergio ya lo decidió el 2026-08-27: *"no se
+  cobra"*. El add-on se retiró de la oferta y las funciones quedaron gratis para todos. Que
+  la clave no la lea nadie es ahora **lo correcto**. Está escrito en `lib/pricing.ts:120`.
+- **F2 · Gatear `addon.web`.** La web del cliente la entrega **web-factory**, otro repo. No
+  tiene ni debería tener pantalla en la plataforma. La clave es decorativa.
+- **F4 · Encender el agente `captador`.** Está apagado **por diseño**, no por olvido.
+  `agents-runtime.ts:1152` lo dice: *"Sin esto, cada clínica dental y cada veterinaria
+  estrenaría una fila 'captador inmobiliario'"*. Es un add-on con `requiresFeature`, y su
+  copy es **inmobiliario** ("nunca inventa datos del inmueble") — un rubro que ni siquiera
+  se ofrece. `kind_not_enabled` en 14 días de log = nadie lo compró. Funciona como debe.
 
 ### Arrastre de la cola anterior
 
@@ -119,6 +129,12 @@ en vivo hoy, no heredados. Los dos últimos son desarrollo de verdad.
 - **UI/UX del dashboard** — lo lleva la sesión de web-factory, no esta.
 
 ## Cerrado (2026-08-30) — no rehacer
+
+- [x] **Corregido el catálogo de venta en 5 puntos** — todos porque estaba viejo, y cuatro de
+      los cinco **subvendían** el producto: los cinco rubros ofrecidos ya se venden (decía
+      tres), servicios profesionales está arreglado (decía "en arreglo"), el add-on de
+      inventario está retirado por decisión de Sergio (decía "en revisión"), veterinaria es
+      mucho más barata de lo que decía, y los agentes corren solos (decía que no).
 
 - [x] **PR #56 mergeado** (`14fa528`): el registro ofrece demo al que no sabe configurarlo.
       Lint/Typecheck/Tests/Build y Secret scan en verde; el check de Vercel falló por

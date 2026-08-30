@@ -53,8 +53,10 @@ después del primer cierre.
 ## 2. Rubros
 
 El código declara siete tracks (`SUPPORTED_VERTICAL_TRACK_IDS`) y ofrece cinco en el
-formulario de acceso (`lib/platform/rubros-activos.ts`). **El corte de venta real es de
-TRES**, porque uno de los cinco ofrecidos está bloqueado por un bug de nav.
+formulario de acceso (`lib/platform/rubros-activos.ts`). **Desde el 2026-08-30 los CINCO
+ofrecidos se pueden vender**: el que faltaba (servicios profesionales) se destrabó y el
+formulario y el producto vuelven a decir lo mismo. Antes acá decía "el corte real es de
+TRES" — quedó viejo y le sacaba un rubro a la venta sin motivo.
 
 | Rubro | Track | Se vende hoy |
 |---|---|---|
@@ -62,8 +64,8 @@ TRES**, porque uno de los cinco ofrecidos está bloqueado por un bug de nav.
 | Estética y spa | `esteticagest-clinical` | ✅ **sí** — es la MISMA nav dental con el vocabulario cambiado (`navClinicaDe`), no un rubro aparte. Calza porque la clienta es una persona con CI y es quien recibe la factura |
 | Comercio / ferretería / tienda | `gestios-general` | ✅ **sí** — catálogo, inventario, caja, fiados |
 | Importadora / distribuidora | `proveegest-electrico` | ⚠️ **sí, ACOTADO** — se venden **cotizaciones B2B + costeo de importación**, y nada más del rubro. Fuera de eso no hay pantallas propias |
-| Servicios profesionales | `gestios-servicios-profesionales` | 🔧 **NO — en arreglo ahora mismo.** Su nav tiene "Citas" pero **no tiene `/patients`**, y la lista blanca de rutas se deriva del nav (`declaredSegments`), así que la pantalla para crear a quién citar queda **bloqueada**. Se está corrigiendo en otra rama; no se ofrece hasta que esté |
-| Veterinaria | `vetgest-clinical` | ⛔ **NO — bloqueo de SCHEMA, no comercial.** `Invoice.patientId` es obligatorio y la factura toma **nombre y NIT del paciente**: en una veterinaria el paciente es el animal y el que paga es el dueño, así que no puede facturarle a nadie sin cargar al dueño como paciente. Vuelve cuando exista la separación paciente/responsable |
+| Servicios profesionales | `gestios-servicios-profesionales` | ✅ **sí — arreglado y verificado el 2026-08-30.** Acá decía "NO, en arreglo": quedó viejo y **costaba un rubro entero**. El arreglo ya está en `master` y **no fue abrirle `/patients`** (eso le daría la ficha clínica —`medical-alerts`, `records`— a un estudio contable, con sus APIs devolviendo 403): es **alta inline del cliente en el propio modal de nueva cita**, contra `/api/patients`, que sí es suya (`CON_AGENDA`). Verificado en `app/(dashboard)/appointments/page.tsx:129-143` y con tres guards en `page.test.ts` |
+| Veterinaria | `vetgest-clinical` | ⛔ **NO todavía — pero es MÁS BARATO de lo que decía acá.** El bloqueo es real: la factura toma el CI del paciente (`lib/fiscal/rcv-export.ts:148`, `invoice.patient?.ci` → `nitCliente`), y en una veterinaria el paciente es el animal. **Lo que era falso es el costo:** esto NO es "migrar datos vivos". Es agregar columnas **anulables** de responsable a `Patient` y una lectura con fallback (`responsable?.ci ?? patient.ci`), así que **las filas que ya existen siguen funcionando sin backfill**. Cotizado el 2026-08-30 — ver el detalle en `COLA.md` |
 | Ganadería | `ganadero-offline` | ⛔ **NO.** El track está encendido y las orgs que ya existen siguen andando, pero no hay entidades de hacienda ni sanidad: es el catálogo de comercio con otro nombre. Además el nombre promete **modo offline que no existe** |
 
 **Regla:** un rubro nuevo se ENCIENDE desde el core, no se escribe de cero. El core declara
@@ -125,16 +127,19 @@ Se venden **después del primer cierre**, sobre cualquier plan. Precios: `lib/pr
 | **Chatbot a medida** | integración con el sistema del cliente o flujos propios. **Sin precio de lista**: se define el alcance y recién ahí se cotiza | por definición, a pedido |
 | Agenda pública | link de reserva sin llamadas | 🟢 |
 | Usuario extra | asiento adicional | 🟢 |
-| Inventario avanzado | compras, proveedores, vencimientos, alertas | 🔧 **en revisión** — ver abajo |
+| ~~Inventario avanzado~~ | — | ⛔ **RETIRADO de la oferta (Sergio, 2026-08-27: "no se cobra").** Las funciones NO se quitaron: compras a crédito, proveedores, alertas de stock bajo y vencimientos por lote siguen disponibles **para todos, gratis**. Lo que se quitó es el cobro — cobrar Bs 180 por lo que el cliente ya tiene es una promesa que no sobrevive a la primera pregunta. Ver el bloque de decisión en `lib/pricing.ts:120` |
 | Self-hosted | instalación en servidor del cliente | 🟡 |
 
-⚠️ **Tres claves de add-on se calculan y no las lee nadie.** `lib/platform/entitlements.ts`
-deriva `addon.inventory_advanced` (desde `org.inventoryAddon`), y el catálogo declara
-`addon.chatbot` y `addon.web` — pero **ningún archivo de `app/`, `lib/` o `components/`
-consulta esas tres claves**, y ningún ítem de nav las exige (el único item gateado por
-feature es `/agents`, con `module.agents`). Encender esos add-ons hoy no cambia lo que ve
-el cliente. **Se está arreglando en otra rama**: hasta que cierre, no se cobra "inventario
-avanzado" como si fuera una pantalla distinta.
+⚠️ **Las tres claves de add-on siguen sin lector — revisado una por una el 2026-08-30.**
+Ningún archivo de `app/` o `components/` consulta `addon.inventory_advanced`,
+`addon.chatbot` ni `addon.web`; el único ítem de nav gateado por feature es `/agents`
+(`module.agents`). Pero **no es el mismo problema en las tres**:
+
+| Clave | Qué pasa de verdad | Qué corresponde |
+|---|---|---|
+| `addon.inventory_advanced` | **Ya resuelto.** El add-on se retiró de la oferta el 2026-08-27. Que la clave no la lea nadie es ahora lo correcto, no un bug | nada — cerrado |
+| `addon.chatbot` | 🔴 **Este sí cuesta plata.** El chatbot **se cobra** (Bs 390/mes) y su bandeja `/inbox` **está en el nav de TODOS los packs sin ningún gate** desde el 2026-08-30. El que no lo paga ve la misma pantalla que el que sí | gatear `/inbox` con `requiresFeature: "addon.chatbot"`, y derivar la clave en `entitlements.ts` (hoy ni siquiera se calcula) |
+| `addon.web` | La web del cliente la entrega **web-factory**, otro repo, y no tiene ni debería tener pantalla en la plataforma | sacar la clave del catálogo, o dejarla documentada como decorativa |
 
 **Servicios que no son software:**
 
