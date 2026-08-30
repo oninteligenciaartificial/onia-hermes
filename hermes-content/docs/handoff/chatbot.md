@@ -476,3 +476,29 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   perpetuo re-armado (678de3f1 cada 1min: analiza-y-desarrolla, nunca sin-novedad),
   loop orden re-armado (63ae20ad cada 15min, ahora re-aplica LOS SEIS configs de
   branding). Skill onia-deploy con leccion ajena preservada (a08a2d0).
+
+## Sesion 2026-08-30 (tarde) — objetivo "todo usable" + loop arreglado de raiz
+
+- Decisiones Sergio (AskUserQuestion): insistencia ENCENDIDA por defecto · push movil
+  ADELANTADO · pricing = armar propuesta comparativa (Sendy/Lety/Dapta + valor
+  web-conectada para Bolivia) y RE-PREGUNTAR con numeros.
+- ✅ DOCS AL DIA (0af5452f): linea de entrega + alta WhatsApp (decian "no existe la
+  Configuracion"/"env vacias" — falso desde 28-ago), skill del carril (5 piezas nuevas
+  mapeadas), catalogo de venta (chatbot "vivo", ya no "gateado por Meta") + memoria.
+- ✅ LOOP ARREGLADO: crons zombis duplicados (revivian tras morir la sesion) purgados.
+  Mecanismo real = turno continuo de trabajo + cron orden 15min (63ae20ad) + Monitor
+  popup by3aon06m. Los one-shot de ScheduleWakeup tampoco disparaban confiable.
+- ✅ v6.6 INSISTENCIA fase A+B COMPLETA Y VIVA:
+  - Doc: campo seguimiento {activo bool, horas 1-48} — kind bool nuevo en AMBOS
+    validadores (motor 603/603 + espejo platform, commit 5df8f53 sobre PR 56 ajeno).
+    Ausente = ON con 2h (default vive en el lector; docs viejos validan).
+  - Barrido insistencia-run.mjs + .sh (deriva del followup: CAS reserveFollowUp,
+    deliver, dedup) + cron VPS */30 12-23 UTC. Candado org: solo inboxes que resuelven
+    a org (source db). inboxId ahora PERSISTE en raw de bot_conversations
+    (fillFromSeed — bug cazado en E2E round 1; round 2 cazo sin_org por URL default;
+    round 3 cazo dryRun del config que no lee env — TODOS arreglados).
+  - E2E REAL EN PROD: conv QA 43 "hola" → bot M0R → barrido --now +3h →
+    "¿Seguis por ahi? ... Sergio te la contesta" SENT + step=1 (una sola vez).
+  - Falta fase C (proxima): perilla UI en /settings/chatbot + seccion Seguimiento en
+    el diff del editor conversacional. El default ON ya trabaja sin UI.
+- Proximo orden: v6.6-C → push "te escribieron" → propuesta pricing → v6.7 → v6.8.
