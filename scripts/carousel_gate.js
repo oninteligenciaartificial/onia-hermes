@@ -258,13 +258,17 @@ function revisar(brief, pack, baseDir = process.cwd()) {
   // verde y el render tambien; solo aparecio al MIRAR el PNG. Medido en ese render: 20
   // caracteres entran, 22 se cortan. Va como aviso y no como error porque el limite depende
   // del pack y del ancho de las letras — pero un aviso mira el problema antes que el ojo.
+  // ⚠️ RECALIBRADO el 2026-08-30 de 20 a 16. El umbral de 20 salio de medir "entra 20, se corta
+  // 22" y NO se probo el 21. En L11 "la cabeza de alguien" tiene EXACTAMENTE 20 y raspa el borde:
+  // el aviso no salto y el defecto llego al render. Medir dos puntos y trazar la raya en el mayor
+  // que entro es optimismo; la raya va en el mayor que entro CON HOLGURA ("no la puso nadie", 16).
   slides.forEach((s, i) => {
     for (const campo of ['headline', 'body']) {
       const v = s[campo];
       if (typeof v !== 'string') continue;
       for (const m of v.match(/\*([^*]+)\*/g) || []) {
         const texto = m.slice(1, -1);
-        if (campo === 'headline' && texto.length > 20) {
+        if (campo === 'headline' && texto.length > 16) {
           problemas.push({
             nivel: 'aviso', regla: 'resaltado-largo', lamina: s.number || i + 1,
             msg: `el resaltado "${texto}" tiene ${texto.length} caracteres: arriba de 20 se corta`
