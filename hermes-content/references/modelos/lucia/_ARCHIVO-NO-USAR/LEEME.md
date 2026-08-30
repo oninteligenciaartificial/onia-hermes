@@ -23,3 +23,17 @@ del carril las cita.
 **Lo que sí se usa está en [`../BANCO-OFICIAL.md`](../BANCO-OFICIAL.md).** El gate
 (`scripts/carousel_gate.js`) valida contra esa lista y falla antes de renderizar si alguien
 vuelve a agarrar algo de acá.
+
+## `L07-tres-gratis.json` — retirada 2026-08-30
+
+**Es la misma pieza que `L08-tres-de-cinco-gratis.json`**, que la reescribio y quedo publicable.
+Misma palabra HUMO, misma promesa, y el titular identico salvo que una escribe "3 de 5" y la otra
+"tres de las cinco". Publicar las dos era publicar el mismo post dos veces.
+
+Convivieron en el repo porque el gate revisaba **cada brief contra el registro**, nunca **una pieza
+contra otra**: las dos pasaban perfectas por separado. Se arreglo agregando `revisarLote()` a
+`scripts/carousel_gate.js` (`node scripts/carousel_gate.js --lote <dir>`), que normaliza cifra y
+palabra ("tres" = "3") antes de comparar — sin eso la pareja daba 0,55 de parecido y se colaba.
+Con la normalizacion da 1,00.
+
+Se conserva por si el texto de alguna lamina intermedia sirve. **No se publica.**

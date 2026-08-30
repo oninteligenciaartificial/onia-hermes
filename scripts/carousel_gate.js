@@ -379,6 +379,124 @@ function revisar(brief, pack, baseDir = process.cwd()) {
   return problemas;
 }
 
+// ---------------------------------------------------------------------------
+// Lo que ninguna regla de arriba puede ver: una pieza contra OTRA pieza.
+// Todo `revisar()` mira un brief solo, contra el registro y contra el disco. Por eso
+// L07 y L08 convivieron en el repo siendo la MISMA pieza — misma palabra HUMO, misma
+// promesa, y el titular igual salvo que uno escribe "3 de 5" y el otro "tres de las
+// cinco". Cada una pasaba el gate perfecto. Publicarlas era publicar dos veces lo mismo.
+// ---------------------------------------------------------------------------
+
+// Palabras que no distinguen una pieza de otra. Corta, a proposito: una lista larga
+// borra el contenido y hace que todo se parezca a todo.
+const VACIAS = new Set(['de', 'del', 'la', 'las', 'el', 'los', 'un', 'una', 'unos', 'unas',
+  'que', 'y', 'o', 'a', 'en', 'con', 'por', 'para', 'al', 'se', 'su', 'sus', 'mi', 'tu',
+  'lo', 'es', 'son', 'como', 'mas', 'pero', 'ya', 'te', 'me', 'le', 'si', 'no']);
+
+// "tres" y "3" son el mismo numero. Sin esto, la pareja L07/L08 daba 0,55 de parecido y
+// se colaba: el castellano alterna cifra y palabra todo el tiempo.
+const NUMEROS = {
+  cero: '0', uno: '1', una: '1', dos: '2', tres: '3', cuatro: '4', cinco: '5', seis: '6',
+  siete: '7', ocho: '8', nueve: '9', diez: '10', once: '11', doce: '12', quince: '15',
+  veinte: '20', treinta: '30', cien: '100',
+};
+
+function fichas(txt) {
+  return new Set(String(txt || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9 ]+/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => NUMEROS[w] || w)
+    .filter((w) => !VACIAS.has(w)));
+}
+
+// Jaccard sobre las fichas. Sin dependencias: el parecido que hace falta cazar es
+// "es la misma pieza reescrita", no "se parecen un poco".
+function parecido(a, b) {
+  const A = fichas(a);
+  const B = fichas(b);
+  if (!A.size || !B.size) return 0;
+  let comunes = 0;
+  for (const w of A) if (B.has(w)) comunes += 1;
+  return comunes / (A.size + B.size - comunes);
+}
+
+const PARECIDO_MAXIMO = 0.80;
+
+function portadaDe(brief) {
+  const s = (brief.slides || []);
+  const cover = s.find((x) => x.role === 'cover') || s[0];
+  return cover ? cover.headline : null;
+}
+
+function recompensaDe(brief) {
+  if (brief.comment_reward) return brief.comment_reward;
+  const s = (brief.slides || []).find((x) => x.comment_reward);
+  return s ? s.comment_reward : null;
+}
+
+function triggerDe(brief) {
+  if (brief.comment_trigger) return brief.comment_trigger;
+  const s = (brief.slides || []).find((x) => x.comment_trigger);
+  return s ? s.comment_trigger : null;
+}
+
+// piezas = [{ nombre, brief }]
+function revisarLote(piezas) {
+  const problemas = [];
+
+  for (let i = 0; i < piezas.length; i += 1) {
+    for (let j = i + 1; j < piezas.length; j += 1) {
+      const a = piezas[i];
+      const b = piezas[j];
+
+      // Dos piezas vivas con la misma palabra es un choque real aunque las piezas
+      // sean distintas: Meta manda UN mensaje por palabra, asi que la segunda pieza
+      // entrega la recompensa de la primera.
+      const ta = triggerDe(a.brief);
+      const tb = triggerDe(b.brief);
+      if (ta && tb && ta.toUpperCase() === tb.toUpperCase()) {
+        // Compartir palabra NO es un error por si solo: SISTEMA la usan L10 y L6 y las
+        // dos prometen lo mismo, que es una voz registrada de esa palabra. Lo que si es
+        // imposible es que UNA palabra entregue DOS cosas distintas, porque Meta manda
+        // un solo mensaje por palabra. Marcar el caso legitimo como error era gritar en
+        // falso, y una regla que grita en falso se termina ignorando entera.
+        const ra = recompensaDe(a.brief) || '';
+        const rb = recompensaDe(b.brief) || '';
+        if (ra !== rb) {
+          problemas.push({
+            nivel: 'error', regla: 'palabra-dos-promesas',
+            msg: `${a.nombre} y ${b.nombre} usan ${ta.toUpperCase()} y prometen distinto: `
+              + `"${ra}" / "${rb}". Una palabra entrega UNA cosa`,
+          });
+        } else {
+          problemas.push({
+            nivel: 'aviso', regla: 'palabra-compartida',
+            msg: `${a.nombre} y ${b.nombre} comparten ${ta.toUpperCase()} con la misma `
+              + 'promesa: valido, pero los leads de las dos entran mezclados',
+          });
+        }
+      }
+
+      const pa = portadaDe(a.brief);
+      const pb = portadaDe(b.brief);
+      if (pa && pb) {
+        const p = parecido(pa, pb);
+        if (p >= PARECIDO_MAXIMO) {
+          problemas.push({
+            nivel: 'error', regla: 'pieza-duplicada',
+            msg: `${a.nombre} y ${b.nombre} tienen la misma portada (parecido `
+              + `${p.toFixed(2)}): "${pa}" / "${pb}"`,
+          });
+        }
+      }
+    }
+  }
+  return problemas;
+}
+
 function selfCheck() {
   // El contador se cuenta solo. Antes el final decia 'self-check ok: 24 casos' con el 24
   // ESCRITO A MANO: agregar un caso no cambiaba el numero, y sacar uno tampoco. Un
@@ -531,6 +649,41 @@ function selfCheck() {
   p = revisar({ slides: [{ number: 1, bg: 'vertical.png' }] }, 'dato-ilustrado', tmp);
   ok(!p.some((x) => x.regla === 'bg-deformado'), 'uno vertical si pasa');
 
+
+  // Una pieza contra otra. Ninguno de estos casos lo puede ver `revisar()`, que mira
+  // un brief solo: son exactamente los que dejaron pasar a L07 y L08 como dos piezas.
+  const l07 = { comment_trigger: 'HUMO', slides: [
+    { number: 1, role: 'cover', headline: '3 de 5 herramientas que uso son gratis' }] };
+  const l08 = { comment_trigger: 'HUMO', slides: [
+    { number: 1, role: 'cover', headline: 'Tres de las cinco herramientas que uso son gratis' }] };
+  const otra = { comment_trigger: 'SISTEMA', slides: [
+    { number: 1, role: 'cover', headline: 'Tu negocio entero colgado de una hoja sellada' }] };
+
+  let q = revisarLote([{ nombre: 'L07', brief: l07 }, { nombre: 'L08', brief: l08 }]);
+  ok(q.some((x) => x.regla === 'pieza-duplicada'), 'cifra y palabra son el mismo numero: 3 = tres');
+  ok(q.some((x) => x.regla === 'palabra-compartida'), 'misma palabra y misma promesa: solo aviso');
+
+  // El choque de verdad: una palabra, dos promesas. Imposible de cumplir.
+  q = revisarLote([
+    { nombre: 'A', brief: { comment_trigger: 'HUMO', comment_reward: 'el mapa', slides: [] } },
+    { nombre: 'B', brief: { comment_trigger: 'HUMO', comment_reward: 'otra cosa', slides: [] } }]);
+  ok(q.some((x) => x.regla === 'palabra-dos-promesas'), 'una palabra no entrega dos cosas');
+  ok(!q.some((x) => x.nivel === 'aviso'), 'si choca de verdad, no se avisa: se marca error');
+
+  q = revisarLote([{ nombre: 'L08', brief: l08 }, { nombre: 'L10', brief: otra }]);
+  ok(!q.length, 'dos piezas de verdad distintas no deben chocar');
+
+  // El trigger adentro de la lamina cuenta igual que arriba: tres briefs reales lo
+  // declaran asi, y mirarlo solo en la raiz los dejaba invisibles.
+  q = revisarLote([
+    { nombre: 'A', brief: { slides: [{ role: 'cta', comment_trigger: 'SISTEMA' }] } },
+    { nombre: 'B', brief: { comment_trigger: 'sistema', slides: [] } }]);
+  ok(q.some((x) => x.regla === 'palabra-compartida'), 'el trigger anidado tambien se ve');
+
+  // Y el limite: parecerse no alcanza, tiene que ser la misma pieza.
+  ok(parecido('cinco senales de que tu negocio te necesita', 'tres lugares de Santa Cruz') < 0.80,
+    'dos titulares del mismo mundo no son la misma pieza');
+
   console.log(`self-check ok: ${casos} casos`);
 }
 
@@ -539,6 +692,17 @@ function main() {
   if (a.includes('--self-check')) return selfCheck();
 
   const get = (k) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : null; };
+  const loteDir = get('--lote');
+  if (loteDir) {
+    const piezas = fs.readdirSync(loteDir).filter((f) => f.endsWith('.json'))
+      .map((f) => ({ nombre: f.replace(/\.json$/, ''), brief: JSON.parse(fs.readFileSync(path.join(loteDir, f), 'utf8')) }));
+    const probs = revisarLote(piezas);
+    for (const x of probs) console.log(`${x.nivel === 'error' ? 'ERROR' : 'aviso'} ${x.regla}: ${x.msg}`);
+    const err = probs.filter((x) => x.nivel === 'error');
+    if (!probs.length) console.log(`lote ok: ${piezas.length} piezas, ninguna choca con otra`);
+    return process.exit(err.length ? 1 : 0);
+  }
+
   const briefPath = get('--brief');
   const pack = get('--pack');
   if (!briefPath || !pack) {
@@ -559,4 +723,4 @@ function main() {
 }
 
 if (require.main === module) main();
-module.exports = { revisar, CAPACIDADES, dimensionesPng, escalaEnLienzo, ESCALA_MINIMA };
+module.exports = { revisar, revisarLote, parecido, CAPACIDADES, dimensionesPng, escalaEnLienzo, ESCALA_MINIMA };
