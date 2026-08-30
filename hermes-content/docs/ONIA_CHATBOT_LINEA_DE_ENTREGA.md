@@ -1,5 +1,18 @@
 # ONIA — Línea de entrega del chatbot: de contrato firmado a bot vivo
 
+> **Estado 2026-08-30 — lo que la línea ENTREGA hoy (todo vivo y verificado MIRANDO):**
+> editor self-service con plantilla por rubro que bebe el horario real del alta ·
+> **editor conversacional** ("atendé también los domingos" → diff en español → publicás) ·
+> **"Así atiende tu asistente"** (el guion real en pasos numerados, en vivo) · probador ·
+> canal web 1-click con snippet · **bandeja nativa /inbox** (leer + contestar + resolver;
+> el bot se aparta al contestar el dueño y vuelve al resolver) · **multimedia** en bandeja ·
+> **visión** (el bot VE las fotos y deriva con contexto, Bs 0,008/foto) · audios
+> transcritos · seguimientos/recordatorios · FAQ del negocio · cobro QR BCP en mock
+> (esperan credenciales del banco) · tutorial (Guía de inicio lleva al dueño hasta el
+> asistente). Lo de abajo se conserva como diseño/historia; los estados viejos de esta
+> página que digan "falta X" sobre estas piezas quedaron supersedidos.
+
+
 > **Fuente de verdad viva** (sin fecha en el nombre: se EDITA, no se duplica).
 > Responde: cuál es el camino más corto para conectar el WhatsApp de un cliente,
 > qué parte del bot es plantilla y cuál se rehace, cómo se siembra el cerebro sin
@@ -57,7 +70,7 @@ Verificado 2026-08-21 mirando el panel de Meta logueado + Graph API.
 
 | NO se puede prometer todavía | Qué falta |
 |---|---|
-| "Conectas tu número solo, desde un botón, en 15 minutos" | Falta la Configuración de "Inicio de sesión con Facebook para empresas" (no existe ⇒ no hay `WHATSAPP_CONFIGURATION_ID`) y las 3 env vars de Chatwoot (hoy **vacías**). La Access Verification ya está ✅ (§1.1) |
+| "Conectas tu número solo, desde un botón, en 15 minutos" | ✅ TODO construido (2026-08-28: Configuración "Onia Embedded Signup" ID 1824225392073753, SDK + dominio chat.onia.com.bo, 3 InstallationConfigs cargadas, feature flag de cuenta ON). Falta SOLO la prueba con un +591 real — la hace Sergio |
 | "Tu propia WABA con tu propia factura de Meta" | Depende del mismo botón. Hoy el número entra bajo NUESTRA WABA, y eso tiene techos duros (§1.2): solo pilotos con consentimiento escrito |
 | "Coexistencia: seguís usando tu app de WhatsApp Business" | Llega con el Embedded Signup, y además nunca se probó con un +591 |
 
@@ -259,15 +272,13 @@ gates que faltan (§1.1). Con 0–3 clientes, ninguno de los dos números apriet
 
 ## 5. Qué falta construir (poco), por impacto
 
-1. **Encender Embedded Signup en Chatwoot** — *destraba la conexión en minutos y la WABA
-   propia del cliente antes del 1-oct.* (a) App Review ✅ **aprobado el 2026-08-21** — este
-   paso ya no existe; (b) ✅ **Access Verification VERIFICADA (2026-08-28, mirada en el
-   panel)** — tampoco existe ya; (c) crear la Configuración
-   de "Inicio de sesión con Facebook para empresas" (hoy no existe ninguna), autorizar el
-   dominio del JS SDK — resolviendo antes cuál de los dos hostnames sirve el popup (§1.1) —
-   y setear las 3 env vars, hoy vacías; (d) **probar el flujo completo con un número real y
-   MIRARLO** (riesgo self-hosted §1.1).
-   Trabajo nuestro: ~1 día. Espera de Meta: CERO. Código: cero.
+1. **Encender Embedded Signup en Chatwoot** — ✅ **CONSTRUIDO ENTERO (2026-08-28)**:
+   App Review ✅ (21-ago) · Access Verification ✅ · Configuración "Onia Embedded Signup"
+   ✅ (ID 1824225392073753) · SDK JS + dominio chat.onia.com.bo ✅ · 3 InstallationConfigs
+   ✅ · feature flag de cuenta ✅. **Queda UN solo paso: la prueba del popup con un +591
+   real — la hace Sergio** (Monitor de la sesión la vigila en vivo). El traslado del
+   número oficial 75414930 a coexistencia tiene runbook propio:
+   `ONIA_RUNBOOK_COEXISTENCIA_75414930.md`.
 
 2. **Plantilla de bot por cliente sobre BOT-ONIA + script de alta** — *convierte el alta en
    un comando.* Un `config-<cliente>.mjs` generado desde plantilla por rubro + script que
