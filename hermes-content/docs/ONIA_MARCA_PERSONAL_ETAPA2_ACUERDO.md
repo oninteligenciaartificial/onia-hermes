@@ -35,6 +35,11 @@
 8. Historias: entrega **2 ejemplos completos de secuencia** al inicio + **cada semana el
    tema y el hook de las 2 secuencias** de esa semana.
 9. Mantiene el sheet de CPM con cada contenido y sus variantes listadas (links).
+10. **Seguimiento de la comunidad:** la gestión diaria es de Sergio, pero el sheet
+    mensual de Samuel incluye también los números de comunidad — miembros nuevos por
+    video y qué palabra clave convirtió — y en el cierre de mes propone ajustes de
+    guion/promesa para que entren más. Vistas y miembros viajan juntos en el mismo
+    cierre.
 
 ## 3 · Qué hace Sergio
 
