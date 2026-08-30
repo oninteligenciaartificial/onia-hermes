@@ -206,6 +206,7 @@ export function seedFrom(input) {
     displayName: input.display_name || input.displayName || null,
     pieceKey: input.piece_key || input.pieceKey || null,
     sourceCampaign: input.source_campaign || input.sourceCampaign || null,
+    inboxId: String(input.inbox_id ?? input.inboxId ?? "").trim() || null,
     ownerRoleKey: input.owner_role_key || "sergio",
   };
 }
@@ -224,6 +225,7 @@ function fillFromSeed(state, seed) {
   if (!state.publicContact && seed.publicContact) patch.publicContact = seed.publicContact;
   if (!state.pieceKey && seed.pieceKey) patch.pieceKey = seed.pieceKey;
   if (!state.sourceCampaign && seed.sourceCampaign) patch.sourceCampaign = seed.sourceCampaign;
+  if (!state.inboxId && seed.inboxId) patch.inboxId = seed.inboxId;
   return Object.keys(patch).length ? { ...state, ...patch } : state;
 }
 

@@ -347,6 +347,8 @@ export const SCRIPT = Object.freeze({
   R_NO_DATO: "Eso no lo tengo acá para confirmártelo — te lo confirma {{humano}} por este mismo chat.",
 
   R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
+  // Insistencia v6.6 (1 sola vez, suave, dentro de la ventana de 24 h — texto libre gratis):
+  R_SEGUIMIENTO: "¡Hola! ¿Seguís por ahí? 🙂 Si te quedó alguna duda, {{humano}} te la contesta por acá. Y si preferís que no te escribamos, decínos \"no gracias\" y listo.",
   // Vision (v5): cuando la foto se pudo describir SIN violar guardrails. La descripcion
   // viene del LLM ya filtrada; si violaba una regla se descarto y sale R_ATTACH pelado.
   R_ATTACH_VISTO: "Recibí tu foto ({{descripcion_foto}}). Se la paso a {{humano}}, que te confirma por acá.",

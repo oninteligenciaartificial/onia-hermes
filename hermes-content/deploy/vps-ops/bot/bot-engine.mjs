@@ -82,6 +82,7 @@ export function createState(input = {}) {
     calendarEventId: input.calendarEventId || null,
     leadKey: input.leadKey || null,
     ownerRoleKey: input.ownerRoleKey || "sergio",
+    inboxId: input.inboxId || null,
     humanTookOver: Boolean(input.humanTookOver),
     humanTookOverAt: input.humanTookOverAt || null,
     optInAt: input.optInAt || null,

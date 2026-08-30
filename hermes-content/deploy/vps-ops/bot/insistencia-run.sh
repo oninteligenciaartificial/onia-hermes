@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+# ONIA — corre el BARRIDO DE INSISTENCIA v6.6 (recepcionista multi-org, encendida por defecto) DENTRO del contenedor onia-center
+# (que tiene las credenciales de Supabase onia_center). Llamado por n8n vía SSH, una vez por hora.
+# Mismo patrón que run-turn.sh: se copia la carpeta al contenedor y se ejecuta por ruta.
+#
+# ENTRADA : no usa stdin. Todo va por argumentos.
+# SALIDA  : dry-run -> texto legible · --emit / --json -> una línea JSON por STDOUT.
+#           Exit 0 SIEMPRE: si esto falla con código != 0, n8n reintenta y el prospecto recibe
+#           el follow-up dos veces (justo lo que el CAS existe para evitar).
+#
+# EL "AHORA" SE INYECTA: si no se pasa --now, este wrapper sella el instante con `date -u` y lo
+# manda como parámetro. La lógica de insistencia-run.mjs nunca mira el reloj (determinismo).
+#
+# Uso local (ver a quién le mandaría, sin reservar ni escribir nada):
+#   ./followup-run.sh
+#
+# n8n (nodo SSH, cron cada hora) — reserva con el CAS y devuelve el JSON a enviar:
+#   bash /opt/onia/bot/followup-run.sh --emit
+#
+# Reproducir un barrido pasado (mismo resultado, siempre):
+#   bash /opt/onia/bot/followup-run.sh --now 2026-07-28T14:05:00Z
+#
+# Env opcionales (se pasan al contenedor):
+#   ONIA_BOT_DRY_RUN=false   → los mensajes se registran como 'sent' en vez de 'skipped'
+#   ONIA_BOT_SLOTS="jue 31/07 15:00@2026-07-30T19:00:00Z|vie 01/08 10:00@2026-07-31T14:00:00Z"
+set -uo pipefail
+
+CONTAINER="${ONIA_BOT_CONTAINER:-onia-center}"
+DEST="/tmp/onia-bot"
+
+BOT_DIR="$(cd "$(dirname "$0")" 2>/dev/null && pwd)"
+[ -f "$BOT_DIR/insistencia-run.mjs" ] || BOT_DIR="/opt/onia/bot"
+if [ ! -f "$BOT_DIR/insistencia-run.mjs" ]; then
+  echo '{"ok":false,"send":[],"error":"no se encontro insistencia-run.mjs (esperado en /opt/onia/bot)"}'
+  exit 0
+fi
+
+# Sincronizar el código sólo si cambió (mismo sello que run-turn.sh: comparten la carpeta).
+# Los *.json van INCLUIDOS: ahí vive knowledge.json (los hechos editables). Sin ellos en el
+# sello, editar el conocimiento no re-copiaba nada y el contenedor seguía con la copia vieja.
+STAMP="$(cat "$BOT_DIR"/*.mjs "$BOT_DIR"/*.json 2>/dev/null | md5sum | cut -c1-12)"
+CURRENT="$(docker exec "$CONTAINER" cat "$DEST/.stamp" 2>/dev/null || true)"
+if [ "$CURRENT" != "$STAMP" ]; then
+  docker exec "$CONTAINER" rm -rf "$DEST" >/dev/null 2>&1
+  if ! docker cp "$BOT_DIR" "$CONTAINER:$DEST" >/dev/null 2>&1; then
+    echo '{"ok":false,"send":[],"error":"no se pudo copiar el bot al contenedor"}'
+    exit 0
+  fi
+  docker exec "$CONTAINER" sh -c "printf '%s' '$STAMP' > $DEST/.stamp" >/dev/null 2>&1
+fi
+
+# Si quien llama no fijó el instante, se sella acá y viaja como parámetro explícito.
+NOW_ARGS=()
+case " $* " in
+  *" --now "*|*" --now="*) ;;
+  *) NOW_ARGS=(--now "$(date -u +%Y-%m-%dT%H:%M:%SZ)") ;;
+esac
+
+# El interruptor de "manda de verdad" vive en UN SOLO lugar: webhook.env, el mismo archivo que ya
+# lee el webhook. Antes el default de aca era `true`, asi que un cron que llamara al barrido sin
+# exportar la variable barria, reportaba y NO mandaba nada: encendido en apariencia, apagado de
+# hecho — y sin ningun error que lo delatara. Quien llama puede seguir forzando el valor (tiene
+# prioridad); esto solo cubre el olvido. Si no hay archivo, sigue cayendo a dry-run, que es el
+# default seguro: preferimos no mandar por accidente a mandar por accidente.
+# Las credenciales del conocimiento por org y de la base salen de webhook.env si el
+# caller no las trae (mismo criterio que ONIA_BOT_DRY_RUN: cubrir el olvido).
+for VAR in ONIA_BOT_KNOWLEDGE_URL BOT_KNOWLEDGE_SECRET SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY; do
+  VAL="$(printenv "$VAR" 2>/dev/null || true)"
+  if [ -z "$VAL" ] && [ -f "$BOT_DIR/webhook.env" ]; then
+    LEIDO="$(sed -n "s/^$VAR=//p" "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"\' \r")"
+    [ -n "$LEIDO" ] && export "$VAR=$LEIDO"
+  fi
+done
+if [ -z "${ONIA_BOT_DRY_RUN:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
+  ONIA_BOT_DRY_RUN="$(sed -n 's/^ONIA_BOT_DRY_RUN=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
+fi
+
+# Token de Chatwoot — el barrido MANDA el mensaje, no solo lo reserva. Sale de la base de Chatwoot
+# igual que en webhook-server.sh: nunca se escribe en un archivo ni viaja a n8n.
+CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
+# El bot postea con SU PROPIA identidad de Chatwoot (agente "Onia Bot"), no con la de Sergio:
+# es lo unico que permite saber quien escribio y callar al bot cuando el toma la conversacion.
+# Sin la variable cae al 2 (la cuenta de Sergio) = comportamiento de antes, nunca queda sin token.
+CW_AGENT_ID="${CHATWOOT_BOT_AGENT_ID:-2}"
+CW_TOKEN=""
+if [ -n "$CWDB" ]; then
+  CW_TOKEN="$(docker exec "$CWDB" psql -U postgres -d 'onia-chatbot' -tAc \
+    "select token from access_tokens where owner_id=$CW_AGENT_ID order by created_at desc limit 1" 2>/dev/null | tr -d ' \t\n' || true)"
+fi
+
+docker exec \
+  -e ONIA_BOT_DRY_RUN="${ONIA_BOT_DRY_RUN:-true}" \
+  -e ONIA_BOT_SLOTS="${ONIA_BOT_SLOTS:-}" \
+  -e CHATWOOT_BASE_URL="${CHATWOOT_BASE_URL:-http://onia-chatbot_chatwoot:3000}" \
+  -e CHATWOOT_ACCOUNT_ID="${CHATWOOT_ACCOUNT_ID:-2}" \
+  -e CHATWOOT_API_TOKEN="$CW_TOKEN" \
+  -e CHATWOOT_BOT_AGENT_ID="$CW_AGENT_ID" \
+  -e ONIA_BOT_KNOWLEDGE_URL="${ONIA_BOT_KNOWLEDGE_URL:-http://onia-platform:3000/api/chatbot-knowledge/published}" \
+  -e BOT_KNOWLEDGE_SECRET="${BOT_KNOWLEDGE_SECRET:-}" \
+  -e SUPABASE_URL="${SUPABASE_URL:-}" \
+  -e SUPABASE_SERVICE_ROLE_KEY="${SUPABASE_SERVICE_ROLE_KEY:-}" \
+  "$CONTAINER" node "$DEST/insistencia-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} "$@"
+
+exit 0
