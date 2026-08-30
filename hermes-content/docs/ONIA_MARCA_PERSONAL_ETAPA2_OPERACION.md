@@ -20,6 +20,7 @@
 | 10 | Setup del perfil X | ✅ hecho en vivo 2026-08-30 (queda: revisar/borrar los 3 posts viejos, banner) | — |
 | 11 | Foto de LinkedIn (diálogo nativo de Windows) + decidir visibilidad pública | ⬜ | **Sergio** (2 min) |
 | 12 | Link de comunidad WhatsApp → bio de las 6 plataformas | ⬜ esperando el link | **Sergio** pasa el link |
+| 13 | Conectar X + LinkedIn de Sergio a Postiz y armar el repost automático de los videos del acuerdo (X/LinkedIn NO generan CPM — quedaron fuera del conteo) | ⬜ | loop |
 
 ## 1 · Perfiles listos para pegar
 

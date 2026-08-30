@@ -7,9 +7,12 @@
 
 ## 1 · Sistema
 
-- Plataformas: Instagram · TikTok · Facebook · YouTube Shorts · **LinkedIn · X**
-  (mismas piezas; en LinkedIn con caption adaptado a tono profesional — es la plataforma
-  del comprador B2B).
+- Plataformas del acuerdo (las que Samuel sube y las ÚNICAS que cuentan para CPM):
+  **Instagram · TikTok · Facebook · YouTube Shorts** — las 4 del sistema original.
+- **LinkedIn y X quedan FUERA del acuerdo** (decisión Sergio 2026-08-30): los publica la
+  máquina Onia vía Postiz como distribución propia, con caption adaptado. Sus vistas NO
+  generan CPM. Razón: son repost del mismo contenido con un clic — sumarlas al conteo
+  solo aceleraba el tope y encarecía cada video sin trabajo extra de Samuel.
 - Volumen mensual: **20 videos pilar + 10 B-roll** + variantes de yapping para trial
   reels + **8 secuencias de historias** (2/semana × 4 stories: hook → mito → revelación
   → CTA).
@@ -24,7 +27,7 @@
    respaldada por fuente.
 3. Graba (dirige) en las 2 medias jornadas mensuales.
 4. Edita las 30 piezas y sus variantes de yapping.
-5. Sube todo a las 6 plataformas, con acceso **por rol** (Meta Business Suite /
+5. Sube todo a las 4 plataformas del acuerdo, con acceso **por rol** (Meta Business Suite /
    herramienta de publicación), sin contraseñas compartidas.
 6. Sube los **crudos completos a la carpeta compartida de Sergio dentro de las 48 h**
    posteriores a cada sesión (conserva su propia copia de respaldo).
@@ -54,7 +57,8 @@
 | Tope por contenido | **50.000 vistas combinadas** entre video oficial y sus variantes |
 | Tope mensual total del variable | **Bs 3.500** |
 
-- **Medición:** vistas = suma de las 6 plataformas; foto a los **30 días** de publicado
+- **Medición:** vistas = suma de las 4 plataformas del acuerdo (IG, TikTok, FB, Shorts —
+  X y LinkedIn no cuentan); foto a los **30 días** de publicado
   cada video, verificada contra analytics nativas (capturas o API).
 - **Liquidación:** el variable se paga al cierre del mes siguiente, cuando cada video
   cerró su foto de 30 días. Al terminar el acuerdo, los últimos videos cierran su foto y
