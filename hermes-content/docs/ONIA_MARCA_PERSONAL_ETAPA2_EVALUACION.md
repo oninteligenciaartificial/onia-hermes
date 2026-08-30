@@ -268,6 +268,14 @@ responder la comunidad y las historias diarias. Cerrando esto, fijá vos las fec
 mejor 2 medias jornadas de grabación que 1 día entero, así los 20 pilares no salen
 cansados.
 
+### Ronda 3 — MENSAJE FINAL (2026-08-30, cierre punto por punto; ESTA es la versión enviada)
+
+Responde a la contraoferta de Samuel. Decisiones de Sergio: yapping a mitad de tarifa ·
+crudos con copia compartida = condición de firma · historias 2 ejemplos + tema/hook
+semanal · pago directo sin factura (interno: pagar por canal personal, no OniaAgency) ·
+X y LinkedIn fuera del conteo (los publica Postiz, sin CPM). Texto: ver mensaje del
+2026-08-30 en la sesión; términos consolidados en `ONIA_MARCA_PERSONAL_ETAPA2_ACUERDO.md`.
+
 ## Segunda pasada (2026-08-29) — lo que aún faltaba
 
 ### Para el acuerdo con Samuel (agregar al mensaje / contrato)
