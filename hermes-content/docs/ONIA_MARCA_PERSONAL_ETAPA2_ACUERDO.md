@@ -18,6 +18,8 @@
   → CTA).
 - Grabación: **2 medias jornadas al mes** (no 1 día entero).
 - Comunidad: **WhatsApp**, administrada por Sergio.
+  Link de invitación (2026-08-30): `https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu` —
+  va en la bio/website de las 6 plataformas y es el destino de toda palabra clave.
 - Venta del curso: se activa más adelante, con audiencia estable.
 
 ## 2 · Qué hace Samuel

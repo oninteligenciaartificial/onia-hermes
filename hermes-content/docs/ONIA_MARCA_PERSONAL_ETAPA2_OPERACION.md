@@ -19,7 +19,7 @@
 | 9 | Test comentario→DM desde cuenta de tercero | ⬜ | **Sergio** |
 | 10 | Setup del perfil X | ✅ hecho en vivo 2026-08-30 (queda: revisar/borrar los 3 posts viejos, banner) | — |
 | 11 | Foto de LinkedIn (diálogo nativo de Windows) + decidir visibilidad pública | ⬜ | **Sergio** (2 min) |
-| 12 | Link de comunidad WhatsApp → bio de las 6 plataformas | ⬜ esperando el link | **Sergio** pasa el link |
+| 12 | Link de comunidad WhatsApp → bio de las 6 plataformas | 🟡 link recibido 30-ago (`chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu`). **LinkedIn ✅** (Sitio web en Información de contacto, verificado). **X pendiente** (modal de edición caído/rate-limited — reintentar). **IG/TikTok/FB/YT pendientes** (Sergio o próxima pasada) | loop + Sergio |
 | 13 | Conectar X + LinkedIn de Sergio a Postiz y armar el repost automático de los videos del acuerdo (X/LinkedIn NO generan CPM — quedaron fuera del conteo) | ⬜ | loop |
 
 ## 1 · Perfiles listos para pegar
