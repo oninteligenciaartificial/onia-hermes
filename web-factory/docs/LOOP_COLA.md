@@ -60,12 +60,18 @@ para cerrar huecos que frenan el build.
 - [ ] **A1b · Dashboard: gauge/radial** para tasas (cierre, ocupación) — tipo de
       chart nuevo en `dashboard.ts` (SVG arc). + fila de mini stat-tiles con ícono.
       "Tasa de cierre 34%" es hoy un número pelado: es el caso de uso exacto.
-- [ ] **A1c · 🔴 En dark la marca DESAPARECE.** Los tokens dark ponen
-      `--color-primary: #e7e9ec` (el foreground), así que sidebar activo, botón,
-      KPI hero y barras salen **blancos**: el panel pierde identidad justo en el tema
-      que más se usa. Necesita un step dark del verde de marca, no el foreground.
-      Ojo: el token sale de `packages/tokens`, así que el arreglo toca a todos los
-      templates — verificar los otros demos antes de dar por cerrado.
+- [x] **A1c · En dark la marca ya NO desaparece** (2026-08-30). El remedio viejo, ante
+      un primary ilegible sobre el fondo oscuro, lo reemplazaba por `DARK_FG`: sidebar,
+      botón, KPI hero y barras salían **blancos**. Ahora se **aclara en HSL** conservando
+      hue y saturación (`#0d6b5c` → `#139883`), con `DARK_FG` de último recurso solo para
+      marcas acromáticas, donde aclarar no produce color. Dos gates, no uno: el color
+      tiene que leerse sobre el fondo **y** aguantar su propia tinta encima — parar en el
+      primero dejaba el botón sólido en 4,42:1, y **lo encontró el test, no la revisión**.
+      4 tests nuevos; los 2 viejos que fijaban el hex `#e7e9ec` se reescribieron contra su
+      *intención* (que el par contraste), que es lo que siempre quisieron proteger.
+      198/198 verde. Verificado mirando el render en oscuro.
+      Nota: `--color-secondary` sigue cayendo a blanco a propósito — da la jerarquía
+      primario=marca / secundario=neutro, y se ve bien en el render.
 - [ ] **A1d · Charts fijos en cards anchas → aire muerto.** `CHART_W=320 / CHART_H=150`
       son constantes; la card mide el doble. Queda un tercio de tarjeta vacío en
       "Ingresos por mes" y "Ingresos vs meta". El SVG tiene que escalar al ancho.

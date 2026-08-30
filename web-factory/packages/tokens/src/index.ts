@@ -90,8 +90,15 @@ export function clientDarkTokenVars(client?: ClientTokenInput): Record<string, s
     base["--secondary-foreground"] = DARK_BG;
   }
   if (!legible(client.colores.primary)) {
-    base["--color-primary"] = DARK_FG;
-    base["--primary"] = DARK_FG;
+    // La marca se ACLARA, no se borra. Antes esto ponia DARK_FG directo y el
+    // panel perdia la identidad en oscuro: sidebar activo, boton, celda KPI hero
+    // y barras salian BLANCOS (visto mirando el dashboard, 2026-08-30). Subir la
+    // L en HSL conserva hue y saturacion, asi que un verde sigue siendo verde.
+    // DARK_FG queda de ultimo recurso para las marcas acromaticas, donde aclarar
+    // no produce color: ahi el blanco es lo unico legible.
+    const claro = lightenUntilLegible(client.colores.primary);
+    base["--color-primary"] = claro;
+    base["--primary"] = claro;
     base["--primary-foreground"] = DARK_BG;
     // El par completo, o el arreglo crea otro invisible: `--color-on-primary` es
     // el token que usan los BOTONES solidos (background primary + color
@@ -100,10 +107,68 @@ export function clientDarkTokenVars(client?: ClientTokenInput): Record<string, s
     // blanco: 1,21:1, ilegible. Es exactamente lo que axe encontraba en 93 nodos
     // de la landing demo en oscuro. `--ring` sigue al primary por el mismo motivo
     // (el foco tiene que verse sobre el fondo oscuro).
-    base["--color-on-primary"] = DARK_BG;
-    base["--ring"] = DARK_FG;
+    base["--color-on-primary"] = readableTextOn(claro);
+    base["--ring"] = claro;
   }
   return base;
+}
+
+/**
+ * Sube la luminosidad HSL del color hasta que pase 4.5:1 contra el fondo oscuro,
+ * conservando hue y saturacion (un verde de marca sigue leyendose verde).
+ * Devuelve DARK_FG si ni el maximo alcanza: pasa con marcas acromaticas
+ * (negro/gris puro), donde aclarar no produce color y el blanco es lo unico legible.
+ */
+function lightenUntilLegible(hex: string): string {
+  const [h, s, l] = hexToHsl(hex);
+  if (s === 0) return DARK_FG; // acromatico: aclararlo da gris, no marca
+  for (let paso = l; paso <= 0.96; paso += 0.02) {
+    const candidato = hslToHex(h, s, paso);
+    // Dos gates, no uno: el color tiene que leerse sobre el fondo oscuro Y
+    // aguantar su propia tinta encima. Parar en el primero que pasa contra el
+    // fondo dejaba el boton solido en 4,42:1 — apenas debajo, invisible al ojo
+    // pero un fallo de AA que axe reporta. Lo encontro el test, no la revision.
+    if (
+      contrastRatio(candidato, DARK_BG) >= 4.5 &&
+      contrastRatio(readableTextOn(candidato), candidato) >= 4.5
+    ) {
+      return candidato;
+    }
+  }
+  return DARK_FG;
+}
+
+function hexToHsl(hex: string): [number, number, number] {
+  const [r, g, b] = hexToRgb(hex).map((v) => v / 255) as [number, number, number];
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const delta = max - min;
+  const l = (max + min) / 2;
+  if (delta === 0) return [0, 0, l];
+  const s = delta / (1 - Math.abs(2 * l - 1));
+  const h =
+    max === r ? ((g - b) / delta) % 6 : max === g ? (b - r) / delta + 2 : (r - g) / delta + 4;
+  return [(((h * 60) % 360) + 360) % 360, s, l];
+}
+
+function hslToHex(h: number, s: number, l: number): string {
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  const sector = Math.floor(h / 60) % 6;
+  const [r, g, b] = [
+    [c, x, 0],
+    [x, c, 0],
+    [0, c, x],
+    [0, x, c],
+    [x, 0, c],
+    [c, 0, x],
+  ][sector] as [number, number, number];
+  const canal = (v: number) =>
+    Math.round((v + m) * 255)
+      .toString(16)
+      .padStart(2, "0");
+  return `#${canal(r)}${canal(g)}${canal(b)}`;
 }
 
 /** Contraste WCAG entre dos colores hex (1 = identicos, 21 = negro sobre blanco). */
