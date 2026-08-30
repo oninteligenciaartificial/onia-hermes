@@ -1,5 +1,9 @@
 # Onia Nuvia Accounting Model 2026
 
+> ⚠️ **AVISO (2026-08-30) — este doc le asigna trabajo o carril a Arthur, y Arthur YA NO COLABORA
+> con Onia** (dicho por Sergio el 23-ago). No le rutees tareas ni abras sesiones a su nombre.
+> El trabajo que este doc describe, si sigue vigente, lo toma el carril correspondiente de ONIA.
+
 Estado: interno Sergio/ONIA.
 Fecha: 2026-06-21.
 Visibilidad: privado Sergio/ONIA. No enviar completo a Arthur.

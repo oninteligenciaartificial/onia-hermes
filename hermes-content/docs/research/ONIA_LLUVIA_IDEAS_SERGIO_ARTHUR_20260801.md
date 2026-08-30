@@ -1,5 +1,9 @@
 # Lluvia de ideas Sergio + Arthur — análisis y veredicto (2026-08-01)
 
+> ⚠️ **AVISO (2026-08-30) — este doc le asigna trabajo o carril a Arthur, y Arthur YA NO COLABORA
+> con Onia** (dicho por Sergio el 23-ago). No le rutees tareas ni abras sesiones a su nombre.
+> El trabajo que este doc describe, si sigue vigente, lo toma el carril correspondiente de ONIA.
+
 > Sergio: 15 ideas en bruto, "esto es tanto para mí y Arthur, analízalo y documéntalo".
 > Este doc las analiza UNA por una contra el filtro vigente y deja veredicto + gatillo.
 > No reemplaza el catálogo maestro (`ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md`) — lo

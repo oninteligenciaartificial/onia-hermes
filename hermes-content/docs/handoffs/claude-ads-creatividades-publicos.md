@@ -155,6 +155,28 @@ ser diarias desde el arranque: pesan menos y son el formato natural de la cuenta
 > demo → precio → automatizar. **Producir más contenido NO está en la lista: producir dejó de ser
 > el cuello.**
 
+### 0. 🔴 ANTES DE PUBLICAR: decidir QUÉ ES Lucía. Bloquea todo lo de abajo.
+
+Sergio, 30-ago: *"revisá hacia dónde va tu contenido, sin eso no avanzamos"*. Se contó, y el
+contenido **no va a donde se dijo querer**:
+
+**6 de las 7 piezas mencionan Onia. 4 de 7 mandan a Onia.** Solo L11 no la nombra. Eso es un
+catálogo con cara, no una influencer — y **ninguna marca paga por aparecer en el catálogo de otra
+empresa**, que es justamente lo que se dijo que Lucía tenía que poder vender.
+
+**Causa raíz: el tema de Lucía HOY ES el tema de Onia** ("IA para negocios bolivianos"). Sin tema
+propio no hay audiencia propia, y sin audiencia propia no hay publicidad que vender.
+
+- **A — embudo de Onia** (lo que es hoy): audiencia chica y calificada, gana por leads. **Da plata
+  antes.** Si es esto, el contenido está bien y se publica ya.
+- **B — medio** (lo que se dijo querer): cada pieza le sirve a su audiencia, Onia se menciona pero
+  no es el destino. Gana porque las marcas pagan. **Si es esto, hay que cambiar tema y proporción
+  ANTES de publicar** — máximo 1 de cada 5 piezas manda a Onia; hoy son 4 de 7.
+
+⚠️ Con cero clientes pagando y ~11 semanas de runway, **B puede no valer la pena**: vender
+publicidad necesita audiencia grande y eso tarda meses. Está escrito completo en
+`ONIA_SISTEMA_MARKETING_LUCIA_ONIA.md` §3-CERO.
+
 ### 1. 🔴 PUBLICAR LO DE LUCÍA — es el test de demanda y está sin correr
 
 `ONIA_ADDON_CONTENIDO.md` dice que el lanzamiento de Lucía *es* el test de demanda y que si no

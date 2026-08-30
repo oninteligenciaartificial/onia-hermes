@@ -1,5 +1,9 @@
 # Prompts por sesión — lo que dejaron los 26 videos
 
+> ⚠️ **AVISO (2026-08-30) — este doc le asigna trabajo o carril a Arthur, y Arthur YA NO COLABORA
+> con Onia** (dicho por Sergio el 23-ago). No le rutees tareas ni abras sesiones a su nombre.
+> El trabajo que este doc describe, si sigue vigente, lo toma el carril correspondiente de ONIA.
+
 > ## 🔴 CORRECCION 2026-08-12 — la tarea de seguridad YA ESTA CERRADA
 >
 > Los 3 bloqueantes de seguridad (RLS, firewall/TLS, logging) se cerraron y se **verificaron en

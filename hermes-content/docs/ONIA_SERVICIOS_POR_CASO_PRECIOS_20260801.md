@@ -1,5 +1,9 @@
 # Servicios por caso — precios de hoy, propuesta de subida y lo que enseña el mercado
 
+> ⚠️ **AVISO (2026-08-30) — este doc le asigna trabajo o carril a Arthur, y Arthur YA NO COLABORA
+> con Onia** (dicho por Sergio el 23-ago). No le rutees tareas ni abras sesiones a su nombre.
+> El trabajo que este doc describe, si sigue vigente, lo toma el carril correspondiente de ONIA.
+
 > 2026-08-01. Pedido de Sergio: definir los servicios por caso con precio actual y
 > posibilidad de subir, mirando el mercado. Disparador: reel de @cashflow.automations
 > ("6 Agents every Automation agency Needs", 417 likes en 1 día).
