@@ -36,7 +36,74 @@ El engagement de influencers IA es de CURIOSIDAD (~5,9%), no de confianza → **
 el tráfico, @oniahq lo convierte.** La transparencia ES el gancho (caso Aitana: revelar
 que era IA fue su mayor evento de crecimiento).
 
+## 3-BIS. 🔴 UNA SOLA TAXONOMÍA — dos ejes, no tres listas (2026-08-30)
+
+**El problema que esto arregla.** Había TRES formas de categorizar la misma pieza: los pilares de
+§3 (*IA sin humo / el personaje / detrás de escena*), los pilares A/B/C/D que se usaron al producir,
+y las seis palabras de Sergio (*UGC, día a día, informativo, b-roll, carrusel de venta, carrusel
+informativo*). Con tres taxonomías nadie sabe qué producir.
+
+**Y las dos viejas comparten un agujero: ninguna tiene la categoría "vender".** Por eso las piezas
+que piden una reunión no tenían casa, y el feed terminó con cuatro seguidas pidiendo algo.
+
+Se unifica en **dos ejes independientes**. Toda pieza es un formato × un propósito.
+
+| | **VENDER** (pide reunión) | **INFORMAR** (enseña algo) | **DÍA A DÍA** (el personaje) |
+|---|---|---|---|
+| **Carrusel** | L6 · L10 | L07/L08 (entregan PDF) · L09 (detrás de escena) | **L11** |
+| **Historia** (b-roll + placa) | tanda 1 (H01-H08) | — | tanda 2 (H09-H12) |
+| **Reel / UGC** | — | — | reel de lanzamiento |
+
+`b-roll` no es una categoría de publicación: es el **insumo** (los 5 mp4 de `generadas-20260828`).
+Se convierte en historia o en reel; solo no se publica.
+
+### Lo que el mapa deja a la vista
+
+1. 🔴 **CERO UGC.** Es la casilla vacía más cara: en Instagram el formato que más vende es una
+   persona hablando a cámara mostrando algo. Tenemos 7 carruseles y ni un UGC. **Y no es barato de
+   tapar:** requiere voz (ElevenLabs, pago) y lip-sync — es el único hueco que cuesta plata.
+2. 🔴 **CERO reels informativos y cero reels de venta.** Hay UN reel y es de presentación, cuando
+   el sistema pide 70% reel. **El formato dominante de la plataforma es el que menos tenemos.**
+3. La columna **INFORMAR** tiene 3 piezas y ninguna pide reunión: es la que hace crecer.
+4. La columna **VENDER** tiene 3 piezas (L6, L10, tanda 1) — **suficiente**. No hace falta producir
+   más venta: hace falta producir el resto.
+
+## 3-TER. Cómo se produce todos los días, con el costo real
+
+| Formato | Cómo | Costo | ¿Probado? |
+|---|---|---|---|
+| **2 historias/día** | `story-batch.mjs` recicla b-roll pago + placa escrita en código | **0 créditos** | ✅ dos tandas |
+| **2 carruseles/semana** | `carousel_render.js` + banco existente | **0 créditos** (2 cr si hace falta foto nueva) | ✅ 7 piezas |
+| **1 reel/semana** | 🔴 **sin resolver**. Higgsfield son 6,25 cr por 5 s | ~12-25 cr/semana | parcial |
+| **UGC** | 🔴 **no existe el flujo.** Voz + lip-sync | pago, sin medir | ❌ |
+
+**El cuello no son los créditos.** Un mes entero de historias y carruseles cuesta **Bs 0**; el reel
+semanal, unos Bs 10-25. **El cuello es que dos de los cuatro formatos no tienen flujo de
+producción**, y son justo los que más pesan en Instagram.
+
+## 3-QUATER. ¿Esto vende? La respuesta honesta
+
+**No lo sabemos, y no lo vamos a saber hasta publicar.** Lo que sí se puede afirmar:
+
+- **A favor:** la mecánica comentario→DM está probada técnicamente en @oniahq, y la referencia que
+  pasó Sergio (`@tomas_medinaa`) muestra **622 comentarios en un post** con esa misma mecánica.
+  Funciona a escala en manos ajenas.
+- **En contra, y es lo que hay que cambiar antes de publicar:** ahí la palabra clave es **el TEMA**
+  («Influencer»), y **cada comentario recibe respuesta pública** — dos cosas que nosotros no
+  hacemos. Nuestras palabras (SISTEMA, HUMO) no significan nada para quien recién llega, y solo
+  mandamos DM privado, así que el comentario queda huérfano y el algoritmo no ve conversación.
+- **Medición:** el circuito lleva `?src=` por cuenta y palabra, así que el lead se atribuye. La
+  única corrida real medida de @oniahq dio **alcance 73, 3 comentarios, 1 con palabra, 0 seguidas**.
+
+⇒ **Antes de publicar hay que decidir dos cosas** (§Pendientes): si la palabra pasa a ser el tema
+en vez del producto, y si se agrega la respuesta pública además del DM.
+
 ## 3. Pilares de contenido por cuenta (proporción exacta, estilo Samuel)
+
+> ⚠️ **Superado por §3-BIS.** Estos tres pilares son un eje de PROPÓSITO al que le falta "vender",
+> y por eso se conservan solo como historia del criterio. Mapean así: *IA sin humo* → INFORMAR ·
+> *el personaje* → DÍA A DÍA · *detrás de escena* → INFORMAR (meta).
+
 
 **Lucía — 6 piezas/semana (reels b-roll + carruseles + historias):**
 - 3/6 **"IA sin humo"** — herramientas reales, prompts, resultados con número (adaptadas
