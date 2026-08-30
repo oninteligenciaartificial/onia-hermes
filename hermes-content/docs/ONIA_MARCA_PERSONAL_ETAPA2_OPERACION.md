@@ -14,8 +14,8 @@
 | 4 | Checklist de las 6 cuentas + link in bio | 🟡 abajo, con huecos por confirmar | Sergio confirma |
 | 5 | Runbook de derivados: crudo → clips (editor-videos + HyperFrames) | ✅ §5 abajo | loop |
 | 6 | Plantillas de visual diario de comunidad (carruseles) | 🟡 spec en §6 — se construyen recién cuando el acuerdo firme (regla: nada a medias antes del gate) | loop |
-| 7 | Embudo: quitar `neverError` del workflow comentario→DM activo (`1jS4jwmNmvcQpqqH`) para que un rechazo de Meta ALARME | ⬜ verificar que infra esté libre antes de tocar n8n | loop (infra) |
-| 8 | `cal.onia.com.bo` — diagnóstico del 502 y levantar | ⬜ infra VPS | loop (infra) |
+| 7 | Embudo: quitar `neverError` del workflow comentario→DM activo (`1jS4jwmNmvcQpqqH`) | ➡️ **SALE de este carril** (decisión Sergio 2026-08-30: acá solo estrategia) — va al carril de infra/n8n | otro carril |
+| 8 | `cal.onia.com.bo` — diagnóstico del 502 | ➡️ ídem, carril infra/VPS | otro carril |
 | 9 | Test comentario→DM desde cuenta de tercero | ⬜ | **Sergio** |
 | 10 | Setup del perfil X | ✅ hecho en vivo 2026-08-30 (queda: revisar/borrar los 3 posts viejos, banner) | — |
 | 11 | Foto de LinkedIn (diálogo nativo de Windows) + decidir visibilidad pública | ⬜ | **Sergio** (2 min) |

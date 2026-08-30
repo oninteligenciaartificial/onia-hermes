@@ -63,9 +63,19 @@
   fijo se prorratea por pieza. Atrasos causados por Sergio (sesión cancelada, guion sin
   respuesta dentro de las 48 h) no prorratean.
 - **Revisión:** si el tope mensual se supera 2 meses seguidos, se revisan CPM y tope
-  automáticamente (revisión = renegociar, no ajuste automático de tarifa).
-- **Pago en regla:** con factura de Samuel o con la retención de ley correspondiente,
-  según lo que confirmen ambas consultas antes del primer pago.
+  automáticamente (propuesta de Samuel, aceptada — revisión = renegociar, no ajuste
+  automático de tarifa).
+- **Yapping (cerrado en la negociación):** los yapps SUMAN con su video madre contra un
+  solo tope de 50k (lógica de Samuel, aceptada) pero cobran **la mitad de la tarifa**
+  (posición de Sergio): trabajo marginal, tarifa marginal.
+- **Prorrateo:** solo aplica si la falta es de Samuel; atrasos causados por Sergio
+  (sesión cancelada, guion sin respuesta en 48 h) no prorratean (pedido de Samuel,
+  aceptado).
+- **Pago:** directo entre las partes, sin factura (decisión de ambos lados, 2026-08-30).
+  ⚠️ Nota interna, no va al mensaje: sin factura el gasto no es deducible y una salida
+  recurrente de la cuenta de OniaAgency sin respaldo es un riesgo en auditoría — pagar
+  por canal personal (Leslie), no desde la cuenta del negocio, y el contrato privado
+  simple se firma igual (el contrato no obliga a facturar).
 
 ## 5 · Propiedad y accesos
 
