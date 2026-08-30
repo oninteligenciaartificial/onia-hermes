@@ -57,9 +57,46 @@ para cerrar huecos que frenan el build.
 > **Defectos que reveló MIRAR el render** (2026-08-30). Ninguno se ve en el código;
 > los cinco salieron de abrir la captura en light y en dark.
 
-- [ ] **A1b · Dashboard: gauge/radial** para tasas (cierre, ocupación) — tipo de
-      chart nuevo en `dashboard.ts` (SVG arc). + fila de mini stat-tiles con ícono.
-      "Tasa de cierre 34%" es hoy un número pelado: es el caso de uso exacto.
+> **Fuente de estas tareas** (2026-08-30): `data/references/design-sources/2026-08-30-como-se-hace-un-dashboard.md`
+> — 8 dashboards de referencia despiezados **contra su código real** (8/8 fichas
+> sobrevivieron al crítico), + diagnóstico del admin de Onia y de este template.
+> 12 leyes convergentes, anatomía con números, brecha y plan. **Leerlo antes de tocar.**
+
+- [x] **W1 · Desbloquear lo visual** (2026-08-30). Tres defectos que hacían teórico
+      todo lo demás: (a) **la fuente nunca cargaba** — el CSS pedía "Onest" y el
+      documento no emitía ningún `<link>`, así que el panel entero renderizaba en la
+      fuente del sistema; `renderFontLinks` vivía como función local de
+      `landing-clinic`, se extrajo a `font-links.ts` compartido. (b) **la tarjeta era
+      invisible**: `--card` era literalmente `--color-bg`, 1,00:1; ahora se eleva un 3%
+      del fg y da 1,07:1, el mismo orden que el dark (1,11:1) que sí funcionaba — el
+      sistema de capas existía solo en oscuro. (c) `tabular-nums` en cifras, deltas,
+      ejes y tabla. Verificado midiendo (`document.fonts.check` = true) y mirando.
+- [x] **W2 · Un solo color por dato** (2026-08-30). Barras, sparkline y spark de KPI
+      pintaban con `--color-primary` mientras la línea multi-serie y el donut usaban
+      `--wf-series-*`: **el mismo dataset salía verde marca en barras y aqua en la
+      serie "Real" del gráfico de al lado**. Ahora toda la tinta de dato es
+      `--wf-series-1`; `--color-primary` quedó solo para cromo. De paso, el sparkline
+      tenía `preserveAspectRatio="none"`, que deformaba el trazo y volvía elipse el
+      punto final. Yo había justificado las barras verdes como "una serie no compite":
+      el corpus y el propio demo lo desmienten.
+- [ ] **W3 · Bugs de dato (los que MIENTEN).** `Math.max(value, 0)` en tres lugares
+      aplasta los negativos a cero mientras el `<title>` sigue mostrando el número
+      real: un reembolso o un churn se dibuja como cero. + el último punto del eje X
+      nunca se etiqueta (`index % step`), series de +58 puntos se recortan sin aviso,
+      y `niceMax` manda 340 a un eje de 500 (32% del plot muerto).
+- [ ] **W4 · Gauge/radial + defectos visuales.** "Tasa de cierre 34%" es hoy un número
+      pelado y es el caso de uso exacto (Tabler y Grafana lo resuelven con radial).
+      + `rx` solo arriba en barras, gap de 5px por stroke, donut con `paddingAngle` y
+      total al centro, swatch pill de 14×3, `:focus-visible` (hoy **cero** en 590
+      líneas de CSS), targets de 44px.
+- [ ] **W5 · Los estados que no existen.** Skeleton isomorfo, error de sección con
+      retry, vacío con altura reservada y segundo renglón que diga CUÁNDO se llena.
+- [ ] **W6 · Gates que hoy no existen.** Los tests actuales son `toBeVisible` y
+      `count > 0`: **los diez defectos de arriba pasaban todos los gates en verde**.
+      Falta screenshot comparado (claro/oscuro × 1440/375), axe sobre el fixture, un
+      test que falle si `--color-primary` aparece en un `fill`/`stroke` de dato, y otro
+      que falle si un negativo se dibuja con altura 0. + el fixture debe incluir un
+      negativo, un cero y una serie de 90 puntos, para que los bugs se vean en el demo.
 - [x] **A1c · En dark la marca ya NO desaparece** (2026-08-30). El remedio viejo, ante
       un primary ilegible sobre el fondo oscuro, lo reemplazaba por `DARK_FG`: sidebar,
       botón, KPI hero y barras salían **blancos**. Ahora se **aclara en HSL** conservando

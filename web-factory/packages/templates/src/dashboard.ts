@@ -1,4 +1,5 @@
 import { clientTokenCss } from "@onia/tokens";
+import { renderFontLinks } from "./font-links";
 
 export type DashboardKpi = {
   label: string;
@@ -416,7 +417,7 @@ function renderBarChart(chart: DashboardChart): string {
   // Diagonal-hatch fill for pending/future bars (pattern bank: Fireart 25241984).
   // Identical defs may repeat across inline charts; the shared id resolves to the same drawing.
   const hatchDefs = hasPending
-    ? `<defs><pattern id="wf-hatch" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--color-primary)" stroke-width="1.6" opacity="0.55"></line></pattern></defs>`
+    ? `<defs><pattern id="wf-hatch" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--wf-series-1)" stroke-width="1.6" opacity="0.55"></line></pattern></defs>`
     : "";
 
   const bars = points
@@ -425,8 +426,8 @@ function renderBarChart(chart: DashboardChart): string {
       const x = PAD_L + index * (barWidth + gap);
       const y = PAD_T + PLOT_H - height;
       const paint = point.pending
-        ? `fill="url(#wf-hatch)" stroke="var(--color-primary)" stroke-opacity="0.45" stroke-width="1"`
-        : `fill="var(--color-primary)"`;
+        ? `fill="url(#wf-hatch)" stroke="var(--wf-series-1)" stroke-opacity="0.45" stroke-width="1"`
+        : `fill="var(--wf-series-1)"`;
       const pendingNote = point.pending ? " (pendiente)" : "";
       return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(
         1,
@@ -545,12 +546,17 @@ function renderSparkline(chart: DashboardChart): string {
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
   const last = points[count - 1];
   const dot = last
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="var(--color-primary)"></circle>`
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="var(--wf-series-1)"></circle>`
     : "";
 
+  // `preserveAspectRatio="none"` estiraba el viewBox al ancho de la tarjeta y con
+  // el estiron se deformaba TODO lo dibujado: el trazo perdia grosor uniforme y el
+  // punto final dejaba de ser un circulo para volverse una elipse. `meet` mantiene
+  // la proporcion; la CSS de .wf-sparkline ya fija el aspect-ratio, asi que el
+  // ancho se sigue llenando igual.
   return `<svg class="wf-chart wf-sparkline" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttribute(
     chartLabel(chart),
-  )}" preserveAspectRatio="none"><polygon points="${area}" fill="var(--color-primary)" fill-opacity="0.12"></polygon><polyline points="${line}" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
+  )}" preserveAspectRatio="xMidYMid meet"><polygon points="${area}" fill="var(--wf-series-1)" fill-opacity="0.12"></polygon><polyline points="${line}" fill="none" stroke="var(--wf-series-1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
 }
 
 /** Sparkline drawn inside a KPI card, under the figure (pattern bank: Stakent 23902428).
@@ -645,6 +651,7 @@ export function renderDashboardDocument(client: DashboardClient): string {
     <meta property="og:title" content="${escapeHtml(client.seo.title)}">
     <meta property="og:description" content="${escapeHtml(client.seo.description)}">
     ${ogImage}
+    ${renderFontLinks(client.tipografia)}
     <script>try{var t=localStorage.getItem("wf-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <link rel="stylesheet" href="./site.css">
   </head>
@@ -946,7 +953,11 @@ h1, h2, h3 {
   width: calc(100% + 36px);
   height: 44px;
   margin: 4px -18px -16px;
-  color: var(--color-primary);
+  /* El sparkline del KPI es DATO, asi que su tinta sale del tema categorico y no
+     de la marca: con --color-primary quedaban barras aqua y sparklines verde
+     marca en la misma pantalla, dos colores para lo mismo. En la celda hero
+     sigue heredando la tinta de la card, que ahi es lo unico legible. */
+  color: var(--wf-series-1);
 }
 
 .wf-kpi--accent .wf-kpi-spark {
@@ -959,6 +970,16 @@ h1, h2, h3 {
   font-weight: 650;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+}
+
+/* Cifras de ancho fijo: sin esto los digitos cambian de ancho al actualizarse y
+   el numero "baila" en el lugar; en la tabla, ademas, las columnas no alinean.
+   7 de 8 dashboards del corpus lo hacen (2026-08-30-como-se-hace-un-dashboard). */
+.wf-kpi-value,
+.wf-kpi-delta,
+.wf-chart-axis,
+.wf-dash-table td {
+  font-variant-numeric: tabular-nums;
 }
 
 .wf-kpi-value {

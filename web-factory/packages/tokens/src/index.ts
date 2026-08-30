@@ -32,9 +32,16 @@ export function clientTokenVars(client: ClientTokenInput): Record<string, string
     "--secondary-foreground": readableTextOn(client.colores.secondary),
     "--accent": client.colores.accent,
     "--accent-foreground": readableTextOn(client.colores.accent),
-    "--card": client.colores.bg,
+    // La tarjeta NO puede ser el mismo color que la pagina. Medido en el
+    // dashboard (2026-08-30): `--card` era exactamente `--color-bg`, o sea 1,00:1
+    // contra el fondo — la tarjeta era invisible y toda la separacion la cargaba
+    // un borde de pelo. El sistema de capas existia solo en oscuro, donde `--card`
+    // (#161c22) si difiere del fondo (#0c1013). Un 3% del fg alcanza para que la
+    // superficie se lea como capa sin ensuciar la marca, y funciona con cualquier
+    // color de cliente (claro u oscuro), que es lo que un valor fijo no haria.
+    "--card": "color-mix(in oklab, var(--color-fg) 3%, var(--color-bg))",
     "--card-foreground": client.colores.fg,
-    "--popover": client.colores.bg,
+    "--popover": "color-mix(in oklab, var(--color-fg) 3%, var(--color-bg))",
     "--popover-foreground": client.colores.fg,
     "--muted": "color-mix(in srgb, var(--color-fg) 7%, var(--color-bg))",
     "--muted-foreground": "color-mix(in srgb, var(--color-fg) 68%, var(--color-bg))",
