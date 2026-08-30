@@ -77,8 +77,8 @@ calendario de demos. El `?src=` ya está vivo en prod.
 | TikTok | ¿? | 🟡 confirmar cuenta personal | handle consistente + bio + link |
 | Facebook | ¿? | 🟡 confirmar página/perfil | ídem |
 | YouTube Shorts | ¿? | 🟡 confirmar canal | ídem |
-| LinkedIn | **linkedin.com/in/sergiourcullo** | ✅ **COMPLETADO 2026-08-30** (verificado en pantalla): titular "Fundador de Onia \| Desarrollo sistemas con IA para escalar tu negocio", Acerca de en español (conserva credencial La Galerie Parfums: 900+ decants), URL limpia | foto (clic manual de Sergio en "Cargar foto"), visibilidad pública (titular/extracto/experiencia OCULTOS para no-logueados — decisión de Sergio), banner con logo nuevo |
-| X | **@sergiourcullo** (may-2021) | ✅ **COMPLETADO 2026-08-30** (verificado en pantalla): handle cambiado, nombre "Sergio Urcullo", bio idéntica a IG, ubicación Santa Cruz, foto verde de IG subida | website (esperando link de comunidad WhatsApp), banner |
+| LinkedIn | **linkedin.com/in/sergiourcullo** | ✅ **TERMINADO 2026-08-30**: titular "Fundador de Onia \| Desarrollo sistemas con IA para escalar tu negocio", Acerca de en español (conserva La Galerie Parfums), URL limpia, **foto verde + banner "on\|onia" subidos por Sergio**, **visibilidad pública TOTAL activada y verificada tras recarga** (titular/extracto/experiencia/foto → público, indexable por Google) | nada |
+| X | **@sergiourcullo** (may-2021) | ✅ perfil completo: handle, nombre, bio de IG, ubicación, foto verde | 🟡 banner (asset listo: `Descargas/ChatGPT Image 30 ago 2026, 12_25_34.png`, el mismo de LinkedIn) + website `onia.com.bo` provisorio — **el modal de edición de X dejó de renderizar** (4 intentos 30-ago); reintentar con sesión fresca. Los 3 posts viejos: pestañas renderizan vacías, nada urgente |
 
 > Bio unificada (decisión Sergio 2026-08-30): **la de IG** — "Desarrollo sistemas con IA
 > para escalar tu negocio / Fundador de @oniahq / Aprende IA gratis 👇". El link de bio
