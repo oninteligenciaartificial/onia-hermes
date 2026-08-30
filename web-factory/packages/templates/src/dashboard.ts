@@ -1014,6 +1014,22 @@ h1, h2, h3 {
   background: var(--card);
 }
 
+/* El grid iguala la altura de la fila a la tarjeta mas alta (la del donut, que
+   lleva leyenda de dos lineas), pero el chart tiene aspect-ratio fijo y no crece:
+   medido, sobraban 73px MUERTOS al pie de "Ingresos por mes". Con la tarjeta en
+   columna y el chart con margen automatico, el sobrante se reparte arriba y abajo
+   en vez de amontonarse al fondo. No se deforma nada: estirar el SVG deformaria
+   tambien las etiquetas de los ejes, que son <text> dentro del mismo viewBox. */
+.wf-chart-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.wf-chart-card .wf-chart,
+.wf-chart-card .wf-donut-wrap {
+  margin-block: auto;
+}
+
 .wf-chart-head,
 .wf-dash-table-head {
   display: flex;

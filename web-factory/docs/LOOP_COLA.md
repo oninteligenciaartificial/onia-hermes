@@ -72,9 +72,19 @@ para cerrar huecos que frenan el build.
       198/198 verde. Verificado mirando el render en oscuro.
       Nota: `--color-secondary` sigue cayendo a blanco a propósito — da la jerarquía
       primario=marca / secundario=neutro, y se ve bien en el render.
-- [ ] **A1d · Charts fijos en cards anchas → aire muerto.** `CHART_W=320 / CHART_H=150`
-      son constantes; la card mide el doble. Queda un tercio de tarjeta vacío en
-      "Ingresos por mes" y "Ingresos vs meta". El SVG tiene que escalar al ancho.
+- [x] **A1d · Aire muerto al pie de las tarjetas** (2026-08-30). ⚠️ **Mi diagnóstico
+      inicial estaba MAL**: decía "los charts no escalan al ancho". Medido, sí escalan
+      (`.wf-chart` ya tenía `width:100%` + `aspect-ratio`; el SVG mide 327px en una
+      tarjeta de 365 = exactamente el ancho menos el padding). El defecto real es otro:
+      el grid iguala la altura de la fila a la tarjeta más alta (el donut, con leyenda
+      de dos líneas) y el chart, con ratio fijo, no crece → **73px muertos al pie** de
+      "Ingresos por mes". Arreglado con tarjeta en columna + `margin-block:auto`: el
+      sobrante se reparte arriba y abajo en vez de amontonarse. No se estira el SVG
+      porque deformaría las etiquetas de los ejes, que son `<text>` del mismo viewBox.
+      **Lección: medir antes de arreglar. El primer diagnóstico salió de mirar una
+      captura y era plausible pero falso; el número lo desmintió.**
+      Pendiente de fondo: que el gráfico CREZCA a llenar la tarjeta necesita viewBox
+      dinámico — esperar a ver cómo lo resuelven las referencias antes de inventarlo.
 - [ ] **A1e · Specs de marca del skill `dataviz`**: gap de 2px entre segmentos del
       donut (hoy están pegados), marcadores ≥8px (hoy `r=2.5` → 5px), puntas
       redondeadas de 4px en las barras ancladas a la baseline.
