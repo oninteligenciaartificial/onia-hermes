@@ -118,11 +118,23 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Arrastre de la cola anterior
 
-- [ ] **Actualizar `ONIA_PRECIOS_COMPETENCIA_Y_DECISION.md`**: dice que Emizor *no publica
-      precio* y es **falso**. Están en archive.org, sin cambios en 2,5 años: USD 49/99/299 =
-      **Bs 580 / 1.171 / 3.537** al cambio real. Eso cambia el argumento de venta: **Onia
-      Básico a Bs 320 queda por debajo del piso de Emizor**, y ellos cobran en dólares, así
-      que la devaluación les pegó 70% sin que tocaran la lista.
+- [x] **`ONIA_PRECIOS_COMPETENCIA_Y_DECISION.md` corregido en los 4 lugares** donde decía que
+      Emizor no publica precio — uno de ellos lo llamaba *"el dato que más falta en todo el
+      relevamiento"*. Verificado en vivo el 2026-08-30 contra dos capturas de archive.org
+      (29-nov-2022 y 27-abr-2025, **idénticas**): PYME USD 49 · EMPRESA USD 99 · CORPORATIVO
+      USD 299 = **Bs 580 / 1.171 / 3.537** a 11,83. Nuestros números se leyeron de
+      `subscription-plans.ts` (320/750/1.500/2.900), no de un doc.
+      **Tres cosas que la nota de la cola no tenía y sí cambian el pitch:**
+      (1) los tramos de Emizor son **por facturación anual del cliente**, no por usuarios;
+      (2) el plan PYME **sólo se vende semestral** — USD 294 ≈ **Bs 3.478 por adelantado**
+      contra Bs 320/mes, y ésa es la barrera real para el negocio chico, no los Bs 260 de
+      diferencia mensual; (3) Emizor da facturas, sucursales **y usuarios ilimitados** sin
+      costo de alta, así que contra ellos **no se compite por el precio de la facturación**,
+      se compite por todo lo demás que viene en el mismo plan.
+      **Queda abierto (menor):** `/precios-2` da 404 en vivo y la última captura es de
+      abr-2025 — es el mejor dato disponible, no el precio de hoy confirmado. Se cierra con
+      una cotización por su formulario. **Lección anotada en el doc:** un 404 en `/precios`
+      no prueba que no publiquen precio, prueba que esa ruta no responde.
 - [ ] **Limpiar las organizaciones de prueba** que quedaron en la base **LOCAL** (nombres con
       "Prueba", ~9). Sólo local — producción no se toca.
 - [ ] **Los otros dos agujeros** que el escéptico marcó en `chore/sacar-dentalgest` y las dos

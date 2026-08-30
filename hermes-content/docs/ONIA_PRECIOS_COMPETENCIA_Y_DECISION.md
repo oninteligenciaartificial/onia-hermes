@@ -16,6 +16,11 @@
 
 **Fecha:** 2026-08-28 · **Para:** Sergio · **Estado:** documento de decisión, no material de cliente
 
+> ⚠️ **Revisado el 2026-08-30 — Emizor.** El relevamiento original lo daba como "no publica
+> precio" en cuatro lugares y lo llamaba *el dato que más falta*. **Es falso.** Emizor publica
+> USD 49/99/299 desde 2022; lo que pasa es que su ruta `/precios-2` da 404 y el precio quedó
+> sólo en archive.org. El tipo de cambio no se tocó: sigue Bs 11,83/USD en todo el documento.
+
 **Tipo de cambio usado en todo el documento: Bs 11,83/USD** (oficial BCB al 28-ago-2026). Triangulado por tres fuentes independientes el mismo día: dolarbolivia.net, la tabla de hosting de Sintic (que divide sus propios precios a 11,83 exacto) y la página de tipo de cambio de Xmart, que cita al BCB. El paralelo está en Bs 11,95 venta / 12,00 compra: **la brecha oficial-paralelo es ~1%, prácticamente cerrada.**
 
 > ⚠️ **El brief traía 11,37 y está viejo.** No es un detalle: con 11,37 un SaaS de USD 100 son Bs 1.137 y con 11,83 son Bs 1.183. Si algún doc interno sigue con 11,37, hay que corregirlo antes de usarlo en una cuenta.
@@ -42,11 +47,19 @@
 | **CUCU** API SIAT Junior | Solo timbrado | **280** | **2.800** | **0 facturas incluidas**, Bs 0,98 c/u. A 300 facturas = Bs 574/mes real. |
 | **Sintic** POS escritorio + SIAT | Licencia mono-PC offline | **1.900 pago único** (≈53/mes a 3 años) | — | Solo 2 documentos sector. App móvil con costo extra sin precio. |
 | **Sintic** componentes SIAT sueltos | Librería/gateway/API | **850 a 4.500 pago único** | — | Su copy vende el argumento anti-suscripción textual. |
-| **Emizor** | Facturación certificada por el SIN | 🔴 **NO PUBLICA PRECIO** | — | 3 planes sin un número. Su `/precios-2` da 404. Es el competidor local de mayor peso institucional. |
+| **Emizor** PYME | Facturación certificada por el SIN | **580** | **0** (sin costo de alta) | ⚠️ **Cobra en USD: 49/mes.** Facturas, tipos de documento, sucursales y usuarios **ilimitados**, un solo NIT. **Sólo se vende semestral → USD 294 = Bs 3.478 por adelantado.** Precio leído del snapshot del 27-abr-2025; hoy `/precios-2` da 404. |
 | **Citalo** (dental) | Turnos | 🔴 **NO PUBLICA PRECIO** | — | WhatsApp uruguayo (+598). |
 | **Wirevet** (veterinaria) | Ficha clínica | 🔴 **NO PUBLICA PRECIO** | — | Operación chilena. |
 | **LiveConnect Bolivia** | WhatsApp API | 🔴 **NO PUBLICA PRECIO** | — | Solo "escala a USD 1 por agente" sin base. `/bo/precios` = 404. |
 | **ADSIB** (no es competidor) | Certificado firma digital | **Bs 70 pago único** | — | Lo paga el cliente de cualquier proveedor, incluido el nuestro. |
+
+> **La escalera completa de Emizor** (verificada el 2026-08-30 en dos capturas de
+> archive.org, 29-nov-2022 y 27-abr-2025, **idénticas**): **PYME USD 49 = Bs 580** ·
+> **EMPRESA USD 99 = Bs 1.171** · **CORPORATIVO USD 299 = Bs 3.537**. Los tramos no son por
+> usuarios sino **por facturación anual del cliente**: menos de Bs 1,2 M → PYME, menos de
+> Bs 10 M → EMPRESA, menos de Bs 35 M → CORPORATIVO. Va en la tabla local porque es una
+> empresa boliviana certificada por el SIN, pero **es el único local que cobra en dólares**,
+> así que la cabecera "sin exposición cambiaria" no le aplica.
 
 ### 1.b — Competencia EXTRANJERA en USD/EUR (convertida a 11,83)
 
@@ -201,11 +214,32 @@ Tres decisiones que hay que tomar antes del 1-sep (cuando Meta publica las tarif
 
 **No puedo recomendar subir ningún precio.** Con cero clientes pagando no hay un solo dato de disposición a pagar. Cualquier suba sería un número elegido a dedo.
 
-**No puedo comparar contra Emizor**, que es el competidor local certificado por el SIN de mayor peso institucional y no publica un solo número. Sergio debería pedir las tres cotizaciones (PYME / EMPRESA / CORPORATIVO) por su formulario. **Es el dato que más falta en todo este relevamiento.**
+**SÍ se puede comparar contra Emizor, y la comparación es favorable.** ⚠️ Acá decía que
+Emizor "no publica un solo número" y que era *el dato que más falta en todo el relevamiento*.
+**Era falso**: el número está publicado desde 2022 y sólo dejó de estar a la vista cuando la
+página empezó a dar 404. Verificado el 2026-08-30 (detalle en la tabla 1.a).
+
+- **Onia Básico Bs 320 entra por debajo del piso de Emizor** (PYME Bs 580) — y por debajo con
+  margen: 45% menos. La comparación de arriba de la escalera también cierra: **Enterprise
+  Bs 2.900 vs CORPORATIVO Bs 3.537**. En el medio Emizor gana un tramo: **EMPRESA Bs 1.171
+  queda entre Profesional (750) y Clínica (1.500)**.
+- **El argumento más fuerte no es el precio de lista, es la moneda.** Emizor cobra en USD y
+  **no tocó su lista en 2 años y 5 meses**: mismos 49/99/299 en nov-2022 y abr-2025. Pero el
+  dólar pasó de 6,96 a 11,83, así que **su cliente boliviano paga hoy 70% más en bolivianos
+  sin que ellos hayan subido un centavo** — el plan PYME pasó de Bs 341 a Bs 580. Onia cobra
+  en Bs: el mismo número el mes que viene. Eso se dice así, sin adjetivos, y se sostiene solo.
+- **El desembolso inicial pega más que la mensualidad.** El plan PYME **sólo se vende
+  semestral**: son **USD 294 ≈ Bs 3.478 por adelantado** contra Bs 320 al mes. Para el negocio
+  chico que es nuestro comprador, esa es la barrera real, no los Bs 260 de diferencia mensual.
+- **Lo honesto de la otra vereda**, que hay que saber antes de que lo diga el cliente: Emizor
+  da facturas, tipos de documento, sucursales **y usuarios ilimitados**, sin costo de alta, y
+  está certificado por el SIN hace años. Es facturación sola — sin agenda, sin inventario,
+  sin bandeja ni bot — pero en su carril no tiene jaulas. **Contra Emizor no se compite por
+  precio de facturación: se compite por todo lo demás que viene en el mismo plan.**
 
 ### 4.5 — Un movimiento que no cuesta plata
 
-**Publicar el precio es diferencial en este mercado.** Emizor, Citalo, Wirevet y LiveConnect venden por formulario y WhatsApp sin mostrar un número. La mitad del mercado esconde el precio. Onia ya lo publica; conviene decirlo explícitamente en la landing, no darlo por sentado.
+**Publicar el precio es diferencial en este mercado.** Citalo, Wirevet y LiveConnect venden por formulario y WhatsApp sin mostrar un número. **Emizor es otro caso:** publicó 49/99/299 durante años y hoy su página de precios da 404 — el número existe, dejó de estar a la vista. La mitad del mercado esconde el precio. Onia ya lo publica; conviene decirlo explícitamente en la landing, no darlo por sentado.
 
 ---
 
@@ -261,7 +295,7 @@ Y una trampa concreta: **Bs 390 significa el chatbot en `pricing.ts` y un plan c
 **Bloquea decisiones de precio:**
 
 - 🔴 **Si el Portal Web del SIN es realmente gratuito, y con qué límites.** El dato competitivo más importante de todo el relevamiento. Fuentes secundarias dicen que sí; la página oficial confirma que la modalidad existe pero no publica costo, tope de facturas ni elegibilidad. Si es gratis, el piso del mercado es cero, no Bs 85.
-- 🔴 **Emizor: no hay ni un número.** Su página de precios da 404. Certificado por el SIN, es el competidor local de mayor peso y no sabemos qué cobra. Se consigue por su formulario de solicitud.
+- 🟡 **Emizor: si los USD 49/99/299 siguen vigentes hoy.** ⚠️ Acá decía "no hay ni un número" y **estaba mal**: el número está y se verificó el 2026-08-30. Lo que queda abierto es más chico: `/precios-2` da 404 en vivo y **la última captura es del 27-abr-2025**, o sea 16 meses de antigüedad. Es el mejor dato disponible, no el precio de hoy confirmado. Para cerrarlo hace falta una cotización por su formulario. **Lección:** un 404 en `/precios` no prueba que no publiquen precio — prueba que esa ruta no responde.
 - 🔴 **Tarifa de Meta para Bolivia.** Las dos fuentes halladas se contradicen (marketing USD 0,0851 vs 0,0740; utility USD 0,0130 vs 0,0113) y **ninguna es el rate card oficial**. Meta confirma que Bolivia está en "Rest of Latin America" pero sirve los números como descarga por moneda que no se pudo bajar. Antes de poner un número en material de cliente, bajar el rate card desde el WhatsApp Business Manager.
 - 🔴 **Tarifa del mensaje de servicio post 1-oct-2026.** Meta la publica el 1-sep-2026. Los Bs 200–231/mes de la sección 4.3 son una **ilustración** con la tarifa utility actual, no un dato.
 - 🔴 **El levantamiento de restricciones de tarjeta internacional (abr-2026).** Confirmado por titulares de MEFP, ASFI, Infobae y Bloomberg Línea; la resolución primaria no se pudo abrir. **Hasta confirmarla, el argumento "no podés pagarle a un extranjero" no se usa.**
