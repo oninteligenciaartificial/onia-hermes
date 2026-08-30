@@ -80,12 +80,29 @@ audiencia propia, y sin audiencia propia no hay publicidad que vender.
 Bolivia tarda meses en tenerla. Onia tiene **cero clientes pagando** y ~11 semanas de runway.
 **A —Lucía como embudo— da plata antes**, aunque sea menos ambicioso.
 
+### ✅ DECIDIDO (Sergio, 2026-08-30): **son los dos.**
+
+Y no es contradicción — es **proporción**. Los dos negocios conviven si el contenido que construye
+audiencia es la mayoría y el que vende es la minoría:
+
+> **4 de cada 5 piezas sirven a SU audiencia (B). 1 de cada 5 manda a Onia (A).**
+> Hoy es al revés: **4 de 7 mandan a Onia**. No hay que cambiar las piezas de venta — hay que
+> **sumar** piezas que no vendan, hasta invertir la proporción.
+
+**Objetivo nuevo del carril: Lucía posteable TODOS LOS DÍAS**, con inventario suficiente y esa
+proporción. Lo que falta para eso está medido en §3-BIS: cero UGC y cero reels que no sean el de
+presentación.
+
+<details><summary>La pregunta original, ya contestada</summary>
+
 ⇒ **Decisión de Sergio, y define todo lo demás:** ¿Lucía es un canal de venta de Onia, o un medio
 que después vende publicidad? Si es lo primero, el contenido actual está bien y hay que publicarlo
 ya. Si es lo segundo, **hay que cambiar el tema y la proporción antes de publicar** — porque cada
 pieza que la muestre como vendedora de Onia le pone techo a la audiencia.
 
-**Regla si se elige B:** máximo **1 de cada 5** piezas manda a Onia. Hoy son 4 de 7.
+**Regla:** máximo **1 de cada 5** piezas manda a Onia. Hoy son 4 de 7.
+
+</details>
 
 ## 3-BIS. 🔴 UNA SOLA TAXONOMÍA — dos ejes, no tres listas (2026-08-30)
 
