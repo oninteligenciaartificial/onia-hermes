@@ -494,6 +494,26 @@ Los 5 patrones consagrados — todo dashboard nuevo de Onia parte de acá:
 Referencia viva: hermes-content/references/ui-patterns/panel-claro-premium/index-v4.html
 (+v5 sustractiva). Detalle crudo por galería: docs/DESIGN_LEARNED_2026.md §5b.
 
+> ⚠️ **ALCANCE (acotado 2026-08-30) — y una contradicción abierta que decide Sergio.**
+>
+> Estos 5 patrones son **dirección elegida por Sergio el 17-ago** y NO se reabren por
+> iniciativa propia. Pero el barrido del 29-ago sobre **26 dashboards reales** (Grafana,
+> shadcn, Tremor, Tabler, Flowbite, Horizon, Ant Pro) encontró lo contrario en el punto 5:
+> el patrón que más se repite es **KPI = número grande + chip de tendencia + sparkline
+> DENTRO de la tarjeta**, más una **celda KPI hero de acento sólido** que ancla la fila
+> (`data/references/design-sources/2026-08-29-dashboards-aprendidos.md:11-16`). El punto 5
+> de acá pide justo lo opuesto: celdas de pelo, sin caja.
+>
+> **Reconciliación mientras tanto:** "libro mayor editorial" gobierna el **panel propio de
+> Onia**; el **template de cliente** (`packages/templates/src/dashboard.ts`) sigue
+> `docs/DASHBOARD_PATTERN_BANK_2026.md`, que es el que está anclado al código línea por
+> línea y ya implementa sparkline-en-KPI y celda hero.
+>
+> **Lo que falta decidir:** Sergio pidió el 30-ago llevar el dashboard de **Onia Platform**
+> al nivel de las referencias — o sea, exactamente la superficie donde las dos direcciones
+> chocan. Esa elección es suya, no se resuelve editando este doc. Queda planteada, no
+> zanjada.
+
 
 
 Design read: status at a glance, dense but legible, action over decoration.

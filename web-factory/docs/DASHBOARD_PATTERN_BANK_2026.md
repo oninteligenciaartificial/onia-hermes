@@ -146,37 +146,49 @@ sobre superficie oscura (`dashboard.ts:694-710`). `dataviz` color-formula §Stat
 are reserved … never reused for series". El delta y los chips usan estos tokens, no el acento.
 **Preservar tal cual.**
 
-**[FIX CRÍTICO] La paleta categórica sale de la marca — viola las no-negociables de `dataviz`:**
+**[HECHO — PRESERVAR] La paleta categórica ya salió de la marca** (commit `8fa44440`, 2026-08-30).
 
-```js
-// dashboard.ts:337
-const SERIES_COLORS = [
-  "var(--color-primary)", "var(--color-accent)", "var(--color-secondary)",
-  "color-mix(in srgb, var(--color-primary) 50%, var(--color-bg))",  // ← hue generado
-  "color-mix(in srgb, var(--color-accent) 50%, var(--color-bg))",
-  "color-mix(in srgb, var(--color-secondary) 50%, var(--color-bg))",
-];
-```
+> ⚠️ Este bloque decía `[FIX CRÍTICO]` y describía un `SERIES_COLORS` de `color-mix` que ya no
+> existe. Quedó pidiendo un trabajo hecho: **quien lo obedezca hoy rehace el fix y encima pisa
+> la paleta validada con el orden crudo de `references/palette.md`.** No lo hagas.
 
-1. `dataviz`: "Assign categorical hues in fixed order, never cycled. A 9th series is never a
-   generated hue." Los tres `color-mix … 50% bg` son **hues generados** → indistinguibles bajo
-   CVD, no pasan ΔE ≥ 8 adyacente. Un cliente mono-hue (p.ej. Cleo #47201C/#FFE3D1) produce un
-   donut de 6 gajos donde 4 son el mismo marrón lavado.
-2. `dataviz`: "Run the validator before shipping any categorical palette." No hay validación; los
-   colores salen de una marca que nunca fue diseñada como escala CVD-safe.
+El diagnóstico original era correcto y por eso se aplicó: la marca del cliente nunca fue diseñada
+como escala CVD-safe, y los `color-mix … 50% bg` eran **hues generados** — un cliente mono-hue
+producía un donut donde 4 gajos eran el mismo tono lavado.
 
-**Resolución.** La identidad categórica **NO sale de la marca del cliente**. La marca pinta cromo
-(acento, hero cell, botón); los datos multi-serie usan el **theme categórico fijo de 8 hues
-validado** de `dataviz` (`references/palette.md`, default:
-`#2a78d6,#eb6834,#1baf7a,#eda100,#e87ba4,#008300,#4a3aa7,#e34948`). Correr antes de shippear:
+**Estado en HEAD** (`dashboard.ts:336-366`): la tinta de dato son custom properties
+`--wf-series-1..6` compuestas desde `SERIES_THEME`, con **par light/dark por slot**. Son
+variables y no hex porque un hex quemado en el atributo de un `<path>` **no puede cambiar con el
+tema**: el dark necesita sus propios steps, no un flip.
+
+**Cómo se eligió el orden — y por qué no se re-elige a ojo.** No se escogió: se **computó**. Se
+enumeraron las 720 permutaciones y se validó cada una con el validador de `dataviz` contra los
+surfaces reales, en ambos modos. Pasan 140; el ganador es:
 
 ```
-node scripts/validate_palette.js "<hexes>" --mode light
-node scripts/validate_palette.js "<hexes>" --mode dark --surface "#0c1013"
+aqua > blue > orange > violet > yellow > magenta
+light  #1baf7a #2a78d6 #eb6834 #4a3aa7 #eda100 #e87ba4
+dark   #199e70 #3987e5 #d95926 #9085e9 #c98500 #d55181
 ```
 
-`#0c1013` es el `DARK_BG` real (`tokens/index.ts:54`) — `dataviz`: "validated against the dark
-surface, not an automatic flip". Asignación por nº de series: **1** → secuencial/emphasis (no
+Peor ΔE adyacente **13.2** en ambos modos, sobre un gate de 8. **Reordenar los slots rompe la
+garantía** — el orden ES el mecanismo de seguridad CVD, no cosmética.
+
+La tanda anterior (`03a892f6`) se eligió a criterio y el validador la reprobó: el verde de marca
+daba chroma 0.097 (**leía gris**) y terracota↔oliva ΔE 4.9 en deutan (**el mismo color** para
+daltonismo verde). Es la prueba de por qué esto se corre, no se estima.
+
+```
+node scripts/validate_palette.js "<hexes>" --mode light --surface "#f6f2ea"
+node scripts/validate_palette.js "<hexes>" --mode dark  --surface "#161c22"
+```
+
+⚠️ **El surface es el de la TARJETA, no el de la página.** Antes acá decía `#0c1013` (el
+`DARK_BG` de `tokens/index.ts:54`), y está mal: medido en el navegador, el ancestro opaco detrás
+del chart es `article.wf-chart-card` = `rgb(22,28,34)` = `#161c22` en oscuro y `#f6f2ea` en claro.
+Validar contra el fondo de página da un veredicto de contraste que no es el que ve el usuario.
+`dataviz`: "contrast and band results are only meaningful against the surface the chart actually
+renders on". Asignación por nº de series: **1** → secuencial/emphasis (no
 categórico); **2-3** → theme fijo, slots 1..N en orden, con leyenda (`renderLegend` ya existe,
 `dashboard.ts:363`) + direct-label; **≥4** en scatter/donut → plegar en "Otros" o facetear.
 
@@ -236,18 +248,35 @@ números fiscales no bailan":
 
 ## 8. Checklist de cierre (prioridad)
 
-1. **[CRÍTICO]** Sacar `SERIES_COLORS` de la marca; usar el theme categórico fijo validado de
-   `dataviz`, correr `validate_palette.js` en light y dark(`#0c1013`) antes de shippear.
-   **Marca = cromo, no = series.** (`dashboard.ts:337`)
-2. **[ALTO]** Separar fuentes: números en `--font-body`, serif/display solo en títulos de panel.
-   (`dashboard.ts:941`, `stat-strip.ts:145`)
-3. **[ALTO]** Capa de hover real (crosshair/tooltip) para premium. (`dashboard.ts:411,448`)
-4. **[MEDIO]** Gridlines sólidas; cap de barra ≤24px; endpoint dot r≥4 + anillo 2px; base cuadrada.
-   (`dashboard.ts:323,391,411,526`)
-5. **[MEDIO]** Donut de 6 gajos excede el cap all-pairs de 3 → "Otros"+facet o barra apilada
-   horizontal. (`dashboard.ts:337,470`)
-6. **[MEDIO]** Bento en la banda 2: chart ancla `span 2`, romper el grid uniforme.
-   (`dashboard.ts:981`)
-7. **[PRESERVAR]** `--wf-pos/neg` separados del acento con elevación en oscuro; textura hatch 45°;
+1. **[PRESERVAR — hecho 2026-08-30, `8fa44440`]** `SERIES_COLORS` ya salió de la marca: son
+   `--wf-series-1..6` con par light/dark, en un orden **computado** (720 permutaciones validadas,
+   peor ΔE adyacente 13.2 sobre gate 8). **No re-elegir ni reordenar los slots** — el orden es el
+   mecanismo de seguridad CVD. Detalle y comando en §5. (`dashboard.ts:336-366`)
+2. **[CRÍTICO — nuevo, visto mirando el render]** **En oscuro la marca DESAPARECE.** Los tokens
+   dark mapean `--color-primary` al foreground (`#e7e9ec`), así que sidebar activo, botón, celda
+   KPI hero y las barras salen **blancos**: el panel pierde identidad justo en el tema que más se
+   usa. Necesita un step oscuro del verde de marca, no el foreground. El token vive en
+   `packages/tokens`, así que el arreglo alcanza a **todos** los templates — regenerar y mirar los
+   otros demos antes de cerrar.
+3. **[ALTO — nuevo]** **Los charts no escalan al ancho de la tarjeta.** `CHART_W=320 / CHART_H=150`
+   son constantes y la tarjeta mide el doble: queda un tercio de tarjeta vacío en "Ingresos por
+   mes" y "Ingresos vs meta". Es el defecto de composición más visible del panel.
+   (`dashboard.ts:292-299`)
+4. **[ALTO]** Capa de hover real (crosshair/tooltip). Hoy solo hay `<title>` nativo, que tarda ~1 s
+   y no se puede estilar. `dataviz` interaction: un chart HTML **es** interactivo.
+5. **[ALTO]** Separar fuentes: números en `--font-body`, serif/display solo en títulos de panel.
+   (`dashboard.ts`, `stat-strip.ts:145`)
+6. **[MEDIO]** Specs de marca de `dataviz`: gap de 2px de surface entre gajos del donut (hoy están
+   pegados), marcadores ≥8px (hoy `r=2.5` → 5px de diámetro), puntas redondeadas de 4px en las
+   barras ancladas a la baseline, cap de barra ≤24px.
+7. **[MEDIO]** Falta **gauge/radial**. "Tasa de cierre 34%" es hoy un número pelado y es el caso de
+   uso exacto (Tabler y Grafana lo resuelven así). + fila de mini stat-tiles con ícono.
+8. **[MEDIO]** Donut: el cap all-pairs de `dataviz` es 3 slots. Con 4+ gajos hace falta encoding
+   secundario (ya hay leyenda con % directo, que califica) o plegar la cola en "Otros".
+9. **[MEDIO]** Bento en la banda 2: chart ancla `span 2`, romper el grid uniforme.
+10. **[PRESERVAR]** `--wf-pos/neg` separados del acento con elevación en oscuro; textura hatch 45°;
    `wf-count` con valor real en HTML; herencia de tokens landing↔dashboard; count-up opt-out por
    forma. Todo eso ya cumple la skill.
+
+> Los items 2, 3 y 6 **no se ven leyendo el código**: salieron de abrir la captura en claro y en
+> oscuro. Un `grep` sirve para descartar, nunca para confirmar que algo se ve bien.
