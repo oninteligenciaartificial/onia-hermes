@@ -519,3 +519,26 @@ UN deploy con runner, verifica MIRANDO y pushea. Regla de no-choque por archivos
 A=settings/chatbot+editor-conversacional · B=push+webhooks · C=docs · orquestador=inbox.
 Despues de esto: v6.8 recorrida de friccion completa + gates de Sergio (popup, BCP,
 alta, 75414930).
+
+## ✅ OBJETIVO "todo-usable v1.0" COMPLETO (2026-08-30 noche)
+
+Deploy 699fd09 (BUILD_ID evS4ROA0-2CeHEBAlBCF1, runner 5 gates, suite 2318). VERIFICADO
+MIRANDO: perilla presente=true (captura a Sergio), chip=true. Construido con la
+ARQUITECTURA NUEVA (3 subagentes paralelos sin commit + orquestador integra/deploya):
+1. Perilla "Seguimiento" en /settings/chatbot (switch default ON + espera 1-24h +
+   microcopy; armarDocumento solo escribe si difiere del default; aplicarDoc cableado;
+   diff del editor narra encender/apagar/horas normalizado al default del lector).
+2. PUSH "te escribieron": push-te-escribieron.ts (org por chatwootInboxId, throttle
+   1/conv/5min en memoria, suscripciones muertas se borran) + relay fire-and-forget.
+   BUG PREEXISTENTE arreglado: sw.js leia data.body y lib/push manda message — TODOS
+   los push (citas incluidas) salian sin cuerpo. Falta SOLO verificar en un celular
+   real de Sergio (suscribirse y recibir) — el circuito esta testeado 95/95.
+3. Chip "N conversaciones atendidas hoy · sin limite, siempre" en /inbox (costo cero).
+4. PRICING DECIDIDO por Sergio: OPCION A — Bs 390 plano todo incluido RATIFICADO
+   (cero cambio de codigo; pricing.ts ya lo tiene). Doc con la comparativa verificada:
+   ONIA_PRICING_CHATBOT_PROPUESTA.md (Sendy real 240-560+, Leadsales 1106, Cliengo
+   513/2953, Treble ~4550, ManyChat 775; pitch anti-Sendy en el doc).
+Sesion paralela detectada (carril comercial/CRM, tus 10 bloqueados + 3 leads): sin
+choque de carriles; regla fetch+rebase antes de push absorbio 6 PRs ajenos hoy.
+QUEDA: v6.8 recorrida de friccion + verificacion del push en dispositivo real +
+gates de Sergio (popup — monitor vivo, BCP, alta, 75414930).
