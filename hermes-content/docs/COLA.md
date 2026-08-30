@@ -39,14 +39,35 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 > hechos "más o menos": estaban hechos, o estaban decididos, o el costo era otro. Queda
 > escrito acá para que ninguna sesión los vuelva a abrir.
 
-- [ ] **F2 · `/inbox` no está gateado y el chatbot SÍ se cobra.** Es el único de los tres
-      add-ons que cuesta plata de verdad. La bandeja del asistente entró al nav de **todos**
-      los packs el 2026-08-30 y **no tiene `requiresFeature`**: el que no paga los Bs 390 ve
-      la misma pantalla que el que sí. Además `addon.chatbot` **ni se deriva** en
-      `entitlements.ts` (sólo `inventoryAddon` se deriva).
-      **Arreglo:** derivar la clave y gatear el ítem de nav, con el precedente de `/agents`
-      (`requiresFeature: "module.agents"`). Test primero: un pack sin la clave no declara el
-      segmento `inbox`. Ojo con el fail-closed: gatear mal deja sin bandeja al que ya paga.
+- [ ] 🔴 **F2 · BLOQUEADO EN SERGIO — el chatbot se cobra y medio chatbot es gratis.**
+      Verificado en vivo el 2026-08-30, y la primera versión de este ítem estaba mal en dos
+      cosas, así que ojo con lo que se lee acá:
+      - **La llave NO es `addon.chatbot`, es `addon.whatsapp`.** `addon.chatbot` está en el
+        catálogo (`types.ts:73`) y **no la lee nadie**: es una llave duplicada y muerta. La
+        que trabaja es `addon.whatsapp`, derivada del booleano `whatsappAddon` **o** de un
+        entitlement, con su helper ya escrito: `isWhatsAppAddonActive()` en
+        `lib/plan-limits.ts:396`.
+      - **La mitad del chatbot SÍ está gateada.** `GET /api/chatbot-knowledge/published`
+        chequea el add-on desde el 2026-08-18: sin add-on, el bot no atiende con el
+        conocimiento del cliente.
+      **Lo que sí está abierto:** la **bandeja**. `/inbox` no tiene `requiresFeature`,
+      `inbox/page.tsx` sólo chequea sesión, y `bandejaProfile()` (`lib/chatbot/bandeja-auth.ts`)
+      gatea por rol, no por add-on. La tenencia sale de `clinicSettings.chatwootInboxId`.
+      **Y la raíz:** el alta crea un inbox de Chatwoot para **TODA** org automáticamente
+      (`app/api/admin/clinics/route.ts:99`, `createInbox` + `addAgentToInbox`), sin mirar el
+      add-on. O sea: toda org nace con bandeja funcionando y `whatsappAddon` en `false`.
+
+      **Por qué no lo cierro solo:** cualquiera de los dos arreglos **baja una superficie
+      viva**, y eso está en la lista de "nunca" del loop.
+      - **(a) Gatear `/inbox` con `requiresFeature: "addon.whatsapp"`** — una línea, y alcanza
+        para nav Y ruta (la lista blanca se deriva del nav). Pero **hoy ninguna org tiene el
+        add-on**, así que todas pierden la bandeja de golpe.
+      - **(b) Dejar de crear el inbox salvo que el add-on esté activo** — ataca la raíz y **no
+        apaga nada de lo que ya existe**, sólo cambia lo que recibe una org nueva. Más seguro,
+        pero cambia lo que ve un cliente el día uno (hoy la bandeja vacía funciona de gancho).
+      **Decide Sergio.** Con cero clientes pagando el costo real de hoy es cero; el costo
+      aparece con el primer cliente que pague el add-on y vea que el de al lado lo tiene igual.
+
 - [ ] **F3 · `/requerimientos` sigue inalcanzable.** Portal público con token, endpoints y
       e2e propios; **cero `href` en todo el repo** (verificado hoy). Una capacidad ya
       construida que ningún cliente puede encontrar. Es el único ítem del plan que sobrevivió
