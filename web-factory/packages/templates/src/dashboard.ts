@@ -333,14 +333,17 @@ function renderGrid(max: number): string {
     .join("");
 }
 
-// Token-driven palette for multi-series and donut slices (no hardcoded brand).
+// Tema categórico FIJO para series/donut (regla dataviz + crítico 2026-08-29):
+// la tinta de dato NO sale de la marca. Cuando primary=accent (Onia todo verde)
+// las series salían indistinguibles. Hues distintos de lightness pareja que
+// leen sobre cream (#f6f2ea) y sobre oscuro (#0e1512), orden por separación.
 const SERIES_COLORS = [
-  "var(--color-primary)",
-  "var(--color-accent)",
-  "var(--color-secondary)",
-  "color-mix(in srgb, var(--color-primary) 50%, var(--color-bg))",
-  "color-mix(in srgb, var(--color-accent) 50%, var(--color-bg))",
-  "color-mix(in srgb, var(--color-secondary) 50%, var(--color-bg))",
+  "#0e7c66", // teal-verde (serie 1, alinea con marca)
+  "#c98a3b", // ámbar/miel
+  "#3d6fa5", // azul
+  "#9d4e86", // magenta
+  "#7a9a3e", // oliva
+  "#c05a48", // terracota
 ];
 
 function hasChartData(chart: DashboardChart): boolean {

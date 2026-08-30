@@ -42,11 +42,12 @@ para cerrar huecos que frenan el build.
 
 ## CARRIL A — DESARROLLAR (build; el cron de tareas tira de acá primero)
 
-- [ ] **A1 · Dashboard: charts a tema categórico + gauge.** Hoy las series salen
-      todas en verde de marca (Real/Meta y donut cuestan de distinguir — el
-      crítico lo marcó). Usar el theme categórico de la skill `dataviz`
-      (`references/palette.md`) para las series, correr `scripts/validate_palette.js`,
-      y agregar tipo `gauge`/radial para tasas. Rebuild + mirar.
+- [x] **A1a · Dashboard: charts a tema categórico** (2026-08-29). `SERIES_COLORS`
+      pasó de tokens de marca (todo verde, indistinguible en Onia) a 6 hues fijos
+      distinguibles que leen en light/dark. Verificado mirando: Real/Meta y donut
+      ahora se distinguen; la marca se mantiene en el cromo.
+- [ ] **A1b · Dashboard: gauge/radial** para tasas (cierre, ocupación) — tipo de
+      chart nuevo en `dashboard.ts` (SVG arc). + fila de mini stat-tiles con ícono.
 - [ ] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
       `WEB_FACTORY_TECNICAS_2026.md`, las que 2+ sitios usan y son CSS-only o
       motion.dev (feature-en-banda-de-color, statement full-screen, marquee CSS,
