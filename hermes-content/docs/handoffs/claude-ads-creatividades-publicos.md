@@ -244,6 +244,40 @@ La primera respuesta es "te hacemos tu propia modelo"**, que vale mucho más que
 mató fue el contenido de marca. Perseguir seguidores por seguidores nos lleva al lugar donde
 están ellas: muchas, y comercialmente muertas.
 
+### 1-quinquies. 📅 CALENDARIO DE LANZAMIENTO — armado, falta el OK y la fecha de arranque
+
+**Día 0 — fijar el perfil.** `render-fijado` (quién es Lucía) como post **fijado**. No cuenta como
+publicación diaria: es el ancla del perfil, lo primero que ve quien llega.
+
+| # | Pieza | Pilar | Palabra | Por qué ahí |
+|---|---|---|---|---|
+| 1 | **reel de lanzamiento v7** | A | — | Presenta. El reel pesa más que un carrusel y el sistema pide 70% reel |
+| 2 | **L09** una cara que no existe | A | — | Meta-IA: *"esta cara no existe, así se hace"*. El gancho más barato y en Bolivia no lo usa nadie |
+| 3 | **L6** cinco señales | C | SISTEMA | Primera pieza que pide algo. Recién en la tercera, no en la primera |
+| 4 | **L10** la hoja sellada | C | SISTEMA | Usa G05+G05b, el par del mismo trámite desde los dos lados |
+| 5 | **L08** tres de cinco gratis | C | HUMO | Entrega un PDF de verdad, no una reunión |
+| 6 | 🔴 **FALTA** | **B** | — | **Ver el hueco abajo** |
+
+**Historias, diarias desde el día 1:** primero **H09-H12** (pilar B, sin CTA), después H01-H08.
+Las historias son el latido; el feed es el evento.
+
+**Cadencia.** Sergio pidió 1/día. La recomendación sigue siendo **3 por semana las primeras dos
+semanas** y ahí 1/día — el orden de arriba no cambia, solo se estira. Motivo en §Riesgo.
+
+### 🔴 Dos cosas que aparecieron al ORDENAR las piezas
+
+**1. L07 y L08 son la MISMA pieza.** Misma palabra (HUMO), misma promesa palabra por palabra, y el
+titular casi idéntico: *"3 de 5 herramientas que uso son gratis"* contra *"Tres de las cinco
+herramientas que uso son gratis"*. **L08 es la reescritura de L07.** Publicar las dos es publicar
+el mismo post dos veces. **Va L08 y L07 se archiva** — salvo que Sergio prefiera la otra.
+⚠️ El gate NO lo caza: compara cada brief contra el registro de palabras, pero **nada compara las
+piezas entre sí**.
+
+**2. No hay pieza de pilar B en el FEED.** El feed queda 2 A + 3 C y cero B, aunque el sistema pide
+30% B y B es *"el vehículo"*. Las cuatro piezas B que existen son **historias**, que duran 24 h.
+**Se arregla barato:** el banco tiene G02 parada, G03 mercado y G04 tienda **sin usar en feed** —
+alcanza para un carrusel de pilar B sin gastar un crédito.
+
 ### 2. Destrabar lo terminado (bloquea piezas ya hechas)
 - **FACTURA**: el recurso está vivo (200) pero la palabra no está en el mapa de @oniahq. Es una
   edición de n8n, no se hace desde este carril sin OK. **Bloquea O03.**
