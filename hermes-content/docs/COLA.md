@@ -68,10 +68,18 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Decide Sergio.** Con cero clientes pagando el costo real de hoy es cero; el costo
       aparece con el primer cliente que pague el add-on y vea que el de al lado lo tiene igual.
 
-- [ ] **F3 · `/requerimientos` sigue inalcanzable.** Portal público con token, endpoints y
-      e2e propios; **cero `href` en todo el repo** (verificado hoy). Una capacidad ya
-      construida que ningún cliente puede encontrar. Es el único ítem del plan que sobrevivió
-      entero a la verificación. Arreglo barato: una entrada de nav o una acción rápida.
+- [x] **F3 · `/requerimientos` ya es alcanzable.** Estaba en `COMMON_SEGMENTS` —el gate la
+      dejaba pasar para todos los packs— y no tenía **un solo `href`** en `app/`,
+      `components/` ni `lib/`. El arreglo no fue sólo el enlace: **que el gate deje pasar un
+      segmento no significa que exista un camino para entrar**, y esa brecha no la cubría
+      ninguna guarda. Ahora hay un test que hace imposible el próximo huérfano — cada segmento
+      común o entra a algún nav, o se declara en `SIN_NAV_A_PROPOSITO` **con el motivo**. La
+      guarda tiene su recíproco (un segmento ya enlazado no puede quedarse en la lista de
+      excepciones), y eso cazó **dos entradas mías de más** en el mismo commit en que las
+      escribí. Entró a los 4 navs porque es transversal, con roles SUPERADMIN/ADMIN/STAFF:
+      perseguir papeles es de recepción, no del profesional. Gates: tsc 0, eslint 0 errores,
+      **2282 tests verdes**. Commit `6d8b6b7` en `fix/requerimientos-alcanzable`.
+
 - [ ] **F5 · Veterinaria — COTIZADA el 2026-08-30, decide Sergio.** El bloqueo es real pero
       **el costo estaba inflado**. No es "migrar datos vivos":
       - La factura toma el CI del paciente en **un solo lugar**: `lib/fiscal/rcv-export.ts:148`
