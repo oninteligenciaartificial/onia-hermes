@@ -279,8 +279,12 @@ piezas entre sí**.
 alcanza para un carrusel de pilar B sin gastar un crédito.
 
 ### 2. Destrabar lo terminado (bloquea piezas ya hechas)
-- **FACTURA**: el recurso está vivo (200) pero la palabra no está en el mapa de @oniahq. Es una
-  edición de n8n, no se hace desde este carril sin OK. **Bloquea O03.**
+- **FACTURA**: ✅ autorizado por Sergio (30-ago) y **el cambio exacto quedó escrito** en
+  `ONIA_IG_CARGAR_FACTURA.md`. 🔴 **NO se aplicó por API y no es un olvido:** el MCP de n8n
+  conectado solo tiene `update_workflow` con el Workflow SDK, que describe el workflow COMPLETO en
+  código — cambiar una línea obligaría a reescribir los 18 nodos a mano, con sus notas,
+  posiciones, credenciales y las tres correcciones de agosto. Desproporcionado para agregar una
+  palabra. **Son 30 segundos en la UI de n8n.** Bloquea O03.
 - **STACK**: doble bloqueo (no existe el PDF y el mapa de @sergio_urcullo está vacío a propósito).
   **Bloquea S05 y S06.**
 
