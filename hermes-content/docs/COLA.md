@@ -33,16 +33,57 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ---
 
-## Ahora
+## Ahora — plan de features (2026-08-30)
 
-- [ ] **Mergear el PR #56** (la demo en el registro) cuando CI pase. Ojo: el check de Vercel va a
-      fallar con `api-deployments-free-per-day` hasta el 2026-08-30 — **no es del código y no es
-      obligatorio**. Se mergea igual si Lint/Typecheck/Tests y Secret scan están verdes.
+Ordenado por plata. Los cuatro primeros son **agujeros que ya cuestan ventas**, verificados
+en vivo hoy, no heredados. Los dos últimos son desarrollo de verdad.
+
+- [ ] **F1 · El rubro de servicios profesionales no se puede vender.** Su nav tiene "Citas"
+      (`/appointments`) pero **no tiene `/patients`**, y la lista blanca de rutas se deriva
+      del nav (`declaredSegments`): la pantalla para cargar a quién citar queda bloqueada.
+      Un abogado o un contador entra, ve la agenda, y no tiene cómo cargar un cliente.
+      Es el rubro #4 y el que más negocios formales tiene en Bolivia.
+      **Arreglo:** sumar `/patients` a `SERVICIOS_NAV_ITEMS` en `lib/platform/vertical-pack.ts`
+      (línea ~353). El renombrado por vocabulario ya existe (`vertical-pack.ts:450` mapea
+      `/patients` → `vocab.clientes`). Test primero: que el gate deje pasar `/patients` para
+      `gestios-servicios-profesionales`. Después ABRIR la pantalla con sesión y MIRARLA.
+- [ ] **F2 · Tres llaves de add-on que se cobran y no abren nada.**
+      `addon.inventory_advanced`, `addon.chatbot` y `addon.web` se calculan en
+      `lib/platform/entitlements.ts` y se pueden encender por organización, pero **cero
+      referencias en `app/` y `components/`** — sólo aparecen en
+      `components/layout/navigation.test.ts`. Verificado hoy con grep. Encender el add-on
+      no cambia una sola pantalla. **Vender "inventario avanzado" hoy es cobrar por una
+      llave que no abre ninguna puerta.**
+      **Arreglo:** gatear el ítem de nav de cada uno por su clave (el precedente ya existe:
+      `/agents` se gatea con `module.agents`). Si un add-on no tiene pantalla propia todavía,
+      **sacarlo de la lista de precios** hasta que la tenga — no dejarlo cobrable.
+- [ ] **F3 · Un módulo entero es inalcanzable.** `/requerimientos` tiene portal público con
+      token, endpoints y e2e propios, y está en los segmentos comunes a todos los rubros.
+      **Cero `href` en todo el repo** (verificado hoy): sólo se llega tipeando la URL.
+      Es una capacidad ya construida y pagada que ningún cliente puede encontrar.
+      **Arreglo:** una entrada de nav en los packs que la usen, o una acción rápida. Barato.
+- [ ] **F4 · El agente que trae clientes nunca se enciende.** `/var/log/onia-agents-cron.log`
+      muestra 14 días seguidos de corridas OK, y en TODAS `captador` sale
+      `skippedReason: "kind_not_enabled"` para todas las orgs. Recall y cobrador corren; el
+      captador no. **Averiguar primero si es a propósito** (puede que dependa de un canal que
+      no está) antes de encenderlo.
+- [ ] **F5 · Separar paciente de responsable → desbloquea veterinaria (rubro #6).**
+      `Invoice.patientId` es obligatorio y la factura toma nombre y NIT **del paciente**: una
+      veterinaria no puede facturarle al dueño. Es el modelo, no un texto. Esto es desarrollo
+      de schema con migración — **no se toma en la misma vuelta que F1-F4**, y se decide con
+      Sergio si el 6to rubro vale la migración.
+- [ ] **F6 · El sistema no arranca vacío.** El cliente paga, entra, y ve cero filas: es el
+      momento donde se pierde la suscripción. **Gate 1 antes de codear:** ya existe
+      `lib/platform/demo-provisioning.ts` — leerlo y ver qué siembra hoy. Puede que esté
+      hecho y sólo no se dispare en el alta real.
+
+### Arrastre de la cola anterior
+
 - [ ] **Actualizar `ONIA_PRECIOS_COMPETENCIA_Y_DECISION.md`**: dice que Emizor *no publica
       precio* y es **falso**. Están en archive.org, sin cambios en 2,5 años: USD 49/99/299 =
-      **Bs 580 / 1.171 / 3.537** al cambio real. Eso cambia el argumento de venta: **Onia Básico
-      a Bs 320 queda por debajo del piso de Emizor**, y ellos cobran en dólares, así que la
-      devaluación les pegó 70% sin que tocaran la lista.
+      **Bs 580 / 1.171 / 3.537** al cambio real. Eso cambia el argumento de venta: **Onia
+      Básico a Bs 320 queda por debajo del piso de Emizor**, y ellos cobran en dólares, así
+      que la devaluación les pegó 70% sin que tocaran la lista.
 - [ ] **Limpiar las organizaciones de prueba** que quedaron en la base **LOCAL** (nombres con
       "Prueba", ~9). Sólo local — producción no se toca.
 - [ ] **Los otros dos agujeros** que el escéptico marcó en `chore/sacar-dentalgest` y las dos
@@ -77,7 +118,17 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 - **GA4**: encenderlo o sacar el código muerto.
 - **UI/UX del dashboard** — lo lleva la sesión de web-factory, no esta.
 
-## Cerrado hoy (2026-08-29) — no rehacer
+## Cerrado (2026-08-30) — no rehacer
+
+- [x] **PR #56 mergeado** (`14fa528`): el registro ofrece demo al que no sabe configurarlo.
+      Lint/Typecheck/Tests/Build y Secret scan en verde; el check de Vercel falló por
+      `build-rate-limit`, que no es del código. Cero PRs abiertos en `onia-platform`.
+- [x] **Corregido el catálogo de venta: los agentes SÍ corren solos.** Decía que "nadie los
+      dispara" mirando `vercel.json` — pero la plataforma la sirve el VPS, no Vercel. El
+      crontab del host los corre todos los días a las 07:00 La Paz, con 14 días de `http=200`
+      en el log. Se estaba **subvendiendo** una capacidad que funciona.
+
+## Cerrado (2026-08-29) — no rehacer
 
 - [x] Circuito fiscal en mock, verificado en pantalla: CUF, QR, leyenda, RCV.
 - [x] **La nota de crédito**, en 5 vueltas y 4 escépticos. Cerró con un invariante escrito, un

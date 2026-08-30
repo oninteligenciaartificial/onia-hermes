@@ -215,12 +215,17 @@ Esto es lo que evita vender algo que después no se entrega.
   de este catálogo decía "se está construyendo por decisión del 2026-08-15": era falso —
   ocho días después no hay una línea. Si un cliente lo necesita, es desarrollo a cotizar,
   no una casilla por encender.
-- **Agentes que corren solos.** El módulo `/agents` funciona y `AGENTS_RUNTIME=1` está
-  encendido en producción, pero **nadie los dispara automáticamente**: `vercel.json`
-  agenda tres crons (`appointment-reminders`, `recurring-invoices`,
-  `onia-core-workitems`) y **`/api/cron/onia-agents` no es uno de ellos**. Se vende como
-  "propone y vos aprobás", con la corrida disparada a mano — no como "trabaja de noche
-  sin que hagas nada".
+- ⚠️ **Corregido 2026-08-30 — los agentes SÍ corren solos.** Acá decía que "nadie los
+  dispara automáticamente" porque se miró `vercel.json`. **Se miró el sistema equivocado:
+  la plataforma la sirve un contenedor del VPS, no Vercel, así que los crons de
+  `vercel.json` no son los que mandan.** El disparador real es el **crontab del host**:
+  `0 11 * * * /root/bin/run-onia-agents-cron.sh` (07:00 La Paz), y
+  `/var/log/onia-agents-cron.log` muestra **14 días seguidos de `http=200`**, con un solo
+  fallo (un 524 el 24-ago). Lo mismo el drip del trial (`0 13 * * *`). Se puede vender
+  "corren todos los días sin que hagas nada" — es cierto y estaba escrito al revés.
+  **Lo que sí falta**: todas las corridas dan `proposed: 0` porque no hay datos de cliente
+  todavía, y el agente **`captador` nunca se enciende** (`kind_not_enabled` en todas las
+  orgs, todos los días). Recall y cobrador corren; el que trae clientes no.
 - **Modo offline.** El rubro ganadero lo promete en el nombre y no existe.
 - **Visión por computadora.** Evaluada el 2026-08-15: hay caso, **no hay producto**.
   Sin dataset propio y sin medir en obra real, cualquier precisión prometida es
