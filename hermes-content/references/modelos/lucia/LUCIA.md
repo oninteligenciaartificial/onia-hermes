@@ -187,6 +187,94 @@ noche no aporta a eso y el gym compite con mil cuentas de fitness.
 
 ---
 
+## 3-ter. ✅ DECIDIDO — Ella sube, el lugar queda (Sergio, 2026-08-30)
+
+Sergio pidió: *"que Lucía sea más fancy, que sea más lujosa"*.
+
+> **El lujo va en la ROPA y en el GROOMING. El lugar sigue siendo de otro.**
+> Mismo mercado, misma parada, misma ventanilla de trámites, misma luz fea. Lo que cambia es
+> que ahora es la mujer mejor vestida del cuadro.
+
+### ⚠️ Esto DEROGA una regla escrita — leer antes de producir
+
+`ONIA_LUCIA_DIRECCION_ESTETICA_20260811.md` §2 dice literal: *"Aspiracional pero alcanzable:
+**nada de lujo**"*. **Queda derogado para la PERSONA.** Sigue vigente para el LUGAR, y sigue
+vigente la receta del 28-ago de restar hasta que se vea normal — aplicada al lugar y a la luz,
+no a ella.
+
+Sin esta derogación escrita la próxima sesión produce con la regla vieja. Es exactamente cómo
+salieron L08 y L09 contra un banco ya descartado.
+
+### La distinción que sostiene todo
+
+| Sí | No |
+|---|---|
+| Lujo de **textura** — lino, caída del género, cuero natural | Lujo de **gasto** — auto, viajes, compras, fajos, tanque lleno |
+| Lujo de **terminación** — pelo lavado con brillo, cutícula cuidada | Lujo de **logo** — monograma, caja de joyería, reloj grande |
+| Lujo de **tiempo** — uñas prolijas, camisa impecable a las 3 PM | Lujo **importado** — yate, champagne, París, mármol de lobby |
+
+Con el PIB proyectado en −3,6%, filas de combustible y diésel a 18 Bs, el lujo de gasto lee
+**burla** al mismo dueño de negocio que queremos como cliente. El de textura, no.
+
+### Dos looks, no seis
+
+1. **LINO BLANCO** (por defecto) — camisa de lino blanco hueso `#F4F1EC` oversize, mangas
+   dobladas al codo, metida en pantalón sastrero crema `#EFE7DA` de caída recta, mocasín o bota
+   corta de cuero camel, cinturón fino de cuero natural con hebilla chica mate.
+2. **TRABAJO** — blazer o chaleco de lino arena `#D8C9B0` sin forro sobre remera de algodón
+   blanco roto, **jean crudo recto de talle alto** (el MISMO de G02-G05: ese jean es el puente
+   de continuidad) y bota corta de cuero natural sin herrajes.
+
+Cierra el hueco amarillo anotado en §3 de este archivo: el look de TRABAJO nunca se produjo.
+
+### Grooming, no maquillaje — la distinción ES la dirección
+
+Lo que sube **no** es maquillaje. Maquillaje sigue en **CERO**: sin base, sin corrector, sin
+contorno, sin rubor, sin delineado, sin labial de color. Solo bálsamo.
+
+Lo que sube es **grooming**: pelo lavado hoy con brillo real y puntas sanas (mismo castaño
+`#8A5A3B`, misma raya al medio, mismo largo), frizz controlado pero **no** eliminado, cejas
+peinadas hacia arriba sin depilar ni rellenar, uñas cortas prolijas sin esmalte o nude.
+
+🔴 **Las pecas quedan CONTABLES.** Si se tapan o se suavizan, la foto se descarta antes de
+mirar nada más — es lo primero que el modelo pierde cuando se le pide "más arreglada".
+
+Rodete: antes era *desarmado*, ahora **bajo y prolijo con la nuca limpia**. Ahí está el salto
+entero. Nada de ondas producidas ni pelo planchado: eso lee foto de campaña.
+
+### Lo que NO se toca
+
+- **La luz sigue siendo defecto**, no belleza: tubo fluorescente plano, mediodía nublado, foco
+  desnudo, exposición despareja. Prohibida la hora dorada y el contraluz que dibuja el pelo.
+- **Cero grade de color.** Nada de Kodak Portra ni halation — es el camino que ya falló el
+  21-ago con otro nombre. El bloque 10 sigue apagado.
+- **Cero primer plano y cero low angle.** El plano medio nuevo es 50 mm contra pared lisa.
+- Bloque 7 literal (argollas + cadenita + terracota en cuadro) y **acción a medias** en cada
+  cuadro, que es la palanca verificada del banco.
+
+### Dos cosas nuevas que sí se agregan
+
+- **UN PLANO MEDIO por pieza.** El lujo vive en micro-detalle (caída del lino, brillo del pelo,
+  cutícula) y a cuerpo entero bajo tubo fluorescente ese detalle **no existe en píxeles**. Medio
+  cuerpo desde la cintura, 50 mm, contra superficie lisa. Sin esto la dirección promete algo que
+  su propio encuadre no deja ver.
+- **HUECO DE MARCA obligatorio en el brief.** Cada pieza deja un espacio limpio — mostrador
+  despejado, pared lisa al costado, una mano libre — donde después entra el producto de una marca
+  **sin rehacer la foto**. Es lo único del carril que sirve al objetivo de vender publicidad, y
+  cuesta 0.
+- **Transpiración leve en la sien.** En Santa Cruz una mujer bien vestida que no transpira es un
+  render. Y **un objeto usado que no combina** en cada cuadro (bolsa de tela, funda rayada, vaso
+  a medias): un solo objeto usado mata la lectura de banco de imágenes.
+
+### Por qué sigue siendo la misma persona
+
+Cara del mismo Element `@lucia-skin-v1`. Mismo corte, color y largo de pelo. Mismas argollas y
+cadenita. Mismo terracota en cuadro. Misma luz fea. **Mismo lugar.** Mismo jean crudo recto.
+De todo lo que define a un personaje en una foto, cambia **una prenda de arriba y la
+terminación**. Es la misma mujer el día que se lavó el pelo y se puso la camisa buena.
+
+---
+
 ## 3-bis. ✅ La voz — **Marcela**, decidida el 2026-08-15
 
 > 🔄 **Actualizado el 2026-08-18.** Esta sección decía que la oficial era `Lucia-ONIA` y que
