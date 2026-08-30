@@ -168,9 +168,53 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       modelo. Y corrí el `DELETE` con `docker exec` **sin `-i`**: el heredoc nunca entró, psql
       no recibió nada, y salió sin una sola línea de output. **Un comando que no imprime nada
       no es un comando que funcionó** — se vio sólo porque después conté las filas.
-- [ ] **Los otros dos agujeros** que el escéptico marcó en `chore/sacar-dentalgest` y las dos
-      cifras del reporte que dijo que estaban mal. Están en el journal del workflow
-      `wf_7449df59-54c`. Leerlo antes de tocar.
+- [x] **Los dos agujeros de `chore/sacar-dentalgest` — y debajo había uno peor, vivo en
+      producción.** Leí el journal `wf_7449df59-54c` antes de tocar, como pedía el ítem.
+      **El agujero grande no era ninguno de los dos:** el carril declaró haber arreglado que
+      dos pantallas ofrecieran WhatsApp contra el placeholder `59177000000`, y el bug siguió
+      vivo. Verificado EN VIVO contra el bundle que sirve el contenedor `onia-platform` del
+      VPS (no contra Vercel): `NEXT_PUBLIC_DENTALGEST_WA=59177000000` — **la env var de
+      producción TRAE el placeholder**, y el número real de `lib/contact.ts` (59178491375) no
+      aparece **en ni un solo chunk**. Mover el placeholder de dos componentes a un módulo
+      compartido no arregla nada mientras el valor que gana siga siendo el inventado.
+      **Por qué los tests no lo vieron, que es la lección:** `lib/contact.test.ts` cubría la
+      AUSENCIA de la env var, nunca una env var **presente-y-basura**. Tenía hasta un test
+      llamado "cae al nombre VIEJO, que es el que hoy está cargado en producción" — y pasaba
+      en verde justamente con el valor roto. **Un `??` distingue undefined, no distingue basura.**
+      - **Agujero 2 (real, cerrado):** `admin/plans/PlansClient.tsx` escribía un CUARTO número a
+        mano (`wa.me/59177711991`), lo que hacía FALSA la frase "lib/contact.ts queda como fuente
+        única". Ahora pasa por `oniaWaHref()`, con una guarda nueva que prohíbe cualquier
+        `wa.me/<dígitos>` literal fuera de `lib/contact.ts` (los `wa.me/${telefono}` del despacho,
+        las solicitudes y las reservas son el número DEL CLIENTE y siguen permitidos).
+      - **Agujero 3 (NO se toca, y está bien así):** los `contacto@dentaGest.bo` de
+        `FaqAyuda.tsx` y `lib/ayuda/faq.ts` viven **dentro de comentarios** que explican por qué
+        ese contacto falso se retiró. Borrar esa historia es lo que hace que la regla se vuelva
+        a desobedecer. El `dentagest-clinical` es el trackId del rubro: renombrarlo es migración
+        de datos, y el escéptico ya había dictaminado que dejarlo es correcto.
+      - De paso: `__tests__/escanear-fuente.ts` sólo miraba la línea que ABRE un `{/* ... */}`,
+        así que las del medio pasaban como código vivo. Lo delató la guarda nueva señalando ese
+        comentario de `FaqAyuda.tsx`. Arreglado para las guardas que usan el escáner.
+      **Las dos cifras:** no estaban escritas en ningún lado del repo (murieron con el reporte
+      del subagente), así que no había nada que corregir — se deja acá el número verdadero para
+      que nadie vuelva a citar una base vieja: **origin/master corría 2283**; con esta rama,
+      **2291 pasan + 5 skip (2296) en 184 archivos**. Las cifras del reporte (2136 / 2134) medían
+      el commit del que ramificó, no master.
+      Gates: tsc 0 · eslint 0 errores · 2291 verdes. Commit `34e3d29`, **ya en master**.
+
+- [ ] 🔴 **DECIDE SERGIO — hay CUATRO números de WhatsApp de Onia circulando.** El commit de
+      arriba **no elige**: sólo impide que gane el que no existe. Hoy conviven:
+
+      | Número | Dónde vive | Qué es |
+      |---|---|---|
+      | `59177000000` | env var de producción del VPS | **el placeholder — no es un teléfono** |
+      | `59178491375` | `lib/contact.ts` (el que sirve tras el fix) | "confirmado por Sergio" en el handoff del 26-jul; es el del portfolio de Meta |
+      | `59177711991` | `SUPERADMIN_WHATSAPP` + los mails al cliente de n8n (WF-01, WF-04) | el que los correos de trial y de mora le dan al cliente |
+      | `59175414930` | **lo que publica onia.com.bo hoy** | el de la calle |
+
+      **Lo que hace falta: una línea de Sergio diciendo cuál es el número bueno.** Con eso se
+      edita `lib/contact.ts` (1 línea), se carga `NEXT_PUBLIC_ONIA_WA` en el VPS y se alinean
+      los JSON de n8n y la landing. Sin esa línea no lo elijo yo: mandar al cliente a un número
+      equivocado es peor que el placeholder, porque nadie se entera.
 
 ## Después
 
