@@ -156,27 +156,35 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       que **abrir la pantalla con sesión y mirarla**: un 307 no prueba nada, hay un redirect
       atrapa-todo que responde igual para rutas que no existen.
 
-## Bloqueado — necesita a Sergio
+## Bloqueado — recontado el 2026-08-30
 
-- 🔴 **Bajar el deployment de Vercel que todavía sirve `dentalgest.app`.** No es otro
-  producto: es el MISMO `onia-platform` publicándose en dos lados, contra una base que no es
-  producción. El auto-deploy ya está cortado desde el repo (PR #58); bajar el deployment vivo
-  y decidir el dominio son 2 minutos en el panel, y no los puedo hacer yo (sin token, CLI
-  deslogueado, MCP con 403).
-- 🔴 **Crear `recurring-invoices` y `onia-core-workitems` en el crontab del VPS.** Hoy sólo
-  existen en `vercel.json`, o sea contra la base de la nube: **nunca corrieron contra
-  producción**. `appointment-reminders` sí está (`*/15`).
+> **Eran 10. Verificados uno por uno en vivo, quedan 4 que sólo puede hacer Sergio, 2 que
+> necesitan una palabra suya y nada más, y 4 que NO eran bloqueos.** Mismo patrón que los
+> features de la mañana: la lista se había llenado sin verificar.
 
-- **Credenciales del BCP.** Sin ellas no hay QR. El checkout ya no lo promete (PR #54), pero el
-  cobro sigue siendo manual: el cliente transfiere y alguien aprueba.
-- **Recorrer el circuito en producción.** Crea una cuenta real y manda un correo real.
-- **Vercel al tope**: más de 100 publicaciones diarias del plan gratis. Hasta el 2026-08-30 no se
-  puede publicar. Los merges a master entran igual.
-- **Desplegar al VPS** (es distinto de mergear: `onia.com.bo` lo sirve un contenedor).
-- **`dentalgest.app`** y el **schema de producción**, que sigue llamándose `dentalgest`.
-- **Dar de baja a `arthur` y `seller_001`** en `onia_center.user_profiles`: siguen activos.
-- **GA4**: encenderlo o sacar el código muerto.
-- **UI/UX del dashboard** — lo lleva la sesión de web-factory, no esta.
+### Sólo Sergio — nadie más puede
+
+| # | Qué | Dónde | Cuánto |
+|---|---|---|---|
+| S1 | **Bajar el deployment de Vercel** que sigue sirviendo `dentalgest.app`. El auto-deploy ya está cortado (PR #58), pero el de las 16:22 quedó publicado y apunta al Supabase de la nube | panel de Vercel → `dental-gest` | 2 min |
+| S2 | **Decidir el dominio `dentalgest.app`**: redirigir a `app.onia.com.bo` o dejarlo morir. El DNS vive en Vercel (`ns1/ns2.vercel-dns.com`) | mismo panel | 2 min |
+| S3 | **Credenciales del BCP.** Sin esto no hay QR y el cobro sigue siendo manual | banco | — |
+| S4 | **Recorrer el circuito en producción**: crear una cuenta real, que mande un correo real, pagar. Es la única verificación que no se puede simular | `app.onia.com.bo` | 10 min |
+
+### Necesitan sólo un "dale" — después lo hago yo
+
+| # | Qué | Por qué necesita permiso |
+|---|---|---|
+| D1 | **Instalar los 2 crons que faltan en el VPS** (`recurring-invoices`, `onia-core-workitems`). Los scripts se están escribiendo siguiendo el patrón del que ya funciona | toca infra de producción |
+| D2 | **Dar de baja las cuentas que sobran en `onia_center`.** Contadas hoy: hay **4 activas** y sólo `sergio` debería quedar — `arthur` (ya no colabora, 23-ago), `seller_001` (Camila) y `seller_002` (Jerónimo), los dos vendedores, y **no hay equipo de ventas**. ⚠️ La versión anterior de este ítem decía "arthur y seller_001": se olvidaba de Jerónimo | es acceso de personas |
+| D3 | **Desplegar al VPS** cuando haya algo que valga el swap. Runbook y gates en la skill `onia-deploy` | toca producción |
+
+### Ya NO son bloqueos — salieron de la lista
+
+- ~~**Vercel al tope (rate limit)**~~ — expiraba hoy **y además ya no publicamos**. Muerto por dos vías.
+- ~~**Renombrar el schema de producción**~~ — **ya estaba rechazado con motivo** en este mismo archivo (migración de datos vivos a cambio de prolijidad que ningún cliente ve). Estaba anotado como bloqueo y como rechazo al mismo tiempo.
+- ~~**GA4**~~ — el env de producción **no tiene ninguna variable de GA**, así que en prod no corre. Si el componente es inerte sin el ID, no es código muerto: es una capacidad apagada bien. Se está verificando.
+- ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva web-factory. Estar en otra sesión no es estar bloqueado.
 
 ## Cerrado (2026-08-30) — no rehacer
 
