@@ -484,8 +484,8 @@ El detector del corpus marcó "Webflow" en varios sitios que NO lo son. Al porta
 | máxima therapy | Webflow, Vite | React Router v7 / Remix + Vite + Matter.js |
 | maticrobots | Webflow, Next | Next.js (pages router) + Tailwind |
 | ogaki | (Monaco) | Next.js App Router + styled-components 6 + Lenis, **sin GSAP** |
-| serotoninn | swiper fonts | WordPress tema custom + WooCommerce + Lenis + Lottie |
-| leoff | astro | Nuxt 3 + Sanity + GSAP SplitText ("astro" = substring de "g**astro**nomy") |
+| serotoninn | swiper fonts | WordPress tema custom (Woo *inferido*, `wc-`=0 en el slice) + Lenis + Lottie |
+| leoff | astro | Nuxt 3 + Sanity + GSAP *inferido por SplitText* (`gsap`=0 en crudo, truncado) ("astro" = substring de "g**astro**nomy") |
 | huts | Webflow, Lenis | Nuxt + Sanity + Lenis + Swiper (video = 1 solo mp4) |
 | readily | Webflow | Astro + Tailwind + GSAP |
 | greptile | Webflow | Next.js + Tailwind + Lottie |

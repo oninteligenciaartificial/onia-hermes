@@ -21,9 +21,9 @@ El crawler etiquetó rubro y stack por heurística y falló seguido. Verificado 
 | maximatherapy | Webflow + Vite; `fonts:[]` | **React Router v7/Remix + Vite + Tailwind**; display globo pesado | playbook §1 lo daba "sin señal tipográfica" — ahora anclado |
 | overlay | Webflow (ok); fonts basura | Webflow + **GSAP+Lenis+Splide**; serif alto contraste real | nuevo exemplar Estética |
 | ogakidigital | (nuevo) | **Next + styled-components + Lenis, SIN GSAP** | nuevo exemplar Estética |
-| serotoninn | (ok comercio) | **WordPress+Woo tema custom + Lenis + Lottie**, no builder | confirma grid uniforme + índice numerado |
+| serotoninn | (ok comercio) | **WordPress tema custom + Lenis + Lottie** (Woo *inferido*), no builder | confirma grid uniforme + índice numerado |
 | maticrobots | Webflow + Next | **Next pages-router + Tailwind**, cero Webflow | nuevo exemplar Comercio/producto |
-| leoff-paris | "astro" (falso positivo en g**astro**nomy) | **Nuxt 3 + Sanity + GSAP** | nuevo exemplar Gastronomía |
+| leoff-paris | "astro" (falso positivo en g**astro**nomy) | **Nuxt 3 + Sanity + GSAP *inferido*** | nuevo exemplar Gastronomía |
 | huts | Webflow + Lenis | **Nuxt + Sanity + Lenis + Swiper, SIN GSAP**; 1 solo video | playbook §5 ya lo cita; corregir stack |
 | clay | Webflow (ok) + GSAP | Webflow + GSAP/ScrollTrigger/SplitText | playbook §6 ok; sumar técnicas |
 | farmminerals | (nuevo) | **Webflow + GSAP+ScrollTrigger+SplitText + Lenis + Bunny CDN** | agri-tech producto; técnica canvas-scrub |
@@ -301,7 +301,7 @@ Fuera de los 7 rubros vendibles pero es el tier-cliente Onia. Dos anclas duras:
 - Paleta: superficie oscura **`#3D3B4F`** (púrpura-pizarra) + clara `#EEEEEE`; acentos **ácidos
   semánticos**: verde `#28E99F`, menta `#C5FFD6`, lima `#DAFF01`, rosa `#FFCFFE` (estados/código/
   diagramas, no relleno).
-- Tipo: **Space Mono** (display/técnico, 168 usos) + **Inter** (body). El mono manda el tono —
+- Tipo: **font-mono** (display/técnico, ~168 clases mono; nombre de familia *inferido* — "Space Mono" NO aparece literal en el crudo) + **Inter** (body, ×130 confirmado). El mono manda el tono —
   **excepción válida al ban de Inter** porque Inter va de body y el mono carga la identidad. Firma
   visual: `border-dashed` ×161 + ticks `+` en esquinas = plano de ingeniería.
 - Stack: **Next + Tailwind + Lottie, SIN GSAP/Lenis/Framer.** Reveal = CSS transition + IO.
