@@ -109,8 +109,13 @@ el otro lado del vidrio) y `V04-parada` (animación de G02).
    y se recargó sin guardar. **Los tres campos los carga Sergio a mano** — son 60 segundos y no
    valen el riesgo de tantear en la app de producción. El **ícono ya está** en el repo.
 3. **Screencasts: no sabía qué eran.** Explicado; pendiente su OK para grabarlos.
-4. **Marketing Studio: probarlo con Lucía vendiendo Onia Platform.** ✅ autorizado, aunque él marcó
-   *"tal vez es muy caro pero probá"*.
+4. ~~**Marketing Studio con Lucía vendiendo Onia Platform**~~ — ✅ **HECHO**. 4 créditos (Bs 1,50),
+   no era caro. Resultado en `references/marketing-studio-20260829/`. **El teléfono reproduce el
+   dashboard de verdad** (logo, "Hoy", Bs 4.633,40 exacta, KPIs): ese recorte es publicable. Pero
+   **impone su estética de anuncio y pisa las instrucciones anti-glamour** — mira a cámara pese a
+   que el prompt lo prohibía, luz de catálogo, casting genérico, y la LAPTOP salió inventada.
+   ⇒ **Regla: Marketing Studio para el anuncio de un cliente; la receta normal para la voz de
+   Lucía. No se mezclan.** Y el producto se pide en un TELÉFONO, no en una laptop.
 5. **FACTURA y STACK: pidió que le diga cómo se arreglan.** Ver §Cómo se destraban abajo.
 6. **Reforzar el ancla `@lucia-skin-v1`: SÍ.** ✅ autorizado.
 
@@ -244,6 +249,13 @@ están ellas: muchas, y comercialmente muertas.
   edición de n8n, no se hace desde este carril sin OK. **Bloquea O03.**
 - **STACK**: doble bloqueo (no existe el PDF y el mapa de @sergio_urcullo está vacío a propósito).
   **Bloquea S05 y S06.**
+
+### 2-bis. 🆕 Marketing Studio tiene su PROPIO sistema de Avatares
+
+Aparte de los Elements. Lucía ya existía ahí en **4 versiones** (`Lucia ONIA v4 FINAL`, `v3
+identity`, `v2`, `ONIA`) y también está `Mara ONIA`. La cara **no derivó** del canon en la prueba.
+Nadie lo había registrado: es un segundo lugar donde vive su identidad, y conviene saberlo antes de
+que las dos se desincronicen.
 
 ### 3. Advanced Access — lo único con reloj
 
