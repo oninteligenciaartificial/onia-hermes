@@ -502,3 +502,20 @@ en VPS → gates 0-5 → swap con backup → mirar renderizado). Memoria actuali
   - Falta fase C (proxima): perilla UI en /settings/chatbot + seccion Seguimiento en
     el diff del editor conversacional. El default ON ya trabaja sin UI.
 - Proximo orden: v6.6-C → push "te escribieron" → propuesta pricing → v6.7 → v6.8.
+
+## OBJETIVO ACTIVO (2026-08-30 noche): "Chatbot todo-usable v1.0"
+
+HECHO = estas 4 piezas construidas + UN deploy + verificacion MIRANDO con capturas:
+1. v6.6-C perilla de insistencia en /settings/chatbot + diff del editor [SUBAGENTE A]
+2. Push "te escribieron" (web push al celular via relay del webhook) [SUBAGENTE B]
+3. Propuesta pricing comparativa (Sendy/Leadsales/Cliengo/Treble + costo-real-de-la-
+   alternativa) para RE-PREGUNTAR a Sergio [SUBAGENTE C — solo docs]
+4. v6.7 chip "chats de hoy · sin limite, siempre" en /inbox [ORQUESTADOR — ya editado]
+
+ARQUITECTURA DE EJECUCION (los crons de sesion NO son confiables — 3 mecanismos
+probados y fallados: zombis, one-shots mudos, fires comidos): SUBAGENTES en
+background construyen+testean SIN commitear; el orquestador integra, corre gates,
+UN deploy con runner, verifica MIRANDO y pushea. Regla de no-choque por archivos:
+A=settings/chatbot+editor-conversacional · B=push+webhooks · C=docs · orquestador=inbox.
+Despues de esto: v6.8 recorrida de friccion completa + gates de Sergio (popup, BCP,
+alta, 75414930).
