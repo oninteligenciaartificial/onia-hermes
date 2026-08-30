@@ -81,6 +81,19 @@
   por canal personal (Leslie), no desde la cuenta del negocio, y el contrato privado
   simple se firma igual (el contrato no obliga a facturar).
 
+## 4b · Agregados de la ronda final (2026-08-30)
+
+- **Crudo libre:** al final de cada media jornada, 45-60 min de cámara corriendo con
+  Sergio hablando sin guion — materia prima de los videos extra (sin CPM, sin edición
+  de Samuel).
+- **Guiones = propiedad de Sergio** (se pagan con el fijo), misma regla que los crudos.
+- **Revisión simétrica:** la revisión automática de 2 meses corre en ambos sentidos —
+  tope superado 2 meses → se revisan tarifas; variable por debajo de Bs 500 dos meses
+  seguidos → se revisan formatos y ganchos.
+- **Insumo Onia → guiones:** el radar de tendencias/ganchos se le entrega a Samuel cada
+  mes antes de escribir. La tabla palabra clave → recurso de cada video se define junto
+  con los guiones (automatización lista el día 1).
+
 ## 5 · Propiedad y accesos
 
 - Crudos y contenido editado: **de Sergio** (copia a su carpeta en 48 h; Samuel conserva
