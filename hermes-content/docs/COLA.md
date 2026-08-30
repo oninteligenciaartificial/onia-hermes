@@ -135,8 +135,39 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       abr-2025 — es el mejor dato disponible, no el precio de hoy confirmado. Se cierra con
       una cotización por su formulario. **Lección anotada en el doc:** un 404 en `/precios`
       no prueba que no publiquen precio, prueba que esa ruta no responde.
-- [ ] **Limpiar las organizaciones de prueba** que quedaron en la base **LOCAL** (nombres con
-      "Prueba", ~9). Sólo local — producción no se toca.
+- [x] **Organizaciones de prueba limpiadas en la base LOCAL — y el ítem escondía una trampa.**
+      Hecho el 2026-08-30: eran **10**, no 9. Se borraron **8** con un solo
+      `DELETE FROM organizations` (los 42 FK que apuntan a `organizations` son `ON DELETE
+      CASCADE`, verificado en `pg_constraint`), y con ellas sus 8 `profiles` y sus 8
+      `auth.users`. Quedan **2 a propósito**, porque son la evidencia que esta cola cita en su
+      propio "Estado": `fiscal-local` (la única factura, la del circuito fiscal con CUF/QR/RCV)
+      y `ferreteria-circuito-completo-exu53` (el único `subscription_payment`, los **Bs 320**).
+      Borrarlas dejaba la cola afirmando un resultado sin nada que lo reproduzca.
+      Backup previo del schema `public` en el scratchpad de la sesión (218 KB).
+
+      **La trampa, y por qué importa más que la limpieza:** el ítem decía *"sólo local —
+      producción no se toca"*, pero **la base local NO es la que configura `.env.local`.**
+      - `.env.local` → `postgresql://…@127.0.0.1:54329/postgres?schema=dentalgest`. Ese 54329
+        **no es una base local**: lo escucha un `ssh.exe` (PID 17716) con
+        `-L 54329:127.0.0.1:54329 root@187.77.16.63`. Es un **túnel al VPS**, y del otro lado
+        está `supabase-db`, que efectivamente **corre en el puerto 54329** (`show port`) y
+        responde al alias de red `db` — el mismo `DATABASE_URL` que tiene adentro el contenedor
+        `onia-platform` **en producción**.
+      - O sea: una sesión que hubiera corrido "la limpieza local" cargando `.env.local`
+        **borraba producción**. Hoy no lo hizo por accidente: el túnel está muerto (en el VPS
+        el 54329 no está publicado al host, sólo 54321 y 54322), así que la conexión da
+        `ECONNRESET`. La próxima vez que alguien reviva el túnel, no falla.
+      - **La base local de verdad** es el stack `fiscal-mock` de Supabase CLI:
+        `supabase_db_fiscal-mock`, puerto **55322**, tablas en `public`.
+      - Producción, leída sin tocar nada, tiene **3** organizaciones: `zz-qa-ferreteria-tornillo`,
+        `zz-qa-clinica-chatbot` y `onia-interna`. **Ninguna** se llama "Prueba". El ítem nunca
+        habló de producción, pero su config sí.
+      **Dos errores míos, anotados porque los dos son de método:** busqué la tabla como
+      `"Organization"` (PascalCase, el nombre del modelo Prisma) y concluí "no existe base
+      local" — en la base se llama `organizations`, y el `@@map` no se ve en el nombre del
+      modelo. Y corrí el `DELETE` con `docker exec` **sin `-i`**: el heredoc nunca entró, psql
+      no recibió nada, y salió sin una sola línea de output. **Un comando que no imprime nada
+      no es un comando que funcionó** — se vio sólo porque después conté las filas.
 - [ ] **Los otros dos agujeros** que el escéptico marcó en `chore/sacar-dentalgest` y las dos
       cifras del reporte que dijo que estaban mal. Están en el journal del workflow
       `wf_7449df59-54c`. Leerlo antes de tocar.
