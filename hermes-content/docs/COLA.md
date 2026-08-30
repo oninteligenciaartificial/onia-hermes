@@ -218,13 +218,58 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
-- [ ] **`DELETE /api/payments/[id]` sobre un mes ya declarado** devuelve la factura a BORRADOR y
-      ese mes pierde la venta del CSV, sin nota de crédito de por medio. **No existe cierre de
-      período**: el RCV se regenera on demand para cualquier mes. Borra débito real, no inventa
-      crédito. Es un hueco conceptual, no un bug suelto.
-- [ ] **El guardia de repo de `invoice-status` es evadible** por alias (`const f = prisma.invoice`)
-      y por nested write, y no cubre `invoice.create`. Hoy no existe ninguno de los tres en el
-      repo, pero el guardia promete más de lo que da.
+- [ ] 🔴 **DECIDE SERGIO — `DELETE /api/payments/[id]` sobre un mes ya declarado.** El hueco es
+      real y verificado el 2026-08-30: borrar el último pago devuelve la factura a BORRADOR
+      (`app/api/payments/[id]/route.ts`), BORRADOR está en `RCV_EXCLUDED_STATUSES`, y ese mes
+      pierde la venta del CSV sin nota de crédito de por medio. **No existe NINGÚN concepto de
+      cierre de período** en el repo — cero `fiscal_period`, cero tabla de cierre — y el RCV se
+      regenera on demand para cualquier mes. No es un bug suelto: falta el modelo, y por eso no
+      lo elijo yo.
+      **Las tres salidas, cotizadas:**
+      - **(a) Guarda barata** — bloquear la salida del RCV si el mes de la factura no es el
+        corriente. ~1 día, un guard dentro del helper que ya existe. Pero **inventa la
+        política**: "mes corriente" no es "mes declarado", y de paso bloquea la corrección
+        legítima del día 2 del mes siguiente.
+      - **(b) Cierre de período de verdad** — tabla `fiscal_periods` (org, año, mes, cerradoEn);
+        el RCV la lee, y toda salida del RCV sobre un período cerrado exige nota de crédito.
+        ~3-4 días. Es lo contablemente correcto y lo que el SIN asume.
+      - **(c) No hacer nada todavía.** Verificado EN VIVO en el contenedor `onia-platform` del
+        VPS: `SIAT_EMISSION` **no está seteada**, o sea la emisión ante el SIN está apagada
+        (`lib/fiscal/flags.ts` exige `=== "1"`). Con eso y cero clientes pagando, el costo real
+        de hoy es **cero**; aparece el día que se enciendan los gates fiscales.
+      **Recomendación: (c) ahora, (b) el día que se encienda el emisor.** (a) cuesta casi lo
+      mismo que (b) en discusión y deja escrita una política que después hay que desandar.
+- [x] **El guardia de `invoice-status` ya caza lo que prometía.** Las dos evasiones eran reales
+      —`const facturas = tx.invoice` y `data: { invoices: { update: … } }` son Prisma normal, no
+      rebusques— y **ninguna de las tres existe hoy en el repo** (verificado el 2026-08-30: las
+      tres formas dan 0 resultados). Así que esto no cerró un agujero abierto: cerró la puerta
+      por la que iba a entrar la séptima, que es como volvió tres veces este mismo defecto.
+      **Lo que más importa del arreglo:** los casos se prueban contra código **sintético**, no
+      contra el repo. Un guardia nuevo probado sólo contra un árbol limpio pasa en verde sin
+      detectar nada — que es exactamente cómo se escribe un guardia que no guarda. Van 5 patrones
+      con **4 casos negativos** (leer una factura, incluirla en un `select`, una FILA llamada
+      `invoice`, y crearla), porque un guardia que ladra sobre código legítimo se termina
+      desactivando y ahí vuelve la séptima.
+      **`invoice.create` NO se prohibió, y ésa es la decisión del ítem:** los 5 `create` del repo
+      son NACIMIENTOS, y un documento que acaba de nacer no puede tener una NC apuntándole (la NC
+      se busca por `notes contains #<número>`, y ese número no existía hasta el INSERT).
+      Prohibirlo obligaba a una **lista de excepciones**, que es justo lo que este guardia se
+      prohíbe tener. Lo que el nacimiento SÍ puede romper —una NC que nace fuera del RCV, el
+      PRIMER bug de la serie— dejó de ser un literal suelto dentro de la ruta y pasó a ser un
+      invariante con nombre: `ESTADO_INICIAL_NC` en `lib/fiscal/credit-note.ts`, con su test de
+      que no está en `RCV_EXCLUDED_STATUSES`.
+      **Una trampa anotada:** ese test pasaba en VERDE con la constante todavía sin exportar,
+      porque `not.toContain(undefined)` es cierto y no afirma nada. Lleva un `typeof === "string"`
+      para que no pueda pasar vacío. Es la misma forma del test que cubría la AUSENCIA de una env
+      var y se tragaba la basura.
+      Gates: tsc 0 · eslint 0 errores sobre los archivos tocados · **2301 pasan + 5 skip (2306)**,
+      contra 2291 de la medición anterior. Commit `2849be0`, **ya en master**.
+
+      ⚠️ **Ojo para la próxima sesión:** mientras corría esto, **otra sesión estaba escribiendo en
+      el MISMO árbol** `onia-platform` (master): aparecieron solos `InboxClient.tsx`,
+      `lib/chatbot/push-te-escribieron.ts`, el webhook de Chatwoot y `public/sw.js`. El commit se
+      hizo **con rutas explícitas** para no llevarse trabajo ajeno a medias. Y `npx vitest run`
+      reescribió dos `.snap` **sólo con CRLF** (diff vacío): se revirtieron, no se commitearon.
 - [ ] **La nota de crédito no pasa por `maybeEmitFiscalInvoice`**: el día que se enciendan los
       gates queda declarada en el CSV interno y no ante el SIN.
 - [ ] **Los ítems I1 y E1** de `TODOS_LOS_PENDIENTES.md` siguen sin resolver. Para decidirlos hay
