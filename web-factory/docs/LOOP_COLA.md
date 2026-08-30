@@ -42,12 +42,36 @@ para cerrar huecos que frenan el build.
 
 ## CARRIL A — DESARROLLAR (build; el cron de tareas tira de acá primero)
 
-- [x] **A1a · Dashboard: charts a tema categórico** (2026-08-29). `SERIES_COLORS`
-      pasó de tokens de marca (todo verde, indistinguible en Onia) a 6 hues fijos
-      distinguibles que leen en light/dark. Verificado mirando: Real/Meta y donut
-      ahora se distinguen; la marca se mantiene en el cromo.
+- [x] **A1a · Dashboard: charts a tema categórico** (2026-08-30, **rehecho**).
+      El primer intento (29-ago) eligió 6 hues **a criterio** y estaba MAL: la skill
+      `dataviz` trae un validador ejecutable y los reprobó — el verde de marca daba
+      chroma 0.097 (**leía gris**) y terracota↔oliva ΔE 4.9 en deutan (**el mismo
+      color** para daltonismo verde). Rehecho **computando**: enumeradas las 720
+      permutaciones contra los surfaces reales (`#f6f2ea` / `#161c22`) en ambos modos
+      → `aqua > blue > orange > violet > yellow > magenta`, peor ΔE adyacente **13.2**
+      (piso 8). Emitidos como custom properties `--wf-series-N` con steps propios de
+      dark, porque un hex quemado en el atributo SVG no puede cambiar con el tema.
+      Verificado midiendo el color resuelto en el navegador + mirando ambos temas.
+      **Lección: el color es computable — correr el validador, no estimarlo.**
+
+> **Defectos que reveló MIRAR el render** (2026-08-30). Ninguno se ve en el código;
+> los cinco salieron de abrir la captura en light y en dark.
+
 - [ ] **A1b · Dashboard: gauge/radial** para tasas (cierre, ocupación) — tipo de
       chart nuevo en `dashboard.ts` (SVG arc). + fila de mini stat-tiles con ícono.
+      "Tasa de cierre 34%" es hoy un número pelado: es el caso de uso exacto.
+- [ ] **A1c · 🔴 En dark la marca DESAPARECE.** Los tokens dark ponen
+      `--color-primary: #e7e9ec` (el foreground), así que sidebar activo, botón,
+      KPI hero y barras salen **blancos**: el panel pierde identidad justo en el tema
+      que más se usa. Necesita un step dark del verde de marca, no el foreground.
+      Ojo: el token sale de `packages/tokens`, así que el arreglo toca a todos los
+      templates — verificar los otros demos antes de dar por cerrado.
+- [ ] **A1d · Charts fijos en cards anchas → aire muerto.** `CHART_W=320 / CHART_H=150`
+      son constantes; la card mide el doble. Queda un tercio de tarjeta vacío en
+      "Ingresos por mes" y "Ingresos vs meta". El SVG tiene que escalar al ancho.
+- [ ] **A1e · Specs de marca del skill `dataviz`**: gap de 2px entre segmentos del
+      donut (hoy están pegados), marcadores ≥8px (hoy `r=2.5` → 5px), puntas
+      redondeadas de 4px en las barras ancladas a la baseline.
 - [ ] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
       `WEB_FACTORY_TECNICAS_2026.md`, las que 2+ sitios usan y son CSS-only o
       motion.dev (feature-en-banda-de-color, statement full-screen, marquee CSS,

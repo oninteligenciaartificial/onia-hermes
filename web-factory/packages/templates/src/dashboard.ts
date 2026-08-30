@@ -333,18 +333,37 @@ function renderGrid(max: number): string {
     .join("");
 }
 
-// Tema categórico FIJO para series/donut (regla dataviz + crítico 2026-08-29):
-// la tinta de dato NO sale de la marca. Cuando primary=accent (Onia todo verde)
-// las series salían indistinguibles. Hues distintos de lightness pareja que
-// leen sobre cream (#f6f2ea) y sobre oscuro (#0e1512), orden por separación.
-const SERIES_COLORS = [
-  "#0e7c66", // teal-verde (serie 1, alinea con marca)
-  "#c98a3b", // ámbar/miel
-  "#3d6fa5", // azul
-  "#9d4e86", // magenta
-  "#7a9a3e", // oliva
-  "#c05a48", // terracota
+// Tema categórico FIJO para series/donut: la tinta de dato NO sale de la marca.
+// Con primary=accent (Onia todo verde) las series salían indistinguibles.
+//
+// Los 6 hues NO se eligen a ojo: el orden salió de enumerar las 720 permutaciones
+// y validar cada una con el validador de la skill `dataviz` contra los surfaces
+// REALES de este template (cream #f6f2ea / oscuro #161c22), en AMBOS modos.
+// Ganador `aqua > blue > orange > violet > yellow > magenta`: peor ΔE adyacente
+// 13.2 (el piso del gate es 8). La tanda anterior, elegida a criterio, FALLABA:
+// el verde de marca daba chroma 0.097 (leía gris) y terracota↔oliva daban ΔE 4.9
+// en deutan — el mismo color para quien tiene daltonismo verde.
+//
+// Se emiten como custom properties, no como hex incrustados en el SVG, porque el
+// dark mode necesita SUS PROPIOS steps (no un flip): un hex quemado en el atributo
+// del path no puede cambiar con el tema. Los pares light/dark salen de la paleta
+// de referencia de `dataviz`, ya validada como conjunto — cero hex inventados.
+const SERIES_COUNT = 6;
+const SERIES_COLORS = Array.from({ length: SERIES_COUNT }, (_, index) => `var(--wf-series-${index + 1})`);
+
+/** Pares light/dark del tema categórico. Índice = slot de serie. */
+const SERIES_THEME: ReadonlyArray<{ light: string; dark: string; hue: string }> = [
+  { hue: "aqua", light: "#1baf7a", dark: "#199e70" },
+  { hue: "blue", light: "#2a78d6", dark: "#3987e5" },
+  { hue: "orange", light: "#eb6834", dark: "#d95926" },
+  { hue: "violet", light: "#4a3aa7", dark: "#9085e9" },
+  { hue: "yellow", light: "#eda100", dark: "#c98500" },
+  { hue: "magenta", light: "#e87ba4", dark: "#d55181" },
 ];
+
+function seriesVars(mode: "light" | "dark"): string {
+  return SERIES_THEME.map((slot, index) => `  --wf-series-${index + 1}: ${slot[mode]}; /* ${slot.hue} */`).join("\n");
+}
 
 function hasChartData(chart: DashboardChart): boolean {
   return chart.points.length > 0 || (chart.series ?? []).some((series) => series.points.length > 0);
@@ -695,6 +714,7 @@ body {
   font-family: var(--font-body);
   --wf-pos: #166534;
   --wf-neg: #b91c1c;
+${seriesVars("light")}
 }
 
 /* Dark mode: the dark green/red status text fails contrast on the dark tinted
@@ -703,12 +723,14 @@ body {
   :root:not([data-theme="light"]) body {
     --wf-pos: #4ade80;
     --wf-neg: #f87171;
+${seriesVars("dark")}
   }
 }
 
 [data-theme="dark"] body {
   --wf-pos: #4ade80;
   --wf-neg: #f87171;
+${seriesVars("dark")}
 }
 
 a {
