@@ -36,6 +36,13 @@ mira quiere que su día se vea así.
 Aspiracional pero alcanzable: **nada de lujo**. Sin autos caros, sin viajes, sin marcas de
 moda. El lujo acá es **el orden y el tiempo libre** — que es exactamente lo que vende ONIA.
 
+> 🔴 **DEROGADO PARA LA PERSONA el 2026-08-30** (Sergio: *"que Lucía sea más fancy, que sea
+> más lujosa"*). Este párrafo sigue valiendo **para el LUGAR**: nada de autos, viajes ni marcas
+> en cuadro, y el lugar sigue siendo un negocio de otro. Lo que ya NO vale es aplicarlo a **ella**:
+> su ropa y su terminación suben a lujo de textura y tiempo. La regla viva está en
+> `hermes-content/references/modelos/lucia/LUCIA.md` §3-ter. Si este párrafo y esa sección
+> se contradicen, **gana §3-ter**.
+
 ## 3. Paleta — cerrada, no negociable
 
 | | |
