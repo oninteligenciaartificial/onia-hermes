@@ -158,6 +158,15 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Bloqueado — necesita a Sergio
 
+- 🔴 **Bajar el deployment de Vercel que todavía sirve `dentalgest.app`.** No es otro
+  producto: es el MISMO `onia-platform` publicándose en dos lados, contra una base que no es
+  producción. El auto-deploy ya está cortado desde el repo (PR #58); bajar el deployment vivo
+  y decidir el dominio son 2 minutos en el panel, y no los puedo hacer yo (sin token, CLI
+  deslogueado, MCP con 403).
+- 🔴 **Crear `recurring-invoices` y `onia-core-workitems` en el crontab del VPS.** Hoy sólo
+  existen en `vercel.json`, o sea contra la base de la nube: **nunca corrieron contra
+  producción**. `appointment-reminders` sí está (`*/15`).
+
 - **Credenciales del BCP.** Sin ellas no hay QR. El checkout ya no lo promete (PR #54), pero el
   cobro sigue siendo manual: el cliente transfiere y alguien aprueba.
 - **Recorrer el circuito en producción.** Crea una cuenta real y manda un correo real.

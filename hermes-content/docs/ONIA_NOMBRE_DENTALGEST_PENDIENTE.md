@@ -10,40 +10,55 @@ vivo en producción** y nadie lo había contado. Esto es el inventario.
 
 ---
 
-## ⚠️ Medido de nuevo el 2026-08-30 — es peor que "un nombre viejo"
+## ⚠️ Corregido el 2026-08-30 — no es "otro producto", es UN producto en DOS lados
 
-Sergio pidió que dejaran de llegar los mails de Vercel, diciendo *"ya no usamos vercel"*.
-**Usamos.** Verificado en vivo, no de memoria:
+**Sergio:** *"NO USAMOS DENTALGEST, ES TODO ONIA PLATFORM Y ESTÁ TODO EN EL VPS."* Tiene
+razón, y este doc estaba escrito de una forma que empujaba a leerlo mal.
 
-| Comprobación | Resultado |
+**No hay un producto DentalGest.** Hay **un repo** (`onia-platform`) que se publica en **dos
+lados**. El proyecto de Vercel se llama `dental-gest` por herencia del nombre viejo, pero lo
+que sirve es **el mismo `master`** que va al VPS.
+
+| Dónde | Quién lo sirve | Contra qué base |
+|---|---|---|
+| `app.onia.com.bo` | contenedor `onia-platform` del VPS, detrás de Cloudflare | la self-hosted del VPS ✅ **producción** |
+| `dentalgest.app` / `www` | proyecto Vercel `dental-gest`, NS `ns1/ns2.vercel-dns.com` | `kvepqgikokjlacxngkiw.supabase.co` — el Supabase **de la nube** |
+
+La segunda se publicaba sola en cada push a `master` y servía el login completo con **"Pedí
+tu acceso"**, apuntado a una base que no es producción. Un lead que entrara por ahí dejaba
+la solicitud donde nadie mira.
+
+**Y la decisión ya estaba tomada hace un mes**, en `historial/ONIA_SALIDA_DE_VERCEL_20260801.md`:
+*"Decisión de Sergio: ya no usamos Vercel. Todo se va al VPS"*, con `dental-gest` como ítem
+**B1** — el más barato de todos, *"solo mover el DNS"*. El plan existía; nadie lo ejecutó.
+
+### Hecho (PR #58)
+
+`git.deploymentEnabled.master=false` en `vercel.json`: **`master` deja de publicar la segunda
+producción**, se termina el rate limit diario, y los mails se cortan en la **raíz**. Es lo
+único ejecutable desde el repo — no hay token de Vercel en el sistema, el CLI está
+deslogueado y el MCP da **403** al pausar el proyecto.
+
+### Falta, y necesita a Sergio (2 minutos en el panel de Vercel)
+
+1. Bajar el deployment que **sigue vivo** sirviendo `dentalgest.app`.
+2. Decidir el dominio: redirigir a `app.onia.com.bo`, o dejarlo morir. El DNS también se
+   maneja en Vercel (`ns1/ns2.vercel-dns.com`).
+
+### ⚠️ Antes de borrar el proyecto: dos crons se quedan sin casa
+
+Contado en el crontab del host el 2026-08-30:
+
+| Cron de `vercel.json` | ¿En el VPS? |
 |---|---|
-| `curl -sI https://www.dentalgest.app` | `HTTP 200`, `Server: Vercel` |
-| `curl -sI https://www.dentalgest.app/login` | `HTTP 200` |
-| Proyecto Vercel `dental-gest` | último deploy `target=production`, `readyState=READY`, **del mismo día** |
-| Dominios del proyecto | `www.dentalgest.app`, `dentalgest.app`, `dental-gest-git-master-*` |
-| Pantalla **abierta y mirada** | login completo de Onia: "14 días gratis", **"Pedí tu acceso"** |
+| `appointment-reminders` | ✅ sí — `*/15 * * * *`, **más seguido** que en Vercel |
+| `recurring-invoices` | 🔴 **no** — sólo Vercel |
+| `onia-core-workitems` | 🔴 **no** — sólo Vercel |
 
-**Y no es una copia inocente: apunta a OTRA base.** Su bundle referencia
-`kvepqgikokjlacxngkiw.supabase.co` — el Supabase **en la nube**. El bundle de
-`app.onia.com.bo` **no lo referencia**. La base de producción es la **self-hosted del
-VPS**.
-
-**Entonces hay dos producciones vivas del mismo producto, y la de Vercel se publica sola
-en cada push a `master`, conectada a un backend que no es producción.** Un lead que entre
-por `dentalgest.app` y toque "Pedí tu acceso" deja su solicitud en una base que nadie mira.
-
-Y hay un segundo efecto que nadie contó: **`vercel.json` agenda tres crons**
-(`appointment-reminders`, `recurring-invoices`, `onia-core-workitems`). En el VPS los
-mismos trabajos ya corren por el crontab del host. O sea que esos tres corren **en los dos
-lados**, cada uno contra su base.
-
-**Lo hecho:** `github.silent` en `vercel.json` (PR #58) corta los comentarios del bot —
-los mails— **sin tocar los deploys**. Es el arreglo del síntoma, a propósito: bajar
-`dentalgest.app` apaga una superficie viva y es decisión de Sergio.
-
-**Lo que falta decidir (Sergio):** desconectar el proyecto de Vercel y dejar
-`dentalgest.app` redirigiendo a `app.onia.com.bo`, o mantenerlo apuntado a la base correcta.
-Hoy es lo peor de los dos mundos: vendible y desconectado.
+**El matiz que cambia la lectura:** como el deploy de Vercel apunta a la base de la nube,
+esos dos crons **nunca corrieron contra producción**. No se pierde una capacidad que
+funcionaba — se descubre que nunca estuvo cableada. Hay que crearlos en el crontab del VPS,
+al lado de los que ya están.
 
 ---
 
