@@ -156,6 +156,28 @@ declaración con la etiqueta del Paso 0. Deriva a Onia **una sola vez**, y a pro
 
 - **No contestar los DMs a mano.** El circuito comentario→DM del workflow de n8n solo está
   verificado de punta a punta para la palabra **HUMO**, y el día 0 y el día 1 no piden palabra.
+
+  ⚠️ **Corregido el 31-ago: que la pieza no pida palabra NO significa que el bot esté callado
+  el día 0.** Se leyó el workflow `1jS4jwmNmvcQpqqH` (activo) nodo por nodo: **no tiene ningún
+  filtro de post ni de media**. Escucha *todos* los comentarios de la cuenta; lo único que decide
+  si dispara es la **palabra dentro del texto del comentario**, no la pieza donde se comentó.
+
+  Para Lucía — que entra por la rama `DESCONOCIDA` porque su `entry_id` sigue sin mapear — las
+  palabras vivas son **SISTEMA** y **HUMO**, y el match es `texto.toUpperCase().includes(...)`:
+  **subcadena, no palabra entera**. O sea que un comentario espontáneo como *«me gustaría ver
+  cómo armas tu sistema de contenido»* contiene `SISTEMA` y **dispara el DM**. Y la lámina 6
+  del día 0 pide justamente eso: *«Decime en los comentarios qué te gustaría ver acá»*.
+
+  **No bloquea el día 0**, porque el daño está acotado y es on-brand: sale el DM de SISTEMA de
+  Lucía (voz de ella, link `onia.com.bo/?src=lucia-ig-sistema`, verificado 200), hay freno de
+  **24 h por persona** (`/opt/onia/ig-dm-token.sh`), y a Sergio le llega aviso por Telegram en
+  cada disparo. Lo que sí cambia: **si en el día 0 llega un DM, no es un bug — es esto.** No
+  hay que apagar nada a las apuradas.
+
+  Si Sergio prefiere silencio total el día 0, la única palanca limpia es vaciar `palabras` de la
+  rama `DESCONOCIDA` en el nodo *Parsear comentario* y volver a ponerlas antes del día 4 (L6, la
+  primera pieza que SÍ pide palabra). Es tocar n8n en vivo — carril infra, un dueño a la vez —
+  así que **no se hizo desde acá**: queda como opción suya, de un minuto.
 - **No publicar `onia-6-tareas-para-delegar.pdf`** — no desbloquea ninguna pieza.
 - Los días 2 a 6 (L09 → L6 → L10 → L08 → L11) van uno por día, en ese orden. Recién ahí
   aparece la primera pieza que pide algo por comentario.
