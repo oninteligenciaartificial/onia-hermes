@@ -91,16 +91,40 @@ esa organización en vez de derivar. Tres archivos del motor.
 
 **Carril:** chatbot.
 
-### 🔴 3. El agente que trae clientes no se puede encender nunca
+### ✅ 3. El agente captador SÍ se puede encender — era un fantasma (cerrado 2026-08-31)
 
-`lib/onia-core/modules/agents-runtime.ts:102-116` exige `requiresFeature:
-"addon.inmobiliaria"` — **una clave que no está en el catálogo de add-ons**. Por eso da
-`kind_not_enabled` en las 14 corridas diarias medidas. Recall y cobrador corren; **el único
-agente que persigue plata nueva, no.**
+Este punto decía que `requiresFeature: "addon.inmobiliaria"` era **"una clave que no está en
+el catálogo de add-ons"**. Es **falso**, y lo era ya cuando se escribió: la clave entró a
+`ADDON_IDS` el **2026-08-13**, commit `4077f2c`.
 
-**Terminado =** la clave existe y el agente se puede encender para una organización.
+**La cadena está cerrada, verificada eslabón por eslabón:**
 
-**Carril:** producto.
+| Eslabón | Dónde | Estado |
+|---|---|---|
+| La clave existe | `lib/platform/types.ts:73` (`ADDON_IDS`) → `addon.inmobiliaria` es `FeatureKey` válida | ✅ |
+| Se puede otorgar por API | `POST app/api/admin/organizations/[id]/entitlements/route.ts:101` — valida con `isFeatureKey`, catálogo cerrado fail-closed | ✅ |
+| Hay pantalla para hacerlo | `admin/organizations/[id]/capacidades/CapacidadesOrg.tsx:56` lista **todos** los `ADDON_IDS`, y el :31 le escribe su descripción propia | ✅ |
+| El runtime lee lo que esa pantalla escribe | ambos van a `prisma.organizationEntitlement` por `(organizationId, featureKey)`, que es **`@@unique`** (`schema.prisma:1929`) — una fila, sin ambigüedad | ✅ |
+| Está probado en los dos sentidos | `agents-runtime.test.ts:613` — sin add-on → `kind_not_enabled` y cero writes; con add-on (`conAddon()`) → `draft_message` en `pending_approval` | ✅ |
+
+**El `kind_not_enabled` de las 14 corridas no es una falla: es la respuesta correcta.** Ninguna
+org lo tiene otorgado porque nadie lo compró. La cola ya había rechazado encenderlo para todos,
+con motivo: el copy del captador es **inmobiliario**, y prenderlo global le estrenaba una fila
+"captador inmobiliario" a cada clínica dental.
+
+**Por qué el error fue creíble, que es lo que hay que recordar:** hay **dos** catálogos y el punto
+los mezcló. `lib/pricing.ts` es el catálogo **comercial** (lo que se cobra) y ahí
+`inmobiliaria` **no está**; `lib/platform/types.ts` es el catálogo de **feature keys** (lo que se
+puede otorgar) y ahí sí está. Buscar la clave en el archivo que CLAUDE.md declara "fuente única
+de add-ons" y no encontrarla lleva derecho a esta conclusión falsa. Es el mismo error que este
+repo ya tiene escrito tres veces con otras caras: **verificar contra el sistema equivocado**.
+
+**El residuo real — y NO entra en esta lista:** al no estar en `pricing.ts`, el add-on **no se
+puede comprar**, sólo otorgar a mano (`source: "grant"`). No es 🔴 roto (el LISTO de este punto
+era que se pudiera encender, y se puede) ni 🟠 falso: el catálogo de venta **no lo ofrece** —
+lo nombra en su sección de lo que falta. Ponerle precio es decisión de Sergio, no deuda técnica.
+
+**Carril:** producto. **Cerrado sin tocar una línea de código: no había nada roto.**
 
 ### 🟠 4. El cobro es manual — y se construye hasta el borde, no se espera
 
@@ -137,6 +161,9 @@ la credencial en el env y prender el flag**. Nada de código nuevo ese día.
 ## Cómo se sabe que está terminado
 
 Los cuatro puntos cerrados **y verificados mirando la pantalla**, no por un check verde.
+**Van 1 de 4:** el 3 cerró el 2026-08-31 al verificarlo — era un fantasma, no había nada
+roto. Quedan el 1 y el 2 (carril chatbot) y el 4 (cobro por QR contra mock, que **no**
+espera credenciales).
 
 Recién ahí se les escribe a los siete que están esperando — empezando por la clínica de
 cuatro doctores, que es el lead más calificado que el sistema recibió nunca.

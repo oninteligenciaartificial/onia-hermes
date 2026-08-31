@@ -9,7 +9,7 @@ escribirles si ni siquiera el producto está terminado; dedicate a terminar el p
 escribimos"*.
 
 **Qué significa terminado está escrito y medido en
-[`ONIA_DEFINICION_DE_TERMINADO.md`](ONIA_DEFINICION_DE_TERMINADO.md)** — cuatro puntos, sólo
+[`ONIA_DEFINICION_DE_TERMINADO.md`](ONIA_DEFINICION_DE_TERMINADO.md)** — cuatro puntos (**el 3 cerró el 2026-08-31: era fantasma**), sólo
 cosas **rotas** (el cliente las compra y no funcionan) o **falsas** (se las vendemos y no son
 ciertas). Nada de "sería lindo".
 
@@ -48,6 +48,45 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 > **Cuatro de los seis ítems del plan de la mañana murieron al verificarlos.** No estaban
 > hechos "más o menos": estaban hechos, o estaban decididos, o el costo era otro. Queda
 > escrito acá para que ninguna sesión los vuelva a abrir.
+
+- [x] **P3 · "El agente que trae clientes no se puede encender nunca" — FANTASMA, y el motivo
+      vale más que el ítem.** Era el punto 3 de `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md`, el **único**
+      de esa lista en el carril producto. Su premisa — *"`addon.inmobiliaria`, una clave que no
+      está en el catálogo de add-ons"* — es **falsa desde el 2026-08-13** (commit `4077f2c`).
+      Verificada la cadena entera, eslabón por eslabón: la clave está en `ADDON_IDS`
+      (`lib/platform/types.ts:73`); el `POST` de `app/api/admin/organizations/[id]/entitlements/route.ts:101`
+      la acepta validando con `isFeatureKey` (catálogo cerrado, fail-closed); la pantalla
+      `app/(dashboard)/admin/organizations/[id]/capacidades/CapacidadesOrg.tsx:56` lista **todos** los `ADDON_IDS`
+      y le escribe su propia descripción; y el runtime
+      (`lib/onia-core/modules/agents-runtime.ts:1157`) lee **la misma fila** que esa pantalla
+      escribe — `organization_entitlements` es `@@unique([organizationId, featureKey])`
+      (`prisma/schema.prisma:1929`), así que no hay fila vieja que pueda ganarle a la nueva.
+      Probado en los dos sentidos en `lib/onia-core/modules/agents-runtime.test.ts:613`. **Cero líneas de código
+      tocadas: no había nada roto.** El `kind_not_enabled` de las 14 corridas es la respuesta
+      correcta — nadie lo compró — y coincide con el rechazo de **F4** que ya estaba escrito
+      en este mismo archivo.
+      **La lección, que es lo que se lleva la vuelta: hay DOS catálogos y el punto los mezcló.**
+      `lib/pricing.ts` es el **comercial** (lo que se cobra) y ahí `inmobiliaria` no está;
+      `lib/platform/types.ts` es el de **feature keys** (lo que se puede otorgar) y ahí sí está.
+      Buscar la clave en el archivo que CLAUDE.md declara "fuente única de add-ons" y no
+      encontrarla lleva derecho a la conclusión falsa. Es **verificar contra el sistema
+      equivocado** otra vez, la cuarta anotada en esta cola.
+      **Residuo real, y NO es roto ni falso:** sin precio en `lib/pricing.ts` el add-on **no se puede
+      comprar**, sólo otorgar a mano. El catálogo de venta no lo ofrece — lo nombra en su
+      sección de lo que falta (`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md:249`), así que no le miente a nadie.
+      Ponerle precio es decisión de Sergio.
+
+- [ ] **P4 · El cobro por QR, construido hasta el borde contra un mock.** Único punto **no
+      bloqueado** que queda de `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md`, y su regla 2 es explícita:
+      *"si no tenés credenciales, no te quedes pensando"*. Falta la credencial del BCP, **no el
+      código**. Hoy existen `app/checkout/`, `app/api/payments/route.ts`,
+      `lib/subscription-payment-validation.ts` y `lib/addon-payment.ts`, y el cobro es manual:
+      el cliente transfiere y alguien aprueba.
+      **LISTO =** el circuito (QR → webhook de confirmación con firma validada → activación
+      automática) pasa sus tests con proveedor simulado, detrás de un flag apagado — como ya se
+      hizo con el emisor fiscal en mock. Encender el real = una env var y prender el flag, cero
+      código nuevo ese día.
+      **Gate 1 primero:** medir qué parte del circuito ya existe antes de escribir una línea.
 
 - [ ] 🔴 **F2 · BLOQUEADO EN SERGIO — el chatbot se cobra y medio chatbot es gratis.**
       Verificado en vivo el 2026-08-30, y la primera versión de este ítem estaba mal en dos
