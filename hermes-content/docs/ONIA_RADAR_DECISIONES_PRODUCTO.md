@@ -200,3 +200,37 @@ VPS (hoy 904 bytes, sin `campanas`). Es un `scp` con OK de Sergio, anotado como 
 `hermes-content/docs/cola/chatbot.md`, y **no depende de a qué org vaya el inbox 5**. La decisión
 9 sigue en pie por su motivo original —que los desconocidos se vean en `/inbox`— y esa sigue
 siendo la recomendación: **opción 1**.
+
+## 10. La marca de Chatwoot se está filtrando por tres puertas sin vigilancia (2026-08-31) — acción de Sergio
+
+**Por qué aparece.** La decisión 1 dice que Chatwoot queda como infraestructura invisible y
+que eso "ya está logrado". Es cierto en la cara que ve el cliente, y falso en el fuente.
+
+**Lo medido, contra el contenedor y contra la URL pública.** El job interno
+`Internal::ReconcilePlanConfigService` restaura **diez** `installation_configs` desde
+`enterprise/config/premium_installation_config.yml`. El cron que las defiende
+(`/root/bin/chatwoot-brand-onia.sh`, cada hora al :17) re-aplicaba **tres**. De las siete
+descubiertas, tres ya se perdieron: `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` apuntan a
+`www.chatwoot.com` desde el **16-ago**, y salen en texto plano en el HTML de
+`https://chat.onia.com.bo/app/login`, porque el front embebe ahí su objeto de config.
+Los tres `LOGO` no los defendía nadie: sobrevivían por suerte.
+
+**Lo que NO está roto**, y se dice porque es la mitad que importa: el login renderiza el logo
+`onia`, y el widget muestra al pie "Desarrollado por Onia" con link a `onia.com.bo`. MIRADO.
+
+**Las dos opciones, cotizadas:**
+
+1. **Aplicar el script ya ampliado.** Costo: 0 Bs y dos comandos — `scp` de
+   `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida. Cubre
+   las nueve claves de marca, trae un modo `--check` que no escribe, y arregla un `| tail -1`
+   que se comía la salida (por eso el log nunca pudo avisar de una reversión). Ya probado
+   contra producción en sólo-lectura: `REVERTIDAS 3/9`, sin escribir nada. Reversible: el
+   script viejo está en git.
+2. **Dejarlo.** Costo: 0 Bs. Nadie se ha quejado en quince días y no se ve renderizado. El
+   riesgo es el del 18-ago: cuando el reconcile vuelva a atacar, las seis que hoy están bien
+   sólo tienen tres defendidas, y el pie del widget es una de las que **sí** defiende — pero
+   los logos no.
+
+**Recomendación: opción 1.** Es el mismo mecanismo que ya se aprobó y ya corre; lo único que
+cambia es que cubra todo lo que el reconcile toca en vez de un tercio. Anotado como **S10** en
+`hermes-content/docs/cola/chatbot.md`.

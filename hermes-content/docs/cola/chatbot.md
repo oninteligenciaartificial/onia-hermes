@@ -232,6 +232,43 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       nunca se verificó que gane la carrera contra el reconcile. Si aparece el logo de
       Chatwoot en `chat.onia.com.bo`, re-aplicar LOS SEIS y limpiar caché
       (`GlobalConfig.clear_cache`).
+
+      ⚙️ **Vigilado el 2026-08-31, y el ítem estaba mal escrito en tres puntos.** No son seis
+      configs, la defensa no cubría lo que decía cubrir, y tres ya se habían perdido hace
+      quince días sin que nadie lo viera.
+      **1 · Son DIEZ, no seis.** Leído el YML del propio contenedor
+      (`enterprise/config/premium_installation_config.yml`), `Internal::ReconcilePlanConfigService`
+      restaura: INSTALLATION_NAME, BRAND_NAME, BRAND_URL, WIDGET_BRAND_URL, TERMS_URL,
+      PRIVACY_URL, LOGO, LOGO_DARK, LOGO_THUMBNAIL y DISPLAY_MANIFEST.
+      **2 · La defensa cubría TRES.** El cron real no es `63ae20ad` (ése es un loop de sesión):
+      es `/root/bin/chatwoot-brand-onia.sh`, cada hora al minuto :17, y corre bien —
+      328 ejecuciones, la última al cierre de esta vuelta. Pero re-aplicaba sólo
+      INSTALLATION_NAME, BRAND_NAME y WIDGET_BRAND_URL. Los tres LOGO sobrevivían **por
+      suerte, no por diseño**. Su copia versionada
+      (`hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh`) era idéntica al VPS por md5,
+      así que el repo no mentía: la defensa estaba corta en los dos lados.
+      **3 · Tres YA estaban revertidas, y se ven desde la calle.** `BRAND_URL`, `TERMS_URL` y
+      `PRIVACY_URL` apuntan a `www.chatwoot.com` desde el **16-ago**. No es teoría: el HTML
+      público de `https://chat.onia.com.bo/app/login` embebe el objeto de config del front y
+      las tres salen ahí en texto plano. La regla dura del carril es que Chatwoot no se vea.
+      **Lo que sí está bien, MIRADO y no supuesto:** el login renderiza el logo `onia` y
+      "Iniciar sesión en Onia", y el widget del inbox 4 muestra al pie **"Desarrollado por
+      Onia"**, con link a `https://onia.com.bo/?utm_medium=survey&utm_campaign=branding` e
+      icono `https://onia.com.bo/apple-icon.png`. La cara que ve el desconocido está limpia.
+      **La carrera, respondida con fechas:** los tres del script tienen `updated_at` del
+      **24-ago** y los tres LOGO del **29-ago**. Como el script sólo escribe si el valor
+      difiere, siete días sin que se muevan significa que **hoy el reconcile no está
+      revirtiendo nada** — pero cuando atacó (18-ago, y el 16-ago con estas tres) ganó.
+      **Lo construido:** `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` ampliado a las
+      **nueve** de marca (DISPLAY_MANIFEST queda afuera: su valor de fábrica es el que
+      queremos) y con modo **`--check`** que no escribe y sale 1 si falta alguna. Corregido
+      además un `| tail -1` que se comía la salida entera: por eso
+      `/var/log/chatwoot-brand-onia.log` nunca pudo mostrar una reversión. Probado **contra
+      producción en modo sólo-lectura**: `REVERTIDAS 3/9`, exit 1, y los `updated_at` de las
+      tres siguen en 16-ago — no escribió.
+      ⚠️ **No se aplicó al VPS: reemplazar un cron que corre solo cada hora es infra, y eso
+      es de Sergio.** Son dos comandos y es reversible. Anotado como **S10**, cotizado en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
       contrato del banco calcado); el código no cambia para el modo real. Espera las
@@ -263,6 +300,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
 | S8 | **Desplegar el producto y decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** | El deploy es suyo por regla; y los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` | **El objetivo del carril entero.** El código ya está (commit `88c1d56`): faltan un deploy y dos clicks en `/admin/organizations/<id>`. ⚠️ **Corregido el 31-ago (2ª vuelta): el ítem 2 ya NO cuelga de acá.** Decía que las campañas sólo existían en modo recepcionista — era cierto y ya no lo es: ahora también se leen en modo venta, así que las frases de la web se destraban con S9, sin decidir dueño de inbox |
 | S9 | **Publicar las campañas en el VPS**: copiar `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` (hoy 904 bytes, sin `campanas`) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK. Es un `scp` + recarga, no un build | **El ítem 2 entero.** El motor ya las lee en modo venta (626/626 verde, probado con este mismo documento); falta que el archivo del número las tenga. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico |
+| S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
 ---
