@@ -118,11 +118,26 @@ Las tres formas de fantasma que ya aparecieron acá:
       dejaba el 4º chart y la tabla en `opacity:0` (nunca disparaba el reveal) y
       parecía que faltaran. Toda captura de una página con `[data-reveal]` se scrollea
       antes. Las capturas anteriores de esta sesión pudieron ocultar contenido.
-- [ ] **W3 · Bugs de dato (los que MIENTEN).** `Math.max(value, 0)` en tres lugares
-      aplasta los negativos a cero mientras el `<title>` sigue mostrando el número
-      real: un reembolso o un churn se dibuja como cero. + el último punto del eje X
-      nunca se etiqueta (`index % step`), series de +58 puntos se recortan sin aviso,
-      y `niceMax` manda 340 a un eje de 500 (32% del plot muerto).
+- [x] **W3 · Bugs de dato (los que MIENTEN)** (2026-08-31). Los cuatro, de raíz, en
+      `packages/templates/src/dashboard.ts`. (a) **Negativos**: había 4 `Math.max(v, 0)`
+      y 3 eran el bug — el cuarto (`dashboard.ts:342`) es el clamp 0-100 de una barra de
+      progreso y se deja. Ahora existe una **escala con dominio real** (`chartScale`):
+      el cero es una línea interna, lo negativo cuelga debajo y el `<title>` deja de
+      contradecir al dibujo. El área de la serie única también se cierra contra el cero,
+      no contra el piso del plot. (b) **Último punto del eje X**: se cuenta `step`
+      **desde el final**, así el final de la serie siempre queda rotulado (antes solo
+      por casualidad). (c) **Recorte silencioso**: las barras se reparten por **ranura**
+      (`PLOT_W / count`) con el gap cediendo espacio; antes el ancho tenía piso de 2px y
+      a partir de ~58 puntos las últimas barras se dibujaban FUERA del viewBox.
+      (d) **Eje inflado**: escalera fina en `niceMax` (1 · 1,5 · 2 · 2,5 · 3 · 3,5 · 4 ·
+      5 · 6 · 7,5 · 8 · 10) — 340 ahora va a **350**, no a 500; el plot muerto pasa de
+      32% a 2,9%. + `rx` de la barra clampeado a media barra/media altura y `formatTick`
+      que abrevia negativos (`-1.8k`, antes `-1750`).
+      **Gates**: `typecheck:packages` verde, **205/205** (7 tests nuevos en
+      `dashboard.test.ts`, el primer test unitario de este template) y **mirado
+      renderizado en claro y oscuro** con un fixture temporal que mete un negativo, un
+      cero y una serie de 58 puntos: 0 `[data-reveal]` ocultos, 0 errores de consola.
+      **Lección: los cuatro pasaban todos los gates existentes** — por eso W6.
 - [ ] **W4 · Gauge/radial + defectos visuales.** Evidencia re-verificada 2026-08-30 en
       `packages/templates/src/dashboard.ts`: `grep -c 'gauge\|radial'` → **0** (no existe;
       "Tasa de cierre 34%" es un número pelado y es el caso exacto que Tabler y Grafana

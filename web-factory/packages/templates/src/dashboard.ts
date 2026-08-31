@@ -419,35 +419,69 @@ const PAD_B = 22;
 const PLOT_W = CHART_W - PAD_L - PAD_R;
 const PLOT_H = CHART_H - PAD_T - PAD_B;
 
+// Escalera de topes "redondos". La vieja saltaba 1 > 2 > 5 > 10 y con eso un maximo
+// de 340 se iba a un eje de 500: el 32% del plot quedaba muerto y la serie se veia
+// aplastada contra el piso. Con estos peldanos 340 cae en 350 (2,9% de aire) y las
+// mitades siguen siendo cifras leibles (350/2 = 175), que es lo que la grilla dibuja.
+const NICE_FRACTIONS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7.5, 8, 10];
+
 function niceMax(value: number): number {
   if (value <= 0) {
     return 1;
   }
-  const exponent = Math.floor(Math.log10(value));
-  const base = Math.pow(10, exponent);
+  const base = Math.pow(10, Math.floor(Math.log10(value)));
   const fraction = value / base;
-  const niceFraction = fraction <= 1 ? 1 : fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10;
-  return niceFraction * base;
+  return (NICE_FRACTIONS.find((candidate) => fraction <= candidate) ?? 10) * base;
 }
 
 function formatTick(value: number): string {
-  if (value >= 1000) {
-    return `${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}k`;
+  const magnitude = Math.abs(value);
+  if (magnitude >= 1000) {
+    return `${(value / 1000).toFixed(magnitude % 1000 === 0 ? 0 : 1)}k`;
   }
   return `${Math.round(value)}`;
 }
 
-function renderGrid(max: number): string {
-  return [0, 0.5, 1]
+/** Escala vertical de un chart, con su linea de cero. */
+export interface ChartScale {
+  min: number;
+  max: number;
+  zeroY: number;
+  yFor: (value: number) => number;
+}
+
+// El dominio se calcula con los valores REALES, negativos incluidos. Antes cada
+// lectura pasaba por `Math.max(value, 0)`: un reembolso o un churn se dibujaba con
+// altura cero mientras el `<title>` seguia diciendo el numero de verdad, o sea el
+// grafico MENTIA y el tooltip lo desmentia. Ahora el cero es una linea interna y
+// lo negativo cuelga debajo.
+export function chartScale(values: number[]): ChartScale {
+  const rawMax = Math.max(...values, 0);
+  const rawMin = Math.min(...values, 0);
+  const max = rawMax > 0 ? niceMax(rawMax) : 0;
+  const min = rawMin < 0 ? -niceMax(-rawMin) : 0;
+  const span = max - min || 1;
+  const top = span === 1 && max === 0 ? 1 : max;
+  const yFor = (value: number): number => PAD_T + PLOT_H - ((value - min) / (top - min)) * PLOT_H;
+  return { min, max: top, zeroY: yFor(0), yFor };
+}
+
+function renderGrid(scale: ChartScale): string {
+  // Con dominio negativo los peldanos son min / 0 / max, y el cero se lleva la linea
+  // solida: es la referencia que dice de que lado cae cada barra.
+  const ticks = Array.from(
+    new Set(scale.min < 0 ? [scale.min, 0, scale.max] : [0, scale.max / 2, scale.max]),
+  );
+  return ticks
     .map((tick) => {
-      const y = PAD_T + PLOT_H - tick * PLOT_H;
+      const y = scale.yFor(tick);
       const dash = tick === 0 ? "" : ' stroke-dasharray="2 3"';
       return (
         `<line x1="${PAD_L}" y1="${y.toFixed(1)}" x2="${CHART_W - PAD_R}" y2="${y.toFixed(
           1,
         )}" stroke="var(--border)" stroke-width="1"${dash}></line>` +
         `<text x="${PAD_L - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="wf-chart-axis">${formatTick(
-          tick * max,
+          tick,
         )}</text>`
       );
     })
@@ -490,7 +524,7 @@ function hasChartData(chart: DashboardChart): boolean {
   return chart.points.length > 0 || (chart.series ?? []).some((series) => series.points.length > 0);
 }
 
-function renderChart(chart: DashboardChart): string {
+export function renderChart(chart: DashboardChart): string {
   switch (chart.type) {
     case "donut":
       return renderDonutChart(chart);
@@ -528,10 +562,15 @@ function chartLabel(chart: DashboardChart): string {
 
 function renderBarChart(chart: DashboardChart): string {
   const points = chart.points.length ? chart.points : chart.series?.[0]?.points ?? [];
-  const max = niceMax(Math.max(...points.map((point) => Math.max(point.value, 0)), 1));
+  const scale = chartScale(points.map((point) => point.value));
   const count = points.length;
-  const gap = count > 12 ? 3 : 8;
-  const barWidth = Math.max(2, (PLOT_W - gap * (count - 1)) / count);
+  // El ancho sale de repartir el plot en ranuras y el gap se recorta si no cabe.
+  // Antes era al reves: gap fijo y barra con piso de 2px, asi que a partir de ~58
+  // puntos el ancho pedido excedia el plot y las ultimas barras se dibujaban FUERA
+  // del viewBox — la serie se recortaba sin que nada lo dijera.
+  const slot = count ? PLOT_W / count : PLOT_W;
+  const gap = Math.min(count > 12 ? 3 : 8, slot * 0.35);
+  const barWidth = Math.max(1, slot - gap);
 
   const hasPending = points.some((point) => point.pending);
   // Diagonal-hatch fill for pending/future bars (pattern bank: Fireart 25241984).
@@ -542,33 +581,34 @@ function renderBarChart(chart: DashboardChart): string {
 
   const bars = points
     .map((point, index) => {
-      const height = (Math.max(point.value, 0) / max) * PLOT_H;
-      const x = PAD_L + index * (barWidth + gap);
-      const y = PAD_T + PLOT_H - height;
+      const valueY = scale.yFor(point.value);
+      const height = Math.abs(valueY - scale.zeroY);
+      const x = PAD_L + index * slot + gap / 2;
+      const y = Math.min(valueY, scale.zeroY);
       const paint = point.pending
         ? `fill="url(#wf-hatch)" stroke="var(--wf-series-1)" stroke-opacity="0.45" stroke-width="1"`
         : `fill="var(--wf-series-1)"`;
       const pendingNote = point.pending ? " (pendiente)" : "";
       return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(
         1,
-      )}" rx="3" ${paint}><title>${escapeHtml(point.label)}: ${point.value}${pendingNote}</title></rect>`;
+      )}" rx="${Math.min(3, barWidth / 2, height / 2).toFixed(1)}" ${paint}><title>${escapeHtml(point.label)}: ${point.value}${pendingNote}</title></rect>`;
     })
     .join("");
 
-  const labels = renderChartLabels(points, (index) => PAD_L + index * (barWidth + gap) + barWidth / 2);
+  const labels = renderChartLabels(points, (index) => PAD_L + index * slot + slot / 2);
 
-  return chartSvg(`${hatchDefs}${renderGrid(max)}${bars}${labels}`, chartLabel(chart));
+  return chartSvg(`${hatchDefs}${renderGrid(scale)}${bars}${labels}`, chartLabel(chart));
 }
 
 function renderLineChart(chart: DashboardChart): string {
   const series =
     chart.series && chart.series.length ? chart.series : [{ name: chart.title, points: chart.points }];
-  const max = niceMax(Math.max(...series.flatMap((entry) => entry.points.map((point) => point.value)), 1));
+  const scale = chartScale(series.flatMap((entry) => entry.points.map((point) => point.value)));
   const multi = series.length > 1;
 
   const xFor = (index: number, count: number): number =>
     PAD_L + (count <= 1 ? PLOT_W / 2 : (index / (count - 1)) * PLOT_W);
-  const yFor = (value: number): number => PAD_T + PLOT_H - (Math.max(value, 0) / max) * PLOT_H;
+  const yFor = scale.yFor;
 
   const lines = series
     .map((entry, seriesIndex) => {
@@ -579,10 +619,10 @@ function renderLineChart(chart: DashboardChart): string {
         .join(" ");
       const area = multi
         ? ""
-        : `<polygon points="${xFor(0, count).toFixed(1)},${(PAD_T + PLOT_H).toFixed(1)} ${line} ${xFor(
+        : `<polygon points="${xFor(0, count).toFixed(1)},${scale.zeroY.toFixed(1)} ${line} ${xFor(
             count - 1,
             count,
-          ).toFixed(1)},${(PAD_T + PLOT_H).toFixed(1)}" fill="${color}" fill-opacity="0.12"></polygon>`;
+          ).toFixed(1)},${scale.zeroY.toFixed(1)}" fill="${color}" fill-opacity="0.12"></polygon>`;
       const dots = entry.points
         .map(
           (point, index) =>
@@ -600,7 +640,7 @@ function renderLineChart(chart: DashboardChart): string {
   const labelEntry = series.reduce((longest, entry) => (entry.points.length > longest.points.length ? entry : longest), series[0]);
   const labels = renderChartLabels(labelEntry.points, (index) => xFor(index, labelEntry.points.length));
 
-  const svg = chartSvg(`${renderGrid(max)}${lines}${labels}`, chartLabel(chart));
+  const svg = chartSvg(`${renderGrid(scale)}${lines}${labels}`, chartLabel(chart));
   if (!multi) {
     return svg;
   }
@@ -712,9 +752,12 @@ function renderChartLabels(
   xFor: (index: number) => number,
 ): string {
   const step = points.length > 8 ? Math.ceil(points.length / 6) : 1;
+  // Se cuenta DESDE EL FINAL. Con `index % step` el ultimo punto quedaba sin rotulo
+  // salvo casualidad, y el eje mentia sobre donde termina la serie.
+  const lastIndex = points.length - 1;
   return points
     .map((point, index) =>
-      index % step === 0
+      (lastIndex - index) % step === 0
         ? `<text x="${xFor(index).toFixed(1)}" y="${CHART_H - 6}" text-anchor="middle" class="wf-chart-axis">${escapeHtml(
             point.label,
           )}</text>`
