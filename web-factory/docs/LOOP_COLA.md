@@ -166,8 +166,35 @@ Las tres formas de fantasma que ya aparecieron acá:
       Anotado, NO tocado (fuera de este ítem): el sparkline del KPI sigue con
       `preserveAspectRatio="none"`, así que su punto final es una elipse — el mismo defecto
       que W2 arregló en el sparkline grande.
-- [ ] **W5 · Los estados que no existen.** Skeleton isomorfo, error de sección con
-      retry, vacío con altura reservada y segundo renglón que diga CUÁNDO se llena.
+- [x] **W5 · Los estados que no existen** (2026-08-31). Evidencia re-verificada antes de
+      tocar: `skeleton|retry|aria-busy` → **0 en todo `packages/`** (real), pero el
+      **segundo renglón del vacío YA existía** (`renderEmpty(title, hint)` en 5 llamadas,
+      todas con su "cuándo se llena") — esa parte del ítem era fantasma y no se rehizo.
+      Ahora hay un `estado?: "cargando" | "error"` por sección (chart, tabla, agente,
+      notas) en el template **y en el schema Zod**, que si no lo declaraba se lo comía.
+      **El skeleton es isomorfo por construcción, no por número copiado**: la caja de
+      estado lleva las MISMAS clases que el SVG real (`wf-chart`, `wf-sparkline`), así el
+      alto sale del mismo `aspect-ratio` y no hay una segunda constante que se
+      desincronice; solo el donut (140px) y el medidor (180px) repiten su tamaño, con
+      comentario. El **vacío pasa por la misma caja**: antes colapsaba a la altura de su
+      texto y, como el grid iguala la fila a la tarjeta más alta, un solo gráfico sin
+      datos reacomodaba a sus dos vecinas (A1d otra vez). **Error por sección, no de
+      página**, con `role="alert"` y botón Reintentar de 44px que emite `wf:reintentar`
+      (el template es HTML estático: avisa, no inventa un fetch que no tiene).
+      **Gates**: `typecheck:packages` verde, **219/219** (+5 tests) y **medido en el
+      navegador con un fixture temporal** (3 estados repartidos en la misma fila): las
+      tarjetas en cargando/error/vacío miden **254px, exactamente lo mismo que la
+      baseline con datos** → cero salto al llegar el dato. 0 `[data-reveal]` ocultos,
+      0 errores de consola, claro y oscuro, y el evento de reintento verificado
+      disparándolo (`detail.seccion = "Tu asistente"`).
+      ⚠️ **Defecto que reveló MIRAR**: el skeleton del medidor era un rectángulo a todo
+      el ancho donde el gráfico real es un círculo de 180px — el alto no se movía, pero
+      la FORMA prometía otra cosa. Corregido a círculo del tamaño real.
+      Anotado, NO tocado: `dashboardPointSchema` no declara `pending`, así que el schema
+      lo descarta y el patrón de barra rayada del template es inalcanzable desde el JSON
+      (mismo tipo de drift que ya habían tenido `variant`/`spark`). Y `pnpm test` cortó
+      una vez con `[vitest-pool]: Timeout terminating forks worker` en `hero.test.ts`
+      **sin ninguna aserción fallida**; a la segunda corrida, 219/219 y exit 0.
 - [ ] **W6 · Gates que hoy no existen.** Los tests actuales son `toBeVisible` y
       `count > 0`: **los diez defectos de arriba pasaban todos los gates en verde**.
       Falta screenshot comparado (claro/oscuro × 1440/375), axe sobre el fixture, un

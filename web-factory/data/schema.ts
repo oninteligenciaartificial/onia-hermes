@@ -159,6 +159,10 @@ const dashboardKpiSchema = z.object({
   spark: z.array(z.number()).optional(),
 });
 
+// Ausente = listo. Sin esto el template solo sabia dibujar el estado final: una
+// consulta caida se veia igual que un negocio sin datos.
+const dashboardEstadoSchema = z.enum(["cargando", "error"]).optional();
+
 const dashboardPointSchema = z.object({
   label: z.string().min(1),
   value: z.number(),
@@ -179,12 +183,14 @@ const dashboardChartSchema = z.object({
       }),
     )
     .default([]),
+  estado: dashboardEstadoSchema,
 });
 
 const dashboardTableSchema = z.object({
   title: z.string().default("Detalle"),
   columns: z.array(z.string().min(1)).default([]),
   rows: z.array(z.array(z.string())).default([]),
+  estado: dashboardEstadoSchema,
 });
 
 // Propuestas del agente. NO es un chat: cada propuesta viaja pegada a la
@@ -208,6 +214,7 @@ const dashboardAgentSchema = z.object({
   /** Una linea de contexto: que reviso y cuando. */
   resumen: z.string().default(""),
   acciones: z.array(dashboardAgentActionSchema).default([]),
+  estado: dashboardEstadoSchema,
 });
 
 const dashboardNoteSchema = z.object({
@@ -220,6 +227,7 @@ const dashboardNoteSchema = z.object({
 const dashboardNotesSchema = z.object({
   titulo: z.string().default("Notas"),
   items: z.array(dashboardNoteSchema).default([]),
+  estado: dashboardEstadoSchema,
 });
 
 const dashboardSchema = z

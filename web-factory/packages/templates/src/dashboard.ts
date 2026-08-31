@@ -37,6 +37,16 @@ export type DashboardProgressList = {
 
 export type DashboardSeries = { name: string; points: DashboardPoint[] };
 
+/**
+ * Estado de una seccion que trae datos de afuera. Ausente = listo.
+ *
+ * El panel se generaba SIEMPRE en su estado final: no existia forma de dibujar
+ * "todavia cargando" ni "fallo la consulta", asi que cada consumidor tenia que
+ * inventar su propio markup — o, peor, mostrar una seccion vacia como si el
+ * negocio no tuviera datos cuando en realidad la peticion se habia caido.
+ */
+export type DashboardEstado = "cargando" | "error";
+
 export type DashboardChart = {
   title: string;
   unit: string;
@@ -49,12 +59,14 @@ export type DashboardChart = {
   type: "bar" | "line" | "donut" | "sparkline" | "radial";
   points: DashboardPoint[];
   series?: DashboardSeries[];
+  estado?: DashboardEstado;
 };
 
 export type DashboardTable = {
   title: string;
   columns: string[];
   rows: string[][];
+  estado?: DashboardEstado;
 };
 
 /**
@@ -79,10 +91,11 @@ export type DashboardAgent = {
   titulo: string;
   resumen: string;
   acciones: DashboardAgentAction[];
+  estado?: DashboardEstado;
 };
 
 export type DashboardNote = { texto: string; meta: string; ancla: string };
-export type DashboardNotes = { titulo: string; items: DashboardNote[] };
+export type DashboardNotes = { titulo: string; items: DashboardNote[]; estado?: DashboardEstado };
 
 export type DashboardData = {
   title: string;
@@ -231,6 +244,21 @@ function renderAgentAndNotes(agent?: DashboardAgent, notes?: DashboardNotes): st
 }
 
 function renderAgent(agent: DashboardAgent): string {
+  if (agent.estado) {
+    return `<article class="wf-agent" data-reveal${
+      agent.estado === "cargando" ? ' aria-busy="true"' : ""
+    }>
+            <div class="wf-agent-head">
+              <h2>${escapeHtml(agent.titulo)}</h2>
+            </div>
+            ${
+              agent.estado === "cargando"
+                ? renderSkeletonLines(3, `Cargando ${agent.titulo}`)
+                : renderSectionError(agent.titulo)
+            }
+          </article>`;
+  }
+
   if (!agent.acciones.length) {
     return `<article class="wf-agent">
             <div class="wf-agent-head">
@@ -291,16 +319,23 @@ function renderNotes(notes: DashboardNotes): string {
         .join("")
     : "";
 
+  const cuerpo =
+    notes.estado === "cargando"
+      ? renderSkeletonLines(3, `Cargando ${notes.titulo}`)
+      : notes.estado === "error"
+        ? renderSectionError(notes.titulo)
+        : items
+          ? `<ul class="wf-notes-list">${items}</ul>`
+          : renderEmpty("Sin notas", "Lo que anotes queda a la vista del equipo.");
+
   return `
-          <article class="wf-notes" data-reveal>
+          <article class="wf-notes" data-reveal${
+            notes.estado === "cargando" ? ' aria-busy="true"' : ""
+          }>
             <div class="wf-notes-head">
               <h2>${escapeHtml(notes.titulo)}</h2>
             </div>
-            ${
-              items
-                ? `<ul class="wf-notes-list">${items}</ul>`
-                : renderEmpty("Sin notas", "Lo que anotes queda a la vista del equipo.")
-            }
+            ${cuerpo}
           </article>`;
 }
 
@@ -309,27 +344,96 @@ function renderCharts(charts: DashboardChart[]): string {
     return "";
   }
 
-  const cards = charts
-    .map(
-      (chart) => `
-          <article class="wf-chart-card wf-chart-card--${chart.type}" data-reveal>
-            <div class="wf-chart-head">
-              <h2>${escapeHtml(chart.title)}</h2>
-              ${chart.unit ? `<span class="wf-chart-unit">${escapeHtml(chart.unit)}</span>` : ""}
-            </div>
-            ${
-              hasChartData(chart)
-                ? renderChart(chart)
-                : renderEmpty("Sin datos", "Este grafico se completa cuando llegan los datos.")
-            }
-          </article>`,
-    )
-    .join("");
+  const cards = charts.map(renderChartCard).join("");
 
   return `
         <section class="wf-dash-charts" aria-label="Graficos">
           ${cards}
         </section>`;
+}
+
+export function renderChartCard(chart: DashboardChart): string {
+  return `
+          <article class="wf-chart-card wf-chart-card--${chart.type}" data-reveal${
+            chart.estado === "cargando" ? ' aria-busy="true"' : ""
+          }>
+            <div class="wf-chart-head">
+              <h2>${escapeHtml(chart.title)}</h2>
+              ${chart.unit ? `<span class="wf-chart-unit">${escapeHtml(chart.unit)}</span>` : ""}
+            </div>
+            ${renderChartSlot(chart)}
+          </article>`;
+}
+
+function renderChartSlot(chart: DashboardChart): string {
+  if (chart.estado === "cargando") {
+    return chartSlot(chart, renderSkeleton(`Cargando ${chart.title}`), "cargando");
+  }
+  if (chart.estado === "error") {
+    return chartSlot(chart, renderSectionError(chart.title), "error");
+  }
+  if (hasChartData(chart)) {
+    return renderChart(chart);
+  }
+  return chartSlot(
+    chart,
+    renderEmpty("Sin datos", "Este grafico se completa cuando llegan los datos."),
+    "vacio",
+  );
+}
+
+/**
+ * Caja con la MISMA geometria que el grafico que reemplaza — skeleton isomorfo:
+ * cuando el dato llega, la tarjeta no cambia de alto y nada salta de sitio.
+ *
+ * Por eso el estado vacio tambien pasa por aca: colapsaba a la altura de su
+ * propio texto y, como el grid iguala la fila a la tarjeta mas alta, un solo
+ * grafico sin datos reacomodaba a sus dos vecinas (el defecto de A1d otra vez).
+ *
+ * Para bar/line/sparkline la geometria se reutiliza literal: la caja lleva las
+ * mismas clases que el SVG real (`wf-chart`, `wf-sparkline`), asi el alto sale
+ * del mismo aspect-ratio y no hay un segundo numero que mantener sincronizado.
+ */
+function chartSlot(chart: DashboardChart, inner: string, estado: string): string {
+  const geometria =
+    chart.type === "radial"
+      ? "wf-slot--radial"
+      : chart.type === "donut"
+        ? "wf-slot--donut"
+        : chart.type === "sparkline"
+          ? "wf-chart wf-sparkline"
+          : "wf-chart";
+  return `<div class="wf-slot ${geometria}" data-estado="${estado}">${inner}</div>`;
+}
+
+/** Bloque gris que late. `aria-label` porque para el lector de pantalla la caja
+ *  no dice nada por si sola: sin el, "cargando" es un estado invisible. */
+function renderSkeleton(label: string): string {
+  return `<div class="wf-skel" role="status" aria-label="${escapeAttribute(label)}"></div>`;
+}
+
+/** N renglones de skeleton, para las secciones de texto (agente, notas, tabla). */
+function renderSkeletonLines(count: number, label: string): string {
+  const lines = Array.from(
+    { length: Math.max(count, 1) },
+    () => `<span class="wf-skel wf-skel--line" aria-hidden="true"></span>`,
+  ).join("");
+  return `<div class="wf-skel-lines" role="status" aria-label="${escapeAttribute(label)}">${lines}</div>`;
+}
+
+/**
+ * Error de UNA seccion, no de la pagina: el resto del panel sigue sirviendo.
+ * Lleva boton de reintento porque un error sin salida obliga a recargar todo y
+ * pierde los filtros que el duenio ya habia elegido.
+ */
+function renderSectionError(seccion: string): string {
+  return `<div class="wf-dash-error" role="alert">
+            <strong>No se pudo cargar</strong>
+            <span>${escapeHtml(seccion)} no respondio. El resto del panel sigue al dia.</span>
+            <button type="button" class="wf-dash-retry" data-dash-retry data-seccion="${escapeAttribute(
+              seccion,
+            )}">Reintentar</button>
+          </div>`;
 }
 
 function renderLists(lists: DashboardProgressList[]): string {
@@ -382,19 +486,12 @@ function renderTable(table: DashboardTable): string {
 
   const head = `<tr>${table.columns.map((column) => `<th scope="col">${escapeHtml(column)}</th>`).join("")}</tr>`;
 
-  const body = table.rows.length
-    ? table.rows
-        .map(
-          (row) =>
-            `<tr>${table.columns
-              .map((_, index) => `<td>${escapeHtml(row[index] ?? "")}</td>`)
-              .join("")}</tr>`,
-        )
-        .join("")
-    : `<tr class="wf-table-empty-row"><td colspan="${table.columns.length}">Sin registros para el periodo seleccionado.</td></tr>`;
+  const body = renderTableBody(table);
 
   return `
-        <section class="wf-dash-table" aria-label="${escapeAttribute(table.title)}" data-reveal>
+        <section class="wf-dash-table" aria-label="${escapeAttribute(table.title)}" data-reveal${
+          table.estado === "cargando" ? ' aria-busy="true"' : ""
+        }>
           <div class="wf-dash-table-head">
             <h2>${escapeHtml(table.title)}</h2>
           </div>
@@ -405,6 +502,41 @@ function renderTable(table: DashboardTable): string {
             </table>
           </div>
         </section>`;
+}
+
+/**
+ * El cuerpo de la tabla en sus cuatro estados. El skeleton mantiene la MISMA
+ * cantidad de filas que el ultimo dato conocido (o 4), asi la pagina no da un
+ * salto de alto cuando la consulta vuelve.
+ */
+function renderTableBody(table: DashboardTable): string {
+  const colspan = table.columns.length;
+  if (table.estado === "cargando") {
+    const cells = table.columns
+      .map(() => `<td><span class="wf-skel wf-skel--line" aria-hidden="true"></span></td>`)
+      .join("");
+    return Array.from(
+      { length: Math.max(table.rows.length, 4) },
+      (_, index) =>
+        `<tr${index === 0 ? ' role="status" aria-label="Cargando registros"' : ""}>${cells}</tr>`,
+    ).join("");
+  }
+  if (table.estado === "error") {
+    return `<tr class="wf-table-empty-row"><td colspan="${colspan}">${renderSectionError(
+      table.title,
+    )}</td></tr>`;
+  }
+  if (!table.rows.length) {
+    return `<tr class="wf-table-empty-row"><td colspan="${colspan}">Sin registros para el periodo seleccionado.</td></tr>`;
+  }
+  return table.rows
+    .map(
+      (row) =>
+        `<tr>${table.columns
+          .map((_, index) => `<td>${escapeHtml(row[index] ?? "")}</td>`)
+          .join("")}</tr>`,
+    )
+    .join("");
 }
 
 function renderEmpty(title: string, hint: string): string {
@@ -971,6 +1103,21 @@ const dashboardScript = `<script>
         try { localStorage.setItem("wf-theme", next); } catch (e) {}
       });
     }
+
+    // El reintento no sabe de donde salen los datos: este template es HTML
+    // estatico. Avisa con un evento y deja que quien los trae vuelva a renderizar
+    // la seccion. Delegado en document porque la seccion se reemplaza entera.
+    document.addEventListener("click", function (event) {
+      var button = event.target.closest("[data-dash-retry]");
+      if (!button) return;
+      button.setAttribute("aria-busy", "true");
+      button.disabled = true;
+      button.textContent = "Reintentando...";
+      button.dispatchEvent(new CustomEvent("wf:reintentar", {
+        bubbles: true,
+        detail: { seccion: button.getAttribute("data-seccion") || "" }
+      }));
+    });
 
     var reveal = document.querySelectorAll("[data-reveal]");
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1817,6 +1964,142 @@ h1, h2, h3 {
   color: var(--color-fg);
 }
 
+/* Estados de seccion. La caja de "cargando", "error" y "sin datos" tiene la
+   MISMA geometria que el grafico al que reemplaza, asi cuando el dato llega la
+   tarjeta no cambia de alto y nada salta de sitio. Va DESPUES de .wf-chart a
+   proposito: la caja lleva esa misma clase para heredarle el aspect-ratio, y
+   este display:flex tiene que ganarle al display:block de aquella. */
+.wf-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-block: auto;
+}
+
+.wf-slot > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* ponytail: estos dos altos repiten el ancho de .wf-donut (140px) y .wf-gauge
+   (180px), que son cuadrados. Si aquellos cambian, cambiar estos; el resto de
+   los tipos no necesita numero porque hereda el aspect-ratio de .wf-chart. */
+.wf-slot--donut {
+  block-size: 140px;
+}
+
+.wf-slot--radial {
+  block-size: 180px;
+}
+
+.wf-skel {
+  min-height: 100%;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-fg) 8%, transparent);
+  animation: wf-skel-pulse 1.6s ease-in-out infinite;
+}
+
+/* El medidor y el donut son circulos ACOTADOS, no cajas a todo el ancho: con el
+   skeleton rectangular la tarjeta prometia un grafico ancho y al llegar el dato
+   aparecia una rueda chica en el medio. El alto ya no se movia; la FORMA si. */
+.wf-slot--donut .wf-skel,
+.wf-slot--radial .wf-skel {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.wf-slot--donut,
+.wf-slot--radial {
+  justify-content: flex-start;
+}
+
+.wf-slot--donut .wf-skel {
+  flex: 0 0 auto;
+  inline-size: 140px;
+}
+
+.wf-slot--radial .wf-skel {
+  flex: 0 0 auto;
+  inline-size: 180px;
+  margin-inline: auto;
+}
+
+.wf-skel-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.wf-skel--line {
+  display: block;
+  min-height: 0;
+  height: 0.9rem;
+  border-radius: 999px;
+}
+
+.wf-skel-lines .wf-skel--line:nth-child(even) {
+  width: 72%;
+}
+
+@keyframes wf-skel-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.42;
+  }
+}
+
+/* Error de UNA seccion: borde solido (el vacio es punteado) para que se lea
+   como "algo fallo" y no como "todavia no hay nada", que son cosas distintas. */
+.wf-dash-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 22px;
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--wf-neg) 45%, var(--border));
+  border-radius: var(--radius);
+  color: var(--muted-foreground);
+}
+
+.wf-dash-error strong {
+  color: var(--wf-neg);
+}
+
+.wf-dash-retry {
+  margin-top: 6px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.wf-dash-retry:hover {
+  background: color-mix(in srgb, var(--color-fg) 6%, transparent);
+}
+
+.wf-dash-retry[aria-busy="true"] {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.wf-table-empty-row .wf-dash-error {
+  max-width: 420px;
+  margin-inline: auto;
+}
+
 [data-reveal] {
   opacity: 0;
   transform: translateY(10px);
@@ -1833,6 +2116,10 @@ h1, h2, h3 {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .wf-skel {
+    animation: none;
   }
 }
 

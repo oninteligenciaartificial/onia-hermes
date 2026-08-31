@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { barPath, chartScale, renderChart, type DashboardChart, type DashboardPoint } from "./dashboard.js";
+import {
+  barPath,
+  chartScale,
+  renderChart,
+  renderChartCard,
+  type DashboardChart,
+  type DashboardPoint,
+} from "./dashboard.js";
 
 // Geometria del chart (espejo de las constantes privadas de dashboard.ts).
 const CHART_W = 320;
@@ -222,5 +229,55 @@ describe("marcadores", () => {
     );
     const radii = [...svg.matchAll(/<circle [^>]*r="([\d.]+)"/g)].map((match) => Number(match[1]));
     expect(Math.min(...radii)).toBeGreaterThanOrEqual(4);
+  });
+});
+
+describe("estados de seccion", () => {
+  const puntos: DashboardPoint[] = [
+    { label: "Ene", value: 10 },
+    { label: "Feb", value: 20 },
+  ];
+
+  /** Clases de geometria de la caja de estado (el `div` con `wf-slot`). */
+  function slotClasses(html: string): string {
+    return html.match(/class="wf-slot ([^"]*)"/)?.[1] ?? "";
+  }
+
+  it("cargando dibuja skeleton y NO el grafico", () => {
+    const html = renderChartCard({ ...chart("bar", puntos), estado: "cargando" });
+    expect(html).toContain("wf-skel");
+    expect(html).toContain('aria-busy="true"');
+    expect(html).not.toContain("<svg");
+  });
+
+  it("el skeleton es isomorfo: hereda la geometria del grafico que reemplaza", () => {
+    // bar/line/sparkline reusan las clases del SVG real, asi el alto sale del
+    // mismo aspect-ratio y la tarjeta no cambia cuando llega el dato.
+    expect(slotClasses(renderChartCard({ ...chart("bar", puntos), estado: "cargando" }))).toBe("wf-chart");
+    expect(slotClasses(renderChartCard({ ...chart("sparkline", puntos), estado: "cargando" }))).toBe(
+      "wf-chart wf-sparkline",
+    );
+    expect(slotClasses(renderChartCard({ ...chart("donut", puntos), estado: "cargando" }))).toBe("wf-slot--donut");
+    expect(slotClasses(renderChartCard({ ...chart("radial", puntos), estado: "error" }))).toBe("wf-slot--radial");
+  });
+
+  it("el error da salida propia: reintento, sin recargar la pagina", () => {
+    const html = renderChartCard({ ...chart("line", puntos), estado: "error" });
+    expect(html).toContain('role="alert"');
+    expect(html).toContain("data-dash-retry");
+    expect(html).not.toContain("<svg");
+  });
+
+  it("el vacio reserva la altura del grafico en vez de colapsar", () => {
+    const html = renderChartCard(chart("bar", []));
+    expect(html).toContain('data-estado="vacio"');
+    expect(slotClasses(html)).toBe("wf-chart");
+  });
+
+  it("con datos y sin estado dibuja el grafico, no una caja de estado", () => {
+    const html = renderChartCard(chart("bar", puntos));
+    expect(html).toContain("<svg");
+    expect(html).not.toContain("wf-slot");
+    expect(html).not.toContain("aria-busy");
   });
 });
