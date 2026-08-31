@@ -76,7 +76,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       llega nunca a la bandeja.** Éste es el hueco que hace inalcanzable el objetivo, y no
       estaba escrito en ninguna parte. Verificado hoy, en cuatro archivos:
       - Al crear la org se le crea un inbox **web** y ése se guarda:
-        `app/api/admin/clinics/route.ts:97-105` (`createInbox` + `update chatwootInboxId`).
+        `app/api/admin/clinics/route.ts:97` (`createInbox` + `update chatwootInboxId`).
       - Una vez puesto, **nunca se pisa**: `lib/chatbot/canal-web.ts:27` devuelve
         `created:false` y se va; `app/api/admin/chatbots/route.ts:53` hace lo mismo.
       - La única pantalla que lo muestra es **de sólo lectura**:
@@ -112,8 +112,9 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       (`app/(dashboard)/settings/chatbot/EnsenaleConversando.tsx` las crea hablando),
       publicadas, y las seis contestadas con su respuesta propia — probado por el probador
       real y MIRADO.
-      ⚠️ **No se toca `site.ts`**: es del carril web-factory. Las frases se copian tal cual
-      están hoy; si alguna cambia allá, la campaña deja de matchear y hay que re-copiarla.
+      ⚠️ **No se toca `web-factory/apps/onia-platform/src/lib/site.ts`**: es del carril
+      web-factory. Las frases se copian tal cual están hoy; si alguna cambia allá, la campaña
+      deja de matchear y hay que re-copiarla.
 
 ---
 
