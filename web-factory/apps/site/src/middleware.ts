@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { rolDePerfilAutorizado, type OniaCenterProfile } from "@/lib/onia-center-perfil";
+import { rolDePerfilAutorizado, type OniaCenterProfile } from "./lib/onia-center-perfil";
 
 
 
