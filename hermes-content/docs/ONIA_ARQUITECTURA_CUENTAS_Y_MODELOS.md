@@ -75,11 +75,22 @@ producir nada nuevo. Es la decisión de mejor relación esfuerzo/retorno de toda
 La respuesta corta a "¿comunidad de WhatsApp u Onia Platform?": **Onia Platform. La
 comunidad todavía no.**
 
+> 🔴 **CADUCADO el 2026-08-31 — Sergio abrió la comunidad y decidió lo contrario.**
+> *"en mi marca personal enviaremos el link hacia la comunidad y en lucia y onia, el link de
+> oniahq"*. La comunidad **existe y está viva** (`chat.whatsapp.com/…`, og:title "Onia
+> Community", verificado 200). Queda así:
+> · **@sergio_urcullo → la comunidad** (antes: "comunidad del reto de Samuel")
+> · **Lucía y @oniahq → el link de Onia** — y **ya no un PDF**: se abandona entregar PDFs.
+>
+> Las "4 razones de no abrir la comunidad" de abajo quedan como historia de una decisión que se
+> revirtió. **No se ejecutan.** Si esta sección y la decisión del 31-ago se contradicen, gana la
+> decisión.
+
 | Cuenta | Nivel de quien la sigue | Destino | Por qué ese y no otro |
 |---|---|---|---|
 | **@oniahq** | 2-3 (sabe que tiene el problema) | **Diagnóstico de 20 min** → Onia Platform | Ya está listo para conversar. Es el camino directo a caja |
-| **Lucía** | 0-1 (llegó por curiosidad) | **Recurso gratis** (PDF) → DM → menciona @oniahq | Pedirle un diagnóstico la primera vez quema el lead |
-| **Sergio** | 0-2 | comunidad del reto (de Samuel) | Es su sistema, separado a propósito |
+| **Lucía** | 0-1 (llegó por curiosidad) | ~~Recurso gratis (PDF)~~ → **link de Onia** → DM | Pedirle un diagnóstico la primera vez quema el lead |
+| **Sergio** | 0-2 | **la comunidad de Onia** (link vivo, 31-ago) | Es su sistema, separado a propósito |
 
 ### Las 4 razones de no abrir la comunidad de WhatsApp hoy
 

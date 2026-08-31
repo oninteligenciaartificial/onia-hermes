@@ -191,16 +191,43 @@ noche no aporta a eso y el gym compite con mil cuentas de fitness.
 
 Sergio pidió: *"que Lucía sea más fancy, que sea más lujosa"*.
 
-> **El lujo va en la ROPA y en el GROOMING. El lugar sigue siendo de otro.**
-> Mismo mercado, misma parada, misma ventanilla de trámites, misma luz fea. Lo que cambia es
-> que ahora es la mujer mejor vestida del cuadro.
+> **El lujo va en la ROPA y en el GROOMING. El lugar es donde trabaja un emprendedor.**
+> Y eso es mucho más que el barrio: consultorio, oficina, mall, showroom, distribuidora,
+> mercado, tienda. Lo que cambia es que ahora es la mujer mejor vestida del cuadro.
+
+### ⚠️ Corregido el 2026-08-31 — la primera versión de esta sección se equivocó
+
+Ayer esto decía **«el lugar sigue siendo de otro: mismo mercado, misma parada, misma luz fea»**,
+y restringía a Lucía al barrio. Sergio lo corrigió hoy, con la razón:
+
+> *"también va a oficinas, malls, consultorios, a todos lados, ya que se supone que es cualquier
+> tipo de emprendedor y también es una influencer"*
+
+**Los dos motivos son estructurales y ninguno estaba contemplado:**
+
+1. **Onia le vende a cuatro rubros abiertos**, no a tiendas de barrio. Si Lucía sólo pisa el
+   mercado y la parada del micro, le habla a uno solo de los cuatro y deja afuera al dentista,
+   al importador y al profesional independiente — y el dentista es justamente **el único rubro
+   con recorrido real** (`ONIA_CATALOGO_DE_VENTA.md:47`).
+2. **Es una influencer**, no una documentalista. Una cuenta que sólo muestra barrio no junta
+   seguidores ni atrae acuerdos de marca, que es la mitad B del objetivo decidido el 30-ago.
+
+El barrio **no se va**: pasa de ser *el* lugar a ser *uno* de los lugares.
+
+⚠️ **Y no confundir con la objeción del 15-ago.** Los 5 Elements de lugar de §10 (baño de mármol,
+bar de terciopelo, vereda arbolada…) se apagaron porque **NO son Santa Cruz**, no porque fueran
+lindos. Esa objeción sigue viva y es otra cosa: un lugar caro está permitido **si existe acá**.
+Equipetrol sí, Ventura Mall sí, un consultorio real sí; un lobby de mármol genérico de banco de
+imágenes, no.
 
 ### ⚠️ Esto DEROGA una regla escrita — leer antes de producir
 
 `ONIA_LUCIA_DIRECCION_ESTETICA_20260811.md` §2 dice literal: *"Aspiracional pero alcanzable:
-**nada de lujo**"*. **Queda derogado para la PERSONA.** Sigue vigente para el LUGAR, y sigue
-vigente la receta del 28-ago de restar hasta que se vea normal — aplicada al lugar y a la luz,
-no a ella.
+**nada de lujo**"*. **Queda derogado**, y desde el 31-ago también para el lugar.
+
+Lo que NO se deroga es la distinción de abajo: sigue prohibido el lujo de **gasto**. Una oficina
+linda no es lo mismo que un auto caro. La receta del 28-ago de restar hasta que se vea normal
+sigue vigente como antídoto contra la foto de catálogo — no como obligación de fealdad.
 
 Sin esta derogación escrita la próxima sesión produce con la regla vieja. Es exactamente cómo
 salieron L08 y L09 contra un banco ya descartado.
@@ -215,6 +242,27 @@ salieron L08 y L09 contra un banco ya descartado.
 
 Con el PIB proyectado en −3,6%, filas de combustible y diésel a 18 Bs, el lujo de gasto lee
 **burla** al mismo dueño de negocio que queremos como cliente. El de textura, no.
+
+### Los lugares — uno por rubro, más los de influencer
+
+Salen de los rubros que Onia **de verdad vende** (`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`),
+no de una lista linda. Cada pieza elige de acá:
+
+| Mundo | Lugares | Por qué |
+|---|---|---|
+| **Clínica dental** 🟢 | recepción de consultorio, sala de espera, mostrador de turnos | El único rubro con recorrido real. Es el que más piezas debería tener |
+| **Comercio / tienda** 🟡 | tienda de barrio, local de galería, mostrador, **mall** | Del barrio al Ventura: el comerciante formal también es cliente |
+| **Importadora / distribuidora** 🟡 | depósito, mostrador con mezanine de vidrio, showroom | El mundo del comprador de mayor ticket |
+| **Servicios profesionales** 🟡 | oficina, escritorio, coworking, sala de reunión | El rubro cuyo asistente ya le habla al cliente |
+| **De todos** | oficina de trámites, banco, parada de micro, fila | La fricción que comparten los cuatro. Es el pilar B más barato |
+| **Influencer** | café de especialidad, calle de Equipetrol, mall, feria/Expocruz | La mitad B del objetivo: seguidores y acuerdos de marca |
+
+⛔ **Ganadería no se produce**: el catálogo la marca cerrada porque el pack promete un modo
+offline que no existe. Una pieza de campo vendería algo que no podemos entregar.
+
+**La regla que reemplaza a «el lugar queda»:** el lugar tiene que ser **el lugar de trabajo de
+alguien**, y ese alguien tiene que poder ser cliente de Onia. Un lugar donde nadie trabaja
+(un rooftop, una pileta, un lobby de hotel) es de los que Sergio llama «sin sentido».
 
 ### Dos looks, no seis
 
@@ -244,8 +292,11 @@ entero. Nada de ondas producidas ni pelo planchado: eso lee foto de campaña.
 
 ### Lo que NO se toca
 
-- **La luz sigue siendo defecto**, no belleza: tubo fluorescente plano, mediodía nublado, foco
-  desnudo, exposición despareja. Prohibida la hora dorada y el contraluz que dibuja el pelo.
+- **La luz es la REAL de ese lugar**, nunca una luz de belleza. Corregido el 31-ago: antes decía
+  «tubo fluorescente plano, foco desnudo», que es la luz del barrio y quedó sin sentido al abrir
+  los lugares — un consultorio bueno tiene luz buena, y forzarle un tubo feo lo vuelve falso.
+  El principio nunca fue *luz fea*: es **no maquillar con luz**. Sigue prohibida la hora dorada,
+  el contraluz que dibuja el pelo, el halo y el viento.
 - **Cero grade de color.** Nada de Kodak Portra ni halation — es el camino que ya falló el
   21-ago con otro nombre. El bloque 10 sigue apagado.
 - **Cero primer plano y cero low angle.** El plano medio nuevo es 50 mm contra pared lisa.
@@ -269,7 +320,11 @@ entero. Nada de ondas producidas ni pelo planchado: eso lee foto de campaña.
 ### Por qué sigue siendo la misma persona
 
 Cara del mismo Element `@lucia-skin-v1`. Mismo corte, color y largo de pelo. Mismas argollas y
-cadenita. Mismo terracota en cuadro. Misma luz fea. **Mismo lugar.** Mismo jean crudo recto.
+cadenita. Mismo terracota en cuadro. Mismo jean crudo recto. Cero maquillaje y pecas contables.
+
+⚠️ Al abrirse los lugares (31-ago), la continuidad **ya no se apoya en el lugar ni en la luz** —
+dos de los seis anclajes que tenía. Los que quedan cargan más peso, así que se vuelven menos
+negociables, no más: si además se le cambia el pelo o se le tapan las pecas, deja de ser ella.
 De todo lo que define a un personaje en una foto, cambia **una prenda de arriba y la
 terminación**. Es la misma mujer el día que se lavó el pelo y se puso la camisa buena.
 
