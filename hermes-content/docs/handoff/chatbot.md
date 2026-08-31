@@ -542,3 +542,22 @@ Sesion paralela detectada (carril comercial/CRM, tus 10 bloqueados + 3 leads): s
 choque de carriles; regla fetch+rebase antes de push absorbio 6 PRs ajenos hoy.
 QUEDA: v6.8 recorrida de friccion + verificacion del push en dispositivo real +
 gates de Sergio (popup — monitor vivo, BCP, alta, 75414930).
+
+## 2026-08-31 — DETECTOR DE COMPROBANTES (Sendy-parity, gap #5 del teardown) ✅ VIVO
+
+Pedido Sergio: "que quede pendiente para ser un chatbot como Sendy" → gap analysis:
+quedaban difusiones (grande, post plantillas Meta), frases de campaña (siguiente) y
+la validacion de pagos por vision — construida HOY con la vision existente:
+- vision.mjs: prompt JSON {descripcion, comprobante:{es,monto?,entidad?}} con
+  response_format json_object; monto/entidad = ECO del documento (regex estricto
+  ^\d{1,7}(\.\d{1,2})?$; entidad [\w .-]{1,30}) — jamas cifra nuestra. Texto plano
+  de modelo viejo degrada al flujo actual. 12 tests de vision.
+- Recepcionista: rama R_COMPROBANTE (antes de la foto generica): "Recibi tu
+  comprobante{ de Bs X} 🙏 Se lo paso a {{humano}} para confirmarlo..." + handoff
+  comprobante_recibido (notify_sergio del handoff + push te-escribieron avisan al
+  dueño). PROHIBIDO confirmar: el texto jamas dice "pago confirmado" (test lo fija).
+- 611/611. Deploy motor con backup. E2E REAL: voucher BCP sintetico (chromium
+  headless — PIL no existe en el VPS) como incoming en conv QA 44 → el bot LEYO
+  el monto y contesto exacto. Bolivia-fit: todo el mundo paga QR y manda captura.
+SIGUE del gap Sendy: frases activadoras/respuestas de campaña (sirve YA con links
+wa.me?text= en Instagram bio, sin esperar ads) → difusiones (ultima, post plantillas).
