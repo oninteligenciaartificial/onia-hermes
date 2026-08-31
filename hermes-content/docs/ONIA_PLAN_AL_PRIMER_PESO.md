@@ -35,7 +35,7 @@ El orden no lo invento: está escrito en `ONIA_ADDON_CONTENIDO.md` §"El orden, 
 Están en la sección 5. **Sin esto no arranca nada**: el paso 1 entero está esperando un OK desde el 23 de agosto.
 
 ### Paso 1 — Publicar lo de Lucía. Es el test de demanda y nunca se corrió.
-- **Qué hay listo, pago y sin publicar:** 7 carruseles renderizados (`render-fijado`, `render-l6`, `render-l07`, `render-l08`, `L09`, `render-l10`, `render-l11`), el reel v7, y 12 historias (H01-H12). Cero créditos nuevos.
+- **Qué hay listo, pago y sin publicar:** 7 carruseles renderizados — las carpetas que se suben son `FIJADO`, `L09`, `L6`, `render-l10`, `L08`, `render-l11` (`render-fijado`/`render-l6`/`render-l08` quedaron superadas el 31-ago: ver el handoff del carril, § 1-sexies; `render-l07` es la pieza archivada), el reel v7, y 12 historias (H01-H12). Cero créditos nuevos.
 - **Quién:** vos das el OK y publicás. Esta sesión no publica — es la regla.
 - **Costo:** cero.
 - **Cadencia:** pediste 1/día. La recomendación sigue siendo **3 por semana las dos primeras semanas**, y ahí sí 1/día. Las historias sí, diarias desde el día 1.
