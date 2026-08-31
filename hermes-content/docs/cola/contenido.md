@@ -1,4 +1,8 @@
-# Cola — carril contenido (Lucía, @oniahq, marca personal)
+# Cola — marketing de ONIA (Lucía, @oniahq, marca personal)
+
+> **Alcance ampliado (Sergio, 2026-08-31):** *"aquí manejaremos higgsfield, o sea el marketing de la
+> empresa, onia, cuenta personal y lucia"*. Esta sesión es el carril de marketing de las **tres**
+> cuentas, no sólo el de Lucía.
 
 > **Objetivo único (Sergio, 2026-08-30):** pasar de **0 posts a un feed vivo publicando lo que
 > YA existe**. No se produce nada nuevo hasta que haya algo publicado.
@@ -29,12 +33,13 @@ faltantes. Lo que falta es **publicar**.
 
 ## Ahora
 
-- [x] **Resuelto 31-ago: se publican las carpetas de nombre pelado** (`FIJADO`, `L6`, `L08`), no las `render-*`. Comparadas mirando la portada: `hermes-content/references/modelos/lucia/posts-20260807/FIJADO/slide-01.jpg` usa sans pesada con bloque de resaltado y «DESLIZÁ →»; `hermes-content/references/modelos/lucia/posts-20260807/render-fijado/slide-01.jpg` usa serif itálica fina, que es el tratamiento que Sergio objetó con «se ve muy pequeño el texto». Falta la hoja de contacto de las pelado — se regenera, no es motivo para publicar la peor tipografía · Claude
-- [x] **Mitad hecha 31-ago: marca personal → comunidad.** STACK pasa de `pdf` sin URL al link de la comunidad, y los 8 placeholders `[COMUNIDAD]` quedaron reemplazados en `hermes-content/docs/ONIA_SERGIO_DM_PALABRAS.md`. Ver `scripts/recompensas.json` · Claude
-- [ ] Reescribir el copy de S05 y S06: prometen «la lista completa con los links y lo que cuesta cada uno» y la palabra ahora entrega una invitación a la comunidad. El gate las marca `promesa-distinta` a propósito — no se publican así. Ver `hermes-content/references/marca-personal-sergio/briefs/S06-equipo-que-no-cobra.json` · 20 min · Claude
-- [ ] 🔴 TRABADO — la otra mitad: Lucía y Onia. Necesita que Sergio defina si «el link de oniahq» es la web de Onia con su ?src o el perfil de Instagram. Son ~15 piezas. Ver `hermes-content/docs/cola/contenido.md` · Sergio
+- [x] Elegir cuál render se sube en las 3 piezas con DOS versiones: **gana el lote verde del 28-ago** — `hermes-content/references/modelos/lucia/posts-20260807/FIJADO`, `L6` y `L08`. Las dos sesiones llegaron a lo mismo por separado: mirando la portada, la del 28-ago usa sans pesada con bloque de resaltado y «DESLIZÁ →», y la del 22-ago serif itálica fina — el tratamiento que Sergio objetó con «se ve muy pequeño el texto». Las superadas llevan `hermes-content/references/modelos/lucia/posts-20260807/render-fijado/_NO-SUBIR.md` y los punteros del handoff quedaron corregidos · 31-ago
+- [x] **Marca personal → comunidad.** STACK pasa de `pdf` sin URL al link de la comunidad y los 8 placeholders quedaron reemplazados en `hermes-content/docs/ONIA_SERGIO_DM_PALABRAS.md`. Ver `scripts/recompensas.json` · 31-ago
+- [ ] Reescribir el copy de S05 y S06: prometen «la lista completa con los links y lo que cuesta cada uno» y la palabra ahora entrega una invitación. El gate las marca `promesa-distinta` a propósito — no se publican así. Ver `hermes-content/references/marca-personal-sergio/briefs/S06-equipo-que-no-cobra.json` · 20 min · Claude
+- [ ] Ver si se puede correr Meta Ads para conseguir público (Sergio, 31-ago). Antes de gastar: verificar cuenta publicitaria, medio de pago y estado de la verificación de negocio. Ver `hermes-content/docs/ONIA_AVISO_AUTOMATIZACION_IG.md` · 40 min · Claude
+- [ ] 🔴 TRABADO — Lucía y Onia: falta que Sergio defina si «el link de oniahq» es la web de Onia con su ?src o el perfil de Instagram. Son ~15 piezas. Ver `hermes-content/docs/cola/contenido.md` · Sergio
 - [ ] Declarar la etiqueta de IA en la cuenta antes del primer post — hoy es una instrucción pendiente, no una verificación: `hermes-content/contenido/LUCIA.md` · 5 min · Sergio
-- [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502: `hermes-content/references/modelos/lucia/posts-20260807/render-fijado` · 15 min · Sergio
+- [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502. Son las 7 láminas de `hermes-content/references/modelos/lucia/posts-20260807/FIJADO` (NO la carpeta `hermes-content/references/modelos/lucia/posts-20260807/render-fijado`, que quedó superada) · 15 min · Sergio
 - [ ] Publicar el día 1 (reel de lanzamiento v7, 22 s, 1080×1920): `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4` · 10 min · Sergio
 
 ## Despues
@@ -71,9 +76,11 @@ Se dejan escritos para que nadie los vuelva a poner en «Ahora».
 
 ## Cómo se trabaja esta cola
 
-**Loop de fondo** (cron `5d8f50a4`, :13 y :43): una vuelta chica, **un solo ítem**, evidencia
+**Loop de fondo** (:13 y :43): una vuelta chica, **un solo ítem**, evidencia
 real, commit con rutas explícitas. Los loops anteriores murieron por pedir «una tarea completa»
 por vuelta — tarea grande, turno largo, y el cron siguiente nunca dispara porque sólo corre con
 el REPL ocioso. **El turno corto ES el mecanismo.**
 
 **Abanico cuando Sergio está**: subagentes en paralelo, para lotes probados e independientes.
+
+**Lo que el loop persigue además de la cola** (Sergio, 31-ago): *"perfecciones tu técnica en higgsfield y ver de postear en meta ads para agarrar público"*. Cada vuelta que sobre tiempo va a una de esas dos, y lo aprendido se escribe en `hermes-content/references/modelos/lucia/TECNICA-HIGGSFIELD.md` — no en un doc nuevo al lado.
