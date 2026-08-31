@@ -201,6 +201,19 @@ VPS (hoy 904 bytes, sin `campanas`). Es un `scp` con OK de Sergio, anotado como 
 9 sigue en pie por su motivo original —que los desconocidos se vean en `/inbox`— y esa sigue
 siendo la recomendación: **opción 1**.
 
+🔴 **Corregido el 2026-08-31 (más tarde el mismo día): el párrafo de arriba subestima S9, y
+hacerlo tal como dice no enciende nada.** Daba el motor por desplegado. Medido con md5 contra el
+VPS, no leyendo el repo: `/opt/onia/bot/bot-engine.mjs` es el commit `3e3841aa`, no `994eb42d` —
+le falta exactamente el cambio que hace visibles las campañas en modo venta, y el motor que CORRE
+(contenedor `onia-center`, `/tmp/onia-bot/`) tiene **cero apariciones de `campanaExacta`**.
+Copiar sólo `knowledge.json` habría dejado las 5 campañas en un archivo que el motor viejo ni
+mira: las 4 frases vivas seguirían con el saludo genérico y el ítem se habría dado por cerrado.
+**S9 son tres archivos** (`bot-engine.mjs`, `knowledge.mjs`, `knowledge.json`) **más un
+reinicio**. Queda verificable en un comando, sin tocar el VPS:
+`node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` — sale 0 si el código del VPS es el del
+espejo, 1 nombrando los archivos si no. Esto **no cambia la decisión 9**, que sigue siendo
+opción 1: sólo corrige lo que hay que hacer cuando se ejecute S9.
+
 ## 10. La marca de Chatwoot se está filtrando por tres puertas sin vigilancia (2026-08-31) — acción de Sergio
 
 **Por qué aparece.** La decisión 1 dice que Chatwoot queda como infraestructura invisible y
