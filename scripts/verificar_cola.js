@@ -20,6 +20,15 @@
  * pero solo cuando el item ademas trae una ruta, porque un comando escrito no prueba nada
  * hasta que alguien lo corre.
  *
+ * Y NINGUN item abierto puede repetir el titulo de otro item, en cualquier seccion. Esa regla
+ * mira el archivo ENTERO —no solo "Ahora"— porque el duplicado clasico vive con una pata en
+ * cada seccion. Nace del 2026-08-31: `DELETE /api/payments/[id]` estaba abierto DOS veces, una
+ * con sus tres salidas cotizadas y la otra sin analizar, y este gate pasaba en verde — porque
+ * una copia sin analizar trae exactamente la misma evidencia que el original. Era la TERCERA
+ * vez que esta cola se duplicaba; las dos anteriores quedaron como leccion escrita y no
+ * alcanzo. Un item duplicado no es desprolijidad: manda a cotizar de nuevo un hueco ya
+ * cotizado, que es trabajo fantasma con otra cara.
+ *
  * QUE NO EXIGE. Las secciones "Despues" y "Bloqueado" pueden hablar de cosas que todavia no
  * existen: para eso estan. El filtro es sobre lo que se declara accionable HOY.
  */
@@ -30,6 +39,7 @@ const path = require('path');
 const SECCION_DURA = /^##\s+ahora\b/i;
 const OTRA_SECCION = /^##\s+/;
 const ITEM = /^\s*[-*]\s+\[[ xX]\]\s+(.*)$/;
+const ITEM_ESTADO = /^\s*[-*]\s+\[([ xX])\]\s+(.*)$/;
 
 // `algo` entre backticks. Una ruta se distingue de un comando por el `$ ` inicial.
 const TROZOS = /`([^`]+)`/g;
@@ -128,8 +138,68 @@ function existeEnAlgunRepo(ruta, baseDir) {
   return false;
 }
 
-function revisarCola(texto, baseDir = process.cwd()) {
+// Un item se identifica por su TITULO: la primera **negrita**, o lo que va antes del primer
+// punto. Es como esta cola nombra el trabajo. Comparar el cuerpo entero no serviria — la copia
+// larga trae el analisis y la corta no, que es exactamente la forma que tuvo el duplicado del
+// 2026-08-31 (`DELETE /api/payments/[id]` abierto en la 476 con tres salidas cotizadas y en la
+// 583 sin analizar).
+function tituloDe(texto) {
+  const negrita = texto.match(/\*\*([\s\S]+?)\*\*/);
+  let t = negrita ? negrita[1] : texto.split(/[.·]/)[0];
+  t = t.replace(/`/g, '').toLowerCase();
+  t = t.replace(/^[^a-z0-9\/]+/, '');
+  // El prefijo de decision lo lleva la copia analizada y no la cruda. Sin sacarlo, los dos
+  // titulos no coinciden y el duplicado pasa en verde.
+  t = t.replace(/^(decide sergio|bloqueado en sergio|bloqueado)\s*[—–-]\s*/, '');
+  return t.replace(/\s+/g, ' ').replace(/[.,;:]+$/, '').trim();
+}
+
+// A diferencia de itemsDeAhora, esto lee el archivo ENTERO: el duplicado clasico vive con una
+// pata en "Ahora" y la otra en "Despues", asi que mirar una sola seccion no lo puede ver.
+function todosLosItems(texto) {
+  const items = [];
+  let actual = null;
+  const cerrar = () => { if (actual) items.push(actual); actual = null; };
+  texto.split(/\r?\n/).forEach((linea, i) => {
+    const m = linea.match(ITEM_ESTADO);
+    if (m) { cerrar(); actual = { linea: i + 1, abierto: m[1] === ' ', texto: m[2] }; return; }
+    if (!linea.trim()) return;
+    if (actual && CONTINUACION.test(linea)) { actual.texto += '\n' + linea.trim(); return; }
+    cerrar();
+  });
+  cerrar();
+  return items;
+}
+
+// Un titulo corto ("Revisar") no alcanza para AFIRMAR que dos items son el mismo trabajo.
+// Marcarlos seria el gate adivinando, y un gate que adivina se desactiva.
+const TITULO_MINIMO = 20;
+
+function duplicados(texto) {
+  const items = todosLosItems(texto).map((it) => ({ ...it, titulo: tituloDe(it.texto) }));
   const problemas = [];
+  for (let i = 0; i < items.length; i += 1) {
+    for (let j = i + 1; j < items.length; j += 1) {
+      const a = items[i];
+      const b = items[j];
+      // Dos copias ya cerradas son historia y no hacen dano. El fantasma aparece cuando UNA
+      // sigue abierta: eso es lo que manda a rehacer trabajo hecho, o a analizar dos veces el
+      // mismo hueco.
+      if (!a.abierto && !b.abierto) continue;
+      if (a.titulo.length < TITULO_MINIMO || b.titulo.length < TITULO_MINIMO) continue;
+      if (a.titulo === b.titulo || a.titulo.includes(b.titulo) || b.titulo.includes(a.titulo)) {
+        problemas.push({
+          regla: 'duplicado', linea: b.linea,
+          msg: `"${b.titulo.slice(0, 60)}" repite el item de la linea ${a.linea}: cerrar o borrar una de las dos`,
+        });
+      }
+    }
+  }
+  return problemas;
+}
+
+function revisarCola(texto, baseDir = process.cwd()) {
+  const problemas = duplicados(texto);
   const items = itemsDeAhora(texto);
 
   if (!items.length) {
@@ -262,6 +332,56 @@ function selfCheck() {
   r = revisarCola('## Ahora\n- [ ] Algo · `lib/no-existe-en-ningun-lado.ts`\n', path.join(tmp, 'onia-hermes'));
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el repo hermano no vuelve verde cualquier ruta');
 
+
+  // --- Duplicados: "cerrar un item no cierra su copia" ---
+  // Este defecto ya golpeo DOS veces por escrito en la propia cola. El 2026-08-31 se encontro
+  // la tercera: `DELETE /api/payments/[id]` estaba abierto en las lineas 476 y 583, la primera
+  // con sus tres salidas cotizadas y la segunda sin analizar. El gate pasaba VERDE — solo
+  // miraba "Ahora" y solo pedia evidencia, y una copia sin analizar tiene la misma evidencia
+  // que el original. Una leccion escrita se desobedece; un exit 1 no.
+
+  const dosSecciones = (a, b) =>
+    `## Ahora\n- [ ] **${a}** · \`existe.png\`\n\n## Despues\n- [ ] **${b}** · \`existe.png\`\n`;
+
+  r = revisarCola(dosSecciones('Borrar un pago de un mes ya declarado', 'Borrar un pago de un mes ya declarado'), tmp);
+  ok(r.problemas.some((p) => p.regla === 'duplicado'), 'el mismo item abierto en dos secciones se marca');
+
+  // Se reporta UNA vez, no una por cada lado del par: un gate que dice dos veces lo mismo
+  // entrena a saltearlo.
+  ok(r.problemas.filter((p) => p.regla === 'duplicado').length === 1, 'un par duplicado se reporta una sola vez');
+
+  // El caso historico exacto: se cierra en "Ahora" y la copia queda ABIERTA en "Despues".
+  // Ahi la cola miente hacia adelante — manda a rehacer trabajo ya hecho.
+  r = revisarCola(
+    '## Ahora\n- [x] **Borrar un pago de un mes ya declarado** · `existe.png`\n\n## Despues\n- [ ] **Borrar un pago de un mes ya declarado** · `existe.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'duplicado'), 'una copia abierta de un item ya cerrado se marca');
+
+  // El caso REAL del 2026-08-31: la copia larga lleva el prefijo de decision y la corta no.
+  // Sin normalizar ese prefijo, los dos titulos no coinciden y el duplicado pasa.
+  r = revisarCola(dosSecciones(
+    'DECIDE SERGIO — `DELETE /api/payments/[id]` sobre un mes ya declarado',
+    '`DELETE /api/payments/[id]` sobre un mes ya declarado'), tmp);
+  ok(r.problemas.some((p) => p.regla === 'duplicado'), 'el prefijo "DECIDE SERGIO" no esconde la copia');
+
+  // --- Y los reciprocos, que son lo que impide que este gate grite en falso ---
+
+  // Dos items DISTINTOS que citan el mismo archivo no son duplicados. Sin esto, el gate
+  // ladraria sobre media cola —`lib/pricing.ts` aparece en todos lados— y se desactivaria.
+  r = revisarCola(dosSecciones(
+    'Ponerle precio al add-on inmobiliaria en el catalogo comercial',
+    'Sacar el add-on de veterinaria del catalogo comercial'), tmp);
+  ok(!r.problemas.some((p) => p.regla === 'duplicado'), 'dos items distintos no son duplicados');
+
+  // Dos copias YA CERRADAS son historia, no trabajo fantasma: no se marcan.
+  r = revisarCola(
+    '## Ahora\n- [x] **Borrar un pago de un mes ya declarado** · `existe.png`\n\n## Despues\n- [x] **Borrar un pago de un mes ya declarado** · `existe.png`\n', tmp);
+  ok(!r.problemas.some((p) => p.regla === 'duplicado'), 'dos copias cerradas son historia, no fantasma');
+
+  // Un titulo corto no alcanza para afirmar duplicado: "Revisar" y "Revisar" no son el mismo
+  // trabajo, y marcarlos seria el gate adivinando.
+  r = revisarCola(dosSecciones('Revisar', 'Revisar'), tmp);
+  ok(!r.problemas.some((p) => p.regla === 'duplicado'), 'un titulo demasiado corto no afirma duplicado');
+
   console.log(`self-check ok: ${casos} casos`);
 }
 
@@ -283,4 +403,4 @@ function main() {
 }
 
 if (require.main === module) main();
-module.exports = { revisarCola, itemsDeAhora, evidenciaDe };
+module.exports = { revisarCola, itemsDeAhora, evidenciaDe, todosLosItems, tituloDe, duplicados };

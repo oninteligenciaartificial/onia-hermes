@@ -494,6 +494,18 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         de hoy es **cero**; aparece el día que se enciendan los gates fiscales.
       **Recomendación: (c) ahora, (b) el día que se encienda el emisor.** (a) cuesta casi lo
       mismo que (b) en discusión y deja escrita una política que después hay que desandar.
+      **Deduplicado el 2026-08-31:** este mismo hueco estaba escrito DOS veces y abierto en las
+      dos — acá con sus tres salidas cotizadas, y cien líneas más abajo, en la otra sección
+      "Después", sin analizar. Se borró la copia cruda: dos entradas del mismo hueco hacen que la
+      próxima sesión lo cotice de nuevo creyendo que es un problema distinto, que es trabajo
+      fantasma con otra cara. **Es la tercera vez que esta cola se duplica** — las dos anteriores
+      están escritas unas líneas más abajo, en el ítem del guardia de `invoice-status`, que ya
+      había dejado la lección por escrito (*"cerrar un ítem no cierra su copia"*) y aun así volvió
+      a pasar. Por eso esta vez no queda como lección sino como gate: `scripts/verificar_cola.js`
+      falla con `duplicado` si un ítem **abierto** repite el título de otro, en cualquier sección
+      y aunque el otro esté cerrado. El verificador miraba sólo "Ahora" y sólo pedía evidencia —
+      y una copia sin analizar tiene exactamente la misma evidencia que el original, así que
+      pasaba en verde. Una lección escrita se desobedece; un exit 1 no.
 - [x] **El guardia de `invoice-status` ya caza lo que prometía.** Las dos evasiones eran reales
       —`const facturas = tx.invoice` y `data: { invoices: { update: … } }` son Prisma normal, no
       rebusques— y **ninguna de las tres existe hoy en el repo** (verificado el 2026-08-30: las
@@ -580,10 +592,6 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       trabajo que ya estaba. No se limpiaron porque ese árbol tiene cambios sin commitear de
       otra sesión (`admin/audit`, `credit-note`, `lib/audit.ts`) y resetearlo se los llevaba.
 
-- [ ] **`DELETE /api/payments/[id]` sobre un mes ya declarado** devuelve la factura a BORRADOR y
-      ese mes pierde la venta del CSV, sin nota de crédito de por medio. **No existe cierre de
-      período**: el RCV se regenera on demand para cualquier mes. Borra débito real, no inventa
-      crédito. Es un hueco conceptual, no un bug suelto.
 - [x] **El guardia de repo de `invoice-status` es evadible** — **fantasma: ya estaba cerrado en
       este mismo archivo.** El commit `2849be0` (verificado el 2026-08-31 como ancestro de
       `origin/master`) agregó los 5 patrones con 4 casos negativos, y su cierre está escrito 40

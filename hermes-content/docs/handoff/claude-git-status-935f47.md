@@ -54,7 +54,7 @@ verificado **mirando la pantalla**.
 |---|---|
 | Skill de continuidad (nueva) | `.claude/skills/onia-continuidad/SKILL.md` |
 | Índice de colas por carril | `hermes-content/docs/cola/README.md` |
-| Verificador de colas, ahora bi-repo | `scripts/verificar_cola.js` (self-check 9 → 15) |
+| Verificador de colas, ahora bi-repo | `scripts/verificar_cola.js` (self-check 9 → 15 → 26; ahora tambien caza duplicados) |
 | Scripts de los 2 crons + runbook | `hermes-content/infra/vps-ops/crons/` |
 | Fix del gate de acceso al Center | `web-factory/apps/site/src/lib/onia-center-perfil.ts` |
 | Fix de `page_location` en GA | `onia-platform` PR #59 |
