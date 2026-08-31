@@ -60,9 +60,64 @@ No es una teoría: es la tasa real de trabajo inventado cuando nadie verifica.
 
 Mergear a `main` con los tres gates en verde (Sergio, 2026-08-29). Avisar después, no antes.
 
-## Los loops
+## Los loops — cómo se ponen para que trabajen sin que Sergio promptee
 
-Cada carril tiene su tarea programada en `C:\Users\PC\.claude\scheduled-tasks\`. Dato medido el
-2026-08-31: **el `SKILL.md` sobrevive, el registro del horario NO.** Al cerrar las sesiones los
-loops quedan en disco pero desregistrados. Rearmarlos es barato —el prompt ya está escrito— pero
-hay que hacerlo a mano. No asumir que están corriendo: verificarlo.
+Un loop es **un prompt guardado en disco con un horario**. Cuando llega la hora y la app está
+quieta, Claude Code abre una sesión nueva, corre ese prompt y la cierra. **Arranca sin memoria
+de ninguna conversación**: todo lo que necesita tiene que estar en el prompt o en el repo. Por
+eso no se ve en el administrador de tareas — no es un proceso de Windows. Su rastro son los
+commits y las notificaciones.
+
+Viven en `C:\Users\PC\.claude\scheduled-tasks\<nombre>\SKILL.md`, y se ven en la barra lateral
+de la app, sección **Scheduled**.
+
+### Las tres cosas que obligan a Sergio a promptear, y su arreglo
+
+**1. La cola se queda sin trabajo decidido.** Un loop sin combustible o se planta o inventa — y
+lo que inventa es el trabajo fantasma que ya medimos al 40%.
+
+> **Arreglo: el loop nunca inventa, pero tampoco se planta.** Si la cola se vacía, su tarea de
+> respaldo es **auditar los `[x]` más recientes**: ¿el archivo que dice haber cambiado, cambió?
+> ¿lo que afirma sigue siendo cierto contra el código de hoy? Un ítem fantasma cerrado
+> correctamente vale tanto como uno construido. El loop `cerrar-y-revisar-web-factory` ya lo
+> hace así — es el patrón a copiar.
+
+**2. Se topa con una decisión de Sergio.** Si para y espera, muere ahí.
+
+> **Arreglo: nunca se detiene por una decisión.** La anota en
+> `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` —**el único lugar donde se juntan**—
+> con las opciones **cotizadas** (qué cuesta cada una, qué desbloquea), manda un
+> `PushNotification` de una línea, y **sigue con el próximo ítem desbloqueado**.
+>
+> Así Sergio contesta **en tanda, una vez**, sobre un archivo — en vez de responder preguntas
+> sueltas desparramadas en el chat. Ésa es la diferencia entre promptear todo el día y decidir
+> una vez.
+>
+> ⚠️ Ese archivo existe desde el 2026-08-17 y estuvo **cuatro días sin actualizarse** mientras
+> las decisiones se acumulaban en conversaciones. Ahí se rompió el circuito.
+
+**3. El registro del horario se pierde.** Medido el 2026-08-31: al cerrar las sesiones, los
+`SKILL.md` **sobreviven en disco** pero quedan **desregistrados**. Los loops no corren y nada
+avisa.
+
+> **Arreglo: verificarlo, no asumirlo.** Al abrir una sesión de control, listar las tareas
+> programadas. Si la lista está vacía y los archivos están, rearmarlas — el prompt ya está
+> escrito, sale barato. **Nunca decir "el loop está corriendo" sin haberlo mirado.**
+
+### Los cuatro que están puestos
+
+| Loop | Cadencia | Qué hace |
+|---|---|---|
+| `onia-cola` | `7,27,47` | Carril producto: salud, integrar a `main`, y la cola de plataforma |
+| `web-factory-dev-loop` | `13,33,53` | Construye la siguiente tarea de `LOOP_COLA.md` |
+| `web-factory-salud` | `21` | Server, git y gates del carril web |
+| `cerrar-y-revisar-web-factory` | `07:17` diario | Termina lo que quedó a medias **y audita lo dado por hecho** |
+
+Escalonados a propósito: comparten CPU y disco, y dos loops sobre el mismo árbol se pisan.
+**El carril chatbot no tiene loop porque no tiene cola** — su handoff es estado, no plan. Lo
+escribe su propio carril; un loop sin cola no tendría qué comer.
+
+### Lo que un loop NO hace, nunca
+
+Desplegar al VPS sin OK. Tocar otro carril. Gastar plata. Bajar una superficie viva. Decidir
+algo que le toca a Sergio. **Inventar una tarea que no está en su cola.**
