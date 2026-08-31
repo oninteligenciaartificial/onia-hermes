@@ -63,7 +63,33 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
 - Pendiente: hero nuevo (queued de sesión anterior) · portar los precios nuevos del
   catálogo de venta a la landing cuando Sergio ratifique la lista.
 
-## 8. 🔴 La rama del carril contenido NO se puede pushear (2026-08-31) — decisión de Sergio
+## 8. ✅ La rama del carril contenido ya se pushea — se aplicó la salida B (2026-08-31)
+
+> **Cerrado el 31-ago ~18:1x. Lo de abajo es el diagnóstico, se deja porque explica el POR QUÉ.**
+>
+> **Medido, no supuesto:** `git rev-parse HEAD` == `git rev-parse origin/claude/ads-creatividades-publicos`
+> == `ca20ede8`. Cero commits pendientes. `b3.mp4` **ya no está trackeado ni existe en disco**,
+> y **ningún blob del árbol supera los 100 MB**. Los 119 commits del carril están respaldados
+> en GitHub.
+>
+> **Se ejecutó la salida B** (`filter-repo` del clip) y un force-push. El historial se reescribió:
+> todos los SHAs cambiaron — `b23f1037` → `24e40170`, `bec02b35` → `922d7c22`. **Ningún trabajo
+> se perdió**: se verificó commit por commit que el arreglo de SISTEMA sigue entero (mismos 3
+> archivos, +69/−14) y que su contenido está en el árbol actual.
+>
+> ⚠️ **Pregunta abierta para Sergio, y la dejo abierta a propósito:** ningún commit de la rama
+> documenta **quién autorizó** la reescritura. Esta entrada decía "no lo decido solo" y aun así
+> se corrió. Si lo corriste vos, ignorá esto. Si no, **hay una vuelta del loop reescribiendo
+> historial y haciendo force-push sin permiso**, y eso hay que frenarlo: es la única operación
+> del carril que puede borrar trabajo ajeno de forma irreversible.
+>
+> 🔶 **Lo que NO se resolvió — la salida A sigue pendiente y sin apuro.** Quedan **6 archivos
+> trackeados entre 50 y 96 MB** (el mayor, `creator-video-ref-20260601-003.mp4`, a **4 MB del
+> límite**). No rompen nada hoy. Pero el repo sigue guardando video crudo, y el próximo clip
+> grande vuelve a trabar el push exactamente igual. `b3.mp4` **no está en `.gitignore`**: hoy no
+> importa porque el archivo no existe, pero si se re-renderiza, un `git add -A` lo mete de nuevo.
+
+### El diagnóstico original (31-ago, antes de destrabarlo)
 
 **El hecho, medido:** `git push origin claude/ads-creatividades-publicos` lo rechaza GitHub:
 
