@@ -80,6 +80,16 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       perseguir papeles es de recepción, no del profesional. Gates: tsc 0, eslint 0 errores,
       **2282 tests verdes**. Commit `6d8b6b7` (rama fix/requerimientos-alcanzable, ya mergeada).
 
+- [ ] **F6 · Frase corrida en la pantalla del portal del cliente** — el único ítem NO bloqueado
+      que queda. Encontrado el 2026-08-31 **mirando** el portal en producción con un token
+      inventado: se lee *"El enlace no es válido o venció Pedí un enlace nuevo…"*, sin punto.
+      No es el literal: la línea 85 de `app/(public)/portal/[token]/portal-client.tsx`
+      concatena `{errorGlobal}` con " Pedí un enlace nuevo…", y el fallback **sí** trae el
+      punto mientras el mensaje que manda la API **no** — o sea el camino que se ve en vivo es
+      justo el que quedó sin puntuar. Arreglo de una línea (puntuar en el borde, no en el
+      mensaje). Es la primera pantalla que ve un cliente del portal, así que vale la vuelta.
+      Gates completos, que es código.
+
 - [ ] **F5 · Veterinaria — COTIZADA el 2026-08-30, decide Sergio.** El bloqueo es real pero
       **el costo estaba inflado**. No es "migrar datos vivos":
       - La factura toma el CI del paciente en **un solo lugar**: `lib/fiscal/rcv-export.ts:148`
@@ -354,9 +364,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Gates: tsc 0 · eslint 0 · **2326 pasan + 5 skip**. Commit `14abb9a`, **ya en `origin/master`**.
       **El trabajo estaba sin commitear en el árbol** desde antes de esta vuelta: sin este commit
       se perdía en el próximo `reset` de cualquier sesión.
-- [ ] **Los ítems I1 y E1** de `TODOS_LOS_PENDIENTES.md` siguen sin resolver. Para decidirlos hay
-      que **abrir la pantalla con sesión y mirarla**: un 307 no prueba nada, hay un redirect
-      atrapa-todo que responde igual para rutas que no existen.
+- [x] **I1 y E1: los DOS eran fantasmas — y el ítem se decidió sin necesitar una sesión.**
+      Verificado el 2026-08-31.
+      - **I1 (portal de onboarding del cliente): fase 1 VIVA EN PRODUCCIÓN.** Existe
+        `app/(public)/portal/[token]` + `/requerimientos` + 7 rutas de API. **Mirado
+        renderizado** en `app.onia.com.bo/portal/<token-inventado>`: 200 con la pantalla
+        "Enlace no disponible" del propio portal (una ruta inventada da 308, así que no es el
+        atrapa-todo). Y está **desplegado**, no sólo en `master`: `3e43c93` es ancestro de
+        `e5c1ad3`, el commit que sirve el contenedor del VPS, con los artefactos en su `.next`.
+        Hizo lo que su propio PASO 1 mandaba: **encender, no construir** — cero modelos Prisma
+        nuevos, la máquina de estados corre sobre `onia_core_work_items`.
+      - **E1 (checklist de completitud de rubro): existe** en
+        `onia-core/ONIA_RUBRO_COMPLETITUD_CHECKLIST.md`, con su tabla rubro × 7 pasos. Su LISTO
+        estaba cumplido desde el 2026-08-20.
+      **Lo que sí había que arreglar, y es el aporte de la vuelta:** el checklist de E1 estaba
+      **vencido en la fila exacta que declaraba el único hueco**. Cita el commit `b1aa4ec`
+      (19:56) y el portal entró en `3e43c93` (20:52) — **56 minutos después**. O sea que decía
+      "🔴 FALTA EN EL CORE: no existe el cliente externo autenticado" y "los archivos los carga
+      el EQUIPO, no el cliente" mientras el portal donde el cliente sube sus documentos ya
+      estaba escrito. Corregidas las 4 celdas (paso 2 y 3, tabla del core y tabla por rubro),
+      la lectura honesta #2 y la sección "construir en el core", que baja de bloqueante a deuda.
+      **Los conteos "Encendidos plenos" NO se tocaron**: el portal entra por enlace de un solo
+      uso, no por sesión propia — pasa de ❌ a 🟡, nunca a ✅. Inflarlos habría sido el error que
+      esta cola persigue.
+      **Lección:** un doc de verificación fechado envejece en HORAS cuando el carril que mide es
+      el mismo que construye. No basta con que exista: hay que preguntarle contra qué commit se
+      escribió.
 
 ## Bloqueado — necesita a Sergio
 
