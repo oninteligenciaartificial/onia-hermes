@@ -561,3 +561,21 @@ la validacion de pagos por vision — construida HOY con la vision existente:
   el monto y contesto exacto. Bolivia-fit: todo el mundo paga QR y manda captura.
 SIGUE del gap Sendy: frases activadoras/respuestas de campaña (sirve YA con links
 wa.me?text= en Instagram bio, sin esperar ads) → difusiones (ultima, post plantillas).
+
+## 2026-08-31 (2) — FRASES DE CAMPAÑA + feedback de tono ✅
+
+- Feedback del dueño aplicado en el acto: CERO emojis en todas las plantillas del bot
+  (M0/M0R/R_SEGUIMIENTO/R_COMPROBANTE) y las pruebas/QA no usan su nombre (doc QA
+  humanName → "la encargada", version bump).
+- FRASES DE CAMPAÑA (gap #1 Sendy, version Onia): campanas[{frase max200, respuesta
+  max500}] max 10 en el doc — guardrails vigilan la respuesta (cifra = rechazo entero).
+  campanaExacta con fraseCanonica (sin puntuacion/tildes) y ANTES DEL SALUDO (en
+  wa.me?text= la frase ES el primer mensaje; el opt-in se marca igual, source
+  "campana"). R_CAMPANA + botones del menu. Editor conversacional la crea hablando
+  ("cuando escriban X respondele Y") — prompt actualizado. Espejo platform + diff
+  seccion Campañas (77 tests plataforma, 614/614 motor). E2E /preview real verde.
+  USO INMEDIATO sin ads: link wa.me/<numero>?text=<frase> en Instagram bio / QR
+  impreso — cada frase es un embudo con su respuesta.
+- GAP SENDY RESTANTE: solo difusiones masivas (necesita plantillas Meta aprobadas por
+  org + costo por mensaje post 1-oct — especificar cuando haya un cliente que las pida).
+  A/B, kanban, gamificacion: descartados con razon en el teardown.
