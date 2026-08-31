@@ -1,5 +1,12 @@
 # Onia - Acuerdo de Colaboracion Comercial (plantilla)
 
+> ⚠️ **PLANTILLA SUSPENDIDA — no hay equipo de ventas.** Sergio, 2026-08-27: *"ya no crees
+> nada sobre vendedores, por el momento no tenemos equipo de ventas"*. **El que vende es
+> Sergio.** Esta plantilla se conserva por si algún día existe la persona — pero la regla es
+> **primero existe la persona, después el documento**, y al revés se llenó media carpeta de
+> material para un puesto que nunca se ocupó.
+> Las comisiones quedan **suspendidas**, no borradas. Marcado el 2026-08-31.
+
 Contrato privado de colaboracion comercial y operativa por 60 dias entre
 Onia (representada por Sergio) y el colaborador. Es un acuerdo privado entre las
 partes; puede revisarse legal, contable o laboralmente antes de renovarse o

@@ -1,5 +1,10 @@
 # Onia Capital Recovery and Arthur Investment Policy 2026
 
+> ⚠️ **DOCUMENTO HISTÓRICO — la parte de Arthur ya no aplica**: no colabora con Onia desde
+> el 2026-08-23 (decisión de Sergio). Lo que sí sigue vigente es el criterio general de
+> recuperación de capital; lo que asume a Arthur como parte, no.
+> Marcado el 2026-08-31 al barrer los docs.
+
 Estado: interno Sergio/ONIA.
 Fecha: 2026-06-25.
 Visibilidad: privado Sergio/ONIA. No enviar completo a Arthur.

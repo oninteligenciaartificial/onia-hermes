@@ -1,5 +1,10 @@
 # Onia - Acuerdo Arthur Fuentes 60 Dias
 
+> ⚠️ **DOCUMENTO HISTÓRICO — Arthur Fuentes ya NO colabora con Onia** (decisión de Sergio,
+> 2026-08-23). Se conserva porque describe un acuerdo que existió y sus términos, no porque
+> siga vigente. **No rutear tareas ni carriles a Arthur, y no usar esto como plantilla.**
+> Marcado el 2026-08-31 al barrer los docs: estaba sin aviso, 31 días después de la decisión.
+
 Contrato privado operativo para ordenar trabajo, dinero, responsabilidades y
 crecimiento durante 60 dias. Es un acuerdo privado entre las partes; si alguna
 parte lo requiere, puede revisarse legal, contable o laboralmente antes de
