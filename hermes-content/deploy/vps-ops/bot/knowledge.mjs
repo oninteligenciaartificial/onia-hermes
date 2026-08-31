@@ -57,7 +57,14 @@ export const DEFAULT_KNOWLEDGE_FILE = fileURLToPath(new URL("./knowledge.json", 
  * Un `faq[].id` que no este aca RECHAZA el archivo: una FAQ sin consumidor es una edicion que no
  * hace nada, o sea el fallo silencioso que esta capa existe para evitar.
  */
-export const FAQ_TEMPLATE = Object.freeze({ siat: "M_SIAT_BODY" });
+export const FAQ_TEMPLATE = Object.freeze({
+  siat: "M_SIAT_BODY",
+  // "negocio": la FAQ editable del dueño (decision Sergio 2026-08-28). NO pisa un mensaje del
+  // guion: el recepcionista la consume como LISTA (varias FAQs, cada una con sus tags como
+  // disparadores) y la sirve via la plantilla R_FAQ_NEGOCIO. Control de calidad: guardrails
+  // sobre cada texto + checkFaqNegocio (sin disparador se rechaza) + vigencia.
+  negocio: "R_FAQ_NEGOCIO",
+});
 
 // ---------------------------------------------------------------------------
 // Allowlist estricto (el candado estructural)
@@ -107,6 +114,32 @@ const SHAPE = Object.freeze({
       duracionMinutos: { kind: "int", min: 5, max: 240 },
       duracionFrase: { kind: "text", max: 40 },
       modalidad: { kind: "text", max: 140 },
+    },
+  },
+  // Insistencia (v6.6, decision Sergio 2026-08-30: ENCENDIDA por defecto): si el
+  // cliente deja de responder, el asistente insiste UNA vez pasadas `horas`.
+  // La ausencia del campo = encendida con 2 horas (el default vive en quien lo lee,
+  // no aca — un doc viejo sin el campo no debe fallar la validacion).
+  seguimiento: {
+    kind: "object",
+    fields: {
+      activo: { kind: "bool" },
+      horas: { kind: "int", min: 1, max: 48 },
+    },
+  },
+
+  // Frases de campaña (2026-08-31, gap Sendy): la frase EXACTA que un link
+  // wa.me?text= o un anuncio precarga, y la respuesta del dueño para ese embudo.
+  // Ambos son kind text: los guardrails los vigilan como a todo dato del doc.
+  campanas: {
+    kind: "array",
+    maxItems: 10,
+    item: {
+      kind: "object",
+      fields: {
+        frase: { kind: "text", max: 200, required: true },
+        respuesta: { kind: "text", max: 500, required: true },
+      },
     },
   },
 
@@ -224,6 +257,10 @@ function checkField(value, shape, path, errors) {
     case "int":
       if (!Number.isInteger(value)) return void errors.push(`${path}: tiene que ser un numero entero`);
       if (value < shape.min || value > shape.max) errors.push(`${path}: fuera de rango (${shape.min}-${shape.max})`);
+      return;
+
+    case "bool":
+      if (typeof value !== "boolean") errors.push(`${path}: tiene que ser true o false`);
       return;
 
     case "date":
@@ -349,6 +386,22 @@ function checkRubros(rubros, errors) {
  * @returns {{ok: boolean, errors: string[]}} `ok:false` = el archivo se descarta ENTERO.
  * Nunca tira: un JSON con un getter hostil no puede tumbar el bot.
  */
+/** La FAQ del negocio SIN palabras disparadoras nunca se va a servir: se rechaza al publicar,
+ *  con el motivo claro, en vez de aceptar una edicion que no hace nada (fallo silencioso). */
+function checkFaqNegocio(faq, errors) {
+  if (!Array.isArray(faq)) return;
+  faq.forEach((item, index) => {
+    if (!item || item.id !== "negocio") return;
+    const tags = Array.isArray(item.tags) ? item.tags : [];
+    const utiles = tags.filter((tag) => normalize(tag).trim().length >= MIN_LEXICON_WORD);
+    if (!utiles.length) {
+      errors.push(
+        `faq[${index}]: la FAQ del negocio necesita al menos una palabra disparadora de ${MIN_LEXICON_WORD}+ letras en tags — sin eso el bot nunca la usa`,
+      );
+    }
+  });
+}
+
 export function validateKnowledge(data) {
   const errors = [];
   try {
@@ -357,6 +410,7 @@ export function validateKnowledge(data) {
     checkDemo(data.demo, errors);
     checkProductos(data.productos, errors);
     checkRubros(data.rubrosExtra, errors);
+    checkFaqNegocio(data.faq, errors);
   } catch (error) {
     errors.push(`no se pudo validar: ${String(error?.message || error).slice(0, 160)}`);
   }
@@ -698,7 +752,7 @@ export function knowledgeHealth(options = {}) {
 // ---------------------------------------------------------------------------
 
 /** Una FAQ vencida NO se sirve: el bot afirmando algo que ya no es cierto es el peor daño. */
-function faqVigente(item, nowIso) {
+export function faqVigente(item, nowIso) {
   if (item.status !== "publicado") return false;
   if (!item.vigenteHasta) return true;
   const raw = String(item.vigenteHasta);
@@ -753,6 +807,9 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
 
   const script = {};
   for (const item of Array.isArray(data.faq) ? data.faq : []) {
+    // "negocio" NO pisa el guion: son N entradas y las consume el recepcionista como lista
+    // (recepcionista.mjs, faqNegocioVigente). Pisar script[R_FAQ_NEGOCIO] dejaria solo la ultima.
+    if (item?.id === "negocio") continue;
     const templateKey = FAQ_TEMPLATE[item?.id];
     if (templateKey && faqVigente(item, nowIso)) script[templateKey] = item.body;
   }
@@ -769,7 +826,16 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
  * hechos de la org y pueda ser honesto cuando un campo falta. Ver recepcionista.mjs.
  */
 export function asRecepcionista(config, data) {
-  return createBotConfig({ modo: "recepcionista", conocimiento: data }, config);
+  const base = createBotConfig({ modo: "recepcionista", conocimiento: data }, config);
+  // Sin humanName del cliente, el fallback heredado era "Sergio" (el humano del
+  // funnel de VENTA de Onia): un negocio ajeno decia "Sergio te confirma" delante
+  // de su cliente final (visto en prod, 2026-08-29). Neutro: "el equipo" — M7 dice
+  // "el equipo te confirma" y el boton queda "Hablar con el equipo".
+  const humanoDelCliente = String(data?.identity?.humanName || "").trim();
+  if (!humanoDelCliente) {
+    return { ...base, identity: { ...base.identity, humanName: "el equipo" } };
+  }
+  return base;
 }
 
 /**

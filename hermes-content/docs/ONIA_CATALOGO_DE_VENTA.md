@@ -121,7 +121,7 @@ Se venden **después del primer cierre**, sobre cualquier plan. Precios: `lib/pr
 
 | Add-on | Qué hace | Estado |
 |---|---|---|
-| **Chatbot WhatsApp con IA** | contesta, califica, agenda y hace seguimiento 24/7 con aprobación humana | 🟡 gateado por Meta |
+| **Chatbot con IA (web + WhatsApp)** | asistente 24/7 que contesta, califica, agenda y hace seguimiento; el dueño lo edita CONVERSANDO, ve su guion en pasos, atiende desde la bandeja propia (el bot se aparta cuando contesta él), entiende FOTOS y audios; IA incluida sin límite de chats | ✅ vivo (falta solo la prueba del popup +591 para el alta self-service de WhatsApp; canal web ya self-service) |
 | **Chatbot a medida** | integración con el sistema del cliente o flujos propios. **Sin precio de lista**: se define el alcance y recién ahí se cotiza | por definición, a pedido |
 | Agenda pública | link de reserva sin llamadas | 🟢 |
 | Usuario extra | asiento adicional | 🟢 |

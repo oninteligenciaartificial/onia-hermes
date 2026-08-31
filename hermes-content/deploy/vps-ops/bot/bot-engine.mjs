@@ -82,6 +82,7 @@ export function createState(input = {}) {
     calendarEventId: input.calendarEventId || null,
     leadKey: input.leadKey || null,
     ownerRoleKey: input.ownerRoleKey || "sergio",
+    inboxId: input.inboxId || null,
     humanTookOver: Boolean(input.humanTookOver),
     humanTookOverAt: input.humanTookOverAt || null,
     optInAt: input.optInAt || null,
@@ -106,6 +107,20 @@ export function createState(input = {}) {
  */
 export function markHumanTakeover(state, atIso = null) {
   return { ...state, humanTookOver: true, humanTookOverAt: atIso || state.humanTookOverAt };
+}
+
+/**
+ * El DESARME del takeover (bandeja nativa 2026-08-29): resolver la conversacion
+ * se la devuelve al bot. Tambien resetea el handoff del recepcionista — ambos
+ * candados significan "humano a cargo", y resolver significa "termine".
+ */
+export function clearHumanTakeover(state) {
+  return {
+    ...state,
+    humanTookOver: false,
+    humanTookOverAt: null,
+    botStage: state.botStage === "handoff_humano" ? "nuevo" : state.botStage,
+  };
 }
 
 /** Fila lista para onia_center.bot_conversations. */
@@ -157,6 +172,8 @@ function readIncoming(incoming) {
     text,
     norm: normalize(text),
     hasText: text.trim().length > 0,
+    imageDescription: typeof raw.imageDescription === "string" ? raw.imageDescription : "",
+    imageReceipt: raw.imageReceipt && typeof raw.imageReceipt === "object" ? raw.imageReceipt : null,
     externalMessageId: raw.externalMessageId || null,
     receivedAt: raw.receivedAt || null,
     author: raw.author || "contact",
@@ -238,6 +255,9 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
       stageBefore: prev.botStage,
       stageAfter: next.botStage,
       ...(reply.pending ? { pending: true, llmRequest: reply.llmRequest, fallbackText: reply.fallbackText } : {}),
+      // Botones (Chatwoot input_select): viajan pegados a la respuesta hasta el adapter. El
+      // texto plano sigue siendo la base — un canal sin interactivos simplemente los ignora.
+      ...(reply.options ? { options: reply.options } : {}),
     };
   });
 
@@ -270,9 +290,11 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
 // ---------------------------------------------------------------------------
 
 /**
- * @param {string} [bodyKey]  el mensaje con el que se anuncia el handoff. Por defecto M5 ("eso lo
- *   ve un humano"); el camino de SOPORTE usa el suyo porque decirle "eso lo ve Sergio en la demo"
- *   a un cliente que pide ayuda es contestarle con el guion de venta.
+ * @param {string|{key:string, options?:Array}} [bodyKey]  el mensaje con el que se anuncia el
+ *   handoff. Por defecto M5 ("eso lo ve un humano"); el camino de SOPORTE usa el suyo porque
+ *   decirle "eso lo ve Sergio en la demo" a un cliente que pide ayuda es contestarle con el
+ *   guion de venta. Como objeto `{key, options}` permite colgarle botones al anuncio (R_DERIVA
+ *   del recepcionista) sin duplicar los efectos de esta funcion.
  */
 function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
   const { config, prev, msg } = ctx;
@@ -292,7 +314,9 @@ function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
     { type: "notify_sergio", payload: { kind: "handoff", reason, conversationKey: next.conversationKey, text: summary } },
     auditEffect(prev, next, reason),
   ];
-  return finalize(ctx, next, [...leadingReplies, say(bodyKey, next, config)], effects, [`handoff:${reason}`]);
+  const spec = typeof bodyKey === "string" ? { key: bodyKey } : bodyKey;
+  const body = { ...say(spec.key, next, config, spec.vars || {}), ...(spec.options ? { options: spec.options } : {}) };
+  return finalize(ctx, next, [...leadingReplies, body], effects, [`handoff:${reason}`]);
 }
 
 /**

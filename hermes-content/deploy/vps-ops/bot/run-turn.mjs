@@ -45,8 +45,9 @@
 import { pathToFileURL } from "node:url";
 
 import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
-import { withKnowledge } from "./knowledge.mjs";
-import { createState, step, markHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
+import { ensureKnowledge, withKnowledge } from "./knowledge.mjs";
+import { createState, step, markHumanTakeover,
+  clearHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
 import { createStore } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 import { createBooking, buildBookingNotes, meetingLink } from "./calcom-booking.mjs";
@@ -80,6 +81,17 @@ export function parseInput(raw) {
 }
 
 /**
+ * De que INBOX de Chatwoot vino este turno. Es lo que resuelve "de que organizacion es esta
+ * conversacion" sin organizationId manual: el cargador de knowledge keyea por inbox y el
+ * producto lo traduce a org (clinic_settings.chatwootInboxId). Sin inbox (Telegram, sim,
+ * followups) devuelve {} y todo queda exactamente como antes.
+ */
+function knowledgeOptions(input) {
+  const inboxId = String(input?.inbox_id ?? input?.inboxId ?? "").trim();
+  return inboxId ? { inboxId } : {};
+}
+
+/**
  * Config del turno: DEFAULT_CONFIG + slots + dryRun + los HECHOS editables (knowledge.json).
  * Nada mas se pisa desde el canal. Sin archivo de conocimiento devuelve exactamente lo de antes
  * (el MISMO objeto): la capa editable degrada a codigo sin cambiar una coma.
@@ -100,7 +112,7 @@ export function buildConfig(input) {
       pending: false,
     }));
   }
-  return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG);
+  return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG, knowledgeOptions(input));
 }
 
 /** ONIA_BOT_SLOTS="jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00@2026-07-31T14:00:00Z" */
@@ -121,7 +133,16 @@ function parseEnvSlots() {
  * Tolerante por contrato: si Cal.com no responde, se queda con buildConfig(input) tal cual.
  */
 export async function resolveConfig(input, deps = {}) {
+  // El turno de un inbox de cliente con la cache FRIA espera UNA lectura acotada (5 s max)
+  // antes de armar la config: sin esto el primer mensaje saldria con la cara de Onia (el
+  // fallback archivo/codigo) y recien el segundo con la del cliente. Cache caliente = cero
+  // red, el patron sincronico + refresh en background de siempre (ver ensureKnowledge).
+  const kOpts = knowledgeOptions(input);
+  if (kOpts.inboxId) await ensureKnowledge({ ...kOpts, ...(deps.knowledge || {}) });
+
   const config = buildConfig(input);
+  // Modo recepcionista (org cliente): no hay demo de Onia que agendar — Cal.com no se consulta.
+  if (config.modo === "recepcionista") return config;
   const explicitSlots = Array.isArray(input.slots) && input.slots.length > 0;
   const envSlots = Boolean(String(process.env.ONIA_BOT_SLOTS || "").trim());
   if (explicitSlots || envSlots) return config; // horario ya fijado a mano: no se pisa
@@ -129,31 +150,24 @@ export async function resolveConfig(input, deps = {}) {
   const getSlots = typeof deps.getAvailableSlots === "function" ? deps.getAvailableSlots : getAvailableSlotsFromCalcom;
   const live = await getSlots({ nowIso: input.received_at || input.receivedAt }, deps);
   if (!live || !Array.isArray(live.slots) || live.slots.length === 0) return config;
-  return withKnowledge(createBotConfig({ slots: live.slots, dryRun: config.dryRun }));
+  return withKnowledge(createBotConfig({ slots: live.slots, dryRun: config.dryRun }), kOpts);
 }
 
 // ---------------------------------------------------------------------------
 // LLM (unica rama off-guion). Corre en LiteLLM, ya desplegado. Si no hay key: texto seguro.
 // ---------------------------------------------------------------------------
 
-/**
- * Prompt de sistema de la UNICA llamada al modelo. Exportado para que la suite de evals
- * (evals/evals.test.mjs) lo mida y lo use TAL CUAL: una copia en la suite divergiria sola
- * y la medicion dejaria de medir lo que corre en produccion.
- */
-export const LLM_SYSTEM_PROMPT = [
-  "Sos el asistente automático de una agencia boliviana. Hablás en voseo boliviano, informal y corto.",
-  "Tu ÚNICA tarea es reformular la pregunta pendiente del embudo para que el prospecto la entienda.",
-  "PROHIBIDO: dar precios, planes, features, cifras, plazos, casos de clientes o inventar datos.",
-  "PROHIBIDO: prometer cualquier cosa. Máximo 2 frases. Nada de markdown.",
-].join(" ");
-
 async function askLiteLLM(request) {
   const base = process.env.LITELLM_BASE || "http://onia_selfhosted-litellm-1:4000/v1";
   const key = process.env.LITELLM_KEY || "";
   const model = process.env.ONIA_BOT_MODEL || "gpt-4o-mini";
   if (!key) return "";
-  const system = LLM_SYSTEM_PROMPT;
+  const system = [
+    "Sos el asistente automático de una agencia boliviana. Hablás en voseo boliviano, informal y corto.",
+    "Tu ÚNICA tarea es reformular la pregunta pendiente del embudo para que el prospecto la entienda.",
+    "PROHIBIDO: dar precios, planes, features, cifras, plazos, casos de clientes o inventar datos.",
+    "PROHIBIDO: prometer cualquier cosa. Máximo 2 frases. Nada de markdown.",
+  ].join(" ");
   try {
     const res = await fetch(`${base}/chat/completions`, {
       method: "POST",
@@ -192,6 +206,7 @@ export function seedFrom(input) {
     displayName: input.display_name || input.displayName || null,
     pieceKey: input.piece_key || input.pieceKey || null,
     sourceCampaign: input.source_campaign || input.sourceCampaign || null,
+    inboxId: String(input.inbox_id ?? input.inboxId ?? "").trim() || null,
     ownerRoleKey: input.owner_role_key || "sergio",
   };
 }
@@ -210,6 +225,7 @@ function fillFromSeed(state, seed) {
   if (!state.publicContact && seed.publicContact) patch.publicContact = seed.publicContact;
   if (!state.pieceKey && seed.pieceKey) patch.pieceKey = seed.pieceKey;
   if (!state.sourceCampaign && seed.sourceCampaign) patch.sourceCampaign = seed.sourceCampaign;
+  if (!state.inboxId && seed.inboxId) patch.inboxId = seed.inboxId;
   return Object.keys(patch).length ? { ...state, ...patch } : state;
 }
 
@@ -220,6 +236,10 @@ export function incomingFrom(input, nowIso) {
     kind,
     text: String(input.text ?? ""),
     transcript: typeof input.transcript === "string" ? input.transcript : "",
+    imageDescription: typeof input.image_description === "string" ? input.image_description
+      : typeof input.imageDescription === "string" ? input.imageDescription : "",
+    imageReceipt: input.image_receipt && typeof input.image_receipt === "object" ? input.image_receipt
+      : input.imageReceipt && typeof input.imageReceipt === "object" ? input.imageReceipt : null,
     externalMessageId,
     receivedAt: input.received_at || input.receivedAt || nowIso,
     author: "contact",
@@ -270,10 +290,16 @@ function buildResponse({ state, stageBefore, config, replies, result, applied, s
     dryRun: Boolean(config.dryRun),
     send: replies.map((reply) => ({
       text: reply.text,
+      // La clave de SU fila en bot_messages: el adapter la usa para cerrar el
+      // circuito (markMessageDelivered) despues del POST real. Sin esto, un
+      // rechazo de Chatwoot dejaba la fila mintiendo "sent" para siempre.
+      messageKey: reply.messageKey,
       templateKey: reply.templateKey,
       replySource: reply.replySource,
       deliveryStatus: reply.deliveryStatus,
       guardrailOk: reply.guardrail ? reply.guardrail.ok !== false : true,
+      // Botones (input_select): el adapter de Chatwoot los postea; los demas canales los ignoran.
+      ...(reply.options ? { options: reply.options } : {}),
     })),
     notify: deferred.filter((effect) => effect.type === "notify_sergio").map((effect) => effect.payload),
     calendar: deferred.filter((effect) => effect.type === "calendar_event").map((effect) => effect.payload),
@@ -303,6 +329,28 @@ export async function runTurn(input, deps = {}) {
   let state = fillFromSeed(loaded || createState(seed), seed);
   if (!loaded && store.enabled) store.warnings.push("estado en memoria: la conversación no se pudo cargar");
   if (input.human_takeover === true && !state.humanTookOver) state = markHumanTakeover(state, nowIso);
+
+  // El DESARME (conversacion resuelta desde la bandeja): limpiar el candado,
+  // guardar y salir. No es un mensaje — no corre step, no crea filas, no manda.
+  if (input.human_takeover_clear === true) {
+    const limpio = clearHumanTakeover(state);
+    const saved = await store.saveConversation(limpio);
+    return {
+      ok: true,
+      duplicate: false,
+      conversationKey: limpio.conversationKey,
+      channel: limpio.channel,
+      contactRef: limpio.contactRef,
+      stageBefore: state.botStage,
+      stageAfter: limpio.botStage,
+      send: [],
+      notify: [],
+      calendar: [],
+      notes: ["takeover_desarmado"],
+      saved,
+      warnings: store.warnings,
+    };
+  }
 
   // 2. step() es PURO: correrlo dos veces (con y sin LLM) no tiene efecto de red.
   const incoming = incomingFrom(input, nowIso);

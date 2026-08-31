@@ -44,6 +44,10 @@ import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
 import { knowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
+import { handlePreviewRequest } from "./preview-route.mjs";
+import { handleEditorRequest } from "./editor-sugerir.mjs";
+import { handleBcpCobrar, handleBcpCallback } from "./bcp-qr.mjs";
+import { createChatwootClient } from "./chatwoot-adapter.mjs";
 
 export const DEFAULT_PORT = 3020;
 export const DEFAULT_MAX_BODY_BYTES = 1024 * 1024;
@@ -417,6 +421,58 @@ export function createWebhookServer(deps = {}) {
       return;
     }
 
+    if (req.method === "POST" && url.split("?")[0].replace(/\/+$/, "") === "/editor-sugerir") {
+      // Editor conversacional (v6): la IA propone un doc, validateKnowledge manda,
+      // NADA se persiste aca — la plataforma muestra el diff y el dueño publica.
+      let out;
+      try {
+        const { tooLarge, body } = await readBody(req, config.maxBodyBytes);
+        out = tooLarge
+          ? { status: 413, body: { ok: false, error: "payload_demasiado_grande" } }
+          : await handleEditorRequest({ rawBody: body, headers: req.headers });
+      } catch (error) {
+        out = { status: 500, body: { ok: false, error: String(error?.message || error).slice(0, 200) } };
+      }
+      writeJson(res, out.status, out.body);
+      return;
+    }
+
+    if (req.method === "POST" && url.split("?")[0].replace(/\/+$/, "") === "/preview") {
+      // Probador del editor de conocimiento: valida un BORRADOR y corre un turno
+      // real del motor contra el. Nunca toca la base ni conversaciones vivas.
+      let out;
+      try {
+        const { tooLarge, body } = await readBody(req, config.maxBodyBytes);
+        out = tooLarge
+          ? { status: 413, body: { ok: false, error: "payload_demasiado_grande" } }
+          : await handlePreviewRequest({ rawBody: body, headers: req.headers });
+      } catch (error) {
+        out = { status: 500, body: { ok: false, error: String(error?.message || error).slice(0, 200) } };
+      }
+      writeJson(res, out.status, out.body);
+      return;
+    }
+
+    // Cobro por QR del BCP: /bcp/cobrar lo dispara un humano; /bcp/callback lo
+    // llama el banco. Ambos usan el cliente Chatwoot real del server (deps.client).
+    const rutaBcp = req.method === "POST" ? url.split("?")[0].replace(/\/+$/, "") : null;
+    if (rutaBcp === "/bcp/cobrar" || rutaBcp === "/bcp/callback") {
+      let out;
+      try {
+        const { tooLarge, body } = await readBody(req, config.maxBodyBytes);
+        if (tooLarge) {
+          out = { status: 413, body: { ok: false, error: "payload_demasiado_grande" } };
+        } else {
+          const handler = rutaBcp === "/bcp/cobrar" ? handleBcpCobrar : handleBcpCallback;
+          out = await handler({ rawBody: body, headers: req.headers }, { client: deps.client || createChatwootClient() });
+        }
+      } catch (error) {
+        out = { status: 500, body: { ok: false, error: String(error?.message || error).slice(0, 200) } };
+      }
+      writeJson(res, out.status, out.body);
+      return;
+    }
+
     let outcome;
     try {
       const { tooLarge, body } = await readBody(req, config.maxBodyBytes);
@@ -484,7 +540,9 @@ export function main(deps = {}) {
   });
 
   server.listen(config.port, () => {
-    process.stdout.write(`[onia-webhook] escuchando en :${config.port}${WEBHOOK_PATH}\n`);
+    // Timestamp pedido por DOS handoffs (23-ago y 28-ago): el burst de 56 arranques
+    // fue irreconstruible sin la cadencia real. Un arranque sin hora no diagnostica.
+    process.stdout.write(`[onia-webhook] ${new Date().toISOString()} escuchando en :${config.port}${WEBHOOK_PATH}\n`);
     if (!auth.ok) process.stdout.write(`[onia-webhook] ${auth.aviso}\n`);
   });
 

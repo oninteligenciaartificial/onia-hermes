@@ -20,6 +20,11 @@ lo extiende para este carril.
 | Persistencia | Supabase self-hosted, schema `onia_center` (`bot_conversations`, `bot_messages`) |
 | Canal | Chatwoot self-hosted en el VPS → WhatsApp Cloud API |
 | Relay del producto | repo `onia-platform`, `app/api/webhooks/chatwoot` — **es un relay, NO un segundo motor** |
+| **Bandeja nativa** (el dueño lee/contesta) | `onia-platform`: `app/(dashboard)/inbox/` + `lib/chatbot/bandeja*.ts` + `/api/bandeja*` — tenencia dura por `clinic_settings.chatwootInboxId` |
+| **Editor conversacional** (edita el bot en castellano) | motor: `editor-sugerir.mjs` (POST `/editor-sugerir`, LiteLLM + validateKnowledge) · platform: `/api/chatbot-knowledge/sugerir` + diff en español (`lib/chatbot/editor-conversacional.ts`) |
+| **Guion en pasos** ("Así atiende tu asistente") | `onia-platform`: componente junto al probador en `/settings/chatbot` |
+| **Visión** (el bot VE fotos) | motor: `vision.mjs` (descarga SSRF-safe + LiteLLM detail low) → `R_ATTACH_VISTO`; guardrails filtran la descripción |
+| **Candado bot-humano** (takeover + desarme) | motor: `takeoverTurn` (arma al contestar un humano) + `conversation_status_changed=resolved` → `clearHumanTakeover` (resolver = devolver al bot) |
 
 **Fuentes de verdad — leer ANTES de construir, no después:**
 `ONIA_ESTADO_CHATBOT_Y_VOZ_20260816.md` (qué está encendido hoy) ·

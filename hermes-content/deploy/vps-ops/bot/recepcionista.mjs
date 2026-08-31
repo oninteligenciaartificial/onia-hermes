@@ -18,11 +18,14 @@
 //      lo fuera de guion deriva al humano del negocio. Anotado como pendiente parametrizarlo.
 //
 // Determinista igual que el motor: cero Date.now(), cero I/O. Los helpers con estado
+import { checkGuardrails } from "./guardrails.mjs";
+
 // (finalize / handoffResult / say) llegan inyectados desde bot-engine.mjs para no duplicarlos
 // ni crear un import circular.
 
 import * as intents from "./intents.mjs";
 import { normalize } from "./guardrails.mjs";
+import { faqVigente } from "./knowledge.mjs";
 
 /**
  * El menu de BOTONES del recepcionista (Chatwoot `content_type: input_select`).
@@ -80,6 +83,48 @@ export function catalogoCliente(conocimiento) {
  * @param {object} base   estado con lastInboundAt ya actualizado
  * @param {object} motor  { finalize, handoffResult, say } — los helpers privados de bot-engine
  */
+/**
+ * La FAQ del negocio que matchea el mensaje, o null. Match de PALABRA ENTERA sobre el texto
+ * normalizado ("iva" no salta con "activa"); los tags los escribio el dueño y ya pasaron el
+ * guardrail al publicarse. Vigencia contra msg.receivedAt (el motor es determinista: cero
+ * Date.now()); una FAQ con vencimiento y sin fecha de mensaje NO se sirve (fail-closed).
+ */
+export function faqNegocioVigente(conocimiento, norm, nowIso) {
+  const items = Array.isArray(conocimiento?.faq) ? conocimiento.faq : [];
+  const texto = String(norm || "");
+  if (!texto) return null;
+  for (const item of items) {
+    if (!item || item.id !== "negocio" || !faqVigente(item, nowIso)) continue;
+    for (const tag of Array.isArray(item.tags) ? item.tags : []) {
+      const palabra = normalize(tag).trim();
+      if (palabra.length < 3) continue;
+      const escapada = [...palabra].map((c) => ("[](){}.*+?^$|\\".includes(c) ? "\\" + c : c)).join("");
+      if (new RegExp(`(^|[^a-z0-9])${escapada}([^a-z0-9]|$)`).test(texto)) return item;
+    }
+  }
+  return null;
+}
+
+/**
+ * Campaña cuya frase es el mensaje ENTERO. Para wa.me?text= y anuncios.
+ * La puntuacion no cuenta: el link precarga "Hola, quiero..." y el cliente puede
+ * borrar la coma — sigue siendo el mismo embudo. Solo letras/numeros/espacios.
+ */
+function fraseCanonica(texto) {
+  return String(texto || "").replace(/[^a-z0-9 ]/g, " ").replace(/ +/g, " ").trim();
+}
+
+export function campanaExacta(conocimiento, norm) {
+  const items = Array.isArray(conocimiento?.campanas) ? conocimiento.campanas : [];
+  const texto = fraseCanonica(norm);
+  if (!texto) return null;
+  for (const item of items) {
+    if (!item || typeof item.frase !== "string") continue;
+    if (fraseCanonica(normalize(item.frase)) === texto) return item;
+  }
+  return null;
+}
+
 export function recepcionistaStep(ctx, base, motor) {
   const { config, msg } = ctx;
   const { finalize, handoffResult, say } = motor;
@@ -109,6 +154,30 @@ export function recepcionistaStep(ctx, base, motor) {
     return finalize(ctx, base, [say("M_AUDIO_FAIL", base, config)], [], ["audio_sin_transcripcion"]);
   }
   if (msg.kind === "attachment" && !msg.hasText) {
+    // COMPROBANTE DE PAGO detectado por vision (Sendy-parity, 2026-08-31): el bot
+    // acusa recibo del documento y deriva — JAMAS confirma un pago solo (regla dura:
+    // la plata la confirma un humano). El monto es un eco sanitizado del comprobante
+    // del cliente, no una cifra nuestra: vision.mjs ya lo valido con regex estricto.
+    if (msg.imageReceipt && msg.imageReceipt.es === true) {
+      const monto_frase = msg.imageReceipt.monto ? ` de Bs ${msg.imageReceipt.monto}` : "";
+      return handoffResult(ctx, base, "comprobante_recibido", [], {
+        key: "R_COMPROBANTE",
+        vars: { monto_frase },
+      });
+    }
+    // Vision (v5): la descripcion de la foto SOLO se usa si pasa los guardrails —
+    // un LLM que alucine un precio o un diagnostico se descarta entero y el flujo
+    // queda identico al de siempre. El handoff al humano se hace igual con o sin.
+    const desc = String(msg.imageDescription || "").trim();
+    // Regla extra para vision: una descripcion con DIGITOS se descarta entera
+    // (precio, fecha, placa — el bot no repite cifras que no puede verificar).
+    // checkGuardrails caza las promesas; esto caza lo que una foto puede colar.
+    if (desc && !/\d/.test(desc) && checkGuardrails(desc).length === 0) {
+      return handoffResult(ctx, base, "archivo_adjunto_recepcion", [], {
+        key: "R_ATTACH_VISTO",
+        vars: { descripcion_foto: desc.replace(/\.$/, "") },
+      });
+    }
     return handoffResult(ctx, base, "archivo_adjunto_recepcion", [], "R_ATTACH");
   }
   if (!msg.hasText) return finalize(ctx, base, [], [], ["sin_texto"]);
@@ -117,6 +186,16 @@ export function recepcionistaStep(ctx, base, motor) {
   // "ya se lo saludo": el estado NO estrena etapa nueva — `bot_stage` tiene CHECK en la base
   // (migracion 20260725) y un ALTER por un saludo no se justifica. La conversacion vive en
   // "nuevo" hasta que un handoff u opt-out la mueva.
+  // Frase de campaña ANTES del saludo: en un link wa.me?text= la frase ES el primer
+  // mensaje — si el saludo ganara, el embudo del anuncio moriria en el "hola". El
+  // opt-in se marca igual (escribio el) y la respuesta lleva los botones del menu.
+  const campana = campanaExacta(k, msg.norm);
+  if (campana) {
+    const conOptIn = base.optInAt ? base : { ...base, optInAt: msg.receivedAt, optInSource: "campana" };
+    const reply = { ...say("R_CAMPANA", conOptIn, config, { respuesta_campana: campana.respuesta }), options: botonesRecepcion(config) };
+    return finalize(ctx, conOptIn, [reply], [], ["campana"]);
+  }
+
   const saludado = Boolean(base.optInAt);
   const next = saludado
     ? base
@@ -165,6 +244,11 @@ export function recepcionistaStep(ctx, base, motor) {
       ? faq(say("R_SERVICIOS", next, config, { catalogo_cliente: catalogo }), "faq:servicios")
       : deriva("sin_dato_catalogo", "R_NO_DATO");
   }
+
+  // La FAQ editable del dueño — DESPUES de los candados del guion (precio/pedido/queja ganan
+  // siempre) y de las FAQ fijas, ANTES de derivar por fuera de guion.
+  const faqNegocio = faqNegocioVigente(k, msg.norm, msg.receivedAt);
+  if (faqNegocio) return faq(say("R_FAQ_NEGOCIO", next, config, { faq_respuesta: faqNegocio.body }), "faq:negocio");
 
   // "gracias" / "nos vemos": no es una consulta, no se molesta a nadie.
   if (intents.isCourtesy(msg.norm)) return finalize(ctx, next, [], [], ["cortesia_sin_respuesta"]);

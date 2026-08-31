@@ -22,14 +22,56 @@ STAMP="$(date -Iseconds)"
 
 log() { echo "[$STAMP] $*"; }
 
+# --- Telegram: SOLO errores (decision Sergio 2026-08-28) ---------------------
+# Un incidente = UN aviso de caida + UN aviso de recuperacion. El marcador evita
+# 30 mensajes/hora mientras dure la caida (el cron corre cada 2 min).
+ALERT_ENV="/root/.config/onia/backup.env"
+INCIDENTE="/var/lib/onia-bot-watchdog.incidente"
+tg_error() {
+  [ -f "$ALERT_ENV" ] && . "$ALERT_ENV"
+  [ -n "${TG_BOT_TOKEN:-}" ] && [ -n "${TG_CHAT_ID:-}" ] || return 0
+  curl -sf -m 20 -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage"     -d chat_id="${TG_CHAT_ID}" -d parse_mode=HTML --data-urlencode text="$1" >/dev/null || true
+}
+
 # 1. ¿Existe el contenedor? Sin el, no hay nada que levantar.
 if ! docker ps --format '{{.Names}}' | grep -qx "$CONTAINER"; then
   log "AVISO: el contenedor $CONTAINER no esta corriendo — el watchdog no puede hacer nada"
   exit 0
 fi
 
+
+# 1.5. La excepcion de firewall que el bot necesita para su base (PostgREST escucha en 3000
+# y ONIA-BLOCK-3000 en DOCKER-USER corta contenedor<->contenedor). Se perdio en el reinicio
+# del 2026-08-24 y el bot quedo 4 dias sin base. Idempotente: si la regla esta, no hace nada.
+# ponytail: se re-inserta aca cada 2 min porque el que re-aplica los DROP tras un reinicio
+# sigue sin identificarse; si algun dia se encuentra, mover la excepcion a ese mismo lugar.
+if ! iptables -C DOCKER-USER -s 172.16.0.0/12 -d 172.16.0.0/12 -p tcp -m conntrack --ctorigdstport 3000 -m comment --comment ONIA-ALLOW-3000-INTERNO -j RETURN 2>/dev/null; then
+  iptables -I DOCKER-USER 1 -s 172.16.0.0/12 -d 172.16.0.0/12 -p tcp -m conntrack --ctorigdstport 3000 -m comment --comment ONIA-ALLOW-3000-INTERNO -j RETURN     && log "firewall: re-inserte ONIA-ALLOW-3000-INTERNO (se habia perdido)"
+fi
+
 # 2. ¿Contesta /health? Es la unica prueba que vale: el PID puede existir y el puerto estar mudo.
 if docker exec "$CONTAINER" sh -c "wget -qO- --timeout=5 http://127.0.0.1:$PORT/health" >/dev/null 2>&1; then
+  if [ -f "$INCIDENTE" ]; then
+    rm -f "$INCIDENTE"
+    tg_error "✅ <b>Bot Onia recuperado</b> — el webhook volvio a responder."
+  fi
+  # 2.b. El /health NO ve el camino bot->Chatwoot (la base va por otro puerto): el 2026-08-28
+  # el bot estuvo 4 dias calculando respuestas que Chatwoot nunca recibio (attachment overlay
+  # rancio tras el reboot). Chequeo directo; fix manual documentado en el handoff del carril:
+  # docker network disconnect easypanel onia-center && docker network connect --alias onia-center easypanel onia-center
+  INCIDENTE_CW="/var/lib/onia-bot-watchdog.incidente-chatwoot"
+  if docker exec "$CONTAINER" sh -c "timeout 5 wget -qO- http://onia-chatbot_chatwoot:3000/ >/dev/null 2>&1"; then
+    if [ -f "$INCIDENTE_CW" ]; then
+      rm -f "$INCIDENTE_CW"
+      tg_error "✅ <b>Bot Onia</b> — el camino a Chatwoot volvio: las respuestas salen de nuevo."
+    fi
+  else
+    log "ERROR: el bot NO llega a Chatwoot (respuestas mudas aunque /health este ok)"
+    if [ ! -f "$INCIDENTE_CW" ]; then
+      touch "$INCIDENTE_CW"
+      tg_error "🚨 <b>Bot Onia MUDO</b> — el proceso vive pero NO llega a Chatwoot: calcula respuestas que nadie recibe. Fix: reconectar onia-center a la red easypanel (comando en el watchdog y en el handoff del carril chatbot)."
+    fi
+  fi
   exit 0
 fi
 
@@ -46,6 +88,14 @@ fi
 sleep 3
 if docker exec "$CONTAINER" sh -c "wget -qO- --timeout=5 http://127.0.0.1:$PORT/health" >/dev/null 2>&1; then
   log "OK: webhook de vuelta arriba"
+  if [ -f "$INCIDENTE" ]; then
+    rm -f "$INCIDENTE"
+    tg_error "✅ <b>Bot Onia recuperado</b> — el watchdog lo levanto y responde de nuevo."
+  fi
 else
   log "ERROR: el webhook sigue caido despues del reinicio — mirar ./webhook-server.sh logs"
+  if [ ! -f "$INCIDENTE" ]; then
+    touch "$INCIDENTE"
+    tg_error "🚨 <b>Bot Onia CAIDO</b> — el webhook no responde en :3020 y el watchdog NO pudo levantarlo. El chatbot (widget + WhatsApp) esta mudo hasta que alguien mire. Log: /var/log/onia-bot-watchdog.log"
+  fi
 fi
