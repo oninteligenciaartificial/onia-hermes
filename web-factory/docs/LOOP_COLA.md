@@ -13,6 +13,26 @@ Onia**: on-brand, animados (Next/React + motion.dev/GSAP, o estático CSS según
 tier), y **conectados a Onia Platform** (form → lead). Seguir aprendiendo solo
 para cerrar huecos que frenan el build.
 
+## REGLA DE EVIDENCIA (mata el trabajo fantasma)
+
+> Adoptada del carril de `onia-platform` el 2026-08-30, donde **4 de 6 ítems de la cola
+> resultaron fantasma**. Acá la primera pasada encontró **3 de 11**.
+
+**Ningún ítem entra a "por hacer" sin evidencia de que el problema EXISTE HOY**: un
+`archivo:línea`, la salida de un comando, o una captura. Sin eso no es una tarea: es una
+sospecha, y va a la lista de *sin verificar*.
+
+Antes de trabajar un ítem, **se re-verifica su evidencia** — un defecto que era real la
+semana pasada puede estar arreglado y nadie tachó la línea. Ese es exactamente el modo de
+falla: la cola envejece peor que el código.
+
+Las tres formas de fantasma que ya aparecieron acá:
+1. **Arreglado y no tachado** — W4 decía "cero `:focus-visible` en 590 líneas"; hay 2, los
+   puse yo el mismo día.
+2. **Duplicado** — A1e repetía el gap del donut y el tamaño de marcador que ya pedía W4.
+3. **En curso** — A3 ("reproducir sitio #2") se está construyendo en `apps/ferreteria-sur/`
+   mientras la línea seguía abierta como si nadie la hubiera empezado.
+
 ## Reglas duras del run
 
 1. **Worktree**: `C:\dev\proyectos\onia-hermes\.claude\worktrees\hyperframes-onia-export-formats-053cf9`
@@ -103,11 +123,15 @@ para cerrar huecos que frenan el build.
       real: un reembolso o un churn se dibuja como cero. + el último punto del eje X
       nunca se etiqueta (`index % step`), series de +58 puntos se recortan sin aviso,
       y `niceMax` manda 340 a un eje de 500 (32% del plot muerto).
-- [ ] **W4 · Gauge/radial + defectos visuales.** "Tasa de cierre 34%" es hoy un número
-      pelado y es el caso de uso exacto (Tabler y Grafana lo resuelven con radial).
-      + `rx` solo arriba en barras, gap de 5px por stroke, donut con `paddingAngle` y
-      total al centro, swatch pill de 14×3, `:focus-visible` (hoy **cero** en 590
-      líneas de CSS), targets de 44px.
+- [ ] **W4 · Gauge/radial + defectos visuales.** Evidencia re-verificada 2026-08-30 en
+      `packages/templates/src/dashboard.ts`: `grep -c 'gauge\|radial'` → **0** (no existe;
+      "Tasa de cierre 34%" es un número pelado y es el caso exacto que Tabler y Grafana
+      resuelven con radial) · `r="2.5"` → **1** (5px de diámetro contra el mínimo de 8)
+      · `paddingAngle` → **0** (gajos del donut pegados).
+      + `rx` solo arriba en barras, total al centro del donut, swatch pill de 14×3.
+      ⚠️ **Se cayó de este ítem "`:focus-visible` cero en 590 líneas": hay 2**, agregados
+      el mismo día en los botones del agente. Era fantasma. Lo que queda real ahí son los
+      targets de 44px y el foco en filtros/nav/cards, que sigue sin estar.
 - [ ] **W5 · Los estados que no existen.** Skeleton isomorfo, error de sección con
       retry, vacío con altura reservada y segundo renglón que diga CUÁNDO se llena.
 - [ ] **W6 · Gates que hoy no existen.** Los tests actuales son `toBeVisible` y
@@ -141,18 +165,19 @@ para cerrar huecos que frenan el build.
       captura y era plausible pero falso; el número lo desmintió.**
       Pendiente de fondo: que el gráfico CREZCA a llenar la tarjeta necesita viewBox
       dinámico — esperar a ver cómo lo resuelven las referencias antes de inventarlo.
-- [ ] **A1e · Specs de marca del skill `dataviz`**: gap de 2px entre segmentos del
-      donut (hoy están pegados), marcadores ≥8px (hoy `r=2.5` → 5px), puntas
-      redondeadas de 4px en las barras ancladas a la baseline.
+- [x] ~~**A1e · Specs de marca del skill `dataviz`**~~ — **DUPLICADO de W4**, cerrado sin
+      trabajo (2026-08-30). Pedía exactamente lo mismo: gap del donut, marcadores ≥8px,
+      puntas redondeadas. Se trabaja en W4, que además tiene la evidencia re-verificada.
 - [ ] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
       `WEB_FACTORY_TECNICAS_2026.md`, las que 2+ sitios usan y son CSS-only o
       motion.dev (feature-en-banda-de-color, statement full-screen, marquee CSS,
       hover-lift). Una por vuelta: bloque tipado + tokens ONIA + reduced-motion +
       render de prueba + `typecheck:packages`.
-- [ ] **A3 · Reproducir sitio #2 (estilo contrastante).** Un SaaS estilo Readily
-      o un editorial-bold, en `apps/dental-premium` (o app nueva), aplicando el
-      catálogo, conectado a Onia (`/api/lead`). Prueba de que el catálogo sirve
-      fuera del warm-premium. [entregable de Sergio]
+- [~] **A3 · Sitio #2 (estilo contrastante) — EN CURSO, no tomar.** Se está construyendo
+      en `apps/ferreteria-sur/` (rubro comercio, "Ferretería Sur"): Next 15 + React 19 +
+      motion + GSAP, conectado por `/api/lead`. Lanzado el 2026-08-30 con 3 agentes sobre
+      archivos disjuntos. Estaba abierto como si nadie lo hubiera empezado — el fantasma
+      #3. **Queda por hacer cuando terminen: mirar el render, gates, merge y push.**
 - [ ] **A4 · Pulido de dental-premium:** dark mode mirado + spotlight en touch +
       cablear texturas SVG si Sergio dio OK.
 
