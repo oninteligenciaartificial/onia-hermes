@@ -128,11 +128,21 @@ el catálogo de add-ons"**. Es **falso**, y lo era ya cuando se escribió: la cl
 
 | Eslabón | Dónde | Estado |
 |---|---|---|
-| La clave existe | `lib/platform/types.ts:73` (`ADDON_IDS`) → `addon.inmobiliaria` es `FeatureKey` válida | ✅ |
+| La clave existe | `lib/platform/types.ts:75` (`ADDON_IDS`) → hoy se llama **`addon.captador`** (ver ⚠️ abajo) | ✅ |
 | Se puede otorgar por API | `POST app/api/admin/organizations/[id]/entitlements/route.ts:101` — valida con `isFeatureKey`, catálogo cerrado fail-closed | ✅ |
 | Hay pantalla para hacerlo | `admin/organizations/[id]/capacidades/CapacidadesOrg.tsx:56` lista **todos** los `ADDON_IDS`, y el :31 le escribe su descripción propia | ✅ |
 | El runtime lee lo que esa pantalla escribe | ambos van a `prisma.organizationEntitlement` por `(organizationId, featureKey)`, que es **`@@unique`** (`schema.prisma:1929`) — una fila, sin ambigüedad | ✅ |
 | Está probado en los dos sentidos | `agents-runtime.test.ts:613` — sin add-on → `kind_not_enabled` y cero writes; con add-on (`conAddon()`) → `draft_message` en `pending_approval` | ✅ |
+
+⚠️ **Corregido el 2026-08-31, el mismo día: la clave se RENOMBRÓ a `addon.captador`.** Todo lo
+de arriba sigue siendo cierto salvo el nombre. El renombre lo hizo otro carril por el motivo que
+esta misma auditoría había escrito — era un add-on nombrado por un rubro que Onia no vende (no hay
+track inmobiliario en `SUPPORTED_VERTICAL_TRACK_IDS`), el pipeline del captador es genérico y lo
+único inmobiliario era el copy, **ya corregido**. Ojo con dos consecuencias: una fila vieja con
+`addon.inmobiliaria` en la base **deja de ser feature** por `isFeatureKey` (fail-closed) y hay que
+re-otorgarla; y **el motivo del rechazo de F4 en la cola cambió** — hoy el captador sigue apagado
+por no estar otorgado, ya no por su copy. Lo que NO cambió: `captador` **tampoco figura en
+`lib/pricing.ts`**, así que se otorga a mano pero no se puede comprar.
 
 **El `kind_not_enabled` de las 14 corridas no es una falla: es la respuesta correcta.** Ninguna
 org lo tiene otorgado porque nadie lo compró. La cola ya había rechazado encenderlo para todos,

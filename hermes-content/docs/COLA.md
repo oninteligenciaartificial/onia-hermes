@@ -65,7 +65,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       la acepta validando con `isFeatureKey` (catálogo cerrado, fail-closed); la pantalla
       `app/(dashboard)/admin/organizations/[id]/capacidades/CapacidadesOrg.tsx:56` lista **todos** los `ADDON_IDS`
       y le escribe su propia descripción; y el runtime
-      (`lib/onia-core/modules/agents-runtime.ts:1157`) lee **la misma fila** que esa pantalla
+      (`lib/onia-core/modules/agents-runtime.ts:1188`) lee **la misma fila** que esa pantalla
       escribe — `organization_entitlements` es `@@unique([organizationId, featureKey])`
       (`prisma/schema.prisma:1929`), así que no hay fila vieja que pueda ganarle a la nueva.
       Probado en los dos sentidos en `lib/onia-core/modules/agents-runtime.test.ts:613`. **Cero líneas de código
@@ -116,6 +116,57 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Lección:** el ítem no mentía cuando se escribió — **envejeció**. Un pendiente heredado
       describe el repo del día en que se redactó, no el de hoy. Por eso el Gate 1 corre **antes**
       de tocar una línea, no después.
+
+- [x] **Paso 3 otra vez, y esta vez el defecto NO era un `[x]` mal citado: `master` estaba ROJO
+      — ARREGLADO y mergeado.** Vuelta del 2026-08-31, con la cola sin un solo ítem desbloqueado
+      en "Ahora" (F2, F5, los 4 números de WhatsApp y el `DELETE` de pagos siguen esperando **una
+      línea de Sergio**). El paso 3 pide reverificar los cierres *contra el código de hoy*, y hoy
+      no es el de la auditoría anterior: `origin/master` pasó de `0711ff6` a `3c339a6` con commits
+      del carril chatbot. **Los 12 shas citados siguen siendo ancestros reales** de la punta de
+      hoy — ningún cierre falso.
+      **Lo que apareció al correr los tres gates sobre esa punta nueva:**
+      `__tests__/eslint-no-lintea-worktrees.test.ts` **falló** con `Test timed out in 5000ms` a
+      los **8.159 ms**… y **la corrida siguiente, sobre el MISMO commit, salió verde**. Nadie
+      había roto nada: la primera llamada a `isPathIgnored` carga el flat config **entero** del
+      proyecto (parser de TS y plugins) — medido, **1.670 ms con la máquina en reposo**, ~8 s con
+      la suite en paralelo — y el default de vitest son 5 s. **El tope estaba medido como si la
+      máquina estuviera libre.**
+      **Por qué es más grave que un test lento, y es la misma lección que este archivo ya
+      guarda con otra cara:** ese test existe para que el gate de lint no se abandone, y **un
+      gate que falla al azar se ignora igual que uno que tarda 20 minutos**. Peor: rompe CI sin
+      que nadie haya tocado nada, y el próximo que lo vea en rojo va a buscar el bug en su
+      propio cambio. El 2026-08-31 se arregló que el gate **mintiera** y que **tardara**; faltaba
+      que fuera **determinista**.
+      **El arreglo, dos cambios chicos:** una sola instancia de `ESLint` para los dos casos que
+      preguntan por rutas (la carga en frío se paga una vez, y queda **un** test expuesto en vez
+      de dos) y tope explícito de 30 s en esos dos casos.
+      **Descartado el camino que parecía mejor, y queda escrito para que nadie lo reabra:**
+      `overrideConfigFile: true` lo vuelve hermético y baja el costo a **6 ms** — pero sin el
+      config del proyecto eslint se queda sin patrones `files`, no matchea nada y da **TODO** por
+      ignorado. El cuarto caso ("y el código de ESTE árbol se sigue linteando") pasaría en verde
+      **afirmando lo contrario de lo que mide**. Medido antes de descartarlo, no supuesto.
+      Gates sobre `3c339a6`: tsc **0** · lint **0 errores** (101 warnings preexistentes) ·
+      **2359 pasan + 5 skip (192 archivos)**. Commit **`e644c85`**, **ya en `origin/master`** por
+      fast-forward.
+      **Dos apuntes de método que costaron tiempo en esta vuelta:**
+      (1) **El árbol principal de `onia-platform` se movió mientras trabajaba** (`b3adffc` →
+      `3c339a6`, otra sesión). Estaba limpio y por eso casi edito ahí; se hizo worktree propio,
+      que es lo que la regla pedía. **"El árbol está limpio" no significa "nadie más lo está
+      usando".**
+      (2) **La trampa de CRLF de los snapshots es real y saltó**: `vitest` reescribió
+      `components/layout/__snapshots__/navigation.test.ts.snap` y
+      `lib/platform/__snapshots__/vertical-pack.test.ts.snap`. `git diff --ignore-all-space` dio
+      vacío (sólo fin de línea) y se restauraron; **no entraron al commit**.
+      **Y una cita que la auditoría dejó falsa, corregida en los dos archivos:** el add-on
+      **`addon.inmobiliaria` ya no existe — se renombró a `addon.captador` hoy mismo**
+      (`lib/platform/types.ts:75`, carril ajeno), justo por el motivo que esta cola había
+      escrito: era un add-on nombrado por un rubro que Onia no vende. El pipeline es genérico y
+      **el copy inmobiliario ya está corregido**, así que el motivo del rechazo de **F4** cambió:
+      hoy sigue apagado por no estar otorgado, no por su copy. **El residuo real no se movió:**
+      `captador` **tampoco está en `lib/pricing.ts`** (verificado hoy), así que se otorga a mano
+      pero **no se puede comprar**. Ponerle precio sigue siendo decisión de Sergio.
+      *(Deriva de línea corregida de paso: `lib/onia-core/modules/agents-runtime.ts` pasó de la
+      línea 1157 a la **1188**.)*
 
 - [ ] 🔴 **F2 · BLOQUEADO EN SERGIO — el chatbot se cobra y medio chatbot es gratis.**
       Verificado en vivo el 2026-08-30, y la primera versión de este ítem estaba mal en dos
