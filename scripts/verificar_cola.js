@@ -185,6 +185,17 @@ function selfCheck() {
   r = revisarCola('## Ahora\n- [ ] Algo · `10 min` · `Sergio`\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'sin-evidencia'), 'un texto entre backticks no es una ruta');
 
+  // "origin/master" es una REF de git, no un archivo. Tiene barra, asi que caia en la regla
+  // de "esto parece una ruta" y salia fantasma — y "ya en `origin/master`" es justo como esta
+  // cola escribe que un commit llego. Medido el 2026-08-31: el item F3 daba 5 errores falsos.
+  // Un gate que grita en falso se termina ignorando, que es el motivo de las otras carve-outs.
+  r = revisarCola('## Ahora\n- [x] Hecho · `existe.png` · ya en `origin/master`\n', tmp);
+  ok(!r.problemas.length, 'una ref de git no es una ruta');
+
+  // Pero la carve-out NO puede tragarse un archivo de verdad que empiece con esa palabra.
+  r = revisarCola('## Ahora\n- [x] Hecho · `origin/no-esta.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'la carve-out de refs no tapa un archivo');
+
   // Despues y Bloqueado hablan del futuro: ahi el fantasma es legitimo.
   r = revisarCola('## Ahora\n- [ ] ok · `existe.png`\n\n## Despues\n- [ ] algo que no existe todavia\n', tmp);
   ok(!r.problemas.length, 'Despues no se revisa: para eso esta');

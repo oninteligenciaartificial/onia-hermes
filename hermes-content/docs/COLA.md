@@ -150,7 +150,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       excepciones), y eso cazó **dos entradas mías de más** en el mismo commit en que las
       escribí. Entró a los 4 navs porque es transversal, con roles SUPERADMIN/ADMIN/STAFF:
       perseguir papeles es de recepción, no del profesional. Gates: tsc 0, eslint 0 errores,
-      **2282 tests verdes**. Commit `6d8b6b7` (rama fix/requerimientos-alcanzable, ya mergeada).
+      **2282 tests verdes**. Commit **`ab9e0de`** (*"feat(nav): /requerimientos existia sin un
+      solo enlace en todo el repo (#57)"*), **ya en origin/master**.
+      *(Corregido el 2026-08-31: acá decía `6d8b6b7`, que es el sha **local de la rama antes
+      del squash** y no existe en origin/master. El trabajo sí llegó —
+      `components/layout/navigation.ts:45`, `lib/platform/vertical-pack.ts:169` y la guarda
+      `SIN_NAV_A_PROPOSITO` de `lib/platform/route-access.test.ts` están en master. Citar el sha
+      de la rama y no el del merge hace que la próxima auditoría lea "no llegó" sobre trabajo
+      que sí llegó.)*
 
 - [x] **F6 · Frase corrida en la pantalla del portal del cliente — ARREGLADO.** El diagnóstico
       heredado era correcto y se confirmó en vivo: la API
@@ -205,6 +212,35 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
   se ofrece. `kind_not_enabled` en 14 días de log = nadie lo compró. Funciona como debe.
 
 ### Arrastre de la cola anterior
+
+- [x] **Paso 3 corrido: auditados los 11 shas que esta cola declara cerrados. 10 ciertos, 1 mal
+      citado — y `master` está verde.** Hecho el 2026-08-31, con la cola sin un solo ítem
+      desbloqueado en "Ahora" (F2, F5, los 4 WhatsApp y el `DELETE` de pagos esperan **una línea
+      de Sergio**, no código). **Cero líneas de producto tocadas: no había nada roto.**
+      - **Método, que es lo que se hereda:** `git fetch` y después
+        `git merge-base --is-ancestor <sha> origin/master` — la lección que esta misma cola
+        escribió el 2026-08-31 sobre `git branch --contains`, aplicada por primera vez a todos
+        los cierres a la vez en lugar de a uno.
+      - **10 de 11 son ancestros reales de `origin/master`:** `0711ff6`, `34e3d29`, `2849be0`,
+        `1fc4354`, `14abb9a`, `88c1d56`, `753718f`, `4077f2c`, `3e43c93`, `4dce75e`.
+      - **El que falló fue F3 (`6d8b6b7`) y NO era un cierre falso: era una cita falsa.** El sha
+        no está en `origin/master` porque el PR entró **squasheado** como `ab9e0de` (#57).
+        Corregido arriba. **La diferencia importa:** un sha ausente parece trabajo perdido y
+        dispara que alguien lo rehaga — que es exactamente el costo que el Gate 1 existe para
+        evitar. **Regla nueva: se cita el sha del MERGE, no el de la rama.**
+      - **Las citas `archivo:línea` de los ítems cerrados se resolvieron una por una** contra el
+        árbol de hoy (`types.ts:73`, `plan-limits.ts:396`, `clinics/route.ts:99`, `pricing.ts:64`,
+        `webhooks/bcp/route.ts:55`, `agents-runtime.ts:1157`, `navigation.ts:45`,
+        `portal/requerimientos/route.ts:21`): **ninguna derivó**.
+      - **Gates sobre `origin/master` (= `0711ff6`, la punta):** `tsc --noEmit` **0 errores** ·
+        **2342 pasan + 5 skip (2347) en 190 archivos**. El árbol quedó limpio — esta vez `vitest`
+        **no** reescribió los `.snap` con CRLF, la trampa anotada el 2026-08-30.
+      - **Lo que la auditoría NO cambió, a propósito:** el punto 1 de
+        `ONIA_DEFINICION_DE_TERMINADO.md` ("la bandeja queda vacía") sigue 🔴 aunque su código ya
+        esté en master (`88c1d56`, carril chatbot). Su LISTO no es "el commit existe", es *"un
+        mensaje aparece en su bandeja, **mirado con captura**"*, y eso pide desplegar al VPS —
+        que está en la lista de "nunca" de este loop. **Marcarlo verde por el commit sería
+        reportar como hecho algo que nadie miró.**
 
 - [x] **`ONIA_PRECIOS_COMPETENCIA_Y_DECISION.md` corregido en los 4 lugares** donde decía que
       Emizor no publica precio — uno de ellos lo llamaba *"el dato que más falta en todo el
