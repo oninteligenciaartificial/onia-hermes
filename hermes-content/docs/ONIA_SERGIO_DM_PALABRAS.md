@@ -3,7 +3,9 @@
 > Fuente de verdad de los textos que responde el workflow comentario→DM en
 > @sergio_urcullo. Estado: **BORRADOR para OK de Sergio** — las palabras están
 > cableadas pero APAGADAS hasta que exista la comunidad de WhatsApp del reto.
-> `[COMUNIDAD]` se reemplaza por el link de invitación real antes de encender.
+> ✅ **Link cargado el 2026-08-31.** La comunidad existe y responde 200 (og:title "Onia Community").
+> ⚠️ Que Sergio confirme que ESTE es el invite definitivo: un link de WhatsApp se puede rotar, y este se
+> tomó de la rama `claude/personal-brand-strategy-db9eb9`, que no está mergeada a main.
 
 Regla de tono: primera persona de Sergio, directo, cero humo. Cada DM entrega
 LO PROMETIDO en el video + invita a la comunidad. Nunca venta en el mes 1.
@@ -22,40 +24,40 @@ LO PROMETIDO en el video + invita a la comunidad. Nunca venta en el mes 1.
 
 **1. EDICIÓN**
 > ¡Hola! Acá va lo prometido: el método que usan los grandes creadores para editar con IA — guion, cortes y subtítulos sin tocar un editor.
-> [COMUNIDAD]
+> https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu
 > En la comunidad dejé el paso a paso completo con las herramientas exactas. Cualquier duda, escribime por acá.
 
 **2. SISTEMA**
 > ¡Hola! Los 3 referentes que menciono en el video son Andrej Karpathy, Simon Willison y Ethan Mollick — en la comunidad dejé los links directos a lo mejor de cada uno.
-> [COMUNIDAD]
+> https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu
 > Y si tenés un negocio y querés armar tu propio sistema con IA, contame en una línea a qué te dedicás.
 
 **3. RETO**
 > ¡Hola! Bienvenido al reto: $5.000 antes del 31 de diciembre, documentando todo — lo que funciona y lo que no.
-> [COMUNIDAD]
+> https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu
 > Ahí comparto cada sistema que voy implementando, todos los días. Nos vemos adentro.
 
 **4. HIGGSFIELD**
 > ¡Hola! Acá está el acceso al curso gratuito oficial de Higgsfield para aprender todas sus herramientas:
 > https://higgsfield.ai/learn
-> [COMUNIDAD]
+> https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu
 > En la comunidad muestro cómo lo uso yo para generar video con IA. Cualquier duda, escribime.
 
 **5. SKILL**
 > ¡Hola! El repo de Matt Pocock es este — Skills for Real Engineers, 200k+ estrellas:
 > https://github.com/matt-pocock-skills
-> [COMUNIDAD]
+> https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu
 > En la comunidad voy compartiendo más recursos como este. Nos vemos adentro.
 
 **6. CURSOS**
 > ¡Hola! Las 3 certificaciones gratuitas del video:
 > 1. AI Fluency (Anthropic) · 2. AI Fundamentals (IBM SkillsBuild) · 3. Elements of AI (U. de Helsinki)
-> [COMUNIDAD]
+> https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu
 > En la comunidad están los links directos y cómo convertir esto en habilidades que se pueden monetizar.
 
 **7. RANKING**
 > ¡Hola! El ranking completo con el porqué de cada puesto está en la comunidad — y cómo potenciar cada IA según tu objetivo:
-> [COMUNIDAD]
+> https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu
 > Spoiler: el puesto 1 lo uso todos los días para construir mis sistemas. Nos vemos adentro.
 
 ---

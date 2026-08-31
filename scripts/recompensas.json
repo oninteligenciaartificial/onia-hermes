@@ -1,17 +1,17 @@
 {
   "_": "Que entrega CADA palabra clave, y si el circuito puede entregarla hoy. El gate valida los briefs contra esto ANTES de renderizar. Las URLs se comprueban en vivo con `node scripts/verificar_recompensas.js`.",
-
   "_por_que": [
     "Meta permite UN SOLO mensaje por comentario, para siempre, y solo texto (doc del circuito, 2026-08-28). El mensaje se elige por palabra clave.",
     "Consecuencia dura: DOS piezas con la MISMA palabra no pueden prometer cosas distintas — la segunda promesa es imposible de cumplir. Paso de verdad: O03 pedia comentar SISTEMA prometiendo 'el checklist de tu Oficina Virtual' mientras otras siete piezas prometian con esa misma palabra 'las 6 tareas para delegar'.",
     "Una palabra apagada se come el lead en silencio: el 26-ago alguien comento RANKING en un post de Sergio, su mapa estaba vacio, la persona no recibio nada y Sergio tampoco se entero.",
     "Y `activa` NO es lo mismo que `publicado`: la palabra puede responder y el archivo prometido no estar en la web. Le paso a HUMO el 23-ago (404 con la palabra encendida) y le pasa HOY a SISTEMA."
   ],
-
   "palabras": {
     "SISTEMA": {
       "promete": "un diagnóstico de 20 minutos",
-      "voces": ["el mapa de tu negocio"],
+      "voces": [
+        "el mapa de tu negocio"
+      ],
       "entrega": null,
       "url": "https://onia.com.bo/?src=onia-ig-sistema",
       "url_por_cuenta": {
@@ -19,7 +19,10 @@
         "@lucia.antelo.oficial": "https://onia.com.bo/?src=lucia-ig-sistema"
       },
       "tipo": "pagina",
-      "activa_en": ["@oniahq", "@lucia.antelo.oficial"],
+      "activa_en": [
+        "@oniahq",
+        "@lucia.antelo.oficial"
+      ],
       "activa": true,
       "publicado": true,
       "_historia": "🔴 Este bloque decia que SISTEMA entregaba el PDF 6-tareas-para-delegar y que por eso mandaba un 404. Se leyo el mapa de palabras VIVO del workflow 1jS4jwmNmvcQpqqH el 2026-08-29 y era falso: esa URL de PDF no aparece en ningun lado del circuito. Lo que sale es un link para agendar 20 minutos, que responde 200. Nunca se mando un 404 por esta palabra. El defecto real era que SIETE piezas prometian una lista que el DM nunca mandaba — el que pedia la lista recibia una venta. Se arreglo del lado de las piezas el 2026-08-29 (Sergio eligio esa salida sobre apagar la palabra o publicar el PDF).",
@@ -30,7 +33,9 @@
       "entrega": "hermes-content/recursos/humo/onia-5-herramientas-ia-bolivia.pdf",
       "url": "https://onia.com.bo/recursos/5-herramientas-ia-bolivia.pdf",
       "tipo": "pdf",
-      "activa_en": ["@lucia.antelo.oficial"],
+      "activa_en": [
+        "@lucia.antelo.oficial"
+      ],
       "activa": true,
       "publicado": true,
       "_verificado": "2026-08-28: 200, 306.319 bytes, application/pdf"
@@ -40,7 +45,9 @@
       "entrega": "hermes-content/recursos/lista-por-donde-empezar.pdf",
       "url": "https://onia.com.bo/recursos/lista-por-donde-empezar.pdf",
       "tipo": "pdf",
-      "activa_en": ["@oniahq"],
+      "activa_en": [
+        "@oniahq"
+      ],
       "activa": true,
       "publicado": true,
       "_verificado": "2026-08-28: 200, 258.256 bytes, application/pdf"
@@ -58,14 +65,16 @@
       "_falta": "cargar la palabra FACTURA en el mapa de @oniahq. El recurso ya esta vivo; falta solo el circuito."
     },
     "STACK": {
-      "promete": "la lista con los links y lo que cuesta cada uno",
+      "promete": "la entrada a la comunidad",
       "entrega": null,
-      "url": null,
-      "tipo": "pdf",
-      "activa_en": [],
+      "url": "https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu",
+      "tipo": "link",
+      "activa_en": [
+        "@sergio_urcullo"
+      ],
       "activa": false,
-      "publicado": false,
-      "_falta": "DOS bloqueos, no uno: el recurso no existe Y el mapa de palabras de @sergio_urcullo esta vacio a proposito. Escribir el PDF no alcanza para poder publicar S06."
+      "publicado": true,
+      "_falta": "El recurso YA no bloquea: Sergio decidio el 31-ago que la marca personal entrega el link de la comunidad, que existe y responde 200 (og:title \"Onia Community\"). Quedan DOS cosas: (1) el mapa de palabras de @sergio_urcullo sigue vacio en n8n, por eso activa=false; (2) S05 y S06 prometen en su copy \"la lista completa con los links y lo que cuesta cada uno\", que NO es lo que entrega un link de comunidad. Hay que reescribirles el copy antes de publicar; el gate las marca promesa-distinta a proposito."
     }
   }
 }

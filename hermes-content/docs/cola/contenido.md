@@ -30,12 +30,16 @@ faltantes. Lo que falta es **publicar**.
 ## Ahora
 
 - [x] **Resuelto 31-ago: se publican las carpetas de nombre pelado** (`FIJADO`, `L6`, `L08`), no las `render-*`. Comparadas mirando la portada: `hermes-content/references/modelos/lucia/posts-20260807/FIJADO/slide-01.jpg` usa sans pesada con bloque de resaltado y «DESLIZÁ →»; `hermes-content/references/modelos/lucia/posts-20260807/render-fijado/slide-01.jpg` usa serif itálica fina, que es el tratamiento que Sergio objetó con «se ve muy pequeño el texto». Falta la hoja de contacto de las pelado — se regenera, no es motivo para publicar la peor tipografía · Claude
-- [ ] Reapuntar las palabras clave a LINKS en vez de PDFs (Sergio, 31-ago: «lo del pdf quitalo»): marca personal → link a la comunidad, Lucía y Onia → link de @oniahq. Toca `scripts/recompensas.json` y los `comment_reward` de los briefs, que el gate compara entre sí · 30 min · Claude
+- [x] **Mitad hecha 31-ago: marca personal → comunidad.** STACK pasa de `pdf` sin URL al link de la comunidad, y los 8 placeholders `[COMUNIDAD]` quedaron reemplazados en `hermes-content/docs/ONIA_SERGIO_DM_PALABRAS.md`. Ver `scripts/recompensas.json` · Claude
+- [ ] Reescribir el copy de S05 y S06: prometen «la lista completa con los links y lo que cuesta cada uno» y la palabra ahora entrega una invitación a la comunidad. El gate las marca `promesa-distinta` a propósito — no se publican así. Ver `hermes-content/references/marca-personal-sergio/briefs/S06-equipo-que-no-cobra.json` · 20 min · Claude
+- [ ] 🔴 TRABADO — la otra mitad: Lucía y Onia. Necesita que Sergio defina si «el link de oniahq» es `onia.com.bo` con su `?src` o el perfil de Instagram. Son ~15 piezas. Ver `hermes-content/docs/cola/contenido.md` · Sergio
 - [ ] Declarar la etiqueta de IA en la cuenta antes del primer post — hoy es una instrucción pendiente, no una verificación: `hermes-content/contenido/LUCIA.md` · 5 min · Sergio
 - [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502: `hermes-content/references/modelos/lucia/posts-20260807/render-fijado` · 15 min · Sergio
 - [ ] Publicar el día 1 (reel de lanzamiento v7, 22 s, 1080×1920): `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4` · 10 min · Sergio
 
 ## Despues
+
+- [ ] 🔴 MITO es una palabra fantasma: `hermes-content/carousels/briefs/onia-mitos-ia-20260808.json` pide «comenta MITO» en el caption y MITO no está en `scripts/recompensas.json`. Si esa pieza sale, el lead comenta y no recibe nada — es exacto el incidente RANKING del 26-ago. Registrarla o sacarle el CTA.
 
 - [ ] Días 2 a 6 del calendario, uno por día: L09 → L6 → L10 → L08 → L11. El orden vive en el handoff del carril.
 - [ ] Corregir el calendario: la fila 6 dice «🔴 FALTA» para pilar B y **L11 ya existe** renderizada.
