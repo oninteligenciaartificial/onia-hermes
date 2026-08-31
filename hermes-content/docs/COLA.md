@@ -30,7 +30,10 @@ En producción el alta está **abierta** con verificación de correo probada.
 2. Se **analiza antes de desarrollar**: Gate 1 — ¿ya está hecho? ¿el bloqueo existe de verdad?
    ¿el dato sigue vigente? ¿ya vive en el repo? Un "ya está hecho" heredado es hipótesis.
 3. Se **desarrolla** con test primero, verificado en ROJO por el motivo correcto.
-4. **Gates completos: `tsc --noEmit` + `vitest` + `eslint`.** Los tres. El 2026-08-29 se rompió
+4. **Gates completos: `npx tsc --noEmit` + `npx vitest run` + `npm run lint`.** Los tres.
+   ⚠️ **El lint se corre por `npm run lint`, NO por `npx eslint .`** — el script trae el
+   `--ignore-pattern` que deja afuera los ~30 worktrees; sin él son **20 minutos en vez de 39
+   segundos** y el gate se termina salteando (medido y arreglado el 2026-08-31). El 2026-08-29 se rompió
    CI dos veces por correr sólo los dos primeros: lint es lo que CI verifica y lo que caza
    `react/no-children-prop`.
 5. Si toca pantalla, **se abre y se MIRA** con captura. Un 200 no es verificación.
@@ -235,14 +238,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       - **Gates sobre `origin/master` (= `0711ff6`, la punta):** `tsc --noEmit` **0 errores** ·
         **2342 pasan + 5 skip (2347) en 190 archivos**. El árbol quedó limpio — esta vez `vitest`
         **no** reescribió los `.snap` con CRLF, la trampa anotada el 2026-08-30.
-        ⚠️ **`eslint .` NO se pudo concluir: pasa de 20 minutos sobre el repo entero** y superó
-        dos veces el tope de 10 min de la herramienta (la segunda corrida, en segundo plano, no
-        había emitido una sola línea al cerrar la vuelta — sin errores hasta ahí, pero eso **no
-        es un verde**). Así que acá se afirman **dos de los tres gates**, no los tres. **Es un
-        problema real del carril, no una nota al pie:** el paso 4 de esta cola exige los tres
-        *"porque lint es lo que CI verifica"*, y un gate que no termina es un gate que se salta.
-        **Próxima vuelta: medirlo y acotarlo** (`--cache`, o correrlo sobre los archivos tocados
-        en vez del árbol completo).
+      - **El tercer gate estaba ROTO, y la auditoría lo destapó de casualidad: ARREGLADO en la
+        misma vuelta.** `eslint` sobre la raíz **pasó de 20 minutos** y reventó **dos topes de
+        10 min seguidos**; terminó en segundo plano con **exit 0**, y su salida delató la causa:
+        estaba linteando `.claude/worktrees/*/.next/...`. **No era el tamaño del repo.** El
+        `".next/**"` de `eslint.config.mjs` ignora sólo el `.next` de la **raíz**, y este repo
+        tiene **~30 git worktrees vivos** bajo `.claude/worktrees/`, cada uno con una copia
+        entera del código de **otra rama** y su propio `.next`. El gate revisaba 30 árboles
+        ajenos. **Con el arreglo: 39 segundos contra el mismo árbol. ~30x.**
+        **Por qué era grave siendo sólo lentitud:** el síntoma es **silencioso** — eslint sale
+        en verde igual, sólo que tarda tanto que la sesión lo saltea. Es exactamente lo que me
+        pasó a mí en esta vuelta, y el paso 4 de esta cola exige los tres gates porque **ya se
+        rompió CI dos veces** por correr sólo los dos primeros. Un gate que nadie puede correr
+        no es un gate. **CI nunca lo sufrió**: allá no hay worktrees. Era un defecto **sólo
+        local**, que es la peor clase — el que hace que el gate se abandone justo donde debería
+        atajar antes de CI.
+        Va en el script `lint` de `package.json` (el que invoca `npm run ci`) con su guarda en
+        `__tests__/eslint-no-lintea-worktrees.test.ts`, vista en ROJO antes.
+        Gates del arreglo: tsc 0 · lint **0 errores** (101 warnings preexistentes, todos en
+        `.agents/skills`) · **2346 pasan + 5 skip (191 archivos)**. Commit `149e2a9`, **ya en
+        `origin/master`** por fast-forward.
+        📌 **Para Sergio, y NO bloquea nada:** el arreglo de raíz iba en `globalIgnores` de
+        `eslint.config.mjs`, pero el hook `config-protection` de `~/.claude/scripts/hooks/`
+        **prohíbe editar ese archivo** (existe para que nadie afloje reglas de lint, y hace
+        bien). Se arregló en la capa que sí se puede tocar y **el resultado es el mismo**;
+        mover la ignore al config es cosmética. Si algún día se quiere, hay que habilitar el
+        hook a mano.
       - **Lo que la auditoría NO cambió, a propósito:** el punto 1 de
         `ONIA_DEFINICION_DE_TERMINADO.md` ("la bandeja queda vacía") sigue 🔴 aunque su código ya
         esté en master (`88c1d56`, carril chatbot). Su LISTO no es "el commit existe", es *"un
