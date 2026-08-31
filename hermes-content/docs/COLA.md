@@ -270,11 +270,24 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `lib/chatbot/push-te-escribieron.ts`, el webhook de Chatwoot y `public/sw.js`. El commit se
       hizo **con rutas explícitas** para no llevarse trabajo ajeno a medias. Y `npx vitest run`
       reescribió dos `.snap` **sólo con CRLF** (diff vacío): se revirtieron, no se commitearon.
-- [ ] **Limpiar las organizaciones de prueba** que quedaron en la base **LOCAL** (nombres con
-      "Prueba", ~9). Sólo local — producción no se toca.
-- [ ] **Los otros dos agujeros** que el escéptico marcó en `chore/sacar-dentalgest` y las dos
-      cifras del reporte que dijo que estaban mal. Están en el journal del workflow
-      `wf_7449df59-54c`. Leerlo antes de tocar.
+- [x] **Las organizaciones de prueba de la base LOCAL: no eran ~9, eran 2 — y las dos son
+      evidencia.** Contadas en vivo el 2026-08-31. Primero hubo que dar con la base correcta:
+      el `DIRECT_URL` de `.env.local` apunta a `127.0.0.1:54329`, que **acepta TCP y no habla
+      Postgres** (ECONNRESET) — la que responde es el contenedor `supabase_db_fiscal-mock`,
+      puerto 55322, schema `public`. Ahí hay **dos** organizaciones, ninguna sobrante:
+      `Clinica Prueba Fiscal` sostiene la única factura ENVIADA (Bs 500), que es el circuito
+      fiscal mock declarado cerrado el 2026-08-29; y `Ferreteria Circuito Completo` sostiene
+      el pago **Bs 320,00 APPROVED** en `subscription_payments` — literalmente la cifra que el
+      encabezado de este archivo cita como prueba de que el circuito cierra.
+      **Borrarlas borraba la evidencia de dos ítems ya cerrados.** No se tocó nada.
+      **Lección:** el ítem heredaba un número ("~9") que nadie había contado. Contarlo costó
+      cinco minutos y el ítem se dio vuelta entero.
+- [ ] 🔴 **Los otros dos agujeros del escéptico: la fuente se perdió.** El ítem mandaba leer el
+      journal del workflow `wf_7449df59-54c` antes de tocar, y ese journal **no existe en
+      disco** — buscado el 2026-08-31 bajo `.claude` y bajo el temp de sesión, cero resultados.
+      Los journals mueren con su sesión. Sin él no se sabe cuáles eran los dos agujeros ni
+      cuáles las dos cifras mal. **Se reabre sólo si alguien los vuelve a encontrar:**
+      reconstruirlos de memoria sería inventar, que es justo lo que esta cola persigue.
 
 ## Después
 
