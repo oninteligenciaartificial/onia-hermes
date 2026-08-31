@@ -454,11 +454,33 @@ Las tres formas de fantasma que ya aparecieron acá:
 
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
-- [ ] **B1 · Cerrar rubros SIN-ANCLA** (`2026-08-29-critico-limites.md`): cosecha
-      dirigida (Scrapling `Fetcher.get(impersonate=chrome)` + seguir CSS/preload)
-      de `dental real`, `ganadero/agtech`, `importadora/logística B2B`, `IA`. 2
-      sitios por rubro; reescribir su sección del playbook cambiando "SIN ANCLA"
-      por dato real.
+- [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
+      tocar (`2026-08-29-critico-limites.md:42` seguía vivo): los 4 rubros se recetaban
+      por analogía. Cosechados **8 sitios vivos, 2 por rubro**, con Scrapling
+      `impersonate=chrome` + **siguiendo el `<link rel=stylesheet>`** para leer los
+      **tokens de marca** (`--c-navy`, `--colours--bg-subtle`, `--color-scheme-1--peach`),
+      que es lo que separa marca de ruido — la frecuencia de hex sola miente.
+      Dental real: **dntlbar** + **smilebar** · Ganadero: **halterhq** + **agriwebb** ·
+      Importadora: **flexport** + **zencargo** · IA: **sierra.ai** + **decagon.ai**.
+      Reescritas §1 y §7 del playbook y **agregadas §9 (ganadero) y §10 (IA/agentes)**;
+      evidencia con cifras en `data/references/design-sources/2026-08-31-cosecha-rubros-sin-ancla.md`.
+      **Dos reglas escritas estaban MAL y lo dijo el dato, no la lectura**: (a) el acento
+      dental pedía "sat <15%" y los dos acentos reales miden **HSV 23,9%** y **18,5%** —
+      el umbral era el piso de la muestra vendido como ley, y encima sin declarar el
+      modelo (los mismos hexes dan 52% y 79% en **HSL**, que hace descartar el color
+      correcto). Ahora **HSV <25%** y el modelo escrito. (b) La importadora se recetaba
+      "negro `#010101`, **1** acento" heredado de scoutmotors (automotor): las dos
+      importadoras reales son **navy** (`#052439`, `#080E49`) con **dos** acentos.
+      Hallazgos: el ganadero NO es verde brillante sobre blanco sino **tinta verde bosque
+      sobre hueso cálido** (y anima: halter trae GSAP ×23); el rubro IA **evita la rampa
+      azul** en los dos líderes, igual que Onia. `PP Fragment` reapareció en decagon.ai:
+      segunda muestra, y confirma que es del bucket **SaaS/IA, no dental** — cierra el
+      hallazgo #1 del crítico. Nuevo ruido de scraper documentado: **`#4285F4` = azul
+      del badge de Google Reviews** (parecía el primario de smilebar; es un `<circle>` de
+      su SVG). ⚠️ **Un 200 no es un ancla**: tend.com dio 403 y dentologie.com dio 200
+      con **6.192 bytes** de shell JS — descartados, no se computa nada de ahí.
+      **Gates**: `typecheck:packages` verde (ítem 100% de docs/data: no toca `packages/`
+      ni superficie renderizada). Sigue sin ancla y queda para B: **portfolio (N=1)**.
 - [ ] **B2 · Rubros flacos:** wellness quedó N=1; cosechar 2-3 más. Skincare +2.
 - [ ] **B3 · Update skill `ui-ux-pro-max`** a v2.13 (`uipro-cli`, MIT) — solo local.
 
