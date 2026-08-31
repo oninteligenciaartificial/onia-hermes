@@ -209,7 +209,17 @@ le falta exactamente el cambio que hace visibles las campañas en modo venta, y 
 Copiar sólo `knowledge.json` habría dejado las 5 campañas en un archivo que el motor viejo ni
 mira: las 4 frases vivas seguirían con el saludo genérico y el ítem se habría dado por cerrado.
 **S9 son tres archivos** (`bot-engine.mjs`, `knowledge.mjs`, `knowledge.json`) **más un
-reinicio**. Queda verificable en un comando, sin tocar el VPS:
+reinicio**.
+⚠️ **Corregido otra vez el 2026-08-31 (4ª vuelta del carril): son CUATRO.** Se suma
+`run-turn.mjs`, que volvió a exportar `LLM_SYSTEM_PROMPT` — sin ese export
+`evals/evals.test.mjs` no carga y los 12 evals del bot no corren (llevaban muertos desde
+`d334d776`, con la suite reportando "634 verde" porque `node --test` cuenta un módulo que no
+carga como un solo test roto). El arreglo no cambia el comportamiento del bot: es el mismo
+texto de prompt, exportado en vez de inlineado. Suite del bot **647/647**.
+Corrido hoy contra producción, `espejo-check.mjs` sale **1**: DISTINTOS `bot-engine.mjs`,
+`bot-engine.test.mjs`, `knowledge.mjs`, `run-turn.mjs`, `run-turn.test.mjs`; FALTAN
+`campanas-web.test.mjs`, `espejo-check.mjs`, `espejo-check.test.mjs`, `recepcionista.test.mjs`.
+**Sigue sin cambiar la decisión 9**: sólo corrige la lista de lo que hay que copiar. Queda verificable en un comando, sin tocar el VPS:
 `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` — sale 0 si el código del VPS es el del
 espejo, 1 nombrando los archivos si no. Esto **no cambia la decisión 9**, que sigue siendo
 opción 1: sólo corrige lo que hay que hacer cuando se ejecute S9.
