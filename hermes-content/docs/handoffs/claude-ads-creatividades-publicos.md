@@ -282,7 +282,7 @@ publicación diaria: es el ancla del perfil, lo primero que ve quien llega.
 | 3 | **L6** cinco señales | C | SISTEMA | Primera pieza que pide algo. Recién en la tercera, no en la primera |
 | 4 | **L10** la hoja sellada | C | SISTEMA | Usa G05+G05b, el par del mismo trámite desde los dos lados |
 | 5 | **L08** tres de cinco gratis | C | HUMO | Entrega un PDF de verdad, no una reunión |
-| 6 | 🔴 **FALTA** | **B** | — | **Ver el hueco abajo** |
+| 6 | **L11** tres lugares | **B** | — | Cierra el feed con la única pieza que NO nombra a Onia. Render en `posts-20260807/render-l11/` |
 
 **Historias, diarias desde el día 1:** primero **H09-H12** (pilar B, sin CTA), después H01-H08.
 Las historias son el latido; el feed es el evento.
@@ -299,10 +299,27 @@ el mismo post dos veces. **Va L08 y L07 se archiva** — salvo que Sergio prefie
 ⚠️ El gate NO lo caza: compara cada brief contra el registro de palabras, pero **nada compara las
 piezas entre sí**.
 
-**2. No hay pieza de pilar B en el FEED.** El feed queda 2 A + 3 C y cero B, aunque el sistema pide
-30% B y B es *"el vehículo"*. Las cuatro piezas B que existen son **historias**, que duran 24 h.
-**Se arregla barato:** el banco tiene G02 parada, G03 mercado y G04 tienda **sin usar en feed** —
-alcanza para un carrusel de pilar B sin gastar un crédito.
+**2. ~~No hay pieza de pilar B en el FEED.~~ ✅ CORREGIDO el 31-ago: sí la hay, es L11.**
+
+⚠️ Esto decía que el feed quedaba 2 A + 3 C y **cero B**, y mandaba a *"arreglarlo barato"*
+armando un carrusel nuevo con G02/G03/G04. **Era falso, y era caro**: mandaba a PRODUCIR una
+pieza que ya existe renderizada — justo lo que la cola prohíbe mientras no haya nada publicado.
+
+**L11 «tres lugares» ES la pieza de pilar B del feed.** Verificado el 31-ago, tres evidencias:
+
+- `docs/ONIA_SISTEMA_MARKETING_LUCIA_ONIA.md` línea 121 la clasifica como el carrusel de la
+  columna **DÍA A DÍA (el personaje)** = pilar B. Es el único carrusel de esa columna.
+- Línea 50 del mismo doc: L11 es **la única de las 7 piezas que NO nombra a Onia** — exactamente
+  lo que se le pide a B, *"el vehículo"*.
+- El render está en disco: `posts-20260807/render-l11/`, 7 láminas, 30-ago 11:30, **ya en verde**
+  (§1-sexies lo confirma y por eso lo asigna al día 6).
+
+El feed queda **2 A + 3 C + 1 B**, sin producir nada y sin gastar un crédito. G02, G03 y G04
+siguen sin usar en feed, pero ya no hacen falta para tapar este hueco.
+
+**Por qué se coló:** esta tabla se escribió antes de que L11 se renderizara (30-ago 11:30) y
+nadie volvió a bajar la fila 6. La tabla de §1-sexies, más nueva, ya decía día 6 = L11 — el mismo
+archivo se contradecía a 40 líneas de distancia, y ganaba la mentira porque estaba primero.
 
 ### 1-sexies. ✅ Cuál render se sube — decidido el 31-ago, mirando las láminas
 

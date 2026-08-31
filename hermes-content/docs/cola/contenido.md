@@ -37,7 +37,7 @@ faltantes. Lo que falta es **publicar**.
 ## Despues
 
 - [ ] Días 2 a 6 del calendario, uno por día: L09 → L6 → L10 → L08 → L11. El orden vive en el handoff del carril.
-- [ ] Corregir el calendario: la fila 6 dice «🔴 FALTA» para pilar B y **L11 ya existe** renderizada.
+- [x] Corregir el calendario: la fila 6 decía «🔴 FALTA» para pilar B y **L11 ya existe** renderizada. Hecho el 31-ago en `hermes-content/docs/handoffs/claude-ads-creatividades-publicos.md`: la fila 6 ahora dice L11 con su ruta, y el bloque «no hay pieza B» quedó tachado con las tres evidencias. Importa porque ese bloque mandaba a **producir** un carrusel B nuevo con G02/G03/G04 — trabajo fabricado sobre una pieza que ya está en `hermes-content/references/modelos/lucia/posts-20260807/render-l11/` (7 láminas, verde). Feed real: 2 A + 3 C + 1 B · 31-ago
 - [ ] Las 4 historias H09-H12 no tienen hoja de contacto; las otras 8 sí.
 - [ ] Cargar FACTURA en el mapa de palabras del workflow de n8n (bloque escrito, sin aplicar).
 - [ ] Terminar la tanda del look nuevo (8 imágenes, Bs 6,00) — decidido en `LUCIA.md` §3-ter, **después** de publicar.
