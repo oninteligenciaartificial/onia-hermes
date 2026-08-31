@@ -301,3 +301,57 @@ postear. Hoy el inbox 3 no es el `chatwootInboxId` de ninguna org, así que no a
 
 **Recomendación: opción 1.** Todo lo caro (usuario, token, membresías) ya existe desde el
 11-ago; falta la variable. Anotado como **S11** en `hermes-content/docs/cola/chatbot.md`.
+
+---
+
+## 12. El espejo del bot se desincroniza solo con un `git checkout` (2026-08-31) — decisión de Sergio
+
+**El síntoma, encontrado por las malas.** Después de mutar y restaurar
+`hermes-content/deploy/vps-ops/bot/recepcionista.mjs` con `git checkout --`,
+`espejo-check.mjs` lo reportó **DISTINTOS** contra el VPS. `git status --porcelain` daba
+**vacío**: git no veía un solo cambio, y el gate de drift estaba rojo.
+
+**La causa, medida — no leída.** `core.autocrlf=true` y **no hay `.gitattributes`** en
+`onia-hermes`. Git guarda el blob en LF y lo materializa en CRLF al hacer checkout:
+
+| | bytes |
+|---|---|
+| `/opt/onia/bot/recepcionista.mjs` (lo que corre) | **14110** |
+| en disco, antes del checkout | **14110** |
+| en disco, después del `git checkout --` | **14375** (+265, una por línea) |
+
+Contenido idéntico: `diff` normalizando `\r` contra el archivo del VPS sale **vacío**.
+
+**Por qué importa acá y no en otro carril.** `espejo-check.mjs` compara **md5 de bytes**, y
+tiene que hacerlo: en un `.sh` un CRLF no es cosmético — `#!/bin/bash\r` no arranca. O sea que
+el gate **no puede perdonar** el line ending, y entonces cualquiera que haga `git checkout`
+sobre el espejo fabrica un "deploy pendiente" que nadie pidió. Es el molde exacto del fantasma
+que este carril mide: un rojo que no corresponde a ningún cambio se termina apagando, o
+"arreglando" con un deploy inútil.
+
+⚠️ **El espejo hoy es una MEZCLA, y eso es lo que encarece el arreglo.** No está todo en LF:
+`knowledge.mjs` es LF en disco y en git, mientras `guardrails.mjs` (+130 bytes) e `intents.mjs`
+(+754) son CRLF de los **dos** lados. Un `.gitattributes` con `eol=lf` los renormalizaría a
+todos y desincronizaría contra el VPS todos los que hoy coinciden en CRLF — el gate quedaría
+rojo hasta un redeploy del directorio entero.
+
+**Las tres opciones, cotizadas:**
+
+1. **`.gitattributes` con `* text eol=lf` en el espejo + `scp` del directorio entero al VPS.**
+   Costo: 0 Bs, un commit de renormalización (~60 archivos, sin cambio de contenido) y **un
+   deploy del bot**. Efecto: los dos lados quedan en LF para siempre y `git checkout` deja de
+   mentir. Es la única que cierra la clase entera. Riesgo: el commit toca 60 archivos, así que
+   el diff de esa vuelta no sirve para revisar nada más — conviene que vaya solo.
+2. **Dejar el repo como está y parchear a mano cuando pase** (`perl -pi -e 's/\r\n/\n/g'`
+   sobre el archivo tocado). Costo: 0 Bs, 0 deploy. Es lo que se hizo esta vuelta. Efecto: cada
+   vuelta futura que haga `git checkout` sobre el espejo vuelve a ver el gate rojo y tiene que
+   acordarse de esto. Depende de la memoria, que es justo lo que falla.
+3. **Que `espejo-check.mjs` compare normalizando `\r` sólo en `.mjs`** (y siga byte-exacto en
+   `.sh`, donde el CRLF sí rompe). Costo: 0 Bs, 0 deploy, ~5 líneas. Efecto: el gate deja de
+   dar rojos falsos sin tocar 60 archivos. **Pero deja los dos lados distintos de verdad**, y
+   el día que haga falta un `scp` selectivo por md5, el md5 sigue sin coincidir.
+
+**Recomendación: opción 1, y sola en su commit** — es la única que hace que el espejo sea de
+verdad un espejo. Si no hay ventana para un deploy del bot, la 3 es el paliativo honesto: baja
+el ruido sin fingir que los archivos son iguales. Anotado en la sección "Después" de
+`hermes-content/docs/cola/chatbot.md`.
