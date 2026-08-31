@@ -687,7 +687,7 @@ async function describeIfImage(parsed, deps = {}) {
     }
     return { turn, warnings };
   }
-  return { turn: { ...turn, image_description: vis.description }, warnings };
+  return { turn: { ...turn, image_description: vis.description, ...(vis.comprobante ? { image_receipt: vis.comprobante } : {}) }, warnings };
 }
 
 export async function runChatwootTurn(payload, deps = {}) {

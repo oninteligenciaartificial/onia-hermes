@@ -107,3 +107,51 @@ test("foto SIN descripcion: R_ATTACH de siempre (regresion)", () => {
   assert.equal(r.replies[0].templateKey, "R_ATTACH");
   assert.equal(r.nextState.botStage, "handoff_humano");
 });
+
+test("comprobante: JSON del modelo con monto/entidad legibles pasa sanitizado", async () => {
+  const visionBody = { choices: [{ message: { content: JSON.stringify({
+    descripcion: "captura de una transferencia bancaria",
+    comprobante: { es: true, monto: "150,50", entidad: "BCP" },
+  }) } }] };
+  const r = await describeChatwootImage(
+    { attachments: ATT, token: "t", chatwootBaseUrl: "https://chat.onia.com.bo" },
+    { env: ENV, fetch: fetchFalso({ visionBody }) },
+  );
+  assert.equal(r.ok, true);
+  assert.deepEqual(r.comprobante, { es: true, monto: "150.50", entidad: "BCP" });
+});
+
+test("comprobante: monto ilegible o raro NO se muestra (sanitizado estricto)", async () => {
+  const visionBody = { choices: [{ message: { content: JSON.stringify({
+    descripcion: "voucher",
+    comprobante: { es: true, monto: "ciento cincuenta", entidad: "<script>x</script>" },
+  }) } }] };
+  const r = await describeChatwootImage(
+    { attachments: ATT, token: "t", chatwootBaseUrl: "https://chat.onia.com.bo" },
+    { env: ENV, fetch: fetchFalso({ visionBody }) },
+  );
+  assert.equal(r.comprobante.es, true);
+  assert.equal(r.comprobante.monto, undefined);
+  assert.equal(r.comprobante.entidad, undefined);
+});
+
+test("no-comprobante: comprobante null y la descripcion de siempre", async () => {
+  const visionBody = { choices: [{ message: { content: JSON.stringify({ descripcion: "una foto de un perro", comprobante: { es: false } }) } }] };
+  const r = await describeChatwootImage(
+    { attachments: ATT, token: "t", chatwootBaseUrl: "https://chat.onia.com.bo" },
+    { env: ENV, fetch: fetchFalso({ visionBody }) },
+  );
+  assert.equal(r.comprobante, null);
+  assert.equal(r.description, "una foto de un perro");
+});
+
+test("modelo viejo que devuelve texto plano: descripcion entera, sin comprobante", async () => {
+  const visionBody = { choices: [{ message: { content: "una foto de un mostrador" } }] };
+  const r = await describeChatwootImage(
+    { attachments: ATT, token: "t", chatwootBaseUrl: "https://chat.onia.com.bo" },
+    { env: ENV, fetch: fetchFalso({ visionBody }) },
+  );
+  assert.equal(r.ok, true);
+  assert.equal(r.description, "una foto de un mostrador");
+  assert.equal(r.comprobante, null);
+});

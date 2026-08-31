@@ -238,6 +238,8 @@ export function incomingFrom(input, nowIso) {
     transcript: typeof input.transcript === "string" ? input.transcript : "",
     imageDescription: typeof input.image_description === "string" ? input.image_description
       : typeof input.imageDescription === "string" ? input.imageDescription : "",
+    imageReceipt: input.image_receipt && typeof input.image_receipt === "object" ? input.image_receipt
+      : input.imageReceipt && typeof input.imageReceipt === "object" ? input.imageReceipt : null,
     externalMessageId,
     receivedAt: input.received_at || input.receivedAt || nowIso,
     author: "contact",

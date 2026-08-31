@@ -351,6 +351,8 @@ export const SCRIPT = Object.freeze({
   R_SEGUIMIENTO: "¡Hola! ¿Seguís por ahí? 🙂 Si te quedó alguna duda, {{humano}} te la contesta por acá. Y si preferís que no te escribamos, decínos \"no gracias\" y listo.",
   // Vision (v5): cuando la foto se pudo describir SIN violar guardrails. La descripcion
   // viene del LLM ya filtrada; si violaba una regla se descarto y sale R_ATTACH pelado.
+  // Comprobante de pago: acusar recibo SIN confirmar jamas — confirma el humano.
+  R_COMPROBANTE: "Recibí tu comprobante{{monto_frase}} 🙏 Se lo paso a {{humano}} para confirmarlo — apenas lo revise te avisamos por acá.",
   R_ATTACH_VISTO: "Recibí tu foto ({{descripcion_foto}}). Se la paso a {{humano}}, que te confirma por acá.",
 
   // M6R — opt-out en modo recepcionista. Sin "escribí DEMO": eso es del funnel de venta.

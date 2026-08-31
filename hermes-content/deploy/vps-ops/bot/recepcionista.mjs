@@ -134,6 +134,17 @@ export function recepcionistaStep(ctx, base, motor) {
     return finalize(ctx, base, [say("M_AUDIO_FAIL", base, config)], [], ["audio_sin_transcripcion"]);
   }
   if (msg.kind === "attachment" && !msg.hasText) {
+    // COMPROBANTE DE PAGO detectado por vision (Sendy-parity, 2026-08-31): el bot
+    // acusa recibo del documento y deriva — JAMAS confirma un pago solo (regla dura:
+    // la plata la confirma un humano). El monto es un eco sanitizado del comprobante
+    // del cliente, no una cifra nuestra: vision.mjs ya lo valido con regex estricto.
+    if (msg.imageReceipt && msg.imageReceipt.es === true) {
+      const monto_frase = msg.imageReceipt.monto ? ` de Bs ${msg.imageReceipt.monto}` : "";
+      return handoffResult(ctx, base, "comprobante_recibido", [], {
+        key: "R_COMPROBANTE",
+        vars: { monto_frase },
+      });
+    }
     // Vision (v5): la descripcion de la foto SOLO se usa si pasa los guardrails —
     // un LLM que alucine un precio o un diagnostico se descarta entero y el flujo
     // queda identico al de siempre. El handoff al humano se hace igual con o sin.

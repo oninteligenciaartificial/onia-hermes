@@ -21,13 +21,17 @@ import {
 } from "./audio-transcribe.mjs";
 
 export const DEFAULT_VISION_TIMEOUT_MS = 8_000;
-export const DEFAULT_VISION_MAX_TOKENS = 60;
+export const DEFAULT_VISION_MAX_TOKENS = 140;
 
 const PROMPT = [
   "Sos el asistente de un negocio. Un cliente mando esta imagen por chat.",
-  "Describi en UNA frase corta y neutral que se ve, en espanol boliviano.",
-  "PROHIBIDO: diagnosticos, precios, cifras, marcas de productos, juicios medicos o legales.",
-  "Solo lo visible. Maximo 20 palabras.",
+  'Responde SOLO este JSON: {"descripcion":"...","comprobante":{"es":false}} o',
+  '{"descripcion":"...","comprobante":{"es":true,"monto":"150.00","entidad":"BCP"}}.',
+  "descripcion: UNA frase corta y neutral de que se ve, en espanol boliviano, max 20 palabras.",
+  "PROHIBIDO en descripcion: diagnosticos, precios, cifras, marcas, juicios medicos o legales.",
+  "comprobante.es=true SOLO si la imagen es claramente un comprobante/voucher de pago o",
+  "transferencia (QR pagado, captura de banco/billetera). monto y entidad SOLO si se leen",
+  "con claridad EN el documento (son datos del comprobante, no precios tuyos); si no, omitilos.",
 ].join(" ");
 
 export function pickImageAttachment(attachments) {
@@ -81,6 +85,7 @@ export async function describeChatwootImage(options = {}, deps = {}) {
       body: JSON.stringify({
         model,
         max_tokens: options.maxTokens ?? DEFAULT_VISION_MAX_TOKENS,
+        response_format: { type: "json_object" },
         temperature: 0.2,
         messages: [{
           role: "user",
@@ -94,9 +99,31 @@ export async function describeChatwootImage(options = {}, deps = {}) {
     clearTimeout(timer);
     if (!res.ok) return fail(`litellm_http_${res.status}`);
     const json = await res.json();
-    const description = String(json?.choices?.[0]?.message?.content || "").trim();
-    if (!description) return fail("respuesta_vacia");
-    return { ok: true, description, warnings: [] };
+    const raw = String(json?.choices?.[0]?.message?.content || "").trim();
+    if (!raw) return fail("respuesta_vacia");
+    // JSON estructurado; si el modelo devolvio texto plano (modelo viejo), se usa entero
+    // como descripcion y sin comprobante — el flujo de siempre.
+    let description = raw;
+    let comprobante = null;
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object") {
+        description = String(parsed.descripcion || "").trim() || raw;
+        const c = parsed.comprobante;
+        if (c && typeof c === "object" && c.es === true) {
+          // El monto es un ECO del documento del cliente, jamas un precio nuestro.
+          // Sanitizado estricto: solo numeros con decimal opcional; si no, no se muestra.
+          const monto = String(c.monto ?? "").trim().replace(",", ".");
+          const entidad = String(c.entidad ?? "").trim().slice(0, 30);
+          comprobante = {
+            es: true,
+            ...( /^\d{1,7}(\.\d{1,2})?$/.test(monto) ? { monto } : {}),
+            ...(entidad && /^[\w .-]+$/.test(entidad) ? { entidad } : {}),
+          };
+        }
+      }
+    } catch { /* texto plano: descripcion = raw */ }
+    return { ok: true, description, comprobante, warnings: [] };
   } catch (error) {
     return fail("vision_exploto", [`vision: ${String(error?.message || error).slice(0, 160)}`]);
   }

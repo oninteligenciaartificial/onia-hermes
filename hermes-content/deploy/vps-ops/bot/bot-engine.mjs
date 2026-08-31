@@ -173,6 +173,7 @@ function readIncoming(incoming) {
     norm: normalize(text),
     hasText: text.trim().length > 0,
     imageDescription: typeof raw.imageDescription === "string" ? raw.imageDescription : "",
+    imageReceipt: raw.imageReceipt && typeof raw.imageReceipt === "object" ? raw.imageReceipt : null,
     externalMessageId: raw.externalMessageId || null,
     receivedAt: raw.receivedAt || null,
     author: raw.author || "contact",

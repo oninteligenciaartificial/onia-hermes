@@ -107,3 +107,40 @@ test("runTurn con human_takeover_clear: limpia, guarda y no contesta", async () 
   assert.equal(guardado[0].botStage, "nuevo");
   assert.ok(out.notes.includes("takeover_desarmado"));
 });
+
+// ── Comprobante de pago (Sendy-parity 2026-08-31) ──────────────────────────
+test("comprobante detectado: R_COMPROBANTE con monto eco + handoff (jamas confirma solo)", () => {
+  const doc = { schema: "onia.bot.knowledge/1", identity: { productName: "Ferreteria Tornillo", humanName: "Marta" } };
+  const config = asRecepcionista(applyKnowledge(createBotConfig(), doc), doc);
+  const state = createState({ conversationKey: "chatwoot:9" });
+  const r = step(state, {
+    kind: "attachment", text: "", receivedAt: "2026-08-31T12:00:00Z",
+    imageReceipt: { es: true, monto: "150.50", entidad: "BCP" },
+  }, { config });
+  assert.equal(r.replies.length, 1);
+  assert.match(r.replies[0].text, /Recibí tu comprobante de Bs 150\.50/);
+  assert.match(r.replies[0].text, /Marta/);
+  assert.doesNotMatch(r.replies[0].text, /confirmado|pago recibido/i);
+  assert.equal(r.nextState.botStage, "handoff_humano");
+});
+
+test("comprobante sin monto legible: sin cifra, mismo handoff", () => {
+  const doc = { schema: "onia.bot.knowledge/1", identity: { productName: "Ferreteria", humanName: "Marta" } };
+  const config = asRecepcionista(applyKnowledge(createBotConfig(), doc), doc);
+  const r = step(createState({}), {
+    kind: "attachment", text: "", receivedAt: "2026-08-31T12:00:00Z",
+    imageReceipt: { es: true },
+  }, { config });
+  assert.match(r.replies[0].text, /Recibí tu comprobante 🙏/);
+  assert.doesNotMatch(r.replies[0].text, /Bs/);
+});
+
+test("foto normal (no comprobante): sigue el flujo R_ATTACH de siempre (regresion)", () => {
+  const doc = { schema: "onia.bot.knowledge/1", identity: { productName: "Ferreteria", humanName: "Marta" } };
+  const config = asRecepcionista(applyKnowledge(createBotConfig(), doc), doc);
+  const r = step(createState({}), {
+    kind: "attachment", text: "", receivedAt: "2026-08-31T12:00:00Z",
+    imageDescription: "una foto de un mostrador",
+  }, { config });
+  assert.match(r.replies[0].text, /Recibí tu foto/);
+});
