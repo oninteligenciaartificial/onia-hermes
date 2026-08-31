@@ -372,6 +372,25 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Cerrado (2026-08-31) — no rehacer
 
+- [x] 🚀 **`main` INTEGRADA y DESPLEGADA.** 242 commits de 4 carriles (`onia-web-architecture`,
+      `chatbots-platform-review`, `ads-creatividades-publicos`, `git-status`). Gates: `tsc` 0,
+      **217 tests**, 28 archivos. Deploy de `e5c1ad3` con los 5 gates de
+      `hermes-content/infra/vps-ops/crons/INSTALAR.md`… perdón: de `deploy-gates-swap.sh` en OK.
+      Backup: `runtime-next.prev-20260831-194424`. Verificado **mirando** el login y `/register`.
+- [x] **`claude/pending-tasks-review-fb0694` descartada, no mergeada.** Su único commit es un
+      auto-sync del 10-ago y sus 3 archivos son **más viejos** que los de `main`: mergearla
+      hacía retroceder los tres. Una rama no es un carril por tener commits.
+- [x] **`main` estaba ROJA y nadie lo sabía.** `scripts/carousel_render.test.js` fallaba: el
+      renderer dice `square`, el test decía `cuadrado`. No está en ningún CI. El merge trajo el
+      arreglo desde el carril de contenido.
+- [x] **Había DOS carpetas de handoff** (`handoff/` y `handoffs/`). Consolidadas en la singular,
+      que es la que usa el README y los otros 5 carriles.
+- [x] **El aviso de pedidos de acceso: PROBADO en vivo, y mi diagnóstico anterior era falso.**
+      Dije que "no suena nada" — existe desde el 21-ago (`lib/aviso-acceso.ts`), está cableado
+      en `app/api/access-requests/route.ts` y **funciona**: pedido de prueba → 201 → cero
+      `[aviso-acceso] Telegram falló` en los logs. Lo había buscado con grep en `app/api`.
+      **Lo que sí falla es la señal**: el aviso va al MISMO chat que el guardián del VPS.
+
 - [x] **D2 · Cuentas de más dadas de baja en `onia_center`.** `arthur`, `seller_001` (Camila)
       y `seller_002` (Jerónimo) → `status='blocked'`. Queda **sólo `sergio`** activo. Respaldo
       del estado previo tomado antes del `UPDATE`; se revierte poniendo `'active'`.
