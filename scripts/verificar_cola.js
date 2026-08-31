@@ -61,7 +61,20 @@ function evidenciaDe(texto) {
   return { rutas, comandos };
 }
 
-function revisarCola(texto, baseDir = process.cwd()) {
+// Un item NO puede citarse a si mismo. El 31-ago se escribio un item "TRABADO — 15 piezas
+// esperando una decision" cuya unica evidencia era la ruta de ESTA cola: el archivo existe, asi
+// que el gate lo dejo pasar en verde, y las 15 piezas no tenian ni un archivo detras. Un
+// subagente lo encontro y describio exacto: "apunta a si mismo como evidencia".
+//
+// Es la forma mas fina del trabajo fantasma, y la mas peligrosa, porque pasa el control: la
+// evidencia es real, solo que no prueba NADA sobre el item. Verificar que un archivo existe no
+// alcanza si ese archivo es el que hace la afirmacion.
+function esAutoReferencia(ruta, archivoCola) {
+  if (!archivoCola) return false;
+  return path.resolve(ruta) === path.resolve(archivoCola);
+}
+
+function revisarCola(texto, baseDir = process.cwd(), archivoCola = null) {
   const problemas = [];
   const items = itemsDeAhora(texto);
 
@@ -86,7 +99,16 @@ function revisarCola(texto, baseDir = process.cwd()) {
 
     // El punto de todo el archivo: la ruta tiene que ESTAR.
     for (const r of rutas) {
-      if (!fs.existsSync(path.resolve(baseDir, r))) {
+      const abs = path.resolve(baseDir, r);
+      if (esAutoReferencia(abs, archivoCola)) {
+        problemas.push({
+          regla: 'auto-referencia', linea: it.linea,
+          msg: `"${it.texto.slice(0, 50)}" se cita a si mismo como evidencia: la cola no prueba `
+            + 'lo que la cola afirma',
+        });
+        continue;
+      }
+      if (!fs.existsSync(abs)) {
         problemas.push({
           regla: 'fantasma', linea: it.linea,
           msg: `"${it.texto.slice(0, 50)}" apunta a ${r} y ese archivo NO existe`,
@@ -141,6 +163,18 @@ function selfCheck() {
   r = revisarCola('## Ahora\n- [ ] Dos cosas · `existe.png` y `no-esta.png`\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'alcanza que una ruta falte');
 
+
+  // El item que se cita a si mismo: pasaba en verde y no probaba nada.
+  const colaFalsa = path.join(tmp, 'cola.md');
+  fs.writeFileSync(colaFalsa, 'x');
+  const AHORA = ['## Ahora', ''].join(String.fromCharCode(10));
+  r = revisarCola(AHORA + '- [ ] 15 piezas esperando `cola.md`', tmp, colaFalsa);
+  ok(r.problemas.some((x) => x.regla === 'auto-referencia'), 'la cola no se prueba a si misma');
+
+  // Control: la regla nueva no debe romper el caso sano.
+  r = revisarCola(AHORA + '- [ ] algo real `existe.png`', tmp, colaFalsa);
+  ok(!r.problemas.length, 'una ruta distinta de la cola sigue pasando');
+
   console.log(`self-check ok: ${casos} casos`);
 }
 
@@ -154,7 +188,7 @@ function main() {
     process.exit(2);
   }
 
-  const { problemas, items } = revisarCola(fs.readFileSync(archivo, 'utf8'), process.cwd());
+  const { problemas, items } = revisarCola(fs.readFileSync(archivo, 'utf8'), process.cwd(), archivo);
   for (const p of problemas) console.log(`ERROR ${p.regla} [linea ${p.linea}]: ${p.msg}`);
 
   if (!problemas.length) console.log(`cola ok: ${items.length} items en Ahora, todos con evidencia real`);

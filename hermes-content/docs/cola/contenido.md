@@ -37,10 +37,14 @@ faltantes. Lo que falta es **publicar**.
 - [x] **Marca personal → comunidad.** STACK pasa de `pdf` sin URL al link de la comunidad y los 8 placeholders quedaron reemplazados en `hermes-content/docs/ONIA_SERGIO_DM_PALABRAS.md`. Ver `scripts/recompensas.json` · 31-ago
 - [ ] Reescribir el copy de S05 y S06: prometen «la lista completa con los links y lo que cuesta cada uno» y la palabra ahora entrega una invitación. El gate las marca `promesa-distinta` a propósito — no se publican así. Ver `hermes-content/references/marca-personal-sergio/briefs/S06-equipo-que-no-cobra.json` · 20 min · Claude
 - [ ] Ver si se puede correr Meta Ads para conseguir público (Sergio, 31-ago). Antes de gastar: verificar cuenta publicitaria, medio de pago y estado de la verificación de negocio. Ver `hermes-content/docs/ONIA_AVISO_AUTOMATIZACION_IG.md` · 40 min · Claude
-- [ ] 🔴 TRABADO — Lucía y Onia: falta que Sergio defina si «el link de oniahq» es la web de Onia con su ?src o el perfil de Instagram. Son ~15 piezas. Ver `hermes-content/docs/cola/contenido.md` · Sergio
 - [ ] Declarar la etiqueta de IA en la cuenta antes del primer post — hoy es una instrucción pendiente, no una verificación: `hermes-content/contenido/LUCIA.md` · 5 min · Sergio
 - [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502. Son las 7 láminas de `hermes-content/references/modelos/lucia/posts-20260807/FIJADO` (NO la carpeta `hermes-content/references/modelos/lucia/posts-20260807/render-fijado`, que quedó superada) · 15 min · Sergio
 - [ ] Publicar el día 1 (reel de lanzamiento v7, 22 s, 1080×1920): `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4` · 10 min · Sergio
+
+- [ ] Escribir el caption + etiqueta de IA del reel del día 1. **El día 1 estaba bloqueado y nadie lo había anotado**: el archivo está perfecto (h264, 1080×1920, 22,07 s) pero no existe caption en ningún lado del repo. Ver `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4` · 20 min · Claude
+- [ ] Re-renderizar los 3 creativos de ads: estampan **@oniaagency** y el renderer vigente estampa **@oniahq**. Un anuncio que manda a un handle equivocado es plata tirada. Ver `hermes-content/carousels/out/ads/ad-a2-v1-no-volvieron` · 5 min · Claude
+- [ ] Marcar como NO-SUBIR el render superado de S06: existe en DOS versiones con md5 distinto y en el carril de Sergio ningún doc lo dice. Mismo error de doble render que ya se pagó en Lucía. Ver `hermes-content/references/marca-personal-sergio/render` · 10 min · Claude
+- [ ] Sacarle los CTA a `hermes-content/carousels/briefs` o marcarlo muerto: tiene **cinco palabras fantasma** (MITO, AUTO, COSTO, NUVIA y un LISTA que promete el PDF enterrado), ninguna registrada. El carril vivo de @oniahq es `hermes-content/references/oniahq/briefs`, que está limpio · 15 min · Claude
 
 ## Despues
 
@@ -56,6 +60,8 @@ faltantes. Lo que falta es **publicar**.
 ## Bloqueado
 
 - **El PDF de SISTEMA queda DESCARTADO** (Sergio, 31-ago). No se publica ningún PDF: la recompensa pasa a ser un link. Eso desactiva de paso el bloqueo de los días 3 y 4.
+- 🔴 **META ADS — el conector apunta a la identidad equivocada.** Verificado hoy: esta sesión ve DOS cuentas publicitarias y **ninguna es de ONIA** — `NUVO 1usd` (negocio ajeno) y `Arthur Fuentes` (personal, de alguien que ya no colabora). La cuenta de ONIA responde «no tenés acceso». Es el bloqueo raíz: sin eso no se puede ni leer el estado. Ver `hermes-content/docs/cola/contenido.md` · Sergio
+- 🔴 **Reloj al 5-sep:** el `stop_time` de la campaña y el token de usuario vencen **el mismo día**. Quedan 5.
 - **Postiz da 502** y no hay `POSTIZ_API_KEY` en el `.env`. Mientras siga caído, **todo se publica a mano.** No es un bloqueo para empezar: es un bloqueo para automatizar.
 - **@sergio_urcullo se publica a mano siempre**, tenga o no Postiz: tiene dos avisos de automatización de Meta. El blindaje está en `scripts/postiz_schedule.mjs`.
 

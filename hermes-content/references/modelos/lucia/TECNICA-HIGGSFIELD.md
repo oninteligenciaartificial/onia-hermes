@@ -193,6 +193,12 @@ en MAX y *«Upgrade Plan»* en los demás, que es como se distingue el propio de
 | | |
 |---|---|
 | Créditos | **3.600/mes** (el slider llega a 5.400) |
+
+> 🔴 **CORREGIDO el 2026-08-31 con el dato vivo de la cuenta.** La línea de arriba está MAL.
+> El API devuelve `current_plan: ultra`, que son **3.000 cr/mes por $99** facturado anual, no 3.600 por $115.
+> **Saldo real hoy: 1.959,58 créditos** (~Bs 735), leído sin gastar nada. Entre el 23 y el 31-ago el saldo
+> BAJÓ, no subió: no hubo recarga, y se gastaron ~124 cr que nadie anotó. `auto_refill` está desactivado.
+> Costo real por crédito: $0,033 = **Bs 0,375**.
 | Precio | **$115/mes**, facturado anual (de $158, 27 % off) |
 | **Costo por crédito** | **$0,0319 ≈ Bs 0,374** |
 
