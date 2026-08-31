@@ -416,8 +416,41 @@ Las tres formas de fantasma que ya aparecieron acá:
       y, con la escala de 0,839, mide **5,03px** renderizados — bajo el piso de 8px que
       `dataviz` fijo y que W4 aplico al resto de los marcadores. Es un tamanio, no una
       deformacion.
-- [ ] **A4 · Pulido de dental-premium:** dark mode mirado + spotlight en touch +
-      cablear texturas SVG si Sergio dio OK.
+- [x] **A4 · Pulido de dental-premium** (2026-08-31). Re-verificada la evidencia antes de
+      tocar, **dos de los tres sub-items eran fantasma** y hubo que buscar el defecto real
+      midiendo, no leyendo la linea. (a) **"dark mode mirado"**: se miro, y no hay nada que
+      mirar — el sitio es light-only y renderiza **identico** con el SO en oscuro (el
+      recorte del formulario da el **mismo md5** en claro y en oscuro; la pagina entera
+      solo difiere por el grano del degradado del hero). Lo que si era real es la
+      **omision**: `color-scheme` medido en `normal`, o sea que el diseño claro estaba bien
+      **por accidente del default del UA**, no por declararse. Ahora `color-scheme: light`
+      en `:root`, que ata scrollbar, popup del `<select>`, autofill y corrector a esta
+      paleta. (b) **"spotlight en touch": no existe ningun spotlight** — `spotlight|
+      mousemove|pointermove` da **0** en toda la app. Y la sospecha derivada (hover pegado
+      en touch: 3 reglas `:hover` sin un solo `@media (hover: hover)`) **tampoco se
+      reproduce**: tapeando la tarjeta en emulacion tactil el transform queda en `none`,
+      nunca se aplica el hover. No se toco: no se arregla lo que no falla. (c) texturas SVG
+      → **bloqueado**, no hay OK de Sergio en ningun lado (avisado por PushNotification).
+      **El defecto real lo encontro medir el DOM entero, no la cola**: el enlace a WhatsApp
+      del footer media **28,2px** de alto — bajo el piso tactil de 44px que W4 fijo para el
+      dashboard, y es **la conversion entera del sitio**. Corregido con `min-height: 44px`
+      + `inline-flex`, y el subrayado pasado de `border-bottom` a `text-decoration` para
+      que se pegue a las letras en vez de al borde de la caja de 44px.
+      ⚠️ **Medir, no estimar (otra vez)**: calcule `padding-block: 8px` "= 44,2px" y el
+      navegador devolvio **43,2** — los 28,2 originales incluian el 1px de borde que yo
+      mismo estaba sacando. Por eso el alto sale de `min-height` y no de un padding
+      calculado: no hay que re-ajustarlo si cambia la tipografia.
+      ⚠️ **Falso positivo que casi arreglo**: el circulo negro con una "N" en el borde
+      izquierdo de las capturas es el **badge de devtools de Next**, no un elemento que se
+      desborda. El unico desborde real (`.hero-media`, -28,8px) es el overscan a proposito
+      del parallax. Y el unico control "sin anillo de foco" de la primera pasada era el
+      `<input type="hidden">` que mi selector agarraba de mas: los 15 controles reales ya
+      tenian anillo.
+      **Gates**: `tsc --noEmit` verde en `apps/dental-premium` y **medido en el navegador**
+      en las 4 combinaciones (claro/oscuro x 1440/390): `colorScheme` resuelve `light` en
+      las 4, el enlace da **44,0px** exactos en las 4, la lista de controles bajo 44px
+      queda **vacia** (antes tenia 1) y 0 errores de consola. Footer **mirado**: el
+      subrayado honey sigue pegado al texto y la caja de 44px es invisible.
 
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
