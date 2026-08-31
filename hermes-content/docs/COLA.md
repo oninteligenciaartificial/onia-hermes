@@ -90,15 +90,21 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       perseguir papeles es de recepción, no del profesional. Gates: tsc 0, eslint 0 errores,
       **2282 tests verdes**. Commit `6d8b6b7` (rama fix/requerimientos-alcanzable, ya mergeada).
 
-- [ ] **F6 · Frase corrida en la pantalla del portal del cliente** — el único ítem NO bloqueado
-      que queda. Encontrado el 2026-08-31 **mirando** el portal en producción con un token
-      inventado: se lee *"El enlace no es válido o venció Pedí un enlace nuevo…"*, sin punto.
-      No es el literal: la línea 85 de `app/(public)/portal/[token]/portal-client.tsx`
-      concatena `{errorGlobal}` con " Pedí un enlace nuevo…", y el fallback **sí** trae el
-      punto mientras el mensaje que manda la API **no** — o sea el camino que se ve en vivo es
-      justo el que quedó sin puntuar. Arreglo de una línea (puntuar en el borde, no en el
-      mensaje). Es la primera pantalla que ve un cliente del portal, así que vale la vuelta.
-      Gates completos, que es código.
+- [x] **F6 · Frase corrida en la pantalla del portal del cliente — ARREGLADO.** El diagnóstico
+      heredado era correcto y se confirmó en vivo: la API
+      (`app/api/portal/requerimientos/route.ts:21`) manda *"El enlace no es válido o venció"*
+      **sin punto** y la pantalla lo concatena con " Pedí un enlace nuevo…". El fallback del
+      literal **sí** traía el punto, así que leyendo el código el bug se veía arreglado y en
+      vivo no lo estaba. Se puntúa **en el borde** con `frasePuntuada()` (`lib/utils.ts`, junto
+      al resto de helpers de texto, con su test en `lib/utils.test.ts`) y no mensaje por
+      mensaje: los otros dos errores de esa misma ruta ("No pudimos cargar tus requerimientos",
+      "Error interno") tenían el mismo defecto y quedan cubiertos, igual que el próximo que se
+      agregue. **Verificado MIRANDO la pantalla renderizada** con un token inventado — se lee
+      *"El enlace no es válido o venció. Pedí un enlace nuevo a la persona que te lo envió."*
+      Gates: tsc 0, eslint 0 errores, **2331 tests verdes**. Commit `0711ff6` en `master`.
+      *(Nota de entorno: `next dev` con Turbopack no arranca en esta máquina — falla al
+      spawnear el proceso de PostCSS con `0xc0000142`. Con `next dev --webpack` levanta en
+      segundos. No es del producto; sirve para la próxima verificación visual.)*
 
 - [ ] **F5 · Veterinaria — COTIZADA el 2026-08-30, decide Sergio.** El bloqueo es real pero
       **el costo estaba inflado**. No es "migrar datos vivos":
