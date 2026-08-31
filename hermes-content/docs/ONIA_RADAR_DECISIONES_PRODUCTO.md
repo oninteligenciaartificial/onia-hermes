@@ -102,3 +102,31 @@ tres cosas que no son lo mismo: factura interna del negocio (documento de cobro)
 factura FISCAL SIAT (bloqueada por NIT, a confirmar) · cobro de Onia a sus clientes
 (hoy comprobante manual). Sale en `ONIA_FACTURACION_ESTADO_REAL.md` con una respuesta
 clara para la venta: se puede decir "Onia te factura" SÍ/NO/con qué asterisco.
+
+## 8. Disco C: al 100% — frena TODOS los gates (2026-08-31)
+
+**Encontrado en vivo:** `C:` tenía **0 bytes libres**. No es una molestia de fondo: con el disco
+lleno `tsc`, `vitest` y `lint` no pueden escribir sus temporales y **fallan sin poder correr**, y
+hasta `sed` cortó con *"No space left on device"*. O sea: el carril producto no puede pasar sus
+propios gates. Se liberó lo que no necesita permiso —caché de npm, 2,8 GB, se regenera sola— y
+quedó en **4,8 GB libres (99%)**. Eso destraba hoy, pero se vuelve a llenar.
+
+**Lo grande NO se tocó porque son archivos de Sergio, no basura de build:**
+
+| Qué | Cuánto | Nota |
+|---|---|---|
+| 7 copias del MISMO zip `clase the chosen 1 producto por dia` en `%TEMP%` | **6,5 GB** | descargas a medias, mismo archivo repetido 7 veces |
+| `2026-08-29 17-05-35.mp4` en `%TEMP%` | 0,93 GB | grabación de pantalla |
+| `~/.cache/puppeteer` + `ms-playwright` | 4,0 GB | **no borrar**: son los navegadores que exige la regla de "verificar MIRANDO la pantalla" |
+| `~/.cache/torch` + `huggingface` | 1,15 GB | modelos de Speaches (transcripción) |
+| `~/.cache/codex-runtimes` | 1,3 GB | se re-descarga |
+
+**Decide Sergio — las tres salidas:**
+- **(a) Borrar las 7 copias del zip y el mp4 del temporal.** Recupera **7,4 GB** en un minuto y
+  cero riesgo para el repo. Son archivos suyos: no los borro yo.
+- **(b) Sumar `~/.cache/codex-runtimes`** (+1,3 GB). Se re-descarga solo cuando haga falta.
+- **(c) Mover los ~12 `node_modules` de los worktrees de `onia-platform` a un disco con espacio,
+  o borrar los worktrees ya mergeados.** Es lo único que ataca la causa —30 worktrees vivos— pero
+  toca carriles de otras sesiones, así que **no es de este loop**.
+
+**Recomendación: (a) ya, (c) cuando se cierren los carriles abiertos.** `E:` tiene 84 GB libres.
