@@ -1,9 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-type OniaCenterProfile = {
-  primary_role_key?: string | null;
-  status?: string | null;
-};
+import { rolDePerfilAutorizado, type OniaCenterProfile } from "@/lib/onia-center-perfil";
+
 
 
 function oniaCenterAuthConfigured() {
@@ -127,14 +125,6 @@ function applyRefreshedCookies(response: NextResponse, refreshed: RefreshedSessi
   return response;
 }
 
-function normalizeRoleKey(role: string | null | undefined) {
-  if (role === "area_responsible") {
-    return "area";
-  }
-
-  return role ?? "";
-}
-
 function redirectToLogin(request: NextRequest, reason: string) {
   const loginUrl = request.nextUrl.clone();
   loginUrl.pathname = "/onia-center/login";
@@ -169,7 +159,7 @@ async function getOniaCenterSessionRole(accessToken: string) {
   }
 
   const profileResponse = await fetch(
-    `${supabaseUrl}/rest/v1/user_profiles?select=primary_role_key,status&auth_user_id=eq.${encodeURIComponent(user.id)}&limit=1`,
+    `${supabaseUrl}/rest/v1/user_profiles?select=primary_role_key,status&auth_user_id=eq.${encodeURIComponent(user.id)}&status=eq.active&limit=1`,
     {
       headers: {
         accept: "application/json",
@@ -185,8 +175,9 @@ async function getOniaCenterSessionRole(accessToken: string) {
   }
 
   const profiles = (await profileResponse.json()) as OniaCenterProfile[];
-  const profile = profiles.find((item) => item.status === "active") ?? profiles[0];
-  return normalizeRoleKey(profile?.primary_role_key);
+  // La decision de acceso vive en lib/onia-center-perfil.ts, con su test: el
+  // `?? profiles[0]` que habia aca dejaba entrar a una cuenta dada de baja.
+  return rolDePerfilAutorizado(profiles);
 }
 
 const NUVIA_STORE_ORIGIN = "https://nuvia-store.vercel.app";
