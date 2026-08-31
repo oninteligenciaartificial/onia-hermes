@@ -2,8 +2,18 @@
 
 > Reemplaza al PDF de Samuel del 2026-08-29 como texto de referencia del acuerdo.
 > Análisis y negociación: `ONIA_MARCA_PERSONAL_ETAPA2_EVALUACION.md`.
-> Estado: pendiente de (a) cierre de Etapa 1 con números y (b) OK de Samuel a crudos
-> compartidos y tarifa de yapping.
+> **Estado: ACEPTADO POR AMBAS PARTES el 2026-08-31** (mensaje de Samuel confirmando
+> punto por punto, incluidas las 3 condiciones de Sergio: yapping a mitad, crudos con
+> copia a 48 h, historias con tema+hook semanal). Falta solo: números de Etapa 1 +
+> fechas de grabación (los manda Samuel) y la firma del contrato simple por Leslie.
+>
+> **Dos ajustes finales de Samuel, aceptados el 31-ago:**
+> 1. El yapping aplica **solo a los 20 pilares**; los 10 B-roll quedan piezas únicas
+>    (menos edición para él, menos vistas facturables — neutro/positivo para Sergio).
+> 2. **48 h post-sesión** para entregar crudos y subir el primer video, y hasta **2 días
+>    extra** en el calendario del mes para completar las 30 piezas sin contar como
+>    atraso — **con blindaje: la gracia no mueve la fecha del fijo del mes siguiente ni
+>    los cierres de liquidación; el calendario contractual queda fijo.**
 
 ## 1 · Sistema
 
