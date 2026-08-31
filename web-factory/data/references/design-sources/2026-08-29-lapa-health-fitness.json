@@ -1,0 +1,269 @@
+{
+ "category": "health-fitness",
+ "url": "https://www.lapa.ninja/category/health-fitness/",
+ "status": 200,
+ "items": [
+  {
+   "href": "/post/maxima-therapy/",
+   "title": "Maxima Therapy",
+   "img": null
+  },
+  {
+   "href": "/post/usefoulplay/",
+   "title": "Usefoulplay",
+   "img": null
+  },
+  {
+   "href": "/post/getnudge/",
+   "title": "Nudge",
+   "img": null
+  },
+  {
+   "href": "/post/frequencybreathwork/",
+   "title": "Frequency Breathwork",
+   "img": null
+  },
+  {
+   "href": "/post/joindawn/",
+   "title": "Dawn",
+   "img": null
+  },
+  {
+   "href": "/post/riseplasma/",
+   "title": "Rise Plasma",
+   "img": null
+  },
+  {
+   "href": "/post/future/",
+   "title": "Future",
+   "img": null
+  },
+  {
+   "href": "/post/busybeehoney/",
+   "title": "Busy Bee Honey",
+   "img": null
+  },
+  {
+   "href": "/post/callbaba/",
+   "title": "Baba Care",
+   "img": null
+  },
+  {
+   "href": "/post/glyphic/",
+   "title": "Glyphic",
+   "img": null
+  },
+  {
+   "href": "/post/sleep-well-creatives/",
+   "title": "Sleep Well Creatives",
+   "img": null
+  },
+  {
+   "href": "/post/lore/",
+   "title": "LORE",
+   "img": null
+  }
+ ],
+ "harvested_with": "Scrapling Fetcher.get(impersonate=chrome) — StealthyFetcher NO arranca en esta maquina",
+ "measured": {
+  "maxima-therapy": {
+   "url": "https://maximatherapy.com/",
+   "bodyBg": "rgba(0, 0, 0, 0)",
+   "bodyFont": "ui-sans-serif",
+   "h1": {
+    "fs": "214.286px",
+    "ff": "\"Robuck Rounded\"",
+    "c": "rgb(0, 179, 81)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "r": "0px"
+   },
+   "h1text": "THE\nLEARNING\nYEARS\nSHAPE\nUS",
+   "cta": {
+    "fs": "15.2381px",
+    "ff": "ui-sans-serif",
+    "c": "rgb(0, 0, 0)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "r": "0px"
+   },
+   "ctaText": "EARLY INTERVENTION\nAGES 0-3"
+  },
+  "frequency-breathwork": {
+   "url": "https://frequencybreathwork.com/",
+   "bodyBg": "rgb(242, 239, 233)",
+   "bodyFont": "Aime",
+   "h1": {
+    "fs": "60.48px",
+    "ff": "Aime",
+    "c": "rgb(241, 241, 241)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "r": "0px"
+   },
+   "h1text": "HEALING BEGINS\nWITH THE BREATH",
+   "cta": {
+    "fs": "12.24px",
+    "ff": "Aime",
+    "c": "rgb(71, 71, 71)",
+    "bg": "rgb(242, 239, 233)",
+    "r": "8px"
+   },
+   "ctaText": "Download App"
+  },
+  "dawn": {
+   "url": "https://joindawn.com/",
+   "bodyBg": "rgb(50, 28, 4)",
+   "bodyFont": "Figtree",
+   "h1": {
+    "fs": "42px",
+    "ff": "\"Source Serif 4\"",
+    "c": "oklch(0.96818 0.0136 67.486)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "r": "0px"
+   },
+   "h1text": "Your support\nshould be, too.",
+   "cta": {
+    "fs": "16px",
+    "ff": "Figtree",
+    "c": "oklch(0.96818 0.0136 67.486)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "r": "0px"
+   },
+   "ctaText": "Blog"
+  },
+  "rise-plasma": {
+   "url": "https://www.riseplasma.com/",
+   "bodyBg": "rgb(71, 204, 255)",
+   "bodyFont": "\"Source Serif 4\"",
+   "h1": null,
+   "h1text": null,
+   "cta": null,
+   "ctaText": null
+  },
+  "baba-care": {
+   "url": "https://www.callbaba.com/",
+   "bodyBg": "rgb(250, 249, 241)",
+   "bodyFont": "-apple-system",
+   "h1": {
+    "fs": "68px",
+    "ff": "\"Test Söhne\"",
+    "c": "oklab(0.999994 0.0000455678 0.0000200868 / 0.92)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "r": "0px"
+   },
+   "h1text": "Medicare made\neasy",
+   "cta": {
+    "fs": "15px",
+    "ff": "\"Atkinson Hyperlegible Next\"",
+    "c": "rgb(250, 249, 241)",
+    "bg": "rgb(42, 29, 24)",
+    "r": "12px"
+   },
+   "ctaText": "Skip to main content"
+  },
+  "nudge": {
+   "url": "https://getnudge.info/",
+   "bodyBg": "rgba(0, 0, 0, 0)",
+   "bodyFont": "Inter",
+   "h1": {
+    "fs": "60px",
+    "ff": "Inter",
+    "c": "rgb(38, 37, 30)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "r": "0px"
+   },
+   "h1text": "Change begins with Nudge",
+   "cta": {
+    "fs": "14px",
+    "ff": "Inter",
+    "c": "rgb(59, 57, 47)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "r": "9999px"
+   },
+   "ctaText": "Platform"
+  }
+ },
+ "all_category_slugs": [
+  "3d-websites",
+  "agency",
+  "app",
+  "architecture",
+  "art",
+  "artificial-intelligence",
+  "automotive",
+  "beauty",
+  "bento-grid",
+  "biotechnology",
+  "blockchain",
+  "blog",
+  "book",
+  "bot",
+  "business",
+  "cms",
+  "coming-soon",
+  "community",
+  "corporate",
+  "course",
+  "creative",
+  "cryptocurrency",
+  "culture",
+  "defi",
+  "design",
+  "design-tools",
+  "development-tools",
+  "ecommerce",
+  "education",
+  "entertainment",
+  "event",
+  "fashion",
+  "film",
+  "finance",
+  "fintech",
+  "food-drinks",
+  "foundry",
+  "freelance",
+  "furniture-interiors",
+  "game",
+  "gradient",
+  "hardware",
+  "health-fitness",
+  "home-living",
+  "hosting",
+  "illustration",
+  "insurance",
+  "isometric",
+  "lifestyle",
+  "magazine",
+  "mail",
+  "marketing",
+  "marketplace",
+  "metaverse",
+  "minimal",
+  "miscellaneous",
+  "music",
+  "news",
+  "nft",
+  "no-code",
+  "open-source",
+  "outdoors-travel",
+  "pattern",
+  "photography",
+  "podcast",
+  "portfolio",
+  "product",
+  "product-management",
+  "productivity",
+  "prototype",
+  "real-estate",
+  "retro-style",
+  "saas",
+  "social-media",
+  "software",
+  "sports",
+  "studio",
+  "technology",
+  "typography",
+  "ventures",
+  "wearable",
+  "web3",
+  "wellness"
+ ]
+}

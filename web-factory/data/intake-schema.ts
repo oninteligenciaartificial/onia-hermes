@@ -198,6 +198,14 @@ export const webFactoryIntakeSchema = z.object({
           }),
       )
         .default([]),
+      proceso: z
+        .array(
+          z.object({
+            title: z.string().min(1),
+            description: z.string().min(1),
+          }),
+        )
+        .default([]),
     })
     .default({
       services: [],
@@ -205,6 +213,7 @@ export const webFactoryIntakeSchema = z.object({
       categories: [],
       products: [],
       faqs: [],
+      proceso: [],
     }),
   conversion: z
     .object({
@@ -257,6 +266,40 @@ export const webFactoryIntakeSchema = z.object({
       description: "",
       keywords: [],
       ogImage: "",
+    }),
+  /* Pedido de cotizacion/contacto de la web (circuito web → sistema). Claves en
+   * espanol porque pasan TAL CUAL al perfil (misma forma que data/schema.ts);
+   * traducirlas aca solo fabricaria un mapeo mas que mantener. */
+  cotizacion: z
+    .object({
+      titulo: z.string().default(""),
+      texto: z.string().default(""),
+      accion: z.string().default(""),
+      boton: z.string().default("Pedir cotizacion"),
+      nota: z.string().default(""),
+      campos: z
+        .array(
+          z.object({
+            nombre: z.string().min(1),
+            label: z.string().min(1),
+            tipo: z
+              .enum(["text", "email", "tel", "number", "date", "textarea", "select"])
+              .default("text"),
+            requerido: z.boolean().default(false),
+            opciones: z.array(z.string().min(1)).default([]),
+            placeholder: z.string().default(""),
+            autocomplete: z.string().default(""),
+          }),
+        )
+        .default([]),
+    })
+    .default({
+      titulo: "",
+      texto: "",
+      accion: "",
+      boton: "Pedir cotizacion",
+      nota: "",
+      campos: [],
     }),
   operations: z
     .object({
@@ -316,6 +359,15 @@ export function buildClientProfileFromIntake(input: unknown): ClientProfile {
     logoWide: intake.brand.logoWide,
     heroVideo: intake.media.heroVideo,
     heroPoster: intake.media.heroPoster || intake.media.heroImage,
+    // heroImage cumple doble rol: si no hay heroPoster, ES el hero (linea de
+    // arriba); si hay ambos y son distintos, pasa a ser la imagen secundaria
+    // (la que enciende la banda editorial del template clinic).
+    imagenSecundaria:
+      intake.media.heroPoster &&
+      intake.media.heroImage &&
+      intake.media.heroImage !== intake.media.heroPoster
+        ? intake.media.heroImage
+        : "",
     colores: {
       primary: intake.brand.colors.primary ?? "#0f766e",
       secondary: intake.brand.colors.secondary ?? "#1d4ed8",
@@ -345,6 +397,16 @@ export function buildClientProfileFromIntake(input: unknown): ClientProfile {
       : getUnique(products.map((product) => product.categoria)),
     productos: products,
     beneficios: intake.content.benefits,
+    credenciales: intake.business.trustProofs,
+    proceso: intake.content.proceso.map((paso) => ({
+      titulo: paso.title,
+      desc: paso.description,
+    })),
+    faq: intake.content.faqs.map((item) => ({
+      pregunta: item.question,
+      respuesta: item.answer,
+    })),
+    cotizacion: intake.cotizacion,
     referencias: references,
     cta: {
       texto: intake.conversion.primaryCtaText,

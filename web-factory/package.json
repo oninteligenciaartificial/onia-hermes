@@ -52,7 +52,8 @@
     "automation:vps:references": "node scripts/web-factory-vps-automation.mjs --mode references",
     "automation:vps:nuvia-check": "node scripts/web-factory-vps-automation.mjs --mode nuvia-check",
     "automation:vps:nuvia-watch": "node scripts/web-factory-vps-automation.mjs --mode nuvia-watch",
-    "automation:vps:smoke": "node scripts/web-factory-vps-automation.mjs --mode smoke"
+    "automation:vps:smoke": "node scripts/web-factory-vps-automation.mjs --mode smoke",
+    "typecheck:packages": "tsc --noEmit -p tsconfig.packages.json"
   },
   "keywords": [],
   "author": "",
@@ -73,6 +74,7 @@
     "@types/node": "^20.19.43",
     "playwright": "^1.61.1",
     "tsx": "^4.22.4",
+    "typescript": "^5.9.3",
     "vitest": "^4.1.8"
   }
 }

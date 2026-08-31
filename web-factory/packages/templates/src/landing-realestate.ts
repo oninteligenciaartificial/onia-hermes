@@ -286,7 +286,10 @@ img {
 
 /* Surface role from the model's palette (white cards over the cream field). */
 .wf-re {
-  --color-surface: color-mix(in srgb, var(--color-bg) 55%, #ffffff);
+  /* Tarjeta = bg apenas levantado hacia el fg (patron de logistics). La version
+     anterior mezclaba con #ffffff literal: en claro daba tarjeta, en dark
+     fabricaba un gris medio #797c7d que hundia TODO el contraste del bloque. */
+  --color-surface: color-mix(in srgb, var(--color-fg) 5%, var(--color-bg));
 }
 
 .wf-skip {

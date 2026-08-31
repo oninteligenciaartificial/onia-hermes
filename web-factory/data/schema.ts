@@ -152,6 +152,11 @@ const dashboardKpiSchema = z.object({
   delta: z.string().default(""),
   trend: z.enum(["up", "down", "flat"]).default("flat"),
   context: z.string().default(""),
+  // Celda hero (card oscura de acento) y sparkline integrada en el KPI — el
+  // template ya los soporta; el schema los dejaba caer. Aprendido de Tabler/
+  // shadcn: el KPI cuenta la tendencia en la propia tarjeta, no en otro chart.
+  variant: z.enum(["default", "accent"]).optional(),
+  spark: z.array(z.number()).optional(),
 });
 
 const dashboardPointSchema = z.object({
@@ -182,6 +187,41 @@ const dashboardTableSchema = z.object({
   rows: z.array(z.array(z.string())).default([]),
 });
 
+// Propuestas del agente. NO es un chat: cada propuesta viaja pegada a la
+// evidencia que la justifica y se aprueba o se descarta (human-in-the-loop, que
+// es como funciona el modulo `agents` del core). El patron sale del pattern bank
+// ratificado el 2026-08-17: "propuestas del agente INLINE junto a su evidencia".
+const dashboardAgentActionSchema = z.object({
+  titulo: z.string().min(1),
+  /** Que haria exactamente si se aprueba. En lenguaje del duenio, no del sistema. */
+  detalle: z.string().default(""),
+  /** El dato que la justifica. Sin esto es una corazonada con botones. */
+  evidencia: z.string().default(""),
+  /** Plata o tiempo en juego. Es lo que hace que valga la pena mirarlo. */
+  impacto: z.string().default(""),
+  urgencia: z.enum(["alta", "media", "baja"]).default("media"),
+  canal: z.string().default(""),
+});
+
+const dashboardAgentSchema = z.object({
+  titulo: z.string().default("Tu asistente"),
+  /** Una linea de contexto: que reviso y cuando. */
+  resumen: z.string().default(""),
+  acciones: z.array(dashboardAgentActionSchema).default([]),
+});
+
+const dashboardNoteSchema = z.object({
+  texto: z.string().min(1),
+  meta: z.string().default(""),
+  /** A que cuelga la nota (un paciente, una cita, un pendiente). Vacio = suelta. */
+  ancla: z.string().default(""),
+});
+
+const dashboardNotesSchema = z.object({
+  titulo: z.string().default("Notas"),
+  items: z.array(dashboardNoteSchema).default([]),
+});
+
 const dashboardSchema = z
   .object({
     title: z.string().default("Panel de control"),
@@ -191,6 +231,8 @@ const dashboardSchema = z
     kpis: z.array(dashboardKpiSchema).default([]),
     charts: z.array(dashboardChartSchema).default([]),
     table: dashboardTableSchema.default({ title: "Detalle", columns: [], rows: [] }),
+    agente: dashboardAgentSchema.optional(),
+    notas: dashboardNotesSchema.optional(),
   })
   .default({
     title: "Panel de control",

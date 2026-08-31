@@ -1,4 +1,5 @@
 import { clientTokenCss } from "@onia/tokens";
+import { renderFontLinks } from "./font-links";
 
 export type DashboardKpi = {
   label: string;
@@ -9,7 +10,7 @@ export type DashboardKpi = {
   /** "accent": hero KPI cell as a solid dark accent card (pattern bank: Fireart 25241984). */
   variant?: "default" | "accent";
   /** Integrated sparkline drawn inside the card, under the figure (pattern bank: Stakent 23902428). */
-  spark?: DashboardPoint[];
+  spark?: number[];
 };
 
 /** `pending: true` renders the point as a diagonal-hatch outline bar (pattern bank: Fireart 25241984). */
@@ -50,6 +51,33 @@ export type DashboardTable = {
   rows: string[][];
 };
 
+/**
+ * Familia mono de los datos. Nuestro propio banco de patrones lo pide para
+ * SaaS/producto ("datos Spline Sans Mono con tabular-nums") y ademas resuelve un
+ * defecto real: con UNA sola familia para todo, las cifras y las etiquetas pesan
+ * igual y el panel se lee plano. El mono separa el dato del texto sin gritar.
+ */
+const DASHBOARD_MONO = "Spline Sans Mono";
+
+/** Una propuesta del agente: SIEMPRE con la evidencia que la justifica al lado. */
+export type DashboardAgentAction = {
+  titulo: string;
+  detalle: string;
+  evidencia: string;
+  impacto: string;
+  urgencia: "alta" | "media" | "baja";
+  canal: string;
+};
+
+export type DashboardAgent = {
+  titulo: string;
+  resumen: string;
+  acciones: DashboardAgentAction[];
+};
+
+export type DashboardNote = { texto: string; meta: string; ancla: string };
+export type DashboardNotes = { titulo: string; items: DashboardNote[] };
+
 export type DashboardData = {
   title: string;
   subtitle: string;
@@ -59,6 +87,8 @@ export type DashboardData = {
   charts: DashboardChart[];
   table: DashboardTable;
   lists?: DashboardProgressList[];
+  agente?: DashboardAgent;
+  notas?: DashboardNotes;
 };
 
 export type DashboardClient = {
@@ -99,6 +129,7 @@ export function renderDashboardBody(client: DashboardClient): string {
       <div class="wf-dash-main">
         ${renderTopbar(client)}
         ${renderKpis(dash.kpis)}
+        ${renderAgentAndNotes(dash.agente, dash.notas)}
         ${renderCharts(dash.charts)}
         ${renderLists(dash.lists ?? [])}
         ${renderTable(dash.table)}
@@ -177,6 +208,96 @@ function renderKpis(kpis: DashboardKpi[]): string {
         </section>`;
 }
 
+/**
+ * Banda "que hago ahora": propuestas del agente + notas, lado a lado.
+ *
+ * Va ARRIBA de los graficos a proposito. Los KPI dicen que paso y los graficos
+ * como viene; esta banda es la unica parte del panel que dice QUE HACER, y es lo
+ * que el duenio mira cuando abre a la manana. Enterrarla abajo la vuelve adorno.
+ */
+function renderAgentAndNotes(agent?: DashboardAgent, notes?: DashboardNotes): string {
+  if (!agent && !notes) return "";
+  return `
+        <section class="wf-dash-act" aria-label="Acciones sugeridas y notas">
+          ${agent ? renderAgent(agent) : ""}
+          ${notes ? renderNotes(notes) : ""}
+        </section>`;
+}
+
+function renderAgent(agent: DashboardAgent): string {
+  if (!agent.acciones.length) {
+    return `<article class="wf-agent">
+            <div class="wf-agent-head">
+              <h2>${escapeHtml(agent.titulo)}</h2>
+            </div>
+            ${renderEmpty("Nada que aprobar", "Cuando el asistente encuentre algo que valga la pena, aparece aca.")}
+          </article>`;
+  }
+
+  const acciones = agent.acciones
+    .map(
+      (accion) => `
+              <li class="wf-agent-item wf-agent-item--${accion.urgencia}">
+                <div class="wf-agent-item-main">
+                  <p class="wf-agent-item-title">${escapeHtml(accion.titulo)}</p>
+                  ${accion.detalle ? `<p class="wf-agent-item-detail">${escapeHtml(accion.detalle)}</p>` : ""}
+                  ${
+                    accion.evidencia
+                      ? `<p class="wf-agent-item-why"><span class="wf-agent-why-label">Porque</span> ${escapeHtml(
+                          accion.evidencia,
+                        )}</p>`
+                      : ""
+                  }
+                </div>
+                <div class="wf-agent-item-side">
+                  ${accion.impacto ? `<span class="wf-agent-impact">${escapeHtml(accion.impacto)}</span>` : ""}
+                  ${accion.canal ? `<span class="wf-agent-channel">${escapeHtml(accion.canal)}</span>` : ""}
+                  <div class="wf-agent-actions">
+                    <button type="button" class="wf-agent-ok">Aprobar</button>
+                    <button type="button" class="wf-agent-no">Descartar</button>
+                  </div>
+                </div>
+              </li>`,
+    )
+    .join("");
+
+  return `
+          <article class="wf-agent" data-reveal>
+            <div class="wf-agent-head">
+              <h2>${escapeHtml(agent.titulo)}</h2>
+              ${agent.resumen ? `<p class="wf-agent-sub">${escapeHtml(agent.resumen)}</p>` : ""}
+            </div>
+            <ul class="wf-agent-list">${acciones}</ul>
+          </article>`;
+}
+
+function renderNotes(notes: DashboardNotes): string {
+  const items = notes.items.length
+    ? notes.items
+        .map(
+          (nota) => `
+              <li class="wf-note">
+                ${nota.ancla ? `<span class="wf-note-ancla">${escapeHtml(nota.ancla)}</span>` : ""}
+                <p class="wf-note-text">${escapeHtml(nota.texto)}</p>
+                ${nota.meta ? `<span class="wf-note-meta">${escapeHtml(nota.meta)}</span>` : ""}
+              </li>`,
+        )
+        .join("")
+    : "";
+
+  return `
+          <article class="wf-notes" data-reveal>
+            <div class="wf-notes-head">
+              <h2>${escapeHtml(notes.titulo)}</h2>
+            </div>
+            ${
+              items
+                ? `<ul class="wf-notes-list">${items}</ul>`
+                : renderEmpty("Sin notas", "Lo que anotes queda a la vista del equipo.")
+            }
+          </article>`;
+}
+
 function renderCharts(charts: DashboardChart[]): string {
   if (!charts.length) {
     return "";
@@ -185,7 +306,7 @@ function renderCharts(charts: DashboardChart[]): string {
   const cards = charts
     .map(
       (chart) => `
-          <article class="wf-chart-card" data-reveal>
+          <article class="wf-chart-card wf-chart-card--${chart.type}" data-reveal>
             <div class="wf-chart-head">
               <h2>${escapeHtml(chart.title)}</h2>
               ${chart.unit ? `<span class="wf-chart-unit">${escapeHtml(chart.unit)}</span>` : ""}
@@ -298,56 +419,112 @@ const PAD_B = 22;
 const PLOT_W = CHART_W - PAD_L - PAD_R;
 const PLOT_H = CHART_H - PAD_T - PAD_B;
 
+// Escalera de topes "redondos". La vieja saltaba 1 > 2 > 5 > 10 y con eso un maximo
+// de 340 se iba a un eje de 500: el 32% del plot quedaba muerto y la serie se veia
+// aplastada contra el piso. Con estos peldanos 340 cae en 350 (2,9% de aire) y las
+// mitades siguen siendo cifras leibles (350/2 = 175), que es lo que la grilla dibuja.
+const NICE_FRACTIONS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7.5, 8, 10];
+
 function niceMax(value: number): number {
   if (value <= 0) {
     return 1;
   }
-  const exponent = Math.floor(Math.log10(value));
-  const base = Math.pow(10, exponent);
+  const base = Math.pow(10, Math.floor(Math.log10(value)));
   const fraction = value / base;
-  const niceFraction = fraction <= 1 ? 1 : fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10;
-  return niceFraction * base;
+  return (NICE_FRACTIONS.find((candidate) => fraction <= candidate) ?? 10) * base;
 }
 
 function formatTick(value: number): string {
-  if (value >= 1000) {
-    return `${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}k`;
+  const magnitude = Math.abs(value);
+  if (magnitude >= 1000) {
+    return `${(value / 1000).toFixed(magnitude % 1000 === 0 ? 0 : 1)}k`;
   }
   return `${Math.round(value)}`;
 }
 
-function renderGrid(max: number): string {
-  return [0, 0.5, 1]
+/** Escala vertical de un chart, con su linea de cero. */
+export interface ChartScale {
+  min: number;
+  max: number;
+  zeroY: number;
+  yFor: (value: number) => number;
+}
+
+// El dominio se calcula con los valores REALES, negativos incluidos. Antes cada
+// lectura pasaba por `Math.max(value, 0)`: un reembolso o un churn se dibujaba con
+// altura cero mientras el `<title>` seguia diciendo el numero de verdad, o sea el
+// grafico MENTIA y el tooltip lo desmentia. Ahora el cero es una linea interna y
+// lo negativo cuelga debajo.
+export function chartScale(values: number[]): ChartScale {
+  const rawMax = Math.max(...values, 0);
+  const rawMin = Math.min(...values, 0);
+  const max = rawMax > 0 ? niceMax(rawMax) : 0;
+  const min = rawMin < 0 ? -niceMax(-rawMin) : 0;
+  const span = max - min || 1;
+  const top = span === 1 && max === 0 ? 1 : max;
+  const yFor = (value: number): number => PAD_T + PLOT_H - ((value - min) / (top - min)) * PLOT_H;
+  return { min, max: top, zeroY: yFor(0), yFor };
+}
+
+function renderGrid(scale: ChartScale): string {
+  // Con dominio negativo los peldanos son min / 0 / max, y el cero se lleva la linea
+  // solida: es la referencia que dice de que lado cae cada barra.
+  const ticks = Array.from(
+    new Set(scale.min < 0 ? [scale.min, 0, scale.max] : [0, scale.max / 2, scale.max]),
+  );
+  return ticks
     .map((tick) => {
-      const y = PAD_T + PLOT_H - tick * PLOT_H;
+      const y = scale.yFor(tick);
       const dash = tick === 0 ? "" : ' stroke-dasharray="2 3"';
       return (
         `<line x1="${PAD_L}" y1="${y.toFixed(1)}" x2="${CHART_W - PAD_R}" y2="${y.toFixed(
           1,
         )}" stroke="var(--border)" stroke-width="1"${dash}></line>` +
         `<text x="${PAD_L - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="wf-chart-axis">${formatTick(
-          tick * max,
+          tick,
         )}</text>`
       );
     })
     .join("");
 }
 
-// Token-driven palette for multi-series and donut slices (no hardcoded brand).
-const SERIES_COLORS = [
-  "var(--color-primary)",
-  "var(--color-accent)",
-  "var(--color-secondary)",
-  "color-mix(in srgb, var(--color-primary) 50%, var(--color-bg))",
-  "color-mix(in srgb, var(--color-accent) 50%, var(--color-bg))",
-  "color-mix(in srgb, var(--color-secondary) 50%, var(--color-bg))",
+// Tema categórico FIJO para series/donut: la tinta de dato NO sale de la marca.
+// Con primary=accent (Onia todo verde) las series salían indistinguibles.
+//
+// Los 6 hues NO se eligen a ojo: el orden salió de enumerar las 720 permutaciones
+// y validar cada una con el validador de la skill `dataviz` contra los surfaces
+// REALES de este template (cream #f6f2ea / oscuro #161c22), en AMBOS modos.
+// Ganador `aqua > blue > orange > violet > yellow > magenta`: peor ΔE adyacente
+// 13.2 (el piso del gate es 8). La tanda anterior, elegida a criterio, FALLABA:
+// el verde de marca daba chroma 0.097 (leía gris) y terracota↔oliva daban ΔE 4.9
+// en deutan — el mismo color para quien tiene daltonismo verde.
+//
+// Se emiten como custom properties, no como hex incrustados en el SVG, porque el
+// dark mode necesita SUS PROPIOS steps (no un flip): un hex quemado en el atributo
+// del path no puede cambiar con el tema. Los pares light/dark salen de la paleta
+// de referencia de `dataviz`, ya validada como conjunto — cero hex inventados.
+const SERIES_COUNT = 6;
+const SERIES_COLORS = Array.from({ length: SERIES_COUNT }, (_, index) => `var(--wf-series-${index + 1})`);
+
+/** Pares light/dark del tema categórico. Índice = slot de serie. */
+const SERIES_THEME: ReadonlyArray<{ light: string; dark: string; hue: string }> = [
+  { hue: "aqua", light: "#1baf7a", dark: "#199e70" },
+  { hue: "blue", light: "#2a78d6", dark: "#3987e5" },
+  { hue: "orange", light: "#eb6834", dark: "#d95926" },
+  { hue: "violet", light: "#4a3aa7", dark: "#9085e9" },
+  { hue: "yellow", light: "#eda100", dark: "#c98500" },
+  { hue: "magenta", light: "#e87ba4", dark: "#d55181" },
 ];
+
+function seriesVars(mode: "light" | "dark"): string {
+  return SERIES_THEME.map((slot, index) => `  --wf-series-${index + 1}: ${slot[mode]}; /* ${slot.hue} */`).join("\n");
+}
 
 function hasChartData(chart: DashboardChart): boolean {
   return chart.points.length > 0 || (chart.series ?? []).some((series) => series.points.length > 0);
 }
 
-function renderChart(chart: DashboardChart): string {
+export function renderChart(chart: DashboardChart): string {
   switch (chart.type) {
     case "donut":
       return renderDonutChart(chart);
@@ -385,47 +562,53 @@ function chartLabel(chart: DashboardChart): string {
 
 function renderBarChart(chart: DashboardChart): string {
   const points = chart.points.length ? chart.points : chart.series?.[0]?.points ?? [];
-  const max = niceMax(Math.max(...points.map((point) => Math.max(point.value, 0)), 1));
+  const scale = chartScale(points.map((point) => point.value));
   const count = points.length;
-  const gap = count > 12 ? 3 : 8;
-  const barWidth = Math.max(2, (PLOT_W - gap * (count - 1)) / count);
+  // El ancho sale de repartir el plot en ranuras y el gap se recorta si no cabe.
+  // Antes era al reves: gap fijo y barra con piso de 2px, asi que a partir de ~58
+  // puntos el ancho pedido excedia el plot y las ultimas barras se dibujaban FUERA
+  // del viewBox — la serie se recortaba sin que nada lo dijera.
+  const slot = count ? PLOT_W / count : PLOT_W;
+  const gap = Math.min(count > 12 ? 3 : 8, slot * 0.35);
+  const barWidth = Math.max(1, slot - gap);
 
   const hasPending = points.some((point) => point.pending);
   // Diagonal-hatch fill for pending/future bars (pattern bank: Fireart 25241984).
   // Identical defs may repeat across inline charts; the shared id resolves to the same drawing.
   const hatchDefs = hasPending
-    ? `<defs><pattern id="wf-hatch" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--color-primary)" stroke-width="1.6" opacity="0.55"></line></pattern></defs>`
+    ? `<defs><pattern id="wf-hatch" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--wf-series-1)" stroke-width="1.6" opacity="0.55"></line></pattern></defs>`
     : "";
 
   const bars = points
     .map((point, index) => {
-      const height = (Math.max(point.value, 0) / max) * PLOT_H;
-      const x = PAD_L + index * (barWidth + gap);
-      const y = PAD_T + PLOT_H - height;
+      const valueY = scale.yFor(point.value);
+      const height = Math.abs(valueY - scale.zeroY);
+      const x = PAD_L + index * slot + gap / 2;
+      const y = Math.min(valueY, scale.zeroY);
       const paint = point.pending
-        ? `fill="url(#wf-hatch)" stroke="var(--color-primary)" stroke-opacity="0.45" stroke-width="1"`
-        : `fill="var(--color-primary)"`;
+        ? `fill="url(#wf-hatch)" stroke="var(--wf-series-1)" stroke-opacity="0.45" stroke-width="1"`
+        : `fill="var(--wf-series-1)"`;
       const pendingNote = point.pending ? " (pendiente)" : "";
       return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(
         1,
-      )}" rx="3" ${paint}><title>${escapeHtml(point.label)}: ${point.value}${pendingNote}</title></rect>`;
+      )}" rx="${Math.min(3, barWidth / 2, height / 2).toFixed(1)}" ${paint}><title>${escapeHtml(point.label)}: ${point.value}${pendingNote}</title></rect>`;
     })
     .join("");
 
-  const labels = renderChartLabels(points, (index) => PAD_L + index * (barWidth + gap) + barWidth / 2);
+  const labels = renderChartLabels(points, (index) => PAD_L + index * slot + slot / 2);
 
-  return chartSvg(`${hatchDefs}${renderGrid(max)}${bars}${labels}`, chartLabel(chart));
+  return chartSvg(`${hatchDefs}${renderGrid(scale)}${bars}${labels}`, chartLabel(chart));
 }
 
 function renderLineChart(chart: DashboardChart): string {
   const series =
     chart.series && chart.series.length ? chart.series : [{ name: chart.title, points: chart.points }];
-  const max = niceMax(Math.max(...series.flatMap((entry) => entry.points.map((point) => point.value)), 1));
+  const scale = chartScale(series.flatMap((entry) => entry.points.map((point) => point.value)));
   const multi = series.length > 1;
 
   const xFor = (index: number, count: number): number =>
     PAD_L + (count <= 1 ? PLOT_W / 2 : (index / (count - 1)) * PLOT_W);
-  const yFor = (value: number): number => PAD_T + PLOT_H - (Math.max(value, 0) / max) * PLOT_H;
+  const yFor = scale.yFor;
 
   const lines = series
     .map((entry, seriesIndex) => {
@@ -436,10 +619,10 @@ function renderLineChart(chart: DashboardChart): string {
         .join(" ");
       const area = multi
         ? ""
-        : `<polygon points="${xFor(0, count).toFixed(1)},${(PAD_T + PLOT_H).toFixed(1)} ${line} ${xFor(
+        : `<polygon points="${xFor(0, count).toFixed(1)},${scale.zeroY.toFixed(1)} ${line} ${xFor(
             count - 1,
             count,
-          ).toFixed(1)},${(PAD_T + PLOT_H).toFixed(1)}" fill="${color}" fill-opacity="0.12"></polygon>`;
+          ).toFixed(1)},${scale.zeroY.toFixed(1)}" fill="${color}" fill-opacity="0.12"></polygon>`;
       const dots = entry.points
         .map(
           (point, index) =>
@@ -457,7 +640,7 @@ function renderLineChart(chart: DashboardChart): string {
   const labelEntry = series.reduce((longest, entry) => (entry.points.length > longest.points.length ? entry : longest), series[0]);
   const labels = renderChartLabels(labelEntry.points, (index) => xFor(index, labelEntry.points.length));
 
-  const svg = chartSvg(`${renderGrid(max)}${lines}${labels}`, chartLabel(chart));
+  const svg = chartSvg(`${renderGrid(scale)}${lines}${labels}`, chartLabel(chart));
   if (!multi) {
     return svg;
   }
@@ -523,36 +706,40 @@ function renderSparkline(chart: DashboardChart): string {
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
   const last = points[count - 1];
   const dot = last
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="var(--color-primary)"></circle>`
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="var(--wf-series-1)"></circle>`
     : "";
 
+  // `preserveAspectRatio="none"` estiraba el viewBox al ancho de la tarjeta y con
+  // el estiron se deformaba TODO lo dibujado: el trazo perdia grosor uniforme y el
+  // punto final dejaba de ser un circulo para volverse una elipse. `meet` mantiene
+  // la proporcion; la CSS de .wf-sparkline ya fija el aspect-ratio, asi que el
+  // ancho se sigue llenando igual.
   return `<svg class="wf-chart wf-sparkline" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttribute(
     chartLabel(chart),
-  )}" preserveAspectRatio="none"><polygon points="${area}" fill="var(--color-primary)" fill-opacity="0.12"></polygon><polyline points="${line}" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
+  )}" preserveAspectRatio="xMidYMid meet"><polygon points="${area}" fill="var(--wf-series-1)" fill-opacity="0.12"></polygon><polyline points="${line}" fill="none" stroke="var(--wf-series-1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
 }
 
 /** Sparkline drawn inside a KPI card, under the figure (pattern bank: Stakent 23902428).
  *  Uses currentColor so it inherits the card's ink (accent variant included). */
-function renderKpiSpark(points: DashboardPoint[], label: string): string {
-  const values = points.map((point) => point.value);
+function renderKpiSpark(values: number[], label: string): string {
   const max = Math.max(...values, 1);
   const min = Math.min(...values, 0);
   const range = max - min || 1;
   const width = 320;
   const height = 44;
   const pad = 4;
-  const count = points.length;
+  const count = values.length;
 
   const xFor = (index: number): number =>
     pad + (count <= 1 ? (width - 2 * pad) / 2 : (index / (count - 1)) * (width - 2 * pad));
   const yFor = (value: number): number =>
     height - pad - ((value - min) / range) * (height - 2 * pad);
 
-  const line = points.map((point, index) => `${xFor(index).toFixed(1)},${yFor(point.value).toFixed(1)}`).join(" ");
+  const line = values.map((v, index) => `${xFor(index).toFixed(1)},${yFor(v).toFixed(1)}`).join(" ");
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
-  const last = points[count - 1];
-  const dot = last
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="currentColor"></circle>`
+  const last = count ? values[count - 1] : undefined;
+  const dot = last !== undefined
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="3" fill="currentColor"></circle>`
     : "";
 
   return `<svg class="wf-kpi-spark" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttribute(
@@ -565,9 +752,12 @@ function renderChartLabels(
   xFor: (index: number) => number,
 ): string {
   const step = points.length > 8 ? Math.ceil(points.length / 6) : 1;
+  // Se cuenta DESDE EL FINAL. Con `index % step` el ultimo punto quedaba sin rotulo
+  // salvo casualidad, y el eje mentia sobre donde termina la serie.
+  const lastIndex = points.length - 1;
   return points
     .map((point, index) =>
-      index % step === 0
+      (lastIndex - index) % step === 0
         ? `<text x="${xFor(index).toFixed(1)}" y="${CHART_H - 6}" text-anchor="middle" class="wf-chart-axis">${escapeHtml(
             point.label,
           )}</text>`
@@ -624,6 +814,7 @@ export function renderDashboardDocument(client: DashboardClient): string {
     <meta property="og:title" content="${escapeHtml(client.seo.title)}">
     <meta property="og:description" content="${escapeHtml(client.seo.description)}">
     ${ogImage}
+    ${renderFontLinks(client.tipografia, [DASHBOARD_MONO])}
     <script>try{var t=localStorage.getItem("wf-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <link rel="stylesheet" href="./site.css">
   </head>
@@ -693,6 +884,8 @@ body {
   font-family: var(--font-body);
   --wf-pos: #166534;
   --wf-neg: #b91c1c;
+  --wf-font-mono: "${DASHBOARD_MONO}", ui-monospace, "SFMono-Regular", "Menlo", monospace;
+${seriesVars("light")}
 }
 
 /* Dark mode: the dark green/red status text fails contrast on the dark tinted
@@ -701,12 +894,14 @@ body {
   :root:not([data-theme="light"]) body {
     --wf-pos: #4ade80;
     --wf-neg: #f87171;
+${seriesVars("dark")}
   }
 }
 
 [data-theme="dark"] body {
   --wf-pos: #4ade80;
   --wf-neg: #f87171;
+${seriesVars("dark")}
 }
 
 a {
@@ -922,7 +1117,11 @@ h1, h2, h3 {
   width: calc(100% + 36px);
   height: 44px;
   margin: 4px -18px -16px;
-  color: var(--color-primary);
+  /* El sparkline del KPI es DATO, asi que su tinta sale del tema categorico y no
+     de la marca: con --color-primary quedaban barras aqua y sparklines verde
+     marca en la misma pantalla, dos colores para lo mismo. En la celda hero
+     sigue heredando la tinta de la card, que ahi es lo unico legible. */
+  color: var(--wf-series-1);
 }
 
 .wf-kpi--accent .wf-kpi-spark {
@@ -935,6 +1134,227 @@ h1, h2, h3 {
   font-weight: 650;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+}
+
+/* Cifras de ancho fijo: sin esto los digitos cambian de ancho al actualizarse y
+   el numero "baila" en el lugar; en la tabla, ademas, las columnas no alinean.
+   7 de 8 dashboards del corpus lo hacen (2026-08-30-como-se-hace-un-dashboard).
+   Y van en la familia MONO: con una sola familia para todo, cifra y etiqueta
+   pesan igual y el panel se lee plano. El mono separa el dato del texto. */
+.wf-kpi-value,
+.wf-kpi-delta,
+.wf-chart-axis,
+.wf-agent-impact {
+  font-family: var(--wf-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* La tabla lleva tabular-nums para que las columnas alineen, pero NO la familia
+   mono: las celdas mezclan cifras con nombres propios, y un "Marta Rios" en mono
+   parece un log de sistema. El mono es para el DATO, no para el texto. */
+.wf-dash-table td {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Banda "que hago ahora": agente + notas ───────────────────────────────
+   Grid 7/5 en vez de mitades: la columna del agente carga texto y botones, la
+   de notas es una lista corta. Partirlo por la mitad dejaba la izquierda
+   apretada y la derecha vacia. */
+.wf-dash-act {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+@media (max-width: 900px) {
+  .wf-dash-act {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wf-agent,
+.wf-notes {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  min-width: 0;
+}
+
+.wf-agent-head,
+.wf-notes-head {
+  margin-bottom: 12px;
+}
+
+.wf-agent-head h2,
+.wf-notes-head h2 {
+  font-size: 1.05rem;
+}
+
+.wf-agent-sub {
+  margin-top: 3px;
+  font-size: 0.82rem;
+  color: var(--muted-foreground);
+}
+
+.wf-agent-list,
+.wf-notes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wf-agent-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 0 14px 12px;
+  border-top: 1px solid var(--border);
+  /* La urgencia entra por una barra en el borde, no por el fondo de la fila:
+     un fondo tenido compite con la tinta de dato de los charts de al lado. */
+  border-left: 3px solid transparent;
+}
+
+.wf-agent-item:first-child {
+  border-top: 0;
+}
+
+.wf-agent-item--alta {
+  border-left-color: var(--wf-neg);
+}
+
+.wf-agent-item--media {
+  border-left-color: var(--wf-series-5);
+}
+
+.wf-agent-item--baja {
+  border-left-color: var(--border);
+}
+
+.wf-agent-item-main {
+  min-width: 0;
+}
+
+.wf-agent-item-title {
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.wf-agent-item-detail {
+  margin-top: 3px;
+  font-size: 0.86rem;
+  color: var(--muted-foreground);
+}
+
+/* La evidencia es lo que separa una propuesta de una corazonada con botones. */
+.wf-agent-item-why {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+
+.wf-agent-why-label {
+  font-weight: 600;
+  color: var(--color-fg);
+  opacity: 0.75;
+}
+
+.wf-agent-item-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.wf-agent-impact {
+  font-weight: 600;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.wf-agent-channel {
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.wf-agent-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.wf-agent-ok,
+.wf-agent-no {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  min-height: 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.wf-agent-ok {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: transparent;
+}
+
+.wf-agent-ok:hover {
+  background: color-mix(in srgb, var(--color-primary) 86%, var(--color-fg) 14%);
+}
+
+.wf-agent-no {
+  background: transparent;
+  color: var(--muted-foreground);
+}
+
+.wf-agent-no:hover {
+  background: color-mix(in srgb, var(--color-fg) 6%, transparent);
+}
+
+.wf-agent-ok:focus-visible,
+.wf-agent-no:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.wf-note {
+  padding: 11px 0;
+  border-top: 1px solid var(--border);
+}
+
+.wf-note:first-child {
+  border-top: 0;
+}
+
+.wf-note-ancla {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 3px;
+}
+
+.wf-note-text {
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.wf-note-meta {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.74rem;
+  color: var(--muted-foreground);
 }
 
 .wf-kpi-value {
@@ -988,6 +1408,31 @@ h1, h2, h3 {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
+}
+
+/* El grid iguala la altura de la fila a la tarjeta mas alta (la del donut, que
+   lleva leyenda de dos lineas), pero el chart tiene aspect-ratio fijo y no crece:
+   medido, sobraban 73px MUERTOS al pie de "Ingresos por mes". Con la tarjeta en
+   columna y el chart con margen automatico, el sobrante se reparte arriba y abajo
+   en vez de amontonarse al fondo. No se deforma nada: estirar el SVG deformaria
+   tambien las etiquetas de los ejes, que son <text> dentro del mismo viewBox. */
+.wf-chart-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.wf-chart-card .wf-chart,
+.wf-chart-card .wf-donut-wrap {
+  margin-block: auto;
+}
+
+/* El sparkline es ancho y bajo: en una celda de un tercio quedaba solo en su
+   propia fila, con dos tercios vacios al lado. Ocupa dos columnas, que es la
+   forma que la serie larga pide (12 semanas no entran legibles en 365px). */
+@media (min-width: 901px) {
+  .wf-chart-card--sparkline {
+    grid-column: span 2;
+  }
 }
 
 .wf-chart-head,

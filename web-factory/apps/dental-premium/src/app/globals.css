@@ -1,0 +1,75 @@
+/* Tokens — dirección salud-premium medida en el corpus (One Medical, Parsley,
+   Frequency): neutros CÁLIDOS, verde profundo como superficie/CTA, acento tierra
+   desaturado. Cero azul dental genérico. */
+:root {
+  --paper: #f8f5ef;
+  --paper-dim: #efe9df;
+  --ink: #172420;
+  --ink-soft: #4a5751;
+  --green: #0d6b5c;
+  --green-deep: #0b3b32;
+  --honey: #c98a3b;
+  --line: color-mix(in srgb, var(--ink) 12%, transparent);
+  --on-green: #f3faf6;
+
+  --font-display: var(--font-fraunces), "Georgia", serif;
+  --font-body: var(--font-dmsans), system-ui, sans-serif;
+
+  --wrap: min(1180px, calc(100% - 2.4rem));
+  --r-block: 1.5rem;
+  --r-pill: 999px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+
+.wrap { width: var(--wrap); margin-inline: auto; }
+
+/* Botones */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  min-height: 52px;
+  padding: 0 26px;
+  border-radius: var(--r-pill);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  transition: transform 0.2s var(--ease-out), background 0.2s;
+}
+.btn--solid { background: var(--green); color: var(--on-green); }
+.btn--solid:hover { transform: translateY(-2px); background: var(--green-deep); }
+.btn--ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn--ghost:hover { border-color: var(--green); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}

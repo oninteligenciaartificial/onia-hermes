@@ -9,6 +9,26 @@
       "mode": "structure-and-component-discovery"
     },
     {
+      "url": "https://stitch.withgoogle.com/",
+      "mode": "design-generation-tool",
+      "note": "Agregado 2026-08-29 (captura de Sergio). Hay MCP de Stitch conectado en Claude Code: generar pantallas/variantes como REFERENCIA de dirección, nunca como entregable directo."
+    },
+    {
+      "url": "https://haikei.app/",
+      "mode": "generative-svg-assets",
+      "note": "Agregado 2026-08-29. Fondos/blobs/waves SVG generativos para bandas y texturas de secciones — assets propios, sin licencia de terceros."
+    },
+    {
+      "url": "https://rotato.app/",
+      "mode": "device-mockup-renders",
+      "note": "Agregado 2026-08-29. Mockups 3D de dispositivo para mostrar dashboards/capturas en heros — la captura del producto sigue siendo REAL (regla: la UI nunca la dibuja la IA)."
+    },
+    {
+      "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "mode": "skill-reference",
+      "note": "Agregado 2026-08-29. Ya instalada como skill ui-ux-pro-max en el stack de diseño; el repo es la fuente de updates."
+    },
+    {
       "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
       "mode": "screenshot-and-mood-only"
     },
