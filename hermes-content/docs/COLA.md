@@ -291,13 +291,27 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
-- [ ] 🔒 **La mina de `page_location` en GA (en arreglo ahora).** `GoogleAnalytics.tsx:64` manda
-      `window.location.href` **completo** — con todos los query params — anulando el allowlist
-      `safeQueryParams` que la línea de arriba aplica cuidadosamente a `page_path`. Hoy es
-      inofensivo porque GA está apagado, pero **encenderlo es una env var**, y el día que alguien
-      la ponga, un token en `/login?...` o `/register?...` se va a Google y no se puede deshacer.
-      Lo encontró el subagente que fue a decidir si GA era código muerto — no estaba en ninguna
-      lista.
+- [x] 🔒 **La mina de `page_location` en GA — CERRADA EN `master` el 2026-08-31, y estaba
+      declarada cerrada dos veces sin estarlo.** El ítem figuraba `[x]` más abajo en este mismo
+      archivo citando *"PR #59 mergeado"*. El PR existe (`4dce75e`) pero
+      `git branch --contains` lo ubica **sólo** en `feat/ui-dashboard-piloto` y
+      `fix/aviso-leads-canal-propio`: **nunca entró a `master`**, y `GoogleAnalytics.tsx:64`
+      seguía mandando `window.location.href` completo, anulando el allowlist `safeQueryParams`
+      que la línea de arriba aplica a `page_path`. **Mismo patrón que el WhatsApp placeholder:
+      un carril declara el arreglo y la superficie que importa no cambia.**
+      **Lección de método: "PR mergeado" no es evidencia — `git branch --contains <sha>` sí.**
+      Un ítem se cierra contra la rama que se despliega, no contra la que lo escribió.
+      Se trajo el trabajo de #59 tal cual en vez de duplicarlo, porque es más fuerte que el
+      parche de una línea: extrae `components/analytics/page-view-params.ts` como módulo puro
+      con sus 3 tests, y **estrecha el tipo del parámetro a `{ origin }`** — el regreso lo frena
+      `tsc`, no la buena voluntad. Encima queda la guarda de fuente nueva
+      (`__tests__/url-cruda-fuera-de-analytics.test.ts`), que persigue la LECTURA de la URL cruda
+      (`location.href`, `document.URL`) en `app/`, `components/` y `lib/` y **permite la
+      asignación** (redirigir es idioma normal; una guarda que ladra sobre código legítimo se
+      termina desactivando). Se vio en ROJO señalando la línea 64 antes del fix.
+      Gates: tsc 0 · eslint 0 · **2326 pasan + 5 skip** (188 archivos). Commits `6edfab6` y
+      `a15c82f`, **ya en `master`**.
+      ⚠️ Cuando `feat/ui-dashboard-piloto` se mergee, estos 3 archivos ya están en `master`.
 
 - [ ] **`DELETE /api/payments/[id]` sobre un mes ya declarado** devuelve la factura a BORRADOR y
       ese mes pierde la venta del CSV, sin nota de crédito de por medio. **No existe cierre de
@@ -418,8 +432,11 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       activo). Commit `3cccbe67`.
 - [x] 🔒 **La mina de `page_location`** — GA mandaba la URL entera y anulaba el allowlist que la
       línea de arriba aplicaba a `page_path`. Dormida (GA apagado) pero **a una env var de
-      encenderse**. PR #59 mergeado: se arma del mismo path ya filtrado, y **el tipo se estrechó
+      encenderse**. PR #59: se arma del mismo path ya filtrado, y **el tipo se estrechó
       a `{ origin }`** para que `tsc` frene el regreso.
+      ⚠️ **Esta entrada decía "PR #59 mergeado" y era FALSO: el commit `4dce75e` estaba sólo en
+      `feat/ui-dashboard-piloto` y `fix/aviso-leads-canal-propio`, nunca en `master`.** El bug
+      siguió vivo hasta el 2026-08-31. Ver la entrada de "Después", que es la que vale.
 - [x] **GA4: no era código muerto.** Early-return antes de montar el script, allowlist de 6 rutas
       públicas, política de privacidad ya escrita en condicional. Encenderlo es 1 env var.
 
