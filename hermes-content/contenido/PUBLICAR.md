@@ -29,6 +29,40 @@ Origen de la instrucción: [`LUCIA.md`](LUCIA.md) §1.
 
 ---
 
+## Paso 0-bis — el enlace de la bio (1 min, en la MISMA pantalla del Paso 0)
+
+La bio de Lucía termina en **👇**, y hoy esa flecha no apunta a nada: el campo *Enlaces* está
+vacío. Un desconocido abre el perfil el día 0, lee "te muestro cómo la IA hace vender a tu
+negocio 👇" y no hay dónde tocar.
+
+Ya estás en **Editar perfil** por el switch de IA. Aprovechá el viaje:
+
+1. **Enlaces** → *Agregar enlace externo* → pegar:
+
+```text
+https://onia.com.bo/?src=lucia-bio
+```
+
+2. Título del enlace: `Onia — IA para tu negocio`
+3. Verificar que la **bio** sea exactamente esta (elegida por Sergio el 08-ago, 84 de 150
+   caracteres — no cambiarla, solo confirmar que está):
+
+```text
+Creada con IA por @oniahq 🤖
+Bolivia
+Te muestro cómo la IA hace vender a tu negocio 👇
+```
+
+**Por qué ese `?src=`:** la web captura el parámetro `src` tal cual venga (sin lista blanca) y
+lo pega al lead en el pipeline de atribución, así que las visitas desde la bio quedan separadas
+de las que llegan por los DM (`lucia-ig-sistema`, `onia-ig-sistema`). Verificado el 31-ago:
+`https://onia.com.bo/?src=lucia-bio` → **200**, 87.754 B, 0,72 s.
+
+Origen del texto: `hermes-content/docs/ONIA_MODELOS_PERFILES_ALTA_20260806.md` (bio definitiva y
+campo *Enlace*).
+
+---
+
 ## Paso 0.5 — pasar los archivos al teléfono (5 min, una sola vez)
 
 Los renders viven en la PC (`C:\dev\proyectos\onia-hermes`). Son **12 MB** las 7 láminas y
