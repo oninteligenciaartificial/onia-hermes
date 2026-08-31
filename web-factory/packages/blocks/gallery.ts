@@ -25,6 +25,7 @@ import {
   renderFooterBrand,
   renderHero,
   renderInlineQuoteForm,
+  renderMarquee,
   renderMediaHero,
   renderNewsletterBand,
   renderPathCards,
@@ -285,6 +286,24 @@ export const GALLERY: readonly GalleryBlock[] = [
         { value: "—", label: "Dato que el cliente todavia no confirmo", placeholder: true },
       ],
       note: "Nota de muestra: las cifras reales y su fuente las confirma el cliente.",
+    }),
+  },
+  {
+    id: "marquee",
+    fn: "renderMarquee",
+    file: "packages/blocks/src/marquee.ts",
+    props: "({ items: string[], label?, segundos?, direccion?, id? })",
+    family: "model",
+    css: "MARQUEE_CSS (mismo archivo)",
+    note: "Cinta infinita (T29): la lista se dibuja dos veces y el track corre a -50%, asi el loop no salta. CSS puro, frena en hover y con teclado, y bajo reduced-motion queda quieta con scroll manual.",
+    html: renderMarquee({
+      label: "Resenas de muestra",
+      items: [
+        "“Reseña de muestra A” — Cliente de muestra",
+        "“Reseña de muestra B” — Cliente de muestra",
+        "“Reseña de muestra C” — Cliente de muestra",
+        "“Reseña de muestra D” — Cliente de muestra",
+      ],
     }),
   },
   {

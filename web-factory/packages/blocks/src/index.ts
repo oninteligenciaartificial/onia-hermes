@@ -70,6 +70,11 @@ export {
   type ScrollStoryHeroProps,
 } from "./scroll-story-hero";
 export {
+  renderMarquee,
+  MARQUEE_CSS,
+  type MarqueeProps,
+} from "./marquee";
+export {
   renderStatStrip,
   STAT_STRIP_CSS,
   type StatItem,

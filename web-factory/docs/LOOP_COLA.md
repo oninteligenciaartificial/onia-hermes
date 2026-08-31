@@ -270,9 +270,33 @@ Las tres formas de fantasma que ya aparecieron acá:
       puntas redondeadas. Se trabaja en W4, que además tiene la evidencia re-verificada.
 - [ ] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
       `WEB_FACTORY_TECNICAS_2026.md`, las que 2+ sitios usan y son CSS-only o
-      motion.dev (feature-en-banda-de-color, statement full-screen, marquee CSS,
-      hover-lift). Una por vuelta: bloque tipado + tokens ONIA + reduced-motion +
-      render de prueba + `typecheck:packages`.
+      motion.dev. Una por vuelta: bloque tipado + tokens ONIA + reduced-motion +
+      render de prueba + `typecheck:packages`. **2 de 4 cerradas:**
+      - [x] **T29 marquee** (2026-08-31) — `packages/blocks/src/marquee.ts`, la que el
+            catálogo llama "la más barata y más reutilizable del corpus" (6 sitios) y
+            estaba en cero (`grep marquee packages/` → 0). CSS puro, cero JS.
+            **La decisión que hace o rompe la técnica: la separación es `padding` del
+            ítem, NO `gap` del track.** Con `gap` el track mide `2S+(2n-1)g` y
+            `translateX(-50%)` cae medio gap corrido — el salto que la técnica existe
+            para evitar. Verificado midiendo en el navegador, no razonándolo:
+            desfase de costura **0,000 px** en claro y oscuro; y **mutado a `gap`
+            para probar que la medición sirve** → salta a **94,2 px**. Frena en
+            `:hover` **y en `:focus-within`** (WCAG 2.2.2: con hover solo, quien
+            navega con teclado no puede pararla); bajo `prefers-reduced-motion`
+            queda quieta y el contenedor pasa a scroll manual (verificado:
+            `animation:none`, `overflow-x:auto`, contenido alcanzable). La copia va
+            `aria-hidden` para que un lector de pantalla no lea dos veces.
+            +9 tests, entrada en la galería (`pnpm blocks:demo`), 241/241.
+      - [x] ~~**T34 hover-lift**~~ — **FANTASMA, cerrada sin trabajo.** Ya existe como
+            primitiva del toolkit: `.wf-hover-lift` en `packages/blocks/src/motion.ts:53`
+            (+ su neutralización bajo reduced-motion en :77 y su ficha en :157).
+            Lo que SÍ falta y no es esto: **ningún bloque la usa** (`grep wf-hover-lift`
+            solo devuelve motion.ts) — cablearla a las cards es otra tarea, anotada.
+      - [ ] **T4 feature-en-banda-de-color** (`grep banda packages/` → 0; real).
+      - [ ] **T9 statement pantalla-completa** — parcial: `editorial-statement.ts`
+            cubre la frase gigante centrada, pero NO el `min-height:100svh`, el fondo
+            pleno de la sección ni el CTA que pide el catálogo. Decidir si es variante
+            del bloque que ya existe o bloque aparte, antes de duplicar.
 - [x] **A3 · Sitio #2 (estilo contrastante)** — `apps/ferreteria-sur/`, cerrado 2026-08-31
       (`fac6fa99` + `e4e785f3`). Rubro comercio, industrial utilitario, conectado por
       `/api/lead`. Construido con 3 agentes sobre archivos disjuntos; el de secciones
