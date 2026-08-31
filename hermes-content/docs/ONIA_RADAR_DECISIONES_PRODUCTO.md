@@ -101,3 +101,37 @@ tres cosas que no son lo mismo: factura interna del negocio (documento de cobro)
 factura FISCAL SIAT (bloqueada por NIT, a confirmar) · cobro de Onia a sus clientes
 (hoy comprobante manual). Sale en `ONIA_FACTURACION_ESTADO_REAL.md` con una respuesta
 clara para la venta: se puede decir "Onia te factura" SÍ/NO/con qué asterisco.
+
+## 8. Cuatro desconocidos escribieron y nadie les contestó (2026-08-31) — decisión de Sergio
+
+Medido contra las dos bases (Chatwoot cuenta 2 + `onia_center.bot_messages`), no contra
+un doc. **Cinco desconocidos escribieron al bot entre el 24 y el 29 de agosto.** A cuatro
+nunca les contestó nadie: sus mensajes cayeron dentro de la caída de motor del 24 al 28-ago
+(cero filas en `bot_messages` para las conversaciones 34, 35, 36 y 37). La causa ya está
+auto-curada; lo que queda abierto son las personas.
+
+Tres de los cuatro son alcanzables HOY:
+
+| Quién | Canal | Cuándo | Qué dijo |
+|---|---|---|---|
+| +591 73232758 | WhatsApp | 25-ago | *"estoy evaluando un sistema de gestión para una clínica odontológica de 4 doctores…"* |
+| +591 73021804 | WhatsApp | 28-ago | *"vengo de la web de Onia. Quiero saber si me sirve para mi negocio."* |
+| `Saguilera@ds-santacruz.bo` | widget web | 27-ago | "Quiero información" + dejó su correo |
+| (sin contacto) | widget web | 24-ago | "hola" — no dejó forma de responder |
+
+**Las tres opciones, cotizadas:**
+
+1. **Sergio les escribe a mano, hoy.** Costo: 0 Bs y ~15 minutos. Es la única que puede
+   recuperar al prospecto de la clínica dental de 4 doctores — el lead más calificado que
+   el bot recibió nunca. Riesgo: ninguno; disculparse por la demora es normal.
+2. **El bot los retoma solo.** Costo: 0 Bs de API, pero hay que construir el barrido de
+   reenganche (~medio día) y suena a spam retomar en frío una conversación de hace 6 días.
+   Además, a partir del **1-oct-2026** reabrir una ventana de WhatsApp cerrada cuesta
+   plantilla aprobada + costo por mensaje.
+3. **No hacer nada.** Costo: 0 Bs y los cuatro leads. También borra la evidencia de para
+   qué sirve el carril.
+
+**Recomendación: opción 1.** El carril entero existe para que un desconocido sea atendido;
+dejar cuatro sin respuesta mientras se construye la pieza catorce es exactamente el error
+que el objetivo de la cola quiere evitar. Detalle y evidencia: `hermes-content/docs/cola/chatbot.md`
+(ítem 1 de Cerrado, y S7 en Bloqueado).
