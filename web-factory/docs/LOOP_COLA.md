@@ -271,7 +271,7 @@ Las tres formas de fantasma que ya aparecieron acá:
 - [ ] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
       `WEB_FACTORY_TECNICAS_2026.md`, las que 2+ sitios usan y son CSS-only o
       motion.dev. Una por vuelta: bloque tipado + tokens ONIA + reduced-motion +
-      render de prueba + `typecheck:packages`. **2 de 4 cerradas:**
+      render de prueba + `typecheck:packages`. **3 de 4 cerradas:**
       - [x] **T29 marquee** (2026-08-31) — `packages/blocks/src/marquee.ts`, la que el
             catálogo llama "la más barata y más reutilizable del corpus" (6 sitios) y
             estaba en cero (`grep marquee packages/` → 0). CSS puro, cero JS.
@@ -292,7 +292,32 @@ Las tres formas de fantasma que ya aparecieron acá:
             (+ su neutralización bajo reduced-motion en :77 y su ficha en :157).
             Lo que SÍ falta y no es esto: **ningún bloque la usa** (`grep wf-hover-lift`
             solo devuelve motion.ts) — cablearla a las cards es otra tarea, anotada.
-      - [ ] **T4 feature-en-banda-de-color** (`grep banda packages/` → 0; real).
+      - [x] **T4 feature-en-banda-de-color** (2026-08-31) — `packages/blocks/src/feature-bands.ts`.
+            Evidencia re-verificada antes de tocar: `grep banda packages/` solo devuelve
+            comentarios y una banda hardcodeada del template `clinic-css`; bloque, cero.
+            **La banda es un tinte del token de marca, no un hex de paleta**: el catálogo
+            nombra pollen/sky/meadow porque describe UN sitio, y acá el bloque lo usan 11
+            fichas de cliente — cada tono sale de `color-mix()` sobre
+            `--color-primary/accent/secondary`, así que se recalcula solo en oscuro por la
+            sustitución perezosa de `var()`. Un hex quemado sería el bug de W1 otra vez.
+            **El zigzag lo hace `order`, no el DOM**: el orden de lectura es siempre texto →
+            imagen (medido: `domTextAntes` true en las dos bandas) y solo las pares invierten
+            el lado visual (banda 0 texto en 35 / media en 618; banda 1 al revés). Alternar en
+            el HTML daba el mismo dibujo y rompía la lectura.
+            **Contraste medido, no estimado** (convertí el `oklab()` resuelto a sRGB): texto
+            sobre banda 12,9 / 13,8 en claro y 13,8 / 13,5 en oscuro; la banda `solido`, la
+            única que pinta la marca a pleno, cambia el PAR completo a `--color-on-primary` y
+            da 9,03 en claro y 4,74 en oscuro — cambiar solo el fondo es como se fabrica un
+            botón invisible. Full-bleed verificado midiendo: 1178px de ancho en un viewport
+            de 1178, left 0.
+            ⚠️ **Defecto que reveló MIRAR**: el marco de la galería capea a 1200px
+            (`demo.ts:171`, por los bloques scroll-driven) y mi muestra de 3 bandas medía
+            1385 → **la tercera salía cortada y la galería mentía**. Muestra bajada a las 2
+            que prueban el zigzag (1077 = 1077, nada oculto); la solida y la sin-media quedan
+            en los tests y en la nota. De paso, las rutas de imagen iban sin `./assets/` y
+            daban 2 `ERR_FILE_NOT_FOUND` en consola.
+            **Gates**: `typecheck:packages` verde, **252/252** (+11 tests), galería mirada en
+            claro y oscuro — 0 `[data-reveal]` ocultos, 0 errores de consola.
       - [ ] **T9 statement pantalla-completa** — parcial: `editorial-statement.ts`
             cubre la frase gigante centrada, pero NO el `min-height:100svh`, el fondo
             pleno de la sección ni el CTA que pide el catálogo. Decidir si es variante

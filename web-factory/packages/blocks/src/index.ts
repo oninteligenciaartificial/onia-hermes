@@ -75,6 +75,14 @@ export {
   type MarqueeProps,
 } from "./marquee";
 export {
+  renderFeatureBands,
+  FEATURE_BANDS_CSS,
+  type BandTono,
+  type FeatureBand,
+  type FeatureBandMedia,
+  type FeatureBandsProps,
+} from "./feature-bands";
+export {
   renderStatStrip,
   STAT_STRIP_CSS,
   type StatItem,

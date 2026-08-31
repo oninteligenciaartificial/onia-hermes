@@ -20,6 +20,7 @@ import {
   renderClinicServices,
   renderEditorialStatement,
   renderFaq,
+  renderFeatureBands,
   renderFeatures,
   renderFooter,
   renderFooterBrand,
@@ -286,6 +287,33 @@ export const GALLERY: readonly GalleryBlock[] = [
         { value: "—", label: "Dato que el cliente todavia no confirmo", placeholder: true },
       ],
       note: "Nota de muestra: las cifras reales y su fuente las confirma el cliente.",
+    }),
+  },
+  {
+    id: "feature-bands",
+    fn: "renderFeatureBands",
+    file: "packages/blocks/src/feature-bands.ts",
+    props: "({ items:[{title, copy?, eyebrow?, bullets?, media?, tono?}], label?, id? })",
+    family: "model",
+    css: "FEATURE_BANDS_CSS (mismo archivo)",
+    note: "Bandas de color por feature (T4): cada una posee un tono tenido de la marca del cliente (no un hex de paleta), full-bleed, y el lado de la imagen alterna con CSS order -- el DOM sigue siendo texto -> imagen. Con tono 'solido' pinta la marca a pleno y cambia el par completo a on-primary; sin media la banda va a una sola columna.",
+    html: renderFeatureBands({
+      label: "Bandas de muestra",
+      items: [
+        {
+          eyebrow: "etiqueta de muestra",
+          title: "Banda de muestra en el tono de marca",
+          copy: "Copy de muestra: cada banda es un capitulo, no una fila de una parrilla.",
+          bullets: ["Punto de muestra A", "Punto de muestra B"],
+          media: { src: "./assets/detalle-atencion.webp", alt: "Imagen de muestra", width: 1200, height: 800 },
+        },
+        {
+          eyebrow: "etiqueta de muestra",
+          title: "La siguiente invierte el lado sin tocar el DOM",
+          copy: "Copy de muestra: el zigzag lo hace el CSS, asi el orden de lectura no cambia.",
+          media: { src: "./assets/hero-consultorio.webp", alt: "Imagen de muestra", width: 1200, height: 800 },
+        },
+      ],
     }),
   },
   {
