@@ -40,7 +40,13 @@ export type DashboardSeries = { name: string; points: DashboardPoint[] };
 export type DashboardChart = {
   title: string;
   unit: string;
-  type: "bar" | "line" | "donut" | "sparkline";
+  /**
+   * `radial`: medidor de UNA proporcion, con la cifra al centro. Es el caso que
+   * un numero pelado no resuelve ("34% de cierre" no dice si esta cerca o lejos
+   * del tope); el arco lo situa contra su maximo de un vistazo. `points[0]` es la
+   * parte y el resto de los puntos completan el total.
+   */
+  type: "bar" | "line" | "donut" | "sparkline" | "radial";
   points: DashboardPoint[];
   series?: DashboardSeries[];
 };
@@ -526,6 +532,8 @@ function hasChartData(chart: DashboardChart): boolean {
 
 export function renderChart(chart: DashboardChart): string {
   switch (chart.type) {
+    case "radial":
+      return renderRadialChart(chart);
     case "donut":
       return renderDonutChart(chart);
     case "sparkline":
@@ -556,8 +564,30 @@ function chartLabel(chart: DashboardChart): string {
         ? "Grafico de dona"
         : chart.type === "sparkline"
           ? "Sparkline"
-          : "Grafico de barras";
+          : chart.type === "radial"
+            ? "Medidor radial"
+            : "Grafico de barras";
   return `${kind}: ${chart.title}${chart.unit ? ` (${chart.unit})` : ""}`;
+}
+
+/**
+ * Barra con las esquinas redondeadas SOLO en la punta libre. Antes era un `<rect
+ * rx>`, que redondea las cuatro: la base flotaba sobre la linea de cero en vez de
+ * apoyarse en ella, y la serie se leia como una fila de pildoras sueltas. El radio
+ * va arriba en la barra positiva y abajo en la negativa - siempre en el extremo
+ * que se aleja del cero.
+ */
+export function barPath(x: number, y: number, w: number, h: number, radius: number, down: boolean): string {
+  const r = Math.max(0, Math.min(radius, w / 2, h));
+  const f = (value: number): string => value.toFixed(1);
+  if (down) {
+    return `M${f(x)},${f(y)} h${f(w)} v${f(h - r)} a${f(r)},${f(r)} 0 0 1 ${f(-r)},${f(r)} h${f(
+      -(w - 2 * r),
+    )} a${f(r)},${f(r)} 0 0 1 ${f(-r)},${f(-r)} Z`;
+  }
+  return `M${f(x)},${f(y + h)} v${f(-(h - r))} a${f(r)},${f(r)} 0 0 1 ${f(r)},${f(-r)} h${f(
+    w - 2 * r,
+  )} a${f(r)},${f(r)} 0 0 1 ${f(r)},${f(r)} v${f(h - r)} Z`;
 }
 
 function renderBarChart(chart: DashboardChart): string {
@@ -589,9 +619,9 @@ function renderBarChart(chart: DashboardChart): string {
         ? `fill="url(#wf-hatch)" stroke="var(--wf-series-1)" stroke-opacity="0.45" stroke-width="1"`
         : `fill="var(--wf-series-1)"`;
       const pendingNote = point.pending ? " (pendiente)" : "";
-      return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(
-        1,
-      )}" rx="${Math.min(3, barWidth / 2, height / 2).toFixed(1)}" ${paint}><title>${escapeHtml(point.label)}: ${point.value}${pendingNote}</title></rect>`;
+      return `<path d="${barPath(x, y, barWidth, height, 3, point.value < 0)}" ${paint}><title>${escapeHtml(
+        point.label,
+      )}: ${point.value}${pendingNote}</title></path>`;
     })
     .join("");
 
@@ -628,7 +658,7 @@ function renderLineChart(chart: DashboardChart): string {
           (point, index) =>
             `<circle cx="${xFor(index, count).toFixed(1)}" cy="${yFor(point.value).toFixed(
               1,
-            )}" r="2.5" fill="${color}"><title>${escapeHtml(entry.name)} - ${escapeHtml(point.label)}: ${
+            )}" r="4" fill="${color}"><title>${escapeHtml(entry.name)} - ${escapeHtml(point.label)}: ${
               point.value
             }</title></circle>`,
         )
@@ -650,6 +680,77 @@ function renderLineChart(chart: DashboardChart): string {
   return `${legend}${svg}`;
 }
 
+/** Separacion entre gajos del donut, en px de arco (spec de marca del skill `dataviz`). */
+const DONUT_GAP = 4;
+
+/** Angulos del medidor: arco de 270 grados abierto abajo, como Tabler/Grafana. */
+const GAUGE_START = 225;
+const GAUGE_SWEEP = 270;
+
+function polarPoint(cx: number, cy: number, r: number, angleDeg: number): { x: number; y: number } {
+  const rad = ((angleDeg - 90) * Math.PI) / 180;
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+
+/** Arco de circunferencia como `path`: permite punta redondeada y abrirlo abajo. */
+export function arcPath(cx: number, cy: number, r: number, startDeg: number, endDeg: number): string {
+  const start = polarPoint(cx, cy, r, startDeg);
+  const end = polarPoint(cx, cy, r, endDeg);
+  const largeArc = Math.abs(endDeg - startDeg) > 180 ? 1 : 0;
+  return `M${start.x.toFixed(2)},${start.y.toFixed(2)} A${r},${r} 0 ${largeArc} 1 ${end.x.toFixed(
+    2,
+  )},${end.y.toFixed(2)}`;
+}
+
+/**
+ * Medidor radial: UNA proporcion, con su cifra al centro.
+ *
+ * Es el hueco que dejaba el panel: un porcentaje suelto ("34% de cierre") no dice
+ * si esta cerca o lejos de su tope, y el arco lo situa de un vistazo. Es lo que
+ * Tabler y Grafana ponen en ese caso.
+ *
+ * `points[0]` es la parte medida y el resto de los puntos completan el total. Con
+ * un solo punto el valor se lee como porcentaje (0-100), que es como llega desde
+ * el intake un KPI ya calculado.
+ */
+export function renderRadialChart(chart: DashboardChart): string {
+  const points = chart.points.filter((point) => point.value >= 0);
+  const first = points[0];
+  if (!first) {
+    return renderEmpty("Sin datos", "Este medidor se completa cuando llegan los datos.");
+  }
+  const total = points.length > 1 ? points.reduce((sum, point) => sum + point.value, 0) : 100;
+  const ratio = total > 0 ? Math.min(Math.max(first.value / total, 0), 1) : 0;
+  const percent = Math.round(ratio * 100);
+
+  const size = 150;
+  const cx = size / 2;
+  const cy = size / 2 + 8; // el arco abierto abajo deja aire arriba: se baja el centro
+  const radius = 54;
+  const stroke = 14;
+
+  const track = arcPath(cx, cy, radius, GAUGE_START, GAUGE_START + GAUGE_SWEEP);
+  const value = arcPath(cx, cy, radius, GAUGE_START, GAUGE_START + GAUGE_SWEEP * ratio);
+  // Con ratio 0 NO se dibuja arco: el path degenerado con linecap round pinta un
+  // punto que se lee como "algo", y el dato dice que no hay nada.
+  const valueArc =
+    ratio > 0
+      ? `<path d="${value}" fill="none" stroke="var(--wf-series-1)" stroke-width="${stroke}" stroke-linecap="round"></path>`
+      : "";
+
+  const caption = points.length > 1 ? first.label : chart.unit;
+
+  return `<svg class="wf-chart wf-gauge" viewBox="0 0 ${size} ${size}" role="img" aria-label="${escapeAttribute(
+    `${chartLabel(chart)}: ${percent}%`,
+  )}" preserveAspectRatio="xMidYMid meet"><path d="${track}" fill="none" stroke="var(--border)" stroke-width="${stroke}" stroke-linecap="round"></path>${valueArc}<text x="${cx}" y="${cy}" text-anchor="middle" class="wf-gauge-value">${percent}%</text>${
+    caption
+      ? `<text x="${cx}" y="${cy + 20}" text-anchor="middle" class="wf-gauge-label">${escapeHtml(caption)}</text>`
+      : ""
+  }<title>${escapeHtml(first.label)}: ${first.value}${
+    points.length > 1 ? ` de ${total}` : ""
+  } (${percent}%)</title></svg>`;
+}
+
 function renderDonutChart(chart: DashboardChart): string {
   const points = chart.points.filter((point) => point.value > 0);
   const total = points.reduce((sum, point) => sum + point.value, 0) || 1;
@@ -659,14 +760,20 @@ function renderDonutChart(chart: DashboardChart): string {
   const stroke = 22;
   const circumference = 2 * Math.PI * radius;
 
+  // Gajos pegados = un anillo de bandas que hay que separar con la vista. El gap
+  // se descuenta del largo DIBUJADO, no del reparto: el angulo de cada gajo sigue
+  // siendo su proporcion exacta, asi que separa sin mentir sobre el dato.
+  const gap = points.length > 1 ? DONUT_GAP : 0;
+
   let accumulated = 0;
   const arcs = points
     .map((point, index) => {
       const length = (point.value / total) * circumference;
+      const drawn = Math.max(length - gap, 0.5);
       const color = SERIES_COLORS[index % SERIES_COLORS.length];
-      const segment = `<circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-dasharray="${length.toFixed(
+      const segment = `<circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-dasharray="${drawn.toFixed(
         2,
-      )} ${(circumference - length).toFixed(2)}" stroke-dashoffset="${(-accumulated).toFixed(
+      )} ${(circumference - drawn).toFixed(2)}" stroke-dashoffset="${(-accumulated).toFixed(
         2,
       )}" transform="rotate(-90 ${cx} ${cx})"><title>${escapeHtml(point.label)}: ${point.value} (${Math.round(
         (point.value / total) * 100,
@@ -676,9 +783,21 @@ function renderDonutChart(chart: DashboardChart): string {
     })
     .join("");
 
+  // El agujero estaba vacio y el total solo existia sumando la leyenda de memoria.
+  // Va al centro, el unico lugar del anillo que no compite con ningun gajo.
+  const center = `<text x="${cx}" y="${cx - 2}" text-anchor="middle" class="wf-donut-total">${escapeHtml(
+    formatTick(total),
+  )}</text>${
+    chart.unit
+      ? `<text x="${cx}" y="${cx + 14}" text-anchor="middle" class="wf-donut-total-label">${escapeHtml(
+          chart.unit,
+        )}</text>`
+      : ""
+  }`;
+
   const svg = `<svg class="wf-chart wf-donut" viewBox="0 0 ${size} ${size}" role="img" aria-label="${escapeAttribute(
     chartLabel(chart),
-  )}" preserveAspectRatio="xMidYMid meet"><circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="var(--border)" stroke-width="${stroke}"></circle>${arcs}</svg>`;
+  )}" preserveAspectRatio="xMidYMid meet"><circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="var(--border)" stroke-width="${stroke}"></circle>${arcs}${center}</svg>`;
   const legend = renderLegend(
     points.map((point, index) => ({
       name: `${point.label} ${Math.round((point.value / total) * 100)}%`,
@@ -706,7 +825,7 @@ function renderSparkline(chart: DashboardChart): string {
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
   const last = points[count - 1];
   const dot = last
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="var(--wf-series-1)"></circle>`
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="4" fill="var(--wf-series-1)"></circle>`
     : "";
 
   // `preserveAspectRatio="none"` estiraba el viewBox al ancho de la tarjeta y con
@@ -970,6 +1089,9 @@ h1, h2, h3 {
 }
 
 .wf-dash-nav-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   padding: 10px 12px;
   border-radius: 9px;
   font-weight: 650;
@@ -1029,7 +1151,7 @@ h1, h2, h3 {
 }
 
 .wf-dash-filter {
-  min-height: 36px;
+  min-height: 44px;
   padding: 0 14px;
   border: 0;
   border-radius: 7px;
@@ -1048,7 +1170,7 @@ h1, h2, h3 {
 .wf-dash-cta {
   display: inline-flex;
   align-items: center;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 16px;
   border-radius: 9px;
   font-weight: 750;
@@ -1060,7 +1182,7 @@ h1, h2, h3 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 14px;
   border: 1px solid var(--border);
   border-radius: 9px;
@@ -1321,10 +1443,14 @@ h1, h2, h3 {
   background: color-mix(in srgb, var(--color-fg) 6%, transparent);
 }
 
-.wf-agent-ok:focus-visible,
-.wf-agent-no:focus-visible {
+/* El foco existia en DOS botones (los del agente) y en ningun otro lado: con el
+   teclado, nav, filtros, CTA y tema no se veian. Una sola regla sobre todo lo
+   interactivo del panel cubre tambien lo que se agregue despues. */
+.wf-dash a:focus-visible,
+.wf-dash button:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+  border-radius: 8px;
 }
 
 .wf-note {
@@ -1493,10 +1619,12 @@ h1, h2, h3 {
   gap: 6px;
 }
 
+/* Pildora 14x3, no cuadrado: la muestra tiene que parecerse al trazo que nombra.
+   Con el cuadrado la leyenda pesaba mas que la propia serie del grafico. */
 .wf-chart-legend-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
   flex: 0 0 auto;
 }
 
@@ -1504,6 +1632,37 @@ h1, h2, h3 {
   fill: var(--muted-foreground);
   font-size: 9px;
   font-family: var(--font-body);
+}
+
+/* Ancho ACOTADO, como el donut. Con el 100%% heredado de .wf-chart el medidor se
+   iba a 340px de alto y, como el grid iguala la fila a la tarjeta mas alta, dejaba
+   a las dos vecinas con un palmo de aire muerto al pie (el defecto de A1d, otra vez). */
+.wf-gauge {
+  width: 180px;
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+.wf-gauge-value,
+.wf-donut-total {
+  fill: var(--color-fg);
+  font-family: var(--wf-font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  dominant-baseline: middle;
+}
+
+.wf-donut-total {
+  font-size: 22px;
+}
+
+.wf-gauge-label,
+.wf-donut-total-label {
+  fill: var(--muted-foreground);
+  font-family: var(--font-body);
+  font-size: 10px;
+  dominant-baseline: middle;
 }
 
 /* Progress lists: rows with right-aligned status chips

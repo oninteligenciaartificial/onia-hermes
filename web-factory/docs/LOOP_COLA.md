@@ -138,15 +138,34 @@ Las tres formas de fantasma que ya aparecieron acá:
       renderizado en claro y oscuro** con un fixture temporal que mete un negativo, un
       cero y una serie de 58 puntos: 0 `[data-reveal]` ocultos, 0 errores de consola.
       **Lección: los cuatro pasaban todos los gates existentes** — por eso W6.
-- [ ] **W4 · Gauge/radial + defectos visuales.** Evidencia re-verificada 2026-08-30 en
-      `packages/templates/src/dashboard.ts`: `grep -c 'gauge\|radial'` → **0** (no existe;
-      "Tasa de cierre 34%" es un número pelado y es el caso exacto que Tabler y Grafana
-      resuelven con radial) · `r="2.5"` → **1** (5px de diámetro contra el mínimo de 8)
-      · `paddingAngle` → **0** (gajos del donut pegados).
-      + `rx` solo arriba en barras, total al centro del donut, swatch pill de 14×3.
-      ⚠️ **Se cayó de este ítem "`:focus-visible` cero en 590 líneas": hay 2**, agregados
-      el mismo día en los botones del agente. Era fantasma. Lo que queda real ahí son los
-      targets de 44px y el foco en filtros/nav/cards, que sigue sin estar.
+- [x] **W4 · Gauge/radial + defectos visuales** (2026-08-31). Evidencia re-verificada
+      antes de tocar (`gauge|radial` → 0, `r="2.5"` → 1, `paddingAngle` → 0). Los siete:
+      (a) **medidor radial** nuevo (`type: "radial"`, arco de 270° abierto abajo con la
+      cifra al centro) — es lo que resuelve el porcentaje pelado, que solo dice el número
+      y no dónde cae contra su tope. Cableado a un dato que YA estaba en el panel: el KPI
+      "Citas de hoy 9" con su contexto "7 confirmadas – 2 esperan respuesta" → 78%. Cero
+      cifra inventada. (b) marcadores `r` 2,5→**4** (8px, el piso de `dataviz`); el punto
+      final del sparkline también. (c) **gap entre gajos** del donut, descontado del largo
+      DIBUJADO y no del reparto: separa sin mover el ángulo, que sigue siendo la
+      proporción exacta. (d) **`rx` solo en la punta libre**: las barras pasaron de `<rect
+      rx>` (que redondea las 4 esquinas y dejaba la barra flotando sobre el cero) a un
+      `<path>` con el radio arriba en la positiva y abajo en la negativa. (e) **total al
+      centro del donut** — y de paso su unidad pasó de "% del total" a "tratamientos",
+      porque con la vieja el centro leía "100 % del total", cierto y vacío. (f) leyenda de
+      cuadrado 10×10 a **píldora 14×3**: la muestra tiene que parecerse al trazo que
+      nombra. (g) **44px** en nav/filtros/CTA/tema y **una sola regla de `:focus-visible`**
+      sobre todo `a`/`button` del panel, que además cubre lo que se agregue después.
+      ⚠️ **Defecto que reveló MIRAR**: el medidor heredaba `width:100%` de `.wf-chart` y se
+      iba a 340px de alto; como el grid iguala la fila a la tarjeta más alta, **volvía a
+      abrir el aire muerto de A1d** en sus dos vecinas. Acotado a 180px como el donut.
+      **Gates**: `typecheck:packages` verde, **214/214** (+9 tests: base plana de la barra,
+      radio que no desborda, gauge con 0 que NO dibuja arco, gap que no mueve el reparto,
+      total al centro, marcadores ≥4) y **mirado en claro y oscuro** — 0 `[data-reveal]`
+      ocultos, 0 errores de consola, y el anillo de foco medido tabulando: 12 de 12 con
+      anillo, 0 sin él.
+      Anotado, NO tocado (fuera de este ítem): el sparkline del KPI sigue con
+      `preserveAspectRatio="none"`, así que su punto final es una elipse — el mismo defecto
+      que W2 arregló en el sparkline grande.
 - [ ] **W5 · Los estados que no existen.** Skeleton isomorfo, error de sección con
       retry, vacío con altura reservada y segundo renglón que diga CUÁNDO se llena.
 - [ ] **W6 · Gates que hoy no existen.** Los tests actuales son `toBeVisible` y

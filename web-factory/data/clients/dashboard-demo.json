@@ -218,6 +218,21 @@
     },
     "charts": [
       {
+        "title": "Agenda de hoy confirmada",
+        "unit": "9 citas",
+        "type": "radial",
+        "points": [
+          {
+            "label": "Confirmadas",
+            "value": 7
+          },
+          {
+            "label": "Sin confirmar",
+            "value": 2
+          }
+        ]
+      },
+      {
         "title": "Ocupacion del sillon",
         "unit": "% de la agenda",
         "type": "bar",
@@ -317,7 +332,7 @@
       },
       {
         "title": "Tratamientos del mes",
-        "unit": "% del total",
+        "unit": "tratamientos",
         "type": "donut",
         "points": [
           {

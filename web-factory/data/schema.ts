@@ -167,7 +167,7 @@ const dashboardPointSchema = z.object({
 const dashboardChartSchema = z.object({
   title: z.string().min(1),
   unit: z.string().default(""),
-  type: z.enum(["bar", "line", "donut", "sparkline"]).default("bar"),
+  type: z.enum(["bar", "line", "donut", "sparkline", "radial"]).default("bar"),
   points: z.array(dashboardPointSchema).default([]),
   // Optional multi-series for bar/line: when present, each series is drawn as its
   // own colored line/group with a legend.
