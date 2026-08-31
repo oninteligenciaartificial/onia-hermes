@@ -135,3 +135,37 @@ Tres de los cuatro son alcanzables HOY:
 dejar cuatro sin respuesta mientras se construye la pieza catorce es exactamente el error
 que el objetivo de la cola quiere evitar. Detalle y evidencia: `hermes-content/docs/cola/chatbot.md`
 (ítem 1 de Cerrado, y S7 en Bloqueado).
+
+## 9. ¿De qué org son los inboxes 4 y 5? (2026-08-31) — decisión de Sergio
+
+**Por qué aparece ahora.** Hasta hoy el vínculo org → inbox de Chatwoot sólo se escribía al
+dar de alta la organización y **no había forma de corregirlo**: ninguna pantalla lo editaba
+y el resto del código devuelve `created:false` si ya hay valor. Eso ya está resuelto en
+código (commit `88c1d56` de `onia-platform`: el PATCH de superadmin acepta el inbox, con 409
+si otra org lo usa, y la pantalla `/admin/organizations/<id>` ahora tiene input y botón).
+Lo que el código **no** puede decidir es a quién apuntar.
+
+**El dato.** Los dos inboxes donde escribió gente de verdad — **4 (Onia Web)** y
+**5 (Onia WhatsApp, el +591 75414930)** — no son de ninguna org, así que `/inbox` no puede
+mostrar ninguna de las cinco conversaciones de desconocidos. De las cuatro orgs que existen,
+la única con inbox es la de QA.
+
+**Las tres opciones, cotizadas:**
+
+1. **`Onia (interna)` se queda con el 5 (WhatsApp).** Costo: 0 Bs, un deploy y dos clicks.
+   Es la que cierra el objetivo del carril: el número que la web ya publica pasa a verse en
+   `/inbox`. Límite conocido: una org = un inbox, así que la web (4) queda afuera hasta que
+   haga falta la tabla de N inboxes por org — que hoy no hace falta.
+2. **Una org nueva "Onia Bandeja" que reciba los inboxes.** Costo: 0 Bs y ~10 minutos, pero
+   agrega una org fantasma a la base y un usuario más que mantener, para separar lo que hoy
+   nadie necesita separado.
+3. **No apuntar nada hasta que haya un cliente real.** Costo: 0 Bs — y el carril sigue sin
+   poder demostrar que sirve. El día del Embedded Signup (S1) el inbox del cliente nace
+   huérfano igual, y ahí la decisión vuelve con un cliente esperando del otro lado.
+
+**Recomendación: opción 1**, y el 4 (web) se deja sin dueño hasta que la limitación moleste.
+Es la más barata, es reversible desde la misma pantalla (vaciar el campo desvincula), y es
+la única que convierte el objetivo del carril en una captura.
+
+⚠️ **Requiere un deploy del producto**, que por regla es de Sergio. Detalle y estado:
+`hermes-content/docs/cola/chatbot.md` (ítem 1 de Ahora, y S8 en Bloqueado).

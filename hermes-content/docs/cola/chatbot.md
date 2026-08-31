@@ -95,6 +95,27 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       apunte una org a un inbox existente. Lo caro sería una tabla de N inboxes por org —
       no hace falta hasta que un cliente tenga web **y** WhatsApp a la vez.
 
+      ⚙️ **El código está construido y con gates verdes (2026-08-31, commit `88c1d56` del repo
+      `onia-platform`), pero el ítem NO se cierra: sigue sin haber una conversación de un
+      desconocido visible en `/inbox`, que es el objetivo.** Lo que se hizo: se extendió el
+      PATCH de superadmin que YA existía (`app/api/admin/organizations/[id]/whatsapp/route.ts`)
+      en vez de agregar una ruta nueva — acepta `chatwootInboxId` entero positivo o `null` para
+      desvincular, y devuelve **409 si otra org ya usa ese inbox** (sin ese guardia dos orgs
+      se ven las conversaciones entre sí: la tenencia la da esa sola columna). La pantalla
+      `app/(dashboard)/admin/organizations/[id]/WhatsAppOrgConfig.tsx` dejó de ser un `<dd>`
+      de sólo lectura: ahora es input + botón "Vincular". 11 tests nuevos; `tsc --noEmit`,
+      `eslint` y los 2342 tests de la suite, verdes.
+      ⚠️ **Falta lo que no depende de código, y son las dos cosas que lo cierran:** (1) el
+      deploy del producto, que es de Sergio, y (2) decidir qué org se queda con los inboxes 4
+      y 5 — anotado como **S8**, y cotizado en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      ⚠️ **La pantalla NO se pudo MIRAR, y se dice en vez de simularlo:** es superadmin, así
+      que necesita base + sesión. El `DATABASE_URL` de `.env.local` apunta a
+      `127.0.0.1:54329`, que está cerrado (de los puertos de Supabase local sólo 54322 acepta
+      conexión TCP, y ahí el handshake de Postgres expira). Producción sí responde pero
+      todavía sirve la versión vieja. **La captura se toma en el primer deploy** — es lo
+      primero que hay que hacer al retomar, antes que cualquier ítem nuevo.
+
 - [ ] **2 · Las frases que la web YA manda no están registradas como campañas: el desconocido
       pregunta una cosa y el bot le contesta el saludo genérico.** Las frases de campaña se
       construyeron ayer (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:117`
@@ -160,6 +181,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
+| S8 | **Desplegar el producto y decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** | El deploy es suyo por regla; y los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` | **El objetivo del carril entero.** El código ya está (commit `88c1d56`): faltan un deploy y dos clicks en `/admin/organizations/<id>` |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
 ---
