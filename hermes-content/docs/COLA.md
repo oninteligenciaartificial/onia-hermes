@@ -264,6 +264,30 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         bien). Se arregló en la capa que sí se puede tocar y **el resultado es el mismo**;
         mover la ignore al config es cosmética. Si algún día se quiere, hay que habilitar el
         hook a mano.
+        **Verificado por segunda vez, en paralelo y sin saberlo, el 2026-08-31 — y lo que
+        agrega la revisión independiente son tres datos que el arreglo no tenía:**
+        (1) **No es sólo lentitud: el gate MIENTE.** Con **un solo** worktree anidado el
+        conteo pasa de **101 a 202 warnings** (A/B controlado en un árbol aislado, 41,0 s vs
+        52,1 s) — o sea le atribuye a esta rama los warnings de las otras. Con 30, el número
+        que reporta no es de este árbol.
+        (2) **El comando pelado no sólo tarda: se cae.** `npx eslint .` sobre la raíz abortó
+        con `ENOENT ... scandir '.claude/worktrees/lint-worktrees'` porque **otra sesión creó
+        y borró un worktree mientras eslint lo recorría**. Es no determinista: a veces sale
+        verde en 20 min, a veces revienta. Una razón más para que el paso 4 mande a
+        `npm run lint`.
+        (3) **`tsc` NO tiene este problema — comprobado, para que nadie lo "arregle".**
+        `tsconfig.json` no excluye `.claude`, así que parece vulnerable; no lo es:
+        `npx tsc -p tsconfig.json --listFilesOnly | grep .claude/worktrees` da **0**, porque
+        TypeScript salta los directorios que empiezan con punto en sus patrones wildcard.
+        Tocar el `exclude` del tsconfig sería una vuelta perdida.
+        ⚠️ **Y la lección de proceso, que costó una vuelta entera:** **dos sesiones tomaron
+        este mismo ítem a la vez**, y la segunda escribió un arreglo equivalente en
+        `eslint.config.mjs` que hubo que **tirar a la basura** al descubrir, recién al mergear,
+        que `master` ya lo traía. El Gate 1 pregunta *"¿ya está hecho?"* contra el repo del
+        **inicio** de la vuelta; no protege de lo que se hace **durante**. **Regla nueva:
+        `git fetch` y mirar la punta de `origin/master` ANTES de escribir la primera línea, no
+        al mergear** — y si el worktree propio recibió commits ajenos, es que hay otra sesión
+        en el mismo carril: parar y avisar.
       - **Lo que la auditoría NO cambió, a propósito:** el punto 1 de
         `ONIA_DEFINICION_DE_TERMINADO.md` ("la bandeja queda vacía") sigue 🔴 aunque su código ya
         esté en master (`88c1d56`, carril chatbot). Su LISTO no es "el commit existe", es *"un
