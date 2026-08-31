@@ -1,0 +1,46 @@
+{
+ "sfx": [
+  {
+   "asset": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\editor-videos\\assets\\sfx\\swish.wav",
+   "at": 3.73,
+   "gain": 0.55,
+   "duck": true
+  },
+  {
+   "asset": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\editor-videos\\assets\\sfx\\pop.wav",
+   "at": 4.7,
+   "gain": 0.45,
+   "duck": true
+  },
+  {
+   "asset": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\editor-videos\\assets\\sfx\\swish.wav",
+   "at": 6.73,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\editor-videos\\assets\\sfx\\pop.wav",
+   "at": 7.55,
+   "gain": 0.45,
+   "duck": true
+  },
+  {
+   "asset": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\editor-videos\\assets\\sfx\\swish.wav",
+   "at": 9.74,
+   "gain": 0.55,
+   "duck": true
+  },
+  {
+   "asset": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\editor-videos\\assets\\sfx\\ping.wav",
+   "at": 12.3,
+   "gain": 0.42,
+   "duck": true
+  },
+  {
+   "asset": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\editor-videos\\assets\\sfx\\swish.wav",
+   "at": 17.23,
+   "gain": 0.55,
+   "duck": true
+  }
+ ]
+}

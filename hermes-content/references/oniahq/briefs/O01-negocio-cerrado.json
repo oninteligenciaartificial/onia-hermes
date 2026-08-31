@@ -1,0 +1,74 @@
+{
+ "caption": "Tu negocio cerrado sigue trabajando: alguien pregunta, alguien pide precio, alguien quiere reservar. La diferencia entre el que vende y el que no, muchas veces es solo quién contestó primero.\n\nAcá van cuatro cosas que tu negocio ya podría estar haciendo solo, esta noche, sin que vos estés.\n\nComentá SISTEMA y te agendamos 20 minutos para mirar tu operación y decirte qué conviene automatizar primero — y qué no vale la pena todavía.",
+ "hashtags": [
+  "#negociosbolivia",
+  "#santacruz",
+  "#pyme",
+  "#automatizacion",
+  "#inteligenciaartificial"
+ ],
+ "src": false,
+ "slides": [
+  {
+   "number": 1,
+   "role": "cover",
+   "pill": "Mientras dormís",
+   "headline": "Tu negocio cerrado *sigue* perdiendo ventas",
+   "body": "Y no te enterás hasta fin de mes.",
+   "bg": "hermes-content/references/oniahq/fondos/estantes-03.png"
+  },
+  {
+   "number": 2,
+   "role": "stakes",
+   "pill": "El costo real",
+   "headline": "El que pregunta a las 10 no *espera* a mañana",
+   "body": "Le escribe a tres. Compra al que contestó. No perdiste por precio ni por producto: perdiste por {{hora}}.",
+   "bg": "hermes-content/references/oniahq/fondos/cuaderno-02.png"
+  },
+  {
+   "number": 3,
+   "role": "point",
+   "pill": "01",
+   "headline": "Contestar la pregunta *de siempre*",
+   "body": "Horario, dirección, si hay stock, cuánto sale. Ocho de cada diez mensajes son eso. No hace falta que los contestes vos.",
+   "bg": ""
+  },
+  {
+   "number": 4,
+   "role": "point",
+   "pill": "02",
+   "headline": "Anotar al que *preguntó*",
+   "body": "Hoy ese nombre se pierde en el chat. Debería quedar en una lista con qué pidió y qué día, para volver a buscarlo.",
+   "bg": ""
+  },
+  {
+   "number": 5,
+   "role": "point",
+   "pill": "03",
+   "headline": "Avisarte lo que *no* se ve",
+   "body": "Un fiado que venció. Un producto que se está por acabar. Plata parada hace {{90 días}}. Vos no lo mirás; el sistema sí.",
+   "bg": "hermes-content/references/oniahq/fondos/tienda-01.png"
+  },
+  {
+   "number": 6,
+   "role": "save",
+   "save_worthy": true,
+   "pill": "Guardá esto",
+   "headline": "Las cuatro, en *orden*",
+   "body": "1. Contestar lo repetido · 2. Anotar al que preguntó · 3. Avisar lo que no se ve · 4. Cerrar el día solo. Se empieza por la 1: es la que más veces pasa y siempre igual.",
+   "bg": ""
+  },
+  {
+   "number": 7,
+   "role": "cta",
+   "pill": "20 minutos, gratis",
+   "headline": "Miramos *tu* operación, no un ejemplo",
+   "body": "Comentá SISTEMA",
+   "comment_trigger": "SISTEMA",
+   "comment_reward": "un diagnóstico de 20 minutos",
+   "bg": ""
+  }
+ ],
+ "serie": "Lo que no mirás",
+ "episodio": "001"
+}

@@ -538,7 +538,7 @@ mensaje real.
 
 ### 10.2 — El workflow, construido y PROBADO DE PUNTA A PUNTA
 
-`ONIA - Comentario IG -> DM (Private Reply)` — n8n **`QPMbnfnZQtB1WmOQ`** (v7 multi-cuenta), activo.
+`ONIA - Comentario IG -> DM (Private Reply)` — n8n **`1jS4jwmNmvcQpqqH`** (v8), activo.
 
 ```
 https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/ig-comment
@@ -966,3 +966,21 @@ avisos.
 publish reactiva el snapshot de la version publicada (mismo `activeVersionId`). Los `settings` si
 se leen de la entidad, los NODOS no. Para cambiar nodos por codigo: version nueva con
 `create_workflow_from_code` y archivar la anterior.
+
+## 16. v8 — Lucia con SISTEMA activo y su arranque programado (2026-08-20)
+
+Las 3 decisiones de Sergio llegaron: cara 100% generada por Higgsfield (sin persona real),
+handle `@lucia.antelo.oficial` confirmado, feed 60/40 (generico/aplicado).
+
+- **6 piezas programadas** en su cuenta via Postiz: P1+P2+P6 el 21-ago (11:00/15:00/19:30
+  Bolivia, dia 1 triple para que el perfil no se vea vacio), P3 el 23, P4 el 25, P5 el 28.
+  Cada una con su comentario de hashtags, **sin** link `?src=` (cuenta de alcance: el trafico
+  va por mencion a `@oniahq`, no por link). Briefs en
+  `references/modelos/lucia/posts-20260807/briefs/`.
+- **`postiz_schedule.mjs` extendido**: `--integration` (cuenta destino), `--image` (post de
+  una sola imagen) y `brief.src === false` (apaga la atribucion del comentario).
+- **v8 (`1jS4jwmNmvcQpqqH`)**: Lucia tiene **SISTEMA** activo — su P3 lo pide ("te muestro
+  como se ve todo junto"). Mensaje con su voz y atribucion propia `?src=lucia-ig-sistema`.
+  Probado: SISTEMA en su cuenta manda su mensaje con su token; LISTA en oniahq sigue igual.
+  Su `entry_id` real aun no observado: entra por default (unica cuenta sin mapear) y el
+  primer comentario real lo trae por Telegram para fijarlo.

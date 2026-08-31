@@ -390,3 +390,29 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 
 ## Relacionadas
 `ver-videos` · `embedded-captions` · `talking-head-recut` · `hyperframes-cli` · `media-use` · [[onia-video-hyperframes]] · [[content-engine-remotion]].
+
+---
+
+## 🎬 Moldes de pieza y costura entre generaciones (video-intake, commit 819c84b9)
+
+**EL CORTE ENTRE GENERACIONES SE ESCONDE EN UN WHIP PAN.** Al montar variantes de un mismo plano,
+la costura va tapada con movimiento de cámara — nunca con disolvencia ni corte seco. Literal del
+corpus: *"Hay un barrido de cámara borroso justo donde cambia el material. No hay disolvencias, no
+hay cortes secos visibles. Es la costura, y está tapada con movimiento."*
+→ `transitions.mjs` cubre `fade/dissolve/wipe/slide`; para material GENERADO el whip pan es la
+costura correcta y falta como plantilla de montaje.
+
+**💸 `video_edit` factura por la duración del video FUENTE.** Verificado contra el catálogo el
+2026-08-22: en `seedance_2_5` modo `video_edit`, `duration` y `aspect_ratio` se IGNORAN y se cobra
+por lo que dura el material de ENTRADA. Consecuencia dura: **se filma CORTO** — tomas de 5-8 s que
+se montan después. *"Un plano de 30 s cuesta cuatro veces uno de 8."*
+
+**Reparto de segundos de un anuncio de 46 s, medido** (contraintuitivo, respetarlo):
+gancho **2 s** · producto en estudio 7 s · persona hablando a cámara 8 s (la que trae la confianza)
+· escenarios de uso · CTA. Taxonomía por bloque: Opening Hook · Product Information · Selling
+Points · Real Experience · Usage Scenarios · Call to Action.
+
+**Molde "anuncio sin cara", 7 beats en 33 s** — el hilo de color y el carrier element se definen
+ANTES de escribir un solo prompt. Ya desarrollado para Onia en
+`hermes-content/docs/ONIA_GUION_ANUNCIO_SIN_CARA_20260820.md`. El gancho es MOVIMIENTO, no
+información: plano parcial, contrapicado, objeto cruzando el cuadro en whip con motion blur.

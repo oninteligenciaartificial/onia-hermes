@@ -12,13 +12,17 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { basename, join } from 'node:path';
 
 const BASE = 'https://postiz.onia.com.bo/api/public/v1';
+// Default: @oniahq. --integration permite programar en otra cuenta conectada
+// (Lucia: cmt1sv4eh001alq9cl3y6q7es).
 const INTEGRATION = 'cmsw091nx0001lq9c8kr6dsg8'; // @oniahq
 
 function parseArgs(argv) {
-  const a = { slides: '', captionFrom: '', date: '', keyFile: '', list: false, delete: '' };
+  const a = { slides: '', image: '', captionFrom: '', date: '', keyFile: '', integration: '', list: false, delete: '' };
   for (let i = 2; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--slides') a.slides = argv[++i];
+    else if (k === '--image') a.image = argv[++i];
+    else if (k === '--integration') a.integration = argv[++i];
     else if (k === '--caption-from') a.captionFrom = argv[++i];
     else if (k === '--date') a.date = argv[++i];
     else if (k === '--key-file') a.keyFile = argv[++i];
@@ -80,15 +84,18 @@ const main = async () => {
     return;
   }
 
-  if (!args.slides || !args.captionFrom || !args.date) {
-    throw new Error('Faltan --slides, --caption-from y --date');
+  if ((!args.slides && !args.image) || !args.captionFrom || !args.date) {
+    throw new Error('Faltan --slides (o --image), --caption-from y --date');
   }
 
-  const files = readdirSync(args.slides)
-    .filter((f) => /^slide-\d+\.png$/.test(f))
-    .sort()
-    .map((f) => join(args.slides, f));
-  if (!files.length) throw new Error(`sin slides en ${args.slides}`);
+  // --image: un post de una sola imagen (los de Lucia). --slides: carrusel.
+  const files = args.image
+    ? [args.image]
+    : readdirSync(args.slides)
+        .filter((f) => /^slide-\d+\.png$/.test(f))
+        .sort()
+        .map((f) => join(args.slides, f));
+  if (!files.length) throw new Error(`sin slides en ${args.slides || args.image}`);
 
   const brief = JSON.parse(readFileSync(args.captionFrom, 'utf8'));
 
@@ -96,9 +103,12 @@ const main = async () => {
   // caption son las que deciden si alguien abre el post — una pared de hashtags las entierra.
   const caption = brief.caption;
   const slug = basename(args.captionFrom, '.json');
+  // brief.src === false apaga el link de atribucion: en la cuenta de Lucia un
+  // link a onia.com.bo en cada post es venta de mas para una cuenta de alcance
+  // (el trafico va Lucia -> @oniahq por mencion, no por link).
   const comment = [
     (brief.hashtags || []).join(' '),
-    `📎 onia.com.bo/?src=${slug}`,
+    brief.src === false ? '' : `📎 onia.com.bo/?src=${slug}`,
   ].filter(Boolean).join('\n\n');
 
   const image = [];
@@ -120,7 +130,7 @@ const main = async () => {
       tags: [],
       posts: [
         {
-          integration: { id: INTEGRATION },
+          integration: { id: args.integration || INTEGRATION },
           value,
           settings: { post_type: 'post' }, // sin esto: 400
         },
