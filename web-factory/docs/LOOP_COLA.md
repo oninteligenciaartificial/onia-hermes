@@ -481,7 +481,41 @@ Las tres formas de fantasma que ya aparecieron acá:
       con **6.192 bytes** de shell JS — descartados, no se computa nada de ahí.
       **Gates**: `typecheck:packages` verde (ítem 100% de docs/data: no toca `packages/`
       ni superficie renderizada). Sigue sin ancla y queda para B: **portfolio (N=1)**.
-- [ ] **B2 · Rubros flacos:** wellness quedó N=1; cosechar 2-3 más. Skincare +2.
+- [x] **B2 · Rubros flacos** (2026-08-31). Evidencia re-verificada antes de tocar: la
+      línea *"N=1 real todavía"* seguía viva en `2026-08-29-vertical-playbooks.md:67` y
+      §2 seguía sin segunda ancla. Cosechados **5 sitios vivos** con el método de B1
+      (Scrapling `impersonate=chrome` + seguir el `<link rel=stylesheet>`, hexes por
+      **token declarado** y saturación en **HSV**): wellness → **othership.us** +
+      **remedyplace.com**; estética → **alchemy43.com** + **skinlaundry.com** (clínicas)
+      y **us.typology.com** (producto DTC). Evidencia con cifras en
+      `data/references/design-sources/2026-08-31-cosecha-rubros-flacos.md`; §2 del
+      playbook reescrita entera.
+      **Las DOS reglas centrales de §2 estaban mal y lo dijo el dato, no la lectura:**
+      (a) *"sin pop (sat 5-15%)"* — othership declara `--os-lime: #dbf572` en **HSV S
+      53,5%** (y `--os-plum #372338` como dominante, 116 usos): más del triple del techo
+      escrito. Era el piso de la muestra vendido como ley, el MISMO error que el `<15%`
+      dental de B1. Wellness pasa a **dos regímenes** (sin pop / crema+tinta+un pop).
+      (b) *"estética/skincare = nude cálido + blush"* — le recetaba a la **clínica** la
+      paleta del **producto DTC**, y Onia vende la clínica (esteticagest). Las dos
+      clínicas reales van al revés: tinta oscura + UN acento saturado (alchemy43 oro
+      `#e5ad5a` S 60,7% sobre `#12181f`; skinlaundry lima `#cdf765` S 59,1% sobre
+      `#1a1312`). El nude SÍ se confirma — en DTC: typology (`#f6e7d8`/`#f1d7c3`/
+      `#e8c4a8`) coincide con ONSKN, N=2.
+      Hallazgos: **alchemy43 corre display serif + grotesca de cuerpo** (`freight-neo-pro`
+      en `h1..h6` + `work-sans`), o sea el par de Onia en una clínica real que factura; y
+      **remedyplace corre una sola familia** (Beausite Slick/Classic) — segundo caso real
+      del mono-sans prohibido, así que esa prohibición se cita como decisión de Onia y no
+      como observación del mercado. **Ruido de scraper nuevo**: en remedyplace y typology
+      los hexes MÁS frecuentes son defaults de Tailwind (`--tw-ring-color #2563eb`,
+      escala `--tw-prose-*`) y en glowbar de Shopify Polaris (`--color-critical`,
+      `--color-success`, `--color-reviews`) — leído por frecuencia, remedyplace parecería
+      una marca azul. Regla: **descartar por NOMBRE del token, no por frecuencia**.
+      ⚠️ **Un 200 con h1 tampoco es un ancla**: ever-body.com sirve 31.834 bytes con h1
+      "We’re getting things ready" (holding); peachystudios.com da 200 con **136 bytes**;
+      heydayskincare.com sirve 681 KB pero su color dominante sale de tokens de sección
+      de Shopify. Los tres descartados.
+      **Gates**: `typecheck:packages` verde (ítem 100% docs/data: no toca `packages/` ni
+      superficie renderizada). Sigue sin ancla y queda para B: **portfolio (N=1)**.
 - [ ] **B3 · Update skill `ui-ux-pro-max`** a v2.13 (`uipro-cli`, MIT) — solo local.
 
 ## Regla de alternancia (cómo el loop "siempre trabaja")

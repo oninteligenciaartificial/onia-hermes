@@ -51,21 +51,74 @@ Dos sub-ejes según público — el contraste está literalmente en el corpus.
 
 ---
 
-## 2. Estética / Wellness
+## 2. Estética / Wellness (elegir REGIMEN y SUB-EJE antes de la paleta)
 
-- **Paleta:** crema cálida `#FBF3EB` `#F2EFE9`, tinta `#242424`/`#000`, acento tierra desaturado `#DFD7C8` `#CCC0A8` — o **sin pop** (sat 5-15%). Vende calma/premium.
-- **Par tipográfico:** `Aime` (serif alto contraste, corpus frequencybreathwork) → **Fraunces** (opsz 144) titular + **DM Sans** body. Peso fino/medio: el carácter viene del contraste del trazo, no del peso.
-- **Orden de secciones:** NAV → HERO editorial sereno (video/imagen ambiente + statement) → FILOSOFÍA → PROGRAMAS/SERVICIOS → MECANISMO ("cómo transforma") → TESTIMONIOS/REFLEXIONES → CTA "Reservar" → FOOTER.
-- **Hero:** editorial de ambiente, alto contraste tipográfico, mucho aire (ritmo largo, pocas secciones grandes).
-- **Motion:** PREMIUM. frequencybreathwork es el arquetipo cine: SplitText en el titular (`stagger 0.08-0.12`), ScrollTrigger scrub, Lenis smooth-scroll. Ducking suave, quietud entre golpes — nunca estridente.
-- **Exemplars:** https://frequencybreathwork.com/ (Aime + Neue Montreal, stack GSAP+Lenis completo) · https://joindawn.com/ (crema pura, ritmo sereno)
-- **⚠️ Sub-eje ESTÉTICA/BELLEZA (distinto de wellness) — ancla real 2026-08-29:**
-  wellness = calma/crema; **estética/skincare = nude cálido + blush + charcoal.**
-  Ancla: **ONSKN** (onskn.com, cosechado con Scrapling): `#F2CDA0`/`#E8BD8B`
-  (nude/arena cálida) + `#FFD9D2` (blush rosado) + `#32373C` (charcoal) + negro.
-  Es más sensorial y con color de piel/producto, no el crema monástico del
-  wellness. N=1 real todavía — cosechar 2-3 skincare más para hacerlo ley
-  (estética es rubro VIVO de Onia: esteticagest).
+> ⚠️ Reescrita el **2026-08-31** con la cosecha de `2026-08-31-cosecha-rubros-flacos.md`
+> (5 sitios vivos nuevos). Antes esta sección era **N=1 por sub-eje** y las dos reglas
+> centrales estaban mal: el "sin pop" y el "nude para estética". Las dos las desmintió
+> el dato medido, no la lectura.
+
+### 2.1 Wellness — son DOS regímenes, no uno
+
+- **(a) Crema monástica / sin pop.** Base crema cálida `#FBF3EB` `#F2EFE9`, tinta
+  `#242424`/`#000`, acento tierra desaturado `#DFD7C8` `#CCC0A8`, **HSV S <16%**.
+  Vende quietud. Anclas: frequencybreathwork, joindawn, **remedyplace** (greige
+  cálido `#b9b2aa` S 8,1% · `#403b36` 15,6% · `#8a8580` 7,2%, tinta `#1a1817`).
+- **(b) Crema + tinta profunda + UN pop saturado.** Ancla: **othership.us**, con
+  tokens de marca declarados `--os-plum: #372338` (H 297°, 116 usos, el no-neutro
+  más frecuente), `--os-lime: #dbf572` (**HSV S 53,5%**), `--os-cream: #ece8e3`
+  (+ pink `#cb72c4`, teal `#a7cfc9`, dark-orange `#a24e2b`). Vende ritual con
+  energía (sauna/hielo, social), no silencio.
+- 🔴 **La regla vieja decía "sin pop (sat 5-15%)" y othership la reprueba al triple.**
+  Era el piso de la muestra escrito como ley — el MISMO error que el `<15%` dental
+  que corrigió B1. Saturación siempre en **HSV** y declarada.
+
+### 2.2 Estética — el sub-eje que vende Onia NO es el nude
+
+**Onia vende clínica** en este rubro (esteticagest). Las dos clínicas reales no
+usan nude ni blush; el nude es del **producto DTC**:
+
+| Sub-eje | Régimen medido | Anclas |
+|---|---|---|
+| Skincare **producto/DTC** | nude cálido desaturado (HSV S 12-34%) + blush + charcoal | **ONSKN** (`#F2CDA0`/`#E8BD8B` + blush `#FFD9D2` + charcoal `#32373C`) · **typology** (`#f6e7d8` 12,2% · `#f1d7c3` 19,1% · `#e8c4a8` 27,6%) |
+| Estética **clínica** (lo de Onia) | tinta oscura/casi-negra + **UN** acento saturado, HSV S ~55-61% | **alchemy43** (`--highlight-color #e5ad5a` oro S 60,7%, 182 usos, sobre `--accent-color #27494e` teal y `--body-color #12181f`) · **skinlaundry** (tinta `#1a1312` S 30,8% V 10,2 + pop lima `#cdf765` S 59,1%) |
+
+Lo que se porta a una clínica es **"un acento saturado sobre tinta oscura"**, no el
+hex: los dos pops coinciden en magnitud (60,7% y 59,1%) y no en hue.
+
+### 2.3 Lo común a los dos sub-ejes
+
+- **Par tipográfico:** `Aime` (serif alto contraste, corpus frequencybreathwork) →
+  **Fraunces** (opsz 144) titular + **DM Sans** body. Peso fino/medio: el carácter
+  viene del contraste del trazo, no del peso.
+  Medido en `h1..h6` de las anclas nuevas: **alchemy43 → `freight-neo-pro`
+  (fallback `serif`) + `work-sans`** — display serif + grotesca de cuerpo, o sea el
+  par de Onia en una clínica real que factura. skinlaundry → `Apris` + `Manrope`.
+  othership → `Lido Condensed` + `Founders Grotesk` (display condensado).
+  ⚠️ **remedyplace corre `Beausite` para TODO** (Slick display / Classic): segundo
+  caso real del mono-sans que `MOTION_PATTERN_BANK:462` prohíbe (el primero fue
+  smilebar con Satoshi). La prohibición se cita como **decisión de diferenciación
+  de Onia**, no como observación del mercado.
+- **Orden de secciones:** NAV → HERO editorial sereno (video/imagen ambiente +
+  statement) → FILOSOFÍA → PROGRAMAS/SERVICIOS → MECANISMO ("cómo transforma") →
+  TESTIMONIOS/REFLEXIONES → CTA "Reservar" → FOOTER.
+- **Hero:** editorial de ambiente, alto contraste tipográfico, mucho aire (ritmo
+  largo, pocas secciones grandes).
+- **Motion:** PREMIUM en el régimen (b) y en cine-wellness — frequencybreathwork es
+  el arquetipo (SplitText `stagger 0.08-0.12`, ScrollTrigger scrub, Lenis) y
+  **othership también trae gsap + ScrollTrigger**. Pero el régimen (a) NO lo exige:
+  remedyplace es Next sin librería de motion detectada y sostiene la calma. Ducking
+  suave, quietud entre golpes — nunca estridente.
+- **Exemplars:** https://frequencybreathwork.com/ (Aime + Neue Montreal, GSAP+Lenis)
+  · https://remedyplace.com/ (greige cálido, Beausite) · https://www.othership.us/
+  (plum + lime, Webflow + GSAP) · https://alchemy43.com/ (clínica: oro + teal,
+  freight-neo-pro) · https://www.skinlaundry.com/ (clínica: tinta + lima, Apris) ·
+  https://us.typology.com/ (DTC nude) · https://joindawn.com/ (crema pura)
+- ⚠️ **No sirven de ancla:** peachystudios.com (200 con **136 bytes**),
+  ever-body.com (200 pero h1 "We’re getting things ready" = holding) y
+  heydayskincare.com (sirve 681 KB, pero su color dominante sale de tokens de
+  sección de Shopify, no de marca). **Un 200 con h1 tampoco alcanza si el h1 es el
+  holding.**
 
 ---
 
@@ -170,6 +223,12 @@ Dos sub-ejes según público — el contraste está literalmente en el corpus.
 ## Nota de fidelidad (límites de datos)
 
 - **Actualizado 2026-08-31** (`2026-08-31-cosecha-rubros-sin-ancla.md`): dental real, ganadero/agro, importadora/B2B e IA/agentes pasan de analogía a **N=2 con dato computado** cada uno. Quedan como hipótesis: **portfolio (N=1 legible)** y el resto de servicio/clínica genérico. SaaS (N=5) y ecommerce (N=5) siguen siendo los buckets más sólidos.
+- **Actualizado 2026-08-31 (segunda pasada, `2026-08-31-cosecha-rubros-flacos.md`):** §2
+  deja de ser N=1 por sub-eje — **wellness N=3** (partido en dos regímenes: sin pop /
+  con pop saturado) y **estética N=4** (partido en producto DTC vs clínica, N=2 cada
+  uno). Las dos reglas que había escritas ahí estaban mal y las desmintió el dato:
+  el "sin pop (sat 5-15%)" y el "nude para estética" — que le recetaba a la clínica
+  la paleta del sub-eje que Onia no vende. **Sigue sin ancla: portfolio (N=1).**
 - Dos correcciones que salieron de medir, no de leer: el umbral de saturación dental estaba mal (`<15%` → **HSV <25%**) y la importadora no es negra-de-un-acento sino **navy de dos**. Las dos venían de heredar la muestra equivocada.
 - 11 sitios traen `fonts:[]` (CSS externo no capturado); sus tipografías se enriquecieron por `.woff2` del crudo o se derivan del rubro análogo (marcado por el exemplar citado).
 - Sin señal tipográfica alguna: maximatherapy, getnudge, maticrobots, readily, sutera (por rubro análogo). ironhill y joshuataylordesign: HTML vacío, excluidos de exemplars.
