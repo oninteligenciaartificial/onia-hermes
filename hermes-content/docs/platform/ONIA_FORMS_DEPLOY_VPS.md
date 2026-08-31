@@ -1,5 +1,112 @@
 # Onia Forms — Deploy VPS (runbook)
 
+> ⚠️ **2026-08-27 — se cayo y se revivio.** El contenedor `onia-forms` DESAPARECIO
+> (probablemente en la limpieza del VPS durante la crisis de CPU). `forms.onia.com.bo`
+> quedo devolviendo **502 durante dias** y nadie se entero: la ruta de Traefik sigue
+> viva aunque el contenedor detras no exista.
+>
+> **Nada se habia perdido**: los 3 HTML seguian en `/opt/onia-forms/html`, la config de
+> nginx en `/opt/onia-forms/nginx/default.conf`, y la ruta en Traefik. Faltaba SOLO
+> volver a correr el contenedor. Comando exacto en "Como se levanta" abajo.
+>
+> **Cambio al revivirlo: ya NO se publica el puerto `8189`.** El firewall solo deja
+> 80/443, asi que ese puerto nunca sirvio para verificar y era exposicion al pedo.
+> Traefik llega por la red `easypanel`.
+
+## Que cubre cada formulario, y que falta para construir una web (2026-08-27)
+
+Sergio pregunto si lo que se pide alcanza para generar la web. **Medido contra las 39
+preguntas de `web-factory/INTAKE_CLIENTE.md`**, que es lo que el Lab necesita para
+construir sin idas y vueltas:
+
+| Formulario | Campos | Para que sirve DE VERDAD |
+|---|---|---|
+| `/alta` | 34 | **Alta en el sistema + configurar el bot.** Su seccion "para tu web" es superficial |
+| `/brief` | 41 | **Este SI es el levantamiento de web.** Cubre ~80% del intake |
+| `/cuestionario` | 40 | descubrimiento comercial |
+
+**El `/alta` solo NO alcanza para una web.** El `/brief` casi si — y los dos juntos se
+tapan huecos entre ellos: el brief no pide rubro, ciudad, direccion, horarios ni NIT, y
+el alta si.
+
+### RESUELTO 2026-08-27 — los huecos se cerraron en el `/brief`
+
+Se agregaron **10 campos** al `/brief` (de 41 a 51 campos de formulario; 61 controles
+contando cada checkbox). Ahora el brief cubre el intake completo:
+
+| Campo nuevo | Mapea a | Por que |
+|---|---|---|
+| `cta_objetivo` (chips, **obligatorio**) | — | que accion tiene que provocar la web |
+| `cta_texto` | `cta.label` | lo que dice el boton |
+| `cta_destino` | `cta.url` | a donde lleva |
+| `evitar` | — | que NO quieren: evita rehacer el trabajo entero |
+| `estilo` (6 chips) | — | direccion visual explicita |
+| `tagline` | `tagline` | eslogan |
+| `seo_title` | `seo.title` | titulo para Google |
+| `og_image` | `seo.ogImage` | la imagen que aparece al pegar el link en WhatsApp |
+| `telefono` | `contacto.tel` | el fijo, antes solo pedia WhatsApp |
+| `paga_hosting` | — | el dominio va a nombre del cliente |
+
+**`cta_objetivo` es el unico nuevo que se exige.** Es un clic en un chip — barato de
+responder — y sin el la web se construye sin saber que tiene que lograr. El resto queda
+opcional para no subirle la friccion a un formulario que ya es largo.
+
+⚠️ **La trampa de este formulario, y por que hay que releer esto antes de tocarlo:** el
+payload NO se arma con todo el `FormData`, sino recorriendo una **lista blanca `CAMPOS`**
+en el `<script>`. Un campo agregado al HTML que no este en esa lista **se dibuja y no se
+envia** — se ve perfecto y llega vacio. Los checkbox de valores multiples ademas tienen
+que estar en `MULTI`, o solo viaja el primero marcado.
+
+Chequeo obligatorio despues de tocar el form (`viewport` sale como falso positivo, es la
+etiqueta `<meta>`):
+
+```bash
+python - <<'EOF'
+import re
+s=open("hermes-content/propuestas/brief-produccion.html",encoding="utf-8").read()
+html=set(re.findall(r'name="([a-z_]+)"',s))
+campos=set(re.findall(r'"([a-z_]+)"',re.search(r'const CAMPOS = \[(.*?)\];',s,re.S).group(1)))
+multi=set(re.findall(r'"([a-z_]+)"',re.search(r'const MULTI = \[(.*?)\];',s,re.S).group(1)))
+checks=set(re.findall(r'type="checkbox" name="([a-z_]+)"',s))
+print("se dibujan y NO se envian:", sorted(html-campos-{'viewport'}) or "ninguno")
+print("checkbox fuera de MULTI:", sorted(checks-multi) or "ninguno")
+EOF
+```
+
+### FAQ: ya existia
+
+Esta en el `/alta`, con repetidor de pregunta/respuesta (pensado para el bot, sirve igual
+para la seccion FAQ de la web). Se habia listado como faltante por error.
+
+---
+
+## Como se levanta (probado 2026-08-27)
+
+```bash
+docker run -d --name onia-forms --network easypanel --restart unless-stopped   -v /opt/onia-forms/html:/usr/share/nginx/html:ro   -v /opt/onia-forms/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro   nginx:alpine
+```
+
+**Verificacion que SI cuenta** (un 200 no alcanza — el form puede renderizar y postear
+al vacio):
+
+```bash
+# 1. las 3 rutas responden
+for p in /cuestionario /brief /alta; do curl -s -o /dev/null -w "%{http_code}
+" https://forms.onia.com.bo$p; done
+
+# 2. el webhook de n8n sigue REGISTRADO (sin escribir datos):
+curl -s https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/alta-cliente
+# "not registered for GET ... did you mean POST?"  => el POST esta ACTIVO
+# "The requested webhook is not registered"        => el workflow esta APAGADO
+```
+
+Los 3 webhooks se verificaron activos el 2026-08-27.
+
+⚠️ **Ojo de marca:** el formulario es AZUL y la marca de Onia es verde. Queda anotado,
+no se toco: es decision de diseno, no un bug.
+
+---
+
 Cuestionario, brief y alta de clientes (`/cuestionario`, `/brief`, `/alta`),
 autohospedados en el VPS (`187.77.16.63`, Easypanel). Verificado en vivo
 2026-08-01; `/alta` agregado y verificado 2026-08-16.

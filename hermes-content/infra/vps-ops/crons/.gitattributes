@@ -1,0 +1,3 @@
+# Estos scripts corren en el VPS (Linux). Con CRLF, /bin/sh los rechaza
+# con "bad interpreter: /bin/sh^M". core.autocrlf=true en Windows los rompe.
+*.sh text eol=lf

@@ -1,5 +1,12 @@
 # Cómo se vende una página web
 
+> 🔴 **2026-08-27 — NO hay equipo de ventas.** Decisión de Sergio: no hay vendedora, no
+> hay colaboradores comerciales, no hay nadie externo vendiendo. **El que vende es Sergio.**
+> Todo lo que este doc dice sobre "la vendedora" y sus comisiones queda **SUSPENDIDO**: no
+> es una regla vigente, es cómo se pensaba operar cuando se planeaba un equipo.
+> No se borra porque el resto del proceso sí sirve — pero **nadie debe ejecutar un pago de
+> comisión ni escribir material dirigido a un vendedor** mientras esto siga así.
+
 **Qué vendemos cuando alguien pide una web, cómo se compra, quién la construye y qué
 necesitamos del cliente.**
 
@@ -180,7 +187,10 @@ Auditoría gratis  →  ¿web o sistema?  →  cotización (generador)  →  ant
 
 Tres fuentes del repo dicen exactamente lo mismo, y una de ellas es **código vivo**:
 
-| Paquete | Precio Bs (pago único) | Comisión vendedora |
+⚠️ **La columna de comisión está SUSPENDIDA** (no hay vendedores — ver el aviso del
+encabezado). Se deja escrita para no perder el esquema si algún día hay equipo.
+
+| Paquete | Precio Bs (pago único) | ~~Comisión vendedora~~ (suspendida) |
 |---|---:|---:|
 | Landing de Captación | **790** | 10% |
 | Web Profesional | **1.500** | 12% |
@@ -200,8 +210,13 @@ Tres fuentes del repo dicen exactamente lo mismo, y una de ellas es **código vi
 2. `hermes-content/docs/ONIA_PRICING_2026.md` líneas 58–60 y 183–189.
 3. `hermes-content/propuestas/ONIA_CATALOGO_PRECIOS_2026.md` §2.
 
-**Comisión de la vendedora: una sola vez, sobre el primer pago neto real cobrado.** Los pagos
-siguientes son de Onia.
+~~**Comisión de la vendedora: una sola vez, sobre el primer pago neto real cobrado.** Los
+pagos siguientes son de Onia.~~ — **SUSPENDIDO desde el 2026-08-27: no hay vendedores.**
+
+🟡 **Superficie huérfana detectada:** `/vendedores/cotizador` y `/vendedores/webs` son
+pantallas VIVAS en `web-factory` construidas para un vendedor que no existe. No se tocan en
+este barrido porque son rutas publicadas y sacarlas es una decisión aparte — pero quedan
+anotadas: son código mantenido para un puesto vacío.
 
 ⚠️ **Estos precios están vencidos y hay un conflicto abierto. Leer §8 antes de cotizar.**
 

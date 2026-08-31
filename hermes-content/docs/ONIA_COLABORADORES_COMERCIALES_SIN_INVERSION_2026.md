@@ -243,4 +243,4 @@ subir de nivel.
 - `ONIA_PANEL_VENDEDORES_2026.md`
 - `ONIA_HERMES_COLLABORATOR_ACCESS_MODEL_2026.md`
 - `ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`
-- `ONIA_PRICING_2026.md`
+- **Precios: `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons)** — la fuente. Transcritos junto a sus funciones en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`ONIA_PRICING_2026.md` quedó degradado el 2026-08-27: es historia de junio, no fuente.)*

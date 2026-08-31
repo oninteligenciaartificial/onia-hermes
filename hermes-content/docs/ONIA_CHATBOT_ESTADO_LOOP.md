@@ -98,7 +98,7 @@ con placeholders de rubro (no dental). Capturas `b02`–`b17`, `e04`, `e05`.
 ### El PAGO del add-on chatbot es 100 % manual (la pregunta grande)
 **Cómo contrata HOY un cliente el chatbot**: en `/settings` → Mi Plan → tarjeta "Chatbot
 WhatsApp" → link **"Solicitar activación"** = mensaje wa.me pre-armado a Onia. De ahí en
-adelante todo es humano: cobrar los Bs 1.500 + 1.490/mes por fuera, y el superadmin
+adelante todo es humano: cobrar los Bs 390/mes por fuera, y el superadmin
 activa el add-on a mano (WhatsAppOrgConfig o entitlement en /capacidades).
 **Hueco exacto**: `POST /api/subscription-payment` solo valida PLANES
 (`isSubscriptionPlan`: basic/professional/clinic/enterprise) — no existe `addon` como
@@ -176,7 +176,7 @@ producto no mapea.
 ## 3. NO CONSTRUIDO (y qué implicaría)
 
 - **Checkout self-serve del add-on chatbot**: aceptar `addon: whatsapp` en
-  `subscription-payment` (o tabla propia), monto 1.500 + 1.490 validado contra
+  `subscription-payment` (o tabla propia), monto Bs 390 (o Bs 3.900 anual) validado contra
   `pricing.ts`, y que la aprobación del superadmin encienda `whatsappAddon`
   automáticamente. Hoy: wa.me + toggle manual.
 - **Contador de conversaciones por org** (las 500 incluidas): tabla/contador mensual por

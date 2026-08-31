@@ -1,0 +1,125 @@
+/* ==========================================================================
+   Cinco paletas de lujo — tokens.
+   Fuente: reel https://www.instagram.com/p/DbvmsWlDKo6/ (ficha
+   cinco-paletas-de-lujo-hex-recuperados). Los hex estan ESCRITOS en pantalla:
+   son RECUPERADOS, no muestreados ni reconstruidos. Copiados literales.
+
+   Convencion: la misma de onia-center/styles/tokens.css — custom properties con
+   nombre de ROL (no de color), scopeadas a una clase, para que el consumidor
+   pinte con var(--bg) / var(--accent) y no con el hex. Un hex suelto no es un
+   token: sin rol, la paleta se usa mal.
+
+   Roles: --bg (pagina) · --surface (paneles/tarjetas) · --ink (texto principal)
+          --accent (el saturado) · --on-accent (texto ENCIMA del acento)
+          --line (hairline, obligatorio donde surface no se despega del bg)
+
+   ⚠️ CONTRASTE: cada combinacion esta medida con la formula de luminancia
+   relativa de WCAG (la misma de web-factory/packages/tokens/src/index.ts).
+   Los ratios y los que NO pasan estan anotados aca al lado y en el README.
+   AA = >=4.5:1 (texto normal). AA-large = >=3:1 (>=24px, o >=18.66px bold).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1 · Racing — esquema oscuro. Rojo de carrera sobre casi-negro cafe.
+   -------------------------------------------------------------------------- */
+.paleta-racing {
+  color-scheme: dark;
+
+  --bg: #1a0706;               /* Coffee Bean */
+  --surface: #55100d;          /* Black Cherry — 1,36:1 vs bg: NO se despega solo */
+  --ink: #d9d9d9;              /* Alabaster Grey — 13,81:1 vs bg · 10,15:1 vs surface */
+  --accent: #dd0200;           /* Racing Red */
+  --on-accent: #ffffff;        /* 5,14:1 sobre el acento — AA */
+
+  /* El hairline es obligatorio: surface y bg casi no se distinguen. Derivado
+     del --ink recuperado, no es un color nuevo. */
+  --line: color-mix(in srgb, var(--ink) 16%, transparent);
+
+  /* ⚠️ El acento NO pasa como texto: 3,79:1 sobre --bg (solo AA-large) y
+     2,78:1 sobre --surface (FALLA). Va como relleno, borde o grafico. */
+}
+
+/* --------------------------------------------------------------------------
+   2 · Gold & Slate — esquema oscuro. DOS acentos saturados (ver README, paso 4).
+   -------------------------------------------------------------------------- */
+.paleta-gold-slate {
+  color-scheme: dark;
+
+  --bg: #112532;               /* Dark Blue */
+  --ink: #88a5b7;              /* Light Slate Blue — 6,08:1 vs bg — AA */
+  --accent: #f4b044;           /* Warm Gold — 8,35:1 vs bg: pasa AA hasta como texto */
+  --on-accent: #112532;        /* el propio Dark Blue sobre el oro: 8,35:1 — AA */
+  --accent-2: #e0680e;         /* Burnt Orange — 4,61:1 vs bg, AA justo */
+  --on-accent-2: #112532;      /* 4,61:1 — AA (blanco sobre el naranja da 3,41: FALLA) */
+
+  /* No hay un segundo oscuro entre los 4 recuperados: la superficie es DERIVADA
+     mezclando dos recuperados de la misma paleta. Resuelve a #1d323f. */
+  --surface: color-mix(in srgb, #88a5b7 10%, #112532);
+  --line: color-mix(in srgb, var(--ink) 22%, transparent);
+
+  /* Sobre --surface: ink 5,14:1 AA · gold 7,05:1 AA · orange 3,90:1 AA-large. */
+  /* ⚠️ Los dos acentos entre si dan 1,81:1: nunca uno sobre el otro. */
+}
+
+/* --------------------------------------------------------------------------
+   3 · Rosewood — esquema claro. La unica cuyo acento pasa AA como TEXTO
+   sobre las dos superficies. Es la mas solida de las cinco.
+   -------------------------------------------------------------------------- */
+.paleta-rosewood {
+  color-scheme: light;
+
+  --bg: #f1ece6;               /* Alabaster Cream */
+  --surface: #ddd5cd;          /* Warm Greige — 1,24:1 vs bg (normal en claro) */
+  --ink: #2e2e2e;              /* Charcoal Espresso — 11,56:1 vs bg · 9,36:1 vs surface */
+  --accent: #7d4047;           /* Vintage Rosewood — 6,63:1 vs bg · 5,37:1 vs surface — AA */
+  --on-accent: #ffffff;        /* 7,79:1 — AA */
+
+  --line: color-mix(in srgb, var(--ink) 14%, transparent);
+
+  /* ⚠️ acento sobre ink: 1,74:1. Nunca texto rosewood sobre charcoal. */
+}
+
+/* --------------------------------------------------------------------------
+   4 · Terracotta — esquema claro. Dos acentos, y NINGUNO pasa AA como texto.
+   -------------------------------------------------------------------------- */
+.paleta-terracotta {
+  color-scheme: light;
+
+  --bg: #f0e6d8;               /* Soft Limestone */
+  --ink: #5a2e25;              /* Deep Rust — 9,19:1 vs bg — AA */
+  --accent: #b5543a;           /* Terracotta Clay */
+  --on-accent: #ffffff;        /* 4,89:1 — AA */
+  --accent-2: #6f7f5f;         /* Olive Accent */
+  --on-accent-2: #000000;      /* 4,88:1 — AA (blanco sobre el olivo da 4,31: FALLA) */
+
+  /* Superficie DERIVADA (mezcla de dos recuperados). Resuelve a #e6d9cb. */
+  --surface: color-mix(in srgb, #5a2e25 7%, #f0e6d8);
+  --line: color-mix(in srgb, var(--ink) 16%, transparent);
+
+  /* ⚠️ LA TRAMPA DE ESTA PALETA: los dos acentos fallan como texto.
+     clay 3,96:1 y olive 3,49:1 sobre --bg; 3,53 y 3,11 sobre --surface.
+     Solo AA-large (>=24px o >=18,66px bold). En cuerpo de texto: ilegible.
+     Van como relleno de boton (con --on-accent), grafico o borde grueso. */
+}
+
+/* --------------------------------------------------------------------------
+   5 · Earth — la mas restrictiva: tres oscuros indistinguibles entre si
+   (1,28 a 1,71:1) y un solo claro, que ademas es un tono MEDIO.
+   -------------------------------------------------------------------------- */
+.paleta-earth {
+  color-scheme: light;
+
+  --bg: #c29b72;               /* Beige — fondo medio, no claro */
+  --ink: #2b2d31;              /* Charcoal — 5,40:1 vs bg — AA */
+  --accent: #8d321f;           /* Terracotta */
+  --on-accent: #ffffff;        /* 8,05:1 — AA */
+  --ink-2: #3a4027;            /* Olive — 4,23:1 vs bg: AA-large, NO para cuerpo */
+
+  /* Superficie DERIVADA (mezcla de dos recuperados). Resuelve a #b7946c. */
+  --surface: color-mix(in srgb, #3a4027 8%, #c29b72);
+  --line: color-mix(in srgb, var(--ink) 20%, transparent);
+
+  /* ⚠️ acento 3,15:1 sobre --bg y 2,86:1 sobre --surface: FALLA como texto.
+     ⚠️ El mapeo oscuro (Charcoal de fondo) esta DESCARTADO: ahi el acento da
+     1,71:1 — el color de la paleta queda invisible. Por eso el fondo es el beige. */
+}

@@ -270,6 +270,29 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `lib/chatbot/push-te-escribieron.ts`, el webhook de Chatwoot y `public/sw.js`. El commit se
       hizo **con rutas explícitas** para no llevarse trabajo ajeno a medias. Y `npx vitest run`
       reescribió dos `.snap` **sólo con CRLF** (diff vacío): se revirtieron, no se commitearon.
+- [ ] **Limpiar las organizaciones de prueba** que quedaron en la base **LOCAL** (nombres con
+      "Prueba", ~9). Sólo local — producción no se toca.
+- [ ] **Los otros dos agujeros** que el escéptico marcó en `chore/sacar-dentalgest` y las dos
+      cifras del reporte que dijo que estaban mal. Están en el journal del workflow
+      `wf_7449df59-54c`. Leerlo antes de tocar.
+
+## Después
+
+- [ ] 🔒 **La mina de `page_location` en GA (en arreglo ahora).** `GoogleAnalytics.tsx:64` manda
+      `window.location.href` **completo** — con todos los query params — anulando el allowlist
+      `safeQueryParams` que la línea de arriba aplica cuidadosamente a `page_path`. Hoy es
+      inofensivo porque GA está apagado, pero **encenderlo es una env var**, y el día que alguien
+      la ponga, un token en `/login?...` o `/register?...` se va a Google y no se puede deshacer.
+      Lo encontró el subagente que fue a decidir si GA era código muerto — no estaba en ninguna
+      lista.
+
+- [ ] **`DELETE /api/payments/[id]` sobre un mes ya declarado** devuelve la factura a BORRADOR y
+      ese mes pierde la venta del CSV, sin nota de crédito de por medio. **No existe cierre de
+      período**: el RCV se regenera on demand para cualquier mes. Borra débito real, no inventa
+      crédito. Es un hueco conceptual, no un bug suelto.
+- [ ] **El guardia de repo de `invoice-status` es evadible** por alias (`const f = prisma.invoice`)
+      y por nested write, y no cubre `invoice.create`. Hoy no existe ninguno de los tres en el
+      repo, pero el guardia promete más de lo que da.
 - [ ] **La nota de crédito no pasa por `maybeEmitFiscalInvoice`**: el día que se enciendan los
       gates queda declarada en el CSV interno y no ante el SIN.
 - [ ] **Los ítems I1 y E1** de `TODOS_LOS_PENDIENTES.md` siguen sin resolver. Para decidirlos hay
@@ -299,6 +322,74 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 - **UI/UX del dashboard** — lo lleva la sesión de web-factory, no esta.
 
 ## Cerrado (2026-08-30) — no rehacer
+
+## Bloqueado — recontado el 2026-08-30
+
+> **Eran 10. Verificados uno por uno en vivo, quedan 4 que sólo puede hacer Sergio, 2 que
+> necesitan una palabra suya y nada más, y 4 que NO eran bloqueos.** Mismo patrón que los
+> features de la mañana: la lista se había llenado sin verificar.
+
+### Sólo Sergio — nadie más puede
+
+| # | Qué | Dónde | Cuánto |
+|---|---|---|---|
+| S1 | **Bajar el deployment de Vercel** que sigue sirviendo `dentalgest.app`. El auto-deploy ya está cortado (PR #58), pero el de las 16:22 quedó publicado y apunta al Supabase de la nube | panel de Vercel → `dental-gest` | 2 min |
+| S2 | **Decidir el dominio `dentalgest.app`**: redirigir a `app.onia.com.bo` o dejarlo morir. El DNS vive en Vercel (`ns1/ns2.vercel-dns.com`) | mismo panel | 2 min |
+| S3 | **Credenciales del BCP.** Sin esto no hay QR y el cobro sigue siendo manual | banco | — |
+| S4 | **Recorrer el circuito en producción**: crear una cuenta real, que mande un correo real, pagar. Es la única verificación que no se puede simular | `app.onia.com.bo` | 10 min |
+
+### Necesitan sólo un "dale" — después lo hago yo
+
+| # | Qué | Por qué necesita permiso |
+|---|---|---|
+| D3 | **Desplegar al VPS** cuando haya algo que valga el swap. Runbook y gates en la skill `onia-deploy`. ⚠️ Hoy hay commits en `master` que **no están en producción** | toca producción |
+
+### Ya NO son bloqueos — salieron de la lista
+
+- ~~**Vercel al tope (rate limit)**~~ — expiraba hoy **y además ya no publicamos**. Muerto por dos vías.
+- ~~**Renombrar el schema de producción**~~ — **ya estaba rechazado con motivo** en este mismo archivo (migración de datos vivos a cambio de prolijidad que ningún cliente ve). Estaba anotado como bloqueo y como rechazo al mismo tiempo.
+- ~~**GA4**~~ — **cerrado 2026-08-30: no es código muerto, es una perilla apagada bien.**
+  `GoogleAnalytics.tsx:96-99` hace early-return **antes** de montar el `<Script>` si falta
+  `NEXT_PUBLIC_GA_ID` (cero red, cero `dataLayer`, cero cookie), y encima el hijo filtra por un
+  allowlist de 6 rutas públicas, así que ni encendido rastrearía la app autenticada. La política
+  de privacidad ya está escrita **en condicional** (`app/privacy/page.tsx:92-95`), la CSP ya lo
+  contempla y `.env.example` lo trae vacío. **Encenderlo es UNA env var.** La entrada estaba mal
+  planteada: no había nada que sacar.
+- ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva web-factory. Estar en otra sesión no es estar bloqueado.
+
+## Cerrado (2026-08-31) — no rehacer
+
+- [x] **D2 · Cuentas de más dadas de baja en `onia_center`.** `arthur`, `seller_001` (Camila)
+      y `seller_002` (Jerónimo) → `status='blocked'`. Queda **sólo `sergio`** activo. Respaldo
+      del estado previo tomado antes del `UPDATE`; se revierte poniendo `'active'`.
+      **Cerrado por dos vías**: además del flag, `center.onia.com.bo` responde **404** — la
+      superficie ya estaba dada de baja.
+- [x] **D1 · Los 2 crons instalados en el VPS y PROBADOS.** Pre-chequeos del runbook en verde
+      (`CRON_SECRET` presente, `NEXT_PUBLIC_APP_URL=https://app.onia.com.bo` — no localhost,
+      `N8N_API_KEY` presente, sin duplicados). Crontab respaldado en
+      `/root/crontab-backup-antes-de-2-crons-20260831.txt` (29 líneas → 36). Scripts en
+      `/root/bin/` con permisos `700` y shebang sin CRLF. **Corridos a mano, los dos exit 0:**
+      - `recurring-invoices` → `{"ok":true,"processed":0,"failed":0,"total":0}` (hay **0 filas**
+        en `recurring_invoices`, así que era no-op garantizado — por eso se pudo probar sin
+        riesgo)
+      - `onia-core-workitems` → `{"ok":true,"organizations":3,"created":0,"deduped":0,"errors":0}`
+
+## Cerrado (2026-08-30) — no rehacer
+
+- [x] 🔒 **Dar de baja una cuenta del ONIA Center NO cerraba la puerta.** Apareció yendo a
+      verificar que D2 sirviera de algo. El middleware hacía `find(active) ?? profiles[0]` y la
+      consulta **no filtraba por status**: una cuenta dada de baja caía en el fallback, devolvía
+      su rol, y como el normalizador hace `role ?? ""` salía *truthy* — el guard `if (!role)` la
+      dejaba pasar. Test en rojo: `expected 'seller' to be ''`. Del otro lado
+      `onia-center-auth.ts:252` **sí** filtraba: dos caminos, uno solo cerrado. La decisión salió
+      a `lib/onia-center-perfil.ts` con 7 tests y es **fail-closed** (sin `status` no se asume
+      activo). Commit `3cccbe67`.
+- [x] 🔒 **La mina de `page_location`** — GA mandaba la URL entera y anulaba el allowlist que la
+      línea de arriba aplicaba a `page_path`. Dormida (GA apagado) pero **a una env var de
+      encenderse**. PR #59 mergeado: se arma del mismo path ya filtrado, y **el tipo se estrechó
+      a `{ origin }`** para que `tsc` frene el regreso.
+- [x] **GA4: no era código muerto.** Early-return antes de montar el script, allowlist de 6 rutas
+      públicas, política de privacidad ya escrita en condicional. Encenderlo es 1 env var.
 
 - [x] **Corregido el catálogo de venta en 5 puntos** — todos porque estaba viejo, y cuatro de
       los cinco **subvendían** el producto: los cinco rubros ofrecidos ya se venden (decía

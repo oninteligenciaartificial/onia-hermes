@@ -1,9 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-type OniaCenterProfile = {
-  primary_role_key?: string | null;
-  status?: string | null;
-};
+import { rolDePerfilAutorizado, type OniaCenterProfile } from "@/lib/onia-center-perfil";
+
 
 
 function oniaCenterAuthConfigured() {
@@ -127,14 +125,6 @@ function applyRefreshedCookies(response: NextResponse, refreshed: RefreshedSessi
   return response;
 }
 
-function normalizeRoleKey(role: string | null | undefined) {
-  if (role === "area_responsible") {
-    return "area";
-  }
-
-  return role ?? "";
-}
-
 function redirectToLogin(request: NextRequest, reason: string) {
   const loginUrl = request.nextUrl.clone();
   loginUrl.pathname = "/onia-center/login";
@@ -169,7 +159,7 @@ async function getOniaCenterSessionRole(accessToken: string) {
   }
 
   const profileResponse = await fetch(
-    `${supabaseUrl}/rest/v1/user_profiles?select=primary_role_key,status&auth_user_id=eq.${encodeURIComponent(user.id)}&limit=1`,
+    `${supabaseUrl}/rest/v1/user_profiles?select=primary_role_key,status&auth_user_id=eq.${encodeURIComponent(user.id)}&status=eq.active&limit=1`,
     {
       headers: {
         accept: "application/json",
@@ -185,14 +175,29 @@ async function getOniaCenterSessionRole(accessToken: string) {
   }
 
   const profiles = (await profileResponse.json()) as OniaCenterProfile[];
-  const profile = profiles.find((item) => item.status === "active") ?? profiles[0];
-  return normalizeRoleKey(profile?.primary_role_key);
+  // La decision de acceso vive en lib/onia-center-perfil.ts, con su test: el
+  // `?? profiles[0]` que habia aca dejaba entrar a una cuenta dada de baja.
+  return rolDePerfilAutorizado(profiles);
 }
 
 const NUVIA_STORE_ORIGIN = "https://nuvia-store.vercel.app";
 
 function isCenterHost(request: NextRequest) {
   return (request.headers.get("host") || "").includes("center.onia.com.bo");
+}
+
+// /vendedores/* quedo huerfana: es material para un puesto que NO EXISTE (no hay
+// equipo de ventas, vende Sergio) y ademas publica precios muertos — cotiza el
+// chatbot a Bs 1.500 de instalacion + Bs 1.490/mes cuando pricing.ts dice Bs 390
+// SIN instalacion, que es lo que ya muestra onia.com.bo/chatbot. Estaba sin auth,
+// sin noindex y con robots.txt en 404: indexable.
+// Se cierra detras de la sesion del center en vez de borrarla — reversible en una
+// linea el dia que Sergio quiera el cotizador de vuelta.
+function noEncontrado() {
+  return new NextResponse("Not Found", {
+    status: 404,
+    headers: { "x-robots-tag": "noindex, nofollow" },
+  });
 }
 
 export async function middleware(request: NextRequest) {
@@ -206,7 +211,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(`${NUVIA_STORE_ORIGIN}${pathname}${request.nextUrl.search}`, 308);
   }
 
-  if (!pathname.startsWith("/onia-center") || pathname.startsWith("/onia-center/login")) {
+  const esVendedores = pathname === "/vendedores" || pathname.startsWith("/vendedores/");
+
+  // Al reves que /onia-center: si no hay auth configurada, /vendedores NO queda
+  // abierta. Una superficie con precios equivocados falla cerrada, no abierta.
+  if (esVendedores && !oniaCenterAuthConfigured()) {
+    return noEncontrado();
+  }
+
+  if (!esVendedores && (!pathname.startsWith("/onia-center") || pathname.startsWith("/onia-center/login"))) {
     return NextResponse.next();
   }
 
@@ -218,7 +231,7 @@ export async function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get(REFRESH_COOKIE)?.value;
 
   if (!accessToken && !refreshToken) {
-    return redirectToLogin(request, "auth_required");
+    return esVendedores ? noEncontrado() : redirectToLogin(request, "auth_required");
   }
 
   let activeToken = accessToken;
@@ -237,6 +250,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!role || !activeToken) {
+    if (esVendedores) return noEncontrado();
     return redirectToLogin(request, accessToken ? "auth_verify" : "auth_required");
   }
 
@@ -245,6 +259,10 @@ export async function middleware(request: NextRequest) {
   // exige sesion. Encerrarlos en la vista legacy (regla del monolito) les
   // escondia su plan, el pipeline y el estudio. Cualquier ruta vieja los
   // devuelve a la home nueva; Sergio sigue viendo todo, legacy incluido.
+  if (esVendedores) {
+    return role === "sergio" ? applyRefreshedCookies(NextResponse.next(), refreshed) : noEncontrado();
+  }
+
   if (role !== "sergio" && !pathname.startsWith("/onia-center/next/")) {
     const homeUrl = request.nextUrl.clone();
     homeUrl.pathname = "/onia-center/next/hoy";
@@ -256,5 +274,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/onia-center/:path*", "/nuvia", "/nuvia/:path*"],
+  matcher: ["/onia-center/:path*", "/nuvia", "/nuvia/:path*", "/vendedores", "/vendedores/:path*"],
 };

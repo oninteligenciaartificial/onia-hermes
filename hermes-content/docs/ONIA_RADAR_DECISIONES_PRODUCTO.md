@@ -56,8 +56,9 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
 
 - Landing viva en onia.com.bo (139 kB, deployada; /comparativa arriba).
 - Precios: `onia-platform/lib/pricing.ts` ÚNICA fuente (regla dura). Chatbot:
-  Bs 1.500 instalación + Bs 1.490/mes con 500 conversaciones + "a medida" cotizado.
-  Costeo post-1-oct verificado (aguanta); checkpoint 1-sep para la tarifa exacta.
+  **Bs 390/mes o Bs 3.900/año, sin cargo inicial**, con 500 conversaciones + "a medida"
+  cotizado. El consumo de Meta lo paga el cliente en su cuenta (por eso el abono cierra a
+  este precio — ver `ONIA_FECHAS_CRITICAS_PLAN.md`). Checkpoint 1-sep para la tarifa exacta.
 - Promesa SIAT RETIRADA de la bio hasta que el NIT (S2) destrabe — al volver, es el
   argumento del 30-sep (RND 102600000007, grupos 9-12 por NIT, verificable).
 - Pendiente: hero nuevo (queued de sesión anterior) · portar los precios nuevos del

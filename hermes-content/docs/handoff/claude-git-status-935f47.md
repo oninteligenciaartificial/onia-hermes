@@ -27,6 +27,12 @@ diciendo lo mismo que el código.
 | **Buscador de producto scopeado al depósito** (la caja ya no ofrece stock ajeno) | 🟢 vivo |
 | Vencimientos por lote, reprecio por devaluación (deploy anterior `03b410a`) | 🟢 vivo |
 | **VPS sano** — steal 95% → 9%, load 171 → ~1, login 9,3 s → 0,14 s | 🟢 |
+| **`cal.onia.com.bo`** — daba 502; ahora redirige (302) a `onia.com.bo/empezar` | 🟢 vivo |
+| **`forms.onia.com.bo`** — daba 502; contenedor nginx recreado, 3 formularios y sus webhooks verificados | 🟢 vivo |
+| **Los 3 formularios pasan al verde de Onia** — eran azules; fondo `#EDFBF3` + tinta negra (18,57:1) | 🟢 vivo |
+| **Botón de Google en el login** — llevaba a un 400 crudo; ya no se dibuja | 🟢 |
+| **Add-on de inventario** — dejó de cobrarse; las funciones quedan visibles como incluidas | 🟢 |
+| **Contador de uso del plan** — el tope se ve antes del 403 | 🟢 |
 
 `BUILD_ID` en producción: `2v-oviM-B2TOEoIsxmdJW`.
 Backup del runtime anterior: `/opt/onia-platform/runtime-next.prev-20260825-204330`.
@@ -49,8 +55,11 @@ con cache-buster, o sea que el origen sirve el build nuevo y no es caché de Clo
   en el server bundle, `307` al login sin sesión. Falta que Sergio la abra (§6).
 - 🟡 **~18 docs internos con precios viejos.** `ONIA_AGENTES_COSTO_API.md` necesita que se
   REHAGA la cuenta de margen, no un reemplazo de texto: Bs 1.490 es la base del cálculo.
-- 🟡 **Dos decks HTML de la vendedora** con tablas de precio viejas: falta decidir si se
-  reescriben, se archivan o se les pone banner.
+- ✅ **Material de vendedores: RESUELTO el 2026-08-27.** Sergio: no hay equipo de ventas.
+  Todo lo que asumía un vendedor tercero (packet, decks, runbook de acceso, CRM de
+  vendedores) se archivó en `historial/`. El `sales-kit/` se queda —enseña a vender y el
+  que vende es Sergio— con un README que fija el estado. Queda anotada una superficie
+  huérfana: `/vendedores/cotizador` y `/vendedores/webs` siguen VIVAS en web-factory.
 - 🟡 **`LEEME-PRIMERO.md`** por reescribir; `ONIA_PRICING_2026.md` por degradar y redirigir
   sus 17 enlaces entrantes.
 - 🟡 **Fix de hora de silencio del bot** (`quietBeforeHour: 8`) commiteado y **sin
@@ -80,6 +89,21 @@ probada para el próximo deploy; copiarlos y cambiar el `COMMIT`.
 
 ---
 
+## 4.b Dos dominios publicados servían 502 sin que nadie lo supiera
+
+`cal.onia.com.bo` y `forms.onia.com.bo` estaban caídos hacía días. En los dos casos el
+contenedor había desaparecido y **la ruta de Traefik seguía publicada, con certificado
+válido**. Un `docker rm` no borra la ruta.
+
+- **cal**: los datos sobrevivieron pero **el `.env` no**, y Postgres ignora una contraseña
+  nueva sobre un volumen ya inicializado. Resucitarlo costaba cirugía + 3 contenedores para
+  correr una agenda que ya vendemos → **se redirige a `/empezar`** (302, reversible).
+- **forms**: no se había perdido nada. Los 3 HTML y la config de nginx seguían en
+  `/opt/onia-forms`. Faltaba **sólo volver a correr el contenedor**.
+
+La lección quedó en la skill `onia-infra` §4.b: publicar un dominio crea una deuda de
+monitoreo que no se paga sola.
+
 ## 5. Intentos fallidos (lo que NO hay que repetir)
 
 - 🔴 **Dije "multi-sede no existe" por un `grep` de `branchId`.** El grep era cierto y la
@@ -101,6 +125,22 @@ probada para el próximo deploy; copiarlos y cambiar el `COMMIT`.
 
 ---
 
+## 5.b Lo que se midió y cambió una decisión
+
+**El formulario de alta NO alcanza para generar una web, y el `/brief` casi sí.** Medido
+contra las 39 preguntas de `web-factory/INTAKE_CLIENTE.md`: el brief cubre ~80%, y el alta
+tapa varios de sus huecos (rubro, ciudad, dirección, horarios, NIT, y el repetidor de FAQ).
+
+**✅ Cerrado el mismo día:** se agregaron **10 campos** al `/brief` (CTA con objetivo
+obligatorio + texto y destino del botón, "qué NO querés", estilo visual, tagline, título
+SEO, imagen OG, teléfono, quién paga el hosting). **El `/brief` ya cubre el intake
+entero** — se manda el link en vez de copiar 39 preguntas a mano.
+
+Casi lo estimo mal: por conteo de substring parecía que faltaban 15 campos y que el brief
+no tenía nada. `cta` matcheaba "conectar", `estilo` matcheaba "enlaces de estilos", y el
+FAQ que daba por faltante **ya existía** en el alta. **Verificar en contexto cambió el
+tamaño del trabajo de "formulario nuevo" a "seis campos".**
+
 ## 6. Qué depende de Sergio
 
 1. **Abrir `/comercio/inventario` logueado y mirar la sección "Almacenes".** Es lo único
@@ -111,7 +151,9 @@ probada para el próximo deploy; copiarlos y cambiar el `COMMIT`.
 3. **¿El markup de Meta es 20% o a costo?** `WHATSAPP_ADDON.meta.markupPct: 20` contradice
    la etiqueta que le promete al cliente que el excedente va al costo. Lety.ai vende
    "0% markup" como tesis central: es el ataque más fácil que nos pueden hacer.
-4. **Los dos decks HTML de la vendedora**: reescribir, archivar o poner banner.
+4. **¿Se bajan las pantallas `/vendedores/*` de web-factory?** Son rutas publicadas
+   hechas para un vendedor que no existe. Sacarlas es una decisión de superficie viva, no
+   la tomo solo.
 
 ---
 
