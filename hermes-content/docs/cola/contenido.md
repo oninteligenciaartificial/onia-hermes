@@ -41,11 +41,14 @@ faltantes. Lo que falta es **publicar**.
 - [ ] Publicar el día 1 (reel de lanzamiento v7, 22 s, 1080×1920): `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4` · 10 min · Sergio
 
 - [x] **Escrito 31-ago.** Caption del reel del día 1, con el porqué de cada decisión y los 3 pasos previos: `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/CAPTION.md`. Sale del guion real del reel (`hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/TABLA-DE-CORTES.md`), abre con «No soy real» como el primer beat y cierra con «Seguime» como el último. No lleva palabra clave · Claude
-- [ ] Re-renderizar los 3 creativos de ads: estampan **@oniaagency** y el renderer vigente estampa **@oniahq**. Un anuncio que manda a un handle equivocado es plata tirada. Ver `hermes-content/carousels/out/ads/ad-a2-v1-no-volvieron` · 5 min · Claude
+- [x] **Re-renderizados 31-ago con `@oniahq`**, verificado MIRANDO el JPG. La decisión no fue por HTTP: Instagram devuelve 200 hasta para un handle inventado (probé `onia.hq` de control). Se decidió por el repo — @oniahq en 65 archivos contra @oniaagency en 4, todos de jul-ago — y porque el renderer vigente ya lo estampa. Ver `hermes-content/carousels/out/ads/ad-a2-v1-no-volvieron/slide-01.jpg` · Claude
 - [ ] Marcar como NO-SUBIR el render superado de S06: existe en DOS versiones con md5 distinto y en el carril de Sergio ningún doc lo dice. Mismo error de doble render que ya se pagó en Lucía. Ver `hermes-content/references/marca-personal-sergio/render` · 10 min · Claude
 - [ ] Sacarle los CTA a `hermes-content/carousels/briefs` o marcarlo muerto: tiene **cinco palabras fantasma** (MITO, AUTO, COSTO, NUVIA y un LISTA que promete el PDF enterrado), ninguna registrada. El carril vivo de @oniahq es `hermes-content/references/oniahq/briefs`, que está limpio · 15 min · Claude
 
 ## Despues
+
+- [ ] 🔴 Los 3 creativos de ads dicen **«SWIPE →»** y tienen UNA sola lámina. Un anuncio que invita a deslizar y no tiene a dónde. O se le sacan el swipe y el punto indicador, o se le renderizan las láminas que promete. Descubierto mirando el JPG, no leyendo el brief. Ver `hermes-content/carousels/briefs/ads/ad-a2-v1-no-volvieron.json`
+
 
 - [ ] 🔴 MITO es una palabra fantasma: `hermes-content/carousels/briefs/onia-mitos-ia-20260808.json` pide «comenta MITO» en el caption y MITO no está en `scripts/recompensas.json`. Si esa pieza sale, el lead comenta y no recibe nada — es exacto el incidente RANKING del 26-ago. Registrarla o sacarle el CTA.
 
