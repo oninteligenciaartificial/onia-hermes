@@ -173,11 +173,17 @@ Las tres formas de fantasma que ya aparecieron acá:
       motion.dev (feature-en-banda-de-color, statement full-screen, marquee CSS,
       hover-lift). Una por vuelta: bloque tipado + tokens ONIA + reduced-motion +
       render de prueba + `typecheck:packages`.
-- [~] **A3 · Sitio #2 (estilo contrastante) — EN CURSO, no tomar.** Se está construyendo
-      en `apps/ferreteria-sur/` (rubro comercio, "Ferretería Sur"): Next 15 + React 19 +
-      motion + GSAP, conectado por `/api/lead`. Lanzado el 2026-08-30 con 3 agentes sobre
-      archivos disjuntos. Estaba abierto como si nadie lo hubiera empezado — el fantasma
-      #3. **Queda por hacer cuando terminen: mirar el render, gates, merge y push.**
+- [x] **A3 · Sitio #2 (estilo contrastante)** — `apps/ferreteria-sur/`, cerrado 2026-08-31
+      (`fac6fa99` + `e4e785f3`). Rubro comercio, industrial utilitario, conectado por
+      `/api/lead`. Construido con 3 agentes sobre archivos disjuntos; el de secciones
+      murió por límite de sesión y se recuperó con `resumeFromRunId` (los otros dos
+      volvieron de caché — solo re-corrió el que falló).
+      **Prueba lo que tenía que probar**: al lado de dental-premium no parecen del mismo
+      autor. El catálogo de técnicas no estaba atado al warm-premium.
+      Verificado mirando: 8 secciones, 0 en `opacity:0`, 0 errores de consola, 0
+      menciones de obra, `tsc` 0 y build 4/4.
+      Pendientes anotados, no bloqueantes: el CTA del hero entra por 82px a 1440×900 y
+      **queda fuera a 1440×800**; First Load 192 kB contra el presupuesto de 150 kB.
 - [ ] **A4 · Pulido de dental-premium:** dark mode mirado + spotlight en touch +
       cablear texturas SVG si Sergio dio OK.
 
