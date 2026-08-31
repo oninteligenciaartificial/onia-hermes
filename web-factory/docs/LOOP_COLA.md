@@ -516,7 +516,34 @@ Las tres formas de fantasma que ya aparecieron acá:
       de Shopify. Los tres descartados.
       **Gates**: `typecheck:packages` verde (ítem 100% docs/data: no toca `packages/` ni
       superficie renderizada). Sigue sin ancla y queda para B: **portfolio (N=1)**.
-- [ ] **B3 · Update skill `ui-ux-pro-max`** a v2.13 (`uipro-cli`, MIT) — solo local.
+- [x] **B3 · Update skill `ui-ux-pro-max`** (2026-08-31, **solo local**, nada del repo).
+      Evidencia re-verificada antes de tocar, y el defecto era peor que "está vieja": la
+      skill instalada era **SKILL.md y nada más** (11.569 bytes, sin `scripts/` ni `data/`),
+      mientras su propio cuerpo manda correr `python3 skills/ui-ux-pro-max/scripts/search.py`
+      en el **paso 2, marcado REQUIRED**. O sea: los cuatro pasos del workflow apuntaban a un
+      script inexistente — la skill se citaba en `onia-web-factory/SKILL.md:133` y en
+      `DESIGN_LEARNED_2026.md` como fuente de gates numéricos, pero **no se podía ejecutar**.
+      **El número de la cola también estaba viejo**: el ítem pedía v2.13 y upstream ya va por
+      **v2.15.0** (`nextlevelbuilder/ui-ux-pro-max-skill`, licencia MIT verificada por API, no
+      de memoria). Instalado con el installer oficial (`npx ui-ux-pro-max-cli@latest init --ai
+      claude --global --force`) corrido **desde el scratchpad**, para que no escriba un
+      `.claude/` dentro del worktree: escribe en `~/.claude/skills/`, fuera del repo.
+      Ahora la skill trae `scripts/` (search, design_system, reasoning_contract, validate_data
+      + tests) y `data/` (13 CSV, 3.061 filas): 89 estilos, 193 paletas/reasoning, 75 pares
+      tipográficos, 120 guías UX, 106 iconos, 26 charts, 22 stacks. Lo que sirve a ESTE carril:
+      dominio **`gsap`** (`motion.csv`) y `--json`, que hace la skill usable como **gate
+      programable** y no solo como lectura.
+      **Verificado ejecutándola, no mirando el `ls`**: `search.py "dental clinic premium"
+      --design-system` devuelve sistema completo (paleta con `--color-*`, tipografía, patrón)
+      en Python 3.12.10.
+      ⚠️ **Efecto lateral medido, no supuesto**: el installer trae el **bundle entero** de 7
+      skills y refrescó también `banner-design`, `brand`, `design`, `design-system`, `slides`
+      y `ui-styling` (mtime 19:21). Revisadas una por una: son las mismas del bundle upstream,
+      **cero contenido propio de ONIA pisado** — los "onia" que aparecían en el grep eran
+      *testimONIAl*. Backup del SKILL.md viejo en el scratchpad.
+      **Gates**: `typecheck:packages` verde (ítem 100% fuera de `packages/`: no toca código ni
+      superficie renderizada). **Lección: "actualizar X a vN" envejece como la cola — verificar
+      la versión viva antes de instalarla, y probar la herramienta corriéndola.**
 
 ## Regla de alternancia (cómo el loop "siempre trabaja")
 
