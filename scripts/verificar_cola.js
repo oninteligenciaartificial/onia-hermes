@@ -82,6 +82,13 @@ function evidenciaDe(texto) {
     // gritando en falso, y un gate que grita en falso se termina ignorando.
     if (/^[\/]/.test(ruta)) continue;
 
+    // "origin/master" es una REF de git, no un archivo, pero tiene barra y por eso caia en
+    // la regla de "esto parece ruta". Esta cola escribe "ya en `origin/master`" cada vez que
+    // un commit llega, asi que el gate gritaba en falso justo sobre su frase mas comun
+    // (medido el 2026-08-31: 5 errores falsos en un solo item). Se descarta solo el remoto
+    // desnudo: `origin/foo.png` sigue verificandose, para no tapar un archivo de verdad.
+    if (/^(origin|upstream)\/[^\/]+$/.test(ruta) && !/\.[a-z0-9]{2,5}$/i.test(ruta)) continue;
+
     // Un backtick tambien envuelve codigo y endpoints: `GET /api/x`, `invoice.patient?.ci`,
     // `responsable?.ci ?? patient.ci`. Ningun archivo del repo tiene espacios ni signos de
     // pregunta en el nombre, asi que eso los descarta sin tener que adivinar.
