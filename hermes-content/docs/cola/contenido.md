@@ -30,9 +30,9 @@ faltantes. Lo que falta es **publicar**.
 ## Ahora
 
 - [x] Elegir cuál render se sube en las 3 piezas con DOS versiones: **gana el lote verde del 28-ago**. Se sube `hermes-content/references/modelos/lucia/posts-20260807/FIJADO`, `L6` y `L08`; las tres carpetas superadas llevan adentro un marcador NO-SUBIR, p.ej. `hermes-content/references/modelos/lucia/posts-20260807/render-fijado/_NO-SUBIR.md` y los punteros del handoff quedaron corregidos (apuntaban todos al viejo). Razón y tabla por día en `hermes-content/docs/handoffs/claude-ads-creatividades-publicos.md` § 1-sexies · 31-ago
-- [ ] Declarar la etiqueta de IA en la cuenta antes del primer post — hoy es una instrucción pendiente, no una verificación: `hermes-content/contenido/LUCIA.md` · 5 min · Sergio
-- [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502. Son las 7 láminas de `hermes-content/references/modelos/lucia/posts-20260807/FIJADO` (NO la carpeta `hermes-content/references/modelos/lucia/posts-20260807/render-fijado`, que quedó superada) · 15 min · Sergio
-- [ ] Publicar el día 1 (reel de lanzamiento v7, 22 s, 1080×1920): `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4` · 10 min · Sergio
+- [ ] Declarar la etiqueta de IA en la cuenta antes del primer post — sigue siendo una instrucción pendiente, no una verificación. **Pasos exactos y cómo se comprueba** (se ve el rótulo en el perfil, no basta tocar el switch): `hermes-content/contenido/PUBLICAR.md` § Paso 0 · 5 min · Sergio
+- [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono. **Todo el kit — orden de las 7 láminas, caption, hashtags y alt text — está en `hermes-content/contenido/PUBLICAR.md` § Paso 1**; no hay que volver a abrir el JSON del brief. Son las 7 láminas de `hermes-content/references/modelos/lucia/posts-20260807/FIJADO` (NO la carpeta `hermes-content/references/modelos/lucia/posts-20260807/render-fijado`, que quedó superada) · 15 min · Sergio
+- [ ] Publicar el día 1 (reel de lanzamiento v7, 22 s, 1080×1920): `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4`. **El caption faltaba y se escribió el 31-ago**: `hermes-content/contenido/PUBLICAR.md` § Paso 2, que además avisa que en esa carpeta conviven v6 y v7 · 10 min · Sergio
 
 ## Despues
 
