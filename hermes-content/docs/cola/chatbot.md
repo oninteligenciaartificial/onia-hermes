@@ -177,6 +177,40 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       **Lo que queda del ítem, cuando S8 se destrabe:** cargar estas 5 campañas en el editor de la
       org dueña del inbox 5, publicar, y probar las 4 frases vivas MIRANDO la pantalla.
 
+      ⚙️ **Vuelta del 2026-08-31 (segunda) — el ítem YA NO depende de S8, y el plan de arriba
+      estaba equivocado.** Gate 1 sobre el propio diagnóstico, leyendo el motor: `campanaExacta`
+      se llamaba **sólo** desde `hermes-content/deploy/vps-ops/bot/recepcionista.mjs:192`, y `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:448` corta el modo
+      recepcionista antes de todo el guion de venta. O sea que el plan escrito arriba —"cargar
+      las campañas en la org dueña del inbox 5"— **metía el número de Onia en modo recepcionista**,
+      que es la config del bot de un CLIENTE. Ahí el embudo de leads no existe: lo dice el test
+      `recepcionista: 'DEMO' NO dispara el funnel — el guion de leads queda exclusivo del modo
+      venta`. Y `R_CAMPANA` es literalmente `{{respuesta_campana}}` (`hermes-content/deploy/vps-ops/bot/config.mjs:317`), sin un solo
+      efecto: **se habría cambiado la única línea que produce leads por un texto enlatado.**
+      **Lo que se hizo en su lugar** — que las campañas también se vean desde el modo venta, que es
+      donde caen los wa.me?text= de onia.com.bo:
+      - `hermes-content/deploy/vps-ops/bot/knowledge.mjs` (`applyKnowledge`) ahora lleva `campanas` a la config de los DOS modos.
+        `campanaExacta(config, norm)` lee `.campanas`, así que la misma función sirve a ambos sin
+        tocarla (el recepcionista le sigue pasando `config.conocimiento`).
+      - `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`: la frase de campaña se resuelve en el router **antes** de los intents
+        difusos (es un match del mensaje ENTERO, la señal más específica que puede llegar) y sale
+        por `composeWithFunnel`, el mismo camino que ya usan precio y SIAT. Efecto: la respuesta va
+        **detrás** de la bienvenida, no en lugar de ella — se conservan M0 (el bot se declara bot,
+        D2), la oferta de horarios y el `lead_upsert`.
+      - `composeWithFunnel` acepta `vars` (R_CAMPANA es la única plantilla de ese camino cuyo texto
+        no está en el guion: lo trae el documento publicado).
+      **Probado con el documento real, no con un fixture** (las 5 campañas de
+      `hermes-content/docs/chatbot/campanas-onia.knowledge.json` corridas por el motor en modo venta): las cinco contestan su
+      propia respuesta y las cinco conservan `lead_upsert` + `notify_sergio`. Antes de este cambio
+      las cinco daban `M0_SIN_HORARIOS` solo — exactamente el saludo genérico que el ítem denuncia.
+      **7 tests nuevos** (incluido el guardia de no-regresión "sin campañas publicadas el motor no
+      cambia" y "el opt-out le gana a la campaña"). Suite del bot **626/626** verde (619 antes).
+      La compuerta de publicación sigue en `OK` sobre el documento.
+      ⚠️ **Lo único que queda, y es MUCHO más barato que S8:** copiar
+      `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json`
+      del VPS (hoy tiene 904 bytes y no trae `campanas`) y probar las 4 frases vivas MIRANDO. Eso
+      es un deploy al VPS ⇒ **OK de Sergio**, pero ya no hace falta decidir dueño de inbox ni
+      desplegar el producto. **Corrección a S8:** el ítem 2 sale de su lista de desbloqueos.
+
 ---
 
 ## Después
@@ -227,7 +261,8 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
-| S8 | **Desplegar el producto y decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** | El deploy es suyo por regla; y los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` | **El objetivo del carril entero, y también el ítem 2.** El código ya está (commit `88c1d56`): faltan un deploy y dos clicks en `/admin/organizations/<id>`. Medido el 31-ago: las frases de campaña **sólo** existen en modo recepcionista, que se enciende únicamente con la fila publicada de una org — sin este vínculo, cargarlas donde sea no cambia nada |
+| S8 | **Desplegar el producto y decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** | El deploy es suyo por regla; y los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` | **El objetivo del carril entero.** El código ya está (commit `88c1d56`): faltan un deploy y dos clicks en `/admin/organizations/<id>`. ⚠️ **Corregido el 31-ago (2ª vuelta): el ítem 2 ya NO cuelga de acá.** Decía que las campañas sólo existían en modo recepcionista — era cierto y ya no lo es: ahora también se leen en modo venta, así que las frases de la web se destraban con S9, sin decidir dueño de inbox |
+| S9 | **Publicar las campañas en el VPS**: copiar `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` (hoy 904 bytes, sin `campanas`) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK. Es un `scp` + recarga, no un build | **El ítem 2 entero.** El motor ya las lee en modo venta (626/626 verde, probado con este mismo documento); falta que el archivo del número las tenga. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
 ---

@@ -20,7 +20,7 @@ import {
 } from "./config.mjs";
 import { enforceGuardrails, normalize, SAFE_REPLY } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
-import { recepcionistaStep } from "./recepcionista.mjs";
+import { campanaExacta, recepcionistaStep } from "./recepcionista.mjs";
 // COMO se escribe cada respuesta vive en reply-builder.mjs; aca queda QUE rama se toma.
 import {
   ESPERA_HORARIO_STAGES,
@@ -401,8 +401,12 @@ function descartadoResult(ctx, base) {
   return finalize(ctx, next, [say("M1c", next, config)], effects, ["descartado"]);
 }
 
-/** Respuesta off-guion (precio / SIAT / archivo): cuerpo fijo + la pregunta pendiente del embudo. */
-function composeWithFunnel(ctx, base, bodyKey, reason) {
+/**
+ * Respuesta off-guion (precio / SIAT / archivo / campaña): cuerpo fijo + la pregunta pendiente
+ * del embudo. `vars` existe para R_CAMPANA, que es la unica plantilla de este camino cuyo texto
+ * no esta en el guion: lo trae el documento publicado ({{respuesta_campana}}).
+ */
+function composeWithFunnel(ctx, base, bodyKey, reason, vars = {}) {
   const { config } = ctx;
 
   // En 'nuevo' el disclosure manda (D2, sin excepción): primero M0 —que ya trae los horarios—,
@@ -411,12 +415,12 @@ function composeWithFunnel(ctx, base, bodyKey, reason) {
     return welcomeResult(ctx, base, {
       reason: `${reason}_en_bienvenida`,
       notes: [reason],
-      after: [say(bodyKey, base, config)],
+      after: [say(bodyKey, base, config, vars)],
     });
   }
 
   const ask = pendingAsk(base, config);
-  const body = say(bodyKey, base, config);
+  const body = say(bodyKey, base, config, vars);
   const text = ask ? `${body.text}\n\n${ask}` : body.text;
   return finalize(ctx, base, [{ ...body, text }], [], [reason]);
 }
@@ -509,6 +513,15 @@ export function step(state, incoming, options = {}) {
       ["opt_out"],
     );
   }
+
+  // FRASE DE CAMPAÑA — el que clickeo un wa.me?text= de onia.com.bo. La frase ES el mensaje
+  // entero, asi que es la señal mas especifica que puede llegar: gana a los intents difusos de
+  // abajo, que son por palabra suelta. Va DETRAS de la bienvenida (composeWithFunnel), no en
+  // lugar de ella: M0 es lo que declara al bot como bot (D2), ofrece los horarios y —lo que mas
+  // importa— es la linea que dispara `lead_upsert`. Contestar solo la campaña, como hace el
+  // recepcionista, aca cambiaria un lead por un texto enlatado.
+  const campana = campanaExacta(config, msg.norm);
+  if (campana) return composeWithFunnel(ctx, withData, "R_CAMPANA", "campana", { respuesta_campana: campana.respuesta });
 
   if (intents.isComplaint(msg.norm)) return handoffResult(ctx, withData, "queja_o_desconfianza");
 

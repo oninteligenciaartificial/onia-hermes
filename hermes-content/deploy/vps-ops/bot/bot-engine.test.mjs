@@ -754,3 +754,74 @@ test("faq negocio: un body con precio lo rechaza el guardrail entero", () => {
   const { errors } = validateKnowledge(conPrecio);
   assert.ok(errors.some((e) => e.includes("declara_precio")), "el bot no cotiza ni via FAQ");
 });
+
+// ---------------------------------------------------------------------------
+// Frases de campaña en el MODO VENTA — los links wa.me?text= de onia.com.bo
+// ---------------------------------------------------------------------------
+// onia.com.bo manda al +591 75414930 cuatro frases fijas distintas, una por CTA. Cada una es una
+// intencion ya declarada: la persona dijo que queria ANTES de escribir. `campanaExacta` existia
+// desde el 31-ago pero vivia SOLO dentro de recepcionistaStep, o sea que el numero de Onia —que
+// corre en modo venta— jamas podia mirarlas: contestaba el saludo generico a las cuatro.
+//
+// El arreglo NO puede ser mover el numero de Onia a modo recepcionista: ahi el guion de leads no
+// existe (ver el test "el guion de leads queda exclusivo del modo venta"), asi que se cambiaria la
+// unica linea que produce leads por un texto enlatado. La respuesta de campaña va DETRAS de la
+// bienvenida, por el mismo camino que ya usan precio y SIAT (composeWithFunnel).
+
+const CAMPANAS_ONIA = [
+  {
+    frase: "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio.",
+    respuesta: "Te sirve si tu negocio agenda, cobra o atiende clientes. Contame a qué te dedicás y te digo qué módulo te toca.",
+  },
+  {
+    frase: "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack.",
+    respuesta: "Dale, preguntá lo que quieras del chatbot antes de decidir.",
+  },
+];
+const CONFIG_CAMPANA = createBotConfig({ campanas: CAMPANAS_ONIA }, CONFIG);
+const runCampana = (turns, options = {}) => run(turns, { config: CONFIG_CAMPANA, ...options });
+
+test("campaña en venta: la frase del link se contesta con SU respuesta, detrás de la bienvenida", () => {
+  const { turns } = runCampana([CAMPANAS_ONIA[0].frase]);
+  assert.deepEqual(keysOf(turns[0]), ["M0", "R_CAMPANA"], "primero el bot se declara bot (D2), después lo suyo");
+  assert.match(textOf(turns[0]), /Contame a qué te dedicás y te digo qué módulo te toca/);
+});
+
+test("campaña en venta: cada CTA recibe LO SUYO, no la respuesta de la otra", () => {
+  const { turns } = runCampana([CAMPANAS_ONIA[1].frase]);
+  assert.match(textOf(turns[0]), /preguntá lo que quieras del chatbot/);
+  assert.ok(!/qué módulo te toca/.test(textOf(turns[0])), "no se cruzan las campañas");
+});
+
+test("campaña en venta: NO se pierde el lead — es la única línea que los produce", () => {
+  const { state, turns } = runCampana([CAMPANAS_ONIA[0].frase]);
+  assert.ok(effectsOf(turns[0]).includes("lead_upsert"), "el lead nace igual que sin campaña");
+  assert.equal(state.botStage, "esperando_horario", "el embudo sigue su curso");
+  assert.match(textOf(turns[0]), /jueves 15:00/, "la oferta de horarios sigue sobre la mesa");
+});
+
+test("campaña en venta: la puntuación no cuenta (el que clickea puede borrar la coma)", () => {
+  const { turns } = runCampana(["hola vengo de la web de onia quiero saber si me sirve para mi negocio"]);
+  assert.ok(keysOf(turns[0]).includes("R_CAMPANA"), "misma frase sin comas ni tildes = misma campaña");
+});
+
+test("campaña en venta: sin campañas publicadas el motor no cambia (cero regresión)", () => {
+  const { turns } = run([CAMPANAS_ONIA[0].frase]);
+  assert.deepEqual(keysOf(turns[0]), ["M0"], "la config de hoy contesta exactamente lo que contestaba");
+});
+
+test("campaña en venta: el opt-out le gana a la campaña", () => {
+  const { turns } = runCampana(["no me interesa, no me escribas más", CAMPANAS_ONIA[0].frase]);
+  assert.deepEqual(keysOf(turns[1]), [], "el que dijo basta no recibe la campaña");
+});
+
+test("applyKnowledge lleva las campañas al modo venta (sin ellas el motor no las puede ver)", () => {
+  const doc = {
+    schema: "onia.bot.knowledge/1",
+    version: "test-campanas",
+    campanas: [{ frase: "Hola, quiero conocer Onia", respuesta: "Contame a qué se dedica tu negocio." }],
+  };
+  assert.deepEqual(validateKnowledge(doc).errors, [], "el documento es publicable");
+  const aplicado = applyKnowledge(CONFIG, doc);
+  assert.deepEqual(aplicado.campanas, doc.campanas, "las campañas viajan a la config de venta");
+});

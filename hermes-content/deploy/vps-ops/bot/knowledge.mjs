@@ -798,6 +798,14 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
   // dos archivos.
   if (Array.isArray(data.rubrosExtra) && data.rubrosExtra.length) overrides.rubrosExtra = data.rubrosExtra;
 
+  // Las campañas viajan a la config de LOS DOS modos, no solo del recepcionista. El consumidor
+  // principal de `campanas` son los links wa.me?text= de onia.com.bo, que apuntan al numero de
+  // Onia — y ese numero corre en modo VENTA. Hasta hoy `campanaExacta` solo se leia desde
+  // `config.conocimiento`, que unicamente existe en el recepcionista: las cuatro frases que la
+  // web manda de verdad no podian matchear nunca. `campanaExacta(config, norm)` lee `.campanas`,
+  // asi que la misma funcion sirve a los dos (el recepcionista le pasa `config.conocimiento`).
+  if (Array.isArray(data.campanas) && data.campanas.length) overrides.campanas = data.campanas;
+
   const extraDemo = data.triggersExtra?.demo;
   if (Array.isArray(extraDemo) && extraDemo.length) {
     // UNION con el codigo: agregar es libre, quitar es imposible (diseño §4, candado 4).
