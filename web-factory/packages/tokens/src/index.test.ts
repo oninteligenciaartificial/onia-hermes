@@ -156,6 +156,15 @@ describe("modo oscuro: la marca no puede volverse invisible", () => {
     expect(ratio(dark["--ring"], "#0c1013")).toBeGreaterThanOrEqual(4.5);
   });
 
+  it("la marca se lee sobre la TARJETA, no solo sobre el fondo", () => {
+    // Casi todo el texto de color vive dentro de una card, y la card (#161c22)
+    // es mas clara que el fondo (#0c1013): medir contra el fondo dejaba pasar
+    // colores que en la card caen bajo AA. Lo encontro axe en realestate-dark
+    // con 4,47:1 — a 0,03 del minimo, invisible a ojo y un fallo igual.
+    const dark = clientDarkTokenVars(client);
+    expect(ratio(dark["--color-primary"], "#161c22")).toBeGreaterThanOrEqual(4.5);
+  });
+
   it("el CSS emitido lleva el arreglo al bloque oscuro", () => {
     const css = clientTokenCss(clinica);
     const bloqueOscuro = css.slice(css.indexOf("prefers-color-scheme"));

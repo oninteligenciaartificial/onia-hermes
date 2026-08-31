@@ -195,12 +195,51 @@ Las tres formas de fantasma que ya aparecieron acá:
       (mismo tipo de drift que ya habían tenido `variant`/`spark`). Y `pnpm test` cortó
       una vez con `[vitest-pool]: Timeout terminating forks worker` en `hero.test.ts`
       **sin ninguna aserción fallida**; a la segunda corrida, 219/219 y exit 0.
-- [ ] **W6 · Gates que hoy no existen.** Los tests actuales son `toBeVisible` y
-      `count > 0`: **los diez defectos de arriba pasaban todos los gates en verde**.
-      Falta screenshot comparado (claro/oscuro × 1440/375), axe sobre el fixture, un
-      test que falle si `--color-primary` aparece en un `fill`/`stroke` de dato, y otro
-      que falle si un negativo se dibuja con altura 0. + el fixture debe incluir un
-      negativo, un cero y una serie de 90 puntos, para que los bugs se vean en el demo.
+- [x] **W6 · Gates que hoy no existen** (2026-08-31). Evidencia re-verificada antes de
+      tocar: de los cuatro gates que pedia el item, **uno ya existia** — el test del
+      negativo con altura 0 lo dejo W3 (`dashboard.test.ts`, "dibuja el negativo BAJO el
+      cero"), igual que el de la serie de 90 barras. Fantasma, no se rehizo.
+      Lo que se construyo: **(a) fixture permanente `dashboard-edge`** (cliente propio en
+      `data/clients/`, generado por `global-setup`) con un negativo, un cero, una serie de
+      90 barras, un `sparkline` con datos y las secciones en cargando / error / vacio — el
+      demo "lindo" no traia NINGUNO de esos datos, asi que los cuatro bugs de W3 no eran
+      visibles en ningun gate. **(b) gate visual** (`tests/e2e/visual.spec.ts`) sobre demo
+      + fixture, claro/oscuro x 1440/375, 8 baselines commiteadas. **(c) axe** sobre el
+      fixture, que ejercita `role="alert"`, `aria-busy` y el boton Reintentar. **(d) gate
+      de color** (`--color-primary` nunca pinta un dato) por los DOS caminos: el atributo
+      `fill`/`stroke` y el `color:` de la hoja que alimenta un `currentColor` — que es por
+      donde de hecho entraba.
+      **Cada gate se verifico MUTANDO el codigo**, no solo viendolo pasar: el de color cae
+      con `--wf-series-1` → `--color-primary` en el atributo Y en el CSS; el visual cae 8/8
+      con `PAD_L` 34 → 44. La primera version del visual usaba `maxDiffPixelRatio: 0.002`
+      y **la mutacion pasaba en verde**: sobre una captura fullPage el presupuesto eran
+      ~4.900 pixeles, suficiente para tragarse un marcador que duplica el radio. Cambiado a
+      `maxDiffPixels: 400` (absoluto) y verificado estable en dos corridas limpias.
+      ⚠️ **Lo que el gate encontro apenas existio** — la suite E2E estaba **ROJA desde W7**
+      y nadie lo sabia porque nadie corria `pnpm e2e`:
+      1. **Dos de las tres fuentes de W7 nunca cargaban.** `font-links.ts` pedia
+         `wght@300..900` para toda familia; Bricolage Grotesque llega a 800 y Spline Sans
+         Mono a 700, y css2 responde **HTTP 400** al eje fuera de rango (verificado con
+         `curl`, no de memoria). El titular y las cifras del panel salian en la fuente del
+         sistema: **el bug de W1 reintroducido por la ruta del rango**. Ahora hay rango real
+         por familia, medido; familia desconocida va sin eje (200 seguro, se degrada el peso
+         y no la familia entera). + `font-links.test.ts`.
+      2. **Contraste que reprobaba AA**, invisible a ojo y real: la pildora de delta
+         negativo en claro (4,33:1) y los tres textos secundarios de la card de marca en
+         oscuro (4,09 y 4,42). El par PURO on-primary/primary si pasaba — su test lo
+         protegia — pero la hoja lo diluye con `color-mix` y ahi se rompe. Recalculado.
+      3. **La marca en oscuro se medía contra el fondo, no contra la tarjeta.** Casi todo
+         el texto de color vive DENTRO de una card, que es mas clara: `wf-path-cta` de
+         realestate daba 4,47:1. `packages/tokens` ahora gatea contra `--card`; + test que
+         cae si se vuelve a medir contra el fondo.
+      4. **Dos aserciones congeladas**: el h1 fijaba `"Panel operativo"` (W7 lo renombro) y
+         se contaban `rect` de barras (W4 las paso a `path`). Un gate que falla por drift
+         entrena a ignorar el rojo.
+      **Gates**: `typecheck:packages` verde, **232/232** unit (+13) y **`pnpm e2e` 101
+      passed / 0 failed** (antes: 3 rojos en limpio, mas los que tapaba el fail-fast).
+      Mirado en claro y oscuro, 1440 y 375.
+      Anotado, NO tocado (ver A5/A6).
+
 - [x] **A1c · En dark la marca ya NO desaparece** (2026-08-30). El remedio viejo, ante
       un primary ilegible sobre el fondo oscuro, lo reemplazaba por `DARK_FG`: sidebar,
       botón, KPI hero y barras salían **blancos**. Ahora se **aclara en HSL** conservando
@@ -245,6 +284,17 @@ Las tres formas de fantasma que ya aparecieron acá:
       menciones de obra, `tsc` 0 y build 4/4.
       Pendientes anotados, no bloqueantes: el CTA del hero entra por 82px a 1440×900 y
       **queda fuera a 1440×800**; First Load 192 kB contra el presupuesto de 150 kB.
+- [ ] **A5 · La barra lateral no llega al pie.** Evidencia: las 8 baselines nuevas
+      (`tests/e2e/visual.spec.ts-snapshots/`) — en `dashboard-demo-1440-dark` el bloque
+      oscuro de `.wf-dash-side` termina a ~895px y debajo queda el fondo de pagina hasta
+      el final; en `dashboard-edge-1440-light` corta a ~897px. El sidebar toma la altura
+      de su contenido, no la de la pagina. Se ve solo mirando: ningun test lo nombra.
+- [ ] **A6 · El sparkline del KPI sigue deformado.** `preserveAspectRatio="none"` en
+      `dashboard.ts:998` (el del KPI; W2 lo arreglo solo en el grande): el trazo se estira
+      y el punto final sale elipse. Evidencia en `dashboard-demo-1440-dark`, KPI
+      "Pacientes sin volver", donde el area llena el bloque y la linea no se distingue.
+      + `dashboardPointSchema` no declara `pending`, asi que el patron de barra rayada del
+      template es inalcanzable desde el JSON (mismo drift que `variant`/`spark`).
 - [ ] **A4 · Pulido de dental-premium:** dark mode mirado + spotlight en touch +
       cablear texturas SVG si Sergio dio OK.
 

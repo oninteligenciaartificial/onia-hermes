@@ -5,7 +5,9 @@ import {
   chartScale,
   renderChart,
   renderChartCard,
+  renderDashboardCss,
   type DashboardChart,
+  type DashboardClient,
   type DashboardPoint,
 } from "./dashboard.js";
 
@@ -63,6 +65,19 @@ function axisLabels(svg: string): string[] {
 function chart(type: DashboardChart["type"], points: DashboardPoint[]): DashboardChart {
   return { title: "Prueba", unit: "Bs", type, points };
 }
+
+/** Cliente minimo: solo para pedirle al template su hoja de estilos. */
+const clienteMinimo: DashboardClient = {
+  nombre: "Prueba",
+  slug: "prueba",
+  logo: "P",
+  colores: { primary: "#0d6b5c", secondary: "#155e75", accent: "#f59e0b", bg: "#f6f2ea", fg: "#161c22" },
+  tipografia: { heading: "Bricolage Grotesque", body: "DM Sans" },
+  seo: { title: "Prueba", description: "Prueba", ogImage: "" },
+  contacto: { email: "", tel: "", whatsapp: "", direccion: "" },
+  cta: { texto: "Ver", url: "#" },
+  dashboard: { title: "Prueba", subtitle: "", nav: [], filters: [], kpis: [], charts: [], table: { title: "T", columns: [], rows: [] } },
+};
 
 describe("chartScale", () => {
   it("abre el dominio hacia abajo cuando hay negativos", () => {
@@ -279,5 +294,57 @@ describe("estados de seccion", () => {
     expect(html).toContain("<svg");
     expect(html).not.toContain("wf-slot");
     expect(html).not.toContain("aria-busy");
+  });
+});
+
+// W2 arreglo esto a mano y nada impedia que volviera: `--color-primary` es el
+// color de MARCA (cromo: botones, sidebar, foco) y `--wf-series-*` es la tinta de
+// DATO. Cuando se mezclan, el mismo dataset sale verde marca en las barras y aqua
+// en la serie de al lado. Este gate falla si la marca vuelve a pintar un dato.
+describe("un solo color por dato", () => {
+  const puntos: DashboardPoint[] = [
+    { label: "Ene", value: 900 },
+    { label: "Feb", value: -300 },
+    { label: "Mar", value: 0 },
+  ];
+  const tipos: DashboardChart["type"][] = ["bar", "line", "donut", "sparkline", "radial"];
+
+  /** Valor de cada `fill=` / `stroke=` del markup (los atributos que pintan). */
+  function paintAttrs(svg: string): string[] {
+    return [...svg.matchAll(/(?:fill|stroke)="([^"]*)"/g)].map((match) => match[1]);
+  }
+
+  for (const type of tipos) {
+    it(`${type}: ninguna tinta de dato sale de --color-primary`, () => {
+      const pintadas = paintAttrs(renderChart(chart(type, puntos)));
+      expect(pintadas.length).toBeGreaterThan(0);
+      expect(pintadas.filter((valor) => valor.includes("--color-primary"))).toEqual([]);
+    });
+  }
+
+  it("multi-serie tampoco: cada serie sale de la escala categorica", () => {
+    const svg = renderChart({
+      ...chart("line", puntos),
+      series: [
+        { name: "Real", points: puntos },
+        { name: "Meta", points: puntos },
+      ],
+    });
+    expect(paintAttrs(svg).filter((valor) => valor.includes("--color-primary"))).toEqual([]);
+  });
+
+  it("y el CSS no lo mete por la puerta de atras", () => {
+    // El otro camino, y es el que de hecho se uso: el atributo dice
+    // `fill="currentColor"` (limpio) y la hoja decide esa tinta con un `color:`
+    // sobre la clase del dato. Por eso se miran TODAS las declaraciones de las
+    // reglas de tinta de dato, no solo `fill`/`stroke`.
+    const CLASES_DE_DATO = /wf-kpi-spark|wf-chart|wf-sparkline|wf-donut|wf-slot/;
+    // Sin quitar comentarios el gate se dispara con la propia nota que explica
+    // por que ese color YA no se usa ahi: falso positivo garantizado.
+    const css = renderDashboardCss(clienteMinimo).replace(/\/\*[\s\S]*?\*\//g, "");
+    const culpables = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .filter(([, selector, cuerpo]) => CLASES_DE_DATO.test(selector) && cuerpo.includes("--color-primary"))
+      .map(([, selector]) => selector.trim());
+    expect(culpables).toEqual([]);
   });
 });

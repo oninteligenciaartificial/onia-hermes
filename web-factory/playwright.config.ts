@@ -10,6 +10,10 @@ const PORT = 4319;
 // overlapping each other. See tests/e2e/{perf,a11y}.spec.ts (mode: "serial").
 const MEASUREMENT_SPECS = /(perf|a11y)\.spec\.ts$/;
 
+// El gate visual fija su propio viewport (1440 y 375) y corre una sola vez: en
+// el proyecto mobile capturaria lo mismo con otro device y duplicaria baselines.
+const DESKTOP_ONLY_SPECS = /visual\.spec\.ts$/;
+
 /**
  * E2E for the static previews produced by the factory (out/<slug>). This is the
  * client-facing artifact, so smoke-testing it guards the real deliverable
@@ -42,7 +46,7 @@ export default defineConfig({
     },
     {
       name: "mobile",
-      testIgnore: MEASUREMENT_SPECS,
+      testIgnore: [MEASUREMENT_SPECS, DESKTOP_ONLY_SPECS],
       use: { ...devices["Pixel 7"] },
     },
     // Measurement specs: serialized (fullyParallel: false) so timing-sensitive

@@ -23,6 +23,10 @@ const PAGES = [
   // that exercises the trust strip, the process list and the <details> FAQ.
   { name: "landing + trust/process/faq (clinic-demo)", url: "/clinic-demo/", schemes: ["light", "dark"] as const },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", schemes: ["light", "dark"] as const },
+  // El mismo panel con los datos que rompen (negativos, cero, 90 puntos) y con
+  // las secciones en cargando / error / vacio: son estados con `role="alert"`,
+  // `aria-busy` y un boton Reintentar que el demo feliz nunca ejercita.
+  { name: "dashboard casos borde (dashboard-edge)", url: "/dashboard-edge/", schemes: ["light", "dark"] as const },
   { name: "store (skincare-demo)", url: "/skincare-demo/", schemes: ["light"] as const },
   { name: "landing-clinic (dental-demo)", url: "/dental-demo/", schemes: ["light", "dark"] as const },
   // Built from the learned model find-realestate-editorial: full-bleed media hero

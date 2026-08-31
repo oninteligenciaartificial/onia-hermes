@@ -1149,7 +1149,10 @@ body {
   color: var(--color-fg);
   font-family: var(--font-body);
   --wf-pos: #166534;
-  --wf-neg: #b91c1c;
+  /* #b91c1c daba 4,33:1 sobre su propia pildora (la tinta al 14% sobre la card
+     tostada): reprobaba WCAG AA por 0,17. Oscurecido conservando hue y
+     saturacion hasta 4,64:1 — calculado, no estimado. */
+  --wf-neg: #b01b1b;
   --wf-font-mono: "${DASHBOARD_MONO}", ui-monospace, "SFMono-Regular", "Menlo", monospace;
 ${seriesVars("light")}
 }
@@ -1369,14 +1372,22 @@ h1, h2, h3 {
   color: var(--color-on-primary);
 }
 
+/* El 78% daba 4,12:1 en oscuro y el 16% de la pildora 4,41:1: los dos
+   reprobaban WCAG AA sobre la card de marca. El par PURO
+   (--color-on-primary sobre --color-primary) si pasaba — y su test lo
+   protegia — pero la hoja despues lo diluye con color-mix y ahi se rompe.
+   Subidos a 86% (4,72:1) y 12% (4,72:1), calculado sobre el primary oscuro
+   real, no estimado.
+   ponytail: porcentaje fijo; con una marca muy clara habria que recalcularlo —
+   lo agarra el gate de axe en oscuro. */
 .wf-kpi--accent .wf-kpi-label,
 .wf-kpi--accent .wf-kpi-context {
-  color: color-mix(in srgb, var(--color-on-primary) 78%, transparent);
+  color: color-mix(in srgb, var(--color-on-primary) 86%, transparent);
 }
 
 .wf-kpi--accent .wf-kpi-delta {
   color: var(--color-on-primary);
-  background: color-mix(in srgb, var(--color-on-primary) 16%, transparent);
+  background: color-mix(in srgb, var(--color-on-primary) 12%, transparent);
 }
 
 /* Sparkline as card anatomy: bleeds to the card edges, under the figure
