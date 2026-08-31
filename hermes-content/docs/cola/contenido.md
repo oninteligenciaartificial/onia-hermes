@@ -29,7 +29,7 @@ faltantes. Lo que falta es **publicar**.
 
 ## Ahora
 
-- [x] **Resuelto 31-ago: se publican las carpetas de nombre pelado** (`FIJADO`, `L6`, `L08`), no las `render-*`. Comparadas mirando la portada: `hermes-content/references/modelos/lucia/posts-20260807/FIJADO/slide-01.jpg` usa sans pesada con bloque de resaltado y «DESLIZÁ →»; `render-fijado/slide-01.jpg` usa serif itálica fina, que es el tratamiento que Sergio objetó con «se ve muy pequeño el texto». Falta la hoja de contacto de las pelado — se regenera, no es motivo para publicar la peor tipografía · Claude
+- [x] **Resuelto 31-ago: se publican las carpetas de nombre pelado** (`FIJADO`, `L6`, `L08`), no las `render-*`. Comparadas mirando la portada: `hermes-content/references/modelos/lucia/posts-20260807/FIJADO/slide-01.jpg` usa sans pesada con bloque de resaltado y «DESLIZÁ →»; `hermes-content/references/modelos/lucia/posts-20260807/render-fijado/slide-01.jpg` usa serif itálica fina, que es el tratamiento que Sergio objetó con «se ve muy pequeño el texto». Falta la hoja de contacto de las pelado — se regenera, no es motivo para publicar la peor tipografía · Claude
 - [ ] Reapuntar las palabras clave a LINKS en vez de PDFs (Sergio, 31-ago: «lo del pdf quitalo»): marca personal → link a la comunidad, Lucía y Onia → link de @oniahq. Toca `scripts/recompensas.json` y los `comment_reward` de los briefs, que el gate compara entre sí · 30 min · Claude
 - [ ] Declarar la etiqueta de IA en la cuenta antes del primer post — hoy es una instrucción pendiente, no una verificación: `hermes-content/contenido/LUCIA.md` · 5 min · Sergio
 - [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502: `hermes-content/references/modelos/lucia/posts-20260807/render-fijado` · 15 min · Sergio
