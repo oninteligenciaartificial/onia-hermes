@@ -1,0 +1,58 @@
+{
+  "schema": "onia.bot.knowledge/1",
+  "version": "2026-08-31.1",
+  "updatedBy": "carril-chatbot",
+
+  "identity": {
+    "productName": "Onia",
+    "humanName": "Sergio",
+    "botName": "el asistente automático de Onia"
+  },
+
+  "empresa": {
+    "horario": {
+      "dias": [1, 2, 3, 4, 5],
+      "desde": 9,
+      "hasta": 18,
+      "frase": "lun-vie, 9:00-18:00"
+    }
+  },
+
+  "campanas": [
+    {
+      "frase": "Hola, quiero conocer Onia",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Onia es una plataforma por módulos: tu negocio trabaja adentro (agenda, clientes, ventas, cobros) y hay agentes que contestan por WhatsApp, como te estoy contestando yo. Contame de qué es tu negocio y te digo qué parte te sirve; si querés verlo con tus datos, te coordino una demo con Sergio."
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Para decirte si te sirve necesito dos cosas: de qué es tu negocio y cuánta gente trabaja con vos. Con eso te digo qué módulo te toca y qué resuelve, sin vueltas. Y si preferís verlo funcionando con tus datos, te coordino una demo con Sergio."
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero consultoría/capacitación en IA para mi empresa.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. La consultoría y las capacitaciones en IA las da Sergio, no un bot: se arman sobre lo que tu empresa ya hace hoy. Contame el rubro, cuánta gente son y qué proceso te está costando más tiempo — con eso te coordino la reunión y él llega con el diagnóstico empezado."
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero una propuesta de marketing con IA para mi negocio.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Para la propuesta de marketing con IA — contenido, videos e influencers con IA, y la publicación en redes — necesito saber de qué es tu negocio, en qué redes estás hoy y qué querés lograr: más consultas, más ventas o que más gente te conozca. Me lo pasás y Sergio te la arma con eso adentro."
+    },
+    {
+      "frase": "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia — de hecho, soy el mismo tipo de asistente que estarías contratando. Preguntá tranquilo: si es algo que sé, te lo contesto acá mismo; si es una decisión técnica de tu caso, te la responde Sergio y te coordino la charla. ¿Qué querés saber antes de elegir?"
+    }
+  ],
+
+  "faq": [
+    {
+      "id": "siat",
+      "title": "Facturación en línea / SIAT",
+      "body": "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. El detalle exacto de tu caso lo ve {{humano}} en la demo.",
+      "status": "publicado",
+      "vigenteHasta": "2026-09-30",
+      "tags": ["fiscal"]
+    }
+  ],
+
+  "triggersExtra": {
+    "demo": []
+  }
+}

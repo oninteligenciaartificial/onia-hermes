@@ -169,3 +169,15 @@ la única que convierte el objetivo del carril en una captura.
 
 ⚠️ **Requiere un deploy del producto**, que por regla es de Sergio. Detalle y estado:
 `hermes-content/docs/cola/chatbot.md` (ítem 1 de Ahora, y S8 en Bloqueado).
+
+**2026-08-31 — esta decisión vale MÁS de lo que decía arriba: también destraba las frases de
+campaña.** Medido, no supuesto. `campanaExacta` vive dentro de `recepcionistaStep`
+(`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:192`), y el modo recepcionista lo enciende
+**sólo** `asRecepcionista`, que `withKnowledge` llama **únicamente cuando la fuente es `"db"`** —
+o sea, la fila publicada de una **org**, resuelta por `clinic_settings.chatwootInboxId`
+(`knowledge.mjs:851`). El archivo del VPS (`/opt/onia/bot/knowledge.json`), que es lo que hoy
+atiende el +591 75414930, corre en **modo venta**, donde las campañas ni se miran. Corrido con la
+misma frase que la web precarga en todas sus páginas: fuente archivo devuelve `M0_SIN_HORARIOS`
+(el saludo genérico), fuente db devuelve `R_CAMPANA` con su respuesta propia. **Consecuencia
+práctica:** cargar las campañas a mano en el archivo del VPS **no serviría de nada**; el único
+camino es que el inbox 5 sea de una org. La opción 1 no cierra un objetivo, cierra dos.

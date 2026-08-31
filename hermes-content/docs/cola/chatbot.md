@@ -137,6 +137,46 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       web-factory. Las frases se copian tal cual están hoy; si alguna cambia allá, la campaña
       deja de matchear y hay que re-copiarla.
 
+      ⚙️ **Vuelta del 2026-08-31 — el documento está escrito, validado y con su guardia; lo que
+      falta NO es escribirlo.** Gate 1 primero, en vivo: `/opt/onia/bot/knowledge.json` del VPS
+      (leído por SSH, 904 bytes, del 6-ago) **no tiene `campanas`** — el hueco existe hoy.
+      **Corrección al ítem: no son seis frases vivas, son CINCO — y sólo cuatro las manda la web
+      de verdad.** Medido contra producción con `curl`, no leyendo el repo:
+      | frase | dónde | ¿la manda la web hoy? |
+      |---|---|---|
+      | "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio." | `WA_URL_LANDING` | **sí** — portada, /precios, /empezar, /contacto, /nosotros, /facturacion, /chatbot |
+      | "…Quiero consultoría/capacitación en IA para mi empresa." | `/servicios/consultoria` | **sí** |
+      | "…Quiero una propuesta de marketing con IA para mi negocio." | `/servicios/marketing-ia` | **sí** |
+      | "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack." | `/v1/chatbot` | **sí** |
+      | "Hola, quiero conocer Onia" | `WA_URL`, `web-factory/apps/onia-platform/src/lib/site.ts:41` | **no**: export sin un solo consumidor |
+      | "Hola, quiero que me avisen cuando Onia para comercio/servicios/importadoras esté listo" | `WA_TEXT_*`, `web-factory/apps/onia-platform/src/lib/site.ts:52` | **no**: los tres son exports muertos, nadie los importa |
+      | "Hola, mi rubro no está en la lista de Onia. Mi negocio es: " | `/v1/empezar` | sí, pero es un **prefijo** — la persona escribe su rubro atrás, así que jamás puede ser match exacto |
+      Las tres "avisen cuando esté listo" además chocan con `MODULOS_LISTOS`
+      (`hermes-content/deploy/vps-ops/bot/config.mjs:408`): comercio y proveedores **ya están listos**. Que sean código muerto
+      refuerza la 📌 de abajo — no hay que corregir el texto, hay que borrarlo.
+      **Lo que se hizo:** `hermes-content/docs/chatbot/campanas-onia.knowledge.json` — el
+      documento de Onia (copia del vivo del VPS) con **5 campañas** (las 4 vivas + `WA_URL`, que
+      está a un import de volver). Pasa la **compuerta real de publicación**
+      (`node hermes-content/deploy/vps-ops/bot/knowledge.mjs --check <ruta>` → `OK`, exit 0) y las
+      cinco respuestas pasan los guardrails. Y su guardia:
+      `hermes-content/deploy/vps-ops/bot/campanas-web.test.mjs` **extrae las frases del código de
+      la web** en vez de hardcodearlas, así que el día que web-factory cambie una coma el test se
+      pone rojo en vez de morir en silencio. Suite del bot **619/619** verde (614 antes).
+      🔴 **Y apareció el motivo REAL de por qué el ítem no se puede cerrar, que no es el
+      documento.** `campanaExacta` vive dentro de `recepcionistaStep` (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:192`), y
+      el modo recepcionista lo enciende sólo `asRecepcionista`, al que `withKnowledge` llama
+      **únicamente si la fuente es `"db"`** — la fila publicada de una **org**, resuelta por
+      `clinic_settings.chatwootInboxId` (`hermes-content/deploy/vps-ops/bot/knowledge.mjs:851`). El +591 75414930 hoy se atiende
+      desde el **archivo** del VPS, o sea **modo venta, donde las campañas ni se miran**. Corrido
+      con la misma frase por los dos caminos: archivo → `M0_SIN_HORARIOS` (el saludo genérico que
+      el ítem describe), db → `R_CAMPANA` con la respuesta propia y `guardrail.ok: true`.
+      **Cargar las campañas a mano en el VPS no serviría de nada.** El ítem 2 estaba mal
+      diagnosticado: no le faltaba un documento, le falta **el mismo vínculo org→inbox del ítem
+      1**. Los dos ítems de Ahora son el mismo bloqueo, y es **S8**. Anotado en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §9.
+      **Lo que queda del ítem, cuando S8 se destrabe:** cargar estas 5 campañas en el editor de la
+      org dueña del inbox 5, publicar, y probar las 4 frases vivas MIRANDO la pantalla.
+
 ---
 
 ## Después
@@ -166,6 +206,12 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
   `site.ts` dicen *"avisen cuando Onia para comercio/servicios/importadoras esté listo"*, y
   eso es **exhibir obra en la superficie de venta** — prohibido por CLAUDE.md §3. Además los
   tres rubros ya se venden. Anotado acá para que no se pierda; lo decide su dueño.
+  **2026-08-31, dato nuevo que simplifica la decisión:** los cuatro exports —
+  `WA_TEXT_COMERCIO`, `WA_TEXT_SERVICIOS`, `WA_TEXT_PROVEEDORES` y `WA_URL`— **no los importa
+  nadie** en todo `web-factory/` (verificado por grep en el repo y por `curl` contra las páginas
+  vivas: ninguna los renderiza). No hay texto que corregir: es código muerto, y `WA_URL` dice de
+  sí mismo ser "el CTA general de toda la página", así que probablemente se desconectó sin
+  querer. Dos caminos, los dos baratos: borrarlos, o volver a conectar `WA_URL`.
 
 ---
 
@@ -181,7 +227,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
-| S8 | **Desplegar el producto y decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** | El deploy es suyo por regla; y los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` | **El objetivo del carril entero.** El código ya está (commit `88c1d56`): faltan un deploy y dos clicks en `/admin/organizations/<id>` |
+| S8 | **Desplegar el producto y decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** | El deploy es suyo por regla; y los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` | **El objetivo del carril entero, y también el ítem 2.** El código ya está (commit `88c1d56`): faltan un deploy y dos clicks en `/admin/organizations/<id>`. Medido el 31-ago: las frases de campaña **sólo** existen en modo recepcionista, que se enciende únicamente con la fila publicada de una org — sin este vínculo, cargarlas donde sea no cambia nada |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
 ---
