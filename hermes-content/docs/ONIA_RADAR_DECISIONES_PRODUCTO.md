@@ -234,3 +234,47 @@ Los tres `LOGO` no los defendía nadie: sobrevivían por suerte.
 **Recomendación: opción 1.** Es el mismo mecanismo que ya se aprobó y ya corre; lo único que
 cambia es que cubra todo lo que el reconcile toca en vez de un tercio. Anotado como **S10** en
 `hermes-content/docs/cola/chatbot.md`.
+
+---
+
+## 11. En la bandeja, lo que dice el bot aparece firmado "Vos" (2026-08-31) — acción de Sergio
+
+**El síntoma, MIRADO.** Se abrió `/inbox` con la sesión del dueño y se leyó la conversación
+del +591 71606892: **todos** los mensajes salientes están rotulados **"Vos"**, incluidos los
+que escribió el bot solo (los recordatorios de la demo, la insistencia, el aviso técnico). El
+dueño no tiene forma de saber qué dijo su asistente y qué dijo él.
+
+**La causa, medida en la base de Chatwoot y en el entorno de producción — no leída del código.**
+
+- El adapter postea con el agente `CHATWOOT_BOT_AGENT_ID`, **y si no está seteado cae al 2**
+  (`/opt/onia/bot/webhook-server.sh:149`). No está seteado: de los mensajes salientes de las
+  conversaciones 11, 35 y 37, **los 8 tienen `sender_id = 2`** y ninguno el 3.
+- El agente 2 es `OnIA <oninteligenciaartificial@gmail.com>` — la cuenta de Sergio. El agente
+  **3 es "Onia Bot"** (`business+bot@onia.com.bo`).
+- La bandeja clasifica por id: `bot` si el remitente es `CHATWOOT_BOT_USER_ID` (default **3**,
+  `lib/chatbot/bandeja.ts:119`), y `negocio` = "Vos" en cualquier otro caso. En producción esa
+  variable **no está definida** (`docker inspect onia-platform` → sólo 4 variables `CHATWOOT_`,
+  y no es una de ellas). Bot postea como 2, la bandeja busca 3: todo cae en "Vos".
+
+**Lo que YA está listo y nadie encendió** — es el patrón "construido y apagado" otra vez: el
+agente 3 **tiene su access token** (creado el 11-ago) y **es miembro de los inboxes 4, 5 y 7**.
+El propio motor lo avisa desde adentro: `usage-run.mjs:218` dice que "sin
+`CHATWOOT_BOT_AGENT_ID` configurado el adapter no puede distinguir al humano del bot".
+
+⚠️ **El detalle que hay que mirar antes de apretar:** el agente 3 **no** es miembro del
+**inbox 3**; ahí sólo está el 2. Si algún cliente vive en ese inbox, el bot dejaría de poder
+postear. Hoy el inbox 3 no es el `chatwootInboxId` de ninguna org, así que no atiende a nadie
+— pero se verifica antes, no después.
+
+**Las dos opciones, cotizadas:**
+
+1. **Setear `CHATWOOT_BOT_AGENT_ID=3` en el servicio del bot del VPS** y recargarlo. Costo:
+   0 Bs, una variable. Efecto: el bot pasa a firmar como "Onia Bot", la bandeja lo rotula
+   **"Tu asistente"** en vez de "Vos", y el traspaso ("cuando contestás vos, tu asistente se
+   hace a un lado") por fin se puede ver en pantalla. Reversible borrando la variable.
+   Riesgo: el inbox 3, arriba.
+2. **Dejarlo.** Costo: 0 Bs. El dueño sigue sin poder distinguir su voz de la del bot en su
+   propia bandeja — que es justo lo que la pantalla promete al pie de cada conversación.
+
+**Recomendación: opción 1.** Todo lo caro (usuario, token, membresías) ya existe desde el
+11-ago; falta la variable. Anotado como **S11** en `hermes-content/docs/cola/chatbot.md`.

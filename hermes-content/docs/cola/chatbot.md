@@ -261,27 +261,29 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 
 ## Después
 
-- [ ] **v6.8 — recorrida de fricción completa.** Es el próximo paso que el handoff dejó
-      escrito y sigue vigente: recorrer `/settings/chatbot` y `app/(dashboard)/inbox/InboxClient.tsx`
-      como si fuera el primer día del dueño, anotando cada roce. Va después del objetivo
-      porque pulir la pantalla de un producto que todavía no atendió a un desconocido es
-      optimizar sin señal.
+- [ ] **"La cita" le habla de consultorio a una ferretería — y esta vez NO es el flag.**
+      Encontrado en la recorrida v6.8, con `PLATFORM_LAYER=1` puesto, o sea que es el texto y
+      no el entorno: en `/settings/chatbot` de `Ferreteria Circuito Completo` la tarjeta se
+      titula **"La cita"**, pide **"Cuánto dura (minutos)"** y ofrece de ejemplo
+      **"en el consultorio, o por videollamada"**. Una ferretería no agenda citas ni tiene
+      consultorio. Son literales en `onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`
+      — la pantalla sí usa el vocabulario del rubro, pero sólo para dos placeholders de ejemplo
+      (`page.tsx:47`, `voc.ejemploNombre` y `voc.ejemploMiembro`), no para estos rótulos.
+      **Lo barato que lo arregla:** `lib/onboarding/vocabulario.ts` no tiene todavía una palabra
+      para "la cita" por rubro. Es un campo nuevo en un módulo que consumen muchas pantallas
+      (Sidebar, Header, alta), así que **lo decide el carril de plataforma, no éste** — se
+      anota con su prueba y se deja.
 
-      📋 **Ya hay tres roces MIRADOS el 2026-08-31** (aparecieron al levantar el entorno local
-      para el ítem 1; se anotan acá en vez de perseguirlos, que es otro carril):
-      1. **La barra del panel admin se pisa consigo misma.** Cada icono queda encima de su
-         propia etiqueta: se lee `Métricas`, `Pagos`, `Planes`, `Usuarios`, `Chatbots`,
-         `Auditoría` con el glifo montado sobre la primera letra, y el chip activo parte
-         "Estás en / Clínicas" en dos líneas contra el borde. Es la pantalla del superadmin
-         (`/admin/organizations/<id>`), no la del cliente, pero es donde se vincula el inbox.
-      2. **El buscador dice "Buscar pacientes…" en una ferretería.** La org de prueba es
-         `Ferreteria Circuito Completo` y el placeholder de la barra superior sigue en
-         vocabulario dental — justo lo que `lib/onboarding/vocabulario.ts` existe para evitar
-         (CLAUDE.md §3: el producto no se le vende sólo a clínicas). También la tarjeta de
-         abajo titula "INSTRUCCIONES PARA LA CLÍNICA" y el campo "Admin de la clínica".
-      3. **`next dev` no sirve para mirar en Windows**, así que cualquier recorrida de
-         fricción hay que hacerla sobre `build` + `standalone`. La receta está en la skill
-         `onia-verificacion`.
+- [ ] **El disco de la máquina de Sergio se llenó al 100% y bloqueó el build.**
+      No es una molestia: `next build` murió con `ENOSPC: no space left on device` y con
+      **0 bytes libres** de 465 GB no se puede mirar ninguna pantalla. Se liberó lo
+      inequívocamente muerto — la caché de npm, 308 carpetas `HeadlessChrome*` de Playwright en
+      `%TEMP%`, y los `.next` de los **12 worktrees de `onia-platform` que ni siquiera tienen
+      `node_modules`** (build sin con qué reconstruirse: basura por definición). Quedaron 5,9 GB
+      y el build pasó. **La causa de fondo sigue ahí y no la arregla este carril:**
+      `onia-platform` tiene **30 worktrees**, 13 con su propio `node_modules`. Cerrar los
+      worktrees de ramas ya mergeadas es de cada carril; el de plataforma es el que lleva la
+      cuenta.
 
 - [ ] **Arrastrado del ítem 1: dos huecos de plataforma encontrados al levantar el entorno.**
       Ninguno bloquea el objetivo del carril; se dejan escritos con su prueba.
@@ -390,6 +392,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S8 | **Desplegar el producto y decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** | El deploy es suyo por regla; y los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` | **El objetivo del carril entero.** El código ya está (commit `88c1d56`): faltan un deploy y dos clicks en `/admin/organizations/<id>`. ⚠️ **Corregido el 31-ago (2ª vuelta): el ítem 2 ya NO cuelga de acá.** Decía que las campañas sólo existían en modo recepcionista — era cierto y ya no lo es: ahora también se leen en modo venta, así que las frases de la web se destraban con S9, sin decidir dueño de inbox |
 | S9 | **Publicar las campañas en el VPS**: copiar `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` (hoy 904 bytes, sin `campanas`) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK. Es un `scp` + recarga, no un build | **El ítem 2 entero.** El motor ya las lee en modo venta (626/626 verde, probado con este mismo documento); falta que el archivo del número las tenga. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico |
 | S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas |
+| S11 | **Setear `CHATWOOT_BOT_AGENT_ID=3` en el servicio del bot del VPS** y recargarlo | Escribe en el VPS y cambia con qué identidad postea un bot vivo | Que la bandeja rotule **"Tu asistente"** en vez de **"Vos"** los mensajes del bot: hoy el dueño no puede distinguir su voz de la del asistente en su propia pantalla (MIRADO). Todo lo caro ya existe desde el 11-ago — el agente 3 "Onia Bot" tiene token y es miembro de los inboxes 4, 5 y 7. Opciones y el detalle del inbox 3 en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §11 |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
 ---
@@ -401,6 +404,47 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 > alguien los vuelve a abrir, que sea contra el archivo, no contra la memoria.
 
 **Cerrado en esta vuelta (2026-08-31):**
+
+- [x] **v6.8 — recorrida de fricción completa.** Hecha el 2026-08-31 sobre las dos pantallas
+      que el ítem nombra, con la sesión del dueño de `Ferreteria Circuito Completo` (la org
+      vinculada al inbox 5), en escritorio **y** en móvil (375×812), MIRANDO capturas. La
+      recorrida encontró **una cosa rota de verdad, que se arregló en la misma vuelta**, y
+      corrigió dos de los tres roces que el propio ítem traía anotados.
+      **Lo roto, y arreglado** (`onia-platform`, commit `fdcb3df`, mergeado a `master` y
+      pusheado): **el globo verde de no-leídos no bajaba nunca.** `unread_count` sale de
+      `agent_last_seen_at` de Chatwoot, y lo único que movía esa columna era la UI de Chatwoot
+      — que el dueño no usa. Medido en la base de producción ANTES de tocar: de las 8
+      conversaciones de los inboxes 4 y 5, **siete tenían `agent_last_seen_at` en NULL**.
+      Ahora abrir la conversación llama a `update_last_seen` (después del guard de tenencia, y
+      en `try/catch`: leer es lo que no puede romperse) y el cliente relee la lista una vez para
+      que el globo baje sin esperar los 15 s del poll. Verificado MIRANDO contra el Chatwoot de
+      producción: abrir la conversación 11 le sacó el globo en pantalla **mientras las otras dos
+      lo conservan**, y su `agent_last_seen_at` quedó con la hora del click. Las de desconocidos
+      (35 y 37) no se tocaron a propósito: S7 las espera sin leer.
+      **Corrección al roce 2 del propio ítem — era fantasma, y de los caros.** Decía que "el
+      buscador dice *Buscar pacientes…* en una ferretería" y sonaba a texto dental hardcodeado.
+      No lo es: `Header.tsx:28` y `Sidebar.tsx:53` YA leen `vocabularioDeTrack(...)`, y lo que
+      faltaba era el flag. Con `PLATFORM_LAYER=1` — que es **el valor de producción**, leído con
+      `docker inspect onia-platform` — la misma pantalla dice **"Buscar productos…"** y el menú
+      pasa de `Pacientes · Cobros · Reportes` a **`Catálogo · Inventario · Caja`**. MIRADO en las
+      dos configuraciones. El roce existía sólo en local, por una variable que faltaba en
+      `.env.local`. **El roce 1 (la barra del admin encimada) NO se re-verificó**: vive en
+      `/admin/organizations/<id>`, que no es ninguna de las dos pantallas que este ítem nombra.
+      Queda como estaba — pero ojo, nació con el mismo entorno sin flag que produjo el roce 2, así
+      que antes de perseguirlo conviene volver a mirarlo con `PLATFORM_LAYER=1`.
+      **Un roce nuevo, MIRADO:** al entrar a `/inbox` el modal **"Primeros pasos"** se abre encima
+      y tapa la lista entera de conversaciones; hay que cerrarlo para ver quién escribió. Es el
+      checklist de alta (`components/onboarding/GuiaInicio`), y aparece incluso con conversaciones
+      esperando.
+      **Lo que la recorrida NO pudo cerrar, y quedó anotado en su lugar:** "La cita" le habla de
+      consultorio a una ferretería incluso con el flag puesto (ficha nueva en "Después", es del
+      carril de plataforma), y el bot firma **"Vos"** en vez de "Tu asistente" (**S11** + radar §11).
+      **Dos trampas nuevas del entorno**, que van a costar una vuelta a quien las repita y por eso
+      se escriben: `npm run build` usa Turbopack y **no emite `.next/standalone`** — para poder
+      levantar el producto hay que correr `next build --webpack`, que es además lo que
+      `next.config.ts` declara como build de deploy; y ese build **exige `ENCRYPTION_KEY`** o
+      muere en "Failed to collect page data for /api/gateway-config/test". Las dos van a la skill
+      `onia-verificacion`.
 
 - [x] **1 · Contar si un desconocido YA escribió.** Contado contra las dos bases, no contra el
       handoff. **La respuesta es SÍ: cinco desconocidos, y ninguno se ve en `/inbox`.**
