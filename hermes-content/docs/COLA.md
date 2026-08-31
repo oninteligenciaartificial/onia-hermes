@@ -291,27 +291,39 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
-- [x] 🔒 **La mina de `page_location` en GA — CERRADA EN `master` el 2026-08-31, y estaba
-      declarada cerrada dos veces sin estarlo.** El ítem figuraba `[x]` más abajo en este mismo
-      archivo citando *"PR #59 mergeado"*. El PR existe (`4dce75e`) pero
-      `git branch --contains` lo ubica **sólo** en `feat/ui-dashboard-piloto` y
-      `fix/aviso-leads-canal-propio`: **nunca entró a `master`**, y `GoogleAnalytics.tsx:64`
-      seguía mandando `window.location.href` completo, anulando el allowlist `safeQueryParams`
-      que la línea de arriba aplica a `page_path`. **Mismo patrón que el WhatsApp placeholder:
-      un carril declara el arreglo y la superficie que importa no cambia.**
-      **Lección de método: "PR mergeado" no es evidencia — `git branch --contains <sha>` sí.**
-      Un ítem se cierra contra la rama que se despliega, no contra la que lo escribió.
-      Se trajo el trabajo de #59 tal cual en vez de duplicarlo, porque es más fuerte que el
-      parche de una línea: extrae `components/analytics/page-view-params.ts` como módulo puro
-      con sus 3 tests, y **estrecha el tipo del parámetro a `{ origin }`** — el regreso lo frena
-      `tsc`, no la buena voluntad. Encima queda la guarda de fuente nueva
-      (`__tests__/url-cruda-fuera-de-analytics.test.ts`), que persigue la LECTURA de la URL cruda
+- [x] 🔒 **La mina de `page_location` en GA — ya estaba cerrada, y de paso quedó su guarda.**
+      El ítem seguía abierto acá diciendo *"en arreglo ahora"*, pero el arreglo (PR #59,
+      `4dce75e`) **está en `origin/master` y es ancestro de `e5c1ad3`, que es lo que sirve el
+      contenedor `onia-platform` del VPS**: el fix ya estaba en producción. Cerrado correcto.
+      **Lo que sí faltaba, y es el aporte de esta vuelta:** #59 estrecha el tipo del parámetro a
+      `{ origin }`, así que `tsc` frena el regreso **en ese consumidor** — no en el próximo
+      archivo que quiera leer la URL completa. El defecto no era del componente, era de forma:
+      filtrar los query params en un campo y mandar la URL entera en el de al lado. Ahora hay
+      guarda: `__tests__/url-cruda-fuera-de-analytics.test.ts` persigue la LECTURA
       (`location.href`, `document.URL`) en `app/`, `components/` y `lib/` y **permite la
-      asignación** (redirigir es idioma normal; una guarda que ladra sobre código legítimo se
-      termina desactivando). Se vio en ROJO señalando la línea 64 antes del fix.
-      Gates: tsc 0 · eslint 0 · **2326 pasan + 5 skip** (188 archivos). Commits `6edfab6` y
-      `a15c82f`, **ya en `master`**.
-      ⚠️ Cuando `feat/ui-dashboard-piloto` se mergee, estos 3 archivos ya están en `master`.
+      asignación** — redirigir es idioma normal, y una guarda que ladra sobre código legítimo se
+      termina desactivando, que es cuando vuelve el defecto. Se vio en ROJO señalando la línea 64
+      contra un árbol con el bug antes de traerla. Reusa `escanear-fuente.ts`, el escáner que ya
+      comparten las otras guardas.
+      Gates sobre `origin/master`: tsc 0 · eslint 0 · **2323 pasan + 5 skip** (188 archivos).
+      Commit `1fc4354`, **ya en `master`**.
+
+      ⚠️ **La lección de esta vuelta es un error MÍO de método, y vale más que el ítem.**
+      Diagnostiqué *"el PR nunca llegó a master"* y era **falso**. Dos fallas encadenadas:
+      1. **`git branch --contains <sha>` lista sólo ramas LOCALES.** Para saber si algo llegó
+         hace falta **`git branch -a --contains`**, o mejor `git merge-base --is-ancestor <sha>
+         <lo-desplegado>`, que responde la pregunta que de verdad importa.
+      2. **Leí un `master` local desactualizado sin `git fetch` antes.** El `master` local de
+         `onia-platform` está **divergido** de `origin/master` (tiene `e46e9ee`, el mismo
+         trabajo que `e5c1ad3` con otro sha) y le faltaban 2 commits.
+      Es el mismo error que esta cola ya tiene escrito dos veces con otras caras: **verificar
+      contra el sistema equivocado**. Un repo local sin `fetch` no es la rama que se despliega,
+      igual que Vercel no es el host y un 200 no es una pantalla.
+      **Para la próxima:** antes de declarar que algo falta en `master`, `git fetch` y preguntar
+      por ancestría contra el sha desplegado. Los 2 commits que escribí sobre esa premisa falsa
+      (`6edfab6`, `a15c82f`) quedaron **sólo en el `master` local** y no se pushearon: duplican
+      trabajo que ya estaba. No se limpiaron porque ese árbol tiene cambios sin commitear de
+      otra sesión (`admin/audit`, `credit-note`, `lib/audit.ts`) y resetearlo se los llevaba.
 
 - [ ] **`DELETE /api/payments/[id]` sobre un mes ya declarado** devuelve la factura a BORRADOR y
       ese mes pierde la venta del CSV, sin nota de crédito de por medio. **No existe cierre de
@@ -434,9 +446,11 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       línea de arriba aplicaba a `page_path`. Dormida (GA apagado) pero **a una env var de
       encenderse**. PR #59: se arma del mismo path ya filtrado, y **el tipo se estrechó
       a `{ origin }`** para que `tsc` frene el regreso.
-      ⚠️ **Esta entrada decía "PR #59 mergeado" y era FALSO: el commit `4dce75e` estaba sólo en
-      `feat/ui-dashboard-piloto` y `fix/aviso-leads-canal-propio`, nunca en `master`.** El bug
-      siguió vivo hasta el 2026-08-31. Ver la entrada de "Después", que es la que vale.
+      ✅ **Verificado el 2026-08-31: esta entrada era correcta.** `4dce75e` está en
+      `origin/master` y es **ancestro de `e5c1ad3`**, el commit desplegado en el VPS — o sea el
+      fix ya estaba en producción. (Una sesión lo declaró abierto por leer un `master` local sin
+      `fetch`; el detalle del error, en la entrada de "Después".) Le falta sólo la guarda, que
+      es lo que se agregó.
 - [x] **GA4: no era código muerto.** Early-return antes de montar el script, allowlist de 6 rutas
       públicas, política de privacidad ya escrita en condicional. Encenderlo es 1 env var.
 
