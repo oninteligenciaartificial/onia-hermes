@@ -329,11 +329,31 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       ese mes pierde la venta del CSV, sin nota de crédito de por medio. **No existe cierre de
       período**: el RCV se regenera on demand para cualquier mes. Borra débito real, no inventa
       crédito. Es un hueco conceptual, no un bug suelto.
-- [ ] **El guardia de repo de `invoice-status` es evadible** por alias (`const f = prisma.invoice`)
-      y por nested write, y no cubre `invoice.create`. Hoy no existe ninguno de los tres en el
-      repo, pero el guardia promete más de lo que da.
-- [ ] **La nota de crédito no pasa por `maybeEmitFiscalInvoice`**: el día que se enciendan los
-      gates queda declarada en el CSV interno y no ante el SIN.
+- [x] **El guardia de repo de `invoice-status` es evadible** — **fantasma: ya estaba cerrado en
+      este mismo archivo.** El commit `2849be0` (verificado el 2026-08-31 como ancestro de
+      `origin/master`) agregó los 5 patrones con 4 casos negativos, y su cierre está escrito 40
+      líneas más arriba. La entrada quedó duplicada en "Después" cuando se cerró en "Ahora".
+      **Lección de cola, no de código:** cerrar un ítem no cierra su copia.
+- [x] **La nota de crédito no pasa por `maybeEmitFiscalInvoice` — y no se cierra cableándolo.**
+      Verificado el 2026-08-31: el validador del emisor BO rechaza una NC por **tres** reglas
+      distintas (`total > 0`, `cantidad > 0`, precio unitario negativo — `lib/fiscal/siat-client.ts`),
+      así que llamar al helper sólo dejaría un espejo en `rejected`. En el SIAT la NC es un
+      **documento de ajuste**: otro servicio y el CUF de la original, y el emisor compartido expone
+      hoy un único endpoint (`POST /api/fiscal/invoices`). Cerrarlo de verdad **toca el otro repo**
+      (`hermes-content/integrations/siat`), y eso no es este carril.
+      **Lo que sí se cerró: que el agujero fuera SILENCIOSO.** La NC es el único documento que
+      RESTA del débito fiscal y era el único que no escribía una línea de auditoría — con los
+      gates encendidos bajaba la venta del CSV interno sin existir para el SIN y nadie podía
+      enterarse. Ahora hay `CREDIT_NOTE_CREATED` con `newValue.siatPendiente`, consultable desde
+      `/admin/audit` (con su color ámbar y su filtro). Es el mismo remedio que ya había elegido
+      `PATCH /api/invoices/[id]` para su fallo fiscal, en vez de un `console.error` que no
+      sobrevive a un reinicio del contenedor.
+      **Se miran sólo los dos flags globales** (lectura de env, cero queries): pedir el
+      entitlement `module.invoicing` por org costaba un viaje a la base por cada NC, y
+      sobre-reportar es el lado seguro de una alarma.
+      Gates: tsc 0 · eslint 0 · **2326 pasan + 5 skip**. Commit `14abb9a`, **ya en `origin/master`**.
+      **El trabajo estaba sin commitear en el árbol** desde antes de esta vuelta: sin este commit
+      se perdía en el próximo `reset` de cualquier sesión.
 - [ ] **Los ítems I1 y E1** de `TODOS_LOS_PENDIENTES.md` siguen sin resolver. Para decidirlos hay
       que **abrir la pantalla con sesión y mirarla**: un 307 no prueba nada, hay un redirect
       atrapa-todo que responde igual para rutas que no existen.
@@ -397,6 +417,17 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 - ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva web-factory. Estar en otra sesión no es estar bloqueado.
 
 ## Cerrado (2026-08-31) — no rehacer
+
+- [x] **El `master` local de `onia-platform` estaba divergido de `origin` — 3 commits contra 3, y
+      el mismo árbol.** Es exactamente el objetivo de este carril ("`main` integrado") fallando en
+      silencio: `git rev-list --left-right` daba `3 3`, así que ningún push entraba sin merge, y
+      la cola ya había anotado que `6edfab6` y `a15c82f` duplicaban trabajo que ya estaba en
+      `origin`. **La prueba de que eran duplicados no es leer los mensajes: es el `^{tree}`.** Los
+      dos lados daban `06252c6e…` idéntico — mismo contenido, distinta historia.
+      Por eso el arreglo fue `git reset --soft origin/master` y no `--hard`: el árbol tenía 4
+      archivos sin commitear (`admin/audit`, `credit-note`, `lib/audit.ts`) y un `--hard` se los
+      llevaba — que es justamente el motivo por el que la vuelta anterior no lo había limpiado.
+      Con los trees iguales el soft reset no movió ni un byte del working tree. Quedó `0 0`.
 
 - [x] 🚀 **`main` INTEGRADA y DESPLEGADA.** 242 commits de 4 carriles (`onia-web-architecture`,
       `chatbots-platform-review`, `ads-creatividades-publicos`, `git-status`). Gates: `tsc` 0,
