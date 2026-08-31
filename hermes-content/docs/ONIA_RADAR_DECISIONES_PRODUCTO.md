@@ -181,3 +181,22 @@ misma frase que la web precarga en todas sus páginas: fuente archivo devuelve `
 (el saludo genérico), fuente db devuelve `R_CAMPANA` con su respuesta propia. **Consecuencia
 práctica:** cargar las campañas a mano en el archivo del VPS **no serviría de nada**; el único
 camino es que el inbox 5 sea de una org. La opción 1 no cierra un objetivo, cierra dos.
+
+⚠️ **CORREGIDO el 2026-08-31, más tarde el mismo día: el párrafo de arriba ya no vale, y la
+decisión vuelve a valer lo que decía al principio — una cosa, no dos.** El diagnóstico era
+correcto pero la conclusión era una limitación del código, no una ley: se arregló en el commit
+`994eb42d` de `onia-hermes`. `applyKnowledge` ahora lleva `campanas` a la config de **los dos**
+modos, y `bot-engine.mjs` resuelve la frase en el router del modo venta, saliendo por
+`composeWithFunnel` — el mismo camino que ya usaban precio y SIAT, que pone la respuesta
+**detrás** de la bienvenida en vez de reemplazarla. Eso importa: `R_CAMPANA` es sólo
+`{{respuesta_campana}}` y no dispara ningún efecto, así que hacer lo que este párrafo proponía
+—mover el número de Onia a modo recepcionista— habría cambiado la única línea que produce
+`lead_upsert` por un texto enlatado. Probado con las 5 campañas del documento real: las cinco
+contestan lo suyo y las cinco conservan el lead. Suite del bot 626/626.
+
+**Lo que queda de las campañas NO es esta decisión:** es copiar
+`hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` del
+VPS (hoy 904 bytes, sin `campanas`). Es un `scp` con OK de Sergio, anotado como **S9** en
+`hermes-content/docs/cola/chatbot.md`, y **no depende de a qué org vaya el inbox 5**. La decisión
+9 sigue en pie por su motivo original —que los desconocidos se vean en `/inbox`— y esa sigue
+siendo la recomendación: **opción 1**.
