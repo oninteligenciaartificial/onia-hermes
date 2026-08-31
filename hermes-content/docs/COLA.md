@@ -183,9 +183,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 | # | Qué | Por qué necesita permiso |
 |---|---|---|
-| D1 | ✅ **Los 2 crons ya están escritos y listos para instalar** — `hermes-content/infra/vps-ops/crons/` (2 scripts + `INSTALAR.md` con las líneas exactas, cómo verificar y cómo revertir). Con tu OK los instalo en 1 minuto | toca infra de producción |
-| D2 | **Dar de baja las cuentas que sobran en `onia_center`** — y desde hoy **sirve de algo** (ver el fix de arriba: antes las bajabas y seguían entrando). Contadas hoy: hay **4 activas** y sólo `sergio` debería quedar — `arthur` (ya no colabora, 23-ago), `seller_001` (Camila) y `seller_002` (Jerónimo), los dos vendedores, y **no hay equipo de ventas**. ⚠️ La versión anterior de este ítem decía "arthur y seller_001": se olvidaba de Jerónimo | es acceso de personas |
-| D3 | **Desplegar al VPS** cuando haya algo que valga el swap. Runbook y gates en la skill `onia-deploy` | toca producción |
+| D3 | **Desplegar al VPS** cuando haya algo que valga el swap. Runbook y gates en la skill `onia-deploy`. ⚠️ Hoy hay commits en `master` que **no están en producción** | toca producción |
 
 ### Ya NO son bloqueos — salieron de la lista
 
@@ -199,6 +197,23 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
   contempla y `.env.example` lo trae vacío. **Encenderlo es UNA env var.** La entrada estaba mal
   planteada: no había nada que sacar.
 - ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva web-factory. Estar en otra sesión no es estar bloqueado.
+
+## Cerrado (2026-08-31) — no rehacer
+
+- [x] **D2 · Cuentas de más dadas de baja en `onia_center`.** `arthur`, `seller_001` (Camila)
+      y `seller_002` (Jerónimo) → `status='blocked'`. Queda **sólo `sergio`** activo. Respaldo
+      del estado previo tomado antes del `UPDATE`; se revierte poniendo `'active'`.
+      **Cerrado por dos vías**: además del flag, `center.onia.com.bo` responde **404** — la
+      superficie ya estaba dada de baja.
+- [x] **D1 · Los 2 crons instalados en el VPS y PROBADOS.** Pre-chequeos del runbook en verde
+      (`CRON_SECRET` presente, `NEXT_PUBLIC_APP_URL=https://app.onia.com.bo` — no localhost,
+      `N8N_API_KEY` presente, sin duplicados). Crontab respaldado en
+      `/root/crontab-backup-antes-de-2-crons-20260831.txt` (29 líneas → 36). Scripts en
+      `/root/bin/` con permisos `700` y shebang sin CRLF. **Corridos a mano, los dos exit 0:**
+      - `recurring-invoices` → `{"ok":true,"processed":0,"failed":0,"total":0}` (hay **0 filas**
+        en `recurring_invoices`, así que era no-op garantizado — por eso se pudo probar sin
+        riesgo)
+      - `onia-core-workitems` → `{"ok":true,"organizations":3,"created":0,"deduped":0,"errors":0}`
 
 ## Cerrado (2026-08-30) — no rehacer
 
