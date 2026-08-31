@@ -35,8 +35,15 @@ quema una sola vez.
 
 Hay **siete personas reales** esperando —3 pedidos de acceso y 4 que le escribieron al bot,
 incluido *"estoy evaluando un sistema de gestión para una clínica odontológica de 4
-doctores"*— y **no se les contesta hasta que esta lista esté cerrada.** Están anotadas en
-`ONIA_RADAR_DECISIONES_PRODUCTO.md` §8 y en la cola del chatbot, no se pierden.
+doctores"*— y **no se les contesta hasta que esta lista esté cerrada.** Están anotadas, con
+nombre y con lo que dijeron, en [`ONIA_LEADS_ESPERANDO.md`](ONIA_LEADS_ESPERANDO.md).
+
+*(Acá decía que estaban en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §8 y en la cola del chatbot.
+**Era falso**: verificado el 2026-08-31, la frase "7 personas" no aparecía en ningún otro
+archivo del repo. Los 3 pedidos de acceso nunca corrieron riesgo —tienen tabla y pantalla
+propias—, pero los 4 del bot viven en inboxes de Chatwoot que **no pertenecen a ninguna
+organización**, y a los dos de WhatsApp —incluido el de los 4 doctores— **no les respondió
+nadie, ni una plantilla**.)*
 
 ---
 
@@ -61,18 +68,38 @@ Todo lo demás va a las colas de cada carril, no acá.
 
 La llave de tenencia de la bandeja es `clinic_settings.chatwootInboxId`, y es **un slot
 único** que se llena con el inbox **web** al crear la organización
-(`app/api/admin/clinics/route.ts:97`). Nunca se pisa
-(`lib/chatbot/canal-web.ts:27`, `app/api/admin/chatbots/route.ts:53`), y la única pantalla
-que lo muestra es de sólo lectura (`WhatsAppOrgConfig.tsx:215`).
+(`app/api/admin/clinics/route.ts:97`).
 
-**Ya no es teoría:** hay **cuatro conversaciones reales** en inboxes que no son de ninguna
-organización, así que nadie las puede ver en `/inbox`.
+⚠️ **Corregido el 2026-08-31 — la mitad de este punto ya no es cierta, y es la mitad que lo
+bloqueaba.** Acá decía que *"la única pantalla que lo muestra es de sólo lectura
+(`WhatsAppOrgConfig.tsx:215`)"*. **Es falso contra el `master` de hoy**, y la línea 215 de ese
+archivo es un campo de nombre de plantilla, nada que ver. El commit `88c1d56`
+(*"el inbox de una org se podia crear pero nunca corregir"*) le puso el formulario editable:
+`handleSaveInbox` → `patchWhatsApp({ chatwootInboxId })`, con su mensaje *"Org vinculada al
+inbox N"*.
+
+**Y está DESPLEGADO, no sólo en `master`.** Verificado contra el contenedor `onia-platform`
+del VPS, no contra el repo: el string `"Org vinculada al inbox"` aparece en el bundle que
+sirve hoy (`/app/.next/static/chunks/…` y el chunk SSR de `WhatsAppOrgConfig`). Es la forma
+correcta de preguntarlo: la ancestría contra `e5c1ad3` daba lo contrario, porque `e5c1ad3` ya
+no es lo desplegado.
+
+**O sea: "lo mínimo que lo logra" —un PATCH de superadmin que apunte una org a un inbox
+existente— ya existe y está vivo.** Lo que falta no es construirlo: es **usarlo una vez**.
+
+**Ya no es teoría, y es peor de lo que decía:** medido en producción el 2026-08-31, la única
+org con `chatwootInboxId` es `zz-qa-clinica-chatbot-9k651` → inbox **7** (el de QA). Los
+inboxes **4 (Onia Web)** y **5 (Onia WhatsApp)** son huérfanos, y ahí están **todos** los leads
+reales — incluido el de la clínica de 4 doctores, que lleva días sin que nadie pueda leerlo.
+Ver [`ONIA_LEADS_ESPERANDO.md`](ONIA_LEADS_ESPERANDO.md).
 
 **Terminado =** un mensaje enviado al número del cliente aparece en su bandeja, **mirado con
-captura**. Lo mínimo que lo logra es un PATCH de superadmin que apunte una org a un inbox
-existente — no hace falta una tabla de N inboxes hasta que alguien tenga web **y** WhatsApp.
+captura**. Con el formulario ya vivo, el camino es: `/admin/organizations/<id>` → vincular la
+org al inbox → abrir `/inbox` y MIRAR.
 
-**Carril:** chatbot. Es el ítem 2 de su cola.
+**Carril:** chatbot. Es el ítem 2 de su cola. **Pero el paso que queda es de un minuto y es
+una escritura en producción**, así que lo decide Sergio o el dueño del carril — este loop no
+escribe en la base de producción.
 
 ### 🟠 2. Vendemos que el bot agenda, y el bot no agenda
 

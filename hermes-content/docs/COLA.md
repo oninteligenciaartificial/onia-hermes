@@ -15,8 +15,11 @@ cosas **rotas** (el cliente las compra y no funcionan) o **falsas** (se las vend
 ciertas). Nada de "sería lindo".
 
 ⚠️ **Hay 7 personas reales esperando y NO se les contesta hasta cerrar esa lista.** Un lead
-bueno se quema una sola vez. Están anotadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §8 y en la
-cola del chatbot: no se pierden.
+bueno se quema una sola vez. Quiénes son, qué dijeron y dónde vive cada uno:
+[`ONIA_LEADS_ESPERANDO.md`](ONIA_LEADS_ESPERANDO.md).
+*(Acá decía que estaban en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §8 y en la cola del chatbot.
+**Era falso** —verificado el 2026-08-31: esa §8 habla de una rama de git y no hay cola del
+chatbot en el repo—, y es la peor clase de dato falso: hace creer que están guardados.)*
 
 **Estado:** el circuito **cierra**, verificado de punta a punta en local — alta 200 → checkout con
 precios de la fuente → comprobante PENDING → aprobación → **Bs 320,00 en la serie de agosto**.
@@ -191,6 +194,46 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         vocabulario sólo en el track veterinaria.
       **Riesgo real: bajo.** Es una migración aditiva. Lo que hay que decidir no es el riesgo,
       es si el 6to rubro vale la semana antes de estrenar los cinco que ya se venden.
+
+- [x] **Los 7 leads que esperan NO estaban anotados en ningún lado — y el punto 1 ya no está
+      bloqueado.** Vuelta del 2026-08-31, con la cola sin un solo ítem desbloqueado en "Ahora"
+      (F2, F5, los 4 números de WhatsApp y el `DELETE` de pagos esperan una línea de Sergio).
+      **El defecto lo destapó leer la cola misma:** este archivo y
+      `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md` decían, los dos, que las 7 personas
+      estaban *"anotadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §8 y en la cola del chatbot: no
+      se pierden"*. **Falso**: la §8 de ese archivo habla de una rama de git, no hay cola del
+      chatbot en el repo, y la frase "7 personas" no aparecía en **ningún otro archivo**. Es la
+      peor clase de dato falso — hace creer que el activo más caro del negocio está guardado.
+      - **Recuperados de los sistemas donde viven de verdad, no de un doc**, y escritos en
+        `hermes-content/docs/ONIA_LEADS_ESPERANDO.md`: los **3 pedidos de acceso** de
+        `public.access_requests` (los tres con `contactedAt` NULL) y las **4 conversaciones**
+        reales de Chatwoot, separadas de las de QA, de las del inbox "ONIA Demo" y de las de
+        Sergio.
+      - **Lo que sólo se ve mirando la base:** a los **dos leads de WhatsApp no les llegó ni
+        una plantilla** — cero mensajes salientes. El de la clínica de 4 doctores escribió el
+        25-ago **6 preguntas concretas** y recibió silencio absoluto. Y el correo de otro lead
+        (Saguilera@ds-santacruz.bo) vive **dentro del texto del mensaje**, no en el campo
+        `email` del contacto: si nadie abre esa conversación, ese dato no existe.
+      - 🟢 **El hallazgo que destraba: el punto 1 de la definición de terminado ya tiene su
+        herramienta VIVA en producción.** Ese punto decía que *"la única pantalla que lo muestra
+        es de sólo lectura"* — y esa pantalla es
+        `app/(dashboard)/admin/organizations/[id]/WhatsAppOrgConfig.tsx`. Es falso: el commit `88c1d56` le puso
+        el formulario editable (`handleSaveInbox` → `patchWhatsApp({ chatwootInboxId })`).
+        **Y está desplegado** — verificado contra el contenedor `onia-platform` del VPS, no
+        contra el repo: el string `"Org vinculada al inbox"` está en el bundle que sirve hoy.
+        Lo mínimo que ese punto pedía **ya existe**; falta **usarlo una vez**.
+      - ⚠️ **Y acá casi me equivoco, así que queda escrito:** `git merge-base --is-ancestor
+        88c1d56 e5c1ad3` da **NO**, o sea "no está desplegado" — y es la respuesta equivocada,
+        porque **`e5c1ad3` ya no es lo que corre**. Preguntarle la ancestría a un sha que esta
+        misma cola anotó como "lo desplegado" es **verificar contra el sistema equivocado** una
+        vez más, con la cara nueva de un dato propio que envejeció. Lo que zanjó la pregunta fue
+        **grepear el bundle del contenedor**.
+      - **Corregidas las 3 afirmaciones falsas** (la cita del §8 en los dos archivos, y el
+        "sólo lectura" del punto 1), cada una con la medición al lado.
+      **Cero líneas de producto tocadas: el defecto era de datos y de docs, no de código.**
+      **Lo que NO se hizo, a propósito:** vincular una org al inbox 5 para que los leads se vean.
+      Es una **escritura en producción** sobre un ítem del carril chatbot, y este loop no escribe
+      en la base de producción. Es 1 minuto para Sergio o para el dueño de ese carril.
 
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
