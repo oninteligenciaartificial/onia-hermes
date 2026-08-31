@@ -131,7 +131,7 @@ test("comprobante sin monto legible: sin cifra, mismo handoff", () => {
     kind: "attachment", text: "", receivedAt: "2026-08-31T12:00:00Z",
     imageReceipt: { es: true },
   }, { config });
-  assert.match(r.replies[0].text, /Recibí tu comprobante 🙏/);
+  assert.match(r.replies[0].text, /Recibí tu comprobante\./);
   assert.doesNotMatch(r.replies[0].text, /Bs/);
 });
 
@@ -143,4 +143,36 @@ test("foto normal (no comprobante): sigue el flujo R_ATTACH de siempre (regresio
     imageDescription: "una foto de un mostrador",
   }, { config });
   assert.match(r.replies[0].text, /Recibí tu foto/);
+});
+
+// ── Frases de campaña (gap Sendy, 2026-08-31) ──────────────────────────────
+test("campaña: la frase exacta (con tildes/mayusculas distintas) dispara la respuesta del dueño", () => {
+  const doc = {
+    schema: "onia.bot.knowledge/1",
+    identity: { productName: "Ferreteria Tornillo", humanName: "Marta" },
+    campanas: [{ frase: "Hola, quiero el pack de herreria", respuesta: "Buenisimo. El pack de herreria incluye lo esencial para arrancar. Te paso con Marta para armarlo a tu medida." }],
+  };
+  assert.equal(validateKnowledge(doc).ok, true);
+  const config = asRecepcionista(applyKnowledge(createBotConfig(), doc), doc);
+  const r = step(createState({}), { text: "hola quiero el pack de HERRERÍA", receivedAt: "2026-08-31T12:00:00Z" }, { config });
+  assert.match(r.replies[0].text, /pack de herreria incluye/);
+});
+
+test("campaña: texto parecido pero NO exacto sigue el flujo normal", () => {
+  const doc = {
+    schema: "onia.bot.knowledge/1",
+    identity: { productName: "Ferreteria Tornillo" },
+    campanas: [{ frase: "quiero el pack de herreria", respuesta: "Respuesta del pack." }],
+  };
+  const config = asRecepcionista(applyKnowledge(createBotConfig(), doc), doc);
+  const r = step(createState({}), { text: "quiero un pack", receivedAt: "2026-08-31T12:00:00Z" }, { config });
+  assert.ok(!/Respuesta del pack/.test(r.replies.map((x) => x.text).join(" ")));
+});
+
+test("campaña con respuesta que viola guardrails: el doc entero se rechaza al publicar", () => {
+  const doc = {
+    schema: "onia.bot.knowledge/1",
+    campanas: [{ frase: "promo", respuesta: "Cuesta Bs 99 con descuento si pagas ya" }],
+  };
+  assert.equal(validateKnowledge(doc).ok, false);
 });

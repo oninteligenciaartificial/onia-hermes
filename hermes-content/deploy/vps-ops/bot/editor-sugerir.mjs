@@ -21,6 +21,7 @@ const SYSTEM = [
   "- empresa: { horario: { frase (texto humano), dias (lista de numeros 0=Lunes..6=Domingo), desde (hora numero), hasta (hora numero) } }",
   "- demo: { duracionMinutos (numero), duracionFrase (texto), modalidad (texto) } — la cita o visita",
   "- seguimiento: { activo (true/false), horas (numero 1-48) } — si el asistente insiste cuando el cliente no responde",
+  '- campanas: lista de { frase (el texto EXACTO que el cliente mandara, ej. de un link o anuncio), respuesta (que contesta el asistente) } max 10',
   "- rubrosExtra: lista de { key (slug), label, fuerte (lista de palabras), debil (lista de palabras) }",
   "- productos: lista de { key (slug), tipo (\"modulo\" o \"servicio\"), nombre, queResuelve (texto) }",
   '- faq: lista de { id: "negocio", title (la pregunta), body (la respuesta), tags (lista de palabras de 3+ letras), status: "publicado" }',

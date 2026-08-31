@@ -105,6 +105,26 @@ export function faqNegocioVigente(conocimiento, norm, nowIso) {
   return null;
 }
 
+/**
+ * Campaña cuya frase es el mensaje ENTERO. Para wa.me?text= y anuncios.
+ * La puntuacion no cuenta: el link precarga "Hola, quiero..." y el cliente puede
+ * borrar la coma — sigue siendo el mismo embudo. Solo letras/numeros/espacios.
+ */
+function fraseCanonica(texto) {
+  return String(texto || "").replace(/[^a-z0-9 ]/g, " ").replace(/ +/g, " ").trim();
+}
+
+export function campanaExacta(conocimiento, norm) {
+  const items = Array.isArray(conocimiento?.campanas) ? conocimiento.campanas : [];
+  const texto = fraseCanonica(norm);
+  if (!texto) return null;
+  for (const item of items) {
+    if (!item || typeof item.frase !== "string") continue;
+    if (fraseCanonica(normalize(item.frase)) === texto) return item;
+  }
+  return null;
+}
+
 export function recepcionistaStep(ctx, base, motor) {
   const { config, msg } = ctx;
   const { finalize, handoffResult, say } = motor;
@@ -166,6 +186,16 @@ export function recepcionistaStep(ctx, base, motor) {
   // "ya se lo saludo": el estado NO estrena etapa nueva — `bot_stage` tiene CHECK en la base
   // (migracion 20260725) y un ALTER por un saludo no se justifica. La conversacion vive en
   // "nuevo" hasta que un handoff u opt-out la mueva.
+  // Frase de campaña ANTES del saludo: en un link wa.me?text= la frase ES el primer
+  // mensaje — si el saludo ganara, el embudo del anuncio moriria en el "hola". El
+  // opt-in se marca igual (escribio el) y la respuesta lleva los botones del menu.
+  const campana = campanaExacta(k, msg.norm);
+  if (campana) {
+    const conOptIn = base.optInAt ? base : { ...base, optInAt: msg.receivedAt, optInSource: "campana" };
+    const reply = { ...say("R_CAMPANA", conOptIn, config, { respuesta_campana: campana.respuesta }), options: botonesRecepcion(config) };
+    return finalize(ctx, conOptIn, [reply], [], ["campana"]);
+  }
+
   const saludado = Boolean(base.optInAt);
   const next = saludado
     ? base

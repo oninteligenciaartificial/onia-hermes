@@ -73,7 +73,7 @@ export const SCRIPT = Object.freeze({
   // prospecto esta viendo funcionar es exactamente lo que se le vende. No pide un solo dato: la
   // unica pregunta del mensaje es la que cierra la reunion.
   M0: [
-    "¡Hola! Soy el asistente automático de Onia. Sí, un bot 🙂",
+    "¡Hola! Soy el asistente automático de Onia. Sí, un bot.",
     "",
     "Y esto que estás viendo es justo lo que vendemos: un asistente que atiende tu WhatsApp 24/7 — responde, califica y agenda solo, sin que vos toques el teléfono.",
     "",
@@ -297,7 +297,7 @@ export const SCRIPT = Object.freeze({
   // M0R — saludo. Se declara bot (D2) y ofrece lo unico que sabe hacer: horarios, servicios,
   // tomar un pedido. No promete agendar solo: lo confirma el humano del negocio.
   M0R: [
-    "¡Hola! Soy el asistente de {{producto}} 🙂",
+    "¡Hola! Soy el asistente de {{producto}}.",
     "",
     "Te puedo contar nuestros horarios y qué ofrecemos, o tomar tu pedido para que te lo confirme {{humano}}.",
     "",
@@ -306,13 +306,15 @@ export const SCRIPT = Object.freeze({
 
   // M0R_INTRO — cuando el PRIMER mensaje ya trae una pregunta concreta: se contesta la pregunta,
   // pero el bot igual se presenta como el asistente del negocio (D2, sin excepcion).
-  M0R_INTRO: "¡Hola! Soy el asistente de {{producto}} 🙂",
+  M0R_INTRO: "¡Hola! Soy el asistente de {{producto}}.",
 
   R_HORARIO: "Atendemos {{horario_frase}}. ¿Te ayudo con algo más?",
 
   // La FAQ editable del dueño: el cuerpo YA paso el guardrail al publicarse (todo-o-nada);
   // la plantilla solo lo sirve. Ver knowledge.mjs FAQ_TEMPLATE.negocio y recepcionista.mjs.
   R_FAQ_NEGOCIO: "{{faq_respuesta}}",
+  // La respuesta de una campaña es TEXTO DEL DUEÑO (validado por guardrails al publicar).
+  R_CAMPANA: "{{respuesta_campana}}",
 
   // {{catalogo_cliente}} lo arma recepcionista.mjs desde `conocimiento.productos` (el catalogo
   // publicado de la org). NO pasa por MODULOS_LISTOS: ese candado protege promesas de software
@@ -348,11 +350,11 @@ export const SCRIPT = Object.freeze({
 
   R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
   // Insistencia v6.6 (1 sola vez, suave, dentro de la ventana de 24 h — texto libre gratis):
-  R_SEGUIMIENTO: "¡Hola! ¿Seguís por ahí? 🙂 Si te quedó alguna duda, {{humano}} te la contesta por acá. Y si preferís que no te escribamos, decínos \"no gracias\" y listo.",
+  R_SEGUIMIENTO: "¡Hola! ¿Seguís por ahí? Si te quedó alguna duda, {{humano}} te la contesta por acá. Y si preferís que no te escribamos, decínos \"no gracias\" y listo.",
   // Vision (v5): cuando la foto se pudo describir SIN violar guardrails. La descripcion
   // viene del LLM ya filtrada; si violaba una regla se descarto y sale R_ATTACH pelado.
   // Comprobante de pago: acusar recibo SIN confirmar jamas — confirma el humano.
-  R_COMPROBANTE: "Recibí tu comprobante{{monto_frase}} 🙏 Se lo paso a {{humano}} para confirmarlo — apenas lo revise te avisamos por acá.",
+  R_COMPROBANTE: "Recibí tu comprobante{{monto_frase}}. Se lo paso a {{humano}} para confirmarlo — apenas lo revise te avisamos por acá.",
   R_ATTACH_VISTO: "Recibí tu foto ({{descripcion_foto}}). Se la paso a {{humano}}, que te confirma por acá.",
 
   // M6R — opt-out en modo recepcionista. Sin "escribí DEMO": eso es del funnel de venta.

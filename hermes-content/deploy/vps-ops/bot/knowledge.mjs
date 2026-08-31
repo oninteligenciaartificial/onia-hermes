@@ -128,6 +128,21 @@ const SHAPE = Object.freeze({
     },
   },
 
+  // Frases de campaña (2026-08-31, gap Sendy): la frase EXACTA que un link
+  // wa.me?text= o un anuncio precarga, y la respuesta del dueño para ese embudo.
+  // Ambos son kind text: los guardrails los vigilan como a todo dato del doc.
+  campanas: {
+    kind: "array",
+    maxItems: 10,
+    item: {
+      kind: "object",
+      fields: {
+        frase: { kind: "text", max: 200, required: true },
+        respuesta: { kind: "text", max: 500, required: true },
+      },
+    },
+  },
+
   faq: {
     kind: "array",
     maxItems: 20,
