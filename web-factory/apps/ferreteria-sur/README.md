@@ -69,31 +69,42 @@ La validación del navegador es conveniencia; la que manda es la del borde en
 
 ## Cómo se verifica que el lead llega
 
-**Honesto: el circuito NO se probó contra el webhook real de n8n.** Lo que sigue es cómo se
-prueba, y hay que correrlo antes de dar el sitio por conectado.
+**Qué se probó y qué no, sin adornos.** Los puntos 1 a 5 se corrieron contra un receptor local
+(un `http.createServer` de 20 líneas en un temporal, no en el repo) con `next dev`, y se miraron
+los resultados. El punto 6 —n8n real y Onia Platform— **NO se probó**: el circuito está escrito y
+verificado hasta el borde de salida, pero nadie vio todavía una ejecución del lado de n8n.
 
-1. **Gate sin env** — sin `ONIA_LEAD_WEBHOOK` en el entorno:
+1. **Gate sin env** ✅ — sin `ONIA_LEAD_WEBHOOK` en el entorno:
 
    ```bash
    curl -i -X POST localhost:3000/api/lead -H 'content-type: application/json' \
      -d '{"nombre":"Prueba","whatsapp":"+59170000003","lista":"2 kg de tirafondo 6x60"}'
    ```
 
-   Esperado: **503**, cuerpo `{"error":"No podemos recibir el pedido...","delivered":false}`, y en
-   la consola del server la línea `[lead] ONIA_LEAD_WEBHOOK sin configurar` con el lead entero.
+   Verificado: **503** con `{"error":"No podemos recibir el pedido por el formulario en este
+   momento.","delivered":false}`, y en la consola del server `[lead] ONIA_LEAD_WEBHOOK sin
+   configurar` con el lead entero.
 
-2. **Validación de borde** — mismo curl sin `whatsapp` (o con `"whatsapp":"123"`): **422** con el
-   mensaje que le dice al usuario cómo escribir el número. Sin `lista`: **422**. Cuerpo no JSON: **400**.
+2. **Validación de borde** ✅ — `"whatsapp":"123"` → **422** "Dejá tu WhatsApp con código de
+   país…". Sin `lista` → **422**. Sin `nombre` → **422**. Cuerpo no JSON y cuerpo `null` → **400**.
 
-3. **Canal apuntando a un receptor de prueba** — levantar cualquier endpoint que loguee
-   (`ONIA_LEAD_WEBHOOK=https://webhook.site/<id>`), repetir el curl del punto 1: **200**
-   `{"ok":true,"delivered":true}` y el JSON del lead visible en el receptor con `slug`,
-   `rubro: "comercio"`, `nombre`, `whatsapp`, `lista`, `tipo`, `entrega`, `src`, `recibido`.
+3. **Canal encendido** ✅ — con `ONIA_LEAD_WEBHOOK` apuntando a un receptor que loguea
+   (sirve `https://webhook.site/<id>`): **200** `{"ok":true,"delivered":true}`, y el receptor vio el
+   JSON completo con `slug: "ferreteria-sur"`, `rubro: "comercio"`, `nombre` (con los espacios ya
+   recortados), `whatsapp`, `lista`, `tipo`, `entrega`, `src` (respetando la atribución que mandó el
+   formulario, no el slug) y `recibido`. El header `X-N8N-API-KEY` llegó con el valor de
+   `ONIA_N8N_API_KEY`; sin esa variable, el POST sale sin el header y el receptor lo ve en `null`.
 
-4. **Contra n8n real** — apuntar a la URL del webhook de producción, mandar un pedido desde el
-   formulario en el navegador (no solo curl) y **mirar** que la ejecución aparezca en n8n y que el
-   lead llegue a Onia Platform. Hasta que esto se haga y se vea en pantalla, el circuito está
-   escrito pero no probado punta a punta.
+4. **Upstream caído** ✅ — receptor devolviendo 500: la ruta responde **502**
+   `{"error":"No pudimos entregar el pedido al sistema.","delivered":false}` y deja
+   `[lead] fallo al entregar a Onia` con el lead en el log. No se finge un "gracias".
 
-5. **Autosave** — escribir media lista, recargar la página: los campos vuelven. En ventana
-   privada no rompe (todo el acceso a `localStorage` va envuelto en `try/catch`).
+5. **El formulario en el navegador** ✅ — montado en una página de prueba y manejado con el
+   panel abierto: autosave escribe el draft en `localStorage` (sin el campo `src`) y los campos
+   vuelven tras recargar; con el upstream caído aparece el `role="alert"` con el mensaje honesto y
+   el link de WhatsApp **con la lista, el nombre y la forma de entrega ya escritos adentro**; con el
+   canal sano aparece el panel `role="status"` "Lista recibida…" y el draft se borra.
+
+6. **Contra n8n real** ⬜ **pendiente** — apuntar a la URL del webhook de producción, mandar un
+   pedido desde el formulario en el navegador y **mirar** que la ejecución aparezca en n8n y que el
+   lead llegue a Onia Platform. Hasta que eso se vea en pantalla, el sitio no se declara conectado.

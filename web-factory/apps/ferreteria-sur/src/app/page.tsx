@@ -1,13 +1,24 @@
 import { ferreteria, waLink } from "@/data/ferreteria";
 import { Reveal } from "@/components/motion";
+import {
+  Categorias,
+  Donde,
+  Faq,
+  Franja,
+  HeroFondo,
+  Mostrador,
+  Pasos,
+  Pedido,
+} from "@/components/secciones";
 import "./site.css";
+import "./sections.css";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ESQUELETO. Fija el orden y el armazón de cada sección; el relleno (piezas de
-// categorías, mostrador, pasos, panel de horarios, formulario y FAQ) lo escribe
-// el agente de secciones dentro de los <section> marcados.
+// Página completa. El armazón vive en site.css, las secciones en sections.css y
+// el markup de cada una en components/secciones.tsx. Acá solo va el orden, las
+// cabeceras y los CTA.
 //
-// Reglas que NO se tocan al rellenar:
+// Reglas que NO se tocan:
 //   · Solo se anima transform y opacity. Reveal ya respeta reduced-motion.
 //   · Prohibido nombrar obra ("próximamente", "beta", "en construcción").
 //   · Prohibido inventar prueba social: cero testimonios, logos, cifras, SLA.
@@ -39,9 +50,10 @@ export default function Page() {
 
       {/* ═══ 02 · HERO — split asimétrico sobre retícula visible.
           Izquierda: titular mega en Archivo Black. Derecha: ficha de datos duros
-          en mono. RELLENO: parallax GSAP suave de la retícula (solo transform)
-          y una pieza gráfica de herramienta en SVG inline. ═══ */}
-      <section className="hero grid-bg">
+          en mono. La retícula y la pieza de fierro viven en <HeroFondo /> y se
+          mueven con parallax GSAP (solo transform). ═══ */}
+      <section className="hero">
+        <HeroFondo />
         <div className="wrap hero-inner">
           <div>
             <Reveal>
@@ -65,8 +77,8 @@ export default function Page() {
             </Reveal>
           </div>
 
-          {/* Ficha: horario de hoy, dirección, cómo se paga. RELLENO: estado
-              abierto/cerrado calculado en cliente y detalle de pago. */}
+          {/* Ficha de datos duros. El estado abierto/cerrado en vivo va en la
+              sección "Dónde y cuándo", calculado en hora de Bolivia. */}
           <Reveal delay={0.28}>
             <dl className="spec">
               {ferreteria.horarios.map((h) => (
@@ -84,21 +96,12 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ═══ 03 · FRANJA — cinta naranja de capacidades del local.
-          RELLENO: desplazamiento infinito por transform, duplicando la pista y
-          con animación apagada bajo prefers-reduced-motion. ═══ */}
-      <div className="franja">
-        <div className="franja-track">
-          {ferreteria.franja.map((f) => (
-            <span className="franja-item" key={f}>{f}</span>
-          ))}
-        </div>
-      </div>
+      {/* ═══ 03 · FRANJA — cinta naranja de capacidades del local, en marcha
+          continua por transform. Se pausa en hover/focus. ═══ */}
+      <Franja />
 
-      {/* ═══ 04 · CATEGORÍAS — tablero de mostrador.
-          RELLENO: retícula con filete COMPARTIDO (nada de tarjetas sueltas y
-          uniformes), código de estante en mono a la izquierda, primera celda a
-          doble ancho, lista de items al abrir/hover. ═══ */}
+      {/* ═══ 04 · CATEGORÍAS — tablero de mostrador: filete compartido, filas
+          de anchos desparejos y cada estante enlazado a WhatsApp. ═══ */}
       <section className="section" id="categorias">
         <div className="wrap">
           <div className="sec-head">
@@ -113,12 +116,12 @@ export default function Page() {
               </p>
             </Reveal>
           </div>
-          {/* ► tablero de categorías */}
+          <Categorias />
         </div>
       </section>
 
       {/* ═══ 05 · MOSTRADOR — lo que se hace en el local, no lo que se vende.
-          RELLENO: lista con numeración mono y filete horizontal, sin cajas. ═══ */}
+          Lista numerada en mono con filete horizontal, sin cajas. ═══ */}
       <section className="section section--dim" id="mostrador">
         <div className="wrap">
           <div className="sec-head">
@@ -126,13 +129,19 @@ export default function Page() {
               <Reveal><p className="kicker">En el mostrador</p></Reveal>
               <Reveal delay={0.05}><h2 className="h2">Lo que no viene en caja</h2></Reveal>
             </div>
+            <Reveal delay={0.1}>
+              <p className="sec-note">
+                {ferreteria.mostrador.length} cosas que se resuelven en el mostrador y por
+                las que la gente cruza la ciudad igual que por el material.
+              </p>
+            </Reveal>
           </div>
-          {/* ► servicios de mostrador */}
+          <Mostrador />
         </div>
       </section>
 
-      {/* ═══ 06 · CÓMO COMPRAR — tres pasos. El circuito que el sitio provoca.
-          RELLENO: numeración enorme en display, línea que conecta los pasos. ═══ */}
+      {/* ═══ 06 · CÓMO COMPRAR — el circuito que el sitio provoca. La línea que
+          une los pasos se DIBUJA al entrar: la animación es la explicación. ═══ */}
       <section className="section" id="como-comprar">
         <div className="wrap">
           <div className="sec-head">
@@ -140,14 +149,20 @@ export default function Page() {
               <Reveal><p className="kicker">Cómo se compra</p></Reveal>
               <Reveal delay={0.05}><h2 className="h2">Mandás la lista, te confirmamos, retirás</h2></Reveal>
             </div>
+            <Reveal delay={0.1}>
+              <p className="sec-note">
+                No hace falta cuenta, ni registro, ni bajar nada. Es el mismo mostrador,
+                por escrito.
+              </p>
+            </Reveal>
           </div>
-          {/* ► tres pasos */}
+          <Pasos />
         </div>
       </section>
 
-      {/* ═══ 07 · HORARIOS Y UBICACIÓN — panel de acero (.on-steel).
-          RELLENO: tabla de horarios en mono, referencia del lugar y croquis
-          esquemático en SVG inline (anillos + avenida). Sin mapas externos. ═══ */}
+      {/* ═══ 07 · HORARIOS Y UBICACIÓN — panel de acero (.on-steel). Estado
+          abierto/cerrado en hora de Bolivia y croquis de anillos en SVG
+          inline. Sin proveedor de mapas: renderiza sin red. ═══ */}
       <section className="section section--steel on-steel" id="donde">
         <div className="wrap">
           <div className="sec-head">
@@ -157,13 +172,12 @@ export default function Page() {
             </div>
             <Reveal delay={0.1}><p className="sec-note">{ferreteria.referencia}</p></Reveal>
           </div>
-          {/* ► tabla de horarios + croquis */}
+          <Donde />
         </div>
       </section>
 
-      {/* ═══ 08 · PEDIDO — la CONEXIÓN a Onia.
-          RELLENO: <LeadForm /> (cliente, autosave en localStorage) que postea a
-          /api/lead. Esos dos archivos son de los otros agentes. ═══ */}
+      {/* ═══ 08 · PEDIDO — la CONEXIÓN a Onia. <LeadForm /> postea a /api/lead,
+          que reenvía a Onia Platform desde el servidor. ═══ */}
       <section className="section" id="pedido">
         <div className="wrap">
           <div className="sec-head">
@@ -173,8 +187,14 @@ export default function Page() {
                 <h2 className="h2">Escribí lo que necesitás y te decimos qué hay</h2>
               </Reveal>
             </div>
+            <Reveal delay={0.1}>
+              <p className="sec-note">
+                Copiá la lista tal como la tenés anotada, con marcas y medidas. Cuanto más
+                específica, menos vueltas.
+              </p>
+            </Reveal>
           </div>
-          {/* ► formulario de pedido */}
+          <Pedido />
         </div>
       </section>
 
@@ -186,8 +206,14 @@ export default function Page() {
               <Reveal><p className="kicker">Preguntas</p></Reveal>
               <Reveal delay={0.05}><h2 className="h2">Lo que preguntan por WhatsApp</h2></Reveal>
             </div>
+            <Reveal delay={0.1}>
+              <p className="sec-note">
+                Si la tuya no está acá, escribí igual: se contesta la misma persona que
+                atiende el mostrador.
+              </p>
+            </Reveal>
           </div>
-          {/* ► lista de preguntas */}
+          <Faq />
         </div>
       </section>
 
