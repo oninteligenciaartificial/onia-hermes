@@ -1,99 +1,97 @@
 {
- "serie": "Mi equipo",
- "episodio": "006",
- "comment_trigger": "STACK",
- "comment_reward": "la lista con los links y lo que cuesta cada uno",
- "caption": "Contraté seis empleados este año. Ninguno pidió aumento.\n\nNo duermen, no se quejan, no renuncian un viernes. Y todos corren en un servidor que pago yo, con mis datos adentro de mi casa.\n\nCada uno reemplaza a un software que se cobra por usuario y en dólares:\n\n1. n8n → reemplaza a Zapier\n2. Chatwoot → reemplaza a Intercom\n3. Supabase → reemplaza a Firebase\n4. Postiz → reemplaza a Buffer\n5. Whisper → transcribe todo lo que grabo\n6. ffmpeg → corta, pega y renderiza\n\nTodos de código abierto. Todos autoalojables. Todos corriendo hoy.\n\nLo que no te dicen: el costo no desaparece, se mueve. De suscripción a servidor, y de nadie a alguien que lo encienda y lo actualice. Si ese alguien no existe, la suscripción sale más barata. Yo elegí ser ese alguien.\n\nComentá STACK y te paso la lista con los links y lo que cuesta cada uno de verdad.",
- "hashtags": ["#opensource", "#automatizacion", "#bolivia", "#nocode", "#selfhosted"],
- "src": false,
- "slides": [
-  {
-   "number": 1,
-   "role": "cover",
-   "kicker": "Mi equipo · 2026",
-   "headline": "Contraté *seis empleados*. Ninguno pidió aumento",
-   "body": "No duermen, no se quejan y no renuncian un viernes. Corren en un servidor que pago yo."
-  },
-
-  {
-   "number": 2,
-   "kicker": "Empleado 01",
-   "headline": "El que *nunca* se va a dormir",
-   "n": 1,
-   "nombre": "n8n",
-   "cargo": "Jefe de operaciones",
-   "hace": "Corre los flujos mientras yo duermo. Si algo se cae, lo reintenta y me avisa por Telegram.",
-   "reemplaza": "Zapier"
-  },
-
-  {
-   "number": 3,
-   "kicker": "Empleado 02",
-   "headline": "El que contesta *primero*",
-   "n": 2,
-   "nombre": "Chatwoot",
-   "cargo": "Atención al cliente",
-   "hace": "Recibe los mensajes de WhatsApp e Instagram en una sola bandeja. Contesta lo repetido y me pasa lo que necesita a una persona.",
-   "reemplaza": "Intercom"
-  },
-
-  {
-   "number": 4,
-   "kicker": "Empleado 03",
-   "headline": "El que *guarda* todo",
-   "n": 3,
-   "nombre": "Supabase",
-   "cargo": "El que no pierde nada",
-   "hace": "La base de datos entera, con su login y sus permisos. Corre en mi servidor, así que los datos no viven en la nube de otro.",
-   "reemplaza": "Firebase"
-  },
-
-  {
-   "number": 5,
-   "kicker": "Empleado 04",
-   "headline": "El que *publica* por mí",
-   "n": 4,
-   "nombre": "Postiz",
-   "cargo": "Community manager",
-   "hace": "Programa y publica en todas las cuentas. Yo escribo, él elige la hora y aprieta el botón.",
-   "reemplaza": "Buffer"
-  },
-
-  {
-   "number": 6,
-   "kicker": "Empleado 05",
-   "headline": "El que *escucha* y escribe",
-   "n": 5,
-   "nombre": "Whisper",
-   "cargo": "El que toma nota",
-   "hace": "Convierte en texto todo lo que grabo: reuniones, audios de WhatsApp, videos. Después lo busco por palabra.",
-   "reemplaza": "Otter"
-  },
-
-  {
-   "number": 7,
-   "kicker": "Empleado 06",
-   "headline": "El que *arma* el video",
-   "n": 6,
-   "nombre": "ffmpeg",
-   "cargo": "Editor de video",
-   "hace": "Corta, pega, pone subtítulos y renderiza. Sin abrir un programa de edición ni tocar una línea de tiempo.",
-   "reemplaza": "Premiere"
-  },
-
-  {
-   "number": 8,
-   "kicker": "Lo que no te dicen",
-   "headline": "El costo no desaparece. *Se mueve*",
-   "body": "De suscripción a servidor, y de nadie a alguien que lo encienda y lo actualice. Si ese alguien no existe, la suscripción sale más barata. Yo elegí ser ese alguien."
-  },
-
-  {
-   "number": 9,
-   "role": "cta",
-   "kicker": "Comentá STACK",
-   "headline": "¿Cuál *contratarías* primero?",
-   "body": "Comentá STACK y te paso la lista con los links y lo que cuesta cada uno de verdad — incluido el servidor."
-  }
- ]
+  "serie": "Mi equipo",
+  "episodio": "006",
+  "comment_trigger": "STACK",
+  "comment_reward": "la entrada a la comunidad",
+  "caption": "Contraté seis empleados este año. Ninguno pidió aumento.\n\nNo duermen, no se quejan, no renuncian un viernes. Y todos corren en un servidor que pago yo, con mis datos adentro de mi casa.\n\nCada uno reemplaza a un software que se cobra por usuario y en dólares:\n\n1. n8n → reemplaza a Zapier\n2. Chatwoot → reemplaza a Intercom\n3. Supabase → reemplaza a Firebase\n4. Postiz → reemplaza a Buffer\n5. Whisper → transcribe todo lo que grabo\n6. ffmpeg → corta, pega y renderiza\n\nTodos de código abierto. Todos autoalojables. Todos corriendo hoy.\n\nLo que no te dicen: el costo no desaparece, se mueve. De suscripción a servidor, y de nadie a alguien que lo encienda y lo actualice. Si ese alguien no existe, la suscripción sale más barata. Yo elegí ser ese alguien.\n\nComentá STACK y te paso la lista con los links y lo que cuesta cada uno de verdad.",
+  "hashtags": [
+    "#opensource",
+    "#automatizacion",
+    "#bolivia",
+    "#nocode",
+    "#selfhosted"
+  ],
+  "src": false,
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "kicker": "Mi equipo · 2026",
+      "headline": "Contraté *seis empleados*. Ninguno pidió aumento",
+      "body": "No duermen, no se quejan y no renuncian un viernes. Corren en un servidor que pago yo."
+    },
+    {
+      "number": 2,
+      "kicker": "Empleado 01",
+      "headline": "El que *nunca* se va a dormir",
+      "n": 1,
+      "nombre": "n8n",
+      "cargo": "Jefe de operaciones",
+      "hace": "Corre los flujos mientras yo duermo. Si algo se cae, lo reintenta y me avisa por Telegram.",
+      "reemplaza": "Zapier"
+    },
+    {
+      "number": 3,
+      "kicker": "Empleado 02",
+      "headline": "El que contesta *primero*",
+      "n": 2,
+      "nombre": "Chatwoot",
+      "cargo": "Atención al cliente",
+      "hace": "Recibe los mensajes de WhatsApp e Instagram en una sola bandeja. Contesta lo repetido y me pasa lo que necesita a una persona.",
+      "reemplaza": "Intercom"
+    },
+    {
+      "number": 4,
+      "kicker": "Empleado 03",
+      "headline": "El que *guarda* todo",
+      "n": 3,
+      "nombre": "Supabase",
+      "cargo": "El que no pierde nada",
+      "hace": "La base de datos entera, con su login y sus permisos. Corre en mi servidor, así que los datos no viven en la nube de otro.",
+      "reemplaza": "Firebase"
+    },
+    {
+      "number": 5,
+      "kicker": "Empleado 04",
+      "headline": "El que *publica* por mí",
+      "n": 4,
+      "nombre": "Postiz",
+      "cargo": "Community manager",
+      "hace": "Programa y publica en todas las cuentas. Yo escribo, él elige la hora y aprieta el botón.",
+      "reemplaza": "Buffer"
+    },
+    {
+      "number": 6,
+      "kicker": "Empleado 05",
+      "headline": "El que *escucha* y escribe",
+      "n": 5,
+      "nombre": "Whisper",
+      "cargo": "El que toma nota",
+      "hace": "Convierte en texto todo lo que grabo: reuniones, audios de WhatsApp, videos. Después lo busco por palabra.",
+      "reemplaza": "Otter"
+    },
+    {
+      "number": 7,
+      "kicker": "Empleado 06",
+      "headline": "El que *arma* el video",
+      "n": 6,
+      "nombre": "ffmpeg",
+      "cargo": "Editor de video",
+      "hace": "Corta, pega, pone subtítulos y renderiza. Sin abrir un programa de edición ni tocar una línea de tiempo.",
+      "reemplaza": "Premiere"
+    },
+    {
+      "number": 8,
+      "kicker": "Lo que no te dicen",
+      "headline": "El costo no desaparece. *Se mueve*",
+      "body": "De suscripción a servidor, y de nadie a alguien que lo encienda y lo actualice. Si ese alguien no existe, la suscripción sale más barata. Yo elegí ser ese alguien."
+    },
+    {
+      "number": 9,
+      "role": "cta",
+      "kicker": "Comentá STACK",
+      "headline": "¿Cuál *contratarías* primero?",
+      "body": "Comentá STACK y te paso la entrada a la comunidad, que es donde se habla de esto — incluido lo que cuesta el servidor."
+    }
+  ]
 }

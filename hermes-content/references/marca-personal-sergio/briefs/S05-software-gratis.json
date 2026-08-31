@@ -1,39 +1,73 @@
 {
- "caption": "Casi todo el software que un negocio paga en dólares tiene un gemelo de código abierto que corre en un servidor propio. No es la versión barata: es el mismo software. Lo que cambia es quién lo enciende y quién lo mantiene.\n\nAcá van los cuatro reemplazos exactos que uso todos los días, con lo que reemplaza cada uno.\n\nComentá STACK y te mando la lista completa con los links, lo que cuesta correrlos y en qué caso NO conviene.",
- "hashtags": ["#bolivia", "#software", "#opensource", "#emprendimiento", "#tecnologia"],
- "src": false,
- "slides": [
-  { "number":1, "role":"cover", "pill":"Nadie te lo cuenta",
-    "headline":"El software que pagás en dólares ya existe *gratis*",
-    "body":"Y no es la versión barata.",
-    "bg":"hermes-content/references/marca-personal-sergio/fondos/laptop-03.png" },
-
-  { "number":2, "role":"stakes", "pill":"El costo real",
-    "headline":"Pagás por usuario, todos los meses, en *dólares*",
-    "body":"Una moneda que pasó de 6,96 a 11,37. Y el día que suben el precio, cambian el plan o te cierran la cuenta, tus datos están adentro y vos afuera." },
-
-  { "number":3, "role":"point", "pill":"01",
-    "headline":"No es una *alternativa*. Es el mismo software",
-    "body":"Chatwoot, n8n y Supabase los usan empresas grandes en producción. Lo que cobra la versión paga no es el programa: es la comodidad de que otro lo instale y lo mantenga." },
-
-  { "number":4, "role":"point", "pill":"02",
-    "headline":"Los cuatro reemplazos que uso *todos los días*",
-    "body":"Zapier → n8n. Intercom → Chatwoot. Firebase → Supabase. Buffer → Postiz. Los cuatro corren en un servidor propio, con los datos adentro de tu casa." },
-
-  { "number":5, "role":"point", "pill":"03",
-    "headline":"Lo que SÍ cambia, y nadie lo dice",
-    "body":"El costo no desaparece: se mueve. De suscripción a servidor, y de nadie a alguien que lo encienda y lo actualice. Si ese alguien no existe, la suscripción sale más barata." },
-
-  { "number":6, "role":"save", "save_worthy": true, "pill":"Guardá esto",
-    "headline":"La tabla de *reemplazos*",
-    "body":"Zapier → n8n · Intercom → Chatwoot · Firebase → Supabase · Buffer → Postiz. Todos de código abierto, todos autoalojables, todos en producción hoy.",
-    "lines":["Zapier → n8n","Intercom → Chatwoot","Firebase → Supabase","Buffer → Postiz"] },
-
-  { "number":7, "role":"cta", "pill":"Te paso la lista",
-    "headline":"La lista completa, con *links y costos*",
-    "body":"Comentá STACK",
-    "comment_trigger":"STACK",
-    "comment_reward":"la lista con los links y lo que cuesta cada uno",
-    "bg":"" }
- ]
+  "caption": "Casi todo el software que un negocio paga en dólares tiene un gemelo de código abierto que corre en un servidor propio. No es la versión barata: es el mismo software. Lo que cambia es quién lo enciende y quién lo mantiene.\n\nAcá van los cuatro reemplazos exactos que uso todos los días, con lo que reemplaza cada uno.\n\nComentá STACK y te paso la entrada a la comunidad, que es donde sigue esta conversación: qué corre cada uno, qué cuesta el servidor y en qué caso NO conviene.",
+  "hashtags": [
+    "#bolivia",
+    "#software",
+    "#opensource",
+    "#emprendimiento",
+    "#tecnologia"
+  ],
+  "src": false,
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Nadie te lo cuenta",
+      "headline": "El software que pagás en dólares ya existe *gratis*",
+      "body": "Y no es la versión barata.",
+      "bg": "hermes-content/references/marca-personal-sergio/fondos/laptop-03.png"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El costo real",
+      "headline": "Pagás por usuario, todos los meses, en *dólares*",
+      "body": "Una moneda que pasó de 6,96 a 11,37. Y el día que suben el precio, cambian el plan o te cierran la cuenta, tus datos están adentro y vos afuera."
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "01",
+      "headline": "No es una *alternativa*. Es el mismo software",
+      "body": "Chatwoot, n8n y Supabase los usan empresas grandes en producción. Lo que cobra la versión paga no es el programa: es la comodidad de que otro lo instale y lo mantenga."
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "02",
+      "headline": "Los cuatro reemplazos que uso *todos los días*",
+      "body": "Zapier → n8n. Intercom → Chatwoot. Firebase → Supabase. Buffer → Postiz. Los cuatro corren en un servidor propio, con los datos adentro de tu casa."
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "03",
+      "headline": "Lo que SÍ cambia, y nadie lo dice",
+      "body": "El costo no desaparece: se mueve. De suscripción a servidor, y de nadie a alguien que lo encienda y lo actualice. Si ese alguien no existe, la suscripción sale más barata."
+    },
+    {
+      "number": 6,
+      "role": "save",
+      "save_worthy": true,
+      "pill": "Guardá esto",
+      "headline": "La tabla de *reemplazos*",
+      "body": "Zapier → n8n · Intercom → Chatwoot · Firebase → Supabase · Buffer → Postiz. Todos de código abierto, todos autoalojables, todos en producción hoy.",
+      "lines": [
+        "Zapier → n8n",
+        "Intercom → Chatwoot",
+        "Firebase → Supabase",
+        "Buffer → Postiz"
+      ]
+    },
+    {
+      "number": 7,
+      "role": "cta",
+      "pill": "Te paso la lista",
+      "headline": "La comunidad donde *sigue esto*",
+      "body": "Comentá STACK",
+      "comment_trigger": "STACK",
+      "comment_reward": "la entrada a la comunidad",
+      "bg": ""
+    }
+  ]
 }

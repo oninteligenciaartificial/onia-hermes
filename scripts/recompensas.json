@@ -74,7 +74,7 @@
       ],
       "activa": false,
       "publicado": true,
-      "_falta": "El recurso YA no bloquea: Sergio decidio el 31-ago que la marca personal entrega el link de la comunidad, que existe y responde 200 (og:title \"Onia Community\"). Quedan DOS cosas: (1) el mapa de palabras de @sergio_urcullo sigue vacio en n8n, por eso activa=false; (2) S05 y S06 prometen en su copy \"la lista completa con los links y lo que cuesta cada uno\", que NO es lo que entrega un link de comunidad. Hay que reescribirles el copy antes de publicar; el gate las marca promesa-distinta a proposito."
+      "_falta": "UN solo bloqueo, y es de Sergio: el mapa de palabras de @sergio_urcullo sigue VACIO en el workflow de n8n, por eso activa=false. Son 30 segundos en la UI. El recurso ya no bloquea (link de la comunidad, 200) y el copy de S05/S06 ya se reescribio el 31-ago para prometer la comunidad y no una lista."
     }
   }
 }
