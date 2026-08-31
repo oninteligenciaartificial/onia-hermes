@@ -4,6 +4,14 @@
 > y ninguno en `main`**. El trabajo estaba hecho y no llegaba a ningún lado. La sensación de
 > "no avanzamos" no venía de los loops ni de las sesiones: venía de que nada converge.
 
+## El norte de todos los carriles (Sergio, 2026-08-31)
+
+**Terminar el producto antes de vender.** Los cuatro puntos que faltan —y por qué esos y no
+otros— están en [`../ONIA_DEFINICION_DE_TERMINADO.md`](../ONIA_DEFINICION_DE_TERMINADO.md).
+Sólo entra ahí lo **roto** o lo **falso**; el resto vive en la cola de su carril.
+
+**Ningún carril le escribe a un prospecto hasta que esa lista esté cerrada.**
+
 ## La regla, en una línea
 
 **Un carril = un objetivo = una cola = una pantalla que un desconocido puede ver.**

@@ -4,8 +4,18 @@
 > sesión mueren cuando se cierra Claude Code, y con ellos se perdía la cola entera.
 > Cualquier sesión lo lee, lo ejecuta y lo actualiza. Sergio también lo puede editar.
 
-**Objetivo vigente (elegido por Sergio, 2026-08-29):** que alguien pueda entrar solo, elegir
-plan, pagar, y que esa plata aparezca en métricas. Con eso se venden los 7 rubros que ya existen.
+**Objetivo vigente (Sergio, 2026-08-31):** **terminar el producto.** Textual: *"cómo querés
+escribirles si ni siquiera el producto está terminado; dedicate a terminar el producto y recién
+escribimos"*.
+
+**Qué significa terminado está escrito y medido en
+[`ONIA_DEFINICION_DE_TERMINADO.md`](ONIA_DEFINICION_DE_TERMINADO.md)** — cuatro puntos, sólo
+cosas **rotas** (el cliente las compra y no funcionan) o **falsas** (se las vendemos y no son
+ciertas). Nada de "sería lindo".
+
+⚠️ **Hay 7 personas reales esperando y NO se les contesta hasta cerrar esa lista.** Un lead
+bueno se quema una sola vez. Están anotadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §8 y en la
+cola del chatbot: no se pierden.
 
 **Estado:** el circuito **cierra**, verificado de punta a punta en local — alta 200 → checkout con
 precios de la fuente → comprobante PENDING → aprobación → **Bs 320,00 en la serie de agosto**.
