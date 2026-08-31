@@ -121,6 +121,23 @@ function existeEnAlgunRepo(ruta, baseDir) {
   return false;
 }
 
+// Las colas de este repo describen trabajo que vive en un repo HERMANO: la cola de producto
+// esta en onia-hermes y el producto en onia-platform. Una ruta se busca desde baseDir y, si
+// no esta, subiendo por los ancestros — asi `onia-platform/lib/x.ts` resuelve sin hardcodear
+// la maquina de nadie. Solo se sube con rutas de dos o mas segmentos: un nombre suelto como
+// `existe.png` se busca donde se dijo, para que subir no vuelva verde cualquier cosa.
+function existeRuta(baseDir, r) {
+  let dir = path.resolve(baseDir);
+  const puedeSubir = /[\/]/.test(r);
+  for (;;) {
+    if (fs.existsSync(path.resolve(dir, r))) return true;
+    if (!puedeSubir) return false;
+    const padre = path.dirname(dir);
+    if (padre === dir) return false;
+    dir = padre;
+  }
+}
+
 function revisarCola(texto, baseDir = process.cwd()) {
   const problemas = [];
   const items = itemsDeAhora(texto);
@@ -230,6 +247,20 @@ function selfCheck() {
   // asi que eso los descarta sin tener que adivinar.
   r = revisarCola('## Ahora\n- [ ] Algo · `existe.png` · `GET /api/x` · `invoice.patient?.ci`\n', tmp);
   ok(!r.problemas.length, 'codigo y endpoints entre backticks no son rutas');
+
+  // (5) La cola de producto vive en onia-hermes y cita archivos de onia-platform, que es un
+  // repo hermano. Sin esto el gate llamaba fantasma a todo el producto, que es la mitad del
+  // carril, y se volvia ruido puro.
+  fs.mkdirSync(path.join(tmp, 'hermano', 'lib'), { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'hermano', 'lib', 'x.ts'), 'x');
+  fs.mkdirSync(path.join(tmp, 'repo', 'sub'), { recursive: true });
+  r = revisarCola('## Ahora\n- [ ] Algo · `hermano/lib/x.ts:12`\n', path.join(tmp, 'repo', 'sub'));
+  ok(!r.problemas.length, 'una ruta de repo hermano resuelve subiendo');
+
+  // Y su limite: un nombre suelto no se va a buscar a los ancestros, o cualquier `README.md`
+  // de cualquier carpeta de arriba volveria verde un item inventado.
+  r = revisarCola('## Ahora\n- [ ] Algo · `existe.png`\n', path.join(tmp, 'repo', 'sub'));
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'un nombre suelto se busca donde se dijo');
 
   console.log(`self-check ok: ${casos} casos`);
 }
