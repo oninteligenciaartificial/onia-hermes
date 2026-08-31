@@ -186,10 +186,10 @@ trae nada, la decisión del add-on **se revisa antes de construir**. Nunca se co
 
 | Pieza | Palabra | Estado |
 |---|---|---|
-| `render-fijado` — quién es Lucía | — | 7 láminas, es el post fijado |
-| `render-l6` — cinco señales | SISTEMA | 7 láminas |
+| `FIJADO` — quién es Lucía | — | 7 láminas, es el post fijado. **`render-fijado` quedó superado** (ver 1-sexies) |
+| `L6` — cinco señales | SISTEMA | 7 láminas. **`render-l6` quedó superado** (acento mostaza) |
 | `render-l07` — tres gratis | HUMO | 7 láminas |
-| `render-l08` — tres de cinco gratis | HUMO | 7 láminas |
+| `L08` — tres de cinco gratis | HUMO | 7 láminas. **`render-l08` quedó superado** (acento mostaza) |
 | `L09` — una cara que no existe | — | 7 láminas |
 | `render-l10` — la hoja sellada | SISTEMA | 7 láminas, con el banco propio |
 | reel de lanzamiento v7 | — | `reel-lanzamiento-20260822/final/` |
@@ -272,7 +272,7 @@ están ellas: muchas, y comercialmente muertas.
 
 ### 1-quinquies. 📅 CALENDARIO DE LANZAMIENTO — armado, falta el OK y la fecha de arranque
 
-**Día 0 — fijar el perfil.** `render-fijado` (quién es Lucía) como post **fijado**. No cuenta como
+**Día 0 — fijar el perfil.** `FIJADO/slide-01..07.png` (quién es Lucía) como post **fijado**. No cuenta como
 publicación diaria: es el ancla del perfil, lo primero que ve quien llega.
 
 | # | Pieza | Pilar | Palabra | Por qué ahí |
@@ -303,6 +303,47 @@ piezas entre sí**.
 30% B y B es *"el vehículo"*. Las cuatro piezas B que existen son **historias**, que duran 24 h.
 **Se arregla barato:** el banco tiene G02 parada, G03 mercado y G04 tienda **sin usar en feed** —
 alcanza para un carrusel de pilar B sin gastar un crédito.
+
+### 1-sexies. ✅ Cuál render se sube — decidido el 31-ago, mirando las láminas
+
+Había **tres piezas con dos renders distintos** en la misma carpeta y ningún doc decía cuál era
+el bueno: los punteros apuntaban todos al viejo. Se abrieron las dos versiones y se compararon
+lámina por lámina (`md5` distinto en las 7, y `mean_diff` de 19 a 48 — no era un re-encode, eran
+dos versiones creativas).
+
+**Gana siempre el lote del 28-ago 15:10 (carpeta en MAYÚSCULA).** Razón, y no es gusto:
+
+- **`render-fijado` (22-ago) es otro sistema de diseño**: serif editorial, acento en itálica
+  verde, píldora de contorno fino, flecha `→` diminuta. Se lee mal en miniatura y no tiene
+  afordancia de deslizar. `FIJADO` (28-ago) usa la sans pesada en caps con el bloque verde sobre
+  la palabra acento, scrim inferior fuerte, `DESLIZÁ →` explícito y el lockup avatar+handle.
+- **En slide-06 cambia la foto**: la vieja es un plano corto con la boca abierta a mitad de
+  palabra; la nueva es la selfie de espejo que pide el brief (`L4b-espejo-natural`).
+- **`render-l6` y `render-l08` no cambian de sistema: cambian de color.** Son mostaza. El lote
+  del 28-ago los unifica al **verde Onia**.
+- **El desempate real es la coherencia del feed**: `L09` (día 2) sólo existe en verde — nunca
+  tuvo versión mostaza. Y `render-l10` (29-ago) y `render-l11` (30-ago) se renderizaron después
+  de la unificación, así que **ya son verdes**. Subir cualquier `render-*` viejo mete una lámina
+  mostaza o serif en un feed verde.
+
+**Lo que se sube, en orden de calendario:**
+
+| Día | Pieza | Carpeta que se sube | Superada, NO subir |
+|---|---|---|---|
+| 0 | fijado — quién es Lucía | `posts-20260807/FIJADO/` | ~~`render-fijado/`~~ (serif 22-ago) |
+| 1 | reel de lanzamiento v7 | `reel-lanzamiento-20260822/final/` | — |
+| 2 | L09 — una cara que no existe | `posts-20260807/L09/` | — (nunca tuvo otra) |
+| 3 | L6 — cinco señales | `posts-20260807/L6/` | ~~`render-l6/`~~ (mostaza) |
+| 4 | L10 — la hoja sellada | `posts-20260807/render-l10/` | — (ya es verde) |
+| 5 | L08 — tres de cinco gratis | `posts-20260807/L08/` | ~~`render-l08/`~~ (mostaza) |
+| 6 | L11 — tres lugares | `posts-20260807/render-l11/` | — (ya es verde) |
+
+Las tres carpetas superadas llevan un `_NO-SUBIR.md` adentro, que es lo que ve quien abra la
+carpeta para publicar. No se borran: son el historial de la unificación de color.
+
+⚠️ Ojo con el nombre: **la carpeta buena del día 4 y del día 6 SÍ empieza con `render-`**
+(`render-l10`, `render-l11`). La regla no es "mayúscula gana", es "el lote verde gana" — y esos
+dos se renderizaron después y ya nacieron verdes.
 
 ### 2. Destrabar lo terminado (bloquea piezas ya hechas)
 - **FACTURA**: ✅ autorizado por Sergio (30-ago) y **el cambio exacto quedó escrito** en
@@ -478,7 +519,7 @@ marketing de las tres cuentas escrito como fuente de verdad.
 
 - `reel-lanzamiento-20260822/final/lucia-lanzamiento.mp4` (v6, 22 s, master −14.33 LUFS):
   **renderizado, esperando el OK de Sergio.** Nada se publica sin eso.
-- `posts-20260807/render-fijado/slide-01..07.png` — carrusel fijado renderizado, mismo estado.
+- `posts-20260807/FIJADO/slide-01..07.png` — carrusel fijado renderizado, mismo estado.
 - Soul `LUCIA-SINTETICA-v3` (`e6d8703c-…`): entrenado y **probado**. Ver campo 4: no ganó.
 - **MCP de Postiz agregado** a la config del proyecto — aparece al reiniciar Claude Code.
 - **Facebook en Postiz: cerrado como no-viable por API**, con salida elegida (cross-post
@@ -517,7 +558,7 @@ marketing de las tres cuentas escrito como fuente de verdad.
   §14 inventario de Higgsfield + veredicto del Soul.
 - `references/modelos/lucia/PRODUCCION_MES_1.md` — las 8 piezas guionizadas.
 - `references/modelos/lucia/reel-lanzamiento-20260822/` — el reel completo con sus scripts.
-- `references/modelos/lucia/posts-20260807/render-fijado/` — el carrusel fijado.
+- `references/modelos/lucia/posts-20260807/FIJADO/` — el carrusel fijado (el que se sube).
 - `hermes-content/recursos/humo/` — el PDF, su HTML fuente y los dos scripts que lo generan.
 
 **Motor**

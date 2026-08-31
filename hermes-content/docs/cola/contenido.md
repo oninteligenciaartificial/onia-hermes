@@ -29,10 +29,10 @@ faltantes. Lo que falta es **publicar**.
 
 ## Ahora
 
-- [ ] Elegir cuál render se sube en las 3 piezas que tienen DOS versiones con md5 distinto: `hermes-content/references/modelos/lucia/posts-20260807/render-fijado` contra `hermes-content/references/modelos/lucia/posts-20260807/FIJADO` · 15 min · Claude
+- [x] Elegir cuál render se sube en las 3 piezas con DOS versiones: **gana el lote verde del 28-ago**. Se sube `hermes-content/references/modelos/lucia/posts-20260807/FIJADO`, `L6` y `L08`; las tres carpetas superadas llevan adentro un marcador NO-SUBIR, p.ej. `hermes-content/references/modelos/lucia/posts-20260807/render-fijado/_NO-SUBIR.md` y los punteros del handoff quedaron corregidos (apuntaban todos al viejo). Razón y tabla por día en `hermes-content/docs/handoffs/claude-ads-creatividades-publicos.md` § 1-sexies · 31-ago
 - [ ] Resolver SISTEMA antes del día 3: el recurso que promete da **404** y lo usan DOS piezas (L6 y L10). Ver `hermes-content/recursos/sistema/onia-6-tareas-para-delegar.pdf`, que existe en disco pero no está publicado · 30 min · Sergio
 - [ ] Declarar la etiqueta de IA en la cuenta antes del primer post — hoy es una instrucción pendiente, no una verificación: `hermes-content/contenido/LUCIA.md` · 5 min · Sergio
-- [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502: `hermes-content/references/modelos/lucia/posts-20260807/render-fijado` · 15 min · Sergio
+- [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502. Son las 7 láminas de `hermes-content/references/modelos/lucia/posts-20260807/FIJADO` (NO la carpeta `hermes-content/references/modelos/lucia/posts-20260807/render-fijado`, que quedó superada) · 15 min · Sergio
 - [ ] Publicar el día 1 (reel de lanzamiento v7, 22 s, 1080×1920): `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4` · 10 min · Sergio
 
 ## Despues
