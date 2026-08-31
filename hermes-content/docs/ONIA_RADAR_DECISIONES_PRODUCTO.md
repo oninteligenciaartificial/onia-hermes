@@ -63,6 +63,57 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
 - Pendiente: hero nuevo (queued de sesión anterior) · portar los precios nuevos del
   catálogo de venta a la landing cuando Sergio ratifique la lista.
 
+## 8. 🔴 La rama del carril contenido NO se puede pushear (2026-08-31) — decisión de Sergio
+
+**El hecho, medido:** `git push origin claude/ads-creatividades-publicos` lo rechaza GitHub:
+
+```
+remote: error: File hermes-content/references/oniahq/reel-R01/clips/b3.mp4 is 149.25 MB;
+this exceeds GitHub's file size limit of 100.00 MB
+! [remote rejected] (pre-receive hook declined)
+```
+
+**No es lentitud de red.** `git ls-remote` responde en un segundo. El primer diagnóstico
+("push lento por 118 commits con láminas") estaba mal: la rama está **rechazada desde
+`563c5173`**, el commit que metió ese clip. O sea: **118 commits de este carril existen sólo
+en esta máquina.** Es exactamente el fantasma que ya nos pasó el 30-ago con las 74 láminas
+(commit `1eb80206`).
+
+`b3.mp4` pesa 149 MB entre hermanos de 130 KB, 451 KB y 552 KB — tiene toda la cara de un
+clip crudo que se coló, no de un entregable.
+
+**Archivos grandes que ya están en el árbol:**
+
+| Peso | Archivo | Estado |
+|---|---|---|
+| 149,2 MB | `references/oniahq/reel-R01/clips/b3.mp4` | 🔴 **rompe el push** |
+| 95,8 MB | `references/creator-video-references/inbox/creator-video-ref-20260601-003.mp4` | ⚠️ a 4 MB del límite |
+| 82,9 MB | `references/creator-video-references/inbox/creator-video-ref-20260601-001.mp4` | ⚠️ |
+| 79,9 MB | `references/sergio-approved-media/inbox/IMG_0218.MOV` | ⚠️ |
+| 63,6 MB | `…/final-avatar-identity-lock/20260605-upload-0405-0409/raw/IMG_0406.MOV` | ⚠️ |
+| 58,5 MB | `references/creator-video-references/inbox/creator-video-ref-20260601-002.mp4` | ⚠️ |
+| 50,8 MB | `references/sergio-approved-media/inbox/IMG_0217.MOV` | ⚠️ |
+
+**Por qué es decisión de Sergio y no la tomo solo:** las tres salidas reescriben el historial
+de la rama (cambian todos los SHAs y piden force-push), y **hay otra sesión commiteando en este
+mismo carril** — apareció `b23f1037` mientras trabajaba. Un force-push a ciegas le borra el
+trabajo a esa sesión.
+
+| # | Salida | Costo en USD | Qué implica |
+|---|---|---|---|
+| **A** | `git lfs migrate import` de los 7 archivos | **0 hoy.** Suman ~581 MB y GitHub da 1 GB de storage + 1 GB/mes de banda gratis. Pasado eso: **USD 5/mes por 50 GB** | Reescribe el historial igual. Todo el que clone necesita `git-lfs` instalado o baja punteros rotos. La banda de 1 GB/mes es ajustada: cada clon completo se lleva medio giga |
+| **B** | `git filter-repo --path …/b3.mp4 --invert-paths` | **0** | Saca sólo el archivo que rompe. Reescribe los 118 commits. El clip queda en disco sin trackear. Los otros 6 siguen a un paso del límite: esto no es una solución de fondo, es destrabar el push |
+| **C** | Recomprimir `b3.mp4` y volver a commitear | **0** | ❌ **No sirve solo.** El blob viejo sigue en el historial y GitHub lo sigue rechazando. Requiere B igual |
+
+**Recomendación:** **B para destrabar hoy** (es lo mínimo que devuelve el push), y decidir A
+por separado con calma para los otros 6 — no porque rompan hoy, sino porque el repo está
+guardando video crudo, y eso no escala. Antes de cualquiera de las dos: **coordinar con la otra
+sesión que está commiteando en el carril**, porque el force-push le pisa el trabajo.
+
+**Mientras tanto:** el trabajo del carril se está commiteando local y **no está respaldado**.
+El auto-sync hace push y falla en silencio si nadie mira el exit code.
+
+
 ## Orden sugerido para desglosar (cuando Sergio quiera)
 
 1. Cerrar chatbot texto (inbox→org en curso · plantillas por rubro · esperar Meta).
