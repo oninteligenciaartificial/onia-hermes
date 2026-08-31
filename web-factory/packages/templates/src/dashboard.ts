@@ -993,9 +993,14 @@ function renderKpiSpark(values: number[], label: string): string {
     ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="3" fill="currentColor"></circle>`
     : "";
 
+  // Mismo defecto que W2 arreglo en el sparkline grande, que aca habia quedado:
+  // con `none` el viewBox se estiraba al ancho de la tarjeta, el trazo perdia
+  // grosor uniforme y el punto final salia elipse. `meet` mantiene la proporcion;
+  // la CSS de .wf-kpi-spark fija el aspect-ratio, asi que el bloque se sigue
+  // llenando de borde a borde igual que antes.
   return `<svg class="wf-kpi-spark" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttribute(
     `Tendencia: ${label}`,
-  )}" preserveAspectRatio="none"><polygon points="${area}" fill="currentColor" fill-opacity="0.14"></polygon><polyline points="${line}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
+  )}" preserveAspectRatio="xMidYMid meet"><polygon points="${area}" fill="currentColor" fill-opacity="0.14"></polygon><polyline points="${line}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
 }
 
 function renderChartLabels(
@@ -1395,7 +1400,11 @@ h1, h2, h3 {
 .wf-kpi-spark {
   display: block;
   width: calc(100% + 36px);
-  height: 44px;
+  /* Aspect-ratio y NO alto fijo: es lo que deja al SVG usar xMidYMid meet sin
+     letterbox (con alto fijo la caja se ensancha mas que 320/44 y el dibujo
+     queda centrado con aire a los costados). El alto resultante ronda los
+     42-54px segun la columna, o sea el mismo bloque de antes. */
+  aspect-ratio: 320 / 44;
   margin: 4px -18px -16px;
   /* El sparkline del KPI es DATO, asi que su tinta sale del tema categorico y no
      de la marca: con --color-primary quedaban barras aqua y sparklines verde

@@ -97,3 +97,28 @@ describe("clientSchema clinic fields", () => {
     expect(parsed.faq).toEqual([]);
   });
 });
+
+describe("dashboardPointSchema · el drift que hace inalcanzable un patron", () => {
+  // El template dibuja la barra rayada de `pending` desde W-anteriores, pero Zod
+  // descarta lo que el schema no declara: el JSON del cliente podia pedirlo y el
+  // dato se perdia en silencio entre el archivo y el render.
+  it("deja pasar `pending` hasta el template", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Demo",
+      slug: "demo",
+      dashboard: {
+        charts: [{ title: "Facturacion", points: [{ label: "Sep", value: 12, pending: true }] }],
+      },
+    });
+    expect(parsed.dashboard.charts[0].points[0].pending).toBe(true);
+  });
+
+  it("y sigue siendo opcional: ausente = listo", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Demo",
+      slug: "demo",
+      dashboard: { charts: [{ title: "Facturacion", points: [{ label: "Ago", value: 12 }] }] },
+    });
+    expect(parsed.dashboard.charts[0].points[0].pending).toBeUndefined();
+  });
+});

@@ -5,6 +5,7 @@ import {
   chartScale,
   renderChart,
   renderChartCard,
+  renderDashboardBody,
   renderDashboardCss,
   type DashboardChart,
   type DashboardClient,
@@ -346,5 +347,57 @@ describe("un solo color por dato", () => {
       .filter(([, selector, cuerpo]) => CLASES_DE_DATO.test(selector) && cuerpo.includes("--color-primary"))
       .map(([, selector]) => selector.trim());
     expect(culpables).toEqual([]);
+  });
+});
+
+describe("A6 · nada de dibujo estirado", () => {
+  // El defecto es invisible en el codigo y solo se ve en el render: con
+  // `preserveAspectRatio="none"` el viewBox se estira al ancho de la tarjeta,
+  // el trazo pierde grosor uniforme y todo circulo sale elipse. W2 lo arreglo
+  // en el sparkline grande y volvio a aparecer en el del KPI, asi que el gate
+  // NO mira un SVG: mira TODOS, incluidos los que se agreguen despues.
+  const conSpark: DashboardClient = {
+    ...clienteMinimo,
+    dashboard: {
+      ...clienteMinimo.dashboard,
+      kpis: [
+        {
+          label: "Pacientes sin volver",
+          value: "34",
+          delta: "+4",
+          trend: "up",
+          context: "ultimos 90 dias",
+          spark: [12, 4, 19, 7, 22, 9, 34],
+        },
+      ],
+      charts: [
+        { title: "Barras", unit: "", type: "bar", points: [{ label: "A", value: 3 }] },
+        { title: "Spark", unit: "", type: "sparkline", points: [{ label: "A", value: 3 }, { label: "B", value: 9 }] },
+        { title: "Donut", unit: "", type: "donut", points: [{ label: "A", value: 3 }, { label: "B", value: 9 }] },
+        { title: "Medidor", unit: "", type: "radial", points: [{ label: "A", value: 78 }] },
+      ],
+    },
+  };
+
+  it("ningun svg del panel se dibuja con preserveAspectRatio=none", () => {
+    const body = renderDashboardBody(conSpark);
+    const ratios = [...body.matchAll(/preserveAspectRatio="([^"]*)"/g)].map((match) => match[1]);
+    expect(ratios.length).toBeGreaterThan(0);
+    expect(ratios.filter((valor) => valor === "none")).toEqual([]);
+  });
+
+  it("el sparkline del KPI sigue ahi y ahora respeta la proporcion", () => {
+    const body = renderDashboardBody(conSpark);
+    const svg = body.match(/<svg class="wf-kpi-spark"[^>]*>/)?.[0] ?? "";
+    expect(svg).toContain('preserveAspectRatio="xMidYMid meet"');
+  });
+
+  it("y su caja lleva aspect-ratio, no alto fijo: con `meet` un alto fijo deja aire a los costados", () => {
+    const css = renderDashboardCss(clienteMinimo).replace(/\/\*[\s\S]*?\*\//g, "");
+    const regla = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find(([, selector]) =>
+      selector.trim().split(",").some((parte) => parte.trim() === ".wf-kpi-spark"),
+    );
+    expect(regla?.[2]).toContain("aspect-ratio");
+    expect(regla?.[2]).not.toMatch(/(^|;)\s*height:/);
   });
 });

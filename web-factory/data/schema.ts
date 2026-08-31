@@ -166,6 +166,10 @@ const dashboardEstadoSchema = z.enum(["cargando", "error"]).optional();
 const dashboardPointSchema = z.object({
   label: z.string().min(1),
   value: z.number(),
+  // El template dibuja la barra rayada con `pending: true` desde hace tiempo, pero
+  // el schema no lo declaraba y Zod descarta lo no declarado: el patron era
+  // inalcanzable desde el JSON. Mismo drift que ya habian tenido `variant`/`spark`.
+  pending: z.boolean().optional(),
 });
 
 const dashboardChartSchema = z.object({

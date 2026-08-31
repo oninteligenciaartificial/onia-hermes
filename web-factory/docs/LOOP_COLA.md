@@ -390,12 +390,32 @@ Las tres formas de fantasma que ya aparecieron acá:
       gate.
       **Lección: una captura no es el navegador.** Antes de abrir un defecto que sale de
       una imagen, medirlo en vivo.
-- [ ] **A6 · El sparkline del KPI sigue deformado.** `preserveAspectRatio="none"` en
-      `dashboard.ts:998` (el del KPI; W2 lo arreglo solo en el grande): el trazo se estira
-      y el punto final sale elipse. Evidencia en `dashboard-demo-1440-dark`, KPI
-      "Pacientes sin volver", donde el area llena el bloque y la linea no se distingue.
-      + `dashboardPointSchema` no declara `pending`, asi que el patron de barra rayada del
-      template es inalcanzable desde el JSON (mismo drift que `variant`/`spark`).
+- [x] **A6 · El sparkline del KPI deformado + `pending` inalcanzable** (2026-08-31).
+      Evidencia re-verificada antes de tocar: los dos reales (`preserveAspectRatio="none"`
+      seguia en `dashboard.ts:998`, y `pending` estaba en el TIPO y en el template pero no
+      en el schema). (a) El KPI spark pasa a `xMidYMid meet` — el mismo arreglo que W2 le
+      hizo al sparkline grande y que aca habia quedado a medias. Solo cambiar el atributo
+      NO alcanzaba: con `height: 44px` fijo la caja se ensancha mas que 320/44 y `meet`
+      habria dejado aire a los costados, asi que el alto fijo se cambio por
+      `aspect-ratio: 320/44` (mismo recurso que ya usaba `.wf-sparkline`). (b)
+      `dashboardPointSchema` ahora declara `pending: z.boolean().optional()`; verificado el
+      camino COMPLETO JSON → Zod → template, no solo el parse: la barra sale con trama
+      rayada y `<title>` "(pendiente)".
+      **Gates**: `typecheck:packages` verde, **265/265** (+5 tests) y **medido en el
+      navegador**, 22 mediciones en `dashboard-demo` y `dashboard-edge` × claro/oscuro ×
+      1440/390: escala X == escala Y en las 22 (antes el eje X se estiraba solo), el punto
+      final da ancho/alto **1.000** (era elipse), la caja no letterboxea (268,5/320 =
+      36,9/44 = 0,839 exacto) y las 4 tarjetas de la fila siguen midiendo 177,5px iguales.
+      0 `[data-reveal]` ocultos, 0 errores de consola. **Los tests se verificaron en rojo**:
+      revirtiendo el atributo caen 2 de 3.
+      ⚠️ **Trampa de metodo, no del producto**: `pnpm generate dashboard-demo` sin
+      `--template dashboard` reconstruye ese slug como **landing** y pisa el `out/` que
+      sirve el panel (el default del generador es `landing`). Si el panel "perdio" sus KPI,
+      es esto. Siempre `pnpm generate <slug> --template dashboard`.
+      Anotado, NO tocado (fuera de este item): el punto final del KPI spark sigue en `r=3`
+      y, con la escala de 0,839, mide **5,03px** renderizados — bajo el piso de 8px que
+      `dataviz` fijo y que W4 aplico al resto de los marcadores. Es un tamanio, no una
+      deformacion.
 - [ ] **A4 · Pulido de dental-premium:** dark mode mirado + spotlight en touch +
       cablear texturas SVG si Sergio dio OK.
 
