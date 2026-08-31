@@ -184,7 +184,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 | # | Qué | Por qué necesita permiso |
 |---|---|---|
 | D1 | ✅ **Los 2 crons ya están escritos y listos para instalar** — `hermes-content/infra/vps-ops/crons/` (2 scripts + `INSTALAR.md` con las líneas exactas, cómo verificar y cómo revertir). Con tu OK los instalo en 1 minuto | toca infra de producción |
-| D2 | **Dar de baja las cuentas que sobran en `onia_center`.** Contadas hoy: hay **4 activas** y sólo `sergio` debería quedar — `arthur` (ya no colabora, 23-ago), `seller_001` (Camila) y `seller_002` (Jerónimo), los dos vendedores, y **no hay equipo de ventas**. ⚠️ La versión anterior de este ítem decía "arthur y seller_001": se olvidaba de Jerónimo | es acceso de personas |
+| D2 | **Dar de baja las cuentas que sobran en `onia_center`** — y desde hoy **sirve de algo** (ver el fix de arriba: antes las bajabas y seguían entrando). Contadas hoy: hay **4 activas** y sólo `sergio` debería quedar — `arthur` (ya no colabora, 23-ago), `seller_001` (Camila) y `seller_002` (Jerónimo), los dos vendedores, y **no hay equipo de ventas**. ⚠️ La versión anterior de este ítem decía "arthur y seller_001": se olvidaba de Jerónimo | es acceso de personas |
 | D3 | **Desplegar al VPS** cuando haya algo que valga el swap. Runbook y gates en la skill `onia-deploy` | toca producción |
 
 ### Ya NO son bloqueos — salieron de la lista
@@ -201,6 +201,21 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 - ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva web-factory. Estar en otra sesión no es estar bloqueado.
 
 ## Cerrado (2026-08-30) — no rehacer
+
+- [x] 🔒 **Dar de baja una cuenta del ONIA Center NO cerraba la puerta.** Apareció yendo a
+      verificar que D2 sirviera de algo. El middleware hacía `find(active) ?? profiles[0]` y la
+      consulta **no filtraba por status**: una cuenta dada de baja caía en el fallback, devolvía
+      su rol, y como el normalizador hace `role ?? ""` salía *truthy* — el guard `if (!role)` la
+      dejaba pasar. Test en rojo: `expected 'seller' to be ''`. Del otro lado
+      `onia-center-auth.ts:252` **sí** filtraba: dos caminos, uno solo cerrado. La decisión salió
+      a `lib/onia-center-perfil.ts` con 7 tests y es **fail-closed** (sin `status` no se asume
+      activo). Commit `3cccbe67`.
+- [x] 🔒 **La mina de `page_location`** — GA mandaba la URL entera y anulaba el allowlist que la
+      línea de arriba aplicaba a `page_path`. Dormida (GA apagado) pero **a una env var de
+      encenderse**. PR #59 mergeado: se arma del mismo path ya filtrado, y **el tipo se estrechó
+      a `{ origin }`** para que `tsc` frene el regreso.
+- [x] **GA4: no era código muerto.** Early-return antes de montar el script, allowlist de 6 rutas
+      públicas, política de privacidad ya escrita en condicional. Encenderlo es 1 env var.
 
 - [x] **Corregido el catálogo de venta en 5 puntos** — todos porque estaba viejo, y cuatro de
       los cinco **subvendían** el producto: los cinco rubros ofrecidos ya se venden (decía
