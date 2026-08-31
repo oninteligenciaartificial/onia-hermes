@@ -113,6 +113,24 @@ sesión que está commiteando en el carril**, porque el force-push le pisa el tr
 **Mientras tanto:** el trabajo del carril se está commiteando local y **no está respaldado**.
 El auto-sync hace push y falla en silencio si nadie mira el exit code.
 
+**Confirmado de nuevo el 31-ago 17:4x, desde la vuelta siguiente del loop.** Se reintentó el
+push y GitHub lo volvió a rechazar con el mismo error. Van **119 commits** sin respaldo: se
+sumó `b23f1037` (el fantasma de SISTEMA). Verificado por separado que **`b3.mp4` es el ÚNICO
+blob >100 MB** en todo el rango sin pushear — los otros 6 de la tabla pesan menos y no rompen
+nada hoy, así que **la salida B destraba el push entero**.
+
+⚠️ **Un detalle que ahorra una cacería:** «la otra sesión commiteando en el carril» **no es una
+persona ni un carril paralelo** — es este mismo cron (`5d8f50a4`, :13 y :43) con dos vueltas
+solapadas. `b23f1037` lo escribió la vuelta de las 17:2x. No hay con quién coordinar: alcanza
+con correr el `filter-repo` **con el loop pausado**, y después dejar que la vuelta siguiente
+siga desde el historial nuevo.
+
+🔴 **Ojo con la trampa que hizo fallar el diagnóstico dos veces:** `git push | tail -5` devuelve
+el exit code del `tail`, no el del push — **da 0 aunque GitHub rechace**. Para verificar de
+verdad: comparar `git rev-parse HEAD` contra `git rev-parse origin/<rama>`, o mirar
+`git status -sb`. Es la misma clase de error que el `neverError` de n8n guardando fallos como
+éxito.
+
 
 ## Orden sugerido para desglosar (cuando Sergio quiera)
 
