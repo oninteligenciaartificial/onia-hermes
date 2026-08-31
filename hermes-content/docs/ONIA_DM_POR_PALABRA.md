@@ -1,6 +1,9 @@
 # El DM de cada palabra clave — @oniahq y Lucía
 
-> Fuente de verdad de los textos. La marca personal de Sergio tiene los suyos en
+> **La fuente de verdad real es el mapa de palabras del workflow `1jS4jwmNmvcQpqqH`** — eso es
+> lo que corre y lo que le llega a la gente. Esta página lo ESPEJA: si difieren, gana el
+> workflow y esta página está rota. Antes de creerle a un cartel rojo de acá, leé el workflow
+> vivo y probá la URL. La marca personal de Sergio tiene los suyos en
 > [`ONIA_SERGIO_DM_PALABRAS.md`](ONIA_SERGIO_DM_PALABRAS.md); el circuito y sus límites, en
 > `ONIA_CIRCUITO_COMENTARIO_DM.md`. Qué entrega cada palabra y si está viva:
 > `scripts/recompensas.json`.
@@ -27,23 +30,41 @@ que recibir lo mismo que quien escriba la frase completa.
 
 ---
 
-## SISTEMA · @oniahq y @lucia.antelo.oficial
+## SISTEMA · dos textos distintos, uno por cuenta
 
-🔴 **No encender hasta publicar el PDF.** Hoy `onia.com.bo/recursos/6-tareas-para-delegar.pdf`
-da 404 y la palabra está activa: quien comente recibe un link muerto.
+✅ Verificado el 2026-08-31 contra el mapa VIVO del workflow `1jS4jwmNmvcQpqqH` (activo).
+Ambos entregan un link a la home, **no un PDF**, y responden 200.
+
+⚠️ **Corregido el 2026-08-31.** Acá había un solo texto compartido que entregaba
+`onia.com.bo/recursos/6-tareas-para-delegar.pdf`, con un cartel rojo de "no encender hasta
+publicar el PDF". Las dos cosas eran falsas: ese PDF **no aparece en ningún lado del circuito
+vivo**, la palabra entrega un link para agendar que responde 200, y SISTEMA tiene **un texto
+por cuenta**, no uno solo. El error costó caro — el cartel rojo resucitó tres veces como
+pendiente "publicar el PDF de SISTEMA" en la cola del carril, y la última vez entró a «Ahora»
+con fecha límite. Una fuente de verdad desactualizada fabrica trabajo que no existe.
+
+Los textos van **verbatim del workflow**, sin tildes: así están cargados y así salen.
+
+### @oniahq
 
 ```
-Ey! Vi que comentaste SISTEMA 👋
+Hola! Vi tu comentario. Te dejo el link para agendar el diagnostico de 20 minutos: miramos tu operacion y te decimos que conviene automatizar primero, y que no vale la pena todavia.
 
-Acá va, sin vueltas: las 6 tareas que conviene delegar primero en un negocio,
-y las 3 que no conviene delegar nunca.
+https://onia.com.bo/?src=onia-ig-sistema
 
-https://onia.com.bo/recursos/6-tareas-para-delegar.pdf
+Si preferis, contame en una linea a que se dedica tu negocio y te adelanto algo por aca.
+```
 
-Está pensado para negocios de acá, no son casos de afuera traducidos.
+### @lucia.antelo.oficial
 
-Si lo abrís y algo no te cierra para tu rubro, respondeme y te digo por dónde
-lo encararía. Contesto yo, no un bot.
+Entrega **"el mapa de tu negocio"** — exactamente lo que prometen las piezas L6 y L10.
+
+```
+Hola! Soy Lucia. Te muestro como se ve todo junto: aca agendas 20 minutos y el equipo de @oniahq te arma el mapa de tu negocio, con tus numeros.
+
+https://onia.com.bo/?src=lucia-ig-sistema
+
+Y si preferis chusmear primero, en @oniahq esta el detras de todo lo que muestro.
 ```
 
 ## HUMO · @lucia.antelo.oficial
@@ -120,7 +141,6 @@ mucho más que quien todavía está esperando.
 
 | Qué | De quién |
 |---|---|
-| 🔴 Publicar el PDF de SISTEMA en la landing | infra — copiar a `public/recursos/` y **reiniciar** el contenedor (Next standalone indexa `public/` al arrancar) |
 | 🔴 Cargar la palabra FACTURA en @oniahq | circuito n8n |
 | 🔴 Cargar palabras en la cuenta de Sergio | circuito n8n — hoy su mapa está vacío y ya se perdieron dos leads reales |
 | Respuesta pública al comentario ("Enviado ✅") | circuito n8n — es otra API (`POST /{comment_id}/replies`), nunca se construyó |

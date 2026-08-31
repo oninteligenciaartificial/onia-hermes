@@ -345,6 +345,42 @@ carpeta para publicar. No se borran: son el historial de la unificación de colo
 (`render-l10`, `render-l11`). La regla no es "mayúscula gana", es "el lote verde gana" — y esos
 dos se renderizaron después y ya nacieron verdes.
 
+### 1-septies. ✅ SISTEMA no está roto — el pendiente del PDF era un fantasma (31-ago)
+
+En «Ahora» había un ítem con fecha límite: *"Resolver SISTEMA antes del día 3: el recurso que
+promete da 404 y lo usan DOS piezas (L6 y L10)"*. **Es falso, y se verificó contra el sistema
+correcto en vez de contra el doc.**
+
+Se leyó el **mapa de palabras vivo** del workflow `1jS4jwmNmvcQpqqH` (activo, 18 nodos) y se
+probaron las cuatro URLs que ese mapa realmente manda:
+
+| Palabra · cuenta | URL que manda el circuito VIVO | Estado |
+|---|---|---|
+| SISTEMA · @oniahq | `/?src=onia-ig-sistema` | **200** |
+| SISTEMA · Lucía | `/?src=lucia-ig-sistema` | **200** |
+| LISTA · @oniahq | `/recursos/lista-por-donde-empezar.pdf` | **200**, 258 KB |
+| HUMO · Lucía | `/recursos/5-herramientas-ia-bolivia.pdf` | **200**, 306 KB |
+
+`6-tareas-para-delegar.pdf` **no aparece en ningún nodo del circuito**. Su 404 es real y no le
+importa a nadie: nada lo enlaza. Se abrieron además los briefs de L6 y L10 — los dos prometen
+**"el mapa de tu negocio"**, que es exactamente lo que entrega el DM de SISTEMA de Lucía. La
+promesa y la entrega coinciden.
+
+**Por qué resucitaba, que es lo que había que arreglar.** `ONIA_DM_POR_PALABRA.md` se declara
+"fuente de verdad de los textos" y guardaba el **texto viejo** del DM —el que entregaba el
+PDF— coronado con un cartel rojo: *"No encender hasta publicar el PDF"*. Cualquier sesión que
+leyera ese doc fabricaba el mismo pendiente. Ya había sido desmentido el 29-ago (quedó anotado
+en `scripts/recompensas.json`), pero como el doc no se tocó, volvió a entrar a la cola.
+
+Corregido en el doc, contra el workflow vivo: SISTEMA ahora muestra **sus dos textos reales**
+(uno por cuenta — el doc creía que era uno compartido), verbatim y sin tildes como están
+cargados; se borró la fila *"Publicar el PDF de SISTEMA"* de la tabla de pendientes; y el
+encabezado ahora dice que **la fuente de verdad es el workflow, y que si difieren gana el
+workflow**. Desmentir el fantasma sin arreglar el doc que lo emite no sirve de nada.
+
+⚠️ **No publicar `onia-6-tareas-para-delegar.pdf`.** No desbloquea ninguna pieza. Si algún día
+se quiere usar, primero hay que darle una palabra en el circuito.
+
 ### 2. Destrabar lo terminado (bloquea piezas ya hechas)
 - **FACTURA**: ✅ autorizado por Sergio (30-ago) y **el cambio exacto quedó escrito** en
   `ONIA_IG_CARGAR_FACTURA.md`. 🔴 **NO se aplicó por API y no es un olvido:** el MCP de n8n

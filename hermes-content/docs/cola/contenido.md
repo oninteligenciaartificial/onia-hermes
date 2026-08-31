@@ -30,7 +30,6 @@ faltantes. Lo que falta es **publicar**.
 ## Ahora
 
 - [x] Elegir cuál render se sube en las 3 piezas con DOS versiones: **gana el lote verde del 28-ago**. Se sube `hermes-content/references/modelos/lucia/posts-20260807/FIJADO`, `L6` y `L08`; las tres carpetas superadas llevan adentro un marcador NO-SUBIR, p.ej. `hermes-content/references/modelos/lucia/posts-20260807/render-fijado/_NO-SUBIR.md` y los punteros del handoff quedaron corregidos (apuntaban todos al viejo). Razón y tabla por día en `hermes-content/docs/handoffs/claude-ads-creatividades-publicos.md` § 1-sexies · 31-ago
-- [ ] Resolver SISTEMA antes del día 3: el recurso que promete da **404** y lo usan DOS piezas (L6 y L10). Ver `hermes-content/recursos/sistema/onia-6-tareas-para-delegar.pdf`, que existe en disco pero no está publicado · 30 min · Sergio
 - [ ] Declarar la etiqueta de IA en la cuenta antes del primer post — hoy es una instrucción pendiente, no una verificación: `hermes-content/contenido/LUCIA.md` · 5 min · Sergio
 - [ ] Publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502. Son las 7 láminas de `hermes-content/references/modelos/lucia/posts-20260807/FIJADO` (NO la carpeta `hermes-content/references/modelos/lucia/posts-20260807/render-fijado`, que quedó superada) · 15 min · Sergio
 - [ ] Publicar el día 1 (reel de lanzamiento v7, 22 s, 1080×1920): `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4` · 10 min · Sergio
@@ -54,7 +53,7 @@ faltantes. Lo que falta es **publicar**.
 Se dejan escritos para que nadie los vuelva a poner en «Ahora».
 
 - 🔴 **Los 49 PNG renderizados «a salvo en el repo»** — `git ls-files … | grep -c '.png$'` daba **0**. **Resuelto el 30-ago**: 74 láminas respaldadas como JPG y commiteadas.
-- 🔴 **El PDF que promete SISTEMA** — `curl https://onia.com.bo/recursos/6-tareas-para-delegar.pdf` → **404**. Existe en disco, no está publicado.
+- 🔴 **«SISTEMA entrega un PDF que da 404»** — el 404 es real, la conclusión no: **el circuito vivo nunca manda ese PDF**. Verificado el 31-ago leyendo el mapa de palabras del workflow `1jS4jwmNmvcQpqqH` (activo) y probando las CUATRO URLs que sí manda: `/?src=onia-ig-sistema` **200**, `/?src=lucia-ig-sistema` **200**, `/recursos/lista-por-donde-empezar.pdf` **200** (258 KB), `/recursos/5-herramientas-ia-bolivia.pdf` **200** (306 KB). SISTEMA entrega «el mapa de tu negocio» — lo mismo que prometen L6 y L10, revisados uno por uno. Publicar ese PDF **no desbloquea nada**. Lo resucitaba `ONIA_DM_POR_PALABRA.md`, que guardaba el texto viejo del DM con un cartel rojo; corregido el 31-ago contra el workflow vivo.
 - 🔴 **«@oniahq: cola llena hasta 09-sep»** — Postiz da 502. Esa cola no está publicando nada.
 - 🔴 **Los reels RL01 y RL02 «terminados»** — sólo hay `_PREVIEW-360p.mp4` a 360×640. No existe el render final.
 - 🔴 **«El OK de Sergio para publicar ya está dado»** — el doc más nuevo lo desmiente.
