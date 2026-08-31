@@ -48,7 +48,9 @@ export async function handlePreviewRequest({ rawBody, headers }) {
       config = applyKnowledge(createBotConfig(), state.data, { nowIso: new Date().toISOString() });
       // Fuente db = org cliente: el probador tiene que mostrar lo que el bot REAL contesta
       // (modo recepcionista), no el funnel de venta con el nombre cambiado.
-      if (state.source === "db") config = asRecepcionista(config, state.data);
+      // Con el slug va tambien la agenda: si el bot real manda el link de reserva, el probador
+      // lo tiene que mandar igual — un probador que deriva donde el bot agenda miente al reves.
+      if (state.source === "db") config = asRecepcionista(config, state.data, state.orgSlug);
     }
     conocimiento = { fuente: state.source, version: state.version, error: state.error };
   }

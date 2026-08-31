@@ -149,10 +149,20 @@ const RE_HORARIO_ATENCION = /\bque dias?\b|\bhorarios? de atencion\b|\bque horar
 // Se consulta ANTES que el interes: "como es la cita" pregunta, no reserva.
 const RE_CITA_INFO = /\bcuanto (?:dura|tiempo)\b|\bcomo es la (?:cita|consulta|atencion|reunion)\b|\bes presencial\b|\bes virtual\b|\bpor videollamada\b|\bmodalidad\b/;
 
-// Interes de compra o de cita ("quiero comprar 100 tornillos", "agendame"). El bot NO agenda ni
-// vende solo: esto SIEMPRE escala a un humano. Por eso puede ser amplio sin riesgo — un falso
-// positivo cuesta un handoff, no una promesa.
-const RE_INTERES_PEDIDO = /\bagend\w+\b|\breserv\w+\b|\bcita\b|\bturno\b|\bcompr\w+\b|\bpedido\b|\bpedir\b|\bencarg\w+\b|\bme interesa\b|\bnecesito \d+\b|\bquiero \d+\b/;
+// Interes de compra o de cita ("quiero comprar 100 tornillos", "agendame").
+//
+// POR QUE SON DOS MITADES (2026-08-31): vendemos el chatbot como "contesta, califica, AGENDA"
+// (pricing.ts) y el motor derivaba a un humano TODA intencion de cita. Para que el bot agende de
+// verdad — mandando el link de la agenda publica de su org, que ya crea citas reales — hay que
+// separar lo que se resuelve solo (una cita) de lo que no (un pedido: cantidad, stock y precio
+// los confirma una persona). Juntos en un regex, un "quiero comprar 100 tornillos y agendar"
+// perderia el handoff del pedido a cambio de un link.
+const RE_CITA_PEDIR = /\bagend\w+\b|\breserv\w+\b|\bcita\b|\bturno\b/;
+const RE_COMPRA_PEDIDO = /\bcompr\w+\b|\bpedido\b|\bpedir\b|\bencarg\w+\b|\bnecesito \d+\b|\bquiero \d+\b/;
+// El interes de siempre = la union de las dos mitades + "me interesa" (que no dice cual de las
+// dos es, y por eso sigue escalando). Se compone en vez de repetirse para que no puedan
+// desincronizarse: agregar una palabra a una mitad la agrega tambien aca.
+const RE_INTERES_PEDIDO = new RegExp(`${RE_CITA_PEDIR.source}|${RE_COMPRA_PEDIDO.source}|\\bme interesa\\b`);
 
 /** Saludo sin pregunta: el modo recepcionista contesta con su menu (M0R). */
 export function isGreeting(norm) {
@@ -172,6 +182,15 @@ export function asksBookingInfo(norm) {
 /** Quiere comprar / pedir / agendar: se toma el pedido y lo confirma un humano. */
 export function wantsToOrder(norm) {
   return RE_INTERES_PEDIDO.test(norm);
+}
+
+/**
+ * Quiere UNA CITA y nada mas: la UNICA intencion que el bot puede cerrar solo, mandandole el link
+ * de la agenda publica de su org. La compra queda excluida a proposito: "quiero comprar 100
+ * tornillos y agendar" es un pedido, y un pedido lo confirma una persona (ver recepcionista.mjs).
+ */
+export function wantsToBook(norm) {
+  return RE_CITA_PEDIR.test(norm) && !RE_COMPRA_PEDIDO.test(norm);
 }
 
 // ---------------------------------------------------------------------------

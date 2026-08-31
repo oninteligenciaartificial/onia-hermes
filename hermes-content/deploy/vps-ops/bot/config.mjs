@@ -329,8 +329,20 @@ export const SCRIPT = Object.freeze({
 
   R_CITA: "La cita dura {{demo_duracion}} y es por {{demo_modalidad}}. Si querés una, decime y te la coordina {{humano}}.",
 
-  // R_INTERES — pedido o cita: se ESCALA, el bot no agenda ni vende solo. La promesa "ya le paso
-  // tu pedido" es verdad: este mensaje solo sale junto con el handoff real (review_queue + aviso).
+  // R_AGENDA — el bot AGENDA: manda el link de la agenda publica de ESA org, que ya crea la cita
+  // de verdad. {{link_reserva}} lo compone recepcionista.mjs desde el slug y solo sale si el slug
+  // pasa el validador (sin slug este mensaje NO existe y se deriva por R_INTERES, como antes).
+  // "te la confirma" no es adorno: la cita nace en estado PENDIENTE y la confirma el negocio —
+  // decir "queda confirmada" seria prometer algo que la agenda no hace.
+  R_AGENDA: [
+    "¡Dale! Reservá tu cita acá 👉 {{link_reserva}}",
+    "",
+    "Elegís el día y la hora que te queden bien, y {{humano}} te la confirma por este mismo chat.",
+  ].join("\n"),
+
+  // R_INTERES — pedido (y cita en una org SIN agenda publica): se ESCALA, el bot no vende solo.
+  // La promesa "ya le paso tu pedido" es verdad: este mensaje solo sale junto con el handoff
+  // real (review_queue + aviso). La cita con agenda encendida NO pasa por aca: sale por R_AGENDA.
   R_INTERES: [
     "¡Buenísimo! Ya le paso tu pedido a {{humano}} — te confirma por este mismo chat.",
     "",

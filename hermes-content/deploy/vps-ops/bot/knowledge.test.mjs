@@ -715,15 +715,19 @@ test("renderTemplate sigue siendo el ultimo paso: los {{ }} del conocimiento se 
 
 const ORG = "org_ferreteria";
 
-/** Un fetch falso que contesta como el endpoint /published del producto. */
-function fetchFalso(doc, { status = 200, fallar = false } = {}) {
+/**
+ * Un fetch falso que contesta como el endpoint /published del producto.
+ * `orgSlug` es la agenda publica de esa org: el producto lo manda SOLO si la org de verdad
+ * puede recibir reservas, y sin el el bot deriva la cita a un humano (fail-closed).
+ */
+function fetchFalso(doc, { status = 200, fallar = false, orgSlug = undefined } = {}) {
   const fn = async (url, init) => {
     fn.calls.push({ url, init });
     if (fallar) throw new Error("red caida");
     return {
       ok: status >= 200 && status < 300,
       status,
-      json: async () => ({ data: doc, version: 1, updatedBy: "test" }),
+      json: async () => ({ data: doc, version: 1, updatedBy: "test", ...(orgSlug === undefined ? {} : { orgSlug }) }),
     };
   };
   fn.calls = [];
@@ -858,6 +862,36 @@ test("db: withKnowledge con fuente db enciende el MODO RECEPCIONISTA — y solo 
   resetKnowledgeCache();
   const deOnia = withKnowledge(DEFAULT_CONFIG, { path: "/no/existe/knowledge.json" });
   assert.equal(deOnia.modo, undefined);
+});
+
+// El CABLE entero, de punta a punta: /published manda `orgSlug` -> la cache lo guarda ->
+// withKnowledge lo baja a la config -> el turno contesta con el link de reserva de ESA org.
+// Sin este test, el dia que el producto deje de mandar el campo (o alguien lo renombre) el bot
+// vuelve a derivar TODA cita y nadie se entera: exactamente el fallo silencioso que esta capa
+// existe para evitar.
+test("db: con orgSlug el bot AGENDA (manda el link de la org); sin orgSlug deriva a un humano", async () => {
+  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo", humanName: "Marta" } });
+
+  resetOrgKnowledgeCache();
+  await getOrgKnowledge("org_con_agenda", {
+    ...DB_OPTS,
+    fetch: fetchFalso(doc, { orgSlug: "zz-qa-ferreteria-ab123" }),
+    nowMs: NOW_MS,
+  });
+  const conAgenda = withKnowledge(DEFAULT_CONFIG, { organizationId: "org_con_agenda", nowMs: NOW_MS + 1000 });
+  assert.equal(conAgenda.orgSlug, "zz-qa-ferreteria-ab123", "el slug baja del endpoint a la config");
+  const reserva = step(createState(), { text: "quiero agendar una cita", receivedAt: T0 }, { config: conAgenda });
+  assert.equal(reserva.replies.at(-1).templateKey, "R_AGENDA");
+  assert.match(reserva.replies.at(-1).text, /https:\/\/app\.onia\.com\.bo\/book\/zz-qa-ferreteria-ab123/);
+
+  // Sin el campo (org sin agenda publica, o producto viejo): el handoff de siempre.
+  resetOrgKnowledgeCache();
+  await getOrgKnowledge("org_sin_agenda", { ...DB_OPTS, fetch: fetchFalso(doc), nowMs: NOW_MS });
+  const sinAgenda = withKnowledge(DEFAULT_CONFIG, { organizationId: "org_sin_agenda", nowMs: NOW_MS + 1000 });
+  assert.equal(sinAgenda.orgSlug, null);
+  const derivado = step(createState(), { text: "quiero agendar una cita", receivedAt: T0 }, { config: sinAgenda });
+  assert.equal(derivado.replies.at(-1).templateKey, "R_INTERES");
+  assert.doesNotMatch(derivado.replies.at(-1).text, /app\.onia\.com\.bo/);
 });
 
 test("preview: con organizationId el turno corre contra el conocimiento de ESA org", async () => {

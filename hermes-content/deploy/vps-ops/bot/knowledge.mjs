@@ -454,6 +454,8 @@ export function readKnowledgeFile(path, deps = {}) {
 const EMPTY = Object.freeze({
   data: null,
   source: "code", // "db" | "file" | "code". "db" = la fila publicada POR ORG (paso b), delante del archivo.
+  // Solo lo trae la fuente "db": el slug de la agenda publica de esa org. null = sin agenda.
+  orgSlug: null,
   version: null,
   updatedBy: null,
   loadedAt: null,
@@ -604,7 +606,11 @@ async function fetchOrgKnowledge(key, options = {}) {
     if (!verdict.ok) {
       return { data: null, error: `RECHAZADO (${verdict.errors.length}): ${verdict.errors.join(" · ")}`.slice(0, 600) };
     }
-    return { data: body.data, error: null };
+    // `orgSlug` es la agenda publica de esa org (`/book/<slug>`), y el producto lo manda SOLO si
+    // la org de verdad puede recibir reservas (add-on / plan). Que falte no es un error: es una
+    // org sin agenda, y el bot vuelve a derivar la cita a un humano (recepcionista.mjs).
+    const orgSlug = typeof body?.orgSlug === "string" ? body.orgSlug.trim() : "";
+    return { data: body.data, orgSlug: orgSlug || null, error: null };
   } catch (error) {
     return { data: null, error: `no se pudo leer la db: ${String(error?.message || error).slice(0, 160)}` };
   }
@@ -616,6 +622,7 @@ function nextOrgCache(prev, result, organizationId, nowMs) {
     return Object.freeze({
       data: result.data,
       source: "db",
+      orgSlug: result.orgSlug || null,
       version: typeof result.data.version === "string" ? result.data.version : null,
       updatedBy: typeof result.data.updatedBy === "string" ? result.data.updatedBy : null,
       loadedAt: new Date(nowMs).toISOString(),
@@ -824,9 +831,15 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
  * nunca por el archivo local ni por el codigo, que son la cara de Onia. `conocimiento` viaja
  * entero (el documento validado "onia.bot.knowledge/1") para que el motor renderice SOLO
  * hechos de la org y pueda ser honesto cuando un campo falta. Ver recepcionista.mjs.
+ *
+ * `orgSlug` (opcional) es la agenda publica de esa org: con el, el bot AGENDA de verdad mandando
+ * `/book/<slug>`; sin el, la cita se deriva a un humano como siempre. Va por parametro y no
+ * dentro de `data` a proposito: no es un hecho editable por el dueño, es la identidad de su org
+ * en el producto — el allowlist de esta capa no tiene (ni debe tener) un campo para escribirlo.
  */
-export function asRecepcionista(config, data) {
-  const base = createBotConfig({ modo: "recepcionista", conocimiento: data }, config);
+export function asRecepcionista(config, data, orgSlug = null) {
+  const slug = typeof orgSlug === "string" && orgSlug.trim() ? orgSlug.trim() : null;
+  const base = createBotConfig({ modo: "recepcionista", conocimiento: data, orgSlug: slug }, config);
   // Sin humanName del cliente, el fallback heredado era "Sergio" (el humano del
   // funnel de VENTA de Onia): un negocio ajeno decia "Sergio te confirma" delante
   // de su cliente final (visto en prod, 2026-08-29). Neutro: "el equipo" — M7 dice
@@ -848,7 +861,7 @@ export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
     const state = getKnowledge(options);
     if (!state.data) return config;
     const applied = applyKnowledge(config, state.data, options);
-    return state.source === "db" ? asRecepcionista(applied, state.data) : applied;
+    return state.source === "db" ? asRecepcionista(applied, state.data, state.orgSlug) : applied;
   } catch {
     return config;
   }
