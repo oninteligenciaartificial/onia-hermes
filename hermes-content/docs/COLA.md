@@ -375,7 +375,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 - [x] 🚀 **`main` INTEGRADA y DESPLEGADA.** 242 commits de 4 carriles (`onia-web-architecture`,
       `chatbots-platform-review`, `ads-creatividades-publicos`, `git-status`). Gates: `tsc` 0,
       **217 tests**, 28 archivos. Deploy de `e5c1ad3` con los 5 gates de
-      `hermes-content/infra/vps-ops/crons/INSTALAR.md`… perdón: de `deploy-gates-swap.sh` en OK.
+      `deploy-gates-swap.sh` (en el VPS) en OK.
       Backup: `runtime-next.prev-20260831-194424`. Verificado **mirando** el login y `/register`.
 - [x] **`claude/pending-tasks-review-fb0694` descartada, no mergeada.** Su único commit es un
       auto-sync del 10-ago y sus 3 archivos son **más viejos** que los de `main`: mergearla
