@@ -21,9 +21,21 @@ Instagram tiene el campo nativo. Va **además** de decirlo en la bio, no en vez 
    *"AI creator"*, dentro de Editar perfil o de Configuración → Tipo de cuenta).
 3. Guardar, salir del perfil y volver a entrar: el rótulo tiene que **verse en el perfil**.
 
-**Está hecho cuando se ve el rótulo en el perfil, no cuando se tocó el switch.** Si el switch
-no aparece en esta versión de la app: no bloquea el día 0 — el carrusel declara "soy IA" en la
-lámina 1 y en el caption. Anotarlo en la cola y seguir.
+**Está hecho cuando se ve el rótulo en el perfil, no cuando se tocó el switch.**
+
+🔴 **Y este paso SÍ bloquea el día 0.** Acá decía lo contrario ("no bloquea… anotarlo y
+seguir"), y es falso: la **lámina 3 del carrusel afirma textualmente** *"Yo nací declarada:
+etiqueta de IA activada desde el primer post"*. Publicar el día 0 sin el rótulo puesto deja esa
+frase mintiendo, fijada al perfil, sobre lo único que la cuenta promete no esconder — declarar
+que es IA. La lámina 1 y el caption declaran "soy IA", pero **ninguno de los dos afirma que la
+etiqueta esté activada**; la lámina 3 sí.
+
+Si el switch no aparece en esta versión de la app, hay dos salidas y ninguna es publicar igual:
+
+- **Actualizar la app** y volver a buscarlo (Editar perfil, o Configuración → Tipo de cuenta).
+- Si aun así no está: **avisar antes de publicar.** Se cambia la lámina 3 (el texto vive en el
+  brief, se re-renderiza) o se sube el carrusel de 6 láminas sin ella. Lo que no se hace es
+  subir las 7 con la etiqueta apagada.
 
 Origen de la instrucción: [`LUCIA.md`](LUCIA.md) §1.
 
