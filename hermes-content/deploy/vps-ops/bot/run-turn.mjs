@@ -157,17 +157,22 @@ export async function resolveConfig(input, deps = {}) {
 // LLM (unica rama off-guion). Corre en LiteLLM, ya desplegado. Si no hay key: texto seguro.
 // ---------------------------------------------------------------------------
 
+// Exportado a proposito: los evals (evals/evals.test.mjs) miden el costo en tokens
+// de ESTE prompt. Si se vuelve a inlinear, el archivo de evals deja de importar y
+// sus 20 casos dejan de correr en silencio (paso en d334d776, al sincronizar el espejo).
+export const LLM_SYSTEM_PROMPT = [
+  "Sos el asistente automático de una agencia boliviana. Hablás en voseo boliviano, informal y corto.",
+  "Tu ÚNICA tarea es reformular la pregunta pendiente del embudo para que el prospecto la entienda.",
+  "PROHIBIDO: dar precios, planes, features, cifras, plazos, casos de clientes o inventar datos.",
+  "PROHIBIDO: prometer cualquier cosa. Máximo 2 frases. Nada de markdown.",
+].join(" ");
+
 async function askLiteLLM(request) {
   const base = process.env.LITELLM_BASE || "http://onia_selfhosted-litellm-1:4000/v1";
   const key = process.env.LITELLM_KEY || "";
   const model = process.env.ONIA_BOT_MODEL || "gpt-4o-mini";
   if (!key) return "";
-  const system = [
-    "Sos el asistente automático de una agencia boliviana. Hablás en voseo boliviano, informal y corto.",
-    "Tu ÚNICA tarea es reformular la pregunta pendiente del embudo para que el prospecto la entienda.",
-    "PROHIBIDO: dar precios, planes, features, cifras, plazos, casos de clientes o inventar datos.",
-    "PROHIBIDO: prometer cualquier cosa. Máximo 2 frases. Nada de markdown.",
-  ].join(" ");
+  const system = LLM_SYSTEM_PROMPT;
   try {
     const res = await fetch(`${base}/chat/completions`, {
       method: "POST",
