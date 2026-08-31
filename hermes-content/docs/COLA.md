@@ -295,6 +295,41 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         que está en la lista de "nunca" de este loop. **Marcarlo verde por el commit sería
         reportar como hecho algo que nadie miró.**
 
+- [x] **Paso 3 otra vez, y esta vez el defecto NO estaba en los `[x]` sino en la lista de
+      bloqueos: 6 de 10 entradas de "Bloqueado — necesita a Sergio" ya no eran bloqueos.**
+      Hecho el 2026-08-31 con la cola sin un solo ítem desbloqueado en "Ahora" (F2, F5, los 4
+      números de WhatsApp y el `DELETE` de pagos esperan **una línea de Sergio**, no código).
+      **Cero líneas de producto tocadas: no había nada roto en el código.**
+      **Por qué esta lista importa más que la de cerrados:** los `[x]` los audita alguien de vez
+      en cuando; la lista de bloqueos es la que una sesión lee para decidir **qué preguntarle a
+      Sergio**. Una entrada vencida ahí no es desprolijidad — **fabrica trabajo**: hace que
+      alguien le pida una decisión sobre algo ya hecho. Y el lead bueno se quema una sola vez.
+      - **El hallazgo grande: `dentalgest.app` ya no sirve nada.** La entrada más alarmante de la
+        lista decía que el MISMO `onia-platform` seguía publicado en Vercel contra el Supabase de
+        la nube. Medido hoy, `/` y `/login` dan **404 con `X-Vercel-Error: DEPLOYMENT_NOT_FOUND`**:
+        Vercel conserva el dominio, pero **no hay deployment detrás**. No existe la segunda copia
+        expuesta. Queda sólo decidir qué se hace con el dominio, que es cosmético.
+        **La lección: "el dominio resuelve" y "hay una app viva ahí" no son lo mismo**, y la
+        entrada las mezclaba en una sola frase. El propio código de error de Vercel es lo que
+        separa una cosa de la otra — un 404 de la app diría lo contrario.
+      - **Otras cinco bajas, cada una con su medición y no con un renglón leído:** los 2 crons del
+        VPS (crontab de **36 líneas**, ambos presentes, scripts `700` — cerrado como **D1**);
+        `arthur`/`seller_001` (**D2**, y `center.onia.com.bo` responde **404**); el rate limit de
+        Vercel (su propia entrada decía "hasta el 2026-08-30"); el rename del schema de producción
+        (figuraba **como bloqueo y como rechazo a la vez**); y GA4 y la UI del dashboard, que ya
+        estaban desmentidos el 2026-08-30 y nadie había sacado de la lista.
+      - **Lo que la auditoría CONFIRMÓ, para que nadie lo rehaga:** la consolidación de
+        `handoff/` (existe la singular, no la plural, y `origin/main` la cita bien en sus dos
+        lugares — el plural sobrevive sólo en la rama `claude/ads-creatividades-publicos`, otro
+        carril); y el test de carrusel, que corre verde (`node --test
+        scripts/carousel_render.test.js`, 1 pasa / 0 falla) con `FORMATS.square` tras el renombre.
+      - **Deriva menor anotada, no es un cierre falso:** `master` local de `onia-platform` quedó
+        `0 1` contra `origin/master` — le falta `149e2a9`, el arreglo del gate de lint que se
+        pusheó **después** de aquella nota. El cierre "quedó `0 0`" era cierto cuando se escribió.
+      - **Regla que se lleva la vuelta: la lista de bloqueos se reverifica igual que los cerrados.**
+        Un bloqueo no caduca solo, pero el mundo sí se mueve — dos de estos seis los desbloqueó
+        esta misma cola en una vuelta anterior y nadie volvió a tachar la copia.
+
 - [x] **`ONIA_PRECIOS_COMPETENCIA_Y_DECISION.md` corregido en los 4 lugares** donde decía que
       Emizor no publica precio — uno de ellos lo llamaba *"el dato que más falta en todo el
       relevamiento"*. Verificado en vivo el 2026-08-30 contra dos capturas de archive.org
@@ -558,27 +593,53 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       el mismo que construye. No basta con que exista: hay que preguntarle contra qué commit se
       escribió.
 
-## Bloqueado — necesita a Sergio
+## Bloqueado — necesita a Sergio (reverificado en vivo el 2026-08-31)
 
-- 🔴 **Bajar el deployment de Vercel que todavía sirve `dentalgest.app`.** No es otro
-  producto: es el MISMO `onia-platform` publicándose en dos lados, contra una base que no es
-  producción. El auto-deploy ya está cortado desde el repo (PR #58); bajar el deployment vivo
-  y decidir el dominio son 2 minutos en el panel, y no los puedo hacer yo (sin token, CLI
-  deslogueado, MCP con 403).
-- 🔴 **Crear `recurring-invoices` y `onia-core-workitems` en el crontab del VPS.** Hoy sólo
-  existen en `vercel.json`, o sea contra la base de la nube: **nunca corrieron contra
-  producción**. `appointment-reminders` sí está (`*/15`).
+> **Estaban 10. Seis ya no eran bloqueos: quedan 4.** Esta lista es la que una sesión lee para
+> decidir qué preguntarle a Sergio, así que una entrada vencida **fabrica trabajo** — hace que
+> alguien le pida una decisión sobre algo ya hecho, y quema el único recurso que no se recupera.
+> Es el mismo defecto que esta cola ya bautizó: *"cerrar un ítem no cierra su copia"*. Cada baja
+> lleva la evidencia con la que se dio, medida hoy, no leída de otro renglón.
 
+- 🔴 **Decidir el dominio `dentalgest.app`**: redirigirlo a `app.onia.com.bo` o dejarlo morir. El
+  DNS vive en Vercel (`ns1/ns2.vercel-dns.com`) y no lo puedo tocar (sin token, CLI deslogueado,
+  MCP con 403). **Ya no es urgente** — ver la baja de abajo: hoy no sirve nada.
 - **Credenciales del BCP.** Sin ellas no hay QR. El checkout ya no lo promete (PR #54), pero el
   cobro sigue siendo manual: el cliente transfiere y alguien aprueba.
-- **Recorrer el circuito en producción.** Crea una cuenta real y manda un correo real.
-- **Vercel al tope**: más de 100 publicaciones diarias del plan gratis. Hasta el 2026-08-30 no se
-  puede publicar. Los merges a master entran igual.
-- **Desplegar al VPS** (es distinto de mergear: `onia.com.bo` lo sirve un contenedor).
-- **`dentalgest.app`** y el **schema de producción**, que sigue llamándose `dentalgest`.
-- **Dar de baja a `arthur` y `seller_001`** en `onia_center.user_profiles`: siguen activos.
-- **GA4**: encenderlo o sacar el código muerto.
-- **UI/UX del dashboard** — lo lleva la sesión de web-factory, no esta.
+- **Recorrer el circuito en producción.** Crear una cuenta real, que mande un correo real, pagar.
+  Es la única verificación que no se puede simular.
+- **Desplegar al VPS** (es distinto de mergear: `onia.com.bo` lo sirve un contenedor). Runbook y
+  gates en la skill `onia-deploy`.
+
+### Ya NO son bloqueos — dados de baja el 2026-08-31, con la medición
+
+- ~~**Bajar el deployment de Vercel que todavía sirve `dentalgest.app`**~~ — **ya no sirve nada, y
+  éste era el que más asustaba de la lista.** La entrada decía que el MISMO `onia-platform` seguía
+  publicado contra el Supabase de la nube. Medido hoy: `https://dentalgest.app/` y `/login`
+  responden **404 con `X-Vercel-Error: DEPLOYMENT_NOT_FOUND`** — Vercel todavía tiene el dominio,
+  pero **no hay deployment detrás**. No hay una segunda copia de la app expuesta. Lo único que
+  queda es cosmético y es la entrada de arriba (qué se hace con el dominio).
+  **Por qué importa la distinción:** "el dominio resuelve" y "hay una app viva ahí" no son lo
+  mismo, y la entrada las mezclaba. Un 404 de Vercel con `DEPLOYMENT_NOT_FOUND` es la prueba de
+  que no hay nada corriendo; un 404 de la app sería lo contrario.
+- ~~**Crear `recurring-invoices` y `onia-core-workitems` en el crontab del VPS**~~ — **hechos y
+  probados**, cerrado como **D1** más abajo en este mismo archivo. Verificado hoy por SSH contra
+  el VPS: crontab de **36 líneas**, las dos entradas presentes (`0 6` y `0 10`) junto a
+  `appointment-reminders` (`*/15`), y los scripts en `/root/bin/` con permisos `700`.
+  La entrada afirmaba *"nunca corrieron contra producción"* — falso desde el 2026-08-31.
+- ~~**Dar de baja a `arthur` y `seller_001` en `onia_center.user_profiles`**~~ — hecho, cerrado
+  como **D2** (los tres, más `seller_002`, en `status='blocked'`). Confirmado por la segunda vía:
+  `center.onia.com.bo` responde **404** medido hoy — la superficie ya no está en pie.
+- ~~**Vercel al tope (rate limit)**~~ — la propia entrada decía *"hasta el 2026-08-30"*: **venció**,
+  y además ya no publicamos por ahí. Muerta por dos vías, ya anotado el 2026-08-30.
+- ~~**El schema de producción, que sigue llamándose `dentalgest`**~~ — **está rechazado con motivo**
+  en este mismo archivo (migración de datos vivos a cambio de prolijidad que ningún cliente ve).
+  Figuraba como bloqueo y como rechazo a la vez.
+- ~~**GA4: encenderlo o sacar el código muerto**~~ — cerrado el 2026-08-30: no hay código muerto que
+  sacar, es una perilla apagada bien, y encenderla es **una env var**. La entrada estaba mal
+  planteada.
+- ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva
+  web-factory. Estar en otra sesión no es estar bloqueado.
 
 ## Cerrado (2026-08-30) — no rehacer
 
