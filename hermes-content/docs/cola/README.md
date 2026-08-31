@@ -21,12 +21,21 @@ de reescribir en vez de lanzar.
 |---|---|---|---|
 | **Contenido** (Lucía, @oniahq, marca personal) | `hermes-content/docs/cola/contenido.md` *(rama `claude/ads-creatividades-publicos`)* | *"pasar de 0 posts a un feed vivo publicando lo que YA existe. No se produce nada nuevo hasta que haya algo publicado"* | Se abre Instagram y se ven los posts |
 | **Web Factory** (webs de cliente, dashboard) | `web-factory/docs/LOOP_COLA.md` *(rama `claude/onia-web-architecture-b37eca`)* | *"convertir el catálogo de técnicas verificado en webs y dashboard reales de Onia… conectados a Onia Platform (form → lead)"* | La URL abre para un desconocido y hay una fila en el pipeline |
-| **Chatbot** (motor, guion, WhatsApp, bandeja) | ⚠️ **no tiene cola** — tiene handoff (`hermes-content/docs/handoff/chatbot.md`), que es estado, no plan. **La escribe su propio carril**, no ésta | *(a escribir)* — el estado dice v1.0 completo en prod y Embedded Signup encendido del lado servidor | Una conversación real en la bandeja, de alguien que no somos nosotros |
+| **Chatbot** (motor, guion, WhatsApp, bandeja) | `hermes-content/docs/cola/chatbot.md` ✅ escrita el 2026-08-31 | *"que un desconocido escriba y esa conversación se vea en la bandeja"* | Se abre `/inbox` con la sesión del dueño y hay una conversación de una persona que no somos nosotros |
 | **Producto / plataforma** | `hermes-content/docs/COLA.md` | **`main` integrado y desplegado** | `app.onia.com.bo` sirviendo el `main` de hoy |
 
-**El carril de contenido y el de web ya adoptaron la regla de evidencia por su cuenta.** El de
-web la corrió en su primera pasada y encontró **3 fantasmas de 11**; el de producto, **4 de 6**.
-No es una teoría: es la tasa real de trabajo inventado cuando nadie verifica.
+**Tres carriles adoptaron la regla de evidencia por su cuenta**, sin que nadie la impusiera. Y
+cuando se corre, siempre encuentra lo mismo:
+
+| Carril | Fantasmas |
+|---|---|
+| Chatbot | **7 de 15** (46%) |
+| Producto | 4 de 6 |
+| Web Factory | 3 de 11 |
+
+No es una teoría: **entre un cuarto y la mitad del trabajo declarado pendiente no existe.** El
+peor caso del carril chatbot es el que más enseña — el mismo archivo cerraba una pieza como
+hecha y, más abajo, la repetía como pendiente.
 
 ## Cómo se trabaja una cola
 
