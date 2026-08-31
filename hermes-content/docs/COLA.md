@@ -235,6 +235,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       - **Gates sobre `origin/master` (= `0711ff6`, la punta):** `tsc --noEmit` **0 errores** ·
         **2342 pasan + 5 skip (2347) en 190 archivos**. El árbol quedó limpio — esta vez `vitest`
         **no** reescribió los `.snap` con CRLF, la trampa anotada el 2026-08-30.
+        ⚠️ **`eslint .` NO se pudo concluir: pasa de 20 minutos sobre el repo entero** y superó
+        dos veces el tope de 10 min de la herramienta (la segunda corrida, en segundo plano, no
+        había emitido una sola línea al cerrar la vuelta — sin errores hasta ahí, pero eso **no
+        es un verde**). Así que acá se afirman **dos de los tres gates**, no los tres. **Es un
+        problema real del carril, no una nota al pie:** el paso 4 de esta cola exige los tres
+        *"porque lint es lo que CI verifica"*, y un gate que no termina es un gate que se salta.
+        **Próxima vuelta: medirlo y acotarlo** (`--cache`, o correrlo sobre los archivos tocados
+        en vez del árbol completo).
       - **Lo que la auditoría NO cambió, a propósito:** el punto 1 de
         `ONIA_DEFINICION_DE_TERMINADO.md` ("la bandeja queda vacía") sigue 🔴 aunque su código ya
         esté en master (`88c1d56`, carril chatbot). Su LISTO no es "el commit existe", es *"un
