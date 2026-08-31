@@ -6,6 +6,28 @@
 
 ---
 
+## Las tres reglas que ordenan todo (Sergio, 2026-08-31)
+
+**1. Si algo está roto, ARREGLALO. Escribirlo no lo cierra.**
+> *"Dejá de poner trabas, andá punto por punto pero andá avanzando. Si decís que un cliente no puede conectar WhatsApp, entonces hacé que sea posible."*
+
+Nace de un caso del mismo día: se descubrió que un cliente conecta WhatsApp y su bandeja queda
+vacía, y **se escribió un documento sobre el problema en vez de arreglarlo**. Documentar es lo
+que se hace DESPUÉS, en el commit.
+
+**2. Sin credenciales NO te quedás pensando: desarrollás hasta el borde.**
+> *"Si no tenés credenciales, no te quedes pensando, desarrollá hasta donde puedas y luego colocamos credenciales."*
+
+Una credencial que falta **no es un bloqueo del desarrollo**: es la última variable de entorno.
+Se construye el circuito entero detrás de un flag, se prueba con mock, y enchufar la credencial
+es un `env` y un reinicio. Un ítem sólo se marca bloqueado cuando **ninguna línea** se puede
+escribir sin el dato.
+
+**3. El objetivo es llegar a ser como Lety.** Traducido a capacidades verificables en
+`ONIA_NIVEL_REFERENTES_BRECHA.md`, no como eslogan.
+
+---
+
 ## La regla que ordena todo lo demás
 
 **No se le escribe a un prospecto calificado con el producto a medias.** Un lead bueno se
@@ -80,14 +102,22 @@ agente que persigue plata nueva, no.**
 
 **Carril:** producto.
 
-### 🟠 4. El cobro es manual y el checkout ya no lo promete
+### 🟠 4. El cobro es manual — y se construye hasta el borde, no se espera
 
-Sin credenciales del BCP no hay QR: el cliente transfiere y alguien aprueba a mano. El
-checkout ya se corrigió para no prometer lo que no hay (PR #54), así que **no es falso** —
-pero es fricción en el único momento donde entra la plata.
+Sin credenciales del BCP no hay QR: el cliente transfiere y alguien aprueba a mano. El checkout
+ya no promete lo que no hay (PR #54), así que **no es falso** — pero es fricción en el único
+momento donde entra la plata.
 
-**Terminado =** el cliente paga y la cuenta se activa sin que nadie mire.
-**Bloqueado en Sergio:** las credenciales son del banco.
+⚠️ **Esto NO es un bloqueo del desarrollo** (regla 2). Lo que falta es la credencial, no el
+código. Se construye entero y se prueba con mock:
+
+- El circuito de cobro por QR de punta a punta, **detrás de un flag apagado**.
+- El manejador del webhook de confirmación de pago, con su firma validada.
+- La activación automática de la cuenta al confirmarse el pago.
+- Tests con un proveedor simulado, como ya se hizo con el emisor fiscal en mock.
+
+**Terminado =** el circuito completo pasa sus tests con el mock, y encender el real es **poner
+la credencial en el env y prender el flag**. Nada de código nuevo ese día.
 
 ---
 
