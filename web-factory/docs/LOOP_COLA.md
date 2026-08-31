@@ -367,11 +367,29 @@ Las tres formas de fantasma que ya aparecieron acá:
       menciones de obra, `tsc` 0 y build 4/4.
       Pendientes anotados, no bloqueantes: el CTA del hero entra por 82px a 1440×900 y
       **queda fuera a 1440×800**; First Load 192 kB contra el presupuesto de 150 kB.
-- [ ] **A5 · La barra lateral no llega al pie.** Evidencia: las 8 baselines nuevas
-      (`tests/e2e/visual.spec.ts-snapshots/`) — en `dashboard-demo-1440-dark` el bloque
-      oscuro de `.wf-dash-side` termina a ~895px y debajo queda el fondo de pagina hasta
-      el final; en `dashboard-edge-1440-light` corta a ~897px. El sidebar toma la altura
-      de su contenido, no la de la pagina. Se ve solo mirando: ningun test lo nombra.
+- [x] **A5 · La barra lateral no llega al pie — FANTASMA** (2026-08-31). La evidencia
+      se re-verificó antes de tocar nada y no sobrevivió: **el defecto no existe**. En el
+      navegador el sidebar tapa la ventana entera en todo el scroll — medido a 0%, 50% y
+      100% en `dashboard-demo` y `dashboard-edge`, claro y oscuro: `top: 0`, `bottom: 900`
+      de 900 en las 12 mediciones (al tope del scroll se suelta 0,23px por el sobrante
+      fraccionario, no por el CSS). El `height: 100vh` + `position: sticky` hacen
+      exactamente lo que tienen que hacer.
+      **El artefacto era la captura**: `fullPage` pinta lo `sticky` en su posición
+      ESTÁTICA, así que el bloque oscuro corta al primer viewport y debajo se ve fondo de
+      página. Es el mismo modo de falla que ya anotó W7 (la captura sin scrollear dejando
+      el 4º chart en `opacity: 0`) — segunda vez que la captura inventa un defecto.
+      **Lo que sí era real es el hueco de gate** que lo dejó pasar por defecto: la
+      baseline `fullPage` **se ve igual con el sticky puesto que con el sticky roto**, o
+      sea que una regresión de verdad ahí pasaba en verde. Cerrado con un test que MIDE en
+      el navegador (`dashboard.spec.ts`, "el sidebar cubre la ventana tambien al pie") en
+      los tres puntos de scroll, y con el artefacto documentado en el docblock de
+      `visual.spec.ts` para que no se abra una tercera vez.
+      **Gates**: `typecheck:packages` verde, `dashboard.spec.ts` **8/8** (chromium +
+      mobile) y **el test verificado que FALLA**: forzando `position: static` el sidebar
+      se va a `top: -946` y la aserción cae. Un gate que no puede ponerse rojo no es un
+      gate.
+      **Lección: una captura no es el navegador.** Antes de abrir un defecto que sale de
+      una imagen, medirlo en vivo.
 - [ ] **A6 · El sparkline del KPI sigue deformado.** `preserveAspectRatio="none"` en
       `dashboard.ts:998` (el del KPI; W2 lo arreglo solo en el grande): el trazo se estira
       y el punto final sale elipse. Evidencia en `dashboard-demo-1440-dark`, KPI

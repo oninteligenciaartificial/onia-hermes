@@ -47,6 +47,40 @@ test.describe("dashboard preview (dashboard-demo)", () => {
     await expect(filters.first()).toHaveAttribute("aria-pressed", "false");
   });
 
+  // La barra lateral es `position: sticky` a 100vh: tiene que tapar el alto de
+  // la ventana en CUALQUIER scroll, no solo arriba. El gate visual no puede ver
+  // esto — una captura `fullPage` pinta lo sticky en su posicion ESTATICA, asi
+  // que la baseline se ve igual con el sticky puesto que con el sticky roto.
+  // Por eso se mide en el navegador y no por captura: A5 se abrio como defecto
+  // ("el bloque oscuro corta a ~895px") leyendo justamente ese artefacto.
+  test("el sidebar cubre la ventana tambien al pie de la pagina", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/dashboard-demo/");
+    await page.waitForLoadState("networkidle");
+
+    for (const fraccion of [0, 0.5, 1]) {
+      await page.evaluate((f) => {
+        window.scrollTo(0, document.documentElement.scrollHeight * f);
+      }, fraccion);
+
+      const caja = await page.evaluate(() => {
+        const lado = document.querySelector(".wf-dash-side");
+        if (!lado) return null;
+        const r = lado.getBoundingClientRect();
+        return { top: r.top, bottom: r.bottom, alto: window.innerHeight, y: window.scrollY };
+      });
+
+      expect(caja, ".wf-dash-side no existe").not.toBeNull();
+      // 1px de tolerancia: al final del scroll el sticky se suelta por el
+      // sobrante fraccionario (medido: top -0.23, bottom 899.77 contra 900).
+      expect(caja!.top, `asoma fondo de pagina ARRIBA en scrollY=${caja!.y}`).toBeLessThanOrEqual(1);
+      expect(
+        caja!.bottom,
+        `asoma fondo de pagina ABAJO en scrollY=${caja!.y}`,
+      ).toBeGreaterThanOrEqual(caja!.alto - 1);
+    }
+  });
+
   test("no broken same-origin assets", async ({ page }) => {
     const failed: string[] = [];
     page.on("requestfailed", (request) => {

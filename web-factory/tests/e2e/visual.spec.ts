@@ -13,6 +13,15 @@ import { expect, test } from "@playwright/test";
  * Se corre sobre `dashboard-edge`, el fixture con los datos que rompen, ademas
  * del demo: una baseline de datos lindos no habria detectado ninguno de los
  * cuatro bugs de dato de W3.
+ *
+ * LO QUE ESTA CAPTURA NO PUEDE VER: `fullPage` pinta los elementos `position:
+ * sticky` en su posicion ESTATICA. Por eso el bloque oscuro de `.wf-dash-side`
+ * termina a ~895px en la baseline y debajo queda fondo de pagina: en el
+ * navegador la barra sigue pegada y tapa la ventana entera a cualquier scroll
+ * (medido). Es un artefacto de la captura, no un defecto — se abrio como la
+ * tarea A5 y resulto fantasma. Lo sticky se verifica MIDIENDO en el navegador
+ * (`dashboard.spec.ts`, "el sidebar cubre la ventana tambien al pie"), porque
+ * aca la baseline se ve igual con el sticky puesto que con el sticky roto.
  */
 
 // reduce: los templates cortocircuitan reduced-motion al estado final, asi que
