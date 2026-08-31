@@ -22,6 +22,10 @@ recuperarlas cuando el CDN se normalice, sin volver a gastar créditos.
 |---|---|
 | **Element** | `lucia-ancla-2026-08` |
 | **ID** | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` |
+
+> 🔴 **CORREGIDO 2026-08-31.** Este UUID **NO** es el Element de una foto que describe la tabla
+> de arriba. Es `lucia-skin-v1`, el ancla de **7 ángulos** del 28-ago. El commit `52768edb` cambió el
+> UUID y dejó el nombre y la descripción viejos. Manda `LUCIA.md`, primer bloque.
 | **Origen** | `references/models/lucia-pieza1-20260717/escena-A-bano-reveal.png` — la selfie de espejo que Sergio aprobó como la mejor calidad lograda |
 | **Para qué** | Todo primer plano y toda la biblioteca. Es el reemplazo de generar con el Soul, que en plano cerrado produce cara de IA |
 

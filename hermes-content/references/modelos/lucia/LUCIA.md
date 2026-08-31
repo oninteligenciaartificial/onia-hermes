@@ -1,5 +1,32 @@
 # LUCÍA — archivo único
 
+> ## 🔴 LA CARA — el único dato que hay que copiar
+>
+> **Element canónico: `lucia-skin-v1` · `58bbd635-9b90-4bd2-b08a-1cd4915bd563`**
+> Se escribe `@lucia` en la web y autocompleta. Motor **Nano Banana Pro**, 2K.
+> Construido el 28-ago con **7 ángulos** (no con una foto).
+>
+> **⚠️ Corregido el 2026-08-31.** Este mismo archivo mandaba en SEIS líneas al Element
+> **jubilado** `452d8375` — incluida la plantilla de prompt del §6, que es de donde se copia.
+> `BANCO-OFICIAL.md:51` y `TECNICA-HIGGSFIELD.md:271` lo declaran jubilado desde el 28-ago
+> («una sola foto, inventaba el perfil») y nadie actualizó acá. Ya está arreglado.
+>
+> **⚠️ Y el UUID bueno venía con la descripción del viejo.** El commit `52768edb` reemplazó el
+> UUID dejando intactos el nombre y el texto anteriores, así que cuatro archivos describen
+> `58bbd635` como «`lucia-ancla-2026-08`, selfie de espejo, una foto» — que es exactamente el
+> defecto que el trabajo del 28-ago vino a arreglar.
+>
+> **En el picker hay CUATRO Lucías y tres Modelo 2.** `LUCIA-SINTETICA-v3` es un **Soul**
+> (prohibido); los tres `modelo2-ancla-*` son de **Modelo 2**, otra modelo, en pausa; los dos
+> `ZZ-TEST` son basura que **no se puede borrar** (no hay pantalla de gestión de Elements ni
+> `delete` por MCP). **Elegir por ID, nunca por nombre.**
+>
+> **Marketing Studio es un SEGUNDO sistema de identidad**, aparte de los Elements. Ahí el avatar
+> vigente es **`Lucia ONIA v4 FINAL` · `a1e334f3-5316-4132-b454-ddd9dcc06943`**. Ojo:
+> `avatar-lab/20260706-marketing-studio-test/VERDICTO.md:20` todavía dice «USAR ESTE» de un
+> avatar **superado el 7-jul** — ese doc nunca se actualizó.
+
+
 > 📌 **¿Solo venís a elegir una foto? Andá a [`BANCO-OFICIAL.md`](BANCO-OFICIAL.md).**
 > Este archivo tiene 50 KB y el dato de qué banco se usa estaba perdido en la línea 90: el
 > 28-ago se produjeron dos carruseles con fotos descartadas justamente por eso. `BANCO-OFICIAL.md`
@@ -86,7 +113,7 @@ en ese orden.
 
 | Pos. | Element ID | Nombre | Qué es | Veredicto |
 |---|---|---|---|---|
-| **1** | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` | `lucia-ancla-2026-08` | Selfie de espejo, argolla de oro. Generada | ✅ **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
+| **1** | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` | `lucia-skin-v1` | **7 ángulos** (28-ago). ⚠️ Antes decía `lucia-ancla-2026-08` / «selfie de espejo»: era la descripción VIEJA pegada al UUID NUEVO. Ver de espejo, argolla de oro. Generada | ✅ **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
 | **2** | `902eeebb-89e9-4477-8426-c555b20f7ecc` | `lucia-surgical-anchor` | Photoshoot fondo blanco, sonrisa | ✅ La aprobaste el 7-jul. Salió 3ra |
 | **3** | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | `lucia-face-real-anchor` | Frame REAL del video, escalado 2K | ✅ **Verdad de terreno para QA.** No generar con ella |
 | 4 | `d5e323ef-4d0e-41bf-863e-ec30aede20ae` | `LUCIA-REAL-v2-clean` | Otro frame del MISMO video | ⛔ **FUERA** |
@@ -108,7 +135,7 @@ estaba usando como tal. **Son tres roles separados y ninguno reemplaza al otro:*
 | Rol | Qué es | Dónde vive |
 |---|---|---|
 | **RASGOS** — qué cara es | Photoshoot de **10 ángulos** sobre fondo blanco: frontal neutro, media sonrisa, sonrisa completa, 2 perfiles, 2 tres cuartos, detalle de nariz, detalle de oreja, cuerpo entero | `STACK-rasgos-10-angulos.jpg` · fuente en `references/models/lucia-surgical-shoot-20260707/` |
-| **ANCLA** — con qué se genera | El Element que va en el prompt | `452d8375` (ganó la prueba del 13-ago) |
+| **ANCLA** — con qué se genera | El Element que va en el prompt | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (ganó la prueba del 13-ago) |
 | **RESPALDO** | Si el ancla falla en un encuadre | `902eeebb` (sale del shot 03 de ese mismo stack) |
 
 **El stack NO se usa para generar.** Se usa para responder "¿es ella?" cuando se aprueba una
@@ -582,7 +609,7 @@ se deforma un rostro generado.
 ### El método del carrusel confirma el nuestro, no lo cambia
 
 El carrusel fija primero el **canon** (retrato frontal, fondo liso) y recién después deriva
-las variaciones. Es exactamente el esquema que Lucía ya tiene: ancla `452d8375` para generar
+las variaciones. Es exactamente el esquema que Lucía ya tiene: ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` para generar
 (§2) + stack de 10 ángulos como vara (§8). **Nada de este lote reemplaza al ancla: el único
 método verificado de consistencia de cara sigue siendo ancla + molde §6 + QA §8.** Los
 encuadres son colas de cámara, no un método nuevo.
@@ -808,7 +835,7 @@ el prompt.)
 Los nombres en MAYÚSCULAS ENTRE CORCHETES ordenan la lectura del modelo. Molde de Lucía:
 
 ```
-[IDENTIDAD]              <<<452d8375-...>>> + "this exact woman", rasgos sagrados
+[IDENTIDAD]              <<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>> + "this exact woman", rasgos sagrados
 [CÁMARA]                 equipo REAL nombrado (ver palanca 1)
 [ESCENA]                 lugar, luz, vestuario, hora del día
 [COLOR RULE]             natural true-to-life colors, no grading, no filter, accurate WB
@@ -945,7 +972,7 @@ kling / seedance sigue siendo el **Element ancla** el que manda.
 
 | Element | id | Uso |
 |---|---|---|
-| `lucia-ancla-2026-08` | `452d8375-…` | ✅ **VIGENTE** — el que va en `<<<UUID>>>` en todo prompt |
+| `lucia-ancla-2026-08` | ``58bbd635-9b90-4bd2-b08a-1cd4915bd563`` | ✅ **VIGENTE** — el que va en `<<<UUID>>>` en todo prompt |
 | `lucia-surgical-anchor` | `902eeebb-…` | respaldo aprobado |
 | `ced20cc2` · `d5e323ef` · `de586dbb` · `fdf4b740` | — | ⛔ FUERA (frames de persona real / inconsistentes) |
 
@@ -970,7 +997,7 @@ b-roll actual y no tiene turnaround propio.
 
 ## Cómo se combinan (regla que no cambia)
 
-- **Primer plano / cara reconocible** → Element ancla `452d8375` + `nano_banana_2`, fondo simple.
+- **Primer plano / cara reconocible** → Element ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` + `nano_banana_2`, fondo simple.
 - **Variedad de escena** → ancla + descripción de escena EN TEXTO. Nunca combinar cara +
   outfit-Element + lugar-Element en la misma pieza de feed: se promedian y la cara deriva.
 - **Soul nuevo** → solo con `soul_2`, y se valida contra el ancla antes de darlo por bueno.
@@ -980,7 +1007,7 @@ b-roll actual y no tiene turnaround propio.
 Misma escena, mismo prompt, dos vías. Resultado mirado, no supuesto
 (`prueba-soul-v3/A-soul-v3.png` vs `B-ancla-actual.png`):
 
-| | Soul v3 (`soul_2`) | **Ancla `452d8375` (`nano_banana_2`)** |
+| | Soul v3 (`soul_2`) | **Ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (`nano_banana_2`)** |
 |---|---|---|
 | Mirada a cámara (pedida en el prompt) | ❌ mira de costado | ✅ obedece |
 | Pecas (rasgo sagrado) | tenues | ✅ marcadas |

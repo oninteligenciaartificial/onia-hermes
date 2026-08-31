@@ -81,7 +81,7 @@ terracota es dirección de arte DENTRO de la foto (una taza, una pared), no el a
 
 | Carpeta / archivo | Qué hay | Formato |
 |---|---|---|
-| `generadas-20260830-lujo/` | 🆕 **El look nuevo** — ella sube, el lugar queda (LUCIA.md §3-ter). Mismos lugares que `generadas-20260828/`, ropa y grooming de lujo de textura | 1792×2400 (3:4) |
+| `generadas-20260830-lujo/` | ⚠️ **VACÍA — no hay ni una imagen.** Se creó el 30-ago junto con la decisión de `LUCIA.md` §3-ter y nunca se produjo la tanda. Está en la lista blanca del gate, así que el gate la aprobaría: no la uses como evidencia de que el look nuevo existe | — |
 | `tanda-20260821/` | **El banco principal.** 10 PNG: `L1`, `L1b`, `L2`, `L2b`, `L3`, `L4`, `L4b`, `L5`, `L5b`, `L6` | 896×1200 (3:4) |
 | `tanda-20260821/BROLL-TEST/` | `IMG-01`…`IMG-05` + `frame-ugc-0s`, `frame-ugc-6s` | varía |
 | `prueba-realismo-20260815/` | `r1-cafe`, `r2-calle`, `r3-escritorio` | 1792×2400 (3:4) |
