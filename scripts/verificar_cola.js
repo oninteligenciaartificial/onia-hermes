@@ -74,6 +74,33 @@ function esAutoReferencia(ruta, archivoCola) {
   return path.resolve(ruta) === path.resolve(archivoCola);
 }
 
+// Cinco veces seguidas el gate rechazo un item porque su autor escribio el NOMBRE del archivo
+// en vez de su ruta desde la raiz ("TABLA-DE-CORTES.md" en vez de "hermes-content/.../TABLA-DE-CORTES.md").
+// La regla es correcta —un nombre suelto no se puede verificar— pero rechazar sin ayudar hace
+// perder una vuelta entera cada vez. Si el archivo existe en algun lado, el error lo dice.
+// El tope arranco en 4.000 y el repo tiene 10.743 archivos: el barrido se cortaba antes de
+// llegar y el gate no sugeria nada. Se midio, no se estimo.
+function buscarPorNombre(nombre, baseDir, tope = 60000) {
+  const objetivo = path.basename(nombre).toLowerCase();
+  const pendientes = [baseDir];
+  let vistos = 0;
+  while (pendientes.length && vistos < tope) {
+    const dir = pendientes.shift();
+    let entradas;
+    try { entradas = fs.readdirSync(dir, { withFileTypes: true }); } catch { continue; }
+    for (const e of entradas) {
+      if (e.name === '.git' || e.name === 'node_modules') continue;
+      vistos += 1;
+      const completo = path.join(dir, e.name);
+      if (e.isDirectory()) pendientes.push(completo);
+      else if (e.name.toLowerCase() === objetivo) {
+        return path.relative(baseDir, completo).split(path.sep).join('/');
+      }
+    }
+  }
+  return null;
+}
+
 function revisarCola(texto, baseDir = process.cwd(), archivoCola = null) {
   const problemas = [];
   const items = itemsDeAhora(texto);
@@ -109,9 +136,11 @@ function revisarCola(texto, baseDir = process.cwd(), archivoCola = null) {
         continue;
       }
       if (!fs.existsSync(abs)) {
+        const sugerencia = r.includes('/') ? null : buscarPorNombre(r, baseDir);
         problemas.push({
           regla: 'fantasma', linea: it.linea,
-          msg: `"${it.texto.slice(0, 50)}" apunta a ${r} y ese archivo NO existe`,
+          msg: `"${it.texto.slice(0, 50)}" apunta a ${r} y ese archivo NO existe`
+            + (sugerencia ? `. ¿Quisiste decir \`${sugerencia}\`?` : ''),
         });
       }
     }
@@ -174,6 +203,19 @@ function selfCheck() {
   // Control: la regla nueva no debe romper el caso sano.
   r = revisarCola(AHORA + '- [ ] algo real `existe.png`', tmp, colaFalsa);
   ok(!r.problemas.length, 'una ruta distinta de la cola sigue pasando');
+
+
+  // Un nombre suelto que SI existe en el arbol: el error tiene que sugerir la ruta, no solo negar.
+  fs.mkdirSync(path.join(tmp, 'hondo', 'mas'), { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'hondo', 'mas', 'TABLA.md'), 'x');
+  r = revisarCola(AHORA + '- [ ] algo `TABLA.md`', tmp);
+  ok(r.problemas.some((x) => x.regla === 'fantasma' && x.msg.includes('hondo/mas/TABLA.md')),
+    'sugiere la ruta completa cuando el nombre existe en el arbol');
+
+  // Y si no existe en ningun lado, sigue siendo un rechazo seco.
+  r = revisarCola(AHORA + '- [ ] algo `NO-EXISTE-EN-NINGUN-LADO.md`', tmp);
+  ok(r.problemas.some((x) => x.regla === 'fantasma' && !x.msg.includes('Quisiste')),
+    'sin candidato no inventa sugerencia');
 
   console.log(`self-check ok: ${casos} casos`);
 }
