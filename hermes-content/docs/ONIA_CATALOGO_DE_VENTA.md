@@ -151,8 +151,25 @@ Ningún archivo de `app/` o `components/` consulta `addon.inventory_advanced`,
 
 ## 6. Cómo se da de alta un cliente
 
-**El alta automática está CERRADA.** Esto no es un detalle de implementación: cambia el
-guion de venta entero.
+⚠️ **CORREGIDO el 2026-08-31 — el alta está ABIERTA.** Acá decía *"El alta automática está
+CERRADA"* y que cambiaba el guion de venta entero. **Es falso desde el 2026-08-29.** Medido en
+el `app.env` del contenedor de producción:
+
+```
+ONIA_ALTA_AUTOMATICA=abierta
+ONIA_REGISTRO_CONFIRMA_CORREO=si
+```
+
+Los dos flips están hechos (el segundo va con `GOTRUE_MAILER_AUTOCONFIRM=false` en
+`supabase-auth2`). `/register` sirve el formulario de registro, no el pedido de acceso.
+
+**El daño de dejarlo escrito mal:** manda a cada sesión nueva —y a cada material de venta— a
+ofrecerle "alta acompañada, te contactamos" a alguien que **puede entrar solo en dos pasos**.
+Es fricción inventada en el último clic, que es donde más caro sale.
+
+Lo que sigue abajo describe el circuito de **cuando estaba cerrada** y se conserva porque el
+formulario de pedido de acceso sigue existiendo como camino alternativo — pero **no es el
+camino por defecto**.
 
 ```
 solicitud en /register  →  fila en access_requests  →  alguien de Onia contacta
