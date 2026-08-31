@@ -34,16 +34,33 @@ const ITEM = /^\s*[-*]\s+\[[ xX]\]\s+(.*)$/;
 // `algo` entre backticks. Una ruta se distingue de un comando por el `$ ` inicial.
 const TROZOS = /`([^`]+)`/g;
 
+// Una linea de continuacion: indentada y con contenido. Un item largo pone su evidencia ahi,
+// asi que leer solo la primera linea era declarar "sin evidencia" lo que citaba tres archivos.
+const CONTINUACION = /^\s{2,}\S/;
+
 function itemsDeAhora(texto) {
   const items = [];
   let dentro = false;
+  let actual = null;
+  const cerrar = () => { if (actual) items.push(actual); actual = null; };
+
   texto.split(/\r?\n/).forEach((linea, i) => {
-    if (SECCION_DURA.test(linea)) { dentro = true; return; }
-    if (dentro && OTRA_SECCION.test(linea)) { dentro = false; return; }
+    if (SECCION_DURA.test(linea)) { cerrar(); dentro = true; return; }
+    if (dentro && OTRA_SECCION.test(linea)) { cerrar(); dentro = false; return; }
     if (!dentro) return;
+
     const m = linea.match(ITEM);
-    if (m) items.push({ linea: i + 1, texto: m[1] });
+    if (m) { cerrar(); actual = { linea: i + 1, texto: m[1] }; return; }
+
+    // Una linea en blanco NO cierra el item: los items largos traen parrafos separados.
+    if (!linea.trim()) return;
+    if (actual && CONTINUACION.test(linea)) { actual.texto += '\n' + linea.trim(); return; }
+
+    // Texto sin indentar = ya no es este item.
+    cerrar();
   });
+
+  cerrar();
   return items;
 }
 
@@ -54,11 +71,54 @@ function evidenciaDe(texto) {
   TROZOS.lastIndex = 0;
   while ((m = TROZOS.exec(texto)) !== null) {
     const t = m[1].trim();
-    if (t.startsWith('$ ')) comandos.push(t.slice(2).trim());
+    if (t.startsWith('$ ')) { comandos.push(t.slice(2).trim()); continue; }
+
+    // "lib/plan-limits.ts:396" es como se cita una linea. El archivo es lo de la izquierda;
+    // el sufijo no es parte del nombre, y buscarlo tal cual daba fantasmas falsos.
+    const ruta = t.replace(/:\d+(?::\d+)?$/, '');
+
+    // "/inbox", "/requerimientos", "/root/bin" son URLs de la app o rutas del VPS: no se
+    // verifican contra ESTE disco. No son evidencia, pero llamarlas fantasma es el gate
+    // gritando en falso, y un gate que grita en falso se termina ignorando.
+    if (/^[\/]/.test(ruta)) continue;
+
+    // Un backtick tambien envuelve codigo y endpoints: `GET /api/x`, `invoice.patient?.ci`,
+    // `responsable?.ci ?? patient.ci`. Ningun archivo del repo tiene espacios ni signos de
+    // pregunta en el nombre, asi que eso los descarta sin tener que adivinar.
+    if (/[\s?]/.test(ruta)) continue;
+
     // Una ruta se reconoce por tener separador o extension. "10 min" no es una ruta.
-    else if (/[\\/]/.test(t) || /\.[a-z0-9]{2,5}$/i.test(t)) rutas.push(t);
+    if (/[\/]/.test(ruta) || /\.[a-z0-9]{2,5}$/i.test(ruta)) rutas.push(ruta);
   }
   return { rutas, comandos };
+}
+
+
+// ONIA es DOS repos y una cola cita a los dos: el carril de producto trabaja en
+// `onia-platform` (lib/plan-limits.ts, app/api/...) y escribe su cola en
+// `onia-hermes`. Resolviendo solo contra el repo actual, cada ruta del producto
+// salia como "fantasma" y el verificador quedaba inservible justo para el carril
+// que mas lo necesita — se midio el 2026-08-31: 10 falsos positivos de 10.
+//
+// No se pasa a rutas absolutas a proposito: una cola con `C:\dev\...` adentro
+// solo sirve en la maquina de Sergio.
+const REPOS_HERMANOS = ['onia-platform'];
+
+function existeEnAlgunRepo(ruta, baseDir) {
+  if (fs.existsSync(path.resolve(baseDir, ruta))) return true;
+  // El repo hermano cuelga del mismo padre que este (…/proyectos/onia-hermes
+  // y …/proyectos/onia-platform). Desde un worktree hay que subir mas, asi que
+  // se prueban los padres hasta encontrarlo.
+  let dir = path.resolve(baseDir);
+  for (let i = 0; i < 6; i++) {
+    for (const repo of REPOS_HERMANOS) {
+      if (fs.existsSync(path.join(path.dirname(dir), repo, ruta))) return true;
+    }
+    const padre = path.dirname(dir);
+    if (padre === dir) break;
+    dir = padre;
+  }
+  return false;
 }
 
 function revisarCola(texto, baseDir = process.cwd()) {
@@ -86,7 +146,7 @@ function revisarCola(texto, baseDir = process.cwd()) {
 
     // El punto de todo el archivo: la ruta tiene que ESTAR.
     for (const r of rutas) {
-      if (!fs.existsSync(path.resolve(baseDir, r))) {
+      if (!existeEnAlgunRepo(r, baseDir)) {
         problemas.push({
           regla: 'fantasma', linea: it.linea,
           msg: `"${it.texto.slice(0, 50)}" apunta a ${r} y ese archivo NO existe`,
@@ -140,6 +200,36 @@ function selfCheck() {
   // Varias rutas en un item: basta que UNA falte para que el item sea mentira.
   r = revisarCola('## Ahora\n- [ ] Dos cosas · `existe.png` y `no-esta.png`\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'alcanza que una ruta falte');
+
+  // --- Los tres falsos positivos medidos el 2026-08-31 sobre la cola de producto ---
+
+  // (1) Un item largo pone su evidencia en las lineas de continuacion. Leer solo la primera
+  // linea declaraba "sin evidencia" items que citaban tres archivos reales.
+  r = revisarCola('## Ahora\n- [ ] Algo grande, sin ruta en la primera linea\n      la evidencia esta aca: `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'la evidencia puede vivir en una linea de continuacion');
+
+  // Y su reciproco, que es lo que impide que el arreglo afloje el gate: la continuacion de un
+  // item no le presta evidencia al item siguiente.
+  r = revisarCola('## Ahora\n- [ ] uno · `existe.png`\n- [ ] dos, sin nada\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'sin-evidencia' && p.linea === 3), 'cada item necesita su propia evidencia');
+
+  // (2) `archivo.ts:396` es como se cita una linea. El archivo existe; el sufijo no es su nombre.
+  r = revisarCola('## Ahora\n- [ ] Algo · `existe.png:42`\n', tmp);
+  ok(!r.problemas.length, 'archivo:linea apunta a un archivo que existe');
+
+  // (3) `/requerimientos` es una URL de la app, no un archivo. No es evidencia, pero tampoco es
+  // un fantasma: llamarla fantasma es la forma que tiene el gate de gritar en falso.
+  r = revisarCola('## Ahora\n- [ ] Enlazar `/requerimientos` desde `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una URL de app no se verifica contra el disco');
+
+  r = revisarCola('## Ahora\n- [ ] Enlazar `/requerimientos`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'sin-evidencia'), 'una URL sola no alcanza como evidencia');
+
+  // (4) Un backtick tambien envuelve codigo y endpoints: `GET /api/x`, `invoice.patient?.ci`,
+  // `responsable?.ci ?? patient.ci`. Ningun archivo del repo tiene espacios ni `?` en el nombre,
+  // asi que eso los descarta sin tener que adivinar.
+  r = revisarCola('## Ahora\n- [ ] Algo · `existe.png` · `GET /api/x` · `invoice.patient?.ci`\n', tmp);
+  ok(!r.problemas.length, 'codigo y endpoints entre backticks no son rutas');
 
   console.log(`self-check ok: ${casos} casos`);
 }

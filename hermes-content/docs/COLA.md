@@ -43,7 +43,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Verificado en vivo el 2026-08-30, y la primera versión de este ítem estaba mal en dos
       cosas, así que ojo con lo que se lee acá:
       - **La llave NO es `addon.chatbot`, es `addon.whatsapp`.** `addon.chatbot` está en el
-        catálogo (`types.ts:73`) y **no la lee nadie**: es una llave duplicada y muerta. La
+        catálogo (`lib/platform/types.ts`) y **no la lee nadie**: es una llave duplicada y muerta. La
         que trabaja es `addon.whatsapp`, derivada del booleano `whatsappAddon` **o** de un
         entitlement, con su helper ya escrito: `isWhatsAppAddonActive()` en
         `lib/plan-limits.ts:396`.
@@ -51,7 +51,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         chequea el add-on desde el 2026-08-18: sin add-on, el bot no atiende con el
         conocimiento del cliente.
       **Lo que sí está abierto:** la **bandeja**. `/inbox` no tiene `requiresFeature`,
-      `inbox/page.tsx` sólo chequea sesión, y `bandejaProfile()` (`lib/chatbot/bandeja-auth.ts`)
+      `app/(dashboard)/inbox/page.tsx` sólo chequea sesión, y `bandejaProfile()` (`lib/chatbot/bandeja-auth.ts`)
       gatea por rol, no por add-on. La tenencia sale de `clinicSettings.chatwootInboxId`.
       **Y la raíz:** el alta crea un inbox de Chatwoot para **TODA** org automáticamente
       (`app/api/admin/clinics/route.ts:99`, `createInbox` + `addAgentToInbox`), sin mirar el
@@ -78,7 +78,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       excepciones), y eso cazó **dos entradas mías de más** en el mismo commit en que las
       escribí. Entró a los 4 navs porque es transversal, con roles SUPERADMIN/ADMIN/STAFF:
       perseguir papeles es de recepción, no del profesional. Gates: tsc 0, eslint 0 errores,
-      **2282 tests verdes**. Commit `6d8b6b7` en `fix/requerimientos-alcanzable`.
+      **2282 tests verdes**. Commit `6d8b6b7` (rama fix/requerimientos-alcanzable, ya mergeada).
 
 - [ ] **F5 · Veterinaria — COTIZADA el 2026-08-30, decide Sergio.** El bloqueo es real pero
       **el costo estaba inflado**. No es "migrar datos vivos":
