@@ -9,7 +9,8 @@ escribirles si ni siquiera el producto está terminado; dedicate a terminar el p
 escribimos"*.
 
 **Qué significa terminado está escrito y medido en
-[`ONIA_DEFINICION_DE_TERMINADO.md`](ONIA_DEFINICION_DE_TERMINADO.md)** — cuatro puntos (**el 3 cerró el 2026-08-31: era fantasma**), sólo
+[`ONIA_DEFINICION_DE_TERMINADO.md`](ONIA_DEFINICION_DE_TERMINADO.md)** — cuatro puntos (**los dos del carril producto —3 y 4— cerraron el 2026-08-31 sin escribir
+una línea: el 3 era fantasma y el 4 ya estaba construido; quedan el 1 y el 2, de chatbot**), sólo
 cosas **rotas** (el cliente las compra y no funcionan) o **falsas** (se las vendemos y no son
 ciertas). Nada de "sería lindo".
 
@@ -76,17 +77,39 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       sección de lo que falta (`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md:249`), así que no le miente a nadie.
       Ponerle precio es decisión de Sergio.
 
-- [ ] **P4 · El cobro por QR, construido hasta el borde contra un mock.** Único punto **no
-      bloqueado** que queda de `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md`, y su regla 2 es explícita:
-      *"si no tenés credenciales, no te quedes pensando"*. Falta la credencial del BCP, **no el
-      código**. Hoy existen `app/checkout/`, `app/api/payments/route.ts`,
-      `lib/subscription-payment-validation.ts` y `lib/addon-payment.ts`, y el cobro es manual:
-      el cliente transfiere y alguien aprueba.
-      **LISTO =** el circuito (QR → webhook de confirmación con firma validada → activación
-      automática) pasa sus tests con proveedor simulado, detrás de un flag apagado — como ya se
-      hizo con el emisor fiscal en mock. Encender el real = una env var y prender el flag, cero
-      código nuevo ese día.
-      **Gate 1 primero:** medir qué parte del circuito ya existe antes de escribir una línea.
+- [x] **P4 · El cobro por QR — FANTASMA: el circuito entero ya está construido y verde.**
+      Gate 1 lo cazó antes de escribir una línea. El ítem describe el repo de **antes** del
+      commit `753718f` (*"feat(pagos): enchufe listo del QR dinamico del BCP"*), que ya está
+      en `master`. Verificado eslabón por eslabón, no por grep:
+      - **Cliente del banco:** `lib/gateway/bcp-qr.ts` — generación (`/api/v4/Qr/Generated`),
+        consulta (`/api/v3/Qr/Consult`), mTLS por `BCP_QR_CERT_PATH` y TLS 1.2 forzado, y el contrato de
+        respuesta del callback (`buildBcpCallbackAck` / `buildBcpCallbackError`).
+      - **Genera el QR:** `app/api/subscription-payment/bcp-qr/route.ts` — crea la fila
+        `subscription_payments` PENDING marcada con `BCP_QR_BANK_MARKER`, así una referencia
+        tipeada a mano en el flujo manual no puede colisionar con la del banco.
+      - **Webhook con auth validada:** `app/api/webhooks/bcp/route.ts:55` —
+        `validateBcpCallbackAuth` compara en tiempo constante y es **fail-closed** (sin
+        `BCP_QR_CALLBACK_*` responde 503 y no activa nada).
+      - **Activación automática:** el mismo webhook (`app/api/webhooks/bcp/route.ts:120`) confirma contra
+        `/Qr/Consult` **antes** de activar —el callback del BCP no viene firmado, sólo Basic—
+        y activa por el circuito compartido (`evaluateAutoApproval` + `claimPendingPayment` +
+        `buildPlanActivation`), idempotente ante los 3 reintentos del banco.
+      - **Pantalla:** `app/checkout/page.tsx:84` pasa `bcpQrDisponible={isBcpQrConfigured()}` y
+        `app/checkout/CheckoutClient.tsx:573` muestra el QR real o cae al flujo manual.
+      - **Flag apagado:** el flag son las env vars. Sin ellas `getBcpQrConfig()` devuelve
+        `null`, el checkout sigue manual y **nada revienta** (test explícito).
+      **Y el "proveedor simulado" que pedía el LISTO existe de verdad:**
+      `lib/gateway/bcp-qr.test.ts:96` levanta un servidor HTTP local ("servidor local de
+      mentira") y verifica la forma del request contra la spec — no es un mock del propio
+      módulo. **32 tests verdes** en los tres archivos (`lib/gateway/bcp-qr.test.ts`,
+      `app/api/webhooks/bcp/route.test.ts`, `app/api/subscription-payment/bcp-qr/route.test.ts`),
+      corridos hoy en el worktree `cobro-qr`. **Cero líneas de código tocadas: no había nada roto.**
+      **Lo que falta es exactamente lo que el propio ítem decía que faltaba: la credencial del
+      BCP** (P1 URL de producción, el set Username/Password/AppUserId/PublicToken/BusinessCode
+      y el certificado de `BCP_QR_CERT_PATH`). Encender = cargar env vars. Depende de Sergio y del banco, no del código.
+      **Lección:** el ítem no mentía cuando se escribió — **envejeció**. Un pendiente heredado
+      describe el repo del día en que se redactó, no el de hoy. Por eso el Gate 1 corre **antes**
+      de tocar una línea, no después.
 
 - [ ] 🔴 **F2 · BLOQUEADO EN SERGIO — el chatbot se cobra y medio chatbot es gratis.**
       Verificado en vivo el 2026-08-30, y la primera versión de este ítem estaba mal en dos

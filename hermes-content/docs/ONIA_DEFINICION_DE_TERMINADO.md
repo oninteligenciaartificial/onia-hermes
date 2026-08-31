@@ -126,22 +126,29 @@ lo nombra en su sección de lo que falta. Ponerle precio es decisión de Sergio,
 
 **Carril:** producto. **Cerrado sin tocar una línea de código: no había nada roto.**
 
-### 🟠 4. El cobro es manual — y se construye hasta el borde, no se espera
+### ✅ 4. El cobro por QR está construido contra el mock — cerrado 2026-08-31
 
-Sin credenciales del BCP no hay QR: el cliente transfiere y alguien aprueba a mano. El checkout
-ya no promete lo que no hay (PR #54), así que **no es falso** — pero es fricción en el único
-momento donde entra la plata.
+Este punto pedía construir el circuito hasta el borde sin esperar la credencial del BCP.
+**Ya estaba construido** cuando se verificó: commit `753718f` (*"feat(pagos): enchufe listo
+del QR dinamico del BCP"*), en `master`. Cada línea del "Terminado =" tiene su eslabón:
 
-⚠️ **Esto NO es un bloqueo del desarrollo** (regla 2). Lo que falta es la credencial, no el
-código. Se construye entero y se prueba con mock:
+| Lo que pedía | Dónde está | Estado |
+|---|---|---|
+| Circuito de cobro por QR de punta a punta | `lib/gateway/bcp-qr.ts` (generación v4 + consulta v3 + mTLS por `BCP_QR_CERT_PATH`) y `app/api/subscription-payment/bcp-qr/route.ts` | ✅ |
+| Detrás de un flag apagado | el flag son las env vars: sin ellas `getBcpQrConfig()` da `null`, `app/checkout/page.tsx:84` pasa `bcpQrDisponible={false}` y el checkout sigue manual | ✅ |
+| Webhook de confirmación con su firma validada | `app/api/webhooks/bcp/route.ts:55` — `validateBcpCallbackAuth` compara en tiempo constante y es fail-closed (sin `BCP_QR_CALLBACK_*` → 503, no activa nada) | ✅ |
+| Activación automática al confirmarse el pago | `app/api/webhooks/bcp/route.ts:120` confirma contra `/Qr/Consult` **antes** de activar y usa el circuito compartido (`evaluateAutoApproval` + `claimPendingPayment` + `buildPlanActivation`), idempotente ante los 3 reintentos del banco | ✅ |
+| Tests con proveedor simulado | `lib/gateway/bcp-qr.test.ts:96` levanta un servidor HTTP local y verifica la forma del request contra la spec — no es un mock del propio módulo. **32 tests verdes** con `app/api/webhooks/bcp/route.test.ts` y `app/api/subscription-payment/bcp-qr/route.test.ts` | ✅ |
 
-- El circuito de cobro por QR de punta a punta, **detrás de un flag apagado**.
-- El manejador del webhook de confirmación de pago, con su firma validada.
-- La activación automática de la cuenta al confirmarse el pago.
-- Tests con un proveedor simulado, como ya se hizo con el emisor fiscal en mock.
+**El callback del BCP no viene firmado** (sólo Basic `Username:PublicToken`), y por eso la
+regla dura del webhook: **ningún plan se activa sin confirmar el pago con `/Qr/Consult`**. Esa
+confirmación es la firma que el banco no da.
 
-**Terminado =** el circuito completo pasa sus tests con el mock, y encender el real es **poner
-la credencial en el env y prender el flag**. Nada de código nuevo ese día.
+**Lo que falta es la credencial, tal como este punto ya decía:** URL de producción, el set
+Username/Password/AppUserId/PublicToken/BusinessCode y el certificado de `BCP_QR_CERT_PATH`.
+Encender = cargar env vars, cero código. Depende de Sergio y del banco.
+
+**Carril:** producto. **Cerrado sin tocar una línea de código: no había nada roto.**
 
 ---
 
@@ -161,9 +168,13 @@ la credencial en el env y prender el flag**. Nada de código nuevo ese día.
 ## Cómo se sabe que está terminado
 
 Los cuatro puntos cerrados **y verificados mirando la pantalla**, no por un check verde.
-**Van 1 de 4:** el 3 cerró el 2026-08-31 al verificarlo — era un fantasma, no había nada
-roto. Quedan el 1 y el 2 (carril chatbot) y el 4 (cobro por QR contra mock, que **no**
-espera credenciales).
+**Van 2 de 4**, los dos del carril producto, y los dos cerraron el 2026-08-31 **sin escribir
+una línea**: el 3 era un fantasma y el 4 ya estaba construido. Quedan el **1 y el 2, ambos
+del carril chatbot**.
+
+Que dos de cuatro se cierren verificando en vez de desarrollando no es suerte: los puntos se
+redactaron describiendo el repo de ese día, y el repo siguió. Por eso el Gate 1 —*¿ya está
+hecho?*— corre **antes** de tocar código, no después.
 
 Recién ahí se les escribe a los siete que están esperando — empezando por la clínica de
 cuatro doctores, que es el lead más calificado que el sistema recibió nunca.
