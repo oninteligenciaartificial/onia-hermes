@@ -116,6 +116,52 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       todavía sirve la versión vieja. **La captura se toma en el primer deploy** — es lo
       primero que hay que hacer al retomar, antes que cualquier ítem nuevo.
 
+      ✅ **Vuelta del 2026-08-31 (tercera) — la pantalla YA SE MIRÓ, y no hizo falta ningún
+      deploy: lo que estaba roto era el entorno local, no la base.** El diagnóstico de arriba
+      era correcto en el síntoma y equivocado en la causa, y por eso el ítem quedó tres
+      vueltas esperando a Sergio para algo que no dependía de él.
+      **La causa real.** El stack de Supabase local **está corriendo hace 31 h**
+      (`docker ps` → `supabase_db_fiscal-mock`, healthy). Lo que no existe son los puertos que
+      `.env.local` pedía: `supabase/config.toml` del propio repo declara API `55321` y
+      Postgres `55322`, mientras el env apuntaba a `54321`/`54329`. Y `54329` no era "un
+      puerto cerrado" cualquiera: es el del **pooler, que el config tiene `enabled = false`**,
+      con un usuario ("postgres" con sufijo "onia") que ni figura en `pg_user`. Las claves anon y
+      service_role tampoco eran las del stack — firmadas con otro secreto, daban 403 contra
+      `/auth/v1/admin/*`. Tres datos mal, ninguno de ellos la base.
+      **Lo que se hizo:** se corrigió `.env.local` (puertos reales, `postgres:postgres`,
+      `?schema=public` como producción, claves firmadas con el `GOTRUE_JWT_SECRET` del
+      contenedor), se creó un superadmin local (usuario por `/auth/v1/admin/users` + su fila
+      en `profiles` con `role='SUPERADMIN'`), y se levantó el producto con
+      `npm run build` + `node .next/standalone/server.js`.
+      **Lo verificado MIRANDO, en la pantalla real** (`/admin/organizations/<id>`, sesión de
+      superadmin, captura leída):
+      1. La tarjeta **ESTADO TÉCNICO** ya no es un `<dd>`: muestra *"Chatwoot Inbox ID · De la
+         tenencia de la bandeja. Vaciar para desvincular."* con input numérico (`No vinculado`)
+         y botón **Vincular**.
+      2. Vincular el inbox 5 a `Ferreteria Circuito Completo` → banner verde
+         **"Org vinculada al inbox 5."**, y la fila queda persistida en la base
+         (`clinic_settings.chatwootInboxId = 5`, releída por SQL después del click).
+      3. **El guardia de tenencia funciona:** el mismo inbox 5 sobre la otra org devuelve el
+         409 con su mensaje en pantalla — *"El inbox 5 ya es de «Ferreteria Circuito
+         Completo»"* — y la base sigue con una sola org vinculada. Sin ese guardia dos orgs se
+         leerían las conversaciones entre sí, así que era la parte frágil y es la que se probó.
+      **La receta completa quedó en la skill que corresponde**, no en un doc suelto:
+      `.claude/skills/onia-verificacion/SKILL.md` del repo onia-platform, § "Levantar el entorno LOCAL
+      para poder MIRAR" — incluye las trampas que costaron esta vuelta (Prisma no lee
+      `.env.local`; `?schema=dentalgest` hace fallar una migración que en `public` está bien;
+      `onboardingCompletedAt` en NULL redirige todo a `/onboarding`; `next dev` en Windows
+      panickea con Turbopack y recarga en loop con `--webpack`).
+      🔗 **Hermano del mismo agujero, arreglado hoy por el carril de plataforma** (commit
+      `7791ea3`, `onia-platform`): `encenderCanalWeb()` adoptaba un inbox de Chatwoot buscándolo
+      **por nombre**, y el inbox se llama igual que la org — con dos "Clínica Dental" la
+      segunda se quedaba con la bandeja de la primera. Es la misma llave de tenencia que este
+      ítem: el PATCH ya tenía su 409, y ahora el alta automática también filtra los inboxes ya
+      tomados. Se anota para que no se lo cuente dos veces: **no destraba nada de S8**.
+      ⚠️ **Esto NO cierra el ítem** — el "Hecho =" sigue siendo un mensaje de un desconocido
+      visible en `/inbox`, y para eso falta **S8** (deploy + dueño de los inboxes 4 y 5). Lo
+      que cierra es la duda sobre el código: la pieza que S8 va a encender está mirada y
+      probada, incluido su caso de error.
+
 - [ ] **2 · Las frases que la web YA manda no están registradas como campañas: el desconocido
       pregunta una cosa y el bot le contesta el saludo genérico.** Las frases de campaña se
       construyeron ayer (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:117`
@@ -220,6 +266,49 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       como si fuera el primer día del dueño, anotando cada roce. Va después del objetivo
       porque pulir la pantalla de un producto que todavía no atendió a un desconocido es
       optimizar sin señal.
+
+      📋 **Ya hay tres roces MIRADOS el 2026-08-31** (aparecieron al levantar el entorno local
+      para el ítem 1; se anotan acá en vez de perseguirlos, que es otro carril):
+      1. **La barra del panel admin se pisa consigo misma.** Cada icono queda encima de su
+         propia etiqueta: se lee `Métricas`, `Pagos`, `Planes`, `Usuarios`, `Chatbots`,
+         `Auditoría` con el glifo montado sobre la primera letra, y el chip activo parte
+         "Estás en / Clínicas" en dos líneas contra el borde. Es la pantalla del superadmin
+         (`/admin/organizations/<id>`), no la del cliente, pero es donde se vincula el inbox.
+      2. **El buscador dice "Buscar pacientes…" en una ferretería.** La org de prueba es
+         `Ferreteria Circuito Completo` y el placeholder de la barra superior sigue en
+         vocabulario dental — justo lo que `lib/onboarding/vocabulario.ts` existe para evitar
+         (CLAUDE.md §3: el producto no se le vende sólo a clínicas). También la tarjeta de
+         abajo titula "INSTRUCCIONES PARA LA CLÍNICA" y el campo "Admin de la clínica".
+      3. **`next dev` no sirve para mirar en Windows**, así que cualquier recorrida de
+         fricción hay que hacerla sobre `build` + `standalone`. La receta está en la skill
+         `onia-verificacion`.
+
+- [ ] **Arrastrado del ítem 1: dos huecos de plataforma encontrados al levantar el entorno.**
+      Ninguno bloquea el objetivo del carril; se dejan escritos con su prueba.
+      1. ✅ **Arreglado en la misma vuelta:** el `connect-src` de la CSP
+         (`onia-platform/next.config.ts`) sólo agregaba `wss://<host>` cuando la URL de
+         Supabase era `https:`. Con un Supabase servido por `http` — el stack local, y
+         cualquier self-host on-premise tipo Onia Box — el `ws://<host>` quedaba fuera y el
+         navegador **bloqueaba el websocket de realtime en silencio**: se ve en consola
+         (*"violates the following Content Security Policy directive"*). Lo usan la campana de
+         notificaciones, la agenda y las citas (no `/inbox`, que no abre canal). Ahora el
+         esquema del websocket se deriva del de la URL.
+      2. ↔️ **Encontrado por las malas y YA arreglado por otro carril, media hora antes:**
+         `npx eslint .` entra a `.claude/worktrees/*/.next/**` — el build de OTRO worktree —
+         porque el `globalIgnores` de `eslint.config.mjs` sólo lista `.next/**` de la raíz.
+         Acá costó dos intentos abortados antes de correr el lint acotado a mano; el commit
+         `149e2a9` del repo `onia-platform` ya lo había resuelto moviendo el patrón al script
+         `npm run lint` (20 min → 39 s). **La lección para esta cola: correr `npm run lint`,
+         no `npx eslint .`** — y hacer `git pull` antes de pelearse con un gate lento, porque
+         el arreglo puede estar en origin. La raíz de verdad (`globalIgnores`) sigue esperando
+         a Sergio: el hook `config-protection` bloquea editar `eslint.config.mjs`.
+      3. ⚠️ **El test nuevo de ese mismo arreglo es INESTABLE**, y un gate que parpadea no es
+         un gate: `__tests__/eslint-no-lintea-worktrees.test.ts > "con ese patron, ni el build
+         ni el codigo de otra rama entran"` falló en una corrida de la suite completa
+         (2355 passed | 1 failed) y pasó solo y en la corrida siguiente (2356 passed). Se
+         anota sin tocarlo — es de otro carril — pero el que lo escribió tiene que saberlo:
+         lanza eslint de verdad desde el test, así que compite por CPU con los otros 190
+         archivos.
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       org `zzqa-horario-0001` ("ZZ QA Horario") con su usuario y su inbox, y las
       conversaciones QA 39, 43 y 44 (bandeja, insistencia, comprobante). **No borrar todavía**:
