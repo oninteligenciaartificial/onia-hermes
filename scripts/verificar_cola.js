@@ -34,6 +34,9 @@ const ITEM = /^\s*[-*]\s+\[[ xX]\]\s+(.*)$/;
 // `algo` entre backticks. Una ruta se distingue de un comando por el `$ ` inicial.
 const TROZOS = /`([^`]+)`/g;
 
+// Corta a proposito: preferible exigir el slash a inventar reglas sobre que parece un archivo.
+const EXTENSIONES = /\.(md|json|js|mjs|cjs|ts|tsx|png|jpg|jpeg|webp|svg|mp4|mov|wav|mp3|pdf|txt|csv|html|css|ya?ml|sh|py)$/i;
+
 function itemsDeAhora(texto) {
   const items = [];
   let dentro = false;
@@ -55,8 +58,11 @@ function evidenciaDe(texto) {
   while ((m = TROZOS.exec(texto)) !== null) {
     const t = m[1].trim();
     if (t.startsWith('$ ')) comandos.push(t.slice(2).trim());
-    // Una ruta se reconoce por tener separador o extension. "10 min" no es una ruta.
-    else if (/[\\/]/.test(t) || /\.[a-z0-9]{2,5}$/i.test(t)) rutas.push(t);
+    // Una ruta tiene separador, O termina en una extension CONOCIDA. Antes bastaba con "un punto
+    // y 2-5 letras al final", y eso lee cualquier dominio como ruta: `onia.com.bo` y `onia.hq`
+    // quedaron marcados fantasma. Escribir una URL o un handle en la cola es normal, asi que el
+    // falso positivo se repetia y costaba una vuelta cada vez.
+    else if (/[\/]/.test(t) || EXTENSIONES.test(t)) rutas.push(t);
   }
   return { rutas, comandos };
 }
@@ -216,6 +222,15 @@ function selfCheck() {
   r = revisarCola(AHORA + '- [ ] algo `NO-EXISTE-EN-NINGUN-LADO.md`', tmp);
   ok(r.problemas.some((x) => x.regla === 'fantasma' && !x.msg.includes('Quisiste')),
     'sin candidato no inventa sugerencia');
+
+
+  // Dominios y handles NO son rutas. Dos falsos positivos reales: onia.com.bo y onia.hq.
+  r = revisarCola(AHORA + '- [ ] ok `existe.png` y probe `onia.com.bo` y `onia.hq`', tmp);
+  ok(!r.problemas.length, 'un dominio entre backticks no se confunde con una ruta');
+
+  // Pero una extension de verdad sigue contando, aunque no tenga barra.
+  r = revisarCola(AHORA + '- [ ] algo `NO-ESTA.json`', tmp);
+  ok(r.problemas.some((x) => x.regla === 'fantasma'), 'una extension conocida sigue siendo ruta');
 
   console.log(`self-check ok: ${casos} casos`);
 }
