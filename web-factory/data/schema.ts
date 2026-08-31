@@ -344,6 +344,19 @@ export const clientSchema = z.object({
   // statement the section simply does not render.
   statement: z.string().default(""),
   statementAccent: z.string().default(""),
+  // T9: el statement se toma una pantalla entera, con su fondo y su unica
+  // accion. Declarado aca porque lo que el schema no nombra, lo descarta: el
+  // bloque quedaria inalcanzable desde el JSON del cliente.
+  statementPantalla: z.boolean().default(false),
+  statementFondo: z.enum(["base", "marca", "tinta"]).default("base"),
+  statementCta: z
+    .object({
+      // Sin texto o sin url no se dibuja el boton: un CTA muerto es peor que
+      // ninguno.
+      texto: z.string().default(""),
+      url: z.string().default(""),
+    })
+    .default({ texto: "", url: "" }),
   // Legal line for the footer. Client-supplied: the factory never guesses the
   // holder or the year.
   footerLegal: z.string().default(""),

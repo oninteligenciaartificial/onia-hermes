@@ -24,6 +24,7 @@ export {
   renderEditorialStatement,
   EDITORIAL_STATEMENT_CSS,
   type EditorialStatementProps,
+  type EditorialStatementFondo,
 } from "./editorial-statement";
 export {
   renderBenefitStrip,

@@ -15,6 +15,7 @@ import {
   renderNewsletterBand,
   renderPathCards,
   renderPropertyCards,
+  type EditorialStatementFondo,
   type PathCard,
   type PropertyCard,
 } from "@onia/blocks";
@@ -56,6 +57,10 @@ export type RealestateProperty = {
 export type RealestateClient = LandingClient & {
   statement: string;
   statementAccent: string;
+  /** T9: el statement se toma una pantalla, con su fondo y su unica accion. */
+  statementPantalla?: boolean;
+  statementFondo?: EditorialStatementFondo;
+  statementCta?: { texto: string; url: string };
   newsletter: {
     titulo: string;
     texto: string;
@@ -87,6 +92,11 @@ export function renderLandingRealestateBody(client: RealestateClient): string {
           label: client.statement ? "sobre nosotros" : undefined,
           statement: client.statement ?? "",
           accent: client.statementAccent || undefined,
+          pantalla: client.statementPantalla,
+          fondo: client.statementFondo,
+          cta: client.statementCta?.texto
+            ? { label: client.statementCta.texto, url: client.statementCta.url }
+            : undefined,
         })}
 
         ${renderPathCards({

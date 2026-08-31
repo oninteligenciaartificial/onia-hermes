@@ -268,10 +268,11 @@ Las tres formas de fantasma que ya aparecieron acá:
 - [x] ~~**A1e · Specs de marca del skill `dataviz`**~~ — **DUPLICADO de W4**, cerrado sin
       trabajo (2026-08-30). Pedía exactamente lo mismo: gap del donut, marcadores ≥8px,
       puntas redondeadas. Se trabaja en W4, que además tiene la evidencia re-verificada.
-- [ ] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
+- [x] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
       `WEB_FACTORY_TECNICAS_2026.md`, las que 2+ sitios usan y son CSS-only o
       motion.dev. Una por vuelta: bloque tipado + tokens ONIA + reduced-motion +
-      render de prueba + `typecheck:packages`. **3 de 4 cerradas:**
+      render de prueba + `typecheck:packages`. **4 de 4 cerradas** (una de ellas,
+      T34, era fantasma y se cerró sin trabajo):
       - [x] **T29 marquee** (2026-08-31) — `packages/blocks/src/marquee.ts`, la que el
             catálogo llama "la más barata y más reutilizable del corpus" (6 sitios) y
             estaba en cero (`grep marquee packages/` → 0). CSS puro, cero JS.
@@ -318,10 +319,43 @@ Las tres formas de fantasma que ya aparecieron acá:
             daban 2 `ERR_FILE_NOT_FOUND` en consola.
             **Gates**: `typecheck:packages` verde, **252/252** (+11 tests), galería mirada en
             claro y oscuro — 0 `[data-reveal]` ocultos, 0 errores de consola.
-      - [ ] **T9 statement pantalla-completa** — parcial: `editorial-statement.ts`
-            cubre la frase gigante centrada, pero NO el `min-height:100svh`, el fondo
-            pleno de la sección ni el CTA que pide el catálogo. Decidir si es variante
-            del bloque que ya existe o bloque aparte, antes de duplicar.
+      - [x] **T9 statement pantalla-completa** (2026-08-31). Evidencia re-verificada antes
+            de tocar: `grep 100svh|100dvh|100vh packages/blocks/` no devolvía nada en
+            `editorial-statement.ts` (solo scroll-story-hero y el switcher). **Decidido:
+            VARIANTE, no bloque aparte** — T9 comparte con el bloque que ya existe el
+            label, la medida, la escala display, el acento y el reveal; lo único que
+            cambia es el marco. Duplicar 120 líneas para eso era fabricar dos fuentes de
+            la misma frase. `pantalla` + `fondo` (`base`/`marca`/`tinta`) + `cta`.
+            **El fondo pintado va SIEMPRE full-bleed** (medido: 1440px en un viewport de
+            1440, left 0, dentro de un contenedor de 1120 a propósito): un color que se
+            corta en la medida lee como tarjeta, no como sección. La variante `tinta`
+            cambia el PAR completo a `on-primary`, botón incluido — cambiar solo el fondo
+            es como se fabrica un botón invisible.
+            **"Reveal por líneas" son las líneas que DECLARA el autor** con un salto de
+            línea, en cascada con `wf-stagger`; nunca los puntos de corte, que se mueven
+            con el viewport y no se pueden escalonar sin embarcar un partidor de texto.
+            ⚠️ **Dos defectos que solo aparecieron MIDIENDO, ninguno se ve en el código**:
+            (a) `min-height:100svh` sobre una caja `content-box` **sumaba el padding**: la
+            sección medía **1080px en un viewport de 900** y la "pantalla completa"
+            scrolleaba. `box-sizing:border-box` propio — no puede depender de que la página
+            que la usa traiga un reset. (b) el label de la variante sólida daba **4,17:1 en
+            claro y 3,39:1 en oscuro**: el par puro pasa (6,41/4,94) pero el `color-mix` al
+            72% lo diluía bajo AA — el mismo modo de falla que encontró W6. Sin diluir.
+            ⚠️ Y un defecto de MI medición: conté líneas visuales con `getClientRects()`,
+            que sobre un `span` display:block devuelve **un solo rect aunque el texto
+            envuelva** — decía "1/1" mientras la captura mostraba la línea partida en dos.
+            Contado por alto/line-height, con 15ch la línea declarada se partía; la variante
+            de pantalla ensancha a 24ch y ahí sí se sostiene.
+            **Gates**: `typecheck:packages` verde, **260/260** (+8 tests), `pnpm e2e` **101
+            passed / 0 failed**, y **medido en el navegador** (claro y oscuro, 1440 y 375)
+            con un fixture temporal de las 3 variantes: alto = viewport exacto (900/812),
+            full-bleed sin desborde horizontal (`scrollWidth == clientWidth` en ambos
+            anchos), contraste ≥4,5:1 en las 12 combinaciones (convertido a sRGB real
+            pintando en canvas: leer el `oklab()` con una regex de números da basura),
+            CTA de 68px con anillo de foco, 0 reveals ocultos y 0 errores de consola.
+            Cableado al schema (`statementPantalla`/`statementFondo`/`statementCta`) y a
+            `landing-realestate`: lo que el schema no nombra, lo descarta — el drift que ya
+            se comió `variant`, `spark` y `pending`. + entrada propia en la galería.
 - [x] **A3 · Sitio #2 (estilo contrastante)** — `apps/ferreteria-sur/`, cerrado 2026-08-31
       (`fac6fa99` + `e4e785f3`). Rubro comercio, industrial utilitario, conectado por
       `/api/lead`. Construido con 3 agentes sobre archivos disjuntos; el de secciones
