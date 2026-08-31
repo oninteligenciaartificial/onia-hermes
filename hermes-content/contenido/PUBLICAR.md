@@ -29,6 +29,24 @@ Origen de la instrucción: [`LUCIA.md`](LUCIA.md) §1.
 
 ---
 
+## Paso 0.5 — pasar los archivos al teléfono (5 min, una sola vez)
+
+Los renders viven en la PC (`C:\dev\proyectos\onia-hermes`). Son **12 MB** las 7 láminas y
+**19,7 MB** el reel: entra por cualquier lado.
+
+**Cómo (Telegram, el más limpio):** Telegram en la PC → chat **"Mensajes guardados"** →
+adjuntar → **enviar como ARCHIVO, no como foto** (como foto, Telegram recomprime). Mandar los
+7 `.png` y el `.mp4`. En el teléfono: descargar cada uno y **guardarlo en la galería** — si no
+está en la galería, el selector de Instagram no lo ve.
+
+Si el selector igual no los encuentra: en la misma carpeta `FIJADO/` están los mismos 7 como
+`.jpg`; esos se pueden mandar **como foto** y caen directo en la galería. Instagram recomprime
+todo al subir, así que la diferencia no se ve en el feed.
+
+⚠️ **WhatsApp no**: destroza la imagen y el video.
+
+---
+
 ## Paso 1 — Día 0: el carrusel fijado "quién es Lucía" (15 min)
 
 **Carpeta:** `hermes-content/references/modelos/lucia/posts-20260807/FIJADO/`
