@@ -152,6 +152,23 @@ Encender = cargar env vars, cero código. Depende de Sergio y del banco.
 
 ---
 
+## ⚠️ Lección sobre esta lista misma
+
+**De los cuatro puntos que se escribieron el 2026-08-31, DOS eran fantasmas** — el captador y
+el cobro por QR. **El 50%**, peor que el 27–46% medido en las colas de los otros carriles.
+
+Se escribieron leyendo docs y corriendo greps, **no la cadena de código**. Los refutaron los
+loops de producto y de chatbot, aplicando el mismo Gate 1 que esta lista les exige.
+
+**Esta lista no vale por estar escrita.** Vale mientras cada punto se verifique en vivo antes
+de trabajarlo. Un ítem que nadie volvió a mirar es una hipótesis con formato de tarea.
+
+Y lo que sí salió de verificar: el punto 4 era fantasma **pero al correrlo apareció un agujero
+real de plata** — el callback del BCP no viene firmado y `/Qr/Consult` verificaba con un id que
+salía del mismo callback. Verificar un fantasma no es tiempo perdido.
+
+---
+
 ## Lo que NO entra en esta lista, y por qué
 
 | Qué | Por qué espera |
