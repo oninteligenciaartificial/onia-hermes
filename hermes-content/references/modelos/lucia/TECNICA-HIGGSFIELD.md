@@ -804,5 +804,22 @@ que **sacarlos del foco explícitamente**. Agregar al final:
 Y si el texto ES el punto de la pieza, no se pide al modelo: se compone después con el renderer
 de carruseles, que escribe texto de verdad.
 
-⚠️ Revisar con esta lupa las piezas viejas del banco: la de la farmacia y la del trámite
-(`TURNOS`) también tienen carteles en cuadro y probablemente arrastran el mismo defecto.
+### ⚠️ CORREGIDO el mismo día — el banco viejo NO estaba contaminado
+
+Escribí acá que las piezas viejas «probablemente arrastran el mismo defecto» y salí a revisarlas.
+**Las dos hipótesis eran falsas, y la respuesta ya estaba escrita:**
+
+- **`G01-cafe-pizarra-texto`** inventa *marnago* y *horchimos* **a propósito**. Su `LEEME.md` lo
+  declara: *«el defecto de la IA, a la vista y señalado»*, y alimenta la lámina 6 de L09. No es
+  un defecto: es el contenido.
+- **`G05-oficina-de-tramites`** tiene el `TURNOS` escrito a mano **bien**, y el texto raro del
+  formulario está **al revés** porque se ve el reverso de la hoja a contraluz — que es lo que
+  pasa con papel fino de verdad. Se lee como papel, no como error.
+
+**Miré las imágenes antes de leer el `LEEME` del banco**, que es justo el orden que la regla del
+repo prohíbe. Media vuelta perdida y una afirmación falsa dicha en voz alta.
+
+**Lo que sí distingue los casos** no es el modelo, es **para qué existe la pieza**: G01 *muestra*
+el defecto y por eso lo quiere; B05 tiene que *pasar por* una foto real de un negocio real, y con
+el cartel de frente y roto no pasa. La regla del `out of focus` aplica al segundo caso, no al
+primero.
