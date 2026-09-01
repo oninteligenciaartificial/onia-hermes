@@ -6,7 +6,8 @@
       "number": 1,
       "role": "cover",
       "headline": "¿Cuántos atendiste *el martes pasado*?",
-      "body": "Si tenés que ir a buscarlo, ahí está el problema. No es memoria: es que el dato no existe en ningún lado."
+      "body": "Si tenés que ir a buscarlo, ahí está el problema. No es memoria: es que el dato no existe en ningún lado.",
+      "kicker": "Tus números"
     }
   ],
   "cta": "Reservá una demo"

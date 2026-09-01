@@ -125,7 +125,7 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado'];
+const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado', 'bloque-solido'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
@@ -1144,6 +1144,10 @@ const papelSubrayadoHtml = require('./carousel_pack_papel').crear({
   esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
 });
 
+const bloqueSolidoHtml = require('./carousel_pack_solido').crear({
+  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
+});
+
 function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
@@ -1267,6 +1271,7 @@ function render(args) {
     else if (args.pack === 'papel-subrayado') html = papelSubrayadoHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'dato-ilustrado') html = datoIlustradoHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'tarjeta-empleado') html = tarjetaEmpleadoHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'bloque-solido') html = bloqueSolidoHtml(slide, idx, slides.length, args.account, args);
     else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
     fs.writeFileSync(htmlPath, html, 'utf8');
