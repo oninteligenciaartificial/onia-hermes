@@ -280,6 +280,27 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       archivos.**
 
 
+### Del canario visual — corrida del 2026-09-01
+
+- [ ] **El login del chat pesa 12,9 MB para un formulario de dos campos.** Medido en
+      `https://chat.onia.com.bo/app/login`: **12.953.799 bytes**, 2.437 ms hasta mirable.
+      Es **10× el login de la plataforma** (1.300 KB), que además dibuja una columna de marca
+      entera, iconos y tres bloques de texto. La pantalla se ve BIEN — marca Onia aplicada,
+      campos y botón correctos — así que esto no se nota mirando: se nota midiendo, y es
+      exactamente el fallo con cara de éxito que este carril existe para cazar. Es el bundle
+      de Chatwoot servido entero en la ruta de login. Primer paso barato: ver qué assets
+      entran (`.canario-out/login-chat.json` guarda el detalle) antes de decidir si se puede
+      partir o si es el precio de Chatwoot.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-chat.png`.
+
+- [ ] **El panel del chatbot NO se puede mirar: es una pantalla ciega.** `app.onia.com.bo/settings/chatbot`
+      redirige a `/login` sin sesión, así que el canario la reporta **no medida** — nunca
+      "OK" — y va a seguir así en cada vuelta. Es la pantalla que un cliente usa para editar
+      su conocimiento, y hoy nadie la mira nunca. Hace falta una de dos: una credencial de
+      sólo lectura para el canario, o una ruta de vista previa pública. La baseline guardada
+      en `hermes-content/references/canario-visual/panel-chatbot/baseline.json` está marcada
+      con `NOTA: NO MEDIDA` para que ninguna vuelta futura la confunda con verde.
+
 ---
 
 ## Después

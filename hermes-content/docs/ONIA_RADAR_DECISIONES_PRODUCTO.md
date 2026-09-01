@@ -619,3 +619,17 @@ está en el repo, no está encendido.
 dependencias que el lockfile no tiene, así que `pnpm install --frozen-lockfile` (lo que corre un
 CI) **falla**. No se tocó acá porque regenerar un lockfile no es trabajo de un merge, pero es una
 bomba con temporizador para el primer pipeline que instale en limpio.
+
+## 16. `/` y `/empezar` no tienen dueño (2026-09-01) — decisión de Sergio
+
+La home y la página de acceso viven en `web-factory/apps/onia-platform/`: **ninguna cola las
+nombra**, y la zona de `web-factory-dev-loop` las excluye explícitamente. Son la puerta de
+entrada del producto y hoy sus defectos caen en `COLA.md` por descarte, no porque ese carril
+sea el dueño. Ya hay uno abierto ahí (la maqueta cortada de "Elegís tu rubro").
+
+Las dos opciones cuestan lo mismo — una línea en un archivo, cero bolivianos:
+
+- **a)** `onia-cola` las adopta: se agrega esa ruta a su zona en `COLA.md`. Es donde ya caen
+  hoy, y el carril ya toca `app.onia.com.bo`.
+- **b)** `web-factory-dev-loop` levanta su prohibición para esa carpeta y se las queda. Es el
+  carril que sabe de superficies web, pero hoy tiene la puerta cerrada por decisión previa.

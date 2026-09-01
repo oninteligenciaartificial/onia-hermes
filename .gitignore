@@ -49,3 +49,6 @@ onia-hermes-collab/
 n8n-mcp-server/node_modules/
 .tmp/
 test-results/
+
+# salida de trabajo del canario visual (las baselines si se versionan)
+.canario-out/

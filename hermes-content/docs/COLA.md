@@ -367,6 +367,42 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Lo que NO se toco, a proposito:** las propuestas ya entregadas — queda anotado abajo en
       "Despues" porque tiene una trampa que no es de copy.
 
+### Del canario visual — corrida del 2026-09-01 (abiertas y MIRADAS, no un 200)
+
+- [ ] **La maqueta de "Elegís tu rubro" se ve CORTADA en la home, en desktop 1440.** La
+      tarjeta del panel se pasa de su contenedor y la tercera métrica queda partida al medio
+      ("QR / Bs…" cortado). No es artefacto de la captura full-page: se reprodujo en viewport
+      real 1440×900, parado dentro de la sección pinneada. En móvil 390 no aparece (la sección
+      no se arma). Es la maqueta que DEMUESTRA el producto, en la pantalla de venta principal.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-home-maqueta-cortada.png`
+      · home = 2.310 KB · 933 ms hasta mirable · `section` de 4.980 px de alto (las hermanas
+      miden 641–1.453; los 4.980 son el pin del scrollytelling y eso SÍ es esperado).
+      **Descartado antes de escribirlo:** los bloques de color vacíos que salen en una captura
+      full-page son el reveal-on-scroll sin disparar, no un defecto — el texto está en el DOM.
+      Por eso `scripts/canario_visual.mjs` ahora recorre la página antes de capturar.
+
+- [ ] **Los NOMBRES de los iconos siguen en el DOM como texto en el login de la plataforma.**
+      El `innerText` de `app.onia.com.bo/login` devuelve `bolt`, `credit_card_off` y `smart_toy`.
+      Hoy la ligature de Material Symbols los tapa y la captura los muestra como glifos — el
+      bug de agosto **no** está a la vista. Pero el mecanismo que lo evita es la fuente: si
+      tarda o falla, el cliente lee "credit_card_off" otra vez, que es exactamente como pasó.
+      Y un lector de pantalla lo lee así **hoy**. Sale con `aria-hidden` en el glifo + label
+      propio, o con SVG. **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma.png`
+      · 1.300 KB · 1.043 ms.
+
+- [ ] **La CSP de producción bloquea el beacon de Cloudflare en TODA la plataforma.** En consola,
+      en las dos rutas de `app.onia.com.bo` que se abrieron:
+      `Loading the script 'https://static.cloudflareinsights.com/beacon.min.js/...' violates the
+      following Content Security Policy directive: "script-src 'self' ...`. O se agrega el origen
+      a la CSP, o se apaga Web Analytics en Cloudflare: hoy es ruido rojo permanente en la
+      consola de cada cliente y analítica que no se está midiendo. Ninguna de las dos cuesta
+      nada; elegir es de Sergio sólo si quiere la métrica.
+
+- [ ] **Nadie es dueño de `/` ni de `/empezar`.** Viven en `web-factory/apps/onia-platform/`,
+      que ninguna cola nombra y que la zona de `web-factory-dev-loop` prohíbe explícitamente.
+      Son la puerta de entrada del producto y hoy sus defectos caen acá por descarte. Anotado
+      también en `ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
