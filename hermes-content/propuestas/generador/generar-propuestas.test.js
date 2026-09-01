@@ -204,4 +204,19 @@ test('escapa HTML en campos de texto plano (XSS)', () => {
   assert.ok(!buildHtml(c).includes('<script>x</script>'));
 });
 
+test('el HTML commiteado es exactamente lo que produce el generador', () => {
+  // Un HTML corrido de clientes.json es una propuesta que le miente al cliente: el
+  // 2026-08-15 se saco "Videos con IA" del generador por estar PAUSADO como producto,
+  // y seis HTML lo siguieron cotizando a 2.200/mes. La fuente es clientes.json, nunca el HTML.
+  const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes.json'), 'utf8'));
+  const norm = (t) => t.split('\r').join('');
+  const corridos = data
+    .filter((c) => {
+      const f = path.join(__dirname, '..', `propuesta-${c.slug}.html`);
+      return fs.existsSync(f) && norm(fs.readFileSync(f, 'utf8')) !== norm(buildHtml(c));
+    })
+    .map((c) => c.slug);
+  assert.deepStrictEqual(corridos, [], `HTML corrido de clientes.json: ${corridos.join(', ')}. Regenerar con: node generar-propuestas.js <slug>`);
+});
+
 console.log(`\n${pass} tests OK`);

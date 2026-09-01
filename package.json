@@ -33,6 +33,7 @@
     "test:carousel": "node scripts/carousel_render.test.js",
     "test:dentalgest-bridge": "node scripts/hermes_command_dentalgest.test.js",
     "test:venta-honestidad": "node --test scripts/venta-honestidad.test.mjs",
+    "test:propuestas": "node hermes-content/propuestas/generador/generar-propuestas.test.js",
     "health:propuestas": "node -e \"require('http').get('http://127.0.0.1:3031/health',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>console.log(d))}).on('error',e=>{console.error('Offline:',e.message);process.exitCode=1})\"",
     "mara:prompt-matrix": "node scripts/mara_prompt_matrix.js --limit 12 --routes comfy_ltx23 --run-name pond-smoke-001",
     "mara:comfyui:queue": "node scripts/mara_comfyui_queue.js --workflow C:\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",

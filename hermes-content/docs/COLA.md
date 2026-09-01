@@ -774,25 +774,57 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       el mismo que construye. No basta con que exista: hay que preguntarle contra qué commit se
       escribió.
 
-- [ ] **Las propuestas ya entregadas venden que el bot "agenda solo" — y regenerarlas BORRA
-      contenido.** Encontrado el 2026-08-31 barriendo las copias de la frase falsa. Tres clientes
-      de `hermes-content/propuestas/generador/clientes.json` lo prometen textualmente
-      (`lia-albertengo` linea 458, `aw-climatizacion` 477/517/562/565, `aw-climatizacion-chatbot`
-      699/700/701/737), y esta en los HTML entregados (`propuesta-aw-climatizacion.html`,
-      `propuesta-aw-climatizacion-chatbot.html`, `propuesta-lia-albertengo.html`).
-      **La trampa, que es lo que hace que no lo cierre solo:** el HTML commiteado **ya no es** lo que
-      produce el generador. Se corrio `node generar-propuestas.js` sobre los tres sin tocar nada y
-      `propuesta-lia-albertengo.html` **perdio una fila entera** del cuadro de add-ons (*"Videos con
-      IA para promocionar el libro"*): el HTML se edito a mano en algun momento, o `clientes.json`
-      se recorto despues. Regenerar para arreglar el copy le saca contenido a una propuesta ya
-      enviada. (Se revirtio con `git checkout`; no quedo nada.)
-      **Dos decisiones, y las dos son de Sergio, no de codigo:** (1) que hacer con lo ya enviado —
-      un documento entregado es un artefacto historico y corregirlo cambia lo que se le cotizo a
-      alguien; (2) si el chatbot A MEDIDA (`Chatbot a medida`, sin precio de lista) puede agendar
-      cuando se cotiza el flujo aparte, porque entonces la frase no es falsa **en esas** propuestas
-      y si lo es en el add-on de lista de Bs 390.
-      Lo que si corresponde sin decision: **sincronizar `clientes.json` con los HTML antes de
-      volver a generar nada**, o el proximo `--pdf` publica una propuesta mutilada.
+- [x] **Las propuestas ya entregadas venden que el bot "agenda solo" — y el miedo a regenerar
+      estaba AL REVES: lo corrido era el HTML, no `clientes.json`. ARREGLADO.**
+      Este item, tal como estaba escrito, prescribia **exactamente el arreglo equivocado**:
+      *"sincronizar `clientes.json` con los HTML antes de volver a generar nada"*. Hacerlo
+      habria devuelto al generador un producto **PAUSADO**.
+      **Lo que decia el item:** al regenerar, `propuesta-lia-albertengo.html` *"perdio una fila
+      entera"* del cuadro de add-ons (*"Videos con IA para promocionar el libro"*), y de ahi
+      concluia que *"el HTML se edito a mano en algun momento, o `clientes.json` se recorto
+      despues"*. La medicion existia y no se leyo: `git log -S"Videos con IA"` da el commit
+      **`b0c9c931`** (2026-08-15), cuyo mensaje lo dice con todas las letras — *"Videos IA salen
+      del generador de propuestas (6 clientes lo tenian a 2.200/mes) **porque estan pausados como
+      producto**: seguir cotizandolos vende algo que no se entrega"*. **`clientes.json` es lo
+      correcto; el HTML es lo viejo.** Confirmado contra la fuente unica de que se vende:
+      `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` **no nombra video ni una vez**.
+      **Y no eran 4 propuestas corridas, eran 7 de las 11** — el item solo habia mirado las que
+      tenian la frase del chatbot. Comparados `buildHtml(cliente)` contra el archivo en disco,
+      uno por uno: `bench`, `garabato`, `hsb-engineers`, `lia-albertengo`, `aw-climatizacion`,
+      `aw-climatizacion-web`, `franco-marin`. Dos clases de deriva, **ninguna otra**:
+      - **Seis** seguian cotizando "Videos con IA" a **Bs 2.200 (8/mes)**, un producto pausado.
+      - **`franco-marin`** escribia la marca **`ONIA`** en mayusculas (3 veces); el generador ya
+        produce `Onia`, que es lo que manda CLAUDE.md.
+      **Cero precios movidos, cero contenido perdido:** el diff completo son 9 lineas y no toca
+      un solo numero de paquete. Lo unico que sale es el add-on que Sergio retiro hace 16 dias.
+      **Guarda,** en `hermes-content/propuestas/generador/generar-propuestas.test.js` (el test que
+      ya existia, no uno nuevo al lado) y cableada como **`npm run test:propuestas`**: ningun
+      `propuesta-<slug>.html` puede diferir de lo que produce el generador con `clientes.json`.
+      **Vista en ROJO por el motivo correcto** — listo los 7 slugs por nombre — antes de
+      regenerar. Su caso negativo es gratis y real: los 4 que ya coincidian
+      (`aw-climatizacion-chatbot`, `dentalgest`, `onia-empresarial`, `premium-cars`) no la
+      disparan. Normaliza CRLF, que es la trampa que este archivo ya tiene anotada dos veces.
+      **La leccion, que es lo que se lleva la vuelta:** el item **diagnostico al reves y su
+      prescripcion era el dano**. Habia corrido el generador y visto desaparecer una fila, pero
+      no pregunto **por que** se habia ido — y un `git log -S` de treinta segundos tenia la
+      respuesta firmada. Es la misma forma de "verificar contra el sistema equivocado" que esta
+      cola ya guarda cinco veces, con la cara nueva de **tomar el artefacto viejo por fuente de
+      verdad porque tiene mas contenido**. Mas contenido no es mas verdad.
+      **Lo que NO se toco, y con motivo:**
+      - **Las dos propuestas con epoch en el nombre** (`propuesta-dental-smile-1781042414583.html`,
+        `propuesta-epic-motion-group-1781041181355.html`) tambien cotizan "Videos con IA", pero
+        **no tienen entrada en `clientes.json`**: son artefactos sueltos, no regenerables, y la
+        guarda no los mira. Corregir un documento ya entregado sigue siendo decision de Sergio.
+      - **Los `.pdf`** quedan como estaban (22-jul): son lo que se envio, o sea el registro
+        historico. El `.html` es artefacto generado y ahora coincide con su fuente.
+      - **`cuestionario-cliente.html:181`** ofrece "Videos con IA" como casilla de **interes**,
+        no como precio. No es una cotizacion y hay otras casillas fuera del catalogo, asi que
+        sacar solo esa es decision de copy, no un arreglo. Queda anotado, no tocado.
+      - **La frase del chatbot que "agenda"** sigue en `clientes.json` y por lo tanto en el HTML
+        regenerado: **eso si es de Sergio** y son las dos decisiones que este item ya tenia
+        escritas — (1) que se hace con lo ya enviado y (2) si el **chatbot a medida** (sin precio
+        de lista) puede agendar cuando se cotiza el flujo aparte, porque entonces la frase no es
+        falsa en esas propuestas y si lo es en el add-on de lista de Bs 390.
 
 ## Bloqueado — necesita a Sergio (reverificado en vivo el 2026-08-31)
 

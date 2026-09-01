@@ -181,9 +181,17 @@ en los tres HTML entregados.
   el **"Chatbot a medida"** se cotiza por alcance: si el flujo de agenda se construye y se
   cobra aparte, la frase es cierta ahí y falsa sólo en el de lista. **Eso lo definís vos.**
 
-**Y una trampa que sí hay que arreglar antes de generar nada:** el HTML commiteado ya no
-es lo que produce el generador. Se corrió `node generar-propuestas.js` sobre los tres sin
-tocar una línea y `propuesta-lia-albertengo.html` **perdió una fila entera** del cuadro de
-add-ons ("Videos con IA para promocionar el libro"). O el HTML se editó a mano, o
-`clientes.json` se recortó después. El próximo `--pdf` publica una propuesta mutilada.
-(Se revirtió con `git checkout`; no quedó nada.)
+**La "trampa" que decía este punto ya NO existe, y estaba diagnosticada al revés — corregido
+el 2026-08-31.** Acá decía que el HTML commiteado ya no era lo que produce el generador, que
+`propuesta-lia-albertengo.html` *"perdió una fila entera"* al regenerar ("Videos con IA para
+promocionar el libro"), y que había que **sincronizar `clientes.json` con los HTML**. Eso
+habría devuelto al generador un producto **pausado**: el commit `b0c9c931` (2026-08-15) sacó
+Videos IA a propósito — *"están pausados como producto: seguir cotizándolos vende algo que no
+se entrega"* — y el catálogo de venta no nombra video ni una vez. **`clientes.json` era lo
+correcto; el HTML era lo viejo.** No eran 3 propuestas corridas sino **7 de 11**; se
+regeneraron las 7 (6 perdían el add-on pausado, `franco-marin` además escribía la marca
+`ONIA` en mayúsculas) y quedó la guarda `npm run test:propuestas`, que falla si un
+`propuesta-<slug>.html` difiere de lo que produce el generador. **Regenerar ya es seguro.**
+Lo que sigue siendo decisión de Sergio son los dos puntos de arriba, más qué se hace con las
+dos propuestas de nombre con epoch (`dental-smile`, `epic-motion-group`), que no tienen
+entrada en `clientes.json` y por eso no se regeneran ni las mira la guarda.
