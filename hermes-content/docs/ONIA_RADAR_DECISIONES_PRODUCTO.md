@@ -208,3 +208,49 @@ caso listo**), los 3 HTML regenerados, y queda una guarda que impide que vuelva:
 **Pendiente que este punto ya traía y sigue abierto:** las dos propuestas con nombre de epoch
 (`dental-smile`, `epic-motion-group`) no tienen entrada en `clientes.json`, así que ni se
 regeneran ni las mira ninguna guarda. Nadie sabe qué prometen.
+
+---
+
+## ¿La prueba de 14 días pide tarjeta o no?
+
+**Origen:** Sergio abrió el checkout real de Lety el **2026-08-31** y lo mandó a anotar.
+
+**Lo que hace el referente:** *"7 días gratis — a continuación, 3665,23 BOB por mes a partir del
+7 de septiembre"*, con formulario de tarjeta **obligatorio para empezar**. Captura el dato de
+pago en el minuto de máximo interés y **auto-cobra al día 7**. El trial no es una invitación:
+es un cobro programado con ventana de cancelación.
+
+**Lo que hace Onia hoy:** 14 días, **sin tarjeta**. Verificado vivo en el hero (`PRUEBA.dias`),
+y es un diferenciador cierto — el doble de días y sin pedir plata por adelantado.
+
+**Lo que cuesta:** sin tarjeta **no hay auto-cobro**. Al día 14 alguien tiene que cobrar a mano,
+cliente por cliente. Lety convierte sola; nosotros convertimos con una gestión. Con 1 cliente no
+se nota; con 20 es un trabajo fijo todas las semanas.
+
+### Lo que NO es una opción, para cerrar la puerta antes de que alguien la abra
+
+⚠️ **Stripe no está "pendiente": no acepta Bolivia como comercio.** Stripe Connect no paga a
+cuentas bolivianas. Lety puede usarlo porque **la empresa es de afuera y sólo la tarjeta es
+boliviana** — el sentido inverso no existe. Habilitarlo exigiría una LLC en EE.UU. (~USD 500 +
+100/año, Form 5472), y rutear cobros bolivianos por ahí ya está descartado por doble carga
+fiscal y escasez de dólares. Fuente:
+`hermes-content/docs/research/ONIA_PASARELAS_PAGO_MULTITENANT_BOLIVIA_2026.md`.
+
+**El camino ya decidido** es QR Simple de BNB/BCP + webhook de confirmación que activa el
+`OrganizationEntitlement` solo, bajo modelo **Facilitador** (ONIA nunca toca la plata del cliente
+final). El trámite bancario avanza en paralelo.
+
+### La decisión, y son tres caminos
+
+| | Qué implica |
+|---|---|
+| **A — seguir sin tarjeta** | Se mantiene el diferenciador y el cobro sigue a mano hasta que el QR + webhook estén vivos. Es lo que pasa hoy si nadie decide nada |
+| **B — pedir tarjeta al empezar** | Copia la mecánica de Lety, pero **hoy es imposible**: hace falta la pasarela funcionando primero. No se puede elegir todavía |
+| **C — sin tarjeta para entrar, y método de cobro al día 12** | Guarda el diferenciador del arranque y ataca la conversión donde duele. Requiere el QR igual, pero no rompe la promesa del hero |
+
+**Depende de Sergio.** No la toma un loop: cambia lo que promete la superficie de venta.
+
+**Y ojo con la comparación de precios:** Lety Standard son 3.665 Bs/mes, más caro que el plan
+Grupo de Onia (2.900 Bs), pero **no compiten de frente** — Lety es infraestructura white-label
+para agencias (B2B2B) y el negocio final no le compra. Usar ese número como "somos más baratos"
+es comparar cosas distintas.
