@@ -722,23 +722,40 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       completa por todo el repo cuesta un minuto y es lo que faltó las dos veces.
       Sin gates de código: son tres markdown, cero líneas de producto. `node scripts/verificar_cola.js` verde.
 
-- [ ] **La misma frase falsa vive en `hermes-content/propuestas/generador/clientes.json` — es de
-      OTRO carril.** Encontrada en la misma pasada y **no la toco**: `propuestas` es el carril C
-      del `COORDINATION_MANIFEST.md:94`, y este worktree sólo posee `hermes-content/docs/**` y
-      `web-factory/apps/onia-platform/**`. Lo que dice hoy, en la ficha del cliente **AW
-      Climatización** (una propuesta que se genera y se manda, no un borrador):
-      *"Chatbot WhatsApp con IA — responde, califica y **agenda solo**"* (línea 565), el título
-      *"Chatbot IA en WhatsApp que responde y **agenda solo**"* (699), el subtítulo (476), el
-      problema (477), el detalle (517) y la nota de paquetes (562), que define el paquete
-      **Automatización** como *"además agenda y da seguimiento solo"*. **Es la misma promesa que
-      el punto 2 de `ONIA_DEFINICION_DE_TERMINADO.md` ya declaró falsa**, en el único material
-      que el cliente se lleva por escrito. Lo cierra el dueño de `propuestas` con un reemplazo de
-      copy (cero código): "responde, califica y deriva la visita".
-      *(Se revisó también `hermes-content/sales-kit/`: sus "agenda" son del módulo de agenda del
-      sistema, no del bot, y `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md:126` y
-      `web-factory/apps/onia-platform/src/components/landing-v2/chatbot.tsx:37` ya dicen "deriva".
-      La presentación `sales-kit/presentacion-scz-20260801/` tiene fecha en el nombre: es
-      historia, no se toca.)*
+- [x] **La misma frase falsa vivía en `hermes-content/propuestas/generador/clientes.json` — ARREGLADA,
+      y el carril NO era ajeno.** La vuelta anterior la dejó pasar citando el carril C de
+      `COORDINATION_MANIFEST.md:94`. Ese modelo está rotulado **"HISTÓRICO, superado"** en el propio
+      archivo (`:80`): la autoridad actual es la tabla de carriles vivos del 2026-08-23, que **no
+      nombra `propuestas` en ningún carril**, y la sesión `propuestas-v2` que lo poseía ya no existe.
+      Encima **esta misma rama ya había commiteado ahí** (`9649dc75`, el arreglo de las 7 propuestas
+      con producto pausado). Verificado además que nadie tiene cambios sin commitear en esa carpeta.
+      **Un dueño citado de una sección marcada como superada no es un dueño: es una traba inventada,**
+      y la traba costó que la promesa falsa siguiera viva un día más en el único material que el
+      cliente se lleva por escrito.
+      **Gate 1 contra el sistema correcto, no contra un doc:** `hermes-content/deploy/vps-ops/bot/recepcionista.mjs:232`
+      — *"Pedido / cita / compra: se toma y se ESCALA. El bot no agenda ni vende solo"*. La línea 16
+      del mismo archivo lo repite como regla dura. La promesa es falsa, confirmado en la fuente.
+      **22 frases en 3 clientes**, no las 6 que el ítem contaba —contaba sólo AW web y se le escapaban
+      la propuesta `aw-climatizacion-chatbot` entera y el add-on de `lia-albertengo`
+      (*"agenda y responde pacientes solo"*)—. Corregidas a lo que el bot **sí** hace: responde,
+      califica y **deriva el caso listo**. Los 3 HTML regenerados con el generador (nunca a mano),
+      que es lo que exige la guarda `el HTML commiteado es exactamente lo que produce el generador`.
+      **La guarda nueva es el aporte que sobrevive al ítem:** `ningun cliente le promete al cliente
+      que el bot agenda solo` (`hermes-content/propuestas/generador/generar-propuestas.test.js`) recorre
+      **todos** los strings de `clientes.json` con 7 patrones + la regla de proximidad (si el string
+      nombra al bot, no puede decir "agenda"). Vista en **ROJO** listando las 22, y con **cero falsos
+      positivos**: la agenda **real** del sistema en Onia Dental (*"Agenda, pacientes e historial"*) y
+      la de la web de Lia (*"Agenda / contacto directo"*) no ladran. Eso importa tanto como cazar el
+      defecto — la cola ya tiene escrito que *una guarda que ladra sobre código legítimo se termina
+      desactivando*. Tiene lista `PERMITIDO` vacía, con el molde por si algún día hace falta una
+      excepción con su motivo.
+      **Verificado MIRANDO la propuesta renderizada**, no por grep: el título lee *"responde y deriva
+      la visita ya calificada"* y la tabla de paquetes cierra sin una sola promesa de agenda.
+      **24 tests OK** en el generador. `node scripts/verificar_cola.js` verde.
+      **Residuo que decide Sergio, anotado en el radar:** el 3er paquete de la propuesta de chatbot
+      era **"Bot + Agenda" a Bs 4.800** y su único diferenciador era justo lo que el bot no hace.
+      Quedó como **"Bot + Reportes"** con el mismo precio — y los reportes avanzados también se
+      venden como add-on dos filas más abajo. **El precio no se tocó: no es mi decisión.**
 
 - [ ] 🔴 **Los otros dos agujeros del escéptico: la fuente se perdió.** El ítem mandaba leer el
       journal del workflow `wf_7449df59-54c` antes de tocar, y ese journal **no existe en

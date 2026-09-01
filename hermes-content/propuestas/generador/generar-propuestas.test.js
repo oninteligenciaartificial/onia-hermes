@@ -219,4 +219,43 @@ test('el HTML commiteado es exactamente lo que produce el generador', () => {
   assert.deepStrictEqual(corridos, [], `HTML corrido de clientes.json: ${corridos.join(', ')}. Regenerar con: node generar-propuestas.js <slug>`);
 });
 
+test('ningun cliente le promete al cliente que el bot agenda solo', () => {
+  // El bot NO agenda: `hermes-content/deploy/vps-ops/bot/recepcionista.mjs:232` dice
+  // "Pedido / cita / compra: se toma y se ESCALA. El bot no agenda ni vende solo".
+  // Ya se saco esa promesa de `lib/pricing.ts` (f47d615) y de tres docs, y aun asi
+  // seguia viva en la propuesta de AW — el unico material que el cliente se lleva por
+  // escrito. Arreglar la fuente unica no arregla lo que ya la copio: esta guarda lo caza.
+  // Verdad vendible: responde, califica y DERIVA el caso listo.
+  const PROHIBIDO = [
+    /\bagend[ao]\w*\s+sol[oa]\b/i,
+    /\bagenda\s+(?:la\s+|las\s+)?(?:visitas?|citas?|pacientes)\b/i,
+    /\bagenda\s+de\s+(?:visitas?|citas?)\b/i,
+    /adem[\u00e1a]s\s+agenda\b/i,
+    /\bagenda\s+o\s+deriva\b/i,
+    /\bbot\s*\+\s*agenda\b/i,
+    /(?:califica|responde|capta|atiende)[^.]{0,14}\bagenda\b/i,
+  ];
+  const MENCIONA_BOT = /chatbot|\bbot\b|asistente\s+(?:con\s+)?IA/i;
+  // Excepciones: la frase habla del modulo de agenda DEL SISTEMA, no del bot.
+  // Cada una con su motivo; si se vacia, se borra la lista.
+  const PERMITIDO = new Set([]);
+  const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes.json'), 'utf8'));
+  const malas = [];
+  const revisar = (valor, ruta) => {
+    if (typeof valor === 'string') {
+      if (PERMITIDO.has(valor)) return;
+      const prohibida = PROHIBIDO.some((re) => re.test(valor));
+      const botConAgenda = MENCIONA_BOT.test(valor) && /\bagenda\b/i.test(valor);
+      if (prohibida || botConAgenda) malas.push(`${ruta}: ${valor.slice(0, 90)}`);
+      return;
+    }
+    if (Array.isArray(valor)) return valor.forEach((v, i) => revisar(v, `${ruta}[${i}]`));
+    if (valor && typeof valor === 'object') {
+      return Object.entries(valor).forEach(([k, v]) => revisar(v, `${ruta}.${k}`));
+    }
+  };
+  data.forEach((c, i) => revisar(c, c.slug || `#${i}`));
+  assert.deepStrictEqual(malas, [], `El bot no agenda. Corregir a "deriva":\n  ${malas.join('\n  ')}`);
+});
+
 console.log(`\n${pass} tests OK`);

@@ -166,32 +166,45 @@ con la bandeja marcando leído, el CSP del websocket de realtime y el panel del 
 
 ## 10. Las propuestas ya enviadas venden que el bot "agenda solo" (2026-08-31)
 
-Encontrado barriendo las copias de la frase falsa del chatbot (la del catálogo ya se
-corrigió: `ONIA_CATALOGO_DE_VENTA.md:126`, commit `eefb13d5`). Tres clientes del
-generador lo prometen textualmente — `lia-albertengo`, `aw-climatizacion`,
-`aw-climatizacion-chatbot` en `hermes-content/propuestas/generador/clientes.json` — y está
-en los tres HTML entregados.
+**El generador YA está corregido (2026-09-01). Lo que queda para vos es una sola cosa: qué se
+le dice a AW Climatización, que ya recibió la versión vieja.**
 
-**No lo cierro solo por dos motivos, y ninguno es de código:**
+Estaban en tres clientes de `hermes-content/propuestas/generador/clientes.json` —
+`lia-albertengo`, `aw-climatizacion`, `aw-climatizacion-chatbot` — con **22 frases**, no las 6
+que este punto contaba. Corregidas a lo que el bot sí hace (**responde, califica y deriva el
+caso listo**), los 3 HTML regenerados, y queda una guarda que impide que vuelva:
+`ningun cliente le promete al cliente que el bot agenda solo`
+(`hermes-content/propuestas/generador/generar-propuestas.test.js`).
 
-- **(1) Lo ya enviado es un artefacto histórico.** Corregir el HTML cambia lo que se le
-  cotizó a alguien un día. Es decisión comercial, no técnica.
-- **(2) Puede que en esas propuestas NO sea falso.** El add-on de lista (Bs 390/mes) no
-  agenda — el motor escala a un humano (`deploy/vps-ops/bot/recepcionista.mjs:232`). Pero
-  el **"Chatbot a medida"** se cotiza por alcance: si el flujo de agenda se construye y se
-  cobra aparte, la frase es cierta ahí y falsa sólo en el de lista. **Eso lo definís vos.**
+**Las dos objeciones que este punto tenía escritas, respondidas — no ignoradas:**
 
-**La "trampa" que decía este punto ya NO existe, y estaba diagnosticada al revés — corregido
-el 2026-08-31.** Acá decía que el HTML commiteado ya no era lo que produce el generador, que
-`propuesta-lia-albertengo.html` *"perdió una fila entera"* al regenerar ("Videos con IA para
-promocionar el libro"), y que había que **sincronizar `clientes.json` con los HTML**. Eso
-habría devuelto al generador un producto **pausado**: el commit `b0c9c931` (2026-08-15) sacó
-Videos IA a propósito — *"están pausados como producto: seguir cotizándolos vende algo que no
-se entrega"* — y el catálogo de venta no nombra video ni una vez. **`clientes.json` era lo
-correcto; el HTML era lo viejo.** No eran 3 propuestas corridas sino **7 de 11**; se
-regeneraron las 7 (6 perdían el add-on pausado, `franco-marin` además escribía la marca
-`ONIA` en mayúsculas) y quedó la guarda `npm run test:propuestas`, que falla si un
-`propuesta-<slug>.html` difiere de lo que produce el generador. **Regenerar ya es seguro.**
-Lo que sigue siendo decisión de Sergio son los dos puntos de arriba, más qué se hace con las
-dos propuestas de nombre con epoch (`dental-smile`, `epic-motion-group`), que no tienen
-entrada en `clientes.json` y por eso no se regeneran ni las mira la guarda.
+- **(1) *"Lo ya enviado es un artefacto histórico; corregirlo cambia lo que se cotizó"*.** El
+  repo ya había decidido lo contrario y con motivo: la guarda `el HTML commiteado es exactamente
+  lo que produce el generador` existe desde el arreglo de las 7 propuestas con producto pausado
+  (`9649dc75`), y `CLAUDE.md` dice que **historia es lo que lleva fecha en el nombre** — estos no
+  la llevan, son salida del generador. Dejar la mentira en el repo para "no tocar el histórico"
+  garantiza que la próxima propuesta la vuelva a copiar. **Lo que el archivo no puede arreglar es
+  lo que AW ya tiene en la mano.**
+- **(2) *"Puede que NO sea falso: el chatbot a medida se cotiza por alcance"*.** Es la objeción
+  buena y por eso se verificó antes de tocar, no después. Hoy es falsa igual: el motor único es
+  `hermes-content/deploy/vps-ops/bot/recepcionista.mjs`, que en la línea 232 dice *"Pedido / cita /
+  compra: se toma y se ESCALA. El bot no agenda ni vende solo"* y lo repite como regla dura en la
+  16. **No existe flujo de agenda para construir "aparte": habría que escribirlo.** Y el propio
+  precio lo delata — el paquete se llamaba **"Bot + Agenda"** y costaba Bs 1.600 más que el
+  calificador, que no paga ni cerca un desarrollo nuevo. Si algún día se construye de verdad, la
+  frase vuelve; hoy vender eso es vender lo que no se entrega, que es justo lo que
+  `f47d615` sacó de `lib/pricing.ts`.
+
+**Lo que decidís vos, dos cosas:**
+
+1. **AW ya tiene la versión vieja.** ¿Se le manda la corregida antes de que firme, o se deja y se
+   aclara de palabra? Es un cliente activo, no un borrador. Recomendación: mandarla — llegar con
+   la corrección propia antes de que la descubra él juega a favor.
+2. **El 3er paquete perdió su diferenciador.** Era "Bot + Agenda" a **Bs 4.800**; quedó como
+   **"Bot + Reportes"** con el mismo precio, y los reportes avanzados también se ofrecen como
+   add-on dos filas más abajo en la misma propuesta. **El precio no se tocó** — bajarlo, fusionarlo
+   con el calificador o darle contenido real es decisión comercial.
+
+**Pendiente que este punto ya traía y sigue abierto:** las dos propuestas con nombre de epoch
+(`dental-smile`, `epic-motion-group`) no tienen entrada en `clientes.json`, así que ni se
+regeneran ni las mira ninguna guarda. Nadie sabe qué prometen.
