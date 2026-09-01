@@ -3,6 +3,7 @@ import { Reveal } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { REGISTRO_URL } from "../nav";
+import { CTA_ALTA } from "../alta";
 import { Block, Shape, Btn, Kicker, JsonLd } from "../ui";
 import s from "../sitio.module.css";
 
@@ -18,11 +19,12 @@ import s from "../sitio.module.css";
  * redactó nada nuevo. Tampoco se enumeran rubros acá: el rubro se elige en la
  * primera pantalla del registro, que es la verdad.
  *
- * Cerrado 2026-08-21 (b): Sergio cerro el alta automatica. /register ya no
- * crea cuentas: dice "Pedi tu acceso" y cada cuenta se activa acompanada.
- * Por eso aca no se dice mas "Crear mi cuenta gratis" ni "tu cuenta queda
- * lista" — prometer un alta instantanea que el producto no da es perder al
- * lead justo en el ultimo clic. La prueba de 14 dias SI sigue siendo cierta.
+ * El verbo del alta NO se escribe aca: sale de `../alta`, que es el espejo de
+ * ONIA_ALTA_AUTOMATICA. Esta pagina ya vivio las dos ramas — el 21-ago Sergio
+ * cerro el alta y se reescribio a "Pedi tu acceso"; el 29-ago se reabrio y el
+ * texto quedo atras. Prometer un alta que el producto no da pierde al lead en el
+ * ultimo clic, y PEDIR permiso cuando el producto ya lo da, tambien. La prueba
+ * de 14 dias es cierta en las dos ramas.
  *
  * Cerrado 2026-08-21: Veterinaria se saco de toda la web. Sergio: "aun no
  * terminemos los que ya tenemos". El sitio vende los CINCO que el registro
@@ -32,7 +34,7 @@ import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
   title: `Prueba gratis de ${PRUEBA.dias} días — Onia, sin tarjeta`,
-  description: `Pedí tu acceso, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: agenda, clientes, caja, inventario, contabilidad Bolivia y agentes con IA. Sin tarjeta y sin permanencia.`,
+  description: `${CTA_ALTA}, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: agenda, clientes, caja, inventario, contabilidad Bolivia y agentes con IA. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/empezar" },
   openGraph: {
     type: "website",
@@ -71,7 +73,7 @@ const PASOS: readonly { titulo: string; detalle: string }[] = [
   {
     titulo: "Elegí tu rubro",
     detalle:
-      "Onia se arma para el tuyo: pantallas, vocabulario y agentes a tu medida. El rubro lo elegís en el mismo formulario de acceso.",
+      "Onia se arma para el tuyo: pantallas, vocabulario y agentes a tu medida. El rubro lo elegís en el primer paso del registro.",
   },
   {
     titulo: "Te la entregamos configurada",
@@ -95,7 +97,7 @@ export default function Empezar() {
             <div>
               <Kicker>Empezá</Kicker>
               <h1 className={s.display}>
-                Pedí tu acceso y usalo <em>de verdad</em> {PRUEBA.dias} días.
+                {CTA_ALTA} y usalo <em>de verdad</em> {PRUEBA.dias} días.
               </h1>
               <p className={s.lead}>
                 No es una demo recortada: es tu cuenta real, con todos los
@@ -103,7 +105,7 @@ export default function Empezar() {
                 tus datos los exportás cuando quieras.
               </p>
               <div className={s.actions}>
-                <Btn href={REGISTRO_URL}>Pedir mi acceso</Btn>
+                <Btn href={REGISTRO_URL}>{CTA_ALTA}</Btn>
                 <Btn href="/contacto" variant="line">
                   Prefiero hablar antes
                 </Btn>
@@ -185,10 +187,10 @@ export default function Empezar() {
       <Block surface="signal" labelledBy="cierre-empezar">
         <Reveal>
           <h2 id="cierre-empezar" className={s.display} style={{ maxWidth: "16ch" }}>
-            Pedí tu acceso. Sin tarjeta.
+            {CTA_ALTA}. Sin tarjeta.
           </h2>
           <div className={s.actions}>
-            <Btn href={REGISTRO_URL}>Pedir mi acceso</Btn>
+            <Btn href={REGISTRO_URL}>{CTA_ALTA}</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Hablar por WhatsApp
             </Btn>

@@ -3,6 +3,8 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { waServiciosLink } from "@/lib/site";
+import { PRUEBA } from "@/lib/pricing";
+import { CTA_ALTA } from "../../(sitio)/alta";
 
 const SITE_URL = "https://onia.com.bo";
 
@@ -177,7 +179,7 @@ export default function MarketingIaPage() {
                 </a>
               </PressableCta>
               <a className="btn btn-ghost" href="/empezar">
-                Conocer el sistema — 14 días gratis
+                {CTA_ALTA} — {PRUEBA.dias} días gratis
               </a>
             </Reveal>
           </div>

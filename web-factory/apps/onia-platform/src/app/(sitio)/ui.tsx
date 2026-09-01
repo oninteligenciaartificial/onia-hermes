@@ -7,6 +7,7 @@ import {
   EMPEZAR_URL,
   LOGIN_URL,
 } from "./nav";
+import { CTA_ALTA } from "./alta";
 import { MobileMenu } from "./menu";
 import s from "./sitio.module.css";
 
@@ -181,7 +182,7 @@ export function Header() {
           <a className={s.headerLogin} href={LOGIN_URL}>
             Entrar
           </a>
-          <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
+          <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
           <MobileMenu />
         </div>
       </div>
