@@ -124,6 +124,27 @@ exista. Arquitectura de 4 semanas:
 Cada drop de D0-D6 ya cierra con su pregunta-señal. Registrar las respuestas por drop
 (cuántos SÍ, qué tareas piden) — ese registro alimenta semana 3 y el VSL.
 
+## Playbook de las comunidades grandes (análisis 2026-09-01) — y nuestra versión
+
+Patrones que comparten las que dominan (Skool/Hormozi, Gadzhi, y los grandes en español
+— Skool aloja 170K+ comunidades y estandarizó el modelo):
+
+| # | Patrón de las grandes | Nuestra versión en WhatsApp |
+|---|---|---|
+| 1 | **El trío**: contenido (classroom) + comunidad (feed) + calendario (vivos) | Avisos (drop diario) + General (charla) + **audio semanal de Sergio los domingos** (5-10 min respondiendo la semana) |
+| 2 | **Gamificación**: puntos, niveles, leaderboard — la participación se PREMIA | Manual: **🏆 Miembro de la semana** (mejor resultado aplicando un drop, con nombre), menciones constantes, racha de retos |
+| 3 | **Rituales fijos**: presentación obligatoria, wins del viernes, reto semanal | Mensaje fijado en General: "presentate: negocio + meta". **Miércoles reto · Viernes wins**. Ritmo sagrado 19:00 |
+| 4 | **El dueño aparece a diario al inicio** | Sergio responde 1×1 a los primeros 50; después delega parcial en miembros senior |
+| 5 | **Escalera de valor**: gratis → low-ticket → recurrente | Ya definida: comunidad → curso (VSL) → VIP mensual |
+| 6 | **Onboarding con quick win**: algo aplicable en los primeros 10 min | El mensaje fijado + el último drop siempre a mano (D0 regala cursos al entrar) |
+| 7 | **Challenges con fecha**: retos de 7-30 días crean picos y testimonios | Mes 2: "Reto 7 días: tu primera automatización" — cohorte con inicio y fin |
+| 8 | **Wins = máquina de testimonios** para el VSL | Los viernes de wins se archivan (capturas con permiso) → prueba social del VSL |
+| 9 | **Biblioteca**: el contenido no se pierde en el chat | Doc público con TODOS los drops archivados, link fijado en Avisos (lo armo yo) |
+| 10 | **Migración cuando hay masa** | WhatsApp hasta ~300-500 activos (límite 1024/grupo, sin threads); ahí se evalúa Skool — pero se ARRANCA en WhatsApp porque el boliviano vive ahí |
+
+Regla de secuencia: no agregar rituales hasta que el anterior respire (semana 1: solo
+drop + presentaciones; semana 2: + reto y wins; mes 2: + audio dominical y challenge).
+
 ## Regla de oro
 
 Ningún drop promete lo que no existe. Todo sale de lo que Sergio usa de verdad
