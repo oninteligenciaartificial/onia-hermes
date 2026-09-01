@@ -92,7 +92,12 @@ const lista = filtro.length ? PANTALLAS.filter((p) => filtro.includes(p.nombre))
 if (!lista.length) { console.error('sin pantallas que coincidan:', filtro.join(', ')); process.exit(1); }
 
 mkdirSync(OUT, { recursive: true });
-const browser = await chromium.launch();
+// Como root (el VPS) Chromium NO arranca con su sandbox: falla en la primera pantalla.
+// En Windows/usuario normal se deja el sandbox puesto, que es lo correcto.
+const esRoot = process.getuid?.() === 0;
+const browser = await chromium.launch(
+  esRoot ? { args: ['--no-sandbox', '--disable-dev-shm-usage'] } : {},
+);
 for (const p of lista) {
   const d = await medir(browser, p);
   console.log(`${d.nombre}\tstatus=${d.status ?? 'X'}\t${(d.bytes / 1024).toFixed(0)} KB\t${d.msMirable} ms\t${d.fallo ?? ''}`);

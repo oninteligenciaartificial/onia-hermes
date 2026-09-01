@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Baranda MECANICA de los clones del VPS: un loop NO empuja a main/master.
+#
+# "No mergean a main" esta escrito en los dos prompts, pero un prompt es una
+# instruccion y esto es un cerrojo. Los loops corren sin nadie mirando, y `main`
+# alimenta el deploy del VPS y el de Vercel: un push parcial rompe los dos.
+# La integracion la sigue haciendo `onia-cola`, que se queda en Windows.
+#
+# Se instala apuntando core.hooksPath al directorio que contiene este archivo,
+# asi vale para el clon y para TODOS sus worktrees de una sola vez.
+while read -r _local_ref local_sha remote_ref _remote_sha; do
+  case "$remote_ref" in
+    refs/heads/main|refs/heads/master)
+      # borrar la rama tambien pasa por aca; se bloquea igual
+      echo "pre-push: BLOQUEADO. Un loop del VPS no empuja a $remote_ref." >&2
+      echo "pre-push: commitea y pushea tu rama de carril; integra onia-cola." >&2
+      exit 1
+      ;;
+  esac
+  : "$local_sha"
+done
+exit 0
