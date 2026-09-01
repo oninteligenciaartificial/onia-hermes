@@ -198,8 +198,35 @@ function duplicados(texto) {
   return problemas;
 }
 
+// Dos secciones con el mismo titulo. Es el agujero por el que se cuela lo que la regla
+// `duplicado` no puede ver: esa mira items `- [ ]`, y las listas de bloqueos se escriben con
+// vinetas y filas de tabla. El 2026-09-01 convivian DOS "## Bloqueado", y la copia vieja
+// seguia pidiendo bajar un deployment de Vercel medido inexistente el dia anterior. Un item
+// duplicado hace rehacer trabajo; una SECCION duplicada hace pedirle a Sergio una decision ya
+// tomada, y su tiempo es el unico recurso que no se recupera.
+function seccionesDuplicadas(texto) {
+  const vistas = new Map();
+  const problemas = [];
+  texto.split(/\r?\n/).forEach((linea, i) => {
+    if (!OTRA_SECCION.test(linea)) return;
+    const titulo = linea.replace(/^##\s+/, '').replace(/`/g, '').toLowerCase()
+      .replace(/\s+/g, ' ').replace(/[.,;:]+$/, '').trim();
+    if (!titulo) return;
+    const antes = vistas.get(titulo);
+    if (antes) {
+      problemas.push({
+        regla: 'seccion-duplicada', linea: i + 1,
+        msg: `"${titulo.slice(0, 60)}" repite la seccion de la linea ${antes}: fusionar las dos o fechar una`,
+      });
+      return;
+    }
+    vistas.set(titulo, i + 1);
+  });
+  return problemas;
+}
+
 function revisarCola(texto, baseDir = process.cwd()) {
-  const problemas = duplicados(texto);
+  const problemas = [...seccionesDuplicadas(texto), ...duplicados(texto)];
   const items = itemsDeAhora(texto);
 
   if (!items.length) {
@@ -382,6 +409,22 @@ function selfCheck() {
   r = revisarCola(dosSecciones('Revisar', 'Revisar'), tmp);
   ok(!r.problemas.some((p) => p.regla === 'duplicado'), 'un titulo demasiado corto no afirma duplicado');
 
+  // --- Secciones duplicadas: por donde se cuela lo que la regla de items no ve ---
+  // El 2026-09-01 la cola tenia DOS "## Bloqueado", DOS "## Despues" y DOS "## Cerrado
+  // (2026-08-30)". La copia vieja de Bloqueado seguia pidiendo bajar un deployment de Vercel
+  // que ese mismo dia se habia medido inexistente (404 DEPLOYMENT_NOT_FOUND). La regla
+  // `duplicado` no lo podia ver: las entradas de esa lista son vinetas y filas de tabla, sin
+  // `- [ ]`. Una entrada vencida en la lista de bloqueos FABRICA trabajo — manda a pedirle a
+  // Sergio una decision sobre algo ya resuelto, que es el unico recurso que no se recupera.
+  r = revisarCola(
+    '## Ahora\n- [ ] ok · `existe.png`\n\n## Bloqueado\n- algo\n\n## Bloqueado\n- la copia vieja\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'seccion-duplicada'), 'dos secciones con el mismo titulo se marcan');
+
+  // Su reciproco: las secciones fechadas son distintas entre si y no se tocan.
+  r = revisarCola(
+    '## Ahora\n- [ ] ok · `existe.png`\n\n## Cerrado (2026-08-30)\n- algo\n\n## Cerrado (2026-08-31)\n- otra cosa\n', tmp);
+  ok(!r.problemas.some((p) => p.regla === 'seccion-duplicada'), 'dos fechas distintas no son la misma seccion');
+
   console.log(`self-check ok: ${casos} casos`);
 }
 
@@ -403,4 +446,4 @@ function main() {
 }
 
 if (require.main === module) main();
-module.exports = { revisarCola, itemsDeAhora, evidenciaDe, todosLosItems, tituloDe, duplicados };
+module.exports = { revisarCola, itemsDeAhora, evidenciaDe, todosLosItems, tituloDe, duplicados, seccionesDuplicadas };

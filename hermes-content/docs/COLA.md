@@ -747,8 +747,6 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       cuáles las dos cifras mal. **Se reabre sólo si alguien los vuelve a encontrar:**
       reconstruirlos de memoria sería inventar, que es justo lo que esta cola persigue.
 
-## Después
-
 - [x] 🔒 **La mina de `page_location` en GA — ya estaba cerrada, y de paso quedó su guarda.**
       El ítem seguía abierto acá diciendo *"en arreglo ahora"*, pero el arreglo (PR #59,
       `4dce75e`) **está en `origin/master` y es ancestro de `e5c1ad3`, que es lo que sirve el
@@ -903,7 +901,23 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 - **Recorrer el circuito en producción.** Crear una cuenta real, que mande un correo real, pagar.
   Es la única verificación que no se puede simular.
 - **Desplegar al VPS** (es distinto de mergear: `onia.com.bo` lo sirve un contenedor). Runbook y
-  gates en la skill `onia-deploy`.
+  gates en la skill `onia-deploy`. ⚠️ Hoy `master` tiene commits que **no están en producción** —
+  entre ellos `f47d615`, el que saca la promesa falsa de "agenda" que el cliente lee antes de
+  pagar Bs 390.
+
+> **Deduplicado el 2026-09-01: había DOS listas de bloqueos y la vieja pedía trabajo que ya no
+> existe.** Convivían esta y una `## Bloqueado — recontado el 2026-08-30` cien líneas más abajo.
+> Sus entradas S2/S3/S4/D3 son las mismas cuatro de arriba, pero su **S1** — *"bajar el
+> deployment de Vercel que sigue sirviendo `dentalgest.app`"* — ya estaba dado de baja acá con la
+> medición, y **remedido hoy**: `https://dentalgest.app/` y `/login` responden **404 con
+> `X-Vercel-Error: DEPLOYMENT_NOT_FOUND`**. No hay deployment que bajar.
+> **Por qué esto era peor que un item duplicado:** un item duplicado hace rehacer trabajo; una
+> entrada vencida en la lista de bloqueos hace **pedirle a Sergio una decisión sobre algo ya
+> resuelto**, y su tiempo es el único recurso que no se recupera. El gate `duplicado` de
+> `scripts/verificar_cola.js` no lo podía ver — mira items `- [ ]`, y estas listas se escriben con
+> viñetas y filas de tabla. Por eso la vuelta dejó la guarda que sí lo caza: **`seccion-duplicada`**,
+> que falla si dos `##` repiten título. De paso destapó otras dos copias, ya fusionadas: había
+> **dos `## Después`** y **dos `## Cerrado (2026-08-30)`** (la segunda, vacía).
 
 ### Ya NO son bloqueos — dados de baja el 2026-08-31, con la medición
 
@@ -934,42 +948,6 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
   planteada.
 - ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva
   web-factory. Estar en otra sesión no es estar bloqueado.
-
-## Cerrado (2026-08-30) — no rehacer
-
-## Bloqueado — recontado el 2026-08-30
-
-> **Eran 10. Verificados uno por uno en vivo, quedan 4 que sólo puede hacer Sergio, 2 que
-> necesitan una palabra suya y nada más, y 4 que NO eran bloqueos.** Mismo patrón que los
-> features de la mañana: la lista se había llenado sin verificar.
-
-### Sólo Sergio — nadie más puede
-
-| # | Qué | Dónde | Cuánto |
-|---|---|---|---|
-| S1 | **Bajar el deployment de Vercel** que sigue sirviendo `dentalgest.app`. El auto-deploy ya está cortado (PR #58), pero el de las 16:22 quedó publicado y apunta al Supabase de la nube | panel de Vercel → `dental-gest` | 2 min |
-| S2 | **Decidir el dominio `dentalgest.app`**: redirigir a `app.onia.com.bo` o dejarlo morir. El DNS vive en Vercel (`ns1/ns2.vercel-dns.com`) | mismo panel | 2 min |
-| S3 | **Credenciales del BCP.** Sin esto no hay QR y el cobro sigue siendo manual | banco | — |
-| S4 | **Recorrer el circuito en producción**: crear una cuenta real, que mande un correo real, pagar. Es la única verificación que no se puede simular | `app.onia.com.bo` | 10 min |
-
-### Necesitan sólo un "dale" — después lo hago yo
-
-| # | Qué | Por qué necesita permiso |
-|---|---|---|
-| D3 | **Desplegar al VPS** cuando haya algo que valga el swap. Runbook y gates en la skill `onia-deploy`. ⚠️ Hoy hay commits en `master` que **no están en producción** | toca producción |
-
-### Ya NO son bloqueos — salieron de la lista
-
-- ~~**Vercel al tope (rate limit)**~~ — expiraba hoy **y además ya no publicamos**. Muerto por dos vías.
-- ~~**Renombrar el schema de producción**~~ — **ya estaba rechazado con motivo** en este mismo archivo (migración de datos vivos a cambio de prolijidad que ningún cliente ve). Estaba anotado como bloqueo y como rechazo al mismo tiempo.
-- ~~**GA4**~~ — **cerrado 2026-08-30: no es código muerto, es una perilla apagada bien.**
-  `GoogleAnalytics.tsx:96-99` hace early-return **antes** de montar el `<Script>` si falta
-  `NEXT_PUBLIC_GA_ID` (cero red, cero `dataLayer`, cero cookie), y encima el hijo filtra por un
-  allowlist de 6 rutas públicas, así que ni encendido rastrearía la app autenticada. La política
-  de privacidad ya está escrita **en condicional** (`app/privacy/page.tsx:92-95`), la CSP ya lo
-  contempla y `.env.example` lo trae vacío. **Encenderlo es UNA env var.** La entrada estaba mal
-  planteada: no había nada que sacar.
-- ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva web-factory. Estar en otra sesión no es estar bloqueado.
 
 ## Cerrado (2026-08-31) — no rehacer
 
