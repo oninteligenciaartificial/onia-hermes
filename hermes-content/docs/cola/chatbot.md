@@ -34,11 +34,20 @@ desconocidos al +591 75414930, que está en Cloud API con el bot atendiendo
 hace semanas. Lo que falta es la última cuadra: que esa conversación **aparezca en la
 bandeja**, y que la respuesta sea la que corresponde a lo que la persona clickeó.
 
+🎯 **CUMPLIDO el 2026-08-31.** Sergio vinculó `Onia (interna)` al inbox 5 y la pantalla se
+MIRÓ en producción con la sesión de esa org: `/inbox` lista a **mariohassen** (+591 73021804,
+27 ago, *"Hola, vengo de la web de Onia…"*) y a **F** (+591 73232758, 25 ago, la clínica
+odontológica de 4 doctores). Ninguno de los dos es QA, ni el probador, ni Sergio. La prueba
+completa está en el ítem 1 de "Cerrado". **Lo que sigue NO es este objetivo:** contestarles
+es **S7**, y vende Sergio.
+
 **Medido el 2026-08-31 (ítem 1, cerrado): la mitad del objetivo YA ocurrió.** Cinco
 desconocidos escribieron — dos por WhatsApp con número real, tres por el widget de la web,
 uno de ellos entrando desde Instagram. Ninguna de las cinco se puede ver en `/inbox`, porque
 sus inboxes (4 y 5) no son de ninguna org. **El objetivo no está a media construcción: está a
-una pieza**, y esa pieza es el ítem 1 de Ahora.
+una pieza**, y esa pieza es el ítem 1 de Ahora. ⚠️ **Superado el mismo día:** esa pieza se
+puso, y dos de las cinco ya se ven. Las otras tres están en el inbox 4 (widget web), que
+sigue sin dueño.
 
 ---
 
@@ -61,139 +70,6 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 ---
 
 ## Ahora
-
-- [ ] **1 · Una org sólo puede tener UN inbox, y nadie puede cambiarlo — así ningún WhatsApp
-      llega nunca a la bandeja.** Éste es el hueco que hace inalcanzable el objetivo, y no
-      estaba escrito en ninguna parte. Verificado hoy, en cuatro archivos:
-      - Al crear la org se le crea un inbox **web** y ése se guarda:
-        `app/api/admin/clinics/route.ts:97` (`createInbox` + `update chatwootInboxId`).
-      - Una vez puesto, **nunca se pisa**: `lib/chatbot/canal-web.ts:27` devuelve
-        `created:false` y se va; `app/api/admin/chatbots/route.ts:53` hace lo mismo.
-      - La única pantalla que lo muestra es **de sólo lectura**:
-        `app/(dashboard)/admin/organizations/[id]/WhatsAppOrgConfig.tsx:215` lo pinta en un
-        `<dd>`, sin input ni PATCH.
-      - Y no hay nada del otro lado: **cero apariciones** de `embedded` en todo `app/` y
-        `lib/` de la plataforma.
-      **Medido en la base el 2026-08-31 (ya no es una lectura de código, es el estado real):**
-      de las cuatro orgs que existen, **una sola tiene inbox — y es la org QA**
-      (`ZZ QA Clinica Chatbot` → inbox 7). Las otras tres (`Onia (interna)`,
-      `Bolivian electricidad`, `ZZ QA Ferreteria Tornillo`) tienen `chatwootInboxId` en NULL.
-      Los dos inboxes donde escribió gente de verdad — **4 (Onia Web)** y **5 (Onia WhatsApp)** —
-      no son de ninguna org. La tenencia la da esa columna y sólo esa
-      (`lib/chatbot/bandeja-auth.ts:22`), así que hoy `/inbox` sólo puede mostrar conversaciones
-      QA: las nuestras.
-      **La consecuencia hoy:** el inbox de WhatsApp del +591 75414930 existe en Chatwoot
-      (alta manual, hecha dos veces) pero no es el `chatwootInboxId` de ninguna org, así que
-      `lib/chatbot/bandeja.ts` no lo puede mostrar. **Y ya costó:** las cinco conversaciones de
-      desconocidos que se contaron hoy están todas en los inboxes 4 y 5 — ninguna se ve. Este
-      ítem dejó de ser un riesgo futuro: es la única pieza entre el objetivo y estar cumplido. **La consecuencia mañana:** el día que
-      Sergio corra la prueba del popup de Embedded Signup, nace un inbox de WhatsApp que la
-      plataforma **va a ignorar** — el cliente conecta su número y su bandeja sigue vacía. La
-      pieza que gatea todo el carril entrega un inbox huérfano.
-      **Hecho =** un mensaje enviado al +591 75414930 aparece en `/inbox`, MIRADO con captura.
-      **Lo mínimo que lo logra** (elegir al construir, no ahora): un PATCH de superadmin que
-      apunte una org a un inbox existente. Lo caro sería una tabla de N inboxes por org —
-      no hace falta hasta que un cliente tenga web **y** WhatsApp a la vez.
-
-      ⚙️ **El código está construido y con gates verdes (2026-08-31, commit `88c1d56` del repo
-      `onia-platform`), pero el ítem NO se cierra: sigue sin haber una conversación de un
-      desconocido visible en `/inbox`, que es el objetivo.** Lo que se hizo: se extendió el
-      PATCH de superadmin que YA existía (`app/api/admin/organizations/[id]/whatsapp/route.ts`)
-      en vez de agregar una ruta nueva — acepta `chatwootInboxId` entero positivo o `null` para
-      desvincular, y devuelve **409 si otra org ya usa ese inbox** (sin ese guardia dos orgs
-      se ven las conversaciones entre sí: la tenencia la da esa sola columna). La pantalla
-      `app/(dashboard)/admin/organizations/[id]/WhatsAppOrgConfig.tsx` dejó de ser un `<dd>`
-      de sólo lectura: ahora es input + botón "Vincular". 11 tests nuevos; `tsc --noEmit`,
-      `eslint` y los 2342 tests de la suite, verdes.
-      ⚠️ **Falta lo que no depende de código, y son las dos cosas que lo cierran:** (1) el
-      deploy del producto, que es de Sergio, y (2) decidir qué org se queda con los inboxes 4
-      y 5 — anotado como **S8**, y cotizado en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
-      ⚠️ **La pantalla NO se pudo MIRAR, y se dice en vez de simularlo:** es superadmin, así
-      que necesita base + sesión. El `DATABASE_URL` de `.env.local` apunta a
-      `127.0.0.1:54329`, que está cerrado (de los puertos de Supabase local sólo 54322 acepta
-      conexión TCP, y ahí el handshake de Postgres expira). Producción sí responde pero
-      todavía sirve la versión vieja. **La captura se toma en el primer deploy** — es lo
-      primero que hay que hacer al retomar, antes que cualquier ítem nuevo.
-
-      ✅ **Vuelta del 2026-08-31 (tercera) — la pantalla YA SE MIRÓ, y no hizo falta ningún
-      deploy: lo que estaba roto era el entorno local, no la base.** El diagnóstico de arriba
-      era correcto en el síntoma y equivocado en la causa, y por eso el ítem quedó tres
-      vueltas esperando a Sergio para algo que no dependía de él.
-      **La causa real.** El stack de Supabase local **está corriendo hace 31 h**
-      (`docker ps` → `supabase_db_fiscal-mock`, healthy). Lo que no existe son los puertos que
-      `.env.local` pedía: `supabase/config.toml` del propio repo declara API `55321` y
-      Postgres `55322`, mientras el env apuntaba a `54321`/`54329`. Y `54329` no era "un
-      puerto cerrado" cualquiera: es el del **pooler, que el config tiene `enabled = false`**,
-      con un usuario ("postgres" con sufijo "onia") que ni figura en `pg_user`. Las claves anon y
-      service_role tampoco eran las del stack — firmadas con otro secreto, daban 403 contra
-      `/auth/v1/admin/*`. Tres datos mal, ninguno de ellos la base.
-      **Lo que se hizo:** se corrigió `.env.local` (puertos reales, `postgres:postgres`,
-      `?schema=public` como producción, claves firmadas con el `GOTRUE_JWT_SECRET` del
-      contenedor), se creó un superadmin local (usuario por `/auth/v1/admin/users` + su fila
-      en `profiles` con `role='SUPERADMIN'`), y se levantó el producto con
-      `npm run build` + `node .next/standalone/server.js`.
-      **Lo verificado MIRANDO, en la pantalla real** (`/admin/organizations/<id>`, sesión de
-      superadmin, captura leída):
-      1. La tarjeta **ESTADO TÉCNICO** ya no es un `<dd>`: muestra *"Chatwoot Inbox ID · De la
-         tenencia de la bandeja. Vaciar para desvincular."* con input numérico (`No vinculado`)
-         y botón **Vincular**.
-      2. Vincular el inbox 5 a `Ferreteria Circuito Completo` → banner verde
-         **"Org vinculada al inbox 5."**, y la fila queda persistida en la base
-         (`clinic_settings.chatwootInboxId = 5`, releída por SQL después del click).
-      3. **El guardia de tenencia funciona:** el mismo inbox 5 sobre la otra org devuelve el
-         409 con su mensaje en pantalla — *"El inbox 5 ya es de «Ferreteria Circuito
-         Completo»"* — y la base sigue con una sola org vinculada. Sin ese guardia dos orgs se
-         leerían las conversaciones entre sí, así que era la parte frágil y es la que se probó.
-      **La receta completa quedó en la skill que corresponde**, no en un doc suelto:
-      `.claude/skills/onia-verificacion/SKILL.md` del repo onia-platform, § "Levantar el entorno LOCAL
-      para poder MIRAR" — incluye las trampas que costaron esta vuelta (Prisma no lee
-      `.env.local`; `?schema=dentalgest` hace fallar una migración que en `public` está bien;
-      `onboardingCompletedAt` en NULL redirige todo a `/onboarding`; `next dev` en Windows
-      panickea con Turbopack y recarga en loop con `--webpack`).
-      🔗 **Hermano del mismo agujero, arreglado hoy por el carril de plataforma** (commit
-      `7791ea3`, `onia-platform`): `encenderCanalWeb()` adoptaba un inbox de Chatwoot buscándolo
-      **por nombre**, y el inbox se llama igual que la org — con dos "Clínica Dental" la
-      segunda se quedaba con la bandeja de la primera. Es la misma llave de tenencia que este
-      ítem: el PATCH ya tenía su 409, y ahora el alta automática también filtra los inboxes ya
-      tomados. Se anota para que no se lo cuente dos veces: **no destraba nada de S8**.
-      ⚠️ **Esto NO cierra el ítem** — el "Hecho =" sigue siendo un mensaje de un desconocido
-      visible en `/inbox`, y para eso falta **S8** (deploy + dueño de los inboxes 4 y 5). Lo
-      que cierra es la duda sobre el código: la pieza que S8 va a encender está mirada y
-      probada, incluido su caso de error.
-
-      ✅ **Gate 1 del 2026-08-31 (cuarta vuelta): EL DEPLOY YA ESTÁ HECHO. S8 se achicó a la
-      mitad — queda la decisión y dos clicks, nada más.** Medido en producción, no leído:
-      - **El build del producto trae el PATCH.** `onia-platform` buildeó a las 22:59 y el
-        contenedor arrancó 23:00 (UTC). En sus chunks del servidor están las dos cadenas
-        exactas de `88c1d56`: `` El inbox ${d} ya es de "${e.organization?.name…`` (el 409 de
-        tenencia) y `chatwootInboxId debe ser un entero positivo o null` (el 400).
-        ⚠️ **Y acá casi escribo el fantasma al revés:** el primer `grep` acotado a
-        `.next/server/app/api/admin/organizations/` dio **cero** y parecía probar que el deploy
-        no traía nada. Era falso — `route.js` son 648 bytes de loader y el código vive en
-        `chunks/[root-of-the-server]__*.js`. Un grep que no encuentra descarta un lugar, no
-        el hecho.
-      - **La base sigue sin vincular.** Consultada en vivo (`supabase-db`, schema `public`): de
-        las cuatro orgs, la única con `chatwootInboxId` es `ZZ QA Clinica Chatbot` → 7.
-        `Onia (interna)`, `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. Los
-        inboxes 4 y 5 siguen huérfanos, así que las cinco conversaciones de desconocidos
-        siguen invisibles.
-      **Lo que queda de S8, entero:** entrar a `/admin/organizations/<id>` de `Onia (interna)`,
-      escribir `5` y apretar Vincular. La pantalla ya está desplegada y ya fue mirada.
-
-      ✅ **Gate 1 del 2026-08-31 (quinta vuelta) — sigue igual, y se midió en la base, no se
-      leyó.** Consultada en vivo (`supabase-db`, schema `public`), de las cuatro orgs la única
-      con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`,
-      `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 no
-      se dieron todavía**, así que las cinco conversaciones de desconocidos siguen invisibles y
-      el ítem sigue siendo el único que separa al carril de su objetivo. No se tocó la base:
-      elegir dueño de inbox decide en qué bandeja aterrizan personas reales, y eso es de Sergio.
-
-      ✅ **Gate 1 del 2026-08-31 (octava vuelta) — la base sigue igual, medida en vivo.** `supabase-db`, schema `public`: de las cuatro orgs la única con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`, `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 siguen sin darse**, así que las cinco conversaciones de desconocidos siguen invisibles. No se tocó la base: elegir dueño de inbox decide en qué bandeja aterrizan personas reales, y eso es de Sergio.
-
-      ✅ **Gate 1 del 2026-08-31 (séptima vuelta) — la base sigue igual, medida en vivo.** `supabase-db`, schema `public`: de las cuatro orgs la única con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`, `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 siguen sin darse.** No se tocó la base: elegir dueño de inbox decide en qué bandeja aterrizan personas reales.
-
-      ✅ **Gate 1 del 2026-08-31 (sexta vuelta) — sin cambios en la base, y se despejó la ÚLTIMA duda del ítem.** La base sigue igual (medida en vivo: sólo `ZZ QA Clinica Chatbot` → 7; `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL). Lo nuevo es que se comprobó que **los dos clicks alcanzan de verdad**: el producto lee las conversaciones con su propio token, y en Chatwoot un token de agente que no es miembro del inbox habría devuelto la lista vacía con 200 — exactamente el fantasma que este carril mide. Corrido contra producción, el token del contenedor `onia-platform` ve **inbox 4 → 5 · inbox 5 → 3 · inbox 7 → 6** conversaciones, con `+59173021804` en el payload del 5. Detalle y comando en **S8**. **No queda nada que verificar del lado del código.**
 
 - [ ] **2 · Las frases que la web YA manda no están registradas como campañas: el desconocido
       pregunta una cosa y el bot le contesta el saludo genérico.** Las frases de campaña se
@@ -627,18 +503,182 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
-| S8 | **Decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** — y hacer los dos clicks. ✅ **El deploy YA NO es parte: se hizo el 31-ago 22:59** (verificado en el build de producción, que trae el 409 de tenencia y la validación de `88c1d56`) | Los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §9 (recomendación: opción 1, `Onia (interna)` → inbox 5) | **El objetivo del carril entero, y ya no falta código ni deploy: faltan dos clicks.** Entrar a `/admin/organizations/<id>` de `Onia (interna)`, escribir `5`, Vincular. Base verificada en vivo el 31-ago: las cuatro orgs siguen sin vínculo salvo la de QA (inbox 7). ✅ **Sumado el 31-ago (6ª vuelta) — la última duda que quedaba sobre S8 está medida, y sale que SÍ alcanza.** Nadie había comprobado que el producto pueda LEER esas conversaciones: `listConversations` pega a `/conversations?inbox_id=N`, y en Chatwoot un token de **agente** que no es miembro del inbox recibe la lista **vacía** con 200 — el molde exacto del fantasma de este carril (Sergio hace los dos clicks, la bandeja sigue vacía, y el ítem se cierra mal). Corrido con el token del propio contenedor del producto (`docker exec onia-platform`, sin sacar el token) contra el Chatwoot de producción: **inbox 4 → `all_count` 5 · inbox 5 → `all_count` 3 · inbox 7 → `all_count` 6**, y en el payload del 5 aparece `mariohassen / +59173021804`, que es el desconocido de la conv 37. O sea que la tenencia es lo ÚNICO que falta: el permiso ya está y el filtro `esDeInbox` revalida sobre datos que sí llegan. ⚠️ **Corregido el 31-ago (2ª vuelta): el ítem 2 ya NO cuelga de acá.** Decía que las campañas sólo existían en modo recepcionista — era cierto y ya no lo es: ahora también se leen en modo venta, así que las frases de la web se destraban con S9, sin decidir dueño de inbox |
+| ~~S8~~ | ✅ **HECHO el 2026-08-31: `Onia (interna)` → inbox 5.** Verificado en la base de producción y MIRADO en `/inbox`, que ahora muestra dos desconocidos — el objetivo del carril. Queda vivo sólo lo del **inbox 4 (Onia Web)**, que sigue huérfano: las otras tres conversaciones del widget no se ven. Texto original: **Decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** — y hacer los dos clicks. ✅ **El deploy YA NO es parte: se hizo el 31-ago 22:59** (verificado en el build de producción, que trae el 409 de tenencia y la validación de `88c1d56`) | Los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §9 (recomendación: opción 1, `Onia (interna)` → inbox 5) | **El objetivo del carril entero, y ya no falta código ni deploy: faltan dos clicks.** Entrar a `/admin/organizations/<id>` de `Onia (interna)`, escribir `5`, Vincular. Base verificada en vivo el 31-ago: las cuatro orgs siguen sin vínculo salvo la de QA (inbox 7). ✅ **Sumado el 31-ago (6ª vuelta) — la última duda que quedaba sobre S8 está medida, y sale que SÍ alcanza.** Nadie había comprobado que el producto pueda LEER esas conversaciones: `listConversations` pega a `/conversations?inbox_id=N`, y en Chatwoot un token de **agente** que no es miembro del inbox recibe la lista **vacía** con 200 — el molde exacto del fantasma de este carril (Sergio hace los dos clicks, la bandeja sigue vacía, y el ítem se cierra mal). Corrido con el token del propio contenedor del producto (`docker exec onia-platform`, sin sacar el token) contra el Chatwoot de producción: **inbox 4 → `all_count` 5 · inbox 5 → `all_count` 3 · inbox 7 → `all_count` 6**, y en el payload del 5 aparece `mariohassen / +59173021804`, que es el desconocido de la conv 37. O sea que la tenencia es lo ÚNICO que falta: el permiso ya está y el filtro `esDeInbox` revalida sobre datos que sí llegan. ⚠️ **Corregido el 31-ago (2ª vuelta): el ítem 2 ya NO cuelga de acá.** Decía que las campañas sólo existían en modo recepcionista — era cierto y ya no lo es: ahora también se leen en modo venta, así que las frases de la web se destraban con S9, sin decidir dueño de inbox |
 | S9 | **Publicar las campañas en el VPS — y son CUATRO archivos, no uno.** 🔴 **Corregido el 31-ago (3ª vuelta): tal como estaba escrito, esto NO encendía nada.** Decía copiar sólo `campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` porque daba el motor por desplegado; medido con md5, el VPS está **un commit atrás** (`3e3841aa`, sin `994eb42d`) y su `bot-engine.mjs` tiene **cero `campanaExacta`** — habría ignorado las campañas en silencio. Lo que tiene que viajar: **`bot-engine.mjs` + `knowledge.mjs` + `run-turn.mjs`** (del espejo `hermes-content/deploy/vps-ops/bot/`) **+ `knowledge.json`** (desde `hermes-content/docs/chatbot/campanas-onia.knowledge.json`), y después **reiniciar** — `webhook-server.sh` sólo recopia al contenedor si cambia su STAMP. Verificar con `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` (tiene que salir 0) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK | **El ítem 2 entero.** El motor del repo ya las lee en modo venta (**647/647 verde**, probado con este mismo documento); falta que el VPS TENGA ese motor y que el archivo del número traiga las campañas. ⚠️ **Sumado el 31-ago (4ª vuelta): `run-turn.mjs`**, que volvió a exportar `LLM_SYSTEM_PROMPT` para revivir los 12 evals. Corrido hoy contra producción, `espejo-check.mjs` sale **1**: DISTINTOS `bot-engine.mjs`, `bot-engine.test.mjs`, `knowledge.mjs`, `run-turn.mjs`, `run-turn.test.mjs`; FALTAN `campanas-web.test.mjs`, `espejo-check.mjs`, `espejo-check.test.mjs`, `recepcionista.test.mjs`. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico. ✅ **Gate 1 del 31-ago (5ª vuelta): EL CÓDIGO YA VIAJÓ — S9 se achicó a UN archivo de datos.** Medido, no leído: `espejo-check.mjs` sale **0** (`ESPEJO OK`), o sea que `bot-engine.mjs`, `knowledge.mjs` y `run-turn.mjs` ya son los del repo. Y confirmado en el motor que **CORRE**, no en el host: `docker exec onia-center grep -c campanaExacta /tmp/onia-bot/bot-engine.mjs` → **2** (era 0). Lo único que falta es el documento: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago, con cero `campanas`** — dentro y fuera del contenedor. **S9 hoy = copiar `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` y reiniciar.** 🔴 **CORREGIDO el 31-ago (9ª vuelta): ya NO alcanza el JSON solo — son TRES archivos, y hacerlo con uno EMPEORA producción.** El documento nuevo trae `prefijo` (la campaña del CTA de `/v1/empezar`), y el esquema del validador **rechaza claves desconocidas**: `parseKnowledge` devuelve `data: null`, o sea que el documento **no carga a medias, no carga nada**. Medido con el `knowledge.mjs` que HOY corre en el VPS, bajado por `scp`: `ok=false`, `campanas[4].prefijo: clave desconocida`. Copiando sólo el JSON no quedan 5 campañas de 6 — quedan **cero**, y encima se pierden la FAQ `siat` y el horario que hoy sí están vivos. **Lo que tiene que viajar junto:** `hermes-content/deploy/vps-ops/bot/knowledge.mjs` + `hermes-content/deploy/vps-ops/bot/recepcionista.mjs` + el documento a `/opt/onia/bot/knowledge.json`, y reiniciar. Verificación previa: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` hoy sale **1** y nombra `knowledge.mjs` y `recepcionista.mjs` entre los DISTINTOS — después del `scp` tiene que salir **0**. ✅ **Sumado el 31-ago (6ª vuelta) — verificado que la copia es SEGURA, que era un riesgo sin medir.** La instrucción manda a **sobrescribir un archivo de datos vivo en producción** y nadie había comparado los dos lados: si el documento nuevo no traía algo que el viejo sí, el `scp` lo borraba en silencio. Bajado el vivo del VPS y diffeado campo por campo contra el del repo: `identity`, `empresa` (el horario lun-vie 9-18) y `triggersExtra` son **idénticos**, y la única FAQ (`siat`) es **byte a byte la misma**. El nuevo sólo agrega `campanas` (5) y sube `version` de `2026-08-06.1` a `2026-08-31.1`. Es un **superset estricto**: no se pierde nada. **Y cómo se comprueba DESPUÉS del scp** — porque este carril ya dio dos deploys por hechos sin mirarlos, y hay que medirlo en el motor que CORRE, no en el host:
   ```bash
   ssh root@187.77.16.63 "docker exec onia-center sh -c 'grep -c campanas /tmp/onia-bot/knowledge.json'"
   ```
   Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) |
 | S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas. ✅ **Sumado el 31-ago (7ª vuelta): ahora se comprueba DESDE AFUERA, sin entrar al VPS.** El `--check` del `.sh` vive dentro del contenedor (SSH + `docker exec` + `rails runner`), así que sólo lo corre quien ya está adentro y sabe que tiene que mirar — por eso las tres se perdieron el 16-ago y nadie lo vio en quince días. `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`) lee el `window.globalConfig` del HTML público del login: es un GET, corre desde cualquier máquina y hoy sale **1 con `REVERTIDAS 3/9`**. **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10, y mide la cara que ve el desconocido, no la base |
+| S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes** — commit `4f86381` de `onia-platform` (rama `carril/chatbot-v68-friccion`) | Es un deploy del producto, y ningún deploy sale sin su OK | Que el item "Requerimientos" del menú dibuje su icono. Encontrado MIRANDO `/inbox` de producción hoy: la fuente estaba cargada y el glifo no existía — `assignment_turned_in` nunca se subseteó (342 ligaduras en el .woff2 desplegado, 261 iconos declarados). Es el mismo defecto del login del 14-ago, en una pantalla que ningún gate cubría. Ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`); **verificación post-deploy:** abrir `/inbox` y mirar el menú, o medir el ancho del texto del span — un glifo ocupa ~1em, hoy mide 20em |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **1 · Una org sólo puede tener UN inbox, y nadie puede cambiarlo — así ningún WhatsApp
+      llega nunca a la bandeja.** Éste es el hueco que hace inalcanzable el objetivo, y no
+      estaba escrito en ninguna parte. Verificado hoy, en cuatro archivos:
+      - Al crear la org se le crea un inbox **web** y ése se guarda:
+        `app/api/admin/clinics/route.ts:97` (`createInbox` + `update chatwootInboxId`).
+      - Una vez puesto, **nunca se pisa**: `lib/chatbot/canal-web.ts:27` devuelve
+        `created:false` y se va; `app/api/admin/chatbots/route.ts:53` hace lo mismo.
+      - La única pantalla que lo muestra es **de sólo lectura**:
+        `app/(dashboard)/admin/organizations/[id]/WhatsAppOrgConfig.tsx:215` lo pinta en un
+        `<dd>`, sin input ni PATCH.
+      - Y no hay nada del otro lado: **cero apariciones** de `embedded` en todo `app/` y
+        `lib/` de la plataforma.
+      **Medido en la base el 2026-08-31 (ya no es una lectura de código, es el estado real):**
+      de las cuatro orgs que existen, **una sola tiene inbox — y es la org QA**
+      (`ZZ QA Clinica Chatbot` → inbox 7). Las otras tres (`Onia (interna)`,
+      `Bolivian electricidad`, `ZZ QA Ferreteria Tornillo`) tienen `chatwootInboxId` en NULL.
+      Los dos inboxes donde escribió gente de verdad — **4 (Onia Web)** y **5 (Onia WhatsApp)** —
+      no son de ninguna org. La tenencia la da esa columna y sólo esa
+      (`lib/chatbot/bandeja-auth.ts:22`), así que hoy `/inbox` sólo puede mostrar conversaciones
+      QA: las nuestras.
+      **La consecuencia hoy:** el inbox de WhatsApp del +591 75414930 existe en Chatwoot
+      (alta manual, hecha dos veces) pero no es el `chatwootInboxId` de ninguna org, así que
+      `lib/chatbot/bandeja.ts` no lo puede mostrar. **Y ya costó:** las cinco conversaciones de
+      desconocidos que se contaron hoy están todas en los inboxes 4 y 5 — ninguna se ve. Este
+      ítem dejó de ser un riesgo futuro: es la única pieza entre el objetivo y estar cumplido. **La consecuencia mañana:** el día que
+      Sergio corra la prueba del popup de Embedded Signup, nace un inbox de WhatsApp que la
+      plataforma **va a ignorar** — el cliente conecta su número y su bandeja sigue vacía. La
+      pieza que gatea todo el carril entrega un inbox huérfano.
+      **Hecho =** un mensaje enviado al +591 75414930 aparece en `/inbox`, MIRADO con captura.
+      **Lo mínimo que lo logra** (elegir al construir, no ahora): un PATCH de superadmin que
+      apunte una org a un inbox existente. Lo caro sería una tabla de N inboxes por org —
+      no hace falta hasta que un cliente tenga web **y** WhatsApp a la vez.
+
+      ⚙️ **El código está construido y con gates verdes (2026-08-31, commit `88c1d56` del repo
+      `onia-platform`), pero el ítem NO se cierra: sigue sin haber una conversación de un
+      desconocido visible en `/inbox`, que es el objetivo.** Lo que se hizo: se extendió el
+      PATCH de superadmin que YA existía (`app/api/admin/organizations/[id]/whatsapp/route.ts`)
+      en vez de agregar una ruta nueva — acepta `chatwootInboxId` entero positivo o `null` para
+      desvincular, y devuelve **409 si otra org ya usa ese inbox** (sin ese guardia dos orgs
+      se ven las conversaciones entre sí: la tenencia la da esa sola columna). La pantalla
+      `app/(dashboard)/admin/organizations/[id]/WhatsAppOrgConfig.tsx` dejó de ser un `<dd>`
+      de sólo lectura: ahora es input + botón "Vincular". 11 tests nuevos; `tsc --noEmit`,
+      `eslint` y los 2342 tests de la suite, verdes.
+      ⚠️ **Falta lo que no depende de código, y son las dos cosas que lo cierran:** (1) el
+      deploy del producto, que es de Sergio, y (2) decidir qué org se queda con los inboxes 4
+      y 5 — anotado como **S8**, y cotizado en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      ⚠️ **La pantalla NO se pudo MIRAR, y se dice en vez de simularlo:** es superadmin, así
+      que necesita base + sesión. El `DATABASE_URL` de `.env.local` apunta a
+      `127.0.0.1:54329`, que está cerrado (de los puertos de Supabase local sólo 54322 acepta
+      conexión TCP, y ahí el handshake de Postgres expira). Producción sí responde pero
+      todavía sirve la versión vieja. **La captura se toma en el primer deploy** — es lo
+      primero que hay que hacer al retomar, antes que cualquier ítem nuevo.
+
+      ✅ **Vuelta del 2026-08-31 (tercera) — la pantalla YA SE MIRÓ, y no hizo falta ningún
+      deploy: lo que estaba roto era el entorno local, no la base.** El diagnóstico de arriba
+      era correcto en el síntoma y equivocado en la causa, y por eso el ítem quedó tres
+      vueltas esperando a Sergio para algo que no dependía de él.
+      **La causa real.** El stack de Supabase local **está corriendo hace 31 h**
+      (`docker ps` → `supabase_db_fiscal-mock`, healthy). Lo que no existe son los puertos que
+      `.env.local` pedía: `supabase/config.toml` del propio repo declara API `55321` y
+      Postgres `55322`, mientras el env apuntaba a `54321`/`54329`. Y `54329` no era "un
+      puerto cerrado" cualquiera: es el del **pooler, que el config tiene `enabled = false`**,
+      con un usuario ("postgres" con sufijo "onia") que ni figura en `pg_user`. Las claves anon y
+      service_role tampoco eran las del stack — firmadas con otro secreto, daban 403 contra
+      `/auth/v1/admin/*`. Tres datos mal, ninguno de ellos la base.
+      **Lo que se hizo:** se corrigió `.env.local` (puertos reales, `postgres:postgres`,
+      `?schema=public` como producción, claves firmadas con el `GOTRUE_JWT_SECRET` del
+      contenedor), se creó un superadmin local (usuario por `/auth/v1/admin/users` + su fila
+      en `profiles` con `role='SUPERADMIN'`), y se levantó el producto con
+      `npm run build` + `node .next/standalone/server.js`.
+      **Lo verificado MIRANDO, en la pantalla real** (`/admin/organizations/<id>`, sesión de
+      superadmin, captura leída):
+      1. La tarjeta **ESTADO TÉCNICO** ya no es un `<dd>`: muestra *"Chatwoot Inbox ID · De la
+         tenencia de la bandeja. Vaciar para desvincular."* con input numérico (`No vinculado`)
+         y botón **Vincular**.
+      2. Vincular el inbox 5 a `Ferreteria Circuito Completo` → banner verde
+         **"Org vinculada al inbox 5."**, y la fila queda persistida en la base
+         (`clinic_settings.chatwootInboxId = 5`, releída por SQL después del click).
+      3. **El guardia de tenencia funciona:** el mismo inbox 5 sobre la otra org devuelve el
+         409 con su mensaje en pantalla — *"El inbox 5 ya es de «Ferreteria Circuito
+         Completo»"* — y la base sigue con una sola org vinculada. Sin ese guardia dos orgs se
+         leerían las conversaciones entre sí, así que era la parte frágil y es la que se probó.
+      **La receta completa quedó en la skill que corresponde**, no en un doc suelto:
+      `.claude/skills/onia-verificacion/SKILL.md` del repo onia-platform, § "Levantar el entorno LOCAL
+      para poder MIRAR" — incluye las trampas que costaron esta vuelta (Prisma no lee
+      `.env.local`; `?schema=dentalgest` hace fallar una migración que en `public` está bien;
+      `onboardingCompletedAt` en NULL redirige todo a `/onboarding`; `next dev` en Windows
+      panickea con Turbopack y recarga en loop con `--webpack`).
+      🔗 **Hermano del mismo agujero, arreglado hoy por el carril de plataforma** (commit
+      `7791ea3`, `onia-platform`): `encenderCanalWeb()` adoptaba un inbox de Chatwoot buscándolo
+      **por nombre**, y el inbox se llama igual que la org — con dos "Clínica Dental" la
+      segunda se quedaba con la bandeja de la primera. Es la misma llave de tenencia que este
+      ítem: el PATCH ya tenía su 409, y ahora el alta automática también filtra los inboxes ya
+      tomados. Se anota para que no se lo cuente dos veces: **no destraba nada de S8**.
+      ⚠️ **Esto NO cierra el ítem** — el "Hecho =" sigue siendo un mensaje de un desconocido
+      visible en `/inbox`, y para eso falta **S8** (deploy + dueño de los inboxes 4 y 5). Lo
+      que cierra es la duda sobre el código: la pieza que S8 va a encender está mirada y
+      probada, incluido su caso de error.
+
+      ✅ **Gate 1 del 2026-08-31 (cuarta vuelta): EL DEPLOY YA ESTÁ HECHO. S8 se achicó a la
+      mitad — queda la decisión y dos clicks, nada más.** Medido en producción, no leído:
+      - **El build del producto trae el PATCH.** `onia-platform` buildeó a las 22:59 y el
+        contenedor arrancó 23:00 (UTC). En sus chunks del servidor están las dos cadenas
+        exactas de `88c1d56`: `` El inbox ${d} ya es de "${e.organization?.name…`` (el 409 de
+        tenencia) y `chatwootInboxId debe ser un entero positivo o null` (el 400).
+        ⚠️ **Y acá casi escribo el fantasma al revés:** el primer `grep` acotado a
+        `.next/server/app/api/admin/organizations/` dio **cero** y parecía probar que el deploy
+        no traía nada. Era falso — `route.js` son 648 bytes de loader y el código vive en
+        `chunks/[root-of-the-server]__*.js`. Un grep que no encuentra descarta un lugar, no
+        el hecho.
+      - **La base sigue sin vincular.** Consultada en vivo (`supabase-db`, schema `public`): de
+        las cuatro orgs, la única con `chatwootInboxId` es `ZZ QA Clinica Chatbot` → 7.
+        `Onia (interna)`, `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. Los
+        inboxes 4 y 5 siguen huérfanos, así que las cinco conversaciones de desconocidos
+        siguen invisibles.
+      **Lo que queda de S8, entero:** entrar a `/admin/organizations/<id>` de `Onia (interna)`,
+      escribir `5` y apretar Vincular. La pantalla ya está desplegada y ya fue mirada.
+
+      ✅ **Gate 1 del 2026-08-31 (quinta vuelta) — sigue igual, y se midió en la base, no se
+      leyó.** Consultada en vivo (`supabase-db`, schema `public`), de las cuatro orgs la única
+      con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`,
+      `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 no
+      se dieron todavía**, así que las cinco conversaciones de desconocidos siguen invisibles y
+      el ítem sigue siendo el único que separa al carril de su objetivo. No se tocó la base:
+      elegir dueño de inbox decide en qué bandeja aterrizan personas reales, y eso es de Sergio.
+
+      ✅ **Gate 1 del 2026-08-31 (octava vuelta) — la base sigue igual, medida en vivo.** `supabase-db`, schema `public`: de las cuatro orgs la única con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`, `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 siguen sin darse**, así que las cinco conversaciones de desconocidos siguen invisibles. No se tocó la base: elegir dueño de inbox decide en qué bandeja aterrizan personas reales, y eso es de Sergio.
+
+      ✅ **Gate 1 del 2026-08-31 (séptima vuelta) — la base sigue igual, medida en vivo.** `supabase-db`, schema `public`: de las cuatro orgs la única con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`, `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 siguen sin darse.** No se tocó la base: elegir dueño de inbox decide en qué bandeja aterrizan personas reales.
+
+      ✅ **Gate 1 del 2026-08-31 (sexta vuelta) — sin cambios en la base, y se despejó la ÚLTIMA duda del ítem.** La base sigue igual (medida en vivo: sólo `ZZ QA Clinica Chatbot` → 7; `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL). Lo nuevo es que se comprobó que **los dos clicks alcanzan de verdad**: el producto lee las conversaciones con su propio token, y en Chatwoot un token de agente que no es miembro del inbox habría devuelto la lista vacía con 200 — exactamente el fantasma que este carril mide. Corrido contra producción, el token del contenedor `onia-platform` ve **inbox 4 → 5 · inbox 5 → 3 · inbox 7 → 6** conversaciones, con `+59173021804` en el payload del 5. Detalle y comando en **S8**. **No queda nada que verificar del lado del código.**
+
+      ✅ **CERRADO el 2026-08-31 (novena vuelta) — Sergio dio los dos clicks, y la pantalla
+      se MIRÓ: hay dos desconocidos en `/inbox` de producción.** Es el objetivo del carril
+      entero, y es la primera vez que se cumple.
+      **Gate 1, medido en la base y no leído** (`supabase-db`, schema `public`): de las cuatro
+      orgs, `Onia (interna)` ya tiene `chatwootInboxId = 5` — la opción 1 recomendada en el
+      radar. `ZZ QA Clinica Chatbot` sigue en 7; las otras dos en NULL, que es lo correcto.
+      **Y se MIRÓ la pantalla real de producción, con sesión del dueño de esa org**
+      (`superadmin@onia.com.bo`, el único perfil de `Onia (interna)`), no una simulación:
+      `https://app.onia.com.bo/inbox` devuelve 200 y la lista trae, con su globo de no-leído
+      en 1 cada una:
+      | quién | cuándo | qué escribió |
+      |---|---|---|
+      | **mariohassen** (+591 73021804) | 27 ago | *"Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio."* |
+      | **F** (+591 73232758) | 25 ago | la consulta larga de la clínica odontológica de 4 doctores (seguimiento de pacientes, reportes, costo) |
+      | Sergio | 17 ago | "Hola" — éste sí somos nosotros |
+      Los dos primeros **no son QA, ni el probador, ni Sergio**: son las conversaciones 37 y 35
+      que la cola venía contando como invisibles. La frase de mariohassen es además, palabra por
+      palabra, la de `WA_URL_LANDING` de onia.com.bo — o sea que el circuito completo
+      (web → wa.me → +591 75414930 → Cloud API → Chatwoot → `/inbox`) quedó cerrado y visible.
+      📎 **Cómo se miró, para que no cueste la próxima vez.** No hizo falta ni Docker ni el
+      entorno local (Docker Desktop no levanta su motor WSL en esta máquina sin GUI): se generó
+      una sesión del perfil interno con la admin API de GoTrue
+      (`generate_link` → `verify`, que NO manda correo) y se armaron los cookies con el propio
+      `@supabase/ssr` en vez de adivinarlos — el nombre sale de la URL de Supabase
+      (`sb-app-auth-token`) y el chunking lo decide la librería. Sólo lectura: no se abrió
+      ninguna conversación, así que no se marcó nada como leído en el Chatwoot de gente real.
+      ⚠️ **Lo que este ítem NO cierra:** contestarles. Son personas reales esperando desde hace
+      3-6 días y vende Sergio — sigue siendo **S7**.
+
 
 - [x] **El número que la cola reporta verde NO incluía los 12 evals: `node --test *.test.mjs`
       los saltea, y son justo los graders que ya habían estado muertos días.** Encontrado
