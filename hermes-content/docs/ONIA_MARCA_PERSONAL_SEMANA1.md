@@ -55,6 +55,59 @@ funcione, el CTA es: "el paso a paso está en mi comunidad — link en bio".
 Caption: "Tu negocio + IA. Empezá 👇". Los comentarios alimentan el drop D6 y el
 próximo video.
 
+## Textos X/LinkedIn de la semana (listos para pegar — repost manual, Postiz caído)
+
+Misma idea, dos voces: X corto y directo (el video como venía); LinkedIn con el
+contexto que ese público espera. CTA de agencia va a comunidad (no a la palabra clave:
+el DM automático sigue roto, carril infra).
+
+**Video A — "Mi directorio no cobra sueldo"**
+
+> **X:** Mi directorio no cobra sueldo.
+> Claude Code — CTO. n8n — Operaciones. Higgsfield — Diseño.
+> Así se construye una empresa con 16 años en 2026.
+> ¿Qué puesto le darías a la IA en tu negocio?
+
+> **LinkedIn:** Tengo 16 años y mi empresa tiene un directorio completo.
+> Claude Code es mi CTO — arma sistemas y automatiza. n8n es mi área de operaciones —
+> conecta todo sin que yo intervenga. Higgsfield es mi diseño — renderiza lo visual.
+> Nadie de mi equipo pidió aumento este mes.
+> Así construyo Onia, sin oficina y sin planilla.
+> ¿Qué puesto le darías a la IA en tu negocio? Contá en los comentarios.
+
+**Video B — "Guardá esto antes de pagarle a una agencia"**
+
+> **X:** Guardá esto antes de pagarle a una agencia.
+> 3 cosas que tu negocio hace HOY con IA, gratis:
+> 1. Responder clientes (se arma en una tarde)
+> 2. Fotos de producto de catálogo desde el celular
+> 3. Cotizaciones y descripciones que se escriben solas
+> ¿Cuándo SÍ pagar? Cuando necesitás que todo funcione junto, solo, todos los días.
+> El paso a paso está en mi comunidad — link en bio.
+
+> **LinkedIn:** Antes de firmar con una agencia de marketing o de IA, probá esto gratis:
+> 1) Un asistente que responda las preguntas frecuentes de tus clientes — se arma en
+> una tarde con las herramientas correctas.
+> 2) Fotos de catálogo de tus productos sacadas con el celular, sin fotógrafo.
+> 3) Cotizaciones y descripciones de producto que se escriben solas con un buen prompt.
+> Ahí es donde muchas agencias cobran caro por algo que resolvés vos en una tarde.
+> ¿Cuándo sí tiene sentido pagar? Cuando necesitás que todo eso funcione junto, sin que
+> nadie lo esté prendiendo a mano todos los días. Ahí ya es un sistema — y es otra
+> conversación.
+> El paso a paso de las 3 cosas gratis está en mi comunidad de WhatsApp — link en bio.
+
+**Video C — interactivo**
+
+> **X:** Decime tu negocio en los comentarios —panadería, taller, consultorio, lo que
+> sea— y te digo qué automatizaría primero y con qué herramienta.
+> Uno por uno. Al más interesante se lo construyo y lo muestro.
+
+> **LinkedIn:** Ejercicio abierto: contame en los comentarios a qué te dedicás — no
+> importa el rubro — y te respondo con lo primero que automatizaría en tu negocio y la
+> herramienta puntual para hacerlo.
+> Voy a responder personalmente, uno por uno. El caso más interesante lo construyo de
+> verdad y lo muestro acá.
+
 ## Historias — 2 secuencias (plantilla hook→mito→revelación→CTA)
 
 **Secuencia 1 — "La agencia":**

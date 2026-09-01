@@ -8,10 +8,10 @@
 |---|---|---|
 | P1 | **Biblioteca de drops** | ✅ 2026-09-01: `ONIA_COMUNIDAD_BIBLIOTECA.md` + página Notion "Onia Community · Biblioteca" (borrador privado — **Sergio: abrirla → Compartir → Publicar en la web → fijar ese link en Avisos**) |
 | P2 | **Drops semana 2** | ✅ 2026-09-01: 7 drops lun-dom en `ONIA_COMUNIDAD_CONTENIDO.md` (sáb se llena con señales del mié; jue y dom llevan el toque de Sergio) |
-| P3 | **Radar mensual #1 para Samuel** (tendencias + ganchos + palabra clave por tema — entregable del acuerdo, antes de la primera sesión) | ⬜ |
+| P3 | **Radar mensual #1 para Samuel** (tendencias + ganchos + palabra clave por tema — entregable del acuerdo, antes de la primera sesión) | ✅ 2026-09-01: `ONIA_MARCA_PERSONAL_RADAR.md` |
 | P4 | **Carruseles 1 y 2** — layout listo; bloqueado el render final por íconos (login Higgsfield de Sergio en Chrome) | 🟡 |
 | P5 | X banner + website (modal caprichoso — reintentar) | 🟡 |
-| P6 | Textos X/LinkedIn de la semana (repost manual mientras Postiz esté caído) | ⬜ |
+| P6 | Textos X/LinkedIn de la semana (repost manual mientras Postiz esté caído) | ✅ 2026-09-01: `ONIA_MARCA_PERSONAL_SEMANA1.md` § "Textos X/LinkedIn de la semana" — Video A/B/C, versión X y versión LinkedIn |
 | P7 | Encuesta de temario (semana 3) — redactarla cuando haya señales de 2 semanas | ⏸ |
 
 > Dueño: la sesión de estrategia/marca personal (esta). La sesión de higgsfield/modelos
@@ -25,7 +25,7 @@
 | # | Tarea | Estado | Nota |
 |---|---|---|---|
 | 1 | D0 en la comunidad (bienvenida + 3 cursos) | ⬜ SERGIO pega (30 seg) | texto listo en `ONIA_COMUNIDAD_CONTENIDO.md`; falta que agregue los 3 links del reel CERTIFICADOS |
-| 2 | Drop del día siguiente preparado y pulido | 🔄 loop, diario | D1 Claude Code listo; el loop deja cada drop verificado la noche anterior |
+| 2 | Drop del día siguiente preparado y pulido | 🔄 loop, diario | ✅ 2026-09-02 (D1 Claude Code) en `docs/cola/drops/2026-09-02.md`. Siguiente: D2 (5 prompts) para 2026-09-03 |
 | 3 | Contrato: mandar `Acuerdo_Etapa2_Version_Firma.pdf` a Samuel | ⬜ SERGIO | el PDF "final" de Samuel era idéntico al anterior — NO firmar ese |
 | 4 | X: banner + website (link comunidad) | 🔄 loop reintenta | modal rate-limited el 31-ago; asset en Descargas |
 | 5 | Bios: link de comunidad en IG (y TikTok/FB/YT cuando se confirmen cuentas) | ⬜ SERGIO (IG 1 min) | LinkedIn ✅ ya lo tiene |
