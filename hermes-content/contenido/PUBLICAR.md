@@ -178,6 +178,10 @@ no la versión que se sube):
 | 6 | `slide-06.png` | la pregunta abierta | Lucía sonríe en un cuarto con luz suave. Texto: ¿le seguirías a alguien que no existe? |
 | 7 | `slide-07.png` | esto recién empieza | Lucía camina en la playa al atardecer. Texto: esto recién empieza, seguime. |
 
+🔢 **El orden no lo fija el nombre del archivo → [Paso 1-quater](#paso-1-quater--el-orden-del-carrusel-cómo-se-controla-y-cómo-se-comprueba).**
+Antes de *Compartir*, deslizar el carrusel entero: tiene que abrir en «¿Lucía es real?» y
+cerrar en «esto recién empieza».
+
 📝 **Dónde se escribe eso → [Paso 1-ter](#paso-1-ter--el-texto-alternativo-dónde-se-pone-y-por-qué-no-bloquea).
 No bloquea el día 0**: se puede poner después de publicar.
 
@@ -226,6 +230,8 @@ EL COMIENZO*. La lámina 2 termina en "DESLIZÁ →" y la 4 abre presentando a O
 referencian entre sí, así que el salto no deja frase colgada.
 
 Orden a subir — **6 archivos, misma carpeta `FIJADO/`, salteando `slide-03`** (9,8 MB en total):
+
+🔢 Vale lo mismo del [Paso 1-quater](#paso-1-quater--el-orden-del-carrusel-cómo-se-controla-y-cómo-se-comprueba): el orden es el de toque, y se comprueba deslizando.
 
 | # | archivo | de qué es la lámina | texto alternativo (copiar tal cual) |
 |---|---|---|---|
@@ -292,6 +298,73 @@ A diferencia del Paso 0, **el texto alternativo se puede poner después y no cam
 la pieza.** Ninguna lámina afirma que el post tenga descripciones. Si la Ruta A no aparece o
 Sergio prefiere no pelearse con el teléfono en ese momento: **publicar igual y volver por la
 Ruta B.** No se retrasa el día 0 por esto.
+
+---
+
+## Paso 1-quater — el orden del carrusel: cómo se controla y cómo se comprueba
+
+🟢 **Escrito el 31-ago: mismo hueco que el alt text, un renglón más abajo.** El Paso 1 dice
+*"subir los 7 `.png` **en este orden**"* y da la tabla — pero **en ninguna parte decía cómo se
+consigue ese orden en la app**, ni cómo saber si salió bien. Es la misma forma de agujero: la
+tabla estaba, la pantalla no.
+
+**Por qué importa en esta pieza:** las 7 láminas son una secuencia, no un álbum. La 1 pregunta
+(*¿Lucía es real?*), la 2 responde, la 6 devuelve la pregunta al que mira y la 7 cierra. Salteado
+el orden, la pieza cuya única función es explicar quién es Lucía deja de explicar — y es el post
+que queda **fijado** arriba del perfil.
+
+**El riesgo concreto no es teórico:** los 7 archivos llegan juntos por Telegram (Paso 0.5) y la
+galería del teléfono muestra **lo más nuevo primero**. Si se tocan "como aparecen", el carrusel
+sale al revés: abre en la playa y termina en la pregunta.
+
+### Cómo se controla al subir
+
+**El orden lo fija el ORDEN EN QUE SE TOCA cada foto**, no el nombre del archivo ni cómo estén
+acomodadas en la galería. Al activar la selección múltiple, cada foto tocada queda con un
+**número** encima: ese número es la posición en el carrusel. Se tocan del 1 al 7 según la tabla
+del Paso 1.
+
+⚠️ El selector de Instagram **muchas veces no muestra el nombre del archivo**, así que
+`slide-03.png` no sirve para reconocerla en pantalla. Se reconoce por lo que se ve:
+
+| # | se reconoce porque… |
+|---|---|
+| 1 | primer plano, pecas y aros dorados |
+| 2 | terraza al atardecer |
+| 3 | sonríe frente a una laptop |
+| 4 | laptop en un café |
+| 5 | tablet en un café |
+| 6 | cuarto con luz suave |
+| 7 | playa al atardecer |
+
+### La comprobación (10 segundos, y no depende de la versión de la app)
+
+**Antes de tocar *Compartir*: deslizar el carrusel entero de punta a punta.** Tiene que abrir en
+**"¿Lucía es real?"** y terminar en **"esto recién empieza"**. Si abre en la playa, está al revés.
+
+Esta comprobación vale más que cualquier instrucción de pantalla: mira el resultado, no el menú.
+
+### Si salió mal — se arregla, no se borra
+
+**Antes de publicar:** en la pantalla de edición del carrusel se mantiene presionada una miniatura
+y se arrastra a su lugar.
+
+**Ya publicado:** desde el **24 de marzo de 2026** Instagram deja reordenar un carrusel ya subido
+— abrir el post → **···** → **Editar** → mantener presionada la lámina → arrastrar → **Listo**.
+Se conservan likes, comentarios y guardados; lo que **no** se puede es agregar láminas nuevas.
+La función salió por despliegue gradual, así que puede no estar todavía en esa versión.
+
+⚠️ **No verificado en el teléfono de Sergio** — igual que el Paso 0-ter y el 1-ter: está
+verificado que la función existe y cómo se llama, no que aparezca así en esa app. **Por eso el
+que manda es el deslizar de arriba**, que no depende de ninguna pantalla.
+
+**Fuentes:** [Instagram/@creators](https://www.threads.com/@creators/post/DWO52_igL3r/starting-today-you-can-reorder-photos-and-videos-in-your-carousel-posts-after) ·
+[9to5Mac, 23-mar-2026](https://9to5mac.com/2026/03/23/instagram-now-finally-lets-users-reorder-carousel-images-and-videos-after-publishing/) ·
+[Kapwing (pasos ··· → Editar → mantener presionado → Listo)](https://www.kapwing.com/resources/how-to-change-the-order-of-an-instagram-carousel-post-2026/)
+
+📌 **Vale igual para el Plan B** (Paso 1-bis, 6 láminas): mismo orden, salteando `slide-03`. La
+comprobación cambia en una sola cosa — sigue abriendo en *"¿Lucía es real?"* y cerrando en
+*"esto recién empieza"*, pero la tercera ya no es la de la laptop sino la del café.
 
 ---
 
