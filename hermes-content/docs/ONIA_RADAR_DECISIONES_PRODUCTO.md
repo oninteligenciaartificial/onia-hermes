@@ -636,20 +636,35 @@ Las dos opciones cuestan lo mismo — una línea en un archivo, cero bolivianos:
 
 # Para decidir — al abrir el 1 de septiembre
 
-Ocho cosas esperan a Sergio. Están ordenadas por lo que desbloquean, no por urgencia
+Diez cosas esperan a Sergio — la 2 se resolvió el 1-sep y queda tachada. Están ordenadas por lo
+que desbloquean, no por urgencia
 aparente. Cada una tiene su detalle arriba en este archivo o en
 `hermes-content/docs/handoff/claude-git-status-935f47.md`.
 
-**1. ¿Publicamos los 77 commits de `onia.com.bo`?**
-El sitio de venta no se publica desde el **22-ago**. No estaba roto: lo tapaba el deploy de
-center, que corre antes y muere. [PR #30] lo destraba **sin publicar**. Publicar es aparte:
-`workflow_dispatch` con `swap=false` (build en ubuntu, no toca producción) y, si sale verde,
-`swap=true`. **Recomendación: mirar primero qué cambió en esos 77 commits.**
+**1. ¿Publicamos `onia.com.bo`? Ya no son 77 commits: son OCHO.**
 
-**2. ¿Cuál de los tres heroes?**
-`ui-viva` (las piezas del producto dibujadas, mejor gancho emocional) · `resultado` (el día
-del negocio, mejor titular: *"Cerrás vos. El negocio no."*) · `mecanica` (el circuito animado,
-el más disciplinado). Ninguno lleva una captura del sistema. Se muestran renderizados.
+⚠️ **Corregido el 2026-09-01 midiendo, no leyendo.** Esta decisión decía "77 commits" y esa
+cifra es de antes del despliegue a mano del 24-ago. Lo vivo hoy es el build
+`Ega1b2zc6I30Rblyyl2Fv`, del **24-ago 21:01 La Paz** (`/opt/onia-landing/runtime-next` por SSH;
+el mismo id aparece en el HTML servido). Desde ese build,
+`git log origin/main --since=2026-08-24 -- web-factory/apps/onia-platform` da **8 commits**, y
+son todos de copy y precio de la landing. Mirarlos es media hora, no un día — que era justo la
+razón por la que esta decisión se venía posponiendo.
+
+Lo que está publicado y no debería, medido con `curl` sobre las páginas vivas:
+**/precios sigue cobrando "Inventario avanzado — Bs 180"**, que Sergio sacó de la oferta el
+27-ago y que `eec7d0f3` ya borró en `main`; y **el hero aprobado el 1-sep no está** — el h1 vivo
+sigue siendo el de la v3.
+
+Publicar: `workflow_dispatch` con `swap=false` (build en ubuntu, no toca producción) y, si sale
+verde, `swap=true`. ⚠️ **El paso del landing sigue colgado del de center**
+(`.github/workflows/deploy-onia-center.yml:78`, mismo job, sin `if:`), y center.onia.com.bo está
+muerto a propósito desde el 29-ago (404 medido). PR #30 arregló el lockfile, **no** desacopló los
+dos pasos: si el de center vuelve a morir, el sitio de venta vuelve a no publicarse.
+
+**2. ✅ RESUELTA — el hero es `resultado`.** Sergio eligió el 2026-09-01 (*"esta bien el hero…
+pero esta bien usa ese"*) y ya está mergeado en `main` (PR #35, `c8dfe249`). Lo único que falta
+es la decisión 1: **está en `main` y no en el sitio**.
 
 **3. ¿La prueba de 14 días pide tarjeta?**
 Ver la sección propia arriba. Hoy Onia da 14 días sin tarjeta y **cobra a mano al día 14**;
@@ -687,3 +702,42 @@ que el más valioso no existía.
 **8. Los worktrees.**
 19 vivos; el disco llegó al 100% y frenó el trabajo. Se liberó a 12 GB, pero un worktree con
 dependencias pesa 6,4 GB y se vuelve a llenar solo. Hay que decidir cuáles se archivan.
+⚠️ **Sigue vivo el 2026-09-01**: 24 worktrees y `df` marca **99%** (5,1 GB libres de 465 GB).
+Crear un worktree normal del repo **falla con "No space left on device"** — medido hoy al
+intentarlo; hubo que armarlo con `sparse-checkout`. El disco ya no es una molestia: bloquea.
+
+**9. ¿Para qué sirve `web-factory/packages/`?**
+Los tres paquetes que el carril de Web Factory viene puliendo hace diez días —`@onia/blocks`,
+`@onia/templates`, `@onia/tokens`— **no aparecen en una sola línea** de la app que sirve
+onia.com.bo: `grep -rn "@onia/" web-factory/apps/onia-platform/src` devuelve **0**. Y la cola de
+ese carril le **prohíbe** tocar `apps/onia-platform`, o sea que el destino cero es por diseño,
+no por olvido. Diez días de trabajo cuidadoso —dashboard, bloques, tokens, 265 tests— que hoy no
+tocan ninguna superficie que venda.
+
+Las tres salidas cuestan lo mismo, **Bs 0**; lo que cambia es qué se deja de esperar:
+
+- **a)** Se declaran **producto interno** (la galería + las webs de cliente) y se acepta que la
+  landing no los use. Cero trabajo — pero hay que dejar de medir ese carril por lo que le llega
+  al sitio de venta, que es como se lo viene mirando.
+- **b)** Se le **abre la zona** sobre `apps/onia-platform` para portar de a un bloque. Choca con
+  `onia-cola`, que ya toca esa app: habría que turnarse el archivo.
+- **c)** Las **webs de cliente** pasan a ser el único consumidor y `packages/` deja de crecer
+  hasta que haya un cliente que las pague. Es la que ata el trabajo a plata que entra.
+
+Detalle y evidencia en `web-factory/docs/LOOP_COLA.md`, sección *Bloqueado*.
+
+**10. ¿Dónde se publican `dental-premium` y `ferreteria-sur`?**
+Dos webs de cliente **terminadas, miradas y con gates verdes**, y **cero URL**: no hay proyecto
+en Vercel (medido con la API: 15 proyectos, ninguno es estos dos), no hay workflow, y el
+`vercel.json` de la raíz tiene el deploy por git apagado para todo el repo. El add-on se cierra
+mandando un link por WhatsApp y ese link no existe. Las dos opciones cuestan **Bs 0**:
+
+- **a) Subdominio en el VPS** (recomendada). El comodín de DNS ya resuelve —cualquier subdominio
+  de la marca devuelve las IPs de Cloudflare y responde **404**, o sea que falta el vhost, no el
+  DNS— y las dos apps ya son `output: standalone`, el mismo modelo que
+  `scripts/deploy-onia-landing.sh`. Cuesta un contenedor por sitio.
+- **b) Vercel por CLI.** Cuenta hobby, y el deploy por git está apagado justamente porque cinco
+  loops pusheando agotaban la cuota diaria (`37f9ac88`). Competiría con la cuota que necesita la
+  landing.
+
+Lo único que hace falta de Sergio es **el nombre del subdominio**.

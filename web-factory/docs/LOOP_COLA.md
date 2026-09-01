@@ -1,10 +1,18 @@
 # Loop web-factory — cola de trabajo (analizar ⇄ desarrollar)
 
-> La leen los dos crons in-session. **Regla madre: el loop SIEMPRE trabaja** —
-> cada vuelta o DESARROLLA (construye) o ANALIZA (aprende) y refina. Nunca se
-> queda sin tarea: si un carril se vacía, el de análisis genera la próxima desde
-> el catálogo o los huecos del crítico.
-
+> **Quién la lee y quién la llena** (verificado en vivo el 2026-09-01, no de memoria):
+> la CONSUME `web-factory-dev-loop` — tarea de Windows, `45 * * * *`, habilitada, último
+> run 16:48 La Paz (`list_scheduled_tasks`). La RELLENA `canario-visual`, que desde el
+> 2026-09-01 corre **en el VPS** (`crontab -l` en 187.77.16.63: `41 4,10,16,22` UTC =
+> 00:41 · 06:41 · 12:41 · 18:41 La Paz) y convierte cada diferencia que ve en pantalla en
+> ítem de la cola del carril dueño. Registro: `hermes-content/docs/cola/loops.md`.
+>
+> ⚠️ **Corregido el 2026-09-01.** Acá decía que la leían "los dos crons in-session" y que
+> el refill lo hacía un "cron de análisis (10 min)" alternando con un "cron de tareas
+> (5 min)". **Ninguno de los dos existe.** El único cron de salud de este carril,
+> `web-factory-salud` (`21 * * * *`), está **deshabilitado** desde el 2026-09-01 02:29,
+> igual que `cerrar-y-revisar-web-factory`. Una cola que nombra a un dueño inexistente
+> deja su runbook sin nadie que lo corra — y eso es lo que pasó con el de salud de abajo.
 ## FOCO (lo que perseguimos ahora)
 
 Convertir el **catálogo de técnicas verificado** (`docs/WEB_FACTORY_TECNICAS_2026.md`,
@@ -36,31 +44,226 @@ Las tres formas de fantasma que ya aparecieron acá:
 ## Reglas duras del run
 
 1. **Worktree**: `C:\dev\proyectos\onia-hermes\.claude\worktrees\hyperframes-onia-export-formats-053cf9`
-   — rama `claude/onia-web-architecture-b37eca`. NO otro checkout.
+   — rama `claude/onia-web-architecture-b37eca`. NO otro checkout. (Verificado presente el
+   2026-09-01 con `git worktree list`.)
 2. **Anti-choque**: `git status --short` sucio de OTRA mano → NO tocar código,
    solo salud, y salir.
-3. **Zona propia**: `web-factory/{data,packages,generate,out,tests,docs,FACTORY.md,apps/dental-premium}`
+3. **Zona propia**: `web-factory/{data,packages,generate,out,tests,docs,scripts,FACTORY.md,apps/dental-premium,apps/ferreteria-sur}`
    + `.claude/skills/onia-web-factory/`. PROHIBIDO `web-factory/apps/{onia-platform,site,dentalgest-landing}`,
    `hermes-content/docs/**` (salvo `handoff/web-factory-cliente-prueba.md`) y n8n.
-4. **UNA tarea por vuelta**, la primera no-bloqueada del carril que toque. Gates
-   antes de commit: `pnpm typecheck:packages` (+ `pnpm test` si tocás packages;
-   `tsc --noEmit` en `apps/dental-premium` si la tocás) + **mirar renderizado**.
-   Commit conventional (por qué, en español, sin firma) + push. Marcar `[x]`.
+   ⚠️ **Corregido el 2026-09-01**: la zona no nombraba `apps/ferreteria-sur` —que este mismo
+   carril construyó en A3— ni `web-factory/scripts/`, donde vive el `serve-out.mjs` que el
+   runbook de salud de abajo manda a levantar. El carril tenía prohibido tocar su propia obra.
+4. **UNA tarea por vuelta**, la primera no-bloqueada de `## Ahora`. Gates antes de commit:
+   `pnpm typecheck:packages` (+ `pnpm test` si tocás packages; `tsc --noEmit` en la app si
+   la tocás) + **mirar renderizado**. Commit conventional (por qué, en español, sin firma)
+   + push. Marcar `[x]` y **mover el ítem a la sección de cerrados**, no dejarlo en `## Ahora`.
 5. **Tachadas NO se rehacen. Bloqueado por decisión de Sergio → PushNotification
    y seguir con lo desbloqueado.** Nada de cirugía inventada.
+6. **PROHIBIDO desplegar.** Lo dice el prompt de todos los loops de carril
+   (`scripts/loops/README.md`) y lo repite el del integrador: *"Desplegar sigue siendo de
+   Sergio; juntarle la decisión es tuyo"*. Este carril **prepara** la publicación y la deja
+   a un comando; el botón lo aprieta Sergio.
 
-## Runbook de salud (el cron de análisis lo corre; auto-REMEDIAR)
+## Runbook de salud (lo corre el propio dev-loop; auto-REMEDIAR)
+
+> ⚠️ **Sin dueño hasta el 2026-09-01**: este runbook decía "el cron de análisis lo corre" y
+> ese cron no existe; `web-factory-salud` está deshabilitado. Lo corre el dev-loop al empezar.
 
 1. Server `curl -s -o/dev/null -w "%{http_code}" http://localhost:4319/dental-amanecer/` ≠200
    → `node scripts/serve-out.mjs 4319` en background desde `web-factory/`.
 2. Rama pusheada (`git log origin/… -1` == `git log HEAD -1`); commits locales → push.
    Árbol sucio de otra mano → no commitear, avisar.
 3. `pnpm typecheck:packages` verde; rojo en zona → arreglar mínimo y commitear.
-4. Node zombies de tests viejos → matar. Cerrar con la prueba (200, hash, exit 0).
+4. **`pnpm install --frozen-lockfile` desde `web-factory/`.** Si falla, el deploy de
+   `onia.com.bo` está roto aunque nada de su app lo esté — ver el primer ítem de `## Ahora`.
+5. Node zombies de tests viejos → matar. Cerrar con la prueba (200, hash, exit 0).
 
 ---
 
-## CARRIL A — DESARROLLAR (build; el cron de tareas tira de acá primero)
+## Ahora
+
+> Ordenados por lo que acerca la venta, no por lo fácil. Los dos primeros son webs que ya
+> existen y que hoy no le llegan a ningún cliente; el resto es deuda medida.
+> **Cada ítem trae su evidencia re-verificada el 2026-09-01** — y cinco de los siete
+> estaban escritos DENTRO de ítems ya cerrados, donde ningún loop los iba a ver.
+
+- [ ] **El sitio de venta no publica por culpa de una app de ESTE carril, y la causa sigue viva.**
+      onia.com.bo estuvo **nueve días sin publicarse** y no era su culpa: el deploy muere en
+      `pnpm install --frozen-lockfile` porque `web-factory/apps/dental-premium` declara 9
+      dependencias que `web-factory/pnpm-lock.yaml` no tenía. El lockfile ya se parchó (PR #30,
+      2026-09-01 14:52), **la causa no**: las dos apps de cliente llevan un `package-lock.json`
+      de npm dentro de un workspace pnpm, y su propio README manda correr `npm install`. El
+      próximo que siga el README vuelve a tumbar la publicación del sitio que vende.
+      **Evidencia** (`$ gh run view 33544864012 --log-failed`, run del 2026-09-01 18:43 UTC):
+      `ERR_PNPM_OUTDATED_LOCKFILE ... not up to date with <ROOT>/apps/dental-premium/package.json`
+      · `9 dependencies were added: next@15.5.4, react@19.1.0, motion, gsap …`.
+      Los dos lockfiles de npm siguen commiteados —
+      `web-factory/apps/dental-premium/package-lock.json` y
+      `web-factory/apps/ferreteria-sur/package-lock.json`, 35.759 bytes **idénticos**, junto a
+      `web-factory/pnpm-workspace.yaml`, que mete todo `apps` en el workspace de pnpm — y
+      `web-factory/apps/ferreteria-sur/README.md:18` dice `npm install`.
+      Y **no hay ningún gate**: `$ grep -rn frozen-lockfile .github/workflows/` devuelve 0, o sea
+      que la desincronización sólo se descubre publicando, que es como costó nueve días.
+      **Hecho cuando**: los dos `package-lock.json` fuera del repo (y en `.gitignore`), los dos
+      README diciendo `pnpm install`, y la salida pegada de `pnpm install --frozen-lockfile`
+      desde `web-factory/` con exit 0 contra el lockfile de hoy. El gate en CI es el ítem
+      bloqueado de más abajo: `.github/` no es zona de este carril.
+
+- [ ] **Las dos webs de cliente están terminadas y no se pueden publicar con un comando.**
+      `web-factory/apps/dental-premium` y `web-factory/apps/ferreteria-sur` son dos sitios
+      Next terminados, mirados y con gates verdes, y hoy **no existe ninguna forma de
+      publicarlos**: cero proyectos en Vercel (medido con la API el 2026-09-01 — 15 proyectos,
+      ninguno es estos dos), cero entrada en `.github/workflows/`, y el `vercel.json` de la raíz
+      trae deploy por git apagado para todo el repo. El add-on se cierra mandando un link por
+      WhatsApp, y ese link no existe.
+      **Evidencia**: `$ grep -rln dental-premium .github/ scripts/` → 0 · las dos apps ya traen
+      salida standalone (`web-factory/apps/dental-premium/next.config.ts:6`), o sea el MISMO
+      modelo de despliegue que ya usa `scripts/deploy-onia-landing.sh` para onia.com.bo.
+      **Qué hace este ítem** (no publica — la regla 6 lo prohíbe): (a) correr
+      `pnpm --filter dental-premium build` y `pnpm --filter ferreteria-sur build` y pegar la
+      salida, incluido el First Load de cada ruta; (b) dejar en `web-factory/scripts/` un
+      deploy-web-cliente.sh parametrizado por app + subdominio, copiado de
+      `scripts/deploy-onia-landing.sh` (build → tarball → stage → swap con backup y rollback).
+      **Hecho cuando**: los dos builds salen exit 0 con su server.js de standalone listado, y
+      el script pasa `bash -n`. **Bloqueado sólo el último paso**: el subdominio lo elige
+      Sergio — abajo están las dos opciones, cotizadas las dos en Bs 0.
+
+- [ ] **El CTA del hero de la ferretería queda FUERA del pliegue a 1440×800.**
+      Lo dejó anotado A3 al cerrar ("entra por 82px a 1440×900 y queda fuera a 1440×800") y
+      nunca fue línea de cola, así que ningún loop lo iba a tomar. Es el botón que convierte,
+      en la altura de pantalla más común de una laptop.
+      **Evidencia**: el hero no declara alto propio —
+      `$ grep -rnE "100vh|100svh" web-factory/apps/ferreteria-sur/src` devuelve 0 — así que el
+      pliegue sale del padding acumulado en
+      `web-factory/apps/ferreteria-sur/src/app/sections.css:15`.
+      **Hecho cuando**: medido en el navegador a 1440×800, 1440×900 y 390×844, el CTA queda
+      **entero dentro del primer viewport en los tres**, con la captura mirada.
+      Re-verificar el número antes de tocar: la medición es del 31-ago.
+
+- [ ] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
+      También anotado por A3 al cerrar y nunca convertido en línea. Es el sitio de un negocio
+      en Bolivia: lo abre un cliente con datos móviles.
+      **Evidencia**: `web-factory/apps/ferreteria-sur/package.json` carga `motion` y `gsap`
+      como dependencias planas del bundle y
+      `web-factory/apps/ferreteria-sur/src/components/motion.tsx` es su único consumidor.
+      **Hecho cuando**: la salida de `pnpm --filter ferreteria-sur build` muestra First Load
+      **≤150 kB** en la ruta raíz, pegada en el commit, y el sitio mirado renderizado a 1440 y
+      390 para probar que la animación sigue viva (import dinámico, no animación borrada).
+
+- [ ] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
+      T34 se cerró como fantasma con esta frase adentro: *"lo que SÍ falta y no es esto:
+      ningún bloque la usa — cablearla a las cards es otra tarea, anotada"*. Nunca fue línea.
+      Una primitiva que ninguna card usa es una promesa de la galería que el cliente no ve.
+      **Evidencia** (re-verificada hoy): `$ grep -rn wf-hover-lift web-factory/packages` sólo
+      devuelve su propia definición en `web-factory/packages/blocks/src/motion.ts:53`, su
+      neutralización bajo reduced-motion en la 77, su ficha en la 157, la tabla de
+      `web-factory/packages/blocks/MOTION.md:37` y la demo suelta
+      `web-factory/packages/blocks/motion-demo.html:72`. **Cero uso en los bloques.**
+      **Hecho cuando**: las cards de al menos un bloque real la llevan, con su test de que la
+      clase sigue puesta, y **mirado** el hover en la galería en claro y oscuro + con
+      reduced-motion forzado, comprobando que ahí no se levanta.
+
+- [ ] **El punto final del spark del KPI mide 5,03 px y el piso que fijó W4 es 8.**
+      A6 lo dejó anotado dentro de su propio `[x]`: *"sigue en `r=3` y, con la escala de 0,839,
+      mide 5,03px renderizados — bajo el piso de 8px"*. Es el único marcador del panel que
+      quedó fuera de la regla que el propio carril se puso en W4.
+      **Evidencia**: `web-factory/packages/templates/src/dashboard.ts:993` sigue emitiendo
+      `r="3"` en el círculo del último punto.
+      **Hecho cuando**: medido en el navegador el diámetro RENDERIZADO (no el atributo) en
+      `dashboard-demo` y `dashboard-edge` × claro/oscuro × 1440/390, ≥8 px en todas, con el
+      test que **cae** al volver a 3 verificado en rojo antes de darlo por bueno.
+
+- [ ] **Carril B — portfolio sigue sin ancla (N=1), el último rubro que se receta por analogía.**
+      B1 y B2 cerraron los seis rubros que tenían, y las dos terminan con la misma frase
+      colgando fuera de toda línea de cola: *"Sigue sin ancla y queda para B: portfolio (N=1)"*.
+      **Evidencia** (re-verificada hoy):
+      `web-factory/data/references/design-sources/2026-08-29-vertical-playbooks.md:231` sigue
+      diciendo "Sigue sin ancla: portfolio (N=1)".
+      **Hecho cuando**: dos sitios de portfolio vivos cosechados con el MISMO método que B1/B2
+      (Scrapling con `impersonate=chrome`, siguiendo la hoja de estilo enlazada, hexes por
+      **token declarado** y saturación en **HSV**, descartando por NOMBRE del token y no por
+      frecuencia), su ficha con cifras en
+      `web-factory/data/references/design-sources/`, y la sección del playbook reescrita con lo
+      que el dato diga — incluso si desmiente lo que hoy está escrito, que es lo que pasó en
+      los dos rubros anteriores.
+
+## Bloqueado (decide Sergio)
+
+> Reverificado el 2026-09-01. Un bloqueo vencido es peor que un fantasma: le pide a Sergio
+> una decisión que ya tomó.
+
+- [ ] **Publicar onia.com.bo. Ya no son 77 commits: son OCHO, y uno cobra un precio muerto.**
+      El sitio de venta sirve el build `Ega1b2zc6I30Rblyyl2Fv`, del **24-ago 21:01 La Paz**
+      (medido por SSH en /opt/onia-landing/runtime-next; el mismo id aparece en el HTML vivo).
+      Desde ese build, `$ git log origin/main --since=2026-08-24 -- web-factory/apps/onia-platform`
+      son **8 commits**, no 77 — la cifra vieja del radar es de antes del despliegue a mano del
+      24-ago. Lo que hoy está publicado y no debería:
+      **/precios cobra "Inventario avanzado — Bs 180"**, que Sergio sacó de la oferta el 27-ago
+      y que `eec7d0f3` ya borró en main (medido con curl sobre la página viva), y **el hero
+      aprobado el 1-sep no está**: el h1 vivo sigue siendo el de la v3 ("Tu negocio no pierde
+      citas ni cobros…") mientras main ya trae "El negocio no."
+      (`web-factory/apps/onia-platform/src/app/(sitio)/hero.test.ts:40`).
+      **Cómo se publica**: el workflow de deploy por `workflow_dispatch` con `swap=false`
+      (build + stage, no toca producción) y, si sale verde, otra corrida con `swap=true`.
+      **Ningún loop puede hacerlo**: los prompts prohíben desplegar
+      (`scripts/loops/README.md`) y el del integrador lo dice literal — *"Desplegar sigue
+      siendo de Sergio"*. **Se sabe hecho** abriendo la página de precios y viendo que
+      "Inventario avanzado" ya no cobra, y la home con el hero nuevo.
+
+- [ ] **El paso que publica el sitio de venta sigue colgado del de un panel abandonado.**
+      En `.github/workflows/deploy-onia-center.yml:78` el paso "Deploy landing" corre en el
+      MISMO job y DESPUÉS del deploy de center, **sin `if:`**. Si el primero muere, el segundo
+      nunca corre — que es exactamente cómo el sitio de venta quedó nueve días sin publicar. Y
+      center.onia.com.bo **está muerto a propósito**: devuelve 404 (medido hoy) porque Sergio
+      le sacó los routers de traefik el 29-ago.
+      **Es una línea** (`if: always()` en el paso del landing, o partir el workflow en dos).
+      **Bloqueado por zona, no por dificultad**: `.github/` no es zona de este carril (regla 3).
+      Decisión: se le extiende la zona a este carril para ese archivo, o se rutea a `onia-cola`,
+      que ya despliega. Las dos cuestan lo mismo: una línea, Bs 0. En la misma pasada entra el
+      gate que hoy no existe (`pnpm install --frozen-lockfile` sobre `web-factory/**` en
+      `.github/workflows/repo-pulse.yml`), que es lo que impide que esto vuelva a pasar.
+
+- [ ] **Dónde se publican dental-premium y ferretería-sur.** Dos opciones, las dos Bs 0:
+      **(a) Subdominio en el VPS.** El comodín ya resuelve: cualquier subdominio de la marca
+      devuelve las IPs de Cloudflare y responde **404** hoy, o sea que falta el vhost, no el
+      DNS. Traefik 3.6.7 vía Easypanel; las dos apps ya son standalone, el mismo modelo de
+      `scripts/deploy-onia-landing.sh`. Cuesta un contenedor por sitio.
+      **(b) Vercel por CLI.** Cuenta **hobby**, y el deploy por git está apagado para todo el
+      repo en el `vercel.json` de la raíz porque cinco loops pusheando agotaban la cuota diaria
+      (`37f9ac88`). Habría que deployar a mano con `--prebuilt`.
+      Recomendación: **(a)** — es el modelo que el repo ya sabe operar y no compite con la
+      cuota que la landing necesita.
+
+- [ ] **Los `packages/` de web-factory no los importa NADIE, y a este carril se le prohíbe tocar lo que sí vende.**
+      Los tres paquetes que este carril viene puliendo hace diez días no aparecen en una sola
+      línea de la app que sirve onia.com.bo: `$ grep -rn "@onia/" web-factory/apps/onia-platform/src`
+      devuelve 0. Y la regla 3 le prohíbe a este carril tocar esa app. Diez días de trabajo con
+      destino cero, por diseño. Opciones cotizadas: **(a)** los paquetes se declaran producto
+      interno (galería + webs de cliente) y se acepta que la landing no los use — Bs 0, cero
+      trabajo, pero hay que dejar de medir el carril por lo que le llega al sitio de venta;
+      **(b)** se le abre la zona a este carril sobre esa app para portar de a un bloque — Bs 0,
+      y choca con `onia-cola`, que ya la toca; **(c)** las webs de cliente pasan a ser el único
+      consumidor y `web-factory/packages/` deja de crecer hasta que haya cliente que las pague.
+      Anotado también en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+
+- [ ] **Texturas SVG en dental-premium.** A4(c) lo dejó bloqueado el 31-ago: *"no hay OK de
+      Sergio en ningún lado (avisado por PushNotification)"*, y nunca llegó a esta lista de
+      bloqueos. Sin respuesta desde entonces. Si no hay OK, se cierra sin trabajo.
+
+- [ ] **Bloques cifra-editorial, quote-única y features+device.** Propuesta enviada, sin
+      respuesta desde el 30-ago. Si sigue sin respuesta la próxima vuelta, se cierra sin
+      trabajo en vez de quedar juntando polvo.
+
+- [ ] **Rediseño del dashboard admin real.** ⚠️ **Corregido el 2026-09-01**: esta línea decía
+      "onia-platform/onia-center = otra lane", y **ONIA Center ya no existe** — Sergio el
+      31-ago: *"iba a ser el panel para manejar todo pero quedó abandonado"*, y
+      center.onia.com.bo devuelve 404 (medido hoy). Queda sólo el admin de la app de
+      plataforma, que sigue siendo otro carril: se propone y se coordina, no se toca desde acá.
+
+---
+
+## Cerrado — carril A (build)
 
 - [x] **A1a · Dashboard: charts a tema categórico** (2026-08-30, **rehecho**).
       El primer intento (29-ago) eligió 6 hues **a criterio** y estaba MAL: la skill
@@ -452,7 +655,7 @@ Las tres formas de fantasma que ya aparecieron acá:
       queda **vacia** (antes tenia 1) y 0 errores de consola. Footer **mirado**: el
       subrayado honey sigue pegado al texto y la caja de 44px es invisible.
 
-## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
+## Cerrado — carril B (análisis)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
       tocar (`2026-08-29-critico-limites.md:42` seguía vivo): los 4 rubros se recetaban
@@ -545,22 +748,33 @@ Las tres formas de fantasma que ya aparecieron acá:
       superficie renderizada). **Lección: "actualizar X a vN" envejece como la cola — verificar
       la versión viva antes de instalarla, y probar la herramienta corriéndola.**
 
-## Regla de alternancia (cómo el loop "siempre trabaja")
+## Cómo se rellena esta cola
 
-- El **cron de tareas (5 min)** hace la próxima de **A**. Si A está todo `[x]` o
-  bloqueado, hace la próxima de **B**.
-- El **cron de análisis (10 min)** hace salud → analiza el avance → **reordena** y
-  **REFILL**: si A quedó corto, agrega la próxima tarea A concreta sacada del
-  catálogo (p.ej. "portar técnica T-N"); si B cerró un hueco, agrega el siguiente.
-  Nunca deja A y B vacíos a la vez.
-- Un hallazgo de B que desbloquea un build entra como tarea A. Un hueco que un
-  build A revela entra como tarea B. Los dos carriles se alimentan.
+⚠️ **Reescrito el 2026-09-01.** Acá decía que un "cron de tareas (5 min)" tiraba del carril A,
+que un "cron de análisis (10 min)" hacía salud + reordenaba + refill, y que entre los dos el
+loop "nunca se queda sin tarea". **Los dos crons son inventados.** Medido contra las dos
+fuentes vivas (`list_scheduled_tasks` en Windows y `crontab -l` en el VPS):
 
-## Bloqueadas (esperan a Sergio)
+| quién | dónde | cuándo | qué hace |
+|---|---|---|---|
+| `web-factory-dev-loop` | Windows | `45 * * * *` (La Paz) | **Consume**: la primera de `## Ahora`, más la salud de arriba |
+| `canario-visual` | VPS | `41 4,10,16,22` UTC | **Produce**: abre las pantallas de cliente, las MIRA, y cada diferencia se vuelve ítem del carril dueño |
+| `web-factory-salud` | Windows | `21 * * * *` | **DESHABILITADO** desde el 2026-09-01 02:29 — por eso el runbook de salud lo corre ahora el dev-loop |
 
-- [ ] Bloques cifra-editorial · quote-única · features+device (propuesta enviada).
-- [ ] Rediseño del dashboard admin real (onia-platform/onia-center = otra lane):
-      se propone y coordina, no se toca desde acá.
+La lista viva está en `hermes-content/docs/cola/loops.md`, que es su fuente de verdad.
+
+**Si `## Ahora` se vacía, el loop NO inventa una tarea.** Avisa por Telegram y se va. Una cola
+corta y cierta vale más que una larga y falsa: en la pasada del 2026-09-01, **7 de los 11**
+pendientes que este carril declaraba resultaron ser trabajo ya hecho o inexistente, y en el
+carril de plataforma fueron **4 de 6**. El refill lo trae `canario-visual` con una pantalla
+mirada, o lo escribe una sesión de control con evidencia.
+
+**El espejo del trabajo fantasma** (hallazgo del 2026-08-31, confirmado hoy): el modo de falla
+más caro de esta cola no es trabajo inventado que no existe — es **trabajo real que se evapora
+al escribirlo dentro del texto de un ítem ya cerrado**. Cinco de los siete ítems de `## Ahora`
+salieron de ahí: vivían como "Anotado, NO tocado" o "Pendientes anotados" bajo un `[x]`, donde
+ningún loop los podía leer como tarea. **Regla: lo que no se hizo no se anota en el ítem que se
+cierra; se abre como línea propia en `## Ahora` antes de marcar el `[x]`.**
 
 ## Hechas (no rehacer)
 
