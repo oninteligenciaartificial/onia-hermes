@@ -212,11 +212,21 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 
 
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
-      org `zzqa-horario-0001` ("ZZ QA Horario") con su usuario y su inbox, y las
-      conversaciones QA 39, 43 y 44 (bandeja, insistencia, comprobante). **No borrar todavía**:
-      son la evidencia de cuatro ítems cerrados, igual que las dos orgs que el carril de
-      producto decidió NO borrar por el mismo motivo. Se limpia cuando haya conversaciones
-      reales que las reemplacen como prueba.
+      las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,
+      `Cliente Comprobante`). **No borrar todavía**: son la evidencia de cuatro ítems cerrados,
+      igual que las dos orgs que el carril de producto decidió NO borrar por el mismo motivo.
+      Se limpia cuando haya conversaciones reales que las reemplacen como prueba.
+
+      ⚠️ **Corregido 2026-09-01, auditando el ítem contra la base de HOY (no contra el
+      texto): la org `zzqa-horario-0001` ("ZZ QA Horario") es un fantasma — nunca existió.**
+      `public.organizations` tiene hoy sólo las cuatro de siempre (`Onia (interna)`,
+      `Bolivian electricidad`, `ZZ QA Clinica Chatbot`, `ZZ QA Ferreteria Tornillo`); ninguna
+      con slug u org nueva de "horario". Tampoco hay un quinto inbox en Chatwoot (siguen
+      siendo 3, 4, 5 y 7) ni un usuario con ese correo en `auth.users`. Las tres
+      conversaciones SÍ son reales y SÍ están en `inbox_id=7` — pero es el inbox de la org
+      que ya existe, `ZZ QA Clinica Chatbot`, no uno nuevo. No cambia lo que hay que hacer
+      (seguir sin borrar), sólo corrige el dato falso para que nadie busque una org que no
+      está.
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
       contrato del banco calcado); el código no cambia para el modo real. Espera las
