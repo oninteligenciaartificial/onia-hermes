@@ -260,7 +260,36 @@ cambia es que cubra todo lo que el reconcile toca en vez de un tercio. Anotado c
 
 ---
 
-## 11. En la bandeja, lo que dice el bot aparece firmado "Vos" (2026-08-31) — acción de Sergio
+## 11. ~~En la bandeja, lo que dice el bot aparece firmado "Vos"~~ — RESUELTO, no hay decisión (2026-08-31)
+
+> 🔴 **CORREGIDO el 2026-08-31: esta sección diagnosticó mal y mandaba a Sergio a tocar un bot
+> vivo para nada.** El bot **ya postea como el agente 3 ("Onia Bot") desde el 18-ago** y la
+> bandeja **ya rotula "Tu asistente"**. No hay opción que elegir: la 1 ya está aplicada.
+>
+> **Dónde falló la medición, que es lo que vale.** Abajo dice *"de los mensajes salientes de
+> las conversaciones 11, 35 y 37, los 8 tienen `sender_id = 2`"*. Es **cierto** y **no prueba
+> lo que se le hizo probar**: los 8 son todos de la conv 11 y van del **6-ago al 15-ago** —
+> las convs 35 y 37 aportan **cero** salientes. Se juzgó el comportamiento de hoy con una
+> conversación cuyo último mensaje es anterior al día del cambio. Lo mismo el síntoma
+> "MIRADO": la conv 11 sí se pinta "Vos" y va a seguir así para siempre, porque esos mensajes
+> de verdad los posteó la cuenta 2.
+>
+> **El estado real, medido en producción** (base de Chatwoot + el env del proceso que CORRE —
+> `/proc/<pid>/environ`, no `docker exec printenv`, que arranca un proceso nuevo con el env
+> base del contenedor y no el del `docker exec -d` que levantó el bot):
+> `CHATWOOT_BOT_AGENT_ID=3` en el proceso y persistido en `/opt/onia/bot/webhook.env`;
+> **13 salientes con `sender_id = 3` del 18-ago al 31-ago**; `CHATWOOT_BOT_USER_ID` sin setear
+> en `onia-platform`, o sea el default **3**. Bot postea 3, bandeja busca 3 ⇒ "Tu asistente".
+>
+> ⚠️ **Lo único que sigue vivo de esta sección** es la trampa de los defaults **distintos**:
+> el bot cae a **2** (`webhook-server.sh:149`) y la plataforma a **3**. Si alguien borra la
+> línea de `webhook.env`, la bandeja se re-rotula "Vos" en silencio y se apaga la detección de
+> traspaso. **No se cambió el fallback a 3**: toca un servicio vivo (deploy ⇒ Sergio) y el
+> riesgo del inbox 3 de más abajo sigue sin verificar.
+>
+> Detalle completo y la prueba en `hermes-content/docs/cola/chatbot.md`, § "Cerrado".
+> Lo que sigue es el texto original, que se deja como historia de cómo se midió mal.
+
 
 **El síntoma, MIRADO.** Se abrió `/inbox` con la sesión del dueño y se leyó la conversación
 del +591 71606892: **todos** los mensajes salientes están rotulados **"Vos"**, incluidos los
@@ -352,10 +381,12 @@ rojo hasta un redeploy del directorio entero.
    el día que haga falta un `scp` selectivo por md5, el md5 sigue sin coincidir.
 
 ✅ **La opción 3 YA SE EJECUTÓ (2026-08-31), y con eso el ruido se terminó: lo que queda en
-esta sección es sólo la opción 1.** `espejo-check.mjs` ahora hashea el `.mjs` sin el `` de
+esta sección es sólo la opción 1.** `espejo-check.mjs` ahora hashea el `.mjs` sin el `
+` de
 los dos lados — local con `Buffer.filter`, remoto con `tr -d` (y no `sed`, que agrega un salto
 final si el archivo no lo tenía: sin esa simetría exacta los dos hashes no comparan). El `.sh`
-sigue byte-exacto, porque ahí `#!/bin/bash` no arranca.
+sigue byte-exacto, porque ahí `#!/bin/bash
+` no arranca.
 **Probado contra producción, no con un fixture:** se pasó `guardrails.mjs` a LF (5636 → 5506
 bytes, md5 crudo distinto) con el VPS en CRLF, y el gate **no lo nombró**. Antes de esto ese
 era un rojo falso. Los tres rojos que quedan son honestos: `recepcionista.test.mjs` (0 bytes

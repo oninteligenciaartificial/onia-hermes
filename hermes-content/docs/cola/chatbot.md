@@ -583,12 +583,57 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
   ```
   Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) |
 | S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas. ✅ **Sumado el 31-ago (7ª vuelta): ahora se comprueba DESDE AFUERA, sin entrar al VPS.** El `--check` del `.sh` vive dentro del contenedor (SSH + `docker exec` + `rails runner`), así que sólo lo corre quien ya está adentro y sabe que tiene que mirar — por eso las tres se perdieron el 16-ago y nadie lo vio en quince días. `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`) lee el `window.globalConfig` del HTML público del login: es un GET, corre desde cualquier máquina y hoy sale **1 con `REVERTIDAS 3/9`**. **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10, y mide la cara que ve el desconocido, no la base |
-| S11 | **Setear `CHATWOOT_BOT_AGENT_ID=3` en el servicio del bot del VPS** y recargarlo | Escribe en el VPS y cambia con qué identidad postea un bot vivo | Que la bandeja rotule **"Tu asistente"** en vez de **"Vos"** los mensajes del bot: hoy el dueño no puede distinguir su voz de la del asistente en su propia pantalla (MIRADO). Todo lo caro ya existe desde el 11-ago — el agente 3 "Onia Bot" tiene token y es miembro de los inboxes 4, 5 y 7. Opciones y el detalle del inbox 3 en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §11 |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **S11 era un FANTASMA: el bot ya firma como "Onia Bot" desde el 18-ago, y la bandeja ya
+      rotula "Tu asistente".** Estaba en "Bloqueado en Sergio" pidiéndole una acción sobre un
+      bot vivo que no habría cambiado nada — el molde exacto que este carril mide, y del tipo
+      caro: uno que hace poner las manos en producción.
+      **Por qué el diagnóstico original se equivocó, que es lo que hay que no repetir.** El
+      Radar §11 decía *"de los mensajes salientes de las conversaciones 11, 35 y 37, los 8
+      tienen `sender_id = 2` y ninguno el 3"*. Medido hoy en la base de Chatwoot, eso es cierto
+      **y no prueba lo que se le hizo probar**: los 8 son TODOS de la conv 11 y van del
+      **6-ago al 15-ago** — las convs 35 y 37 aportan **cero** salientes (son dos de los cuatro
+      desconocidos que nadie contestó, S7). O sea que se midió una conversación cuyo último
+      mensaje es **anterior** al día en que la variable empezó a hacer efecto, y de ahí se
+      concluyó cómo se comporta el bot hoy.
+      **Y el síntoma "MIRADO" era real pero histórico.** La conv 11 (+591 71606892) sí se pinta
+      entera como "Vos", y va a seguir así para siempre: esos mensajes **de verdad** los posteó
+      la cuenta 2. Mirar la pantalla fue correcto; mirar una conversación vieja para juzgar el
+      comportamiento actual es lo que falló.
+      **El estado real, medido en producción y no leído** (base de Chatwoot + env del proceso
+      que CORRE, no `docker exec printenv`, que arranca un proceso nuevo con el env base del
+      contenedor y no el del `docker exec -d` que levantó el bot):
+      | qué | medido |
+      |---|---|
+      | `CHATWOOT_BOT_AGENT_ID` del proceso del bot (`/proc/400019/environ`) | **3** |
+      | persistido en `/opt/onia/bot/webhook.env` (lo sourcea `webhook-server.sh:134`) | **sí** — sobrevive al reinicio |
+      | `messages` salientes con `sender_id = 3` | **13, del 18-ago al 31-ago** |
+      | `messages` salientes con `sender_id = 2` | 14, del 26-jul al 30-ago — es Sergio a mano, que es lo correcto |
+      | `CHATWOOT_BOT_USER_ID` en el proceso de `onia-platform` | **no seteada** ⇒ `botUserId()` cae a su default **3** (`lib/chatbot/bandeja.ts:118`) |
+      Bot postea 3, bandeja busca 3 ⇒ `de = "bot"` ⇒ **"Tu asistente"**
+      (`InboxClient.tsx:52`). La clasificación es función pura y está cubierta:
+      `npx vitest run lib/chatbot/bandeja.test.ts` → **13/13**, con el caso
+      *"outgoing de OTRO agente = negocio (el dueño contestando)"*.
+      **Lo que NO se hizo, dicho y no simulado:** no se re-MIRÓ `/inbox` renderizado — necesita
+      base + sesión del dueño. Se dice porque la regla del carril es mirar; acá la evidencia
+      medida es **más fuerte que la captura**, porque una captura de la conv 11 es exactamente
+      lo que produjo la conclusión equivocada. Lo que faltaría mirar es una conversación
+      **posterior al 18-ago** (la 44 sirve: saliente con `sender_id = 3` del 31-ago).
+      📎 **La trampa que queda viva y por la que esto podría volver:** los dos lados tienen
+      defaults **distintos** — el bot cae a **2** (`webhook-server.sh:149`,
+      `${CHATWOOT_BOT_AGENT_ID:-2}`) y la plataforma a **3**. Hoy no molesta porque la variable
+      está en `webhook.env`; el día que esa línea se borre, el bot vuelve a firmar como Sergio,
+      **toda la bandeja se re-rotula "Vos" en silencio** y además se apaga la detección de
+      traspaso (con la variable vacía `takeoverTurn` devuelve `null` y el bot deja de callarse
+      cuando el dueño contesta). **No se "arregló" cambiando el default a 3 a propósito:**
+      tocar ese fallback cambia el comportamiento de un servicio vivo y necesita deploy — o sea
+      Sergio— y el riesgo del inbox 3 del Radar §11 sigue sin verificarse. Queda escrito acá,
+      que es lo que cuesta cero y evita el próximo diagnóstico al revés.
 
 > **Siete de estos eran pendientes vivos en el handoff y ya estaban hechos.** Se verificaron
 > uno por uno contra el código de hoy, no contra el handoff. Cada uno lleva su prueba: si
@@ -725,6 +770,9 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       **Lo que la recorrida NO pudo cerrar, y quedó anotado en su lugar:** "La cita" le habla de
       consultorio a una ferretería incluso con el flag puesto (ficha nueva en "Después", es del
       carril de plataforma), y el bot firma **"Vos"** en vez de "Tu asistente" (**S11** + radar §11).
+      🔴 **Corregido el 2026-08-31: lo del "Vos" era un fantasma y la recorrida lo dio por roto
+      mirando la conv 11, que es de antes del 18-ago.** El bot ya firma como "Onia Bot"
+      (`sender_id = 3`) y la bandeja ya rotula "Tu asistente". Ver S11 en "Cerrado".
       **Dos trampas nuevas del entorno**, que van a costar una vuelta a quien las repita y por eso
       se escriben: `npm run build` usa Turbopack y **no emite `.next/standalone`** — para poder
       levantar el producto hay que correr `next build --webpack`, que es además lo que
