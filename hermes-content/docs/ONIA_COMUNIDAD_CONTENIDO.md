@@ -101,6 +101,29 @@ y nosotros tenemos skills reales corriendo: ventaja injusta.
 3. **Interactivo (18K en TikTok):** "Decime tu negocio en los comentarios y te digo
    qué automatizaría primero" — genera comentarios masivos y alimenta D6.
 
+## Estrategia de embudo: comunidad → VSL → curso (definida 2026-09-01)
+
+La comunidad no es el fin: es el **nurture** para lanzar el curso con un VSL cuando
+exista. Arquitectura de 4 semanas:
+
+- **Semana 1-2 — valor + señales:** cada drop cierra con UNA pregunta que mide deseo
+  (¿SÍ al paso a paso? ¿cuál prompt te sirvió? ¿tu tarea más repetida?). Las respuestas
+  son el mapa de dolores.
+- **Semana 3 — validación del temario:** encuesta grande en Avisos: "¿qué querés que
+  enseñe A FONDO, paso a paso?" con 4 opciones salidas de las señales reales. Eso ES el
+  temario del curso, validado antes de grabarlo.
+- **Semana 4+ — VSL:** cuando el curso EXISTA (regla de la casa: no se vende lo que no
+  existe), el VSL se estrena en la comunidad primero con precio de fundador. Esqueleto
+  del VSL (se llena con las señales recolectadas): hook (el dolor más votado) → historia
+  (16 años, Bolivia, lo construí yo) → mecanismo (el sistema, no trucos) → prueba
+  (resultados de miembros de la comunidad, con permiso) → oferta → urgencia honesta
+  (precio fundador limitado) → cierre.
+- **Regla dura:** ningún drop ANUNCIA el curso antes de que exista. Se siembra
+  ("estoy preparando algo con esto") recién cuando esté en producción real.
+
+Cada drop de D0-D6 ya cierra con su pregunta-señal. Registrar las respuestas por drop
+(cuántos SÍ, qué tareas piden) — ese registro alimenta semana 3 y el VSL.
+
 ## Regla de oro
 
 Ningún drop promete lo que no existe. Todo sale de lo que Sergio usa de verdad
