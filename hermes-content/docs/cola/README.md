@@ -121,18 +121,43 @@ avisa.
 > programadas. Si la lista está vacía y los archivos están, rearmarlas — el prompt ya está
 > escrito, sale barato. **Nunca decir "el loop está corriendo" sin haberlo mirado.**
 
-### Los cuatro que están puestos
+### Los seis que están puestos
 
-| Loop | Cadencia | Qué hace |
+> ⚠️ **Corregido el 2026-08-31 — acá decía "los cuatro que están puestos" y era falso.**
+> Contados en vivo con `list_scheduled_tasks`: son **seis**, los seis `enabled`, y los seis
+> con `lastRunAt` dentro de la hora. Faltaban `chatbot-cola` y `contenido-cola`.
+> Peor todavía, más abajo este mismo archivo afirmaba que *"el carril chatbot no tiene loop
+> porque no tiene cola"* — cuando su cola se escribió ese mismo día y la tabla de arriba ya
+> la listaba con un ✅. **El archivo se contradecía a sí mismo con seis líneas de distancia.**
+>
+> El peligro de dejarlo: quien lea esto para saber qué corre solo, no encuentra dos loops que
+> SÍ corren, y o los duplica o le da por muerto un carril que está trabajando.
+
+| Loop | Cadencia (cron) | Qué hace |
 |---|---|---|
+| `chatbot-cola` | `3,23,43` | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
 | `onia-cola` | `7,27,47` | Carril producto: salud, integrar a `main`, y la cola de plataforma |
+| `contenido-cola` | `9,29,49` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo |
 | `web-factory-dev-loop` | `13,33,53` | Construye la siguiente tarea de `LOOP_COLA.md` |
 | `web-factory-salud` | `21` | Server, git y gates del carril web |
-| `cerrar-y-revisar-web-factory` | `07:17` diario | Termina lo que quedó a medias **y audita lo dado por hecho** |
+| `cerrar-y-revisar-web-factory` | `17 7` diario | Termina lo que quedó a medias **y audita lo dado por hecho** |
 
-Escalonados a propósito: comparten CPU y disco, y dos loops sobre el mismo árbol se pisan.
-**El carril chatbot no tiene loop porque no tiene cola** — su handoff es estado, no plan. Lo
-escribe su propio carril; un loop sin cola no tendría qué comer.
+Los cinco horarios están **escalonados de a 2 minutos a propósito**: comparten CPU y disco, y
+dos loops sobre el mismo árbol se pisan.
+
+### Lo que el loop deja, y lo que se pierde
+
+Medido el 2026-08-31, y es el hueco que queda abierto:
+
+- **Lo que sobrevive: lo que toca el repo.** Commits, colas tachadas, docs corregidos. Eso lo
+  lee cualquier sesión después.
+- **Lo que se evapora: el razonamiento.** Cada loop corre en su propia sesión sin memoria, y
+  su informe —el porqué, lo que descartó, lo que midió— queda en esa sesión. La sesión madre
+  **no se entera solo**: tiene que ir a leerlo.
+
+> **Por eso un loop que arregla algo y no lo escribe en su cola o en un doc, trabajó a medias.**
+> El commit prueba QUÉ cambió; el `[x]` con su línea de porqué es lo único que evita que el
+> próximo loop lo vuelva a investigar desde cero.
 
 ### Lo que un loop NO hace, nunca
 
