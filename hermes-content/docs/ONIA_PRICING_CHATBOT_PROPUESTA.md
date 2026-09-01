@@ -39,7 +39,17 @@ no-oficial de Sendy las evita — a cambio del riesgo de baneo del número.
 **Lectura en una línea**: incluso sumando el plan base del sistema, Onia con chatbot
 (Bs 780) cuesta menos que Leadsales solo (Bs 1.106), que Cliengo con WhatsApp oficial
 (Bs 2.953) y que ManyChat con IA (Bs 775, y este sin bandeja seria ni sistema) — y es
-el único donde la cita cae en la agenda y el cobro en la caja del mismo sistema.
+el único donde la bandeja del bot vive DENTRO del sistema que ya tiene la agenda, la
+ficha y la caja, sin una segunda herramienta que pagar y conectar.
+
+> ⚠️ **Corregido el 2026-08-31.** Acá decía *"es el único donde la cita cae en la agenda y
+> el cobro en la caja del mismo sistema"*. **Es falso hoy y era el argumento que sostenía
+> el precio:** el bot NO agenda ni carga nada — un pedido de cita lo ESCALA a una persona
+> (`bot/recepcionista.mjs:232`), el canal `whatsapp_chatwoot → lead_conversacion` de
+> `lib/onia-core/intake.ts:15` **no lo llama nadie** y `bot_conversations` no existe en el
+> schema. Es el mismo defecto que ya se corrigió en `lib/pricing.ts` (commit `f47d615`, punto
+> 2 de `ONIA_DEFINICION_DE_TERMINADO.md`): la copia sobrevivió acá. El escalón barato que lo
+> volvería cierto está cotizado en `ONIA_NIVEL_REFERENTES_BRECHA.md` §"agenda".)
 
 ---
 
@@ -57,10 +67,11 @@ el chat** y alguien que lo conecte. Armar por partes lo que el add-on trae junto
 | Conexión WhatsApp oficial | Verificación de negocio en Meta + configuración técnica: horas propias o pagadas; en Cliengo la API aparece recién a Bs 2.953/mes con alta asistida "de días" | Alta guiada (Embedded Signup); el cliente paga a Meta directo sus conversaciones, como en todos lados |
 | Bandeja para atender lo que el bot deriva | Incluida a medias (ManyChat básica) o en el plan caro | Bandeja nativa en el sistema, con candado bot-humano (el bot se aparta cuando contesta el dueño y vuelve al resolver) |
 | Alguien que lo configure y lo retoque | Cada cambio de horario, precio o guion = tocar flujos o pagarle a quien sepa | El dueño lo edita **conversando** ("atendé también los domingos") con validador que no deja publicar nada roto; guion visible en pasos numerados |
-| Que el bot toque el negocio de verdad | **No existe por partes a ningún precio**: el bot de terceros anota en SU CRM; la cita y el cobro hay que re-digitarlos | La cita queda en la agenda del sistema, el cliente en la ficha, y el cobro (QR BCP, en mock listo) en la caja |
+| Dónde cae lo que el bot levanta | El bot de terceros anota en SU CRM: la cita y el cobro se re-digitan en otra herramienta, que además hay que pagar aparte | **Hoy también se cargan a mano** — el bot deriva y una persona anota — pero se anotan **en el mismo sistema** que ya tiene agenda, ficha y caja (QR BCP en mock listo), sin una segunda suscripción ni una segunda base. ⚠️ **No se vende que el bot agende solo: no lo hace** |
 
 **Suma por partes**: **Bs 420–1.550+/mes** en suscripciones sueltas, más el trabajo de
-pegarlas y mantenerlas — para terminar con un bot que **no toca** tu agenda ni tu caja.
+pegarlas y mantenerlas — para terminar con un bot que vive en una herramienta aparte de
+tu agenda y tu caja.
 Los rangos son estimaciones conservadoras marcadas como tales; los precios duros son
 los de la tabla 1.
 
@@ -115,11 +126,16 @@ no antes.
 
 > **"Sendy te alquila un vendedor que anota en un cuaderno aparte y te hace pagar la
 > IA de tu bolsillo, en dólares y con tarjeta internacional; en Onia son Bs 390 con la
-> IA adentro y sin límite de chats — y cada cita queda EN tu agenda y cada cobro EN tu
-> caja."**
+> IA adentro, sin límite de chats, y la bandeja adentro del mismo sistema donde ya están
+> tu agenda, tus fichas y tu caja."**
 
-Variante corta para material de venta: *"Con otros, el bot vende y vos re-digitás.
-Con Onia, el bot atiende y tu sistema ya lo tiene anotado."*
+Variante corta para material de venta: *"Con otros, el bot atiende en una herramienta que
+pagás aparte. Con Onia, atiende adentro de tu sistema."*
+
+> ⚠️ **Corregido el 2026-08-31.** El pitch decía *"cada cita queda EN tu agenda y cada cobro
+> EN tu caja"* y la variante corta *"tu sistema ya lo tiene anotado"*. **El bot no anota
+> nada** — ver la corrección de §1. Prometerlo en la frase de cierre es donde más caro sale:
+> es lo primero que un prospecto prueba en la demo.
 
 ---
 

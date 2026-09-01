@@ -10,7 +10,9 @@ escribimos"*.
 
 **Qué significa terminado está escrito y medido en
 [`ONIA_DEFINICION_DE_TERMINADO.md`](ONIA_DEFINICION_DE_TERMINADO.md)** — cuatro puntos (**los dos del carril producto —3 y 4— cerraron el 2026-08-31 sin escribir
-una línea: el 3 era fantasma y el 4 ya estaba construido; quedan el 1 y el 2, de chatbot**), sólo
+una línea: el 3 era fantasma y el 4 ya estaba construido. El 2 también cerró ese día, por la
+salida honesta: `f47d615` sacó el "agenda" de `lib/pricing.ts` y le queda sólo el deploy, que
+decide Sergio. Queda el 1, de chatbot**), sólo
 cosas **rotas** (el cliente las compra y no funcionan) o **falsas** (se las vendemos y no son
 ciertas). Nada de "sería lindo".
 
@@ -679,6 +681,65 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Borrarlas borraba la evidencia de dos ítems ya cerrados.** No se tocó nada.
       **Lección:** el ítem heredaba un número ("~9") que nadie había contado. Contarlo costó
       cinco minutos y el ítem se dio vuelta entero.
+- [x] **El "el bot agenda" no estaba sólo en `lib/pricing.ts`: sobrevivió en tres docs de venta,
+      y en uno era el argumento que sostiene el precio — ARREGLADO.** Vuelta del 2026-08-31, con
+      la cola sin un ítem desbloqueado en "Ahora" (F2, F5, los 4 números de WhatsApp y el `DELETE`
+      de pagos siguen esperando **una línea de Sergio**). Paso 3: se auditaron los `[x]`.
+      **Los cierres están sanos** — los 24 shas citados en este archivo se preguntaron con
+      `git merge-base --is-ancestor` contra `origin/master` (no con `git branch --contains`, que
+      es el error ya escrito acá): **19 son ancestros reales** y los 4 que no (`6edfab6`,
+      `a15c82f`, `e46e9ee`, `6d8b6b7`) son exactamente los que este archivo **ya declara**
+      locales o pre-squash. Los artefactos que cada cierre promete existen en `origin/master`:
+      `__tests__/url-cruda-fuera-de-analytics.test.ts`, `__tests__/eslint-no-lintea-worktrees.test.ts`,
+      `lib/gateway/bcp-qr.ts`, `app/api/webhooks/bcp/route.ts`, `CREDIT_NOTE_CREATED` en
+      `lib/audit.ts` + `app/(dashboard)/admin/audit/page.tsx`, `SIN_NAV_A_PROPOSITO` en
+      `lib/platform/route-access.test.ts` y `frasePuntuada` en `lib/utils.ts`.
+      **Lo que apareció al verificar el punto 2 de `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md`:**
+      el punto está bien cerrado en el código (`f47d615`), pero **la frase falsa siguió viva en
+      el material que la lee**. El punto 2 arregló la fuente y la pantalla del add-on; nadie
+      buscó la copia fuera del repo del producto. Encontradas y corregidas, las tres en
+      `hermes-content/docs/**` (mi carril):
+      - `hermes-content/docs/ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md:51` — la tabla de add-ons vendía
+        *"contesta, califica, **agenda** y hace seguimiento"* a Bs 390. Ahora dice "deriva a una
+        persona" y nombra el ESCALA de `bot/recepcionista.mjs`.
+      - `hermes-content/docs/ONIA_PRICING_CHATBOT_PROPUESTA.md` — **el peor de los tres, y no es
+        una frase suelta: es el diferenciador entero.** Decía *"es el único donde la cita cae en
+        la agenda y el cobro en la caja del mismo sistema"* (§1), lo repetía como fila de tabla
+        contra la competencia (*"La cita queda en la agenda del sistema, el cliente en la ficha"*)
+        y **cerraba con eso el pitch de una frase contra Sendy**. Es el argumento por el que
+        alguien pagaría Bs 390 en vez de Bs 240, y es falso: el bot escala
+        (`bot/recepcionista.mjs:232`), el canal `whatsapp_chatwoot → lead_conversacion` de
+        `lib/onia-core/intake.ts:15` no lo llama nadie y `bot_conversations` no está en el schema.
+        Reescrito al diferenciador que **sí** es cierto —la bandeja vive dentro del sistema que ya
+        tiene agenda, ficha y caja, sin una segunda suscripción— con la nota de qué decía antes.
+      - `hermes-content/docs/ONIA_NIVEL_REFERENTES_BRECHA.md:192` — citaba `lib/pricing.ts:64` en
+        presente como prueba de que "lo prometemos en la superficie de venta". Ese texto ya no
+        existe; la brecha de PRODUCTO sigue abierta y se deja escrita como tal.
+      **La lección, que es lo que se lleva la vuelta: arreglar la fuente única no arregla lo que
+      ya la copió.** Es la misma forma del defecto que el propio punto 2 había encontrado un
+      escalón más adentro (la frase hardcodeada en `AddonChatbotClient.tsx`), y la misma que este
+      archivo tiene escrita como *"cerrar un ítem no cierra su copia"*. Un `grep` de la frase
+      completa por todo el repo cuesta un minuto y es lo que faltó las dos veces.
+      Sin gates de código: son tres markdown, cero líneas de producto. `node scripts/verificar_cola.js` verde.
+
+- [ ] **La misma frase falsa vive en `hermes-content/propuestas/generador/clientes.json` — es de
+      OTRO carril.** Encontrada en la misma pasada y **no la toco**: `propuestas` es el carril C
+      del `COORDINATION_MANIFEST.md:94`, y este worktree sólo posee `hermes-content/docs/**` y
+      `web-factory/apps/onia-platform/**`. Lo que dice hoy, en la ficha del cliente **AW
+      Climatización** (una propuesta que se genera y se manda, no un borrador):
+      *"Chatbot WhatsApp con IA — responde, califica y **agenda solo**"* (línea 565), el título
+      *"Chatbot IA en WhatsApp que responde y **agenda solo**"* (699), el subtítulo (476), el
+      problema (477), el detalle (517) y la nota de paquetes (562), que define el paquete
+      **Automatización** como *"además agenda y da seguimiento solo"*. **Es la misma promesa que
+      el punto 2 de `ONIA_DEFINICION_DE_TERMINADO.md` ya declaró falsa**, en el único material
+      que el cliente se lleva por escrito. Lo cierra el dueño de `propuestas` con un reemplazo de
+      copy (cero código): "responde, califica y deriva la visita".
+      *(Se revisó también `hermes-content/sales-kit/`: sus "agenda" son del módulo de agenda del
+      sistema, no del bot, y `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md:126` y
+      `web-factory/apps/onia-platform/src/components/landing-v2/chatbot.tsx:37` ya dicen "deriva".
+      La presentación `sales-kit/presentacion-scz-20260801/` tiene fecha en el nombre: es
+      historia, no se toca.)*
+
 - [ ] 🔴 **Los otros dos agujeros del escéptico: la fuente se perdió.** El ítem mandaba leer el
       journal del workflow `wf_7449df59-54c` antes de tocar, y ese journal **no existe en
       disco** — buscado el 2026-08-31 bajo `.claude` y bajo el temp de sesión, cero resultados.

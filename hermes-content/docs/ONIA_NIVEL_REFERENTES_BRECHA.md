@@ -188,11 +188,15 @@ Lo que dice el código:
   (`prisma/schema.prisma:1036`) y el bot la lee. **`bot_conversations` no existe en el schema
   de Prisma**: las conversaciones viven fuera del sistema.
 
-Y mientras tanto lo prometemos en la superficie de venta: `lib/pricing.ts:64` dice
-*"Contesta, califica, **agenda** y hace seguimiento 24/7"*, y
-`ONIA_PRICING_CHATBOT_PROPUESTA.md` §2 dice *"La cita queda en la agenda del sistema, el
-cliente en la ficha"*. **Un prospecto que lo pruebe en la demo lo descubre en el primer
-mensaje.**
+✅ **Ya no lo prometemos en la superficie de venta — cerrado el 2026-08-31.** Acá decía que
+`lib/pricing.ts:64` vendía *"Contesta, califica, **agenda** y hace seguimiento 24/7"* y que
+`ONIA_PRICING_CHATBOT_PROPUESTA.md` §2 decía *"La cita queda en la agenda del sistema, el
+cliente en la ficha"*. Las dos frases **ya no existen**: el precio se corrigió en el commit
+`f47d615` (*"vendiamos que el bot agenda y el bot no agenda"*, ancestro de `origin/master`) y
+el doc de pricing del chatbot se corrigió el 2026-08-31 con su nota de por qué.
+**La brecha de producto que describe esta sección sigue abierta** — el bot sigue sin agendar —,
+pero ya no hay material que diga lo contrario, así que un prospecto no lo descubre en la demo.
+Lo que falta es el escalón barato de acá abajo.
 
 - **Qué desbloquea:** el único argumento por el que alguien elegiría Onia a Bs 390 en vez de
   Sendy a Bs 240. Sin esto somos un chatbot más, y más caro.

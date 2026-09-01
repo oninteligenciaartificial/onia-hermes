@@ -48,7 +48,7 @@ facturas recurrentes y agentes. Los de arriba solo levantan topes.
 
 | Add-on | Precio | Qué entrega | Estado real |
 |---|---|---|---|
-| **Chatbot WhatsApp con IA** | **Bs 390/mes** o Bs 3.900/año, **sin cargo inicial**. 500 conversaciones/mes incluidas; Meta cobra el consumo directo en la cuenta del cliente | contesta, califica, agenda y hace seguimiento 24/7 con aprobación humana | 🟢 motor vivo, Tech Provider con App Review aprobado. ⚠️ `knowledge.json` tiene **un solo hecho**: falta CONTENIDO, no código |
+| **Chatbot WhatsApp con IA** | **Bs 390/mes** o Bs 3.900/año, **sin cargo inicial**. 500 conversaciones/mes incluidas; Meta cobra el consumo directo en la cuenta del cliente | contesta, califica, **deriva a una persona** y hace seguimiento 24/7 con aprobación humana (**no agenda solo**: un pedido de cita lo ESCALA — `bot/recepcionista.mjs`) | 🟢 motor vivo, Tech Provider con App Review aprobado. ⚠️ `knowledge.json` tiene **un solo hecho**: falta CONTENIDO, no código |
 | **Agenda pública** | Bs 150/mes | link de reserva sin llamadas | 🟢 vivo — **incluida** en Profesional y Completo |
 | **Usuario extra** | Bs 70/usuario/mes | asiento adicional (Básico admite hasta 3) | 🟢 vivo |
 | **Inventario avanzado** | Bs 180/mes | compras a crédito, proveedores, alertas de stock bajo, vencimientos por lote | ⚠️ **ver §4.3** |
