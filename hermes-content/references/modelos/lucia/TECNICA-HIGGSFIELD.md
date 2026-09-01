@@ -666,3 +666,35 @@ de 3,0 s / 5,0 s / 6,0 s.
 
 **Lo que queda por medir:** si `9:16` (el formato que necesitamos para Reels e Historias) cambia
 el precio, y cuánto cuesta 1080p. Se leen igual: sin generar.
+
+---
+
+## 🔴 La descarga desde el navegador está rota — 2026-08-31
+
+**Hay una imagen generada y pagada que no está en el repo.** Existe en la cuenta, verificada
+abriendo su panel: prompt `@lucia-skin-v1 One single continuous photograph... waiting room of a
+small dental clinic`, **Nano Banana Pro**, **1792×2400**, 31-ago 22:09. Costó 2 créditos.
+
+### Los cuatro caminos, y por qué fallan hoy
+
+| Camino | Qué pasa |
+|---|---|
+| Botón `Download` del panel | **No existe como botón con ese texto.** Ningún `<button>` ni `<a>` de la página tiene `download`, y el panel se cierra solo al clickear |
+| Leer el `src` de la imagen por JS | **Bloqueado**: el tool devuelve `[BLOCKED: Cookie/query string data]` |
+| Screenshot y recortar | **Roto**: `Failed to deserialize params.clip.scale`, error de CDP en esta pestaña |
+| Descarga de Chrome | Ya había fallado el 30-ago — Chrome bloquea descargas de `higgsfield.ai`. Se comprobó con un `data:` URI de 15 bytes que tampoco bajó |
+
+### Lo que esto significa, y es lo importante
+
+**Generar sin poder bajar es gastar créditos para nada.** Cada imagen que no llega al repo no se
+puede mirar a tamaño real, no entra al banco, no pasa el gate y no se publica. La generación no
+es el cuello: **la descarga sí**.
+
+**Antes de generar la próxima, resolver esto.** Ideas sin probar, en orden de lo más barato:
+1. Botón derecho → «Guardar imagen como» por coordenadas (el menú contextual de Chrome no depende
+   del DOM de la página).
+2. Ver si el panel expone la URL en un `data-*` o en el `background-image` de un contenedor, que
+   el bloqueo de `src` quizá no cubra.
+3. La API de Higgsfield por MCP **sólo para leer la URL** — no para generar, que es donde
+   sustituye el modelo en silencio.
+4. Pedirle a Sergio que la baje a mano una vez, para no bloquear el banco mientras se resuelve.

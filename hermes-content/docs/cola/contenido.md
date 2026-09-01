@@ -50,6 +50,9 @@ faltantes. Lo que falta es **publicar**.
 
 ## Despues
 
+- [ ] 🔴 **Resolver la descarga desde Higgsfield antes de generar nada más.** Hay una imagen pagada (2 cr) que existe en la cuenta y no está en el repo: los cuatro caminos de descarga fallan hoy. Generar sin poder bajar es gastar créditos para nada. Los cuatro fallos y las cuatro ideas sin probar están en `hermes-content/references/modelos/lucia/TECNICA-HIGGSFIELD.md`
+
+
 - [ ] 🔴 Los 3 creativos de ads dicen **«SWIPE →»** y tienen UNA sola lámina. Un anuncio que invita a deslizar y no tiene a dónde. O se le sacan el swipe y el punto indicador, o se le renderizan las láminas que promete. Descubierto mirando el JPG, no leyendo el brief. Ver `hermes-content/carousels/briefs/ads/ad-a2-v1-no-volvieron.json`
 
 
