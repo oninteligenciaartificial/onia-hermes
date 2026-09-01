@@ -687,3 +687,31 @@ que el más valioso no existía.
 **8. Los worktrees.**
 19 vivos; el disco llegó al 100% y frenó el trabajo. Se liberó a 12 GB, pero un worktree con
 dependencias pesa 6,4 GB y se vuelve a llenar solo. Hay que decidir cuáles se archivan.
+
+**9. ¿El chatbot AGENDA? La rama que lo hace está lista y no se puede mergear sin tu decisión.**
+
+`fix/bot-manda-link-de-reserva` (1 commit, `ad16b8ce`, con sus tests) hace que el recepcionista
+mande el link de la agenda pública de SU organización (`app.onia.com.bo/book/<slug>`) en vez de
+derivar toda intención de cita a un humano. Está bien hecho: fail-closed — sin slug limpio vuelve
+a derivar exactamente como antes.
+
+**Medido en vivo hoy (2026-09-01), no deducido:**
+- La ruta existe y responde: `app/(public)/book/[orgSlug]/page.tsx`, y `GET /book` → 200.
+- Un slug inexistente NO explota: renderiza "no encontrada" (eso sí, con status 200).
+
+**Por qué no se mergeó igual:** pone en ROJO la guarda de honestidad
+`scripts/venta-honestidad.test.mjs`, que ata la copia de venta al motor y dice, en su propio
+comentario, qué hacer: *"Si esto se pone rojo el bot APRENDIÓ a agendar: no hay que borrar el
+test sin más, hay que verificarlo en vivo y recién ahí cambiar la copia."* La verificación en
+vivo está arriba; **cambiar la copia es tuyo**: `ONIA_CATALOGO_DE_VENTA.md` hoy declara que el
+chatbot NO agenda, y la guarda lo exige en las dos puntas.
+
+**Lo que hay que decidir (una sola cosa):** ¿el chatbot se vende como que AGENDA?
+- **Sí** → se mergea la rama, se reescribe la guarda al nuevo invariante y la fila del chatbot
+  del catálogo pasa a decir "agenda". Costo: nada de plata; ~1 vuelta de loop.
+- **No** → la rama se archiva y el bot sigue derivando la cita a una persona. Costo: cero, pero
+  `pricing.ts` ya no lo vende así, o sea que nadie está prometiendo de más.
+
+**Ojo con el borde real, que no es de copy:** una org puede tener slug y NO tener la agenda
+configurada. Ahí el cliente final recibe un link a una página vacía. Si la respuesta es "sí",
+esto se cierra antes de encender.
