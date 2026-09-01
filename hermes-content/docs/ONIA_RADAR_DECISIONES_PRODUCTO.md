@@ -769,3 +769,30 @@ mandando un link por WhatsApp y ese link no existe. Las dos opciones cuestan **B
   landing.
 
 Lo único que hace falta de Sergio es **el nombre del subdominio**.
+
+**12. El canario mira 10 pantallas en el repo, pero el VPS sigue corriendo la versión de 3.**
+Se mergeó a `main` hoy (`52e359c1`): diez pantallas de cliente, umbrales medidos y el peso deja
+de ser una lotería. Pero el prompt que EJECUTA el canario vive en `/root/bin/loops/` del VPS, y
+`scripts/loops/README.md` lo dice literal: *"Al cambiar un prompt hay que volver a copiarlo"*.
+Hasta que se copie, la mejora está commiteada y **no mira nada nuevo** — construido ≠ terminado.
+
+Es **un solo comando** y cuesta **Bs 0**; no se corrió porque tocar el VPS necesita tu OK:
+
+```bash
+install -m 644 scripts/loops/prompts/canario-visual.md /root/bin/loops/canario-visual.md
+```
+
+**13. Tres ramas quedaron fuera de la integración por divergencia, no por conflicto.**
+Se integraron 7 ramas a `main` hoy con los gates en verde. Estas tres no, porque arrastran
+semanas de deriva y mezclarlas a ciegas es cómo se rompe `main`:
+
+| rama | commits atrás de `main` | commits suyos sin mergear |
+|---|---|---|
+| `claude/personal-brand-strategy-db9eb9` | 366 | 32 |
+| `claude/onia-web-architecture-b37eca` | 307 | 4 |
+| `claude/chatbots-platform-review-0d1d09` | 294 | 3 |
+
+Para cada una la decisión es la misma y cuesta **Bs 0**: **rebasar y mergear** (alguien tiene que
+mirar el rebase; las 32 de la primera son varias vueltas de loop) o **archivarla** y perder ese
+trabajo. `claude/ads-creatividades-publicos` (145 commits) queda afuera a propósito: es tu carril
+de contenido y lo cerrás vos.
