@@ -38,6 +38,8 @@
     "mara:comfyui:audit": "node scripts/comfyui_video_audit.js",
     "mara:wan:readiness": "node scripts/comfyui_wan_readiness.js",
     "mara:wan:queue": "node scripts/mara_comfyui_queue.js --workflow hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b_api.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b.mapping.json",
-    "validate:onia-core": "node onia-core/validate.mjs"
+    "validate:onia-core": "node onia-core/validate.mjs",
+    "marca:chatwoot": "node hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs",
+    "test:marca-chatwoot": "node --test hermes-content/deploy/vps-ops/chatwoot-marca-publica.test.mjs"
   }
 }

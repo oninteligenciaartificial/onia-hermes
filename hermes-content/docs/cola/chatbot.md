@@ -189,6 +189,8 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       el ítem sigue siendo el único que separa al carril de su objetivo. No se tocó la base:
       elegir dueño de inbox decide en qué bandeja aterrizan personas reales, y eso es de Sergio.
 
+      ✅ **Gate 1 del 2026-08-31 (séptima vuelta) — la base sigue igual, medida en vivo.** `supabase-db`, schema `public`: de las cuatro orgs la única con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`, `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 siguen sin darse.** No se tocó la base: elegir dueño de inbox decide en qué bandeja aterrizan personas reales.
+
       ✅ **Gate 1 del 2026-08-31 (sexta vuelta) — sin cambios en la base, y se despejó la ÚLTIMA duda del ítem.** La base sigue igual (medida en vivo: sólo `ZZ QA Clinica Chatbot` → 7; `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL). Lo nuevo es que se comprobó que **los dos clicks alcanzan de verdad**: el producto lee las conversaciones con su propio token, y en Chatwoot un token de agente que no es miembro del inbox habría devuelto la lista vacía con 200 — exactamente el fantasma que este carril mide. Corrido contra producción, el token del contenedor `onia-platform` ve **inbox 4 → 5 · inbox 5 → 3 · inbox 7 → 6** conversaciones, con `+59173021804` en el payload del 5. Detalle y comando en **S8**. **No queda nada que verificar del lado del código.**
 
 - [ ] **2 · Las frases que la web YA manda no están registradas como campañas: el desconocido
@@ -349,6 +351,8 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       El motor sí sabe leerlas — eso ya se verificó la vuelta pasada. **S9 sigue pendiente y
       sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
 
+      ✅ **Gate 1 del 2026-08-31 (séptima vuelta) — sin cambios, medido dentro y fuera del contenedor.** `/opt/onia/bot/knowledge.json` sigue en **904 bytes con cero `campanas`**, y lo mismo en el motor que CORRE (`docker exec onia-center` sobre `/tmp/onia-bot/knowledge.json`: 904 bytes, 0). **S9 sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
+
       ✅ **Gate 1 del 2026-08-31 (sexta vuelta) — sin cambios, y ahora la copia está PROBADA como segura.** `/opt/onia/bot/knowledge.json` sigue en 904 bytes del 6-ago con cero `campanas`, dentro y fuera del contenedor. Lo que faltaba y nadie había hecho: comparar el documento nuevo contra el vivo antes de mandar a sobrescribirlo. Diffeados campo por campo, el del repo es **superset estricto** (`identity`, `empresa` y `triggersExtra` idénticos, la FAQ `siat` byte a byte; sólo agrega las 5 `campanas` y sube la `version`). El `scp` de S9 **no borra conocimiento vivo**. Prueba y comando de verificación post-deploy en **S9**.
 
 ---
@@ -497,6 +501,52 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       ⚠️ **No se aplicó al VPS: reemplazar un cron que corre solo cada hora es infra, y eso
       es de Sergio.** Son dos comandos y es reversible. Anotado como **S10**, cotizado en
       `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+
+      ⚙️ **Vuelta del 2026-08-31 (séptima) — ahora la reversión SE VE desde afuera, que es lo
+      único que faltaba para que "vigilar" signifique algo.** Gate 1 primero, medido y no
+      leído: las tres siguen revertidas hoy (`curl` a `https://chat.onia.com.bo/app/login`
+      → `"BRAND_URL":"https://www.chatwoot.com"`, más `TERMS_URL` y `PRIVACY_URL`).
+      **El hueco real que quedaba, y por qué se pierden quince días sin que nadie lo note:**
+      el modo `--check` de `chatwoot-brand-onia.sh` vive **dentro del contenedor** — necesita
+      SSH al VPS, `docker exec` y `rails runner`. O sea que sólo puede correrlo alguien que ya
+      está adentro, a mano, sabiendo que tiene que mirar. Nadie lo corre, y por eso el
+      16-ago pasó sin ruido.
+      **Lo construido:** `hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs` — mira la
+      marca **desde la calle**, que es exactamente la cara que ve el desconocido. El front de
+      Chatwoot embebe su config en la página (`window.globalConfig = {…}`), así que es un
+      **GET y nada más**: sin VPS, sin docker, sin token, sin credenciales. Corre desde
+      cualquier máquina (`npm run marca:chatwoot`) y sale 1 nombrando las revertidas.
+      **Corrido contra producción**, que es la prueba de que sirve:
+      ```
+      [marca-publica] REVERTIDAS 3/9 en https://chat.onia.com.bo/app/login:
+      [marca-publica]   BRAND_URL: "https://www.chatwoot.com"
+      [marca-publica]   TERMS_URL: "https://www.chatwoot.com/terms-of-service"
+      [marca-publica]   PRIVACY_URL: "https://www.chatwoot.com/privacy-policy"
+      ```
+      **8 tests** (`npm run test:marca-chatwoot`), sobre el HTML REAL del 31-ago con las tres
+      revertidas. El que más vale es el que **ata las dos listas**: lee las nueve claves del
+      propio `chatwoot-brand-onia.sh` y exige que sean idénticas a las del gate — si se
+      separan, el cron defiende una marca y el gate mide otra, y saldría verde sobre una clave
+      que nadie re-aplica. **Probado que pueden fallar:** borrando `BRAND_URL` de la lista,
+      **4 de 8 en rojo**.
+      ⚠️ **Un tropiezo que queda escrito porque el molde es el del carril:** la primera versión
+      salía con `process.exit(1)` y contra el HTTPS real reventaba libuv con los sockets
+      keep-alive de `fetch` abiertos — imprimía `REVERTIDAS 3/9` correctamente y **devolvía
+      127**. Un gate que grita el veredicto y no lo puede pasar por su código de salida no lo
+      lee ningún cron. Se pasó a `process.exitCode`. **Y se dice lo que el test NO hace:**
+      revertido a `process.exit(1)` a propósito, los dos tests de exit siguen **verdes** contra
+      el servidor local — la carrera no se da en `127.0.0.1`. Lo que sostiene el arreglo es el
+      comentario del `.mjs`, no el test; está escrito ahí para que nadie lo cuente como
+      cubierto.
+      ⚠️ **Esto NO repara nada: sólo mira.** Quien repara sigue siendo
+      `chatwoot-brand-onia.sh`, y aplicarlo al VPS sigue siendo **S10** — de Sergio. Lo que
+      cambia es que a partir de hoy la reversión es detectable sin entrar al VPS, así que la
+      próxima no puede durar quince días.
+      📎 **Por qué en `vps-ops/` y no en `bot/`:** `espejo-check.mjs` compara `bot/` archivo por
+      archivo contra `/opt/onia/bot`, así que un `.mjs` nuevo ahí deja el gate rojo hasta el
+      próximo `scp` — y el propio carril tiene escrito que *un gate que siempre está rojo lo
+      apaga alguien*. Verificado después de crear los dos archivos: el espejo sigue reportando
+      los mismos tres de siempre.
 - [ ] **Botón "Cobrar con QR" dentro de la conversación** (pieza 5 del backlog v5). El
       circuito está completo en mock y verificado mirando (`/bcp/cobrar` + `/bcp/callback`,
       contrato del banco calcado); el código no cambia para el modo real. Espera las
@@ -532,7 +582,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
   ssh root@187.77.16.63 "docker exec onia-center sh -c 'grep -c campanas /tmp/onia-bot/knowledge.json'"
   ```
   Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) |
-| S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas |
+| S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas. ✅ **Sumado el 31-ago (7ª vuelta): ahora se comprueba DESDE AFUERA, sin entrar al VPS.** El `--check` del `.sh` vive dentro del contenedor (SSH + `docker exec` + `rails runner`), así que sólo lo corre quien ya está adentro y sabe que tiene que mirar — por eso las tres se perdieron el 16-ago y nadie lo vio en quince días. `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`) lee el `window.globalConfig` del HTML público del login: es un GET, corre desde cualquier máquina y hoy sale **1 con `REVERTIDAS 3/9`**. **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10, y mide la cara que ve el desconocido, no la base |
 | S11 | **Setear `CHATWOOT_BOT_AGENT_ID=3` en el servicio del bot del VPS** y recargarlo | Escribe en el VPS y cambia con qué identidad postea un bot vivo | Que la bandeja rotule **"Tu asistente"** en vez de **"Vos"** los mensajes del bot: hoy el dueño no puede distinguir su voz de la del asistente en su propia pantalla (MIRADO). Todo lo caro ya existe desde el 11-ago — el agente 3 "Onia Bot" tiene token y es miembro de los inboxes 4, 5 y 7. Opciones y el detalle del inbox 3 en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §11 |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
@@ -763,10 +813,21 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 - [x] **El motor estuvo caído 4 días** (24 al 28-ago) y volvió: `/tmp/onia-bot` a medias +
       la excepción de firewall perdida en el reboot. Las dos causas están auto-curadas desde
       `hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh`.
-- [x] **Branding de Chatwoot completo** (seis configs), **canario de auth** cada 5 min,
-      **n8n saneado** (4 workflows con claves vivas redactados y archivados, 27 inactivos
-      archivados) y el **webhook de Cal.com despublicado** — estaba huérfano y aceptaba POSTs
-      forjados.
+- [x] **Canario de auth** cada 5 min, **n8n saneado** (4 workflows con claves vivas
+      redactados y archivados, 27 inactivos archivados) y el **webhook de Cal.com
+      despublicado** — estaba huérfano y aceptaba POSTs forjados.
+      🔴 **De esta línea SE SACÓ "Branding de Chatwoot completo (seis configs)" el 2026-08-31
+      (séptima vuelta): era falso, y medido desde la calle.** Un `[x]` que dice *completo*
+      sobre algo que está roto en producción es el fantasma exacto que este carril mide, y
+      éste llevaba **quince días**. No son seis configs sino nueve, y tres —`BRAND_URL`,
+      `TERMS_URL`, `PRIVACY_URL`— dicen `www.chatwoot.com` en el HTML público de
+      `https://chat.onia.com.bo/app/login` desde el **16-ago**. Verificado hoy con un `curl`
+      a la página, no leyendo la base:
+      `"BRAND_URL":"https://www.chatwoot.com"`. La parte que SÍ está bien y por eso no se
+      borra entera: logo, `BRAND_NAME`, `INSTALLATION_NAME` y el `WIDGET_BRAND_URL` del pie
+      del widget siguen siendo los de Onia. **Lo pendiente vive en el ítem de "Después"
+      (`Vigilar que el reconcile…`) y en S10**, que es donde tiene que estar mientras siga
+      roto.
 
 ---
 
