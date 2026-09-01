@@ -20,6 +20,24 @@
    las que atiende él. Quince de verde señal: las que atiende Onia.
    El verde se escapa por el borde derecho porque esas horas no terminan.
    No hay dispositivo, no hay pantalla: la composición ES el argumento.
+
+   ─── v2 (2026-08-31). Lo que cambió y por qué ────────────────────────
+   1. UNA sola rejilla de 24 para regla + bloques. Antes eran dos rejillas
+      hermanas que coincidían por acuerdo; ahora la alineación es
+      estructural. Eso además permite ROTAR el día en móvil sin tocar el
+      DOM: a <=700px la rejilla pasa a 24 FILAS y la regla se pone
+      vertical al costado. La idea no se adapta: gira. (Antes, apilado,
+      la regla quedaba de adorno y la proporción 9:15 se perdía.)
+   2. El bloque verde dejó de ser un campo vacío: lleva las tres cosas
+      que de verdad pasan en esas 15 horas.
+   3. La columna derecha dice QUÉ ES Onia (un sistema, no un bot) y QUÉ
+      PASA SI NO HACÉS NADA. Sin eso la pieza explicaba, no vendía.
+   4. Se borró una promesa falsa: los agentes NO envían nada solos.
+      Dejan la propuesta escrita en /pending y la aprueba una persona
+      (onia-core/contract.json:838 · app/api/cron/onia-agents/route.ts ·
+      lib/onia-core/modules/agents-runtime.ts → todo lo que contacta a un
+      cliente va a pending_approval). "Onia prepara, vos aprobás" es lo
+      cierto y además refuerza el argumento de que no perdés el control.
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -157,11 +175,27 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
 }
 .lead b { font-weight: 600; color: var(--ink); }
 
+/* El costo de no hacer nada. Va ACÁ, pegado al botón, porque es lo que
+   convierte "entiendo el producto" en "esto me pasa a mí". La hairline
+   reusa --line (la misma del kicker): un segundo tiempo, cero elemento
+   visual nuevo. */
+.cost {
+  font-size: 1em;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 32em;
+  text-wrap: pretty;
+  margin: 1.3em 0 0;
+  padding-top: 1.1em;
+  border-top: 1px solid var(--line);
+}
+.cost b { font-weight: 600; color: var(--ink); }
+
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7em;
-  margin-top: 1.8em;
+  margin-top: 1.6em;
 }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
@@ -188,6 +222,11 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
 }
 .btn--quiet:hover { background: var(--bg-deep); border-color: var(--ink-faint); }
 
+/* Bs 320 = plan `basic` mensual, leído de la fuente única
+   onia-platform/lib/subscription-plans.ts (DEFAULT_PLAN_AMOUNTS) el
+   2026-08-31. Acá antes decía "IA incluida · sin límite de chats": es
+   cierto del CHATBOT, que es un add-on que se vende después del primer
+   cierre — puesto bajo el botón del sistema, prometía de más. */
 .fine {
   font-family: var(--font-mono);
   font-size: 0.75em;
@@ -203,23 +242,26 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
   .top {
     grid-template-columns: 1.15fr 1fr;
     gap: 3.2em;
-    align-items: end;
+    align-items: start;
   }
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   EL DÍA. Una sola rejilla de 24 columnas: arriba las 24 marcas de
-   hora, abajo los dos bloques de color plano. Todo alineado al
-   mismo tick, así el corte de las 18:00 cae exacto en los dos.
+   EL DÍA. UNA sola rejilla de 24: la fila de arriba son las 24 marcas
+   de hora, la de abajo los dos bloques de color plano, que abarcan 9
+   y 15 columnas de ESA MISMA rejilla. El corte de las 18:00 cae exacto
+   en los dos porque es la misma línea, no dos que coinciden.
    ══════════════════════════════════════════════════════════════════ */
-.day { margin-top: 3.4em; }
-
-.ruler {
+.day {
+  margin-top: 3.4em;
   display: grid;
-  grid-template-columns: repeat(24, 1fr);
-  gap: 0.22em;
-  margin-bottom: 0.34em;
+  grid-template-columns: repeat(24, minmax(0, 1fr));
+  gap: 0.34em 0.22em;
+  align-items: stretch;
 }
+/* `display: contents` deja los ticks como hijos directos de la rejilla
+   (alineación estructural) sin perder el aria-hidden del envoltorio. */
+.ruler { display: contents; }
 .tick {
   height: 1.15em;
   border-radius: calc(var(--r-block) * 0.28);
@@ -227,13 +269,8 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
 }
 .tick--on { background: var(--senal); }
 
-.slabs {
-  display: grid;
-  grid-template-columns: 9fr 15fr;   /* 9 horas de vos · 15 de Onia */
-  gap: 0.22em;
-  align-items: stretch;
-}
 .slab {
+  grid-column: span var(--span);
   border-radius: var(--r-block);
   padding: 1.4em 1.5em 1.3em;
   min-height: 9.5em;
@@ -241,8 +278,8 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
   flex-direction: column;
   justify-content: space-between;
 }
-.slab--vos  { background: var(--tinta);  color: #edf1ef; }   /* 16,66:1 */
-.slab--onia { background: var(--senal);  color: var(--tinta); } /* 9,43:1 */
+.slab--vos  { --span: 9;  background: var(--tinta); color: #edf1ef; }     /* 16,66:1 */
+.slab--onia { --span: 15; background: var(--senal); color: var(--tinta); } /* 9,43:1 */
 
 .slab .hrs {
   font-family: var(--font-mono);
@@ -255,7 +292,14 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
   align-items: baseline;
   gap: 1.4em;
 }
-.slab .hrs span:last-child { text-align: right; }
+/* El secundario del rótulo sólo cabe en una línea cuando el bloque verde
+   pasa de ~940px. Debajo de eso partía "18:00 → / 09:00" en dos y encima
+   "TODOS LOS / DÍAS": dos rótulos rotos por querer decir algo que la lista
+   de abajo ya dice. Se oculta por defecto y se enciende con ancho. */
+.slab .hrs span:last-child:not(:first-child) { display: none; }
+@media (min-width: 940px) {
+  .slab .hrs span:last-child:not(:first-child) { display: block; text-align: right; }
+}
 /* Cero hex inventados: el sistema no declara un "secundario sobre bloque
    oscuro", así que se reusa --line (gris claro, ~12:1 sobre tinta) en vez
    de fabricar un gris nuevo. Sobre señal el secundario es --verde-900
@@ -282,9 +326,37 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
   font-weight: 500;
   margin: 0.5em 0 0;
   max-width: 26ch;
+  color: #edf1ef;   /* el par de .ink, 16,66:1 */
 }
-.slab--vos .who  { color: #edf1ef; }        /* el par de .ink, 16,66:1 */
-.slab--onia .who { color: var(--tinta); }   /* el par de .signalBlock, 9,43:1 */
+
+/* Las tres cosas que de verdad pasan en esas 15 horas. Van DENTRO del
+   verde porque son el contenido de esas horas: sin ellas el bloque era
+   un campo de color esperando algo. */
+.moments {
+  list-style: none;
+  margin: 0.8em 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5em;
+  max-width: 40em;
+}
+.moments li {
+  font-size: 0.95em;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+/* "Vos los aprobás" es la frase que corrige la promesa falsa: no se puede
+   partir en dos líneas. 16 caracteres entran en el bloque a cualquier
+   ancho, así que nowrap acá es seguro y no puede desbordar. */
+.moments .cierre { white-space: nowrap; }
+.moments b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.8em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--verde-900);   /* 8,7:1 sobre señal */
+}
 
 @media (min-width: 768px) {
   .slab { min-height: 12em; padding: 1.7em 1.9em 1.6em; }
@@ -293,26 +365,50 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
   .slab--onia { padding-right: calc(1.9em + var(--bleed)); }
   .slab--vos  .amount { font-size: 2.4em; }
   .slab--onia .amount { font-size: 3.4em; }
+  /* la hora en columna propia: la lista se lee como un horario, no como
+     tres frases sueltas */
+  .moments li { display: grid; grid-template-columns: 5.4em 1fr; gap: 0 0.6em; }
 }
 
-/* Móvil. Tres decisiones, no una adaptación automática:
-   1. El ratio 9:15 no cabe a lo ancho con texto adentro, así que pasa
-      al ALTO (7,2em vs 12em). La idea sobrevive al apilado.
-   2. Se mata el sangrado: con 1,2rem de margen, escaparse por la
-      derecha no se lee como gesto, se lee como margen mal puesto.
-   3. Las marcas se estiran a barras; a 11px de ancho, cuadradas se
-      convertían en puntos y dejaban de contar horas. */
+/* ══════════════════════════════════════════════════════════════════
+   MÓVIL: el día GIRA, no se apila. La misma rejilla de 24 pasa de 24
+   columnas a 24 FILAS; la regla se para en vertical al costado y los
+   bloques abarcan 9 y 15 filas de esa misma rejilla. La proporción
+   9:15 sigue siendo espacial y exacta, y la regla sigue explicándola
+   —que es lo que se perdía cuando los bloques se apilaban sueltos.
+   Acá mira el 70% del lead que llega por Instagram.
+   ══════════════════════════════════════════════════════════════════ */
 @media (max-width: 700px) {
-  .bleed { margin-left: 1.2rem; margin-right: 1.2rem; }
-  .slabs { grid-template-columns: 1fr; gap: 0.34em; }
-  .slab  { min-height: 0; }
-  .slab--vos  { min-height: 7.2em; }
-  .slab--onia { min-height: 12em; }
-  .slab--vos  .amount { font-size: 2.3em; }
-  .slab--onia .amount { font-size: 3em; }
-  .slab .hrs span:last-child:not(:first-child) { display: none; }
-  .ruler { gap: 0.16em; margin-bottom: 0.28em; }
-  .tick  { height: 1.5em; border-radius: calc(var(--r-block) * 0.16); }
+  .bleed { margin-left: 1.2rem; margin-right: 1.2rem; }  /* escaparse por la derecha con 1,2rem de margen se lee como error, no como gesto */
+
+  /* Se recorta el aire de arriba para que el borde del bloque verde ASOME
+     sobre el pliegue de 812px. En un teléfono, que la pieza termine justo
+     donde termina la pantalla es la diferencia entre que la scrolleen y
+     que no: el verde tiene que verse empezar. */
+  .block:first-child { padding-top: 3.6em; }
+
+  .day {
+    margin-top: 2.6em;
+    grid-template-columns: 1.5em minmax(0, 1fr);
+    grid-template-rows: repeat(24, minmax(0, 1fr));
+    grid-auto-flow: column;
+    gap: 0.16em 0.7em;
+    min-height: 31em;
+  }
+  .tick {
+    height: auto;                                   /* la marca la estira la fila */
+    border-radius: calc(var(--r-block) * 0.14);
+  }
+  .slab {
+    grid-column: auto;
+    grid-row: span var(--span);
+    min-height: 0;
+    padding: 1.15em 1.2em;
+  }
+  .slab--vos  .amount { font-size: 2.2em; }
+  .slab--onia .amount { font-size: 2.9em; }
+  .moments li { font-size: 0.88em; }
+  .moments b { margin-inline-end: 0.2em; }   /* sin columna propia, la hora necesita su aire */
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -334,15 +430,18 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
 
         <div>
           <p class="lead">
-            A las 23:40 preguntan el precio y <b>el chatbot contesta</b>. El domingo
-            reservan solos por <b>tu agenda pública</b>. A las 07:00 salen los
-            <b>recordatorios y los avisos de cobro</b>, todos los días, sin que abras nada.
+            <b>Onia es el sistema con el que llevás el negocio</b>: agenda, clientes,
+            inventario y caja. Y no cierra cuando cerrás vos.
+          </p>
+          <p class="cost">
+            Fuera de horario hoy no contesta nadie. <b>El que pregunta espera hasta
+            mañana.</b> Si espera.
           </p>
           <div class="actions">
             <a class="btn" href="/register">Creá tu cuenta</a>
             <a class="btn btn--quiet" href="https://wa.me/59175414930">Escribinos por WhatsApp</a>
           </div>
-          <p class="fine">IA incluida · sin límite de chats</p>
+          <p class="fine">Desde Bs 320 al mes · con tu rubro</p>
         </div>
       </div>
     </div>
@@ -363,21 +462,23 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
         <span class="tick tick--on"></span><span class="tick tick--on"></span><span class="tick tick--on"></span>
       </div>
 
-      <div class="slabs">
-        <div class="slab slab--vos">
-          <p class="hrs"><span>09:00 → 18:00</span></p>
-          <div>
-            <p class="amount">9 horas</p>
-            <p class="who">Abrís vos.</p>
-          </div>
+      <div class="slab slab--vos">
+        <p class="hrs"><span>09:00 → 18:00</span></p>
+        <div>
+          <p class="amount">9 horas</p>
+          <p class="who">Abrís vos.</p>
         </div>
+      </div>
 
-        <div class="slab slab--onia">
-          <p class="hrs"><span>18:00 → 09:00</span><span>Todos los días · también domingo</span></p>
-          <div>
-            <p class="amount">15 horas</p>
-            <p class="who">Contesta Onia.</p>
-          </div>
+      <div class="slab slab--onia">
+        <p class="hrs"><span>18:00 → 09:00</span><span>Todos los días · también domingo</span></p>
+        <div>
+          <p class="amount">15 horas</p>
+          <ul class="moments">
+            <li><b>23:40</b> <span>Preguntan el precio. Contesta el asistente.</span></li>
+            <li><b>Domingo</b> <span>Reservan la cita solos, por tu agenda pública.</span></li>
+            <li><b>07:00</b> <span>Los recordatorios y los avisos de pago quedan escritos. <span class="cierre">Vos los aprobás.</span></span></li>
+          </ul>
         </div>
       </div>
     </div>
