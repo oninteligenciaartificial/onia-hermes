@@ -76,7 +76,7 @@
       "publicado": true,
       "_falta": "UN solo bloqueo, y es de Sergio: el mapa de palabras de @sergio_urcullo sigue VACIO en el workflow de n8n, por eso activa=false. Son 30 segundos en la UI. El recurso ya no bloquea (link de la comunidad, 200) y el copy de S05/S06 ya se reescribio el 31-ago para prometer la comunidad y no una lista."
     },
-    "LUCIA": {
+    "COMUNIDAD": {
       "promete": "la entrada a la comunidad de IA",
       "entrega": null,
       "url": "https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu",
@@ -88,7 +88,7 @@
       "publicado": true,
       "_verificado": "2026-08-31: HTTP 200, 199.250 bytes, og:title = \"Onia Community\". Es el MISMO grupo de WhatsApp que promete STACK desde la cuenta de Sergio.",
       "_falta": "UN bloqueo y es de Sergio: cargar LUCIA en el mapa de palabras del workflow de n8n (30 s en la UI). Hasta entonces activa=false y quien comente no recibe nada — es el incidente RANKING del 26-ago.",
-      "_colision": "🔴 LUCIA es el NOMBRE de la cuenta. El bot NO filtra por post: cualquier comentario que contenga la palabra dispara el DM, en cualquier publicacion. En la cuenta de Lucia la gente va a escribir \"lucia\" para saludarla, taggearla o responderle, y todos esos van a recibir el link de la comunidad sin haberlo pedido. Alternativa sin colision: COMUNIDAD."
+      "_decision": "Sergio eligio COMUNIDAD sobre LUCIA el 01-sep. Motivo: el bot NO filtra por post, y LUCIA es el nombre de la cuenta — cualquiera que escriba lucia para saludarla o taggearla recibiria el link sin pedirlo. Evidencia de la calle: @mindshft.ai uso Nike y no MINDSHFT, y junto 99 comentarios."
     }
   }
 }

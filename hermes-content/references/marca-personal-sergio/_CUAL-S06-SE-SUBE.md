@@ -1,3 +1,15 @@
+# ✅ RESUELTO — Sergio eligió el VERDE DE ONIA (01-sep)
+
+**Gana la carpeta `S06` (verde), no `render/S06` (naranja).** Aplica a las OCHO piezas del
+carril: una sola identidad visual en las tres cuentas, y se nota que Onia es suya.
+
+El verde es además lo que sale hoy corriendo el render sin argumentos, así que no hay que
+tocar `scripts/carousel_render.js`. **Las versiones naranjas quedan superadas.**
+
+---
+
+_Lo que sigue es el análisis del 31-ago que planteó la pregunta._
+
 # S06 existe en DOS versiones — y no es un error de render
 
 **Comparadas mirando las dos portadas el 2026-08-31.** El layout, el texto, el número de láminas

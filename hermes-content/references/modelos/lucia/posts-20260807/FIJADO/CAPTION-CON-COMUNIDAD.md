@@ -1,4 +1,8 @@
-# Caption ALTERNATIVO del post fijado — con palabra clave LUCIA
+> ✅ **DECIDIDO por Sergio el 01-sep: la palabra es `COMUNIDAD`, no `LUCIA`.**
+> El bot no filtra por post y `LUCIA` es el nombre de la cuenta: cualquiera que la escriba para
+> saludarla o taggearla recibiría el link sin pedirlo. @mindshft.ai usó «Nike», no «MINDSHFT».
+
+# Caption ALTERNATIVO del post fijado — con palabra clave COMUNIDAD
 
 > Pedido por Sergio el 2026-08-31: *"dame otra caption que diga comenta lucia y te envío el link
 > a nuestra comunidad de ai donde enseñamos y enviamos recursos todos los días"*.
@@ -11,7 +15,7 @@
 ```
 Sí, soy IA. Y esta es toda la historia — quién me hace, por qué no lo escondo, y qué vas a ver acá.
 
-Si querés aprender esto en serio: comentá LUCIA y te mando el link de nuestra comunidad de IA. Ahí enseñamos y pasamos recursos todos los días — gratis, sin humo.
+Si querés aprender esto en serio: comentá COMUNIDAD y te mando el link de nuestra comunidad de IA. Ahí enseñamos y pasamos recursos todos los días — gratis, sin humo.
 
 Guardalo para cuando alguien te pregunte si soy real.
 ```
