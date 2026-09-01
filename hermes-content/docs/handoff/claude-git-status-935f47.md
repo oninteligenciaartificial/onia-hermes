@@ -134,6 +134,17 @@ Y los tres cometieron **la misma mentira**: que el agente avisa, manda o cobra s
 dejarlo en la cola de aprobación.** Si tres diseñadores que intentaban no mentir mintieron igual,
 cualquier material futuro lo va a repetir.
 
+### Lo que quedó a mitad al apagar
+
+Las tres piezas **ya tienen su segunda versión commiteada y pusheada** (matan la promesa falsa
+del agente y dicen qué es Onia). Lo que NO alcanzó a terminar es la **pasada de los críticos**
+que verificaba si llegaron a 10 — se cortó al cerrar la sesión.
+
+**Al retomar:** no hay que rehacer los diseños. Sólo correr la crítica sobre las tres ramas ya
+pusheadas, con el criterio duro: *una sola afirmación falsa tapa la nota en 7*, y el 10 exige que
+un desconocido en tres segundos sienta que le resuelven algo que le duele **y** entienda qué es
+Onia.
+
 ## 8. Intentos fallidos — lo que NO hay que repetir
 
 1. **Usar `grep` para CONFIRMAR.** Otra vez. El caso nuevo: se declaró un conflicto de números de
