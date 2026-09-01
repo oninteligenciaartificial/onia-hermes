@@ -949,6 +949,30 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 - ~~**UI/UX del dashboard**~~ — no es un bloqueo, es una **asignación de carril**: lo lleva
   web-factory. Estar en otra sesión no es estar bloqueado.
 
+## Cerrado (2026-09-01) — no rehacer
+
+- [x] **La lista de bloqueos estaba duplicada y la copia vieja fabricaba trabajo para Sergio.**
+      Vuelta con "Ahora" sin un solo ítem desbloqueado (F2 y F5 esperan a Sergio; la frase falsa de
+      `hermes-content/propuestas/generador/clientes.json` es del carril C; el ítem del escéptico
+      perdió su fuente). Auditando los `[x]` apareció el defecto: convivían **dos** secciones
+      `## Bloqueado`, y la del 2026-08-30 seguía pidiendo **bajar un deployment de Vercel que ya
+      no existe**. Remedido en vivo antes de tocar nada: `https://dentalgest.app/` y `/login`
+      responden **404 `X-Vercel-Error: DEPLOYMENT_NOT_FOUND`**.
+      **Lo que se hizo:** se borró la sección vencida (sus otras cuatro entradas ya estaban, con
+      medición, en la lista del 31-ago) y se le pasó a la que queda el único dato que sólo tenía
+      la vieja — que `master` tiene commits sin desplegar. De paso se fusionaron las otras dos
+      copias estructurales que el mismo barrido destapó: **dos `## Después`** y **dos
+      `## Cerrado (2026-08-30)`**, la segunda vacía.
+      **Y la guarda, que es lo que impide la próxima:** `scripts/verificar_cola.js` ahora falla con
+      **`seccion-duplicada`** si dos `##` repiten título. El gate `duplicado` que ya existía **no
+      podía ver esto**: mira items `- [ ]`, y las listas de bloqueos se escriben con viñetas y
+      filas de tabla — así que una sección entera vencida pasaba en verde. Test primero, en rojo
+      por el motivo correcto (`dos secciones con el mismo titulo se marcan`), con su recíproco
+      para que no grite en falso sobre las secciones fechadas. **28 casos** en el self-check.
+      **La lección: un ítem duplicado hace rehacer trabajo; una SECCIÓN duplicada hace pedirle a
+      Sergio una decisión ya tomada.** Es el mismo defecto que esta cola bautizó *"cerrar un ítem
+      no cierra su copia"*, un nivel más arriba — y la cuarta vez que se duplica.
+
 ## Cerrado (2026-08-31) — no rehacer
 
 - [x] **Paso 3 (auditoría de los `[x]`): la cola resiste, y el hallazgo es que el punto 2 está
