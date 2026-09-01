@@ -362,6 +362,32 @@ carpeta para publicar. No se borran: son el historial de la unificación de colo
 (`render-l10`, `render-l11`). La regla no es "mayúscula gana", es "el lote verde gana" — y esos
 dos se renderizaron después y ya nacieron verdes.
 
+### 1-octies. ✅ Día 2 (L09) verificado MIRÁNDOLO — y la pizarra dice lo que la pieza promete (31-ago)
+
+Hasta hoy, de las cinco piezas de los días 2 a 6 la única con hoja de contacto era la del día 4
+(`posts-20260807/render-l10/_CONTACTO.jpg`). El estado «las 25 tienen su render en disco» venía de
+contar archivos, no de mirarlos. Se cerró el día 2, que es el primero que se publica después del
+lanzamiento:
+
+- **Hoja de contacto nueva:** `posts-20260807/L09/_HOJA-DE-CONTACTO.jpg` (7 láminas, 1080×1350,
+  generada con `scripts/carousel_contactsheet.js`).
+- **Secuencia completa y coherente:** 01 *esta cara no existe, así se hace* → 02 *no empieza con un
+  texto, empieza con una cara* → 03 *una de las ocho fotos era de otra mujer* → 04 *no fue un truco,
+  fue mirar* → 05 *la voz es un trabajo aparte* → 06 *lo que se me nota* → 07 *la cara no existe, el
+  equipo que la hizo sí*. Todas del lote verde.
+- **La afirmación comprobable, comprobada:** la lámina 6 manda a mirar la pizarra del café y dice que
+  *«Café con Leche» está bien escrito* y que dos renglones más abajo aparecen *«marnago»* y
+  *«horchimos»*, que no son palabras. Se hizo zoom sobre `slide-06.png`: la pizarra dice exactamente
+  eso (y más abajo sigue con *Vencido…*, *Marci…*, *Rugar…*). **Importa acá más que en otra pieza:**
+  L09 es la que enseña a reconocer una imagen de IA. Si el detalle que manda a mirar no estuviera en
+  la foto, el carrusel enseñaría a desconfiar con un ejemplo inventado — en la cuenta cuya promesa es
+  no esconder nada.
+- Detalle menor, sin arreglo: el badge *GUARDÁ ESTO* tapa la M de «Medialunas». No toca la línea que
+  la lámina cita.
+
+**Lo que queda del mismo tipo:** días 3, 5 y 6 (`L6`, `L08`, `render-l11`) siguen sin hoja de
+contacto. Una por vuelta.
+
 ### 1-septies. ✅ SISTEMA no está roto — el pendiente del PDF era un fantasma (31-ago)
 
 En «Ahora» había un ítem con fecha límite: *"Resolver SISTEMA antes del día 3: el recurso que
