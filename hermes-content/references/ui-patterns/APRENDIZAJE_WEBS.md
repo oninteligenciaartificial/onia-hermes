@@ -156,3 +156,44 @@ con la oferta.
 | Barra lateral "React Sidebars Part 16" como *técnica* | contenido de volumen; el componente ya está resuelto por la librería que usamos. **Sí** sirve como referencia visual |
 | Chat de mensajería armado a mano | Chatwoot ya trae la conversación completa y probada |
 | Copiar composiciones de uiverse | produce exactamente el diseño genérico que queremos evitar |
+
+---
+
+## 2026-09-01 — Los creativos de ads se veían pobres porque yo usaba el pack más plano
+
+Sergio: *«se ve muy pobre el diseño»*. Tenía razón, y la causa era mía: **el renderer ya tiene
+NUEVE packs** (`typographic · dark-product · dark-neon · editorial-photo · editorial-clean ·
+bright-retail · papel-subrayado · dato-ilustrado · tarjeta-empleado`) y yo venía usando el
+**default, `typographic`**, que es texto sobre negro con un resaltado verde. El más plano de todos.
+
+Se renderizó el mismo anuncio en los nueve y se miraron. Ranking para **ads**:
+
+| Pack | Veredicto |
+|---|---|
+| 🏆 **`editorial-photo`** | Foto real full-bleed + scrim + titular encima. **Otra liga.** Frena el scroll porque parece una foto, no una placa |
+| 🥈 **`bright-retail`** | Verde a toda página con onda blanca. Imposible confundirla en un feed lleno de blanco y negro |
+| 🥉 **`dark-neon`** | Grilla, glow verde y halftone. Buena atmósfera, pero con UNA lámina deja mucho aire arriba |
+| ⛔ **`papel-subrayado`** | Con una sola lámina deja **dos tercios del cuadro vacíos**. Está pensado para carruseles largos |
+| ⛔ **`typographic`** | El que usaba. Funciona, no compite |
+
+**Los packs no comparten el código del CTA.** Cada uno tiene su propio template, y todos traían
+el mismo hueco: `role === 'cta' ? ... : ''`, que con una sola lámina no dibuja nada. Se parcheó
+`typographic` y `editorial-photo`; **los demás siguen sin CTA en pieza de una lámina.**
+
+### 🔴 El defecto que el diseño NO arregla: la foto no coincide con el texto
+
+Los 8 creativos hablan de **clínica dental** («tu clínica», «pacientes», «silla vacía»), y el
+banco de fotos de Lucía tiene **café, parada de micro, mercado, tienda de barrio, oficina de
+trámites y peluquería**. Ninguna es un consultorio.
+
+Resultado: *«Tu clínica no puede depender de un cuaderno»* sobre la foto de un almacén con un
+señor dando el vuelto. Se ve bien y **no cierra**. Un dentista mira eso y no se reconoce.
+
+**Las dos salidas, y hay que elegir por pieza:**
+1. **Copy genérico + foto real** → sirve para el mensaje multi-rubro, que es lo que el catálogo
+   vende de verdad. Sale `editorial-photo`.
+2. **Copy específico de un rubro + sin foto** → hasta que exista una foto de ese rubro. Sale
+   `bright-retail` o `dark-neon`, que no prometen una escena.
+
+Meter foto genérica debajo de copy específico es peor que no poner foto: suma una promesa visual
+que el texto desmiente.

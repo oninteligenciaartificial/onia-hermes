@@ -945,6 +945,11 @@ ${MARKS_CSS}
 .ed-body { font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif; font-weight:500; font-size:38px; line-height:1.4;
   margin-top:28px; max-width:880px; color:rgba(255,255,255,.85); }
 .ed-body .g { ${EMPH[EMPH_STYLE]} }
+/* CTA de pieza de UNA lamina: sin slide de cierre, la portada la lleva. */
+.ed-cta { display:inline-block; align-self:flex-start; margin-top:28px;
+  background:var(--onia-green); color:var(--onia-ink);
+  font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
+  font-size:34px; letter-spacing:.4px; padding:18px 30px; border-radius:999px; }
 .swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
   font-size:26px; letter-spacing:3px; text-transform:uppercase; color:var(--onia-green); }
 
@@ -962,6 +967,7 @@ ${MARKS_CSS}
   <${headTag} class="ed-h">${emph(slide.headline)}</${headTag}>
   ${body}
   ${role === 'cta' ? ctaButton(triggerWord(slide)) : ''}
+  ${role !== 'cta' && last && slide.cta ? `<div class="ed-cta">${esc(slide.cta)}</div>` : ''}
   ${last ? '' : '<div class="swipe">Deslizá →</div>'}
   <div class="footer">
     <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
