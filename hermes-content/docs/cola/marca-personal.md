@@ -8,10 +8,16 @@
 |---|---|---|
 | P1 | **Biblioteca de drops** | ✅ 2026-09-01: `ONIA_COMUNIDAD_BIBLIOTECA.md` + página Notion "Onia Community · Biblioteca" (borrador privado — **Sergio: abrirla → Compartir → Publicar en la web → fijar ese link en Avisos**) |
 | P2 | **Drops semana 2** | ✅ 2026-09-01: 7 drops lun-dom en `ONIA_COMUNIDAD_CONTENIDO.md` (sáb se llena con señales del mié; jue y dom llevan el toque de Sergio) |
-| P3 | **Radar mensual #1 para Samuel** (tendencias + ganchos + palabra clave por tema — entregable del acuerdo, antes de la primera sesión) | ⬜ |
-| P4 | **Carruseles 1 y 2** — layout listo; bloqueado el render final por íconos (login Higgsfield de Sergio en Chrome) | 🟡 |
+| P3 | **Radar mensual #1 para Samuel** | ✅ 2026-09-01: `ONIA_MARCA_PERSONAL_RADAR.md` (14 ganchos por serie + tabla tema→palabra→recurso) |
+| P4 | **Carrusel 1 "5 prompts"** | ✅ 2026-09-01: 7 láminas 1080×1350 en `carousels/out/carrusel-5-prompts/` — íconos Fluent 3D (MIT), SIN esperar Higgsfield. Generador: `scripts/marca-personal/generar-carrusel-prompts.py`. Carrusel 2 ("3 cursos") pendiente, mismo generador |
 | P5 | X banner + website (modal caprichoso — reintentar) | 🟡 |
-| P6 | Textos X/LinkedIn de la semana (repost manual mientras Postiz esté caído) | ⬜ |
+| P6 | Textos X/LinkedIn + captions + checklist completa | ✅ 2026-09-01: `docs/cola/PARA-PUBLICAR-HOY.md` (7 bloques copy-paste) |
+
+> **LOOP VPS: VIVO Y VERIFICADO** (2026-09-01). Cron diario 17:56 La Paz. Primera vuelta:
+> 127 s, exit 0, escribió `drops/2026-09-02.md` (calidad verificada) y pusheó a
+> `claude/marca-personal-loop`. ⚠️ Nota para el dueño del runner `onia-loop.sh`: el
+> contador "sin pushear" dio falso positivo (contó ANTES de que el push del agente
+> terminara de registrarse) — el aviso FALLO de las 21:58 era mentira, el push estaba hecho.
 | P7 | Encuesta de temario (semana 3) — redactarla cuando haya señales de 2 semanas | ⏸ |
 
 > Dueño: la sesión de estrategia/marca personal (esta). La sesión de higgsfield/modelos
