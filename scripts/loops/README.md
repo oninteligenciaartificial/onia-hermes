@@ -79,24 +79,32 @@ líneas (se dejan las últimas 3.000).
 crontab -e   # y comentar la línea del loop
 ```
 
-## Requisito que no está resuelto acá
+## La credencial del VPS — resuelto el 2026-09-01
 
 `claude -p` en el VPS necesita la credencial de la suscripción
-(`/root/.claude/.credentials.json`). **Medido el 2026-09-01: está vacía** (`accessToken` y
-`refreshToken` de 0 bytes, `expiresAt: 0`) y la última sesión real del VPS es del **15-ago** —
-por eso `claude-guardia.sh` viene escribiendo "diagnóstico automático no disponible" desde
-entonces. Se arregla con una sesión interactiva **como root en el VPS**:
+(`/root/.claude/.credentials.json`). El 2026-09-01 a la mañana estaba **vacía** (`accessToken` y
+`refreshToken` de 0 bytes, `expiresAt: 0`), la última sesión real del VPS era del **15-ago**, y
+las dos líneas de `crontab` quedaron **comentadas** con el motivo escrito. `claude-guardia.sh`
+venía escribiendo "diagnóstico automático no disponible" desde entonces.
+
+**Ya no.** Verificado en vivo el 2026-09-01 20:45 UTC, las dos cosas que faltaban:
 
 ```bash
-ssh root@187.77.16.63
-claude            # y adentro: /login
-# o, mejor para headless:
-claude setup-token
+ssh root@187.77.16.63 'claude -p "responde solo: OK" --allowedTools ""'   # → OK
+# y el push, con un ref temporal que se borra en el acto:
+cd /root/loops/onia-hermes
+git push origin FETCH_HEAD:refs/heads/tmp/vps-write-test && git push origin :refs/heads/tmp/vps-write-test
 ```
 
-Hasta que eso pase, los loops arrancan, detectan `Not logged in`, avisan por Telegram y salen
-sin romper nada.
+Las dos líneas del `crontab` quedaron **descomentadas**. `canario-visual` ya había corrido a
+mano a las 19:48 UTC con `exit 0` y 2 commits pusheados: la cadena entera (worktree → rama →
+`claude` → commit → push) está probada, no deducida.
 
 ⚠️ **No copiar el `.credentials.json` de Windows.** Es lo que se hizo el 2026-08-15 y por eso
 murió: dos máquinas compartiendo un mismo OAuth rotan el `refreshToken` entre ellas, y la que
-pierde la carrera queda deslogueada en silencio. `setup-token` genera un token propio del VPS.
+pierde la carrera queda deslogueada en silencio. Si vuelve a caer, la salida es una sesión
+interactiva **como root en el VPS** (`claude` → `/login`, o mejor `claude setup-token`, que
+genera un token propio de la máquina).
+
+Mientras la credencial esté rota, los loops arrancan, detectan `Not logged in`, avisan por
+Telegram y salen sin romper nada.
