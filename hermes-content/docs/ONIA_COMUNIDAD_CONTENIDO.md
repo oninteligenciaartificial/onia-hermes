@@ -101,6 +101,63 @@ y nosotros tenemos skills reales corriendo: ventaja injusta.
 3. **Interactivo (18K en TikTok):** "Decime tu negocio en los comentarios y te digo
    qué automatizaría primero" — genera comentarios masivos y alimenta D6.
 
+## Drops SEMANA 2 (ritmo fijo lun-dom, listos para pegar)
+
+### Lun — Herramienta de la semana: n8n
+
+> 🔧 La herramienta de esta semana: **n8n** — el empleado que trabaja mientras dormís.
+> Conecta tus apps entre sí: llega un mensaje de WhatsApp → se guarda en tu Excel → te
+> avisa por Telegram. Sin escribir código.
+> Yo lo uso para [ejemplo real de Sergio]. Gratis para empezar: n8n.io
+> ¿Qué dos apps de tu negocio conectarías? Contá en General 👇
+
+### Mar — Receta: el prompt cotizador completo
+
+> 📋 Receta de hoy (copiá, cambiá los corchetes, listo):
+> "Actuá como el encargado de ventas de [mi negocio]. Un cliente pide [servicio/producto].
+> Armame una cotización profesional que incluya: descripción en 2 líneas, qué incluye,
+> qué NO incluye, precio [X], validez de 7 días, y una línea final que invite a cerrar
+> sin presionar. Tono cercano pero profesional, formato listo para WhatsApp."
+> Probala con tu próximo cliente y contá qué respondió.
+
+### Mié — RETO de 10 minutos
+
+> ⚡ Reto de hoy (10 min): abrí Claude o ChatGPT y pegá las 5 preguntas que más te hacen
+> tus clientes. Pedile: "Armá una respuesta corta y cálida para cada una, listas para
+> copiar a WhatsApp".
+> Guardalas. Acabás de crear tu primer sistema de respuestas.
+> 👉 Contá en General cuál es tu pregunta #1 — la más repetida de todas la automatizo
+> completa en video.
+
+### Jue — Caso real
+
+> 🏗 Caso de esta semana: [Sergio elige — ej. cómo el chatbot de Onia responde consultas
+> de precios a las 2 AM, con captura]. Qué resuelve: [2 líneas]. Qué usé: [herramientas].
+> ¿Preguntas? General 👇
+
+### Vie — Recurso: checklist "¿qué automatizo primero?"
+
+> 📥 Recurso del viernes: 5 preguntas para saber QUÉ automatizar primero en tu negocio:
+> 1. ¿Qué hago más de 3 veces por semana exactamente igual?
+> 2. ¿Qué me interrumpe cuando estoy trabajando en lo importante?
+> 3. ¿Qué se me olvida seguido (cobros, seguimientos, recordatorios)?
+> 4. ¿Dónde pierdo clientes por responder tarde?
+> 5. ¿Qué tarea odio tanto que la postergo?
+> La que aparezca en 2+ respuestas: esa va primero. Contá la tuya 👇
+> Y mañana: la automatización más pedida de la semana, armada paso a paso.
+
+### Sáb — La más pedida
+
+> (Se escribe el viernes con las señales del miércoles/viernes: la tarea más repetida
+> entre las respuestas, armada paso a paso con herramienta concreta.)
+
+### Dom — Cierre de semana
+
+> 🎙 Cierre de semana: [audio de Sergio de 5 min — qué pasó en la comunidad, el mejor
+> resultado de un miembro CON NOMBRE (🏆 miembro de la semana), y qué viene el lunes].
+> Pregunta grande de la semana: ¿qué querés que enseñe más a fondo? Respondé con una
+> palabra en General.
+
 ## Estrategia de embudo: comunidad → VSL → curso (definida 2026-09-01)
 
 La comunidad no es el fin: es el **nurture** para lanzar el curso con un VSL cuando

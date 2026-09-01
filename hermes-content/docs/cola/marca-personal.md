@@ -6,8 +6,8 @@
 
 | # | Pieza | Estado |
 |---|---|---|
-| P1 | **Biblioteca de drops** — doc público con todos los drops archivados, para fijar en Avisos | ⬜ |
-| P2 | **Drops semana 2** (7, siguiendo el ritmo lun-dom del plan mensual) | ⬜ |
+| P1 | **Biblioteca de drops** | ✅ 2026-09-01: `ONIA_COMUNIDAD_BIBLIOTECA.md` + página Notion "Onia Community · Biblioteca" (borrador privado — **Sergio: abrirla → Compartir → Publicar en la web → fijar ese link en Avisos**) |
+| P2 | **Drops semana 2** | ✅ 2026-09-01: 7 drops lun-dom en `ONIA_COMUNIDAD_CONTENIDO.md` (sáb se llena con señales del mié; jue y dom llevan el toque de Sergio) |
 | P3 | **Radar mensual #1 para Samuel** (tendencias + ganchos + palabra clave por tema — entregable del acuerdo, antes de la primera sesión) | ⬜ |
 | P4 | **Carruseles 1 y 2** — layout listo; bloqueado el render final por íconos (login Higgsfield de Sergio en Chrome) | 🟡 |
 | P5 | X banner + website (modal caprichoso — reintentar) | 🟡 |
