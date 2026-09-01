@@ -168,15 +168,18 @@ todo al subir, así que la diferencia no se ve en el feed.
 Subir los 7 `.png` **en este orden** (los `.jpg` de la misma carpeta son el respaldo del repo,
 no la versión que se sube):
 
-| # | archivo | de qué es la lámina | alt text |
+| # | archivo | de qué es la lámina | texto alternativo (copiar tal cual) |
 |---|---|---|---|
-| 1 | `slide-01.png` | ¿Lucía es real? | Lucia es real? |
-| 2 | `slide-02.png` | un personaje digital | Personaje digital |
-| 3 | `slide-03.png` | no lo escondo | IA declarada |
-| 4 | `slide-04.png` | un equipo boliviano | Quien la hace |
-| 5 | `slide-05.png` | IA sin humo | Que publica |
-| 6 | `slide-06.png` | la pregunta abierta | Pregunta abierta |
-| 7 | `slide-07.png` | esto recién empieza | Seguime |
+| 1 | `slide-01.png` | ¿Lucía es real? | Primer plano de Lucía, joven con pecas y aros dorados. Texto: ¿Lucía es real? No. |
+| 2 | `slide-02.png` | un personaje digital | Lucía en una terraza al atardecer. Texto: un personaje digital creado con IA por @oniahq. |
+| 3 | `slide-03.png` | no lo escondo | Lucía sonríe frente a una laptop. Texto: no lo escondo, nací con etiqueta de IA. |
+| 4 | `slide-04.png` | un equipo boliviano | Lucía trabaja en una laptop en un café. Texto: un equipo boliviano, Onia, la hace. |
+| 5 | `slide-05.png` | IA sin humo | Lucía mira una tablet en un café. Texto: IA sin humo, herramientas que funcionan. |
+| 6 | `slide-06.png` | la pregunta abierta | Lucía sonríe en un cuarto con luz suave. Texto: ¿le seguirías a alguien que no existe? |
+| 7 | `slide-07.png` | esto recién empieza | Lucía camina en la playa al atardecer. Texto: esto recién empieza, seguime. |
+
+📝 **Dónde se escribe eso → [Paso 1-ter](#paso-1-ter--el-texto-alternativo-dónde-se-pone-y-por-qué-no-bloquea).
+No bloquea el día 0**: se puede poner después de publicar.
 
 💡 **Al llegar a la última pantalla, antes de *Compartir*:** si el switch del Paso 0 no se pudo
 poner, activá ahí la etiqueta por publicación — [Paso 0-ter](#paso-0-ter--la-otra-etiqueta-la-de-la-publicación-plan-a2).
@@ -224,14 +227,14 @@ referencian entre sí, así que el salto no deja frase colgada.
 
 Orden a subir — **6 archivos, misma carpeta `FIJADO/`, salteando `slide-03`** (9,8 MB en total):
 
-| # | archivo | de qué es la lámina | alt text |
+| # | archivo | de qué es la lámina | texto alternativo (copiar tal cual) |
 |---|---|---|---|
-| 1 | `slide-01.png` | ¿Lucía es real? | Lucia es real? |
-| 2 | `slide-02.png` | un personaje digital | Personaje digital |
-| 3 | `slide-04.png` | un equipo boliviano | Quien la hace |
-| 4 | `slide-05.png` | IA sin humo | Que publica |
-| 5 | `slide-06.png` | la pregunta abierta | Pregunta abierta |
-| 6 | `slide-07.png` | esto recién empieza | Seguime |
+| 1 | `slide-01.png` | ¿Lucía es real? | Primer plano de Lucía, joven con pecas y aros dorados. Texto: ¿Lucía es real? No. |
+| 2 | `slide-02.png` | un personaje digital | Lucía en una terraza al atardecer. Texto: un personaje digital creado con IA por @oniahq. |
+| 3 | `slide-04.png` | un equipo boliviano | Lucía trabaja en una laptop en un café. Texto: un equipo boliviano, Onia, la hace. |
+| 4 | `slide-05.png` | IA sin humo | Lucía mira una tablet en un café. Texto: IA sin humo, herramientas que funcionan. |
+| 5 | `slide-06.png` | la pregunta abierta | Lucía sonríe en un cuarto con luz suave. Texto: ¿le seguirías a alguien que no existe? |
+| 6 | `slide-07.png` | esto recién empieza | Lucía camina en la playa al atardecer. Texto: esto recién empieza, seguime. |
 
 **El caption sí cambia — se le saca tres palabras.** El del Paso 1 promete tres cosas: *"quién me
 hace, **por qué no lo escondo**, y qué vas a ver acá"*. Ese beat del medio **es la lámina 3**: es
@@ -250,6 +253,45 @@ sigue siendo cierto.
 **Y avisale a Sergio igual**, no para frenar sino para que quede anotado: la lámina 3 hay que
 re-escribirla en el brief antes de que la etiqueta se pueda poner, o el día que se pueda, se
 re-renderiza y este post se puede volver a subir completo.
+
+---
+
+## Paso 1-ter — el texto alternativo: dónde se pone (y por qué NO bloquea)
+
+🟢 **Escrito el 31-ago: al kit le faltaba el "dónde".** Las tablas del Paso 1 traían una columna
+*alt text* desde el principio, pero **en ninguna parte del kit decía en qué pantalla se escribe
+eso**. Sergio llegaba con el teléfono, 7 láminas cargadas y 7 textos sin lugar donde ponerlos.
+
+Y lo que traía la columna tampoco era texto alternativo: eran los titulares recortados y sin
+acentos — *"Lucia es real?"*, *"Personaje digital"*, *"Quien la hace"*. Eso **no describe nada**
+a quien no ve la imagen; repite la frase que ya está en la lámina. Las tablas ahora traen la
+descripción real de cada foto (se miraron las 7 en `FIJADO/_HOJA-DE-CONTACTO.jpg`), todas de
+**menos de 100 caracteres**, porque el campo de Instagram es corto y no conviene arriesgar que
+se corte a la mitad justo en el minuto de publicar.
+
+**Importa en esta pieza más que en otras:** si no se escribe, Instagram **igual pone uno**,
+generado automáticamente por su propia IA ("puede contener: 1 persona, primer plano"). O sea que
+la cuenta que promete no esconder que es IA quedaría describiéndose sola con una IA ajena, y mal.
+
+### Dónde
+
+**Ruta A — al subir**, en la última pantalla antes de *Compartir* (la misma del Paso 0-ter):
+**Configuración avanzada** → **Texto alternativo** / *Escribir texto alternativo*. En un carrusel,
+según la versión, deja tocar lámina por lámina o pide una sola.
+
+**Ruta B — después de publicar** (la que siempre está): abrir el post → **···** → **Editar** →
+deslizar a cada lámina → **Editar texto alternativo** → escribir el de esa fila → *Listo*.
+
+⚠️ **No verificado en el teléfono de Sergio** — igual que el Paso 0-ter, se verificó que la
+función existe y cómo se llama en español, no que aparezca así en esa versión. Está hecho cuando
+el texto quedó guardado en la lámina, no cuando se tocó el menú.
+
+### Y esto NO es un bloqueo
+
+A diferencia del Paso 0, **el texto alternativo se puede poner después y no cambia lo que dice
+la pieza.** Ninguna lámina afirma que el post tenga descripciones. Si la Ruta A no aparece o
+Sergio prefiere no pelearse con el teléfono en ese momento: **publicar igual y volver por la
+Ruta B.** No se retrasa el día 0 por esto.
 
 ---
 
