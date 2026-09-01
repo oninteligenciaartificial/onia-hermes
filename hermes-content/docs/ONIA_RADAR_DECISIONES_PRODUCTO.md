@@ -574,3 +574,48 @@ hace que el espejo sea un espejo.
 verdad un espejo. Si no hay ventana para un deploy del bot, la 3 es el paliativo honesto: baja
 el ruido sin fingir que los archivos son iguales. Anotado en la sección "Después" de
 `hermes-content/docs/cola/chatbot.md`.
+
+---
+
+## 16. Treinta y un commits verificados ya están en `main` y NINGUNO está desplegado (2026-08-31) — decisión de Sergio
+
+**Qué pasó.** Dos carriles trabajaron días y su trabajo nunca llegó a `main`: `chatbot` estaba
+**245 commits atrás** y `web-factory` **251**. Lo único que le entraba a `main` eran auto-syncs.
+Mientras tanto la definición de hecho de este proyecto dice *"encendido en producción y
+verificado ahí"* — o sea que 31 commits verdes estaban valiendo cero.
+
+Integrados hoy en `main` (`f3061524` chatbot, `5d47f465` web-factory, `ac57e2b4` el cableado de
+los gates). **Los tres gates pasaron sobre `main` ya mergeada**: `tsc --noEmit` 0 errores,
+`vitest run` 277/277, `npm run lint` 0 errores, y la suite raíz 728 tests en verde.
+
+**Ahora están en el repo y NO en producción.** Lo que sigue no se arregló solo por mergear:
+
+| Qué arregla | Dónde vive el arreglo | Qué falta para que valga |
+|---|---|---|
+| **Los 12 evals estaban muertos y la suite los contaba como "634 verde"** | `bot/evals-contrato.test.mjs` | nada: es un gate, ya corre |
+| **`recepcionista.test.mjs` estaba en 0 bytes** y sumaba silencio a los verdes | `bot/recepcionista.test.mjs` | nada: ya corre |
+| **La marca de Onia sobre Chatwoot lleva 15 días revertida** en `chat.onia.com.bo/app/login` | `chatwoot-marca-publica.mjs` + `chatwoot-brand-onia.sh` | **correr el script contra el VPS.** Hasta entonces la pantalla pública sigue diciendo `www.chatwoot.com` |
+| **El CTA de `/v1/empezar` no podía tener campaña nunca** — habría dejado **cero campañas** en producción | `bot/bot-engine.mjs`, `bot/run-turn.mjs` | **deploy del motor al VPS** |
+| **Las frases de campaña no las podía ver el número de Onia** | `docs/chatbot/campanas-onia.knowledge.json`, `bot/knowledge.mjs` | **deploy del motor al VPS** |
+| El gate del espejo daba rojo por un CRLF (un rojo que se paga con un deploy inútil) | `bot/espejo-check.mjs` | nada, pero ver la sección 15 |
+| **La suite E2E de web-factory llevaba roja desde W7 sin que nadie lo viera** | `tests/e2e/*`, `playwright.config.ts` | nada: es un gate |
+| El KPI spark seguía estirado y `pending` no llegaba nunca al template | `packages/templates/src/dashboard.ts` | **regenerar los sitios** que usan el template dashboard |
+| Bloques nuevos: medidor radial, estados carga/error/vacío, cinta infinita, bandas por feature, statement a pantalla completa | `packages/blocks/src/*` | **regenerar los sitios** que los quieran |
+| Cuatro rubros se recetaban de memoria y dos reglas del playbook estaban mal; la skill mandaba correr un script inexistente | `data/references/*`, `docs/LOOP_COLA.md` | nada: son docs |
+
+**La decisión que queda.** Desplegar no lo decide un carril de integración. Los dos deploys que
+mueven la aguja son distintos y se pueden hacer por separado:
+
+- **(a) El motor del bot al VPS.** Enciende las campañas y el CTA de `/v1/empezar`. Sin esto, un
+  desconocido que llega desde la web sigue recibiendo la respuesta genérica.
+- **(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
+  ajeno de una pantalla que ven los clientes desde el 16-ago.
+
+Se pueden hacer los dos, uno, o ninguno — pero mientras no se haga, este radar dice la verdad:
+está en el repo, no está encendido.
+
+**Un hallazgo colateral, para que no muerda después:** `web-factory/pnpm-lock.yaml` está
+**desactualizado en `main` desde `470a2140`** — `apps/dental-premium/package.json` declara nueve
+dependencias que el lockfile no tiene, así que `pnpm install --frozen-lockfile` (lo que corre un
+CI) **falla**. No se tocó acá porque regenerar un lockfile no es trabajo de un merge, pero es una
+bomba con temporizador para el primer pipeline que instale en limpio.
