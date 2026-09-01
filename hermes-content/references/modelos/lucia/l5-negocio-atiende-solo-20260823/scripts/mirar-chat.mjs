@@ -1,0 +1,10 @@
+import { chromium } from 'playwright';
+const URL='https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw';
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: 620, height: 1100 }, deviceScaleFactor: 2 });
+await p.goto(URL, { waitUntil: 'networkidle', timeout: 60000 });
+await p.waitForTimeout(6000);
+await p.screenshot({ path: 'capturas/01-chat-vacio.png' });
+const inputs = await p.evaluate(() => Array.from(document.querySelectorAll('input,textarea,button')).map(e=>e.tagName+'|'+(e.id||'')+'|'+(e.getAttribute('placeholder')||e.textContent||'').trim().slice(0,40)));
+console.log(inputs.join('\n'));
+await b.close();

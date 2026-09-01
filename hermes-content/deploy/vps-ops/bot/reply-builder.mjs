@@ -90,7 +90,11 @@ export function varsFor(state, config, extra = {}) {
     bot: config.identity.botName,
     demo_duracion: demo.duracionFrase,
     demo_modalidad: demo.modalidad,
-    horario_frase: horario.frase || DEFAULT_CONFIG.businessHours.frase,
+    // El dueno suele escribir su horario como oracion completa ("Atendemos de lunes...").
+    // Las plantillas que consumen {{horario_frase}} ya ponen el verbo o el contexto
+    // ("Atendemos {{...}}", "en horario de oficina ({{...}})"): sin este strip salia
+    // "Atendemos Atendemos de lunes..." — visto en produccion (conv 39, 2026-08-29).
+    horario_frase: (horario.frase || DEFAULT_CONFIG.businessHours.frase).replace(/^\s*atendemos\s+/i, ""),
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
     // Un solo bloque: modulos + servicios. Ver serviceList sobre por que no son dos variables.

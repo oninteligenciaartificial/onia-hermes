@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+  <!-- Onda editorial para transicion entre bandas (paleta clinic: hueso->verde). Generada propia, estilo Haikei. -->
+  <path d="M0,96 C240,160 480,32 720,72 C960,112 1200,176 1440,120 L1440,220 L0,220 Z" fill="#0d6b5c" opacity="0.08"/>
+  <path d="M0,128 C260,180 520,72 760,104 C1000,136 1220,190 1440,150 L1440,220 L0,220 Z" fill="#0d6b5c" opacity="0.14"/>
+  <path d="M0,164 C300,208 560,120 820,144 C1080,168 1260,204 1440,180 L1440,220 L0,220 Z" fill="#0d6b5c"/>
+</svg>

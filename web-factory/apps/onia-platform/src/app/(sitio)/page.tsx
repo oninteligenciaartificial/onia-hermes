@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import { PLANES, ADDONS, GRUPO, PRUEBA, bs } from "@/lib/pricing";
@@ -10,6 +11,7 @@ import {
 import { HUECO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
+import { ALTA_VERBO_VOS, CTA_ALTA, ctaAltaPlan } from "./alta";
 import { Block, Shape, Btn, Kicker, JsonLd } from "./ui";
 import { Switcher } from "./switcher";
 import s from "./sitio.module.css";
@@ -34,12 +36,26 @@ import s from "./sitio.module.css";
  */
 const OG_IMAGE = "/og/onia-rubros.jpg";
 
-const TITULO = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";
+/**
+ * El titular de la pestaña y el del buscador dicen lo MISMO que el h1.
+ *
+ * Hasta el 2026-09-01 los cuatro repetían el hero viejo ("Tu negocio no pierde
+ * citas ni cobros mientras dormís") — se cambió el hero y el resultado de
+ * Google habría seguido prometiendo la frase anterior. Una promesa que cambia
+ * se barre en TODA la superficie, y el snippet es la primera.
+ *
+ * También se va el "Desde Bs 320" de las dos descripciones, por la misma razón
+ * por la que se fue del hero: la escena que promete la página —el negocio
+ * atendiendo de noche— la hace el asistente (add-on) más la agenda pública
+ * sobre el plan, no el plan de Bs 320 solo. El precio completo, con lo que cada
+ * nivel trae y lo que no, vive en /precios, que es donde se compra.
+ */
+const TITULO = "Onia · Cerrás vos, el negocio no | Software de gestión Bolivia";
 const DESCRIPCION =
-  "Onia es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y agentes que trabajan 24/7 con tu aprobación. Desde Bs 320 al mes. Probalo 14 días gratis, sin tarjeta.";
-const OG_TITULO = "Tu negocio no pierde citas ni cobros — Onia, Bolivia";
+  "Onia es el sistema con el que llevás tu negocio en Bolivia: agenda, clientes, cobros e inventario, con un asistente que contesta fuera de horario y agentes que dejan el borrador listo para tu aprobación. 14 días gratis, sin tarjeta.";
+const OG_TITULO = "Cerrás vos. El negocio no. — Onia, Bolivia";
 const OG_DESCRIPCION =
-  "Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs 320/mes, 14 días gratis.";
+  "Un negocio abre 9 horas. Las otras 15 hoy no las atiende nadie: el que pregunta a las once espera hasta mañana, si espera. Onia contesta, agenda y deja los avisos escritos para que vos los aprobés. 14 días gratis, sin tarjeta.";
 
 export const metadata: Metadata = {
   title: TITULO,
@@ -59,7 +75,9 @@ export const metadata: Metadata = {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Pantalla real de Onia: elegís el rubro de tu negocio al crear la cuenta.",
+        // La captura es el selector de rubro, que es el primer paso en las DOS
+        // ramas del alta: describirlo así no ata este alt a `./alta`.
+        alt: "Pantalla real de Onia: elegís el rubro de tu negocio en el primer paso.",
       },
     ],
   },
@@ -104,10 +122,11 @@ const PCT_SALARIO = Math.round(
 /**
  * FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes.
  *
- * Cerrado 2026-08-23: el verbo se alineó con el destino. /register ya no crea
- * cuentas (ver el comentario de (sitio)/empezar/page.tsx:21-25), así que acá no
- * se dice más "te registrás y usás": se PIDE el acceso. La prueba de 14 días
- * sin tarjeta sigue siendo cierta y es lo que se promete.
+ * El verbo del alta NO se escribe acá: sale de `./alta`. El 23-ago se barrió a
+ * mano a "pedís tu acceso" (el alta estaba cerrada) y cuando el alta se reabrió
+ * esta respuesta quedó atrás pidiendo permiso para entrar a un formulario que ya
+ * crea la cuenta sola. La prueba de 14 días sin tarjeta es cierta en las dos
+ * ramas y es lo que se promete.
  *
  * Las cuatro preguntas nuevas (carga de datos, aprender a usarlo, dejar de
  * pagar, rubro fuera de la lista) son las que frenan la compra. Ninguna
@@ -116,7 +135,7 @@ const PCT_SALARIO = Math.round(
 const FAQ = [
   {
     q: "¿Necesito tarjeta para probar?",
-    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: pedís tu acceso, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
   },
   {
     // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx:79 (paso 02).
@@ -251,50 +270,222 @@ const JSON_LD = {
   ],
 };
 
+/**
+ * El día del negocio, en dos números. Las 9 horas que atiende una persona y
+ * las 15 que no atiende nadie.
+ *
+ * Salen de acá y de ningún otro lado: la rejilla del hero son 24 columnas y la
+ * proporción 9:15 es ESPACIAL (`--span`), no dibujada a mano. Los mismos dos
+ * números cuentan las marcas de la regla, las marcas de cada lane y el texto
+ * "9 horas / 15 horas". Escribirlos cuatro veces era la forma segura de que un
+ * día dejaran de sumar 24.
+ */
+const HORAS_VOS = 9;
+const HORAS_ONIA = 15;
+
+/**
+ * Las tres cosas que de verdad pasan en esas 15 horas. Ninguna es una promesa
+ * nueva: el asistente que contesta es el chatbot (sección 6 y /chatbot), la
+ * reserva sola es el add-on de reservas online (lib/pricing.ts → ADDONS) y el
+ * borrador que espera aprobación es lo que hacen los agentes (sección 5).
+ *
+ * ⚠️ El cierre del tercero NO se toca: los agentes preparan el borrador y lo
+ * dejan en la cola de aprobación — no avisan, no mandan y no cobran solos
+ * (onia-core/contract.json:838 · app/api/cron/onia-agents/route.ts, "SIN
+ * ningun envio externo"). Tres diseñadores se equivocaron en esto antes.
+ */
+const MOMENTOS = [
+  { hora: "23:40", que: "Preguntan el precio. Contesta el asistente." },
+  { hora: "Domingo", que: "Reservan la cita solos, por tu agenda pública." },
+  {
+    hora: "07:00",
+    que: (
+      <>
+        Los recordatorios y los avisos de pago quedan escritos.{" "}
+        <span className={s.cierre}>Vos los aprobás.</span>
+      </>
+    ),
+  },
+] as const;
+
+/**
+ * Una lane de la banda: rótulo · track de marcas · palabra.
+ *
+ * Las marcas son las HORAS del bloque (9 o 15), las mismas que cuenta la regla
+ * de arriba — no son un gráfico de ningún dato. El track es decorativo
+ * (aria-hidden); lo que se lee es la frase que forman los dos rótulos.
+ *
+ * `--i` escalona la onda de ONIA: una sola regla CSS en vez de quince
+ * `nth-child`.
+ */
+function Lane({
+  quien,
+  que,
+  marcas,
+  tono,
+}: {
+  quien: string;
+  que: string;
+  marcas: number;
+  /** vos = lleno y quieto · duerme = la misma marca aplastada · onia = de pie, con onda */
+  tono: "vos" | "duerme" | "onia";
+}) {
+  const tonoClass = { vos: s.laneVos, duerme: s.laneDuerme, onia: s.laneOnia };
+  return (
+    <div className={`${s.lane} ${tonoClass[tono]}`}>
+      <span className={s.laneQ}>{quien}</span>
+      <span className={s.track} aria-hidden="true">
+        {Array.from({ length: marcas }, (_, i) => (
+          <span key={i} style={{ "--i": i } as CSSProperties} />
+        ))}
+      </span>
+      <span className={s.laneS}>{que}</span>
+    </div>
+  );
+}
+
 export default function Portada() {
   return (
     <>
       <JsonLd data={JSON_LD} />
-      {/* 1 · HERO — promesa de RESULTADO, no de categoría abstracta */}
-      <Block surface="paper">
-        <div className={s.split}>
-          <Reveal>
+      {/* 1 · HERO — "el resultado": el día del negocio, DIBUJADO.
+
+          Aprobado por Sergio el 2026-09-01 sobre la pieza suelta de
+          hermes-content/references/ui-patterns/hero-onia/resultado/. De tres
+          direcciones ganó ésta; el titular no se toca.
+
+          Lo que sale y por qué:
+           · la CAPTURA del panel. Sergio, 2026-09-01: "no coloques capturas
+             literales del sistema, se ve mal, coloca cosas referenciales". El
+             hero no lleva ni una imagen — el día se dibuja con divs y color.
+           · "Ver precios" como segundo botón. La escena que dibuja el hero la
+             hace el asistente (add-on) sobre el plan: mandar a la tabla de
+             precios desde acá es prometer un número que no compra esta imagen.
+             /precios sigue en el header, en el pie y en la sección 8.
+           · la nota de "14 días gratis · sin tarjeta". No se pierde: es la
+             banda de prueba que viene JUSTO abajo, y la primera pregunta de la
+             FAQ. Repetirla acá le sacaba aire al argumento del día. */}
+      <Block surface="paper" className={s.heroBlock}>
+        <Reveal>
+          <div className={`${s.split} ${s.heroTop}`}>
             <div>
-              <Kicker>Software de gestión con IA · Bolivia</Kicker>
+              <Kicker>Un negocio abre 9 horas</Kicker>
               <h1 className={s.display}>
-                Tu negocio no pierde <em>citas ni cobros</em> mientras dormís.
+                Cerrás vos.
+                <br />
+                El negocio <em>no</em>.
               </h1>
+            </div>
+            <div>
               <p className={s.lead}>
-                Onia agenda las citas, persigue los cobros y hace volver al
-                cliente que se enfrió. Vos aprobás; el sistema hace.
+                <b>Onia es el sistema con el que llevás el negocio.</b> Y no
+                cierra cuando cerrás vos.
+              </p>
+              <p className={s.cost}>
+                Fuera de horario hoy no contesta nadie.{" "}
+                <b>El que pregunta espera hasta mañana.</b> Si espera.
               </p>
               <div className={s.actions}>
-                {/* El verbo tiene que ser el del destino: /empezar dice "Pedir
-                    mi acceso" porque /register ya no da alta automática.
-                    Prometer un botón que el producto no cumple pierde al lead
-                    en el último clic. Los días gratis bajan a la nota. */}
-                <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
-                <Btn href="/precios" variant="line">
-                  Ver precios
+                {/* El verbo tiene que ser el del destino, y el destino cambia:
+                    por eso sale de `./alta` y no se escribe acá. Prometer un
+                    botón que el producto no cumple —en cualquiera de los dos
+                    sentidos— pierde al lead en el último clic. */}
+                <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
+                <Btn href={WA_URL_LANDING} variant="line" external>
+                  Escribinos por WhatsApp
                 </Btn>
               </div>
-              <p className={s.note} style={{ marginTop: "1.2em" }}>
-                {PRUEBA.dias} días gratis · sin tarjeta · sin implementación ·
-                tus datos se exportan en CSV
+              <p className={s.puerta}>
+                <em>El asistente</em> es la puerta. Adentro está el sistema:{" "}
+                <b>agenda, clientes, cobros e inventario</b>.
               </p>
             </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <Shape
-              tone="green"
-              ratio="4 / 3"
-              src="/v2/capturas/panel.webp"
-              width={2160}
-              height={1620}
-              alt="Panel de Onia mostrando el dia de una ferreteria: Bs 4.633,40 cobrados en 11 tickets, como le pagaron, el corte de caja y una propuesta del agente esperando aprobacion."
-            />
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
+
+        {/* pendiente: prueba real (cero clientes pagando ⇒ ni logos ni
+            testimonios; los hechos verificables van en la banda de abajo) */}
+
+        <Reveal delay={0.08} className={s.day}>
+          <div className={s.ruler} aria-hidden="true">
+            {Array.from({ length: HORAS_VOS + HORAS_ONIA }, (_, i) => (
+              <span
+                key={i}
+                className={i < HORAS_VOS ? s.tick : `${s.tick} ${s.tickOn}`}
+              />
+            ))}
+          </div>
+
+          <div
+            className={`${s.slab} ${s.slabVos}`}
+            style={{ "--span": HORAS_VOS } as CSSProperties}
+          >
+            {/* El rótulo y la banda van EN UN GRUPO, igual que en el bloque
+                verde: así las lanes arrancan a la misma altura a los dos lados
+                del corte de las 18:00 y se leen como UNA banda que cruza la
+                pieza. Sueltas, con space-between repartiendo tres hijos, la
+                del negro caía 95px más abajo y el contraste había que
+                buscarlo. */}
+            <div>
+              <p className={s.hrs}>
+                <span>09:00 → 18:00</span>
+              </p>
+              <div className={s.band}>
+                <Lane quien="Vos" que="Atendés" marcas={HORAS_VOS} tono="vos" />
+                <Lane
+                  quien="Onia"
+                  que="Con vos"
+                  marcas={HORAS_VOS}
+                  tono="onia"
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className={s.amount}>{HORAS_VOS} horas</p>
+              <p className={s.who}>Abrís vos.</p>
+            </div>
+          </div>
+
+          <div
+            className={`${s.slab} ${s.slabOnia}`}
+            style={{ "--span": HORAS_ONIA } as CSSProperties}
+          >
+            <div>
+              <p className={s.hrs}>
+                <span>18:00 → 09:00</span>
+                <span>Todos los días · también domingo</span>
+              </p>
+              {/* Las dos lanes JUNTAS: la misma forma, aplastada arriba y de
+                  pie abajo. Leído de corrido: "Vos dormís / Onia por vos". */}
+              <div className={s.band}>
+                <Lane
+                  quien="Vos"
+                  que="Dormís"
+                  marcas={HORAS_ONIA}
+                  tono="duerme"
+                />
+                <Lane
+                  quien="Onia"
+                  que="Por vos"
+                  marcas={HORAS_ONIA}
+                  tono="onia"
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className={s.amount}>{HORAS_ONIA} horas</p>
+              <ul className={s.moments}>
+                {MOMENTOS.map((momento) => (
+                  <li key={momento.hora}>
+                    <b>{momento.hora}</b> <span>{momento.que}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Reveal>
       </Block>
 
       {/* 2 · BANDA DE PRUEBA — solo hechos verificables, cero logos/testimonios */}
@@ -525,7 +716,7 @@ export default function Portada() {
                   ))}
                 </ul>
                 <div className={s.planFoot}>
-                  <Btn href={EMPEZAR_URL}>Pedir acceso al {plan.nombre}</Btn>
+                  <Btn href={EMPEZAR_URL}>{ctaAltaPlan(plan.nombre)}</Btn>
                 </div>
               </div>
             ))}
@@ -662,7 +853,7 @@ export default function Portada() {
             Probá Onia {PRUEBA.dias} días. Sin tarjeta.
           </h2>
           <div className={s.actions}>
-            <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
+            <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Hablar por WhatsApp
             </Btn>

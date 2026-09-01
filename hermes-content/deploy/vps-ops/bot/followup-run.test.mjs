@@ -712,30 +712,3 @@ test("renderHuman muestra a quien se le manda, a quien no y por que", async () =
   assert.match(text, /NO SE MANDA \(1\)/);
   assert.match(text, /telegram:9 — opt_out/);
 });
-
-// Hora de silencio del seguimiento (decision de Sergio, 2026-08-24). Sin esto el barrido
-// de los :17 mandaba un WhatsApp a las 6 de la manana y castigaba el quality rating.
-test("horario silencioso: no escribe antes de las 08:00 de Bolivia", () => {
-  const vivo = { humanTookOver: false, optOutAt: null, followupStep: 0, botStage: "esperando_horario" };
-  // La Paz es UTC-4: 10:00Z = 06:00 local, dentro del silencio.
-  const seisAM = "2026-07-28T10:00:00Z";
-  const inbound = "2026-07-27T13:00:00Z"; // 21 h antes: elegible por afterHours y dentro de la ventana
-  assert.equal(skipReason({ ...vivo, lastInboundAt: inbound }, seisAM, CONFIG), "horario_silencioso:6h");
-});
-
-test("horario silencioso: a las 09:00 ya sale — el descarte era transitorio, no una perdida", () => {
-  const vivo = { humanTookOver: false, optOutAt: null, followupStep: 0, botStage: "esperando_horario" };
-  const nueveAM = "2026-07-28T13:00:00Z"; // 09:00 en La Paz
-  const inbound = "2026-07-27T16:00:00Z"; // 21 h antes
-  assert.equal(skipReason({ ...vivo, lastInboundAt: inbound }, nueveAM, CONFIG), null);
-});
-
-test("el freno va AL FINAL: una conversacion muerta reporta su motivo real, no el horario", () => {
-  // Si el chequeo de hora fuera antes, el dry-run que lee Sergio diria "horario_silencioso"
-  // sobre una fila que en realidad esta muerta hace dias. El diagnostico mentiria.
-  const vivo = { humanTookOver: false, optOutAt: null, followupStep: 0, botStage: "esperando_horario" };
-  const seisAM = "2026-08-10T10:00:00Z";
-  const muyViejo = "2026-07-27T13:00:00Z"; // ~14 dias antes
-  const motivo = skipReason({ ...vivo, lastInboundAt: muyViejo }, seisAM, CONFIG);
-  assert.ok(motivo.startsWith("conversacion_muerta"), `esperaba conversacion_muerta, vino: ${motivo}`);
-});

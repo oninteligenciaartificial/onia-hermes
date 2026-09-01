@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
+import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker, JsonLd } from "../ui";
 import s from "../sitio.module.css";
 
@@ -153,7 +154,7 @@ export default function Nosotros() {
             en CSV cuando quieras.
           </p>
           <div className={s.actions}>
-            <Btn href={EMPEZAR_URL}>Probar el sistema</Btn>
+            <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Hablar con nosotros
             </Btn>

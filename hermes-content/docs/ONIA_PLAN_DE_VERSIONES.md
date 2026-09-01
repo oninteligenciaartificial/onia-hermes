@@ -73,7 +73,7 @@ Los cuatro bloqueantes murieron el mismo dia:
 | Era bloqueante | Estado |
 |---|---|
 | La web nueva sin publicar | **Publicada** en onia.com.bo (swap 23:50 UTC). 9 rutas 200, redirecciones de las URLs viejas, la v1 archivada en `/v1` con noindex. Y se corrigio que los CTA decian "Crea tu cuenta" cuando el producto ya pedia acceso |
-| El alta automatica abierta | **Cerrada** (swap 23:17). `/register` es "Pedi tu acceso": 6 campos, guarda el interesado con su atribucion, cero lenguaje de obra. Reabrir = `ONIA_ALTA_AUTOMATICA=abierta`, un solo cambio |
+| El alta automatica abierta | **Cerrada ese dia** (swap 23:17) — ⚠️ **YA NO: se reabrio el 2026-08-29** y hoy `/register` crea la cuenta en dos pasos. El estado vigente lo manda `ONIA_CATALOGO_DE_VENTA.md` §6; esta fila es la foto del 21-ago. El copy del sitio lo sigue solo desde `web-factory/apps/onia-platform/src/app/(sitio)/alta.ts` |
 | Un pedido no avisaba a nadie | **Avisa por correo** al Gmail del dueno, con estado Pendiente/Contactado en `/admin/solicitudes` y los pendientes ordenados primero |
 | El correo sin una entrega comprobada | **PROBADO**: `to=<oninteligenciaartificial@gmail.com> ... status=sent` a las 00:22:08 UTC. Gmail lo acepto. Es la primera entrega exitosa desde que se arreglo el FCrDNS |
 

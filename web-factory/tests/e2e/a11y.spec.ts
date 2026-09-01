@@ -23,6 +23,10 @@ const PAGES = [
   // that exercises the trust strip, the process list and the <details> FAQ.
   { name: "landing + trust/process/faq (clinic-demo)", url: "/clinic-demo/", schemes: ["light", "dark"] as const },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", schemes: ["light", "dark"] as const },
+  // El mismo panel con los datos que rompen (negativos, cero, 90 puntos) y con
+  // las secciones en cargando / error / vacio: son estados con `role="alert"`,
+  // `aria-busy` y un boton Reintentar que el demo feliz nunca ejercita.
+  { name: "dashboard casos borde (dashboard-edge)", url: "/dashboard-edge/", schemes: ["light", "dark"] as const },
   { name: "store (skincare-demo)", url: "/skincare-demo/", schemes: ["light"] as const },
   { name: "landing-clinic (dental-demo)", url: "/dental-demo/", schemes: ["light", "dark"] as const },
   // Built from the learned model find-realestate-editorial: full-bleed media hero
@@ -36,7 +40,12 @@ const PAGES = [
 for (const target of PAGES) {
   for (const scheme of target.schemes) {
     test(`accessibility: ${target.name} — ${scheme} — WCAG 2.2 AA`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: scheme });
+      // reducedMotion: sin esto, axe escanea con los reveals y animaciones
+      // scroll-driven a mitad de vuelo (opacidad/transform transitorios) y el
+      // muestreo de contraste flakea — el mismo test caia un dia en dental-dark
+      // y al siguiente en logistics-dark. Los templates cortocircuitan
+      // reduced-motion a estado final: se audita la pagina asentada.
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
       await page.goto(target.url);
       await page.waitForLoadState("networkidle");
 

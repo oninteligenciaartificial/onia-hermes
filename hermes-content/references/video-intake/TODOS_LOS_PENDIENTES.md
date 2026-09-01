@@ -11,6 +11,28 @@ Antes de pegar, los tres gates del preámbulo de [PROMPTS_POR_SESION.md](PROMPTS
 > ejecutar cualquiera, verificá contra `origin/main`, no contra el checkout local** — varios
 > prompts dan por faltante algo que ya existe en `main`.
 
+## ⚠️ Verificación del 2026-08-29 — cuatro ítems, cuatro respuestas distintas
+
+Un relevamiento anterior afirmó que **E1, E3, F2 e I1 ya estaban hechos** y que esta lista los
+seguía marcando como pendientes. **Se verificó uno por uno contra el código y esa afirmación no
+se sostiene entera.** Va el estado real, para que nadie ejecute de más ni de menos:
+
+| Ítem | Estado verificado | Evidencia |
+|---|---|---|
+| **F2** — evals del agente | ✅ **HECHO** | `hermes-content/deploy/vps-ops/bot/evals/evals.test.mjs`. Ojo: vive en `onia-hermes` (el bot), **no** en `onia-platform`, así que buscarlo en el producto da vacío y parece pendiente |
+| **E3** — las 9 features de comida | ❌ **NO HECHO** | No existe un pack de gastronomía. Los rubros son 7 (dental, eléctrico, general, ganadero, estética, veterinaria, servicios profesionales) y ninguno es comida |
+| **I1** — portal de documentos del cliente | ❓ **SIN RESOLVER** | `lib/onboarding/` existe pero es otra cosa: extrae datos del negocio desde su web. I1 pide un portal donde el CLIENTE sube documentos, con máquina de estados. Y la sonda por HTTP no sirve para decidirlo: `/cliente/documentos` devuelve 307 igual que `/onboarding`, o sea hay un redirect atrapa-todo y un 307 no prueba que la ruta exista |
+| **E1** — el molde de un rubro completo | ❓ **SIN RESOLVER** | No se encontró un artefacto identificable |
+
+**Por qué no se tachó ninguno:** tachar un ítem que sigue abierto es peor que dejarlo. Los dos
+que quedan en duda necesitan abrir la pantalla con sesión y mirarla — un código HTTP no alcanza
+cuando hay un redirect que se come todo.
+
+**La lección, que aplica a toda esta lista:** un "ya está hecho" heredado de otra sesión es una
+hipótesis, no un dato. F2 estaba hecho pero en el repo equivocado; E3 no estaba hecho en absoluto.
+
+---
+
 ## Si hay que elegir el orden
 
 1. **F1** (`pendiente`) — auditar los agentes que ya existen. Antes de construir más, ver cuáles sobran.

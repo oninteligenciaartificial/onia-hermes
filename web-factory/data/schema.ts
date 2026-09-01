@@ -152,17 +152,30 @@ const dashboardKpiSchema = z.object({
   delta: z.string().default(""),
   trend: z.enum(["up", "down", "flat"]).default("flat"),
   context: z.string().default(""),
+  // Celda hero (card oscura de acento) y sparkline integrada en el KPI — el
+  // template ya los soporta; el schema los dejaba caer. Aprendido de Tabler/
+  // shadcn: el KPI cuenta la tendencia en la propia tarjeta, no en otro chart.
+  variant: z.enum(["default", "accent"]).optional(),
+  spark: z.array(z.number()).optional(),
 });
+
+// Ausente = listo. Sin esto el template solo sabia dibujar el estado final: una
+// consulta caida se veia igual que un negocio sin datos.
+const dashboardEstadoSchema = z.enum(["cargando", "error"]).optional();
 
 const dashboardPointSchema = z.object({
   label: z.string().min(1),
   value: z.number(),
+  // El template dibuja la barra rayada con `pending: true` desde hace tiempo, pero
+  // el schema no lo declaraba y Zod descarta lo no declarado: el patron era
+  // inalcanzable desde el JSON. Mismo drift que ya habian tenido `variant`/`spark`.
+  pending: z.boolean().optional(),
 });
 
 const dashboardChartSchema = z.object({
   title: z.string().min(1),
   unit: z.string().default(""),
-  type: z.enum(["bar", "line", "donut", "sparkline"]).default("bar"),
+  type: z.enum(["bar", "line", "donut", "sparkline", "radial"]).default("bar"),
   points: z.array(dashboardPointSchema).default([]),
   // Optional multi-series for bar/line: when present, each series is drawn as its
   // own colored line/group with a legend.
@@ -174,12 +187,51 @@ const dashboardChartSchema = z.object({
       }),
     )
     .default([]),
+  estado: dashboardEstadoSchema,
 });
 
 const dashboardTableSchema = z.object({
   title: z.string().default("Detalle"),
   columns: z.array(z.string().min(1)).default([]),
   rows: z.array(z.array(z.string())).default([]),
+  estado: dashboardEstadoSchema,
+});
+
+// Propuestas del agente. NO es un chat: cada propuesta viaja pegada a la
+// evidencia que la justifica y se aprueba o se descarta (human-in-the-loop, que
+// es como funciona el modulo `agents` del core). El patron sale del pattern bank
+// ratificado el 2026-08-17: "propuestas del agente INLINE junto a su evidencia".
+const dashboardAgentActionSchema = z.object({
+  titulo: z.string().min(1),
+  /** Que haria exactamente si se aprueba. En lenguaje del duenio, no del sistema. */
+  detalle: z.string().default(""),
+  /** El dato que la justifica. Sin esto es una corazonada con botones. */
+  evidencia: z.string().default(""),
+  /** Plata o tiempo en juego. Es lo que hace que valga la pena mirarlo. */
+  impacto: z.string().default(""),
+  urgencia: z.enum(["alta", "media", "baja"]).default("media"),
+  canal: z.string().default(""),
+});
+
+const dashboardAgentSchema = z.object({
+  titulo: z.string().default("Tu asistente"),
+  /** Una linea de contexto: que reviso y cuando. */
+  resumen: z.string().default(""),
+  acciones: z.array(dashboardAgentActionSchema).default([]),
+  estado: dashboardEstadoSchema,
+});
+
+const dashboardNoteSchema = z.object({
+  texto: z.string().min(1),
+  meta: z.string().default(""),
+  /** A que cuelga la nota (un paciente, una cita, un pendiente). Vacio = suelta. */
+  ancla: z.string().default(""),
+});
+
+const dashboardNotesSchema = z.object({
+  titulo: z.string().default("Notas"),
+  items: z.array(dashboardNoteSchema).default([]),
+  estado: dashboardEstadoSchema,
 });
 
 const dashboardSchema = z
@@ -191,6 +243,8 @@ const dashboardSchema = z
     kpis: z.array(dashboardKpiSchema).default([]),
     charts: z.array(dashboardChartSchema).default([]),
     table: dashboardTableSchema.default({ title: "Detalle", columns: [], rows: [] }),
+    agente: dashboardAgentSchema.optional(),
+    notas: dashboardNotesSchema.optional(),
   })
   .default({
     title: "Panel de control",
@@ -294,6 +348,19 @@ export const clientSchema = z.object({
   // statement the section simply does not render.
   statement: z.string().default(""),
   statementAccent: z.string().default(""),
+  // T9: el statement se toma una pantalla entera, con su fondo y su unica
+  // accion. Declarado aca porque lo que el schema no nombra, lo descarta: el
+  // bloque quedaria inalcanzable desde el JSON del cliente.
+  statementPantalla: z.boolean().default(false),
+  statementFondo: z.enum(["base", "marca", "tinta"]).default("base"),
+  statementCta: z
+    .object({
+      // Sin texto o sin url no se dibuja el boton: un CTA muerto es peor que
+      // ninguno.
+      texto: z.string().default(""),
+      url: z.string().default(""),
+    })
+    .default({ texto: "", url: "" }),
   // Legal line for the footer. Client-supplied: the factory never guesses the
   // holder or the year.
   footerLegal: z.string().default(""),

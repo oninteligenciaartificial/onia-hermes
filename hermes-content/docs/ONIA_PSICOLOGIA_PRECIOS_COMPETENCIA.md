@@ -245,10 +245,9 @@ Esto no es opinión ni doc: es lo que el checkout valida.
 Anual = 10x el mensual (2 meses gratis, **~17% de descuento**). Semanal con prima (~20%
 Básico, ~15% Pro) porque la flexibilidad se paga.
 
-**Add-ons — `onia-platform/lib/pricing.ts`:** chatbot WhatsApp Bs. 1.500 instalación +
-Bs. 1.490/mes + Meta (500 conversaciones incluidas); agenda pública Bs. 150/mes (incluida
-en Pro y Completo); usuario extra Bs. 70/mes (máx. 3 en Básico); inventario avanzado
-Bs. 180/mes; self-hosted desde Bs. 4.500 + Bs. 900/mes; Empresa desde Bs. 2.900 +
+**Add-ons — `onia-platform/lib/pricing.ts`:** chatbot WhatsApp **Bs 390/mes o Bs 3.900/año,
+sin cargo inicial** (500 conversaciones incluidas; el consumo de Meta lo paga el cliente en
+su propia cuenta); agenda pública Bs. 150/mes (incluida en Pro y Completo); usuario extra Bs. 70/mes (máx. 3 en Básico); self-hosted desde Bs. 4.500 + Bs. 900/mes; Empresa desde Bs. 2.900 +
 implementación desde Bs. 3.500.
 
 **Techos — `onia-platform/lib/plan-limits.ts`:** free 30 clientes / 1 usuario / 0 emails;
@@ -314,11 +313,17 @@ Básico 300 / 2 / 200; Profesional 1.500 / 5 / 800; Completo y Empresa ilimitado
    funcional en el código.** Es exactamente el señuelo de Lovable, con peor relación.
 
    Y lo que Empresa promete para justificarse —*"multi-sucursal, contabilidad avanzada,
-   instancia privada"*, de su `activationMessage`— no se sostiene: **multi-sucursal NO
-   EXISTE** (`branchId` da cero coincidencias), la contabilidad es transversal y la tienen
-   todos los planes, y la instancia privada es el add-on self-hosted que se cobra aparte.
+   instancia privada"*, de su `activationMessage`— se sostiene a medias: la contabilidad es
+   transversal y la tienen todos los planes, y la instancia privada es el add-on self-hosted
+   que se cobra aparte.
 
-   **Empresa no se puede vender hasta que exista multi-sucursal.** Mientras tanto sirve
+   ⚠️ **Corregido 2026-08-25:** acá decía **multi-sucursal NO EXISTE** (*branchId da cero
+   coincidencias*). El grep era cierto y la conclusión falsa — `OniaCommerceWarehouse` ya
+   existía con el stock indexado por depósito. **Varios depósitos + traspaso interno están
+   VIVOS en producción desde el 2026-08-25**; lo que no existe es la **sucursal FISCAL ante el
+   SIN**. Detalle en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.2.
+
+   **Empresa se vende por sus depósitos, nunca por sucursales ante Impuestos.** Mientras tanto sirve
    como ancla visible (§4.2.3) — mostrarlo hace que Bs 1.500 se lea barato — pero
    mostrarlo NO es lo mismo que venderlo.
 6. **Cobrar en dólares.** Los siete comparables cotizan en USD (Wix incluso advierte

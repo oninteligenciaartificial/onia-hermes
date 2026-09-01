@@ -32,9 +32,16 @@ export function clientTokenVars(client: ClientTokenInput): Record<string, string
     "--secondary-foreground": readableTextOn(client.colores.secondary),
     "--accent": client.colores.accent,
     "--accent-foreground": readableTextOn(client.colores.accent),
-    "--card": client.colores.bg,
+    // La tarjeta NO puede ser el mismo color que la pagina. Medido en el
+    // dashboard (2026-08-30): `--card` era exactamente `--color-bg`, o sea 1,00:1
+    // contra el fondo — la tarjeta era invisible y toda la separacion la cargaba
+    // un borde de pelo. El sistema de capas existia solo en oscuro, donde `--card`
+    // (#161c22) si difiere del fondo (#0c1013). Un 3% del fg alcanza para que la
+    // superficie se lea como capa sin ensuciar la marca, y funciona con cualquier
+    // color de cliente (claro u oscuro), que es lo que un valor fijo no haria.
+    "--card": "color-mix(in oklab, var(--color-fg) 3%, var(--color-bg))",
     "--card-foreground": client.colores.fg,
-    "--popover": client.colores.bg,
+    "--popover": "color-mix(in oklab, var(--color-fg) 3%, var(--color-bg))",
     "--popover-foreground": client.colores.fg,
     "--muted": "color-mix(in srgb, var(--color-fg) 7%, var(--color-bg))",
     "--muted-foreground": "color-mix(in srgb, var(--color-fg) 68%, var(--color-bg))",
@@ -53,6 +60,16 @@ export function clientTokenVars(client: ClientTokenInput): Record<string, string
  */
 const DARK_BG = "#0c1013";
 const DARK_FG = "#e7e9ec";
+/**
+ * Superficie oscura MAS CLARA que sirven los templates (`--card` / `--popover`).
+ *
+ * Es contra esta, y no contra `--color-bg`, que hay que medir la marca: casi
+ * todo el texto de color vive DENTRO de una tarjeta, y la tarjeta es mas clara
+ * que el fondo. Medir contra el fondo dejaba pasar colores que en la tarjeta
+ * caen por debajo de AA — `wf-path-cta` de realestate marcaba 4,47:1 en oscuro,
+ * a 0,03 del minimo, y el gate lo daba por bueno.
+ */
+const DARK_CARD = "#161c22";
 
 /**
  * Tokens del modo oscuro.
@@ -83,15 +100,22 @@ export function clientDarkTokenVars(client?: ClientTokenInput): Record<string, s
   if (!client) return base;
 
   // 4.5:1 es el minimo de WCAG AA para texto normal.
-  const legible = (color: string) => contrastRatio(color, DARK_BG) >= 4.5;
+  const legible = (color: string) => contrastRatio(color, DARK_CARD) >= 4.5;
   if (!legible(client.colores.secondary)) {
     base["--color-secondary"] = DARK_FG;
     base["--secondary"] = DARK_FG;
     base["--secondary-foreground"] = DARK_BG;
   }
   if (!legible(client.colores.primary)) {
-    base["--color-primary"] = DARK_FG;
-    base["--primary"] = DARK_FG;
+    // La marca se ACLARA, no se borra. Antes esto ponia DARK_FG directo y el
+    // panel perdia la identidad en oscuro: sidebar activo, boton, celda KPI hero
+    // y barras salian BLANCOS (visto mirando el dashboard, 2026-08-30). Subir la
+    // L en HSL conserva hue y saturacion, asi que un verde sigue siendo verde.
+    // DARK_FG queda de ultimo recurso para las marcas acromaticas, donde aclarar
+    // no produce color: ahi el blanco es lo unico legible.
+    const claro = lightenUntilLegible(client.colores.primary);
+    base["--color-primary"] = claro;
+    base["--primary"] = claro;
     base["--primary-foreground"] = DARK_BG;
     // El par completo, o el arreglo crea otro invisible: `--color-on-primary` es
     // el token que usan los BOTONES solidos (background primary + color
@@ -100,10 +124,68 @@ export function clientDarkTokenVars(client?: ClientTokenInput): Record<string, s
     // blanco: 1,21:1, ilegible. Es exactamente lo que axe encontraba en 93 nodos
     // de la landing demo en oscuro. `--ring` sigue al primary por el mismo motivo
     // (el foco tiene que verse sobre el fondo oscuro).
-    base["--color-on-primary"] = DARK_BG;
-    base["--ring"] = DARK_FG;
+    base["--color-on-primary"] = readableTextOn(claro);
+    base["--ring"] = claro;
   }
   return base;
+}
+
+/**
+ * Sube la luminosidad HSL del color hasta que pase 4.5:1 contra el fondo oscuro,
+ * conservando hue y saturacion (un verde de marca sigue leyendose verde).
+ * Devuelve DARK_FG si ni el maximo alcanza: pasa con marcas acromaticas
+ * (negro/gris puro), donde aclarar no produce color y el blanco es lo unico legible.
+ */
+function lightenUntilLegible(hex: string): string {
+  const [h, s, l] = hexToHsl(hex);
+  if (s === 0) return DARK_FG; // acromatico: aclararlo da gris, no marca
+  for (let paso = l; paso <= 0.96; paso += 0.02) {
+    const candidato = hslToHex(h, s, paso);
+    // Dos gates, no uno: el color tiene que leerse sobre el fondo oscuro Y
+    // aguantar su propia tinta encima. Parar en el primero que pasa contra el
+    // fondo dejaba el boton solido en 4,42:1 — apenas debajo, invisible al ojo
+    // pero un fallo de AA que axe reporta. Lo encontro el test, no la revision.
+    if (
+      contrastRatio(candidato, DARK_CARD) >= 4.5 &&
+      contrastRatio(readableTextOn(candidato), candidato) >= 4.5
+    ) {
+      return candidato;
+    }
+  }
+  return DARK_FG;
+}
+
+function hexToHsl(hex: string): [number, number, number] {
+  const [r, g, b] = hexToRgb(hex).map((v) => v / 255) as [number, number, number];
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const delta = max - min;
+  const l = (max + min) / 2;
+  if (delta === 0) return [0, 0, l];
+  const s = delta / (1 - Math.abs(2 * l - 1));
+  const h =
+    max === r ? ((g - b) / delta) % 6 : max === g ? (b - r) / delta + 2 : (r - g) / delta + 4;
+  return [(((h * 60) % 360) + 360) % 360, s, l];
+}
+
+function hslToHex(h: number, s: number, l: number): string {
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  const sector = Math.floor(h / 60) % 6;
+  const [r, g, b] = [
+    [c, x, 0],
+    [x, c, 0],
+    [0, c, x],
+    [0, x, c],
+    [x, 0, c],
+    [c, 0, x],
+  ][sector] as [number, number, number];
+  const canal = (v: number) =>
+    Math.round((v + m) * 255)
+      .toString(16)
+      .padStart(2, "0");
+  return `#${canal(r)}${canal(g)}${canal(b)}`;
 }
 
 /** Contraste WCAG entre dos colores hex (1 = identicos, 21 = negro sobre blanco). */

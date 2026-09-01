@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderBenefitStrip } from "./benefit-strip";
-import { renderEditorialStatement } from "./editorial-statement";
+import { EDITORIAL_STATEMENT_CSS, renderEditorialStatement } from "./editorial-statement";
 import { renderFooterBrand } from "./footer-brand";
 
 describe("renderEditorialStatement", () => {
@@ -25,6 +25,86 @@ describe("renderEditorialStatement", () => {
     expect(html).not.toContain("<b>l</b>");
     expect(html).not.toContain("<i>a</i>");
     expect(html).toContain("&lt;script&gt;");
+  });
+
+  // T9 (statement pantalla-completa) es una VARIANTE de este bloque, no otro
+  // bloque: estos tests fijan lo que la variante agrega y lo que no rompe.
+  it("por defecto no es pantalla completa ni pinta fondo", () => {
+    const html = renderEditorialStatement({ statement: "Una linea" });
+    expect(html).not.toContain("wf-statement--pantalla");
+    expect(html).not.toContain("wf-statement--bleed");
+    expect(html).not.toContain("wf-statement--marca");
+  });
+
+  it("con pantalla se toma la pantalla, y el fondo pintado va full-bleed", () => {
+    const html = renderEditorialStatement({
+      statement: "Una linea",
+      pantalla: true,
+      fondo: "tinta",
+    });
+    expect(html).toContain("wf-statement--pantalla");
+    expect(html).toContain("wf-statement--tinta");
+    // Un color que se corta en la medida lee como tarjeta, no como seccion.
+    expect(html).toContain("wf-statement--bleed");
+  });
+
+  it("cada linea declarada es un hijo del stagger, para que revelen por turno", () => {
+    const html = renderEditorialStatement({
+      statement: "Primera linea\n\nSegunda linea",
+      accent: "y el giro.",
+    });
+    expect(html).toContain("wf-stagger");
+    expect(html.match(/wf-statement-l"/g)).toHaveLength(2);
+    // El acento cierra la ULTIMA linea: es el giro de la frase, no un adorno
+    // suelto entre medio.
+    expect(html).toMatch(/Segunda linea <em class="wf-statement-accent">/);
+  });
+
+  it("dibuja el CTA solo cuando tiene texto Y url", () => {
+    const conCta = renderEditorialStatement({
+      statement: "Una linea",
+      cta: { label: "Pedir demo", url: "#contacto" },
+    });
+    expect(conCta).toContain('class="wf-statement-cta" href="#contacto"');
+    expect(conCta).toContain("Pedir demo");
+
+    const sinUrl = renderEditorialStatement({
+      statement: "Una linea",
+      cta: { label: "Pedir demo", url: "  " },
+    });
+    expect(sinUrl).not.toContain("wf-statement-cta");
+  });
+
+  it("la variante solida invierte el par completo del boton y del acento", () => {
+    // Cambiar solo el fondo es como se fabrica un boton invisible: el par
+    // entero tiene que darse vuelta.
+    expect(EDITORIAL_STATEMENT_CSS).toMatch(
+      /\.wf-statement--tinta\s*\{[^}]*--wf-statement-surface:\s*var\(--color-primary\)[^}]*--wf-statement-fg:\s*var\(--color-on-primary\)/,
+    );
+    expect(EDITORIAL_STATEMENT_CSS).toMatch(
+      /\.wf-statement--tinta \.wf-statement-cta\s*\{[^}]*background:\s*var\(--color-on-primary\)[^}]*color:\s*var\(--color-primary\)/,
+    );
+    expect(EDITORIAL_STATEMENT_CSS).toContain(".wf-statement--tinta .wf-statement-accent");
+  });
+
+  // Los dos defectos que solo apareceron MIDIENDO el render, no leyendo el CSS.
+  it("la pantalla completa mide una pantalla, padding incluido", () => {
+    // Sin box-sizing el padding se suma a las 100svh: 1080px en un viewport de
+    // 900. La seccion no puede depender del reset de la pagina que la usa.
+    expect(EDITORIAL_STATEMENT_CSS).toMatch(
+      /\.wf-statement--pantalla\s*\{[^}]*box-sizing:\s*border-box[^}]*min-height:\s*100svh/,
+    );
+  });
+
+  it("la pantalla completa ensancha la medida para que la linea declarada no se parta", () => {
+    expect(EDITORIAL_STATEMENT_CSS).toMatch(
+      /\.wf-statement--pantalla \.wf-statement-line\s*\{[^}]*max-width:\s*24ch/,
+    );
+  });
+
+  it("el CTA respeta el minimo tactil y tiene anillo de foco", () => {
+    expect(EDITORIAL_STATEMENT_CSS).toMatch(/\.wf-statement-cta\s*\{[^}]*min-height:\s*44px/);
+    expect(EDITORIAL_STATEMENT_CSS).toContain(".wf-statement-cta:focus-visible");
   });
 });
 

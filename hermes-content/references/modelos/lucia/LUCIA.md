@@ -1,7 +1,7 @@
 # LUCÍA — archivo único
 
 > **Este archivo manda.** Todo lo que se decide sobre Lucía se escribe acá. Si otro doc dice
-> algo distinto, gana este. Última edición: 2026-08-13.
+> algo distinto, gana este. Última edición: 2026-08-20.
 >
 > Las decisiones abiertas están marcadas 🟡 con opciones numeradas. Cuando Sergio elige, se
 > reemplaza el bloque por la elegida y se marca ✅ con la fecha.
@@ -345,6 +345,13 @@ generada, que es **la luz demasiado perfecta y la óptica demasiado limpia.**
 | 8 | **Luz como DEFECTO** | `Imperfect available light: strong highlights, slightly washed-out tones, uneven exposure across the frame, one side of her face brighter than the other.` |
 | 9 | **Óptica de celular** | `Minor chromatic aberration at the image edges, characteristic of a modern smartphone camera with a slightly wide lens. Slight motion softness, no tripod steadiness.` |
 | 10 | **Paleta** | `Color palette limited to #C89F82 #8A5A3B #E4714E #EFE7DA #D8C9B0 #B08246 #4E8C87 #2E2A26.` |
+
+> ⚠️ **Bloque 10 y la mitad del 8, OPCIONALES desde el 2026-08-21.** Sergio detectó que las
+> imágenes salían "con un filtro de color": lo causan la paleta limitada de 8 tonos (bloque 10)
+> y el *"slightly washed-out tones"* del bloque 8 — juntos producen un grade editorial fade.
+> Para el feed natural de Lucía: **omitir el bloque 10** y reemplazar esa frase del 8 por
+> `NATURAL TRUE-TO-LIFE COLORS, no color grading, no filter look, accurate white balance`.
+> El bloque 10 queda solo para piezas que PIDEN grade (campaña, carrusel con overlay).
 | 11 | Cierre | `Shot on iPhone, natural light, slight film grain, no beauty filter, no smoothing. Not a 3D render, not AI-looking, not plastic, not doll-like, not airbrushed. No brand logos, no text, no watermark.` |
 
 ⚠️ El bloque 11 lleva **negaciones**: funcionan en la vía `nano_banana_2` + Element. Con
@@ -369,6 +376,62 @@ texture with visible pores. She wears a cream linen shirt, straight jeans and a 
 chain necklace, seen from the waist up, mid-sentence talking. Available window light only,
 slightly imperfect handheld framing, everyday vertical phone photo.
 ```
+
+---
+
+## 6-bis. Biblioteca de encuadres (2026-08-20) — se SUMA al molde, no lo reemplaza
+
+Nueve pares **ángulo → uso comercial** leídos de un carrusel ajeno (los prompts estaban detrás
+del cebo; la taxonomía no, y la taxonomía es la mitad que nadie escribe). Cada encuadre
+aprobado es un **fragmento fijo** que va en el hueco `[cámara]` del molde del §6, igual que
+R1–R4. **Si algo choca con el §6, gana el §6.**
+
+| Encuadre | Uso comercial | Para Lucía | Cola de cámara (texto fijo) |
+|---|---|---|---|
+| **E1 eye-level** | editorial | ✅ | `Eye-level frontal shot, symmetrical composition, she looks straight into the camera, plain neutral background, 50mm` |
+| **E2 high angle** | lifestyle | ✅ | `High angle from about 45 degrees above her table, she looks up at the camera, her notebook and a terracotta mug on the table, 35mm` |
+| **E3 over-the-shoulder** | narrativa | ✅ | `Over-the-shoulder shot from behind her at a three-quarter angle, her back and shoulder framing the foreground, focus on the worn wooden table she is working at, 35mm` |
+| **E4 wide** | campaña | ✅ | `Wide shot, her full figure small within a large interior, generous negative space around her, 35mm` |
+| **E5 side profile** | perfume → acá, portadas | ✅ | `Pure 90-degree side profile, head and shoulders, against a flat saturated terracotta wall, soft even light, 85mm` |
+| **E6 bird's-eye** | editorial | ✅ con QA doble | `Overhead bird's-eye view, tight framing on her face and collarbone, she lies on a plain light fabric background, 50mm` |
+| extreme close-up (media cara) | belleza | ⛔ | — |
+| low angle | poder / lujo | ⛔ | — |
+| dutch (~15°, neón mojado) | streetwear | ⛔ | — |
+
+Notas de uso: **E1** empalma con R2 (fondo neutro = la cara aguanta, ver regla 2). **E2/E3**
+son las que muestran a Lucía *trabajando* sin nombrar pantallas — la mesa es la protagonista.
+**E4** es la base para texto encima con HyperFrames; a esa distancia la cara no carga la
+identidad: la cargan pelo, postura y el terracota en cuadro. **E5** se QA-ea contra los 2
+perfiles del stack de 10 ángulos. **E6** lleva QA reforzada: el escorzo cenital es donde más
+se deforma un rostro generado.
+
+### Los tres que NO van, y por qué
+
+| Encuadre | Motivo |
+|---|---|
+| **Extreme close-up media cara** | Es la toma que más delata al generador (regla 1). Y el uso "belleza" **ya está cubierto por R4** (§6), que es primer plano cabeza-hombros probado el 15-ago. La versión más cerrada no aporta un uso que R4 no tenga y suma el máximo riesgo. R4 queda; esto no lo reemplaza |
+| **Low angle poder/lujo** | El molde entero está construido para leer "foto de celular sacada por una amiga" (bloques 8, 9 y 11 del §6). Un contrapicado con arquitectura convergiendo lee campaña de lujo — o sea humo, exactamente contra lo que Lucía dice estar (§1-bis) |
+| **Dutch con neón mojado** | El neón nocturno no existe en su paleta fija (§1-quater) ni en su luz (cálida, diurna, Santa Cruz). Su streetwear aprobado es de día: mercado, vereda, café (§3). Es la misma razón por la que `nightout` quedó en reserva |
+
+### Dos reglas que valen más que la lista
+
+1. **El extreme close-up delata al generador.** Cuanto más cerca, más se ve lo sintético:
+   poro, vello, transición pelo-piel. R4 sigue vigente porque está probado, pero **toda pieza
+   R4 pasa el QA del §8 con doble atención antes de publicar** — es la toma donde más hay que
+   mirar.
+2. **La cara aguanta en estudio y se corre en escenario.** Fondo neutro: la estructura del
+   rostro se sostiene. Escalera, calle, interior cargado: la estructura y la edad aparente se
+   corren. **Cuando la escena manda más que la referencia, la cara se pierde.** Para Lucía:
+   cara reconocible (primeros planos, portadas) = fondo simple (E1, E5, R2, R4); escena
+   cargada = cara chica en cuadro (E4) o de espaldas (E3).
+
+### El método del carrusel confirma el nuestro, no lo cambia
+
+El carrusel fija primero el **canon** (retrato frontal, fondo liso) y recién después deriva
+las variaciones. Es exactamente el esquema que Lucía ya tiene: ancla `452d8375` para generar
+(§2) + stack de 10 ángulos como vara (§8). **Nada de este lote reemplaza al ancla: el único
+método verificado de consistencia de cara sigue siendo ancla + molde §6 + QA §8.** Los
+encuadres son colas de cámara, no un método nuevo.
 
 ---
 
@@ -449,3 +512,331 @@ Este archivo manda. Los de abajo se conservan porque **cada uno tiene algo que n
 Evidencia: `prueba-motor-20260813/` (la prueba que fijó el método) ·
 `INVENTARIO-caras.jpg` y `INVENTARIO-ropa.jpg` (qué imagen es cada ID) ·
 `docs/ONIA_MODELOS_RECETA_VISUAL_20260806.md` (calibración de 30 imágenes).
+
+---
+
+# §9. RECETA B-ROLL — cómo se hicieron los 4 videos que le encantaron a Sergio (21-ago)
+
+> Sergio: "me encantó el resultado, haz lo mismo pero más barato y aprende cómo los hiciste."
+> Esta sección ES ese aprendizaje. Para B-roll de Lucía, seguir esto al pie.
+
+## El pipeline (2 pasos, ~6-8 cr por escena)
+
+**PASO 1 — Imagen de escena (nano_banana_2, 2.00 cr, NO se puede abaratar):**
+- Prompt = `<<<452d8375-fb67-4df7-9ae0-8f1b257aa51f>>>` + molde §6, con estas líneas fijas:
+  - `A casual candid snapshot of this exact woman [ACCIÓN] in [LUGAR]`
+  - vestuario + `small gold hoop earrings`
+  - `Natural true-to-life colors, no color grading, no filter look, accurate white balance`
+  - `Shot on a phone camera, slight natural grain, [ÁNGULO], [ENCUADRE]`
+  - `Her face stays identical to the reference. No beauty filter, no skin smoothing, no text anywhere`
+- ⚠️ z_image (0.15 cr) NO sirve: no acepta referencia → pierde la cara. El precio de la
+  identidad es 2 cr, no se negocia.
+- **MIRAR la imagen antes de animar** (Read del PNG). Si la cara derivó, regenerar imagen;
+  nunca "arreglar en video".
+
+**PASO 2 — Animar (veo3_1_lite, 1 cr/segundo; duraciones 4/6/8 s):**
+- `medias: [{value: <job_id de la imagen>, role: "start_image"}]`
+- `declined_preset_id: "24bae836-2c4a-48e0-89b6-49fcc0b21612"` SIEMPRE (si no, el preset
+  "IN THE DARK" intercepta el request)
+- Prompt de video, 4 líneas fijas + 1 variable:
+  1. `Natural true-to-life colors, no color grading, no filter look, accurate white balance exactly as the source image.`
+  2. `Natural real-time speed, no slow motion.` ← el fix del slow motion (21-ago)
+  3. [LA ACCIÓN, en ritmo normal: "at a normal everyday pace", "at real wind speed"]
+  4. `Handheld micro-shake only, no camera travel.` (o `Handheld tracking backward smoothly` si camina)
+  5. `Photorealistic, her face stays identical, no morphing.`
+
+## Checklist antes de CADA generación (la regla de los 3 errores)
+
+1. ¿Alguna palabra en MAYÚSCULAS que pueda hornearse como texto? → quitarla
+2. ¿Algún "slowly/softly/gently" que el modelo lea como cámara lenta? → reemplazar por "at a normal pace"
+3. ¿Alguna restricción de paleta que actúe de filtro? → fuera; color natural siempre
+
+## Tarifa medida por clip (21-ago, todos con get_cost)
+
+| Motor | Config | 5-6 s | Nota |
+|---|---|---|---|
+| **veo3_1_lite** | 720p | **4 cr (4s) / 6 cr (6s)** | EL ELEGIDO. 1 cr/s exacto |
+| **seedance_2_0_mini** | **480p sin audio** | **5 cr** | el más barato por clip; 496×864, más blando |
+| seedance_2_0_mini | 720p con audio | 12.5 cr | el audio+resolución duplican el precio |
+| grok_video | 720p | 7.5 cr | sin probar calidad |
+| kling3_0_turbo | 720p | 7.5 cr | mejor movimiento (test 21-ago), backup |
+| happy_horse / grok 1.5 | — | 12.5 cr | caros para B-roll |
+| flux_3_video | 720p | 27.5 cr | descartado para B-roll |
+
+**Configuración "más barato" pedida por Sergio:** imagen 2 cr + veo lite 4 s = **6 cr/escena**
+(vs 8 del test original). Alternativa mini-480p: 7 cr con cara sostenida pero 480p — para
+historias sirve, para reels el 720p de veo lite rinde más por crédito.
+
+## Reglas duras aprendidas
+
+- **NSFW en video ≠ NSFW en imagen**: el traje de baño pasó como imagen y el modelo de VIDEO
+  lo bloqueó. Playa/deporte para animar: ropa cubierta DESDE la imagen (vestido, remera).
+- El costo con audio de seedance se paga aunque el reel lleve música encima: **generate_audio:
+  false siempre** en B-roll (la voz va aparte, ElevenLabs).
+- Verificar SIEMPRE la duración/resolución del mp4 con ffprobe al bajar.
+
+---
+
+# §10. UGC — selfie hablando a cámara (probado 21-ago, 14 cr total)
+
+**Motor oficial de B-roll ratificado por Sergio: veo3_1_lite.** (El A/B contra seedance mini
+480p con prompt IDÉNTICO salió lento en seedance — el modelo obedece menos el ritmo, no era
+el prompt.)
+
+## Receta UGC (2 pasos)
+
+1. **Selfie image (nano_banana_2 + ancla, 2 cr):** "A casual handheld selfie video still of
+   this exact woman holding the phone with one extended arm, talking directly to the camera
+   mid-sentence, mouth slightly open as if speaking" + escena casual (cama/cocina/calle) +
+   las líneas fijas de color natural y cara idéntica del §9.
+2. **veo3_1_lite 8 s + `generate_audio: true` (12 cr):** el prompt lleva el DIÁLOGO entre
+   comillas y el idioma: `She speaks in Latin American Spanish, warm conversational tone,
+   and says: "..."` + `Her lips sync naturally with the words`. ~15-20 palabras caben en 8 s.
+
+## Límites conocidos
+
+- **La voz NO es la Marcela oficial** — veo inventa una voz. Para piezas donde la voz importa
+  (reel de lanzamiento), la vía sigue siendo video mudo + ElevenLabs + lipsync (sync_so,
+  18.15 cr). El UGC barato sirve para historias, pruebas de gancho y volumen.
+- Audio nativo duplica el costo de veo lite (8 s: 8 → 12 cr).
+- El diálogo generado hay que ESCUCHARLO antes de aprobar: acento y pronunciación varían.
+
+## §10-bis. Veredicto UGC de Sergio (21-ago, noche) + LA VOZ
+
+- **gemini_omni (24 cr): el mejor resultado** ("espectacular") — candidato, NO oficial
+  todavía por costo. kling3 (16 cr): bien pero se equivoca frases y va más lento.
+  veo lite (12 cr): movimientos raros al hablar.
+- **NINGÚN motor de video usa la voz oficial.** ⚠️ CORREGIDO mismo día: la voz element de
+  Higgsfield `8de5db95-...` ("Lucia-voz") está **DESCARTADA desde el 25-jul** — Sergio: "robótica".
+  **La voz oficial es "Marcela" de ElevenLabs (`86V9x9hrQds83qf7zaGn`, colombiana es-LATAM)**,
+  se genera LOCAL con `.claude/skills/editor-videos/scripts/tts-elevenlabs.mjs` (default=marcela)
+  y se sube a Higgsfield con media_upload+media_confirm. El pipeline queda:
+  1. Video hablado con el motor elegido (la voz nativa es descartable)
+  2. `tts-elevenlabs.mjs --text "..."` → mp3 con Marcela (usa el cupo ElevenLabs, no créditos)
+     ⚠️ **SIN voice_settings** (aprobado por Sergio 22-ago): los ajustes stability/style que
+     el script forzaba le CAMBIABAN el timbre ("esa no es la voz"). La voz aprobada del
+     casting sale con los DEFAULTS de la API — el script ya fue corregido para no forzar nada.
+  3. media_upload + media_confirm del mp3 → media_id
+  4. `sync_so` input_video + input_audio, probar `sync_mode: remap` (cut_off quedó desincronizado)
+  1. Video hablado con el motor elegido (la voz nativa es descartable)
+  2. `seed_audio` con `voice_type: element` + UUID COMPLETO de la voz (~2.4 cr)
+  3. `sync_so` con `input_video` + `input_audio`, `sync_mode: cut_off` (18.15 cr)
+  VID-08 (voz element, cut_off) = RECHAZADO por Sergio: voz equivocada y desincronizado.
+  VID-09 (voz Marcela real, remap) = el intento corregido.
+- Costo UGC completo con voz oficial: gemini 24 + voz 2.4 + sync 18.15 ≈ **45 cr por pieza**.
+  Para volumen barato sin voz oficial: historias mudas con subtítulos.
+
+## §11. LA VOZ, decidida y cerrada (22-ago, decisión de Sergio + técnica elegida por mí)
+
+- **Voz: Marcela** (`86V9x9hrQds83qf7zaGn`, "Native Colombian", la #1 de la Voice Library
+  con 96.7K usuarios). Ratificada en recasting contra las 5 finalistas.
+- **Técnica de entonación: `eleven_v3` con dirección de actuación** — UNA sola llamada con
+  TODA la narración (nunca por pedazos: cada llamada renderiza prosodia distinta y los
+  tonos saltan) + etiquetas de dirección por frase que NO se pronuncian:
+  `[intrigante]` `[cálida, sonriendo]` `[segura, conversacional]` `[cómplice]` `[entusiasta]`
+- **"Onia" se escribe `Onnia` en el texto del TTS** (fonético; el subtítulo dice Onia).
+- Sin voice_settings. Costo: caracteres del plan (narración ≈ 500 chars ≈ 0.7% del cupo
+  mensual), CERO créditos de Higgsfield.
+- Los cortes de video se recalculan a los tiempos REALES de la narración (Whisper local
+  word-level + límites en el punto medio entre beats) — el audio manda, el video obedece.
+
+---
+
+# §12. Arquitectura de PROMPT por bloques — adoptada del lote M1 (22-ago)
+
+> Origen: `video-intake/PROMPTS_LOTE_2026-08-22.md` (M1, carril INFLUENCERS IA, commit
+> 819c84b9). Prompt recuperado literal de pantalla de un reel que rinde. Se adopta acá
+> porque resuelve DOS errores que ya nos costaron generaciones: el texto horneado
+> ("CLOSED" en la tapa del cuaderno) y las manos deformes.
+
+## La regla madre: bloques con NOMBRE, y cada bloque es una REGLA, no una descripción
+
+Los nombres en MAYÚSCULAS ENTRE CORCHETES ordenan la lectura del modelo. Molde de Lucía:
+
+```
+[IDENTIDAD]              <<<452d8375-...>>> + "this exact woman", rasgos sagrados
+[CÁMARA]                 equipo REAL nombrado (ver palanca 1)
+[ESCENA]                 lugar, luz, vestuario, hora del día
+[COLOR RULE]             natural true-to-life colors, no grading, no filter, accurate WB
+[TEXT RULE — MANDATORY]  ver palanca 2 — el arreglo del texto horneado
+[HANDS RULE]             qué se ve y qué NO de las manos
+[MOVIMIENTO]             solo en video: ritmo real, sin adverbios de lentitud
+```
+
+## Las tres palancas
+
+**1 · La cámara se ESPECIFICA, no se adjetiva.** Nombrar el equipo real es más preciso que
+cualquier adjetivo. Para Lucía:
+- Feed casual / "foto de celular": `shot on an iPhone 15 Pro main camera, 24mm`
+- Pieza cine / hero: `Arri Alexa 35 with a 35mm prime, T2.8`
+- Macro de producto o detalle: `Laowa 24mm f/14 probe lens` (es EL lente de esos macros)
+
+**2 · TEXT RULE — el arreglo del texto en IA.** En vez de pelear porque el modelo no sabe
+escribir, se le prohíbe escribir. Literal del prompt fuente:
+> *"They read as typographic shapes, never as language. Legibility not required at any point."*
+
+Molde para nuestras piezas: `[TEXT RULE — MANDATORY] No legible text anywhere in frame. Any
+lettering on props reads as abstract typographic shapes, never as language.`
+→ Esto es lo que habría evitado el "CLOSED" horneado en la tapa del cuaderno.
+
+**3 · SOBRECOBERTURA a propósito** (para modelos que dan 10-30 s: kling, seedance, minimax):
+> *"Fast-cut montage. I am cutting it myself in post. Deliberately overload it — more shots
+> than fit, extra angles I did not ask for, alternate coverage of every beat, inserts,
+> overshoots, impact frames. Every beat is a new shot. Nothing holds."*
+
+Se pide una **hoja de contactos**, no la toma exacta, y se corta en post. Multiplica lo
+aprovechable por corrida — clave para bajar el costo por pieza publicada.
+⚠️ NO aplica a `veo3_1_lite` (4/6/8 s: no hay lugar para sobrecobertura). Sí a la pieza
+"hero" mensual, donde una sola generación larga puede rendir 4-5 planos utilizables.
+
+## Checklist de prompt, actualizado
+
+1. ¿Alguna palabra en MAYÚSCULAS que pueda hornearse como texto? → fuera
+2. ¿Adverbio de velocidad/suavidad que se lea como cámara lenta? → "at a normal pace"
+3. ¿Restricción de paleta que actúe de filtro? → fuera, color natural
+4. **¿Está el `[TEXT RULE — MANDATORY]`?** → si hay props con letras, es obligatorio
+5. **¿La cámara está nombrada o adjetivada?** → nombrar equipo real
+6. **¿El modelo da ≥10 s?** → pedir sobrecobertura y cortar en post
+
+---
+
+# §13. Guion MULTI-ESCENA — la continuidad se escribe, no se rescata en el editor
+
+> Del carril video-intake, sesión `influencers-ia` (commit 819c84b9). Diagnóstico literal del
+> doc, que describe exactamente cómo armamos el reel de lanzamiento: *"hoy se genera plano por
+> plano y la consistencia entre tomas se rompe. Acá la continuidad está escrita en el prompt."*
+
+## El formato (sale de un anuncio real generado desde UNA sola foto)
+
+```
+Scene N — <nombre> (Xs–Ys)
+  <encuadre y ángulo> · <comportamiento de cámara> · <qué queda en foco y qué sale>
+  · <calidad y dirección de la luz>
+```
+
+Los TRES campos que este formato aporta y que a nuestros prompts les faltan:
+**lock de vestuario · raccord de luz · timestamps.** Un guion de Lucía son 15-20 s divididos en
+escenas con sus rangos, en UN prompt — no N generaciones sueltas cosidas después.
+
+## El diálogo va LITERAL, entre comillas, dentro del beat
+
+Verificado en el corpus: *"el diálogo entre comillas sale palabra por palabra en el video
+generado. Se comparó el prompt con el audio del resultado y coincide literal. El guion se
+escribe en el prompt, no se corrige después."*
+
+→ Para piezas con audio nativo (`seedance_2_5`, `flux_3_video`, `veo3`, `gemini_omni`) el texto
+exacto va entre comillas en el beat y **no hace falta post de audio**.
+→ ElevenLabs/Marcela (§11) queda para cuando la VOZ específica importa: el reel de lanzamiento,
+las piezas de marca. Para volumen diario, el audio nativo alcanza.
+
+## CINE o UGC: se elige ANTES de escribir, y no se mezclan
+
+Regla binaria literal: **"si el video HABLA, es UGC. Si IMPRESIONA, es cine."**
+
+En modo CINE el **recorrido de cámara ocupa la mitad del prompt (~120 palabras)**: de dónde
+arranca, hacia dónde acelera, dónde se inclina, qué curva describe, dónde termina. El error
+nombrado, que es el nuestro: *"describimos la escena y le pedimos a la cámara movimiento
+cinematográfico. Por eso sale genérico. La cámara se COREOGRAFÍA."*
+
+## Dónde se pierde la cara — regla de selección de encuadre (va sobre §6-bis)
+
+Observado en dos lotes distintos: *"la consistencia de cara SE SOSTIENE EN LAS TOMAS DE ESTUDIO
+Y SE DEGRADA EN LAS DE ESCENARIO. En las de fondo neutro la cara aguanta; en la escalera y en la
+calle la estructura del rostro y la edad aparente se corren."*
+
+- Cara reconocible → **fondo simple**, siempre.
+- Escenario cargado (mercado, calle, lobby) → solo cuando la cara NO es el punto.
+- El **primer plano extremo es la toma que DELATA al generador**: si se usa, se mira cuadro a
+  cuadro antes de publicar.
+
+## Foto realista: pedir SUCIEDAD, prohibir lo pulido, y bloque negativo
+
+El molde §6 no tiene bloque negativo. Se agrega, casi constante:
+`Negative prompt: CGI, cartoon, plastic skin, beauty filter, over-retouched, bad anatomy,
+extra fingers, HDR, studio lighting, over-sharpening, blurry subject, text, watermark`
+
+Y la palanca contraintuitiva: se **pide** `slight film grain`, `harsh direct camera flash`,
+`muted colors`, marcas de uso — y se **prohíbe** `beauty filter`, `perfect background`,
+`studio lighting`. *"Un modelo dejado solo tira a catálogo; hay que empujarlo a lo contrario."*
+⚠️ Antes de aplicar: verificar con `models_explore` (gratis) qué motores aceptan campo negativo
+SEPARADO — varios lo ignoran y hay que meterlo en el positivo.
+
+## De dónde sale el encuadre: Pinterest es el director de fotografía
+
+*"No inventes el encuadre. Buscalo."* Queries: `beach selfie`, `mirror selfie`,
+`get ready with me`, `instagram story aesthetic`. De cada pin se extraen **5 datos**: dónde está
+el sol · cómo cae la sombra en la cara · a qué altura está el móvil · qué se ve de fondo · qué
+ropa lleva. Se traducen al prompt LITERAL.
+Criterio que contradice el instinto: *"cuanto más aburrida y cotidiana sea la referencia, mejor
+funciona"* — buscar referencias espectaculares es lo que hace que el UGC se vea a anuncio.
+
+---
+
+# §14. INVENTARIO en Higgsfield — qué existe y qué se usa (22-ago)
+
+> Sergio: *"¿por qué no hay un character creado?"* — **sí había uno, y estaba descartado
+> a propósito.** Este inventario existe para que eso no vuelva a preguntarse.
+
+## Characters (Souls)
+
+| Soul | id | Estado |
+|---|---|---|
+| `LUCIA-REAL-v2-clean` | `36305a9b-af24-4390-959b-885082dddd5d` | ⛔ **NO USAR.** Dos motivos: sale con la **piel roja** e **ignora el atuendo pedido** (§2), y fue entrenado con frames de **una persona real sin permiso documentado** |
+| **`LUCIA-SINTETICA-v3`** | `e6d8703c-ea48-4d37-9e66-afae59ebe84a` | 🟡 **RESPALDO, no principal** — ver veredicto abajo. Entrenado con 6 imágenes 100% GENERADAS desde el ancla: rooftop, oficina, café, gimnasio, playa y selfie UGC. Identidad sintética pura — sin deuda de consentimiento |
+
+⚠️ Un Soul solo corre en `soul_2` y `soul_cinema_studio`. Para nano_banana / gpt_image /
+kling / seedance sigue siendo el **Element ancla** el que manda.
+
+## Elements de cara
+
+| Element | id | Uso |
+|---|---|---|
+| `lucia-ancla-2026-08` | `452d8375-…` | ✅ **VIGENTE** — el que va en `<<<UUID>>>` en todo prompt |
+| `lucia-surgical-anchor` | `902eeebb-…` | respaldo aprobado |
+| `ced20cc2` · `d5e323ef` · `de586dbb` · `fdf4b740` | — | ⛔ FUERA (frames de persona real / inconsistentes) |
+
+## Vestuario — YA EXISTE, 5 turnarounds v2 (categoría prop)
+
+| Look | id | Qué es |
+|---|---|---|
+| clean-girl | `cac118e1-a683-4874-b32a-eee4efbbed36` | top crema ribbed, pantalón beige, dorado mínimo, mocasines |
+| streetwear | `db9608fd-5f72-49df-b681-9414382c5cbb` | remera blanca, jean claro straight, gorra, zapatillas |
+| night-out | `3c9d1e87-ea1b-4ae1-8c5e-60683a848033` | vestido negro un-hombro midi, tacos, cartera |
+| loungewear | `23135bd8-8827-4bb5-9045-fe08ef80f9e1` | sweater crema + pantalón knit + pantuflas |
+| gym | `8352ef80-63b4-4cb1-be8b-b21cbacb22be` | top deportivo gris carbón + calza + zapatillas blancas |
+
+⚠️ Los 4 `lucia-outfit-*` viejos (sin `-v2`) quedan obsoletos: eran flatlays de Pinterest.
+🟡 **Falta el look de TRABAJO** (blazer beige + remera blanca), que es el que más usa el
+b-roll actual y no tiene turnaround propio.
+
+## Ambientes (categoría environment)
+
+`44a4686e` baño · `6a721405` dormitorio · `5cfbdab5` café · `cddfa484` calle · `2750ef8b` bar
+🟡 Faltan los que el b-roll ya usa: **rooftop atardecer · escritorio/oficina · gimnasio · playa**.
+
+## Cómo se combinan (regla que no cambia)
+
+- **Primer plano / cara reconocible** → Element ancla `452d8375` + `nano_banana_2`, fondo simple.
+- **Variedad de escena** → ancla + descripción de escena EN TEXTO. Nunca combinar cara +
+  outfit-Element + lugar-Element en la misma pieza de feed: se promedian y la cara deriva.
+- **Soul nuevo** → solo con `soul_2`, y se valida contra el ancla antes de darlo por bueno.
+
+### Veredicto del Soul v3 — probado contra el ancla el 22-ago (no ganó)
+
+Misma escena, mismo prompt, dos vías. Resultado mirado, no supuesto
+(`prueba-soul-v3/A-soul-v3.png` vs `B-ancla-actual.png`):
+
+| | Soul v3 (`soul_2`) | **Ancla `452d8375` (`nano_banana_2`)** |
+|---|---|---|
+| Mirada a cámara (pedida en el prompt) | ❌ mira de costado | ✅ obedece |
+| Pecas (rasgo sagrado) | tenues | ✅ marcadas |
+| Estructura de cara | más angulosa, se corre del canon | ✅ fiel |
+| Media sonrisa característica | sonrisa amplia genérica | ✅ la suya |
+
+**Conclusión: el ANCLA sigue siendo la vía principal.** El Soul v3 mejora al viejo
+(`36305a9b`: adiós piel roja y adiós deuda de consentimiento) pero **no le gana al Element**
+en fidelidad ni en obediencia al prompt. Queda como respaldo para cuando algo exija
+`soul_2` sí o sí.
+
+Esto confirma el patrón que el archivo ya tenía escrito: **la identidad se sostiene en LA
+REFERENCIA, no en el entrenamiento.** Un Soul promedia; un Element se copia.

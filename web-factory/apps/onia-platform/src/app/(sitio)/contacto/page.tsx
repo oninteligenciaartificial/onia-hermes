@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import { CAL_DEMO_URL, CAL_CONSULTA_URL, WA_URL_LANDING } from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
+import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker } from "../ui";
 import s from "../sitio.module.css";
 
@@ -134,7 +135,7 @@ export default function Contacto() {
             ¿Preferís probarlo solo? También se puede.
           </h2>
           <div className={s.actions}>
-            <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
+            <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
             <Btn href="/precios" variant="line">
               Ver precios
             </Btn>

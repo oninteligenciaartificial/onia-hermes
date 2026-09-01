@@ -44,6 +44,12 @@
   --green-mid: var(--verde-700);
   --signal: var(--senal); /* #00d26a */
 
+  /* El SANGRADO: lo que sobra a cada lado del `.inner` hasta el borde de la
+     ventana. Con esto un bloque que vive dentro del `.inner` puede escaparse
+     por la derecha sin recalcular el ancho de la columna (lo usa el día del
+     hero). Va en `vw` porque tiene que medir la VENTANA, no al padre. */
+  --bleed: calc((100vw - min(74rem, 100vw - 2.4rem)) / 2);
+
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -467,6 +473,472 @@
   }
   .splitFlip > :first-child {
     order: 2;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════ */
+/* HERO — "el resultado". La pieza que Sergio aprobó el 2026-09-01          */
+/* ("esta bien el hero… pero esta bien usa ese"), portada desde             */
+/* hermes-content/references/ui-patterns/hero-onia/resultado/index.html.    */
+/*                                                                         */
+/* LA IDEA: el día del negocio, dibujado. Empieza a las 09:00 — como lo     */
+/* piensa el dueño, no como lo piensa un reloj. Nueve horas de tinta: las   */
+/* que atiende él. Quince de verde señal: las que atiende Onia. El verde se */
+/* escapa por el borde derecho porque esas horas no terminan.               */
+/*                                                                         */
+/* CERO capturas, cero imagen, cero SVG, cero sombra — Sergio, 2026-09-01:  */
+/* "no coloques capturas literales del sistema, se ve mal, coloca cosas     */
+/* referenciales". Todo son divs con color y alto. Ese invariante lo        */
+/* verifica `hero.test.ts`.                                                 */
+/* ══════════════════════════════════════════════════════════════════════ */
+
+/* En teléfono el hero recupera el aire que le come el header.
+   `.block:first-child` abre con 8em, que en escritorio es el respiro de la
+   marca — pero en un teléfono son 128px de blanco DEBAJO de un header sticky
+   de 60px, y con eso la línea del asistente ("El asistente es la puerta…")
+   caía abajo del pliegue en los tres teléfonos medidos. La pieza aprobada
+   abría con 2.6em justamente por esto. Solo el hero: los otros ocho bloques
+   y las otras ocho páginas conservan su ritmo.
+   `.block.heroBlock` y no `.heroBlock` a secas: `.block:first-child` pesa
+   (0,2,0) y una clase sola perdía. */
+@media (max-width: 700px) {
+  .block.heroBlock {
+    padding-top: 2.6em;
+  }
+}
+
+/* Las dos columnas del hero son TEXTO, no texto+captura: arrancan alineadas
+   arriba (los bloques de resultado sí van centrados, porque al lado tienen
+   una imagen) y la del titular pesa más. */
+.heroTop {
+  align-items: start;
+}
+/* .lead abre con 1.3em porque en los demás bloques cuelga de un h2. Acá es
+   lo primero de su columna: con el margen puesto, la columna derecha
+   arrancaba más abajo que el titular y las dos dejaban de leerse como una. */
+.heroTop .lead {
+  margin-top: 0;
+}
+/* La frase que define QUÉ ES Onia va a tinta plena; el resto del lead queda al
+   78% como en toda la página. Scoped al hero y no a `.lead b` a secas: sobre
+   los bloques de tinta y verde hondo el lead es texto CLARO, y ahí un
+   `color: var(--ink)` convertiría la negrita en texto negro sobre negro. */
+.heroTop .lead b {
+  font-weight: 600;
+  color: var(--ink);
+}
+@media (min-width: 900px) {
+  .heroTop {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+}
+
+/* El costo de no hacer nada. Va pegado al botón porque es lo que convierte
+   "entiendo el producto" en "esto me pasa a mí". La hairline reusa --line
+   (la misma del kicker): un segundo tiempo, cero elemento visual nuevo. */
+.cost {
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 1em;
+  line-height: 1.5;
+  margin: 1.3em 0 0;
+  padding-top: 1.1em;
+  border-top: 1px solid var(--line);
+  max-width: 32em;
+  text-wrap: pretty;
+}
+.cost b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Donde estaba el precio. Acá vivía "Desde Bs 320 al mes" (plan `basic`):
+   cierto como número y falso como promesa, porque las 15 horas que dibuja el
+   bloque verde las hace el asistente —add-on de Bs 390— más la agenda
+   pública. El piso real de la escena es Bs 860, así que el 320 no compraba lo
+   que la imagen de al lado muestra. El precio completo vive en /precios.
+
+   La línea que lo reemplaza NOMBRA al asistente (hasta acá aparecía dentro
+   del bloque verde sin presentación) y lo pone en su lugar: es la puerta, no
+   el sistema. Usa los dos únicos recursos de destaque que la pieza ya tiene —
+   color para la palabra (igual que `.display em`) y tinta en negrita para lo
+   que se compra (igual que `.lead b`). */
+.puerta {
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin: 1.3em 0 0;
+  max-width: 30em;
+  text-wrap: pretty;
+}
+.puerta em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+.puerta b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------- */
+/* EL DÍA — UNA sola rejilla de 24                                          */
+/*                                                                         */
+/* La primera fila son las 24 marcas de hora; la segunda, los dos bloques   */
+/* de color plano, que abarcan 9 y 15 columnas de ESA MISMA rejilla. El     */
+/* corte de las 18:00 cae exacto en los dos porque es la misma línea, no    */
+/* dos que coinciden. El 9 y el 15 los pone el TSX (HORAS_VOS/HORAS_ONIA)   */
+/* en `--span`: la proporción sale de un solo lugar.                        */
+/* ---------------------------------------------------------------------- */
+.day {
+  margin-top: 3.4em;
+  /* se escapa por la derecha: el único gesto de profundidad de la pieza —
+     nunca una sombra. Lo recorta el `overflow-x: clip` de .page. */
+  margin-right: calc(0px - var(--bleed));
+  display: grid;
+  grid-template-columns: repeat(24, minmax(0, 1fr));
+  gap: 0.34em 0.22em;
+  align-items: stretch;
+}
+/* `display: contents` deja las marcas como hijas directas de la rejilla
+   (alineación estructural) sin perder el aria-hidden del envoltorio. */
+.ruler {
+  display: contents;
+}
+.tick {
+  height: 1.15em;
+  border-radius: calc(var(--r-block) * 0.28);
+  background: var(--ink-block);
+}
+.tickOn {
+  background: var(--signal);
+}
+
+.slab {
+  grid-column: span var(--span);
+  border-radius: var(--r-block);
+  padding: 1.4em 1.5em 1.3em;
+  min-height: 9.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.slabVos {
+  background: var(--ink-block);
+  color: #edf1ef; /* 16,66:1 */
+}
+.slabOnia {
+  background: var(--signal);
+  color: var(--tinta); /* 9,43:1 — jamás blanco sobre verde */
+}
+
+.hrs {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.4em;
+}
+/* El secundario del rótulo sólo cabe en una línea cuando el bloque verde
+   pasa de ~940px. Debajo partía "18:00 → / 09:00" y encima "TODOS LOS /
+   DÍAS": dos rótulos rotos por decir algo que la lista de abajo ya dice. */
+.hrs span:last-child:not(:first-child) {
+  display: none;
+}
+@media (min-width: 940px) {
+  .hrs span:last-child:not(:first-child) {
+    display: block;
+    text-align: right;
+  }
+}
+/* Cero hex inventados: el sistema no declara un "secundario sobre bloque
+   oscuro", así que se reusa --line (~12:1 sobre tinta) en vez de fabricar un
+   gris nuevo. Sobre señal el secundario es --green-deep (8,7:1). */
+.slabVos .hrs {
+  color: var(--line);
+}
+.slabOnia .hrs {
+  color: var(--green-deep);
+}
+
+/* La escala ES el argumento: el número grande es el de las horas que hoy
+   nadie cubre. Ninguno alcanza al display, para no partir la pantalla en dos
+   titulares. */
+.amount {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 550;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin: 0.6em 0 0;
+}
+.slabVos .amount {
+  font-size: 2.1em;
+}
+.slabOnia .amount {
+  font-size: 3.2em;
+}
+.who {
+  font-size: 1em;
+  line-height: 1.35;
+  font-weight: 500;
+  margin: 0.5em 0 0;
+  max-width: 26ch;
+}
+
+/* Las tres cosas que de verdad pasan en esas 15 horas. Van DENTRO del verde
+   porque son el contenido de esas horas: sin ellas el bloque era un campo de
+   color esperando algo. */
+.moments {
+  list-style: none;
+  margin: 0.8em 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5em;
+  max-width: 40em;
+}
+.moments li {
+  font-size: 0.95em;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+/* "Vos los aprobás" corrige la promesa falsa (los agentes NO mandan solos:
+   dejan el borrador en la cola y lo aprueba una persona). No se puede partir
+   en dos líneas; 16 caracteres entran a cualquier ancho, así que el nowrap
+   es seguro y no puede desbordar. */
+.cierre {
+  white-space: nowrap;
+}
+.moments b {
+  font-family: var(--font-mono), monospace;
+  font-weight: 500;
+  font-size: 0.8em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green-deep); /* 8,7:1 sobre señal */
+}
+
+/* ---------------------------------------------------------------------- */
+/* LA BANDA — lo único que la pieza DIBUJA                                  */
+/*                                                                         */
+/* Sergio, 2026-09-01: "talvez algo mas visual dentro de los cuadros que    */
+/* muestren como el duerme o mas abajo mientras genera ingresos".           */
+/*                                                                         */
+/* Una sola forma. Dos actores, una lane cada uno, a los dos lados del      */
+/* corte de las 18:00 — y las cuatro alineadas, así que se leen de corrido  */
+/* como una banda que cruza la pieza:                                       */
+/*                                                                         */
+/*   negro · VOS  → 9 marcas paradas ....  ATENDÉS  ┐ la línea de VOS       */
+/*   verde · VOS  → 15 aplastadas .......  DORMÍS   ┘ MUERE a las 18:00     */
+/*   negro · ONIA → 9 marcas paradas ....  CON VOS  ┐ la de ONIA cruza      */
+/*   verde · ONIA → 15 paradas ..........  POR VOS  ┘ las 24 SIN CORTE      */
+/*                                                                         */
+/* Ahí está el argumento entero, dibujado: una línea se apaga, la otra no.  */
+/* Y la de ONIA está de pie también en el bloque negro porque es cierto —   */
+/* el sistema no se enciende a las 18:00, ya estaba trabajando con él.      */
+/*                                                                         */
+/* ONIA siempre va del color CONTRARIO al de su bloque (señal sobre tinta,  */
+/* tinta sobre señal): es el que no es dueño de ese bloque, y así la banda   */
+/* se sigue con el ojo aunque el fondo cambie.                              */
+/*                                                                         */
+/* Congelado FUNCIONA: con reduced-motion o en una captura las marcas ya    */
+/* están paradas y aplastadas — la historia entera está en el primer        */
+/* fotograma. La animación sólo agrega "está pasando ahora".                */
+/*                                                                         */
+/* Las marcas NO son un gráfico de nada: son las horas (9 y 15), las mismas */
+/* que cuenta la regla de arriba. Acá es donde otros ponen su facturación   */
+/* con un contador que sube; nosotros no podemos: cero clientes pagando ⇒   */
+/* cualquier cifra adentro sería fabricada.                                 */
+/* ---------------------------------------------------------------------- */
+.band {
+  display: grid;
+  gap: 0.5em;
+  margin: 0.9em 0 0;
+}
+.lane {
+  /* "ONIA" mide ~2,1em: 2,6 alcanza y le devuelve ancho al track */
+  grid-template-columns: 2.6em 1fr auto;
+  display: grid;
+  align-items: center;
+  gap: 0 0.8em;
+}
+/* mismo tratamiento que .hrs: mono, versalita, tracking. Cero recurso nuevo. */
+.laneQ,
+.laneS {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.laneS {
+  text-align: right;
+}
+.slabVos .laneQ,
+.slabVos .laneS {
+  color: var(--line); /* ~12:1 sobre tinta */
+}
+.slabOnia .laneQ,
+.slabOnia .laneS {
+  color: var(--green-deep); /* 8,7:1 sobre señal */
+}
+
+.track {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  height: 1.5em;
+}
+.track span {
+  flex: 1;
+  border-radius: calc(var(--r-block) * 0.16);
+}
+
+/* VOS de día: lleno, y QUIETO a propósito — él no es una máquina. */
+.laneVos .track span {
+  height: 100%;
+  background: #edf1ef; /* 16,66:1 */
+}
+/* VOS de noche: la MISMA marca, aplastada. Queda una línea muerta. */
+.laneDuerme .track span {
+  height: 0.18em;
+  background: var(--green-deep);
+}
+/* ONIA: de pie a las 24 horas, a los dos lados del corte. La onda la recorre
+   de izquierda a derecha una vez cada 5s — es el TIEMPO pasando, no un dato
+   subiendo (un dato subiendo sería una cifra inventada). El escalonado sale
+   de `--i`, que pone el TSX: 15 reglas nth-child para decir lo mismo. */
+.laneOnia .track span {
+  height: 100%;
+  transform-origin: bottom;
+  animation: onda 5s var(--ease) infinite;
+  animation-delay: calc(var(--i, 0) * 0.17s);
+}
+.slabVos .laneOnia .track span {
+  background: var(--signal); /* 9,43:1 sobre tinta */
+}
+.slabOnia .laneOnia .track span {
+  background: var(--ink-block); /* 9,43:1 sobre señal */
+}
+@keyframes onda {
+  0%,
+  62%,
+  100% {
+    transform: scaleY(0.6);
+  }
+  10% {
+    transform: scaleY(1);
+  }
+}
+
+/* 768–1279: el bloque negro son 9/24 de un ancho chico, y los dos rótulos
+   que flanquean el track le comen casi todo. Sin esto su marca cae a 6px
+   contra los 14px del verde, y se pierde justo lo que hace funcionar la
+   banda: que sea LA MISMA marca en dos estados. Achicar el rótulo la devuelve
+   a ~9px. Arriba de 1280 no hace falta: ahí miden 28 y 30. */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .lane {
+    grid-template-columns: 2.3em 1fr auto;
+    gap: 0 0.5em;
+  }
+  .laneQ,
+  .laneS {
+    font-size: 0.62em;
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (min-width: 768px) {
+  .slab {
+    min-height: 12em;
+    padding: 1.7em 1.9em 1.6em;
+  }
+  /* el bloque que se escapa por el borde recupera su margen derecho: la
+     etiqueta cae en el espejo exacto del margen del titular */
+  .slabOnia {
+    padding-right: calc(1.9em + var(--bleed));
+  }
+  .slabVos .amount {
+    font-size: 2.4em;
+  }
+  .slabOnia .amount {
+    font-size: 3.4em;
+  }
+  /* la hora en columna propia: la lista se lee como un horario, no como tres
+     frases sueltas */
+  .moments li {
+    display: grid;
+    grid-template-columns: 5.4em 1fr;
+    gap: 0 0.6em;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* MÓVIL: el día GIRA, no se apila.                                         */
+/*                                                                         */
+/* La misma rejilla de 24 pasa de 24 columnas a 24 FILAS; la regla se para  */
+/* en vertical al costado y los bloques abarcan 9 y 15 filas de esa misma   */
+/* rejilla. La proporción 9:15 sigue siendo espacial y exacta, y la regla    */
+/* sigue explicándola — que es lo que se perdía apilando los bloques        */
+/* sueltos. Acá mira el 70% del lead que llega por Instagram.                */
+/* ---------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  /* escaparse por la derecha con 1,2rem de margen se lee como error, no como
+     gesto: en teléfono el día se queda dentro del `.inner`. */
+  .day {
+    margin-top: 2.6em;
+    margin-right: 0;
+    grid-template-columns: 1.5em minmax(0, 1fr);
+    grid-template-rows: repeat(24, minmax(0, 1fr));
+    grid-auto-flow: column;
+    gap: 0.16em 0.7em;
+  }
+  .tick {
+    height: auto; /* la marca la estira la fila */
+    border-radius: calc(var(--r-block) * 0.14);
+  }
+  /* Sin min-height, y a propósito: las 24 filas son `1fr`, así que el alto lo
+     pide el bloque que más necesita —el verde, con sus tres momentos— y el
+     negro sale de la proporción 9:15 sin negociar. Con un alto decretado el
+     negro quedaba con más de un cuarto de aire adentro. */
+  .slab {
+    grid-column: auto;
+    grid-row: span var(--span);
+    min-height: 0;
+    padding: 1.15em 1.2em;
+  }
+  .slabVos .amount {
+    font-size: 2.2em;
+  }
+  .slabOnia .amount {
+    font-size: 2.9em;
+  }
+  .moments li {
+    font-size: 0.88em;
+  }
+  .moments b {
+    margin-inline-end: 0.2em; /* sin columna propia, la hora necesita su aire */
+  }
+  /* la banda encoge, no desaparece: es lo que Sergio pidió VER, y el 70% del
+     lead mira acá. Las 15 marcas siguen siendo 15. */
+  .lane {
+    grid-template-columns: 2.4em 1fr auto;
+    gap: 0 0.6em;
+  }
+  .laneQ,
+  .laneS {
+    font-size: 0.66em;
+    letter-spacing: 0.1em;
+  }
+  .track {
+    height: 1em;
+    gap: 0.13em;
+  }
+  .band {
+    gap: 0.34em;
+    margin-top: 0.7em;
   }
 }
 
@@ -1426,7 +1898,11 @@
   .burger,
   .sheetClose,
   .sheetLink,
-  .faqQ::after {
+  .faqQ::after,
+  /* la onda del hero: congelada la banda sigue contando la historia entera
+     —marcas paradas contra marcas aplastadas—, así que apagarla no cuesta
+     nada. Es el mismo cuadro que sale en una captura de pantalla. */
+  .laneOnia .track span {
     transition: none;
     animation: none;
   }
@@ -1572,7 +2048,7 @@
 /*   · `.offerStar` — panel de verde-900 DENTRO del bloque de tinta. La    */
 /*     profundidad es tono sobre tono y solape de superficie, nunca una    */
 /*     sombra (misma ley que el resto del archivo: cero `box-shadow`).     */
-/*   · `.offerList` — los otros cuatro, con el precio en verde señal y el  */
+/*   · `.offerList` — los demás, con el precio en verde señal y el        */
 /*     resultado en tipografía de lectura, no de nota al pie.              */
 /*                                                                         */
 /* LA REGLA QUE MANTIENE AL PLAN COMO LA COMPRA PRINCIPAL: en toda esta    */
@@ -1720,6 +2196,25 @@
        entrada conserva ancho de lectura y el bloque no se vuelve un menú. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 3.5em;
+  }
+  /* El filete vive en la CELDA, no en la fila: con una cantidad IMPAR de
+     entradas la última fila deja la celda derecha vacía y la regla horizontal
+     queda CORTADA a mitad de ancho. Pasó al retirar "Inventario avanzado"
+     (2026-08-27): la lista bajó de 4 (2x2, cerraba) a 3 y el bloque quedó con
+     media línea colgando, en la portada y en /precios.
+     Se arregla por la PARIDAD y no por el número 3: la última entrada toma la
+     fila entera cuando sobra, y su filete vuelve a llegar de punta a punta.
+     Sirve para 3, 5 o 7 — y con un número par ni se aplica. */
+  .offerItem:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  /* ...pero solo se estira el FILETE. El encabezado se queda del ancho de una
+     columna (la mitad menos medio `column-gap`) para que el precio caiga en la
+     misma x que los de la columna izquierda de arriba. Sin esto, el precio de
+     la última fila se iría al borde derecho y la carta perdería su columna de
+     precios, que es lo único que la hace leerse como carta. */
+  .offerItem:last-child:nth-child(odd) .offerItemHead {
+    max-width: calc(50% - 1.75em);
   }
 }
 .offerItem {

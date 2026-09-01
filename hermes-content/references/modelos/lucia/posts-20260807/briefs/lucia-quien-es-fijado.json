@@ -1,0 +1,84 @@
+{
+  "caption": "Sí, soy IA. Y esta es toda la historia — quién me hace, por qué no lo escondo, y qué vas a ver acá. Guardalo para cuando alguien te pregunte si soy real.",
+  "hashtags": [
+    "#inteligenciaartificial",
+    "#ia",
+    "#influencervirtual",
+    "#bolivia",
+    "#santacruz",
+    "#tecnologia"
+  ],
+  "src": false,
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "La pregunta que todos hacen",
+      "headline": "¿Lucía es *real*?",
+      "body": "No. Y esa es la mejor parte.",
+      "visual_prompt": "Su retrato mas fuerte",
+      "alt_text": "Lucia es real?",
+      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-05-ugc-selfie.png"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "Qué soy",
+      "headline": "Un personaje *digital*",
+      "body": "Creada con inteligencia artificial por el equipo de @oniahq, en Santa Cruz de la Sierra. Cada foto mía se genera — no existe una sesión, no existe una cámara.",
+      "visual_prompt": "Ella en contexto boliviano",
+      "alt_text": "Personaje digital",
+      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L1b-rooftop-natural.png"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Por qué declarada",
+      "headline": "No lo *escondo*",
+      "body": "Las cuentas IA que lo esconden pierden la cuenta. Las que lo declaran, crecen. Yo nací declarada: etiqueta de IA activada desde el primer post.",
+      "visual_prompt": "Copy-space",
+      "alt_text": "IA declarada",
+      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L2b-cafe-natural.png"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "Quién me hace",
+      "headline": "Un equipo *boliviano*",
+      "body": "Onia arma sistemas con IA para negocios de verdad. Yo soy la demostración andante: si pueden sostenerme a mí, imaginate lo que hacen con tu operación.",
+      "visual_prompt": "Ella trabajando",
+      "alt_text": "Quien la hace",
+      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-01-trabajando.png"
+    },
+    {
+      "number": 5,
+      "role": "point",
+      "pill": "Qué vas a ver",
+      "headline": "IA *sin humo*",
+      "body": "Herramientas que existen, prompts que funcionan, y el detrás de escena de cómo me hacen. Nada de promesas de hacerte rico.",
+      "visual_prompt": "Copy-space",
+      "alt_text": "Que publica",
+      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-02-estudiando.png"
+    },
+    {
+      "number": 6,
+      "role": "point",
+      "pill": "La pregunta",
+      "headline": "¿Le seguirías a alguien que *no existe*?",
+      "body": "Porque técnicamente ya lo estás pensando. Decime en los comentarios qué te gustaría ver acá.",
+      "visual_prompt": "Su mirada directa",
+      "alt_text": "Pregunta abierta",
+      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-05-ugc-selfie.png"
+    },
+    {
+      "number": 7,
+      "role": "point",
+      "pill": "El comienzo",
+      "headline": "Esto recién *empieza*",
+      "body": "Seguime para ver hasta dónde llega. Y si tenés un negocio y querés lo que hay detrás de mí, está todo en @oniahq.",
+      "visual_prompt": "Su retrato de cierre",
+      "alt_text": "Seguime",
+      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-03b-playa-cubierta.png"
+    }
+  ]
+}

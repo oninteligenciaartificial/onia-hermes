@@ -1,0 +1,238 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FERRETERÍA SUR — tokens
+
+   Dirección: INDUSTRIAL UTILITARIO. Deliberadamente opuesta al warm-premium de
+   dental-premium (cream + verde profundo + serif escasa + esquinas de 24px).
+   Acá: hormigón frío, tinta casi negra, naranja de seguridad, retícula VISIBLE,
+   esquinas de 3px y filete de 2px. La referencia no es un spa: es una etiqueta
+   de máquina, una regla metálica y un tablero de mostrador.
+
+   Reglas del sistema:
+   - El naranja NUNCA lleva texto blanco encima: lleva tinta. #16181a sobre
+     #ff5b04 da 5,7:1 (AA). Blanco sobre naranja da 2,9:1 y estaría roto.
+   - El naranja tampoco se usa como color de texto sobre papel (2,5:1). Es
+     RELLENO y filete; el texto va en tinta.
+   - Dark NO es un flip: tiene sus propios escalones (el asfalto no es el
+     negativo del hormigón, y el naranja sube un punto para no quemar).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Superficies (hormigón / cal / acero) ── */
+  --paper: #ebebe8;      /* fondo base, gris cal frío */
+  --paper-dim: #e2e2de;  /* banda alterna */
+  --panel: #ffffff;      /* celda, ficha, tarjeta */
+  --steel: #23292e;      /* superficie oscura de contraste (footer, panel dato) */
+  --steel-deep: #171c20;
+
+  /* ── Tinta ── */
+  --ink: #16181a;
+  --ink-soft: #5b6166;   /* 5,1:1 sobre --paper */
+  --on-steel: #eef0ef;
+  --on-steel-soft: #a4adb3;
+  --on-orange: #16181a;  /* el texto sobre naranja es TINTA, nunca blanco */
+
+  /* ── Acento ── */
+  --orange: #ff5b04;     /* naranja de seguridad: CTA, filete, relleno */
+  --orange-deep: #d94800;
+  --hazard: #f0c000;     /* amarillo de franja de peligro, solo en detalle */
+
+  /* ── Líneas y retícula (el grid se VE) ── */
+  --line: color-mix(in srgb, var(--ink) 16%, transparent);
+  --line-strong: color-mix(in srgb, var(--ink) 42%, transparent);
+  --grid-line: color-mix(in srgb, var(--ink) 7%, transparent);
+  --bw: 1px;
+  --bw-strong: 2px;
+
+  /* ── Foco (se redefine sobre superficie oscura) ── */
+  --focus: var(--ink);
+
+  /* ── Tipografía ──
+     --font-display / --font-body / --font-mono los inyecta next/font en <html>.
+     Los stacks propios llevan prefijo --ff- para no chocar con esas variables. */
+  --ff-display: var(--font-display), "Arial Black", system-ui, sans-serif;
+  --ff-text: var(--font-body), system-ui, sans-serif;
+  --ff-code: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  /* --t-mega medido en pantalla: con el tope en 8.5rem el titular solo medía
+     767px de alto a 1440 y empujaba el lede y el CTA fuera del primer scroll.
+     Tope en 6rem: el hero entra completo en 900px de viewport. */
+  --t-mega: clamp(2.6rem, 1rem + 6.2vw, 6rem);      /* titular de hero */
+  --t-h2: clamp(1.9rem, 1.05rem + 3.3vw, 3.5rem);
+  --t-h3: clamp(1.1rem, 1rem + 0.55vw, 1.45rem);
+  --t-lede: clamp(1.05rem, 0.98rem + 0.5vw, 1.3rem);
+  --t-body: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --t-small: 0.875rem;
+  --t-micro: 0.75rem;                                /* etiqueta mono, caja alta */
+  --track-micro: 0.12em;
+
+  /* ── Espaciado (escala fija + ritmo de sección) ── */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4.5rem;
+  --space-section: clamp(3.5rem, 2rem + 6vw, 7.5rem);
+  --wrap: min(1240px, calc(100% - 2.4rem));
+  --gutter: clamp(1.2rem, 3vw, 2rem);
+
+  /* ── Radios: casi rectos. Es una regla metálica, no un jabón. ── */
+  --r-0: 0px;
+  --r-1: 3px;
+  --r-2: 6px;
+
+  /* ── Movimiento (solo transform y opacity) ── */
+  --d-1: 140ms;
+  --d-2: 260ms;
+  --d-3: 480ms;
+  --d-4: 800ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);   /* misma curva que motion.tsx */
+  --ease-snap: cubic-bezier(0.2, 0, 0, 1);     /* golpe mecánico, para hover */
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ── Dark con escalones PROPIOS ──────────────────────────────────────────────
+   No es el negativo del claro: el asfalto es más azul que el hormigón, el panel
+   sube un escalón en vez de bajar a negro, y el naranja se abre para no vibrar
+   sobre fondo oscuro. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #101315;
+    --paper-dim: #151a1d;
+    --panel: #1b2125;
+    --steel: #0b0e10;
+    --steel-deep: #070909;
+
+    --ink: #e9eae7;
+    --ink-soft: #99a2a8;
+    --on-steel: #e9eae7;
+    --on-steel-soft: #8b959b;
+
+    --orange: #ff6a1f;
+    --orange-deep: #ff8a45;
+    --hazard: #ffd23d;
+    --on-orange: #14161a;
+
+    --line: color-mix(in srgb, var(--ink) 18%, transparent);
+    --line-strong: color-mix(in srgb, var(--ink) 40%, transparent);
+    --grid-line: color-mix(in srgb, var(--ink) 8%, transparent);
+
+    --focus: var(--hazard);
+  }
+}
+
+/* ═══ Base ══════════════════════════════════════════════════════════════════ */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ff-text);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-family: var(--ff-display);
+  font-weight: 400;          /* Archivo Black ya ES el peso */
+  line-height: 0.94;
+  letter-spacing: -0.028em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+p { margin: 0; }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* Foco visible siempre, en tinta (14:1 sobre papel) o amarillo sobre acero. */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ═══ Primitivas ════════════════════════════════════════════════════════════ */
+.wrap { width: var(--wrap); margin-inline: auto; }
+
+/* Etiqueta mono en caja alta: el "rotulado" del sistema. */
+.tag {
+  font-family: var(--ff-code);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Retícula de fondo: el grid se ve, no se insinúa. */
+.grid-bg {
+  background-image:
+    repeating-linear-gradient(to right, var(--grid-line) 0 1px, transparent 1px 72px),
+    repeating-linear-gradient(to bottom, var(--grid-line) 0 1px, transparent 1px 72px);
+}
+
+/* ═══ Botones ═══════════════════════════════════════════════════════════════
+   Rectangulares (r-1), altos (48px ≥ 44px de target) y con desplazamiento
+   mecánico en hover: la sombra sólida se cierra contra el botón. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 48px;
+  padding: 0 var(--s-5);
+  border: var(--bw-strong) solid var(--ink);
+  border-radius: var(--r-1);
+  font-family: var(--ff-code);
+  font-size: var(--t-small);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--d-1) var(--ease-snap),
+              box-shadow var(--d-1) var(--ease-snap);
+}
+.btn--solid {
+  background: var(--orange);
+  color: var(--on-orange);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.btn--solid:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+.btn--solid:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--line-strong);
+}
+.btn--ghost:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--line-strong); }
+.btn--ghost:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
+
+/* Sobre superficie de acero el foco y los bordes cambian de dueño. */
+.on-steel {
+  --focus: var(--hazard);
+  --ink: var(--on-steel);
+  --ink-soft: var(--on-steel-soft);
+  --line: color-mix(in srgb, var(--on-steel) 20%, transparent);
+  --line-strong: color-mix(in srgb, var(--on-steel) 45%, transparent);
+  background: var(--steel);
+  color: var(--on-steel);
+}
+
+/* ═══ Reduced motion ════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

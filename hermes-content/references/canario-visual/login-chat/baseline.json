@@ -1,0 +1,15 @@
+{
+  "nombre": "login-chat",
+  "url": "https://chat.onia.com.bo/app/login",
+  "status": 200,
+  "fallo": null,
+  "bytes": 12953799,
+  "msMirable": 2437,
+  "msTotal": 3685,
+  "erroresConsola": [],
+  "visto": {
+    "titulo": "Onia",
+    "urlFinal": "https://chat.onia.com.bo/app/login",
+    "texto": "Iniciar sesión en Onia E-mail Contraseña ¿Olvidaste tu contraseña? Iniciar sesión"
+  }
+}

@@ -1,12 +1,20 @@
 # Ciclo comentario→DM — checklist de seguridad, manual
 
-> 🔴 **DESACTUALIZADO EN LO QUE SIGUE — corregido el 2026-08-20.**
-> Este doc dice que el ciclo comentario→DM está bloqueado por **S6**. **Es falso desde el
-> 2026-08-18.** S6 nunca bloqueó nuestras propias cuentas: `@oniahq` tiene rol en nuestra app y
-> opera con **Standard Access**, que no pasa por App Review. El ciclo está **vivo y probado en
-> producción** (workflow n8n `gWrVHU8OxI9yugc4`, 4 eventos reales de Meta el 18-ago).
-> S6 bloquea las cuentas de **clientes**, que es otra cosa.
-> Fuente vigente: `ONIA_AUTOMATIZACION_MENSAJES_20260818.md` §10 y §14 · mapa completo:
+> 🔴 **DESACTUALIZADO EN LO QUE SIGUE — corregido el 2026-08-20, RE-CORREGIDO el 2026-08-27.**
+> **Sigue siendo cierto:** este doc dice que el ciclo comentario→DM está bloqueado por **S6**, y
+> eso es falso desde el 2026-08-18. S6 nunca bloqueó nuestras propias cuentas: `@oniahq` tiene
+> rol en nuestra app y opera con **Standard Access**, que no pasa por App Review. S6 bloquea las
+> cuentas de **clientes**, que es otra cosa.
+>
+> ⚠️ **Lo que decía acá y era falso:** que el ciclo estaba *"vivo y probado en producción"* en el
+> workflow `gWrVHU8OxI9yugc4`. Contado en vivo el 2026-08-27: **ese workflow está APAGADO** desde
+> el 21-ago (lo reemplazó `1jS4jwmNmvcQpqqH`), y el único DM que Meta aceptó en toda la historia
+> fue **para Sergio mismo**, no para un lead. Esta frase se copió sin re-contar a cuatro docs y a
+> un lote de prompts de contenido. **Es exactamente el error que la regla "verificar es MIRAR"
+> existe para evitar.**
+>
+> **Fuente vigente y única del tema: `ONIA_CIRCUITO_COMENTARIO_DM.md`** (sin fecha, se edita).
+> Contexto histórico: `ONIA_AUTOMATIZACION_MENSAJES_20260818.md` §10 y §14 ·
 > `ONIA_RECORRIDO_24_7_20260820.md`.
 > Lo demás de este doc (qué puede y qué no puede Postiz) sigue vigente.
 

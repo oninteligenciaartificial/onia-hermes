@@ -11,7 +11,6 @@ export const clinicCss = `
 }
 
 .wf-clinic-section,
-.wf-clinic-strip,
 .wf-clinic-final {
   width: var(--wrap);
   margin-inline: auto;
@@ -26,7 +25,7 @@ export const clinicCss = `
   min-height: 52px;
   padding: 0 24px;
   border-radius: 999px;
-  font-weight: 750;
+  font-weight: 650;
   font-size: 1.02rem;
   cursor: pointer;
 }
@@ -172,7 +171,7 @@ export const clinicCss = `
   font-size: clamp(2.9rem, 7vw, 6rem);
   line-height: 0.96;
   letter-spacing: -0.025em;
-  font-weight: 820;
+  font-weight: 450;
   color: #fff;
   text-wrap: balance;
   text-shadow: 0 2px 34px rgba(6, 12, 18, 0.42);
@@ -222,36 +221,32 @@ export const clinicCss = `
 }
 
 /* ---------- Benefits strip ---------- */
+/* Antes: tarjeta glass flotando sobre el hero (blur + sombra + pills). Se leia
+   como widget suelto y era el unico elemento con sombra dura de la pagina.
+   Ahora: banda editorial full-bleed en la tinta de marca, pegada al hero — el
+   corte de color ES la profundidad, y las tres promesas quedan como micro-
+   etiquetas de manifiesto, no como chips de app. */
 .wf-clinic-strip {
-  position: relative;
-  z-index: 2;
-  margin-top: clamp(-34px, -3vw, -22px);
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px clamp(18px, 4vw, 56px);
   justify-content: center;
-  padding: 18px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 22px 50px color-mix(in srgb, var(--color-fg) 12%, transparent);
+  padding: 16px clamp(16px, 4vw, 48px);
+  background: var(--color-secondary);
 }
 
 .wf-clinic-chip {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 9px 15px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg));
-  color: color-mix(in srgb, var(--color-fg) 85%, var(--color-bg));
+  gap: 10px;
+  color: color-mix(in srgb, var(--color-bg) 92%, var(--color-secondary));
+  font-size: 0.8rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-.wf-clinic-chip .wf-icon { color: color-mix(in srgb, var(--color-accent) 60%, var(--color-fg)); }
+.wf-clinic-chip .wf-icon { color: var(--color-accent); }
 
 /* ---------- Section head ---------- */
 .wf-clinic-section { padding-block: clamp(48px, 7vw, 92px); }
@@ -270,7 +265,9 @@ export const clinicCss = `
   color: var(--ink-accent);
 }
 
-.wf-clinic-kicker::before { content: ""; width: 24px; height: 2px; background: var(--color-primary); }
+/* El guion del kicker es el punto de temperatura de la marca: acento, no
+   primario — si todo es primario, el acento del intake no existe en pantalla. */
+.wf-clinic-kicker::before { content: ""; width: 24px; height: 2px; background: var(--color-accent); }
 
 .wf-clinic-section-head h2 {
   margin: 0;
@@ -349,6 +346,7 @@ export const clinicCss = `
 }
 
 .wf-clinic-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -359,10 +357,64 @@ export const clinicCss = `
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
+/* Franja de foto en la celda destacada: SOLO en el layout ancho donde la celda
+   es 2x2 y existe el vacio. La foto vive arriba y se funde al color de la
+   tarjeta antes de llegar al texto — el copy nunca pisa imagen. */
+@media (min-width: 1081px) {
+  .wf-clinic-card--media { overflow: hidden; }
+  .wf-clinic-card--media::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 58%;
+    background-image: var(--wf-card-media);
+    background-size: cover;
+    background-position: center 35%;
+  }
+  .wf-clinic-card--media::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 58%;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-primary) 26%, transparent),
+      color-mix(in srgb, var(--card) 40%, transparent) 70%,
+      var(--card) 99%
+    );
+  }
+  .wf-clinic-card--media .wf-clinic-card-icon,
+  .wf-clinic-card--media .wf-clinic-card-body {
+    position: relative;
+    z-index: 1;
+  }
+}
+
 .wf-clinic-card:hover {
   transform: translateY(-4px);
   border-color: color-mix(in srgb, var(--color-primary) 42%, var(--border));
   box-shadow: 0 20px 44px color-mix(in srgb, var(--color-fg) 12%, transparent);
+}
+
+/* Spotlight: foco de luz que sigue al puntero sobre la tarjeta (patron top de
+   21st.dev, version sin librerias). El script del template setea --wf-mx/--wf-my
+   por pointermove; solo en dispositivos con hover real. */
+@media (hover: hover) {
+  .wf-clinic-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      220px circle at var(--wf-mx, 50%) var(--wf-my, 50%),
+      color-mix(in srgb, var(--color-accent) 16%, transparent),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+  .wf-clinic-card:hover::after { opacity: 1; }
 }
 
 .wf-clinic-card--featured {
@@ -397,6 +449,113 @@ export const clinicCss = `
 
 .wf-clinic-card p { margin: 6px 0 0; color: var(--muted-foreground); line-height: 1.55; }
 
+/* ---------- Pedido / cotizacion (inline-quote-form dentro del clinic) ------ */
+/* El bloque trae su CSS tokenizado; aca solo se asienta en el ritmo del
+   template: superficie propia que corta el papel y respiracion de seccion. */
+.wf-clinic-quote {
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-bg));
+  border-block: 1px solid color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.wf-clinic-quote .wf-qf-heading {
+  font-weight: 480;
+  letter-spacing: -0.015em;
+}
+
+/* Sin form (accion vacia) el bloque deja solo la columna de copy+canales: la
+   grilla de dos columnas dejaria media seccion vacia. Una columna por defecto;
+   dos SOLO cuando el form existe. */
+.wf-clinic-quote .wf-qf-inner {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 620px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.wf-clinic-quote .wf-qf-inner .wf-qf-heading {
+  max-width: none;
+  margin-inline: auto;
+}
+
+.wf-clinic-quote .wf-qf-inner .wf-qf-lede {
+  margin-inline: auto;
+}
+
+.wf-clinic-quote .wf-qf-direct-list {
+  justify-content: center;
+}
+
+.wf-clinic-quote .wf-qf-inner:has(.wf-qf-form) {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.wf-clinic-quote .wf-qf-inner:has(.wf-qf-form) .wf-qf-lede,
+.wf-clinic-quote .wf-qf-inner:has(.wf-qf-form) .wf-qf-heading {
+  margin-inline: 0;
+}
+
+.wf-clinic-quote .wf-qf-inner:has(.wf-qf-form) .wf-qf-direct-list {
+  justify-content: flex-start;
+}
+
+/* ---------- Footer (polish clinic) ---------- */
+/* El minimal compartido quedaba en dos columnas flojas. Dentro del clinic:
+   marca en serif con aire, contacto como columna etiquetada, borde superior
+   que cierra la pagina. Scoped a .wf-clinic-page: ningun otro template cambia. */
+.wf-clinic-page .wf-footer {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 72px) 0 clamp(28px, 4vw, 44px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+  border-top: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+}
+
+.wf-clinic-page .wf-footer > div > strong {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 640;
+  letter-spacing: -0.01em;
+}
+
+.wf-clinic-page .wf-footer > div > p {
+  margin: 10px 0 0;
+  max-width: 46ch;
+  color: color-mix(in srgb, var(--color-fg) 66%, var(--color-bg));
+  line-height: 1.6;
+}
+
+.wf-clinic-page .wf-footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.wf-clinic-page .wf-footer-links a {
+  color: var(--color-fg);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  transition: border-color 0.2s ease;
+}
+
+.wf-clinic-page .wf-footer-links a:hover,
+.wf-clinic-page .wf-footer-links a:focus-visible {
+  border-bottom-color: var(--color-accent);
+}
+
+.wf-clinic-page .wf-footer-links span {
+  color: color-mix(in srgb, var(--color-fg) 62%, var(--color-bg));
+}
+
+@media (max-width: 720px) {
+  .wf-clinic-page .wf-footer { grid-template-columns: 1fr; }
+}
+
 /* ---------- Process timeline ---------- */
 .wf-clinic-timeline {
   list-style: none;
@@ -430,10 +589,10 @@ export const clinicCss = `
   height: 54px;
   border-radius: 50%;
   font-family: var(--font-heading);
-  font-weight: 820;
+  font-weight: 560;
   color: var(--ink-accent);
   background: var(--color-bg);
-  border: 2px solid color-mix(in srgb, var(--color-primary) 45%, var(--border));
+  border: 2px solid color-mix(in srgb, var(--color-accent) 55%, var(--border));
 }
 
 .wf-clinic-step h3 { margin: 0; font-size: 1.15rem; color: var(--color-fg); }

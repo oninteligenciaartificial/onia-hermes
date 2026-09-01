@@ -53,8 +53,10 @@ después del primer cierre.
 ## 2. Rubros
 
 El código declara siete tracks (`SUPPORTED_VERTICAL_TRACK_IDS`) y ofrece cinco en el
-formulario de acceso (`lib/platform/rubros-activos.ts`). **El corte de venta real es de
-TRES**, porque uno de los cinco ofrecidos está bloqueado por un bug de nav.
+formulario de acceso (`lib/platform/rubros-activos.ts`). **Desde el 2026-08-30 los CINCO
+ofrecidos se pueden vender**: el que faltaba (servicios profesionales) se destrabó y el
+formulario y el producto vuelven a decir lo mismo. Antes acá decía "el corte real es de
+TRES" — quedó viejo y le sacaba un rubro a la venta sin motivo.
 
 | Rubro | Track | Se vende hoy |
 |---|---|---|
@@ -62,8 +64,8 @@ TRES**, porque uno de los cinco ofrecidos está bloqueado por un bug de nav.
 | Estética y spa | `esteticagest-clinical` | ✅ **sí** — es la MISMA nav dental con el vocabulario cambiado (`navClinicaDe`), no un rubro aparte. Calza porque la clienta es una persona con CI y es quien recibe la factura |
 | Comercio / ferretería / tienda | `gestios-general` | ✅ **sí** — catálogo, inventario, caja, fiados |
 | Importadora / distribuidora | `proveegest-electrico` | ⚠️ **sí, ACOTADO** — se venden **cotizaciones B2B + costeo de importación**, y nada más del rubro. Fuera de eso no hay pantallas propias |
-| Servicios profesionales | `gestios-servicios-profesionales` | 🔧 **NO — en arreglo ahora mismo.** Su nav tiene "Citas" pero **no tiene `/patients`**, y la lista blanca de rutas se deriva del nav (`declaredSegments`), así que la pantalla para crear a quién citar queda **bloqueada**. Se está corrigiendo en otra rama; no se ofrece hasta que esté |
-| Veterinaria | `vetgest-clinical` | ⛔ **NO — bloqueo de SCHEMA, no comercial.** `Invoice.patientId` es obligatorio y la factura toma **nombre y NIT del paciente**: en una veterinaria el paciente es el animal y el que paga es el dueño, así que no puede facturarle a nadie sin cargar al dueño como paciente. Vuelve cuando exista la separación paciente/responsable |
+| Servicios profesionales | `gestios-servicios-profesionales` | ✅ **sí — arreglado y verificado el 2026-08-30.** Acá decía "NO, en arreglo": quedó viejo y **costaba un rubro entero**. El arreglo ya está en `master` y **no fue abrirle `/patients`** (eso le daría la ficha clínica —`medical-alerts`, `records`— a un estudio contable, con sus APIs devolviendo 403): es **alta inline del cliente en el propio modal de nueva cita**, contra `/api/patients`, que sí es suya (`CON_AGENDA`). Verificado en `app/(dashboard)/appointments/page.tsx:129-143` y con tres guards en `page.test.ts` |
+| Veterinaria | `vetgest-clinical` | ⛔ **NO todavía — pero es MÁS BARATO de lo que decía acá.** El bloqueo es real: la factura toma el CI del paciente (`lib/fiscal/rcv-export.ts:148`, `invoice.patient?.ci` → `nitCliente`), y en una veterinaria el paciente es el animal. **Lo que era falso es el costo:** esto NO es "migrar datos vivos". Es agregar columnas **anulables** de responsable a `Patient` y una lectura con fallback (`responsable?.ci ?? patient.ci`), así que **las filas que ya existen siguen funcionando sin backfill**. Cotizado el 2026-08-30 — ver el detalle en `COLA.md` |
 | Ganadería | `ganadero-offline` | ⛔ **NO.** El track está encendido y las orgs que ya existen siguen andando, pero no hay entidades de hacienda ni sanidad: es el catálogo de comercio con otro nombre. Además el nombre promete **modo offline que no existe** |
 
 **Regla:** un rubro nuevo se ENCIENDE desde el core, no se escribe de cero. El core declara
@@ -121,20 +123,23 @@ Se venden **después del primer cierre**, sobre cualquier plan. Precios: `lib/pr
 
 | Add-on | Qué hace | Estado |
 |---|---|---|
-| **Chatbot WhatsApp con IA** | contesta, califica, agenda y hace seguimiento 24/7 con aprobación humana | 🟡 gateado por Meta |
+| **Chatbot con IA (web + WhatsApp)** | asistente 24/7 que contesta, califica, **deriva a un humano** y hace seguimiento (un pedido de cita lo ESCALA a una persona — `deploy/vps-ops/bot/recepcionista.mjs`); el dueño lo edita CONVERSANDO, ve su guion en pasos, atiende desde la bandeja propia (el bot se aparta cuando contesta él), entiende FOTOS y audios; IA incluida sin límite de chats | ✅ vivo (falta solo la prueba del popup +591 para el alta self-service de WhatsApp; canal web ya self-service) |
 | **Chatbot a medida** | integración con el sistema del cliente o flujos propios. **Sin precio de lista**: se define el alcance y recién ahí se cotiza | por definición, a pedido |
 | Agenda pública | link de reserva sin llamadas | 🟢 |
 | Usuario extra | asiento adicional | 🟢 |
-| Inventario avanzado | compras, proveedores, vencimientos, alertas | 🔧 **en revisión** — ver abajo |
+| ~~Inventario avanzado~~ | — | ⛔ **RETIRADO de la oferta (Sergio, 2026-08-27: "no se cobra").** Las funciones NO se quitaron: compras a crédito, proveedores, alertas de stock bajo y vencimientos por lote siguen disponibles **para todos, gratis**. Lo que se quitó es el cobro — cobrar Bs 180 por lo que el cliente ya tiene es una promesa que no sobrevive a la primera pregunta. Ver el bloque de decisión en `lib/pricing.ts:120` |
 | Self-hosted | instalación en servidor del cliente | 🟡 |
 
-⚠️ **Tres claves de add-on se calculan y no las lee nadie.** `lib/platform/entitlements.ts`
-deriva `addon.inventory_advanced` (desde `org.inventoryAddon`), y el catálogo declara
-`addon.chatbot` y `addon.web` — pero **ningún archivo de `app/`, `lib/` o `components/`
-consulta esas tres claves**, y ningún ítem de nav las exige (el único item gateado por
-feature es `/agents`, con `module.agents`). Encender esos add-ons hoy no cambia lo que ve
-el cliente. **Se está arreglando en otra rama**: hasta que cierre, no se cobra "inventario
-avanzado" como si fuera una pantalla distinta.
+⚠️ **Las tres claves de add-on siguen sin lector — revisado una por una el 2026-08-30.**
+Ningún archivo de `app/` o `components/` consulta `addon.inventory_advanced`,
+`addon.chatbot` ni `addon.web`; el único ítem de nav gateado por feature es `/agents`
+(`module.agents`). Pero **no es el mismo problema en las tres**:
+
+| Clave | Qué pasa de verdad | Qué corresponde |
+|---|---|---|
+| `addon.inventory_advanced` | **Ya resuelto.** El add-on se retiró de la oferta el 2026-08-27. Que la clave no la lea nadie es ahora lo correcto, no un bug | nada — cerrado |
+| `addon.chatbot` | ⚠️ **La clave está muerta y la que trabaja es OTRA** (verificado el 2026-08-31: `addon.chatbot` sólo aparece en tests; el gate vivo es `addon.whatsapp`, con `isWhatsAppAddonActive()` en `lib/plan-limits.ts`). Y **medio chatbot ya está gateado**: `GET /api/chatbot-knowledge/published` exige el add-on desde el 2026-08-18. Lo que sigue abierto es la bandeja `/inbox`, en el nav de todos los packs sin gate | **decide Sergio** (ítem F2 de `COLA.md`): gatear `/inbox` con `addon.whatsapp` baja una superficie viva —hoy ninguna org tiene el add-on—, o dejar de crear el inbox de Chatwoot salvo add-on activo, que ataca la raíz sin apagar nada |
+| `addon.web` | La web del cliente la entrega **web-factory**, otro repo, y no tiene ni debería tener pantalla en la plataforma | sacar la clave del catálogo, o dejarla documentada como decorativa |
 
 **Servicios que no son software:**
 
@@ -146,8 +151,25 @@ avanzado" como si fuera una pantalla distinta.
 
 ## 6. Cómo se da de alta un cliente
 
-**El alta automática está CERRADA.** Esto no es un detalle de implementación: cambia el
-guion de venta entero.
+⚠️ **CORREGIDO el 2026-08-31 — el alta está ABIERTA.** Acá decía *"El alta automática está
+CERRADA"* y que cambiaba el guion de venta entero. **Es falso desde el 2026-08-29.** Medido en
+el `app.env` del contenedor de producción:
+
+```
+ONIA_ALTA_AUTOMATICA=abierta
+ONIA_REGISTRO_CONFIRMA_CORREO=si
+```
+
+Los dos flips están hechos (el segundo va con `GOTRUE_MAILER_AUTOCONFIRM=false` en
+`supabase-auth2`). `/register` sirve el formulario de registro, no el pedido de acceso.
+
+**El daño de dejarlo escrito mal:** manda a cada sesión nueva —y a cada material de venta— a
+ofrecerle "alta acompañada, te contactamos" a alguien que **puede entrar solo en dos pasos**.
+Es fricción inventada en el último clic, que es donde más caro sale.
+
+Lo que sigue abajo describe el circuito de **cuando estaba cerrada** y se conserva porque el
+formulario de pedido de acceso sigue existiendo como camino alternativo — pero **no es el
+camino por defecto**.
 
 ```
 solicitud en /register  →  fila en access_requests  →  alguien de Onia contacta
@@ -215,12 +237,17 @@ Esto es lo que evita vender algo que después no se entrega.
   de este catálogo decía "se está construyendo por decisión del 2026-08-15": era falso —
   ocho días después no hay una línea. Si un cliente lo necesita, es desarrollo a cotizar,
   no una casilla por encender.
-- **Agentes que corren solos.** El módulo `/agents` funciona y `AGENTS_RUNTIME=1` está
-  encendido en producción, pero **nadie los dispara automáticamente**: `vercel.json`
-  agenda tres crons (`appointment-reminders`, `recurring-invoices`,
-  `onia-core-workitems`) y **`/api/cron/onia-agents` no es uno de ellos**. Se vende como
-  "propone y vos aprobás", con la corrida disparada a mano — no como "trabaja de noche
-  sin que hagas nada".
+- ⚠️ **Corregido 2026-08-30 — los agentes SÍ corren solos.** Acá decía que "nadie los
+  dispara automáticamente" porque se miró `vercel.json`. **Se miró el sistema equivocado:
+  la plataforma la sirve un contenedor del VPS, no Vercel, así que los crons de
+  `vercel.json` no son los que mandan.** El disparador real es el **crontab del host**:
+  `0 11 * * * /root/bin/run-onia-agents-cron.sh` (07:00 La Paz), y
+  `/var/log/onia-agents-cron.log` muestra **14 días seguidos de `http=200`**, con un solo
+  fallo (un 524 el 24-ago). Lo mismo el drip del trial (`0 13 * * *`). Se puede vender
+  "corren todos los días sin que hagas nada" — es cierto y estaba escrito al revés.
+  **Lo que sí falta**: todas las corridas dan `proposed: 0` porque no hay datos de cliente
+  todavía, y el agente **`captador` nunca se enciende** (`kind_not_enabled` en todas las
+  orgs, todos los días). Recall y cobrador corren; el que trae clientes no.
 - **Modo offline.** El rubro ganadero lo promete en el nombre y no existe.
 - **Visión por computadora.** Evaluada el 2026-08-15: hay caso, **no hay producto**.
   Sin dataset propio y sin medir en obra real, cualquier precisión prometida es

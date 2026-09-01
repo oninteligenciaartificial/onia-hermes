@@ -6,10 +6,10 @@
 <title>Alta de Cliente ONIA — Armemos tu sistema</title>
 <style>
   :root{
-    --ink:#0d1320;--muted:#5a6675;--soft:#8493a3;--line:#e3e9f1;--line2:#eef2f7;
-    --blue:#1e5bff;--blue-dark:#1239a8;--green:#0f8b62;--amber:#a75b00;
-    --bg:#f5f7fb;--white:#fff;--accent:#1e5bff;
-    --shadow:0 1px 2px rgba(13,19,32,.04),0 8px 24px rgba(13,19,32,.05);
+    --ink:#0A0A0A;--muted:#41544B;--soft:#607469;--line:#CFE9DC;--line2:#E2F3EA;
+    --blue:#027650;--blue-dark:#004D32;--green:#089868;--amber:#a75b00;
+    --bg:#EDFBF3;--white:#fff;--accent:#027650;
+    --shadow:0 1px 2px rgba(1,57,37,.05),0 8px 24px rgba(1,57,37,.07);
   }
   *{box-sizing:border-box;}
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
@@ -17,25 +17,25 @@
   .page{max-width:880px;margin:0 auto;padding:48px 28px 96px;}
 
   /* HERO */
-  .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0f1a 0%,#11203b 55%,#0d3f30 150%);
+  .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#013925 0%,#004D32 55%,#016141 150%);
     color:#fff;border-radius:22px;padding:52px 46px;margin-bottom:14px;box-shadow:var(--shadow);}
   .hero::after{content:"";position:absolute;top:-40%;right:-10%;width:380px;height:380px;
-    background:radial-gradient(circle,rgba(30,91,255,.35),transparent 65%);pointer-events:none;}
-  .kicker{position:relative;color:#9fc0ff;font-size:11.5px;font-weight:800;text-transform:uppercase;
+    background:radial-gradient(circle,rgba(2,118,80,.32),transparent 65%);pointer-events:none;}
+  .kicker{position:relative;color:#86D9B0;font-size:11.5px;font-weight:800;text-transform:uppercase;
     letter-spacing:.16em;margin-bottom:16px;}
   .hero h1{position:relative;font-size:clamp(30px,5.4vw,50px);line-height:1.05;margin:0 0 16px;
     font-weight:800;letter-spacing:-.025em;}
-  .hero p{position:relative;color:#cdd9ec;font-size:17.5px;line-height:1.6;max-width:60ch;margin:0;}
+  .hero p{position:relative;color:#B2EACD;font-size:17.5px;line-height:1.6;max-width:60ch;margin:0;}
   .meta{position:relative;margin-top:24px;display:flex;gap:18px;flex-wrap:wrap;
-    color:#7f93b0;font-size:13px;font-weight:600;}
-  .meta b{color:#cdd9ec;}
+    color:#7E958A;font-size:13px;font-weight:600;}
+  .meta b{color:#B2EACD;}
 
   /* SECTIONS */
   section{margin-top:34px;}
   .shead{display:flex;align-items:center;gap:14px;margin:0 0 16px;}
   .snum{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;
     font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 4px 12px rgba(30,91,255,.35);}
+    box-shadow:0 4px 12px rgba(2,118,80,.32);}
   .shead h2{font-size:21px;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
   .shead .sdesc{font-size:13px;color:var(--soft);font-weight:500;margin-top:2px;}
 
@@ -50,11 +50,11 @@
   label.lbl .req{color:var(--blue);font-weight:800;}
   label.lbl .opt{color:var(--soft);font-weight:600;font-size:12px;}
   .hint{display:block;font-size:12px;font-weight:500;color:var(--soft);margin:-3px 0 7px;line-height:1.4;}
-  input,select,textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fafbfd;
+  input,select,textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#FFFFFF;
     border:1px solid var(--line);border-radius:11px;padding:12px 14px;line-height:1.4;transition:.14s;letter-spacing:-.01em;}
-  input::placeholder,textarea::placeholder{color:#aab6c4;}
+  input::placeholder,textarea::placeholder{color:#9DB3A6;}
   input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:#fff;
-    box-shadow:0 0 0 3.5px rgba(30,91,255,.13);}
+    box-shadow:0 0 0 3.5px rgba(2,118,80,.14);}
   textarea{min-height:84px;resize:vertical;}
   select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235a6675' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-position:right 15px center;padding-right:38px;}
@@ -64,10 +64,10 @@
   .chip{position:relative;}
   .chip input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0;}
   .chip span{display:inline-block;padding:9px 16px;border:1px solid var(--line);border-radius:999px;
-    background:#fafbfd;font-size:14px;color:var(--muted);cursor:pointer;transition:.14s;font-weight:600;}
-  .chip input:checked+span{background:#eef3ff;border-color:var(--accent);color:var(--blue-dark);
+    background:#FFFFFF;font-size:14px;color:var(--muted);cursor:pointer;transition:.14s;font-weight:600;}
+  .chip input:checked+span{background:#EDFBF3;border-color:var(--accent);color:var(--blue-dark);
     box-shadow:0 0 0 1px var(--accent) inset;}
-  .chip span:hover{border-color:#c3d0e2;}
+  .chip span:hover{border-color:#B2EACD;}
 
   /* REPEATABLE ROWS */
   .rows{display:flex;flex-direction:column;gap:10px;}
@@ -78,20 +78,20 @@
   .rm{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:#fff;
     color:var(--soft);font-size:17px;font-weight:700;cursor:pointer;transition:.14s;line-height:1;}
   .rm:hover{border-color:#e0a0a0;color:#b23c3c;}
-  .add{margin-top:12px;border:1.5px dashed #c3d0e2;border-radius:11px;background:none;color:var(--blue-dark);
+  .add{margin-top:12px;border:1.5px dashed #B2EACD;border-radius:11px;background:none;color:var(--blue-dark);
     font-family:inherit;font-size:14px;font-weight:700;padding:11px 16px;cursor:pointer;transition:.14s;width:100%;}
-  .add:hover{border-color:var(--accent);background:#f4f7ff;}
+  .add:hover{border-color:var(--accent);background:#D5F4E3;}
 
   /* ACTIONS */
   .err{display:none;align-items:center;gap:8px;background:#fff3e6;color:var(--amber);
     border:1px solid #f5d9b8;border-radius:12px;padding:13px 16px;font-size:14px;font-weight:700;margin-top:18px;}
   .actions{position:sticky;bottom:0;z-index:5;margin-top:26px;padding:20px 0 6px;
-    background:linear-gradient(180deg,rgba(245,247,251,0),var(--bg) 38%);display:flex;gap:12px;flex-wrap:wrap;}
+    background:linear-gradient(180deg,rgba(237,251,243,0),var(--bg) 38%);display:flex;gap:12px;flex-wrap:wrap;}
   .btn{flex:1;min-width:210px;border:none;border-radius:13px;padding:17px 22px;font-size:15.5px;
     font-weight:800;cursor:pointer;text-decoration:none;text-align:center;letter-spacing:-.01em;
     transition:.16s;box-shadow:var(--shadow);}
   .btn-primary{background:var(--accent);color:#fff;}
-  .btn-primary:hover{background:#1748d6;}
+  .btn-primary:hover{background:#016141;}
   .btn-ghost{background:var(--white);color:var(--blue-dark);border:1.5px solid var(--line);}
   .btn-ghost:hover{border-color:var(--accent);}
   .btn:hover{transform:translateY(-2px);}
@@ -115,7 +115,7 @@
   <div class="hero">
     <div class="kicker">Alta de cliente · ONIA Inteligencia Artificial</div>
     <h1>¡Bienvenido!<br>Armemos tu sistema</h1>
-    <p>Con estos datos construimos tu web y dejamos a tu asistente listo para responder como si trabajara en tu negocio. Llenalo una sola vez, desde el celular si querés — las marcadas con <b style="color:#9fc0ff">*</b> son las clave, el resto es opcional.</p>
+    <p>Con estos datos construimos tu web y dejamos a tu asistente listo para responder como si trabajara en tu negocio. Llenalo una sola vez, desde el celular si querés — las marcadas con <b style="color:#86D9B0">*</b> son las clave, el resto es opcional.</p>
     <div class="meta"><span>⏱ <b>10 min</b></span><span>🔒 <b>Privado</b></span><span>📎 Logo y fotos <b>por WhatsApp</b>, acá no subís archivos</span></div>
   </div>
 

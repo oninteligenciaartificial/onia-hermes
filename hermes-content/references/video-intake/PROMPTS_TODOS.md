@@ -1,6 +1,6 @@
 # Todos los prompts del carril — índice único
 
-**55 prompts** repartidos en cuatro lotes. Este archivo es el **índice**: la fuente de
+**56 prompts** repartidos en cuatro lotes. Este archivo es el **índice**: la fuente de
 cada prompt sigue siendo su lote, y las copias para trabajar están en
 [`sesiones/`](sesiones/README.md). Si cambia una regla, se edita en el lote — no acá.
 
@@ -105,7 +105,7 @@ Copia para trabajar: [`sesiones/chatbot.md`](sesiones/chatbot.md)
 |---|---|---|
 | **Q06** | [OpenReply: el comentario→DM de Instagram, open source, contra los $139/mes de ManyChat](prompts-lote-2026-08-24/Q06-openreply-manychat-open-source.md) | 24-ago |
 
-## → `onia-plattform` — 3 prompts
+## → `onia-plattform` — 4 prompts
 
 Copia para trabajar: [`sesiones/onia-plattform.md`](sesiones/onia-plattform.md)
 
@@ -114,6 +114,7 @@ Copia para trabajar: [`sesiones/onia-plattform.md`](sesiones/onia-plattform.md)
 | **Q07** | [Checkout por visión: detecta el producto, decodifica el código y arma el recibo solo](prompts-lote-2026-08-24/Q07-checkout-por-vision-recibo-en-vivo.md) | 24-ago |
 | **Q08** | [Receiptile: el recibo digital es la excusa, lo que capturan es al cliente](prompts-lote-2026-08-24/Q08-receiptile-recibo-digital-captura-cliente.md) | 24-ago |
 | **Q09** | [Datos sintéticos con Blender: cómo entrenar visión sin tener el dataset](prompts-lote-2026-08-24/Q09-datos-sinteticos-blender-para-vision.md) | 24-ago |
+| **T01** | [Ponerle gates y arista de aprendizaje a los agentes de Onia](prompts-lote-2026-08-28/T01-loops-y-grafos-gates-y-arista-de-aprendizaje.md) | 28-ago |
 
 ## → `pendiente` — 2 prompts
 

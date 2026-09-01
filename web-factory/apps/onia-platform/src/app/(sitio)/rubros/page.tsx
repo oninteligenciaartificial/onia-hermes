@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { PRUEBA } from "@/lib/pricing";
 import { EMPEZAR_URL } from "../nav";
+import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker } from "../ui";
 import { Switcher } from "../switcher";
 import s from "../sitio.module.css";
@@ -174,7 +174,7 @@ export default function Rubros() {
             Armá tu cuenta con tu rubro.
           </h2>
           <div className={s.actions}>
-            <Btn href={EMPEZAR_URL}>Probá {PRUEBA.dias} días gratis</Btn>
+            <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
           </div>
         </Reveal>
       </Block>

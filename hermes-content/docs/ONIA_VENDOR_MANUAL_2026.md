@@ -4,6 +4,26 @@ Documento interno para vendedores nuevos. No compartir publicamente.
 
 Ultima actualizacion: 2026-06-18
 
+> 🔴 **PRECIOS DE PLATAFORMA DESACTUALIZADOS — leer antes de cotizar (2026-08-27).**
+>
+> Las tablas de abajo son de junio y **no son fuente**. Los precios de la plataforma se LEEN de
+> `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons);
+> la versión vendible, con las funciones al lado, está en
+> **`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`**.
+>
+> Lo que hay que saber antes de abrir la boca con un cliente:
+> - Los planes son **Básico Bs 320 · Profesional Bs 750 · Completo Bs 1.500 · Empresa Bs 2.900**
+>   (mensual; anual = 10 meses). **Ya no se llaman DentalGest Basico/Profesional/Clinica**: Onia
+>   vende 7 rubros y el pack dental es uno.
+> - El **chatbot de WhatsApp** es **Bs 390/mes o Bs 3.900/año, sin cargo inicial**. Los mensajes se
+>   los cobra **Meta directamente al cliente** en su cuenta: nosotros no los facturamos ni los
+>   marcamos.
+> - **`GestiOS` no existe como producto.** Es un rubro de Onia Platform; sus repos son legado.
+> - Las líneas de **web, consultoría y automatización no llevan lista de precios**: se cotizan caso
+>   por caso (decisión 2026-08-24). Las cifras de abajo son rango histórico, no tarifario, y **no se
+>   corrigen contra `pricing.ts`** — ese archivo no cubre esa línea.
+
+
 ## 1. Que vende Onia
 
 Onia vende sistemas para que un negocio consiga mas conversaciones, atienda con
@@ -40,9 +60,9 @@ Reglas:
 
 | Oferta | Precio de arranque | Gana vendedor |
 |---|---:|---:|
-| DentalGest Basico | Bs. 320/mes | Bs. 112.00 |
-| DentalGest Profesional | Bs. 750/mes | Bs. 262.50 |
-| DentalGest Clinica | Bs. 1,500/mes | Bs. 525.00 |
+| Plan Básico | Bs. 320/mes | Bs. 112.00 |
+| Plan Profesional | Bs. 750/mes | Bs. 262.50 |
+| Plan Completo | Bs. 1.500/mes | Bs. 525.00 |
 | GestiOS Basico | Bs. 350/mes | Bs. 122.50 |
 | GestiOS Crecer | Bs. 530/mes | Bs. 185.50 |
 | GestiOS Pro | Bs. 800/mes | Bs. 280.00 |
@@ -121,16 +141,17 @@ Onia lo apruebe.
 
 | Plan | Precio cliente | Que significa | Gana vendedor |
 |---|---:|---|---:|
-| DentalGest Basico | Bs. 320/mes | 300 pacientes, 2 usuarios, agenda y odontograma digital | Bs. 112.00 |
-| DentalGest Profesional | Bs. 750/mes | 1500 pacientes, 5 usuarios, pagos, reportes y agenda inteligente | Bs. 262.50 |
-| DentalGest Clinica | Bs. 1,500/mes | pacientes, usuarios y emails ilimitados, multi-sede y soporte prioritario | Bs. 525.00 |
+| Plan Básico | Bs. 320/mes | 300 pacientes, 2 usuarios, agenda y odontograma digital | Bs. 112.00 |
+| Plan Profesional | Bs. 750/mes | 1500 pacientes, 5 usuarios, pagos, reportes y agenda inteligente | Bs. 262.50 |
+| Plan Completo | Bs. 1.500/mes | pacientes, usuarios y emails ilimitados, multi-sede y soporte prioritario | Bs. 525.00 |
 | Onboarding express DentalGest | Bs. 290 | configuracion inicial guiada | Bs. 29.00 |
 | Configuracion asistida DentalGest | Bs. 690 | configuracion + acompanamiento inicial | Bs. 69.00 |
-| Migracion + capacitacion DentalGest | Bs. 1,490 | carga/migracion ligera y entrenamiento del equipo | Bs. 149.00 |
+| Migracion + capacitacion (onboarding guiado) | **cotizado por alcance** (`pricing.ts`) | carga/migracion ligera y entrenamiento del equipo | 10% de lo cobrado |
 | Agenda publica en plan Basico | Bs. 150/mes | agenda publica si el cliente esta en Basico | Bs. 52.50 |
 | Usuario extra DentalGest | Bs. 70/usuario/mes | usuario adicional al limite del plan | Bs. 24.50 |
-| Insumos dentales en Basico | Bs. 80/mes | modulo de insumos si el cliente esta en Basico | Bs. 28.00 |
-| WhatsApp operativo DentalGest | Bs. 650 inst. + Bs. 350/mes + Meta | requiere aprobacion Onia, numero, Meta y plantillas | segun aprobacion |
+| ~~Insumos dentales en Basico~~ | 🔴 **NO EXISTE en `pricing.ts` — no cobrarlo (2026-08-27).** El inventario está incluido en todos los planes y **no tiene versión paga**: compras a crédito, proveedores, vencimientos por lote y alertas de stock bajo no las gatea ningún archivo del producto. El add-on "Inventario avanzado" se retiró el 2026-08-27. Vender un "módulo de insumos" a Bs 80 es cobrar por algo que ya es gratis. | — | — |
+| ~~Inventario avanzado~~ | ⛔ **RETIRADO (Sergio, 2026-08-27: "no se cobra")** | compras a credito, proveedores, vencimientos por lote y alertas de stock bajo: siguen encendidas y gratis para todos | — |
+| Chatbot WhatsApp con IA (add-on) | **Bs 390/mes o Bs 3.900/año, sin cargo inicial** | requiere aprobacion Onia, numero y Meta. **Los mensajes los cobra Meta al cliente en SU cuenta** | segun aprobacion |
 
 Como vender DentalGest:
 

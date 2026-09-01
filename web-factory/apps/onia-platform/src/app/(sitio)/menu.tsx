@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { NAV_PRODUCTO, NAV_DECIDIR, NAV_LEGAL, EMPEZAR_URL, LOGIN_URL } from "./nav";
+import { CTA_ALTA } from "./alta";
 import s from "./sitio.module.css";
 
 /**
@@ -69,7 +70,7 @@ export function MobileMenu() {
 
           <div className={s.sheetFoot}>
             <a className={s.btn} href={EMPEZAR_URL}>
-              Pedí tu acceso
+              {CTA_ALTA}
             </a>
             <a className={`${s.btn} ${s.btnLine}`} href={LOGIN_URL}>
               Entrar

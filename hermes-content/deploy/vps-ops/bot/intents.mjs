@@ -134,6 +134,47 @@ export function asksWhatWeDo(norm) {
 }
 
 // ---------------------------------------------------------------------------
+// MODO RECEPCIONISTA (el bot de un CLIENTE de Onia). Solo lo consulta
+// recepcionista.mjs: el funnel de venta no pasa por aca.
+// ---------------------------------------------------------------------------
+
+// Saludo pelado ("hola", "buenas"). Anclado al ARRANQUE del mensaje: "hola, cuanto cuesta?"
+// trae una pregunta y la pregunta gana (el router del modo recepcionista consulta esto ultimo).
+const RE_SALUDO = /^\s*(?:hola+|holis?|buenas+|buen dia|buenos dias|buenas tardes|buenas noches|hey|que tal|saludos)\b/;
+
+// "¿que dias atienden?" / "¿a que hora abren?" — el horario de atencion del NEGOCIO.
+const RE_HORARIO_ATENCION = /\bque dias?\b|\bhorarios? de atencion\b|\bque horarios?\b|\ben que horarios?\b|\bhasta que hora\b|\bdesde que hora\b|\ba que hora (?:abren|cierran|atienden)\b|\bcuando (?:atienden|abren|cierran)\b|\bestan abiert\w+\b|\babren\b|\bcierran\b|\batienden\b/;
+
+// "¿cuanto dura la cita?" / "¿es presencial?" — la logistica de la cita, no un pedido.
+// Se consulta ANTES que el interes: "como es la cita" pregunta, no reserva.
+const RE_CITA_INFO = /\bcuanto (?:dura|tiempo)\b|\bcomo es la (?:cita|consulta|atencion|reunion)\b|\bes presencial\b|\bes virtual\b|\bpor videollamada\b|\bmodalidad\b/;
+
+// Interes de compra o de cita ("quiero comprar 100 tornillos", "agendame"). El bot NO agenda ni
+// vende solo: esto SIEMPRE escala a un humano. Por eso puede ser amplio sin riesgo — un falso
+// positivo cuesta un handoff, no una promesa.
+const RE_INTERES_PEDIDO = /\bagend\w+\b|\breserv\w+\b|\bcita\b|\bturno\b|\bcompr\w+\b|\bpedido\b|\bpedir\b|\bencarg\w+\b|\bme interesa\b|\bnecesito \d+\b|\bquiero \d+\b/;
+
+/** Saludo sin pregunta: el modo recepcionista contesta con su menu (M0R). */
+export function isGreeting(norm) {
+  return RE_SALUDO.test(norm);
+}
+
+/** Pregunta por el horario de atencion del negocio. */
+export function asksSchedule(norm) {
+  return RE_HORARIO_ATENCION.test(norm);
+}
+
+/** Pregunta como es la cita (duracion / modalidad), sin pedirla todavia. */
+export function asksBookingInfo(norm) {
+  return RE_CITA_INFO.test(norm);
+}
+
+/** Quiere comprar / pedir / agendar: se toma el pedido y lo confirma un humano. */
+export function wantsToOrder(norm) {
+  return RE_INTERES_PEDIDO.test(norm);
+}
+
+// ---------------------------------------------------------------------------
 // SEGUNDO CAMINO: soporte (no venta)
 // ---------------------------------------------------------------------------
 // Quien YA es cliente no viene a comprar: viene a que algo funcione. Ofrecerle la demo comercial

@@ -51,7 +51,10 @@ const ACCOUNTS = {
   // Handle IG real de ONIA, confirmado por Sergio 2026-08-13.
   onia: { handle: '@oniahq', name: 'Onia', personal: false },
   arthur: { handle: '@arthur', name: 'Arthur', personal: true },
-  sergio: { handle: '@sergio', name: 'Sergio', personal: true },
+  // Handle REAL verificado por Graph API el 2026-08-23 (id 37718852144430113,
+  // MEDIA_CREATOR, 36 posts, 411 seguidores). Antes decia '@sergio', que no existe:
+  // cualquier pieza suya salia firmada con un handle inventado.
+  sergio: { handle: '@sergio_urcullo', name: 'Sergio Urcullo', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
   lucia: { handle: '@lucia.antelo.oficial', name: 'Lucía Antelo', personal: true },
 };
@@ -83,7 +86,7 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'bright-retail'];
+const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
@@ -124,6 +127,8 @@ function parseArgs(argv) {
     else if (k === '--accent') a.accent = argv[++i];
     else if (k === '--format') a.format = argv[++i];
     else if (k === '--emph') a.emph = argv[++i];
+    else if (k === '--serie') a.serie = argv[++i];
+    else if (k === '--episodio') a.episodio = argv[++i];
   }
   if (!FORMATS[a.format]) {
     throw new Error('Unknown --format: ' + a.format + ' (use ' + Object.keys(FORMATS).join('|') + ')');
@@ -201,6 +206,38 @@ function triggerWord(slide) {
   return /^[A-ZÁÉÍÓÚÑ]{3,}$/.test(fromBrief) ? fromBrief : '';
 }
 
+// Que recibe el que comenta la palabra. SALE DEL BRIEF, nunca de una constante.
+//
+// Hasta el 2026-08-23 esto estaba hardcodeado: si la palabra no era SISTEMA, la slide
+// prometia "la lista con los costos" pasara lo que pasara. O sea que el carrusel de la
+// palabra HUMO — que entrega un PDF de herramientas de IA — le prometia al lector una
+// lista de costos que nadie iba a mandarle. El render inventaba una promesa que el brief
+// nunca declaro, que es exactamente lo que la regla de no fabricar prohibe.
+//
+// Ahora: si el brief no dice que se entrega, el ticket NO se dibuja. La slide sigue
+// pidiendo el comentario (titular + boton); lo unico que desaparece es la promesa que
+// nadie escribio. Mejor una slide con dos senales que una con una mentira.
+function commentReward(slide) {
+  const r = String(slide.comment_reward || '').trim();
+  return r || '';
+}
+
+// La linea de "guardalo" del cierre. Mismo problema que commentReward y misma solucion.
+//
+// Estaba hardcodeada como "Gratis. Guardalo para cuando te sientes a resolverlo.", que solo
+// tiene sentido cuando la pieza REGALA algo. En un carrusel cuyo cierre es una pregunta
+// abierta ("¿cuál agregarías vos?") no hay nada gratis ni nada que guardar: la linea
+// aparecia igual y prometia un regalo inexistente.
+//
+// Regla: si el brief trae `save_hint`, se usa. Si no, solo se dibuja la linea clasica
+// cuando ADEMAS hay un regalo declarado (`comment_reward`). Sin regalo, no hay "gratis".
+function saveHint(slide) {
+  const explicit = String(slide.save_hint || '').trim();
+  if (explicit) return `<p class="savehint">${esc(explicit)}</p>`;
+  if (commentReward(slide)) return `<p class="savehint">Gratis. Guardalo para cuando te sientes a resolverlo.</p>`;
+  return '';
+}
+
 // Boton de accion, compartido. La slide de CTA es la de mayor intencion de todo el carrusel
 // y hasta el 2026-08-17 solo el pack `typographic` dibujaba algo que se leyera como "tocá acá";
 // los otros cuatro dejaban solo texto.
@@ -231,8 +268,18 @@ function slideHtml(slide, idx, total, account, bg) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
-  const bgLayer = bg
-    ? `<div class="bgphoto" style="background-image:url('file://${bg.replace(/\\/g, '/')}')"></div><div class="bgscrim"></div>`
+  // El fondo se puede fijar POR SLIDE (`slide.bg`) y no solo global (`--bg`).
+  //
+  // Hizo falta el 2026-08-23: el flag --bg pone la foto en la portada Y en el cierre.
+  // La slide de cierre de este pack es verde con texto NEGRO, asi que sobre una foto
+  // oscura el titular queda ilegible — se vio comparando renders, no leyendo el CSS.
+  // Ahora: `bg` global de base, `slide.bg` lo pisa, y `"slide.bg": ""` lo APAGA para
+  // esa slide. Asi la portada lleva foto y el cierre se queda limpio.
+  const bgSrc = Object.prototype.hasOwnProperty.call(slide, 'bg')
+    ? (slide.bg ? path.resolve(slide.bg) : '')
+    : bg;
+  const bgLayer = bgSrc
+    ? `<div class="bgphoto" style="background-image:url('file://${String(bgSrc).replace(/\\/g, '/')}')"></div><div class="bgscrim"></div>`
     : '';
 
   let inner = '';
@@ -257,18 +304,18 @@ function slideHtml(slide, idx, total, account, bg) {
       <h2 class="cta-h">${emph(slide.headline)}</h2>
       <p class="body">${emph(slide.body)}</p>
       ${itemLines(slide)}
-      ${word && !itemLines(slide) ? `<div class="ticket">
+      ${word && !itemLines(slide) && commentReward(slide) ? `<div class="ticket">
         <div class="ticket-l">
           <span class="ticket-k">Comentás</span>
           <span class="ticket-w">${esc(word)}</span>
         </div>
         <div class="ticket-r">
           <span class="ticket-k">Y recibís</span>
-          <span class="ticket-v">${word === 'SISTEMA' ? 'tu diagnóstico de 20 min' : 'la lista con los costos'}</span>
+          <span class="ticket-v">${esc(commentReward(slide))}</span>
         </div>
       </div>` : ''}
       ${word ? `<div class="ctabtn">Comentá ${esc(word)}</div>` : ''}
-      <p class="savehint">Gratis. Guardalo para cuando te sientes a resolverlo.</p>
+      ${saveHint(slide)}
       ${logoFooter(account)}`;
   } else if (role === 'save') {
     inner = `
@@ -355,7 +402,12 @@ ${safeAreaCss()}
 .ln-d { flex:1; border-bottom:5px dotted currentColor; opacity:.32; }
 .ln-v { font-family:var(--font-display); font-weight:700; font-size:42px; white-space:nowrap; }
 .hook { font-family:var(--font-display); font-weight:700; font-size:118px;
-  line-height:1.02; letter-spacing:-3px; }
+  /* 1.02 era demasiado apretado: el fondo del marcador ocupa TODA la caja de linea,
+     asi que en un titular de 118px invadia la linea de arriba y CORTABA los
+     descendentes. "ya existe" se leia "ua existe" con la palabra resaltada debajo.
+     Medido el 2026-08-24 mirando el render, no el CSS. 1.14 deja aire para el
+     descendente sin aflojar el bloque de titulo. */
+  line-height:1.14; letter-spacing:-3px; }
 .coverline { font-size:42px; line-height:1.35; color:var(--onia-muted-dark); margin-top:40px; max-width:840px; }
 
 .pageno { font-family:var(--font-display); font-weight:500; font-size:28px;
@@ -387,6 +439,10 @@ ${safeAreaCss()}
   color:var(--ink); opacity:.7; }
 .slide.cover .point-h, .slide.cover .body { margin-top:0; }
 .g { ${EMPH[EMPH_STYLE]} }
+/* Dato con fondo propio (research 17-ago, ref Zenovent). El numero antes que la frase. */
+.dato { background:var(--onia-green); color:var(--onia-ink); font-weight:700;
+  font-size:.9em; padding:.05em .28em; border-radius:.2em; white-space:nowrap; }
+.slide.cta .dato { background:var(--onia-ink); color:var(--onia-green); }
 /* El slide de CTA tiene fondo verde: un marcador verde ahi no se ve. Se invierte. */
 .slide.cta .g { background:var(--onia-ink); color:var(--onia-green); box-shadow:none; }
 </style></head>
@@ -416,7 +472,14 @@ const EMPH = {
 let EMPH_STYLE = 'marcador';
 
 function emph(s) {
-  return esc(s).replace(/\*([^*]+)\*/g, '<span class="g">$1</span>');
+  // {{dato}} -> chip con fondo propio. Del research del 17-ago (referencia Zenovent),
+  // señalado como "aplicable directo" y nunca aplicado: hoy las cifras ("20 horas al mes",
+  // "40% no vuelve", los precios) son texto corrido en el body de 4 de 5 packs. Con fondo
+  // propio el numero se vuelve DATO-COMO-DISENO y se lee antes que la frase que lo rodea.
+  // Va antes que el *verde* para que un dato pueda ir dentro de una frase enfatizada.
+  return esc(s)
+    .replace(/\{\{([^}]+)\}\}/g, '<span class="dato">$1</span>')
+    .replace(/\*([^*]+)\*/g, '<span class="g">$1</span>');
 }
 
 // Continuation curve: a green stroke that bleeds off the right edge on
@@ -430,12 +493,21 @@ function continuationCurve(idx, total) {
   // never dips into the headline/body area at the bottom — so it reads as a
   // continuous panorama behind the 3D object without crossing the text.
   // enter from left (unless first), exit right (unless last)
+  // Las Y estan escritas en el lienzo FEED (1350 de alto) y se escalan al formato
+  // activo. Sin esto la curva quedaba clavada en y=600 tanto en feed (44% de la
+  // altura) como en story (31%): el viewBox escalaba y la curva no, asi que en story
+  // la panoramica aparecia descolocada respecto del objeto y del texto.
+  // Roto desde que existe --format; no se veia porque el test que lo cazaba llevaba
+  // meses rojo por otras assertions viejas (arreglado 2026-08-23).
+  const sy = (y) => Math.round(y * FMT.h / FORMATS.feed.h);
+  const P = (...ys) => ys.map(sy);
+  const [y300, y560, y600, y340, y320] = P(300, 560, 600, 340, 320);
   const enter = first ? '' : (down
-    ? 'M -60 300 C 220 300 260 560 540 560'
-    : 'M -60 600 C 220 600 260 340 540 340');
+    ? `M -60 ${y300} C 220 ${y300} 260 ${y560} 540 ${y560}`
+    : `M -60 ${y600} C 220 ${y600} 260 ${y340} 540 ${y340}`);
   const exit = last ? '' : (down
-    ? 'M 540 560 C 860 560 940 320 1140 320'
-    : 'M 540 340 C 860 340 940 600 1140 600');
+    ? `M 540 ${y560} C 860 ${y560} 940 ${y320} 1140 ${y320}`
+    : `M 540 ${y340} C 860 ${y340} 940 ${y600} 1140 ${y600}`);
   const paths = [enter, exit].filter(Boolean)
     .map((d) => `<path d="${d}" />`).join('');
   return `<svg class="curve" viewBox="0 0 ${FMT.w} ${FMT.h}" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
@@ -719,6 +791,123 @@ ${safeAreaCss()}
 </div></body></html>`;
 }
 
+
+// Pack: editorial-clean (2026-08-20, pedido de Sergio: "menos cargado, letras mas
+// atractivas, que venda"). Serif editorial en caja mixta sobre foto full-bleed.
+// Diferencias contra editorial-photo: sin pill con caja, sin "Desliza" en cada
+// slide, sin logo en el footer, cuerpo mas liviano. El CTA SIEMPRE pide la
+// palabra: si el brief no la trae, el render FALLA a proposito (regla de Sergio).
+function editorialCleanHtml(slide, idx, total, account, args) {
+  const role = roleFor(slide, idx, total);
+  const last = idx === total - 1;
+  const acc = ACCOUNTS[account];
+  const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
+  const rawBg = slide.bg || (args && args.bg) || '';
+  const bg = rawBg ? path.resolve(rawBg).replace(/\\/g, '/') : '';
+  const photo = bg
+    ? `<div class="photo" style="background-image:url('file://${bg}')"></div>`
+    : '';
+  const accentVar = (args && args.accent)
+    ? `:root, .slide { --onia-green: ${args.accent}; }` : '';
+
+  if (role === 'cta' && !triggerWord(slide)) {
+    throw new Error(`editorial-clean: la slide CTA no pide ninguna palabra (regla: siempre se pide comentar). Slide: ${slide.headline}`);
+  }
+
+  const headTag = role === 'cover' ? 'h1' : 'h2';
+  // Marcador de SERIE. Adoptado de la referencia @josecarlosttb (2026-08-24): pone el
+  // nombre de la serie a la izquierda y el numero de episodio ("// 001") al lado. Convierte
+  // piezas sueltas en coleccion e invita a buscar la anterior — branding por repeticion.
+  // Se toma de `serie` y `episodio` del brief; si no estan, no se dibuja nada.
+  const serieTxt = String((args && args.serie) || '').trim();
+  const epTxt = String((args && args.episodio) || '').trim();
+  const serieBar = (serieTxt || epTxt)
+    ? `<div class="serie">${serieTxt ? `<span>${esc(serieTxt)}</span>` : '<span></span>'}${epTxt ? `<span class="ep">// ${esc(epTxt)}</span>` : ''}</div>`
+    : '';
+  const kicker = slide.pill
+    ? `<div class="kicker"><span class="dot"></span>${esc(slide.pill)}</div>` : '';
+  const body = slide.body ? `<p class="cl-body">${emph(slide.body)}</p>` : '';
+  const word = triggerWord(slide);
+  const cta = role === 'cta'
+    ? `<div class="cl-cta">Comentá&nbsp;<b>${esc(word)}</b></div>` : '';
+  const serie = serieBar;
+
+  return `<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+${tokens}
+${accentVar}
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:${FMT.w}px; height:${FMT.h}px; }
+${safeAreaCss()}
+.slide { position:relative; width:${FMT.w}px; height:${FMT.h}px; overflow:hidden;
+  padding:calc(var(--pad) * 1.2); display:flex; flex-direction:column; justify-content:flex-end;
+  background:var(--onia-ink); color:var(--onia-white); font-family:'Inter',system-ui,Arial,sans-serif; }
+.photo { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
+.scrim { position:absolute; inset:0; z-index:1;
+  background:linear-gradient(180deg, rgba(10,15,13,.05) 0%, rgba(10,15,13,.38) 52%, rgba(10,15,13,.88) 100%); }
+.grain { position:absolute; inset:0; z-index:2; opacity:.06; mix-blend-mode:overlay; }
+.slide > *:not(.photo):not(.scrim):not(.grain):not(.kicker):not(.cl-arrow):not(.serie) { position:relative; z-index:3; }
+.kicker, .cl-arrow { z-index:4; }
+
+.kicker { position:absolute; top:calc(var(--pad) * 1.2); left:calc(var(--pad) * 1.2);
+  display:flex; align-items:center; gap:14px; font-weight:600; font-size:24px;
+  letter-spacing:5px; text-transform:uppercase; color:rgba(255,255,255,.92); }
+.kicker .dot { width:12px; height:12px; border-radius:50%; background:var(--onia-green); }
+
+.cl-h { font-family:'Instrument Serif',Georgia,serif; font-weight:400; font-size:118px;
+  line-height:1.02; letter-spacing:-1px; max-width:920px; text-wrap:balance; }
+.cl-h .g { font-style:italic; color:var(--onia-green); background:none; padding:0;
+  box-shadow:none; border-radius:0; }
+.cl-body { font-weight:400; font-size:33px; line-height:1.5; margin-top:30px;
+  max-width:780px; color:rgba(255,255,255,.78); }
+.cl-body .g { background:none; padding:0; box-shadow:none; color:var(--onia-white);
+  font-weight:600; }
+.cl-body b, .cl-body strong { color:var(--onia-white); font-weight:600; }
+
+.cl-cta { align-self:flex-start; margin-top:38px; display:flex; align-items:baseline;
+  background:var(--onia-green); color:var(--onia-ink); font-size:42px; font-weight:400;
+  font-family:'Instrument Serif',Georgia,serif; font-style:italic;
+  padding:24px 48px; border-radius:100px; box-shadow:0 18px 48px rgba(0,0,0,.4); }
+.cl-cta b { font-family:'Inter',sans-serif; font-style:normal; font-weight:700;
+  letter-spacing:1px; }
+
+.cl-arrow { position:absolute; right:calc(var(--pad) * 1.2); bottom:calc(var(--pad) * 1.2);
+  font-size:52px; color:var(--onia-green); font-family:Georgia,serif; }
+.cl-handle { margin-top:44px; font-size:24px; letter-spacing:2px; font-weight:600;
+  color:rgba(255,255,255,.55); }
+/* Barra de serie: nombre a la izquierda, episodio a la derecha. Discreta a proposito —
+   es branding por repeticion, no un titular. */
+.serie { position:absolute; top:calc(var(--pad) * 1.2); left:calc(var(--pad) * 1.2);
+  right:calc(var(--pad) * 1.2); display:flex;
+  justify-content:space-between; align-items:baseline; font-family:'Inter',sans-serif;
+  font-weight:600; font-size:26px; letter-spacing:3px; text-transform:uppercase;
+  /* .62 era ilegible sobre foto clara: el scrim de este pack pesa ABAJO (donde va el
+     texto) y arriba no cubre nada. Se vio en una portada con ventana. Sombra suave
+     ademas, para que aguante cualquier fondo. */
+  color:rgba(255,255,255,.88); text-shadow:0 1px 14px rgba(0,0,0,.6); z-index:3; }
+.serie .ep { color:var(--onia-green); letter-spacing:2px; }
+/* Dato con fondo propio: el numero se lee antes que la frase. */
+.dato { background:var(--onia-green); color:var(--onia-ink); font-family:'Inter',sans-serif;
+  font-weight:700; font-size:.86em; padding:.06em .3em; border-radius:.2em;
+  white-space:nowrap; letter-spacing:-.01em; }
+/* Con barra de serie, el kicker baja: si no, se pisan (los dos viven en el margen de arriba). */
+.slide.has-serie .kicker { top:calc(var(--pad) * 1.2 + 62px); }
+</style></head>
+<body><div class="slide ${role}${serieBar ? ' has-serie' : ''}">
+  ${photo}<div class="scrim"></div>
+  <svg class="grain" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="300" height="300" filter="url(#n)"/></svg>
+  ${serie}
+  ${kicker}
+  <${headTag} class="cl-h">${emph(slide.headline)}</${headTag}>
+  ${body}
+  ${cta}
+  <div class="cl-handle">${esc(acc.handle)}</div>
+  ${last ? '' : '<div class="cl-arrow">&#8594;</div>'}
+</div></body></html>`;
+}
+
 // Ribbon multicolor continuo (eco de las franjas del logo Nuvia). Fluye de
 // borde a borde y cambia de fase por slide -> sensación de panorama/peek entre
 // slides, como la curva verde del pack dark-product de Onia.
@@ -727,8 +916,12 @@ function nuviaRibbon(idx, total, stripes, onAccent) {
   const last = idx === total - 1;
   // S-curve base que entra por izquierda y sale por derecha; alterna altura.
   const up = idx % 2 === 0;
-  const yA = up ? 430 : 980;
-  const yB = up ? 980 : 430;
+  // Mismo problema y mismo arreglo que la curva de dark-product: las alturas estan
+  // escritas en el lienzo FEED y hay que escalarlas al formato activo, o el ribbon
+  // queda descolocado en cuadrado y en story.
+  const syR = (y) => Math.round(y * FMT.h / FORMATS.feed.h);
+  const yA = syR(up ? 430 : 980);
+  const yB = syR(up ? 980 : 430);
   const base = `M -120 ${yA} C 260 ${yA} 320 ${yB} 560 ${yB} S 900 ${yA} 1200 ${yA}`;
   const cols = onAccent
     ? ['rgba(255,255,255,.9)', 'rgba(255,255,255,.6)', 'rgba(255,255,255,.35)', 'rgba(255,255,255,.2)', 'rgba(255,255,255,.12)']
@@ -843,6 +1036,10 @@ function render(args) {
     // El brief trae `comment_trigger` a nivel raiz; el render lo necesita por slide.
     { ...sl, comment_trigger: sl.comment_trigger || brief.comment_trigger || '' }));
   if (!slides.length) throw new Error('brief has no slides');
+  // La serie es del CARRUSEL, no de la slide: el brief es su lugar natural. La bandera
+  // de linea de comando sigue funcionando y gana, para poder probar sin editar el brief.
+  args.serie = args.serie || brief.serie || '';
+  args.episodio = args.episodio || brief.episodio || '';
   if (args.bg) args.bg = path.resolve(args.bg);
   if (args.object) args.object = path.resolve(args.object);
   fs.mkdirSync(args.out, { recursive: true });
@@ -855,6 +1052,7 @@ function render(args) {
     if (args.pack === 'dark-product') html = darkProductHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'dark-neon') html = darkNeonHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'editorial-photo') html = editorialPhotoHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'editorial-clean') html = editorialCleanHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'bright-retail') html = brightRetailHtml(slide, idx, slides.length, args.account, args);
     else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
@@ -900,7 +1098,7 @@ if (require.main === module) {
 }
 
 module.exports = {
-  slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml,
+  slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
   emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };

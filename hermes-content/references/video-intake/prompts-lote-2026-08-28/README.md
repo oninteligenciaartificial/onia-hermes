@@ -1,4 +1,4 @@
-# Lote del 2026-08-28 — R01 a R10, y S01
+# Lote del 2026-08-28 — R01 a R10, y S01/T01
 
 **14 links mandados de a uno. 11 nuevos analizados, 3 ya estaban.**
 
@@ -56,3 +56,13 @@
 | **S01** | [Graphify: el mapa del repo que sobrevive a la sesión](S01-graphify-memoria-permanente-del-agente.md) |
 
 Toca directamente el gasto de tokens que Sergio cortó el mismo día.
+
+## → `onia-plattform` (fuera de Instagram)
+
+| | Prompt |
+|---|---|
+| **T01** | [Loops y grafos: gates y arista de aprendizaje](T01-loops-y-grafos-gates-y-arista-de-aprendizaje.md) |
+
+**Primer item del corpus que no es de Instagram** — es un ensayo de X. `yt-dlp` falló con 404 y
+resolvió un id distinto al pedido; se leyó abriendo el post en el navegador. Para X, el camino
+es el navegador.

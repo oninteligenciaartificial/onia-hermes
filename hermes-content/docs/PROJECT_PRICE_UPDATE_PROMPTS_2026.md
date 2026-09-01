@@ -1,5 +1,20 @@
 # Project Price Update Prompts 2026
 
+> 🔴 **OBSOLETO EN SU MECÁNICA — leer antes de correr cualquier prompt de acá (2026-08-27).**
+>
+> Estos prompts le dicen a otro repo que **escriba precios en su código**. Esa es exactamente
+> la práctica que produjo cuatro precios vivos del mismo producto. Hoy el precio vive en UN
+> lugar y todo lo demás lo LEE:
+> - Planes → `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`), que **valida
+>   el cobro**.
+> - Add-ons y nombres de plan → `onia-platform/lib/pricing.ts` (`PLAN_LABELS`).
+>
+> Y el repo objetivo tampoco existe: `dental-saas` se llama **`onia-platform`**, es UNA
+> plataforma con módulos por rubro, y `DentalGest`/`GestiOS` son nombres viejos de packs.
+>
+> **Si hay que mover un precio: se edita la fuente, y ya.** Este doc queda como registro de
+> cómo se hacía antes.
+
 Use these prompts in each project repo so pricing, plans, landing copy, seed
 data and sales screens stay aligned with Onia Pricing 2026.
 
@@ -22,15 +37,14 @@ Contexto:
 - Los clientes pueden crear su cuenta, subir/cargar sus datos y empezar solos.
 - El onboarding es opcional y se vende como acelerador.
 
-Precios actuales:
-- Basico: Bs. 320/mes.
-- Profesional: Bs. 750/mes.
-- Clinica: Bs. 1,500/mes.
+Precios actuales (se LEEN de onia-platform/lib/subscription-plans.ts):
+- Basico: Bs. 320/mes (semanal 89, anual 3.200).
+- Profesional: Bs. 750/mes (semanal 199, anual 7.500).
+- Completo: Bs. 1.500/mes (anual 15.000).
+- Empresa: Bs. 2.900/mes (anual 29.000) + implementacion desde Bs. 3.500.
 
-Onboarding opcional:
-- Carga guiada express: Bs. 290.
-- Configuracion asistida: Bs. 690.
-- Migracion + capacitacion equipo: Bs. 1,490.
+Onboarding opcional: cotizado por alcance (pricing.ts). Los montos fijos
+290/690/1.490 no existen en el codigo.
 
 Comisiones comerciales para mostrar solo en docs internos/admin, no en landing publica:
 - SaaS mensual: 35% de la primera mensualidad neta cobrada, una sola vez.

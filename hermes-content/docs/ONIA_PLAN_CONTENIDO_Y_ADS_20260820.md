@@ -209,3 +209,36 @@ Este plan sintetiza 3 informes que pasaron verificación adversarial independien
 
 **Total: ~45 referencias verificadas · 2 caídas (excluidas) · ~13 no verificables (marcadas donde se usan).**
 No verificado en esta síntesis: estado en vivo de Postiz/n8n/VPS posterior al 18-20 ago (prohibido re-tocar; se usó el contexto verificado provisto), y si el footer legal ya está publicado en onia.com.bo.
+
+---
+
+# ESTADO 2026-08-21 (noche) — construido vs siguiente
+
+## Construido y verificado
+
+| Sistema | Estado |
+|---|---|
+| Publicación | Postiz con 2 cuentas · cola @oniahq llena hasta el 09-sep (9 posts + comentarios) · 1er post publicado y vivo |
+| Respuesta | comentario→DM v8 multi-cuenta EN PROD: SISTEMA/LISTA (@oniahq) + SISTEMA con voz propia (Lucía) · freno 24h · anti-bucle |
+| Motor carruseles | pack editorial-clean (serif) · gate CTA-con-palabra · gate ortografía · Chrome-first · puente render→programar probado |
+| Identidad Lucía | ancla vigente + molde corregido (paleta opcional = sin filtro) · 4 fotos nuevas sin filtro (L1b/2b/4b/5b) |
+| Lanzamiento Lucía | guion reel 4 beats + brief carrusel fijado (7 slides) + **motor elegido: kling natural** (seedance mini respaldo) |
+| Modelo 2 | INTERNA en pausa · método ganado: ficha de rasgos → imagen maestra → encadenado |
+| Conocimiento | tarifario completo medido (incl. seedance_2_5 = 32.5cr/5s) · plantillas foto/CINE/UGC · encuadres · radar de ganchos · tendencias influencers IA · TikTok research |
+
+## Los errores de generación, anotados con causa (pedido de Sergio)
+
+1. Photoshoot v1 derivado → Element mezclaba 3 bases; regla: imagen maestra única
+2. Filtro de color → bloque de paleta del molde; regla: color natural por defecto
+3. "CLOSED" horneado → mayúsculas en el prompt se vuelven texto
+4. **Slow motion → "slowly/softly" en MIS prompts; regla: `natural real-time speed` siempre**
+5. Patrón de fondo: instrucciones sin auditar efectos secundarios → checklist de 3 preguntas antes de generar (mayúsculas / velocidad / paleta)
+
+## Siguiente, en orden
+
+1. **Reel de lanzamiento de Lucía** (kling natural, velocidad natural, voz Marcela, subtítulos con gate) → tabla de cortes + preview 360p a Sergio
+2. Render del carrusel fijado con las fotos aprobadas → QC
+3. OK de Sergio al preview → **Lucía AL AIRE** (reel + fijado + posts escalonados)
+4. Después: historias, serie "El prompt de hoy", cron v2 (puente autónomo)
+5. Bloqueado por Sergio: **tarjeta en ONIA Ads** (amplificar el lanzamiento)
+6. En pausa: modelo 2 · TikTok (conector Higgsfield, link vencido — se regenera al retomar)

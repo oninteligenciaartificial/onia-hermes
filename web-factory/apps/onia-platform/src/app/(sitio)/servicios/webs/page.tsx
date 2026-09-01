@@ -3,6 +3,7 @@ import { Reveal } from "@/motion";
 import { CUIDADO_WEB, WEB_STACKS, precioWeb } from "@/content/webs";
 import { SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "../../nav";
+import { CTA_ALTA } from "../../alta";
 import { Block, Btn, Kicker, JsonLd } from "../../ui";
 import s from "../../sitio.module.css";
 import { PedirWeb } from "./PedirWeb";
@@ -203,7 +204,7 @@ export default function Webs() {
           <div className={s.actions}>
             <Btn href="/precios">Ver precios del sistema</Btn>
             <Btn href={EMPEZAR_URL} variant="line">
-              Probá gratis
+              {CTA_ALTA}
             </Btn>
           </div>
         </Reveal>

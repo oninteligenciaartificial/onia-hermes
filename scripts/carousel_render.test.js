@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS } = require('./carousel_render');
+const { roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
 
 let passed = 0;
 function test(name, fn) {
@@ -65,8 +65,11 @@ test('accounts configured (onia/arthur/sergio/nuvia)', () => {
 test('emph turns *word* into green span, escaping first', () => {
   assert.strictEqual(emph('a *b* <c>'), 'a <span class="g">b</span> &lt;c&gt;');
 });
-test('packs list includes all packs (incl. dark-neon + bright-retail)', () => {
-  assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'bright-retail']);
+test('packs list includes all packs (incl. editorial-clean)', () => {
+  // Rojo desde el 2026-08-20 hasta el 08-23: `editorial-clean` se agrego al motor y
+  // nadie actualizo esta lista. Una suite roja por una razon vieja tapa las regresiones
+  // nuevas — que es justo lo que un test existe para evitar.
+  assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail']);
 });
 test('nuvia account + brand kit configured', () => {
   assert.strictEqual(ACCOUNTS.nuvia.handle, '@nuvia.bo');
@@ -129,7 +132,7 @@ test('dark-product object slot rendered when provided', () => {
 // formatos de salida (feed default, cuadrado, story)
 test('FORMATS expone feed/cuadrado/story con sus dimensiones', () => {
   assert.deepStrictEqual(FORMATS.feed, { w: 1080, h: 1350 });
-  assert.deepStrictEqual(FORMATS.cuadrado, { w: 1080, h: 1080 });
+  assert.deepStrictEqual(FORMATS.square, { w: 1080, h: 1080 });   // se llamaba 'cuadrado'; el test quedo viejo tras el renombre
   assert.deepStrictEqual(FORMATS.story, { w: 1080, h: 1920 });
 });
 test('sin --formato el typographic sigue saliendo 1080x1350 (default intacto)', () => {
@@ -137,18 +140,23 @@ test('sin --formato el typographic sigue saliendo 1080x1350 (default intacto)', 
   assert.ok(html.includes('width:1080px; height:1350px'));
   assert.ok(!html.includes('1920px'));
 });
-test('typographic cuadrado y story cambian el lienzo', () => {
-  const sq = slideHtml({ headline: 'H', body: '' }, 0, 3, 'onia', '', 'cuadrado');
-  assert.ok(sq.includes('width:1080px; height:1080px'));
-  const st = slideHtml({ headline: 'H', body: '' }, 0, 3, 'onia', '', 'story');
-  assert.ok(st.includes('width:1080px; height:1920px'));
+test('typographic square y story cambian el lienzo', () => {
+  // El test pasaba el formato como 6o argumento de slideHtml, que solo toma 5.
+  // El formato se fija con setFormat() — la firma cambio y el test quedo viejo.
+  setFormat('square');
+  assert.ok(slideHtml({ headline: 'H', body: '' }, 0, 3, 'onia', '').includes('width:1080px; height:1080px'));
+  setFormat('story');
+  assert.ok(slideHtml({ headline: 'H', body: '' }, 0, 3, 'onia', '').includes('width:1080px; height:1920px'));
+  setFormat('feed');   // dejarlo como estaba: setFormat muta estado del modulo
 });
 test('dark-product story: lienzo y viewBox de la curva escalan juntos', () => {
-  const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { formato: 'story' });
+  setFormat('story');
+  const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
   assert.ok(html.includes('width:1080px; height:1920px'));
   assert.ok(html.includes('viewBox="0 0 1080 1920"'));
   // idx impar entra por la rama de y 600 (feed), escalada a story: 600*1920/1350 = 853
   assert.ok(html.includes('M -60 853'));
+  setFormat('feed');
 });
 test('dark-product sin formato conserva el viewBox feed historico', () => {
   const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
@@ -156,13 +164,16 @@ test('dark-product sin formato conserva el viewBox feed historico', () => {
   assert.ok(html.includes('M -60 600'));
 });
 test('dark-neon y editorial-photo respetan el formato', () => {
-  const dn = darkNeonHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { formato: 'cuadrado' });
+  setFormat('square');
+  const dn = darkNeonHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
   assert.ok(dn.includes('width:1080px; height:1080px'));
-  const ed = editorialPhotoHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { formato: 'story' });
+  setFormat('story');
+  const ed = editorialPhotoHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
   assert.ok(ed.includes('width:1080px; height:1920px'));
 });
 test('bright-retail cuadrado: ribbon con viewBox del formato y alturas escaladas', () => {
-  const html = brightRetailHtml({ role: 'point', headline: 'H' }, 1, 4, 'nuvia', { formato: 'cuadrado' });
+  setFormat('square');
+  const html = brightRetailHtml({ role: 'point', headline: 'H' }, 1, 4, 'nuvia', {});
   assert.ok(html.includes('width:1080px; height:1080px'));
   assert.ok(html.includes('viewBox="0 0 1080 1080"'));
   // yA impar (980 en feed) escalado: 980*1080/1350 = 784
@@ -170,3 +181,79 @@ test('bright-retail cuadrado: ribbon con viewBox del formato y alturas escaladas
 });
 
 console.log(`\n${passed} passed`);
+
+// --- 2026-08-23: texto que la plantilla inventaba y el brief nunca declaraba ---
+
+test('CTA sin comment_reward NO promete ningun regalo', () => {
+  // Estaba hardcodeado: si la palabra no era SISTEMA prometia "la lista con los costos"
+  // pasara lo que pasara. El carrusel de HUMO (que entrega un PDF de herramientas) le
+  // prometia al lector una lista de costos que nadie iba a mandarle.
+  const html = slideHtml({ role: 'cta', headline: 'Escribinos', body: 'Comentá HUMO' }, 4, 5, 'onia', '');
+  assert.ok(!html.includes('la lista con los costos'), 'no debe inventar un regalo');
+  assert.ok(html.includes('HUMO'), 'pero sigue pidiendo la palabra');
+});
+
+test('CTA con comment_reward muestra EL regalo declarado', () => {
+  const html = slideHtml({ role: 'cta', headline: 'Escribinos', body: 'Comentá HUMO',
+    comment_reward: 'el PDF de las 5 herramientas' }, 4, 5, 'onia', '');
+  assert.ok(html.includes('el PDF de las 5 herramientas'));
+});
+
+test('sin regalo declarado no aparece la linea de "Gratis. Guardalo"', () => {
+  const html = slideHtml({ role: 'cta', headline: 'Que opinas', body: 'Comentá SISTEMA' }, 4, 5, 'onia', '');
+  assert.ok(!html.includes('Gratis. Guardalo'), 'sin regalo no hay "gratis"');
+});
+
+test('slide.bg vacio APAGA el fondo aunque haya --bg global', () => {
+  // El cierre de typographic es verde con texto NEGRO: sobre una foto oscura queda ilegible.
+  // OJO: 'bgphoto' aparece SIEMPRE en el CSS. Hay que mirar el MARCADO, no la hoja
+  // de estilos — buscar la clase suelta da falso positivo (me paso al escribir esto).
+  const DIV = '<div class="bgphoto"';
+  const conFoto = slideHtml({ role: 'cover', headline: 'A', body: '' }, 0, 5, 'onia', '/tmp/x.png');
+  assert.ok(conFoto.includes(DIV), 'el global si pinta la portada');
+  const sinFoto = slideHtml({ role: 'cta', headline: 'A', body: 'Comentá HUMO', bg: '' }, 4, 5, 'onia', '/tmp/x.png');
+  assert.ok(!sinFoto.includes(DIV), 'slide.bg vacio lo apaga');
+});
+
+test('handle real de Sergio, no el placeholder', () => {
+  // Decia '@sergio', que no existe. Verificado por Graph API: @sergio_urcullo.
+  assert.strictEqual(ACCOUNTS.sergio.handle, '@sergio_urcullo');
+});
+
+// --- 2026-08-24: marcador de serie en editorial-clean ---
+
+test('marcador de serie: dibuja nombre y episodio cuando el brief los trae', () => {
+  const html = editorialCleanHtml({ role: 'cover', headline: 'H', body: 'b', pill: 'P' }, 0, 5, 'onia',
+    { serie: 'Tu negocio, de noche', episodio: '001' });
+  assert.ok(html.includes('Tu negocio, de noche'), 'el nombre de serie va');
+  assert.ok(html.includes('// 001'), 'el episodio va con las barras');
+  assert.ok(html.includes(' has-serie"'), 'la slide se marca para que el kicker baje y no se pisen');
+});
+
+test('marcador de serie: sin datos no dibuja nada', () => {
+  const html = editorialCleanHtml({ role: 'cover', headline: 'H', body: 'b', pill: 'P' }, 0, 5, 'onia', {});
+  assert.ok(!html.includes('class="serie"'), 'sin serie no hay barra');
+  // Ojo: 'has-serie' tambien aparece en la REGLA CSS, que se emite siempre. Hay que mirar
+  // el atributo class del marcado. Mismo tropiezo que con 'bgphoto' — ya van dos.
+  assert.ok(!html.includes(' has-serie"'), 'ni marca en el class de la slide');
+});
+
+test('marcador de serie: NO lo pisa la regla que fuerza position:relative', () => {
+  // El bug real: `.slide > *:not(...)` forzaba position:relative en todo hijo no exceptuado,
+  // y .serie no estaba en la lista, asi que la barra se renderizaba y no se VEIA.
+  // Se encontro mirando el PNG, no leyendo el CSS.
+  const html = editorialCleanHtml({ role: 'cover', headline: 'H', body: 'b' }, 0, 5, 'onia', { serie: 'S' });
+  assert.ok(html.includes(':not(.serie)'), '.serie tiene que estar exceptuada de la regla');
+});
+
+test('chip de dato: {{x}} se vuelve span.dato, y convive con *verde*', () => {
+  // Del research del 17-ago (ref Zenovent), senalado como aplicable directo y nunca
+  // aplicado: las cifras eran texto corrido en el body de 4 de 5 packs.
+  const out = emph('Perdes {{20 horas}} al mes en algo *repetido*');
+  assert.ok(out.includes('<span class="dato">20 horas</span>'));
+  assert.ok(out.includes('<span class="g">repetido</span>'));
+});
+
+test('chip de dato: escapa el HTML antes de convertir', () => {
+  assert.ok(emph('{{<b>5</b>}}').includes('&lt;b&gt;5&lt;/b&gt;'), 'no debe inyectar HTML');
+});

@@ -1,15 +1,32 @@
 name: Deploy ONIA Center
 
-# Mantiene produccion (center.onia.com.bo) al dia con main. Buildea el standalone en
-# ubuntu (NO en el VPS: swap 100%; NO en Windows: sharp nativo) y deploya por SSH.
-# - push a main que toca web-factory/** -> deploy automatico (swap).
-# - manual (workflow_dispatch) -> elegis swap=false (solo build+stage) o true (promueve).
+# Buildea el standalone en ubuntu (NO en el VPS: swap 100%; NO en Windows: sharp
+# nativo) y deploya por SSH. Publica DOS cosas seguidas: center.onia.com.bo y,
+# despues, onia.com.bo (el sitio de venta).
+#
+# SOLO MANUAL desde el 2026-08-31 (workflow_dispatch). Antes disparaba con cada push
+# a main que tocara web-factory/**, y eso resulto ser una trampa cara:
+#
+#   El paso de center murio y el paso del landing NUNCA corrio. onia.com.bo — el sitio
+#   que ve un cliente — quedo sin publicar desde el 22-ago, con 77 commits acumulados,
+#   sin que nada de su app estuviera roto. Se lo llevo puesto el vecino.
+#
+#   Y el primer fallo (24-ago) ni siquiera fue el lockfile: el deploy de center
+#   FUNCIONO (DEPLOY_OK, login 200) y el job murio despues, en el paso cosmetico
+#   [6/6] maintenance dry-run, con "Broken pipe" -> exit 255 bajo set -e.
+#
+# Ademas center.onia.com.bo esta BAJADO a proposito desde el 29-ago (Sergio saco sus
+# routers de traefik). Seguir auto-publicandolo es publicar una superficie sin ruta.
+#
+# ⚠️ El contenedor onia-center NO se apaga: el auditor diario lo usa como runtime de
+# node (docker exec onia-center node). Bajar el deploy y bajar el servicio son cosas
+# distintas.
+#
+# Para publicar: workflow_dispatch con swap=false (build+stage, no toca produccion) y,
+# si sale verde, otra corrida con swap=true. Volver al deploy automatico exige decidir
+# antes que hacer con el paso de center — sacarlo, o arreglarlo.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "web-factory/**"
   workflow_dispatch:
     inputs:
       swap:

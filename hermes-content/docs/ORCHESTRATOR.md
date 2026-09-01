@@ -29,7 +29,7 @@ Si la tarea toca CRM, ventas o vendedores, revisar tambien:
 - `NOTION_VENDOR_CRM_SCHEMA_2026.md`
 - `ONIA_VENDOR_MANUAL_2026.md`
 - `ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
-- `ONIA_PRICING_2026.md`
+- **Precios: `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons)** — la fuente. Transcritos junto a sus funciones en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`ONIA_PRICING_2026.md` quedó degradado el 2026-08-27: es historia de junio, no fuente.)*
 
 Si la tarea toca contenido o video, revisar tambien:
 

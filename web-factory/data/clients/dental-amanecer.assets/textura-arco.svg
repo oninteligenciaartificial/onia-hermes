@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 180" preserveAspectRatio="none" aria-hidden="true">
+  <!-- Arco suave para cerrar una banda oscura sobre papel (paleta clinic). -->
+  <path d="M0,180 L0,120 Q720,-40 1440,120 L1440,180 Z" fill="#142320"/>
+  <path d="M0,180 L0,150 Q720,20 1440,150 L1440,180 Z" fill="#c98a3b" opacity="0.22"/>
+</svg>

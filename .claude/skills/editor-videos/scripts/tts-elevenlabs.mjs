@@ -33,13 +33,18 @@ const voiceArg = String(flag("voice", DEFAULT_VOICE)).toLowerCase();
 const VOICE_ID = VOICES[voiceArg] || flag("voice", VOICES[DEFAULT_VOICE]);
 const OUT = flag("out", "voz.mp3");
 
-// Ajustes de naturalidad: algo de variación y estilo para que no salga plano/robótico.
-const SETTINGS = {
-  stability: Number(flag("stability", "0.45")),
-  similarity_boost: Number(flag("similarity", "0.8")),
-  style: Number(flag("style", "0.35")),
-  use_speaker_boost: true,
-};
+// ⚠️ SIN voice_settings por defecto (Sergio, 2026-08-21): los ajustes forzados
+// (stability .45 / style .35) le CAMBIABAN el timbre a Marcela — "esa no es la voz".
+// La voz aprobada en el casting salió con los defaults de la API; así se queda.
+// Solo se aplican settings si se piden explícitos por flag.
+const SETTINGS = (has("stability") || has("similarity") || has("style"))
+  ? {
+      stability: Number(flag("stability", "0.5")),
+      similarity_boost: Number(flag("similarity", "0.75")),
+      style: Number(flag("style", "0")),
+      use_speaker_boost: true,
+    }
+  : null;
 
 (async () => {
   const textFile = flag("text-file", "");
@@ -57,7 +62,7 @@ const SETTINGS = {
     {
       method: "POST",
       headers: { "xi-api-key": KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ text, model_id: MODEL, voice_settings: SETTINGS }),
+      body: JSON.stringify(SETTINGS ? { text, model_id: MODEL, voice_settings: SETTINGS } : { text, model_id: MODEL }),
     },
   );
   if (!res.ok) { console.error(`ElevenLabs ${res.status}: ${(await res.text()).slice(0, 200)}`); process.exit(1); }
