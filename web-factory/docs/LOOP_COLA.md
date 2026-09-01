@@ -651,6 +651,48 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Gates**: ítem 100% de `docs/` (no toca `packages/` ni superficie renderizada);
       aun así se corrieron los cuatro de la regla 4 y están todos verdes, arriba.
 
+- [x] **AUD4 · Auditoría de A7/A8 (los `[x]` que AUD3 no podía cubrir) — el archivo que
+      dos docs daban por reemplazado seguía en disco** (2026-09-01). Cuarta vuelta de
+      escalón 2 (A y B siguen todos `[x]`; A7 y A8 nacieron después de AUD3, así que eran
+      los únicos sin auditar).
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo); rama
+      == `origin` (`684fd863`); árbol limpio; `typecheck:packages` verde; `pnpm test`
+      **267/267**; `pnpm e2e` **103 passed / 0 failed** (7 skipped) — el gate visual
+      aguanta la tercera vuelta seguida.
+      **A7 cierto, verificado contra el código de hoy**: la puerta existe en
+      `clinic-css.ts:775` (`.wf-clinic-card:hover { transform: none; }` dentro del bloque
+      `prefers-reduced-motion: reduce`) con su porqué escrito al lado, y el hover que
+      neutraliza sigue en `:393`. **A8 cierto en lo que declaró**: `grep wf-hover-lift` en
+      `packages/*/src/` devuelve **cero reglas** — solo las tres líneas de prosa que
+      explican el borrado, que es la lápida que el propio ítem quería dejar.
+      🔴 **Lo que A8 no vio, y es el hallazgo**: `packages/blocks/motion-demo.html` seguía
+      en disco con **su propia copia a mano de `MOTION_CSS`** (líneas 15 y 17) y **tres
+      tarjetas usando `.wf-hover-lift`** — el ÚNICO lugar del repo que todavía servía la
+      primitiva borrada. Y no es que faltara actualizarlo: **dos documentos ya lo daban por
+      muerto en pasado**. `MOTION.md:12` dice que la galería *"replaced `motion-demo.html`,
+      a hand-kept copy of `MOTION_CSS` that had already drifted"*, y `demo.ts:3` se define
+      a sí mismo como lo contrario de *"a hand-kept mirror like the old motion-demo.html,
+      which desynced"*. O sea: se lo declaró reemplazado, se escribió el porqué **dos
+      veces**, y no se lo borró — así que el archivo se quedó drifteando exactamente como
+      decía su epitafio, y AUD3 ya lo había rozado (*"hoy también devuelve
+      `motion-demo.html`"*) sin sacar la conclusión.
+      **Borrado** (7.716 B). No lo referencia nadie: `grep motion-demo` en `package.json`,
+      `packages/*/package.json` y `scripts/` da vacío; las únicas menciones que quedan son
+      las dos frases en pasado, que ahora son ciertas.
+      **Verificado que el reemplazo está vivo, no supuesto**: `pnpm blocks:demo` construye
+      `out/blocks-demo/index.html` (**28 bloques · 5 huérfanos · 12 por construir**), su
+      tabla de primitivas se lee de `MOTION_PRIMITIVES` y lista `wf-reveal`,
+      `wf-clip-reveal`, `wf-scale-in` — **`wf-hover-lift` aparece 0 veces**. Abierta y
+      **mirada** en el navegador: renderiza.
+      **Nodos**: 8 `node.exe` vivos, **cero zombies de tests míos**. Uno es mi server 4319;
+      los otros siete son de otros carriles (el túnel de onia-center y **dos `next dev` del
+      worktree `hero-en-home` sobre `apps/onia-platform`**, puertos 3411 y 3477, vivos hace
+      ~2 h). No se tocan: `apps/onia-platform` es zona prohibida de este carril.
+      **Lección: "lo reemplacé" no es "lo borré". Un archivo que dos docs declaran muerto y
+      sigue en disco no es historia, es una segunda fuente de verdad — y esta servía CSS.**
+      **Gates**: `typecheck:packages` verde, **267/267**, `pnpm e2e` **103/0**, y mirado
+      renderizado.
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
