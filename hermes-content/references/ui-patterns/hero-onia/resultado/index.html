@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="es-BO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onia — hero "el resultado" (dirección editorial)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&display=swap">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   HERO "EL RESULTADO" — dirección editorial, cero UI, cero capturas.
+   Lenguaje visual: hermes-content/references/ui-patterns/hero-onia/LENGUAJE.md
+   (extraído de la landing v3 aprobada por Sergio el 2026-08-21).
+
+   LA IDEA: el día del negocio, dibujado. Empieza a las 09:00 — como lo
+   piensa el dueño, no como lo piensa un reloj. Nueve horas de tinta:
+   las que atiende él. Quince de verde señal: las que atiende Onia.
+   El verde se escapa por el borde derecho porque esas horas no terminan.
+   No hay dispositivo, no hay pantalla: la composición ES el argumento.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  color-scheme: light;
+
+  /* ---- escala verde Onia (idéntica en landing y producto) ---- */
+  --verde-50:  #EDFBF3;
+  --verde-100: #D5F4E3;
+  --verde-200: #B2EACD;
+  --verde-300: #86D9B0;
+  --verde-400: #4DBD8C;
+  --verde-500: #089868;
+  --verde-600: #027650;
+  --verde-700: #016141;
+  --verde-800: #004D32;
+  --verde-900: #013925;
+
+  /* ---- papel ---- */
+  --bg:          #F9FBFA;
+  --bg-deep:     #F3F5F4;
+  --surface:     #FFFFFF;
+  --surface-dim: #F3F5F4;
+
+  /* ---- tinta ---- */
+  --ink:       #141A17;  /* 16,98:1 sobre papel */
+  --ink-soft:  #424A46;  /* 8,79:1 */
+  --ink-faint: #69716D;  /* 4,83:1 — piso de AA */
+  --line:      #D4D9D6;
+  --line-soft: #E2E5E3;
+
+  /* ---- lámina de marca: verde señal sobre tinta, 9,43:1 ---- */
+  --senal: #00d26a;
+  --tinta: #12100e;
+
+  /* ---- roles del verde ---- */
+  --accent:        var(--verde-500);  /* FORMAS. 3,54:1: NO es texto */
+  --accent-ink:    var(--verde-700);  /* el verde legible — 7,25:1 */
+  --accent-strong: var(--verde-700);
+  --accent-soft:   var(--verde-100);
+
+  /* ---- dos familias, ni una más ---- */
+  --font-display: "Archivo", system-ui, sans-serif;
+  --font-sans:    "Archivo", system-ui, sans-serif;
+  --font-mono:    "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* ---- UN solo sistema de radios ---- */
+  --r-block: 1.4rem;  /* 22,4px */
+  --r-pill:  999px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta donde termina el hero */
+
+/* ---------------------------------------------------------------------- */
+/* EL ANCLA DEL RITMO. Un font-size por breakpoint reescala tipografía Y   */
+/* espaciado a la vez. Cero clamp() disperso — es el mecanismo.            */
+/* ---------------------------------------------------------------------- */
+.page {
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 450;
+  font-stretch: 100%;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+@media (min-width: 768px)  { .page { font-size: 17px; } }
+@media (min-width: 1280px) { .page { font-size: 18px; } }
+
+/* ---- ritmo de bloque ---- */
+.block             { padding-block: 6.5em; }
+.block:first-child { padding-top: 5.5em; }
+.inner             { width: min(74rem, 100% - 2.4rem); margin-inline: auto; }
+
+/* El bleed: arranca en el margen del texto y se ESCAPA por la derecha.
+   Es el único gesto de profundidad — sin sombra, sin gradiente.
+   El margen izquierdo va con `100%` (a prueba de scrollbar) porque ahí la
+   alineación con el titular se VE. El padding interior del bloque que se
+   escapa usa la versión en `vw` — ahí un par de píxeles no los nota nadie. */
+.bleed {
+  margin-left: calc((100% - min(74rem, 100% - 2.4rem)) / 2);
+  margin-right: 0;
+}
+.page { --bleed: calc((100vw - min(74rem, 100vw - 2.4rem)) / 2); }
+
+/* ---- kicker: la premisa ---- */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 1.6em;
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+}
+.kicker::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  max-width: 8em;
+}
+
+/* ---- el titular ---- */
+.display {
+  font-family: var(--font-display);
+  font-size: 3.1em;
+  font-weight: 550;
+  font-stretch: 100%;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-wrap: balance;
+  margin: 0;
+  max-width: 15ch;
+}
+@media (min-width: 768px)  { .display { font-size: 3.9em; line-height: 0.9; } }
+@media (min-width: 1280px) { .display { font-size: 4.6em; line-height: 0.86; letter-spacing: -0.025em; } }
+/* la palabra destacada se resalta con COLOR, nunca con otra fuente ni más peso */
+.display em { font-style: normal; color: var(--accent-ink); }
+
+/* ---- columna derecha ---- */
+.lead {
+  font-size: 1.15em;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  max-width: 30em;
+  text-wrap: pretty;
+  margin: 0;
+}
+.lead b { font-weight: 600; color: var(--ink); }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  margin-top: 1.8em;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+  min-height: 44px;
+  padding: 0.8em 1.5em;
+  border-radius: var(--r-pill);
+  border: 1.5px solid transparent;
+  background: var(--senal);
+  color: var(--tinta);              /* JAMÁS blanco: 2,01:1 */
+  font-family: var(--font-sans);
+  font-weight: 600; font-size: 1em; line-height: 1.2;
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background-color 0.15s var(--ease), transform 0.15s var(--ease),
+              border-color 0.15s var(--ease);
+}
+.btn:hover  { background: #00be5f; }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+.btn--quiet {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btn--quiet:hover { background: var(--bg-deep); border-color: var(--ink-faint); }
+
+.fine {
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 1.4em 0 0;
+}
+
+/* ---- la rejilla del hero ---- */
+.top { display: grid; gap: 2.6em; }
+@media (min-width: 940px) {
+  .top {
+    grid-template-columns: 1.15fr 1fr;
+    gap: 3.2em;
+    align-items: end;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   EL DÍA. Una sola rejilla de 24 columnas: arriba las 24 marcas de
+   hora, abajo los dos bloques de color plano. Todo alineado al
+   mismo tick, así el corte de las 18:00 cae exacto en los dos.
+   ══════════════════════════════════════════════════════════════════ */
+.day { margin-top: 3.4em; }
+
+.ruler {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 0.22em;
+  margin-bottom: 0.34em;
+}
+.tick {
+  height: 1.15em;
+  border-radius: calc(var(--r-block) * 0.28);
+  background: var(--tinta);
+}
+.tick--on { background: var(--senal); }
+
+.slabs {
+  display: grid;
+  grid-template-columns: 9fr 15fr;   /* 9 horas de vos · 15 de Onia */
+  gap: 0.22em;
+  align-items: stretch;
+}
+.slab {
+  border-radius: var(--r-block);
+  padding: 1.4em 1.5em 1.3em;
+  min-height: 9.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.slab--vos  { background: var(--tinta);  color: #edf1ef; }   /* 16,66:1 */
+.slab--onia { background: var(--senal);  color: var(--tinta); } /* 9,43:1 */
+
+.slab .hrs {
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.4em;
+}
+.slab .hrs span:last-child { text-align: right; }
+/* Cero hex inventados: el sistema no declara un "secundario sobre bloque
+   oscuro", así que se reusa --line (gris claro, ~12:1 sobre tinta) en vez
+   de fabricar un gris nuevo. Sobre señal el secundario es --verde-900
+   (8,7:1), que ya existe y es el verde de bloque profundo. */
+.slab--vos .hrs  { color: var(--line); }
+.slab--onia .hrs { color: var(--verde-900); }
+
+.slab .amount {
+  font-family: var(--font-display);
+  font-weight: 550;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin: 0.6em 0 0;
+}
+/* La escala ES el argumento: el número grande es el de las horas que
+   hoy nadie cubre. Ninguno alcanza al display (82,8px), para no
+   partir la pantalla en dos titulares. */
+.slab--vos  .amount { font-size: 2.1em; }
+.slab--onia .amount { font-size: 3.2em; }
+
+.slab .who {
+  font-size: 1em;
+  line-height: 1.35;
+  font-weight: 500;
+  margin: 0.5em 0 0;
+  max-width: 26ch;
+}
+.slab--vos .who  { color: #edf1ef; }        /* el par de .ink, 16,66:1 */
+.slab--onia .who { color: var(--tinta); }   /* el par de .signalBlock, 9,43:1 */
+
+@media (min-width: 768px) {
+  .slab { min-height: 12em; padding: 1.7em 1.9em 1.6em; }
+  /* el bloque que se escapa por el borde recupera su margen derecho:
+     la etiqueta cae en el espejo exacto del margen del titular */
+  .slab--onia { padding-right: calc(1.9em + var(--bleed)); }
+  .slab--vos  .amount { font-size: 2.4em; }
+  .slab--onia .amount { font-size: 3.4em; }
+}
+
+/* Móvil. Tres decisiones, no una adaptación automática:
+   1. El ratio 9:15 no cabe a lo ancho con texto adentro, así que pasa
+      al ALTO (7,2em vs 12em). La idea sobrevive al apilado.
+   2. Se mata el sangrado: con 1,2rem de margen, escaparse por la
+      derecha no se lee como gesto, se lee como margen mal puesto.
+   3. Las marcas se estiran a barras; a 11px de ancho, cuadradas se
+      convertían en puntos y dejaban de contar horas. */
+@media (max-width: 700px) {
+  .bleed { margin-left: 1.2rem; margin-right: 1.2rem; }
+  .slabs { grid-template-columns: 1fr; gap: 0.34em; }
+  .slab  { min-height: 0; }
+  .slab--vos  { min-height: 7.2em; }
+  .slab--onia { min-height: 12em; }
+  .slab--vos  .amount { font-size: 2.3em; }
+  .slab--onia .amount { font-size: 3em; }
+  .slab .hrs span:last-child:not(:first-child) { display: none; }
+  .ruler { gap: 0.16em; margin-bottom: 0.28em; }
+  .tick  { height: 1.5em; border-radius: calc(var(--r-block) * 0.16); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+
+<body>
+<main class="page">
+  <section class="block">
+
+    <div class="inner">
+      <div class="top">
+        <div>
+          <p class="kicker">Un negocio abre 9 horas</p>
+          <h1 class="display">Cerrás vos.<br>El negocio <em>no</em>.</h1>
+        </div>
+
+        <div>
+          <p class="lead">
+            A las 23:40 preguntan el precio y <b>el chatbot contesta</b>. El domingo
+            reservan solos por <b>tu agenda pública</b>. A las 07:00 salen los
+            <b>recordatorios y los avisos de cobro</b>, todos los días, sin que abras nada.
+          </p>
+          <div class="actions">
+            <a class="btn" href="/register">Creá tu cuenta</a>
+            <a class="btn btn--quiet" href="https://wa.me/59175414930">Escribinos por WhatsApp</a>
+          </div>
+          <p class="fine">IA incluida · sin límite de chats</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- pendiente: prueba real -->
+
+    <div class="day bleed">
+      <div class="ruler" aria-hidden="true">
+        <!-- 09:00 → 17:59 · las nueve horas que atiende una persona -->
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span>
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span>
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span>
+        <!-- 18:00 → 08:59 · las quince que atiende Onia -->
+        <span class="tick tick--on"></span><span class="tick tick--on"></span><span class="tick tick--on"></span>
+        <span class="tick tick--on"></span><span class="tick tick--on"></span><span class="tick tick--on"></span>
+        <span class="tick tick--on"></span><span class="tick tick--on"></span><span class="tick tick--on"></span>
+        <span class="tick tick--on"></span><span class="tick tick--on"></span><span class="tick tick--on"></span>
+        <span class="tick tick--on"></span><span class="tick tick--on"></span><span class="tick tick--on"></span>
+      </div>
+
+      <div class="slabs">
+        <div class="slab slab--vos">
+          <p class="hrs"><span>09:00 → 18:00</span></p>
+          <div>
+            <p class="amount">9 horas</p>
+            <p class="who">Abrís vos.</p>
+          </div>
+        </div>
+
+        <div class="slab slab--onia">
+          <p class="hrs"><span>18:00 → 09:00</span><span>Todos los días · también domingo</span></p>
+          <div>
+            <p class="amount">15 horas</p>
+            <p class="who">Contesta Onia.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>
+</body>
+</html>
