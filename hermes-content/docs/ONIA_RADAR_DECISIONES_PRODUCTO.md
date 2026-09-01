@@ -130,3 +130,36 @@ quedó en **4,8 GB libres (99%)**. Eso destraba hoy, pero se vuelve a llenar.
   toca carriles de otras sesiones, así que **no es de este loop**.
 
 **Recomendación: (a) ya, (c) cuando se cierren los carriles abiertos.** `E:` tiene 84 GB libres.
+
+---
+
+## 9. El deploy que falta — la frase falsa sigue viva en producción (2026-08-31)
+
+**Medido, no supuesto.** El punto 2 de `ONIA_DEFINICION_DE_TERMINADO.md` está cerrado en
+`master` (commit `f47d615`) pero **el contenedor `onia-platform` del VPS sirve el bundle
+anterior**. Verificado hoy dentro del contenedor, no por ancestría de git:
+
+- `grep -rl "califica, agenda" /app/.next` → **5 chunks** la traen viva
+  (`2r69hfvyqgu11.js`, `0y0ll2ez_8ibn.js`, `0i_c69j3x7kp7.js`, `21bxtovtcih3y.js`,
+  `1-eua0_n1sbcf.js`).
+- `grep -rl "deriva al humano" /app/.next` → **cero**. El arreglo no llegó.
+
+**Dónde la lee un cliente:** el tagline tiene **un solo** sitio de render,
+`app/(dashboard)/settings/addon-chatbot/AddonChatbotClient.tsx:275` — la pantalla del add-on,
+detrás de login. O sea: la ve el cliente que ya entró y está por pagar **Bs 390**. Es el peor
+lugar posible para una promesa que el motor no cumple.
+
+**El resto del rezago:** `master` está **11 commits adelante** de lo desplegado (`e5c1ad3`),
+con la bandeja marcando leído, el CSP del websocket de realtime y el panel del día adentro.
+
+**Decide Sergio — las salidas:**
+- **(a) Desplegar `master` (`f47d615`) con `deploy-gates-swap.sh`.** Cierra el punto 2 de verdad
+  y arrastra los otros 10 commits. Costo: una ventana de swap; el runbook ya tiene sus 5 gates y
+  el backup previo. **Este loop no despliega sin OK explícito.**
+- **(b) Desplegar sólo cuando cierre el punto 1** (vincular la org al inbox). Junta las dos
+  cosas en una ventana, pero deja la frase falsa viva mientras tanto.
+- **(c) No desplegar.** El punto 2 queda cerrado en el repo y **falso donde el cliente mira**,
+  que es exactamente lo que la definición de terminado llama 🟠.
+
+**Recomendación: (a).** Los tres gates están verdes sobre `master` hoy —`tsc` 0,
+**2362 tests**, lint 0 errores— así que el riesgo del swap es el de siempre, no uno nuevo.

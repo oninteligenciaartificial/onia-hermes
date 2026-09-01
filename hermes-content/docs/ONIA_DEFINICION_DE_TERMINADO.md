@@ -137,6 +137,13 @@ de traerla. `tsc` 0 · 2362 tests · lint 0 errores.
 viva hasta el proximo deploy** — y desplegar lo decide Sergio. Es lo unico que queda de este
 punto.
 
+**MEDIDO el 2026-08-31, ya no es una suposicion.** Se pregunto DENTRO del contenedor, que es la
+unica forma valida (la ancestria contra `e5c1ad3` responde otra pregunta): `grep -rl "califica,
+agenda" /app/.next` devuelve **5 chunks** vivos y `grep -rl "deriva al humano"` devuelve **cero**.
+Y el tagline tiene **un solo** sitio de render —`AddonChatbotClient.tsx:275`, la pantalla del
+add-on detras de login—, asi que quien lee la frase falsa es el cliente que esta por pagar
+**Bs 390**. Opciones cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9.
+
 ### ✅ 3. El agente captador SÍ se puede encender — era un fantasma (cerrado 2026-08-31)
 
 Este punto decía que `requiresFeature: "addon.inmobiliaria"` era **"una clave que no está en

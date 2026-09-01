@@ -827,6 +827,39 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Cerrado (2026-08-31) — no rehacer
 
+- [x] **Paso 3 (auditoría de los `[x]`): la cola resiste, y el hallazgo es que el punto 2 está
+      cerrado en el repo y FALSO en producción.** Vuelta del 2026-08-31 con "Ahora" sin un solo
+      ítem desbloqueado (F2, F5, los 4 números de WhatsApp y el `DELETE` de pagos esperan a
+      Sergio). Cero líneas de producto tocadas: no había nada roto que este loop pueda arreglar.
+      **Lo que se auditó y aguantó:**
+      - Los **7 shas citados** en esta cola (`0711ff6`, `ab9e0de`, `1fc4354`, `4dce75e`,
+        `e5c1ad3`, `753718f`, `4077f2c`) están en `origin/master`, preguntado con
+        `git merge-base --is-ancestor` y no con `git branch --contains` — que es la falla de
+        método que esta misma cola ya se había anotado.
+      - La divergencia `3 3` que se arregló hoy **quedó en `0 0`** y el árbol de
+        `onia-platform` está **limpio**. *(La guía del loop dice que ese árbol está "SUCIO con
+        trabajo ajeno": hoy es falso.)*
+      - **`master` verde de verdad, corriendo los tres gates**: `tsc` 0 · **2362 tests**
+        (191 archivos, 5 skip) · `npm run lint` **0 errores** (101 warnings, ninguno nuevo).
+      - Las rutas y guardas que la cola declara vivas existen y siguen ahí: `frasePuntuada`
+        (`lib/utils.ts:167`), `/requerimientos` en el nav (`navigation.ts:45`),
+        `SIN_NAV_A_PROPOSITO`, `__tests__/url-cruda-fuera-de-analytics.test.ts`, y los 3
+        archivos del QR del BCP.
+      - **Falsa alarma descartada, y vale anotarla:** los **tres** caminos que aprueban un pago
+        parecían no contemplar el add-on. Se siguieron los tres y son **fail-closed**: el manual
+        sí lo enciende (`admin/subscription-payments/route.ts:93` → `whatsappAddon: true`), el QR
+        del BCP lo rechaza antes de crear la fila (`isSubscriptionPlan`) y el callback de n8n
+        corta con 422 (`evaluateAutoApproval` → *"Plan invalido"*). Nadie paga el add-on y se
+        queda sin él.
+      **El hallazgo, que es lo que se lleva la vuelta:** la definición de terminado decía
+      *"falta el deploy"* como **suposición**. Se midió DENTRO del contenedor del VPS —única
+      forma válida, porque `e5c1ad3` ya no es lo desplegado—: `grep -rl "califica, agenda"
+      /app/.next` da **5 chunks vivos** y `"deriva al humano"` da **cero**. Y el tagline se
+      renderiza en **un solo** lugar, `AddonChatbotClient.tsx:275`, la pantalla del add-on detrás
+      de login: **la frase falsa la lee el cliente que está por pagar Bs 390**. `master` está
+      **11 commits** adelante de lo desplegado. Opciones cotizadas en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §9 — **decide Sergio**, este loop no despliega.
+
 - [x] **El `master` local de `onia-platform` estaba divergido de `origin` — 3 commits contra 3, y
       el mismo árbol.** Es exactamente el objetivo de este carril ("`main` integrado") fallando en
       silencio: `git rev-list --left-right` daba `3 3`, así que ningún push entraba sin merge, y
