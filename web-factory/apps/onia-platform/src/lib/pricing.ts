@@ -17,9 +17,9 @@
  *  - contabilidad y RRHH ..... lib/plan-limits.ts:416-435 (basico desde Basico,
  *    completa desde Profesional — montan sobre los mismos umbrales de reportes)
  *  - add-ons ................. lib/pricing.ts (agenda publica 150 · usuario
- *    extra 70 (max 3 en Basico) · inventario avanzado 180 · instancia privada
- *    desde 4.500+900 · Grupo implementacion desde 3.500). El CHATBOT no vive
- *    aca: su precio sale de content/chatbot-precios.ts, que es su fuente unica
+ *    extra 70 (max 3 en Basico) · instancia privada desde 4.500+900 · Grupo
+ *    implementacion desde 3.500). El CHATBOT no vive aca: su precio sale de
+ *    content/chatbot-precios.ts, que es su fuente unica
  *    (2026-08-21: Bs 390/mes sin instalacion; antes este archivo publicaba
  *    "desde 300+200" y chatbot-precios.ts "1.500+1.490" — dos precios vivos
  *    del mismo add-on).
@@ -83,7 +83,7 @@ export const PLANES: readonly Plan[] = [
       "Hasta 300 fichas de clientes o pacientes cargadas",
       "200 recordatorios por email al mes",
       "Agenda, fichas, caja y cobros en un solo lugar",
-      "Inventario simple con aviso de stock mínimo",
+      "Inventario con existencias, costo, proveedor y aviso de stock mínimo",
       "Reporte básico y contabilidad básica de compras y ventas",
       "Lista de empleados",
       "Exportás tus datos en CSV cuando quieras",
@@ -217,6 +217,16 @@ export interface AddOn {
   href?: string;
 }
 
+/**
+ * ⛔ NO VOLVER A PONER "Inventario avanzado" ACA (Sergio, 2026-08-27: "no se
+ * cobra"). Compras, proveedores, vencimientos por lote y aviso de stock bajo NO
+ * estan gateados por ningun archivo del producto — `addon.inventory_advanced` se
+ * calcula en entitlements.ts y no lo lee nadie. Cobrarlo era ponerle precio a lo
+ * que el cliente ya tiene encendido: se cae en la primera pregunta del que ya lo
+ * usa. El inventario ahora se cuenta donde corresponde, en el `incluye` del
+ * Basico (y por herencia en Pro y Full). Guarda:
+ * scripts/venta-honestidad.test.mjs. Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
+ */
 export const ADDONS: readonly AddOn[] = [
   {
     nombre: "Chatbot de WhatsApp",
@@ -233,11 +243,6 @@ export const ADDONS: readonly AddOn[] = [
     nombre: "Usuario adicional",
     copy: "Una persona más en el sistema. En Básico se pueden sumar hasta 3.",
     precio: "Bs 70/mes por usuario",
-  },
-  {
-    nombre: "Inventario avanzado",
-    copy: "Compras, proveedores, vencimientos y alertas avanzadas, por encima del inventario simple que ya viene incluido.",
-    precio: "Desde Bs 180/mes",
   },
   {
     nombre: "Web del negocio",

@@ -185,8 +185,8 @@ aprobacion de Onia.
 | Migracion + capacitacion equipo (onboarding guiado) | **cotizado por alcance** (`pricing.ts`) | 10% de lo cobrado |
 | Agenda publica en el plan Básico | Bs. 150/mes (incluida en Profesional y Completo) | Bs. 52.50 |
 | Usuario extra | Bs. 70/usuario/mes | Bs. 24.50 |
-| ~~Insumos dentales en Basico~~ | 🔴 **NO EXISTE en `pricing.ts` — no cobrarlo (2026-08-27).** El inventario simple está incluido en todos los planes; lo que sí existe es el add-on **Inventario avanzado, Bs 180/mes** (compras a crédito, proveedores, vencimientos por lote y alertas de stock bajo). Vender un "módulo de insumos" a Bs 80 es cobrar por algo que ya es gratis. | — |
-| Inventario avanzado (add-on real) | Bs. 180/mes | 10% de lo cobrado |
+| ~~Insumos dentales en Basico~~ | 🔴 **NO EXISTE en `pricing.ts` — no cobrarlo (2026-08-27).** El inventario está incluido en todos los planes y **no tiene versión paga**: compras a crédito, proveedores, vencimientos por lote y alertas de stock bajo no las gatea ningún archivo del producto. El add-on "Inventario avanzado" se retiró el 2026-08-27. Vender un "módulo de insumos" a Bs 80 es cobrar por algo que ya es gratis. | — |
+| ~~Inventario avanzado~~ | ⛔ **RETIRADO de la oferta (Sergio, 2026-08-27: "no se cobra").** Las funciones siguen encendidas y gratis para todos; no hay gate que las cobre | — |
 | Chatbot WhatsApp con IA (add-on de plataforma) | **Bs 390/mes o Bs 3.900/año, sin cargo inicial** — se lee de `pricing.ts` | Requiere aprobacion |
 
 ⚠️ **Corregido 2026-08-27.** Acá decía `instalacion Bs. 650 + mensualidad Bs. 350 + tarifas
