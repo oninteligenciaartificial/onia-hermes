@@ -254,3 +254,47 @@ final). El trámite bancario avanza en paralelo.
 Grupo de Onia (2.900 Bs), pero **no compiten de frente** — Lety es infraestructura white-label
 para agencias (B2B2B) y el negocio final no le compra. Usar ese número como "somos más baratos"
 es comparar cosas distintas.
+
+---
+
+# Para decidir — al abrir el 1 de septiembre
+
+Ocho cosas esperan a Sergio. Están ordenadas por lo que desbloquean, no por urgencia
+aparente. Cada una tiene su detalle arriba en este archivo o en
+`hermes-content/docs/handoff/claude-git-status-935f47.md`.
+
+**1. ¿Publicamos los 77 commits de `onia.com.bo`?**
+El sitio de venta no se publica desde el **22-ago**. No estaba roto: lo tapaba el deploy de
+center, que corre antes y muere. [PR #30] lo destraba **sin publicar**. Publicar es aparte:
+`workflow_dispatch` con `swap=false` (build en ubuntu, no toca producción) y, si sale verde,
+`swap=true`. **Recomendación: mirar primero qué cambió en esos 77 commits.**
+
+**2. ¿Cuál de los tres heroes?**
+`ui-viva` (las piezas del producto dibujadas, mejor gancho emocional) · `resultado` (el día
+del negocio, mejor titular: *"Cerrás vos. El negocio no."*) · `mecanica` (el circuito animado,
+el más disciplinado). Ninguno lleva una captura del sistema. Se muestran renderizados.
+
+**3. ¿La prueba de 14 días pide tarjeta?**
+Ver la sección propia arriba. Hoy Onia da 14 días sin tarjeta y **cobra a mano al día 14**;
+Lety pide tarjeta y auto-cobra al día 7. El camino B (copiar a Lety) **hoy no es elegible**:
+necesita la pasarela viva.
+
+**4. ¿Aplico las 8 `GOTRUE_MAILER_*` al contenedor?**
+Las plantillas en castellano ya están en `master` y probadas (200 con el placeholder adentro).
+Falta encenderlas. Exige recrear `supabase-auth2` **conservando el alias de red `auth`** o el
+stack se cae. Runbook en `onia-platform/docs/CORREOS_AUTH_MARCA.md`.
+
+**5. ¿La máquina se apaga de noche o queda trabajando?**
+Apagada, **los loops no corren** (viven en la app de Windows). Los 18 crons del VPS sí siguen.
+
+**6. ¿Qué hacemos con ONIA Center?**
+El panel está bajado a propósito desde el 29-ago y su deploy ya pasó a manual. Falta decidir si
+se saca el paso del workflow. ⚠️ **El contenedor NO se apaga**: el auditor diario lo usa como
+runtime. Y sus **seis memorias** quedan marcadas como sospechosas hasta medir qué sigue vivo.
+
+**7. Tres personas pidieron acceso y siguen sin respuesta.**
+Máximo (21-ago), Leonardo (23-ago), Edwin (28-ago). Es lo único de esta lista que **caduca**.
+
+**8. Los worktrees.**
+19 vivos; el disco llegó al 100% y frenó el trabajo. Se liberó a 12 GB, pero un worktree con
+dependencias pesa 6,4 GB y se vuelve a llenar solo. Hay que decidir cuáles se archivan.
