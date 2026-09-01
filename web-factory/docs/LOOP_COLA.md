@@ -465,18 +465,52 @@ Las tres formas de fantasma que ya aparecieron acá:
       queda **vacia** (antes tenia 1) y 0 errores de consola. Footer **mirado**: el
       subrayado honey sigue pegado al texto y la caja de 44px es invisible.
 
-- [ ] **A7 · Cablear `wf-hover-lift` a las cards que lo piden** — recuperada de la
-      prosa de T34, donde llevaba un día declarada *"anotada"* sin serlo (ver AUD3).
-      **Evidencia medida hoy (2026-09-01), no heredada**: `grep -rln wf-hover-lift
-      packages/*/src/` fuera de `motion.ts` devuelve **0 de 44 bloques**. La primitiva
-      existe entera y probada (`motion.ts:53`, neutralizada bajo reduced-motion en `:77`,
-      ficha en `:157`) y **solo la usa su propio demo** (`motion-demo.html`) y `MOTION.md`.
-      O sea: hay una técnica del toolkit pagada y en cero uso real.
-      Candidato directo y único hoy: `packages/blocks/src/clinic-services.ts`, el otro
-      bloque del paquete que dibuja `card`. Al tomarla: cablear, mirar el render en claro
-      y oscuro, confirmar que bajo `prefers-reduced-motion` no se mueve, y `pnpm e2e`
-      (toca superficie dibujada → si cambia geometría, `--update-snapshots` y **mirar la
-      baseline nueva**).
+- [x] **A7 · La tarjeta ya se levantaba; lo que le faltaba era la PUERTA** (2026-09-01).
+      El ítem pedía cablear `wf-hover-lift` a `clinic-services.ts`, y **medido hoy, ese
+      cableado habría sido inerte y duplicado**. Dos números, no una impresión:
+      (a) **`MOTION_CSS` no viaja a esa página**. Sus únicos consumidores son
+      `landing-logistics.ts:270` y `landing-realestate.ts:248` (+ la galería); el template
+      que dibuja las tarjetas, `landing-clinic.ts`, **no lo emite**. La clase habría salido
+      al HTML sin una sola regla detrás. (b) **`.wf-clinic-card` YA se levanta**
+      (`clinic-css.ts:393`: `translateY(-4px)` + borde + sombra, con su propia transición),
+      y lo hace mejor: sus valores salen de `color-mix()` sobre los tokens, mientras
+      `wf-hover-lift` quema `rgba(10,17,38,.35)` — una sombra ciega al tema, el mismo modo
+      de falla de W1.
+      **Lo que la primitiva sí traía y a la tarjeta le faltaba es su puerta**:
+      `.wf-hover-lift:hover{transform:none}` bajo reduced-motion (`motion.ts:77`). En
+      `clinic-css.ts` el bloque `reduce` sólo neutralizaba `[data-reveal]`, y los botones
+      entraban por `no-preference` — **la tarjeta era el ÚNICO hover con `transform` de
+      todo el archivo sin puerta** (verificado: 4 `:hover`, sólo 2 con movimiento). Puesta.
+      Se apaga el desplazamiento y **se dejan borde y sombra**, que son color y no
+      movimiento: quien pide menos movimiento no pierde la respuesta al hover.
+      **Medido en el navegador en las dos preferencias**, no razonado: con
+      `no-preference` la tarjeta da `matrix(1,0,0,1,0,-4)`; con `reduce`, `none` — y el
+      `borderTopColor` y el `box-shadow` son **idénticos byte a byte en las dos**. 0
+      errores de consola. Miradas las dos capturas: en `reduce` la tarjeta no sube.
+      **El gate se probó MUTANDO**: sacada la línea, `clinic-css.test.ts` cae. Y el segundo
+      test fija la lista de `:hover` con `translate/scale/rotate`, así que **un hover nuevo
+      sin puerta rompe rojo** en vez de pasar desapercibido — que es la lección de AUD1.
+      **Gates**: `typecheck:packages` verde, **267/267** (+2), `pnpm e2e` **103 passed /
+      0 failed**, y mirado renderizado.
+      ⚠️ **De paso, un tropiezo de método propio**: regeneré con `pnpm generate
+      dental-amanecer` a secas y el cliente **no declara `template` en su `.json`** (sólo
+      en el `.design.json`), así que salió con la plantilla genérica y la página de la
+      salud perdió las tarjetas. Rehecho con `--template landing-clinic` (19 tarjetas,
+      200). `out/` está en `.gitignore`, así que no llegó a ningún commit — pero el
+      servidor de salud sí habría servido otra página.
+
+- [ ] **A8 · `MOTION_CSS` viaja donde no hay tarjetas y falta donde sí** — hallazgo
+      medido al cerrar A7 (regla de AUD3: el pendiente se escribe como línea de cola en el
+      mismo commit que tacha el ítem). **Evidencia de hoy (2026-09-01)**: en
+      `out/logistics-demo/index.html` y `out/realestate-demo/index.html` la cadena
+      `wf-hover-lift` aparece **3 veces, y las 3 son las reglas CSS** — `grep -o
+      'class="[^"]*wf-hover-lift[^"]*"'` devuelve **0 elementos** en ambas. Ninguna de esas
+      dos plantillas dibuja tarjetas. O sea: la hoja de motion se emite entera en dos
+      páginas de cliente para una primitiva que nadie usa, y la única página con tarjetas
+      no la recibe. Al tomarla, la decisión es **borrar la primitiva o darle un dueño real**,
+      no cablearla por cablearla — A7 ya midió que en `clinic-services.ts` sería inerte y
+      duplicada. Medir antes el peso que MOTION_CSS le agrega a esas dos páginas.
+
 
 - [x] **AUD1 · Auditoría de los `[x]` + salud — el gate visual estaba 8/8 en ROJO**
       (2026-09-01). Vuelta de escalón 2: A y B estaban todos `[x]`, así que tocaba

@@ -768,6 +768,11 @@ export const clinicCss = `
 
 @media (prefers-reduced-motion: reduce) {
   .wf-clinic-motion [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  /* La tarjeta era el UNICO hover con transform sin puerta: los botones ya
+     entraban por no-preference (arriba) y el reveal ya estaba neutralizado
+     aca. Se apaga el desplazamiento y se deja el borde y la sombra, que son
+     color y no movimiento: la respuesta al hover no desaparece. */
+  .wf-clinic-card:hover { transform: none; }
   html { scroll-behavior: auto; }
 }
 
