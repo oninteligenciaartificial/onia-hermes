@@ -42,10 +42,18 @@ corre los gates él mismo y muta la implementación para probar que el test se p
 
 | Rama / PR | Qué cierra | Por qué no se mergeó |
 |---|---|---|
-| [PR #30](https://github.com/oninteligenciaartificial/onia-hermes/pull/30) `fix/lockfile-deploy-center` | El lockfile que tenía rojas dos superficies + el deploy pasa a manual | **Mergearlo podría publicar 77 commits en `onia.com.bo`.** Ver §5 |
-| `fix/inventario-avanzado-no-se-cobra` | Un precio que no se puede cobrar, vivo en la landing | Tercera vuelta de refutación en curso |
-| `fix/loops-autocura` | La lista versionada de loops + el chequeo de arranque | Docs-only; lo integra `onia-cola` en su Paso 1 |
-| `design/hero-{ui-viva,resultado,mecanica}` | Tres heroes sin capturas del sistema | **Sergio elige uno.** Ver §7 |
+| [PR #30](https://github.com/oninteligenciaartificial/onia-hermes/pull/30) `fix/lockfile-deploy-center` | El lockfile que tenía rojas dos superficies + el deploy pasa a manual | **Mergearlo podría publicar 77 commits en `onia.com.bo`.** Ver §5. **Es el único que quedó abierto** |
+| `design/hero-{ui-viva,resultado,mecanica}` | Tres heroes sin capturas del sistema, ya en su **segunda** versión (pusheadas) | **Sergio elige uno.** Ver §7 |
+
+**Mergeados antes de cerrar:** [#31](https://github.com/oninteligenciaartificial/onia-hermes/pull/31)
+(el precio del inventario, tres vueltas de refutación) y
+[#32](https://github.com/oninteligenciaartificial/onia-hermes/pull/32) (la auto-cura de los loops).
+
+⚠️ **La laptop se apagó el 31-ago ~23:55 La Paz por pedido de Sergio.** Mientras esté apagada
+**los cinco loops no corren**; los 18 crons del VPS sí. Al prender, la auto-cura del §6 rearma
+lo que se haya desregistrado — pero **sólo si al menos un loop quedó registrado**. Si al abrir
+no aparecen commits de carriles en unas horas, hay que rearmarlos a mano desde
+`hermes-content/docs/cola/loops.md`.
 
 ## 4. Los defectos que se cerraron, y lo que enseñan
 
