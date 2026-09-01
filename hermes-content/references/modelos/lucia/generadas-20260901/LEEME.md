@@ -33,3 +33,29 @@ le pedía que no fuera legible. **Gana la instrucción que pone el objeto.**
 **La regla corregida:** no alcanza con pedir «sin texto legible». Hay que **no pedir el cartel**.
 Si la escena necesita uno, se nombra como superficie y no como cartel — «una pared con papeles
 pegados», no «un cartel de tarifas escrito a mano».
+
+
+---
+
+## ⏳ PENDIENTE DE BAJAR — video de B06 (pagado, 6,25 cr)
+
+Lanzado el 01-sep desde `Turn to video` sobre B06. **Quedó generando al cerrar la vuelta.**
+Está en la cuenta; lo primero de la próxima vuelta es bajarlo, mirarlo con frames y anotarlo acá.
+
+**Ajustes usados y verificados en pantalla:** Kling 3.0 · 5 s · **720p** · botón **✦ 6,25**.
+
+**El prompt se reescribió, y eso casi cuesta 6,25 créditos tirados.** `Turn to video` **arrastra
+el prompt de la generación anterior**: al abrirlo traía el de `V05-oficina` —*«the clerk lets go
+of the stamped form»*, *«scratched glass»*— con el frame dental cargado. O sea que el frame es
+nuevo y el texto es viejo. Si se aprieta Generate sin mirar, Kling anima la escena equivocada.
+
+🔴 **Regla nueva: `Turn to video` NO limpia el prompt. Leerlo y reescribirlo SIEMPRE antes de
+generar.**
+
+⚠️ Y una trampa de UI: `ctrl+a` dentro del campo de prompt del workspace de VIDEO selecciona la
+**página entera**, no el campo — pasó dos veces. Lo que sí funciona es **`triple_click` sobre el
+`ref` del textarea** y después escribir.
+
+**Dato a confirmar al bajarlo:** el historial mostró **9:16** junto a 720p y 5 s. Si el MP4 sale
+vertical de verdad, se acabó el problema de formato para Meta Ads, donde todo el banco venía en
+828×1108.
