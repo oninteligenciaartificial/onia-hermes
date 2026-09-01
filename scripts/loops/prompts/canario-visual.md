@@ -24,6 +24,26 @@ Lo que cambia para vos, y **no lo vuelvas a traducir al revés**:
 - Nadie va a contestarte una pregunta a mitad de vuelta. Si algo necesita a Sergio: al radar
   y `onia-tg.sh`, y seguí.
 
+## Lo primero que escribís cada vuelta: UNA línea para Sergio
+
+Antes de cualquier detalle técnico, escribí **una sola línea en castellano llano** que diga
+**qué hiciste y por qué le importa a él**. Sin siglas, sin nombres de archivo, sin códigos
+internos.
+
+Nace de que Sergio miró el informe de un loop y dijo: *"este loop que hace por ejemplo no lo
+entiendo"*. Tenía razón: reportábamos en taquigrafía (`A7`, `AUD2`, `wf-hover-lift`) que sólo
+entiende quien ya leyó la cola. **Si el que paga esto no entiende qué hiciste, no lo hiciste
+para nadie.**
+
+- **Bien:** *"El bot saludaba y se callaba cuando alguien decía de qué rubro era. Ya contesta."*
+- **Bien:** *"Miré las 10 pantallas de cliente. Ninguna cambió, no toqué nada."*
+- **Mal:** *"Cerré A7, cableé wf-hover-lift, AUD3 verde."*
+
+Después de esa línea, todo el detalle técnico que quieras.
+
+**Si la vuelta no produjo nada, la línea lo dice igual** — *"Revisé la cola, no había nada
+desbloqueado que hacer"* es una línea honesta y útil. Lo que no vale es empezar por el detalle.
+
 # LA REGLA QUE MANDA SOBRE TODAS
 
 **Tu oficio no es vigilar: es ALIMENTAR.**
@@ -92,24 +112,35 @@ Ahí viven las tres colas que vas a escribir. Si necesitás rehacerlo:
 
     git -C /root/loops/onia-hermes worktree add /root/loops/onia-hermes-canario claude/canario-visual
 
-## Las pantallas (lista fija)
+## Las pantallas
 
-| # | Pantalla | URL | Carril dueño | Su cola |
-|---|---|---|---|---|
-| 1 | Home | https://onia.com.bo/ | ⚠️ sin dueño declarado | `hermes-content/docs/COLA.md` |
-| 2 | Empezar | https://onia.com.bo/empezar | ⚠️ sin dueño declarado | `hermes-content/docs/COLA.md` |
-| 3 | Login plataforma | https://app.onia.com.bo/login | onia-cola | `hermes-content/docs/COLA.md` |
-| 4 | Login chat | https://chat.onia.com.bo/app/login | chatbot-cola | `hermes-content/docs/cola/chatbot.md` |
-| 5 | Panel del chatbot | https://app.onia.com.bo/settings/chatbot | chatbot-cola | `hermes-content/docs/cola/chatbot.md` |
+**La lista vive en `scripts/canario_visual.mjs`, en `PANTALLAS`. Acá NO se copia.**
 
-⚠️ **1 y 2 son huérfanas, medido el 2026-08-31**: viven en `web-factory/apps/onia-platform/`, que
-**ninguna** cola nombra y que la zona de `web-factory-dev-loop` prohíbe explícitamente. Van a
-`COLA.md` porque es la puerta de entrada del producto, y **la primera vez que escribís una,
-sumás UNA línea al radar** (`hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`) pidiendo que
-Sergio le ponga dueño. No lo repitas cada vuelta.
+Cada entrada trae su `nombre`, su `url`, el `duenio` y la `cola` donde va su ítem. Dos copias de
+la misma lista es exactamente cómo se llega a vigilar una pantalla que no existe, o a no vigilar
+una que sí — y este archivo ya tuvo esa corrección dos veces con los `cron`. Para verla:
+`grep -n "nombre:" scripts/canario_visual.mjs`.
 
-⚠️ **La 5 está detrás de sesión.** Si no tenés sesión, esa pantalla se reporta **"no medida"** —
-**nunca** "OK". Una pantalla que no miraste no está verde: está sin mirar.
+**Son diez, ordenadas por cuánto acercan la venta**, no por lo que cuesta mirarlas: home →
+precios → empezar → rubros → chatbot → contacto → register → login plataforma → login chat →
+panel del chatbot.
+
+> **Ampliada el 2026-09-01: eran cinco y se quedaba corta.** Faltaban `/precios` (donde un
+> desconocido decide, y donde el proyecto ya tuvo **cuatro precios vivos del mismo chatbot**) y
+> `app.onia.com.bo/register` (el último clic antes de que exista una cuenta — **ya dejó de crear
+> cuentas una vez** y nadie la estaba mirando). Las cinco nuevas se verificaron vivas **antes** de
+> listarlas: 200 medido desde el VPS, no supuesto.
+
+⚠️ **Las de `onia.com.bo` son huérfanas, medido el 2026-08-31**: viven en
+`web-factory/apps/onia-platform/`, que **ninguna** cola nombra y que la zona de
+`web-factory-dev-loop` prohíbe explícitamente. Van a `COLA.md` porque es la puerta de entrada del
+producto, y **la primera vez que escribís una, sumás UNA línea al radar**
+(`hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`) pidiendo que Sergio le ponga dueño. No
+lo repitas cada vuelta.
+
+⚠️ **El panel del chatbot está detrás de sesión.** Sin sesión se reporta **"no medida"** —
+**nunca** "OK". Una pantalla que no miraste no está verde: está sin mirar. Hoy redirige a
+`/login`, y eso es lo esperado, no un hallazgo.
 
 ⚠️ **Ya hay un monitor propio del VPS mirando login/register/web cada 15 min**
 (`/root/bin/onia-mirar-cliente.sh`, avisa por Telegram al cambiar de estado). **No lo apagues ni
@@ -118,16 +149,95 @@ lo dupliques.** Él avisa; vos escribís ítems con evidencia. Si su estado
 
 Si aparece una pantalla nueva, el dueño **se deriva del archivo que la renderiza**, no se elige.
 
+### Rutas vivas que NO se vigilan, y por qué
+
+Están listadas para que **no las agregues creyendo que las descubriste**. Todas dan 200, medido
+el 2026-09-01. Que estén acá es una decisión, no un olvido:
+
+| Ruta | Por qué no está en la lista |
+|---|---|
+| `/agentes`, `/comparativa`, `/nosotros`, `/facturacion`, `/guia-facturacion` | Secundarias en el camino a la compra. Su contenido de venta ya aparece en home y precios, que sí se vigilan |
+| `/servicios/webs`, `/servicios/consultoria`, `/servicios/marketing-ia` | Servicios, no el producto. Onia vende software, nunca horas |
+| `/privacidad`, `/terminos` | Legales. Cambian poco y son honestas sobre los límites **a propósito** — la regla de "no exhibir obra" no aplica ahí |
+| `/patrones` | **Es la galería interna de scroll de Web Factory, publicada al público** (su `<title>` dice literalmente "Patrones de scroll — Web Factory"). No es superficie de venta: vigilarla sería bendecirla. Necesita decisión de Sergio, no baseline |
+| `/v1`, `/v1/precios`, `/v1/empezar`, `/v1/prueba-gratis`, `/v1/modulos/dental`… | **Toda la landing vieja sigue pública**, incluida una **segunda página de precios**. `/v1/precios` no nombra el chatbot y `/precios` lo publica a Bs 390: dos páginas de precio alcanzables por un desconocido, en el proyecto cuyo fallo mejor documentado es "cuatro precios vivos del mismo chatbot". **Es decisión de Sergio (bajarla o `noindex`), no una pantalla a vigilar** |
+
+**Si encontrás una ruta nueva que no está ni en `PANTALLAS` ni en esta tabla:** medila, y o la
+agregás con su dueño derivado del archivo que la renderiza, o la anotás acá con su motivo. Las dos
+salidas son válidas; dejarla sin decidir, no.
+
+### Las dos webs de cliente — todavía no
+
+`web-factory/apps/dental-premium/` y `web-factory/apps/ferreteria-sur/` existen en el repo y
+están construidas, pero **no tienen URL**: `dental-premium.onia.com.bo` y
+`ferreteria-sur.onia.com.bo` dan **404**, verificado el 2026-09-01. **No son pantallas vivas y no
+se vigilan.** El día que tengan dominio, entran a `PANTALLAS` con su dueño — no antes. Construido
+≠ terminado: una web sin URL es trabajo con valor cero para este carril.
+
+## Umbrales — cuándo el peso y el tiempo SON un ítem
+
+**Los compara el script, no vos.** `scripts/canario_visual.mjs` lee la baseline de cada pantalla,
+aplica los umbrales y **imprime el veredicto en la misma línea**: o `ITEM -> <cola> :: <motivos>`,
+o `sin disparo mecanico`. Diez pantallas por cuatro comparaciones a ojo es justo el trabajo que
+una vuelta apurada saltea, y saltearlo devuelve un verde falso.
+
+| Disparo | Umbral | De dónde sale el número |
+|---|---|---|
+| **Deriva de peso** | > **+40 %** sobre su baseline | Un asset gordo que entra sin querer mueve el peso mucho más que eso. Las once pantallas vivas están entre 0,3 y 2,1 MB |
+| **Deriva de tiempo** | `msMirable` > **2×** su baseline **y** > **2,5 s** | El múltiplo agarra el degrade; el piso mata el ruido — ver abajo |
+| **Techo de peso** | > **4 MB**, con o sin baseline | El bug original era **un** archivo de 3,9 MB. Ninguna pantalla nuestra pasa hoy de 2,1 MB |
+| **Techo de tiempo** | `msMirable` > **8 s** | Nadie espera 8 s. El bug tardaba **117 s** con status 200 |
+| **Error de consola nuevo** | cualquiera que no esté en la baseline | Un error que YA estaba no se vuelve a escribir cada vuelta |
+| **No abre, o status ≥ 400** | siempre | — |
+
+**El piso de 2,5 s no es intuición.** Tres corridas seguidas de la misma home dieron **1382, 395 y
+261 ms** — la primera fría, las otras con el CDN caliente. Con un piso de 1 s, ese arranque en
+frío se reportaba como "el tiempo se duplicó" **en cada vuelta**: un fantasma por corrida, que es
+peor que no medir.
+
+**`sin disparo mecanico` NO quiere decir "OK".** Quiere decir "nada que la máquina pueda ver". El
+diff de píxeles no ve un icono que dice `credit_card_off` ni un botón que promete algo falso.
+**La comparación mecánica descarta; el ojo confirma.** Seguís obligado a mirar las diez capturas.
+
+**Si tocás un umbral, corré `node scripts/canario_visual.mjs --self-check`** (13 casos, no abre
+navegador). Un umbral roto en silencio deja el carril en verde para siempre.
+
+> ⚠️ **Las baselines de `home`, `empezar`, `login-plataforma`, `login-chat` y `panel-chatbot` son
+> de ANTES de que se arreglara la medición de peso, y sus KB no son comparables.** El contador
+> sumaba dos unidades distintas (`content-length`, comprimido, y el largo de `body()`,
+> descomprimido) desde un handler `async` que nadie esperaba: el contexto se cerraba con pesajes a
+> medio resolver. La misma home sin cambios daba **2310, 582, 509 y 500 KB**. Ya está arreglado
+> —tres corridas seguidas dan **1224 KB clavado**—, pero **la primera vuelta después de este
+> cambio tiene que RETOMAR esas cinco baselines** y decir que las retomó. Una baseline nueva no es
+> una verificación: es el punto de partida de la próxima.
+
+> ⚠️ **No filtres "muy pronto" con un `grep` y lo escribas como ítem.** Se probó el 2026-09-01
+> contra las once pantallas: los **tres** aciertos eran **falsos** — "dejan un **borrador**
+> esperando" es cómo funciona el producto (los agentes proponen y el dueño aprueba), no lenguaje
+> de obra. La regla de siempre, otra vez: **un `grep` sirve para descartar, nunca para
+> confirmar.** Buscá la palabra para saber **dónde mirar**, y decidí con la captura.
+
+> ⚠️ **Tus propias corridas repetidas te pueden devolver un `429`.** Apareció midiendo la home
+> muchas veces seguidas, y las baselines de esa misma pantalla tienen `erroresConsola: []`. Un 429
+> que sólo aparece cuando remedís no es un defecto del sitio: es tuyo. Confirmalo con una corrida
+> sola antes de escribirlo.
+
 ## La pasada
 
 Para CADA pantalla, con la herramienta en `scripts/canario_visual.mjs` (código de herramienta va
 en `scripts/`, no suelto en la raíz):
 
+Una sola corrida hace las diez: `node scripts/canario_visual.mjs` (una pantalla suelta:
+`node scripts/canario_visual.mjs precios`). Para cada una hace 1-3 sola, y vos hacés la 4:
+
 1. Abrir con Chromium headless, esperar la red quieta, **captura full-page**.
-2. Medir **peso total transferido** y **tiempo hasta que se puede mirar**.
-3. Comparar contra la baseline versionada de esa pantalla.
+2. Medir **peso real de red** y **tiempo hasta que se puede mirar**.
+3. Comparar contra la baseline versionada y **aplicar los umbrales** (ver arriba). Deja el
+   veredicto en la línea de salida y en `<pantalla>.json`, campo `motivos`: si `motivos` tiene
+   algo, **eso ya es un ítem** y el JSON te dice a qué cola va (campo `cola`).
 4. **Mirar la captura vos** — el diff de píxeles no ve un icono que dice "credit_card_off"
    ni un botón que promete algo falso. La comparación mecánica descarta; el ojo confirma.
+   **`motivos` vacío no es "OK": es "nada que la máquina pueda ver".**
 
 **Baseline (fuente de verdad, un tema = un archivo SIN fecha):**
 `hermes-content/references/canario-visual/<pantalla>/baseline.png` + `baseline.json`
@@ -160,6 +270,12 @@ resolver un merge por vos: si dejás un conflicto abierto o un archivo nuevo que
 archivo nuevo sin commitear, queda roto hasta que alguien lo mire a mano.
 
 **PROHIBIDO** inventar una pantalla, deducirla, o reportar como medida una que no abriste.
+
+**Si el tope de 45 minutos te alcanza con la lista a medias:** cerrá lo que tenés, commiteá los
+ítems que ya escribiste, y decí **cuáles pantallas quedaron sin mirar, por nombre**. Diez es más
+que las cinco de antes y la vuelta es más larga. Lo que NO se hace es apurar las últimas para
+decir "las diez": una pantalla que no miraste no está verde, está sin mirar — y decir lo
+contrario es exactamente el fallo que este carril existe para no cometer.
 
 ## Nunca
 
