@@ -38,6 +38,22 @@
       lib/onia-core/modules/agents-runtime.ts → todo lo que contacta a un
       cliente va a pending_approval). "Onia prepara, vos aprobás" es lo
       cierto y además refuerza el argumento de que no perdés el control.
+
+   ─── v3 (2026-09-01). Tres restas ────────────────────────────────────
+   1. Se fue el precio. El hero dibuja el negocio funcionando de noche, y
+      esa noche la hace el ASISTENTE, que es un add-on de Bs 390 y se
+      vende después del primer cierre. Con la agenda pública el número
+      real es 320 + 390 + 150 = Bs 860: el "desde Bs 320" de abajo no
+      compraba lo que la imagen de arriba promete. Se publica sin precio.
+   2. En su lugar, la línea que nombra al asistente. Hasta acá aparecía
+      dentro del bloque verde ("Contesta el asistente") sin haber sido
+      presentado nunca, y encima el lead repetía la misma enumeración que
+      ahora lleva esta línea. Una frase resuelve las dos cosas y separa
+      add-on de plan sin nombrar estado de obra.
+   3. El día en móvil medía 31em de alto por decreto, no por contenido:
+      el bloque negro quedaba con más de un cuarto de aire adentro y el
+      verde caía fuera de cualquier pantalla real. Ahora el alto lo pide
+      el contenido del bloque verde y el negro sale de la proporción.
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -222,19 +238,29 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
 }
 .btn--quiet:hover { background: var(--bg-deep); border-color: var(--ink-faint); }
 
-/* Bs 320 = plan `basic` mensual, leído de la fuente única
-   onia-platform/lib/subscription-plans.ts (DEFAULT_PLAN_AMOUNTS) el
-   2026-08-31. Acá antes decía "IA incluida · sin límite de chats": es
-   cierto del CHATBOT, que es un add-on que se vende después del primer
-   cierre — puesto bajo el botón del sistema, prometía de más. */
-.fine {
-  font-family: var(--font-mono);
-  font-size: 0.75em;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin: 1.4em 0 0;
+/* Donde estaba el precio. Acá vivió "Desde Bs 320 al mes" (plan `basic`
+   de onia-platform/lib/subscription-plans.ts): cierto como número y falso
+   como promesa, porque las 15 horas que dibuja el bloque verde las hace el
+   asistente —add-on de Bs 390, lib/pricing.ts— más la agenda pública. El
+   piso real de la escena es Bs 860. Un número que no compra lo que la
+   imagen de arriba muestra hace más daño que no poner número.
+
+   La línea que lo reemplaza hace el trabajo que faltaba: NOMBRA al
+   asistente (hasta acá aparecía dentro del bloque verde sin presentación)
+   y lo pone en su lugar — es la puerta, no el sistema. Usa los dos únicos
+   recursos que la pieza ya tiene para destacar: color para la palabra
+   (igual que `.display em`) y tinta en negrita para lo que se compra
+   (igual que `.lead b`). Ni una fuente ni un gris nuevos. */
+.puerta {
+  font-size: 0.95em;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 30em;
+  text-wrap: pretty;
+  margin: 1.3em 0 0;
 }
+.puerta em { font-style: normal; font-weight: 600; color: var(--accent-ink); }
+.puerta b  { font-weight: 600; color: var(--ink); }
 
 /* ---- la rejilla del hero ---- */
 .top { display: grid; gap: 2.6em; }
@@ -381,19 +407,27 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
 @media (max-width: 700px) {
   .bleed { margin-left: 1.2rem; margin-right: 1.2rem; }  /* escaparse por la derecha con 1,2rem de margen se lee como error, no como gesto */
 
-  /* Se recorta el aire de arriba para que el borde del bloque verde ASOME
-     sobre el pliegue de 812px. En un teléfono, que la pieza termine justo
-     donde termina la pantalla es la diferencia entre que la scrolleen y
-     que no: el verde tiene que verse empezar. */
-  .block:first-child { padding-top: 3.6em; }
+  /* Acá decía que este recorte hacía ASOMAR el bloque verde sobre "el
+     pliegue de 812px". 812 es el alto de PANTALLA de un iPhone X; el
+     viewport del navegador, con su barra puesta, son ~664. A 664 el verde
+     no asoma con ningún recorte razonable, y perseguirlo costaría el
+     titular. Lo que sí tiene que entrar entero arriba del pliegue es
+     titular + botones + la línea del asistente: para eso se recorta. */
+  .block:first-child { padding-top: 2.6em; }
 
+  /* Sin min-height. Antes eran 31em fijos: un decreto, no una medida. Las
+     24 filas son `1fr`, así que el alto lo pide el bloque que más necesita
+     —el verde, con sus tres momentos— y el negro sale de la proporción 9:15
+     sin negociar. Con los 31em el negro quedaba con 26,7% de aire adentro
+     (49px de hueco entre el rótulo y el número) y el día medía 496px; ahora
+     mide 426px con 14,5% de aire, y el 9:15 sigue exacto porque es la misma
+     rejilla. La proporción se respeta sola; el hueco era del decreto. */
   .day {
     margin-top: 2.6em;
     grid-template-columns: 1.5em minmax(0, 1fr);
     grid-template-rows: repeat(24, minmax(0, 1fr));
     grid-auto-flow: column;
     gap: 0.16em 0.7em;
-    min-height: 31em;
   }
   .tick {
     height: auto;                                   /* la marca la estira la fila */
@@ -430,8 +464,8 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
 
         <div>
           <p class="lead">
-            <b>Onia es el sistema con el que llevás el negocio</b>: agenda, clientes,
-            inventario y caja. Y no cierra cuando cerrás vos.
+            <b>Onia es el sistema con el que llevás el negocio.</b>
+            Y no cierra cuando cerrás vos.
           </p>
           <p class="cost">
             Fuera de horario hoy no contesta nadie. <b>El que pregunta espera hasta
@@ -441,7 +475,10 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
             <a class="btn" href="/register">Creá tu cuenta</a>
             <a class="btn btn--quiet" href="https://wa.me/59175414930">Escribinos por WhatsApp</a>
           </div>
-          <p class="fine">Desde Bs 320 al mes · con tu rubro</p>
+          <p class="puerta">
+            <em>El asistente</em> es la puerta. Adentro está el sistema:
+            <b>agenda, clientes, cobros e inventario</b>.
+          </p>
         </div>
       </div>
     </div>
