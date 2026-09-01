@@ -101,7 +101,7 @@ org al inbox → abrir `/inbox` y MIRAR.
 una escritura en producción**, así que lo decide Sergio o el dueño del carril — este loop no
 escribe en la base de producción.
 
-### 🟠 2. Vendemos que el bot agenda, y el bot no agenda
+### ✅ 2. Vendemos que el bot agenda, y el bot no agenda — CERRADO EN `master` el 2026-08-31
 
 `lib/pricing.ts:64` vende *"contesta, califica, **agenda**"*. El motor dice lo contrario,
 literal: `bot/recepcionista.mjs:232` — *"El bot no agenda ni vende solo"*. El canal
@@ -117,6 +117,25 @@ barato:** la agenda pública ya existe y crea citas reales (`app/(public)/book/[
 esa organización en vez de derivar. Tres archivos del motor.
 
 **Carril:** chatbot.
+
+**Cerrado por la salida honesta, que es la que estaba en el carril producto** (commit
+`f47d615`, ya en `origin/master`): la copia dejo de decir que agenda. Dice
+*"contesta, califica, **deriva al humano** y hace seguimiento"*, que es lo que el motor hace
+de verdad. Hacer que el bot agende toca `bot/recepcionista.mjs`, del carril chatbot y de otro
+repo; el doc autorizaba las dos salidas y se tomo la que no cruza carriles.
+
+**Lo que aparecio al arreglarlo y es la mitad que importa: la frase estaba escrita DOS veces.**
+En `lib/pricing.ts` (la fuente unica) y **hardcodeada** en
+`app/(dashboard)/settings/addon-chatbot/AddonChatbotClient.tsx:275`, que es la pantalla donde
+el cliente la lee antes de pagar. Arreglar solo la fuente unica dejaba la mentira viva en el
+unico lugar que se mira. Ahora la pantalla deriva el tagline de `WHATSAPP_ADDON.tiers`.
+Guarda permanente en `lib/pricing-honestidad.test.ts` — vista en ROJO en los dos casos antes
+de traerla. `tsc` 0 · 2362 tests · lint 0 errores.
+
+⚠️ **Falta el deploy para que sea cierto donde el cliente mira.** El contenedor
+`onia-platform` del VPS sirve el bundle anterior, asi que **en produccion la frase falsa sigue
+viva hasta el proximo deploy** — y desplegar lo decide Sergio. Es lo unico que queda de este
+punto.
 
 ### ✅ 3. El agente captador SÍ se puede encender — era un fantasma (cerrado 2026-08-31)
 

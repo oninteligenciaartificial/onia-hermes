@@ -286,6 +286,52 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Es una **escritura en producción** sobre un ítem del carril chatbot, y este loop no escribe
       en la base de producción. Es 1 minuto para Sergio o para el dueño de ese carril.
 
+- [x] **El punto 2 de la definicion de terminado — "vendemos que el bot agenda y el bot no
+      agenda" — ARREGLADO, y el defecto de verdad era que la frase estaba escrita DOS veces.**
+      La vuelta empezo en el paso 3 (la cola no tenia un solo item desbloqueado en "Ahora": F2,
+      F5, los 4 numeros de WhatsApp y el `DELETE` de pagos siguen esperando **una linea de
+      Sergio**) y termino arreglando el unico item 🟠 **falso** que quedaba en el carril producto.
+      **Auditoria del paso 3, primero, y salio limpia:** los 24 shas citados en este archivo
+      existen y los que se declaran ancestros de `origin/master` lo son; los 4 que no
+      (`6edfab6`, `a15c82f`, `e46e9ee`, `6d8b6b7`) son los duplicados locales que este mismo
+      archivo ya documenta. Los tres gates sobre la punta de hoy (`e644c85`): **tsc 0 · 2359
+      tests + 5 skip · lint 0 errores**. `master` verde, ningun cierre falso.
+      **Un cierre SI envejecio en 24 h, y no era falso: era una cita.** P3 cita
+      `addon.inmobiliaria` en `ADDON_IDS`, y hoy esa clave **no existe**: el commit `f27bc9d`
+      (PR #64) la renombro a `addon.captador` porque estaba gateada por un rubro que Onia no
+      vende. Verificado que el rename no dejo hueco: la pantalla de capacidades tiene su
+      descripcion (`app/(dashboard)/admin/organizations/[id]/capacidades/CapacidadesOrg.tsx:31`), no quedan referencias sueltas, y — lo que de verdad
+      importaba, porque `isFeatureKey` es fail-closed y una fila vieja dejaria de ser feature en
+      silencio — **la base de PRODUCCION no tiene ni una fila `addon.inmobiliaria`**
+      (contenedor `supabase-db` del VPS: solo `addon.whatsapp` x2 y `module.agents` x3). Nadie
+      perdio un add-on. El `[x]` de P3 queda: su conclusion sigue siendo cierta, envejecio la cita.
+      **El item que se arreglo:** `lib/pricing.ts` vendia el chatbot de Bs 390/mes como que
+      *"contesta, califica, **agenda** y hace seguimiento"*, y el motor dice lo contrario en una
+      linea (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:153` — *"El bot no agenda ni
+      vende solo"*): un pedido de cita se **escala a un humano**. Verificado hoy en los dos
+      lados antes de tocar nada.
+      **Y el hallazgo que justifica la vuelta: la frase falsa estaba duplicada.** Vivia en
+      `lib/pricing.ts` (3 strings) **y hardcodeada** en
+      `app/(dashboard)/settings/addon-chatbot/AddonChatbotClient.tsx:275`, que es la pantalla que
+      el cliente lee **antes de pagar**. Arreglar la "fuente unica" y parar ahi dejaba la mentira
+      viva en el unico lugar donde se mira — el mismo error de fondo que este archivo ya tiene
+      anotado cuatro veces con otra cara: **arreglar el sistema equivocado**. La pantalla ahora
+      deriva el tagline de la lista `tiers` de `WHATSAPP_ADDON`, asi que no hay segunda copia que corregir.
+      **Guarda,** en `lib/pricing-honestidad.test.ts` (el archivo que ya ata la copia de venta al
+      codigo que la sostiene, en vez de crear uno nuevo al lado): ninguna linea de venta del
+      chatbot puede decir `agend*`, y la pantalla no puede volver a escribirla a mano. **Vista en
+      ROJO por el motivo correcto en los dos casos** antes de traerla. La agenda publica queda
+      intacta — esa SI reserva sola y es otro producto de la misma lista (`key: "agenda"`), por
+      eso el guard mira solo la copia del chatbot y no la palabra en todo el archivo.
+      Gates: **tsc 0 · 2362 tests + 5 skip · lint 0 errores**. Commit `f47d615`, **ya en
+      `origin/master`**.
+      ⚠️ **No lo mire renderizado y digo por que:** la pantalla es del dashboard (pide sesion) y
+      el cambio es un literal reemplazado por `{tierChatbot?.tagline}` dentro del mismo `<li>` —
+      `tsc` prueba el tipo y el guard prueba el texto. No hay markup nuevo que se pueda romper.
+      ⚠️ **Y falta el deploy para que sea cierto donde el cliente mira:** el contenedor
+      `onia-platform` del VPS sirve el bundle anterior, asi que **en produccion la frase falsa
+      sigue viva hasta el proximo deploy**, y eso lo decide Sergio.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
