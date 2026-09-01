@@ -507,6 +507,46 @@ Las tres formas de fantasma que ya aparecieron acá:
       comparar contra nada, así que hoy no es una red: es un `ls`. Es `hermes-content/`,
       zona prohibida de este carril.
 
+- [x] **AUD2 · Auditoría de los `[x]` que AUD1 no tocó + salud** (2026-09-01). Segunda
+      vuelta de escalón 2 (A y B siguen todos `[x]`). **Salud**: server 4319 daba **000**
+      → relanzado `serve-out.mjs 4319`, **200** verificado; rama == `origin`
+      (`5a3e8dc0`); árbol limpio; `typecheck:packages` verde; `pnpm test` **265/265**;
+      **`pnpm e2e` 103 passed / 0 failed** — las baselines que AUD1 regeneró aguantan,
+      el gate ya está adentro de la regla 4 y ya se corre. Dos `node.exe` vivos (el
+      server recién lanzado y otro loop): cero zombies.
+      **Auditados los 9 `[x]` que AUD1 dejó afuera** (cubrió A6, W3-W6, T4/T9/T29).
+      Ninguno miente; los nueve siguen ciertos contra el código de HOY:
+      **A1a** `SERIES_THEME` en `packages/templates/src/dashboard.ts:648` con el orden
+      exacto que declara (aqua→blue→orange→violet→yellow→magenta) y pares light/dark
+      propios, emitidos como `--wf-series-N` por `seriesVars()`, no hex en el SVG ·
+      **W1a** `packages/templates/src/font-links.ts` existe compartido y lo importan
+      `dashboard.ts` y `landing-clinic.ts` · **W1b** `--card` es
+      `color-mix(in oklab, var(--color-fg) 3%, var(--color-bg))` (`tokens/src/index.ts:42`),
+      el 3% literal · **W1c** 5 usos de `tabular-nums` en `dashboard.ts` · **W2** toda la
+      tinta de dato (barras :752, sparkline :870, spark de KPI :960/:970) es
+      `--wf-series-1`; los 11 `--color-primary` que quedan son cromo (botón, sidebar,
+      badge) · **W7** `DASHBOARD_MONO = "Spline Sans Mono"` y el par display/body
+      Bricolage Grotesque + DM Sans entra por `tipografia` del cliente
+      (`dashboard.test.ts:76`), que es lo correcto: el template no quema la marca.
+      Las secciones agente (:240) y notas (:332) existen · **A1c**
+      `lightenUntilLegible()` en `tokens/src/index.ts:116` y `DARK_FG` sólo de último
+      recurso para acromáticas · **A1d** `margin-block: auto` en `dashboard.ts:1719`
+      y `:1997` · **A4** `color-scheme: light` en `dental-premium/src/app/globals.css:9`,
+      `min-height: 44px` en `site.css`, y `spotlight|mousemove|pointermove` = **0**
+      ocurrencias · **B1/B2** el playbook tiene §9 (ganadero) y §10 (IA), el umbral
+      dental dice **HSV <25%** con el modelo declarado, y las dos cosechas están en
+      `data/references/design-sources/2026-08-31-cosecha-rubros-{sin-ancla,flacos}.md`.
+      No auditable acá: **B3**, que se declara *solo local* (la skill vive fuera del repo).
+      ⚠️ **Corrección a la nota de AUD1**: `hermes-content/docs/cola/loops.md` **SÍ
+      existe** — commit `f7496282` del 2026-08-31 23:36, presente en **`origin/main`**.
+      AUD1 lo midió con un `ls` dentro de este worktree, cuya rama arranca en `415a6f8c`
+      y es **anterior** al commit; el `main` local también está atrasado. O sea: el
+      chequeo de arranque **sí es una red**, y hoy comparó de verdad (5 activos
+      registrados y `enabled: true`; `web-factory-salud` y `cerrar-y-revisar-web-factory`
+      siguen apagados a propósito y se dejan así). **Lección: "el archivo no existe"
+      medido desde un worktree viejo es una rama vieja, no un archivo faltante — se
+      verifica contra `origin/main`, no contra el árbol propio.**
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
