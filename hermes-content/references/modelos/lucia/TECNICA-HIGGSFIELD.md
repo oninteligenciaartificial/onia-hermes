@@ -605,3 +605,32 @@ realidad era el mp4 de `V04`.
 
 La regla estaba escrita ("confirmar con `ls`, nunca con el toast") y aun así se repitió el mismo
 día. Una regla que solo vive en un doc se desobedece; esta la comprueba el script.
+
+---
+
+## Intento de tasar Marketing Studio VIDEO — 2026-08-31, sin resultado
+
+**No se consiguió el precio.** Se anota igual, porque un intento fallido documentado evita que la
+próxima vuelta repita el mismo callejón.
+
+**Qué se buscaba:** leer el número del botón Generate con el toggle en **Video**, sin generar. Es
+el único modo sin sustituto gratuito y el que mapea 1:1 a un servicio vendible. Los dos números
+que circulan (52,50 y 120 cr) son **de papel: ninguno medido**.
+
+**Dos obstáculos, los dos nuevos:**
+
+1. **El screenshot del navegador falla** con `Failed to deserialize params.clip.scale` (error de
+   CDP, no de la página). Hay que leer por árbol de accesibilidad o por JS.
+2. **El compositor no se renderiza** al entrar a `/marketing-studio` — `document.body.innerText`
+   no contiene «Describe what you want», y sólo aparece la galería de plantillas con
+   «Browse templates». La vez anterior (misma URL, mismo día) el compositor sí estaba. Hay dos
+   estados de esa pantalla y el que sale no es determinista.
+
+**Lo único que sí se confirmó, y sirve:** existe una plantilla llamada **`How-To UGC VIDEO`**, y
+las familias del selector son ADS · MOTION · UGC · Product shot · Posters · Marketplace. O sea el
+UGC de Marketing Studio existe como plantilla propia, no sólo como categoría.
+
+**Para la próxima vuelta:** entrar por la plantilla `How-To UGC VIDEO` en vez de por el
+compositor. Una plantilla abre su propio panel con el precio a la vista — es como se descubrió
+que `Recreate` cuesta 36 cr en unas plantillas y 2 en otras. **Y ese dato ya vale por sí solo:
+el precio de Marketing Studio no es uno, depende de la plantilla.**
