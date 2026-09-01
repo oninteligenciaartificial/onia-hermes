@@ -163,3 +163,27 @@ con la bandeja marcando leído, el CSP del websocket de realtime y el panel del 
 
 **Recomendación: (a).** Los tres gates están verdes sobre `master` hoy —`tsc` 0,
 **2362 tests**, lint 0 errores— así que el riesgo del swap es el de siempre, no uno nuevo.
+
+## 10. Las propuestas ya enviadas venden que el bot "agenda solo" (2026-08-31)
+
+Encontrado barriendo las copias de la frase falsa del chatbot (la del catálogo ya se
+corrigió: `ONIA_CATALOGO_DE_VENTA.md:126`, commit `eefb13d5`). Tres clientes del
+generador lo prometen textualmente — `lia-albertengo`, `aw-climatizacion`,
+`aw-climatizacion-chatbot` en `hermes-content/propuestas/generador/clientes.json` — y está
+en los tres HTML entregados.
+
+**No lo cierro solo por dos motivos, y ninguno es de código:**
+
+- **(1) Lo ya enviado es un artefacto histórico.** Corregir el HTML cambia lo que se le
+  cotizó a alguien un día. Es decisión comercial, no técnica.
+- **(2) Puede que en esas propuestas NO sea falso.** El add-on de lista (Bs 390/mes) no
+  agenda — el motor escala a un humano (`deploy/vps-ops/bot/recepcionista.mjs:232`). Pero
+  el **"Chatbot a medida"** se cotiza por alcance: si el flujo de agenda se construye y se
+  cobra aparte, la frase es cierta ahí y falsa sólo en el de lista. **Eso lo definís vos.**
+
+**Y una trampa que sí hay que arreglar antes de generar nada:** el HTML commiteado ya no
+es lo que produce el generador. Se corrió `node generar-propuestas.js` sobre los tres sin
+tocar una línea y `propuesta-lia-albertengo.html` **perdió una fila entera** del cuadro de
+add-ons ("Videos con IA para promocionar el libro"). O el HTML se editó a mano, o
+`clientes.json` se recortó después. El próximo `--pdf` publica una propuesta mutilada.
+(Se revirtió con `git checkout`; no quedó nada.)
