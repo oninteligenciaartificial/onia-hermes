@@ -10,7 +10,7 @@
 | P2 | **Drops semana 2** | ✅ 2026-09-01: 7 drops lun-dom en `ONIA_COMUNIDAD_CONTENIDO.md` (sáb se llena con señales del mié; jue y dom llevan el toque de Sergio) |
 | P3 | **Radar mensual #1 para Samuel** | ✅ 2026-09-01: `ONIA_MARCA_PERSONAL_RADAR.md` (14 ganchos por serie + tabla tema→palabra→recurso) |
 | P4 | **Carrusel 1 "5 prompts"** | ✅ 2026-09-01: 7 láminas 1080×1350 en `carousels/out/carrusel-5-prompts/` — íconos Fluent 3D (MIT), SIN esperar Higgsfield. Generador: `scripts/marca-personal/generar-carrusel-prompts.py`. Carrusel 2 ("3 cursos") pendiente, mismo generador |
-| P5 | X banner + website (modal caprichoso — reintentar) | 🟡 |
+| P5 | X banner + website | 🔴 el modal de edición de X lleva TODO el día sin montar en este entorno (probado 6+ veces, 2 navegadores, mobile incluido). **Alternativa de 1 min para Sergio desde el TELÉFONO:** app de X → Editar perfil → banner (mandate la imagen `ChatGPT Image 30 ago...png` de Descargas por WhatsApp a vos mismo) + Website: `https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu` |
 | P6 | Textos X/LinkedIn + captions + checklist completa | ✅ 2026-09-01: `docs/cola/PARA-PUBLICAR-HOY.md` (7 bloques copy-paste) |
 
 > **LOOP VPS: VIVO Y VERIFICADO** (2026-09-01). Cron diario 17:56 La Paz. Primera vuelta:
