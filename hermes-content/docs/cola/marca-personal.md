@@ -1,5 +1,19 @@
 # Cola — carril MARCA PERSONAL · COMUNIDAD · CONTRATO SAMUEL
 
+> Índice del carril: `docs/ONIA_MARCA_PERSONAL_MADRE.md` (documento madre).
+
+## PRODUCCIÓN DEL LOOP (2026-09-01 en adelante, orden de prioridad)
+
+| # | Pieza | Estado |
+|---|---|---|
+| P1 | **Biblioteca de drops** — doc público con todos los drops archivados, para fijar en Avisos | ⬜ |
+| P2 | **Drops semana 2** (7, siguiendo el ritmo lun-dom del plan mensual) | ⬜ |
+| P3 | **Radar mensual #1 para Samuel** (tendencias + ganchos + palabra clave por tema — entregable del acuerdo, antes de la primera sesión) | ⬜ |
+| P4 | **Carruseles 1 y 2** — layout listo; bloqueado el render final por íconos (login Higgsfield de Sergio en Chrome) | 🟡 |
+| P5 | X banner + website (modal caprichoso — reintentar) | 🟡 |
+| P6 | Textos X/LinkedIn de la semana (repost manual mientras Postiz esté caído) | ⬜ |
+| P7 | Encuesta de temario (semana 3) — redactarla cuando haya señales de 2 semanas | ⏸ |
+
 > Dueño: la sesión de estrategia/marca personal (esta). La sesión de higgsfield/modelos
 > es dueña de Lucía · @oniahq · ads (su cola: `docs/cola/contenido.md`). Ninguna toca
 > los archivos de la otra. División acordada 2026-09-01.

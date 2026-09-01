@@ -1,0 +1,56 @@
+# 🏛 DOCUMENTO MADRE — Marca personal Sergio · Comunidad · Curso
+
+> EL punto de entrada del carril. Toda sesión que trabaje marca personal/comunidad
+> arranca acá. Un tema = un archivo: este índice NO duplica contenido, rutea.
+> Dueño del carril: sesión de estrategia/marca personal. La sesión higgsfield/modelos
+> es dueña de Lucía · @oniahq · ads (no cruzar archivos).
+
+## El objetivo (la escalera completa)
+
+**Redes (alcance) → Comunidad WhatsApp gratis (confianza + señales) → VSL → Curso
+(pago único) → Grupo VIP (recurrente, solo habla Sergio).**
+Cada nivel se lanza cuando el anterior tiene masa: comunidad 100-300 miembros antes del
+VSL; curso 20+ ventas antes del VIP. Nada se anuncia antes de existir.
+
+## Estado (actualizar al cerrar cada sesión)
+
+| Frente | Estado 2026-09-01 |
+|---|---|
+| Comunidad "Onia Community" | ✅ creada (Avisos + General) · D0 listo esperando publicación |
+| Acuerdo Samuel Etapa 2 | ✅ aceptado por ambos · falta FIRMA (versión de firma nuestra, no su PDF) + números Etapa 1 + fechas |
+| Perfiles | X ✅ (falta banner/website) · LinkedIn ✅ completo · IG activo (427 seg) |
+| Contenido semana 1 | guiones listos, Sergio graba el batch |
+| Curso / VSL | NO existe — se valida temario en semana 3 con encuesta |
+
+## Mapa de documentos del carril
+
+| Doc | Qué tiene |
+|---|---|
+| `ONIA_MARCA_PERSONAL_ETAPA2_ACUERDO.md` | los términos completos con Samuel (fuente de verdad del trato) |
+| `ONIA_MARCA_PERSONAL_ETAPA2_EVALUACION.md` | cómo se negoció (historia, rondas, agujeros) |
+| `ONIA_MARCA_PERSONAL_ETAPA2_OPERACION.md` | backlog operativo, checklist de cuentas, tablero KPIs, runbook crudos→clips |
+| `ONIA_MARCA_PERSONAL_ETAPA2_CONTRATO.md` | contrato de firma (PDF: `Acuerdo_Etapa2_Version_Firma.pdf`) |
+| `ONIA_MARCA_PERSONAL_PLAN_MENSUAL.md` | mes completo: ritmo semanal comunidad, 6 carruseles, 4 series de video |
+| `ONIA_MARCA_PERSONAL_SEMANA1.md` | guiones palabra por palabra de la semana 1 + calendario |
+| `ONIA_COMUNIDAD_CONTENIDO.md` | drops D0-D6, embudo a VSL, playbook de las comunidades grandes |
+| `docs/cola/marca-personal.md` | la cola viva del carril (el loop trabaja de ahí) |
+| `references/ui-patterns/statement-3d-minimal/` | patrón visual aprendido (plantilla + ficha + referencia) |
+| `references/marca-personal/` | los PDFs/planes de Samuel (historia) |
+
+## Reparto permanente
+
+- **Sergio:** graba (guiones míos), publica (drops/videos/historias), responde General,
+  aprueba todo lo que sale.
+- **La máquina (yo):** textos, guiones, carruseles, edición de video, biblioteca,
+  KPIs, radar mensual para Samuel, registro de señales para el VSL.
+- **Samuel (desde la firma):** 20 pilar + 10 B-roll + yapps, sube "lo prometido" a la
+  comunidad, tema+hook semanal de historias, sheet con vistas + miembros.
+
+## Reglas duras del carril
+
+1. La venta nunca exhibe obra; nada se anuncia antes de existir (curso incluido).
+2. Toda cifra publicada lleva fuente. No se fabrican testimonios ni números.
+3. Las señales de la comunidad se registran SIEMPRE (son el VSL).
+4. Publicar en la cuenta personal de Sergio = con su OK, nunca automatizado con bots.
+5. Contratos y cobros: firma Leslie; pagos por canal personal (no cuenta OniaAgency
+   mientras no haya factura).
