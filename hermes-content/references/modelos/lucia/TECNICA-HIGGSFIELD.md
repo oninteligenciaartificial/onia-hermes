@@ -634,3 +634,35 @@ UGC de Marketing Studio existe como plantilla propia, no sólo como categoría.
 compositor. Una plantilla abre su propio panel con el precio a la vista — es como se descubrió
 que `Recreate` cuesta 36 cr en unas plantillas y 2 en otras. **Y ese dato ya vale por sí solo:
 el precio de Marketing Studio no es uno, depende de la plantilla.**
+
+### ✅ Resuelto en la vuelta siguiente — y «Marketing Studio VIDEO» probablemente no existe
+
+**Medido el 2026-08-31 leyendo el botón, sin generar.** Dos hallazgos, y el primero cambia la
+pregunta:
+
+**1. El toggle «Video» del compositor de Marketing Studio TE SACA de Marketing Studio.** Al
+clickearlo la URL salta de `/marketing-studio` a **`/ai/video`**, el workspace general. O sea no
+hay un «Marketing Studio VIDEO» con avatar + producto como lo tiene la versión imagen: el botón
+es un atajo al video normal. Los dos números de papel que circulaban para ese modo (52,50 y
+120 cr) **no corresponden a nada verificable** y se dan de baja.
+
+**2. Los defectos del workspace de video, leídos hoy:**
+
+| Campo | Valor por defecto |
+|---|---|
+| Modelo | Kling 3.0 |
+| Duración | 5 s |
+| Resolución | **720p** |
+| Formato | 16:9 |
+| **Botón** | **Generate 6.25** |
+
+⚠️ **Esto corrige un aviso que este mismo carril venía repitiendo:** se decía que «el workspace de
+video arranca en 4K y 5 s de Kling 3.0 en 4K son 30 créditos». Hoy **arranca en 720p a 6,25 cr**.
+La advertencia de bajar la resolución antes de generar sigue siendo sana —4K existe y cuesta—
+pero el default medido no es el caro.
+
+Otras opciones visibles en la barra: **Seedance 2.5**, **Kling 3.0 Turbo**, 1080p, y duraciones
+de 3,0 s / 5,0 s / 6,0 s.
+
+**Lo que queda por medir:** si `9:16` (el formato que necesitamos para Reels e Historias) cambia
+el precio, y cuánto cuesta 1080p. Se leen igual: sin generar.
