@@ -1,6 +1,6 @@
 {
   "schema": "onia.bot.knowledge/1",
-  "version": "2026-08-31.1",
+  "version": "2026-08-31.2",
   "updatedBy": "carril-chatbot",
 
   "identity": {
@@ -34,6 +34,11 @@
     {
       "frase": "Hola, vengo de la web de Onia. Quiero una propuesta de marketing con IA para mi negocio.",
       "respuesta": "¡Hola! Soy el asistente automático de Onia. Para la propuesta de marketing con IA — contenido, videos e influencers con IA, y la publicación en redes — necesito saber de qué es tu negocio, en qué redes estás hoy y qué querés lograr: más consultas, más ventas o que más gente te conozca. Me lo pasás y Sergio te la arma con eso adentro."
+    },
+    {
+      "frase": "Hola, mi rubro no está en la lista de Onia. Mi negocio es: ",
+      "prefijo": true,
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. Que tu rubro no esté en la lista no lo deja afuera: el motor es el mismo y los módulos —agenda, clientes, ventas, cobros— se arman con vos sobre lo que ya corre. Contame qué hacés y cuánta gente trabaja con vos, y con eso Sergio te muestra en la demo qué parte te sirve."
     },
     {
       "frase": "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack.",

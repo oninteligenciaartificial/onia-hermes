@@ -139,6 +139,9 @@ const SHAPE = Object.freeze({
       fields: {
         frase: { kind: "text", max: 200, required: true },
         respuesta: { kind: "text", max: 500, required: true },
+        // Opt-in: la frase es un PREFIJO y el mensaje puede seguir (link con el texto abierto,
+        // ej. "...Mi negocio es: " en /v1/empezar). Sin el campo, el match es del mensaje entero.
+        prefijo: { kind: "bool" },
       },
     },
   },

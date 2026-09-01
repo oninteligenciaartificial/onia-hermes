@@ -793,6 +793,28 @@ test("campaña en venta: cada CTA recibe LO SUYO, no la respuesta de la otra", (
   assert.ok(!/qué módulo te toca/.test(textOf(turns[0])), "no se cruzan las campañas");
 });
 
+// El CTA de /v1/empezar precarga un texto ABIERTO y la persona escribe su rubro atras, asi que
+// nunca puede ser match exacto. Medido en el motor el 31-ago, "…Mi negocio es: panaderia" salia
+// M0 pelado: quien MAS declaro (su rubro, y que no esta en la lista) recibia lo mismo que "hola".
+const CAMPANA_PREFIJO = {
+  frase: "Hola, mi rubro no está en la lista de Onia. Mi negocio es: ",
+  prefijo: true,
+  respuesta: "Que tu rubro no esté en la lista no lo deja afuera: contame qué hacés.",
+};
+const CONFIG_PREFIJO = createBotConfig({ campanas: [...CAMPANAS_ONIA, CAMPANA_PREFIJO] }, CONFIG);
+
+test("campaña de PREFIJO en venta: contesta LO SUYO aunque la persona siga escribiendo, y el lead nace igual", () => {
+  const { turns } = run([CAMPANA_PREFIJO.frase + "panadería"], { config: CONFIG_PREFIJO });
+  assert.deepEqual(keysOf(turns[0]), ["M0", "R_CAMPANA"], "primero el bot se declara bot (D2), después lo suyo");
+  assert.match(textOf(turns[0]), /no lo deja afuera/);
+  assert.ok(effectsOf(turns[0]).includes("lead_upsert"), "el lead nace igual que sin campaña");
+});
+
+test("campaña de PREFIJO en venta: NO se come a la campaña de match exacto que empieza parecido", () => {
+  const { turns } = run([CAMPANAS_ONIA[0].frase], { config: CONFIG_PREFIJO });
+  assert.match(textOf(turns[0]), /qué módulo te toca/, "el match exacto le gana al prefijo");
+});
+
 test("campaña en venta: NO se pierde el lead — es la única línea que los produce", () => {
   const { state, turns } = runCampana([CAMPANAS_ONIA[0].frase]);
   assert.ok(effectsOf(turns[0]).includes("lead_upsert"), "el lead nace igual que sin campaña");

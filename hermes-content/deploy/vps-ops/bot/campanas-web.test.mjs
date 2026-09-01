@@ -32,12 +32,10 @@ const DOC_PATH = fileURLToPath(new URL("../../../docs/chatbot/campanas-onia.know
  * Vivir aca es una decision, no un olvido: si mañana uno deja de ser un prefijo, el test de
  * cobertura lo empuja al documento.
  */
-const NO_MATCHEABLES = new Map([
-  [
-    "Hola, mi rubro no está en la lista de Onia. Mi negocio es: ",
-    "es un PREFIJO: la persona escribe su rubro a continuacion, asi que el mensaje entero nunca es igual a la frase",
-  ],
-]);
+// 2026-08-31: la unica que vivia aca —el CTA de /v1/empezar— dejo de ser no-matcheable: las
+// campañas ahora pueden declarar `prefijo: true`. El mecanismo se queda igual, vacio, porque el
+// dia que la web mande un texto armado por codigo hay que escribir el motivo, no borrarlo.
+const NO_MATCHEABLES = new Map([]);
 
 /** Todos los .ts/.tsx de la web, recursivo. */
 function fuentesWeb(dir) {
@@ -105,4 +103,51 @@ test("el motor matchea cada frase — tal cual, y tambien sin la puntuacion que 
 test("un mensaje que NO es ninguna campaña sigue cayendo al flujo normal", () => {
   assert.equal(campanaExacta(doc, normalize("hola")), null);
   assert.equal(campanaExacta(doc, normalize("Hola, vengo de la web de Onia.")), null);
+});
+
+// ---------------------------------------------------------------------------
+// Campañas de PREFIJO — el CTA de /v1/empezar
+// ---------------------------------------------------------------------------
+// `waLink("Hola, mi rubro no esta en la lista de Onia. Mi negocio es: ")` precarga un texto que
+// queda ABIERTO: la persona escribe su rubro a continuacion. Con match del mensaje entero ese CTA
+// no podia tener campaña nunca, y por eso vivia en NO_MATCHEABLES. Medido en el motor el 31-ago,
+// las dos variantes —con rubro atras y el prefijo pelado— contestaban M0, el saludo generico: o
+// sea la persona que MAS informacion declaro (su rubro, y que no esta en la lista) recibia lo
+// mismo que quien escribe "hola".
+// El arreglo es opt-in POR CAMPAÑA (`prefijo: true`): sin el campo, el match sigue siendo del
+// mensaje entero. Una campaña normal no se estira sola.
+
+const PREFIJO_EMPEZAR = "Hola, mi rubro no está en la lista de Onia. Mi negocio es: ";
+
+test("campaña de PREFIJO: matchea cuando la persona escribe su rubro a continuacion", () => {
+  const campana = campanas.find((c) => c.frase === PREFIJO_EMPEZAR);
+  assert.ok(campana, `la web manda "${PREFIJO_EMPEZAR}" y el documento no la cubre`);
+  assert.equal(campana.prefijo, true, "sin `prefijo: true` el mensaje entero nunca es igual a la frase");
+  for (const rubro of ["panadería", "taller mecánico", "una granja de pollos"]) {
+    assert.equal(
+      campanaExacta(doc, normalize(PREFIJO_EMPEZAR + rubro))?.respuesta,
+      campana.respuesta,
+      `no matcheo con el rubro "${rubro}" atras`,
+    );
+  }
+});
+
+test("campaña de PREFIJO: el prefijo pelado, sin rubro atras, sigue matcheando", () => {
+  const campana = campanas.find((c) => c.frase === PREFIJO_EMPEZAR);
+  assert.equal(campanaExacta(doc, normalize(PREFIJO_EMPEZAR))?.respuesta, campana.respuesta);
+});
+
+test("SIN `prefijo` el match sigue siendo del mensaje ENTERO — una campaña normal no se estira", () => {
+  const normal = campanas.find((c) => c.prefijo !== true);
+  assert.ok(normal, "el documento se quedo sin ninguna campaña de match exacto");
+  assert.equal(
+    campanaExacta(doc, normalize(normal.frase + " y ademas otra cosa")),
+    null,
+    "una campaña de match exacto no puede empezar a comerse mensajes mas largos",
+  );
+});
+
+test("PREFIJO no matchea a medias: un mensaje que solo comparte el arranque cae al flujo normal", () => {
+  assert.equal(campanaExacta(doc, normalize("Hola, mi rubro")), null);
+  assert.equal(campanaExacta(doc, normalize("Hola, mi rubro no está en la lista")), null);
 });

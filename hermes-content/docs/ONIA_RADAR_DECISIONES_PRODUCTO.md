@@ -224,6 +224,23 @@ Corrido hoy contra producción, `espejo-check.mjs` sale **1**: DISTINTOS `bot-en
 espejo, 1 nombrando los archivos si no. Esto **no cambia la decisión 9**, que sigue siendo
 opción 1: sólo corrige lo que hay que hacer cuando se ejecute S9.
 
+🔴 **Corregido otra vez el 2026-08-31 (9ª vuelta) — y ahora la instrucción vieja no sólo "no
+enciende nada": EMPEORA producción.** El código ya viajó (`espejo-check.mjs` salió 0 el 31-ago),
+así que S9 había quedado escrito como "un solo archivo de datos". Desde hoy eso es falso: el
+documento trae la campaña de **prefijo** del CTA de `/v1/empezar` (`prefijo: true`), y el esquema
+del validador **rechaza claves desconocidas**. `parseKnowledge` devuelve `data: null` cuando el
+veredicto no es `ok`, o sea que un documento rechazado **no carga a medias: no carga nada**.
+Medido con el `knowledge.mjs` que HOY corre en el VPS, bajado por `scp` (41.423 bytes, cero
+`prefijo`), corriendo su propio `validateKnowledge` contra el documento nuevo:
+`ok=false`, `["campanas[4].prefijo: clave desconocida (el esquema no la acepta)"]`.
+Copiando sólo el JSON no quedan 5 campañas de 6 — quedan **cero**, y encima se pierden la FAQ
+`siat` y el horario que hoy sí están vivos en el archivo del número.
+**S9 hoy = `knowledge.mjs` + `recepcionista.mjs` + el documento a `/opt/onia/bot/knowledge.json`,
+y reiniciar.** Verificable antes y después sin tocar nada:
+`node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` (hoy sale 1 nombrando esos dos; después
+del `scp` tiene que salir 0). **La decisión 9 no cambia**: sigue siendo opción 1, esto sólo
+corrige la lista y su orden.
+
 ## 10. La marca de Chatwoot se está filtrando por tres puertas sin vigilancia (2026-08-31) — acción de Sergio
 
 **Por qué aparece.** La decisión 1 dice que Chatwoot queda como infraestructura invisible y
