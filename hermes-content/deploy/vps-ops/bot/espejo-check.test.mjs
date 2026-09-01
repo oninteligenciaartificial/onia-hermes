@@ -18,7 +18,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { compararEspejo, parsearMd5sum } from "./espejo-check.mjs";
+import { compararEspejo, md5Archivo, parsearMd5sum } from "./espejo-check.mjs";
 
 test("parsearMd5sum: el prefijo de ruta del VPS no cambia el nombre del archivo", () => {
   const salida = [
@@ -97,4 +97,46 @@ test("compararEspejo: un archivo que sobra en el VPS tambien es drift (el espejo
   const r = compararEspejo({}, { "recepcionista.mjs": "aaa" });
   assert.equal(r.ok, false);
   assert.deepEqual(r.soloVps, ["recepcionista.mjs"]);
+});
+
+// --- El fin de linea NO es drift en un .mjs, y SI lo es en un .sh -------------------------
+//
+// `onia-hermes` tiene `core.autocrlf=true` y no tiene `.gitattributes`: git guarda el blob en
+// LF y lo materializa en CRLF al hacer checkout. O sea que un `git checkout --` sobre el espejo
+// cambia los BYTES de un archivo sin cambiar una sola linea de codigo — medido el 2026-08-31:
+// `recepcionista.mjs` paso de 14110 bytes (LF, lo que corre el VPS) a 14375 (CRLF), +265,
+// exactamente una por linea, con `git status --porcelain` VACIO y `diff` normalizando \r vacio.
+//
+// Como el gate compara md5 de bytes, eso fabricaba un "deploy pendiente" que nadie pidio. Es el
+// molde exacto del fantasma que este carril sangra: un rojo que no corresponde a ningun cambio
+// se apaga, o se "arregla" con un scp inutil al VPS.
+//
+// La asimetria es a proposito y no se puede colapsar: en un `.sh` el CRLF NO es cosmetico
+// (`#!/bin/bash\r` no arranca), asi que ahi el byte tiene que seguir contando.
+
+test("md5Archivo: en un .mjs, CRLF y LF con el mismo codigo dan el MISMO hash", () => {
+  const lf = Buffer.from("const a = 1;\nexport default a;\n");
+  const crlf = Buffer.from("const a = 1;\r\nexport default a;\r\n");
+  assert.notEqual(lf.length, crlf.length, "el fixture tiene que diferir en bytes, si no no prueba nada");
+  assert.equal(md5Archivo("bot-engine.mjs", crlf), md5Archivo("bot-engine.mjs", lf));
+});
+
+test("md5Archivo: en un .sh, CRLF y LF dan hashes DISTINTOS — ahi el byte importa", () => {
+  const lf = Buffer.from("#!/bin/bash\necho hola\n");
+  const crlf = Buffer.from("#!/bin/bash\r\necho hola\r\n");
+  assert.notEqual(md5Archivo("webhook-server.sh", crlf), md5Archivo("webhook-server.sh", lf));
+});
+
+test("md5Archivo: normalizar NO tapa el drift real (el caso medido hoy en el VPS)", () => {
+  // `recepcionista.test.mjs`: 9783 bytes en el espejo, 0 bytes en el VPS (md5 del archivo
+  // vacio, d41d8cd9...). Si normalizar pusiera esto en verde, el gate dejaria de servir.
+  const espejo = Buffer.from("import test from 'node:test';\r\ntest('x', () => {});\r\n");
+  const vps = Buffer.from("");
+  assert.notEqual(md5Archivo("recepcionista.test.mjs", espejo), md5Archivo("recepcionista.test.mjs", vps));
+});
+
+test("md5Archivo: dos .mjs con codigo distinto siguen difiriendo aunque compartan fin de linea", () => {
+  const a = Buffer.from("const a = 1;\r\n");
+  const b = Buffer.from("const a = 2;\r\n");
+  assert.notEqual(md5Archivo("config.mjs", a), md5Archivo("config.mjs", b));
 });

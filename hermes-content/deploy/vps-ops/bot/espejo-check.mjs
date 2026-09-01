@@ -37,6 +37,28 @@ import path from "node:path";
 const ES_CODIGO = (nombre) => nombre.endsWith(".mjs") || nombre.endsWith(".sh");
 
 /**
+ * El fin de linea no es drift en un `.mjs`, y si lo es en un `.sh`.
+ *
+ * `onia-hermes` tiene `core.autocrlf=true` y ningun `.gitattributes`: git guarda LF y
+ * materializa CRLF al hacer checkout. Un `git checkout --` sobre el espejo cambia entonces los
+ * BYTES sin cambiar una linea de codigo (medido: `recepcionista.mjs` 14110 -> 14375, +265, una
+ * por linea, con `git status` vacio), y este gate — que compara md5 de bytes — fabricaba un
+ * "deploy pendiente" que nadie pidio. Un rojo que no corresponde a ningun cambio se apaga, o se
+ * paga con un scp inutil al VPS: es el mismo fantasma que el gate existe para matar.
+ *
+ * En un `.sh` el CRLF NO es cosmetico (`#!/bin/bash\r` no arranca), asi que ahi el byte cuenta.
+ * Se borra el \r entero, no solo el de fin de linea, para que el lado remoto pueda hacer lo
+ * mismo con `tr -d` — que a diferencia de `sed` no agrega un salto final si el archivo no lo
+ * tenia, y sin esa simetria exacta los dos hashes no comparan.
+ */
+export function md5Archivo(nombre, contenido) {
+  const buf = nombre.endsWith(".mjs")
+    ? Buffer.from(contenido.filter((b) => b !== 0x0d))
+    : contenido;
+  return createHash("md5").update(buf).digest("hex");
+}
+
+/**
  * `md5sum` escribe "<hash>  <ruta>", y en dos dialectos que rompen el nombre si no se limpian:
  * el VPS lo da con la ruta absoluta y Git Bash antepone "*" al nombre en modo binario.
  */
@@ -95,7 +117,7 @@ export function md5Local(dir) {
   for (const nombre of readdirSync(dir)) {
     const completo = path.join(dir, nombre);
     if (!statSync(completo).isFile()) continue;
-    out[nombre] = createHash("md5").update(readFileSync(completo)).digest("hex");
+    out[nombre] = md5Archivo(nombre, readFileSync(completo));
   }
   return out;
 }
@@ -106,7 +128,16 @@ function md5Vps({ host, key, dir }) {
   // `md5sum *` sale 1 al toparse con backups/ y evals/, y eso hacia fallar el comando entero
   // aunque la lectura fuera perfecta. `find -maxdepth 1 -type f` toma solo archivos sueltos —
   // el mismo criterio que md5Local — y deja el exit code libre para reportar fallas de ssh.
-  args.push(host, `cd ${dir} && find . -maxdepth 1 -type f -exec md5sum {} +`);
+  // Mismo criterio que `md5Archivo` del lado de alla: al `.mjs` se le saca el retorno de
+  // carro antes de hashear, al resto no. `tr -d` y no `sed` porque sed agrega un salto final
+  // si el archivo no lo tenia, y sin esa simetria exacta los dos hashes no comparan.
+  const sinCr = `tr -d '\\r' < "$f" | md5sum | cut -d' ' -f1`;
+  args.push(
+    host,
+    `cd ${dir} && find . -maxdepth 1 -type f | while IFS= read -r f; do ` +
+      `case "$f" in *.mjs) printf '%s  %s\\n' "$(${sinCr})" "$f";; ` +
+      `*) md5sum "$f";; esac; done`,
+  );
   return parsearMd5sum(execFileSync("ssh", args, { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }));
 }
 

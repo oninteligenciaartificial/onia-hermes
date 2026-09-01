@@ -181,6 +181,14 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       **Lo que queda de S8, entero:** entrar a `/admin/organizations/<id>` de `Onia (interna)`,
       escribir `5` y apretar Vincular. La pantalla ya está desplegada y ya fue mirada.
 
+      ✅ **Gate 1 del 2026-08-31 (quinta vuelta) — sigue igual, y se midió en la base, no se
+      leyó.** Consultada en vivo (`supabase-db`, schema `public`), de las cuatro orgs la única
+      con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`,
+      `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 no
+      se dieron todavía**, así que las cinco conversaciones de desconocidos siguen invisibles y
+      el ítem sigue siendo el único que separa al carril de su objetivo. No se tocó la base:
+      elegir dueño de inbox decide en qué bandeja aterrizan personas reales, y eso es de Sergio.
+
 - [ ] **2 · Las frases que la web YA manda no están registradas como campañas: el desconocido
       pregunta una cosa y el bot le contesta el saludo genérico.** Las frases de campaña se
       construyeron ayer (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:117`
@@ -332,6 +340,13 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json`
       y reiniciar. Sigue siendo un deploy ⇒ **OK de Sergio**.
 
+      ✅ **Gate 1 del 2026-08-31 (quinta vuelta) — confirmado sin cambios, medido en los dos
+      lugares.** `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago con cero
+      `campanas`**, y lo mismo dentro del contenedor que CORRE
+      (`docker exec onia-center` sobre `/tmp/onia-bot/knowledge.json`: 904 bytes, 0 `campanas`).
+      El motor sí sabe leerlas — eso ya se verificó la vuelta pasada. **S9 sigue pendiente y
+      sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
+
 ---
 
 ## Después
@@ -416,6 +431,44 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §12 (recomendación: opción 1, y
       sola en su commit; la 3 —normalizar `\r` sólo en `.mjs` dentro de `espejo-check.mjs`— es
       el paliativo si no hay ventana de deploy).
+
+      ✅ **Vuelta del 2026-08-31 — la opción 3 (el paliativo) ESTÁ HECHA: el gate ya no
+      fabrica rojos falsos.** Gate 1 primero, corriendo el gate contra producción: salía
+      **rojo por `recepcionista.test.mjs`**, y ese resultó ser drift REAL y no el fantasma del
+      fin de línea — el archivo tiene **9783 bytes en el espejo y 0 en el VPS** (`d41d8cd9…`,
+      el md5 del archivo vacío). O sea que el rojo de hoy no era el que este ítem describe; el
+      defecto igual estaba vivo y sin arreglar.
+      **La trampa medida hoy, que cambió desde que se escribió el ítem:** el espejo ya no es la
+      mezcla pareja que dice arriba — **69 archivos de código están en CRLF en disco**
+      (incluidos `bot-engine.mjs`, `knowledge.mjs`, `run-turn.mjs` y el propio
+      `espejo-check.mjs`), mientras el blob de git es LF por `core.autocrlf=true`. El VPS
+      también los tiene en CRLF, así que hoy coinciden **por casualidad**: alcanza un
+      `git checkout` — o correr el gate desde Linux — para volver rojos ~60 archivos que nadie
+      tocó.
+      **Lo que se hizo:** `espejo-check.mjs` exporta `md5Archivo(nombre, contenido)` y hashea el
+      `.mjs` **sin el `\r`, de los dos lados** — local con `Buffer.filter`, y el comando remoto
+      con `tr -d` en vez de `md5sum` a secas. Es `tr` y no `sed` a propósito: sed agrega un
+      salto final si el archivo no lo tenía, y sin esa simetría exacta los dos hashes no
+      comparan nunca. El `.sh` sigue byte-exacto — ahí `#!/bin/bash\r` no arranca, y esa
+      asimetría es la razón de que el gate no pueda perdonar el byte en general.
+      **Probado contra producción y no con un fixture**, que es lo único que prueba que el lado
+      remoto también normaliza: se pasó `guardrails.mjs` a LF — **5636 → 5506 bytes, md5 crudo
+      distinto**, con el VPS en CRLF — y el gate **no lo nombró**; antes de este cambio ése era
+      exactamente el rojo falso. Restaurado byte a byte después (`441cdd70…`, 5636). Los tres
+      rojos que quedan son honestos: `recepcionista.test.mjs` (drift real, va en S9) y los dos
+      archivos de este mismo cambio.
+      **4 tests nuevos**, incluido el guardia que impide que el arreglo se vuelva una tapadera
+      (*normalizar NO tapa el drift real*, con el caso de 0 bytes medido hoy) y el que fija la
+      asimetría del `.sh`. Suite del bot **658/658** verde (654 antes).
+      ⚠️ **Lo que NO cierra, y por eso el ítem queda abierto:** la opción 1 —`.gitattributes`
+      con `eol=lf` + redeploy del directorio— sigue siendo de Sergio, y es la única que hace
+      que el espejo sea un espejo. La 3 baja el ruido pero **deja los dos lados distintos de
+      verdad**: el día que haga falta un `scp` selectivo por md5, el md5 crudo sigue sin
+      coincidir. Radar §12 actualizado: de las tres opciones ya sólo queda viva la 1.
+      📎 **Efecto secundario que hay que saber antes de mirar el gate:** `espejo-check.mjs` y
+      `espejo-check.test.mjs` ahora salen DISTINTOS contra el VPS, porque son los archivos que
+      acaban de cambiar. Es drift honesto y no urgente — son herramienta de desarrollo, no el
+      motor: no cambian una línea de lo que corre. Se suman al `scp` de S9 cuando haya ventana.
 
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       org `zzqa-horario-0001` ("ZZ QA Horario") con su usuario y su inbox, y las

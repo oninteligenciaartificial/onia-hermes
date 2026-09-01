@@ -351,6 +351,22 @@ rojo hasta un redeploy del directorio entero.
    dar rojos falsos sin tocar 60 archivos. **Pero deja los dos lados distintos de verdad**, y
    el día que haga falta un `scp` selectivo por md5, el md5 sigue sin coincidir.
 
+✅ **La opción 3 YA SE EJECUTÓ (2026-08-31), y con eso el ruido se terminó: lo que queda en
+esta sección es sólo la opción 1.** `espejo-check.mjs` ahora hashea el `.mjs` sin el `` de
+los dos lados — local con `Buffer.filter`, remoto con `tr -d` (y no `sed`, que agrega un salto
+final si el archivo no lo tenía: sin esa simetría exacta los dos hashes no comparan). El `.sh`
+sigue byte-exacto, porque ahí `#!/bin/bash` no arranca.
+**Probado contra producción, no con un fixture:** se pasó `guardrails.mjs` a LF (5636 → 5506
+bytes, md5 crudo distinto) con el VPS en CRLF, y el gate **no lo nombró**. Antes de esto ese
+era un rojo falso. Los tres rojos que quedan son honestos: `recepcionista.test.mjs` (0 bytes
+en el VPS, drift real de S9) y los dos archivos de este mismo cambio. 4 tests nuevos, uno de
+ellos el guardia de que normalizar **no** tapa el drift real; suite del bot **658/658**.
+
+**Lo que sigue siendo decisión de Sergio: la opción 1.** La 3 baja el ruido pero, como decía
+su propia cotización, **deja los dos lados distintos de verdad** — el día que haga falta un
+`scp` selectivo por md5, el md5 crudo sigue sin coincidir. Sólo el `.gitattributes` + redeploy
+hace que el espejo sea un espejo.
+
 **Recomendación: opción 1, y sola en su commit** — es la única que hace que el espejo sea de
 verdad un espejo. Si no hay ventana para un deploy del bot, la 3 es el paliativo honesto: baja
 el ruido sin fingir que los archivos son iguales. Anotado en la sección "Después" de
