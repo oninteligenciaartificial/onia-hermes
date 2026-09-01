@@ -759,3 +759,21 @@ ancla. **Para la próxima:** pedir *editorial portrait* en vez de *fashion campa
 piezas de pilar B.
 
 El registro caro se consigue con **luz, encuadre y vestuario** — no pidiéndole que parezca modelo.
+
+## 🔴 5. El Enter que acepta el mention falla EN SILENCIO si la página está ocupada
+
+Vuelta del 2026-08-31, 23:0x. Secuencia: clic en el campo (por `ref`) → `ctrl+a` → `Delete` →
+escribir `@lucia` → `Enter` → escribir el cuerpo. **El `Enter` no aceptó nada**, porque el
+desplegable de characters todavía no había abierto: el `type` siguiente dio timeout de CDP y la
+página estaba congelada.
+
+**Resultado:** el campo quedó con **`@lucia` como texto plano**, no con el chip verde
+`@lucia-skin-v1`. Se ve casi igual de reojo, y **generar así NO aplica el element**: saldría una
+mujer cualquiera, 2 créditos tirados y una pieza que viola la regla de «cara SOLO con
+@lucia-skin-v1».
+
+**Cómo se detecta:** el mention válido se ve **verde y con el nombre completo** (`@lucia-skin-v1`).
+Si dice `@lucia` a secas y en el color del texto normal, está roto.
+
+**Regla:** después del `Enter`, **mirar el campo antes de escribir el cuerpo**. No encadenar
+`Enter` + `type` en el mismo lote — que es justo lo que hice acá.
