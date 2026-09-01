@@ -18,11 +18,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readdirSync, statSync } from "node:fs";
+import { mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-import { compararEspejo, md5Archivo, parsearMd5sum } from "./espejo-check.mjs";
+import { compararEspejo, ladoVps, md5Archivo, md5Local, parsearMd5sum } from "./espejo-check.mjs";
 
 test("parsearMd5sum: el prefijo de ruta del VPS no cambia el nombre del archivo", () => {
   const salida = [
@@ -175,4 +176,25 @@ test("el espejo declara eol=lf para sus .mjs (si no, un checkout los vuelve CRLF
     .filter((l) => l.trim() && !l.endsWith(": eol: lf"))
     .map((l) => l.split(":")[0]);
   assert.deepEqual(sinPolitica, [], `sin eol=lf en .gitattributes: ${sinPolitica.join(", ")}`);
+});
+
+// --- Desde el 2026-09-01 el loop corre DENTRO del VPS: /opt/onia/bot ya es este disco --------
+//
+// Hasta el 2026-08-31 este gate corria en la maquina de Sergio y el unico camino al VPS era
+// SSH con ONIA_VPS_KEY. Migrado el loop al propio VPS, esa clave no existe en el host (se
+// conectaria a si mismo) y el script fallaba entero con "Permission denied (publickey)" en vez
+// de comparar nada — medido en vivo el 2026-09-01. Si el directorio ya esta en este disco no
+// hace falta SSH.
+
+test("ladoVps: si el directorio ya esta en este disco, lo lee directo sin pasar por SSH", () => {
+  const tmp = mkdtempSync(path.join(tmpdir(), "espejo-check-"));
+  try {
+    writeFileSync(path.join(tmp, "bot-engine.mjs"), "const a = 1;\n");
+    // Host y clave a proposito rotos: si `ladoVps` intentara SSH esto tiraria, no daria un
+    // resultado. Que devuelva el md5 local prueba que no lo intento.
+    const r = ladoVps({ host: "root@host-que-no-existe.invalid", key: "/no/existe", dir: tmp });
+    assert.deepEqual(r, md5Local(tmp));
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
 });

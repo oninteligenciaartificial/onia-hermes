@@ -465,6 +465,30 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **`espejo-check.mjs` quedó ciego el mismo día que el loop se mudó al VPS: intentaba
+      SSH a sí mismo con una clave que no existe en el host.** Encontrado midiendo el ítem de
+      "Ahora" (`npm run marca:chatwoot`, que SÍ funciona porque es un GET puro) y corriendo
+      después el otro gate del carril por costumbre: `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs`
+      tiraba `Permission denied (publickey)` contra `root@187.77.16.63` con la clave
+      `~/.ssh/onia_hermes_vps_ed25519`, que no está en este disco — porque este disco YA es
+      `187.77.16.63`, desde que `hermes-content/docs/cola/loops.md` movió el loop acá el
+      2026-09-01. El gate no medía drift: **no corría nada**, y un gate que siempre truena se
+      apaga o se ignora, que es el mismo fantasma que este script existe para matar.
+      **Lo que se hizo:** `ladoVps({host, key, dir})` — si `dir` (`/opt/onia/bot`) existe en
+      este mismo disco, lo lee directo con `md5Local`, sin SSH ni clave; si no, cae al SSH de
+      siempre (loop corriendo fuera del VPS). `main()` usa `ladoVps` en vez de `md5Vps` a
+      secas.
+      **Probado que compara de verdad, no sólo que no truena:** corrido después del arreglo
+      contra el `/opt/onia/bot` real del VPS, sale **`ESPEJO DESINCRONIZADO`** y nombra
+      `knowledge.mjs` y `recepcionista.mjs` — exactamente los dos archivos que **S9** dice que
+      faltan viajar — más el drift honesto de herramienta (`espejo-check.mjs` y su propio
+      test, recién tocados) y `evals-contrato.test.mjs` (ya sabido, va en el `scp` de S9). El
+      gate vuelve a decir la verdad sin tocar el VPS.
+      **1 test nuevo** (`ladoVps` con un directorio temporal y un host/clave rotos a
+      propósito: si intentara SSH, tiraría). Suite del bot **684/684** verde (683 antes).
+      ⚠️ **No repara nada del VPS**, sólo el gate que lo mide. `chatwoot-marca-publica.mjs` y
+      `campanas-vivas.mjs` no tenían este problema: son GET puro, sin SSH.
+
 - [x] **El espejo del bot ya tiene política de fin de línea: un `git checkout` no vuelve a
       fabricar un deploy pendiente.** Cerrado el 2026-09-01 con las tres partes del "Hecho =".
       **1 · La política existe y es del alcance exacto:** `hermes-content/deploy/vps-ops/.gitattributes`
