@@ -26,6 +26,12 @@ Consecuencia comercial: el add-on "Inventario avanzado" no está tan lejos como 
 sigue sin poder venderse, porque **nada de eso tiene pantalla**. Regla del proyecto: construido ≠
 terminado.
 
+⛔ **Actualización 2026-08-27 — ya no hay add-on que vender.** Sergio lo retiró de la oferta ("no
+se cobra"): las funciones que SÍ están cableadas quedan gratis para todos, y las que no lo están no
+se nombran. Lo de arriba sigue valiendo como medición de qué falta cablear en comercio, pero **no
+como oportunidad de precio**. (Los vencimientos por lote se cablearon punta a punta el 2026-08-24,
+después de esta medición.)
+
 ---
 
 ## A) Qué le falta de verdad — ordenado por cuánto duele

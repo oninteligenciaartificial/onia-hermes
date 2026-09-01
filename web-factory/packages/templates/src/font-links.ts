@@ -11,6 +11,45 @@
 
 export type TipografiaCliente = { heading: string; body: string };
 
+/**
+ * Rango de peso REAL de cada familia que enviamos, medido contra la API.
+ *
+ * Antes se pedia `wght@300..900` para TODAS, con el argumento de que si una
+ * familia no lo soportaba "muere SOLO ese link". El argumento era falso en la
+ * practica: css2 responde **400** a cualquier eje fuera de rango, y el 2026-08-31
+ * eso dejaba sin cargar 2 de las 3 familias que W7 eligio para el panel
+ * (Bricolage Grotesque llega a 800, Spline Sans Mono a 700). O sea: el titular y
+ * las cifras del panel salian en la fuente del sistema — exactamente el bug que
+ * W1 habia arreglado, reintroducido por la ruta del rango.
+ *
+ * Verificado con `curl` familia por familia, no de memoria:
+ *   Onest 100..900 · Bricolage Grotesque 200..800 · DM Sans 100..1000 ·
+ *   Spline Sans Mono 300..700.
+ */
+const RANGO_POR_FAMILIA: Readonly<Record<string, string>> = {
+  onest: "100..900",
+  "bricolage grotesque": "200..800",
+  "dm sans": "100..1000",
+  "spline sans mono": "300..700",
+};
+
+/** Nombre de familia → segmento de la URL (`DM Sans` → `DM+Sans`). */
+function familiaUrl(familia: string): string {
+  return encodeURIComponent(familia).replace(/%20/g, "+");
+}
+
+/**
+ * URL de css2 para una familia. Con rango conocido pide la escalera variable
+ * completa; sin conocerlo pide la familia PELADA, que responde 200 para
+ * cualquier familia del catalogo y trae la regular. Se degrada el rango de
+ * pesos, nunca la familia entera.
+ */
+export function fontHref(familia: string): string {
+  const rango = RANGO_POR_FAMILIA[familia.trim().toLowerCase()];
+  const eje = rango ? `:wght@${rango}` : "";
+  return `https://fonts.googleapis.com/css2?family=${familiaUrl(familia.trim())}${eje}&display=swap`;
+}
+
 export function renderFontLinks(tipografia: TipografiaCliente, extras: string[] = []): string {
   const familias = [
     ...new Set(
@@ -18,15 +57,8 @@ export function renderFontLinks(tipografia: TipografiaCliente, extras: string[] 
     ),
   ];
   if (familias.length === 0) return "";
-  // Un <link> POR familia y rango variable 300..900: los templates piden pesos
-  // altos (hero 820) que una escalera estatica 400-700 no trae. Si una familia
-  // es solo-estatica, css2 devuelve 400 y muere SOLO ese link — la otra familia
-  // y el stack de fallback siguen vivos.
   const links = familias
-    .map(
-      (familia) =>
-        `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=${encodeURIComponent(familia).replace(/%20/g, "+")}:wght@300..900&display=swap">`,
-    )
+    .map((familia) => `<link rel="stylesheet" href="${fontHref(familia)}">`)
     .join("\n    ");
   return `<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -6,9 +6,12 @@
 > `data/references/design-sources/`). Un crítico adversarial verificó cada
 > afirmación contra el corpus: LISTA para 5 rubros bien anclados (SaaS,
 > ecommerce, cálido-premium/gastronomía, editorial/moda, brutalist/agencia);
-> NO es ley universal — ganadero, importadora y dental-adulto están recitados
-> por analogía SIN ancla y hay que cosecharlos. El gate `validate_palette.js`
-> ya existe (`scripts/`). No trates lo marcado "SIN ANCLA" como verdad.
+> NO es ley universal. ✅ **2026-08-31: ganadero, importadora, dental real e
+> IA/agentes YA se cosecharon** (N=2 real cada uno, con dato computado del CSS
+> servido) — receta en `2026-08-29-vertical-playbooks.md` §1 §7 §9 §10, evidencia
+> en `2026-08-31-cosecha-rubros-sin-ancla.md`. Sigue SIN ancla: **portfolio**
+> (N=1 legible). El gate `validate_palette.js` ya existe (`scripts/`). No trates
+> lo marcado "SIN ANCLA" como verdad.
 > Destilada del corpus real (≈29 sitios únicos analizados con 6 lentes: color, tipografía,
 > arquitectura, layout, motion, código). Cada regla trae su rango del corpus y su ancla.
 > Un agente futuro sigue los 8 pasos EN ORDEN y sale con un sitio vendible, no una plantilla.

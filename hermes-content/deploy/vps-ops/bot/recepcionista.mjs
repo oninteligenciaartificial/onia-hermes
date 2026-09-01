@@ -109,6 +109,12 @@ export function faqNegocioVigente(conocimiento, norm, nowIso) {
  * Campaña cuya frase es el mensaje ENTERO. Para wa.me?text= y anuncios.
  * La puntuacion no cuenta: el link precarga "Hola, quiero..." y el cliente puede
  * borrar la coma — sigue siendo el mismo embudo. Solo letras/numeros/espacios.
+ *
+ * EXCEPCION opt-in `prefijo: true`: hay links que dejan el texto ABIERTO a proposito
+ * ("...Mi negocio es: " en /v1/empezar) y la persona escribe atras. Esos no pueden ser
+ * match exacto NUNCA, asi que sin esto el CTA que mas informacion declara —su rubro—
+ * recibia el saludo generico. Es por campaña y no global: una campaña normal no se
+ * puede estirar sola a mensajes mas largos.
  */
 function fraseCanonica(texto) {
   return String(texto || "").replace(/[^a-z0-9 ]/g, " ").replace(/ +/g, " ").trim();
@@ -118,11 +124,21 @@ export function campanaExacta(conocimiento, norm) {
   const items = Array.isArray(conocimiento?.campanas) ? conocimiento.campanas : [];
   const texto = fraseCanonica(norm);
   if (!texto) return null;
+  // El match exacto GANA siempre (sale por el return de adentro). El prefijo se guarda y se
+  // resuelve al final, con la frase mas larga: entre dos prefijos que arrancan igual, el mas
+  // especifico. El " " del startsWith es el limite de palabra — sin el, "mi negocio es" tambien
+  // matchearia "mi negocio establecido".
+  let prefijo = null;
   for (const item of items) {
     if (!item || typeof item.frase !== "string") continue;
-    if (fraseCanonica(normalize(item.frase)) === texto) return item;
+    const frase = fraseCanonica(normalize(item.frase));
+    if (!frase) continue;
+    if (frase === texto) return item;
+    if (item.prefijo === true && texto.startsWith(frase + " ") && (!prefijo || frase.length > prefijo.largo)) {
+      prefijo = { item, largo: frase.length };
+    }
   }
-  return null;
+  return prefijo ? prefijo.item : null;
 }
 
 export function recepcionistaStep(ctx, base, motor) {

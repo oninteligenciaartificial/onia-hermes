@@ -13,6 +13,11 @@ export default async function globalSetup(): Promise<void> {
   await generateSite("demo", { rootDir, template: "landing" });
   await generateSite("skincare-demo", { rootDir, template: "store" });
   await generateSite("dashboard-demo", { rootDir, template: "dashboard" });
+  // Fixture de casos borde: negativos, un cero, una serie de 90 puntos y las
+  // secciones en cargando / error / vacio. El demo "lindo" no trae ninguno de
+  // esos datos, asi que los defectos que W3-W5 arreglaron no se veian en NINGUN
+  // gate automatico — se veian solo si alguien miraba con un fixture temporal.
+  await generateSite("dashboard-edge", { rootDir, template: "dashboard" });
   await generateSite("demo-focus", { rootDir, template: "landing-focus" });
   await generateSite("clinic-demo", { rootDir, template: "landing" });
   await generateSite("dental-demo", { rootDir, template: "landing-clinic" });

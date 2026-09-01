@@ -2,6 +2,12 @@
    Frequency): neutros CÁLIDOS, verde profundo como superficie/CTA, acento tierra
    desaturado. Cero azul dental genérico. */
 :root {
+  /* El sitio es light-only por diseno. Declararlo -y no dejarlo en el `normal`
+     por defecto- ata las superficies que pinta el navegador (scrollbar, popup
+     del <select>, autofill, subrayado del corrector) a esta paleta, en vez de
+     que dependan de como resuelva el UA cuando el SO esta en oscuro. */
+  color-scheme: light;
+
   --paper: #f8f5ef;
   --paper-dim: #efe9df;
   --ink: #172420;

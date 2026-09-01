@@ -21,6 +21,9 @@ import { fileURLToPath } from "node:url";
 import { DEFAULT_CONFIG, slotsPending } from "./config.mjs";
 import { resetKnowledgeCache, resetOrgKnowledgeCache } from "./knowledge.mjs";
 import { buildConfig, resolveConfig } from "./run-turn.mjs";
+// Namespace a proposito: si el export desaparece queremos que ROMPA ESTE TEST por su
+// nombre, no que se caiga el modulo entero (que es justo el fallo silencioso que cubre).
+import * as runTurnModule from "./run-turn.mjs";
 
 test.afterEach(() => {
   resetOrgKnowledgeCache();
@@ -168,4 +171,23 @@ test("PARIDAD: con knowledge.json el transporte no cambia, pero el objeto SI (po
     delete process.env.ONIA_BOT_KNOWLEDGE_FILE;
     resetKnowledgeCache();
   }
+});
+
+// ---------------------------------------------------------------------------
+// GUARDIA DE ESPEJO: el prompt del LLM tiene que seguir EXPORTADO.
+//
+// Por que existe. En d334d776 el espejo del repo se sincronizo con el VPS y esa
+// version tenia el prompt inlineado dentro de askLiteLLM. Al desaparecer el export,
+// evals/evals.test.mjs dejo de IMPORTAR — no fallo un caso: fallo el modulo entero,
+// y sus 12 evals dejaron de correr. Como node --test lo reporta como UN test roto
+// entre 634 verdes, tres vueltas seguidas reportaron "634/634 verde" sin verlo.
+//
+// Este test es barato y ruidoso: si alguien vuelve a inlinear el prompt, ROMPE ACA,
+// con el motivo escrito, en vez de apagar los evals en silencio.
+// ---------------------------------------------------------------------------
+test("el prompt del LLM sigue exportado — si se inlinea, los evals dejan de correr en silencio", () => {
+  const prompt = runTurnModule.LLM_SYSTEM_PROMPT;
+  assert.equal(typeof prompt, "string", "evals/evals.test.mjs lo importa: sin el export no carga ESE modulo y sus 12 evals no corren");
+  assert.ok(prompt.length > 0, "vacio tampoco sirve: los evals miden tokens sobre este texto");
+  assert.match(prompt, /PROHIBIDO: dar precios/, "es el prompt con los guardrails, no cualquier string");
 });

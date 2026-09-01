@@ -202,7 +202,6 @@ Add-ons cobrables:
 - automatizacion n8n;
 - pagos QR si proveedor esta validado;
 - e-commerce si aplica;
-- inventario avanzado;
 - exportacion contable;
 - WhatsApp Business cuando Meta este listo;
 - portal cliente;

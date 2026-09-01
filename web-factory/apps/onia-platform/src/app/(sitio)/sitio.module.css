@@ -1572,7 +1572,7 @@
 /*   · `.offerStar` — panel de verde-900 DENTRO del bloque de tinta. La    */
 /*     profundidad es tono sobre tono y solape de superficie, nunca una    */
 /*     sombra (misma ley que el resto del archivo: cero `box-shadow`).     */
-/*   · `.offerList` — los otros cuatro, con el precio en verde señal y el  */
+/*   · `.offerList` — los demás, con el precio en verde señal y el        */
 /*     resultado en tipografía de lectura, no de nota al pie.              */
 /*                                                                         */
 /* LA REGLA QUE MANTIENE AL PLAN COMO LA COMPRA PRINCIPAL: en toda esta    */
@@ -1720,6 +1720,25 @@
        entrada conserva ancho de lectura y el bloque no se vuelve un menú. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 3.5em;
+  }
+  /* El filete vive en la CELDA, no en la fila: con una cantidad IMPAR de
+     entradas la última fila deja la celda derecha vacía y la regla horizontal
+     queda CORTADA a mitad de ancho. Pasó al retirar "Inventario avanzado"
+     (2026-08-27): la lista bajó de 4 (2x2, cerraba) a 3 y el bloque quedó con
+     media línea colgando, en la portada y en /precios.
+     Se arregla por la PARIDAD y no por el número 3: la última entrada toma la
+     fila entera cuando sobra, y su filete vuelve a llegar de punta a punta.
+     Sirve para 3, 5 o 7 — y con un número par ni se aplica. */
+  .offerItem:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  /* ...pero solo se estira el FILETE. El encabezado se queda del ancho de una
+     columna (la mitad menos medio `column-gap`) para que el precio caiga en la
+     misma x que los de la columna izquierda de arriba. Sin esto, el precio de
+     la última fila se iría al borde derecho y la carta perdería su columna de
+     precios, que es lo único que la hace leerse como carta. */
+  .offerItem:last-child:nth-child(odd) .offerItemHead {
+    max-width: calc(50% - 1.75em);
   }
 }
 .offerItem {

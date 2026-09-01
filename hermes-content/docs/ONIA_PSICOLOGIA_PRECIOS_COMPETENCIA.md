@@ -247,8 +247,7 @@ Básico, ~15% Pro) porque la flexibilidad se paga.
 
 **Add-ons — `onia-platform/lib/pricing.ts`:** chatbot WhatsApp **Bs 390/mes o Bs 3.900/año,
 sin cargo inicial** (500 conversaciones incluidas; el consumo de Meta lo paga el cliente en
-su propia cuenta); agenda pública Bs. 150/mes (incluida en Pro y Completo); usuario extra Bs. 70/mes (máx. 3 en Básico); inventario avanzado
-Bs. 180/mes; self-hosted desde Bs. 4.500 + Bs. 900/mes; Empresa desde Bs. 2.900 +
+su propia cuenta); agenda pública Bs. 150/mes (incluida en Pro y Completo); usuario extra Bs. 70/mes (máx. 3 en Básico); self-hosted desde Bs. 4.500 + Bs. 900/mes; Empresa desde Bs. 2.900 +
 implementación desde Bs. 3.500.
 
 **Techos — `onia-platform/lib/plan-limits.ts`:** free 30 clientes / 1 usuario / 0 emails;

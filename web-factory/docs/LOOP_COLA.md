@@ -138,23 +138,108 @@ Las tres formas de fantasma que ya aparecieron acá:
       renderizado en claro y oscuro** con un fixture temporal que mete un negativo, un
       cero y una serie de 58 puntos: 0 `[data-reveal]` ocultos, 0 errores de consola.
       **Lección: los cuatro pasaban todos los gates existentes** — por eso W6.
-- [ ] **W4 · Gauge/radial + defectos visuales.** Evidencia re-verificada 2026-08-30 en
-      `packages/templates/src/dashboard.ts`: `grep -c 'gauge\|radial'` → **0** (no existe;
-      "Tasa de cierre 34%" es un número pelado y es el caso exacto que Tabler y Grafana
-      resuelven con radial) · `r="2.5"` → **1** (5px de diámetro contra el mínimo de 8)
-      · `paddingAngle` → **0** (gajos del donut pegados).
-      + `rx` solo arriba en barras, total al centro del donut, swatch pill de 14×3.
-      ⚠️ **Se cayó de este ítem "`:focus-visible` cero en 590 líneas": hay 2**, agregados
-      el mismo día en los botones del agente. Era fantasma. Lo que queda real ahí son los
-      targets de 44px y el foco en filtros/nav/cards, que sigue sin estar.
-- [ ] **W5 · Los estados que no existen.** Skeleton isomorfo, error de sección con
-      retry, vacío con altura reservada y segundo renglón que diga CUÁNDO se llena.
-- [ ] **W6 · Gates que hoy no existen.** Los tests actuales son `toBeVisible` y
-      `count > 0`: **los diez defectos de arriba pasaban todos los gates en verde**.
-      Falta screenshot comparado (claro/oscuro × 1440/375), axe sobre el fixture, un
-      test que falle si `--color-primary` aparece en un `fill`/`stroke` de dato, y otro
-      que falle si un negativo se dibuja con altura 0. + el fixture debe incluir un
-      negativo, un cero y una serie de 90 puntos, para que los bugs se vean en el demo.
+- [x] **W4 · Gauge/radial + defectos visuales** (2026-08-31). Evidencia re-verificada
+      antes de tocar (`gauge|radial` → 0, `r="2.5"` → 1, `paddingAngle` → 0). Los siete:
+      (a) **medidor radial** nuevo (`type: "radial"`, arco de 270° abierto abajo con la
+      cifra al centro) — es lo que resuelve el porcentaje pelado, que solo dice el número
+      y no dónde cae contra su tope. Cableado a un dato que YA estaba en el panel: el KPI
+      "Citas de hoy 9" con su contexto "7 confirmadas – 2 esperan respuesta" → 78%. Cero
+      cifra inventada. (b) marcadores `r` 2,5→**4** (8px, el piso de `dataviz`); el punto
+      final del sparkline también. (c) **gap entre gajos** del donut, descontado del largo
+      DIBUJADO y no del reparto: separa sin mover el ángulo, que sigue siendo la
+      proporción exacta. (d) **`rx` solo en la punta libre**: las barras pasaron de `<rect
+      rx>` (que redondea las 4 esquinas y dejaba la barra flotando sobre el cero) a un
+      `<path>` con el radio arriba en la positiva y abajo en la negativa. (e) **total al
+      centro del donut** — y de paso su unidad pasó de "% del total" a "tratamientos",
+      porque con la vieja el centro leía "100 % del total", cierto y vacío. (f) leyenda de
+      cuadrado 10×10 a **píldora 14×3**: la muestra tiene que parecerse al trazo que
+      nombra. (g) **44px** en nav/filtros/CTA/tema y **una sola regla de `:focus-visible`**
+      sobre todo `a`/`button` del panel, que además cubre lo que se agregue después.
+      ⚠️ **Defecto que reveló MIRAR**: el medidor heredaba `width:100%` de `.wf-chart` y se
+      iba a 340px de alto; como el grid iguala la fila a la tarjeta más alta, **volvía a
+      abrir el aire muerto de A1d** en sus dos vecinas. Acotado a 180px como el donut.
+      **Gates**: `typecheck:packages` verde, **214/214** (+9 tests: base plana de la barra,
+      radio que no desborda, gauge con 0 que NO dibuja arco, gap que no mueve el reparto,
+      total al centro, marcadores ≥4) y **mirado en claro y oscuro** — 0 `[data-reveal]`
+      ocultos, 0 errores de consola, y el anillo de foco medido tabulando: 12 de 12 con
+      anillo, 0 sin él.
+      Anotado, NO tocado (fuera de este ítem): el sparkline del KPI sigue con
+      `preserveAspectRatio="none"`, así que su punto final es una elipse — el mismo defecto
+      que W2 arregló en el sparkline grande.
+- [x] **W5 · Los estados que no existen** (2026-08-31). Evidencia re-verificada antes de
+      tocar: `skeleton|retry|aria-busy` → **0 en todo `packages/`** (real), pero el
+      **segundo renglón del vacío YA existía** (`renderEmpty(title, hint)` en 5 llamadas,
+      todas con su "cuándo se llena") — esa parte del ítem era fantasma y no se rehizo.
+      Ahora hay un `estado?: "cargando" | "error"` por sección (chart, tabla, agente,
+      notas) en el template **y en el schema Zod**, que si no lo declaraba se lo comía.
+      **El skeleton es isomorfo por construcción, no por número copiado**: la caja de
+      estado lleva las MISMAS clases que el SVG real (`wf-chart`, `wf-sparkline`), así el
+      alto sale del mismo `aspect-ratio` y no hay una segunda constante que se
+      desincronice; solo el donut (140px) y el medidor (180px) repiten su tamaño, con
+      comentario. El **vacío pasa por la misma caja**: antes colapsaba a la altura de su
+      texto y, como el grid iguala la fila a la tarjeta más alta, un solo gráfico sin
+      datos reacomodaba a sus dos vecinas (A1d otra vez). **Error por sección, no de
+      página**, con `role="alert"` y botón Reintentar de 44px que emite `wf:reintentar`
+      (el template es HTML estático: avisa, no inventa un fetch que no tiene).
+      **Gates**: `typecheck:packages` verde, **219/219** (+5 tests) y **medido en el
+      navegador con un fixture temporal** (3 estados repartidos en la misma fila): las
+      tarjetas en cargando/error/vacío miden **254px, exactamente lo mismo que la
+      baseline con datos** → cero salto al llegar el dato. 0 `[data-reveal]` ocultos,
+      0 errores de consola, claro y oscuro, y el evento de reintento verificado
+      disparándolo (`detail.seccion = "Tu asistente"`).
+      ⚠️ **Defecto que reveló MIRAR**: el skeleton del medidor era un rectángulo a todo
+      el ancho donde el gráfico real es un círculo de 180px — el alto no se movía, pero
+      la FORMA prometía otra cosa. Corregido a círculo del tamaño real.
+      Anotado, NO tocado: `dashboardPointSchema` no declara `pending`, así que el schema
+      lo descarta y el patrón de barra rayada del template es inalcanzable desde el JSON
+      (mismo tipo de drift que ya habían tenido `variant`/`spark`). Y `pnpm test` cortó
+      una vez con `[vitest-pool]: Timeout terminating forks worker` en `hero.test.ts`
+      **sin ninguna aserción fallida**; a la segunda corrida, 219/219 y exit 0.
+- [x] **W6 · Gates que hoy no existen** (2026-08-31). Evidencia re-verificada antes de
+      tocar: de los cuatro gates que pedia el item, **uno ya existia** — el test del
+      negativo con altura 0 lo dejo W3 (`dashboard.test.ts`, "dibuja el negativo BAJO el
+      cero"), igual que el de la serie de 90 barras. Fantasma, no se rehizo.
+      Lo que se construyo: **(a) fixture permanente `dashboard-edge`** (cliente propio en
+      `data/clients/`, generado por `global-setup`) con un negativo, un cero, una serie de
+      90 barras, un `sparkline` con datos y las secciones en cargando / error / vacio — el
+      demo "lindo" no traia NINGUNO de esos datos, asi que los cuatro bugs de W3 no eran
+      visibles en ningun gate. **(b) gate visual** (`tests/e2e/visual.spec.ts`) sobre demo
+      + fixture, claro/oscuro x 1440/375, 8 baselines commiteadas. **(c) axe** sobre el
+      fixture, que ejercita `role="alert"`, `aria-busy` y el boton Reintentar. **(d) gate
+      de color** (`--color-primary` nunca pinta un dato) por los DOS caminos: el atributo
+      `fill`/`stroke` y el `color:` de la hoja que alimenta un `currentColor` — que es por
+      donde de hecho entraba.
+      **Cada gate se verifico MUTANDO el codigo**, no solo viendolo pasar: el de color cae
+      con `--wf-series-1` → `--color-primary` en el atributo Y en el CSS; el visual cae 8/8
+      con `PAD_L` 34 → 44. La primera version del visual usaba `maxDiffPixelRatio: 0.002`
+      y **la mutacion pasaba en verde**: sobre una captura fullPage el presupuesto eran
+      ~4.900 pixeles, suficiente para tragarse un marcador que duplica el radio. Cambiado a
+      `maxDiffPixels: 400` (absoluto) y verificado estable en dos corridas limpias.
+      ⚠️ **Lo que el gate encontro apenas existio** — la suite E2E estaba **ROJA desde W7**
+      y nadie lo sabia porque nadie corria `pnpm e2e`:
+      1. **Dos de las tres fuentes de W7 nunca cargaban.** `font-links.ts` pedia
+         `wght@300..900` para toda familia; Bricolage Grotesque llega a 800 y Spline Sans
+         Mono a 700, y css2 responde **HTTP 400** al eje fuera de rango (verificado con
+         `curl`, no de memoria). El titular y las cifras del panel salian en la fuente del
+         sistema: **el bug de W1 reintroducido por la ruta del rango**. Ahora hay rango real
+         por familia, medido; familia desconocida va sin eje (200 seguro, se degrada el peso
+         y no la familia entera). + `font-links.test.ts`.
+      2. **Contraste que reprobaba AA**, invisible a ojo y real: la pildora de delta
+         negativo en claro (4,33:1) y los tres textos secundarios de la card de marca en
+         oscuro (4,09 y 4,42). El par PURO on-primary/primary si pasaba — su test lo
+         protegia — pero la hoja lo diluye con `color-mix` y ahi se rompe. Recalculado.
+      3. **La marca en oscuro se medía contra el fondo, no contra la tarjeta.** Casi todo
+         el texto de color vive DENTRO de una card, que es mas clara: `wf-path-cta` de
+         realestate daba 4,47:1. `packages/tokens` ahora gatea contra `--card`; + test que
+         cae si se vuelve a medir contra el fondo.
+      4. **Dos aserciones congeladas**: el h1 fijaba `"Panel operativo"` (W7 lo renombro) y
+         se contaban `rect` de barras (W4 las paso a `path`). Un gate que falla por drift
+         entrena a ignorar el rojo.
+      **Gates**: `typecheck:packages` verde, **232/232** unit (+13) y **`pnpm e2e` 101
+      passed / 0 failed** (antes: 3 rojos en limpio, mas los que tapaba el fail-fast).
+      Mirado en claro y oscuro, 1440 y 375.
+      Anotado, NO tocado (ver A5/A6).
+
 - [x] **A1c · En dark la marca ya NO desaparece** (2026-08-30). El remedio viejo, ante
       un primary ilegible sobre el fondo oscuro, lo reemplazaba por `DARK_FG`: sidebar,
       botón, KPI hero y barras salían **blancos**. Ahora se **aclara en HSL** conservando
@@ -183,11 +268,94 @@ Las tres formas de fantasma que ya aparecieron acá:
 - [x] ~~**A1e · Specs de marca del skill `dataviz`**~~ — **DUPLICADO de W4**, cerrado sin
       trabajo (2026-08-30). Pedía exactamente lo mismo: gap del donut, marcadores ≥8px,
       puntas redondeadas. Se trabaja en W4, que además tiene la evidencia re-verificada.
-- [ ] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
+- [x] **A2 · Portar técnicas top del catálogo a `packages/blocks`.** De
       `WEB_FACTORY_TECNICAS_2026.md`, las que 2+ sitios usan y son CSS-only o
-      motion.dev (feature-en-banda-de-color, statement full-screen, marquee CSS,
-      hover-lift). Una por vuelta: bloque tipado + tokens ONIA + reduced-motion +
-      render de prueba + `typecheck:packages`.
+      motion.dev. Una por vuelta: bloque tipado + tokens ONIA + reduced-motion +
+      render de prueba + `typecheck:packages`. **4 de 4 cerradas** (una de ellas,
+      T34, era fantasma y se cerró sin trabajo):
+      - [x] **T29 marquee** (2026-08-31) — `packages/blocks/src/marquee.ts`, la que el
+            catálogo llama "la más barata y más reutilizable del corpus" (6 sitios) y
+            estaba en cero (`grep marquee packages/` → 0). CSS puro, cero JS.
+            **La decisión que hace o rompe la técnica: la separación es `padding` del
+            ítem, NO `gap` del track.** Con `gap` el track mide `2S+(2n-1)g` y
+            `translateX(-50%)` cae medio gap corrido — el salto que la técnica existe
+            para evitar. Verificado midiendo en el navegador, no razonándolo:
+            desfase de costura **0,000 px** en claro y oscuro; y **mutado a `gap`
+            para probar que la medición sirve** → salta a **94,2 px**. Frena en
+            `:hover` **y en `:focus-within`** (WCAG 2.2.2: con hover solo, quien
+            navega con teclado no puede pararla); bajo `prefers-reduced-motion`
+            queda quieta y el contenedor pasa a scroll manual (verificado:
+            `animation:none`, `overflow-x:auto`, contenido alcanzable). La copia va
+            `aria-hidden` para que un lector de pantalla no lea dos veces.
+            +9 tests, entrada en la galería (`pnpm blocks:demo`), 241/241.
+      - [x] ~~**T34 hover-lift**~~ — **FANTASMA, cerrada sin trabajo.** Ya existe como
+            primitiva del toolkit: `.wf-hover-lift` en `packages/blocks/src/motion.ts:53`
+            (+ su neutralización bajo reduced-motion en :77 y su ficha en :157).
+            Lo que SÍ falta y no es esto: **ningún bloque la usa** (`grep wf-hover-lift`
+            solo devuelve motion.ts) — cablearla a las cards es otra tarea, anotada.
+      - [x] **T4 feature-en-banda-de-color** (2026-08-31) — `packages/blocks/src/feature-bands.ts`.
+            Evidencia re-verificada antes de tocar: `grep banda packages/` solo devuelve
+            comentarios y una banda hardcodeada del template `clinic-css`; bloque, cero.
+            **La banda es un tinte del token de marca, no un hex de paleta**: el catálogo
+            nombra pollen/sky/meadow porque describe UN sitio, y acá el bloque lo usan 11
+            fichas de cliente — cada tono sale de `color-mix()` sobre
+            `--color-primary/accent/secondary`, así que se recalcula solo en oscuro por la
+            sustitución perezosa de `var()`. Un hex quemado sería el bug de W1 otra vez.
+            **El zigzag lo hace `order`, no el DOM**: el orden de lectura es siempre texto →
+            imagen (medido: `domTextAntes` true en las dos bandas) y solo las pares invierten
+            el lado visual (banda 0 texto en 35 / media en 618; banda 1 al revés). Alternar en
+            el HTML daba el mismo dibujo y rompía la lectura.
+            **Contraste medido, no estimado** (convertí el `oklab()` resuelto a sRGB): texto
+            sobre banda 12,9 / 13,8 en claro y 13,8 / 13,5 en oscuro; la banda `solido`, la
+            única que pinta la marca a pleno, cambia el PAR completo a `--color-on-primary` y
+            da 9,03 en claro y 4,74 en oscuro — cambiar solo el fondo es como se fabrica un
+            botón invisible. Full-bleed verificado midiendo: 1178px de ancho en un viewport
+            de 1178, left 0.
+            ⚠️ **Defecto que reveló MIRAR**: el marco de la galería capea a 1200px
+            (`demo.ts:171`, por los bloques scroll-driven) y mi muestra de 3 bandas medía
+            1385 → **la tercera salía cortada y la galería mentía**. Muestra bajada a las 2
+            que prueban el zigzag (1077 = 1077, nada oculto); la solida y la sin-media quedan
+            en los tests y en la nota. De paso, las rutas de imagen iban sin `./assets/` y
+            daban 2 `ERR_FILE_NOT_FOUND` en consola.
+            **Gates**: `typecheck:packages` verde, **252/252** (+11 tests), galería mirada en
+            claro y oscuro — 0 `[data-reveal]` ocultos, 0 errores de consola.
+      - [x] **T9 statement pantalla-completa** (2026-08-31). Evidencia re-verificada antes
+            de tocar: `grep 100svh|100dvh|100vh packages/blocks/` no devolvía nada en
+            `editorial-statement.ts` (solo scroll-story-hero y el switcher). **Decidido:
+            VARIANTE, no bloque aparte** — T9 comparte con el bloque que ya existe el
+            label, la medida, la escala display, el acento y el reveal; lo único que
+            cambia es el marco. Duplicar 120 líneas para eso era fabricar dos fuentes de
+            la misma frase. `pantalla` + `fondo` (`base`/`marca`/`tinta`) + `cta`.
+            **El fondo pintado va SIEMPRE full-bleed** (medido: 1440px en un viewport de
+            1440, left 0, dentro de un contenedor de 1120 a propósito): un color que se
+            corta en la medida lee como tarjeta, no como sección. La variante `tinta`
+            cambia el PAR completo a `on-primary`, botón incluido — cambiar solo el fondo
+            es como se fabrica un botón invisible.
+            **"Reveal por líneas" son las líneas que DECLARA el autor** con un salto de
+            línea, en cascada con `wf-stagger`; nunca los puntos de corte, que se mueven
+            con el viewport y no se pueden escalonar sin embarcar un partidor de texto.
+            ⚠️ **Dos defectos que solo aparecieron MIDIENDO, ninguno se ve en el código**:
+            (a) `min-height:100svh` sobre una caja `content-box` **sumaba el padding**: la
+            sección medía **1080px en un viewport de 900** y la "pantalla completa"
+            scrolleaba. `box-sizing:border-box` propio — no puede depender de que la página
+            que la usa traiga un reset. (b) el label de la variante sólida daba **4,17:1 en
+            claro y 3,39:1 en oscuro**: el par puro pasa (6,41/4,94) pero el `color-mix` al
+            72% lo diluía bajo AA — el mismo modo de falla que encontró W6. Sin diluir.
+            ⚠️ Y un defecto de MI medición: conté líneas visuales con `getClientRects()`,
+            que sobre un `span` display:block devuelve **un solo rect aunque el texto
+            envuelva** — decía "1/1" mientras la captura mostraba la línea partida en dos.
+            Contado por alto/line-height, con 15ch la línea declarada se partía; la variante
+            de pantalla ensancha a 24ch y ahí sí se sostiene.
+            **Gates**: `typecheck:packages` verde, **260/260** (+8 tests), `pnpm e2e` **101
+            passed / 0 failed**, y **medido en el navegador** (claro y oscuro, 1440 y 375)
+            con un fixture temporal de las 3 variantes: alto = viewport exacto (900/812),
+            full-bleed sin desborde horizontal (`scrollWidth == clientWidth` en ambos
+            anchos), contraste ≥4,5:1 en las 12 combinaciones (convertido a sRGB real
+            pintando en canvas: leer el `oklab()` con una regex de números da basura),
+            CTA de 68px con anillo de foco, 0 reveals ocultos y 0 errores de consola.
+            Cableado al schema (`statementPantalla`/`statementFondo`/`statementCta`) y a
+            `landing-realestate`: lo que el schema no nombra, lo descarta — el drift que ya
+            se comió `variant`, `spark` y `pending`. + entrada propia en la galería.
 - [x] **A3 · Sitio #2 (estilo contrastante)** — `apps/ferreteria-sur/`, cerrado 2026-08-31
       (`fac6fa99` + `e4e785f3`). Rubro comercio, industrial utilitario, conectado por
       `/api/lead`. Construido con 3 agentes sobre archivos disjuntos; el de secciones
@@ -199,18 +367,183 @@ Las tres formas de fantasma que ya aparecieron acá:
       menciones de obra, `tsc` 0 y build 4/4.
       Pendientes anotados, no bloqueantes: el CTA del hero entra por 82px a 1440×900 y
       **queda fuera a 1440×800**; First Load 192 kB contra el presupuesto de 150 kB.
-- [ ] **A4 · Pulido de dental-premium:** dark mode mirado + spotlight en touch +
-      cablear texturas SVG si Sergio dio OK.
+- [x] **A5 · La barra lateral no llega al pie — FANTASMA** (2026-08-31). La evidencia
+      se re-verificó antes de tocar nada y no sobrevivió: **el defecto no existe**. En el
+      navegador el sidebar tapa la ventana entera en todo el scroll — medido a 0%, 50% y
+      100% en `dashboard-demo` y `dashboard-edge`, claro y oscuro: `top: 0`, `bottom: 900`
+      de 900 en las 12 mediciones (al tope del scroll se suelta 0,23px por el sobrante
+      fraccionario, no por el CSS). El `height: 100vh` + `position: sticky` hacen
+      exactamente lo que tienen que hacer.
+      **El artefacto era la captura**: `fullPage` pinta lo `sticky` en su posición
+      ESTÁTICA, así que el bloque oscuro corta al primer viewport y debajo se ve fondo de
+      página. Es el mismo modo de falla que ya anotó W7 (la captura sin scrollear dejando
+      el 4º chart en `opacity: 0`) — segunda vez que la captura inventa un defecto.
+      **Lo que sí era real es el hueco de gate** que lo dejó pasar por defecto: la
+      baseline `fullPage` **se ve igual con el sticky puesto que con el sticky roto**, o
+      sea que una regresión de verdad ahí pasaba en verde. Cerrado con un test que MIDE en
+      el navegador (`dashboard.spec.ts`, "el sidebar cubre la ventana tambien al pie") en
+      los tres puntos de scroll, y con el artefacto documentado en el docblock de
+      `visual.spec.ts` para que no se abra una tercera vez.
+      **Gates**: `typecheck:packages` verde, `dashboard.spec.ts` **8/8** (chromium +
+      mobile) y **el test verificado que FALLA**: forzando `position: static` el sidebar
+      se va a `top: -946` y la aserción cae. Un gate que no puede ponerse rojo no es un
+      gate.
+      **Lección: una captura no es el navegador.** Antes de abrir un defecto que sale de
+      una imagen, medirlo en vivo.
+- [x] **A6 · El sparkline del KPI deformado + `pending` inalcanzable** (2026-08-31).
+      Evidencia re-verificada antes de tocar: los dos reales (`preserveAspectRatio="none"`
+      seguia en `dashboard.ts:998`, y `pending` estaba en el TIPO y en el template pero no
+      en el schema). (a) El KPI spark pasa a `xMidYMid meet` — el mismo arreglo que W2 le
+      hizo al sparkline grande y que aca habia quedado a medias. Solo cambiar el atributo
+      NO alcanzaba: con `height: 44px` fijo la caja se ensancha mas que 320/44 y `meet`
+      habria dejado aire a los costados, asi que el alto fijo se cambio por
+      `aspect-ratio: 320/44` (mismo recurso que ya usaba `.wf-sparkline`). (b)
+      `dashboardPointSchema` ahora declara `pending: z.boolean().optional()`; verificado el
+      camino COMPLETO JSON → Zod → template, no solo el parse: la barra sale con trama
+      rayada y `<title>` "(pendiente)".
+      **Gates**: `typecheck:packages` verde, **265/265** (+5 tests) y **medido en el
+      navegador**, 22 mediciones en `dashboard-demo` y `dashboard-edge` × claro/oscuro ×
+      1440/390: escala X == escala Y en las 22 (antes el eje X se estiraba solo), el punto
+      final da ancho/alto **1.000** (era elipse), la caja no letterboxea (268,5/320 =
+      36,9/44 = 0,839 exacto) y las 4 tarjetas de la fila siguen midiendo 177,5px iguales.
+      0 `[data-reveal]` ocultos, 0 errores de consola. **Los tests se verificaron en rojo**:
+      revirtiendo el atributo caen 2 de 3.
+      ⚠️ **Trampa de metodo, no del producto**: `pnpm generate dashboard-demo` sin
+      `--template dashboard` reconstruye ese slug como **landing** y pisa el `out/` que
+      sirve el panel (el default del generador es `landing`). Si el panel "perdio" sus KPI,
+      es esto. Siempre `pnpm generate <slug> --template dashboard`.
+      Anotado, NO tocado (fuera de este item): el punto final del KPI spark sigue en `r=3`
+      y, con la escala de 0,839, mide **5,03px** renderizados — bajo el piso de 8px que
+      `dataviz` fijo y que W4 aplico al resto de los marcadores. Es un tamanio, no una
+      deformacion.
+- [x] **A4 · Pulido de dental-premium** (2026-08-31). Re-verificada la evidencia antes de
+      tocar, **dos de los tres sub-items eran fantasma** y hubo que buscar el defecto real
+      midiendo, no leyendo la linea. (a) **"dark mode mirado"**: se miro, y no hay nada que
+      mirar — el sitio es light-only y renderiza **identico** con el SO en oscuro (el
+      recorte del formulario da el **mismo md5** en claro y en oscuro; la pagina entera
+      solo difiere por el grano del degradado del hero). Lo que si era real es la
+      **omision**: `color-scheme` medido en `normal`, o sea que el diseño claro estaba bien
+      **por accidente del default del UA**, no por declararse. Ahora `color-scheme: light`
+      en `:root`, que ata scrollbar, popup del `<select>`, autofill y corrector a esta
+      paleta. (b) **"spotlight en touch": no existe ningun spotlight** — `spotlight|
+      mousemove|pointermove` da **0** en toda la app. Y la sospecha derivada (hover pegado
+      en touch: 3 reglas `:hover` sin un solo `@media (hover: hover)`) **tampoco se
+      reproduce**: tapeando la tarjeta en emulacion tactil el transform queda en `none`,
+      nunca se aplica el hover. No se toco: no se arregla lo que no falla. (c) texturas SVG
+      → **bloqueado**, no hay OK de Sergio en ningun lado (avisado por PushNotification).
+      **El defecto real lo encontro medir el DOM entero, no la cola**: el enlace a WhatsApp
+      del footer media **28,2px** de alto — bajo el piso tactil de 44px que W4 fijo para el
+      dashboard, y es **la conversion entera del sitio**. Corregido con `min-height: 44px`
+      + `inline-flex`, y el subrayado pasado de `border-bottom` a `text-decoration` para
+      que se pegue a las letras en vez de al borde de la caja de 44px.
+      ⚠️ **Medir, no estimar (otra vez)**: calcule `padding-block: 8px` "= 44,2px" y el
+      navegador devolvio **43,2** — los 28,2 originales incluian el 1px de borde que yo
+      mismo estaba sacando. Por eso el alto sale de `min-height` y no de un padding
+      calculado: no hay que re-ajustarlo si cambia la tipografia.
+      ⚠️ **Falso positivo que casi arreglo**: el circulo negro con una "N" en el borde
+      izquierdo de las capturas es el **badge de devtools de Next**, no un elemento que se
+      desborda. El unico desborde real (`.hero-media`, -28,8px) es el overscan a proposito
+      del parallax. Y el unico control "sin anillo de foco" de la primera pasada era el
+      `<input type="hidden">` que mi selector agarraba de mas: los 15 controles reales ya
+      tenian anillo.
+      **Gates**: `tsc --noEmit` verde en `apps/dental-premium` y **medido en el navegador**
+      en las 4 combinaciones (claro/oscuro x 1440/390): `colorScheme` resuelve `light` en
+      las 4, el enlace da **44,0px** exactos en las 4, la lista de controles bajo 44px
+      queda **vacia** (antes tenia 1) y 0 errores de consola. Footer **mirado**: el
+      subrayado honey sigue pegado al texto y la caja de 44px es invisible.
 
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
-- [ ] **B1 · Cerrar rubros SIN-ANCLA** (`2026-08-29-critico-limites.md`): cosecha
-      dirigida (Scrapling `Fetcher.get(impersonate=chrome)` + seguir CSS/preload)
-      de `dental real`, `ganadero/agtech`, `importadora/logística B2B`, `IA`. 2
-      sitios por rubro; reescribir su sección del playbook cambiando "SIN ANCLA"
-      por dato real.
-- [ ] **B2 · Rubros flacos:** wellness quedó N=1; cosechar 2-3 más. Skincare +2.
-- [ ] **B3 · Update skill `ui-ux-pro-max`** a v2.13 (`uipro-cli`, MIT) — solo local.
+- [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
+      tocar (`2026-08-29-critico-limites.md:42` seguía vivo): los 4 rubros se recetaban
+      por analogía. Cosechados **8 sitios vivos, 2 por rubro**, con Scrapling
+      `impersonate=chrome` + **siguiendo el `<link rel=stylesheet>`** para leer los
+      **tokens de marca** (`--c-navy`, `--colours--bg-subtle`, `--color-scheme-1--peach`),
+      que es lo que separa marca de ruido — la frecuencia de hex sola miente.
+      Dental real: **dntlbar** + **smilebar** · Ganadero: **halterhq** + **agriwebb** ·
+      Importadora: **flexport** + **zencargo** · IA: **sierra.ai** + **decagon.ai**.
+      Reescritas §1 y §7 del playbook y **agregadas §9 (ganadero) y §10 (IA/agentes)**;
+      evidencia con cifras en `data/references/design-sources/2026-08-31-cosecha-rubros-sin-ancla.md`.
+      **Dos reglas escritas estaban MAL y lo dijo el dato, no la lectura**: (a) el acento
+      dental pedía "sat <15%" y los dos acentos reales miden **HSV 23,9%** y **18,5%** —
+      el umbral era el piso de la muestra vendido como ley, y encima sin declarar el
+      modelo (los mismos hexes dan 52% y 79% en **HSL**, que hace descartar el color
+      correcto). Ahora **HSV <25%** y el modelo escrito. (b) La importadora se recetaba
+      "negro `#010101`, **1** acento" heredado de scoutmotors (automotor): las dos
+      importadoras reales son **navy** (`#052439`, `#080E49`) con **dos** acentos.
+      Hallazgos: el ganadero NO es verde brillante sobre blanco sino **tinta verde bosque
+      sobre hueso cálido** (y anima: halter trae GSAP ×23); el rubro IA **evita la rampa
+      azul** en los dos líderes, igual que Onia. `PP Fragment` reapareció en decagon.ai:
+      segunda muestra, y confirma que es del bucket **SaaS/IA, no dental** — cierra el
+      hallazgo #1 del crítico. Nuevo ruido de scraper documentado: **`#4285F4` = azul
+      del badge de Google Reviews** (parecía el primario de smilebar; es un `<circle>` de
+      su SVG). ⚠️ **Un 200 no es un ancla**: tend.com dio 403 y dentologie.com dio 200
+      con **6.192 bytes** de shell JS — descartados, no se computa nada de ahí.
+      **Gates**: `typecheck:packages` verde (ítem 100% de docs/data: no toca `packages/`
+      ni superficie renderizada). Sigue sin ancla y queda para B: **portfolio (N=1)**.
+- [x] **B2 · Rubros flacos** (2026-08-31). Evidencia re-verificada antes de tocar: la
+      línea *"N=1 real todavía"* seguía viva en `2026-08-29-vertical-playbooks.md:67` y
+      §2 seguía sin segunda ancla. Cosechados **5 sitios vivos** con el método de B1
+      (Scrapling `impersonate=chrome` + seguir el `<link rel=stylesheet>`, hexes por
+      **token declarado** y saturación en **HSV**): wellness → **othership.us** +
+      **remedyplace.com**; estética → **alchemy43.com** + **skinlaundry.com** (clínicas)
+      y **us.typology.com** (producto DTC). Evidencia con cifras en
+      `data/references/design-sources/2026-08-31-cosecha-rubros-flacos.md`; §2 del
+      playbook reescrita entera.
+      **Las DOS reglas centrales de §2 estaban mal y lo dijo el dato, no la lectura:**
+      (a) *"sin pop (sat 5-15%)"* — othership declara `--os-lime: #dbf572` en **HSV S
+      53,5%** (y `--os-plum #372338` como dominante, 116 usos): más del triple del techo
+      escrito. Era el piso de la muestra vendido como ley, el MISMO error que el `<15%`
+      dental de B1. Wellness pasa a **dos regímenes** (sin pop / crema+tinta+un pop).
+      (b) *"estética/skincare = nude cálido + blush"* — le recetaba a la **clínica** la
+      paleta del **producto DTC**, y Onia vende la clínica (esteticagest). Las dos
+      clínicas reales van al revés: tinta oscura + UN acento saturado (alchemy43 oro
+      `#e5ad5a` S 60,7% sobre `#12181f`; skinlaundry lima `#cdf765` S 59,1% sobre
+      `#1a1312`). El nude SÍ se confirma — en DTC: typology (`#f6e7d8`/`#f1d7c3`/
+      `#e8c4a8`) coincide con ONSKN, N=2.
+      Hallazgos: **alchemy43 corre display serif + grotesca de cuerpo** (`freight-neo-pro`
+      en `h1..h6` + `work-sans`), o sea el par de Onia en una clínica real que factura; y
+      **remedyplace corre una sola familia** (Beausite Slick/Classic) — segundo caso real
+      del mono-sans prohibido, así que esa prohibición se cita como decisión de Onia y no
+      como observación del mercado. **Ruido de scraper nuevo**: en remedyplace y typology
+      los hexes MÁS frecuentes son defaults de Tailwind (`--tw-ring-color #2563eb`,
+      escala `--tw-prose-*`) y en glowbar de Shopify Polaris (`--color-critical`,
+      `--color-success`, `--color-reviews`) — leído por frecuencia, remedyplace parecería
+      una marca azul. Regla: **descartar por NOMBRE del token, no por frecuencia**.
+      ⚠️ **Un 200 con h1 tampoco es un ancla**: ever-body.com sirve 31.834 bytes con h1
+      "We’re getting things ready" (holding); peachystudios.com da 200 con **136 bytes**;
+      heydayskincare.com sirve 681 KB pero su color dominante sale de tokens de sección
+      de Shopify. Los tres descartados.
+      **Gates**: `typecheck:packages` verde (ítem 100% docs/data: no toca `packages/` ni
+      superficie renderizada). Sigue sin ancla y queda para B: **portfolio (N=1)**.
+- [x] **B3 · Update skill `ui-ux-pro-max`** (2026-08-31, **solo local**, nada del repo).
+      Evidencia re-verificada antes de tocar, y el defecto era peor que "está vieja": la
+      skill instalada era **SKILL.md y nada más** (11.569 bytes, sin `scripts/` ni `data/`),
+      mientras su propio cuerpo manda correr `python3 skills/ui-ux-pro-max/scripts/search.py`
+      en el **paso 2, marcado REQUIRED**. O sea: los cuatro pasos del workflow apuntaban a un
+      script inexistente — la skill se citaba en `onia-web-factory/SKILL.md:133` y en
+      `DESIGN_LEARNED_2026.md` como fuente de gates numéricos, pero **no se podía ejecutar**.
+      **El número de la cola también estaba viejo**: el ítem pedía v2.13 y upstream ya va por
+      **v2.15.0** (`nextlevelbuilder/ui-ux-pro-max-skill`, licencia MIT verificada por API, no
+      de memoria). Instalado con el installer oficial (`npx ui-ux-pro-max-cli@latest init --ai
+      claude --global --force`) corrido **desde el scratchpad**, para que no escriba un
+      `.claude/` dentro del worktree: escribe en `~/.claude/skills/`, fuera del repo.
+      Ahora la skill trae `scripts/` (search, design_system, reasoning_contract, validate_data
+      + tests) y `data/` (13 CSV, 3.061 filas): 89 estilos, 193 paletas/reasoning, 75 pares
+      tipográficos, 120 guías UX, 106 iconos, 26 charts, 22 stacks. Lo que sirve a ESTE carril:
+      dominio **`gsap`** (`motion.csv`) y `--json`, que hace la skill usable como **gate
+      programable** y no solo como lectura.
+      **Verificado ejecutándola, no mirando el `ls`**: `search.py "dental clinic premium"
+      --design-system` devuelve sistema completo (paleta con `--color-*`, tipografía, patrón)
+      en Python 3.12.10.
+      ⚠️ **Efecto lateral medido, no supuesto**: el installer trae el **bundle entero** de 7
+      skills y refrescó también `banner-design`, `brand`, `design`, `design-system`, `slides`
+      y `ui-styling` (mtime 19:21). Revisadas una por una: son las mismas del bundle upstream,
+      **cero contenido propio de ONIA pisado** — los "onia" que aparecían en el grep eran
+      *testimONIAl*. Backup del SKILL.md viejo en el scratchpad.
+      **Gates**: `typecheck:packages` verde (ítem 100% fuera de `packages/`: no toca código ni
+      superficie renderizada). **Lección: "actualizar X a vN" envejece como la cola — verificar
+      la versión viva antes de instalarla, y probar la herramienta corriéndola.**
 
 ## Regla de alternancia (cómo el loop "siempre trabaja")
 
