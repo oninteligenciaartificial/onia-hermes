@@ -220,7 +220,10 @@ function pill(role, idx, total, account) {
 
 // Puntos DENTRO de la imagen: el lector ve cuantas slides son y se compromete.
 // Un "03 / 08" en texto no produce ese efecto; los puntos si.
+// Con UNA sola lamina no hay nada que indicar: un punto solo promete un carrusel
+// que no existe. Descubierto el 01-sep en los 3 creativos de ads.
 function dots(idx, total) {
+  if (total <= 1) return '';
   const d = Array.from({ length: total }, (_, i) =>
     `<i class="${i === idx ? 'on' : ''}"></i>`).join('');
   return `<div class="dots">${d}</div>`;
@@ -327,7 +330,7 @@ function slideHtml(slide, idx, total, account, bg) {
   if (role === 'cover') {
     inner = `
       ${bgLayer}
-      <div class="topline">${pill(role, idx, total, account)}<span class="swipe">SWIPE →</span></div>
+      <div class="topline">${pill(role, idx, total, account)}${last ? '' : '<span class="swipe">SWIPE →</span>'}</div>
       <h1 class="hook">${emph(slide.headline)}</h1>
       ${slide.body ? `<p class="coverline">${emph(slide.body)}</p>` : ''}
       ${dots(idx, total)}
