@@ -44,8 +44,21 @@ Las tres formas de fantasma que ya aparecieron acá:
    `hermes-content/docs/**` (salvo `handoff/web-factory-cliente-prueba.md`) y n8n.
 4. **UNA tarea por vuelta**, la primera no-bloqueada del carril que toque. Gates
    antes de commit: `pnpm typecheck:packages` (+ `pnpm test` si tocás packages;
-   `tsc --noEmit` en `apps/dental-premium` si la tocás) + **mirar renderizado**.
+   `tsc --noEmit` en `apps/dental-premium` si la tocás) + **mirar renderizado**
+   + **`pnpm e2e` si cambiaste UN SOLO PIXEL de lo que se dibuja** (y si el cambio
+   de geometría era el objetivo, `--update-snapshots` y **mirar la baseline nueva**
+   antes de commitearla: una baseline se refresca MIRÁNDOLA, nunca a ciegas).
    Commit conventional (por qué, en español, sin firma) + push. Marcar `[x]`.
+
+   ⚠️ **`pnpm e2e` se agregó el 2026-09-01, y lo pidió un rojo real.** La regla
+   pedía typecheck + unit + mirar, y **A6 cumplió las tres** — midió 22 veces en el
+   navegador — y aun así dejó el gate visual **8/8 en rojo**: cambió el alto del
+   sparkline del KPI (`height:44px` → `aspect-ratio`) sin regenerar las baselines
+   que W6 había commiteado. Nadie lo vio porque `pnpm e2e` no estaba en esta lista.
+   Es **exactamente** el modo de falla que W6 documentó ("la suite llevaba roja
+   desde W7 y nadie corría `pnpm e2e`"): W6 construyó el gate pero no lo metió en
+   la regla, así que el gate volvió a quedar fuera del camino. **Un gate que no
+   está en la lista de gates no existe.**
 5. **Tachadas NO se rehacen. Bloqueado por decisión de Sergio → PushNotification
    y seguir con lo desbloqueado.** Nada de cirugía inventada.
 
@@ -451,6 +464,48 @@ Las tres formas de fantasma que ya aparecieron acá:
       las 4, el enlace da **44,0px** exactos en las 4, la lista de controles bajo 44px
       queda **vacia** (antes tenia 1) y 0 errores de consola. Footer **mirado**: el
       subrayado honey sigue pegado al texto y la caja de 44px es invisible.
+
+- [x] **AUD1 · Auditoría de los `[x]` + salud — el gate visual estaba 8/8 en ROJO**
+      (2026-09-01). Vuelta de escalón 2: A y B estaban todos `[x]`, así que tocaba
+      auditar lo tachado y correr la salud. **Salud**: server 4319 → 200, rama igual a
+      `origin` (`415a6f8c`), árbol limpio, `typecheck:packages` verde, `pnpm test`
+      **265/265** — el número que declaraba A6, exacto. Cero zombies de tests: los 9
+      `node.exe` vivos son los loops, el `serve-out 4319` y un `next dev` del worktree
+      `inventario-muerto` (otra mano, no se toca).
+      **Lo que la auditoría encontró**: `pnpm e2e` **fallaba 8/8** en `visual.spec.ts`,
+      los ocho baselines del panel. Ningún `[x]` mentía — los reclamos de A6, W3-W6, T29,
+      T4 y T9 se re-verificaron contra el código de hoy y **todos siguen ciertos**
+      (`preserveAspectRatio="none"` = 0 en `dashboard.ts`, `pending` declarado en
+      `dashboardPointSchema`, `r="2.5"` = 0, radial/estados/chartScale presentes,
+      `marquee.ts`/`feature-bands.ts`/variante pantalla en su lugar). Lo que faltaba era
+      un **gate no corrido**.
+      **Diagnosticado midiendo, no mirando la captura** (que es cómo A5 se abrió como
+      fantasma): (a) `git log` desde el commit que trajo las baselines (`353b0c21`, W6) →
+      **un solo commit toca el render**, `24f5cbea` (A6); B1/B2 son playbook y T9/T4/T29
+      son `blocks`, no el panel. (b) diff fila por fila baseline↔actual: la página **mide
+      7px menos** y la primera fila distinta es **y=240**, la fila de KPIs. (c) barrido de
+      desplazamiento por bandas de 100px: **todas las bandas de y=300 para abajo calzan
+      exactas con un corrimiento de 7px** (0-24 px de residuo, antialiasing), y la única
+      banda con cambio real es **y=200-299**. O sea: el contenido no cambió, se corrió —
+      y se corrió por donde A6 dijo que iba a correrse.
+      **Veredicto: las baselines estaban viejas, el código no roto.** Regeneradas las 8,
+      **miradas** en claro y oscuro (demo y `dashboard-edge`) antes de commitearlas: el
+      panel completo, el negativo colgando bajo el cero, las 90 barras dentro del viewBox,
+      el gauge en 0% sin arco, skeleton/error/vacío y el eje cerrando en 350. `pnpm e2e`
+      **103 passed / 0 failed**.
+      **La causa raíz NO es A6: es la regla 4**, que pedía typecheck + unit + mirar y no
+      `pnpm e2e`. A6 cumplió las tres y midió 22 veces en el navegador. Arreglado ahí
+      arriba, que es donde lo lee la próxima vuelta — parchear solo esta corrida dejaba el
+      agujero abierto para el siguiente cambio de geometría.
+      **Lección: W6 construyó el gate pero no lo metió en la lista de gates, y por eso el
+      gate volvió a quedar fuera del camino en 2 vueltas.** Construir el gate es la mitad;
+      la otra mitad es que sea imposible saltearlo.
+      ⚠️ **Fuera de zona, para quien corresponda**: el chequeo de arranque de los loops
+      manda comparar `list_scheduled_tasks` contra `hermes-content/docs/cola/loops.md` y
+      **ese archivo no existe** (la carpeta solo tiene `contenido.md`). Hoy no hizo daño —
+      los 5 loops activos están registrados y `enabled: true` — pero el chequeo no puede
+      comparar contra nada, así que hoy no es una red: es un `ls`. Es `hermes-content/`,
+      zona prohibida de este carril.
 
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
