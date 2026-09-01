@@ -189,6 +189,8 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       el ítem sigue siendo el único que separa al carril de su objetivo. No se tocó la base:
       elegir dueño de inbox decide en qué bandeja aterrizan personas reales, y eso es de Sergio.
 
+      ✅ **Gate 1 del 2026-08-31 (octava vuelta) — la base sigue igual, medida en vivo.** `supabase-db`, schema `public`: de las cuatro orgs la única con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`, `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 siguen sin darse**, así que las cinco conversaciones de desconocidos siguen invisibles. No se tocó la base: elegir dueño de inbox decide en qué bandeja aterrizan personas reales, y eso es de Sergio.
+
       ✅ **Gate 1 del 2026-08-31 (séptima vuelta) — la base sigue igual, medida en vivo.** `supabase-db`, schema `public`: de las cuatro orgs la única con `chatwootInboxId` sigue siendo `ZZ QA Clinica Chatbot` → 7; `Onia (interna)`, `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL. **Los dos clicks de S8 siguen sin darse.** No se tocó la base: elegir dueño de inbox decide en qué bandeja aterrizan personas reales.
 
       ✅ **Gate 1 del 2026-08-31 (sexta vuelta) — sin cambios en la base, y se despejó la ÚLTIMA duda del ítem.** La base sigue igual (medida en vivo: sólo `ZZ QA Clinica Chatbot` → 7; `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL). Lo nuevo es que se comprobó que **los dos clicks alcanzan de verdad**: el producto lee las conversaciones con su propio token, y en Chatwoot un token de agente que no es miembro del inbox habría devuelto la lista vacía con 200 — exactamente el fantasma que este carril mide. Corrido contra producción, el token del contenedor `onia-platform` ve **inbox 4 → 5 · inbox 5 → 3 · inbox 7 → 6** conversaciones, con `+59173021804` en el payload del 5. Detalle y comando en **S8**. **No queda nada que verificar del lado del código.**
@@ -350,6 +352,8 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       (`docker exec onia-center` sobre `/tmp/onia-bot/knowledge.json`: 904 bytes, 0 `campanas`).
       El motor sí sabe leerlas — eso ya se verificó la vuelta pasada. **S9 sigue pendiente y
       sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
+
+      ✅ **Gate 1 del 2026-08-31 (octava vuelta) — sin cambios, medido en el motor que CORRE.** `docker exec onia-center` sobre `/tmp/onia-bot/knowledge.json`: **904 bytes, cero `campanas`**. **S9 sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
 
       ✅ **Gate 1 del 2026-08-31 (séptima vuelta) — sin cambios, medido dentro y fuera del contenedor.** `/opt/onia/bot/knowledge.json` sigue en **904 bytes con cero `campanas`**, y lo mismo en el motor que CORRE (`docker exec onia-center` sobre `/tmp/onia-bot/knowledge.json`: 904 bytes, 0). **S9 sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
 
@@ -542,6 +546,8 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       `chatwoot-brand-onia.sh`, y aplicarlo al VPS sigue siendo **S10** — de Sergio. Lo que
       cambia es que a partir de hoy la reversión es detectable sin entrar al VPS, así que la
       próxima no puede durar quince días.
+      ✅ **Vigilado el 2026-08-31 (octava vuelta) — sigue revertido, y el gate se comprobó de punta a punta.** `npm run marca:chatwoot` contra producción: **`REVERTIDAS 3/9`** — `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` siguen diciendo `www.chatwoot.com` en el HTML público del login, sin cambio desde el 16-ago. **Y se verificó el código de salida, no sólo el texto**, que es lo que el propio ítem dice que hace fallar a un gate en silencio: corrido con la salida descartada, `$?` = **1**. Sirve para un cron. **S10 sigue pendiente y sigue siendo de Sergio** — reparar escribe en el VPS.
+
       📎 **Por qué en `vps-ops/` y no en `bot/`:** `espejo-check.mjs` compara `bot/` archivo por
       archivo contra `/opt/onia/bot`, así que un `.mjs` nuevo ahí deja el gate rojo hasta el
       próximo `scp` — y el propio carril tiene escrito que *un gate que siempre está rojo lo
@@ -588,6 +594,50 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **El número que la cola reporta verde NO incluía los 12 evals: `node --test *.test.mjs`
+      los saltea, y son justo los graders que ya habían estado muertos días.** Encontrado
+      auditando los `[x]` recientes contra el código de hoy — que es lo que manda hacer el loop
+      cuando "Ahora" queda bloqueado —, corriendo la suite y no leyéndola.
+      **La medición, los dos comandos, hoy:**
+      | comando | tests | incluye `evals/` |
+      |---|---|---|
+      | `node --test *.test.mjs` (dentro de `bot/`) | **658** | **no** |
+      | `node --test` (bare, recursivo) | **670** | sí (658 + 12) |
+      Los 12 evals viven en `hermes-content/deploy/vps-ops/bot/evals/evals.test.mjs`, o sea en un
+      subdirectorio, y el glob `*.test.mjs` **no baja un nivel**. El "658/658 verde" que quedó
+      escrito arriba es el número del glob: real, pero **medido con un comando que no corre los
+      graders que miden que el bot no cotiza precios, no promete y deriva al humano**.
+      **Por qué esto es el mismo fantasma y no uno nuevo.** El ítem de arriba —*"Los 12 evals
+      estaban MUERTOS hace días y la cola reportaba 634/634 verde"*— se cerró arreglando el
+      `export LLM_SYSTEM_PROMPT`. Correcto, pero incompleto: arregló **el síntoma de esa vez** y
+      dejó viva **la razón por la que nadie lo vio**, que es que el número reportado se saca de un
+      comando ciego a `evals/`. Sin esto, el próximo export que se caiga vuelve a desaparecer en
+      silencio.
+      **Lo que se hizo, y es lo mínimo que cierra las dos mitades:**
+      1. **Un solo comando, y que sí los corra:** `npm run test:bot` (`package.json` de
+         `onia-hermes`) = `cd hermes-content/deploy/vps-ops/bot && node --test`. Corrido hoy:
+         **676/676 verde** (670 + los 6 del guardia). Es la forma recursiva, así que ningún
+         subdirectorio de tests puede quedar afuera.
+      2. **El cable-trampa DENTRO del glob que sí se reporta:**
+         `hermes-content/deploy/vps-ops/bot/evals-contrato.test.mjs`. **Parsea los imports del
+         propio `evals.test.mjs`** y verifica contra los módulos reales que cada nombre siga
+         exportándose — así cubre los cinco (`bot-engine`, `guardrails`, `bench`, `run-turn`,
+         `persistence`), no sólo el que se rompió aquella vez. Si un export desaparece, se pone
+         rojo **en el número que la gente mira**, en vez de en un archivo que ese comando no abre.
+      **Probado que puede fallar, que es lo único que prueba que un guardia sirve:** se le sacó el
+      `export` a `LLM_SYSTEM_PROMPT` en `run-turn.mjs` y el guardia salió **5 pass / 1 fail**,
+      nombrando el módulo y el export exactos (*"../run-turn.mjs ya no exporta LLM_SYSTEM_PROMPT"*)
+      — reproduciendo `d334d776` a pedido. `run-turn.mjs` restaurado byte a byte después
+      (`git diff` vacío). Incluye además el test que impide que el guardia se vuelva un verde
+      hueco: si el parser encontrara menos de 4 imports relativos, falla.
+      **Gates:** este repo no tiene TS, eslint ni vitest (el bot es ESM plano con `node:test`), así
+      que el gate que aplica es la suite — **676/676**, con los 12 evals adentro y verificados
+      aparte (**12/12**).
+      📎 **Drift honesto que esto suma al `scp` de S9:** `espejo-check.mjs` ahora nombra
+      `evals-contrato.test.mjs` en FALTAN EN EL VPS. Es un test, no el motor: no cambia una línea
+      de lo que corre. Los tres DISTINTOS (`espejo-check.mjs`, `espejo-check.test.mjs`,
+      `recepcionista.test.mjs`) ya estaban antes de esta vuelta.
 
 - [x] **S11 era un FANTASMA: el bot ya firma como "Onia Bot" desde el 18-ago, y la bandeja ya
       rotula "Tu asistente".** Estaba en "Bloqueado en Sergio" pidiéndole una acción sobre un
