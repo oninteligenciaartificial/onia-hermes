@@ -99,6 +99,17 @@ function evidenciaDe(texto) {
     // desnudo: `origin/foo.png` sigue verificandose, para no tapar un archivo de verdad.
     if (/^(origin|upstream)\/[^\/]+$/.test(ruta) && !/\.[a-z0-9]{2,5}$/i.test(ruta)) continue;
 
+    // Un HOST o una URL entre backticks no es una ruta de este repo, y esta cola los escribe
+    // todo el tiempo: `app.onia.com.bo/login`, `onia.com.bo`. Caian en "esto parece una ruta"
+    // —tienen barra, o terminan en algo con forma de extension (`.bo`)— y salian fantasma.
+    // Medido el 2026-09-01: la cola de `origin/main` daba 6 errores falsos por esto, o sea el
+    // gate estaba ROJO DE FABRICA. Es peor que gritar en falso de vez en cuando: si el gate
+    // nunca puede estar verde, nadie distingue su rojo real del de siempre y se deja de correr.
+    // Se reconoce por el esquema o porque el primer segmento termina en un TLD de los que
+    // usamos. No puede tragarse un archivo de verdad: ninguno del repo se llama `algo.com`.
+    if (/^https?:\/\//i.test(ruta)) continue;
+    if (/\.(com|bo|app|dev|io|net|org|ai)$/i.test(ruta.split('/')[0])) continue;
+
     // Un backtick tambien envuelve codigo y endpoints: `GET /api/x`, `invoice.patient?.ci`,
     // `responsable?.ci ?? patient.ci`. Ningun archivo del repo tiene espacios ni signos de
     // pregunta en el nombre, asi que eso los descarta sin tener que adivinar.
@@ -295,6 +306,17 @@ function selfCheck() {
   // Un gate que grita en falso se termina ignorando, que es el motivo de las otras carve-outs.
   r = revisarCola('## Ahora\n- [x] Hecho · `existe.png` · ya en `origin/master`\n', tmp);
   ok(!r.problemas.length, 'una ref de git no es una ruta');
+
+  // Un host no es una ruta del repo. Sin esto la cola de origin/main daba 6 fantasmas falsos.
+  r = revisarCola('## Ahora\n- [ ] Mirar `app.onia.com.bo/login` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un host con path no es una ruta');
+
+  r = revisarCola('## Ahora\n- [ ] Sirve `onia.com.bo` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un host desnudo no es una ruta');
+
+  // Su reciproco: la carve-out mira el PRIMER segmento, asi que un archivo se sigue verificando.
+  r = revisarCola('## Ahora\n- [ ] Roto · `web-factory/no-esta.json`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'la carve-out de host no tapa un archivo');
 
   // Pero la carve-out NO puede tragarse un archivo de verdad que empiece con esa palabra.
   r = revisarCola('## Ahora\n- [x] Hecho · `origin/no-esta.png`\n', tmp);
