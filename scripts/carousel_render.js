@@ -125,7 +125,7 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado'];
+const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado', 'bloque-solido'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
@@ -306,8 +306,19 @@ function logoFooter(account) {
   </div>`;
 }
 
+// Medido el 01-sep sobre los 8 creativos de ads: los titulares de 40-43 caracteres
+// rinden bien; a partir de 46 el titular se parte en cinco lineas y se come la pieza.
+// El renderer NO achica la tipografia, asi que el limite es del texto, no del CSS.
+const TITULAR_MAX = 44;
+
 function slideHtml(slide, idx, total, account, bg) {
   const role = roleFor(slide, idx, total);
+  if (slide.headline) {
+    const limpio = String(slide.headline).replace(/\*/g, '');
+    if (limpio.length > TITULAR_MAX) {
+      console.warn(`[aviso] titular de ${limpio.length} caracteres (max ${TITULAR_MAX}): "${limpio}" — se va a desbordar`);
+    }
+  }
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
   // El fondo se puede fijar POR SLIDE (`slide.bg`) y no solo global (`--bg`).
@@ -333,6 +344,11 @@ function slideHtml(slide, idx, total, account, bg) {
       <div class="topline">${pill(role, idx, total, account)}${last ? '' : '<span class="swipe">SWIPE →</span>'}</div>
       <h1 class="hook">${emph(slide.headline)}</h1>
       ${slide.body ? `<p class="coverline">${emph(slide.body)}</p>` : ''}
+      ${/* Con UNA sola lamina no hay slide de cierre que lleve el CTA, y un anuncio
+            pagado sin llamada a la accion no vende: el que lo ve no sabe que hacer.
+            Descubierto el 01-sep mirando los 3 creativos de ads, que traian
+            "cta" en el brief y nunca lo dibujaban. */''}
+      ${last && slide.cta ? `<div class="ctabtn">${esc(slide.cta)}</div>` : ''}
       ${dots(idx, total)}
       ${logoFooter(account)}`;
   } else if (role === 'cta') {
@@ -929,6 +945,11 @@ ${MARKS_CSS}
 .ed-body { font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif; font-weight:500; font-size:38px; line-height:1.4;
   margin-top:28px; max-width:880px; color:rgba(255,255,255,.85); }
 .ed-body .g { ${EMPH[EMPH_STYLE]} }
+/* CTA de pieza de UNA lamina: sin slide de cierre, la portada la lleva. */
+.ed-cta { display:inline-block; align-self:flex-start; margin-top:28px;
+  background:var(--onia-green); color:var(--onia-ink);
+  font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
+  font-size:34px; letter-spacing:.4px; padding:18px 30px; border-radius:999px; }
 .swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
   font-size:26px; letter-spacing:3px; text-transform:uppercase; color:var(--onia-green); }
 
@@ -946,6 +967,7 @@ ${MARKS_CSS}
   <${headTag} class="ed-h">${emph(slide.headline)}</${headTag}>
   ${body}
   ${role === 'cta' ? ctaButton(triggerWord(slide)) : ''}
+  ${role !== 'cta' && last && slide.cta ? `<div class="ed-cta">${esc(slide.cta)}</div>` : ''}
   ${last ? '' : '<div class="swipe">Deslizá →</div>'}
   <div class="footer">
     <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -1122,6 +1144,10 @@ const papelSubrayadoHtml = require('./carousel_pack_papel').crear({
   esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
 });
 
+const bloqueSolidoHtml = require('./carousel_pack_solido').crear({
+  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
+});
+
 function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
@@ -1219,8 +1245,10 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
   const slides = (brief.slides || []).map((sl) => (
-    // El brief trae `comment_trigger` a nivel raiz; el render lo necesita por slide.
-    { ...sl, comment_trigger: sl.comment_trigger || brief.comment_trigger || '' }));
+    // El brief trae `comment_trigger` y `cta` a nivel raiz; el render los necesita por slide.
+    { ...sl,
+      comment_trigger: sl.comment_trigger || brief.comment_trigger || '',
+      cta: sl.cta || brief.cta || '' }));
   if (!slides.length) throw new Error('brief has no slides');
   // La serie es del CARRUSEL, no de la slide: el brief es su lugar natural. La bandera
   // de linea de comando sigue funcionando y gana, para poder probar sin editar el brief.
@@ -1243,6 +1271,7 @@ function render(args) {
     else if (args.pack === 'papel-subrayado') html = papelSubrayadoHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'dato-ilustrado') html = datoIlustradoHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'tarjeta-empleado') html = tarjetaEmpleadoHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'bloque-solido') html = bloqueSolidoHtml(slide, idx, slides.length, args.account, args);
     else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
     fs.writeFileSync(htmlPath, html, 'utf8');

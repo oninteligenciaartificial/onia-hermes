@@ -1,0 +1,14 @@
+{
+  "title": "A4 — el mensaje de las 8",
+  "caption": "Angulo: el MOMENTO concreto en que se pierde el paciente. No habla de sistemas, habla de una hora del dia.",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "headline": "*8 de la noche*: alguien quiere una cita",
+      "body": "Te escribe, no le contestás hasta mañana, y mañana ya sacó turno en otro lado.",
+      "kicker": "Fuera de hora"
+    }
+  ],
+  "cta": "Reservá una demo"
+}

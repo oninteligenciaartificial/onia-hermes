@@ -23,7 +23,14 @@ falla si esa ruta no está.
 > (`claude/ads-creatividades-publicos` y `claude/carril-contenido`) y cada una midió cosas que la
 > otra no. Se fusionaron quedándose con la afirmación **medida** más nueva de cada ítem: de ahí
 > salió que el día 0 estaba abierto en una rama y publicado en la otra, y que la bio de Lucía
-> figuraba a la vez como pendiente y como verificada. Una sola cola desde acá.
+> figuraba a la vez como pendiente y como verificada.
+
+> ⚠️ **Volvió a partirse, y el 01-sep se cerró de otra forma.** Copiar sólo el TEXTO de la cola
+> no alcanza: la afirmación viajaba sin la prueba. El 01-sep esta rama decía «los 3 anuncios no
+> tienen CTA» y la otra ya lo había arreglado en el renderer y subido a 8 creativos — pero el
+> arreglo y los JPG vivían allá. Adoptar el `[x]` a secas dejaba la cola apuntando a un archivo
+> inexistente y `verificar_cola.js` en rojo. **Se traen los archivos junto con la afirmación**
+> (`git checkout <rama> -- <rutas>`), no sólo la línea de la cola.
 
 ---
 
@@ -55,7 +62,7 @@ caracteres). El hueco del día 1 era específico del reel, que no tiene brief JS
 - [x] **Re-renderizados 31-ago con `@oniahq`**, verificado MIRANDO el JPG. La decisión no fue por HTTP: Instagram devuelve 200 hasta para un handle inventado (se probó uno de control, «onia punto hq», que no existe y respondió igual). Se decidió por el repo — @oniahq en 65 archivos contra @oniaagency en 4, todos de jul-ago — y porque el renderer vigente ya lo estampa. Ver `hermes-content/carousels/out/ads/ad-a2-v1-no-volvieron/slide-01.jpg` · Claude
 - [x] **Carril de briefs viejos marcado MUERTO 31-ago.** No se le sacan los CTA: se declara que de ahí no se publica y se apunta al carril vivo (`hermes-content/references/oniahq/briefs`, 10 briefs limpios). El lote destapó CINCO pares de piezas duplicadas exactas y dos defectos estructurales: el trigger guarda la frase «Comentá SISTEMA» en vez de la palabra, y AUTO y NUVIA piden comentarios sin estar registradas. Ver `hermes-content/carousels/briefs/LEEME.md` · Claude
 - [x] ✅ **Arreglado 01-sep en el RENDERER, no en los 3 briefs.** `scripts/carousel_render.js` emitía `SWIPE →` sin la guarda `last` que sí tienen las otras dos plantillas, y `dots()` dibujaba un punto indicador aunque hubiera una sola lámina. Arreglado en la fuente, así que cualquier pieza de una lámina sale bien de ahora en más. Verificado MIRANDO el PNG. Ver `hermes-content/carousels/out/ads/ad-a3-silla-vacia/slide-01.jpg` · Claude
-- [ ] 🔴 **Los 3 anuncios no tienen llamada a la acción, y el dato SÍ existe.** Cada brief trae `"cta": "Reservá una demo"`, pero `scripts/carousel_render.js` sólo dibuja la CTA como **rol de la última lámina** de un carrusel: con UNA sola lámina nunca se dibuja, y queda media imagen vacía. Un anuncio pagado sin CTA no vende — el que lo ve no sabe qué hacer. Descubierto al mirar el render, no el brief. Ver `hermes-content/carousels/out/ads/ad-a3-silla-vacia/slide-01.jpg` · Claude
+- [x] ✅ **Resuelto 01-sep en el RENDERER.** El `cta` del brief ahora se inyecta por lámina y la portada lo dibuja **cuando es la última** — así un carrusel largo sigue usando su lámina de cierre y una pieza de una sola lámina no queda sin llamada a la acción. Además se subieron de 3 a **8 creativos** con ángulos distintos. Verificado MIRANDO los JPG. Ver `hermes-content/carousels/out/ads/ad-a8-no-reemplaza/slide-01.jpg` · Claude
 
 ## Despues
 
