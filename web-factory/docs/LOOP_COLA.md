@@ -693,6 +693,40 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Gates**: `typecheck:packages` verde, **267/267**, `pnpm e2e` **103/0**, y mirado
       renderizado.
 
+- [x] **AUD5 · Auditoría de AUD4 + salud — el borrado dejó una cita apuntando a código
+      que ya no existe** (2026-09-01). Quinta vuelta de escalón 2 (A y B siguen todos
+      `[x]`; AUD4 era el único `[x]` que nadie había auditado, porque nació en la vuelta
+      anterior).
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo);
+      rama == `origin` (`aa7e786c`); árbol limpio; `typecheck:packages` verde; `pnpm test`
+      **267/267**; `pnpm e2e` **103 corridos, 0 fallados** (100 pasados + 3 flaky + 7
+      skipped).
+      ⚠️ **Los 3 flaky son de la máquina, no del código**, y se puede probar: los tres
+      murieron con `page.goto: Page crashed` (Chromium se cae al navegar, no una
+      aserción que falle), y pasaron en el reintento. La causa está en el listado de
+      nodos: de los **8 `node.exe` vivos**, **6 son del worktree `hero-en-home`** — dos
+      `next dev` sobre `apps/onia-platform` (3411 y 3477) con sus hijos. Otra mano, zona
+      prohibida: no se tocan. Cero zombies míos (el único mío es el `serve-out 4319`).
+      **AUD4 cierto, verificado contra el disco de hoy**: `packages/blocks/motion-demo.html`
+      **no existe**; `grep motion-demo` en `packages/`, `scripts/`, `package.json` devuelve
+      **solo las dos frases en pasado** (`demo.ts:3`, `MOTION.md:12`) y las líneas de esta
+      misma cola — cero referencia funcional; `grep wf-hover-lift` en `packages/*/src/`
+      da **cero reglas CSS**, solo prosa.
+      🔴 **Lo que el borrado dejó atrás**: `clinic-css.test.ts:11` justificaba el test
+      citando *"`.wf-hover-lift:hover{transform:none}` bajo reduced-motion
+      (**motion.ts:77**)"* — y esa primitiva la borró A8. Hoy `motion.ts:77` es la regla
+      de reduced-motion de `wf-reveal`/`wf-clip-reveal`/etc.: **la cita no envejeció mal,
+      ahora apunta a otra cosa**, que es peor que apuntar a nada. Reescrito el comentario
+      para que diga lo que hoy es cierto: la primitiva ya no está y **este test es el
+      único lugar que guarda esa puerta**.
+      **Lección: borrar deja huella en la prosa que justificaba lo borrado.** AUD4 revisó
+      quién *importaba* el archivo (`package.json`, `scripts/`) y estaba bien; lo que no
+      revisó es quién lo *citaba con número de línea*. Un `grep` del nombre encuentra lo
+      primero; el segundo hay que buscarlo por el símbolo.
+      **Gates**: `typecheck:packages` verde, **267/267**, `pnpm e2e` 103/0. El cambio es
+      un comentario en un test: no dibuja un solo píxel, así que las baselines no se
+      tocan.
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de

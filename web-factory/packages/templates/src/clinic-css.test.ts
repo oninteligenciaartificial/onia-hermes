@@ -3,12 +3,13 @@ import { describe, expect, it } from "vitest";
 import { clinicCss } from "./clinic-css.js";
 
 /**
- * A7 midio que `.wf-hover-lift` (packages/blocks/src/motion.ts) esta en CERO uso
- * real: su CSS solo viaja en logistics/realestate, que no dibujan tarjetas, y la
- * pagina que SI las dibuja (clinic) no lo emite. Cablear la clase ahi habria
- * agregado un atributo inerte sobre una tarjeta que YA se levanta sola.
- * Lo que la primitiva si traia y a la tarjeta le faltaba es su PUERTA:
- * `.wf-hover-lift:hover{transform:none}` bajo reduced-motion (motion.ts:77).
+ * A7 midio que `.wf-hover-lift` estaba en CERO uso real: su CSS solo viajaba en
+ * logistics/realestate, que no dibujan tarjetas, y la pagina que SI las dibuja
+ * (clinic) no lo emitia. Cablear la clase ahi habria agregado un atributo inerte
+ * sobre una tarjeta que YA se levanta sola. Lo unico que la primitiva traia y a
+ * la tarjeta le faltaba era su PUERTA: neutralizar el hover bajo reduced-motion.
+ * A8 borro la primitiva por eso mismo, asi que este test es hoy el UNICO lugar
+ * que guarda esa puerta -- no busques `.wf-hover-lift` en motion.ts, ya no esta.
  */
 describe("clinicCss y prefers-reduced-motion", () => {
   it("apaga el desplazamiento de la tarjeta, sin apagar el borde ni la sombra", () => {
