@@ -465,6 +465,19 @@ Las tres formas de fantasma que ya aparecieron acá:
       queda **vacia** (antes tenia 1) y 0 errores de consola. Footer **mirado**: el
       subrayado honey sigue pegado al texto y la caja de 44px es invisible.
 
+- [ ] **A7 · Cablear `wf-hover-lift` a las cards que lo piden** — recuperada de la
+      prosa de T34, donde llevaba un día declarada *"anotada"* sin serlo (ver AUD3).
+      **Evidencia medida hoy (2026-09-01), no heredada**: `grep -rln wf-hover-lift
+      packages/*/src/` fuera de `motion.ts` devuelve **0 de 44 bloques**. La primitiva
+      existe entera y probada (`motion.ts:53`, neutralizada bajo reduced-motion en `:77`,
+      ficha en `:157`) y **solo la usa su propio demo** (`motion-demo.html`) y `MOTION.md`.
+      O sea: hay una técnica del toolkit pagada y en cero uso real.
+      Candidato directo y único hoy: `packages/blocks/src/clinic-services.ts`, el otro
+      bloque del paquete que dibuja `card`. Al tomarla: cablear, mirar el render en claro
+      y oscuro, confirmar que bajo `prefers-reduced-motion` no se mueve, y `pnpm e2e`
+      (toca superficie dibujada → si cambia geometría, `--update-snapshots` y **mirar la
+      baseline nueva**).
+
 - [x] **AUD1 · Auditoría de los `[x]` + salud — el gate visual estaba 8/8 en ROJO**
       (2026-09-01). Vuelta de escalón 2: A y B estaban todos `[x]`, así que tocaba
       auditar lo tachado y correr la salud. **Salud**: server 4319 → 200, rama igual a
@@ -546,6 +559,48 @@ Las tres formas de fantasma que ya aparecieron acá:
       siguen apagados a propósito y se dejan así). **Lección: "el archivo no existe"
       medido desde un worktree viejo es una rama vieja, no un archivo faltante — se
       verifica contra `origin/main`, no contra el árbol propio.**
+
+- [x] **AUD3 · Auditoría de A2/A3/A5 — los únicos `[x]` que nadie había mirado, y tres
+      pendientes que se habían perdido** (2026-09-01). Tercera vuelta de escalón 2 (A y B
+      siguen todos `[x]`). **Salud, los cuatro puntos, corridos**: server 4319 → **200**
+      (no hizo falta relanzarlo); rama == `origin` (`7e5b486a`); árbol limpio;
+      `typecheck:packages` verde; `pnpm test` **265/265**; `pnpm e2e` **103 passed / 0
+      failed** (7 skipped) — el gate visual aguanta por segunda vuelta seguida; dos
+      `node.exe` vivos, los dos arrancados hoy (14:27 y 14:50: el server y otro loop),
+      **cero zombies**.
+      **El hueco de la auditoría**: cruzando los IDs tachados contra lo que AUD1 y AUD2
+      dicen haber cubierto, **A2, A3 y A5 no estaban en ninguna de las dos listas**. AUD1
+      cubrió A6/W3-W6/T4/T9/T29 y AUD2 los otros nueve; AUD2 se declaró completa ("los 9
+      que AUD1 dejó afuera") sin notar que la resta no cerraba. Auditados ahora:
+      **A5** cierto — el test que MIDE existe con el nombre exacto que declara
+      (`tests/e2e/dashboard.spec.ts:56`) y el artefacto del `fullPage` está documentado en
+      el docblock de `tests/e2e/visual.spec.ts:23` · **A3** cierto — `apps/ferreteria-sur/`
+      existe con su `src/app/` completo (`page.tsx`, `sections.css`, `site.css`, `api/`) ·
+      **A2** cierto en lo sustantivo: las 4 sub-técnicas están donde dice, y de T34 se
+      verificaron las tres referencias una por una — `motion.ts:53`, `:77` y `:157`, las
+      tres exactas.
+      ⚠️ **Un dato de T34 envejeció**: decía *"`grep wf-hover-lift` solo devuelve
+      motion.ts"*, y hoy también devuelve `motion-demo.html` y `MOTION.md`. La conclusión
+      no cambia (ninguno es un bloque) pero el número que la sostenía sí: por eso A7 entra
+      con el grep **acotado a `packages/*/src/`**, que es el que mide lo que la frase
+      quiere decir.
+      🔴 **El hallazgo que vale**: **tres pendientes reales estaban declarados "anotados"
+      dentro de la prosa de ítems ya cerrados, y nunca fueron línea de cola de nadie** —
+      el cableado de `wf-hover-lift` (T34, *"otra tarea, anotada"*) y los dos de A3
+      (*"pendientes anotados, no bloqueantes"*: el CTA del hero fuera de pantalla a
+      1440×800 y First Load 192 kB contra un presupuesto de 150 kB). `grep hover-lift
+      docs/LOOP_COLA.md` devuelve **sólo la frase que dice que está anotada**. Es el modo
+      de falla espejo del trabajo fantasma que esta cola persigue: no es trabajo inventado
+      que no existe, es **trabajo real que existe y se evaporó al escribirlo dentro de un
+      `[x]`**. Un ítem tachado se deja de leer — ahí adentro, un pendiente está enterrado,
+      no anotado. El de hover-lift, re-medido hoy, entra a A como **A7**; los dos de A3
+      cargan evidencia del 31-ago sin re-verificar, así que van a **Sin verificar**, que
+      es donde la REGLA DE EVIDENCIA los manda y que hasta hoy se nombraba sin existir.
+      **Regla nueva: un pendiente que aparece mientras cerrás un ítem se escribe como
+      línea de cola en el mismo commit que lo tacha.** "Anotado" dentro de un `[x]` no es
+      anotado.
+      **Gates**: ítem 100% de `docs/` (no toca `packages/` ni superficie renderizada);
+      aun así se corrieron los cuatro de la regla 4 y están todos verdes, arriba.
 
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
@@ -656,6 +711,23 @@ Las tres formas de fantasma que ya aparecieron acá:
 - [ ] Bloques cifra-editorial · quote-única · features+device (propuesta enviada).
 - [ ] Rediseño del dashboard admin real (onia-platform/onia-center = otra lane):
       se propone y coordina, no se toca desde acá.
+
+## Sin verificar (sospechas: evidencia vieja, no re-medida)
+
+> La REGLA DE EVIDENCIA nombra esta lista desde el principio y **no existía**: una sospecha
+> sin lugar donde caer termina como línea de "por hacer" o, peor, enterrada en un `[x]`.
+> Nada de acá se trabaja sin re-medirlo primero; si la medición no lo confirma, se tacha
+> como fantasma y se dice por qué.
+
+- [ ] **El CTA del hero de `ferreteria-sur` quedaría fuera de pantalla a 1440×800.**
+      Medido por A3 el 2026-08-31 ("entra por 82px a 1440×900"); **no re-verificado hoy**.
+      Para tomarla hay que construir la app y medir a 1440×800 en el navegador.
+      ⚠️ Ojo de carril: `apps/ferreteria-sur/` **no está en la zona propia** que declara la
+      regla 3 (que nombra `apps/dental-premium`) ni en su lista de prohibidos — la construyó
+      este carril en A3, pero el dueño hay que confirmarlo antes de tocarla.
+- [ ] **First Load de `ferreteria-sur` en 192 kB contra un presupuesto de 150 kB.**
+      Misma fuente y misma advertencia: número del 31-ago, sin re-medir. Se re-mide con el
+      build, no se estima. Mismo ojo de carril que el anterior.
 
 ## Hechas (no rehacer)
 
