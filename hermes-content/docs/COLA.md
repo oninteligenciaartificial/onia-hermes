@@ -588,20 +588,45 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       el commit del que ramificó, no master.
       Gates: tsc 0 · eslint 0 errores · 2291 verdes. Commit `34e3d29`, **ya en master**.
 
-- [ ] 🔴 **DECIDE SERGIO — hay CUATRO números de WhatsApp de Onia circulando.** El commit de
-      arriba **no elige**: sólo impide que gane el que no existe. Hoy conviven:
-
-      | Número | Dónde vive | Qué es |
-      |---|---|---|
-      | `59177000000` | env var de producción del VPS | **el placeholder — no es un teléfono** |
-      | `59178491375` | `lib/contact.ts` (el que sirve tras el fix) | "confirmado por Sergio" en el handoff del 26-jul; es el del portfolio de Meta |
-      | `59177711991` | `SUPERADMIN_WHATSAPP` + los mails al cliente de n8n (WF-01, WF-04) | el que los correos de trial y de mora le dan al cliente |
-      | `59175414930` | **lo que publica onia.com.bo hoy** | el de la calle |
-
-      **Lo que hace falta: una línea de Sergio diciendo cuál es el número bueno.** Con eso se
-      edita `lib/contact.ts` (1 línea), se carga `NEXT_PUBLIC_ONIA_WA` en el VPS y se alinean
-      los JSON de n8n y la landing. Sin esa línea no lo elijo yo: mandar al cliente a un número
-      equivocado es peor que el placeholder, porque nadie se entera.
+- [x] **Los CUATRO números de WhatsApp — CERRADO: Sergio eligió, otro carril lo shippeó, y esta
+      vuelta encontró los tres que quedaron afuera.** El ítem seguía abierto acá como 🔴 DECIDE
+      SERGIO **pidiendo una decisión que ya estaba tomada** — es el mismo defecto que esta cola
+      cerró hace horas (*"la copia vieja fabricaba trabajo para Sergio"*), ahora con la cara de un
+      ítem que envejeció en vez de una sección duplicada. Gana **`59175414930`, el de la calle**
+      (`197f7a1`, *"habia CUATRO numeros de Onia y ahora hay uno"*, verificado ancestro de
+      `origin/master`): es el que publica onia.com.bo y el que está en Cloud API con el bot
+      atendiendo.
+      **Y el "ahora hay uno" no era cierto todavía: quedaban TRES `wa.me/59177711991` vivos**, y
+      no en un lugar interno — en el HTML de los correos que se le mandan al cliente:
+      `n8n/workflows/WF-01-trial-warnings.json` (*"Tu trial termina en 3 días"* y *"Último día de
+      tu trial"*) y `n8n/workflows/WF-04-dunning.json` (aviso final de mora al paciente). Los tres
+      momentos en que más importa que conteste alguien.
+      **La raíz, que es lo que se lleva la vuelta: la guarda que existe para impedir exactamente
+      esto miraba la carpeta equivocada.** `__tests__/whatsapp-fuente-unica.test.ts` se apoya en
+      `__tests__/escanear-fuente.ts`, que lee `.ts`/`.tsx` de `app/`, `components/` y `lib/` — los
+      workflows son **JSON en `n8n/`**, o sea fuera del barrido. La guarda afirmaba *"el número se
+      escribe UNA vez"* **sin poder verlos**. Es el mismo defecto que la creó el 2026-08-29, un
+      nivel más arriba: entonces se escapó un archivo, ahora una **extensión** entera.
+      Se le agregó el barrido de `n8n/workflows/*.json` comparando contra `ONIA_WA_NUMBER` —no
+      contra un literal—, así el día que el número vuelva a cambiar estos tres fallan hasta
+      acompañarlo, con su recíproco para que no pase en verde leyendo una carpeta vacía. **No** se
+      extendió `escanear-fuente.ts` a JSON: lo comparten otras guardas de copy de pantalla y
+      meterles los workflows adentro les cambia lo que miden.
+      Visto en ROJO nombrando los tres antes del arreglo. Gates sobre `f0a6f9e`: **tsc 0 · 2367
+      pasan + 5 skip (192 archivos) · lint 0 errores** (101 warnings preexistentes). Commit
+      **`40d8dc2`**, **ya en `origin/master`** por fast-forward.
+      **Medido, no supuesto:** WF-01 y WF-04 **no están hoy en la instancia viva de n8n** —
+      buscados por nombre, sólo corren WF-02, WF-07, WF-08, WF-09 y WF-SENTRY-01—, así que ese
+      correo no le llegó a nadie con el número malo. Se arregla en el origen para que no salga mal
+      el día que se importen.
+      **Residuo, y es de Sergio, no del código:** falta cargar `NEXT_PUBLIC_ONIA_WA=59175414930`
+      en el `app.env` del VPS. Se hornea en el build, así que entra con el próximo deploy; hasta
+      entonces manda el fallback de `lib/contact.ts`, que ya es el correcto. Producción tiene hoy
+      el placeholder muerto (`59177000000`) en la env var, y `sinPlaceholder()` lo filtra — por eso
+      no rompe nada mientras tanto.
+      *(Anotado de paso, NO perseguido — es de otro carril: `WF-09: Trial Expired Alert`, que sí
+      está activo, consulta `https://kvepqgikokjlacxngkiw.supabase.co`, o sea el Supabase de la
+      nube. La base de producción es la self-hosted del VPS.)*
 
 ## Después
 
