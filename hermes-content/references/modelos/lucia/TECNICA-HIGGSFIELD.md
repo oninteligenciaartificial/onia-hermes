@@ -777,3 +777,32 @@ Si dice `@lucia` a secas y en el color del texto normal, está roto.
 
 **Regla:** después del `Enter`, **mirar el campo antes de escribir el cuerpo**. No encadenar
 `Enter` + `type` en el mismo lote — que es justo lo que hice acá.
+
+## 🔴 6. El modelo INVENTA los carteles — cualquier texto en escena sale en idioma falso
+
+`generadas-20260831/B05-micro-camino-al-trabajo.png`, segunda pieza del pilar B. La corrección
+del prompt funcionó (ver punto 4): **pelo suelto, pecas visibles, cara mucho más parecida al
+ancla** que la del registro «campaña». Luz real del micro, pasajeros desenfocados, tote gastado.
+
+**Pero los carteles son ilegibles y falsos.** El cartel de tarifas de la ventana dice:
+
+> `FARE ROU…` · `CARHEDA BIT. 20.` · `LUCIVINA PER 1,50` · `CARTFOLUREX 50` · `BOLIVADA DEL 3,00`
+
+Ninguna de esas palabras existe. Y `FARE` es **inglés**, en un micro boliviano. Los dos carteles
+del fondo izquierdo están igual de rotos.
+
+**Por qué importa más que un detalle:** el texto inventado es el delator de IA más obvio que hay,
+y lo caza cualquier boliviano en medio segundo. Una pieza de pilar B existe justamente para
+parecer una foto real de un negocio real — con esto adentro, no puede publicarse.
+
+**Regla nueva para el prompt:** si la escena tiene carteles, precios, letreros o pantallas, hay
+que **sacarlos del foco explícitamente**. Agregar al final:
+
+> `Any signage, price lists or screens are out of focus and unreadable, no legible text anywhere
+> in frame.`
+
+Y si el texto ES el punto de la pieza, no se pide al modelo: se compone después con el renderer
+de carruseles, que escribe texto de verdad.
+
+⚠️ Revisar con esta lupa las piezas viejas del banco: la de la farmacia y la del trámite
+(`TURNOS`) también tienen carteles en cuadro y probablemente arrastran el mismo defecto.
