@@ -30,11 +30,22 @@ frase mintiendo, fijada al perfil, sobre lo único que la cuenta promete no esco
 que es IA. La lámina 1 y el caption declaran "soy IA", pero **ninguno de los dos afirma que la
 etiqueta esté activada**; la lámina 3 sí.
 
-Si el switch no aparece en esta versión de la app, hay dos salidas y ninguna es publicar igual:
+Si el switch no aparece en esta versión de la app, hay **tres** salidas y ninguna es publicar
+igual. En este orden — las dos primeras conservan las 7 láminas, la tercera pierde una:
 
-- **Actualizar la app** y volver a buscarlo (Editar perfil, o Configuración → Tipo de cuenta).
-- Si aun así no está: **ir al [Paso 1-bis](#paso-1-bis--plan-b-el-carrusel-de-6-láminas-si-la-etiqueta-no-se-puede-poner)
-  y publicar el carrusel de 6 láminas.** Lo que no se hace es subir las 7 con la etiqueta apagada.
+1. **Actualizar la app** y volver a buscarlo (Editar perfil, o Configuración → Tipo de cuenta).
+2. **La etiqueta por publicación**, en la pantalla de subir: ver el
+   [Paso 0-ter](#paso-0-ter--la-otra-etiqueta-la-de-la-publicación-plan-a2). Es la ruta que
+   faltaba acá, y es mejor que el Plan B: el post sale con las 7 láminas y con rótulo de IA.
+3. Si ninguna de las dos está: **ir al
+   [Paso 1-bis](#paso-1-bis--plan-b-el-carrusel-de-6-láminas-si-la-etiqueta-no-se-puede-poner)
+   y publicar el carrusel de 6 láminas.** Lo que no se hace es subir las 7 con todo apagado.
+
+🟠 **Y hay una razón concreta para esperar que el switch NO esté:** la etiqueta de perfil
+"Creador de IA" salió en **mayo de 2026 como prueba**, y las notas de prensa del lanzamiento
+dicen que *"todavía no está disponible para todos los usuarios a nivel global"*
+([Infobae, 05-may-2026](https://www.infobae.com/america/agencias/2026/05/05/instagram-prueba-etiquetas-de-creador-de-ia-para-perfiles-que-publican-contenido-generado-con-ia-frecuentemente/)).
+O sea que la rama de abajo no es el caso raro: puede ser el caso normal. Por eso el Paso 0-ter.
 
 🟢 **Corregido el 31-ago: esta salida ya no es un freno.** Acá decía *"avisar antes de publicar.
 Se cambia la lámina 3 (el texto vive en el brief, se re-renderiza) o se sube el carrusel de 6
@@ -46,6 +57,46 @@ mandado los 7 archivos. **Nadie había comprobado si el carrusel sobrevive sin l
 Se comprobó (ver Paso 1-bis): sobrevive. No hay que re-renderizar nada.
 
 Origen de la instrucción: [`LUCIA.md`](LUCIA.md) §1.
+
+---
+
+## Paso 0-ter — la OTRA etiqueta, la de la publicación (plan A2)
+
+🟢 **Escrito el 31-ago: al kit le faltaba una ruta entera.** Acá sólo existía la etiqueta de
+**perfil** (el switch de Editar perfil), y de ahí se saltaba directo al Plan B — perder una
+lámina. Pero Instagram tiene **dos** etiquetas distintas, no una:
+
+| Etiqueta | Dónde se activa | Qué dice | Qué cubre |
+|---|---|---|---|
+| **Creador de IA** (Paso 0) | Editar perfil, una vez | *"Este perfil publica contenido generado o modificado con IA"* | la cuenta entera |
+| **Información de IA** (este paso) | en la pantalla de subir, publicación por publicación | *"El contenido de esta publicación puede haberse modificado con IA"* | ese post |
+
+**Por qué alcanza para el día 0.** La lámina 3 promete *"etiqueta de IA activada desde el primer
+post"*. La etiqueta de publicación deja esa frase **cierta**: el primer post sale con rótulo de
+IA visible, que es exactamente lo que la lámina afirma. Y cuando las dos están puestas,
+Instagram muestra la de publicación en vez de la de perfil — o sea que ni siquiera se pisan.
+
+**Dónde buscarla al subir** (después de elegir las 7 láminas y escribir el caption, en la última
+pantalla antes de *Compartir*):
+
+1. Tocar **Configuración avanzada** (o *Más opciones* / *Advanced settings*, según versión).
+2. Buscar el interruptor de declaración de IA — aparece como **"Información de IA"**,
+   *"Etiquetar como información de IA"*, o el nombre viejo **"Hecho con IA"**.
+3. Activarlo → *Compartir*.
+
+⚠️ **Esto NO está verificado en el teléfono de Sergio** — se verificó que la función existe y
+cómo se llama, no que aparezca en esa versión de la app. **Está hecho cuando el post publicado
+muestra el rótulo debajo del usuario**, igual que el Paso 0: se mira, no se supone.
+
+**Si tampoco está**, recién ahí el Plan B (Paso 1-bis, 6 láminas).
+
+**Fuentes** (verificadas el 31-ago): Meta anunció la herramienta de auto-declaración al publicar
+en [about.fb.com, feb-2024](https://about.fb.com/es/news/2024/02/etiquetado-de-imagenes-generadas-por-ia-en-facebook-instagram-y-threads/)
+— *"añadiremos una función para que los usuarios nos informen cuando vayan a compartir videos o
+audios generados por IA"*, con sanciones si no se usa en contenido fotorrealista. El rótulo
+"Hecho con IA" pasó a llamarse **"Información de IA"**, y la etiqueta de perfil "Creador de IA"
+es de mayo de 2026 y sigue en despliegue parcial
+([Social Media Today](https://www.socialmediatoday.com/news/instagram-adds-ai-creator-labels/819267/)).
 
 ---
 
@@ -126,6 +177,10 @@ no la versión que se sube):
 | 5 | `slide-05.png` | IA sin humo | Que publica |
 | 6 | `slide-06.png` | la pregunta abierta | Pregunta abierta |
 | 7 | `slide-07.png` | esto recién empieza | Seguime |
+
+💡 **Al llegar a la última pantalla, antes de *Compartir*:** si el switch del Paso 0 no se pudo
+poner, activá ahí la etiqueta por publicación — [Paso 0-ter](#paso-0-ter--la-otra-etiqueta-la-de-la-publicación-plan-a2).
+Si el Paso 0 ya está puesto, no hace falta tocar nada acá.
 
 ⚠️ **NO subir `posts-20260807/render-fijado/`.** Es el render superado del 22-ago (serif); tiene
 adentro su marcador `_NO-SUBIR.md`. La carpeta buena es `FIJADO`, sin prefijo `render-`.
