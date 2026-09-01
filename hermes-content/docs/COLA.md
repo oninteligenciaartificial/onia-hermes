@@ -628,6 +628,16 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       está activo, consulta `https://kvepqgikokjlacxngkiw.supabase.co`, o sea el Supabase de la
       nube. La base de producción es la self-hosted del VPS.)*
 
+      ⚠️ **Trampa de método que me costó romper el repo, y por eso queda escrita:** un worktree de
+      `onia-platform` no trae `node_modules`, y linkearlo con una **junction** de Windows
+      (`New-Item -ItemType Junction`) parece gratis… hasta que `git worktree remove --force`
+      **sigue la junction y vacía el `node_modules` de verdad** — el del árbol principal, que
+      comparten los ~30 worktrees. Se detectó al verificar y se restauró con `npm ci` (682
+      paquetes, `tsc` verde, árbol limpio), pero el agujero estuvo abierto. **Para la próxima:
+      `npm ci` dentro del worktree, o borrar la junction ANTES del `worktree remove`.** Y la
+      lección de fondo es la de siempre con otra cara: **limpiar también es una acción que hay
+      que verificar**, no sólo construir.
+
 ## Después
 
 - [ ] 🔴 **DECIDE SERGIO — `DELETE /api/payments/[id]` sobre un mes ya declarado.** El hueco es
