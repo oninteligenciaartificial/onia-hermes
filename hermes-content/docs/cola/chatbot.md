@@ -189,6 +189,8 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       el ítem sigue siendo el único que separa al carril de su objetivo. No se tocó la base:
       elegir dueño de inbox decide en qué bandeja aterrizan personas reales, y eso es de Sergio.
 
+      ✅ **Gate 1 del 2026-08-31 (sexta vuelta) — sin cambios en la base, y se despejó la ÚLTIMA duda del ítem.** La base sigue igual (medida en vivo: sólo `ZZ QA Clinica Chatbot` → 7; `Bolivian electricidad` y `ZZ QA Ferreteria Tornillo` en NULL). Lo nuevo es que se comprobó que **los dos clicks alcanzan de verdad**: el producto lee las conversaciones con su propio token, y en Chatwoot un token de agente que no es miembro del inbox habría devuelto la lista vacía con 200 — exactamente el fantasma que este carril mide. Corrido contra producción, el token del contenedor `onia-platform` ve **inbox 4 → 5 · inbox 5 → 3 · inbox 7 → 6** conversaciones, con `+59173021804` en el payload del 5. Detalle y comando en **S8**. **No queda nada que verificar del lado del código.**
+
 - [ ] **2 · Las frases que la web YA manda no están registradas como campañas: el desconocido
       pregunta una cosa y el bot le contesta el saludo genérico.** Las frases de campaña se
       construyeron ayer (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:117`
@@ -347,6 +349,8 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       El motor sí sabe leerlas — eso ya se verificó la vuelta pasada. **S9 sigue pendiente y
       sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
 
+      ✅ **Gate 1 del 2026-08-31 (sexta vuelta) — sin cambios, y ahora la copia está PROBADA como segura.** `/opt/onia/bot/knowledge.json` sigue en 904 bytes del 6-ago con cero `campanas`, dentro y fuera del contenedor. Lo que faltaba y nadie había hecho: comparar el documento nuevo contra el vivo antes de mandar a sobrescribirlo. Diffeados campo por campo, el del repo es **superset estricto** (`identity`, `empresa` y `triggersExtra` idénticos, la FAQ `siat` byte a byte; sólo agrega las 5 `campanas` y sube la `version`). El `scp` de S9 **no borra conocimiento vivo**. Prueba y comando de verificación post-deploy en **S9**.
+
 ---
 
 ## Después
@@ -375,32 +379,6 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       worktrees de ramas ya mergeadas es de cada carril; el de plataforma es el que lleva la
       cuenta.
 
-- [ ] **Arrastrado del ítem 1: dos huecos de plataforma encontrados al levantar el entorno.**
-      Ninguno bloquea el objetivo del carril; se dejan escritos con su prueba.
-      1. ✅ **Arreglado en la misma vuelta:** el `connect-src` de la CSP
-         (`onia-platform/next.config.ts`) sólo agregaba `wss://<host>` cuando la URL de
-         Supabase era `https:`. Con un Supabase servido por `http` — el stack local, y
-         cualquier self-host on-premise tipo Onia Box — el `ws://<host>` quedaba fuera y el
-         navegador **bloqueaba el websocket de realtime en silencio**: se ve en consola
-         (*"violates the following Content Security Policy directive"*). Lo usan la campana de
-         notificaciones, la agenda y las citas (no `/inbox`, que no abre canal). Ahora el
-         esquema del websocket se deriva del de la URL.
-      2. ↔️ **Encontrado por las malas y YA arreglado por otro carril, media hora antes:**
-         `npx eslint .` entra a `.claude/worktrees/*/.next/**` — el build de OTRO worktree —
-         porque el `globalIgnores` de `eslint.config.mjs` sólo lista `.next/**` de la raíz.
-         Acá costó dos intentos abortados antes de correr el lint acotado a mano; el commit
-         `149e2a9` del repo `onia-platform` ya lo había resuelto moviendo el patrón al script
-         `npm run lint` (20 min → 39 s). **La lección para esta cola: correr `npm run lint`,
-         no `npx eslint .`** — y hacer `git pull` antes de pelearse con un gate lento, porque
-         el arreglo puede estar en origin. La raíz de verdad (`globalIgnores`) sigue esperando
-         a Sergio: el hook `config-protection` bloquea editar `eslint.config.mjs`.
-      3. ⚠️ **El test nuevo de ese mismo arreglo es INESTABLE**, y un gate que parpadea no es
-         un gate: `__tests__/eslint-no-lintea-worktrees.test.ts > "con ese patron, ni el build
-         ni el codigo de otra rama entran"` falló en una corrida de la suite completa
-         (2355 passed | 1 failed) y pasó solo y en la corrida siguiente (2356 passed). Se
-         anota sin tocarlo — es de otro carril — pero el que lo escribió tiene que saberlo:
-         lanza eslint de verdad desde el test, así que compite por CPU con los otros 190
-         archivos.
 - [ ] **`git checkout` en este repo DESINCRONIZA el espejo del bot sin mostrar un solo cambio
       — y pone rojo el gate que existe para detectar drift real.** Encontrado por las malas al
       cerrar el ítem de `recepcionista.test.mjs`: después de mutar y restaurar
@@ -548,8 +526,12 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S4 | **Verificar el push "te escribieron" en su celular** (suscribirse y recibir) | Hace falta un dispositivo real | El circuito está testeado 95/95 y deployado; sólo falta la prueba física |
 | S5 | **¿Silenciar el Telegram de los agentes n8n que sí trabajan?** (Vendedor, Contenido, Finanzas, Prospector, Radar IA, Web Factory Radar) + los recordatorios de agenda cada 30 min | Es su canal y su umbral de ruido. No se apagan los workflows: hacen trabajo — hay que editar el nodo de aviso de cada uno | Que Telegram vuelva a ser sólo errores, que es la regla que ya se aplicó al resto |
 | S7 | **Contestar (o descartar) a los cuatro desconocidos que escribieron y nadie respondió** — conv 35 (+591 73232758, clínica dental de 4 doctores, 25-ago), 37 (+591 73021804, 28-ago), 36 (`Saguilera@ds-santacruz.bo`, 27-ago) y 34 (widget, sin dato de contacto) | Vende Sergio, y son personas reales esperando desde hace 3-6 días. Un bot no puede retomar una conversación fría de hace una semana sin que suene a spam | El primer lead atendido del carril. Dos tienen número de WhatsApp y uno correo: tres de los cuatro son alcanzables hoy |
-| S8 | **Decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** — y hacer los dos clicks. ✅ **El deploy YA NO es parte: se hizo el 31-ago 22:59** (verificado en el build de producción, que trae el 409 de tenencia y la validación de `88c1d56`) | Los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §9 (recomendación: opción 1, `Onia (interna)` → inbox 5) | **El objetivo del carril entero, y ya no falta código ni deploy: faltan dos clicks.** Entrar a `/admin/organizations/<id>` de `Onia (interna)`, escribir `5`, Vincular. Base verificada en vivo el 31-ago: las cuatro orgs siguen sin vínculo salvo la de QA (inbox 7). ⚠️ **Corregido el 31-ago (2ª vuelta): el ítem 2 ya NO cuelga de acá.** Decía que las campañas sólo existían en modo recepcionista — era cierto y ya no lo es: ahora también se leen en modo venta, así que las frases de la web se destraban con S9, sin decidir dueño de inbox |
-| S9 | **Publicar las campañas en el VPS — y son CUATRO archivos, no uno.** 🔴 **Corregido el 31-ago (3ª vuelta): tal como estaba escrito, esto NO encendía nada.** Decía copiar sólo `campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` porque daba el motor por desplegado; medido con md5, el VPS está **un commit atrás** (`3e3841aa`, sin `994eb42d`) y su `bot-engine.mjs` tiene **cero `campanaExacta`** — habría ignorado las campañas en silencio. Lo que tiene que viajar: **`bot-engine.mjs` + `knowledge.mjs` + `run-turn.mjs`** (del espejo `hermes-content/deploy/vps-ops/bot/`) **+ `knowledge.json`** (desde `hermes-content/docs/chatbot/campanas-onia.knowledge.json`), y después **reiniciar** — `webhook-server.sh` sólo recopia al contenedor si cambia su STAMP. Verificar con `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` (tiene que salir 0) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK | **El ítem 2 entero.** El motor del repo ya las lee en modo venta (**647/647 verde**, probado con este mismo documento); falta que el VPS TENGA ese motor y que el archivo del número traiga las campañas. ⚠️ **Sumado el 31-ago (4ª vuelta): `run-turn.mjs`**, que volvió a exportar `LLM_SYSTEM_PROMPT` para revivir los 12 evals. Corrido hoy contra producción, `espejo-check.mjs` sale **1**: DISTINTOS `bot-engine.mjs`, `bot-engine.test.mjs`, `knowledge.mjs`, `run-turn.mjs`, `run-turn.test.mjs`; FALTAN `campanas-web.test.mjs`, `espejo-check.mjs`, `espejo-check.test.mjs`, `recepcionista.test.mjs`. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico. ✅ **Gate 1 del 31-ago (5ª vuelta): EL CÓDIGO YA VIAJÓ — S9 se achicó a UN archivo de datos.** Medido, no leído: `espejo-check.mjs` sale **0** (`ESPEJO OK`), o sea que `bot-engine.mjs`, `knowledge.mjs` y `run-turn.mjs` ya son los del repo. Y confirmado en el motor que **CORRE**, no en el host: `docker exec onia-center grep -c campanaExacta /tmp/onia-bot/bot-engine.mjs` → **2** (era 0). Lo único que falta es el documento: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago, con cero `campanas`** — dentro y fuera del contenedor. **S9 hoy = copiar `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` y reiniciar.** (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) |
+| S8 | **Decidir qué org se queda con los inboxes 4 (Onia Web) y 5 (Onia WhatsApp)** — y hacer los dos clicks. ✅ **El deploy YA NO es parte: se hizo el 31-ago 22:59** (verificado en el build de producción, que trae el 409 de tenencia y la validación de `88c1d56`) | Los dos inboxes son de Onia misma, así que elegir dueño es decidir en qué bandeja aterrizan los desconocidos. Opciones cotizadas en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §9 (recomendación: opción 1, `Onia (interna)` → inbox 5) | **El objetivo del carril entero, y ya no falta código ni deploy: faltan dos clicks.** Entrar a `/admin/organizations/<id>` de `Onia (interna)`, escribir `5`, Vincular. Base verificada en vivo el 31-ago: las cuatro orgs siguen sin vínculo salvo la de QA (inbox 7). ✅ **Sumado el 31-ago (6ª vuelta) — la última duda que quedaba sobre S8 está medida, y sale que SÍ alcanza.** Nadie había comprobado que el producto pueda LEER esas conversaciones: `listConversations` pega a `/conversations?inbox_id=N`, y en Chatwoot un token de **agente** que no es miembro del inbox recibe la lista **vacía** con 200 — el molde exacto del fantasma de este carril (Sergio hace los dos clicks, la bandeja sigue vacía, y el ítem se cierra mal). Corrido con el token del propio contenedor del producto (`docker exec onia-platform`, sin sacar el token) contra el Chatwoot de producción: **inbox 4 → `all_count` 5 · inbox 5 → `all_count` 3 · inbox 7 → `all_count` 6**, y en el payload del 5 aparece `mariohassen / +59173021804`, que es el desconocido de la conv 37. O sea que la tenencia es lo ÚNICO que falta: el permiso ya está y el filtro `esDeInbox` revalida sobre datos que sí llegan. ⚠️ **Corregido el 31-ago (2ª vuelta): el ítem 2 ya NO cuelga de acá.** Decía que las campañas sólo existían en modo recepcionista — era cierto y ya no lo es: ahora también se leen en modo venta, así que las frases de la web se destraban con S9, sin decidir dueño de inbox |
+| S9 | **Publicar las campañas en el VPS — y son CUATRO archivos, no uno.** 🔴 **Corregido el 31-ago (3ª vuelta): tal como estaba escrito, esto NO encendía nada.** Decía copiar sólo `campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` porque daba el motor por desplegado; medido con md5, el VPS está **un commit atrás** (`3e3841aa`, sin `994eb42d`) y su `bot-engine.mjs` tiene **cero `campanaExacta`** — habría ignorado las campañas en silencio. Lo que tiene que viajar: **`bot-engine.mjs` + `knowledge.mjs` + `run-turn.mjs`** (del espejo `hermes-content/deploy/vps-ops/bot/`) **+ `knowledge.json`** (desde `hermes-content/docs/chatbot/campanas-onia.knowledge.json`), y después **reiniciar** — `webhook-server.sh` sólo recopia al contenedor si cambia su STAMP. Verificar con `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` (tiene que salir 0) | Escribe en el VPS, y la regla dice que ningún deploy sale sin su OK | **El ítem 2 entero.** El motor del repo ya las lee en modo venta (**647/647 verde**, probado con este mismo documento); falta que el VPS TENGA ese motor y que el archivo del número traiga las campañas. ⚠️ **Sumado el 31-ago (4ª vuelta): `run-turn.mjs`**, que volvió a exportar `LLM_SYSTEM_PROMPT` para revivir los 12 evals. Corrido hoy contra producción, `espejo-check.mjs` sale **1**: DISTINTOS `bot-engine.mjs`, `bot-engine.test.mjs`, `knowledge.mjs`, `run-turn.mjs`, `run-turn.test.mjs`; FALTAN `campanas-web.test.mjs`, `espejo-check.mjs`, `espejo-check.test.mjs`, `recepcionista.test.mjs`. Sin esto las 4 frases vivas de onia.com.bo siguen recibiendo el saludo genérico. ✅ **Gate 1 del 31-ago (5ª vuelta): EL CÓDIGO YA VIAJÓ — S9 se achicó a UN archivo de datos.** Medido, no leído: `espejo-check.mjs` sale **0** (`ESPEJO OK`), o sea que `bot-engine.mjs`, `knowledge.mjs` y `run-turn.mjs` ya son los del repo. Y confirmado en el motor que **CORRE**, no en el host: `docker exec onia-center grep -c campanaExacta /tmp/onia-bot/bot-engine.mjs` → **2** (era 0). Lo único que falta es el documento: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago, con cero `campanas`** — dentro y fuera del contenedor. **S9 hoy = copiar `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json` y reiniciar.** ✅ **Sumado el 31-ago (6ª vuelta) — verificado que la copia es SEGURA, que era un riesgo sin medir.** La instrucción manda a **sobrescribir un archivo de datos vivo en producción** y nadie había comparado los dos lados: si el documento nuevo no traía algo que el viejo sí, el `scp` lo borraba en silencio. Bajado el vivo del VPS y diffeado campo por campo contra el del repo: `identity`, `empresa` (el horario lun-vie 9-18) y `triggersExtra` son **idénticos**, y la única FAQ (`siat`) es **byte a byte la misma**. El nuevo sólo agrega `campanas` (5) y sube `version` de `2026-08-06.1` a `2026-08-31.1`. Es un **superset estricto**: no se pierde nada. **Y cómo se comprueba DESPUÉS del scp** — porque este carril ya dio dos deploys por hechos sin mirarlos, y hay que medirlo en el motor que CORRE, no en el host:
+  ```bash
+  ssh root@187.77.16.63 "docker exec onia-center sh -c 'grep -c campanas /tmp/onia-bot/knowledge.json'"
+  ```
+  Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) |
 | S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas |
 | S11 | **Setear `CHATWOOT_BOT_AGENT_ID=3` en el servicio del bot del VPS** y recargarlo | Escribe en el VPS y cambia con qué identidad postea un bot vivo | Que la bandeja rotule **"Tu asistente"** en vez de **"Vos"** los mensajes del bot: hoy el dueño no puede distinguir su voz de la del asistente en su propia pantalla (MIRADO). Todo lo caro ya existe desde el 11-ago — el agente 3 "Onia Bot" tiene token y es miembro de los inboxes 4, 5 y 7. Opciones y el detalle del inbox 3 en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §11 |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
@@ -563,6 +545,28 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 > alguien los vuelve a abrir, que sea contra el archivo, no contra la memoria.
 
 **Cerrado en esta vuelta (2026-08-31):**
+
+- [x] **Arrastrado del ítem 1: dos huecos de plataforma — LOS TRES cerrados, y el tercero
+      lo cerró otro carril hace una hora.** Gate 1 del 2026-08-31 (sexta vuelta) contra el
+      código de HOY, no contra el texto del ítem:
+      1. ✅ **CSP:** `onia-platform/next.config.ts:18` deriva el esquema del websocket del
+         de la URL — `${url.protocol === "https:" ? "wss" : "ws"}://${url.host}`. Era el
+         arreglo de este mismo carril y sigue en pie.
+      2. ✅ **eslint no entra a los worktrees:** `package.json:10` →
+         `"lint": "eslint --ignore-pattern \".claude/**\""`. La raíz de verdad
+         (`globalIgnores` de `eslint.config.mjs`, que sigue listando sólo `.next/**`) NO se
+         tocó y NO hace falta: el script ya la tapa, y editar ese archivo lo bloquea el hook
+         `config-protection`. Se deja de arrastrar.
+      3. ✅ **El test inestable dejó de serlo:** commit `e644c85` de `onia-platform`
+         (31-ago 19:35) — *"la guarda del gate de lint fallaba al azar y volvia el gate
+         inservible"*. La causa que encontró es la que este carril sospechaba y mejor
+         medida: la primera `isPathIgnored` carga el flat config entero (~1,7 s en reposo,
+         ~8 s con la suite en paralelo) contra un default de vitest de 5 s. **Corrido hoy:**
+         `npx vitest run __tests__/eslint-no-lintea-worktrees.test.ts` → **4 passed**, 6,88 s.
+      **Por qué se cierra y no se deja "por las dudas":** el ítem existía para dejar escritos
+      dos huecos ajenos con su prueba. Los dos se arreglaron y el tercero también. Un ítem
+      abierto cuyo contenido ya está hecho es el fantasma exacto que este carril mide.
+
 
 - [x] **`recepcionista.test.mjs` estaba COMMITEADO CON 0 BYTES — un test que no podía fallar.**
       Gate 1 confirmó que era real, no fantasma: `wc -c` daba **0** y `git show HEAD:…` también,
