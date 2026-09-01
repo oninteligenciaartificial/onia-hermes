@@ -443,9 +443,22 @@ declaración con la etiqueta del Paso 0. Deriva a Onia **una sola vez**, y a pro
   hay que apagar nada a las apuradas.
 
   Si Sergio prefiere silencio total el día 0, la única palanca limpia es vaciar `palabras` de la
-  rama `DESCONOCIDA` en el nodo *Parsear comentario* y volver a ponerlas antes del día 4 (L6, la
-  primera pieza que SÍ pide palabra). Es tocar n8n en vivo — carril infra, un dueño a la vez —
-  así que **no se hizo desde acá**: queda como opción suya, de un minuto.
+  rama `DESCONOCIDA` en el nodo *Parsear comentario* y volver a ponerlas **antes del día 3
+  (L6, la primera pieza que SÍ pide palabra)**. Es tocar n8n en vivo — carril infra, un dueño a
+  la vez — así que **no se hizo desde acá**: queda como opción suya, de un minuto.
+
+  ⚠️ **Corregido el 31-ago: acá decía «antes del día 4».** Está mal por un día, y el error se
+  contradecía con la línea de cuatro renglones más abajo, en este mismo archivo: el orden es
+  L09 → L6 → L10 → L08 → L11, así que **L6 es el día 3** (confirmado en el handoff del carril,
+  `hermes-content/docs/handoffs/claude-ads-creatividades-publicos.md` fila 3 de la tabla del
+  calendario: *«L6 cinco señales · SISTEMA · Primera pieza que pide algo»*). Importa porque el
+  día que se repone es exactamente el día que se publica: reponer «antes del día 4» deja a L6
+  saliendo el día 3 con la palanca todavía vacía. Y L6 **es** la pieza que pide comentario —
+  su lámina 7 cierra con el botón *«Comentá SISTEMA»* (mirado el 31-ago en
+  `hermes-content/references/modelos/lucia/posts-20260807/L6/_HOJA-DE-CONTACTO.jpg`). El
+  resultado sería el peor de los dos mundos: la primera pieza que pide algo, publicada, con la
+  gente comentando la palabra correcta y **el bot sin escucharla** — un CTA muerto en el feed,
+  silencioso, sin error en ningún lado que lo delate.
 - **No publicar `onia-6-tareas-para-delegar.pdf`** — no desbloquea ninguna pieza.
 - Los días 2 a 6 (L09 → L6 → L10 → L08 → L11) van uno por día, en ese orden. Recién ahí
   aparece la primera pieza que pide algo por comentario.
