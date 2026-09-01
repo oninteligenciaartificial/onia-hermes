@@ -37,18 +37,36 @@ export type DashboardProgressList = {
 
 export type DashboardSeries = { name: string; points: DashboardPoint[] };
 
+/**
+ * Estado de una seccion que trae datos de afuera. Ausente = listo.
+ *
+ * El panel se generaba SIEMPRE en su estado final: no existia forma de dibujar
+ * "todavia cargando" ni "fallo la consulta", asi que cada consumidor tenia que
+ * inventar su propio markup — o, peor, mostrar una seccion vacia como si el
+ * negocio no tuviera datos cuando en realidad la peticion se habia caido.
+ */
+export type DashboardEstado = "cargando" | "error";
+
 export type DashboardChart = {
   title: string;
   unit: string;
-  type: "bar" | "line" | "donut" | "sparkline";
+  /**
+   * `radial`: medidor de UNA proporcion, con la cifra al centro. Es el caso que
+   * un numero pelado no resuelve ("34% de cierre" no dice si esta cerca o lejos
+   * del tope); el arco lo situa contra su maximo de un vistazo. `points[0]` es la
+   * parte y el resto de los puntos completan el total.
+   */
+  type: "bar" | "line" | "donut" | "sparkline" | "radial";
   points: DashboardPoint[];
   series?: DashboardSeries[];
+  estado?: DashboardEstado;
 };
 
 export type DashboardTable = {
   title: string;
   columns: string[];
   rows: string[][];
+  estado?: DashboardEstado;
 };
 
 /**
@@ -73,10 +91,11 @@ export type DashboardAgent = {
   titulo: string;
   resumen: string;
   acciones: DashboardAgentAction[];
+  estado?: DashboardEstado;
 };
 
 export type DashboardNote = { texto: string; meta: string; ancla: string };
-export type DashboardNotes = { titulo: string; items: DashboardNote[] };
+export type DashboardNotes = { titulo: string; items: DashboardNote[]; estado?: DashboardEstado };
 
 export type DashboardData = {
   title: string;
@@ -225,6 +244,21 @@ function renderAgentAndNotes(agent?: DashboardAgent, notes?: DashboardNotes): st
 }
 
 function renderAgent(agent: DashboardAgent): string {
+  if (agent.estado) {
+    return `<article class="wf-agent" data-reveal${
+      agent.estado === "cargando" ? ' aria-busy="true"' : ""
+    }>
+            <div class="wf-agent-head">
+              <h2>${escapeHtml(agent.titulo)}</h2>
+            </div>
+            ${
+              agent.estado === "cargando"
+                ? renderSkeletonLines(3, `Cargando ${agent.titulo}`)
+                : renderSectionError(agent.titulo)
+            }
+          </article>`;
+  }
+
   if (!agent.acciones.length) {
     return `<article class="wf-agent">
             <div class="wf-agent-head">
@@ -285,16 +319,23 @@ function renderNotes(notes: DashboardNotes): string {
         .join("")
     : "";
 
+  const cuerpo =
+    notes.estado === "cargando"
+      ? renderSkeletonLines(3, `Cargando ${notes.titulo}`)
+      : notes.estado === "error"
+        ? renderSectionError(notes.titulo)
+        : items
+          ? `<ul class="wf-notes-list">${items}</ul>`
+          : renderEmpty("Sin notas", "Lo que anotes queda a la vista del equipo.");
+
   return `
-          <article class="wf-notes" data-reveal>
+          <article class="wf-notes" data-reveal${
+            notes.estado === "cargando" ? ' aria-busy="true"' : ""
+          }>
             <div class="wf-notes-head">
               <h2>${escapeHtml(notes.titulo)}</h2>
             </div>
-            ${
-              items
-                ? `<ul class="wf-notes-list">${items}</ul>`
-                : renderEmpty("Sin notas", "Lo que anotes queda a la vista del equipo.")
-            }
+            ${cuerpo}
           </article>`;
 }
 
@@ -303,27 +344,96 @@ function renderCharts(charts: DashboardChart[]): string {
     return "";
   }
 
-  const cards = charts
-    .map(
-      (chart) => `
-          <article class="wf-chart-card wf-chart-card--${chart.type}" data-reveal>
-            <div class="wf-chart-head">
-              <h2>${escapeHtml(chart.title)}</h2>
-              ${chart.unit ? `<span class="wf-chart-unit">${escapeHtml(chart.unit)}</span>` : ""}
-            </div>
-            ${
-              hasChartData(chart)
-                ? renderChart(chart)
-                : renderEmpty("Sin datos", "Este grafico se completa cuando llegan los datos.")
-            }
-          </article>`,
-    )
-    .join("");
+  const cards = charts.map(renderChartCard).join("");
 
   return `
         <section class="wf-dash-charts" aria-label="Graficos">
           ${cards}
         </section>`;
+}
+
+export function renderChartCard(chart: DashboardChart): string {
+  return `
+          <article class="wf-chart-card wf-chart-card--${chart.type}" data-reveal${
+            chart.estado === "cargando" ? ' aria-busy="true"' : ""
+          }>
+            <div class="wf-chart-head">
+              <h2>${escapeHtml(chart.title)}</h2>
+              ${chart.unit ? `<span class="wf-chart-unit">${escapeHtml(chart.unit)}</span>` : ""}
+            </div>
+            ${renderChartSlot(chart)}
+          </article>`;
+}
+
+function renderChartSlot(chart: DashboardChart): string {
+  if (chart.estado === "cargando") {
+    return chartSlot(chart, renderSkeleton(`Cargando ${chart.title}`), "cargando");
+  }
+  if (chart.estado === "error") {
+    return chartSlot(chart, renderSectionError(chart.title), "error");
+  }
+  if (hasChartData(chart)) {
+    return renderChart(chart);
+  }
+  return chartSlot(
+    chart,
+    renderEmpty("Sin datos", "Este grafico se completa cuando llegan los datos."),
+    "vacio",
+  );
+}
+
+/**
+ * Caja con la MISMA geometria que el grafico que reemplaza — skeleton isomorfo:
+ * cuando el dato llega, la tarjeta no cambia de alto y nada salta de sitio.
+ *
+ * Por eso el estado vacio tambien pasa por aca: colapsaba a la altura de su
+ * propio texto y, como el grid iguala la fila a la tarjeta mas alta, un solo
+ * grafico sin datos reacomodaba a sus dos vecinas (el defecto de A1d otra vez).
+ *
+ * Para bar/line/sparkline la geometria se reutiliza literal: la caja lleva las
+ * mismas clases que el SVG real (`wf-chart`, `wf-sparkline`), asi el alto sale
+ * del mismo aspect-ratio y no hay un segundo numero que mantener sincronizado.
+ */
+function chartSlot(chart: DashboardChart, inner: string, estado: string): string {
+  const geometria =
+    chart.type === "radial"
+      ? "wf-slot--radial"
+      : chart.type === "donut"
+        ? "wf-slot--donut"
+        : chart.type === "sparkline"
+          ? "wf-chart wf-sparkline"
+          : "wf-chart";
+  return `<div class="wf-slot ${geometria}" data-estado="${estado}">${inner}</div>`;
+}
+
+/** Bloque gris que late. `aria-label` porque para el lector de pantalla la caja
+ *  no dice nada por si sola: sin el, "cargando" es un estado invisible. */
+function renderSkeleton(label: string): string {
+  return `<div class="wf-skel" role="status" aria-label="${escapeAttribute(label)}"></div>`;
+}
+
+/** N renglones de skeleton, para las secciones de texto (agente, notas, tabla). */
+function renderSkeletonLines(count: number, label: string): string {
+  const lines = Array.from(
+    { length: Math.max(count, 1) },
+    () => `<span class="wf-skel wf-skel--line" aria-hidden="true"></span>`,
+  ).join("");
+  return `<div class="wf-skel-lines" role="status" aria-label="${escapeAttribute(label)}">${lines}</div>`;
+}
+
+/**
+ * Error de UNA seccion, no de la pagina: el resto del panel sigue sirviendo.
+ * Lleva boton de reintento porque un error sin salida obliga a recargar todo y
+ * pierde los filtros que el duenio ya habia elegido.
+ */
+function renderSectionError(seccion: string): string {
+  return `<div class="wf-dash-error" role="alert">
+            <strong>No se pudo cargar</strong>
+            <span>${escapeHtml(seccion)} no respondio. El resto del panel sigue al dia.</span>
+            <button type="button" class="wf-dash-retry" data-dash-retry data-seccion="${escapeAttribute(
+              seccion,
+            )}">Reintentar</button>
+          </div>`;
 }
 
 function renderLists(lists: DashboardProgressList[]): string {
@@ -376,19 +486,12 @@ function renderTable(table: DashboardTable): string {
 
   const head = `<tr>${table.columns.map((column) => `<th scope="col">${escapeHtml(column)}</th>`).join("")}</tr>`;
 
-  const body = table.rows.length
-    ? table.rows
-        .map(
-          (row) =>
-            `<tr>${table.columns
-              .map((_, index) => `<td>${escapeHtml(row[index] ?? "")}</td>`)
-              .join("")}</tr>`,
-        )
-        .join("")
-    : `<tr class="wf-table-empty-row"><td colspan="${table.columns.length}">Sin registros para el periodo seleccionado.</td></tr>`;
+  const body = renderTableBody(table);
 
   return `
-        <section class="wf-dash-table" aria-label="${escapeAttribute(table.title)}" data-reveal>
+        <section class="wf-dash-table" aria-label="${escapeAttribute(table.title)}" data-reveal${
+          table.estado === "cargando" ? ' aria-busy="true"' : ""
+        }>
           <div class="wf-dash-table-head">
             <h2>${escapeHtml(table.title)}</h2>
           </div>
@@ -399,6 +502,41 @@ function renderTable(table: DashboardTable): string {
             </table>
           </div>
         </section>`;
+}
+
+/**
+ * El cuerpo de la tabla en sus cuatro estados. El skeleton mantiene la MISMA
+ * cantidad de filas que el ultimo dato conocido (o 4), asi la pagina no da un
+ * salto de alto cuando la consulta vuelve.
+ */
+function renderTableBody(table: DashboardTable): string {
+  const colspan = table.columns.length;
+  if (table.estado === "cargando") {
+    const cells = table.columns
+      .map(() => `<td><span class="wf-skel wf-skel--line" aria-hidden="true"></span></td>`)
+      .join("");
+    return Array.from(
+      { length: Math.max(table.rows.length, 4) },
+      (_, index) =>
+        `<tr${index === 0 ? ' role="status" aria-label="Cargando registros"' : ""}>${cells}</tr>`,
+    ).join("");
+  }
+  if (table.estado === "error") {
+    return `<tr class="wf-table-empty-row"><td colspan="${colspan}">${renderSectionError(
+      table.title,
+    )}</td></tr>`;
+  }
+  if (!table.rows.length) {
+    return `<tr class="wf-table-empty-row"><td colspan="${colspan}">Sin registros para el periodo seleccionado.</td></tr>`;
+  }
+  return table.rows
+    .map(
+      (row) =>
+        `<tr>${table.columns
+          .map((_, index) => `<td>${escapeHtml(row[index] ?? "")}</td>`)
+          .join("")}</tr>`,
+    )
+    .join("");
 }
 
 function renderEmpty(title: string, hint: string): string {
@@ -526,6 +664,8 @@ function hasChartData(chart: DashboardChart): boolean {
 
 export function renderChart(chart: DashboardChart): string {
   switch (chart.type) {
+    case "radial":
+      return renderRadialChart(chart);
     case "donut":
       return renderDonutChart(chart);
     case "sparkline":
@@ -556,8 +696,30 @@ function chartLabel(chart: DashboardChart): string {
         ? "Grafico de dona"
         : chart.type === "sparkline"
           ? "Sparkline"
-          : "Grafico de barras";
+          : chart.type === "radial"
+            ? "Medidor radial"
+            : "Grafico de barras";
   return `${kind}: ${chart.title}${chart.unit ? ` (${chart.unit})` : ""}`;
+}
+
+/**
+ * Barra con las esquinas redondeadas SOLO en la punta libre. Antes era un `<rect
+ * rx>`, que redondea las cuatro: la base flotaba sobre la linea de cero en vez de
+ * apoyarse en ella, y la serie se leia como una fila de pildoras sueltas. El radio
+ * va arriba en la barra positiva y abajo en la negativa - siempre en el extremo
+ * que se aleja del cero.
+ */
+export function barPath(x: number, y: number, w: number, h: number, radius: number, down: boolean): string {
+  const r = Math.max(0, Math.min(radius, w / 2, h));
+  const f = (value: number): string => value.toFixed(1);
+  if (down) {
+    return `M${f(x)},${f(y)} h${f(w)} v${f(h - r)} a${f(r)},${f(r)} 0 0 1 ${f(-r)},${f(r)} h${f(
+      -(w - 2 * r),
+    )} a${f(r)},${f(r)} 0 0 1 ${f(-r)},${f(-r)} Z`;
+  }
+  return `M${f(x)},${f(y + h)} v${f(-(h - r))} a${f(r)},${f(r)} 0 0 1 ${f(r)},${f(-r)} h${f(
+    w - 2 * r,
+  )} a${f(r)},${f(r)} 0 0 1 ${f(r)},${f(r)} v${f(h - r)} Z`;
 }
 
 function renderBarChart(chart: DashboardChart): string {
@@ -589,9 +751,9 @@ function renderBarChart(chart: DashboardChart): string {
         ? `fill="url(#wf-hatch)" stroke="var(--wf-series-1)" stroke-opacity="0.45" stroke-width="1"`
         : `fill="var(--wf-series-1)"`;
       const pendingNote = point.pending ? " (pendiente)" : "";
-      return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(
-        1,
-      )}" rx="${Math.min(3, barWidth / 2, height / 2).toFixed(1)}" ${paint}><title>${escapeHtml(point.label)}: ${point.value}${pendingNote}</title></rect>`;
+      return `<path d="${barPath(x, y, barWidth, height, 3, point.value < 0)}" ${paint}><title>${escapeHtml(
+        point.label,
+      )}: ${point.value}${pendingNote}</title></path>`;
     })
     .join("");
 
@@ -628,7 +790,7 @@ function renderLineChart(chart: DashboardChart): string {
           (point, index) =>
             `<circle cx="${xFor(index, count).toFixed(1)}" cy="${yFor(point.value).toFixed(
               1,
-            )}" r="2.5" fill="${color}"><title>${escapeHtml(entry.name)} - ${escapeHtml(point.label)}: ${
+            )}" r="4" fill="${color}"><title>${escapeHtml(entry.name)} - ${escapeHtml(point.label)}: ${
               point.value
             }</title></circle>`,
         )
@@ -650,6 +812,77 @@ function renderLineChart(chart: DashboardChart): string {
   return `${legend}${svg}`;
 }
 
+/** Separacion entre gajos del donut, en px de arco (spec de marca del skill `dataviz`). */
+const DONUT_GAP = 4;
+
+/** Angulos del medidor: arco de 270 grados abierto abajo, como Tabler/Grafana. */
+const GAUGE_START = 225;
+const GAUGE_SWEEP = 270;
+
+function polarPoint(cx: number, cy: number, r: number, angleDeg: number): { x: number; y: number } {
+  const rad = ((angleDeg - 90) * Math.PI) / 180;
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+
+/** Arco de circunferencia como `path`: permite punta redondeada y abrirlo abajo. */
+export function arcPath(cx: number, cy: number, r: number, startDeg: number, endDeg: number): string {
+  const start = polarPoint(cx, cy, r, startDeg);
+  const end = polarPoint(cx, cy, r, endDeg);
+  const largeArc = Math.abs(endDeg - startDeg) > 180 ? 1 : 0;
+  return `M${start.x.toFixed(2)},${start.y.toFixed(2)} A${r},${r} 0 ${largeArc} 1 ${end.x.toFixed(
+    2,
+  )},${end.y.toFixed(2)}`;
+}
+
+/**
+ * Medidor radial: UNA proporcion, con su cifra al centro.
+ *
+ * Es el hueco que dejaba el panel: un porcentaje suelto ("34% de cierre") no dice
+ * si esta cerca o lejos de su tope, y el arco lo situa de un vistazo. Es lo que
+ * Tabler y Grafana ponen en ese caso.
+ *
+ * `points[0]` es la parte medida y el resto de los puntos completan el total. Con
+ * un solo punto el valor se lee como porcentaje (0-100), que es como llega desde
+ * el intake un KPI ya calculado.
+ */
+export function renderRadialChart(chart: DashboardChart): string {
+  const points = chart.points.filter((point) => point.value >= 0);
+  const first = points[0];
+  if (!first) {
+    return renderEmpty("Sin datos", "Este medidor se completa cuando llegan los datos.");
+  }
+  const total = points.length > 1 ? points.reduce((sum, point) => sum + point.value, 0) : 100;
+  const ratio = total > 0 ? Math.min(Math.max(first.value / total, 0), 1) : 0;
+  const percent = Math.round(ratio * 100);
+
+  const size = 150;
+  const cx = size / 2;
+  const cy = size / 2 + 8; // el arco abierto abajo deja aire arriba: se baja el centro
+  const radius = 54;
+  const stroke = 14;
+
+  const track = arcPath(cx, cy, radius, GAUGE_START, GAUGE_START + GAUGE_SWEEP);
+  const value = arcPath(cx, cy, radius, GAUGE_START, GAUGE_START + GAUGE_SWEEP * ratio);
+  // Con ratio 0 NO se dibuja arco: el path degenerado con linecap round pinta un
+  // punto que se lee como "algo", y el dato dice que no hay nada.
+  const valueArc =
+    ratio > 0
+      ? `<path d="${value}" fill="none" stroke="var(--wf-series-1)" stroke-width="${stroke}" stroke-linecap="round"></path>`
+      : "";
+
+  const caption = points.length > 1 ? first.label : chart.unit;
+
+  return `<svg class="wf-chart wf-gauge" viewBox="0 0 ${size} ${size}" role="img" aria-label="${escapeAttribute(
+    `${chartLabel(chart)}: ${percent}%`,
+  )}" preserveAspectRatio="xMidYMid meet"><path d="${track}" fill="none" stroke="var(--border)" stroke-width="${stroke}" stroke-linecap="round"></path>${valueArc}<text x="${cx}" y="${cy}" text-anchor="middle" class="wf-gauge-value">${percent}%</text>${
+    caption
+      ? `<text x="${cx}" y="${cy + 20}" text-anchor="middle" class="wf-gauge-label">${escapeHtml(caption)}</text>`
+      : ""
+  }<title>${escapeHtml(first.label)}: ${first.value}${
+    points.length > 1 ? ` de ${total}` : ""
+  } (${percent}%)</title></svg>`;
+}
+
 function renderDonutChart(chart: DashboardChart): string {
   const points = chart.points.filter((point) => point.value > 0);
   const total = points.reduce((sum, point) => sum + point.value, 0) || 1;
@@ -659,14 +892,20 @@ function renderDonutChart(chart: DashboardChart): string {
   const stroke = 22;
   const circumference = 2 * Math.PI * radius;
 
+  // Gajos pegados = un anillo de bandas que hay que separar con la vista. El gap
+  // se descuenta del largo DIBUJADO, no del reparto: el angulo de cada gajo sigue
+  // siendo su proporcion exacta, asi que separa sin mentir sobre el dato.
+  const gap = points.length > 1 ? DONUT_GAP : 0;
+
   let accumulated = 0;
   const arcs = points
     .map((point, index) => {
       const length = (point.value / total) * circumference;
+      const drawn = Math.max(length - gap, 0.5);
       const color = SERIES_COLORS[index % SERIES_COLORS.length];
-      const segment = `<circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-dasharray="${length.toFixed(
+      const segment = `<circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-dasharray="${drawn.toFixed(
         2,
-      )} ${(circumference - length).toFixed(2)}" stroke-dashoffset="${(-accumulated).toFixed(
+      )} ${(circumference - drawn).toFixed(2)}" stroke-dashoffset="${(-accumulated).toFixed(
         2,
       )}" transform="rotate(-90 ${cx} ${cx})"><title>${escapeHtml(point.label)}: ${point.value} (${Math.round(
         (point.value / total) * 100,
@@ -676,9 +915,21 @@ function renderDonutChart(chart: DashboardChart): string {
     })
     .join("");
 
+  // El agujero estaba vacio y el total solo existia sumando la leyenda de memoria.
+  // Va al centro, el unico lugar del anillo que no compite con ningun gajo.
+  const center = `<text x="${cx}" y="${cx - 2}" text-anchor="middle" class="wf-donut-total">${escapeHtml(
+    formatTick(total),
+  )}</text>${
+    chart.unit
+      ? `<text x="${cx}" y="${cx + 14}" text-anchor="middle" class="wf-donut-total-label">${escapeHtml(
+          chart.unit,
+        )}</text>`
+      : ""
+  }`;
+
   const svg = `<svg class="wf-chart wf-donut" viewBox="0 0 ${size} ${size}" role="img" aria-label="${escapeAttribute(
     chartLabel(chart),
-  )}" preserveAspectRatio="xMidYMid meet"><circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="var(--border)" stroke-width="${stroke}"></circle>${arcs}</svg>`;
+  )}" preserveAspectRatio="xMidYMid meet"><circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="var(--border)" stroke-width="${stroke}"></circle>${arcs}${center}</svg>`;
   const legend = renderLegend(
     points.map((point, index) => ({
       name: `${point.label} ${Math.round((point.value / total) * 100)}%`,
@@ -706,7 +957,7 @@ function renderSparkline(chart: DashboardChart): string {
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
   const last = points[count - 1];
   const dot = last
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="var(--wf-series-1)"></circle>`
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="4" fill="var(--wf-series-1)"></circle>`
     : "";
 
   // `preserveAspectRatio="none"` estiraba el viewBox al ancho de la tarjeta y con
@@ -742,9 +993,14 @@ function renderKpiSpark(values: number[], label: string): string {
     ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="3" fill="currentColor"></circle>`
     : "";
 
+  // Mismo defecto que W2 arreglo en el sparkline grande, que aca habia quedado:
+  // con `none` el viewBox se estiraba al ancho de la tarjeta, el trazo perdia
+  // grosor uniforme y el punto final salia elipse. `meet` mantiene la proporcion;
+  // la CSS de .wf-kpi-spark fija el aspect-ratio, asi que el bloque se sigue
+  // llenando de borde a borde igual que antes.
   return `<svg class="wf-kpi-spark" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttribute(
     `Tendencia: ${label}`,
-  )}" preserveAspectRatio="none"><polygon points="${area}" fill="currentColor" fill-opacity="0.14"></polygon><polyline points="${line}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
+  )}" preserveAspectRatio="xMidYMid meet"><polygon points="${area}" fill="currentColor" fill-opacity="0.14"></polygon><polyline points="${line}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
 }
 
 function renderChartLabels(
@@ -853,6 +1109,21 @@ const dashboardScript = `<script>
       });
     }
 
+    // El reintento no sabe de donde salen los datos: este template es HTML
+    // estatico. Avisa con un evento y deja que quien los trae vuelva a renderizar
+    // la seccion. Delegado en document porque la seccion se reemplaza entera.
+    document.addEventListener("click", function (event) {
+      var button = event.target.closest("[data-dash-retry]");
+      if (!button) return;
+      button.setAttribute("aria-busy", "true");
+      button.disabled = true;
+      button.textContent = "Reintentando...";
+      button.dispatchEvent(new CustomEvent("wf:reintentar", {
+        bubbles: true,
+        detail: { seccion: button.getAttribute("data-seccion") || "" }
+      }));
+    });
+
     var reveal = document.querySelectorAll("[data-reveal]");
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce || !("IntersectionObserver" in window)) {
@@ -883,7 +1154,10 @@ body {
   color: var(--color-fg);
   font-family: var(--font-body);
   --wf-pos: #166534;
-  --wf-neg: #b91c1c;
+  /* #b91c1c daba 4,33:1 sobre su propia pildora (la tinta al 14% sobre la card
+     tostada): reprobaba WCAG AA por 0,17. Oscurecido conservando hue y
+     saturacion hasta 4,64:1 — calculado, no estimado. */
+  --wf-neg: #b01b1b;
   --wf-font-mono: "${DASHBOARD_MONO}", ui-monospace, "SFMono-Regular", "Menlo", monospace;
 ${seriesVars("light")}
 }
@@ -970,6 +1244,9 @@ h1, h2, h3 {
 }
 
 .wf-dash-nav-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   padding: 10px 12px;
   border-radius: 9px;
   font-weight: 650;
@@ -1029,7 +1306,7 @@ h1, h2, h3 {
 }
 
 .wf-dash-filter {
-  min-height: 36px;
+  min-height: 44px;
   padding: 0 14px;
   border: 0;
   border-radius: 7px;
@@ -1048,7 +1325,7 @@ h1, h2, h3 {
 .wf-dash-cta {
   display: inline-flex;
   align-items: center;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 16px;
   border-radius: 9px;
   font-weight: 750;
@@ -1060,7 +1337,7 @@ h1, h2, h3 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 14px;
   border: 1px solid var(--border);
   border-radius: 9px;
@@ -1100,14 +1377,22 @@ h1, h2, h3 {
   color: var(--color-on-primary);
 }
 
+/* El 78% daba 4,12:1 en oscuro y el 16% de la pildora 4,41:1: los dos
+   reprobaban WCAG AA sobre la card de marca. El par PURO
+   (--color-on-primary sobre --color-primary) si pasaba — y su test lo
+   protegia — pero la hoja despues lo diluye con color-mix y ahi se rompe.
+   Subidos a 86% (4,72:1) y 12% (4,72:1), calculado sobre el primary oscuro
+   real, no estimado.
+   ponytail: porcentaje fijo; con una marca muy clara habria que recalcularlo —
+   lo agarra el gate de axe en oscuro. */
 .wf-kpi--accent .wf-kpi-label,
 .wf-kpi--accent .wf-kpi-context {
-  color: color-mix(in srgb, var(--color-on-primary) 78%, transparent);
+  color: color-mix(in srgb, var(--color-on-primary) 86%, transparent);
 }
 
 .wf-kpi--accent .wf-kpi-delta {
   color: var(--color-on-primary);
-  background: color-mix(in srgb, var(--color-on-primary) 16%, transparent);
+  background: color-mix(in srgb, var(--color-on-primary) 12%, transparent);
 }
 
 /* Sparkline as card anatomy: bleeds to the card edges, under the figure
@@ -1115,7 +1400,11 @@ h1, h2, h3 {
 .wf-kpi-spark {
   display: block;
   width: calc(100% + 36px);
-  height: 44px;
+  /* Aspect-ratio y NO alto fijo: es lo que deja al SVG usar xMidYMid meet sin
+     letterbox (con alto fijo la caja se ensancha mas que 320/44 y el dibujo
+     queda centrado con aire a los costados). El alto resultante ronda los
+     42-54px segun la columna, o sea el mismo bloque de antes. */
+  aspect-ratio: 320 / 44;
   margin: 4px -18px -16px;
   /* El sparkline del KPI es DATO, asi que su tinta sale del tema categorico y no
      de la marca: con --color-primary quedaban barras aqua y sparklines verde
@@ -1321,10 +1610,14 @@ h1, h2, h3 {
   background: color-mix(in srgb, var(--color-fg) 6%, transparent);
 }
 
-.wf-agent-ok:focus-visible,
-.wf-agent-no:focus-visible {
+/* El foco existia en DOS botones (los del agente) y en ningun otro lado: con el
+   teclado, nav, filtros, CTA y tema no se veian. Una sola regla sobre todo lo
+   interactivo del panel cubre tambien lo que se agregue despues. */
+.wf-dash a:focus-visible,
+.wf-dash button:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+  border-radius: 8px;
 }
 
 .wf-note {
@@ -1493,10 +1786,12 @@ h1, h2, h3 {
   gap: 6px;
 }
 
+/* Pildora 14x3, no cuadrado: la muestra tiene que parecerse al trazo que nombra.
+   Con el cuadrado la leyenda pesaba mas que la propia serie del grafico. */
 .wf-chart-legend-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
   flex: 0 0 auto;
 }
 
@@ -1504,6 +1799,37 @@ h1, h2, h3 {
   fill: var(--muted-foreground);
   font-size: 9px;
   font-family: var(--font-body);
+}
+
+/* Ancho ACOTADO, como el donut. Con el 100%% heredado de .wf-chart el medidor se
+   iba a 340px de alto y, como el grid iguala la fila a la tarjeta mas alta, dejaba
+   a las dos vecinas con un palmo de aire muerto al pie (el defecto de A1d, otra vez). */
+.wf-gauge {
+  width: 180px;
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+.wf-gauge-value,
+.wf-donut-total {
+  fill: var(--color-fg);
+  font-family: var(--wf-font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  dominant-baseline: middle;
+}
+
+.wf-donut-total {
+  font-size: 22px;
+}
+
+.wf-gauge-label,
+.wf-donut-total-label {
+  fill: var(--muted-foreground);
+  font-family: var(--font-body);
+  font-size: 10px;
+  dominant-baseline: middle;
 }
 
 /* Progress lists: rows with right-aligned status chips
@@ -1658,6 +1984,142 @@ h1, h2, h3 {
   color: var(--color-fg);
 }
 
+/* Estados de seccion. La caja de "cargando", "error" y "sin datos" tiene la
+   MISMA geometria que el grafico al que reemplaza, asi cuando el dato llega la
+   tarjeta no cambia de alto y nada salta de sitio. Va DESPUES de .wf-chart a
+   proposito: la caja lleva esa misma clase para heredarle el aspect-ratio, y
+   este display:flex tiene que ganarle al display:block de aquella. */
+.wf-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-block: auto;
+}
+
+.wf-slot > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* ponytail: estos dos altos repiten el ancho de .wf-donut (140px) y .wf-gauge
+   (180px), que son cuadrados. Si aquellos cambian, cambiar estos; el resto de
+   los tipos no necesita numero porque hereda el aspect-ratio de .wf-chart. */
+.wf-slot--donut {
+  block-size: 140px;
+}
+
+.wf-slot--radial {
+  block-size: 180px;
+}
+
+.wf-skel {
+  min-height: 100%;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-fg) 8%, transparent);
+  animation: wf-skel-pulse 1.6s ease-in-out infinite;
+}
+
+/* El medidor y el donut son circulos ACOTADOS, no cajas a todo el ancho: con el
+   skeleton rectangular la tarjeta prometia un grafico ancho y al llegar el dato
+   aparecia una rueda chica en el medio. El alto ya no se movia; la FORMA si. */
+.wf-slot--donut .wf-skel,
+.wf-slot--radial .wf-skel {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.wf-slot--donut,
+.wf-slot--radial {
+  justify-content: flex-start;
+}
+
+.wf-slot--donut .wf-skel {
+  flex: 0 0 auto;
+  inline-size: 140px;
+}
+
+.wf-slot--radial .wf-skel {
+  flex: 0 0 auto;
+  inline-size: 180px;
+  margin-inline: auto;
+}
+
+.wf-skel-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.wf-skel--line {
+  display: block;
+  min-height: 0;
+  height: 0.9rem;
+  border-radius: 999px;
+}
+
+.wf-skel-lines .wf-skel--line:nth-child(even) {
+  width: 72%;
+}
+
+@keyframes wf-skel-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.42;
+  }
+}
+
+/* Error de UNA seccion: borde solido (el vacio es punteado) para que se lea
+   como "algo fallo" y no como "todavia no hay nada", que son cosas distintas. */
+.wf-dash-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 22px;
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--wf-neg) 45%, var(--border));
+  border-radius: var(--radius);
+  color: var(--muted-foreground);
+}
+
+.wf-dash-error strong {
+  color: var(--wf-neg);
+}
+
+.wf-dash-retry {
+  margin-top: 6px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.wf-dash-retry:hover {
+  background: color-mix(in srgb, var(--color-fg) 6%, transparent);
+}
+
+.wf-dash-retry[aria-busy="true"] {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.wf-table-empty-row .wf-dash-error {
+  max-width: 420px;
+  margin-inline: auto;
+}
+
 [data-reveal] {
   opacity: 0;
   transform: translateY(10px);
@@ -1674,6 +2136,10 @@ h1, h2, h3 {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .wf-skel {
+    animation: none;
   }
 }
 

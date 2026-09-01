@@ -103,7 +103,16 @@
 .footer-in strong { font-family: var(--font-display); font-size: 1.3rem; color: #fff; }
 .footer-in p { max-width: 46ch; margin: 10px 0 0; }
 .footer-contact { display: flex; flex-direction: column; gap: 8px; }
-.footer-contact a { color: #fff; border-bottom: 1px solid var(--honey); text-decoration: none; width: fit-content; }
+/* El unico enlace a WhatsApp del footer medía 28,2px de alto: bajo el piso
+   tactil de 44px, y es la conversion entera del sitio. El subrayado pasa de
+   border-bottom a text-decoration para que se pegue a las letras y la caja de
+   44px no lo despegue. El alto sale de min-height, no de un padding calculado:
+   medido, 8px de padding daban 43,2 y hay que no volver a ajustarlo si cambia
+   la tipografia. */
+.footer-contact a { color: #fff; width: fit-content;
+  display: inline-flex; align-items: center; min-height: 44px;
+  text-decoration: underline; text-decoration-color: var(--honey);
+  text-decoration-thickness: 1px; text-underline-offset: 5px; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {

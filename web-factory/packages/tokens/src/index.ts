@@ -60,6 +60,16 @@ export function clientTokenVars(client: ClientTokenInput): Record<string, string
  */
 const DARK_BG = "#0c1013";
 const DARK_FG = "#e7e9ec";
+/**
+ * Superficie oscura MAS CLARA que sirven los templates (`--card` / `--popover`).
+ *
+ * Es contra esta, y no contra `--color-bg`, que hay que medir la marca: casi
+ * todo el texto de color vive DENTRO de una tarjeta, y la tarjeta es mas clara
+ * que el fondo. Medir contra el fondo dejaba pasar colores que en la tarjeta
+ * caen por debajo de AA — `wf-path-cta` de realestate marcaba 4,47:1 en oscuro,
+ * a 0,03 del minimo, y el gate lo daba por bueno.
+ */
+const DARK_CARD = "#161c22";
 
 /**
  * Tokens del modo oscuro.
@@ -90,7 +100,7 @@ export function clientDarkTokenVars(client?: ClientTokenInput): Record<string, s
   if (!client) return base;
 
   // 4.5:1 es el minimo de WCAG AA para texto normal.
-  const legible = (color: string) => contrastRatio(color, DARK_BG) >= 4.5;
+  const legible = (color: string) => contrastRatio(color, DARK_CARD) >= 4.5;
   if (!legible(client.colores.secondary)) {
     base["--color-secondary"] = DARK_FG;
     base["--secondary"] = DARK_FG;
@@ -136,7 +146,7 @@ function lightenUntilLegible(hex: string): string {
     // fondo dejaba el boton solido en 4,42:1 — apenas debajo, invisible al ojo
     // pero un fallo de AA que axe reporta. Lo encontro el test, no la revision.
     if (
-      contrastRatio(candidato, DARK_BG) >= 4.5 &&
+      contrastRatio(candidato, DARK_CARD) >= 4.5 &&
       contrastRatio(readableTextOn(candidato), candidato) >= 4.5
     ) {
       return candidato;

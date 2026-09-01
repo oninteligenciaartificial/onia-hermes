@@ -24,6 +24,7 @@ export {
   renderEditorialStatement,
   EDITORIAL_STATEMENT_CSS,
   type EditorialStatementProps,
+  type EditorialStatementFondo,
 } from "./editorial-statement";
 export {
   renderBenefitStrip,
@@ -69,6 +70,19 @@ export {
   type ScrollStoryHeroLink,
   type ScrollStoryHeroProps,
 } from "./scroll-story-hero";
+export {
+  renderMarquee,
+  MARQUEE_CSS,
+  type MarqueeProps,
+} from "./marquee";
+export {
+  renderFeatureBands,
+  FEATURE_BANDS_CSS,
+  type BandTono,
+  type FeatureBand,
+  type FeatureBandMedia,
+  type FeatureBandsProps,
+} from "./feature-bands";
 export {
   renderStatStrip,
   STAT_STRIP_CSS,
