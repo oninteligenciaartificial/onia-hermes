@@ -123,7 +123,7 @@ Se venden **después del primer cierre**, sobre cualquier plan. Precios: `lib/pr
 
 | Add-on | Qué hace | Estado |
 |---|---|---|
-| **Chatbot con IA (web + WhatsApp)** | asistente 24/7 que contesta, califica, agenda y hace seguimiento; el dueño lo edita CONVERSANDO, ve su guion en pasos, atiende desde la bandeja propia (el bot se aparta cuando contesta él), entiende FOTOS y audios; IA incluida sin límite de chats | ✅ vivo (falta solo la prueba del popup +591 para el alta self-service de WhatsApp; canal web ya self-service) |
+| **Chatbot con IA (web + WhatsApp)** | asistente 24/7 que contesta, califica, **deriva a un humano** y hace seguimiento (un pedido de cita lo ESCALA a una persona — `deploy/vps-ops/bot/recepcionista.mjs`); el dueño lo edita CONVERSANDO, ve su guion en pasos, atiende desde la bandeja propia (el bot se aparta cuando contesta él), entiende FOTOS y audios; IA incluida sin límite de chats | ✅ vivo (falta solo la prueba del popup +591 para el alta self-service de WhatsApp; canal web ya self-service) |
 | **Chatbot a medida** | integración con el sistema del cliente o flujos propios. **Sin precio de lista**: se define el alcance y recién ahí se cotiza | por definición, a pedido |
 | Agenda pública | link de reserva sin llamadas | 🟢 |
 | Usuario extra | asiento adicional | 🟢 |
@@ -138,7 +138,7 @@ Ningún archivo de `app/` o `components/` consulta `addon.inventory_advanced`,
 | Clave | Qué pasa de verdad | Qué corresponde |
 |---|---|---|
 | `addon.inventory_advanced` | **Ya resuelto.** El add-on se retiró de la oferta el 2026-08-27. Que la clave no la lea nadie es ahora lo correcto, no un bug | nada — cerrado |
-| `addon.chatbot` | 🔴 **Este sí cuesta plata.** El chatbot **se cobra** (Bs 390/mes) y su bandeja `/inbox` **está en el nav de TODOS los packs sin ningún gate** desde el 2026-08-30. El que no lo paga ve la misma pantalla que el que sí | gatear `/inbox` con `requiresFeature: "addon.chatbot"`, y derivar la clave en `entitlements.ts` (hoy ni siquiera se calcula) |
+| `addon.chatbot` | ⚠️ **La clave está muerta y la que trabaja es OTRA** (verificado el 2026-08-31: `addon.chatbot` sólo aparece en tests; el gate vivo es `addon.whatsapp`, con `isWhatsAppAddonActive()` en `lib/plan-limits.ts`). Y **medio chatbot ya está gateado**: `GET /api/chatbot-knowledge/published` exige el add-on desde el 2026-08-18. Lo que sigue abierto es la bandeja `/inbox`, en el nav de todos los packs sin gate | **decide Sergio** (ítem F2 de `COLA.md`): gatear `/inbox` con `addon.whatsapp` baja una superficie viva —hoy ninguna org tiene el add-on—, o dejar de crear el inbox de Chatwoot salvo add-on activo, que ataca la raíz sin apagar nada |
 | `addon.web` | La web del cliente la entrega **web-factory**, otro repo, y no tiene ni debería tener pantalla en la plataforma | sacar la clave del catálogo, o dejarla documentada como decorativa |
 
 **Servicios que no son software:**

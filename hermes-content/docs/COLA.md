@@ -332,6 +332,39 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `onia-platform` del VPS sirve el bundle anterior, asi que **en produccion la frase falsa
       sigue viva hasta el proximo deploy**, y eso lo decide Sergio.
 
+- [x] **La frase falsa del chatbot tenia una TERCERA copia — en el catalogo de venta, que es
+      la fuente unica de "que se vende".** Vuelta del 2026-08-31 (segunda del dia). "Ahora" no
+      tenia un solo item desbloqueado (F2, F5, los 4 numeros de WhatsApp y el `DELETE` de pagos
+      siguen esperando **una linea de Sergio**), asi que se audito el cierre mas reciente — el de
+      `f47d615`, que corrigio la copia del chatbot en `lib/pricing.ts` y en la pantalla del add-on.
+      **El cierre aguanta**: `f47d615` es ancestro de `origin/master`, el arbol de `onia-platform`
+      esta limpio y en `0 0`, y el barrido del repo del producto no encuentra **ninguna** otra
+      linea de venta que diga que el bot agenda.
+      **Pero el defecto que ese item habia diagnosticado —la frase duplicada— tenia una copia mas,
+      y en el peor archivo posible:** `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md:126` vendia el
+      chatbot como *"asistente 24/7 que contesta, califica, **agenda** y hace seguimiento"*. CLAUDE.md
+      declara ese archivo la fuente unica de que se vende: toda propuesta, one-pager y cotizacion
+      LEEN de ahi. Arreglar el codigo y dejar la mentira en la fuente de la que copia el material
+      comercial es, otra vez, **arreglar el sistema equivocado**.
+      **Verificado contra el motor antes de tocar nada**, no contra un doc:
+      `hermes-content/deploy/vps-ops/bot/recepcionista.mjs:232` — *"Pedido / cita / compra: se toma y se ESCALA.
+      El bot no agenda ni vende solo"*. La fila ahora dice *"contesta, califica, **deriva a un
+      humano** y hace seguimiento"*, la misma redaccion que el tagline ya corregido de
+      `lib/pricing.ts:69`, para que no queden dos verdades distintas.
+      **Y de paso, la misma fila de add-ons prescribia una clave MUERTA:** el catalogo mandaba
+      gatear `/inbox` con `requiresFeature: "addon.chatbot"`, y `addon.chatbot` **no la lee nadie**
+      (verificado hoy: aparece solo en tests; la viva es `addon.whatsapp`). Quien tomara esa
+      recomendacion literal habria escrito un gate que no gatea nada. Corregida con el estado real
+      —medio chatbot YA esta gateado desde el 2026-08-18— y remitida a **F2**, que es de Sergio.
+      **Guarda,** `scripts/venta-honestidad.test.mjs` (`npm run test:venta-honestidad`): ata la copia
+      de venta al motor. Dos tests — el motor tiene que seguir diciendo que no agenda, y ninguna
+      linea del catalogo que hable del chatbot puede decir `agend*`. **Vista en ROJO por el motivo
+      correcto** antes del arreglo: fallo con exactamente una linea, la fila del chatbot. La agenda
+      publica (`key: "agenda"`) SI reserva sola y es otro producto, por eso el filtro mira solo las
+      lineas del chatbot y no la palabra suelta.
+      **Lo que NO se toco, a proposito:** las propuestas ya entregadas — queda anotado abajo en
+      "Despues" porque tiene una trampa que no es de copy.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
@@ -740,6 +773,26 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Lección:** un doc de verificación fechado envejece en HORAS cuando el carril que mide es
       el mismo que construye. No basta con que exista: hay que preguntarle contra qué commit se
       escribió.
+
+- [ ] **Las propuestas ya entregadas venden que el bot "agenda solo" — y regenerarlas BORRA
+      contenido.** Encontrado el 2026-08-31 barriendo las copias de la frase falsa. Tres clientes
+      de `hermes-content/propuestas/generador/clientes.json` lo prometen textualmente
+      (`lia-albertengo` linea 458, `aw-climatizacion` 477/517/562/565, `aw-climatizacion-chatbot`
+      699/700/701/737), y esta en los HTML entregados (`propuesta-aw-climatizacion.html`,
+      `propuesta-aw-climatizacion-chatbot.html`, `propuesta-lia-albertengo.html`).
+      **La trampa, que es lo que hace que no lo cierre solo:** el HTML commiteado **ya no es** lo que
+      produce el generador. Se corrio `node generar-propuestas.js` sobre los tres sin tocar nada y
+      `propuesta-lia-albertengo.html` **perdio una fila entera** del cuadro de add-ons (*"Videos con
+      IA para promocionar el libro"*): el HTML se edito a mano en algun momento, o `clientes.json`
+      se recorto despues. Regenerar para arreglar el copy le saca contenido a una propuesta ya
+      enviada. (Se revirtio con `git checkout`; no quedo nada.)
+      **Dos decisiones, y las dos son de Sergio, no de codigo:** (1) que hacer con lo ya enviado —
+      un documento entregado es un artefacto historico y corregirlo cambia lo que se le cotizo a
+      alguien; (2) si el chatbot A MEDIDA (`Chatbot a medida`, sin precio de lista) puede agendar
+      cuando se cotiza el flujo aparte, porque entonces la frase no es falsa **en esas** propuestas
+      y si lo es en el add-on de lista de Bs 390.
+      Lo que si corresponde sin decision: **sincronizar `clientes.json` con los HTML antes de
+      volver a generar nada**, o el proximo `--pdf` publica una propuesta mutilada.
 
 ## Bloqueado — necesita a Sergio (reverificado en vivo el 2026-08-31)
 
