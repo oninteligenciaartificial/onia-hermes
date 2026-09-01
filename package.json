@@ -41,6 +41,8 @@
     "validate:onia-core": "node onia-core/validate.mjs",
     "marca:chatwoot": "node hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs",
     "test:marca-chatwoot": "node --test hermes-content/deploy/vps-ops/chatwoot-marca-publica.test.mjs",
+    "campanas:vivas": "node hermes-content/deploy/vps-ops/campanas-vivas.mjs",
+    "test:campanas-vivas": "node --test hermes-content/deploy/vps-ops/campanas-vivas.test.mjs",
     "test:bot": "cd hermes-content/deploy/vps-ops/bot && node --test"
   }
 }

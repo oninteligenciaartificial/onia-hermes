@@ -279,6 +279,14 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       producción, hecho siguiendo la instrucción al pie. **S9 corregido abajo: viajan TRES
       archivos.**
 
+      ✅ **Gate 1 del 2026-08-31 (décima vuelta) — sin cambios, y de la auditoría salió el
+      guardia que faltaba.** `/opt/onia/bot/knowledge.json` sigue en **904 bytes con cero
+      `campanas`**, medido dentro y fuera del contenedor. **S9 sigue pendiente y sigue siendo de
+      Sergio.** Como "Ahora" quedó sin ítem desbloqueado, se auditaron los `[x]` recientes contra
+      el código de hoy: tres afirmaciones salieron **ciertas** y apareció **un hueco real, tapado
+      en la misma vuelta** — el guardia de las frases medía el REPO y no la web que sirve
+      producción. Detalle y pruebas en Cerrado.
+
 
 ---
 
@@ -508,7 +516,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
   ```bash
   ssh root@187.77.16.63 "docker exec onia-center sh -c 'grep -c campanas /tmp/onia-bot/knowledge.json'"
   ```
-  Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) |
+  Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) ✅ **Sumado el 31-ago (10ª vuelta) — verificación PREVIA, que antes no existía:** `npm run campanas:vivas` mide **desde la calle** que el documento cubra las frases que onia.com.bo manda **hoy**. Si sale 1, el `scp` publicaría un documento que ya no matchea y no hay que hacerlo. Corrido hoy: **0** (5 de 5 cubiertas). No reemplaza al `grep -c campanas` de después — ese mide el VPS, este mide el documento. |
 | S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas. ✅ **Sumado el 31-ago (7ª vuelta): ahora se comprueba DESDE AFUERA, sin entrar al VPS.** El `--check` del `.sh` vive dentro del contenedor (SSH + `docker exec` + `rails runner`), así que sólo lo corre quien ya está adentro y sabe que tiene que mirar — por eso las tres se perdieron el 16-ago y nadie lo vio en quince días. `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`) lee el `window.globalConfig` del HTML público del login: es un GET, corre desde cualquier máquina y hoy sale **1 con `REVERTIDAS 3/9`**. **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10, y mide la cara que ve el desconocido, no la base |
 | S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes** — commit `4f86381` de `onia-platform` (rama `carril/chatbot-v68-friccion`) | Es un deploy del producto, y ningún deploy sale sin su OK | Que el item "Requerimientos" del menú dibuje su icono. Encontrado MIRANDO `/inbox` de producción hoy: la fuente estaba cargada y el glifo no existía — `assignment_turned_in` nunca se subseteó (342 ligaduras en el .woff2 desplegado, 261 iconos declarados). Es el mismo defecto del login del 14-ago, en una pantalla que ningún gate cubría. Ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`); **verificación post-deploy:** abrir `/inbox` y mirar el menú, o medir el ancho del texto del span — un glifo ocupa ~1em, hoy mide 20em |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
@@ -516,6 +524,57 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **El guardia de las frases de campaña medía el REPO, no la web que sirve producción — y
+      la primera medición que lo destapó estaba ella misma rota.** Encontrado auditando los `[x]`
+      recientes contra el código de hoy, que es lo que manda el loop cuando "Ahora" queda
+      bloqueado (el único ítem de Ahora cuelga de S9, que es de Sergio).
+      **Lo que se auditó primero, y salió cierto** — se escribe porque una auditoría que sólo
+      reporta lo que falla no prueba que haya mirado:
+      | afirmación de la cola | medido hoy |
+      |---|---|
+      | suite del bot **682/682** | `npm run test:bot` → **682 pass, 0 fail**: reproduce |
+      | `espejo-check.mjs` sale 1 y nombra los archivos de S9 | exit **1**. DISTINTOS de motor = `knowledge.mjs` y `recepcionista.mjs`, **exactamente los dos** que S9 manda viajar; `bot-engine.mjs` ya está en sync |
+      | objetivo CUMPLIDO: `Onia (interna)` → inbox 5 | base de producción: `c956c02fccd8573cd6fcc5b35` → **5**. El vínculo sigue vivo; las otras tres orgs siguen en NULL salvo la de QA (7) |
+      | "este repo no tiene TS, eslint ni vitest" | `node_modules/.bin/` no tiene ninguno de los tres: el gate que aplica es la suite |
+      📎 **Trampa de medición que se llevó una consulta y queda escrita:** `node gate.mjs | tail`
+      reporta el `$?` de **`tail`**, no el del gate — salió `EXIT=0` sobre un gate que estaba
+      diciendo `ESPEJO DESINCRONIZADO`. Un exit code se mide **sin pipe**.
+      **El hueco, que no estaba escrito en ninguna parte.**
+      `hermes-content/deploy/vps-ops/bot/campanas-web.test.mjs` extrae las frases en vez de
+      hardcodearlas — bien — pero las extrae de `web-factory/apps/onia-platform/src/`, o sea del
+      **repo**. Producción se sirve de un build, y la web es de **otro carril**: el día que
+      web-factory despliegue un cambio que este árbol no tiene (o al revés), el test queda
+      **verde** mientras el desconocido recibe el saludo genérico. Es el molde del carril entero:
+      un guardia que mide el lado equivocado.
+      **Medido contra producción y no leído:** las **5** frases que onia.com.bo manda hoy están
+      las cinco cubiertas por el documento (4 exactas + el prefijo de `/v1/empezar`). Hoy
+      coinciden; que coincidan era **suerte, no una medición**.
+      **Lo que se hizo:** `hermes-content/deploy/vps-ops/campanas-vivas.mjs` — mira las frases
+      **desde la calle**, igual que `chatwoot-marca-publica.mjs`: un GET a las 11 páginas, sin
+      VPS, sin docker, sin token, desde cualquier máquina (`npm run campanas:vivas`). El match
+      **no se reimplementa**: importa `campanaExacta` del motor, así que la regla del prefijo y la
+      normalización son las de producción y no una copia que se despega. Corrido contra
+      producción: `5 frases vivas, 5 con campaña (documento 2026-08-31.2)`, exit **0**.
+      📎 **Un tropiezo que queda escrito porque casi cierra la vuelta al revés:** la primera
+      medición usó una clase negativa con un backslash de menos, y en regex eso excluye la
+      **letra `s`**. Cortaba "…Quiero " justo antes de "saber" y reportaba las cinco frases vivas
+      como **SIN CAMPAÑA** — un rojo inventado sobre un dato de entrada truncado, y a un gate así
+      lo apaga alguien. Por eso el extractor usa una clase **positiva** (lo que produce
+      `encodeURIComponent`), que además corta sola donde tiene que cortar: en la comilla del href
+      suelto y en la barra invertida del payload RSC de Next.
+      **11 tests** (`npm run test:campanas-vivas`), **probado que pueden fallar**: reinyectada la
+      clase negativa con el backslash de menos, **3 se ponen rojos** y uno nombra el corte en la
+      `s`. Restaurado byte a byte después.
+      ⚠️ **Lo que este gate NO hace, dicho para que nadie lo cuente de más:** mide que el
+      **documento** cubra lo que la web manda. **No** mide que el VPS tenga el documento — eso
+      sigue siendo **S9**, y se verifica con el `grep -c campanas` dentro del contenedor. Uno se
+      corre **antes** de publicar, el otro **después**.
+      📎 Va en `vps-ops/` y no en `bot/` por la misma razón que `chatwoot-marca-publica.mjs`:
+      un `.mjs` nuevo en `bot/` deja `espejo-check.mjs` rojo hasta el próximo `scp`. Verificado
+      después de crearlo — el espejo nombra los mismos archivos de siempre.
+      **Gates:** suite del bot **682/682** (no se tocó el motor) + los **11** nuevos. Este repo no
+      tiene tsc/eslint/vitest: la suite es el gate que aplica.
 
 - [x] **1 · Una org sólo puede tener UN inbox, y nadie puede cambiarlo — así ningún WhatsApp
       llega nunca a la bandeja.** Éste es el hueco que hace inalcanzable el objetivo, y no
