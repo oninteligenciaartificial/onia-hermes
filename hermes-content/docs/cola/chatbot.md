@@ -71,222 +71,95 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 
 ## Ahora
 
-- [ ] **2 · Las frases que la web YA manda no están registradas como campañas: el desconocido
-      pregunta una cosa y el bot le contesta el saludo genérico.** Las frases de campaña se
-      construyeron ayer (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:117`
-      `campanaExacta`, espejo en `lib/chatbot/knowledge.ts:101`, deployadas en el commit
-      `e5c1ad3`) y **no las usa nadie**: cero campañas publicadas en ningún documento.
-      Mientras tanto onia.com.bo manda **seis frases fijas distintas** al mismo número, todas
-      desde `web-factory/apps/onia-platform/src/lib/site.ts` — "Hola, quiero conocer Onia"
-      (línea 41), "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio."
-      (49), y las tres de comercio/servicios/importadoras (52-58), más las de los
-      configuradores de servicios. Cada una es una intención declarada — la persona ya dijo
-      qué quiere antes de escribir — y el bot la trata a todas igual.
-      **Por qué es el ítem barato de mayor valor:** no hay que construir nada. La capacidad
-      existe, la distribución existe, el número atiende. Falta escribir el documento.
-      **Hecho =** las frases cargadas como campañas desde el panel
-      (`app/(dashboard)/settings/chatbot/EnsenaleConversando.tsx` las crea hablando),
-      publicadas, y las seis contestadas con su respuesta propia — probado por el probador
-      real y MIRADO.
-      ⚠️ **No se toca `web-factory/apps/onia-platform/src/lib/site.ts`**: es del carril
-      web-factory. Las frases se copian tal cual están hoy; si alguna cambia allá, la campaña
-      deja de matchear y hay que re-copiarla.
+- [ ] **`git checkout` en este repo DESINCRONIZA el espejo del bot sin mostrar un solo cambio
+      — y pone rojo el gate que existe para detectar drift real.** Encontrado por las malas al
+      cerrar el ítem de `hermes-content/deploy/vps-ops/bot/recepcionista.test.mjs`: después de mutar y restaurar
+      `hermes-content/deploy/vps-ops/bot/recepcionista.mjs` con `git checkout --`, `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` lo reportó **DISTINTOS**
+      contra el VPS, mientras `git status --porcelain` daba **vacío**.
+      **La causa, medida:** `core.autocrlf=true` y **no hay `.gitattributes`** en `onia-hermes`.
+      Git guarda el blob en LF y lo materializa en CRLF al hacer checkout; el archivo pasó de
+      **14110 bytes (LF, lo que corre el VPS) a 14375 (CRLF)** — exactamente +265, una por línea.
+      Contenido idéntico: `diff` normalizando `\r` sale **vacío** contra
+      `/opt/onia/bot/recepcionista.mjs`.
+      **Por qué importa acá y no en otro carril:** `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` compara **md5 de bytes**, y
+      tiene que hacerlo — en un .sh un CRLF no es cosmético, el shebang con CR al final no arranca. O sea
+      que el gate no puede perdonarlo, y entonces cualquiera que haga `git checkout` sobre el
+      espejo fabrica un "deploy pendiente" que nadie pidió. Es el molde exacto del fantasma que
+      este carril mide: **un rojo que no corresponde a ningún cambio se apaga o se "arregla"
+      con un deploy inútil.**
+      **El espejo hoy es una MEZCLA**, no todo LF: `hermes-content/deploy/vps-ops/bot/knowledge.mjs` está en LF en disco y en git
+      (diff 0), mientras `hermes-content/deploy/vps-ops/bot/guardrails.mjs` (+130) e `hermes-content/deploy/vps-ops/bot/intents.mjs` (+754) están en CRLF en los dos
+      lados. Por eso **no se arregló en esta vuelta**: un `.gitattributes` con `text eol=lf`
+      renormalizaría ~60 archivos y desincronizaría contra el VPS todos los que hoy son CRJF de
+      ambos lados — se arregla con un redeploy completo del directorio, y eso es de Sergio.
+      **El parche de esta vuelta fue puntual:** `perl -pi -e 's/\r\n/\n/g'` sobre el archivo
+      tocado, verificado con `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` (vuelve a 14110 y sale del listado).
+      **Lo mínimo que lo cierra:** decidir la política de line endings del espejo
+      (`.gitattributes` con `eol=lf` + un redeploy del directorio entero, que alinea los dos
+      lados de una vez) — o dejarlo escrito acá para siempre. Lo primero es un deploy: **de
+      Sergio**. Tres opciones cotizadas en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §12 (recomendación: opción 1, y
+      sola en su commit; la 3 —normalizar `\r` sólo en .mjs dentro de `hermes-content/deploy/vps-ops/bot/espejo-check.mjs`— es
+      el paliativo si no hay ventana de deploy).
 
-      ⚙️ **Vuelta del 2026-08-31 — el documento está escrito, validado y con su guardia; lo que
-      falta NO es escribirlo.** Gate 1 primero, en vivo: `/opt/onia/bot/knowledge.json` del VPS
-      (leído por SSH, 904 bytes, del 6-ago) **no tiene `campanas`** — el hueco existe hoy.
-      **Corrección al ítem: no son seis frases vivas, son CINCO — y sólo cuatro las manda la web
-      de verdad.** Medido contra producción con `curl`, no leyendo el repo:
-      | frase | dónde | ¿la manda la web hoy? |
-      |---|---|---|
-      | "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio." | `WA_URL_LANDING` | **sí** — portada, /precios, /empezar, /contacto, /nosotros, /facturacion, /chatbot |
-      | "…Quiero consultoría/capacitación en IA para mi empresa." | `/servicios/consultoria` | **sí** |
-      | "…Quiero una propuesta de marketing con IA para mi negocio." | `/servicios/marketing-ia` | **sí** |
-      | "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack." | `/v1/chatbot` | **sí** |
-      | "Hola, quiero conocer Onia" | `WA_URL`, `web-factory/apps/onia-platform/src/lib/site.ts:41` | **no**: export sin un solo consumidor |
-      | "Hola, quiero que me avisen cuando Onia para comercio/servicios/importadoras esté listo" | `WA_TEXT_*`, `web-factory/apps/onia-platform/src/lib/site.ts:52` | **no**: los tres son exports muertos, nadie los importa |
-      | "Hola, mi rubro no está en la lista de Onia. Mi negocio es: " | `/v1/empezar` | sí, pero es un **prefijo** — la persona escribe su rubro atrás, así que jamás puede ser match exacto |
-      Las tres "avisen cuando esté listo" además chocan con `MODULOS_LISTOS`
-      (`hermes-content/deploy/vps-ops/bot/config.mjs:408`): comercio y proveedores **ya están listos**. Que sean código muerto
-      refuerza la 📌 de abajo — no hay que corregir el texto, hay que borrarlo.
-      **Lo que se hizo:** `hermes-content/docs/chatbot/campanas-onia.knowledge.json` — el
-      documento de Onia (copia del vivo del VPS) con **5 campañas** (las 4 vivas + `WA_URL`, que
-      está a un import de volver). Pasa la **compuerta real de publicación**
-      (`node hermes-content/deploy/vps-ops/bot/knowledge.mjs --check <ruta>` → `OK`, exit 0) y las
-      cinco respuestas pasan los guardrails. Y su guardia:
-      `hermes-content/deploy/vps-ops/bot/campanas-web.test.mjs` **extrae las frases del código de
-      la web** en vez de hardcodearlas, así que el día que web-factory cambie una coma el test se
-      pone rojo en vez de morir en silencio. Suite del bot **619/619** verde (614 antes).
-      🔴 **Y apareció el motivo REAL de por qué el ítem no se puede cerrar, que no es el
-      documento.** `campanaExacta` vive dentro de `recepcionistaStep` (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:192`), y
-      el modo recepcionista lo enciende sólo `asRecepcionista`, al que `withKnowledge` llama
-      **únicamente si la fuente es `"db"`** — la fila publicada de una **org**, resuelta por
-      `clinic_settings.chatwootInboxId` (`hermes-content/deploy/vps-ops/bot/knowledge.mjs:851`). El +591 75414930 hoy se atiende
-      desde el **archivo** del VPS, o sea **modo venta, donde las campañas ni se miran**. Corrido
-      con la misma frase por los dos caminos: archivo → `M0_SIN_HORARIOS` (el saludo genérico que
-      el ítem describe), db → `R_CAMPANA` con la respuesta propia y `guardrail.ok: true`.
-      **Cargar las campañas a mano en el VPS no serviría de nada.** El ítem 2 estaba mal
-      diagnosticado: no le faltaba un documento, le falta **el mismo vínculo org→inbox del ítem
-      1**. Los dos ítems de Ahora son el mismo bloqueo, y es **S8**. Anotado en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §9.
-      **Lo que queda del ítem, cuando S8 se destrabe:** cargar estas 5 campañas en el editor de la
-      org dueña del inbox 5, publicar, y probar las 4 frases vivas MIRANDO la pantalla.
+      ✅ **Vuelta del 2026-08-31 — la opción 3 (el paliativo) ESTÁ HECHA: el gate ya no
+      fabrica rojos falsos.** Gate 1 primero, corriendo el gate contra producción: salía
+      **rojo por `hermes-content/deploy/vps-ops/bot/recepcionista.test.mjs`**, y ese resultó ser drift REAL y no el fantasma del
+      fin de línea — el archivo tiene **9783 bytes en el espejo y 0 en el VPS** (`d41d8cd9…`,
+      el md5 del archivo vacío). O sea que el rojo de hoy no era el que este ítem describe; el
+      defecto igual estaba vivo y sin arreglar.
+      **La trampa medida hoy, que cambió desde que se escribió el ítem:** el espejo ya no es la
+      mezcla pareja que dice arriba — **69 archivos de código están en CRLF en disco**
+      (incluidos `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`, `hermes-content/deploy/vps-ops/bot/knowledge.mjs`, `hermes-content/deploy/vps-ops/bot/run-turn.mjs` y el propio
+      `hermes-content/deploy/vps-ops/bot/espejo-check.mjs`), mientras el blob de git es LF por `core.autocrlf=true`. El VPS
+      también los tiene en CRLF, así que hoy coinciden **por casualidad**: alcanza un
+      `git checkout` — o correr el gate desde Linux — para volver rojos ~60 archivos que nadie
+      tocó.
+      **Lo que se hizo:** `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` exporta `md5Archivo(nombre, contenido)` y hashea el
+      .mjs **sin el `\r`, de los dos lados** — local con `Buffer.filter`, y el comando remoto
+      con `tr -d` en vez de `md5sum` a secas. Es `tr` y no `sed` a propósito: sed agrega un
+      salto final si el archivo no lo tenía, y sin esa simetría exacta los dos hashes no
+      comparan nunca. El .sh sigue byte-exacto — ahí el shebang con CR al final no arranca, y esa
+      asimetría es la razón de que el gate no pueda perdonar el byte en general.
+      **Probado contra producción y no con un fixture**, que es lo único que prueba que el lado
+      remoto también normaliza: se pasó `hermes-content/deploy/vps-ops/bot/guardrails.mjs` a LF — **5636 → 5506 bytes, md5 crudo
+      distinto**, con el VPS en CRLF — y el gate **no lo nombró**; antes de este cambio ése era
+      exactamente el rojo falso. Restaurado byte a byte después (`441cdd70…`, 5636). Los tres
+      rojos que quedan son honestos: `hermes-content/deploy/vps-ops/bot/recepcionista.test.mjs` (drift real, va en S9) y los dos
+      archivos de este mismo cambio.
+      **4 tests nuevos**, incluido el guardia que impide que el arreglo se vuelva una tapadera
+      (*normalizar NO tapa el drift real*, con el caso de 0 bytes medido hoy) y el que fija la
+      asimetría del .sh. Suite del bot **658/658** verde (654 antes).
+      ⚠️ **Lo que NO cierra, y por eso el ítem queda abierto:** la opción 1 —`.gitattributes`
+      con `eol=lf` + redeploy del directorio— sigue siendo de Sergio, y es la única que hace
+      que el espejo sea un espejo. La 3 baja el ruido pero **deja los dos lados distintos de
+      verdad**: el día que haga falta un `scp` selectivo por md5, el md5 crudo sigue sin
+      coincidir. Radar §12 actualizado: de las tres opciones ya sólo queda viva la 1.
+      📎 **Efecto secundario que hay que saber antes de mirar el gate:** `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` y
+      `hermes-content/deploy/vps-ops/bot/espejo-check.test.mjs` ahora salen DISTINTOS contra el VPS, porque son los archivos que
+      acaban de cambiar. Es drift honesto y no urgente — son herramienta de desarrollo, no el
+      motor: no cambian una línea de lo que corre. Se suman al `scp` de S9 cuando haya ventana.
 
-      ⚙️ **Vuelta del 2026-08-31 (segunda) — el ítem YA NO depende de S8, y el plan de arriba
-      estaba equivocado.** Gate 1 sobre el propio diagnóstico, leyendo el motor: `campanaExacta`
-      se llamaba **sólo** desde `hermes-content/deploy/vps-ops/bot/recepcionista.mjs:192`, y `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:448` corta el modo
-      recepcionista antes de todo el guion de venta. O sea que el plan escrito arriba —"cargar
-      las campañas en la org dueña del inbox 5"— **metía el número de Onia en modo recepcionista**,
-      que es la config del bot de un CLIENTE. Ahí el embudo de leads no existe: lo dice el test
-      `recepcionista: 'DEMO' NO dispara el funnel — el guion de leads queda exclusivo del modo
-      venta`. Y `R_CAMPANA` es literalmente `{{respuesta_campana}}` (`hermes-content/deploy/vps-ops/bot/config.mjs:317`), sin un solo
-      efecto: **se habría cambiado la única línea que produce leads por un texto enlatado.**
-      **Lo que se hizo en su lugar** — que las campañas también se vean desde el modo venta, que es
-      donde caen los wa.me?text= de onia.com.bo:
-      - `hermes-content/deploy/vps-ops/bot/knowledge.mjs` (`applyKnowledge`) ahora lleva `campanas` a la config de los DOS modos.
-        `campanaExacta(config, norm)` lee `.campanas`, así que la misma función sirve a ambos sin
-        tocarla (el recepcionista le sigue pasando `config.conocimiento`).
-      - `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`: la frase de campaña se resuelve en el router **antes** de los intents
-        difusos (es un match del mensaje ENTERO, la señal más específica que puede llegar) y sale
-        por `composeWithFunnel`, el mismo camino que ya usan precio y SIAT. Efecto: la respuesta va
-        **detrás** de la bienvenida, no en lugar de ella — se conservan M0 (el bot se declara bot,
-        D2), la oferta de horarios y el `lead_upsert`.
-      - `composeWithFunnel` acepta `vars` (R_CAMPANA es la única plantilla de ese camino cuyo texto
-        no está en el guion: lo trae el documento publicado).
-      **Probado con el documento real, no con un fixture** (las 5 campañas de
-      `hermes-content/docs/chatbot/campanas-onia.knowledge.json` corridas por el motor en modo venta): las cinco contestan su
-      propia respuesta y las cinco conservan `lead_upsert` + `notify_sergio`. Antes de este cambio
-      las cinco daban `M0_SIN_HORARIOS` solo — exactamente el saludo genérico que el ítem denuncia.
-      **7 tests nuevos** (incluido el guardia de no-regresión "sin campañas publicadas el motor no
-      cambia" y "el opt-out le gana a la campaña"). Suite del bot **626/626** verde (619 antes).
-      La compuerta de publicación sigue en `OK` sobre el documento.
-      ⚠️ **Lo único que queda, y es MUCHO más barato que S8:** copiar
-      `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json`
-      del VPS (hoy tiene 904 bytes y no trae `campanas`) y probar las 4 frases vivas MIRANDO. Eso
-      es un deploy al VPS ⇒ **OK de Sergio**, pero ya no hace falta decidir dueño de inbox ni
-      desplegar el producto. **Corrección a S8:** el ítem 2 sale de su lista de desbloqueos.
+      ✅ **Promovido a "Ahora" el 2026-08-31, y NO por turno: hoy tiene trabajo que ayer no
+      tenía.** El ítem quedaba en Después porque su única salida viva —la opción 1,
+      `.gitattributes` con `eol=lf`— arrastraba un redeploy del directorio entero, y eso es de
+      Sergio. **Eso cambió con el paliativo de la séptima vuelta, y se midió antes de
+      promoverlo, leyendo el gate y no el ítem:** `hermes-content/deploy/vps-ops/bot/espejo-check.mjs:37`
+      hashea los .mjs **sin el `` de los dos lados** (`md5Archivo` local, `tr -d` remoto).
+      O sea que forzar LF en los .mjs del espejo **ya no desincroniza nada contra el VPS**:
+      el gate los compara normalizados. Confirmado además que el hueco sigue abierto:
+      `git config core.autocrlf` → `true` y `.gitattributes` **no existe** en `onia-hermes`.
+      ⚠️ **El .sh queda AFUERA del arreglo, a propósito** — ahí el byte sí cuenta
+      (#!/bin/bash no arranca), el gate lo compara byte a byte, y tocarlo sí necesitaría
+      el redeploy de Sergio. **Hecho =** `.gitattributes` que fuerza LF sólo en los .mjs del
+      espejo, `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` sigue en 0 contra producción después del checkout, y un test
+      que se ponga rojo si alguien vuelve a dejar el directorio sin política.
 
-      🔴 **Vuelta del 2026-08-31 (tercera) — S9 estaba MAL ESCRITO, y hacerlo tal como decía no
-      habría encendido nada.** El párrafo de arriba afirma *"El motor ya las lee en modo venta
-      (626/626 verde)"*. Eso es cierto **en el espejo del repo** y falso en el VPS: el motor se
-      verificó localmente y se dio por desplegado sin mirarlo. Medido con md5, los dos lados:
-      | archivo | espejo del repo | VPS `/opt/onia/bot/` |
-      |---|---|---|
-      | `hermes-content/deploy/vps-ops/bot/bot-engine.mjs` | `b5a5c878…` = commit `994eb42d` (campañas) | `7f50f1a9…` = commit `3e3841aa` (comprobantes) |
-      | `hermes-content/deploy/vps-ops/bot/knowledge.mjs` | `4ba53652…` | `d00a3c1f…` |
-      | `hermes-content/deploy/vps-ops/bot/campanas-web.test.mjs` | existe | **no existe** |
-      El VPS quedó **exactamente un commit atrás**: `994eb42d` nunca viajó. Confirmado sin
-      grep de descarte sino contando en el motor que CORRE (contenedor `onia-center`,
-      `/tmp/onia-bot/bot-engine.mjs`): **cero apariciones de `campanaExacta`**.
-      **La consecuencia si Sergio hacía S9 tal como estaba escrito:** copiaba las 5 campañas a
-      `/opt/onia/bot/knowledge.json`, el motor viejo las ignoraba —no tiene el código que las
-      lee—, las 4 frases vivas seguían recibiendo el saludo genérico, y el ítem se daba por
-      cerrado. Un fantasma más, y del tipo caro: uno que se escribe DESPUÉS de que alguien puso
-      las manos en producción.
-      **S9 corregido:** no es sólo el documento. Tienen que viajar **`hermes-content/deploy/vps-ops/bot/bot-engine.mjs`,
-      `hermes-content/deploy/vps-ops/bot/knowledge.mjs`** y el documento a `/opt/onia/bot/knowledge.json`, y hay que **reiniciar** (`hermes-content/deploy/vps-ops/bot/webhook-server.sh`
-      recopia al contenedor sólo cuando cambia su STAMP).
-      **Lo construido para que esto no vuelva a pasar** — porque ya pasó dos veces, las dos
-      descubiertas de casualidad y en direcciones opuestas (`d334d776`: el espejo quedó 25
-      archivos atrás del VPS; hoy: el VPS quedó atrás del espejo):
-      `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` — un md5 por lado, sólo lectura, sin
-      tocar el VPS. Sale 0 si el código coincide y 1 nombrando los archivos si no.
-      El documento publicado y los `webhook.env*` quedan fuera del veredicto **a propósito**: son dato
-      vivo, no código, y un gate que siempre está rojo lo apaga alguien.
-      **Corrido contra producción**, que es la prueba de que sirve:
-      ```
-      ESPEJO DESINCRONIZADO — …/vps-ops/bot/ vs root@187.77.16.63:/opt/onia/bot
-        DISTINTOS (el VPS corre otra version): bot-engine.mjs, bot-engine.test.mjs, knowledge.mjs
-        FALTAN EN EL VPS (deploy a medias):    campanas-web.test.mjs, recepcionista.test.mjs
-      ```
-      8 tests nuevos (`hermes-content/deploy/vps-ops/bot/espejo-check.test.mjs`), uno de ellos con los md5 REALES de hoy: si ese
-      caso pasara en verde, el gate no serviría. Suite del bot **634/634** (626 antes).
-      📎 **Trampa que costó tres consultas y queda escrita en el encabezado del script:** el
-      motor vive en TRES lugares —espejo, `/opt/onia/bot` del host, y `/tmp/onia-bot` **dentro
-      del contenedor `onia-center`**, que es el que corre—. `ps` en el host muestra
-      `node /tmp/onia-bot/webhook-server.mjs` y ese directorio **no existe en el host**: es el
-      `/tmp` del contenedor. El 3 se rehace solo del 2 por el STAMP de `hermes-content/deploy/vps-ops/bot/webhook-server.sh`, así
-      que alinear el 2 es lo que el próximo restart lleva al bot vivo.
-
-      ✅ **Gate 1 del 2026-08-31 (cuarta vuelta) — el motor YA VIAJÓ; queda SOLO el documento.**
-      La tabla de md5 de arriba quedó vieja y hacía perder la vuelta: `espejo-check.mjs` corrido
-      hoy contra producción sale **0 — `ESPEJO OK`**, o sea que `bot-engine.mjs`, `knowledge.mjs`
-      y `run-turn.mjs` del VPS ya son los del repo. Y verificado donde importa, en el motor que
-      **corre** y no en el host: `docker exec onia-center grep -c campanaExacta
-      /tmp/onia-bot/bot-engine.mjs` da **2**, cuando la vuelta anterior contó **0**.
-      **Lo que sigue faltando, medido dentro y fuera del contenedor:** `knowledge.json` está en
-      **904 bytes del 6-ago y sin `campanas`** en los dos lugares. O sea que el motor sabe leer
-      campañas y el archivo del número no trae ninguna — las 4 frases vivas de onia.com.bo
-      siguen recibiendo el saludo genérico, pero por UNA razón y no por cuatro.
-      **S9 quedó en un archivo de datos:** copiar
-      `hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json`
-      y reiniciar. Sigue siendo un deploy ⇒ **OK de Sergio**.
-
-      ✅ **Gate 1 del 2026-08-31 (quinta vuelta) — confirmado sin cambios, medido en los dos
-      lugares.** `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago con cero
-      `campanas`**, y lo mismo dentro del contenedor que CORRE
-      (`docker exec onia-center` sobre `/tmp/onia-bot/knowledge.json`: 904 bytes, 0 `campanas`).
-      El motor sí sabe leerlas — eso ya se verificó la vuelta pasada. **S9 sigue pendiente y
-      sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
-
-      ✅ **Gate 1 del 2026-08-31 (octava vuelta) — sin cambios, medido en el motor que CORRE.** `docker exec onia-center` sobre `/tmp/onia-bot/knowledge.json`: **904 bytes, cero `campanas`**. **S9 sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
-
-      ✅ **Gate 1 del 2026-08-31 (séptima vuelta) — sin cambios, medido dentro y fuera del contenedor.** `/opt/onia/bot/knowledge.json` sigue en **904 bytes con cero `campanas`**, y lo mismo en el motor que CORRE (`docker exec onia-center` sobre `/tmp/onia-bot/knowledge.json`: 904 bytes, 0). **S9 sigue siendo un solo archivo de datos.** No se copió: escribe en el VPS.
-
-      ✅ **Gate 1 del 2026-08-31 (sexta vuelta) — sin cambios, y ahora la copia está PROBADA como segura.** `/opt/onia/bot/knowledge.json` sigue en 904 bytes del 6-ago con cero `campanas`, dentro y fuera del contenedor. Lo que faltaba y nadie había hecho: comparar el documento nuevo contra el vivo antes de mandar a sobrescribirlo. Diffeados campo por campo, el del repo es **superset estricto** (`identity`, `empresa` y `triggersExtra` idénticos, la FAQ `siat` byte a byte; sólo agrega las 5 `campanas` y sube la `version`). El `scp` de S9 **no borra conocimiento vivo**. Prueba y comando de verificación post-deploy en **S9**.
-
-      ⚙️ **Vuelta del 2026-08-31 (novena) — el CTA de `/v1/empezar` ya no puede tener campaña
-      "nunca": ahora la tiene. Y el mismo cambio destapó que S9, tal como estaba escrito, HOY
-      ROMPE producción.**
-      **Gate 1 primero, en el motor y no en el papel.** La tabla del ítem declara una de las
-      frases vivas como imposible: *"Hola, mi rubro no está en la lista de Onia. Mi negocio es: "*
-      es un **prefijo** — la persona escribe su rubro atrás, así que el mensaje entero nunca es
-      igual a la frase. Estaba escrito como decisión, con su motivo, en `NO_MATCHEABLES` de
-      `hermes-content/deploy/vps-ops/bot/campanas-web.test.mjs`. Verificado que sigue viva hoy,
-      con `curl` a producción y no leyendo el repo:
-      `https://onia.com.bo/v1/empezar` renderiza
-      `wa.me/59175414930?text=Hola%2C%20mi%20rubro%20no%20est%C3%A1...Mi%20negocio%20es%3A%20`.
-      Y medido en el motor, las dos variantes contestaban **`M0` pelado**: quien MÁS información
-      declaró —su rubro, y que no está en la lista— recibía exactamente lo mismo que quien
-      escribe "hola".
-      **Lo que se hizo, y es opt-in por campaña a propósito:** una campaña puede declarar
-      `prefijo: true` y entonces matchea también cuando el mensaje **sigue**
-      (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs`, `campanaExacta`). Sin el campo, el
-      match sigue siendo del mensaje entero — una campaña normal no se estira sola. El match
-      exacto **le gana siempre** al prefijo, y entre dos prefijos gana la frase más larga; el
-      límite es un espacio, así que `mi negocio es` no se come `mi negocio establecido`.
-      `prefijo` agregado al esquema (`knowledge.mjs`) y la **sexta campaña** al documento
-      (`hermes-content/docs/chatbot/campanas-onia.knowledge.json`, `version` → `2026-08-31.2`),
-      que sigue pasando la compuerta real de publicación (`--check` → `OK`, exit 0).
-      **Probado con el documento REAL corrido por el motor**, no con un fixture: las dos
-      variantes (`…Mi negocio es: panadería` y el prefijo pelado) salen ahora **`M0` + `R_CAMPANA`
-      con `lead_upsert`**, y `hola` sigue saliendo `M0` solo — o sea que no se le comió el flujo
-      normal a nadie. **6 tests nuevos**, y se comprobó que pueden fallar: apagando la rama del
-      prefijo, 2 se ponen rojos nombrando el caso. Suite del bot **682/682** (676 antes).
-      🔴 **Y lo que más vale de esta vuelta, que es un hallazgo sobre S9 y no sobre el prefijo.**
-      El esquema del validador **rechaza claves desconocidas**, y `parseKnowledge` devuelve
-      `data: null` cuando el veredicto no es `ok` — o sea que un documento rechazado no carga
-      "a medias": **no carga nada**. Bajado el `knowledge.mjs` que HOY corre en el VPS
-      (41.423 bytes, cero `prefijo`) y corrido su propio `validateKnowledge` contra el documento
-      nuevo:
-      ```
-      ok= false
-      errors= ["campanas[4].prefijo: clave desconocida (el esquema no la acepta)"]
-      ```
-      **Si S9 se hace como estaba escrito —copiar sólo `knowledge.json`— el motor viejo tira el
-      documento ENTERO:** no quedan 5 campañas andando y 1 ignorada, quedan **cero**, y además
-      se pierden la FAQ `siat` y el horario que hoy sí están vivos. Sería un deploy que empeora
-      producción, hecho siguiendo la instrucción al pie. **S9 corregido abajo: viajan TRES
-      archivos.**
-
-      ✅ **Gate 1 del 2026-08-31 (décima vuelta) — sin cambios, y de la auditoría salió el
-      guardia que faltaba.** `/opt/onia/bot/knowledge.json` sigue en **904 bytes con cero
-      `campanas`**, medido dentro y fuera del contenedor. **S9 sigue pendiente y sigue siendo de
-      Sergio.** Como "Ahora" quedó sin ítem desbloqueado, se auditaron los `[x]` recientes contra
-      el código de hoy: tres afirmaciones salieron **ciertas** y apareció **un hueco real, tapado
-      en la misma vuelta** — el guardia de las frases medía el REPO y no la web que sirve
-      producción. Detalle y pruebas en Cerrado.
-
+> **El ítem 2 —las campañas de la web— salió de acá el 2026-08-31.** Vivió diez vueltas
+> esperando el `scp` de **S9**, que escribe en el VPS y por eso es de Sergio. Se movió entero
+> a "Bloqueado en Sergio" con su historia. Reverificado antes de moverlo, dentro y fuera del
+> contenedor: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago con cero
+> `campanas`** — el bloqueo está **vivo, no vencido**. Vuelve cuando Sergio avise.
 
 ---
 
@@ -316,74 +189,6 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       worktrees de ramas ya mergeadas es de cada carril; el de plataforma es el que lleva la
       cuenta.
 
-- [ ] **`git checkout` en este repo DESINCRONIZA el espejo del bot sin mostrar un solo cambio
-      — y pone rojo el gate que existe para detectar drift real.** Encontrado por las malas al
-      cerrar el ítem de `recepcionista.test.mjs`: después de mutar y restaurar
-      `recepcionista.mjs` con `git checkout --`, `espejo-check.mjs` lo reportó **DISTINTOS**
-      contra el VPS, mientras `git status --porcelain` daba **vacío**.
-      **La causa, medida:** `core.autocrlf=true` y **no hay `.gitattributes`** en `onia-hermes`.
-      Git guarda el blob en LF y lo materializa en CRLF al hacer checkout; el archivo pasó de
-      **14110 bytes (LF, lo que corre el VPS) a 14375 (CRLF)** — exactamente +265, una por línea.
-      Contenido idéntico: `diff` normalizando `\r` sale **vacío** contra
-      `/opt/onia/bot/recepcionista.mjs`.
-      **Por qué importa acá y no en otro carril:** `espejo-check.mjs` compara **md5 de bytes**, y
-      tiene que hacerlo — en un `.sh` un CRLF no es cosmético, `#!/bin/bash\r` no arranca. O sea
-      que el gate no puede perdonarlo, y entonces cualquiera que haga `git checkout` sobre el
-      espejo fabrica un "deploy pendiente" que nadie pidió. Es el molde exacto del fantasma que
-      este carril mide: **un rojo que no corresponde a ningún cambio se apaga o se "arregla"
-      con un deploy inútil.**
-      **El espejo hoy es una MEZCLA**, no todo LF: `knowledge.mjs` está en LF en disco y en git
-      (diff 0), mientras `guardrails.mjs` (+130) e `intents.mjs` (+754) están en CRLF en los dos
-      lados. Por eso **no se arregló en esta vuelta**: un `.gitattributes` con `text eol=lf`
-      renormalizaría ~60 archivos y desincronizaría contra el VPS todos los que hoy son CRJF de
-      ambos lados — se arregla con un redeploy completo del directorio, y eso es de Sergio.
-      **El parche de esta vuelta fue puntual:** `perl -pi -e 's/\r\n/\n/g'` sobre el archivo
-      tocado, verificado con `espejo-check.mjs` (vuelve a 14110 y sale del listado).
-      **Lo mínimo que lo cierra:** decidir la política de line endings del espejo
-      (`.gitattributes` con `eol=lf` + un redeploy del directorio entero, que alinea los dos
-      lados de una vez) — o dejarlo escrito acá para siempre. Lo primero es un deploy: **de
-      Sergio**. Tres opciones cotizadas en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §12 (recomendación: opción 1, y
-      sola en su commit; la 3 —normalizar `\r` sólo en `.mjs` dentro de `espejo-check.mjs`— es
-      el paliativo si no hay ventana de deploy).
-
-      ✅ **Vuelta del 2026-08-31 — la opción 3 (el paliativo) ESTÁ HECHA: el gate ya no
-      fabrica rojos falsos.** Gate 1 primero, corriendo el gate contra producción: salía
-      **rojo por `recepcionista.test.mjs`**, y ese resultó ser drift REAL y no el fantasma del
-      fin de línea — el archivo tiene **9783 bytes en el espejo y 0 en el VPS** (`d41d8cd9…`,
-      el md5 del archivo vacío). O sea que el rojo de hoy no era el que este ítem describe; el
-      defecto igual estaba vivo y sin arreglar.
-      **La trampa medida hoy, que cambió desde que se escribió el ítem:** el espejo ya no es la
-      mezcla pareja que dice arriba — **69 archivos de código están en CRLF en disco**
-      (incluidos `bot-engine.mjs`, `knowledge.mjs`, `run-turn.mjs` y el propio
-      `espejo-check.mjs`), mientras el blob de git es LF por `core.autocrlf=true`. El VPS
-      también los tiene en CRLF, así que hoy coinciden **por casualidad**: alcanza un
-      `git checkout` — o correr el gate desde Linux — para volver rojos ~60 archivos que nadie
-      tocó.
-      **Lo que se hizo:** `espejo-check.mjs` exporta `md5Archivo(nombre, contenido)` y hashea el
-      `.mjs` **sin el `\r`, de los dos lados** — local con `Buffer.filter`, y el comando remoto
-      con `tr -d` en vez de `md5sum` a secas. Es `tr` y no `sed` a propósito: sed agrega un
-      salto final si el archivo no lo tenía, y sin esa simetría exacta los dos hashes no
-      comparan nunca. El `.sh` sigue byte-exacto — ahí `#!/bin/bash\r` no arranca, y esa
-      asimetría es la razón de que el gate no pueda perdonar el byte en general.
-      **Probado contra producción y no con un fixture**, que es lo único que prueba que el lado
-      remoto también normaliza: se pasó `guardrails.mjs` a LF — **5636 → 5506 bytes, md5 crudo
-      distinto**, con el VPS en CRLF — y el gate **no lo nombró**; antes de este cambio ése era
-      exactamente el rojo falso. Restaurado byte a byte después (`441cdd70…`, 5636). Los tres
-      rojos que quedan son honestos: `recepcionista.test.mjs` (drift real, va en S9) y los dos
-      archivos de este mismo cambio.
-      **4 tests nuevos**, incluido el guardia que impide que el arreglo se vuelva una tapadera
-      (*normalizar NO tapa el drift real*, con el caso de 0 bytes medido hoy) y el que fija la
-      asimetría del `.sh`. Suite del bot **658/658** verde (654 antes).
-      ⚠️ **Lo que NO cierra, y por eso el ítem queda abierto:** la opción 1 —`.gitattributes`
-      con `eol=lf` + redeploy del directorio— sigue siendo de Sergio, y es la única que hace
-      que el espejo sea un espejo. La 3 baja el ruido pero **deja los dos lados distintos de
-      verdad**: el día que haga falta un `scp` selectivo por md5, el md5 crudo sigue sin
-      coincidir. Radar §12 actualizado: de las tres opciones ya sólo queda viva la 1.
-      📎 **Efecto secundario que hay que saber antes de mirar el gate:** `espejo-check.mjs` y
-      `espejo-check.test.mjs` ahora salen DISTINTOS contra el VPS, porque son los archivos que
-      acaban de cambiar. Es drift honesto y no urgente — son herramienta de desarrollo, no el
-      motor: no cambian una línea de lo que corre. Se suman al `scp` de S9 cuando haya ventana.
 
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       org `zzqa-horario-0001` ("ZZ QA Horario") con su usuario y su inbox, y las
@@ -520,6 +325,211 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas. ✅ **Sumado el 31-ago (7ª vuelta): ahora se comprueba DESDE AFUERA, sin entrar al VPS.** El `--check` del `.sh` vive dentro del contenedor (SSH + `docker exec` + `rails runner`), así que sólo lo corre quien ya está adentro y sabe que tiene que mirar — por eso las tres se perdieron el 16-ago y nadie lo vio en quince días. `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`) lee el `window.globalConfig` del HTML público del login: es un GET, corre desde cualquier máquina y hoy sale **1 con `REVERTIDAS 3/9`**. **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10, y mide la cara que ve el desconocido, no la base |
 | S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes** — commit `4f86381` de `onia-platform` (rama `carril/chatbot-v68-friccion`) | Es un deploy del producto, y ningún deploy sale sin su OK | Que el item "Requerimientos" del menú dibuje su icono. Encontrado MIRANDO `/inbox` de producción hoy: la fuente estaba cargada y el glifo no existía — `assignment_turned_in` nunca se subseteó (342 ligaduras en el .woff2 desplegado, 261 iconos declarados). Es el mismo defecto del login del 14-ago, en una pantalla que ningún gate cubría. Ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`); **verificación post-deploy:** abrir `/inbox` y mirar el menú, o medir el ancho del texto del span — un glifo ocupa ~1em, hoy mide 20em |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
+
+### S9 — el ítem completo, movido de "Ahora" el 2026-08-31
+
+> Vivió diez vueltas en "Ahora" esperando un `scp` que sólo Sergio puede hacer, y cada
+> vuelta le agregaba un párrafo que repetía la misma medición. Se mueve entero acá con su
+> número: **un ítem bloqueado se vuelve a mirar cuando Sergio avisa, no cada 20 minutos.**
+> Se borraron las cinco relecturas que sólo decían "sin cambios" (5ª, 6ª, 7ª, 8ª y 10ª
+> vuelta); lo que cada una aportaba de verdad ya vive en la fila S9 de arriba o en Cerrado.
+> Vuelve a "Ahora" el día que S9 se haga, con lo que queda: probar las frases MIRANDO.
+
+**2 · Las frases que la web YA manda no están registradas como campañas: el desconocido
+pregunta una cosa y el bot le contesta el saludo genérico.** Las frases de campaña se
+construyeron ayer (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:117`
+`campanaExacta`, espejo en `lib/chatbot/knowledge.ts:101`, deployadas en el commit
+`e5c1ad3`) y **no las usa nadie**: cero campañas publicadas en ningún documento.
+Mientras tanto onia.com.bo manda **seis frases fijas distintas** al mismo número, todas
+desde `web-factory/apps/onia-platform/src/lib/site.ts` — "Hola, quiero conocer Onia"
+(línea 41), "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio."
+(49), y las tres de comercio/servicios/importadoras (52-58), más las de los
+configuradores de servicios. Cada una es una intención declarada — la persona ya dijo
+qué quiere antes de escribir — y el bot la trata a todas igual.
+**Por qué es el ítem barato de mayor valor:** no hay que construir nada. La capacidad
+existe, la distribución existe, el número atiende. Falta escribir el documento.
+**Hecho =** las frases cargadas como campañas desde el panel
+(`app/(dashboard)/settings/chatbot/EnsenaleConversando.tsx` las crea hablando),
+publicadas, y las seis contestadas con su respuesta propia — probado por el probador
+real y MIRADO.
+⚠️ **No se toca `web-factory/apps/onia-platform/src/lib/site.ts`**: es del carril
+web-factory. Las frases se copian tal cual están hoy; si alguna cambia allá, la campaña
+deja de matchear y hay que re-copiarla.
+
+⚙️ **Vuelta del 2026-08-31 — el documento está escrito, validado y con su guardia; lo que
+falta NO es escribirlo.** Gate 1 primero, en vivo: `/opt/onia/bot/knowledge.json` del VPS
+(leído por SSH, 904 bytes, del 6-ago) **no tiene `campanas`** — el hueco existe hoy.
+**Corrección al ítem: no son seis frases vivas, son CINCO — y sólo cuatro las manda la web
+de verdad.** Medido contra producción con `curl`, no leyendo el repo:
+| frase | dónde | ¿la manda la web hoy? |
+|---|---|---|
+| "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio." | `WA_URL_LANDING` | **sí** — portada, /precios, /empezar, /contacto, /nosotros, /facturacion, /chatbot |
+| "…Quiero consultoría/capacitación en IA para mi empresa." | `/servicios/consultoria` | **sí** |
+| "…Quiero una propuesta de marketing con IA para mi negocio." | `/servicios/marketing-ia` | **sí** |
+| "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack." | `/v1/chatbot` | **sí** |
+| "Hola, quiero conocer Onia" | `WA_URL`, `web-factory/apps/onia-platform/src/lib/site.ts:41` | **no**: export sin un solo consumidor |
+| "Hola, quiero que me avisen cuando Onia para comercio/servicios/importadoras esté listo" | `WA_TEXT_*`, `web-factory/apps/onia-platform/src/lib/site.ts:52` | **no**: los tres son exports muertos, nadie los importa |
+| "Hola, mi rubro no está en la lista de Onia. Mi negocio es: " | `/v1/empezar` | sí, pero es un **prefijo** — la persona escribe su rubro atrás, así que jamás puede ser match exacto |
+Las tres "avisen cuando esté listo" además chocan con `MODULOS_LISTOS`
+(`hermes-content/deploy/vps-ops/bot/config.mjs:408`): comercio y proveedores **ya están listos**. Que sean código muerto
+refuerza la 📌 de abajo — no hay que corregir el texto, hay que borrarlo.
+**Lo que se hizo:** `hermes-content/docs/chatbot/campanas-onia.knowledge.json` — el
+documento de Onia (copia del vivo del VPS) con **5 campañas** (las 4 vivas + `WA_URL`, que
+está a un import de volver). Pasa la **compuerta real de publicación**
+(`node hermes-content/deploy/vps-ops/bot/knowledge.mjs --check <ruta>` → `OK`, exit 0) y las
+cinco respuestas pasan los guardrails. Y su guardia:
+`hermes-content/deploy/vps-ops/bot/campanas-web.test.mjs` **extrae las frases del código de
+la web** en vez de hardcodearlas, así que el día que web-factory cambie una coma el test se
+pone rojo en vez de morir en silencio. Suite del bot **619/619** verde (614 antes).
+🔴 **Y apareció el motivo REAL de por qué el ítem no se puede cerrar, que no es el
+documento.** `campanaExacta` vive dentro de `recepcionistaStep` (`hermes-content/deploy/vps-ops/bot/recepcionista.mjs:192`), y
+el modo recepcionista lo enciende sólo `asRecepcionista`, al que `withKnowledge` llama
+**únicamente si la fuente es `"db"`** — la fila publicada de una **org**, resuelta por
+`clinic_settings.chatwootInboxId` (`hermes-content/deploy/vps-ops/bot/knowledge.mjs:851`). El +591 75414930 hoy se atiende
+desde el **archivo** del VPS, o sea **modo venta, donde las campañas ni se miran**. Corrido
+con la misma frase por los dos caminos: archivo → `M0_SIN_HORARIOS` (el saludo genérico que
+el ítem describe), db → `R_CAMPANA` con la respuesta propia y `guardrail.ok: true`.
+**Cargar las campañas a mano en el VPS no serviría de nada.** El ítem 2 estaba mal
+diagnosticado: no le faltaba un documento, le falta **el mismo vínculo org→inbox del ítem
+1**. Los dos ítems de Ahora son el mismo bloqueo, y es **S8**. Anotado en
+`hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §9.
+**Lo que queda del ítem, cuando S8 se destrabe:** cargar estas 5 campañas en el editor de la
+org dueña del inbox 5, publicar, y probar las 4 frases vivas MIRANDO la pantalla.
+
+⚙️ **Vuelta del 2026-08-31 (segunda) — el ítem YA NO depende de S8, y el plan de arriba
+estaba equivocado.** Gate 1 sobre el propio diagnóstico, leyendo el motor: `campanaExacta`
+se llamaba **sólo** desde `hermes-content/deploy/vps-ops/bot/recepcionista.mjs:192`, y `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:448` corta el modo
+recepcionista antes de todo el guion de venta. O sea que el plan escrito arriba —"cargar
+las campañas en la org dueña del inbox 5"— **metía el número de Onia en modo recepcionista**,
+que es la config del bot de un CLIENTE. Ahí el embudo de leads no existe: lo dice el test
+`recepcionista: 'DEMO' NO dispara el funnel — el guion de leads queda exclusivo del modo
+venta`. Y `R_CAMPANA` es literalmente `{{respuesta_campana}}` (`hermes-content/deploy/vps-ops/bot/config.mjs:317`), sin un solo
+efecto: **se habría cambiado la única línea que produce leads por un texto enlatado.**
+**Lo que se hizo en su lugar** — que las campañas también se vean desde el modo venta, que es
+donde caen los wa.me?text= de onia.com.bo:
+- `hermes-content/deploy/vps-ops/bot/knowledge.mjs` (`applyKnowledge`) ahora lleva `campanas` a la config de los DOS modos.
+  `campanaExacta(config, norm)` lee `.campanas`, así que la misma función sirve a ambos sin
+  tocarla (el recepcionista le sigue pasando `config.conocimiento`).
+- `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`: la frase de campaña se resuelve en el router **antes** de los intents
+  difusos (es un match del mensaje ENTERO, la señal más específica que puede llegar) y sale
+  por `composeWithFunnel`, el mismo camino que ya usan precio y SIAT. Efecto: la respuesta va
+  **detrás** de la bienvenida, no en lugar de ella — se conservan M0 (el bot se declara bot,
+  D2), la oferta de horarios y el `lead_upsert`.
+- `composeWithFunnel` acepta `vars` (R_CAMPANA es la única plantilla de ese camino cuyo texto
+  no está en el guion: lo trae el documento publicado).
+**Probado con el documento real, no con un fixture** (las 5 campañas de
+`hermes-content/docs/chatbot/campanas-onia.knowledge.json` corridas por el motor en modo venta): las cinco contestan su
+propia respuesta y las cinco conservan `lead_upsert` + `notify_sergio`. Antes de este cambio
+las cinco daban `M0_SIN_HORARIOS` solo — exactamente el saludo genérico que el ítem denuncia.
+**7 tests nuevos** (incluido el guardia de no-regresión "sin campañas publicadas el motor no
+cambia" y "el opt-out le gana a la campaña"). Suite del bot **626/626** verde (619 antes).
+La compuerta de publicación sigue en `OK` sobre el documento.
+⚠️ **Lo único que queda, y es MUCHO más barato que S8:** copiar
+`hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json`
+del VPS (hoy tiene 904 bytes y no trae `campanas`) y probar las 4 frases vivas MIRANDO. Eso
+es un deploy al VPS ⇒ **OK de Sergio**, pero ya no hace falta decidir dueño de inbox ni
+desplegar el producto. **Corrección a S8:** el ítem 2 sale de su lista de desbloqueos.
+
+🔴 **Vuelta del 2026-08-31 (tercera) — S9 estaba MAL ESCRITO, y hacerlo tal como decía no
+habría encendido nada.** El párrafo de arriba afirma *"El motor ya las lee en modo venta
+(626/626 verde)"*. Eso es cierto **en el espejo del repo** y falso en el VPS: el motor se
+verificó localmente y se dio por desplegado sin mirarlo. Medido con md5, los dos lados:
+| archivo | espejo del repo | VPS `/opt/onia/bot/` |
+|---|---|---|
+| `hermes-content/deploy/vps-ops/bot/bot-engine.mjs` | `b5a5c878…` = commit `994eb42d` (campañas) | `7f50f1a9…` = commit `3e3841aa` (comprobantes) |
+| `hermes-content/deploy/vps-ops/bot/knowledge.mjs` | `4ba53652…` | `d00a3c1f…` |
+| `hermes-content/deploy/vps-ops/bot/campanas-web.test.mjs` | existe | **no existe** |
+El VPS quedó **exactamente un commit atrás**: `994eb42d` nunca viajó. Confirmado sin
+grep de descarte sino contando en el motor que CORRE (contenedor `onia-center`,
+`/tmp/onia-bot/bot-engine.mjs`): **cero apariciones de `campanaExacta`**.
+**La consecuencia si Sergio hacía S9 tal como estaba escrito:** copiaba las 5 campañas a
+`/opt/onia/bot/knowledge.json`, el motor viejo las ignoraba —no tiene el código que las
+lee—, las 4 frases vivas seguían recibiendo el saludo genérico, y el ítem se daba por
+cerrado. Un fantasma más, y del tipo caro: uno que se escribe DESPUÉS de que alguien puso
+las manos en producción.
+**S9 corregido:** no es sólo el documento. Tienen que viajar **`hermes-content/deploy/vps-ops/bot/bot-engine.mjs`,
+`hermes-content/deploy/vps-ops/bot/knowledge.mjs`** y el documento a `/opt/onia/bot/knowledge.json`, y hay que **reiniciar** (`hermes-content/deploy/vps-ops/bot/webhook-server.sh`
+recopia al contenedor sólo cuando cambia su STAMP).
+**Lo construido para que esto no vuelva a pasar** — porque ya pasó dos veces, las dos
+descubiertas de casualidad y en direcciones opuestas (`d334d776`: el espejo quedó 25
+archivos atrás del VPS; hoy: el VPS quedó atrás del espejo):
+`hermes-content/deploy/vps-ops/bot/espejo-check.mjs` — un md5 por lado, sólo lectura, sin
+tocar el VPS. Sale 0 si el código coincide y 1 nombrando los archivos si no.
+El documento publicado y los `webhook.env*` quedan fuera del veredicto **a propósito**: son dato
+vivo, no código, y un gate que siempre está rojo lo apaga alguien.
+**Corrido contra producción**, que es la prueba de que sirve:
+```
+ESPEJO DESINCRONIZADO — …/vps-ops/bot/ vs root@187.77.16.63:/opt/onia/bot
+  DISTINTOS (el VPS corre otra version): bot-engine.mjs, bot-engine.test.mjs, knowledge.mjs
+  FALTAN EN EL VPS (deploy a medias):    campanas-web.test.mjs, recepcionista.test.mjs
+```
+8 tests nuevos (`hermes-content/deploy/vps-ops/bot/espejo-check.test.mjs`), uno de ellos con los md5 REALES de hoy: si ese
+caso pasara en verde, el gate no serviría. Suite del bot **634/634** (626 antes).
+📎 **Trampa que costó tres consultas y queda escrita en el encabezado del script:** el
+motor vive en TRES lugares —espejo, `/opt/onia/bot` del host, y `/tmp/onia-bot` **dentro
+del contenedor `onia-center`**, que es el que corre—. `ps` en el host muestra
+`node /tmp/onia-bot/webhook-server.mjs` y ese directorio **no existe en el host**: es el
+`/tmp` del contenedor. El 3 se rehace solo del 2 por el STAMP de `hermes-content/deploy/vps-ops/bot/webhook-server.sh`, así
+que alinear el 2 es lo que el próximo restart lleva al bot vivo.
+
+✅ **Gate 1 del 2026-08-31 (cuarta vuelta) — el motor YA VIAJÓ; queda SOLO el documento.**
+La tabla de md5 de arriba quedó vieja y hacía perder la vuelta: `espejo-check.mjs` corrido
+hoy contra producción sale **0 — `ESPEJO OK`**, o sea que `bot-engine.mjs`, `knowledge.mjs`
+y `run-turn.mjs` del VPS ya son los del repo. Y verificado donde importa, en el motor que
+**corre** y no en el host: `docker exec onia-center grep -c campanaExacta
+/tmp/onia-bot/bot-engine.mjs` da **2**, cuando la vuelta anterior contó **0**.
+**Lo que sigue faltando, medido dentro y fuera del contenedor:** `knowledge.json` está en
+**904 bytes del 6-ago y sin `campanas`** en los dos lugares. O sea que el motor sabe leer
+campañas y el archivo del número no trae ninguna — las 4 frases vivas de onia.com.bo
+siguen recibiendo el saludo genérico, pero por UNA razón y no por cuatro.
+**S9 quedó en un archivo de datos:** copiar
+`hermes-content/docs/chatbot/campanas-onia.knowledge.json` a `/opt/onia/bot/knowledge.json`
+y reiniciar. Sigue siendo un deploy ⇒ **OK de Sergio**.
+
+⚙️ **Vuelta del 2026-08-31 (novena) — el CTA de `/v1/empezar` ya no puede tener campaña
+"nunca": ahora la tiene. Y el mismo cambio destapó que S9, tal como estaba escrito, HOY
+ROMPE producción.**
+**Gate 1 primero, en el motor y no en el papel.** La tabla del ítem declara una de las
+frases vivas como imposible: *"Hola, mi rubro no está en la lista de Onia. Mi negocio es: "*
+es un **prefijo** — la persona escribe su rubro atrás, así que el mensaje entero nunca es
+igual a la frase. Estaba escrito como decisión, con su motivo, en `NO_MATCHEABLES` de
+`hermes-content/deploy/vps-ops/bot/campanas-web.test.mjs`. Verificado que sigue viva hoy,
+con `curl` a producción y no leyendo el repo:
+`https://onia.com.bo/v1/empezar` renderiza
+`wa.me/59175414930?text=Hola%2C%20mi%20rubro%20no%20est%C3%A1...Mi%20negocio%20es%3A%20`.
+Y medido en el motor, las dos variantes contestaban **`M0` pelado**: quien MÁS información
+declaró —su rubro, y que no está en la lista— recibía exactamente lo mismo que quien
+escribe "hola".
+**Lo que se hizo, y es opt-in por campaña a propósito:** una campaña puede declarar
+`prefijo: true` y entonces matchea también cuando el mensaje **sigue**
+(`hermes-content/deploy/vps-ops/bot/recepcionista.mjs`, `campanaExacta`). Sin el campo, el
+match sigue siendo del mensaje entero — una campaña normal no se estira sola. El match
+exacto **le gana siempre** al prefijo, y entre dos prefijos gana la frase más larga; el
+límite es un espacio, así que `mi negocio es` no se come `mi negocio establecido`.
+`prefijo` agregado al esquema (`knowledge.mjs`) y la **sexta campaña** al documento
+(`hermes-content/docs/chatbot/campanas-onia.knowledge.json`, `version` → `2026-08-31.2`),
+que sigue pasando la compuerta real de publicación (`--check` → `OK`, exit 0).
+**Probado con el documento REAL corrido por el motor**, no con un fixture: las dos
+variantes (`…Mi negocio es: panadería` y el prefijo pelado) salen ahora **`M0` + `R_CAMPANA`
+con `lead_upsert`**, y `hola` sigue saliendo `M0` solo — o sea que no se le comió el flujo
+normal a nadie. **6 tests nuevos**, y se comprobó que pueden fallar: apagando la rama del
+prefijo, 2 se ponen rojos nombrando el caso. Suite del bot **682/682** (676 antes).
+🔴 **Y lo que más vale de esta vuelta, que es un hallazgo sobre S9 y no sobre el prefijo.**
+El esquema del validador **rechaza claves desconocidas**, y `parseKnowledge` devuelve
+`data: null` cuando el veredicto no es `ok` — o sea que un documento rechazado no carga
+"a medias": **no carga nada**. Bajado el `knowledge.mjs` que HOY corre en el VPS
+(41.423 bytes, cero `prefijo`) y corrido su propio `validateKnowledge` contra el documento
+nuevo:
+```
+ok= false
+errors= ["campanas[4].prefijo: clave desconocida (el esquema no la acepta)"]
+```
+**Si S9 se hace como estaba escrito —copiar sólo `knowledge.json`— el motor viejo tira el
+documento ENTERO:** no quedan 5 campañas andando y 1 ignorada, quedan **cero**, y además
+se pierden la FAQ `siat` y el horario que hoy sí están vivos. Sería un deploy que empeora
+producción, hecho siguiendo la instrucción al pie. **S9 corregido ARRIBA, en su fila: viajan TRES
+archivos.**
+
 
 ---
 
