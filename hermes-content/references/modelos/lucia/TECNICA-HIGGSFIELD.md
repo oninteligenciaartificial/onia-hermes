@@ -698,3 +698,64 @@ es el cuello: **la descarga sí**.
 3. La API de Higgsfield por MCP **sólo para leer la URL** — no para generar, que es donde
    sustituye el modelo en silencio.
 4. Pedirle a Sergio que la baje a mano una vez, para no bloquear el banco mientras se resuelve.
+
+---
+
+# Sesión 2026-08-31 — la descarga NO estaba rota, y el registro «caro» cuesta la cara
+
+## ✅ 1. CORRECCIÓN — el botón `Download` SÍ existe, y funciona
+
+**Lo que reporté el 31-ago a la mañana era falso.** Dije que «los cuatro caminos de descarga
+fallan» y que «`Download` no existe como botón con ese texto». Existe:
+
+> **Se hace clic en la imagen del grid → se abre el panel de detalle → abajo a la derecha está
+> `Download`**, junto a `Turn to video`, `Recreate` y `Reference`.
+
+Probado hoy: el archivo cayó en `Downloads` como
+`hf_20260901_025201_<uuid>.png`, **7.675.702 bytes, 1792×2400**. Cero fricción.
+
+**Por qué me lo perdí:** busqué un `<button>` con el texto `Download` y elementos con atributo
+`download` **sobre el grid**, sin abrir el detalle. Es exactamente el error que este mismo archivo
+ya se reprochaba en la sesión anterior — *«mirar UNA pantalla y dar por sabidas las demás»*— y lo
+volví a cometer, sobre el mismo botón.
+
+⚠️ Y de paso: el ícono de descarga del hover **no descarga**, abre el detalle. Por eso el camino
+correcto son **dos** clics, no uno.
+
+## 🔴 2. Los clics por coordenada no son confiables acá; por `ref` sí
+
+Dos fallos hoy, los dos por coordenada:
+- Click en el selector de modelo a `(404, 628)`: **no abrió nada**.
+- Click en la fila «Nano Banana Pro» a `(428, 471)`: **seleccionó Seedream 4.5**, la fila de
+  arriba. Se vio porque el botón pasó a decir `Generate ✦ 1` y la URL a `model=seedream_v4_5`.
+- Click en `Generate` a `(1010, 614)`: **no generó**; la grilla quedó igual.
+
+Los tres funcionaron a la primera usando `find` → `ref_N`. **Regla: en este UI se clickea por
+referencia, no por píxel.** Y siempre se confirma leyendo el número del botón y la URL.
+
+## ⚠️ 3. Hay TRES elements de Lucía en el selector, no uno
+
+Escribiendo `@lucia` aparecen: **`lucia-skin-v1`** (el bueno, primero), `LUCIA-SINTETICA-v3` y
+`lucia-ancla-2026-08`. El doc sólo nombraba el vigente y el jubilado. Los otros dos no están
+documentados y son un riesgo de elegir mal a las apuradas — se acepta con **Enter**, que toma el
+primero.
+
+## 🔴 4. El hallazgo de contenido: el registro «campaña de moda» le cambia la cara
+
+Primera pieza del registro cinematográfico (`generadas-20260831/C01-terraza-torre-cristal.png`),
+pedida por Sergio a partir del reel de @mindshft.ai. **El registro salió; la fidelidad no.**
+
+| Salió bien | Salió mal |
+|---|---|
+| Luz dura de mediodía, sombra nítida en el concreto | **La cara es más angulosa y flaca que el ancla**: pómulos hundidos, mandíbula afilada, cuello largo |
+| Muro cortina de vidrio, Santa Cruz difusa abajo | **Pelo recogido tirante** — le saca el rasgo más reconocible, que es el pelo suelto ondulado |
+| Chaleco sastre y pantalón ancho: caro y controlado | Piel de brazos y hombros más lisa de lo que pide su ficha (poros visibles) |
+| Pecas conservadas y visibles | |
+
+**La causa es el prompt, no el modelo.** Palabras como `fashion-commercial`, `campaign look` y
+`hair pulled back tight` arrastran al arquetipo de modelo de pasarela, y el arquetipo le gana al
+ancla. **Para la próxima:** pedir *editorial portrait* en vez de *fashion campaign*, dejar el
+**pelo suelto**, y mantener la línea de «poros visibles, asimetría natural» que ya funciona en las
+piezas de pilar B.
+
+El registro caro se consigue con **luz, encuadre y vestuario** — no pidiéndole que parezca modelo.
