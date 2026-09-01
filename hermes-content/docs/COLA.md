@@ -1039,6 +1039,61 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Cerrado (2026-09-01) — no rehacer
 
+- [x] **Paso 3 otra vez: los `[x]` resisten, y el defecto aparecio en la pantalla que decide QUE
+      SE PUEDE VENDER.** Vuelta con "Ahora" sin un solo item desbloqueado (F2, F5, el `DELETE` de
+      pagos y el item del esceptico esperan **una linea de Sergio**). Se audito contra la punta de
+      hoy, que **no** es la de la auditoria anterior: `origin/master` paso de `3c339a6` a `40d8dc2`.
+      **La auditoria dio limpia:** los **11 shas citados** (`4077f2c`, `753718f`, `e644c85`,
+      `ab9e0de`, `0711ff6`, `2849be0`, `1fc4354`, `4dce75e`, `f47d615`, `3c339a6`, `e5c1ad3`) son
+      ancestros reales de esa punta, los archivos y las lineas citadas siguen existiendo, y los
+      tres gates dieron **verde** sobre `40d8dc2` (tsc 0 · **2367 pasan + 5 skip** · lint 0 errores,
+      101 warnings preexistentes). Ningun cierre falso.
+      **El primer candidato a arreglo era FANTASMA, y vale escribirlo:** F2 dejo anotado que
+      `addon.chatbot` es "una llave duplicada y muerta". Es **cierto** —confirmado: `lib/pricing.ts:61`
+      es un **tier** de `WHATSAPP_ADDON`, no la feature key, y la entitlement `addon.chatbot` no la
+      lee **nadie**— pero **no es roto ni falso**: la pantalla de `/admin/organizations/[id]/capacidades`
+      ya la muestra con el badge *"Sin efecto todavia · Ninguna pantalla ni API lee esta capacidad"*.
+      Es honesta. Borrarla habria sido trabajo fabricado. **Gate 1 sirve tambien para no arreglar.**
+      **El defecto real estaba un nivel mas arriba: ese badge se decidia con un mapa mantenido A
+      MANO.** `CON_EFECTO_REAL` venia de una auditoria del **2026-08-13** y su propio comentario
+      avisaba del riesgo (*"al cablear una capacidad nueva, sumala aca — si no, la pantalla la
+      seguira marcando como sin efecto y estaras subestimando tu propio producto"*). **Miente en
+      las DOS direcciones y las dos cuestan plata:** una clave prometida sin consumidor le vende a
+      Sergio un efecto que no existe; una clave ya cableada fuera del mapa le dice que algo que
+      **si** funciona no sirve, y no lo vende. Verificado hoy: el mapa esta **correcto**, pero
+      nada lo sostenia.
+      **Lo que se hizo:** el mapa sale del client component a `lib/platform/capacidades-con-efecto.ts`
+      (el test no puede importar la pantalla sin arrastrar React) y lo guarda
+      `lib/platform/capacidades-con-efecto.test.ts`. **Otorgar no es consumir:** los archivos que
+      declaran el catalogo o lo derivan (`types.ts`, `entitlements.ts`, `demo-provisioning.ts`, el
+      `register`) quedan fuera — si contaran, toda clave derivada de un plan se daria por cableada
+      y el mapa se llenaria de promesas falsas, que es justo la mentira que persigue. Casos
+      **sinteticos** en las dos direcciones (un guard probado solo contra el arbol limpio de hoy
+      pasa en verde sin detectar nada) mas el caso real contra el repo. **Visto en ROJO** sacando
+      `addon.captador` del mapa: `{ clave: 'addon.captador', tipo: 'consumidor-sin-nota' }`.
+      **Y la pantalla no tenia UNA sola prueba de render**, siendo la que le dice a Sergio que se
+      puede vender: sin ella, mover el mapa pasaba en verde aunque la pantalla dejara de leerlo.
+      Vista en ROJO con `nota = undefined`, y **mirada renderizada de verdad** — se lee
+      *"module.agents · Completa: nav, pantalla y runtime de agentes"* junto a
+      *"module.accounting · Sin efecto todavia"*.
+      **Un dato falso corregido en el catalogo canonico:** `lib/platform/types.ts` afirmaba que
+      `public_booking` *"gatea un item de la nav"*. **No lo gatea nadie** — el unico
+      `requiresFeature` de la nav es `module.agents` (`components/layout/navigation.ts:40`). La
+      agenda publica **si** esta gateada, pero por las **tres** rutas de `/api/booking`
+      (appointments, doctors, slots) con `!org.publicBookingAddon && !canUsePublicBooking(plan)`,
+      no por la feature key. Es la misma trampa que ya costo una conclusion falsa en **P3** —
+      buscar la clave en el archivo equivocado — asi que se corrige donde se lee.
+      **Anotado sin arreglar (no es roto ni falso HOY):** la lista de planes con agenda incluida
+      esta escrita **tres veces a mano** (`PAID_PUBLIC_BOOKING_PLANS` en `app/(dashboard)/admin/page.tsx:40`
+      y dos literales en `admin/plans/`), y hoy **coincide** exacto con `getLimits().publicBookingIncluded`
+      (professional, clinic, enterprise). Se rompe el dia que cambie un plan.
+      Gates sobre la punta rebaseada `0532659`: tsc **0** · **2432 pasan + 5 skip (197 archivos)** ·
+      lint **0 errores**. Commit **`7bf8a79`**, **ya en `origin/master`**.
+      **Apunte de metodo:** el push se rechazo porque `origin/master` se movio entre el `fetch` y
+      el `push` (dos merges de otros carriles). Se rebaseo y se **re-corrieron los tres gates
+      sobre la punta nueva** antes de pushear: gates verdes sobre una punta vieja no dicen nada de
+      la punta que se publica.
+
 - [x] **La lista de bloqueos estaba duplicada y la copia vieja fabricaba trabajo para Sergio.**
       Vuelta con "Ahora" sin un solo ítem desbloqueado (F2 y F5 esperan a Sergio; la frase falsa de
       `hermes-content/propuestas/generador/clientes.json` es del carril C; el ítem del escéptico
