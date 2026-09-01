@@ -82,6 +82,18 @@ function evidenciaDe(texto) {
     // gritando en falso, y un gate que grita en falso se termina ignorando.
     if (/^[\/]/.test(ruta)) continue;
 
+    // Una URL o un dominio NO son archivos, y el gate los llamaba fantasma. Se midio el
+    // 2026-09-01 al promover el item de la marca de Chatwoot: 7 de sus 8 "fantasmas" eran
+    // `chat.onia.com.bo`, `www.chatwoot.com` y pedazos de JSON. El propio archivo dice mas
+    // arriba por que eso importa mas que un falso negativo: un gate que grita en falso se
+    // termina ignorando, y este existe justo para que la cola no mienta.
+    if (/^[a-z][a-z0-9+.-]*:\/\//i.test(ruta)) continue;
+    if (/^(www\.[a-z0-9-]|[a-z0-9-]+(\.[a-z0-9-]+)*\.(com|bo|net|org|io|dev|app|ai|co)(\.[a-z]{2})?)([\/:]|$)/i.test(ruta)) continue;
+
+    // Comillas: es un pedazo de codigo o de JSON citado ("BRAND_URL":"https://..."), no un
+    // nombre de archivo. Ninguno del repo las tiene.
+    if (/["']/.test(ruta)) continue;
+
     // Un backtick tambien envuelve codigo y endpoints: `GET /api/x`, `invoice.patient?.ci`,
     // `responsable?.ci ?? patient.ci`. Ningun archivo del repo tiene espacios ni signos de
     // pregunta en el nombre, asi que eso los descarta sin tener que adivinar.
@@ -230,6 +242,25 @@ function selfCheck() {
   // asi que eso los descarta sin tener que adivinar.
   r = revisarCola('## Ahora\n- [ ] Algo · `existe.png` · `GET /api/x` · `invoice.patient?.ci`\n', tmp);
   ok(!r.problemas.length, 'codigo y endpoints entre backticks no son rutas');
+
+  // (4b) Una URL y un dominio no son archivos. Medido el 2026-09-01: el item de la marca de
+  // Chatwoot daba 8 fantasmas y 7 eran `chat.onia.com.bo`, `www.chatwoot.com` y JSON citado.
+  r = revisarCola('## Ahora\n- [ ] Mirar `https://chat.onia.com.bo/app/login` desde `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una URL con esquema no se verifica contra el disco');
+
+  r = revisarCola('## Ahora\n- [ ] `chat.onia.com.bo` y `www.chatwoot.com` desde `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un dominio suelto tampoco');
+
+  r = revisarCola('## Ahora\n- [ ] Sale `"BRAND_URL":"https://www.chatwoot.com"` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un pedazo de JSON citado no es una ruta');
+
+  // Y el limite, que es lo que impide que el arreglo afloje el gate: un archivo con extension
+  // corta sigue siendo una ruta, y sigue siendo fantasma si no esta.
+  r = revisarCola('## Ahora\n- [ ] Algo · `no-esta.png`\n', tmp);
+  ok(r.problemas.some((x) => x.regla === 'fantasma'), 'un archivo que no existe sigue siendo fantasma');
+
+  r = revisarCola('## Ahora\n- [ ] Solo `https://chat.onia.com.bo`\n', tmp);
+  ok(r.problemas.some((x) => x.regla === 'sin-evidencia'), 'una URL sola no alcanza como evidencia');
 
   // (5) La cola de producto vive en onia-hermes y cita archivos de onia-platform, que es un
   // repo hermano. Sin esto el gate llamaba fantasma a todo el producto — la mitad del carril —

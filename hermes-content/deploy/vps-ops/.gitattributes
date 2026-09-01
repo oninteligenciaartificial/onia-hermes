@@ -1,1 +1,11 @@
+# Politica de fin de linea del espejo del bot (`bot/` es el espejo de /opt/onia/bot del VPS).
+#
+# `onia-hermes` tiene core.autocrlf=true y ningun .gitattributes en la raiz: git guarda LF y
+# materializa CRLF al hacer checkout. Sobre el espejo eso cambia los BYTES sin cambiar una
+# linea de codigo, y `bot/espejo-check.mjs` — que compara md5 contra el VPS — fabricaba un
+# "deploy pendiente" que nadie pidio. Forzar LF aca alinea los dos lados de verdad.
+#
+# En un .sh el CRLF ademas ROMPE: `#!/bin/bash\r` no arranca. Por eso el gate compara los .sh
+# byte a byte y estos siguen forzados a LF.
 *.sh text eol=lf
+bot/*.mjs text eol=lf

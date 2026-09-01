@@ -350,7 +350,7 @@ postear. Hoy el inbox 3 no es el `chatwootInboxId` de ninguna org, así que no a
 
 ---
 
-## 12. El espejo del bot se desincroniza solo con un `git checkout` (2026-08-31) — decisión de Sergio
+## 12. ~~El espejo del bot se desincroniza solo con un `git checkout`~~ — CERRADO, no hay decisión (2026-09-01)
 
 **El síntoma, encontrado por las malas.** Después de mutar y restaurar
 `hermes-content/deploy/vps-ops/bot/recepcionista.mjs` con `git checkout --`,
@@ -419,3 +419,27 @@ hace que el espejo sea un espejo.
 verdad un espejo. Si no hay ventana para un deploy del bot, la 3 es el paliativo honesto: baja
 el ruido sin fingir que los archivos son iguales. Anotado en la sección "Después" de
 `hermes-content/docs/cola/chatbot.md`.
+
+✅ **CERRADO el 2026-09-01: la opción 1 se hizo, y SIN el redeploy que la encarecía — ya no
+hay nada que decidir acá.** La cotización de arriba daba por atado el `.gitattributes` a un
+`scp` del directorio entero, porque renormalizar habría desincronizado contra el VPS los
+archivos que hoy coinciden en CRLF de los dos lados. **Eso dejó de ser cierto con la opción 3:**
+desde que `espejo-check.mjs` hashea los `.mjs` sin el `\r` de los dos lados, forzar LF en el
+repo **no puede** mover un solo hash. Se midió antes de tocar nada, y después.
+
+**Lo que se hizo:** `hermes-content/deploy/vps-ops/.gitattributes` suma `bot/*.mjs text eol=lf`
+al `*.sh text eol=lf` que ya tenía — alcance exacto del espejo, sin arrastrar los 40+ `.mjs`
+sueltos de `vps-ops/` ni `evals/` (que el gate tampoco mira: `md5Local` no baja de `maxdepth 1`).
+Los `.sh` siguen forzados a LF por el motivo de siempre.
+
+**Medido con un checkout real:** `guardrails.mjs` borrado y restaurado con `git checkout --`
+sale ahora en **5506 bytes con 0 `\r`**; antes de la política el mismo checkout lo dejaba en
+**5636**. Renormalizados además los **21 `.mjs` que estaban en CRLF en disco** con el blob en
+LF — coincidían con el VPS por casualidad. Un test nuevo en
+`hermes-content/deploy/vps-ops/bot/espejo-check.test.mjs` corre `git check-attr eol` y se pone
+rojo si alguien deja el directorio sin política; suite del bot **683/683**.
+
+**Y no agregó un rojo al gate**, que era la única prueba de que no desincronizaba: los 8 que
+`espejo-check.mjs` nombra hoy son drift honesto de **S9** —verificado abriendo los archivos
+contra el VPS, no creyéndole al hash: `recepcionista.mjs` y `knowledge.mjs` difieren por el
+opt-in `prefijo` del commit `ba970f4a`, contenido y no fin de línea.
