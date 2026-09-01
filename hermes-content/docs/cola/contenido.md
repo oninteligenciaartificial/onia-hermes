@@ -7,6 +7,10 @@
 > **Objetivo único (Sergio, 2026-08-30):** pasar de **0 posts a un feed vivo publicando lo que
 > YA existe**. No se produce nada nuevo hasta que haya algo publicado.
 >
+> ✅ **El cero se rompió el 31-ago**: Sergio publicó el post fijado de Lucía. La cláusula «no se
+> produce nada nuevo» queda cumplida y levantada — el 31-ago pidió *«segui produciendo y
+> aprendiendo»*, y ahí arranca el registro cine (`generadas-20260831/`).
+>
 > **Hecho =** se abre el perfil de Instagram y se ven los posts. No es un commit, no es un
 > render, no es un doc. Es una pantalla que un desconocido puede ver.
 
@@ -39,7 +43,7 @@ faltantes. Lo que falta es **publicar**.
 - [x] **Marca personal → comunidad.** STACK pasa de `pdf` sin URL al link de la comunidad y los 8 placeholders quedaron reemplazados en `hermes-content/docs/ONIA_SERGIO_DM_PALABRAS.md`. Ver `scripts/recompensas.json` · 31-ago
 - [x] **Reescrito 31-ago.** S05 y S06 ya prometen la comunidad y no «la lista con los links». El gate dejo de marcar `promesa-distinta`; queda solo `palabra-apagada`, que es de Sergio (cargar STACK en el mapa de n8n, 30 s). Ver `hermes-content/references/marca-personal-sergio/briefs/S06-equipo-que-no-cobra.json` · Claude
 - [x] **Etiqueta de IA declarada — Sergio, 31-ago.** Era el último requisito de los días 0 y 1. Lo reporta Sergio sobre su propia cuenta; yo no la veo desde acá, así que queda anotado como su verificación, no como la mía. Ver `hermes-content/contenido/LUCIA.md` · Sergio
-- [ ] ✅ **DESBLOQUEADO** — publicar el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502. Son las 7 láminas de `hermes-content/references/modelos/lucia/posts-20260807/FIJADO`, y el caption a copiar quedó al lado en `hermes-content/references/modelos/lucia/posts-20260807/FIJADO/CAPTION.md` (NO la carpeta `hermes-content/references/modelos/lucia/posts-20260807/render-fijado`, que quedó superada). **No lleva palabra clave ni link**: no depende de n8n, ni de Postiz, ni de la decisión del link · 15 min · Sergio
+- [x] 🎉 **PUBLICADO — Sergio, 31-ago.** El feed dejó de estar en cero. Lo reporta él; desde acá no veo su Instagram, así que es su verificación, no la mía. Era el día 0 (post fijado) A MANO desde el teléfono, porque Postiz da 502. Son las 7 láminas de `hermes-content/references/modelos/lucia/posts-20260807/FIJADO`, y el caption a copiar quedó al lado en `hermes-content/references/modelos/lucia/posts-20260807/FIJADO/CAPTION.md` (NO la carpeta `hermes-content/references/modelos/lucia/posts-20260807/render-fijado`, que quedó superada). **No lleva palabra clave ni link**: no depende de n8n, ni de Postiz, ni de la decisión del link · 15 min · Sergio
 - [ ] ✅ **DESBLOQUEADO** — publicar el día 1 (reel de lanzamiento v7, 22 s, 1080×1920): `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4`, caption en `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/CAPTION.md`. Tampoco lleva palabra clave ni link. Va **después** del fijado · 10 min · Sergio
 
 - [x] **Escrito 31-ago.** Caption del reel del día 1, con el porqué de cada decisión y los 3 pasos previos: `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/CAPTION.md`. Sale del guion real del reel (`hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/TABLA-DE-CORTES.md`), abre con «No soy real» como el primer beat y cierra con «Seguime» como el último. No lleva palabra clave · Claude
