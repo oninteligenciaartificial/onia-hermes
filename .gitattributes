@@ -1,4 +1,6 @@
-# Los scripts que corren en el VPS SIEMPRE con finales LF: con CRLF, Linux
-# falla con "bad interpreter: /usr/bin/env bash^M" y el loop no arranca nunca.
-scripts/loops/*.sh text eol=lf
-scripts/loops/pre-push text eol=lf
+# Todo lo de scripts/ termina corriendo en el VPS (Linux). Con CRLF, bash falla
+# con "bad interpreter: /usr/bin/env bash^M" y el loop no arranca nunca; y un .mjs
+# escrito desde Windows llega a main como un archivo "entero cambiado" que choca
+# con su propia version en main (pasó el 2026-09-01 con scripts/canario_visual.mjs:
+# 207 lineas de conflicto que eran SOLO finales de linea).
+scripts/** text=auto eol=lf

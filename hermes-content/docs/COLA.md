@@ -403,6 +403,27 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Son la puerta de entrada del producto y hoy sus defectos caen acá por descarte. Anotado
       también en `ONIA_RADAR_DECISIONES_PRODUCTO.md`.
 
+### Del canario visual — segunda pasada del 2026-09-01
+
+- [ ] **El párrafo izquierdo del login de la plataforma sale con espacios metidos DENTRO de
+      palabras** ("Ent regamos", "puest a", "t odo el sist ema", "cit as", "import ante"), en
+      `app.onia.com.bo/login` — y por herencia en `/settings/chatbot` sin sesión, que redirige
+      ahí. Reproducido 3 veces seguidas en Chromium headless del VPS (`--no-sandbox`), siempre
+      en las mismas palabras. El `innerText` del párrafo es correcto (sin espacios de más) y
+      `document.fonts.status` es `loaded`, sin 404 de fuentes — el glitch es sólo visual, en el
+      renderizado del glifo, no en el dato. La fuente del bloque es `Archivo` (variable font).
+      **No se descartó como artefacto del canario**: a diferencia del blanqueo por scroll de la
+      home (que desaparece con más tiempo de scroll y por eso NO se reporta), este espaciado
+      **no cambió con 3 s de espera extra** después de `networkidle`.
+      **No verificado en un Chrome de escritorio normal** — puede ser una rareza de fuente
+      variable + Chromium headless Linux y no algo que vea un cliente real; queda a criterio
+      del dueño confirmarlo en un navegador de verdad antes de invertir tiempo.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma-texto-espaciado.png`
+      (página completa) y `...-crop.png` (recorte del párrafo) · login-plataforma hoy = 967 KB
+      · 147 ms hasta mirable (baseline: 1.302 KB · 1.043 ms — la baja de peso es variación de
+      CDN/compresión entre corridas, no un recorte de contenido: el `innerText` completo
+      coincide con la baseline).
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
