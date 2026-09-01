@@ -31,6 +31,8 @@ faltantes. Lo que falta es **publicar**.
 
 ---
 
+**Verificado el 31-ago:** las SEIS piezas del calendario tienen caption escrito (153 a 1.268 caracteres). El hueco del día 1 era específico del reel, que no tiene brief JSON. No hace falta revisarlo de nuevo.
+
 ## Ahora
 
 - [x] Elegir cuál render se sube en las 3 piezas con DOS versiones: **gana el lote verde del 28-ago** — `hermes-content/references/modelos/lucia/posts-20260807/FIJADO`, `L6` y `L08`. Las dos sesiones llegaron a lo mismo por separado: mirando la portada, la del 28-ago usa sans pesada con bloque de resaltado y «DESLIZÁ →», y la del 22-ago serif itálica fina — el tratamiento que Sergio objetó con «se ve muy pequeño el texto». Las superadas llevan `hermes-content/references/modelos/lucia/posts-20260807/render-fijado/_NO-SUBIR.md` y los punteros del handoff quedaron corregidos · 31-ago
