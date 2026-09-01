@@ -10,6 +10,7 @@ import {
 import { HUECO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
+import { ALTA_VERBO_VOS, CTA_ALTA, ctaAltaPlan } from "./alta";
 import { Block, Shape, Btn, Kicker, JsonLd } from "./ui";
 import { Switcher } from "./switcher";
 import s from "./sitio.module.css";
@@ -59,7 +60,9 @@ export const metadata: Metadata = {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Pantalla real de Onia: elegís el rubro de tu negocio al crear la cuenta.",
+        // La captura es el selector de rubro, que es el primer paso en las DOS
+        // ramas del alta: describirlo así no ata este alt a `./alta`.
+        alt: "Pantalla real de Onia: elegís el rubro de tu negocio en el primer paso.",
       },
     ],
   },
@@ -104,10 +107,11 @@ const PCT_SALARIO = Math.round(
 /**
  * FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes.
  *
- * Cerrado 2026-08-23: el verbo se alineó con el destino. /register ya no crea
- * cuentas (ver el comentario de (sitio)/empezar/page.tsx:21-25), así que acá no
- * se dice más "te registrás y usás": se PIDE el acceso. La prueba de 14 días
- * sin tarjeta sigue siendo cierta y es lo que se promete.
+ * El verbo del alta NO se escribe acá: sale de `./alta`. El 23-ago se barrió a
+ * mano a "pedís tu acceso" (el alta estaba cerrada) y cuando el alta se reabrió
+ * esta respuesta quedó atrás pidiendo permiso para entrar a un formulario que ya
+ * crea la cuenta sola. La prueba de 14 días sin tarjeta es cierta en las dos
+ * ramas y es lo que se promete.
  *
  * Las cuatro preguntas nuevas (carga de datos, aprender a usarlo, dejar de
  * pagar, rubro fuera de la lista) son las que frenan la compra. Ninguna
@@ -116,7 +120,7 @@ const PCT_SALARIO = Math.round(
 const FAQ = [
   {
     q: "¿Necesito tarjeta para probar?",
-    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: pedís tu acceso, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
   },
   {
     // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx:79 (paso 02).
@@ -269,11 +273,12 @@ export default function Portada() {
                 cliente que se enfrió. Vos aprobás; el sistema hace.
               </p>
               <div className={s.actions}>
-                {/* El verbo tiene que ser el del destino: /empezar dice "Pedir
-                    mi acceso" porque /register ya no da alta automática.
-                    Prometer un botón que el producto no cumple pierde al lead
-                    en el último clic. Los días gratis bajan a la nota. */}
-                <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
+                {/* El verbo tiene que ser el del destino, y el destino cambia:
+                    por eso sale de `./alta` y no se escribe acá. Prometer un
+                    botón que el producto no cumple —en cualquiera de los dos
+                    sentidos— pierde al lead en el último clic. Los días gratis
+                    bajan a la nota. */}
+                <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
                 <Btn href="/precios" variant="line">
                   Ver precios
                 </Btn>
@@ -525,7 +530,7 @@ export default function Portada() {
                   ))}
                 </ul>
                 <div className={s.planFoot}>
-                  <Btn href={EMPEZAR_URL}>Pedir acceso al {plan.nombre}</Btn>
+                  <Btn href={EMPEZAR_URL}>{ctaAltaPlan(plan.nombre)}</Btn>
                 </div>
               </div>
             ))}
@@ -662,7 +667,7 @@ export default function Portada() {
             Probá Onia {PRUEBA.dias} días. Sin tarjeta.
           </h2>
           <div className={s.actions}>
-            <Btn href={EMPEZAR_URL}>Pedí tu acceso</Btn>
+            <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Hablar por WhatsApp
             </Btn>

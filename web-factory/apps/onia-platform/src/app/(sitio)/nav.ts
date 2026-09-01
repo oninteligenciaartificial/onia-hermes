@@ -56,7 +56,13 @@ export const NAV_HEADER: readonly NavItem[] = [
   { href: "/contacto", label: "Contacto" },
 ];
 
-/** La pantalla de arranque vive DENTRO del sitio: no se sale a otro cromo. */
+/**
+ * La pantalla de arranque vive DENTRO del sitio: no se sale a otro cromo.
+ *
+ * El DESTINO se cambia acá; la ETIQUETA del botón vive en `./alta` — porque no
+ * depende de la ruta sino de lo que /register haga ese día. Ningún archivo del
+ * sitio escribe ese verbo a mano: `alta.test.ts` lo verifica.
+ */
 export const EMPEZAR_URL = "/empezar";
 
 /** Volver al sistema. El registro y el login son del producto, no del sitio. */

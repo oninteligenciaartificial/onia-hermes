@@ -172,8 +172,14 @@ visible, parametrizada por rubro — **Reservar / Comprar / Pedir acceso**. Togg
 el hero sale de viewport (no scroll handler).
 
 **Honestidad de conversión (regla ONIA dura):** el botón promete exactamente lo que hay del otro lado. Si el
-alta es solicitud, el copy dice "Pedí tu acceso", no "Probá 14 días gratis". Barré la promesa vieja en TODA la
-superficie con grep antes de dar el cambio por hecho (nace del bug de los 4 botones de `/register`).
+alta es solicitud, el copy dice "Pedí tu acceso"; si crea la cuenta sola, dice "Creá tu cuenta". Nace del bug de
+los botones de `/register` — que volvió a pasar el 29-ago con el signo invertido (el alta se reabrió y el sitio
+siguió pidiendo permiso), porque el verbo estaba a mano en once archivos.
+
+**El grep a mano no alcanzó: ahora es una fuente única con guard.** En `onia-platform` el verbo sale de
+`src/app/(sitio)/alta.ts` y `alta.test.ts` falla si alguna superficie se queda con el vocabulario de la rama
+apagada, o si un enlace al alta escribe su etiqueta a mano. Copiar ese patrón en cualquier sitio cuya promesa
+dependa de un flag del producto.
 
 ---
 

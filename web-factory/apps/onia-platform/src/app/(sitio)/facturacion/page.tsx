@@ -10,6 +10,7 @@ import {
 } from "@/lib/siat";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { Block, Btn, Kicker, JsonLd } from "../ui";
+import { CTA_ALTA } from "../alta";
 import s from "../sitio.module.css";
 
 /**
@@ -203,7 +204,7 @@ export default function Facturacion() {
             Dejá tu operación lista antes del plazo.
           </h2>
           <div className={s.actions}>
-            <Btn href="/empezar">Empezá gratis</Btn>
+            <Btn href="/empezar">{CTA_ALTA}</Btn>
             <Btn href={WA_URL_LANDING} variant="line" external>
               Preguntanos tu caso por WhatsApp
             </Btn>

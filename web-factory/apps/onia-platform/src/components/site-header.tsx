@@ -1,5 +1,6 @@
 import { BrandLogo } from "@/components/brand-logo";
 import { APP_URL } from "@/lib/site";
+import { CTA_ALTA } from "@/app/(sitio)/alta";
 import styles from "./site-header.module.css";
 
 /*
@@ -54,7 +55,7 @@ export function SiteHeader() {
           href={`${APP_URL}/register`}
           className={`${styles.btn} ${styles.primary}`}
         >
-          Probar gratis
+          {CTA_ALTA}
         </a>
       </div>
     </header>
