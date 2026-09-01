@@ -1,0 +1,4 @@
+# Los scripts que corren en el VPS SIEMPRE con finales LF: con CRLF, Linux
+# falla con "bad interpreter: /usr/bin/env bash^M" y el loop no arranca nunca.
+scripts/loops/*.sh text eol=lf
+scripts/loops/pre-push text eol=lf
