@@ -499,18 +499,33 @@ Las tres formas de fantasma que ya aparecieron acá:
       200). `out/` está en `.gitignore`, así que no llegó a ningún commit — pero el
       servidor de salud sí habría servido otra página.
 
-- [ ] **A8 · `MOTION_CSS` viaja donde no hay tarjetas y falta donde sí** — hallazgo
-      medido al cerrar A7 (regla de AUD3: el pendiente se escribe como línea de cola en el
-      mismo commit que tacha el ítem). **Evidencia de hoy (2026-09-01)**: en
-      `out/logistics-demo/index.html` y `out/realestate-demo/index.html` la cadena
-      `wf-hover-lift` aparece **3 veces, y las 3 son las reglas CSS** — `grep -o
-      'class="[^"]*wf-hover-lift[^"]*"'` devuelve **0 elementos** en ambas. Ninguna de esas
-      dos plantillas dibuja tarjetas. O sea: la hoja de motion se emite entera en dos
-      páginas de cliente para una primitiva que nadie usa, y la única página con tarjetas
-      no la recibe. Al tomarla, la decisión es **borrar la primitiva o darle un dueño real**,
-      no cablearla por cablearla — A7 ya midió que en `clinic-services.ts` sería inerte y
-      duplicada. Medir antes el peso que MOTION_CSS le agrega a esas dos páginas.
-
+- [x] **A8 · La primitiva de hover borrada: nadie la usaba y ninguna tarjeta la quiere**
+      (2026-09-01). Evidencia re-verificada antes de tocar: `grep -o 'class="[^"]*wf-hover-lift[^"]*"'`
+      devuelve **0 elementos en las 14 páginas de `out/`**, no solo en las dos del ítem;
+      la cadena aparecía únicamente como las reglas CSS dentro de `MOTION_CSS`, que solo
+      emiten `landing-logistics` y `landing-realestate`. **Medido el peso, como pedía el
+      ítem**: `MOTION_CSS` son 2.738 B (14,1% de logistics, 11,8% de realestate) y la
+      primitiva muerta 261 B de eso — **el peso NO era el argumento**, así que la decisión
+      se tomó por diseño, no por bytes.
+      **Se borró**, y las dos tarjetas que existen son la razón: `clinic-css` levanta la
+      suya −4px con su propia puerta de reduced-motion, y `property-cards.ts:189` zooma la
+      foto DENTRO de un marco que **a propósito no se mueve** ("the frame does not move").
+      Un lift genérico no es el hover que ninguna de las dos quiere, y encima quemaba
+      `rgba(10,17,38,.35)` — sombra ciega al tema, el modo de falla que W1/A1a ya habían
+      arreglado en otro lado. A7 además ya había medido que en `clinic-services.ts` habría
+      sido inerte y duplicada. **Darle un dueño era inventarle uno.**
+      Fuera: las 2 reglas, su neutralizador de reduced-motion (`motion.ts:77`), la entrada
+      de `MOTION_PRIMITIVES`, la línea del JSDoc y la fila de `MOTION.md`. El *por qué*
+      quedó en el JSDoc de `motion.ts` — **fuera del literal `MOTION_CSS`**, porque ahí
+      dentro el comentario viajaría como bytes a cada página de cliente, justo lo contrario
+      de lo que se estaba haciendo (lo escribí adentro primero y lo medí).
+      Verificado: diff de las dos páginas = **exactamente esas 4 líneas y nada más**
+      (23.214→22.953 B y 19.440→19.179 B; `MOTION_CSS` 2.738→2.477), `typecheck:packages`
+      verde, 267 tests verdes, `pnpm e2e` **103 pasados / 0 rojos**, y **mirado**: la página
+      renderiza entera y la tarjeta de propiedad conserva su hover medido en el navegador
+      (foto `none`→`matrix(1.04…)`, marco `none`→`none`, `.wf-hover-lift` = 0 en el DOM).
+      **Lección: una primitiva sin usuarios no se cablea para justificarla — se borra, y el
+      motivo se escribe donde el próximo autor lo lea antes de re-agregarla.**
 
 - [x] **AUD1 · Auditoría de los `[x]` + salud — el gate visual estaba 8/8 en ROJO**
       (2026-09-01). Vuelta de escalón 2: A y B estaban todos `[x]`, así que tocaba
