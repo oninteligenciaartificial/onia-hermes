@@ -104,15 +104,22 @@ export function Block({
   children,
   id,
   labelledBy,
+  className,
 }: {
   surface?: Tone | "paperDim";
   children: ReactNode;
   id?: string;
   labelledBy?: string;
+  /** Ajuste puntual del ritmo de UN bloque (hoy: el aire del hero en teléfono). */
+  className?: string;
 }) {
   const cls = surface === "paperDim" ? s.paperDim : surfaceClass[surface as Tone];
   return (
-    <section className={`${s.block} ${cls}`} id={id} aria-labelledby={labelledBy}>
+    <section
+      className={`${s.block} ${cls}${className ? ` ${className}` : ""}`}
+      id={id}
+      aria-labelledby={labelledBy}
+    >
       <div className={s.inner}>{children}</div>
     </section>
   );
