@@ -792,17 +792,23 @@ Es **un solo comando** y cuesta **Bs 0**; no se corrió porque tocar el VPS nece
 install -m 644 scripts/loops/prompts/canario-visual.md /root/bin/loops/canario-visual.md
 ```
 
-**13. Tres ramas quedaron fuera de la integración por divergencia, no por conflicto.**
-Se integraron 7 ramas a `main` hoy con los gates en verde. Estas tres no, porque arrastran
-semanas de deriva y mezclarlas a ciegas es cómo se rompe `main`:
+**13. DOS ramas quedaron fuera de la integración por divergencia, no por conflicto.**
+Se integraron 7 ramas a `main` con los gates en verde. Estas no, porque arrastran semanas de
+deriva y mezclarlas a ciegas es cómo se rompe `main`:
 
 | rama | commits atrás de `main` | commits suyos sin mergear |
 |---|---|---|
-| `claude/personal-brand-strategy-db9eb9` | 366 | 32 |
-| `claude/onia-web-architecture-b37eca` | 307 | 4 |
-| `claude/chatbots-platform-review-0d1d09` | 294 | 3 |
+| `claude/onia-web-architecture-b37eca` | 371 | 6 |
+| `claude/chatbots-platform-review-0d1d09` | 358 | 5 |
 
-Para cada una la decisión es la misma y cuesta **Bs 0**: **rebasar y mergear** (alguien tiene que
-mirar el rebase; las 32 de la primera son varias vueltas de loop) o **archivarla** y perder ese
-trabajo. `claude/ads-creatividades-publicos` (145 commits) queda afuera a propósito: es tu carril
-de contenido y lo cerrás vos.
+⚠️ **Corregido el 2026-09-01 23:40 UTC, midiendo con `git rev-list --left-right --count`.**
+Acá figuraba una tercera fila, `claude/personal-brand-strategy-db9eb9` con 32 commits sin
+mergear, y **hoy tiene CERO**: su trabajo ya entró a `main` y la rama sólo está 2 commits
+atrás. Pedirte que decidas entre "rebasar o archivar" una rama que ya se mergeó es peor que
+un pendiente fantasma — es hacerte tomar de nuevo una decisión que ya está tomada. Las otras
+dos filas también estaban viejas (decían 307/4 y 294/3): siguen abiertas, pero con los
+números de hoy.
+
+Para cada una la decisión es la misma y cuesta **Bs 0**: **rebasar y mergear** (alguien tiene
+que mirar el rebase) o **archivarla** y perder ese trabajo. `claude/ads-creatividades-publicos`
+(146 commits) queda afuera a propósito: es tu carril de contenido y lo cerrás vos.
