@@ -96,8 +96,10 @@ lo que inventa es el trabajo fantasma que ya medimos al 40%.
 > **Arreglo: el loop nunca inventa, pero tampoco se planta.** Si la cola se vacía, su tarea de
 > respaldo es **auditar los `[x]` más recientes**: ¿el archivo que dice haber cambiado, cambió?
 > ¿lo que afirma sigue siendo cierto contra el código de hoy? Un ítem fantasma cerrado
-> correctamente vale tanto como uno construido. El loop `cerrar-y-revisar-web-factory` ya lo
-> hace así — es el patrón a copiar.
+> correctamente vale tanto como uno construido. El patrón salió de
+> `cerrar-y-revisar-web-factory`, que hoy está apagado porque su hermano lo absorbió: **ya está
+> escrito como "escalera" dentro de los cinco prompts activos**, no hay que copiarlo de ningún
+> lado.
 
 **2. Se topa con una decisión de Sergio.** Si para y espera, muere ahí.
 
@@ -115,35 +117,69 @@ lo que inventa es el trabajo fantasma que ya medimos al 40%.
 
 **3. El registro del horario se pierde.** Medido el 2026-08-31: al cerrar las sesiones, los
 `SKILL.md` **sobreviven en disco** pero quedan **desregistrados**. Los loops no corren y nada
-avisa.
+avisa — se descubrió por casualidad al listarlos.
 
-> **Arreglo: verificarlo, no asumirlo.** Al abrir una sesión de control, listar las tareas
-> programadas. Si la lista está vacía y los archivos están, rearmarlas — el prompt ya está
-> escrito, sale barato. **Nunca decir "el loop está corriendo" sin haberlo mirado.**
-
-### Los seis que están puestos
-
-> ⚠️ **Corregido el 2026-08-31 — acá decía "los cuatro que están puestos" y era falso.**
-> Contados en vivo con `list_scheduled_tasks`: son **seis**, los seis `enabled`, y los seis
-> con `lastRunAt` dentro de la hora. Faltaban `chatbot-cola` y `contenido-cola`.
-> Peor todavía, más abajo este mismo archivo afirmaba que *"el carril chatbot no tiene loop
-> porque no tiene cola"* — cuando su cola se escribió ese mismo día y la tabla de arriba ya
-> la listaba con un ✅. **El archivo se contradecía a sí mismo con seis líneas de distancia.**
+> **Arreglo: los loops se curan entre ellos.** Ya no depende de que alguien se acuerde de mirar.
 >
-> El peligro de dejarlo: quien lea esto para saber qué corre solo, no encuentra dos loops que
-> SÍ corren, y o los duplica o le da por muerto un carril que está trabajando.
+> Existe la lista versionada [`loops.md`](loops.md) — **la fuente de verdad de qué loops deben
+> existir**, con su `id`, su `cron` y para qué sirve cada uno. Antes existía sólo dentro de la
+> app: si se perdía, no había contra qué comparar.
+>
+> Y **cada loop activo, al arrancar y antes de trabajar**, lista las tareas programadas, las
+> compara contra ese archivo y **rearma la que falte** (el `SKILL.md` sigue en disco, así que sale
+> barato), avisando con un `PushNotification` de una línea. Si todo está bien no genera ni una
+> línea de salida, y **no reemplaza su vuelta**: es un chequeo de arranque.
+>
+> **El bloque está pegado idéntico en los CINCO loops activos, y la redundancia es a propósito:**
+> mientras quede **UN** loop registrado, el conjunto se recompone solo. Sacarlo de cuatro para
+> "no repetir" convierte cinco redes en una sola. Por eso el propio bloque lleva escrito adentro
+> que no se optimice.
+>
+> Un loop **nunca se re-registra a sí mismo** (si está corriendo, está registrado) ni rearma los
+> dos **apagados a propósito** — ésos están en `loops.md` con su motivo medido, y revivirlos sería
+> desobedecer la decisión.
 
-| Loop | Cadencia (cron) | Qué hace |
-|---|---|---|
-| `chatbot-cola` | `3,23,43` | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
-| `onia-cola` | `7,27,47` | Carril producto: salud, integrar a `main`, y la cola de plataforma |
-| `contenido-cola` | `9,29,49` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo |
-| `web-factory-dev-loop` | `13,33,53` | Construye la siguiente tarea de `LOOP_COLA.md` |
-| `web-factory-salud` | `21` | Server, git y gates del carril web |
-| `cerrar-y-revisar-web-factory` | `17 7` diario | Termina lo que quedó a medias **y audita lo dado por hecho** |
+**Lo que esta auto-cura NO puede curar** — y no se tapa, se escribe:
 
-Los cinco horarios están **escalonados de a 2 minutos a propósito**: comparten CPU y disco, y
+- **Si se pierden TODOS los registros a la vez, esto no se recupera solo.** No queda ningún loop
+  adentro para notarlo. La red se recompone desde uno, no desde cero.
+- **Si la máquina está apagada, ninguno corre.** Los 18 crons del VPS sí siguen; éstos no, porque
+  viven en la app de Claude Code de la máquina de Sergio.
+
+> **Cómo lo nota una persona:** no aparecen commits nuevos de los carriles en varias horas
+> (`git log --all --since="6 hours ago" --oneline`), y ninguna notificación de loop llegó. Un
+> carril vivo commitea o avisa; el silencio de los dos a la vez es la señal.
+>
+> **Cómo se rearma:** los `SKILL.md` están todos en `C:\Users\PC\.claude\scheduled-tasks\<id>\`.
+> Se re-registran uno por uno desde la tabla de [`loops.md`](loops.md) (`id` + `cron`, y como
+> prompt el cuerpo del `SKILL.md` sin el frontmatter). Con que vuelva **uno**, ese rearma al resto
+> en su próxima vuelta.
+
+### Los que están puestos
+
+**La lista vive en [`loops.md`](loops.md), y ése es el único lugar donde se edita.** Acá no se
+copia la tabla: dos copias de los mismos `cron` es exactamente cómo se llega a decir un horario
+que no existe. Este archivo explica el **porqué**; `loops.md` es la **lista** contra la que los
+loops se comparan al arrancar.
+
+**Hoy son cinco activos** — `chatbot-cola`, `onia-cola`, `contenido-cola`, `canario-visual` y
+`web-factory-dev-loop` — con los horarios **escalonados a propósito**: comparten CPU y disco, y
 dos loops sobre el mismo árbol se pisan.
+
+> ⚠️ **Corregido el 2026-08-31 (segunda pasada).** Acá decía "los seis que están puestos" con una
+> tabla de cadencias tipo `3,23,43`, y **ninguna** de esas seis líneas coincidía con lo registrado
+> en vivo: los cron reales son otros, `canario-visual` faltaba entero, y dos de los seis ya
+> estaban apagados. Es la **segunda** corrección del mismo párrafo en el mismo día — por eso ahora
+> la lista está en un solo archivo y ésta es una remisión, no una copia.
+
+**Y dos apagados a propósito el mismo día**, con su motivo medido —el detalle está en
+`loops.md`—. Se documentan, **no se borran**: sus `SKILL.md` siguen en disco por si Sergio los
+quiere de vuelta, y **ningún loop los rearma**.
+
+- **`web-factory-salud`**: 7 de 8 corridas fueron no-ops y no dejó rastro en el repo en 48 h. Sus
+  4 chequeos son los mismos que `web-factory-dev-loop` ya corre 3× más seguido, y los absorbió.
+- **`cerrar-y-revisar-web-factory`**: corrió una vez, no tocó el repo, y competía por el mismo
+  plato con un hermano 288× más rápido, en el mismo árbol y la misma rama.
 
 ### Lo que el loop deja, y lo que se pierde
 
