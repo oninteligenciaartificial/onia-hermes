@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero — la mecánica · Onia</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&display=swap">
+
+<style>
+/* ==========================================================================
+   HERO — LA MECÁNICA
+   Dirección: el hero no muestra el producto, muestra LA NOCHE.
+   Lo valioso de Onia pasa entre pantallas: un mensaje entra a las 2 am y a
+   las 7 el día ya está armado. Eso no se fotografía. Se dibuja.
+
+   Lenguaje: hermes-content/references/ui-patterns/hero-onia/LENGUAJE.md
+   Cero sombras · cero clamp() · dos familias · el verde va en formas
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+:root {
+  color-scheme: light;
+
+  /* ---- escala verde Onia ---- */
+  --verde-50:  #EDFBF3;
+  --verde-100: #D5F4E3;
+  --verde-200: #B2EACD;
+  --verde-300: #86D9B0;
+  --verde-400: #4DBD8C;
+  --verde-500: #089868;
+  --verde-600: #027650;
+  --verde-700: #016141;
+  --verde-800: #004D32;
+  --verde-900: #013925;
+
+  /* ---- papel ---- */
+  --bg:          #F9FBFA;
+  --bg-deep:     #F3F5F4;
+  --surface:     #FFFFFF;
+  --surface-dim: #F3F5F4;
+
+  /* ---- tinta ---- */
+  --ink:       #141A17;
+  --ink-soft:  #424A46;
+  --ink-faint: #69716D;
+  --line:      #D4D9D6;
+  --line-soft: #E2E5E3;
+
+  /* ---- lámina de marca ---- */
+  --senal: #00d26a;
+  --tinta: #12100e;
+
+  /* ---- roles del verde ---- */
+  --accent:        var(--verde-500);
+  --accent-ink:    var(--verde-700);
+  --accent-strong: var(--verde-700);
+  --accent-soft:   var(--verde-100);
+
+  /* ---- sobre tinta ---- */
+  --on-tinta:       #edf1ef;                    /* 16,66:1 */
+  --on-tinta-soft:  rgba(237,241,239,0.64);     /* ~6,9:1  */
+  --on-tinta-line:  rgba(237,241,239,0.14);
+  --on-tinta-fill:  rgba(237,241,239,0.07);
+
+  /* ---- tipografía: dos familias, ni una más ---- */
+  --font-display: "Archivo", system-ui, sans-serif;
+  --font-sans:    "Archivo", system-ui, sans-serif;
+  --font-mono:    "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* ---- UN solo sistema de radios ---- */
+  --r-block: 1.4rem;
+  --r-pill:  999px;
+
+  /* ---- movimiento ---- */
+  --ease:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ciclo: 8s;
+
+  /* ---- geometría del circuito ----
+     Fija a propósito: el viajero salta múltiplos exactos de --est-paso,
+     así el riel nunca se desalinea al cambiar el ancla de ritmo.
+     En móvil se comprime para que la mecánica entre sobre el pliegue. */
+  --forma-h:  3.7em;
+  --est-h:    6.0em;   /* rótulo 1.5 + aire 0.8 + forma */
+  --est-gap:  1.7em;
+  --est-paso: 7.7em;   /* est-h + est-gap */
+  --riel-x:   4.35em;  /* 3.6em (columna hora) + 0.75em (medio del riel) */
+}
+@media (min-width: 768px) {
+  :root {
+    --forma-h:  4.6em;
+    --est-h:    6.9em;
+    --est-gap:  2.2em;
+    --est-paso: 9.1em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   EL ANCLA DEL RITMO. Un font-size por breakpoint reescala tipografía,
+   espaciado y el circuito entero a la vez y en proporción. Cero clamp().
+   -------------------------------------------------------------------------- */
+.page {
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 450;
+  font-stretch: 100%;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+@media (min-width: 768px)  { .page { font-size: 17px; } }
+@media (min-width: 1280px) { .page { font-size: 18px; } }
+
+.inner { width: min(74rem, 100% - 2.4rem); margin-inline: auto; }
+
+/* ====================== cromo mínimo ====================== */
+.bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1em; min-height: 60px; padding-block: 0.9em;
+}
+.wordmark {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  font-weight: 600; font-size: 1.1em; letter-spacing: -0.015em;
+  color: var(--ink); text-decoration: none;
+}
+.wordmark i {                     /* el verde va en FORMAS, no en texto */
+  display: block; width: 0.62em; height: 0.62em;
+  border-radius: calc(var(--r-block) * 0.15);
+  background: var(--senal);
+}
+.barNav { display: none; gap: 1.8em; font-size: 0.92em; font-weight: 500; }
+.barNav a { color: var(--ink-soft); text-decoration: none; transition: color 0.15s var(--ease); }
+.barNav a:hover { color: var(--ink); }
+@media (min-width: 860px) { .barNav { display: flex; } }
+
+/* ====================== bloque del hero ====================== */
+.block { padding-block: 2em 4em; }
+@media (min-width: 900px) { .block { padding-block: 4.2em 6.5em; } }
+
+/* Móvil: texto → circuito → nota al pie.
+   La nota baja del pliegue a propósito: lo que tiene que verse antes de
+   scrollear es la mecánica, no el pie de página. */
+.grid { display: grid; gap: 2.2em; align-items: center; }
+@media (min-width: 1000px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+    grid-template-rows: 1fr auto;
+    column-gap: 3.6em; row-gap: 0;
+  }
+  /* el panel fija la altura del hero; la nota se apoya en SU borde inferior.
+     Esa alineación es la que ata las dos columnas sin dibujar una línea. */
+  .texto { grid-column: 1; grid-row: 1; align-self: center; }
+  .panel { grid-column: 2; grid-row: 1 / span 2; }
+  .nota  {
+    grid-column: 1; grid-row: 2; align-self: end;
+    border-top: 1px solid var(--line-soft); padding-top: 1.1em;
+  }
+}
+
+/* SANGRADO: en pantalla ancha el bloque oscuro llega hasta el borde.
+   Ésa es la profundidad — un plano que se sale del papel, no una sombra. */
+@media (min-width: 1000px) {
+  .heroInner {
+    width: auto;
+    margin-left: max(1.2rem, calc(50vw - 37rem));
+    margin-right: 0;
+  }
+}
+
+/* ====================== la columna de texto ====================== */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.8em; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex; align-items: center; gap: 0.7em;
+  margin: 0 0 1.5em;
+}
+.kicker::before {
+  content: ""; width: 0.55em; height: 0.55em; border-radius: var(--r-pill);
+  background: var(--senal); flex: none;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-size: 3.1em; font-weight: 550; font-stretch: 100%;
+  letter-spacing: -0.02em; line-height: 0.95;
+  text-wrap: balance; margin: 0; max-width: 15ch;
+}
+@media (min-width: 768px)  { .display { font-size: 3.9em; line-height: 0.9; } }
+@media (min-width: 1280px) { .display { font-size: 4.6em; line-height: 0.86; letter-spacing: -0.025em; } }
+.display em { font-style: normal; color: var(--accent-ink); }
+
+.lead {
+  font-size: 1.06em; line-height: 1.45; color: var(--ink-soft);
+  max-width: 30em; text-wrap: pretty; margin: 1.05em 0 0;
+}
+@media (min-width: 768px) { .lead { font-size: 1.15em; margin-top: 1.15em; } }
+
+.acciones { display: flex; flex-wrap: wrap; gap: 0.7em; margin-top: 1.7em; }
+@media (min-width: 768px) { .acciones { margin-top: 2em; } }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+  min-height: 44px; padding: 0.8em 1.5em;
+  border-radius: var(--r-pill); border: 1.5px solid transparent;
+  background: var(--senal); color: var(--tinta);       /* JAMÁS blanco: 2,01:1 */
+  font-family: inherit; font-weight: 600; font-size: 1em; line-height: 1.2;
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background-color 0.15s var(--ease), transform 0.15s var(--ease);
+}
+.btn:hover  { background: #00be5f; }
+.btn:active { transform: translateY(1px); }
+
+.btnGhost {
+  background: transparent; color: var(--ink); border-color: var(--line);
+  transition: border-color 0.15s var(--ease), background-color 0.15s var(--ease);
+}
+.btnGhost:hover { background: var(--bg-deep); border-color: var(--ink-faint); }
+.btnGhost b { font-family: var(--font-mono); font-weight: 500; font-size: 0.92em; }
+
+.nota {
+  font-size: 0.9em; line-height: 1.5; color: var(--ink-faint);
+  margin: 0; max-width: 34em;
+}
+
+/* ==========================================================================
+   EL CIRCUITO — una noche cualquiera, dibujada
+   ========================================================================== */
+.panel {
+  position: relative;
+  background: var(--tinta); color: var(--on-tinta);
+  border-radius: var(--r-block);
+  padding: 1.3em 1.3em 1.6em;
+}
+@media (min-width: 768px)  { .panel { padding: 1.9em 2em 2.2em; } }
+@media (min-width: 1000px) {
+  .panel { border-radius: var(--r-block) 0 0 var(--r-block); padding-right: 3em; }
+}
+
+.panelBar {
+  display: flex; align-items: center; justify-content: space-between; gap: 1em;
+  font-family: var(--font-mono); font-size: 0.72em; font-weight: 500;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--on-tinta-soft);
+  padding-bottom: 1.2em; margin-bottom: 1.6em;
+  border-bottom: 1px solid var(--on-tinta-line);
+}
+@media (min-width: 768px) { .panelBar { padding-bottom: 1.4em; margin-bottom: 1.8em; } }
+.enLinea { display: inline-flex; align-items: center; gap: 0.6em; }
+.enLinea::before {
+  content: ""; width: 0.5em; height: 0.5em; border-radius: var(--r-pill);
+  background: var(--senal);
+}
+
+.circuito { position: relative; display: grid; gap: var(--est-gap); }
+
+/* el riel: una hairline. No una flecha. */
+.circuito::before {
+  content: ""; position: absolute;
+  left: var(--riel-x); top: 0.55em; bottom: 4.9em;
+  width: 1px; background: var(--on-tinta-line);
+}
+
+.estacion {
+  position: relative;
+  height: var(--est-h);
+  display: grid;
+  grid-template-columns: 3.6em 1.5em minmax(0, 1fr);
+  align-items: start;
+}
+.estacion::before {                                   /* el punto de la estación */
+  content: ""; position: absolute;
+  left: calc(var(--riel-x) - 4px); top: 0.36em;
+  width: 8px; height: 8px; border-radius: var(--r-pill);
+  background: var(--senal);
+  animation: pingPunto var(--ciclo) var(--ease) infinite;
+}
+.estacion:nth-child(2)::before { animation-delay: 0s; }
+.estacion:nth-child(3)::before { animation-delay: calc(var(--ciclo) * 0.28); }
+.estacion:nth-child(4)::before { animation-delay: calc(var(--ciclo) * 0.56); }
+
+.hora {
+  grid-column: 1;
+  font-family: var(--font-mono); font-size: 0.78em; font-weight: 500;
+  letter-spacing: 0.02em; color: var(--on-tinta-soft);
+  line-height: 1.55; padding-top: 0.05em;
+}
+.cuerpo { grid-column: 3; }
+.rotulo {
+  height: 1.5em; line-height: 1.5em;
+  font-size: 0.98em; font-weight: 550; letter-spacing: -0.01em;
+  color: var(--on-tinta); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.forma { height: var(--forma-h); margin-top: 0.8em; position: relative; }
+.canal {
+  font-family: var(--font-mono); font-size: 0.62em; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(237,241,239,0.56);   /* 4,84:1 sobre el bloque del mensaje */
+}
+
+/* --- el anillo que recorre el riel: el mensaje viajando --- */
+.viajero {
+  position: absolute; left: calc(var(--riel-x) - 0.575em); top: -0.19em;
+  width: 1.15em; height: 1.15em;
+  border: 1.5px solid var(--senal); border-radius: var(--r-pill);
+  animation: recorrer var(--ciclo) var(--ease) infinite;
+  pointer-events: none;
+}
+
+/* ---- 1. entra el mensaje: forma blanda, translúcida, sin resolver ---- */
+.msg {
+  width: 80%; height: 100%;
+  border-radius: calc(var(--r-block) * 0.55);
+  background: rgba(0, 210, 106, 0.15);
+  border: 1px solid rgba(0, 210, 106, 0.30);
+  padding: 0.9em 1.1em; display: grid; align-content: space-between;
+}
+.msgLineas { display: grid; gap: 0.5em; }
+.msgLineas span { display: block; height: 2px; border-radius: var(--r-pill); background: rgba(237,241,239,0.34); }
+.msgLineas span:nth-child(1) { width: 88%; }
+.msgLineas span:nth-child(2) { width: 55%; }
+
+/* ---- 2. contesta Onia: la misma forma, más densa, del otro lado ---- */
+.resp {
+  width: 100%; height: 100%; margin-left: auto;
+  border-radius: calc(var(--r-block) * 0.55);
+  background: rgba(0, 210, 106, 0.34);
+  border: 1px solid rgba(0, 210, 106, 0.55);
+  padding: 0.95em 1.1em;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.9em;
+}
+.respLineas { display: grid; gap: 0.55em; flex: 1 1 auto; min-width: 0; }
+.respLineas span { display: block; height: 2px; border-radius: var(--r-pill); background: rgba(237,241,239,0.45); }
+.respLineas span:nth-child(1) { width: 92%; }
+.respLineas span:nth-child(2) { width: 64%; }
+.chip {
+  flex: none;
+  font-family: var(--font-mono); font-size: 0.68em; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--senal); color: var(--tinta);       /* 9,43:1 */
+  padding: 0.45em 0.7em; border-radius: var(--r-pill);
+}
+
+/* En pantalla ancha las formas se ESCALONAN: el mensaje entra corto por la
+   izquierda, la respuesta vuelve más ancha por la derecha, la agenda ocupa
+   todo. El ancho creciente es la mecánica resolviéndose. */
+@media (min-width: 768px) {
+  .msg  { width: 64%; }
+  .resp { width: 84%; }
+  .chip { padding: 0.5em 0.85em; }
+}
+
+/* ---- 3. la agenda: la forma blanda terminó siendo un bloque sólido ---- */
+.agenda { height: 100%; display: grid; grid-template-rows: repeat(4, 1fr); gap: 0.32em; }
+.slot {
+  border-radius: calc(var(--r-block) * 0.28);
+  background: var(--on-tinta-fill);
+  border: 1px solid var(--on-tinta-line);
+  display: flex; align-items: center; gap: 0.75em;
+  padding-inline: 0.8em;
+  font-family: var(--font-mono); font-size: 0.66em; font-weight: 500;
+  letter-spacing: 0.06em; color: rgba(237,241,239,0.55);  /* 5,05:1 sobre la fila vacia */
+  white-space: nowrap; overflow: hidden;
+}
+.slotLleno {
+  position: relative;
+  background: var(--senal); border-color: var(--senal);
+  color: var(--tinta);                                  /* 9,43:1 */
+}
+.slotLleno b { font-weight: 500; opacity: 0.68; }
+.slotLleno::after {                                     /* el aterrizaje */
+  content: ""; position: absolute; inset: -1px; border-radius: inherit;
+  border: 1.5px solid var(--senal); opacity: 0;
+  animation: aterrizar var(--ciclo) var(--ease) infinite;
+}
+
+/* ====================== movimiento ======================
+   Regla de la casa para esta pieza: 0% == 100% == estado de reposo.
+   Congelado en el primer fotograma el circuito se lee entero. */
+@keyframes recorrer {
+  0%,  8%   { transform: translateY(0);                          opacity: 1; }
+  26%, 36%  { transform: translateY(var(--est-paso));            opacity: 1; }
+  54%, 74%  { transform: translateY(calc(var(--est-paso) * 2));  opacity: 1; }
+  82%       { transform: translateY(calc(var(--est-paso) * 2));  opacity: 0; }
+  83%, 97%  { transform: translateY(0);                          opacity: 0; }
+  100%      { transform: translateY(0);                          opacity: 1; }
+}
+@keyframes pingPunto {
+  0%, 4%   { transform: scale(1); }
+  9%       { transform: scale(1.9); }
+  18%      { transform: scale(1); }
+  100%     { transform: scale(1); }
+}
+@keyframes aterrizar {
+  0%, 54%  { opacity: 0;    transform: scale(1); }
+  60%      { opacity: 0.85; transform: scale(1); }
+  76%      { opacity: 0;    transform: scale(1.07); }
+  100%     { opacity: 0;    transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .viajero { transform: translateY(0); opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <div class="inner">
+    <div class="bar">
+      <a class="wordmark" href="#"><i></i>onia</a>
+      <nav class="barNav">
+        <a href="#">Rubros</a>
+        <a href="#">Precios</a>
+        <a href="#">Entrar</a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="block">
+    <div class="inner heroInner">
+      <div class="grid">
+
+        <!-- ============ texto ============ -->
+        <div class="texto">
+          <p class="kicker">Software de gestión · Bolivia</p>
+
+          <h1 class="display">Contesta a las <em>2 am</em></h1>
+
+          <p class="lead">
+            Un cliente escribe de madrugada. Onia le responde al instante y le pasa
+            el link para reservar. A las siete tu día ya está armado.
+          </p>
+
+          <div class="acciones">
+            <a class="btn" href="#">Crear mi cuenta</a>
+            <a class="btn btnGhost" href="#">WhatsApp <b>+591 75414930</b></a>
+          </div>
+
+          <!-- pendiente: prueba real -->
+        </div>
+
+        <!-- ============ el circuito ============ -->
+        <div class="panel">
+          <div class="panelBar">
+            <span>Una noche cualquiera</span>
+            <span class="enLinea">En línea</span>
+          </div>
+
+          <div class="circuito">
+            <div class="viajero" aria-hidden="true"></div>
+
+            <div class="estacion">
+              <div class="hora">02:14</div>
+              <div class="cuerpo">
+                <div class="rotulo">Te escribe un cliente</div>
+                <div class="forma">
+                  <div class="msg">
+                    <div class="canal">WhatsApp</div>
+                    <div class="msgLineas"><span></span><span></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="estacion">
+              <div class="hora">02:14</div>
+              <div class="cuerpo">
+                <div class="rotulo">Onia le contesta</div>
+                <div class="forma">
+                  <div class="resp">
+                    <div class="respLineas"><span></span><span></span></div>
+                    <div class="chip">Reservar</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="estacion">
+              <div class="hora">07:00</div>
+              <div class="cuerpo">
+                <div class="rotulo">Tu día ya está armado</div>
+                <div class="forma">
+                  <div class="agenda">
+                    <div class="slot">08:00</div>
+                    <div class="slot slotLleno">09:30 <b>Consulta nueva</b></div>
+                    <div class="slot">11:00</div>
+                    <div class="slot">16:30</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <p class="nota">
+          Agenda, cobros e inventario en un solo lugar. Sin instalar nada: entra por
+          el navegador y por tu WhatsApp.
+        </p>
+
+      </div>
+    </div>
+  </main>
+
+</div>
+</body>
+</html>
