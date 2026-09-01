@@ -41,37 +41,45 @@ Origen de la instrucción: [`LUCIA.md`](LUCIA.md) §1.
 
 ---
 
-## Paso 0-bis — el enlace de la bio (1 min, en la MISMA pantalla del Paso 0)
+## Paso 0-bis — el enlace de la bio ✅ YA ESTÁ (no hay que hacer nada)
 
-La bio de Lucía termina en **👇**, y hoy esa flecha no apunta a nada: el campo *Enlaces* está
-vacío. Un desconocido abre el perfil el día 0, lee "te muestro cómo la IA hace vender a tu
-negocio 👇" y no hay dónde tocar.
-
-Ya estás en **Editar perfil** por el switch de IA. Aprovechá el viaje:
-
-1. **Enlaces** → *Agregar enlace externo* → pegar:
+🟢 **Corregido el 31-ago: este paso ya estaba hecho.** Acá decía que la bio "termina en 👇 y el
+campo *Enlaces* está vacío", y era falso — nadie había mirado el perfil. Se abrió
+`instagram.com/lucia.antelo.oficial` deslogueado el 31-ago y el enlace **está puesto y activo**:
 
 ```text
 https://onia.com.bo/?src=lucia-bio
 ```
 
-2. Título del enlace: `Onia — IA para tu negocio`
-3. Verificar que la **bio** sea exactamente esta (elegida por Sergio el 08-ago, 84 de 150
-   caracteres — no cambiarla, solo confirmar que está):
+(`bio_links[0].link_type: "external"`, `link_id 18103663877269545`, se muestra en el perfil como
+`onia.com.bo/?src=lucia-bio`.) La URL responde **200** (87.754 B, 0,72 s, medido el 31-ago).
+
+La bio también está puesta, y con una diferencia de un carácter contra el doc de alta — lleva la
+banderita, y así queda:
 
 ```text
 Creada con IA por @oniahq 🤖
-Bolivia
+Bolivia 🇧🇴
 Te muestro cómo la IA hace vender a tu negocio 👇
 ```
 
+**Lo único que hay que hacer en Editar perfil es el switch del Paso 0.** No toques el enlace.
+
 **Por qué ese `?src=`:** la web captura el parámetro `src` tal cual venga (sin lista blanca) y
 lo pega al lead en el pipeline de atribución, así que las visitas desde la bio quedan separadas
-de las que llegan por los DM (`lucia-ig-sistema`, `onia-ig-sistema`). Verificado el 31-ago:
-`https://onia.com.bo/?src=lucia-bio` → **200**, 87.754 B, 0,72 s.
+de las que llegan por los DM (`lucia-ig-sistema`, `onia-ig-sistema`).
 
-Origen del texto: `hermes-content/docs/ONIA_MODELOS_PERFILES_ALTA_20260806.md` (bio definitiva y
-campo *Enlace*).
+---
+
+## Estado del perfil, medido el 31-ago (deslogueado, no supuesto)
+
+| Qué | Cómo está hoy |
+|---|---|
+| Publicaciones | **0** — el feed sigue vacío, el día 0 no se subió |
+| Seguidores / seguidos | 1 / 2 |
+| Bio | ✅ puesta, la de arriba |
+| Enlace de la bio | ✅ `https://onia.com.bo/?src=lucia-bio` |
+| Etiqueta de IA | 🔴 **NO puesta** — `account_badges` viene vacío. Es el Paso 0, y es lo único que bloquea |
 
 ---
 
@@ -130,7 +138,7 @@ post fijado; no cuenta como el día 1 del calendario.
 ## Paso 2 — Día 1: el reel de lanzamiento (10 min)
 
 **Archivo:** `hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4`
-· 22 s · 1080×1920 · subtítulos ya quemados · audio −14,3 LUFS.
+· 22,07 s · 1080×1920 a 30 fps · subtítulos ya quemados · audio medido: media −17,7 dB, pico −1,6 dB (acá decía «−14,3 LUFS», un número que nadie midió).
 
 ⚠️ En esa carpeta hay **dos** archivos. Sube **`lucia-lanzamiento-v7.mp4`**, no
 `lucia-lanzamiento.mp4` (v6, con el clip de playa que perdía las pecas — ver
