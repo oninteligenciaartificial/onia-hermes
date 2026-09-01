@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>statement-3d-minimal</title>
+<style>
+  :root{
+    --bg:#F7F7F7; --ink:#0A0A0A; --muted:#8E8E8E;
+    --w:1080px; --h:1350px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#444;display:grid;place-items:center;min-height:100vh;font-family:'Inter',-apple-system,'SF Pro Display',sans-serif}
+  .lienzo{width:var(--w);height:var(--h);background:var(--bg);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:72px;padding:96px 120px}
+  .fila{display:flex;gap:120px;justify-content:center;align-items:flex-end}
+  .item{display:flex;flex-direction:column;align-items:center;gap:20px}
+  .item img{width:250px;height:auto;display:block}
+  .item .label{font-size:34px;font-weight:400;color:var(--ink);letter-spacing:-0.01em}
+  .centro{text-align:center;display:flex;flex-direction:column;gap:8px}
+  .claim{font-size:128px;font-weight:900;color:var(--ink);letter-spacing:-0.04em;line-height:1;white-space:nowrap}
+  .sub{font-size:62px;font-weight:600;color:var(--muted);letter-spacing:-0.02em}
+</style>
+</head>
+<body>
+  <div class="lienzo">
+    <div class="fila">
+      <div class="item"><img src="iconos-mock/instagram.png" alt=""><div class="label">Instagram</div></div>
+      <div class="item"><img src="iconos-mock/claude.png" alt=""><div class="label">Claude</div></div>
+    </div>
+    <div class="centro">
+      <div class="claim">Bs 0 en sueldos</div>
+      <div class="sub">mi equipo son 4 cosas</div>
+    </div>
+    <div class="fila">
+      <div class="item"><img src="iconos-mock/laptop.png" alt=""><div class="label">Laptop</div></div>
+      <div class="item"><img src="iconos-mock/notion.png" alt=""><div class="label">Notion</div></div>
+    </div>
+  </div>
+</body>
+</html>
