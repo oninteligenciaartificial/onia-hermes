@@ -74,10 +74,19 @@ function itemsDeAhora(texto) {
   return items;
 }
 
-function evidenciaDe(texto) {
+function evidenciaDe(textoCrudo) {
   const rutas = [];
   const comandos = [];
   let m;
+
+  // Un bloque ``` desbalancea el conteo de backticks y DESPLAZA todos los pares que vienen
+  // despues: el cierre del bloque se aparea con el backtick de la siguiente ruta, y a partir
+  // de ahi el gate lee basura. Medido el 2026-09-01: un item que citaba
+  // `hermes-content/deploy/vps-ops/bot/knowledge.mjs` en texto plano salia como
+  // "no nombra ninguna ruta" solo por tener arriba una salida de comando en un bloque.
+  // Se quitan los bloques antes de buscar: adentro va salida pegada, nunca la cita del item.
+  const texto = textoCrudo.replace(/```[\s\S]*?```/g, ' ').replace(/```/g, ' ');
+
   TROZOS.lastIndex = 0;
   while ((m = TROZOS.exec(texto)) !== null) {
     const t = m[1].trim();
@@ -91,6 +100,18 @@ function evidenciaDe(texto) {
     // verifican contra ESTE disco. No son evidencia, pero llamarlas fantasma es el gate
     // gritando en falso, y un gate que grita en falso se termina ignorando.
     if (/^[\/]/.test(ruta)) continue;
+
+    // Una URL tampoco es un archivo de este disco. Con o sin esquema: la cola del carril
+    // chatbot cita `https://chat.onia.com.bo/app/login` y `app.onia.com.bo/settings/chatbot`
+    // como la PANTALLA que hay que mirar, que es justo la evidencia que este repo pide.
+    // Medido el 2026-09-01: la cola de chatbot salia en rojo (exit 1) por dos URLs y un
+    // directorio gitignoreado — cero fantasmas de verdad. Es el mismo gate gritando en falso
+    // que el comentario de arriba: si sale rojo por escribir bien la evidencia, se apaga.
+    // Ojo con la segunda: EXIGE la barra despues del dominio. Sin ella "package.json" y
+    // "bot-engine.mjs" tambien parecen dominio.tld y el gate deja de ver archivos reales
+    // (probado: rompe el --self-check).
+    if (/^[a-z][a-z0-9+.-]*:\/\//i.test(ruta)) continue;
+    if (/^(?:[a-z0-9-]+\.)+[a-z]{2,}\//i.test(ruta)) continue;
 
     // "origin/master" es una REF de git, no un archivo, pero tiene barra y por eso caia en
     // la regla de "esto parece ruta". Esta cola escribe "ya en `origin/master`" cada vez que
@@ -277,6 +298,32 @@ function selfCheck() {
 
   r = revisarCola('## Ahora\n- [ ] Publicar algo · `no-esta.png` · 10 min\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'una ruta que no existe es fantasma');
+
+  // Un bloque ``` no puede desplazar el apareo de backticks del resto del item.
+  // Sin el filtro de bloques, el cierre del ``` se aparea con el backtick de `existe.png`
+  // y el item sale "sin evidencia" aunque la cite en texto plano.
+  r = revisarCola(
+    '## Ahora\n- [ ] Medido\n      ```\n      salida | del comando\n      ```\n      La prueba: `existe.png`\n',
+    tmp,
+  );
+  ok(!r.problemas.length, 'un bloque de codigo no rompe el apareo de backticks del item');
+
+  // Y el filtro no puede volverse una tapadera: una ruta fantasma FUERA del bloque
+  // se tiene que seguir viendo.
+  r = revisarCola(
+    '## Ahora\n- [ ] Medido\n      ```\n      salida | del comando\n      ```\n      La prueba: `no-esta.png`\n',
+    tmp,
+  );
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'con bloque, una ruta fantasma sigue siendo fantasma');
+
+  // Una URL es la PANTALLA que hay que mirar, no un archivo de este disco.
+  r = revisarCola('## Ahora\n- [ ] Mirar `https://chat.onia.com.bo/app/login` y `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una URL con esquema no se busca en disco');
+  r = revisarCola('## Ahora\n- [ ] Mirar `app.onia.com.bo/settings/chatbot` y `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un dominio con path tampoco se busca en disco');
+  // Pero un archivo con punto NO es un dominio: sin barra, se sigue verificando.
+  r = revisarCola('## Ahora\n- [ ] Publicar `no-esta.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el filtro de dominios no se come un archivo suelto');
 
   r = revisarCola('## Ahora\n- [ ] Terminar el sistema de publicacion\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'sin-evidencia'), 'un item sin ruta no entra');
