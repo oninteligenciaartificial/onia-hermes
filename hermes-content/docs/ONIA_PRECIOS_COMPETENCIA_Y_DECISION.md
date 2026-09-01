@@ -271,7 +271,7 @@ Y una trampa concreta: **Bs 390 significa el chatbot en `pricing.ts` y un plan c
 **P0 — hoy, no mañana**
 
 1. **Bajar o corregir `/vendedores/cotizador`.** Un archivo con cuatro precios muertos de chatbot, que además resucita el markup sobre Meta que `pricing.ts` prohíbe con todas las letras. Es una página pública e indexable, para un puesto de vendedor que no existe. **La decisión de bajarla es de Sergio y hace falta ahora.** Verificar mirando la pantalla si sigue servida: es un dato heredado y nadie lo contó de nuevo.
-2. **Sacar "Inventario avanzado desde Bs 180/mes" de la landing de producción.** Se eliminó el 27-ago porque las funciones ya son gratis para todos. Está publicado en `web-factory/apps/onia-platform/src/lib/pricing.ts:238` y en `ONIA_PRICING_2026.md:188`. Es cobrar por algo que el cliente ya tiene: la promesa que no sobrevive a la primera pregunta.
+2. ✅ **HECHO — "Inventario avanzado desde Bs 180/mes" salió de la landing.** Estaba servido en vivo en la portada y en `/precios`, las dos alimentadas por la misma fila de `ADDONS` en `web-factory/apps/onia-platform/src/lib/pricing.ts`. Se sacó la fila y el inventario pasó al `incluye` del plan Básico (lo heredan Pro y Full): la capacidad existe y no se cobra, así que se cuenta como valor incluido en vez de dejar el hueco. Barridos también `ONIA_PRICING_2026.md`, `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.3, `ONIA_PSICOLOGIA_PRECIOS_COMPETENCIA.md`, `ONIA_VENDOR_MANUAL_2026.md`, `ONIA_VENDOR_SALES_PLAYBOOK_2026.md`, `ONIA_VERTICAL_SERVICE_MATRIX_2026.md` y `PROJECTS_ORCHESTRATION.md`. Guarda: `scripts/venta-honestidad.test.mjs`.
 3. **Sacar "Insumos dental Bs 80/mes".** No existe en el código y sigue cotizable en dos superficies.
 
 **P1 — esta semana**
@@ -316,7 +316,7 @@ Y una trampa concreta: **Bs 390 significa el chatbot en `pricing.ts` y un plan c
 **Del lado de Onia:**
 
 - **No se verificó mirando la pantalla si `/vendedores/cotizador` y `/vendedores/webs` siguen servidas en producción.** La lente interna fue solo-lectura sobre el repo. CLAUDE.md las declara "superficie huérfana viva", pero es un dato heredado. **Si están caídas, el hallazgo P0 número 1 baja de gravedad.** Hay que abrirlas.
-- No se verificó si el bundle desplegado en onia.com.bo coincide con el fuente. El "Inventario avanzado Bs 180" está en el código; no se confirmó que esté renderizado.
+- ✅ Verificado después: el "Inventario avanzado · Desde Bs 180/mes" **sí estaba renderizado** en el HTML servido de `onia.com.bo/` y de `onia.com.bo/precios` (bloque `sitio_offerItem`), no solo en el código. Ya se sacó de la fuente; falta el deploy para que baje de producción.
 - Se abrieron 2 de ~20 HTML de propuesta. Puede haber más precios muertos firmables.
 - No se revisaron los 117 docs de `historial/` (por regla no son fuente de verdad) ni se leyeron los 81 docs sin fecha completos — solo los que matchearon los patrones de grep.
 

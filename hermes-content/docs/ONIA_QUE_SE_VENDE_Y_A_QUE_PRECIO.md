@@ -51,7 +51,7 @@ facturas recurrentes y agentes. Los de arriba solo levantan topes.
 | **Chatbot WhatsApp con IA** | **Bs 390/mes** o Bs 3.900/año, **sin cargo inicial**. 500 conversaciones/mes incluidas; Meta cobra el consumo directo en la cuenta del cliente | contesta, califica, **deriva a una persona** y hace seguimiento 24/7 con aprobación humana (**no agenda solo**: un pedido de cita lo ESCALA — `bot/recepcionista.mjs`) | 🟢 motor vivo, Tech Provider con App Review aprobado. ⚠️ `knowledge.json` tiene **un solo hecho**: falta CONTENIDO, no código |
 | **Agenda pública** | Bs 150/mes | link de reserva sin llamadas | 🟢 vivo — **incluida** en Profesional y Completo |
 | **Usuario extra** | Bs 70/usuario/mes | asiento adicional (Básico admite hasta 3) | 🟢 vivo |
-| **Inventario avanzado** | Bs 180/mes | compras a crédito, proveedores, alertas de stock bajo, vencimientos por lote | ⚠️ **ver §4.3** |
+| ~~Inventario avanzado~~ | ⛔ **sin precio: no se cobra** | compras a crédito, proveedores, alertas de stock bajo, vencimientos por lote — **incluidas para todos** | ⛔ **RETIRADO de la oferta el 2026-08-27** — ver §4.3 |
 | **Self-hosted** | desde Bs 4.500 inst. + Bs 900/mes | instalación en el servidor del cliente, con soporte, backups y monitoreo | ⚠️ NO VERIFICADO en cliente real |
 | **Chatbot a medida** | se cotiza | integración con el sistema del cliente o flujos propios | por definición, a pedido |
 
@@ -109,12 +109,19 @@ nunca para confirmar** — y acá se usó al revés.
 🟡 **Empresa se puede vender por sus depósitos, NO por sucursales fiscales.** Decir
 "manejá tus sucursales ante Impuestos" sigue siendo prometer lo que no entregamos.
 
-### 4.3 El inventario avanzado cobra por lo que ya es gratis
-De las cuatro cosas que promete: **compras a crédito, proveedores y alertas de stock bajo
+### 4.3 ✅ RESUELTO — el inventario avanzado cobraba por lo que ya es gratis
+De las cuatro cosas que prometía: **compras a crédito, proveedores y alertas de stock bajo
 ya funcionan para todos** — `/comercio/fiados` no tiene gate de plan ni de add-on, y
 `addon.inventory_advanced` se calcula en `entitlements.ts:55` y **no lo lee ningún archivo**.
 Los vencimientos por lote se cablearon el 2026-08-24 y sí son nuevos.
-**O se gatea lo que ya existe, o el add-on no tiene qué cobrar.**
+Eran dos salidas: gatear lo que ya existe, o dejar de cobrarlo.
+
+**Sergio eligió la segunda el 2026-08-27: "no se cobra".** El add-on salió de la oferta y
+nada se apagó — las cuatro funciones quedan encendidas y gratis para todos. La línea
+"Inventario avanzado · Desde Bs 180/mes" se sacó de la portada y de `/precios`
+(`web-factory/apps/onia-platform/src/lib/pricing.ts` → `ADDONS`), y el inventario pasó a
+contarse donde corresponde: en el `incluye` del plan Básico, que Pro y Full heredan.
+Guarda contra la vuelta: `scripts/venta-honestidad.test.mjs`.
 
 ### 4.4 La pasarela de pago está apagada en los cinco planes
 `gatewayEnabled: false` en Gratuito, Básico, Profesional, Completo y Empresa. Nadie la

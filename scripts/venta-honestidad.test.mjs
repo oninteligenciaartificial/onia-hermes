@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Ata la COPIA DE VENTA del chatbot al motor que la sostiene. Correr:
+// Ata la COPIA DE VENTA al producto que la sostiene. Correr:
 //   node --test scripts/venta-honestidad.test.mjs
 //
 // Origen (2026-08-31): `lib/pricing.ts` de onia-platform vendia el chatbot de
@@ -40,4 +40,38 @@ test("el catalogo de venta no vende que el chatbot agenda", () => {
   // el filtro mira solo las lineas que hablan del chatbot, no la palabra suelta.
   const mentirosas = filasChatbot.filter((linea) => /agend/i.test(linea));
   assert.deepEqual(mentirosas, [], `el chatbot no agenda: deriva a un humano (${MOTOR})`);
+});
+
+// ---------------------------------------------------------------------------
+// Inventario avanzado: se publicaba "Desde Bs 180/mes" en la portada y en
+// /precios (una sola fila de ADDONS alimenta las dos) por funciones que NO
+// tienen gate — `addon.inventory_advanced` se calcula en entitlements.ts y no lo
+// lee ningun archivo del producto. Sergio lo saco de la oferta el 2026-08-27
+// ("no se cobra"). Cobrar por lo que el cliente ya tiene encendido se cae en la
+// primera pregunta del que ya lo usa.
+const PRICING = "web-factory/apps/onia-platform/src/lib/pricing.ts";
+
+/** El literal de un `export const NOMBRE ... ] as const;`, sin lo de alrededor. */
+function bloque(src, nombre) {
+  const desde = src.indexOf(`export const ${nombre}`);
+  assert.notEqual(desde, -1, `no se encontro ${nombre} en ${PRICING}`);
+  const hasta = src.indexOf("] as const;", desde);
+  assert.notEqual(hasta, -1, `${nombre} no cierra con "] as const;" en ${PRICING}`);
+  return src.slice(desde, hasta);
+}
+
+test("ninguna superficie de cliente le pone precio al inventario", () => {
+  // ADDONS es lo que la portada y /precios rinden bajo "Lo demas que se suma",
+  // con su precio al lado. Que el inventario aparezca ahi ES el defecto, con o
+  // sin el numero 180 escrito al lado.
+  const filas = bloque(leer(PRICING), "ADDONS")
+    .split("\n")
+    .filter((linea) => /inventario/i.test(linea));
+  assert.deepEqual(filas, [], "el inventario no se cobra: va en el `incluye` del plan, no en ADDONS");
+});
+
+test("el inventario sigue contandose como valor incluido", () => {
+  // La otra mitad del mismo arreglo: sacar la fila y no decir en ningun lado que
+  // el inventario viene deja al producto pareciendo que no lo tiene.
+  assert.match(bloque(leer(PRICING), "PLANES"), /inventario/i);
 });
