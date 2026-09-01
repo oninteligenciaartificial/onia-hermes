@@ -306,8 +306,19 @@ function logoFooter(account) {
   </div>`;
 }
 
+// Medido el 01-sep sobre los 8 creativos de ads: los titulares de 40-43 caracteres
+// rinden bien; a partir de 46 el titular se parte en cinco lineas y se come la pieza.
+// El renderer NO achica la tipografia, asi que el limite es del texto, no del CSS.
+const TITULAR_MAX = 44;
+
 function slideHtml(slide, idx, total, account, bg) {
   const role = roleFor(slide, idx, total);
+  if (slide.headline) {
+    const limpio = String(slide.headline).replace(/\*/g, '');
+    if (limpio.length > TITULAR_MAX) {
+      console.warn(`[aviso] titular de ${limpio.length} caracteres (max ${TITULAR_MAX}): "${limpio}" — se va a desbordar`);
+    }
+  }
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
   // El fondo se puede fijar POR SLIDE (`slide.bg`) y no solo global (`--bg`).
@@ -333,6 +344,11 @@ function slideHtml(slide, idx, total, account, bg) {
       <div class="topline">${pill(role, idx, total, account)}${last ? '' : '<span class="swipe">SWIPE →</span>'}</div>
       <h1 class="hook">${emph(slide.headline)}</h1>
       ${slide.body ? `<p class="coverline">${emph(slide.body)}</p>` : ''}
+      ${/* Con UNA sola lamina no hay slide de cierre que lleve el CTA, y un anuncio
+            pagado sin llamada a la accion no vende: el que lo ve no sabe que hacer.
+            Descubierto el 01-sep mirando los 3 creativos de ads, que traian
+            "cta" en el brief y nunca lo dibujaban. */''}
+      ${last && slide.cta ? `<div class="ctabtn">${esc(slide.cta)}</div>` : ''}
       ${dots(idx, total)}
       ${logoFooter(account)}`;
   } else if (role === 'cta') {
@@ -1219,8 +1235,10 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
   const slides = (brief.slides || []).map((sl) => (
-    // El brief trae `comment_trigger` a nivel raiz; el render lo necesita por slide.
-    { ...sl, comment_trigger: sl.comment_trigger || brief.comment_trigger || '' }));
+    // El brief trae `comment_trigger` y `cta` a nivel raiz; el render los necesita por slide.
+    { ...sl,
+      comment_trigger: sl.comment_trigger || brief.comment_trigger || '',
+      cta: sl.cta || brief.cta || '' }));
   if (!slides.length) throw new Error('brief has no slides');
   // La serie es del CARRUSEL, no de la slide: el brief es su lugar natural. La bandera
   // de linea de comando sigue funcionando y gana, para poder probar sin editar el brief.

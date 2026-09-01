@@ -1,0 +1,13 @@
+{
+  "title": "A7 — la pregunta incomoda",
+  "caption": "Angulo: pregunta verificable en el momento. Si tiene que ir a buscar la respuesta, ya se demostró solo.",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "headline": "¿Cuántos atendiste *el martes pasado*?",
+      "body": "Si tenés que ir a buscarlo, ahí está el problema. No es memoria: es que el dato no existe en ningún lado."
+    }
+  ],
+  "cta": "Reservá una demo"
+}
