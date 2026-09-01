@@ -9,10 +9,20 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 /* ==========================================================================
-   HERO ONIA — "una noche cualquiera"
+   HERO ONIA — "tu negocio trabajo anoche"
    Lenguaje visual: ../LENGUAJE.md (leido del codigo aprobado de (sitio))
-   La UI del hero se DIBUJA con divs: cero capturas del sistema.
+
+   La UI se DIBUJA con divs: cero capturas del sistema.
    Cero box-shadow. Cero clamp(). Cero blanco sobre senal.
+
+   DOS reglas de contenido que mandan sobre el diseno:
+   1. El asistente CONTESTA solo (chatbot vivo). Todo lo que COMPROMETE al
+      dueno queda en pending_approval — lib/onia-core/modules/agents-runtime.ts,
+      y el cron dice "SIN ningun envio externo". Por eso ninguna tarjeta dice
+      "avisado" ni "enviado": dicen "espera tu OK".
+   2. Onia es el SISTEMA (agenda, clientes, cobros, inventario). El asistente
+      es UNA PARTE. Por eso la noche entera ocurre DENTRO del panel: la barra
+      de modulos encabeza la composicion y encuadra todo lo de abajo.
    ========================================================================== */
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -106,7 +116,13 @@ html, body { margin: 0; padding: 0; }
 
 .heroGrid { display: grid; gap: 3.6em; align-items: center; }
 .heroGrid > * { min-width: 0; }
-@media (min-width: 940px) { .heroGrid { grid-template-columns: 1fr 1.02fr; gap: 3.2em; } }
+/* La columna visual es alta (tres tiempos apilados) y la de texto es corta.
+   Centrar hundia el titular ~500px y empujaba el CTA contra el pliegue de 900.
+   Se alinean por ARRIBA y el kicker queda a la altura de la barra de modulos. */
+@media (min-width: 940px) {
+  .heroGrid { grid-template-columns: 1fr 1.02fr; gap: 3.2em; align-items: start; }
+  .heroText { padding-top: 1.35em; }
+}
 
 /* ---------------- columna de texto ---------------- */
 .kicker {
@@ -116,6 +132,8 @@ html, body { margin: 0; padding: 0; }
   display: flex; align-items: center; gap: 0.75em;
   margin: 0 0 1.5em;
 }
+/* a 375 la linea entera no entra y deja "BOLIVIA" huerfana: se aprieta, no se corta */
+@media (max-width: 400px) { .kicker { font-size: 0.74em; letter-spacing: 0.09em; gap: 0.6em; } }
 .kicker::before {
   content: ""; width: 0.55em; height: 0.55em; border-radius: 50%;
   background: var(--senal); flex: none;
@@ -135,7 +153,8 @@ html, body { margin: 0; padding: 0; }
   font-size: 1.15em; line-height: 1.45; color: var(--ink-soft);
   max-width: 30em; text-wrap: pretty; margin: 1.2em 0 0;
 }
-@media (min-width: 940px) { .lead { max-width: 25em; } }
+@media (min-width: 940px) { .lead { max-width: 26em; } }
+.lead b { color: var(--ink); font-weight: 600; }
 
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7em; margin-top: 2em; }
 .btn {
@@ -162,7 +181,7 @@ html, body { margin: 0; padding: 0; }
 }
 .note b { color: var(--ink-soft); font-weight: 600; }
 
-/* ---------------- columna visual: la noche en tres piezas ---------------- */
+/* ---------------- columna visual: la noche, DENTRO del panel ---------------- */
 .heroVisual { position: relative; }
 
 /* profundidad = solape de planos, nunca sombra */
@@ -180,11 +199,32 @@ html, body { margin: 0; padding: 0; }
   position: relative;
   background: var(--bg-deep);
   border-radius: var(--r-block);
-  padding: 1.5em 1.05em 1.6em;
+  padding: 1.4em 1.05em 1.6em;
 }
-@media (min-width: 940px) { .panel { padding: 1.7em 1.6em 1.8em; } }
+/* el mismo mecanismo del ancla, aplicado adentro: UN font-size reescala el panel
+   entero (tipografia + aire + espina) y lo deja un punto por debajo de la copia,
+   que es como se ve una UI real al lado de un titular */
+@media (min-width: 940px) { .panel { padding: 1.5em 1.6em 1.7em; font-size: 0.95em; } }
 
-/* la espina de tiempo: esto convierte tres tarjetas sueltas en UNA historia */
+/* LA BARRA DE MODULOS: encuadra la noche entera dentro del sistema.
+   Sin esto la pieza vende el asistente; con esto el asistente es una parte. */
+.panelHead {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 0.5em 1.2em;
+  margin: 0 0 1.25em; padding-bottom: 0.85em;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 0.66em;
+  letter-spacing: 0.11em; text-transform: uppercase;
+}
+.panelMark { display: inline-flex; align-items: center; gap: 0.6em; color: var(--ink); font-weight: 500; }
+.panelMark i {
+  width: 0.9em; height: 0.9em; flex: none;
+  border-radius: calc(var(--r-block) * 0.22); background: var(--senal);
+}
+.panelNav { display: inline-flex; flex-wrap: wrap; gap: 0.4em 0.55em; color: var(--ink-faint); }
+.panelNav b { color: var(--line); font-weight: 400; }
+
+/* la espina de tiempo: convierte tres tarjetas sueltas en UNA historia */
 .spine { position: relative; padding-left: 4.4em; }
 .spine::before {
   content: ""; position: absolute;
@@ -196,8 +236,6 @@ html, body { margin: 0; padding: 0; }
   .spine { padding-left: 4.25em; }
   .spine::before { left: 3.2em; }
   .card { padding: 0.8em 0.9em 0.9em; }
-  .row { justify-content: space-between; }
-  .rowMain { flex: 1 1 100%; }
 }
 
 .node { position: relative; }
@@ -226,7 +264,7 @@ html, body { margin: 0; padding: 0; }
   padding: 0.85em 1em 0.95em;
 }
 .cardHead {
-  display: flex; align-items: center; gap: 0.6em;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5em 0.6em;
   font-family: var(--font-mono); font-size: 0.68em; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--ink-faint);
   margin: 0 0 0.75em;
@@ -238,6 +276,16 @@ html, body { margin: 0; padding: 0; }
   display: inline-flex; align-items: center; justify-content: center;
   font-size: 1em; font-weight: 500; letter-spacing: 0;
 }
+/* la pastilla de estado dice la VERDAD: nada salio, espera tu OK */
+.cardHead .pill { margin-left: auto; font-size: 1.02em; letter-spacing: 0.02em; text-transform: none; }
+.pill {
+  display: inline-flex; align-items: center; gap: 0.4em;
+  padding: 0.32em 0.72em; border-radius: var(--r-pill);
+  font-family: var(--font-sans); font-size: 0.72em; font-weight: 600;
+  white-space: nowrap;
+  background: var(--accent-soft); color: var(--accent-ink);
+}
+.pillDot { width: 0.42em; height: 0.42em; border-radius: 50%; background: var(--verde-500); flex: none; }
 
 /* pieza 1: la conversacion — rompe la reja hacia la derecha */
 .cardChat { margin-right: -1.6em; }
@@ -256,32 +304,46 @@ html, body { margin: 0; padding: 0; }
   border-bottom-right-radius: calc(var(--r-block) * 0.2);
   margin-left: auto; margin-top: 0.5em;
 }
-.handoff {
-  display: flex; align-items: center; gap: 0.5em;
+.trail {
+  display: flex; align-items: baseline; gap: 0.5em;
   margin: 0.8em 0 0; padding-top: 0.7em;
   border-top: 1px solid var(--line-soft);
-  font-family: var(--font-mono); font-size: 0.72em; letter-spacing: 0.02em;
-  color: var(--accent-ink);
+  font-family: var(--font-mono); font-size: 0.72em; line-height: 1.45;
+  letter-spacing: 0.02em; color: var(--accent-ink);
 }
+.trail s { text-decoration: none; flex: none; }
 
-/* pieza 2: la fila de cobro */
+/* pieza 2: la corrida de la manana — agenda + cobros, o sea el SISTEMA */
+.cardRun { padding-bottom: 1.45em; }
+.miniHead {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 0.8em;
+  font-size: 0.8em; color: var(--ink-faint); margin: 0 0 0.5em;
+}
+.miniHead b { color: var(--ink); font-weight: 500; }
+.slots { display: flex; gap: 0.3em; margin: 0 0 1em; }
+.slot {
+  flex: 1; height: 1.55em;
+  border-radius: calc(var(--r-block) * 0.18);
+  background: var(--accent-soft);
+}
+.slot--free { background: var(--bg-deep); }
+.slot--new  { background: var(--senal); }
+
+.rule { height: 1px; background: var(--line-soft); margin: 0 0 0.3em; }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3em 0.8em; padding: 0.5em 0; }
 .row + .row { border-top: 1px solid var(--line-soft); }
 .rowMain { min-width: 0; flex: 1 1 9em; }
 .rowName { display: block; font-size: 0.92em; font-weight: 500; color: var(--ink); }
 .rowMeta { display: block; font-size: 0.78em; color: var(--ink-faint); margin-top: 0.15em; }
 .rowAmt { font-family: var(--font-mono); font-size: 0.82em; color: var(--ink-soft); white-space: nowrap; }
-.pill {
-  display: inline-flex; align-items: center; gap: 0.4em;
-  padding: 0.32em 0.7em; border-radius: var(--r-pill);
-  font-size: 0.72em; font-weight: 600; white-space: nowrap;
-  background: var(--accent-soft); color: var(--accent-ink);
-}
-.pillDot { width: 0.42em; height: 0.42em; border-radius: 50%; background: var(--verde-500); }
+/* VA DESPUES de .row a proposito: mismo peso de selector, gana el ultimo.
+   Sin la pastilla por fila el monto entra al lado del nombre incluso a 375,
+   y la fila se lee como planilla en vez de como lista suelta. */
+@media (max-width: 480px) { .row { flex-wrap: nowrap; justify-content: space-between; } }
 
-/* pieza 3: el traspaso al humano — solapa a la de arriba */
+/* pieza 3: el despertar — solapa a la de arriba */
 .cardWake {
-  margin-top: -0.9em; margin-left: 2.2em;
+  margin-top: -0.7em; margin-left: 2.2em;
   position: relative; z-index: 2;
   background: var(--tinta); color: #edf1ef; /* 16,66:1 */
   border-color: var(--tinta);
@@ -292,6 +354,7 @@ html, body { margin: 0; padding: 0; }
 .wakeLine {
   font-family: var(--font-display); font-size: 1.25em; font-weight: 550;
   line-height: 1.18; letter-spacing: -0.015em; margin: 0;
+  text-wrap: balance; /* sin esto "vos." queda huerfano y la frase pierde el golpe */
 }
 .wakeLine em { font-style: normal; color: var(--verde-300); }
 .wakeFoot {
@@ -305,8 +368,10 @@ html, body { margin: 0; padding: 0; }
 
 .visualFoot {
   margin: 1.1em 0 0; padding-left: 0.2em;
-  font-size: 0.82em; line-height: 1.45; color: var(--ink-faint);
+  font-size: 0.85em; line-height: 1.45; color: var(--ink-faint);
+  text-wrap: pretty;
 }
+.visualFoot b { color: var(--ink-soft); font-weight: 600; }
 
 /* ---------------- entrada ---------------- */
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
@@ -334,14 +399,14 @@ html, body { margin: 0; padding: 0; }
     <div class="inner heroGrid">
 
       <div class="heroText">
-        <p class="kicker">Una noche cualquiera</p>
+        <p class="kicker">Software de gestión con IA · Bolivia</p>
 
-        <h1 class="display">Atiende mientras <em>dormís</em></h1>
+        <h1 class="display">Tu negocio trabajó <em>anoche</em></h1>
 
         <p class="lead">
-          El asistente de Onia contesta por WhatsApp y por tu web a cualquier hora, entiende
-          fotos y audios, y cuando alguien quiere una cita te lo pasa a vos con la
-          conversación entera.
+          Onia es el sistema donde vive tu negocio: agenda, clientes, cobros e
+          inventario, armado para tu rubro. De noche contesta y prepara.
+          A la mañana, <b>vos aprobás</b>.
         </p>
 
         <div class="actions">
@@ -352,7 +417,7 @@ html, body { margin: 0; padding: 0; }
         </div>
 
         <p class="note">
-          <b>Dos pasos y entrás.</b> Elegís tu rubro y el sistema se arma con tu vocabulario,
+          <b>Elegís tu rubro y entrás.</b> El sistema se arma con tu vocabulario,
           tus pantallas y tus recordatorios. Sin instalar nada.
         </p>
 
@@ -365,29 +430,52 @@ html, body { margin: 0; padding: 0; }
         <span class="plate plateSignal" aria-hidden="true"></span>
 
         <div class="panel">
+
+          <div class="panelHead">
+            <span class="panelMark"><i></i>Tu panel</span>
+            <span class="panelNav">Agenda<b>·</b>Clientes<b>·</b>Cobros<b>·</b>Inventario</span>
+          </div>
+
           <div class="spine">
 
             <article class="node node--live">
               <span class="time">02:47</span>
               <div class="card cardChat">
-                <p class="cardHead"><span class="badge">W</span>WhatsApp · nuevo</p>
+                <p class="cardHead"><span class="badge">W</span>Asistente · WhatsApp</p>
                 <p class="bubble bubbleIn">Hola, atienden mañana? necesito una limpieza</p>
                 <p class="bubble bubbleOut">Sí, mañana atendemos de 9:00 a 18:00. Te paso con el equipo para reservarte el horario.</p>
-                <p class="handoff">↳ Derivado a vos, con el contexto</p>
+                <p class="trail"><s>&#8627;</s> Queda en tu bandeja, con la conversación entera</p>
               </div>
             </article>
 
             <article class="node">
               <span class="time">07:00</span>
-              <div class="card">
-                <p class="cardHead"><span class="badge">$</span>Cobros del día</p>
+              <div class="card cardRun">
+                <p class="cardHead">
+                  <span class="badge">&#8635;</span>Revisión de la mañana
+                  <span class="pill"><span class="pillDot"></span>Espera tu OK</span>
+                </p>
+
+                <p class="miniHead"><b>Agenda de hoy</b><span>6 citas</span></p>
+                <!-- 6 bloques = las 6 citas del rotulo. El de senal es la que
+                     entro a las 02:47 por WhatsApp: la misma historia, tres veces. -->
+                <div class="slots" aria-hidden="true">
+                  <span class="slot"></span>
+                  <span class="slot"></span>
+                  <span class="slot slot--new"></span>
+                  <span class="slot"></span>
+                  <span class="slot"></span>
+                  <span class="slot"></span>
+                </div>
+
+                <p class="miniHead"><b>Cobros</b><span>2 vencen</span></p>
+                <div class="rule"></div>
                 <div class="row">
                   <span class="rowMain">
                     <span class="rowName">Mariana R.</span>
                     <span class="rowMeta">Vence hoy</span>
                   </span>
                   <span class="rowAmt">Bs 450</span>
-                  <span class="pill"><span class="pillDot"></span>Avisado</span>
                 </div>
                 <div class="row">
                   <span class="rowMain">
@@ -395,8 +483,9 @@ html, body { margin: 0; padding: 0; }
                     <span class="rowMeta">Vencido · 3 días</span>
                   </span>
                   <span class="rowAmt">Bs 280</span>
-                  <span class="pill"><span class="pillDot"></span>Avisado</span>
                 </div>
+
+                <p class="trail"><s>&#8627;</s> 1 cita y 2 recordatorios, redactados</p>
               </div>
             </article>
 
@@ -404,10 +493,10 @@ html, body { margin: 0; padding: 0; }
               <span class="time">08:30</span>
               <div class="card cardWake">
                 <p class="cardHead"><span class="badge">&#8599;</span>Al abrir el panel</p>
-                <p class="wakeLine">Te espera <em>una</em> cita por confirmar.</p>
+                <p class="wakeLine">Todo contestado. Nada <em>decidido</em> sin vos.</p>
                 <p class="wakeFoot">
-                  <span><i>4</i> mensajes contestados</span>
-                  <span><i>2</i> cobros recordados</span>
+                  <span><i>4</i> respuestas del asistente</span>
+                  <span><i>3</i> cosas esperando tu OK</span>
                 </p>
               </div>
             </article>
@@ -416,7 +505,10 @@ html, body { margin: 0; padding: 0; }
         </div>
         </div>
 
-        <p class="visualFoot">Vos confirmás la cita. Onia hace todo lo que pasa antes.</p>
+        <p class="visualFoot">
+          El asistente es la puerta. Adentro está el sistema: <b>agenda, clientes,
+          cobros e inventario</b>, todo en la misma pantalla.
+        </p>
       </div>
 
     </div>
