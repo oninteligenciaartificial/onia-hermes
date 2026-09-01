@@ -33,9 +33,17 @@ etiqueta esté activada**; la lámina 3 sí.
 Si el switch no aparece en esta versión de la app, hay dos salidas y ninguna es publicar igual:
 
 - **Actualizar la app** y volver a buscarlo (Editar perfil, o Configuración → Tipo de cuenta).
-- Si aun así no está: **avisar antes de publicar.** Se cambia la lámina 3 (el texto vive en el
-  brief, se re-renderiza) o se sube el carrusel de 6 láminas sin ella. Lo que no se hace es
-  subir las 7 con la etiqueta apagada.
+- Si aun así no está: **ir al [Paso 1-bis](#paso-1-bis--plan-b-el-carrusel-de-6-láminas-si-la-etiqueta-no-se-puede-poner)
+  y publicar el carrusel de 6 láminas.** Lo que no se hace es subir las 7 con la etiqueta apagada.
+
+🟢 **Corregido el 31-ago: esta salida ya no es un freno.** Acá decía *"avisar antes de publicar.
+Se cambia la lámina 3 (el texto vive en el brief, se re-renderiza) o se sube el carrusel de 6
+láminas sin ella"* — y era un callejón: ofrecía un **re-render como primera opción** (horas de
+trabajo, justo en el minuto de publicar) y el "carrusel de 6" no existía en ningún lado. El
+Paso 1 es una tabla de 7 filas con su orden y su alt text; no había versión de 6. Al llegar a
+esa rama con el teléfono en la mano, Sergio tenía que re-derivar el orden solo — y ya habría
+mandado los 7 archivos. **Nadie había comprobado si el carrusel sobrevive sin la lámina 3.**
+Se comprobó (ver Paso 1-bis): sobrevive. No hay que re-renderizar nada.
 
 Origen de la instrucción: [`LUCIA.md`](LUCIA.md) §1.
 
@@ -132,6 +140,61 @@ Sí, soy IA. Y esta es toda la historia — quién me hace, por qué no lo escon
 
 **Después de publicarlo: fijarlo al perfil.** (··· sobre el post → *Fijar en tu perfil*.) Es un
 post fijado; no cuenta como el día 1 del calendario.
+
+---
+
+## Paso 1-bis — PLAN B: el carrusel de 6 láminas (si la etiqueta no se puede poner)
+
+**Sólo si el Paso 0 falló** — el switch de "Creador de IA" no existe en esa versión de la app.
+Si la etiqueta está puesta, ignorá esta sección y usá el Paso 1.
+
+**Se saca la lámina 3 y se sube igual. No se re-renderiza nada.**
+
+Por qué se puede: la lámina 3 es la única que afirma que la **etiqueta** está activada
+(*"Yo nací declarada: etiqueta de IA activada desde el primer post"*). La declaración de que
+Lucía es IA no depende de ella y queda dicha **dos veces más**, en las láminas que sí se suben:
+
+- **Lámina 1** — *"¿LUCÍA ES real? / No. Y esa es la mejor parte."*
+- **Lámina 2** — *"UN PERSONAJE digital / Creada con inteligencia artificial por el equipo de
+  @oniahq, en Santa Cruz de la Sierra. Cada foto mía se genera — no existe una sesión, no
+  existe una cámara."*
+
+Sacando la 3, lo único que se pierde es la frase que sería falsa. Nada más la menciona:
+verificado lámina por lámina el 31-ago sobre `FIJADO/_HOJA-DE-CONTACTO.jpg`.
+
+**Y el carrusel sigue leyéndose.** Los rótulos verdes quedan encadenados sin hueco:
+*LA PREGUNTA QUE TODOS HACEN → QUÉ SOY → QUIÉN ME HACE → QUÉ VAS A VER → LA PREGUNTA →
+EL COMIENZO*. La lámina 2 termina en "DESLIZÁ →" y la 4 abre presentando a Onia; no se
+referencian entre sí, así que el salto no deja frase colgada.
+
+Orden a subir — **6 archivos, misma carpeta `FIJADO/`, salteando `slide-03`** (9,8 MB en total):
+
+| # | archivo | de qué es la lámina | alt text |
+|---|---|---|---|
+| 1 | `slide-01.png` | ¿Lucía es real? | Lucia es real? |
+| 2 | `slide-02.png` | un personaje digital | Personaje digital |
+| 3 | `slide-04.png` | un equipo boliviano | Quien la hace |
+| 4 | `slide-05.png` | IA sin humo | Que publica |
+| 5 | `slide-06.png` | la pregunta abierta | Pregunta abierta |
+| 6 | `slide-07.png` | esto recién empieza | Seguime |
+
+**El caption sí cambia — se le saca tres palabras.** El del Paso 1 promete tres cosas: *"quién me
+hace, **por qué no lo escondo**, y qué vas a ver acá"*. Ese beat del medio **es la lámina 3**: es
+la única que lo contesta (rótulo *POR QUÉ DECLARADA*). Sin ella, el caption enumera algo que el
+carrusel ya no entrega — y justo en la pieza cuya promesa es no esconder nada. Copiar este:
+
+```text
+Sí, soy IA. Y esta es toda la historia — quién me hace y qué vas a ver acá. Guardalo para cuando alguien te pregunte si soy real.
+
+#inteligenciaartificial #ia #influencervirtual #bolivia #santacruz #tecnologia
+```
+
+Lo demás del caption queda igual, hashtags incluidos: "Sí, soy IA" no depende de la etiqueta y
+sigue siendo cierto.
+
+**Y avisale a Sergio igual**, no para frenar sino para que quede anotado: la lámina 3 hay que
+re-escribirla en el brief antes de que la etiqueta se pueda poner, o el día que se pueda, se
+re-renderiza y este post se puede volver a subir completo.
 
 ---
 
