@@ -11,14 +11,14 @@
 | P3 | **Radar mensual #1 para Samuel** | ✅ 2026-09-01: `ONIA_MARCA_PERSONAL_RADAR.md` (14 ganchos por serie + tabla tema→palabra→recurso) |
 | P4 | **Carrusel 1 "5 prompts"** | ✅ 2026-09-01: 7 láminas 1080×1350 en `carousels/out/carrusel-5-prompts/` — íconos Fluent 3D (MIT), SIN esperar Higgsfield. Generador: `scripts/marca-personal/generar-carrusel-prompts.py`. Carrusel 2 ("3 cursos") pendiente, mismo generador |
 | P5 | X banner + website | 🔴 el modal de edición de X lleva TODO el día sin montar en este entorno (probado 6+ veces, 2 navegadores, mobile incluido). **Alternativa de 1 min para Sergio desde el TELÉFONO:** app de X → Editar perfil → banner (mandate la imagen `ChatGPT Image 30 ago...png` de Descargas por WhatsApp a vos mismo) + Website: `https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu` |
-| P6 | Textos X/LinkedIn + captions + checklist completa | ✅ 2026-09-01: `docs/cola/PARA-PUBLICAR-HOY.md` (7 bloques copy-paste) |
+| P6 | Textos X/LinkedIn + captions + checklist completa | ✅ 2026-09-01: `docs/cola/PARA-PUBLICAR-HOY.md` (7 bloques copy-paste) + `ONIA_MARCA_PERSONAL_SEMANA1.md` § "Textos X/LinkedIn de la semana" (versión X y versión LinkedIn de Video A/B/C) |
+| P7 | Encuesta de temario (semana 3) — redactarla cuando haya señales de 2 semanas | ⏸ |
 
 > **LOOP VPS: VIVO Y VERIFICADO** (2026-09-01). Cron diario 17:56 La Paz. Primera vuelta:
 > 127 s, exit 0, escribió `drops/2026-09-02.md` (calidad verificada) y pusheó a
 > `claude/marca-personal-loop`. ⚠️ Nota para el dueño del runner `onia-loop.sh`: el
 > contador "sin pushear" dio falso positivo (contó ANTES de que el push del agente
 > terminara de registrarse) — el aviso FALLO de las 21:58 era mentira, el push estaba hecho.
-| P7 | Encuesta de temario (semana 3) — redactarla cuando haya señales de 2 semanas | ⏸ |
 
 > Dueño: la sesión de estrategia/marca personal (esta). La sesión de higgsfield/modelos
 > es dueña de Lucía · @oniahq · ads (su cola: `docs/cola/contenido.md`). Ninguna toca
@@ -31,7 +31,7 @@
 | # | Tarea | Estado | Nota |
 |---|---|---|---|
 | 1 | D0 en la comunidad (bienvenida + 3 cursos) | ⬜ SERGIO pega (30 seg) | texto listo en `ONIA_COMUNIDAD_CONTENIDO.md`; falta que agregue los 3 links del reel CERTIFICADOS |
-| 2 | Drop del día siguiente preparado y pulido | 🔄 loop, diario | D1 Claude Code listo; el loop deja cada drop verificado la noche anterior |
+| 2 | Drop del día siguiente preparado y pulido | 🔄 loop, diario | ✅ 2026-09-02 (D1 Claude Code) en `docs/cola/drops/2026-09-02.md`. Siguiente: D2 (5 prompts) para 2026-09-03 |
 | 3 | Contrato: mandar `Acuerdo_Etapa2_Version_Firma.pdf` a Samuel | ⬜ SERGIO | el PDF "final" de Samuel era idéntico al anterior — NO firmar ese |
 | 4 | X: banner + website (link comunidad) | 🔄 loop reintenta | modal rate-limited el 31-ago; asset en Descargas |
 | 5 | Bios: link de comunidad en IG (y TikTok/FB/YT cuando se confirmen cuentas) | ⬜ SERGIO (IG 1 min) | LinkedIn ✅ ya lo tiene |
