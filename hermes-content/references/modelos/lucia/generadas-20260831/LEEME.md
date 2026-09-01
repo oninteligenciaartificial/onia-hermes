@@ -10,8 +10,8 @@ archivo que descarga Higgsfield (`hf_<fecha>_<hora>_<uuid>.png`).
 
 | Archivo | Qué es | Asset id | Estado |
 |---|---|---|---|
-| `C01-terraza-torre-cristal.jpg` | Terraza de torre de vidrio, sol duro de mediodía, sastrería negra | `ada5ba51-a570-4faf-baf2-62d6d54e1361` | ⚠️ **La cara se fue del ancla** |
-| `B05-micro-camino-al-trabajo.jpg` | Adentro de un micro camino al trabajo, mirando el celular | `6558ebeb-e4b2-46a9-b035-107a382ccdde` | 🔴 **Carteles inventados** |
+| `C01-terraza-torre-cristal.jpg` | Terraza de torre de vidrio, sol duro de mediodía, sastrería negra | `ada5ba51-a570-4faf-baf2-62d6d54e1361` | ⚠️ Contraejemplo — la cara se fue del ancla. **NO regenerar:** se guarda para mostrar qué hace `fashion campaign` |
+| `B05-micro-camino-al-trabajo.jpg` | Adentro de un micro camino al trabajo, mirando el celular | `6558ebeb-e4b2-46a9-b035-107a382ccdde` | 🔧 **REGENERAR** — carteles inventados |
 
 ## C01 — el registro «cine», y por qué falló
 
@@ -44,3 +44,16 @@ defecto de la IA, a la vista y señalado»*, y alimenta la lámina 6 de L09.
 
 La diferencia es para qué existe la pieza. G01 **muestra** el defecto y por eso lo quiere. B05
 tiene que **pasar por una foto real** de un negocio real, y con el cartel roto no pasa.
+
+
+## 🔧 Qué significa el marcador `🔧 REGENERAR`
+
+**Sólo las filas con `🔧 REGENERAR` se vuelven a generar.** Nace de un defecto encontrado el
+01-sep: el loop buscaba `🔴` y en el `LEEME.md` del banco del 28-ago hay dos 🔴 que **no son
+piezas rotas** — una nota histórica ya resuelta, y `V04-parada`, que se guarda **a propósito**
+por ser la más floja: es la prueba de que sin acción a medias el modelo inventa habla y giros.
+
+Regenerar V04 habría **borrado la evidencia** de una regla. Es el mismo error que con
+`G01-cafe-pizarra-texto`, que inventa texto a propósito: **una imperfección deliberada leída como
+defecto.** Por eso el marcador de "hay que rehacerla" tiene que ser distinto del de "ojo con
+esto".
