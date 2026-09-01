@@ -82,8 +82,9 @@ Los renders viven en la PC (`C:\dev\proyectos\onia-hermes`). Son **12 MB** las 7
 
 **Cómo (Telegram, el más limpio):** Telegram en la PC → chat **"Mensajes guardados"** →
 adjuntar → **enviar como ARCHIVO, no como foto** (como foto, Telegram recomprime). Mandar los
-7 `.png` y el `.mp4`. En el teléfono: descargar cada uno y **guardarlo en la galería** — si no
-está en la galería, el selector de Instagram no lo ve.
+7 `.png`, el `.mp4` y **`portada-v7.jpg`** (la portada del reel, ver Paso 2). En el teléfono:
+descargar cada uno y **guardarlo en la galería** — si no está en la galería, el selector de
+Instagram no lo ve.
 
 Si el selector igual no los encuentra: en la misma carpeta `FIJADO/` están los mismos 7 como
 `.jpg`; esos se pueden mandar **como foto** y caen directo en la galería. Instagram recomprime
@@ -134,6 +135,32 @@ post fijado; no cuenta como el día 1 del calendario.
 ⚠️ En esa carpeta hay **dos** archivos. Sube **`lucia-lanzamiento-v7.mp4`**, no
 `lucia-lanzamiento.mp4` (v6, con el clip de playa que perdía las pecas — ver
 [`TABLA-DE-CORTES.md`](../references/modelos/lucia/reel-lanzamiento-20260822/TABLA-DE-CORTES.md)).
+
+**Verificado el 31-ago mirándolo, no suponiéndolo:** hoja de contacto de los 22 s
+(11 frames) + medición. El archivo es 1080×1920 a 30 fps, dura 22,07 s, el audio existe de
+verdad (mean −17,7 dB / pico −1,6 dB — no es un video mudo con LUFS escrito en un doc), y los
+subtítulos quemados dicen lo que promete el caption: *NO SOY REAL · NO EXISTO · SOY LUCÍA · UN
+PERSONAJE DIGITAL · EL EQUIPO DE ONIA · …SIN HUMO · NO ESCONDO LO QUE SOY · LO QUE VIENE ·
+¡SEGUIME!*. Los dos momentos que en miniatura parecen un defecto —la cara "partida" cerca del
+seg. 18 y el mockup del navegador flotando sobre el clip del gimnasio— son las disolvencias
+entre clips, ~0,7 s cada una. No hay nada que re-renderizar.
+
+### La portada (esto sí faltaba)
+
+Instagram pide **Portada** al subir un reel, y esa imagen es la que queda para siempre en la
+grilla del perfil, al lado del carrusel fijado. El kit no decía cuál, y por defecto Instagram
+agarra el primer frame: Lucía de perfil, mirando afuera, medio de espaldas — la peor de las 22
+segundos para la grilla.
+
+Ya está elegido y extraído:
+**`hermes-content/references/modelos/lucia/reel-lanzamiento-20260822/final/portada-v7.jpg`**
+(1080×1920, 258 KB) — el frame del **seg. 21**: cara centrada, sonrisa, mirando a cámara, luz
+de atardecer. Lleva abajo el subtítulo *LO QUE VIENE.*, que en el recorte de la grilla queda
+fuera o al borde.
+
+Mandalo al teléfono junto con el `.mp4` (mismo viaje del Paso 0.5) y en la pantalla de portada
+elegí **Agregar desde la galería**. Si preferís no pasar otro archivo: arrastrá el selector de
+portada hasta el **segundo 21** de los 22, es el mismo frame.
 
 **Caption** (copiar tal cual):
 
