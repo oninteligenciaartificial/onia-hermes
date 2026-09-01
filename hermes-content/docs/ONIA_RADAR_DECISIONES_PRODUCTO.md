@@ -634,6 +634,16 @@ Las dos opciones cuestan lo mismo — una línea en un archivo, cero bolivianos:
 - **b)** `web-factory-dev-loop` levanta su prohibición para esa carpeta y se las queda. Es el
   carril que sabe de superficies web, pero hoy tiene la puerta cerrada por decisión previa.
 
+**Se puso más urgente el 2026-09-01 22:41 UTC.** El canario visual encontró que, sin dueño,
+`/` y `/empezar` se redeployaron enteras (título, copy, CTA) entre dos pasadas de la misma
+tarde, y el nuevo CTA de `/empezar` ("Creá tu cuenta") manda a `app.onia.com.bo/register`, que
+resultó estar vivo con un wizard de 2 pasos y un formulario de contraseña real. Esto puede
+contradecir lo que `CLAUDE.md` tiene escrito como historia (que `/register` "dejó de crear
+cuentas" y el arreglo honesto vive en `/empezar`) — si esa premisa venció, o si `/register`
+no cierra el alta de verdad, hay que decidirlo antes de que otro lead se tope con la pantalla
+rota. Detalle y evidencia (capturas) en `COLA.md`, sección "Del canario visual — corrida del
+2026-09-01 22:41 UTC". Nadie del canario tocó el formulario ni creó cuentas.
+
 # Para decidir — al abrir el 1 de septiembre
 
 Diez cosas esperan a Sergio — la 2 se resolvió el 1-sep y queda tachada. Están ordenadas por lo

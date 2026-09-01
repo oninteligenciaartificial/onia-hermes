@@ -480,6 +480,53 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       anota como huérfana cuatro ítems más arriba. El gate se puede cablear sin tocar su
       código — y justamente por eso conviene que exista antes de que alguien lo toque.
 
+### Del canario visual — corrida del 2026-09-01 22:41 UTC (tercera pasada)
+
+- [ ] 🔴 **`onia.com.bo/` y `/empezar` cambiaron de diseño y de copy ENTERO desde la baseline de
+      hace 3 h, y el CTA de `/empezar` ahora manda a `app.onia.com.bo/register` — que resultó
+      estar VIVO, con un wizard de 2 pasos que llega hasta un formulario real de contraseña.**
+      Esto contradice lo que este mismo repo tiene escrito como historia (`CLAUDE.md`, sección
+      "Una promesa que cambia se barre en TODA la superficie"): que `/register` "dejó de crear
+      cuentas" y que el arreglo honesto vive sólo en `/empezar` ("Pedí tu acceso"). Si esa premisa
+      ya no es cierta, la corrección de agosto puede estar desactualizada; si SÍ sigue siendo
+      cierta y `/register` no termina de crear la cuenta, volvió el bug exacto que esa corrección
+      arregló, con las mismas palabras ("Creá tu cuenta") apuntando derecho a la pantalla rota.
+      **No lo decidí yo — no tengo dueño para esta pantalla y no toco el flujo de otro carril.**
+      **Lo que sí verifiqué, mirando y sin enviar el formulario (no creé ninguna cuenta):**
+      - Home: título pasó de *"Onia · Tu negocio no pierde citas ni cobros | Bolivia"* a
+        *"Onia · Cerrás vos, el negocio no | Software de gestión Bolivia"*, y el CTA de *"Pedí tu
+        acceso"* pasó a *"Creá tu cuenta"* en cabecera, footer y banda final. Todo el copy central
+        cambió (de "Onia agenda las citas..." a "Un negocio abre 9 horas / Cerrás vos. El negocio
+        no."). **Es un redeploy real, no una regresión de datos**: HTML válido, sin errores de
+        consola nuevos, `msMirable` bajó de 933 a 495 ms.
+      - `/empezar`: 4 botones "Creá tu cuenta". El de la barra de navegación apunta a `/empezar`
+        (self, correcto, ya estás ahí). **Los otros dos** (el de la sección hero y el de la banda
+        verde final) apuntan a `https://app.onia.com.bo/register` (`href` verificado en el DOM,
+        no un grep de texto).
+      - `app.onia.com.bo/register` responde 200. Paso 1 es un selector de rubro (los 5 packs +
+        "otro rubro, escribinos"). Clic en "Empezar aquí" (Clínica dental) llega a un Paso 2 con
+        `<form>` real: nombre, correo, contraseña, nombre del negocio, "¿cómo nos conociste?",
+        checkbox de novedades y botón **"Crear mi cuenta — 14 días gratis"**. **No hice submit**:
+        crear una cuenta de prueba es una escritura en producción y no es lo que este loop hace.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-01-home-rediseno.png`
+      (home hoy 1.585 KB · 495 ms; baseline 2.310 KB · 933 ms) ·
+      `hermes-content/docs/historial/canario-visual/2026-09-01-empezar-rediseno.png` (empezar hoy 2.168 KB · 573 ms; baseline 2.497 KB · 711 ms) ·
+      `hermes-content/docs/historial/canario-visual/2026-09-01-register-paso1.png` y `hermes-content/docs/historial/canario-visual/2026-09-01-register-paso2.png`.
+      **La baseline de `home` y `empezar` NO se tocó** — sigue siendo la de la mañana, a propósito:
+      la regla es que se actualiza recién cuando la diferencia ya se explicó o el ítem que la
+      reportó cierra. Si esto es un deploy legítimo y esperado, el dueño que lo cierre actualiza
+      la baseline con estas capturas.
+      **Efecto colateral, ya visible en el monitor propio del VPS:** `/root/bin/onia-mirar-cliente.sh`
+      viene avisando `ROTO` cada 15 min desde hace horas por texto ausente ("Pedí tu acceso" en
+      `/empezar`, "Tu negocio no pierde" en `web`) — su lista de textos esperados quedó
+      desactualizada por este mismo cambio. No lo toqué (es infraestructura compartida, no mi
+      carril), lo anoto para quien tenga `/root/bin/onia-mirar-cliente.sh`.
+      **A quién le toca decidir:** nadie tiene declarado dueño de `web-factory/apps/onia-platform/`
+      (home + empezar) y esto cruza a `app.onia.com.bo` (plataforma, carril `onia-cola`). Sumo una
+      línea al radar (`hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`) pidiendo que se le ponga dueño y que
+      alguien confirme si `/register` de verdad crea la cuenta hasta el final.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
