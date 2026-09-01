@@ -54,6 +54,26 @@
       el bloque negro quedaba con más de un cuarto de aire adentro y el
       verde caía fuera de cualquier pantalla real. Ahora el alto lo pide
       el contenido del bloque verde y el negro sale de la proporción.
+
+   ─── v4 (2026-09-01). LA BANDA ───────────────────────────────────────
+   Pedido de Sergio, textual: "talvez algo mas visual dentro de los
+   cuadros que muestren como el duerme o mas abajo mientras genera
+   ingresos". Hasta acá el titular DECÍA el contraste y nada lo MOSTRABA:
+   los dos bloques eran campos de color con texto, y el negro tenía un
+   cuarto de aire muerto adentro.
+
+   Lo que entró: cuatro lanes, dos por bloque, alineadas a los dos lados
+   del corte de las 18:00. La línea de VOS está llena a la izquierda y
+   muerta a la derecha; la de ONIA cruza las 24 horas sin cortarse. El
+   detalle completo, en el comentario de `.lane` más abajo.
+
+   Lo que NO entró, a propósito: una cifra. Es el lugar exacto donde el
+   hero de Lety pone su facturación ($14.181/mo con contador que sube) y
+   es lo primero que uno quiere copiar para decir "genera ingresos". No
+   se puede: cero clientes pagando ⇒ el número sería inventado, y la
+   pieza ya renunció al precio real por la misma razón. Lo que sí es
+   cierto lo dicen los tres momentos: una cita reservada a las 23:40 ES
+   el ingreso.
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -384,6 +404,118 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
   color: var(--verde-900);   /* 8,7:1 sobre señal */
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   LA BANDA — lo único que la pieza DIBUJA.
+   Sergio, 2026-09-01: "talvez algo mas visual dentro de los cuadros
+   que muestren como el duerme o mas abajo mientras genera ingresos".
+
+   Una sola forma. Dos actores, una línea cada uno, a los dos lados del
+   corte de las 18:00 — y las cuatro alineadas, así que se leen de corrido
+   como una banda que cruza la pieza:
+
+     negro · VOS  → 9 marcas paradas .....  ATENDÉS  ┐ la línea de VOS
+     verde · VOS  → 15 marcas aplastadas .  DORMÍS   ┘ MUERE a las 18:00
+     negro · ONIA → 9 marcas paradas .....  CON VOS  ┐ la de ONIA cruza
+     verde · ONIA → 15 marcas paradas ....  POR VOS  ┘ las 24 SIN CORTE
+
+   Ahí está el argumento entero, dibujado: una línea se apaga, la otra no.
+   Y la de ONIA está de pie también en el bloque negro porque es cierto —
+   el sistema no se enciende a las 18:00, ya estaba trabajando con él.
+
+   ONIA siempre va del color CONTRARIO al de su bloque (señal sobre tinta,
+   tinta sobre señal): es el que no es dueño de ese bloque, y así la banda
+   se sigue con el ojo aunque el fondo cambie.
+
+   La misma lane en dos estados. El contraste se VE antes de leerse, y
+   sobre todo se ve CONGELADO: quien la mire sin animación (reduced
+   motion, o una captura de pantalla) ya tiene la historia entera en el
+   primer fotograma. La animación sólo agrega "está pasando ahora".
+
+   Las marcas NO son un gráfico de nada: son las horas (9 y 15), las
+   mismas que cuenta la regla de arriba. Acá es donde Lety pone su
+   facturación ($14.181/mo, contador que sube). Nosotros no podemos:
+   cero clientes pagando ⇒ cualquier cifra adentro sería fabricada.
+   "Genera ingresos" se dice con lo único cierto —una cita reservada a
+   las 23:40 ES el ingreso— y eso ya lo dicen los tres momentos.
+
+   Cero imagen, cero SVG: <span> con background-color y height.
+   ══════════════════════════════════════════════════════════════════ */
+.lane {
+  display: grid;
+  grid-template-columns: 2.6em 1fr auto;   /* "ONIA" mide ~2,1em: 2,6 alcanza y le devuelve ancho al track */
+  align-items: center;
+  gap: 0 0.8em;
+}
+/* mismo tratamiento que .hrs: mono, versalita, tracking. Cero recurso nuevo. */
+.lane__q, .lane__s {
+  font-family: var(--font-mono);
+  font-size: 0.72em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.lane__s { text-align: right; }
+
+.track {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  height: 1.5em;
+}
+.track span { flex: 1; border-radius: calc(var(--r-block) * 0.16); }
+
+/* Las dos lanes de cada bloque, pegadas: el par es lo que se lee. */
+.band { display: grid; gap: 0.5em; margin: 0.9em 0 0; }
+/* el rótulo, del par de la tinta de su bloque */
+.slab--vos  .lane__q, .slab--vos  .lane__s { color: var(--line); }        /* ~12:1 sobre tinta */
+.slab--onia .lane__q, .slab--onia .lane__s { color: var(--verde-900); }   /* 8,7:1 sobre señal */
+
+/* VOS de día: lleno, y QUIETO a propósito — él no es una máquina. */
+.lane--vos .track span { height: 100%; background: #edf1ef; }             /* 16,66:1 */
+
+/* VOS de noche: la MISMA marca, aplastada. Queda una línea muerta. */
+.lane--duerme .track span { height: 0.18em; background: var(--verde-900); }
+
+/* ONIA: de pie a las 24 horas, a los dos lados del corte. La onda la
+   recorre de izquierda a derecha una vez cada 5s — es el tiempo pasando,
+   no un dato subiendo (un dato subiendo sería una cifra inventada). */
+.lane--onia .track span {
+  height: 100%;
+  transform-origin: bottom;
+  animation: onda 5s var(--ease) infinite;
+}
+.slab--vos  .lane--onia .track span { background: var(--senal); }         /* 9,43:1 sobre tinta */
+.slab--onia .lane--onia .track span { background: var(--tinta); }         /* 9,43:1 sobre señal */
+@keyframes onda {
+  0%, 62%, 100% { transform: scaleY(0.6); }
+  10%           { transform: scaleY(1); }
+}
+.lane--onia .track span:nth-child(1)  { animation-delay: 0.00s; }
+.lane--onia .track span:nth-child(2)  { animation-delay: 0.17s; }
+.lane--onia .track span:nth-child(3)  { animation-delay: 0.34s; }
+.lane--onia .track span:nth-child(4)  { animation-delay: 0.51s; }
+.lane--onia .track span:nth-child(5)  { animation-delay: 0.68s; }
+.lane--onia .track span:nth-child(6)  { animation-delay: 0.85s; }
+.lane--onia .track span:nth-child(7)  { animation-delay: 1.02s; }
+.lane--onia .track span:nth-child(8)  { animation-delay: 1.19s; }
+.lane--onia .track span:nth-child(9)  { animation-delay: 1.36s; }
+.lane--onia .track span:nth-child(10) { animation-delay: 1.53s; }
+.lane--onia .track span:nth-child(11) { animation-delay: 1.70s; }
+.lane--onia .track span:nth-child(12) { animation-delay: 1.87s; }
+.lane--onia .track span:nth-child(13) { animation-delay: 2.04s; }
+.lane--onia .track span:nth-child(14) { animation-delay: 2.21s; }
+.lane--onia .track span:nth-child(15) { animation-delay: 2.38s; }
+
+/* 768–1279: el bloque negro son 9/24 de un ancho chico, y los dos rótulos
+   que flanquean el track le comen casi todo. Sin esto su marca cae a 6px
+   contra los 14px del verde, y se pierde justo lo que hace funcionar la
+   banda: que sea LA MISMA marca en dos estados. Achicar la palabra la
+   devuelve a ~10px. Arriba de 1280 no hace falta: ahí miden 28 y 30. */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .lane { grid-template-columns: 2.3em 1fr auto; gap: 0 0.5em; }
+  .lane__q, .lane__s { font-size: 0.62em; letter-spacing: 0.08em; }
+}
+
 @media (min-width: 768px) {
   .slab { min-height: 12em; padding: 1.7em 1.9em 1.6em; }
   /* el bloque que se escapa por el borde recupera su margen derecho:
@@ -443,6 +575,13 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
   .slab--onia .amount { font-size: 2.9em; }
   .moments li { font-size: 0.88em; }
   .moments b { margin-inline-end: 0.2em; }   /* sin columna propia, la hora necesita su aire */
+
+  /* la banda encoge, no desaparece: es lo que Sergio pidió VER, y el 70%
+     del lead mira acá. Las 15 marcas siguen siendo 15. */
+  .lane { grid-template-columns: 2.4em 1fr auto; gap: 0 0.6em; }
+  .lane__q, .lane__s { font-size: 0.66em; letter-spacing: 0.1em; }
+  .track { height: 1em; gap: 0.13em; }
+  .band { gap: 0.34em; margin-top: 0.7em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -500,7 +639,37 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
       </div>
 
       <div class="slab slab--vos">
-        <p class="hrs"><span>09:00 → 18:00</span></p>
+        <!-- El rótulo y la lane van EN UN GRUPO, igual que en el bloque verde:
+             así la lane de VOS arranca a la misma altura a los dos lados del
+             corte de las 18:00 y las dos se leen como UNA banda que cruza la
+             pieza — llena a la izquierda, muerta a la derecha. Sueltas (con
+             space-between repartiendo tres hijos) la del negro caía 95px más
+             abajo y el contraste había que buscarlo. -->
+        <div>
+          <p class="hrs"><span>09:00 → 18:00</span></p>
+
+          <!-- 9 marcas = las 9 horas de este bloque. Sólo el track es
+               decorativo; los rótulos son la frase y se leen. -->
+          <div class="band">
+            <div class="lane lane--vos">
+              <span class="lane__q">Vos</span>
+              <span class="track" aria-hidden="true"
+                ><span></span><span></span><span></span><span></span><span></span
+                ><span></span><span></span><span></span><span></span
+              ></span>
+              <span class="lane__s">Atendés</span>
+            </div>
+            <div class="lane lane--onia">
+              <span class="lane__q">Onia</span>
+              <span class="track" aria-hidden="true"
+                ><span></span><span></span><span></span><span></span><span></span
+                ><span></span><span></span><span></span><span></span
+              ></span>
+              <span class="lane__s">Con vos</span>
+            </div>
+          </div>
+        </div>
+
         <div>
           <p class="amount">9 horas</p>
           <p class="who">Abrís vos.</p>
@@ -508,7 +677,33 @@ html, body { margin: 0; background: var(--bg); }  /* sin esto, el papel se corta
       </div>
 
       <div class="slab slab--onia">
+        <div>
         <p class="hrs"><span>18:00 → 09:00</span><span>Todos los días · también domingo</span></p>
+
+        <!-- Las dos lanes JUNTAS: la misma forma, aplastada arriba y de pie
+             abajo. Leído de corrido: "Vos dormís / Onia atiende". -->
+        <div class="band">
+          <div class="lane lane--duerme">
+            <span class="lane__q">Vos</span>
+            <span class="track" aria-hidden="true"
+              ><span></span><span></span><span></span><span></span><span></span
+              ><span></span><span></span><span></span><span></span><span></span
+              ><span></span><span></span><span></span><span></span><span></span
+            ></span>
+            <span class="lane__s">Dormís</span>
+          </div>
+          <div class="lane lane--onia">
+            <span class="lane__q">Onia</span>
+            <span class="track" aria-hidden="true"
+              ><span></span><span></span><span></span><span></span><span></span
+              ><span></span><span></span><span></span><span></span><span></span
+              ><span></span><span></span><span></span><span></span><span></span
+            ></span>
+            <span class="lane__s">Por vos</span>
+          </div>
+        </div>
+        </div>
+
         <div>
           <p class="amount">15 horas</p>
           <ul class="moments">

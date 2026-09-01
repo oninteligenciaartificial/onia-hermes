@@ -43,7 +43,9 @@ const OBLIGATORIOS = { titular: 'h1', botones: '.actions', 'línea del asistente
       const out = {};
       for (const [nombre, sel] of Object.entries(sels)) {
         const e = document.querySelector(sel);
-        out[nombre] = e ? +e.getBoundingClientRect().bottom.toFixed(1) : null;
+        if (!e) { out[nombre] = null; continue; }
+        const r = e.getBoundingClientRect();
+        out[nombre] = { bottom: +r.bottom.toFixed(1), alto: +r.height.toFixed(1) };
       }
       const negro = document.querySelector('.slab--vos');
       const cs = getComputedStyle(negro);
@@ -56,11 +58,18 @@ const OBLIGATORIOS = { titular: 'h1', botones: '.actions', 'línea del asistente
 
     const negro = m.__negro; delete m.__negro;
     console.log(`\n${w}x${h}  ·  bloque negro ${negro.alto}px, hueco interno ${negro.hueco}px`);
-    for (const [nombre, bottom] of Object.entries(m)) {
-      if (bottom === null) { console.log(`  ✗ ${nombre}: NO EXISTE en el DOM`); fallas++; continue; }
-      const ok = bottom <= h;
+    for (const [nombre, v] of Object.entries(m)) {
+      if (v === null) { console.log(`  ✗ ${nombre}: NO EXISTE en el DOM`); fallas++; continue; }
+      // Un nodo con display:none devuelve un rect TODO EN CERO, y `0 <= h` daba
+      // verde: el gate se ponía OK justamente con el elemento invisible. Entrar
+      // en el pliegue no es tener bottom chico, es OCUPAR LUGAR y terminar antes.
+      if (v.alto <= 0 || v.bottom <= 0) {
+        console.log(`  ✗ ${nombre}: NO SE VE (alto ${v.alto}px, bottom ${v.bottom}px) — oculto no es "entra"`);
+        fallas++; continue;
+      }
+      const ok = v.bottom <= h;
       if (!ok) fallas++;
-      console.log(`  ${ok ? '✓' : '✗'} ${nombre}: termina en ${bottom}px de ${h} (${ok ? 'sobran' : 'FALTAN'} ${Math.abs(h - bottom).toFixed(1)}px)`);
+      console.log(`  ${ok ? '✓' : '✗'} ${nombre}: termina en ${v.bottom}px de ${h} (${ok ? 'sobran' : 'FALTAN'} ${Math.abs(h - v.bottom).toFixed(1)}px)`);
     }
     if (GUARDAR) await page.screenshot({ path: path.join(OUT, `hero-v3-${w}x${h}-pliegue.png`) });
     await ctx.close();
