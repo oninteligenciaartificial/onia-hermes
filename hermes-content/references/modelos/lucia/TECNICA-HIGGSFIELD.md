@@ -823,3 +823,68 @@ repo prohíbe. Media vuelta perdida y una afirmación falsa dicha en voz alta.
 el defecto y por eso lo quiere; B05 tiene que *pasar por* una foto real de un negocio real, y con
 el cartel de frente y roto no pasa. La regla del `out of focus` aplica al segundo caso, no al
 primero.
+
+---
+
+# Sesión 2026-09-01 — el mapa de UGC, un susto de $348 y un pago fallido
+
+## 🔴 1. AVISO DE PAGO FALLIDO en la cuenta
+
+Apareció una barra roja en toda la app:
+
+> **Payment failed.** We couldn't charge your subscription. Unlimited generations are paused.
+
+**No bloquea generar por crédito** —se generó normal con el botón en ✦2 mientras el aviso estaba
+puesto—, sólo pausa el modo Unlimited, que igual nunca usamos. Pero es un cobro fallido de una
+suscripción viva: **lo resuelve Sergio, no Claude.** El botón «retry payment» NO se toca.
+
+Estado verificado el mismo día en `higgsfield.ai/me/settings/subscription`:
+**Ultra Plan · 3.000 créditos/mes · renueva el 1-sep · 2.030 / 3.000 disponibles · auto-refill
+DESACTIVADO.** (Confirma otra vez que el plan es **Ultra**, no «MAX 3.600 por $115» como decían
+docs viejos.)
+
+## 🔴 2. Un clic por coordenada casi compra un plan anual de $348
+
+Clic en `(190, 300)` —espacio vacío en la captura anterior— y la app terminó en
+`higgsfield.ai/pricing` con un modal **«Changing commitment»** abierto: `Pro · Annual · $348`,
+botón en **«Confirming…»**. Se cerró con la X y se verificó en Subscription que **no quedó ningún
+compromiso**: sigue Ultra.
+
+**Esto sube la regla de «clic por `ref`, nunca por coordenada» de molestia a riesgo de plata.**
+En esta app un píxel equivocado no falla: navega, y a veces a una compra. La regla ya estaba
+escrita por otros motivos; ahora tiene el peor de todos.
+
+## ✅ 3. El mapa real de UGC, sacado del gasto (no de suponer)
+
+`higgsfield.ai/me/settings/usage` da el histórico: **$196,034 gastados · 4.900,85 créditos ·
+782 generaciones · 38 features usadas.** El desglose por modelo es la respuesta a «¿cuál es la
+forma buena de hacer UGC?», porque muestra qué se usó de verdad:
+
+| Modelo | % del gasto |
+|---|---|
+| **Seedance 2.0** | **29%** |
+| **Marketing Studio Video** | **15%** |
+| Nano Banana Pro | 11% |
+| Kling v3.0 | 9% (449,25 cr) |
+| Soul ID | 6% |
+| Nano Banana 2 | 4% |
+| GPT Image 2.0 | 4% |
+| Wan 2.7 Video | 3% |
+| Otros | 20% |
+
+**Lo que esto dice:**
+- Hay **cuatro** caminos de video vivos en la cuenta, no uno: **Seedance 2.0**, **Marketing Studio
+  Video**, **Kling 3.0** (el que usa `Animate` / `Turn to video`) y **Wan 2.7**.
+- **Marketing Studio Video ya es el 15% del gasto histórico** — o sea que alguien lo usó en
+  serio, probablemente Arthur. No es territorio virgen: conviene mirar qué salió antes de gastar.
+- El banco de Lucía se animó **todo con Kling 3.0 a 6,25 cr**. Seedance y Marketing Studio
+  **nunca se probaron con `@lucia-skin-v1`**, y ese es justo el hueco.
+- **Auto-refill está DESACTIVADO**, así que no hay riesgo de recarga automática. Bien así.
+
+## Lo que falta probar, en orden de barato a caro
+1. `Turn to video` con Kling 3.0 a **720p** desde `G06-peluqueria` — precio conocido, 6,25 cr.
+2. **Marketing Studio Video** con el avatar de Lucía — hay que MEDIR el precio antes de apretar.
+3. **Seedance 2.0** — el más usado de la cuenta y el más caro del ranking; medir primero.
+
+⚠️ Ninguno se dispara sin leer el número del botón. La lección del punto 2 es que en esta app la
+plata se va por un clic mal puesto.
