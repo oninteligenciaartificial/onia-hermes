@@ -57,6 +57,14 @@ function crear({ esc, roleFor, ACCOUNTS, BRAND, getFmt }) {
     const foto = slide.photo || (args && args.photo);
     if (!foto) throw new Error('El pack historia-fancy necesita `photo` en la lamina o --photo.');
     const src = dataUri(foto);
+    const last = idx === total - 1;
+
+    // CTA y "deslizá" existen SOLO en carrusel de feed. En historia el hueco inferior
+    // tiene que quedar limpio para el sticker nativo — dibujar ahí rompe el formato.
+    const textoCta = slide.cta || (args && args.cta) || '';
+    const cta = (total > 1 && last && textoCta)
+      ? `<div class="boton">${esc(textoCta)}</div>` : '';
+    const swipe = (total > 1 && !last) ? '<span class="swipe">DESLIZÁ →</span>' : '';
 
     return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -102,8 +110,19 @@ html,body { width:${FMT.w}px; height:${FMT.h}px; }
   text-shadow:0 4px 30px rgba(0,0,0,.5); }
 .pregunta em { font-style:italic; font-weight:600; color:var(--onia-green,#00D26A); }
 
-/* 5 · EL HUECO: aca va el sticker nativo de encuesta. No dibujar nada. */
+/* 5 · EL HUECO: en historia aca va el sticker nativo de encuesta. No dibujar nada. */
 .hueco { flex:1; min-height:${Math.round(FMT.h * 0.3)}px; }
+
+/* Solo en carrusel de feed: el CTA de la ultima lamina y la pista de deslizar.
+   En historia no aparecen — el hueco tiene que quedar limpio para el sticker. */
+.boton { align-self:flex-start; font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif;
+  font-weight:500; font-size:34px; color:#052A1D;
+  background:var(--onia-green,#00D26A); padding:22px 38px; border-radius:999px;
+  margin-bottom:26px; }
+.swipe { position:absolute; right:${pad}px; bottom:${pad}px;
+  font-family:'JetBrains Mono',ui-monospace,monospace; font-weight:500; font-size:24px;
+  letter-spacing:3px; color:rgba(247,244,238,.8);
+  text-shadow:0 2px 12px rgba(0,0,0,.6); }
 
 .firma { display:flex; align-items:center; gap:16px; }
 .firma .mark { width:42px; height:42px; }
@@ -115,12 +134,14 @@ html,body { width:${FMT.w}px; height:${FMT.h}px; }
   <img class="foto" src="${src}" alt="">
   <div class="velo-arriba"></div>
   <div class="velo-abajo"></div>
+  ${swipe}
   <div class="capa">
     ${slide.kicker ? `<div class="kicker">${esc(slide.kicker)}</div>` : ''}
     <div class="filete"></div>
     ${slide.overline ? `<p class="overline">${esc(slide.overline)}</p>` : ''}
     <h1 class="pregunta">${esc(slide.headline)}</h1>
     <div class="hueco"></div>
+    ${cta}
     <div class="firma">
       <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
         <circle cx="60" cy="60" r="43" stroke="#F7F4EE" stroke-width="13" fill="none"/>
