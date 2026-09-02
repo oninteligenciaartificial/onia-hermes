@@ -41,8 +41,9 @@ Talking head, 45-60 s:
 > Eso es un sistema — y es otra liga."
 > CTA: "Comentá AGENCIA y te mando la guía con los 3 pasos."
 
-⚠️ Palabra clave AGENCIA → el DM automático sigue ROTO (carril infra). Hasta que
-funcione, el CTA es: "el paso a paso está en mi comunidad — link en bio".
+**CTA final (regla Sergio 02-sep):** "Comentá COMUNIDAD y te mando el acceso." ⚠️ El DM
+automático sigue ROTO (carril infra): los comentarios se responden A MANO con el link
+hasta que infra lo arregle.
 
 ## Guion Video C — interactivo (18K en TikTok)
 
