@@ -141,3 +141,46 @@ la imagen que le dieron.
 🔴 **Confirma la cadena de video por CLI de punta a punta:** `generate cost` → `generate create`
 con `--start-image <asset-id>` → URL directa → `curl`. Sin navegador, sin menús escondidos, y con
 el asset id anotado se re-anima sin volver a pagar la imagen.
+
+
+---
+
+## ✅ V09 — B08 (taller mecánico) animada por CLI, con la fuente LOCAL como start-image
+
+`V09-taller-seedance.mp4` · **720×1280 = 9:16 exacto** · 4,04 s · 97 frames · **con pista de audio
+aac** · modelo `seedance1_5` · **4,8 cr** (costo medido antes de generar, confirmado).
+
+Cierra el último hueco de video del banco: `B08-taller-9x16-CLI` era la única imagen limpia y
+publicable que seguía **sin animar**. Ahora los 12 lugares del banco tienen su video.
+
+| | |
+|---|---|
+| **Archivo** | `V09-taller-seedance.mp4` |
+| **Fuente** | `B08-taller-9x16-CLI.jpg` |
+| **start_image** | ruta local `generadas-20260901/B08-taller-9x16-CLI.jpg` (auto-subida por el CLI — B08 no tenía asset id anotado) |
+| **Modelo** | `seedance1_5` · 9:16 · 4 s · 720p · `generate_audio=true` |
+| **job_id del video** | `d014a51c-8515-478a-8b4f-97783c5001df` |
+| **Salida** | 720×1280, 4,04 s, 97 frames, ~8,0 MB |
+
+**Verificación — MIRADO** (`_V09-TIRA.jpg`, 4 frames a 0,1 / 1,3 / 2,6 / 3,9 s): el traspaso de la
+llave se **completa** — las dos manos sobre la misma llave, el cliente la toma, y ella baja las
+manos hacia el banco mientras él busca otra herramienta. **No inventa habla ni giros:** boca
+cerrada, mirada calma, sin rotar de más. La cara aguanta los cuatro frames — pecas, cejas gruesas,
+argolla dorada, tono de piel parejo. Colores true-to-life, ningún cartel legible. Mismo
+comportamiento bueno que V05/V06/V08: **con acción a medias clara el modelo continúa en vez de
+actuar.**
+
+⚠️ El pelo sale recogido, no suelto — pero eso **viene de la fuente B08** (`TECNICA §11`: la
+generación por referencia recoge el pelo), no de la animación.
+
+🔴 **Aporte nuevo de esta vuelta:** `--start-image` **acepta la ruta local del `.jpg` y la sube
+sola**. Ya no hace falta tener el asset id anotado para re-animar una pieza — si la imagen está en
+el repo, se pasa el path y listo. Sirve justo para las piezas viejas cuyo id nunca se guardó.
+
+**Prompt de animación** (para reproducir/afinar):
+> Handheld iPhone shot inside a small neighbourhood motorcycle repair shop in Santa Cruz. The woman
+> in a blue mechanic's apron finishes handing over the metal socket wrench; the male customer's hand
+> closes around it and takes its weight, then she lowers her free hand toward the workbench. She
+> blinks and shifts her head a fraction, eyes calm, mouth closed, not posing. Subtle natural
+> handheld micro-movement, real warm light from the open garage doorway behind her, the parked
+> motorbike and parts shelves staying still. NATURAL TRUE-TO-LIFE COLORS.

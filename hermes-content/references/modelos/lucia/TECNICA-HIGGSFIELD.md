@@ -1221,6 +1221,11 @@ higgsfield generate create seedance1_5 --start-image "$IMG" --prompt "$PROMPT" -
 higgsfield generate get <job_id> --json | grep -oE 'https://[^"]+\.mp4'
 ```
 
+📎 **Matiz medido en V09 (2026-09-02):** para un clip de **4 s**, `--wait --wait-timeout 6m
+--wait-interval 5s` **sí devolvió la URL en una sola llamada** — el job terminó en <2 min, antes
+del corte. O sea que `--wait` sirve cuando el job es corto y termina rápido; la regla del poll
+sigue siendo la segura para `--duration 8/12` u horas de cola, donde el corte a 2 min sí muerde.
+
 **Por qué seedance y no kling — con evidencia mirada (4 frames c/u):**
 
 | | seedance1_5 | kling3_0 |
