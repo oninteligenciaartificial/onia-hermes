@@ -20,6 +20,22 @@
 set -uo pipefail
 
 NOMBRE="${1:-}"
+
+# 🔴 `tg` se define ACA ARRIBA, antes del `case`, y no junto a `avisar`.
+# El 2026-09-02 `investigacion` y `kpis-semanal` perdieron su `case` (alguien
+# reescribio este archivo hacia atras) y sus crons los llamaron durante horas:
+# cada corrida moria en el `*)` con exit 64 — ANTES de que `avisar` existiera —
+# asi que no salio ni un aviso. Un loop registrado, con prompt en disco y cron
+# perfecto, que no corria y no lo decia. Todo lo que falle antes de esta linea
+# falla MUDO, y por eso esta linea va lo mas arriba posible.
+tg() { /root/bin/onia-tg.sh "$1" >/dev/null 2>&1 || true; }
+
+# Los ids conocidos se leen del `case` de abajo, no de una lista a mano: la que
+# habia escrita nombraba 7 y ya se habia olvidado de `kpis-semanal`. Un mensaje
+# de uso que miente sobre que loops existen manda a buscar el problema al lugar
+# equivocado.
+IDS=$(sed -n 's/^  \([a-z][a-z0-9-]*\))$/\1/p' "$0" 2>/dev/null | paste -sd'|' -)
+
 # Tope de turnos por vuelta. 120 alcanza para cerrar UN item de cola; el
 # integrador necesita mas, porque cada carril son fetch + merge + gates + push.
 TURNOS=120
@@ -102,7 +118,12 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   *)
-    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta|investigacion>" >&2; exit 64 ;;
+    # Este es el camino por el que un loop muere sin que nadie se entere: el cron
+    # lo sigue llamando cada hora y el unico rastro es un exit 64 en un log que
+    # nadie abre. Ahora grita.
+    echo "uso: $0 <${IDS:-?}>" >&2
+    tg "🔴 <b>Loop sin <code>case</code></b>: <code>${NOMBRE:-(vacio)}</code> no existe en <code>$0</code>, pero algo lo esta llamando (su cron). Muere con exit 64 en cada corrida. Conocidos: <code>${IDS:-?}</code>"
+    exit 64 ;;
 esac
 
 LOG=/var/log/onia-loop-$NOMBRE.log
@@ -122,7 +143,7 @@ export ONIA_LOOP_ID="$NOMBRE"
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*" >> "$LOG"; }
 
-tg() { /root/bin/onia-tg.sh "$1" >/dev/null 2>&1 || true; }
+# (`tg` ya quedo definida arriba del `case`, a proposito: ver el comentario ahi.)
 
 # Un monitor que se muere en silencio es peor que no tener monitor. Pero avisar
 # cada vuelta de lo mismo es ruido: como mucho un aviso cada 6 h por loop.
