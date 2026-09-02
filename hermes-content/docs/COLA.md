@@ -209,20 +209,6 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       spawnear el proceso de PostCSS con `0xc0000142`. Con `next dev --webpack` levanta en
       segundos. No es del producto; sirve para la próxima verificación visual.)*
 
-- [ ] **F5 · Veterinaria — COTIZADA el 2026-08-30, decide Sergio.** El bloqueo es real pero
-      **el costo estaba inflado**. No es "migrar datos vivos":
-      - La factura toma el CI del paciente en **un solo lugar**: `lib/fiscal/rcv-export.ts:148`
-        (`invoice.patient?.ci` → `nitCliente`).
-      - El arreglo mínimo son **columnas anulables** de responsable en `Patient` + una lectura
-        con fallback (`responsable?.ci ?? patient.ci`). **Cero backfill**: las filas que ya
-        existen se comportan igual que hoy.
-      - Superficie: `patientId` aparece 24 veces en `schema.prisma` y 49 archivos lo tocan,
-        **pero ninguno se toca en esta versión** — el fallback los deja intactos.
-      - Falta: el bloque "responsable / quién paga" en el alta de paciente, mostrado por
-        vocabulario sólo en el track veterinaria.
-      **Riesgo real: bajo.** Es una migración aditiva. Lo que hay que decidir no es el riesgo,
-      es si el 6to rubro vale la semana antes de estrenar los cinco que ya se venden.
-
 - [x] **Los 7 leads que esperan NO estaban anotados en ningún lado — y el punto 1 ya no está
       bloqueado.** Vuelta del 2026-08-31, con la cola sin un solo ítem desbloqueado en "Ahora"
       (F2, F5, los 4 números de WhatsApp y el `DELETE` de pagos esperan una línea de Sergio).
@@ -985,6 +971,26 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
+- [ ] 🟡 **El gate de la cola (`scripts/verificar_cola.js`) ladra 4 "fantasmas" que no lo son —
+      un gate ruidoso es un gate que se empieza a ignorar.** Medido el 2026-09-02 corriendo
+      `node scripts/verificar_cola.js hermes-content/docs/COLA.md`: sale con 4 ERROR y **los
+      cuatro son falsos positivos**, porque el detector de rutas toma por nombre de archivo cosas
+      que no lo son:
+      - `web-factory/apps/onia-platform/**` — es un **glob** de zona, no un archivo (por eso "no
+        existe").
+      - `alta.ts` — palabra suelta dentro de una frase en prosa.
+      - `visto.texto` — una **expresión de JavaScript** citada en el ítem (cuenta doble: el mismo
+        renglón se reporta dos veces).
+      **Por qué importa y no es cosmético:** el prompt de este carril manda correr este script
+      *antes* de tomar un ítem. Un gate que siempre sale rojo por motivos falsos entrena a que se
+      lo saltee — es exactamente cómo `CLAUDE.md` cuenta que se rompió el CI dos veces.
+      **Cómo se sabe que quedó hecho:** el script sale en verde sobre `COLA.md` sin haber
+      aflojado la detección — o sea, sigue cazando un ítem que cite un archivo inexistente de
+      verdad (probarlo con uno inventado). Ignorar globs (`*`/`**`), expresiones con `.texto`/
+      punto sin extensión conocida, y no contar dos veces el mismo renglón.
+      **No lo tomé en esta vuelta** (2026-09-02): la vuelta ya había cerrado su ítem — mover F5 a
+      bloqueados — y la regla es un ítem por vuelta.
+
 - [x] 🟡 **`ONIA_WEB_IMAGENES_DE_CONTEXTO.md` daba por publicable una carpeta que ya no existe —
       ARREGLADO el 2026-09-02, y no era UNA línea sino TRES.** La §10 se recontó carpeta por
       carpeta con `ls` contra `web-factory/apps/onia-platform/public/` (`brand · capturas ·
@@ -1329,9 +1335,15 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         de lista) puede agendar cuando se cotiza el flujo aparte, porque entonces la frase no es
         falsa en esas propuestas y si lo es en el add-on de lista de Bs 390.
 
-## Bloqueado — necesita a Sergio (reverificado en vivo el 2026-08-31, F2 movido y reverificado el 2026-09-02)
+## Bloqueado — necesita a Sergio
 
-> **Estaban 10. El 2026-08-31 quedaron 4; hoy 2026-09-01 quedan 2.** Esta lista es la que una sesión lee para
+> ⚠️ **Acá había un conteo en prosa ("Estaban 10… hoy quedan 2") y se pudrió**: decía 2 cuando
+> había 4, y el 2026-09-02 entraron F2 y F5. **No lo repongas.** El conteo vigente son las
+> viñetas de abajo, y se cuenta mirándolas — mismo motivo por el que
+> `hermes-content/docs/cola/loops.md` dejó de contar loops en prosa. La fecha de reverificación
+> tampoco va en el título: cada entrada trae la suya, que es la que importa.
+>
+> Esta lista es la que una sesión lee para
 > decidir qué preguntarle a Sergio, así que una entrada vencida **fabrica trabajo** — hace que
 > alguien le pida una decisión sobre algo ya hecho, y quema el único recurso que no se recupera.
 > Es el mismo defecto que esta cola ya bautizó: *"cerrar un ítem no cierra su copia"*. Cada baja
@@ -1350,6 +1362,28 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
   - **(b)** Dejar de crear el inbox salvo que el add-on esté activo — ataca la raíz sin apagar
     nada existente, pero cambia lo que ve un cliente el día uno (la bandeja vacía es gancho hoy).
   **Decide Sergio.** Con cero clientes pagando el costo real de hoy sigue siendo cero.
+
+- 🔴 **F5 · Veterinaria, el 6to rubro** (movida acá el 2026-09-02 desde "Ahora"; era el primer
+  ítem abierto y llevaba sin moverse desde el 2026-08-30, cotizada). **El bloqueo es real pero
+  el costo estaba inflado**: no es "migrar datos vivos".
+  - La factura toma el CI del paciente en **un solo lugar**: `lib/fiscal/rcv-export.ts:148`
+    (hoy el campo intermedio se llama `patientCi`, y sale al RCV como `nitCliente` —
+    `lib/fiscal/rcv-export.test.ts:143`; la cita vieja del ítem saltaba ese paso).
+  - El arreglo mínimo son **columnas anulables** de responsable en `Patient` + una lectura con
+    fallback (`responsable?.ci ?? patient.ci`). **Cero backfill**: las filas que ya existen se
+    comportan igual que hoy.
+  - Superficie: `patientId` aparece 24 veces en `schema.prisma` y 49 archivos lo tocan, **pero
+    ninguno se toca en esta versión** — el fallback los deja intactos.
+  - Falta: el bloque "responsable / quién paga" en el alta de paciente, mostrado por vocabulario
+    sólo en el track veterinaria.
+  **Reverificado en vivo contra `onia-platform` `origin/master` (`efaffe8`, 2026-09-02): el
+  bloqueo NO venció, y el trabajo no se hizo.** `Patient` sigue sin columnas de responsable — lo
+  único que hay en `prisma/schema.prisma:1831` es `ownerProfileId`, que es otra cosa (el humano
+  que aprueba en la cola) — y `rcv-export.ts:148` sigue leyendo `invoice.patient?.ci` sin
+  fallback. El vocabulario, en cambio, **ya nombra el rubro** (`lib/onboarding/vocabulario.ts:130`,
+  "tu veterinaria"): lo que falta es el modelo de datos, no el idioma.
+  **Riesgo real: bajo.** Es una migración aditiva. **Decide Sergio**, y lo que decide no es el
+  riesgo: es si el 6to rubro vale la semana antes de estrenar los cinco que ya se venden.
 
 - 🔴 **Decidir el dominio `dentalgest.app`**: redirigirlo a `app.onia.com.bo` o dejarlo morir. El
   DNS vive en Vercel (`ns1/ns2.vercel-dns.com`) y no lo puedo tocar (sin token, CLI deslogueado,
