@@ -1,0 +1,188 @@
+{
+  "cuando": "2026-09-02T22:15:41.911Z",
+  "escribio": false,
+  "llegoHasta": 2,
+  "deCuantos": 8,
+  "corte": {
+    "paso": 3,
+    "nombre": "pedir-acceso",
+    "estado": "no-medido",
+    "detalle": "el alta pide contraseña (parece crear cuenta), pero no se envió: --escribir está apagado"
+  },
+  "datosQA": null,
+  "pasos": [
+    {
+      "n": 1,
+      "nombre": "home",
+      "que": "Entrar a onia.com.bo y que se VEA",
+      "estado": "ok",
+      "detalle": "cargó en 1797 ms, 6977 caracteres visibles",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-01-home.png",
+      "dom": {
+        "textoVisible": 6977,
+        "secciones": 13,
+        "seccionesInvisibles": 0,
+        "titulo": "Onia · Cerrás vos, el negocio no | Software de gestión Bolivia"
+      }
+    },
+    {
+      "n": 2,
+      "nombre": "camino-de-alta",
+      "que": "Encontrar el camino de alta desde la home: qué botón promete qué",
+      "estado": "ok",
+      "detalle": "7 botones de alta; el camino es \"Creá tu cuenta\" y son 2 clics: https://onia.com.bo/ → https://onia.com.bo/empezar → https://app.onia.com.bo/register",
+      "cadena": [
+        "https://onia.com.bo/",
+        "https://onia.com.bo/empezar",
+        "https://app.onia.com.bo/register"
+      ],
+      "clicsHastaElFormulario": 2,
+      "ctas": [
+        {
+          "texto": "Contacto",
+          "href": "/contacto"
+        },
+        {
+          "texto": "Creá tu cuenta",
+          "href": "/empezar"
+        },
+        {
+          "texto": "Empezar",
+          "href": "/empezar"
+        },
+        {
+          "texto": "Empezar con el Básico",
+          "href": "/empezar"
+        },
+        {
+          "texto": "Empezar con el Pro",
+          "href": "/empezar"
+        },
+        {
+          "texto": "Empezar con el Full",
+          "href": "/empezar"
+        },
+        {
+          "texto": "O agendá una demo con horario →",
+          "href": "/contacto"
+        }
+      ],
+      "prometenUso": [],
+      "captura": "hermes-content/docs/recorrido/capturas/paso-02-camino-de-alta.png",
+      "dom": {
+        "textoVisible": 1553,
+        "secciones": 6,
+        "seccionesInvisibles": 0,
+        "titulo": "Prueba gratis de 14 días — Onia, sin tarjeta"
+      }
+    },
+    {
+      "n": 3,
+      "nombre": "pedir-acceso",
+      "que": "Pedir acceso / registrarse con datos zz-qa-",
+      "estado": "no-medido",
+      "detalle": "el alta pide contraseña (parece crear cuenta), pero no se envió: --escribir está apagado",
+      "campos": [
+        {
+          "tag": "input",
+          "tipo": "text",
+          "name": "sitioWeb",
+          "id": "",
+          "placeholder": "",
+          "requerido": false
+        },
+        {
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "id": "",
+          "placeholder": "Dr. Juan Pérez",
+          "requerido": true
+        },
+        {
+          "tag": "input",
+          "tipo": "email",
+          "name": "",
+          "id": "",
+          "placeholder": "doctor@clinica.bo",
+          "requerido": true
+        },
+        {
+          "tag": "input",
+          "tipo": "password",
+          "name": "",
+          "id": "",
+          "placeholder": "Mínimo 8 caracteres",
+          "requerido": true
+        },
+        {
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "id": "",
+          "placeholder": "Clínica Dental Sonrisa",
+          "requerido": true
+        },
+        {
+          "tag": "select",
+          "tipo": "select-one",
+          "name": "",
+          "id": "",
+          "placeholder": "",
+          "requerido": false
+        },
+        {
+          "tag": "input",
+          "tipo": "checkbox",
+          "name": "",
+          "id": "",
+          "placeholder": "",
+          "requerido": false
+        }
+      ],
+      "altaCreaCuenta": true,
+      "captura": "hermes-content/docs/recorrido/capturas/paso-03-pedir-acceso.png",
+      "dom": {
+        "textoVisible": 1050,
+        "secciones": 2,
+        "seccionesInvisibles": 0,
+        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
+      }
+    },
+    {
+      "n": 4,
+      "nombre": "entrar",
+      "que": "Entrar a la plataforma con esa cuenta",
+      "estado": "no-medido",
+      "detalle": "faltan credenciales en RECORRIDO_USER/RECORRIDO_PASS"
+    },
+    {
+      "n": 5,
+      "nombre": "elegir-rubro",
+      "que": "Elegir rubro y terminar el onboarding",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
+    {
+      "n": 6,
+      "nombre": "cargar-dato",
+      "que": "Cargar un dato real del rubro (un cliente, un paciente, un producto)",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
+    {
+      "n": 7,
+      "nombre": "cobro",
+      "que": "Llegar a la pantalla de cobro y MIRARLA. Frenar ahí",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
+    {
+      "n": 8,
+      "nombre": "bandeja",
+      "que": "Abrir la bandeja / el panel y ver si el dato del paso 6 aparece",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    }
+  ]
+}
