@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 
 /**
  * Los cinco rubros PUBLICADOS. No se agrega ninguno acá: la lista es la misma
- * que el conmutador (switcher.tsx:49-55) y la misma que dice la portada
+ * que el conmutador (RUBROS en switcher.tsx) y la misma que dice la portada
  * ("cinco rubros vivos y vendibles hoy").
  *
  * `resultado` es lo que el negocio GANA; `ve` es lo que el sistema le pone
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
  * conmutador — la fuente va anotada rubro por rubro.
  *
  * `foto` es una imagen de CONTEXTO: la persona en su negocio, sin ninguna
- * pantalla legible. La captura del producto sigue estando arriba, en el
- * conmutador. Reglas y gate:
+ * pantalla legible. Arriba, en el conmutador, tampoco hay captura: es el panel
+ * DIBUJADO de cada rubro (ui.tsx). Reglas y gate:
  * hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md
  */
 const RUBROS: readonly {
@@ -57,7 +57,7 @@ const RUBROS: readonly {
   h: number;
 }[] = [
   {
-    // switcher.tsx:50 — agenda del día con hora, motivo y teléfono.
+    // panel "dental" (ui.tsx) — agenda del día con hora y tratamiento.
     id: "dental",
     nombre: "Dental",
     resultado:
@@ -68,7 +68,7 @@ const RUBROS: readonly {
     h: 960,
   },
   {
-    // switcher.tsx:51 — caja: total del día por método de pago.
+    // panel "comercio" (ui.tsx) — la caja cortada por método de pago.
     id: "comercio",
     nombre: "Comercio",
     resultado:
@@ -79,7 +79,7 @@ const RUBROS: readonly {
     h: 960,
   },
   {
-    // switcher.tsx:52 — cotizaciones B2B con su estado y su monto.
+    // panel "importadora" (ui.tsx) — cotizaciones con su estado.
     id: "importadora",
     nombre: "Importadora",
     resultado:
@@ -90,7 +90,7 @@ const RUBROS: readonly {
     h: 874,
   },
   {
-    // switcher.tsx:53 — sesiones y controles post-tratamiento en la agenda.
+    // panel "estetica" (ui.tsx) — sesiones del paquete y el control en agenda.
     id: "estetica",
     nombre: "Estética",
     resultado:
@@ -101,7 +101,7 @@ const RUBROS: readonly {
     h: 960,
   },
   {
-    // switcher.tsx:54 — IVA e IT del mes y registro de ventas.
+    // panel "servicios" (ui.tsx) — IVA e IT del mes y registro de ventas.
     id: "servicios",
     nombre: "Servicios",
     resultado:

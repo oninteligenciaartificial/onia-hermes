@@ -22,19 +22,30 @@ import s from "./sitio.module.css";
  *   manifiesto → agentes → chatbot → SWITCHER de rubros (estrella) →
  *   precios → FAQ → cierre.
  *
- * Las tres pantallas del hero, agentes y chatbot son CAPTURAS REALES del
- * producto. Donde todavía no hay clip va un placeholder de forma+color con el
- * ratio ya reservado, así el material real entra sin CLS. Precios y
- * capacidades salen SOLO de las fuentes (lib/pricing.ts,
+ * Ninguna pantalla de esta página es una captura del producto: las de agentes,
+ * chatbot y el conmutador de rubros son PANELES DIBUJADOS (<Shape> en ui.tsx),
+ * y las fotos son de contexto —la persona en su negocio, sin pantalla legible—.
+ * Sergio, 2026-09-01, textual: "no coloques capturas literales del sistema, se
+ * ve mal, coloca cosas referenciales". El guard forma.test.ts lo sostiene.
+ * Precios y capacidades salen SOLO de las fuentes (lib/pricing.ts,
  * content/chatbot-precios.ts, lib/proof.ts) — cero cifras a mano.
  */
 
 /**
- * La imagen social es una captura REAL del sistema (el selector de rubro de
- * app.onia.com.bo), no un mockup. Regla de la casa: nada de pantallas
- * dibujadas haciendo de prueba. Viene de la v1 y se conserva.
+ * La imagen social NO se declara acá. La dibuja `opengraph-image.tsx`, que al
+ * vivir en el segmento `(sitio)` la sirve para las DOCE rutas del sitio y no
+ * sólo para la home.
+ *
+ * ⚠️ Acá había una regla escrita al revés —"la imagen social es una captura
+ * REAL del sistema… nada de pantallas dibujadas haciendo de prueba"— catorce
+ * líneas debajo del comentario de cabecera que dice lo contrario. Esa regla
+ * sostenía `/og/onia-rubros.jpg`, una captura con "MUY PRONTO" impreso adentro
+ * y la fila de abajo cortada por el recorte: la primera cosa que veía un lead
+ * al recibir el link por WhatsApp. Un comentario que contradice a la regla de
+ * la casa no es una nota: es la instrucción que la próxima sesión obedece.
+ *
+ * Si esta página vuelve a declarar `openGraph.images`, PISA el dibujo.
  */
-const OG_IMAGE = "/og/onia-rubros.jpg";
 
 /**
  * El titular de la pestaña y el del buscador dicen lo MISMO que el h1.
@@ -70,22 +81,11 @@ export const metadata: Metadata = {
     title: OG_TITULO,
     description: OG_DESCRIPCION,
     url: "/",
-    images: [
-      {
-        url: OG_IMAGE,
-        width: 1200,
-        height: 630,
-        // La captura es el selector de rubro, que es el primer paso en las DOS
-        // ramas del alta: describirlo así no ata este alt a `./alta`.
-        alt: "Pantalla real de Onia: elegís el rubro de tu negocio en el primer paso.",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: OG_TITULO,
     description: OG_DESCRIPCION,
-    images: [OG_IMAGE],
   },
 };
 
@@ -180,14 +180,15 @@ const FAQ = [
  * prácticos".
  *
  * Son fotos de CONTEXTO, no de producto: una persona en su negocio, ningún
- * dispositivo con pantalla legible. La interfaz sigue siendo captura REAL y
- * vive en sus propios bloques (hero, agentes, chatbot, conmutador). Reglas,
- * shot list y gate: hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md
+ * dispositivo con pantalla legible. La interfaz NO se fotografía en ningún
+ * bloque: hero, agentes, chatbot y conmutador son paneles DIBUJADOS (<Shape> y
+ * <PanelDibujado> en ui.tsx). Reglas, shot list y gate:
+ * hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md
  *
  * Cada línea es un RESULTADO, y cada resultado es una capacidad YA publicada
  * en este mismo sitio — acá no se promete nada nuevo:
- *   · mañana → switcher.tsx:50 (agenda del día: hora, motivo y teléfono)
- *   · tarde  → switcher.tsx:51 (caja: total del día por método de pago)
+ *   · mañana → panel "dental" de ui.tsx (agenda del día: hora y tratamiento)
+ *   · tarde  → panel "comercio" de ui.tsx (la caja cortada por método de pago)
  *              + rubros/page.tsx:39 (fiados)
  *   · noche  → rubros/page.tsx:41 (paquetes y sesiones) + la sección 5 de
  *              este mismo archivo (el borrador que espera tu aprobación)
@@ -538,7 +539,7 @@ export default function Portada() {
       {/* 4 · UN DÍA CON ONIA — el manifiesto deja de estar suspendido: la
           frase que dice QUÉ ES queda arriba, y debajo van tres momentos del
           día que muestran QUÉ PASA. Fotos de contexto (ver DIA, arriba); la
-          interfaz sigue siendo captura real y vive en los otros bloques. */}
+          interfaz se DIBUJA y vive en los otros bloques. */}
       <Block surface="paper" labelledBy="que-es">
         <Reveal>
           <Kicker>Un día con Onia</Kicker>
@@ -593,14 +594,7 @@ export default function Portada() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape
-              tone="signal"
-              ratio="4 / 3"
-              src="/v2/capturas/agentes.webp"
-              width={1680}
-              height={1260}
-              alt="Pantalla de agentes de Onia con las propuestas que dejaron trabajando de noche, cada una esperando que el dueno apruebe."
-            />
+            <Shape tone="signal" panel="agentes" />
           </Reveal>
         </div>
       </Block>
@@ -628,14 +622,7 @@ export default function Portada() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape
-              tone="green"
-              ratio="4 / 3"
-              src="/v2/capturas/whatsapp.webp"
-              width={2160}
-              height={1620}
-              alt="Editor del chatbot de WhatsApp en Onia: el negocio escribe su horario, sus servicios y como habla, y el bot contesta con eso."
-            />
+            <Shape tone="green" panel="chat" />
           </Reveal>
         </div>
       </Block>
