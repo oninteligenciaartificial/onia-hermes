@@ -213,3 +213,12 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       captura real de un sticker de IG** — pedírsela a Sergio (una captura de pantalla
       pegando una encuesta, 10 seg) y recién ahí calibrar `.zona`. Anotado acá para que la
       próxima corrida no lo invente a ojo.
+
+## 7 · Decisiones de diseno de Sergio (02-sep tarde) — MANDAN sobre lo anterior
+
+- **Mascota: cartoon 2D SVG** (references/ui-patterns/mascota-onia/), estilo axelyastro:
+  linea negra + verde plano. Los 3 candidatos 3D clay quedan DESCARTADOS. La mascota
+  protagoniza contenido (tiras, sketches, venta), no decora.
+- **Menos es mas**: "hay informacion innecesaria" — 1 idea por lamina, cero metadata
+  decorativa. El experimento marco spec-sheet queda DESCARTADO.
+- **Verde Onia (#00C661) y tipografia de marca (Archivo + Geist Mono) SIEMPRE.**
