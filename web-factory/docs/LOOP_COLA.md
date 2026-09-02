@@ -827,19 +827,46 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Gate verificado MUTANDO**: con `dotR = 3` el test nuevo cae con `expected
       5.034375 to be greater than or equal to 8` — el mismo numero que midio el navegador.
 
-- [ ] **A10 · El gate visual se trago un marcador que se AGRANDO 60%** — evidencia medida
-      hoy (2026-09-02), al cerrar A9. El cambio de A9 movio 4 puntos de 5,03 a 8,05px de
-      diametro y desplazo la polilinea de los 4 sparks, y `pnpm e2e` paso **8/8 en verde
-      sin tocar una sola baseline**. Bajando `maxDiffPixels` a 0 en `tests/e2e/visual.spec.ts:62`
-      el gate SI cae y reporta la cifra real: **81 a 184 pixeles distintos** por captura,
-      contra un presupuesto de **400**. O sea que el tope actual es 2-5x mas grande que un
-      cambio que casi duplica un marcador en 4 tarjetas.
-      Es el mismo modo de falla que W6 documento y creyo cerrado: W6 valido el presupuesto
-      contra `PAD_L` 34→44 (un corrimiento de TODO el plot) y ese si lo caza; un defecto
-      localizado en un elemento chico, no. **Vale medir cual es el tope mas bajo que aguanta
-      dos corridas limpias** (el antiflake de S1 ya esta), o partir la captura fullPage en
-      regiones con presupuesto propio. Al bajarlo salio ademas que la pagina cambia de
-      **1840 a 1839px** de alto entre corridas, asi que el tope no puede ser 0.
+- [x] **A10 · El gate visual se trago un marcador que se AGRANDO 60% — el tope baja de
+      400 a 20, MEDIDO** (2026-09-02). Evidencia re-verificada antes de tocar y confirmada:
+      A9 movio 4 puntos de 5,03 a 8,05px de diametro y desplazo la polilinea de los 4
+      sparks, y `pnpm e2e` habia pasado **8/8 en verde sin tocar una sola baseline** —
+      81 a 184 pixeles distintos por captura contra un presupuesto de 400.
+      🔴 **El presupuesto tapaba el defecto Y ADEMAS impedia refrescar la baseline.** En
+      Playwright 1.61 `--update-snapshots` a secas es modo `changed`: solo reescribe lo que
+      FALLA. Como el diff caia dentro de los 400, la primera corrida con el flag dijo
+      "8 passed" y **no toco un solo archivo** (mtime intacto). Hizo falta
+      `--update-snapshots=all`. O sea que un tope generoso no solo deja pasar la regresion:
+      congela las baselines en un estado que ya nadie puede refrescar por el camino normal.
+      **El piso se MIDIO, no se estimo.** Con las baselines al dia y `maxDiffPixels: 0`,
+      **cuatro corridas limpias seguidas dieron 8/8 verde**: el ruido real entre corridas
+      es **cero**. Y el flap de alto 1840↔1839 que este mismo item daba por razon para no
+      bajar a 0 **no es un obstaculo**: aparece DENTRO del bucle de estabilizacion de
+      `toHaveScreenshot` (se ve en las lineas "Expected an image 1440px by 1840px, received
+      1440px by 1839px" que preceden a la comparacion final) y Playwright lo absorbe
+      recapturando hasta que dos capturas seguidas coinciden. Ademas un alto distinto es un
+      **size mismatch**, que ningun presupuesto de pixeles tapa: subir el tope nunca lo
+      habria protegido.
+      **Queda en 20**, no en 0: deja aire para el antialiasing de un Chromium futuro y sigue
+      **4x por debajo** del defecto real mas chico jamas medido aca (81px). Un gate que da
+      rojo por ruido se termina ignorando — es la leccion que ya esta escrita en
+      `playwright.config.ts`.
+      **Gate verificado MUTANDO**, como pide W6: con `dotR` de vuelta en 3 (el estado
+      pre-A9, exactamente el defecto que el tope viejo se trago) el gate cae **8/8** con
+      585 a 1256 pixeles distintos por captura. Con 400 ese mismo cambio pasaba en verde.
+      **Baselines regeneradas y MIRADAS** (no refrescadas a ciegas): demo 1440 claro — las
+      3 fuentes de W7 cargadas, medidor, donut con total al centro, los 4 sparks con su
+      punto redondo, tabla y panel de IA completos, 0 secciones en `opacity:0`; borde 1440
+      oscuro — negativo bajo el cero, el cero, las 90 barras dentro del viewBox, gauge en
+      0% sin arco, skeleton, error con Reintentar y los dos vacios.
+      **Gates**: `typecheck:packages` verde, `pnpm test` **269/269**, `pnpm e2e` **103
+      pasados / 0 fallados / 7 skipped**, y tres corridas limpias del gate visual con el
+      tope nuevo.
+      **Leccion: un presupuesto sobre una captura fullPage no protege un defecto
+      LOCALIZADO.** W6 lo validó contra `PAD_L` 34→44, que corre TODO el plot y gasta miles
+      de pixeles; el tope quedo calibrado para esa clase de cambio y ciego a la otra. El
+      numero correcto no sale de estimar cuanto ruido "deberia" haber: sale de poner el tope
+      en 0, contar el ruido real y dejar margen sobre ESE numero.
 
 - [x] **AUD7 · Auditar W3/W4/W5 y cazar la primera nota VENCIDA del carril** (2026-09-01).
       Séptima vuelta de escalón 2 (A y B siguen todos `[x]`). **Por qué estos tres**: AUD1–AUD6
