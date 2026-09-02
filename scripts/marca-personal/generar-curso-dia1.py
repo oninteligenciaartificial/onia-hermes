@@ -73,6 +73,7 @@ FEED = f"""<div class="lienzo" style="width:1080px;height:1350px;justify-content
 
 H1 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:44px;padding:120px 90px">
   <div class="pill">HOY ARRANCA</div>
+  <div class="sticker" style="top:220px;right:36px;width:160px;height:160px;font-size:30px">día<br>UNO</div>
   <div class="wordmark" style="font-size:112px">Onia<br>Community</div>
   <div class="chat" style="width:100%">
     <div class="cinta" style="top:-22px;left:60px;transform:rotate(-7deg)"></div>
@@ -86,6 +87,8 @@ H1 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:c
 
 H2 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:52px;padding:150px 90px">
   <div class="pill">LO QUE VIENE</div>
+  <div class="sticker" style="top:330px;right:90px;transform:rotate(12deg);font-size:29px">CON<br>VOS</div>
+  <div class="cinta" style="top:520px;left:70px;transform:rotate(-9deg)"></div>
   <div class="titulo" style="font-size:108px">Y esto recién<br>empieza</div>
   <div class="sub">más adelante quiero armar un curso:<br>el sistema COMPLETO, paso a paso —<br>y lo voy a armar con vos</div>
   <img class="icono-flot" src="{ICONOS}/rocket.png" style="position:static;width:170px;transform:rotate(8deg)">
@@ -93,9 +96,12 @@ H2 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:c
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H3 = """<div class="lienzo" style="width:1080px;height:1920px;gap:50px;padding:140px 90px 120px">
+H3 = f"""<div class="lienzo" style="width:1080px;height:1920px;gap:50px;padding:140px 90px 120px">
   <div class="titulo" style="font-size:86px">¿Qué querés que<br>enseñe primero?</div>
-  <div class="card">
+  <div class="sticker" style="top:96px;right:44px;width:150px;height:150px;font-size:27px;transform:rotate(10deg)">tu voto<br>manda</div>
+  <div class="card" style="position:relative">
+    <div class="cinta" style="top:-26px;left:80px;transform:rotate(-6deg)"></div>
+    <img class="icono-flot" src="{ICONOS}/money_bag.png" style="width:120px;bottom:-46px;right:-38px;transform:rotate(10deg)">
     <div class="op"><b>A</b> que responda solo por WhatsApp</div>
     <div class="op"><b>B</b> fotos y anuncios sin diseñador</div>
     <div class="op"><b>C</b> cotizaciones en 1 minuto</div>
@@ -105,14 +111,19 @@ H3 = """<div class="lienzo" style="width:1080px;height:1920px;gap:50px;padding:1
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H4 = """<div class="lienzo" style="width:1080px;height:1920px;gap:54px;padding:150px 90px 120px">
+H4 = f"""<div class="lienzo" style="width:1080px;height:1920px;gap:54px;padding:150px 90px 120px">
   <div class="titulo" style="font-size:92px">¿Qué te gustaría<br>aprender sí o sí?</div>
   <div class="sub">decímelo con tus palabras —<br>lo leo TODO y con eso armo el contenido</div>
-  <div class="zona"><span>CAJA DE PREGUNTAS ACÁ</span></div>
+  <div class="zona" style="position:relative"><span>CAJA DE PREGUNTAS ACÁ</span>
+    <div class="cinta" style="top:-24px;left:90px;transform:rotate(-7deg)"></div>
+    <img class="icono-flot" src="{ICONOS}/light_bulb.png" style="width:130px;top:-56px;right:-34px;transform:rotate(9deg)">
+  </div>
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H5 = """<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:56px;padding:150px 90px">
+H5 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:56px;padding:150px 90px">
+  <div class="sticker" style="top:320px;right:70px;transform:rotate(12deg)">100%<br>GRATIS</div>
+  <img class="icono-flot" src="{ICONOS}/rocket.png" style="width:150px;top:300px;left:52px;transform:rotate(-12deg)">
   <div class="titulo" style="font-size:96px">Entrá gratis.<br>Somos los primeros.</div>
   <div class="sub">cada día una herramienta o prompt<br>en mi comunidad de WhatsApp</div>
   <div class="pill" style="font-size:42px">RESPONDÉ: COMUNIDAD</div>

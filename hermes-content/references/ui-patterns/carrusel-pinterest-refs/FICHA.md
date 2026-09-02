@@ -14,3 +14,10 @@
 
 Aplicado por primera vez en carousels/out/curso-dia1/post-feed.png (v3: burbuja
 de codigo con prompt real copiable + cinta + sticker + iconos 3D).
+
+## Veredicto de Sergio (02-sep): el post con mockup de chat + collage = "la mejor hasta el momento"
+
+Formato APROBADO por Sergio. Regla derivada: **stickers siempre** — toda pieza lleva
+sticker circular + cinta + icono 3D flotante (clases .sticker/.cinta/.icono-flot del
+generador generar-curso-dia1.py). El mockup de chat con contenido copiable es el
+patron estrella para presentar la comunidad.
