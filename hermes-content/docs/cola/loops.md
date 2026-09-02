@@ -34,7 +34,22 @@ exacta tal como está registrada **en su propia máquina**: `crontab -l` en el V
 `list_scheduled_tasks` en Windows. Cada loop activo compara esa salida contra estas tablas al
 arrancar — ver la sección *"Chequeo de arranque"* dentro de su prompt.
 
-**Verificado en vivo el 2026-09-02**: `crontab -l` en `187.77.16.63` para las SIETE filas `VPS`.
+**Verificado en vivo el 2026-09-02 09:18 UTC**: `crontab -l` en `187.77.16.63` para las siete
+filas `VPS`.
+
+⚠️ **Re-verificado el mismo día, vuelta siguiente: `marca-personal` ya no corría `56 13,21` sino
+`56 9,13,17,21` (4×/día, no 2×/día).** La tabla decía 2×/día porque así se verificó horas antes;
+el cron real ya había cambiado para cuando esta vuelta lo miró de nuevo (mtime de
+`/var/spool/cron/crontabs/root`: 03:34 UTC, después de esa verificación). Corregido acá y en
+`ONIA_RADAR_DECISIONES_PRODUCTO.md` ítem 17, que todavía citaba el patrón viejo. Una verificación
+de hace horas también hay que re-contarla, no asumirla vigente.
+
+⚠️ **Y a las 09:18 UTC faltaban DOS más: `web-venta` e `investigacion`.** Los dos corrían en
+`crontab -l` y ninguno estaba en esta tabla — el mismo agujero que tuvo `marca-personal`, tres
+veces en un día. **Comparar la tabla contra `crontab -l` no alcanza si sólo se mira en una
+dirección**: el chequeo de arranque busca filas de la tabla que falten en el cron, y así nunca ve
+una línea de cron que falte en la tabla. Es el sentido que deja al loop invisible: existe, corre,
+gasta, y la auto-cura no lo rearma nunca porque no sabe que existe.
 
 ## Deben existir y estar activos
 
@@ -65,16 +80,50 @@ con los casos de `onia-cola` y `docs-auditoria`). Un loop que reinstale el scrip
 per `scripts/loops/README.md` habría borrado los tres sin avisar. Sincronizado el `.sh` al repo
 en el mismo commit.
 
-⚠️ **Corregido más tarde el mismo 2026-09-02.** Acá había una sección entera diciendo que
-`docs-auditoria` estaba *"construido y probado, TODAVÍA sin horario"* y que vivía en la rama
-`claude/git-status-935f47`. **Las dos cosas dejaron de ser ciertas el mismo día**, minutos después
-de que se escribieran: tiene su línea de cron (`18 1,5,9,13,17,21`) y **rama propia**
-(`claude/docs-auditoria`), justamente porque compartir rama con la sesión de control ya había
-causado un conflicto.
+⚠️ **Y volvió a divergir en menos de siete horas.** A las 09:18 UTC el `.sh` del repo era otra vez
+el viejo: sin `web-venta`, sin `investigacion`, con la rama vieja de `docs-auditoria`, con
+`claude-sonnet-5` donde el VPS ya corría `claude-opus-5 --effort max`, y sin la guarda de
+`MERGE_HEAD`. **El peligro no era hipotético: reinstalar desde el repo habría bajado el modelo de
+todos los loops y borrado dos carriles.** Sincronizar una vez no arregla nada si el que corre se
+sigue editando a mano — lo que falta es que el propio corredor avise de la diferencia, como ya
+hace con los prompts (`ddc3b9f1`). Anotado en el radar.
 
-No fue un error de quien lo escribió: era cierto cuando lo midió. Es el costo normal de dos manos
-trabajando el mismo archivo a la vez, y la razón de la regla **"el que MIRA agrega, el que ARREGLA
-marca"** de [`EQUIPO.md`](EQUIPO.md).
+### 🔴 Un loop puede morir con su cron INTACTO — y en silencio
+
+Acá decía que `docs-auditoria` estaba *"construido y probado, TODAVÍA sin horario"*, con rama
+`claude/git-status-935f47`. **Las dos cosas eran falsas al 2026-09-02 09:18 UTC**: tiene su línea
+(`18 1,5,9,13,17,21`), está en la tabla de arriba, y su rama es `claude/docs-auditoria` desde ese
+mismo día. La sección se contradecía con la tabla del propio archivo.
+
+Lo que ocupa su lugar es un modo de falla peor, encontrado en esa misma vuelta:
+
+**`investigacion` tenía su línea de cron y aun así estaba muerto.** Corrió una sola vez
+(03:00:20Z, `exit 0`, commit `a7a28f63` — cerró cuatro decisiones fantasma del radar). Después,
+cuando se reescribió `/root/bin/onia-loop.sh` a las 05:44 para agregar `web-venta` y la guarda de
+`MERGE_HEAD`, **su `case` desapareció del script y nadie lo notó**. Desde entonces cada corrida
+del cron caía en el `*)`:
+
+```
+uso: /root/bin/onia-loop.sh <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta>
+```
+
+El `exit 64` ocurre **antes** de la función `avisar` — así que no salió por Telegram. Un loop
+registrado, con prompt en disco y worktree vivo, que no corría y no lo decía. El `case` tampoco
+estaba en ninguno de los tres backups del script: se perdió del todo.
+
+**Por eso el chequeo de arranque de un loop no puede mirar sólo el cron.** Que la línea esté no
+prueba que el loop corra. Lo que sí lo prueba es el log: si `/var/log/onia-loop-<id>.log` no tiene
+un `ARRANCA` posterior a la última hora que le tocaba, ese loop está muerto aunque su cron esté
+perfecto.
+
+Restaurado el 2026-09-02 09:20 UTC con los tres valores que su propio log había registrado
+(`rama claude/investigacion — tope 2400s`) y el worktree que figura en `git worktree list` — no de
+memoria. En el mismo commit se versionaron `scripts/loops/onia-loop.sh` y los siete prompts, que
+estaban atrás de lo que corría.
+
+Nada de esto fue error de quien lo escribió: cada versión era cierta cuando la midió. Es el costo
+normal de dos manos sobre el mismo archivo, y la razón de la regla **"el que MIRA agrega, el que
+ARREGLA marca"** de [`EQUIPO.md`](EQUIPO.md).
 
 Los horarios están **escalonados a propósito**: comparten CPU y disco, y dos loops sobre el mismo
 árbol se pisan. No los juntes en el mismo minuto.
@@ -158,10 +207,10 @@ Dos cambios:
    primera pantalla que ve un lead: el defecto más caro del sistema estaba en la superficie sin
    dueño.
 
-⚠️ **El conteo de esta sección es historia, no estado.** Empezó con dos, sumó `marca-personal` el
-2026-09-01, y con `onia-cola` y `docs-auditoria` el 2026-09-02 son **cinco** en el VPS
-(verificado en `crontab -l` ese día). **El conteo vigente vive sólo en la tabla de arriba** — si
-esta sección y esa tabla no coinciden, gana la tabla.
+⚠️ **El conteo de esta sección se quedó viejo tres veces en un día** — "dos", después "TRES", y a
+las 09:18 UTC del 2026-09-02 eran **seis** en el VPS. **No lo actualices más acá:** los títulos y
+párrafos de esta sección son historia del día de la mudanza, y un número suelto en prosa es
+justamente lo que se pudre. El conteo vigente es la tabla de arriba, y se cuenta con `crontab -l`.
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 
@@ -186,11 +235,17 @@ rearma la que falte **de su columna**. El bloque está pegado idéntico en todos
 pierden **todos** a la vez, o la máquina está apagada, no queda nadie adentro para notarlo.
 
 Y hay un agujero por diseño: **ningún lado vigila al otro.** Si se cae el crontab del VPS,
-`contenido-cola` no se entera; si se desregistra `contenido-cola`, los cinco del VPS tampoco. Lo
-que sí avisa del lado del VPS es el propio corredor: todo fallo sale por Telegram
-(`/root/bin/onia-tg.sh`), como mucho uno cada 6 h por loop.
+`contenido-cola` no se entera; si se desregistra `contenido-cola`, los del VPS tampoco.
 
-⚠️ Desde el 2026-09-02 el desbalance es fuerte: **cinco loops en el VPS y uno solo en Windows.**
+⚠️ **Acá decía que "todo fallo sale por Telegram" del lado del VPS. Es falso, y su excepción es
+exactamente la que dejó muerto a `investigacion` seis horas.** El corredor define `avisar()` en la
+línea 121; el `exit 64` del nombre no reconocido está en la 97. **Todo lo que falla antes de la
+línea 121 falla mudo** — medido el 2026-09-02 corriendo
+`/root/bin/onia-loop.sh nombre-que-no-existe`: imprime el uso, sale 64, no manda nada. Lo que sí
+avisa es lo que falla *después* de esa línea, como mucho uno cada 6 h por loop.
+
+⚠️ Desde el 2026-09-02 el desbalance es fuerte: **casi todos los loops en el VPS y uno solo en
+Windows** (el conteo exacto, en la tabla de arriba).
 La auto-cura del lado de Windows cuelga de ese único loop — si `contenido-cola` se desregistra,
 **no queda nadie de ese lado para rearmarlo**, y los del VPS no lo ven ni lo tocan a propósito.
 Lo nota una persona: cero commits del carril de contenido en varios días.
@@ -207,3 +262,12 @@ Lo nota una persona: cero commits del carril de contenido en varios días.
 5. **Corrélo a mano una vez y leé el log entero.** Un cron escrito no es un cron que anda.
 6. Recién ahí la línea de cron, **en UTC** y escalonada contra el minuto efectivo.
 7. Y agregalo a la tabla de arriba — si no está acá, la auto-cura no lo rearma nunca.
+8. **Al día siguiente, mirá su log una vez más.** `tail /var/log/onia-loop-<id>.log`: si no hay un
+   `ARRANCA` posterior a la última hora que le tocaba, está muerto aunque el cron esté perfecto.
+   Es el único paso que detecta lo que le pasó a `investigacion` — un `case` borrado por la
+   siguiente edición del corredor, fallando mudo cada 6 h.
+
+> ⚠️ **El paso 3 es el frágil, y ya falló dos veces en un día.** Editar sólo
+> `/root/bin/onia-loop.sh` deja el `case` sin versionar: la próxima reescritura del script lo
+> borra y no queda copia en ningún backup. **Editá el del repo, copiálo al VPS, y verificá con
+> `diff` que quedaron idénticos** — no al revés.

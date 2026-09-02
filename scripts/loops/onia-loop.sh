@@ -78,8 +78,23 @@ case "$NOMBRE" in
     TOPE=3000
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  investigacion)
+    # Carril investigacion/radar: cotiza las decisiones que esperan a Sergio y
+    # cierra las que ya se resolvieron solas.
+    # RESTAURADO 2026-09-02 09:20 UTC. Su `case` desaparecio cuando se reescribio
+    # este script a las 05:44 (el que agrego web-venta y la guarda de MERGE_HEAD).
+    # Desde entonces el cron `26 3,9,15,21` lo llamaba y moria en el `*)` con
+    # exit 64, ANTES de la funcion `avisar`: un loop muerto que no avisa nadie.
+    # Los tres valores salen del log de su unica vuelta viva (03:00:20Z), no de
+    # memoria: "rama claude/investigacion — tope 2400s", y el worktree figura en
+    # `git worktree list`. TOOLS es el valor uniforme del resto del archivo.
+    WT=/root/loops/onia-hermes-investigacion
+    RAMA=claude/investigacion
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
-    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta>" >&2; exit 64 ;;
+    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta|investigacion>" >&2; exit 64 ;;
 esac
 
 LOG=/var/log/onia-loop-$NOMBRE.log
