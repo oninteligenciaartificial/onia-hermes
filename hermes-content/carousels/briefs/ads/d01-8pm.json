@@ -1,0 +1,35 @@
+{
+  "slug": "d01-8pm",
+  "account": "onia",
+  "cta": "Comentá DEMO",
+  "nota": "Carrusel de venta. Estructura: hook → agitación → giro → mecanismo → CTA. Los asteriscos marcan la palabra que sale en serif italic verde. Render: --pack venta-editorial --format feed",
+  "slides": [
+    {
+      "kicker": "20:07 · un martes",
+      "headline": "Alguien quiere *darte plata*.",
+      "body": "Y vos ya cerraste."
+    },
+    {
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B10-restaurante-almuerzo.jpg",
+      "kicker": "Mientras tanto",
+      "headline": "Le contestás a las *nueve*.",
+      "body": "A esa hora ya reservó en otro lado. Y no te enteraste nunca."
+    },
+    {
+      "kicker": "El diagnóstico equivocado",
+      "headline": "No lo perdiste *por caro*.",
+      "body": "Lo perdiste *por horario*."
+    },
+    {
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B06-consultorio-dental.jpg",
+      "kicker": "Lo que hace",
+      "headline": "Contesta *mientras dormís*.",
+      "body": "Responde la duda, agenda la cita, y te deja el mensaje listo para la mañana."
+    },
+    {
+      "kicker": "Empezá hoy",
+      "headline": "El que contesta primero se *queda con la reserva*.",
+      "body": "Te muestro cómo queda funcionando con *lo tuyo*, sin compromiso."
+    }
+  ]
+}
