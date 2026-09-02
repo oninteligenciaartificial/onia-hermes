@@ -164,8 +164,60 @@ decisión de Sergio.
 
 **Cómo se agrega o se saca un loop** quedó escrito al final de
 [`cola/loops.md`](../cola/loops.md), y los prompts versionados viven en
-[`scripts/loops/prompts/`](../../../scripts/loops/prompts/) — **hay que copiarlos al VPS, o el
-que corre queda huérfano**, que es exactamente lo que le pasó al canario.
+[`scripts/loops/prompts/`](../../../scripts/loops/prompts/).
+
+### El equipo quedó organizado, y el VPS ya no depende de la laptop
+
+Pedido de Sergio, el mismo día: *"organizá tu equipo, porque chocan tanto — uno desarrolla, otro
+audita, otro investiga, otro perfecciona, otro revisa"* y *"mandá todo al VPS que voy a apagar
+la PC"*.
+
+**Siete loops en el VPS, uno en Windows** (`contenido-cola`, que él maneja). El organigrama —
+quién hace qué oficio y **qué rutas escribe cada uno** — vive en
+[`cola/EQUIPO.md`](../cola/EQUIPO.md).
+
+**Chocaban por tres causas, no por mala suerte**, y cada una tiene ahora una regla mecánica:
+dos loops sobre la misma rama · cuatro editando el mismo archivo de cola (**el que MIRA agrega
+al final, el que ARREGLA marca `[x]`**) · superficies vivas sin dueño.
+
+**Dos loops nuevos, los dos con combustible medido antes de existir:**
+- **`web-venta`** — dueño de `onia.com.bo/` y `/empezar`. Primera vuelta: metió el gate de tipos
+  a la app que sirve el sitio, **lo probó rompiéndolo a propósito** y revirtió (`1c9538d6`).
+- **`investigacion`** — cotiza las decisiones del radar. Primera vuelta: **cerró 4 decisiones
+  fantasma** que ya se habían resuelto solas (`a7a28f63`).
+
+**"Perfecciona" NO recibió loop, a propósito.** Ya se intentó (`web-factory-salud`: 7 de 8
+corridas en no-op). Sin una lista finita de qué está mal, un loop no se planta: **inventa
+trabajo**. Vive dentro de cada desarrollador como el escalón 2 de su escalera. La lista primero,
+el loop después.
+
+**Y el arreglo que hace autónomo al VPS:** `/root/bin/onia-loops-sync.sh` corre cada hora al
+minuto 44 —once después del integrador— y despliega el corredor y los prompts **desde `main`**,
+de forma atómica. Antes había que copiarlos a mano desde Windows, y por eso el canario pasó un
+día ejecutando la versión vieja. **Commitear una mejora no la enciende; ahora sí.**
+
+⚠️ **Dos trampas nuevas, las dos medidas hoy** (están en
+[`COMO_SE_ARMA_UN_LOOP.md`](../COMO_SE_ARMA_UN_LOOP.md), trampa 5):
+1. **Editar el corredor en caliente rompe la vuelta que corre.** Bash lee los scripts por
+   **offset de bytes**: reescribir el mismo inodo le hace ejecutar basura. Pasó con `web-venta`
+   — el agente ya había pusheado, pero el corredor nunca escribió `TERMINA`, **nunca soltó el
+   `flock`** y quedó un zombi que habría bloqueado todas sus vueltas siguientes. `bash -n` en
+   verde no protege de esto. → Instalar con `mv`, nunca sobreescribir.
+2. **Copiar prompts desde Windows mete CRLF**, y la guarda anti-drift (`cmp -s`, byte exacto)
+   veía distintos dos archivos idénticos. **Una alarma que siempre suena es una alarma apagada.**
+   → El sync copia desde el propio checkout de `main`: los dos lados salen del mismo git.
+
+### La bandeja 4, vinculada (2026-09-02, con permiso explícito de Sergio)
+
+`onia-interna` → **inbox 4** (el widget de `onia.com.bo`), donde estaban **7 conversaciones
+reales** que nadie podía leer desde el panel. Respaldo previo en
+`/root/backups/clinic_settings-20260902T025252Z.sql`.
+
+⚠️ **El costo, y hay que saberlo:** `clinic_settings.chatwootInboxId` es **una sola columna
+entera** — un inbox por org. Vincular la 4 **desvinculó la 5** (Onia WhatsApp, 3
+conversaciones). No se perdió nada y se revierte con un `UPDATE`, pero **una org no puede leer
+su web y su WhatsApp a la vez**. Eso es un límite de diseño, no un olvido, y es decisión de
+Sergio si se arregla.
 
 ## 7. Los tres heroes
 
