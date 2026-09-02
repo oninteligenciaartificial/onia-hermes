@@ -91,6 +91,14 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 > `REVERTIDAS 3/9` (`BRAND_URL`, `TERMS_URL`, `PRIVACY_URL`) — el bloqueo está **vivo, no
 > vencido**. Vuelve a "Ahora" el día que el gate cambie de veredicto.
 
+> ⚠️ **Con "Ahora" vacío, `verificar_cola.js` sale 1** (`ERROR cola-vacia`) — medido el
+> 2026-09-02 contra este archivo Y contra el de HEAD: el rojo es **anterior** a la vuelta que lo
+> anota, no lo trajo un cambio. Es el gate diciendo la verdad, no una falla: los tres ítems de
+> "Ahora" se fueron a "Bloqueado en Sergio" (S9, S10, S11) y los tres esperan un `scp` o un
+> deploy que sólo él autoriza. **No se destraba llenando "Ahora"**: promover un ítem de "Después"
+> para que el gate se ponga verde es fabricar trabajo, que es lo único que la cola prohíbe. Se
+> destraba cuando Sergio hace uno de esos tres.
+
 > **El ítem 2 —las campañas de la web— salió de acá el 2026-08-31.** Vivió diez vueltas
 > esperando el `scp` de **S9**, que escribe en el VPS y por eso es de Sergio. Se movió entero
 > a "Bloqueado en Sergio" con su historia. Reverificado antes de moverlo, dentro y fuera del
@@ -100,19 +108,6 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 ---
 
 ## Después
-
-- [ ] **"La cita" le habla de consultorio a una ferretería — y esta vez NO es el flag.**
-      Encontrado en la recorrida v6.8, con `PLATFORM_LAYER=1` puesto, o sea que es el texto y
-      no el entorno: en `/settings/chatbot` de `Ferreteria Circuito Completo` la tarjeta se
-      titula **"La cita"**, pide **"Cuánto dura (minutos)"** y ofrece de ejemplo
-      **"en el consultorio, o por videollamada"**. Una ferretería no agenda citas ni tiene
-      consultorio. Son literales en `onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`
-      — la pantalla sí usa el vocabulario del rubro, pero sólo para dos placeholders de ejemplo
-      (`page.tsx:47`, `voc.ejemploNombre` y `voc.ejemploMiembro`), no para estos rótulos.
-      **Lo barato que lo arregla:** `lib/onboarding/vocabulario.ts` no tiene todavía una palabra
-      para "la cita" por rubro. Es un campo nuevo en un módulo que consumen muchas pantallas
-      (Sidebar, Header, alta), así que **lo decide el carril de plataforma, no éste** — se
-      anota con su prueba y se deja.
 
 - [ ] **El disco de la máquina de Sergio se llenó al 100% y bloqueó el build.**
       No es una molestia: `next build` murió con `ENOSPC: no space left on device` y con
@@ -390,6 +385,51 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **"La cita" ya no le habla de consultorio a una ferretería: cada rubro lee su propia
+      palabra.** Cerrado el 2026-09-02 (commit `675541b` de `onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`). **Commiteado, NO desplegado.**
+      **Gate 1 primero, en vivo:** el ítem era REAL —`ChatbotClient.tsx` líneas 90, 505, 510 y
+      520 seguían con los literales— y no estaba cerrado más abajo.
+      🔴 **Pero su diagnóstico estaba incompleto, y el dato que faltaba lo hacía más barato, no
+      más caro.** El ítem decía *"lo decide el carril de plataforma"* porque agregar un campo a
+      `lib/onboarding/vocabulario.ts` sonaba a tocar un módulo que consumen muchas pantallas.
+      Medido: `VOCABULARIOS` es un `Record<VerticalTrackId, …>` con los 7 rubros explícitos, así
+      que un campo nuevo es **aditivo** — TypeScript obliga a llenar los 7 y ningún consumidor
+      actual se entera (Sidebar y Header leen `busqueda`, el alta lee `ejemploNombre`). Y la
+      pantalla rota es `/settings/chatbot`, que es de ESTE carril.
+      **Lo que el ítem no vio, y es el corazón del arreglo:** el modelo de dominio ya sabía la
+      verdad y la pantalla no la leía. `lib/chatbot/plantillas.ts:53-55` no le da `demo` ni a
+      comercio ni a importadora, con su motivo escrito —*"sin cita definida el bot deriva en vez
+      de agendar"*—, mientras el editor les pedía igual configurar una cita, en dental.
+      **Lo que se hizo:** `cita` y `citaModalidad` en `VocabularioAlta`, los 7 rubros, coherentes
+      con la `demo.modalidad` de `plantillas.ts` (clínica/estética/veterinaria "la cita"; estudio
+      "la reunión"; comercio, importadora y estancia "la visita"). `ChatbotClient` los recibe por
+      prop, y `etiquetaDeCampo` los usa **también en los mensajes de error**, que decían
+      "Duración de la cita" para todos. El bloque ahora avisa que dejarlo vacío hace derivar en
+      vez de agendar — la regla dura del motor, que ningún rubro leía en pantalla.
+      **Por qué el trinquete no lo había atajado, que es el hallazgo que sobrevive al ítem:**
+      `__tests__/lib/vocabulario-por-rubro.test.ts` buscaba `paciente|clínica` y **no
+      `consultorio`** — igual de dental, sólo que nombra el LUGAR en vez de la persona. Por eso
+      esta pantalla pasó por debajo. Agregada la palabra al regex; radio medido ANTES de
+      ampliarlo: **un solo archivo** (el otro hit era un comentario, y `textoVisible` los
+      strippea), o sea que el trinquete no arrastró deuda ajena.
+      **Probado que los tests MUERDEN, no sólo que pasan:** revertidos a mano los dos literales,
+      **5 tests se ponen rojos** (los 3 de rubro no-clínico + los 2 del trinquete) y vuelven a
+      verde al restaurarlos. El nuevo `app/(dashboard)/settings/chatbot/bloque-cita.test.ts`
+      **RENDERIZA el componente real** con `renderToStaticMarkup` y lee el HTML: un grep no
+      distingue el literal viejo de una prop bien cableada. Va en `.ts` con `createElement` a
+      propósito, para no tocar el `include` de `vitest.config.ts`, que comparten todos los
+      carriles.
+      **MIRADO renderizado en Chromium** (los tres rubros lado a lado): la ferretería lee
+      **"La visita" / "en el local"**, la clínica conserva **"La cita" / "en el consultorio, o
+      por videollamada"** —el arreglo no le quitó su palabra— y el estudio contable lee
+      **"La reunión"**. ⚠️ **Con hoja de estilos sustituta, no la de producción:** este disco no
+      tiene `.env` ni base sembrada, así que `/dev/demo` no levanta, y Tailwind v4 va por postcss
+      (no hay binario para compilar los tokens sueltos). Lo verificado es el **texto y la
+      estructura** del componente real; la piel de producción no se miró.
+      **Gates:** `tsc --noEmit` limpio · **2441 tests** verdes (197 archivos) · `eslint` 0
+      errores, y 0 warnings en los 5 archivos tocados.
 
 - [x] **`espejo-check.mjs` quedó ciego el mismo día que el loop se mudó al VPS: intentaba
       SSH a sí mismo con una clave que no existe en el host.** Encontrado midiendo el ítem de
