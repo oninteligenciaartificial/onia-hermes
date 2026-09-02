@@ -354,13 +354,46 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Gates:** `test:sonda-widget` (11 casos) cableado a `npm test`, verificado **en rojo
       primero**: `test:guards-cableados` mordió con *"estos tests existen y NO los corre nadie:
       test:sonda-widget"* antes de cablearlo.
-      🔴 **Lo que falta, y no se declara hecho: la sonda todavía no mandó un mensaje.** Al correrla
-      en vivo salió **2** con su propio diagnóstico —*"la sonda todavía no tiene token guardado"*—
-      porque las 5 aperturas de la ventana 20:00-21:00 UTC se habían gastado **midiendo el bug**.
-      La ventana de `rack_attack` es la hora en punto y el loop corre al minuto 3, así que la
-      próxima vuelta (21:03 UTC) arranca con el cupo entero, guarda el token y a partir de ahí no
-      lo vuelve a gastar nunca. **El camino feliz está escrito pero NO ejecutado**; el que sí se
-      ejecutó, y el que importaba destrabar, es el del 429.
+      🔴 **La sonda mandó sus dos mensajes por primera vez el 2026-09-02 20:49 UTC, y el bot
+      contestó los DOS.** Conversación **49**, leída en la base de producción: entrante *"Hola,
+      quiero informacion sobre el sistema"* → `message_type=1`; entrante *"Tengo una clinica dental
+      en Santa Cruz, somos 4 personas"* → `message_type=1` *"Perfecto, anotado que te dedicás a
+      odontología, que son 4 personas…"*. **El bug de la semana no volvió**, y por primera vez eso
+      está medido en vez de supuesto.
+
+      **Esperar a la hora en punto era la salida equivocada, y estaba escrita acá.** Decía que el
+      cupo se recompone solo al minuto 3. Es cierto y no alcanza: deja la única prueba del carril
+      atada a que nadie haya corrido la sonda hace poco — una moneda, no un chequeo. La sonda ya
+      **no abre `/widget` limpio nunca**: mintea su `cw_conversation` con el propio
+      `Widget::TokenService` de Chatwoot vía `rails runner` (11 s medidos), y entra siempre por la
+      puerta que `rack_attack` no cuenta. `guionBootstrap()` y `tokenDeSalida()` están exportadas y
+      afirmadas: el token se saca **de entre** el ruido de WARN/INFO del runner, y si la marca no
+      está **explota** en vez de guardar una línea de log como si fuera un token.
+      Efecto de borde: el contacto se crea **ya nombrado** `Sonda QA carril chatbot`. Antes el
+      nombre se ponía por SQL al final, sólo si la vuelta llegaba viva hasta ahí, y **cada arranque
+      fallido dejaba un contacto anónimo en el inbox 4**, el de los leads de verdad — había 12 del
+      2026-09-02 (`misty-leaf-844`, `lingering-water-811`…). Verificado que **no contaminan el
+      objetivo**: los 395 contactos sin conversación del inbox 4 no los cuenta `objetivo:visible`,
+      que cuenta conversaciones; sigue diciendo 2 desconocidos (#37 mariohassen, #35 F).
+
+      Se cayeron dos hipótesis escritas, las dos por MIRAR la pantalla renderizada:
+      - **El widget no abre en la caja de texto.** Abre en una pantalla cuyo único `<button>` dice
+        **"Iniciar conversación"**; `#chat-input` recién se monta al tocarlo. Por eso expiraba el
+        localizador. Ni el iframe ni *"esperar a que monte el panel"* — lo que faltaba era **un
+        clic**. Con el clic la sonda mandó los dos mensajes.
+      - **El nombre corto del contenedor no existe.** En Swarm es
+        `onia-chatbot_chatwoot-db.1.nhgizxt2v01…`, con sufijo de réplica que cambia en cada
+        redeploy: `docker exec onia-chatbot_chatwoot-db` daba `No such container` **después** de
+        mandar los mensajes, o sea gastaba la medición para no medir nada. Ahora los dos
+        contenedores se resuelven por prefijo con `docker ps --filter`.
+
+      🔴 **Lo único que queda, con su reproducción exacta:** correr `npm run sonda:widget` **una
+      segunda vez**, con la conversación 49 ya existente, vuelve a salir **2** con
+      *"waiting for locator('#chat-input')"*. La primera corrida (sin conversación) sí pasa. La
+      hipótesis —**no verificada, no la anuncies sin mirarla**— es que con conversación previa el
+      widget ya no muestra "Iniciar conversación" y monta otra pantalla. Se reproduce en 30 s:
+      abrir la URL del widget con el `cw_conversation` de `/root/.onia/sonda-widget.json`,
+      `document.body.innerText` y la lista de `<button>`. **Mirarla antes de tocar el selector.**
 
 ✅ **"Ahora" tiene combustible, y las dos veces salió de MIRAR el sistema vivo, no de la cola**: el
 `bot-engine` sin versionar salió de comparar el repo contra producción, y la sonda rota salió de

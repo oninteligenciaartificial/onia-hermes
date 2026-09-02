@@ -84,6 +84,7 @@ import { dirname } from 'node:path';
 const HOST = process.env.ONIA_WIDGET_URL || 'https://onia-chatbot-chatwoot.hqdqgh.easypanel.host';
 const WEBSITE_TOKEN = process.env.ONIA_WIDGET_TOKEN || '9k5i7xnAgCbSse1EZwVChZLw';
 const DB = process.env.ONIA_CHATWOOT_DB_CONTAINER || 'onia-chatbot_chatwoot-db';
+const APP = process.env.ONIA_CHATWOOT_APP_CONTAINER || 'onia-chatbot_chatwoot';
 const ESTADO = process.env.ONIA_SONDA_ESTADO || '/root/.onia/sonda-widget.json';
 const NOMBRE_SONDA = 'Sonda QA carril chatbot';
 
@@ -159,6 +160,62 @@ export function juzgar({ enviados, mensajes, conversacionId }) {
   };
 }
 
+// ───────────────────────── el arranque que NO pasa por `/widget` ─────────────────────────
+//
+// El cupo de 5 aperturas por hora se agota con la sonda misma, y entonces la sonda no puede
+// sacar su primer token — el unico estado del que no se sale sola. Medido el 2026-09-02 20:13:
+// la vuelta anterior habia gastado las 5 del bucket probando, y esta vuelta ya no tenia como
+// medir hasta las 21:00. Un chequeo de "hecho" que depende de que nadie lo haya corrido hace
+// poco no es un chequeo: es una moneda.
+//
+// La salida es que el token NO nace en el navegador. `Widget::TokenService` lo firma dentro de
+// Chatwoot, y `rails runner` esta a un `docker exec` (11 s medidos). Desde ese token la sonda
+// entra siempre por `cw_conversation`, que rack_attack no cuenta.
+//
+// Efecto de borde que importa igual de mucho: el contacto se crea YA con su nombre. Antes el
+// nombre se ponia por SQL al final, solo si la vuelta llegaba viva hasta ahi — y cada arranque
+// fallido dejaba un contacto anonimo (`misty-leaf-844`) en el inbox 4, el de los leads de
+// verdad. Habia 12 de esos solo el 2026-09-02.
+
+/** Con esta marca el runner delata el token entre su propio ruido de WARN e INFO. */
+export const MARCA_BOOTSTRAP = 'ONIA_SONDA_TOKEN=';
+
+/** El guion de Rails. Separado y exportado para poder afirmarlo sin levantar un contenedor. */
+export function guionBootstrap({ websiteToken, nombre }) {
+  const rb = (s) => JSON.stringify(String(s)); // comillas de Ruby y de JSON coinciden para esto
+  return [
+    `canal = Channel::WebWidget.find_by(website_token: ${rb(websiteToken)})`,
+    `raise "no hay WebWidget con ese website_token" if canal.nil?`,
+    `inbox = canal.inbox`,
+    `ci = inbox.contact_inboxes.joins(:contact).where(contacts: { name: ${rb(nombre)} }).order(:id).first`,
+    `if ci.nil?`,
+    `  contacto = inbox.account.contacts.create!(name: ${rb(nombre)})`,
+    `  ci = inbox.contact_inboxes.create!(contact: contacto, source_id: SecureRandom.uuid)`,
+    `end`,
+    `carga = { source_id: ci.source_id, inbox_id: inbox.id }`,
+    `puts "${MARCA_BOOTSTRAP}" + Widget::TokenService.new(payload: carga).generate_token`,
+  ].join('\n');
+}
+
+/** Saca el token de la salida del runner, que viene envuelta en WARN de deprecacion e INFO. */
+export function tokenDeSalida(salida) {
+  const linea = String(salida)
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l.startsWith(MARCA_BOOTSTRAP))
+    .pop();
+  if (!linea) {
+    throw new Error(`el runner de Rails no imprimio ${MARCA_BOOTSTRAP} — salida: ${String(salida).slice(-300)}`);
+  }
+  const token = linea.slice(MARCA_BOOTSTRAP.length).trim();
+  // Tres partes separadas por punto. Sin esto, un `nil` o un source_id suelto se guardarian
+  // igual de bien y el error recien aparecería al abrir el widget, lejos de su causa.
+  if (token.split('.').length !== 3 || token.split('.').some((p) => p === '')) {
+    throw new Error(`el runner devolvio algo que no parece un JWT: ${JSON.stringify(token)}`);
+  }
+  return token;
+}
+
 /** Lee el `source_id` del JWT del widget sin la clave: solo se necesita leerlo, no validarlo. */
 export function sourceIdDelToken(token) {
   const partes = String(token).split('.');
@@ -170,8 +227,26 @@ export function sourceIdDelToken(token) {
 
 // ─────────────────────────────── lo que toca el mundo real ───────────────────────────────
 
+/**
+ * En Swarm los contenedores NO se llaman como su servicio: `onia-chatbot_chatwoot-db` es en
+ * realidad `onia-chatbot_chatwoot-db.1.nhgizxt2v01lnhebx9jtdwm5q`, con un sufijo de replica que
+ * cambia en cada redeploy. Hardcodear el nombre corto daba `No such container` — y encima
+ * DESPUES de haber mandado los dos mensajes, o sea gastando la medicion para no medir nada.
+ */
+function contenedor(prefijo, excluir = []) {
+  const encontrado = execFileSync('docker', ['ps', '--filter', `name=${prefijo}`, '--format', '{{.Names}}'], {
+    encoding: 'utf8',
+    timeout: 30_000,
+  })
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l && !excluir.some((x) => l.includes(x)))[0];
+  if (!encontrado) throw new Error(`no encontre el contenedor "${prefijo}" en docker ps`);
+  return encontrado;
+}
+
 const sql = (q) =>
-  execFileSync('docker', ['exec', DB, 'psql', '-U', 'postgres', '-d', 'onia-chatbot', '-tAc', q], {
+  execFileSync('docker', ['exec', contenedor(DB), 'psql', '-U', 'postgres', '-d', 'onia-chatbot', '-tAc', q], {
     encoding: 'utf8',
     timeout: 30_000,
   }).trim();
@@ -189,12 +264,41 @@ function guardarEstado(estado) {
   writeFileSync(ESTADO, JSON.stringify(estado, null, 2));
 }
 
+/** Mint del `cw_conversation` con el propio Rails de Chatwoot. Tarda ~11 s y corre UNA vez. */
+function bootstrapear() {
+  const app = contenedor(APP, ['sidekiq', '-db', 'redis']);
+  const guion = guionBootstrap({ websiteToken: WEBSITE_TOKEN, nombre: NOMBRE_SONDA });
+  // Por stdin y no por argumento: el guion trae comillas, llaves y saltos de linea, y armarlo
+  // dentro de un `sh -lc` es exactamente donde se rompen estas cosas.
+  execFileSync('docker', ['exec', '-i', app, 'sh', '-c', 'cat > /tmp/onia_sonda_bootstrap.rb'], {
+    input: guion,
+    timeout: 30_000,
+  });
+  const salida = execFileSync(
+    'docker',
+    ['exec', app, 'sh', '-lc', 'RAILS_ENV=production bundle exec rails runner /tmp/onia_sonda_bootstrap.rb 2>&1'],
+    { encoding: 'utf8', timeout: 180_000 },
+  );
+  return tokenDeSalida(salida);
+}
+
 async function correr() {
   const { chromium } = await import('/root/node_modules/playwright/index.mjs');
   const estado = leerEstado();
-  const url = estado.cw_conversation
-    ? `${HOST}/widget?website_token=${WEBSITE_TOKEN}&cw_conversation=${encodeURIComponent(estado.cw_conversation)}`
-    : `${HOST}/widget?website_token=${WEBSITE_TOKEN}`;
+
+  // Sin token guardado se arranca por Rails, NO abriendo `/widget` limpio: esa puerta tiene
+  // cupo de 5/hora y es la que dejaba a la sonda sin forma de medir.
+  if (!estado.cw_conversation) {
+    try {
+      const token = bootstrapear();
+      guardarEstado({ ...estado, cw_conversation: token, arrancada: new Date().toISOString() });
+      estado.cw_conversation = token;
+    } catch (e) {
+      return { codigo: 2, texto: `NO SE PUDO MEDIR — fallo el arranque por Rails: ${e.message}` };
+    }
+  }
+
+  const url = `${HOST}/widget?website_token=${WEBSITE_TOKEN}&cw_conversation=${encodeURIComponent(estado.cw_conversation)}`;
 
   const navegador = await chromium.launch({ args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   let enviados = 0;
@@ -207,12 +311,10 @@ async function correr() {
       return {
         codigo: 2,
         texto:
-          'NO SE PUDO MEDIR — HTTP 429 al abrir el widget. Chatwoot limita a 5 aperturas por hora ' +
-          'y por IP cuando NO se manda `cw_conversation` (rack_attack.rb). ' +
-          (estado.cw_conversation
-            ? 'La sonda SI mando su token, asi que el limite se agoto por otra via desde esta IP.'
-            : 'La sonda todavia no tiene token guardado: se destraba al empezar la proxima hora en punto, ' +
-              'y a partir de ahi entra siempre por la puerta libre.'),
+          'NO SE PUDO MEDIR — HTTP 429 aun mandando `cw_conversation`, que es la puerta que ' +
+          'rack_attack NO cuenta. O sea que lo que se agoto es otro tope (`req/ip`, 3000/min) ' +
+          'o el token guardado dejo de ser valido y Chatwoot lo trata como apertura limpia. ' +
+          `Mirar ${ESTADO}.`,
       };
     }
     if (!respuesta || !respuesta.ok()) {
@@ -225,6 +327,16 @@ async function correr() {
       guardarEstado({ ...estado, cw_conversation: token, visto: new Date().toISOString() });
     }
     if (!token) return { codigo: 2, texto: 'NO SE PUDO MEDIR — la pagina no expuso `window.authToken`' };
+
+    // El widget NO abre en la caja de texto: abre en una pantalla de bienvenida cuyo unico
+    // boton es "Iniciar conversacion", y `#chat-input` recien se monta despues de tocarlo.
+    // MIRADO renderizado el 2026-09-02: el `body` entero decia "Estamos en linea / Iniciar
+    // conversacion / Desarrollado por Onia" y en todo el DOM habia UN solo <button>. Por eso el
+    // localizador expiraba a los 30 s — y por eso las dos explicaciones escritas antes (un
+    // iframe, la caja "montada recien al abrir el panel") mandaban a arreglar otra cosa: no hay
+    // iframe, y lo que falta no es esperar mas sino hacer clic.
+    const arranque = pagina.getByRole('button', { name: /iniciar conversaci/i });
+    if (await arranque.count()) await arranque.first().click();
 
     const caja = pagina.locator('#chat-input');
     await caja.waitFor({ state: 'visible', timeout: 30_000 });
@@ -381,6 +493,46 @@ function selfCheck() {
     // Si esta sonda entrara sin nombre, `objetivo_visible.mjs` la contaria como "un desconocido
     // escribio" y el carril se declararia cumplido por su propia sonda.
     assert.match(NOMBRE_SONDA, /\b(prueba|qa|test)\b/i, `"${NOMBRE_SONDA}" no lo excluye`);
+  });
+
+  // ── el arranque sin `/widget`, que es lo que destraba la sonda cuando el cupo esta quemado ──
+
+  caso('el token se saca de entre el ruido del runner de Rails', () => {
+    // `rails runner` escupe WARN de deprecacion y INFO de geoip ANTES de lo nuestro. Tomar "la
+    // ultima linea" o regexear el bulto entero devuelve ruido con cara de token.
+    const salida = [
+      "W, [2026-09-02T20:16:16] WARN -- : RubyLLM's legacy acts_as API is deprecated",
+      'I, [2026-09-02T20:16:20] INFO -- : [rake ip_lookup:setup] IP_LOOKUP_API_KEY empty.',
+      `${MARCA_BOOTSTRAP}aaa.bbb.ccc`,
+      'I, [2026-09-02T20:16:21] INFO -- : algo mas despues',
+    ].join('\n');
+    assert.strictEqual(tokenDeSalida(salida), 'aaa.bbb.ccc');
+  });
+
+  caso('si el runner reventó y no imprimio la marca, THROW — no devolver ruido', () => {
+    // El modo de falla caro: el runner falla, la sonda guarda una linea de log como si fuera el
+    // token, y a partir de ahi cada vuelta muere con un error que no dice nada del origen.
+    assert.throws(
+      () => tokenDeSalida('W, [..] WARN -- : algo\nI, [..] INFO -- : otra cosa'),
+      /no imprimio/i,
+      'sin la marca tiene que explotar, no inventar un token',
+    );
+  });
+
+  caso('la marca con algo que no es un JWT tampoco pasa', () => {
+    // `puts` de un `nil` deja la marca vacia, y un source_id suelto no es un JWT. Las dos cosas
+    // se guardarian igual de bien y recien se verian al fallar el widget una hora despues.
+    assert.throws(() => tokenDeSalida(`${MARCA_BOOTSTRAP}`), /no parece un JWT/);
+    assert.throws(() => tokenDeSalida(`${MARCA_BOOTSTRAP}29a25aec-b51b`), /no parece un JWT/);
+  });
+
+  caso('el guion nombra a la sonda al CREARLA, no despues', () => {
+    // Antes el nombre se ponia al final, por SQL, y solo si la vuelta llegaba viva hasta ahi.
+    // Cada arranque fallido dejaba un contacto anonimo mas en el inbox de los leads de verdad.
+    const guion = guionBootstrap({ websiteToken: 'TOK123', nombre: NOMBRE_SONDA });
+    assert.match(guion, /TOK123/, 'el guion tiene que buscar el inbox por su website_token');
+    assert.ok(guion.includes(NOMBRE_SONDA), 'el guion tiene que nombrar la sonda');
+    assert.match(guion, new RegExp(MARCA_BOOTSTRAP), 'sin la marca no hay como leer el token');
   });
 
   let fallados = 0;
