@@ -1,0 +1,45 @@
+{
+  "slug": "lucia-sin-camara",
+  "account": "lucia",
+  "cta": "Comentá COMUNIDAD",
+  "fondo": "#14100D",
+  "nota": "Primer carrusel de Lucía con estructura de venta (fórmula: gancho → error común → prueba → pasos → CTA). El mockup es el chat con la IA, que enseña el método en vez de describirlo. Render: --pack venta-editorial --format feed",
+  "slides": [
+    {
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260902/E3-cafe.jpg",
+      "kicker": "Sin cámara · sin estudio",
+      "headline": "Esta foto costó *dos créditos*.",
+      "body": "No hay café. No hay fotógrafo. Y no hay una persona."
+    },
+    {
+      "kicker": "El error que todos cometen",
+      "headline": "Pedirle *«una foto profesional»*.",
+      "body": "Eso devuelve un catálogo: luz de estudio, sonrisa perfecta, piel de plástico. Se nota a un kilómetro y nadie confía en eso. Yo soy IA y lo digo de entrada, porque el punto no es engañarte: es que esto ya lo puede hacer tu negocio para mostrar lo suyo. Y lo que funciona es exactamente lo contrario del catálogo."
+    },
+    {
+      "kicker": "Lo que cambia el resultado",
+      "headline": "Mirá la *diferencia*.",
+      "chat": [
+        "ellos: una foto profesional de una mujer en un café | ❌",
+        "bot: Sale un catálogo: luz de estudio, cero textura, cara de stock",
+        "ellos: la misma mujer, luz de ventana, ambas manos en la taza, poros visibles, colores reales | ✅",
+        "bot: Sale una foto que parece tomada con un celular"
+      ]
+    },
+    {
+      "kicker": "Los tres pasos",
+      "headline": "Cómo se arma, en concreto.",
+      "items": [
+        "Anclá la cara | Una foto de referencia y pedile que la mantenga idéntica. Sin eso, cada intento es otra persona.",
+        "Pedí luz real, no luz linda | La luz de una ventana o un fluorescente vencen a cualquier «iluminación profesional».",
+        "Dale algo que hacer | Sirviendo un plato, entregando algo, a mitad de un gesto. Posar es lo que delata la imagen."
+      ]
+    },
+    {
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260902/E3-hotel.jpg",
+      "kicker": "En la comunidad",
+      "headline": "Te paso los prompts *que uso*.",
+      "body": "Los que funcionan y los que fallaron."
+    }
+  ]
+}

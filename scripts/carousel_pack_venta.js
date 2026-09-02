@@ -129,7 +129,10 @@ html,body { width:${FMT.w}px; height:${FMT.h}px; }
   width:210px; height:210px; border:3px solid rgba(0,210,106,.30);
   border-radius:50%; }
 
-${foto ? `.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 22%; }
+${foto ? `/* Encuadre alto a proposito: la cara va en el TERCIO SUPERIOR y el texto cae en la
+   zona que el velo oscurece. Con el encuadre centrado el titular aterrizaba sobre la cara
+   y competian los dos. */
+.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 18%; }
 /* El velo es DIRECCIONAL: casi transparente arriba —donde esta la escena, que es el
    motivo de poner una foto— y fuerte abajo, donde se apoya el texto. Un velo parejo
    deja la foto de fondo gris y entonces daba lo mismo no ponerla. */
