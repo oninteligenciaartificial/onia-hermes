@@ -1,0 +1,62 @@
+# Banco del 2026-09-02 — la ventana FANCY (E1–E7)
+
+Índice de piezas con su **asset id** (imágenes) y estado. Los creativos de anuncio de los videos
+de café están en [`CREATIVO.md`](CREATIVO.md); la receta consolidada, en
+[`../TECNICA-HIGGSFIELD.md`](../TECNICA-HIGGSFIELD.md) §12–17.
+
+Generadas con `lucia-skin-v1` (`58bbd635-…`) por CLI en el VPS, Nano Banana Pro, **2K · 9:16**
+(`1536×2752`), 2 créditos cada una. Asset id sacado del nombre del archivo que descarga Higgsfield
+(`hf_<fecha>_<hora>_<uuid>.png`), guardado en los `_E*.log` de esta carpeta.
+
+## Imágenes
+
+| Archivo | Qué es | Asset id | Estado |
+|---|---|---|---|
+| `E2-A-rooftop.png` | Rooftop de Santa Cruz al atardecer, vaso para llevar sobre la baranda de vidrio — toma A | `460df6ae-a209-4953-82c9-16e719bb940f` | ✅ variante de la escena rooftop |
+| `E2-B-rooftop.png` | Misma rooftop — **toma B, la referencia de LUZ de la receta (§12)** | `378291da-bfc4-4795-963c-101206116865` | ✅ **la mejor rooftop** — pelo suelto, pecas marcadas, rim dorado, cara fiel al ancla, sin pantallas ni texto |
+| `E2-C-rooftop.png` | Misma rooftop — toma C | `af2771c7-e66b-4592-86e8-0fe59b02128a` | ✅ variante de la escena rooftop |
+| `E3-cafe.png` | Café de especialidad, luz cálida de ventana, ladrillo, plantas colgando, **las dos manos en la taza** (acción a medias) | `c31c1333-dbd6-4be7-890f-07dcbb1cfc59` | ✅ **la prueba 9/9 de la receta** — es la que se animó (→ E4/E6) |
+| `E3-coworking.png` | Coworking de diseño, sol de ventana con flare, plantas, laptop con UI | `bc39fa80-5144-4230-8171-c56bfc77aee5` | ⚠️ fancy y fiel, pero **pelo recogido** y **laptop con UI** en cuadro (de canto y suave, no legible de frente). Sin animar |
+| `E3-hotel.png` | Hall de hotel con boiserie de madera, lámparas cálidas, ventanal al jardín | `43bb8397-45ed-4307-b4f8-ba592ff2bdaa` | ✅ **la más limpia** — pelo suelto, sin pantallas ni texto, cara muy fiel al ancla. **Es la próxima a animar** (ver abajo) |
+
+**Las tres tomas E2 salen del mismo base prompt** — está en `_E2-BASE-prompt.txt`. A y C son
+tomas alternas de la misma escena; **B es la que la receta canonizó** como palanca de luz fancy
+(`warm golden hour backlight, soft falloff, shallow depth of field`), la que NO cuesta la casilla
+de identidad.
+
+## Videos (todos animan `E3-cafe.png` — la misma escena)
+
+Formatos verificados con `ffprobe` (detalle y creativos en [`CREATIVO.md`](CREATIVO.md)):
+
+| Archivo | Formato | Dur. | Modelo | Costo | Estado |
+|---|---|---|---|---|---|
+| `E4-cafe-seedance1_5.mp4` 🎯 | 720×1280 = 9:16 exacto · aac | 4,0 s | `seedance1_5` | 4,8 cr | ✅ **el default publicable** — cierra sobre su cara (casilla 9) |
+| `E6-cafe-seedance-8s.mp4` | 720×1280 = 9:16 exacto · aac | 8,0 s | `seedance1_5` | 9,6 cr | ✅ b-roll largo/relajado; el medio es el sorbo (§16) |
+| `E4-cafe-kling3_0.mp4` ⛔ | 716×1284 (necesita recorte) · aac | 5,0 s | `kling3_0` | 8,75 cr | ⚠️ **NO se publica** — termina cabizbaja, cara tapada (§15). Se guarda como contraejemplo |
+
+🔴 **Los `job_id` de estos tres videos NO quedaron guardados.** La `CREATIVO.md` decía que estaban
+en los `_E*.log`, pero esos logs son **sólo de imágenes** (contienen la URL del PNG, no la del
+MP4). Verificado esta vuelta: no hay `job_id` de video en ningún `.log` ni `.txt` de la carpeta.
+No bloquea re-animar: `--start-image` acepta la **ruta local del PNG** y la sube sola (hallazgo de
+V09), así que para re-generar cualquiera de estos videos se pasa el path de `E3-cafe.png`, no el
+`job_id` viejo. Lo que se pierde es sólo recuperar *ese* render exacto.
+
+## ⛔ Pendiente heredado a la próxima vuelta: animar `E3-hotel.png`
+
+`E3-hotel.png` es la mejor imagen sin video del banco. Esta vuelta (2026-09-02) se intentó animarla
+por CLI y **el servidor devolvió `grace_daily_limit_reached`**: el límite diario de generación de
+video ya estaba agotado. El costo se midió antes (**4,8 cr**, `seedance1_5` 9:16 4 s) y la generación
+NO se llegó a lanzar. Comando exacto para la próxima vuelta con cupo:
+
+```bash
+IMG="hermes-content/references/modelos/lucia/generadas-20260902/E3-hotel.png"
+PROMPT="She gently tucks a loose strand of hair behind her ear, blinks once softly, and shifts her weight slightly while keeping her gaze toward the lens. Warm afternoon light glows on her hair and the wood-paneled hotel lounge behind her. The camera barely moves, like a casual clip filmed while standing. Natural true-to-life colors. Nobody else looks at the camera."
+higgsfield generate cost   seedance1_5 --start-image "$IMG" --prompt "$PROMPT" --aspect-ratio 9:16   # 4,8 cr (medido)
+higgsfield generate create seedance1_5 --start-image "$IMG" --prompt "$PROMPT" --aspect-ratio 9:16 --json
+```
+
+⚠️ **Ojo con la casilla 9 en el hotel/coworking:** a diferencia del café, estas dos escenas NO
+tienen la acción a medias con las dos manos sobre un objeto — son retratos. Animan a b-roll sutil
+(parpadeo, mechón, cambio de peso) manteniendo la cara en cuadro, no una acción que se resuelve.
+`E3-coworking` además arrastra el pelo recogido y la laptop; si sólo hay cupo para un video, va
+**hotel**.

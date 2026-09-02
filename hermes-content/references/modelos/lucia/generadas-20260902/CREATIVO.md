@@ -111,7 +111,8 @@ Un sistema no atiende por vos. Registra lo que vos ya no alcanzás a anotar.
 4. **Registrar la palabra del CTA** en `scripts/recompensas.json` y en el mapa de n8n **de la
    cuenta que publica** — el que publica es el que recibe el comentario (incidente RANKING).
 
-> ⚠️ **Pendiente de esta carpeta (0 créditos, otra vuelta):** `generadas-20260902/` todavía no tiene
-> `LEEME.md` con el asset id / job_id de cada pieza E2–E6. Sin eso no se las vuelve a encontrar ni
-> re-animar (regla de la sección 7 del loop). Los `job_id` de E4/E6 están en los `_E*.log` de la
-> carpeta; falta consolidarlos.
+> ✅ **Resuelto el 2026-09-02:** ya existe [`LEEME.md`](LEEME.md) con el asset id de cada imagen
+> E2–E3. **Corrección:** los `job_id` de los videos E4/E6 **NO** estaban en los `_E*.log` — esos
+> logs son sólo de imágenes (URL del PNG). Verificado: no hay `job_id` de video guardado en la
+> carpeta. No bloquea re-animar (`--start-image` acepta la ruta local de `E3-cafe.png`), sólo se
+> pierde recuperar ese render exacto. Detalle en el `LEEME.md`.
