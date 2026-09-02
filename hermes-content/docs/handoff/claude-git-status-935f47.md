@@ -122,6 +122,51 @@ minuto**. Ahora: `:03 · :17 · :31 · :41 · :45`.
 **re-registra el que falte**. Es redundante a propósito: mientras quede **uno** vivo, el conjunto
 se recompone solo.
 
+### 2026-09-02 — la mudanza se completó, y lo que apareció al hacerla
+
+Pedido de Sergio: *"arma tu loop y termina de desarrollar, acomoda tus loops y documentos para
+que termines, **trabaja desde el vps**, sin eso no podemos avanzar"*.
+
+Ahora corren **cinco loops en el VPS** (`crontab -l` en `187.77.16.63`) y **uno solo en Windows**
+(`contenido-cola`, que Sergio maneja en su propia sesión y nadie toca).
+
+**Lo que más dolía: `onia-cola` seguía en Windows.** Es el **único** loop que mergea ramas de
+carril a `main`, y las tareas de Windows sólo disparan cuando la app está quieta — así que
+llevaba días sin correr. `claude/chatbots-platform-review-0d1d09` acumulaba **7 commits** sin
+llegar a `main`, que es lo que alimenta el deploy del VPS y el de Vercel. Peor: `loops.md`
+**justificaba** dejarlo ahí ("dos publicadores sobre `main` es el conflicto que `CLAUDE.md`
+prohíbe"). El razonamiento estaba mal — lo prohibido es que haya **dos integradores**, no que el
+único corra en Linux. **Una regla mal escrita defendió el bloqueo durante días.**
+
+**Se sumó `docs-auditoria`** (`/root/bin/loops/docs-auditoria.md`, rama del carril, cada 4 h): un
+foco por vuelta entre *docs falsos · trabajo pisado · ítems fantasma*, siempre verificando en
+vivo, y **prohibido inventar hallazgos**. Su combustible no se agota.
+
+**🔴 `web-factory-dev-loop` NO se migró, a propósito.** Su cola está seca: `LOOP_COLA.md` tiene
+`CARRIL A` y `CARRIL B` con **cero** ítems sin marcar (27 hechos), y los 2 que quedan están en
+*"Bloqueadas (esperan a Sergio)"*, que no es cola. Un loop sin combustible no se planta:
+**inventa trabajo**. Para revivirlo hay que **rellenar la cola, no rearmar el cron** — y eso es
+decisión de Sergio.
+
+**Dos defectos que sólo aparecieron al mudarse:**
+
+1. **El canario corría un prompt viejo.** El repo tenía la versión de **diez pantallas con
+   umbrales medidos** (commit `52e359c1`), ya mergeada a `main`; el VPS ejecutaba la de **cinco**
+   y su worktree estaba **100 commits atrás de `main`**, con el script viejo de 4.572 bytes que ni
+   siquiera acepta `--self-check`. Arreglado: FF limpio de la rama a `main` + prompt desplegado.
+   Verificado: `node scripts/canario_visual.mjs --self-check` → *"ok — 13 casos de umbral + 10
+   pantallas con cola existente"*. **Commitear una mejora no la enciende.**
+2. **`marca-personal` fallaba cada vuelta por un `upstream` mal puesto.** Apuntaba a `origin/main`
+   en vez de a su propia rama, así que `git push` se negaba y el corredor avisaba *"quedaron N
+   commits SIN pushear"* — **una alarma falsa**, porque el trabajo ya estaba en el remoto.
+   Además **nunca había estado escrito en `loops.md`**: el archivo existía y la lista contra la
+   que se compara, no. Un loop fuera de esa tabla **no lo rearma nadie**.
+
+**Cómo se agrega o se saca un loop** quedó escrito al final de
+[`cola/loops.md`](../cola/loops.md), y los prompts versionados viven en
+[`scripts/loops/prompts/`](../../../scripts/loops/prompts/) — **hay que copiarlos al VPS, o el
+que corre queda huérfano**, que es exactamente lo que le pasó al canario.
+
 ## 7. Los tres heroes
 
 Sergio pidió que el hero **no lleve capturas literales del sistema**. Se desarmó Lety y el dato

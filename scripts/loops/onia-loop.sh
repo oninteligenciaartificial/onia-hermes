@@ -113,6 +113,17 @@ ACTUAL=$(git -C "$WT" branch --show-current 2>/dev/null || echo '?')
 [ "$ACTUAL" = "$RAMA" ] || { avisar "el worktree $WT esta en '$ACTUAL' y se esperaba '$RAMA'"; exit 2; }
 cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
 
+# ── el prompt que corre vs el versionado en main -----------------------------
+# El prompt que se ejecuta vive en /root/bin/loops/; su fuente versionada vive
+# en el repo. Si divergen, el loop corre una version vieja y NADIE se entera:
+# el 2026-09-02 el canario llevaba un dia entero mirando 5 pantallas mientras
+# `main` ya tenia la version de 10 con umbrales medidos. Avisa, no frena: un
+# prompt viejo sigue trabajando; uno que no arranca, no.
+FUENTE=/root/loops/onia-hermes/scripts/loops/prompts/$NOMBRE.md
+if [ -f "$FUENTE" ] && ! cmp -s "$FUENTE" "$PROMPT"; then
+  avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
+fi
+
 # ── la vuelta ----------------------------------------------------------------
 ANTES=$(git rev-parse --short HEAD)
 T0=$(date +%s)
