@@ -263,6 +263,22 @@ Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
 - `claude/investigacion` — cotiza las decisiones del radar (loop `investigacion`)
 - `claude/git-status-935f47` — la sesion de control (Sergio y el orquestador escriben ahi)
 - `claude/lucia-vps` — carril LUCIA/@oniahq. **NO la mergees**: ver el recuadro de abajo.
+- `claude/supervisor` — audita a los otros loops (loop `supervisor`)
+- `claude/web-factory-dev` — webs de cliente (loop `web-factory-dev`)
+- `claude/calidad-generado` — calidad de piezas generadas (loop `calidad-generado`)
+- `claude/recorrido-cliente` — recorre el camino del cliente (loop `recorrido-cliente`)
+- `claude/tendencias` — recetas de contenido con fuente (loop `tendencias`)
+
+⚠️ **Y volvió a pasar, con CINCO carriles a la vez.** Al 2026-09-02 21:20 UTC esta lista nombraba
+ocho ramas y el corredor ya definía **catorce loops sobre doce ramas de carril**: faltaban las
+cinco de arriba. Tres tenían trabajo varado en ese momento — `supervisor` (2 commits),
+`web-factory-dev` (1) y `calidad-generado` (1) — y las otras dos existen y sus loops corren
+8×/día y 2×/día. Medido con `scripts/loops/onia-loop.sh` (los `RAMA=` de cada `case`, que es
+quien decide dónde pushea cada loop) contra esta lista, no de memoria.
+
+**La lección no es "actualizá la lista": es que la lista se atrasa cada vez que nace un loop, y
+ya van tres.** La fuente de verdad de qué ramas hay es el corredor, no este archivo. Si el
+comando en vivo de abajo contradice esta lista, **gana el comando**.
 
 ⚠️ **`web-venta` e `investigacion` faltaban en esta lista hasta el 2026-09-02 13:38 UTC, y los
 dos tenían un commit varado.** Sus loops se crearon ese mismo día, con cron registrado y
