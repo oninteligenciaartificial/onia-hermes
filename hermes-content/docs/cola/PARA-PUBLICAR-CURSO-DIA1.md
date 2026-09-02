@@ -13,14 +13,13 @@ en claude.ai — tu asistente en 10 minutos.
 Queres el paso a paso completo cada dia? Comenta COMUNIDAD y te paso el enlace
 para unirte.
 
-## 2 · HISTORIAS (en este orden, con stickers nativos encima de la zona punteada)
+## 2 · HISTORIAS (v2 aprobada por Sergio: el INICIO es la comunidad; el curso es proyecto FUTURO)
 
-1. historia-1-anuncio.png — sin sticker.
-2. historia-2-encuesta.png — sticker ENCUESTA, 4 opciones (max ~26 caracteres c/u):
-   "Responda solo (WhatsApp)" / "Fotos y anuncios" / "Cotizaciones al toque" /
-   "TODO el sistema"
-3. historia-3-preguntas.png — sticker CAJA DE PREGUNTAS, titulo: "Que tendria que tener si o si?"
-4. historia-4-comunidad.png — sin sticker (la gente RESPONDE la historia con COMUNIDAD y el link se manda a mano por DM).
+1. historia-1-arranque.png — hoy arranca Onia Community (sin sticker).
+2. historia-2-lo-que-viene.png — el curso como proyecto futuro, sin fecha ni venta (sin sticker).
+3. historia-3-encuesta.png — sticker ENCUESTA, 4 opciones: "Responda solo (WhatsApp)" / "Fotos y anuncios" / "Cotizaciones al toque" / "TODO el sistema"
+4. historia-4-preguntas.png — sticker CAJA DE PREGUNTAS: "Que te gustaria aprender si o si?"
+5. historia-5-comunidad.png — la gente RESPONDE la historia con COMUNIDAD y el link va por DM a mano.
 
 ## 3 · Comunidad (Avisos) — mismo dia, despues de las historias
 

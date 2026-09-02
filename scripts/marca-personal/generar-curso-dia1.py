@@ -71,16 +71,30 @@ FEED = f"""<div class="lienzo" style="width:1080px;height:1350px;justify-content
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H1 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:54px;padding:150px 90px">
-  <div class="pill">HOY</div>
-  <div class="titulo" style="font-size:128px;font-weight:600">Estoy armando<br><span style="font-weight:650">EL CURSO</span></div>
-  <div class="sub">el sistema completo que muestro acá,<br>paso a paso — y lo armo con vos</div>
+H1 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:44px;padding:120px 90px">
+  <div class="pill">HOY ARRANCA</div>
+  <div class="wordmark" style="font-size:112px">Onia<br>Community</div>
+  <div class="chat" style="width:100%">
+    <div class="cinta" style="top:-22px;left:60px;transform:rotate(-7deg)"></div>
+    <img class="icono-flot" src="{ICONOS}/light_bulb.png" style="width:130px;top:-54px;right:-40px;transform:rotate(10deg)">
+    <div class="burbuja"><div class="autor">Sergio · Onia</div><div class="txt">Cada día: una herramienta o prompt que uso de verdad en mi empresa — gratis</div></div>
+    <div class="burbuja"><div class="autor">Sergio · Onia</div><div class="txt">🧰 El de hoy ya está en el feed: tu asistente de clientes en 10 minutos</div></div>
+  </div>
   <div class="sub" style="font-weight:650;color:#0A0A0A;font-size:38px">seguí →</div>
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H2 = """<div class="lienzo" style="width:1080px;height:1920px;gap:50px;padding:140px 90px 120px">
-  <div class="titulo" style="font-size:86px">¿Qué te urge más<br>en tu negocio?</div>
+H2 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:52px;padding:150px 90px">
+  <div class="pill">LO QUE VIENE</div>
+  <div class="titulo" style="font-size:108px">Y esto recién<br>empieza</div>
+  <div class="sub">más adelante quiero armar un curso:<br>el sistema COMPLETO, paso a paso —<br>y lo voy a armar con vos</div>
+  <img class="icono-flot" src="{ICONOS}/rocket.png" style="position:static;width:170px;transform:rotate(8deg)">
+  <div class="sub" style="font-weight:650;color:#0A0A0A;font-size:38px">decime qué necesitás →</div>
+  <div class="handle">@sergiourcullo</div>
+</div>"""
+
+H3 = """<div class="lienzo" style="width:1080px;height:1920px;gap:50px;padding:140px 90px 120px">
+  <div class="titulo" style="font-size:86px">¿Qué querés que<br>enseñe primero?</div>
   <div class="card">
     <div class="op"><b>A</b> que responda solo por WhatsApp</div>
     <div class="op"><b>B</b> fotos y anuncios sin diseñador</div>
@@ -91,24 +105,24 @@ H2 = """<div class="lienzo" style="width:1080px;height:1920px;gap:50px;padding:1
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H3 = """<div class="lienzo" style="width:1080px;height:1920px;gap:54px;padding:150px 90px 120px">
-  <div class="titulo" style="font-size:92px">¿Qué tendría que<br>tener sí o sí?</div>
-  <div class="sub">decímelo con tus palabras —<br>lo leo TODO y lo meto al temario</div>
+H4 = """<div class="lienzo" style="width:1080px;height:1920px;gap:54px;padding:150px 90px 120px">
+  <div class="titulo" style="font-size:92px">¿Qué te gustaría<br>aprender sí o sí?</div>
+  <div class="sub">decímelo con tus palabras —<br>lo leo TODO y con eso armo el contenido</div>
   <div class="zona"><span>CAJA DE PREGUNTAS ACÁ</span></div>
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H4 = """<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:56px;padding:150px 90px">
-  <div class="titulo" style="font-size:92px">Mientras lo armo,<br>el paso a paso<br>va <span style="font-weight:650">GRATIS</span></div>
-  <div class="sub">cada día suelto una herramienta o prompt<br>en mi comunidad de WhatsApp</div>
+H5 = """<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:56px;padding:150px 90px">
+  <div class="titulo" style="font-size:96px">Entrá gratis.<br>Somos los primeros.</div>
+  <div class="sub">cada día una herramienta o prompt<br>en mi comunidad de WhatsApp</div>
   <div class="pill" style="font-size:42px">RESPONDÉ: COMUNIDAD</div>
   <div class="sub" style="font-size:36px">a esta historia y te paso el enlace</div>
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-PIEZAS = [("post-feed", FEED, 1080, 1350), ("historia-1-anuncio", H1, 1080, 1920),
-          ("historia-2-encuesta", H2, 1080, 1920), ("historia-3-preguntas", H3, 1080, 1920),
-          ("historia-4-comunidad", H4, 1080, 1920)]
+PIEZAS = [("post-feed", FEED, 1080, 1350), ("historia-1-arranque", H1, 1080, 1920),
+          ("historia-2-lo-que-viene", H2, 1080, 1920), ("historia-3-encuesta", H3, 1080, 1920),
+          ("historia-4-preguntas", H4, 1080, 1920), ("historia-5-comunidad", H5, 1080, 1920)]
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
