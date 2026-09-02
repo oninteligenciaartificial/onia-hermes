@@ -46,6 +46,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | `docs-auditoria` | **VPS** | `18 1,5,9,13,17,21 * * *` (UTC) | Carril docs/infra (rama `claude/docs-auditoria`): que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
 | `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `canario-visual` | **VPS** | `41 4,10,16,22 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
+| `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
 | `marca-personal` | **VPS** | `56 13,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
 | `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
 
@@ -124,6 +125,29 @@ un worktree apuntando a una rama que ya tiene dueño **no avisa nada**.
 
 **`contenido-cola` se queda en Windows a propósito**, y esto sí es una decisión, no una omisión:
 Sergio, 2026-09-01 — *"no toques el de contenido, el de contenido lo maneja su sesión"*.
+
+### 🔴 El sistema integraba y auditaba, y no construía nada
+
+Lo cazó Sergio el mismo 2026-09-02, mirando la lista: *"pero y loops para tu desarrollo no tenés
+entonces?"*. Tenía razón, y el agujero era estructural, no un olvido:
+
+- `docs-auditoria` **audita**, no construye.
+- `canario-visual` **produce ítems de cola**, no los cierra.
+- `chatbot-cola` y `marca-personal` construyen, pero **sólo lo suyo**.
+- `onia-cola` decía construir *"sólo si no había nada que integrar"* — y con cinco carriles
+  pusheando **casi nunca** iba a llegar ahí. **La cola de plataforma no tenía a nadie.**
+
+Dos cambios:
+
+1. **`onia-cola` mergea UN carril por vuelta y después construye** si le queda más de la mitad
+   del tope. Integrar es rápido; el resto de la hora es para cerrar ítems.
+2. **Nace `web-venta`**, dueño de `onia.com.bo/` y `/empezar`. Esas dos pantallas vivían en
+   `web-factory/apps/onia-platform/`, una carpeta que **ninguna cola nombraba** y que la zona del
+   viejo loop de web-factory **prohibía explícitamente**. El canario encontraba defectos ahí y
+   los dejaba anotados **sin nadie que los consumiera** — por eso seguían vivos la maqueta
+   cortada en desktop y la falta de un gate que corra `tsc` sobre el sitio de venta. Son la
+   primera pantalla que ve un lead: el defecto más caro del sistema estaba en la superficie sin
+   dueño.
 
 ⚠️ **El conteo de esta sección es historia, no estado.** Empezó con dos, sumó `marca-personal` el
 2026-09-01, y con `onia-cola` y `docs-auditoria` el 2026-09-02 son **cinco** en el VPS

@@ -143,11 +143,38 @@ proposito.** Su loop no existe: se apago el 2026-09-02 porque su cola quedo seca
 apagados en `loops.md`). La rama esta **1.173 commits atras de `main`** con 1 commit propio;
 mergearla es decision de Sergio, no tuya.
 
-Para la que tenga commits sin mergear y el árbol limpio: **mergeá a `main` y pusheá.**
+### 🔴 UN carril por vuelta, no todos
+
+**Mergeá UNO solo: el que más commits sin mergear tenga.** Después pasá al Paso 2. El resto
+espera a la vuelta siguiente — corrés cada hora, no hay apuro.
+
+Nace del 2026-09-02, la primera vuelta de este loop en el VPS: intentó los cinco carriles de
+corrido, **se quedó sin turnos a mitad del tercero** y dejó `MERGE_HEAD` abierto sobre `main`
+con el índice entero montado. No había ni un conflicto —git había resuelto todo— pero un merge
+abierto es el estado que cualquier `add -A` convierte en un commit a ciegas. **Es el modo de
+falla que `CLAUDE.md` prohíbe**, y ya llegó una vez a `main` con 17 archivos con marcadores
+adentro.
 
 **Mergeá, no rebasees.** Acá hay varios worktrees sobre el mismo repo: un `checkout` de la rama
 del carril te la arranca de abajo de su propio loop. `git merge --no-ff origin/<rama>` desde
 `main` hace el trabajo sin tocar el árbol de nadie.
+
+### Nunca sueltes el turno con un merge abierto
+
+Si vas quedándote sin turnos o sin tiempo **en medio de un merge**, no lo dejes ahí:
+
+    git merge --abort
+
+Abortar es **gratis** —la rama del carril no se toca y el merge se rehace igual en la vuelta
+siguiente— y dejarlo abierto puede publicar medio merge en `main`. Antes de dar la vuelta por
+terminada, comprobalo:
+
+    git rev-parse --git-dir            # y verificá que NO exista MERGE_HEAD adentro
+    git diff --name-only --diff-filter=U   # tiene que salir vacío
+
+⚠️ **Para empujar a `main` necesitás `ONIA_LOOP_ID=onia-cola` en el entorno.** El corredor te lo
+exporta solo; hay un hook `pre-push` que bloquea a cualquier otro loop del VPS. Si ves
+*"pre-push: BLOQUEADO"*, no lo desactives: estás corriendo fuera del corredor.
 
 ### Los gates, antes de mergear
 
@@ -191,17 +218,30 @@ el de contenido, el de contenido lo maneja su sesión"*.
 Una rama que diverge hace semanas (>100 commits atrás de `main`) **no se mergea sola**: anotala y
 `onia-tg.sh` — esa es decisión de Sergio.
 
-**Tu definición de hecho es "cero commits sin mergear en las ramas de carril activas", no "un
-ítem de cola cerrado".** Si mergeaste algo, esa fue tu vuelta: terminaste.
-
 Si quedan commits en `main` SIN desplegar: listalos en
 `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` con lo que arregla cada uno y mandá UNA
 línea: *"N commits listos, el más caro es X"*. Desplegar sigue siendo de Sergio; juntarle la
 decisión es tuyo.
 
-## Paso 2 — sólo si no había nada que integrar: tu cola
+## Paso 2 — CONSTRUIR. No es el premio de consolación: es la mitad de tu oficio
+
+⚠️ **Acá decía "sólo si no había nada que integrar", y estaba mal.** Con cinco carriles vivos
+pusheando, casi siempre hay algo que integrar — así que ese "sólo si" dejaba la cola de
+plataforma **sin nadie que la construyera nunca**. Lo cazó Sergio el 2026-09-02: *"pero y loops
+para tu desarrollo no tenés entonces?"*. Tenía razón: el sistema entero quedaba integrando y
+auditando, sin nadie construyendo.
+
+**La regla que reemplaza a esa:** mergeaste tu carril del Paso 1, ¿y te queda **más de la mitad
+del tope** (25 minutos)? **Seguí con el Paso 2 en la misma vuelta.** Integrar es rápido —un
+merge y sus gates—; el resto del tiempo es para construir.
+
+Si no te queda tiempo, terminá ahí y decilo en tu línea. Es honesto.
 
 Leé `hermes-content/docs/COLA.md`. Tomá el **primer ítem no bloqueado de "Ahora"**.
+
+⚠️ **Los ítems del sitio de venta NO son tuyos.** Todo lo que apunte a
+`web-factory/apps/onia-platform/` o a las URLs `onia.com.bo/` y `/empezar` es del loop
+`web-venta`, que estrenó dueño el 2026-09-02. Saltealos y tomá el siguiente.
 
 **Gate 1 antes de tocar una línea:** ¿ya está hecho? ¿el bloqueo existe? Verificá **EN VIVO** y
 contra el sistema correcto (la plataforma la sirve un contenedor del VPS, **no Vercel**; la base
