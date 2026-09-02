@@ -113,6 +113,14 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 > `REVERTIDAS 3/9` (`BRAND_URL`, `TERMS_URL`, `PRIVACY_URL`) — el bloqueo está **vivo, no
 > vencido**. Vuelve a "Ahora" el día que el gate cambie de veredicto.
 
+> ⚠️ **Con "Ahora" vacío, `verificar_cola.js` sale 1** (`ERROR cola-vacia`) — medido el
+> 2026-09-02 contra este archivo Y contra el de HEAD: el rojo es **anterior** a la vuelta que lo
+> anota, no lo trajo un cambio. Es el gate diciendo la verdad, no una falla: los tres ítems de
+> "Ahora" se fueron a "Bloqueado en Sergio" (S9, S10, S11) y los tres esperan un `scp` o un
+> deploy que sólo él autoriza. **No se destraba llenando "Ahora"**: promover un ítem de "Después"
+> para que el gate se ponga verde es fabricar trabajo, que es lo único que la cola prohíbe. Se
+> destraba cuando Sergio hace uno de esos tres.
+
 > **El ítem 2 —las campañas de la web— salió de acá el 2026-08-31.** Vivió diez vueltas
 > esperando el `scp` de **S9**, que escribe en el VPS y por eso es de Sergio. Se movió entero
 > a "Bloqueado en Sergio" con su historia. Reverificado antes de moverlo, dentro y fuera del
@@ -151,19 +159,6 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 ---
 
 ## Después
-
-- [ ] **"La cita" le habla de consultorio a una ferretería — y esta vez NO es el flag.**
-      Encontrado en la recorrida v6.8, con `PLATFORM_LAYER=1` puesto, o sea que es el texto y
-      no el entorno: en `/settings/chatbot` de `Ferreteria Circuito Completo` la tarjeta se
-      titula **"La cita"**, pide **"Cuánto dura (minutos)"** y ofrece de ejemplo
-      **"en el consultorio, o por videollamada"**. Una ferretería no agenda citas ni tiene
-      consultorio. Son literales en `onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`
-      — la pantalla sí usa el vocabulario del rubro, pero sólo para dos placeholders de ejemplo
-      (`page.tsx:47`, `voc.ejemploNombre` y `voc.ejemploMiembro`), no para estos rótulos.
-      **Lo barato que lo arregla:** `lib/onboarding/vocabulario.ts` no tiene todavía una palabra
-      para "la cita" por rubro. Es un campo nuevo en un módulo que consumen muchas pantallas
-      (Sidebar, Header, alta), así que **lo decide el carril de plataforma, no éste** — se
-      anota con su prueba y se deja.
 
 - [ ] **El disco de la máquina de Sergio se llenó al 100% y bloqueó el build.**
       No es una molestia: `next build` murió con `ENOSPC: no space left on device` y con
@@ -444,6 +439,51 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **"La cita" ya no le habla de consultorio a una ferretería: cada rubro lee su propia
+      palabra.** Cerrado el 2026-09-02 (commit `675541b` de `onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`). **Commiteado, NO desplegado.**
+      **Gate 1 primero, en vivo:** el ítem era REAL —`ChatbotClient.tsx` líneas 90, 505, 510 y
+      520 seguían con los literales— y no estaba cerrado más abajo.
+      🔴 **Pero su diagnóstico estaba incompleto, y el dato que faltaba lo hacía más barato, no
+      más caro.** El ítem decía *"lo decide el carril de plataforma"* porque agregar un campo a
+      `lib/onboarding/vocabulario.ts` sonaba a tocar un módulo que consumen muchas pantallas.
+      Medido: `VOCABULARIOS` es un `Record<VerticalTrackId, …>` con los 7 rubros explícitos, así
+      que un campo nuevo es **aditivo** — TypeScript obliga a llenar los 7 y ningún consumidor
+      actual se entera (Sidebar y Header leen `busqueda`, el alta lee `ejemploNombre`). Y la
+      pantalla rota es `/settings/chatbot`, que es de ESTE carril.
+      **Lo que el ítem no vio, y es el corazón del arreglo:** el modelo de dominio ya sabía la
+      verdad y la pantalla no la leía. `lib/chatbot/plantillas.ts:53-55` no le da `demo` ni a
+      comercio ni a importadora, con su motivo escrito —*"sin cita definida el bot deriva en vez
+      de agendar"*—, mientras el editor les pedía igual configurar una cita, en dental.
+      **Lo que se hizo:** `cita` y `citaModalidad` en `VocabularioAlta`, los 7 rubros, coherentes
+      con la `demo.modalidad` de `plantillas.ts` (clínica/estética/veterinaria "la cita"; estudio
+      "la reunión"; comercio, importadora y estancia "la visita"). `ChatbotClient` los recibe por
+      prop, y `etiquetaDeCampo` los usa **también en los mensajes de error**, que decían
+      "Duración de la cita" para todos. El bloque ahora avisa que dejarlo vacío hace derivar en
+      vez de agendar — la regla dura del motor, que ningún rubro leía en pantalla.
+      **Por qué el trinquete no lo había atajado, que es el hallazgo que sobrevive al ítem:**
+      `__tests__/lib/vocabulario-por-rubro.test.ts` buscaba `paciente|clínica` y **no
+      `consultorio`** — igual de dental, sólo que nombra el LUGAR en vez de la persona. Por eso
+      esta pantalla pasó por debajo. Agregada la palabra al regex; radio medido ANTES de
+      ampliarlo: **un solo archivo** (el otro hit era un comentario, y `textoVisible` los
+      strippea), o sea que el trinquete no arrastró deuda ajena.
+      **Probado que los tests MUERDEN, no sólo que pasan:** revertidos a mano los dos literales,
+      **5 tests se ponen rojos** (los 3 de rubro no-clínico + los 2 del trinquete) y vuelven a
+      verde al restaurarlos. El nuevo `app/(dashboard)/settings/chatbot/bloque-cita.test.ts`
+      **RENDERIZA el componente real** con `renderToStaticMarkup` y lee el HTML: un grep no
+      distingue el literal viejo de una prop bien cableada. Va en `.ts` con `createElement` a
+      propósito, para no tocar el `include` de `vitest.config.ts`, que comparten todos los
+      carriles.
+      **MIRADO renderizado en Chromium** (los tres rubros lado a lado): la ferretería lee
+      **"La visita" / "en el local"**, la clínica conserva **"La cita" / "en el consultorio, o
+      por videollamada"** —el arreglo no le quitó su palabra— y el estudio contable lee
+      **"La reunión"**. ⚠️ **Con hoja de estilos sustituta, no la de producción:** este disco no
+      tiene `.env` ni base sembrada, así que `/dev/demo` no levanta, y Tailwind v4 va por postcss
+      (no hay binario para compilar los tokens sueltos). Lo verificado es el **texto y la
+      estructura** del componente real; la piel de producción no se miró.
+      **Gates:** `tsc --noEmit` limpio · **2441 tests** verdes (197 archivos) · `eslint` 0
+      errores, y 0 warnings en los 5 archivos tocados.
 
 - [x] **`espejo-check.mjs` quedó ciego el mismo día que el loop se mudó al VPS: intentaba
       SSH a sí mismo con una clave que no existe en el host.** Encontrado midiendo el ítem de
@@ -845,6 +885,56 @@ archivos.**
       `evals-contrato.test.mjs` en FALTAN EN EL VPS. Es un test, no el motor: no cambia una línea
       de lo que corre. Los tres DISTINTOS (`espejo-check.mjs`, `espejo-check.test.mjs`,
       `recepcionista.test.mjs`) ya estaban antes de esta vuelta.
+
+- [x] **El objetivo del carril se REVIRTIÓ en silencio: `Onia (interna)` dejó de apuntar al
+      inbox 5 (WhatsApp) y pasó a apuntar al 4 (Web) sin que nadie lo tocara desde la UI —
+      encontrado auditando "Después" (Ahora estaba vacío) y corregido en la misma vuelta.**
+      **Gate 1, medido en la base de producción, no leído:** `clinic_settings` de
+      `Onia (interna)` (`organizationId c956c02fccd8573cd6fcc5b35`) tenía
+      `chatwootInboxId = 4`, no `5` como dejó cerrado S8 el 31-ago. Consecuencia real, medida
+      contra Chatwoot: `/inbox` de esa org mostraba las conversaciones del **inbox 4** (los seis
+      desconocidos del widget, la mayoría sin teléfono) y **dejaba invisibles otra vez a
+      mariohassen (+591 73021804) y F (+591 73232758)** — los dos leads de WhatsApp que **S7**
+      da por visibles y esperando respuesta de Sergio. El objetivo técnico ("una conversación de
+      un desconocido en `/inbox`") seguía cumplido por casualidad (inbox 4 también tiene
+      desconocidos), pero **S7 quedó roto sin que la cola lo supiera**.
+      **Lo sospechoso que separa esto de un simple click accidental:** la fila de
+      `clinic_settings` para esa org tiene `id = ab6e629f-f798-4a7f-87df-12ec1c7fac0b` — formato
+      **UUID con guiones** — mientras las otras tres filas de la misma tabla son `cuid()` de
+      Prisma (`cmsvyguwn…`, `cmsw0e759…`, `cmthllqlp…`, todas minúsculas sin guion). `createdAt =
+      updatedAt = 2026-09-01 02:02:47`, y **todos** los demás campos están en su default de
+      schema (horario 08:00-18:00, sin `botPrompt`, sin `oniaCoreOnboarding`). Ningún camino de
+      `onia-platform` genera un id con ese formato: `ClinicSettings.id` es
+      `@default(cuid())` (`prisma/schema.prisma:989`) en los cuatro lugares que crean la fila
+      (`admin/clinics/route.ts`, `lib/platform/provisioning.ts`, `lib/onia-core/onboarding.ts`,
+      `lib/chatbot/canal-web.ts`). O sea: la fila vieja (con `chatwootInboxId=5`) no se
+      actualizó, se **BORRÓ y se re-creó desde cero por fuera de la app**, a las 02:02 de la
+      madrugada del 1-sep. No se encontró en el repo (`onia-platform` ni `onia-hermes`) ningún
+      script, migración o cron que haga ese INSERT — se buscó con `git log -S`, grep de
+      `clinicSettings.create/upsert/delete` y los crons del VPS. **Queda sin confirmar el
+      mecanismo exacto**; lo único descartado con evidencia es que haya sido un camino normal de
+      la app (habría dejado un `cuid()`, no un UUID).
+      **Lo que se hizo:** verificado primero que **ningún otro org usa el inbox 5** hoy
+      (`SELECT "chatwootInboxId" FROM clinic_settings` → sólo 4 y 7 ocupados), exactamente el
+      guardia de 409 que ya tiene `app/api/admin/organizations/[id]/whatsapp/route.ts`. Con eso
+      confirmado, se restauró con un `UPDATE` directo a `chatwootInboxId=5` — la misma escritura
+      que hace ese endpoint, sin tocar código ni desplegar nada. Verificado después contra
+      Chatwoot: inbox 5 vuelve a traer `37 mariohassen`, `35 F`, `11 Sergio`; la base vuelve a
+      leer `Onia (interna) → 5`, `ZZ QA Clinica Chatbot → 7`, las otras dos en NULL — el mismo
+      estado que dejó cerrado S8.
+      ⚠️ **Lo que NO se cerró, y por qué queda anotado y no en Bloqueado:** no depende de una
+      decisión de Sergio, así que no bloquea la cola — pero el mecanismo que borró la fila sigue
+      sin identificarse, y si vuelve a correr, revierte esto otra vez sin avisar. Ningún gate de
+      este carril mide hoy la tenencia del inbox 5 (los que existen — `espejo-check`,
+      `campanas-vivas`, `marca-chatwoot` — miden código y HTML público, no esta columna). Se
+      deja escrito el comando de verificación para el próximo Gate 1 que toque `/inbox` o S7/S8:
+      ```bash
+      docker exec supabase-db psql -U postgres -d postgres -c \
+        "select o.name, cs.\"chatwootInboxId\" from public.organizations o left join public.clinic_settings cs on cs.\"organizationId\"=o.id order by o.id;"
+      ```
+      `Onia (interna)` tiene que dar **5**. Si algún día vuelve a dar otra cosa sin que nadie lo
+      haya pisado desde la UI, es la misma trampa: mirar `id`/`createdAt` de la fila antes de
+      asumir que fue un click.
 
 - [x] **S11 era un FANTASMA: el bot ya firma como "Onia Bot" desde el 18-ago, y la bandeja ya
       rotula "Tu asistente".** Estaba en "Bloqueado en Sergio" pidiéndole una acción sobre un
