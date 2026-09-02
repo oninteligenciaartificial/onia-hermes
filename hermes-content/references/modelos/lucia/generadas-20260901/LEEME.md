@@ -99,3 +99,45 @@ la misma bolsa de papel**, que es el patrón que dio `V05` y `V06`.
 
 **Lo próximo:** animarla con `Turn to video`. Si el video hereda el aspecto del frame —que es lo
 que dice §7 de la técnica—, este va a ser **el primer video vertical**, listo para Reels y ads.
+
+
+---
+
+## ✅ V08 — B07 animada, y el PRIMER video vertical de verdad HECHO POR CLI
+
+`V08-ferreteria-seedance.mp4` · **720×1280 = 9:16 exacto** · 4,04 s · 97 frames · **con pista de
+audio aac** · modelo `seedance1_5` · **4,8 cr** (costo medido antes de generar, confirmado).
+
+**Lo generó el loop del VPS por CLI, sin navegador**, animando `B07-ferreteria-9x16`, la imagen
+que este mismo LEEME dejaba marcada como *«lo próximo: animarla»*.
+
+| | |
+|---|---|
+| **Archivo** | `V08-ferreteria-seedance.mp4` |
+| **Fuente** | `B07-ferreteria-9x16.jpg` |
+| **start_image (asset id de B07)** | `4eb429ec-c734-4e5e-a263-895d9b7f315a` |
+| **Modelo** | `seedance1_5` · 9:16 · 4 s · 720p · `generate_audio=true` |
+| **job_id del video** | `b4754470-79ca-45f9-9f32-7d2816e46333` |
+| **Salida** | 720×1280, 4,04 s, 97 frames, ~8,0 MB |
+
+**Verificación — MIRADO** (`_V08-TIRA.jpg`, 4 frames a 0,1 / 1,3 / 2,6 / 3,9 s): el traspaso se
+**completa** — ella sostiene la bolsa, la pasa, el cliente cierra las manos sobre ella y toma el
+peso, y ella baja las manos al mostrador. **No inventa habla ni giros** —el defecto de V04—: la
+boca queda cerrada, la mirada calma. La cara aguanta los cuatro frames: pecas, argolla dorada,
+cejas gruesas, **piel de tono parejo sin rojez** (no es la «muerta»). Colores true-to-life, ningún
+cartel legible. Es el mismo comportamiento bueno que V05/V06: con acción a medias clara el modelo
+**continúa** en vez de actuar.
+
+⚠️ El pelo sale recogido, no suelto — pero eso **viene de la fuente B07**, no de la animación
+(la generación por asset id ya recogía el pelo, anotado en `TECNICA §11`). El video sólo continúa
+la imagen que le dieron.
+
+**Prompt de animación** (para reproducir/afinar):
+> Handheld iPhone shot inside a small neighbourhood hardware store in Santa Cruz. The shopkeeper
+> finishes handing over the paper bag of screws; the customer's hands close around it and take its
+> weight. The woman blinks and shifts her head a fraction, eyes calm, not posing. Subtle natural
+> handheld micro-movement, real warm light from the open doorway. NATURAL TRUE-TO-LIFE COLORS.
+
+🔴 **Confirma la cadena de video por CLI de punta a punta:** `generate cost` → `generate create`
+con `--start-image <asset-id>` → URL directa → `curl`. Sin navegador, sin menús escondidos, y con
+el asset id anotado se re-anima sin volver a pagar la imagen.
