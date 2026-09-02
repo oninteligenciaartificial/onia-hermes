@@ -158,8 +158,37 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **La sonda reusa UNA conversación para siempre, así que desde la segunda vuelta ya no
-      mide "un desconocido escribe dos veces": mide una charla con ocho turnos encima.** Medido hoy
+- [x] 🔴 **La sonda reusa UNA conversación para siempre, así que desde la segunda vuelta ya no
+      mide "un desconocido escribe dos veces": mide una charla con ocho turnos encima.**
+      **CERRADO el 2026-09-02.** La causa medida no era la que este ítem suponía, y la diferencia
+      importa: no es que la conversación "crezca" y confunda a la sonda por largo — es que llega a
+      un estado donde **el bot calla POR DISEÑO**. Prueba, no hipótesis:
+      `select bot_stage, human_took_over from onia_center.bot_conversations where
+      conversation_key='chatwoot:49';` → **`handoff_humano|f`**. El motor lo silencia en
+      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:459` y en el `case "handoff_humano"` de la 591, que es lo CORRECTO: el bot
+      derivó a Sergio. La sonda gritaba "EL BOT SE QUEDO MUDO" con el bot sano — a las 20:19 y a
+      las 21:09 del mismo día había contestado los dos turnos.
+      **Ojo con la base equivocada:** en Chatwoot la conversación 49 figura `open` y perfectamente
+      sana. El estado que calla vive en OTRA base (`onia_center.bot_conversations` del
+      `supabase-db`). Mirar sólo Chatwoot es lo que mantuvo este bug invisible.
+      **El arreglo — desarmar antes de medir**, con su caso en rojo primero
+      (`necesitaDesarme is not defined`, 21/25) y verde después (25/25). No inventa un camino:
+      usa el que el producto ya define — `clearHumanTakeover` (mismo archivo, línea 117) dice *"resolver significa terminé"* y
+      devuelve `handoff_humano` a `nuevo`. Se resuelve **por Rails** para que corra el camino real
+      (Chatwoot emite `conversation_status_changed` → el adapter lo traduce), así cada vuelta
+      verifica de paso que ese desarme sigue vivo. Medido en vivo: `resolved` → **4 segundos** →
+      `bot_stage=nuevo`.
+      **Falla hacia el 2, nunca hacia el 1:** si el desarme no devuelve la conversación, la sonda
+      dice "NO SE PUDO MEDIR", no "el bot está mudo". Confundir esas dos cosas es exactamente lo
+      que costó esta vuelta.
+      **Verificación final:** `node scripts/sonda_widget.mjs` → **exit 0**, *"EL BOT CONTESTO LOS 2
+      — conversacion 49"*. Antes del arreglo, mismo comando: exit 1, 2 de 2 sin respuesta.
+      ⚠️ **La corrección que este ítem proponía (resolver para que se abra una conversación NUEVA)
+      no es lo que pasó:** medido, el widget siguió escribiendo en la **49**. Alcanza igual, porque
+      lo que había que resetear era el estado del motor, no el hilo. Anotado para que nadie
+      "arregle" después el hecho de que la conversación no se renueve.
+      <!-- Diagnóstico original, conservado: llegó a la causa correcta a medias -->
+      Medido hoy
       2026-09-02, no supuesto — y es un **falso rojo**, el peor defecto posible en el instrumento
       que decide si el carril está roto. Archivo: `scripts/sonda_widget.mjs`.
       **Reproducción exacta, 2 minutos:** `node scripts/sonda_widget.mjs` dos veces seguidas. La

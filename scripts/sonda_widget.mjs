@@ -86,6 +86,9 @@ const WEBSITE_TOKEN = process.env.ONIA_WIDGET_TOKEN || '9k5i7xnAgCbSse1EZwVChZLw
 const DB = process.env.ONIA_CHATWOOT_DB_CONTAINER || 'onia-chatbot_chatwoot-db';
 const APP = process.env.ONIA_CHATWOOT_APP_CONTAINER || 'onia-chatbot_chatwoot';
 const ESTADO = process.env.ONIA_SONDA_ESTADO || '/root/.onia/sonda-widget.json';
+// La base del MOTOR del bot, que NO es la de Chatwoot: `onia_center.bot_conversations` vive en
+// el Supabase self-hosted del VPS. Es donde se ve si el bot esta callado por diseno.
+const ESTADO_DB = process.env.ONIA_BOT_ESTADO_DB || 'supabase-db';
 const NOMBRE_SONDA = 'Sonda QA carril chatbot';
 
 /** Los dos mensajes del chequeo, tal cual los fija el prompt del loop. */
@@ -179,6 +182,41 @@ export function juzgar({ enviados, mensajes, conversacionId }) {
 
 /** Con esta marca el runner delata el token entre su propio ruido de WARN e INFO. */
 export const MARCA_BOOTSTRAP = 'ONIA_SONDA_TOKEN=';
+
+// ─────────────────────────── EL DESARME, o por que la sonda se envenenaba sola ────────────
+// Reusar UNA sola conversacion es lo que hace sostenible medir cada hora (esquiva el cupo de
+// 5/hora de rack_attack y no ensucia con 24 conversaciones diarias la bandeja donde viven los
+// leads de verdad). Su costo, que no estaba visto: esa conversacion ACUMULA estado.
+//
+// Medido el 2026-09-02: a las 20:19 y a las 21:09 el bot contesto los DOS turnos. En la tercera
+// vuelta la conversacion llego a `handoff_humano` —el bot derivo a Sergio, que es EXACTAMENTE lo
+// que tiene que hacer— y ahi el motor calla por diseno (`bot-engine.mjs:459`, y el
+// `case "handoff_humano"` de la 591). La sonda midio 0 de 2 y grito "EL BOT SE QUEDO MUDO"
+// con el bot sano.
+//
+// Sin este desarme la sonda miente UNA VEZ POR HORA para siempre, y cada vuelta del loop se
+// quema en su propia falsa alarma en vez de mirar la cola. Es el caso exacto del instrumento
+// que se da la razon a si mismo.
+//
+// El desarme NO es un truco: es la semantica que el propio producto define. `clearHumanTakeover`
+// (bot-engine.mjs:117) dice "resolver significa termine" y devuelve `handoff_humano` a `nuevo`.
+// Resolvemos por Rails para que el camino real se ejecute entero — Chatwoot emite
+// `conversation_status_changed`, el adapter lo traduce y el estado vuelve. Efecto de borde
+// deseado: cada vuelta verifica ademas que ese desarme sigue vivo.
+
+/** Estados del motor en los que el bot calla por diseno. Medir ahi no mide al bot. */
+export const ESTADOS_QUE_CALLAN = new Set(['handoff_humano']);
+
+/**
+ * ¿Esta conversacion esta en un estado donde el silencio es CORRECTO?
+ * Sin fila todavia no hay nada que desarmar; desarmar de mas tampoco es gratis (resolver
+ * reinicia el embudo), asi que solo se toca lo que efectivamente calla.
+ */
+export function necesitaDesarme(fila) {
+  if (!fila) return false;
+  if (fila.humanTookOver === true) return true;
+  return ESTADOS_QUE_CALLAN.has(String(fila.botStage || ''));
+}
 
 /** El guion de Rails. Separado y exportado para poder afirmarlo sin levantar un contenedor. */
 export function guionBootstrap({ websiteToken, nombre }) {
@@ -291,6 +329,71 @@ const sql = (q) =>
     timeout: 30_000,
   }).trim();
 
+/** La conversacion que le corresponde al token guardado, o null si todavia no existe. */
+function conversacionDelToken(token) {
+  const sid = sourceIdDelToken(token);
+  const id = sql(
+    `select c.id from conversations c join contact_inboxes ci on ci.id = c.contact_inbox_id ` +
+      `where ci.source_id = '${sid.replace(/'/g, "''")}' order by c.id desc limit 1;`,
+  );
+  return id ? Number(id) : null;
+}
+
+/**
+ * El estado del MOTOR (no el de Chatwoot). Vive en otra base: `onia_center.bot_conversations`
+ * del `supabase-db` self-hosted. Mirar solo Chatwoot fue lo que hizo invisible este bug: alli
+ * la conversacion figura `open` y perfectamente sana.
+ */
+function estadoDelBot(conversacionId) {
+  const fila = execFileSync(
+    'docker',
+    [
+      'exec',
+      ESTADO_DB,
+      'psql',
+      '-U',
+      'postgres',
+      '-d',
+      'postgres',
+      '-tAc',
+      `select bot_stage || '|' || human_took_over from onia_center.bot_conversations ` +
+        `where conversation_key = 'chatwoot:${Number(conversacionId)}';`,
+    ],
+    { encoding: 'utf8', timeout: 30_000 },
+  ).trim();
+  if (!fila) return null;
+  const [botStage, tomada] = fila.split('|');
+  return { botStage, humanTookOver: tomada === 't' || tomada === 'true' };
+}
+
+/**
+ * Devuelve la conversacion al bot resolviendola, que es lo que el producto define como
+ * "termine" (`clearHumanTakeover`). Va por Rails a proposito: asi se ejecuta el camino real
+ * —Chatwoot emite `conversation_status_changed`, el adapter lo traduce— y cada vuelta verifica
+ * de paso que ese desarme sigue vivo. Escribir la base a mano lo daria por bueno sin probarlo.
+ */
+function desarmar(conversacionId) {
+  const app = contenedor(APP, ['sidekiq', '-db', 'redis']);
+  execFileSync(
+    'docker',
+    [
+      'exec',
+      app,
+      'sh',
+      '-lc',
+      `RAILS_ENV=production bundle exec rails runner "Conversation.find(${Number(conversacionId)}).resolved!" 2>&1`,
+    ],
+    { encoding: 'utf8', timeout: 180_000 },
+  );
+  // El webhook viaja por Sidekiq: es rapido pero no instantaneo. Se espera al EFECTO
+  // (`bot_stage` de vuelta en algo que habla), no a un plazo fijo.
+  for (let i = 0; i < 10; i += 1) {
+    if (!necesitaDesarme(estadoDelBot(conversacionId))) return true;
+    execFileSync('sleep', ['2']);
+  }
+  return false;
+}
+
 function leerEstado() {
   try {
     return JSON.parse(readFileSync(ESTADO, 'utf8'));
@@ -336,6 +439,32 @@ async function correr() {
     } catch (e) {
       return { codigo: 2, texto: `NO SE PUDO MEDIR — fallo el arranque por Rails: ${e.message}` };
     }
+  }
+
+  // DESARMAR ANTES DE MEDIR. Ver el comentario largo de `necesitaDesarme`: la conversacion
+  // reusada acumula estado y termina en `handoff_humano`, donde el silencio es CORRECTO. Medir
+  // ahi no mide al bot — grita que esta mudo con el bot sano, una vez por hora, para siempre.
+  try {
+    const previa = conversacionDelToken(estado.cw_conversation);
+    if (previa) {
+      const fila = estadoDelBot(previa);
+      if (necesitaDesarme(fila)) {
+        const ok = desarmar(previa);
+        if (!ok) {
+          // Fallar hacia "no se pudo medir" (2) y NUNCA hacia "el bot esta mudo" (1): no medir
+          // no es estar roto, y confundirlos es como este carril perdio una vuelta entera.
+          return {
+            codigo: 2,
+            texto:
+              `NO SE PUDO MEDIR — la conversacion ${previa} quedo en "${fila.botStage}" (el bot calla por ` +
+              'diseno) y el desarme por `resolved` no la devolvio a "nuevo". Revisar que Chatwoot siga ' +
+              'emitiendo `conversation_status_changed` y que el adapter lo traduzca.',
+          };
+        }
+      }
+    }
+  } catch (e) {
+    return { codigo: 2, texto: `NO SE PUDO MEDIR — fallo el desarme previo: ${e.message}` };
   }
 
   const url = `${HOST}/widget?website_token=${WEBSITE_TOKEN}&cw_conversation=${encodeURIComponent(estado.cw_conversation)}`;
@@ -679,6 +808,33 @@ function selfCheck() {
     assert.match(guion, /TOK123/, 'el guion tiene que buscar el inbox por su website_token');
     assert.ok(guion.includes(NOMBRE_SONDA), 'el guion tiene que nombrar la sonda');
     assert.match(guion, new RegExp(MARCA_BOOTSTRAP), 'sin la marca no hay como leer el token');
+  });
+
+  // ── El desarme: por que la sonda se envenenaba sola ───────────────────────────────────
+  // La sonda reusa UNA conversacion para siempre (el `cw_conversation` evita el cupo de
+  // 5/hora). El efecto de borde que nadie vio: esa conversacion ACUMULA estado. El 2026-09-02
+  // llego a `handoff_humano` —el bot derivo a Sergio, que es lo correcto— y desde ahi el motor
+  // calla POR DISENO (`bot-engine.mjs:459` y el `case "handoff_humano"` de la 591). La sonda
+  // midio 0 de 2 y grito "EL BOT SE QUEDO MUDO" con el bot sano: 20:19 y 21:09 del mismo dia
+  // habia contestado los dos turnos. Sin esto la sonda miente UNA VEZ POR HORA, para siempre,
+  // y cada vuelta del loop se quema en una falsa alarma en vez de mirar la cola.
+  caso('derivada a humano → hay que desarmar antes de medir', () => {
+    assert.strictEqual(necesitaDesarme({ botStage: 'handoff_humano', humanTookOver: false }), true);
+  });
+
+  caso('el takeover humano tambien calla al bot', () => {
+    assert.strictEqual(necesitaDesarme({ botStage: 'calificando', humanTookOver: true }), true);
+  });
+
+  caso('una conversacion en curso NO se toca', () => {
+    // Desarmar de mas tampoco es gratis: resolver reinicia el embudo y borraria el estado que
+    // la sonda quiere medir. Solo se desarma lo que efectivamente calla.
+    assert.strictEqual(necesitaDesarme({ botStage: 'calificando', humanTookOver: false }), false);
+    assert.strictEqual(necesitaDesarme({ botStage: 'nuevo', humanTookOver: false }), false);
+  });
+
+  caso('sin fila todavia no hay nada que desarmar', () => {
+    assert.strictEqual(necesitaDesarme(null), false);
   });
 
   let fallados = 0;
