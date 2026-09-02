@@ -43,43 +43,6 @@ de 3."** Ya no. `diff scripts/loops/prompts/canario-visual.md /root/bin/loops/ca
 está adentro de `main` — no hace falta rebasar ni archivar. Sigue viva sólo
 `claude/onia-web-architecture-b37eca` (401/2, aumentó desde el 371/6 de la última
 medición: sigue divergiendo, no se achica sola).
-⚠️ **Recontada el 2026-09-02: `462 8`**, no `401 2`. Sigue divergiendo y ahora
-más rápido — cada vuelta que se posterga, el rebase se paga más caro.
-
-**E. §9 — "la frase falsa sigue viva en producción". Ya no: se desplegó.** El punto pedía
-elegir entre (a) desplegar `master`, (b) esperar al punto 1, o (c) no desplegar. Se hizo (a).
-Medido **dentro del contenedor de producción**, con el mismo comando que el punto usó para
-denunciarlo — y da lo inverso:
-
-```
-docker exec onia-platform grep -rl "califica, agenda"   /app/.next | wc -l   →  0   (antes: 5)
-docker exec onia-platform grep -rl "deriva al humano"   /app/.next | wc -l   →  21  (antes: 0)
-```
-
-Los **cinco chunks** que el punto nombraba uno por uno (`2r69hfvyqgu11.js`, `0y0ll2ez_8ibn.js`,
-`0i_c69j3x7kp7.js`, `21bxtovtcih3y.js`, `1-eua0_n1sbcf.js`) ya no existen: `find` dentro del
-contenedor no encuentra ninguno. El `BUILD_ID` vivo es `lNDdVgrRvP1mizzu3BVXc` y el contenedor
-arrancó el **2026-09-01 22:28:26 UTC** (`docker inspect onia-platform`).
-
-Y lo que ahora lee el cliente en la pantalla del add-on —la de Bs 390, que era "el peor lugar
-posible para una promesa que el motor no cumple"— es exactamente la frase corregida de `f47d615`,
-extraída del bundle servido:
-
-```
-tagline:"Contesta, califica, deriva al humano y hace seguimiento"
-```
-
-**No queda decisión.** Ojo con lo que esto NO cierra: el punto 16 sigue vivo en su parte **(a)**,
-que es otro deploy y otro sistema —el **motor del bot** en `/opt/onia/bot`, no el bundle de la
-plataforma—. Medido hoy, `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` sale
-**DESINCRONIZADO**: 11 archivos distintos (`bot-engine.test.mjs`, `campanas-web.test.mjs`,
-`config.mjs`, `espejo-check.mjs`, `espejo-check.test.mjs`, `intents.mjs`, `knowledge.mjs`,
-`knowledge.test.mjs`, `preview-route.mjs`, `recepcionista.mjs`, `recepcionista.test.mjs`) y
-**falta** `evals-contrato.test.mjs`. La lista creció desde los 2 archivos de la última medición
-del 31-ago: el rezago del motor no se achica solo. Y 16(b) también sigue vivo — medido el
-2026-09-02, `https://chat.onia.com.bo/app/login` todavía sirve `BRAND_URL`, `TERMS_URL` y
-`PRIVACY_URL` apuntando a `www.chatwoot.com` (3 apariciones en el HTML), aunque `BRAND_NAME` e
-`INSTALLATION_NAME` sí dicen `Onia`.
 
 ## 1. ¿Chatwoot o plataforma de chat PROPIA hecha por Onia?
 
@@ -162,36 +125,6 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
    carrito/pedido por chat, y qué permite cada canal (widget web vs WhatsApp
    Cloud API — catálogo nativo de WhatsApp incluido).
 
-⚠️ **Corregido el 2026-09-02: TRES de las cuatro ya no son "a investigar" — están
-construidas y CORRIENDO en producción.** El punto lleva desde el 18-ago mandando a
-investigar la factibilidad de cosas que el motor ya hace, y eso vale plata: es la lista
-que se mira para decidir qué se puede vender.
-
-Medido contra **el motor que de verdad corre**, no contra el repo. El proceso vivo es
-`node /tmp/onia-bot/webhook-server.mjs` (pid 915791), y ese `/tmp` no se ve desde el
-disco del VPS —es la vista del contenedor—, así que se leyó por
-`/proc/915791/root/tmp/onia-bot/`. Es la misma trampa que el §12 documentó: mirar
-`/opt/onia/bot` **no** es mirar lo que atiende.
-
-| capacidad | estado real | la prueba, en el motor que corre |
-|---|---|---|
-| **Botones / listas interactivas** | ✅ **vivo** | `chatwoot-adapter.mjs`: `input_select` ×6, y la línea 512 corta a `items.slice(0, 3)` — el tope de 3 botones de Meta. `recepcionista.mjs`: `botonesRecepcion` ×5, con el tope de 20 caracteres por título anotado como *"límites de Meta, no nuestros"* (línea 34) |
-| **Recibir imágenes** (comprobantes) | ✅ **vivo** | `vision.mjs` presente en el motor que corre; describe la imagen entrante |
-| **Enviar imágenes** (catálogo con fotos) | ✅ **vivo** | `sendAttachment` ×2 en `chatwoot-adapter.mjs` (multipart a la API de Chatwoot) |
-| **Carrito / pedido por chat** | ❌ **no existe** | `grep -ric 'carrito\|checkout\|shopping.cart'` sobre **todos** los `.mjs` del motor que corre → **0** |
-
-Y el `chatwoot-adapter.mjs` que corre es **idéntico** (`cmp -s`) al de `/opt/onia/bot`,
-así que esto no es un espejo desincronizado: es lo que atiende a la gente hoy.
-
-**Lo único que queda abierto de este punto es el carrito** — y como toca el requisito 2
-("que pueda COMPRAR sin fricción"), va cotizado abajo como decisión 18.
-
-⚠️ **Lo que sigue sin medir, y dónde se mira:** el **catálogo nativo de WhatsApp**
-(Single/Multi-Product Message) no se pudo confirmar en esta vuelta — necesita la
-documentación de Meta y este loop corre sin permiso de red saliente. El dato que falta
-es si Bolivia está habilitada para catálogo de WhatsApp Business en Commerce Manager, y
-se mira en `business.facebook.com` → Commerce Manager, con la cuenta de Meta de Onia.
-
 
 ## 6. Webs CONECTADAS al sistema (2026-08-18) — tarea abierta
 
@@ -240,14 +173,7 @@ quedó en **4,8 GB libres (99%)**. Eso destraba hoy, pero se vuelve a llenar.
 
 ---
 
-## 9. ~~El deploy que falta — la frase falsa sigue viva en producción~~ — CERRADO, se desplegó (2026-09-02)
-
-> ✅ **Ya no hay decisión: se hizo la opción (a).** Verificado dentro del contenedor de
-> producción el 2026-09-02 — `"califica, agenda"` da **0** chunks (eran 5) y
-> `"deriva al humano"` da **21** (era 0); los cinco chunks que este punto nombraba ya no
-> existen. La medición completa está en **"Cerradas → E"** arriba.
-> **Lo que este cierre NO arrastra:** el punto 16(a) —el deploy del **motor del bot** a
-> `/opt/onia/bot`— sigue abierto y es otro sistema. Lo que sigue es el texto original.
+## 9. El deploy que falta — la frase falsa sigue viva en producción (2026-08-31)
 
 **Medido, no supuesto.** El punto 2 de `ONIA_DEFINICION_DE_TERMINADO.md` está cerrado en
 `master` (commit `f47d615`) pero **el contenedor `onia-platform` del VPS sirve el bundle
@@ -727,6 +653,19 @@ opt-in `prefijo` del commit `ba970f4a`, contenido y no fin de línea.
 
 ## 16. Treinta y un commits verificados ya están en `main` y NINGUNO está desplegado (2026-08-31) — decisión de Sergio
 
+> ⚠️ **Añadido el 2026-09-02 por el integrador — antes de decidir CUÁNDO desplegar, hay que
+> saber que hasta hoy el deploy ni siquiera arrancaba.** `web-factory/pnpm-lock.yaml` estaba
+> desincronizado con `web-factory/apps/onia-platform/package.json`, y los dos scripts de deploy
+> instalan con `pnpm install --frozen-lockfile` (`scripts/deploy-onia-landing.sh:24`,
+> `scripts/deploy-onia-center.sh:31`) — un modo que **falla** si el lockfile no coincide.
+> Reproducido con el lockfile de `main`: `ERR_PNPM_OUTDATED_LOCKFILE`, *"1 dependencies were
+> added: vitest@^4.1.8"*, exit 1. **El deploy de `onia.com.bo` moría en la línea 24, antes de
+> compilar una sola línea.** Ya está arreglado y verificado en `main` (`9d57be50`): con el
+> lockfile sincronizado, `pnpm install --frozen-lockfile` sale exit 0.
+> **Lo que cambia para la decisión:** nada de esta lista se movía aunque Sergio hubiera dicho
+> "desplegá" — habría fallado en el install y parecido un problema del servidor. Ahora sí
+> depende sólo de la decisión.
+
 **Qué pasó.** Dos carriles trabajaron días y su trabajo nunca llegó a `main`: `chatbot` estaba
 **245 commits atrás** y `web-factory` **251**. Lo único que le entraba a `main` eran auto-syncs.
 Mientras tanto la definición de hecho de este proyecto dice *"encendido en producción y
@@ -760,8 +699,20 @@ mueven la aguja son distintos y se pueden hacer por separado:
   también que el bot agende** (mergeado el 2026-09-01). Sin esto, un desconocido que llega desde
   la web sigue recibiendo la respuesta genérica, y una cita sigue derivándose a mano — que es
   justo lo que `pricing.ts` cobra como resuelto.
-- **(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
-  ajeno de una pantalla que ven los clientes desde el 16-ago.
+- ~~**(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
+  ajeno de una pantalla que ven los clientes desde el 16-ago.~~ ⚠️ **VENCIDA — verificada en vivo
+  el 2026-09-02. No le pidan a Sergio esta decisión: ya está tomada y automatizada.** El script
+  corre solo cada hora (`17 * * * * /root/bin/chatwoot-brand-onia.sh` en el crontab del VPS, con
+  corridas limpias hasta las 06:17 UTC de hoy), y `chat.onia.com.bo/app/login` sirve hoy
+  `"INSTALLATION_NAME":"Onia"` y `"WIDGET_BRAND_URL":"https://onia.com.bo"`. La pantalla pública
+  **ya no se presenta como Chatwoot**.
+
+  Lo que queda es mucho más chico y **no es lo que decía la fila**: sobreviven dos claves de URL
+  sin pisar, `TERMS_URL` y `BRAND_URL`, las dos apuntando a `https://www.chatwoot.com`. Es un
+  ítem de cola del carril chatbot, no una decisión de Sergio.
+
+  Se deja tachada y no borrada porque el resto de esta sección sigue vigente: **(a) el deploy del
+  motor del bot no se hizo**, y la tabla de arriba sigue midiendo bien lo que ese deploy enciende.
 
 Se pueden hacer los dos, uno, o ninguno — pero mientras no se haga, este radar dice la verdad:
 está en el repo, no está encendido.
@@ -772,7 +723,17 @@ dependencias que el lockfile no tiene, así que `pnpm install --frozen-lockfile`
 CI) **falla**. No se tocó acá porque regenerar un lockfile no es trabajo de un merge, pero es una
 bomba con temporizador para el primer pipeline que instale en limpio.
 
-## 16. `/` y `/empezar` no tienen dueño (2026-09-01) — decisión de Sergio
+## 24. ~~`/` y `/empezar` no tienen dueño~~ — RESUELTO 2026-09-02, no hay decisión
+
+> ⚠️ **Era la SEGUNDA sección numerada `16` de este archivo, y por eso quedó fuera de secuencia.**
+> Renumerada a 24 el 2026-09-02. El `16` legítimo es el de arriba (*"Treinta y un commits… NINGUNO
+> está desplegado"*, creado en `d1826f48` el 08-31 23:09); esta nació después, en `84ad6628`, y
+> reusó el número. **El choque no era cosmético: las DOS tenían una opción `(a)`**, así que las
+> tres citas de *"punto 16(a)"* / *"la §16"* que viven en este mismo archivo (grep `16(a)`)
+> resolvían a dos cosas distintas — el deploy del motor del bot, o "que `onia-cola` adopte la
+> home". Se renumeró ésta y no aquélla porque aquélla estaba primero, **sigue abierta**, y es la
+> que se lleva las tres citas. Se deja acá, en su lugar cronológico, en vez de moverla al final:
+> mover el texto perdería el contexto de las secciones que la rodean.
 
 La home y la página de acceso viven en `web-factory/apps/onia-platform/`: **ninguna cola las
 nombra**, y la zona de `web-factory-dev-loop` las excluye explícitamente. Son la puerta de
@@ -786,15 +747,18 @@ Las dos opciones cuestan lo mismo — una línea en un archivo, cero bolivianos:
 - **b)** `web-factory-dev-loop` levanta su prohibición para esa carpeta y se las queda. Es el
   carril que sabe de superficies web, pero hoy tiene la puerta cerrada por decisión previa.
 
-**Se puso más urgente el 2026-09-01 22:41 UTC.** El canario visual encontró que, sin dueño,
-`/` y `/empezar` se redeployaron enteras (título, copy, CTA) entre dos pasadas de la misma
-tarde, y el nuevo CTA de `/empezar` ("Creá tu cuenta") manda a `app.onia.com.bo/register`, que
-resultó estar vivo con un wizard de 2 pasos y un formulario de contraseña real. Esto puede
-contradecir lo que `CLAUDE.md` tiene escrito como historia (que `/register` "dejó de crear
-cuentas" y el arreglo honesto vive en `/empezar`) — si esa premisa venció, o si `/register`
-no cierra el alta de verdad, hay que decidirlo antes de que otro lead se tope con la pantalla
-rota. Detalle y evidencia (capturas) en `COLA.md`, sección "Del canario visual — corrida del
-2026-09-01 22:41 UTC". Nadie del canario tocó el formulario ni creó cuentas.
+**Resuelto el 2026-09-02, con las dos preguntas que dejó abiertas contestadas — no por
+elección entre (a)/(b), sino porque el propio loop `web-venta` ya nació dueño de esta zona**
+(su prompt: "Vos sos ese dueño", zona `web-factory/apps/onia-platform/**`). Y la duda de fondo
+—¿el redeploy del 2026-09-01 con `/register` como CTA era legítimo o el bug de agosto había
+vuelto?— también se cerró: es legítimo. `ONIA_ALTA_AUTOMATICA=abierta` se reabrió en
+`onia-platform` el 29-ago, el sitio se puso al día con `alta.ts` (commit `37ab9e92`,
+2026-09-01) y hoy (verificado contra el contenedor `onia-landing`, no `main`) las dos páginas
+dicen "Creá tu cuenta" en consistencia total — cero "Pedí tu acceso" residual. Detalle en
+`COLA.md`, el ítem que cerraba esa duda.
+**Lo que sigue siendo cierto y no cambia con esto:** `app.onia.com.bo/register` sigue siendo
+del repo `onia-platform`, otro carril (`onia-cola`) — este carril no toca ese flujo, sólo lo
+enlaza.
 
 # Para decidir — al abrir el 1 de septiembre
 
@@ -978,7 +942,14 @@ mirar el rebase) o **archivarla** y perder ese trabajo, Bs 0 cualquiera de las d
 `claude/ads-creatividades-publicos` (146 commits) queda afuera a propósito: es tu carril de
 contenido y lo cerrás vos.
 
-## 17. El loop `docs-auditoria` está construido y probado, pero apagado (2026-09-02) — decisión de Sergio
+## 17. ~~El loop `docs-auditoria` está construido y probado, pero apagado~~ — RESUELTO, ya corre (2026-09-02)
+
+> 🔴 **CORREGIDO el 2026-09-02: esta sección quedó vieja en horas.** Esta misma vuelta del
+> carril `docs-auditoria` está corriendo **porque el cron ya está prendido** —
+> `crontab -l` en el VPS tiene `18 1,5,9,13,17,21 * * * /root/bin/onia-loop.sh docs-auditoria`
+> (6×/día), y `hermes-content/docs/cola/loops.md` ya lo lista en la tabla "Deben existir y
+> estar activos". No queda ninguna opción por elegir: la cadencia ya se decidió y se aplicó.
+> Lo que sigue es el texto original, que se deja como historia de la decisión pendiente.
 
 El carril que audita ESTE archivo (worktree, rama, prompt, `case` en `onia-loop.sh`) ya existe en
 el VPS y corrió una vez a mano el 2026-09-02T02:21 UTC con `exit 0`. **No tiene línea en
@@ -1012,61 +983,406 @@ Con el OK de Sergio, la línea a agregar en `crontab -e` es:
 ```
 y después se suma la fila a la tabla "Deben existir y estar activos" de arriba.
 
-## 18. ¿El bot toma el pedido, o lo sigue pasando a una persona? (2026-09-02)
+## 18. Home y `/empezar` tienen 6 screenshots reales del producto — la regla del 1-sep las prohíbe (2026-09-02) — decisión de Sergio
 
-**Qué se decide.** El requisito 2 del §5 dice que el cliente del cliente tiene que poder
-**comprar** por chat sin fricción. Hoy el bot **detecta** la intención de compra y la pasa a
-un humano: en el motor que corre, `intents.mjs:172` documenta `wantsToOrder` como
-*"Quiere comprar / pedir / agendar: se toma el pedido y **lo confirma un humano**"*. Mientras
-no se decida, el add-on de chatbot se vende como canal de atención y **no** como canal de venta.
+Regla vigente, tuya, del 2026-09-01: *"no coloques capturas literales del sistema, se ve mal,
+coloca cosas referenciales"* — cero `<img>`/`<video>`/`<canvas>` que fotografíen el software,
+sólo piezas que DIBUJEN el resultado del cliente. Encontrado midiendo el HTML servido de
+`onia.com.bo/` y `/empezar` (contenedor `onia-landing`, no un grep de repo): **6 imágenes son
+screenshots reales del panel de Onia**, de antes de esta regla (commit `65201c20`,
+2026-08-21 — el propio mensaje dice *"la landing muestra el producto real... capturas
+cableadas en sus ranuras"*, con datos de un tenant de demo sembrado por los circuitos reales).
 
-> ⚠️ Ojo al citar este archivo: el `intents.mjs` del VPS y el del repo **no son el mismo**
-> (`espejo-check.mjs` lo lista entre los distintos). En el que corre, la regex se llama
-> `RE_INTERES_PEDIDO` (línea 155) y `RE_COMPRA_PEDIDO` **no existe**; en el repo sí, y con
-> otra numeración. Todo lo de esta sección está medido sobre el que corre.
+**Dónde están:**
+- Home: `/v2/capturas/agentes.webp` (pantalla de agentes) y `/v2/capturas/whatsapp.webp`
+  (editor del chatbot) — el bloque "Trabajan de noche. No *deciden* solos."
+- `/empezar`: `/v2/capturas/panel.webp` (dashboard con "Bs 4.633,40 cobrados") — la imagen del
+  hero, al lado del CTA principal.
+- Las 5 de `/rubros/*.webp` en la banda "Elegís tu rubro" — mismo tipo de captura; tienen
+  además un bug de recorte propio ya anotado en `COLA.md` (item de la maqueta cortada), que es
+  independiente de éste.
 
-**Lo que ya está puesto y no hay que pagar de nuevo** (todo medido hoy, no supuesto):
+**Por qué no lo cerré solo esta vuelta:** sacar 3 imágenes centrales del hero de las dos
+páginas que más lead reciben es la clase de cambio visual que la otra regla de esta cola frena
+— *"un rediseño no se publica sin que Sergio VEA la pieza terminada"* — con el precedente caro
+del 2026-08-20 (landing v2 rechazada entera, revertida en producción). No hay un reemplazo
+"obvio" de bajo riesgo: un hueco en blanco tampoco vende.
 
-- Los **botones interactivos ya corren** (§5 arriba): un menú de hasta 3 opciones por mensaje
-  es capacidad instalada, no trabajo nuevo.
-- La base de producción **ya tiene las tablas de comercio**:
-  `docker exec supabase-db psql -tAc "select count(*) from public.<t>"` →
-  `onia_commerce_products` **3**, `onia_commerce_product_variants` **3**,
-  `onia_commerce_orders` **0**, `onia_commerce_order_lines` **0**, `inventory_items` **0**.
-  O sea: hay dónde guardar un pedido y **nunca se guardó ninguno**.
-- El **cobro por QR del BCP ya está escrito y cableado**: `bcp-qr.mjs` vive en el motor que
-  corre y lo llama `webhook-server.mjs`.
+**Tres caminos, ninguno cuesta plata en efectivo salvo el marcado:**
+- **a) Ilustración/diagrama referencial** (lo que la regla pide al pie de la letra): redibujar
+  cada captura como pieza gráfica — no fotografía del software, sí su resultado (montos,
+  agenda, WhatsApp). Costo: diseño, ~1 vuelta por imagen bien hecha, cero plata si se hace con
+  CSS/SVG; con generación de imagen (Higgsfield) es gasto trivial de crédito, ya autorizado por
+  `CLAUDE.md` para lotes chicos — pero igual necesita el visto bueno de la pieza terminada.
+- **b) Blur/recorte fuerte** que deje reconocible sólo la forma (bloque de color + contorno),
+  no el contenido — es lo que la ranura `shapeShot` ya sabía hacer ANTES de cablear estas
+  capturas (`65201c20` lo dice: "sin `src` sigue siendo la ranura de forma+color"). Revertir a
+  ese estado es la opción más barata y ya probada, aunque pierde el "se ve real" que buscaba el
+  commit original.
+- **c) Excepción explícita para estas 3**: si Sergio decide que la regla del 1-sep era para
+  otro contexto (video/referente) y no para las capturas ya ganadas del producto, se anota acá
+  como excepción y el ítem de `COLA.md` se cierra sin tocar código.
 
-**El detalle que decide todo, y es el que nadie tiene anotado:** ese módulo corre en
-**`BCP_MODE = mock`** — leído del entorno del proceso vivo (`/proc/915791/environ`), no de un
-doc. Está ejercitando el circuito entero contra un banco falso. Y su propia regla 1, escrita
-en la cabecera del archivo, es: *"EL BOT JAMAS COBRA SOLO. `/bcp/cobrar` lo llama una
-persona; el motor conversacional no tiene ningún camino hacia acá."*
+Mientras no haya decisión, el ítem queda abierto en `COLA.md` con la medición completa para
+que la próxima vuelta no la repita.
 
-| opción | qué cuesta | cuánto tarda | qué se pierde |
-|---|---|---|---|
-| **A — seguir derivando** (lo de hoy) | Bs 0, cero trabajo | ya está | El requisito 2 queda sin cumplir: el chatbot se vende como atención, no como venta |
-| **B — el bot arma el pedido, el cobro lo dispara una persona** | Bs 0 de proveedores. Trabajo: escribir el flujo de pedido y llenar `onia_commerce_orders` (hoy 0 filas). **NO depende del banco** | No acotable en esta vuelta — ver "qué falta medir" | Nada externo. Pero obliga a mover la copia de venta (abajo) |
-| **C — el bot toma el pedido Y cobra solo por QR** | Bs 0 de código nuevo de cobro (ya escrito), pero **bloqueado**: exige `BCP_MODE=real` + credenciales del BCP, que el banco no entregó (decisión de Sergio del 28-ago: *"armalo con credenciales falsas solo para probar"*) | **No elegible hoy** | — |
+## 19. ~~El espaciado roto del login~~ — CERRADA el 2026-09-02, Sergio NO decide nada
 
-**Recomendación: B.** Es la única que avanza sin depender de un tercero: los botones y las
-tablas ya están, y `onia_commerce_orders` en **0 filas** es la medida exacta de lo que falta —
-no falta infraestructura, falta el flujo que la use. C no se puede elegir aunque se quiera,
-porque el riel de cobro real no existe todavía.
+> ✅ **Era el motor de captura, no el sitio. Las tres opciones de abajo quedan sin objeto: ninguna
+> hay que ejecutar, y el párrafo de `/login` NO se toca.**
+>
+> **Cómo se resolvió sin Sergio.** El camino **(c)** de esta misma sección —*"que Sergio abra
+> `app.onia.com.bo/login` en su Chrome de escritorio; si no lo ve, se cierra como
+> fantasma-de-headless"*— era la respuesta correcta con el instrumento equivocado: no hacía falta
+> un humano con GUI, hacía falta **el otro Chromium, que ya estaba bajado en el VPS**. Se cambió
+> el motor en vez de la persona.
+>
+> **La medición, hecha dos veces por dos carriles distintos** (el dueño de `web-venta` y después
+> el integrador, sin creerle al primero): misma URL, mismo instante, misma fuente ya cargada,
+> los dos binarios apuntados por `executablePath`.
+> - `chrome-headless-shell-1223` → *"Ent regamos t u sist ema … puest a … con t us dat os"*.
+> - `chromium-1223` completo → *"Entregamos tu sistema con la configuración de tu rubro puesta."*
+>
+> El `innerText` es idéntico en los dos, y **la única variable que cambió fue el rasterizador**.
+>
+> **Por qué la bisección de abajo no contradice esto — importa, porque es lo que hizo perder tres
+> días.** "Roto en pesos ≤500, limpio en 600+, limpio con Arial" es exactamente la firma de un bug
+> de rasterizado en trazos finos: describe *cuándo* se ve, no *quién* lo dibuja. Ninguna de esas
+> pruebas cambió de motor, así que **ninguna podía distinguir sitio de captura** — por eso todas
+> apuntaron con confianza al lugar equivocado. Cuando una investigación no puede refutar su propia
+> hipótesis, acumular evidencia dentro de ella sólo la vuelve más convincente, no más cierta.
+>
+> **Lo único que queda, y no es de Sergio:** el canario visual saca sus fotos con el motor malo
+> (`scripts/canario_visual.mjs`, `chromium.launch` sin `channel`), así que va a seguir inventando
+> este defecto en cada corrida. Está como ítem abierto del carril del canario en `COLA.md`.
 
-**Lo que NO es opción, y por qué:**
+<details><summary>La investigación original, tal como quedó (ya explicada por lo de arriba)</summary>
 
-- **C no es "casi C".** Que `bcp-qr.mjs` esté escrito y pase sus tests **no** significa que
-  pueda cobrar: `BCP_MODE=mock` es un banco simulado. Darlo por listo es exactamente el error
-  que `CLAUDE.md` llama *construido ≠ terminado*.
-- **B no se puede encender en silencio.** Es el mismo caso que la agenda (ver "Cerradas → B"):
-  el día que el bot tome pedidos, `ONIA_CATALOGO_DE_VENTA.md` —que hoy dice que un pedido *"lo
-  ESCALA a una persona"*— pasa a estar **mintiendo al revés**, y la guarda
-  `scripts/venta-honestidad.test.mjs` se pone roja a propósito. Copia y motor se mueven **en el
-  mismo paso**, o no se mueve ninguno.
-- **Y ojo con el borde real:** hay **3 productos** cargados y **0 items de inventario**. Un bot
-  que toma pedidos sin stock detrás promete lo que el negocio no sabe si tiene.
+`COLA.md` tenía el ítem del párrafo de `app.onia.com.bo/login` con espacios metidos DENTRO de
+palabras ("Ent regamos", "puest a") marcado como *"queda a criterio del dueño confirmarlo en un
+navegador de verdad antes de invertir tiempo"* — podía ser un artefacto de Chromium headless en
+Linux y no algo que viera un cliente real. Se invirtió el tiempo: **es un bug real y aislado, no
+un artefacto de captura**, pero cerrarlo cambia el peso visual del texto.
 
-**Qué falta medir para poner el "cuánto tarda"** (no se inventa acá): el flujo de pedido no
-existe en ninguna forma —0 apariciones de carrito/checkout en el motor—, así que estimarlo
-exige que el carril dueño del bot lo diseñe primero. Este loop no toca código.
+**Lo nuevo, verificado hoy, que el ítem original no tenía:**
+- Se reproduce igual en DPR 1 (el mismo que usa `canario_visual.mjs`) y en DPR 3, y con zoom por
+  `transform: scale()` en vez de supersampling del screenshot — descarta que sea un artefacto de
+  cómo se capturó la imagen.
+- **Es específico de la fuente Archivo en pesos ≤500.** El mismo párrafo con `font-family: Arial`
+  (DOM override, sin tocar código) sale perfecto — cero gap. Con `font-weight: 700` sale perfecto
+  también. Bisecado: **400/450/500 rotos, 600 y para arriba limpios.**
+- **No es kerning ni ligaduras**: `font-kerning: none` y `font-feature-settings: "kern" 0, "liga"
+  0, "calt" 0` no cambian nada — el gap sigue. Tampoco es el eje `wght` sin fijar: pinearlo
+  explícito a `'wght' 400` con `font-variation-settings` no lo arregla.
+  → Es un problema del propio archivo variable de Archivo (Google Fonts, servido por
+  `next/font/google` sin `weight` fijo — `app/layout.tsx:25-29` en `onia-platform`) al
+  interpolar el eje de peso en pesos bajos/medios bajo el shaping de Chromium/Linux (HarfBuzz o
+  FreeType), no de nuestro CSS.
+
+**Por qué no lo cerré con un `font-weight: 600` esta vuelta:** el párrafo (`text-white/55`, texto
+secundario deliberadamente liviano — `components/auth/AuthShell.tsx:105`) está pensado para
+verse discreto al lado del título en `font-extrabold`. Subirlo a 600 lo saca de ese lugar visual
+— cambia cómo se ve la pantalla que comparten `/login` y `/register`, la misma clase de cambio
+que la regla *"un rediseño no se publica sin que Sergio VEA la pieza terminada"* frena (precedente
+del 2026-08-20). No es un bug de una línea con un arreglo obvio: es un trade-off entre "se ve
+roto a veces" y "se ve más pesado siempre".
+
+**No verificado, y sigue sin poder verificarse desde acá:** un Chrome de escritorio real
+(Windows/Mac, no headless) — esta máquina no tiene GUI. Sigue siendo posible que el bug sólo
+exista en Chromium headless de Linux y ningún cliente real lo vea nunca.
+
+**Tres caminos, cotizados:**
+- **a) Subir el peso del texto secundario del panel a 600** (o el valor bisecado más bajo que
+  salga limpio — no se afinó más allá de escalones de 50). Cierra el bug con certeza, cambia el
+  peso visual de TODO el texto `detalle` del panel de auth (3 bullets, 2 pantallas). Costo: una
+  línea de CSS + gates + captura para que Sergio la mire antes de mergear. ~15 min.
+  - Es el mismo bug reportado en el `titulo` en `font-extrabold` (~800): a ese peso nunca se vio,
+    consistente con que arriba de 600 esté limpio.
+- **b) Servir Archivo como fuente ESTÁTICA (no variable) para los pesos que usa el body**, en vez
+  del archivo variable completo 100–900 que pide `layout.tsx` hoy. Sin interpolación de eje no
+  debería haber nada que HarfBuzz calcule mal. Mantiene el peso visual actual. Costo mayor: tocar
+  cómo se cargan las DOS familias de marca (el comentario de `layout.tsx:19-23` dice que la
+  variable es a propósito, para que el numeral fino de 300 y el titular de 800 salgan del mismo
+  archivo) — un cambio de infraestructura de fuente, no de una pantalla. No probado si de verdad
+  esquiva el bug: es hipótesis, no medición. ~1-2 vueltas.
+- **c) No tocar nada todavía** y pedirle a Sergio que abra `app.onia.com.bo/login` en su propio
+  Chrome de escritorio. Si no lo ve, el ítem se cierra como fantasma-de-headless sin gastar más
+  tiempo; si lo ve, elige entre (a) y (b) con la certeza de que es real para un cliente.
+
+**Recomendación: (c) primero — es gratis y resuelve la duda de fondo —, y si confirma, (a)**: es
+reversible, rápido, y el texto sigue siendo perfectamente legible a 600; (b) sólo si (a) no
+alcanza o Sergio prefiere no tocar el peso visual.
+
+Mientras no haya decisión, el ítem sigue abierto en `COLA.md`, con este hallazgo referenciado
+para que la próxima vuelta no rehaga la bisección.
+
+</details>
+
+## 20. Tres commits arreglan el login de la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
+
+**No confundir con la §16**: aquella es el deploy del **motor del bot** y de `web-factory`. Esta
+es el deploy de **`onia-platform`**, el contenedor que sirve `app.onia.com.bo`. Son dos deploys
+distintos, con riesgos distintos, y se pueden hacer por separado.
+
+**Medido en vivo el 2026-09-02, no deducido.** El contenedor `onia-platform` monta
+`/opt/onia-platform/runtime-next`, cuyo `.next/BUILD_ID` es `lNDdVgrRvP1mizzu3BVXc` — el mismo
+que `/opt/onia-platform/build-8a3b5a6`. O sea: **producción corre `8a3b5a6`**, y `master` tiene
+tres commits encima que nadie desplegó.
+
+| Commit | Qué arregla | Cómo se comprobó que NO está en producción |
+|---|---|---|
+| `bdf0935` + `5888a13` (merge) | **El login le deletrea los nombres de los iconos al lector de pantalla**, y si la fuente tarda más de 12 s se los muestra como texto a cualquiera (`bolt`, `credit_card_off`, `smart_toy`) | El HTML servido hoy trae los tres `<span>` **sin `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)` en vez de la guarda `d.fonts.status` |
+| `efaffe8` | **La CSP bloqueaba el beacon de Cloudflare Web Analytics en toda la plataforma** | La cabecera `content-security-policy` servida hoy no menciona `cloudflareinsights` en ningún lado |
+
+Tocan 6 archivos, +151/−15, y **4 de los 6 son tests** — la superficie de riesgo real son
+`components/auth/AuthShell.tsx` (5 líneas), `lib/iconos-script.ts` (13) y `next.config.ts` (29).
+
+**Por qué importa que sean éstos y no otros.** Los dos son el mismo tipo de fallo: *invisible
+mientras todo va bien, feo justo cuando algo va mal*. El de los iconos es literalmente el bug de
+agosto que Sergio encontró a mano —el login mostrando `credit_card_off` como palabra— y hoy lo
+único que lo tapa es que la fuente cargue rápido. Con la fuente que en agosto tardó 117 s, el
+fallback de 12 s **es el camino normal, no el raro**.
+
+**La decisión.** Desplegar `onia-platform` no lo decide un carril de integración. Es el mismo
+runbook del swap de siempre (`onia-platform/.claude/skills/onia-deploy/SKILL.md`), con el
+recordatorio de `CLAUDE.md`: **buildear en el VPS con `app.env`, nunca con un `.env.local`
+presente**, o Next hornea `127.0.0.1` en el bundle.
+
+**Recomendación: hacerlo.** Es el deploy más barato del radar —cambia tres archivos de código,
+ninguno toca base de datos, pagos ni sesiones— y cierra un ítem de `COLA.md` que ya está verde en
+código y vale cero hasta que se encienda.
+
+## 21. Nadie mira nunca el panel del chatbot del cliente — falta una credencial de sólo lectura (2026-09-02) — decisión de Sergio
+
+**Qué pasa.** `app.onia.com.bo/settings/chatbot` es la pantalla donde un cliente edita el
+conocimiento de su bot. Está detrás de sesión, así que el canario visual —el único que abre y
+MIRA las pantallas de cliente— nunca la vio. Hasta hoy, encima, **la reportaba verde**: medía
+el `/login` al que redirige y lo comparaba contra una baseline que también era el login.
+Arreglado hoy (`scripts/canario_visual.mjs`): ahora dice `NO MEDIDA` con el motivo. Pero
+"no miente" no es "se mira": la pantalla sigue sin que nadie le pase el ojo nunca.
+
+**Qué falta, y es una sola cosa.** Un usuario del producto que sólo mire, puesto como
+`ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`. **Cero
+código pendiente**: `requiereSesion` y `iniciarSesion()` ya están escritos y entran por el
+formulario real de `/login`. Enchufarla es un `env`.
+
+**Las opciones, cotizadas:**
+
+1. **Crear un usuario de sólo lectura en una org existente** (~5 min de Sergio, cero código).
+   Es la recomendada. Riesgo: la credencial vive en el entorno del VPS — no en el repo.
+2. **Reusar una cuenta que ya exista** (0 min). Más barato, pero si es una cuenta con permisos
+   de escritura, un canario que se equivoque de click toca datos reales. No recomendada.
+3. **Una ruta de vista previa pública** — la que proponía el ítem original. **Se descarta:**
+   expone configuración de cliente sin sesión y agrega una superficie viva. Se anota para
+   cerrar la puerta, no para elegirla.
+
+**Recomendación: (1).** **Desbloquea:** que `/settings/chatbot` entre a la ronda del canario
+como las otras diez pantallas. Es **S15** en `hermes-content/docs/cola/chatbot.md`.
+
+## 22. El corredor de los loops se edita a mano en el VPS y el repo queda atrás — decidir si se blinda (2026-09-02)
+
+**Qué pasó, medido.** El 2026-09-02 09:18 UTC el carril `investigacion` estaba **muerto con su
+cron intacto**: su línea (`26 3,9,15,21`) seguía en `crontab -l`, pero su `case` había
+desaparecido de `/root/bin/onia-loop.sh` cuando se reescribió el script a las 05:44. Cada corrida
+caía en el `*)` con `exit 64` — que ocurre en la línea 97, **24 líneas antes de que se defina
+`avisar()`** (línea 121). Fallo mudo: nada por Telegram, nada en ningún tablero. Corrió una sola
+vez en su vida (03:00:20Z) y esa vuelta hizo trabajo real (`a7a28f63`, cerró 4 fantasmas de este
+mismo archivo).
+
+Ya restaurado y versionado. **Lo que queda para vos es evitar la próxima**, porque la causa sigue
+viva: el `.sh` que corre se edita a mano y el del repo queda atrás. En una sola jornada divergió
+**dos veces**; a las 09:18 el repo tenía `claude-sonnet-5` donde el VPS ya corría
+`claude-opus-5 --effort max`, no tenía `web-venta` ni `investigacion`, y le faltaba la guarda de
+`MERGE_HEAD`. Reinstalar desde el repo —que es lo que el propio README manda— **habría bajado el
+modelo de todos los loops y borrado dos carriles.**
+
+**Opciones cotizadas (todas Bs 0, sólo trabajo de una vuelta de loop):**
+
+- **A — El corredor se avisa a sí mismo.** Extender la guarda que ya existe para los prompts
+  (`ddc3b9f1`): al arrancar, `diff` entre `/root/bin/onia-loop.sh` y la copia del repo; si
+  difieren, Telegram de una línea. Barato, no bloquea nada, y ataca la causa real (nadie se entera
+  de la divergencia). **Recomendada.**
+- **B — Un `ARRANCA` que falte, avisa.** Un chequeo diario que compare cada línea de `crontab -l`
+  contra el `tail` de su log: si no hay `ARRANCA` posterior a la última hora que le tocaba, avisa.
+  Cubre a `investigacion` **y** a cualquier otra causa de muerte silenciosa, no sólo esta. Más
+  trabajo que A, y es el único que detecta un loop que arranca y se cuelga.
+- **C — Mover el `exit 64` después de `avisar()`.** Arregla sólo el caso "nombre no reconocido".
+  Diez minutos. Es un parche, no cubre B.
+- **D — Nada.** Queda la disciplina escrita en `loops.md` paso 3 y 8. Gratis hoy, y ya sabemos que
+  la disciplina sola falló dos veces en un día.
+
+A y B se pueden hacer las dos; no compiten.
+
+**El chequeo de arranque mira en una sola dirección.** Aparte de lo de arriba, hay un agujero de
+diseño que conviene que sepas: el bloque pegado en todos los prompts busca filas de la tabla que
+falten en el cron — nunca al revés. Por eso `web-venta` e `investigacion` corrieron días sin estar
+en `loops.md`, invisibles para la auto-cura. Arreglarlo toca los 7 prompts (uno por carril) y el
+bloque dice explícitamente "no lo optimices", así que **no lo tocó nadie todavía**: decidilo vos.
+
+## 23. ~~Los arreglos del carril chatbot al producto nunca llegan a `master`~~ — RESUELTO 2026-09-02, Sergio NO decide nada
+
+> ✅ **Cerrado el 2026-09-02 12:39 UTC por el integrador (`onia-cola`), por el camino (a).** Se
+> tomaron las dos acciones que pedía esta entrada, en la misma vuelta:
+>
+> 1. **Mergeados los 3 commits a `origin/master`** (`503af44`, merge `--no-ff`). Eran 3, no 2:
+>    se sumó `d62beeb`, que cablea el gate de iconos a `ci`. Guarda dura pasada (0 archivos
+>    borrados, 13 archivos, +373/−28) y **los tres gates de `onia-platform` en verde**:
+>    `tsc` 0 · `vitest` **2494 pasan / 204 archivos** · `npm run lint` **0 errores**
+>    (100 warnings preexistentes). Los snapshots NO se reescribieron esta vuelta — se verificó
+>    con `git status` después de vitest, por la trampa de CRLF que la cola ya tenía anotada.
+> 2. **Tapado el agujero que lo causaba** (recomendación (a)): `scripts/loops/prompts/onia-cola.md`
+>    ahora hace `fetch` y cuenta en **los dos repos**, cada uno contra su base (`main` en
+>    `onia-hermes`, `master` en `onia-platform`), y trae el comando para enumerar en vivo las
+>    ramas del segundo repo en vez de confiar en una lista escrita a mano.
+>
+> **Verificado por el gate que este mismo carril construyó, no por lectura:**
+> `npm run deploy:alcanzable` pasó de **exit 1** nombrando los commits inalcanzables a **exit 0**
+> — *"4 commit(s) declarado(s), los 4 llegan a origin/master"*. Es la clase de prueba que esta
+> entrada pedía: una que discrimina en vez de gritar a todo.
+>
+> ⚠️ **Lo que NO cambia: esto era el escalón `rama → master`. La §20 sigue abierta.** Los tres
+> arreglos ahora existen en `master` y **el cliente todavía no los ve**: falta el deploy, que
+> decide Sergio. Cerrar ésta no destraba aquélla — la hace posible.
+
+**Es un escalón ANTES de la §20, no la misma cosa.** La §20 mide `master` → producción: tres
+commits que están en `master` y nadie desplegó. Ésta mide **rama de carril → `master`**: dos
+commits que ni siquiera llegaron a la rama de la que se buildea. Si mañana se aprueba el deploy
+de la §20, el swap buildea `master` y **estos dos siguen sin estar**.
+
+**Medido el 2026-09-02, no deducido** (`git merge-base --is-ancestor` en el clon del VPS):
+
+| Commit | Qué arregla | ¿en `origin/master`? |
+|---|---|---|
+| `22fd088` | El menú del dashboard dibuja `ASSIGNMENT_TURNED_IN` en letras gigantes en vez de un icono | **NO** |
+| `675541b` | El editor del chatbot le dice "La cita" y "en el consultorio" a una ferretería | **NO** |
+
+Los dos están commiteados **y pusheados** a `origin/claude/chatbots-platform-review-0d1d09` de
+`onia-platform`. Esa rama está **2 commits adelante y 17 atrás** de `origin/master`, y nada la
+mergea.
+
+**Por qué nadie la mergea, que es la causa y no el síntoma.** El integrador (`onia-cola`) tiene
+el merge a `master` **pre-autorizado** por su propio prompt. Pero su Paso 1 hace
+`cd /root/loops/onia-hermes` y recorre una lista de ramas de **ese** repo. La rama
+`claude/chatbots-platform-review-0d1d09` está en esa lista — sólo que la cuenta contra el `main`
+de `onia-hermes`, donde da **0**, y concluye "no hay nada que hacer con esa rama". El mismo
+nombre de rama existe en los DOS repos, y el que tiene trabajo sin mergear es el que nadie mira.
+
+**El costo ya cobrado: es la tercera vez que la misma instrucción falla, cada vez un escalón más
+adentro.** (1) `S11` mandaba desplegar un commit inexistente — el trabajo había quedado en el
+disco de Windows. (2) Se rehizo y se pusheó, y `S11` quedó escrito "commiteado y pusheado, NO
+desplegado", como si sólo faltara el OK. (3) Medido hoy: falta el merge. **Un bloqueo que le pide
+a Sergio desplegar algo que el deploy no alcanza no se destraba nunca.**
+
+**Ya no depende de un párrafo:** `npm run deploy:alcanzable` lee la cola, saca los commits de
+`onia-platform` que declara y le pregunta a git si `origin/master` los alcanza. Hoy sale **exit
+1** nombrando los dos; `e644c85` (de un ítem viejo) sale **OK**, que es la prueba de que
+discrimina en vez de gritar a todo.
+
+**Tres caminos, cotizados:**
+
+- **(a) `onia-cola` extiende su Paso 1 a las ramas de `onia-platform`.** Su prompt ya autoriza el
+  merge a `master` y ya tiene escritos los tres gates de ese repo (`tsc`, `vitest`, `npm run
+  lint`). Lo que falta es que enumere el segundo repo. Toca
+  `scripts/loops/prompts/onia-cola.md` — es del carril de integración, **no del chatbot**.
+  Costo: una vuelta de ese loop. **Es el único que no se vuelve a romper el mes que viene.**
+- **(b) Sergio mergea la rama a mano**, o por PR como llegaron los últimos (`Merge pull request
+  #77`). Costo: minutos. Arregla estos dos commits y ninguno de los próximos.
+- **(c) Dejarlo.** Cada arreglo que este carril haga sobre el producto queda en una rama muerta,
+  y `S11` no se destraba nunca.
+
+**Recomendación: (a)**, y (b) ahora mismo si se quiere el icono arreglado en el próximo swap.
+
+---
+
+## 25. Los carriles auditan un árbol viejo: nadie sincroniza el worktree con `main` (2026-09-02)
+
+**Qué pasó, medido.** La vuelta de `docs-auditoria` de las 13:18 UTC arrancó en `HEAD 8a83eea7`
+—su propio último commit— y `git rev-list --count HEAD..origin/main` daba **96**. Noventa y seis
+commits de `main` que el carril no veía.
+
+**Por qué importa, con el caso concreto de esa misma vuelta.** El carril leyó `COLA.md` y el
+radar de su copia vieja, encontró el ítem *"Nadie es dueño de `/` ni de `/empezar`"* pidiéndole a
+Sergio elegir entre dos opciones, verificó en vivo que el bloqueo estaba **vencido** (el carril
+`web-venta` es el dueño desde el 2026-09-02, corre 5 veces al día y commitea arreglos reales en
+`web-factory/apps/onia-platform/`) y **estuvo a punto de escribir la corrección**. En `origin/main`
+esa sección ya decía `RESUELTO` hacía horas. Se salvó por casualidad: al ir a editar, comparó
+contra `origin/main` primero.
+
+Ese es el modo de falla exacto: **un carril cuyo trabajo es "que lo escrito sea cierto" auditando
+una copia que ya no es lo escrito.** Gasta la vuelta entera re-corrigiendo lo corregido, y peor,
+puede "arreglar" hacia atrás algo que otro carril ya dejó bien.
+
+**No es sólo de este carril.** `/root/bin/onia-loop.sh` no tiene un solo `git fetch` ni
+`git merge --ff-only` antes de trabajar (`grep -n "fetch\|pull\|rebase" /root/bin/onia-loop.sh`
+sólo devuelve comentarios). Los siete carriles arrancan donde los dejó su vuelta anterior.
+
+**Por qué no lo arreglo solo:** tocar el corredor cambia el comportamiento de **los siete
+carriles a la vez**, y el prompt de este carril prohíbe tocar otro carril. Además hay un motivo
+real para no sincronizar a ciegas: un `merge` automático puede abrir conflictos sin nadie que los
+resuelva, y `CLAUDE.md` prohíbe soltar el turno con un merge abierto.
+
+**Opciones cotizadas (todas Bs 0, trabajo de una vuelta):**
+
+- **(a) `git merge --ff-only origin/main` al arrancar, y si NO es fast-forward, seguir igual y
+  avisar por Telegram.** El `--ff-only` es la clave: nunca abre un conflicto — o adelanta limpio,
+  o falla sin tocar nada. Cubre el caso de esta vuelta (el carril no tenía commits propios sin
+  mergear: `git rev-list --count origin/main..HEAD` = 0). Toca `scripts/loops/onia-loop.sh` + su
+  copia del VPS. **Recomendada.**
+- **(b) Sólo `git fetch` + avisar la distancia**, sin mover el árbol. El carril decide qué hacer.
+  Más conservador, pero deja el trabajo de decidir en cada vuelta.
+- **(c) Que cada prompt lo haga por su cuenta.** Toca los 7 prompts en vez de 1 archivo, y se
+  desincroniza igual que todo lo demás. No recomendada.
+- **(d) Dejarlo.** Cada carril sigue auditando su foto vieja. El costo no es hipotético: ya
+  quemó parte de una vuelta.
+
+**Recomendación: (a).** Es la única que no depende de que alguien se acuerde, y por ser
+`--ff-only` no puede dejar un merge abierto — que es justo lo que `CLAUDE.md` prohíbe.
+
+---
+
+## 26. Una rama de `onia-platform` lleva dos meses varada, y 10 de sus 11 modelos ya llegaron por otro lado (2026-09-02) — decisión de Sergio
+
+**Cómo apareció:** contando ramas del segundo repo, que es lo que este loop hace cada vuelta.
+`claude/onia-core-adoption-sprint5` es la **única** rama sin mergear a `origin/master` hoy
+(`git branch -r --no-merged origin/master`). No estaba en la lista de carriles del integrador
+porque **no es un carril**: no tiene loop.
+
+**Lo medido, no supuesto:**
+
+- **1 commit propio, 382 commits atrás de `master`.** El commit es `aa8f211`
+  (*"feat(onia-core): add area + accounting + invoicing schema (Sprint 5)"*), del **2026-07-06** —
+  casi dos meses. Toca 2 archivos: `prisma/schema.prisma` (+810) y una migración nueva
+  (`20260706000000_add_onia_accounting_invoicing_area/migration.sql`, +340).
+- **Mergearla a ciegas es pedir conflicto sobre el archivo más caro del repo.** Desde la base
+  común, `master` movió `prisma/schema.prisma` en **+1.018 líneas**. Es el schema de la base de
+  producción: un merge mal resuelto ahí no rompe un build, rompe datos.
+- **Y sobre todo: casi todo su contenido YA ESTÁ en `master`.** De los 11 modelos que agrega,
+  **10 ya existen** (`OniaAccountingAccount`, `FiscalPeriod`, `JournalEntry`, `JournalEntryLine`,
+  `TaxRate`, `TaxDeclaration`, `RcvRecord`, `WithholdingRecord`, `FixedAsset`,
+  `OniaInvoicingCreditDebitNote`). **El único que falta es `OniaCoreArea`.**
+
+**O sea que la rama no es trabajo varado: es trabajo ya entregado por otro camino, con un
+residuo de un modelo.** Mergearla entera para rescatar `OniaCoreArea` es pagar un conflicto de
+schema de 1.000 líneas por una tabla.
+
+**Las opciones, cotizadas (todas Bs 0):**
+
+- **(a) Borrar la rama y, si `OniaCoreArea` hace falta, escribirlo como migración nueva sobre
+  `master`.** Es lo barato y lo limpio: una migración chica, sin tocar las 1.018 líneas que
+  `master` movió. Hay que confirmar antes que `OniaCoreArea` se use para algo — hoy no lo llama
+  nadie. **Recomendada.**
+- **(b) Dejar la rama como está.** Cuesta cero hoy, pero cada vuelta del integrador la vuelve a
+  contar, y en dos meses más nadie va a saber qué tenía adentro. Es cómo nace un fantasma.
+- **(c) Mergearla.** No la recomiendo y no la hago sin orden explícita: conflicto garantizado en
+  `prisma/schema.prisma`, sobre el schema de producción, para traer 1 modelo de 11.
+
+**Recomendación: (a).** Y mientras no se decida, el integrador **no la mergea** — queda anotado
+en su propio prompt para que ninguna vuelta futura la levante por parecer "la única pendiente".
+
+**Efecto colateral que ya se cobró solo, y vale más que la rama:** contar esta rama destapó que
+el ítem bloqueado del `DELETE /api/payments/[id]` tenía una premisa falsa. Declaraba *"cero
+`fiscal_period`, cero tabla de cierre en el repo"*, y `OniaAccountingFiscalPeriod` no sólo está
+en `master`: **está aplicado en la base de producción** (`supabase-db`, tabla
+`onia_accounting_fiscal_periods`, 0 filas) y **no lo llama nadie**. Su opción (b) estaba cotizada
+en 3-4 días contando el modelado y la migración, que ya están hechos. Corregido en `COLA.md`,
+sección "Bloqueado — necesita a Sergio".

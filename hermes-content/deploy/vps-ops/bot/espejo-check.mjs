@@ -114,6 +114,102 @@ export function compararEspejo(repo, vps) {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Acoples: que archivos VIAJAN JUNTOS
+// ---------------------------------------------------------------------------
+//
+// Saber QUE archivos difieren no alcanza para desplegar bien, y el 2026-09-02 costo casi un
+// deploy roto: la cola mandaba copiar `knowledge.mjs` + `recepcionista.mjs` y nada mas, pero el
+// `recepcionista.mjs` del espejo ya llamaba a `intents.wantsToBook()` y a la plantilla
+// `R_AGENDA` — ninguna de las dos existe todavia en el VPS. Copiar ese subconjunto deja el motor
+// llamando a una funcion inexistente: `TypeError: intents.wantsToBook is not a function`.
+//
+// Es el mismo molde que el gate ya cazo dos veces, un escalon mas abajo: la primera vez el
+// archivo de datos viajaba sin el codigo que lo lee; esta vez el codigo viaja sin el codigo del
+// que depende. En los dos casos la instruccion escrita se sigue al pie y produce algo peor que
+// no hacer nada.
+//
+// Esto es analisis estatico a proposito — no importa los modulos. Importarlos ejecutaria el
+// motor del VPS dentro de este proceso, y un gate de solo lectura no puede permitirse efectos.
+
+/**
+ * Los simbolos que un fuente USA y que tiene que definir OTRO archivo del espejo.
+ *
+ * Dos familias, que son las dos que cruzan archivos en este motor: las funciones de intents
+ * (`intents.wantsToBook(...)`) y las plantillas del guion (`say("R_AGENDA", ...)`), que viven en
+ * `config.mjs`. Se exige el parentesis en el caso de intents para no contar `"./intents.mjs"` de
+ * la linea de import — que es un string, no una llamada.
+ */
+export function simbolosUsados(src) {
+  // Se exige el IMPORT, no solo la mención. Sin esto el propio `espejo-check.mjs` salia acoplado
+  // a `intents.mjs` por nombrar `intents.wantsToBook` en un comentario — medido el 2026-09-02, y
+  // un gate que nombra archivos que no son es el ruido que termina apagandolo.
+  const importaIntents = /from\s+["']\.\/intents\.mjs["']/.test(src);
+  // `say` no siempre se importa: `recepcionista.mjs` lo recibe INYECTADO desde bot-engine
+  // (`const { finalize, handoffResult, say } = motor;`). Buscar solo el import daba un falso
+  // NEGATIVO — que en un gate es peor que el falso positivo: calla justo donde hay que avisar.
+  const importaSay = /(?:import|const|let|var)\s*\{[^}]*\bsay\b[^}]*\}/.test(src);
+
+  const funciones = importaIntents
+    ? [...src.matchAll(/\bintents\.(\w+)\s*\(/g)].map((m) => `intents.${m[1]}`)
+    : [];
+  const plantillas = importaSay
+    ? [...src.matchAll(/\bsay\(\s*"([A-Z][A-Z0-9_]*)"/g)].map((m) => `config.${m[1]}`)
+    : [];
+  return [...new Set([...funciones, ...plantillas])].sort();
+}
+
+/** Los simbolos que un conjunto de fuentes DEFINE (nombre -> texto del archivo). */
+export function simbolosDefinidos(fuentes) {
+  const out = new Set();
+  for (const [nombre, src] of Object.entries(fuentes)) {
+    if (nombre === "intents.mjs") {
+      for (const m of src.matchAll(/export\s+function\s+(\w+)/g)) out.add(`intents.${m[1]}`);
+    }
+    if (nombre === "config.mjs") {
+      for (const m of src.matchAll(/^\s{2,}([A-Z][A-Z0-9_]*)\s*:/gm)) out.add(`config.${m[1]}`);
+    }
+  }
+  return out;
+}
+
+/**
+ * Si copiara `aCopiar` del espejo al VPS y nada mas, ¿queda el motor coherente?
+ *
+ * Devuelve un renglon por cada simbolo que quedaria colgado, diciendo QUE archivo hay que sumar
+ * al viaje para que no quede. Vacio = ese conjunto se puede copiar solo.
+ */
+export function acoplesDeCopia(repo, vps, aCopiar) {
+  const despues = { ...vps };
+  for (const n of aCopiar) if (Object.hasOwn(repo, n)) despues[n] = repo[n];
+
+  const definidos = simbolosDefinidos(despues);
+  const faltantes = [];
+  for (const archivo of aCopiar) {
+    if (!Object.hasOwn(repo, archivo)) continue;
+    for (const simbolo of simbolosUsados(repo[archivo])) {
+      if (definidos.has(simbolo)) continue;
+      const loTrae = Object.keys(repo)
+        .filter((n) => simbolosDefinidos({ [n]: repo[n] }).has(simbolo))
+        .sort();
+      faltantes.push({ archivo, simbolo, loTrae });
+    }
+  }
+  return faltantes;
+}
+
+/** Texto de los `.mjs` sueltos de un directorio (mismo alcance que `md5Local`). */
+export function fuentesLocales(dir) {
+  const out = {};
+  for (const nombre of readdirSync(dir)) {
+    if (!nombre.endsWith(".mjs")) continue;
+    const completo = path.join(dir, nombre);
+    if (!statSync(completo).isFile()) continue;
+    out[nombre] = readFileSync(completo, "utf8");
+  }
+  return out;
+}
+
 /** md5 de los archivos sueltos del espejo local (sin bajar a backups/ ni evals/). */
 export function md5Local(dir) {
   const out = {};
@@ -178,6 +274,35 @@ function main() {
   if (r.soloRepo.length) console.log(`  FALTAN EN EL VPS (deploy a medias):    ${r.soloRepo.join(", ")}`);
   if (r.soloVps.length) console.log(`  SOBRAN EN EL VPS (el espejo quedo atras): ${r.soloVps.join(", ")}`);
   if (r.ignorados.length) console.log(`  (no son codigo, no cuentan: ${r.ignorados.join(", ")})`);
+
+  // Los acoples solo se pueden calcular leyendo el TEXTO de los dos lados. Si el VPS esta del
+  // otro lado de un SSH no se baja el codigo entero por esto: se dice que no se midio, en vez de
+  // callar y dejar creer que no hay acoples.
+  if (existsSync(dir)) {
+    const repoSrc = fuentesLocales(espejo);
+    const vpsSrc = fuentesLocales(dir);
+    const lineas = [];
+    // Solo el MOTOR. Quedan afuera los `.test.mjs` (no los corre nadie en el VPS: un acople suyo
+    // no rompe nada) y este mismo archivo, que documenta el caso real citando `R_AGENDA` y
+    // `wantsToBook` y por eso se denunciaba a si mismo en cada corrida. Los dos son herramienta,
+    // no el motor — la misma distincion que el espejo ya hacia en prosa.
+    const esMotor = (n) => n.endsWith(".mjs") && !n.endsWith(".test.mjs") && n !== "espejo-check.mjs";
+    for (const archivo of r.distintos.filter(esMotor)) {
+      const faltan = acoplesDeCopia(repoSrc, vpsSrc, [archivo]);
+      if (!faltan.length) continue;
+      const detalle = faltan
+        .map((f) => `${f.loTrae.join("+") || "?"} (${f.simbolo})`)
+        .filter((v, i, a) => a.indexOf(v) === i)
+        .join(", ");
+      lineas.push(`    ${archivo} NO viaja solo: necesita ${detalle}`);
+    }
+    if (lineas.length) {
+      console.log("  VIAJAN JUNTOS (copiar uno solo deja el motor llamando a lo que no existe):");
+      for (const l of lineas) console.log(l);
+    }
+  } else {
+    console.log("  (acoples no medidos: el VPS esta por SSH y no se bajo el codigo)");
+  }
   return 1;
 }
 

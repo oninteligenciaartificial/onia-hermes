@@ -3,8 +3,7 @@ import { Header, Footer } from "./ui";
 import s from "./sitio.module.css";
 
 /**
- * Cromo del SITIO PÚBLICO (v3, publicada 2026-08-21 con OK explícito de
- * Sergio sobre las capturas).
+ * Cromo del SITIO PÚBLICO (v3, publicada 2026-08-21).
  *
  * Es un GRUPO DE RUTAS `(sitio)`: los paréntesis no salen en la URL, así que
  * este layout envuelve exactamente las nueve páginas de la venta — `/`,

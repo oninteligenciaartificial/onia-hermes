@@ -36,7 +36,7 @@
   statement-3d (guardados > likes).
 - Palabras que convierten en ES: "gratis", "con certificado", "de verdad", "paso a paso",
   "sin pagarle a nadie".
-- **CTA estándar: "Comentá COMUNIDAD y te mando el acceso"** (regla Sergio 02-sep) — el
+- **CTA estándar: "Comentá COMUNIDAD y te paso el enlace para unirte"** (regla Sergio 02-sep) — el
   comentario alimenta el algoritmo; el link en bio es respaldo. DM roto = responder a mano.
 
 ## 4 · Para SAMUEL (brief que se le entrega con el radar mensual)
@@ -47,7 +47,169 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
 
 ## 5 · Cola de pruebas del loop (una por corrida de práctica)
 
-- [ ] Soul-ID con la cara de Sergio (CLI, costo 0 explorar → cotizar el train)
-- [ ] Probar 1 skill del radar (unlazy / shuohao) y anotar veredicto
-- [ ] Variante statement-post animado (HyperFrames 6 s del claim "Bs 0 en sueldos")
-- [ ] Comparativa nano_banana_flash vs soul_v2 para artes verdes (0,24 cr total)
+- [ ] Soul-ID con la cara de Sergio (CLI, costo 0 explorar → cotizar el train) — requiere
+      fotos de identidad de Sergio, que viven fuera de este carril (`references/marca-personal/`
+      no las tiene); no se ejecuta sin ellas ni sin que Sergio decida el gasto del train.
+- [x] **Probar 1 skill del radar (unlazy / shuohao) y anotar veredicto** (02-sep) —
+      **evaluadas por lectura de fuente (README/SKILL.md vía GitHub raw), sin instalar
+      ni ejecutar**: instalar tocaría `~/.claude/skills/` o `.claude/skills/` del repo,
+      fuera de los archivos permitidos a este carril (REGLA DURA). **`unlazy`**
+      (`Leonxlnx/unlazy`, 2.950⭐): disciplina de cierre — obliga a escribir una lista de
+      gates verificables ANTES de dar algo por terminado y los re-corre con un checker de
+      Node, bloqueando el `Stop` hasta que pasen. Es literalmente la regla "Nada a medias
+      — cerrar antes de abrir" de este mismo `CLAUDE.md`, pero automatizada con un gate
+      ejecutable en vez de honor system — **candidata real para el carril
+      `docs-auditoria` o `onia-cola` (el integrador)**, no para este. **`shuohao-skills`**
+      (`eternityspring/shuohao-skills`, 2.527⭐): pipeline de 5 skills para producir
+      cortometrajes/dramas chinos desde una novela (outline→personajes→arte→guion→
+      storyboard), con paywall de comunidad en WeChat — dominio ajeno (ficción china, no
+      automatización de negocio boliviano), **no aplica al contenido de este carril**.
+      **Veredicto: ninguna se adopta en marca-personal; `unlazy` se anota como propuesta
+      para quien sea dueño de `.claude/skills/` a nivel repo — no es esta sesión.**
+- [ ] Variante statement-post animado (HyperFrames 6 s del claim "Bs 0 en sueldos") —
+      probado 02-sep: no hay CLI de HyperFrames instalado en el VPS (`hyperframes` no
+      existe, `npx hyperframes-cli` da 404). Queda pendiente de que se resuelva el runtime.
+- [x] **Comparativa nano_banana_flash vs soul_v2 para artes verdes** (02-sep) — **el ítem
+      estaba mal cotizado**: `higgsfield generate cost` dio **nano_banana_flash = 1,5 cr**
+      (y nano_banana / nano_banana_2_lite = 1 cr), muy por encima del tope 0,12 cr/imagen
+      de la regla dura. Solo `text2image_soul_v2` entra en presupuesto (0,12 cr). Se
+      **abortó sin generar** con Nano Banana — la regla "cotizar ANTES" hizo justo su
+      trabajo. No hay comparativa posible dentro del tope; no reintentar con estos modelos.
+
+## 6 · Mejoras de calidad pedidas por Sergio (02-sep) — las trabaja el loop de práctica
+
+- [x] **Tipografía** (probado 02-sep, 2 comparativas renderizadas): primera pasada
+      eligió Bricolage y Sergio la corrigió — **la marca Onia es Archivo Variable**
+      (ONIA_MARCA_SISTEMA: Archivo para todo, jerarquía por tamaño + eje `wdth`;
+      Bricolage está descartada a propósito ahí). Veredicto final aplicado a los 4
+      generadores: **claims/títulos Archivo wght 900 wdth 62** (condensed editorial,
+      word-spacing .09em) · **números/impacto wdth 125** (expanded poster) ·
+      **wordmark "Onia Community" wght 560 wdth 96** (el corte del logo) · cuerpo
+      Archivo · **micro-etiquetas y handle Geist Mono** letter-spacing .08em.
+- [x] **Más imágenes — mitad "artes Higgsfield integrados"** (02-sep, experimento A/B
+      renderizado y comparado en `carousels/out/experimento-arte-higgsfield-vs-icono/`):
+      misma portada ("Un sistema, no una lista de apps"), **A** icono Fluent (laptop,
+      gratis) vs **B** arte Higgsfield (engranajes verdes, `text2image_soul_v2`, 0,12 cr
+      cotizado y verificado en `account transactions`). **Gana B**: el engranaje
+      literaliza "sistema" mejor que un laptop genérico y el verde de marca encaja con
+      la caja redondeada tipo app-icon; el laptop además traía celeste/violeta que
+      chocan con la paleta. **Regla de uso, por costo:** el arte pago se reserva para
+      la portada/hero de una pieza (1 por pieza), el interior sigue en íconos Fluent
+      gratis — meter Higgsfield en cada lámina de un carrusel de 5-7 rompería el tope
+      de 1 cr/día en una sola pieza. Aplicado ya a `generar-carrusel-sistema.py`
+      (portada real, no solo el experimento); arte guardado en
+      `references/marca-personal/higgsfield-artes/sistema-engranajes.png`.
+- [ ] **Más imágenes — mitad "foto real de Sergio"**: sin ejecutar, no hay identity
+      assets en este carril (mismo bloqueo que Soul-ID arriba) — separada del ítem de
+      arriba porque esa mitad sí se pudo cerrar.
+- [ ] **Sonido**: BGM en teasers HyperFrames (media-use resolve BGM) + SFX en beats
+      clave; probar en el teaser de comunidad v3
+- [x] **Texturas/atmósfera** (02-sep, experimento A/B/C renderizado y comparado en
+      `carousels/out/experimento-textura-statement/`, sobre la pieza real "Mi oficina
+      entera"): **gana la sombra de ícono más rica** (`drop-shadow` más profundo,
+      `0 30px 45px rgba(0,0,0,.25)`) — se nota, da presencia sin ensuciar el fondo
+      plano. **El grano sutil (feTurbulence) se descarta**: triplicó el peso del PNG
+      (172KB → 900KB) y a esta escala de publicación es imperceptible — costo sin
+      beneficio visible, justo lo que la regla "verificar es MIRAR" existe para
+      atrapar. Aplicado a `generar-statement-post.py`; el papel envejecido de carosia
+      queda sin adoptar (no rindió en nuestro fondo claro).
+- [x] **Marco spec-sheet** (02-sep, experimento A/B renderizado y comparado en
+      `carousels/out/experimento-marco-specsheet/`): **gana la variante CON marco**
+      (header "ONIA SYSTEM · GRID 1080×1350 / V1.0" + footer "TECHNICAL SPEC ·
+      TEMA: X / FORMATO: Y", Geist Mono mayúscula, filete negro arriba y abajo) —
+      da look editorial de sistema real sin tapar nada ni cortar texto, y encaja con
+      la firma "sin humo" del carril. Aplicado a la portada de
+      `generar-carrusel-chatbot.py`; próximos generadores de portada lo copian de ahí.
+- [ ] **Mascota 3D Onia** (candidatos listos 02-sep, **falta el OK de Sergio** — no se
+      adopta sin él): 3 variantes generadas con `text2image_soul_v2` (0,12 cr c/u, 0,36 cr
+      total) en `carousels/out/experimento-mascota-onia/` — **A-cubo.png** (cabeza cubo
+      redondeada, cuerpo simple, un solo material verde `#1F7A4D`), **B-blob.png** (cuerpo
+      blob con antena), **C-chip.png** (cabeza con patrón de circuito y cara realista
+      dentro — mezcla de materiales que rompe la pureza "toy"). **Recomendación: gana
+      A-cubo** — es el más limpio, el único material consistente de punta a punta, el más
+      parecido al cubo-head que ya usa carosia (referencia de `spec-sheet-editorial/FICHA.md`)
+      y el más fácil de hacer sostener props para literalizar metáforas (el objetivo
+      original del ítem). B es genérico y sin gancho de marca; C mezcla plástico de juguete
+      con piel fotorrealista, se ve inconsistente. **Pendiente de Sergio: mirar los 3 y dar
+      el OK sobre A (o pedir otra variante) antes de usarlo en cualquier pieza publicable.**
+- [x] **Historias-quiz** (02-sep): formato ingenierobinario adaptado a marca —
+      `generar-historia-quiz.py`, 3 historias listas con zona para el sticker de
+      encuesta; opciones y respuestas en SEMANA1. La interacción es el poll de 1 tap.
+- [x] **Label de ícono en statement-3d-minimal** (02-sep, tanda intensiva) —
+      A/B renderizado y comparado en `carousels/out/experimento-label-icono-statement/`
+      sobre la pieza real "16 años. 4 herramientas. 1 empresa.": **A** sans regular
+      negra (la que había) vs **B** Geist Mono mayúscula gris. **Gana B** — no compite
+      en peso visual con el claim (A usaba el mismo negro pleno) y unifica el
+      lenguaje con el marco spec-sheet y el handle. Aplicado a
+      `generar-statement-post.py` (regenerado, mismo PNG) y al generador nuevo
+      `generar-statement-16anos.py`. FICHA.md actualizada. **Hallazgo extra:** el
+      mismo experimento destapó que con un claim de 2-3 líneas los íconos/gaps que
+      traía el generador original invadían el handle — bug real de layout, corregido
+      antes de publicar (íconos 230px→196px, gaps más chicos).
+- [x] **Banda segura de historias 9:16** (02-sep, tanda intensiva) — **experimento
+      inventado por el loop: §5/§6 no tenían ningún pendiente ejecutable** (los cuatro
+      que quedan están bloqueados por assets, por el runtime de HyperFrames o esperando
+      el OK de Sergio). A/B/C renderizado y comparado en
+      `carousels/out/experimento-safearea-historia/`, con la **interfaz de IG simulada
+      encima** (bandas rojas = lo que el usuario no ve): **A** layout actual ·
+      **B** banda segura, misma tipografía · **C** banda segura + tipografía al 88 %.
+      **Gana C.** Banda usada: `y ∈ [230px, 1498px]` — fuente interna versionada,
+      `.agents/skills/embedded-captions/references/aesthetic-principles.md` §17
+      ("9:16 TikTok/IG/Shorts: caption zone y ∈ [12%, 78%], bottom 22% is UI"); no se
+      pudo citar la spec de Meta porque esta corrida no tiene acceso web.
+      **A tenía un defecto real, no estético:** el handle quedaba **tachado por la barra
+      "Enviar mensaje"** y ~40 % de la zona punteada de encuesta caía debajo de la UI —
+      Sergio habría pegado el sticker medio tapado. B lo corrige pero deja la zona de
+      encuesta apretada (~330px); C corrige lo mismo y recupera ~200px para el sticker,
+      y la pérdida de tipografía es imperceptible a escala de historia (el claim baja de
+      58px a 51px y sigue siendo lo más grande de la pantalla). Aplicado a
+      `generar-historia-quiz.py` y **las 6 historias regeneradas**.
+      **De paso quedó el gate del formato:** `chequear-banda-segura-historias.py` pega la
+      interfaz sobre los PNG ya hechos y arma `CHEQUEO-banda-segura.png` para mirarla.
+      Es justo lo que un `>50KB` no puede ver: el PNG suelto se veía impecable.
+- [x] **La portada, leída al tamaño en que la ve el público** (02-sep, tanda intensiva) —
+      **segundo experimento inventado por el loop**: los pendientes que quedan en §5/§6
+      siguen bloqueados (assets de identidad, runtime de HyperFrames, OK de Sergio sobre la
+      mascota, captura de un sticker de IG). A/B/C renderizado y comparado en
+      `carousels/out/experimento-portada-miniatura/`: **A** el layout que usan HOY todos los
+      generadores (icono 300 + título 88 wdth62 + subtítulo gris 44) · **B** sin subtítulo,
+      título 112 · **C** jerarquía por tamaño (contexto 62 gris + remate 150 wdth 125).
+      **Gana C, y no por poco.** A 33 % (feed) C se lee de un golpe mientras que A hay que
+      esforzarse para leerla; a 13 % (grilla de perfil) **C es la única donde algo
+      sobrevive** — A y B se vuelven una mancha gris. Es la regla "jerarquía por tamaño +
+      eje `wdth`" de ONIA_MARCA_SISTEMA comprobada, y la §13 de
+      `.agents/skills/embedded-captions/references/aesthetic-principles.md` ("el énfasis
+      escala DENTRO de una frase, no entre frases").
+      **Defecto real que destapó, no estético:** el subtítulo gris de las portadas viejas es
+      **peso muerto** — ilegible a 33 % y a 13 %, o sea invisible justo en el único momento
+      que decide si alguien frena el scroll, y encima obliga al título a achicarse para
+      dejarle lugar. Cuesta y no paga.
+      **Nota de escala:** el marco spec-sheet tampoco se lee reducido, pero eso está bien —
+      ahí funciona como filete decorativo. **No agrandarlo**: se diseñó para la lectura a
+      pantalla completa.
+      Aplicado a la portada de `generar-carrusel-atender.py` y a la FICHA de
+      `spec-sheet-editorial`. **Las portadas ya renderizadas NO se rehicieron**: a diferencia
+      de la banda segura (que corregía algo roto), acá el cambio es una mejora, y cada
+      portada necesita decidir a mano QUÉ dos o tres palabras son el remate — decisión
+      editorial, no reemplazo mecánico. Queda como pendiente abajo.
+      Las escalas de la hoja (33 % / 13 %) **no son medidas de la UI de Meta** —esta corrida
+      no tiene acceso web para citarla—: son las proporciones a las que se ve una portada
+      cuando no la abrís.
+      **De paso, el gate se atrapó a sí mismo:** la primera hoja incluía una fila al 100 % y
+      salía cortada (tres láminas de 1080 no entran en 1400px de ancho). Y agrandar la hoja
+      era peor: al abrirla se reduce entera y las miniaturas dejan de verse al tamaño que se
+      quiere juzgar. La fila 100 % se sacó; el tamaño completo se mira en los
+      `variante-*.png` sueltos.
+- [ ] **Portadas viejas al patrón ganador** (abierto 02-sep): `carrusel-5-prompts`,
+      `carrusel-cursos-gratis`, `carrusel-tareas-automatizadas`, `carrusel-chatbot-venta` y
+      `carrusel-sistema-venta` siguen con el layout A (título mediano + subtítulo gris).
+      Cada una necesita elegir su remate de 2-3 palabras antes de re-renderizar — una por
+      vuelta alcanza.
+- [ ] **Próximo experimento — ¿la zona punteada es del tamaño del sticker real?**
+      El gate de arriba prueba que la zona de encuesta está DENTRO de la banda segura,
+      pero nadie verificó que su **tamaño** coincida con el del sticker de encuesta de IG:
+      si la zona es más grande, Sergio pega un sticker chico flotando en un rectángulo
+      vacío; si es más chica, lo pega desbordando el diseño. **No se puede medir sin una
+      captura real de un sticker de IG** — pedírsela a Sergio (una captura de pantalla
+      pegando una encuesta, 10 seg) y recién ahí calibrar `.zona`. Anotado acá para que la
+      próxima corrida no lo invente a ojo.

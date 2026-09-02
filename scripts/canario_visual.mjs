@@ -51,9 +51,67 @@ const PANTALLAS = [
 
   // --- Chatbot ---
   { nombre: 'login-chat', url: 'https://chat.onia.com.bo/app/login', cola: 'hermes-content/docs/cola/chatbot.md', duenio: 'chatbot-cola' },
-  // Detrás de sesión: sin sesión se reporta "no medida", NUNCA "OK".
-  { nombre: 'panel-chatbot', url: 'https://app.onia.com.bo/settings/chatbot', cola: 'hermes-content/docs/cola/chatbot.md', duenio: 'chatbot-cola' },
+  // Detrás de sesión: sin sesión se reporta "no medida", NUNCA "OK". `requiereSesion` no es
+  // decorativo — es lo que hace que el canario intente entrar y que, si no puede, lo DIGA.
+  { nombre: 'panel-chatbot', url: 'https://app.onia.com.bo/settings/chatbot', cola: 'hermes-content/docs/cola/chatbot.md', duenio: 'chatbot-cola', requiereSesion: true },
 ];
+
+/**
+ * Credenciales de sólo lectura para las pantallas detrás de sesión. Sin ellas el canario no
+ * se queda pensando: mide lo que puede y marca la pantalla NO MEDIDA con el motivo.
+ * Enchufarlas es un `env`, no un cambio de código.
+ */
+const SESION = { user: process.env.ONIA_CANARIO_USER || '', pass: process.env.ONIA_CANARIO_PASS || '' };
+
+/**
+ * ¿La página que quedó abierta es la que pedí, o me desviaron?
+ *
+ * Nace del 2026-09-02: `panel-chatbot` redirige a `/login` y el canario venía imprimiendo
+ * `status=200 … sin disparo mecanico (comparada)` — daba por buena una pantalla que nunca
+ * vio, comparándola encima contra una baseline que era la del login. Verde con cara de
+ * éxito, dentro del vigilante mismo.
+ *
+ * Se compara host + camino: el query string y la barra final no son desvíos.
+ */
+/**
+ * Con qué binario se saca la foto. NO es un detalle de arranque: es lo que decide qué
+ * defectos ve el canario.
+ *
+ * `chromium.launch()` **sin `channel`** resuelve a `chromium_headless_shell`, un rasterizador
+ * que dibuja un espacio DESPUÉS DE CADA `t` en los pesos finos de la fuente Archivo:
+ * *"Ent regamos t u sist ema … puest a … con t us dat os"*. Eso **no lo ve ningún cliente** —
+ * es del binario que captura, no del sitio.
+ *
+ * Lo que costó antes de arreglarse (2026-09-02): un ítem abierto tres días contra una pantalla
+ * impecable, una bisección entera que culpó a la fuente ("roto en pesos ≤500, limpio en 600"),
+ * y una decisión escalada a Sergio que nunca existió (radar §19). Ninguna de esas pruebas podía
+ * acertar, porque **ninguna cambió el motor**.
+ *
+ * Medido dos veces, misma URL y mismo instante, con los dos binarios que ya están bajados en el
+ * VPS (`chromium-1223` y `chromium_headless_shell-1223`, ambos rev 1223 = la que pide el
+ * Playwright 1.60 de `/root/node_modules`): el shell rompe el texto, el Chromium completo lo
+ * dibuja perfecto. No hay que instalar nada.
+ *
+ * Regla para leer un reporte futuro: si TODOS los cortes caen pegados a una `t`, es este
+ * artefacto y no un defecto del producto.
+ */
+function opcionesDeChromium(esRoot) {
+  return {
+    // Pedir el Chromium COMPLETO. Sin esto el canario inventa defectos de texto en cada corrida.
+    channel: 'chromium',
+    // Como root (el VPS) Chromium NO arranca con su sandbox: falla en la primera pantalla.
+    // En Windows/usuario normal se deja el sandbox puesto, que es lo correcto.
+    ...(esRoot ? { args: ['--no-sandbox', '--disable-dev-shm-usage'] } : {}),
+  };
+}
+
+function llegoALaPantalla(urlPedida, urlFinal) {
+  try {
+    const a = new URL(urlPedida), b = new URL(urlFinal);
+    const camino = (u) => u.pathname.replace(/\/+$/, '') || '/';
+    return a.host === b.host && camino(a) === camino(b);
+  } catch { return false; }
+}
 
 const OUT = process.env.CANARIO_OUT || join(process.cwd(), '.canario-out');
 const TIMEOUT = 60_000;
@@ -94,6 +152,13 @@ const UMBRAL = {
  */
 function juzgar(datos, baseInyectada) {
   const motivos = [];
+  // Una pantalla a la que no llegué no se juzga: no es un ítem (gritaría en CADA vuelta hasta
+  // que alguien apague el canario) pero tampoco puede salir como "sin disparo". Y sobre todo
+  // no se compara contra su baseline: la de `panel-chatbot` guardaba los bytes del login, así
+  // que el día que la sesión funcione el panel real dispararía un fantasma de peso.
+  if (datos.medida === false) {
+    return { motivos, noMedida: true, baseline: `NO MEDIDA — ${datos.motivoNoMedida || 'no se llegó a la pantalla'}` };
+  }
   if (datos.fallo) motivos.push(`no abrió: ${datos.fallo}`);
   if (datos.status !== null && datos.status >= 400) motivos.push(`status ${datos.status}`);
   if (datos.bytes > UMBRAL.techoPesoBytes) {
@@ -123,9 +188,39 @@ function juzgar(datos, baseInyectada) {
   return { motivos, baseline: 'comparada' };
 }
 
-async function medir(browser, { nombre, url, cola, duenio }) {
+/**
+ * Entra por el formulario de `/login` de app.onia.com.bo. Devuelve null si entró, o el motivo
+ * por el que no — que se escribe tal cual en el JSON: "no medida" sin motivo no se puede
+ * arreglar. No lanza: una sesión que falla degrada la pantalla a NO MEDIDA, no rompe la vuelta.
+ */
+async function iniciarSesion(page, origen) {
+  try {
+    await page.goto(`${origen}/login`, { waitUntil: 'domcontentloaded', timeout: TIMEOUT });
+    await page.fill('input[type="email"]', SESION.user);
+    await page.fill('input[type="password"]', SESION.pass);
+    await Promise.all([
+      page.waitForURL((u) => !/\/login/.test(u.pathname), { timeout: 30_000 }).catch(() => {}),
+      page.click('button[type="submit"]'),
+    ]);
+    if (/\/login/.test(new URL(page.url()).pathname)) return 'las credenciales no entraron (sigue en /login)';
+    return null;
+  } catch (e) {
+    return `no se pudo iniciar sesión: ${String(e.message).split('\n')[0]}`;
+  }
+}
+
+async function medir(browser, { nombre, url, cola, duenio, requiereSesion }) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();
+
+  // Sin credenciales NO se abandona la pantalla: se la mide igual (va a caer en el login) y el
+  // desvío la marca NO MEDIDA con este motivo. El día que existan, es un `env` y nada más.
+  let motivoNoMedida = null;
+  if (requiereSesion) {
+    motivoNoMedida = (SESION.user && SESION.pass)
+      ? await iniciarSesion(page, new URL(url).origin)
+      : 'faltan ONIA_CANARIO_USER / ONIA_CANARIO_PASS (credencial de sólo lectura, la da Sergio)';
+  }
 
   let bytes = 0;
   const pesajes = [];
@@ -193,7 +288,15 @@ async function medir(browser, { nombre, url, cola, duenio }) {
   await Promise.all(pesajes);
 
   await ctx.close();
-  const datos = { nombre, url, cola, duenio, status, fallo, bytes, msMirable, msTotal, erroresConsola: errores.slice(0, 10), visto };
+
+  // El chequeo que faltaba: ¿la página que capturé es la que pedí? Si me desviaron, la
+  // captura y el peso son de OTRA pantalla y no valen para nada.
+  // Si la página NO abrió, eso ya es un ítem (`fallo`) y manda: `null` para no degradarla a
+  // NO MEDIDA, que taparía una caída real detrás de un veredicto tibio.
+  const medida = fallo ? null : llegoALaPantalla(url, visto.urlFinal);
+  if (medida === false && !motivoNoMedida) motivoNoMedida = `desviada a ${visto.urlFinal}`;
+
+  const datos = { nombre, url, cola, duenio, status, fallo, bytes, msMirable, msTotal, medida, motivoNoMedida, erroresConsola: errores.slice(0, 10), visto };
   const veredicto = juzgar(datos);
   datos.baseline = veredicto.baseline;
   // `motivos` son las razones MECÁNICAS por las que esto ya es un ítem. Vacío NO significa
@@ -213,7 +316,19 @@ if (filtro.includes('--self-check')) {
   const base = { bytes: 1_000_000, msMirable: 200, erroresConsola: ['viejo'] };
   const caso = (extra) => ({ nombre: 'x', bytes: 1_000_000, msMirable: 200, status: 200, fallo: null, erroresConsola: ['viejo'], ...extra });
   const motivosDe = (extra) => juzgar(caso(extra), base).motivos;
-  const afirmar = (cond, que) => { if (!cond) { console.error('FALLO:', que); process.exitCode = 1; } };
+  // Contadas, no escritas a mano: el número que se imprime dejó de coincidir con la realidad
+  // en cuanto se agregaron casos, y un conteo que miente es la primera grieta de un gate.
+  let casos = 0;
+  const afirmar = (cond, que) => { casos++; if (!cond) { console.error('FALLO:', que); process.exitCode = 1; } };
+
+  // El MOTOR con el que se saca la foto decide qué defectos ve el canario, así que es un
+  // umbral más y va acá. Sin `channel`, Playwright resuelve a `chromium_headless_shell`, que
+  // dibuja un espacio DESPUÉS DE CADA `t` en los pesos finos de Archivo ("Ent regamos t u
+  // sist ema"). Ningún cliente ve eso: es del binario que captura, no del sitio.
+  afirmar(opcionesDeChromium(true).channel === 'chromium', 'como root pide el Chromium COMPLETO, no el headless shell');
+  afirmar(opcionesDeChromium(false).channel === 'chromium', 'fuera de root TAMBIEN pide el Chromium completo');
+  afirmar(opcionesDeChromium(true).args?.includes('--no-sandbox'), 'como root sigue arrancando sin sandbox');
+  afirmar(opcionesDeChromium(false).args === undefined, 'fuera de root el sandbox queda puesto');
 
   afirmar(motivosDe({}).length === 0, 'una pantalla igual a su baseline no dispara nada');
   afirmar(motivosDe({ bytes: 1_390_000 }).length === 0, '+39 % de peso es ruido, no un item');
@@ -232,6 +347,36 @@ if (filtro.includes('--self-check')) {
   // El caso que originó el carril: 3,9 MB y 117 s con status 200.
   afirmar(juzgar(caso({ bytes: 3_900_000, msMirable: 117_000 }), null).motivos.length > 0, 'el bug de 3,9 MB / 117 s se agarra SIN baseline');
 
+  // --- Llegué o no llegué a la pantalla que pedí ---
+  // Medido el 2026-09-02: `panel-chatbot` redirige a /login y el canario imprimía
+  // "sin disparo mecanico (comparada)" — o sea daba por buena una pantalla que nunca vio.
+  afirmar(llegoALaPantalla('https://app.onia.com.bo/settings/chatbot', 'https://app.onia.com.bo/settings/chatbot'), 'misma url = llegué');
+  afirmar(!llegoALaPantalla('https://app.onia.com.bo/settings/chatbot', 'https://app.onia.com.bo/login'), 'redirigido al login = NO llegué');
+  afirmar(llegoALaPantalla('https://onia.com.bo/', 'https://onia.com.bo'), 'la barra final no es un desvío');
+  afirmar(llegoALaPantalla('https://onia.com.bo/precios', 'https://onia.com.bo/precios?ref=x'), 'un query string no es un desvío');
+  afirmar(!llegoALaPantalla('https://onia.com.bo/', 'https://onia.com.bo/empezar'), 'la home desviada a /empezar NO llegó');
+  afirmar(!llegoALaPantalla('https://app.onia.com.bo/login', 'https://chat.onia.com.bo/login'), 'otro host = NO llegué');
+
+  // Una pantalla no medida NO es un ítem (si lo fuera, gritaría en cada vuelta y alguien la
+  // apagaría) pero TAMPOCO puede salir como "sin disparo": ésa es la mentira que se arregló.
+  const noMedida = juzgar(caso({ medida: false, motivoNoMedida: 'sin credenciales' }), base);
+  afirmar(noMedida.noMedida === true, 'una pantalla no medida se marca como tal');
+  afirmar(noMedida.motivos.length === 0, 'no medida NO es un ítem mecánico');
+  afirmar(/NO MEDIDA/.test(noMedida.baseline), 'el veredicto de una no medida dice NO MEDIDA');
+  // Y no puede compararse contra la baseline de OTRA pantalla: la de `panel-chatbot` guardaba
+  // los bytes del login, así que el día que la sesión funcione el panel real dispararía un
+  // fantasma de peso. No se compara lo que no se midió.
+  afirmar(juzgar(caso({ medida: false, bytes: 99_000_000 }), base).motivos.length === 0, 'no medida no compara peso contra una baseline ajena');
+
+  // Una pantalla que NO ABRE sigue siendo un ítem: `medir` le pone `medida: null` justamente
+  // para que el atajo de arriba no le tape la caída. Si esto se rompe, una caída real de
+  // producción sale como un "no medida" tibio y nadie la mira.
+  afirmar(juzgar(caso({ fallo: 'timeout', medida: null }), base).motivos.some((m) => m.includes('no abrió')), 'una pantalla caída es ITEM, no "no medida"');
+
+  // La lista declara qué pantallas viven detrás de sesión: sin el campo, la de mañana se
+  // agrega y vuelve a mentir en silencio.
+  afirmar(PANTALLAS.some((p) => p.requiereSesion), 'al menos una pantalla se declara detrás de sesión');
+
   // La lista de pantallas ES la cola de este carril, así que le corresponde el mismo gate que a
   // las demás: nada entra sin evidencia de que existe. `verificar_cola.js` no aplica acá (no hay
   // sección "## Ahora"), así que la parte que sí se puede comprobar en frío se comprueba acá:
@@ -246,7 +391,7 @@ if (filtro.includes('--self-check')) {
     afirmar(Boolean(p.duenio), `${p.nombre}: sin dueño declarado`);
   }
 
-  console.log(process.exitCode ? 'self-check: FALLO' : `self-check: ok — 13 casos de umbral + ${PANTALLAS.length} pantallas con cola existente`);
+  console.log(process.exitCode ? 'self-check: FALLO' : `self-check: ok — ${casos} casos sobre ${PANTALLAS.length} pantallas`);
   process.exit(process.exitCode ?? 0);
 }
 
@@ -257,14 +402,14 @@ mkdirSync(OUT, { recursive: true });
 // Como root (el VPS) Chromium NO arranca con su sandbox: falla en la primera pantalla.
 // En Windows/usuario normal se deja el sandbox puesto, que es lo correcto.
 const esRoot = process.getuid?.() === 0;
-const browser = await chromium.launch(
-  esRoot ? { args: ['--no-sandbox', '--disable-dev-shm-usage'] } : {},
-);
+const browser = await chromium.launch(opcionesDeChromium(esRoot));
 for (const p of lista) {
   const d = await medir(browser, p);
   const veredicto = d.motivos.length
     ? `ITEM -> ${d.cola} :: ${d.motivos.join(' | ')}`
-    : `sin disparo mecanico (${d.baseline}) — MIRA la captura igual`;
+    : d.medida === false
+      ? `NO MEDIDA :: ${d.motivoNoMedida} — la captura es de OTRA pantalla, no la mires como si fuera esta`
+      : `sin disparo mecanico (${d.baseline}) — MIRA la captura igual`;
   console.log(`${d.nombre}\tstatus=${d.status ?? 'X'}\t${(d.bytes / 1024).toFixed(0)} KB\t${d.msMirable} ms\t${veredicto}`);
 }
 await browser.close();

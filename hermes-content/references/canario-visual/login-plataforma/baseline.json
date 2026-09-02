@@ -1,11 +1,13 @@
 {
   "nombre": "login-plataforma",
   "url": "https://app.onia.com.bo/login",
+  "cola": "hermes-content/docs/COLA.md",
+  "duenio": "onia-cola",
   "status": 200,
   "fallo": null,
-  "bytes": 1331545,
-  "msMirable": 1043,
-  "msTotal": 2527,
+  "bytes": 715612,
+  "msMirable": 135,
+  "msTotal": 939,
   "erroresConsola": [
     "Loading the script 'https://static.cloudflareinsights.com/beacon.min.js/v3d52b47920f24c319d37e2661827c42b1787588026925' violates the following Content Security Policy directive: \"script-src 'self' 'un"
   ],
@@ -13,5 +15,7 @@
     "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia",
     "urlFinal": "https://app.onia.com.bo/login",
     "texto": "Tu negocio completo, en un solo sistema. bolt Activación acompañada Entregamos tu sistema con la configuración de tu rubro puesta. Si no sabés cómo configurarlo, hacemos una demo y lo armamos con tus datos. credit_card_off 14 días gratis, sin tarjeta Probás todo el sistema. Si no te sirve, no pagas nada. smart_toy Agentes que trabajan por vos Recuerdan citas, cobran deudas y avisan lo importante. Clínicas dentales · Comercios · Importadoras — hecho en Bolivia Hola de nuevo Entrá a tu cuenta para seguir donde quedaste. Correo electrónico Contraseña Olvidé mi contraseña Iniciar sesión ¿Todavía no tenés cuenta? person_add Pedí tu acceso Si tu negocio ya usa Onia, pedí acceso al administrador. Conocer Onia"
-  }
+  },
+  "baseline": "comparada",
+  "motivos": []
 }

@@ -52,8 +52,18 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
-  // OG sin imagen a proposito: la imagen sera una captura REAL del sistema
-  // cuando exista (regla de la casa: nunca mockups falsos como proof).
+  /**
+   * OG sin imagen ACA a proposito: la imagen la pone cada segmento con su
+   * `opengraph-image.tsx` (ver `(sitio)/tarjeta-social.tsx`), porque esa
+   * convencion de Next no baja a las rutas anidadas.
+   *
+   * ⚠️ Corregido 2026-09-02. Aca decia que la imagen "sera una captura REAL del
+   * sistema cuando exista (nunca mockups falsos como proof)" — la regla al
+   * REVES. Sergio, 2026-09-01: "no coloques capturas literales del sistema, se
+   * ve mal, coloca cosas referenciales". Ese comentario es el que sostuvo
+   * `/og/onia-rubros.jpg` (una captura con "MUY PRONTO" impreso adentro) como
+   * primera cosa que veia un lead al recibir el link.
+   */
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
@@ -62,7 +72,13 @@ export const metadata: Metadata = {
     siteName: "Onia",
   },
   twitter: {
-    card: "summary",
+    /**
+     * `summary_large_image` y no `summary`: con `summary` la tarjeta sale chica
+     * y el dibujo de 1200×630 queda recortado a un cuadradito al costado del
+     * texto. Medido el 2026-09-02: `/empezar` heredaba `summary` de aca, asi
+     * que aun con imagen se compartia como si no la tuviera.
+     */
+    card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },

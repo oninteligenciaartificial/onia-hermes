@@ -41,8 +41,9 @@ Talking head, 45-60 s:
 > Eso es un sistema — y es otra liga."
 > CTA: "Comentá AGENCIA y te mando la guía con los 3 pasos."
 
-⚠️ Palabra clave AGENCIA → el DM automático sigue ROTO (carril infra). Hasta que
-funcione, el CTA es: "el paso a paso está en mi comunidad — link en bio".
+**CTA final (regla Sergio 02-sep):** "Comentá COMUNIDAD y te paso el enlace para unirte." ⚠️ El DM
+automático sigue ROTO (carril infra): los comentarios se responden A MANO con el link
+hasta que infra lo arregle.
 
 ## Guion Video C — interactivo (18K en TikTok)
 
@@ -83,7 +84,7 @@ el DM automático sigue roto, carril infra).
 > 2. Fotos de producto de catálogo desde el celular
 > 3. Cotizaciones y descripciones que se escriben solas
 > ¿Cuándo SÍ pagar? Cuando necesitás que todo funcione junto, solo, todos los días.
-> ¿Querés el paso a paso? Comentá COMUNIDAD y te mando el acceso.
+> ¿Querés el paso a paso? Comentá COMUNIDAD y te paso el enlace para unirte.
 
 > **LinkedIn:** Antes de firmar con una agencia de marketing o de IA, probá esto gratis:
 > 1) Un asistente que responda las preguntas frecuentes de tus clientes — se arma en
@@ -94,7 +95,7 @@ el DM automático sigue roto, carril infra).
 > ¿Cuándo sí tiene sentido pagar? Cuando necesitás que todo eso funcione junto, sin que
 > nadie lo esté prendiendo a mano todos los días. Ahí ya es un sistema — y es otra
 > conversación.
-> El paso a paso de las 3 cosas gratis está en mi comunidad de WhatsApp: comentá COMUNIDAD y te mando el acceso.
+> El paso a paso de las 3 cosas gratis está en mi comunidad de WhatsApp: comentá COMUNIDAD y te paso el enlace para unirte.
 
 **Video C — interactivo**
 
@@ -107,6 +108,37 @@ el DM automático sigue roto, carril infra).
 > herramienta puntual para hacerlo.
 > Voy a responder personalmente, uno por uno. El caso más interesante lo construyo de
 > verdad y lo muestro acá.
+
+## Historias-quiz (formato nuevo 02-sep — interacción por encuesta nativa)
+
+PNGs listos en `carousels/out/historias-quiz/`. Subís la imagen como historia y
+pegás el **sticker de encuesta de IG** sobre la zona punteada, con estas opciones
+(la correcta en negrita — se revela al día siguiente o en la comunidad):
+
+| Historia | Opciones del sticker | Nota |
+|---|---|---|
+| 01 asistente | 3 meses · 1 mes · 1 semana · **1 tarde** | remata con historia "se arma en una tarde — en mi comunidad está el paso a paso" |
+| 02 cuál NO puede | fotos · WhatsApp · cotizar · **ninguna: todo puede** | la trampa es el gancho |
+| 03 costo del arte | Bs 700 · Bs 70 · Bs 7 · **menos de Bs 1** | remata con el arte terminado + "0,12 créditos" |
+| 04 guardián del VPS | 1 vez al día · cada hora · **cada 10 minutos** · nunca | el cron real está en la imagen (`*/10 * * * * claude-guardia.sh`); remata mostrando un aviso de Telegram de verdad |
+| 05 quién escribe esto | 1 · 2 · **4** · ninguna, lo hago yo | meta-contenido: la historia la escribió el loop del servidor. 4×/día es el cron real de este carril (`56 9,13,17,21` UTC) |
+| 06 el empleado que no duerme | Bs 3.500 · Bs 1.200 · Bs 400 · **Bs 0** | la pregunta es por el SUELDO (el servidor sí cuesta) — remata con "no cobra sueldo, cobra electricidad" |
+
+**Las cifras de 04 y 05 salen de `crontab -l` del VPS, contado en vivo el 02-sep**, no de
+memoria. Si el horario del loop cambia, la historia 05 miente: re-contar antes de publicarla.
+
+⚠️ **CTA en historias — adaptación explícita, no deriva.** El CTA estándar del carril es
+*"Comentá COMUNIDAD y te paso el enlace para unirte"*, pero **en historias no hay
+comentarios**. El remate de cada una usa la misma promesa por el canal que sí existe:
+*"Respondé COMUNIDAD a esta historia y te paso el enlace para unirte"*. Los carruseles y
+posts de feed siguen llevando el CTA exacto.
+
+**Banda segura (02-sep):** las 6 historias se rehicieron para que nada caiga bajo la
+interfaz de IG. Antes el handle quedaba **tachado por la barra "Enviar mensaje"** y ~40 %
+de la zona de encuesta caía debajo de la UI — o sea, el sticker se pegaba parcialmente
+tapado. Gate del formato: `scripts/marca-personal/chequear-banda-segura-historias.py`
+(arma `CHEQUEO-banda-segura.png` con la interfaz simulada encima; **mirarla** antes de dar
+una historia por lista — el peso del PNG no detecta esto).
 
 ## Historias — 2 secuencias (plantilla hook→mito→revelación→CTA)
 
@@ -128,6 +160,14 @@ S4: "Documento todo en mi comunidad. Gratis. Link arriba."
    comunidad). Fuente: drop D2.
 2. **"3 cursos de IA gratis y con certificado"** — 5 láminas. Recicla el reel de 948
    vistas en formato guardable (los carruseles viven del "guardar").
+3. **"Cómo contesto a cada cliente sin estar yo"** — 7 láminas en
+   `carousels/out/carrusel-atender-clientes/` (portada + 5 pasos + CTA comunidad). El paso
+   a paso de la atención con IA: una sola bandeja · guion propio editado conversando ·
+   entiende fotos y audios · escala a una persona cuando hay que cerrar · seguimiento solo.
+   Todo lo que afirma sale de la fila "Chatbot con IA (web + WhatsApp)" de
+   `ONIA_CATALOGO_DE_VENTA.md`, en estado vivo. **Sin precio** (el catálogo no le pone
+   precio de lista a esa fila). Caption sugerida: el hook es la portada —
+   *"Contesto a cada cliente sin estar yo. Así funciona, en 5 pasos."*
 
 ## Calendario
 

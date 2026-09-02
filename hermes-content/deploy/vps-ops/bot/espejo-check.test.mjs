@@ -23,7 +23,17 @@ import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-import { compararEspejo, ladoVps, md5Archivo, md5Local, parsearMd5sum } from "./espejo-check.mjs";
+import {
+  acoplesDeCopia,
+  compararEspejo,
+  fuentesLocales,
+  ladoVps,
+  md5Archivo,
+  md5Local,
+  parsearMd5sum,
+  simbolosDefinidos,
+  simbolosUsados,
+} from "./espejo-check.mjs";
 
 test("parsearMd5sum: el prefijo de ruta del VPS no cambia el nombre del archivo", () => {
   const salida = [
@@ -197,4 +207,88 @@ test("ladoVps: si el directorio ya esta en este disco, lo lee directo sin pasar 
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
+});
+
+// --- Acoples: saber QUE difiere no alcanza para desplegar bien --------------------------------
+//
+// El 2026-09-02 la cola mandaba copiar al VPS `knowledge.mjs` + `recepcionista.mjs` y nada mas.
+// Medido ese dia contra `/opt/onia/bot` real: el `recepcionista.mjs` del espejo ya llama a
+// `intents.wantsToBook()` y a la plantilla `R_AGENDA`, y NINGUNA de las dos existe todavia alla
+// (`intents.mjs` del VPS exporta `wantsToOrder` pero no `wantsToBook`; su `config.mjs` tiene
+// cero `R_AGENDA`). Seguir esa instruccion al pie deja el motor llamando a `undefined`.
+
+test("simbolosUsados: cuenta la LLAMADA a intents, no el import del modulo", () => {
+  const src = 'import * as intents from "./intents.mjs";\nif (intents.wantsToBook(m)) return 1;\n';
+  // Sin exigir el parentesis, `"./intents.mjs"` colaba un simbolo fantasma `intents.mjs`.
+  assert.deepEqual(simbolosUsados(src), ["intents.wantsToBook"]);
+});
+
+test("simbolosUsados: las plantillas del guion tambien cruzan archivos", () => {
+  const src = 'import { say } from "./reply-builder.mjs";\n'
+    + 'return faq(say("R_AGENDA", next, config, { link: l }), "agenda");';
+  assert.deepEqual(simbolosUsados(src), ["config.R_AGENDA"]);
+});
+
+test("simbolosUsados: nombrar un simbolo en un COMENTARIO no acopla nada", () => {
+  // El falso positivo real del 2026-09-02: este mismo gate se declaraba acoplado a intents.mjs
+  // y a config.mjs porque su encabezado explica el caso citando los dos nombres. Sin el import,
+  // no hay llamada posible en tiempo de ejecucion.
+  const src = '// el recepcionista llama a intents.wantsToBook() y a say("R_AGENDA", ...)\n';
+  assert.deepEqual(simbolosUsados(src), []);
+});
+
+test("simbolosDefinidos: intents define funciones exportadas; config, plantillas en mayuscula", () => {
+  const d = simbolosDefinidos({
+    "intents.mjs": "export function wantsToBook(n) { return true; }\n",
+    "config.mjs": "export const BASE_CONFIG = {\n  R_AGENDA: [\n    'x',\n  ].join('\\n'),\n};\n",
+    "otro.mjs": "export function noCuenta() {}\n",
+  });
+  assert.ok(d.has("intents.wantsToBook"));
+  assert.ok(d.has("config.R_AGENDA"));
+  assert.ok(!d.has("intents.noCuenta"), "solo intents.mjs define intents.*");
+});
+
+test("acoplesDeCopia: el caso REAL del 2026-09-02 — recepcionista.mjs no viaja solo", () => {
+  const repo = {
+    "recepcionista.mjs": 'import * as intents from "./intents.mjs";\n'
+      + 'import { say } from "./reply-builder.mjs";\n'
+      + "if (linkAgenda && intents.wantsToBook(m.norm)) return say(\"R_AGENDA\", n, c);\n",
+    "intents.mjs": "export function wantsToOrder(n) {}\nexport function wantsToBook(n) {}\n",
+    "config.mjs": "export const BASE_CONFIG = {\n  R_AGENDA: 'x',\n};\n",
+  };
+  const vps = {
+    "recepcionista.mjs": "// version vieja\n",
+    "intents.mjs": "export function wantsToOrder(n) {}\n",
+    "config.mjs": "export const BASE_CONFIG = {\n  R_DERIVA: 'x',\n};\n",
+  };
+
+  const solo = acoplesDeCopia(repo, vps, ["recepcionista.mjs"]);
+  assert.deepEqual(
+    solo.map((f) => f.simbolo).sort(),
+    ["config.R_AGENDA", "intents.wantsToBook"],
+    "copiar el recepcionista solo deja dos simbolos colgados",
+  );
+  assert.deepEqual(solo.find((f) => f.simbolo === "intents.wantsToBook").loTrae, ["intents.mjs"]);
+  assert.deepEqual(solo.find((f) => f.simbolo === "config.R_AGENDA").loTrae, ["config.mjs"]);
+
+  // Y el conjunto COMPLETO si se puede copiar: si esto no fuera vacio, el gate seria inutil
+  // (gritaria siempre y alguien lo apagaria, que es la trampa que este archivo ya documenta).
+  assert.deepEqual(acoplesDeCopia(repo, vps, ["recepcionista.mjs", "intents.mjs", "config.mjs"]), []);
+});
+
+test("acoplesDeCopia: no inventa acoples cuando el VPS ya tiene el simbolo", () => {
+  const usa = 'import * as intents from "./intents.mjs";\nintents.wantsToOrder(m);\n';
+  const repo = { "recepcionista.mjs": usa, "intents.mjs": "export function wantsToOrder(n) {}\n" };
+  const vps = { "recepcionista.mjs": "// vieja\n", "intents.mjs": "export function wantsToOrder(n) {}\n" };
+  // El simbolo SI se detecta (si no, este caso pasaria por no mirar nada) y aun asi no hay acople.
+  assert.deepEqual(simbolosUsados(usa), ["intents.wantsToOrder"]);
+  assert.deepEqual(acoplesDeCopia(repo, vps, ["recepcionista.mjs"]), []);
+});
+
+test("el espejo REAL es coherente consigo mismo: copiarlo entero nunca deja un simbolo colgado", () => {
+  // El guardia que impide que este gate se vuelva un rojo permanente: el espejo tiene que poder
+  // desplegarse completo sin acoples pendientes. Si algun dia falla, el roto es el espejo.
+  const espejo = fileURLToPath(new URL(".", import.meta.url));
+  const repo = fuentesLocales(espejo);
+  assert.deepEqual(acoplesDeCopia(repo, {}, Object.keys(repo)), []);
 });

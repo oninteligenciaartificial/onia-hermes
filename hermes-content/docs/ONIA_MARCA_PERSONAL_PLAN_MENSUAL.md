@@ -61,7 +61,11 @@ Todos cierran con lámina CTA → comunidad.
 1. **"5 prompts que uso a diario en mi negocio"** (S1 — del drop D2)
 2. **"3 cursos de IA gratis con certificado"** (S1 — recicla el reel de 948 en formato guardable)
 3. **"Las 5 tareas que más tiempo te roban (y cómo las automatizo)"** (S2 — sale de las señales del D3)
-4. **"Cómo respondo clientes en 30 segundos con IA"** (S2-S3 — paso a paso)
+4. **"Cómo contesto a cada cliente sin estar yo"** (S2-S3 — paso a paso) ✅ 02-sep,
+   7 láminas en `carousels/out/carrusel-atender-clientes/`.
+   ⚠️ Se titulaba *"Cómo respondo clientes en 30 segundos con IA"*: **los 30 segundos no
+   están medidos en ningún lado**, así que la cifra no se escribe (regla del carril: toda
+   cifra con fuente o no se escribe). El tema es el mismo
 5. **"16 años, 0 empleados: las 6 herramientas que son mi equipo"** (S3 — espejo del video de 5.4K)
 6. **"Antes de pagarle a una agencia, mirá esto"** (S4 — espejo del video B)
 

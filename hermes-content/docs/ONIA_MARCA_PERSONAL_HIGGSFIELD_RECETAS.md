@@ -77,3 +77,26 @@ navegador = Higgsfield.
 | Fecha | Pieza | Modelo | Prompt (resumen) | Costo |
 |---|---|---|---|---|
 | 2026-09-02 | Test CLI: overlay starburst 3D clay (usable para reel "El setup") | text2image_soul_v2 | 3D clay render, orange starburst icon, rounded square, warm white bg | 0,12 cr (cotizado = debitado ✓) |
+| 2026-09-02 | Práctica: 3 candidatos mascota 3D Onia (cubo/blob/chip), pendiente §6 BASE_CONTENIDO — ver veredicto ahí | text2image_soul_v2 ×3 | toy 3D clay mascot, verde marca #1F7A4D, variando forma de cabeza (cubo / blob / chip-circuito) | 0,12 cr ×3 = 0,36 cr (cotizado y confirmado por `account transactions` antes y después) |
+| 2026-09-02 | Experimento arte vs ícono (gana arte, ver §6 BASE_CONTENIDO) + portada real `carrusel-sistema-venta` | text2image_soul_v2 | 3D clay render, abstract interlocking gears, verde marca #1F7A4D, rounded toy-like, warm white bg #F7F7F7 | 0,12 cr (cotizado = debitado ✓, verificado en `account transactions`) — **total del día para este carril: 0,60 cr de 1 cr** |
+
+### ⚠️ El tope que frena no siempre es el nuestro (02-sep)
+
+Al pedir el arte de portada del carrusel de atención, con el gasto del carril en
+**0,60 de 1 cr** y el modelo cotizado en 0,12 cr (`higgsfield generate cost
+text2image_soul_v2` → `0.12 credits`), la generación falló:
+
+```
+{"error_type":"grace_daily_limit_reached", ...}
+```
+
+**Cero cargos** — verificado en `higgsfield account transactions` antes y después: la
+última línea seguía siendo `2026-09-02 08:48 Seedance 1.5 Pro -4.8`, sin entrada nueva.
+El límite es **de la cuenta compartida**, que ese día ya venía gastando fuerte por otro
+carril (Seedance 4,8 ×3 + Nano Banana Pro 2 ×2 ≈ 18 cr antes de las 09:00).
+
+**Lo que hay que saber:** el presupuesto propio de 1 cr/día **no garantiza** que se pueda
+generar. Un carril puede tener saldo y aun así quedar bloqueado por lo que gastó otro.
+La pieza tiene que poder salir sin arte pago — por eso el default sigue siendo la
+Receta 3 (plantilla + íconos Fluent, costo 0), y el arte Higgsfield es un **plus de la
+portada**, nunca un requisito. El carrusel de atención salió completo con íconos.
