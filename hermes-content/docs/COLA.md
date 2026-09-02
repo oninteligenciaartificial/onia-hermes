@@ -660,6 +660,36 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       dos páginas no matchea ninguna ruta bajo `/v2/capturas/` ni `/rubros/`, y lo que las
       reemplaza fue mirado renderizado por Sergio antes de publicarse.
 
+### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
+
+- [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
+      dueño real es el carril chatbot/infra, no `web-factory/apps/onia-platform`.**
+      `node scripts/canario_visual.mjs home empezar` salió con un error de consola NUEVO en las
+      dos: `Failed to load resource: ...429`. Rastreado con un script propio a
+      `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=...` — confirmado
+      también con `curl` directo (`HTTP/2 429`, body `Retry later`).
+      **Causa medida, no supuesta:** `docker logs onia-chatbot_chatwoot...` muestra
+      `[Rack::Attack][Blocked]` sobre `path: "/widget"`, **262 bloqueos en las últimas 24 h**,
+      **todos** desde dos direcciones IP: la del VPS mismo (61 bloqueos) y la salida de los
+      loops/sandboxes (189 bloqueos). **Cero IPs distintas bloqueadas en 24 h** — no hay evidencia
+      de que un visitante real haya pegado contra el límite hoy: el propio ecosistema de
+      monitoreo (`onia-mirar-cliente` cada 15 min, `canario-visual` 4×/día, este loop cada 2 h,
+      más el `chatbot-cola`) es quien agota la cuota de Rack::Attack contra sí mismo.
+      **No lo arreglo yo:** el límite vive en la config de Chatwoot (contenedor
+      `onia-chatbot_chatwoot`, servicio Docker en el VPS), no en `web-factory/apps/onia-platform`
+      — cruzar a tocarlo es cruzar de carril/servicio, prohibido por `CLAUDE.md`. El embed del
+      widget en mi zona
+      (`web-factory/apps/onia-platform/src/app/layout.tsx:87`) ya está bien: una sola carga por
+      visita, sin reintentos.
+      **Lo que hace falta, para quien tenga ese contenedor:** subir el umbral de
+      `Rack::Attack` para `/widget` o dejar pasar sin límite las dos IPs de monitoreo propio (ver
+      el log citado arriba) — hoy el efecto medible es ruido falso-positivo en cada corrida del
+      canario, y el riesgo no medible es que un visitante real detrás de la misma IP compartida
+      (NAT de oficina, VPN) sí lo sufra.
+      **Cómo se sabe que quedó hecho:** `docker logs onia-chatbot_chatwoot... | grep Rack::Attack`
+      sin bloqueos de las IPs de monitoreo, y una corrida del canario sin el 429 en
+      `erroresConsola`.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
@@ -1251,6 +1281,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
   cobro sigue siendo manual: el cliente transfiere y alguien aprueba. **Remedido el 2026-09-01:**
   `grep -c 'BCP_QR' /opt/onia-platform/app.env` en el VPS devuelve **0** — no hay ni una de las
   seis variables. El bloqueo es real y no se movió.
+- **La maqueta de "Elegís tu rubro" recortada** (`## Ahora`, item del canario del 2026-09-01).
+  Reverificado el 2026-09-02: arreglarla necesita levantar el dashboard REAL con datos de demo
+  para recapturar las 5 pantallas al viewport correcto, y ese dashboard vive en el repo
+  `onia-platform` (otro carril) — cruzarlo es lo que `CLAUDE.md` prohíbe. Decide Sergio si vale
+  la excepción puntual o si lo hace el dueño de ese repo.
+- **Las 6 capturas literales del sistema en `home`/`empezar`** (`## Ahora`, encontrado
+  2026-09-02, opciones cotizadas en el radar §18). No se reemplazan sin que Sergio VEA la pieza
+  terminada — mismo precedente que la landing v2 revertida.
 
 > **Deduplicado el 2026-09-01: había DOS listas de bloqueos y la vieja pedía trabajo que ya no
 > existe.** Convivían esta y una `## Bloqueado — recontado el 2026-08-30` cien líneas más abajo.
