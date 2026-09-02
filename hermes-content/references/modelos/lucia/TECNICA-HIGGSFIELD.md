@@ -1365,3 +1365,16 @@ Sale **720×1280 = 9:16 exacto**, 4 s, cierra sobre su cara. `--duration 8`/`12`
 
 **Foto fancy 9/9 publicable: 2 cr. Con b-roll de 4 s: 6,8 cr.** El cuello nunca fue el crédito —
 es mirar y puntuar. Esta receta ya no requiere experimentar: se copia y sale fancy.
+
+### ⚠️ 2026-09-02 — hay un límite DIARIO de generación aparte del saldo
+
+`generate create nano_banana_pro` devolvió
+`{"error_type":"grace_daily_limit_reached","data":{"modal_data":{"type":"unlock_full_access_notice"}}}`
+**con 1948 créditos en la cuenta**. O sea: el saldo NO es el único techo — hay un cupo diario de
+generación (nota de «grace / unlock full access») que se agota antes que los créditos y bloquea
+tanto imagen como video por CLI hasta que resetea.
+
+🔴 **Es un bloqueo, no un error de prompt: no se re-mide ni se reintenta en la misma vuelta**
+(escalera de agotamiento, regla 0). Si aparece, la vuelta se cierra con la tarea de 0 créditos
+(un `CREATIVO.md` que falte, o auditar una pieza vieja) y se anota. El `generate cost` sí sigue
+respondiendo gratis aunque el `create` esté bloqueado — medir no cuenta contra el cupo.
