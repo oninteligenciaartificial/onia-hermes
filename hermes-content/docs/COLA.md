@@ -506,6 +506,17 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       · 147 ms hasta mirable (baseline: 1.302 KB · 1.043 ms — la baja de peso es variación de
       CDN/compresión entre corridas, no un recorte de contenido: el `innerText` completo
       coincide con la baseline).
+      ⚠️ **Se invirtió el tiempo el 2026-09-02: es un bug real de la fuente, no un artefacto de
+      captura — pero cerrarlo es una decisión de diseño, no una línea de código.** Reproducido en
+      DPR 1 y DPR 3, con zoom por `transform: scale()` (no supersampling de screenshot). Aislado
+      por bisección: **específico de Archivo en pesos ≤500** — con `font-weight: 700` o con
+      `font-family: Arial` (swap por DOM, sin tocar código) el gap desaparece; `font-kerning` y
+      `font-feature-settings` no cambian nada; pinear el eje `wght` a 400 explícito tampoco. El
+      arreglo más directo (subir el peso del texto `detalle` del panel) cambia el peso visual de
+      las dos pantallas de auth, así que no se aplicó sin que Sergio lo vea primero — sigue sin
+      poder probarse en un Chrome de escritorio real desde esta máquina (sin GUI). Detalle
+      completo, con las tres salidas cotizadas, en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §19.
 
 ### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
 

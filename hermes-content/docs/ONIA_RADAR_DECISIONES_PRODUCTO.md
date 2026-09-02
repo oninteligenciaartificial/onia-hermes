@@ -983,3 +983,63 @@ del 2026-08-20 (landing v2 rechazada entera, revertida en producción). No hay u
 
 Mientras no haya decisión, el ítem queda abierto en `COLA.md` con la medición completa para
 que la próxima vuelta no la repita.
+
+## 19. El espaciado roto del login es un bug real de la fuente Archivo — pero el arreglo cambia cómo se ve el texto (2026-09-02) — decisión de Sergio
+
+`COLA.md` tenía el ítem del párrafo de `app.onia.com.bo/login` con espacios metidos DENTRO de
+palabras ("Ent regamos", "puest a") marcado como *"queda a criterio del dueño confirmarlo en un
+navegador de verdad antes de invertir tiempo"* — podía ser un artefacto de Chromium headless en
+Linux y no algo que viera un cliente real. Se invirtió el tiempo: **es un bug real y aislado, no
+un artefacto de captura**, pero cerrarlo cambia el peso visual del texto.
+
+**Lo nuevo, verificado hoy, que el ítem original no tenía:**
+- Se reproduce igual en DPR 1 (el mismo que usa `canario_visual.mjs`) y en DPR 3, y con zoom por
+  `transform: scale()` en vez de supersampling del screenshot — descarta que sea un artefacto de
+  cómo se capturó la imagen.
+- **Es específico de la fuente Archivo en pesos ≤500.** El mismo párrafo con `font-family: Arial`
+  (DOM override, sin tocar código) sale perfecto — cero gap. Con `font-weight: 700` sale perfecto
+  también. Bisecado: **400/450/500 rotos, 600 y para arriba limpios.**
+- **No es kerning ni ligaduras**: `font-kerning: none` y `font-feature-settings: "kern" 0, "liga"
+  0, "calt" 0` no cambian nada — el gap sigue. Tampoco es el eje `wght` sin fijar: pinearlo
+  explícito a `'wght' 400` con `font-variation-settings` no lo arregla.
+  → Es un problema del propio archivo variable de Archivo (Google Fonts, servido por
+  `next/font/google` sin `weight` fijo — `app/layout.tsx:25-29` en `onia-platform`) al
+  interpolar el eje de peso en pesos bajos/medios bajo el shaping de Chromium/Linux (HarfBuzz o
+  FreeType), no de nuestro CSS.
+
+**Por qué no lo cerré con un `font-weight: 600` esta vuelta:** el párrafo (`text-white/55`, texto
+secundario deliberadamente liviano — `components/auth/AuthShell.tsx:105`) está pensado para
+verse discreto al lado del título en `font-extrabold`. Subirlo a 600 lo saca de ese lugar visual
+— cambia cómo se ve la pantalla que comparten `/login` y `/register`, la misma clase de cambio
+que la regla *"un rediseño no se publica sin que Sergio VEA la pieza terminada"* frena (precedente
+del 2026-08-20). No es un bug de una línea con un arreglo obvio: es un trade-off entre "se ve
+roto a veces" y "se ve más pesado siempre".
+
+**No verificado, y sigue sin poder verificarse desde acá:** un Chrome de escritorio real
+(Windows/Mac, no headless) — esta máquina no tiene GUI. Sigue siendo posible que el bug sólo
+exista en Chromium headless de Linux y ningún cliente real lo vea nunca.
+
+**Tres caminos, cotizados:**
+- **a) Subir el peso del texto secundario del panel a 600** (o el valor bisecado más bajo que
+  salga limpio — no se afinó más allá de escalones de 50). Cierra el bug con certeza, cambia el
+  peso visual de TODO el texto `detalle` del panel de auth (3 bullets, 2 pantallas). Costo: una
+  línea de CSS + gates + captura para que Sergio la mire antes de mergear. ~15 min.
+  - Es el mismo bug reportado en el `titulo` en `font-extrabold` (~800): a ese peso nunca se vio,
+    consistente con que arriba de 600 esté limpio.
+- **b) Servir Archivo como fuente ESTÁTICA (no variable) para los pesos que usa el body**, en vez
+  del archivo variable completo 100–900 que pide `layout.tsx` hoy. Sin interpolación de eje no
+  debería haber nada que HarfBuzz calcule mal. Mantiene el peso visual actual. Costo mayor: tocar
+  cómo se cargan las DOS familias de marca (el comentario de `layout.tsx:19-23` dice que la
+  variable es a propósito, para que el numeral fino de 300 y el titular de 800 salgan del mismo
+  archivo) — un cambio de infraestructura de fuente, no de una pantalla. No probado si de verdad
+  esquiva el bug: es hipótesis, no medición. ~1-2 vueltas.
+- **c) No tocar nada todavía** y pedirle a Sergio que abra `app.onia.com.bo/login` en su propio
+  Chrome de escritorio. Si no lo ve, el ítem se cierra como fantasma-de-headless sin gastar más
+  tiempo; si lo ve, elige entre (a) y (b) con la certeza de que es real para un cliente.
+
+**Recomendación: (c) primero — es gratis y resuelve la duda de fondo —, y si confirma, (a)**: es
+reversible, rápido, y el texto sigue siendo perfectamente legible a 600; (b) sólo si (a) no
+alcanza o Sergio prefiere no tocar el peso visual.
+
+Mientras no haya decisión, el ítem sigue abierto en `COLA.md`, con este hallazgo referenciado
+para que la próxima vuelta no rehaga la bisección.
