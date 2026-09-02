@@ -27,7 +27,7 @@ exacta tal como está registrada **en su propia máquina**: `crontab -l` en el V
 `list_scheduled_tasks` en Windows. Cada loop activo compara esa salida contra estas tablas al
 arrancar — ver la sección *"Chequeo de arranque"* dentro de su prompt.
 
-**Verificado en vivo el 2026-09-02**: `crontab -l` en `187.77.16.63` para las cinco filas `VPS`.
+**Verificado en vivo el 2026-09-02**: `crontab -l` en `187.77.16.63` para las SIETE filas `VPS`.
 
 ## Deben existir y estar activos
 
@@ -46,8 +46,9 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | `docs-auditoria` | **VPS** | `18 1,5,9,13,17,21 * * *` (UTC) | Carril docs/infra (rama `claude/docs-auditoria`): que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
 | `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `canario-visual` | **VPS** | `41 4,10,16,22 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
+| `investigacion` | **VPS** | `26 3,9,15,21 * * *` (UTC) | **Cotiza** las decisiones abiertas del radar para que Sergio decida en tanda, una vez, sobre un archivo (rama `claude/investigacion`) |
 | `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
-| `marca-personal` | **VPS** | `56 13,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
+| `marca-personal` | **VPS** | `56 9,13,17,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
 | `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
 
 ⚠️ **Corregido 2026-09-02.** `marca-personal` corría en `crontab -l` del VPS y no estaba en esta
@@ -57,15 +58,16 @@ con los casos de `onia-cola` y `docs-auditoria`). Un loop que reinstale el scrip
 per `scripts/loops/README.md` habría borrado los tres sin avisar. Sincronizado el `.sh` al repo
 en el mismo commit.
 
-### `docs-auditoria` — construido y probado, TODAVÍA sin horario
+⚠️ **Corregido más tarde el mismo 2026-09-02.** Acá había una sección entera diciendo que
+`docs-auditoria` estaba *"construido y probado, TODAVÍA sin horario"* y que vivía en la rama
+`claude/git-status-935f47`. **Las dos cosas dejaron de ser ciertas el mismo día**, minutos después
+de que se escribieran: tiene su línea de cron (`18 1,5,9,13,17,21`) y **rama propia**
+(`claude/docs-auditoria`), justamente porque compartir rama con la sesión de control ya había
+causado un conflicto.
 
-Este carril (el que audita ESTE archivo) tiene worktree (`/root/loops/onia-hermes-docs`, rama
-`claude/git-status-935f47`), prompt (`/root/bin/loops/docs-auditoria.md`) y `case` en
-`onia-loop.sh` — corrió una vez a mano el 2026-09-02T02:21 UTC con `exit 0`. **No tiene línea en
-`crontab -l`**: sin ella, esta vuelta no se repite sola. No entra todavía en la tabla de arriba
-porque esa tabla es "deben existir y estar ACTIVOS", y activo no está. La cadencia (y el permiso
-para prender el cron) queda anotada para Sergio en
-`ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+No fue un error de quien lo escribió: era cierto cuando lo midió. Es el costo normal de dos manos
+trabajando el mismo archivo a la vez, y la razón de la regla **"el que MIRA agrega, el que ARREGLA
+marca"** de [`EQUIPO.md`](EQUIPO.md).
 
 Los horarios están **escalonados a propósito**: comparten CPU y disco, y dos loops sobre el mismo
 árbol se pisan. No los juntes en el mismo minuto.
