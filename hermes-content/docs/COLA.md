@@ -746,6 +746,218 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Lo que falta, y no es zona de este carril:** el deploy. Contra `onia-landing`, las cuatro
       siguen sin imagen hoy. Publicar lo decide Sergio.
 
+### Encontrado el 2026-09-02 auditando el `[x]` de las capturas literales — ARREGLADO en la misma vuelta
+
+- [x] **El guard de "cero capturas del sistema" miraba SÓLO `(sitio)`: era ciego a 4 de las 16
+      rutas publicadas y a TODO lo compartido (cabecera, pie, las secciones).** Es la
+      **tercera** vez que este mismo guard falla, y las dos anteriores ya estaban escritas en su
+      propio comentario. Peor: el agujero es el MISMO que el bloque de tarjetas sociales de ese
+      archivo se había tapado horas antes leyendo el sitemap (`8ec1c9e3`) — los dos guards viven
+      en `web-factory/apps/onia-platform/src/app/(sitio)/forma.test.ts`, uno arreglado y el otro
+      no.
+      **Cómo apareció:** auditando el `[x]` de las 6 capturas literales. Ese ítem se verificó
+      mirando `/` y `/empezar`, y las dos estaban bien; lo que nadie preguntó es **qué mira el
+      test que lo sostiene**. `fuentesDelSitio()` arrancaba el walk en el directorio `(sitio)`,
+      así que `/servicios/marketing-ia`, `/servicios/consultoria`, `/terminos` y `/privacidad`
+      —que viven fuera de ese grupo de rutas— quedaban fuera, junto con
+      `web-factory/apps/onia-platform/src/components/site-header.tsx`, su pie, sus secciones y su
+      carpeta legal. Una captura en la cabecera sale en las **dieciséis** páginas a la vez y el
+      guard pasaba verde.
+      **Gate 1, medido antes de tocar nada — el agujero es real pero HOY no tiene víctima:** las
+      4 rutas de afuera sirven sólo `/brand/v2/onia-logo.svg`; el único `/og/onia-rubros.jpg` que
+      queda en `web-factory/apps/onia-platform/src/app/layout.tsx` (línea 64) está **dentro de un
+      comentario** (el guard ya los strippea); y la carpeta `landing-v1` es el archivo `/v1`,
+      noindex, con su captura a propósito. Se arregla el guard, no una pantalla: no se desmarca
+      nada.
+      **Lo que se hizo:** el walk arranca ahora en la raíz de la app (rutas + todo lo compartido) y lo único
+      excluido es el archivo `/v1`, por nombre y con su motivo escrito. Se da vuelta la misma
+      regla que ya se había dado vuelta para las carpetas de imagen: en vez de enumerar dónde SÍ
+      mirar, se mira todo y se enumera lo excluido. Una carpeta de rutas nueva queda cubierta el
+      día que se crea.
+      **Probado que MUERDE, dos veces, no que sólo pasa:**
+      - Se inyectó `"/capturas/panel-onia.png"` en la cabecera compartida —archivo al que
+        el guard viejo **no llegaba**— y la suite falló en esa línea exacta
+        (`× components…site-header.tsx no sirve una captura del producto`). Restaurado, verde.
+      - Se volvió a apuntar el walk a `(sitio)` y saltó el anti-regresión nuevo
+        (`× mira la superficie viva entera, no sólo (sitio)` → *"el walk no llega a la página de
+        términos"*), cayendo a **51** tests: exactamente el número viejo. Sin ese
+        test, angostar el walk otra vez —que suena razonable, es "la carpeta del sitio"— deja la
+        suite en verde con media superficie sin mirar.
+      **Verificado MIRANDO, no sólo con el test**, contra el contenedor `onia-landing` (no `main`,
+      no Vercel), con `channel: 'chromium'` y no `headless_shell`: `/servicios/consultoria` y
+      `/terminos` en 1440×900 — cero `<img>`, `<video>` o `<canvas>` fuera del logo SVG, cero
+      desborde horizontal, **cero errores de consola**, texto bien dibujado y sin una palabra de
+      obra.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-fuera-de-sitio-servicios-consultoria.png`
+      y `hermes-content/docs/historial/canario-visual/2026-09-02-fuera-de-sitio-terminos.png`.
+      **Gates:** `tsc --noEmit` 0 · `vitest run forma.test.ts` **99 pasando** (eran 51: el walk
+      pasó de 33 archivos a 81) · `npm run build` exit 0, 32/32 páginas.
+
+### Encontrado el 2026-09-02 MIRANDO la home en TELÉFONO — ARREGLADO en la misma vuelta
+
+- [x] **La home abría con una franja de 148px EN BLANCO en el primer scroll del iPhone más
+      común, y ninguna revisión lo vio nunca porque todas se hicieron a 1440×900.** Es la
+      pantalla #1 del carril y el dispositivo real del lead: el link llega por WhatsApp y se
+      abre en el teléfono.
+      **Cómo apareció:** ni "Ahora" ni "Después" tenían ítem abierto de esta zona, así que se
+      bajó al escalón 2 (auditar los `[x]`). El `[x]` de las tarjetas sociales auditó limpio —
+      las 16 rutas sirven `og:image` **y** `twitter:image` con `summary_large_image`, medido
+      sobre el HTML del build. Lo que ninguna de las auditorías previas había hecho es abrir las
+      dos pantallas en un viewport de teléfono.
+      **El defecto, medido en tamaños reales de dispositivo** (Playwright, `channel: 'chromium'`):
+
+      | dispositivo | franja en blanco |
+      |---|---|
+      | iPhone 12/13/14/15/16 (390×844) | **148px** |
+      | Galaxy S20/S23 (360×800) | **53px** |
+      | iPhone SE (375×667) | 0 — el panel ni asoma |
+      | iPhone Pro (393×852) y todo lo más alto | 0 — entraba justo al 35% |
+
+      **La causa, y por qué se escapó tres veces:** `src/motion/tokens.ts` definía
+      `viewportOnce = { once: true, amount: 0.3 }`. El `amount` de `whileInView` se mide sobre el
+      **alto del elemento**, no sobre lo que se ve. El panel del día (`s.day`) mide 512px en
+      teléfono y asoma 148px = **29%**, contra un umbral de 30%: se quedaba en `opacity: 0`
+      hasta que el visitante scrolleara. A 393×852 asoma 180px = 35% y dispara — por eso el
+      defecto es invisible en cualquier pantalla grande, incluida la de quien revisa.
+      **Y ya había mordido antes, con la causa a la vista.** `(sitio)/servicios/webs/page.tsx:180`
+      tiene el diagnóstico escrito desde hace tiempo —"un Reveal más alto que ~3,3 pantallas
+      nunca llega al 30% visible y se queda en opacity 0 para siempre"— y se arregló **achicando
+      ese Reveal**. La causa quedó viva en el token, y de ahí llegó a la home. Es el mismo patrón
+      que esta cola ya anotó para los guards: arreglar la instancia donde saltó y no la clase.
+      **Lo que se hizo:** el token pasa a `amount: "some"` (cualquier píxel dentro). La
+      invariante queda enunciable y no depende del alto de nada: **nada que toque la pantalla
+      puede quedar invisible**. Con una fracción no se cumple para bloques altos; con `"some"`
+      se cumple por definición. El estado final de cada página es idéntico —sólo cambia CUÁNDO
+      dispara la entrada—, así que no es un cambio de dirección visual.
+      **Probado que los guards MUERDEN, no que sólo pasan** (`src/motion/tokens.test.ts`, nuevo):
+      - Se devolvió el token a `amount: 0.3` → `× no usa una fraccion como umbral`.
+      - Se escribió `viewport={{ once: true, amount: 0.45 }}` a mano en `reveal.tsx` → el guard
+        lo cazó por archivo y línea. Restaurado, verde.
+      - El guard mira **sólo** el `viewport={{…}}` de `whileInView`, que es la clase que
+        esconde. `useInView` (`CountUp`, `AgentScene`) queda afuera **a propósito y medido**:
+        renderizan su contenido igual —`CountUp` sirve el valor final desde el server— y un
+        umbral ahí sólo demora una animación de pasos. La primera versión del guard los marcaba
+        y era un falso positivo.
+      **Verificado MIRANDO, y en las 16 rutas, no sólo donde arreglé:** barrido de
+      `16 rutas × 3 tamaños = 48 pantallas` preguntando por cualquier elemento con `opacity: 0`
+      que toque el viewport inicial → **cero**. Antes del cambio, ese mismo barrido marcaba la
+      home a 390×844 y a 360×800.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-home-telefono-franja-en-blanco-ANTES.png`
+      (la franja vacía) y `…/2026-09-02-home-telefono-panel-visible.png` (el panel del día ya
+      visible en la primera pantalla).
+
+- [x] **De paso, el gate del carril: los 115 tests de guarda NO los corría nadie.** Las suites
+      que estas vueltas fueron construyendo —`forma.test.ts` (cero capturas del sistema, las 16
+      tarjetas sociales), `alta.test.ts`, `hero.test.ts`— vivían en el repo **sin un script que
+      las invocara**: `package.json` no tenía `test`, y `prebuild` era sólo `tsc --noEmit`. Se
+      corrían a mano con `npx vitest run`. Una regresión de captura literal pasaba el build y
+      llegaba al deploy.
+      **Lo que se hizo:** `"test": "vitest run"` y `"prebuild": "tsc --noEmit && vitest run"`.
+      Es el mismo hook que el deploy real ya ejecuta (`scripts/deploy-onia-landing.sh:25`,
+      `pnpm --filter onia-platform build`), y el install de ese script es
+      `pnpm install --frozen-lockfile` —no `--prod`—, así que `vitest` está disponible igual que
+      `tsc`, que ya corría ahí.
+      **Probado que MUERDE:** con el token roto a propósito, `npm run build` sale **exit 1** y
+      corta **antes** de `next build`. Restaurado, `npm run build` exit 0.
+      **Gates de esta vuelta:** `tsc --noEmit` 0 · `vitest run` **115 pasando** (eran 112: 3 del
+      guard nuevo) · `npm run build` exit 0, 48/48 páginas.
+      **Lo que sigue abierto y es de otro dueño:** las otras apps de `web-factory`
+      (`dental-premium`, `dentalgest-landing`, `ferreteria-sur`, y `site` que ni script tiene) y
+      el cableado en el script raíz — tocar los 4 archivos raíz de `web-factory` no es zona de
+      este loop.
+
+### Encontrado el 2026-09-02 MIRANDO el PIE en teléfono — ARREGLADO en la misma vuelta
+
+- [x] **Las dos pantallas del carril cerraban con una franja de 73px del fondo CLARO debajo del
+      pie NEGRO, en teléfono.** No era del pie ni de una página: era del `body`, así que salía
+      en **todas** las páginas del sitio en móvil. Lo último que ve un lead que leyó la página
+      entera era un corte de maquetación.
+      **Cómo apareció:** ni el tablero ni "Ahora" daban ítem de esta zona (las 3 tareas del
+      tablero son del carril chatbot; el único ítem de zona, el del gate `tsc`, ya tiene cerrado
+      su residuo y lo que queda es de otros dueños). Así que se corrió la definición de hecho del
+      carril: abrir las dos pantallas y MIRARLAS. Salieron 4 capturas (390×844 y 1280×900,
+      `channel: 'chromium'` — el motor correcto, no el `headless_shell` que inventa defectos de
+      texto): HTTP 200, cero errores de consola, cero desborde horizontal, y la franja al pie.
+      **La causa, medida y no supuesta:** `globals.css` tenía
+      `@media (max-width: 899px) { body { padding-bottom: calc(4.6rem + env(safe-area-inset-bottom)) } }`,
+      con el comentario *"la barra de accion fija del movil no debe tapar el final de la pagina"*.
+      **Esa barra ya no existe.** Medido en vivo con la página scrolleada al fondo: el único
+      elemento `fixed`/`sticky` del sitio es el `header` (arriba, 61px), y `grep` de
+      `position: fixed` sobre `globals.css` + `sitio.module.css` + todos los `.tsx` devuelve
+      **cero**. El hueco quedó huérfano y pintaba del fondo del body, que es claro.
+      El padding entró con `1ddba7ad` (`git log -S "4.6rem"`); la barra se fue después y el
+      hueco se quedó.
+      **Un falso positivo descartado en el camino, y cómo:** la misma corrida mostró una columna
+      de cuadraditos pegada al borde izquierdo que parecía un grid roto (el navegador reportaba
+      `grid-template-columns: 24px 316px` donde el fuente dice `repeat(24, 1fr)`). **No es un
+      defecto:** `sitio.module.css:1126` rota el panel del día 90° en teléfono a propósito
+      (`grid-template-rows: repeat(24, ...)` + `grid-auto-flow: column`), y los 9/15 ticks
+      alinean con sus dos bloques. Leer el CSS antes de "arreglarlo" evitó romper un diseño sano.
+      **Lo que se hizo:** el bloque huérfano del `body` sale, y el área segura del teléfono la
+      absorbe ahora el propio pie (`.footer { padding-bottom: calc(2.4em + env(safe-area-inset-bottom)) }`).
+      Es el arreglo correcto y no sólo el que borra: puesto en el `body`, el margen del notch
+      pintaba igual del fondo claro; puesto en el pie, sale del negro del pie.
+      **Verificado MIRÁNDOLO, no con un grep:** build local servido en `:3199`, scroll hasta el
+      fondo real (`scrollY == maxScroll`) y captura de las dos pantallas — el pie negro llega al
+      borde inferior. Medición: `sobra = scrollHeight - footer.bottom` pasa de **73px (home) y
+      74px (/empezar)** a **0 y 0**; `body.padding-bottom` de `73.6px` a `0px`.
+      **Gates:** `npm run typecheck` exit 0 · `npm run build` exit 0.
+      **No se desplegó:** `onia.com.bo` la sirve el contenedor `onia-landing` y publicar es de
+      Sergio — la franja sigue viva en producción hasta ese deploy.
+
+      ✅ **Y ahora tiene gate — `web-factory/apps/onia-platform/src/app/(sitio)/cierre.test.ts`,
+      2026-09-02.** El arreglo de
+      arriba se fue **sólo en CSS, sin un test**: nada impedía que el `padding-bottom` volviera, y
+      este defecto vivió en las 16 rutas del sitio sin que ningún gate lo viera. Corre en
+      `prebuild` (`tsc --noEmit && vitest run`), que es el comando real del deploy.
+      **Caza la CLASE, no la forma de ayer** — la lección que el guard de capturas de al lado ya
+      había aprendido fallando tres veces: no busca el literal 4,6rem ni sólo `padding-bottom`, sino que el
+      `body`/`html` reserve fondo en **cualquiera** de sus formas (`-bottom`, `-block`, y el atajo
+      `padding`/`margin`, resolviendo qué valor es el lado de abajo según tenga 1, 2, 3 o 4).
+      **Lleva las dos mitades del arreglo**, porque borrar el padding a secas dejaba el mismo
+      defecto en un iPhone con notch: exige que `env(safe-area-inset-bottom)` lo absorba el PIE y
+      no el documento.
+      **Probado en ROJO antes, en las tres formas de romperlo:** (1) vuelve el `body
+      { padding-bottom: 4,6rem }` original → 2 tests rojos; (2) nadie absorbe el área segura →
+      *"en un iPhone con notch vuelve la franja"*; (3) la absorbe el `body` en vez del pie → 2
+      rojos. Árbol restaurado y verde en las tres.
+      ⚠️ **Se cazó a sí mismo un falso positivo**: la primera versión marcaba `body { margin: 0 }`
+      —un reset legítimo— porque miraba la propiedad y no el VALOR. Un guard que ladra sobre
+      código sano se termina apagando, así que ahora sólo cuenta el lado de abajo distinto de cero.
+      **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **119 pasan (5 archivos)**.
+
+      ⚠️ **Y ese gate nacía CIEGO a doce de las catorce hojas — corregido el 2026-09-02,
+      misma jornada.** Auditando el propio `[x]` de arriba: el test declaraba vigilar "las 16
+      rutas del sitio", pero su lista de hojas era **fija y de dos archivos** (`globals.css` y
+      `sitio.module.css`). La app tiene **14 hojas `.css`**, y un CSS module alcanza el `body`
+      con `:global(body)` — `guia-facturacion` ya lo hace. Es **el mismo error que el guard de
+      capturas de al lado** (`def54931`: *"miraba solo (sitio) y era ciego a 4 rutas
+      publicadas"*), repetido en el gate escrito para no repetirlo.
+      **Demostrado, no argumentado:** el mismo defecto (`:global(body) { padding-bottom: 4.6rem }`)
+      escrito en `site-footer.module.css` —la hoja que cierra `/privacidad`, `/terminos`, las 8
+      rutas `/v1/*` y el 404— pasaba **VERDE (4/4)** con el gate viejo y sale **ROJO** con el
+      nuevo, nombrando el archivo culpable.
+      **Qué cambió:** las hojas se descubren del disco (una hoja nueva queda cubierta sin que
+      nadie se acuerde de agregarla); `esElDocumento` entiende `:global()` en cualquier posición
+      y `body`/`html` calificados (`body:has(.hoja)`, `html.oscuro`), pero **no** cuando `body`
+      es sólo el ancestro (`body main` no es el documento).
+      **Y se corrigió una regla que era falsa:** el test exigía que *todo* selector con
+      `env(safe-area-inset-bottom)` fuera un `footer`. Al barrer las 14 hojas apareció `.mobar`
+      de `landing-v1` —**la barra de acción fija del móvil, que sí existe** en el legado `/v1`,
+      con fondo propio, absorbiendo bien su área segura. La regla real no es "tiene que ser el
+      pie" sino **"no puede ser el documento"**: ahí es donde el espacio se pinta del fondo claro.
+      **Probado en ROJO en 4 formas** (pseudo-clase `:has()`, atajo `margin` de 4 valores, el
+      documento absorbiendo el área segura, y borrar el área segura del pie de venta) **y en
+      VERDE en 2 que no deben ladrar** (`body main` descendiente, y una barra fija con fondo
+      propio). Árbol restaurado y verde en las seis.
+      **Medido en producción hoy, con Chromium sobre el contenedor `onia-landing`:** la franja de
+      **74px** sigue viva en `/` y `/empezar` en teléfono (`body.padding-bottom: 73.6px`, pie
+      negro `rgb(18,16,14)`, hueco claro `rgb(249,251,250)`) — captura en `/tmp/pie-home.png`.
+      El arreglo espera el deploy de Sergio; el gate ya impide que se pierda.
+      **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
