@@ -81,7 +81,7 @@ def cta():
 <div class="lienzo" style="gap:56px">
   <img class="icono" src="{ICONOS.as_uri()}/rocket.png">
   <div class="titulo">El paso a paso completo<br>está en mi comunidad</div>
-  <div class="sub">gratis · cada día un recurso nuevo · link en bio</div>
+  <div class="sub">Comentá <b style="color:var(--ink)">COMUNIDAD</b> y te mando el acceso · gratis</div>
   <div class="handle">@sergiourcullo</div>
 </div>"""
 

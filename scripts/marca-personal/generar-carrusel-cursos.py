@@ -89,7 +89,7 @@ SLIDES = [
     f"""<div class="lienzo" style="gap:56px">
   <img class="icono" src="{ICONOS}/sparkles.png">
   <div class="titulo">Cada día comparto<br>un recurso así</div>
-  <div class="sub">gratis, en mi comunidad · link en bio</div>
+  <div class="sub">Comentá <b style="color:var(--ink)">COMUNIDAD</b> y te mando el acceso</div>
   <div class="handle">@sergiourcullo</div>
 </div>""",
 ]
