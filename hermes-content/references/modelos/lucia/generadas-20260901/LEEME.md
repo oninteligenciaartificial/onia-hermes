@@ -172,3 +172,42 @@ y darle al segundo personaje algo que seguir haciendo ahí mismo — no un motiv
 
 El pelo sale **recogido**, no suelto como pide la receta. Viene así desde `B08`, no lo introdujo
 la animación. Se corrige en la imagen fuente, no en el video.
+
+---
+
+## ⛔ B09 — restaurante de almuerzo · LA CARA NO ES LUCÍA · contraejemplo, NO usar
+
+`B09-restaurante-almuerzo.png` · job `7fa1d766-89af-4ce2-bee0-03dab6a6eb36` · 1536×2752 (9:16) · `nano_banana_pro` 2K · **2 cr**.
+Generada por CLI pasando **`--image-references bc3db11b-…`** (el asset de `B06`, la mejor cara del banco).
+
+**La escena salió muy bien** y por eso duele: plato de almuerzo boliviano creíble, el comensal con
+las dos manos ya sobre el plato **y visible en primer plano** (justo lo que pide la regla de V09),
+jarra de refresco, sillas de plástico, ventilador de techo, luz de mediodía mezclada con
+fluorescente. Cero texto legible. Pelo suelto, como se pidió.
+
+🔴 **Pero la cara es de otra persona.** Rostro más redondo, otras cejas, sin pecas, sin la cadenita
+ni el aro. No comparte un solo rasgo del ancla. **Casilla 1 fallada = la pieza no existe** para el
+banco de Lucía, por linda que sea la escena.
+
+### Lo que esto enseña
+
+**`--image-references` NO es un mecanismo de identidad facial.** Toma la imagen como referencia de
+contenido y estilo, y reconstruye la cara de cero. Es distinto de `--start-image`, que sí ancla el
+frame — por eso `V08` y `V09` salieron con la cara correcta: **partían de una imagen que ya era
+Lucía**, no de una referencia.
+
+**La regla operativa que queda:**
+
+| Quiero | Flag / método | ¿Conserva la cara? |
+|---|---|---|
+| Animar una imagen que ya es Lucía | `--start-image <asset>` | ✅ sí (V08, V09) |
+| Imagen NUEVA con la cara de Lucía | `--image-references <asset>` | ❌ **NO** (este caso) |
+| Imagen NUEVA con la cara de Lucía | element `@lucia-skin-v1` por navegador | ✅ sí (todo el banco) |
+
+⚠️ **Pregunta abierta, no la cierro inventando:** `B08-taller` **sí salió por CLI y sí es Lucía**.
+O sea que existe un camino por CLI que funciona, pero no es el que probé acá. Hay que averiguar con
+qué parámetro se generó B08 antes de volver a gastar en imágenes nuevas por CLI.
+
+**Mientras tanto:** las imágenes nuevas de Lucía se generan **por navegador con el element**, y el
+CLI queda para animar lo que ya existe. Se guarda el archivo como evidencia del defecto, igual que
+`C01`: borrarlo haría que alguien repita el intento y vuelva a pagarlo.
