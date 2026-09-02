@@ -78,3 +78,4 @@ navegador = Higgsfield.
 |---|---|---|---|---|
 | 2026-09-02 | Test CLI: overlay starburst 3D clay (usable para reel "El setup") | text2image_soul_v2 | 3D clay render, orange starburst icon, rounded square, warm white bg | 0,12 cr (cotizado = debitado ✓) |
 | 2026-09-02 | Práctica: 3 candidatos mascota 3D Onia (cubo/blob/chip), pendiente §6 BASE_CONTENIDO — ver veredicto ahí | text2image_soul_v2 ×3 | toy 3D clay mascot, verde marca #1F7A4D, variando forma de cabeza (cubo / blob / chip-circuito) | 0,12 cr ×3 = 0,36 cr (cotizado y confirmado por `account transactions` antes y después) |
+| 2026-09-02 | Experimento arte vs ícono (gana arte, ver §6 BASE_CONTENIDO) + portada real `carrusel-sistema-venta` | text2image_soul_v2 | 3D clay render, abstract interlocking gears, verde marca #1F7A4D, rounded toy-like, warm white bg #F7F7F7 | 0,12 cr (cotizado = debitado ✓, verificado en `account transactions`) — **total del día para este carril: 0,60 cr de 1 cr** |

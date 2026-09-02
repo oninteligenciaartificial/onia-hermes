@@ -86,8 +86,22 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       word-spacing .09em) · **números/impacto wdth 125** (expanded poster) ·
       **wordmark "Onia Community" wght 560 wdth 96** (el corte del logo) · cuerpo
       Archivo · **micro-etiquetas y handle Geist Mono** letter-spacing .08em.
-- [ ] **Más imágenes**: láminas con foto real de Sergio (identity assets) + artes
-      Higgsfield integrados en carruseles (no solo íconos)
+- [x] **Más imágenes — mitad "artes Higgsfield integrados"** (02-sep, experimento A/B
+      renderizado y comparado en `carousels/out/experimento-arte-higgsfield-vs-icono/`):
+      misma portada ("Un sistema, no una lista de apps"), **A** icono Fluent (laptop,
+      gratis) vs **B** arte Higgsfield (engranajes verdes, `text2image_soul_v2`, 0,12 cr
+      cotizado y verificado en `account transactions`). **Gana B**: el engranaje
+      literaliza "sistema" mejor que un laptop genérico y el verde de marca encaja con
+      la caja redondeada tipo app-icon; el laptop además traía celeste/violeta que
+      chocan con la paleta. **Regla de uso, por costo:** el arte pago se reserva para
+      la portada/hero de una pieza (1 por pieza), el interior sigue en íconos Fluent
+      gratis — meter Higgsfield en cada lámina de un carrusel de 5-7 rompería el tope
+      de 1 cr/día en una sola pieza. Aplicado ya a `generar-carrusel-sistema.py`
+      (portada real, no solo el experimento); arte guardado en
+      `references/marca-personal/higgsfield-artes/sistema-engranajes.png`.
+- [ ] **Más imágenes — mitad "foto real de Sergio"**: sin ejecutar, no hay identity
+      assets en este carril (mismo bloqueo que Soul-ID arriba) — separada del ítem de
+      arriba porque esa mitad sí se pudo cerrar.
 - [ ] **Sonido**: BGM en teasers HyperFrames (media-use resolve BGM) + SFX en beats
       clave; probar en el teaser de comunidad v3
 - [x] **Texturas/atmósfera** (02-sep, experimento A/B/C renderizado y comparado en
