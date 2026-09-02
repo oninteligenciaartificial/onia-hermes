@@ -256,3 +256,45 @@ focus and unreadable.`
 
 **Consecuencia práctica: el CLI SÍ sirve para imágenes nuevas de Lucía.** No hace falta el navegador
 para cada foto — hace falta escribir bien el prompt. Eso desbloquea generar sin la PC de Sergio.
+
+---
+
+## ⚠️ V10 — restaurante · 8/9 · **usable recortado a 3 s**
+
+`V10-restaurante-seedance.mp4` · job `77fd5dcc-3702-45d7-a7d5-c60c2f78c4b1` · **720×1280 (9:16)** · 4,05 s · **con audio** · `seedance1_5` · **4,8 cr**. Animada desde `B10` (`43535c03-…`).
+
+**Lo que aguanta:** la cara es Lucía **en los cuatro frames** — no derivó como en `V08`. Y la
+entrega del plato se completa: él toma el peso, ella suelta y retira las manos.
+
+**Los dos defectos, los dos en el último cuarto:**
+1. **El comensal sale de cuadro igual**, aunque el prompt decía `STAYS in frame`. La instrucción
+   ayudó pero no fue obedecida hasta el final.
+2. 🔴 **Ella abre la boca como si hablara** — sin diálogo. Es exactamente el defecto de `V04`.
+
+### La regla se refina: no es binario, es CUÁNTO TIEMPO queda sin ancla
+
+| | `V08` ferretería | `V10` restaurante |
+|---|---|---|
+| El otro se va en | el frame 2 (~1 s) | el frame 4 (~3 s) |
+| Tiempo sin ancla | ~2,5 s | ~1 s |
+| Cara | ❌ **deriva** | ✅ **aguanta** |
+
+`STAYS in frame` **no garantiza** que el modelo lo retenga, pero **retrasa su salida**, y eso
+alcanza para salvar la cara. Lo que hace daño no es que se vaya: es cuántos segundos quedan sin
+una segunda referencia en cuadro.
+
+### Y un defecto nuevo: cuando se acaba la acción, el modelo inventa habla
+
+La boca abierta del frame final aparece **justo después** de que la acción termina y el otro sale.
+El modelo se queda sin nada que continuar y rellena. **No alcanza con dar una acción a medias al
+principio: tiene que haber algo pasando hasta el último frame.**
+
+**Al regenerar:** darle una segunda acción que arranque cuando termina la primera —secar las manos
+en el delantal, acomodar la jarra, levantar los platos limpios—. Es UNA variable: agregar la acción
+de cierre, sin tocar el resto.
+
+### Mientras tanto, es usable
+
+**Los primeros 3 segundos están limpios.** Un gancho de 2 s cabe de sobra, así que la pieza sirve
+para el anuncio **recortada a 3 s** con el editor. No hace falta gastar otros 4,8 cr para tenerla
+al aire.
