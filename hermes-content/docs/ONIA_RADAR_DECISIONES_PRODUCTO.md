@@ -602,12 +602,16 @@ los gates). **Los tres gates pasaron sobre `main` ya mergeada**: `tsc --noEmit` 
 | El KPI spark seguía estirado y `pending` no llegaba nunca al template | `packages/templates/src/dashboard.ts` | **regenerar los sitios** que usan el template dashboard |
 | Bloques nuevos: medidor radial, estados carga/error/vacío, cinta infinita, bandas por feature, statement a pantalla completa | `packages/blocks/src/*` | **regenerar los sitios** que los quieran |
 | Cuatro rubros se recetaban de memoria y dos reglas del playbook estaban mal; la skill mandaba correr un script inexistente | `data/references/*`, `docs/LOOP_COLA.md` | nada: son docs |
+| **El bot AGENDA: manda el link de la agenda de su org en vez de derivar** (mergeado el 2026-09-01) | `bot/recepcionista.mjs`, `bot/intents.mjs`, `bot/config.mjs`, `bot/knowledge.mjs` | **deploy del motor al VPS** — el mismo deploy (a) de abajo. La agenda ya está viva y verificada MIRÁNDOLA (`/book/zz-qa-clinica-chatbot-9k651` muestra el asistente de 4 pasos con profesionales reales); lo que falta es el motor que mande el link |
+| La tarjeta de clínica se movía aunque el visitante pidiera menos movimiento; se borró la primitiva `.wf-hover-lift` que nadie usaba (mergeado el 2026-09-01) | `packages/templates/src/clinic-css.ts`, `packages/blocks/src/motion.ts` | **regenerar los sitios** que usen el template de clínica |
 
 **La decisión que queda.** Desplegar no lo decide un carril de integración. Los dos deploys que
 mueven la aguja son distintos y se pueden hacer por separado:
 
-- **(a) El motor del bot al VPS.** Enciende las campañas y el CTA de `/v1/empezar`. Sin esto, un
-  desconocido que llega desde la web sigue recibiendo la respuesta genérica.
+- **(a) El motor del bot al VPS.** Enciende las campañas, el CTA de `/v1/empezar` **y ahora
+  también que el bot agende** (mergeado el 2026-09-01). Sin esto, un desconocido que llega desde
+  la web sigue recibiendo la respuesta genérica, y una cita sigue derivándose a mano — que es
+  justo lo que `pricing.ts` cobra como resuelto.
 - **(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
   ajeno de una pantalla que ven los clientes desde el 16-ago.
 
