@@ -16,7 +16,7 @@ Generadas con `lucia-skin-v1` (`58bbd635-…`) por CLI en el VPS, Nano Banana Pr
 | `E2-B-rooftop.png` | Misma rooftop — **toma B, la referencia de LUZ de la receta (§12)** | `378291da-bfc4-4795-963c-101206116865` | ✅ **la mejor rooftop** — pelo suelto, pecas marcadas, rim dorado, cara fiel al ancla, sin pantallas ni texto |
 | `E2-C-rooftop.png` | Misma rooftop — toma C | `af2771c7-e66b-4592-86e8-0fe59b02128a` | ✅ variante de la escena rooftop |
 | `E3-cafe.png` | Café de especialidad, luz cálida de ventana, ladrillo, plantas colgando, **las dos manos en la taza** (acción a medias) | `c31c1333-dbd6-4be7-890f-07dcbb1cfc59` | ✅ **la prueba 9/9 de la receta** — es la que se animó (→ E4/E6) |
-| `E3-coworking.png` | Coworking de diseño, sol de ventana con flare, plantas, laptop con UI | `bc39fa80-5144-4230-8171-c56bfc77aee5` | ⚠️ fancy y fiel, pero **pelo recogido** y **laptop con UI** en cuadro (de canto y suave, no legible de frente). Sin animar |
+| `E3-coworking.png` | Coworking de diseño, sol de ventana con flare, plantas, laptop con UI | `bc39fa80-5144-4230-8171-c56bfc77aee5` | ⚠️ fancy y fiel, pero **pelo recogido** y **laptop con UI** en cuadro (de canto y suave, no legible de frente). Sin animar — **auditada 2026-09-02, ver abajo** |
 | `E3-hotel.png` | Hall de hotel con boiserie de madera, lámparas cálidas, ventanal al jardín | `43bb8397-45ed-4307-b4f8-ba592ff2bdaa` | ✅ **la más limpia** — pelo suelto, sin pantallas ni texto, cara muy fiel al ancla. **Es la próxima a animar** (ver abajo) |
 
 **Las tres tomas E2 salen del mismo base prompt** — está en `_E2-BASE-prompt.txt`. A y C son
@@ -40,6 +40,28 @@ MP4). Verificado esta vuelta: no hay `job_id` de video en ningún `.log` ni `.tx
 No bloquea re-animar: `--start-image` acepta la **ruta local del PNG** y la sube sola (hallazgo de
 V09), así que para re-generar cualquiera de estos videos se pasa el path de `E3-cafe.png`, no el
 `job_id` viejo. Lo que se pierde es sólo recuperar *ese* render exacto.
+
+## 🔍 Auditoría de `E3-coworking.png` contra el brief (2026-09-02, mirada)
+
+Vuelta con **generación bloqueada** (`grace_daily_limit_reached` cubre imagen Y video, no sólo
+video — confirmado esta vuelta con un intento de imagen nueva a 0 cr). Sin poder generar, se hace
+trabajo de cero créditos: auditar una pieza vieja contra su brief. Se auditó `E3-coworking.jpg` a
+resolución completa **mirándola** contra el brief §6 del loop y las casillas de la rúbrica.
+
+| Eje del brief | Resultado |
+|---|---|
+| Cara fiel al ancla | ✅ es Lucía: cejas gruesas, ojos marrones, pecas marcadas en nariz/pómulos, aro de oro + cadenita fina. Identidad intacta |
+| Piel real (poros/pecas/asimetría) | ✅ de lo mejor del banco — pecas y textura muy marcadas, cero alisado |
+| Luz real / fancy | ✅ flare dorado de ventana detrás, look influencer fuerte |
+| **Pelo suelto** | ❌ **recogido** (tirante hacia atrás). El brief pide suelto |
+| **Acción a medias** | ❌ es un **retrato** — mira sobre el hombro, cabeza apoyada, sin las dos manos sobre un objeto. Es el motivo por el que se queda en CASI (§14) |
+| **Sin pantallas legibles** | ⚠️ laptop a la derecha **en 3/4, UI blanda pero presente** (app de diseño, un bloque verde). No es frontal ni nítida, pero está en cuadro: riesgo vivo de casilla 3 si se anima y la pantalla se mueve |
+
+**Veredicto:** deprioridad. Cuando vuelva el cupo, **hotel va primero** (pelo suelto, sin pantalla,
+más limpia). El coworking sólo se anima si se quiere expresamente una escena "trabajando", y con un
+prompt que **fije la laptop quieta y fuera de foco** (nada de paneo hacia la pantalla) para no
+despertar la casilla 3. Como imagen fija sirve para feed; como base de video es la más riesgosa de
+las tres E3.
 
 ## ⛔ Pendiente heredado a la próxima vuelta: animar `E3-hotel.png`
 
