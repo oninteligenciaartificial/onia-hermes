@@ -211,3 +211,48 @@ qué parámetro se generó B08 antes de volver a gastar en imágenes nuevas por 
 **Mientras tanto:** las imágenes nuevas de Lucía se generan **por navegador con el element**, y el
 CLI queda para animar lo que ya existe. Se guarda el archivo como evidencia del defecto, igual que
 `C01`: borrarlo haría que alguien repita el intento y vuelva a pagarlo.
+
+---
+
+## ✅ B10 — restaurante de almuerzo · y la CORRECCIÓN de lo que dije sobre `--image-references`
+
+`B10-restaurante-almuerzo.png` · job `43535c03-315e-4350-9d80-249b0a044fcd` · 1536×2752 (9:16) · `nano_banana_pro` 2K · **2 cr** · referencia: `bc3db11b` (B06).
+
+**Es Lucía.** Cejas gruesas naturales, pecas en el pómulo, cadenita de oro fina, aro pequeño, sin
+maquillaje, **pelo suelto y ondulado** (corregido respecto a `B08`, que salió recogido).
+
+La escena cumple todo: plato de almuerzo boliviano creíble (arroz, plátano frito, frejoles, guiso),
+jarra metálica de refresco, pila de platos, sillas de plástico, ventilador de techo, piso de
+mosaico, luz de mediodía mezclada con fluorescente. **Cuatro manos sobre el mismo plato** y el
+comensal en primer plano — o sea que ya nace cumpliendo la regla de `V09`. **Candidata inmediata a
+animar.**
+
+### ⚠️ Corrijo lo que escribí en `B09`, hace una vuelta
+
+Ahí concluí que **«`--image-references` NO es un mecanismo de identidad facial»**. **Es falso**, y
+dejarlo escrito habría mandado a la próxima sesión por el camino equivocado.
+
+Consulté los params reales de `B08` —que sí salió por CLI con la cara correcta— y usa **exactamente
+el mismo flag**. La diferencia no estaba en el flag: **estaba en el prompt.**
+
+| | `B09` ❌ | `B08` y `B10` ✅ |
+|---|---|---|
+| Cómo nombra al sujeto | `A young woman in a simple apron…` | `Same woman as the reference, **keep her face identical**: warm olive skin, countable freckles never smoothed, brown almond eyes, thick natural brows, no makeup, long dark wavy hair worn loose` |
+| Resultado | otra persona | **Lucía** |
+
+🔴 **La regla correcta: `--image-references` conserva la cara, pero hay que PEDÍRSELO por texto.**
+El flag entrega la imagen; el prompt es el que decide si el modelo la copia o sólo se inspira. Sin
+el prefijo de identidad + la lista de rasgos, reconstruye la cara de cero.
+
+**El prefijo, para copiar y pegar:**
+```
+One single continuous vertical photograph, full bleed. Same woman as the reference, keep her
+face identical: warm olive skin, countable freckles never smoothed, brown almond eyes, thick
+natural brows, no makeup, long dark wavy hair worn loose. Now she is in <ESCENA>.
+```
+
+Y se cierra con: `No signs, no labels, no price tags, no screens; any surface with writing is out of
+focus and unreadable.`
+
+**Consecuencia práctica: el CLI SÍ sirve para imágenes nuevas de Lucía.** No hace falta el navegador
+para cada foto — hace falta escribir bien el prompt. Eso desbloquea generar sin la PC de Sergio.

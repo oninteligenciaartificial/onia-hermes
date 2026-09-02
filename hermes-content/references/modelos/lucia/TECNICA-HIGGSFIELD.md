@@ -1128,3 +1128,22 @@ Kling queda para cuando Seedance falle.
 ⚠️ Y no confundir con la §11: **la etiqueta «9:16» del historial de la interfaz no describe el
 archivo.** `V06` mostraba «9:16» y bajó en 828×1108. Lo único que vale es medir el MP4 con
 `ffprobe` después de bajarlo.
+
+## 13 · El prefijo de identidad — cómo se conserva la cara por CLI (2026-09-02)
+
+`--image-references` **sí** conserva la cara de Lucía, pero **sólo si el prompt lo pide**. El flag
+entrega la imagen; el texto decide si el modelo la copia o sólo se inspira.
+
+**Sin el prefijo → otra persona** (caso `B09`, 2 cr tirados). **Con el prefijo → Lucía** (`B08`, `B10`).
+
+```
+One single continuous vertical photograph, full bleed. Same woman as the reference, keep her
+face identical: warm olive skin, countable freckles never smoothed, brown almond eyes, thick
+natural brows, no makeup, long dark wavy hair worn loose. Now she is in <ESCENA>.
+...
+No signs, no labels, no price tags, no screens; any surface with writing is out of focus and
+unreadable.
+```
+
+**Esto desbloquea el CLI para imágenes nuevas**: ya no hace falta el navegador con el element para
+cada foto. El navegador sigue siendo el camino cuando se quiere el element puro.
