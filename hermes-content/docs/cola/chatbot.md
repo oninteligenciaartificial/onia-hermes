@@ -158,6 +158,59 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] **El bot no dejaba NI UNA línea por mensaje, y por eso el bug de "contesta una vez y se
+      calla" sobrevivió una semana con cinco personas reales del otro lado.** Hecho el 2026-09-02.
+      Archivos: `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` y
+      `hermes-content/deploy/vps-ops/bot/webhook-server.test.mjs`.
+      **Medido en vivo, no leído:** `/tmp/onia-bot-webhook.log` **dentro del contenedor
+      `onia-center`** (en el host no existe: el bot corre con `docker exec -d`) tenía **2,5 MB y
+      su última escritura era `2026-09-02T17:19:49Z`, la del arranque** — mientras la conversación
+      **48** recibía mensajes a las 17:21:35 y 17:21:54. Cero líneas por webhook. La causa: el
+      servidor **ya recibía** un `log`, pero sólo lo llamaba en dos errores raros (socket muerto y
+      n8n); el camino del webhook no escribía nunca. **Un log que existe y no se llama es peor que
+      no tenerlo, porque aparenta diagnóstico.**
+      **Qué se construyó.** `formatearTraza()` (pura) + una `traza` que sale de **todas** las
+      ramas de `handleChatwootWebhook`. Una línea por webhook con conversación, mensaje, entrada,
+      etapa `antes->después`, el conteo de publicados sobre producidos y **el motivo**. Las tres ramas
+      mudas se nombran distinto porque las tres devuelven 200 con cuerpos casi iguales y a ojo se
+      leen como éxito: **`MUDO`** (el turno corrió y no produjo nada — el bug de la semana),
+      **`NO_ENTREGADO`** (produjo respuesta y Chatwoot la rechazó — los cuatro días de agosto con
+      `/health` en verde) e **`ignorado`**. Más `repetido`, `ERROR`, `rechazado` (auth: la rama que
+      hay que ver cuando "no llegan los webhooks") y `respondio`.
+      **La traza se arma envolviendo el pipeline, no en cada `return`.** Hay **nueve** salidas: la
+      propiedad "todo webhook deja una línea" se rompe sola en cuanto alguien agregue la décima.
+      Envolviendo, no hay forma de salir sin traza — y hay un test que lo exige en las ramas feliz,
+      skip y auth.
+      **Rojo primero y por el motivo correcto.** Los 7 casos nuevos se corrieron contra un stub que
+      devolvía `""`, así que cada uno falló en **su propia** aserción, no por un error de módulo.
+      **Y probado que MUERDE:** dos mutaciones, las dos rojas — `MUDO`→`respondio` (2 casos) y el
+      servidor volviendo a **no** loguear, que es el estado de hoy en producción (1 caso).
+      **Gates:** `npm run test:bot` **704/704** en verde (31 en este archivo, 7 nuevos).
+      🔴 **COMMITEADO, NO DESPLEGADO.** `/opt/onia/bot` no es un checkout de git y el deploy no es
+      de este carril. **Hasta que alguien copie el archivo y reinicie el bot, el log sigue ciego.**
+
+- [ ] 🔴 **El arreglo que hoy hace que el bot conteste dos veces está VIVO en producción y NO
+      está en el repo: un `rsync` desde Windows lo borra y el bug de la semana vuelve.**
+      Encontrado el 2026-09-02 al comparar, no al leer. `diff` normalizado (sin `\r`, porque
+      crudo da el archivo entero y es sólo el fin de línea) entre
+      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs` y `/opt/onia/bot/bot-engine.mjs`:
+      **25 líneas**, en dos lugares que son exactamente el arreglo:
+      `botStage: sinHorarios ? "handoff_humano" : "esperando_horario"` → `botStage:
+      "esperando_horario"` (el repo todavía manda a `handoff_humano`, que es la barrera que hace
+      callar al bot para siempre), y `say("M0b", …)` → `say(slotsPending(config) ?
+      "M0b_SIN_HORARIOS" : "M0b", …)`. `hermes-content/deploy/vps-ops/bot/config.mjs` también difiere
+      (ahí vive `M0b_SIN_HORARIOS`), y hay `bot-engine.mjs.bak-20260902-171939` y
+      `config.mjs.bak-20260902-171939` en `/opt/onia/bot` con la hora del cambio.
+      **La prueba de que el arreglo funciona está en la base:** conversación **47** (17:01, antes)
+      recibió **una** respuesta; la **48** (17:21, después) recibió **dos** — la segunda es
+      *"Perfecto, anotado que te dedicás a odontología, que son 4 personas y que estás en Santa
+      Cruz…"*. Reproducir en 30 s:
+      `diff <(tr -d '\r' < hermes-content/deploy/vps-ops/bot/bot-engine.mjs) <(tr -d '\r' < /opt/onia/bot/bot-engine.mjs)`
+      → hoy **25** líneas; cuando esté versionado, **0**.
+      **No es trámite de copiar:** hay que traer los dos archivos, correr `npm run test:bot` (el
+      repo tiene tests del motor que asumen `handoff_humano`) y recién ahí commitear. Entra en una
+      vuelta, pero es un ítem propio.
+
 - [x] **El objetivo del carril se daba por cumplido leyendo un párrafo del 31-ago, y las cuatro
       formas en que puede romperse devuelven 200 con la lista vacía.** Hecho el 2026-09-02,
       auditando los `[x]` (nivel 2 de la escalera: "Ahora" no tenía ítems sin empezar y los tres de
@@ -238,7 +291,12 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       cadena — y verificado **en rojo primero**: `test:guards-cableados` mordió con *"estos tests
       existen y NO los corre nadie"* antes de cablearlo.
 
-⚠️ **"Ahora" sigue sin ítems sin empezar: el carril está sin combustible.** Los tres de "Después"
+✅ **"Ahora" volvió a tener combustible el 2026-09-02**: el ítem del `bot-engine` sin versionar es
+el próximo, y salió de MIRAR producción contra el repo — no de la cola. Lo de abajo describe la
+vuelta anterior, cuando el carril sí estaba vacío, y explica por qué mirar el sistema vivo es lo
+que lo destraba.
+
+⚠️ **"Ahora" seguía sin ítems sin empezar: el carril estaba sin combustible.** Los tres de "Después"
 no son promovibles y no es trámite — el del disco es de la máquina Windows de Sergio y el propio
 ítem dice que no lo arregla este carril; la data QA es un "no borrar todavía" deliberado; el QR
 espera al banco (**S2**). Las 14 filas de "Bloqueado en Sergio" esperan a Sergio, y las que una
