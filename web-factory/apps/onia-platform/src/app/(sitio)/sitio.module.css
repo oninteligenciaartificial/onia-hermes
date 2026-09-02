@@ -1707,6 +1707,11 @@
   background: var(--ink-block);
   color: color-mix(in srgb, #edf1ef 78%, transparent);
   padding-block: 3.5em 2.4em;
+  /* El area segura del telefono (la barra de gestos del iPhone) la absorbe el
+     PIE y no el body: asi ese margen queda del negro del pie. Puesto en el
+     body pintaba del fondo claro y se leia como una franja rota debajo del
+     pie. Va despues de `padding-block` a proposito: lo pisa. */
+  padding-bottom: calc(2.4em + env(safe-area-inset-bottom, 0px));
   font-size: 0.95rem;
 }
 .footerInner {

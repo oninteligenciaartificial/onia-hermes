@@ -896,6 +896,45 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       el cableado en el script raíz — tocar los 4 archivos raíz de `web-factory` no es zona de
       este loop.
 
+### Encontrado el 2026-09-02 MIRANDO el PIE en teléfono — ARREGLADO en la misma vuelta
+
+- [x] **Las dos pantallas del carril cerraban con una franja de 73px del fondo CLARO debajo del
+      pie NEGRO, en teléfono.** No era del pie ni de una página: era del `body`, así que salía
+      en **todas** las páginas del sitio en móvil. Lo último que ve un lead que leyó la página
+      entera era un corte de maquetación.
+      **Cómo apareció:** ni el tablero ni "Ahora" daban ítem de esta zona (las 3 tareas del
+      tablero son del carril chatbot; el único ítem de zona, el del gate `tsc`, ya tiene cerrado
+      su residuo y lo que queda es de otros dueños). Así que se corrió la definición de hecho del
+      carril: abrir las dos pantallas y MIRARLAS. Salieron 4 capturas (390×844 y 1280×900,
+      `channel: 'chromium'` — el motor correcto, no el `headless_shell` que inventa defectos de
+      texto): HTTP 200, cero errores de consola, cero desborde horizontal, y la franja al pie.
+      **La causa, medida y no supuesta:** `globals.css` tenía
+      `@media (max-width: 899px) { body { padding-bottom: calc(4.6rem + env(safe-area-inset-bottom)) } }`,
+      con el comentario *"la barra de accion fija del movil no debe tapar el final de la pagina"*.
+      **Esa barra ya no existe.** Medido en vivo con la página scrolleada al fondo: el único
+      elemento `fixed`/`sticky` del sitio es el `header` (arriba, 61px), y `grep` de
+      `position: fixed` sobre `globals.css` + `sitio.module.css` + todos los `.tsx` devuelve
+      **cero**. El hueco quedó huérfano y pintaba del fondo del body, que es claro.
+      El padding entró con `1ddba7ad` (`git log -S "4.6rem"`); la barra se fue después y el
+      hueco se quedó.
+      **Un falso positivo descartado en el camino, y cómo:** la misma corrida mostró una columna
+      de cuadraditos pegada al borde izquierdo que parecía un grid roto (el navegador reportaba
+      `grid-template-columns: 24px 316px` donde el fuente dice `repeat(24, 1fr)`). **No es un
+      defecto:** `sitio.module.css:1126` rota el panel del día 90° en teléfono a propósito
+      (`grid-template-rows: repeat(24, ...)` + `grid-auto-flow: column`), y los 9/15 ticks
+      alinean con sus dos bloques. Leer el CSS antes de "arreglarlo" evitó romper un diseño sano.
+      **Lo que se hizo:** el bloque huérfano del `body` sale, y el área segura del teléfono la
+      absorbe ahora el propio pie (`.footer { padding-bottom: calc(2.4em + env(safe-area-inset-bottom)) }`).
+      Es el arreglo correcto y no sólo el que borra: puesto en el `body`, el margen del notch
+      pintaba igual del fondo claro; puesto en el pie, sale del negro del pie.
+      **Verificado MIRÁNDOLO, no con un grep:** build local servido en `:3199`, scroll hasta el
+      fondo real (`scrollY == maxScroll`) y captura de las dos pantallas — el pie negro llega al
+      borde inferior. Medición: `sobra = scrollHeight - footer.bottom` pasa de **73px (home) y
+      74px (/empezar)** a **0 y 0**; `body.padding-bottom` de `73.6px` a `0px`.
+      **Gates:** `npm run typecheck` exit 0 · `npm run build` exit 0.
+      **No se desplegó:** `onia.com.bo` la sirve el contenedor `onia-landing` y publicar es de
+      Sergio — la franja sigue viva en producción hasta ese deploy.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
