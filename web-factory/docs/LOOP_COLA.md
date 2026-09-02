@@ -905,6 +905,34 @@ Las tres formas de fantasma que ya aparecieron acá:
       `apps/onia-platform`, 3411 y 3477, con sus hijos: otra mano, zona prohibida) y el único
       de este carril es el `serve-out 4319`.
 
+- [x] **AUD8 · Auditar A9/A10 y estrenar el gate visual apretado desde una sesion limpia**
+      (2026-09-02). Octava vuelta de escalon 2 (A y B siguen todos `[x]`). **Por que estos
+      dos**: AUD1-AUD7 cubrieron W1-W5, A1a, A2, A3, A5, A7, A8, AUD4, S1, B1, B2 y B3 —
+      **A9 y A10 son los unicos `[x]` que nadie habia mirado**, y ademas los mas recientes,
+      que es donde una linea todavia no tuvo tiempo de envejecer mal.
+      **Los dos ciertos contra el disco de hoy.** A9 → `dotR = 4.8` y `const pad = dotR`
+      vivos en `dashboard.ts:988,991`, y sus dos tests existen y son los que decia ser: el
+      de tamaño multiplica por la escala medida (`ESCALA_KPI_SPARK = 268.5 / 320`) en vez de
+      comparar el `r` pelado, y el segundo comprueba que el circulo no se recorte
+      (`cy - r >= 0`, `cx + r <= 320`) ✔ · A10 → `maxDiffPixels: 20` vivo en
+      `tests/e2e/visual.spec.ts:81` ✔. **Ninguna se desmarca.**
+      **Lo que esta vuelta agrega y A10 no podia dar: la primera corrida del gate apretado
+      desde una sesion que no lo escribio.** A10 midio su propio ruido en corridas
+      encadenadas y con las baselines recien regeneradas por el mismo proceso — el caso
+      facil. Aca el gate corrio en frio, en otra sesion y con otra carga de maquina, y dio
+      **8/8 verde sin tocar una sola baseline**. Es la evidencia que faltaba de que el 20 no
+      es un numero apretado a la medida de una corrida afortunada.
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo); rama
+      `claude/onia-web-architecture-b37eca` — verificada con `git branch --show-current`, la
+      señal que AUD7 dejo escrita — al dia con `origin` (`cb47ef40`) y arbol limpio;
+      `typecheck:packages` **exit 0**; `pnpm test` **269/269 en 2,8 s** (el mismo numero que
+      declara A9); `pnpm e2e` **103 pasados / 0 fallados / 7 skipped**.
+      **Cero zombies, y uno que casi lo parece**: los `chrome.exe` vivos son el navegador
+      real de Sergio, **no** de Playwright — Playwright corre su propio Chromium desde la
+      cache `ms-playwright`, asi que un `taskkill` sobre `chrome.exe` le habria cerrado el
+      navegador de trabajo sin arreglar nada. El unico proceso de este carril sigue siendo
+      el `serve-out 4319`.
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
