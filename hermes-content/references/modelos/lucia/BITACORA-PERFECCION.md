@@ -327,3 +327,85 @@ lindo, aire) **sin costar la cara** (casilla 1 y 7 intactas), escrita como un fl
 requiere volver a experimentar** — se copia y sale. Y deja además una pieza publicable (`D13`).
 El cuello de botella de todo el carril —«fancy le cambia la cara»— queda **resuelto y documentado
 como receta operativa**, no sólo como hallazgo.
+
+### E8 · El bloqueo NO es un cupo diario: la cuenta entera no genera — 2026-09-02 · **0 créditos**
+
+**La vuelta salió a animar `E3-hotel.jpg`** (el pendiente heredado, 4,8 cr, dentro del tope) y
+volvió a chocar con `grace_daily_limit_reached`. En vez de anotar «el límite sigue» y esperar al
+día siguiente —que es lo que decía el pendiente— se midió **qué es** el límite. La respuesta
+cambia el plan del carril, así que la vuelta entrega eso.
+
+**Error idéntico en los tres intentos, palabra por palabra:**
+
+```json
+{"data":{"modal_data":{"elapsed_days":1},"type":"unlock_full_access_notice"},
+ "error_type":"grace_daily_limit_reached"}
+```
+
+| Prueba | Modelo | Costo | Resultado |
+|---|---|---|---|
+| Animar `E3-hotel.jpg` | `seedance1_5` (video) | 4,8 cr | ⛔ `grace_daily_limit_reached` |
+| Imagen nueva (vuelta previa) | `nano_banana_pro` | 2 cr | ⛔ mismo error |
+| **Imagen más barata del catálogo** | `text2image_soul_v2` | **0,12 cr** | ⛔ **mismo error** |
+| `generate cost` de todos ellos | — | **gratis** | ✅ responde normal |
+
+🔴 **El dato que decide: falla el modelo de 0,12 créditos.** Una cuenta con **1948,66 créditos** y
+plan `ultra` (`higgsfield account status`, verificado en vivo) no puede gastar doce centavos de
+crédito. El bloqueo **no es de video, ni de modelos caros, ni de gasto**: es de **toda creación**.
+Cotizar sigue gratis y sigue funcionando, que es lo que hacía parecer que la herramienta estaba viva.
+
+**Y la hipótesis del cupo diario queda REFUTADA por el historial de la propia cuenta**
+(`account transactions`, 200 movimientos leídos):
+
+| día | créditos gastados | generaciones | ¿cortó? |
+|---|---|---|---|
+| **2026-09-02** | **72,67** | **25** | **sí, a las 08:48 UTC** |
+| 2026-08-23 | 83,30 | 29 | no |
+| **2026-08-21** | **313,45** | **69** | **no** |
+
+Si hubiera un tope diario de créditos o de piezas, el 21-ago —**4× el gasto y casi 3× las
+generaciones**— habría cortado mucho antes que el 02-sep. No cortó. **El corte del 02-sep no lo
+causó el consumo de ese día.**
+
+**Última generación exitosa: 2026-09-02T08:48:46 UTC** (Seedance 1.5 Pro, 4,8 cr). Al reintentar
+a las 21:39 UTC seguía bloqueado: **~13 h sin poder generar nada**.
+
+**Pista observada, sin explicación probada:** las cinco últimas generaciones del día salieron a
+**exactamente una por hora** — 04:49 · 05:49 · 06:48 · 07:49 · 08:48 — mientras que antes de las
+04:41 hubo ráfagas de tres en el mismo segundo. Parece un goteo forzado antes del corte total,
+pero **es una observación, no un mecanismo probado**: no la tomes como causa.
+
+⚠️ **Lo que NO sabemos, y no se inventa.** `unlock_full_access_notice` + `elapsed_days: 1` **suena**
+a un cambio de estado de la suscripción (una ventana de «gracia» con acceso recortado), y el
+historial muestra que la cuenta ya osciló antes — `Task Reward Cashback Paused` el 27-ago (−80 cr)
+y `Resumed` el 01-sep (+80 cr). **Pero eso es una hipótesis, no una medición**, y desde el CLI no
+hay forma de refutarla: `account status` informa `ultra` y 1948 créditos, o sea que **la API
+miente por omisión sobre el estado que de verdad bloquea**. Sólo se ve entrando a la cuenta por
+navegador.
+
+**Consecuencia operativa para el carril, hasta que se destrabe:**
+
+1. **No sirve esperar al día siguiente.** El pendiente de `E3-hotel` no está esperando cupo: está
+   esperando a Sergio. Anotado así en el `LEEME.md` del banco.
+2. **Toda vuelta que planee generar tiene que cotizar primero** (`generate cost` es gratis y sigue
+   vivo) **y aceptar que `create` puede rebotar**. Plan B de cero créditos, siempre.
+3. **No reintentar en bucle.** Tres intentos de tres modelos distintos dieron el mismo error: el
+   cuarto no aporta información. Se reintenta **una** vez por vuelta, y si rebota, se hace trabajo
+   de 0 créditos.
+
+**Método que hay que repetir:** el pendiente decía «esperá a mañana» y esa era una conclusión
+heredada, no medida. Contarla de nuevo —tres modelos, el más barato incluido, y el historial de
+gasto— la dio vuelta entera. `CLAUDE.md`: *un dato heredado no se ejecuta sin CONTARLO de nuevo*.
+
+### 🔧 Hallazgo de paso: el banco entero citaba archivos `.png` que no existen — 0 créditos
+
+Al ir a correr el comando heredado saltó que apunta a `E3-hotel.png`, y en disco es **`.jpg`**.
+Verificado en todo el carril: **no hay ni un solo `.png`** en `references/modelos/lucia/`. El
+`LEEME.md` del banco los nombraba `.png` **13 veces** y `CREATIVO.md` 2 — Higgsfield **descarga**
+`.png`, pero al repo entraron convertidas, y los docs copiaron el nombre de la descarga.
+
+**Cualquier comando copiado de esos docs moría en «file not found» antes de tocar el servidor.**
+Corregidas las 15 menciones y verificado que cada archivo citado existe en disco. Queda la nota en
+el encabezado del `LEEME`: se escribe la extensión **que tiene el archivo**, no la que trajo la
+descarga. Es el mismo defecto que la rúbrica combate en las fotos —*medido, no supuesto*— aplicado
+a las rutas.
