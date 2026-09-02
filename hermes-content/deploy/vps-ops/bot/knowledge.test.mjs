@@ -484,11 +484,39 @@ test("sin horarios reales el bot NO inventa ni muestra el placeholder: saluda y 
   assert.match(texto, /coordina uno personalmente/, "se le dice la verdad: el horario lo pone un humano");
   assert.match(texto, /a qué se dedica tu negocio/, "y no se pierde la calificacion");
 
-  assert.equal(result.nextState.botStage, "handoff_humano", "queda a cargo de un humano, no esperando una eleccion imposible");
+  // 2026-09-02: aca decia `handoff_humano`, y ESTE TEST BLINDABA EL BUG. Verificaba que el
+  // mensaje fuera correcto y nunca que la conversacion pudiera seguir — y `handoff_humano` es
+  // silencio permanente (barrera 1 de step()). Como los slots nunca se definieron, TODA
+  // conversacion caia ahi: el bot saludaba y no volvia a hablar. Cinco personas escribieron
+  // entre el 24 y el 29 de agosto; a cuatro no les contesto nadie.
+  assert.equal(result.nextState.botStage, "esperando_horario", "sigue el guion vivo: sin agenda igual califica");
   assert.ok(result.notes.includes("sin_horarios_que_ofrecer"));
   const tipos = result.sideEffects.map((effect) => effect.type);
   assert.ok(tipos.includes("lead_upsert"), "el lead nace igual: el prospecto no se pierde");
   assert.ok(tipos.includes("notify_sergio"), "y Sergio se entera de que tiene que proponer hora");
+});
+
+test("sin horarios, el bot CONTESTA el segundo mensaje — el que costo una semana de silencio", () => {
+  // El test de arriba miraba el primer mensaje y nada mas. Este mira el SEGUNDO, que es donde
+  // se perdian los prospectos: saludaba bien y despues, mudo para siempre.
+  const cfg = DEFAULT_CONFIG;
+  const uno = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config: cfg });
+  assert.equal(uno.replies.length, 1, "saluda");
+
+  const dos = step(uno.nextState, { text: "Tengo una clinica dental en Santa Cruz, somos 4 personas" }, { config: cfg });
+  assert.ok(dos.replies.length >= 1, "EL BUG: aca el bot se quedaba mudo para siempre");
+  assert.ok(!dos.notes.includes("silencio:handoff_en_curso"), "no puede irse al silencio por no tener agenda");
+
+  const texto = dos.replies.map((reply) => reply.text).join("\n");
+  assert.ok(!/pendiente de definir/i.test(texto), "no re-ofrece un horario que no existe");
+  assert.ok(!texto.includes("{{"), "ninguna variable sin resolver");
+
+  // y el dato del prospecto no se pierde: es lo unico que se puede capturar sin agenda
+  assert.ok(/odontolog|dental/i.test(texto) || Object.keys(dos.nextState.qualification || {}).length > 0,
+    "captura lo que le contaron");
+
+  const tres = step(dos.nextState, { text: "atendemos de 9 a 19" }, { config: cfg });
+  assert.ok(tres.replies.length >= 1, "y sigue contestando, no se agota en un turno");
 });
 
 test("con horarios reales el guion normal no cambia ni una coma", () => {

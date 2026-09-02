@@ -72,6 +72,109 @@ Una credencial que falta es la última variable de entorno, no un bloqueo. Se co
 
 El norte de todos los carriles: `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md`.
 
+## 🔴 Chequeo de tu DEFINICION DE HECHO — antes de la cola, todas las vueltas
+
+Tu objetivo dice *"que un desconocido escriba y esa conversacion se vea en la bandeja"*. Hasta el
+2026-09-02 eso era una **frase**, no un chequeo: nadie escribia nunca. Resultado medido: el bot
+paso una semana contestando el saludo y callandose en el segundo mensaje, con cinco personas
+reales del otro lado, mientras este loop corria 21 vueltas y reportaba —con razon, segun lo que
+podia ver— *"no encontre nada roto"*. **Su cola estaba vacia porque nadie habia mirado.**
+
+**Ahora se mide, y se mide ANTES de mirar la cola:**
+
+1. Abri el widget del inbox de leads reales:
+   `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`
+2. Escribi **DOS** mensajes, con 15 s entre uno y otro:
+   - `Hola, quiero informacion sobre el sistema`
+   - `Tengo una clinica dental en Santa Cruz, somos 4 personas`
+3. Conta las respuestas en la base:
+   `docker exec <chatwoot-db> psql -U postgres -d onia-chatbot -tAc "select message_type, left(content,80) from messages where conversation_id=<N> order by created_at;"`
+
+**HECHO = el bot contesto los DOS.** Una sola respuesta es el bug abierto, no un exito parcial.
+
+⚠️ **Un mensaje que se manda y no se mira no prueba nada.** Y `curl` contra
+`/api/v1/widget/messages` **no alcanza**: la sesion del widget se arma con JS y devuelve
+`Resource could not be found` sin ella. Si automatizas esto —y conviene— tiene que ser con un
+navegador de verdad, y el prober es un item legitimo de tu cola.
+
+🔴 **Y lo primero de todo: HACE QUE SE VEA.** `/tmp/onia-bot-webhook.log` **solo tiene lineas de
+arranque**, ni una por mensaje, porque el proceso corre con `docker exec -d` y su salida no va a
+ningun lado. Por eso este bug sobrevivio una semana. Que cada webhook deje una linea con la
+conversacion, la entrada, la rama que tomo y **por que no respondio**. Sin eso se sigue
+adivinando, y adivinar ya costo una semana.
+
+## 🔴 TU CARRIL TIENE QUE PODER FALLAR A LA VISTA
+
+### 1. Corré tu definición de hecho. No la leas: EJECUTALA
+
+Tu objetivo arriba dice qué significa "hecho". **Convertilo en un comando que corras al empezar
+cada vuelta, antes de mirar la cola.** Si no lo podés ejecutar, no podés saber si está hecho — y
+vas a reportar que sí.
+
+- Si tu carril es una **pantalla**: abrila y **MIRALA** renderizada.
+- Si es una **conversación**: escribile y contá las respuestas.
+- Si es un **cobro**: pagá uno de prueba y mirá la fila en la base.
+- Si es un **correo**: mandate uno y abrilo.
+
+**Un objetivo que no se ejecuta cada vuelta es decoración.**
+
+### 2. Un test que mira el primer paso NO ve un sistema que muere en el segundo
+
+El bug del bot estaba **blindado por su propio test**: verificaba que el mensaje de bienvenida
+fuera correcto y exigía el estado que hace callar al bot para siempre. Verde, y la conversación
+moría igual.
+
+Cuando escribas o audites un test, preguntá: **¿esto sobreviviría a un segundo turno?** El
+primer mensaje casi siempre funciona; **el dinero se pierde en el segundo.**
+
+Y cuando arregles un bug, **el test nuevo tiene que fallar en ROJO antes** — por el motivo
+correcto, no por otro.
+
+### 3. Si no hay log, no hay diagnóstico: hacé que se VEA antes de arreglar
+
+El bot no dejaba **ni una línea por mensaje** — su proceso arrancaba de una forma que tira la
+salida a la basura. Por eso nadie pudo decir en una semana por qué se callaba.
+
+**Antes de tocar el motor de algo que falla en silencio: hacelo hablar.** Una línea por evento
+con qué entró, qué rama tomó y **por qué no hizo nada**. Con eso la causa aparece en la primera
+vuelta; sin eso se adivina, y adivinar ya costó una semana.
+
+⚠️ **Un fallo que no avisa es peor que uno ruidoso.** El loop `investigacion` estuvo muerto con
+su cron intacto: su error salía en una línea del corredor **anterior** a donde se define la
+función que avisa. Todo lo que falla antes de esa línea falla **mudo**.
+
+### 4. Medí con el instrumento correcto, y desconfiá del que te da la razón
+
+El canario visual pasó **tres días** reportando texto roto (`"Ent regamos t u sist ema"`) que
+**nunca existió**: era el rasterizador con el que sacaba las fotos, no el sitio. Costó un ítem
+abierto tres días, una bisección entera que culpó a la fuente, y una decisión escalada a Sergio
+que no existía.
+
+**Cuando una investigación no puede refutar su propia hipótesis, más evidencia la vuelve más
+convincente, no más cierta.** Antes de escalar algo: cambiá el instrumento y volvé a medir.
+
+Y contra el sistema correcto: la plataforma la sirve un contenedor del VPS (**no Vercel**), la
+base es `supabase-db` (**no** la nube), `onia.com.bo` la sirve `onia-landing` (**pushear no
+publica nada**).
+
+### 5. Una hipótesis no probada no se anuncia como arreglo
+
+Hoy mismo: el add-on parecía la causa del silencio del bot, se otorgó, **y el bot siguió mudo**.
+La hipótesis era falsa. Probarla costó dos minutos; anunciarla habría costado la confianza.
+
+**Se prueba, después se cuenta.**
+
+---
+
+## Qué hacer cuando tu chequeo de "hecho" sale MAL
+
+**No sigas con la cola.** Ese es tu ítem de la vuelta: tu carril está roto **ahora**, y lo que
+esté escrito en la cola importa menos.
+
+Si no lo podés arreglar en esta vuelta, dejalo en la cola **con la reproducción exacta** —los
+pasos, el comando, lo que devuelve— para que la próxima lo reproduzca en 30 segundos en vez de
+volver a investigarlo desde cero.
+
 ## Chequeo de arranque — que el conjunto de loops siga registrado
 
 **Antes de todo lo demás, y antes de trabajar.** Tu prompt sobrevive; **el registro del horario

@@ -139,6 +139,34 @@ rendimiento por vuelta, no más vueltas. Si en algún momento hay que bajar el g
 **espaciar los horarios**, no volver a Sonnet: una vuelta peor deja trabajo mal hecho que después
 alguien tiene que deshacer.
 
+## 🔴 El agujero que ningun loop podia ver, y como se tapa
+
+Sergio, 2026-09-02, mirando que el bot seguia mudo: *"esos problemas no se supone que los loops
+los arreglan? Osea de verdad se estan corriendo?"*.
+
+**Si corrian** —21 vueltas del carril chatbot esa noche, 17 con commit— y aun asi el bot llevaba
+una semana contestando el saludo y callandose en el segundo mensaje, con cinco personas reales
+esperando. El loop no fallo: **reporto la verdad de lo que podia ver.** Su cola no tenia el bug,
+y no lo tenia porque **nadie habia escrito nunca al bot**.
+
+Ahi esta la regla, y es la misma que ya nos mordio una vez:
+
+> **Un carril sin productor es un carril ciego.** No se planta: reporta "todo bien" mientras su
+> superficie esta rota, y suena mas convincente cada vuelta.
+
+Teniamos productor para **pantallas** (`canario-visual`, que las abre y las mira) y para
+**decisiones** (`investigacion`, que las cotiza). **No teniamos ninguno para conversaciones**, que
+es justo la superficie donde se pierde un cliente.
+
+**Como se tapo, y por que asi:** en vez de un octavo loop, el carril chatbot **prueba su propia
+definicion de hecho al empezar cada vuelta** — escribe DOS mensajes al widget y cuenta las
+respuestas. Su objetivo ya decia *"que un desconocido escriba y esa conversacion se vea en la
+bandeja"*; era una **frase**, no un chequeo. Ahora es un chequeo.
+
+**La leccion, para el proximo carril que se arme:** un objetivo que no se ejecuta cada vuelta es
+decoracion. Si la definicion de hecho de un carril no se puede correr, el carril no puede saber
+si esta hecho — y va a reportar que si.
+
 ## Cómo se sabe que el equipo está sano
 
 **No por cuántas vueltas corrieron.** Por esto, en orden:
