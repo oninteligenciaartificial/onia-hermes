@@ -462,23 +462,22 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       en 111 archivos y sólo **46** llevan `aria-hidden`. Eso es una barrida propia, no este
       ítem — este cierra la pantalla reportada y su hermana.
 
-- [ ] **La CSP de producción bloquea el beacon de Cloudflare en TODA la plataforma.** En consola,
-      en las dos rutas de `app.onia.com.bo` que se abrieron:
-      `Loading the script 'https://static.cloudflareinsights.com/beacon.min.js/...' violates the
-      following Content Security Policy directive: "script-src 'self' ...`. O se agrega el origen
-      a la CSP, o se apaga Web Analytics en Cloudflare: hoy es ruido rojo permanente en la
-      consola de cada cliente y analítica que no se está midiendo. Ninguna de las dos cuesta
-      nada; elegir es de Sergio sólo si quiere la métrica.
-      ⚠️ **Reverificado el 2026-09-01 leyendo la cabecera, no la consola.** La respuesta de
-      `app.onia.com.bo/login` trae `content-security-policy: default-src 'self'` con
-      `script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com` — el
-      origen del beacon **no está**, así que el bloqueo es de la cabecera y se arregla ahí o en
-      Cloudflare. Sigue abierto.
-      **Y ahora se sabe dónde se toca**, que es lo que al ítem le faltaba: la cabecera se
-      escribe a mano en `next.config.ts:76` del repo `onia-platform` (el bloque `headers()`,
-      con la clave en la línea 73). Es una línea: agregar el origen del beacon a `script-src`,
-      o apagar Web Analytics en Cloudflare. **Cómo se sabe que quedó hecho:** abrir
-      app.onia.com.bo/login y que la consola no traiga la violación de CSP.
+- [x] **La CSP de producción bloqueaba el beacon de Cloudflare en TODA la plataforma — ARREGLADO
+      EN CÓDIGO el 2026-09-02, `onia-platform` `efaffe8`, en `master`. Falta SÓLO el deploy, que
+      decide Sergio.** Se agregó `https://static.cloudflareinsights.com` a `script-src` y
+      `https://cloudflareinsights.com` a `connect-src` en `next.config.ts` — la opción que no
+      apaga métrica: si Sergio no quiere Web Analytics, apagarlo en Cloudflare sigue siendo válido
+      y no requiere código.
+      Se extrajo `buildContentSecurityPolicy()` (antes la directiva vivía inline dentro de
+      `headers()` y no había forma de testearla sin levantar Next). Test nuevo
+      `__tests__/csp-cloudflare-beacon.test.ts`: falló en ROJO antes del cambio
+      (`buildContentSecurityPolicy is not a function`) y pasa en VERDE después, verificando
+      `script-src` y `connect-src` por separado.
+      Gates verdes: `tsc --noEmit` 0 · `npm run lint` 0 errores (100 warnings preexistentes) ·
+      `vitest run --no-file-parallelism` 203 archivos, 2.482 pasan + 5 skip.
+      **Píxeles sin cambio** (es una cabecera HTTP, no hay captura que mirar). **Cómo se sabe que
+      quedó hecho en producción:** después del deploy, abrir `app.onia.com.bo/login` y que la
+      consola no traiga la violación de CSP.
 
 - [x] **Nadie es dueño de `/` ni de `/empezar` — RESUELTO 2026-09-02: el carril `web-venta`
       (este) es el dueño declarado.** Su propio prompt de loop lo dice desde el 2026-09-02:
