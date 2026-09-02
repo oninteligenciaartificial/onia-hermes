@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -88,6 +88,44 @@ describe("la superficie de venta dibuja, no fotografía el sistema", () => {
         prohibidas,
         `sirve imagen desde una carpeta que no es ${PERMITIDAS.join(" ni ")}`,
       ).toEqual([]);
+    },
+  );
+});
+
+/**
+ * Toda ruta del sitio se comparte CON tarjeta.
+ *
+ * Nace del 2026-09-02: `opengraph-image.tsx` vivía sólo en `(sitio)` y su propio
+ * comentario daba por hecho que "la heredan sus DOCE rutas". Falso — esa
+ * convención de Next aplica al `page.tsx` de su segmento y no baja a los
+ * anidados. Resultado medido sobre el build: la home servía el dibujo y las
+ * otras once salían con título y descripción pero SIN imagen, `/empezar`
+ * incluida, que es justo el link que se le pasa a un lead para que se registre.
+ * Un `curl` a la home daba verde y tapaba las once.
+ */
+describe("cada ruta del sitio se comparte con su tarjeta social", () => {
+  const rutas = readdirSync(AQUI, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .flatMap((e) => {
+      const dir = join(AQUI, e.name);
+      // `servicios/` es sólo un contenedor: la página vive un nivel más abajo.
+      if (existsSync(join(dir, "page.tsx"))) return [dir];
+      return readdirSync(dir, { withFileTypes: true })
+        .filter((h) => h.isDirectory() && existsSync(join(dir, h.name, "page.tsx")))
+        .map((h) => join(dir, h.name));
+    });
+
+  it("encuentra las rutas anidadas del sitio", () => {
+    expect(rutas.length).toBeGreaterThan(8);
+  });
+
+  it.each([["(sitio)", AQUI], ...rutas.map((r) => [r.slice(AQUI.length + 1), r])])(
+    "%s tiene su opengraph-image.tsx",
+    (_rotulo, dir) => {
+      expect(
+        existsSync(join(dir as string, "opengraph-image.tsx")),
+        "sin este archivo la ruta se comparte por WhatsApp sin una sola imagen",
+      ).toBe(true);
     },
   );
 });

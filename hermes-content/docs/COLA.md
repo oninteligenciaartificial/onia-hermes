@@ -690,6 +690,48 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       captura `fullPage` sale **en blanco** y parece roto. Se mira en viewport, parando en cada
       rubro. Quien audite esto de nuevo, que no reporte ese blanco como defecto.
 
+### Encontrado el 2026-09-02 auditando los `[x]` del carril — ARREGLADO en la misma vuelta
+
+- [x] **`/empezar` se compartía por WhatsApp SIN una sola imagen, y con él otras diez rutas del
+      sitio. El `[x]` de ayer daba por cubiertas las doce.** Es el link que se le pasa a un lead
+      para que se registre: el último clic del embudo llegaba como un renglón de texto pelado,
+      justo al lado de la home, que sí muestra su tarjeta dibujada.
+      **Cómo apareció:** auditando el `[x]` de la tarjeta social (el que cerró `4384f7e8`). Ese
+      ítem se verificó mirando la home, y la home estaba bien. El comentario de
+      `(sitio)/opengraph-image.tsx` afirmaba, textual, que por vivir en el segmento `(sitio)` "la
+      heredan sus DOCE rutas". **Es falso.** `opengraph-image` de Next aplica sólo al `page.tsx`
+      de su propio segmento y no baja a los anidados.
+      **Medido sobre el build, ruta por ruta** (`curl` al HTML servido, no al DOM): `/` traía
+      `og:image`; `/empezar`, `/precios`, `/chatbot`, `/agentes`, `/rubros`, `/comparativa`,
+      `/contacto`, `/facturacion`, `/guia-facturacion`, `/nosotros` y `/servicios/webs` traían
+      `og:title` y `og:description` pero **cero imagen**. Once de doce. Un `curl` a la home daba
+      verde y tapaba las once.
+      **Y el segundo medio defecto de la misma pantalla:** `src/app/layout.tsx` fijaba
+      `twitter:card: "summary"` — la tarjeta chica. Aun con imagen, `/empezar` se compartía como
+      si no la tuviera. Ahora es `summary_large_image` en todo el sitio.
+      **Lo que se hizo:** el dibujo (el mismo, sin tocar un píxel) se movió a
+      `(sitio)/tarjeta-social.tsx`, y cada una de las doce rutas tiene su `opengraph-image.tsx` de
+      tres líneas que lo llama. Se corrigió además el comentario de `layout.tsx`, que todavía
+      mandaba a poner "una captura REAL del sistema" — la regla de Sergio del 2026-09-01 al revés,
+      y el mismo comentario que sostuvo `/og/onia-rubros.jpg` con "MUY PRONTO" impreso adentro.
+      **Guard:** `(sitio)/forma.test.ts` ahora falla si una ruta de `(sitio)` no tiene su
+      `opengraph-image.tsx`. Una ruta nueva sin tarjeta rompe la suite en vez de salir pelada.
+      **Verificado en vivo sobre el build nuevo:** las **doce** rutas sirven
+      `og:image` + `summary_large_image`. **Evidencia mirada, no supuesta:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-empezar-tarjeta-social.png` — la
+      tarjeta de `/empezar`, 1200×630, dibujada, cero captura, cero obra.
+      **Gates:** `tsc --noEmit` 0 · `vitest run forma.test.ts` 47 pasando · `next build` exit 0
+      con las 12 rutas de imagen emitidas.
+      ⚠️ **Trampa que costó media vuelta, para no repetirla:** el `next start` de la verificación
+      **no arrancó** —el puerto seguía tomado por el servidor del build anterior— y siguió
+      sirviendo el build viejo sin decir nada. Durante varios minutos medí "arreglado" y "sin
+      imagen" sobre HTML de antes del cambio. **Un `curl` a `localhost` no prueba que estés
+      mirando tu build:** revisar el log del servidor (`EADDRINUSE`) antes de creerle a la
+      medición.
+      **Lo que falta, y no es zona de este carril:** el deploy. Contra `onia-landing`,
+      `onia.com.bo/empezar` sigue sin `og:image` hoy, y la home sigue sirviendo
+      `/og/onia-rubros.jpg` (la captura con "MUY PRONTO"). Publicar lo decide Sergio.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
