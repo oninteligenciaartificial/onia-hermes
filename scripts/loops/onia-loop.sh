@@ -8,7 +8,7 @@
 # entonces ninguno habia corrido. Y con la laptop apagada no corren nunca.
 # Por eso se mudan a cron acá.
 #
-# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta>
+# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|kpis-semanal|onia-cola|docs-auditoria|web-venta>
 # APAGAR: crontab -e y comentar la linea del loop.
 #
 # Forma copiada de /root/bin/claude-guardia.sh (secretos por .hermes/.env, unset
@@ -20,6 +20,22 @@
 set -uo pipefail
 
 NOMBRE="${1:-}"
+
+# 🔴 `tg` se define ACA ARRIBA, antes del `case`, y no junto a `avisar`.
+# El 2026-09-02 `investigacion` y `kpis-semanal` perdieron su `case` (alguien
+# reescribio este archivo hacia atras) y sus crons los llamaron durante horas:
+# cada corrida moria en el `*)` con exit 64 — ANTES de que `avisar` existiera —
+# asi que no salio ni un aviso. Un loop registrado, con prompt en disco y cron
+# perfecto, que no corria y no lo decia. Todo lo que falle antes de esta linea
+# falla MUDO, y por eso esta linea va lo mas arriba posible.
+tg() { /root/bin/onia-tg.sh "$1" >/dev/null 2>&1 || true; }
+
+# Los ids conocidos se leen del `case` de abajo, no de una lista a mano: la que
+# habia escrita nombraba 7 y ya se habia olvidado de `kpis-semanal`. Un mensaje
+# de uso que miente sobre que loops existen manda a buscar el problema al lugar
+# equivocado.
+IDS=$(sed -n 's/^  \([a-z][a-z0-9-]*\))$/\1/p' "$0" 2>/dev/null | paste -sd'|' -)
+
 # Tope de turnos por vuelta. 120 alcanza para cerrar UN item de cola; el
 # integrador necesita mas, porque cada carril son fetch + merge + gates + push.
 TURNOS=120
@@ -69,6 +85,14 @@ case "$NOMBRE" in
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  kpis-semanal)
+    # KPIs de lunes del carril marca personal. Mismo worktree que marca-personal;
+    # corre lunes 13:07 UTC, lejos de las corridas :56 de ese loop.
+    WT=/root/loops/onia-hermes-marca-personal
+    RAMA=claude/marca-personal-loop
+    TOPE=1800
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   web-venta)
     # Dueno de onia.com.bo/ y /empezar — la puerta de entrada del producto, que
     # hasta el 2026-09-02 no tenia carril: el canario dejaba defectos ahi y nadie
@@ -78,8 +102,38 @@ case "$NOMBRE" in
     TOPE=3000
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  investigacion)
+    # Carril investigacion/radar: cotiza las decisiones que esperan a Sergio y
+    # cierra las que ya se resolvieron solas.
+    # RESTAURADO 2026-09-02 09:20 UTC. Su `case` desaparecio cuando se reescribio
+    # este script a las 05:44 (el que agrego web-venta y la guarda de MERGE_HEAD).
+    # Desde entonces el cron `26 3,9,15,21` lo llamaba y moria en el `*)` con
+    # exit 64, ANTES de la funcion `avisar`: un loop muerto que no avisa nadie.
+    # Los tres valores salen del log de su unica vuelta viva (03:00:20Z), no de
+    # memoria: "rama claude/investigacion — tope 2400s", y el worktree figura en
+    # `git worktree list`. TOOLS es el valor uniforme del resto del archivo.
+    WT=/root/loops/onia-hermes-investigacion
+    RAMA=claude/investigacion
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  lucia)
+    # Carril Lucia / modelos (Higgsfield). Era una sesion de Windows: se mudo al
+    # VPS el 2026-09-02 para que corra con la laptop apagada.
+    # 🔴 Es el UNICO carril que puede quemar plata solo. Su prompt le prohibe
+    # generar video y dar de alta plataformas: deja todo listo y Sergio dispara.
+    WT=/root/loops/onia-hermes-lucia
+    RAMA=claude/lucia-vps
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
-    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta>" >&2; exit 64 ;;
+    # Este es el camino por el que un loop muere sin que nadie se entere: el cron
+    # lo sigue llamando cada hora y el unico rastro es un exit 64 en un log que
+    # nadie abre. Ahora grita.
+    echo "uso: $0 <${IDS:-?}>" >&2
+    tg "🔴 <b>Loop sin <code>case</code></b>: <code>${NOMBRE:-(vacio)}</code> no existe en <code>$0</code>, pero algo lo esta llamando (su cron). Muere con exit 64 en cada corrida. Conocidos: <code>${IDS:-?}</code>"
+    exit 64 ;;
 esac
 
 LOG=/var/log/onia-loop-$NOMBRE.log
@@ -99,7 +153,7 @@ export ONIA_LOOP_ID="$NOMBRE"
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*" >> "$LOG"; }
 
-tg() { /root/bin/onia-tg.sh "$1" >/dev/null 2>&1 || true; }
+# (`tg` ya quedo definida arriba del `case`, a proposito: ver el comentario ahi.)
 
 # Un monitor que se muere en silencio es peor que no tener monitor. Pero avisar
 # cada vuelta de lo mismo es ruido: como mucho un aviso cada 6 h por loop.
