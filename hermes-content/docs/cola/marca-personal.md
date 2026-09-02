@@ -14,6 +14,8 @@
 | P6 | Textos X/LinkedIn + captions + checklist completa | ✅ 2026-09-01: `docs/cola/PARA-PUBLICAR-HOY.md` (7 bloques copy-paste) + `ONIA_MARCA_PERSONAL_SEMANA1.md` § "Textos X/LinkedIn de la semana" (versión X y versión LinkedIn de Video A/B/C) |
 | P7 | Encuesta de temario (semana 3) — redactarla cuando haya señales de 2 semanas | ⏸ |
 | P8 | **Pieza de venta: chatbot/recepcionista IA** | ✅ 2026-09-02: mini-carrusel 5 láminas `carousels/out/carrusel-chatbot-venta/` — generador `scripts/marca-personal/generar-carrusel-chatbot.py`. Promesas SOLO de `ONIA_CATALOGO_DE_VENTA.md` §5 (chatbot 🟢 vivo), sin precio. CTA "Escribime AUTOMATIZAR" |
+| P9 | **Statement-post "Mi oficina entera"** | ✅ 2026-09-02: `carousels/out/statement-mi-oficina-entera.png` — generador nuevo `scripts/marca-personal/generar-statement-post.py`, patrón statement-3d-minimal, claim del banco de la FICHA |
+| P10 | **Práctica: experimento textura/sombra statement** | ✅ 2026-09-02: A/B/C en `carousels/out/experimento-textura-statement/` — gana sombra de ícono más rica, grano descartado (triplica peso, no se ve). Aplicado al generador y a las FICHAs de `statement-3d-minimal` y `spec-sheet-editorial`. BASE_CONTENIDO §6 cerrado |
 
 > **LOOP VPS: VIVO Y VERIFICADO** (2026-09-01). Cron diario 17:56 La Paz. Primera vuelta:
 > 127 s, exit 0, escribió `drops/2026-09-02.md` (calidad verificada) y pusheó a

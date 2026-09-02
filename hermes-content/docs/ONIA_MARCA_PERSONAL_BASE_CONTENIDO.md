@@ -66,8 +66,15 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       Higgsfield integrados en carruseles (no solo íconos)
 - [ ] **Sonido**: BGM en teasers HyperFrames (media-use resolve BGM) + SFX en beats
       clave; probar en el teaser de comunidad v3
-- [ ] **Texturas/atmósfera**: grano sutil, sombras más ricas en el patrón statement
-      (la referencia carosia usa papel envejecido — ver spec-sheet-editorial/FICHA.md)
+- [x] **Texturas/atmósfera** (02-sep, experimento A/B/C renderizado y comparado en
+      `carousels/out/experimento-textura-statement/`, sobre la pieza real "Mi oficina
+      entera"): **gana la sombra de ícono más rica** (`drop-shadow` más profundo,
+      `0 30px 45px rgba(0,0,0,.25)`) — se nota, da presencia sin ensuciar el fondo
+      plano. **El grano sutil (feTurbulence) se descarta**: triplicó el peso del PNG
+      (172KB → 900KB) y a esta escala de publicación es imperceptible — costo sin
+      beneficio visible, justo lo que la regla "verificar es MIRAR" existe para
+      atrapar. Aplicado a `generar-statement-post.py`; el papel envejecido de carosia
+      queda sin adoptar (no rindió en nuestro fondo claro).
 - [x] **Marco spec-sheet** (02-sep, experimento A/B renderizado y comparado en
       `carousels/out/experimento-marco-specsheet/`): **gana la variante CON marco**
       (header "ONIA SYSTEM · GRID 1080×1350 / V1.0" + footer "TECHNICAL SPEC ·
