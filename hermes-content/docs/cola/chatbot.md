@@ -113,13 +113,15 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 > `REVERTIDAS 3/9` (`BRAND_URL`, `TERMS_URL`, `PRIVACY_URL`) — el bloqueo está **vivo, no
 > vencido**. Vuelve a "Ahora" el día que el gate cambie de veredicto.
 
-> ⚠️ **Con "Ahora" vacío, `verificar_cola.js` sale 1** (`ERROR cola-vacia`) — medido el
-> 2026-09-02 contra este archivo Y contra el de HEAD: el rojo es **anterior** a la vuelta que lo
-> anota, no lo trajo un cambio. Es el gate diciendo la verdad, no una falla: los tres ítems de
-> "Ahora" se fueron a "Bloqueado en Sergio" (S9, S10, S11) y los tres esperan un `scp` o un
-> deploy que sólo él autoriza. **No se destraba llenando "Ahora"**: promover un ítem de "Después"
-> para que el gate se ponga verde es fabricar trabajo, que es lo único que la cola prohíbe. Se
-> destraba cuando Sergio hace uno de esos tres.
+> 📎 **Corregido el 2026-09-02 (vuelta siguiente): las dos afirmaciones de arriba ya no son
+> ciertas, y una de ellas era peligrosa.** "Ahora" **no** está vacío —la corrida del canario del
+> 01-sep le dejó dos ítems, que son los que están acá abajo— y por lo tanto
+> `verificar_cola.js` **no** sale 1: corrido contra este archivo antes de tocarlo, sale **0**
+> (`cola ok: 2 items en Ahora, todos con evidencia real`). Se corrige en vez de borrarse porque
+> el párrafo decía *"el rojo es esperable, no es una falla"*, y esa frase sobreviviéndole al rojo
+> es una anestesia: la próxima vuelta que viera el gate en rojo **de verdad** lo iba a descartar
+> como conocido. Lo que sigue vigente es el fondo: **no se destraba llenando "Ahora"** —promover
+> un ítem de "Después" para poner el gate en verde es fabricar trabajo.
 
 > **El ítem 2 —las campañas de la web— salió de acá el 2026-08-31.** Vivió diez vueltas
 > esperando el `scp` de **S9**, que escribe en el VPS y por eso es de Sergio. Se movió entero
@@ -127,34 +129,14 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 > contenedor: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago con cero
 > `campanas`** — el bloqueo está **vivo, no vencido**. Vuelve cuando Sergio avise.
 
-### Del canario visual — corrida del 2026-09-01
-
-- [ ] **El login del chat pesa 12,9 MB para un formulario de dos campos.** Medido en
-      `https://chat.onia.com.bo/app/login`: **12.953.799 bytes**, 2.437 ms hasta mirable.
-      Es **10× el login de la plataforma** (1.300 KB), que además dibuja una columna de marca
-      entera, iconos y tres bloques de texto. La pantalla se ve BIEN — marca Onia aplicada,
-      campos y botón correctos — así que esto no se nota mirando: se nota midiendo, y es
-      exactamente el fallo con cara de éxito que este carril existe para cazar. Es el bundle
-      de Chatwoot servido entero en la ruta de login. Primer paso barato: ver qué assets
-      entran (el canario deja el detalle en su carpeta de salida — la que está **gitignoreada**,
-      así que hay que correrlo para tenerla) antes de decidir si se puede partir o si es el
-      precio de Chatwoot.
-      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-chat.png`
-      y el script que la saca, `scripts/canario_visual.mjs`.
-      📎 **Corregido el 2026-09-01:** este ítem citaba entre backticks el JSON de la carpeta de
-      salida del canario, y esa carpeta está en `.gitignore` (línea 54) — o sea que el archivo
-      **nunca** existe en un checkout limpio. El verificador de colas lo marcaba fantasma y la
-      cola entera salía **exit 1 desde el momento en que se escribió el ítem**: nadie corrió el
-      gate después de escribirlo. Un directorio de salida no puede ser la evidencia de un ítem;
-      la evidencia es la captura commiteada.
-
-- [ ] **El panel del chatbot NO se puede mirar: es una pantalla ciega.** `app.onia.com.bo/settings/chatbot`
-      redirige a `/login` sin sesión, así que el canario la reporta **no medida** — nunca
-      "OK" — y va a seguir así en cada vuelta. Es la pantalla que un cliente usa para editar
-      su conocimiento, y hoy nadie la mira nunca. Hace falta una de dos: una credencial de
-      sólo lectura para el canario, o una ruta de vista previa pública. La baseline guardada
-      en `hermes-content/references/canario-visual/panel-chatbot/baseline.json` está marcada
-      con `NOTA: NO MEDIDA` para que ninguna vuelta futura la confunda con verde.
+> **"Ahora" quedó vacío el 2026-09-02**, y esta vez no es una frase de trámite: el ítem que
+> tenía se **cerró** (el primero de "Cerrado", con su evidencia), y lo único que le quedaba
+> era una credencial ⇒ se fue a **S15**. Los tres de "Después" están frenados por algo que no
+> es código: el disco es de la máquina de Sergio y el ítem mismo dice *"no la arregla este
+> carril"*; la limpieza de QA dice *"no borrar todavía"*; y el botón QR espera al BCP (**S2**).
+> Por eso `verificar_cola.js` sale **1** con `cola-vacia` — **es el gate diciendo la verdad**,
+> y se deja rojo a propósito. No se destraba promoviendo uno de "Después": ninguno de los tres
+> está desbloqueado, y moverlo sólo para ver verde es fabricar trabajo. Lo destraba **S15**.
 
 ---
 
@@ -228,6 +210,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S12 | **Los DOS horarios fijos de demo — sin ellos el bot deriva a un humano en el primer mensaje y se calla para siempre.** Son dos bloques semanales de SU agenda; `hermes-content/deploy/vps-ops/bot/config.mjs` los trae `pending: true` con un TODO que dice *"PROHIBIDO inventar horarios acá"*. **Contexto nuevo del 01-sep:** existía la salida automática por Cal.com y **está muerta** — no hay contenedor de Cal.com en el VPS y `cal.onia.com.bo` responde 302 a `onia.com.bo/empezar`, así que el módulo cae al placeholder en silencio. **Dos opciones, las dos baratas:** (a) Sergio dicta dos bloques fijos (ej. martes 10:00 y jueves 16:00) y quedan como dato — cero código; (b) revivir Cal.com, que es infra y cuesta más. Recomendación: **(a)**, y (b) después si molesta mantenerlos a mano | Son horas de su semana, y el código prohíbe inventarlas | **El ítem 1 de Ahora, que es el único defecto que un comprador ve.** Probado corriendo el motor con dos horarios cualesquiera: el embudo llega hasta `M2` demo agendada sin tocar una línea de código |
 | S13 | **Encender el aviso `notify_sergio`** — hoy el bot pide un humano y no se entera nadie. ⚠️ **NO es "poner `ONIA_N8N_ENABLED=true`"**: `ONIA_N8N_EVENT_URL` está **vacío** y **no existe ningún workflow de n8n** que reciba el evento (listados los 44). Con la variable en `true` y sin URL el envío devuelve `failed` y **nadie se entera**, porque es fire-and-forget a propósito. **Decidir el camino:** (a) Telegram directo desde el bot, reusando el `TG_BOT_TOKEN` que `hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh` ya usa en el VPS — sin workflow, sin URL, sin secreto nuevo; (b) crear el workflow de n8n y cargar la URL. Recomendación: **(a)** | Escribe en el VPS. El código lo escribe este carril; la decisión y el deploy son suyos | El ítem 2 de Ahora. Gate barato antes de mirar el celular: `"configurado":true` en el `/health` del bot |
 | S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org y por ahí entraron **5 de las 9** conversaciones de desconocidos, incluida la del 01-sep. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox**, y `Onia (interna)` ya gastó el suyo en el 5. **Opciones:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código; (c) levantar la restricción de un inbox por org, que es código del producto y de otro carril. Recomendación: **(b)** | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
+| S15 | **Una credencial de sólo lectura para que el canario ENTRE al panel del chatbot** — un usuario del producto (correo + contraseña) que sólo mire. Se enchufa como `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`; **no hay una línea de código pendiente**: `requiereSesion` y `iniciarSesion()` ya están en `scripts/canario_visual.mjs` y entran por el formulario real de `/login`. Sin ella el canario NO miente (desde hoy dice `NO MEDIDA` con el motivo), pero **la pantalla que un cliente usa para editar su conocimiento sigue sin que nadie la mire nunca**. ⚠️ La otra opción que el ítem original proponía —una ruta de vista previa pública— **se descarta**: expone configuración de cliente sin sesión, y es agregar una superficie viva | Es un alta de usuario en producción, y una contraseña | Que `/settings/chatbot` entre a la ronda del canario como las otras diez. Hecho = el canario imprime `panel-chatbot … sin disparo mecanico` y su baseline se crea con `urlFinal` = `/settings/chatbot` |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 | S12 | **¿Sigue en pie la opción 1 de §9 ("el inbox 4 se deja sin dueño hasta que la limitación moleste")?** Medido el 2026-09-02: son SEIS conversaciones reales en inbox 4 (34, 36, 38, 40, 45, 46), dos nuevas del 01-sep, y CINCO de las seis no dejaron teléfono ni correo — sólo se les puede contestar desde adentro del widget, que es justo lo que el inbox huérfano bloquea. El límite técnico sigue siendo real: `clinic_settings.chatwootInboxId` es un `Int?` único (`prisma/schema.prisma:1002`), una org = un inbox. Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9: (2) crear una org "Onia Bandeja" sólo para recibir el 4 (~10 min, agrega una org fantasma), o (nueva) extender `clinic_settings` a N inboxes — más caro, y lo decide plataforma | Su decisión de producto y su límite de schema, igual que S8 | Que las próximas conversaciones del widget se vean en `/inbox` sin esperar a que alguien dé su teléfono |
 
@@ -439,6 +422,94 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **El canario daba por buena la pantalla del panel del chatbot sin haberla visto nunca:
+      medía el LOGIN y lo reportaba como "sin disparo mecánico".** Cerrado el 2026-09-02.
+      Archivos: `scripts/canario_visual.mjs` y
+      `hermes-content/references/canario-visual/panel-chatbot/baseline.json`.
+      🔴 **Gate 1 corrigió el ítem, y hacia peor.** El ítem afirmaba *"el canario la reporta
+      **no medida** — nunca OK"*. **Falso, y medido, no leído:** corrido en vivo antes de tocar
+      nada, imprimía `panel-chatbot status=200 702 KB 148 ms sin disparo mecanico
+      (comparada)`. La palabra `comparada` es literal — comparó contra una baseline. El
+      `NOTA: NO MEDIDA` que el ítem citaba como salvaguarda era **una cadena de texto en el
+      JSON que el script nunca lee**: un comentario para un humano que ningún humano abre.
+      O sea que la pantalla no salía "no medida": salía **verde**.
+      **Y la baseline estaba envenenada, que es la mitad que nadie había visto.** Guardaba
+      `bytes: 773831` y `msMirable: 973` — los del **login**— bajo el nombre del panel. Efecto
+      doble: hoy el login se compara contra sí mismo y da verde eterno; y el día que la sesión
+      funcione, el panel real dispara un **fantasma de peso** contra números de otra pantalla.
+      Es el mismo defecto que se cerró ayer en `login-chat` (baseline anclada 3,6× arriba de la
+      realidad): **verde con cara de éxito, dentro del vigilante mismo**, por segundo día
+      seguido.
+      **Lo que se hizo:** `llegoALaPantalla(urlPedida, urlFinal)` compara host + camino
+      (el query string y la barra final no son desvíos) y `medir()` marca `medida: false`
+      cuando la página que quedó abierta no es la que se pidió. `juzgar()` corta ahí y
+      devuelve un **tercer veredicto**, `NO MEDIDA`, que no es ítem ni "sin disparo":
+      no es ítem **a propósito** —gritaría en cada vuelta hasta que alguien apague el canario,
+      que es la trampa que el propio script documenta en `espejo-check`— y sobre todo **no
+      compara contra la baseline**, que es lo que mataba el fantasma de peso.
+      La línea impresa ahora dice `NO MEDIDA :: <motivo> — la captura es de OTRA pantalla, no
+      la mires como si fuera esta`.
+      **Circuito de sesión hasta el borde (regla 2 del carril):** `requiereSesion: true` es un
+      campo de la lista, y `iniciarSesion()` entra por el formulario real de `/login`. Con
+      `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` puestos, el canario entra y mide el panel de
+      verdad; sin ellos degrada a `NO MEDIDA` nombrando **exactamente** las dos variables que
+      faltan. **Enchufarlas es un `env`, no un cambio de código** — es todo lo que queda, y es
+      **S15**.
+      **Trampa que casi introduzco y quedó cubierta con su caso:** el primer corte era
+      `medida = !fallo && llegoALaPantalla(...)`, que degradaba a `NO MEDIDA` una pantalla
+      **caída** — o sea que una caída real de producción salía como veredicto tibio en vez de
+      ítem. Ahora `medida` es `null` cuando hay `fallo`, y hay un caso que lo fija.
+      **Probado que los tests MUERDEN:** apagando el corte de `juzgar()` → **3 casos rojos**;
+      apagando la detección de desvío (`return true`) → **3 casos rojos**; restaurado, verde.
+      El `--self-check` pasó de 13 casos escritos a mano a **65 contados por el propio
+      script** (un conteo hardcodeado ya había dejado de coincidir con la realidad).
+      **Verificado en vivo, no en frío**, y con dos pantallas sanas al lado para medir el radio:
+      ```
+      home              200  2859 KB  216 ms  sin disparo mecanico (comparada)
+      login-plataforma  200   699 KB  123 ms  sin disparo mecanico (comparada)
+      panel-chatbot     200   702 KB  133 ms  NO MEDIDA :: faltan ONIA_CANARIO_USER / ...
+      ```
+      Las otras **nueve** pantallas no se movieron: comprobado antes de tocar nada que
+      `panel-chatbot` es la **única** cuya baseline tiene `urlFinal ≠ url`.
+      **MIRADA la captura** (`/tmp/canario-post/panel-chatbot.png`): es el login de
+      `app.onia.com.bo` — logo, los dos campos, "Iniciar sesión" — con los cuatro iconos
+      (`bolt`, `credit_card_off`, `smart_toy`, `person_add`) dibujados como glifos y **no**
+      como palabras. La baseline se reemplazó por un registro con los números en **0**, para
+      que ni leída por accidente pueda producir una comparación falsa.
+
+- [x] **El login del chat NO pesa 12,9 MB: pesa 3,58 MB, y los 12,9 eran el mismo contenido
+      SIN COMPRIMIR.** Cerrado el 2026-09-02. Lo que cambió en el repo:
+      `hermes-content/references/canario-visual/login-chat/baseline.json`.
+      **Gate 1 primero, y acá salvó la vuelta:** el ítem pedía "ver qué assets entran antes de
+      decidir si se puede partir o si es el precio de Chatwoot", así que lo primero fue medir de
+      nuevo en vez de heredar el número. Da **3.583.426 bytes** y 808-913 ms — no 12.953.799 ni
+      2.437 ms. Corrido **tres veces seguidas con el propio canario**: 3499 KB clavado las tres.
+      **De dónde salían los 12,9 MB, medido y no supuesto:** se bajó cada asset del login con
+      `Accept-Encoding: identity` y se sumaron uno por uno → **12.973.552 bytes**, que está a
+      **0,15 %** del número viejo. O sea que los 12,9 MB son los bytes *decodificados* de estos
+      mismos assets, no assets de más. Por el cable viajan 3,58 MB gzip. La conclusión del ítem
+      —"es el bundle de Chatwoot servido entero en la ruta de login"— era **correcta**; el que
+      estaba mal era el tamaño, por un factor de 3,6.
+      **La respuesta a la pregunta que el ítem hacía: es el precio de Chatwoot, y se paga una
+      sola vez.** El **92 %** del peso comprimido es UN chunk, `vite/assets/DashboardIcon-*.js`
+      (11,25 MB crudo / 3,14 MB gzip), que se construye dentro del contenedor de Chatwoot —
+      partirlo es modificar el motor. Pero se sirve con `max-age=31556952` y nombre hasheado:
+      medida la segunda visita del mismo navegador, baja **10 KB en 237 ms — el 0,2 % de la
+      primera**. Y no la ve ningún cliente: `grep` de `chat.onia.com.bo` en todo `web-factory/`
+      no devuelve **nada**, es el login del MOTOR, que por regla dura "está hecho para no verse".
+      No hay nada que arreglar en la pantalla, y se MIRÓ renderizada para decirlo: logo Onia,
+      los dos campos y el botón, sin nombres de iconos crudos.
+      🔴 **Lo que SÍ estaba roto era el gate, y es el hallazgo que sobrevive al ítem.** La
+      baseline se había guardado con los 12.953.799 bytes de aquella lectura. Con
+      `derivaPeso: 1.4`, la alarma de peso de esta pantalla sólo saltaba **arriba de 18,1 MB**:
+      un gate que no podía dispararse nunca, anclado 3,6× por encima de la realidad — "verde con
+      cara de éxito", exactamente lo que este carril existe para cazar, esta vez en el vigilante
+      mismo. Reemplazada por la medición real, así el techo absoluto de 4 MB vuelve a ser el que
+      manda. La baseline lleva escrito que si una vuelta futura vuelve a leer ~12,9 MB **no es la
+      pantalla engordando: es que los assets llegaron sin comprimir**, y eso sí es un ítem.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-chat.png`
+      y el script que la saca, `scripts/canario_visual.mjs`.
 
 - [x] **"La cita" ya no le habla de consultorio a una ferretería: cada rubro lee su propia
       palabra.** Cerrado el 2026-09-02 (commit `675541b` de `onia-platform`, rama
