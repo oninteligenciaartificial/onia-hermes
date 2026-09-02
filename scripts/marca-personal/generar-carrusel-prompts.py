@@ -11,7 +11,19 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 ICONOS = REPO / "hermes-content/references/ui-patterns/statement-3d-minimal/iconos"
 OUT = REPO / "hermes-content/carousels/out/carrusel-5-prompts"
-CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+
+def _chrome():
+    import os, glob
+    if os.environ.get("CHROME_BIN"):
+        return os.environ["CHROME_BIN"]
+    candidatos = [r"C:\Program Files\Google\Chrome\Application\chrome.exe"]
+    candidatos += sorted(glob.glob("/root/.cache/ms-playwright/chromium-*/chrome-linux64/chrome"), reverse=True)
+    for c in candidatos:
+        if Path(c).exists():
+            return c
+    raise SystemExit("No encontre Chrome/Chromium (seteá CHROME_BIN)")
+
+CHROME = _chrome()
 
 CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
@@ -97,7 +109,7 @@ def main():
         f.write_text(html, encoding="utf-8")
         png = OUT / f"lamina-{i:02d}.png"
         subprocess.run([
-            CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars",
+            CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--no-sandbox",
             "--window-size=1080,1350", "--force-device-scale-factor=1",
             "--virtual-time-budget=8000",
             f"--screenshot={png}", f.as_uri(),
