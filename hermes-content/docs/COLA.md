@@ -9,10 +9,15 @@ escribirles si ni siquiera el producto está terminado; dedicate a terminar el p
 escribimos"*.
 
 **Qué significa terminado está escrito y medido en
-[`ONIA_DEFINICION_DE_TERMINADO.md`](ONIA_DEFINICION_DE_TERMINADO.md)** — cuatro puntos (**los dos del carril producto —3 y 4— cerraron el 2026-08-31 sin escribir
-una línea: el 3 era fantasma y el 4 ya estaba construido. El 2 también cerró ese día, por la
-salida honesta: `f47d615` sacó el "agenda" de `lib/pricing.ts` y le queda sólo el deploy, que
-decide Sergio. Queda el 1, de chatbot**), sólo
+[`ONIA_DEFINICION_DE_TERMINADO.md`](ONIA_DEFINICION_DE_TERMINADO.md)** — cuatro puntos, **van 3
+de 4**: el 3 era fantasma y el 4 ya estaba construido (los dos del carril producto, cerrados el
+2026-08-31 sin escribir una línea), y el **2 cerró también en producción** — `f47d615` sacó el
+"agenda" de `lib/pricing.ts` y **el deploy que le faltaba ya entró**, verificado en el contenedor
+vivo el 2026-09-02: la frase falsa pasó de 5 chunks a **cero**.
+*(Acá decía "le queda sólo el deploy, que decide Sergio". Era un **bloqueo vencido** —le pedía a
+Sergio una decisión ya tomada—, que es peor que un fantasma: un fantasma cuesta una vuelta,
+éste mantenía cerrada la puerta de los 7 leads por un motivo inexistente.)*
+**Queda el 1, de chatbot.** La lista tiene sólo
 cosas **rotas** (el cliente las compra y no funcionan) o **falsas** (se las vendemos y no son
 ciertas). Nada de "sería lindo".
 

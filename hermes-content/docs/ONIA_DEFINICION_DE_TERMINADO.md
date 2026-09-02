@@ -125,7 +125,7 @@ org al inbox → abrir `/inbox` y MIRAR.
 una escritura en producción**, así que lo decide Sergio o el dueño del carril — este loop no
 escribe en la base de producción.
 
-### ✅ 2. Vendemos que el bot agenda, y el bot no agenda — CERRADO EN `master` el 2026-08-31
+### ✅ 2. Vendemos que el bot agenda, y el bot no agenda — CERRADO **Y DESPLEGADO** (código 2026-08-31, producción verificada 2026-09-02)
 
 `lib/pricing.ts:64` vende *"contesta, califica, **agenda**"*. El motor dice lo contrario,
 literal: `bot/recepcionista.mjs:232` — *"El bot no agenda ni vende solo"*. El canal
@@ -167,17 +167,37 @@ unico lugar que se mira. Ahora la pantalla deriva el tagline de `WHATSAPP_ADDON.
 Guarda permanente en `lib/pricing-honestidad.test.ts` — vista en ROJO en los dos casos antes
 de traerla. `tsc` 0 · 2362 tests · lint 0 errores.
 
-⚠️ **Falta el deploy para que sea cierto donde el cliente mira.** El contenedor
-`onia-platform` del VPS sirve el bundle anterior, asi que **en produccion la frase falsa sigue
-viva hasta el proximo deploy** — y desplegar lo decide Sergio. Es lo unico que queda de este
-punto.
+✅ **El deploy que faltaba YA SE HIZO. Este punto está cerrado también en producción**
+— medido en vivo el 2026-09-02 18:40 UTC, no deducido:
 
-**MEDIDO el 2026-08-31, ya no es una suposicion.** Se pregunto DENTRO del contenedor, que es la
-unica forma valida (la ancestria contra `e5c1ad3` responde otra pregunta): `grep -rl "califica,
-agenda" /app/.next` devuelve **5 chunks** vivos y `grep -rl "deriva al humano"` devuelve **cero**.
-Y el tagline tiene **un solo** sitio de render —`AddonChatbotClient.tsx:275`, la pantalla del
-add-on detras de login—, asi que quien lee la frase falsa es el cliente que esta por pagar
-**Bs 390**. Opciones cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9.
+| Eslabón | Cómo se preguntó | Antes (2026-08-31) | Hoy |
+|---|---|---|---|
+| Bundle desplegado, frase FALSA | `docker exec onia-platform grep -rl "califica, agenda" /app/.next` | **5 chunks** | **0** |
+| Bundle desplegado, frase HONESTA | `docker exec onia-platform grep -rl "deriva al humano" /app/.next` | **0** | **21 chunks** |
+| Frase exacta que sirve el contenedor | `grep -rhoa "contesta, califica, …" /app/.next` | *"califica, **agenda**"* | *"contesta, califica, **deriva al humano** y hace seguimiento"* |
+| Superficie de cliente por HTTPS | `curl` a `onia.com.bo/`, `/chatbot`, `/precios` y `app.onia.com.bo/login` | — | **0 ocurrencias** de la frase falsa en las cuatro |
+| La pantalla no la re-hardcodea | `AddonChatbotClient.tsx` línea del tagline | hardcodeada | `{tierChatbot?.tagline}`, derivado de `pricing.ts` |
+
+El contenedor que sirve `app.onia.com.bo` lleva **20 h arriba**: el deploy entró el 2026-09-01
+por la noche y **este doc nunca se enteró**. `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9 sí lo
+registró como cerrado el 2026-09-02 — o sea que el radar y la definición de hecho decían cosas
+opuestas sobre el mismo hecho.
+
+⚠️ **Por qué se corrige y no se deja "por las dudas": un bloqueo VENCIDO es peor que un ítem
+fantasma.** Un fantasma hace perder una vuelta verificándolo; éste le pedía a Sergio **una
+decisión que ya había tomado**, y encima mantenía cerrada la puerta de escribirles a los siete
+leads por un motivo que ya no existía. Es la misma lección que este doc ya guarda dos veces
+—*un punto describe el repo del día en que se escribió*— pero en el sentido contrario al
+habitual: acá el repo avanzó y el doc quedó pidiendo trabajo hecho.
+
+**Lo que NO cierra esto:** las propuestas **ya enviadas** siguen prometiendo que el bot agenda
+solo. Eso es papel que ya salió, no superficie que se pueda re-desplegar: vive aparte en
+`ONIA_RADAR_DECISIONES_PRODUCTO.md` §10 y sigue esperando a Sergio.
+
+*(Medición original, para que se vea contra qué se comparó: `grep -rl "califica, agenda"
+/app/.next` devolvía **5 chunks** vivos y `grep -rl "deriva al humano"` devolvía **cero**. Se
+preguntó DENTRO del contenedor, que es la única forma válida — la ancestría contra `e5c1ad3`
+responde otra pregunta.)*
 
 ### ✅ 3. El agente captador SÍ se puede encender — era un fantasma (cerrado 2026-08-31)
 
@@ -283,9 +303,20 @@ salía del mismo callback. Verificar un fantasma no es tiempo perdido.
 ## Cómo se sabe que está terminado
 
 Los cuatro puntos cerrados **y verificados mirando la pantalla**, no por un check verde.
-**Van 2 de 4**, los dos del carril producto, y los dos cerraron el 2026-08-31 **sin escribir
-una línea**: el 3 era un fantasma y el 4 ya estaba construido. Quedan el **1 y el 2, ambos
-del carril chatbot**.
+
+**Van 3 de 4.** Los puntos 3 y 4 cerraron el 2026-08-31 **sin escribir una línea** (el 3 era un
+fantasma, el 4 ya estaba construido). El **punto 2 cerró en producción**: el deploy que le
+faltaba entró el 2026-09-01 y se verificó en el contenedor vivo el 2026-09-02 — la frase falsa
+pasó de 5 chunks a **cero** y la honesta de cero a **21**.
+
+**Queda UNO: el punto 1, del carril chatbot** — el inbox 4 sigue huérfano con 7 conversaciones
+adentro, y ninguna org de CLIENTE tiene inbox propio. Recontado en vivo el 2026-09-02 18:38 UTC
+con la consulta que este mismo doc deja escrita: las únicas dos orgs vinculadas siguen siendo
+`zz-qa-clinica-chatbot-9k651` → 7 y `onia-interna` → 5, las dos nuestras.
+
+⚠️ **Eso mueve la puerta de los siete leads: ya no faltan dos puntos, falta uno.** No se les
+escribe todavía —el punto 1 sigue abierto—, pero conviene saber que lo que falta es **un solo
+paso de un minuto en producción**, no dos frentes.
 
 Que dos de cuatro se cierren verificando en vez de desarrollando no es suerte: los puntos se
 redactaron describiendo el repo de ese día, y el repo siguió. Por eso el Gate 1 —*¿ya está
