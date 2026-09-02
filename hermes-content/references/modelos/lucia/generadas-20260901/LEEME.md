@@ -6,6 +6,7 @@ Generadas con `lucia-skin-v1` (`58bbd635-…`) desde el navegador, Nano Banana P
 | Archivo | Qué es | Asset id | Estado |
 |---|---|---|---|
 | `B06-consultorio-dental.jpg` | Mostrador de un consultorio dental, entregando la tarjeta de turno a una paciente mayor | `bc3db11b-9e82-47ae-a312-ebecac69e189` | ✅ **La mejor del banco** |
+| `B07-ferreteria-9x16.jpg` | Ferretería de barrio, entregando una bolsa de tornillos a un cliente | `4eb429ec-c734-4e5e-a263-895d9b7f315a` | ✅ **La PRIMERA en 9:16** |
 
 ## B06 — por qué es la mejor
 
@@ -80,3 +81,21 @@ workspace, no el que muestra el historial.
 No hay botón visible. Está **dentro del menú `…`** de la pieza, junto a Virality Predictor,
 Regenerate, Publish y Delete. Distinto del panel de detalle de una IMAGEN, donde `Download` sí es
 un botón a la vista.
+
+
+## ✅ B07 — la primera imagen vertical del banco
+
+**1536×2752 · ratio 0,558**, contra 0,563 que sería 9:16 exacto. **Es vertical de verdad**, y las
+16 anteriores eran 3:4 (0,750).
+
+**Cierra el bloqueo del formato para Meta Ads.** La cadena quedó probada de punta a punta:
+poner **9:16 en el selector de aspecto del workspace de IMAGEN** — que estuvo ahí todo el tiempo,
+en 3:4 por defecto — y el resto sale solo. **El precio no cambia: siguió en ✦ 2.**
+
+La escena también sirve: estantes de madera atiborrados, sogas colgadas, latas de pintura,
+tornillos sueltos, piso de concreto, cortina metálica al fondo. Bombilla colgante más luz cálida
+de la puerta abierta. Y la acción a medias es de las más claras del banco: **cuatro manos sobre
+la misma bolsa de papel**, que es el patrón que dio `V05` y `V06`.
+
+**Lo próximo:** animarla con `Turn to video`. Si el video hereda el aspecto del frame —que es lo
+que dice §7 de la técnica—, este va a ser **el primer video vertical**, listo para Reels y ads.
