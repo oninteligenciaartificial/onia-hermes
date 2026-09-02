@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -88,6 +88,58 @@ describe("la superficie de venta dibuja, no fotografía el sistema", () => {
         prohibidas,
         `sirve imagen desde una carpeta que no es ${PERMITIDAS.join(" ni ")}`,
       ).toEqual([]);
+    },
+  );
+});
+
+/**
+ * Toda ruta del sitio se comparte CON tarjeta.
+ *
+ * Nace del 2026-09-02: `opengraph-image.tsx` vivía sólo en `(sitio)` y su propio
+ * comentario daba por hecho que "la heredan sus DOCE rutas". Falso — esa
+ * convención de Next aplica al `page.tsx` de su segmento y no baja a los
+ * anidados. Resultado medido sobre el build: la home servía el dibujo y las
+ * otras once salían con título y descripción pero SIN imagen, `/empezar`
+ * incluida, que es justo el link que se le pasa a un lead para que se registre.
+ * Un `curl` a la home daba verde y tapaba las once.
+ */
+describe("cada ruta del sitio se comparte con su tarjeta social", () => {
+  const APP = dirname(AQUI);
+
+  /**
+   * La lista sale del SITEMAP, no de la carpeta `(sitio)`.
+   *
+   * ⚠️ Enumerar la carpeta fue el segundo agujero del mismo defecto, medido el
+   * 2026-09-02: al arreglar las doce rutas de `(sitio)` este guard se escribió
+   * recorriendo ese directorio, así que quedó ciego a las publicadas FUERA del
+   * grupo. Cuatro seguían compartiéndose sin imagen —`/servicios/consultoria`,
+   * `/servicios/marketing-ia`, `/terminos` y `/privacidad`— y el guard pasaba
+   * en verde igual, porque no las miraba. El sitemap es la lista de lo que
+   * publicamos ("nunca una página publicada sin su entrada"), así que es la
+   * fuente correcta: una página nueva entra al sitemap y este test le exige su
+   * tarjeta, esté en el grupo que esté.
+   */
+  const paths = [
+    ...readFileSync(join(APP, "sitemap.ts"), "utf8").matchAll(/\{\s*path:\s*"([^"]*)"/g),
+  ].map((m) => m[1]);
+
+  /** Una ruta del sitemap puede vivir dentro o fuera de `(sitio)`. */
+  const dirDe = (path: string) =>
+    [join(AQUI, path), join(APP, path)].find((d) => existsSync(join(d, "page.tsx")));
+
+  it("lee las rutas publicadas del sitemap", () => {
+    expect(paths.length).toBeGreaterThan(14);
+  });
+
+  it.each(paths.map((p) => [p === "" ? "/" : p, p]))(
+    "%s tiene su opengraph-image.tsx",
+    (_rotulo, path) => {
+      const dir = dirDe(path as string);
+      expect(dir, `no encuentro el page.tsx de ${path} — ¿sitemap desactualizado?`).toBeTruthy();
+      expect(
+        existsSync(join(dir as string, "opengraph-image.tsx")),
+        "sin este archivo la ruta se comparte por WhatsApp sin una sola imagen",
+      ).toBe(true);
     },
   );
 });

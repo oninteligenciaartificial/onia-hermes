@@ -1016,7 +1016,37 @@ del 2026-08-20 (landing v2 rechazada entera, revertida en producción). No hay u
 Mientras no haya decisión, el ítem queda abierto en `COLA.md` con la medición completa para
 que la próxima vuelta no la repita.
 
-## 19. El espaciado roto del login es un bug real de la fuente Archivo — pero el arreglo cambia cómo se ve el texto (2026-09-02) — decisión de Sergio
+## 19. ~~El espaciado roto del login~~ — CERRADA el 2026-09-02, Sergio NO decide nada
+
+> ✅ **Era el motor de captura, no el sitio. Las tres opciones de abajo quedan sin objeto: ninguna
+> hay que ejecutar, y el párrafo de `/login` NO se toca.**
+>
+> **Cómo se resolvió sin Sergio.** El camino **(c)** de esta misma sección —*"que Sergio abra
+> `app.onia.com.bo/login` en su Chrome de escritorio; si no lo ve, se cierra como
+> fantasma-de-headless"*— era la respuesta correcta con el instrumento equivocado: no hacía falta
+> un humano con GUI, hacía falta **el otro Chromium, que ya estaba bajado en el VPS**. Se cambió
+> el motor en vez de la persona.
+>
+> **La medición, hecha dos veces por dos carriles distintos** (el dueño de `web-venta` y después
+> el integrador, sin creerle al primero): misma URL, mismo instante, misma fuente ya cargada,
+> los dos binarios apuntados por `executablePath`.
+> - `chrome-headless-shell-1223` → *"Ent regamos t u sist ema … puest a … con t us dat os"*.
+> - `chromium-1223` completo → *"Entregamos tu sistema con la configuración de tu rubro puesta."*
+>
+> El `innerText` es idéntico en los dos, y **la única variable que cambió fue el rasterizador**.
+>
+> **Por qué la bisección de abajo no contradice esto — importa, porque es lo que hizo perder tres
+> días.** "Roto en pesos ≤500, limpio en 600+, limpio con Arial" es exactamente la firma de un bug
+> de rasterizado en trazos finos: describe *cuándo* se ve, no *quién* lo dibuja. Ninguna de esas
+> pruebas cambió de motor, así que **ninguna podía distinguir sitio de captura** — por eso todas
+> apuntaron con confianza al lugar equivocado. Cuando una investigación no puede refutar su propia
+> hipótesis, acumular evidencia dentro de ella sólo la vuelve más convincente, no más cierta.
+>
+> **Lo único que queda, y no es de Sergio:** el canario visual saca sus fotos con el motor malo
+> (`scripts/canario_visual.mjs`, `chromium.launch` sin `channel`), así que va a seguir inventando
+> este defecto en cada corrida. Está como ítem abierto del carril del canario en `COLA.md`.
+
+<details><summary>La investigación original, tal como quedó (ya explicada por lo de arriba)</summary>
 
 `COLA.md` tenía el ítem del párrafo de `app.onia.com.bo/login` con espacios metidos DENTRO de
 palabras ("Ent regamos", "puest a") marcado como *"queda a criterio del dueño confirmarlo en un
@@ -1075,6 +1105,8 @@ alcanza o Sergio prefiere no tocar el peso visual.
 
 Mientras no haya decisión, el ítem sigue abierto en `COLA.md`, con este hallazgo referenciado
 para que la próxima vuelta no rehaga la bisección.
+
+</details>
 
 ## 20. Tres commits arreglan el login de la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
 
