@@ -54,10 +54,24 @@ Las tres formas de fantasma que ya aparecieron acá:
    ⚠️ **Corregido el 2026-09-01**: la zona no nombraba `apps/ferreteria-sur` —que este mismo
    carril construyó en A3— ni `web-factory/scripts/`, donde vive el `serve-out.mjs` que el
    runbook de salud de abajo manda a levantar. El carril tenía prohibido tocar su propia obra.
-4. **UNA tarea por vuelta**, la primera no-bloqueada de `## Ahora`. Gates antes de commit:
-   `pnpm typecheck:packages` (+ `pnpm test` si tocás packages; `tsc --noEmit` en la app si
-   la tocás) + **mirar renderizado**. Commit conventional (por qué, en español, sin firma)
-   + push. Marcar `[x]` y **mover el ítem a la sección de cerrados**, no dejarlo en `## Ahora`.
+4. **UNA tarea por vuelta**, la primera no-bloqueada del carril que toque. Gates
+   antes de commit: `pnpm typecheck:packages` (+ `pnpm test` si tocás packages;
+   `tsc --noEmit` en `apps/dental-premium` si la tocás) + **mirar renderizado**
+   + **`pnpm e2e` si cambiaste UN SOLO PIXEL de lo que se dibuja** (y si el cambio
+   de geometría era el objetivo, `--update-snapshots` y **mirar la baseline nueva**
+   antes de commitearla: una baseline se refresca MIRÁNDOLA, nunca a ciegas).
+   Commit conventional (por qué, en español, sin firma) + push. Marcar `[x]` y
+   **mover el ítem a la sección de cerrados**, no dejarlo en `## Ahora`.
+
+   ⚠️ **`pnpm e2e` se agregó el 2026-09-01, y lo pidió un rojo real.** La regla
+   pedía typecheck + unit + mirar, y **A6 cumplió las tres** — midió 22 veces en el
+   navegador — y aun así dejó el gate visual **8/8 en rojo**: cambió el alto del
+   sparkline del KPI (`height:44px` → `aspect-ratio`) sin regenerar las baselines
+   que W6 había commiteado. Nadie lo vio porque `pnpm e2e` no estaba en esta lista.
+   Es **exactamente** el modo de falla que W6 documentó ("la suite llevaba roja
+   desde W7 y nadie corría `pnpm e2e`"): W6 construyó el gate pero no lo metió en
+   la regla, así que el gate volvió a quedar fuera del camino. **Un gate que no
+   está en la lista de gates no existe.**
 5. **Tachadas NO se rehacen. Bloqueado por decisión de Sergio → PushNotification
    y seguir con lo desbloqueado.** Nada de cirugía inventada.
 6. **PROHIBIDO desplegar.** Lo dice el prompt de todos los loops de carril
@@ -655,6 +669,268 @@ Las tres formas de fantasma que ya aparecieron acá:
       queda **vacia** (antes tenia 1) y 0 errores de consola. Footer **mirado**: el
       subrayado honey sigue pegado al texto y la caja de 44px es invisible.
 
+- [x] **A7 · La tarjeta ya se levantaba; lo que le faltaba era la PUERTA** (2026-09-01).
+      El ítem pedía cablear `wf-hover-lift` a `clinic-services.ts`, y **medido hoy, ese
+      cableado habría sido inerte y duplicado**. Dos números, no una impresión:
+      (a) **`MOTION_CSS` no viaja a esa página**. Sus únicos consumidores son
+      `landing-logistics.ts:270` y `landing-realestate.ts:248` (+ la galería); el template
+      que dibuja las tarjetas, `landing-clinic.ts`, **no lo emite**. La clase habría salido
+      al HTML sin una sola regla detrás. (b) **`.wf-clinic-card` YA se levanta**
+      (`clinic-css.ts:393`: `translateY(-4px)` + borde + sombra, con su propia transición),
+      y lo hace mejor: sus valores salen de `color-mix()` sobre los tokens, mientras
+      `wf-hover-lift` quema `rgba(10,17,38,.35)` — una sombra ciega al tema, el mismo modo
+      de falla de W1.
+      **Lo que la primitiva sí traía y a la tarjeta le faltaba es su puerta**:
+      `.wf-hover-lift:hover{transform:none}` bajo reduced-motion (`motion.ts:77`). En
+      `clinic-css.ts` el bloque `reduce` sólo neutralizaba `[data-reveal]`, y los botones
+      entraban por `no-preference` — **la tarjeta era el ÚNICO hover con `transform` de
+      todo el archivo sin puerta** (verificado: 4 `:hover`, sólo 2 con movimiento). Puesta.
+      Se apaga el desplazamiento y **se dejan borde y sombra**, que son color y no
+      movimiento: quien pide menos movimiento no pierde la respuesta al hover.
+      **Medido en el navegador en las dos preferencias**, no razonado: con
+      `no-preference` la tarjeta da `matrix(1,0,0,1,0,-4)`; con `reduce`, `none` — y el
+      `borderTopColor` y el `box-shadow` son **idénticos byte a byte en las dos**. 0
+      errores de consola. Miradas las dos capturas: en `reduce` la tarjeta no sube.
+      **El gate se probó MUTANDO**: sacada la línea, `clinic-css.test.ts` cae. Y el segundo
+      test fija la lista de `:hover` con `translate/scale/rotate`, así que **un hover nuevo
+      sin puerta rompe rojo** en vez de pasar desapercibido — que es la lección de AUD1.
+      **Gates**: `typecheck:packages` verde, **267/267** (+2), `pnpm e2e` **103 passed /
+      0 failed**, y mirado renderizado.
+      ⚠️ **De paso, un tropiezo de método propio**: regeneré con `pnpm generate
+      dental-amanecer` a secas y el cliente **no declara `template` en su `.json`** (sólo
+      en el `.design.json`), así que salió con la plantilla genérica y la página de la
+      salud perdió las tarjetas. Rehecho con `--template landing-clinic` (19 tarjetas,
+      200). `out/` está en `.gitignore`, así que no llegó a ningún commit — pero el
+      servidor de salud sí habría servido otra página.
+
+- [x] **A8 · La primitiva de hover borrada: nadie la usaba y ninguna tarjeta la quiere**
+      (2026-09-01). Evidencia re-verificada antes de tocar: `grep -o 'class="[^"]*wf-hover-lift[^"]*"'`
+      devuelve **0 elementos en las 14 páginas de `out/`**, no solo en las dos del ítem;
+      la cadena aparecía únicamente como las reglas CSS dentro de `MOTION_CSS`, que solo
+      emiten `landing-logistics` y `landing-realestate`. **Medido el peso, como pedía el
+      ítem**: `MOTION_CSS` son 2.738 B (14,1% de logistics, 11,8% de realestate) y la
+      primitiva muerta 261 B de eso — **el peso NO era el argumento**, así que la decisión
+      se tomó por diseño, no por bytes.
+      **Se borró**, y las dos tarjetas que existen son la razón: `clinic-css` levanta la
+      suya −4px con su propia puerta de reduced-motion, y `property-cards.ts:189` zooma la
+      foto DENTRO de un marco que **a propósito no se mueve** ("the frame does not move").
+      Un lift genérico no es el hover que ninguna de las dos quiere, y encima quemaba
+      `rgba(10,17,38,.35)` — sombra ciega al tema, el modo de falla que W1/A1a ya habían
+      arreglado en otro lado. A7 además ya había medido que en `clinic-services.ts` habría
+      sido inerte y duplicada. **Darle un dueño era inventarle uno.**
+      Fuera: las 2 reglas, su neutralizador de reduced-motion (`motion.ts:77`), la entrada
+      de `MOTION_PRIMITIVES`, la línea del JSDoc y la fila de `MOTION.md`. El *por qué*
+      quedó en el JSDoc de `motion.ts` — **fuera del literal `MOTION_CSS`**, porque ahí
+      dentro el comentario viajaría como bytes a cada página de cliente, justo lo contrario
+      de lo que se estaba haciendo (lo escribí adentro primero y lo medí).
+      Verificado: diff de las dos páginas = **exactamente esas 4 líneas y nada más**
+      (23.214→22.953 B y 19.440→19.179 B; `MOTION_CSS` 2.738→2.477), `typecheck:packages`
+      verde, 267 tests verdes, `pnpm e2e` **103 pasados / 0 rojos**, y **mirado**: la página
+      renderiza entera y la tarjeta de propiedad conserva su hover medido en el navegador
+      (foto `none`→`matrix(1.04…)`, marco `none`→`none`, `.wf-hover-lift` = 0 en el DOM).
+      **Lección: una primitiva sin usuarios no se cablea para justificarla — se borra, y el
+      motivo se escribe donde el próximo autor lo lea antes de re-agregarla.**
+
+- [x] **AUD1 · Auditoría de los `[x]` + salud — el gate visual estaba 8/8 en ROJO**
+      (2026-09-01). Vuelta de escalón 2: A y B estaban todos `[x]`, así que tocaba
+      auditar lo tachado y correr la salud. **Salud**: server 4319 → 200, rama igual a
+      `origin` (`415a6f8c`), árbol limpio, `typecheck:packages` verde, `pnpm test`
+      **265/265** — el número que declaraba A6, exacto. Cero zombies de tests: los 9
+      `node.exe` vivos son los loops, el `serve-out 4319` y un `next dev` del worktree
+      `inventario-muerto` (otra mano, no se toca).
+      **Lo que la auditoría encontró**: `pnpm e2e` **fallaba 8/8** en `visual.spec.ts`,
+      los ocho baselines del panel. Ningún `[x]` mentía — los reclamos de A6, W3-W6, T29,
+      T4 y T9 se re-verificaron contra el código de hoy y **todos siguen ciertos**
+      (`preserveAspectRatio="none"` = 0 en `dashboard.ts`, `pending` declarado en
+      `dashboardPointSchema`, `r="2.5"` = 0, radial/estados/chartScale presentes,
+      `marquee.ts`/`feature-bands.ts`/variante pantalla en su lugar). Lo que faltaba era
+      un **gate no corrido**.
+      **Diagnosticado midiendo, no mirando la captura** (que es cómo A5 se abrió como
+      fantasma): (a) `git log` desde el commit que trajo las baselines (`353b0c21`, W6) →
+      **un solo commit toca el render**, `24f5cbea` (A6); B1/B2 son playbook y T9/T4/T29
+      son `blocks`, no el panel. (b) diff fila por fila baseline↔actual: la página **mide
+      7px menos** y la primera fila distinta es **y=240**, la fila de KPIs. (c) barrido de
+      desplazamiento por bandas de 100px: **todas las bandas de y=300 para abajo calzan
+      exactas con un corrimiento de 7px** (0-24 px de residuo, antialiasing), y la única
+      banda con cambio real es **y=200-299**. O sea: el contenido no cambió, se corrió —
+      y se corrió por donde A6 dijo que iba a correrse.
+      **Veredicto: las baselines estaban viejas, el código no roto.** Regeneradas las 8,
+      **miradas** en claro y oscuro (demo y `dashboard-edge`) antes de commitearlas: el
+      panel completo, el negativo colgando bajo el cero, las 90 barras dentro del viewBox,
+      el gauge en 0% sin arco, skeleton/error/vacío y el eje cerrando en 350. `pnpm e2e`
+      **103 passed / 0 failed**.
+      **La causa raíz NO es A6: es la regla 4**, que pedía typecheck + unit + mirar y no
+      `pnpm e2e`. A6 cumplió las tres y midió 22 veces en el navegador. Arreglado ahí
+      arriba, que es donde lo lee la próxima vuelta — parchear solo esta corrida dejaba el
+      agujero abierto para el siguiente cambio de geometría.
+      **Lección: W6 construyó el gate pero no lo metió en la lista de gates, y por eso el
+      gate volvió a quedar fuera del camino en 2 vueltas.** Construir el gate es la mitad;
+      la otra mitad es que sea imposible saltearlo.
+      ⚠️ **Fuera de zona, para quien corresponda**: el chequeo de arranque de los loops
+      manda comparar `list_scheduled_tasks` contra `hermes-content/docs/cola/loops.md` y
+      **ese archivo no existe** (la carpeta solo tiene `contenido.md`). Hoy no hizo daño —
+      los 5 loops activos están registrados y `enabled: true` — pero el chequeo no puede
+      comparar contra nada, así que hoy no es una red: es un `ls`. Es `hermes-content/`,
+      zona prohibida de este carril.
+
+- [x] **AUD2 · Auditoría de los `[x]` que AUD1 no tocó + salud** (2026-09-01). Segunda
+      vuelta de escalón 2 (A y B siguen todos `[x]`). **Salud**: server 4319 daba **000**
+      → relanzado `serve-out.mjs 4319`, **200** verificado; rama == `origin`
+      (`5a3e8dc0`); árbol limpio; `typecheck:packages` verde; `pnpm test` **265/265**;
+      **`pnpm e2e` 103 passed / 0 failed** — las baselines que AUD1 regeneró aguantan,
+      el gate ya está adentro de la regla 4 y ya se corre. Dos `node.exe` vivos (el
+      server recién lanzado y otro loop): cero zombies.
+      **Auditados los 9 `[x]` que AUD1 dejó afuera** (cubrió A6, W3-W6, T4/T9/T29).
+      Ninguno miente; los nueve siguen ciertos contra el código de HOY:
+      **A1a** `SERIES_THEME` en `packages/templates/src/dashboard.ts:648` con el orden
+      exacto que declara (aqua→blue→orange→violet→yellow→magenta) y pares light/dark
+      propios, emitidos como `--wf-series-N` por `seriesVars()`, no hex en el SVG ·
+      **W1a** `packages/templates/src/font-links.ts` existe compartido y lo importan
+      `dashboard.ts` y `landing-clinic.ts` · **W1b** `--card` es
+      `color-mix(in oklab, var(--color-fg) 3%, var(--color-bg))` (`tokens/src/index.ts:42`),
+      el 3% literal · **W1c** 5 usos de `tabular-nums` en `dashboard.ts` · **W2** toda la
+      tinta de dato (barras :752, sparkline :870, spark de KPI :960/:970) es
+      `--wf-series-1`; los 11 `--color-primary` que quedan son cromo (botón, sidebar,
+      badge) · **W7** `DASHBOARD_MONO = "Spline Sans Mono"` y el par display/body
+      Bricolage Grotesque + DM Sans entra por `tipografia` del cliente
+      (`dashboard.test.ts:76`), que es lo correcto: el template no quema la marca.
+      Las secciones agente (:240) y notas (:332) existen · **A1c**
+      `lightenUntilLegible()` en `tokens/src/index.ts:116` y `DARK_FG` sólo de último
+      recurso para acromáticas · **A1d** `margin-block: auto` en `dashboard.ts:1719`
+      y `:1997` · **A4** `color-scheme: light` en `dental-premium/src/app/globals.css:9`,
+      `min-height: 44px` en `site.css`, y `spotlight|mousemove|pointermove` = **0**
+      ocurrencias · **B1/B2** el playbook tiene §9 (ganadero) y §10 (IA), el umbral
+      dental dice **HSV <25%** con el modelo declarado, y las dos cosechas están en
+      `data/references/design-sources/2026-08-31-cosecha-rubros-{sin-ancla,flacos}.md`.
+      No auditable acá: **B3**, que se declara *solo local* (la skill vive fuera del repo).
+      ⚠️ **Corrección a la nota de AUD1**: `hermes-content/docs/cola/loops.md` **SÍ
+      existe** — commit `f7496282` del 2026-08-31 23:36, presente en **`origin/main`**.
+      AUD1 lo midió con un `ls` dentro de este worktree, cuya rama arranca en `415a6f8c`
+      y es **anterior** al commit; el `main` local también está atrasado. O sea: el
+      chequeo de arranque **sí es una red**, y hoy comparó de verdad (5 activos
+      registrados y `enabled: true`; `web-factory-salud` y `cerrar-y-revisar-web-factory`
+      siguen apagados a propósito y se dejan así). **Lección: "el archivo no existe"
+      medido desde un worktree viejo es una rama vieja, no un archivo faltante — se
+      verifica contra `origin/main`, no contra el árbol propio.**
+
+- [x] **AUD3 · Auditoría de A2/A3/A5 — los únicos `[x]` que nadie había mirado, y tres
+      pendientes que se habían perdido** (2026-09-01). Tercera vuelta de escalón 2 (A y B
+      siguen todos `[x]`). **Salud, los cuatro puntos, corridos**: server 4319 → **200**
+      (no hizo falta relanzarlo); rama == `origin` (`7e5b486a`); árbol limpio;
+      `typecheck:packages` verde; `pnpm test` **265/265**; `pnpm e2e` **103 passed / 0
+      failed** (7 skipped) — el gate visual aguanta por segunda vuelta seguida; dos
+      `node.exe` vivos, los dos arrancados hoy (14:27 y 14:50: el server y otro loop),
+      **cero zombies**.
+      **El hueco de la auditoría**: cruzando los IDs tachados contra lo que AUD1 y AUD2
+      dicen haber cubierto, **A2, A3 y A5 no estaban en ninguna de las dos listas**. AUD1
+      cubrió A6/W3-W6/T4/T9/T29 y AUD2 los otros nueve; AUD2 se declaró completa ("los 9
+      que AUD1 dejó afuera") sin notar que la resta no cerraba. Auditados ahora:
+      **A5** cierto — el test que MIDE existe con el nombre exacto que declara
+      (`tests/e2e/dashboard.spec.ts:56`) y el artefacto del `fullPage` está documentado en
+      el docblock de `tests/e2e/visual.spec.ts:23` · **A3** cierto — `apps/ferreteria-sur/`
+      existe con su `src/app/` completo (`page.tsx`, `sections.css`, `site.css`, `api/`) ·
+      **A2** cierto en lo sustantivo: las 4 sub-técnicas están donde dice, y de T34 se
+      verificaron las tres referencias una por una — `motion.ts:53`, `:77` y `:157`, las
+      tres exactas.
+      ⚠️ **Un dato de T34 envejeció**: decía *"`grep wf-hover-lift` solo devuelve
+      motion.ts"*, y hoy también devuelve `motion-demo.html` y `MOTION.md`. La conclusión
+      no cambia (ninguno es un bloque) pero el número que la sostenía sí: por eso A7 entra
+      con el grep **acotado a `packages/*/src/`**, que es el que mide lo que la frase
+      quiere decir.
+      🔴 **El hallazgo que vale**: **tres pendientes reales estaban declarados "anotados"
+      dentro de la prosa de ítems ya cerrados, y nunca fueron línea de cola de nadie** —
+      el cableado de `wf-hover-lift` (T34, *"otra tarea, anotada"*) y los dos de A3
+      (*"pendientes anotados, no bloqueantes"*: el CTA del hero fuera de pantalla a
+      1440×800 y First Load 192 kB contra un presupuesto de 150 kB). `grep hover-lift
+      docs/LOOP_COLA.md` devuelve **sólo la frase que dice que está anotada**. Es el modo
+      de falla espejo del trabajo fantasma que esta cola persigue: no es trabajo inventado
+      que no existe, es **trabajo real que existe y se evaporó al escribirlo dentro de un
+      `[x]`**. Un ítem tachado se deja de leer — ahí adentro, un pendiente está enterrado,
+      no anotado. El de hover-lift, re-medido hoy, entra a A como **A7**; los dos de A3
+      cargan evidencia del 31-ago sin re-verificar, así que van a **Sin verificar**, que
+      es donde la REGLA DE EVIDENCIA los manda y que hasta hoy se nombraba sin existir.
+      **Regla nueva: un pendiente que aparece mientras cerrás un ítem se escribe como
+      línea de cola en el mismo commit que lo tacha.** "Anotado" dentro de un `[x]` no es
+      anotado.
+      **Gates**: ítem 100% de `docs/` (no toca `packages/` ni superficie renderizada);
+      aun así se corrieron los cuatro de la regla 4 y están todos verdes, arriba.
+
+- [x] **AUD4 · Auditoría de A7/A8 (los `[x]` que AUD3 no podía cubrir) — el archivo que
+      dos docs daban por reemplazado seguía en disco** (2026-09-01). Cuarta vuelta de
+      escalón 2 (A y B siguen todos `[x]`; A7 y A8 nacieron después de AUD3, así que eran
+      los únicos sin auditar).
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo); rama
+      == `origin` (`684fd863`); árbol limpio; `typecheck:packages` verde; `pnpm test`
+      **267/267**; `pnpm e2e` **103 passed / 0 failed** (7 skipped) — el gate visual
+      aguanta la tercera vuelta seguida.
+      **A7 cierto, verificado contra el código de hoy**: la puerta existe en
+      `clinic-css.ts:775` (`.wf-clinic-card:hover { transform: none; }` dentro del bloque
+      `prefers-reduced-motion: reduce`) con su porqué escrito al lado, y el hover que
+      neutraliza sigue en `:393`. **A8 cierto en lo que declaró**: `grep wf-hover-lift` en
+      `packages/*/src/` devuelve **cero reglas** — solo las tres líneas de prosa que
+      explican el borrado, que es la lápida que el propio ítem quería dejar.
+      🔴 **Lo que A8 no vio, y es el hallazgo**: `packages/blocks/motion-demo.html` seguía
+      en disco con **su propia copia a mano de `MOTION_CSS`** (líneas 15 y 17) y **tres
+      tarjetas usando `.wf-hover-lift`** — el ÚNICO lugar del repo que todavía servía la
+      primitiva borrada. Y no es que faltara actualizarlo: **dos documentos ya lo daban por
+      muerto en pasado**. `MOTION.md:12` dice que la galería *"replaced `motion-demo.html`,
+      a hand-kept copy of `MOTION_CSS` that had already drifted"*, y `demo.ts:3` se define
+      a sí mismo como lo contrario de *"a hand-kept mirror like the old motion-demo.html,
+      which desynced"*. O sea: se lo declaró reemplazado, se escribió el porqué **dos
+      veces**, y no se lo borró — así que el archivo se quedó drifteando exactamente como
+      decía su epitafio, y AUD3 ya lo había rozado (*"hoy también devuelve
+      `motion-demo.html`"*) sin sacar la conclusión.
+      **Borrado** (7.716 B). No lo referencia nadie: `grep motion-demo` en `package.json`,
+      `packages/*/package.json` y `scripts/` da vacío; las únicas menciones que quedan son
+      las dos frases en pasado, que ahora son ciertas.
+      **Verificado que el reemplazo está vivo, no supuesto**: `pnpm blocks:demo` construye
+      `out/blocks-demo/index.html` (**28 bloques · 5 huérfanos · 12 por construir**), su
+      tabla de primitivas se lee de `MOTION_PRIMITIVES` y lista `wf-reveal`,
+      `wf-clip-reveal`, `wf-scale-in` — **`wf-hover-lift` aparece 0 veces**. Abierta y
+      **mirada** en el navegador: renderiza.
+      **Nodos**: 8 `node.exe` vivos, **cero zombies de tests míos**. Uno es mi server 4319;
+      los otros siete son de otros carriles (el túnel de onia-center y **dos `next dev` del
+      worktree `hero-en-home` sobre `apps/onia-platform`**, puertos 3411 y 3477, vivos hace
+      ~2 h). No se tocan: `apps/onia-platform` es zona prohibida de este carril.
+      **Lección: "lo reemplacé" no es "lo borré". Un archivo que dos docs declaran muerto y
+      sigue en disco no es historia, es una segunda fuente de verdad — y esta servía CSS.**
+      **Gates**: `typecheck:packages` verde, **267/267**, `pnpm e2e` **103/0**, y mirado
+      renderizado.
+
+- [x] **AUD5 · Auditoría de AUD4 + salud — el borrado dejó una cita apuntando a código
+      que ya no existe** (2026-09-01). Quinta vuelta de escalón 2 (A y B siguen todos
+      `[x]`; AUD4 era el único `[x]` que nadie había auditado, porque nació en la vuelta
+      anterior).
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo);
+      rama == `origin` (`aa7e786c`); árbol limpio; `typecheck:packages` verde; `pnpm test`
+      **267/267**; `pnpm e2e` **103 corridos, 0 fallados** (100 pasados + 3 flaky + 7
+      skipped).
+      ⚠️ **Los 3 flaky son de la máquina, no del código**, y se puede probar: los tres
+      murieron con `page.goto: Page crashed` (Chromium se cae al navegar, no una
+      aserción que falle), y pasaron en el reintento. La causa está en el listado de
+      nodos: de los **8 `node.exe` vivos**, **6 son del worktree `hero-en-home`** — dos
+      `next dev` sobre `apps/onia-platform` (3411 y 3477) con sus hijos. Otra mano, zona
+      prohibida: no se tocan. Cero zombies míos (el único mío es el `serve-out 4319`).
+      **AUD4 cierto, verificado contra el disco de hoy**: `packages/blocks/motion-demo.html`
+      **no existe**; `grep motion-demo` en `packages/`, `scripts/`, `package.json` devuelve
+      **solo las dos frases en pasado** (`demo.ts:3`, `MOTION.md:12`) y las líneas de esta
+      misma cola — cero referencia funcional; `grep wf-hover-lift` en `packages/*/src/`
+      da **cero reglas CSS**, solo prosa.
+      🔴 **Lo que el borrado dejó atrás**: `clinic-css.test.ts:11` justificaba el test
+      citando *"`.wf-hover-lift:hover{transform:none}` bajo reduced-motion
+      (**motion.ts:77**)"* — y esa primitiva la borró A8. Hoy `motion.ts:77` es la regla
+      de reduced-motion de `wf-reveal`/`wf-clip-reveal`/etc.: **la cita no envejeció mal,
+      ahora apunta a otra cosa**, que es peor que apuntar a nada. Reescrito el comentario
+      para que diga lo que hoy es cierto: la primitiva ya no está y **este test es el
+      único lugar que guarda esa puerta**.
+      **Lección: borrar deja huella en la prosa que justificaba lo borrado.** AUD4 revisó
+      quién *importaba* el archivo (`package.json`, `scripts/`) y estaba bien; lo que no
+      revisó es quién lo *citaba con número de línea*. Un `grep` del nombre encuentra lo
+      primero; el segundo hay que buscarlo por el símbolo.
+      **Gates**: `typecheck:packages` verde, **267/267**, `pnpm e2e` 103/0. El cambio es
+      un comentario en un test: no dibuja un solo píxel, así que las baselines no se
+      tocan.
+
 ## Cerrado — carril B (análisis)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
@@ -775,6 +1051,23 @@ al escribirlo dentro del texto de un ítem ya cerrado**. Cinco de los siete íte
 salieron de ahí: vivían como "Anotado, NO tocado" o "Pendientes anotados" bajo un `[x]`, donde
 ningún loop los podía leer como tarea. **Regla: lo que no se hizo no se anota en el ítem que se
 cierra; se abre como línea propia en `## Ahora` antes de marcar el `[x]`.**
+
+## Sin verificar (sospechas: evidencia vieja, no re-medida)
+
+> La REGLA DE EVIDENCIA nombra esta lista desde el principio y **no existía**: una sospecha
+> sin lugar donde caer termina como línea de "por hacer" o, peor, enterrada en un `[x]`.
+> Nada de acá se trabaja sin re-medirlo primero; si la medición no lo confirma, se tacha
+> como fantasma y se dice por qué.
+
+- [ ] **El CTA del hero de `ferreteria-sur` quedaría fuera de pantalla a 1440×800.**
+      Medido por A3 el 2026-08-31 ("entra por 82px a 1440×900"); **no re-verificado hoy**.
+      Para tomarla hay que construir la app y medir a 1440×800 en el navegador.
+      ⚠️ Ojo de carril: `apps/ferreteria-sur/` **no está en la zona propia** que declara la
+      regla 3 (que nombra `apps/dental-premium`) ni en su lista de prohibidos — la construyó
+      este carril en A3, pero el dueño hay que confirmarlo antes de tocarla.
+- [ ] **First Load de `ferreteria-sur` en 192 kB contra un presupuesto de 150 kB.**
+      Misma fuente y misma advertencia: número del 31-ago, sin re-medir. Se re-mide con el
+      build, no se estima. Mismo ojo de carril que el anterior.
 
 ## Hechas (no rehacer)
 
