@@ -774,6 +774,54 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Lo que falta, y no es zona de este carril:** el deploy. Contra `onia-landing`, las cuatro
       siguen sin imagen hoy. Publicar lo decide Sergio.
 
+### Encontrado el 2026-09-02 auditando el `[x]` de las capturas literales — ARREGLADO en la misma vuelta
+
+- [x] **El guard de "cero capturas del sistema" miraba SÓLO `(sitio)`: era ciego a 4 de las 16
+      rutas publicadas y a TODO lo compartido (cabecera, pie, las secciones).** Es la
+      **tercera** vez que este mismo guard falla, y las dos anteriores ya estaban escritas en su
+      propio comentario. Peor: el agujero es el MISMO que el bloque de tarjetas sociales de ese
+      archivo se había tapado horas antes leyendo el sitemap (`8ec1c9e3`) — los dos guards viven
+      en `web-factory/apps/onia-platform/src/app/(sitio)/forma.test.ts`, uno arreglado y el otro
+      no.
+      **Cómo apareció:** auditando el `[x]` de las 6 capturas literales. Ese ítem se verificó
+      mirando `/` y `/empezar`, y las dos estaban bien; lo que nadie preguntó es **qué mira el
+      test que lo sostiene**. `fuentesDelSitio()` arrancaba el walk en el directorio `(sitio)`,
+      así que `/servicios/marketing-ia`, `/servicios/consultoria`, `/terminos` y `/privacidad`
+      —que viven fuera de ese grupo de rutas— quedaban fuera, junto con
+      `web-factory/apps/onia-platform/src/components/site-header.tsx`, su pie, sus secciones y su
+      carpeta legal. Una captura en la cabecera sale en las **dieciséis** páginas a la vez y el
+      guard pasaba verde.
+      **Gate 1, medido antes de tocar nada — el agujero es real pero HOY no tiene víctima:** las
+      4 rutas de afuera sirven sólo `/brand/v2/onia-logo.svg`; el único `/og/onia-rubros.jpg` que
+      queda en `web-factory/apps/onia-platform/src/app/layout.tsx` (línea 64) está **dentro de un
+      comentario** (el guard ya los strippea); y la carpeta `landing-v1` es el archivo `/v1`,
+      noindex, con su captura a propósito. Se arregla el guard, no una pantalla: no se desmarca
+      nada.
+      **Lo que se hizo:** el walk arranca ahora en la raíz de la app (rutas + todo lo compartido) y lo único
+      excluido es el archivo `/v1`, por nombre y con su motivo escrito. Se da vuelta la misma
+      regla que ya se había dado vuelta para las carpetas de imagen: en vez de enumerar dónde SÍ
+      mirar, se mira todo y se enumera lo excluido. Una carpeta de rutas nueva queda cubierta el
+      día que se crea.
+      **Probado que MUERDE, dos veces, no que sólo pasa:**
+      - Se inyectó `"/capturas/panel-onia.png"` en la cabecera compartida —archivo al que
+        el guard viejo **no llegaba**— y la suite falló en esa línea exacta
+        (`× components…site-header.tsx no sirve una captura del producto`). Restaurado, verde.
+      - Se volvió a apuntar el walk a `(sitio)` y saltó el anti-regresión nuevo
+        (`× mira la superficie viva entera, no sólo (sitio)` → *"el walk no llega a la página de
+        términos"*), cayendo a **51** tests: exactamente el número viejo. Sin ese
+        test, angostar el walk otra vez —que suena razonable, es "la carpeta del sitio"— deja la
+        suite en verde con media superficie sin mirar.
+      **Verificado MIRANDO, no sólo con el test**, contra el contenedor `onia-landing` (no `main`,
+      no Vercel), con `channel: 'chromium'` y no `headless_shell`: `/servicios/consultoria` y
+      `/terminos` en 1440×900 — cero `<img>`, `<video>` o `<canvas>` fuera del logo SVG, cero
+      desborde horizontal, **cero errores de consola**, texto bien dibujado y sin una palabra de
+      obra.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-fuera-de-sitio-servicios-consultoria.png`
+      y `hermes-content/docs/historial/canario-visual/2026-09-02-fuera-de-sitio-terminos.png`.
+      **Gates:** `tsc --noEmit` 0 · `vitest run forma.test.ts` **99 pasando** (eran 51: el walk
+      pasó de 33 archivos a 81) · `npm run build` exit 0, 32/32 páginas.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
