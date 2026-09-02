@@ -17,7 +17,7 @@ Desde entonces ninguno había corrido. Y con la laptop apagada no corren en abso
 
 | Archivo | Qué es |
 |---|---|
-| `onia-loop.sh` | El corredor. Un solo script para los dos loops (`onia-loop.sh <id>`). |
+| `onia-loop.sh` | El corredor. Un solo script para todos los loops del VPS (`onia-loop.sh <id>`); ver el `case` para la lista vigente. |
 | `onia-tg.sh` | El reemplazo de `PushNotification`: Telegram con `parse_mode=HTML`. |
 | `pre-push` | Hook que **bloquea** un push a `main`/`master` desde el VPS. |
 | `prompts/*.md` | Los prompts portados de `scheduled-tasks/<id>/SKILL.md`, con rutas Linux. |
@@ -48,6 +48,9 @@ install -m 755 scripts/loops/onia-loop.sh scripts/loops/onia-tg.sh /root/bin/
 install -d /root/bin/loops
 install -m 644 scripts/loops/prompts/canario-visual.md /root/bin/loops/canario-visual.md
 install -m 644 scripts/loops/prompts/chatbot-cola.md   /root/bin/loops/chatbot-cola.md
+install -m 644 scripts/loops/prompts/marca-personal.md /root/bin/loops/marca-personal.md
+install -m 644 scripts/loops/prompts/onia-cola.md      /root/bin/loops/onia-cola.md
+install -m 644 scripts/loops/prompts/docs-auditoria.md /root/bin/loops/docs-auditoria.md
 
 # el hook vale para el clon y TODOS sus worktrees de una sola vez
 for r in onia-hermes onia-platform; do
