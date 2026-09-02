@@ -367,7 +367,9 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (este) es el dueño declarado.** Su propio prompt de loop lo dice desde el 2026-09-02:
       "`onia.com.bo/` y `/empezar` no tenían dueño... Vos sos ese dueño", con zona exclusiva
       `web-factory/apps/onia-platform/**`. Actualizado en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §16.
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §24 (era §16 — el radar tenía
+      **dos** secciones con ese número y ésta se renumeró el 2026-09-02; la §16 que queda es la
+      del deploy, que sigue abierta).
 
 ### Del canario visual — segunda pasada del 2026-09-01
 
@@ -570,7 +572,8 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       dudar — la promesa que cambia SÍ hay que barrerla en toda la superficie (regla de
       `CLAUDE.md`), y hasta ayer nadie había confirmado que la barrida terminó. Confirmado hoy:
       terminó, cero superficie con el vocabulario viejo.
-      **Lo que sigue sin dueño real** (ver radar §16): la ambigüedad de fondo — que
+      **Lo que sigue sin dueño real** (ver radar §24, que hasta el 2026-09-02 estaba numerada
+      §16 igual que la del deploy): la ambigüedad de fondo — que
       `app.onia.com.bo/register` es del repo `onia-platform`, otro carril — sigue viva para la
       PRÓXIMA vez que ese flag cambie. Ese archivo (`alta.ts`) ya deja el runbook de los dos
       pasos escrito para cuando pase.

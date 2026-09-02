@@ -723,7 +723,17 @@ dependencias que el lockfile no tiene, así que `pnpm install --frozen-lockfile`
 CI) **falla**. No se tocó acá porque regenerar un lockfile no es trabajo de un merge, pero es una
 bomba con temporizador para el primer pipeline que instale en limpio.
 
-## 16. ~~`/` y `/empezar` no tienen dueño~~ — RESUELTO 2026-09-02, no hay decisión
+## 24. ~~`/` y `/empezar` no tienen dueño~~ — RESUELTO 2026-09-02, no hay decisión
+
+> ⚠️ **Era la SEGUNDA sección numerada `16` de este archivo, y por eso quedó fuera de secuencia.**
+> Renumerada a 24 el 2026-09-02. El `16` legítimo es el de arriba (*"Treinta y un commits… NINGUNO
+> está desplegado"*, creado en `d1826f48` el 08-31 23:09); esta nació después, en `84ad6628`, y
+> reusó el número. **El choque no era cosmético: las DOS tenían una opción `(a)`**, así que las
+> tres citas de *"punto 16(a)"* / *"la §16"* que viven en este mismo archivo (grep `16(a)`)
+> resolvían a dos cosas distintas — el deploy del motor del bot, o "que `onia-cola` adopte la
+> home". Se renumeró ésta y no aquélla porque aquélla estaba primero, **sigue abierta**, y es la
+> que se lleva las tres citas. Se deja acá, en su lugar cronológico, en vez de moverla al final:
+> mover el texto perdería el contexto de las secciones que la rodean.
 
 La home y la página de acceso viven en `web-factory/apps/onia-platform/`: **ninguna cola las
 nombra**, y la zona de `web-factory-dev-loop` las excluye explícitamente. Son la puerta de
@@ -1281,3 +1291,49 @@ discrimina en vez de gritar a todo.
   y `S11` no se destraba nunca.
 
 **Recomendación: (a)**, y (b) ahora mismo si se quiere el icono arreglado en el próximo swap.
+
+---
+
+## 25. Los carriles auditan un árbol viejo: nadie sincroniza el worktree con `main` (2026-09-02)
+
+**Qué pasó, medido.** La vuelta de `docs-auditoria` de las 13:18 UTC arrancó en `HEAD 8a83eea7`
+—su propio último commit— y `git rev-list --count HEAD..origin/main` daba **96**. Noventa y seis
+commits de `main` que el carril no veía.
+
+**Por qué importa, con el caso concreto de esa misma vuelta.** El carril leyó `COLA.md` y el
+radar de su copia vieja, encontró el ítem *"Nadie es dueño de `/` ni de `/empezar`"* pidiéndole a
+Sergio elegir entre dos opciones, verificó en vivo que el bloqueo estaba **vencido** (el carril
+`web-venta` es el dueño desde el 2026-09-02, corre 5 veces al día y commitea arreglos reales en
+`web-factory/apps/onia-platform/`) y **estuvo a punto de escribir la corrección**. En `origin/main`
+esa sección ya decía `RESUELTO` hacía horas. Se salvó por casualidad: al ir a editar, comparó
+contra `origin/main` primero.
+
+Ese es el modo de falla exacto: **un carril cuyo trabajo es "que lo escrito sea cierto" auditando
+una copia que ya no es lo escrito.** Gasta la vuelta entera re-corrigiendo lo corregido, y peor,
+puede "arreglar" hacia atrás algo que otro carril ya dejó bien.
+
+**No es sólo de este carril.** `/root/bin/onia-loop.sh` no tiene un solo `git fetch` ni
+`git merge --ff-only` antes de trabajar (`grep -n "fetch\|pull\|rebase" /root/bin/onia-loop.sh`
+sólo devuelve comentarios). Los siete carriles arrancan donde los dejó su vuelta anterior.
+
+**Por qué no lo arreglo solo:** tocar el corredor cambia el comportamiento de **los siete
+carriles a la vez**, y el prompt de este carril prohíbe tocar otro carril. Además hay un motivo
+real para no sincronizar a ciegas: un `merge` automático puede abrir conflictos sin nadie que los
+resuelva, y `CLAUDE.md` prohíbe soltar el turno con un merge abierto.
+
+**Opciones cotizadas (todas Bs 0, trabajo de una vuelta):**
+
+- **(a) `git merge --ff-only origin/main` al arrancar, y si NO es fast-forward, seguir igual y
+  avisar por Telegram.** El `--ff-only` es la clave: nunca abre un conflicto — o adelanta limpio,
+  o falla sin tocar nada. Cubre el caso de esta vuelta (el carril no tenía commits propios sin
+  mergear: `git rev-list --count origin/main..HEAD` = 0). Toca `scripts/loops/onia-loop.sh` + su
+  copia del VPS. **Recomendada.**
+- **(b) Sólo `git fetch` + avisar la distancia**, sin mover el árbol. El carril decide qué hacer.
+  Más conservador, pero deja el trabajo de decidir en cada vuelta.
+- **(c) Que cada prompt lo haga por su cuenta.** Toca los 7 prompts en vez de 1 archivo, y se
+  desincroniza igual que todo lo demás. No recomendada.
+- **(d) Dejarlo.** Cada carril sigue auditando su foto vieja. El costo no es hipotético: ya
+  quemó parte de una vuelta.
+
+**Recomendación: (a).** Es la única que no depende de que alguien se acuerde, y por ser
+`--ff-only` no puede dejar un merge abierto — que es justo lo que `CLAUDE.md` prohíbe.
