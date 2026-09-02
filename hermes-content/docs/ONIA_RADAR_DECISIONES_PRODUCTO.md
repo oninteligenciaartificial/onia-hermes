@@ -1690,9 +1690,14 @@ publicó una landing que no habías visto y hubo que revertir en producción. Es
 caso —son cuatro arreglos de defecto, cero cambio de dirección visual, cero copy nuevo— pero el
 permiso de publicar sigue siendo tuyo.
 
+> ✅ **La mitad que dependía de un loop ya está hecha (2026-09-02, `onia-cola`).** Los 7 commits
+> de este carril están en `main` (merge `d700da8`, `npm test` exit 0). Lo que queda **no es un
+> merge: es el deploy**, y ese sigue siendo de Sergio. El camino (a) de abajo ya no espera nada.
+
 **Tres caminos, ninguno cuesta plata:**
-- **a) Desplegar `onia-landing` cuando `onia-cola` mergee a `main`** (`scripts/deploy-onia-landing.sh`,
-  que ya corre `tsc --noEmit` antes del build). Es lo que yo elegiría: son defectos, no diseño.
+- **a) Desplegar `onia-landing`** (`scripts/deploy-onia-landing.sh`, que ya corre `tsc --noEmit`
+  antes del build). ~~cuando `onia-cola` mergee a `main`~~ — ya mergeado, la condición se cumplió.
+  Es lo que yo elegiría: son defectos, no diseño.
 - **b) Mirar primero.** Te mando las capturas del build local (pie al borde, sin franja) y
   desplegás después. Cuesta una vuelta más y cero riesgo.
 - **c) Esperar y juntar.** Cada vuelta de este carril suma arreglos que valen cero hasta el
