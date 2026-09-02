@@ -141,6 +141,15 @@ function evidenciaDe(textoCrudo) {
     // pregunta en el nombre, asi que eso los descarta sin tener que adivinar.
     if (/[\s?]/.test(ruta)) continue;
 
+    // Un paquete de npm CON SCOPE no es un archivo de este repo: `@supabase/ssr`,
+    // `@anthropic-ai/sdk`, `@supabase/ssr/dist/main/index.js`. Tienen barra, asi que caian en
+    // "esto parece una ruta" y salian fantasma (medido el 2026-09-02: la cola de chatbot volvio
+    // a exit 1 por citar la libreria con la que se arman las cookies de sesion). Es el mismo
+    // gate gritando en falso que las cinco reglas de arriba, y por el mismo motivo se descarta:
+    // ningun archivo de estos repos tiene un primer segmento que empiece con `@`.
+    // Ojo: se exige que el `@` sea el PRIMER caracter. Un `correo@dominio/x` no es un scope.
+    if (/^@[a-z0-9._-]+\//i.test(ruta)) continue;
+
     // Un GLOB no es un archivo: es una ZONA. Esta cola escribe
     // `web-factory/apps/onia-platform/**` para decir de que carril es una carpeta, y
     // `public/rubros/*.webp` para nombrar un conjunto. Buscarlos en disco daba fantasma
@@ -515,6 +524,18 @@ function selfCheck() {
   ok(!r.problemas.length, 'un glob de zona no es una ruta');
   r = revisarCola('## Ahora\n- [ ] Zona `carpeta/*.webp` · `existe.png`\n', tmp);
   ok(!r.problemas.length, 'un glob con comodin de nombre tampoco');
+
+  // (1b) Un paquete de npm CON SCOPE tiene barra y no es un archivo del repo. La cola de chatbot
+  // salio en rojo el 2026-09-02 por citar `@supabase/ssr`, la libreria con la que se arman las
+  // cookies de sesion — evidencia legitima, marcada como fantasma.
+  r = revisarCola('## Ahora\n- [ ] Cookies con `@supabase/ssr` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un paquete npm con scope no es una ruta');
+  r = revisarCola('## Ahora\n- [ ] Import de `@supabase/ssr/dist/main/index.js` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'ni una ruta interna de ese paquete');
+  // Su reciproco, que es lo que impide que el carve-out afloje: el `@` tiene que ser el PRIMER
+  // caracter. Una ruta de verdad que apenas contiene un `@` sigue verificandose.
+  r = revisarCola('## Ahora\n- [ ] Roto `carpeta@vieja/no-existe.png`\n', tmp);
+  ok(r.problemas.length === 1, 'un `@` en medio NO convierte la ruta en paquete npm');
 
   // (2) `visto.texto` es una EXPRESION de JavaScript citada, no un archivo: `.texto` no es una
   // extension. Un nombre suelto sin barra solo es ruta si su extension es de las que existen

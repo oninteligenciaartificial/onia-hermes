@@ -139,12 +139,68 @@ identificarse: la fila se borró y se re-creó por fuera de la app apuntando al 
 propio comando de verificación —y a nadie que lo corriera—, que es el molde con el que S16
 venció en silencio. Hoy sale **0**.
 
+**Y el objetivo del carril se comprueba solo, entero y por HTTP:**
+
+```bash
+npm run objetivo:visible
+```
+
+Genera una sesión del dueño real de la bandeja (preguntado a la base, no hardcodeado), llama a
+`/api/bandeja` contra el host público y sale **0** si ahí hay alguien que no somos nosotros.
+Es el ÚNICO gate que mide el objetivo y no una pieza suya: `inbox:tenencia` mide la columna, que
+es el primer eslabón de cinco, y **los otros cuatro fallan devolviendo 200 con la lista vacía**.
+Hoy sale **0** — mariohassen y F, por el camino completo.
+
 **Nunca:** desplegar al VPS sin OK de Sergio · tocar otro carril (web-factory es dueño de
 `web-factory/`, producto de la cola de plataforma) · gastar plata · bajar una superficie viva.
 
 ---
 
 ## Ahora
+
+- [x] **El objetivo del carril se daba por cumplido leyendo un párrafo del 31-ago, y las cuatro
+      formas en que puede romperse devuelven 200 con la lista vacía.** Hecho el 2026-09-02,
+      auditando los `[x]` (nivel 2 de la escalera: "Ahora" no tenía ítems sin empezar y los tres de
+      "Después" no son promovibles). Archivos: `scripts/objetivo_visible.mjs` (nuevo), `package.json`.
+      **Gate 1 primero, y el `[x]` auditado resultó CIERTO hoy** — el ítem *"CERRADO el 2026-08-31
+      (novena vuelta): hay dos desconocidos en `/inbox` de producción"*. Medido por el camino real,
+      no leído: sesión del dueño → `GET https://app.onia.com.bo/api/bandeja` → **200**,
+      `sinCanal:false`, tres conversaciones — **#37 mariohassen (+59173021804)** y **#35 F
+      (+59173232758)**, más la #11 de Sergio, que es nuestra. El objetivo del carril sigue vivo.
+      🔴 **Lo que NO estaba, y es el ítem: nada lo comprobaba.** `inbox:tenencia`, construido la
+      vuelta anterior, mide `clinic_settings.chatwootInboxId` — el **primer eslabón de cinco**.
+      Entre esa columna y el ojo del dueño hay cuatro capas más, y **tres fallan mudas**, con un
+      200 indistinguible del éxito: la org sin inbox (`200 {sinCanal:true}`), el token de Chatwoot
+      del contenedor sin membresía en el inbox (`200 {conversaciones:[]}`), y `esDeInbox` filtrando
+      todas las filas (igual). La capa del token no es hipotética: **esta misma cola la nombra**
+      *"exactamente el fantasma que este carril mide"*, y se comprobó a mano UNA vez, el 31-ago.
+      **Y la receta para volver a mirarlo vivía sólo en la prosa de ese ítem cerrado**
+      (`generate_link` → `verify` → cookies con `@supabase/ssr`) — el mismo molde con el que **S16
+      venció en silencio** y **S11 se comprobaba a mano**. Ahora es ejecutable.
+      **Qué se construyó.** `npm run objetivo:visible` sale **0** si la bandeja del dueño trae al
+      menos una conversación de alguien que no somos nosotros, **1** si el objetivo se rompió
+      (nombrando cuál de las cuatro capas), **2** si no pudo medir. No hardcodea al dueño: le
+      pregunta a la base **quién** tiene el inbox 5 y entra como esa persona, así que si la bandeja
+      cambia de org el gate sigue midiendo al dueño real. Y no hardcodea a mariohassen: exige
+      "≥1 que no somos nosotros", porque un gate que exige un nombre se muere el día que esa
+      conversación se borra.
+      **Probado que MUERDE, y ahí aparecieron cuatro casos que pasaban en falso.** Siete mutaciones
+      al veredicto, las siete rojas (2 a 9 casos cada una). Las mutaciones destaparon que
+      `codigo === 1` **no alcanzaba** para `sinCanal` ni para la lista vacía: apagando cualquiera de
+      esas ramas el flujo cae igual en "SOLO NOSOTROS", que también es 1 — o sea que el caso pasaba
+      con la rama rota. Se afirma el **diagnóstico**, no sólo el código: un rojo por el motivo
+      equivocado manda a mirar el archivo equivocado. Lo mismo con el 502, que sin su rama caía en
+      "200 sin array" y devolvía 2 igual. Y el caso del `\b` del regex estaba mal elegido:
+      `"Prudencia"` no contiene `"prueba"`, así que pasaba con el regex aflojado — reemplazado por
+      el apellido real **`Testa`**, que sí contiene `test`. **Un caso que no puede fallar no es un caso.**
+      **Las cuatro salidas en vivo, contra producción:** real → **0**; host que no es el producto →
+      **2**; contenedor de base inexistente → **2**; sin `@supabase/ssr` → **2**.
+      ⚠️ **Sólo lectura, y con dos cuidados que no son adorno:** nunca abre una conversación (eso la
+      marcaría como leída en el Chatwoot de gente real), y **nunca hace `signOut`** — el perfil del
+      dueño es el mismo que usa Sergio y un signOut global lo sacaría de su propia sesión.
+      **Gates:** `npm test` completo en verde, con `test:objetivo-visible` (30 casos) cableado a la
+      cadena — verificado **en rojo primero**: `test:guards-cableados` mordió con *"estos tests
+      existen y NO los corre nadie: test:objetivo-visible"* antes de cablearlo.
 
 - [x] **La bandeja del objetivo ya se había dado vuelta sola una vez, y lo único que la vigilaba
       era un comando escrito en un párrafo.** Hecho el 2026-09-02, auditando los `[x]` (nivel 2 de
