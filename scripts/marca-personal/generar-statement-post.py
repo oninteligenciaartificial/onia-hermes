@@ -6,6 +6,9 @@ Tipografia de marca: Archivo variable (claim wght900 wdth62 word-spacing .09em)
 + Geist Mono para el handle. Sombra de icono mas rica: ganadora del experimento
 A/B/C 02-sep (experimento-textura-statement.py) -- el grano sutil se descarto,
 tripicaba el peso del PNG sin verse a esta escala; ver FICHA.md.
+Etiqueta bajo icono: Geist Mono mayuscula gris, ganadora del experimento A/B 02-sep
+(experimento-label-icono-statement.py) sobre sans regular negra -- no compite con
+el claim y unifica con el lenguaje del marco spec-sheet.
 Salida: hermes-content/carousels/out/statement-mi-oficina-entera.png"""
 import subprocess, tempfile, shutil
 from pathlib import Path
@@ -53,7 +56,7 @@ body{{background:#F6F4F1;font-family:'Archivo',sans-serif;overflow:hidden}}
 .fila{{display:flex;gap:130px;justify-content:center;align-items:flex-end}}
 .item{{display:flex;flex-direction:column;align-items:center;gap:22px}}
 .item img{{width:230px;height:230px;object-fit:contain;filter:drop-shadow(0 30px 45px rgba(0,0,0,.25))}}
-.label{{font-size:34px;font-weight:400;color:#0A0A0A;letter-spacing:-0.01em}}
+.label{{font-family:'Geist Mono',monospace;font-size:24px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#8E8E8E}}
 .centro{{text-align:center;display:flex;flex-direction:column;gap:14px}}
 .claim{{font-size:132px;font-weight:900;font-variation-settings:'wdth' 62;color:#0A0A0A;
   word-spacing:.09em;line-height:1}}

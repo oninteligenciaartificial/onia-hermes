@@ -135,3 +135,14 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
 - [x] **Historias-quiz** (02-sep): formato ingenierobinario adaptado a marca —
       `generar-historia-quiz.py`, 3 historias listas con zona para el sticker de
       encuesta; opciones y respuestas en SEMANA1. La interacción es el poll de 1 tap.
+- [x] **Label de ícono en statement-3d-minimal** (02-sep, tanda intensiva) —
+      A/B renderizado y comparado en `carousels/out/experimento-label-icono-statement/`
+      sobre la pieza real "16 años. 4 herramientas. 1 empresa.": **A** sans regular
+      negra (la que había) vs **B** Geist Mono mayúscula gris. **Gana B** — no compite
+      en peso visual con el claim (A usaba el mismo negro pleno) y unifica el
+      lenguaje con el marco spec-sheet y el handle. Aplicado a
+      `generar-statement-post.py` (regenerado, mismo PNG) y al generador nuevo
+      `generar-statement-16anos.py`. FICHA.md actualizada. **Hallazgo extra:** el
+      mismo experimento destapó que con un claim de 2-3 líneas los íconos/gaps que
+      traía el generador original invadían el handle — bug real de layout, corregido
+      antes de publicar (íconos 230px→196px, gaps más chicos).
