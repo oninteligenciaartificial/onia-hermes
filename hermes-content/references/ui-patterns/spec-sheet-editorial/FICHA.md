@@ -14,12 +14,17 @@ Anatomía de la portada:
 |---|---|---|
 | Marco spec-sheet | Header y footer con metadata técnica fake en mono ("GRID SYSTEM 2.0 · UNIT: PX · VERSION 1.0 · BY ...", "TECHNICAL SPEC / COLOR: #F2571F / LAYOUT NOTES...") | Geist Mono ≤30px MAYÚSCULA — encaja EXACTO con la micro-etiqueta del sistema de marca |
 | Título 2 niveles | Línea 1 display condensada negra + línea 2 sobre **bloque de color** (highlight bar naranja) | Archivo wdth 62 wght 900 + bloque #00C661 (comunidad) o ink (marca personal) |
-| Mascota 3D | Personaje toy (cabeza cubo naranja, hoodie, headphones) junto a una impresora escupiendo billetes — literaliza la metáfora del título | Generable con Higgsfield (imagen ≤0,12 cr); definir mascota propia ANTES de usar (pendiente §6 BASE) |
-| Fondo | Papel envejecido off-white, estética brutalist print | Nuestro F7F7F7 + grano sutil (pendiente texturas §6) |
+| Mascota 3D | Personaje toy (cabeza cubo naranja, hoodie, headphones) junto a una impresora escupiendo billetes — literaliza la metáfora del título | 3 candidatos generados 02-sep en `carousels/out/experimento-mascota-onia/` (cubo/blob/chip), gana A-cubo — **esperando OK de Sergio**, ver §6 BASE_CONTENIDO |
+| Fondo | Papel envejecido off-white, estética brutalist print | Nuestro F7F7F7 plano — el grano sutil se probó (02-sep) y se descartó: triplicaba el peso del PNG sin verse a esta escala. Ganó sombra de ícono más rica en su lugar (ver `statement-3d-minimal/FICHA.md`) |
 | Promesa concreta | Pill bordeada abajo: "7 repos gratis que ya se venden como servicio" | Ya usamos pill — copiar la promesa NUMÉRICA |
 | Caption | Lista numerada 01→07 `herramienta → qué hace`, hook "Claude no te hace ganar plata. Lo que le enchufás, sí." | Formato de caption para nuestros carruseles de herramientas |
 
 Lo que NO copiamos: su naranja, su mascota, su firma "by francisco carosia".
+
+**Experimento A/B corrido 02-sep** (`scripts/marca-personal/experimento-marco-specsheet.py`,
+salida en `carousels/out/experimento-marco-specsheet/`): portada sin marco vs. con marco
+spec-sheet sobre la misma pieza real (portada de venta del chatbot). **Gana CON marco** —
+más distintivo, cero texto cortado. Ya aplicado en `generar-carrusel-chatbot.py`.
 
 ## 2 · Historia-quiz (ingenierobinario)
 
