@@ -131,32 +131,29 @@ Hoy sale **0** — S9 y S10 medidos vivos, los dos siguen bloqueados.
 
 ## Ahora
 
-- [ ] **De las 14 filas de "Bloqueado en Sergio" sólo DOS se comprueban solas, y la única de las
-      otras doce que una máquina puede medir es S11 — le falta su verificador.** El gate nuevo
-      (`scripts/bloqueos_vencidos.mjs`) corre hoy S9 y S10 e imprime las otras doce como *"sin
-      verificador mecánico"*. Once de ellas esperan un chip, un trámite de banco, horas de la
-      agenda de Sergio o una decisión suya: **no hay nada que medir, y está bien que sea así.**
-      **S11 no.** Su "hecho" es un hecho del mundo y ya está escrito en su propia fila: el build
-      que corre en producción tiene que dejar de contener `assignment_turned_in`. Hoy eso se
-      comprueba a mano y sólo cuando alguien se acuerda — que es exactamente la condición con la
-      que **S16 venció en silencio**. Y S11 es la fila más cara para que eso pase: es la que ya
-      estuvo tres veces mal escrita, y la única cuyo destrabe es un swap que Sergio puede hacer en
-      minutos.
-      **Qué hacer:** `npm run s11:desplegado` — le pregunta al contenedor `onia-platform` del VPS
-      si su build publicado todavía trae el nombre crudo del icono, y sale **0** cuando ya no.
-      Molde exacto: `hermes-content/deploy/vps-ops/bot/espejo-check.mjs`, que ya mide el VPS por
-      SSH **sin tocarlo** y deja fuera de `npm test` la medición viva (sólo entra su
-      `--self-check`). Después se declara en la fila S11 de
-      `hermes-content/docs/cola/chatbot.md` con la marca `**Verificador:** … → 0`, y el gate lo
-      levanta solo — no hay que tocar `scripts/bloqueos_vencidos.mjs`.
-      ⚠️ **Medir el contenedor que CORRE, no el host ni el repo.** Es la trampa que este carril ya
-      pagó con el bot: el motor vivía en tres lugares y se verificó el equivocado.
-      **Hecho =** con el defecto vivo sale **1** nombrando el icono; con él resuelto, **0**. Y
-      `npm run bloqueos:vencidos` pasa a correr **tres** verificadores en vez de dos.
+- [x] **La guarda de entrada de `espejo-check.mjs` reventaba al importarlo, y el molde ya se había
+      copiado a otro gate.** Hecho el 2026-09-02, en la misma vuelta en que se encontró.
+      Archivos: `hermes-content/deploy/vps-ops/bot/espejo-check.mjs`, `scripts/s11_desplegado.mjs`.
+      La guarda armaba la URL a mano —`new URL("file://" + process.argv[1])`— y con
+      `node -e "import(...)" <arg>` el `argv[1]` es el **argumento**, no una ruta: tira
+      `ERR_INVALID_URL` y el módulo no se puede importar. Apareció al probar el verificador nuevo
+      de S11, que había copiado esa guarda de acá; reproducido después sobre el original. Va con
+      `pathToFileURL`, que además resuelve solo el escapado y las barras invertidas, así que se
+      cae el `replace(/\\/g,"/")` a mano. Verificado que sigue corriendo como programa —**S9
+      depende de él** y sigue dando 1— y que ahora sí se importa. Suite: **21/21**.
 
-> Los tres de "Después" no suben, y no es trámite: ninguno está frenado por código. El
+⚠️ **Y con esto "Ahora" se queda sin ítems sin empezar: el carril está sin combustible.** Los tres
+de "Después" no son promovibles y no es trámite — el del disco es de la máquina Windows de Sergio
+y el propio ítem dice que no lo arregla este carril; la data QA es un "no borrar todavía"
+deliberado; el QR espera al banco (**S2**). Las 14 filas de "Bloqueado en Sergio" esperan a
+Sergio, y las tres que una máquina puede medir ya se miden solas. Lo que destraba el carril es
+**S14** (darle org al inbox 4: hay seis conversaciones de desconocidos que nadie puede abrir, cinco
+sin teléfono ni correo) y **S12** (los dos horarios de demo, sin los cuales el bot contesta una
+vez y se calla). Los dos son decisión de Sergio, no código.
+
+> Los tres de "Después" siguen sin subir, y no es trámite: ninguno está frenado por código. El
 > disco es de la máquina Windows de Sergio y el ítem mismo dice que no lo arregla este carril —
-> medido hoy en el VPS, que es donde corre este loop: 72 % de uso, 56 GB libres y **2** worktrees
+> medido en el VPS, que es donde corre este loop: 72 % de uso, 56 GB libres y **2** worktrees
 > de `onia-platform`, no 30. La data QA es "no borrar todavía". El QR espera al banco (**S2**).
 
 ---
@@ -227,7 +224,7 @@ Hoy sale **0** — S9 y S10 medidos vivos, los dos siguen bloqueados.
   ```
   Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) ✅ **Sumado el 31-ago (10ª vuelta) — verificación PREVIA, que antes no existía:** `npm run campanas:vivas` mide **desde la calle** que el documento cubra las frases que onia.com.bo manda **hoy**. Si sale 1, el `scp` publicaría un documento que ya no matchea y no hay que hacerlo. Corrido hoy: **0** (5 de 5 cubiertas). No reemplaza al `grep -c campanas` de después — ese mide el VPS, este mide el documento. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): S9 volvió a quedar corto, y hacerlo como dice HOY deja el motor llamando a una función que no existe.** Desde que se escribió "viajan TRES archivos", el espejo sumó una feature entera —el bot manda el link de la agenda pública de la org en vez de derivar— repartida en **cinco** archivos. Medido contra `/opt/onia/bot` real, no leído: `espejo-check` nombra ahora `config.mjs`, `intents.mjs` y `preview-route.mjs` **además** de `knowledge.mjs` y `recepcionista.mjs`. Y el acople es duro: el `recepcionista.mjs` del espejo llama a `intents.wantsToBook()` y a la plantilla `R_AGENDA`, y **ninguna de las dos existe en el VPS** (su `intents.mjs` exporta `wantsToOrder` pero no `wantsToBook`; su `config.mjs` tiene cero `R_AGENDA`). Probado ejecutando, no por grep: copiado el subconjunto que S9 mandaba a un `/tmp` con el resto del VPS, `intents.wantsToBook` da `undefined` y llamarlo tira `TypeError: intents.wantsToBook is not a function`. **La lista vigente de S9 = `bot-engine.mjs`(ya en sync) + `config.mjs` + `intents.mjs` + `knowledge.mjs` + `preview-route.mjs` + `recepcionista.mjs` + el documento `knowledge.json`** — y la manda el gate, no este párrafo: `espejo-check.mjs` ahora imprime `VIAJAN JUNTOS` con los acoples calculados en vivo. Correr el gate ANTES del `scp` y copiar lo que diga; esta lista envejece, la del gate no. **Verificador:** `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → 0 |
 | S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual. Repara **DIEZ** `installation_configs` que Chatwoot reconcilia solo (`Internal::ReconcilePlanConfigService`, leído del YML del propio contenedor): el cron que hoy corre (`/root/bin/chatwoot-brand-onia.sh`, cada hora al minuto :17) sólo reaplica 3 de las 9 que le tocan (DISPLAY_MANIFEST queda afuera a propósito: su valor de fábrica es el que se quiere) | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Se mide **desde la calle, sin VPS ni SSH**: `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`, 8 tests) lee `window.globalConfig` del login público — antes de que existiera este gate, la reversión del 16-ago vivió quince días sin que nadie la viera, porque el único chequeo vivía dentro del contenedor. **Re-verificado en vivo el 2026-09-02: sigue en `REVERTIDAS 3/9`, exit 1**, sin cambio desde el 16-ago (ya se vigiló así ocho vueltas seguidas entre el 31-ago y hoy, siempre con el mismo resultado). **Después del `scp` y la corrida manual, tiene que salir 0.** **Verificador:** `npm run marca:chatwoot` → 0 |
-| S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes.** El arreglo es el commit **`22fd088`** de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`. ✅ **Ya está en `origin/master`** desde el merge `503af44` (2026-09-02 12:38 UTC), así que **el deploy hoy SÍ lo alcanza** — durante horas esta fila decía lo contrario y por eso no se destrababa. **Falta sólo el swap**, y el defecto sigue vivo en producción: el contenedor `onia-platform` lleva 15 h arriba (anterior al merge) y su build todavía tiene `assignment_turned_in` — medido con `docker exec … grep -rl` sobre `/app/.next`, no leído. Esta fila se quedó corta tres veces (el commit no existía · existía sin mergear · mergeado pero la fila decía que no); por eso la lista ya no la mantiene este párrafo: `npm run deploy:alcanzable` se lo pregunta a git, y hoy sale **0** | Es un deploy del producto, y ningún deploy sale sin su OK | Que el ítem "Requerimientos" del menú dibuje su icono. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): esta fila mandaba a desplegar un commit que NO EXISTE.** Decía *"commit `4f86381` (rama `carril/chatbot-v68-friccion`)"* y *"ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`)"*. Medido, no leído: después de `git fetch --all --prune` contra GitHub, `git log 4f86381` da `unknown revision`, **no hay ninguna rama** que matchee `friccion` ni `v68` en las 39 remotas, y el archivo del guardia **nunca fue agregado en ninguna rama**. Ese trabajo quedó en el disco de Windows y nunca se pusheó. Un bloqueo que le pide a Sergio desplegar la nada es peor que un fantasma: no se destraba nunca. **El defecto SÍ era real y seguía vivo**, verificado RENDERIZANDO el `.woff2` que se publica (Chromium, no grep): `assignment_turned_in` mide **20em** —el texto crudo— contra **1em** de los otros 34 iconos del menú. Causa medida: el icono entró el 30-ago (`ab9e0de`) y la fuente subseteada es del 29-ago (`917adca`), así que el glifo nunca viajó; y `scripts/subset-iconos.mjs`, que corre dentro del `build`, **se rinde en silencio y sale 0** si falta `pyftsubset` (reproducido acá). **Rehecho de cero en `22fd088`:** el ítem usa `task_alt`, que ya está en el subset (no depende de que exista Python en el entorno de build), más el gate `npm run gate:iconos` (`scripts/iconos-en-la-fuente.mjs`) que renderiza los 35 iconos declarados contra la fuente publicada **sin sesión ni app levantada** — el hueco exacto por el que se coló, ya que `e2e/iconos.spec.ts` sólo mira `/`, `/login` y `/register`. Rojo por el motivo correcto antes, verde después (35/35). Gates: `tsc` limpio · **2441** tests · `eslint` 0 errores. **Verificación post-deploy:** abrir `/inbox` y mirar el menú — el ítem "Requerimientos" tiene que dibujar un tilde, no una palabra |
+| S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes.** El arreglo es el commit **`22fd088`** de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`. ✅ **Ya está en `origin/master`** desde el merge `503af44` (2026-09-02 12:38 UTC), así que **el deploy hoy SÍ lo alcanza** — durante horas esta fila decía lo contrario y por eso no se destrababa. **Falta sólo el swap**, y el defecto sigue vivo en producción: el contenedor `onia-platform` lleva 15 h arriba (anterior al merge) y su build todavía tiene `assignment_turned_in` — medido con `docker exec … grep -rl` sobre `/app/.next`, no leído. Esta fila se quedó corta tres veces (el commit no existía · existía sin mergear · mergeado pero la fila decía que no); por eso la lista ya no la mantiene este párrafo: `npm run deploy:alcanzable` se lo pregunta a git, y hoy sale **0**. **Y desde el 2026-09-02 esta fila se comprueba sola: `npm run s11:desplegado` le pregunta al contenedor `onia-platform` del VPS —el que CORRE, no el host ni el repo— con qué icono dibuja hoy la entrada `/requerimientos` de su build publicado. Hoy sale 1 nombrando `assignment_turned_in`; el día que Sergio haga el swap sale 0 y `npm run bloqueos:vencidos` levanta la fila solo, sin que nadie se acuerde de mirar. **Verificador:** `npm run s11:desplegado` → 0** | Es un deploy del producto, y ningún deploy sale sin su OK | Que el ítem "Requerimientos" del menú dibuje su icono. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): esta fila mandaba a desplegar un commit que NO EXISTE.** Decía *"commit `4f86381` (rama `carril/chatbot-v68-friccion`)"* y *"ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`)"*. Medido, no leído: después de `git fetch --all --prune` contra GitHub, `git log 4f86381` da `unknown revision`, **no hay ninguna rama** que matchee `friccion` ni `v68` en las 39 remotas, y el archivo del guardia **nunca fue agregado en ninguna rama**. Ese trabajo quedó en el disco de Windows y nunca se pusheó. Un bloqueo que le pide a Sergio desplegar la nada es peor que un fantasma: no se destraba nunca. **El defecto SÍ era real y seguía vivo**, verificado RENDERIZANDO el `.woff2` que se publica (Chromium, no grep): `assignment_turned_in` mide **20em** —el texto crudo— contra **1em** de los otros 34 iconos del menú. Causa medida: el icono entró el 30-ago (`ab9e0de`) y la fuente subseteada es del 29-ago (`917adca`), así que el glifo nunca viajó; y `scripts/subset-iconos.mjs`, que corre dentro del `build`, **se rinde en silencio y sale 0** si falta `pyftsubset` (reproducido acá). **Rehecho de cero en `22fd088`:** el ítem usa `task_alt`, que ya está en el subset (no depende de que exista Python en el entorno de build), más el gate `npm run gate:iconos` (`scripts/iconos-en-la-fuente.mjs`) que renderiza los 35 iconos declarados contra la fuente publicada **sin sesión ni app levantada** — el hueco exacto por el que se coló, ya que `e2e/iconos.spec.ts` sólo mira `/`, `/login` y `/register`. Rojo por el motivo correcto antes, verde después (35/35). Gates: `tsc` limpio · **2441** tests · `eslint` 0 errores. **Verificación post-deploy:** abrir `/inbox` y mirar el menú — el ítem "Requerimientos" tiene que dibujar un tilde, no una palabra |
 | S12 | **Los DOS horarios fijos de demo — sin ellos el bot deriva a un humano en el primer mensaje y se calla para siempre.** Son dos bloques semanales de SU agenda; `hermes-content/deploy/vps-ops/bot/config.mjs` los trae `pending: true` con un TODO que dice *"PROHIBIDO inventar horarios acá"*. **Contexto nuevo del 01-sep:** existía la salida automática por Cal.com y **está muerta** — no hay contenedor de Cal.com en el VPS y `cal.onia.com.bo` responde 302 a `onia.com.bo/empezar`, así que el módulo cae al placeholder en silencio. **Dos opciones, las dos baratas:** (a) Sergio dicta dos bloques fijos (ej. martes 10:00 y jueves 16:00) y quedan como dato — cero código; (b) revivir Cal.com, que es infra y cuesta más. Recomendación: **(a)**, y (b) después si molesta mantenerlos a mano | Son horas de su semana, y el código prohíbe inventarlas | **El ítem 1 de Ahora, que es el único defecto que un comprador ve.** Probado corriendo el motor con dos horarios cualesquiera: el embudo llega hasta `M2` demo agendada sin tocar una línea de código |
 | S13 | **Encender el aviso `notify_sergio`** — hoy el bot pide un humano y no se entera nadie. ⚠️ **NO es "poner `ONIA_N8N_ENABLED=true`"**: `ONIA_N8N_EVENT_URL` está **vacío** y **no existe ningún workflow de n8n** que reciba el evento (listados los 44). Con la variable en `true` y sin URL el envío devuelve `failed` y **nadie se entera**, porque es fire-and-forget a propósito. **Decidir el camino:** (a) Telegram directo desde el bot, reusando el `TG_BOT_TOKEN` que `hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh` ya usa en el VPS — sin workflow, sin URL, sin secreto nuevo; (b) crear el workflow de n8n y cargar la URL. Recomendación: **(a)** | Escribe en el VPS. El código lo escribe este carril; la decisión y el deploy son suyos | El ítem 2 de Ahora. Gate barato antes de mirar el celular: `"configurado":true` en el `/health` del bot |
 | S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org, y por ahí entraron **SEIS** conversaciones de desconocidos (34, 36, 38, 40, 45, 46), dos de ellas del 01-sep. **Cinco de las seis no dejaron teléfono ni correo**: sólo se les puede contestar desde adentro del widget, que es exactamente lo que el inbox huérfano impide — o sea que un inbox sin dueño no es una demora, es una pérdida. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox** (`clinic_settings.chatwootInboxId` es un `Int?` único, `prisma/schema.prisma:1002`), y `Onia (interna)` ya gastó el suyo en el 5. **Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código, ~10 min, agrega una org fantasma; (c) extender `clinic_settings` a N inboxes, que es código del producto y de otro carril. Recomendación: **(b)**. 🔁 **Fusionada el 2026-09-02 con la fila que la tabla listaba aparte bajo un SEGUNDO `S12`** (*"¿sigue en pie la opción 1 de §9?"*): era la **misma decisión preguntada dos veces**, con dos números distintos y uno de ellos ya usado por los horarios de demo. Lo destapó `npm run bloqueos:vencidos` al imprimir `S12, S12` — el gate nombra las filas por su id, así que un id repetido lo vuelve ambiguo. El dato fresco que aportaba esa fila (seis conversaciones, cinco sin contacto) es justo el que le faltaba a la condición de §9 *"hasta que la limitación moleste"*, y ya vive acá. **Y el `5 de las 9` que esta fila decía estaba viejo**: eran seis. | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
@@ -443,6 +440,43 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **S11 era el único bloqueo que una máquina podía medir y no se medía: ahora se comprueba
+      solo.** Cerrado el 2026-09-02. Archivos: `scripts/s11_desplegado.mjs` (nuevo),
+      `package.json`, `hermes-content/docs/cola/chatbot.md`.
+      **Qué se construyó.** `npm run s11:desplegado` le pregunta al contenedor `onia-platform`
+      del VPS —el que CORRE; no el host, no el repo, no `origin/master`— con qué icono dibuja la
+      entrada `/requerimientos` de su build publicado en `/app/.next`. Sale **1** con el defecto
+      vivo nombrando el icono, **0** con el swap hecho, y **2** si no pudo medir. La fila S11 ya
+      lo declara con la marca `**Verificador:** … → 0`, así que `npm run bloqueos:vencidos` lo
+      levanta solo: pasó de correr **dos** verificadores a **tres**, y de 12 filas "sin
+      verificador mecánico" a 11.
+      **Medido, no leído.** Con el defecto vivo de hoy sale 1 y nombra `assignment_turned_in`.
+      La rama verde también se probó de punta a punta —tubería de shell real + parser— contra un
+      bundle con `task_alt`: sale 0. Las dos ramas, no sólo la que da rojo hoy.
+      🔴 **Lo obvio era un `grep assignment_turned_in` y habría quedado en ROJO PARA SIEMPRE.** El
+      fuente ya arreglado **sigue conteniendo** esa cadena: `components/layout/navigation.ts:45`
+      la nombra en un comentario que explica por qué se eligió `task_alt`, y
+      `scripts/iconos-en-la-fuente.mjs` la usa de caso de prueba. Hoy la minificación los borra,
+      pero eso es una propiedad del minificador, no del arreglo — alcanza un source map o que
+      alguien mueva el comentario a un string. Un verificador que no puede ponerse verde es peor
+      que ninguno: es el mismo modo de falla que este gate existe para cerrar. Por eso mide el
+      **par ruta→icono**, que es el hecho del mundo que la fila declara; un comentario no forma
+      ese par. El self-check tiene ese caso, y se comprobó que la versión ingenua lo falla.
+      **Dos cosas que sólo aparecieron al medir, y las dos eran bugs de este script:**
+      **(1)** la primera versión tardaba **48 s** — `grep -o` con ventana ancha backtrackea sobre
+      chunks minificados de megabytes (13 s con ventana 60, 27 s con 120, 48 s con 220, lineal).
+      El gate que lo invoca corta a los **120 s**, y ahí un timeout se lee como "no medido": el
+      verificador se volvía inútil solo con que el build creciera. Partir el bundle en `}` antes
+      de filtrar lo dejó en **0,8 s** (58×), porque las entradas de menú son objetos planos.
+      **(2)** la guarda de entrada, copiada de `espejo-check.mjs`, construía la URL a mano
+      (`new URL("file://" + argv[1])`) y **reventaba** con `ERR_INVALID_URL` al importar el módulo
+      con argumentos — o sea que importar las funciones puras rompía. Va con `pathToFileURL`.
+      Antes de esa guarda, un `import` disparaba un `docker exec` contra producción como efecto de
+      cargar el módulo.
+      **Gates:** `npm test` completo en verde, con `test:s11-desplegado` (14 casos) cableado a la
+      cadena — y verificado **en rojo primero**: `test:guards-cableados` mordió con *"estos tests
+      existen y NO los corre nadie"* antes de cablearlo.
 
 - [x] **Los bloqueos ya declaraban cómo comprobarse solos y nadie los comprobaba: ahora hay un
       gate que los corre.** Cerrado el 2026-09-02. Archivos: `scripts/bloqueos_vencidos.mjs`
