@@ -1177,7 +1177,7 @@ para que la próxima vuelta no rehaga la bisección.
 
 </details>
 
-## 20. Tres commits arreglan el login de la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
+## 20. OCHO commits arreglan la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
 
 **No confundir con la §16**: aquella es el deploy del **motor del bot** y de `web-factory`. Esta
 es el deploy de **`onia-platform`**, el contenedor que sirve `app.onia.com.bo`. Son dos deploys
@@ -1185,16 +1185,29 @@ distintos, con riesgos distintos, y se pueden hacer por separado.
 
 **Medido en vivo el 2026-09-02, no deducido.** El contenedor `onia-platform` monta
 `/opt/onia-platform/runtime-next`, cuyo `.next/BUILD_ID` es `lNDdVgrRvP1mizzu3BVXc` — el mismo
-que `/opt/onia-platform/build-8a3b5a6`. O sea: **producción corre `8a3b5a6`**, y `master` tiene
-tres commits encima que nadie desplegó.
+que `/opt/onia-platform/build-8a3b5a6`. O sea: **producción corre `8a3b5a6`**.
+
+⚠️ **Este ítem decía "tres commits" y hoy son OCHO.** Recontado en vivo a las 22:45 UTC
+(`git log --oneline 8a3b5a6..master | wc -l` = 8), no releído del párrafo anterior. La pila crece
+sola cada vez que el integrador mergea y nadie despliega: **el número envejece más rápido que el
+resto del ítem**, así que se cuenta de nuevo antes de citarlo. Es la misma trampa que ya costó
+una vuelta con los horarios de `loops.md`.
 
 | Commit | Qué arregla | Cómo se comprobó que NO está en producción |
 |---|---|---|
+| `22fd088` + `d62beeb` | **El menú dibuja `ASSIGNMENT_TURNED_IN` en letras gigantes en TODA pantalla del dashboard** — el bug más caro de la pila: lo ve cualquier cliente que entre, en cada pantalla | Producción corre `8a3b5a6`, anterior a los dos commits |
 | `bdf0935` + `5888a13` (merge) | **El login le deletrea los nombres de los iconos al lector de pantalla**, y si la fuente tarda más de 12 s se los muestra como texto a cualquiera (`bolt`, `credit_card_off`, `smart_toy`) | El HTML servido hoy trae los tres `<span>` **sin `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)` en vez de la guarda `d.fonts.status` |
+| `675541b` | **Una ferretería lee "La cita" y "en el consultorio"** en el editor de su propio chatbot | Producción corre `8a3b5a6`, anterior al commit |
+| `15e3910` | **El cliente que paga el add-on del chatbot (Bs 390) queda sin bandeja** hasta que descubre y aprieta un botón: aprobar el pago encendía el booleano y no creaba el inbox de Chatwoot. Ahora la aprobación enciende el canal web sola, fuera de la transacción del cobro y sin poder tumbarlo | Medido en la base: **cero orgs de cliente** con `chatwootInboxId`. El commit es de hoy y no hay build posterior a `8a3b5a6` |
 | `efaffe8` | **La CSP bloqueaba el beacon de Cloudflare Web Analytics en toda la plataforma** | La cabecera `content-security-policy` servida hoy no menciona `cloudflareinsights` en ningún lado |
 
-Tocan 6 archivos, +151/−15, y **4 de los 6 son tests** — la superficie de riesgo real son
-`components/auth/AuthShell.tsx` (5 líneas), `lib/iconos-script.ts` (13) y `next.config.ts` (29).
+Tocan **21 archivos, +647/−44**, y **9 de los 21 son tests o snapshots** (recontado en vivo el
+2026-09-02 22:45 UTC junto con el número de commits). La superficie de riesgo real sigue siendo
+chica y sin migraciones: `components/auth/AuthShell.tsx`, `lib/iconos-script.ts`,
+`next.config.ts`, `components/layout/navigation.ts`, `lib/onboarding/vocabulario.ts` y
+`app/api/admin/subscription-payments/route.ts`. **Ninguno toca base de datos ni sesiones**; el de
+`subscription-payments` toca el cobro, pero sólo agrega un efecto posterior a la transacción que
+no puede hacerla fallar (probado con Chatwoot caído).
 
 **Por qué importa que sean éstos y no otros.** Los dos son el mismo tipo de fallo: *invisible
 mientras todo va bien, feo justo cuando algo va mal*. El de los iconos es literalmente el bug de
@@ -1207,9 +1220,18 @@ runbook del swap de siempre (`onia-platform/.claude/skills/onia-deploy/SKILL.md`
 recordatorio de `CLAUDE.md`: **buildear en el VPS con `app.env`, nunca con un `.env.local`
 presente**, o Next hornea `127.0.0.1` en el bundle.
 
-**Recomendación: hacerlo.** Es el deploy más barato del radar —cambia tres archivos de código,
-ninguno toca base de datos, pagos ni sesiones— y cierra un ítem de `COLA.md` que ya está verde en
-código y vale cero hasta que se encienda.
+**Recomendación: hacerlo.** Sigue siendo de los deploys baratos del radar: seis archivos de
+código, **ninguno toca base de datos ni sesiones**, y cierra ítems que ya están verdes en código y
+valen cero hasta que se enciendan.
+
+⚠️ **Un matiz que antes no existía y hay que decir en voz alta.** Hasta el 2026-09-02 acá decía
+"ninguno toca base de datos, **pagos** ni sesiones". Con `15e3910` eso dejó de ser cierto: ese
+commit sí toca la ruta que aprueba pagos. Lo que agrega es un efecto **posterior** a la
+transacción del cobro —crear el inbox de Chatwoot— envuelto en `try/catch`, así que no puede
+hacer fallar ni revertir una aprobación; hay un test que lo prueba con Chatwoot caído, y otro que
+fija que aprobar un plan normal **no** cree inbox (regalarlo sería entregar gratis un add-on de
+Bs 390). Aun así, **es código de plata y merece que Sergio lo sepa antes de desplegar**, no que
+quede tapado por una frase escrita cuando la pila era otra.
 
 ## 21. Nadie mira nunca el panel del chatbot del cliente — falta una credencial de sólo lectura (2026-09-02) — decisión de Sergio
 
