@@ -348,21 +348,45 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* Placeholder de FORMA — reserva el ratio del clip futuro (cero CLS)       */
+/* PANEL DIBUJADO — el resultado del cliente, no la captura del sistema     */
 /*                                                                         */
-/* No es "imagen próximamente": es composición de bloques planos de marca. */
-/* El contenedor declara aspect-ratio, así el clip real entra sin mover     */
-/* nada. Cero sombra: la profundidad es solape de rectángulos.             */
+/* Sergio, 2026-09-01, textual: "no coloques capturas literales del         */
+/* sistema, se ve mal, coloca cosas referenciales". Acá vivía una ranura de */
+/* forma+color que terminó cableada con capturas reales del producto        */
+/* (.shapeShot, muerto). Se fueron con ella los dos rectángulos             */
+/* decorativos, las barras y la etiqueta: eran composición de la ranura     */
+/* VACÍA y con el panel adentro no queda nada que decorar.                 */
+/*                                                                         */
+/* Mismo invariante que el hero aprobado ese día: todo son divs con color.  */
+/* Cero <img>, cero <svg>, cero sombra — la profundidad es la tarjeta clara */
+/* apoyada sobre el mat de color del bloque (solape + escala).             */
+/*                                                                         */
+/* ⚠️ La tarjeta NO sigue el tema. El mat (--signal / --ink-block /         */
+/* --green-deep) son colores FIJOS: atada a --surface/--ink la tarjeta se   */
+/* volvería #141A18 el día que se encienda data-theme="dark" y desaparece   */
+/* sobre el mat de tinta. Por eso dos tokens propios: blanco y --tinta, que */
+/* es el único de la paleta que no se redefine en oscuro.                  */
 /* ---------------------------------------------------------------------- */
 
 .shape {
   position: relative;
   width: 100%;
-  aspect-ratio: var(--shape-ratio, 4 / 3);
+  /* ratio fijo: reserva el alto de la columna antes de pintar (cero CLS).
+     Era una variable con los cinco llamadores pasándole el mismo 4/3. */
+  aspect-ratio: 4 / 3;
   border-radius: var(--r-block);
   overflow: hidden;
   background: var(--green-deep);
-  isolation: isolate;
+  display: grid;
+  padding: 7%;
+  /* El panel escala con el ANCHO de su columna (~351px en teléfono, ~560px
+     en escritorio) y no con el font-size de la página: anclado a `em` como el
+     resto del archivo, el mock quedaba 1,4x más grande en teléfono contra su
+     propio bloque. Es la única excepción al ritmo en `em`, y es por eso. */
+  container-type: inline-size;
+
+  --panel-paper: #fff;
+  --panel-ink: var(--tinta);
 }
 .shapeInk {
   background: var(--ink-block);
@@ -375,85 +399,171 @@
   background: var(--signal);
 }
 
-/* rectángulo grande (la "superficie") — solapa desde una esquina */
-.shape::before {
-  content: "";
-  position: absolute;
-  inset: 14% 10% 26% 12%;
-  border-radius: calc(var(--r-block) * 0.7);
-  background: color-mix(in srgb, var(--signal) 22%, transparent);
-}
-.shapePaper::before {
-  background: color-mix(in srgb, var(--verde-700) 14%, transparent);
-}
-.shapeSignal::before {
-  background: color-mix(in srgb, var(--tinta) 12%, transparent);
-}
-
-/* rectángulo chico (la "tarjeta") solapado — el solape ES la profundidad */
-.shape::after {
-  content: "";
-  position: absolute;
-  right: 8%;
-  bottom: 14%;
-  width: 42%;
-  height: 40%;
-  border-radius: calc(var(--r-block) * 0.55);
-  background: var(--signal);
-}
-.shapePaper::after {
-  background: var(--verde-500);
-}
-.shapeSignal::after {
-  background: var(--tinta);
-}
-
-/* barras/pastilla internas: composición, no ruido */
-.shapeBars {
-  position: absolute;
-  left: 16%;
-  top: 22%;
+.panel {
   display: flex;
   flex-direction: column;
-  gap: 0.7em;
-  width: 40%;
-  z-index: 1;
-}
-.shapeBar {
-  height: 0.55em;
-  border-radius: var(--r-pill);
-  background: color-mix(in srgb, #fff 80%, transparent);
-}
-.shapeBar:nth-child(2) {
-  width: 72%;
-}
-.shapeBar:nth-child(3) {
-  width: 54%;
-}
-.shapePaper .shapeBar {
-  background: color-mix(in srgb, var(--ink) 32%, transparent);
-}
-.shapeSignal .shapeBar {
-  background: color-mix(in srgb, var(--tinta) 55%, transparent);
+  gap: 0.8em;
+  overflow: hidden;
+  padding: 1.1em 1.15em;
+  border-radius: calc(var(--r-block) * 0.7);
+  background: var(--panel-paper);
+  color: var(--panel-ink);
+  /* El piso NO es decorativo: a 0.6rem la fila de un pendiente caía a 8px en
+     teléfono y el panel dejaba de LEERSE, que es lo único que tiene que hacer.
+     El techo lo pone el ancho de columna en escritorio. */
+  font-size: clamp(0.72rem, 3.4cqw, 0.95rem);
+  line-height: 1.35;
+  text-align: left;
 }
 
-/* etiqueta de categoría (caption, NO estado de obra) */
-.shapeTag {
-  position: absolute;
-  left: 8%;
-  bottom: 8%;
-  z-index: 2;
+/* ---- cabecera ---- */
+.panelHead {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  padding-bottom: 0.7em;
+  border-bottom: 1px solid color-mix(in srgb, var(--panel-ink) 10%, transparent);
+}
+.panelMark {
+  flex: none;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: var(--r-pill);
+  background: var(--verde-500);
+}
+.panelTitle {
+  min-width: 0;
+  font-weight: 600;
+  font-size: 0.92em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* La hora dice CUÁNDO pasó, que es medio argumento: el panel de agentes sin
+   "03:12 · cerrado" muestra qué hace el sistema, no que lo hizo de noche. */
+.panelStamp {
+  flex: none;
+  margin-left: auto;
   font-family: var(--font-mono), monospace;
   font-size: 0.72em;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, #fff 82%, transparent);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--panel-ink) 58%, transparent);
 }
-.shapePaper .shapeTag {
-  color: var(--ink-faint);
+
+/* ---- filas de pendientes (panel "agentes") ---- */
+/* El cuerpo flota entre la cabecera y el remate: en 4/3 con dos burbujas o
+   tres filas sobra alto, y pegado arriba el panel quedaba descolgado. */
+.panelRows,
+.panelChat,
+.panelGrid {
+  margin: auto 0;
 }
-.shapeSignal .shapeTag {
-  color: color-mix(in srgb, var(--tinta) 80%, transparent);
+.panelRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 0;
+  list-style: none;
+}
+.panelRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.5em 0.55em;
+  border-radius: calc(var(--r-block) * 0.4);
+  background: color-mix(in srgb, var(--verde-500) 8%, transparent);
+}
+.panelSq {
+  flex: none;
+  width: 0.72em;
+  height: 0.72em;
+  border-radius: calc(var(--r-block) * 0.16);
+  background: var(--verde-500);
+}
+.panelTxt {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.86em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Pastilla de acción: el verde va en la FORMA y el texto en verde OSCURO.
+   Blanco sobre verde señal mide 1,48:1; verde-800 sobre verde-100 mide 9,4:1. */
+.panelAct {
+  flex: none;
+  padding: 0.28em 0.7em;
+  border-radius: var(--r-pill);
+  background: var(--verde-100);
+  color: var(--verde-800);
+  font-size: 0.74em;
+  font-weight: 600;
+}
+
+/* ---- conversación (panel "chat") ---- */
+.panelChat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.panelMsg {
+  max-width: 84%;
+  padding: 0.5em 0.7em;
+  border-radius: calc(var(--r-block) * 0.45);
+  font-size: 0.84em;
+}
+.panelIn {
+  align-self: flex-start;
+  border-bottom-left-radius: calc(var(--r-block) * 0.14);
+  background: color-mix(in srgb, var(--panel-ink) 7%, transparent);
+}
+.panelOut {
+  align-self: flex-end;
+  border-bottom-right-radius: calc(var(--r-block) * 0.14);
+  background: var(--verde-100);
+  color: var(--verde-900);
+}
+
+/* ---- módulos encendidos (panel "cuenta") ---- */
+/* Los seis van encendidos SIEMPRE. Un llenado progresivo sería una barra de
+   progreso, y eso es exhibir obra en la pantalla de venta. */
+.panelGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45em;
+}
+.panelPill {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  min-width: 0;
+  padding: 0.42em 0.7em;
+  border-radius: var(--r-pill);
+  background: var(--verde-50);
+  color: var(--verde-800);
+  font-size: 0.78em;
+  font-weight: 500;
+}
+.panelPillTxt {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- el remate ---- */
+/* Va con peso y a tamaño pleno a propósito: es lo SEGUNDO que se lee del
+   panel, no el pie de foto. En gris chico el gráfico se quedaba sin frase. */
+.panelFoot {
+  /* `auto` arriba y no `justify-content: space-between` en el padre: con tres
+     hijos el reparto abría un hueco muerto entre la cabecera y la primera
+     fila. Así la cabecera y el cuerpo quedan juntos y el remate cae al pie. */
+  margin: auto 0 0;
+  font-size: 1.05em;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--panel-ink);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -1911,30 +2021,10 @@
   }
 }
 
-/* La captura dentro del bloque: el color queda de marco (mecanica Fanvue —
-   el bloque plano contiene, no decora). Inset chico para que se lea como
-   pieza enmarcada y no como imagen pegada al borde. */
-.shapeShot {
-  position: absolute;
-  /* z-index OBLIGATORIO: .shape::after pinta un rectángulo verde sólido
-     (42% x 40%, abajo a la derecha) que es composición de la ranura VACÍA.
-     Sin esto se apila encima de la captura y le tapa una esquina — estaba
-     vivo en producción (home y /agentes). .shapeBars y .shapeTag ya tenían
-     su z-index (1 y 2); a la imagen se le había olvidado. */
-  z-index: 1;
-  inset: 0.5em;
-  width: calc(100% - 1em);
-  height: calc(100% - 1em);
-  object-fit: cover;
-  object-position: top left;
-  border-radius: calc(var(--radio) * 0.6);
-  display: block;
-}
-
 /* ---------------------------------------------------------------------- */
 /* Fotos de CONTEXTO — la persona en su negocio, NUNCA pantalla de producto */
 /*                                                                         */
-/* La interfaz sigue siendo captura REAL y vive en .shape / .slotFoto.     */
+/* La interfaz NO se fotografía: se dibuja, y eso vive en .shape / .panel.  */
 /* Estas fotos muestran el MOMENTO, no el sistema; ninguna tiene pantalla  */
 /* legible. Reglas, shot list y gate de aprobación:                        */
 /* hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md                    */

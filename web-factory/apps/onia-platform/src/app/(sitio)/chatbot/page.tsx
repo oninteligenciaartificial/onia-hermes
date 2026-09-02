@@ -83,7 +83,7 @@ const PCT_SALARIO = Math.round((CHATBOT_PLAN.mensual / SALARIO_MINIMO_2026) * 10
  * que es la fuente única (pricing.ts → ADDONS lee de ahí). El copy vende lo
  * que el bot HACE — contesta a cualquier hora con la info que el negocio
  * cargó, no inventa, y deriva a una persona — y no nombra lo que no existe.
- * Sin imágenes: la conversación se reserva como forma para un clip futuro.
+ * Sin imágenes: la conversación se DIBUJA con divs (ver <Shape> en ../ui).
  */
 export default function Chatbot() {
   const bot = CHATBOT_PLAN;
@@ -115,29 +115,13 @@ export default function Chatbot() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            {/* Ranura cableada con la ÚNICA captura publicable del chatbot.
-                Descartadas tras abrirlas: bot-saludo / bot-pedido /
-                editor-chatbot / editor-chatbot-movil son todas del lote viejo
-                (18-ago) y muestran datos de QA en pantalla — "ZZ QA Clinica
-                Chatbot", "ZZ QA Ferreteria Tornillo", el nombre de Sergio, un
-                "Atendemos Atendemos" duplicado y un "(aud 11:52)" de debug.
-                Publicar eso en la pantalla de venta es exhibir el banco de
-                pruebas. El lote de capturas/ (21-ago) es el limpio.
-
-                El ratio pasa de 3/4 a 4/3 porque es el del archivo: forzar un
-                4/3 dentro de un 3/4 con object-fit:cover + object-position:top
-                left recortaba justo la derecha, o sea el panel "Probá tu bot",
-                que es la mitad del argumento. Sigue siendo el <Shape> el que
-                reserva el ratio, así que CLS cero. Es además el ratio que usan
-                las otras cuatro capturas del sitio. */}
-            <Shape
-              tone="green"
-              ratio="4 / 3"
-              src="/v2/capturas/whatsapp.webp"
-              width={2160}
-              height={1620}
-              alt="Editor del chatbot de Onia: el negocio carga su nombre, a quién deriva, cómo se presenta el bot y sus horarios, y al lado lo prueba escribiendo como si fuera el cliente."
-            />
+            {/* La conversacion se DIBUJA. Antes acá iba whatsapp.webp, el
+                editor real del chatbot: Sergio, 2026-09-01, textual —"no
+                coloques capturas literales del sistema, se ve mal, coloca
+                cosas referenciales". El panel no muestra la pantalla que hay
+                que aprender a usar, muestra el resultado: el que escribió a
+                las 23:40 ya tiene su horario contestado. */}
+            <Shape tone="green" panel="chat" />
           </Reveal>
         </div>
       </Block>

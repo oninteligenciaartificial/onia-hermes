@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   NAV_HEADER,
   NAV_PRODUCTO,
@@ -17,7 +17,7 @@ import s from "./sitio.module.css";
  * rubros.
  */
 
-/* ---------- placeholder de FORMA (reserva el ratio del clip futuro) ------- */
+/* ---------- PANEL DIBUJADO (el resultado, no la captura) ----------------- */
 
 type Tone = "green" | "ink" | "paper" | "signal";
 
@@ -28,64 +28,129 @@ const toneClass: Record<Tone, string> = {
   signal: `${s.shape} ${s.shapeSignal}`,
 };
 
+/** Los tres paneles dibujados. Cada uno muestra el RESULTADO del cliente, no
+ *  la pantalla del sistema (Sergio, 2026-09-01, textual: "no coloques
+ *  capturas literales del sistema, se ve mal, coloca cosas referenciales"). */
+type Panel = "agentes" | "chat" | "cuenta";
+
 /**
- * Bloque de forma+color que RESERVA el ratio donde luego entra un clip o
- * captura. Declara aspect-ratio, así el clip real entra sin CLS. No dice
- * "próximamente": es composición de marca (regla: la venta nunca exhibe obra).
+ * Rótulo accesible de cada panel. Va en el CONTENEDOR con role="img": el panel
+ * se anuncia como UNA imagen con su frase, y no como fragmentos sueltos de
+ * interfaz ("03:12 · cerrado", "Aprobar", "Aprobar", "Aprobar"...).
+ *
+ * Vive acá y no en el call site a propósito: cada panel tiene UN rótulo
+ * correcto, y dejarlo en la llamada era la forma segura de publicar uno vacío
+ * — que es exactamente lo que pasaba con el `alt` de la captura.
  */
-export function Shape({
-  tone = "green",
-  ratio = "4 / 3",
-  tag,
-  bars = true,
-  src,
-  alt,
-  width,
-  height,
-}: {
-  tone?: Tone;
-  ratio?: string;
-  tag?: string;
-  bars?: boolean;
-  /** Captura real del producto. Sin src, el bloque es forma+color (la ranura reservada). */
-  src?: string;
-  /** Obligatorio cuando hay src: con imagen el bloque deja de ser decorativo. */
-  alt?: string;
-  width?: number;
-  height?: number;
-}) {
-  // Con imagen el bloque NO es decorativo: se le saca aria-hidden y las barras
-  // de relleno, y el color pasa a ser el marco. Sin imagen sigue siendo la
-  // ranura reservada — mismo ratio, asi que cablear la captura no mueve nada.
-  const conImagen = Boolean(src);
+const panelLabel: Record<Panel, string> = {
+  agentes:
+    "Pendientes de aprobación a las 03:12, con el negocio cerrado: tres propuestas que los agentes dejaron escritas de madrugada, cada una con su botón de aprobar. Nada se manda hasta que el dueño aprueba.",
+  chat:
+    "Conversación de WhatsApp a las 23:40: alguien pregunta si atienden el sábado y ya tiene la respuesta con el horario que el negocio publicó.",
+  cuenta:
+    "Una cuenta recién creada para una clínica dental, con agenda, clientes, cobros, facturación, recordatorios y agentes ya encendidos.",
+};
+
+/** Los módulos del panel de cuenta. Ninguno es una promesa nueva: son los que
+ *  ya nombra el copy de /empezar y la descripción del sitio. */
+const MODULOS = [
+  "Agenda",
+  "Clientes",
+  "Cobros",
+  "Facturación",
+  "Recordatorios",
+  "Agentes",
+] as const;
+
+/** Lo que los agentes dejan escrito. Sin números ni nombres de cliente: un
+ *  conteo inventado dentro de una interfaz creíble se lee como dato real, y no
+ *  hay un solo cliente pagando todavía. */
+const PENDIENTES = [
+  "Recordar las citas de mañana",
+  "Avisar los pagos vencidos",
+  "Volver a invitar a quien no vino",
+] as const;
+
+function PanelCuerpo({ panel }: { panel: Panel }) {
+  if (panel === "agentes") {
+    return (
+      <>
+        <div className={s.panelHead}>
+          <span className={s.panelMark} />
+          <span className={s.panelTitle}>Pendientes de aprobación</span>
+          <span className={s.panelStamp}>03:12 · cerrado</span>
+        </div>
+        <ul className={s.panelRows}>
+          {PENDIENTES.map((q) => (
+            <li key={q} className={s.panelRow}>
+              <span className={s.panelSq} />
+              <span className={s.panelTxt}>{q}</span>
+              <span className={s.panelAct}>Aprobar</span>
+            </li>
+          ))}
+        </ul>
+        <p className={s.panelFoot}>Nada se manda hasta que lo aprobás.</p>
+      </>
+    );
+  }
+
+  if (panel === "chat") {
+    return (
+      <>
+        <div className={s.panelHead}>
+          <span className={s.panelMark} />
+          <span className={s.panelTitle}>WhatsApp del negocio</span>
+          <span className={s.panelStamp}>23:40 · cerrado</span>
+        </div>
+        <div className={s.panelChat}>
+          <div className={`${s.panelMsg} ${s.panelIn}`}>
+            Hola, ¿atienden mañana sábado?
+          </div>
+          <div className={`${s.panelMsg} ${s.panelOut}`}>
+            Sí, sábado de 9:00 a 13:00.
+          </div>
+        </div>
+        <p className={s.panelFoot}>Contestó con el horario que vos publicaste.</p>
+      </>
+    );
+  }
+
   return (
-    <div
-      className={toneClass[tone]}
-      style={{ "--shape-ratio": ratio } as CSSProperties}
-      aria-hidden={conImagen ? undefined : "true"}
-    >
-      {conImagen ? (
-        <img
-          src={src}
-          alt={alt ?? ""}
-          width={width}
-          height={height}
-          loading="lazy"
-          decoding="async"
-          className={s.shapeShot}
-        />
-      ) : (
-        <>
-          {bars && (
-            <div className={s.shapeBars}>
-              <span className={s.shapeBar} />
-              <span className={s.shapeBar} />
-              <span className={s.shapeBar} />
-            </div>
-          )}
-          {tag && <span className={s.shapeTag}>{tag}</span>}
-        </>
-      )}
+    <>
+      <div className={s.panelHead}>
+        <span className={s.panelMark} />
+        <span className={s.panelTitle}>Tu cuenta</span>
+        <span className={s.panelStamp}>Dental</span>
+      </div>
+      <div className={s.panelGrid}>
+        {MODULOS.map((m) => (
+          <span key={m} className={s.panelPill}>
+            <span className={s.panelSq} />
+            <span className={s.panelPillTxt}>{m}</span>
+          </span>
+        ))}
+      </div>
+      <p className={s.panelFoot}>Encendidos desde el primer día.</p>
+    </>
+  );
+}
+
+/**
+ * Bloque de color que dibuja una interfaz INVENTADA mostrando el resultado del
+ * cliente. Cero <img>, cero <svg>, cero sombra: la profundidad es la tarjeta
+ * clara apoyada sobre el mat de color del tono. Mismo invariante que el hero
+ * aprobado el 2026-09-01, y el `aspect-ratio` fijo del mat sigue reservando el
+ * alto de la columna (cero CLS).
+ *
+ * `panel` es OBLIGATORIO y ya no existe una rama de imagen: la regresión
+ * "volvamos a cablear la captura" no compila, que vale más que un test.
+ */
+export function Shape({ panel, tone = "green" }: { panel: Panel; tone?: Tone }) {
+  return (
+    <div className={toneClass[tone]} role="img" aria-label={panelLabel[panel]}>
+      <div className={s.panel}>
+        <PanelCuerpo panel={panel} />
+      </div>
     </div>
   );
 }

@@ -593,14 +593,7 @@ export default function Portada() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape
-              tone="signal"
-              ratio="4 / 3"
-              src="/v2/capturas/agentes.webp"
-              width={1680}
-              height={1260}
-              alt="Pantalla de agentes de Onia con las propuestas que dejaron trabajando de noche, cada una esperando que el dueno apruebe."
-            />
+            <Shape tone="signal" panel="agentes" />
           </Reveal>
         </div>
       </Block>
@@ -628,14 +621,7 @@ export default function Portada() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Shape
-              tone="green"
-              ratio="4 / 3"
-              src="/v2/capturas/whatsapp.webp"
-              width={2160}
-              height={1620}
-              alt="Editor del chatbot de WhatsApp en Onia: el negocio escribe su horario, sus servicios y como habla, y el bot contesta con eso."
-            />
+            <Shape tone="green" panel="chat" />
           </Reveal>
         </div>
       </Block>
