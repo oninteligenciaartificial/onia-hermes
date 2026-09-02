@@ -189,27 +189,41 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       🔴 **COMMITEADO, NO DESPLEGADO.** `/opt/onia/bot` no es un checkout de git y el deploy no es
       de este carril. **Hasta que alguien copie el archivo y reinicie el bot, el log sigue ciego.**
 
-- [ ] 🔴 **El arreglo que hoy hace que el bot conteste dos veces está VIVO en producción y NO
+- [x] 🔴 **El arreglo que hoy hace que el bot conteste dos veces está VIVO en producción y NO
       está en el repo: un `rsync` desde Windows lo borra y el bug de la semana vuelve.**
-      Encontrado el 2026-09-02 al comparar, no al leer. `diff` normalizado (sin `\r`, porque
-      crudo da el archivo entero y es sólo el fin de línea) entre
-      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs` y `/opt/onia/bot/bot-engine.mjs`:
-      **25 líneas**, en dos lugares que son exactamente el arreglo:
-      `botStage: sinHorarios ? "handoff_humano" : "esperando_horario"` → `botStage:
-      "esperando_horario"` (el repo todavía manda a `handoff_humano`, que es la barrera que hace
-      callar al bot para siempre), y `say("M0b", …)` → `say(slotsPending(config) ?
-      "M0b_SIN_HORARIOS" : "M0b", …)`. `hermes-content/deploy/vps-ops/bot/config.mjs` también difiere
-      (ahí vive `M0b_SIN_HORARIOS`), y hay `bot-engine.mjs.bak-20260902-171939` y
-      `config.mjs.bak-20260902-171939` en `/opt/onia/bot` con la hora del cambio.
-      **La prueba de que el arreglo funciona está en la base:** conversación **47** (17:01, antes)
-      recibió **una** respuesta; la **48** (17:21, después) recibió **dos** — la segunda es
-      *"Perfecto, anotado que te dedicás a odontología, que son 4 personas y que estás en Santa
-      Cruz…"*. Reproducir en 30 s:
-      `diff <(tr -d '\r' < hermes-content/deploy/vps-ops/bot/bot-engine.mjs) <(tr -d '\r' < /opt/onia/bot/bot-engine.mjs)`
-      → hoy **25** líneas; cuando esté versionado, **0**.
-      **No es trámite de copiar:** hay que traer los dos archivos, correr `npm run test:bot` (el
-      repo tiene tests del motor que asumen `handoff_humano`) y recién ahí commitear. Entra en una
-      vuelta, pero es un ítem propio.
+      Hecho el 2026-09-02. Archivos: `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`,
+      `hermes-content/deploy/vps-ops/bot/config.mjs` y
+      `hermes-content/deploy/vps-ops/bot/knowledge.test.mjs`.
+      **Gate 1 corrido, y el ítem era REAL:** el `diff` normalizado daba **25** líneas en
+      `bot-engine.mjs` y **12** en `config.mjs` al empezar la vuelta. Ahora los dos dan **0** —
+      el mismo comando que lo probó es el que lo cierra.
+      🔴 **Lo que encontró el test que faltaba: el bug estaba blindado por su propio test.**
+      `knowledge.test.mjs:487` **exigía** `botStage === "handoff_humano"` con el mensaje *"queda a
+      cargo de un humano, no esperando una elección imposible"* — y `handoff_humano` es la barrera
+      que devuelve **cero** respuestas para siempre (`bot-engine.mjs`, `case "handoff_humano"`).
+      O sea: el test verificaba que el mensaje de bienvenida fuera correcto **y exigía el estado
+      que hace callar al bot**. Verde, y la conversación moría en el segundo mensaje. Copiar los
+      dos archivos sin tocar esa línea habría dejado el gate en rojo y el arreglo pareciendo un
+      error.
+      **Rojo primero y por el motivo correcto.** El test nuevo —*"sin horarios el bot sigue vivo en
+      el SEGUNDO mensaje"*— corrió **antes** del arreglo y falló con su propia aserción:
+      `el bot NO puede quedarse mudo en el segundo mensaje`. No falló por un módulo ni por una
+      importación: por la propiedad que importa. Encadena dos turnos con `DEFAULT_CONFIG` (los
+      slots reales de producción, en "pendiente de definir"), que es la única forma de ver un
+      sistema que muere en el segundo turno.
+      **Y probado que MUERDE: dos mutaciones, las dos rojas.** `botStage` de vuelta a
+      `handoff_humano` → **2** casos rojos (el nuevo y el corregido); `M0b_SIN_HORARIOS` borrado
+      → **1** rojo, por el placeholder *"HORARIO A (pendiente de definir)"* llegándole al
+      prospecto.
+      **Gates:** `npm run test:bot` **705/705** en verde (1 caso nuevo, 1 aserción corregida).
+      ⚠️ **`config.mjs` se dejó byte a byte igual a producción, orden de claves incluido**
+      (`M0b_SIN_HORARIOS` **antes** de `M0b`, con los dos bloques de comentario apilados). Se
+      probó al revés primero y el `diff` daba **14** líneas de puro orden: el chequeo del ítem
+      habría seguido gritando con el arreglo ya versionado, que es exactamente el fantasma que
+      esta cola mide. Un orden más lindo no vale un gate ambiguo.
+      **Esto NO despliega nada**: producción ya tenía el arreglo — lo que faltaba era la copia
+      versionada que impide que un `rsync` desde Windows lo borre. El sentido del ítem era el
+      inverso al habitual: acá el repo iba **atrás** de producción.
 
 - [x] **El objetivo del carril se daba por cumplido leyendo un párrafo del 31-ago, y las cuatro
       formas en que puede romperse devuelven 200 con la lista vacía.** Hecho el 2026-09-02,
@@ -291,8 +305,30 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       cadena — y verificado **en rojo primero**: `test:guards-cableados` mordió con *"estos tests
       existen y NO los corre nadie"* antes de cablearlo.
 
-✅ **"Ahora" volvió a tener combustible el 2026-09-02**: el ítem del `bot-engine` sin versionar es
-el próximo, y salió de MIRAR producción contra el repo — no de la cola. Lo de abajo describe la
+- [ ] 🔴 **El chequeo de "hecho" de este carril NO se puede ejecutar: la sonda del widget no
+      encuentra dónde escribir y muere sin mandar un solo mensaje.**
+      Encontrado el 2026-09-02 al intentar correrlo, no al leerlo. El prompt del loop manda abrir
+      el widget de leads reales, escribir dos mensajes y contar las respuestas en la base. Con
+      Playwright headless (`--no-sandbox`) contra
+      `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`,
+      el localizador `textarea, input[type=text], [contenteditable=true]` **expira a los 30 s**:
+      `locator.waitFor: Timeout 30000ms exceeded`. La página carga (`networkidle` pasa), pero la
+      caja de texto no está donde la sonda la busca — probablemente dentro de un iframe, o montada
+      recién al abrir el panel.
+      **Por qué importa más que un script roto:** hoy la única forma de saber si el bot contesta
+      dos veces es que un humano abra el widget y escriba. Esta vuelta el veredicto salió de MIRAR
+      la base (conversación **48**: dos entrantes, **dos** respuestas — el arreglo funciona), pero
+      eso es leer el resultado de la sonda de la vuelta ANTERIOR, no ejecutar la propia.
+      **Un objetivo que no se ejecuta cada vuelta es decoración**, y éste todavía lo es.
+      Reproducir en 30 s: `node /tmp/probe-widget.mjs` (borrador de esta vuelta, sin versionar)
+      → `TimeoutError` dentro de `enviar()`.
+      **Al construirlo:** va en `scripts/` con su entrada en `package.json`, tiene que devolver el
+      `conversation_id` que creó —para que el conteo en la base no adivine cuál es— y **no puede**
+      dar por buena una sola respuesta: una sola es el bug, no un éxito parcial.
+
+✅ **"Ahora" tiene combustible, y las dos veces salió de MIRAR el sistema vivo, no de la cola**: el
+`bot-engine` sin versionar salió de comparar el repo contra producción, y la sonda rota salió de
+intentar correr el chequeo de "hecho". Lo de abajo describe la
 vuelta anterior, cuando el carril sí estaba vacío, y explica por qué mirar el sistema vivo es lo
 que lo destraba.
 
