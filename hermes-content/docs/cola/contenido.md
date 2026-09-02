@@ -32,6 +32,23 @@ falla si esa ruta no está.
 > inexistente y `verificar_cola.js` en rojo. **Se traen los archivos junto con la afirmación**
 > (`git checkout <rama> -- <rutas>`), no sólo la línea de la cola.
 
+> ✅ **Cerrado el 02-sep, arreglando el GATE y no la cola.** Las dos ramas volvían a «divergir»
+> cada vuelta por construcción: el chequeo comparaba `git rev-list --left-right --count` entre
+> las ramas enteras, y eso **nunca** va a dar cero — son dos carriles vivos. Medido hoy: 149/186
+> de divergencia con la cola difiriendo en **un solo párrafo**. Ese contador mandó **cuatro de
+> las últimas cinco vueltas** a «reconciliar»: el carril se pasó el día copiando su propia cola
+> en vez de acercar el feed. Arreglado en el instrumento (`C:/Users/PC/.claude/scheduled-tasks/contenido-cola/SKILL.md`): ahora compara el **archivo** con
+> `diff`, y la reconciliación es **direccional** — sólo entra hacia acá lo que la otra rama
+> midió más nuevo. Y queda escrita la razón por la que nunca sale hacia allá:
+> `claude/carril-contenido` **la maneja Sergio en su propia sesión** (lo dice el loop
+> `docs-auditoria` del VPS) y su árbol tenía trabajo suyo sin commitear — dos PNG modificados y
+> los clips de RL03 sin versionar. Escribirle ahí mezcla árboles.
+>
+> **Lo único que quedó de este lado y allá no está** es el hallazgo del 02-sep: MITO/AUTO/COSTO
+> resueltas sin registrar, y las 7 láminas idénticas de `onia-costo-invisible-20260808`. En la
+> rama de Sergio MITO figura **abierta**, así que si alguien la toma va a registrar en n8n una
+> palabra que acá se midió que **no hay que registrar**. Va por aviso a Sergio, no por commit.
+
 ---
 
 ## El estado real, medido el 2026-08-30
