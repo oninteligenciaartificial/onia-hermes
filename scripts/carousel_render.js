@@ -127,7 +127,17 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado', 'bloque-solido'];
+// PACKS es la lista blanca del CLI (valida `--pack` mas abajo): estar aca es PROMETER que
+// ese pack renderiza. Por eso solo entra el pack cuyo archivo esta EN ESTE REPO.
+//
+// `papel-subrayado`, `dato-ilustrado` y `tarjeta-empleado` entraron aca el 2026-09-02 SIN
+// sus modulos: `carousel_pack_papel/dato/empleado.js` se commitearon solo en
+// `claude/ads-creatividades-publicos` —el carril de contenido, que el integrador tiene
+// prohibido mergear— y nunca llegaron a main. Listados igual, el CLI los aceptaba y
+// reventaba DESPUES, al renderar ("Pack no disponible"): una entrada de menu para un plato
+// que la cocina no puede hacer. Vuelven en una linea (aca + su `const` de abajo) cuando ese
+// carril cierre y sus archivos entren — el test `todo pack listado RENDERIZA` lo comprueba.
+const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'bloque-solido'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
@@ -1329,7 +1339,7 @@ if (require.main === module) {
 
 module.exports = {
   slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
-  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml,
+  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, bloqueSolidoHtml,
   emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };
