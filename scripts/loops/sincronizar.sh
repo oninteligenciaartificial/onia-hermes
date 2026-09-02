@@ -29,6 +29,9 @@ REPO=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
 DESTINO_BIN=${ONIA_LOOPS_BIN:-/root/bin}
 FUENTE="$REPO/scripts/loops"
 CAMBIOS=0
+# Indirecto para poder PROBAR este script sin mandarle un Telegram falso a Sergio.
+# Una guarda que no se puede ejercitar es una guarda que nadie sabe si anda.
+TG=${ONIA_TG:-/root/bin/onia-tg.sh}
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"; }
 
@@ -59,7 +62,43 @@ poner() {  # poner <origen> <destino>
   CAMBIOS=$((CAMBIOS + 1))
 }
 
-poner "$FUENTE/onia-loop.sh" "$DESTINO_BIN/onia-loop.sh"
+# 🔴 GUARDA: `main` NO puede apagar un loop que el cron sigue llamando.
+#
+# Nace del 2026-09-02 20:32 UTC, medido por el loop supervisor. Este script copia
+# el corredor DESDE main, siempre, en una direccion sola. Ese dia main estaba CINCO
+# commits atras (los `case` de supervisor, web-factory-dev, recorrido-cliente,
+# tendencias y calidad-generado vivian solo en `claude/git-status-935f47`, sin
+# mergear) mientras los cinco ya tenian linea de cron, prompt en disco y worktree
+# vivo. La corrida de las :44 los habria borrado del corredor sin decir una palabra,
+# y cada uno habria muerto en el `*)` con exit 64 — cinco carriles apagados por un
+# merge que faltaba, no por una decision de nadie.
+#
+# `loops.md` ya avisaba del riesgo ("reinstalar desde el repo habria bajado el modelo
+# de todos los loops y borrado dos carriles") y anotaba lo que faltaba: que el propio
+# corredor avise de la diferencia, como ya hace con los prompts. Esto es eso.
+#
+# El criterio NO es "main nunca puede sacar un case" — retirar un loop tiene que
+# seguir siendo posible. Es: **si el cron lo sigue llamando, sacarle el case lo mata**.
+# Un loop retirado de verdad se saca primero del crontab; entonces esta guarda lo deja
+# pasar sola. Asi la unica cosa que bloquea es la unica que rompe.
+ids_case() { grep -oE '^  [a-z0-9-]+\)' "$1" 2>/dev/null | tr -d ' )' | sort -u; }
+
+PERDIDOS=""
+if [ -f "$DESTINO_BIN/onia-loop.sh" ] && [ -f "$FUENTE/onia-loop.sh" ]; then
+  while read -r id; do
+    [ -n "$id" ] || continue
+    if crontab -l 2>/dev/null | grep -qE "onia-loop\.sh +${id}([[:space:]]|\$)"; then
+      PERDIDOS="$PERDIDOS $id"
+    fi
+  done < <(comm -13 <(ids_case "$FUENTE/onia-loop.sh") <(ids_case "$DESTINO_BIN/onia-loop.sh"))
+fi
+
+if [ -n "$PERDIDOS" ]; then
+  log "RECHAZADO: el corredor de main no conoce a$PERDIDOS, y el cron los sigue llamando — dejo el desplegado"
+  "$TG" "🔴 <b>Sync de loops frenado</b>: el corredor de <code>main</code> no conoce a <code>$(echo "$PERDIDOS" | sed 's/^ //; s/ /<\/code>, <code>/g')</code>, pero el cron los llama igual. Los habria matado con exit 64. Falta mergear su rama a main; mientras tanto dejo el corredor que anda." >/dev/null 2>&1 || true
+else
+  poner "$FUENTE/onia-loop.sh" "$DESTINO_BIN/onia-loop.sh"
+fi
 
 # El sincronizador se despliega A SI MISMO. Sin esta linea es el unico archivo del
 # sistema que hay que copiar a mano, y por lo tanto el unico cuyas mejoras nunca se
@@ -101,6 +140,6 @@ done
 
 if [ "$CAMBIOS" -gt 0 ]; then
   log "sincronizados $CAMBIOS archivo(s) desde main"
-  /root/bin/onia-tg.sh "🔄 <b>Loops</b>: $CAMBIOS archivo(s) desplegados desde <code>main</code> en el VPS" >/dev/null 2>&1 || true
+  "$TG" "🔄 <b>Loops</b>: $CAMBIOS archivo(s) desplegados desde <code>main</code> en el VPS" >/dev/null 2>&1 || true
 fi
 exit 0
