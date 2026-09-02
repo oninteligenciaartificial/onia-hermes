@@ -44,7 +44,7 @@ Lucía **no sirve para nada**: lo único irreemplazable del personaje es que sea
 
 ## Cola
 
-### E1 · ¿Qué tan poco fancy es el banco? · **0 créditos** · PENDIENTE
+### E1 · ¿Qué tan poco fancy es el banco? · **0 créditos** · HECHO
 Mirá `G01..G06`, `B05..B08`, `C01`. Puntuá cada una **contra la tabla fancy de arriba**, no
 contra la rúbrica técnica. **Salida:** qué piezas ya tienen algo fancy (sospecha: `C01-terraza`
 y `B07`) y qué exactamente las hace verse de barrio en el resto — luz, lugar, ropa o encuadre.
@@ -92,3 +92,43 @@ y es fancy, con el comando exacto. Es el entregable de la ventana.
 ## Resultados
 
 _(cada vuelta agrega su bloque: qué probó, qué midió mirando, qué decidió)_
+
+### E1 · Auditoría fancy del banco — 2026-09-02 · 0 créditos
+
+Abrí y miré las 11 piezas nombradas (`G01..G06`, `B05..B08`, `C01`). Puntué **fancy 0–5**
+(mezcla de luz + lugar + ropa + encuadre) contra la tabla fancy, no la rúbrica técnica.
+La **cara de Lucía es consistente en las 11** — el banco no tiene problema de identidad,
+tiene problema de estética.
+
+| Pieza | Fancy | Por qué |
+|---|---|---|
+| **C01-terraza-torre-cristal** | **4/5** | Rooftop de cristal (lugar fancy real), chaleco sastre negro, skyline desenfocado con aire. Único techo: luz de **mediodía dura/plana**, no dorada. |
+| **G01-cafe-pizarra** | **3/5** | Retrato cercano, luz cálida de interior, bokeh de luces tibias, top de canalé beige. Café de barrio pero **acogedor y aspiracional** — la más fancy fuera de C01. |
+| B05-micro-al-trabajo | 2/5 | Camisa de **lino crema** (mejor ropa del set barrio) + algo de luz lateral cálida, pero micro lleno con carteles → sigue leyendo documental. |
+| G02-parada-de-micro | 1/5 | Cielo **gris plano**, pared descascarada, camiseta gris. |
+| G03-mercado | 1/5 | Toldo verde, cajones de verdura, camiseta gris, fondo saturado. |
+| G04-tienda-de-barrio | 1/5 | **Foco pelado**, heladera Coca-Cola, estantería cargada, camiseta gris. |
+| G05-oficina-de-tramites | 1/5 | **Fluorescente**, pared descascarada, sillas plásticas, camiseta gris. |
+| G06-peluqueria | 1/5 | **Fluorescente**, espejo viejo, shampoos genéricos, capa negra. |
+| B06-consultorio-dental | 1/5 | **Fluorescente verdoso**, pared con humedad, scrub blanco. |
+| B07-ferreteria | 1/5 | **Foco pelado**, delantal azul manchado, estantería de pintura. |
+| B08-taller | 1/5 | **Fluorescente**, delantal con grasa, repuestos de moto. |
+
+**Corrección de una sospecha de la bitácora:** el ítem E1 apostaba a `C01` **y `B07`**.
+Mirado al 100 %, **`B07`-ferretería es barrio PURO (1/5)** — foco pelado, delantal manchado.
+La segunda pieza semi-fancy real es **`G01`-café-pizarra**. (Verificar es mirar, no suponer.)
+
+**Qué las hace verse de barrio, ordenado por peso — y esto le da el orden de ataque a E2:**
+1. **LUZ (el killer #1 y el más barato de corregir).** 8 de 11 tienen fluorescente verdoso,
+   foco pelado o cielo gris plano. Las **dos** semi-fancy (C01, G01) comparten una sola cosa:
+   **luz natural/cálida**, no dura. → valida que la variante **B de E2 (golden hour por la LUZ)**
+   es la primera palanca a probar.
+2. **LUGAR.** Entornos de barrio saturados de clutter (estanterías, cables, paredes rotas).
+3. **ENCUADRE.** Fondos llenos sin aire ni profundidad; solo C01 y G01 tienen bokeh/profundidad.
+4. **ROPA — lo MENOS decisivo.** La camiseta gris / lino es real y correcta; el delantal es
+   contextual. **Cambiar solo la ropa no da fancy** — no gastar una variante en eso.
+
+**Conclusión para E2:** el eje causal de "fancy" es **luz > lugar > encuadre > ropa**. Empezar
+por la luz. Nota de una variable: C01 ya prueba que un **lugar** fancy sube a 4/5 aun con luz
+dura → si E2-B (luz dorada) confirma que la luz sola sube sin tocar la cara, **luz + lugar** es
+la receta de techo.
