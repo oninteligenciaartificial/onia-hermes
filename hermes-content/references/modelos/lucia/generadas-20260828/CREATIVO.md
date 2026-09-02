@@ -3,6 +3,12 @@
 > Escrito el 2026-09-01. Los cinco videos existían desde el 28-ago **sin un solo creativo**:
 > ni gancho, ni caption, ni CTA. Estaban listos para mirar y no para publicar.
 
+> 🔧 **Ampliado 2026-09-02.** El banco tiene un **sexto** video —la peluquería (`V07`/`G06`,
+> Pilar B)— que quedaba fuera de este doc: su único creativo era el caption comunitario de
+> `PARA-PUBLICAR/D14-lucia-reel-peluqueria/CAPTION.txt`. Se le agrega abajo el **segundo ángulo**
+> (desglose de costo), la misma forma que los otros cinco, para poder A/B-testear la misma toma.
+> Ver [«V07/G06 — peluquería»](#v07g06--peluquería-pilar-b--segundo-ángulo) al final.
+
 ## 🔴 Lo que hay que saber antes de usar cualquiera
 
 **Los cinco son de 5 segundos, mudos y en 828×1108.** Eso importa para ads:
@@ -149,3 +155,58 @@ Y no se regenera: **su valor es mostrar el defecto.** Es el mismo caso que
 3. **Re-encuadrar a 9:16** o aceptar barras. Hoy son 828×1108.
 4. **Registrar la palabra del CTA** en `scripts/recompensas.json` y en el mapa de n8n **de la
    cuenta que publica** — el que publica es el que recibe el comentario. Es el incidente RANKING.
+
+---
+
+## V07/G06 — peluquería (Pilar B) · segundo ángulo
+
+**El sexto video del banco, y el único distinto en especie.** No es cost-desglose de Onia:
+nació **Pilar B** (no nombra a Onia), animando `G06-peluqueria.jpg` desde el espejo. La peluquera
+sostiene el mechón mojado y la tijera **avanza y cierra sobre las puntas** en los ~4 s —acción a
+medias de las más claras del banco— y la mano sale de cuadro dejando la cara al final. Mirado esta
+vuelta en `_V07-TIRA.jpg`: cara idéntica cuadro a cuadro (pecas, aro de oro, cadenita), ventilador
+girando, ningún cartel legible.
+
+🔴 **Ojo, no es como los otros cinco:**
+
+| | V01–V05 | **V07/G06 peluquería** |
+|---|---|---|
+| Formato | 828×1108 (≈3:4) | **720×1280 = 9:16 exacto** — no necesita re-encuadre |
+| Audio | mudos | **con pista de sala** |
+| Duración | 5 s | ~4 s |
+| Pilar | nombra/insinúa Onia | **Pilar B, no nombra Onia** |
+
+🔴 **Es un solo render con tres nombres.** `G06-peluqueria-video-seedance.mp4`,
+`V07-peluqueria-seedance.mp4` y `PARA-PUBLICAR/D14-lucia-reel-peluqueria/lucia-peluqueria-REEL-720x1280.mp4`
+son **byte-idénticos** (mismo md5 `18a8ed46…`). No re-animar creyendo que falta: es el mismo clip.
+
+**Ya tiene un creativo vivo:** el caption comunitario *«Esta peluquería no existe. Yo tampoco»*
+en `D14/CAPTION.txt`, con CTA **COMUNIDAD**. Lo de abajo es el **segundo ángulo** —el desglose de
+costo— para testear la misma toma con otro mensaje. Reutiliza la palabra **COMUNIDAD** a propósito:
+ya está cableada en n8n para este reel (D14), así que no abre trabajo nuevo de recompensas.
+
+**Gancho (0–2 s, quemado en pantalla):**
+> **Ningún camarógrafo entró a esta peluquería. No hizo falta.**
+
+**Caption:**
+```
+Un reel así, filmado de verdad, cuesta:
+  · camarógrafo media jornada        → Bs …
+  · edición y color del clip         → Bs …
+  · cuadrar día, luz y una clienta   → Bs …
+
+Y la partida que nunca se cotiza: que ese día salga todo bien —la luz, la
+clienta, la peluquera de humor— para grabar los 4 segundos que servían.
+
+Esto salió en minutos, desde una compu, sin nadie en el local. No es que sea
+más barato: es que desaparece la variable que no controlabas.
+
+Tu negocio puede tener su propio contenido con movimiento, sin esperar una
+producción entera.
+```
+
+**CTA:** `Comentá COMUNIDAD y te muestro cómo se hace el de tu local.`
+
+⚠️ **Cifras vacías a propósito**, como el resto del doc: antes de publicar, traer un número real
+(un presupuesto de filmación, lo que cobra un camarógrafo en Santa Cruz) y anotar de dónde salió.
+Sin fuente, se sacan las líneas de plata y queda sólo el argumento.
