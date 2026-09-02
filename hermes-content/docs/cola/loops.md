@@ -77,7 +77,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | `web-factory-dev` | **VPS** | `21 2,8,14,20 * * *` (UTC) | Webs de cliente terminadas Y publicables con un comando (rama `claude/web-factory-dev`; cola en `web-factory/docs/LOOP_COLA.md`) |
 | `tendencias` | **VPS** | `51 11,23 * * *` (UTC) | Convierte lo que funciona AHORA en el rubro en recetas accionables de contenido, cada una con su fuente pública (rama `claude/tendencias`) |
 | `calidad-generado` | **VPS** | `5 3,9,15,21 * * *` (UTC) | Que Onia no publique una pieza mala y que Lucía sea SIEMPRE la misma cara (rama `claude/calidad-generado`) |
-| `supervisor` | **VPS** | `29 2,8,14,20 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |
+| `supervisor` | **VPS** | `29 */2 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |
 | `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
 
 ⚠️ **Corregido 2026-09-02 20:40 UTC — la tabla tenía 10 filas y el cron 14.** Faltaban
@@ -288,6 +288,13 @@ coinciden. Va dentro de `npm test`, así que el integrador no puede mergear con 
 Nace de que el chequeo pegado en los prompts sólo miraba en un sentido: buscaba filas que
 faltaran en el cron, y por eso **nunca podía ver** los cinco loops que corrían sin figurar acá.
 Un archivo que se compara a ojo divergió tres veces en un solo día.
+
+✅ **Y cazó una divergencia a los tres minutos de existir.** Recién commiteado, la medición marcó
+`supervisor: cron=[29 */2 * * *] doc=[29 2,8,14,20 * * *]`: el `mtime` del crontab era de **26
+segundos antes** — el propio loop `supervisor`, corriendo en paralelo, se había subido la
+frecuencia de 4 a 12 vueltas por día mientras esta vuelta escribía la tabla. A ojo eso se
+descubría dentro de días, o nunca. **Cuando el cron y la tabla difieren, gana el cron**: es lo que
+efectivamente corre y gasta; la tabla se alinea a él.
 
 ⚠️ **No listes el cron con `head`.** Ese mismo día el integrador arrancó con
 `crontab -l | head -50`, la lista tenía 68 líneas, y concluyó que `lucia` y `kpis-semanal` no
