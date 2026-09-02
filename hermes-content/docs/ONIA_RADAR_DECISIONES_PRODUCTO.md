@@ -442,7 +442,7 @@ la base de Chatwoot en el propio VPS), dos nuevas del 01-sep ("tengo una ferrete
 dental en Santa Cruz, somos 4 personas"). **Cinco de las seis no dejaron teléfono ni correo**:
 sólo se les puede contestar desde el widget mismo, así que un inbox sin dueño no es una demora,
 es una pérdida. El límite de una org = un inbox sigue siendo real
-(`clinic_settings.chatwootInboxId` es `Int?` único). Anotado como **S12** en
+(`clinic_settings.chatwootInboxId` es `Int?` único). Anotado como **S14** en
 `hermes-content/docs/cola/chatbot.md`, sin tocar la decisión: sigue esperando que Sergio elija
 entre la opción 2 (org "Onia Bandeja", ~10 min) o extender el schema a N inboxes.
 

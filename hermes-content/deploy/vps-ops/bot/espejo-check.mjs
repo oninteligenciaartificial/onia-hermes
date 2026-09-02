@@ -33,7 +33,7 @@
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 
 /** Solo el codigo decide el veredicto. Lo demas se reporta y se perdona — ver ES_CODIGO. */
@@ -306,6 +306,10 @@ function main() {
   return 1;
 }
 
-if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1].replace(/\\/g, "/")}`).href) {
+// `pathToFileURL` y no `new URL("file://" + argv[1])`: con `node -e "import(...)" <arg>`, `argv[1]`
+// es el ARGUMENTO y no una ruta, y concatenarlo tira `ERR_INVALID_URL` — o sea que importar este
+// modulo con argumentos lo rompia. Reproducido el 2026-09-02, cuando `s11_desplegado.mjs` copio
+// esta guarda de aca y fallo asi. Ademas resuelve solo el escapado y las barras invertidas.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   process.exit(main());
 }
