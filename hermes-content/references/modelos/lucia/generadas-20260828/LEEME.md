@@ -57,3 +57,31 @@ piezas donde Lucía tiene que parecer una persona y no una modelo.
   Higgsfield (`hf_<fecha>_<hora>_<uuid>.png`). Sin eso hay que buscarla en un grid que no carga.
 - Ninguna de estas está en la lista blanca de `scripts/lucia_banco.json` todavía —
   `generadas-20260828/` sí está, así que el gate ya las acepta.
+
+
+---
+
+## ✅ V07 — el PRIMER video vertical, y lo produjo el carril del VPS solo
+
+`V07-peluqueria-seedance.mp4` · **720×1280 = 9:16 exacto** · 4,04 s · 97 frames · **con pista de
+audio aac** · modelo `seedance1_5` · **4,8 créditos**.
+
+**Lo generó el loop del VPS sin intervención**, en su primera corrida, animando `G06-peluqueria`
+— que era justo la imagen pendiente. Verificado con `_V07-TIRA.jpg`: la mano sostiene el mechón,
+la tijera avanza entre frames, y **la cara aguanta los cuatro** sin inventar habla ni perderse.
+
+### Dos diferencias con Kling que cambian el flujo
+
+| | Kling 3.0 (V01-V06) | **Seedance 1.5 (V07)** |
+|---|---|---|
+| Formato | 828×1108 (~3:4) | **720×1280 (9:16)** |
+| Audio | sin pista | **con pista aac** |
+| Costo | 6,25–8,75 cr | **4,8 cr** |
+| Vertical desde imagen 3:4 | no | **sí** |
+
+🔴 **Seedance da vertical aunque la imagen fuente sea 3:4.** Kling heredaba el aspecto del frame;
+Seedance no. Eso significa que **las 16 imágenes viejas del banco, todas 3:4, se pueden animar en
+9:16 sin regenerarlas.** No hace falta rehacer el banco.
+
+**Seedance 1.5 pasa a ser el modelo de video por defecto**: más barato, vertical nativo y con
+audio. Kling queda para cuando haga falta otra cosa.
