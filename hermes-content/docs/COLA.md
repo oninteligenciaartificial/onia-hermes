@@ -421,7 +421,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
   </details>
 
-- [ ] 🟠 **El canario saca las capturas con el motor equivocado, y por eso INVENTA defectos de
+- [x] 🟠 **El canario saca las capturas con el motor equivocado, y por eso INVENTA defectos de
       texto.** Es la raíz del fantasma de arriba, y no es zona de `web-venta` (vive en
       `scripts/`, cuyo dueño es el carril del canario).
       **Dónde, exacto:** `scripts/canario_visual.mjs:259` llama `chromium.launch(...)` **sin
@@ -437,6 +437,28 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       contra una pantalla que se veía perfecta.
       **Cómo se sabe que quedó hecho:** correr el canario sobre `login-plataforma` y que la
       captura diga "Entregamos tu sistema", no "Ent regamos t u sist ema".
+
+      ✅ **HECHO el 2026-09-02 por el integrador, en `main`** (`scripts/canario_visual.mjs`).
+      Lo tomó él y no el carril del canario porque era el primer ítem abierto de "Ahora" y
+      porque cada corrida con el motor malo le fabrica trabajo inventado a los demás carriles.
+      **Lo que se hizo:** el `launch` inline salió a una función `opcionesDeChromium(esRoot)`
+      que pide `channel: 'chromium'` y conserva `--no-sandbox` sólo como root. Cuatro casos
+      nuevos en `--self-check` (69 en total, verde) — **corridos en ROJO antes del cambio**, y
+      fallaron los dos del `channel` y ninguno del sandbox, que es el rojo correcto.
+      **La prueba de que arregla el defecto, hecha con el Playwright que usa el canario**
+      (`/root/node_modules`, 1.60, rev 1223): misma URL, mismo instante, misma fuente cargada.
+      Sin `channel` → *"Ent regamos t u sist ema … con t us dat os"*. Con `channel: 'chromium'`
+      → *"Entregamos tu sistema con la configuración de tu rubro puesta."* Miradas las dos
+      capturas, no leído un exit code.
+      ⚠️ **Lo que NO se pudo correr, y es del carril del canario:** el canario entero desde este
+      worktree revienta antes de abrir nada — `node_modules` local trae Playwright **1.62.1**,
+      que pide `chromium-1234`, y en el VPS sólo está **1223**. No lo causó este cambio (pasa
+      igual sin él); el canario no lo sufre porque su worktree **no tiene `node_modules`
+      propio** y resuelve a `/root/node_modules` 1.60, que sí calza. Si alguna vez se le agrega
+      uno, el canario deja de arrancar.
+      ⚠️ **Y esto no llega solo a la próxima corrida:** el runner **no** mergea `main` en los
+      worktrees de carril, y `claude/canario-visual` está 91 commits atrás. El canario tiene que
+      traer `main` a su rama antes de que sus fotos salgan limpias.
 
 ### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
 

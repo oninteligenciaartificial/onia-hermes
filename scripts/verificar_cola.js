@@ -198,8 +198,19 @@ const EXTENSIONES = new Set([
 // solo sirve en la maquina de Sergio.
 const REPOS_HERMANOS = ['onia-platform'];
 
+// Y las apps que viven DENTRO de este repo. Un item del sitio de venta escribe sus rutas
+// relativas a la app (`src/app/terminos/opengraph-image.tsx`), no al repo — es como se
+// nombran entre gente que trabaja ahi, y pedirle el prefijo largo a cada renglon es pedir
+// que el gate se ignore. Medido el 2026-09-02: 4 falsos positivos de 4, todos archivos que
+// SI existen, el dia despues de que `dc8baa8b` limpiara otros 4 por lo mismo. Un gate que
+// sale rojo de fabrica se empieza a saltear, y ahi deja de proteger nada.
+const APPS_DEL_REPO = ['web-factory/apps/onia-platform'];
+
 function existeEnAlgunRepo(ruta, baseDir) {
   if (fs.existsSync(path.resolve(baseDir, ruta))) return true;
+  for (const app of APPS_DEL_REPO) {
+    if (fs.existsSync(path.resolve(baseDir, app, ruta))) return true;
+  }
   // El repo hermano cuelga del mismo padre que este (…/proyectos/onia-hermes
   // y …/proyectos/onia-platform). Desde un worktree hay que subir mas, asi que
   // se prueban los padres hasta encontrarlo.

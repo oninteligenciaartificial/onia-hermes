@@ -73,6 +73,38 @@ const SESION = { user: process.env.ONIA_CANARIO_USER || '', pass: process.env.ON
  *
  * Se compara host + camino: el query string y la barra final no son desvíos.
  */
+/**
+ * Con qué binario se saca la foto. NO es un detalle de arranque: es lo que decide qué
+ * defectos ve el canario.
+ *
+ * `chromium.launch()` **sin `channel`** resuelve a `chromium_headless_shell`, un rasterizador
+ * que dibuja un espacio DESPUÉS DE CADA `t` en los pesos finos de la fuente Archivo:
+ * *"Ent regamos t u sist ema … puest a … con t us dat os"*. Eso **no lo ve ningún cliente** —
+ * es del binario que captura, no del sitio.
+ *
+ * Lo que costó antes de arreglarse (2026-09-02): un ítem abierto tres días contra una pantalla
+ * impecable, una bisección entera que culpó a la fuente ("roto en pesos ≤500, limpio en 600"),
+ * y una decisión escalada a Sergio que nunca existió (radar §19). Ninguna de esas pruebas podía
+ * acertar, porque **ninguna cambió el motor**.
+ *
+ * Medido dos veces, misma URL y mismo instante, con los dos binarios que ya están bajados en el
+ * VPS (`chromium-1223` y `chromium_headless_shell-1223`, ambos rev 1223 = la que pide el
+ * Playwright 1.60 de `/root/node_modules`): el shell rompe el texto, el Chromium completo lo
+ * dibuja perfecto. No hay que instalar nada.
+ *
+ * Regla para leer un reporte futuro: si TODOS los cortes caen pegados a una `t`, es este
+ * artefacto y no un defecto del producto.
+ */
+function opcionesDeChromium(esRoot) {
+  return {
+    // Pedir el Chromium COMPLETO. Sin esto el canario inventa defectos de texto en cada corrida.
+    channel: 'chromium',
+    // Como root (el VPS) Chromium NO arranca con su sandbox: falla en la primera pantalla.
+    // En Windows/usuario normal se deja el sandbox puesto, que es lo correcto.
+    ...(esRoot ? { args: ['--no-sandbox', '--disable-dev-shm-usage'] } : {}),
+  };
+}
+
 function llegoALaPantalla(urlPedida, urlFinal) {
   try {
     const a = new URL(urlPedida), b = new URL(urlFinal);
@@ -289,6 +321,15 @@ if (filtro.includes('--self-check')) {
   let casos = 0;
   const afirmar = (cond, que) => { casos++; if (!cond) { console.error('FALLO:', que); process.exitCode = 1; } };
 
+  // El MOTOR con el que se saca la foto decide qué defectos ve el canario, así que es un
+  // umbral más y va acá. Sin `channel`, Playwright resuelve a `chromium_headless_shell`, que
+  // dibuja un espacio DESPUÉS DE CADA `t` en los pesos finos de Archivo ("Ent regamos t u
+  // sist ema"). Ningún cliente ve eso: es del binario que captura, no del sitio.
+  afirmar(opcionesDeChromium(true).channel === 'chromium', 'como root pide el Chromium COMPLETO, no el headless shell');
+  afirmar(opcionesDeChromium(false).channel === 'chromium', 'fuera de root TAMBIEN pide el Chromium completo');
+  afirmar(opcionesDeChromium(true).args?.includes('--no-sandbox'), 'como root sigue arrancando sin sandbox');
+  afirmar(opcionesDeChromium(false).args === undefined, 'fuera de root el sandbox queda puesto');
+
   afirmar(motivosDe({}).length === 0, 'una pantalla igual a su baseline no dispara nada');
   afirmar(motivosDe({ bytes: 1_390_000 }).length === 0, '+39 % de peso es ruido, no un item');
   afirmar(motivosDe({ bytes: 1_410_000 }).some((m) => m.includes('peso')), '+41 % de peso SI es un item');
@@ -361,9 +402,7 @@ mkdirSync(OUT, { recursive: true });
 // Como root (el VPS) Chromium NO arranca con su sandbox: falla en la primera pantalla.
 // En Windows/usuario normal se deja el sandbox puesto, que es lo correcto.
 const esRoot = process.getuid?.() === 0;
-const browser = await chromium.launch(
-  esRoot ? { args: ['--no-sandbox', '--disable-dev-shm-usage'] } : {},
-);
+const browser = await chromium.launch(opcionesDeChromium(esRoot));
 for (const p of lista) {
   const d = await medir(browser, p);
   const veredicto = d.motivos.length
