@@ -55,6 +55,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | `canario-visual` | **VPS** | `41 4,10,16,22 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
 | `investigacion` | **VPS** | `26 3,9,15,21 * * *` (UTC) | **Cotiza** las decisiones abiertas del radar para que Sergio decida en tanda, una vez, sobre un archivo (rama `claude/investigacion`) |
 | `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
+| `lucia` | **VPS** | `37 5,11,17,23 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
 | `marca-personal` | **VPS** | `56 9,13,17,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
 | `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
 
@@ -95,6 +96,30 @@ rama, en dos máquinas**, pisándose.
   `list_scheduled_tasks` es lo **esperado**, no una falla. No las crees, no las habilites.
 - Si corrés en el **VPS**: las filas `Windows` **no son tuyas**. Que no aparezcan en
   `crontab -l` es lo **esperado**. No las toques.
+
+## 🔴 Quién decide QUÉ hacen los loops — desde el 2026-09-02
+
+Ocho loops, y hasta hoy **ninguno decidía qué importa más**: cada uno comía de su propia cola y
+la prioridad la ponía Sergio a mano, todos los días. Pedido suyo ese día: *"quiero que ordenes y
+que yo sólo dé el veredicto final"*.
+
+El circuito, sin él en el medio:
+
+```
+Hermes ordenador   cada 2 h   mide el estado real → deja ≤3 tareas en el tablero `onia`
+Los 8 loops        su horario  leen el TABLERO primero, reclaman con cerrojo, ejecutan
+Hermes veredicto   1 vez/día   a Sergio SÓLO lo que decide él (máx. 5, con costo)
+```
+
+**El tablero le gana a la cola en markdown**, y no por gusto: probado el 2026-09-02, dos carriles
+que cierran ítems **distintos** del mismo archivo —la línea 3 y la línea 4— **dan conflicto
+igual**, porque git no separa líneas pegadas. En el tablero cada tarea es una **fila** y se
+reclama con un cerrojo atómico. Reglas y cómo entra una sesión nueva:
+[`TABLERO.md`](TABLERO.md).
+
+⚠️ **Las colas en markdown NO están jubiladas.** Siguen siendo el trabajo interno de cada carril.
+El tablero es donde entra la prioridad y donde se cruzan las sesiones. **Si algo está en los dos,
+manda el tablero y se saca del markdown en la misma vuelta.**
 
 ## Por qué se mudaron los loops al VPS
 
