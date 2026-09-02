@@ -49,6 +49,18 @@ una pieza**, y esa pieza es el ítem 1 de Ahora. ⚠️ **Superado el mismo día
 puso, y dos de las cinco ya se ven. Las otras tres están en el inbox 4 (widget web), que
 sigue sin dueño.
 
+⚠️ **Recontado el 2026-09-02 contra la base de HOY, no contra este párrafo: en inbox 4 ya no
+son tres, son SEIS — y crecen sin que nadie las vea.** `docker exec` a `onia-chatbot-db`
+(conversaciones × mensajes de `inbox_id=4`): 34 (24-ago, "hola", sin contacto), 36 (27-ago,
+`Saguilera@ds-santacruz.bo`, ya en S7), 38 (29-ago, "hola", sin contacto), 40 (29-ago, sin
+contacto), **45 (01-sep, "tengo una ferreteria", sin contacto)** y **46 (01-sep, "Hola,
+quiero informacion... Tengo una clinica dental en Santa Cruz, somos 4 personas", sin
+contacto)** — estas dos últimas no estaban contadas en ningún lado. De las seis, **cinco no
+dejaron teléfono ni correo**: sólo se les puede contestar DESDE el widget, que es exactamente
+lo que el inbox huérfano impide. La decisión §9 sigue en pie (opción 1, dejar el 4 sin dueño
+"hasta que la limitación moleste") pero el propio dato que le faltaba a esa condición ya
+está: **S12** en Bloqueado.
+
 ---
 
 ## Cómo se trabaja esta cola
@@ -172,9 +184,10 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
       próximo `scp` — y el propio carril tiene escrito que *un gate que siempre está rojo lo
       apaga alguien*. Verificado después de crear los dos archivos: el espejo sigue reportando
       los mismos tres de siempre.
-> **"Ahora" quedó vacío el 2026-09-01**, y eso es un estado válido: los dos ítems que vivían acá
-> se cerraron o se movieron a "Bloqueado en Sergio" con su medición. La próxima vuelta toma el
-> primer ítem de **Después** — no es premio de consuelo, es la cola.
+> ⚠️ **Corregido el 2026-09-02: la nota de acá abajo decía "Ahora quedó vacío el 2026-09-01" y
+> ya no es cierto** — quedó escrita ANTES de que el ítem de arriba (vigilar el reconcile) se
+> promoviera de vuelta a "Ahora" ese mismo día, y nadie la borró. Se saca para que la próxima
+> vuelta no lea "Ahora" como vacío cuando no lo está.
 
 > **El ítem 2 —las campañas de la web— salió de acá el 2026-08-31.** Vivió diez vueltas
 > esperando el `scp` de **S9**, que escribe en el VPS y por eso es de Sergio. Se movió entero
@@ -265,6 +278,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 | S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas. ✅ **Sumado el 31-ago (7ª vuelta): ahora se comprueba DESDE AFUERA, sin entrar al VPS.** El `--check` del `.sh` vive dentro del contenedor (SSH + `docker exec` + `rails runner`), así que sólo lo corre quien ya está adentro y sabe que tiene que mirar — por eso las tres se perdieron el 16-ago y nadie lo vio en quince días. `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`) lee el `window.globalConfig` del HTML público del login: es un GET, corre desde cualquier máquina y hoy sale **1 con `REVERTIDAS 3/9`**. **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10, y mide la cara que ve el desconocido, no la base |
 | S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes** — commit `4f86381` de `onia-platform` (rama `carril/chatbot-v68-friccion`) | Es un deploy del producto, y ningún deploy sale sin su OK | Que el item "Requerimientos" del menú dibuje su icono. Encontrado MIRANDO `/inbox` de producción hoy: la fuente estaba cargada y el glifo no existía — `assignment_turned_in` nunca se subseteó (342 ligaduras en el .woff2 desplegado, 261 iconos declarados). Es el mismo defecto del login del 14-ago, en una pantalla que ningún gate cubría. Ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`); **verificación post-deploy:** abrir `/inbox` y mirar el menú, o medir el ancho del texto del span — un glifo ocupa ~1em, hoy mide 20em |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
+| S12 | **¿Sigue en pie la opción 1 de §9 ("el inbox 4 se deja sin dueño hasta que la limitación moleste")?** Medido el 2026-09-02: son SEIS conversaciones reales en inbox 4 (34, 36, 38, 40, 45, 46), dos nuevas del 01-sep, y CINCO de las seis no dejaron teléfono ni correo — sólo se les puede contestar desde adentro del widget, que es justo lo que el inbox huérfano bloquea. El límite técnico sigue siendo real: `clinic_settings.chatwootInboxId` es un `Int?` único (`prisma/schema.prisma:1002`), una org = un inbox. Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9: (2) crear una org "Onia Bandeja" sólo para recibir el 4 (~10 min, agrega una org fantasma), o (nueva) extender `clinic_settings` a N inboxes — más caro, y lo decide plataforma | Su decisión de producto y su límite de schema, igual que S8 | Que las próximas conversaciones del widget se vean en `/inbox` sin esperar a que alguien dé su teléfono |
 
 ### S9 — el ítem completo, movido de "Ahora" el 2026-08-31
 

@@ -241,6 +241,16 @@ y reiniciar.** Verificable antes y después sin tocar nada:
 del `scp` tiene que salir 0). **La decisión 9 no cambia**: sigue siendo opción 1, esto sólo
 corrige la lista y su orden.
 
+⚠️ **Recontado el 2026-09-02: aparece el dato que a la opción 1 le faltaba para "hasta que la
+limitación moleste".** El inbox 4 pasó de 3 a **6** conversaciones reales (`docker exec` contra
+la base de Chatwoot en el propio VPS), dos nuevas del 01-sep ("tengo una ferretería" y "clínica
+dental en Santa Cruz, somos 4 personas"). **Cinco de las seis no dejaron teléfono ni correo**:
+sólo se les puede contestar desde el widget mismo, así que un inbox sin dueño no es una demora,
+es una pérdida. El límite de una org = un inbox sigue siendo real
+(`clinic_settings.chatwootInboxId` es `Int?` único). Anotado como **S12** en
+`hermes-content/docs/cola/chatbot.md`, sin tocar la decisión: sigue esperando que Sergio elija
+entre la opción 2 (org "Onia Bandeja", ~10 min) o extender el schema a N inboxes.
+
 ## 10. La marca de Chatwoot se está filtrando por tres puertas sin vigilancia (2026-08-31) — acción de Sergio
 
 **Por qué aparece.** La decisión 1 dice que Chatwoot queda como infraestructura invisible y
