@@ -120,6 +120,25 @@ pegás el **sticker de encuesta de IG** sobre la zona punteada, con estas opcion
 | 01 asistente | 3 meses · 1 mes · 1 semana · **1 tarde** | remata con historia "se arma en una tarde — en mi comunidad está el paso a paso" |
 | 02 cuál NO puede | fotos · WhatsApp · cotizar · **ninguna: todo puede** | la trampa es el gancho |
 | 03 costo del arte | Bs 700 · Bs 70 · Bs 7 · **menos de Bs 1** | remata con el arte terminado + "0,12 créditos" |
+| 04 guardián del VPS | 1 vez al día · cada hora · **cada 10 minutos** · nunca | el cron real está en la imagen (`*/10 * * * * claude-guardia.sh`); remata mostrando un aviso de Telegram de verdad |
+| 05 quién escribe esto | 1 · 2 · **4** · ninguna, lo hago yo | meta-contenido: la historia la escribió el loop del servidor. 4×/día es el cron real de este carril (`56 9,13,17,21` UTC) |
+| 06 el empleado que no duerme | Bs 3.500 · Bs 1.200 · Bs 400 · **Bs 0** | la pregunta es por el SUELDO (el servidor sí cuesta) — remata con "no cobra sueldo, cobra electricidad" |
+
+**Las cifras de 04 y 05 salen de `crontab -l` del VPS, contado en vivo el 02-sep**, no de
+memoria. Si el horario del loop cambia, la historia 05 miente: re-contar antes de publicarla.
+
+⚠️ **CTA en historias — adaptación explícita, no deriva.** El CTA estándar del carril es
+*"Comentá COMUNIDAD y te paso el enlace para unirte"*, pero **en historias no hay
+comentarios**. El remate de cada una usa la misma promesa por el canal que sí existe:
+*"Respondé COMUNIDAD a esta historia y te paso el enlace para unirte"*. Los carruseles y
+posts de feed siguen llevando el CTA exacto.
+
+**Banda segura (02-sep):** las 6 historias se rehicieron para que nada caiga bajo la
+interfaz de IG. Antes el handle quedaba **tachado por la barra "Enviar mensaje"** y ~40 %
+de la zona de encuesta caía debajo de la UI — o sea, el sticker se pegaba parcialmente
+tapado. Gate del formato: `scripts/marca-personal/chequear-banda-segura-historias.py`
+(arma `CHEQUEO-banda-segura.png` con la interfaz simulada encima; **mirarla** antes de dar
+una historia por lista — el peso del PNG no detecta esto).
 
 ## Historias — 2 secuencias (plantilla hook→mito→revelación→CTA)
 

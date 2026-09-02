@@ -146,3 +146,32 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       mismo experimento destapó que con un claim de 2-3 líneas los íconos/gaps que
       traía el generador original invadían el handle — bug real de layout, corregido
       antes de publicar (íconos 230px→196px, gaps más chicos).
+- [x] **Banda segura de historias 9:16** (02-sep, tanda intensiva) — **experimento
+      inventado por el loop: §5/§6 no tenían ningún pendiente ejecutable** (los cuatro
+      que quedan están bloqueados por assets, por el runtime de HyperFrames o esperando
+      el OK de Sergio). A/B/C renderizado y comparado en
+      `carousels/out/experimento-safearea-historia/`, con la **interfaz de IG simulada
+      encima** (bandas rojas = lo que el usuario no ve): **A** layout actual ·
+      **B** banda segura, misma tipografía · **C** banda segura + tipografía al 88 %.
+      **Gana C.** Banda usada: `y ∈ [230px, 1498px]` — fuente interna versionada,
+      `.agents/skills/embedded-captions/references/aesthetic-principles.md` §17
+      ("9:16 TikTok/IG/Shorts: caption zone y ∈ [12%, 78%], bottom 22% is UI"); no se
+      pudo citar la spec de Meta porque esta corrida no tiene acceso web.
+      **A tenía un defecto real, no estético:** el handle quedaba **tachado por la barra
+      "Enviar mensaje"** y ~40 % de la zona punteada de encuesta caía debajo de la UI —
+      Sergio habría pegado el sticker medio tapado. B lo corrige pero deja la zona de
+      encuesta apretada (~330px); C corrige lo mismo y recupera ~200px para el sticker,
+      y la pérdida de tipografía es imperceptible a escala de historia (el claim baja de
+      58px a 51px y sigue siendo lo más grande de la pantalla). Aplicado a
+      `generar-historia-quiz.py` y **las 6 historias regeneradas**.
+      **De paso quedó el gate del formato:** `chequear-banda-segura-historias.py` pega la
+      interfaz sobre los PNG ya hechos y arma `CHEQUEO-banda-segura.png` para mirarla.
+      Es justo lo que un `>50KB` no puede ver: el PNG suelto se veía impecable.
+- [ ] **Próximo experimento — ¿la zona punteada es del tamaño del sticker real?**
+      El gate de arriba prueba que la zona de encuesta está DENTRO de la banda segura,
+      pero nadie verificó que su **tamaño** coincida con el del sticker de encuesta de IG:
+      si la zona es más grande, Sergio pega un sticker chico flotando en un rectángulo
+      vacío; si es más chica, lo pega desbordando el diseño. **No se puede medir sin una
+      captura real de un sticker de IG** — pedírsela a Sergio (una captura de pantalla
+      pegando una encuesta, 10 seg) y recién ahí calibrar `.zona`. Anotado acá para que la
+      próxima corrida no lo invente a ojo.
