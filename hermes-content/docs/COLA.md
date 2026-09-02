@@ -666,8 +666,8 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Cómo apareció:** auditando el `[x]` de la tarjeta social (el que cerró `4384f7e8`). Ese
       ítem se verificó mirando la home, y la home estaba bien. El comentario de
       `(sitio)/opengraph-image.tsx` afirmaba, textual, que por vivir en el segmento `(sitio)` "la
-      heredan sus DOCE rutas". **Es falso.** `opengraph-image` de Next aplica sólo al `page.tsx`
-      de su propio segmento y no baja a los anidados.
+      heredan sus DOCE rutas". **Es falso.** `opengraph-image` de Next aplica sólo al
+      `(sitio)/page.tsx` de su propio segmento y no baja a los anidados.
       **Medido sobre el build, ruta por ruta** (`curl` al HTML servido, no al DOM): `/` traía
       `og:image`; `/empezar`, `/precios`, `/chatbot`, `/agentes`, `/rubros`, `/comparativa`,
       `/contacto`, `/facturacion`, `/guia-facturacion`, `/nosotros` y `/servicios/webs` traían
@@ -719,7 +719,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       enumeraba las rutas con un `readdirSync` del directorio `(sitio)`, así que era
       **estructuralmente ciego** a lo de afuera: pasaba en verde con las cuatro rotas. Un guard
       que sólo mira donde ya arreglaste no es un guard. Ahora la lista **sale del sitemap**
-      (`sitemap.ts`, parseado) y resuelve cada ruta dentro o fuera de `(sitio)`: una página nueva
+      (`src/app/sitemap.ts`, parseado) y resuelve cada ruta dentro o fuera de `(sitio)`: una página nueva
       entra al sitemap y el test le exige su tarjeta, esté en el grupo que esté.
       **Probado que el guard MUERDE, no que sólo pasa:** se sacó
       `terminos/opengraph-image.tsx` y la suite falló en esa ruta exacta
@@ -1137,6 +1137,40 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `lib/esto-no-existe-jamas.ts` **sigue saliendo fantasma**. `npm test` exit 0. Las otras
       colas de `hermes-content/docs/cola/` dan el mismo `cola-vacia` que antes del cambio
       (verificado con `git stash`): no tienen sección "Ahora", y eso no es regresión de esto.
+
+      **↑ Auditado el 2026-09-02 15:00 UTC por `onia-cola` (escalón 2): este `[x]` estaba FALSO
+      contra el código de hoy — RE-ARREGLADO en la misma vuelta.** El cierre decía "sale
+      **verde, exit 0, 16 ítems**"; corrido hoy salía **exit 1 con 12 ERROR**, y los doce eran
+      falsos otra vez. **No se revirtió nada: el ítem envejeció.** Los carve-outs de la tanda
+      anterior siguen intactos; lo que cambió es la cola, que sumó tres formas de citar que el
+      detector no conocía. Es la misma lección que este archivo ya guarda dos veces: **un cierre
+      describe el repo del día en que se escribió.** Un gate que vuelve a salir rojo de fábrica
+      se vuelve a saltear, y el prompt de este carril manda correrlo antes de tomar cada ítem.
+      **Las tres caras nuevas, cada una con su recíproco en el `--self-check`:**
+      - **Cita abreviada con elipsis** (`…/2026-09-02-mismo-html-chromium-real-login.png`, 3 de
+        los 12): el archivo **existe** —en `hermes-content/docs/historial/canario-visual/`—; lo
+        que no existe es esa forma de escribirlo. Medido: ningún archivo de los dos repos tiene
+        `…` ni `...` en el nombre. Recíproco: sin la elipsis, la ruta se sigue verificando.
+      - **Nombre de rama** (`claude/canario-visual`, 1 de los 12): una rama no es un archivo.
+        Medido: no hay ninguna carpeta `claude/` en los dos repos.
+      - **Ruta parcial con barra** (`(sitio)/opengraph-image.tsx` y 5 más, 6 de los 12): el sitio
+        de venta cita relativo a `src/app/`, y ni el repo ni `APPS_DEL_REPO` lo resolvían porque
+        **el prefijo que falta es intermedio**. Ahora cuenta si algún archivo del repo *termina*
+        en esa ruta, cortando en límite de segmento. **No afloja el gate**: sigue exigiendo que
+        el archivo exista, sólo deja de exigir el prefijo entero.
+      **Lo que NO se aflojó, a propósito:** la resolución por sufijo se aplica **sólo con barra**.
+      Los otros 2 de los 12 eran `page.tsx` y `sitemap.ts` **sueltos**, y entre los cientos que
+      hay en el repo esa cita no identifica ningún archivo. Se arregló **la cita**, no el
+      detector: ahora dicen `(sitio)/page.tsx` y `src/app/sitemap.ts`.
+      **Medido:** `--self-check` **58 casos** (9 nuevos, los 9 en ROJO antes del cambio y el
+      primero verificado por su mensaje exacto); el gate sobre `COLA.md` **exit 0, 20 ítems**;
+      un ítem inventado que cita `lib/esto-no-existe-jamas.ts` **sigue saliendo fantasma**;
+      `npm test` exit 0.
+      **Un defecto de test cazado de paso, que valía la pena:** el índice de archivos se cachea
+      por carpeta la primera vez que un sufijo lo necesita, así que un fixture creado *después*
+      en esa misma carpeta no se veía y el caso nuevo daba rojo con el detector ya correcto.
+      Se le dio árbol propio al bloque, en vez de agregarle al script una API de reset que sólo
+      usarían los tests.
 
       *(Texto original del ítem, para que se vea contra qué se midió.)* Medido el 2026-09-02 corriendo
       `node scripts/verificar_cola.js hermes-content/docs/COLA.md`: sale con 4 ERROR y **los

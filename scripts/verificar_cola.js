@@ -147,6 +147,18 @@ function evidenciaDe(textoCrudo) {
     // siempre (medido el 2026-09-02 sobre COLA.md). Ningun archivo del repo tiene `*`.
     if (/\*/.test(ruta)) continue;
 
+    // Una cita ABREVIADA tampoco es un archivo. La cola escribe
+    // `…/2026-09-02-mismo-html-chromium-real-login.png` para no repetir la carpeta larga: el
+    // archivo existe, lo que no existe es esa forma de escribirlo. Medido el 2026-09-02:
+    // ningun archivo de los dos repos tiene `…` ni `...` en el nombre, asi que esto no puede
+    // tapar uno de verdad — y sin la elipsis la misma ruta se sigue verificando.
+    if (/…|\.\.\./.test(ruta)) continue;
+
+    // Una RAMA de git no es un archivo. La cola nombra `claude/canario-visual` para decir de
+    // que carril es un item, y el gate la buscaba en disco. Medido: no hay ninguna carpeta
+    // `claude/` en los dos repos, asi que el prefijo alcanza para distinguirla.
+    if (/^claude\//.test(ruta)) continue;
+
     // Una ruta se reconoce por tener separador o extension. "10 min" no es una ruta.
     if (/[\/]/.test(ruta)) { rutas.push(ruta); continue; }
 
@@ -223,7 +235,51 @@ function existeEnAlgunRepo(ruta, baseDir) {
     if (padre === dir) break;
     dir = padre;
   }
+
+  // Ultimo recurso: una ruta PARCIAL. El sitio de venta cita `(sitio)/opengraph-image.tsx`
+  // —relativo a `src/app/`, que es como se nombran entre quienes trabajan ahi— y ni el repo ni
+  // `APPS_DEL_REPO` lo resuelven, porque el prefijo que falta es intermedio. Cuenta si algun
+  // archivo del repo TERMINA en esa ruta, en limite de segmento. No afloja el gate: sigue
+  // exigiendo que el archivo exista de verdad; solo deja de exigir el prefijo entero.
+  // Se aplica solo CON barra: `page.tsx` suelto matchearia cualquiera de los cientos que hay.
+  if (ruta.includes('/')) return existeComoSufijo(ruta, baseDir);
   return false;
+}
+
+// Indice perezoso de los archivos del arbol, por nombre. Se construye UNA vez y solo si algun
+// sufijo lo necesita — el caso normal (la ruta existe tal cual) no paga nada.
+const indicePorNombre = new Map();
+
+function indiceDe(baseDir) {
+  const clave = path.resolve(baseDir);
+  if (indicePorNombre.has(clave)) return indicePorNombre.get(clave);
+  const porNombre = new Map();
+  const IGNORAR = new Set(['node_modules', '.git', '.next', 'dist', 'build', '.turbo']);
+  const caminar = (dir, rel, hondo) => {
+    if (hondo > 12) return;
+    let entradas;
+    try { entradas = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+    for (const e of entradas) {
+      if (IGNORAR.has(e.name)) continue;
+      const sub = rel ? rel + '/' + e.name : e.name;
+      if (e.isDirectory()) caminar(path.join(dir, e.name), sub, hondo + 1);
+      else {
+        if (!porNombre.has(e.name)) porNombre.set(e.name, []);
+        porNombre.get(e.name).push(sub);
+      }
+    }
+  };
+  caminar(clave, '', 0);
+  indicePorNombre.set(clave, porNombre);
+  return porNombre;
+}
+
+function existeComoSufijo(ruta, baseDir) {
+  const nombre = ruta.slice(ruta.lastIndexOf('/') + 1);
+  const candidatos = indiceDe(baseDir).get(nombre) || [];
+  // `endsWith('/' + ruta)` es lo que fuerza el limite de segmento: `itio)/og.tsx` no puede
+  // matchear `app/(sitio)/og.tsx`, porque el corte tiene que caer en una barra.
+  return candidatos.some((p) => p === ruta || p.endsWith('/' + ruta));
 }
 
 // Un item se identifica por su TITULO: la primera **negrita**, o lo que va antes del primer
@@ -541,6 +597,56 @@ function selfCheck() {
   // lo mismo sobre el mismo renglon, que es la otra forma de entrenar a saltearlo.
   r = revisarCola('## Ahora\n- [ ] Falta `no-esta.png` y otra vez `no-esta.png`\n', tmp);
   ok(r.problemas.filter((p) => p.regla === 'fantasma').length === 1, 'una ruta repetida se reporta una sola vez');
+
+  // --- Los DOCE falsos positivos medidos el 2026-09-02 14:34 UTC sobre la propia COLA.md ---
+  // El item que declaraba este gate "verde, exit 0, 16 items" ENVEJECIO: hoy sale exit 1 con 12
+  // ERROR y los doce son falsos. Mismo modo de falla que la tanda anterior, con tres caras
+  // nuevas. Cada carve-out va con su reciproco, que es lo que impide que el arreglo afloje.
+
+  // (5) Una cita ABREVIADA con puntos suspensivos no es un archivo. La cola escribe
+  // `…/2026-09-02-mismo-html-chromium-real-login.png` para no repetir la carpeta larga, y ese
+  // archivo EXISTE (hermes-content/docs/historial/canario-visual/). Medido: ningun archivo de
+  // los dos repos tiene `…` ni `...` en el nombre, asi que descartarlo no puede tapar nada.
+  r = revisarCola('## Ahora\n- [ ] Ver `…/no-esta.png` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una cita abreviada con puntos suspensivos no es una ruta');
+  r = revisarCola('## Ahora\n- [ ] Ver `carpeta/.../no-esta.png` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'tres puntos ASCII tambien abrevian');
+  // Su reciproco: sin la elipsis, la misma ruta se sigue verificando.
+  r = revisarCola('## Ahora\n- [ ] Ver `carpeta/no-esta.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'sin elipsis la ruta se sigue verificando');
+
+  // (6) Una RAMA de git no es un archivo. La cola nombra `claude/canario-visual` para decir de
+  // que carril es un item. Medido: no existe ninguna carpeta `claude/` en los dos repos.
+  r = revisarCola('## Ahora\n- [ ] Es del carril `claude/canario-visual` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un nombre de rama no es una ruta');
+  // Su reciproco: una ruta de verdad que arranque con otra cosa se sigue verificando.
+  r = revisarCola('## Ahora\n- [ ] Ver `scripts/no-esta.js`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'la carve-out de ramas no tapa otras rutas');
+
+  // (7) Una ruta PARCIAL con barra cuenta como evidencia si algun archivo del repo TERMINA en
+  // ella. El sitio de venta cita `(sitio)/opengraph-image.tsx` —relativo a `src/app/`, no a la
+  // app— y el archivo existe bajo web-factory/apps/onia-platform/src/app/. Esto NO afloja el
+  // gate: sigue exigiendo que el archivo exista de verdad, solo deja de exigir que la cita
+  // traiga el prefijo entero. Sin barra NO se aplica a proposito: `page.tsx` suelto matchearia
+  // cualquiera de los cientos que hay y dejaria de identificar nada.
+  // Arbol propio: el indice de archivos se cachea por carpeta la primera vez que un sufijo lo
+  // necesita, y para entonces `tmp` ya fue recorrido por los casos de arriba. Un fixture
+  // creado tarde en esa misma carpeta no se veria. Un arbol nuevo evita el falso rojo sin
+  // inventarle al script una API de reset que solo usarian los tests.
+  const tmpSufijo = fs.mkdtempSync(path.join(require('os').tmpdir(), 'cola-sufijo-'));
+  fs.mkdirSync(path.join(tmpSufijo, 'app', '(sitio)'), { recursive: true });
+  fs.writeFileSync(path.join(tmpSufijo, 'app', '(sitio)', 'og.tsx'), 'x');
+  r = revisarCola('## Ahora\n- [ ] Ver `(sitio)/og.tsx`\n', tmpSufijo);
+  ok(!r.problemas.length, 'una ruta parcial con barra resuelve por sufijo');
+  // Su reciproco 1: si NINGUN archivo termina asi, sigue siendo fantasma.
+  r = revisarCola('## Ahora\n- [ ] Ver `(sitio)/no-esta.tsx`\n', tmpSufijo);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'un sufijo que no existe sigue siendo fantasma');
+  // Su reciproco 2: el sufijo corta en limite de segmento, no a media palabra.
+  r = revisarCola('## Ahora\n- [ ] Ver `itio)/og.tsx`\n', tmpSufijo);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el sufijo no matchea a media carpeta');
+  // Su reciproco 3: un nombre suelto sin barra NO resuelve por sufijo.
+  r = revisarCola('## Ahora\n- [ ] Ver `og.tsx`\n', tmpSufijo);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'sin barra no hay resolucion por sufijo');
 
   // --- Duplicados: "cerrar un item no cierra su copia" ---
   // Este defecto ya golpeo DOS veces por escrito en la propia cola. El 2026-08-31 se encontro
