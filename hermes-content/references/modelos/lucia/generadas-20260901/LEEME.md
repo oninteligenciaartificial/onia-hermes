@@ -137,3 +137,38 @@ cliente — que siga mirando la bolsa, que la abra ahí mismo. **Una sola variab
 
 ⚠️ No confundir con `V04`, que se guarda roto a propósito. Éste **sí se regenera**: el defecto ya
 está explicado acá y el archivo no aporta evidencia nueva una vez leída esta nota.
+
+---
+
+## ✅ V09 — taller mecánico · el PRIMER vertical que aguanta la cara
+
+`V09-taller-seedance.mp4` · job `3c90bae3-59fb-416b-969d-29aca36bacda` · **720×1280 (9:16)** · 4,05 s · **con audio** · `seedance1_5` · **4,8 cr**.
+Animada desde `B08-taller-9x16-CLI` (asset **`5f9e643f-751b-4984-8dfd-7032b4a553bc`** — no estaba anotado en ninguna parte, se recuperó del historial del CLI).
+
+**Mirado en `_V09-TIRA.jpg`, 4 frames: la cara aguanta los cuatro.** Cejas, nariz, mandíbula, el
+aro y la cadenita son los mismos en el primero y en el último. Casilla 9 ✅ — es el primer video
+vertical del banco que la pasa.
+
+### La confirmación: una variable cambiada, resultado opuesto
+
+V08 y V09 se generaron con el **mismo modelo, mismo aspecto, mismo costo y la misma hora**. Lo
+único distinto fue una frase del prompt:
+
+| | `V08` ferretería | `V09` taller |
+|---|---|---|
+| Frase | `she draws her hand back toward the counter` | `he keeps it low over the workbench and **STAYS in frame** in the foreground` |
+| Segundo personaje al final | fuera de cuadro | **brazo y herramienta en cuadro** |
+| Cara | ❌ deriva (8/9) | ✅ **aguanta (9/9)** |
+
+🔴 **Regla confirmada: el prompt tiene que RETENER al segundo personaje hasta el último frame.**
+No alcanza con que la acción sea a medias — si el otro se va, el modelo pierde la referencia de
+escala y ángulo y reconstruye la cara. No hace falta que se vea entero: **con el brazo y el objeto
+alcanza**, que es lo que pasa acá del frame 2 en adelante.
+
+**Cómo se escribe:** poner el verbo de permanencia explícito y en mayúsculas (`STAYS in frame`),
+y darle al segundo personaje algo que seguir haciendo ahí mismo — no un motivo para irse.
+
+### Pendiente menor
+
+El pelo sale **recogido**, no suelto como pide la receta. Viene así desde `B08`, no lo introdujo
+la animación. Se corrige en la imagen fuente, no en el video.
