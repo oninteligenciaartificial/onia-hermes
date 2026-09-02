@@ -100,3 +100,5 @@ generar. Un carril puede tener saldo y aun así quedar bloqueado por lo que gast
 La pieza tiene que poder salir sin arte pago — por eso el default sigue siendo la
 Receta 3 (plantilla + íconos Fluent, costo 0), y el arte Higgsfield es un **plus de la
 portada**, nunca un requisito. El carrusel de atención salió completo con íconos.
+
+| 2026-09-02 ~17:00 UTC | Mascota cartoon 2D pedida por Sergio: intento CAPADO por `grace_daily_limit_reached` (cuenta en periodo de gracia por el cobro anual reclamado; el cupo diario ya lo consumio la otra sesion: 3x Seedance + 2x Nano Banana = 18,4 cr). CERO cargo, verificado en transactions (ultima entrada 08:48). Pendiente: generar en la primera corrida con cupo. <!-- mascota cartoon capada --> | text2image_soul_v2 (cotizado 0,12) | ver prompts exactos en docs/cola/marca-personal.md | 0 cr |

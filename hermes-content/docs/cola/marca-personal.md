@@ -1,3 +1,18 @@
+
+## P0 · MASCOTA-HIGGSFIELD (Sergio 02-sep: "disenala con Higgsfield, no me gusta el SVG")
+
+PRIMERA corrida con cupo (el grace_daily_limit se resetea por dia): generar las 3
+variantes con `higgsfield generate create text2image_soul_v2 --prompt "..."` usando
+EXACTO estos prompts (0,12 cr c/u, cost antes, transactions despues, registrar lote):
+
+1. TILE: "flat 2D cartoon illustration of a cute robot mascot character, thick bold black ink outlines, solid flat green color fill #00C661, pure white background, hand-drawn indie webcomic animation style, rounded square head, two tall oval black eyes with tiny white glints, thin curved eyebrows, small spring antenna with a green ball tip, chunky small rounded body, white rounded chest panel with three green equalizer bars, short tube arms with white glove hands, short legs with rounded feet, standing and waving, full body, completely flat colors, no shading, no gradients, no 3D render, no photorealism, minimal clean sticker-like vector art"
+2. TV: mismo prompt pero cabeza = "retro TV shaped head with slightly rounded dark screen face, two glowing green oval eyes and thin eyebrows drawn on the screen"
+3. CASCO: mismo prompt pero cabeza = "round space-helmet head with a big glossy black visor showing one white glint" y cuerpo mas chico.
+
+Bajar las 3 a hermes-content/references/ui-patterns/mascota-onia/candidatos-higgsfield/,
+MIRARLAS, commitear y avisar a Sergio por Telegram (onia-tg.sh) con 1 linea para que
+elija. NO adoptar ninguna sin su OK. Si vuelve grace_daily_limit: registrar y reintentar
+la corrida siguiente.
 # Cola — carril MARCA PERSONAL · COMUNIDAD · CONTRATO SAMUEL
 
 > Índice del carril: `docs/ONIA_MARCA_PERSONAL_MADRE.md` (documento madre).
