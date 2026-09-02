@@ -158,6 +158,30 @@ vez y se calla). Los dos son decisión de Sergio, no código.
 
 ---
 
+- [ ] 🔴 **El bot contesta el saludo y se calla en el SEGUNDO mensaje. Reproducido hoy, en vivo, en el inbox de los leads reales.**
+      **Cómo se reproduce** (30 segundos, sin tocar nada): abrir
+      `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`,
+      escribir *"Hola, quiero informacion sobre el sistema"* → **contesta bien**; después
+      *"Tengo una clinica dental en Santa Cruz, somos 4 personas"* → **nada, nunca**.
+      **No es infraestructura.** Medido: `/health` dentro de `onia-center` da `ok:true`, base a
+      32 ms, el camino a Chatwoot responde, el webhook está registrado en la cuenta 2 sin filtro
+      de inbox (o sea que cubre el 4), y no hay incidente abierto.
+      **Tampoco es el add-on.** Se probó la hipótesis y salió FALSA: se le otorgó
+      `addon.whatsapp` a `onia-interna` (activo, verificado en `organization_entitlements`) y el
+      bot se sigue callando igual. Queda otorgado.
+      **El patrón, contado sobre las 13 conversaciones desde el 24-ago:** en el inbox 7 (QA) el
+      bot sostuvo una charla entera (5 mensajes → 5 respuestas). En los inboxes 4 y 5 —los de
+      leads reales— contestó **como máximo UNA vez, siempre**: 1→0, 1→0, 2→0, 1→0, 1→1, 2→1,
+      2→1, 2→1. Nunca hubo una segunda respuesta a una persona real.
+      🔴 **Lo primero es VERLO, no adivinarlo.** `/tmp/onia-bot-webhook.log` sólo tiene líneas de
+      arranque: **ni una por mensaje**. El proceso corre con `docker exec -d`, así que su salida
+      no va a ningún lado. Por eso este bug sobrevivió una semana con cinco personas escribiendo.
+      **Antes de tocar el motor: que cada webhook deje una línea** con conversación, entrada, la
+      rama que tomó y por qué no respondió. Con eso la causa aparece en la primera vuelta; sin
+      eso se sigue adivinando.
+      ⚠️ **Ojo con dar por buena una hipótesis sin probarla**: la del add-on parecía cerrada y era
+      falsa. La conversación de prueba de hoy queda en el inbox 4 a propósito, para reproducir.
+
 ## Después
 
 - [ ] **El disco de la máquina de Sergio se llenó al 100% y bloqueó el build.**

@@ -89,6 +89,17 @@ export const SCRIPT = Object.freeze({
   // recibo (para que no repita lo que ya dijo) y se le vuelven a poner los dos horarios sobre la
   // mesa. Mandarlo a la rama LLM por un mensaje que se entendio perfecto gasta una respuesta y,
   // al segundo, un handoff — en alguien que esta colaborando.
+  // M0b_SIN_HORARIOS — el mismo acuse que M0b, pero cuando `slots` sigue en "pendiente de
+  // definir". M0b re-ofrece **A)** y **B)**, y sin horarios reales eso sale literal como
+  // "HORARIO A (pendiente de definir)": el prospecto no puede elegir nada y la charla se
+  // estanca repitiendo la misma frase. Aca se acusa el dato, se avanza pidiendo lo unico
+  // accionable (el contacto) y la hora la coordina Sergio.
+  M0b_SIN_HORARIOS: [
+    "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
+    "",
+    "{{humano}} te coordina el horario personalmente, así que no te hago elegir nada acá. ¿A qué número o correo te escribe?",
+  ].join("\n"),
+
   M0b: [
     "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
     "",
