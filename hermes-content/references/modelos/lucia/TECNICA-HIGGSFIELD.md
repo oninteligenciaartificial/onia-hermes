@@ -1154,3 +1154,70 @@ Corrió 3 en paralelo (`&` + `wait`) en ~1 min c/u, sin que el shell cortara el 
 rúbrica (`1080×1920` / `720×1280`). Visualmente es vertical y pasa, pero **toda pieza de CLI
 necesita un export final** (center-crop a 9:16 + scale a 1080×1920) antes de publicar. Sin ese
 paso ninguna generación de CLI es 9/9 estricta. Pendiente de resolver el comando ffmpeg del export.
+
+---
+
+## 13. ✅ El export a resolución de publicación — resuelve la casilla 2 (E3, 2026-09-02)
+
+El CLI da 1536×2752 (ratio 0,558), que **no** es el 1080×1920 exacto de la casilla 2. El export:
+
+```bash
+# 9:16 exacto para historia/reel (1080×1920)
+ffmpeg -y -i ENTRADA.png -vf "scale=1080:-1,crop=1080:1920" -q:v 2 SALIDA-STORY-1080x1920.jpg
+# 4:5 para feed (1080×1350) — a partir del 9:16 ya exportado, recorte centrado
+ffmpeg -y -i SALIDA-STORY-1080x1920.jpg -vf "crop=1080:1350:0:340" -q:v 2 SALIDA-FEED-1080x1350.jpg
+```
+`scale=1080:-1` lleva el ancho a 1080 (alto → 1935), `crop=1080:1920` recorta 15 px arriba/abajo:
+no toca cara ni manos. **Verificar SIEMPRE con `ffprobe … stream=width,height` Y mirándolo** —
+el crop puede comerse una mano si la composición está pegada al borde. Para feed, IG prefiere 4:5;
+la historia usa el 9:16.
+
+## 14. 🔴 Dos trampas de composición que matan casillas (E3, 2026-09-02)
+
+- **Pantallas con contenido = casilla 3 muerta.** Un laptop/celular/TV **de frente y en foco**
+  sale con **texto de UI corrupto** (probado: el coworking de E3, pantalla de app de diseño con
+  glifos rotos). Si la escena pide una pantalla: apagada, de canto, o en desenfoque total. Nunca
+  una UI legible de frente.
+- **La acción a medias (casilla 5) es lo que sube de 8/9 a 9/9.** Una escena fancy **con las dos
+  manos sobre un objeto a mitad de un gesto** (el café: dos manos en la taza) pasa; la misma
+  calidad de cara y luz **sin** gesto (E2-B rooftop, hotel, coworking) se queda en CASI. Pedir
+  siempre un gesto a medias — y de paso es la mejor base para animar (el modelo continúa el gesto
+  en vez de inventarlo).
+
+## 15. ✅ Animar a Lucía por CLI: `seedance1_5` gana a `kling3_0` (E4, 2026-09-02)
+
+Probado sobre **la misma** imagen (`E3-cafe.png`, escena café con acción a medias), mismo prompt
+de movimiento, `9:16`, cambiando SÓLO el modelo. La comparación anterior (V06 kling / V07 seedance)
+era de fuentes distintas y no valía. Ahora sí.
+
+**Comando exacto copiable** (el flag para animar es `--start-image`, y acepta un **path local**
+que auto-sube — no hace falta el asset id de la cuenta):
+
+```bash
+# Animar una foto fancy de Lucía — GANADOR: seedance1_5 (4,8 cr, 9:16 exacto)
+IMG="hermes-content/references/modelos/lucia/generadas-20260902/E3-cafe.png"
+PROMPT="She lifts the coffee cup slightly and takes a small sip, then lowers it, blinks once softly. The camera barely moves, like a casual clip filmed while sitting. Nobody looks at the camera."
+higgsfield generate create seedance1_5 --start-image "$IMG" --prompt "$PROMPT" --aspect-ratio 9:16 --json
+# → devuelve ["<job_id>"]. NO usar --wait (el shell lo corta a 2 min); pollear:
+higgsfield generate get <job_id> --json | grep -oE 'https://[^"]+\.mp4'
+```
+
+**Por qué seedance y no kling — con evidencia mirada (4 frames c/u):**
+
+| | seedance1_5 | kling3_0 |
+|---|---|---|
+| Costo | **4,8 cr** | 8,75 cr (45% más) |
+| Formato | **720×1280 = 9:16 exacto** | 716×1284, necesita recorte |
+| Duración | 4 s · param `duration` = **4/8/12** | 5 s (default) |
+| **Casilla 9 (cara aguanta el clip)** | **✅ termina SOBRE la cara** | ⚠️ termina cabizbaja, cara tapada |
+
+🔑 **Hallazgo de modelo, no de prompt:** con el mismo prompt, **seedance resuelve la acción y
+devuelve la cara a cuadro** (mira→sorbe→baja→vuelve a mirar); **kling sostiene la pose de beber y
+muere enterrado en ella**. Para un reel de Lucía, donde el último frame tiene que ser su cara,
+seedance es la elección correcta aparte del precio. **Default de video del carril: `seedance1_5`.**
+
+🔻 **`seedance1_5` desbloquea clips de 8 y 12 s** (`duration: 4,8,12`, default 4) sin encadenar —
+responde casi entero a E6. Falta sólo medir el costo de 8/12 s con `generate cost … --duration 8`.
+
+🔴 **Trampa ya conocida, confirmada:** `--start-image` sí, `--image-references` NO para animar
+(éste quiere un asset id y trata la imagen como referencia, no como frame inicial).

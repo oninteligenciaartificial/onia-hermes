@@ -89,3 +89,16 @@ Siguiente lugar: **veterinaria de barrio**. Mismas reglas que D02.
 ## Publicadas / listas
 
 _(cada vuelta agrega su bloque acá: carpeta, cuenta, destino, palabra del CTA, cómo se verificó)_
+
+### D13 · Lucía · foto fancy en café de especialidad · LISTA (0 cr extra, subproducto de E3)
+- **Carpeta:** `PARA-PUBLICAR/D13-lucia-cafe-fancy/`
+  - `lucia-cafe-fancy-FEED-1080x1350.jpg` (feed, 4:5) · `lucia-cafe-fancy-STORY-1080x1920.jpg` (historia, 9:16)
+- **Cuenta / destino:** **Lucía** · feed (la 4:5) — la 9:16 sirve de historia.
+- **CTA:** **`COMUNIDAD`** (el de Lucía). `CAPTION.txt` completo, informa sobre IA y declara que la
+  foto ES IA (el argumento de venta es la declaración, no se esconde).
+- **Cómo se verificó:** salió de E2/E3 (receta fancy). 9/9 de la rúbrica MIRÁNDOLA al 100 %:
+  cara Lucía (pecas, poros, argolla), manos 5+5 sobre la taza, acción a medias (ambas manos),
+  luz de ventana real, cero texto legible, colores true-to-life. Casilla 2 resuelta con el export
+  a 1080×1920 / 1080×1350 (verificado con `ffprobe` y mirado, no corta cara ni manos).
+- ⚠️ **Falta lo de Sergio:** confirmar que `COMUNIDAD` está viva en el mapa de n8n de la cuenta de
+  Lucía antes de publicar (incidente RANKING). La pieza y el caption están listos.

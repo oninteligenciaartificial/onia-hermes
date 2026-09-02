@@ -65,11 +65,11 @@ casilla 1 (¿sigue siendo Lucía?) y casilla 7 (¿quedan poros?).
 **Salida:** cuál da fancy sin costo de cara, y **la frase exacta** que lo logra, escrita en
 `TECNICA-HIGGSFIELD.md`. Éste es el entregable que desbloquea el resto.
 
-### E3 · Tres lugares fancy nuevos · **~6 créditos** · PENDIENTE
+### E3 · Tres lugares fancy nuevos · **~6 créditos** · HECHO
 Con la fórmula ganadora de E2, generá **café de especialidad**, **coworking de diseño** y
 **hall de hotel**. 9:16. Las que salgan 9/9 van a `hermes-content/PARA-PUBLICAR/`.
 
-### E4 · Seedance vs Kling sobre LA MISMA imagen · **~13,5 créditos** · PENDIENTE
+### E4 · Seedance vs Kling sobre LA MISMA imagen · **~13,5 créditos** · HECHO
 Hoy `V06` es kling sobre dental y `V07` es seedance sobre peluquería: **distinta fuente, no es
 comparación.** Animá **una sola** imagen fancy de E3 con `seedance1_5` (4,8) y `kling3_0` (8,75),
 mismo prompt de movimiento. Comparar: aspecto de salida, duración, audio, y casilla 9 —**la cara
@@ -171,3 +171,67 @@ excelente base para animar (E4) o para regenerar con una acción a medias. No va
 **Entregable escrito** en `TECNICA-HIGGSFIELD.md` §12: la frase ganadora, el comando exacto
 copiable, la frase prohibida (C) y la trampa nueva del `9:16` del CLI ≠ 1080×1920.
 **El cuello de botella de la ventana queda resuelto:** hay léxico fancy que no cuesta la cara.
+
+### E3 · La fórmula fancy en 3 lugares nuevos — 2026-09-02 · 6 créditos (3×2 cr)
+
+Apliqué la fórmula ganadora de E2 (frase de LUZ) cambiando SÓLO la escena: **café de
+especialidad**, **coworking de diseño**, **hall de hotel boutique**. Misma referencia (`G01`),
+9:16, 2k, CLI. Piezas: `generadas-20260902/E3-{cafe,coworking,hotel}.png` + crops al 100 %.
+**La fórmula generaliza: las 3 salieron fancy y con la cara de Lucía intacta.** Puntuación de
+foto (casillas 1-8; la 9 es de video):
+
+| Pieza | Veredicto | Detalle mirado al 100 % |
+|---|---|---|
+| **E3-café ⭐** | **9/9 → PUBLICABLE** | Cara Lucía nítida (la mejor de la sesión), poros reales, **manos 5+5** sobre la taza, **acción a medias** (ambas manos cradleando), luz de ventana real, cero texto, colores true-to-life. Casilla 2 resuelta con export a 1080×1920 y 1080×1350. → **`PARA-PUBLICAR/D13-lucia-cafe-fancy/`** con caption. |
+| E3-coworking | CASI / ROTA | Fancy, cara ✅, pero la **pantalla del laptop tiene texto de UI corrupto → casilla 3 FALLA**, y casilla 5 débil (sin acción). El flare de sol un poco quemado. |
+| E3-hotel | CASI (8/9) | Fancy, cara y poros ✅, pero **casilla 5 débil** (posada, sin acción) y **casilla 8 al límite**: tinte naranja fuerte en pelo/piel, roza el «filtro dorado». |
+
+**Dos hallazgos nuevos (van a la técnica):**
+1. 🔴 **No poner pantallas con contenido** (laptop, celular de frente, TV): la IA **rompe el texto
+   de la UI** y mata la casilla 3. El coworking se cae por eso. Si hay pantalla, que esté apagada,
+   de canto o fuera de foco total.
+2. **La acción a medias es lo que separa 9/9 de 8/9.** El café la tiene (dos manos + taza) y por
+   eso publica; E2-B, coworking y hotel no la tienen y se quedan en CASI. Confirma la casilla 5:
+   una escena fancy **con un gesto a medias** es la receta de techo — y además es la mejor base
+   para animar (E4).
+
+**La ventana ya tiene su entregable doble:** receta fancy 9/9 escrita **y** una pieza publicable.
+
+### E4 · Seedance vs Kling sobre LA MISMA imagen — 2026-09-02 · 13,55 créditos (4,8 + 8,75)
+
+**Por fin una comparación real:** antes `V06` (kling/dental) y `V07` (seedance/peluquería) eran
+**fuentes distintas** — no comparaban nada. Acá animé **la misma** imagen fancy 9/9 (`E3-cafe.png`,
+la de la taza cradleada = acción a medias, la mejor base para animar), **mismo prompt de
+movimiento mínimo**, `9:16`, cambiando SÓLO el modelo. Piezas: `E4-cafe-seedance1_5.mp4`,
+`E4-cafe-kling3_0.mp4` + sus tiras de 4 frames `_E4-{seedance,kling}-frames.jpg` (inicio·⅓·⅔·final).
+
+Truco de flujo que ahorró la cacería del asset id: **`--start-image` acepta un PATH LOCAL y lo
+auto-sube.** No hace falta el asset id de la cuenta — se le pasa el `.png` del repo directo.
+
+| Dimensión | **seedance1_5** (4,8 cr) | kling3_0 (8,75 cr) |
+|---|---|---|
+| **Costo** | **4,8** ✅ 45% más barato | 8,75 |
+| **Formato (cas.2)** | **720×1280 = 9:16 exacto** ✅ | 716×1284 — casi, **necesita recorte** ⚠️ |
+| **Duración** | 4,04 s · param `duration` ofrece **4/8/12** | 5,04 s · default 5 |
+| **Audio (cas. de video)** | pista AAC | pista AAC — inerte para nosotros (voz va aparte) |
+| **Casilla 9 — cara aguanta el clip** | **✅ los 4 frames** | ⚠️ **falla** |
+| **Cómo termina** | resuelve el sorbo y **vuelve la cara a cuadro** — cierra SOBRE la cara ✅ | se queda **cabizbaja bebiendo** la mitad de atrás y **cierra con la cara tapada** por taza+pelo ❌ |
+
+**Ganador: `seedance1_5`, decisivo.** Más barato, 9:16 exacto sin recorte, y —lo que más importa
+para un reel— **su arco de movimiento devuelve la cara a cuadro**: mira→levanta→sorbe→baja→vuelve
+a mirar. Kling se compromete con la pose de beber y **muere enterrado en la acción**, que es medio
+defecto de `V04` en versión suave: la identidad se sostiene donde la cara se ve, pero el clip no
+termina sobre ella y pierde ~medio de contacto visual.
+
+**Hallazgo de modelo (no de prompt):** con el MISMO prompt, seedance **cierra la acción** y kling
+**la sostiene abierta**. Para Lucía —donde el último frame de un reel tiene que ser su cara— eso
+hace a seedance la elección correcta más allá del precio.
+
+**Cruce con E6 (gratis, ya visto):** `higgsfield model get seedance1_5` muestra `duration: 4,8,12`
+(default 4). O sea **sí se puede pedir más de 4 s** en seedance sin encadenar — E6 queda casi
+respondido sin gastar; falta sólo medir el costo de 8/12 s (otra vuelta).
+
+**El clip de seedance es b-roll Story-ready (9/9 de video).** NO lo copio a `PARA-PUBLICAR/`:
+la escena café ya está publicada como `D13` (la foto fija), y meter un clip casi idéntico de la
+misma escena es sobre-publicar la misma cara. Queda disponible en `generadas-20260902/` para
+cuando Sergio arme un reel; publicar es su decisión.
