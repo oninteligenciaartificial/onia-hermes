@@ -116,6 +116,17 @@ barato:** la agenda pública ya existe y crea citas reales (`app/(public)/book/[
 `Organization.slug` es único), así que alcanza con que el bot mande el link de reserva de
 esa organización en vez de derivar. Tres archivos del motor.
 
+**Ese escalón se construyó y se mergeó a `main` el 2026-09-01** (rama
+`fix/bot-manda-link-de-reserva`): con `orgSlug` limpio el recepcionista manda
+`https://app.onia.com.bo/book/<slug>` y, sin slug, deriva igual que antes (fail-closed).
+La agenda se verificó MIRÁNDOLA: `/book/zz-qa-clinica-chatbot-9k651` renderiza el asistente
+de 4 pasos con los profesionales reales de esa org; `/book/demo` da "Negocio no encontrado".
+⚠️ La cita de arriba a `bot/recepcionista.mjs:232` ya **no existe**: ese comentario se
+reescribió al enseñarle a agendar. La guarda que lo ataba a la copia de venta ahora mide el
+comportamiento (`scripts/venta-honestidad.test.mjs`), no la prosa. **Falta el deploy**, que
+es de Sergio: hasta que el bot desplegado mande el link, la copia de venta sigue sin
+prometer que agenda.
+
 **Carril:** chatbot.
 
 **Cerrado por la salida honesta, que es la que estaba en el carril producto** (commit

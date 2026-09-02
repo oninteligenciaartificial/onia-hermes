@@ -519,6 +519,61 @@ test("recepcionista: 'quiero comprar 100 tornillos' escala a humano — el bot n
   assert.deepEqual(luego.turns[0].notes, ["silencio:handoff_en_curso"]);
 });
 
+// ---------------------------------------------------------------------------
+// 8a. AGENDAR — el bot manda el LINK de reserva de la org (no deriva a un humano)
+// ---------------------------------------------------------------------------
+// Vendemos el chatbot como "contesta, califica, agenda" (pricing.ts) y hasta hoy el motor
+// hacia lo contrario: toda intencion de cita terminaba en un handoff. La agenda publica de
+// la org YA existe y crea citas reales (/book/<slug>), asi que agendar es MANDAR ese link.
+// Fail-closed en las dos direcciones: sin slug se deriva como siempre (jamas un link roto),
+// y una intencion de COMPRA sigue escalando aunque la org tenga agenda.
+
+const SLUG_FERRETERIA = "ferreteria-el-tornillo-ab123";
+const CONFIG_FERRETERIA_AGENDA = asRecepcionista(
+  applyKnowledge(CONFIG, CONOCIMIENTO_FERRETERIA),
+  CONOCIMIENTO_FERRETERIA,
+  SLUG_FERRETERIA,
+);
+const runAgenda = (turns, options = {}) => run(turns, { config: CONFIG_FERRETERIA_AGENDA, ...options });
+
+test("recepcionista: con slug, 'quiero agendar una cita' manda el link de reserva de ESA org", () => {
+  const { state, turns } = runAgenda(["hola", "quiero agendar una cita"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_AGENDA"]);
+  const text = textOf(turns[1]);
+  assert.match(text, /https:\/\/app\.onia\.com\.bo\/book\/ferreteria-el-tornillo-ab123/, "el link es el de la org, no uno generico");
+  assert.ok(!/\/book\/undefined|\/book\/null/.test(text), "nunca un link roto");
+  assert.equal(state.botStage, "nuevo", "agendar SOLO ya no molesta a un humano: no hay handoff");
+  assert.ok(!effectsOf(turns[1]).includes("review_queue"), "y no entra a la cola de revision");
+  assert.ok(turns[1].notes.includes("agenda:link_reserva"));
+});
+
+test("recepcionista: SIN slug la misma frase deriva como antes — fail-closed, nunca un link roto", () => {
+  const { state, turns } = runRecep(["hola", "quiero agendar una cita"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_INTERES"]);
+  assert.ok(!/app\.onia\.com\.bo|\/book\//.test(textOf(turns[1])), "sin slug no se inventa ningun link");
+  assert.equal(state.botStage, "handoff_humano");
+  assert.ok(turns[1].notes.includes("handoff:pedido_del_cliente"));
+});
+
+test("recepcionista: un slug que no pasa el validador se trata como si no hubiera — deriva", () => {
+  const roto = asRecepcionista(applyKnowledge(CONFIG, CONOCIMIENTO_FERRETERIA), CONOCIMIENTO_FERRETERIA, "el tornillo/../admin");
+  const { turns } = run(["hola", "quiero agendar una cita"], { config: roto });
+  assert.deepEqual(keysOf(turns[1]), ["R_INTERES"]);
+  assert.ok(!/app\.onia\.com\.bo/.test(textOf(turns[1])));
+});
+
+test("recepcionista: con agenda encendida, 'quiero comprar 100 tornillos' SIGUE escalando a humano", () => {
+  const { state, turns } = runAgenda(["hola", "quiero comprar 100 tornillos"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_INTERES"], "un pedido no es una cita: el link no se lo puede tragar");
+  assert.equal(state.botStage, "handoff_humano");
+  assert.ok(effectsOf(turns[1]).includes("review_queue"));
+});
+
+test("recepcionista: '¿cuánto dura la cita?' sigue siendo INFO — pregunta, no reserva", () => {
+  const { turns } = runAgenda(["hola", "¿cuánto dura la cita?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_CITA"], "preguntar por la cita no dispara el link");
+});
+
 test("recepcionista: pregunta de precio deriva a humano SIN cotizar (jamás el M4 del funnel)", () => {
   const { state, turns } = runRecep(["hola", "¿cuánto cuestan los tornillos?"]);
   assert.deepEqual(keysOf(turns[1]), ["R_PRECIO"]);

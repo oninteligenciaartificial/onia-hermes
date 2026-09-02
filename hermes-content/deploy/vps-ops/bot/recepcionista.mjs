@@ -13,7 +13,9 @@
 //   2. Renderiza SOLO hechos del knowledge de la org (`config.conocimiento`, el documento
 //      "onia.bot.knowledge/1" validado). Si un campo falta, respuesta honesta + handoff
 //      (R_NO_DATO) — nunca se rellena con los datos de Onia.
-//   3. JAMAS precios, jamas agendar solo: pedido / precio / duda => handoff a {{humano}}.
+//   3. JAMAS precios: pedido / precio / duda => handoff a {{humano}}. La UNICA excepcion es
+//      AGENDAR: si la org tiene slug, el bot manda el link de su agenda publica (que ya crea la
+//      cita) en vez de derivar — ver linkDeReserva. Sin slug, vuelve a ser un handoff.
 //   4. SIN LLM. Decision consciente (la rama LLM del funnel ancla su prompt al pitch de Onia):
 //      lo fuera de guion deriva al humano del negocio. Anotado como pendiente parametrizarlo.
 //
@@ -141,6 +143,28 @@ export function campanaExacta(conocimiento, norm) {
   return prefijo ? prefijo.item : null;
 }
 
+/**
+ * EL LINK DE LA AGENDA de esta org, o null.
+ *
+ * POR QUE EXISTE: `pricing.ts` vende el chatbot como "contesta, califica, AGENDA" y este motor
+ * decia lo contrario — toda intencion de cita terminaba derivada a un humano. La agenda publica
+ * de la org YA existe y crea citas reales, y `Organization.slug` es unico: agendar es mandar
+ * este link. No hay integracion nueva, solo dejar de mentir.
+ *
+ * FAIL-CLOSED, que es lo unico delicado de esta funcion: `config.orgSlug` viaja desde la fila
+ * publicada de la org y su validacion en el producto (`register`) es un `z.string()` sin charset,
+ * o sea que un slug con basura adentro es posible. Sin slug limpio se devuelve null y el turno
+ * deriva EXACTAMENTE como antes. Un link roto delante del cliente final es peor que un handoff.
+ */
+export const AGENDA_BASE_URL = "https://app.onia.com.bo/book";
+const RE_SLUG_ORG = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+
+export function linkDeReserva(config) {
+  const slug = String(config?.orgSlug || "").trim();
+  if (!slug || slug.length > 120 || !RE_SLUG_ORG.test(slug)) return null;
+  return `${AGENDA_BASE_URL}/${slug}`;
+}
+
 export function recepcionistaStep(ctx, base, motor) {
   const { config, msg } = ctx;
   const { finalize, handoffResult, say } = motor;
@@ -245,7 +269,16 @@ export function recepcionistaStep(ctx, base, motor) {
       : deriva("sin_dato_cita", "R_NO_DATO");
   }
 
-  // Pedido / cita / compra: se toma y se ESCALA. El bot no agenda ni vende solo.
+  // AGENDAR: la unica intencion que el bot cierra SOLO — le manda el link de la agenda publica de
+  // su org, que crea la cita de verdad. Sin link (org sin slug, o slug sucio) cae al handoff de
+  // abajo, igual que antes. `wantsToBook` excluye la compra a proposito: "quiero comprar 100
+  // tornillos y agendar" es un pedido y un pedido lo sigue confirmando una persona.
+  const linkAgenda = linkDeReserva(config);
+  if (linkAgenda && intents.wantsToBook(msg.norm)) {
+    return faq(say("R_AGENDA", next, config, { link_reserva: linkAgenda }), "agenda:link_reserva");
+  }
+
+  // Pedido / compra (y cita sin agenda publica): se toma y se ESCALA. El bot no vende solo.
   if (intents.wantsToOrder(msg.norm)) return deriva("pedido_del_cliente", "R_INTERES");
 
   if (boton === "horarios" || intents.asksSchedule(msg.norm)) {
