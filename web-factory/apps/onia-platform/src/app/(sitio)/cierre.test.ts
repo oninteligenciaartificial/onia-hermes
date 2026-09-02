@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { readdirSync, readFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
@@ -36,12 +36,33 @@ import { describe, expect, it } from "vitest";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const APP = dirname(AQUI);
+const SRC = dirname(APP);
 
-/** Las dos hojas que visten la superficie de venta. */
-const HOJAS = [
-  join(APP, "globals.css"),
-  join(AQUI, "sitio.module.css"),
-] as const;
+/**
+ * TODAS las hojas de estilo de la app, descubiertas del disco.
+ *
+ * ⚠️ Acá había una lista de DOS archivos (`globals.css` y `sitio.module.css`).
+ * Era el mismo error que este proyecto ya cometió con el guard de capturas:
+ * mirar sólo `(sitio)` y ser ciego al resto de lo publicado. La app tiene
+ * CATORCE hojas, y el defecto que este archivo vigila —reservar fondo desde el
+ * documento— sale en TODAS las rutas se escriba donde se escriba: un CSS module
+ * puede alcanzar el `body` con `:global(body)`, y `guia-facturacion` ya lo hace.
+ * Con la lista fija, el mismo bug reescrito en cualquiera de las otras doce
+ * hojas pasaba en VERDE.
+ *
+ * Se leen del disco a propósito: una hoja nueva queda cubierta sin que nadie se
+ * acuerde de agregarla acá. Un gate que hay que mantener a mano es un gate que
+ * se queda viejo.
+ */
+function hojasDeEstilo(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const ruta = join(dir, e.name);
+    if (e.isDirectory()) return hojasDeEstilo(ruta);
+    return e.isFile() && e.name.endsWith(".css") ? [ruta] : [];
+  });
+}
+
+const HOJAS = hojasDeEstilo(SRC).sort();
 
 /**
  * Los comentarios se sacan ANTES de mirar. Este archivo y el CSS explican en
@@ -63,12 +84,42 @@ function reglas(css: string): { selector: string; cuerpo: string }[] {
   return encontradas;
 }
 
-/** ¿El selector alcanza al documento entero? `body`, `html` y su forma `:global()`. */
+/**
+ * El SUJETO de un selector: la última parte, la que el navegador termina
+ * estilando. En `body:has(.hoja) main` el sujeto es `main`, no el `body` —
+ * ése reserva fondo en un `main`, no en el documento.
+ *
+ * Los combinadores se buscan sólo a nivel de superficie: un espacio dentro de
+ * `:has(.a .b)` no separa nada.
+ */
+function sujeto(selector: string): string {
+  let hondura = 0;
+  let corte = 0;
+  for (let i = 0; i < selector.length; i++) {
+    const c = selector[i];
+    if (c === "(" || c === "[") hondura++;
+    else if (c === ")" || c === "]") hondura--;
+    else if (hondura === 0 && /[\s>+~]/.test(c)) corte = i + 1;
+  }
+  return selector.slice(corte).trim();
+}
+
+/**
+ * ¿El selector alcanza al documento entero?
+ *
+ * Cuenta `body` y `html` en todas sus formas de escribirse: envueltos en
+ * `:global(...)` —en cualquier posición, no sólo rodeando el selector
+ * entero—, y calificados con pseudo-clases o clases (`body:has(.hoja)`,
+ * `html.oscuro`), que siguen siendo el documento. No cuenta cuando `body` es
+ * sólo el ancestro de otra cosa.
+ */
 function esElDocumento(selector: string): boolean {
-  return selector
-    .split(",")
-    .map((s) => s.trim().replace(/^:global\((.*)\)$/, "$1").trim())
-    .some((s) => s === "body" || s === "html");
+  return selector.split(",").some((s) => {
+    const plano = s.replace(/:global\(([^()]*)\)/g, "$1").trim();
+    // se corta en la primera pseudo-clase, clase, id o atributo del sujeto
+    const raiz = sujeto(plano).split(/[:.#[]/)[0].trim();
+    return raiz === "body" || raiz === "html";
+  });
 }
 
 /**
@@ -128,14 +179,21 @@ function reservaFondo(cuerpo: string): string[] {
 
 describe("la página de venta cierra en el pie, sin franja debajo", () => {
   const hojas = HOJAS.map((ruta) => ({
-    rotulo: ruta.slice(APP.length + 1),
+    rotulo: relative(SRC, ruta),
     css: soloCodigo(readFileSync(ruta, "utf8")),
   }));
 
   it("encuentra las hojas de estilo del sitio", () => {
-    // si una hoja se renombra, los expects de abajo pasan sobre nada
-    for (const h of hojas) {
-      expect(reglas(h.css).length, `${h.rotulo} no tiene reglas`).toBeGreaterThan(10);
+    // Si el descubrimiento se rompe (carpeta movida, `src/` renombrado), los
+    // expects de abajo pasarían sobre una lista VACÍA, en verde. Se ancla a las
+    // dos hojas que visten la superficie de venta y al orden de magnitud: son
+    // catorce hoy, así que menos de diez es que algo dejó de verse.
+    expect(hojas.length, "el barrido de hojas .css encontró casi nada").toBeGreaterThan(9);
+    for (const imprescindible of ["app/globals.css", "app/(sitio)/sitio.module.css"]) {
+      expect(
+        hojas.map((h) => h.rotulo),
+        `falta ${imprescindible}: el guard estaría mirando otra cosa`,
+      ).toContain(imprescindible);
     }
   });
 
@@ -154,24 +212,35 @@ describe("la página de venta cierra en el pie, sin franja debajo", () => {
     },
   );
 
-  it("el área segura del teléfono la absorbe el pie, no el body", () => {
-    const enElPie = hojas
-      .flatMap((h) => reglas(h.css))
-      .filter((r) => /safe-area-inset-bottom/.test(r.cuerpo));
+  it("el pie de la superficie de venta absorbe el área segura del teléfono", () => {
+    // La segunda mitad del arreglo, anclada donde importa: el pie de `(sitio)`,
+    // que es el que cierra `/` y `/empezar`. Sin esto, borrar el padding del
+    // body a secas deja la misma franja en cualquier iPhone con notch.
+    const pieDeVenta = hojas.find((h) => h.rotulo === "app/(sitio)/sitio.module.css");
+    const absorben = reglas(pieDeVenta!.css).filter(
+      (r) => /safe-area-inset-bottom/.test(r.cuerpo) && /footer/i.test(r.selector),
+    );
     expect(
-      enElPie.length,
-      "nadie absorbe env(safe-area-inset-bottom): en un iPhone con notch vuelve la franja",
+      absorben.length,
+      "el pie de venta no absorbe env(safe-area-inset-bottom): en un iPhone con " +
+        "notch vuelve la franja debajo del pie negro",
     ).toBeGreaterThan(0);
-    for (const r of enElPie) {
-      expect(
-        esElDocumento(r.selector),
-        `\`${r.selector}\` absorbe el área segura desde el documento: pinta del ` +
-          `fondo claro. Tiene que hacerlo un elemento del pie.`,
-      ).toBe(false);
-      expect(
-        r.selector,
-        `\`${r.selector}\` absorbe el área segura pero no es el pie`,
-      ).toMatch(/footer/i);
-    }
+  });
+
+  it("nadie absorbe el área segura desde el documento, en ninguna hoja", () => {
+    // El área segura la puede absorber el pie o una barra fija propia (la
+    // `.mobar` de landing-v1 lo hace bien: tiene su propio fondo). Lo que no
+    // puede es absorberla el `body`/`html` — ahí el espacio se pinta del fondo
+    // CLARO y se lee como una franja rota debajo del pie.
+    const culpables = hojas.flatMap((h) =>
+      reglas(h.css)
+        .filter((r) => /safe-area-inset-bottom/.test(r.cuerpo) && esElDocumento(r.selector))
+        .map((r) => `${h.rotulo}: ${r.selector}`),
+    );
+    expect(
+      culpables,
+      "absorber el área segura desde el documento pinta del fondo claro: tiene " +
+        "que hacerlo el pie, o el elemento fijo que tenga fondo propio",
+    ).toEqual([]);
   });
 });

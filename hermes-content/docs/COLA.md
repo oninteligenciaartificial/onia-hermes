@@ -956,6 +956,36 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       código sano se termina apagando, así que ahora sólo cuenta el lado de abajo distinto de cero.
       **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **119 pasan (5 archivos)**.
 
+      ⚠️ **Y ese gate nacía CIEGO a doce de las catorce hojas — corregido el 2026-09-02,
+      misma jornada.** Auditando el propio `[x]` de arriba: el test declaraba vigilar "las 16
+      rutas del sitio", pero su lista de hojas era **fija y de dos archivos** (`globals.css` y
+      `sitio.module.css`). La app tiene **14 hojas `.css`**, y un CSS module alcanza el `body`
+      con `:global(body)` — `guia-facturacion` ya lo hace. Es **el mismo error que el guard de
+      capturas de al lado** (`def54931`: *"miraba solo (sitio) y era ciego a 4 rutas
+      publicadas"*), repetido en el gate escrito para no repetirlo.
+      **Demostrado, no argumentado:** el mismo defecto (`:global(body) { padding-bottom: 4.6rem }`)
+      escrito en `site-footer.module.css` —la hoja que cierra `/privacidad`, `/terminos`, las 8
+      rutas `/v1/*` y el 404— pasaba **VERDE (4/4)** con el gate viejo y sale **ROJO** con el
+      nuevo, nombrando el archivo culpable.
+      **Qué cambió:** las hojas se descubren del disco (una hoja nueva queda cubierta sin que
+      nadie se acuerde de agregarla); `esElDocumento` entiende `:global()` en cualquier posición
+      y `body`/`html` calificados (`body:has(.hoja)`, `html.oscuro`), pero **no** cuando `body`
+      es sólo el ancestro (`body main` no es el documento).
+      **Y se corrigió una regla que era falsa:** el test exigía que *todo* selector con
+      `env(safe-area-inset-bottom)` fuera un `footer`. Al barrer las 14 hojas apareció `.mobar`
+      de `landing-v1` —**la barra de acción fija del móvil, que sí existe** en el legado `/v1`,
+      con fondo propio, absorbiendo bien su área segura. La regla real no es "tiene que ser el
+      pie" sino **"no puede ser el documento"**: ahí es donde el espacio se pinta del fondo claro.
+      **Probado en ROJO en 4 formas** (pseudo-clase `:has()`, atajo `margin` de 4 valores, el
+      documento absorbiendo el área segura, y borrar el área segura del pie de venta) **y en
+      VERDE en 2 que no deben ladrar** (`body main` descendiente, y una barra fija con fondo
+      propio). Árbol restaurado y verde en las seis.
+      **Medido en producción hoy, con Chromium sobre el contenedor `onia-landing`:** la franja de
+      **74px** sigue viva en `/` y `/empezar` en teléfono (`body.padding-bottom: 73.6px`, pie
+      negro `rgb(18,16,14)`, hueco claro `rgb(249,251,250)`) — captura en `/tmp/pie-home.png`.
+      El arreglo espera el deploy de Sergio; el gate ya impide que se pierda.
+      **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
