@@ -71,6 +71,16 @@ Las tres formas de fantasma que ya aparecieron acá:
 3. `pnpm typecheck:packages` verde; rojo en zona → arreglar mínimo y commitear.
 4. Node zombies de tests viejos → matar. Cerrar con la prueba (200, hash, exit 0).
 
+   ⚠️ **El chequeo 4 nunca se había corrido de verdad, y tenía presa** (2026-09-02).
+   La máquina cargaba **24 `node.exe` / 1.328 MB**. Dos eran del carril muerto
+   `hero-en-home`: `git worktree list` **ya no lo lista** (el directorio quedó huérfano)
+   y sus dos `next dev` (3411, 3477) contestaban **500** hacía 23,5 h. Matados los dos
+   árboles → **18 procesos / 1.147 MB**, 3411 y 3477 en `000`, y el server propio (4319)
+   sigue en **200**. **Un proceso vivo no prueba un servidor vivo: hay que pedirle el
+   código.** Los otros 8 (`web-venta`, puertos 3489/3491/3493/3941-3945) **NO se tocaron**:
+   contestan 200 y son de un carril vivo — pero **ocho `next start` del mismo worktree
+   acumulados en 15 h** es un goteo que ese carril debería cerrar al terminar cada vuelta.
+
 ---
 
 ## CARRIL A — DESARROLLAR (build; el cron de tareas tira de acá primero)
