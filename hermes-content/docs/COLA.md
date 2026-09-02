@@ -883,6 +883,83 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `hermes-content/docs/COLA.md` **exit 0, 21 ítems**; `hermes-content/docs/cola/chatbot.md` verde; las otras
       colas dan el mismo `cola-vacia` que antes (no es regresión de esto); `npm test` exit 0.
 
+### Encontrado el 2026-09-02 16:34 UTC, `onia-cola` — ARREGLADO en la misma vuelta
+
+- [x] **El worktree principal NO podía abrir una sola pantalla: Playwright pedía un Chromium que
+      no estaba bajado. La regla nº1 del proyecto ("verificar es MIRAR") era inejecutable desde
+      acá — ARREGLADO y con guarda.**
+      **Cómo apareció:** no lo buscaba. Fui a medir en vivo el 429 de Chatwoot (ítem de más
+      arriba) con un Playwright de usar y tirar, y murió antes de abrir el navegador:
+      `browserType.launch: Executable doesn't exist at`
+      `/root/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome`.
+      **La deriva, medida:** `package.json:5` declara `playwright ^1.62.1`;
+      `/root/loops/onia-hermes/node_modules/playwright` tenía **1.62.1** (instalado el 2026-09-02
+      02:39), que pide la revisión **`chromium-1234`**. En la caché de navegadores de Playwright del VPS sólo estaban
+      bajadas `chromium-1223` y `chromium_headless_shell-1223` — las de Playwright **1.60.0**.
+      **Por qué el canario seguía verde igual, y por qué eso era lo peligroso:** su worktree
+      `/root/loops/onia-hermes-canario` **no tiene `node_modules` propio**, así que resolvía al
+      Playwright **1.60.0** de `/root/node_modules` — un paquete instalado a mano, fuera del repo,
+      que nadie versiona. El canario andaba **por accidente de resolución**: un `npm install` en
+      ese worktree lo mataba en silencio. Es el mismo modo de falla que
+      `hermes-content/docs/cola/loops.md` documenta dos veces (algo que corre porque hay una copia
+      hand-editada en el VPS), sólo que acá la víctima era la verificación misma.
+      **El arreglo:** `npx playwright install chromium` desde el repo — baja la revisión que pide
+      la dependencia **declarada**, así el repo deja de depender del `/root/node_modules` global.
+      114,7 MiB, sin plata, sin deploy. Quedan bajadas las dos revisiones (`chromium-1223` y
+      `chromium-1234`) y las dos funcionan; disco después: 137G/193G usados.
+      **Verificado, no supuesto:** el mismo comando que tiraba `Executable doesn't exist` ahora
+      abre `https://onia.com.bo/` y devuelve datos.
+      **La guarda, para que no vuelva en silencio** — `scripts/canario_mirable.mjs`, cableado a
+      `npm test` como `test:canario-mirable` (`package.json`):
+      - **Lanza y cierra Chromium de verdad** con las mismas opciones del canario, en vez de
+        comparar números de revisión contra las carpetas de la caché. Un `grep` sirve para
+        descartar, nunca para confirmar; y un proxy acierta el caso de ayer y falla el de mañana
+        (permisos, librería del sistema, binario a medio bajar). Cuesta ~2 s: `npm test` entero
+        pasó de 7 s a **9 s**, exit 0.
+      - **No sale rojo de fábrica** — el anti-patrón que este archivo ya documenta tres veces. Sin
+        Playwright instalado **saltea en VERDE** diciendo por qué (sin Playwright el canario no
+        corre de todos modos, y eso es otro problema). Sólo se pone rojo en la condición real de
+        deriva: **Playwright presente y su navegador ausente.**
+      - **Recíproco que evita que el guard envejezca mintiendo:** lee `channel: 'chromium'` del
+        **cuerpo** de `opcionesDeChromium` en `scripts/canario_visual.mjs` y se pone ROJO si
+        desaparece — si no, estaría probando un binario que el canario ya no usa. Lee el cuerpo y
+        no todo el archivo a propósito: la palabra `channel` aparece también en los comentarios
+        que explican por qué NO hay que sacarla.
+      - **Distingue el remedio:** `navegador-no-instalado` manda a `npx playwright install
+        chromium`; un fallo de sandbox sale como `navegador-no-arranca` y **no** manda a
+        reinstalar al pedo.
+      **Medido:** `--self-check` **12 casos** (incluidos los tres portantes) y —lo que de verdad
+      importa— **el guard probado en ROJO por la condición REAL**, no sólo en el test unitario:
+      con `PLAYWRIGHT_BROWSERS_PATH` a un directorio vacío sale `exit 1` con el mensaje exacto
+      `canario-mirable: ROJO (navegador-no-instalado)`. `npm test` completo **exit 0**.
+
+- [x] **De paso quedó medida la causa del 429 de Chatwoot — y el ítem que lo reporta está
+      dirigido a un carril que NO puede tomarlo.**
+      **La medición que faltaba** (con el Playwright ya arreglado, contra `https://onia.com.bo/`):
+      **una sola pantalla dispara 24 pedidos** a
+      `onia-chatbot-chatwoot.hqdqgh.easypanel.host` — prácticamente tantos como al propio sitio
+      (25). Con ~6 pantallas de `onia.com.bo` por pasada × 4 pasadas/día, dan los "cientos de
+      pedidos" que el ítem de arriba dedujo por los logs, ahora contados del lado del navegador.
+      En esta corrida los 24 volvieron **200**: la ventana de Rack::Attack se había reseteado, lo
+      que confirma que el 429 es **autoinducido e intermitente**, no una caída del servicio.
+      **Y el hallazgo que traba el ítem, verificado leyendo los prompts que corren HOY**
+      (`/root/bin/loops/*.md`): el ítem cierra con *"No lo tomo yo: el archivo es del carril
+      `canario-visual`"* — pero ese loop **no puede tomarlo por construcción**, por dos razones
+      independientes:
+      1. **No lee `hermes-content/docs/COLA.md`.** Su prompt sólo nombra `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` y
+         `cola/loops.md` (los otros seis loops sí nombran su cola). Nunca va a ver el ítem.
+      2. **Aunque lo viera, tiene prohibido arreglarlo.** Su propio prompt lista *"Arreglar el
+         defecto que encontrás"* entre sus PROHIBICIONES: escribe ítems en la cola del dueño y
+         sigue. Es un **productor puro, sin bandeja de entrada**.
+      **El costo, contado:** el ítem ya consumió tres vueltas de `onia-cola` (12:35 lo re-midió,
+      15:35 lo saltó, 16:34 lo saltó otra vez) esperando a un destinatario que no existe. Es la
+      misma forma del agujero que este carril ya pagó dos veces —un carril que nadie enumera no
+      se cuenta nunca—, sólo que al revés: un ítem que nadie puede leer no se hace nunca.
+      **No lo cierro yo esta vuelta** (una vuelta cierra UN ítem, y ya cerré el de Playwright).
+      Queda con su evidencia para que la próxima vuelta lo tome **sin volver a derivarlo**, y con
+      una línea en el radar, porque "un loop productor sin bandeja" es diseño del sistema de loops
+      y eso lo decide Sergio.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,

@@ -1504,3 +1504,46 @@ de cobro real no existe todavía.
 **Qué falta medir para poner el "cuánto tarda"** (no se inventa acá): el flujo de pedido no
 existe en ninguna forma —0 apariciones de carrito/checkout en los 59 `.mjs` del motor—, así que
 estimarlo exige que el carril dueño del bot lo diseñe primero. Este loop no toca código.
+
+---
+
+## 28. Un loop escribe ítems y NINGUNO tiene bandeja de entrada: `canario-visual` no puede recibir trabajo (2026-09-02) — decisión de Sergio
+
+**Qué se midió, leyendo los prompts que corren HOY** (`/root/bin/loops/*.md`, no de memoria):
+
+- De los siete loops del VPS, **seis nombran la cola de la que sacan trabajo**. `canario-visual`
+  **no nombra ninguna**: su prompt sólo cita `ONIA_RADAR_DECISIONES_PRODUCTO.md` y
+  `cola/loops.md`.
+- Y su prompt lista *"Arreglar el defecto que encontrás"* entre sus **PROHIBICIONES** — junto con
+  *"Tocar otro carril más allá de escribir el ítem en su cola"*. Está diseñado como **productor
+  puro**: mira pantallas, escribe ítems en la cola del dueño, no arregla nada.
+
+**Por qué importa, con el costo contado.** El 2026-09-02 una vuelta de `onia-cola` escribió en
+`COLA.md` el ítem del 429 de Chatwoot y lo cerró con *"No lo tomo yo: el archivo es del carril
+`canario-visual`, cuyo loop corre a las 16:41 UTC"*. Ese destinatario **no puede tomarlo por
+construcción**: ni lo ve (no lee `COLA.md`) ni podría arreglarlo (lo tiene prohibido). El ítem
+quedó de carta muerta al tope de "Ahora" y **consumió tres vueltas** del integrador —12:35 lo
+re-midió, 15:35 y 16:34 lo saltaron—, cada una gastando su Gate 1 en un ítem que nadie iba a
+hacer nunca.
+
+Es la forma espejo del agujero que este carril ya pagó dos veces (*"un carril que el integrador
+no enumera no se cuenta nunca"*): acá **un ítem que su destinatario no puede leer no se hace
+nunca**, y encima tapa la cola.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A** | Al que escribe un ítem se le prohíbe derivarlo a `canario-visual`: si el arreglo cae en un archivo sin dueño con loop propio, **lo toma quien lo encontró**. Sólo se toca el prompt de `onia-cola`. | ~15 min, 1 archivo | El más barato. Pero deja intacta la asimetría: el canario sigue sin bandeja, y otro loop puede volver a derivarle |
+| **B** | `canario-visual` estrena cola propia (`hermes-content/docs/cola/canario.md`) y su prompt la lee. Deja de ser productor puro. | ~40 min, prompt + cola + `loops.md` | Simétrico con los otros seis. **Contra:** su prompt prohíbe arreglar a propósito —"si lo arreglás vos, dos manos tocan el mismo archivo y el dueño pierde su cola"— así que esto **reabre una decisión ya tomada**, no la ejecuta |
+| **C** | Se le da dueño explícito a `scripts/canario_visual.mjs` en `COORDINATION_MANIFEST.md` y ese dueño es `onia-cola` (el integrador), no el canario. | ~20 min, 1 tabla | Resuelve el caso concreto y todos los futuros del mismo archivo, sin tocar el diseño del canario |
+
+**Lo que este loop recomienda: C.** El canario fue diseñado a propósito para no arreglar —esa
+regla tiene su historia escrita y no hay que reabrirla—, así que el defecto no es que le falte
+bandeja: es que **su propio script no figura como de nadie**, y por eso cada quien se lo deriva
+al otro. Poner el dueño en la tabla cierra la causa sin discutir el diseño.
+
+**Lo que NO hace falta decidir para avanzar:** el 429 en sí. Es autoinducido (24 pedidos al host
+de Chatwoot por pantalla, medidos del lado del navegador, todos 200 en la última corrida) y
+ningún visitante real lo sufrió — cero IPs de terceros bloqueadas en 24 h, medido dos veces. No
+corre riesgo mientras esto se decide.
