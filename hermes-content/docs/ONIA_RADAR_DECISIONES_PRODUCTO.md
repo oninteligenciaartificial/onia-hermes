@@ -981,3 +981,43 @@ defecto:
 vive en la base self-hosted del VPS y es del carril `onia-db`; el "0" de arriba es del catálogo,
 no un `SELECT` de hoy. Si ese número cambió, cambia el color del ítem —pero no la opción (a),
 que es correcta con cualquier número.
+
+## 20. Falta un TERCER deploy que la sección 16 no nombra: el del sitio de venta (2026-09-02) — decisión de Sergio
+
+**El agujero.** La sección 16 de este mismo radar pide dos deploys —(a) el motor del bot y (b) el
+script de marca de Chatwoot— y **ninguno de los dos publica `onia.com.bo`**. Esa la sirve el
+contenedor `onia-landing`, que es un tercer deploy que nadie estaba pidiendo. Resultado: los
+arreglos de la cara del producto se verifican, se commitean, y se quedan.
+
+**Medido hoy, mirando producción con Chromium real (no `headless_shell`) en iPhone 390×844:**
+
+- `onia.com.bo/` cierra con **73 px** de franja clara debajo del pie negro; `/empezar`, con
+  **74 px**. Son los mismos dos números que el commit `f0248601` midió y arregló.
+- El contenedor arrancó **16:53 UTC**; el arreglo se commiteó **19:59 UTC**. Sirve código de
+  antes: no es que el arreglo falle, es que nunca se publicó.
+
+**Lo que está listo y esperando** (rama `claude/web-venta`, gates verdes, mirado renderizado):
+
+| Commit | Qué arregla en la pantalla que ve el lead |
+|---|---|
+| `36d2576d` | La home abría con una franja en blanco en el iPhone más común |
+| `f0248601` | Las dos pantallas cerraban con una franja clara bajo el pie negro |
+| `2dbb3acf` | El test que impide que esa franja vuelva |
+| `def54931` | El guard de capturas era ciego a 4 rutas publicadas y a la cabecera |
+
+**Por qué no lo decido yo.** Publicar `onia.com.bo` es tuyo, y con razón: el 2026-08-20 se
+publicó una landing que no habías visto y hubo que revertir en producción. Esto **no es** ese
+caso —son cuatro arreglos de defecto, cero cambio de dirección visual, cero copy nuevo— pero el
+permiso de publicar sigue siendo tuyo.
+
+**Tres caminos, ninguno cuesta plata:**
+- **a) Desplegar `onia-landing` cuando `onia-cola` mergee a `main`** (`scripts/deploy-onia-landing.sh`,
+  que ya corre `tsc --noEmit` antes del build). Es lo que yo elegiría: son defectos, no diseño.
+- **b) Mirar primero.** Te mando las capturas del build local (pie al borde, sin franja) y
+  desplegás después. Cuesta una vuelta más y cero riesgo.
+- **c) Esperar y juntar.** Cada vuelta de este carril suma arreglos que valen cero hasta el
+  deploy; la deuda crece pero el sitio no empeora.
+
+**Lo que este carril NO puede hacer:** el deploy en sí, ni el merge a `main` (es de `onia-cola`).
+Mientras tanto, la definición de hecho de `CLAUDE.md` —*"encendido en producción y verificado
+ahí"*— dice que estos cuatro commits valen **cero**.
