@@ -36,7 +36,7 @@
   statement-3d (guardados > likes).
 - Palabras que convierten en ES: "gratis", "con certificado", "de verdad", "paso a paso",
   "sin pagarle a nadie".
-- **CTA estándar: "Comentá COMUNIDAD y te mando el acceso"** (regla Sergio 02-sep) — el
+- **CTA estándar: "Comentá COMUNIDAD y te paso el enlace para unirte"** (regla Sergio 02-sep) — el
   comentario alimenta el algoritmo; el link en bio es respaldo. DM roto = responder a mano.
 
 ## 4 · Para SAMUEL (brief que se le entrega con el radar mensual)
@@ -51,3 +51,28 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
 - [ ] Probar 1 skill del radar (unlazy / shuohao) y anotar veredicto
 - [ ] Variante statement-post animado (HyperFrames 6 s del claim "Bs 0 en sueldos")
 - [ ] Comparativa nano_banana_flash vs soul_v2 para artes verdes (0,24 cr total)
+
+## 6 · Mejoras de calidad pedidas por Sergio (02-sep) — las trabaja el loop de práctica
+
+- [x] **Tipografía** (probado 02-sep, 2 comparativas renderizadas): primera pasada
+      eligió Bricolage y Sergio la corrigió — **la marca Onia es Archivo Variable**
+      (ONIA_MARCA_SISTEMA: Archivo para todo, jerarquía por tamaño + eje `wdth`;
+      Bricolage está descartada a propósito ahí). Veredicto final aplicado a los 4
+      generadores: **claims/títulos Archivo wght 900 wdth 62** (condensed editorial,
+      word-spacing .09em) · **números/impacto wdth 125** (expanded poster) ·
+      **wordmark "Onia Community" wght 560 wdth 96** (el corte del logo) · cuerpo
+      Archivo · **micro-etiquetas y handle Geist Mono** letter-spacing .08em.
+- [ ] **Más imágenes**: láminas con foto real de Sergio (identity assets) + artes
+      Higgsfield integrados en carruseles (no solo íconos)
+- [ ] **Sonido**: BGM en teasers HyperFrames (media-use resolve BGM) + SFX en beats
+      clave; probar en el teaser de comunidad v3
+- [ ] **Texturas/atmósfera**: grano sutil, sombras más ricas en el patrón statement
+      (la referencia carosia usa papel envejecido — ver spec-sheet-editorial/FICHA.md)
+- [ ] **Marco spec-sheet**: header/footer con metadata técnica en Geist Mono (patrón
+      carosia) en portadas de carrusel — probar 1 portada A/B
+- [ ] **Mascota 3D Onia**: personaje consistente estilo toy para literalizar metáforas
+      (carosia usa el suyo en cada post) — definir con Higgsfield imagen (≤0,12 cr),
+      requiere OK de Sergio sobre el diseño elegido
+- [x] **Historias-quiz** (02-sep): formato ingenierobinario adaptado a marca —
+      `generar-historia-quiz.py`, 3 historias listas con zona para el sticker de
+      encuesta; opciones y respuestas en SEMANA1. La interacción es el poll de 1 tap.

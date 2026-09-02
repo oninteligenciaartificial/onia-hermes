@@ -26,17 +26,17 @@ def _chrome():
 CHROME = _chrome()
 
 CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@500&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#F7F7F7;--ink:#0A0A0A;--muted:#8E8E8E;--card:#FFFFFF}
 html,body{width:1080px;height:1350px}
-body{background:var(--bg);font-family:'Inter',sans-serif;overflow:hidden}
+body{background:var(--bg);font-family:'Archivo',sans-serif;overflow:hidden}
 .lienzo{width:1080px;height:1350px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:90px 100px;position:relative}
-.handle{position:absolute;bottom:52px;left:0;right:0;text-align:center;font-size:30px;font-weight:600;color:var(--muted)}
-.num{font-size:210px;font-weight:900;color:var(--ink);letter-spacing:-0.05em;line-height:.9}
+.handle{position:absolute;bottom:52px;left:0;right:0;text-align:center;font-family:'Geist Mono',monospace;font-size:27px;font-weight:500;letter-spacing:.08em;color:var(--muted)}
+.num{font-size:200px;font-weight:900;font-variation-settings:'wdth' 125;color:var(--ink);letter-spacing:-0.02em;line-height:.9}
 .icono{width:300px;height:300px;object-fit:contain}
 .icono-sm{width:210px;height:210px;object-fit:contain}
-.titulo{font-size:78px;font-weight:900;color:var(--ink);letter-spacing:-0.03em;text-align:center;line-height:1.05}
+.titulo{font-size:88px;font-weight:900;font-variation-settings:'wdth' 62;color:var(--ink);letter-spacing:0;word-spacing:.09em;text-align:center;line-height:1.02}
 .sub{font-size:44px;font-weight:600;color:var(--muted);text-align:center;letter-spacing:-0.01em}
 .caja{background:var(--card);border-radius:36px;padding:56px 60px;font-size:40px;line-height:1.42;color:var(--ink);box-shadow:0 18px 50px rgba(0,0,0,.07);width:100%}
 .caja b{font-weight:600;background:#EFEDEA;border-radius:8px;padding:0 8px}
@@ -81,7 +81,7 @@ def cta():
 <div class="lienzo" style="gap:56px">
   <img class="icono" src="{ICONOS.as_uri()}/rocket.png">
   <div class="titulo">El paso a paso completo<br>está en mi comunidad</div>
-  <div class="sub">Comentá <b style="color:var(--ink)">COMUNIDAD</b> y te mando el acceso · gratis</div>
+  <div class="sub">Comentá <b style="color:var(--ink)">COMUNIDAD</b> y te paso el enlace para unirte</div>
   <div class="handle">@sergiourcullo</div>
 </div>"""
 

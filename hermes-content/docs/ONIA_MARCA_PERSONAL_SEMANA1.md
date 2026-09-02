@@ -41,7 +41,7 @@ Talking head, 45-60 s:
 > Eso es un sistema — y es otra liga."
 > CTA: "Comentá AGENCIA y te mando la guía con los 3 pasos."
 
-**CTA final (regla Sergio 02-sep):** "Comentá COMUNIDAD y te mando el acceso." ⚠️ El DM
+**CTA final (regla Sergio 02-sep):** "Comentá COMUNIDAD y te paso el enlace para unirte." ⚠️ El DM
 automático sigue ROTO (carril infra): los comentarios se responden A MANO con el link
 hasta que infra lo arregle.
 
@@ -84,7 +84,7 @@ el DM automático sigue roto, carril infra).
 > 2. Fotos de producto de catálogo desde el celular
 > 3. Cotizaciones y descripciones que se escriben solas
 > ¿Cuándo SÍ pagar? Cuando necesitás que todo funcione junto, solo, todos los días.
-> ¿Querés el paso a paso? Comentá COMUNIDAD y te mando el acceso.
+> ¿Querés el paso a paso? Comentá COMUNIDAD y te paso el enlace para unirte.
 
 > **LinkedIn:** Antes de firmar con una agencia de marketing o de IA, probá esto gratis:
 > 1) Un asistente que responda las preguntas frecuentes de tus clientes — se arma en
@@ -95,7 +95,7 @@ el DM automático sigue roto, carril infra).
 > ¿Cuándo sí tiene sentido pagar? Cuando necesitás que todo eso funcione junto, sin que
 > nadie lo esté prendiendo a mano todos los días. Ahí ya es un sistema — y es otra
 > conversación.
-> El paso a paso de las 3 cosas gratis está en mi comunidad de WhatsApp: comentá COMUNIDAD y te mando el acceso.
+> El paso a paso de las 3 cosas gratis está en mi comunidad de WhatsApp: comentá COMUNIDAD y te paso el enlace para unirte.
 
 **Video C — interactivo**
 
@@ -108,6 +108,18 @@ el DM automático sigue roto, carril infra).
 > herramienta puntual para hacerlo.
 > Voy a responder personalmente, uno por uno. El caso más interesante lo construyo de
 > verdad y lo muestro acá.
+
+## Historias-quiz (formato nuevo 02-sep — interacción por encuesta nativa)
+
+PNGs listos en `carousels/out/historias-quiz/`. Subís la imagen como historia y
+pegás el **sticker de encuesta de IG** sobre la zona punteada, con estas opciones
+(la correcta en negrita — se revela al día siguiente o en la comunidad):
+
+| Historia | Opciones del sticker | Nota |
+|---|---|---|
+| 01 asistente | 3 meses · 1 mes · 1 semana · **1 tarde** | remata con historia "se arma en una tarde — en mi comunidad está el paso a paso" |
+| 02 cuál NO puede | fotos · WhatsApp · cotizar · **ninguna: todo puede** | la trampa es el gancho |
+| 03 costo del arte | Bs 700 · Bs 70 · Bs 7 · **menos de Bs 1** | remata con el arte terminado + "0,12 créditos" |
 
 ## Historias — 2 secuencias (plantilla hook→mito→revelación→CTA)
 
