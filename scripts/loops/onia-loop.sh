@@ -184,6 +184,16 @@ case "$NOMBRE" in
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  supervisor)
+    # Audita a los OTROS loops: abre sus commits y dice si el trabajo sirve.
+    # Ninguno se mira a si mismo, y un loop que produce basura no falla — commitea,
+    # reporta bien, y se ve igual que uno que sirve. Contar commits mide actividad;
+    # abrirlos mide valor.
+    WT=/root/loops/onia-hermes-supervisor
+    RAMA=claude/supervisor
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
     # Este es el camino por el que un loop muere sin que nadie se entere: el cron
     # lo sigue llamando cada hora y el unico rastro es un exit 64 en un log que
