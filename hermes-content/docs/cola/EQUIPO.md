@@ -56,6 +56,23 @@ instrucción: los loops corren sin nadie mirando.
 **Uno más, que no es mío:** `contenido-cola` corre en Windows y **lo maneja Sergio en su propia
 sesión**. Ningún loop del VPS lo toca ni lo rearma.
 
+### Y una capa ARRIBA de todos: Hermes Agent
+
+Los siete loops tienen un techo que ninguno puede romper solo: **cada uno come de su propia cola.
+Ninguno decide qué importa más esta semana.** Eso lo hacía Sergio, todos los días, o no lo hacía
+nadie.
+
+**Hermes Agent** (de NousResearch, en el VPS) cubre exactamente eso: **12 trabajos programados**
+que entregan por Telegram — agenda diaria con 3 prioridades, kickoff los lunes, revisión de
+finanzas los viernes, cierre los domingos. **No programa**: cuando hace falta código, delega a
+Claude Code igual que `onia-loop.sh`.
+
+Detalle completo, cómo se opera y su historia en [`../HERMES_AGENT.md`](../HERMES_AGENT.md).
+
+⚠️ **Estuvo nueve días con 12 de 13 trabajos fallando y nadie se enteró** — sus API keys daban
+401. Es el mismo modo de falla de este archivo, en otra caja. Ahora tiene su vigía horario
+(`hermes-vigia.sh`), que es su mitad del bloque *"tenés que poder FALLAR a la vista"*.
+
 ### Los dos que ALIMENTAN, y por qué el sistema se moría sin ellos
 
 `canario-visual` y `docs-auditoria` **no cierran ítems: los fabrican.** Es la distinción que casi
