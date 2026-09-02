@@ -1107,3 +1107,24 @@ suelto. El element manda mejor la identidad; la referencia por foto manda bien p
 
 **Regla:** piezas de cara protagonista → navegador con el element. **Volumen, pruebas y todo lo
 que corra en el loop → CLI.**
+
+## 12 · Seedance devuelve vertical aunque la fuente sea 3:4 — medido el 2026-09-02
+
+La §7 decía que el video **hereda el aspecto del frame**. Es cierto para Kling y **falso para
+Seedance**, y la diferencia vale el banco entero.
+
+| | `kling3_0` | `seedance1_5` |
+|---|---|---|
+| Salida desde un frame 3:4 | **828×1108 (~3:4)** | **720×1280 (9:16 exacto)** |
+| Audio | sin pista | **con pista** |
+| Costo | 6,25-8,75 cr | **4,8 cr** |
+
+🔴 **Consecuencia: las 16 imágenes viejas del banco, todas 3:4, se pueden animar en 9:16 sin
+regenerar ninguna.** No hay que rehacer el banco para Meta Ads — hay que cambiar de modelo.
+
+**Seedance 1.5 pasa a ser el default de video:** más barato, vertical nativo y con audio.
+Kling queda para cuando Seedance falle.
+
+⚠️ Y no confundir con la §11: **la etiqueta «9:16» del historial de la interfaz no describe el
+archivo.** `V06` mostraba «9:16» y bajó en 828×1108. Lo único que vale es medir el MP4 con
+`ffprobe` después de bajarlo.

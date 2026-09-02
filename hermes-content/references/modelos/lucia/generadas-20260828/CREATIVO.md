@@ -149,3 +149,54 @@ Y no se regenera: **su valor es mostrar el defecto.** Es el mismo caso que
 3. **Re-encuadrar a 9:16** o aceptar barras. Hoy son 828×1108.
 4. **Registrar la palabra del CTA** en `scripts/recompensas.json` y en el mapa de n8n **de la
    cuenta que publica** — el que publica es el que recibe el comentario. Es el incidente RANKING.
+
+---
+
+# V07 — peluquería · el primero vertical y con audio
+
+> Agregado el 2026-09-02. Los cinco de arriba son de 5 s, mudos y 828×1108. **Éste no**, y por eso
+> cambia lo que se puede subir.
+
+| | |
+|---|---|
+| **Archivo** | `V07-peluqueria-seedance.mp4` |
+| **Formato** | **720×1280 — 9:16 exacto** |
+| **Duración** | 4,05 s · 97 frames |
+| **Audio** | **con pista** |
+| **Costo** | **4,8 cr** · `seedance1_5` |
+
+🔴 **El hallazgo que cambia el banco entero:** Seedance devuelve vertical **aunque la imagen
+fuente sea 3:4**. Kling heredaba el aspecto del frame; Seedance no. Entonces **las 16 imágenes
+viejas del banco se pueden animar en 9:16 sin regenerar ninguna** — y a 4,8 cr en vez de 6,25-8,75.
+
+**Verificado mirando** 4 frames: la mano sostiene el mechón mojado, la tijera avanza y cierra, el
+ventilador de pared gira, y la cara se mantiene idéntica en los cuatro (pecas, cadenita, lunares).
+
+## Gancho (0-2 s)
+
+> **Sabe cortar el pelo. Cuánto ganó este mes, no.**
+
+## Caption
+
+```
+Cuatro segundos en una peluquería de barrio. Nadie los filmó.
+
+Lo que costaría filmarlos de verdad:
+  · modelo por media jornada        → Bs …
+  · permiso para grabar adentro     → Bs …
+  · alguien que sostenga la luz     → Bs …
+
+Y la partida que nadie factura: que ese día no entre nadie a interrumpir.
+
+Pero el punto no es el video.
+
+El punto es que ella sabe cortar, sabe cobrar y sabe a qué hora abre.
+Lo que no sabe es cuánto le quedó el mes pasado, porque eso vive en
+una libreta, en el celular y en la cabeza al mismo tiempo.
+
+Un sistema no le enseña a cortar. Le saca lo que odia hacer.
+```
+
+## CTA
+
+`Comentá DEMO y te muestro cómo se ve tu mes sin libreta.`
