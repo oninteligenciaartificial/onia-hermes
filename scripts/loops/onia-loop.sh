@@ -78,6 +78,9 @@ set -a; . /root/.hermes/.env 2>/dev/null; set +a
 # ANTHROPIC_API_KEY en el entorno la pisaria, y la de .hermes/.env esta vacia.
 unset ANTHROPIC_API_KEY ANTHROPIC_TOKEN
 export HOME=/root
+# El hook .githooks/pre-push del repo lee esto: solo el caso onia-cola puede
+# empujar a main/master, el resto de los loops de carril queda bloqueado.
+export ONIA_LOOP_ID="$NOMBRE"
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*" >> "$LOG"; }
 

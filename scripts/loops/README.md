@@ -31,7 +31,8 @@ Desde entonces ninguno había corrido. Y con la laptop apagada no corren en abso
 - **`cd` verificado**: worktree presente y en la rama esperada **antes** de gastar una sesión.
   `claude-guardia.sh` no lo hace y lleva semanas diagnosticando desde `/root` porque su carpeta
   desapareció.
-- **`pre-push`**: `main`/`master` bloqueados mecánicamente, no sólo por prompt.
+- **`pre-push`**: `main`/`master` bloqueados mecánicamente, no sólo por prompt — salvo el caso
+  `onia-cola` (el integrador), que `onia-loop.sh` marca exportando `ONIA_LOOP_ID`.
 - **Aviso a Telegram** en todo fallo, como mucho **1 cada 6 h por loop** (el ruido apaga la señal).
 - **`--allowedTools` acotado**: headless no puede contestar preguntas, así que los permisos se
   deciden de antemano.
