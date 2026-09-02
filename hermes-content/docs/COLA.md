@@ -346,60 +346,6 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       sirve el dominio: `curl https://onia.com.bo/` todavía trae esas cinco rutas de imagen —
       `onia-landing` sigue sirviendo el build viejo. Deploy es de Sergio.
 
-- [ ] **Los NOMBRES de los iconos siguen en el DOM como texto en el login de la plataforma.**
-      El `innerText` de `app.onia.com.bo/login` devuelve `bolt`, `credit_card_off` y `smart_toy`.
-      Hoy la ligature de Material Symbols los tapa y la captura los muestra como glifos — el
-      bug de agosto **no** está a la vista. Pero el mecanismo que lo evita es la fuente: si
-      tarda o falla, el cliente lee "credit_card_off" otra vez, que es exactamente como pasó.
-      Y un lector de pantalla lo lee así **hoy**. Sale con `aria-hidden` en el glifo + label
-      propio, o con SVG. **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma.png`
-      · 1.300 KB · 1.043 ms.
-      ⚠️ **Reverificado el 2026-09-01 sobre el bundle nuevo (`55e8d8a`, tres deploys después):
-      sigue igual, y ahora se sabe el número exacto del tope.** El HTML servido trae los tres
-      nombres como nodos de texto (`bolt`, `credit_card_off`, `smart_toy`, una vez cada uno) y
-      los tapa con una regla inline `visibility:hidden` que se levanta sólo al agregar la clase
-      `iconos-listos`… **o a los 12 segundos, pase lo que pase** — el script del `<head>` cierra
-      con un `setTimeout(ok, 12000)`. O sea: el mecanismo no es "si la fuente falla no se ven",
-      es "si la fuente tarda más de 12 s, el cliente lee `credit_card_off`". Con la fuente de
-      iconos que en agosto tardó 117 s, ese fallback es el camino normal, no el raro. Y
-      **ningún glifo tiene `aria-hidden`**: un lector de pantalla los deletrea hoy, con la
-      fuente cargando perfecto.
-      ✅ **ARREGLADO EN CÓDIGO el 2026-09-01 — `onia-platform` `5888a13`, en `master`. Falta
-      SÓLO el deploy, que decide Sergio.** Los dos agujeros que el ítem nombra, cerrados en su
-      raíz compartida y clavados con test:
-      - **El lector de pantalla:** los tres glifos salen de `components/auth/AuthShell.tsx:92`
-        — el panel que comparten `/login` y `/register`, así que se arregló una vez para las
-        dos pantallas. Van con `aria-hidden="true"`: cada bullet ya trae su título y su
-        detalle en texto, el glifo no aporta nada que no esté dicho.
-        `components/auth/AuthShell.test.ts` exige `aria-hidden` en **cada** glifo del panel y
-        falla si aparece uno nuevo sin él.
-      - **El `setTimeout(ok, 12000)`:** ahora sólo destapa `if (d.fonts.status !== 'loading')`.
-        Antes contradecía la decisión que el propio `lib/iconos-script.ts` declara arriba
-        ("si la fuente NO carga, los iconos quedan ocultos en vez de mostrar su nombre"): con
-        la fuente que tardó 117 s, a los 12 s el cliente leía `credit_card_off`.
-        `lib/iconos-script.test.ts` (nuevo) ejecuta el script de verdad contra un `document`
-        de mentira — el defecto vive en CUÁNDO llama a `ok()`, no en el HTML.
-      **Gates verdes en el worktree `iconos-a11y`:** `tsc --noEmit` 0 · `vitest run` 2.480
-      pasando, 0 fallando · `npm run lint` 0 errores. ⚠️ **La corrida en paralelo de vitest
-      perdió 8 archivos de test** por `spawn UNKNOWN errno -4094` (la máquina sin RAM: los
-      otros loops la tenían en 2,9 GB libres de 24) y salió con exit 1 reportando "193 files".
-      Con `--no-file-parallelism` corrieron los **202**. Si el gate reporta menos archivos de
-      los que hay, no está verde: está incompleto.
-      **Píxeles sin cambio**: `aria-hidden` no se ve y la guarda sólo cambia el modo de fallo,
-      así que acá no hay captura que mirar — lo que cambia es el árbol de accesibilidad (lo
-      afirma el test sobre el render real) y qué pasa cuando la fuente tarda.
-      **Deuda medida, aparte:** en todo el producto hay **456** `.material-symbols-outlined`
-      en 111 archivos y sólo **46** llevan `aria-hidden`. Eso es una barrida propia, no este
-      ítem — este cierra la pantalla reportada y su hermana.
-      📌 **2026-09-02, el integrador puso número al "falta el deploy": producción corre
-      `8a3b5a6`**, medido por el `BUILD_ID` del contenedor (`lNDdVgrRvP1mizzu3BVXc` =
-      `/opt/onia-platform/build-8a3b5a6`), no deducido. Encima quedan **3 commits sin
-      desplegar** — éste (`bdf0935`+`5888a13`) y la CSP (`efaffe8`). Reconfirmado MIRANDO el
-      HTML servido: los tres `<span>` siguen **sin `aria-hidden`** y el script del `<head>`
-      sigue con `setTimeout(ok,12000)`. La decisión, cotizada y con el runbook, quedó en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §20. **El código no cambia hasta
-      que Sergio despliegue.**
-
 - [x] **La CSP de producción bloqueaba el beacon de Cloudflare en TODA la plataforma — ARREGLADO
       EN CÓDIGO el 2026-09-02, `onia-platform` `efaffe8`, en `master`. Falta SÓLO el deploy, que
       decide Sergio.** Se agregó `https://static.cloudflareinsights.com` a `script-src` y
@@ -424,37 +370,6 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §16.
 
 ### Del canario visual — segunda pasada del 2026-09-01
-
-- [ ] **El párrafo izquierdo del login de la plataforma sale con espacios metidos DENTRO de
-      palabras** ("Ent regamos", "puest a", "t odo el sist ema", "cit as", "import ante"), en
-      `app.onia.com.bo/login` — y por herencia en `/settings/chatbot` sin sesión, que redirige
-      ahí. Reproducido 3 veces seguidas en Chromium headless del VPS (`--no-sandbox`), siempre
-      en las mismas palabras. El `innerText` del párrafo es correcto (sin espacios de más) y
-      `document.fonts.status` es `loaded`, sin 404 de fuentes — el glitch es sólo visual, en el
-      renderizado del glifo, no en el dato. La fuente del bloque es `Archivo` (variable font).
-      **No se descartó como artefacto del canario**: a diferencia del blanqueo por scroll de la
-      home (que desaparece con más tiempo de scroll y por eso NO se reporta), este espaciado
-      **no cambió con 3 s de espera extra** después de `networkidle`.
-      **No verificado en un Chrome de escritorio normal** — puede ser una rareza de fuente
-      variable + Chromium headless Linux y no algo que vea un cliente real; queda a criterio
-      del dueño confirmarlo en un navegador de verdad antes de invertir tiempo.
-      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma-texto-espaciado.png`
-      (página completa) y `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma-texto-espaciado-crop.png`
-      (recorte del párrafo) · login-plataforma hoy = 967 KB
-      · 147 ms hasta mirable (baseline: 1.302 KB · 1.043 ms — la baja de peso es variación de
-      CDN/compresión entre corridas, no un recorte de contenido: el `innerText` completo
-      coincide con la baseline).
-      ⚠️ **Se invirtió el tiempo el 2026-09-02: es un bug real de la fuente, no un artefacto de
-      captura — pero cerrarlo es una decisión de diseño, no una línea de código.** Reproducido en
-      DPR 1 y DPR 3, con zoom por `transform: scale()` (no supersampling de screenshot). Aislado
-      por bisección: **específico de Archivo en pesos ≤500** — con `font-weight: 700` o con
-      `font-family: Arial` (swap por DOM, sin tocar código) el gap desaparece; `font-kerning` y
-      `font-feature-settings` no cambian nada; pinear el eje `wght` a 400 explícito tampoco. El
-      arreglo más directo (subir el peso del texto `detalle` del panel) cambia el peso visual de
-      las dos pantallas de auth, así que no se aplicó sin que Sergio lo vea primero — sigue sin
-      poder probarse en un Chrome de escritorio real desde esta máquina (sin GUI). Detalle
-      completo, con las tres salidas cotizadas, en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §19.
 
 ### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
 
@@ -971,8 +886,30 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
-- [ ] 🟡 **El gate de la cola (`scripts/verificar_cola.js`) ladra 4 "fantasmas" que no lo son —
-      un gate ruidoso es un gate que se empieza a ignorar.** Medido el 2026-09-02 corriendo
+- [x] 🟡 **El gate de la cola (`scripts/verificar_cola.js`) ladraba 4 "fantasmas" que no lo son
+      — ARREGLADO el 2026-09-02, y eran TRES defectos distintos, no uno.** El diagnóstico
+      heredado era correcto en los tres síntomas pero los trataba como un solo "detector
+      demasiado suelto"; cada uno necesitó su propia carve-out **y su recíproco**, que es lo que
+      impide que arreglar el ruido afloje el gate:
+      - **Glob** (`*`): una zona no es un archivo. Ningún archivo del repo tiene `*`.
+      - **Identificador punteado sin barra** (`visto.texto`, `d.fonts`): el patrón viejo
+        `\.[a-z0-9]{2,5}$` tomaba por archivo cualquier expresión de código que la cola cita.
+        Ahora un nombre **sin barra** sólo es ruta si su extensión está en `EXTENSIONES` (lista
+        explícita, no patrón). **Con barra se sigue verificando siempre**, así que no puede
+        tapar un archivo dentro de una carpeta.
+      - **Nombre corto de un archivo ya citado entero** (`alta.ts`, después de
+        `web-factory/apps/onia-platform/src/app/(sitio)/alta.ts` en el mismo ítem): no es
+        fantasma, es el mismo archivo. Se descarta **sólo** si el propio ítem trae una ruta que
+        termina en ese nombre — sin la ruta larga, sigue siendo fantasma.
+      - **Y la repetición**: la misma ruta citada dos veces en un ítem se reporta una vez.
+      **Cómo se sabe que quedó hecho, medido:** `--self-check` pasa **49 casos** (los 9 nuevos
+      fallaron en ROJO antes del cambio, por el motivo correcto); `node scripts/verificar_cola.js
+      hermes-content/docs/COLA.md` sale **verde, exit 0, 16 ítems**; y un ítem inventado que cita
+      `lib/esto-no-existe-jamas.ts` **sigue saliendo fantasma**. `npm test` exit 0. Las otras
+      colas de `hermes-content/docs/cola/` dan el mismo `cola-vacia` que antes del cambio
+      (verificado con `git stash`): no tienen sección "Ahora", y eso no es regresión de esto.
+
+      *(Texto original del ítem, para que se vea contra qué se midió.)* Medido el 2026-09-02 corriendo
       `node scripts/verificar_cola.js hermes-content/docs/COLA.md`: sale con 4 ERROR y **los
       cuatro son falsos positivos**, porque el detector de rutas toma por nombre de archivo cosas
       que no lo son:
@@ -1348,6 +1285,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 > alguien le pida una decisión sobre algo ya hecho, y quema el único recurso que no se recupera.
 > Es el mismo defecto que esta cola ya bautizó: *"cerrar un ítem no cierra su copia"*. Cada baja
 > lleva la evidencia con la que se dio, medida hoy, no leída de otro renglón.
+
+- 🔴 **Los nombres de los iconos se leen como texto en el login de la plataforma — ARREGLADO
+  EN CÓDIGO, falta SÓLO el deploy** (movida acá el 2026-09-02 desde "Ahora"; vivía abierta
+  arriba de todo mientras el código ya estaba en `master`). El arreglo son `aria-hidden` en los
+  tres glifos de `components/auth/AuthShell.tsx` y la guarda del `setTimeout(ok,12000)` de
+  `lib/iconos-script.ts`, con sus dos tests (`components/auth/AuthShell.test.ts`,
+  `lib/iconos-script.test.ts`).
+  **Reverificado en vivo el 2026-09-02, MIRANDO lo servido, no el repo:** producción sigue en
+  `BUILD_ID lNDdVgrRvP1mizzu3BVXc` (= `build-8a3b5a6`), el HTML de `app.onia.com.bo/login`
+  todavía trae `bolt`, `credit_card_off` y `smart_toy` como nodos de texto **sin
+  `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)`. El
+  bloqueo NO venció.
+  **Lo que falta es un deploy, no una línea:** `8a3b5a6..origin/master` son exactamente **3
+  commits** — `bdf0935` + `5888a13` (este ítem) y `efaffe8` (la CSP del beacon de Cloudflare).
+  **Decide Sergio**, con el runbook y el costo en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §20.
+
+- 🔴 **El párrafo del login sale con espacios metidos DENTRO de palabras ("Ent regamos",
+  "cit as") — la causa está aislada, pero el arreglo cambia cómo se ve la pantalla** (movida
+  acá el 2026-09-02 desde "Ahora"). No es artefacto del canario: reproducido en DPR 1 y DPR 3
+  y aislado por bisección a **la fuente Archivo en pesos ≤500** — con `font-weight: 700` o con
+  Arial el gap desaparece; `font-kerning`, `font-feature-settings` y pinear `wght` no cambian
+  nada. **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma-texto-espaciado-crop.png`.
+  **Por qué no se cerró solo:** la salida directa —subir el peso del texto `detalle` del panel—
+  cambia el peso visual de `/login` y `/register`, y una superficie viva no se cambia sin que
+  Sergio VEA la pieza. Tampoco puede confirmarse en un Chrome de escritorio real desde el VPS
+  (sin GUI). **Las tres salidas, cotizadas, en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §19.**
 
 - 🔴 **F2 · El chatbot se cobra y medio chatbot es gratis** (movida acá el 2026-09-02 desde
   "Ahora"; vivía como el primer ítem no bloqueado y venía sin moverse desde el 2026-08-30).
