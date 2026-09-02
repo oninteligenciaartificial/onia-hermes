@@ -4,6 +4,46 @@
 > Sergio: "estas son ideas que no puedo olvidar; luego vamos a desglosar una por
 > una". Cada frente lleva su estado REAL verificado y la pregunta que falta decidir.
 
+## Cerradas — vencidas, verificadas contra el sistema en vivo (2026-09-02)
+
+Estas cuatro dejaron de necesitar una decisión de Sergio: el propio sistema (u otra
+sesión) ya las resolvió. Se cierran acá con la medición, no se borran del historial de
+"Para decidir" — ese punto queda con una nota que apunta para acá.
+
+**A. ¿Publicamos `onia.com.bo`?** Ya está publicado. `/opt/onia-landing/runtime-next`
+se desplegó el **2026-09-01 21:42 UTC** (`stat` del directorio), con `BUILD_ID`
+`qinaKbiNJ_V9rh9loH5MO` — distinto del `Ega1b2zc6I30Rblyyl2Fv` que el punto daba por
+vivo. Verificado MIRANDO las dos páginas que el punto señalaba como rotas:
+`curl -s https://onia.com.bo/precios | grep -c "Inventario avanzado"` → **0** (ya no
+cobra el addon retirado) y el `<h1>` de `https://onia.com.bo/` es
+`"Cerrás vos.<br/>El negocio no."` — el hero de PR #35, no el de la v3. Los dos commits
+que el punto pedía (`eec7d0f3` precio, `c8dfe249` hero) son ancestros de `origin/main`
+Y ya están sirviéndose.
+
+**B. ¿El chatbot AGENDA? (la rama `fix/bot-manda-link-de-reserva`)** Ya se mergeó —
+commit `fbe106be` (2026-09-01 20:28 -04:00), y trae la decisión tomada adentro del
+propio mensaje: *"El catalogo de venta NO se toca: no promete agendar hasta que el bot
+desplegado lo haga."* Verificado que se cumplió: `ONIA_CATALOGO_DE_VENTA.md:126` sigue
+diciendo que un pedido de cita "lo ESCALA a una persona", y
+`scripts/venta-honestidad.test.mjs` (test *"el catalogo de venta no vende que el
+chatbot agenda"*) sigue en el repo verificando exactamente eso. No hay pregunta
+pendiente: se decidió mergear el código y dejar la promesa de venta como estaba hasta
+el deploy al VPS — que ya es parte del punto 16(a) de este mismo radar, no una decisión
+nueva.
+
+**C. "El canario mira 10 pantallas en el repo, pero el VPS sigue corriendo la versión
+de 3."** Ya no. `diff scripts/loops/prompts/canario-visual.md /root/bin/loops/canario-visual.md`
+→ sin salida, archivos idénticos (18.371 bytes los dos, el del VPS fechado
+`2026-09-02 02:25`). El comando de un renglón que el punto pedía ya se corrió.
+
+**D. "Dos ramas quedaron fuera de la integración" — una de las dos ya no.**
+`git rev-list --left-right --count origin/main...origin/claude/chatbots-platform-review-0d1d09`
+→ `388 0`: cero commits propios sin mergear (confirmado con
+`git log origin/claude/chatbots-platform-review-0d1d09 --not origin/main`, vacío). Ya
+está adentro de `main` — no hace falta rebasar ni archivar. Sigue viva sólo
+`claude/onia-web-architecture-b37eca` (401/2, aumentó desde el 371/6 de la última
+medición: sigue divergiendo, no se achica sola).
+
 ## 1. ¿Chatwoot o plataforma de chat PROPIA hecha por Onia?
 
 **La regla de Sergio**: "tiene que ser hecho por nosotros — usar otra plataforma no
@@ -658,7 +698,7 @@ dependencias que el lockfile no tiene, así que `pnpm install --frozen-lockfile`
 CI) **falla**. No se tocó acá porque regenerar un lockfile no es trabajo de un merge, pero es una
 bomba con temporizador para el primer pipeline que instale en limpio.
 
-## 16. `/` y `/empezar` no tienen dueño (2026-09-01) — decisión de Sergio
+## 16. ~~`/` y `/empezar` no tienen dueño~~ — RESUELTO 2026-09-02, no hay decisión
 
 La home y la página de acceso viven en `web-factory/apps/onia-platform/`: **ninguna cola las
 nombra**, y la zona de `web-factory-dev-loop` las excluye explícitamente. Son la puerta de
@@ -672,15 +712,18 @@ Las dos opciones cuestan lo mismo — una línea en un archivo, cero bolivianos:
 - **b)** `web-factory-dev-loop` levanta su prohibición para esa carpeta y se las queda. Es el
   carril que sabe de superficies web, pero hoy tiene la puerta cerrada por decisión previa.
 
-**Se puso más urgente el 2026-09-01 22:41 UTC.** El canario visual encontró que, sin dueño,
-`/` y `/empezar` se redeployaron enteras (título, copy, CTA) entre dos pasadas de la misma
-tarde, y el nuevo CTA de `/empezar` ("Creá tu cuenta") manda a `app.onia.com.bo/register`, que
-resultó estar vivo con un wizard de 2 pasos y un formulario de contraseña real. Esto puede
-contradecir lo que `CLAUDE.md` tiene escrito como historia (que `/register` "dejó de crear
-cuentas" y el arreglo honesto vive en `/empezar`) — si esa premisa venció, o si `/register`
-no cierra el alta de verdad, hay que decidirlo antes de que otro lead se tope con la pantalla
-rota. Detalle y evidencia (capturas) en `COLA.md`, sección "Del canario visual — corrida del
-2026-09-01 22:41 UTC". Nadie del canario tocó el formulario ni creó cuentas.
+**Resuelto el 2026-09-02, con las dos preguntas que dejó abiertas contestadas — no por
+elección entre (a)/(b), sino porque el propio loop `web-venta` ya nació dueño de esta zona**
+(su prompt: "Vos sos ese dueño", zona `web-factory/apps/onia-platform/**`). Y la duda de fondo
+—¿el redeploy del 2026-09-01 con `/register` como CTA era legítimo o el bug de agosto había
+vuelto?— también se cerró: es legítimo. `ONIA_ALTA_AUTOMATICA=abierta` se reabrió en
+`onia-platform` el 29-ago, el sitio se puso al día con `alta.ts` (commit `37ab9e92`,
+2026-09-01) y hoy (verificado contra el contenedor `onia-landing`, no `main`) las dos páginas
+dicen "Creá tu cuenta" en consistencia total — cero "Pedí tu acceso" residual. Detalle en
+`COLA.md`, el ítem que cerraba esa duda.
+**Lo que sigue siendo cierto y no cambia con esto:** `app.onia.com.bo/register` sigue siendo
+del repo `onia-platform`, otro carril (`onia-cola`) — este carril no toca ese flujo, sólo lo
+enlaza.
 
 # Para decidir — al abrir el 1 de septiembre
 
@@ -689,7 +732,12 @@ que desbloquean, no por urgencia
 aparente. Cada una tiene su detalle arriba en este archivo o en
 `hermes-content/docs/handoff/claude-git-status-935f47.md`.
 
-**1. ¿Publicamos `onia.com.bo`? Ya no son 77 commits: son OCHO.**
+**1. ~~¿Publicamos `onia.com.bo`?~~ ✅ CERRADO — ya está publicado.** Ver "Cerradas → A"
+arriba: build `qinaKbiNJ_V9rh9loH5MO` del 2026-09-01 21:42 UTC, sin la promesa vieja.
+
+<details><summary>Texto original (historia de cómo se venía posponiendo)</summary>
+
+**Ya no son 77 commits: son OCHO.**
 
 ⚠️ **Corregido el 2026-09-01 midiendo, no leyendo.** Esta decisión decía "77 commits" y esa
 cifra es de antes del despliegue a mano del 24-ago. Lo vivo hoy es el build
@@ -709,6 +757,8 @@ verde, `swap=true`. ⚠️ **El paso del landing sigue colgado del de center**
 (`.github/workflows/deploy-onia-center.yml:78`, mismo job, sin `if:`), y center.onia.com.bo está
 muerto a propósito desde el 29-ago (404 medido). PR #30 arregló el lockfile, **no** desacopló los
 dos pasos: si el de center vuelve a morir, el sitio de venta vuelve a no publicarse.
+
+</details>
 
 **2. ✅ RESUELTA — el hero es `resultado`.** Sergio eligió el 2026-09-01 (*"esta bien el hero…
 pero esta bien usa ese"*) y ya está mergeado en `main` (PR #35, `c8dfe249`). Lo único que falta
@@ -754,7 +804,14 @@ dependencias pesa 6,4 GB y se vuelve a llenar solo. Hay que decidir cuáles se a
 Crear un worktree normal del repo **falla con "No space left on device"** — medido hoy al
 intentarlo; hubo que armarlo con `sparse-checkout`. El disco ya no es una molestia: bloquea.
 
-**9. ¿El chatbot AGENDA? La rama que lo hace está lista y no se puede mergear sin tu decisión.**
+**9. ~~¿El chatbot AGENDA?~~ ✅ CERRADO — ya se mergeó y la decisión ya está tomada.** Ver
+"Cerradas → B" arriba: commit `fbe106be` (2026-09-01 20:28), y el propio mensaje del merge
+elige "no tocar el catálogo hasta el deploy" — no queda pregunta para vos, salvo el deploy
+al VPS que ya cubre el punto 16(a).
+
+<details><summary>Texto original</summary>
+
+La rama que lo hace está lista y no se puede mergear sin tu decisión.
 
 `fix/bot-manda-link-de-reserva` (1 commit, `ad16b8ce`, con sus tests) hace que el recepcionista
 mande el link de la agenda pública de SU organización (`app.onia.com.bo/book/<slug>`) en vez de
@@ -781,6 +838,8 @@ chatbot NO agenda, y la guarda lo exige en las dos puntas.
 **Ojo con el borde real, que no es de copy:** una org puede tener slug y NO tener la agenda
 configurada. Ahí el cliente final recibe un link a una página vacía. Si la respuesta es "sí",
 esto se cierra antes de encender.
+
+</details>
 
 **10. ¿Para qué sirve `web-factory/packages/`?**
 Los tres paquetes que el carril de Web Factory viene puliendo hace diez días —`@onia/blocks`,
@@ -818,7 +877,12 @@ mandando un link por WhatsApp y ese link no existe. Las dos opciones cuestan **B
 
 Lo único que hace falta de Sergio es **el nombre del subdominio**.
 
-**12. El canario mira 10 pantallas en el repo, pero el VPS sigue corriendo la versión de 3.**
+**12. ~~El canario mira 10 pantallas en el repo, pero el VPS sigue corriendo la versión de
+3.~~ ✅ CERRADO — ya se copió.** Ver "Cerradas → C": el prompt del VPS y el del repo son
+idénticos byte a byte hoy.
+
+<details><summary>Texto original</summary>
+
 Se mergeó a `main` hoy (`52e359c1`): diez pantallas de cliente, umbrales medidos y el peso deja
 de ser una lotería. Pero el prompt que EJECUTA el canario vive en `/root/bin/loops/` del VPS, y
 `scripts/loops/README.md` lo dice literal: *"Al cambiar un prompt hay que volver a copiarlo"*.
@@ -830,26 +894,18 @@ Es **un solo comando** y cuesta **Bs 0**; no se corrió porque tocar el VPS nece
 install -m 644 scripts/loops/prompts/canario-visual.md /root/bin/loops/canario-visual.md
 ```
 
-**13. DOS ramas quedaron fuera de la integración por divergencia, no por conflicto.**
-Se integraron 7 ramas a `main` con los gates en verde. Estas no, porque arrastran semanas de
-deriva y mezclarlas a ciegas es cómo se rompe `main`:
+</details>
 
-| rama | commits atrás de `main` | commits suyos sin mergear |
-|---|---|---|
-| `claude/onia-web-architecture-b37eca` | 371 | 6 |
-| `claude/chatbots-platform-review-0d1d09` | 358 | 5 |
+**13. DOS ramas quedaron fuera de la integración por divergencia, no por conflicto — ahora es
+UNA sola.** Ver "Cerradas → D": `claude/chatbots-platform-review-0d1d09` ya tiene **cero**
+commits propios sin mergear, ya está adentro de `main`. Sigue viva sólo
+`claude/onia-web-architecture-b37eca` (**401 commits atrás de `main`, 2 propios sin mergear**,
+medido hoy — venía divergiendo, no se achica sola).
 
-⚠️ **Corregido el 2026-09-01 23:40 UTC, midiendo con `git rev-list --left-right --count`.**
-Acá figuraba una tercera fila, `claude/personal-brand-strategy-db9eb9` con 32 commits sin
-mergear, y **hoy tiene CERO**: su trabajo ya entró a `main` y la rama sólo está 2 commits
-atrás. Pedirte que decidas entre "rebasar o archivar" una rama que ya se mergeó es peor que
-un pendiente fantasma — es hacerte tomar de nuevo una decisión que ya está tomada. Las otras
-dos filas también estaban viejas (decían 307/4 y 294/3): siguen abiertas, pero con los
-números de hoy.
-
-Para cada una la decisión es la misma y cuesta **Bs 0**: **rebasar y mergear** (alguien tiene
-que mirar el rebase) o **archivarla** y perder ese trabajo. `claude/ads-creatividades-publicos`
-(146 commits) queda afuera a propósito: es tu carril de contenido y lo cerrás vos.
+La decisión sigue siendo la misma para la que queda: **rebasar y mergear** (alguien tiene que
+mirar el rebase) o **archivarla** y perder ese trabajo, Bs 0 cualquiera de las dos.
+`claude/ads-creatividades-publicos` (146 commits) queda afuera a propósito: es tu carril de
+contenido y lo cerrás vos.
 
 ## 17. El loop `docs-auditoria` está construido y probado, pero apagado (2026-09-02) — decisión de Sergio
 
@@ -884,3 +940,46 @@ Con el OK de Sergio, la línea a agregar en `crontab -e` es:
 <minuto> <horas> * * * /root/bin/onia-loop.sh docs-auditoria >> /var/log/onia-loop-docs-auditoria.log 2>&1
 ```
 y después se suma la fila a la tabla "Deben existir y estar activos" de arriba.
+
+## 18. Home y `/empezar` tienen 6 screenshots reales del producto — la regla del 1-sep las prohíbe (2026-09-02) — decisión de Sergio
+
+Regla vigente, tuya, del 2026-09-01: *"no coloques capturas literales del sistema, se ve mal,
+coloca cosas referenciales"* — cero `<img>`/`<video>`/`<canvas>` que fotografíen el software,
+sólo piezas que DIBUJEN el resultado del cliente. Encontrado midiendo el HTML servido de
+`onia.com.bo/` y `/empezar` (contenedor `onia-landing`, no un grep de repo): **6 imágenes son
+screenshots reales del panel de Onia**, de antes de esta regla (commit `65201c20`,
+2026-08-21 — el propio mensaje dice *"la landing muestra el producto real... capturas
+cableadas en sus ranuras"*, con datos de un tenant de demo sembrado por los circuitos reales).
+
+**Dónde están:**
+- Home: `/v2/capturas/agentes.webp` (pantalla de agentes) y `/v2/capturas/whatsapp.webp`
+  (editor del chatbot) — el bloque "Trabajan de noche. No *deciden* solos."
+- `/empezar`: `/v2/capturas/panel.webp` (dashboard con "Bs 4.633,40 cobrados") — la imagen del
+  hero, al lado del CTA principal.
+- Las 5 de `/rubros/*.webp` en la banda "Elegís tu rubro" — mismo tipo de captura; tienen
+  además un bug de recorte propio ya anotado en `COLA.md` (item de la maqueta cortada), que es
+  independiente de éste.
+
+**Por qué no lo cerré solo esta vuelta:** sacar 3 imágenes centrales del hero de las dos
+páginas que más lead reciben es la clase de cambio visual que la otra regla de esta cola frena
+— *"un rediseño no se publica sin que Sergio VEA la pieza terminada"* — con el precedente caro
+del 2026-08-20 (landing v2 rechazada entera, revertida en producción). No hay un reemplazo
+"obvio" de bajo riesgo: un hueco en blanco tampoco vende.
+
+**Tres caminos, ninguno cuesta plata en efectivo salvo el marcado:**
+- **a) Ilustración/diagrama referencial** (lo que la regla pide al pie de la letra): redibujar
+  cada captura como pieza gráfica — no fotografía del software, sí su resultado (montos,
+  agenda, WhatsApp). Costo: diseño, ~1 vuelta por imagen bien hecha, cero plata si se hace con
+  CSS/SVG; con generación de imagen (Higgsfield) es gasto trivial de crédito, ya autorizado por
+  `CLAUDE.md` para lotes chicos — pero igual necesita el visto bueno de la pieza terminada.
+- **b) Blur/recorte fuerte** que deje reconocible sólo la forma (bloque de color + contorno),
+  no el contenido — es lo que la ranura `shapeShot` ya sabía hacer ANTES de cablear estas
+  capturas (`65201c20` lo dice: "sin `src` sigue siendo la ranura de forma+color"). Revertir a
+  ese estado es la opción más barata y ya probada, aunque pierde el "se ve real" que buscaba el
+  commit original.
+- **c) Excepción explícita para estas 3**: si Sergio decide que la regla del 1-sep era para
+  otro contexto (video/referente) y no para las capturas ya ganadas del producto, se anota acá
+  como excepción y el ítem de `COLA.md` se cierra sin tocar código.
+
+Mientras no haya decisión, el ítem queda abierto en `COLA.md` con la medición completa para
+que la próxima vuelta no la repita.

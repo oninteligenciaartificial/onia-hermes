@@ -88,10 +88,34 @@ no es lo desplegado.
 existente— ya existe y está vivo.** Lo que falta no es construirlo: es **usarlo una vez**.
 
 **Ya no es teoría, y es peor de lo que decía:** medido en producción el 2026-08-31, la única
-org con `chatwootInboxId` es `zz-qa-clinica-chatbot-9k651` → inbox **7** (el de QA). Los
-inboxes **4 (Onia Web)** y **5 (Onia WhatsApp)** son huérfanos, y ahí están **todos** los leads
+org con `chatwootInboxId` era `zz-qa-clinica-chatbot-9k651` → inbox **7** (el de QA). Los
+inboxes **4 (Onia Web)** y **5 (Onia WhatsApp)** eran huérfanos, y ahí están **todos** los leads
 reales — incluido el de la clínica de 4 doctores, que lleva días sin que nadie pueda leerlo.
 Ver [`ONIA_LEADS_ESPERANDO.md`](ONIA_LEADS_ESPERANDO.md).
+
+⚠️ **Recontado en vivo el 2026-09-02 y la mitad ya no es cierta.** Contra `supabase-db` y contra
+la base de Chatwoot del VPS, no de memoria:
+
+| inbox | canal | conversaciones | org vinculada |
+|---|---|---|---|
+| 3 · ONIA Demo | API | 8 | **ninguna — huérfano** |
+| 4 · Onia Web | widget | **7** | **ninguna — huérfano** |
+| 5 · Onia WhatsApp | WhatsApp | 3 | `onia-interna` ✅ |
+| 7 · ZZ QA Clinica | widget | 6 | `zz-qa-clinica-chatbot-9k651` |
+
+**Inbox 5 dejó de ser huérfano**: alguien lo vinculó a `onia-interna`. O sea que **el PATCH ya
+se usó una vez y funcionó** — lo que este punto pedía como "lo mínimo que lo logra" ya ocurrió.
+
+**Lo que queda, y es más chico de lo que decía el párrafo de arriba:**
+1. **Inbox 4 sigue huérfano con 7 conversaciones adentro** — el widget de `onia.com.bo`. Ahí
+   están los leads del sitio, y son los que nadie puede leer desde el panel.
+2. **Ninguna org de CLIENTE tiene inbox propio.** `onia-interna` es la nuestra: prueba el
+   mecanismo, no el caso de un cliente. Terminado sigue siendo **un cliente**, no nosotros.
+
+**Verificado así, y se repite igual la próxima vez** (nada de `grep`, nada de memoria):
+
+    docker exec supabase-db psql -U postgres -d postgres -tAc \
+      'select o.slug, cs."chatwootInboxId" from clinic_settings cs join organizations o on o.id=cs."organizationId" where cs."chatwootInboxId" is not null;'
 
 **Terminado =** un mensaje enviado al número del cliente aparece en su bandeja, **mirado con
 captura**. Con el formulario ya vivo, el camino es: `/admin/organizations/<id>` → vincular la

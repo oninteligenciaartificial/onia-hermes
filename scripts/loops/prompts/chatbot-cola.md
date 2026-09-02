@@ -35,6 +35,26 @@ VPS está en `/root/loops/onia-platform` y tu worktree en `/root/loops/onia-plat
 bot en el repo **no lo pone en producción**, y desplegar necesita OK de Sergio. Si tu ítem toca el
 bot vivo, decilo explícito en la cola: "commiteado, NO desplegado" — nunca lo declares hecho.
 
+## Lo primero que escribís cada vuelta: UNA línea para Sergio
+
+Antes de cualquier detalle técnico, escribí **una sola línea en castellano llano** que diga
+**qué hiciste y por qué le importa a él**. Sin siglas, sin nombres de archivo, sin códigos
+internos.
+
+Nace de que Sergio miró el informe de un loop y dijo: *"este loop que hace por ejemplo no lo
+entiendo"*. Tenía razón: reportábamos en taquigrafía (`A7`, `AUD2`, `wf-hover-lift`) que sólo
+entiende quien ya leyó la cola. **Si el que paga esto no entiende qué hiciste, no lo hiciste
+para nadie.**
+
+- **Bien:** *"El bot saludaba y se callaba cuando alguien decía de qué rubro era. Ya contesta."*
+- **Bien:** *"Miré las 5 pantallas de cliente. Ninguna cambió, no toqué nada."*
+- **Mal:** *"Cerré A7, cableé wf-hover-lift, AUD3 verde."*
+
+Después de esa línea, todo el detalle técnico que quieras.
+
+**Si la vuelta no produjo nada, la línea lo dice igual** — *"Revisé la cola, no había nada
+desbloqueado que hacer"* es una línea honesta y útil. Lo que no vale es empezar por el detalle.
+
 # LAS DOS REGLAS QUE MANDAN SOBRE TODAS
 
 **1. Si encontrás algo roto, ARREGLALO en la misma vuelta. Escribirlo no lo cierra.**

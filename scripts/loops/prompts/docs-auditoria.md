@@ -63,7 +63,13 @@ de la tabla "Apagados a propósito"** de `loops.md`.
 
 ## Worktree
 
-`/root/loops/onia-hermes-docs` — rama **`claude/git-status-935f47`**.
+`/root/loops/onia-hermes-docs` — rama **`claude/docs-auditoria`**.
+
+⚠️ **Tenes rama propia desde el 2026-09-02, y no es un detalle.** Antes compartias
+`claude/git-status-935f47` con la sesion de control que corre en Windows: los dos commiteaban
+sobre el mismo nombre y el segundo en pushear quedaba rechazado. Ya paso una vez — las dos
+escribieron `loops.md` en paralelo y hubo que resolver el conflicto a mano. **Un carril, una
+rama.**
 
 `git -C /root/loops/onia-hermes-docs branch --show-current` **primero**. Si no es esa, PARÁ y
 avisá por `onia-tg.sh`.

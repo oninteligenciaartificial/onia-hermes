@@ -407,6 +407,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (recortes-rubro.mjs), ya no está en el repo. Este carril **no** puede sembrar
       datos: la base es la de PRODUCCIÓN en el VPS. Queda desbloqueado para quien tenga una
       base local, o con un `docker compose` de Postgres (hoy no hay Docker en esta máquina).
+      ⚠️ **Reverificado el 2026-09-02: Docker YA está en la máquina** (`docker compose version`
+      → v5.0.2, hay 15 contenedores `onia-*` corriendo), pero **eso no desbloquea el ítem**. La
+      app con `prisma/seed-demo.ts` que hay que correr con datos falsos es el **dashboard real
+      del producto** (repo `onia-platform`, el que sirve `app.onia.com.bo`), no
+      `web-factory/apps/onia-platform` (la landing, que es mi zona). Levantarlo — aunque sea
+      sólo para capturar pantallas y sin commitear nada ahí — es correr el código de **otro
+      carril**, justo lo que `CLAUDE.md` prohíbe ("el repo `onia-platform` tampoco... no cruces
+      de repo"). Sigue bloqueado; el bloqueo real nunca fue Docker.
 
 - [ ] **Los NOMBRES de los iconos siguen en el DOM como texto en el login de la plataforma.**
       El `innerText` de `app.onia.com.bo/login` devuelve `bolt`, `credit_card_off` y `smart_toy`.
@@ -472,10 +480,11 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       o apagar Web Analytics en Cloudflare. **Cómo se sabe que quedó hecho:** abrir
       app.onia.com.bo/login y que la consola no traiga la violación de CSP.
 
-- [ ] **Nadie es dueño de `/` ni de `/empezar`.** Viven en `web-factory/apps/onia-platform/`,
-      que ninguna cola nombra y que la zona de `web-factory-dev-loop` prohíbe explícitamente.
-      Son la puerta de entrada del producto y hoy sus defectos caen acá por descarte. Anotado
-      también en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+- [x] **Nadie es dueño de `/` ni de `/empezar` — RESUELTO 2026-09-02: el carril `web-venta`
+      (este) es el dueño declarado.** Su propio prompt de loop lo dice desde el 2026-09-02:
+      "`onia.com.bo/` y `/empezar` no tenían dueño... Vos sos ese dueño", con zona exclusiva
+      `web-factory/apps/onia-platform/**`. Actualizado en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §16.
 
 ### Del canario visual — segunda pasada del 2026-09-01
 
@@ -530,19 +539,59 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       anota como huérfana cuatro ítems más arriba. El gate se puede cablear sin tocar su
       código — y justamente por eso conviene que exista antes de que alguien lo toque.
 
+      ✅ **Cerrado el residuo más urgente el 2026-09-02, sin tocar la raíz de `web-factory`:**
+      `apps/onia-platform/package.json` ahora tiene `"prebuild": "tsc --noEmit"`. Verificado que
+      es exactamente el comando que corre el deploy real
+      (`scripts/deploy-onia-landing.sh:25`, `pnpm --filter onia-platform build`) — no un script
+      paralelo que nadie llama: `pnpm run build` en ese filtro ejecuta el hook automáticamente
+      (probado en vivo con `prebuild: echo`), y con un error de tipos inyectado a propósito
+      (`layout.tsx` con un `number` asignado a un `string`) el build **corta antes de
+      `next build`** con `ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL`. Revertido el error de prueba,
+      gates limpios: `tsc --noEmit` 0 · `next build` 32/32 páginas.
+      **Lo que sigue abierto, y es de otro dueño:** `dental-premium`, `dentalgest-landing` y
+      `ferreteria-sur` (mismo arreglo, un dueño con permiso en esas carpetas) y `site` (ni
+      siquiera tiene script `typecheck`). Cablearlo "en el script raíz que un carril corre antes
+      de mergear" sigue sin dueño — tocar los 4 archivos raíz de `web-factory` no es zona de
+      este loop.
+      **Por qué no bastaba con que el `node_modules` faltara:** al arrancar esta vuelta
+      `npm run typecheck` en `onia-platform` fallaba con `Cannot find module 'vitest'` — no era
+      un bug de código, era que este worktree nunca corrió `pnpm install` (root `node_modules`
+      no existía). Con el install hecho, tsc y build salen limpios; quedó anotado para que la
+      próxima vuelta no lo reporte como regresión.
+
 ### Del canario visual — corrida del 2026-09-01 22:41 UTC (tercera pasada)
 
-- [ ] 🔴 **`onia.com.bo/` y `/empezar` cambiaron de diseño y de copy ENTERO desde la baseline de
-      hace 3 h, y el CTA de `/empezar` ahora manda a `app.onia.com.bo/register` — que resultó
-      estar VIVO, con un wizard de 2 pasos que llega hasta un formulario real de contraseña.**
-      Esto contradice lo que este mismo repo tiene escrito como historia (`CLAUDE.md`, sección
-      "Una promesa que cambia se barre en TODA la superficie"): que `/register` "dejó de crear
-      cuentas" y que el arreglo honesto vive sólo en `/empezar` ("Pedí tu acceso"). Si esa premisa
-      ya no es cierta, la corrección de agosto puede estar desactualizada; si SÍ sigue siendo
-      cierta y `/register` no termina de crear la cuenta, volvió el bug exacto que esa corrección
-      arregló, con las mismas palabras ("Creá tu cuenta") apuntando derecho a la pantalla rota.
-      **No lo decidí yo — no tengo dueño para esta pantalla y no toco el flujo de otro carril.**
-      **Lo que sí verifiqué, mirando y sin enviar el formulario (no creé ninguna cuenta):**
+- [x] **`onia.com.bo/` y `/empezar` cambiaron de diseño y de copy ENTERO desde la baseline de
+      hace 3 h, y el CTA de `/empezar` ahora manda a `app.onia.com.bo/register` — RESUELTO
+      2026-09-02: es un cambio legítimo, no una regresión, y ya no hay contradicción en el
+      sitio.** Gate 1 (mirar el código y la producción de HOY, no la duda de ayer): el propio
+      worktree ya tiene la respuesta escrita en
+      `web-factory/apps/onia-platform/src/app/(sitio)/alta.ts` (commit `37ab9e92`, del
+      2026-09-01): `ONIA_ALTA_AUTOMATICA=abierta` se verificó en vivo en el contenedor
+      `onia-platform` ese mismo día, así que `ALTA_ABIERTA = true` y **todo** el sitio debe
+      decir "Creá tu cuenta", no "Pedí tu acceso" — la duda que este ítem dejaba abierta (¿es
+      un redeploy legítimo o volvió el bug de agosto con el registro roto?) ya estaba
+      contestada en el propio código, sólo faltaba publicarla y reverificar en vivo.
+      **Verificado HOY contra el contenedor que sirve el dominio** (`onia-landing`, no Vercel,
+      no `main`):
+      - `curl https://onia.com.bo/` y `/empezar`: **cero** apariciones de "Pedí tu acceso" en
+        ninguna de las dos páginas; "Creá tu cuenta" aparece 15 veces en `/empezar`, consistente
+        en cabecera, footer y banda final — ya no quedan las dos frases mezcladas.
+      - `https://app.onia.com.bo/register` responde `200` y arma el wizard de 2 pasos descrito.
+        No se envió el formulario (no se crea cuenta de prueba en producción).
+      - **Mirado renderizado**, no sólo `grep`: `scripts/canario_visual.mjs home empezar` sin
+        disparo mecánico, y capturas propias en viewport 1440×900 de la cabecera de las dos
+        páginas — texto y botones alineados, sin overlap, sin corte.
+      **Por qué no era un fantasma barato de cerrar sin mirar:** el ítem original tenía razón en
+      dudar — la promesa que cambia SÍ hay que barrerla en toda la superficie (regla de
+      `CLAUDE.md`), y hasta ayer nadie había confirmado que la barrida terminó. Confirmado hoy:
+      terminó, cero superficie con el vocabulario viejo.
+      **Lo que sigue sin dueño real** (ver radar §16): la ambigüedad de fondo — que
+      `app.onia.com.bo/register` es del repo `onia-platform`, otro carril — sigue viva para la
+      PRÓXIMA vez que ese flag cambie. Ese archivo (`alta.ts`) ya deja el runbook de los dos
+      pasos escrito para cuando pase.
+      **Lo que se verificó en su momento, mirando y sin enviar el formulario (no se creó
+      ninguna cuenta):**
       - Home: título pasó de *"Onia · Tu negocio no pierde citas ni cobros | Bolivia"* a
         *"Onia · Cerrás vos, el negocio no | Software de gestión Bolivia"*, y el CTA de *"Pedí tu
         acceso"* pasó a *"Creá tu cuenta"* en cabecera, footer y banda final. Todo el copy central
@@ -570,12 +619,46 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Efecto colateral, ya visible en el monitor propio del VPS:** `/root/bin/onia-mirar-cliente.sh`
       viene avisando `ROTO` cada 15 min desde hace horas por texto ausente ("Pedí tu acceso" en
       `/empezar`, "Tu negocio no pierde" en `web`) — su lista de textos esperados quedó
-      desactualizada por este mismo cambio. No lo toqué (es infraestructura compartida, no mi
-      carril), lo anoto para quien tenga `/root/bin/onia-mirar-cliente.sh`.
-      **A quién le toca decidir:** nadie tiene declarado dueño de `web-factory/apps/onia-platform/`
-      (home + empezar) y esto cruza a `app.onia.com.bo` (plataforma, carril `onia-cola`). Sumo una
-      línea al radar (`hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`) pidiendo que se le ponga dueño y que
-      alguien confirme si `/register` de verdad crea la cuenta hasta el final.
+      desactualizada por este mismo cambio en su momento — a reverificar por quien tenga
+      `/root/bin/onia-mirar-cliente.sh`, no es zona de este carril.
+
+### Encontrado el 2026-09-02, dueño del carril — sin cerrar, necesita la vista de Sergio
+
+- [ ] 🔴 **`onia.com.bo/` y `/empezar` tienen 6 capturas LITERALES del sistema — viola la regla
+      de Sergio del 2026-09-01 ("no coloques capturas literales del sistema... coloca cosas
+      referenciales", cero `<img>`/`<video>`/`<canvas>` del software) y es previo a esa regla.**
+      Encontrado mirando el HTML servido, no supuesto: `grep -o '<img\|<video\|<canvas'` da
+      **10** hits en home y **1** en `/empezar`; de esos, **6 son screenshots reales del panel
+      de Onia**, no fotos de personas ni ilustraciones:
+      - Home: `/v2/capturas/agentes.webp` (pantalla de agentes) y `/v2/capturas/whatsapp.webp`
+        (editor del bot) — clase `sitio_shapeShot`.
+      - `/empezar`: `/v2/capturas/panel.webp` (dashboard con "Bs 4.633,40 cobrados") — misma
+        clase.
+      - Las 5 imágenes de `/rubros/*.webp` en la banda "Elegís tu rubro" (ya hay un ítem propio
+        arriba sobre su recorte; **son el mismo tipo de captura**, el bug de recorte es
+        aparte del bug de ser literales).
+      **No es una sospecha de nombre de carpeta**: el propio commit que las metió lo dice sin
+      ambigüedad — `65201c20` (2026-08-21, **antes** de la regla del 1-sep), mensaje *"la
+      landing muestra el producto real — 4 capturas cableadas en sus ranuras... Las capturas
+      salen del producto real con un inquilino de demo sembrado por los circuitos de verdad"*.
+      No hay screenshot fabricado con datos falsos (serían prueba social fabricada, peor
+      todavía) — son datos de una demo real, pero siguen siendo **fotografías del software**,
+      que es exactamente lo que la regla nueva prohíbe.
+      **Por qué no lo reemplacé yo mismo esta vuelta:** las 3 capturas de `/v2/capturas/` son
+      piezas centrales del hero de las dos pantallas que este carril tiene que cuidar más — la
+      regla hermana de esta misma cola dice *"un rediseño no se publica sin que Sergio VEA la
+      pieza terminada"* (el precedente caro: la landing v2 del 2026-08-20, rechazada entera y
+      revertida en producción). Sacar 3 imágenes centrales del hero y del `/empezar` sin
+      reemplazo aprobado es la clase de cambio visual que esa regla existe para frenar — no una
+      corrección de una línea.
+      **Lo que sí hice:** medí el alcance completo (6 capturas, 2 pantallas, 1 commit origen),
+      descarté que sea sólo el ítem de recorte de `/rubros` (es un bug distinto, más viejo, y
+      sigue abierto por su cuenta), y sumé la decisión al radar (§18) con las opciones
+      cotizadas para que la próxima vuelta —o Sergio— elija el reemplazo sin repetir esta
+      medición.
+      **Cómo se sabe que quedó hecho:** `grep -o '<img\|<video\|<canvas'` sobre el HTML de las
+      dos páginas no matchea ninguna ruta bajo `/v2/capturas/` ni `/rubros/`, y lo que las
+      reemplaza fue mirado renderizado por Sergio antes de publicarse.
 
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
