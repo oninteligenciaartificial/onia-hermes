@@ -732,6 +732,48 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `onia.com.bo/empezar` sigue sin `og:image` hoy, y la home sigue sirviendo
       `/og/onia-rubros.jpg` (la captura con "MUY PRONTO"). Publicar lo decide Sergio.
 
+### Encontrado el 2026-09-02 auditando el `[x]` de la tarjeta social — ARREGLADO en la misma vuelta
+
+- [x] **Otras CUATRO rutas publicadas se compartían sin imagen, y el guard que debía impedirlo
+      no las miraba. El `[x]` de la vuelta anterior daba por cubierto el sitio entero.** Es el
+      MISMO defecto que cerró `30484b7b` ("once de doce"), una capa más afuera: aquel arregló
+      las doce rutas del grupo `(sitio)`, pero el sitio publica **dieciséis**.
+      **Cómo apareció:** auditando ese `[x]`. Se volvió a medir, pero **contra el sitemap** en
+      vez de contra la carpeta — el sitemap es la lista de lo que publicamos ("nunca una página
+      publicada sin su entrada", dice su propio comentario). De sus 16 URLs, **4 servían
+      `og:title` y `og:description` y cero imagen**: `/servicios/marketing-ia`,
+      `/servicios/consultoria`, `/terminos` y `/privacidad`.
+      **Por qué se escaparon, que es lo que importa:** viven FUERA del grupo `(sitio)` —en
+      `src/app/servicios/…`, `src/app/terminos/`, `src/app/privacidad/`—, y `opengraph-image` de
+      Next no cruza grupos de rutas. `/servicios/webs` sí tenía tarjeta **porque está adentro**:
+      dos rutas hermanas bajo la misma URL `/servicios/`, una con imagen y otra sin, según en qué
+      carpeta del disco quedaron.
+      **El guard tenía el mismo agujero, y ese es el hallazgo real.** `(sitio)/forma.test.ts`
+      enumeraba las rutas con un `readdirSync` del directorio `(sitio)`, así que era
+      **estructuralmente ciego** a lo de afuera: pasaba en verde con las cuatro rotas. Un guard
+      que sólo mira donde ya arreglaste no es un guard. Ahora la lista **sale del sitemap**
+      (`sitemap.ts`, parseado) y resuelve cada ruta dentro o fuera de `(sitio)`: una página nueva
+      entra al sitemap y el test le exige su tarjeta, esté en el grupo que esté.
+      **Probado que el guard MUERDE, no que sólo pasa:** se sacó
+      `terminos/opengraph-image.tsx` y la suite falló en esa ruta exacta
+      (`× /terminos tiene su opengraph-image.tsx`); restaurado, verde. Un test que nunca se vio
+      fallar no prueba nada.
+      **Verificado sobre el HTML servido del build nuevo** (no el DOM, no `main`): las **16**
+      rutas del sitemap devuelven `og:image` `200 image/png` de 40.888 B. Antes: 12.
+      **Evidencia mirada, no supuesta:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-tarjeta-social-rutas-fuera-de-sitio.png`
+      — la tarjeta de `/servicios/consultoria`, 1200×630, dibujada, cero captura, cero obra.
+      **Gates:** `tsc --noEmit` 0 · `vitest run forma.test.ts` **51 pasando** (eran 47: una por
+      ruta nueva) · `next build` exit 0, **16** rutas `opengraph-image` emitidas (eran 12).
+      ⚠️ **La trampa del `EADDRINUSE` volvió a morder, y avisada.** `pkill -f "next start"` mató
+      **mi propia shell** (el patrón coincide con la línea de comando que lo invoca), no el
+      servidor: el viejo siguió tomando el puerto y el `next start` nuevo murió con
+      `EADDRINUSE`. Un `curl` ahí habría medido el build ANTERIOR y dado "arreglado" por
+      casualidad. Se libera con `fuser -k 3210/tcp` y se lee el log antes de creerle a la
+      medición.
+      **Lo que falta, y no es zona de este carril:** el deploy. Contra `onia-landing`, las cuatro
+      siguen sin imagen hoy. Publicar lo decide Sergio.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
