@@ -21,10 +21,14 @@ Anatomía de la portada:
 
 Lo que NO copiamos: su naranja, su mascota, su firma "by francisco carosia".
 
-**Experimento A/B corrido 02-sep** (`scripts/marca-personal/experimento-marco-specsheet.py`,
-salida en `carousels/out/experimento-marco-specsheet/`): portada sin marco vs. con marco
-spec-sheet sobre la misma pieza real (portada de venta del chatbot). **Gana CON marco** —
-más distintivo, cero texto cortado. Ya aplicado en `generar-carrusel-chatbot.py`.
+🚫 **EL MARCO SPEC-SHEET ESTÁ DESCARTADO — no lo repongas** (Sergio, 02-sep tarde:
+*"hay información innecesaria"*, §7 de `ONIA_MARCA_PERSONAL_BASE_CONTENIDO.md`).
+Un experimento A/B nuestro (`experimento-marco-specsheet.py`) lo había declarado ganador
+ese mismo día por ser "más distintivo", y se aplicó a cuatro generadores. **Sergio miró
+las piezas y decidió lo contrario**, y su decisión manda sobre cualquier veredicto del
+loop: el header/footer de metadata técnica se retiró de los 4 generadores el 02-sep.
+La ficha lo conserva descrito abajo como **referencia de lo que hace carosia**, no como
+patrón nuestro. Que un A/B interno "gane" no lo vuelve aprobado.
 
 ### Jerarquía de la portada — la regla nace de mirarla CHICA (02-sep)
 
@@ -42,8 +46,23 @@ scroll. Veredicto completo en §6 de `ONIA_MARCA_PERSONAL_BASE_CONTENIDO.md`.
 baja a gris y a tamaño de contexto. Ejemplo real: *"Cómo contesto a cada cliente"* (gris,
 62) + **"SIN ESTAR YO"** (ink, 150 wdth 125).
 
-**El marco spec-sheet NO se agranda** aunque tampoco se lea reducido: a tamaño chico
-funciona como filete decorativo, y se diseñó para la lectura a pantalla completa.
+### El verde de marca es un RELLENO, nunca un color de texto (02-sep)
+
+`experimento-verde-marca.py` midió el contraste además de mirarlo, sobre la palabra
+"COMUNIDAD" de la lámina de CTA real. Sobre el fondo `#F7F7F7` del sistema:
+
+| tratamiento | contraste | |
+|---|---|---|
+| `#00C661` como **color de texto** | **2,12:1** | ❌ reprueba AA — se lava en el feed |
+| `#00C661` como **fondo** + tinta `#0A0A0A` | **8,72:1** | ✅ el patrón |
+
+El verde de marca es claro; puesto como tinta sobre fondo claro queda más apagado que el
+gris que lo rodea. Como bloque, el CTA pasa a ser lo segundo más fuerte de la lámina.
+**Todo highlight verde va `background:#00C661` + `color:#0A0A0A`.** Ver §7 de
+`ONIA_MARCA_PERSONAL_BASE_CONTENIDO.md`.
+
+⚠️ Trampa ya conocida del bloque: pegado a un signo de puntuación deja un hueco visible —
+el resaltado abarca la palabra, no la coma.
 
 ### Trampa del resaltado en `.caja b`
 

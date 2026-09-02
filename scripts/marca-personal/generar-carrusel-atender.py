@@ -47,7 +47,7 @@ CHROME = _chrome()
 CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@500&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#F7F7F7;--ink:#0A0A0A;--muted:#8E8E8E;--card:#FFFFFF;--verde:#1F7A4D}
+:root{--bg:#F7F7F7;--ink:#0A0A0A;--muted:#8E8E8E;--card:#FFFFFF;--verde:#00C661}
 html,body{width:1080px;height:1350px}
 body{background:var(--bg);font-family:'Archivo',sans-serif;overflow:hidden}
 .lienzo{width:1080px;height:1350px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:90px 100px;position:relative}
@@ -61,25 +61,18 @@ body{background:var(--bg);font-family:'Archivo',sans-serif;overflow:hidden}
 .sub{font-size:44px;font-weight:600;color:var(--muted);text-align:center}
 .caja{background:var(--card);border-radius:36px;padding:56px 60px;font-size:40px;line-height:1.45;color:var(--ink);box-shadow:0 18px 50px rgba(0,0,0,.07);width:100%}
 .caja b{font-weight:600;background:#EFEDEA;border-radius:8px;padding:0 8px}
-.cta{font-weight:900;color:var(--verde)}
-.marco-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;
-  padding:44px 56px;font-family:'Geist Mono',monospace;font-size:24px;font-weight:500;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--ink);border-bottom:2px solid var(--ink)}
-.marco-bottom{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;
-  padding:36px 56px 96px;font-family:'Geist Mono',monospace;font-size:22px;font-weight:500;
-  letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-top:2px solid var(--ink)}
+.cta{font-weight:900;color:var(--ink);background:var(--verde);border-radius:10px;padding:2px 16px 6px}
 """
 
 SLIDES = [
-    # 1 portada — marco spec-sheet + jerarquia por tamano (ganador miniatura)
+    # 1 portada — jerarquia por tamano (ganador miniatura). Sin marco: Sergio lo
+    # descarto el 02-sep ("menos es mas", BASE_CONTENIDO SS7).
     f"""<div class="lienzo" style="gap:50px;padding-top:150px;padding-bottom:150px">
-  <div class="marco-top"><span>ONIA SYSTEM &middot; GRID 1080&times;1350</span><span>V1.0</span></div>
   <img class="icono" src="{ICONOS}/robot.png" style="width:240px;height:240px">
   <div>
     <div class="contexto">C&oacute;mo contesto a cada cliente</div>
     <div class="remate" style="margin-top:14px">SIN<br>ESTAR YO</div>
   </div>
-  <div class="marco-bottom"><span>TECHNICAL SPEC &middot; TEMA: ATENCION CON IA</span><span>FORMATO: CARRUSEL</span></div>
   <div class="handle">@sergiourcullo</div>
 </div>""",
     # 2 una sola bandeja

@@ -133,6 +133,8 @@ TRABAJO DE CADA VUELTA, en orden:
 3. PRACTICA GENERATIVA — EXPERIMENTAR PARA PERFECCIONAR (regla Sergio 02-sep; ademas de la pieza, una por vuelta): toma EL siguiente pendiente [ ] de §5/§6 de hermes-content/docs/ONIA_MARCA_PERSONAL_BASE_CONTENIDO.md y ejecutalo como EXPERIMENTO A/B: renderiza 2-3 variantes de la misma cosa (textura vs sin, layout A vs B, tamano/eje distinto), MIRALAS comparadas (peso >50KB y sin texto cortado no alcanza: hay que juzgar cual gana y por que), registra el veredicto en el mismo doc (marcar [x] + 1 linea con la ganadora) y APLICA la ganadora a los generadores y la FICHA en esa misma vuelta. La vuelta siguiente construye sobre lo aprendido: cada pieza debe salir mejor que la anterior. Si §5/§6 quedaron vacios, inventa el proximo experimento y anotalo ahi.
 4. Actualiza la cola con lo hecho.
 
+REGLA DE DISENO (Sergio 02-sep): menos es mas — 1 idea por lamina, cero metadata decorativa (el marco spec-sheet quedo DESCARTADO). La mascota oficial es el SVG de references/ui-patterns/mascota-onia/ (reusar sus grupos SVG o crear poses nuevas copiando EXACTO el estilo: stroke 10 #111, verde #00C661 plano, guantes blancos, panel ecualizador; PROHIBIDO generarla con IA o redisenarla). Tipografia SIEMPRE Archivo + Geist Mono.
+
 CTA ESTANDAR (regla Sergio): "Comenta COMUNIDAD y te paso el enlace para unirte" — en toda pieza de contenido; la lamina CTA de cada carrusel lo lleva exacto.
 
 REGLAS DURAS:

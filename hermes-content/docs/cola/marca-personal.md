@@ -1,3 +1,22 @@
+
+## P0 · MASCOTA-HIGGSFIELD (Sergio 02-sep: "disenala con Higgsfield, no me gusta el SVG")
+
+PRIMERA corrida con cupo (el grace_daily_limit se resetea por dia): generar las 3
+variantes con `higgsfield generate create text2image_soul_v2 --prompt "..."` usando
+EXACTO estos prompts (0,12 cr c/u, cost antes, transactions despues, registrar lote):
+
+1. TILE: "flat 2D cartoon illustration of a cute robot mascot character, thick bold black ink outlines, solid flat green color fill #00C661, pure white background, hand-drawn indie webcomic animation style, rounded square head, two tall oval black eyes with tiny white glints, thin curved eyebrows, small spring antenna with a green ball tip, chunky small rounded body, white rounded chest panel with three green equalizer bars, short tube arms with white glove hands, short legs with rounded feet, standing and waving, full body, completely flat colors, no shading, no gradients, no 3D render, no photorealism, minimal clean sticker-like vector art"
+2. TV: mismo prompt pero cabeza = "retro TV shaped head with slightly rounded dark screen face, two glowing green oval eyes and thin eyebrows drawn on the screen"
+3. CASCO: mismo prompt pero cabeza = "round space-helmet head with a big glossy black visor showing one white glint" y cuerpo mas chico.
+
+Bajar las 3 a hermes-content/references/ui-patterns/mascota-onia/candidatos-higgsfield/,
+MIRARLAS, commitear y avisar a Sergio por Telegram (onia-tg.sh) con 1 linea para que
+elija. NO adoptar ninguna sin su OK.
+
+⚠️ **Reintentar el MISMO dia no sirve** (medido 02-sep: dos corridas, ~17:00 y ~18:00 UTC,
+mismo `grace_daily_limit_reached`, cero cargo las dos). El cupo es diario y de la cuenta
+compartida. **Reintentar en la primera corrida de un DIA nuevo**, no en la vuelta
+siguiente — y si vuelve a fallar ahi, registrar y esperar al dia siguiente otra vez.
 # Cola — carril MARCA PERSONAL · COMUNIDAD · CONTRATO SAMUEL
 
 > Índice del carril: `docs/ONIA_MARCA_PERSONAL_MADRE.md` (documento madre).
@@ -30,6 +49,9 @@
 | P21 | **Carrusel 4 "Cómo contesto a cada cliente sin estar yo"** | ✅ 2026-09-02 (tanda intensiva): 7 láminas en `carousels/out/carrusel-atender-clientes/` + hoja de revisión `CONTACTO-7-laminas.png` — generador nuevo `scripts/marca-personal/generar-carrusel-atender.py`. Es el ítem 4 del plan mensual. Promesas 100 % de la fila "Chatbot con IA (web + WhatsApp)" de `ONIA_CATALOGO_DE_VENTA.md` (🟢 vivo), **sin precio**; CTA comunidad exacto. Se le **quitó el "en 30 segundos"** que traía el título del plan: esa cifra no está medida en ningún lado |
 | P22 | **Práctica: la portada leída al tamaño en que la ve el público** | ✅ 2026-09-02 (tanda intensiva): A/B/C en `carousels/out/experimento-portada-miniatura/` — gana **C** (jerarquía por tamaño: contexto chico gris + remate gigante wdth 125). A 13 % (grilla de perfil) es la única variante que se sigue leyendo. **Defecto real:** el subtítulo gris de todas las portadas viejas es peso muerto — invisible al tamaño del feed y encima le roba tamaño al título. Aplicado a P21 y a la FICHA de `spec-sheet-editorial`; queda pendiente pasar las 5 portadas viejas al patrón (hay que elegir el remate de cada una a mano). **Segundo experimento inventado por el loop**: §5/§6 siguen sin pendientes ejecutables. De paso el gate se atrapó a sí mismo (la hoja salía cortada) y apareció una trampa del CSS: un resaltado pegado a un signo de puntuación deja un hueco visible |
 
+| P23 | **Guiones D · E · F (los 3 "por delante")** | ✅ 2026-09-02 (tanda intensiva): en `ONIA_MARCA_PERSONAL_SEMANA1.md`. **D** "Mi servidor se arregla solo" (gancho #8, build-in-public) · **E** "Hoy despedí a mi diseñador. Era yo." (gancho #3, deadpan, el arte por terminal con el costo antes) · **F** "Tu negocio ya te está pidiendo un empleado" (gancho #13, **el único de venta**, CTA "Escribime AUTOMATIZAR"). Las promesas de F salen 100 % de la fila *"Chatbot con IA (web + WhatsApp)"* de `ONIA_CATALOGO_DE_VENTA.md` (✅ vivo), **sin precio**. Las 3 cifras que se dicen en cámara se contaron **en vivo esta corrida** (`crontab -l` → guardián cada 10 min y loop 4×/día; `higgsfield generate cost` → 0,12 cr), y el guion E lleva la advertencia de no decir "siempre funciona" (el cupo es compartido) |
+| P24 | **Práctica: el verde de marca — la §7 de Sergio no estaba ejecutada** | ✅ 2026-09-02 (tanda intensiva): A/B/C con **contraste medido**, no supuesto, en `carousels/out/experimento-verde-marca/`. **Hallazgo:** §7 fijaba `#00C661` "SIEMPRE" y **4 de los 12 generadores estaban en `#1F7A4D`** — las dos piezas de venta y los dos carruseles más nuevos. **Cambiar el hex a secas habría roto la pieza:** ahí el verde era *color de texto*, y `#00C661` como tinta da **2,12:1** (reprueba AA). **Gana C** — verde de **fondo** + tinta negra, **8,72:1** — que es como ya lo usaban los otros generadores. Aplicado a los 4 + las 4 piezas regeneradas + FICHA. **De paso:** se retiró el marco "TECHNICAL SPEC" que Sergio descartó y seguía vivo en esos 4, se corrigieron los docstrings que lo anunciaban como ganador, y se arregló que el CTA del carrusel de tareas salía en **negro** (variable de verde declarada y no usada). Hoja de verificación: `carousels/out/CHEQUEO-verde-y-marco.png` |
+
 > **LOOP VPS: VIVO Y VERIFICADO** (2026-09-01). Cron diario 17:56 La Paz. Primera vuelta:
 > 127 s, exit 0, escribió `drops/2026-09-02.md` (calidad verificada) y pusheó a
 > `claude/marca-personal-loop`. ⚠️ Nota para el dueño del runner `onia-loop.sh`: el
@@ -47,7 +69,7 @@
 | # | Tarea | Estado | Nota |
 |---|---|---|---|
 | 1 | D0 en la comunidad (bienvenida + 3 cursos) | ⬜ SERGIO pega (30 seg) | texto listo en `ONIA_COMUNIDAD_CONTENIDO.md`; falta que agregue los 3 links del reel CERTIFICADOS |
-| 2 | Drop del día siguiente preparado y pulido | 🔄 loop, diario | ✅ D1 (Claude Code) en `docs/cola/drops/2026-09-03.md` — ya escrito, la vuelta de las 13:56 UTC tampoco lo tocó. Siguiente: D2 (5 prompts) para 2026-09-04 |
+| 2 | Drop del día siguiente preparado y pulido | 🔄 loop, diario | ✅ D1 (Claude Code) en `docs/cola/drops/2026-09-03.md` — ya escrito; las vueltas de 13:56 y 17:56 UTC lo dejaron intacto a propósito. Siguiente: D2 (5 prompts) para 2026-09-04, lo escribe la primera vuelta del 03-sep |
 | 6 | Captura real de un sticker de encuesta de IG | ⬜ SERGIO (10 seg) | pantallazo pegando una encuesta en una historia — sin eso, el tamaño de la zona punteada de las historias-quiz está a ojo (ver BASE_CONTENIDO §6, próximo experimento) |
 | 3 | Contrato: mandar `Acuerdo_Etapa2_Version_Firma.pdf` a Samuel | ⬜ SERGIO | el PDF "final" de Samuel era idéntico al anterior — NO firmar ese |
 | 4 | X: banner + website (link comunidad) | 🔄 loop reintenta | modal rate-limited el 31-ago; asset en Descargas |
