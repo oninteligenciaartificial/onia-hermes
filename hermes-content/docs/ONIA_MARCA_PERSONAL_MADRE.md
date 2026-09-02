@@ -22,7 +22,9 @@ VSL; curso 20+ ventas antes del VIP. Nada se anuncia antes de existir.
 | Contenido semana 1 | guiones listos, Sergio graba el batch |
 | Curso / VSL | NO existe — se valida temario en semana 3 con encuesta |
 
-## Mapa de documentos del carril
+## Mapa de documentos
+
+- **El curso (paso 3 de la escalera): ** — temario, produccion, precios 🔶 a decidir, calendario. La venta arranca SOLO con el curso grabado. del carril
 
 | Doc | Qué tiene |
 |---|---|
