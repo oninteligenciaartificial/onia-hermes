@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Baranda MECANICA de los clones del VPS: un loop de CARRIL no empuja a main/master.
+#
+# "No mergean a main" esta escrito en los dos prompts, pero un prompt es una
+# instruccion y esto es un cerrojo. Los loops corren sin nadie mirando, y `main`
+# alimenta el deploy del VPS y el de Vercel: un push parcial rompe los dos.
+#
+# 2026-09-02: onia-cola (el integrador) SE MUDO de Windows al VPS — ver
+# CLAUDE.md de este loop. Este hook seguia escrito para el mundo viejo
+# ("la integracion la sigue haciendo onia-cola, que se queda en Windows") y
+# bloqueaba tambien al integrador nuevo. onia-loop.sh exporta ONIA_LOOP_ID con
+# el id del caso que corre; solo el caso `onia-cola` puede empujar a main.
+#
+# Se instala apuntando core.hooksPath al directorio que contiene este archivo,
+# asi vale para el clon y para TODOS sus worktrees de una sola vez.
+while read -r _local_ref local_sha remote_ref _remote_sha; do
+  case "$remote_ref" in
+    refs/heads/main|refs/heads/master)
+      if [ "${ONIA_LOOP_ID:-}" = "onia-cola" ]; then
+        : "$local_sha"
+        continue
+      fi
+      # borrar la rama tambien pasa por aca; se bloquea igual
+      echo "pre-push: BLOQUEADO. Un loop de carril del VPS no empuja a $remote_ref." >&2
+      echo "pre-push: commitea y pushea tu rama de carril; integra onia-cola." >&2
+      exit 1
+      ;;
+  esac
+  : "$local_sha"
+done
+exit 0
