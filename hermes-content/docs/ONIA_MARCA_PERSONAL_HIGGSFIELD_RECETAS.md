@@ -77,3 +77,4 @@ navegador = Higgsfield.
 | Fecha | Pieza | Modelo | Prompt (resumen) | Costo |
 |---|---|---|---|---|
 | 2026-09-02 | Test CLI: overlay starburst 3D clay (usable para reel "El setup") | text2image_soul_v2 | 3D clay render, orange starburst icon, rounded square, warm white bg | 0,12 cr (cotizado = debitado ✓) |
+| 2026-09-02 | Práctica: 3 candidatos mascota 3D Onia (cubo/blob/chip), pendiente §6 BASE_CONTENIDO — ver veredicto ahí | text2image_soul_v2 ×3 | toy 3D clay mascot, verde marca #1F7A4D, variando forma de cabeza (cubo / blob / chip-circuito) | 0,12 cr ×3 = 0,36 cr (cotizado y confirmado por `account transactions` antes y después) |

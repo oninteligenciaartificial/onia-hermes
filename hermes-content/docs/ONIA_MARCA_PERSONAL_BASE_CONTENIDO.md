@@ -47,10 +47,19 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
 
 ## 5 · Cola de pruebas del loop (una por corrida de práctica)
 
-- [ ] Soul-ID con la cara de Sergio (CLI, costo 0 explorar → cotizar el train)
+- [ ] Soul-ID con la cara de Sergio (CLI, costo 0 explorar → cotizar el train) — requiere
+      fotos de identidad de Sergio, que viven fuera de este carril (`references/marca-personal/`
+      no las tiene); no se ejecuta sin ellas ni sin que Sergio decida el gasto del train.
 - [ ] Probar 1 skill del radar (unlazy / shuohao) y anotar veredicto
-- [ ] Variante statement-post animado (HyperFrames 6 s del claim "Bs 0 en sueldos")
-- [ ] Comparativa nano_banana_flash vs soul_v2 para artes verdes (0,24 cr total)
+- [ ] Variante statement-post animado (HyperFrames 6 s del claim "Bs 0 en sueldos") —
+      probado 02-sep: no hay CLI de HyperFrames instalado en el VPS (`hyperframes` no
+      existe, `npx hyperframes-cli` da 404). Queda pendiente de que se resuelva el runtime.
+- [x] **Comparativa nano_banana_flash vs soul_v2 para artes verdes** (02-sep) — **el ítem
+      estaba mal cotizado**: `higgsfield generate cost` dio **nano_banana_flash = 1,5 cr**
+      (y nano_banana / nano_banana_2_lite = 1 cr), muy por encima del tope 0,12 cr/imagen
+      de la regla dura. Solo `text2image_soul_v2` entra en presupuesto (0,12 cr). Se
+      **abortó sin generar** con Nano Banana — la regla "cotizar ANTES" hizo justo su
+      trabajo. No hay comparativa posible dentro del tope; no reintentar con estos modelos.
 
 ## 6 · Mejoras de calidad pedidas por Sergio (02-sep) — las trabaja el loop de práctica
 
@@ -82,9 +91,18 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       da look editorial de sistema real sin tapar nada ni cortar texto, y encaja con
       la firma "sin humo" del carril. Aplicado a la portada de
       `generar-carrusel-chatbot.py`; próximos generadores de portada lo copian de ahí.
-- [ ] **Mascota 3D Onia**: personaje consistente estilo toy para literalizar metáforas
-      (carosia usa el suyo en cada post) — definir con Higgsfield imagen (≤0,12 cr),
-      requiere OK de Sergio sobre el diseño elegido
+- [ ] **Mascota 3D Onia** (candidatos listos 02-sep, **falta el OK de Sergio** — no se
+      adopta sin él): 3 variantes generadas con `text2image_soul_v2` (0,12 cr c/u, 0,36 cr
+      total) en `carousels/out/experimento-mascota-onia/` — **A-cubo.png** (cabeza cubo
+      redondeada, cuerpo simple, un solo material verde `#1F7A4D`), **B-blob.png** (cuerpo
+      blob con antena), **C-chip.png** (cabeza con patrón de circuito y cara realista
+      dentro — mezcla de materiales que rompe la pureza "toy"). **Recomendación: gana
+      A-cubo** — es el más limpio, el único material consistente de punta a punta, el más
+      parecido al cubo-head que ya usa carosia (referencia de `spec-sheet-editorial/FICHA.md`)
+      y el más fácil de hacer sostener props para literalizar metáforas (el objetivo
+      original del ítem). B es genérico y sin gancho de marca; C mezcla plástico de juguete
+      con piel fotorrealista, se ve inconsistente. **Pendiente de Sergio: mirar los 3 y dar
+      el OK sobre A (o pedir otra variante) antes de usarlo en cualquier pieza publicable.**
 - [x] **Historias-quiz** (02-sep): formato ingenierobinario adaptado a marca —
       `generar-historia-quiz.py`, 3 historias listas con zona para el sticker de
       encuesta; opciones y respuestas en SEMANA1. La interacción es el poll de 1 tap.
