@@ -174,35 +174,6 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       *(Deriva de línea corregida de paso: `lib/onia-core/modules/agents-runtime.ts` pasó de la
       línea 1157 a la **1188**.)*
 
-- [ ] 🔴 **F2 · BLOQUEADO EN SERGIO — el chatbot se cobra y medio chatbot es gratis.**
-      Verificado en vivo el 2026-08-30, y la primera versión de este ítem estaba mal en dos
-      cosas, así que ojo con lo que se lee acá:
-      - **La llave NO es `addon.chatbot`, es `addon.whatsapp`.** `addon.chatbot` está en el
-        catálogo (`lib/platform/types.ts`) y **no la lee nadie**: es una llave duplicada y muerta. La
-        que trabaja es `addon.whatsapp`, derivada del booleano `whatsappAddon` **o** de un
-        entitlement, con su helper ya escrito: `isWhatsAppAddonActive()` en
-        `lib/plan-limits.ts:396`.
-      - **La mitad del chatbot SÍ está gateada.** `GET /api/chatbot-knowledge/published`
-        chequea el add-on desde el 2026-08-18: sin add-on, el bot no atiende con el
-        conocimiento del cliente.
-      **Lo que sí está abierto:** la **bandeja**. `/inbox` no tiene `requiresFeature`,
-      `app/(dashboard)/inbox/page.tsx` sólo chequea sesión, y `bandejaProfile()` (`lib/chatbot/bandeja-auth.ts`)
-      gatea por rol, no por add-on. La tenencia sale de `clinicSettings.chatwootInboxId`.
-      **Y la raíz:** el alta crea un inbox de Chatwoot para **TODA** org automáticamente
-      (`app/api/admin/clinics/route.ts:99`, `createInbox` + `addAgentToInbox`), sin mirar el
-      add-on. O sea: toda org nace con bandeja funcionando y `whatsappAddon` en `false`.
-
-      **Por qué no lo cierro solo:** cualquiera de los dos arreglos **baja una superficie
-      viva**, y eso está en la lista de "nunca" del loop.
-      - **(a) Gatear `/inbox` con `requiresFeature: "addon.whatsapp"`** — una línea, y alcanza
-        para nav Y ruta (la lista blanca se deriva del nav). Pero **hoy ninguna org tiene el
-        add-on**, así que todas pierden la bandeja de golpe.
-      - **(b) Dejar de crear el inbox salvo que el add-on esté activo** — ataca la raíz y **no
-        apaga nada de lo que ya existe**, sólo cambia lo que recibe una org nueva. Más seguro,
-        pero cambia lo que ve un cliente el día uno (hoy la bandeja vacía funciona de gancho).
-      **Decide Sergio.** Con cero clientes pagando el costo real de hoy es cero; el costo
-      aparece con el primer cliente que pague el add-on y vea que el de al lado lo tiene igual.
-
 - [x] **F3 · `/requerimientos` ya es alcanzable.** Estaba en `COMMON_SEGMENTS` —el gate la
       dejaba pasar para todos los packs— y no tenía **un solo `href`** en `app/`,
       `components/` ni `lib/`. El arreglo no fue sólo el enlace: **que el gate deje pasar un
@@ -1246,13 +1217,27 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         de lista) puede agendar cuando se cotiza el flujo aparte, porque entonces la frase no es
         falsa en esas propuestas y si lo es en el add-on de lista de Bs 390.
 
-## Bloqueado — necesita a Sergio (reverificado en vivo el 2026-08-31)
+## Bloqueado — necesita a Sergio (reverificado en vivo el 2026-08-31, F2 movido y reverificado el 2026-09-02)
 
 > **Estaban 10. El 2026-08-31 quedaron 4; hoy 2026-09-01 quedan 2.** Esta lista es la que una sesión lee para
 > decidir qué preguntarle a Sergio, así que una entrada vencida **fabrica trabajo** — hace que
 > alguien le pida una decisión sobre algo ya hecho, y quema el único recurso que no se recupera.
 > Es el mismo defecto que esta cola ya bautizó: *"cerrar un ítem no cierra su copia"*. Cada baja
 > lleva la evidencia con la que se dio, medida hoy, no leída de otro renglón.
+
+- 🔴 **F2 · El chatbot se cobra y medio chatbot es gratis** (movida acá el 2026-09-02 desde
+  "Ahora"; vivía como el primer ítem no bloqueado y venía sin moverse desde el 2026-08-30).
+  **Reverificado en vivo contra `onia-platform` `origin/master` (`efaffe8`, 2026-09-02):** la
+  bandeja sigue abierta para todos. `app/(dashboard)/inbox/page.tsx` sigue sin
+  `requiresFeature`, y `app/api/admin/clinics/route.ts` sigue creando el inbox de Chatwoot
+  (`createInbox` + `addAgentToInbox`) para **toda** org nueva sin mirar `whatsappAddon`. El
+  bloqueo no venció: sigue siendo el mismo hoy que el 2026-08-30.
+  **Las dos opciones, sin cerrar solo porque las dos bajan una superficie viva:**
+  - **(a)** Gatear `/inbox` con `requiresFeature: "addon.whatsapp"` — una línea, pero hoy
+    ninguna org tiene el add-on: todas pierden la bandeja de golpe.
+  - **(b)** Dejar de crear el inbox salvo que el add-on esté activo — ataca la raíz sin apagar
+    nada existente, pero cambia lo que ve un cliente el día uno (la bandeja vacía es gancho hoy).
+  **Decide Sergio.** Con cero clientes pagando el costo real de hoy sigue siendo cero.
 
 - 🔴 **Decidir el dominio `dentalgest.app`**: redirigirlo a `app.onia.com.bo` o dejarlo morir. El
   DNS vive en Vercel (`ns1/ns2.vercel-dns.com`) y no lo puedo tocar (sin token, CLI deslogueado,
