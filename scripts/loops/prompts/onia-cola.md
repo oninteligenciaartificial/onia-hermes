@@ -262,8 +262,9 @@ Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
 - `claude/web-venta` — sitio de venta (loop `web-venta`)
 - `claude/investigacion` — cotiza las decisiones del radar (loop `investigacion`)
 - `claude/git-status-935f47` — la sesion de control (Sergio y el orquestador escriben ahi)
+- `claude/lucia-vps` — carril LUCIA/@oniahq. **NO la mergees**: ver el recuadro de abajo.
 
-⚠️ **`web-venta` e `investigacion` faltaban en esta lista hasta el 2026-09-02 18:33 UTC, y los
+⚠️ **`web-venta` e `investigacion` faltaban en esta lista hasta el 2026-09-02 13:38 UTC, y los
 dos tenían un commit varado.** Sus loops se crearon ese mismo día, con cron registrado y
 corriendo — pero esta lista se escribió antes y **nadie la actualizó**. Un carril que el
 integrador no enumera no se cuenta nunca, así que sus commits **no llegan a `main`** aunque el
@@ -271,14 +272,36 @@ loop pushee perfecto: es el mismo costo que ya se pagó con el chatbot (7 commit
 la rama homónima del otro repo, sólo que en silencio y sin nadie contando mal — **contando bien
 una lista incompleta**. `loops.md` describe este agujero para el cron; acá tenía su gemelo.
 
-**Por eso, la lista de arriba tampoco se cree sola: enumerá EN VIVO también este repo.** Si sale
-una rama que no está listada y su loop existe en `loops.md`, es un carril, y va:
+**Por eso, la lista de arriba tampoco se cree sola: enumerá EN VIVO también este repo:**
 
     git -C /root/loops/onia-hermes branch -r --list 'origin/claude/*' --no-merged origin/main
 
+⚠️ **Acá decía que una rama sin listar es carril "si su loop existe en `loops.md`". Ese filtro
+es el que dejó invisible a `claude/lucia-vps` durante tres días.** Un carril NO necesita un loop:
+puede moverlo un cron pelado. Lucia lo mueven `lucia-ugc.sh` (`37 */3 * * *`) y `lucia-cierre.sh`
+(`10 11 * * *`) — dos líneas de `crontab -l` que **no** son `onia-loop.sh`, así que `loops.md` no
+las lista y nunca las va a listar. Medido el 2026-09-02 17:30 UTC: **17 commits sin mergear**, 90
+archivos, +4780/−894, y lo último de Lucia que llegó a `main` fue `12ea2219` del **2026-08-30**.
+Peor: su árbol `/root/loops/lucia-contenido` es un **clon aparte**, no un worktree — no sale en
+`git worktree list`, así que ninguna enumeración basada en árboles la ve tampoco.
+
+**La regla corregida:** una rama que sale de ese `--no-merged` y **no** está en la lista de arriba
+es un carril hasta que se demuestre lo contrario. No la mergees por tu cuenta: agregala a la lista
+con su dueño y mandá la decisión al radar.
+
+⚠️ **`claude/lucia-vps` — NO la mergees, y no es prudencia genérica.** Diverge desde `647f7fe8`
+(2026-09-01 22:56) y `main` ya avanzó **101 commits** desde esa base, así que no es un
+fast-forward. **No es por miedo al conflicto:** medido, no hay un solo archivo tocado por los dos
+lados. Es por lo que arrastra — **+88,2 MB** en 59 binarios (el banco de video de Lucia) a un
+repo que todo clon se lleva entero — y porque además de assets trae **herramienta compartida**
+(`scripts/carousel_render.js` +329 y `scripts/carousel_pack_solido.js`, nuevo), que es la parte
+que sí haría falta en `main`. Y roza el límite que puso Sergio (*"el de contenido lo maneja su
+sesión"*), que es de él, no tuyo. Cotizada en el radar, ítem 29. El trabajo **no está perdido**:
+la rama está pusheada en `origin` y su árbol está limpio.
+
 Ramas de carril activas en **`onia-platform`** (base `origin/master`):
 
-- *(al 2026-09-02 18:33 UTC, ninguna de carril.* `claude/chatbots-platform-review-0d1d09`
+- *(al 2026-09-02 13:38 UTC, ninguna de carril.* `claude/chatbots-platform-review-0d1d09`
   **ya está mergeada a `master`** — se destrabó ese día y por eso salió de esta lista.*)*
 - `claude/onia-core-adoption-sprint5` — **NO la mergees**: 382 commits atrás de `master` con 1
   commit propio (`aa8f211`, +910/−240 en 2 archivos de schema del core). Diverge hace demasiado,

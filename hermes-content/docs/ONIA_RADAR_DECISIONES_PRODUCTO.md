@@ -1547,3 +1547,46 @@ al otro. Poner el dueño en la tabla cierra la causa sin discutir el diseño.
 de Chatwoot por pantalla, medidos del lado del navegador, todos 200 en la última corrida) y
 ningún visitante real lo sufrió — cero IPs de terceros bloqueadas en 24 h, medido dos veces. No
 corre riesgo mientras esto se decide.
+
+---
+
+## 29. El carril de Lucia lleva 17 commits que nunca llegan a `main`, y nadie lo enumera (2026-09-02) — decisión de Sergio
+
+**Qué se midió, el 2026-09-02 17:30 UTC.** `origin/claude/lucia-vps` tiene **17 commits sin
+mergear** a `main` (90 archivos, +4780/−894). Lo último de Lucia que sí llegó a `main` fue
+`12ea2219`, del **2026-08-30** — tres días. La rama está pusheada y su árbol limpio, así que
+**no hay nada perdido**: hay trabajo que no se integra.
+
+**Por qué nadie lo vio.** Es el mismo agujero que ya se pagó con el chatbot (7 commits varados) y
+con `web-venta`/`investigacion`, pero por una puerta nueva, y por eso las dos defensas que
+existían fallaron las dos:
+
+- **El integrador no la enumeraba.** Su lista de ramas de carril tenía siete; ésta es la octava.
+- **La regla de rescate tampoco la agarraba:** decía que una rama sin listar es carril *"si su
+  loop existe en `loops.md`"*. Lucia **no tiene loop**: la mueven `lucia-ugc.sh` (`37 */3 * * *`)
+  y `lucia-cierre.sh` (`10 11 * * *`), dos crons pelados que no son `onia-loop.sh` y que
+  `loops.md` no lista ni va a listar nunca. El filtro la excluía por construcción.
+- Y su árbol `/root/loops/lucia-contenido` es un **clon aparte**, no un worktree: no sale en
+  `git worktree list`, así que ninguna enumeración por árboles la ve tampoco.
+
+Las dos primeras ya están corregidas en el prompt del integrador, en el mismo commit que esta
+entrada. Lo que queda para vos es qué hacer con la rama.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A** | Mergear `lucia-vps` entera, como un carril más | **Cero conflictos** — medido: no hay un solo archivo tocado por los dos lados. ~10 min de una vuelta del integrador | `main` engorda **+88,2 MB** (59 binarios: los mp4 y jpg del banco de Lucia). Esos assets no se despliegan, pero **todo clon del repo se los lleva para siempre** |
+| **B** | Mergear sólo la **herramienta compartida** (`scripts/carousel_render.js` +329 y `scripts/carousel_pack_solido.js`, nuevo). El álbum se queda en la rama | ~20 min, cherry-pick. `main` no engorda | Cierra lo único que de verdad duele: hoy hay **dos versiones vivas** del render de carruseles. **Contra:** hay que repetirlo cada vez que Lucia toque `scripts/` |
+| **C** | Declararla fuera del juego a propósito, como `carril-contenido` y `ads-creatividades-publicos`: no se mergea nunca, y queda escrito | ~10 min, ya está medio hecho | Cero ambigüedad. **Contra:** deja el render de carruseles bifurcado a perpetuidad — justo lo que prohíbe *"una sola fuente de verdad por tema"* |
+
+**Lo que este loop recomienda: B.** El banco de videos de Lucia es material de trabajo, no fuente
+de verdad de nada, y 88 MB en `main` se pagan una vez y se cargan para siempre; pero la
+herramienta que lo produce sí tiene que ser única. B separa las dos cosas. Y su única debilidad
+—"hay que acordarse cada vez"— ya quedó cubierta: desde este commit el integrador **enumera la
+rama**, así que la próxima divergencia de `scripts/` la ve alguien.
+
+**Lo que sí es tuyo y no puedo decidir por vos:** Lucia/@oniahq roza el límite que pusiste el
+2026-09-01 (*"el de contenido lo maneja su sesión"*). Ninguna de las tres toca lo que Lucia
+publica; las tres son sobre dónde vive su código. Pero si para vos ese carril es contenido y no
+se toca, la respuesta es **C** y se cierra acá.
