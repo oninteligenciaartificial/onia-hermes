@@ -63,8 +63,10 @@ listas de herramientas ~50K · interactivo "¿qué negocio quieren que construya
 | Claude Skills | SKILL | guía de activación |
 | Caso real por rubro | MI NEGOCIO | respuesta personalizada en General |
 
-⚠️ El circuito palabra→DM sigue roto (carril infra): hasta que se arregle, el CTA de
-los videos es "link en bio → comunidad", NO "comentá X y te llega".
+**Regla de CTA (Sergio, 02-sep): SIEMPRE pedir comentar COMUNIDAD** — el comentario es la
+interacción que el algoritmo premia. ⚠️ El DM automático sigue roto (carril infra): hasta
+que se arregle, los comentarios COMUNIDAD se responden A MANO con el link (Sergio o la
+sesión madre). El link en bio queda como respaldo silencioso.
 
 ## 4 · Para la sesión de grabación con Samuel
 

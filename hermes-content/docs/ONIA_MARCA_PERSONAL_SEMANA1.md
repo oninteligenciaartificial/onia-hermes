@@ -83,7 +83,7 @@ el DM automático sigue roto, carril infra).
 > 2. Fotos de producto de catálogo desde el celular
 > 3. Cotizaciones y descripciones que se escriben solas
 > ¿Cuándo SÍ pagar? Cuando necesitás que todo funcione junto, solo, todos los días.
-> El paso a paso está en mi comunidad — link en bio.
+> ¿Querés el paso a paso? Comentá COMUNIDAD y te mando el acceso.
 
 > **LinkedIn:** Antes de firmar con una agencia de marketing o de IA, probá esto gratis:
 > 1) Un asistente que responda las preguntas frecuentes de tus clientes — se arma en
@@ -94,7 +94,7 @@ el DM automático sigue roto, carril infra).
 > ¿Cuándo sí tiene sentido pagar? Cuando necesitás que todo eso funcione junto, sin que
 > nadie lo esté prendiendo a mano todos los días. Ahí ya es un sistema — y es otra
 > conversación.
-> El paso a paso de las 3 cosas gratis está en mi comunidad de WhatsApp — link en bio.
+> El paso a paso de las 3 cosas gratis está en mi comunidad de WhatsApp: comentá COMUNIDAD y te mando el acceso.
 
 **Video C — interactivo**
 

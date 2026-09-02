@@ -36,6 +36,8 @@
   statement-3d (guardados > likes).
 - Palabras que convierten en ES: "gratis", "con certificado", "de verdad", "paso a paso",
   "sin pagarle a nadie".
+- **CTA estándar: "Comentá COMUNIDAD y te mando el acceso"** (regla Sergio 02-sep) — el
+  comentario alimenta el algoritmo; el link en bio es respaldo. DM roto = responder a mano.
 
 ## 4 · Para SAMUEL (brief que se le entrega con el radar mensual)
 
