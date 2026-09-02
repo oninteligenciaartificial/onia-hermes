@@ -6,16 +6,12 @@ Objetivo: VALIDAR el temario en publico. No se vende nada: cero precio, cero fec
 
 Caption listo:
 
-Estoy armando EL curso: el paso a paso completo del sistema que muestro aca —
-un negocio que atiende, cotiza y hace seguimiento solo.
-Lo estoy construyendo con lo que VOS necesitas. Contame en los comentarios:
-A) que mi negocio responda solo por WhatsApp
-B) fotos y anuncios que vendan, sin disenador
-C) cotizaciones y papeleo en 1 minuto
-D) el sistema completo funcionando mientras duermo
-Leo todos y el temario se arma con eso.
-Y si queres el paso a paso gratis mientras tanto: comenta COMUNIDAD y te paso
-el enlace para unirte.
+Asi se ve un dia adentro de Onia Community: una herramienta o prompt que
+funciona, cada dia, gratis.
+El de hoy: copia el prompt de la imagen, pegale la info de tu negocio y probalo
+en claude.ai — tu asistente en 10 minutos.
+Queres el paso a paso completo cada dia? Comenta COMUNIDAD y te paso el enlace
+para unirte.
 
 ## 2 · HISTORIAS (en este orden, con stickers nativos encima de la zona punteada)
 
