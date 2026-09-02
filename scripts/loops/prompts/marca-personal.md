@@ -29,13 +29,13 @@ menos urgente.
 
 **Al empezar la vuelta, después del chequeo de arranque:**
 
-    scripts/kanban/tablero.sh list
+    /root/bin/onia-tablero.sh list
 
 Si hay una tarea **de tu zona** y **sin reclamar**, **ESA es tu vuelta** — no la cola:
 
-    PERFIL=<tu-carril> scripts/kanban/tablero.sh claim <id>
+    PERFIL=<tu-carril> /root/bin/onia-tablero.sh claim <id>
     ... hacés el trabajo y lo verificás ...
-    PERFIL=<tu-carril> scripts/kanban/tablero.sh complete <id>
+    PERFIL=<tu-carril> /root/bin/onia-tablero.sh complete <id>
 
 **Reclamá ANTES de tocar nada.** Si te dice `cannot claim ... lock=...`, **es la respuesta
 correcta, no un error**: otra sesión la tiene. Tomá otra o seguí con tu cola.

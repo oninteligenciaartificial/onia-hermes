@@ -43,21 +43,29 @@ existe. Como los nueve loops se mudaron al VPS ese mismo día, `tablero.sh list`
 ninguno podía leerlo. Un tablero único que la mayoría de sus usuarios no puede abrir no es un
 tablero único.
 
+⚠️ **Y por eso se invoca por ruta ABSOLUTA, no `scripts/kanban/tablero.sh`.** La ruta relativa
+apuntaba al worktree de cada carril, pero cada carril está parado en **su** rama y el script
+nació en `main`: en los worktrees del chatbot, el canario y web-venta el archivo **no existía**.
+El corredor no mergea `main` hacia las ramas de carril —le arrancaría el árbol de abajo a un loop
+en curso— así que **una herramienta compartida no puede vivir en una rama**: llega sólo a quien
+casualmente esté al día. Ahora `sincronizar.sh` la despliega a `/root/bin/onia-tablero.sh`, junto
+a `onia-tg.sh`, que es el mismo caso y por eso nunca falló.
+
 ```bash
 # 1. Mirar qué hay
-scripts/kanban/tablero.sh list
+/root/bin/onia-tablero.sh list
 
 # 2. Tomar una tarea — poné TU nombre de perfil, siempre
-PERFIL=carril-chatbot scripts/kanban/tablero.sh claim t_abc123
+PERFIL=carril-chatbot /root/bin/onia-tablero.sh claim t_abc123
 
 # 3. Cerrarla cuando esté hecha y verificada
-PERFIL=carril-chatbot scripts/kanban/tablero.sh complete t_abc123
+PERFIL=carril-chatbot /root/bin/onia-tablero.sh complete t_abc123
 ```
 
 Y para dejarle trabajo a otro:
 
 ```bash
-scripts/kanban/tablero.sh create "Título corto y accionable" \
+/root/bin/onia-tablero.sh create "Título corto y accionable" \
   --body "Qué está roto, cómo se reproduce, y qué archivo mirar" --priority 1
 ```
 

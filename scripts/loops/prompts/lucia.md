@@ -63,13 +63,13 @@ menos urgente.
 
 **Al empezar la vuelta, después del chequeo de arranque:**
 
-    scripts/kanban/tablero.sh list
+    /root/bin/onia-tablero.sh list
 
 Si hay una tarea **de tu zona** y **sin reclamar**, **ESA es tu vuelta** — no la cola:
 
-    PERFIL=<tu-carril> scripts/kanban/tablero.sh claim <id>
+    PERFIL=<tu-carril> /root/bin/onia-tablero.sh claim <id>
     ... hacés el trabajo y lo verificás ...
-    PERFIL=<tu-carril> scripts/kanban/tablero.sh complete <id>
+    PERFIL=<tu-carril> /root/bin/onia-tablero.sh complete <id>
 
 **Reclamá ANTES de tocar nada.** Si te dice `cannot claim ... lock=...`, **es la respuesta
 correcta, no un error**: otra sesión la tiene. Tomá otra o seguí con tu cola.
@@ -150,7 +150,7 @@ n8n. Y **NUNCA** el carril de contenido (`claude/carril-contenido`,
 
 ## De dónde sale tu trabajo — en este orden
 
-1. **El tablero.** `scripts/kanban/tablero.sh list` — si hay una tarea de tu zona **sin
+1. **El tablero.** `/root/bin/onia-tablero.sh list` — si hay una tarea de tu zona **sin
    reclamar**, ese es tu ítem. Reclamala con `PERFIL=carril-lucia … claim <id>` **antes de
    tocar nada**, y cerrala con `complete` sólo si la verificaste. Reglas en
    `hermes-content/docs/cola/TABLERO.md`.
