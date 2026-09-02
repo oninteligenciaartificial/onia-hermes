@@ -305,26 +305,62 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       cadena — y verificado **en rojo primero**: `test:guards-cableados` mordió con *"estos tests
       existen y NO los corre nadie"* antes de cablearlo.
 
-- [ ] 🔴 **El chequeo de "hecho" de este carril NO se puede ejecutar: la sonda del widget no
-      encuentra dónde escribir y muere sin mandar un solo mensaje.**
-      Encontrado el 2026-09-02 al intentar correrlo, no al leerlo. El prompt del loop manda abrir
-      el widget de leads reales, escribir dos mensajes y contar las respuestas en la base. Con
-      Playwright headless (`--no-sandbox`) contra
-      `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`,
-      el localizador `textarea, input[type=text], [contenteditable=true]` **expira a los 30 s**:
-      `locator.waitFor: Timeout 30000ms exceeded`. La página carga (`networkidle` pasa), pero la
-      caja de texto no está donde la sonda la busca — probablemente dentro de un iframe, o montada
-      recién al abrir el panel.
-      **Por qué importa más que un script roto:** hoy la única forma de saber si el bot contesta
-      dos veces es que un humano abra el widget y escriba. Esta vuelta el veredicto salió de MIRAR
-      la base (conversación **48**: dos entrantes, **dos** respuestas — el arreglo funciona), pero
-      eso es leer el resultado de la sonda de la vuelta ANTERIOR, no ejecutar la propia.
-      **Un objetivo que no se ejecuta cada vuelta es decoración**, y éste todavía lo es.
-      Reproducir en 30 s: `node /tmp/probe-widget.mjs` (borrador de esta vuelta, sin versionar)
-      → `TimeoutError` dentro de `enviar()`.
-      **Al construirlo:** va en `scripts/` con su entrada en `package.json`, tiene que devolver el
-      `conversation_id` que creó —para que el conteo en la base no adivine cuál es— y **no puede**
-      dar por buena una sola respuesta: una sola es el bug, no un éxito parcial.
+- [x] 🔴 **El chequeo de "hecho" de este carril no se podía ejecutar — y el diagnóstico escrito
+      de por qué era FALSO.** Hecho el 2026-09-02. Archivos: `scripts/sonda_widget.mjs` (nuevo),
+      `package.json`.
+      **Gate 1 corrido, y el ítem era REAL**, pero su causa no era la anotada. Acá decía que el
+      localizador expiraba *"probablemente dentro de un iframe, o montada recién al abrir el
+      panel"*. Medido: **no hay iframe** (`page.frames().length === 1`) y el selector es
+      `#chat-input` (el `ChatInputWrap` del widget, linea 139 — vive dentro del contenedor de Chatwoot, no en este repo). Lo que pasaba es
+      que la página **nunca cargaba**: `GET /widget?website_token=…` devuelve **HTTP 429 `Retry
+      later`**. La regla, textual, en el `rack_attack` de Chatwoot (initializer del contenedor, no de este repo):
+      `throttle('widget?website_token=…', limit: 5, period: 1.hour)` `if req.path == '/widget' &&
+      params['cw_conversation'].blank?`. **Abrir el widget sin traer conversación son 5 veces por
+      hora y por IP.** Una sonda horaria que abre limpio se apaga sola y encima se come el cupo.
+      La hipótesis del iframe no era sólo inútil: mandaba a arreglar el archivo equivocado.
+      ⚠️ **Los leads reales NO están afectados, y se verificó en vez de suponerse.** El contador es
+      por IP y Chatwoot ve la IP real de cada visitante: en su log conviven `181.115.161.191`,
+      `189.28.94.168`, `181.188.170.59` (ISPs bolivianos) y `187.77.16.63`, que es este VPS. **El
+      único bloqueado era el bloqueador: nosotros.**
+      **La salida es `cw_conversation`.** `WidgetsController#set_token` decodifica ese parámetro,
+      busca el `ContactInbox` por `source_id` y reusa el contacto — y el throttle **no aplica**
+      cuando el parámetro viene. La sonda guarda su token la primera vez y después entra siempre
+      por la puerta libre. Efecto de borde deseado: hay **una sola** conversación de sonda, no una
+      por hora ensuciando la bandeja donde viven los leads de verdad.
+      **`npm run sonda:widget`** sale **0** si el bot contestó los DOS mensajes, **1** si contestó
+      uno o ninguno, **2** si no pudo medir. El `conversation_id` sale del `source_id` del propio
+      token, **no** de "la conversación más nueva del inbox": adivinarla haría que la sonda juzgue
+      la conversación de un lead de verdad.
+      ⚠️ **El contacto se llama `Sonda QA carril chatbot` a propósito.** `scripts/objetivo_visible.mjs`
+      excluye a los que somos nosotros con `/\b(prueba|qa|test)\b/i`; sin nombre, ese gate contaría
+      a esta sonda como "un desconocido escribió" y **el carril se declararía cumplido por su
+      propia sonda**. Hay un caso que lo afirma.
+      🔴 **Los tres falsos verdes que encontró el veredicto, y que un conteo ingenuo no ve.**
+      (1) Los `message_type = 3` son los enlatados del pre-chat: salen en el **mismo milisegundo**
+      que el entrante y salen **siempre**, también con el bot mudo — contarlos pinta de verde
+      exactamente el bug. (2) "Hubo 2 salientes" es verde con **dos respuestas al primer mensaje y
+      cero al segundo**, que es literalmente el bug de la semana: se cuenta **por turno**. (3) Una
+      respuesta tiene que venir después de **su** entrante y del más reciente, o una sola respuesta
+      da por contestados dos mensajes seguidos.
+      **Probado que MUERDE, y ahí aparecieron DOS casos que pasaban en falso.** Cuatro mutaciones;
+      en la primera pasada **sólo dos** se pusieron rojas. Las otras dos —"la saliente contesta
+      cualquier turno" y "juzgar el histórico entero"— sobrevivían porque los casos estaban mal
+      construidos: el de la saliente huérfana la ponía **antes** del primer entrante, donde no hay
+      turno abierto que ensuciar, y el del histórico ya venía rojo por otro motivo, así que el
+      veredicto no cambiaba. Reemplazados por los dos que sí muerden (*una respuesta no alcanza
+      para dos entrantes seguidos* y *un mudo de una vuelta vieja no deja el gate rojo para
+      siempre*). Ahora las **cuatro** mutaciones caen, cada una en **su propia** aserción.
+      **Un caso que no puede fallar no es un caso** — y el archivo tenía dos.
+      **Gates:** `test:sonda-widget` (11 casos) cableado a `npm test`, verificado **en rojo
+      primero**: `test:guards-cableados` mordió con *"estos tests existen y NO los corre nadie:
+      test:sonda-widget"* antes de cablearlo.
+      🔴 **Lo que falta, y no se declara hecho: la sonda todavía no mandó un mensaje.** Al correrla
+      en vivo salió **2** con su propio diagnóstico —*"la sonda todavía no tiene token guardado"*—
+      porque las 5 aperturas de la ventana 20:00-21:00 UTC se habían gastado **midiendo el bug**.
+      La ventana de `rack_attack` es la hora en punto y el loop corre al minuto 3, así que la
+      próxima vuelta (21:03 UTC) arranca con el cupo entero, guarda el token y a partir de ahí no
+      lo vuelve a gastar nunca. **El camino feliz está escrito pero NO ejecutado**; el que sí se
+      ejecutó, y el que importaba destrabar, es el del 429.
 
 ✅ **"Ahora" tiene combustible, y las dos veces salió de MIRAR el sistema vivo, no de la cola**: el
 `bot-engine` sin versionar salió de comparar el repo contra producción, y la sonda rota salió de
