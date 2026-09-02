@@ -992,6 +992,39 @@ Las tres formas de fantasma que ya aparecieron acá:
       ninguno mio** — los 24 `node.exe` de la maquina son los `next dev/start` de otros
       worktrees, mismo cuadro que midio AUD9. Se avisa, no se toca.
 
+- [x] **AUD11 · La resta de la auditoria CIERRA: no queda un solo `[x]` sin mirar, y por eso
+      el escalon 2 tambien se quedo sin combustible** (2026-09-02). Undecima vuelta de escalon 2
+      (`CARRIL A` y `CARRIL B` con **cero** `- [ ]`; los 4 sin marcar viven en *Bloqueadas* y
+      *Sin verificar*, que no son cola).
+      **El hallazgo, y es nuevo porque nadie habia hecho la resta completa.** AUD3 dejo escrita
+      la leccion (*"AUD2 se declaro completa sin notar que la resta no cerraba"*) pero nadie la
+      volvio a correr entera. Corrida hoy: **33 IDs `[x]`** en A + B + AUD, cruzados uno por uno
+      contra la cobertura que declara cada auditoria — AUD1 (A6, W3-W6, T4/T9/T29) · AUD2 (A1a,
+      W1a/b/c, W2, W7, A1c, A1d, A4, B1/B2) · AUD3 (A2, A3, A5) · AUD4 (A7, A8) · AUD5 (AUD4) ·
+      AUD6 (S1, B1, B2, B3) · AUD7 (W3, W4, W5) · AUD8 (A9, A10) · AUD9 (AUD8) · AUD10 (AUD9).
+      **No queda ninguno afuera.** La consecuencia importa mas que el dato: desde AUD9 el unico
+      `[x]` sin auditar de cada vuelta **es la auditoria de la vuelta anterior**. El escalon 2
+      dejo de auditar el carril y pasa a auditarse a si mismo — tres vueltas seguidas
+      reproduciendo los mismos tres numeros. **Eso ya no es una red, es un espejo**, y es la
+      medicion que le faltaba al item bloqueado: no es que el escalon 1 este vacio y el 2 aguante,
+      es que **los dos** estan vacios.
+      **Auditoria del unico `[x]` sin mirar (AUD10), por un camino distinto al suyo**: su hallazgo
+      central sobrevive, y se midio sin repetir su comando. `git show origin/main:.../loops.md |
+      grep -n web-factory-dev-loop` da la fila en **linea 175** exacta, en la tabla *"Apagados a
+      proposito — NO rearmar"*; `git branch -a --contains fe22ac99` lo pone en `origin/main`; y
+      `git merge-base --is-ancestor f046236f origin/main` responde **NO**, con
+      `git show --stat f046236f` confirmando que ese commit toca `marca-personal` y el radar, no
+      este loop. O sea: la correccion de AUD10 a AUD9 es cierta y el merge que el bloqueo le
+      pedia a Sergio efectivamente sobra.
+      **Gates, en frio y en otra sesion**: `typecheck:packages` **exit 0**; `pnpm test`
+      **269/269 en 2,84 s** (30 archivos); `pnpm e2e` **103 pasados / 0 fallados / 7 skipped en
+      1,2 min**; `git status --short` **vacio despues del e2e** — cuarta corrida del tope
+      `maxDiffPixels: 20` de A10 sin regenerar una sola baseline.
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo); rama
+      `claude/onia-web-architecture-b37eca` al dia con `origin` (`1fac7c17`) y arbol limpio antes
+      y despues del e2e; typecheck verde; **zombies: ninguno mio** — 24 `node.exe` en la maquina,
+      el mismo cuadro de AUD9 y AUD10, son `next dev/start` de otros worktrees. Se avisa, no se toca.
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
