@@ -127,6 +127,27 @@ case "$NOMBRE" in
     TOPE=2700
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  recorrido-cliente)
+    # Recorre el producto de punta a punta como un cliente real: home -> alta ->
+    # rubro -> cargar un dato -> pantalla de cobro -> bandeja. El canario mira
+    # pantallas SUELTAS; este mira el CAMINO, que es donde se pierde la plata.
+    # Playwright como root necesita --no-sandbox: sin eso no abre y la vuelta se
+    # pierde creyendo que el sitio esta caido.
+    WT=/root/loops/onia-hermes-recorrido
+    RAMA=claude/recorrido-cliente
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  tendencias)
+    # Investiga que funciona AHORA (formatos, ganchos, estructura de carrusel) y
+    # lo convierte en recetas EJECUTABLES para los carriles de contenido. El
+    # radar viejo era solo de la marca personal; para producto y ads no habia
+    # nada. Solo fuentes publicas: no se loguea a ninguna red ni gasta.
+    WT=/root/loops/onia-hermes-tendencias
+    RAMA=claude/tendencias
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
     # Este es el camino por el que un loop muere sin que nadie se entere: el cron
     # lo sigue llamando cada hora y el unico rastro es un exit 64 en un log que
