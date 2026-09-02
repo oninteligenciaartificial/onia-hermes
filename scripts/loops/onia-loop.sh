@@ -8,7 +8,7 @@
 # entonces ninguno habia corrido. Y con la laptop apagada no corren nunca.
 # Por eso se mudan a cron acá.
 #
-# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria>
+# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta>
 # APAGAR: crontab -e y comentar la linea del loop.
 #
 # Forma copiada de /root/bin/claude-guardia.sh (secretos por .hermes/.env, unset
@@ -20,6 +20,9 @@
 set -uo pipefail
 
 NOMBRE="${1:-}"
+# Tope de turnos por vuelta. 120 alcanza para cerrar UN item de cola; el
+# integrador necesita mas, porque cada carril son fetch + merge + gates + push.
+TURNOS=120
 case "$NOMBRE" in
   canario-visual)
     WT=/root/loops/onia-hermes-canario
@@ -45,6 +48,9 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   onia-cola)
+    # 120 turnos lo cortaron a mitad de un merge el 2026-09-02 y dejaron
+    # MERGE_HEAD abierto sobre main, con el indice entero montado.
+    TURNOS=260
     # EL INTEGRADOR. Es el unico que mergea ramas de carril a main; si no corre,
     # nada llega a main y main alimenta el deploy del VPS y el de Vercel.
     # Vivia en Windows y por eso llevaba dias sin integrar: las tareas de la app
@@ -59,12 +65,21 @@ case "$NOMBRE" in
     # Carril docs/infra: que lo escrito sea cierto. Un doc falso manda a la
     # proxima sesion al archivo equivocado. Combustible que no se agota.
     WT=/root/loops/onia-hermes-docs
-    RAMA=claude/git-status-935f47
+    RAMA=claude/docs-auditoria
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  web-venta)
+    # Dueno de onia.com.bo/ y /empezar — la puerta de entrada del producto, que
+    # hasta el 2026-09-02 no tenia carril: el canario dejaba defectos ahi y nadie
+    # los consumia. Zona: web-factory/apps/onia-platform/ y nada mas.
+    WT=/root/loops/onia-hermes-web-venta
+    RAMA=claude/web-venta
+    TOPE=3000
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
-    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria>" >&2; exit 64 ;;
+    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta>" >&2; exit 64 ;;
 esac
 
 LOG=/var/log/onia-loop-$NOMBRE.log
@@ -137,7 +152,7 @@ log "===== ARRANCA $NOMBRE — rama $RAMA — HEAD $ANTES — tope ${TOPE}s ====
 #  2) sin redirigir stdin, `claude` se traga lo que quede en la entrada del shell
 #     que lo invoco. Corriendo dos loops seguidos por ssh, el primero se comio el
 #     script del segundo y la segunda vuelta nunca ocurrio.
-timeout "$TOPE" claude -p --model claude-sonnet-5 --max-turns 120 \
+timeout "$TOPE" claude -p --model claude-sonnet-5 --max-turns "$TURNOS" \
   --allowedTools "$TOOLS" < "$PROMPT" >> "$LOG" 2>&1
 RC=$?
 
@@ -164,6 +179,18 @@ elif [ "$RC" != 0 ]; then
   fi
 elif [ "$SINPUSH" != 0 ]; then
   avisar "quedaron $SINPUSH commit(s) SIN pushear en $RAMA"
+fi
+
+# ── un merge abierto NO se deja pasar en silencio ----------------------------
+# El 2026-09-02 el integrador se quedo sin turnos a mitad de un merge y dejo
+# MERGE_HEAD con todo el indice montado. No habia ni un marcador de conflicto
+# —git habia resuelto solo— pero es un estado que el `add -A` de cualquier hook
+# convierte en un commit a ciegas. Es el modo de falla que CLAUDE.md prohibe, y
+# ya llego una vez a main con 17 archivos con marcadores adentro.
+GITDIR=$(git -C "$WT" rev-parse --git-dir 2>/dev/null || echo /dev/null)
+if [ -f "$GITDIR/MERGE_HEAD" ]; then
+  CONF=$(git -C "$WT" diff --name-only --diff-filter=U | wc -l)
+  avisar "quedo un MERGE ABIERTO en $RAMA ($CONF archivo(s) en conflicto). No lo cierra nadie solo: hay que resolver a mano en <code>$WT</code>"
 fi
 
 # ── rotacion: 24 vueltas por dia llenan un disco -----------------------------

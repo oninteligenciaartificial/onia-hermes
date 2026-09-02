@@ -63,7 +63,7 @@ cron ──► onia-loop.sh <nombre>
 
 ---
 
-## ⚠️ Las cuatro trampas que costaron vueltas perdidas
+## ⚠️ Las cinco trampas que costaron vueltas perdidas
 
 **1. `--allowedTools` es variadic y se come el argumento que le sigue.**
 Pasar el prompt como argumento posicional después de los tools lo parte en "reglas" de permiso
@@ -82,6 +82,27 @@ Claude Code usa `/root/.claude/.credentials.json`. Si hay una API key en el env 
 **4. El cron del VPS es UTC; en Windows los horarios eran de La Paz (UTC−4).**
 Copiar el horario tal cual corre el loop **cuatro horas antes**. → Traducir, y anotarlo en el
 crontab para que la próxima sesión no lo "corrija" de vuelta.
+
+**5. Editar el corredor EN CALIENTE le mueve el piso a la vuelta que está corriendo.**
+Bash **no carga el script entero**: lo lee por **offset de bytes** a medida que avanza. Reescribir
+el mismo inodo mientras hay una vuelta viva le hace ejecutar basura desde donde iba:
+
+```
+/root/bin/onia-loop.sh: line 157: l: command not found
+```
+
+Medido el 2026-09-02: se parcheó `onia-loop.sh` mientras `web-venta` corría. El agente ya había
+terminado y **pusheado** —no se perdió trabajo—, pero el corredor **nunca escribió su línea
+`TERMINA`, nunca soltó el `flock`, y quedó un proceso zombi** que habría bloqueado todas las
+vueltas siguientes de ese loop. Hubo que matarlo y borrar el lock a mano.
+
+⚠️ **Un `bash -n` en verde no protege de esto.** El archivo estaba perfecto; el problema era
+editarlo en caliente.
+
+→ **Instalá con [`scripts/loops/instalar.sh`](../../scripts/loops/instalar.sh)**, que escribe a un
+temporal, corre `bash -n` sobre él y recién ahí hace `mv`. Un `mv` en el mismo filesystem es
+**atómico**: el proceso que ya abrió el archivo se queda con el inodo viejo hasta terminar, y la
+próxima vuelta arranca con el nuevo. Nadie lee un archivo a medio escribir.
 
 **Y una regla de cordura:** el `timeout` tiene que ser **menor que el intervalo del cron**. Un
 loop horario con tope de 50 min deja 10 de colchón; el `flock` cubre el resto.
@@ -158,8 +179,11 @@ renueva sola con cada deploy.
 ## Cómo agregar un loop nuevo
 
 1. **Verificá que el carril tenga cola con ítems reales.** Si no, parás acá.
-2. Escribí `/root/bin/loops/<nombre>.md` con la anatomía de arriba.
-3. Agregá el `case` en `onia-loop.sh`: worktree, rama, tope, tools.
+2. Escribí el prompt versionado en `scripts/loops/prompts/<nombre>.md`.
+3. Agregá el `case` en `scripts/loops/onia-loop.sh`: worktree, rama, tope, turnos, tools.
+   **Los dos archivos van al repo Y al VPS** — con `scripts/loops/instalar.sh`, nunca a mano
+   (trampa 5). Si sólo lo ponés en el VPS, el próximo que reinstale desde el repo lo borra sin
+   avisar; si sólo lo ponés en el repo, no corre nadie.
 4. Creá el worktree en su rama: `git worktree add /root/loops/<...> <rama>`.
 5. **Corrélo a mano una vez y leé el log entero.** Un cron escrito no es un cron que anda.
 6. Recién ahí, la línea de cron — **escalonada**, en UTC.
@@ -196,6 +220,8 @@ más rápido.
 | Los logs | `/var/log/onia-loop-<nombre>.log` |
 | Los worktrees | `/root/loops/<repo>-<carril>` |
 | La lista de qué loops deben existir | `hermes-content/docs/cola/loops.md` |
+| **Quién hace qué oficio, y su zona** | `hermes-content/docs/cola/EQUIPO.md` |
+| El instalador atómico | `scripts/loops/instalar.sh` |
 | La doctrina y los modos de falla | `hermes-content/docs/cola/README.md` |
 | Las colas | `hermes-content/docs/cola/<carril>.md` |
 | Las decisiones que esperan a Sergio | `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` |

@@ -27,7 +27,7 @@ exacta tal como está registrada **en su propia máquina**: `crontab -l` en el V
 `list_scheduled_tasks` en Windows. Cada loop activo compara esa salida contra estas tablas al
 arrancar — ver la sección *"Chequeo de arranque"* dentro de su prompt.
 
-**Verificado en vivo el 2026-09-02**: `crontab -l` en `187.77.16.63` para las cinco filas `VPS`.
+**Verificado en vivo el 2026-09-02**: `crontab -l` en `187.77.16.63` para las SIETE filas `VPS`.
 
 ## Deben existir y estar activos
 
@@ -43,10 +43,12 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
 | `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
-| `docs-auditoria` | **VPS** | `18 1,5,9,13,17,21 * * *` (UTC) | Carril docs/infra: que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
+| `docs-auditoria` | **VPS** | `18 1,5,9,13,17,21 * * *` (UTC) | Carril docs/infra (rama `claude/docs-auditoria`): que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
 | `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `canario-visual` | **VPS** | `41 4,10,16,22 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
-| `marca-personal` | **VPS** | `56 13,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
+| `investigacion` | **VPS** | `26 3,9,15,21 * * *` (UTC) | **Cotiza** las decisiones abiertas del radar para que Sergio decida en tanda, una vez, sobre un archivo (rama `claude/investigacion`) |
+| `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
+| `marca-personal` | **VPS** | `56 9,13,17,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
 | `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
 
 ⚠️ **Corregido 2026-09-02.** `marca-personal` corría en `crontab -l` del VPS y no estaba en esta
@@ -56,15 +58,16 @@ con los casos de `onia-cola` y `docs-auditoria`). Un loop que reinstale el scrip
 per `scripts/loops/README.md` habría borrado los tres sin avisar. Sincronizado el `.sh` al repo
 en el mismo commit.
 
-### `docs-auditoria` — construido y probado, TODAVÍA sin horario
+⚠️ **Corregido más tarde el mismo 2026-09-02.** Acá había una sección entera diciendo que
+`docs-auditoria` estaba *"construido y probado, TODAVÍA sin horario"* y que vivía en la rama
+`claude/git-status-935f47`. **Las dos cosas dejaron de ser ciertas el mismo día**, minutos después
+de que se escribieran: tiene su línea de cron (`18 1,5,9,13,17,21`) y **rama propia**
+(`claude/docs-auditoria`), justamente porque compartir rama con la sesión de control ya había
+causado un conflicto.
 
-Este carril (el que audita ESTE archivo) tiene worktree (`/root/loops/onia-hermes-docs`, rama
-`claude/git-status-935f47`), prompt (`/root/bin/loops/docs-auditoria.md`) y `case` en
-`onia-loop.sh` — corrió una vez a mano el 2026-09-02T02:21 UTC con `exit 0`. **No tiene línea en
-`crontab -l`**: sin ella, esta vuelta no se repite sola. No entra todavía en la tabla de arriba
-porque esa tabla es "deben existir y estar ACTIVOS", y activo no está. La cadencia (y el permiso
-para prender el cron) queda anotada para Sergio en
-`ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+No fue un error de quien lo escribió: era cierto cuando lo midió. Es el costo normal de dos manos
+trabajando el mismo archivo a la vez, y la razón de la regla **"el que MIRA agrega, el que ARREGLA
+marca"** de [`EQUIPO.md`](EQUIPO.md).
 
 Los horarios están **escalonados a propósito**: comparten CPU y disco, y dos loops sobre el mismo
 árbol se pisan. No los juntes en el mismo minuto.
@@ -115,12 +118,43 @@ Se mudó también `docs-auditoria` (carril docs/infra, nuevo) y `marca-personal`
 el VPS desde el 2026-09-01 pero **nunca se había escrito en esta tabla** — el archivo existía y la
 lista contra la que se compara, no).
 
+**Y `docs-auditoria` estrenó con una colisión de rama que no hay que repetir.** Se le dio la
+misma rama que usa la sesión de control (`claude/git-status-935f47`), y en su primera vuelta las
+dos escribieron este mismo archivo en paralelo: hubo que resolver el conflicto a mano y una de
+las dos habría quedado con el push rechazado. Ya tiene rama propia (`claude/docs-auditoria`).
+**Un carril, una rama** — la regla estaba escrita en `CLAUDE.md` y se rompió igual, porque crear
+un worktree apuntando a una rama que ya tiene dueño **no avisa nada**.
+
 **`contenido-cola` se queda en Windows a propósito**, y esto sí es una decisión, no una omisión:
 Sergio, 2026-09-01 — *"no toques el de contenido, el de contenido lo maneja su sesión"*.
 
-⚠️ **Ya no son dos — el 2026-09-01 se sumó `marca-personal`** (verificado en `crontab -l` el
-2026-09-02): son TRES los que corren en el VPS. El título de esta sección quedó como historia del
-día de la mudanza, no como conteo vigente — el conteo vigente vive en la tabla de arriba.
+### 🔴 El sistema integraba y auditaba, y no construía nada
+
+Lo cazó Sergio el mismo 2026-09-02, mirando la lista: *"pero y loops para tu desarrollo no tenés
+entonces?"*. Tenía razón, y el agujero era estructural, no un olvido:
+
+- `docs-auditoria` **audita**, no construye.
+- `canario-visual` **produce ítems de cola**, no los cierra.
+- `chatbot-cola` y `marca-personal` construyen, pero **sólo lo suyo**.
+- `onia-cola` decía construir *"sólo si no había nada que integrar"* — y con cinco carriles
+  pusheando **casi nunca** iba a llegar ahí. **La cola de plataforma no tenía a nadie.**
+
+Dos cambios:
+
+1. **`onia-cola` mergea UN carril por vuelta y después construye** si le queda más de la mitad
+   del tope. Integrar es rápido; el resto de la hora es para cerrar ítems.
+2. **Nace `web-venta`**, dueño de `onia.com.bo/` y `/empezar`. Esas dos pantallas vivían en
+   `web-factory/apps/onia-platform/`, una carpeta que **ninguna cola nombraba** y que la zona del
+   viejo loop de web-factory **prohibía explícitamente**. El canario encontraba defectos ahí y
+   los dejaba anotados **sin nadie que los consumiera** — por eso seguían vivos la maqueta
+   cortada en desktop y la falta de un gate que corra `tsc` sobre el sitio de venta. Son la
+   primera pantalla que ve un lead: el defecto más caro del sistema estaba en la superficie sin
+   dueño.
+
+⚠️ **El conteo de esta sección es historia, no estado.** Empezó con dos, sumó `marca-personal` el
+2026-09-01, y con `onia-cola` y `docs-auditoria` el 2026-09-02 son **cinco** en el VPS
+(verificado en `crontab -l` ese día). **El conteo vigente vive sólo en la tabla de arriba** — si
+esta sección y esa tabla no coinciden, gana la tabla.
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 
