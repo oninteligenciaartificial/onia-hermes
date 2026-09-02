@@ -1,0 +1,39 @@
+{
+  "slug": "ads-por-rubro-foto",
+  "account": "onia",
+  "nota": "Cierra el hueco del PLAN_DE_CONTENIDO: los 8 ads hablaban de clínica dental y sólo había foto de consultorio. Acá cada copy va con la foto de SU rubro. Render: --pack historia-fancy --format feed. Cada lámina es un anuncio INDEPENDIENTE, no un carrusel.",
+  "slides": [
+    {
+      "id": "AR01-taller",
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B08-taller-9x16-CLI.jpg",
+      "kicker": "Taller mecánico",
+      "overline": "Sabés qué repuesto te falta cuando el cliente ya está esperando.",
+      "headline": "Para entonces se fue a otro taller.",
+      "suelta": true, "cta": "Reservá una demo"
+    },
+    {
+      "id": "AR02-restaurante",
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B10-restaurante-almuerzo.jpg",
+      "kicker": "Almuerzo",
+      "overline": "A las tres de la tarde nadie se acuerda cuántos platos salieron.",
+      "headline": "Y así no sabés cuánto comprar mañana.",
+      "suelta": true, "cta": "Reservá una demo"
+    },
+    {
+      "id": "AR03-ferreteria",
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B07-ferreteria-9x16.jpg",
+      "kicker": "Ferretería",
+      "overline": "El cuaderno no falla. Falla acordarse de abrirlo.",
+      "headline": "A las ocho de la noche, nadie anota.",
+      "suelta": true, "cta": "Reservá una demo"
+    },
+    {
+      "id": "AR04-dental",
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B06-consultorio-dental.jpg",
+      "kicker": "Consultorio",
+      "overline": "Le das la tarjeta del turno y ahí termina tu sistema de recordatorios.",
+      "headline": "Si se pierde, se pierde el turno.",
+      "suelta": true, "cta": "Reservá una demo"
+    }
+  ]
+}

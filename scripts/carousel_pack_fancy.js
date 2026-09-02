@@ -61,10 +61,19 @@ function crear({ esc, roleFor, ACCOUNTS, BRAND, getFmt }) {
 
     // CTA y "deslizá" existen SOLO en carrusel de feed. En historia el hueco inferior
     // tiene que quedar limpio para el sticker nativo — dibujar ahí rompe el formato.
-    const textoCta = slide.cta || (args && args.cta) || '';
-    const cta = (total > 1 && last && textoCta)
-      ? `<div class="boton">${esc(textoCta)}</div>` : '';
-    const swipe = (total > 1 && !last) ? '<span class="swipe">DESLIZÁ →</span>' : '';
+    // El CTA sale si la lámina lo declara (anuncio suelto) o si es la última de un
+    // carrusel con `cta` a nivel brief. La historia-quiz no declara ninguno de los dos,
+    // así que su hueco queda limpio para el sticker.
+    // 🔴 `slide.cta` NO sirve para distinguir: el renderer inyecta el `cta` del brief en
+    // TODAS las láminas. La señal tiene que ser explícita del brief, por lámina.
+    const esSuelta = slide.suelta === true;
+    const textoCta = (esSuelta || last) ? (slide.cta || (args && args.cta) || '') : '';
+    const cta = textoCta ? `<div class="boton">${esc(textoCta)}</div>` : '';
+    // 🔴 «DESLIZÁ» sólo en un carrusel de verdad. Si la lámina trae su PROPIO `cta`, es una
+    // pieza suelta que comparte archivo de brief con otras (los anuncios por rubro), y
+    // decirle al lector que deslice es mentirle: no hay nada al lado.
+    const swipe = (total > 1 && !last && !esSuelta)
+      ? '<span class="swipe">DESLIZÁ →</span>' : '';
 
     return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
