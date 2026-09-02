@@ -80,6 +80,26 @@ html,body { width:${FMT.w}px; height:${FMT.h}px; }
   background:${fondo}; padding:${pad}px;
   display:flex; flex-direction:column; }
 
+/* --- LO QUE SACA A LA PIEZA DE "PLANA" (Sergio, 2026-09-02) --- */
+
+/* a · GRANO. Un color liso a 1080px se ve digital y muerto. Las referencias que no se
+   ven planas casi siempre tienen papel, cartón o ruido debajo. Turbulencia SVG en vez de
+   una textura bitmap: pesa cero y no hay que versionar un asset. */
+.grano { position:absolute; inset:0; opacity:.055; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* b · UN HALO SUAVE detrás del titular: da profundidad sin agregar un objeto. Es la
+   diferencia entre "fondo de color" y "espacio con luz". */
+.halo { position:absolute; left:-12%; bottom:-18%; width:88%; height:62%;
+  background:radial-gradient(ellipse at center, rgba(0,210,106,.18) 0%, rgba(0,210,106,0) 68%);
+  pointer-events:none; }
+
+/* c · UN BLOQUE QUE SANGRA por el borde derecho. Rompe el rectángulo: el ojo lee que la
+   composición sigue fuera de la lámina. */
+.sangra { position:absolute; right:-70px; top:${18 + idx * 9}%;
+  width:210px; height:210px; border:3px solid rgba(0,210,106,.30);
+  border-radius:50%; }
+
 ${foto ? `.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 22%; }
 /* El velo es DIRECCIONAL: casi transparente arriba —donde esta la escena, que es el
    motivo de poner una foto— y fuerte abajo, donde se apoya el texto. Un velo parejo
@@ -107,12 +127,26 @@ ${foto ? `.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:
 .indice small { font-size:30px; font-weight:500; }
 
 /* 1 y 2 · el titular SANGRA y mezcla familias. Es el 45% de la lamina. */
-.titular { margin-top:auto; font-family:'Inter',system-ui,Arial,sans-serif;
+.titular { position:relative; z-index:1; margin-top:auto; font-family:'Inter',system-ui,Arial,sans-serif;
   font-weight:900; font-size:104px; line-height:.96; letter-spacing:-4.5px;
   color:#F7F4EE; text-wrap:balance;
   ${foto ? 'text-shadow:0 6px 34px rgba(0,0,0,.55);' : ''} }
-.titular em { font-family:'Fraunces',Georgia,serif; font-style:italic; font-weight:600;
-  letter-spacing:-2px; color:var(--onia-green,#00D26A); }
+/* d · HIGHLIGHT DE MARCADOR, no un rectángulo limpio. Las referencias que funcionan
+   subrayan a mano: el trazo se sale, no llega parejo a los bordes. Un rectángulo perfecto
+   se lee como "resaltado de Word"; éste se lee como alguien marcando la frase. */
+/* ⚠️ El pseudo-elemento absoluto NO servía: se rompe cuando la frase corta en dos líneas
+   (pasó en la lámina 05) y encima tapaba el texto. Con background + box-decoration-break
+   el trazo se dibuja por CADA línea, y al ir en el fondo del renglón queda como subrayado
+   grueso: marca sin comerse la palabra.
+   ⚠️ Y ojo: nada de backticks en los comentarios de este CSS — está dentro de un template
+   literal de JS y cortan la cadena. */
+.titular em { font-family:'Fraunces',Georgia,serif; font-style:italic;
+  font-weight:600; letter-spacing:-2px; color:#F7F4EE;
+  background-image:linear-gradient(to top,
+    rgba(0,210,106,.92) 0, rgba(0,210,106,.92) .26em,
+    rgba(0,210,106,0) .26em, rgba(0,210,106,0) 100%);
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+  padding:0 .05em .02em; border-radius:2px; }
 
 .cuerpo { margin-top:30px; font-family:'Inter',system-ui,Arial,sans-serif; font-weight:400;
   font-size:38px; line-height:1.38; color:rgba(247,244,238,.80); max-width:88%;
@@ -135,6 +169,8 @@ ${foto ? `.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:
 </style></head>
 <body><div class="slide ${role}">
   ${foto ? `<img class="bg" src="${foto}" alt=""><div class="velo"></div>` : ''}
+  <div class="grano"></div>
+  ${foto ? '' : '<div class="halo"></div><div class="sangra"></div>'}
   <div class="linea"></div><div class="nodo"></div>
   <div class="capa">
     <div class="top">

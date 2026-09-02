@@ -38,3 +38,31 @@ mismo no poner la foto**. Ahora el degradado va de casi transparente arriba —d
 que es el motivo de poner una foto— a fuerte abajo, donde se apoya el texto.
 
 🔴 La palabra **`DEMO`** tiene que estar viva en el mapa de n8n **de @oniahq**.
+
+---
+
+## v3 — «no quiero que sea así plano» (Sergio, 2026-09-02)
+
+Segunda pasada por su Pinterest, buscando **profundidad** en vez de estructura. Lo que tenían
+en común las que NO se ven planas: **textura de papel, objetos con sombra real, y highlight
+dibujado a mano** — nunca bloques limpios sobre color liso.
+
+Cuatro capas agregadas, todas por CSS (cero assets que versionar):
+
+| | Qué | Por qué |
+|---|---|---|
+| **a** | **Grano** por turbulencia SVG, al 5,5 % | Un color liso a 1080px se ve digital y muerto. El ruido le da cuerpo sin ensuciar |
+| **b** | **Halo** radial verde abajo a la izquierda | Es la diferencia entre «fondo de color» y «espacio con luz» |
+| **c** | **Un círculo que sangra** por el borde derecho, y baja en cada lámina | Rompe el rectángulo: el ojo lee que la composición sigue afuera |
+| **d** | **Highlight de marcador** en la palabra italic | Un rectángulo perfecto se lee como resaltado de Word; éste, como alguien marcando la frase |
+
+### ⚠️ Dos cosas que se rompieron y cómo quedaron
+
+**1. El highlight tapaba el texto y desaparecía en dos líneas.** Estaba hecho con un
+pseudo-elemento absoluto: en la lámina 05, donde la frase corta en dos renglones, **no se
+dibujaba**. Ahora va con `background-image` + `box-decoration-break: clone`, que lo pinta por
+cada línea, y apoyado en el fondo del renglón: **marca sin comerse la palabra.**
+
+**2. Nada de backticks en los comentarios del CSS.** El bloque vive dentro de un template
+literal de JS y un backtick corta la cadena — el render falló con `SyntaxError: Unexpected
+identifier 'background'`.
