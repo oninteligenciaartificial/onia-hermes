@@ -14,6 +14,15 @@ toda diferencia en ítem con evidencia en la cola del carril dueño.
 
 **Nada.** Este carril no despliega: mide y escribe ítems. Las 10 pantallas siguen como estaban.
 
+**Corrida del 2026-09-02 16:41 UTC — las 10 abrieron con status 200. UN ítem rojo nuevo:
+el widget de chat de `/chatbot` responde 429 y dejó de cargar.** La página cayó de 2.231 KB
+(medidos a las 10:41 UTC, misma jornada, con el widget vivo) a **449 KB**: son ~1,8 MB del bundle
+que ya no bajan. **La ventana de rotura es angosta y conocida: entre las 10:41 y las 16:41 UTC
+del 2026-09-02** — quien lo arregle sabe exactamente qué mirar. Tres `curl` planos al endpoint
+confirman el 429 fuera del navegador. Ítem con evidencia en `COLA.md`.
+Detalle: una caída de peso **no dispara umbral** (sólo se comparan subidas > +40 %); se encontró
+mirando. Las otras nueve, sin novedad.
+
 **Corrida del 2026-09-02 10:41 UTC — las 10 abrieron con status 200, cero disparos mecánicos.**
 
 | pantalla | peso | ms | mirada |
