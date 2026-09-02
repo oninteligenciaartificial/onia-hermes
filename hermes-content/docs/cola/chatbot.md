@@ -98,6 +98,17 @@ un grep sirve para descartar y nunca para confirmar), gates completos donde haya
 node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 ```
 
+**Y nada se declara "listo para desplegar" sin que el deploy lo alcance:**
+
+```bash
+npm run deploy:alcanzable
+```
+
+Saca los commits de `onia-platform` que esta cola nombra y le pregunta a git si `origin/master`
+—la rama de la que se buildea— los alcanza. Nace de que la misma fila (**S11**) falló tres veces:
+el commit no existía, después existía sin estar mergeado. **Un párrafo que lista commits
+envejece; esto no.** Hoy sale **1** por **S16**.
+
 **Nunca:** desplegar al VPS sin OK de Sergio · tocar otro carril (web-factory es dueño de
 `web-factory/`, producto de la cola de plataforma) · gastar plata · bajar una superficie viva.
 
@@ -113,21 +124,13 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 > `REVERTIDAS 3/9` (`BRAND_URL`, `TERMS_URL`, `PRIVACY_URL`) — el bloqueo está **vivo, no
 > vencido**. Vuelve a "Ahora" el día que el gate cambie de veredicto.
 
-> 📎 **Corregido el 2026-09-02 (vuelta siguiente): las dos afirmaciones de arriba ya no son
-> ciertas, y una de ellas era peligrosa.** "Ahora" **no** está vacío —la corrida del canario del
-> 01-sep le dejó dos ítems, que son los que están acá abajo— y por lo tanto
-> `verificar_cola.js` **no** sale 1: corrido contra este archivo antes de tocarlo, sale **0**
-> (`cola ok: 2 items en Ahora, todos con evidencia real`). Se corrige en vez de borrarse porque
-> el párrafo decía *"el rojo es esperable, no es una falla"*, y esa frase sobreviviéndole al rojo
-> es una anestesia: la próxima vuelta que viera el gate en rojo **de verdad** lo iba a descartar
-> como conocido. Lo que sigue vigente es el fondo: **no se destraba llenando "Ahora"** —promover
-> un ítem de "Después" para poner el gate en verde es fabricar trabajo.
-
-> **El ítem 2 —las campañas de la web— salió de acá el 2026-08-31.** Vivió diez vueltas
-> esperando el `scp` de **S9**, que escribe en el VPS y por eso es de Sergio. Se movió entero
-> a "Bloqueado en Sergio" con su historia. Reverificado antes de moverlo, dentro y fuera del
-> contenedor: `/opt/onia/bot/knowledge.json` sigue en **904 bytes del 6-ago con cero
-> `campanas`** — el bloqueo está **vivo, no vencido**. Vuelve cuando Sergio avise.
+> 🧹 **Podadas acá tres notas del 2026-09-02 que se contradecían entre sí** (2026-09-02, vuelta
+> de la auditoría de los `[x]`). Una afirmaba que `verificar_cola.js` **sale 0** y otra que
+> **sale 1**; medido antes de podar, sale **1** (`cola-vacia`). Una frase viva que declara verde
+> un gate que está rojo es la anestesia exacta que esta cola denuncia dos párrafos más abajo:
+> la próxima vuelta que viera el rojo lo iba a descartar como conocido. Las otras dos sólo
+> narraban mudanzas ya reflejadas en **S9** y **S10**. La historia vive en el `git log`; acá
+> queda **una sola** nota vigente, la de abajo.
 
 > **"Ahora" quedó vacío el 2026-09-02**, y esta vez no es una frase de trámite: el ítem que
 > tenía se **cerró** (el primero de "Cerrado", con su evidencia), y lo único que le quedaba
@@ -206,11 +209,12 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
   ```
   Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) ✅ **Sumado el 31-ago (10ª vuelta) — verificación PREVIA, que antes no existía:** `npm run campanas:vivas` mide **desde la calle** que el documento cubra las frases que onia.com.bo manda **hoy**. Si sale 1, el `scp` publicaría un documento que ya no matchea y no hay que hacerlo. Corrido hoy: **0** (5 de 5 cubiertas). No reemplaza al `grep -c campanas` de después — ese mide el VPS, este mide el documento. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): S9 volvió a quedar corto, y hacerlo como dice HOY deja el motor llamando a una función que no existe.** Desde que se escribió "viajan TRES archivos", el espejo sumó una feature entera —el bot manda el link de la agenda pública de la org en vez de derivar— repartida en **cinco** archivos. Medido contra `/opt/onia/bot` real, no leído: `espejo-check` nombra ahora `config.mjs`, `intents.mjs` y `preview-route.mjs` **además** de `knowledge.mjs` y `recepcionista.mjs`. Y el acople es duro: el `recepcionista.mjs` del espejo llama a `intents.wantsToBook()` y a la plantilla `R_AGENDA`, y **ninguna de las dos existe en el VPS** (su `intents.mjs` exporta `wantsToOrder` pero no `wantsToBook`; su `config.mjs` tiene cero `R_AGENDA`). Probado ejecutando, no por grep: copiado el subconjunto que S9 mandaba a un `/tmp` con el resto del VPS, `intents.wantsToBook` da `undefined` y llamarlo tira `TypeError: intents.wantsToBook is not a function`. **La lista vigente de S9 = `bot-engine.mjs`(ya en sync) + `config.mjs` + `intents.mjs` + `knowledge.mjs` + `preview-route.mjs` + `recepcionista.mjs` + el documento `knowledge.json`** — y la manda el gate, no este párrafo: `espejo-check.mjs` ahora imprime `VIAJAN JUNTOS` con los acoples calculados en vivo. Correr el gate ANTES del `scp` y copiar lo que diga; esta lista envejece, la del gate no. |
 | S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual. Repara **DIEZ** `installation_configs` que Chatwoot reconcilia solo (`Internal::ReconcilePlanConfigService`, leído del YML del propio contenedor): el cron que hoy corre (`/root/bin/chatwoot-brand-onia.sh`, cada hora al minuto :17) sólo reaplica 3 de las 9 que le tocan (DISPLAY_MANIFEST queda afuera a propósito: su valor de fábrica es el que se quiere) | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Se mide **desde la calle, sin VPS ni SSH**: `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`, 8 tests) lee `window.globalConfig` del login público — antes de que existiera este gate, la reversión del 16-ago vivió quince días sin que nadie la viera, porque el único chequeo vivía dentro del contenedor. **Re-verificado en vivo el 2026-09-02: sigue en `REVERTIDAS 3/9`, exit 1**, sin cambio desde el 16-ago (ya se vigiló así ocho vueltas seguidas entre el 31-ago y hoy, siempre con el mismo resultado). **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10 |
-| S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes.** El arreglo es el commit **`22fd088`** de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09` — **commiteado y pusheado, NO desplegado** | Es un deploy del producto, y ningún deploy sale sin su OK | Que el ítem "Requerimientos" del menú dibuje su icono. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): esta fila mandaba a desplegar un commit que NO EXISTE.** Decía *"commit `4f86381` (rama `carril/chatbot-v68-friccion`)"* y *"ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`)"*. Medido, no leído: después de `git fetch --all --prune` contra GitHub, `git log 4f86381` da `unknown revision`, **no hay ninguna rama** que matchee `friccion` ni `v68` en las 39 remotas, y el archivo del guardia **nunca fue agregado en ninguna rama**. Ese trabajo quedó en el disco de Windows y nunca se pusheó. Un bloqueo que le pide a Sergio desplegar la nada es peor que un fantasma: no se destraba nunca. **El defecto SÍ era real y seguía vivo**, verificado RENDERIZANDO el `.woff2` que se publica (Chromium, no grep): `assignment_turned_in` mide **20em** —el texto crudo— contra **1em** de los otros 34 iconos del menú. Causa medida: el icono entró el 30-ago (`ab9e0de`) y la fuente subseteada es del 29-ago (`917adca`), así que el glifo nunca viajó; y `scripts/subset-iconos.mjs`, que corre dentro del `build`, **se rinde en silencio y sale 0** si falta `pyftsubset` (reproducido acá). **Rehecho de cero en `22fd088`:** el ítem usa `task_alt`, que ya está en el subset (no depende de que exista Python en el entorno de build), más el gate `npm run gate:iconos` (`scripts/iconos-en-la-fuente.mjs`) que renderiza los 35 iconos declarados contra la fuente publicada **sin sesión ni app levantada** — el hueco exacto por el que se coló, ya que `e2e/iconos.spec.ts` sólo mira `/`, `/login` y `/register`. Rojo por el motivo correcto antes, verde después (35/35). Gates: `tsc` limpio · **2441** tests · `eslint` 0 errores. **Verificación post-deploy:** abrir `/inbox` y mirar el menú — el ítem "Requerimientos" tiene que dibujar un tilde, no una palabra |
+| S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes.** El arreglo es el commit **`22fd088`** de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09` — **commiteado y pusheado, pero NO llega a `master`: ver S16.** 🔴 **Corregido el 2026-09-02 (auditoría de los `[x]`, tercera vuelta): "commiteado y pusheado" NO alcanza, y escribirlo así volvía a dejar el bloqueo sin salida.** `onia-platform` se despliega buildeando **`origin/master`** (medido en la §20 del radar: producción corre `8a3b5a6`, un build de `master`), y `22fd088` **no está en `master`** — vive sólo en la rama del carril, que está 2 adelante y 17 atrás y que nadie mergea. Con el OK dado, el swap buildea `master`, el icono sigue roto y el bloqueo se cierra en falso. **Es la tercera vez que esta misma fila se queda corta**: primero el commit no existía, después existía sin estar mergeado. Por eso la lista ya no la mantiene este párrafo: `npm run deploy:alcanzable` se lo pregunta a git | Es un deploy del producto, y ningún deploy sale sin su OK | Que el ítem "Requerimientos" del menú dibuje su icono. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): esta fila mandaba a desplegar un commit que NO EXISTE.** Decía *"commit `4f86381` (rama `carril/chatbot-v68-friccion`)"* y *"ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`)"*. Medido, no leído: después de `git fetch --all --prune` contra GitHub, `git log 4f86381` da `unknown revision`, **no hay ninguna rama** que matchee `friccion` ni `v68` en las 39 remotas, y el archivo del guardia **nunca fue agregado en ninguna rama**. Ese trabajo quedó en el disco de Windows y nunca se pusheó. Un bloqueo que le pide a Sergio desplegar la nada es peor que un fantasma: no se destraba nunca. **El defecto SÍ era real y seguía vivo**, verificado RENDERIZANDO el `.woff2` que se publica (Chromium, no grep): `assignment_turned_in` mide **20em** —el texto crudo— contra **1em** de los otros 34 iconos del menú. Causa medida: el icono entró el 30-ago (`ab9e0de`) y la fuente subseteada es del 29-ago (`917adca`), así que el glifo nunca viajó; y `scripts/subset-iconos.mjs`, que corre dentro del `build`, **se rinde en silencio y sale 0** si falta `pyftsubset` (reproducido acá). **Rehecho de cero en `22fd088`:** el ítem usa `task_alt`, que ya está en el subset (no depende de que exista Python en el entorno de build), más el gate `npm run gate:iconos` (`scripts/iconos-en-la-fuente.mjs`) que renderiza los 35 iconos declarados contra la fuente publicada **sin sesión ni app levantada** — el hueco exacto por el que se coló, ya que `e2e/iconos.spec.ts` sólo mira `/`, `/login` y `/register`. Rojo por el motivo correcto antes, verde después (35/35). Gates: `tsc` limpio · **2441** tests · `eslint` 0 errores. **Verificación post-deploy:** abrir `/inbox` y mirar el menú — el ítem "Requerimientos" tiene que dibujar un tilde, no una palabra |
 | S12 | **Los DOS horarios fijos de demo — sin ellos el bot deriva a un humano en el primer mensaje y se calla para siempre.** Son dos bloques semanales de SU agenda; `hermes-content/deploy/vps-ops/bot/config.mjs` los trae `pending: true` con un TODO que dice *"PROHIBIDO inventar horarios acá"*. **Contexto nuevo del 01-sep:** existía la salida automática por Cal.com y **está muerta** — no hay contenedor de Cal.com en el VPS y `cal.onia.com.bo` responde 302 a `onia.com.bo/empezar`, así que el módulo cae al placeholder en silencio. **Dos opciones, las dos baratas:** (a) Sergio dicta dos bloques fijos (ej. martes 10:00 y jueves 16:00) y quedan como dato — cero código; (b) revivir Cal.com, que es infra y cuesta más. Recomendación: **(a)**, y (b) después si molesta mantenerlos a mano | Son horas de su semana, y el código prohíbe inventarlas | **El ítem 1 de Ahora, que es el único defecto que un comprador ve.** Probado corriendo el motor con dos horarios cualesquiera: el embudo llega hasta `M2` demo agendada sin tocar una línea de código |
 | S13 | **Encender el aviso `notify_sergio`** — hoy el bot pide un humano y no se entera nadie. ⚠️ **NO es "poner `ONIA_N8N_ENABLED=true`"**: `ONIA_N8N_EVENT_URL` está **vacío** y **no existe ningún workflow de n8n** que reciba el evento (listados los 44). Con la variable en `true` y sin URL el envío devuelve `failed` y **nadie se entera**, porque es fire-and-forget a propósito. **Decidir el camino:** (a) Telegram directo desde el bot, reusando el `TG_BOT_TOKEN` que `hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh` ya usa en el VPS — sin workflow, sin URL, sin secreto nuevo; (b) crear el workflow de n8n y cargar la URL. Recomendación: **(a)** | Escribe en el VPS. El código lo escribe este carril; la decisión y el deploy son suyos | El ítem 2 de Ahora. Gate barato antes de mirar el celular: `"configurado":true` en el `/health` del bot |
 | S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org y por ahí entraron **5 de las 9** conversaciones de desconocidos, incluida la del 01-sep. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox**, y `Onia (interna)` ya gastó el suyo en el 5. **Opciones:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código; (c) levantar la restricción de un inbox por org, que es código del producto y de otro carril. Recomendación: **(b)** | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
 | S15 | **Una credencial de sólo lectura para que el canario ENTRE al panel del chatbot** — un usuario del producto (correo + contraseña) que sólo mire. Se enchufa como `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`; **no hay una línea de código pendiente**: `requiereSesion` y `iniciarSesion()` ya están en `scripts/canario_visual.mjs` y entran por el formulario real de `/login`. Sin ella el canario NO miente (desde hoy dice `NO MEDIDA` con el motivo), pero **la pantalla que un cliente usa para editar su conocimiento sigue sin que nadie la mire nunca**. ⚠️ La otra opción que el ítem original proponía —una ruta de vista previa pública— **se descarta**: expone configuración de cliente sin sesión, y es agregar una superficie viva | Es un alta de usuario en producción, y una contraseña | Que `/settings/chatbot` entre a la ronda del canario como las otras diez. Hecho = el canario imprime `panel-chatbot … sin disparo mecanico` y su baseline se crea con `urlFinal` = `/settings/chatbot` |
+| S16 | **Los arreglos de este carril al producto no llegan a `master`, así que ningún deploy los puede alcanzar.** Medido el 2026-09-02 con `git merge-base --is-ancestor`, no leído: `22fd088` (el icono roto del menú, **S11**) y `675541b` (el editor que le dice "consultorio" a una ferretería) están pusheados a `origin/claude/chatbots-platform-review-0d1d09` de `onia-platform` y **NO** están en `origin/master`, que es de donde se buildea. ⚠️ **Ya son TRES, y el tercero muestra que esto no es sólo un problema de deploy:** se suma `d62beeb`, que cablea `gate:iconos` a la cadena `ci`. Ése no necesita un swap en el VPS —es un `package.json` y un test— pero **sí** necesita estar en `master` para que el CI de `master` lo corra. Mientras no llegue, la guarda que impide que otro icono salga como palabra en el menú **no protege a la rama de la que se buildea**. Cada vuelta que este carril arregla algo del producto, la pila crece. **Causa, y es de procedimiento, no de código:** el integrador (`onia-cola`) tiene el merge a `master` pre-autorizado por su propio prompt, pero su Paso 1 recorre las ramas de **`onia-hermes`**; la rama homónima de `onia-platform` no la mira nadie, y contra el `main` de `onia-hermes` da 0, así que concluye "nada que hacer". Opciones cotizadas en el radar §23: **(a)** que `onia-cola` extienda su Paso 1 al segundo repo — toca `scripts/loops/prompts/onia-cola.md`, que es del carril de integración y **no de éste**; **(b)** mergear la rama a mano o por PR, como llegaron los últimos; **(c)** dejarlo, y S11 no se destraba nunca. Recomendación: **(a)**, y (b) ya si se quiere el icono en el próximo swap | Es elegir entre cambiar el procedimiento del integrador o mergear a mano — y `master` es rama protegida de este loop | **S11 entero**, y todo arreglo futuro de este carril sobre el producto. Verificador: `npm run deploy:alcanzable` tiene que salir **0**; hoy sale **1** nombrando los dos |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 | S12 | **¿Sigue en pie la opción 1 de §9 ("el inbox 4 se deja sin dueño hasta que la limitación moleste")?** Medido el 2026-09-02: son SEIS conversaciones reales en inbox 4 (34, 36, 38, 40, 45, 46), dos nuevas del 01-sep, y CINCO de las seis no dejaron teléfono ni correo — sólo se les puede contestar desde adentro del widget, que es justo lo que el inbox huérfano bloquea. El límite técnico sigue siendo real: `clinic_settings.chatwootInboxId` es un `Int?` único (`prisma/schema.prisma:1002`), una org = un inbox. Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9: (2) crear una org "Onia Bandeja" sólo para recibir el 4 (~10 min, agrega una org fantasma), o (nueva) extender `clinic_settings` a N inboxes — más caro, y lo decide plataforma | Su decisión de producto y su límite de schema, igual que S8 | Que las próximas conversaciones del widget se vean en `/inbox` sin esperar a que alguien dé su teléfono |
 
@@ -423,6 +427,109 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **El gate que impide que un icono vuelva a salir como palabra en el menú EXISTÍA y no lo
+      corría nadie.** Cerrado el 2026-09-02 (commit `d62beeb` de `onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`). Archivos:
+      `__tests__/gate-iconos-esta-cableado.test.ts` (nuevo) y `package.json`.
+      Salió de auditar los `[x]`, que es lo que manda el loop cuando "Ahora" queda sin ítems
+      desbloqueados — los tres de "Después" siguen frenados por algo que no es código.
+      **Lo que se auditó y salió CIERTO** — se escribe porque una auditoría que sólo reporta lo
+      que falla no prueba que haya mirado:
+      | afirmación de la cola | medido hoy en vivo |
+      |---|---|
+      | los 7 loops `VPS` de `loops.md` están en `crontab -l` | los 7, con su expresión exacta. Nada que rearmar |
+      | `S16` sigue vivo | `npm run deploy:alcanzable` → exit **1**, `22fd088` y `675541b` `no-llega`; `e644c85` sigue saliendo `ok` |
+      | `npm run gate:iconos` da verde | exit **0**, `35 iconos del menu, los 35 dibujan glifo` |
+      | suite del bot verde | `npm run test:bot` → **697 pass, 0 fail** |
+      | `npm run campanas:vivas` sale 0 | exit **0**, `5 frases vivas, 5 con campaña` |
+      | los npm scripts que la cola nombra existen | 6 de 6 en su repo (`gate:iconos` es de `onia-platform`, no de acá) |
+      | las 22 rutas de `onia-platform` que la cola declara existen | 22 de 22 — incluido que `scripts/iconos-en-la-fuente.test.ts` **siga sin existir**, que es lo que la cola dice |
+      🔴 **Lo que salió FALSO, y es de la clase cara: literalmente cierto, funcionalmente falso.**
+      El ítem de acá abajo dice *"el gate que S11 daba por hecho ahora existe de verdad"*. Existe.
+      **Y no lo invocaba nadie.** Medido, no supuesto: `gate:iconos` no estaba en `npm test`
+      (es un `.mjs`, vitest no lo ve), ni en la cadena `npm run ci`, ni en
+      `.github/workflows/ci.yml`, ni en `build`. Su única mención en todo el repo fuera del
+      propio script era un comentario en `components/layout/navigation.ts:47`.
+      **La consecuencia:** el agujero que ese ítem declaraba tapado seguía abierto entero. Se
+      agrega un icono al menú → `scripts/subset-iconos.mjs` se rinde en silencio y sale 0 si
+      falta `pyftsubset` → la fuente publicada no trae el glifo → el nombre crudo vuelve al
+      sidebar de **toda** pantalla del dashboard, `/inbox` incluida, y nada se pone rojo. Es
+      exactamente el camino por el que se coló `ASSIGNMENT_TURNED_IN` la primera vez.
+      El vecino `__tests__/eslint-no-lintea-worktrees.test.ts` ya lo tenía escrito en una línea:
+      *"Un gate que nadie corre no existe"*. Estaba en el repo y no se aplicó al gate siguiente.
+      **Lo que se hizo:** `gate:iconos` entra a la cadena `ci`, **antes del `build`**. Antes y no
+      después porque el gate mide la fuente **commiteada** —la que se publica cuando el subset
+      falla mudo—; medirla después sería medir la regenerada, justo la que el entorno roto no
+      produce. Y falla en 2 s en vez de después de un `next build` entero.
+      **Y su guardia, que es el punto:** el test nuevo vigila el **cableado**, no los iconos, y
+      por eso no necesita navegador — vive en `npm test`, que **sí** corre GitHub Actions, así
+      que sacar el gate de la cadena pone el CI en rojo.
+      ⚠️ **Lo que este ítem NO logra, dicho antes de que alguien lo asuma:** GitHub Actions
+      **no** renderiza los 35 iconos. `ci.yml` no instala navegadores (no tiene
+      `playwright install`), así que el renderizado real sigue ocurriendo sólo donde hay
+      Chromium: `npm run ci` en local y en el VPS. Cablearlo en Actions es agregar un paso de
+      instalación de navegador que desde este loop **no se puede verificar corriendo**, y un
+      paso de CI que rompe para todos es peor que el hueco que tapa. Anotado, no hecho.
+      **Probado que muerde, no sólo que pasa:** **2 rojos** antes por el motivo correcto. El
+      segundo caso hizo falta corregirlo: pasaba en **verde** con el gate AUSENTE, porque
+      `indexOf` de un string que no está da `-1` y `-1` es menor que cualquier índice — o sea
+      que el caso "corre antes del build" daba verde justo cuando fallaba lo que mide. Los dos
+      `toBeGreaterThan(-1)` no son adorno.
+      **Gates:** `tsc --noEmit` limpio · **2444** tests verdes (198 archivos, +3 nuevos sobre
+      los 2441 anotados) · `eslint` 0 en el archivo tocado.
+      ⚠️ **Commiteado, NO mergeado.** `d62beeb` es el **tercer** commit de este carril que no
+      llega a `origin/master` — se suma a **S16**, no a S11: no necesita un deploy al VPS (es un
+      `package.json` y un test), necesita estar en `master` para que el CI de `master` lo corra.
+
+- [x] **Los dos arreglos de este carril al producto estaban pusheados y a nadie le llegaban: el
+      deploy buildea `master` y no están en `master`.** Cerrado el 2026-09-02. Archivos:
+      `scripts/deploy_alcanzable.mjs` (nuevo) y `package.json`. Salió de auditar los `[x]`, que
+      es lo que manda el loop cuando "Ahora" queda sin ítems desbloqueados.
+      🔴 **Gate 1 primero, y acá salvó la vuelta dos veces.** (1) El primer hallazgo aparente fue
+      que 5 de las 10 pantallas del canario no tenían baseline. **Falso:** existen en `main` — era
+      **esta rama la que estaba 14 commits atrás**. Se hizo `merge --ff-only origin/main` antes de
+      seguir, porque además `scripts/verificar_cola.js` había cambiado en `main` (`dc8baa8b`) y el
+      gate se estaba corriendo con una versión vieja. (2) Con el árbol al día, el gate de la cola
+      sigue diciendo `cola-vacia` **exit 1**, que es la verdad: "Ahora" está vacío.
+      **Lo que se auditó y salió CIERTO** — se escribe porque una auditoría que sólo reporta lo
+      que falla no prueba que haya mirado:
+      | afirmación de la cola | medido hoy en vivo |
+      |---|---|
+      | el canario reporta `panel-chatbot` como `NO MEDIDA` nombrando las dos variables | corrido en vivo: `NO MEDIDA :: faltan ONIA_CANARIO_USER / ONIA_CANARIO_PASS`. Y su baseline sigue en `bytes: 0` |
+      | `--self-check` cuenta 65 casos sobre 10 pantallas | `self-check: ok — 65 casos sobre 10 pantallas`, exit 0 |
+      | el login del chat pesa 3,58 MB y su baseline dejó de estar anclada en 12,9 MB | corrido en vivo: **3499 KB / 868 ms**, contra una baseline de 3.583.426 B. Coinciden: la baseline es honesta |
+      | la evidencia del ítem existe | `hermes-content/docs/historial/canario-visual/2026-09-01-login-chat.png`, 22.552 B |
+      | los commits `22fd088` y `675541b` existen y están pusheados | sí, los dos en `origin/claude/chatbots-platform-review-0d1d09` de `onia-platform` |
+      🔴 **Lo que salió FALSO, y es lo que esta vuelta arregla.** "Pusheado" no es "alcanzable".
+      `onia-platform` se despliega buildeando `origin/master` (§20 del radar lo midió:
+      producción corre `8a3b5a6`), y los dos commits **no están en `master`** — viven en la rama
+      del carril, 2 adelante y 17 atrás, que nadie mergea. Con el OK de Sergio dado, el swap
+      buildea `master`, el icono sigue roto y **S11** se cierra en falso. **Es la tercera vez que
+      esa misma fila se queda corta**: primero el commit no existía, después existía sin estar
+      mergeado, ahora no llega. Las tres veces la lista la mantenía un párrafo a mano.
+      **Causa, medida y no supuesta:** el integrador tiene el merge a `master` pre-autorizado,
+      pero su Paso 1 hace `cd /root/loops/onia-hermes` y cuenta la rama contra el `main` de **ese**
+      repo, donde da 0. El mismo nombre de rama existe en los dos repos y el que tiene trabajo sin
+      mergear es el que nadie enumera. Es procedimiento del carril de integración ⇒ **S16** + radar
+      §23, con las tres opciones cotizadas.
+      **Lo que se hizo, para que no lo mantenga un párrafo:** `npm run deploy:alcanzable` saca los
+      commits de `onia-platform` que la cola declara —exigiendo el `de \`onia-platform\``, porque
+      la cola nombra también commits del bot y de `onia-hermes`— y le pregunta a git si
+      `origin/master` los alcanza. Distingue los **dos** modos de falla ya pagados: `no-existe` y
+      `no-llega`. Corrido: **exit 1** nombrando `22fd088` y `675541b`, y `e644c85` (de un ítem
+      viejo) sale **OK** — ésa es la prueba de que discrimina en vez de gritar a todo.
+      **Probado que los tests MUERDEN, no sólo que pasan:** aflojando el discriminador de repo →
+      **2 rojos**; apagando `juzgar()` → **2 rojos** más el que exige que el motivo diga en qué
+      línea corregir; apagando la deduplicación por sha → **1 rojo**. `--self-check` cuenta sus
+      casos en vez de hardcodearlos (13), por la misma razón que el canario: un conteo que miente
+      es la primera grieta de un gate.
+      **Cableado como el resto del repo:** la medición en vivo es su propio script
+      (`deploy:alcanzable`) y **no** entra a `npm test` —igual que `marca:chatwoot` y
+      `campanas:vivas`, que también están rojos esperando un `scp`—; lo que entra a `npm test` es
+      el `--self-check` (`test:deploy-alcanzable`). Un gate que siempre truena lo apaga alguien.
+      ⚠️ **No mergea ni despliega nada.** `master` es rama protegida de este loop y hay un hook
+      `pre-push` que lo bloquea.
+
 - [x] **El menú del producto mostraba `ASSIGNMENT_TURNED_IN` en letras gigantes, y el bloqueo
       que decía tenerlo arreglado apuntaba a un commit inexistente.** Cerrado el 2026-09-02
       (commit `22fd088` de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`).
@@ -465,6 +572,14 @@ archivos.**
       única diferencia del diff fuera `icon` antes de actualizarlos.
       **Gates:** `tsc --noEmit` limpio · **2441** tests verdes (197 archivos) · `eslint` 0
       errores y 0 warnings en los archivos tocados.
+      🔴 **Corregido el 2026-09-02 (vuelta siguiente, auditando este mismo `[x]`): la frase
+      "el gate que S11 daba por hecho ahora existe de verdad" era cierta y no alcanzaba.**
+      El gate existía y **no lo corría nadie** — ni `npm test`, ni `npm run ci`, ni `ci.yml`, ni
+      `build` — así que el agujero que este ítem declara tapado siguió abierto hasta que se
+      cableó. El ítem NO se desmarca porque el trabajo se hizo y el icono está arreglado; lo
+      que estaba mal era la conclusión. **Construir un gate y cablearlo son dos cosas**, y esta
+      cola ya paga esa distinción en otra parte (S9: "commitear una mejora no la enciende").
+      Cerrado arriba, en el primer ítem de esta sección.
 
 - [x] **Saber QUÉ archivos difieren no alcanzaba para desplegar bien: el gate ahora dice cuáles
       VIAJAN JUNTOS.** Cerrado el 2026-09-02. Archivos: `hermes-content/deploy/vps-ops/bot/espejo-check.mjs`
@@ -599,7 +714,8 @@ archivos.**
 
 - [x] **"La cita" ya no le habla de consultorio a una ferretería: cada rubro lee su propia
       palabra.** Cerrado el 2026-09-02 (commit `675541b` de `onia-platform`, rama
-      `claude/chatbots-platform-review-0d1d09`). **Commiteado, NO desplegado.**
+      `claude/chatbots-platform-review-0d1d09`). **Commiteado, NO desplegado — y medido el mismo
+      día: tampoco llega a `origin/master`, que es de donde se buildea. Ver S16.**
       **Gate 1 primero, en vivo:** el ítem era REAL —`ChatbotClient.tsx` líneas 90, 505, 510 y
       520 seguían con los literales— y no estaba cerrado más abajo.
       🔴 **Pero su diagnóstico estaba incompleto, y el dato que faltaba lo hacía más barato, no
