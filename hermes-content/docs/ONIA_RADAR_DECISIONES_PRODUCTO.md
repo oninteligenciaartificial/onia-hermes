@@ -1176,3 +1176,53 @@ diseño que conviene que sepas: el bloque pegado en todos los prompts busca fila
 falten en el cron — nunca al revés. Por eso `web-venta` e `investigacion` corrieron días sin estar
 en `loops.md`, invisibles para la auto-cura. Arreglarlo toca los 7 prompts (uno por carril) y el
 bloque dice explícitamente "no lo optimices", así que **no lo tocó nadie todavía**: decidilo vos.
+
+## 23. Los arreglos del carril chatbot al producto nunca llegan a `master`, así que el deploy no los puede alcanzar (2026-09-02) — decisión de Sergio
+
+**Es un escalón ANTES de la §20, no la misma cosa.** La §20 mide `master` → producción: tres
+commits que están en `master` y nadie desplegó. Ésta mide **rama de carril → `master`**: dos
+commits que ni siquiera llegaron a la rama de la que se buildea. Si mañana se aprueba el deploy
+de la §20, el swap buildea `master` y **estos dos siguen sin estar**.
+
+**Medido el 2026-09-02, no deducido** (`git merge-base --is-ancestor` en el clon del VPS):
+
+| Commit | Qué arregla | ¿en `origin/master`? |
+|---|---|---|
+| `22fd088` | El menú del dashboard dibuja `ASSIGNMENT_TURNED_IN` en letras gigantes en vez de un icono | **NO** |
+| `675541b` | El editor del chatbot le dice "La cita" y "en el consultorio" a una ferretería | **NO** |
+
+Los dos están commiteados **y pusheados** a `origin/claude/chatbots-platform-review-0d1d09` de
+`onia-platform`. Esa rama está **2 commits adelante y 17 atrás** de `origin/master`, y nada la
+mergea.
+
+**Por qué nadie la mergea, que es la causa y no el síntoma.** El integrador (`onia-cola`) tiene
+el merge a `master` **pre-autorizado** por su propio prompt. Pero su Paso 1 hace
+`cd /root/loops/onia-hermes` y recorre una lista de ramas de **ese** repo. La rama
+`claude/chatbots-platform-review-0d1d09` está en esa lista — sólo que la cuenta contra el `main`
+de `onia-hermes`, donde da **0**, y concluye "no hay nada que hacer con esa rama". El mismo
+nombre de rama existe en los DOS repos, y el que tiene trabajo sin mergear es el que nadie mira.
+
+**El costo ya cobrado: es la tercera vez que la misma instrucción falla, cada vez un escalón más
+adentro.** (1) `S11` mandaba desplegar un commit inexistente — el trabajo había quedado en el
+disco de Windows. (2) Se rehizo y se pusheó, y `S11` quedó escrito "commiteado y pusheado, NO
+desplegado", como si sólo faltara el OK. (3) Medido hoy: falta el merge. **Un bloqueo que le pide
+a Sergio desplegar algo que el deploy no alcanza no se destraba nunca.**
+
+**Ya no depende de un párrafo:** `npm run deploy:alcanzable` lee la cola, saca los commits de
+`onia-platform` que declara y le pregunta a git si `origin/master` los alcanza. Hoy sale **exit
+1** nombrando los dos; `e644c85` (de un ítem viejo) sale **OK**, que es la prueba de que
+discrimina en vez de gritar a todo.
+
+**Tres caminos, cotizados:**
+
+- **(a) `onia-cola` extiende su Paso 1 a las ramas de `onia-platform`.** Su prompt ya autoriza el
+  merge a `master` y ya tiene escritos los tres gates de ese repo (`tsc`, `vitest`, `npm run
+  lint`). Lo que falta es que enumere el segundo repo. Toca
+  `scripts/loops/prompts/onia-cola.md` — es del carril de integración, **no del chatbot**.
+  Costo: una vuelta de ese loop. **Es el único que no se vuelve a romper el mes que viene.**
+- **(b) Sergio mergea la rama a mano**, o por PR como llegaron los últimos (`Merge pull request
+  #77`). Costo: minutos. Arregla estos dos commits y ninguno de los próximos.
+- **(c) Dejarlo.** Cada arreglo que este carril haga sobre el producto queda en una rama muerta,
+  y `S11` no se destraba nunca.
+
+**Recomendación: (a)**, y (b) ahora mismo si se quiere el icono arreglado en el próximo swap.
