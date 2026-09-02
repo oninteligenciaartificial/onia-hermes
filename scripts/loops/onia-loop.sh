@@ -158,6 +158,17 @@ case "$NOMBRE" in
     TOPE=2700
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  calidad-generado)
+    # Juzga lo que Higgsfield genera y cuida que Lucia sea SIEMPRE la misma cara.
+    # No genera nada: abre las piezas del ultimo lote, las mira contra la rubrica,
+    # y escribe en la bitacora POR QUE salio bien la que salio bien — eso es lo
+    # que hace que la proxima no sea suerte. La deriva de un rasgo no se nota
+    # hasta que ya se publicaron veinte piezas.
+    WT=/root/loops/onia-hermes-calidad
+    RAMA=claude/calidad-generado
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
     # Este es el camino por el que un loop muere sin que nadie se entere: el cron
     # lo sigue llamando cada hora y el unico rastro es un exit 64 en un log que

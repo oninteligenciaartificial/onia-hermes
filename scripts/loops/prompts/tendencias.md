@@ -66,6 +66,33 @@ con fuente. Una buena, no cinco a medias.
 
 ---
 
+## 🔴 MIRÁ REELS Y TIKTOKS DE VERDAD — no leas sobre ellos
+
+Sergio, 2026-09-02: *"quiero otro que mire reels de IG para que aprenda cosas o TikToks"*.
+
+**Ese trabajo es tuyo y no de un carril aparte** — dos loops sobre el mismo plato es un modo de
+falla ya medido en este proyecto (así se apagó `web-factory-salud`, con 7 de 8 vueltas en vacío
+compitiendo con un hermano más rápido).
+
+**Cómo se hace, y la diferencia importa:** un blog de marketing te dice *"usá ganchos fuertes"*,
+que no se puede ejecutar. Un reel que funcionó te dice **cuántos segundos dura el gancho, qué se
+ve en el primer frame, cuándo aparece el texto y cuándo el corte**. Eso sí.
+
+Con Chromium headless sobre páginas **públicas** (`--dump-dom --no-sandbox`), mirá piezas reales
+del rubro y sacá **la estructura**, no la opinión:
+
+- **Los primeros 3 segundos**: qué se ve, qué dice, y qué promete.
+- **El ritmo**: cada cuántos segundos cambia el plano o entra un texto.
+- **El cierre**: qué pide, y cuándo lo pide.
+- **En carrusel**: cuántas láminas, qué hace la primera, qué hace la última.
+
+⚠️ **PROHIBIDO loguearte a Instagram, TikTok o cualquier red.** Sólo lo que se ve sin cuenta. Si
+algo necesita estar logueado, **no lo mires**: anotá qué dato falta y seguí.
+
+⚠️ **Y no traigas números que no puedas ver.** "Este formato tiene 3x más retención" es inventado
+salvo que la fuente lo muestre. Sin el número, describí la estructura y decí que no medís el
+resultado — es honesto y sirve igual.
+
 ## 🔴 EL TABLERO VA PRIMERO — antes que tu cola
 
 Desde el 2026-09-02 hay **un tablero único** para todas las sesiones y todos los loops, y una
