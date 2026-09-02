@@ -176,9 +176,12 @@ Las tres formas de fantasma que ya aparecieron acá:
       total al centro, marcadores ≥4) y **mirado en claro y oscuro** — 0 `[data-reveal]`
       ocultos, 0 errores de consola, y el anillo de foco medido tabulando: 12 de 12 con
       anillo, 0 sin él.
-      Anotado, NO tocado (fuera de este ítem): el sparkline del KPI sigue con
-      `preserveAspectRatio="none"`, así que su punto final es una elipse — el mismo defecto
-      que W2 arregló en el sparkline grande.
+      ~~Anotado, NO tocado (fuera de este ítem): el sparkline del KPI sigue con
+      `preserveAspectRatio="none"`, así que su punto final es una elipse.~~
+      ⚠️ **Nota VENCIDA, tachada por AUD7 (2026-09-01).** Se arregló y nadie tachó la línea:
+      `dashboard.ts:1003` (`renderKpiSpark`) emite hoy `preserveAspectRatio="xMidYMid meet"`,
+      con el comentario que cuenta el arreglo, y `dashboard.test.ts:382` guarda que **ningún**
+      SVG del panel vuelva a `none`. Deja de ser algo por hacer.
 - [x] **W5 · Los estados que no existen** (2026-08-31). Evidencia re-verificada antes de
       tocar: `skeleton|retry|aria-busy` → **0 en todo `packages/`** (real), pero el
       **segundo renglón del vacío YA existía** (`renderEmpty(title, hint)` en 5 llamadas,
@@ -429,6 +432,8 @@ Las tres formas de fantasma que ya aparecieron acá:
       y, con la escala de 0,839, mide **5,03px** renderizados — bajo el piso de 8px que
       `dataviz` fijo y que W4 aplico al resto de los marcadores. Es un tamanio, no una
       deformacion.
+      → **Promovida a ítem A9 por AUD7 (2026-09-01)**: sigue siendo cierta, y como nota al
+      pie no la podía tomar nadie. Se trabaja desde A9, no desde acá.
 - [x] **A4 · Pulido de dental-premium** (2026-08-31). Re-verificada la evidencia antes de
       tocar, **dos de los tres sub-items eran fantasma** y hubo que buscar el defecto real
       midiendo, no leyendo la linea. (a) **"dark mode mirado"**: se miro, y no hay nada que
@@ -798,6 +803,57 @@ Las tres formas de fantasma que ya aparecieron acá:
       seguidas miraron A porque ahí está el código; los ítems de B son docs y data, y
       "no dibujan un píxel" se convirtió en excusa para no volver a mirarlos. Un doc que
       afirma una regla de diseño envejece igual que el código que la implementa.
+
+- [ ] **A9 · El punto final del KPI spark mide 5,03px, bajo el piso de 8px** — promovido a
+      ítem por AUD7 (2026-09-01), no medido de nuevo: la medición ya existía **como nota al
+      pie de A3** y ahí llevaba días sin que nadie pudiera tomarla. Evidencia vigente contra
+      el disco de hoy: `packages/templates/src/dashboard.ts:995` sigue con `r="3"` en el
+      `<circle>` de `renderKpiSpark`, y con la escala de 0,839 del bloque da **5,03px**
+      renderizados, contra los 8px que `dataviz` fija y que W4 ya aplicó al resto de los
+      marcadores (`dashboard.ts:793` y `:960`, los dos en `r="4"`).
+      El test de marcadores **no lo cubre**: `dashboard.test.ts:238` sólo mide los `<circle>`
+      de `renderChart("line")`, así que el KPI spark quedó fuera del gate y por eso el `r=3`
+      sobrevivió a W4. Cerrarlo es subir el radio **y** extender ese test al KPI spark, o el
+      próximo cambio lo vuelve a bajar sin que nada avise.
+      ⚠️ Toca geometría dibujada → `pnpm e2e --update-snapshots` y **mirar la baseline nueva**
+      antes de commitearla (regla dura 4).
+
+- [x] **AUD7 · Auditar W3/W4/W5 y cazar la primera nota VENCIDA del carril** (2026-09-01).
+      Séptima vuelta de escalón 2 (A y B siguen todos `[x]`). **Por qué estos tres**: AUD1–AUD6
+      auditaron W1, W2, A1a, AUD4, B1, B2, B3 y S1 — **W3, W4 y W5 nunca los miró nadie**, y
+      son los tres ítems que más código tocaron.
+      **Los tres ciertos contra el disco de hoy**: W3 → `chartScale`/`niceMax`/`formatTick`
+      existen (`dashboard.ts:566,575,596`) y de los `Math.max(...,0)` que quedan **ninguno es
+      el bug**: son guardas de conteo, el clamp 0-100 de la barra de progreso (`:452`, el que
+      W3 dijo dejar) y topes de radio ✔ · W4 → medidor `radial` vivo, marcadores en `r="4"`,
+      **una sola** regla `:focus-visible` sobre `a`/`button` (`:1616`) y 5 usos de `44px` ✔ ·
+      W5 → `DashboardEstado = "cargando" | "error"` (`:48`) con `aria-busy` cableado y el Zod
+      declarándolo ✔. **Ninguna se desmarca.**
+      🔴 **Lo que sí estaba podrido era una nota al pie, no un `[x]`.** W4 cerró anotando "el
+      sparkline del KPI **sigue** con `preserveAspectRatio='none'`" — y hoy es falso: A6 lo
+      pasó a `xMidYMid meet` y `dashboard.test.ts:382` lo guarda para todo el panel. Tachada
+      arriba. Es la forma de fantasma nº1 de la REGLA DE EVIDENCIA ("arreglado y no tachado"),
+      **la primera que se caza en este carril**, y explica por qué el loop parece sin
+      combustible teniendo trabajo: las notas al pie no son ítems, así que ni se cierran
+      cuando se arreglan ni se pueden tomar cuando siguen vivas. Por eso la otra nota —el
+      `r=3` del KPI spark, que **sí** sigue siendo cierta— se promovió a **A9**.
+      🔴 **Defecto de infraestructura que seis auditorías no vieron: el worktree estaba en
+      HEAD desasociado.** `git rev-parse --abbrev-ref HEAD` devolvía `HEAD` y `git worktree
+      list` lo confirmaba (`4d57ac8d (detached HEAD)`), justo en la punta de
+      `claude/onia-web-architecture-b37eca`. Al estar en la punta **no se perdió nada**, pero
+      el próximo commit habría quedado huérfano fuera de la rama y el push no lo habría
+      subido. Reasociado con `git checkout claude/onia-web-architecture-b37eca`.
+      **Lección: la regla dura 1 pide la rama y el runbook de salud no la mide.** El punto 2
+      compara `origin` contra `HEAD` — y en HEAD desasociado esa comparación da **igual**, así
+      que pasa en verde mientras la rama no es la que dice ser. `git branch --show-current`
+      devolviendo **vacío** es la señal, y hay que mirarla antes de commitear.
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo); rama
+      reasociada y == `origin` (`4d57ac8d`), árbol limpio; `typecheck:packages` verde;
+      `pnpm test` **267/267 en 2,8 s**; `pnpm e2e` **103 pasados / 0 fallados / 7 skipped, 0
+      flaky** (segunda corrida seguida sin flaky: S1 aguanta). Cero zombies míos — de los 8
+      `node.exe` vivos, 6 son del worktree `hero-en-home` (dos `next dev` sobre
+      `apps/onia-platform`, 3411 y 3477, con sus hijos: otra mano, zona prohibida) y el único
+      de este carril es el `serve-out 4319`.
 
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
