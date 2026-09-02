@@ -698,7 +698,7 @@ dependencias que el lockfile no tiene, así que `pnpm install --frozen-lockfile`
 CI) **falla**. No se tocó acá porque regenerar un lockfile no es trabajo de un merge, pero es una
 bomba con temporizador para el primer pipeline que instale en limpio.
 
-## 16. `/` y `/empezar` no tienen dueño (2026-09-01) — decisión de Sergio
+## 16. ~~`/` y `/empezar` no tienen dueño~~ — RESUELTO 2026-09-02, no hay decisión
 
 La home y la página de acceso viven en `web-factory/apps/onia-platform/`: **ninguna cola las
 nombra**, y la zona de `web-factory-dev-loop` las excluye explícitamente. Son la puerta de
@@ -712,15 +712,18 @@ Las dos opciones cuestan lo mismo — una línea en un archivo, cero bolivianos:
 - **b)** `web-factory-dev-loop` levanta su prohibición para esa carpeta y se las queda. Es el
   carril que sabe de superficies web, pero hoy tiene la puerta cerrada por decisión previa.
 
-**Se puso más urgente el 2026-09-01 22:41 UTC.** El canario visual encontró que, sin dueño,
-`/` y `/empezar` se redeployaron enteras (título, copy, CTA) entre dos pasadas de la misma
-tarde, y el nuevo CTA de `/empezar` ("Creá tu cuenta") manda a `app.onia.com.bo/register`, que
-resultó estar vivo con un wizard de 2 pasos y un formulario de contraseña real. Esto puede
-contradecir lo que `CLAUDE.md` tiene escrito como historia (que `/register` "dejó de crear
-cuentas" y el arreglo honesto vive en `/empezar`) — si esa premisa venció, o si `/register`
-no cierra el alta de verdad, hay que decidirlo antes de que otro lead se tope con la pantalla
-rota. Detalle y evidencia (capturas) en `COLA.md`, sección "Del canario visual — corrida del
-2026-09-01 22:41 UTC". Nadie del canario tocó el formulario ni creó cuentas.
+**Resuelto el 2026-09-02, con las dos preguntas que dejó abiertas contestadas — no por
+elección entre (a)/(b), sino porque el propio loop `web-venta` ya nació dueño de esta zona**
+(su prompt: "Vos sos ese dueño", zona `web-factory/apps/onia-platform/**`). Y la duda de fondo
+—¿el redeploy del 2026-09-01 con `/register` como CTA era legítimo o el bug de agosto había
+vuelto?— también se cerró: es legítimo. `ONIA_ALTA_AUTOMATICA=abierta` se reabrió en
+`onia-platform` el 29-ago, el sitio se puso al día con `alta.ts` (commit `37ab9e92`,
+2026-09-01) y hoy (verificado contra el contenedor `onia-landing`, no `main`) las dos páginas
+dicen "Creá tu cuenta" en consistencia total — cero "Pedí tu acceso" residual. Detalle en
+`COLA.md`, el ítem que cerraba esa duda.
+**Lo que sigue siendo cierto y no cambia con esto:** `app.onia.com.bo/register` sigue siendo
+del repo `onia-platform`, otro carril (`onia-cola`) — este carril no toca ese flujo, sólo lo
+enlaza.
 
 # Para decidir — al abrir el 1 de septiembre
 
@@ -937,3 +940,46 @@ Con el OK de Sergio, la línea a agregar en `crontab -e` es:
 <minuto> <horas> * * * /root/bin/onia-loop.sh docs-auditoria >> /var/log/onia-loop-docs-auditoria.log 2>&1
 ```
 y después se suma la fila a la tabla "Deben existir y estar activos" de arriba.
+
+## 18. Home y `/empezar` tienen 6 screenshots reales del producto — la regla del 1-sep las prohíbe (2026-09-02) — decisión de Sergio
+
+Regla vigente, tuya, del 2026-09-01: *"no coloques capturas literales del sistema, se ve mal,
+coloca cosas referenciales"* — cero `<img>`/`<video>`/`<canvas>` que fotografíen el software,
+sólo piezas que DIBUJEN el resultado del cliente. Encontrado midiendo el HTML servido de
+`onia.com.bo/` y `/empezar` (contenedor `onia-landing`, no un grep de repo): **6 imágenes son
+screenshots reales del panel de Onia**, de antes de esta regla (commit `65201c20`,
+2026-08-21 — el propio mensaje dice *"la landing muestra el producto real... capturas
+cableadas en sus ranuras"*, con datos de un tenant de demo sembrado por los circuitos reales).
+
+**Dónde están:**
+- Home: `/v2/capturas/agentes.webp` (pantalla de agentes) y `/v2/capturas/whatsapp.webp`
+  (editor del chatbot) — el bloque "Trabajan de noche. No *deciden* solos."
+- `/empezar`: `/v2/capturas/panel.webp` (dashboard con "Bs 4.633,40 cobrados") — la imagen del
+  hero, al lado del CTA principal.
+- Las 5 de `/rubros/*.webp` en la banda "Elegís tu rubro" — mismo tipo de captura; tienen
+  además un bug de recorte propio ya anotado en `COLA.md` (item de la maqueta cortada), que es
+  independiente de éste.
+
+**Por qué no lo cerré solo esta vuelta:** sacar 3 imágenes centrales del hero de las dos
+páginas que más lead reciben es la clase de cambio visual que la otra regla de esta cola frena
+— *"un rediseño no se publica sin que Sergio VEA la pieza terminada"* — con el precedente caro
+del 2026-08-20 (landing v2 rechazada entera, revertida en producción). No hay un reemplazo
+"obvio" de bajo riesgo: un hueco en blanco tampoco vende.
+
+**Tres caminos, ninguno cuesta plata en efectivo salvo el marcado:**
+- **a) Ilustración/diagrama referencial** (lo que la regla pide al pie de la letra): redibujar
+  cada captura como pieza gráfica — no fotografía del software, sí su resultado (montos,
+  agenda, WhatsApp). Costo: diseño, ~1 vuelta por imagen bien hecha, cero plata si se hace con
+  CSS/SVG; con generación de imagen (Higgsfield) es gasto trivial de crédito, ya autorizado por
+  `CLAUDE.md` para lotes chicos — pero igual necesita el visto bueno de la pieza terminada.
+- **b) Blur/recorte fuerte** que deje reconocible sólo la forma (bloque de color + contorno),
+  no el contenido — es lo que la ranura `shapeShot` ya sabía hacer ANTES de cablear estas
+  capturas (`65201c20` lo dice: "sin `src` sigue siendo la ranura de forma+color"). Revertir a
+  ese estado es la opción más barata y ya probada, aunque pierde el "se ve real" que buscaba el
+  commit original.
+- **c) Excepción explícita para estas 3**: si Sergio decide que la regla del 1-sep era para
+  otro contexto (video/referente) y no para las capturas ya ganadas del producto, se anota acá
+  como excepción y el ítem de `COLA.md` se cierra sin tocar código.
+
+Mientras no haya decisión, el ítem queda abierto en `COLA.md` con la medición completa para
+que la próxima vuelta no la repita.
