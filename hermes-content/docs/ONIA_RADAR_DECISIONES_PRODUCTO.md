@@ -1611,3 +1611,41 @@ entren a `main` — no hay nada que construir.
 **Lo que este loop recomienda: B**, si Sergio va a querer esos packs antes de cerrar contenido —
 son tres archivos nuevos que no pisan nada, y el guard nuevo verifica solo que rendericen al
 volver a listarlos. Si no hay apuro, **A** no cuesta nada.
+
+---
+
+## 30. El bot NO puede decir un precio, y los precios están publicados en la web (2026-09-02) — decisión de Sergio
+
+**Medido, no supuesto.** El motor tiene un candado explícito: el guardrail `declara_precio`
+(`/opt/onia/bot/guardrails.mjs:27`) rechaza **todo string con una cifra de plata**
+(`/\d+\s*bs\b/`), y el allowlist de la capa de conocimiento
+(`/opt/onia/bot/knowledge.mjs:74`) no tiene ningún campo `precio`, `planes`, `desde` ni
+`tarifa` — textual: *"no hay dónde escribir una cifra"*. Su razón, también textual:
+
+> `N1 — el bot no cotiza: el precio depende del plan y de los módulos que use el negocio`
+
+Se descubrió al intentar cargar el conocimiento real de Onia: el borrador con los planes
+**lo rechazaba el validador entero** (40 errores, `node knowledge.mjs --check`). Las cifras
+estaban bien —320/750/1500/2900 y 390/150/70, verificadas contra
+`lib/subscription-plans.ts` y `lib/pricing.ts`—; el problema es que **no hay dónde ponerlas**.
+
+**Lo que hace que la decisión valga la pena mirarla hoy:** el candado se escribió cuando el
+precio dependía de una demo. Hoy los planes están **publicados en la web** con esos mismos
+números. O sea que el bot le contesta *"eso lo ve Sergio"* a alguien que puede leer el precio
+en `onia.com.bo` dos clics antes. La pregunta de precio es, además, la más frecuente de un
+desconocido que escribe por WhatsApp.
+
+**Las dos opciones, cotizadas:**
+
+| | Qué se hace | Costo | Riesgo |
+|---|---|---|---|
+| **A. Se queda como está** | Nada. La pregunta de precio ya cae al embudo de demo desde el commit `f22f47bcb` (9 disparadores nuevos: "planes", "cuánto sería", "qué incluye", "quiero contratar") | **Cero** — ya está hecho y commiteado | El lead que sólo quería un número se va a buscarlo a la web, o no lo busca |
+| **B. El bot dice el precio de lista** | Un campo `planes` en el allowlist, alimentado desde `subscription-plans.ts` (no escrito a mano), y afinar `declara_precio` para que permita SÓLO ese campo | ~1 vuelta de carril, con test en rojo primero | Un precio desactualizado en un canal que no se mira. Se mitiga leyendo de la fuente, no copiando |
+
+**Lo que NO se hizo a propósito:** meter los precios por la ventana (el nombre de un producto
+sí pasa el guardrail — `productos[].nombre` no lo dispara). Sería esquivar un candado
+deliberado con una decisión de producto adentro, que es de Sergio y no de una vuelta de loop.
+
+**Dónde está el trabajo hecho:** `hermes-content/deploy/vps-ops/bot/knowledge.onia.json`,
+verde contra el validador. **Commiteado, NO desplegado**: se instala con
+`/opt/onia/bot/webhook-server.sh knowledge` y eso cambia lo que oye un lead real.
