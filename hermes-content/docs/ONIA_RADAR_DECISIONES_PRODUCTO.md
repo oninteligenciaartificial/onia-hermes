@@ -857,3 +857,43 @@ Con el OK de Sergio, la línea a agregar en `crontab -e` es:
 <minuto> <horas> * * * /root/bin/onia-loop.sh docs-auditoria >> /var/log/onia-loop-docs-auditoria.log 2>&1
 ```
 y después se suma la fila a la tabla "Deben existir y estar activos" de arriba.
+
+## 18. El corredor de los loops se edita a mano en el VPS y el repo queda atrás — decidir si se blinda (2026-09-02)
+
+**Qué pasó, medido.** El 2026-09-02 09:18 UTC el carril `investigacion` estaba **muerto con su
+cron intacto**: su línea (`26 3,9,15,21`) seguía en `crontab -l`, pero su `case` había
+desaparecido de `/root/bin/onia-loop.sh` cuando se reescribió el script a las 05:44. Cada corrida
+caía en el `*)` con `exit 64` — que ocurre en la línea 97, **24 líneas antes de que se defina
+`avisar()`** (línea 121). Fallo mudo: nada por Telegram, nada en ningún tablero. Corrió una sola
+vez en su vida (03:00:20Z) y esa vuelta hizo trabajo real (`a7a28f63`, cerró 4 fantasmas de este
+mismo archivo).
+
+Ya restaurado y versionado. **Lo que queda para vos es evitar la próxima**, porque la causa sigue
+viva: el `.sh` que corre se edita a mano y el del repo queda atrás. En una sola jornada divergió
+**dos veces**; a las 09:18 el repo tenía `claude-sonnet-5` donde el VPS ya corría
+`claude-opus-5 --effort max`, no tenía `web-venta` ni `investigacion`, y le faltaba la guarda de
+`MERGE_HEAD`. Reinstalar desde el repo —que es lo que el propio README manda— **habría bajado el
+modelo de todos los loops y borrado dos carriles.**
+
+**Opciones cotizadas (todas Bs 0, sólo trabajo de una vuelta de loop):**
+
+- **A — El corredor se avisa a sí mismo.** Extender la guarda que ya existe para los prompts
+  (`ddc3b9f1`): al arrancar, `diff` entre `/root/bin/onia-loop.sh` y la copia del repo; si
+  difieren, Telegram de una línea. Barato, no bloquea nada, y ataca la causa real (nadie se entera
+  de la divergencia). **Recomendada.**
+- **B — Un `ARRANCA` que falte, avisa.** Un chequeo diario que compare cada línea de `crontab -l`
+  contra el `tail` de su log: si no hay `ARRANCA` posterior a la última hora que le tocaba, avisa.
+  Cubre a `investigacion` **y** a cualquier otra causa de muerte silenciosa, no sólo esta. Más
+  trabajo que A, y es el único que detecta un loop que arranca y se cuelga.
+- **C — Mover el `exit 64` después de `avisar()`.** Arregla sólo el caso "nombre no reconocido".
+  Diez minutos. Es un parche, no cubre B.
+- **D — Nada.** Queda la disciplina escrita en `loops.md` paso 3 y 8. Gratis hoy, y ya sabemos que
+  la disciplina sola falló dos veces en un día.
+
+A y B se pueden hacer las dos; no compiten.
+
+**El chequeo de arranque mira en una sola dirección.** Aparte de lo de arriba, hay un agujero de
+diseño que conviene que sepas: el bloque pegado en todos los prompts busca filas de la tabla que
+falten en el cron — nunca al revés. Por eso `web-venta` e `investigacion` corrieron días sin estar
+en `loops.md`, invisibles para la auto-cura. Arreglarlo toca los 7 prompts (uno por carril) y el
+bloque dice explícitamente "no lo optimices", así que **no lo tocó nadie todavía**: decidilo vos.

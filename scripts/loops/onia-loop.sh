@@ -8,7 +8,7 @@
 # entonces ninguno habia corrido. Y con la laptop apagada no corren nunca.
 # Por eso se mudan a cron acá.
 #
-# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria>
+# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta>
 # APAGAR: crontab -e y comentar la linea del loop.
 #
 # Forma copiada de /root/bin/claude-guardia.sh (secretos por .hermes/.env, unset
@@ -20,6 +20,9 @@
 set -uo pipefail
 
 NOMBRE="${1:-}"
+# Tope de turnos por vuelta. 120 alcanza para cerrar UN item de cola; el
+# integrador necesita mas, porque cada carril son fetch + merge + gates + push.
+TURNOS=120
 case "$NOMBRE" in
   canario-visual)
     WT=/root/loops/onia-hermes-canario
@@ -45,6 +48,9 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   onia-cola)
+    # 120 turnos lo cortaron a mitad de un merge el 2026-09-02 y dejaron
+    # MERGE_HEAD abierto sobre main, con el indice entero montado.
+    TURNOS=260
     # EL INTEGRADOR. Es el unico que mergea ramas de carril a main; si no corre,
     # nada llega a main y main alimenta el deploy del VPS y el de Vercel.
     # Vivia en Windows y por eso llevaba dias sin integrar: las tareas de la app
@@ -59,12 +65,36 @@ case "$NOMBRE" in
     # Carril docs/infra: que lo escrito sea cierto. Un doc falso manda a la
     # proxima sesion al archivo equivocado. Combustible que no se agota.
     WT=/root/loops/onia-hermes-docs
-    RAMA=claude/git-status-935f47
+    RAMA=claude/docs-auditoria
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  web-venta)
+    # Dueno de onia.com.bo/ y /empezar — la puerta de entrada del producto, que
+    # hasta el 2026-09-02 no tenia carril: el canario dejaba defectos ahi y nadie
+    # los consumia. Zona: web-factory/apps/onia-platform/ y nada mas.
+    WT=/root/loops/onia-hermes-web-venta
+    RAMA=claude/web-venta
+    TOPE=3000
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  investigacion)
+    # Carril investigacion/radar: cotiza las decisiones que esperan a Sergio y
+    # cierra las que ya se resolvieron solas.
+    # RESTAURADO 2026-09-02 09:20 UTC. Su `case` desaparecio cuando se reescribio
+    # este script a las 05:44 (el que agrego web-venta y la guarda de MERGE_HEAD).
+    # Desde entonces el cron `26 3,9,15,21` lo llamaba y moria en el `*)` con
+    # exit 64, ANTES de la funcion `avisar`: un loop muerto que no avisa nadie.
+    # Los tres valores salen del log de su unica vuelta viva (03:00:20Z), no de
+    # memoria: "rama claude/investigacion — tope 2400s", y el worktree figura en
+    # `git worktree list`. TOOLS es el valor uniforme del resto del archivo.
+    WT=/root/loops/onia-hermes-investigacion
+    RAMA=claude/investigacion
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   *)
-    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria>" >&2; exit 64 ;;
+    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta|investigacion>" >&2; exit 64 ;;
 esac
 
 LOG=/var/log/onia-loop-$NOMBRE.log
@@ -120,7 +150,7 @@ cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
 # `main` ya tenia la version de 10 con umbrales medidos. Avisa, no frena: un
 # prompt viejo sigue trabajando; uno que no arranca, no.
 FUENTE=/root/loops/onia-hermes/scripts/loops/prompts/$NOMBRE.md
-if [ -f "$FUENTE" ] && ! cmp -s "$FUENTE" "$PROMPT"; then
+if [ -f "$FUENTE" ] && ! diff -q --strip-trailing-cr "$FUENTE" "$PROMPT" >/dev/null 2>&1; then
   avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
 fi
 
@@ -137,7 +167,10 @@ log "===== ARRANCA $NOMBRE — rama $RAMA — HEAD $ANTES — tope ${TOPE}s ====
 #  2) sin redirigir stdin, `claude` se traga lo que quede en la entrada del shell
 #     que lo invoco. Corriendo dos loops seguidos por ssh, el primero se comio el
 #     script del segundo y la segunda vuelta nunca ocurrio.
-timeout "$TOPE" claude -p --model claude-sonnet-5 --max-turns 120 \
+# Modelo y esfuerzo: decision de Sergio el 2026-09-02 — "cambialos todos a opus 5
+# en max, pero quiero que terminen de una vez". Antes era claude-sonnet-5 sin
+# --effort. Cuesta mas por vuelta; el rendimiento por vuelta es lo que se compra.
+timeout "$TOPE" claude -p --model claude-opus-5 --effort max --max-turns "$TURNOS" \
   --allowedTools "$TOOLS" < "$PROMPT" >> "$LOG" 2>&1
 RC=$?
 
@@ -164,6 +197,18 @@ elif [ "$RC" != 0 ]; then
   fi
 elif [ "$SINPUSH" != 0 ]; then
   avisar "quedaron $SINPUSH commit(s) SIN pushear en $RAMA"
+fi
+
+# ── un merge abierto NO se deja pasar en silencio ----------------------------
+# El 2026-09-02 el integrador se quedo sin turnos a mitad de un merge y dejo
+# MERGE_HEAD con todo el indice montado. No habia ni un marcador de conflicto
+# —git habia resuelto solo— pero es un estado que el `add -A` de cualquier hook
+# convierte en un commit a ciegas. Es el modo de falla que CLAUDE.md prohibe, y
+# ya llego una vez a main con 17 archivos con marcadores adentro.
+GITDIR=$(git -C "$WT" rev-parse --git-dir 2>/dev/null || echo /dev/null)
+if [ -f "$GITDIR/MERGE_HEAD" ]; then
+  CONF=$(git -C "$WT" diff --name-only --diff-filter=U | wc -l)
+  avisar "quedo un MERGE ABIERTO en $RAMA ($CONF archivo(s) en conflicto). No lo cierra nadie solo: hay que resolver a mano en <code>$WT</code>"
 fi
 
 # ── rotacion: 24 vueltas por dia llenan un disco -----------------------------
