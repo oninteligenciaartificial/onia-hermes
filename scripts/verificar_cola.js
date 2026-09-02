@@ -77,6 +77,7 @@ function itemsDeAhora(texto) {
 function evidenciaDe(textoCrudo) {
   const rutas = [];
   const comandos = [];
+  const shas = [];
   let m;
 
   // Un bloque ``` desbalancea el conteo de backticks y DESPLAZA todos los pares que vienen
@@ -91,6 +92,11 @@ function evidenciaDe(textoCrudo) {
   while ((m = TROZOS.exec(texto)) !== null) {
     const t = m[1].trim();
     if (t.startsWith('$ ')) { comandos.push(t.slice(2).trim()); continue; }
+
+    // Un SHA es la otra forma de evidencia que escribe esta cola: "ya en `origin/master`
+    // (`e644c85`)". Se pide UN digito y UNA letra a proposito — sin eso, `defaced` y `facade`
+    // son hexadecimal validos y cualquier palabra de esas entra como commit.
+    if (/^[0-9a-f]{7,40}$/.test(t) && /[0-9]/.test(t) && /[a-f]/.test(t)) { shas.push(t); continue; }
 
     // "lib/plan-limits.ts:396" es como se cita una linea. El archivo es lo de la izquierda;
     // el sufijo no es parte del nombre, y buscarlo tal cual daba fantasmas falsos.
@@ -184,6 +190,7 @@ function evidenciaDe(textoCrudo) {
   return {
     rutas: unicas.filter((r) => r.includes('/') || !conBarra.some((l) => l.endsWith('/' + r))),
     comandos,
+    shas: [...new Set(shas)],
   };
 }
 
@@ -282,6 +289,77 @@ function existeComoSufijo(ruta, baseDir) {
   return candidatos.some((p) => p === ruta || p.endsWith('/' + ruta));
 }
 
+// --- SHAs: la otra mitad de la evidencia, y hasta hoy nadie la verificaba ---
+//
+// Esta cola cierra items escribiendo "commit `X`, ya en origin/master". El gate verificaba que
+// el ARCHIVO citado existiera y daba por buena la otra mitad. Ya fallo una vez, y el propio
+// archivo lo documenta: un `[x]` citaba `6d8b6b7` —el sha LOCAL de la rama antes del squash—
+// que no esta en `origin/master`. Citar el sha de la rama y no el del merge hace que la
+// proxima auditoria lea "no llego" sobre trabajo que si llego, y al reves: un sha inventado
+// declara desplegado algo que nunca salio.
+//
+// Medido el 2026-09-02: este loop gasto DOS vueltas enteras comprobando a mano "los 24 shas
+// citados existen y los que se declaran ancestros lo son". Peor: el script ad-hoc que lo
+// comprobo esta vuelta tenia un bug de substring y dio por bueno un sha que NO esta en master.
+// Una auditoria que se rehace a mano cada vuelta se hace mal alguna vuelta.
+const SHA_ES = /^[0-9a-f]{7,40}$/;
+
+// Shas que NO resuelven en ningun repo y esta BIEN que no resuelvan, cada uno con su motivo.
+// Sin esta lista el gate sale rojo de fabrica —el anti-patron que este archivo ya documenta
+// tres veces— porque la cola los cita justamente para explicar que son duplicados locales.
+// Tiene su reciproco abajo: si alguno EMPIEZA a resolver, se marca. Una excepcion que envejece
+// en silencio es como se tapa un fantasma de verdad.
+const SHAS_SIN_REPO_A_PROPOSITO = new Map([
+  ['6edfab6', 'duplicado local de una rama ya squasheada; la cola lo cita para documentarlo'],
+  ['a15c82f', 'idem 6edfab6'],
+  ['e46e9ee', 'idem 6edfab6'],
+]);
+
+// Los repos donde puede vivir un sha citado. Mismo paseo por los padres que `existeEnAlgunRepo`:
+// la cola de producto cita commits de `onia-platform` y se escribe en `onia-hermes`.
+function reposGit(baseDir) {
+  const dirs = [path.resolve(baseDir)];
+  let dir = path.resolve(baseDir);
+  for (let i = 0; i < 6; i++) {
+    for (const repo of REPOS_HERMANOS) {
+      const c = path.join(path.dirname(dir), repo);
+      if (fs.existsSync(path.join(c, '.git'))) dirs.push(c);
+    }
+    const padre = path.dirname(dir);
+    if (padre === dir) break;
+    dir = padre;
+  }
+  return [...new Set(dirs)];
+}
+
+// Devuelve true si el sha es un commit de verdad en alguno de los repos. UNA llamada a git por
+// repo (`--batch-check` come todos los shas de una), no una por sha: el gate corre antes de cada
+// item y un gate lento se saltea igual que uno que miente.
+function resolvedorGit(baseDir) {
+  return (shas) => {
+    if (!shas.length) return new Set();
+    const cp = require('child_process');
+    const vivos = new Set();
+    for (const dir of reposGit(baseDir)) {
+      let salida;
+      try {
+        salida = cp.execFileSync('git', ['-C', dir, 'cat-file', '--batch-check'], {
+          input: shas.map((s) => s + '^{commit}').join('\n') + '\n',
+          encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 20000,
+        });
+      } catch { continue; } // sin git, o sin repo: el gate no opina de shas, no grita
+      // Se compara el CAMPO, no el substring. Cuando el objeto falta, git responde
+      // "6edfab6^{commit} missing" — o sea que la palabra "commit" aparece igual en la linea
+      // del fallo. Un `includes('commit')` da por vivo todo lo muerto; es exactamente el bug
+      // de substring que tenia el script ad-hoc que motivo este gate.
+      salida.split('\n').forEach((linea, i) => {
+        if (linea.trim().split(/\s+/)[1] === 'commit' && shas[i]) vivos.add(shas[i]);
+      });
+    }
+    return vivos;
+  };
+}
+
 // Un item se identifica por su TITULO: la primera **negrita**, o lo que va antes del primer
 // punto. Es como esta cola nombra el trabajo. Comparar el cuerpo entero no serviria — la copia
 // larga trae el analisis y la corta no, que es exactamente la forma que tuvo el duplicado del
@@ -369,9 +447,10 @@ function seccionesDuplicadas(texto) {
   return problemas;
 }
 
-function revisarCola(texto, baseDir = process.cwd()) {
+function revisarCola(texto, baseDir = process.cwd(), resolverShas = null) {
   const problemas = [...seccionesDuplicadas(texto), ...duplicados(texto)];
   const items = itemsDeAhora(texto);
+  const resolver = resolverShas || resolvedorGit(baseDir);
 
   if (!items.length) {
     problemas.push({ regla: 'cola-vacia', linea: 0,
@@ -379,7 +458,23 @@ function revisarCola(texto, baseDir = process.cwd()) {
     return { problemas, items };
   }
 
-  for (const it of items) {
+  // Todos los shas de la seccion, en UNA sola pasada de git. Se resuelven antes del bucle para
+  // no pagar un proceso por item.
+  const shasPorItem = items.map((it) => evidenciaDe(it.texto).shas);
+  const todosLosShas = [...new Set(shasPorItem.flat())];
+  const shasVivos = resolver(todosLosShas);
+
+  // Reciproco de la lista de excepciones: si un sha declarado "no esta en ningun repo a
+  // proposito" empieza a resolver, la excepcion vencio y hay que sacarla. Sin esto, la lista
+  // crece y termina tapando un fantasma de verdad — que es como muere toda allowlist.
+  for (const [sha, motivo] of SHAS_SIN_REPO_A_PROPOSITO) {
+    if (shasVivos.has(sha) && todosLosShas.includes(sha)) {
+      problemas.push({ regla: 'excepcion-sha-vencida', linea: 0,
+        msg: `${sha} esta en la lista de excepciones ("${motivo}") pero HOY resuelve: sacalo de SHAS_SIN_REPO_A_PROPOSITO` });
+    }
+  }
+
+  for (const [i, it] of items.entries()) {
     const { rutas, comandos } = evidenciaDe(it.texto);
 
     if (!rutas.length) {
@@ -400,6 +495,15 @@ function revisarCola(texto, baseDir = process.cwd()) {
           msg: `"${it.texto.slice(0, 50)}" apunta a ${r} y ese archivo NO existe`,
         });
       }
+    }
+
+    // La otra mitad: el commit citado como prueba de que el trabajo llego tiene que EXISTIR.
+    for (const sha of shasPorItem[i]) {
+      if (shasVivos.has(sha) || SHAS_SIN_REPO_A_PROPOSITO.has(sha)) continue;
+      problemas.push({
+        regla: 'sha-fantasma', linea: it.linea,
+        msg: `"${it.texto.slice(0, 50)}" cita el commit ${sha} y no existe en ningun repo: o esta mal escrito, o es el sha local de una rama que se squasheo (cita el del merge)`,
+      });
     }
   }
   return { problemas, items };
@@ -712,6 +816,44 @@ function selfCheck() {
   r = revisarCola(
     '## Ahora\n- [ ] ok · `existe.png`\n\n## Cerrado (2026-08-30)\n- algo\n\n## Cerrado (2026-08-31)\n- otra cosa\n', tmp);
   ok(!r.problemas.some((p) => p.regla === 'seccion-duplicada'), 'dos fechas distintas no son la misma seccion');
+
+  // --- SHAs citados como evidencia ---
+  // El resolvedor se inyecta: el self-check corre en un tmp sin repo, y ademas asi el caso
+  // mide LA REGLA y no el estado de git de la maquina donde corra.
+  const gitFalso = (vivos) => () => new Set(vivos);
+  const conSha = (sha) => `## Ahora\n- [ ] Se arreglo · \`existe.png\` · commit \`${sha}\`\n`;
+
+  // Lo que motivo todo: un `[x]` citaba el sha LOCAL de una rama squasheada, que no existe en
+  // ningun lado. La cola declaraba desplegado algo cuya prueba no se puede ni mirar.
+  r = revisarCola(conSha('6d8b6b7'), tmp, gitFalso([]));
+  ok(r.problemas.some((p) => p.regla === 'sha-fantasma'), 'un sha que no existe en ningun repo se marca');
+
+  // Reciproco 1: el sha que SI resuelve no molesta a nadie.
+  r = revisarCola(conSha('e644c85'), tmp, gitFalso(['e644c85']));
+  ok(!r.problemas.some((p) => p.regla === 'sha-fantasma'), 'un sha que resuelve no se marca');
+
+  // Reciproco 2: la lista de excepciones tapa los duplicados documentados, o el gate sale rojo
+  // de fabrica sobre la cola de hoy.
+  r = revisarCola(conSha('6edfab6'), tmp, gitFalso([]));
+  ok(!r.problemas.some((p) => p.regla === 'sha-fantasma'), 'un sha en la lista de excepciones no se marca');
+
+  // Reciproco 3 — el que impide que la excepcion envejezca en silencio: si el sha excusado
+  // empieza a resolver, la excusa vencio.
+  r = revisarCola(conSha('6edfab6'), tmp, gitFalso(['6edfab6']));
+  ok(r.problemas.some((p) => p.regla === 'excepcion-sha-vencida'), 'una excepcion de sha que ya resuelve se marca');
+
+  // Una palabra hexadecimal NO es un commit. Sin pedir un digito, `defaced` y `facade` entran
+  // como sha y el gate inventa fantasmas sobre prosa.
+  r = revisarCola('## Ahora\n- [ ] Se arreglo · `existe.png` · quedo `defaced`\n', tmp, gitFalso([]));
+  ok(!r.problemas.some((p) => p.regla === 'sha-fantasma'), 'una palabra hexadecimal sin digito no es un sha');
+
+  // Y el numero de un item o un año tampoco: sin pedir una letra, `2026090` es un sha valido.
+  r = revisarCola('## Ahora\n- [ ] Se arreglo · `existe.png` · ticket `2026090`\n', tmp, gitFalso([]));
+  ok(!r.problemas.some((p) => p.regla === 'sha-fantasma'), 'una cifra sin letras no es un sha');
+
+  // El sha va entre backticks y entero: `753718f` cuenta, pero no un pedazo de otra palabra.
+  ok(evidenciaDe('commit `753718f` y `no-es-sha`').shas.join() === '753718f',
+    'se extrae el sha del trozo entero, no un pedazo');
 
   console.log(`self-check ok: ${casos} casos`);
 }

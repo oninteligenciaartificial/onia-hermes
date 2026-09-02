@@ -842,6 +842,47 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       register 704 KB/100 ms · login-plataforma 699 KB/135 ms · login-chat 3.501 KB/1.365 ms ·
       panel-chatbot 699 KB/140 ms (redirige a `/login`, sin sesión — "no medida", no "OK").
 
+### Auditoría del escalón 2 — 2026-09-02 15:35 UTC, `onia-cola`
+
+- [x] **Los `[x]` resisten, y el defecto estaba en el MÉTODO de auditarlos — ARREGLADO en la
+      misma vuelta.** La cola no tenía un ítem propio: los dos abiertos de "Ahora" son de otros
+      carriles (el 429 de Chatwoot es de `canario-visual`, que corre 16:41) y "Después" está
+      entero en `[x]`. Así que escalón 2.
+      **Lo auditado, contra el código de HOY, y salió limpio:** las 53 citas `archivo:línea`
+      únicas del archivo — ninguna pasada de fin de archivo — y **miradas** las cinco de más
+      riesgo (`lib/platform/types.ts:73`, `lib/onia-core/modules/agents-runtime.ts:1188`,
+      `components/layout/navigation.ts:45`, `lib/platform/vertical-pack.ts:169`,
+      `app/(dashboard)/admin/organizations/[id]/capacidades/CapacidadesOrg.tsx:31`): las cinco
+      caen exactamente donde el ítem dice. Ningún cierre falso.
+      **El defecto real, y es de método:** este loop ya gastó **dos vueltas** comprobando a mano
+      "los 24 shas citados existen y los que se declaran ancestros lo son". Esta vuelta lo hizo
+      con un script de usar y tirar que **tenía un bug**: clasificaba
+      `"EXISTE-PERO-NO-EN-BASE"` con `.includes("EN-BASE")`, que da **true**, y por eso dio por
+      bueno `6d8b6b7` — el sha que este mismo archivo documenta como NO ancestro de
+      `origin/master`. Una auditoría que se rehace a mano cada vuelta se hace mal alguna vuelta.
+      **El arreglo, en el gate que este carril ya corre antes de cada ítem**
+      (`scripts/verificar_cola.js`): verificaba que el **archivo** citado existiera y daba por
+      buena la otra mitad de la evidencia. Ahora verifica también que el **commit** citado
+      exista, con `git cat-file --batch-check` (una llamada por repo, no una por sha: el gate
+      sigue en **0,12 s**).
+      **Lo que lo mantiene honesto, que es el punto:** tres recíprocos. Un sha que resuelve no
+      molesta; los tres duplicados locales que la cola cita a propósito van en
+      `SHAS_SIN_REPO_A_PROPOSITO` con su motivo — sin esa lista el gate salía **rojo de
+      fábrica**, el anti-patrón que este archivo ya documenta tres veces —; y si uno de esos
+      **empieza** a resolver, se marca `excepcion-sha-vencida`, así la lista no envejece en
+      silencio tapando un fantasma de verdad.
+      **Y el mismo bug de substring casi entra al gate:** `git cat-file --batch-check` responde
+      `6edfab6^{commit} missing`, o sea que la palabra "commit" está **también** en la línea del
+      fallo. Se compara el **campo**, no el substring.
+      **Descartado a propósito, y queda escrito para que nadie lo reabra:** un detector de
+      deriva *semántica* (¿el símbolo que el ítem nombra sigue cerca de la línea citada?).
+      Probado: marca 16 citas y **casi todas son falsas** — toma símbolos del párrafo vecino.
+      Un gate que sale rojo de fábrica se saltea; se midió antes de descartarlo, no se supuso.
+      **Medido:** `--self-check` **65 casos** (7 nuevos, y los tres portantes verificados en
+      ROJO **por su mensaje exacto** desactivando cada regla en una copia); el gate sobre
+      `hermes-content/docs/COLA.md` **exit 0, 21 ítems**; `hermes-content/docs/cola/chatbot.md` verde; las otras
+      colas dan el mismo `cola-vacia` que antes (no es regresión de esto); `npm test` exit 0.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
