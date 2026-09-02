@@ -53,7 +53,9 @@ el único comentario del post de referencia es exactamente esa pregunta).
   `carousels/out/experimento-label-icono-statement/`: A (sans regular negra, la que
   había) vs B (Geist Mono mayúscula gris). **Gana B**: no compite en peso visual con
   el claim negro (A usaba el mismo negro pleno que el claim) y unifica el lenguaje
-  con el marco spec-sheet y el handle, que ya usan Geist Mono. Aplicado a
+  con el handle, que ya usa Geist Mono. (El veredicto original citaba también el
+  marco spec-sheet; ese marco quedó **descartado por Sergio** el 02-sep — el
+  veredicto de B se sostiene igual, sin él.) Aplicado a
   `generar-statement-post.py` (regenerado) y a `generar-statement-16anos.py`. De
   paso el mismo experimento destapó un bug real de layout: con un claim de 2-3
   líneas (a diferencia del claim de 1 línea de "Mi oficina entera"), los íconos y

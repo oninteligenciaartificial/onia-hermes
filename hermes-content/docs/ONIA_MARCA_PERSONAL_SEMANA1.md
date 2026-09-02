@@ -56,6 +56,91 @@ hasta que infra lo arregle.
 Caption: "Tu negocio + IA. Empezá 👇". Los comentarios alimentan el drop D6 y el
 próximo video.
 
+---
+
+# Guiones D · E · F — los 3 "por delante" (escritos 2026-09-02 por el loop)
+
+> Regla del carril: siempre 3 guiones listos **antes** de que Sergio se siente a grabar,
+> para que un batch de 40 min rinda. Ganchos tomados del banco de
+> `ONIA_MARCA_PERSONAL_RADAR.md` §2; material **solo** de `BASE_CONTENIDO` §1 (lo
+> probado por nosotros) y de `ONIA_CATALOGO_DE_VENTA.md` (lo que se puede prometer).
+>
+> ⚠️ **Las tres cifras que aparecen abajo se contaron en vivo en esta misma corrida**,
+> no de memoria: `crontab -l` en el VPS (guardián cada 10 min, loop de contenido 4×/día)
+> y `higgsfield generate cost text2image_soul_v2` → `0.12 credits`. Si Sergio graba
+> dentro de unos días y alguna cambió, se vuelve a contar antes de decirla en cámara.
+
+## Guion Video D — "Mi servidor se arregla solo" (serie DÍA X · gancho #8)
+
+Formato: pantalla compartida del VPS + tu cara en esquina. 40-50 s.
+B-roll necesario: la terminal con `crontab -l` y un aviso real de Telegram.
+
+> Hook (0-3 s): "Son las 3 de la mañana y algo en mi empresa se acaba de romper.
+> Y no me voy a enterar hasta mañana — porque ya se arregló solo."
+>
+> (Mostrás la terminal) "Cada 10 minutos, una IA entra a mi servidor sola.
+> Revisa que todo esté vivo. Si un servicio se cayó, lo levanta."
+>
+> (Mostrás el Telegram) "Y después me manda esto: qué se rompió, qué hizo, si quedó bien."
+>
+> "Esto no es un producto que compré. Son diez líneas de configuración."
+>
+> Remate: "El empleado más barato de mi empresa trabaja mientras yo duermo."
+
+Caption: "Mi servidor se arregla solo y me avisa por Telegram 🤖
+¿Cuántas veces se te cayó algo un domingo y te enteraste el lunes?"
+CTA en pantalla: **Comentá COMUNIDAD y te paso el enlace para unirte.**
+
+## Guion Video E — "Hoy despedí a mi diseñador" (serie Mi equipo no cobra · gancho #3)
+
+Formato: talking head deadpan + captura de pantalla de la terminal. 30-40 s.
+Tono: seco, sin sonreír hasta el final.
+
+> Hook (0-3 s): "Hoy despedí a mi diseñador." (beat) "Era yo."
+>
+> "No abrí Photoshop. No abrí Canva. Abrí una terminal."
+>
+> (Mostrás la terminal) "Escribo lo que quiero. Antes de generar nada, **me dice cuánto
+> cuesta**: doce centavos de crédito la imagen. Recién ahí aprieto enter."
+>
+> "Y sale el arte. El mismo que estás viendo en mis últimas publicaciones."
+>
+> Remate: "No es que la IA diseñe mejor que un diseñador. Es que yo no necesitaba
+> un diseñador — necesitaba una imagen, hoy, y saber cuánto me iba a costar."
+
+Caption: "Mis artes salen de una terminal, con el precio calculado antes de generarlos 🎨
+¿Qué parte de tu negocio hacés a mano porque nunca te sentaste a probar otra cosa?"
+CTA en pantalla: **Comentá COMUNIDAD y te paso el enlace para unirte.**
+
+⚠️ **Honestidad obligatoria si Sergio improvisa:** el crédito diario es de una cuenta
+compartida y hay días en que el cupo ya está gastado y no se puede generar (pasó el
+02-sep). No decir "siempre funciona": decir "cuando tengo cupo, cuesta esto".
+
+## Guion Video F — "Tu negocio ya te está pidiendo un empleado" (venta · gancho #13)
+
+Formato: talking head, dirigido a **dueño de negocio**, no a creadores. 45-60 s.
+Es el único de los tres pensado para **cerrar**, no para informar.
+
+> Hook (0-3 s): "Si contestás las mismas cinco preguntas todos los días, tu negocio ya
+> te está pidiendo un empleado. La buena noticia es que no tenés que contratarlo."
+>
+> "Mirá lo que hace el que yo uso, y que le instalo a mis clientes:
+> — Contesta en tu web y en tu WhatsApp, a cualquier hora.
+> — Entiende fotos y audios, como te escribe la gente de verdad.
+> — Si alguien quiere una cita, **no la inventa: te la pasa a vos**.
+> — Y vos lo editás conversando. Le decís qué contestar, y ves su guion escrito en pasos."
+>
+> (Beat) "Cuando querés meterte, entrás a la misma bandeja y el bot se aparta."
+>
+> Remate: "No es un robot que te reemplaza. Es el que atiende mientras vos trabajás."
+
+Caption: "El empleado que contesta a cualquier hora — y te pasa la cita a vos 📲"
+CTA de venta: **Escribime AUTOMATIZAR y te cuento cómo.**
+
+**Fuente de cada promesa:** `ONIA_CATALOGO_DE_VENTA.md`, fila *"Chatbot con IA (web +
+WhatsApp)"* — estado ✅ vivo. **Sin precio en el video**: el precio se conversa. No
+agregar ninguna capacidad que no esté en esa fila.
+
 ## Textos X/LinkedIn de la semana (listos para pegar — repost manual, Postiz caído)
 
 Misma idea, dos voces: X corto y directo (el video como venía); LinkedIn con el
