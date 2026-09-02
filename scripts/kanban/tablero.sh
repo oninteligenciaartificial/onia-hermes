@@ -36,7 +36,31 @@ if [ $# -eq 0 ]; then
   exit 64
 fi
 
-HERMES='/usr/local/lib/hermes-agent/venv/bin/python -m hermes_cli.main'
+PYTHON="${ONIA_HERMES_PY:-/usr/local/lib/hermes-agent/venv/bin/python}"
+HERMES="$PYTHON -m hermes_cli.main"
+
+# HOME=/root en LAS DOS ramas, a proposito: el CLI resuelve por HOME donde vive
+# el SQLite del tablero. Si la rama local heredara otro HOME leeria OTRO tablero,
+# y un script que promete "el MISMO tablero desde cualquier lado" pasaria a ser
+# justo la segunda fuente de verdad que CLAUDE.md prohibe.
+
+# ¿Ya estamos DENTRO del VPS? Entonces no hay que salir por SSH a nuestra propia IP.
+#
+# Nace del 2026-09-02, el mismo dia en que se escribio este script: se penso para
+# Windows con Git Bash, pero ese mismo dia los nueve loops se mudaron al VPS, y
+# desde adentro `ssh root@187.77.16.63` buscaba una llave que en el VPS no existe
+# (`/root/.ssh/onia_hermes_vps_ed25519`). `tablero.sh list` moria con "Permission
+# denied (publickey)" para TODOS los loops del cron — y el prompt de cada uno dice
+# "el tablero va primero". El tablero unico quedaba ilegible justo para las nueve
+# sesiones que mas lo necesitan, y cada una seguia de largo con su markdown.
+#
+# La prueba es el INTERPRETE, no la IP ni el hostname: la pregunta real es "¿puedo
+# correr el CLI sin salir a la red?". Un hostname se renombra y una IP se mueve;
+# si el binario esta y es ejecutable, el SSH sobra.
+if [ -x "$PYTHON" ]; then
+  export HOME=/root HERMES_PROFILE="$PERFIL"
+  exec $HERMES kanban --board "$TABLERO" "$@"
+fi
 
 # Las comillas de cada argumento se preservan para que un titulo con espacios
 # llegue entero al otro lado.

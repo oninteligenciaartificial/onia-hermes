@@ -31,8 +31,17 @@ Cerrojo atómico, con vencimiento, y **espacio de trabajo aislado por tarea**, c
 
 ## Cómo entra tu sesión — tres comandos
 
-El tablero **vive en el VPS** y se llama `onia`. Cualquier sesión que llegue por SSH usa **el
-mismo**, y eso es justamente lo que evita que se pisen. Probado desde Windows con Git Bash.
+El tablero **vive en el VPS** y se llama `onia`. Toda sesión usa **el mismo**, y eso es
+justamente lo que evita que se pisen. El script resuelve solo cómo llegar: si ya está **dentro**
+del VPS ejecuta el CLI local, y si está afuera (Windows con Git Bash) sale por SSH. Los dos
+caminos fuerzan `HOME=/root`, así que apuntan al mismo SQLite.
+
+⚠️ **Corregido 2026-09-02.** Acá decía "cualquier sesión que llegue **por SSH**", y el script
+hacía SSH siempre — incluso corriendo en el VPS, contra su propia IP, con una llave que ahí no
+existe. Como los nueve loops se mudaron al VPS ese mismo día, `tablero.sh list` les moría con
+`Permission denied (publickey)` a **todos**: el prompt de cada uno dice "el tablero va primero" y
+ninguno podía leerlo. Un tablero único que la mayoría de sus usuarios no puede abrir no es un
+tablero único.
 
 ```bash
 # 1. Mirar qué hay
