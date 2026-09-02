@@ -102,28 +102,6 @@ Las tres formas de fantasma que ya aparecieron acá:
 > **Cada ítem trae su evidencia re-verificada el 2026-09-01** — y cinco de los siete
 > estaban escritos DENTRO de ítems ya cerrados, donde ningún loop los iba a ver.
 
-- [ ] **El sitio de venta no publica por culpa de una app de ESTE carril, y la causa sigue viva.**
-      onia.com.bo estuvo **nueve días sin publicarse** y no era su culpa: el deploy muere en
-      `pnpm install --frozen-lockfile` porque `web-factory/apps/dental-premium` declara 9
-      dependencias que `web-factory/pnpm-lock.yaml` no tenía. El lockfile ya se parchó (PR #30,
-      2026-09-01 14:52), **la causa no**: las dos apps de cliente llevan un `package-lock.json`
-      de npm dentro de un workspace pnpm, y su propio README manda correr `npm install`. El
-      próximo que siga el README vuelve a tumbar la publicación del sitio que vende.
-      **Evidencia** (`$ gh run view 33544864012 --log-failed`, run del 2026-09-01 18:43 UTC):
-      `ERR_PNPM_OUTDATED_LOCKFILE ... not up to date with <ROOT>/apps/dental-premium/package.json`
-      · `9 dependencies were added: next@15.5.4, react@19.1.0, motion, gsap …`.
-      Los dos lockfiles de npm siguen commiteados —
-      `web-factory/apps/dental-premium/package-lock.json` y
-      `web-factory/apps/ferreteria-sur/package-lock.json`, 35.759 bytes **idénticos**, junto a
-      `web-factory/pnpm-workspace.yaml`, que mete todo `apps` en el workspace de pnpm — y
-      `web-factory/apps/ferreteria-sur/README.md:18` dice `npm install`.
-      Y **no hay ningún gate**: `$ grep -rn frozen-lockfile .github/workflows/` devuelve 0, o sea
-      que la desincronización sólo se descubre publicando, que es como costó nueve días.
-      **Hecho cuando**: los dos `package-lock.json` fuera del repo (y en `.gitignore`), los dos
-      README diciendo `pnpm install`, y la salida pegada de `pnpm install --frozen-lockfile`
-      desde `web-factory/` con exit 0 contra el lockfile de hoy. El gate en CI es el ítem
-      bloqueado de más abajo: `.github/` no es zona de este carril.
-
 - [ ] **Las dos webs de cliente están terminadas y no se pueden publicar con un comando.**
       `web-factory/apps/dental-premium` y `web-factory/apps/ferreteria-sur` son dos sitios
       Next terminados, mirados y con gates verdes, y hoy **no existe ninguna forma de
@@ -225,6 +203,22 @@ Las tres formas de fantasma que ya aparecieron acá:
       siendo de Sergio"*. **Se sabe hecho** abriendo la página de precios y viendo que
       "Inventario avanzado" ya no cobra, y la home con el hero nuevo.
 
+- [ ] **La app que SIRVE onia.com.bo sigue con el lockfile de npm que este carril acaba de sacar
+      de las suyas — y no es zona de este carril.**
+      El 2026-09-02 se sacaron `apps/dental-premium/package-lock.json` y
+      `apps/ferreteria-sur/package-lock.json` (ítem A8, arriba). **Quedó el tercero, y es el
+      peor**: `$ git ls-files | grep package-lock.json` desde `web-factory/` devuelve hoy una
+      sola línea, `apps/onia-platform/package-lock.json`. Esa app entra al workspace de pnpm por
+      `pnpm-workspace.yaml` (`apps/*`) igual que las otras dos, así que un `npm install` ahí
+      desincroniza `pnpm-lock.yaml` y **vuelve a matar el deploy** — con el agravante de que es
+      la app del sitio de venta, o sea el fallo que ya costó nueve días.
+      **No es dificultad, es zona**: `apps/onia-platform/` es del carril `web-venta`
+      (`hermes-content/docs/cola/loops.md`), y la regla 3 se lo prohíbe a este carril.
+      **Es el mismo trabajo de A8, ya probado**: `git rm --cached` del lockfile, la línea en su
+      `.gitignore`, y `pnpm install --frozen-lockfile` verde. Bs 0.
+      **Decisión**: se rutea a `web-venta`, o se le extiende la zona a este carril sólo para ese
+      archivo. Las dos cuestan lo mismo.
+
 - [ ] **El paso que publica el sitio de venta sigue colgado del de un panel abandonado.**
       En `.github/workflows/deploy-onia-center.yml:78` el paso "Deploy landing" corre en el
       MISMO job y DESPUÉS del deploy de center, **sin `if:`**. Si el primero muere, el segundo
@@ -278,6 +272,40 @@ Las tres formas de fantasma que ya aparecieron acá:
 ---
 
 ## Cerrado — carril A (build)
+
+- [x] **A8 · Sacada la causa por la que una app de este carril tumbaba la publicación de
+      onia.com.bo** (2026-09-02).
+      El lockfile ya estaba sano —`pnpm install --frozen-lockfile` desde `web-factory/` da
+      **exit 0** hoy (`Lockfile is up to date, resolution step is skipped · Already up to date ·
+      Done in 1.3s using pnpm v10.33.3`, 9 workspace projects)—, así que lo que quedaba era la
+      **causa**, y seguía viva: los dos `package-lock.json` de npm trackeados dentro de un
+      workspace pnpm, más un README mandando `npm install`.
+      **Qué se hizo**: `git rm` de `apps/dental-premium/package-lock.json` y
+      `apps/ferreteria-sur/package-lock.json`; `package-lock.json` + `yarn.lock` agregados al
+      `.gitignore` de cada app con el porqué escrito adentro (un `.gitignore` sin motivo se
+      revierte); `apps/ferreteria-sur/README.md` reescrito a `pnpm install --frozen-lockfile`
+      desde la raíz del workspace + `pnpm --filter`.
+      **Probado que eran peso muerto, no supuesto**: con los dos lockfiles ya borrados,
+      `pnpm --filter dental-premium typecheck` y `pnpm --filter ferreteria-sur typecheck` dan
+      **exit 0** — las apps resuelven sus dependencias desde el workspace de pnpm y nunca
+      leyeron esos archivos. `pnpm typecheck:packages`: exit 0.
+      **La cola decía "los dos README" y eran uno**: `apps/dental-premium` **no tenía README**.
+      Ahí el peligro era peor —cero instrucciones, así que el próximo adivina `npm install`—, y
+      se creó uno mínimo, sólo con lo verificado en `package.json` y `next.config.ts`, dejando
+      escrito que el formulario no se documentó porque nadie lo midió en esta pasada.
+      ⚠️ **Hipótesis probada y REFUTADA en la misma vuelta, para que nadie la repita**: las dos
+      apps tienen `"incremental": true` **y** tenían `tsconfig.tsbuildinfo` commiteado, lo que
+      parecía un agujero de gate (un `tsbuildinfo` ajeno haciendo que `tsc --noEmit` no
+      re-chequee). Se midió inyectando un error de tipos real en `src/app/page.tsx` con el
+      `tsbuildinfo` commiteado presente: `tsc` lo cazó igual —
+      `error TS2322: Type 'string' is not assignable to type 'number'`, exit 2. **No enmascara
+      nada.** Se sacaron del repo igual, pero como ruido de diff, no como arreglo de gate.
+      ⚠️ **Queda el mismo riesgo FUERA de zona**: `apps/onia-platform/package-lock.json` sigue
+      trackeado, y esa app también entra al workspace por `apps/*` — es exactamente la que
+      sirve onia.com.bo. Es zona del carril `web-venta`, así que este carril no la tocó: la
+      línea está abajo, en `## Ahora`.
+      **Lección: el lockfile era el síntoma; el hábito de `npm install` era la causa. Arreglar
+      el lockfile sin sacar los archivos que invitan al error deja el bug esperando al próximo.**
 
 - [x] **A1a · Dashboard: charts a tema categórico** (2026-08-30, **rehecho**).
       El primer intento (29-ago) eligió 6 hues **a criterio** y estaba MAL: la skill
