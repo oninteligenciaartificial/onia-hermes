@@ -1056,3 +1056,54 @@ correcto es **`nano_banana_pro`**.
 ### Estado
 Autenticado y probado en lectura. **Todavía no se generó nada por CLI** — falta una generación de
 prueba que confirme que lo que sale es lo que se pidió.
+
+---
+
+## 11. ✅ LA RECETA POR CLI — probada de punta a punta, sin navegador
+
+Primera generación por CLI el 2026-09-01: `B08-taller-9x16-CLI`.
+**1536×2752 · ratio 0,558 → es 9:16.** Cara reconocible como Lucía. 2 créditos.
+
+```bash
+higgsfield generate create nano_banana_pro \
+  --prompt "<escena>" \
+  --aspect-ratio 9:16 \
+  --resolution 2k \
+  --image-references <asset-id-de-una-foto-suya> \
+  --wait --wait-timeout 5m
+```
+
+Devuelve **la URL directa del PNG** en CloudFront. Se baja con `curl` y listo. Sin panel de
+detalle, sin buscar el botón `Download`, sin menús escondidos.
+
+### 🔴 El element NO sirve como referencia; el ASSET ID sí
+
+```
+--image-references 58bbd635-…  (el element @lucia-skin-v1)  →  Error: Media input not found
+--image-references 4eb429ec-…  (asset id de B07)            →  ✅ funciona
+```
+
+`--image-references` acepta **upload id, job id o una ruta local** (las rutas se suben solas —
+eso resuelve de paso la vieja traba de «no se puede subir una imagen del disco al frame»).
+El **element es otra cosa** y sólo existe dentro del `@` del navegador.
+
+**Consecuencia:** por CLI la cara se sostiene con una **foto suya como referencia**, no con el
+element. Se usa el asset id de una pieza buena y reciente. Los ids están en los `LEEME.md` de
+cada carpeta — por eso se anotan.
+
+⚠️ **Y hay una diferencia de calidad que conviene medir con más piezas:** la cara sale un poco
+más plana que con el element entrenado, y en `B08` el pelo quedó recogido aunque el prompt pedía
+suelto. El element manda mejor la identidad; la referencia por foto manda bien pero no igual.
+
+### Los dos caminos, y cuándo usar cada uno
+
+| | Navegador (element `@lucia-skin-v1`) | CLI (referencia por asset id) |
+|---|---|---|
+| Fidelidad de la cara | **Mejor** | Buena, un poco más plana |
+| Velocidad | Lenta: clics, esperas, descargas | **Un comando, devuelve URL** |
+| Precio antes de gastar | Leer un botón en una captura | **`generate cost`, exacto** |
+| Corre sin Sergio | No | **Sí, headless en el VPS** |
+| Riesgo de errar el modelo | Alto (5 IDs muestran «Nano Banana Pro») | **Nulo: se pasa el ID** |
+
+**Regla:** piezas de cara protagonista → navegador con el element. **Volumen, pruebas y todo lo
+que corra en el loop → CLI.**
