@@ -141,11 +141,51 @@ function evidenciaDe(textoCrudo) {
     // pregunta en el nombre, asi que eso los descarta sin tener que adivinar.
     if (/[\s?]/.test(ruta)) continue;
 
+    // Un GLOB no es un archivo: es una ZONA. Esta cola escribe
+    // `web-factory/apps/onia-platform/**` para decir de que carril es una carpeta, y
+    // `public/rubros/*.webp` para nombrar un conjunto. Buscarlos en disco daba fantasma
+    // siempre (medido el 2026-09-02 sobre COLA.md). Ningun archivo del repo tiene `*`.
+    if (/\*/.test(ruta)) continue;
+
     // Una ruta se reconoce por tener separador o extension. "10 min" no es una ruta.
-    if (/[\/]/.test(ruta) || /\.[a-z0-9]{2,5}$/i.test(ruta)) rutas.push(ruta);
+    if (/[\/]/.test(ruta)) { rutas.push(ruta); continue; }
+
+    // Sin barra, la sola presencia de un punto NO alcanza: `visto.texto`, `d.fonts`,
+    // `patient.ci` son expresiones de codigo, y `.texto` no es una extension de nada. Se
+    // pide que el sufijo sea una extension que exista de verdad en estos repos. Con barra
+    // (arriba) se sigue verificando siempre, asi que esto no puede tapar un archivo en una
+    // carpeta — solo desarma la confusion "identificador punteado == nombre de archivo".
+    const ext = ruta.match(/\.([a-z0-9]{1,5})$/i);
+    if (ext && EXTENSIONES.has(ext[1].toLowerCase())) rutas.push(ruta);
   }
-  return { rutas, comandos };
+
+  // La misma ruta citada dos veces en un item es UN problema, no dos. El gate reportaba el
+  // mismo renglon repetido (medido el 2026-09-02: `visto.texto` salia dos veces), y un gate
+  // que dice dos veces lo mismo entrena a saltearlo igual que uno que grita en falso.
+  const unicas = [...new Set(rutas)];
+
+  // Un item cita el archivo entero una vez y despues lo nombra corto: "Ese archivo
+  // (`alta.ts`) ya deja el runbook". El nombre corto no existe en la raiz, pero no es un
+  // fantasma — es el mismo archivo del renglon de arriba, y la ruta larga YA se verifica.
+  // Se descarta solo si el propio item trae una ruta que termina en ese nombre.
+  const conBarra = unicas.filter((r) => r.includes('/'));
+  return {
+    rutas: unicas.filter((r) => r.includes('/') || !conBarra.some((l) => l.endsWith('/' + r))),
+    comandos,
+  };
 }
+
+// Las extensiones que de verdad aparecen en estos dos repos. Es una lista y no un patron a
+// proposito: un patron generico (`\.[a-z]{2,5}$`) toma por archivo cualquier identificador
+// punteado del codigo que la cola cita, que es exactamente el falso positivo que esto arregla.
+// Si algun dia falta una, el sintoma es leve y visible (una ruta real deja de contar como
+// evidencia); al reves —volver al patron— el gate vuelve a salir rojo de fabrica.
+const EXTENSIONES = new Set([
+  'ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs', 'json', 'md', 'mdx', 'sql', 'prisma', 'sh', 'py',
+  'css', 'scss', 'html', 'yml', 'yaml', 'toml', 'txt', 'csv', 'log', 'env', 'lock', 'xml',
+  'png', 'jpg', 'jpeg', 'webp', 'svg', 'gif', 'ico', 'avif', 'pdf', 'woff', 'woff2', 'ttf',
+  'mp4', 'mov', 'webm', 'mp3', 'wav', 'srt', 'vtt', 'zip', 'gz', 'tar', 'bak',
+]);
 
 
 // ONIA es DOS repos y una cola cita a los dos: el carril de producto trabaja en
@@ -158,8 +198,19 @@ function evidenciaDe(textoCrudo) {
 // solo sirve en la maquina de Sergio.
 const REPOS_HERMANOS = ['onia-platform'];
 
+// Y las apps que viven DENTRO de este repo. Un item del sitio de venta escribe sus rutas
+// relativas a la app (`src/app/terminos/opengraph-image.tsx`), no al repo — es como se
+// nombran entre gente que trabaja ahi, y pedirle el prefijo largo a cada renglon es pedir
+// que el gate se ignore. Medido el 2026-09-02: 4 falsos positivos de 4, todos archivos que
+// SI existen, el dia despues de que `dc8baa8b` limpiara otros 4 por lo mismo. Un gate que
+// sale rojo de fabrica se empieza a saltear, y ahi deja de proteger nada.
+const APPS_DEL_REPO = ['web-factory/apps/onia-platform'];
+
 function existeEnAlgunRepo(ruta, baseDir) {
   if (fs.existsSync(path.resolve(baseDir, ruta))) return true;
+  for (const app of APPS_DEL_REPO) {
+    if (fs.existsSync(path.resolve(baseDir, app, ruta))) return true;
+  }
   // El repo hermano cuelga del mismo padre que este (…/proyectos/onia-hermes
   // y …/proyectos/onia-platform). Desde un worktree hay que subir mas, asi que
   // se prueban los padres hasta encontrarlo.
@@ -452,6 +503,44 @@ function selfCheck() {
   r = revisarCola('## Ahora\n- [ ] Algo · `lib/no-existe-en-ningun-lado.ts`\n', path.join(tmp, 'onia-hermes'));
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el repo hermano no vuelve verde cualquier ruta');
 
+
+  // --- Los cuatro falsos positivos medidos el 2026-09-02 sobre la propia COLA.md ---
+  // El gate salia con 4 ERROR y los cuatro eran falsos. Un gate que siempre sale rojo por
+  // motivos falsos entrena a saltearlo: es como `CLAUDE.md` cuenta que se rompio el CI dos
+  // veces. Cada carve-out va con su reciproco, que es lo que impide que el arreglo afloje.
+
+  // (1) Un GLOB de zona no es un archivo. La cola escribe `web-factory/apps/onia-platform/**`
+  // para decir "esta carpeta es de tal carril", y el gate lo buscaba en disco.
+  r = revisarCola('## Ahora\n- [ ] Zona `web-factory/apps/onia-platform/**` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un glob de zona no es una ruta');
+  r = revisarCola('## Ahora\n- [ ] Zona `carpeta/*.webp` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un glob con comodin de nombre tampoco');
+
+  // (2) `visto.texto` es una EXPRESION de JavaScript citada, no un archivo: `.texto` no es una
+  // extension. Un nombre suelto sin barra solo es ruta si su extension es de las que existen
+  // en estos repos; con barra se sigue verificando siempre.
+  r = revisarCola('## Ahora\n- [ ] El `visto.texto` coincide · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una expresion de codigo con punto no es una ruta');
+  r = revisarCola('## Ahora\n- [ ] Algo · `no-esta.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'la carve-out de extensiones no tapa un archivo suelto');
+  r = revisarCola('## Ahora\n- [ ] Algo · `carpeta/no-esta.texto`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'con barra se verifica aunque la extension sea rara');
+
+  // (3) Un mismo item cita el archivo entero UNA vez y despues lo nombra corto
+  // ("Ese archivo (`alta.ts`) ya deja el runbook"). El nombre corto no existe en la raiz, pero
+  // no es un fantasma: es el mismo archivo del renglon de arriba.
+  fs.mkdirSync(path.join(tmp, 'sub'), { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'sub', 'alta.ts'), 'x');
+  r = revisarCola('## Ahora\n- [ ] Ver `sub/alta.ts`\n      Ese archivo (`alta.ts`) trae el runbook · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'el nombre corto de un archivo ya citado entero no es fantasma');
+  // Su reciproco: si el item NO cita la ruta larga, el nombre corto sigue siendo fantasma.
+  r = revisarCola('## Ahora\n- [ ] Ese archivo (`alta.ts`) trae el runbook · `existe.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'un nombre corto sin su ruta larga sigue siendo fantasma');
+
+  // (4) La misma ruta citada dos veces en un item se reporta UNA vez. El gate decia dos veces
+  // lo mismo sobre el mismo renglon, que es la otra forma de entrenar a saltearlo.
+  r = revisarCola('## Ahora\n- [ ] Falta `no-esta.png` y otra vez `no-esta.png`\n', tmp);
+  ok(r.problemas.filter((p) => p.regla === 'fantasma').length === 1, 'una ruta repetida se reporta una sola vez');
 
   // --- Duplicados: "cerrar un item no cierra su copia" ---
   // Este defecto ya golpeo DOS veces por escrito en la propia cola. El 2026-08-31 se encontro

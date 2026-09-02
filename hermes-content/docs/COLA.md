@@ -346,60 +346,6 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       sirve el dominio: `curl https://onia.com.bo/` todavía trae esas cinco rutas de imagen —
       `onia-landing` sigue sirviendo el build viejo. Deploy es de Sergio.
 
-- [ ] **Los NOMBRES de los iconos siguen en el DOM como texto en el login de la plataforma.**
-      El `innerText` de `app.onia.com.bo/login` devuelve `bolt`, `credit_card_off` y `smart_toy`.
-      Hoy la ligature de Material Symbols los tapa y la captura los muestra como glifos — el
-      bug de agosto **no** está a la vista. Pero el mecanismo que lo evita es la fuente: si
-      tarda o falla, el cliente lee "credit_card_off" otra vez, que es exactamente como pasó.
-      Y un lector de pantalla lo lee así **hoy**. Sale con `aria-hidden` en el glifo + label
-      propio, o con SVG. **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma.png`
-      · 1.300 KB · 1.043 ms.
-      ⚠️ **Reverificado el 2026-09-01 sobre el bundle nuevo (`55e8d8a`, tres deploys después):
-      sigue igual, y ahora se sabe el número exacto del tope.** El HTML servido trae los tres
-      nombres como nodos de texto (`bolt`, `credit_card_off`, `smart_toy`, una vez cada uno) y
-      los tapa con una regla inline `visibility:hidden` que se levanta sólo al agregar la clase
-      `iconos-listos`… **o a los 12 segundos, pase lo que pase** — el script del `<head>` cierra
-      con un `setTimeout(ok, 12000)`. O sea: el mecanismo no es "si la fuente falla no se ven",
-      es "si la fuente tarda más de 12 s, el cliente lee `credit_card_off`". Con la fuente de
-      iconos que en agosto tardó 117 s, ese fallback es el camino normal, no el raro. Y
-      **ningún glifo tiene `aria-hidden`**: un lector de pantalla los deletrea hoy, con la
-      fuente cargando perfecto.
-      ✅ **ARREGLADO EN CÓDIGO el 2026-09-01 — `onia-platform` `5888a13`, en `master`. Falta
-      SÓLO el deploy, que decide Sergio.** Los dos agujeros que el ítem nombra, cerrados en su
-      raíz compartida y clavados con test:
-      - **El lector de pantalla:** los tres glifos salen de `components/auth/AuthShell.tsx:92`
-        — el panel que comparten `/login` y `/register`, así que se arregló una vez para las
-        dos pantallas. Van con `aria-hidden="true"`: cada bullet ya trae su título y su
-        detalle en texto, el glifo no aporta nada que no esté dicho.
-        `components/auth/AuthShell.test.ts` exige `aria-hidden` en **cada** glifo del panel y
-        falla si aparece uno nuevo sin él.
-      - **El `setTimeout(ok, 12000)`:** ahora sólo destapa `if (d.fonts.status !== 'loading')`.
-        Antes contradecía la decisión que el propio `lib/iconos-script.ts` declara arriba
-        ("si la fuente NO carga, los iconos quedan ocultos en vez de mostrar su nombre"): con
-        la fuente que tardó 117 s, a los 12 s el cliente leía `credit_card_off`.
-        `lib/iconos-script.test.ts` (nuevo) ejecuta el script de verdad contra un `document`
-        de mentira — el defecto vive en CUÁNDO llama a `ok()`, no en el HTML.
-      **Gates verdes en el worktree `iconos-a11y`:** `tsc --noEmit` 0 · `vitest run` 2.480
-      pasando, 0 fallando · `npm run lint` 0 errores. ⚠️ **La corrida en paralelo de vitest
-      perdió 8 archivos de test** por `spawn UNKNOWN errno -4094` (la máquina sin RAM: los
-      otros loops la tenían en 2,9 GB libres de 24) y salió con exit 1 reportando "193 files".
-      Con `--no-file-parallelism` corrieron los **202**. Si el gate reporta menos archivos de
-      los que hay, no está verde: está incompleto.
-      **Píxeles sin cambio**: `aria-hidden` no se ve y la guarda sólo cambia el modo de fallo,
-      así que acá no hay captura que mirar — lo que cambia es el árbol de accesibilidad (lo
-      afirma el test sobre el render real) y qué pasa cuando la fuente tarda.
-      **Deuda medida, aparte:** en todo el producto hay **456** `.material-symbols-outlined`
-      en 111 archivos y sólo **46** llevan `aria-hidden`. Eso es una barrida propia, no este
-      ítem — este cierra la pantalla reportada y su hermana.
-      📌 **2026-09-02, el integrador puso número al "falta el deploy": producción corre
-      `8a3b5a6`**, medido por el `BUILD_ID` del contenedor (`lNDdVgrRvP1mizzu3BVXc` =
-      `/opt/onia-platform/build-8a3b5a6`), no deducido. Encima quedan **3 commits sin
-      desplegar** — éste (`bdf0935`+`5888a13`) y la CSP (`efaffe8`). Reconfirmado MIRANDO el
-      HTML servido: los tres `<span>` siguen **sin `aria-hidden`** y el script del `<head>`
-      sigue con `setTimeout(ok,12000)`. La decisión, cotizada y con el runbook, quedó en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §20. **El código no cambia hasta
-      que Sergio despliegue.**
-
 - [x] **La CSP de producción bloqueaba el beacon de Cloudflare en TODA la plataforma — ARREGLADO
       EN CÓDIGO el 2026-09-02, `onia-platform` `efaffe8`, en `master`. Falta SÓLO el deploy, que
       decide Sergio.** Se agregó `https://static.cloudflareinsights.com` a `script-src` y
@@ -421,11 +367,41 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (este) es el dueño declarado.** Su propio prompt de loop lo dice desde el 2026-09-02:
       "`onia.com.bo/` y `/empezar` no tenían dueño... Vos sos ese dueño", con zona exclusiva
       `web-factory/apps/onia-platform/**`. Actualizado en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §16.
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §24 (era §16 — el radar tenía
+      **dos** secciones con ese número y ésta se renumeró el 2026-09-02; la §16 que queda es la
+      del deploy, que sigue abierta).
 
 ### Del canario visual — segunda pasada del 2026-09-01
 
-- [ ] **El párrafo izquierdo del login de la plataforma sale con espacios metidos DENTRO de
+- [x] **FANTASMA — "los espacios dentro de palabras" NO existen para un cliente: los dibuja el
+      motor con el que sacamos las capturas.** Cerrado el 2026-09-02 por el dueño de `web-venta`,
+      que es exactamente lo que este ítem pedía ("confirmarlo en un navegador de verdad antes de
+      invertir tiempo"). **Nadie tiene que arreglar nada acá, ni en el login ni en el sitio.**
+      **Cómo se probó, y por qué la prueba es concluyente:** se abrió **la misma URL, en el mismo
+      instante, con la misma fuente ya cargada**, con los dos motores que hay en el VPS:
+      - `chromium_headless_shell` (el que usa el canario): dibuja
+        *"Ent regamos t u sist ema con la configuración de t u rubro puest a"*.
+      - Chromium completo (`channel: 'chromium'`, headless igual): dibuja
+        *"Entregamos tu sistema con la configuración de tu rubro puesta."* — **perfecto**.
+      El defecto **es del rasterizador, no del sitio**: sólo cambia el motor de captura. Coincide
+      con lo que el propio ítem ya había medido y no supo interpretar — `innerText` correcto,
+      `document.fonts.status: loaded`, cero 404. Medido además `getClientRects()`: **una sola
+      caja** por palabra en los DOS motores, o sea que ni el layout ni el DOM meten el espacio.
+      **La regla del artefacto, para no volver a caer:** el corte cae **siempre después de una
+      `t`** (`Client es`, `Fact uración`, `Recordat orios`, `Agent es`, `Ent regamos`, `cit as`).
+      Las palabras sin `t` —`Agenda`, `Cobros`— salen limpias en los dos motores. Si un reporte
+      futuro tiene TODOS los cortes pegados a una `t`, es este artefacto y no un defecto.
+      **Evidencia (mismo html, dos motores, lado a lado):**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-artefacto-headless-shell-login.png`
+      vs `…/2026-09-02-mismo-html-chromium-real-login.png`, y en el sitio de venta
+      `…/2026-09-02-artefacto-headless-shell-empezar.png` vs
+      `…/2026-09-02-mismo-html-chromium-real-empezar.png`.
+      **Lo que sí queda por hacer, y NO es de este carril** (ver el ítem nuevo abajo): el canario
+      arrastra el motor malo, así que va a seguir inventando este defecto en cada corrida.
+
+  <details><summary>El reporte original, tal como lo dejó el canario (ya refutado)</summary>
+
+- **El párrafo izquierdo del login de la plataforma sale con espacios metidos DENTRO de
       palabras** ("Ent regamos", "puest a", "t odo el sist ema", "cit as", "import ante"), en
       `app.onia.com.bo/login` — y por herencia en `/settings/chatbot` sin sesión, que redirige
       ahí. Reproducido 3 veces seguidas en Chromium headless del VPS (`--no-sandbox`), siempre
@@ -444,17 +420,47 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       · 147 ms hasta mirable (baseline: 1.302 KB · 1.043 ms — la baja de peso es variación de
       CDN/compresión entre corridas, no un recorte de contenido: el `innerText` completo
       coincide con la baseline).
-      ⚠️ **Se invirtió el tiempo el 2026-09-02: es un bug real de la fuente, no un artefacto de
-      captura — pero cerrarlo es una decisión de diseño, no una línea de código.** Reproducido en
-      DPR 1 y DPR 3, con zoom por `transform: scale()` (no supersampling de screenshot). Aislado
-      por bisección: **específico de Archivo en pesos ≤500** — con `font-weight: 700` o con
-      `font-family: Arial` (swap por DOM, sin tocar código) el gap desaparece; `font-kerning` y
-      `font-feature-settings` no cambian nada; pinear el eje `wght` a 400 explícito tampoco. El
-      arreglo más directo (subir el peso del texto `detalle` del panel) cambia el peso visual de
-      las dos pantallas de auth, así que no se aplicó sin que Sergio lo vea primero — sigue sin
-      poder probarse en un Chrome de escritorio real desde esta máquina (sin GUI). Detalle
-      completo, con las tres salidas cotizadas, en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §19.
+
+  </details>
+
+- [x] 🟠 **El canario saca las capturas con el motor equivocado, y por eso INVENTA defectos de
+      texto.** Es la raíz del fantasma de arriba, y no es zona de `web-venta` (vive en
+      `scripts/`, cuyo dueño es el carril del canario).
+      **Dónde, exacto:** `scripts/canario_visual.mjs:259` llama `chromium.launch(...)` **sin
+      `channel`**. Con Playwright 1.60 (el instalado) eso resuelve a `chromium_headless_shell`,
+      que es el motor que mete el espacio después de cada `t`. El VPS **ya tiene los dos
+      binarios** bajados (`/root/.cache/ms-playwright/chromium-1223` y
+      `chromium_headless_shell-1223`): no hay que instalar nada.
+      **El arreglo es una línea:** agregar `channel: 'chromium'` a ese `launch` (conservando los
+      `args` de `--no-sandbox`, que siguen haciendo falta como root).
+      **Por qué importa más que un falso positivo suelto:** este loop confía en las capturas del
+      canario para decidir qué está roto en la cara del producto. Un motor que dibuja mal el
+      texto convierte cada corrida en trabajo inventado — ya costó un ítem abierto tres días
+      contra una pantalla que se veía perfecta.
+      **Cómo se sabe que quedó hecho:** correr el canario sobre `login-plataforma` y que la
+      captura diga "Entregamos tu sistema", no "Ent regamos t u sist ema".
+
+      ✅ **HECHO el 2026-09-02 por el integrador, en `main`** (`scripts/canario_visual.mjs`).
+      Lo tomó él y no el carril del canario porque era el primer ítem abierto de "Ahora" y
+      porque cada corrida con el motor malo le fabrica trabajo inventado a los demás carriles.
+      **Lo que se hizo:** el `launch` inline salió a una función `opcionesDeChromium(esRoot)`
+      que pide `channel: 'chromium'` y conserva `--no-sandbox` sólo como root. Cuatro casos
+      nuevos en `--self-check` (69 en total, verde) — **corridos en ROJO antes del cambio**, y
+      fallaron los dos del `channel` y ninguno del sandbox, que es el rojo correcto.
+      **La prueba de que arregla el defecto, hecha con el Playwright que usa el canario**
+      (`/root/node_modules`, 1.60, rev 1223): misma URL, mismo instante, misma fuente cargada.
+      Sin `channel` → *"Ent regamos t u sist ema … con t us dat os"*. Con `channel: 'chromium'`
+      → *"Entregamos tu sistema con la configuración de tu rubro puesta."* Miradas las dos
+      capturas, no leído un exit code.
+      ⚠️ **Lo que NO se pudo correr, y es del carril del canario:** el canario entero desde este
+      worktree revienta antes de abrir nada — `node_modules` local trae Playwright **1.62.1**,
+      que pide `chromium-1234`, y en el VPS sólo está **1223**. No lo causó este cambio (pasa
+      igual sin él); el canario no lo sufre porque su worktree **no tiene `node_modules`
+      propio** y resuelve a `/root/node_modules` 1.60, que sí calza. Si alguna vez se le agrega
+      uno, el canario deja de arrancar.
+      ⚠️ **Y esto no llega solo a la próxima corrida:** el runner **no** mergea `main` en los
+      worktrees de carril, y `claude/canario-visual` está 91 commits atrás. El canario tiene que
+      traer `main` a su rama antes de que sus fotos salgan limpias.
 
 ### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
 
@@ -566,7 +572,8 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       dudar — la promesa que cambia SÍ hay que barrerla en toda la superficie (regla de
       `CLAUDE.md`), y hasta ayer nadie había confirmado que la barrida terminó. Confirmado hoy:
       terminó, cero superficie con el vocabulario viejo.
-      **Lo que sigue sin dueño real** (ver radar §16): la ambigüedad de fondo — que
+      **Lo que sigue sin dueño real** (ver radar §24, que hasta el 2026-09-02 estaba numerada
+      §16 igual que la del deploy): la ambigüedad de fondo — que
       `app.onia.com.bo/register` es del repo `onia-platform`, otro carril — sigue viva para la
       PRÓXIMA vez que ese flag cambie. Ese archivo (`alta.ts`) ya deja el runbook de los dos
       pasos escrito para cuando pase.
@@ -621,6 +628,119 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Lo que falta, y no es zona de este carril:** el deploy — medido contra `onia-landing`,
       `curl https://onia.com.bo/` y `/empezar` siguen sirviendo las 6 capturas viejas hoy.
 
+      ✅ **Auditado el 2026-09-02 MIRANDO el resultado, que es lo que faltaba.** Hasta hoy este
+      ítem se apoyaba en `tsc` + `next build` verdes, y eso **no dice nada sobre cómo se ve** —
+      la regla del carril pide una captura de la pantalla arreglada, no un commit. Se levantó el
+      build de este worktree (`next start`, 32/32 páginas) y se abrieron las dos pantallas en
+      1440×900:
+      - **Los paneles dibujados se ven bien y cuentan cada uno su historia.** El conmutador
+        recorre los cinco rubros: cada parada cambia la palabra resaltada y sube su panel
+        (agenda dental → caja de comercio → cotizaciones de importadora → paquetes de estética →
+        cierre de servicios), uno solo visible por vez, sin recorte ni solape.
+        Captura: `hermes-content/docs/historial/canario-visual/2026-09-02-switcher-panel-dibujado-importadora.png`.
+      - **Cero `<img>`/`<video>`/`<canvas>` del sistema** en las dos páginas. Las **tres**
+        imágenes que quedan en la home (`/contexto/dental|comercio|estetica.webp`) se abrieron y
+        se miraron una por una: son **fotos de negocios reales** —una odontóloga con su cuaderno
+        de papel, un ferretero con su libro y su calculadora—, sin una sola pantalla legible.
+        Es justo lo referencial que Sergio pidió, y el guard `forma.test.ts` ya las exceptúa a
+        propósito. **No son un defecto y no se tocan.**
+      - **Sin desborde horizontal ni errores de consola** en ninguna de las dos.
+      ⚠️ **Un agujero del propio método, para no repetirlo:** esa barrida preguntó por
+      `img, video, canvas, picture source` **del DOM**, así que **no miraba el `<head>`** — la
+      captura que viajaba en `og:image`/`twitter:image` (la que ve cualquiera que pega el link en
+      WhatsApp) le pasó por al lado. La cazó `4384f7e8` ("la última captura del sitio estaba en
+      el `<head>`, que es donde nadie miró"). Reverificado tras el rebase, ya con esos commits:
+      `/empezar` sirve **cero** imágenes y el `og:image` de la home es hoy una tarjeta
+      **generada y dibujada** (`/opengraph-image-…`, el panel de 9 h / 15 h), no una captura del
+      panel. Quien audite esto de nuevo: el barrido va sobre el **HTML servido**, no sobre el DOM.
+      **Ojo con las capturas de página completa:** el conmutador es `sticky`, así que en una
+      captura `fullPage` sale **en blanco** y parece roto. Se mira en viewport, parando en cada
+      rubro. Quien audite esto de nuevo, que no reporte ese blanco como defecto.
+
+### Encontrado el 2026-09-02 auditando los `[x]` del carril — ARREGLADO en la misma vuelta
+
+- [x] **`/empezar` se compartía por WhatsApp SIN una sola imagen, y con él otras diez rutas del
+      sitio. El `[x]` de ayer daba por cubiertas las doce.** Es el link que se le pasa a un lead
+      para que se registre: el último clic del embudo llegaba como un renglón de texto pelado,
+      justo al lado de la home, que sí muestra su tarjeta dibujada.
+      **Cómo apareció:** auditando el `[x]` de la tarjeta social (el que cerró `4384f7e8`). Ese
+      ítem se verificó mirando la home, y la home estaba bien. El comentario de
+      `(sitio)/opengraph-image.tsx` afirmaba, textual, que por vivir en el segmento `(sitio)` "la
+      heredan sus DOCE rutas". **Es falso.** `opengraph-image` de Next aplica sólo al `page.tsx`
+      de su propio segmento y no baja a los anidados.
+      **Medido sobre el build, ruta por ruta** (`curl` al HTML servido, no al DOM): `/` traía
+      `og:image`; `/empezar`, `/precios`, `/chatbot`, `/agentes`, `/rubros`, `/comparativa`,
+      `/contacto`, `/facturacion`, `/guia-facturacion`, `/nosotros` y `/servicios/webs` traían
+      `og:title` y `og:description` pero **cero imagen**. Once de doce. Un `curl` a la home daba
+      verde y tapaba las once.
+      **Y el segundo medio defecto de la misma pantalla:** `src/app/layout.tsx` fijaba
+      `twitter:card: "summary"` — la tarjeta chica. Aun con imagen, `/empezar` se compartía como
+      si no la tuviera. Ahora es `summary_large_image` en todo el sitio.
+      **Lo que se hizo:** el dibujo (el mismo, sin tocar un píxel) se movió a
+      `(sitio)/tarjeta-social.tsx`, y cada una de las doce rutas tiene su `opengraph-image.tsx` de
+      tres líneas que lo llama. Se corrigió además el comentario de `layout.tsx`, que todavía
+      mandaba a poner "una captura REAL del sistema" — la regla de Sergio del 2026-09-01 al revés,
+      y el mismo comentario que sostuvo `/og/onia-rubros.jpg` con "MUY PRONTO" impreso adentro.
+      **Guard:** `(sitio)/forma.test.ts` ahora falla si una ruta de `(sitio)` no tiene su
+      `opengraph-image.tsx`. Una ruta nueva sin tarjeta rompe la suite en vez de salir pelada.
+      **Verificado en vivo sobre el build nuevo:** las **doce** rutas sirven
+      `og:image` + `summary_large_image`. **Evidencia mirada, no supuesta:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-empezar-tarjeta-social.png` — la
+      tarjeta de `/empezar`, 1200×630, dibujada, cero captura, cero obra.
+      **Gates:** `tsc --noEmit` 0 · `vitest run forma.test.ts` 47 pasando · `next build` exit 0
+      con las 12 rutas de imagen emitidas.
+      ⚠️ **Trampa que costó media vuelta, para no repetirla:** el `next start` de la verificación
+      **no arrancó** —el puerto seguía tomado por el servidor del build anterior— y siguió
+      sirviendo el build viejo sin decir nada. Durante varios minutos medí "arreglado" y "sin
+      imagen" sobre HTML de antes del cambio. **Un `curl` a `localhost` no prueba que estés
+      mirando tu build:** revisar el log del servidor (`EADDRINUSE`) antes de creerle a la
+      medición.
+      **Lo que falta, y no es zona de este carril:** el deploy. Contra `onia-landing`,
+      `onia.com.bo/empezar` sigue sin `og:image` hoy, y la home sigue sirviendo
+      `/og/onia-rubros.jpg` (la captura con "MUY PRONTO"). Publicar lo decide Sergio.
+
+### Encontrado el 2026-09-02 auditando el `[x]` de la tarjeta social — ARREGLADO en la misma vuelta
+
+- [x] **Otras CUATRO rutas publicadas se compartían sin imagen, y el guard que debía impedirlo
+      no las miraba. El `[x]` de la vuelta anterior daba por cubierto el sitio entero.** Es el
+      MISMO defecto que cerró `30484b7b` ("once de doce"), una capa más afuera: aquel arregló
+      las doce rutas del grupo `(sitio)`, pero el sitio publica **dieciséis**.
+      **Cómo apareció:** auditando ese `[x]`. Se volvió a medir, pero **contra el sitemap** en
+      vez de contra la carpeta — el sitemap es la lista de lo que publicamos ("nunca una página
+      publicada sin su entrada", dice su propio comentario). De sus 16 URLs, **4 servían
+      `og:title` y `og:description` y cero imagen**: `/servicios/marketing-ia`,
+      `/servicios/consultoria`, `/terminos` y `/privacidad`.
+      **Por qué se escaparon, que es lo que importa:** viven FUERA del grupo `(sitio)` —en
+      `src/app/servicios/…`, `src/app/terminos/`, `src/app/privacidad/`—, y `opengraph-image` de
+      Next no cruza grupos de rutas. `/servicios/webs` sí tenía tarjeta **porque está adentro**:
+      dos rutas hermanas bajo la misma URL `/servicios/`, una con imagen y otra sin, según en qué
+      carpeta del disco quedaron.
+      **El guard tenía el mismo agujero, y ese es el hallazgo real.** `(sitio)/forma.test.ts`
+      enumeraba las rutas con un `readdirSync` del directorio `(sitio)`, así que era
+      **estructuralmente ciego** a lo de afuera: pasaba en verde con las cuatro rotas. Un guard
+      que sólo mira donde ya arreglaste no es un guard. Ahora la lista **sale del sitemap**
+      (`sitemap.ts`, parseado) y resuelve cada ruta dentro o fuera de `(sitio)`: una página nueva
+      entra al sitemap y el test le exige su tarjeta, esté en el grupo que esté.
+      **Probado que el guard MUERDE, no que sólo pasa:** se sacó
+      `terminos/opengraph-image.tsx` y la suite falló en esa ruta exacta
+      (`× /terminos tiene su opengraph-image.tsx`); restaurado, verde. Un test que nunca se vio
+      fallar no prueba nada.
+      **Verificado sobre el HTML servido del build nuevo** (no el DOM, no `main`): las **16**
+      rutas del sitemap devuelven `og:image` `200 image/png` de 40.888 B. Antes: 12.
+      **Evidencia mirada, no supuesta:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-tarjeta-social-rutas-fuera-de-sitio.png`
+      — la tarjeta de `/servicios/consultoria`, 1200×630, dibujada, cero captura, cero obra.
+      **Gates:** `tsc --noEmit` 0 · `vitest run forma.test.ts` **51 pasando** (eran 47: una por
+      ruta nueva) · `next build` exit 0, **16** rutas `opengraph-image` emitidas (eran 12).
+      ⚠️ **La trampa del `EADDRINUSE` volvió a morder, y avisada.** `pkill -f "next start"` mató
+      **mi propia shell** (el patrón coincide con la línea de comando que lo invoca), no el
+      servidor: el viejo siguió tomando el puerto y el `next start` nuevo murió con
+      `EADDRINUSE`. Un `curl` ahí habría medido el build ANTERIOR y dado "arreglado" por
+      casualidad. Se libera con `fuser -k 3210/tcp` y se lee el log antes de creerle a la
+      medición.
+      **Lo que falta, y no es zona de este carril:** el deploy. Contra `onia-landing`, las cuatro
+      siguen sin imagen hoy. Publicar lo decide Sergio.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
@@ -650,6 +770,30 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Cómo se sabe que quedó hecho:** `docker logs onia-chatbot_chatwoot... | grep Rack::Attack`
       sin bloqueos de las IPs de monitoreo, y una corrida del canario sin el 429 en
       `erroresConsola`.
+      **↑ Re-medido en vivo el 2026-09-02 12:35 UTC por `onia-cola` (Gate 1). Sigue vivo y
+      empeoró — pero la causa NO es la que dice arriba, y eso cambia cuál es el arreglo:**
+      - **485 bloqueos en 24 h** (eran 262), y siguen siendo **exactamente dos IPs, las dos
+        nuestras**: `192.223.122.70` (406, salida de los loops) y `187.77.16.63` (79, el VPS).
+        **Cero IPs de terceros** — se confirma que ningún visitante real lo sufrió.
+      - **Pero no es "el monitoreo en general": es una corrida puntual.** Repartidos por hora,
+        **365 de los 485 (75%) caen en las horas 04 y 05 UTC** — la corrida del canario de las
+        `04:41`. Las horas 08 y 10 tienen 7 y 9 bloqueos. `onia-mirar-cliente` corre cada 15 min
+        y **no** produce ese volumen. Una sola pasada del canario genera **cientos** de pedidos a
+        `/widget`: el defecto no está en el umbral de Chatwoot, sino en que nuestro canario
+        martilla un endpoint de terceros.
+      - **El contenedor NO tiene ninguna env var de rate limit** (`docker inspect` filtrado por
+        rack/limit/throttle sale vacío): usa el default del código de Chatwoot. O sea que "subir
+        el umbral" **exige reiniciar el contenedor**, el mismo que hospeda la bandeja de los 7
+        leads. **Eso necesita OK de Sergio** — no es una traba, es la regla de no desplegar al
+        VPS sin permiso.
+      - Reproducción: con el token real, tres GET seguidos dan **200, 200, 429**. ⚠️ **No puedo
+        afirmar que el umbral sea 3**: la misma IP corre `onia-mirar-cliente` cada 15 min y no
+        controlé el estado de la ventana. Lo honesto es "tripa rápido", no un número.
+      **Qué cambia para quien lo tome:** el arreglo barato y sin permiso es **que el canario deje
+      de pedir el widget** — es nuestro repo (`scripts/canario_visual.mjs`, carril
+      `canario-visual`), no producción. Tocar Chatwoot es el arreglo caro y sólo hace falta si se
+      prueba que un visitante real lo sufre; hoy la evidencia dice que no.
+      **No lo tomo yo:** el archivo es del carril `canario-visual`, cuyo loop corre a las 16:41 UTC.
 
 ### Del canario visual — corrida del 2026-09-02 04:41 UTC (diez pantallas, sin ítems nuevos)
 
@@ -971,8 +1115,30 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
-- [ ] 🟡 **El gate de la cola (`scripts/verificar_cola.js`) ladra 4 "fantasmas" que no lo son —
-      un gate ruidoso es un gate que se empieza a ignorar.** Medido el 2026-09-02 corriendo
+- [x] 🟡 **El gate de la cola (`scripts/verificar_cola.js`) ladraba 4 "fantasmas" que no lo son
+      — ARREGLADO el 2026-09-02, y eran TRES defectos distintos, no uno.** El diagnóstico
+      heredado era correcto en los tres síntomas pero los trataba como un solo "detector
+      demasiado suelto"; cada uno necesitó su propia carve-out **y su recíproco**, que es lo que
+      impide que arreglar el ruido afloje el gate:
+      - **Glob** (`*`): una zona no es un archivo. Ningún archivo del repo tiene `*`.
+      - **Identificador punteado sin barra** (`visto.texto`, `d.fonts`): el patrón viejo
+        `\.[a-z0-9]{2,5}$` tomaba por archivo cualquier expresión de código que la cola cita.
+        Ahora un nombre **sin barra** sólo es ruta si su extensión está en `EXTENSIONES` (lista
+        explícita, no patrón). **Con barra se sigue verificando siempre**, así que no puede
+        tapar un archivo dentro de una carpeta.
+      - **Nombre corto de un archivo ya citado entero** (`alta.ts`, después de
+        `web-factory/apps/onia-platform/src/app/(sitio)/alta.ts` en el mismo ítem): no es
+        fantasma, es el mismo archivo. Se descarta **sólo** si el propio ítem trae una ruta que
+        termina en ese nombre — sin la ruta larga, sigue siendo fantasma.
+      - **Y la repetición**: la misma ruta citada dos veces en un ítem se reporta una vez.
+      **Cómo se sabe que quedó hecho, medido:** `--self-check` pasa **49 casos** (los 9 nuevos
+      fallaron en ROJO antes del cambio, por el motivo correcto); `node scripts/verificar_cola.js
+      hermes-content/docs/COLA.md` sale **verde, exit 0, 16 ítems**; y un ítem inventado que cita
+      `lib/esto-no-existe-jamas.ts` **sigue saliendo fantasma**. `npm test` exit 0. Las otras
+      colas de `hermes-content/docs/cola/` dan el mismo `cola-vacia` que antes del cambio
+      (verificado con `git stash`): no tienen sección "Ahora", y eso no es regresión de esto.
+
+      *(Texto original del ítem, para que se vea contra qué se midió.)* Medido el 2026-09-02 corriendo
       `node scripts/verificar_cola.js hermes-content/docs/COLA.md`: sale con 4 ERROR y **los
       cuatro son falsos positivos**, porque el detector de rutas toma por nombre de archivo cosas
       que no lo son:
@@ -1032,39 +1198,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (`/contexto/`, `/fotos/`) en vez de las prohibidas, así que cualquier captura nueva en la
       superficie de venta rompe la suite.
 
-- [ ] 🔴 **DECIDE SERGIO — `DELETE /api/payments/[id]` sobre un mes ya declarado.** El hueco es
-      real y verificado el 2026-08-30: borrar el último pago devuelve la factura a BORRADOR
-      (`app/api/payments/[id]/route.ts`), BORRADOR está en `RCV_EXCLUDED_STATUSES`, y ese mes
-      pierde la venta del CSV sin nota de crédito de por medio. **No existe NINGÚN concepto de
-      cierre de período** en el repo — cero `fiscal_period`, cero tabla de cierre — y el RCV se
-      regenera on demand para cualquier mes. No es un bug suelto: falta el modelo, y por eso no
-      lo elijo yo.
-      **Las tres salidas, cotizadas:**
-      - **(a) Guarda barata** — bloquear la salida del RCV si el mes de la factura no es el
-        corriente. ~1 día, un guard dentro del helper que ya existe. Pero **inventa la
-        política**: "mes corriente" no es "mes declarado", y de paso bloquea la corrección
-        legítima del día 2 del mes siguiente.
-      - **(b) Cierre de período de verdad** — tabla `fiscal_periods` (org, año, mes, cerradoEn);
-        el RCV la lee, y toda salida del RCV sobre un período cerrado exige nota de crédito.
-        ~3-4 días. Es lo contablemente correcto y lo que el SIN asume.
-      - **(c) No hacer nada todavía.** Verificado EN VIVO en el contenedor `onia-platform` del
-        VPS: `SIAT_EMISSION` **no está seteada**, o sea la emisión ante el SIN está apagada
-        (`lib/fiscal/flags.ts` exige `=== "1"`). Con eso y cero clientes pagando, el costo real
-        de hoy es **cero**; aparece el día que se enciendan los gates fiscales.
-      **Recomendación: (c) ahora, (b) el día que se encienda el emisor.** (a) cuesta casi lo
-      mismo que (b) en discusión y deja escrita una política que después hay que desandar.
-      **Deduplicado el 2026-08-31:** este mismo hueco estaba escrito DOS veces y abierto en las
-      dos — acá con sus tres salidas cotizadas, y cien líneas más abajo, en la otra sección
-      "Después", sin analizar. Se borró la copia cruda: dos entradas del mismo hueco hacen que la
-      próxima sesión lo cotice de nuevo creyendo que es un problema distinto, que es trabajo
-      fantasma con otra cara. **Es la tercera vez que esta cola se duplica** — las dos anteriores
-      están escritas unas líneas más abajo, en el ítem del guardia de `invoice-status`, que ya
-      había dejado la lección por escrito (*"cerrar un ítem no cierra su copia"*) y aun así volvió
-      a pasar. Por eso esta vez no queda como lección sino como gate: `scripts/verificar_cola.js`
-      falla con `duplicado` si un ítem **abierto** repite el título de otro, en cualquier sección
-      y aunque el otro esté cerrado. El verificador miraba sólo "Ahora" y sólo pedía evidencia —
-      y una copia sin analizar tiene exactamente la misma evidencia que el original, así que
-      pasaba en verde. Una lección escrita se desobedece; un exit 1 no.
+- [x] **Movido a "Bloqueado — necesita a Sergio" el 2026-09-02** (`DELETE /api/payments/[id]`
+      sobre un mes ya declarado). Está medido y espera una línea de Sergio, así que vivía en la
+      sección equivocada: en "Después" hacía que cada vuelta lo releyera como si fuera trabajo
+      tomable. **Y al reverificarlo antes de moverlo apareció que una de sus premisas ya era
+      falsa** — el detalle, con la cotización corregida, va con el ítem en su nueva sección.
+      El texto completo NO se copió acá: se movió entero, para no dejar la copia que este mismo
+      archivo ya se cansó de cazar.
+
 - [x] **El guardia de `invoice-status` ya caza lo que prometía.** Las dos evasiones eran reales
       —`const facturas = tx.invoice` y `data: { invoices: { update: … } }` son Prisma normal, no
       rebusques— y **ninguna de las tres existe hoy en el repo** (verificado el 2026-08-30: las
@@ -1348,6 +1489,82 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 > alguien le pida una decisión sobre algo ya hecho, y quema el único recurso que no se recupera.
 > Es el mismo defecto que esta cola ya bautizó: *"cerrar un ítem no cierra su copia"*. Cada baja
 > lleva la evidencia con la que se dio, medida hoy, no leída de otro renglón.
+
+- 🔴 **`DELETE /api/payments/[id]` sobre un mes ya declarado** (movido acá el 2026-09-02 desde
+  "Después", donde cada vuelta lo releía como trabajo tomable). El hueco es real y verificado el
+  2026-08-30: borrar el último pago devuelve la factura a BORRADOR
+  (`app/api/payments/[id]/route.ts`), BORRADOR está en `RCV_EXCLUDED_STATUSES`, y ese mes pierde
+  la venta del CSV sin nota de crédito de por medio.
+  **⚠️ Reverificado hoy antes de moverlo, y una premisa ya era FALSA — por eso la cotización
+  cambia.** El ítem decía: *"No existe NINGÚN concepto de cierre de período en el repo — cero
+  `fiscal_period`, cero tabla de cierre"*. Hoy eso no se sostiene, medido en los dos sistemas:
+  - **El modelo existe en `master`** (`prisma/schema.prisma`, `model OniaAccountingFiscalPeriod`
+    → tabla `onia_accounting_fiscal_periods`) y trae **exactamente** los campos que la opción (b)
+    pedía inventar: `organizationId`, `startDate`/`endDate`, `status` (default `open`), `closedAt`,
+    y `@@unique([organizationId, name])`.
+  - **Y ya está aplicado en la base de PRODUCCIÓN** — contenedor `supabase-db`, no la nube:
+    `to_regclass('public.onia_accounting_fiscal_periods')` devuelve la tabla, con **0 filas**.
+  - **Pero no lo llama NADIE**: cero referencias a `OniaAccountingFiscalPeriod` /
+    `fiscalPeriod` en todo el `.ts`/`.tsx` del repo. Es *construido ≠ terminado* con todas las
+    letras — un módulo que nadie llama, valor cero.
+  **Qué cambia para Sergio: (b) ya no cuesta 3-4 días.** Lo caro de (b) era modelar la tabla,
+  migrarla y aplicarla; las tres cosas están hechas. Lo que falta es **cablear el RCV a leerla**
+  y exigir nota de crédito sobre un período cerrado. La decisión sigue siendo suya, pero ya no es
+  entre "barato y torcido" (a) y "correcto y caro" (b): (b) es hoy bastante más barata de lo que
+  este ítem venía diciendo, y ese número mal puesto empujaba a elegir (a).
+  **Las tres salidas, con (b) re-cotizada:**
+  - **(a) Guarda barata** — bloquear la salida del RCV si el mes de la factura no es el corriente.
+    ~1 día. Pero **inventa la política**: "mes corriente" no es "mes declarado", y bloquea la
+    corrección legítima del día 2 del mes siguiente. **Hoy tiene menos sentido que nunca**: la
+    tabla que evitaba ya existe.
+  - **(b) Cierre de período de verdad** — usar la tabla que YA está: el RCV la lee, y toda salida
+    sobre un período cerrado exige nota de crédito. **Ya no son 3-4 días**: el schema y la
+    migración están en `master` y aplicados en producción. Queda el cableado. Es lo contablemente
+    correcto y lo que el SIN asume.
+  - **(c) No hacer nada todavía.** Reverificado EN VIVO hoy en el contenedor `onia-platform`:
+    `SIAT_EMISSION` **sigue sin estar seteada** (`docker inspect` no devuelve ninguna `SIAT_*`),
+    o sea la emisión ante el SIN está apagada (`lib/fiscal/flags.ts` exige `=== "1"`). Con eso y
+    cero clientes pagando, el costo real de hoy sigue siendo **cero**.
+  **Recomendación: (c) ahora, (b) el día que se encienda el emisor** — igual que antes, pero (b)
+  entra más barata de lo que estaba escrito.
+  **Cómo apareció esto, que es la lección:** no se buscó. Salió de contar la rama
+  `claude/onia-core-adoption-sprint5` de `onia-platform` (radar 26), que trae ese modelo entre
+  otros diez. **Un bloqueo se pudre solo**: nadie tocó este ítem, y aun así envejeció mal porque
+  otro carril construyó por debajo lo que él declaraba inexistente. Por eso la regla es
+  reverificar ANTES de mover, no al escribirlo.
+
+- 🔴 **Los nombres de los iconos se leen como texto en el login de la plataforma — ARREGLADO
+  EN CÓDIGO, falta SÓLO el deploy** (movida acá el 2026-09-02 desde "Ahora"; vivía abierta
+  arriba de todo mientras el código ya estaba en `master`). El arreglo son `aria-hidden` en los
+  tres glifos de `components/auth/AuthShell.tsx` y la guarda del `setTimeout(ok,12000)` de
+  `lib/iconos-script.ts`, con sus dos tests (`components/auth/AuthShell.test.ts`,
+  `lib/iconos-script.test.ts`).
+  **Reverificado en vivo el 2026-09-02, MIRANDO lo servido, no el repo:** producción sigue en
+  `BUILD_ID lNDdVgrRvP1mizzu3BVXc` (= `build-8a3b5a6`), el HTML de `app.onia.com.bo/login`
+  todavía trae `bolt`, `credit_card_off` y `smart_toy` como nodos de texto **sin
+  `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)`. El
+  bloqueo NO venció.
+  **Lo que falta es un deploy, no una línea:** `8a3b5a6..origin/master` son exactamente **3
+  commits** — `bdf0935` + `5888a13` (este ítem) y `efaffe8` (la CSP del beacon de Cloudflare).
+  **Decide Sergio**, con el runbook y el costo en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §20.
+
+- ~~🔴 **El párrafo del login sale con espacios metidos DENTRO de palabras**~~ — **BLOQUEO
+  VENCIDO, sacado de acá el 2026-09-02 por el integrador. Sergio NO tiene que decidir nada:
+  el defecto no existe para un cliente.** Pedía elegir entre tres salidas que cambiaban cómo
+  se ve `/login` y `/register`, y ninguna hace falta. Ver el ítem cerrado en *"Del canario
+  visual — segunda pasada del 2026-09-01"*, más arriba en este mismo archivo.
+  **Reverificado por el integrador antes de sacarlo, sin creerle a nadie** (misma URL, mismo
+  instante, misma fuente cargada, los dos binarios que ya están en el VPS, apuntados por
+  `executablePath`): `chrome-headless-shell-1223` dibuja *"Ent regamos t u sist ema … puest a …
+  con t us dat os"*; `chromium-1223` completo dibuja *"Entregamos tu sistema con la
+  configuración de tu rubro puesta."* — **impecable**. El `innerText` es idéntico en los dos.
+  **Por qué la bisección de antes no contradice esto:** aislar el gap a "Archivo en pesos ≤500"
+  y que se vaya con `font-weight: 700` es exactamente lo que hace un bug de rasterizado en los
+  trazos finos. Esa prueba nunca podía distinguir sitio de motor, porque **no cambió el motor**.
+  La única variable que apaga el defecto sin tocar una línea del sitio es cuál de los dos
+  Chromium saca la foto.
+  **Lo que sí sigue abierto, y no es de Sergio:** el canario captura con el motor malo — está
+  como ítem del carril del canario, arriba.
 
 - 🔴 **F2 · El chatbot se cobra y medio chatbot es gratis** (movida acá el 2026-09-02 desde
   "Ahora"; vivía como el primer ítem no bloqueado y venía sin moverse desde el 2026-08-30).

@@ -723,7 +723,17 @@ dependencias que el lockfile no tiene, así que `pnpm install --frozen-lockfile`
 CI) **falla**. No se tocó acá porque regenerar un lockfile no es trabajo de un merge, pero es una
 bomba con temporizador para el primer pipeline que instale en limpio.
 
-## 16. ~~`/` y `/empezar` no tienen dueño~~ — RESUELTO 2026-09-02, no hay decisión
+## 24. ~~`/` y `/empezar` no tienen dueño~~ — RESUELTO 2026-09-02, no hay decisión
+
+> ⚠️ **Era la SEGUNDA sección numerada `16` de este archivo, y por eso quedó fuera de secuencia.**
+> Renumerada a 24 el 2026-09-02. El `16` legítimo es el de arriba (*"Treinta y un commits… NINGUNO
+> está desplegado"*, creado en `d1826f48` el 08-31 23:09); esta nació después, en `84ad6628`, y
+> reusó el número. **El choque no era cosmético: las DOS tenían una opción `(a)`**, así que las
+> tres citas de *"punto 16(a)"* / *"la §16"* que viven en este mismo archivo (grep `16(a)`)
+> resolvían a dos cosas distintas — el deploy del motor del bot, o "que `onia-cola` adopte la
+> home". Se renumeró ésta y no aquélla porque aquélla estaba primero, **sigue abierta**, y es la
+> que se lleva las tres citas. Se deja acá, en su lugar cronológico, en vez de moverla al final:
+> mover el texto perdería el contexto de las secciones que la rodean.
 
 La home y la página de acceso viven en `web-factory/apps/onia-platform/`: **ninguna cola las
 nombra**, y la zona de `web-factory-dev-loop` las excluye explícitamente. Son la puerta de
@@ -1016,7 +1026,37 @@ del 2026-08-20 (landing v2 rechazada entera, revertida en producción). No hay u
 Mientras no haya decisión, el ítem queda abierto en `COLA.md` con la medición completa para
 que la próxima vuelta no la repita.
 
-## 19. El espaciado roto del login es un bug real de la fuente Archivo — pero el arreglo cambia cómo se ve el texto (2026-09-02) — decisión de Sergio
+## 19. ~~El espaciado roto del login~~ — CERRADA el 2026-09-02, Sergio NO decide nada
+
+> ✅ **Era el motor de captura, no el sitio. Las tres opciones de abajo quedan sin objeto: ninguna
+> hay que ejecutar, y el párrafo de `/login` NO se toca.**
+>
+> **Cómo se resolvió sin Sergio.** El camino **(c)** de esta misma sección —*"que Sergio abra
+> `app.onia.com.bo/login` en su Chrome de escritorio; si no lo ve, se cierra como
+> fantasma-de-headless"*— era la respuesta correcta con el instrumento equivocado: no hacía falta
+> un humano con GUI, hacía falta **el otro Chromium, que ya estaba bajado en el VPS**. Se cambió
+> el motor en vez de la persona.
+>
+> **La medición, hecha dos veces por dos carriles distintos** (el dueño de `web-venta` y después
+> el integrador, sin creerle al primero): misma URL, mismo instante, misma fuente ya cargada,
+> los dos binarios apuntados por `executablePath`.
+> - `chrome-headless-shell-1223` → *"Ent regamos t u sist ema … puest a … con t us dat os"*.
+> - `chromium-1223` completo → *"Entregamos tu sistema con la configuración de tu rubro puesta."*
+>
+> El `innerText` es idéntico en los dos, y **la única variable que cambió fue el rasterizador**.
+>
+> **Por qué la bisección de abajo no contradice esto — importa, porque es lo que hizo perder tres
+> días.** "Roto en pesos ≤500, limpio en 600+, limpio con Arial" es exactamente la firma de un bug
+> de rasterizado en trazos finos: describe *cuándo* se ve, no *quién* lo dibuja. Ninguna de esas
+> pruebas cambió de motor, así que **ninguna podía distinguir sitio de captura** — por eso todas
+> apuntaron con confianza al lugar equivocado. Cuando una investigación no puede refutar su propia
+> hipótesis, acumular evidencia dentro de ella sólo la vuelve más convincente, no más cierta.
+>
+> **Lo único que queda, y no es de Sergio:** el canario visual saca sus fotos con el motor malo
+> (`scripts/canario_visual.mjs`, `chromium.launch` sin `channel`), así que va a seguir inventando
+> este defecto en cada corrida. Está como ítem abierto del carril del canario en `COLA.md`.
+
+<details><summary>La investigación original, tal como quedó (ya explicada por lo de arriba)</summary>
 
 `COLA.md` tenía el ítem del párrafo de `app.onia.com.bo/login` con espacios metidos DENTRO de
 palabras ("Ent regamos", "puest a") marcado como *"queda a criterio del dueño confirmarlo en un
@@ -1075,6 +1115,8 @@ alcanza o Sergio prefiere no tocar el peso visual.
 
 Mientras no haya decisión, el ítem sigue abierto en `COLA.md`, con este hallazgo referenciado
 para que la próxima vuelta no rehaga la bisección.
+
+</details>
 
 ## 20. Tres commits arreglan el login de la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
 
@@ -1176,3 +1218,171 @@ diseño que conviene que sepas: el bloque pegado en todos los prompts busca fila
 falten en el cron — nunca al revés. Por eso `web-venta` e `investigacion` corrieron días sin estar
 en `loops.md`, invisibles para la auto-cura. Arreglarlo toca los 7 prompts (uno por carril) y el
 bloque dice explícitamente "no lo optimices", así que **no lo tocó nadie todavía**: decidilo vos.
+
+## 23. ~~Los arreglos del carril chatbot al producto nunca llegan a `master`~~ — RESUELTO 2026-09-02, Sergio NO decide nada
+
+> ✅ **Cerrado el 2026-09-02 12:39 UTC por el integrador (`onia-cola`), por el camino (a).** Se
+> tomaron las dos acciones que pedía esta entrada, en la misma vuelta:
+>
+> 1. **Mergeados los 3 commits a `origin/master`** (`503af44`, merge `--no-ff`). Eran 3, no 2:
+>    se sumó `d62beeb`, que cablea el gate de iconos a `ci`. Guarda dura pasada (0 archivos
+>    borrados, 13 archivos, +373/−28) y **los tres gates de `onia-platform` en verde**:
+>    `tsc` 0 · `vitest` **2494 pasan / 204 archivos** · `npm run lint` **0 errores**
+>    (100 warnings preexistentes). Los snapshots NO se reescribieron esta vuelta — se verificó
+>    con `git status` después de vitest, por la trampa de CRLF que la cola ya tenía anotada.
+> 2. **Tapado el agujero que lo causaba** (recomendación (a)): `scripts/loops/prompts/onia-cola.md`
+>    ahora hace `fetch` y cuenta en **los dos repos**, cada uno contra su base (`main` en
+>    `onia-hermes`, `master` en `onia-platform`), y trae el comando para enumerar en vivo las
+>    ramas del segundo repo en vez de confiar en una lista escrita a mano.
+>
+> **Verificado por el gate que este mismo carril construyó, no por lectura:**
+> `npm run deploy:alcanzable` pasó de **exit 1** nombrando los commits inalcanzables a **exit 0**
+> — *"4 commit(s) declarado(s), los 4 llegan a origin/master"*. Es la clase de prueba que esta
+> entrada pedía: una que discrimina en vez de gritar a todo.
+>
+> ⚠️ **Lo que NO cambia: esto era el escalón `rama → master`. La §20 sigue abierta.** Los tres
+> arreglos ahora existen en `master` y **el cliente todavía no los ve**: falta el deploy, que
+> decide Sergio. Cerrar ésta no destraba aquélla — la hace posible.
+
+**Es un escalón ANTES de la §20, no la misma cosa.** La §20 mide `master` → producción: tres
+commits que están en `master` y nadie desplegó. Ésta mide **rama de carril → `master`**: dos
+commits que ni siquiera llegaron a la rama de la que se buildea. Si mañana se aprueba el deploy
+de la §20, el swap buildea `master` y **estos dos siguen sin estar**.
+
+**Medido el 2026-09-02, no deducido** (`git merge-base --is-ancestor` en el clon del VPS):
+
+| Commit | Qué arregla | ¿en `origin/master`? |
+|---|---|---|
+| `22fd088` | El menú del dashboard dibuja `ASSIGNMENT_TURNED_IN` en letras gigantes en vez de un icono | **NO** |
+| `675541b` | El editor del chatbot le dice "La cita" y "en el consultorio" a una ferretería | **NO** |
+
+Los dos están commiteados **y pusheados** a `origin/claude/chatbots-platform-review-0d1d09` de
+`onia-platform`. Esa rama está **2 commits adelante y 17 atrás** de `origin/master`, y nada la
+mergea.
+
+**Por qué nadie la mergea, que es la causa y no el síntoma.** El integrador (`onia-cola`) tiene
+el merge a `master` **pre-autorizado** por su propio prompt. Pero su Paso 1 hace
+`cd /root/loops/onia-hermes` y recorre una lista de ramas de **ese** repo. La rama
+`claude/chatbots-platform-review-0d1d09` está en esa lista — sólo que la cuenta contra el `main`
+de `onia-hermes`, donde da **0**, y concluye "no hay nada que hacer con esa rama". El mismo
+nombre de rama existe en los DOS repos, y el que tiene trabajo sin mergear es el que nadie mira.
+
+**El costo ya cobrado: es la tercera vez que la misma instrucción falla, cada vez un escalón más
+adentro.** (1) `S11` mandaba desplegar un commit inexistente — el trabajo había quedado en el
+disco de Windows. (2) Se rehizo y se pusheó, y `S11` quedó escrito "commiteado y pusheado, NO
+desplegado", como si sólo faltara el OK. (3) Medido hoy: falta el merge. **Un bloqueo que le pide
+a Sergio desplegar algo que el deploy no alcanza no se destraba nunca.**
+
+**Ya no depende de un párrafo:** `npm run deploy:alcanzable` lee la cola, saca los commits de
+`onia-platform` que declara y le pregunta a git si `origin/master` los alcanza. Hoy sale **exit
+1** nombrando los dos; `e644c85` (de un ítem viejo) sale **OK**, que es la prueba de que
+discrimina en vez de gritar a todo.
+
+**Tres caminos, cotizados:**
+
+- **(a) `onia-cola` extiende su Paso 1 a las ramas de `onia-platform`.** Su prompt ya autoriza el
+  merge a `master` y ya tiene escritos los tres gates de ese repo (`tsc`, `vitest`, `npm run
+  lint`). Lo que falta es que enumere el segundo repo. Toca
+  `scripts/loops/prompts/onia-cola.md` — es del carril de integración, **no del chatbot**.
+  Costo: una vuelta de ese loop. **Es el único que no se vuelve a romper el mes que viene.**
+- **(b) Sergio mergea la rama a mano**, o por PR como llegaron los últimos (`Merge pull request
+  #77`). Costo: minutos. Arregla estos dos commits y ninguno de los próximos.
+- **(c) Dejarlo.** Cada arreglo que este carril haga sobre el producto queda en una rama muerta,
+  y `S11` no se destraba nunca.
+
+**Recomendación: (a)**, y (b) ahora mismo si se quiere el icono arreglado en el próximo swap.
+
+---
+
+## 25. Los carriles auditan un árbol viejo: nadie sincroniza el worktree con `main` (2026-09-02)
+
+**Qué pasó, medido.** La vuelta de `docs-auditoria` de las 13:18 UTC arrancó en `HEAD 8a83eea7`
+—su propio último commit— y `git rev-list --count HEAD..origin/main` daba **96**. Noventa y seis
+commits de `main` que el carril no veía.
+
+**Por qué importa, con el caso concreto de esa misma vuelta.** El carril leyó `COLA.md` y el
+radar de su copia vieja, encontró el ítem *"Nadie es dueño de `/` ni de `/empezar`"* pidiéndole a
+Sergio elegir entre dos opciones, verificó en vivo que el bloqueo estaba **vencido** (el carril
+`web-venta` es el dueño desde el 2026-09-02, corre 5 veces al día y commitea arreglos reales en
+`web-factory/apps/onia-platform/`) y **estuvo a punto de escribir la corrección**. En `origin/main`
+esa sección ya decía `RESUELTO` hacía horas. Se salvó por casualidad: al ir a editar, comparó
+contra `origin/main` primero.
+
+Ese es el modo de falla exacto: **un carril cuyo trabajo es "que lo escrito sea cierto" auditando
+una copia que ya no es lo escrito.** Gasta la vuelta entera re-corrigiendo lo corregido, y peor,
+puede "arreglar" hacia atrás algo que otro carril ya dejó bien.
+
+**No es sólo de este carril.** `/root/bin/onia-loop.sh` no tiene un solo `git fetch` ni
+`git merge --ff-only` antes de trabajar (`grep -n "fetch\|pull\|rebase" /root/bin/onia-loop.sh`
+sólo devuelve comentarios). Los siete carriles arrancan donde los dejó su vuelta anterior.
+
+**Por qué no lo arreglo solo:** tocar el corredor cambia el comportamiento de **los siete
+carriles a la vez**, y el prompt de este carril prohíbe tocar otro carril. Además hay un motivo
+real para no sincronizar a ciegas: un `merge` automático puede abrir conflictos sin nadie que los
+resuelva, y `CLAUDE.md` prohíbe soltar el turno con un merge abierto.
+
+**Opciones cotizadas (todas Bs 0, trabajo de una vuelta):**
+
+- **(a) `git merge --ff-only origin/main` al arrancar, y si NO es fast-forward, seguir igual y
+  avisar por Telegram.** El `--ff-only` es la clave: nunca abre un conflicto — o adelanta limpio,
+  o falla sin tocar nada. Cubre el caso de esta vuelta (el carril no tenía commits propios sin
+  mergear: `git rev-list --count origin/main..HEAD` = 0). Toca `scripts/loops/onia-loop.sh` + su
+  copia del VPS. **Recomendada.**
+- **(b) Sólo `git fetch` + avisar la distancia**, sin mover el árbol. El carril decide qué hacer.
+  Más conservador, pero deja el trabajo de decidir en cada vuelta.
+- **(c) Que cada prompt lo haga por su cuenta.** Toca los 7 prompts en vez de 1 archivo, y se
+  desincroniza igual que todo lo demás. No recomendada.
+- **(d) Dejarlo.** Cada carril sigue auditando su foto vieja. El costo no es hipotético: ya
+  quemó parte de una vuelta.
+
+**Recomendación: (a).** Es la única que no depende de que alguien se acuerde, y por ser
+`--ff-only` no puede dejar un merge abierto — que es justo lo que `CLAUDE.md` prohíbe.
+
+---
+
+## 26. Una rama de `onia-platform` lleva dos meses varada, y 10 de sus 11 modelos ya llegaron por otro lado (2026-09-02) — decisión de Sergio
+
+**Cómo apareció:** contando ramas del segundo repo, que es lo que este loop hace cada vuelta.
+`claude/onia-core-adoption-sprint5` es la **única** rama sin mergear a `origin/master` hoy
+(`git branch -r --no-merged origin/master`). No estaba en la lista de carriles del integrador
+porque **no es un carril**: no tiene loop.
+
+**Lo medido, no supuesto:**
+
+- **1 commit propio, 382 commits atrás de `master`.** El commit es `aa8f211`
+  (*"feat(onia-core): add area + accounting + invoicing schema (Sprint 5)"*), del **2026-07-06** —
+  casi dos meses. Toca 2 archivos: `prisma/schema.prisma` (+810) y una migración nueva
+  (`20260706000000_add_onia_accounting_invoicing_area/migration.sql`, +340).
+- **Mergearla a ciegas es pedir conflicto sobre el archivo más caro del repo.** Desde la base
+  común, `master` movió `prisma/schema.prisma` en **+1.018 líneas**. Es el schema de la base de
+  producción: un merge mal resuelto ahí no rompe un build, rompe datos.
+- **Y sobre todo: casi todo su contenido YA ESTÁ en `master`.** De los 11 modelos que agrega,
+  **10 ya existen** (`OniaAccountingAccount`, `FiscalPeriod`, `JournalEntry`, `JournalEntryLine`,
+  `TaxRate`, `TaxDeclaration`, `RcvRecord`, `WithholdingRecord`, `FixedAsset`,
+  `OniaInvoicingCreditDebitNote`). **El único que falta es `OniaCoreArea`.**
+
+**O sea que la rama no es trabajo varado: es trabajo ya entregado por otro camino, con un
+residuo de un modelo.** Mergearla entera para rescatar `OniaCoreArea` es pagar un conflicto de
+schema de 1.000 líneas por una tabla.
+
+**Las opciones, cotizadas (todas Bs 0):**
+
+- **(a) Borrar la rama y, si `OniaCoreArea` hace falta, escribirlo como migración nueva sobre
+  `master`.** Es lo barato y lo limpio: una migración chica, sin tocar las 1.018 líneas que
+  `master` movió. Hay que confirmar antes que `OniaCoreArea` se use para algo — hoy no lo llama
+  nadie. **Recomendada.**
+- **(b) Dejar la rama como está.** Cuesta cero hoy, pero cada vuelta del integrador la vuelve a
+  contar, y en dos meses más nadie va a saber qué tenía adentro. Es cómo nace un fantasma.
+- **(c) Mergearla.** No la recomiendo y no la hago sin orden explícita: conflicto garantizado en
+  `prisma/schema.prisma`, sobre el schema de producción, para traer 1 modelo de 11.
+
+**Recomendación: (a).** Y mientras no se decida, el integrador **no la mergea** — queda anotado
+en su propio prompt para que ninguna vuelta futura la levante por parecer "la única pendiente".
+
+**Efecto colateral que ya se cobró solo, y vale más que la rama:** contar esta rama destapó que
+el ítem bloqueado del `DELETE /api/payments/[id]` tenía una premisa falsa. Declaraba *"cero
+`fiscal_period`, cero tabla de cierre en el repo"*, y `OniaAccountingFiscalPeriod` no sólo está
+en `master`: **está aplicado en la base de producción** (`supabase-db`, tabla
+`onia_accounting_fiscal_periods`, 0 filas) y **no lo llama nadie**. Su opción (b) estaba cotizada
+en 3-4 días contando el modelado y la migración, que ya están hechos. Corregido en `COLA.md`,
+sección "Bloqueado — necesita a Sergio".
