@@ -19,9 +19,17 @@
  *   <ul class="wf-stagger">…</ul>                       children cascade in
  *   <h1 class="wf-type-slam wf-onload">…</h1>           headline slams in on load
  *   <div class="wf-parallax" data-wf-parallax="0.2">…</div>        scroll parallax
- *   <article class="wf-hover-lift">…</article>          hover lift (cards)
  *   <div data-wf-scrub><figure class="wf-frame">…</figure>…</div>  scroll advances the scene
  *   <span class="wf-count" data-wf-count="4200">4.200</span>       count-up in view
+ *
+ * No hay primitiva generica de hover para tarjetas: cada bloque que dibuja
+ * tarjetas escribe el suyo, porque el hover correcto depende de la tarjeta.
+ * Medido antes de borrar `.wf-hover-lift` (A8, 2026-09-01): CERO elementos la
+ * usaban en las 14 paginas de out/, su sombra `rgba(10,17,38,.35)` era ciega al
+ * tema, y las dos tarjetas que existen ya la contradecian -- clinic-css levanta
+ * la tarjeta -4px con su propia puerta de reduced-motion, y property-cards.ts
+ * zooma la foto DENTRO de un marco que a proposito NO se mueve. Un bloque nuevo
+ * con tarjetas escribe su :hover y su neutralizacion bajo prefers-reduced-motion.
  */
 
 /** The factory's editorial easing, shared with the React side (ui.tsx EASE). */
@@ -49,10 +57,6 @@ export const MOTION_CSS = `
 .wf-stagger>*{transition-delay:calc(var(--wf-stag) * var(--wf-i, 0))}
 .wf-stagger.wf-in>*{opacity:1;transform:none}
 
-/* hover lift for cards (pure CSS) */
-.wf-hover-lift{transition:transform .3s var(--wf-ease),box-shadow .3s var(--wf-ease)}
-.wf-hover-lift:hover{transform:translateY(-6px);box-shadow:0 24px 50px -24px rgba(10,17,38,.35)}
-
 /* sticky nav: .wf-scrolled toggled by the runtime after a little scroll */
 .wf-sticky{position:sticky;top:0;z-index:50;transition:background-color .3s var(--wf-ease),backdrop-filter .3s var(--wf-ease),box-shadow .3s var(--wf-ease)}
 
@@ -74,7 +78,6 @@ export const MOTION_CSS = `
 @media (prefers-reduced-motion: reduce){
   .wf-reveal,.wf-clip-reveal,.wf-scale-in,.wf-slide-left,.wf-slide-right,.wf-type-slam,.wf-zoom,.wf-stagger>*{
     opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}
-  .wf-hover-lift:hover{transform:none}
   .wf-parallax{transform:none!important}
   .wf-frame{transition:none}
 }
@@ -154,7 +157,6 @@ export const MOTION_PRIMITIVES = [
   { primitive: "staggered-children", motionSpec: "children cascade", class: "wf-stagger (on parent)", trigger: "in-view" },
   { primitive: "type-slam", motionSpec: "headline slams in", class: "wf-type-slam wf-onload", trigger: "on-load" },
   { primitive: "scroll-parallax", motionSpec: "parallax on media", class: "wf-parallax + data-wf-parallax='0.2'", trigger: "scroll-linked" },
-  { primitive: "hover-lift", motionSpec: "card lift on hover", class: "wf-hover-lift", trigger: "hover" },
   { primitive: "sticky-nav", motionSpec: "sticky nav with scrolled state", class: "wf-sticky (+ .wf-scrolled)", trigger: "scroll-linked" },
   { primitive: "scroll-scrub", motionSpec: "el scroll avanza la escena por etapas", class: "data-wf-scrub (track) + .wf-frame / .wf-step", trigger: "scroll-linked" },
   { primitive: "count-up", motionSpec: "la metrica cuenta hasta su valor real", class: "wf-count + data-wf-count='4200'", trigger: "in-view" },

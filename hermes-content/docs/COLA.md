@@ -23,9 +23,13 @@ bueno se quema una sola vez. Quiénes son, qué dijeron y dónde vive cada uno:
 **Era falso** —verificado el 2026-08-31: esa §8 habla de una rama de git y no hay cola del
 chatbot en el repo—, y es la peor clase de dato falso: hace creer que están guardados.)*
 
-**Estado:** el circuito **cierra**, verificado de punta a punta en local — alta 200 → checkout con
-precios de la fuente → comprobante PENDING → aprobación → **Bs 320,00 en la serie de agosto**.
-En producción el alta está **abierta** con verificación de correo probada.
+**Estado (medido en la base de PRODUCCIÓN el 2026-09-01):** el circuito **ya corrió en producción**,
+no sólo en local. La organización `ZZ QA Circuito Completo` (`cmtj22i3q000001khaxefs8ft`) tiene
+`onboardingCompletedAt = 2026-09-01 19:31`, **1 cita**, **3 productos** y un `subscription_payments`
+en **`APPROVED` por Bs 320,00** (`TRX-20260901-QA01`, revisado 19:40 UTC).
+*(Acá decía "verificado de punta a punta **en local**". Quedó viejo el mismo día: hasta esta
+mañana los contadores de producción eran 0 citas / 0 productos / 0 pagos, y el LISTO del punto
+era justamente que dejaran de serlo.)*
 
 ---
 
@@ -380,6 +384,29 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Descartado antes de escribirlo:** los bloques de color vacíos que salen en una captura
       full-page son el reveal-on-scroll sin disparar, no un defecto — el texto está en el DOM.
       Por eso `scripts/canario_visual.mjs` ahora recorre la página antes de capturar.
+      ⚠️ **Gate 1 del 2026-09-01: el ítem describe UNA imagen y el defecto está en las CINCO,
+      y no lo arregla ni el CSS ni un recorte.** No es la tarjeta la que "se pasa de su
+      contenedor": la tarjeta calza exacto. La tarjeta (clase `card`) mide `--niche-slot × 0.853` = 478×560 CSS
+      (`web-factory/apps/onia-platform/src/app/(sitio)/sitio.module.css:1738`) y las cinco imágenes
+      WebP de `web-factory/apps/onia-platform/public/rubros/` miden **956×1120** — la misma
+      relación, así que `object-fit: cover` no recorta nada. **El corte viene horneado en el
+      archivo**: la captura se hizo en un viewport ancho y después se recortó una ventana de
+      478 px, cortando lo que cruzaba el borde. Abiertas y MIRADAS las cinco:
+      `comercio` parte la tercera tarjeta de métrica ("QR / Bs…" — el defecto reportado),
+      `servicios` parte "Crédito fiscal" y la columna "IM", `importadora` parte la columna
+      "Válida hasta", y `dental`/`estetica` parten el botón verde "+ Nueva cita" y las
+      píldoras de estado.
+      **Descartado con la medición, no por pereza:** recortar el borde derecho no cierra —
+      en `estetica` el botón empieza en x≈822 y el texto "Control post-tratamiento" termina
+      en x≈843, así que **no existe** un corte que deje las dos cosas enteras. Tapar o hacer
+      zoom sería disimular con números mágicos distintos por rubro.
+      **Lo que lo cierra:** volver a capturar las cinco pantallas con el viewport en 478 px
+      CSS (×2 = 956) para que el layout responsive del producto entre solo. **Eso necesita la
+      app corriendo con datos de demo** (`prisma/seed-demo.ts`) — y el script que lo hacía,
+      el que vivía en la carpeta temporal .verif-tmp
+      (recortes-rubro.mjs), ya no está en el repo. Este carril **no** puede sembrar
+      datos: la base es la de PRODUCCIÓN en el VPS. Queda desbloqueado para quien tenga una
+      base local, o con un `docker compose` de Postgres (hoy no hay Docker en esta máquina).
 
 - [ ] **Los NOMBRES de los iconos siguen en el DOM como texto en el login de la plataforma.**
       El `innerText` de `app.onia.com.bo/login` devuelve `bolt`, `credit_card_off` y `smart_toy`.
@@ -389,6 +416,43 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Y un lector de pantalla lo lee así **hoy**. Sale con `aria-hidden` en el glifo + label
       propio, o con SVG. **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma.png`
       · 1.300 KB · 1.043 ms.
+      ⚠️ **Reverificado el 2026-09-01 sobre el bundle nuevo (`55e8d8a`, tres deploys después):
+      sigue igual, y ahora se sabe el número exacto del tope.** El HTML servido trae los tres
+      nombres como nodos de texto (`bolt`, `credit_card_off`, `smart_toy`, una vez cada uno) y
+      los tapa con una regla inline `visibility:hidden` que se levanta sólo al agregar la clase
+      `iconos-listos`… **o a los 12 segundos, pase lo que pase** — el script del `<head>` cierra
+      con un `setTimeout(ok, 12000)`. O sea: el mecanismo no es "si la fuente falla no se ven",
+      es "si la fuente tarda más de 12 s, el cliente lee `credit_card_off`". Con la fuente de
+      iconos que en agosto tardó 117 s, ese fallback es el camino normal, no el raro. Y
+      **ningún glifo tiene `aria-hidden`**: un lector de pantalla los deletrea hoy, con la
+      fuente cargando perfecto.
+      ✅ **ARREGLADO EN CÓDIGO el 2026-09-01 — `onia-platform` `5888a13`, en `master`. Falta
+      SÓLO el deploy, que decide Sergio.** Los dos agujeros que el ítem nombra, cerrados en su
+      raíz compartida y clavados con test:
+      - **El lector de pantalla:** los tres glifos salen de `components/auth/AuthShell.tsx:92`
+        — el panel que comparten `/login` y `/register`, así que se arregló una vez para las
+        dos pantallas. Van con `aria-hidden="true"`: cada bullet ya trae su título y su
+        detalle en texto, el glifo no aporta nada que no esté dicho.
+        `components/auth/AuthShell.test.ts` exige `aria-hidden` en **cada** glifo del panel y
+        falla si aparece uno nuevo sin él.
+      - **El `setTimeout(ok, 12000)`:** ahora sólo destapa `if (d.fonts.status !== 'loading')`.
+        Antes contradecía la decisión que el propio `lib/iconos-script.ts` declara arriba
+        ("si la fuente NO carga, los iconos quedan ocultos en vez de mostrar su nombre"): con
+        la fuente que tardó 117 s, a los 12 s el cliente leía `credit_card_off`.
+        `lib/iconos-script.test.ts` (nuevo) ejecuta el script de verdad contra un `document`
+        de mentira — el defecto vive en CUÁNDO llama a `ok()`, no en el HTML.
+      **Gates verdes en el worktree `iconos-a11y`:** `tsc --noEmit` 0 · `vitest run` 2.480
+      pasando, 0 fallando · `npm run lint` 0 errores. ⚠️ **La corrida en paralelo de vitest
+      perdió 8 archivos de test** por `spawn UNKNOWN errno -4094` (la máquina sin RAM: los
+      otros loops la tenían en 2,9 GB libres de 24) y salió con exit 1 reportando "193 files".
+      Con `--no-file-parallelism` corrieron los **202**. Si el gate reporta menos archivos de
+      los que hay, no está verde: está incompleto.
+      **Píxeles sin cambio**: `aria-hidden` no se ve y la guarda sólo cambia el modo de fallo,
+      así que acá no hay captura que mirar — lo que cambia es el árbol de accesibilidad (lo
+      afirma el test sobre el render real) y qué pasa cuando la fuente tarda.
+      **Deuda medida, aparte:** en todo el producto hay **456** `.material-symbols-outlined`
+      en 111 archivos y sólo **46** llevan `aria-hidden`. Eso es una barrida propia, no este
+      ítem — este cierra la pantalla reportada y su hermana.
 
 - [ ] **La CSP de producción bloquea el beacon de Cloudflare en TODA la plataforma.** En consola,
       en las dos rutas de `app.onia.com.bo` que se abrieron:
@@ -397,11 +461,121 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       a la CSP, o se apaga Web Analytics en Cloudflare: hoy es ruido rojo permanente en la
       consola de cada cliente y analítica que no se está midiendo. Ninguna de las dos cuesta
       nada; elegir es de Sergio sólo si quiere la métrica.
+      ⚠️ **Reverificado el 2026-09-01 leyendo la cabecera, no la consola.** La respuesta de
+      `app.onia.com.bo/login` trae `content-security-policy: default-src 'self'` con
+      `script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com` — el
+      origen del beacon **no está**, así que el bloqueo es de la cabecera y se arregla ahí o en
+      Cloudflare. Sigue abierto.
+      **Y ahora se sabe dónde se toca**, que es lo que al ítem le faltaba: la cabecera se
+      escribe a mano en `next.config.ts:76` del repo `onia-platform` (el bloque `headers()`,
+      con la clave en la línea 73). Es una línea: agregar el origen del beacon a `script-src`,
+      o apagar Web Analytics en Cloudflare. **Cómo se sabe que quedó hecho:** abrir
+      app.onia.com.bo/login y que la consola no traiga la violación de CSP.
 
 - [ ] **Nadie es dueño de `/` ni de `/empezar`.** Viven en `web-factory/apps/onia-platform/`,
       que ninguna cola nombra y que la zona de `web-factory-dev-loop` prohíbe explícitamente.
       Son la puerta de entrada del producto y hoy sus defectos caen acá por descarte. Anotado
-      también en `ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      también en `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+
+### Del canario visual — segunda pasada del 2026-09-01
+
+- [ ] **El párrafo izquierdo del login de la plataforma sale con espacios metidos DENTRO de
+      palabras** ("Ent regamos", "puest a", "t odo el sist ema", "cit as", "import ante"), en
+      `app.onia.com.bo/login` — y por herencia en `/settings/chatbot` sin sesión, que redirige
+      ahí. Reproducido 3 veces seguidas en Chromium headless del VPS (`--no-sandbox`), siempre
+      en las mismas palabras. El `innerText` del párrafo es correcto (sin espacios de más) y
+      `document.fonts.status` es `loaded`, sin 404 de fuentes — el glitch es sólo visual, en el
+      renderizado del glifo, no en el dato. La fuente del bloque es `Archivo` (variable font).
+      **No se descartó como artefacto del canario**: a diferencia del blanqueo por scroll de la
+      home (que desaparece con más tiempo de scroll y por eso NO se reporta), este espaciado
+      **no cambió con 3 s de espera extra** después de `networkidle`.
+      **No verificado en un Chrome de escritorio normal** — puede ser una rareza de fuente
+      variable + Chromium headless Linux y no algo que vea un cliente real; queda a criterio
+      del dueño confirmarlo en un navegador de verdad antes de invertir tiempo.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma-texto-espaciado.png`
+      (página completa) y `hermes-content/docs/historial/canario-visual/2026-09-01-login-plataforma-texto-espaciado-crop.png`
+      (recorte del párrafo) · login-plataforma hoy = 967 KB
+      · 147 ms hasta mirable (baseline: 1.302 KB · 1.043 ms — la baja de peso es variación de
+      CDN/compresión entre corridas, no un recorte de contenido: el `innerText` completo
+      coincide con la baseline).
+
+### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
+
+- [ ] 🟠 **Decir "`main` compila" no dice NADA sobre `onia.com.bo`: ningún gate corre `tsc`
+      sobre las apps de `web-factory`.** El único typecheck cableado del repo mira **cero
+      líneas de código de app**.
+      **Evidencia, medida hoy y en tres lugares distintos:**
+      - `web-factory/tsconfig.packages.json` es exactamente `{"extends": "./tsconfig.json",
+        "include": ["packages/**/*.ts"]}` — ni un archivo de `web-factory/apps/`. Y es el único que se
+        corre: en `web-factory/package.json` el solo script de tipos es
+        `"typecheck:packages": "tsc --noEmit -p tsconfig.packages.json"`.
+      - **Ninguna CI lo suple.** `$ git grep -nE "tsc|typecheck|pnpm.*(build|test)|npm run (build|test)" origin/main -- .github/workflows`
+        devuelve **cero líneas**. Los 6 workflows de `.github/workflows` son deploy, higiene,
+        auditoría, pulso y video-intake: **no hay un solo job que compile o testee nada**.
+      - **Y esto no es teórico: la app sin gate es la que sirve la venta.** El contenedor
+        `onia-landing` del VPS corre `next-server (v15.5.19)` sobre `/app/apps/onia-platform`
+        — o sea `web-factory/apps/onia-platform/`, la app de `onia.com.bo` y `/empezar`.
+        Medido por `docker exec`, no leído de un doc.
+      **El estado app por app** (todas en `web-factory/apps/`): `dental-premium`,
+      `dentalgest-landing`, `ferreteria-sur` y `onia-platform` **sí tienen** script `typecheck`
+      (`tsc --noEmit`) en su `package.json` y **no lo llama nadie**; `site` **ni siquiera lo
+      tiene** (su único script de calidad es `lint`). Son cinco líneas de trabajo, no un
+      proyecto.
+      **Cómo se sabe que quedó hecho:** correr `$ pnpm --filter <app> typecheck` para las cinco
+      y que el resultado quede **cableado en el script raíz** que un carril corre antes de
+      mergear — con la corrida de `onia-platform` verde pegada, porque es la que publica el
+      sitio de venta. Si alguna sale roja hoy, ese error **ya está en producción**.
+      **Sin bloqueo:** no toca producción, no gasta, no baja ninguna superficie.
+      ⚠️ **Ojo de carril:** `web-factory/apps/onia-platform/` es la app que esta misma cola
+      anota como huérfana cuatro ítems más arriba. El gate se puede cablear sin tocar su
+      código — y justamente por eso conviene que exista antes de que alguien lo toque.
+
+### Del canario visual — corrida del 2026-09-01 22:41 UTC (tercera pasada)
+
+- [ ] 🔴 **`onia.com.bo/` y `/empezar` cambiaron de diseño y de copy ENTERO desde la baseline de
+      hace 3 h, y el CTA de `/empezar` ahora manda a `app.onia.com.bo/register` — que resultó
+      estar VIVO, con un wizard de 2 pasos que llega hasta un formulario real de contraseña.**
+      Esto contradice lo que este mismo repo tiene escrito como historia (`CLAUDE.md`, sección
+      "Una promesa que cambia se barre en TODA la superficie"): que `/register` "dejó de crear
+      cuentas" y que el arreglo honesto vive sólo en `/empezar` ("Pedí tu acceso"). Si esa premisa
+      ya no es cierta, la corrección de agosto puede estar desactualizada; si SÍ sigue siendo
+      cierta y `/register` no termina de crear la cuenta, volvió el bug exacto que esa corrección
+      arregló, con las mismas palabras ("Creá tu cuenta") apuntando derecho a la pantalla rota.
+      **No lo decidí yo — no tengo dueño para esta pantalla y no toco el flujo de otro carril.**
+      **Lo que sí verifiqué, mirando y sin enviar el formulario (no creé ninguna cuenta):**
+      - Home: título pasó de *"Onia · Tu negocio no pierde citas ni cobros | Bolivia"* a
+        *"Onia · Cerrás vos, el negocio no | Software de gestión Bolivia"*, y el CTA de *"Pedí tu
+        acceso"* pasó a *"Creá tu cuenta"* en cabecera, footer y banda final. Todo el copy central
+        cambió (de "Onia agenda las citas..." a "Un negocio abre 9 horas / Cerrás vos. El negocio
+        no."). **Es un redeploy real, no una regresión de datos**: HTML válido, sin errores de
+        consola nuevos, `msMirable` bajó de 933 a 495 ms.
+      - `/empezar`: 4 botones "Creá tu cuenta". El de la barra de navegación apunta a `/empezar`
+        (self, correcto, ya estás ahí). **Los otros dos** (el de la sección hero y el de la banda
+        verde final) apuntan a `https://app.onia.com.bo/register` (`href` verificado en el DOM,
+        no un grep de texto).
+      - `app.onia.com.bo/register` responde 200. Paso 1 es un selector de rubro (los 5 packs +
+        "otro rubro, escribinos"). Clic en "Empezar aquí" (Clínica dental) llega a un Paso 2 con
+        `<form>` real: nombre, correo, contraseña, nombre del negocio, "¿cómo nos conociste?",
+        checkbox de novedades y botón **"Crear mi cuenta — 14 días gratis"**. **No hice submit**:
+        crear una cuenta de prueba es una escritura en producción y no es lo que este loop hace.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-01-home-rediseno.png`
+      (home hoy 1.585 KB · 495 ms; baseline 2.310 KB · 933 ms) ·
+      `hermes-content/docs/historial/canario-visual/2026-09-01-empezar-rediseno.png` (empezar hoy 2.168 KB · 573 ms; baseline 2.497 KB · 711 ms) ·
+      `hermes-content/docs/historial/canario-visual/2026-09-01-register-paso1.png` y `hermes-content/docs/historial/canario-visual/2026-09-01-register-paso2.png`.
+      **La baseline de `home` y `empezar` NO se tocó** — sigue siendo la de la mañana, a propósito:
+      la regla es que se actualiza recién cuando la diferencia ya se explicó o el ítem que la
+      reportó cierra. Si esto es un deploy legítimo y esperado, el dueño que lo cierre actualiza
+      la baseline con estas capturas.
+      **Efecto colateral, ya visible en el monitor propio del VPS:** `/root/bin/onia-mirar-cliente.sh`
+      viene avisando `ROTO` cada 15 min desde hace horas por texto ausente ("Pedí tu acceso" en
+      `/empezar`, "Tu negocio no pierde" en `web`) — su lista de textos esperados quedó
+      desactualizada por este mismo cambio. No lo toqué (es infraestructura compartida, no mi
+      carril), lo anoto para quien tenga `/root/bin/onia-mirar-cliente.sh`.
+      **A quién le toca decidir:** nadie tiene declarado dueño de `web-factory/apps/onia-platform/`
+      (home + empezar) y esto cruza a `app.onia.com.bo` (plataforma, carril `onia-cola`). Sumo una
+      línea al radar (`hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`) pidiendo que se le ponga dueño y que
+      alguien confirme si `/register` de verdad crea la cuenta hasta el final.
 
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
@@ -828,12 +1002,18 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Quedó como **"Bot + Reportes"** con el mismo precio — y los reportes avanzados también se
       venden como add-on dos filas más abajo. **El precio no se tocó: no es mi decisión.**
 
-- [ ] 🔴 **Los otros dos agujeros del escéptico: la fuente se perdió.** El ítem mandaba leer el
-      journal del workflow `wf_7449df59-54c` antes de tocar, y ese journal **no existe en
-      disco** — buscado el 2026-08-31 bajo `.claude` y bajo el temp de sesión, cero resultados.
-      Los journals mueren con su sesión. Sin él no se sabe cuáles eran los dos agujeros ni
-      cuáles las dos cifras mal. **Se reabre sólo si alguien los vuelve a encontrar:**
-      reconstruirlos de memoria sería inventar, que es justo lo que esta cola persigue.
+- [x] **Los otros dos agujeros del escéptico — CERRADO como irreconstruible, y por eso deja de
+      ocupar un renglón abierto.** El ítem mandaba leer el journal del workflow
+      `wf_7449df59-54c` antes de tocar, y ese journal **no existe**. Rebuscado el 2026-09-01 en
+      los tres lugares donde podría estar: `find` bajo el `.claude` del usuario, `find` bajo el
+      repo, y `$ git grep -l 7449df59 origin/main` — el **único** archivo del repo que menciona
+      ese id es `hermes-content/docs/COLA.md`, o sea este mismo renglón citándose a sí mismo.
+      Los journals mueren con su sesión.
+      **Por qué se cierra en vez de dejarse abierto:** un ítem que nadie puede tomar no es un
+      pendiente, es un fantasma con buena letra — el próximo que lea la cola gasta la vuelta
+      buscando la fuente y llega adonde llegaron las dos vueltas anteriores. Reconstruirlos de
+      memoria sería inventar, que es justo lo que esta cola persigue.
+      **Se reabre sólo si alguien vuelve a encontrar el journal**, con su ruta escrita acá.
 
 - [x] 🔒 **La mina de `page_location` en GA — ya estaba cerrada, y de paso quedó su guarda.**
       El ítem seguía abierto acá diciendo *"en arreglo ahora"*, pero el arreglo (PR #59,
@@ -975,7 +1155,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Bloqueado — necesita a Sergio (reverificado en vivo el 2026-08-31)
 
-> **Estaban 10. Seis ya no eran bloqueos: quedan 4.** Esta lista es la que una sesión lee para
+> **Estaban 10. El 2026-08-31 quedaron 4; hoy 2026-09-01 quedan 2.** Esta lista es la que una sesión lee para
 > decidir qué preguntarle a Sergio, así que una entrada vencida **fabrica trabajo** — hace que
 > alguien le pida una decisión sobre algo ya hecho, y quema el único recurso que no se recupera.
 > Es el mismo defecto que esta cola ya bautizó: *"cerrar un ítem no cierra su copia"*. Cada baja
@@ -985,13 +1165,9 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
   DNS vive en Vercel (`ns1/ns2.vercel-dns.com`) y no lo puedo tocar (sin token, CLI deslogueado,
   MCP con 403). **Ya no es urgente** — ver la baja de abajo: hoy no sirve nada.
 - **Credenciales del BCP.** Sin ellas no hay QR. El checkout ya no lo promete (PR #54), pero el
-  cobro sigue siendo manual: el cliente transfiere y alguien aprueba.
-- **Recorrer el circuito en producción.** Crear una cuenta real, que mande un correo real, pagar.
-  Es la única verificación que no se puede simular.
-- **Desplegar al VPS** (es distinto de mergear: `onia.com.bo` lo sirve un contenedor). Runbook y
-  gates en la skill `onia-deploy`. ⚠️ Hoy `master` tiene commits que **no están en producción** —
-  entre ellos `f47d615`, el que saca la promesa falsa de "agenda" que el cliente lee antes de
-  pagar Bs 390.
+  cobro sigue siendo manual: el cliente transfiere y alguien aprueba. **Remedido el 2026-09-01:**
+  `grep -c 'BCP_QR' /opt/onia-platform/app.env` en el VPS devuelve **0** — no hay ni una de las
+  seis variables. El bloqueo es real y no se movió.
 
 > **Deduplicado el 2026-09-01: había DOS listas de bloqueos y la vieja pedía trabajo que ya no
 > existe.** Convivían esta y una `## Bloqueado — recontado el 2026-08-30` cien líneas más abajo.
@@ -1006,6 +1182,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 > viñetas y filas de tabla. Por eso la vuelta dejó la guarda que sí lo caza: **`seccion-duplicada`**,
 > que falla si dos `##` repiten título. De paso destapó otras dos copias, ya fusionadas: había
 > **dos `## Después`** y **dos `## Cerrado (2026-08-30)`** (la segunda, vacía).
+
+### Ya NO son bloqueos — dados de baja el 2026-09-01, con la medición
+
+- ~~**Recorrer el circuito en producción**~~ — **corrido hoy, y es el hecho más importante del
+  día.** La entrada decía *"crear una cuenta real, que mande un correo real, pagar; es la única
+  verificación que no se puede simular"*. Contado en la base de producción (contenedor
+  `supabase-db`, schema `public`), no leído de un doc: la organización `ZZ QA Circuito Completo`
+  (`cmtj22i3q000001khaxefs8ft`) tiene `onboardingCompletedAt = 2026-09-01 19:31`, **1 fila en
+  `appointments`**, **3 en `onia_commerce_products`** y **1 en `subscription_payments` con
+  `status = APPROVED`, `amount = 320.00`** (`transactionRef = TRX-20260901-QA01`, `bankName = BNB`,
+  `reviewedAt = 19:40`). Los contadores globales pasaron de **0 citas / 0 productos / 0 pagos**
+  a **1 / 6 / 1** en el día. El trabajo entró por los PRs **#71 a #75** de la rama
+  `fix/circuito-completo` en `onia-platform`.
+- ~~**Desplegar al VPS**~~ — **producción está EXACTAMENTE en `origin/master`: cero commits
+  pendientes.** La entrada avisaba que `master` tenía commits sin desplegar, *"entre ellos
+  `f47d615`, el que saca la promesa falsa de «agenda»"*. Medido hoy contra el clon del VPS
+  (`/root/loops/onia-platform`, con `git fetch` antes): lo desplegado es **`55e8d8a`** (build
+  `/opt/onia-platform/build-55e8d8a`, contenedor levantado 20:59 UTC), `origin/master` es
+  **`55e8d8a`**, y `git log 55e8d8a..origin/master` sale **vacío**. Confirmado además contra el
+  bundle servido, que es lo que de verdad lee el cliente: `grep` dentro de `/app/.next` devuelve
+  *"contesta, califica, **deriva al humano** y hace seguimiento"* — la frase falsa ya no está en
+  producción. Hubo **tres** deploys hoy (`02b9558`, `88a38fd`, `55e8d8a`).
+  ⚠️ **Esto no significa "no hay que volver a desplegar nunca":** significa que **hoy** no hay
+  nada esperando, y que la próxima vuelta tiene que **remedir** en vez de heredar este renglón.
+  Preguntarle a un sha viejo cuál es el desplegado es el error que esta cola ya tiene anotado
+  tres veces.
 
 ### Ya NO son bloqueos — dados de baja el 2026-08-31, con la medición
 

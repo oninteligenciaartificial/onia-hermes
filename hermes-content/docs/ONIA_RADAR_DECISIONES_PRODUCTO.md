@@ -602,12 +602,16 @@ los gates). **Los tres gates pasaron sobre `main` ya mergeada**: `tsc --noEmit` 
 | El KPI spark seguía estirado y `pending` no llegaba nunca al template | `packages/templates/src/dashboard.ts` | **regenerar los sitios** que usan el template dashboard |
 | Bloques nuevos: medidor radial, estados carga/error/vacío, cinta infinita, bandas por feature, statement a pantalla completa | `packages/blocks/src/*` | **regenerar los sitios** que los quieran |
 | Cuatro rubros se recetaban de memoria y dos reglas del playbook estaban mal; la skill mandaba correr un script inexistente | `data/references/*`, `docs/LOOP_COLA.md` | nada: son docs |
+| **El bot AGENDA: manda el link de la agenda de su org en vez de derivar** (mergeado el 2026-09-01) | `bot/recepcionista.mjs`, `bot/intents.mjs`, `bot/config.mjs`, `bot/knowledge.mjs` | **deploy del motor al VPS** — el mismo deploy (a) de abajo. La agenda ya está viva y verificada MIRÁNDOLA (`/book/zz-qa-clinica-chatbot-9k651` muestra el asistente de 4 pasos con profesionales reales); lo que falta es el motor que mande el link |
+| La tarjeta de clínica se movía aunque el visitante pidiera menos movimiento; se borró la primitiva `.wf-hover-lift` que nadie usaba (mergeado el 2026-09-01) | `packages/templates/src/clinic-css.ts`, `packages/blocks/src/motion.ts` | **regenerar los sitios** que usen el template de clínica |
 
 **La decisión que queda.** Desplegar no lo decide un carril de integración. Los dos deploys que
 mueven la aguja son distintos y se pueden hacer por separado:
 
-- **(a) El motor del bot al VPS.** Enciende las campañas y el CTA de `/v1/empezar`. Sin esto, un
-  desconocido que llega desde la web sigue recibiendo la respuesta genérica.
+- **(a) El motor del bot al VPS.** Enciende las campañas, el CTA de `/v1/empezar` **y ahora
+  también que el bot agende** (mergeado el 2026-09-01). Sin esto, un desconocido que llega desde
+  la web sigue recibiendo la respuesta genérica, y una cita sigue derivándose a mano — que es
+  justo lo que `pricing.ts` cobra como resuelto.
 - **(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
   ajeno de una pantalla que ven los clientes desde el 16-ago.
 
@@ -634,22 +638,47 @@ Las dos opciones cuestan lo mismo — una línea en un archivo, cero bolivianos:
 - **b)** `web-factory-dev-loop` levanta su prohibición para esa carpeta y se las queda. Es el
   carril que sabe de superficies web, pero hoy tiene la puerta cerrada por decisión previa.
 
+**Se puso más urgente el 2026-09-01 22:41 UTC.** El canario visual encontró que, sin dueño,
+`/` y `/empezar` se redeployaron enteras (título, copy, CTA) entre dos pasadas de la misma
+tarde, y el nuevo CTA de `/empezar` ("Creá tu cuenta") manda a `app.onia.com.bo/register`, que
+resultó estar vivo con un wizard de 2 pasos y un formulario de contraseña real. Esto puede
+contradecir lo que `CLAUDE.md` tiene escrito como historia (que `/register` "dejó de crear
+cuentas" y el arreglo honesto vive en `/empezar`) — si esa premisa venció, o si `/register`
+no cierra el alta de verdad, hay que decidirlo antes de que otro lead se tope con la pantalla
+rota. Detalle y evidencia (capturas) en `COLA.md`, sección "Del canario visual — corrida del
+2026-09-01 22:41 UTC". Nadie del canario tocó el formulario ni creó cuentas.
+
 # Para decidir — al abrir el 1 de septiembre
 
-Ocho cosas esperan a Sergio. Están ordenadas por lo que desbloquean, no por urgencia
+Diez cosas esperan a Sergio — la 2 se resolvió el 1-sep y queda tachada. Están ordenadas por lo
+que desbloquean, no por urgencia
 aparente. Cada una tiene su detalle arriba en este archivo o en
 `hermes-content/docs/handoff/claude-git-status-935f47.md`.
 
-**1. ¿Publicamos los 77 commits de `onia.com.bo`?**
-El sitio de venta no se publica desde el **22-ago**. No estaba roto: lo tapaba el deploy de
-center, que corre antes y muere. [PR #30] lo destraba **sin publicar**. Publicar es aparte:
-`workflow_dispatch` con `swap=false` (build en ubuntu, no toca producción) y, si sale verde,
-`swap=true`. **Recomendación: mirar primero qué cambió en esos 77 commits.**
+**1. ¿Publicamos `onia.com.bo`? Ya no son 77 commits: son OCHO.**
 
-**2. ¿Cuál de los tres heroes?**
-`ui-viva` (las piezas del producto dibujadas, mejor gancho emocional) · `resultado` (el día
-del negocio, mejor titular: *"Cerrás vos. El negocio no."*) · `mecanica` (el circuito animado,
-el más disciplinado). Ninguno lleva una captura del sistema. Se muestran renderizados.
+⚠️ **Corregido el 2026-09-01 midiendo, no leyendo.** Esta decisión decía "77 commits" y esa
+cifra es de antes del despliegue a mano del 24-ago. Lo vivo hoy es el build
+`Ega1b2zc6I30Rblyyl2Fv`, del **24-ago 21:01 La Paz** (`/opt/onia-landing/runtime-next` por SSH;
+el mismo id aparece en el HTML servido). Desde ese build,
+`git log origin/main --since=2026-08-24 -- web-factory/apps/onia-platform` da **8 commits**, y
+son todos de copy y precio de la landing. Mirarlos es media hora, no un día — que era justo la
+razón por la que esta decisión se venía posponiendo.
+
+Lo que está publicado y no debería, medido con `curl` sobre las páginas vivas:
+**/precios sigue cobrando "Inventario avanzado — Bs 180"**, que Sergio sacó de la oferta el
+27-ago y que `eec7d0f3` ya borró en `main`; y **el hero aprobado el 1-sep no está** — el h1 vivo
+sigue siendo el de la v3.
+
+Publicar: `workflow_dispatch` con `swap=false` (build en ubuntu, no toca producción) y, si sale
+verde, `swap=true`. ⚠️ **El paso del landing sigue colgado del de center**
+(`.github/workflows/deploy-onia-center.yml:78`, mismo job, sin `if:`), y center.onia.com.bo está
+muerto a propósito desde el 29-ago (404 medido). PR #30 arregló el lockfile, **no** desacopló los
+dos pasos: si el de center vuelve a morir, el sitio de venta vuelve a no publicarse.
+
+**2. ✅ RESUELTA — el hero es `resultado`.** Sergio eligió el 2026-09-01 (*"esta bien el hero…
+pero esta bien usa ese"*) y ya está mergeado en `main` (PR #35, `c8dfe249`). Lo único que falta
+es la decisión 1: **está en `main` y no en el sitio**.
 
 **3. ¿La prueba de 14 días pide tarjeta?**
 Ver la sección propia arriba. Hoy Onia da 14 días sin tarjeta y **cobra a mano al día 14**;
@@ -687,3 +716,103 @@ que el más valioso no existía.
 **8. Los worktrees.**
 19 vivos; el disco llegó al 100% y frenó el trabajo. Se liberó a 12 GB, pero un worktree con
 dependencias pesa 6,4 GB y se vuelve a llenar solo. Hay que decidir cuáles se archivan.
+⚠️ **Sigue vivo el 2026-09-01**: 24 worktrees y `df` marca **99%** (5,1 GB libres de 465 GB).
+Crear un worktree normal del repo **falla con "No space left on device"** — medido hoy al
+intentarlo; hubo que armarlo con `sparse-checkout`. El disco ya no es una molestia: bloquea.
+
+**9. ¿El chatbot AGENDA? La rama que lo hace está lista y no se puede mergear sin tu decisión.**
+
+`fix/bot-manda-link-de-reserva` (1 commit, `ad16b8ce`, con sus tests) hace que el recepcionista
+mande el link de la agenda pública de SU organización (`app.onia.com.bo/book/<slug>`) en vez de
+derivar toda intención de cita a un humano. Está bien hecho: fail-closed — sin slug limpio vuelve
+a derivar exactamente como antes.
+
+**Medido en vivo hoy (2026-09-01), no deducido:**
+- La ruta existe y responde: `app/(public)/book/[orgSlug]/page.tsx`, y `GET /book` → 200.
+- Un slug inexistente NO explota: renderiza "no encontrada" (eso sí, con status 200).
+
+**Por qué no se mergeó igual:** pone en ROJO la guarda de honestidad
+`scripts/venta-honestidad.test.mjs`, que ata la copia de venta al motor y dice, en su propio
+comentario, qué hacer: *"Si esto se pone rojo el bot APRENDIÓ a agendar: no hay que borrar el
+test sin más, hay que verificarlo en vivo y recién ahí cambiar la copia."* La verificación en
+vivo está arriba; **cambiar la copia es tuyo**: `ONIA_CATALOGO_DE_VENTA.md` hoy declara que el
+chatbot NO agenda, y la guarda lo exige en las dos puntas.
+
+**Lo que hay que decidir (una sola cosa):** ¿el chatbot se vende como que AGENDA?
+- **Sí** → se mergea la rama, se reescribe la guarda al nuevo invariante y la fila del chatbot
+  del catálogo pasa a decir "agenda". Costo: nada de plata; ~1 vuelta de loop.
+- **No** → la rama se archiva y el bot sigue derivando la cita a una persona. Costo: cero, pero
+  `pricing.ts` ya no lo vende así, o sea que nadie está prometiendo de más.
+
+**Ojo con el borde real, que no es de copy:** una org puede tener slug y NO tener la agenda
+configurada. Ahí el cliente final recibe un link a una página vacía. Si la respuesta es "sí",
+esto se cierra antes de encender.
+
+**10. ¿Para qué sirve `web-factory/packages/`?**
+Los tres paquetes que el carril de Web Factory viene puliendo hace diez días —`@onia/blocks`,
+`@onia/templates`, `@onia/tokens`— **no aparecen en una sola línea** de la app que sirve
+onia.com.bo: `grep -rn "@onia/" web-factory/apps/onia-platform/src` devuelve **0**. Y la cola de
+ese carril le **prohíbe** tocar `apps/onia-platform`, o sea que el destino cero es por diseño,
+no por olvido. Diez días de trabajo cuidadoso —dashboard, bloques, tokens, 265 tests— que hoy no
+tocan ninguna superficie que venda.
+
+Las tres salidas cuestan lo mismo, **Bs 0**; lo que cambia es qué se deja de esperar:
+
+- **a)** Se declaran **producto interno** (la galería + las webs de cliente) y se acepta que la
+  landing no los use. Cero trabajo — pero hay que dejar de medir ese carril por lo que le llega
+  al sitio de venta, que es como se lo viene mirando.
+- **b)** Se le **abre la zona** sobre `apps/onia-platform` para portar de a un bloque. Choca con
+  `onia-cola`, que ya toca esa app: habría que turnarse el archivo.
+- **c)** Las **webs de cliente** pasan a ser el único consumidor y `packages/` deja de crecer
+  hasta que haya un cliente que las pague. Es la que ata el trabajo a plata que entra.
+
+Detalle y evidencia en `web-factory/docs/LOOP_COLA.md`, sección *Bloqueado*.
+
+**11. ¿Dónde se publican `dental-premium` y `ferreteria-sur`?**
+Dos webs de cliente **terminadas, miradas y con gates verdes**, y **cero URL**: no hay proyecto
+en Vercel (medido con la API: 15 proyectos, ninguno es estos dos), no hay workflow, y el
+`vercel.json` de la raíz tiene el deploy por git apagado para todo el repo. El add-on se cierra
+mandando un link por WhatsApp y ese link no existe. Las dos opciones cuestan **Bs 0**:
+
+- **a) Subdominio en el VPS** (recomendada). El comodín de DNS ya resuelve —cualquier subdominio
+  de la marca devuelve las IPs de Cloudflare y responde **404**, o sea que falta el vhost, no el
+  DNS— y las dos apps ya son `output: standalone`, el mismo modelo que
+  `scripts/deploy-onia-landing.sh`. Cuesta un contenedor por sitio.
+- **b) Vercel por CLI.** Cuenta hobby, y el deploy por git está apagado justamente porque cinco
+  loops pusheando agotaban la cuota diaria (`37f9ac88`). Competiría con la cuota que necesita la
+  landing.
+
+Lo único que hace falta de Sergio es **el nombre del subdominio**.
+
+**12. El canario mira 10 pantallas en el repo, pero el VPS sigue corriendo la versión de 3.**
+Se mergeó a `main` hoy (`52e359c1`): diez pantallas de cliente, umbrales medidos y el peso deja
+de ser una lotería. Pero el prompt que EJECUTA el canario vive en `/root/bin/loops/` del VPS, y
+`scripts/loops/README.md` lo dice literal: *"Al cambiar un prompt hay que volver a copiarlo"*.
+Hasta que se copie, la mejora está commiteada y **no mira nada nuevo** — construido ≠ terminado.
+
+Es **un solo comando** y cuesta **Bs 0**; no se corrió porque tocar el VPS necesita tu OK:
+
+```bash
+install -m 644 scripts/loops/prompts/canario-visual.md /root/bin/loops/canario-visual.md
+```
+
+**13. DOS ramas quedaron fuera de la integración por divergencia, no por conflicto.**
+Se integraron 7 ramas a `main` con los gates en verde. Estas no, porque arrastran semanas de
+deriva y mezclarlas a ciegas es cómo se rompe `main`:
+
+| rama | commits atrás de `main` | commits suyos sin mergear |
+|---|---|---|
+| `claude/onia-web-architecture-b37eca` | 371 | 6 |
+| `claude/chatbots-platform-review-0d1d09` | 358 | 5 |
+
+⚠️ **Corregido el 2026-09-01 23:40 UTC, midiendo con `git rev-list --left-right --count`.**
+Acá figuraba una tercera fila, `claude/personal-brand-strategy-db9eb9` con 32 commits sin
+mergear, y **hoy tiene CERO**: su trabajo ya entró a `main` y la rama sólo está 2 commits
+atrás. Pedirte que decidas entre "rebasar o archivar" una rama que ya se mergeó es peor que
+un pendiente fantasma — es hacerte tomar de nuevo una decisión que ya está tomada. Las otras
+dos filas también estaban viejas (decían 307/4 y 294/3): siguen abiertas, pero con los
+números de hoy.
+
+Para cada una la decisión es la misma y cuesta **Bs 0**: **rebasar y mergear** (alguien tiene
+que mirar el rebase) o **archivarla** y perder ese trabajo. `claude/ads-creatividades-publicos`
+(146 commits) queda afuera a propósito: es tu carril de contenido y lo cerrás vos.

@@ -17,7 +17,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const RAIZ = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const leer = (rel) => readFileSync(path.join(RAIZ, rel), "utf8");
@@ -25,10 +25,33 @@ const leer = (rel) => readFileSync(path.join(RAIZ, rel), "utf8");
 const MOTOR = "hermes-content/deploy/vps-ops/bot/recepcionista.mjs";
 const CATALOGO = "hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md";
 
-test("el motor sigue derivando la cita, no agendandola", () => {
-  // Si esto se pone rojo el bot APRENDIO a agendar: no hay que borrar el test de
-  // abajo sin mas, hay que verificarlo en vivo y recien ahi cambiar la copia.
-  assert.match(leer(MOTOR), /El bot no agenda ni vende solo/);
+// 2026-09-01: el bot APRENDIO a agendar y este test cambio de forma, siguiendo el
+// procedimiento que el propio comentario de abajo exigia ("verificarlo en vivo y recien
+// ahi cambiar la copia"). Verificado MIRANDO la pantalla, no razonado:
+// https://app.onia.com.bo/book/zz-qa-clinica-chatbot-9k651 renderiza el asistente de 4
+// pasos (Profesional / Fecha / Horario / Datos) con los profesionales reales de esa org,
+// y un slug inexistente (/book/demo) da "Negocio no encontrado". El link que manda el
+// motor lleva a una agenda que existe y crea la cita.
+//
+// Lo que este test guarda YA NO es una frase del comentario —esa se reescribio con el
+// cambio y ataba la guarda a la prosa, no al comportamiento— sino la unica regla que
+// hace seguro mandar ese link: FAIL-CLOSED. Sin slug limpio no hay link, y el turno
+// deriva a un humano exactamente como antes. Un link roto delante del cliente final es
+// peor que un handoff.
+test("agendar es FAIL-CLOSED: sin slug limpio no hay link, hay handoff", async () => {
+  const { linkDeReserva, AGENDA_BASE_URL } = await import(
+    pathToFileURL(path.join(RAIZ, MOTOR)).href
+  );
+  assert.equal(linkDeReserva({ orgSlug: "zz-qa-clinica-chatbot-9k651" }), `${AGENDA_BASE_URL}/zz-qa-clinica-chatbot-9k651`);
+  for (const basura of [undefined, "", "   ", "Con Mayus", "con espacio", "-arranca-guion", "termina-guion-", "slug/../../etc", "a".repeat(121)]) {
+    assert.equal(linkDeReserva({ orgSlug: basura }), null, `deberia derivar con orgSlug ${JSON.stringify(basura)}`);
+  }
+});
+
+test("lo que NO agenda sigue escalando: precio y pedido son del humano", () => {
+  // El bot aprendio a agendar, no a vender. Si esto se pone rojo, el motor empezo a
+  // cotizar solo: verificar en vivo antes de tocar la copia de venta.
+  assert.match(leer(MOTOR), /JAMAS precios/);
 });
 
 test("el catalogo de venta no vende que el chatbot agenda", () => {

@@ -9,6 +9,7 @@ import {
   type Estado,
 } from "@/lib/proof";
 import { Block, Btn, Kicker } from "../ui";
+import { CTA_ALTA } from "../alta";
 import s from "../sitio.module.css";
 
 /**
@@ -149,7 +150,7 @@ export default function Comparativa() {
             Comparalo con tu propio negocio adentro.
           </h2>
           <div className={s.actions}>
-            <Btn href="/empezar">Pedí tu acceso</Btn>
+            <Btn href="/empezar">{CTA_ALTA}</Btn>
             <Btn href="/precios" variant="line">
               Ver precios
             </Btn>

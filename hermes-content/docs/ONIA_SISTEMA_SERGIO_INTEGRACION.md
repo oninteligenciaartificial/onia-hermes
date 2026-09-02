@@ -10,7 +10,7 @@
 
 | Pieza del plan de Samuel | Lo nuestro, vivo hoy |
 |---|---|
-| Paso 2-3 del embudo: comenta la palabra → DM automático (IG/FB) | **El circuito comentario→DM está EN PRODUCCIÓN** desde el 18-ago, probado con cuenta real, sin ManyChat. Falta solo parametrizar **una palabra por video** (EDICIÓN, SISTEMA, RETO, HIGGSFIELD, SKILL, CURSOS, RANKING) |
+| Paso 2-3 del embudo: comenta la palabra → DM automático (IG/FB) | ⚠️ **Corregido 2026-08-29: NO está probado.** El recuento en vivo del 27-ago (105 ejecuciones) encontró el workflow "probado" APAGADO, 5 de 6 envíos rechazados por Meta y **cero DMs a un lead real** — `neverError` disfrazaba los rechazos de éxito. Detalle: `ONIA_CIRCUITO_COMENTARIO_DM.md`. Antes decía "EN PRODUCCIÓN desde el 18-ago, probado con cuenta real" y esa línea sostuvo la planificación de la Etapa 2 (ver `ONIA_MARCA_PERSONAL_ETAPA2_EVALUACION.md`) |
 | Métrica 3: qué video/red trajo cada miembro (UTM) | **El circuito `?src=` → pipeline de leads está vivo** — se reusa con `src=v1-edicion`, `src=v3-reto`, etc. Cero sistemas nuevos |
 | Métrica 2: comentarios por palabra clave | El radar de ganchos (decisión K1: herramienta interna, archivo en el repo) es el lugar donde se registra qué palabra convirtió |
 | Producción de los 8 videos | El pipeline **sin editores humanos** (editor-videos + HyperFrames): cortes, subtítulos karaoke palabra por palabra (Inter, como pide la identidad), slates. El video 8 (montaje sin voz) es costo CERO. Y el video 1 literalmente **vende nuestro método** — el ejemplo del "video hecho 100% con IA" lo producimos nosotros |
