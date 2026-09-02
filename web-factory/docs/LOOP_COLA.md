@@ -727,6 +727,35 @@ Las tres formas de fantasma que ya aparecieron acá:
       un comentario en un test: no dibuja un solo píxel, así que las baselines no se
       tocan.
 
+- [x] **S1 · Los dos gates locales se caian por contencion, no por un defecto** (2026-09-01,
+      vuelta de auditoria: A y B estaban todos `[x]`). `pnpm test` **murio antes de correr
+      un solo test** con `FATAL ERROR: Zone Allocation failed - process out of memory` — a
+      los 78 ms, con el heap en 5,9 MB. Un heap de 5,9 MB no es un test pesado: es la
+      largada. vitest 4 abre **un fork por nucleo** y esta maquina tiene **12** con ~3,3 GB
+      libres; los 12 node arrancando juntos agotan la memoria durante la COLECCION. Por eso
+      cada subcarpeta pasaba por separado (`packages/blocks`, `templates`, `data`, `design`,
+      `generate`, `harvester`, `apps`: verdes las siete) y el rojo parecia un fantasma.
+      Con `maxWorkers: 4` en `vitest.config.ts`: **30 archivos / 267 tests verdes en 2,6 s**.
+      El mismo cuadro en `pnpm e2e`: 3 rojos + 2 flaky, y los tres morian con **`Target page,
+      context or browser has been closed`** — el navegador se caia, no fallaba una asercion.
+      Medido: 1 worker → 49 verdes / 0 rojos · 2 workers → **103 verdes / 0 rojos en 1,2 min**
+      (con 3 tardaba 1,3 min, o sea el paralelismo perdido no cuesta **nada**). Bajado a
+      `workers: 2` en local; CI queda en 4, que no comparte maquina con los loops.
+      ⚠️ **Lo peligroso es que NO estaba roto siempre**: el item de arriba (del mismo dia)
+      declara 267/267 y e2e 103/0 de buena fe. Depende de cuanta RAM libre haya en ese
+      minuto, y **cinco loops corren en paralelo en esta misma maquina**. Un gate que da
+      rojo la mitad de las veces por contencion se termina ignorando — que es exactamente
+      como la suite llevaba ocho vueltas roja sin que nadie mirara. Ahora falla o pasa por
+      lo que mide.
+      **Auditoria de los `[x]` de la misma vuelta** (contra el codigo de HOY, no contra la
+      linea): W1 → `packages/templates/src/font-links.ts` existe y tiene su test ✔ ·
+      W2 → cero `preserveAspectRatio="none"` en superficie (solo se lo nombra en dos
+      comentarios que cuentan la historia) y `--color-primary` quedo solo en cromo, con
+      **test que lo guarda** (`dashboard.test.ts:319`) ✔ · A1a → `--wf-series-*` vivo en
+      `dashboard.ts` ✔. Ninguna se desmarca.
+      **Gates**: `typecheck:packages` verde · `pnpm test` **267/267** · `pnpm e2e` **103/0**.
+      Cambio de configuracion de corrida: no dibuja un pixel, baselines intactas.
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
