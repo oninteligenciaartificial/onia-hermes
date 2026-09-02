@@ -2,7 +2,10 @@
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
 const {
-  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, assertSlidesDistintas, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 
 let passed = 0;
 process.on('exit', () => console.log(`
@@ -68,12 +71,16 @@ test('accounts configured (onia/arthur/sergio/nuvia)', () => {
 test('emph turns *word* into green span, escaping first', () => {
   assert.strictEqual(emph('a *b* <c>'), 'a <span class="g">b</span> &lt;c&gt;');
 });
-test('packs list includes all packs (incl. editorial-clean)', () => {
+test('packs list includes all packs (incl. editorial-clean, bloque-solido)', () => {
   // Rojo desde el 2026-08-20 hasta el 08-23: `editorial-clean` se agrego al motor y
   // nadie actualizo esta lista. Una suite roja por una razon vieja tapa las regresiones
   // nuevas — que es justo lo que un test existe para evitar.
+  // ⚠ Volvio a pasar con `bloque-solido`, y esta vez costo mas: la suite estaba roja
+  // por esto el 2026-09-02, y como assert corta la corrida, NINGUN test posterior se
+  // ejecutaba. No es un test desactualizado: es la suite entera apagada sin avisar.
   assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo',
-    'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado']);
+    'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado',
+    'bloque-solido']);
 });
 test('nuvia account + brand kit configured', () => {
   assert.strictEqual(ACCOUNTS.nuvia.handle, '@nuvia.bo');
@@ -491,4 +498,27 @@ test('Lucia va en el verde de Onia, no en terracota', () => {
   // color propio, y hoy ninguna lo declara.
   const h = editorialPhotoHtml({ headline: 'H', bg: 'x.jpg' }, 0, 7, 'lucia');
   assert.ok(!h.includes('#E4714E'), 'sin terracota');
+});
+
+test('laminas identicas = render invalido, no {ok:true}', () => {
+  // El 2026-08-20 se commitearon 7 laminas de onia-costo-invisible que eran la MISMA
+  // captura de la pagina de error del navegador. El render dijo {ok:true} porque su
+  // unica guarda era "aparecio un PNG". Esta es la guarda que faltaba.
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'onia-car-test-'));
+  const iguales = [1, 2, 3].map((n) => {
+    const f = path.join(dir, `slide-0${n}.png`);
+    fs.writeFileSync(f, 'la pagina de error, identica');
+    return f;
+  });
+  assert.throws(() => assertSlidesDistintas(iguales), /identicas/);
+
+  const distintas = [1, 2].map((n) => {
+    const f = path.join(dir, `ok-0${n}.png`);
+    fs.writeFileSync(f, `lamina ${n}`);
+    return f;
+  });
+  assertSlidesDistintas(distintas); // no tira
+
+  assertSlidesDistintas([distintas[0]]); // una sola lamina: nada con que comparar
+  fs.rmSync(dir, { recursive: true, force: true });
 });

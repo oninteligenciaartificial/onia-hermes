@@ -22,6 +22,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { execFileSync } = require('child_process');
 
 const BRAND = path.join(__dirname, '..', 'hermes-content', 'brand');
@@ -1294,8 +1295,30 @@ function render(args) {
     produced.push(png);
   });
 
+  assertSlidesDistintas(produced);
   fs.rmSync(tmp, { recursive: true, force: true });
   return produced;
+}
+
+// `existsSync(png)` solo pregunta "aparecio un PNG", no "aparecio NUESTRO PNG".
+// El navegador tambien escribe captura cuando NO pudo abrir el HTML: fotografia su
+// propia pagina de error y sale con codigo 0, asi que el render imprimia {ok:true}.
+// Paso de verdad el 2026-08-20 con onia-costo-invisible-20260808: las 7 laminas
+// commiteadas eran la MISMA captura de "No se encuentra el archivo / ERR_FILE_NOT_FOUND"
+// de Edge, byte a byte identicas, y nadie lo noto durante 13 dias porque en el listado
+// parecia un carrusel terminado de 7 laminas. La firma es esa: laminas identicas.
+// Techo conocido: no detecta el fallo en una pieza de UNA sola lamina, donde no hay
+// con que comparar. Si eso llega a pasar, el paso siguiente es verificar el DOM
+// renderizado, no el archivo.
+function assertSlidesDistintas(pngs) {
+  if (pngs.length < 2) return;
+  const hashes = pngs.map((p) => crypto.createHash('md5').update(fs.readFileSync(p)).digest('hex'));
+  if (new Set(hashes).size > 1) return;
+  throw new Error(
+    `render invalido: las ${pngs.length} laminas salieron identicas (${hashes[0].slice(0, 8)}). ` +
+    'Casi siempre es el navegador fotografiando su pagina de error en vez del HTML. ' +
+    'Revisar que el navegador pueda leer el directorio temporal y volver a renderizar.'
+  );
 }
 
 function main(argv) {
@@ -1318,6 +1341,6 @@ if (require.main === module) {
 module.exports = {
   slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
   papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml,
-  emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
+  emph, roleFor, assertSlidesDistintas, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };
