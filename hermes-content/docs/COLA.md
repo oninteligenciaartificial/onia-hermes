@@ -767,6 +767,30 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Cómo se sabe que quedó hecho:** `docker logs onia-chatbot_chatwoot... | grep Rack::Attack`
       sin bloqueos de las IPs de monitoreo, y una corrida del canario sin el 429 en
       `erroresConsola`.
+      **↑ Re-medido en vivo el 2026-09-02 12:35 UTC por `onia-cola` (Gate 1). Sigue vivo y
+      empeoró — pero la causa NO es la que dice arriba, y eso cambia cuál es el arreglo:**
+      - **485 bloqueos en 24 h** (eran 262), y siguen siendo **exactamente dos IPs, las dos
+        nuestras**: `192.223.122.70` (406, salida de los loops) y `187.77.16.63` (79, el VPS).
+        **Cero IPs de terceros** — se confirma que ningún visitante real lo sufrió.
+      - **Pero no es "el monitoreo en general": es una corrida puntual.** Repartidos por hora,
+        **365 de los 485 (75%) caen en las horas 04 y 05 UTC** — la corrida del canario de las
+        `04:41`. Las horas 08 y 10 tienen 7 y 9 bloqueos. `onia-mirar-cliente` corre cada 15 min
+        y **no** produce ese volumen. Una sola pasada del canario genera **cientos** de pedidos a
+        `/widget`: el defecto no está en el umbral de Chatwoot, sino en que nuestro canario
+        martilla un endpoint de terceros.
+      - **El contenedor NO tiene ninguna env var de rate limit** (`docker inspect` filtrado por
+        rack/limit/throttle sale vacío): usa el default del código de Chatwoot. O sea que "subir
+        el umbral" **exige reiniciar el contenedor**, el mismo que hospeda la bandeja de los 7
+        leads. **Eso necesita OK de Sergio** — no es una traba, es la regla de no desplegar al
+        VPS sin permiso.
+      - Reproducción: con el token real, tres GET seguidos dan **200, 200, 429**. ⚠️ **No puedo
+        afirmar que el umbral sea 3**: la misma IP corre `onia-mirar-cliente` cada 15 min y no
+        controlé el estado de la ventana. Lo honesto es "tripa rápido", no un número.
+      **Qué cambia para quien lo tome:** el arreglo barato y sin permiso es **que el canario deje
+      de pedir el widget** — es nuestro repo (`scripts/canario_visual.mjs`, carril
+      `canario-visual`), no producción. Tocar Chatwoot es el arreglo caro y sólo hace falta si se
+      prueba que un visitante real lo sufre; hoy la evidencia dice que no.
+      **No lo tomo yo:** el archivo es del carril `canario-visual`, cuyo loop corre a las 16:41 UTC.
 
 ### Del canario visual — corrida del 2026-09-02 04:41 UTC (diez pantallas, sin ítems nuevos)
 

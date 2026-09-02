@@ -1209,7 +1209,30 @@ falten en el cron — nunca al revés. Por eso `web-venta` e `investigacion` cor
 en `loops.md`, invisibles para la auto-cura. Arreglarlo toca los 7 prompts (uno por carril) y el
 bloque dice explícitamente "no lo optimices", así que **no lo tocó nadie todavía**: decidilo vos.
 
-## 23. Los arreglos del carril chatbot al producto nunca llegan a `master`, así que el deploy no los puede alcanzar (2026-09-02) — decisión de Sergio
+## 23. ~~Los arreglos del carril chatbot al producto nunca llegan a `master`~~ — RESUELTO 2026-09-02, Sergio NO decide nada
+
+> ✅ **Cerrado el 2026-09-02 12:39 UTC por el integrador (`onia-cola`), por el camino (a).** Se
+> tomaron las dos acciones que pedía esta entrada, en la misma vuelta:
+>
+> 1. **Mergeados los 3 commits a `origin/master`** (`503af44`, merge `--no-ff`). Eran 3, no 2:
+>    se sumó `d62beeb`, que cablea el gate de iconos a `ci`. Guarda dura pasada (0 archivos
+>    borrados, 13 archivos, +373/−28) y **los tres gates de `onia-platform` en verde**:
+>    `tsc` 0 · `vitest` **2494 pasan / 204 archivos** · `npm run lint` **0 errores**
+>    (100 warnings preexistentes). Los snapshots NO se reescribieron esta vuelta — se verificó
+>    con `git status` después de vitest, por la trampa de CRLF que la cola ya tenía anotada.
+> 2. **Tapado el agujero que lo causaba** (recomendación (a)): `scripts/loops/prompts/onia-cola.md`
+>    ahora hace `fetch` y cuenta en **los dos repos**, cada uno contra su base (`main` en
+>    `onia-hermes`, `master` en `onia-platform`), y trae el comando para enumerar en vivo las
+>    ramas del segundo repo en vez de confiar en una lista escrita a mano.
+>
+> **Verificado por el gate que este mismo carril construyó, no por lectura:**
+> `npm run deploy:alcanzable` pasó de **exit 1** nombrando los commits inalcanzables a **exit 0**
+> — *"4 commit(s) declarado(s), los 4 llegan a origin/master"*. Es la clase de prueba que esta
+> entrada pedía: una que discrimina en vez de gritar a todo.
+>
+> ⚠️ **Lo que NO cambia: esto era el escalón `rama → master`. La §20 sigue abierta.** Los tres
+> arreglos ahora existen en `master` y **el cliente todavía no los ve**: falta el deploy, que
+> decide Sergio. Cerrar ésta no destraba aquélla — la hace posible.
 
 **Es un escalón ANTES de la §20, no la misma cosa.** La §20 mide `master` → producción: tres
 commits que están en `master` y nadie desplegó. Ésta mide **rama de carril → `master`**: dos

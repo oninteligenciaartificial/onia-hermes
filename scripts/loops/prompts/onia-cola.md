@@ -121,22 +121,51 @@ remediaste lo mismo y volvió a caer, `onia-tg.sh` de una línea y seguí.
 
 ## Paso 1 — INTEGRAR (esto es el carril, no el preámbulo)
 
-    cd /root/loops/onia-hermes && git fetch --all --prune
+### 🔴 Son DOS repos, no uno. Contá los dos ANTES de elegir.
 
-Para CADA rama de carril **activa**, contá:
+    cd /root/loops/onia-hermes   && git fetch --all --prune
+    cd /root/loops/onia-platform && git fetch --all --prune
 
-    git rev-list --left-right --count origin/main...origin/<rama>
+⚠️ **El mismo nombre de rama existe en los DOS repos, y esa es la trampa que ya costó tres
+vueltas.** `claude/chatbots-platform-review-0d1d09` vive en `onia-hermes` **y** en
+`onia-platform`. Hasta el 2026-09-02 este Paso 1 hacía `cd /root/loops/onia-hermes` y contaba
+**todas** las ramas contra `main` de ESE repo: la del chatbot daba 0, y la conclusión era "no hay
+nada que hacer con esa rama" — mientras la homónima de `onia-platform` acumulaba 3 commits que
+arreglaban cosas que el cliente VE (el menú dibujando `ASSIGNMENT_TURNED_IN` en letras gigantes
+en todo el dashboard, y el editor del chatbot diciéndole "La cita" y "en el consultorio" a una
+ferretería).
 
-El **segundo** número son los commits que la rama tiene y `main` no. Si es 0, no hay nada que
-hacer con esa rama.
+**Nadie mintió: el integrador contó bien, contra el repo equivocado.** Es *verificar contra el
+sistema correcto* otra vez. Y el costo se acumulaba en silencio, porque el bloqueo que le llegaba
+a Sergio le pedía **desplegar** un commit que ni siquiera estaba en la rama de la que se buildea.
+Medido en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §23; se destrabó el 2026-09-02.
 
-Las ramas de carril activas hoy:
+Para CADA rama de carril **activa**, en **su** repo y contra **su** base:
+
+    # onia-hermes   → base origin/main
+    git -C /root/loops/onia-hermes   rev-list --left-right --count origin/main...origin/<rama>
+    # onia-platform → base origin/master   (⚠️ ese repo NO usa `main`)
+    git -C /root/loops/onia-platform rev-list --left-right --count origin/master...origin/<rama>
+
+El **segundo** número son los commits que la rama tiene y la base no. Si es 0, no hay nada que
+hacer con esa rama **en ese repo** — lo que no dice nada sobre el otro.
+
+Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
 
 - `claude/chatbots-platform-review-0d1d09` — carril chatbot (loop `chatbot-cola`)
 - `claude/canario-visual` — canario visual (loop `canario-visual`)
 - `claude/marca-personal-loop` — marca personal (loop `marca-personal`)
 - `claude/docs-auditoria` — carril docs/infra (loop `docs-auditoria`)
 - `claude/git-status-935f47` — la sesion de control (Sergio y el orquestador escriben ahi)
+
+Ramas de carril activas en **`onia-platform`** (base `origin/master`):
+
+- `claude/chatbots-platform-review-0d1d09` — carril chatbot (loop `chatbot-cola`)
+
+**No confíes en la lista del segundo repo: enumerála EN VIVO.** Un carril puede abrir una rama
+nueva ahí sin que este archivo se entere — que es exactamente cómo se gestó el agujero:
+
+    git -C /root/loops/onia-platform branch -r --list 'origin/claude/*' --no-merged origin/master
 
 ⚠️ **`claude/hyperframes-onia-export-formats-053cf9` (web-factory) NO esta en esa lista a
 proposito.** Su loop no existe: se apago el 2026-09-02 porque su cola quedo seca (ver la tabla de
