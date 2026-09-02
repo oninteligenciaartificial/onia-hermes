@@ -59,7 +59,7 @@ case "$NOMBRE" in
     # Carril docs/infra: que lo escrito sea cierto. Un doc falso manda a la
     # proxima sesion al archivo equivocado. Combustible que no se agota.
     WT=/root/loops/onia-hermes-docs
-    RAMA=claude/git-status-935f47
+    RAMA=claude/docs-auditoria
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;

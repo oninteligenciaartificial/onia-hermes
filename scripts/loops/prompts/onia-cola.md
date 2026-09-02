@@ -135,8 +135,13 @@ Las ramas de carril activas hoy:
 - `claude/chatbots-platform-review-0d1d09` — carril chatbot (loop `chatbot-cola`)
 - `claude/canario-visual` — canario visual (loop `canario-visual`)
 - `claude/marca-personal-loop` — marca personal (loop `marca-personal`)
-- `claude/git-status-935f47` — carril docs/infra (loop `docs-auditoria`)
-- `claude/hyperframes-onia-export-formats-053cf9` — web-factory (loop `web-factory-dev`)
+- `claude/docs-auditoria` — carril docs/infra (loop `docs-auditoria`)
+- `claude/git-status-935f47` — la sesion de control (Sergio y el orquestador escriben ahi)
+
+⚠️ **`claude/hyperframes-onia-export-formats-053cf9` (web-factory) NO esta en esa lista a
+proposito.** Su loop no existe: se apago el 2026-09-02 porque su cola quedo seca (ver la tabla de
+apagados en `loops.md`). La rama esta **1.173 commits atras de `main`** con 1 commit propio;
+mergearla es decision de Sergio, no tuya.
 
 Para la que tenga commits sin mergear y el árbol limpio: **mergeá a `main` y pusheá.**
 

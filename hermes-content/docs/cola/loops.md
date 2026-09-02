@@ -43,7 +43,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
 | `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
-| `docs-auditoria` | **VPS** | `18 1,5,9,13,17,21 * * *` (UTC) | Carril docs/infra: que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
+| `docs-auditoria` | **VPS** | `18 1,5,9,13,17,21 * * *` (UTC) | Carril docs/infra (rama `claude/docs-auditoria`): que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
 | `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `canario-visual` | **VPS** | `41 4,10,16,22 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
 | `marca-personal` | **VPS** | `56 13,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
@@ -115,7 +115,14 @@ Se mudó también `docs-auditoria` (carril docs/infra, nuevo) y `marca-personal`
 el VPS desde el 2026-09-01 pero **nunca se había escrito en esta tabla** — el archivo existía y la
 lista contra la que se compara, no).
 
-**`contenido-cola` se queda en Windows a propósito**, y esto sí es una decisión, no una omisión:
+**Y  estrenó con una colisión de rama que hay que no repetir.** Se le dio la
+misma rama que usa la sesión de control (), y en su primera vuelta las
+dos escribieron  en paralelo: hubo que resolver el conflicto a mano y una de las dos
+habría quedado con el push rechazado. Ya tiene rama propia (). **Un
+carril, una rama** — la regla estaba escrita en  y se rompió igual, porque el worktree
+se creó apuntando a una rama que ya tenía dueño.
+
+** se queda en Windows a propósito**, y esto sí es una decisión, no una omisión:
 Sergio, 2026-09-01 — *"no toques el de contenido, el de contenido lo maneja su sesión"*.
 
 ⚠️ **Ya no son dos — el 2026-09-01 se sumó `marca-personal`** (verificado en `crontab -l` el
