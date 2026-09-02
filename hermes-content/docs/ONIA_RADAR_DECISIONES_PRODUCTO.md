@@ -1177,39 +1177,65 @@ para que la próxima vuelta no rehaga la bisección.
 
 </details>
 
-## 20. Tres commits arreglan el login de la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
+## 20. La plataforma le muestra al cliente el NOMBRE de un icono en vez del icono, y el arreglo lleva siete commits sin desplegar (2026-09-02) — decisión de Sergio
+
+> 🔄 **Re-medido en vivo el 2026-09-02 17:36 UTC — y cambió desde la mañana.** Este punto se
+> escribió diciendo *"tres commits… el login"*. Hoy son **siete**, y **el peor ya no es el del
+> login**: es el menú lateral de TODA pantalla del dashboard. Un dato heredado de hace ocho horas
+> también hay que contarlo de nuevo.
 
 **No confundir con la §16**: aquella es el deploy del **motor del bot** y de `web-factory`. Esta
 es el deploy de **`onia-platform`**, el contenedor que sirve `app.onia.com.bo`. Son dos deploys
 distintos, con riesgos distintos, y se pueden hacer por separado.
 
-**Medido en vivo el 2026-09-02, no deducido.** El contenedor `onia-platform` monta
-`/opt/onia-platform/runtime-next`, cuyo `.next/BUILD_ID` es `lNDdVgrRvP1mizzu3BVXc` — el mismo
-que `/opt/onia-platform/build-8a3b5a6`. O sea: **producción corre `8a3b5a6`**, y `master` tiene
-tres commits encima que nadie desplegó.
+**Qué se decide.** Correr o no el swap de `onia-platform` con `master` (`503af44`). Mientras no
+se corra, el cliente que paga entra al sistema y ve la palabra `ASSIGNMENT_TURNED_IN` en letras
+gigantes en el menú, en toda pantalla.
 
-| Commit | Qué arregla | Cómo se comprobó que NO está en producción |
+### Lo que está vivo en producción AHORA — medido, no deducido
+
+Producción corre `8a3b5a6` (el contenedor bind-montea `/opt/onia-platform/runtime-next`, cuyo
+`BUILD_ID` es `lNDdVgrRvP1mizzu3BVXc`, igual al de `build-8a3b5a6`). `git rev-list --count
+8a3b5a6..master` = **7**.
+
+| Commit | Qué arregla | Prueba de que NO está en producción (hoy 17:36 UTC) |
 |---|---|---|
-| `bdf0935` + `5888a13` (merge) | **El login le deletrea los nombres de los iconos al lector de pantalla**, y si la fuente tarda más de 12 s se los muestra como texto a cualquiera (`bolt`, `credit_card_off`, `smart_toy`) | El HTML servido hoy trae los tres `<span>` **sin `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)` en vez de la guarda `d.fonts.status` |
-| `efaffe8` | **La CSP bloqueaba el beacon de Cloudflare Web Analytics en toda la plataforma** | La cabecera `content-security-policy` servida hoy no menciona `cloudflareinsights` en ningún lado |
+| `22fd088` | 🔴 **El menú dibuja `ASSIGNMENT_TURNED_IN` como texto a 20em** en el ítem "Requerimientos" — se ve en el sidebar de **toda pantalla del dashboard**, `/inbox` incluida | `docker exec onia-platform grep -rl assignment_turned_in /app/.next` → **4 chunks**. El glifo no viajó en la fuente subseteada y Material Symbols dibuja por ligadura: sin glifo, el navegador pinta el texto crudo |
+| `bdf0935` + `5888a13` | El login le deletrea los nombres de los iconos al lector de pantalla, y si la fuente tarda más de 12 s se los muestra como texto a cualquiera | El HTML servido trae los tres `<span class="material-symbols-outlined …">bolt<`, `credit_card_off`, `smart_toy` **sin `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)`; `d.fonts.status` aparece **0 veces** |
+| `efaffe8` | La CSP bloqueaba el beacon de Cloudflare Web Analytics en toda la plataforma | `curl -sSI https://app.onia.com.bo/login \| grep -ci cloudflareinsights` → **0** |
+| `675541b` | La ferretería leía "La cita" y "en el consultorio" en su editor | (vocabulario por rubro; mismo deploy) |
+| `d62beeb` | `gate:iconos` existía y no lo corría nadie — ahora está cableado a `ci` | es un gate, no cambia la pantalla |
 
-Tocan 6 archivos, +151/−15, y **4 de los 6 son tests** — la superficie de riesgo real son
-`components/auth/AuthShell.tsx` (5 líneas), `lib/iconos-script.ts` (13) y `next.config.ts` (29).
+**Por qué el nuevo es peor que el del login.** Los dos son el mismo bug de agosto que Sergio
+encontró a mano —la pantalla mostrando `credit_card_off` como palabra— pero el del login **sólo
+aparece si la fuente tarda >12 s**, y el del menú **aparece siempre**: el glifo directamente no
+está en el archivo que se sirve. Y lo ve el cliente que ya pagó y entró, no el visitante.
+La medición del tamaño (20em contra 1em de los otros 34 iconos) está en el propio `22fd088`.
 
-**Por qué importa que sean éstos y no otros.** Los dos son el mismo tipo de fallo: *invisible
-mientras todo va bien, feo justo cuando algo va mal*. El de los iconos es literalmente el bug de
-agosto que Sergio encontró a mano —el login mostrando `credit_card_off` como palabra— y hoy lo
-único que lo tapa es que la fuente cargue rápido. Con la fuente que en agosto tardó 117 s, el
-fallback de 12 s **es el camino normal, no el raro**.
+⚠️ **Dos huecos que este deploy NO cierra** (quedan como ítems del carril producto, no decisión
+de Sergio): `scripts/subset-iconos.mjs` **se rinde en silencio y sale 0** si falta `pyftsubset`
+—el build publica la fuente vieja sin avisar—, y `e2e/iconos.spec.ts` sólo mira `/`, `/login` y
+`/register`, así que el sidebar (que exige sesión) no aparece en ninguna de las tres. Por eso
+nadie lo atajó.
 
-**La decisión.** Desplegar `onia-platform` no lo decide un carril de integración. Es el mismo
-runbook del swap de siempre (`onia-platform/.claude/skills/onia-deploy/SKILL.md`), con el
-recordatorio de `CLAUDE.md`: **buildear en el VPS con `app.env`, nunca con un `.env.local`
-presente**, o Next hornea `127.0.0.1` en el bundle.
+### Qué cuesta desplegarlo — medido sobre el último build real
 
-**Recomendación: hacerlo.** Es el deploy más barato del radar —cambia tres archivos de código,
-ninguno toca base de datos, pagos ni sesiones— y cierra un ítem de `COLA.md` que ya está verde en
-código y vale cero hasta que se encienda.
+| opción | qué cuesta | cuánto tarda | qué se pierde |
+|---|---|---|---|
+| **A. Desplegar `master` (`503af44`)** | 0 Bs. Build en el VPS + `deploy-gates-swap.sh 503af44`, que corre 5 gates y **sólo swapea si `FAIL=0`** | **~2 min de build** (el de `8a3b5a6` fue 22:25:43→22:27:45) + rsync de 36 MB + `docker restart` ≈ **3 min en total**, con unos segundos de corte | nada: el script hace `cp -a` del runtime vivo a `runtime-next.prev-<TS>` **antes** del rsync, así que la vuelta atrás es una copia |
+| **B. Desplegar sólo el icono del menú** (cherry-pick de `22fd088`) | mismo build, más el trabajo de armar una rama de un commit | ~10 min | los otros 6 commits siguen valiendo cero, y el próximo deploy los arrastra igual — el riesgo no se evita, se pospone |
+| **C. No desplegar** | 0 | — | el cliente que paga sigue viendo `ASSIGNMENT_TURNED_IN` en el menú de cada pantalla, y cada día que pasa el swap arrastra más commits juntos |
+
+**Recomendación: A.** Es el deploy más barato del radar: 3 minutos, ningún commit toca base de
+datos, pagos ni sesiones, y el rollback es una carpeta que el propio script deja hecha. Contra
+eso, lo que está vivo es exactamente el bug que `CLAUDE.md` cita como el peor error de agosto.
+
+**Lo que NO es opción, y por qué:** buildear con un `.env.local` presente. Next hornea los
+`NEXT_PUBLIC_*` en el bundle y publica `127.0.0.1` — hay que buildear en el VPS con `app.env`.
+El `GATE 4` de `deploy-gates-swap.sh` lo atrapa (`cero 127.0.0.1 nuevo`), pero costaría el build.
+
+**Lo que este loop NO hace:** desplegar. Es código y producción — lo corre el carril dueño con OK
+explícito de Sergio.
 
 ## 21. Nadie mira nunca el panel del chatbot del cliente — falta una credencial de sólo lectura (2026-09-02) — decisión de Sergio
 
