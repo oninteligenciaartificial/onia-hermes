@@ -67,13 +67,33 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
 | `docs-auditoria` | **VPS** | `18 1,5,9,13,17,21 * * *` (UTC) | Carril docs/infra (rama `claude/docs-auditoria`): que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
 | `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
-| `canario-visual` | **VPS** | `41 4,10,16,22 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
+| `canario-visual` | **VPS** | `41 0,3,6,9,12,15,18,21 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
 | `investigacion` | **VPS** | `26 3,9,15,21 * * *` (UTC) | **Cotiza** las decisiones abiertas del radar para que Sergio decida en tanda, una vez, sobre un archivo (rama `claude/investigacion`) |
-| `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
-| `lucia` | **VPS** | `37 5,11,17,23 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
+| `web-venta` | **VPS** | `48 * * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
+| `lucia` | **VPS** | `37 0,3,6,9,12,15,18,21 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
 | `marca-personal` | **VPS** | `56 9,13,17,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
 | `kpis-semanal` | **VPS** | `7 13 * * 1` (UTC) | Tablero KPIs del lunes del carril marca personal; pide a Sergio los numeros que solo el ve |
+| `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
+| `web-factory-dev` | **VPS** | `21 2,8,14,20 * * *` (UTC) | Webs de cliente terminadas Y publicables con un comando (rama `claude/web-factory-dev`; cola en `web-factory/docs/LOOP_COLA.md`) |
+| `tendencias` | **VPS** | `51 11,23 * * *` (UTC) | Convierte lo que funciona AHORA en el rubro en recetas accionables de contenido, cada una con su fuente pública (rama `claude/tendencias`) |
+| `calidad-generado` | **VPS** | `5 3,9,15,21 * * *` (UTC) | Que Onia no publique una pieza mala y que Lucía sea SIEMPRE la misma cara (rama `claude/calidad-generado`) |
+| `supervisor` | **VPS** | `29 2,8,14,20 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |
 | `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
+
+⚠️ **Corregido 2026-09-02 20:40 UTC — la tabla tenía 10 filas y el cron 14.** Faltaban
+`recorrido-cliente`, `web-factory-dev`, `tendencias`, `calidad-generado` y `supervisor`: los cinco
+con línea de cron, prompt en disco y `case` en el corredor, **corriendo y gastando desde hacía
+horas**, invisibles para este archivo. Y tres de las filas que sí estaban mentían el horario:
+`canario-visual` corría `41 0,3,6,9,12,15,18,21` (no `41 4,10,16,22`), `lucia`
+`37 0,3,6,9,12,15,18,21` (no `37 5,11,17,23`) y `web-venta` `48 * * * *` (no `48 */2`). Es el
+mismo agujero de sentido único que este archivo ya describe, a mayor escala.
+
+⚠️ **Y la trampa que casi lo empeora: `crontab -l | head -50` corta la lista.** El integrador
+arrancó esa vuelta con ese comando y concluyó que `lucia` y `kpis-semanal` **no tenían cron** —
+los dos están en las líneas 60 y 62 de un crontab de 68. Estuvo a un paso de "rearmar" dos líneas
+que ya existían, o sea de **duplicarlas**: dos corridas simultáneas del mismo loop sobre el mismo
+worktree. **El chequeo de arranque se hace con `crontab -l | grep onia-loop.sh`, nunca con un
+`head`**: la lista crece, y un truncado silencioso convierte la auto-cura en el daño.
 
 ⚠️ **Corregido 2026-09-02.** `marca-personal` corría en `crontab -l` del VPS y no estaba en esta
 tabla — verificado en vivo el mismo día. `scripts/loops/onia-loop.sh` en el repo tampoco tenía su
@@ -247,7 +267,7 @@ deshabilitados **los deja así**: están acá con su motivo medido, no son una f
 |---|---|---|
 | `web-factory-salud` | `21 * * * *` | **7 de 8 corridas fueron no-ops y no dejó rastro en el repo en 48 h.** Sus 4 chequeos son los mismos que `web-factory-dev-loop` ya corre 3× más seguido, y los absorbió. |
 | `cerrar-y-revisar-web-factory` | `17 7 * * *` | Corrió **una vez**, no tocó el repo, y competía por el mismo plato con un hermano 288× más rápido, en el mismo árbol y la misma rama. |
-| `web-factory-dev-loop` | `45 * * * *` (Windows) | **Se quedó sin combustible.** Medido el 2026-09-02 en `web-factory/docs/LOOP_COLA.md`: `CARRIL A` y `CARRIL B` con **cero** ítems sin marcar, 27 hechos, y los 2 que quedan sin marcar están en *"Bloqueadas (esperan a Sergio)"* — que **no es cola**. La primera regla de armar un loop es *"¿este carril tiene una cola con ítems reales?"*; sin eso, un loop no se planta: **inventa trabajo**. No se migró al VPS a propósito. **Para revivirlo hace falta rellenar `CARRIL A`, no rearmar el cron.** |
+| `web-factory-dev-loop` | `45 * * * *` (Windows) | **Se quedó sin combustible.** Medido el 2026-09-02 en `web-factory/docs/LOOP_COLA.md`: `CARRIL A` y `CARRIL B` con **cero** ítems sin marcar, 27 hechos, y los 2 que quedan sin marcar están en *"Bloqueadas (esperan a Sergio)"* — que **no es cola**. La primera regla de armar un loop es *"¿este carril tiene una cola con ítems reales?"*; sin eso, un loop no se planta: **inventa trabajo**. No se migró al VPS a propósito. **Para revivirlo hace falta rellenar `CARRIL A`, no rearmar el cron.** ⚠️ **REVIVIÓ el 2026-09-02** como `web-factory-dev` en el VPS (`21 2,8,14,20`, commit `0c48cf72`): se cumplió la condición que esta misma fila exigía — `CARRIL A` volvió a tener 7 ítems reales. **Está en la tabla de activos de arriba; esta fila es historia, no una orden de apagarlo.** |
 
 ## La auto-cura, y lo que no alcanza
 
@@ -255,6 +275,25 @@ Cada loop activo, **antes de trabajar**, lista el registro **de su propia máqui
 (`list_scheduled_tasks` en Windows, `crontab -l` en el VPS), lo compara contra este archivo y
 rearma la que falte **de su columna**. El bloque está pegado idéntico en todos: mientras quede
 **UN** loop registrado por máquina, ese lado se recompone solo.
+
+**Esa comparación es un comando, no una lectura** (desde el 2026-09-02, en el VPS):
+
+```
+npm run loops:registrados
+```
+
+Compara `crontab -l` contra la tabla de arriba **en las dos direcciones** —filas sin cron **y**
+líneas de cron sin fila— y también los horarios. Sale `1` con la lista de diferencias y verde si
+coinciden. Va dentro de `npm test`, así que el integrador no puede mergear con la tabla mintiendo.
+Nace de que el chequeo pegado en los prompts sólo miraba en un sentido: buscaba filas que
+faltaran en el cron, y por eso **nunca podía ver** los cinco loops que corrían sin figurar acá.
+Un archivo que se compara a ojo divergió tres veces en un solo día.
+
+⚠️ **No listes el cron con `head`.** Ese mismo día el integrador arrancó con
+`crontab -l | head -50`, la lista tenía 68 líneas, y concluyó que `lucia` y `kpis-semanal` no
+estaban registrados: estaban, en las líneas 60 y 62. "Rearmar" una línea que ya existe la
+**duplica**, y dos corridas simultáneas del mismo loop comparten worktree y rama. Siempre
+`crontab -l | grep onia-loop.sh`, o directamente el comando de arriba.
 
 **Lo que esto NO puede curar** —y cómo se nota y se rearma a mano— está en el
 [`README.md`](README.md), sección *"3. El registro del horario se pierde"*. En una línea: si se
