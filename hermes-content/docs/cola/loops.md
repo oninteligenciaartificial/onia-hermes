@@ -115,19 +115,20 @@ Se mudó también `docs-auditoria` (carril docs/infra, nuevo) y `marca-personal`
 el VPS desde el 2026-09-01 pero **nunca se había escrito en esta tabla** — el archivo existía y la
 lista contra la que se compara, no).
 
-**Y  estrenó con una colisión de rama que hay que no repetir.** Se le dio la
-misma rama que usa la sesión de control (), y en su primera vuelta las
-dos escribieron  en paralelo: hubo que resolver el conflicto a mano y una de las dos
-habría quedado con el push rechazado. Ya tiene rama propia (). **Un
-carril, una rama** — la regla estaba escrita en  y se rompió igual, porque el worktree
-se creó apuntando a una rama que ya tenía dueño.
+**Y `docs-auditoria` estrenó con una colisión de rama que no hay que repetir.** Se le dio la
+misma rama que usa la sesión de control (`claude/git-status-935f47`), y en su primera vuelta las
+dos escribieron este mismo archivo en paralelo: hubo que resolver el conflicto a mano y una de
+las dos habría quedado con el push rechazado. Ya tiene rama propia (`claude/docs-auditoria`).
+**Un carril, una rama** — la regla estaba escrita en `CLAUDE.md` y se rompió igual, porque crear
+un worktree apuntando a una rama que ya tiene dueño **no avisa nada**.
 
-** se queda en Windows a propósito**, y esto sí es una decisión, no una omisión:
+**`contenido-cola` se queda en Windows a propósito**, y esto sí es una decisión, no una omisión:
 Sergio, 2026-09-01 — *"no toques el de contenido, el de contenido lo maneja su sesión"*.
 
-⚠️ **Ya no son dos — el 2026-09-01 se sumó `marca-personal`** (verificado en `crontab -l` el
-2026-09-02): son TRES los que corren en el VPS. El título de esta sección quedó como historia del
-día de la mudanza, no como conteo vigente — el conteo vigente vive en la tabla de arriba.
+⚠️ **El conteo de esta sección es historia, no estado.** Empezó con dos, sumó `marca-personal` el
+2026-09-01, y con `onia-cola` y `docs-auditoria` el 2026-09-02 son **cinco** en el VPS
+(verificado en `crontab -l` ese día). **El conteo vigente vive sólo en la tabla de arriba** — si
+esta sección y esa tabla no coinciden, gana la tabla.
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 
