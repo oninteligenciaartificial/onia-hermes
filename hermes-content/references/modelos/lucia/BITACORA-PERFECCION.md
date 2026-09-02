@@ -75,9 +75,10 @@ comparación.** Animá **una sola** imagen fancy de E3 con `seedance1_5` (4,8) y
 mismo prompt de movimiento. Comparar: aspecto de salida, duración, audio, y casilla 9 —**la cara
 aguanta el clip entero**. Conclusión con evidencia a `TECNICA-HIGGSFIELD.md`.
 
-### E5 · ¿`--resolution 2k` se nota en la piel? · **~4 créditos** · PENDIENTE
-Misma escena a `2k` y al default, comparadas al 100 % de zoom. Si no se distingue, se baja y se
-ahorra en **cada pieza futura**.
+### E5 · ¿`--resolution 2k` se nota en la piel? · **0 créditos** · HECHO
+Resuelto SIN generar: la premisa («si no se distingue, se baja y se ahorra») es **falsa en el
+CLI**. `higgsfield generate cost nano_banana_pro` da **1k = 2k = 2 cr** y **2k es el default**.
+No hay nada que ahorrar bajando; ver bloque en Resultados.
 
 ### E6 · ¿Se puede pedir más de 4 segundos? · **~10 créditos** · PENDIENTE
 `V07` dio 4,05 s y un reel de 4 s obliga a encadenar. Mirá el `--help` del subcomando de video.
@@ -235,3 +236,30 @@ respondido sin gastar; falta sólo medir el costo de 8/12 s (otra vuelta).
 la escena café ya está publicada como `D13` (la foto fija), y meter un clip casi idéntico de la
 misma escena es sobre-publicar la misma cara. Queda disponible en `generadas-20260902/` para
 cuando Sergio arme un reel; publicar es su decisión.
+
+### E5 · ¿`--resolution 2k` se nota en la piel? — 2026-09-02 · **0 créditos** (decidido por precio)
+
+**No se generó nada, y esa es la respuesta correcta.** La variable que decide E5 no es cómo se ve
+la piel: es **cuánto se ahorra bajando la resolución**. Medido en el CLI con `higgsfield generate
+cost nano_banana_pro` (mismo prompt base de E2, 9:16, consulta gratis):
+
+| resolución | costo | nota |
+|---|---|---|
+| `1k` | **2 cr** | mismo precio que 2k |
+| `2k` | **2 cr** | **es el DEFAULT** del modelo (`higgsfield model get nano_banana_pro`) |
+| `4k` | 4 cr | el doble |
+
+**Conclusión — la premisa de E5 está muerta:** bajar a `1k` **no ahorra un solo crédito**, y `2k`
+ya viene por defecto. Aunque `1k` se viera idéntico al 100 %, la decisión sería la misma: **usar
+2k siempre**. Gastar 4 cr en comparar piel de una decisión ya tomada es tirar créditos — por eso
+se cierra mirando el precio, no la foto. (Confirma en el CLI lo que `TECNICA §🔻` ya decía del
+navegador: «2K cuesta lo mismo que 1K».)
+
+**Dato de píxeles medido, para no re-medirlo:** `2k` + `9:16` en el CLI = **1536×2752** (ratio
+0,558), verificado con `ffprobe` en `E3-cafe.png`, `E2-B-rooftop.png` y `E3-hotel.png` — las tres
+idénticas. **No es 1080×1920:** toda pieza publicable necesita el export (casilla 2), como ya
+resolvió E3-café. → va a `TECNICA-HIGGSFIELD.md`.
+
+**Lo que E5 NO responde (queda como futuro, es OTRO experimento):** si `4k` (4 cr, el doble) da
+poros visiblemente mejores para una pieza *hero*. Ahí sí habría una decisión de plata real. Hoy
+no se toca — cada pieza normal va a 2k y punto.

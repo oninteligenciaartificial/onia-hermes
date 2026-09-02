@@ -36,6 +36,25 @@ Importa concretamente: **el render de carrusel es 1080×1350**, así que una fot
 ⚠️ **Las 4 fotos del banco propio se generaron en 1K por no haber mirado este selector.**
 Sirven, pero conviene regenerar las que se usen en piezas finales — son 2 cr cada una.
 
+#### ✅ Confirmado en el CLI del VPS (E5, 2026-09-02) — y con los números exactos
+
+Lo mismo vale por CLI, medido con `higgsfield generate cost` (la consulta NO gasta):
+
+```bash
+higgsfield generate cost nano_banana_pro --prompt "..." --resolution 1k --aspect-ratio 9:16  # 2 cr
+higgsfield generate cost nano_banana_pro --prompt "..." --resolution 2k --aspect-ratio 9:16  # 2 cr  ← default
+higgsfield generate cost nano_banana_pro --prompt "..." --resolution 4k --aspect-ratio 9:16  # 4 cr
+```
+
+- **`resolution` default = `2k`** (`higgsfield model get nano_banana_pro`). No hace falta pasar el
+  flag: si no lo ponés, sale 2k.
+- **`1k` NO ahorra nada** (mismo 2 cr). Bajar a 1k es sólo perder píxeles gratis. Nunca hacerlo.
+- **`4k` cuesta el DOBLE (4 cr)** — reservado a una eventual pieza *hero*; sin probar si mejora la
+  piel lo suficiente para justificarlo. Para toda pieza normal: **2k**.
+- **Píxeles reales de `2k` + `9:16` por CLI: `1536×2752`** (ratio 0,558), no 1080×1920. → **toda
+  pieza publicable necesita export a 1080×1920 / 1080×1350** para pasar la casilla 2 (lo mismo que
+  ya hizo E3-café). Un `9:16` del CLI ≠ el 9:16 exacto de Reels.
+
 ### ⚠️ El toggle `Unlimited` NO es gratis
 
 Parece un interruptor y es una **venta**: abre un modal de **$5 por 1 día · $12 por 3 días ·
