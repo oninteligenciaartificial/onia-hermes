@@ -407,6 +407,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (recortes-rubro.mjs), ya no está en el repo. Este carril **no** puede sembrar
       datos: la base es la de PRODUCCIÓN en el VPS. Queda desbloqueado para quien tenga una
       base local, o con un `docker compose` de Postgres (hoy no hay Docker en esta máquina).
+      ⚠️ **Reverificado el 2026-09-02: Docker YA está en la máquina** (`docker compose version`
+      → v5.0.2, hay 15 contenedores `onia-*` corriendo), pero **eso no desbloquea el ítem**. La
+      app con `prisma/seed-demo.ts` que hay que correr con datos falsos es el **dashboard real
+      del producto** (repo `onia-platform`, el que sirve `app.onia.com.bo`), no
+      `web-factory/apps/onia-platform` (la landing, que es mi zona). Levantarlo — aunque sea
+      sólo para capturar pantallas y sin commitear nada ahí — es correr el código de **otro
+      carril**, justo lo que `CLAUDE.md` prohíbe ("el repo `onia-platform` tampoco... no cruces
+      de repo"). Sigue bloqueado; el bloqueo real nunca fue Docker.
 
 - [ ] **Los NOMBRES de los iconos siguen en el DOM como texto en el login de la plataforma.**
       El `innerText` de `app.onia.com.bo/login` devuelve `bolt`, `credit_card_off` y `smart_toy`.
@@ -529,6 +537,26 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       ⚠️ **Ojo de carril:** `web-factory/apps/onia-platform/` es la app que esta misma cola
       anota como huérfana cuatro ítems más arriba. El gate se puede cablear sin tocar su
       código — y justamente por eso conviene que exista antes de que alguien lo toque.
+
+      ✅ **Cerrado el residuo más urgente el 2026-09-02, sin tocar la raíz de `web-factory`:**
+      `apps/onia-platform/package.json` ahora tiene `"prebuild": "tsc --noEmit"`. Verificado que
+      es exactamente el comando que corre el deploy real
+      (`scripts/deploy-onia-landing.sh:25`, `pnpm --filter onia-platform build`) — no un script
+      paralelo que nadie llama: `pnpm run build` en ese filtro ejecuta el hook automáticamente
+      (probado en vivo con `prebuild: echo`), y con un error de tipos inyectado a propósito
+      (`layout.tsx` con un `number` asignado a un `string`) el build **corta antes de
+      `next build`** con `ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL`. Revertido el error de prueba,
+      gates limpios: `tsc --noEmit` 0 · `next build` 32/32 páginas.
+      **Lo que sigue abierto, y es de otro dueño:** `dental-premium`, `dentalgest-landing` y
+      `ferreteria-sur` (mismo arreglo, un dueño con permiso en esas carpetas) y `site` (ni
+      siquiera tiene script `typecheck`). Cablearlo "en el script raíz que un carril corre antes
+      de mergear" sigue sin dueño — tocar los 4 archivos raíz de `web-factory` no es zona de
+      este loop.
+      **Por qué no bastaba con que el `node_modules` faltara:** al arrancar esta vuelta
+      `npm run typecheck` en `onia-platform` fallaba con `Cannot find module 'vitest'` — no era
+      un bug de código, era que este worktree nunca corrió `pnpm install` (root `node_modules`
+      no existía). Con el install hecho, tsc y build salen limpios; quedó anotado para que la
+      próxima vuelta no lo reporte como regresión.
 
 ### Del canario visual — corrida del 2026-09-01 22:41 UTC (tercera pasada)
 
