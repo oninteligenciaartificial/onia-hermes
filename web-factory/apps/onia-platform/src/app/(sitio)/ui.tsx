@@ -63,11 +63,11 @@ export type PanelId =
  */
 const panelLabel: Record<PanelId, string> = {
   agentes:
-    "Pendientes de aprobación a las 03:12, con el negocio cerrado: cuatro propuestas que los agentes dejaron escritas de madrugada, cada una con su botón de aprobar. Nada se manda hasta que el dueño aprueba.",
+    "Pendientes de aprobación a las 03:12, con el negocio cerrado: tres propuestas que los agentes dejaron escritas de madrugada, cada una con su botón de aprobar. Nada se manda hasta que el dueño aprueba.",
   chat:
     "Conversación de WhatsApp a las 23:40: alguien pregunta si atienden el sábado y ya tiene la respuesta con el horario que el negocio publicó.",
   cuenta:
-    "Una cuenta recién creada para una clínica dental, con agenda, clientes, cobros, facturación, recordatorios y agentes ya encendidos.",
+    "Una cuenta recién creada, con agenda, clientes, caja, inventario, contabilidad y agentes ya encendidos.",
   dental:
     "Agenda del día de una clínica dental: cada paciente con su hora y su tratamiento, dos citas ya confirmadas y una marcada para llamar.",
   comercio:
@@ -77,29 +77,53 @@ const panelLabel: Record<PanelId, string> = {
   estetica:
     "Paquetes en curso de un centro de estética: cada tratamiento con las sesiones ya hechas y las que faltan, y el control post-tratamiento ya puesto en la agenda.",
   servicios:
-    "Cierre de mes de un estudio profesional: el registro de ventas al día, y el IVA y el IT del mes ya armados.",
+    "Cierre de mes de un estudio profesional: las ventas y las compras del mes al día, y el reporte del mes esperando revisión.",
 };
 
-/** Los módulos del panel de cuenta. Ninguno es una promesa nueva: son los que
- *  ya nombra el copy de /empezar y la descripción del sitio. */
+/**
+ * Los módulos del panel de cuenta. Son EXACTAMENTE los que nombra el copy que
+ * queda al lado en /empezar ("Todo encendido: agenda, caja, inventario,
+ * contabilidad y la cola de agentes") más "Clientes", que nombra la descripción
+ * del sitio. Nada acá es una promesa nueva.
+ *
+ * ⚠️ Acá decía "Facturación", y estaba mal por dos motivos a la vez. Primero,
+ * la lista no coincidía con el párrafo pegado al costado —dos listas de módulos
+ * distintas, lado a lado, en la misma pantalla, sin inventario ni contabilidad
+ * y con una capacidad de más—. Segundo y peor: iba bajo el remate "Encendidos
+ * desde el primer día" mientras la FAQ de la home dice que la homologación
+ * sigue en trámite y que por ahora se factura en el Portal Web del SIN. La
+ * ilustración prometía lo que el texto del mismo sitio tiene que desmentir.
+ */
 const MODULOS = [
   "Agenda",
   "Clientes",
-  "Cobros",
-  "Facturación",
-  "Recordatorios",
+  "Caja",
+  "Inventario",
+  "Contabilidad",
   "Agentes",
 ] as const;
 
 /** Lo que los agentes dejan escrito. Sin números ni nombres de cliente: un
  *  conteo inventado dentro de una interfaz creíble se lee como dato real, y no
  *  hay un solo cliente pagando todavía. La misma regla rige los cinco rubros:
- *  hay horas y estados, nunca montos ni cantidades. */
+ *  hay horas y estados, nunca montos ni cantidades.
+ *
+ *  Son TRES y no cuatro por dos razones medidas. (a) Con cuatro filas el panel
+ *  desbordaba su propia caja —`overflow: hidden` y 8-10px de más entre 900 y
+ *  1920—, y el aire de abajo quedaba en la mitad del de arriba: leía cargado
+ *  hacia el pie. (b) La cuarta era "Responder las consultas de anoche", que es
+ *  el trabajo del chatbot y se muestra dibujada en el panel de al lado, en esta
+ *  misma página. Un panel que promete lo que el vecino ya prueba gasta una fila
+ *  en repetirse. */
+/*  Y son CORTOS: a 375 la fila deja 161px para el texto, y con el piso
+ *  tipográfico nuevo "Volver a invitar a quien no vino" pedía 162 — un solo
+ *  píxel de más, que en `text-overflow: ellipsis` no se come un píxel sino
+ *  cuatro caracteres ("quien no vi…"). Las otras dos entraban con CERO de
+ *  margen. Un rótulo de cola de aprobación se escribe corto igual. */
 const PENDIENTES = [
-  "Recordar las citas de mañana",
+  "Recordar citas de mañana",
   "Avisar los pagos vencidos",
-  "Volver a invitar a quien no vino",
-  "Responder las consultas de anoche",
+  "Invitar a quien no vino",
 ] as const;
 
 /** Caja del día de la ferretería. El ancho de la barra es una FORMA, no una
@@ -112,12 +136,20 @@ const CAJA = [
   { metodo: "Fiado", w: "19%" },
 ] as const;
 
-function Head({ titulo, sello }: { titulo: string; sello: string }) {
+/**
+ * `sello` es opcional a propósito: el panel de cuenta vive en /empezar, que es
+ * genérica, y ahí no hay rubro que estampar todavía. Llevaba "Dental" quemado —
+ * la única imagen de "tu cuenta" del sitio mostraba una cuenta dental, en una
+ * página cuyo copy promete la configuración DE TU rubro, y contra la regla de
+ * la casa: no se le vende sólo a clínicas. Poner un número ("6 rubros") en su
+ * lugar habría sido peor: hoy conviven tres cuentas distintas de rubros.
+ */
+function Head({ titulo, sello }: { titulo: string; sello?: string }) {
   return (
     <div className={s.panelHead}>
       <span className={s.panelMark} />
       <span className={s.panelTitle}>{titulo}</span>
-      <span className={s.panelStamp}>{sello}</span>
+      {sello ? <span className={s.panelStamp}>{sello}</span> : null}
     </div>
   );
 }
@@ -125,8 +157,14 @@ function Head({ titulo, sello }: { titulo: string; sello: string }) {
 /**
  * Fila de lista: hora o marca a la izquierda, el texto en el medio y una
  * pastilla a la derecha. La pastilla VERDE es lo único que espera a la persona
- * (Aprobar, Llamar, Responder) y la apagada es un estado ya resuelto: con tres
- * pastillas verdes iguales el ojo no sabe dónde caer.
+ * (Aprobar, Llamar, Revisar) y la apagada es un estado ya resuelto.
+ *
+ * La regla muerde en las listas MIXTAS —dental, importadora, estética,
+ * servicios—: ahí va exactamente una verde, porque con todas iguales el ojo no
+ * sabe dónde caer. La cola de aprobación es la excepción declarada: se titula
+ * "Para aprobar" y todo lo que lista está, por definición, esperando — apagar
+ * una sería decir que ya se mandó, que es justo lo contrario de lo que el panel
+ * promete.
  */
 function Fila({
   hora,
@@ -174,7 +212,12 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
     case "agentes":
       return (
         <>
-          <Head titulo="Pendientes de aprobación" sello="03:12 · cerrado" />
+          {/* "Para aprobar" y no "Pendientes de aprobación": con el piso
+              tipográfico nuevo el título largo pedía 155px en una cabecera de
+              134px a 375, y se cortaba con ellipsis contra el sello de la hora.
+              El sello se queda —"03:12 · cerrado" ES medio argumento—, así que
+              el que cede es el título. */}
+          <Head titulo="Para aprobar" sello="03:12 · cerrado" />
           <ul className={s.panelRows}>
             {PENDIENTES.map((q) => (
               <Fila key={q} txt={q} pill="Aprobar" />
@@ -206,7 +249,7 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
     case "cuenta":
       return (
         <>
-          <Head titulo="Tu cuenta" sello="Dental" />
+          <Head titulo="Tu cuenta" />
           <div className={s.panelGrid}>
             {MODULOS.map((m) => (
               <span key={m} className={s.panelPill}>
@@ -292,17 +335,25 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
         </>
       );
 
+    /* ⚠️ Este panel decía "Registro de ventas · IVA del mes · IT del mes", con
+       el remate "Llegás al cierre con el IVA y el IT ya armados". Ninguna de
+       las dos declaraciones aparece en lib/pricing.ts: el Básico promete
+       "contabilidad básica de compras y ventas" y el Pro "contabilidad completa
+       (RCV, balance y export)" — el IVA y el IT son formularios que se derivan
+       de eso, y no un producto que ningún plan diga entregar armado. Era una
+       capacidad fabricada dentro de una interfaz creíble. Ahora dice lo que la
+       fuente dice, y la única pastilla verde es la que espera a la persona. */
     case "servicios":
       return (
         <>
           <Head titulo="Cierre del mes" sello="Servicios" />
           <ul className={s.panelRows}>
-            <Fila txt="Registro de ventas" pill="Al día" hecho />
-            <Fila txt="IVA del mes" pill="Armado" hecho />
-            <Fila txt="IT del mes" pill="Armado" hecho />
+            <Fila txt="Ventas del mes" pill="Al día" hecho />
+            <Fila txt="Compras del mes" pill="Al día" hecho />
+            <Fila txt="Reporte del mes" pill="Revisar" />
           </ul>
           <p className={s.panelFoot}>
-            Llegás al cierre con el IVA y el IT ya armados.
+            Llegás al cierre con las compras y las ventas ordenadas.
           </p>
         </>
       );

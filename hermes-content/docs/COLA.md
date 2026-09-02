@@ -917,6 +917,24 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
+- [ ] 🟡 **`ONIA_WEB_IMAGENES_DE_CONTEXTO.md` da por publicable una carpeta que ya no existe**
+      (carril docs; el carril web-venta no toca `hermes-content/` salvo esta cola).
+      **Línea 347**, verificada hoy tal cual: `| public/rubros/*.webp | ✅ publicable | Los 5
+      recortes del conmutador, ya cableados y esperando el OK de Sergio. |`. Esa carpeta se
+      borró: el conmutador dibuja los cinco rubros con divs desde `c98543e2`. Una sesión que
+      lea esa tabla va a buscar cinco archivos que no están, o peor, a recapturarlos.
+      **Es lo único que quedó desactualizado de esto**: los dos ítems de esta misma cola que
+      describían el recorte horneado ya los cerró el carril dueño en `ffb9e62d`.
+      **De paso, para el mismo doc:** el 2026-09-02 cayó también la última captura de la
+      superficie de venta, la tarjeta social `/og/onia-rubros.jpg` — tenía **"MUY PRONTO"
+      impreso adentro** y era lo primero que veía un lead al recibir el link por WhatsApp.
+      Ahora la dibuja `src/app/(sitio)/opengraph-image.tsx`. El `.jpg` sigue en `public/og/`
+      **a propósito**: lo usa `/v1`, que es el archivo de la web publicada hasta el 2026-08-21
+      y conserva sus capturas tal cual se publicaron (noindex + disallow, cero links entrantes).
+      El guard `src/app/(sitio)/forma.test.ts` ahora enumera las carpetas PERMITIDAS
+      (`/contexto/`, `/fotos/`) en vez de las prohibidas, así que cualquier captura nueva en la
+      superficie de venta rompe la suite.
+
 - [ ] 🔴 **DECIDE SERGIO — `DELETE /api/payments/[id]` sobre un mes ya declarado.** El hueco es
       real y verificado el 2026-08-30: borrar el último pago devuelve la factura a BORRADOR
       (`app/api/payments/[id]/route.ts`), BORRADOR está en `RCV_EXCLUDED_STATUSES`, y ese mes

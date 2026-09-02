@@ -425,8 +425,18 @@
      teléfono y el panel dejaba de LEERSE, que es lo único que tiene que hacer.
      El techo subió de 0.95rem: con el mat en 4/3 y una lista de tres filas
      sobraban 88-116px de hueco muerto sobre el remate (medido a 1440), y el
-     panel leía a medio llenar. */
-  font-size: clamp(0.72rem, 3.6cqw, 1.2rem);
+     panel leía a medio llenar.
+
+     ⚠️ El piso subió otra vez, de 0.72rem, y esta es la corrección importante:
+     la vez anterior se subió la BASE y no los hijos, que es donde el texto vive
+     de verdad. Con base 11,5px (lo que da 0.72rem en los tres teléfonos
+     medidos, 320/375/414) los múltiplos caían así: el sello a 0.72em = 8,3px,
+     la pastilla a 0.74em = 8,5px, la hora a 0.76em = 8,8px. O sea que el panel
+     seguía sin LEERSE en la única pantalla donde importa —la del lead que llega
+     de Instagram—, que es exactamente el defecto que el piso existía para
+     evitar. Con 0.88rem el hijo más chico queda en 10,1px. En escritorio no
+     cambia nada: ahí manda el techo. */
+  font-size: clamp(0.88rem, 3.6cqw, 1.2rem);
   line-height: 1.35;
   text-align: left;
 }
@@ -494,14 +504,14 @@
   align-items: center;
   gap: 0.6em;
   padding: 0.5em 0.55em;
-  border-radius: calc(var(--r-block) * 0.4);
+  border-radius: calc(var(--r-block) * 0.45);
   background: color-mix(in srgb, var(--verde-500) 8%, transparent);
 }
 .panelSq {
   flex: none;
   width: 0.72em;
   height: 0.72em;
-  border-radius: calc(var(--r-block) * 0.16);
+  border-radius: calc(var(--r-block) * 0.14);
   background: var(--verde-500);
 }
 .panelTxt {
@@ -638,6 +648,35 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* En teléfono el texto del panel ENVUELVE en vez de cortarse.
+   `text-overflow: ellipsis` protege el layout de un string largo, pero acá el
+   layout ya no necesita protección: debajo de 768px el mat suelta su
+   `aspect-ratio` y el panel crece con su contenido. Lo único que hacía el
+   ellipsis era comerse el final de la frase.
+   Medido a 320px —iPhone SE y los Android chicos, que siguen existiendo— con
+   el piso tipográfico nuevo se cortaban SEIS textos a la vez ("WhatsApp del
+   negocio" perdía 48px, o sea media frase) en la home, /agentes y /chatbot.
+   Bajar el piso para que entren los devolvía a 8px, que es el defecto que el
+   piso vino a arreglar: entre cortar la frase y partirla en dos líneas, se
+   parte. Además vuelve el panel inmune a la métrica de la fuente: si Archivo
+   no carga y entra la de sistema, esto envuelve en vez de truncar. */
+@media (max-width: 767px) {
+  .panelTitle,
+  .panelTxt,
+  .panelBarLbl,
+  .panelPillTxt {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  /* la etiqueta de la barra deja de ser una columna fija: envuelta, 5.4em la
+     dejaban con una palabra por línea */
+  .panelBarLbl {
+    width: auto;
+    max-width: 45%;
+  }
 }
 
 /* ---- el remate ---- */
@@ -990,7 +1029,7 @@
 }
 .track span {
   flex: 1;
-  border-radius: calc(var(--r-block) * 0.16);
+  border-radius: calc(var(--r-block) * 0.14);
 }
 
 /* VOS de día: lleno, y QUIETO a propósito — él no es una máquina. */

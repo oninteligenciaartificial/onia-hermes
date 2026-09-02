@@ -51,12 +51,27 @@ type Rubro = {
 /**
  * Los cinco mats se alternan a propósito: dos rubros seguidos del mismo verde
  * hacían que el rodillo pareciera no haber cambiado de panel.
+ *
+ * ⚠️ Eso se decía acá y NO se cumplía en el último paso. Estética era
+ * --verde-700 (#016141) y Servicios --verde-900 (#013925): 1,73:1 de contraste
+ * entre un mat y el siguiente — calculado, no estimado. Los dos paneles tienen
+ * además la misma silueta (cabecera + tres filas con pastilla + remate), así
+ * que el paso final de LA sección estrella no cambiaba ni de color ni de forma:
+ * el rodillo parecía trabado justo donde tiene que rematar. Estética pasa a
+ * --verde-500 y la serie queda oscuro → señal → tinta → medio → hondo, sin dos
+ * valores vecinos parecidos:
+ *   dental → comercio  : verde-800  → señal      (salto máximo)
+ *   comercio → importadora : señal  → tinta      (salto máximo)
+ *   importadora → estética : tinta  → verde-500  (5,15:1)
+ *   estética → servicios   : v-500  → verde-900  (3,53:1)
+ * El orden de los rubros NO se toca: dental primero es la regla del proyecto
+ * (dental vivo → comercio → importadora), y las palabras leen en ese orden.
  */
 const RUBROS: readonly Rubro[] = [
   { id: "dental", palabra: "Dental", bg: "var(--verde-800)" },
   { id: "comercio", palabra: "Comercio", bg: "var(--signal)" },
   { id: "importadora", palabra: "Importadora", bg: "var(--tinta)" },
-  { id: "estetica", palabra: "Estética", bg: "var(--verde-700)" },
+  { id: "estetica", palabra: "Estética", bg: "var(--verde-500)" },
   { id: "servicios", palabra: "Servicios", bg: "var(--verde-900)" },
 ];
 
