@@ -935,6 +935,27 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **No se desplegó:** `onia.com.bo` la sirve el contenedor `onia-landing` y publicar es de
       Sergio — la franja sigue viva en producción hasta ese deploy.
 
+      ✅ **Y ahora tiene gate — `web-factory/apps/onia-platform/src/app/(sitio)/cierre.test.ts`,
+      2026-09-02.** El arreglo de
+      arriba se fue **sólo en CSS, sin un test**: nada impedía que el `padding-bottom` volviera, y
+      este defecto vivió en las 16 rutas del sitio sin que ningún gate lo viera. Corre en
+      `prebuild` (`tsc --noEmit && vitest run`), que es el comando real del deploy.
+      **Caza la CLASE, no la forma de ayer** — la lección que el guard de capturas de al lado ya
+      había aprendido fallando tres veces: no busca el literal 4,6rem ni sólo `padding-bottom`, sino que el
+      `body`/`html` reserve fondo en **cualquiera** de sus formas (`-bottom`, `-block`, y el atajo
+      `padding`/`margin`, resolviendo qué valor es el lado de abajo según tenga 1, 2, 3 o 4).
+      **Lleva las dos mitades del arreglo**, porque borrar el padding a secas dejaba el mismo
+      defecto en un iPhone con notch: exige que `env(safe-area-inset-bottom)` lo absorba el PIE y
+      no el documento.
+      **Probado en ROJO antes, en las tres formas de romperlo:** (1) vuelve el `body
+      { padding-bottom: 4,6rem }` original → 2 tests rojos; (2) nadie absorbe el área segura →
+      *"en un iPhone con notch vuelve la franja"*; (3) la absorbe el `body` en vez del pie → 2
+      rojos. Árbol restaurado y verde en las tres.
+      ⚠️ **Se cazó a sí mismo un falso positivo**: la primera versión marcaba `body { margin: 0 }`
+      —un reset legítimo— porque miraba la propiedad y no el VALOR. Un guard que ladra sobre
+      código sano se termina apagando, así que ahora sólo cuenta el lado de abajo distinto de cero.
+      **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **119 pasan (5 archivos)**.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
