@@ -1,11 +1,13 @@
 {
   "nombre": "panel-chatbot",
   "url": "https://app.onia.com.bo/settings/chatbot",
+  "cola": "hermes-content/docs/cola/chatbot.md",
+  "duenio": "chatbot-cola",
   "status": 200,
   "fallo": null,
-  "bytes": 773831,
-  "msMirable": 973,
-  "msTotal": 2457,
+  "bytes": 716079,
+  "msMirable": 140,
+  "msTotal": 978,
   "erroresConsola": [
     "Loading the script 'https://static.cloudflareinsights.com/beacon.min.js/v3d52b47920f24c319d37e2661827c42b1787588026925' violates the following Content Security Policy directive: \"script-src 'self' 'un"
   ],
@@ -14,5 +16,6 @@
     "urlFinal": "https://app.onia.com.bo/login",
     "texto": "Tu negocio completo, en un solo sistema. bolt Activación acompañada Entregamos tu sistema con la configuración de tu rubro puesta. Si no sabés cómo configurarlo, hacemos una demo y lo armamos con tus datos. credit_card_off 14 días gratis, sin tarjeta Probás todo el sistema. Si no te sirve, no pagas nada. smart_toy Agentes que trabajan por vos Recuerdan citas, cobran deudas y avisan lo importante. Clínicas dentales · Comercios · Importadoras — hecho en Bolivia Hola de nuevo Entrá a tu cuenta para seguir donde quedaste. Correo electrónico Contraseña Olvidé mi contraseña Iniciar sesión ¿Todavía no tenés cuenta? person_add Pedí tu acceso Si tu negocio ya usa Onia, pedí acceso al administrador. Conocer Onia"
   },
-  "NOTA": "NO MEDIDA: sin sesion, https://app.onia.com.bo/settings/chatbot redirige a /login. Esta baseline es la del LOGIN, no la del panel. Una pantalla que no se miro NO esta verde."
+  "baseline": "comparada",
+  "motivos": []
 }

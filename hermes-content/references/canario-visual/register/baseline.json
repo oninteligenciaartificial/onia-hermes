@@ -1,0 +1,21 @@
+{
+  "nombre": "register",
+  "url": "https://app.onia.com.bo/register",
+  "cola": "hermes-content/docs/COLA.md",
+  "duenio": "onia-cola",
+  "status": 200,
+  "fallo": null,
+  "bytes": 721367,
+  "msMirable": 100,
+  "msTotal": 907,
+  "erroresConsola": [
+    "Loading the script 'https://static.cloudflareinsights.com/beacon.min.js/v3d52b47920f24c319d37e2661827c42b1787588026925' violates the following Content Security Policy directive: \"script-src 'self' 'un"
+  ],
+  "visto": {
+    "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia",
+    "urlFinal": "https://app.onia.com.bo/register",
+    "texto": "Tu negocio completo, en un solo sistema. bolt Activación acompañada Entregamos tu sistema con la configuración de tu rubro puesta. Si no sabés cómo configurarlo, hacemos una demo y lo armamos con tus datos. credit_card_off 14 días gratis, sin tarjeta Probás todo el sistema. Si no te sirve, no pagas nada. smart_toy Agentes que trabajan por vos Recuerdan citas, cobran deudas y avisan lo importante. Clínicas dentales · Comercios · Importadoras — hecho en Bolivia 1 Tu rubro 2 Tu cuenta ¿Qué tipo de negocio tenés? Onia se adapta a tu rubro: pantallas, vocabulario y agentes a tu medida. dentistry Clínica dental Pacientes, citas, tratamientos y cobros Empezar aquí arrow_forward storefront Comercio / tienda Catálogo, inventario, caja y clientes Empezar aquí arrow_forward local_shipping Importadora / distribuidora Catálogo, cotizaciones B2B y costeo de importación Empezar aquí arrow_forward spa Estética y spa Agenda, clientas, tratamientos y caja Empezar aquí arrow_forward work Servicios profesionales Agenda, citas, cobros y contabilidad Empezar aquí arrow_forward ¿Otro rubro? Escribinos y lo vemos con vos. ¿Ya tenés cuenta? Inicia sesión"
+  },
+  "baseline": "sin baseline — esta vuelta la creás; una baseline nueva NO es una verificación",
+  "motivos": []
+}
