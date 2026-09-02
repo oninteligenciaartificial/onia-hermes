@@ -817,7 +817,14 @@ Para cada una la decisión es la misma y cuesta **Bs 0**: **rebasar y mergear** 
 que mirar el rebase) o **archivarla** y perder ese trabajo. `claude/ads-creatividades-publicos`
 (146 commits) queda afuera a propósito: es tu carril de contenido y lo cerrás vos.
 
-## 17. El loop `docs-auditoria` está construido y probado, pero apagado (2026-09-02) — decisión de Sergio
+## 17. ~~El loop `docs-auditoria` está construido y probado, pero apagado~~ — RESUELTO, ya corre (2026-09-02)
+
+> 🔴 **CORREGIDO el 2026-09-02: esta sección quedó vieja en horas.** Esta misma vuelta del
+> carril `docs-auditoria` está corriendo **porque el cron ya está prendido** —
+> `crontab -l` en el VPS tiene `18 1,5,9,13,17,21 * * * /root/bin/onia-loop.sh docs-auditoria`
+> (6×/día), y `hermes-content/docs/cola/loops.md` ya lo lista en la tabla "Deben existir y
+> estar activos". No queda ninguna opción por elegir: la cadencia ya se decidió y se aplicó.
+> Lo que sigue es el texto original, que se deja como historia de la decisión pendiente.
 
 El carril que audita ESTE archivo (worktree, rama, prompt, `case` en `onia-loop.sh`) ya existe en
 el VPS y corrió una vez a mano el 2026-09-02T02:21 UTC con `exit 0`. **No tiene línea en

@@ -29,6 +29,13 @@ arrancar — ver la sección *"Chequeo de arranque"* dentro de su prompt.
 
 **Verificado en vivo el 2026-09-02**: `crontab -l` en `187.77.16.63` para las cinco filas `VPS`.
 
+⚠️ **Re-verificado el mismo día, vuelta siguiente: `marca-personal` ya no corría `56 13,21` sino
+`56 9,13,17,21` (4×/día, no 2×/día).** La tabla decía 2×/día porque así se verificó horas antes;
+el cron real ya había cambiado para cuando esta vuelta lo miró de nuevo (mtime de
+`/var/spool/cron/crontabs/root`: 03:34 UTC, después de esa verificación). Corregido acá y en
+`ONIA_RADAR_DECISIONES_PRODUCTO.md` ítem 17, que todavía citaba el patrón viejo. Una verificación
+de hace horas también hay que re-contarla, no asumirla vigente.
+
 ## Deben existir y estar activos
 
 **Desde el 2026-09-01 el conjunto vive en DOS lugares**, y la columna *dónde corre* es la que
@@ -46,7 +53,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | `docs-auditoria` | **VPS** | `18 1,5,9,13,17,21 * * *` (UTC) | Carril docs/infra: que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
 | `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `canario-visual` | **VPS** | `41 4,10,16,22 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
-| `marca-personal` | **VPS** | `56 13,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
+| `marca-personal` | **VPS** | `56 9,13,17,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
 | `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
 
 ⚠️ **Corregido 2026-09-02.** `marca-personal` corría en `crontab -l` del VPS y no estaba en esta
