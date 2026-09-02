@@ -50,7 +50,22 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
 - [ ] Soul-ID con la cara de Sergio (CLI, costo 0 explorar → cotizar el train) — requiere
       fotos de identidad de Sergio, que viven fuera de este carril (`references/marca-personal/`
       no las tiene); no se ejecuta sin ellas ni sin que Sergio decida el gasto del train.
-- [ ] Probar 1 skill del radar (unlazy / shuohao) y anotar veredicto
+- [x] **Probar 1 skill del radar (unlazy / shuohao) y anotar veredicto** (02-sep) —
+      **evaluadas por lectura de fuente (README/SKILL.md vía GitHub raw), sin instalar
+      ni ejecutar**: instalar tocaría `~/.claude/skills/` o `.claude/skills/` del repo,
+      fuera de los archivos permitidos a este carril (REGLA DURA). **`unlazy`**
+      (`Leonxlnx/unlazy`, 2.950⭐): disciplina de cierre — obliga a escribir una lista de
+      gates verificables ANTES de dar algo por terminado y los re-corre con un checker de
+      Node, bloqueando el `Stop` hasta que pasen. Es literalmente la regla "Nada a medias
+      — cerrar antes de abrir" de este mismo `CLAUDE.md`, pero automatizada con un gate
+      ejecutable en vez de honor system — **candidata real para el carril
+      `docs-auditoria` o `onia-cola` (el integrador)**, no para este. **`shuohao-skills`**
+      (`eternityspring/shuohao-skills`, 2.527⭐): pipeline de 5 skills para producir
+      cortometrajes/dramas chinos desde una novela (outline→personajes→arte→guion→
+      storyboard), con paywall de comunidad en WeChat — dominio ajeno (ficción china, no
+      automatización de negocio boliviano), **no aplica al contenido de este carril**.
+      **Veredicto: ninguna se adopta en marca-personal; `unlazy` se anota como propuesta
+      para quien sea dueño de `.claude/skills/` a nivel repo — no es esta sesión.**
 - [ ] Variante statement-post animado (HyperFrames 6 s del claim "Bs 0 en sueldos") —
       probado 02-sep: no hay CLI de HyperFrames instalado en el VPS (`hyperframes` no
       existe, `npx hyperframes-cli` da 404). Queda pendiente de que se resuelva el runtime.
