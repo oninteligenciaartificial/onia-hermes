@@ -758,6 +758,78 @@ mueven la aguja son distintos y se pueden hacer por separado:
   también que el bot agende** (mergeado el 2026-09-01). Sin esto, un desconocido que llega desde
   la web sigue recibiendo la respuesta genérica, y una cita sigue derivándose a mano — que es
   justo lo que `pricing.ts` cobra como resuelto.
+
+  🔴 **La pregunta (a) ya no es la correcta — medido en vivo el 2026-09-02 21:40 UTC. El deploy
+  SE HIZO HOY, y quedó a la mitad.** A las 17:19 alguien copió el motor al VPS y se llevó **2 de
+  los 5 archivos del cambio**. Nadie lo anotó, y este radar seguía diciendo que no se había
+  desplegado nada.
+
+  Verificado contra el proceso que de verdad corre —`node /tmp/onia-bot/webhook-server.mjs`
+  (PID arrancado 17:19) dentro del contenedor `onia-center`, **no** contra `/opt/onia/bot/`:
+
+  ```
+  # diff --strip-trailing-cr  main(hermes-content/deploy/vps-ops/bot)  vs  onia-center:/tmp/onia-bot
+  IGUAL a main    bot-engine.mjs        ← desplegado hoy 17:19 (.bak-20260902-171939)
+  IGUAL a main    config.mjs            ← desplegado hoy 17:19
+  ATRASADO        recepcionista.mjs  (57 lineas)
+  ATRASADO        knowledge.mjs      (26 lineas)
+  ATRASADO        intents.mjs        (27 lineas)
+
+  docker exec onia-center grep -c wantsToBook   /tmp/onia-bot/intents.mjs       →  0
+  docker exec onia-center grep -c linkDeReserva /tmp/onia-bot/recepcionista.mjs →  0
+  ```
+
+  ⚠️ **El primer diff mentía y por poco lo reporto:** sin `--strip-trailing-cr` los cinco archivos
+  daban "1.634 líneas distintas" con las **mismas líneas a ambos lados** — es CRLF contra LF, el
+  mismo instrumento roto que ya costó el rojo del gate del espejo (§15). Los 3 atrasos de arriba
+  son los que sobreviven a cambiar el instrumento.
+
+  **Qué significa, en concreto:** el bot que atiende ahora mismo **no agenda** —no tiene el código
+  que manda `/book/<slug>`— y el CTA de `/v1/empezar` **sigue sin matchear por prefijo**, así que
+  el lead que declara su rubro ("…Mi negocio es: veterinaria") recibe igual el saludo genérico.
+  No está *roto*: `bot-engine.mjs` no llama a `wantsToBook` ni a `linkDeReserva`, así que no hay
+  error de import — está **silenciosamente atrasado**, que es peor de detectar.
+
+  **Y la premisa comercial de esta fila venció.** Decía que la cita derivada a mano es *"justo lo
+  que `pricing.ts` cobra como resuelto"*. Ya no: `onia-platform@f47d615` (**2026-08-31 20:03**,
+  en `master`) es literalmente *"fix(pricing): vendiamos que el bot agenda y el bot no agenda"*, y
+  hoy `lib/pricing.ts:22` ordena lo contrario — *"⚠️ NO decir que el bot 'agenda': no agenda"*.
+  **Nadie está prometiendo de más.** Los dos carriles resolvieron el mismo problema en direcciones
+  opuestas y con un día de diferencia: producto bajó la promesa el 31-ago, chatbot subió la
+  capacidad el 1-sep.
+
+### 16-bis. ¿Se termina el deploy del bot que quedó a medias hoy? (2026-09-02)
+
+**Qué se decide.** El motor nuevo ya corre en producción, pero sin las 3 piezas que le dan la
+capacidad de agendar y de leer el CTA. O se completan los 3 archivos, o se saca de `main` el
+código que nunca va a correr. Mientras no se decida, `main` y producción dicen cosas distintas y
+el próximo deploy parcial vuelve a pasar sin que nadie lo note.
+
+| opción | qué cuesta | cuánto tarda | qué se pierde |
+|---|---|---|---|
+| **A — completar los 3 archivos** | Bs 0 | Copiar 3 archivos a `/opt/onia/bot/` + `webhook-server.sh restart`, que hace `docker cp` del directorio entero (`webhook-server.sh:123`). El reinicio anterior figura caído y sano **dentro del mismo segundo** en el log del watchdog (`21:42:01 … reiniciando` / `21:42:01 OK: webhook de vuelta arriba`) | Hay que mover la copia de venta **en el mismo paso**: `ONIA_CATALOGO_DE_VENTA.md` y `pricing.ts:22` hoy declaran que el bot NO agenda, y `scripts/venta-honestidad.test.mjs` se pone **roja a propósito** cuando eso deja de ser cierto |
+| **B — revertir en `main`** | Bs 0 | 1 vuelta de loop del carril chatbot | Se tira trabajo mergeado y verificado, **y el CTA de `/v1/empezar` sigue roto** — ese arreglo viaja en los mismos 3 archivos y no tiene nada que ver con agendar |
+| **C — dejarlo así** | Bs 0 | — | `main` y producción quedan divergentes en 3 archivos sin que nada lo vigile: exactamente el modo de falla de §22, ahora en el motor que le habla a los clientes |
+
+**Recomendación: A.** La agenda pública ya está viva y verificada mirándola
+(`/book/zz-qa-clinica-chatbot-9k651` renderiza el asistente de 4 pasos con profesionales reales,
+§16 arriba), el diseño es *fail-closed* —sin slug limpio el bot deriva exactamente como hoy— y el
+add-on de **Bs 390/mes** (`lib/pricing.ts:30`) hoy entrega menos de lo que el código ya sabe hacer.
+El costo real de A no es técnico: es aceptar que la copia pase a decir "agenda".
+
+**Lo que NO es opción, y por qué:**
+
+- **Partir A en dos** (desplegar sólo el arreglo del CTA y dejar la agenda) **no sale gratis**:
+  las dos cosas están entreveradas en los mismos `recepcionista.mjs` / `intents.mjs`, así que
+  separarlas es escribir código nuevo, no copiar archivos.
+- **A no se enciende en silencio.** Es el mismo caso que el pedido (§27): el día que el bot
+  agende, la copia que dice que no agenda pasa a mentir al revés. Motor y copia se mueven en el
+  mismo paso, o no se mueve ninguno.
+- **Y el borde real sigue abierto:** una org puede tener slug y **no** tener la agenda
+  configurada; ahí el cliente final recibe un link a una página vacía. Si la respuesta es A, eso
+  se cierra **antes** de encender.
+
+**Quién lo hace:** el carril chatbot es el dueño del motor. Este loop no toca código ni despliega.
 - ~~**(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
   ajeno de una pantalla que ven los clientes desde el 16-ago.~~ ⚠️ **VENCIDA — verificada en vivo
   el 2026-09-02. No le pidan a Sergio esta decisión: ya está tomada y automatizada.** El script
