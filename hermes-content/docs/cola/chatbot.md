@@ -113,13 +113,15 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 > `REVERTIDAS 3/9` (`BRAND_URL`, `TERMS_URL`, `PRIVACY_URL`) — el bloqueo está **vivo, no
 > vencido**. Vuelve a "Ahora" el día que el gate cambie de veredicto.
 
-> ⚠️ **Con "Ahora" vacío, `verificar_cola.js` sale 1** (`ERROR cola-vacia`) — medido el
-> 2026-09-02 contra este archivo Y contra el de HEAD: el rojo es **anterior** a la vuelta que lo
-> anota, no lo trajo un cambio. Es el gate diciendo la verdad, no una falla: los tres ítems de
-> "Ahora" se fueron a "Bloqueado en Sergio" (S9, S10, S11) y los tres esperan un `scp` o un
-> deploy que sólo él autoriza. **No se destraba llenando "Ahora"**: promover un ítem de "Después"
-> para que el gate se ponga verde es fabricar trabajo, que es lo único que la cola prohíbe. Se
-> destraba cuando Sergio hace uno de esos tres.
+> 📎 **Corregido el 2026-09-02 (vuelta siguiente): las dos afirmaciones de arriba ya no son
+> ciertas, y una de ellas era peligrosa.** "Ahora" **no** está vacío —la corrida del canario del
+> 01-sep le dejó dos ítems, que son los que están acá abajo— y por lo tanto
+> `verificar_cola.js` **no** sale 1: corrido contra este archivo antes de tocarlo, sale **0**
+> (`cola ok: 2 items en Ahora, todos con evidencia real`). Se corrige en vez de borrarse porque
+> el párrafo decía *"el rojo es esperable, no es una falla"*, y esa frase sobreviviéndole al rojo
+> es una anestesia: la próxima vuelta que viera el gate en rojo **de verdad** lo iba a descartar
+> como conocido. Lo que sigue vigente es el fondo: **no se destraba llenando "Ahora"** —promover
+> un ítem de "Después" para poner el gate en verde es fabricar trabajo.
 
 > **El ítem 2 —las campañas de la web— salió de acá el 2026-08-31.** Vivió diez vueltas
 > esperando el `scp` de **S9**, que escribe en el VPS y por eso es de Sergio. Se movió entero
@@ -128,25 +130,6 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 > `campanas`** — el bloqueo está **vivo, no vencido**. Vuelve cuando Sergio avise.
 
 ### Del canario visual — corrida del 2026-09-01
-
-- [ ] **El login del chat pesa 12,9 MB para un formulario de dos campos.** Medido en
-      `https://chat.onia.com.bo/app/login`: **12.953.799 bytes**, 2.437 ms hasta mirable.
-      Es **10× el login de la plataforma** (1.300 KB), que además dibuja una columna de marca
-      entera, iconos y tres bloques de texto. La pantalla se ve BIEN — marca Onia aplicada,
-      campos y botón correctos — así que esto no se nota mirando: se nota midiendo, y es
-      exactamente el fallo con cara de éxito que este carril existe para cazar. Es el bundle
-      de Chatwoot servido entero en la ruta de login. Primer paso barato: ver qué assets
-      entran (el canario deja el detalle en su carpeta de salida — la que está **gitignoreada**,
-      así que hay que correrlo para tenerla) antes de decidir si se puede partir o si es el
-      precio de Chatwoot.
-      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-chat.png`
-      y el script que la saca, `scripts/canario_visual.mjs`.
-      📎 **Corregido el 2026-09-01:** este ítem citaba entre backticks el JSON de la carpeta de
-      salida del canario, y esa carpeta está en `.gitignore` (línea 54) — o sea que el archivo
-      **nunca** existe en un checkout limpio. El verificador de colas lo marcaba fantasma y la
-      cola entera salía **exit 1 desde el momento en que se escribió el ítem**: nadie corrió el
-      gate después de escribirlo. Un directorio de salida no puede ser la evidencia de un ítem;
-      la evidencia es la captura commiteada.
 
 - [ ] **El panel del chatbot NO se puede mirar: es una pantalla ciega.** `app.onia.com.bo/settings/chatbot`
       redirige a `/login` sin sesión, así que el canario la reporta **no medida** — nunca
@@ -439,6 +422,39 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **El login del chat NO pesa 12,9 MB: pesa 3,58 MB, y los 12,9 eran el mismo contenido
+      SIN COMPRIMIR.** Cerrado el 2026-09-02. Lo que cambió en el repo:
+      `hermes-content/references/canario-visual/login-chat/baseline.json`.
+      **Gate 1 primero, y acá salvó la vuelta:** el ítem pedía "ver qué assets entran antes de
+      decidir si se puede partir o si es el precio de Chatwoot", así que lo primero fue medir de
+      nuevo en vez de heredar el número. Da **3.583.426 bytes** y 808-913 ms — no 12.953.799 ni
+      2.437 ms. Corrido **tres veces seguidas con el propio canario**: 3499 KB clavado las tres.
+      **De dónde salían los 12,9 MB, medido y no supuesto:** se bajó cada asset del login con
+      `Accept-Encoding: identity` y se sumaron uno por uno → **12.973.552 bytes**, que está a
+      **0,15 %** del número viejo. O sea que los 12,9 MB son los bytes *decodificados* de estos
+      mismos assets, no assets de más. Por el cable viajan 3,58 MB gzip. La conclusión del ítem
+      —"es el bundle de Chatwoot servido entero en la ruta de login"— era **correcta**; el que
+      estaba mal era el tamaño, por un factor de 3,6.
+      **La respuesta a la pregunta que el ítem hacía: es el precio de Chatwoot, y se paga una
+      sola vez.** El **92 %** del peso comprimido es UN chunk, `vite/assets/DashboardIcon-*.js`
+      (11,25 MB crudo / 3,14 MB gzip), que se construye dentro del contenedor de Chatwoot —
+      partirlo es modificar el motor. Pero se sirve con `max-age=31556952` y nombre hasheado:
+      medida la segunda visita del mismo navegador, baja **10 KB en 237 ms — el 0,2 % de la
+      primera**. Y no la ve ningún cliente: `grep` de `chat.onia.com.bo` en todo `web-factory/`
+      no devuelve **nada**, es el login del MOTOR, que por regla dura "está hecho para no verse".
+      No hay nada que arreglar en la pantalla, y se MIRÓ renderizada para decirlo: logo Onia,
+      los dos campos y el botón, sin nombres de iconos crudos.
+      🔴 **Lo que SÍ estaba roto era el gate, y es el hallazgo que sobrevive al ítem.** La
+      baseline se había guardado con los 12.953.799 bytes de aquella lectura. Con
+      `derivaPeso: 1.4`, la alarma de peso de esta pantalla sólo saltaba **arriba de 18,1 MB**:
+      un gate que no podía dispararse nunca, anclado 3,6× por encima de la realidad — "verde con
+      cara de éxito", exactamente lo que este carril existe para cazar, esta vez en el vigilante
+      mismo. Reemplazada por la medición real, así el techo absoluto de 4 MB vuelve a ser el que
+      manda. La baseline lleva escrito que si una vuelta futura vuelve a leer ~12,9 MB **no es la
+      pantalla engordando: es que los assets llegaron sin comprimir**, y eso sí es un ítem.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-login-chat.png`
+      y el script que la saca, `scripts/canario_visual.mjs`.
 
 - [x] **"La cita" ya no le habla de consultorio a una ferretería: cada rubro lee su propia
       palabra.** Cerrado el 2026-09-02 (commit `675541b` de `onia-platform`, rama
