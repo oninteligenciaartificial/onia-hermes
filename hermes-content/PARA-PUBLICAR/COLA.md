@@ -1,0 +1,91 @@
+# Cola de publicación — lo que Sergio abre, copia y publica
+
+> Ventana de producción del **2026-09-02**, corrida sola en el VPS mientras la PC está apagada.
+> Sergio: *«genera contenido para publicar en lucia y en onia, para informar o cerrar ventas»*.
+
+## 🔴 Qué significa «listo» acá
+
+El número que importa es **publicado**, y hoy dice **1**. Producir más archivos no lo mueve.
+Una pieza cuenta como lista **sólo** si Sergio la puede publicar sin escribir nada:
+
+1. **El archivo** en su carpeta `D##-...`, en el formato correcto del destino.
+2. **`CAPTION.txt`** completo — texto tal cual va, con saltos de línea y hashtags.
+3. **La palabra del CTA**, y para **cuál cuenta** está registrada (el que publica es el que
+   recibe el comentario; si la palabra no está viva en el mapa de n8n de ESA cuenta, el lead
+   comenta y no recibe nada — es el incidente RANKING).
+4. **Destino explícito**: feed / reel / historia, y qué cuenta publica.
+5. **Verificada MIRÁNDOLA.** Un render que existe no es un render que se ve bien.
+
+Una pieza sin caption **no está lista**, aunque la imagen sea perfecta.
+
+## Las dos cuentas van al mismo lugar
+
+| | **@oniahq** | **Lucía** |
+|---|---|---|
+| Objetivo | leads y comentarios | leads y comentarios |
+| CTA que pesa | **`DEMO`** → reservá una demo | **`COMUNIDAD`** → la comunidad de IA |
+| Convence a | el que ya tiene el problema | el que no sabe que la IA le sirve |
+
+**Alterná cuenta en cada vuelta.** Si dos vueltas seguidas alimentan a la misma, la otra se
+queda sin feed — ya pasó una vez y Lucía quedó parada.
+
+---
+
+## Cola — tomá la primera `PENDIENTE`
+
+### D01 · @oniahq · carrusel que CIERRA · 0 créditos · PENDIENTE
+Renderizá `hermes-content/carousels/briefs/ads/ad-a4-ocho-de-la-noche.json` con el pack
+**`bloque-solido`** (`node scripts/carousel_render.js --brief <ruta> --pack bloque-solido`).
+Ángulo: a las 8 de la noche, cansado, nadie se acuerda de anotar.
+Caption: el dolor en la primera línea, la prueba en el medio, `Comentá DEMO` al final.
+
+### D02 · Lucía · UGC en lugar nuevo · ~2 créditos · PENDIENTE
+Imagen 9:16 en un lugar que el banco no tenga (**restaurante de almuerzo** es el primero).
+Receta y trampas en `references/modelos/lucia/TECNICA-HIGGSFIELD.md`; calidad contra las
+9 casillas de `RUBRICA-IMPOLUTO.md`. Caption que informa sobre IA, CTA `COMUNIDAD`.
+
+### D03 · @oniahq · carrusel que INFORMA · 0 créditos · PENDIENTE
+Renderizá `briefs/onia-5-preguntas-de-siempre-20260820.json`. Informa, no vende: las 5 preguntas
+que un dueño se hace todos los días y que el sistema ya contesta. CTA suave `DEMO`.
+
+### D04 · Lucía · historia-quiz · 0 créditos · PENDIENTE
+El formato de `references/video-intake/2026-09-02-ingenierobinario-historia-quiz.md`.
+9:16, 1080×1920. Trampa sobre IA: *«Le pedís a una IA que escriba el post. Le das tu web y tres
+ejemplos tuyos. ¿Qué sale?»* → la correcta es **«Depende de los ejemplos»**.
+🔴 **Las opciones NO se dibujan**: se dejan en el `CAPTION.txt` para que Sergio las tipee en el
+sticker nativo de encuesta. Dibujarlas mata la única ventaja del formato (se responde con un toque).
+
+### D05 · @oniahq · historia-quiz de gestión · 0 créditos · PENDIENTE
+Mismo formato, trampa de gestión: *«3 pacientes reservaron para el martes. 1 canceló por WhatsApp
+a las 21:40. ¿Cuántos van a venir?»* → la correcta es **«2, pero te enterás el martes»**.
+Duele porque es verdad: el dato existe pero llega tarde. Es lo que vende Onia, como acertijo.
+
+### D06 · Lucía · animar la imagen de D02 · ~4,8 créditos · PENDIENTE
+`seedance1_5` con `--start-image` (el asset id que anotaste en D02). Sale 9:16 con audio.
+4 frames con `ffmpeg` y **mirarlos** antes de darla por buena.
+
+### D07 · @oniahq · carrusel que CIERRA, otro ángulo · 0 créditos · PENDIENTE
+`ads/ad-a7-el-martes-pasado.json`, pack `bloque-solido`.
+Ángulo: cuántos atendiste el martes pasado — nadie se acuerda, el sistema sí.
+
+### D08 · Lucía · carrusel «cómo se hace» · 0 créditos · PENDIENTE
+Brief nuevo, escrito por vos: cómo se produce una foto de Lucía sin cámara y sin estudio.
+**Declara que es IA** — el argumento de venta ES la declaración, nunca se esconde.
+CTA `COMUNIDAD`. Pack a elección entre los 10 disponibles, **no `typographic`** (es el más pobre).
+
+### D09 · @oniahq · el cuaderno · 0 créditos · PENDIENTE
+`ads/ad-a6-el-cuaderno-no-falla.json`. El cuaderno no falla: falla acordarse de abrirlo.
+
+### D10 · Lucía · UGC lugar nuevo · ~2 créditos · PENDIENTE
+Siguiente lugar: **veterinaria de barrio**. Mismas reglas que D02.
+
+### D11 · @oniahq · carrusel que INFORMA · 0 créditos · PENDIENTE
+`briefs/onia-competencia-mientras-whatsapp-20260820.json`.
+
+### D12 · Lucía · animar D10 · ~4,8 créditos · PENDIENTE
+
+---
+
+## Publicadas / listas
+
+_(cada vuelta agrega su bloque acá: carpeta, cuenta, destino, palabra del CTA, cómo se verificó)_

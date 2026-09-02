@@ -1,65 +1,94 @@
-# Bitácora de perfeccionamiento — ventana del 2026-09-02
+# Bitácora de experimentación — ventana del 2026-09-02 · eje **FANCY**
 
-> **La cola de trabajo del loop.** Cada vuelta: leé esto PRIMERO, tomá el primer `PENDIENTE`,
-> hacelo, y **escribí el resultado acá** antes de commitear. Sin esto, cada vuelta reinventa
-> qué probar y se gastan créditos midiendo lo ya medido.
+> **La cola del loop.** Cada vuelta: leé esto PRIMERO, tomá el primer `PENDIENTE`, hacelo,
+> y **escribí el resultado acá** antes de commitear. Sin esto cada vuelta reinventa qué probar
+> y se gastan créditos midiendo lo ya medido.
 
-**Objetivo de la ventana:** que una generación de Lucía salga **9/9 en `RUBRICA-IMPOLUTO.md`**
-sin retoque. No es producir volumen: es **saber qué variable causa cada defecto**.
+## El problema que abre esta ventana
 
-**Techo de gasto de toda la ventana: 250 créditos.** El corredor corta solo al llegar.
+Sergio, 2026-09-02: *«experimentar para perfeccionar, **recordá que Lucía es fancy**»*.
+
+**El banco actual no es fancy.** Es documental de barrio: peluquería, tienda de esquina, parada
+de micro, mercado, ferretería, taller mecánico. Se construyó así a propósito —para que la foto
+no desmienta el copy multi-rubro— y para eso funciona. **Pero no es la estética de una influencer
+de IA**, que es lo que Lucía tiene que ser para que alguien la siga.
+
+### 🎯 Y acá está el conflicto técnico que hay que resolver
+
+`TECNICA-HIGGSFIELD.md` prohíbe `fashion campaign` y `campaign look` **porque le cambian la
+cara**. Pero «fancy» es exactamente lo que esas palabras traen.
+
+**Entonces la pregunta de la ventana es:**
+> ¿Con qué léxico se consigue una imagen **fancy** (aspiracional, luz cuidada, lugar lindo)
+> **sin** que el modelo pierda la cara de `@lucia-skin-v1`?
+
+Si se resuelve, Lucía deja de parecer un banco de stock documental y pasa a ser una cuenta que
+alguien quiere seguir. **Es el cuello de botella de todo el carril.**
+
+### Qué es «fancy» acá, para que no quede a gusto de cada vuelta
+
+| Fancy **sí** | Fancy **no** |
+|---|---|
+| Luz dorada de ventanal, hora dorada, sombra suave | Flash duro de estudio |
+| Rooftop, café de especialidad, coworking de diseño, hotel, boutique | Pasarela, editorial de moda |
+| Ropa cuidada y real (lino, tejidos con caída) | Alta costura, vestuario imposible |
+| Composición con aire, profundidad, fondo desenfocado | Fondo plano de catálogo |
+| **La cara de Lucía intacta** | Cara «mejorada» = ya no es ella |
+
+🔴 **Fancy nunca puede costar la casilla 1** (la cara) ni la 7 (poros). Una Lucía linda que no es
+Lucía **no sirve para nada**: lo único irreemplazable del personaje es que sea siempre la misma.
+
+**Techo de gasto de la ventana: 250 créditos.** El corredor corta solo al llegar.
 
 ---
 
 ## Cola
 
-### E1 · Línea base — auditar lo que ya existe · **0 créditos** · PENDIENTE
-Puntuá contra la rúbrica **mirando** (no de memoria) las piezas de `generadas-2026082 8/31/01`:
-imágenes `G01..G06`, `B05`, `B06`, `B07`, `B08`, `C01`; videos `V01..V07`.
-Para video: `ffmpeg` 4 frames y leelos. Para imagen: abrila.
-**Salida:** una tabla acá con la puntuación de cada una y **qué casilla falló**.
-Sin esta tabla, los experimentos siguientes no tienen contra qué comparar.
+### E1 · ¿Qué tan poco fancy es el banco? · **0 créditos** · PENDIENTE
+Mirá `G01..G06`, `B05..B08`, `C01`. Puntuá cada una **contra la tabla fancy de arriba**, no
+contra la rúbrica técnica. **Salida:** qué piezas ya tienen algo fancy (sospecha: `C01-terraza`
+y `B07`) y qué exactamente las hace verse de barrio en el resto — luz, lugar, ropa o encuadre.
+Sin esto, los experimentos siguientes no saben qué corregir.
 
-### E2 · ¿9:16 nativo compone mejor que 3:4? · **0 créditos** · PENDIENTE
-`B07` y `B08` ya son 9:16 nativos; `G01..G06` son 3:4. Comparalos en composición y luz.
-**Lo que se busca saber:** si conviene regenerar el banco viejo en 9:16, o alcanza con animarlo
-(Seedance da vertical igual). **Es una decisión de plata: 16 imágenes × 2 cr.**
+### E2 · 🎯 **El experimento central: léxico fancy que NO rompe la cara** · **~6 créditos** · PENDIENTE
+**Una escena fija** (rooftop de Santa Cruz a la hora dorada, ella apoyada en la baranda con un
+café, media vuelta hacia el lente). **Tres variantes cambiando SOLO el bloque de estilo:**
 
-### E3 · El anti-cartel, prueba limpia · **~2 créditos** · PENDIENTE
-`B05-micro` está marcada 🔧 REGENERAR: el prompt **pedía** «a handwritten fare sign» y a la vez
-pedía no leer carteles. Ganó el cartel.
-**Variable única:** el mismo prompt **sin mencionar el cartel**, cerrando con
-`No signs, no labels, no price tags and no screens anywhere in frame`.
-**Confirma o refuta** la regla escrita en `TECNICA-HIGGSFIELD.md`.
+| Variante | Bloque de estilo |
+|---|---|
+| **A · control** | `NATURAL TRUE-TO-LIFE COLORS, visible skin pores, natural asymmetry` |
+| **B · fancy por la LUZ** | igual que A + `warm golden hour backlight, soft falloff, shallow depth of field` |
+| **C · fancy por el OFICIO** | igual que A + `editorial portrait lighting, styled but candid, elevated everyday` |
 
-### E4 · 🎯 Seedance vs Kling sobre LA MISMA imagen · **~13,5 créditos** · PENDIENTE
-**El experimento que falta.** Hoy `V06` es kling sobre dental y `V07` es seedance sobre
-peluquería: distinta fuente, **no es comparación**.
-Animá **una sola imagen** (usá `B06-consultorio-dental`) con los dos:
-`seedance1_5` (4,8) y `kling3_0` (8,75). Mismo prompt de movimiento.
-**Comparar:** aspecto de salida, duración, audio, casilla 9 (la cara aguanta), naturalidad.
-**Salida:** cuál gana y **con qué evidencia**, escrito en `TECNICA-HIGGSFIELD.md`.
+Mismo prompt de escena, mismo seed si el CLI lo permite. **Mirá las tres al 100 %** y puntuá
+casilla 1 (¿sigue siendo Lucía?) y casilla 7 (¿quedan poros?).
+**Salida:** cuál da fancy sin costo de cara, y **la frase exacta** que lo logra, escrita en
+`TECNICA-HIGGSFIELD.md`. Éste es el entregable que desbloquea el resto.
 
-### E5 · ¿Se puede pedir más de 4 segundos? · **~10 créditos** · PENDIENTE
-`V07` dio 4,05 s. Un reel de 4 s obliga a encadenar. Mirá `higgsfield generate cost` y los
-parámetros de duración del CLI (`--help` del subcomando). Si hay flag de duración, probalo.
-**Si no existe el flag, anotalo y NO gastes** — pasá al siguiente.
+### E3 · Tres lugares fancy nuevos · **~6 créditos** · PENDIENTE
+Con la fórmula ganadora de E2, generá **café de especialidad**, **coworking de diseño** y
+**hall de hotel**. 9:16. Las que salgan 9/9 van a `hermes-content/PARA-PUBLICAR/`.
 
-### E6 · ¿`--resolution 2k` vale lo que cuesta? · **~4 créditos** · PENDIENTE
-Misma escena a `2k` y al default. Compará al 100% de zoom: poros (casilla 7) y textura de tela.
-**Si no se distingue, se baja la resolución y se ahorra en cada pieza futura.**
+### E4 · Seedance vs Kling sobre LA MISMA imagen · **~13,5 créditos** · PENDIENTE
+Hoy `V06` es kling sobre dental y `V07` es seedance sobre peluquería: **distinta fuente, no es
+comparación.** Animá **una sola** imagen fancy de E3 con `seedance1_5` (4,8) y `kling3_0` (8,75),
+mismo prompt de movimiento. Comparar: aspecto de salida, duración, audio, y casilla 9 —**la cara
+aguanta el clip entero**. Conclusión con evidencia a `TECNICA-HIGGSFIELD.md`.
 
-### E7 · Léxico que conserva la piel · **~4 créditos** · PENDIENTE
-Sabemos que `fashion campaign` rompe la cara. Falta saber **qué la mejora**.
-Dos variantes de la misma escena cambiando SOLO el bloque de piel
-(ej. `visible skin pores, natural asymmetry` vs sin ese bloque). Mirá al 100%.
+### E5 · ¿`--resolution 2k` se nota en la piel? · **~4 créditos** · PENDIENTE
+Misma escena a `2k` y al default, comparadas al 100 % de zoom. Si no se distingue, se baja y se
+ahorra en **cada pieza futura**.
 
-### E8 · Consolidar la receta ganadora · **0 créditos** · PENDIENTE
-Con E1..E7 hechos, escribí en `TECNICA-HIGGSFIELD.md` **la receta única** que sale 9/9,
-con el comando exacto copiable. Es el entregable de la ventana.
+### E6 · ¿Se puede pedir más de 4 segundos? · **~10 créditos** · PENDIENTE
+`V07` dio 4,05 s y un reel de 4 s obliga a encadenar. Mirá el `--help` del subcomando de video.
+**Si no existe flag de duración, anotalo y NO gastes.**
+
+### E7 · La receta fancy, consolidada · **0 créditos** · PENDIENTE
+Con E1..E6 hechos, escribí en `TECNICA-HIGGSFIELD.md` **una sola receta copiable** que sale 9/9
+y es fancy, con el comando exacto. Es el entregable de la ventana.
 
 ---
 
 ## Resultados
 
-_(cada vuelta agrega su bloque acá — qué probó, qué midió, qué decidió)_
+_(cada vuelta agrega su bloque: qué probó, qué midió mirando, qué decidió)_
