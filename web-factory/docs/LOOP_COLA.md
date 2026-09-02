@@ -933,6 +933,35 @@ Las tres formas de fantasma que ya aparecieron acá:
       navegador de trabajo sin arreglar nada. El unico proceso de este carril sigue siendo
       el `serve-out 4319`.
 
+- [x] **AUD9 · El carril esta sin combustible, y la tabla de loops YA lo dice — pero el
+      cron de Windows sigue disparando** (2026-09-02). Novena vuelta de escalon 2: `CARRIL A`
+      y `CARRIL B` con **cero** `- [ ]` (medido: 36 `[x]`, y los 4 sin marcar viven en
+      *Bloqueadas* y *Sin verificar*, que no son cola).
+      **El hallazgo nuevo, y es de gobierno, no de codigo.** La version mas reciente de
+      `hermes-content/docs/cola/loops.md` (commit `f046236f`, rama `claude/docs-auditoria`,
+      escrita por el loop `docs-auditoria` del VPS el 2026-09-02) **ya movio a
+      `web-factory-dev-loop` a la tabla "Apagados a proposito — NO rearmar"**, con la misma
+      medicion que da esta vuelta y el motivo escrito: *"sin cola, un loop no se planta:
+      inventa trabajo... para revivirlo hace falta rellenar `CARRIL A`, no rearmar el cron"*.
+      **Pero ese commit no esta en `main`** — `main` todavia lo lista como activo — y la
+      tarea de Windows sigue `enabled: true`, `cronExpression 45 * * * *`, con `lastRunAt`
+      2026-09-02T07:48Z. O sea: **la decision esta tomada y escrita, y no llego al unico
+      lugar que la ejecuta.** Un loop no se apaga a si mismo: queda para Sergio, en
+      *Bloqueadas*.
+      **Auditoria del unico `[x]` sin mirar (AUD8), en frio y en otra sesion**: sus tres
+      numeros se reprodujeron identicos — `typecheck:packages` **exit 0**, `pnpm test`
+      **269/269 en 2,77 s**, `pnpm e2e` **103 pasados / 0 fallados / 7 skipped en 1,2 min**,
+      y `git status --short` **vacio despues del e2e**, que es la prueba de que el gate paso
+      **sin regenerar una sola baseline**. Segunda corrida en frio del tope `maxDiffPixels:
+      20` de A10, en otra sesion y otra carga: no se desmarca nada.
+      **Salud, los cuatro puntos**: server 4319 → **200**; rama
+      `claude/onia-web-architecture-b37eca` al dia con `origin` (`92ab1816`) y arbol limpio;
+      typecheck verde; **zombies: ninguno mio**. Los 22 `node.exe` extra que aparecen en la
+      maquina son `next dev`/`next start` de los worktrees `hero-en-home` y `web-venta` —
+      **otros carriles**, y `apps/onia-platform` esta en los prohibidos de la regla 3: no se
+      matan desde aca. Se avisa, no se toca. El unico proceso de este carril sigue siendo el
+      `serve-out 4319`.
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
@@ -1039,6 +1068,15 @@ Las tres formas de fantasma que ya aparecieron acá:
 
 ## Bloqueadas (esperan a Sergio)
 
+- [ ] **Apagar `web-factory-dev-loop` en Windows, o rellenar `CARRIL A`.** La decision ya
+      esta escrita y medida por otro carril: `loops.md` en `f046236f`
+      (rama `claude/docs-auditoria`) lo tiene en *"Apagados a proposito — NO rearmar"*
+      porque la cola quedo en cero. Pero ese commit no llego a `main` y el cron de Windows
+      sigue vivo (`45 * * * *`, `enabled: true`). Son dos caminos y los dos son de Sergio:
+      **(a)** apagarlo — mergear `claude/docs-auditoria` a `main` y poner la tarea en
+      `enabled: false`; o **(b)** revivirlo — decir que se construye ahora y `CARRIL A`
+      se rellena con eso. Mientras tanto cada vuelta solo puede auditar lo ya auditado.
+      Un loop no se apaga a si mismo: por eso esta aca y no lo hizo AUD9.
 - [ ] Bloques cifra-editorial · quote-única · features+device (propuesta enviada).
 - [ ] Rediseño del dashboard admin real (onia-platform/onia-center = otra lane):
       se propone y coordina, no se toca desde acá.
