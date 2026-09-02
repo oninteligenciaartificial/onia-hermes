@@ -792,6 +792,56 @@ archivos.**
       de lo que corre. Los tres DISTINTOS (`espejo-check.mjs`, `espejo-check.test.mjs`,
       `recepcionista.test.mjs`) ya estaban antes de esta vuelta.
 
+- [x] **El objetivo del carril se REVIRTIÓ en silencio: `Onia (interna)` dejó de apuntar al
+      inbox 5 (WhatsApp) y pasó a apuntar al 4 (Web) sin que nadie lo tocara desde la UI —
+      encontrado auditando "Después" (Ahora estaba vacío) y corregido en la misma vuelta.**
+      **Gate 1, medido en la base de producción, no leído:** `clinic_settings` de
+      `Onia (interna)` (`organizationId c956c02fccd8573cd6fcc5b35`) tenía
+      `chatwootInboxId = 4`, no `5` como dejó cerrado S8 el 31-ago. Consecuencia real, medida
+      contra Chatwoot: `/inbox` de esa org mostraba las conversaciones del **inbox 4** (los seis
+      desconocidos del widget, la mayoría sin teléfono) y **dejaba invisibles otra vez a
+      mariohassen (+591 73021804) y F (+591 73232758)** — los dos leads de WhatsApp que **S7**
+      da por visibles y esperando respuesta de Sergio. El objetivo técnico ("una conversación de
+      un desconocido en `/inbox`") seguía cumplido por casualidad (inbox 4 también tiene
+      desconocidos), pero **S7 quedó roto sin que la cola lo supiera**.
+      **Lo sospechoso que separa esto de un simple click accidental:** la fila de
+      `clinic_settings` para esa org tiene `id = ab6e629f-f798-4a7f-87df-12ec1c7fac0b` — formato
+      **UUID con guiones** — mientras las otras tres filas de la misma tabla son `cuid()` de
+      Prisma (`cmsvyguwn…`, `cmsw0e759…`, `cmthllqlp…`, todas minúsculas sin guion). `createdAt =
+      updatedAt = 2026-09-01 02:02:47`, y **todos** los demás campos están en su default de
+      schema (horario 08:00-18:00, sin `botPrompt`, sin `oniaCoreOnboarding`). Ningún camino de
+      `onia-platform` genera un id con ese formato: `ClinicSettings.id` es
+      `@default(cuid())` (`prisma/schema.prisma:989`) en los cuatro lugares que crean la fila
+      (`admin/clinics/route.ts`, `lib/platform/provisioning.ts`, `lib/onia-core/onboarding.ts`,
+      `lib/chatbot/canal-web.ts`). O sea: la fila vieja (con `chatwootInboxId=5`) no se
+      actualizó, se **BORRÓ y se re-creó desde cero por fuera de la app**, a las 02:02 de la
+      madrugada del 1-sep. No se encontró en el repo (`onia-platform` ni `onia-hermes`) ningún
+      script, migración o cron que haga ese INSERT — se buscó con `git log -S`, grep de
+      `clinicSettings.create/upsert/delete` y los crons del VPS. **Queda sin confirmar el
+      mecanismo exacto**; lo único descartado con evidencia es que haya sido un camino normal de
+      la app (habría dejado un `cuid()`, no un UUID).
+      **Lo que se hizo:** verificado primero que **ningún otro org usa el inbox 5** hoy
+      (`SELECT "chatwootInboxId" FROM clinic_settings` → sólo 4 y 7 ocupados), exactamente el
+      guardia de 409 que ya tiene `app/api/admin/organizations/[id]/whatsapp/route.ts`. Con eso
+      confirmado, se restauró con un `UPDATE` directo a `chatwootInboxId=5` — la misma escritura
+      que hace ese endpoint, sin tocar código ni desplegar nada. Verificado después contra
+      Chatwoot: inbox 5 vuelve a traer `37 mariohassen`, `35 F`, `11 Sergio`; la base vuelve a
+      leer `Onia (interna) → 5`, `ZZ QA Clinica Chatbot → 7`, las otras dos en NULL — el mismo
+      estado que dejó cerrado S8.
+      ⚠️ **Lo que NO se cerró, y por qué queda anotado y no en Bloqueado:** no depende de una
+      decisión de Sergio, así que no bloquea la cola — pero el mecanismo que borró la fila sigue
+      sin identificarse, y si vuelve a correr, revierte esto otra vez sin avisar. Ningún gate de
+      este carril mide hoy la tenencia del inbox 5 (los que existen — `espejo-check`,
+      `campanas-vivas`, `marca-chatwoot` — miden código y HTML público, no esta columna). Se
+      deja escrito el comando de verificación para el próximo Gate 1 que toque `/inbox` o S7/S8:
+      ```bash
+      docker exec supabase-db psql -U postgres -d postgres -c \
+        "select o.name, cs.\"chatwootInboxId\" from public.organizations o left join public.clinic_settings cs on cs.\"organizationId\"=o.id order by o.id;"
+      ```
+      `Onia (interna)` tiene que dar **5**. Si algún día vuelve a dar otra cosa sin que nadie lo
+      haya pisado desde la UI, es la misma trampa: mirar `id`/`createdAt` de la fila antes de
+      asumir que fue un click.
+
 - [x] **S11 era un FANTASMA: el bot ya firma como "Onia Bot" desde el 18-ago, y la bandeja ya
       rotula "Tu asistente".** Estaba en "Bloqueado en Sergio" pidiéndole una acción sobre un
       bot vivo que no habría cambiado nada — el molde exacto que este carril mide, y del tipo
