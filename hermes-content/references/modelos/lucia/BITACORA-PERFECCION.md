@@ -50,7 +50,7 @@ contra la rúbrica técnica. **Salida:** qué piezas ya tienen algo fancy (sospe
 y `B07`) y qué exactamente las hace verse de barrio en el resto — luz, lugar, ropa o encuadre.
 Sin esto, los experimentos siguientes no saben qué corregir.
 
-### E2 · 🎯 **El experimento central: léxico fancy que NO rompe la cara** · **~6 créditos** · PENDIENTE
+### E2 · 🎯 **El experimento central: léxico fancy que NO rompe la cara** · **~6 créditos** · HECHO
 **Una escena fija** (rooftop de Santa Cruz a la hora dorada, ella apoyada en la baranda con un
 café, media vuelta hacia el lente). **Tres variantes cambiando SOLO el bloque de estilo:**
 
@@ -132,3 +132,42 @@ La segunda pieza semi-fancy real es **`G01`-café-pizarra**. (Verificar es mirar
 por la luz. Nota de una variable: C01 ya prueba que un **lugar** fancy sube a 4/5 aun con luz
 dura → si E2-B (luz dorada) confirma que la luz sola sube sin tocar la cara, **luz + lugar** es
 la receta de techo.
+
+### E2 · Léxico fancy que NO rompe la cara — 2026-09-02 · 6 créditos (3×2 cr, `nano_banana_pro`)
+
+**Diseño de una variable:** misma referencia (`G01`), misma escena base **light-neutral**
+(rooftop de Santa Cruz al atardecer, apoyada en la baranda de cristal con un café, media vuelta
+al lente), variando SÓLO el bloque de estilo. 9:16, 2k, CLI headless, 3 en paralelo ~1 min c/u.
+Piezas: `generadas-20260902/E2-{A,B,C}-rooftop.png` + sus `_E2-*-FACE-crop.png` al 100 %.
+
+| Var | Bloque de estilo | Fancy /5 | Cas.1 cara | Cas.7 poros |
+|---|---|---|---|---|
+| **A** control | `visible skin pores, natural asymmetry` | 3,5 | ✅ Lucía nítida | ✅ poros reales |
+| **B** ⭐ LUZ | A + `warm golden hour backlight, soft falloff, shallow depth of field` | **4,5** | **✅ fuerte** | **✅** |
+| **C** oficio | A + `editorial portrait lighting, styled but candid, elevated everyday` | 4 | ⚠️ deriva leve | ⚠️ piel algo pulida |
+
+**Las 3 salieron mucho más fancy que TODO el banco documental** — rooftop, aire, luz cálida,
+todas leen influencer. Y **las 3 mantuvieron la cara de Lucía y los poros** (la referencia
+sostuvo la identidad). El diferencial:
+
+- **B es la ganadora.** La frase **`warm golden hour backlight, soft falloff, shallow depth of
+  field`** da el look aspiracional (rim dorado + fondo desenfocado limpio) **sin costo de cara**:
+  pecas y poros intactos, identidad fuerte. Es la palanca de LUZ que E1 predijo como la más barata.
+- **C descartada como frase:** `editorial portrait lighting…` es fancy pero **alisa la piel y
+  afina el rostro** hacia un genérico-lindo — el mismo defecto de `fashion campaign`, más suave.
+  Confirma que el problema no es la palabra «fancy» sino pedir **luz de estudio/retrato**; pedir
+  **luz natural dorada** sí sirve.
+
+**Medición honesta (nota de una variable):** la escena base decía "late afternoon", así que la
+variante A **no fue un control 100 % neutro** — le filtró algo de calidez. El ranking relativo
+igual se sostiene (B claramente > A > la barrio del banco), pero un control más limpio pediría la
+escena en luz plana. No re-medir: la conclusión de B no cambia.
+
+**Por qué B NO se publica (no es 9/9):** miradas las 8 casillas de foto: pasa 1,3,4,6,7,8;
+**falla la casilla 2** (el CLI da 1536×2752 = ratio 0,558, no el 1080×1920 exacto — necesita
+export) y la **casilla 5 es débil** (sostiene el vaso, sin acción a medias). Es **CASI (8/9)**,
+excelente base para animar (E4) o para regenerar con una acción a medias. No va a PARA-PUBLICAR.
+
+**Entregable escrito** en `TECNICA-HIGGSFIELD.md` §12: la frase ganadora, el comando exacto
+copiable, la frase prohibida (C) y la trampa nueva del `9:16` del CLI ≠ 1080×1920.
+**El cuello de botella de la ventana queda resuelto:** hay léxico fancy que no cuesta la cara.

@@ -1107,3 +1107,50 @@ suelto. El element manda mejor la identidad; la referencia por foto manda bien p
 
 **Regla:** piezas de cara protagonista → navegador con el element. **Volumen, pruebas y todo lo
 que corra en el loop → CLI.**
+
+---
+
+## 12. ✅ LA RECETA FANCY — el léxico que da aspiracional SIN cambiar la cara (E2, 2026-09-02)
+
+**El problema que resuelve:** el banco era documental de barrio; «fancy» lo traían
+`fashion campaign` / `campaign look`, **prohibidos porque cambian la cara**. E2 buscó el
+reemplazo. Se generó **una escena fija** (rooftop de Santa Cruz, atardecer, apoyada en la
+baranda de cristal con un café, media vuelta al lente) con **la MISMA referencia** (`G01`) y
+**la MISMA escena base light-neutral**, variando SOLO el bloque de estilo:
+
+| Variante | Bloque de estilo | Fancy | Casilla 1 (cara) | Casilla 7 (poros) |
+|---|---|---|---|---|
+| A · control | `NATURAL TRUE-TO-LIFE COLORS, visible skin pores, natural asymmetry` | 3,5 | ✅ Lucía | ✅ |
+| **B · LUZ ⭐** | A + `warm golden hour backlight, soft falloff, shallow depth of field` | **4,5** | **✅ fuerte** | **✅** |
+| C · oficio | A + `editorial portrait lighting, styled but candid, elevated everyday` | 4 | ⚠️ leve deriva | ⚠️ piel algo pulida |
+
+### 🏆 La frase ganadora — copiable
+```
+warm golden hour backlight, soft falloff, shallow depth of field
+```
+Va **al final** del bloque anti-plástico, después de `NATURAL TRUE-TO-LIFE COLORS, visible skin
+pores, natural asymmetry`. Da rim dorado + fondo desenfocado limpio (look influencer) y
+**mantiene pecas, poros e identidad intactos**. Es la palanca de **LUZ**, la más barata — E1 ya
+había mostrado que la luz es el killer #1 de lo fancy.
+
+### ⛔ Lo que NO usar
+`editorial portrait lighting, styled but candid, elevated everyday` (variante C): es fancy pero
+**alisa la piel y afina el rostro** hacia un genérico-lindo — mismo defecto que `fashion campaign`,
+más suave. Descartado para cara protagonista.
+
+### El comando exacto — probado de punta a punta
+```bash
+higgsfield generate create nano_banana_pro \
+  --prompt "Photo of the same woman as in the reference image, keep the exact same face. She is leaning on the glass railing of an open rooftop terrace in Santa Cruz de la Sierra in the late afternoon, holding a takeaway coffee cup, half-turned toward the lens, the low-rise city behind her. She wears a simple linen top. Small gold hoop earrings and a thin gold chain, marked freckles on nose and cheeks, thick eyebrows, brown eyes. Skin with real pore and texture, even tone, no retouch or smoothing. Shot on an iPhone 15 Pro main camera, 24mm. NATURAL TRUE-TO-LIFE COLORS, visible skin pores, natural asymmetry, warm golden hour backlight, soft falloff, shallow depth of field." \
+  --aspect-ratio 9:16 --resolution 2k \
+  --image-references generadas-20260828/G01-cafe-pizarra-texto.jpg \
+  --wait --wait-timeout 6m --wait-interval 5s
+```
+Corrió 3 en paralelo (`&` + `wait`) en ~1 min c/u, sin que el shell cortara el `--wait`. 2 cr c/u.
+
+### 🔴 Trampa nueva: el «9:16» del CLI NO es 1080×1920
+`nano_banana_pro --aspect-ratio 9:16 --resolution 2k` sale **1536×2752 → ratio 0,5581**, no el
+0,5625 exacto de 9:16, y no es ninguna de las resoluciones que pide la **casilla 2** de la
+rúbrica (`1080×1920` / `720×1280`). Visualmente es vertical y pasa, pero **toda pieza de CLI
+necesita un export final** (center-crop a 9:16 + scale a 1080×1920) antes de publicar. Sin ese
+paso ninguna generación de CLI es 9/9 estricta. Pendiente de resolver el comando ffmpeg del export.
