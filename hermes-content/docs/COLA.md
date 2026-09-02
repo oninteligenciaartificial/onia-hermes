@@ -461,7 +461,35 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Del canario visual — segunda pasada del 2026-09-01
 
-- [ ] **El párrafo izquierdo del login de la plataforma sale con espacios metidos DENTRO de
+- [x] **FANTASMA — "los espacios dentro de palabras" NO existen para un cliente: los dibuja el
+      motor con el que sacamos las capturas.** Cerrado el 2026-09-02 por el dueño de `web-venta`,
+      que es exactamente lo que este ítem pedía ("confirmarlo en un navegador de verdad antes de
+      invertir tiempo"). **Nadie tiene que arreglar nada acá, ni en el login ni en el sitio.**
+      **Cómo se probó, y por qué la prueba es concluyente:** se abrió **la misma URL, en el mismo
+      instante, con la misma fuente ya cargada**, con los dos motores que hay en el VPS:
+      - `chromium_headless_shell` (el que usa el canario): dibuja
+        *"Ent regamos t u sist ema con la configuración de t u rubro puest a"*.
+      - Chromium completo (`channel: 'chromium'`, headless igual): dibuja
+        *"Entregamos tu sistema con la configuración de tu rubro puesta."* — **perfecto**.
+      El defecto **es del rasterizador, no del sitio**: sólo cambia el motor de captura. Coincide
+      con lo que el propio ítem ya había medido y no supo interpretar — `innerText` correcto,
+      `document.fonts.status: loaded`, cero 404. Medido además `getClientRects()`: **una sola
+      caja** por palabra en los DOS motores, o sea que ni el layout ni el DOM meten el espacio.
+      **La regla del artefacto, para no volver a caer:** el corte cae **siempre después de una
+      `t`** (`Client es`, `Fact uración`, `Recordat orios`, `Agent es`, `Ent regamos`, `cit as`).
+      Las palabras sin `t` —`Agenda`, `Cobros`— salen limpias en los dos motores. Si un reporte
+      futuro tiene TODOS los cortes pegados a una `t`, es este artefacto y no un defecto.
+      **Evidencia (mismo html, dos motores, lado a lado):**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-artefacto-headless-shell-login.png`
+      vs `…/2026-09-02-mismo-html-chromium-real-login.png`, y en el sitio de venta
+      `…/2026-09-02-artefacto-headless-shell-empezar.png` vs
+      `…/2026-09-02-mismo-html-chromium-real-empezar.png`.
+      **Lo que sí queda por hacer, y NO es de este carril** (ver el ítem nuevo abajo): el canario
+      arrastra el motor malo, así que va a seguir inventando este defecto en cada corrida.
+
+  <details><summary>El reporte original, tal como lo dejó el canario (ya refutado)</summary>
+
+- **El párrafo izquierdo del login de la plataforma sale con espacios metidos DENTRO de
       palabras** ("Ent regamos", "puest a", "t odo el sist ema", "cit as", "import ante"), en
       `app.onia.com.bo/login` — y por herencia en `/settings/chatbot` sin sesión, que redirige
       ahí. Reproducido 3 veces seguidas en Chromium headless del VPS (`--no-sandbox`), siempre
@@ -480,6 +508,25 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       · 147 ms hasta mirable (baseline: 1.302 KB · 1.043 ms — la baja de peso es variación de
       CDN/compresión entre corridas, no un recorte de contenido: el `innerText` completo
       coincide con la baseline).
+
+  </details>
+
+- [ ] 🟠 **El canario saca las capturas con el motor equivocado, y por eso INVENTA defectos de
+      texto.** Es la raíz del fantasma de arriba, y no es zona de `web-venta` (vive en
+      `scripts/`, cuyo dueño es el carril del canario).
+      **Dónde, exacto:** `scripts/canario_visual.mjs:259` llama `chromium.launch(...)` **sin
+      `channel`**. Con Playwright 1.60 (el instalado) eso resuelve a `chromium_headless_shell`,
+      que es el motor que mete el espacio después de cada `t`. El VPS **ya tiene los dos
+      binarios** bajados (`/root/.cache/ms-playwright/chromium-1223` y
+      `chromium_headless_shell-1223`): no hay que instalar nada.
+      **El arreglo es una línea:** agregar `channel: 'chromium'` a ese `launch` (conservando los
+      `args` de `--no-sandbox`, que siguen haciendo falta como root).
+      **Por qué importa más que un falso positivo suelto:** este loop confía en las capturas del
+      canario para decidir qué está roto en la cara del producto. Un motor que dibuja mal el
+      texto convierte cada corrida en trabajo inventado — ya costó un ítem abierto tres días
+      contra una pantalla que se veía perfecta.
+      **Cómo se sabe que quedó hecho:** correr el canario sobre `login-plataforma` y que la
+      captura diga "Entregamos tu sistema", no "Ent regamos t u sist ema".
 
 ### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
 
@@ -613,6 +660,35 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       32/32 páginas.
       **Lo que falta, y no es zona de este carril:** el deploy — medido contra `onia-landing`,
       `curl https://onia.com.bo/` y `/empezar` siguen sirviendo las 6 capturas viejas hoy.
+
+      ✅ **Auditado el 2026-09-02 MIRANDO el resultado, que es lo que faltaba.** Hasta hoy este
+      ítem se apoyaba en `tsc` + `next build` verdes, y eso **no dice nada sobre cómo se ve** —
+      la regla del carril pide una captura de la pantalla arreglada, no un commit. Se levantó el
+      build de este worktree (`next start`, 32/32 páginas) y se abrieron las dos pantallas en
+      1440×900:
+      - **Los paneles dibujados se ven bien y cuentan cada uno su historia.** El conmutador
+        recorre los cinco rubros: cada parada cambia la palabra resaltada y sube su panel
+        (agenda dental → caja de comercio → cotizaciones de importadora → paquetes de estética →
+        cierre de servicios), uno solo visible por vez, sin recorte ni solape.
+        Captura: `hermes-content/docs/historial/canario-visual/2026-09-02-switcher-panel-dibujado-importadora.png`.
+      - **Cero `<img>`/`<video>`/`<canvas>` del sistema** en las dos páginas. Las **tres**
+        imágenes que quedan en la home (`/contexto/dental|comercio|estetica.webp`) se abrieron y
+        se miraron una por una: son **fotos de negocios reales** —una odontóloga con su cuaderno
+        de papel, un ferretero con su libro y su calculadora—, sin una sola pantalla legible.
+        Es justo lo referencial que Sergio pidió, y el guard `forma.test.ts` ya las exceptúa a
+        propósito. **No son un defecto y no se tocan.**
+      - **Sin desborde horizontal ni errores de consola** en ninguna de las dos.
+      ⚠️ **Un agujero del propio método, para no repetirlo:** esa barrida preguntó por
+      `img, video, canvas, picture source` **del DOM**, así que **no miraba el `<head>`** — la
+      captura que viajaba en `og:image`/`twitter:image` (la que ve cualquiera que pega el link en
+      WhatsApp) le pasó por al lado. La cazó `4384f7e8` ("la última captura del sitio estaba en
+      el `<head>`, que es donde nadie miró"). Reverificado tras el rebase, ya con esos commits:
+      `/empezar` sirve **cero** imágenes y el `og:image` de la home es hoy una tarjeta
+      **generada y dibujada** (`/opengraph-image-…`, el panel de 9 h / 15 h), no una captura del
+      panel. Quien audite esto de nuevo: el barrido va sobre el **HTML servido**, no sobre el DOM.
+      **Ojo con las capturas de página completa:** el conmutador es `sticky`, así que en una
+      captura `fullPage` sale **en blanco** y parece roto. Se mira en viewport, parando en cada
+      rubro. Quien audite esto de nuevo, que no reporte ese blanco como defecto.
 
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
