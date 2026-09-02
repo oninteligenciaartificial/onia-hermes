@@ -158,6 +158,78 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **La sonda reusa UNA conversación para siempre, así que desde la segunda vuelta ya no
+      mide "un desconocido escribe dos veces": mide una charla con ocho turnos encima.** Medido hoy
+      2026-09-02, no supuesto — y es un **falso rojo**, el peor defecto posible en el instrumento
+      que decide si el carril está roto. Archivo: `scripts/sonda_widget.mjs`.
+      **Reproducción exacta, 2 minutos:** `node scripts/sonda_widget.mjs` dos veces seguidas. La
+      primera salió **0** (21:09:04 y 21:09:19, las dos contestadas: mensajes 264→265 y 266→267);
+      la segunda, **40 segundos después**, salió **1** — mensaje **270** (21:09:59) sin respuesta
+      **90 s después**, verificado en la base, no por timeout de la sonda:
+      `docker exec <chatwoot-db> psql -U postgres -d onia-chatbot -tAc "select id, message_type,
+      created_at, left(content,70) from messages where conversation_id=49 order by created_at;"`
+      **Por qué NO es el bug del bot.** En esa tercera repetición el bot ya venía de contestar
+      *"¿En qué horario te viene mejor…"* y *"Eso lo tiene que ver Sergio, no yo"*: la máquina de
+      estados está a ocho turnos de la bienvenida. Ningún lead de verdad llega ahí en su segundo
+      mensaje. La sonda está juzgando un estado conversacional que su propia definición de hecho
+      no describe.
+      **De dónde viene:** la conversación se reusa para esquivar el tope de 5 aperturas/hora, y esa
+      decisión —correcta contra el 429— arrastró un efecto que nadie midió: la conversación **crece**
+      y el estado del bot se va con ella.
+      **El dato que hace barata la corrección, medido hoy:** el inbox 4 tiene
+      `lock_to_single_conversation = f` (`select id, name, lock_to_single_conversation from
+      inboxes where id in (4,5);` → `4|Onia Web|f`). O sea que **resolviendo** la conversación
+      antes de medir, el próximo mensaje del widget abre una **nueva** — conversación fresca cada
+      vuelta, sin tocar el throttle, porque el token se sigue firmando por Rails
+      (`guionBootstrap`), que nunca pasa por `/widget`. Es un `update` de estado en el guión de
+      Rails que ya existe, más su caso en rojo primero.
+      ⚠️ **No confundir con "arrancar de cero cada vez":** un contacto nuevo por vuelta ensucia el
+      inbox 4, que es donde viven los leads de verdad (ya pasó: 12 contactos anónimos el 2026-09-02).
+      El contacto se reusa; lo que se renueva es la conversación.
+
+- [x] **El chequeo de "hecho" de este carril funcionó UNA sola vez en su vida, y el arreglo
+      anterior es el que lo garantizó.** Hecho el 2026-09-02. Archivo: `scripts/sonda_widget.mjs`.
+      **Gate 1: el ítem era REAL y salió del propio chequeo de arranque**, no de la cola —
+      `node scripts/sonda_widget.mjs` daba **exit 2**, `Timeout 30000ms … waiting for
+      locator('#chat-input')`. La vuelta anterior había cerrado la sonda declarándola viva, y lo
+      estaba: la conversación **49** existe con sus dos turnos contestados (mensajes 257-263,
+      20:19-20:20). Midió una vez y no volvió a medir nunca.
+      🔴 **Las dos causas, MIRADAS renderizadas con Chromium — ninguna era la que decía el error.**
+      **(1) El botón cambia de rótulo.** Para esquivar el tope de 5 aperturas/hora la sonda entra
+      con `cw_conversation` y **reusa su conversación** — y con conversación ya empezada Chatwoot
+      rotula el botón **"Continuar conversación"**, no "Iniciar conversación", que era lo único que
+      el localizador buscaba. O sea que el arreglo del 429 **se saboteó a sí mismo**: la primera
+      vuelta (contacto recién creado, sin conversación) decía "Iniciar" y anduvo; **todas las
+      siguientes decían "Continuar" y morían**. Es exactamente el modo de falla que este carril
+      tiene escrito — *un chequeo que mira el primer paso no ve un sistema que muere en el segundo*—
+      esta vez adentro del chequeo mismo.
+      **(2) Y aun clickeando por rótulo correcto, no alcanzaba: no había a quién clickear todavía.**
+      `goto` vuelve con `domcontentloaded` y en ese instante el Vue del widget **no dibujó nada**:
+      `document.querySelectorAll('button')` devuelve **cero**. La sonda no clickeaba, esperaba 30 s
+      una caja que no se iba a montar, y el mensaje de Playwright no decía ni una palabra de esto.
+      Con 6 s de espera los dos botones están y el clic funciona.
+      **Qué se construyó.** `elegirArranque()` —pura y exportada— elige el botón **por estructura y
+      no por rótulo**: descarta el de cerrar y los sin texto, y entre los que quedan prefiere el que
+      habla de la conversación. Sobrevive a "Continuar", a un cambio de idioma y al próximo cambio
+      de copy. Más un bucle que **espera a que el widget monte** antes de mirarle los botones, y un
+      diagnóstico que, si igual no aparece `#chat-input`, imprime **los botones y el texto de la
+      pantalla**. Eso último no es adorno: esta misma falla costó una vuelta de diagnóstico a
+      ciegas —se supuso un iframe que no existe, y después un rótulo que había cambiado— y el
+      mensaje nuevo la resuelve en 5 segundos.
+      **Rojo primero y por el motivo correcto.** Los 6 casos nuevos se corrieron contra la semántica
+      vieja (la que estaba viva): **3 en rojo**, y el principal falló con **su propia** aserción —
+      *"con «Continuar conversación» hay que clickear igual: es el mismo botón con otro rótulo"*.
+      Los DOM de los casos son **reales**, leídos del widget de producción con Chromium: el de una
+      vuelta cualquiera (`["…close-button", "Continuar conversación"]`) y el de la primerísima
+      (`"Iniciar conversación"`). Los otros 3 son guardas: que no se arregle el caso 2 rompiendo el
+      1, que **nunca** se clickee el botón de cerrar (cerraría el panel, con un síntoma idéntico al
+      bug de hoy) y que la lista vacía dé -1 = *esperar*, no *no hay botón*.
+      **Verificado en vivo, y verificado DOS veces a propósito** — que funcione una vez es
+      justamente lo que ya pasaba: primera corrida **exit 0**, *"EL BOT CONTESTO LOS 2 —
+      conversación 49"*; segunda corrida seguida, **midió otra vez** (dio 1, y ese 1 es el ítem
+      abierto de arriba: la sonda mide, pero desde la vuelta 2 mide otra cosa).
+      **Gates:** `npm test` completo en verde (exit 0), con `test:sonda-widget` **21/21**.
+
 - [x] **El bot no dejaba NI UNA línea por mensaje, y por eso el bug de "contesta una vez y se
       calla" sobrevivió una semana con cinco personas reales del otro lado.** Hecho el 2026-09-02.
       Archivos: `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` y

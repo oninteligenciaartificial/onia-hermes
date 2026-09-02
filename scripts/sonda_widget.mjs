@@ -216,6 +216,46 @@ export function tokenDeSalida(salida) {
   return token;
 }
 
+// ───────────────────── el boton que abre el chat, y por que NO es un texto ─────────────────────
+//
+// El widget no abre en la caja de texto: abre en una pantalla de bienvenida con UN boton, y
+// `#chat-input` recien se monta despues de tocarlo. Hasta el 2026-09-02 ese boton se buscaba por
+// su texto, `/iniciar conversaci/i` — y eso hizo que la sonda funcionara UNA sola vez en su vida.
+//
+// El motivo es que el arreglo anterior se saboteo a si mismo: para esquivar el tope de 5
+// aperturas/hora, la sonda entra con `cw_conversation` y REUSA su conversacion. Con conversacion
+// ya empezada, Chatwoot rotula ese mismo boton **"Continuar conversacion"**. O sea que la primera
+// vuelta (contacto recien creado, sin conversacion) decia "Iniciar" y andaba, y **todas las
+// siguientes decian "Continuar" y morian** con `Timeout … waiting for locator('#chat-input')`.
+// MIRADO renderizado hoy, no supuesto: el `body` decia "Estamos en linea / OB / Continuar
+// conversacion / Desarrollado por Onia" y los <button> eran `["…close-button", "Continuar
+// conversacion"]`. Es el modo de falla que el propio carril tiene escrito — un chequeo que mira
+// el primer paso no ve un sistema que muere en el segundo.
+//
+// Por eso ahora se elige por ESTRUCTURA, no por rotulo: de los botones de la pantalla se descarta
+// el de cerrar y los que no tienen texto, y queda el unico que abre el chat. Sobrevive a
+// "Continuar", a un cambio de idioma y a que Chatwoot le cambie el copy otra vez.
+
+/** El boton de cerrar del widget. Es el unico que NO hay que tocar: cierra el panel. */
+const CERRAR = /close-button/;
+
+/**
+ * Elige cual de los botones de la pantalla de bienvenida abre el chat. Devuelve el indice, o
+ * -1 si no hay ninguno. Pura y exportada a proposito: es la pieza donde vivio el bug y se puede
+ * afirmar contra el DOM real sin levantar un navegador.
+ *
+ * `botones` son `{ texto, clase }` tal como salen del `page.evaluate` de abajo.
+ */
+export function elegirArranque(botones) {
+  const candidatos = (botones || [])
+    .map((b, i) => ({ texto: String(b?.texto ?? '').trim(), clase: String(b?.clase ?? ''), i }))
+    .filter((b) => !CERRAR.test(b.clase) && b.texto !== '');
+  if (candidatos.length === 0) return -1;
+  // Con varios botones se prefiere el que habla de la conversacion; con uno solo, ese.
+  const conversacional = candidatos.find((b) => /conversaci|conversation|chat/i.test(b.texto));
+  return (conversacional ?? candidatos[0]).i;
+}
+
 /** Lee el `source_id` del JWT del widget sin la clave: solo se necesita leerlo, no validarlo. */
 export function sourceIdDelToken(token) {
   const partes = String(token).split('.');
@@ -328,18 +368,49 @@ async function correr() {
     }
     if (!token) return { codigo: 2, texto: 'NO SE PUDO MEDIR — la pagina no expuso `window.authToken`' };
 
-    // El widget NO abre en la caja de texto: abre en una pantalla de bienvenida cuyo unico
-    // boton es "Iniciar conversacion", y `#chat-input` recien se monta despues de tocarlo.
-    // MIRADO renderizado el 2026-09-02: el `body` entero decia "Estamos en linea / Iniciar
-    // conversacion / Desarrollado por Onia" y en todo el DOM habia UN solo <button>. Por eso el
-    // localizador expiraba a los 30 s — y por eso las dos explicaciones escritas antes (un
-    // iframe, la caja "montada recien al abrir el panel") mandaban a arreglar otra cosa: no hay
-    // iframe, y lo que falta no es esperar mas sino hacer clic.
-    const arranque = pagina.getByRole('button', { name: /iniciar conversaci/i });
-    if (await arranque.count()) await arranque.first().click();
-
+    // El widget no abre en la caja de texto: abre en una pantalla de bienvenida con un boton, y
+    // `#chat-input` recien se monta despues de tocarlo. Cual es ese boton lo decide
+    // `elegirArranque` por estructura y no por rotulo — ver el comentario largo alla arriba.
     const caja = pagina.locator('#chat-input');
-    await caja.waitFor({ state: 'visible', timeout: 30_000 });
+    const botones = () =>
+      pagina.evaluate(() =>
+        [...document.querySelectorAll('button')].map((b) => ({ texto: b.innerText || '', clase: b.className || '' })),
+      );
+
+    // Hay que ESPERAR a que el widget monte antes de mirarle los botones. `goto` vuelve con
+    // `domcontentloaded` y en ese instante el Vue del widget todavia no dibujo nada: la lista de
+    // botones sale vacia, `elegirArranque` devuelve -1 con razon, no se clickea, y la sonda se
+    // queda 30 s esperando una caja que nunca se iba a montar. Medido hoy: con 6 s de espera los
+    // dos botones estan y el clic funciona; sin espera, cero botones.
+    const limite = Date.now() + 30_000;
+    while (Date.now() < limite) {
+      if (await caja.isVisible().catch(() => false)) break;
+      if (elegirArranque(await botones()) >= 0) break;
+      await pagina.waitForTimeout(500);
+    }
+
+    if (!(await caja.isVisible().catch(() => false))) {
+      const cual = elegirArranque(await botones());
+      if (cual >= 0) await pagina.locator('button').nth(cual).click();
+    }
+
+    try {
+      await caja.waitFor({ state: 'visible', timeout: 30_000 });
+    } catch {
+      // El mensaje de Playwright es `Timeout … waiting for locator('#chat-input')` y no dice NADA
+      // de lo que habia en pantalla: con el solo, esta misma falla costo una vuelta entera de
+      // diagnostico a ciegas (se supuso un iframe que no existe, y despues un rotulo que habia
+      // cambiado). Si la sonda no encuentra su caja, que al menos diga que SI vio.
+      const vistos = await botones().catch(() => []);
+      const texto = await pagina.evaluate(() => document.body.innerText).catch(() => '');
+      return {
+        codigo: 2,
+        texto:
+          'NO SE PUDO MEDIR — el widget cargo pero nunca aparecio `#chat-input`. ' +
+          `Botones en pantalla: ${JSON.stringify(vistos.map((b) => b.texto.trim() || `.${b.clase}`))}. ` +
+          `Pantalla: ${JSON.stringify(String(texto).replace(/\s+/g, ' ').trim().slice(0, 300))}`,
+      };
+    }
     for (const texto of MENSAJES) {
       await caja.click();
       await caja.fill(texto);
@@ -479,6 +550,81 @@ function selfCheck() {
     const desordenado = [CONV_48[5], CONV_48[4], CONV_48[3], CONV_48[0]];
     const v = juzgar({ enviados: 2, mensajes: desordenado, conversacionId: 48 });
     assert.strictEqual(v.codigo, 0, `con las filas desordenadas tiene que dar 0 igual; salio ${v.codigo}: ${v.texto}`);
+  });
+
+  // ── el boton que abre el chat: donde la sonda funcionaba UNA sola vez ──
+
+  // Los dos DOM son REALES, leidos del widget de produccion el 2026-09-02 con Chromium: el
+  // primero es el de una vuelta cualquiera (conversacion ya empezada) y el segundo el de la
+  // primerisima (contacto recien creado por el runner de Rails, todavia sin conversacion).
+  const DOM_CON_CONVERSACION = [
+    { texto: '', clase: 'button transparent compact close-button' },
+    { texto: 'Continuar conversación', clase: '' },
+  ];
+  const DOM_PRIMERA_VEZ = [
+    { texto: '', clase: 'button transparent compact close-button' },
+    { texto: 'Iniciar conversación', clase: '' },
+  ];
+
+  caso('EL BUG: con la conversacion ya empezada el boton dice "Continuar", no "Iniciar"', () => {
+    // Este es el caso que la sonda no tenia y que la dejo muerta desde su segunda corrida. Buscar
+    // el rotulo "Iniciar" no encuentra nada aca, no se hace clic, `#chat-input` no se monta nunca
+    // y el veredicto sale 2 para siempre: el carril deja de poder medirse a si mismo.
+    assert.strictEqual(
+      elegirArranque(DOM_CON_CONVERSACION),
+      1,
+      'con "Continuar conversación" hay que clickear igual: es el mismo boton con otro rotulo',
+    );
+  });
+
+  caso('la primera vuelta ("Iniciar conversación") sigue andando', () => {
+    assert.strictEqual(elegirArranque(DOM_PRIMERA_VEZ), 1, 'no se puede arreglar el caso 2 rompiendo el 1');
+  });
+
+  caso('el boton de CERRAR no se toca nunca', () => {
+    // Clickearlo cierra el panel: la sonda se quedaria sin caja de texto por su propia mano, y el
+    // sintoma seria identico al del bug de hoy (timeout esperando `#chat-input`).
+    assert.notStrictEqual(elegirArranque(DOM_CON_CONVERSACION), 0, 'el indice 0 es el boton de cerrar');
+    assert.strictEqual(elegirArranque([DOM_CON_CONVERSACION[0]]), -1, 'si SOLO esta el de cerrar, no hay a que entrar');
+  });
+
+  caso('widget todavia sin montar → -1, que significa ESPERAR y no clickear a ciegas', () => {
+    // `goto` vuelve con `domcontentloaded` y ahi el Vue del widget no dibujo nada todavia. Este
+    // -1 es la senal de "todavia no", no de "no hay boton": quien llama tiene que reintentar.
+    // Sin esa distincion la sonda no clickeaba nunca y moria esperando `#chat-input`.
+    assert.strictEqual(elegirArranque([]), -1, 'sin botones no hay nada que clickear');
+    assert.strictEqual(elegirArranque(undefined), -1, 'ni siquiera con la lista sin llegar');
+  });
+
+  caso('sobrevive a un cambio de idioma o de copy', () => {
+    // Se elige por estructura, no por rotulo: si Chatwoot vuelve a cambiarle el texto —ya lo
+    // hizo una vez y costo la sonda entera— la sonda no se entera.
+    assert.strictEqual(
+      elegirArranque([
+        { texto: '', clase: 'button transparent compact close-button' },
+        { texto: 'Start conversation', clase: '' },
+      ]),
+      1,
+    );
+    assert.strictEqual(
+      elegirArranque([
+        { texto: '', clase: 'button transparent compact close-button' },
+        { texto: 'Escribinos', clase: '' },
+      ]),
+      1,
+      'con un solo boton util no hace falta que el rotulo hable de conversaciones',
+    );
+  });
+
+  caso('con varios botones gana el de la conversacion, no el primero cualquiera', () => {
+    assert.strictEqual(
+      elegirArranque([
+        { texto: '', clase: 'button transparent compact close-button' },
+        { texto: 'Ver artículos de ayuda', clase: '' },
+        { texto: 'Continuar conversación', clase: '' },
+      ]),
+      2,
+    );
   });
 
   caso('source_id sale del JWT sin la clave', () => {
