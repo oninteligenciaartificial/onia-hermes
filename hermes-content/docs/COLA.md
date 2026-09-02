@@ -685,6 +685,25 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Ninguna baseline se actualizó esta vuelta.** La de `chatbot-landing` (2.232 KB) se deja
       intacta a propósito: pisarla con los 449 KB de hoy taparía el ítem del widget caído.
 
+### Del canario visual — corrida del 2026-09-02 21:41 UTC (diez pantallas, sin ítems nuevos)
+
+- [ ] 🔴 **Los dos ítems 🔴/🟠 de arriba (widget de `/chatbot` caído y captura full-page ciega)
+      siguen exactamente igual, 5 horas después.** No los duplico, los confirmo con evidencia
+      fresca porque nadie los tomó:
+      - `chatbot-landing` sigue en **331 KB / status 200 / `429`** (era 449 KB a las 16:41 UTC —
+        sigue faltando el bundle del widget, no hay burbuja de chat visible en la captura). Tres
+        pantallas más (`precios`, `rubros`) SÍ muestran la burbuja verde flotante del widget
+        propio del sitio — el 429 es específico de `/chatbot`, no del sitio entero.
+      - La banda de precio "Bs 390/mes" de `/chatbot` sigue vacía en la captura full-page (mismo
+        artefacto ciego, no arreglado).
+      - Home y `/empezar` siguen mostrando el rediseño *"Cerrás vos. El negocio no."* / "Creá tu
+        cuenta" en vez del copy de la baseline vieja ("Pedí tu acceso"). Sigue sin dueño.
+      **Las otras siete pantallas, sin novedad.** Pesos de hoy: home 2.362 KB/486 ms · precios
+      2.109 KB/317 ms · empezar 2.104 KB/300 ms · rubros 2.362 KB/329 ms · contacto 322 KB/160 ms ·
+      register 704 KB/161 ms · login-plataforma 696 KB/119 ms · login-chat 3.500 KB/954 ms ·
+      panel-chatbot 702 KB/215 ms (redirige a `/login`, sigue "no medida"). Ninguna baseline
+      tocada.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
