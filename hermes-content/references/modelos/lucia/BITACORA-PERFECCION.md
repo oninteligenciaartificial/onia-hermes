@@ -84,9 +84,9 @@ No hay nada que ahorrar bajando; ver bloque en Resultados.
 `V07` dio 4,05 s y un reel de 4 s obliga a encadenar. Mirá el `--help` del subcomando de video.
 **Si no existe flag de duración, anotalo y NO gastes.** → Existe (`--duration 4/8/12`); ver Resultados.
 
-### E7 · La receta fancy, consolidada · **0 créditos** · PENDIENTE
+### E7 · La receta fancy, consolidada · **0 créditos** · HECHO
 Con E1..E6 hechos, escribí en `TECNICA-HIGGSFIELD.md` **una sola receta copiable** que sale 9/9
-y es fancy, con el comando exacto. Es el entregable de la ventana.
+y es fancy, con el comando exacto. Es el entregable de la ventana. → §17, ver Resultados.
 
 ---
 
@@ -298,3 +298,32 @@ acción nueva.
 4 s). Un tercer corte casi idéntico de la misma cara es sobre-publicar. Queda de b-roll en
 `generadas-20260902/` para cuando Sergio arme un reel. Entregable de la vuelta: la receta de
 duración escrita en `TECNICA §16` con el comando exacto y la regla 4 s vs 8/12 s.
+
+### E7 · La receta fancy 9/9 consolidada — 2026-09-02 · **0 créditos**
+
+**Cierre de la ventana FANCY.** No se generó nada: E7 es puramente de escritura. E1–E6 habían
+probado cada variable por separado y el hallazgo quedaba **disperso en §12–16** — una sesión nueva
+que quisiera «hacer una foto fancy de Lucía» tenía que leer cinco secciones y reensamblar el flujo
+a mano. E7 lo funde en **una sola receta copiable de punta a punta**: `TECNICA-HIGGSFIELD.md §17`.
+
+**Qué contiene §17 (autocontenido, se copia entero):**
+1. **Los 4 ingredientes que hacen 9/9 fancy**, cada uno con su origen y por qué es obligatorio:
+   frase de LUZ (E2), lugar fancy real (E1/E3), gesto a medias con las dos manos (E3, es lo que
+   separa 9/9 de 8/9), y la guarda anti-pantallas (E3, salva la casilla 3).
+2. **Comando de imagen** (`nano_banana_pro`, 2 cr) anclado al **café D13 — la única pieza que ya
+   pasó las 9 casillas por este camino** — con la instrucción de cambiar SÓLO el lugar y el gesto.
+3. **Export ffmpeg** a 1080×1920 / 1080×1350 (resuelve la casilla 2, que ninguna generación de CLI
+   pasa cruda porque el «9:16» del CLI es 1536×2752 ≈ 0,558, no 0,5625).
+4. **Puntuar mirando** antes de publicar, y el paso opcional de **animar con `seedance1_5`** (el
+   ganador de E4/E6: 9:16 exacto, cierra sobre la cara, `--start-image` no `--image-references`).
+5. **Tabla de costos de la receta completa:** foto 9/9 = **2 cr**; con b-roll de 4 s = **6,8 cr**.
+
+**La lista de frases prohibidas quedó junta en §17** (`fashion campaign`, `campaign look`,
+`editorial portrait lighting`, `hair pulled back tight`) con su reemplazo aprobado — antes estaba
+partida entre §12 y la sesión del 31-ago.
+
+🎯 **La ventana entrega lo que Sergio pidió:** una receta que sale **fancy** (luz dorada, lugar
+lindo, aire) **sin costar la cara** (casilla 1 y 7 intactas), escrita como un flujo que **no
+requiere volver a experimentar** — se copia y sale. Y deja además una pieza publicable (`D13`).
+El cuello de botella de todo el carril —«fancy le cambia la cara»— queda **resuelto y documentado
+como receta operativa**, no sólo como hallazgo.

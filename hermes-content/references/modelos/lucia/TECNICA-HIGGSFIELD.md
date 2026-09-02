@@ -1273,3 +1273,90 @@ con la **taza tapando la boca**. La cara no se pierde nunca, pero hay más "tiem
 Regla: **4 s cuando cada segundo tiene que mostrar su cara** (reel de máximo contacto visual);
 **8/12 s cuando querés b-roll largo y relajado** y no importa que el medio sea el sorbo. No es que
 8 s sea peor — es que llena el tiempo extra con MÁS del mismo gesto, no con acción nueva.
+
+---
+
+## 17. ⭐ LA RECETA FANCY 9/9 — consolidada, copiable de punta a punta (E7, 2026-09-02)
+
+> **Qué es esto.** El entregable de la ventana FANCY. §12–16 probaron cada variable por separado;
+> acá están **fundidas en un solo flujo** que sale **fancy Y 9/9** sin volver a experimentar. Se
+> copia entero. La única pieza que ya pasó las 9 casillas por este camino es el **café** (`D13`),
+> así que va como ejemplo concreto — cambiá SÓLO el lugar fancy y el gesto, nunca la estructura.
+
+### Los 4 ingredientes que hacen 9/9 fancy (probados, no supuestos)
+
+| # | Ingrediente | De dónde sale | Por qué es obligatorio |
+|---|---|---|---|
+| 1 | **Frase de LUZ** `warm golden hour backlight, soft falloff, shallow depth of field` | §12 (E2-B) | Da lo aspiracional (rim dorado + fondo desenfocado) **sin tocar la cara**. Es la palanca fancy que NO cuesta la casilla 1/7. |
+| 2 | **Lugar fancy real** (café de especialidad, rooftop, coworking de diseño, hall de hotel) | §12–13 (E1/E3) | Sube fancy sin editorial de moda. Barrio saturado de clutter → documental; lugar lindo con aire → influencer. |
+| 3 | **Gesto a medias con las DOS manos sobre un objeto** (café: ambas manos en la taza) | §14 (E3) | Es lo único que separa **9/9 de 8/9** (casilla 5). Y de paso es la mejor base para animar. |
+| 4 | **Guarda anti-pantallas** si hay laptop/cel/TV en escena | §14 (E3) | Una UI legible de frente sale con texto corrupto → mata la casilla 3. Apagada, de canto o fuera de foco. |
+
+🔴 **Prohibido para siempre** (cambian la cara): `fashion campaign`, `campaign look`,
+`editorial portrait lighting`, `hair pulled back tight`. La frase de LUZ (ingrediente 1) es el
+reemplazo aprobado. Ver §12 ⛔ y la sesión 2026-08-31 punto 4.
+
+### Paso 1 — generar la imagen (2 cr, `nano_banana_pro`)
+
+```bash
+cd /root/loops/lucia-contenido
+REF="hermes-content/references/modelos/lucia/generadas-20260828/G01-cafe-pizarra-texto.jpg"  # foto suya como referencia de cara (asset local, se auto-sube)
+OUT="hermes-content/references/modelos/lucia/generadas-YYYYMMDD"   # carpeta del día
+mkdir -p "$OUT"
+
+# medir SIEMPRE antes (gratis, no gasta):
+higgsfield generate cost nano_banana_pro --prompt "x" --aspect-ratio 9:16 --resolution 2k   # → 2 cr
+
+# EJEMPLO PROBADO 9/9 = el café D13. Cambiá SÓLO el lugar (bloque 2) y el gesto (bloque 5).
+higgsfield generate create nano_banana_pro \
+  --prompt "Photo of the same woman as in the reference image, keep the exact same face. She is sitting at a window table inside a bright specialty coffee shop, warm daylight coming through the window, softly blurred café interior behind her. She cradles a ceramic coffee cup with BOTH hands, mid-gesture, looking softly toward the lens. She wears a simple linen top. Small gold hoop earrings and a thin gold chain, marked freckles on nose and cheeks, thick eyebrows, brown eyes. Skin with real pore and texture, even tone, no retouch or smoothing. Shot on an iPhone 15 Pro main camera, 24mm. Any signage or screens are out of focus and unreadable. NATURAL TRUE-TO-LIFE COLORS, visible skin pores, natural asymmetry, warm golden hour backlight, soft falloff, shallow depth of field." \
+  --aspect-ratio 9:16 --resolution 2k \
+  --image-references "$REF" \
+  --wait --wait-timeout 6m --wait-interval 5s
+# → imprime la URL del PNG en CloudFront. Bajar con: curl -sL "<url>" -o "$OUT/PIEZA.png"
+```
+
+El PNG sale **1536×2752** (ratio 0,558) — vertical pero **NO** es 1080×1920 (casilla 2). Sigue el paso 2.
+
+### Paso 2 — export a resolución de publicación (0 cr, resuelve casilla 2)
+
+```bash
+P="$OUT/PIEZA"
+ffmpeg -y -i "$P.png" -vf "scale=1080:-1,crop=1080:1920" -q:v 2 "$P-STORY-1080x1920.jpg"      # 9:16 historia/reel
+ffmpeg -y -i "$P-STORY-1080x1920.jpg" -vf "crop=1080:1350:0:340" -q:v 2 "$P-FEED-1080x1350.jpg"  # 4:5 feed
+ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "$P-STORY-1080x1920.jpg"  # verificar 1080,1920
+```
+⚠️ **Mirar el JPG**, no sólo el ffprobe: el crop puede comerse una mano si la composición está pegada al borde.
+
+### Paso 3 — puntuar mirando (obligatorio antes de publicar)
+
+Abrir el JPG **y un crop de la cara al 100 %**. Pasa a `PARA-PUBLICAR/` **sólo si da 9/9**:
+casilla 1 (¿sigue siendo Lucía? — comparar contra el ancla), casilla 3 (cero texto corrupto),
+casilla 5 (gesto a medias visible), casilla 7 (poros/pecas intactos), casilla 2 (1080×1920 exacto).
+Fancy: luz dorada ✓, lugar lindo ✓, aire/profundidad ✓ contra la tabla fancy de la bitácora.
+
+### Paso 4 (opcional) — animar a b-roll, GANADOR `seedance1_5` (4,8 cr, §15)
+
+```bash
+IMG="$OUT/PIEZA.png"   # el PNG original 1536×2752, seedance reencuadra a 9:16 exacto
+PROMPT="She lifts the coffee cup slightly and takes a small sip, then lowers it, blinks once softly. The camera barely moves, like a casual clip filmed while sitting. Nobody looks at the camera."
+higgsfield generate cost seedance1_5 --start-image "$IMG" --prompt "$PROMPT" --aspect-ratio 9:16          # 4,8 cr (4s) · 9,6 (8s) · 14,39 (12s)
+higgsfield generate create seedance1_5 --start-image "$IMG" --prompt "$PROMPT" --aspect-ratio 9:16 --json  # → ["<job_id>"]
+# NO --wait (el shell corta a 2 min). Pollear:
+higgsfield generate get <job_id> --json | grep -oE 'https://[^"]+\.mp4'
+```
+Sale **720×1280 = 9:16 exacto**, 4 s, cierra sobre su cara. `--duration 8`/`12` para b-roll largo
+(§16: el medio se llena con más del mismo sorbo, la cara aguanta). **Para animar es `--start-image`
+(path local, auto-sube), NUNCA `--image-references`.**
+
+### Los 4 costos de la receta completa — medidos, no re-medir
+
+| Paso | Modelo/herramienta | Costo |
+|---|---|---|
+| 1 · imagen 2k 9:16 | `nano_banana_pro` | **2 cr** |
+| 2 · export a 1080×1920/1350 | `ffmpeg` local | **0 cr** |
+| 4 · b-roll 4 s | `seedance1_5` | **4,8 cr** |
+| 4 · b-roll 8 s / 12 s | `seedance1_5` | 9,6 / 14,39 cr |
+
+**Foto fancy 9/9 publicable: 2 cr. Con b-roll de 4 s: 6,8 cr.** El cuello nunca fue el crédito —
+es mirar y puntuar. Esta receta ya no requiere experimentar: se copia y sale fancy.
