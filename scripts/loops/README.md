@@ -32,7 +32,12 @@ Desde entonces ninguno había corrido. Y con la laptop apagada no corren en abso
   `claude-guardia.sh` no lo hace y lleva semanas diagnosticando desde `/root` porque su carpeta
   desapareció.
 - **`pre-push`**: `main`/`master` bloqueados mecánicamente, no sólo por prompt.
-- **Aviso a Telegram** en todo fallo, como mucho **1 cada 6 h por loop** (el ruido apaga la señal).
+- **Aviso a Telegram** en todo fallo **posterior a la línea 121**, como mucho **1 cada 6 h por
+  loop** (el ruido apaga la señal). ⚠️ **Acá decía "en todo fallo" y es falso**: `avisar()` se
+  define en la línea 121 y el `exit 64` del nombre no reconocido está en la 97 — todo lo que
+  falla antes es **mudo**. Eso dejó a `investigacion` muerto seis horas el 2026-09-02 con su cron
+  intacto (`hermes-content/docs/cola/loops.md`, *"Un loop puede morir con su cron INTACTO"*).
+  Verificable: `/root/bin/onia-loop.sh nombre-que-no-existe` no manda nada.
 - **`--allowedTools` acotado**: headless no puede contestar preguntas, así que los permisos se
   deciden de antemano.
 - Los prompts prohíben desplegar, mergear, gastar plata, tocar otro carril y bajar superficies
@@ -43,6 +48,13 @@ Desde entonces ninguno había corrido. Y con la laptop apagada no corren en abso
 Los scripts se **copian** a `/root/bin/` (no se enlazan al clon: un loop no debe poder romper su
 propio corredor a mitad de vuelta). Desde la raíz de un checkout del repo en el VPS:
 
+> 🔴 **Antes de correr esto, `diff /root/bin/onia-loop.sh scripts/loops/onia-loop.sh`.** La
+> primera línea **pisa el corredor que corre**, y el repo se atrasa cada vez que alguien edita el
+> del VPS a mano — pasó dos veces el 2026-09-02. Si difieren, **el que corre es el que manda**:
+> llevalo al repo y commiteá primero. Correr esto a ciegas ese día habría bajado el modelo de
+> todos los loops a `claude-sonnet-5` y borrado los carriles `web-venta` e `investigacion`.
+> **Y esta lista de prompts tiene que estar completa**: un prompt que falte acá queda huérfano.
+
 ```bash
 install -m 755 scripts/loops/onia-loop.sh scripts/loops/onia-tg.sh /root/bin/
 install -d /root/bin/loops
@@ -51,6 +63,8 @@ install -m 644 scripts/loops/prompts/chatbot-cola.md   /root/bin/loops/chatbot-c
 install -m 644 scripts/loops/prompts/marca-personal.md /root/bin/loops/marca-personal.md
 install -m 644 scripts/loops/prompts/onia-cola.md      /root/bin/loops/onia-cola.md
 install -m 644 scripts/loops/prompts/docs-auditoria.md /root/bin/loops/docs-auditoria.md
+install -m 644 scripts/loops/prompts/web-venta.md      /root/bin/loops/web-venta.md
+install -m 644 scripts/loops/prompts/investigacion.md  /root/bin/loops/investigacion.md
 
 # el hook vale para el clon y TODOS sus worktrees de una sola vez
 for r in onia-hermes onia-platform; do
