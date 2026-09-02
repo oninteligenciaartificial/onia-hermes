@@ -4,6 +4,46 @@
 > Sergio: "estas son ideas que no puedo olvidar; luego vamos a desglosar una por
 > una". Cada frente lleva su estado REAL verificado y la pregunta que falta decidir.
 
+## Cerradas — vencidas, verificadas contra el sistema en vivo (2026-09-02)
+
+Estas cuatro dejaron de necesitar una decisión de Sergio: el propio sistema (u otra
+sesión) ya las resolvió. Se cierran acá con la medición, no se borran del historial de
+"Para decidir" — ese punto queda con una nota que apunta para acá.
+
+**A. ¿Publicamos `onia.com.bo`?** Ya está publicado. `/opt/onia-landing/runtime-next`
+se desplegó el **2026-09-01 21:42 UTC** (`stat` del directorio), con `BUILD_ID`
+`qinaKbiNJ_V9rh9loH5MO` — distinto del `Ega1b2zc6I30Rblyyl2Fv` que el punto daba por
+vivo. Verificado MIRANDO las dos páginas que el punto señalaba como rotas:
+`curl -s https://onia.com.bo/precios | grep -c "Inventario avanzado"` → **0** (ya no
+cobra el addon retirado) y el `<h1>` de `https://onia.com.bo/` es
+`"Cerrás vos.<br/>El negocio no."` — el hero de PR #35, no el de la v3. Los dos commits
+que el punto pedía (`eec7d0f3` precio, `c8dfe249` hero) son ancestros de `origin/main`
+Y ya están sirviéndose.
+
+**B. ¿El chatbot AGENDA? (la rama `fix/bot-manda-link-de-reserva`)** Ya se mergeó —
+commit `fbe106be` (2026-09-01 20:28 -04:00), y trae la decisión tomada adentro del
+propio mensaje: *"El catalogo de venta NO se toca: no promete agendar hasta que el bot
+desplegado lo haga."* Verificado que se cumplió: `ONIA_CATALOGO_DE_VENTA.md:126` sigue
+diciendo que un pedido de cita "lo ESCALA a una persona", y
+`scripts/venta-honestidad.test.mjs` (test *"el catalogo de venta no vende que el
+chatbot agenda"*) sigue en el repo verificando exactamente eso. No hay pregunta
+pendiente: se decidió mergear el código y dejar la promesa de venta como estaba hasta
+el deploy al VPS — que ya es parte del punto 16(a) de este mismo radar, no una decisión
+nueva.
+
+**C. "El canario mira 10 pantallas en el repo, pero el VPS sigue corriendo la versión
+de 3."** Ya no. `diff scripts/loops/prompts/canario-visual.md /root/bin/loops/canario-visual.md`
+→ sin salida, archivos idénticos (18.371 bytes los dos, el del VPS fechado
+`2026-09-02 02:25`). El comando de un renglón que el punto pedía ya se corrió.
+
+**D. "Dos ramas quedaron fuera de la integración" — una de las dos ya no.**
+`git rev-list --left-right --count origin/main...origin/claude/chatbots-platform-review-0d1d09`
+→ `388 0`: cero commits propios sin mergear (confirmado con
+`git log origin/claude/chatbots-platform-review-0d1d09 --not origin/main`, vacío). Ya
+está adentro de `main` — no hace falta rebasar ni archivar. Sigue viva sólo
+`claude/onia-web-architecture-b37eca` (401/2, aumentó desde el 371/6 de la última
+medición: sigue divergiendo, no se achica sola).
+
 ## 1. ¿Chatwoot o plataforma de chat PROPIA hecha por Onia?
 
 **La regla de Sergio**: "tiene que ser hecho por nosotros — usar otra plataforma no
@@ -689,7 +729,12 @@ que desbloquean, no por urgencia
 aparente. Cada una tiene su detalle arriba en este archivo o en
 `hermes-content/docs/handoff/claude-git-status-935f47.md`.
 
-**1. ¿Publicamos `onia.com.bo`? Ya no son 77 commits: son OCHO.**
+**1. ~~¿Publicamos `onia.com.bo`?~~ ✅ CERRADO — ya está publicado.** Ver "Cerradas → A"
+arriba: build `qinaKbiNJ_V9rh9loH5MO` del 2026-09-01 21:42 UTC, sin la promesa vieja.
+
+<details><summary>Texto original (historia de cómo se venía posponiendo)</summary>
+
+**Ya no son 77 commits: son OCHO.**
 
 ⚠️ **Corregido el 2026-09-01 midiendo, no leyendo.** Esta decisión decía "77 commits" y esa
 cifra es de antes del despliegue a mano del 24-ago. Lo vivo hoy es el build
@@ -709,6 +754,8 @@ verde, `swap=true`. ⚠️ **El paso del landing sigue colgado del de center**
 (`.github/workflows/deploy-onia-center.yml:78`, mismo job, sin `if:`), y center.onia.com.bo está
 muerto a propósito desde el 29-ago (404 medido). PR #30 arregló el lockfile, **no** desacopló los
 dos pasos: si el de center vuelve a morir, el sitio de venta vuelve a no publicarse.
+
+</details>
 
 **2. ✅ RESUELTA — el hero es `resultado`.** Sergio eligió el 2026-09-01 (*"esta bien el hero…
 pero esta bien usa ese"*) y ya está mergeado en `main` (PR #35, `c8dfe249`). Lo único que falta
@@ -754,7 +801,14 @@ dependencias pesa 6,4 GB y se vuelve a llenar solo. Hay que decidir cuáles se a
 Crear un worktree normal del repo **falla con "No space left on device"** — medido hoy al
 intentarlo; hubo que armarlo con `sparse-checkout`. El disco ya no es una molestia: bloquea.
 
-**9. ¿El chatbot AGENDA? La rama que lo hace está lista y no se puede mergear sin tu decisión.**
+**9. ~~¿El chatbot AGENDA?~~ ✅ CERRADO — ya se mergeó y la decisión ya está tomada.** Ver
+"Cerradas → B" arriba: commit `fbe106be` (2026-09-01 20:28), y el propio mensaje del merge
+elige "no tocar el catálogo hasta el deploy" — no queda pregunta para vos, salvo el deploy
+al VPS que ya cubre el punto 16(a).
+
+<details><summary>Texto original</summary>
+
+La rama que lo hace está lista y no se puede mergear sin tu decisión.
 
 `fix/bot-manda-link-de-reserva` (1 commit, `ad16b8ce`, con sus tests) hace que el recepcionista
 mande el link de la agenda pública de SU organización (`app.onia.com.bo/book/<slug>`) en vez de
@@ -781,6 +835,8 @@ chatbot NO agenda, y la guarda lo exige en las dos puntas.
 **Ojo con el borde real, que no es de copy:** una org puede tener slug y NO tener la agenda
 configurada. Ahí el cliente final recibe un link a una página vacía. Si la respuesta es "sí",
 esto se cierra antes de encender.
+
+</details>
 
 **10. ¿Para qué sirve `web-factory/packages/`?**
 Los tres paquetes que el carril de Web Factory viene puliendo hace diez días —`@onia/blocks`,
@@ -818,7 +874,12 @@ mandando un link por WhatsApp y ese link no existe. Las dos opciones cuestan **B
 
 Lo único que hace falta de Sergio es **el nombre del subdominio**.
 
-**12. El canario mira 10 pantallas en el repo, pero el VPS sigue corriendo la versión de 3.**
+**12. ~~El canario mira 10 pantallas en el repo, pero el VPS sigue corriendo la versión de
+3.~~ ✅ CERRADO — ya se copió.** Ver "Cerradas → C": el prompt del VPS y el del repo son
+idénticos byte a byte hoy.
+
+<details><summary>Texto original</summary>
+
 Se mergeó a `main` hoy (`52e359c1`): diez pantallas de cliente, umbrales medidos y el peso deja
 de ser una lotería. Pero el prompt que EJECUTA el canario vive en `/root/bin/loops/` del VPS, y
 `scripts/loops/README.md` lo dice literal: *"Al cambiar un prompt hay que volver a copiarlo"*.
@@ -830,26 +891,18 @@ Es **un solo comando** y cuesta **Bs 0**; no se corrió porque tocar el VPS nece
 install -m 644 scripts/loops/prompts/canario-visual.md /root/bin/loops/canario-visual.md
 ```
 
-**13. DOS ramas quedaron fuera de la integración por divergencia, no por conflicto.**
-Se integraron 7 ramas a `main` con los gates en verde. Estas no, porque arrastran semanas de
-deriva y mezclarlas a ciegas es cómo se rompe `main`:
+</details>
 
-| rama | commits atrás de `main` | commits suyos sin mergear |
-|---|---|---|
-| `claude/onia-web-architecture-b37eca` | 371 | 6 |
-| `claude/chatbots-platform-review-0d1d09` | 358 | 5 |
+**13. DOS ramas quedaron fuera de la integración por divergencia, no por conflicto — ahora es
+UNA sola.** Ver "Cerradas → D": `claude/chatbots-platform-review-0d1d09` ya tiene **cero**
+commits propios sin mergear, ya está adentro de `main`. Sigue viva sólo
+`claude/onia-web-architecture-b37eca` (**401 commits atrás de `main`, 2 propios sin mergear**,
+medido hoy — venía divergiendo, no se achica sola).
 
-⚠️ **Corregido el 2026-09-01 23:40 UTC, midiendo con `git rev-list --left-right --count`.**
-Acá figuraba una tercera fila, `claude/personal-brand-strategy-db9eb9` con 32 commits sin
-mergear, y **hoy tiene CERO**: su trabajo ya entró a `main` y la rama sólo está 2 commits
-atrás. Pedirte que decidas entre "rebasar o archivar" una rama que ya se mergeó es peor que
-un pendiente fantasma — es hacerte tomar de nuevo una decisión que ya está tomada. Las otras
-dos filas también estaban viejas (decían 307/4 y 294/3): siguen abiertas, pero con los
-números de hoy.
-
-Para cada una la decisión es la misma y cuesta **Bs 0**: **rebasar y mergear** (alguien tiene
-que mirar el rebase) o **archivarla** y perder ese trabajo. `claude/ads-creatividades-publicos`
-(146 commits) queda afuera a propósito: es tu carril de contenido y lo cerrás vos.
+La decisión sigue siendo la misma para la que queda: **rebasar y mergear** (alguien tiene que
+mirar el rebase) o **archivarla** y perder ese trabajo, Bs 0 cualquiera de las dos.
+`claude/ads-creatividades-publicos` (146 commits) queda afuera a propósito: es tu carril de
+contenido y lo cerrás vos.
 
 ## 17. El loop `docs-auditoria` está construido y probado, pero apagado (2026-09-02) — decisión de Sergio
 
