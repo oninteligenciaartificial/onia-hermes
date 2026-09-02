@@ -686,8 +686,20 @@ mueven la aguja son distintos y se pueden hacer por separado:
   también que el bot agende** (mergeado el 2026-09-01). Sin esto, un desconocido que llega desde
   la web sigue recibiendo la respuesta genérica, y una cita sigue derivándose a mano — que es
   justo lo que `pricing.ts` cobra como resuelto.
-- **(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
-  ajeno de una pantalla que ven los clientes desde el 16-ago.
+- ~~**(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
+  ajeno de una pantalla que ven los clientes desde el 16-ago.~~ ⚠️ **VENCIDA — verificada en vivo
+  el 2026-09-02. No le pidan a Sergio esta decisión: ya está tomada y automatizada.** El script
+  corre solo cada hora (`17 * * * * /root/bin/chatwoot-brand-onia.sh` en el crontab del VPS, con
+  corridas limpias hasta las 06:17 UTC de hoy), y `chat.onia.com.bo/app/login` sirve hoy
+  `"INSTALLATION_NAME":"Onia"` y `"WIDGET_BRAND_URL":"https://onia.com.bo"`. La pantalla pública
+  **ya no se presenta como Chatwoot**.
+
+  Lo que queda es mucho más chico y **no es lo que decía la fila**: sobreviven dos claves de URL
+  sin pisar, `TERMS_URL` y `BRAND_URL`, las dos apuntando a `https://www.chatwoot.com`. Es un
+  ítem de cola del carril chatbot, no una decisión de Sergio.
+
+  Se deja tachada y no borrada porque el resto de esta sección sigue vigente: **(a) el deploy del
+  motor del bot no se hizo**, y la tabla de arriba sigue midiendo bien lo que ese deploy enciende.
 
 Se pueden hacer los dos, uno, o ninguno — pero mientras no se haga, este radar dice la verdad:
 está en el repo, no está encendido.
@@ -1043,3 +1055,37 @@ alcanza o Sergio prefiere no tocar el peso visual.
 
 Mientras no haya decisión, el ítem sigue abierto en `COLA.md`, con este hallazgo referenciado
 para que la próxima vuelta no rehaga la bisección.
+
+## 20. Tres commits arreglan el login de la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
+
+**No confundir con la §16**: aquella es el deploy del **motor del bot** y de `web-factory`. Esta
+es el deploy de **`onia-platform`**, el contenedor que sirve `app.onia.com.bo`. Son dos deploys
+distintos, con riesgos distintos, y se pueden hacer por separado.
+
+**Medido en vivo el 2026-09-02, no deducido.** El contenedor `onia-platform` monta
+`/opt/onia-platform/runtime-next`, cuyo `.next/BUILD_ID` es `lNDdVgrRvP1mizzu3BVXc` — el mismo
+que `/opt/onia-platform/build-8a3b5a6`. O sea: **producción corre `8a3b5a6`**, y `master` tiene
+tres commits encima que nadie desplegó.
+
+| Commit | Qué arregla | Cómo se comprobó que NO está en producción |
+|---|---|---|
+| `bdf0935` + `5888a13` (merge) | **El login le deletrea los nombres de los iconos al lector de pantalla**, y si la fuente tarda más de 12 s se los muestra como texto a cualquiera (`bolt`, `credit_card_off`, `smart_toy`) | El HTML servido hoy trae los tres `<span>` **sin `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)` en vez de la guarda `d.fonts.status` |
+| `efaffe8` | **La CSP bloqueaba el beacon de Cloudflare Web Analytics en toda la plataforma** | La cabecera `content-security-policy` servida hoy no menciona `cloudflareinsights` en ningún lado |
+
+Tocan 6 archivos, +151/−15, y **4 de los 6 son tests** — la superficie de riesgo real son
+`components/auth/AuthShell.tsx` (5 líneas), `lib/iconos-script.ts` (13) y `next.config.ts` (29).
+
+**Por qué importa que sean éstos y no otros.** Los dos son el mismo tipo de fallo: *invisible
+mientras todo va bien, feo justo cuando algo va mal*. El de los iconos es literalmente el bug de
+agosto que Sergio encontró a mano —el login mostrando `credit_card_off` como palabra— y hoy lo
+único que lo tapa es que la fuente cargue rápido. Con la fuente que en agosto tardó 117 s, el
+fallback de 12 s **es el camino normal, no el raro**.
+
+**La decisión.** Desplegar `onia-platform` no lo decide un carril de integración. Es el mismo
+runbook del swap de siempre (`onia-platform/.claude/skills/onia-deploy/SKILL.md`), con el
+recordatorio de `CLAUDE.md`: **buildear en el VPS con `app.env`, nunca con un `.env.local`
+presente**, o Next hornea `127.0.0.1` en el bundle.
+
+**Recomendación: hacerlo.** Es el deploy más barato del radar —cambia tres archivos de código,
+ninguno toca base de datos, pagos ni sesiones— y cierra un ítem de `COLA.md` que ya está verde en
+código y vale cero hasta que se encienda.

@@ -405,6 +405,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Deuda medida, aparte:** en todo el producto hay **456** `.material-symbols-outlined`
       en 111 archivos y sólo **46** llevan `aria-hidden`. Eso es una barrida propia, no este
       ítem — este cierra la pantalla reportada y su hermana.
+      📌 **2026-09-02, el integrador puso número al "falta el deploy": producción corre
+      `8a3b5a6`**, medido por el `BUILD_ID` del contenedor (`lNDdVgrRvP1mizzu3BVXc` =
+      `/opt/onia-platform/build-8a3b5a6`), no deducido. Encima quedan **3 commits sin
+      desplegar** — éste (`bdf0935`+`5888a13`) y la CSP (`efaffe8`). Reconfirmado MIRANDO el
+      HTML servido: los tres `<span>` siguen **sin `aria-hidden`** y el script del `<head>`
+      sigue con `setTimeout(ok,12000)`. La decisión, cotizada y con el runbook, quedó en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` §20. **El código no cambia hasta
+      que Sergio despliegue.**
 
 - [x] **La CSP de producción bloqueaba el beacon de Cloudflare en TODA la plataforma — ARREGLADO
       EN CÓDIGO el 2026-09-02, `onia-platform` `efaffe8`, en `master`. Falta SÓLO el deploy, que
