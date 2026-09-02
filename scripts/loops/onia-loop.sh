@@ -148,6 +148,16 @@ case "$NOMBRE" in
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  web-factory-dev)
+    # Webs de cliente. Se APAGO el 2026-09-02 por quedarse sin cola y se volvio a
+    # encender el MISMO dia al medir que LOOP_COLA.md tenia 7 items reales otra
+    # vez. Un carril con trabajo y sin nadie que lo haga es lo contrario de
+    # "todo el tiempo trabajando".
+    WT=/root/loops/onia-hermes-webfactory
+    RAMA=claude/web-factory-dev
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
     # Este es el camino por el que un loop muere sin que nadie se entere: el cron
     # lo sigue llamando cada hora y el unico rastro es un exit 64 en un log que
