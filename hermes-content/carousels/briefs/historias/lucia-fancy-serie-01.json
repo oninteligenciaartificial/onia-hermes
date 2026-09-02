@@ -1,0 +1,35 @@
+{
+  "slug": "lucia-fancy-serie-01",
+  "account": "lucia",
+  "nota": "Rediseño fancy de la serie quiz. La foto de Lucia ES el diseño. 🔴 Las options NO se dibujan: van al sticker nativo. Render: --pack historia-fancy --format story",
+  "slides": [
+    {
+      "id": "HF01-cuantos-intentos",
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260902/E3-cafe.jpg",
+      "kicker": "Sin cámara",
+      "overline": "Esta foto no la sacó nadie. No hay café, ni ventana, ni yo.",
+      "headline": "¿Cuántos intentos hasta que salga bien?",
+      "options": [
+        "1, la IA ya está lista",
+        "3 o 4",
+        "Más de 10",
+        "Depende de si guardás lo que falla"
+      ],
+      "respuesta": "Depende de si guardás lo que falla"
+    },
+    {
+      "id": "HF02-que-sale",
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260902/E3-hotel.jpg",
+      "kicker": "El prompt",
+      "overline": "Le das tu web y tres ejemplos tuyos, y le pedís que escriba como vos.",
+      "headline": "¿Qué te devuelve?",
+      "options": [
+        "Un post tuyo",
+        "Un post genérico",
+        "Un post tuyo mal escrito",
+        "Depende de los ejemplos"
+      ],
+      "respuesta": "Depende de los ejemplos"
+    }
+  ]
+}

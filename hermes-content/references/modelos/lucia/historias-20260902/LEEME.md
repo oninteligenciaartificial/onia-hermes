@@ -72,3 +72,41 @@ de otra persona (`B09`), la que se dio vuelta (`V04`). Sin esas cuatro, cada int
 el mismo error. **Es literalmente cómo se armó esta cuenta**, contado como acertijo.
 
 Y da pie a la historia siguiente, que ya está escrita en el análisis: mostrar una de las rotas.
+
+---
+
+## 🔴 Corrección de Sergio: «tus diseños no los hagas pobres, Lucía es fancy»
+
+**Tenía razón, y el error tiene nombre.** Las `HQ01-03` están copiadas de @ingenierobinario,
+que es un **canal de programación**: fondo negro plano, ventana de terminal, bloque de color
+saturado. Para un dev boliviano eso funciona. Para una influencer es pobre — **no tiene nada de
+ella: ni su cara, ni luz, ni aire.** Copié la estructura del formato y me traje también su
+identidad, que era justo lo que el análisis decía NO copiar.
+
+### El pack `historia-fancy` — qué cambia y por qué
+
+| | `historia-quiz` (pobre) | `historia-fancy` |
+|---|---|---|
+| Fondo | Negro plano | **La foto de Lucía, a sangre** |
+| Legibilidad | Caja opaca sobre el fondo | **Dos degradados** — la piel y la luz siguen viéndose |
+| Pregunta | Sans en caja verde | **Serif display 92px**, sobre la foto |
+| Verde | Bloque saturado entero | **Un filete de 3px** |
+| Qué comunica | «Esto es técnico» | «Esta persona existe y su vida se ve bien» |
+
+**Lo único que se conserva es el hueco inferior**, porque es lo que hace funcionar al formato:
+ahí va el sticker nativo de encuesta. **Las opciones nunca se dibujan.**
+
+### Por qué la foto es el diseño y no un adorno
+
+Una historia de influencer **sin su cara es una placa de texto**, y a una placa de texto no la
+sigue nadie. Además ya teníamos el material: el loop del VPS generó anoche `E3-cafe`, `E3-hotel`
+y `E3-coworking` con la receta fancy 9/9 (§17), y **estaban sin usar**. El diseño pobre no era
+por falta de fotos: era por no mirarlas.
+
+| Pieza | Foto | Trampa |
+|---|---|---|
+| `HF01-cuantos-intentos.png` | `E3-cafe` — luz dorada de ventana, ambas manos en la taza | Cuántos intentos hasta que salga bien → **«depende de si guardás lo que falla»** |
+| `HF02-que-sale.png` | `E3-hotel` — hall de hotel, lámparas cálidas | Qué devuelve la IA con tu web y 3 ejemplos → **«depende de los ejemplos»** |
+
+**Las `HQ01-03` no se borran:** quedan como el contraejemplo de qué pasa cuando se copia la
+identidad de la referencia en vez de sólo su mecánica.
