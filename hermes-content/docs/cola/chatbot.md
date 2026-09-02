@@ -124,6 +124,21 @@ Sólo ejecuta `npm run <script de package.json>` o `node <ruta del repo>`, siemp
 un gate que corre texto arbitrario sacado de un documento es peor que el problema que tapa.
 Hoy sale **0** — S9 y S10 medidos vivos, los dos siguen bloqueados.
 
+**Y la bandeja del objetivo no se da vuelta sola sin que nadie se entere:**
+
+```bash
+npm run inbox:tenencia
+```
+
+Le pregunta a la base de producción quién es dueño de cada inbox de Chatwoot. Sale **0** si
+`Onia (interna)` tiene el inbox 5 —la tenencia que S8 dejó cerrada, y la única columna que
+decide qué muestra `/inbox`— y **1** si se movió o si dos orgs reclaman el mismo inbox. Nace de
+que **ya se dio vuelta una vez**, a las 02:02 del 1-sep, por un mecanismo que sigue sin
+identificarse: la fila se borró y se re-creó por fuera de la app apuntando al inbox 4, y con eso
+**S7 quedó roto sin que la cola lo supiera**. El ítem que lo arregló se cerró dejando escrito su
+propio comando de verificación —y a nadie que lo corriera—, que es el molde con el que S16
+venció en silencio. Hoy sale **0**.
+
 **Nunca:** desplegar al VPS sin OK de Sergio · tocar otro carril (web-factory es dueño de
 `web-factory/`, producto de la cola de plataforma) · gastar plata · bajar una superficie viva.
 
@@ -131,25 +146,50 @@ Hoy sale **0** — S9 y S10 medidos vivos, los dos siguen bloqueados.
 
 ## Ahora
 
-- [x] **La guarda de entrada de `espejo-check.mjs` reventaba al importarlo, y el molde ya se había
-      copiado a otro gate.** Hecho el 2026-09-02, en la misma vuelta en que se encontró.
-      Archivos: `hermes-content/deploy/vps-ops/bot/espejo-check.mjs`, `scripts/s11_desplegado.mjs`.
-      La guarda armaba la URL a mano —`new URL("file://" + process.argv[1])`— y con
-      `node -e "import(...)" <arg>` el `argv[1]` es el **argumento**, no una ruta: tira
-      `ERR_INVALID_URL` y el módulo no se puede importar. Apareció al probar el verificador nuevo
-      de S11, que había copiado esa guarda de acá; reproducido después sobre el original. Va con
-      `pathToFileURL`, que además resuelve solo el escapado y las barras invertidas, así que se
-      cae el `replace(/\\/g,"/")` a mano. Verificado que sigue corriendo como programa —**S9
-      depende de él** y sigue dando 1— y que ahora sí se importa. Suite: **21/21**.
+- [x] **La bandeja del objetivo ya se había dado vuelta sola una vez, y lo único que la vigilaba
+      era un comando escrito en un párrafo.** Hecho el 2026-09-02, auditando los `[x]` (nivel 2 de
+      la escalera: "Ahora" no tenía ítems y los tres de "Después" no son promovibles).
+      Archivos: `scripts/inbox_tenencia.mjs` (nuevo), `package.json`.
+      **Gate 1 primero, y el `[x]` auditado resultó CIERTO hoy:** `Onia (interna)` sigue con el
+      inbox 5 — medido en `supabase-db`, no leído, con `updatedAt = 2026-09-02 05:09:11`, que es
+      el `UPDATE` de la restauración (su commit `fc58f298` es de las 05:11:18). Nadie lo volvió a
+      tocar. Pero ese ítem se cerró **declarando su propio agujero**: *"ningún gate de este carril
+      mide hoy la tenencia del inbox 5… se deja escrito el comando de verificación para el próximo
+      Gate 1"*. Un comando parado en un documento es el molde exacto con el que **S16 venció en
+      silencio** y con el que **S11 se comprobaba a mano**. Ahora es ejecutable.
+      **Qué se construyó.** `npm run inbox:tenencia` le pregunta a la base de producción quién es
+      dueño de cada inbox de Chatwoot. Sale **0** si `Onia (interna)` tiene el 5, **1** si la
+      tenencia se movió, **2** si no pudo medir (no medir no es estar bien). Importa más que los
+      otros tres gates del carril: `espejo-check`, `campanas-vivas` y `marca-chatwoot` miden código
+      y HTML público; **éste mide la única columna que decide si el objetivo se ve** — `/inbox`
+      filtra por `clinic_settings.chatwootInboxId` y sólo por esa (`lib/chatbot/bandeja-auth.ts:22`).
+      **Rojo por el motivo correcto, y contra bytes VIVOS.** Se leyó producción de verdad y a esa
+      salida real se le aplicó el revert del 1-sep: sale 1, dice *"debería tener el inbox 5 y tiene
+      el 4"* y agrega la pista forense que la propia cola manda mirar — el `id` de la fila es un
+      UUID y no el `cuid()` que genera la app, o sea que se escribió **por fuera**.
+      🔴 **El id UUID se reporta pero NO es el veredicto, y esa distinción es el ítem.** Hoy la fila
+      **buena** también tiene id UUID (`ab6e629f-…`): la restauración fue un `UPDATE` sobre la fila
+      que dejó el mecanismo desconocido, no una fila nueva. Un gate que se pusiera rojo por el
+      formato del id estaría rojo para siempre con la tenencia correcta — el mismo modo de falla
+      que `scripts/s11_desplegado.mjs` ya documenta.
+      🔴 **Y apareció un segundo invariante que nadie había medido: la base NO impide que dos orgs
+      se queden con el mismo inbox.** `chatwootInboxId` es `Int?` **sin `@unique`**
+      (`prisma/schema.prisma:1002`), y `ClinicSettings` tampoco tiene `@@unique` sobre esa columna:
+      el 409 que evita la colisión vive **sólo en la app**, en el PATCH de superadmin — y la
+      escritura que rompió esto la primera vez no pasó por la app. Dos orgs sobre un inbox se ven
+      las conversaciones entre sí. El gate lo detecta y lo nombra.
+      **Gates:** `npm test` completo en verde, con `test:inbox-tenencia` (22 casos) cableado a la
+      cadena — y verificado **en rojo primero**: `test:guards-cableados` mordió con *"estos tests
+      existen y NO los corre nadie"* antes de cablearlo.
 
-⚠️ **Y con esto "Ahora" se queda sin ítems sin empezar: el carril está sin combustible.** Los tres
-de "Después" no son promovibles y no es trámite — el del disco es de la máquina Windows de Sergio
-y el propio ítem dice que no lo arregla este carril; la data QA es un "no borrar todavía"
-deliberado; el QR espera al banco (**S2**). Las 14 filas de "Bloqueado en Sergio" esperan a
-Sergio, y las tres que una máquina puede medir ya se miden solas. Lo que destraba el carril es
-**S14** (darle org al inbox 4: hay seis conversaciones de desconocidos que nadie puede abrir, cinco
-sin teléfono ni correo) y **S12** (los dos horarios de demo, sin los cuales el bot contesta una
-vez y se calla). Los dos son decisión de Sergio, no código.
+⚠️ **"Ahora" sigue sin ítems sin empezar: el carril está sin combustible.** Los tres de "Después"
+no son promovibles y no es trámite — el del disco es de la máquina Windows de Sergio y el propio
+ítem dice que no lo arregla este carril; la data QA es un "no borrar todavía" deliberado; el QR
+espera al banco (**S2**). Las 14 filas de "Bloqueado en Sergio" esperan a Sergio, y las que una
+máquina puede medir ya se miden solas. Lo que destraba el carril es **S14** (darle org al inbox 4:
+hay seis conversaciones de desconocidos que nadie puede abrir, cinco sin teléfono ni correo) y
+**S12** (los dos horarios de demo, sin los cuales el bot contesta una vez y se calla). Los dos son
+decisión de Sergio, no código.
 
 > Los tres de "Después" siguen sin subir, y no es trámite: ninguno está frenado por código. El
 > disco es de la máquina Windows de Sergio y el ítem mismo dice que no lo arregla este carril —
@@ -227,7 +267,7 @@ vez y se calla). Los dos son decisión de Sergio, no código.
 | S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes.** El arreglo es el commit **`22fd088`** de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`. ✅ **Ya está en `origin/master`** desde el merge `503af44` (2026-09-02 12:38 UTC), así que **el deploy hoy SÍ lo alcanza** — durante horas esta fila decía lo contrario y por eso no se destrababa. **Falta sólo el swap**, y el defecto sigue vivo en producción: el contenedor `onia-platform` lleva 15 h arriba (anterior al merge) y su build todavía tiene `assignment_turned_in` — medido con `docker exec … grep -rl` sobre `/app/.next`, no leído. Esta fila se quedó corta tres veces (el commit no existía · existía sin mergear · mergeado pero la fila decía que no); por eso la lista ya no la mantiene este párrafo: `npm run deploy:alcanzable` se lo pregunta a git, y hoy sale **0**. **Y desde el 2026-09-02 esta fila se comprueba sola: `npm run s11:desplegado` le pregunta al contenedor `onia-platform` del VPS —el que CORRE, no el host ni el repo— con qué icono dibuja hoy la entrada `/requerimientos` de su build publicado. Hoy sale 1 nombrando `assignment_turned_in`; el día que Sergio haga el swap sale 0 y `npm run bloqueos:vencidos` levanta la fila solo, sin que nadie se acuerde de mirar. **Verificador:** `npm run s11:desplegado` → 0** | Es un deploy del producto, y ningún deploy sale sin su OK | Que el ítem "Requerimientos" del menú dibuje su icono. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): esta fila mandaba a desplegar un commit que NO EXISTE.** Decía *"commit `4f86381` (rama `carril/chatbot-v68-friccion`)"* y *"ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`)"*. Medido, no leído: después de `git fetch --all --prune` contra GitHub, `git log 4f86381` da `unknown revision`, **no hay ninguna rama** que matchee `friccion` ni `v68` en las 39 remotas, y el archivo del guardia **nunca fue agregado en ninguna rama**. Ese trabajo quedó en el disco de Windows y nunca se pusheó. Un bloqueo que le pide a Sergio desplegar la nada es peor que un fantasma: no se destraba nunca. **El defecto SÍ era real y seguía vivo**, verificado RENDERIZANDO el `.woff2` que se publica (Chromium, no grep): `assignment_turned_in` mide **20em** —el texto crudo— contra **1em** de los otros 34 iconos del menú. Causa medida: el icono entró el 30-ago (`ab9e0de`) y la fuente subseteada es del 29-ago (`917adca`), así que el glifo nunca viajó; y `scripts/subset-iconos.mjs`, que corre dentro del `build`, **se rinde en silencio y sale 0** si falta `pyftsubset` (reproducido acá). **Rehecho de cero en `22fd088`:** el ítem usa `task_alt`, que ya está en el subset (no depende de que exista Python en el entorno de build), más el gate `npm run gate:iconos` (`scripts/iconos-en-la-fuente.mjs`) que renderiza los 35 iconos declarados contra la fuente publicada **sin sesión ni app levantada** — el hueco exacto por el que se coló, ya que `e2e/iconos.spec.ts` sólo mira `/`, `/login` y `/register`. Rojo por el motivo correcto antes, verde después (35/35). Gates: `tsc` limpio · **2441** tests · `eslint` 0 errores. **Verificación post-deploy:** abrir `/inbox` y mirar el menú — el ítem "Requerimientos" tiene que dibujar un tilde, no una palabra |
 | S12 | **Los DOS horarios fijos de demo — sin ellos el bot deriva a un humano en el primer mensaje y se calla para siempre.** Son dos bloques semanales de SU agenda; `hermes-content/deploy/vps-ops/bot/config.mjs` los trae `pending: true` con un TODO que dice *"PROHIBIDO inventar horarios acá"*. **Contexto nuevo del 01-sep:** existía la salida automática por Cal.com y **está muerta** — no hay contenedor de Cal.com en el VPS y `cal.onia.com.bo` responde 302 a `onia.com.bo/empezar`, así que el módulo cae al placeholder en silencio. **Dos opciones, las dos baratas:** (a) Sergio dicta dos bloques fijos (ej. martes 10:00 y jueves 16:00) y quedan como dato — cero código; (b) revivir Cal.com, que es infra y cuesta más. Recomendación: **(a)**, y (b) después si molesta mantenerlos a mano | Son horas de su semana, y el código prohíbe inventarlas | **El ítem 1 de Ahora, que es el único defecto que un comprador ve.** Probado corriendo el motor con dos horarios cualesquiera: el embudo llega hasta `M2` demo agendada sin tocar una línea de código |
 | S13 | **Encender el aviso `notify_sergio`** — hoy el bot pide un humano y no se entera nadie. ⚠️ **NO es "poner `ONIA_N8N_ENABLED=true`"**: `ONIA_N8N_EVENT_URL` está **vacío** y **no existe ningún workflow de n8n** que reciba el evento (listados los 44). Con la variable en `true` y sin URL el envío devuelve `failed` y **nadie se entera**, porque es fire-and-forget a propósito. **Decidir el camino:** (a) Telegram directo desde el bot, reusando el `TG_BOT_TOKEN` que `hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh` ya usa en el VPS — sin workflow, sin URL, sin secreto nuevo; (b) crear el workflow de n8n y cargar la URL. Recomendación: **(a)** | Escribe en el VPS. El código lo escribe este carril; la decisión y el deploy son suyos | El ítem 2 de Ahora. Gate barato antes de mirar el celular: `"configurado":true` en el `/health` del bot |
-| S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org, y por ahí entraron **SEIS** conversaciones de desconocidos (34, 36, 38, 40, 45, 46), dos de ellas del 01-sep. **Cinco de las seis no dejaron teléfono ni correo**: sólo se les puede contestar desde adentro del widget, que es exactamente lo que el inbox huérfano impide — o sea que un inbox sin dueño no es una demora, es una pérdida. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox** (`clinic_settings.chatwootInboxId` es un `Int?` único, `prisma/schema.prisma:1002`), y `Onia (interna)` ya gastó el suyo en el 5. **Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código, ~10 min, agrega una org fantasma; (c) extender `clinic_settings` a N inboxes, que es código del producto y de otro carril. Recomendación: **(b)**. 🔁 **Fusionada el 2026-09-02 con la fila que la tabla listaba aparte bajo un SEGUNDO `S12`** (*"¿sigue en pie la opción 1 de §9?"*): era la **misma decisión preguntada dos veces**, con dos números distintos y uno de ellos ya usado por los horarios de demo. Lo destapó `npm run bloqueos:vencidos` al imprimir `S12, S12` — el gate nombra las filas por su id, así que un id repetido lo vuelve ambiguo. El dato fresco que aportaba esa fila (seis conversaciones, cinco sin contacto) es justo el que le faltaba a la condición de §9 *"hasta que la limitación moleste"*, y ya vive acá. **Y el `5 de las 9` que esta fila decía estaba viejo**: eran seis. | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
+| S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org, y por ahí entraron **SEIS** conversaciones de desconocidos (34, 36, 38, 40, 45, 46), dos de ellas del 01-sep. **Cinco de las seis no dejaron teléfono ni correo**: sólo se les puede contestar desde adentro del widget, que es exactamente lo que el inbox huérfano impide — o sea que un inbox sin dueño no es una demora, es una pérdida. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox** (`clinic_settings.chatwootInboxId`, `prisma/schema.prisma:1002`), y `Onia (interna)` ya gastó el suyo en el 5. ⚠️ **Corregido el 2026-09-02:** acá decía que esa columna era *"un `Int?` **único**"* y es falso — medido, no leído: no tiene `@unique` ni hay `@@unique` en `ClinicSettings`. Lo cierto de la frase es la mitad que importa para esta decisión (una org tiene UN inbox, porque es una columna escalar); lo que NO garantiza nadie es el otro sentido — **la base acepta que dos orgs reclamen el mismo inbox**, y el 409 que lo impide vive sólo en el PATCH de superadmin. No cambia las tres opciones de abajo, pero sí descarta "la base no me deja" como argumento. Desde hoy lo vigila `npm run inbox:tenencia`. **Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código, ~10 min, agrega una org fantasma; (c) extender `clinic_settings` a N inboxes, que es código del producto y de otro carril. Recomendación: **(b)**. 🔁 **Fusionada el 2026-09-02 con la fila que la tabla listaba aparte bajo un SEGUNDO `S12`** (*"¿sigue en pie la opción 1 de §9?"*): era la **misma decisión preguntada dos veces**, con dos números distintos y uno de ellos ya usado por los horarios de demo. Lo destapó `npm run bloqueos:vencidos` al imprimir `S12, S12` — el gate nombra las filas por su id, así que un id repetido lo vuelve ambiguo. El dato fresco que aportaba esa fila (seis conversaciones, cinco sin contacto) es justo el que le faltaba a la condición de §9 *"hasta que la limitación moleste"*, y ya vive acá. **Y el `5 de las 9` que esta fila decía estaba viejo**: eran seis. | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
 | S15 | **Una credencial de sólo lectura para que el canario ENTRE al panel del chatbot** — un usuario del producto (correo + contraseña) que sólo mire. Se enchufa como `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`; **no hay una línea de código pendiente**: `requiereSesion` y `iniciarSesion()` ya están en `scripts/canario_visual.mjs` y entran por el formulario real de `/login`. Sin ella el canario NO miente (desde hoy dice `NO MEDIDA` con el motivo), pero **la pantalla que un cliente usa para editar su conocimiento sigue sin que nadie la mire nunca**. ⚠️ La otra opción que el ítem original proponía —una ruta de vista previa pública— **se descarta**: expone configuración de cliente sin sesión, y es agregar una superficie viva | Es un alta de usuario en producción, y una contraseña | Que `/settings/chatbot` entre a la ronda del canario como las otras diez. Hecho = el canario imprime `panel-chatbot … sin disparo mecanico` y su baseline se crea con `urlFinal` = `/settings/chatbot` |
 | ~~S16~~ | ✅ **VENCIDO el 2026-09-02 — Sergio no decide nada: la decisión ya se tomó y el trabajo ya llegó.** Pedía elegir entre cambiar el procedimiento del integrador, mergear a mano, o dejarlo. Pasaron **las dos primeras**: el integrador arregló su Paso 1 (`d26444c1` de `onia-hermes`, *"contaba las ramas contra el repo equivocado"*) y mergeó el carril a `master` de `onia-platform` (`503af44`, 12:38 UTC). Verificado con `git fetch` fresco y `merge-base --is-ancestor`: **los cuatro** commits declarados (`22fd088`, `675541b`, `d62beeb`, `e644c85`) llegan a `origin/master`; `npm run deploy:alcanzable` sale **0**. El radar §23 ya figuraba **RESUELTO** — sólo esta fila seguía pidiendo la decisión. Detalle en el primer ítem de "Cerrado". | — | — |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
@@ -440,6 +480,17 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **La guarda de entrada de `espejo-check.mjs` reventaba al importarlo, y el molde ya se había
+      copiado a otro gate.** Hecho el 2026-09-02, en la misma vuelta en que se encontró.
+      Archivos: `hermes-content/deploy/vps-ops/bot/espejo-check.mjs`, `scripts/s11_desplegado.mjs`.
+      La guarda armaba la URL a mano —`new URL("file://" + process.argv[1])`— y con
+      `node -e "import(...)" <arg>` el `argv[1]` es el **argumento**, no una ruta: tira
+      `ERR_INVALID_URL` y el módulo no se puede importar. Apareció al probar el verificador nuevo
+      de S11, que había copiado esa guarda de acá; reproducido después sobre el original. Va con
+      `pathToFileURL`, que además resuelve solo el escapado y las barras invertidas, así que se
+      cae el `replace(/\\/g,"/")` a mano. Verificado que sigue corriendo como programa —**S9
+      depende de él** y sigue dando 1— y que ahora sí se importa. Suite: **21/21**.
 
 - [x] **S11 era el único bloqueo que una máquina podía medir y no se medía: ahora se comprueba
       solo.** Cerrado el 2026-09-02. Archivos: `scripts/s11_desplegado.mjs` (nuevo),
@@ -1334,17 +1385,18 @@ archivos.**
       estado que dejó cerrado S8.
       ⚠️ **Lo que NO se cerró, y por qué queda anotado y no en Bloqueado:** no depende de una
       decisión de Sergio, así que no bloquea la cola — pero el mecanismo que borró la fila sigue
-      sin identificarse, y si vuelve a correr, revierte esto otra vez sin avisar. Ningún gate de
-      este carril mide hoy la tenencia del inbox 5 (los que existen — `espejo-check`,
-      `campanas-vivas`, `marca-chatwoot` — miden código y HTML público, no esta columna). Se
-      deja escrito el comando de verificación para el próximo Gate 1 que toque `/inbox` o S7/S8:
-      ```bash
-      docker exec supabase-db psql -U postgres -d postgres -c \
-        "select o.name, cs.\"chatwootInboxId\" from public.organizations o left join public.clinic_settings cs on cs.\"organizationId\"=o.id order by o.id;"
-      ```
-      `Onia (interna)` tiene que dar **5**. Si algún día vuelve a dar otra cosa sin que nadie lo
-      haya pisado desde la UI, es la misma trampa: mirar `id`/`createdAt` de la fila antes de
-      asumir que fue un click.
+      sin identificarse, y si vuelve a correr, revierte esto otra vez sin avisar.
+      ✅ **Cerrado el 2026-09-02, auditando este mismo `[x]`.** Acá quedaba escrito un `docker exec
+      … psql` "para el próximo Gate 1 que toque `/inbox` o S7/S8" — o sea, **a nadie**. Es el molde
+      con el que S16 venció en silencio: lo declarado no lo corre nadie. Ese comando ahora es
+      `npm run inbox:tenencia` (`scripts/inbox_tenencia.mjs`), cableado a `npm test` por su
+      self-check, y mide además un segundo invariante que este párrafo no tenía: que **dos orgs no
+      reclamen el mismo inbox**, cosa que la base no impide (`chatwootInboxId` es `Int?` sin
+      `@unique`; el 409 vive sólo en la app, y la escritura del 1-sep no pasó por la app).
+      La lección que sí seguía valiendo y ahora la aplica el gate solo: **mirar el `id` de la fila
+      antes de asumir que fue un click** — un UUID significa escritura por fuera de la app, un
+      `cuid()` significa que la escribió la app. El gate lo reporta pero nunca lo usa de veredicto,
+      porque hoy la fila **correcta** también tiene id UUID.
 
 - [x] **S11 era un FANTASMA: el bot ya firma como "Onia Bot" desde el 18-ago, y la bandeja ya
       rotula "Tu asistente".** Estaba en "Bloqueado en Sergio" pidiéndole una acción sobre un
