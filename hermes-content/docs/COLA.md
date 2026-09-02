@@ -832,7 +832,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       dispara la entrada—, así que no es un cambio de dirección visual.
       **Probado que los guards MUERDEN, no que sólo pasan** (`src/motion/tokens.test.ts`, nuevo):
       - Se devolvió el token a `amount: 0.3` → `× no usa una fraccion como umbral`.
-      - Se escribió `viewport={{ once: true, amount: 0.45 }}` a mano en `reveal.tsx` → el guard
+      - Se escribió `viewport={{ once: true, amount: 0.45 }}` a mano en `src/motion/reveal.tsx` → el guard
         lo cazó por archivo y línea. Restaurado, verde.
       - El guard mira **sólo** el `viewport={{…}}` de `whileInView`, que es la clase que
         esconde. `useInView` (`CountUp`, `AgentScene`) queda afuera **a propósito y medido**:
@@ -849,8 +849,8 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       visible en la primera pantalla).
 
 - [x] **De paso, el gate del carril: los 115 tests de guarda NO los corría nadie.** Las suites
-      que estas vueltas fueron construyendo —`forma.test.ts` (cero capturas del sistema, las 16
-      tarjetas sociales), `alta.test.ts`, `hero.test.ts`— vivían en el repo **sin un script que
+      que estas vueltas fueron construyendo —`(sitio)/forma.test.ts` (cero capturas del sistema, las 16
+      tarjetas sociales), `(sitio)/alta.test.ts`, `(sitio)/hero.test.ts`— vivían en el repo **sin un script que
       las invocara**: `package.json` no tenía `test`, y `prebuild` era sólo `tsc --noEmit`. Se
       corrían a mano con `npx vitest run`. Una regresión de captura literal pasaba el build y
       llegaba al deploy.
@@ -880,12 +880,12 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       carril: abrir las dos pantallas y MIRARLAS. Salieron 4 capturas (390×844 y 1280×900,
       `channel: 'chromium'` — el motor correcto, no el `headless_shell` que inventa defectos de
       texto): HTTP 200, cero errores de consola, cero desborde horizontal, y la franja al pie.
-      **La causa, medida y no supuesta:** `globals.css` tenía
+      **La causa, medida y no supuesta:** `src/app/globals.css` tenía
       `@media (max-width: 899px) { body { padding-bottom: calc(4.6rem + env(safe-area-inset-bottom)) } }`,
       con el comentario *"la barra de accion fija del movil no debe tapar el final de la pagina"*.
       **Esa barra ya no existe.** Medido en vivo con la página scrolleada al fondo: el único
       elemento `fixed`/`sticky` del sitio es el `header` (arriba, 61px), y `grep` de
-      `position: fixed` sobre `globals.css` + `sitio.module.css` + todos los `.tsx` devuelve
+      `position: fixed` sobre `globals.css` + `(sitio)/sitio.module.css` + todos los `.tsx` devuelve
       **cero**. El hueco quedó huérfano y pintaba del fondo del body, que es claro.
       El padding entró con `1ddba7ad` (`git log -S "4.6rem"`); la barra se fue después y el
       hueco se quedó.
@@ -936,7 +936,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       capturas de al lado** (`def54931`: *"miraba solo (sitio) y era ciego a 4 rutas
       publicadas"*), repetido en el gate escrito para no repetirlo.
       **Demostrado, no argumentado:** el mismo defecto (`:global(body) { padding-bottom: 4.6rem }`)
-      escrito en `site-footer.module.css` —la hoja que cierra `/privacidad`, `/terminos`, las 8
+      escrito en `components/site-footer.module.css` —la hoja que cierra `/privacidad`, `/terminos`, las 8
       rutas `/v1/*` y el 404— pasaba **VERDE (4/4)** con el gate viejo y sale **ROJO** con el
       nuevo, nombrando el archivo culpable.
       **Qué cambió:** las hojas se descubren del disco (una hoja nueva queda cubierta sin que
