@@ -110,6 +110,35 @@ dé trabajo:
 - **Mostrar obra en la venta**: ni "muy pronto", ni "beta", ni listas de lo que falta.
 - **Fabricar prueba social.** No hay clientes pagando: ni testimonios, ni logos, ni cifras.
 
+## Con qué modelo corren, y cada cuánto
+
+**Todos con `claude-opus-5` y `--effort max`** — decisión de Sergio el 2026-09-02:
+*"cambialos todos a opus 5 en max, pero quiero que terminen de una vez"*. Antes era
+`claude-sonnet-5` sin `--effort`, y estaba **fijo en el corredor para los siete**, sin que
+ninguna decisión lo hubiera elegido: quedó del primer script y nadie lo volvió a mirar.
+
+| loop | cada | tope | turnos |
+|---|---|---|---|
+| `chatbot-cola` | 1 h | 50 min | 120 |
+| `onia-cola` | 1 h | 50 min | **260** |
+| `web-venta` | 2 h | 50 min | 120 |
+| `docs-auditoria` | 4 h | 40 min | 120 |
+| `investigacion` | 6 h | 40 min | 120 |
+| `canario-visual` | 6 h | 45 min | 120 |
+| `marca-personal` | 4 veces/día | 50 min | 120 |
+
+El integrador lleva **260 turnos y no 120** porque cada carril son fetch + merge + gates + push:
+con 120 se quedó sin turnos a mitad de un merge y dejó `MERGE_HEAD` abierto sobre `main`.
+
+**El tope siempre menor que el intervalo del cron**, y el `flock` cubre el resto: un loop horario
+que tarde más de una hora **se pisaría a sí mismo** sobre el mismo árbol.
+
+⚠️ **Opus en `max` cuesta bastante más por vuelta que Sonnet.** `chatbot-cola` y `onia-cola`
+corren **cada hora**: son ~48 vueltas de Opus-max por día sólo entre esos dos. Se compra
+rendimiento por vuelta, no más vueltas. Si en algún momento hay que bajar el gasto, lo primero es
+**espaciar los horarios**, no volver a Sonnet: una vuelta peor deja trabajo mal hecho que después
+alguien tiene que deshacer.
+
 ## Cómo se sabe que el equipo está sano
 
 **No por cuántas vueltas corrieron.** Por esto, en orden:

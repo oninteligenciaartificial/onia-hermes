@@ -152,7 +152,10 @@ log "===== ARRANCA $NOMBRE — rama $RAMA — HEAD $ANTES — tope ${TOPE}s ====
 #  2) sin redirigir stdin, `claude` se traga lo que quede en la entrada del shell
 #     que lo invoco. Corriendo dos loops seguidos por ssh, el primero se comio el
 #     script del segundo y la segunda vuelta nunca ocurrio.
-timeout "$TOPE" claude -p --model claude-sonnet-5 --max-turns "$TURNOS" \
+# Modelo y esfuerzo: decision de Sergio el 2026-09-02 — "cambialos todos a opus 5
+# en max, pero quiero que terminen de una vez". Antes era claude-sonnet-5 sin
+# --effort. Cuesta mas por vuelta; el rendimiento por vuelta es lo que se compra.
+timeout "$TOPE" claude -p --model claude-opus-5 --effort max --max-turns "$TURNOS" \
   --allowedTools "$TOOLS" < "$PROMPT" >> "$LOG" 2>&1
 RC=$?
 
