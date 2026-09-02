@@ -1089,3 +1089,30 @@ presente**, o Next hornea `127.0.0.1` en el bundle.
 **Recomendación: hacerlo.** Es el deploy más barato del radar —cambia tres archivos de código,
 ninguno toca base de datos, pagos ni sesiones— y cierra un ítem de `COLA.md` que ya está verde en
 código y vale cero hasta que se encienda.
+
+## 21. Nadie mira nunca el panel del chatbot del cliente — falta una credencial de sólo lectura (2026-09-02) — decisión de Sergio
+
+**Qué pasa.** `app.onia.com.bo/settings/chatbot` es la pantalla donde un cliente edita el
+conocimiento de su bot. Está detrás de sesión, así que el canario visual —el único que abre y
+MIRA las pantallas de cliente— nunca la vio. Hasta hoy, encima, **la reportaba verde**: medía
+el `/login` al que redirige y lo comparaba contra una baseline que también era el login.
+Arreglado hoy (`scripts/canario_visual.mjs`): ahora dice `NO MEDIDA` con el motivo. Pero
+"no miente" no es "se mira": la pantalla sigue sin que nadie le pase el ojo nunca.
+
+**Qué falta, y es una sola cosa.** Un usuario del producto que sólo mire, puesto como
+`ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`. **Cero
+código pendiente**: `requiereSesion` y `iniciarSesion()` ya están escritos y entran por el
+formulario real de `/login`. Enchufarla es un `env`.
+
+**Las opciones, cotizadas:**
+
+1. **Crear un usuario de sólo lectura en una org existente** (~5 min de Sergio, cero código).
+   Es la recomendada. Riesgo: la credencial vive en el entorno del VPS — no en el repo.
+2. **Reusar una cuenta que ya exista** (0 min). Más barato, pero si es una cuenta con permisos
+   de escritura, un canario que se equivoque de click toca datos reales. No recomendada.
+3. **Una ruta de vista previa pública** — la que proponía el ítem original. **Se descarta:**
+   expone configuración de cliente sin sesión y agrega una superficie viva. Se anota para
+   cerrar la puerta, no para elegirla.
+
+**Recomendación: (1).** **Desbloquea:** que `/settings/chatbot` entre a la ronda del canario
+como las otras diez pantallas. Es **S15** en `hermes-content/docs/cola/chatbot.md`.
