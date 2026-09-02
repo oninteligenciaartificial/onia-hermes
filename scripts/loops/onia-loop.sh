@@ -78,6 +78,9 @@ set -a; . /root/.hermes/.env 2>/dev/null; set +a
 # ANTHROPIC_API_KEY en el entorno la pisaria, y la de .hermes/.env esta vacia.
 unset ANTHROPIC_API_KEY ANTHROPIC_TOKEN
 export HOME=/root
+# El hook .githooks/pre-push del repo lee esto: solo el caso onia-cola puede
+# empujar a main/master, el resto de los loops de carril queda bloqueado.
+export ONIA_LOOP_ID="$NOMBRE"
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*" >> "$LOG"; }
 
@@ -109,6 +112,17 @@ fi
 ACTUAL=$(git -C "$WT" branch --show-current 2>/dev/null || echo '?')
 [ "$ACTUAL" = "$RAMA" ] || { avisar "el worktree $WT esta en '$ACTUAL' y se esperaba '$RAMA'"; exit 2; }
 cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
+
+# ── el prompt que corre vs el versionado en main -----------------------------
+# El prompt que se ejecuta vive en /root/bin/loops/; su fuente versionada vive
+# en el repo. Si divergen, el loop corre una version vieja y NADIE se entera:
+# el 2026-09-02 el canario llevaba un dia entero mirando 5 pantallas mientras
+# `main` ya tenia la version de 10 con umbrales medidos. Avisa, no frena: un
+# prompt viejo sigue trabajando; uno que no arranca, no.
+FUENTE=/root/loops/onia-hermes/scripts/loops/prompts/$NOMBRE.md
+if [ -f "$FUENTE" ] && ! cmp -s "$FUENTE" "$PROMPT"; then
+  avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
+fi
 
 # ── la vuelta ----------------------------------------------------------------
 ANTES=$(git rev-parse --short HEAD)
