@@ -44,6 +44,33 @@ está adentro de `main` — no hace falta rebasar ni archivar. Sigue viva sólo
 `claude/onia-web-architecture-b37eca` (401/2, aumentó desde el 371/6 de la última
 medición: sigue divergiendo, no se achica sola).
 
+**E. §9 — "la frase falsa sigue viva en producción". Ya no: se desplegó.** El punto pedía
+elegir entre (a) desplegar `master`, (b) esperar al punto 1, o (c) no desplegar. Se hizo (a).
+Medido **dentro del contenedor de producción**, con el mismo comando que el punto usó para
+denunciarlo — y da lo inverso:
+
+```
+docker exec onia-platform grep -rl "califica, agenda"  /app/.next | wc -l  →  0   (antes: 5)
+docker exec onia-platform grep -rl "deriva al humano"  /app/.next | wc -l  →  21  (antes: 0)
+```
+
+El `BUILD_ID` vivo es `lNDdVgrRvP1mizzu3BVXc` y el contenedor arrancó el **2026-09-01
+22:28:26 UTC** (`docker inspect onia-platform`). Y lo que ahora lee el cliente en la pantalla
+del add-on —la de Bs 390, que el punto llamaba "el peor lugar posible para una promesa que el
+motor no cumple"— es la frase corregida de `f47d615`, extraída del bundle servido:
+
+```
+tagline:"Contesta, califica, deriva al humano y hace seguimiento 24/7, con tu aprobacion."
+```
+
+**Ojo con lo que esto NO cierra:** el punto 16 sigue vivo en su parte **(a)**, que es otro
+deploy y **otro sistema** —el motor del bot en `/opt/onia/bot`, no el bundle de la plataforma—.
+Medido hoy, `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` sale **DESINCRONIZADO**:
+11 archivos distintos (`bot-engine.test.mjs`, `campanas-web.test.mjs`, `config.mjs`,
+`espejo-check.mjs`, `espejo-check.test.mjs`, `intents.mjs`, `knowledge.mjs`,
+`knowledge.test.mjs`, `preview-route.mjs`, `recepcionista.mjs`, `recepcionista.test.mjs`) y
+**falta** `evals-contrato.test.mjs`. El rezago del motor no se achica solo.
+
 ## 1. ¿Chatwoot o plataforma de chat PROPIA hecha por Onia?
 
 **La regla de Sergio**: "tiene que ser hecho por nosotros — usar otra plataforma no
@@ -125,6 +152,32 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
    carrito/pedido por chat, y qué permite cada canal (widget web vs WhatsApp
    Cloud API — catálogo nativo de WhatsApp incluido).
 
+⚠️ **Corregido el 2026-09-02: TRES de las cuatro ya no son "a investigar" — están construidas
+y CORRIENDO en producción.** El punto lleva desde el 18-ago mandando a investigar la
+factibilidad de cosas que el motor ya hace, y eso vale plata: es la lista que se mira para
+decidir qué se puede vender.
+
+Medido contra **el motor que de verdad corre**, no contra el repo. El proceso vivo es
+`node /tmp/onia-bot/webhook-server.mjs` (pid 915791), y ese `/tmp` no se ve desde el disco del
+VPS —es la vista del contenedor—, así que se leyó por `/proc/915791/root/tmp/onia-bot/`
+(59 `.mjs`). Es la misma trampa que el §12 documentó: mirar `/opt/onia/bot` **no** es mirar lo
+que atiende.
+
+| capacidad | estado real | la prueba, en el motor que corre |
+|---|---|---|
+| **Botones / listas interactivas** | ✅ **vivo** | `input_select` ×6 en `chatwoot-adapter.mjs`; `botonesRecepcion` ×5 en `recepcionista.mjs` |
+| **Recibir imágenes** (comprobantes) | ✅ **vivo** | `vision.mjs` presente en el motor que corre; describe la imagen entrante |
+| **Enviar imágenes** (catálogo con fotos) | ✅ **vivo** | `sendAttachment` ×2 en `chatwoot-adapter.mjs` (multipart a la API de Chatwoot) |
+| **Carrito / pedido por chat** | ❌ **no existe** | `grep -ric 'carrito\|checkout\|shopping.cart'` sobre **los 59 `.mjs`** del motor que corre → **0** |
+
+**Lo único que queda abierto de este punto es el carrito** — y como toca el requisito 2 ("que
+pueda COMPRAR sin fricción"), va cotizado abajo como **decisión 27**.
+
+⚠️ **Lo que sigue sin medir, y dónde se mira:** el **catálogo nativo de WhatsApp**
+(Single/Multi-Product Message) no se pudo confirmar — el dato que falta es si Bolivia está
+habilitada para catálogo de WhatsApp Business, y se mira en `business.facebook.com` →
+Commerce Manager, con la cuenta de Meta de Onia. Este loop no se loguea a servicios.
+
 
 ## 6. Webs CONECTADAS al sistema (2026-08-18) — tarea abierta
 
@@ -173,7 +226,13 @@ quedó en **4,8 GB libres (99%)**. Eso destraba hoy, pero se vuelve a llenar.
 
 ---
 
-## 9. El deploy que falta — la frase falsa sigue viva en producción (2026-08-31)
+## 9. ~~El deploy que falta — la frase falsa sigue viva en producción~~ — CERRADO, se desplegó (2026-09-02)
+
+> ✅ **Ya no hay decisión: se hizo la opción (a).** Verificado dentro del contenedor de
+> producción el 2026-09-02 — `"califica, agenda"` da **0** chunks (eran 5) y
+> `"deriva al humano"` da **21** (era 0). La medición completa está en **"Cerradas → E"** arriba.
+> **Lo que este cierre NO arrastra:** el punto 16(a) —el deploy del **motor del bot** a
+> `/opt/onia/bot`— sigue abierto y es otro sistema. Lo que sigue es el texto original.
 
 **Medido, no supuesto.** El punto 2 de `ONIA_DEFINICION_DE_TERMINADO.md` está cerrado en
 `master` (commit `f47d615`) pero **el contenedor `onia-platform` del VPS sirve el bundle
@@ -1386,3 +1445,62 @@ en `master`: **está aplicado en la base de producción** (`supabase-db`, tabla
 `onia_accounting_fiscal_periods`, 0 filas) y **no lo llama nadie**. Su opción (b) estaba cotizada
 en 3-4 días contando el modelado y la migración, que ya están hechos. Corregido en `COLA.md`,
 sección "Bloqueado — necesita a Sergio".
+
+---
+
+## 27. ¿El bot toma el pedido, o lo sigue pasando a una persona? (2026-09-02)
+
+**Qué se decide.** El requisito 2 del §5 dice que el cliente del cliente tiene que poder
+**comprar** por chat sin fricción. Hoy el bot **detecta** la intención de compra y la pasa a un
+humano. Mientras no se decida, el add-on de chatbot (Bs 390/mes, `lib/pricing.ts`) se vende como
+canal de **atención** y no como canal de **venta** — que es lo que el requisito pedía.
+
+> ⚠️ Ojo al citar archivos acá: el `intents.mjs` del VPS y el del repo **no son el mismo**
+> (`espejo-check.mjs` lo lista entre los distintos). Todo lo de esta sección está medido sobre
+> **el que corre** (`/proc/915791/root/tmp/onia-bot/`), donde la regex se llama
+> `RE_INTERES_PEDIDO` (línea 155) y la expone `wantsToOrder` (línea 173).
+
+**Lo que ya está puesto y no hay que pagar de nuevo** (todo medido hoy, no supuesto):
+
+- Los **botones interactivos ya corren** (§5 arriba): un menú de hasta 3 opciones por mensaje es
+  capacidad instalada, no trabajo nuevo.
+- La base de producción **ya tiene las tablas de comercio**, contadas hoy con
+  `docker exec supabase-db psql -U postgres -tAc "select count(*) from public.<t>"`:
+  `onia_commerce_products` **3**, `onia_commerce_product_variants` **3**,
+  `onia_commerce_orders` **0**, `onia_commerce_order_lines` **0**, `inventory_items` **0**.
+  O sea: hay dónde guardar un pedido y **nunca se guardó ninguno**.
+- El **cobro por QR del BCP ya está escrito y cableado**: `bcp-qr.mjs` (15.138 bytes) vive en el
+  motor que corre y `webhook-server.mjs` lo referencia 4 veces.
+
+**El detalle que decide todo, y es el que nadie tiene anotado:** ese módulo corre en
+**`BCP_MODE=mock`** — leído del entorno del proceso vivo (`/proc/915791/environ`), no de un doc.
+Está ejercitando el circuito entero contra un banco falso. Y su propia regla 1, escrita en la
+cabecera del archivo, es: *"EL BOT JAMAS COBRA SOLO. `/bcp/cobrar` lo llama una persona"*.
+
+| opción | qué cuesta | cuánto tarda | qué se pierde |
+|---|---|---|---|
+| **A — seguir derivando** (lo de hoy) | Bs 0, cero trabajo | ya está | El requisito 2 queda sin cumplir: el chatbot se vende como atención, no como venta |
+| **B — el bot arma el pedido, el cobro lo dispara una persona** | Bs 0 de proveedores. Trabajo: escribir el flujo de pedido y llenar `onia_commerce_orders` (hoy 0 filas). **NO depende del banco** | No acotable en esta vuelta — ver "qué falta medir" | Nada externo. Pero obliga a mover la copia de venta en el mismo paso (abajo) |
+| **C — el bot toma el pedido Y cobra solo por QR** | Bs 0 de código nuevo de cobro (ya escrito), pero **bloqueado**: exige `BCP_MODE=real` + credenciales del BCP, que el banco no entregó | **No elegible hoy** | — |
+
+**Recomendación: B.** Es la única que avanza sin depender de un tercero: los botones y las tablas
+ya están, y `onia_commerce_orders` en **0 filas** es la medida exacta de lo que falta — no falta
+infraestructura, falta el flujo que la use. C no se puede elegir aunque se quiera, porque el riel
+de cobro real no existe todavía.
+
+**Lo que NO es opción, y por qué:**
+
+- **C no es "casi C".** Que `bcp-qr.mjs` esté escrito y pase sus tests **no** significa que pueda
+  cobrar: `BCP_MODE=mock` es un banco simulado. Darlo por listo es exactamente el error que
+  `CLAUDE.md` llama *construido ≠ terminado*.
+- **B no se puede encender en silencio.** Es el mismo caso que la agenda (ver "Cerradas → B"): el
+  día que el bot tome pedidos, `ONIA_CATALOGO_DE_VENTA.md` —que hoy dice que un pedido *"lo
+  ESCALA a una persona"*— pasa a estar **mintiendo al revés**, y la guarda
+  `scripts/venta-honestidad.test.mjs` se pone roja a propósito. Copia y motor se mueven **en el
+  mismo paso**, o no se mueve ninguno.
+- **Y ojo con el borde real:** hay **3 productos** cargados y **0 items de inventario**. Un bot
+  que toma pedidos sin stock detrás promete lo que el negocio no sabe si tiene.
+
+**Qué falta medir para poner el "cuánto tarda"** (no se inventa acá): el flujo de pedido no
+existe en ninguna forma —0 apariciones de carrito/checkout en los 59 `.mjs` del motor—, así que
+estimarlo exige que el carril dueño del bot lo diseñe primero. Este loop no toca código.
