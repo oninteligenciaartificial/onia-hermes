@@ -37,10 +37,11 @@ pegados», no «un cartel de tarifas escrito a mano».
 
 ---
 
-## ⏳ PENDIENTE DE BAJAR — video de B06 (pagado, 6,25 cr)
+## ✅ V06 — el video de B06, bajado y verificado
 
-Lanzado el 01-sep desde `Turn to video` sobre B06. **Quedó generando al cerrar la vuelta.**
-Está en la cuenta; lo primero de la próxima vuelta es bajarlo, mirarlo con frames y anotarlo acá.
+`V06-dental-animate-kling3.mp4` · asset `7dcf2c0a-9635-4f50-bc16-f325467cfa4d` · 5,04 s · 121 frames · **sin pista de audio** · 6,25 cr.
+
+**Funciona.** Mirado con `_V06-TIRA.jpg` (4 frames): el traspaso se COMPLETA — ella suelta la tarjeta, la paciente la toma y baja la vista, ella retira la mano al mostrador. La cara aguanta los 5 s, no inventa habla ni gira de más. Confirma otra vez la regla: con acción a medias clara el modelo continúa en vez de actuar.
 
 **Ajustes usados y verificados en pantalla:** Kling 3.0 · 5 s · **720p** · botón **✦ 6,25**.
 
@@ -59,3 +60,23 @@ generar.**
 **Dato a confirmar al bajarlo:** el historial mostró **9:16** junto a 720p y 5 s. Si el MP4 sale
 vertical de verdad, se acabó el problema de formato para Meta Ads, donde todo el banco venía en
 828×1108.
+
+
+## 🔴 El 9:16 de la interfaz NO es el 9:16 del archivo
+
+La pregunta que el loop arrastraba desde el 31-ago tiene respuesta, y es la mala.
+
+El historial de Higgsfield mostraba **`720p · 5.0s · 9:16`** junto a esta generación. El archivo
+bajado mide **828×1108** — exactamente lo mismo que los cinco videos del 28-ago. **No es 9:16,
+es ~3:4.**
+
+O sea que **la etiqueta de la interfaz no describe el archivo**. Seguimos sin un solo video
+vertical, y Meta Ads lo pide para Reels y Stories. Las salidas siguen siendo dos: re-encuadrar
+con el editor, o encontrar dónde se fija de verdad el aspecto antes de generar — el selector del
+workspace, no el que muestra el historial.
+
+## ⚠️ En el workspace de VIDEO, `Download` está escondido
+
+No hay botón visible. Está **dentro del menú `…`** de la pieza, junto a Virality Predictor,
+Regenerate, Publish y Delete. Distinto del panel de detalle de una IMAGEN, donde `Download` sí es
+un botón a la vista.
