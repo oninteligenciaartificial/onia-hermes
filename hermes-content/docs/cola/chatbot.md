@@ -83,111 +83,13 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
 
 ## Ahora
 
-> **Promovido el 2026-09-01, y con el motivo escrito porque no es por turno.** Los cuatro ítems
-> que lo preceden en "Después" no los puede ejecutar este carril: dos son de plataforma (el
-> vocabulario de "la cita" y los 30 worktrees que llenaron el disco), la limpieza de data QA
-> está retenida a propósito —es la evidencia de cuatro ítems cerrados— y el botón de QR espera
-> las credenciales del BCP. Éste sí es del carril **y no necesita a nadie para medir**:
-> `npm run marca:chatwoot` es un GET contra el login público.
-> ⚠️ **Lo que NO se hace con él:** agregarle otro párrafo que diga *sigue revertido*. Si la
-> medición no cambia, no se escribe — ya está escrito abajo. Reparar es **S10**, de Sergio;
-> este ítem sólo vuelve a dar trabajo el día que el gate cambie de veredicto.
-
-- [ ] **Vigilar que el reconcile nocturno de Chatwoot no revierta el branding.** Son SEIS
-      `installation_configs` (BRAND_NAME, INSTALLATION_NAME, WIDGET_BRAND_URL, LOGO,
-      LOGO_DARK, LOGO_THUMBNAIL). El loop de orden (cron `63ae20ad`) los re-aplica, pero
-      nunca se verificó que gane la carrera contra el reconcile. Si aparece el logo de
-      Chatwoot en `chat.onia.com.bo`, re-aplicar LOS SEIS y limpiar caché
-      (`GlobalConfig.clear_cache`).
-
-      ⚙️ **Vigilado el 2026-08-31, y el ítem estaba mal escrito en tres puntos.** No son seis
-      configs, la defensa no cubría lo que decía cubrir, y tres ya se habían perdido hace
-      quince días sin que nadie lo viera.
-      **1 · Son DIEZ, no seis.** Leído el YML del propio contenedor
-      (`/app/enterprise/config/premium_installation_config.yml`, dentro del contenedor), `Internal::ReconcilePlanConfigService`
-      restaura: INSTALLATION_NAME, BRAND_NAME, BRAND_URL, WIDGET_BRAND_URL, TERMS_URL,
-      PRIVACY_URL, LOGO, LOGO_DARK, LOGO_THUMBNAIL y DISPLAY_MANIFEST.
-      **2 · La defensa cubría TRES.** El cron real no es `63ae20ad` (ése es un loop de sesión):
-      es `/root/bin/chatwoot-brand-onia.sh`, cada hora al minuto :17, y corre bien —
-      328 ejecuciones, la última al cierre de esta vuelta. Pero re-aplicaba sólo
-      INSTALLATION_NAME, BRAND_NAME y WIDGET_BRAND_URL. Los tres LOGO sobrevivían **por
-      suerte, no por diseño**. Su copia versionada
-      (`hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh`) era idéntica al VPS por md5,
-      así que el repo no mentía: la defensa estaba corta en los dos lados.
-      **3 · Tres YA estaban revertidas, y se ven desde la calle.** `BRAND_URL`, `TERMS_URL` y
-      `PRIVACY_URL` apuntan a `www.chatwoot.com` desde el **16-ago**. No es teoría: el HTML
-      público de `https://chat.onia.com.bo/app/login` embebe el objeto de config del front y
-      las tres salen ahí en texto plano. La regla dura del carril es que Chatwoot no se vea.
-      **Lo que sí está bien, MIRADO y no supuesto:** el login renderiza el logo `onia` y
-      "Iniciar sesión en Onia", y el widget del inbox 4 muestra al pie **"Desarrollado por
-      Onia"**, con link a `https://onia.com.bo/?utm_medium=survey&utm_campaign=branding` e
-      icono `https://onia.com.bo/apple-icon.png`. La cara que ve el desconocido está limpia.
-      **La carrera, respondida con fechas:** los tres del script tienen `updated_at` del
-      **24-ago** y los tres LOGO del **29-ago**. Como el script sólo escribe si el valor
-      difiere, siete días sin que se muevan significa que **hoy el reconcile no está
-      revirtiendo nada** — pero cuando atacó (18-ago, y el 16-ago con estas tres) ganó.
-      **Lo construido:** `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` ampliado a las
-      **nueve** de marca (DISPLAY_MANIFEST queda afuera: su valor de fábrica es el que
-      queremos) y con modo **`--check`** que no escribe y sale 1 si falta alguna. Corregido
-      además un `| tail -1` que se comía la salida entera: por eso
-      `/var/log/chatwoot-brand-onia.log` nunca pudo mostrar una reversión. Probado **contra
-      producción en modo sólo-lectura**: `REVERTIDAS 3/9`, exit 1, y los `updated_at` de las
-      tres siguen en 16-ago — no escribió.
-      ⚠️ **No se aplicó al VPS: reemplazar un cron que corre solo cada hora es infra, y eso
-      es de Sergio.** Son dos comandos y es reversible. Anotado como **S10**, cotizado en
-      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
-
-      ⚙️ **Vuelta del 2026-08-31 (séptima) — ahora la reversión SE VE desde afuera, que es lo
-      único que faltaba para que "vigilar" signifique algo.** Gate 1 primero, medido y no
-      leído: las tres siguen revertidas hoy (`curl` a `https://chat.onia.com.bo/app/login`
-      → `"BRAND_URL":"https://www.chatwoot.com"`, más `TERMS_URL` y `PRIVACY_URL`).
-      **El hueco real que quedaba, y por qué se pierden quince días sin que nadie lo note:**
-      el modo `--check` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` vive **dentro del contenedor** — necesita
-      SSH al VPS, `docker exec` y `rails runner`. O sea que sólo puede correrlo alguien que ya
-      está adentro, a mano, sabiendo que tiene que mirar. Nadie lo corre, y por eso el
-      16-ago pasó sin ruido.
-      **Lo construido:** `hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs` — mira la
-      marca **desde la calle**, que es exactamente la cara que ve el desconocido. El front de
-      Chatwoot embebe su config en la página (`window.globalConfig = {…}`), así que es un
-      **GET y nada más**: sin VPS, sin docker, sin token, sin credenciales. Corre desde
-      cualquier máquina (`npm run marca:chatwoot`) y sale 1 nombrando las revertidas.
-      **Corrido contra producción**, que es la prueba de que sirve:
-      ```
-      [marca-publica] REVERTIDAS 3/9 en https://chat.onia.com.bo/app/login:
-      [marca-publica]   BRAND_URL: "https://www.chatwoot.com"
-      [marca-publica]   TERMS_URL: "https://www.chatwoot.com/terms-of-service"
-      [marca-publica]   PRIVACY_URL: "https://www.chatwoot.com/privacy-policy"
-      ```
-      **8 tests** (`npm run test:marca-chatwoot`), sobre el HTML REAL del 31-ago con las tres
-      revertidas. El que más vale es el que **ata las dos listas**: lee las nueve claves del
-      propio `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` y exige que sean idénticas a las del gate — si se
-      separan, el cron defiende una marca y el gate mide otra, y saldría verde sobre una clave
-      que nadie re-aplica. **Probado que pueden fallar:** borrando `BRAND_URL` de la lista,
-      **4 de 8 en rojo**.
-      ⚠️ **Un tropiezo que queda escrito porque el molde es el del carril:** la primera versión
-      salía con `process.exit(1)` y contra el HTTPS real reventaba libuv con los sockets
-      keep-alive de `fetch` abiertos — imprimía `REVERTIDAS 3/9` correctamente y **devolvía
-      127**. Un gate que grita el veredicto y no lo puede pasar por su código de salida no lo
-      lee ningún cron. Se pasó a `process.exitCode`. **Y se dice lo que el test NO hace:**
-      revertido a `process.exit(1)` a propósito, los dos tests de exit siguen **verdes** contra
-      el servidor local — la carrera no se da en `127.0.0.1`. Lo que sostiene el arreglo es el
-      comentario del `.mjs`, no el test; está escrito ahí para que nadie lo cuente como
-      cubierto.
-      ⚠️ **Esto NO repara nada: sólo mira.** Quien repara sigue siendo
-      `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh`, y aplicarlo al VPS sigue siendo **S10** — de Sergio. Lo que
-      cambia es que a partir de hoy la reversión es detectable sin entrar al VPS, así que la
-      próxima no puede durar quince días.
-      ✅ **Vigilado el 2026-08-31 (octava vuelta) — sigue revertido, y el gate se comprobó de punta a punta.** `npm run marca:chatwoot` contra producción: **`REVERTIDAS 3/9`** — `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` siguen diciendo `www.chatwoot.com` en el HTML público del login, sin cambio desde el 16-ago. **Y se verificó el código de salida, no sólo el texto**, que es lo que el propio ítem dice que hace fallar a un gate en silencio: corrido con la salida descartada, `$?` = **1**. Sirve para un cron. **S10 sigue pendiente y sigue siendo de Sergio** — reparar escribe en el VPS.
-
-      📎 **Por qué en `vps-ops/` y no en `bot/`:** `espejo-check.mjs` compara `bot/` archivo por
-      archivo contra `/opt/onia/bot`, así que un `.mjs` nuevo ahí deja el gate rojo hasta el
-      próximo `scp` — y el propio carril tiene escrito que *un gate que siempre está rojo lo
-      apaga alguien*. Verificado después de crear los dos archivos: el espejo sigue reportando
-      los mismos tres de siempre.
-> ⚠️ **Corregido el 2026-09-02: la nota de acá abajo decía "Ahora quedó vacío el 2026-09-01" y
-> ya no es cierto** — quedó escrita ANTES de que el ítem de arriba (vigilar el reconcile) se
-> promoviera de vuelta a "Ahora" ese mismo día, y nadie la borró. Se saca para que la próxima
-> vuelta no lea "Ahora" como vacío cuando no lo está.
+> **Ahora está vacío el 2026-09-02.** El único ítem que tenía —vigilar que el reconcile
+> nocturno de Chatwoot no revierta el branding— se movió entero a "Bloqueado en Sergio" como
+> **S10**: ya medía lo mismo desde el 31-ago (ocho vueltas seguidas con el mismo veredicto) y
+> lo único que falta es un `scp` al VPS, que sólo Sergio puede autorizar. Reverificado ANTES
+> de moverlo, no de memoria: `npm run marca:chatwoot` contra producción sigue en
+> `REVERTIDAS 3/9` (`BRAND_URL`, `TERMS_URL`, `PRIVACY_URL`) — el bloqueo está **vivo, no
+> vencido**. Vuelve a "Ahora" el día que el gate cambie de veredicto.
 
 > **El ítem 2 —las campañas de la web— salió de acá el 2026-08-31.** Vivió diez vueltas
 > esperando el `scp` de **S9**, que escribe en el VPS y por eso es de Sergio. Se movió entero
@@ -275,7 +177,7 @@ node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md
   ssh root@187.77.16.63 "docker exec onia-center sh -c 'grep -c campanas /tmp/onia-bot/knowledge.json'"
   ```
   Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) ✅ **Sumado el 31-ago (10ª vuelta) — verificación PREVIA, que antes no existía:** `npm run campanas:vivas` mide **desde la calle** que el documento cubra las frases que onia.com.bo manda **hoy**. Si sale 1, el `scp` publicaría un documento que ya no matchea y no hay que hacerlo. Corrido hoy: **0** (5 de 5 cubiertas). No reemplaza al `grep -c campanas` de después — ese mide el VPS, este mide el documento. |
-| S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Ya probado en modo `--check` contra producción: 3 de 9 revertidas. ✅ **Sumado el 31-ago (7ª vuelta): ahora se comprueba DESDE AFUERA, sin entrar al VPS.** El `--check` del `.sh` vive dentro del contenedor (SSH + `docker exec` + `rails runner`), así que sólo lo corre quien ya está adentro y sabe que tiene que mirar — por eso las tres se perdieron el 16-ago y nadie lo vio en quince días. `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`) lee el `window.globalConfig` del HTML público del login: es un GET, corre desde cualquier máquina y hoy sale **1 con `REVERTIDAS 3/9`**. **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10, y mide la cara que ve el desconocido, no la base |
+| S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual. Repara **DIEZ** `installation_configs` que Chatwoot reconcilia solo (`Internal::ReconcilePlanConfigService`, leído del YML del propio contenedor): el cron que hoy corre (`/root/bin/chatwoot-brand-onia.sh`, cada hora al minuto :17) sólo reaplica 3 de las 9 que le tocan (DISPLAY_MANIFEST queda afuera a propósito: su valor de fábrica es el que se quiere) | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Se mide **desde la calle, sin VPS ni SSH**: `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`, 8 tests) lee `window.globalConfig` del login público — antes de que existiera este gate, la reversión del 16-ago vivió quince días sin que nadie la viera, porque el único chequeo vivía dentro del contenedor. **Re-verificado en vivo el 2026-09-02: sigue en `REVERTIDAS 3/9`, exit 1**, sin cambio desde el 16-ago (ya se vigiló así ocho vueltas seguidas entre el 31-ago y hoy, siempre con el mismo resultado). **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10 |
 | S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes** — commit `4f86381` de `onia-platform` (rama `carril/chatbot-v68-friccion`) | Es un deploy del producto, y ningún deploy sale sin su OK | Que el item "Requerimientos" del menú dibuje su icono. Encontrado MIRANDO `/inbox` de producción hoy: la fuente estaba cargada y el glifo no existía — `assignment_turned_in` nunca se subseteó (342 ligaduras en el .woff2 desplegado, 261 iconos declarados). Es el mismo defecto del login del 14-ago, en una pantalla que ningún gate cubría. Ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`); **verificación post-deploy:** abrir `/inbox` y mirar el menú, o medir el ancho del texto del span — un glifo ocupa ~1em, hoy mide 20em |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 | S12 | **¿Sigue en pie la opción 1 de §9 ("el inbox 4 se deja sin dueño hasta que la limitación moleste")?** Medido el 2026-09-02: son SEIS conversaciones reales en inbox 4 (34, 36, 38, 40, 45, 46), dos nuevas del 01-sep, y CINCO de las seis no dejaron teléfono ni correo — sólo se les puede contestar desde adentro del widget, que es justo lo que el inbox huérfano bloquea. El límite técnico sigue siendo real: `clinic_settings.chatwootInboxId` es un `Int?` único (`prisma/schema.prisma:1002`), una org = un inbox. Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9: (2) crear una org "Onia Bandeja" sólo para recibir el 4 (~10 min, agrega una org fantasma), o (nueva) extender `clinic_settings` a N inboxes — más caro, y lo decide plataforma | Su decisión de producto y su límite de schema, igual que S8 | Que las próximas conversaciones del widget se vean en `/inbox` sin esperar a que alguien dé su teléfono |
