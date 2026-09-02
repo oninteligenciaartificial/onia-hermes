@@ -83,9 +83,38 @@ Siguiente lugar: **veterinaria de barrio**. Mismas reglas que D02.
 
 ---
 
+## 🟢 Las 3 de HOY (2026-09-02) — en orden
+
+Ordenadas por lo que más mueve el número. **Lo viejo listo gana a lo recién hecho**, y se
+**alterna cuenta** (ayer cerró @oniahq con D01 → hoy abre Lucía).
+
+1. **D14 · Lucía · REEL peluquería** — el **día 1 del calendario**, listo y verificado desde el
+   28-ago, parado más de una semana. Es lo único que mueve el número de verdad. `D14-.../CAPTION.txt`.
+2. **D01 · @oniahq · feed «8 de la noche»** — listo desde ayer, cierra ventas. `D01-.../CAPTION.txt`.
+3. **D13 · Lucía · feed café fancy** — foto lista, informa sobre IA. `D13-.../CAPTION.txt`.
+
+---
+
 ## Publicadas / listas
 
 _(cada vuelta agrega su bloque acá: carpeta, cuenta, destino, palabra del CTA, cómo se verificó)_
+
+### D14 · Lucía · REEL peluquería (pilar B, no nombra a Onia) · LISTA · 0 cr extra
+- **Carpeta:** `PARA-PUBLICAR/D14-lucia-reel-peluqueria/`
+  - `lucia-peluqueria-REEL-720x1280.mp4` (reel, 9:16) · `CAPTION.txt` completo.
+- **Cuenta / destino:** **Lucía** · **reel**. Es el **primer video vertical real del banco**
+  (`V07-peluqueria-seedance`, `seedance1_5`, 4,8 cr): 720×1280 = 9:16 exacto, 4,05 s, con pista
+  de audio aac — se sube tal cual, no necesita re-encuadre ni quemar texto.
+- **CTA:** **`COMUNIDAD`** (el de Lucía). Caption pilar B: declara que ES IA (el argumento de
+  venta es la declaración, no se esconde), informa qué significa que hoy cualquier negocio
+  produzca su propio contenido, cierra con `Comentá COMUNIDAD`.
+- **Cómo se verificó:** MIRADO — `ffprobe` confirma 720×1280 h264 + aac, 4,05 s (no 0-byte);
+  frame a 2 s abierto y mirado: Lucía con pecas, argolla dorada y cadenita, escena de peluquería
+  de barrio compuesta desde el espejo, tijera cortando el mechón mojado, ventilador de pared,
+  colores true-to-life, ningún cartel legible. Coincide con el caption.
+- ⚠️ **Falta lo de Sergio:** cargar `COMUNIDAD` en el mapa de n8n de la cuenta de Lucía antes de
+  publicar (ya está en `recompensas.json`; es el paso de 30 s del incidente RANKING). Pieza y
+  caption listos.
 
 ### D01 · @oniahq · ad «8 de la noche» que CIERRA · LISTA · 0 créditos
 - **Carpeta:** `PARA-PUBLICAR/D01-oniahq-8pm/`
