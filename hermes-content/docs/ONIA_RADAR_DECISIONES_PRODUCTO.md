@@ -723,7 +723,17 @@ dependencias que el lockfile no tiene, así que `pnpm install --frozen-lockfile`
 CI) **falla**. No se tocó acá porque regenerar un lockfile no es trabajo de un merge, pero es una
 bomba con temporizador para el primer pipeline que instale en limpio.
 
-## 16. ~~`/` y `/empezar` no tienen dueño~~ — RESUELTO 2026-09-02, no hay decisión
+## 24. ~~`/` y `/empezar` no tienen dueño~~ — RESUELTO 2026-09-02, no hay decisión
+
+> ⚠️ **Era la SEGUNDA sección numerada `16` de este archivo, y por eso quedó fuera de secuencia.**
+> Renumerada a 24 el 2026-09-02. El `16` legítimo es el de arriba (*"Treinta y un commits… NINGUNO
+> está desplegado"*, creado en `d1826f48` el 08-31 23:09); esta nació después, en `84ad6628`, y
+> reusó el número. **El choque no era cosmético: las DOS tenían una opción `(a)`**, así que las
+> tres citas de *"punto 16(a)"* / *"la §16"* que viven en este mismo archivo (grep `16(a)`)
+> resolvían a dos cosas distintas — el deploy del motor del bot, o "que `onia-cola` adopte la
+> home". Se renumeró ésta y no aquélla porque aquélla estaba primero, **sigue abierta**, y es la
+> que se lleva las tres citas. Se deja acá, en su lugar cronológico, en vez de moverla al final:
+> mover el texto perdería el contexto de las secciones que la rodean.
 
 La home y la página de acceso viven en `web-factory/apps/onia-platform/`: **ninguna cola las
 nombra**, y la zona de `web-factory-dev-loop` las excluye explícitamente. Son la puerta de
