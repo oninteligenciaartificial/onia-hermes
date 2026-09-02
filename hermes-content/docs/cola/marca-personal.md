@@ -1,5 +1,5 @@
 
-## P0 · MASCOTA-HIGGSFIELD (Sergio 02-sep: "disenala con Higgsfield, no me gusta el SVG")
+## PAUSADA · MASCOTA-HIGGSFIELD — Sergio 02-sep: "la mascota no es necesaria por ahora". NO generar, NO gastar creditos en esto. Los prompts quedan abajo por si la reactiva.
 
 PRIMERA corrida con cupo (el grace_daily_limit se resetea por dia): generar las 3
 variantes con `higgsfield generate create text2image_soul_v2 --prompt "..."` usando
