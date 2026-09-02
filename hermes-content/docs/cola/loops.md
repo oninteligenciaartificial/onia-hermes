@@ -43,9 +43,27 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 |---|---|---|---|
 | `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
 | `canario-visual` | **VPS** | `41 4,10,16,22 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
+| `marca-personal` | **VPS** | `56 13,21 * * *` (UTC) | Carril marca personal: drop del día siguiente + 1 pieza de producción |
 | `onia-cola` | Windows | `17 * * * *` | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo |
 | `web-factory-dev-loop` | Windows | `45 * * * *` | Construye la siguiente tarea de `web-factory/docs/LOOP_COLA.md` |
+
+⚠️ **Corregido 2026-09-02.** `marca-personal` corría en `crontab -l` del VPS y no estaba en esta
+tabla — verificado en vivo el mismo día. `scripts/loops/onia-loop.sh` en el repo tampoco tenía su
+`case`: sólo existía en `/root/bin/onia-loop.sh` del VPS, hand-editado y nunca commiteado (junto
+con los casos de `onia-cola` y `docs-auditoria`). Un loop que reinstale el script desde el repo
+per `scripts/loops/README.md` habría borrado los tres sin avisar. Sincronizado el `.sh` al repo
+en el mismo commit.
+
+### `docs-auditoria` — construido y probado, TODAVÍA sin horario
+
+Este carril (el que audita ESTE archivo) tiene worktree (`/root/loops/onia-hermes-docs`, rama
+`claude/git-status-935f47`), prompt (`/root/bin/loops/docs-auditoria.md`) y `case` en
+`onia-loop.sh` — corrió una vez a mano el 2026-09-02T02:21 UTC con `exit 0`. **No tiene línea en
+`crontab -l`**: sin ella, esta vuelta no se repite sola. No entra todavía en la tabla de arriba
+porque esa tabla es "deben existir y estar ACTIVOS", y activo no está. La cadencia (y el permiso
+para prender el cron) queda anotada para Sergio en
+`ONIA_RADAR_DECISIONES_PRODUCTO.md`.
 
 Los horarios están **escalonados a propósito**: comparten CPU y disco, y dos loops sobre el mismo
 árbol se pisan. No los juntes en el mismo minuto.
@@ -81,6 +99,10 @@ eligieron el **productor** (`canario-visual`, el único que mete combustible al 
 **mejor consumidor medido** (`chatbot-cola`). `onia-cola` se queda en Windows **a propósito**:
 es el que integra a `main`, y dos publicadores sobre `main` es el conflicto que `CLAUDE.md`
 prohíbe.
+
+⚠️ **Ya no son dos — el 2026-09-01 se sumó `marca-personal`** (verificado en `crontab -l` el
+2026-09-02): son TRES los que corren en el VPS. El título de esta sección quedó como historia del
+día de la mudanza, no como conteo vigente — el conteo vigente vive en la tabla de arriba.
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 

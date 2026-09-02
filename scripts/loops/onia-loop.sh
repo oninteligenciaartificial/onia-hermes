@@ -8,7 +8,7 @@
 # entonces ninguno habia corrido. Y con la laptop apagada no corren nunca.
 # Por eso se mudan a cron acá.
 #
-# Uso:  onia-loop.sh <canario-visual|chatbot-cola>
+# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria>
 # APAGAR: crontab -e y comentar la linea del loop.
 #
 # Forma copiada de /root/bin/claude-guardia.sh (secretos por .hermes/.env, unset
@@ -36,8 +36,35 @@ case "$NOMBRE" in
     TOPE=3000
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  marca-personal)
+    WT=/root/loops/onia-hermes-marca-personal
+    RAMA=claude/marca-personal-loop
+    # Drop del dia siguiente + 1 pieza de produccion. Corre 1 vez al dia (21:00
+    # UTC = 17:00 La Paz), asi el drop de las 19:00 esta listo con 2 h de colchon.
+    TOPE=3000
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  onia-cola)
+    # EL INTEGRADOR. Es el unico que mergea ramas de carril a main; si no corre,
+    # nada llega a main y main alimenta el deploy del VPS y el de Vercel.
+    # Vivia en Windows y por eso llevaba dias sin integrar: las tareas de la app
+    # solo disparan cuando la app esta quieta.
+    WT=/root/loops/onia-hermes
+    RAMA=main
+    # Cron HORARIO: tope < 60 min o la vuelta siguiente llega con esta viva.
+    TOPE=3000
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  docs-auditoria)
+    # Carril docs/infra: que lo escrito sea cierto. Un doc falso manda a la
+    # proxima sesion al archivo equivocado. Combustible que no se agota.
+    WT=/root/loops/onia-hermes-docs
+    RAMA=claude/git-status-935f47
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
-    echo "uso: $0 <canario-visual|chatbot-cola>" >&2; exit 64 ;;
+    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria>" >&2; exit 64 ;;
 esac
 
 LOG=/var/log/onia-loop-$NOMBRE.log

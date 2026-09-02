@@ -816,3 +816,37 @@ números de hoy.
 Para cada una la decisión es la misma y cuesta **Bs 0**: **rebasar y mergear** (alguien tiene
 que mirar el rebase) o **archivarla** y perder ese trabajo. `claude/ads-creatividades-publicos`
 (146 commits) queda afuera a propósito: es tu carril de contenido y lo cerrás vos.
+
+## 17. El loop `docs-auditoria` está construido y probado, pero apagado (2026-09-02) — decisión de Sergio
+
+El carril que audita ESTE archivo (worktree, rama, prompt, `case` en `onia-loop.sh`) ya existe en
+el VPS y corrió una vez a mano el 2026-09-02T02:21 UTC con `exit 0`. **No tiene línea en
+`crontab -l`**: sin ella, no se repite solo — cada vuelta futura necesita que alguien lo dispare
+a mano. El `TOPE` ya está puesto en 2400 s (40 min), calcado del resto de los loops del VPS.
+
+Lo que falta decidir es la **cadencia**, porque prender el cron es correr una sesión de Claude
+cada vez que dispara (cuesta el consumo de la suscripción, no plata directa, pero sí corre sin que
+nadie mire). Comparado con los otros tres del VPS:
+
+| loop | cadencia | por qué |
+|---|---|---|
+| `chatbot-cola` | horaria | cola viva, hay que verla en la bandeja rápido |
+| `canario-visual` | 4×/día | mira pantallas de cliente, barato y de bajo riesgo |
+| `marca-personal` | 2×/día | drop de contenido con horario fijo (19:00 La Paz) |
+| `docs-auditoria` | **sin decidir** | auditoría de docs — no depende de un reloj externo |
+
+**Opciones cotizadas (todas Bs 0, sólo consumo de sesión Claude):**
+- **2×/día** (ej. `11 8,20 * * *` UTC — mismo patrón que `marca-personal`, corrido 8 h después
+  para no competir por CPU/disco en el mismo minuto): ritmo parejo con el resto de los loops de
+  carril.
+- **1×/día**: alcanza si los docs no cambian tan rápido como para que un hallazgo dure medio día
+  sin corregirse.
+- **Dejarlo apagado y disparar a mano** cuando se sospeche drift: cuesta cero sesiones de más,
+  pero vuelve a depender de que alguien se acuerde — el mismo problema que esta doc existe para
+  resolver en los otros loops.
+
+Con el OK de Sergio, la línea a agregar en `crontab -e` es:
+```
+<minuto> <horas> * * * /root/bin/onia-loop.sh docs-auditoria >> /var/log/onia-loop-docs-auditoria.log 2>&1
+```
+y después se suma la fila a la tabla "Deben existir y estar activos" de arriba.
