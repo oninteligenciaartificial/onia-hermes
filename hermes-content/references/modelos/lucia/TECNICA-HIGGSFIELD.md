@@ -925,3 +925,30 @@ es `ffprobe` sobre el MP4 bajado — otra vez la regla de mirar, no suponer.
 Generar la primera imagen en **9:16** y animarla, para confirmar la cadena de punta a punta.
 El selector quedó abierto en 9:16 cuando el renderer de la página se congeló; hay que verificar
 que quedó puesto antes de generar, y que el botón siga diciendo **✦ 2**.
+
+
+---
+
+## 8. ¿Se puede producir desde el VPS? — medido el 2026-09-01
+
+**Corrección: el VPS SÍ tiene navegador.** Yo había escrito que no, y era falso.
+
+| Requisito | Estado en el VPS |
+|---|---|
+| Navegador | ✅ **Playwright instalado**: `chromium-1223`, `chromium_headless_shell-1223`, `firefox-1522`, `webkit-2287` |
+| Red hacia Higgsfield | ✅ `higgsfield.ai` responde **HTTP 200** |
+| RAM | ✅ 12,3 GB libres de 16 (chromium headless pide ~500 MB) |
+| Credencial de Higgsfield | ❌ **ninguna `HIGGSFIELD_*` en `/root/.hermes/.env`** |
+
+**Entonces el bloqueo no es técnico: es la sesión.** Higgsfield se opera logueado y no hay API
+key en el entorno, así que habría que **copiar las cookies del Chrome de Sergio al perfil de
+Playwright del VPS** — el mismo patrón que se usó con la credencial de Claude Code.
+
+🔴 **El riesgo, dicho sin adornos:** la sesión entraría desde una IP de datacenter en Bolivia
+mientras Sergio la usa desde su casa. Eso es lo que las plataformas marcan como acceso
+sospechoso, y la cuenta **ya arrastra un aviso de «Payment failed»**. Es probable que la marquen,
+no seguro. **La decisión es de Sergio, no mía.**
+
+**Lo que sí puede correr en el VPS hoy, sin tocar nada:** todo el trabajo de repo — renderizar
+carruseles, escribir creativos, correr los gates, verificar piezas. Eso no necesita sesión ni
+navegador logueado.
