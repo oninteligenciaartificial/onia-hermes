@@ -804,19 +804,42 @@ Las tres formas de fantasma que ya aparecieron acá:
       "no dibujan un píxel" se convirtió en excusa para no volver a mirarlos. Un doc que
       afirma una regla de diseño envejece igual que el código que la implementa.
 
-- [ ] **A9 · El punto final del KPI spark mide 5,03px, bajo el piso de 8px** — promovido a
-      ítem por AUD7 (2026-09-01), no medido de nuevo: la medición ya existía **como nota al
-      pie de A3** y ahí llevaba días sin que nadie pudiera tomarla. Evidencia vigente contra
-      el disco de hoy: `packages/templates/src/dashboard.ts:995` sigue con `r="3"` en el
-      `<circle>` de `renderKpiSpark`, y con la escala de 0,839 del bloque da **5,03px**
-      renderizados, contra los 8px que `dataviz` fija y que W4 ya aplicó al resto de los
-      marcadores (`dashboard.ts:793` y `:960`, los dos en `r="4"`).
-      El test de marcadores **no lo cubre**: `dashboard.test.ts:238` sólo mide los `<circle>`
-      de `renderChart("line")`, así que el KPI spark quedó fuera del gate y por eso el `r=3`
-      sobrevivió a W4. Cerrarlo es subir el radio **y** extender ese test al KPI spark, o el
-      próximo cambio lo vuelve a bajar sin que nada avise.
-      ⚠️ Toca geometría dibujada → `pnpm e2e --update-snapshots` y **mirar la baseline nueva**
-      antes de commitearla (regla dura 4).
+- [x] **A9 · El punto del KPI spark ya mide 8,05px — y el piso se mide en PIXELES, no en
+      unidades de viewBox** (2026-09-02). Evidencia re-verificada antes de tocar y **medida
+      en el navegador**, no deducida: `dashboard.ts` seguia con `r="3"` y el circulo
+      renderizaba **5,03px** de diametro (la cifra exacta que anotaba el item).
+      🔴 **El arreglo obvio era el equivocado.** Copiar el `r="4"` que W4 le puso al resto
+      de los marcadores **no alcanzaba**: cada SVG del panel se dibuja a una escala
+      distinta y el piso de 8px de `dataviz` es de pixeles en pantalla. Medido a 1440:
+      el chart de linea va a escala **1,023** (caja 327,3px / viewBox 320) y ahi `r=4`
+      da 8,18px ✔; el spark del KPI vive en la tarjeta angosta y va a escala **0,839**
+      (268,5px / 320), donde `r=4` habria dado **6,71px** — otra vez bajo el piso, y con
+      el item marcado como cerrado. Ahora `dotR = 4.8` → **8,05px medidos**. La escala
+      0,839 es el peor caso (en mobile la tarjeta es mas ancha), asi que cubre todos los anchos.
+      **Efecto colateral que hubo que arreglar en el mismo cambio**: con `pad = 4` el
+      circulo de r=4,8 se recortaba contra el borde del viewBox cuando el ultimo valor
+      era el maximo de la serie; el pad ahora sale del propio radio (`const pad = dotR`).
+      **El test se extendio multiplicando por la escala**, no comparando el `r` pelado —
+      un `r >= 4` habria dejado pasar los 6,71px. + un segundo test de no-recorte.
+      **Gates**: `typecheck:packages` verde, `pnpm test` **269/269** (+2), `pnpm e2e`
+      **103 pasados / 0 fallados / 7 skipped**, y **mirado renderizado en claro y oscuro**
+      (0 `[data-reveal]` ocultos, 0 errores de consola, los 4 circulos dentro de su caja).
+      **Gate verificado MUTANDO**: con `dotR = 3` el test nuevo cae con `expected
+      5.034375 to be greater than or equal to 8` — el mismo numero que midio el navegador.
+
+- [ ] **A10 · El gate visual se trago un marcador que se AGRANDO 60%** — evidencia medida
+      hoy (2026-09-02), al cerrar A9. El cambio de A9 movio 4 puntos de 5,03 a 8,05px de
+      diametro y desplazo la polilinea de los 4 sparks, y `pnpm e2e` paso **8/8 en verde
+      sin tocar una sola baseline**. Bajando `maxDiffPixels` a 0 en `tests/e2e/visual.spec.ts:62`
+      el gate SI cae y reporta la cifra real: **81 a 184 pixeles distintos** por captura,
+      contra un presupuesto de **400**. O sea que el tope actual es 2-5x mas grande que un
+      cambio que casi duplica un marcador en 4 tarjetas.
+      Es el mismo modo de falla que W6 documento y creyo cerrado: W6 valido el presupuesto
+      contra `PAD_L` 34→44 (un corrimiento de TODO el plot) y ese si lo caza; un defecto
+      localizado en un elemento chico, no. **Vale medir cual es el tope mas bajo que aguanta
+      dos corridas limpias** (el antiflake de S1 ya esta), o partir la captura fullPage en
+      regiones con presupuesto propio. Al bajarlo salio ademas que la pagina cambia de
+      **1840 a 1839px** de alto entre corridas, asi que el tope no puede ser 0.
 
 - [x] **AUD7 · Auditar W3/W4/W5 y cazar la primera nota VENCIDA del carril** (2026-09-01).
       Séptima vuelta de escalón 2 (A y B siguen todos `[x]`). **Por qué estos tres**: AUD1–AUD6
