@@ -66,3 +66,55 @@ cada línea, y apoyado en el fondo del renglón: **marca sin comerse la palabra.
 **2. Nada de backticks en los comentarios del CSS.** El bloque vive dentro de un template
 literal de JS y un backtick corta la cadena — el render falló con `SyntaxError: Unexpected
 identifier 'background'`.
+
+---
+
+## v4 — «los textos están mal, no desglosás» (Sergio, 2026-09-02)
+
+> *«No podés poner "alguien quiere darte plata" y nada más, explicate bien, no desglosás tus
+> tareas… probá diferentes estructuras de texto, mockups. Tenés Pinterest, miralo y aprendé,
+> ¿por qué no lo hacés?»*
+
+Tenía razón en las tres cosas, y la tercera explica las otras dos: en las dos pasadas anteriores
+miré **el grid de miniaturas** y saqué reglas de composición. Nunca abrí un carrusel entero para
+ver **cómo estructuran el contenido**. Por eso las cinco láminas eran lo mismo —titular grande +
+una línea— o sea **cinco afirmaciones sueltas y ninguna prueba**.
+
+### Lo que encontré al abrir los pines
+
+Un carrusel de **@luana.redesmaker** con «FÓRMULA #1 / #2 — ESTRUCTURA», que es literalmente el
+esqueleto:
+
+| Fórmula #1 | Fórmula #2 |
+|---|---|
+| 1. Gancho con promesa de resultado | 1. La pregunta que más te hacen |
+| 2. **El error común que los frena** | 2. Respuesta directa y profesional |
+| 3. **Pasos 1, 2 y 3 — acciones concretas** | 3. El detalle estratégico que marca la diferencia |
+| 4. Resultado final + beneficio | 4. **Aplicación práctica** |
+| | 5. CTA con palabra clave |
+
+**La clave: las láminas del medio llevan contenido concreto** — pasos numerados, la respuesta
+desarrollada, la prueba. Sin eso el carrusel afirma y no demuestra.
+
+Y de **@Olivero**: burbujas de chat flotando con sombra. Para Onia es el mockup ideal, porque el
+producto **es** un asistente de WhatsApp: la conversación es la prueba, no la descripción.
+
+### Las cinco láminas, ahora con estructura distinta cada una
+
+| # | Estructura | Qué lleva |
+|---|---|---|
+| 01 | Titular + **párrafo** | La escena, explicada — no una frase suelta |
+| 02 | Foto + **párrafo** | El error común: contestar a la mañana, y por qué hunde la venta |
+| 03 | 🆕 **MOCKUP de chat** | La conversación real que el asistente resuelve solo, con horas y doble check |
+| 04 | 🆕 **LISTA numerada** | Los tres pasos, cada uno con su descripción |
+| 05 | Titular + cierre + botón | Resultado + el único CTA |
+
+Dos layouts nuevos en el pack, declarados desde el brief: `items[]` (lista, formato
+`"Título \| descripción"`) y `chat[]` (formato `"bot: texto \| hora"` o `"ellos: …"`).
+
+### 🔴 Una cifra inventada que casi se publica
+
+El primer texto abría con *«El 60% de los mensajes llegan fuera de horario»*. **No hay fuente**:
+me la inventé para que sonara sólido. Es exactamente lo que la regla prohíbe —cero clientes
+pagando, prohibido inventar cifras— y es lo que hunde la pieza ante el primer dueño que la lea.
+Reemplazada por el argumento sin número, que se sostiene solo.

@@ -69,6 +69,35 @@ function crear({ esc, roleFor, ACCOUNTS, BRAND, getFmt }) {
     // haber vendido nada, y ademas gasta el unico punto saturado de la pieza.
     const textoCta = last ? (slide.cta || (args && args.cta) || '') : '';
 
+    // --- DOS ESTRUCTURAS DE LAMINA ADEMAS DEL TITULAR SUELTO ---
+    //
+    // Sergio, 2026-09-02: *"no podes poner 'alguien quiere darte plata' y nada mas,
+    // explicate bien, no desglosas tus tareas... proba diferentes estructuras de texto,
+    // mockups"*. Tenia razon: las cinco laminas eran titular + una linea, o sea afirmaciones
+    // sueltas. En las formulas de carrusel que funcionan (ref: «FORMULA #1/#2 ESTRUCTURA»
+    // de @luana.redesmaker, vista en su Pinterest) **las laminas del medio llevan contenido
+    // concreto**: pasos numerados, la respuesta desarrollada, la prueba. Sin eso el carrusel
+    // afirma y no demuestra.
+
+    // a · LISTA numerada: para desglosar los pasos o lo que hace el producto.
+    const items = Array.isArray(slide.items) ? slide.items : [];
+    const lista = items.length ? `<ol class="lista">${items.map((it) => {
+      const [t, d] = String(it).split('|');
+      return `<li><span class="it">${esc(t.trim())}</span>${d ? `<span class="id">${esc(d.trim())}</span>` : ''}</li>`;
+    }).join('')}</ol>` : '';
+
+    // b · CHAT: el mockup. Onia ES un asistente de WhatsApp, asi que la conversacion es la
+    // prueba del producto — mucho mas que describirla en prosa. Cada entrada del brief es
+    // "quien: texto"; `ellos` = el cliente (burbuja clara), `bot` = el asistente (verde).
+    const msgs = Array.isArray(slide.chat) ? slide.chat : [];
+    const chat = msgs.length ? `<div class="chat">${msgs.map((m) => {
+      const esBot = /^bot\s*:/i.test(m);
+      const txt = m.replace(/^(bot|ellos)\s*:/i, '').trim();
+      const [cuerpoMsg, hora] = txt.split('|');
+      return `<div class="msg ${esBot ? 'bot' : 'ellos'}">${esc(cuerpoMsg.trim())}${
+        hora ? `<span class="hora">${esc(hora.trim())}${esBot ? ' ✓✓' : ''}</span>` : ''}</div>`;
+    }).join('')}</div>` : '';
+
     return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600&family=Inter:wght@400;500;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -153,6 +182,31 @@ ${foto ? `.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:
   ${foto ? 'text-shadow:0 2px 18px rgba(0,0,0,.5);' : ''} }
 .cuerpo b { font-weight:500; color:#F7F4EE; }
 
+/* a · LISTA numerada: desglosa en vez de afirmar. El numero en verde ancla la lectura. */
+.lista { list-style:none; margin-top:34px; display:flex; flex-direction:column; gap:22px;
+  counter-reset:n; }
+.lista li { counter-increment:n; position:relative; padding-left:76px;
+  font-family:'Inter',system-ui,Arial,sans-serif; }
+.lista li::before { content:counter(n,decimal-leading-zero);
+  position:absolute; left:0; top:-4px; font-weight:900; font-size:40px;
+  color:var(--onia-green,#00D26A); letter-spacing:-1px; }
+.lista .it { display:block; font-weight:500; font-size:40px; line-height:1.2;
+  color:#F7F4EE; }
+.lista .id { display:block; margin-top:6px; font-weight:400; font-size:31px;
+  line-height:1.35; color:rgba(247,244,238,.62); }
+
+/* b · CHAT: burbujas con sombra real, apiladas y alternadas. La sombra es lo que las
+   despega del fondo — sin ella vuelven a verse planas, que es el defecto que arrastramos. */
+.chat { margin-top:32px; display:flex; flex-direction:column; gap:18px; }
+.msg { position:relative; max-width:76%; padding:22px 26px; border-radius:22px;
+  font-family:'Inter',system-ui,Arial,sans-serif; font-weight:400; font-size:33px;
+  line-height:1.32; box-shadow:0 16px 34px rgba(0,0,0,.34); }
+.msg.ellos { align-self:flex-start; background:#F7F4EE; color:#14100D;
+  border-bottom-left-radius:7px; }
+.msg.bot { align-self:flex-end; background:#00D26A; color:#052A1D;
+  border-bottom-right-radius:7px; }
+.msg .hora { display:block; margin-top:8px; font-size:22px; opacity:.55; text-align:right; }
+
 .boton { align-self:flex-start; margin-top:34px;
   font-family:'Inter',system-ui,Arial,sans-serif; font-weight:500; font-size:36px;
   color:#052A1D; background:var(--onia-green,#00D26A);
@@ -179,6 +233,7 @@ ${foto ? `.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:
     </div>
     <h1 class="titular">${mixto(slide.headline)}</h1>
     ${slide.body ? `<p class="cuerpo">${esc(slide.body).replace(/\*([^*]+)\*/g, '<b>$1</b>')}</p>` : ''}
+    ${lista}${chat}
     ${textoCta ? `<div class="boton">${esc(textoCta)}</div>` : ''}
     <div class="pie">
       <div class="firma">

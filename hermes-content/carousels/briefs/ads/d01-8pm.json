@@ -2,34 +2,42 @@
   "slug": "d01-8pm",
   "account": "onia",
   "cta": "Comentá DEMO",
-  "nota": "Carrusel de venta. Estructura: hook → agitación → giro → mecanismo → CTA. Los asteriscos marcan la palabra que sale en serif italic verde. Render: --pack venta-editorial --format feed",
+  "nota": "Estructura tomada de las «FÓRMULAS DE ESTRUCTURA» de carrusel (@luana.redesmaker, Pinterest): gancho con escena → el error común → la PRUEBA (mockup de chat) → los pasos desglosados → resultado + CTA. Las láminas del medio llevan contenido concreto, no afirmaciones sueltas. Render: --pack venta-editorial --format feed",
   "slides": [
     {
       "kicker": "20:07 · un martes",
-      "headline": "Alguien quiere *darte plata*.",
-      "body": "Y vos ya cerraste."
+      "headline": "Te escriben cuando ya *cerraste*.",
+      "body": "Pasa todos los días y no es culpa de nadie: es la hora en que el cliente por fin se acuerda de resolverlo. Justo cuando vos ya bajaste la persiana."
     },
     {
       "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B10-restaurante-almuerzo.jpg",
-      "kicker": "Mientras tanto",
-      "headline": "Le contestás a las *nueve*.",
-      "body": "A esa hora ya reservó en otro lado. Y no te enteraste nunca."
+      "kicker": "El error que todos cometemos",
+      "headline": "Contestar *a la mañana*.",
+      "body": "Parece razonable y es lo que hunde la venta: para las nueve, el que preguntó a las ocho de la noche ya le escribió a otros tres. El primero que le respondió se quedó con el turno."
     },
     {
-      "kicker": "El diagnóstico equivocado",
-      "headline": "No lo perdiste *por caro*.",
-      "body": "Lo perdiste *por horario*."
+      "kicker": "Lo que pasa mientras dormís",
+      "headline": "Así se ve *por dentro*.",
+      "chat": [
+        "ellos: Hola, atienden mañana? Necesito un turno | 20:07",
+        "bot: Hola! Sí. Tenemos 9:30, 11:00 y 15:40. ¿Cuál te sirve? | 20:07",
+        "ellos: 11 está bien | 20:09",
+        "bot: Listo, agendado. Te escribo un recordatorio mañana 10:00 | 20:09"
+      ]
     },
     {
-      "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B06-consultorio-dental.jpg",
-      "kicker": "Lo que hace",
-      "headline": "Contesta *mientras dormís*.",
-      "body": "Responde la duda, agenda la cita, y te deja el mensaje listo para la mañana."
+      "kicker": "Los tres pasos",
+      "headline": "Qué hace, exactamente.",
+      "items": [
+        "Responde la duda | Precios, horarios, dirección, qué incluye. Lo que ya contestás veinte veces por semana.",
+        "Agenda en tu calendario | Toma el turno según los huecos reales que tenés libres, no inventa disponibilidad.",
+        "Te deja el resumen | A la mañana abrís y ves qué se agendó y qué hay que responder a mano."
+      ]
     },
     {
       "kicker": "Empezá hoy",
       "headline": "El que contesta primero se *queda con la reserva*.",
-      "body": "Te muestro cómo queda funcionando con *lo tuyo*, sin compromiso."
+      "body": "No reemplaza tu trato: se ocupa del rato en que no podés estar. Te muestro cómo queda con *tu negocio*, sin compromiso."
     }
   ]
 }
