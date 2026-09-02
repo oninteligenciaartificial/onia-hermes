@@ -26,6 +26,32 @@ salida en `carousels/out/experimento-marco-specsheet/`): portada sin marco vs. c
 spec-sheet sobre la misma pieza real (portada de venta del chatbot). **Gana CON marco** —
 más distintivo, cero texto cortado. Ya aplicado en `generar-carrusel-chatbot.py`.
 
+### Jerarquía de la portada — la regla nace de mirarla CHICA (02-sep)
+
+`experimento-portada-miniatura.py` rindió la misma portada en tres layouts y la miró al
+33 % (feed) y al 13 % (grilla de perfil), que es donde se decide si alguien frena el
+scroll. Veredicto completo en §6 de `ONIA_MARCA_PERSONAL_BASE_CONTENIDO.md`.
+
+| | Portada VIEJA (no usar) | Portada NUEVA (patrón) |
+|---|---|---|
+| Estructura | ícono 300 → título 88 wdth 62 → subtítulo gris 44 | ícono 240 → contexto 62 wdth 62 **gris** → remate 150 **wdth 125** |
+| A 13 % | mancha gris ilegible | el remate se sigue leyendo |
+| Subtítulo | **se elimina** — ilegible a 33 % y a 13 %, y le roba tamaño al título | no hay |
+
+**Cómo se elige el remate:** son las 2-3 palabras que aguantan solas. El resto de la frase
+baja a gris y a tamaño de contexto. Ejemplo real: *"Cómo contesto a cada cliente"* (gris,
+62) + **"SIN ESTAR YO"** (ink, 150 wdth 125).
+
+**El marco spec-sheet NO se agranda** aunque tampoco se lea reducido: a tamaño chico
+funciona como filete decorativo, y se diseñó para la lectura a pantalla completa.
+
+### Trampa del resaltado en `.caja b`
+
+`.caja b` lleva `padding:0 8px`, así que cualquier coma, dos puntos o punto **pegado a
+`</b>` sale separado por un hueco visible** ("...una persona : no improvisa"). Regla: el
+resaltado nunca termina justo antes de un signo — se reformula para que lo siga un espacio
+y una palabra. Encontrado mirando las láminas del carrusel de atención, 02-sep.
+
 ## 2 · Historia-quiz (ingenierobinario)
 
 `referencia-historia-quiz-ingenierobinario.jpg`. Fórmula de interacción:
