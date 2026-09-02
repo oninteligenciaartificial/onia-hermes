@@ -71,6 +71,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | `investigacion` | **VPS** | `26 3,9,15,21 * * *` (UTC) | **Cotiza** las decisiones abiertas del radar para que Sergio decida en tanda, una vez, sobre un archivo (rama `claude/investigacion`) |
 | `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
 | `marca-personal` | **VPS** | `56 9,13,17,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
+| `kpis-semanal` | **VPS** | `7 13 * * 1` (UTC) | Tablero KPIs del lunes del carril marca personal; pide a Sergio los numeros que solo el ve |
 | `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
 
 ⚠️ **Corregido 2026-09-02.** `marca-personal` corría en `crontab -l` del VPS y no estaba en esta
@@ -271,3 +272,16 @@ Lo nota una persona: cero commits del carril de contenido en varios días.
 > `/root/bin/onia-loop.sh` deja el `case` sin versionar: la próxima reescritura del script lo
 > borra y no queda copia en ningún backup. **Editá el del repo, copiálo al VPS, y verificá con
 > `diff` que quedaron idénticos** — no al revés.
+
+
+## Scripts de aviso (sh, sin IA) — tambien en el crontab del VPS
+
+Viven versionados en `scripts/loops/extras/` y desplegados a `/root/bin/`. No usan
+Claude: cuestan cero y avisan por Telegram. El chequeo de arranque de los loops NO
+los rearma (apuntan a otro binario); si faltan, reponerlos a mano de esta lista.
+
+| script | cron (UTC) | que hace |
+|---|---|---|
+| `onia-drop-recordatorio.sh` | `45 22 * * *` | manda el drop del dia listo-para-pegar 15 min antes de las 19:00 La Paz |
+| `onia-vigia-embudo.sh` | `19 */6 * * *` | chequea landing, cal y Postiz; avisa SOLO al caerse o volver |
+| `onia-leads-vigia.sh` | `9 */2 * * *` | avisa solicitudes de acceso nuevas (access_requests) con datos de contacto |

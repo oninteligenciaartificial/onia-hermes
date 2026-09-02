@@ -8,7 +8,7 @@
 # entonces ninguno habia corrido. Y con la laptop apagada no corren nunca.
 # Por eso se mudan a cron acá.
 #
-# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta>
+# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|kpis-semanal|onia-cola|docs-auditoria|web-venta>
 # APAGAR: crontab -e y comentar la linea del loop.
 #
 # Forma copiada de /root/bin/claude-guardia.sh (secretos por .hermes/.env, unset
@@ -67,6 +67,14 @@ case "$NOMBRE" in
     WT=/root/loops/onia-hermes-docs
     RAMA=claude/docs-auditoria
     TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  kpis-semanal)
+    # KPIs de lunes del carril marca personal. Mismo worktree que marca-personal;
+    # corre lunes 13:07 UTC, lejos de las corridas :56 de ese loop.
+    WT=/root/loops/onia-hermes-marca-personal
+    RAMA=claude/marca-personal-loop
+    TOPE=1800
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   web-venta)
