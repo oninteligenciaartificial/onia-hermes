@@ -48,8 +48,13 @@ function crear({ esc, emph, roleFor, ACCOUNTS, BRAND, getFmt }) {
     const kicker = slide.kicker
       ? `<span class="etiqueta">${esc(slide.kicker)}</span>` : '';
     const body = slide.body ? `<p class="cuerpo">${emph(slide.body)}</p>` : '';
-    // Con UNA lamina no hay slide de cierre que lleve el CTA: la tarjeta lo lleva.
-    const cta = (role !== 'cta' && last && slide.cta)
+    // El boton va en la ULTIMA lamina, sea o no de rol `cta`.
+    //
+    // ⚠️ Antes decia `role !== 'cta' && last`, pensado para el caso de UNA sola lamina.
+    // Efecto real: en un carrusel de 5, `roleFor` marca la ultima como 'cta' y el boton
+    // NO se dibujaba — justo en la lamina que existe para pedir la accion. Lo encontro
+    // Sergio el 2026-09-02 mirando el render.
+    const cta = (last && slide.cta)
       ? `<div class="boton">${esc(slide.cta)}</div>` : '';
 
     return `<!doctype html><html><head><meta charset="utf-8">

@@ -1,0 +1,18 @@
+{
+  "slug": "d01-fancy",
+  "account": "onia",
+  "slides": [
+    {
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B10-restaurante-almuerzo.jpg",
+      "kicker": "Mientras tanto",
+      "overline": "Te escribió a las 8 para reservar. Le contestás a las 9 de la mañana.",
+      "headline": "A esa hora ya reservó en otro lado."
+    },
+    {
+      "photo": "hermes-content/references/modelos/lucia/generadas-20260901/B06-consultorio-dental.jpg",
+      "kicker": "Lo que hace",
+      "overline": "Contesta la duda, agenda la cita y te deja el mensaje listo para la mañana.",
+      "headline": "Se ocupa del rato en que no podés estar."
+    }
+  ]
+}
