@@ -8,6 +8,13 @@ disco con un horario registrado en algún lado — y desde el 2026-09-01 ese "al
 | Windows | `C:\Users\PC\.claude\scheduled-tasks\<id>\SKILL.md` | la app de Claude Code (`list_scheduled_tasks`) |
 | VPS | `/root/bin/loops/<id>.md` (fuente: [`scripts/loops/prompts/`](../../../scripts/loops/prompts/)) | `crontab -l` en `187.77.16.63` |
 
+🔄 **Desde el 2026-09-02 el VPS se despliega solo.** `/root/bin/onia-loops-sync.sh` corre cada
+hora al minuto 44 —once minutos después del integrador— y copia el corredor y los prompts
+**desde `main`** a `/root/bin`, de forma atómica. Lo que se mergea queda corriendo en la vuelta
+siguiente, **sin que nadie toque la laptop**. Antes había que copiarlos a mano, y por eso el
+canario pasó un día entero ejecutando la versión de cinco pantallas mientras `main` ya tenía la
+de diez: **commitear una mejora no la enciende.**
+
 **El prompt sobrevive al cerrar la app; el registro del horario NO.** Ya pasó el 2026-08-31: los
 archivos quedaron en disco, desregistrados, los loops dejaron de correr y **nada avisó** — se
 descubrió por casualidad al listarlos.

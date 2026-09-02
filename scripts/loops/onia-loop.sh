@@ -135,7 +135,7 @@ cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
 # `main` ya tenia la version de 10 con umbrales medidos. Avisa, no frena: un
 # prompt viejo sigue trabajando; uno que no arranca, no.
 FUENTE=/root/loops/onia-hermes/scripts/loops/prompts/$NOMBRE.md
-if [ -f "$FUENTE" ] && ! cmp -s "$FUENTE" "$PROMPT"; then
+if [ -f "$FUENTE" ] && ! diff -q --strip-trailing-cr "$FUENTE" "$PROMPT" >/dev/null 2>&1; then
   avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
 fi
 
