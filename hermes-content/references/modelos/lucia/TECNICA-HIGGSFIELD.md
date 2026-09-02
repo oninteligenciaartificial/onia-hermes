@@ -1235,8 +1235,41 @@ devuelve la cara a cuadro** (mira→sorbe→baja→vuelve a mirar); **kling sost
 muere enterrado en ella**. Para un reel de Lucía, donde el último frame tiene que ser su cara,
 seedance es la elección correcta aparte del precio. **Default de video del carril: `seedance1_5`.**
 
-🔻 **`seedance1_5` desbloquea clips de 8 y 12 s** (`duration: 4,8,12`, default 4) sin encadenar —
-responde casi entero a E6. Falta sólo medir el costo de 8/12 s con `generate cost … --duration 8`.
-
 🔴 **Trampa ya conocida, confirmada:** `--start-image` sí, `--image-references` NO para animar
 (éste quiere un asset id y trata la imagen como referencia, no como frame inicial).
+
+## 16. ✅ Clips de 8 y 12 s en `seedance1_5`: la cara AGUANTA (E6, 2026-09-02)
+
+**Sí se puede pedir más de 4 s sin encadenar** — el flag es `--duration` (`seedance1_5` acepta
+`4,8,12`, default 4). El costo es **lineal, ~1,2 cr/s**, medido con `generate cost` (gratis):
+
+| duración | costo | nota |
+|---|---|---|
+| 4 s | **4,8 cr** | default |
+| 8 s | **9,6 cr** | exacto 2× |
+| 12 s | **14,39 cr** | ~3× |
+
+**Comando exacto copiable** (misma foto y prompt que §15, se agrega SÓLO `--duration`):
+
+```bash
+IMG="hermes-content/references/modelos/lucia/generadas-20260902/E3-cafe.png"
+PROMPT="She lifts the coffee cup slightly and takes a small sip, then lowers it, blinks once softly. The camera barely moves, like a casual clip filmed while sitting. Nobody looks at the camera."
+# medir SIEMPRE antes (gratis):
+higgsfield generate cost seedance1_5 --start-image "$IMG" --prompt "$PROMPT" --aspect-ratio 9:16 --duration 8
+higgsfield generate create seedance1_5 --start-image "$IMG" --prompt "$PROMPT" --aspect-ratio 9:16 --duration 8 --json
+# → ["<job_id>"]. NO --wait (el shell corta a 2 min); pollear: higgsfield generate get <job_id> --json | grep -oE 'https://[^"]+\.mp4'
+```
+
+🔑 **Casilla 9 CONFIRMADA a 8 s (probado, no supuesto):** animé `E3-cafe.png` a 8 s, miré 6
+frames (0·1,6·3,2·4,8·6,4·7,9 s) y el crop de cara al 100 % del **primer vs último frame**. La
+identidad de Lucía **se sostiene el clip entero** — pecas en nariz/mejillas y textura de piel
+intactas al inicio Y al final, mismos ojos/cejas. El clip **cierra sobre su cara** (taza abajo,
+mirando al lente). Salida exacta: `720×1280 = 9:16`, `8,04 s`, audio AAC. Pieza:
+`generadas-20260902/E6-cafe-seedance-8s.mp4`.
+
+⚖️ **Trade-off de duración (el hallazgo útil, no el flag):** con el MISMO prompt de sorbo, seedance
+**estira el gesto para llenar el doble de tiempo** — el clip de 8 s pasa ~3 s del medio (≈t1,6–4,8)
+con la **taza tapando la boca**. La cara no se pierde nunca, pero hay más "tiempo muerto" bebiendo.
+Regla: **4 s cuando cada segundo tiene que mostrar su cara** (reel de máximo contacto visual);
+**8/12 s cuando querés b-roll largo y relajado** y no importa que el medio sea el sorbo. No es que
+8 s sea peor — es que llena el tiempo extra con MÁS del mismo gesto, no con acción nueva.

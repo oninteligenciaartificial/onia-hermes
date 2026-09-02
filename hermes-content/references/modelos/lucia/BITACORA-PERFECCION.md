@@ -80,9 +80,9 @@ Resuelto SIN generar: la premisa («si no se distingue, se baja y se ahorra») e
 CLI**. `higgsfield generate cost nano_banana_pro` da **1k = 2k = 2 cr** y **2k es el default**.
 No hay nada que ahorrar bajando; ver bloque en Resultados.
 
-### E6 · ¿Se puede pedir más de 4 segundos? · **~10 créditos** · PENDIENTE
+### E6 · ¿Se puede pedir más de 4 segundos? · **9,6 créditos** · HECHO
 `V07` dio 4,05 s y un reel de 4 s obliga a encadenar. Mirá el `--help` del subcomando de video.
-**Si no existe flag de duración, anotalo y NO gastes.**
+**Si no existe flag de duración, anotalo y NO gastes.** → Existe (`--duration 4/8/12`); ver Resultados.
 
 ### E7 · La receta fancy, consolidada · **0 créditos** · PENDIENTE
 Con E1..E6 hechos, escribí en `TECNICA-HIGGSFIELD.md` **una sola receta copiable** que sale 9/9
@@ -263,3 +263,38 @@ resolvió E3-café. → va a `TECNICA-HIGGSFIELD.md`.
 **Lo que E5 NO responde (queda como futuro, es OTRO experimento):** si `4k` (4 cr, el doble) da
 poros visiblemente mejores para una pieza *hero*. Ahí sí habría una decisión de plata real. Hoy
 no se toca — cada pieza normal va a 2k y punto.
+
+### E6 · Clips de 8 s: ¿aguanta la cara el arco largo? — 2026-09-02 · 9,6 créditos
+
+**Parte gratis (flag + costo), primero.** El `--help` del subcomando de video no lista params; se
+leen con `higgsfield model get seedance1_5`: hay `duration = 4,8,12` (default 4). O sea **sí se
+puede pedir más de 4 s sin encadenar**. Costo medido con `generate cost` (gratis), **lineal ~1,2
+cr/s**: 4 s = 4,8 · 8 s = 9,6 · 12 s = 14,39. Con eso la pregunta literal de E6 quedaba respondida
+sin gastar — pero el flag no dice lo que de verdad importa para Lucía: **¿la cara aguanta el doble
+de tiempo?** Eso sólo se sabe mirando, así que un experimento de UNA variable (misma `E3-cafe.png`,
+mismo prompt de sorbo de E4, sólo `4 s → 8 s`) sí valía los 9,6 cr.
+
+**Diseño de una variable:** idéntico a E4-seedance salvo `--duration 8`. Piezas:
+`generadas-20260902/E6-cafe-seedance-8s.mp4` + `_E6-seedance-8s-frames.jpg` (6 frames:
+0·1,6·3,2·4,8·6,4·7,9 s) + `_E6-FACE-compare.png` (crop 100 % del **primer vs último frame**).
+
+Salida técnica: **720×1280 = 9:16 exacto**, **8,04 s**, audio AAC.
+
+| Casilla | Veredicto (mirado, no supuesto) |
+|---|---|
+| **1 · cara** | **✅ aguanta los 8 s.** Crop 100 % inicio vs final: misma Lucía — mismos ojos/cejas, gesto igual. |
+| **7 · poros** | **✅** pecas en nariz/mejillas y textura de piel **visibles al inicio Y al final**, sin alisado. |
+| **9 · cara en el clip entero** | **✅** los 6 frames son ella; **cierra sobre su cara** (taza abajo, mirando al lente). |
+
+**El hallazgo que no da el flag (⚖️ trade-off de duración):** con el mismo prompt de sorbo, seedance
+**estira el gesto para llenar el doble de tiempo** — el clip de 8 s pasa ~3 s del medio (≈t1,6–4,8)
+con la **taza tapando la boca**. La cara nunca se pierde, pero hay más "tiempo muerto" bebiendo que
+en los 4 s tensos de E4. Regla escrita a `TECNICA §16`: **4 s = máximo contacto visual por segundo**
+(reel donde cada segundo muestra la cara); **8/12 s = b-roll largo/relajado** donde no molesta que
+el medio sea el sorbo. 8 s no es "peor": llena el tiempo extra con MÁS del mismo gesto, no con
+acción nueva.
+
+**No va a PARA-PUBLICAR:** es la MISMA escena café que ya se publicó (`D13` foto) y que E4 (seedance
+4 s). Un tercer corte casi idéntico de la misma cara es sobre-publicar. Queda de b-roll en
+`generadas-20260902/` para cuando Sergio arme un reel. Entregable de la vuelta: la receta de
+duración escrita en `TECNICA §16` con el comando exacto y la regla 4 s vs 8/12 s.
