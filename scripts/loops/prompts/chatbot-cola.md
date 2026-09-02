@@ -72,6 +72,37 @@ Una credencial que falta es la última variable de entorno, no un bloqueo. Se co
 
 El norte de todos los carriles: `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md`.
 
+## 🔴 Chequeo de tu DEFINICION DE HECHO — antes de la cola, todas las vueltas
+
+Tu objetivo dice *"que un desconocido escriba y esa conversacion se vea en la bandeja"*. Hasta el
+2026-09-02 eso era una **frase**, no un chequeo: nadie escribia nunca. Resultado medido: el bot
+paso una semana contestando el saludo y callandose en el segundo mensaje, con cinco personas
+reales del otro lado, mientras este loop corria 21 vueltas y reportaba —con razon, segun lo que
+podia ver— *"no encontre nada roto"*. **Su cola estaba vacia porque nadie habia mirado.**
+
+**Ahora se mide, y se mide ANTES de mirar la cola:**
+
+1. Abri el widget del inbox de leads reales:
+   `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`
+2. Escribi **DOS** mensajes, con 15 s entre uno y otro:
+   - `Hola, quiero informacion sobre el sistema`
+   - `Tengo una clinica dental en Santa Cruz, somos 4 personas`
+3. Conta las respuestas en la base:
+   `docker exec <chatwoot-db> psql -U postgres -d onia-chatbot -tAc "select message_type, left(content,80) from messages where conversation_id=<N> order by created_at;"`
+
+**HECHO = el bot contesto los DOS.** Una sola respuesta es el bug abierto, no un exito parcial.
+
+⚠️ **Un mensaje que se manda y no se mira no prueba nada.** Y `curl` contra
+`/api/v1/widget/messages` **no alcanza**: la sesion del widget se arma con JS y devuelve
+`Resource could not be found` sin ella. Si automatizas esto —y conviene— tiene que ser con un
+navegador de verdad, y el prober es un item legitimo de tu cola.
+
+🔴 **Y lo primero de todo: HACE QUE SE VEA.** `/tmp/onia-bot-webhook.log` **solo tiene lineas de
+arranque**, ni una por mensaje, porque el proceso corre con `docker exec -d` y su salida no va a
+ningun lado. Por eso este bug sobrevivio una semana. Que cada webhook deje una linea con la
+conversacion, la entrada, la rama que tomo y **por que no respondio**. Sin eso se sigue
+adivinando, y adivinar ya costo una semana.
+
 ## Chequeo de arranque — que el conjunto de loops siga registrado
 
 **Antes de todo lo demás, y antes de trabajar.** Tu prompt sobrevive; **el registro del horario
