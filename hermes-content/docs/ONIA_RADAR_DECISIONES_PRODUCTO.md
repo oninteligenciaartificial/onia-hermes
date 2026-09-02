@@ -1547,3 +1547,45 @@ al otro. Poner el dueño en la tabla cierra la causa sin discutir el diseño.
 de Chatwoot por pantalla, medidos del lado del navegador, todos 200 en la última corrida) y
 ningún visitante real lo sufrió — cero IPs de terceros bloqueadas en 24 h, medido dos veces. No
 corre riesgo mientras esto se decide.
+
+---
+
+## 29. Tres packs de carrusel quedaron fuera del motor porque sus archivos viven en el carril de contenido (2026-09-02) — decisión de Sergio
+
+**Qué se midió, ejecutando el render (no leyendo la lista).** El merge del carril de Lucía a
+`main` agregó cuatro packs a `PACKS` de `scripts/carousel_render.js`, que es **la lista blanca
+del CLI**. De los cuatro, sólo `bloque-solido` trajo su módulo:
+
+| pack | ¿en `PACKS`? | ¿su archivo en `main`? | qué pasaba al renderar |
+|---|---|---|---|
+| `bloque-solido` | sí | sí (`carousel_pack_solido.js`) | **renderiza** |
+| `papel-subrayado` | sí | **no** | `Pack no disponible (./carousel_pack_papel falta en el repo)` |
+| `dato-ilustrado` | sí | **no** | `Pack no disponible (./carousel_pack_dato falta en el repo)` |
+| `tarjeta-empleado` | sí | **no** | `Pack no disponible (./carousel_pack_empleado falta en el repo)` |
+
+Los tres archivos **sí existen**, commiteados el 27 y 28 de agosto — pero **sólo en
+`claude/ads-creatividades-publicos`**, el carril de contenido, que el integrador tiene prohibido
+mergear (*"el de contenido lo maneja su sesión"*, Sergio 2026-09-01). Nunca llegaron a `main`.
+
+**Por qué importaba.** Como los packs se cargan perezoso, el CLI **aceptaba** `--pack
+dato-ilustrado` y reventaba después, al renderar: una entrada de menú para un plato que la cocina
+no puede hacer. Y el test que debía cazarlo comparaba `PACKS` contra un literal —la constante del
+motor contra una copia de sí misma—, así que pasaba con el nombre puesto sin mirar nunca el
+render. Ya había rotado igual el 2026-08-20 con `editorial-clean`.
+
+**Qué se hizo en la misma vuelta** (commit `032ca24e`): los tres salen del registro con el
+comentario que los devuelve en una línea, y se agrega el test `todo pack listado RENDERIZA`, que
+llama a cada renderer y exige HTML completo. `main` volvió a verde.
+
+**Lo que queda para Sergio, y es una sola pregunta:** los tres packs son trabajo terminado que
+está varado en el carril de contenido. Vuelven solos cuando ese carril cierre y sus archivos
+entren a `main` — no hay nada que construir.
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A** | Nada ahora: entran cuando Sergio cierre el carril de contenido. | 0 | Los tres packs siguen sin poder usarse hasta ese día. Es el estado de hoy |
+| **B** | Sergio autoriza traer **sólo esos 3 archivos** del carril de contenido (cherry-pick de `5e8d66cd`, `8c7638b6`, `12c8b3f0`, que tocan un archivo nuevo cada uno). | ~15 min, 3 archivos nuevos, cero borrados | Los packs quedan usables ya. Requiere permiso explícito: hoy ese carril es intocable para los loops |
+
+**Lo que este loop recomienda: B**, si Sergio va a querer esos packs antes de cerrar contenido —
+son tres archivos nuevos que no pisan nada, y el guard nuevo verifica solo que rendericen al
+volver a listarlos. Si no hay apuro, **A** no cuesta nada.
