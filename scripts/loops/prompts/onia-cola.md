@@ -156,11 +156,30 @@ Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
 - `claude/canario-visual` — canario visual (loop `canario-visual`)
 - `claude/marca-personal-loop` — marca personal (loop `marca-personal`)
 - `claude/docs-auditoria` — carril docs/infra (loop `docs-auditoria`)
+- `claude/web-venta` — sitio de venta (loop `web-venta`)
+- `claude/investigacion` — cotiza las decisiones del radar (loop `investigacion`)
 - `claude/git-status-935f47` — la sesion de control (Sergio y el orquestador escriben ahi)
+
+⚠️ **`web-venta` e `investigacion` faltaban en esta lista hasta el 2026-09-02 18:33 UTC, y los
+dos tenían un commit varado.** Sus loops se crearon ese mismo día, con cron registrado y
+corriendo — pero esta lista se escribió antes y **nadie la actualizó**. Un carril que el
+integrador no enumera no se cuenta nunca, así que sus commits **no llegan a `main`** aunque el
+loop pushee perfecto: es el mismo costo que ya se pagó con el chatbot (7 commits varados) y con
+la rama homónima del otro repo, sólo que en silencio y sin nadie contando mal — **contando bien
+una lista incompleta**. `loops.md` describe este agujero para el cron; acá tenía su gemelo.
+
+**Por eso, la lista de arriba tampoco se cree sola: enumerá EN VIVO también este repo.** Si sale
+una rama que no está listada y su loop existe en `loops.md`, es un carril, y va:
+
+    git -C /root/loops/onia-hermes branch -r --list 'origin/claude/*' --no-merged origin/main
 
 Ramas de carril activas en **`onia-platform`** (base `origin/master`):
 
-- `claude/chatbots-platform-review-0d1d09` — carril chatbot (loop `chatbot-cola`)
+- *(al 2026-09-02 18:33 UTC, ninguna de carril.* `claude/chatbots-platform-review-0d1d09`
+  **ya está mergeada a `master`** — se destrabó ese día y por eso salió de esta lista.*)*
+- `claude/onia-core-adoption-sprint5` — **NO la mergees**: 382 commits atrás de `master` con 1
+  commit propio (`aa8f211`, +910/−240 en 2 archivos de schema del core). Diverge hace demasiado,
+  así que es decisión de Sergio — anotada en el radar, ítem 26.
 
 **No confíes en la lista del segundo repo: enumerála EN VIVO.** Un carril puede abrir una rama
 nueva ahí sin que este archivo se entere — que es exactamente cómo se gestó el agujero:

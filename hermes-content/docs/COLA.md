@@ -1198,39 +1198,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (`/contexto/`, `/fotos/`) en vez de las prohibidas, así que cualquier captura nueva en la
       superficie de venta rompe la suite.
 
-- [ ] 🔴 **DECIDE SERGIO — `DELETE /api/payments/[id]` sobre un mes ya declarado.** El hueco es
-      real y verificado el 2026-08-30: borrar el último pago devuelve la factura a BORRADOR
-      (`app/api/payments/[id]/route.ts`), BORRADOR está en `RCV_EXCLUDED_STATUSES`, y ese mes
-      pierde la venta del CSV sin nota de crédito de por medio. **No existe NINGÚN concepto de
-      cierre de período** en el repo — cero `fiscal_period`, cero tabla de cierre — y el RCV se
-      regenera on demand para cualquier mes. No es un bug suelto: falta el modelo, y por eso no
-      lo elijo yo.
-      **Las tres salidas, cotizadas:**
-      - **(a) Guarda barata** — bloquear la salida del RCV si el mes de la factura no es el
-        corriente. ~1 día, un guard dentro del helper que ya existe. Pero **inventa la
-        política**: "mes corriente" no es "mes declarado", y de paso bloquea la corrección
-        legítima del día 2 del mes siguiente.
-      - **(b) Cierre de período de verdad** — tabla `fiscal_periods` (org, año, mes, cerradoEn);
-        el RCV la lee, y toda salida del RCV sobre un período cerrado exige nota de crédito.
-        ~3-4 días. Es lo contablemente correcto y lo que el SIN asume.
-      - **(c) No hacer nada todavía.** Verificado EN VIVO en el contenedor `onia-platform` del
-        VPS: `SIAT_EMISSION` **no está seteada**, o sea la emisión ante el SIN está apagada
-        (`lib/fiscal/flags.ts` exige `=== "1"`). Con eso y cero clientes pagando, el costo real
-        de hoy es **cero**; aparece el día que se enciendan los gates fiscales.
-      **Recomendación: (c) ahora, (b) el día que se encienda el emisor.** (a) cuesta casi lo
-      mismo que (b) en discusión y deja escrita una política que después hay que desandar.
-      **Deduplicado el 2026-08-31:** este mismo hueco estaba escrito DOS veces y abierto en las
-      dos — acá con sus tres salidas cotizadas, y cien líneas más abajo, en la otra sección
-      "Después", sin analizar. Se borró la copia cruda: dos entradas del mismo hueco hacen que la
-      próxima sesión lo cotice de nuevo creyendo que es un problema distinto, que es trabajo
-      fantasma con otra cara. **Es la tercera vez que esta cola se duplica** — las dos anteriores
-      están escritas unas líneas más abajo, en el ítem del guardia de `invoice-status`, que ya
-      había dejado la lección por escrito (*"cerrar un ítem no cierra su copia"*) y aun así volvió
-      a pasar. Por eso esta vez no queda como lección sino como gate: `scripts/verificar_cola.js`
-      falla con `duplicado` si un ítem **abierto** repite el título de otro, en cualquier sección
-      y aunque el otro esté cerrado. El verificador miraba sólo "Ahora" y sólo pedía evidencia —
-      y una copia sin analizar tiene exactamente la misma evidencia que el original, así que
-      pasaba en verde. Una lección escrita se desobedece; un exit 1 no.
+- [x] **Movido a "Bloqueado — necesita a Sergio" el 2026-09-02** (`DELETE /api/payments/[id]`
+      sobre un mes ya declarado). Está medido y espera una línea de Sergio, así que vivía en la
+      sección equivocada: en "Después" hacía que cada vuelta lo releyera como si fuera trabajo
+      tomable. **Y al reverificarlo antes de moverlo apareció que una de sus premisas ya era
+      falsa** — el detalle, con la cotización corregida, va con el ítem en su nueva sección.
+      El texto completo NO se copió acá: se movió entero, para no dejar la copia que este mismo
+      archivo ya se cansó de cazar.
+
 - [x] **El guardia de `invoice-status` ya caza lo que prometía.** Las dos evasiones eran reales
       —`const facturas = tx.invoice` y `data: { invoices: { update: … } }` son Prisma normal, no
       rebusques— y **ninguna de las tres existe hoy en el repo** (verificado el 2026-08-30: las
@@ -1514,6 +1489,49 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 > alguien le pida una decisión sobre algo ya hecho, y quema el único recurso que no se recupera.
 > Es el mismo defecto que esta cola ya bautizó: *"cerrar un ítem no cierra su copia"*. Cada baja
 > lleva la evidencia con la que se dio, medida hoy, no leída de otro renglón.
+
+- 🔴 **`DELETE /api/payments/[id]` sobre un mes ya declarado** (movido acá el 2026-09-02 desde
+  "Después", donde cada vuelta lo releía como trabajo tomable). El hueco es real y verificado el
+  2026-08-30: borrar el último pago devuelve la factura a BORRADOR
+  (`app/api/payments/[id]/route.ts`), BORRADOR está en `RCV_EXCLUDED_STATUSES`, y ese mes pierde
+  la venta del CSV sin nota de crédito de por medio.
+  **⚠️ Reverificado hoy antes de moverlo, y una premisa ya era FALSA — por eso la cotización
+  cambia.** El ítem decía: *"No existe NINGÚN concepto de cierre de período en el repo — cero
+  `fiscal_period`, cero tabla de cierre"*. Hoy eso no se sostiene, medido en los dos sistemas:
+  - **El modelo existe en `master`** (`prisma/schema.prisma`, `model OniaAccountingFiscalPeriod`
+    → tabla `onia_accounting_fiscal_periods`) y trae **exactamente** los campos que la opción (b)
+    pedía inventar: `organizationId`, `startDate`/`endDate`, `status` (default `open`), `closedAt`,
+    y `@@unique([organizationId, name])`.
+  - **Y ya está aplicado en la base de PRODUCCIÓN** — contenedor `supabase-db`, no la nube:
+    `to_regclass('public.onia_accounting_fiscal_periods')` devuelve la tabla, con **0 filas**.
+  - **Pero no lo llama NADIE**: cero referencias a `OniaAccountingFiscalPeriod` /
+    `fiscalPeriod` en todo el `.ts`/`.tsx` del repo. Es *construido ≠ terminado* con todas las
+    letras — un módulo que nadie llama, valor cero.
+  **Qué cambia para Sergio: (b) ya no cuesta 3-4 días.** Lo caro de (b) era modelar la tabla,
+  migrarla y aplicarla; las tres cosas están hechas. Lo que falta es **cablear el RCV a leerla**
+  y exigir nota de crédito sobre un período cerrado. La decisión sigue siendo suya, pero ya no es
+  entre "barato y torcido" (a) y "correcto y caro" (b): (b) es hoy bastante más barata de lo que
+  este ítem venía diciendo, y ese número mal puesto empujaba a elegir (a).
+  **Las tres salidas, con (b) re-cotizada:**
+  - **(a) Guarda barata** — bloquear la salida del RCV si el mes de la factura no es el corriente.
+    ~1 día. Pero **inventa la política**: "mes corriente" no es "mes declarado", y bloquea la
+    corrección legítima del día 2 del mes siguiente. **Hoy tiene menos sentido que nunca**: la
+    tabla que evitaba ya existe.
+  - **(b) Cierre de período de verdad** — usar la tabla que YA está: el RCV la lee, y toda salida
+    sobre un período cerrado exige nota de crédito. **Ya no son 3-4 días**: el schema y la
+    migración están en `master` y aplicados en producción. Queda el cableado. Es lo contablemente
+    correcto y lo que el SIN asume.
+  - **(c) No hacer nada todavía.** Reverificado EN VIVO hoy en el contenedor `onia-platform`:
+    `SIAT_EMISSION` **sigue sin estar seteada** (`docker inspect` no devuelve ninguna `SIAT_*`),
+    o sea la emisión ante el SIN está apagada (`lib/fiscal/flags.ts` exige `=== "1"`). Con eso y
+    cero clientes pagando, el costo real de hoy sigue siendo **cero**.
+  **Recomendación: (c) ahora, (b) el día que se encienda el emisor** — igual que antes, pero (b)
+  entra más barata de lo que estaba escrito.
+  **Cómo apareció esto, que es la lección:** no se buscó. Salió de contar la rama
+  `claude/onia-core-adoption-sprint5` de `onia-platform` (radar 26), que trae ese modelo entre
+  otros diez. **Un bloqueo se pudre solo**: nadie tocó este ítem, y aun así envejeció mal porque
+  otro carril construyó por debajo lo que él declaraba inexistente. Por eso la regla es
+  reverificar ANTES de mover, no al escribirlo.
 
 - 🔴 **Los nombres de los iconos se leen como texto en el login de la plataforma — ARREGLADO
   EN CÓDIGO, falta SÓLO el deploy** (movida acá el 2026-09-02 desde "Ahora"; vivía abierta

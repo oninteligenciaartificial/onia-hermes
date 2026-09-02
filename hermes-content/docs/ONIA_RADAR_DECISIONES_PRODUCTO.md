@@ -1337,3 +1337,52 @@ resuelva, y `CLAUDE.md` prohíbe soltar el turno con un merge abierto.
 
 **Recomendación: (a).** Es la única que no depende de que alguien se acuerde, y por ser
 `--ff-only` no puede dejar un merge abierto — que es justo lo que `CLAUDE.md` prohíbe.
+
+---
+
+## 26. Una rama de `onia-platform` lleva dos meses varada, y 10 de sus 11 modelos ya llegaron por otro lado (2026-09-02) — decisión de Sergio
+
+**Cómo apareció:** contando ramas del segundo repo, que es lo que este loop hace cada vuelta.
+`claude/onia-core-adoption-sprint5` es la **única** rama sin mergear a `origin/master` hoy
+(`git branch -r --no-merged origin/master`). No estaba en la lista de carriles del integrador
+porque **no es un carril**: no tiene loop.
+
+**Lo medido, no supuesto:**
+
+- **1 commit propio, 382 commits atrás de `master`.** El commit es `aa8f211`
+  (*"feat(onia-core): add area + accounting + invoicing schema (Sprint 5)"*), del **2026-07-06** —
+  casi dos meses. Toca 2 archivos: `prisma/schema.prisma` (+810) y una migración nueva
+  (`20260706000000_add_onia_accounting_invoicing_area/migration.sql`, +340).
+- **Mergearla a ciegas es pedir conflicto sobre el archivo más caro del repo.** Desde la base
+  común, `master` movió `prisma/schema.prisma` en **+1.018 líneas**. Es el schema de la base de
+  producción: un merge mal resuelto ahí no rompe un build, rompe datos.
+- **Y sobre todo: casi todo su contenido YA ESTÁ en `master`.** De los 11 modelos que agrega,
+  **10 ya existen** (`OniaAccountingAccount`, `FiscalPeriod`, `JournalEntry`, `JournalEntryLine`,
+  `TaxRate`, `TaxDeclaration`, `RcvRecord`, `WithholdingRecord`, `FixedAsset`,
+  `OniaInvoicingCreditDebitNote`). **El único que falta es `OniaCoreArea`.**
+
+**O sea que la rama no es trabajo varado: es trabajo ya entregado por otro camino, con un
+residuo de un modelo.** Mergearla entera para rescatar `OniaCoreArea` es pagar un conflicto de
+schema de 1.000 líneas por una tabla.
+
+**Las opciones, cotizadas (todas Bs 0):**
+
+- **(a) Borrar la rama y, si `OniaCoreArea` hace falta, escribirlo como migración nueva sobre
+  `master`.** Es lo barato y lo limpio: una migración chica, sin tocar las 1.018 líneas que
+  `master` movió. Hay que confirmar antes que `OniaCoreArea` se use para algo — hoy no lo llama
+  nadie. **Recomendada.**
+- **(b) Dejar la rama como está.** Cuesta cero hoy, pero cada vuelta del integrador la vuelve a
+  contar, y en dos meses más nadie va a saber qué tenía adentro. Es cómo nace un fantasma.
+- **(c) Mergearla.** No la recomiendo y no la hago sin orden explícita: conflicto garantizado en
+  `prisma/schema.prisma`, sobre el schema de producción, para traer 1 modelo de 11.
+
+**Recomendación: (a).** Y mientras no se decida, el integrador **no la mergea** — queda anotado
+en su propio prompt para que ninguna vuelta futura la levante por parecer "la única pendiente".
+
+**Efecto colateral que ya se cobró solo, y vale más que la rama:** contar esta rama destapó que
+el ítem bloqueado del `DELETE /api/payments/[id]` tenía una premisa falsa. Declaraba *"cero
+`fiscal_period`, cero tabla de cierre en el repo"*, y `OniaAccountingFiscalPeriod` no sólo está
+en `master`: **está aplicado en la base de producción** (`supabase-db`, tabla
+`onia_accounting_fiscal_periods`, 0 filas) y **no lo llama nadie**. Su opción (b) estaba cotizada
+en 3-4 días contando el modelado y la migración, que ya están hechos. Corregido en `COLA.md`,
+sección "Bloqueado — necesita a Sergio".
