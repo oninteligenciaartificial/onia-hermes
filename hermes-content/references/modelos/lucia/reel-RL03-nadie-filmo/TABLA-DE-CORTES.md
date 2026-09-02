@@ -53,3 +53,30 @@ Es que el sistema depende de que se acuerde.
 ```
 
 🔴 **Cifras vacías a propósito.** Sin fuente real se sacan las tres líneas y queda el argumento.
+
+---
+
+## ✅ TERMINADO — `final/RL03-CON-GANCHO.mp4`
+
+Sergio, 2026-09-02: *«¿qué necesitás de mí? Vos podés hacer esas tareas»*. Tenía razón: los tres
+pendientes de arriba eran trabajo mío, no suyo. Hechos con ffmpeg local, **cero créditos**:
+
+1. **Gancho quemado**, en tres líneas escalonadas (0,2 s / 0,6 s / 1,1 s) para que se lea en orden
+   y no como un bloque. La tercera va en **verde de Onia** — el único color saturado, misma regla
+   que `bloque-solido`.
+2. **Audio arreglado.** Los tres clips traían pista propia de Seedance y se cortaban de golpe.
+   Ahora: fade-out de 0,4-0,5 s al final de cada clip y fade-in de 0,3 s al empezar el siguiente.
+3. **CTA quemado** desde el segundo 9: `Comentá COMUNIDAD` en cápsula verde.
+
+**11,17 s · 720×1280 · con audio · 3,4 MB.**
+
+### ⚠️ La trampa de `drawtext`: se come los acentos
+
+El primer render salió con **«contrato»** y **«Comenta»**, sin tilde. `drawtext` con `text=`
+inline pierde los caracteres acentuados en este entorno.
+
+**La solución: `textfile=` apuntando a un `.txt` en UTF-8** (uno por línea, en `txt/`). Verificado
+con `file`: `Unicode text, UTF-8`. Y verificado MIRANDO el frame — que es la única forma de
+enterarse, porque el render no falla: sale mudo el acento y listo.
+
+Copia lista para publicar en `hermes-content/PARA-PUBLICAR/D15-lucia-reel-tres-negocios/`.
