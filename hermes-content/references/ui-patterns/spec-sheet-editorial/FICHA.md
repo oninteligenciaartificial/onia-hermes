@@ -21,6 +21,11 @@ Anatomía de la portada:
 
 Lo que NO copiamos: su naranja, su mascota, su firma "by francisco carosia".
 
+**Experimento A/B corrido 02-sep** (`scripts/marca-personal/experimento-marco-specsheet.py`,
+salida en `carousels/out/experimento-marco-specsheet/`): portada sin marco vs. con marco
+spec-sheet sobre la misma pieza real (portada de venta del chatbot). **Gana CON marco** —
+más distintivo, cero texto cortado. Ya aplicado en `generar-carrusel-chatbot.py`.
+
 ## 2 · Historia-quiz (ingenierobinario)
 
 `referencia-historia-quiz-ingenierobinario.jpg`. Fórmula de interacción:

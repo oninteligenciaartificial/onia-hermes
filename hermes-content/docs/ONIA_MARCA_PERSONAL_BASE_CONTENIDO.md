@@ -68,8 +68,13 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       clave; probar en el teaser de comunidad v3
 - [ ] **Texturas/atmósfera**: grano sutil, sombras más ricas en el patrón statement
       (la referencia carosia usa papel envejecido — ver spec-sheet-editorial/FICHA.md)
-- [ ] **Marco spec-sheet**: header/footer con metadata técnica en Geist Mono (patrón
-      carosia) en portadas de carrusel — probar 1 portada A/B
+- [x] **Marco spec-sheet** (02-sep, experimento A/B renderizado y comparado en
+      `carousels/out/experimento-marco-specsheet/`): **gana la variante CON marco**
+      (header "ONIA SYSTEM · GRID 1080×1350 / V1.0" + footer "TECHNICAL SPEC ·
+      TEMA: X / FORMATO: Y", Geist Mono mayúscula, filete negro arriba y abajo) —
+      da look editorial de sistema real sin tapar nada ni cortar texto, y encaja con
+      la firma "sin humo" del carril. Aplicado a la portada de
+      `generar-carrusel-chatbot.py`; próximos generadores de portada lo copian de ahí.
 - [ ] **Mascota 3D Onia**: personaje consistente estilo toy para literalizar metáforas
       (carosia usa el suyo en cada post) — definir con Higgsfield imagen (≤0,12 cr),
       requiere OK de Sergio sobre el diseño elegido
