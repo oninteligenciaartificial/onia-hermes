@@ -888,3 +888,40 @@ forma buena de hacer UGC?», porque muestra qué se usó de verdad:
 
 ⚠️ Ninguno se dispara sin leer el número del botón. La lección del punto 2 es que en esta app la
 plata se va por un clic mal puesto.
+
+---
+
+## ✅ 7. RESUELTO — por qué NINGÚN video salía vertical
+
+**El aspecto del video lo hereda del frame.** No hay selector de aspecto en el workspace de
+video: Kling anima la imagen que le das y devuelve su misma proporción. Como **las 16 imágenes
+del banco se generaron en 3:4**, los **6 videos salieron 828×1108**. Medido:
+
+```
+V01 · V02 · V03 · V04 · V05 · V06  →  828x1108  (los seis)
+```
+
+**Y el selector de 9:16 existía todo este tiempo, en el workspace de IMAGEN.** El menú
+«Aspect ratio» ofrece: `Auto · 1:1 · 3:4 · 4:3 · 2:3 · 3:2 · 9:16 · 16:9 · 5:4 · 4:5 · 21:9`.
+Estaba en **3:4** por defecto y nadie lo cambió nunca — ni yo, ni las sesiones anteriores.
+
+### La cadena, ahora que se entiende
+
+```
+imagen 3:4  ──Turn to video──►  video 3:4   ✗ no sirve para Reels ni Stories
+imagen 9:16 ──Turn to video──►  video 9:16  ✓ es lo que pide Meta Ads
+```
+
+**Para un video vertical hay que generar la IMAGEN en 9:16 primero.** No se arregla del lado del
+video, se arregla del lado de la imagen.
+
+### ⚠️ Y el `9:16` que muestra el historial de video NO significa nada
+
+En la generación de `V06` el historial decía **`720p · 5.0s · 9:16`** y el archivo bajado midió
+**828×1108**. La etiqueta de la interfaz **no describe el archivo**. La única verificación válida
+es `ffprobe` sobre el MP4 bajado — otra vez la regla de mirar, no suponer.
+
+### Pendiente
+Generar la primera imagen en **9:16** y animarla, para confirmar la cadena de punta a punta.
+El selector quedó abierto en 9:16 cuando el renderer de la página se congeló; hay que verificar
+que quedó puesto antes de generar, y que el botón siga diciendo **✦ 2**.
