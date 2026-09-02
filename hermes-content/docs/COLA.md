@@ -577,6 +577,53 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       línea al radar (`hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`) pidiendo que se le ponga dueño y que
       alguien confirme si `/register` de verdad crea la cuenta hasta el final.
 
+### Del canario visual — corrida del 2026-09-02 04:41 UTC (diez pantallas, sin ítems nuevos)
+
+- [ ] 🟢 **Pasada completa de las diez pantallas, mirando cada captura. No encontré defecto
+      nuevo.** Detalle de lo que sí toqué:
+      - **Cinco baselines nuevas creadas** (no existían): `precios`, `rubros`,
+        `chatbot-landing`, `contacto`, `register`. Es el punto de partida, no una verificación.
+      - **Tres baselines retomadas** (`login-plataforma`, `login-chat`, `panel-chatbot`): mismo
+        contenido exacto (`visto.texto` idéntico, diffeado), sólo se actualizó peso/tiempo con
+        el contador de peso ya corregido (`52e359c1`). **`home` y `empezar` quedaron SIN tocar
+        a propósito**: siguen mostrando hoy el mismo rediseño que abrió el ítem de la pasada
+        de ayer 22:41 UTC (título todavía *"Cerrás vos, el negocio no"*, no el de la baseline
+        vieja) — ese ítem sigue abierto y sin dueño, así que pisar la baseline lo daría por
+        cerrado sin que nadie decidió nada. Confirmo que sigue vigente, no lo duplico.
+      - **`rubros` y el bloque verde final de `contacto` parecen vacíos en la captura full-page
+        pero NO lo están**: son secciones de scroll-reveal/sticky (el listado de rubros
+        Dental/Comercio/Importadora/Estética/Servicios, y el CTA final "¿Preferís probarlo
+        solo?"). Lo confirmé haciendo scroll real por tramos y volviendo a capturar — el
+        contenido aparece correcto. Es un artefacto del método de captura de página completa
+        contra animaciones ligadas al scroll, no un bug del sitio. Lo anoto acá para que el
+        próximo loop no lo vuelva a investigar desde cero.
+      - Los íconos (`bolt`, `credit_card_off`, `smart_toy` en `login-plataforma`) siguen
+        apareciendo como texto en `visto.texto` (extracción de DOM) pero se VEN como íconos
+        reales en la captura — es la trampa que originó la regla de mirar, y hoy la pantalla
+        está bien.
+      - **Duda sin resolver, no reportada como ítem:** el endpoint del widget de chat del sitio
+        (`onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget`) devolvió 429 en varias de mis
+        pasadas manuales de esta misma vuelta (incluida una corrida sola después de 150 s de
+        espera). No lo escribo como ítem porque no lo puedo descartar como autoinducido: esta
+        misma vuelta ya le pegó a ese endpoint muchas veces seguidas investigando otras cosas,
+        y la corrida OFICIAL única (`node scripts/canario_visual.mjs`, la que se compara y
+        basea) sólo lo vio en `contacto` — ninguna de las otras cinco pantallas de
+        `onia.com.bo` en esa misma pasada. Si un loop futuro lo ve fresco, sin haber
+        golpeado el sitio antes, ahí sí es un ítem.
+      **Evidencia (capturas de hoy):**
+      `hermes-content/references/canario-visual/precios/baseline.png` ·
+      `hermes-content/references/canario-visual/rubros/baseline.png` ·
+      `hermes-content/references/canario-visual/chatbot-landing/baseline.png` ·
+      `hermes-content/references/canario-visual/contacto/baseline.png` ·
+      `hermes-content/references/canario-visual/register/baseline.png` ·
+      `hermes-content/references/canario-visual/login-plataforma/baseline.png` ·
+      `hermes-content/references/canario-visual/login-chat/baseline.png` ·
+      `hermes-content/references/canario-visual/panel-chatbot/baseline.png`.
+      Pesos de hoy: home 2.859 KB/325 ms · precios 2.108 KB/174 ms · empezar 2.253 KB/141 ms ·
+      rubros 2.588 KB/216 ms · chatbot-landing 2.232 KB/134 ms · contacto 322 KB/185 ms ·
+      register 704 KB/100 ms · login-plataforma 699 KB/135 ms · login-chat 3.501 KB/1.365 ms ·
+      panel-chatbot 699 KB/140 ms (redirige a `/login`, sin sesión — "no medida", no "OK").
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,

@@ -1,0 +1,21 @@
+{
+  "nombre": "contacto",
+  "url": "https://onia.com.bo/contacto",
+  "cola": "hermes-content/docs/COLA.md",
+  "duenio": "sin dueño declarado",
+  "status": 200,
+  "fallo": null,
+  "bytes": 329762,
+  "msMirable": 186,
+  "msTotal": 763,
+  "erroresConsola": [
+    "Failed to load resource: the server responded with a status of 429 ()"
+  ],
+  "visto": {
+    "titulo": "Hablemos — agendá una demo de Onia | Bolivia",
+    "urlFinal": "https://onia.com.bo/contacto",
+    "texto": "Saltar al contenido Onia. Rubros Precios Comparativa Facturación Contacto Entrar Creá tu cuenta HABLEMOS Elegí el horario y hablamos. No hay formulario que caiga en un buzón. Elegís vos el día y la hora en nuestra agenda, y del otro lado hay alguien que conoce el sistema. Agendar 20 MINUTOS · SIN COMPROMISO Consulta comercial Nos contás qué negocio tenés y te decimos, de frente, si Onia te sirve o no. Si no te sirve, te lo decimos ahí. Para el que todavía no sabe si esto es para su rubro. Agendar 20 minutos 45 MINUTOS · VER EL SISTEMA Demo y diagnóstico Recorremos el sistema con tu caso adelante: tu agenda, tus cobros, tus agentes. Salís sabiendo qué se enciende primero. Para el que ya vio los precios y quiere verlo funcionando. Agendar la demo AHORA MISMO ¿Una sola pregunta? Escribinos y listo. El mismo WhatsApp que atiende a los clientes. Si tu rubro es otro y querés saber si entra, este es el lugar para preguntarlo. Escribir por WhatsApp ¿Preferís probarlo solo? También se puede. Creá tu cuenta Ver precios Onia. Sistema de gestión con IA · Bolivia PRODUCTO Rubros Agentes Chatbot Precios DECIDIR Comparativa Facturación Nosotros Contacto Empezar Entrar Privacidad Términos"
+  },
+  "baseline": "sin baseline — esta vuelta la creás; una baseline nueva NO es una verificación",
+  "motivos": []
+}

@@ -1,0 +1,19 @@
+{
+  "nombre": "chatbot-landing",
+  "url": "https://onia.com.bo/chatbot",
+  "cola": "hermes-content/docs/COLA.md",
+  "duenio": "sin dueño declarado",
+  "status": 200,
+  "fallo": null,
+  "bytes": 2285789,
+  "msMirable": 134,
+  "msTotal": 1716,
+  "erroresConsola": [],
+  "visto": {
+    "titulo": "Chatbot de WhatsApp — precio publicado | Onia",
+    "urlFinal": "https://onia.com.bo/chatbot",
+    "texto": "Saltar al contenido Onia. Rubros Precios Comparativa Facturación Contacto Entrar Creá tu cuenta CHATBOT DE WHATSAPP El que escribe a las once ya tiene respuesta. Contesta al instante a cualquier hora —también el domingo y el feriado— con la información real que vos publicaste. Y cuando el caso necesita una persona, te lo pasa con la conversación entera. Pedir el chatbot Ver precios QUÉ RESUELVE No pierdo al que escribe. El mensaje de las 11 de la noche, el del domingo, el del feriado. El que preguntó, nadie contestó y se fue a otro lado. Para: El que recibe consultas y las está perdiendo fuera de horario: consultorio, comercio, importadora. QUÉ INCLUYE Todo lo que entra en el servicio. Contesta al instante a cualquier hora: de noche, el domingo y el feriado Responde con la información real que vos publicaste: horarios, servicios y los datos de la cita No inventa ni cotiza por su cuenta: solo dice lo que vos cargaste Lo que no sabe se lo pasa a una persona, con la conversación completa Configuración del número y de las plantillas que Meta aprueba Lo que necesitás vos Un número que Meta pueda verificar Tus preguntas frecuentes con tus respuestas reales Alguien que atienda lo que el b"
+  },
+  "baseline": "sin baseline — esta vuelta la creás; una baseline nueva NO es una verificación",
+  "motivos": []
+}

@@ -1,15 +1,19 @@
 {
   "nombre": "login-chat",
   "url": "https://chat.onia.com.bo/app/login",
+  "cola": "hermes-content/docs/cola/chatbot.md",
+  "duenio": "chatbot-cola",
   "status": 200,
   "fallo": null,
-  "bytes": 12953799,
-  "msMirable": 2437,
-  "msTotal": 3685,
+  "bytes": 3584628,
+  "msMirable": 1365,
+  "msTotal": 1959,
   "erroresConsola": [],
   "visto": {
     "titulo": "Onia",
     "urlFinal": "https://chat.onia.com.bo/app/login",
     "texto": "Iniciar sesión en Onia E-mail Contraseña ¿Olvidaste tu contraseña? Iniciar sesión"
-  }
+  },
+  "baseline": "comparada",
+  "motivos": []
 }
