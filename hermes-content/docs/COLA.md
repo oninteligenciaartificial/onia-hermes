@@ -985,9 +985,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
-- [ ] 🟡 **`ONIA_WEB_IMAGENES_DE_CONTEXTO.md` da por publicable una carpeta que ya no existe**
-      (carril docs; el carril web-venta no toca `hermes-content/` salvo esta cola).
-      **Línea 347**, verificada hoy tal cual: `| public/rubros/*.webp | ✅ publicable | Los 5
+- [x] 🟡 **`ONIA_WEB_IMAGENES_DE_CONTEXTO.md` daba por publicable una carpeta que ya no existe —
+      ARREGLADO el 2026-09-02, y no era UNA línea sino TRES.** La §10 se recontó carpeta por
+      carpeta con `ls` contra `web-factory/apps/onia-platform/public/` (`brand · capturas ·
+      contexto · fotos · og · recursos`), no de memoria:
+      - `public/rubros/*.webp` — el renglón que abrió el ítem. Borrado: la carpeta no existe.
+      - `public/v2/capturas/**` y `public/v2/*.webp` — **el mismo defecto, sin reportar**:
+        `public/v2/` tampoco existe. Los dos renglones se caían por el mismo motivo, así que
+        arreglar sólo el citado dejaba el bug vivo dos renglones más arriba.
+      - `components/landing-v2/rubros.tsx`, citado como responsable de las fotos viejas — **ese
+        archivo tampoco existe** (murió con la landing v2 rechazada). Hoy `ferreteria.webp` lo
+        sirve `components/landing-v1/how-it-works.tsx`, el archivo `/v1`; `dentista.webp` no lo
+        usa nadie (verificado con grep sobre todo `src/`, incluida construcción dinámica de ruta).
+      La tabla ahora cubre las **seis** carpetas reales — antes listaba tres inexistentes y
+      omitía `brand/` y `recursos/`, así que "no está en la tabla" no significaba nada.
+      Y queda dicho que `/fotos/` pasa el guard por **forma**, no por estética: `forma.test.ts`
+      es el gate de "no servir capturas literales", no el gate visual de §8. Que el test pase no
+      hace publicable a una foto.
+      **Nada de código tocado** — el ítem es del doc, y `web-factory/apps/onia-platform/` es zona
+      del carril `web-venta`.
+      **Lo que estaba en juego:** una sesión que leyera "✅ publicable" iba a buscar cinco
+      archivos que no están y, al no encontrarlos, a **recapturarlos** — reponiendo justo las
+      capturas literales que Sergio mandó sacar el 2026-09-01. Un doc que declara publicable lo
+      inexistente no confunde: fabrica trabajo prohibido.
+
+      Texto original del ítem, para no perder la medición que lo abrió:
+      **Línea 347**, verificada tal cual: `| public/rubros/*.webp | ✅ publicable | Los 5
       recortes del conmutador, ya cableados y esperando el OK de Sergio. |`. Esa carpeta se
       borró: el conmutador dibuja los cinco rubros con divs desde `c98543e2`. Una sesión que
       lea esa tabla va a buscar cinco archivos que no están, o peor, a recapturarlos.

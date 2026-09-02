@@ -338,18 +338,43 @@ viva es cambio de pieza: necesita el OK de Sergio sobre ESA pieza (regla R5 de �
 
 ## 10. Qué material de `public/` es publicable y qué no
 
+**Recontado carpeta por carpeta el 2026-09-02** contra
+`web-factory/apps/onia-platform/public/` — `ls`, no memoria. Las carpetas son las que hay hoy:
+`brand · capturas · contexto · fotos · og · recursos`.
+
 | Carpeta | Estado | Detalle |
 |---|---|---|
-| `public/contexto/**` | ✅ **publicable** | Las 6 fotos de contexto de este doc. Gate de §8 pasado una por una. |
-| `public/v2/capturas/**` | ✅ **publicable** | Lote limpio del 21-ago. Es el único lote de capturas de producto que se puede mostrar. |
-| `public/v2/*.webp` (raíz) | 🔴 **NO publicable — material de QA** | Lote del 18-ago. `bot-saludo` tiene la cabecera "ZZ QA Clinica" con mensajes de "ZZ QA Ferreteria" (**inquilinos cruzados**); `bot-pedido` trae el **nombre de Sergio**; `editor-chatbot` y `editor-chatbot-movil` tienen "Atendemos Atendemos" duplicado y texto de debug "(aud 11:52)". Se ven bien de lejos y por eso son peligrosos. |
-| `public/fotos/*.webp` | 🔴 **NO pasan el gate** | Ver abajo. |
-| `public/rubros/*.webp` | ✅ publicable | Los 5 recortes del conmutador, ya cableados y esperando el OK de Sergio. |
+| `public/contexto/**` | ✅ **publicable** | Las 6 fotos de contexto de este doc (`comercio · dental · estetica · importadora · mostrador · servicios`). Gate de §8 pasado una por una, y es una de las dos carpetas que el guard de forma deja pasar. |
+| `public/fotos/*.webp` | 🟡 **permitida por forma, NO por estética** | 6 archivos. El guard la deja pasar; el gate de §8 rechaza a dos de ellos — ver abajo. |
+| `public/capturas/rubros-onia.webp` | 🔴 **NO cablear en el sitio vivo** | Único archivo de la carpeta. Hoy lo sirve **sólo `components/landing-v1/how-it-works.tsx`**, o sea el archivo `/v1`. Es una captura literal del producto: cablearla en `(sitio)` rompe el guard, que es exactamente lo que el guard existe para impedir. |
+| `public/og/onia-rubros.jpg` | 🔴 **NO reutilizar — tiene "MUY PRONTO" impreso** | Sigue en disco **a propósito**: lo usa `src/app/v1/page.tsx`, que conserva sus imágenes tal como se publicaron. El `og:image` del sitio vivo lo dibuja `src/app/(sitio)/opengraph-image.tsx`, no este archivo. |
+| `public/brand/**` · `public/recursos/**` | ⚪ **fuera de este doc** | No son material de contexto ni capturas de producto. Se listan para que la tabla cubra las seis carpetas y nadie deduzca que "no está = no existe". |
 
-**Los `public/fotos/*.webp` viejos NO pasan el gate.** `dentista.webp` y `ferreteria.webp` son de
-un lote anterior: sonríen **a cámara**, bata blanca, grade teal-naranja. Son los dos clisés de
-rechazo automático. Sólo los usa `components/landing-v2/rubros.tsx`, que es la landing rechazada
-— no cablearlos en el sitio v3 creyendo que son material aprovechable.
+⚠️ **Corregido el 2026-09-02: esta tabla mandaba a buscar tres cosas que ya no existen.** Decía
+`public/rubros/*.webp` **"✅ publicable — los 5 recortes del conmutador"**, y esa carpeta se borró
+cuando el conmutador pasó a dibujar cada rubro con divs (`c98543e2`); listaba `public/v2/capturas/**`
+y `public/v2/*.webp` como si `public/v2/` existiera, y **no existe**. Los tres renglones sobrevivieron
+al cambio porque nadie los volvió a mirar: el commit tocó el código, no el doc que lo describe.
+
+**Por qué era peor que un renglón viejo:** una sesión que leyera "✅ publicable" iba a buscar cinco
+archivos que no están y, al no encontrarlos, a **recapturarlos** — reponiendo justo las capturas
+literales que Sergio mandó sacar el 2026-09-01. Un doc que declara publicable lo inexistente no
+confunde: **fabrica trabajo prohibido.** Es la misma regla que "una promesa que cambia se barre en
+TODA la superficie" (`CLAUDE.md` §2), aplicada al revés — cuando el código borra algo, el doc que
+lo daba por vivo es parte de la superficie.
+
+**Los `public/fotos/*.webp` viejos NO pasan el gate de §8.** `dentista.webp` y `ferreteria.webp`
+son de un lote anterior: sonríen **a cámara**, bata blanca, grade teal-naranja. Son los dos clisés
+de rechazo automático. Hoy `ferreteria.webp` lo sirve `components/landing-v1/how-it-works.tsx` —
+el archivo `/v1`, que conserva lo publicado y por eso no se toca; `dentista.webp` no lo usa nadie.
+No cablearlos en el sitio vivo creyendo que son material aprovechable.
+⚠️ El renglón anterior culpaba a `components/landing-v2/rubros.tsx`: **ese archivo ya no existe**
+(era la landing v2 rechazada, borrada con ella). Citarlo mandaba a auditar una ruta muerta.
+
+⚠️ **Ojo con el guard: `/fotos/` pasa por FORMA, no por estética.** `src/app/(sitio)/forma.test.ts`
+enumera `PERMITIDAS = ["/contexto/", "/fotos/"]` y falla ante cualquier otra carpeta de imagen en
+el sitio. Es un gate de "no servir capturas literales del producto", **no** el gate visual de §8:
+que el test pase no dice nada sobre si la foto es publicable. Los dos gates se cumplen aparte.
 
 ⚠️ **El esquema del MCP exige envoltorio `params`**: `generate_image({params:{model, prompt,
 aspect_ratio, quality}})`. Los parámetros sueltos devuelven `Input validation error: params:
