@@ -384,6 +384,29 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Descartado antes de escribirlo:** los bloques de color vacíos que salen en una captura
       full-page son el reveal-on-scroll sin disparar, no un defecto — el texto está en el DOM.
       Por eso `scripts/canario_visual.mjs` ahora recorre la página antes de capturar.
+      ⚠️ **Gate 1 del 2026-09-01: el ítem describe UNA imagen y el defecto está en las CINCO,
+      y no lo arregla ni el CSS ni un recorte.** No es la tarjeta la que "se pasa de su
+      contenedor": la tarjeta calza exacto. La tarjeta (clase `card`) mide `--niche-slot × 0.853` = 478×560 CSS
+      (`web-factory/apps/onia-platform/src/app/(sitio)/sitio.module.css:1738`) y las cinco imágenes
+      WebP de `web-factory/apps/onia-platform/public/rubros/` miden **956×1120** — la misma
+      relación, así que `object-fit: cover` no recorta nada. **El corte viene horneado en el
+      archivo**: la captura se hizo en un viewport ancho y después se recortó una ventana de
+      478 px, cortando lo que cruzaba el borde. Abiertas y MIRADAS las cinco:
+      `comercio` parte la tercera tarjeta de métrica ("QR / Bs…" — el defecto reportado),
+      `servicios` parte "Crédito fiscal" y la columna "IM", `importadora` parte la columna
+      "Válida hasta", y `dental`/`estetica` parten el botón verde "+ Nueva cita" y las
+      píldoras de estado.
+      **Descartado con la medición, no por pereza:** recortar el borde derecho no cierra —
+      en `estetica` el botón empieza en x≈822 y el texto "Control post-tratamiento" termina
+      en x≈843, así que **no existe** un corte que deje las dos cosas enteras. Tapar o hacer
+      zoom sería disimular con números mágicos distintos por rubro.
+      **Lo que lo cierra:** volver a capturar las cinco pantallas con el viewport en 478 px
+      CSS (×2 = 956) para que el layout responsive del producto entre solo. **Eso necesita la
+      app corriendo con datos de demo** (`prisma/seed-demo.ts`) — y el script que lo hacía,
+      el que vivía en la carpeta temporal .verif-tmp
+      (recortes-rubro.mjs), ya no está en el repo. Este carril **no** puede sembrar
+      datos: la base es la de PRODUCCIÓN en el VPS. Queda desbloqueado para quien tenga una
+      base local, o con un `docker compose` de Postgres (hoy no hay Docker en esta máquina).
 
 - [ ] **Los NOMBRES de los iconos siguen en el DOM como texto en el login de la plataforma.**
       El `innerText` de `app.onia.com.bo/login` devuelve `bolt`, `credit_card_off` y `smart_toy`.
@@ -403,6 +426,33 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       iconos que en agosto tardó 117 s, ese fallback es el camino normal, no el raro. Y
       **ningún glifo tiene `aria-hidden`**: un lector de pantalla los deletrea hoy, con la
       fuente cargando perfecto.
+      ✅ **ARREGLADO EN CÓDIGO el 2026-09-01 — `onia-platform` `5888a13`, en `master`. Falta
+      SÓLO el deploy, que decide Sergio.** Los dos agujeros que el ítem nombra, cerrados en su
+      raíz compartida y clavados con test:
+      - **El lector de pantalla:** los tres glifos salen de `components/auth/AuthShell.tsx:92`
+        — el panel que comparten `/login` y `/register`, así que se arregló una vez para las
+        dos pantallas. Van con `aria-hidden="true"`: cada bullet ya trae su título y su
+        detalle en texto, el glifo no aporta nada que no esté dicho.
+        `components/auth/AuthShell.test.ts` exige `aria-hidden` en **cada** glifo del panel y
+        falla si aparece uno nuevo sin él.
+      - **El `setTimeout(ok, 12000)`:** ahora sólo destapa `if (d.fonts.status !== 'loading')`.
+        Antes contradecía la decisión que el propio `lib/iconos-script.ts` declara arriba
+        ("si la fuente NO carga, los iconos quedan ocultos en vez de mostrar su nombre"): con
+        la fuente que tardó 117 s, a los 12 s el cliente leía `credit_card_off`.
+        `lib/iconos-script.test.ts` (nuevo) ejecuta el script de verdad contra un `document`
+        de mentira — el defecto vive en CUÁNDO llama a `ok()`, no en el HTML.
+      **Gates verdes en el worktree `iconos-a11y`:** `tsc --noEmit` 0 · `vitest run` 2.480
+      pasando, 0 fallando · `npm run lint` 0 errores. ⚠️ **La corrida en paralelo de vitest
+      perdió 8 archivos de test** por `spawn UNKNOWN errno -4094` (la máquina sin RAM: los
+      otros loops la tenían en 2,9 GB libres de 24) y salió con exit 1 reportando "193 files".
+      Con `--no-file-parallelism` corrieron los **202**. Si el gate reporta menos archivos de
+      los que hay, no está verde: está incompleto.
+      **Píxeles sin cambio**: `aria-hidden` no se ve y la guarda sólo cambia el modo de fallo,
+      así que acá no hay captura que mirar — lo que cambia es el árbol de accesibilidad (lo
+      afirma el test sobre el render real) y qué pasa cuando la fuente tarda.
+      **Deuda medida, aparte:** en todo el producto hay **456** `.material-symbols-outlined`
+      en 111 archivos y sólo **46** llevan `aria-hidden`. Eso es una barrida propia, no este
+      ítem — este cierra la pantalla reportada y su hermana.
 
 - [ ] **La CSP de producción bloquea el beacon de Cloudflare en TODA la plataforma.** En consola,
       en las dos rutas de `app.onia.com.bo` que se abrieron:
