@@ -756,6 +756,49 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Gates**: `typecheck:packages` verde · `pnpm test` **267/267** · `pnpm e2e` **103/0**.
       Cambio de configuracion de corrida: no dibuja un pixel, baselines intactas.
 
+- [x] **AUD6 · Auditoría de S1 y del carril B — la primera vez que alguien mira los `[x]`
+      de B, y la corrida que PRUEBA el arreglo de S1** (2026-09-01). Sexta vuelta de
+      escalón 2 (A y B siguen todos `[x]`).
+      **Por qué estos cuatro**: AUD1–AUD5 auditaron **solo el carril A**; B1, B2 y B3
+      llevaban un día cerrados **sin que nadie los verificara contra el disco**. Y S1
+      nació en la vuelta anterior, así que era el otro `[x]` huérfano.
+      **S1, cierto y medible**: `vitest.config.ts` tiene `maxWorkers: 4` con su porqué
+      escrito, y `playwright.config.ts` tiene `workers: process.env.CI ? 4 : 2` — los tres
+      números que la línea declara (4 local en unit, 2 local en e2e, 4 en CI) están en el
+      archivo, no solo en la prosa.
+      🟢 **Y la corrida de hoy lo PRUEBA, que es lo que faltaba.** AUD5 cerró con **3
+      flaky** y los explicó por contención (`page.goto: Page crashed` en los tres, pasaban
+      al reintento). Hoy, **con la misma carga ajena presente** — los mismos 6 `node.exe`
+      del worktree `hero-en-home`, dos `next dev` sobre `apps/onia-platform` (3411 y 3477)
+      con sus hijos, zona prohibida que no se toca — la suite dio **103 pasados, 0
+      fallados, 0 flaky**. S1 no arregló el síntoma de una corrida: bajo la misma
+      condición que antes producía tres caídas de navegador, ahora produce cero.
+      **B1 cierto**: existe `2026-08-31-cosecha-rubros-sin-ancla.md` (7.831 B) y el
+      playbook trae **§9 ganadero y §10 IA/agentes** (antes no existían); la corrección
+      del umbral dental está escrita **con su historia** (`<15%` → **HSV <25%**, "se había
+      escrito el piso de la muestra como ley") y la importadora dice navy de dos acentos,
+      con el `#010101` nombrado como la receta del automotor que era.
+      **B2 cierto**: existe `2026-08-31-cosecha-rubros-flacos.md` (8.028 B) y §2 está
+      reescrita en dos regímenes con las anclas medidas. Miré si el reemplazo repetía el
+      error que denuncia — el régimen "sin pop" pasó de `5-15%` a `HSV S <16%`, que sigue
+      siendo el borde de la muestra — y **no lo repite**: ahora el umbral viene con los
+      tres valores de remedyplace que lo sostienen (8,1% · 15,6% · 7,2%), con el modelo
+      declarado y el ancla nombrada. Un techo medido y mostrado no es lo mismo que un piso
+      heredado a ciegas.
+      **B3 cierto**: `~/.claude/skills/ui-ux-pro-max/` tiene `scripts/search.py` y los 13
+      CSV de `data/` — la skill que la línea encontró siendo "SKILL.md y nada más" hoy
+      está completa.
+      **Ninguna se desmarca.**
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo);
+      rama == `origin` (`18c00cfa`); árbol limpio; `typecheck:packages` verde; `pnpm test`
+      **267/267 en 3,0 s**; `pnpm e2e` **103 pasados / 0 fallados / 7 skipped**. Cero
+      zombies míos: de los 9 `node.exe` vivos, el único de este carril es el
+      `serve-out 4319`.
+      **Lección: el carril B también acumula `[x]` sin auditar.** Cinco auditorías
+      seguidas miraron A porque ahí está el código; los ítems de B son docs y data, y
+      "no dibujan un píxel" se convirtió en excusa para no volver a mirarlos. Un doc que
+      afirma una regla de diseño envejece igual que el código que la implementa.
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
