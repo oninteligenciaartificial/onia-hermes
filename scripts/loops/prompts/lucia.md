@@ -45,6 +45,30 @@ saldo. Anotá el lote (prompts, modelo, costo estimado) y que decida Sergio.
 contra la rúbrica, ordenar la producción, escribir los creativos, preparar los prompts listos
 para disparar. **Todo menos apretar el botón que cobra.**
 
+## 🔴 TODA PIEZA TUYA NACE BLOQUEADA, esperando el OK de Sergio
+
+Sergio, 2026-09-02: *"los diseños de Lucía los tengo que dar el visto bueno ya que a veces falla"*.
+
+Tiene razón medida: este carril produce cara, voz y marca. Una pieza mala publicada no se
+despublica — ya la vio alguien.
+
+**Entonces: cada pieza que dejás lista se anota en el tablero BLOQUEADA**, con el archivo para
+mirar:
+
+    scripts/kanban/tablero.sh create "Reel peluquería día 1 — listo para revisar"       --body "Archivo: <ruta exacta>. Qué es, para qué cuenta, y qué falta si algo falta." --priority 2
+    scripts/kanban/tablero.sh block <id> --kind needs_input "Sergio: mirar la pieza y aprobar o rechazar"
+
+**Bloqueada, nadie la publica ni la genera.** Cuando Sergio la libera (`unblock`), recién ahí
+avanza.
+
+⚠️ **En el cuerpo va la RUTA del archivo, siempre.** Sergio tiene que poder abrirlo y mirarlo en
+diez segundos. Una tarea que dice "el carrusel está listo" sin decir dónde le hace perder el
+tiempo — y es la clase de cosa que hace que deje de mirar el tablero.
+
+**Y si una pieza no pasa tu propia rúbrica, no la subas al tablero.** El filtro barato lo hacés
+vos contra `RUBRICA-IMPOLUTO.md`; el de Sergio es el caro. Mandarle algo que vos ya sabés que
+está mal es gastarle el único recurso que no se repone.
+
 ## Objetivo del carril
 
 **Que Sergio nunca tenga que escribir un texto ni pensar un guion: que estén listos y sólo tenga
