@@ -1,0 +1,39 @@
+{
+  "slug": "lucia-quiz-serie-01",
+  "account": "lucia",
+  "nota": "Secuencia de 3 historias que se publican SEGUIDAS el mismo dia. HQ01 pregunta, HQ02 responde y explica, HQ03 abre la trampa siguiente. 🔴 Las options NO se dibujan: se tipean en el sticker nativo de encuesta. Render: --pack historia-quiz --format story",
+  "slides": [
+    {
+      "id": "HQ02-la-respuesta",
+      "kicker": "La respuesta",
+      "window_label": "resultado",
+      "lines": [
+        "Con 3 ejemplos flojos,",
+        "copia lo flojo.",
+        "Con 3 buenos, copia eso."
+      ],
+      "headline": "Depende de los ejemplos",
+      "options": [],
+      "nota_publicacion": "Va SIN sticker: es la respuesta de HQ01, no una pregunta. Se publica 15-30 min despues para que la encuesta junte votos primero."
+    },
+    {
+      "id": "HQ03-cuantos-intentos",
+      "kicker": "¿Cuántos?",
+      "window_label": "intentos",
+      "lines": [
+        "Querés una foto tuya",
+        "en un lugar donde nunca",
+        "estuviste. Sin cámara."
+      ],
+      "headline": "¿Cuántos intentos hasta que salga bien?",
+      "options": [
+        "1, la IA ya está lista",
+        "3 o 4",
+        "Más de 10",
+        "Depende de si guardás lo que falla"
+      ],
+      "respuesta": "Depende de si guardás lo que falla",
+      "por_que": "El banco de Lucia tiene 15 imagenes y 4 de ellas se guardan ROTAS a proposito: la que invento un cartel, la que perdio la cara, la que salio de otra persona. Sin esas, cada intento nuevo repite el mismo error. Es literalmente como se armo esta cuenta."
+    }
+  ]
+}
