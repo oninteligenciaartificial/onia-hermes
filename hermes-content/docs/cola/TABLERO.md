@@ -90,6 +90,43 @@ quien la tome.
 
 ---
 
+## 🔴 Cómo Sergio da el visto bueno — el circuito, probado
+
+Lo que necesita su decisión **nace bloqueado**. Ningún loop lo puede tomar hasta que él lo suelte.
+
+```
+Hermes crea la tarea  →  block --kind needs_input "qué decide Sergio"
+Un loop intenta       →  cannot claim: status=blocked        ← el cerrojo
+Sergio da el OK       →  unblock <id>
+El loop la toma       →  Workspace: … y la trabaja
+```
+
+Probado de punta a punta el 2026-09-02, en los dos sentidos: bloqueada **no se puede reclamar**,
+y liberada se reclama en el acto.
+
+**Sergio libera con UNA línea:**
+
+```bash
+scripts/kanban/tablero.sh unblock t_abc123
+```
+
+O varias de una: `unblock t_abc123 t_def456`. Y si la respuesta es que no, se archiva:
+`archive t_abc123`.
+
+**Lo que ve en el tablero**, de un vistazo:
+
+| símbolo | estado | qué significa |
+|---|---|---|
+| `▶` | `ready` | libre, cualquier loop de esa zona la toma |
+| `●` | `running` | alguien la tiene, con cerrojo |
+| `⛔` | `blocked` | **espera el veredicto de Sergio** |
+| `?` | `triage` | sin especificar todavía |
+| `✓` | `done` | cerrada, con su evidencia en los comentarios |
+
+⚠️ **Una decisión sin número no se toma: se posterga.** Por eso el ordenador tiene prohibido
+bloquear una tarea sin las opciones **cotizadas** adentro. Si no pudo medir el costo, tiene que
+decir qué falta medir en vez de inventarlo.
+
 ## Qué NO reemplaza todavía
 
 **Las colas en markdown siguen siendo la fuente de los loops** (`COLA.md`,

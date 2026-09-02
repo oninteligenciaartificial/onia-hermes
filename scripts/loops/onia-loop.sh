@@ -39,8 +39,20 @@ IDS=$(sed -n 's/^  \([a-z][a-z0-9-]*\))$/\1/p' "$0" 2>/dev/null | paste -sd'|' -
 # Tope de turnos por vuelta. 120 alcanza para cerrar UN item de cola; el
 # integrador necesita mas, porque cada carril son fetch + merge + gates + push.
 TURNOS=120
+# Modelo y esfuerzo por loop. Default: lo caro, porque la mayoria de los carriles
+# decide algo. Sergio, 2026-09-02: "me parece que tenemos que bajar el uso de
+# claude opus 5 max en algunas tareas, mira las menos usables o que no necesitan
+# mucho razonamiento". Se baja SOLO donde el trabajo es mecanico: abrir, comparar,
+# contar. Donde hay que decidir que esta mal y por que, sigue Opus.
+MODELO=claude-opus-5
+ESFUERZO=max
 case "$NOMBRE" in
   canario-visual)
+    # Abre 10 pantallas, compara contra baseline y escribe la diferencia. El juicio
+    # duro (si un defecto es real) lo hace el carril dueño cuando lo toma; aca el
+    # trabajo es mecanico. Sonnet alcanza y cuesta una fraccion.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     WT=/root/loops/onia-hermes-canario
     RAMA=claude/canario-visual
     # 5 pantallas con Playwright + mirar 5 capturas. Cada 6 h: sobra margen.
@@ -86,6 +98,9 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   kpis-semanal)
+    # Junta numeros y los presenta. No decide nada: no necesita Opus.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # KPIs de lunes del carril marca personal. Mismo worktree que marca-personal;
     # corre lunes 13:07 UTC, lejos de las corridas :56 de ese loop.
     WT=/root/loops/onia-hermes-marca-personal
@@ -125,6 +140,58 @@ case "$NOMBRE" in
     WT=/root/loops/onia-hermes-lucia
     RAMA=claude/lucia-vps
     TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  recorrido-cliente)
+    # Recorre el producto de punta a punta como un cliente real: home -> alta ->
+    # rubro -> cargar un dato -> pantalla de cobro -> bandeja. El canario mira
+    # pantallas SUELTAS; este mira el CAMINO, que es donde se pierde la plata.
+    # Playwright como root necesita --no-sandbox: sin eso no abre y la vuelta se
+    # pierde creyendo que el sitio esta caido.
+    WT=/root/loops/onia-hermes-recorrido
+    RAMA=claude/recorrido-cliente
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  tendencias)
+    # Investiga que funciona AHORA (formatos, ganchos, estructura de carrusel) y
+    # lo convierte en recetas EJECUTABLES para los carriles de contenido. El
+    # radar viejo era solo de la marca personal; para producto y ads no habia
+    # nada. Solo fuentes publicas: no se loguea a ninguna red ni gasta.
+    WT=/root/loops/onia-hermes-tendencias
+    RAMA=claude/tendencias
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  web-factory-dev)
+    # Webs de cliente. Se APAGO el 2026-09-02 por quedarse sin cola y se volvio a
+    # encender el MISMO dia al medir que LOOP_COLA.md tenia 7 items reales otra
+    # vez. Un carril con trabajo y sin nadie que lo haga es lo contrario de
+    # "todo el tiempo trabajando".
+    WT=/root/loops/onia-hermes-webfactory
+    RAMA=claude/web-factory-dev
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  calidad-generado)
+    # Juzga lo que Higgsfield genera y cuida que Lucia sea SIEMPRE la misma cara.
+    # No genera nada: abre las piezas del ultimo lote, las mira contra la rubrica,
+    # y escribe en la bitacora POR QUE salio bien la que salio bien — eso es lo
+    # que hace que la proxima no sea suerte. La deriva de un rasgo no se nota
+    # hasta que ya se publicaron veinte piezas.
+    WT=/root/loops/onia-hermes-calidad
+    RAMA=claude/calidad-generado
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  supervisor)
+    # Audita a los OTROS loops: abre sus commits y dice si el trabajo sirve.
+    # Ninguno se mira a si mismo, y un loop que produce basura no falla — commitea,
+    # reporta bien, y se ve igual que uno que sirve. Contar commits mide actividad;
+    # abrirlos mide valor.
+    WT=/root/loops/onia-hermes-supervisor
+    RAMA=claude/supervisor
+    TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   *)
@@ -209,7 +276,7 @@ log "===== ARRANCA $NOMBRE — rama $RAMA — HEAD $ANTES — tope ${TOPE}s ====
 # Modelo y esfuerzo: decision de Sergio el 2026-09-02 — "cambialos todos a opus 5
 # en max, pero quiero que terminen de una vez". Antes era claude-sonnet-5 sin
 # --effort. Cuesta mas por vuelta; el rendimiento por vuelta es lo que se compra.
-timeout "$TOPE" claude -p --model claude-opus-5 --effort max --max-turns "$TURNOS" \
+timeout "$TOPE" claude -p --model "$MODELO" --effort "$ESFUERZO" --max-turns "$TURNOS" \
   --allowedTools "$TOOLS" < "$PROMPT" >> "$LOG" 2>&1
 RC=$?
 
@@ -248,6 +315,30 @@ GITDIR=$(git -C "$WT" rev-parse --git-dir 2>/dev/null || echo /dev/null)
 if [ -f "$GITDIR/MERGE_HEAD" ]; then
   CONF=$(git -C "$WT" diff --name-only --diff-filter=U | wc -l)
   avisar "quedo un MERGE ABIERTO en $RAMA ($CONF archivo(s) en conflicto). No lo cierra nadie solo: hay que resolver a mano en <code>$WT</code>"
+fi
+
+# ── reporte a Sergio por Telegram, TODAS las vueltas -------------------------
+# Sergio, 2026-09-02: "quiero revisar cada que hagan algo, que me lo envien por
+# telegram". Antes solo avisaba cuando algo FALLABA: el trabajo bueno era
+# invisible y habia que entrar al VPS a leer un log para saber que hizo un loop.
+#
+# Se manda la PRIMERA linea util que escribio el agente — la regla de todos los
+# prompts es empezar con una linea en castellano llano para Sergio, asi que esa
+# es exactamente la que sirve. REPORTE A SERGIO.
+LINEA=$(sed -n "/===== ARRANCA $NOMBRE/,\$p" "$LOG" 2>/dev/null \
+  | grep -vE "^[0-9]{4}-[0-9]{2}-[0-9]{2}T|^\s*$|^={3,}" \
+  | sed 's/^[*_#> -]*//' \
+  | grep -vE "^(Detalle|Resumen|Vuelta|##)" \
+  | head -1 | cut -c1-450)
+
+if [ -n "$LINEA" ]; then
+  ESTADO="✅"; [ "$RC" != 0 ] && ESTADO="⚠️"
+  COMMITS=""; [ "$ANTES" != "$DESPUES" ] && COMMITS=" · $(git log --oneline "$ANTES..$DESPUES" | wc -l) commit(s)"
+  tg "$ESTADO <b>$NOMBRE</b> · ${T}s${COMMITS}
+$LINEA"
+else
+  # Sin linea no se manda nada: mejor silencio que un mensaje vacio cada vuelta.
+  log "(sin linea para Sergio en esta vuelta)"
 fi
 
 # ── rotacion: 24 vueltas por dia llenan un disco -----------------------------

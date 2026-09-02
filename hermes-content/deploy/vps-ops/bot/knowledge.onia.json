@@ -1,0 +1,147 @@
+{
+  "schema": "onia.bot.knowledge/1",
+  "version": "2026-09-02.1",
+  "updatedBy": "sesion-control",
+
+  "identity": {
+    "productName": "Onia",
+    "humanName": "Sergio",
+    "botName": "el asistente automático de Onia"
+  },
+
+  "empresa": {
+    "horario": {
+      "dias": [1, 2, 3, 4, 5],
+      "desde": 9,
+      "hasta": 18,
+      "frase": "lun-vie, 9:00-18:00"
+    }
+  },
+
+  "productos": [
+    {
+      "key": "plan-basico",
+      "nombre": "Plan Básico — Bs 320/mes",
+      "queResuelve": "Un negocio chico que hoy anota en cuaderno o WhatsApp: agenda, clientes y cobros en un solo lugar. También Bs 89 por semana o Bs 3.200 al año."
+    },
+    {
+      "key": "plan-profesional",
+      "nombre": "Plan Profesional — Bs 750/mes",
+      "queResuelve": "El negocio que ya tiene volumen y necesita más usuarios y más módulos. Bs 199 por semana o Bs 7.500 al año."
+    },
+    {
+      "key": "plan-clinica",
+      "nombre": "Plan Clínica — Bs 1.500/mes",
+      "queResuelve": "Varios profesionales atendiendo en paralelo, con agenda por persona. Bs 15.000 al año."
+    },
+    {
+      "key": "plan-empresa",
+      "nombre": "Plan Empresa — Bs 2.900/mes",
+      "queResuelve": "Empresa con contabilidad adentro. Incluye la contabilidad completa, que en los otros planes no va. Bs 29.000 al año."
+    },
+    {
+      "key": "addon-chatbot",
+      "nombre": "Chatbot de WhatsApp — Bs 390/mes",
+      "queResuelve": "Contesta a los clientes al instante con la información que el negocio escribió, también fuera de horario. Lo que no sabe lo pasa a una persona con la conversación entera. Se suma a cualquier plan."
+    },
+    {
+      "key": "addon-agenda",
+      "nombre": "Agenda pública — Bs 150/mes",
+      "queResuelve": "Un link donde el cliente elige su hora solo, sin llamar ni esperar respuesta."
+    },
+    {
+      "key": "addon-usuarios",
+      "nombre": "Usuario extra — Bs 70/mes",
+      "queResuelve": "Sumar a alguien más del equipo con su propio acceso."
+    },
+    {
+      "key": "prueba",
+      "nombre": "14 días de prueba, sin tarjeta",
+      "queResuelve": "Se entra y se usa el sistema sin poner datos de pago. No se cobra nada al terminar la prueba: si el negocio sigue, se coordina el pago."
+    }
+  ],
+
+  "rubrosExtra": [
+    {
+      "key": "dental",
+      "nombre": "Clínica dental",
+      "queResuelve": "Pacientes, citas, tratamientos y cobros, con el vocabulario del rubro."
+    },
+    {
+      "key": "estetica",
+      "nombre": "Estética y spa",
+      "queResuelve": "Igual que la clínica, con el vocabulario del rubro: clientas, sesiones y paquetes."
+    },
+    {
+      "key": "comercio",
+      "nombre": "Comercio, ferretería o tienda",
+      "queResuelve": "Catálogo, inventario, caja y fiados."
+    },
+    {
+      "key": "servicios",
+      "nombre": "Servicios profesionales",
+      "queResuelve": "Agenda de clientes y cobros para estudios contables, jurídicos y consultoras."
+    },
+    {
+      "key": "importadora",
+      "nombre": "Importadora o distribuidora",
+      "queResuelve": "Cotizaciones para empresas y costeo de importación."
+    }
+  ],
+
+  "faq": [
+    {
+      "id": "que-es",
+      "title": "¿Qué es Onia?",
+      "body": "Onia es un sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y contabilidad en un solo lugar. Se arma según el rubro, así que un dentista ve pacientes y una ferretería ve productos y fiados. Hay agentes que revisan los datos con el negocio cerrado y dejan un borrador esperando: a quién llamar, a quién cobrarle. La decisión siempre la toma el dueño.",
+      "status": "vigente",
+      "tags": ["producto", "general"]
+    },
+    {
+      "id": "precio",
+      "title": "¿Cuánto cuesta?",
+      "body": "Los planes arrancan en Bs 320 al mes (también Bs 89 por semana). Después están el Profesional en Bs 750, el Clínica en Bs 1.500 y el Empresa en Bs 2.900, que es el único que trae la contabilidad completa adentro. Aparte se pueden sumar el chatbot de WhatsApp por Bs 390 al mes, la agenda pública por Bs 150 y usuarios extra por Bs 70 cada uno. Pagando al año salen diez meses en vez de doce.",
+      "status": "vigente",
+      "tags": ["precio", "planes"]
+    },
+    {
+      "id": "prueba",
+      "title": "¿Hay prueba gratis?",
+      "body": "Sí: 14 días, y no hace falta poner tarjeta. Se entra y se usa el sistema. Al terminar la prueba no se cobra nada automáticamente — si el negocio quiere seguir, se coordina el pago.",
+      "status": "vigente",
+      "tags": ["prueba", "precio"]
+    },
+    {
+      "id": "rubros",
+      "title": "¿Sirve para mi rubro?",
+      "body": "Hoy está armado para clínicas dentales, estética y spa, comercios y ferreterías, servicios profesionales como estudios contables o jurídicos, e importadoras y distribuidoras. Si tu rubro no está en esa lista, contame cuál es y te digo derecho si te sirve o no.",
+      "status": "vigente",
+      "tags": ["rubros"]
+    },
+    {
+      "id": "chatbot",
+      "title": "¿Cómo funciona el chatbot?",
+      "body": "El negocio escribe lo que su bot tiene que saber —horarios, servicios, precios, cómo habla— y el bot contesta con eso, también de noche y los fines de semana. No inventa: lo que no sabe lo pasa a una persona con la conversación entera, para que nadie tenga que repetir lo que ya contó. Son Bs 390 al mes y se suma a cualquier plan.",
+      "status": "vigente",
+      "tags": ["chatbot", "whatsapp"]
+    },
+    {
+      "id": "siat",
+      "title": "Facturación en línea / SIAT",
+      "body": "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el Servicio de Impuestos tiene un portal gratuito para emitir. Lo que te convenga a vos según tu NIT y tu volumen lo ve Sergio con vos — no te lo voy a resolver yo por chat.",
+      "status": "vigente",
+      "tags": ["fiscal", "siat", "bolivia"]
+    },
+    {
+      "id": "quien-es-onia",
+      "title": "¿Quiénes son?",
+      "body": "Onia es de Santa Cruz, Bolivia, y el sistema se desarrolla acá. Si querés hablar con una persona, Sergio te coordina una demo corta y te muestra el sistema andando con los datos de tu rubro.",
+      "status": "vigente",
+      "tags": ["empresa"]
+    }
+  ],
+
+  "triggersExtra": {
+    "demo": ["demo", "quiero verlo", "mostrame", "precio", "cuanto cuesta", "cuanto sale", "info", "informacion", "planes"]
+  }
+}
