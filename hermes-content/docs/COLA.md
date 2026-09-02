@@ -373,48 +373,21 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Del canario visual — corrida del 2026-09-01 (abiertas y MIRADAS, no un 200)
 
-- [ ] **La maqueta de "Elegís tu rubro" se ve CORTADA en la home, en desktop 1440.** La
-      tarjeta del panel se pasa de su contenedor y la tercera métrica queda partida al medio
-      ("QR / Bs…" cortado). No es artefacto de la captura full-page: se reprodujo en viewport
-      real 1440×900, parado dentro de la sección pinneada. En móvil 390 no aparece (la sección
-      no se arma). Es la maqueta que DEMUESTRA el producto, en la pantalla de venta principal.
-      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-01-home-maqueta-cortada.png`
-      · home = 2.310 KB · 933 ms hasta mirable · `section` de 4.980 px de alto (las hermanas
-      miden 641–1.453; los 4.980 son el pin del scrollytelling y eso SÍ es esperado).
-      **Descartado antes de escribirlo:** los bloques de color vacíos que salen en una captura
-      full-page son el reveal-on-scroll sin disparar, no un defecto — el texto está en el DOM.
-      Por eso `scripts/canario_visual.mjs` ahora recorre la página antes de capturar.
-      ⚠️ **Gate 1 del 2026-09-01: el ítem describe UNA imagen y el defecto está en las CINCO,
-      y no lo arregla ni el CSS ni un recorte.** No es la tarjeta la que "se pasa de su
-      contenedor": la tarjeta calza exacto. La tarjeta (clase `card`) mide `--niche-slot × 0.853` = 478×560 CSS
-      (`web-factory/apps/onia-platform/src/app/(sitio)/sitio.module.css:1738`) y las cinco imágenes
-      WebP de `web-factory/apps/onia-platform/public/rubros/` miden **956×1120** — la misma
-      relación, así que `object-fit: cover` no recorta nada. **El corte viene horneado en el
-      archivo**: la captura se hizo en un viewport ancho y después se recortó una ventana de
-      478 px, cortando lo que cruzaba el borde. Abiertas y MIRADAS las cinco:
-      `comercio` parte la tercera tarjeta de métrica ("QR / Bs…" — el defecto reportado),
-      `servicios` parte "Crédito fiscal" y la columna "IM", `importadora` parte la columna
-      "Válida hasta", y `dental`/`estetica` parten el botón verde "+ Nueva cita" y las
-      píldoras de estado.
-      **Descartado con la medición, no por pereza:** recortar el borde derecho no cierra —
-      en `estetica` el botón empieza en x≈822 y el texto "Control post-tratamiento" termina
-      en x≈843, así que **no existe** un corte que deje las dos cosas enteras. Tapar o hacer
-      zoom sería disimular con números mágicos distintos por rubro.
-      **Lo que lo cierra:** volver a capturar las cinco pantallas con el viewport en 478 px
-      CSS (×2 = 956) para que el layout responsive del producto entre solo. **Eso necesita la
-      app corriendo con datos de demo** (`prisma/seed-demo.ts`) — y el script que lo hacía,
-      el que vivía en la carpeta temporal .verif-tmp
-      (recortes-rubro.mjs), ya no está en el repo. Este carril **no** puede sembrar
-      datos: la base es la de PRODUCCIÓN en el VPS. Queda desbloqueado para quien tenga una
-      base local, o con un `docker compose` de Postgres (hoy no hay Docker en esta máquina).
-      ⚠️ **Reverificado el 2026-09-02: Docker YA está en la máquina** (`docker compose version`
-      → v5.0.2, hay 15 contenedores `onia-*` corriendo), pero **eso no desbloquea el ítem**. La
-      app con `prisma/seed-demo.ts` que hay que correr con datos falsos es el **dashboard real
-      del producto** (repo `onia-platform`, el que sirve `app.onia.com.bo`), no
-      `web-factory/apps/onia-platform` (la landing, que es mi zona). Levantarlo — aunque sea
-      sólo para capturar pantallas y sin commitear nada ahí — es correr el código de **otro
-      carril**, justo lo que `CLAUDE.md` prohíbe ("el repo `onia-platform` tampoco... no cruces
-      de repo"). Sigue bloqueado; el bloqueo real nunca fue Docker.
+- [x] **La maqueta de "Elegís tu rubro" se ve CORTADA en la home, en desktop 1440 — ARREGLADO
+      EN CÓDIGO el 2026-09-02 (commit `c98543e2`, de Sergio), falta el deploy.** El defecto
+      original (medido el 2026-09-01) era que el corte venía HORNEADO en las cinco imágenes
+      webp de rubros — no lo arreglaba ni un CSS ni un recorte, y cerrarlo de verdad necesitaba
+      recapturar esas cinco pantallas contra el dashboard real corriendo con datos de demo, algo
+      que este carril no podía hacer sin cruzar al repo `onia-platform` (otro carril).
+      **Ya no aplica: dejó de existir el archivo que tenía el corte.** Verificado hoy en el
+      worktree, tras el rebase que trajo el commit de Sergio: la carpeta pública de rubros con
+      esas cinco imágenes fue borrada, y
+      `web-factory/apps/onia-platform/src/app/(sitio)/switcher.tsx` ahora dibuja cada rubro con
+      divs (componente `Shape` en modo `panel`) en vez de servir una captura. Gates verdes en
+      este worktree: `tsc --noEmit` 0 · `next build` 32/32 páginas.
+      **Lo que falta, y no es zona de este carril:** el deploy. Medido contra el contenedor que
+      sirve el dominio: `curl https://onia.com.bo/` todavía trae esas cinco rutas de imagen —
+      `onia-landing` sigue sirviendo el build viejo. Deploy es de Sergio.
 
 - [ ] **Los NOMBRES de los iconos siguen en el DOM como texto en el login de la plataforma.**
       El `innerText` de `app.onia.com.bo/login` devuelve `bolt`, `credit_card_off` y `smart_toy`.
@@ -624,41 +597,22 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Encontrado el 2026-09-02, dueño del carril — sin cerrar, necesita la vista de Sergio
 
-- [ ] 🔴 **`onia.com.bo/` y `/empezar` tienen 6 capturas LITERALES del sistema — viola la regla
-      de Sergio del 2026-09-01 ("no coloques capturas literales del sistema... coloca cosas
-      referenciales", cero `<img>`/`<video>`/`<canvas>` del software) y es previo a esa regla.**
-      Encontrado mirando el HTML servido, no supuesto: `grep -o '<img\|<video\|<canvas'` da
-      **10** hits en home y **1** en `/empezar`; de esos, **6 son screenshots reales del panel
-      de Onia**, no fotos de personas ni ilustraciones:
-      - Home: `/v2/capturas/agentes.webp` (pantalla de agentes) y `/v2/capturas/whatsapp.webp`
-        (editor del bot) — clase `sitio_shapeShot`.
-      - `/empezar`: `/v2/capturas/panel.webp` (dashboard con "Bs 4.633,40 cobrados") — misma
-        clase.
-      - Las 5 imágenes de `/rubros/*.webp` en la banda "Elegís tu rubro" (ya hay un ítem propio
-        arriba sobre su recorte; **son el mismo tipo de captura**, el bug de recorte es
-        aparte del bug de ser literales).
-      **No es una sospecha de nombre de carpeta**: el propio commit que las metió lo dice sin
-      ambigüedad — `65201c20` (2026-08-21, **antes** de la regla del 1-sep), mensaje *"la
-      landing muestra el producto real — 4 capturas cableadas en sus ranuras... Las capturas
-      salen del producto real con un inquilino de demo sembrado por los circuitos de verdad"*.
-      No hay screenshot fabricado con datos falsos (serían prueba social fabricada, peor
-      todavía) — son datos de una demo real, pero siguen siendo **fotografías del software**,
-      que es exactamente lo que la regla nueva prohíbe.
-      **Por qué no lo reemplacé yo mismo esta vuelta:** las 3 capturas de `/v2/capturas/` son
-      piezas centrales del hero de las dos pantallas que este carril tiene que cuidar más — la
-      regla hermana de esta misma cola dice *"un rediseño no se publica sin que Sergio VEA la
-      pieza terminada"* (el precedente caro: la landing v2 del 2026-08-20, rechazada entera y
-      revertida en producción). Sacar 3 imágenes centrales del hero y del `/empezar` sin
-      reemplazo aprobado es la clase de cambio visual que esa regla existe para frenar — no una
-      corrección de una línea.
-      **Lo que sí hice:** medí el alcance completo (6 capturas, 2 pantallas, 1 commit origen),
-      descarté que sea sólo el ítem de recorte de `/rubros` (es un bug distinto, más viejo, y
-      sigue abierto por su cuenta), y sumé la decisión al radar (§18) con las opciones
-      cotizadas para que la próxima vuelta —o Sergio— elija el reemplazo sin repetir esta
-      medición.
-      **Cómo se sabe que quedó hecho:** `grep -o '<img\|<video\|<canvas'` sobre el HTML de las
-      dos páginas no matchea ninguna ruta bajo `/v2/capturas/` ni `/rubros/`, y lo que las
-      reemplaza fue mirado renderizado por Sergio antes de publicarse.
+- [x] **`onia.com.bo/` y `/empezar` tienen 6 capturas LITERALES del sistema — ARREGLADO EN
+      CÓDIGO el 2026-09-02 (commits `bba1c76e` y `c98543e2`, de Sergio mismo — la vista que este
+      ítem esperaba), falta el deploy.** El hallazgo original (2026-09-02, mirando el HTML
+      servido): 6 screenshots reales del panel de Onia en las dos pantallas — 2 en home
+      (agentes, editor de WhatsApp) y 1 en `/empezar` (dashboard con montos reales), más las 5
+      de la banda de rubros. Violaba la regla de Sergio del 2026-09-01 ("cero capturas
+      literales, coloca cosas referenciales"), y no se reemplazaba sin que él viera antes la
+      pieza terminada — mismo precedente que la landing v2 revertida en producción.
+      **Verificado hoy en el worktree, tras el rebase que trajo el commit de Sergio:** las 6
+      imágenes están borradas del repo, `web-factory/apps/onia-platform/src/app/(sitio)/ui.tsx`
+      ya no acepta una imagen como fuente para el componente que las mostraba (sólo dibuja con
+      divs) y `web-factory/apps/onia-platform/src/app/(sitio)/forma.test.ts` falla si vuelve a
+      aparecer una captura. Gates verdes en este worktree: `tsc --noEmit` 0 · `next build`
+      32/32 páginas.
+      **Lo que falta, y no es zona de este carril:** el deploy — medido contra `onia-landing`,
+      `curl https://onia.com.bo/` y `/empezar` siguen sirviendo las 6 capturas viejas hoy.
 
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
@@ -1281,14 +1235,10 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
   cobro sigue siendo manual: el cliente transfiere y alguien aprueba. **Remedido el 2026-09-01:**
   `grep -c 'BCP_QR' /opt/onia-platform/app.env` en el VPS devuelve **0** — no hay ni una de las
   seis variables. El bloqueo es real y no se movió.
-- **La maqueta de "Elegís tu rubro" recortada** (`## Ahora`, item del canario del 2026-09-01).
-  Reverificado el 2026-09-02: arreglarla necesita levantar el dashboard REAL con datos de demo
-  para recapturar las 5 pantallas al viewport correcto, y ese dashboard vive en el repo
-  `onia-platform` (otro carril) — cruzarlo es lo que `CLAUDE.md` prohíbe. Decide Sergio si vale
-  la excepción puntual o si lo hace el dueño de ese repo.
-- **Las 6 capturas literales del sistema en `home`/`empezar`** (`## Ahora`, encontrado
-  2026-09-02, opciones cotizadas en el radar §18). No se reemplazan sin que Sergio VEA la pieza
-  terminada — mismo precedente que la landing v2 revertida.
+- **Deploy de `home`/`empezar`: dos ítems (la maqueta de rubro recortada y las 6 capturas
+  literales) están ARREGLADOS EN CÓDIGO desde el 2026-09-02** (`bba1c76e`, `c98543e2`, ya en
+  esta rama) y sólo falta publicarlos — medido contra `onia-landing`: `onia.com.bo` sigue
+  sirviendo el build viejo con las capturas. Deploy es de Sergio.
 
 > **Deduplicado el 2026-09-01: había DOS listas de bloqueos y la vieja pedía trabajo que ya no
 > existe.** Convivían esta y una `## Bloqueado — recontado el 2026-08-30` cien líneas más abajo.
