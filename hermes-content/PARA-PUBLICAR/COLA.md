@@ -33,11 +33,8 @@ queda sin feed — ya pasó una vez y Lucía quedó parada.
 
 ## Cola — tomá la primera `PENDIENTE`
 
-### D01 · @oniahq · carrusel que CIERRA · 0 créditos · PENDIENTE
-Renderizá `hermes-content/carousels/briefs/ads/ad-a4-ocho-de-la-noche.json` con el pack
-**`bloque-solido`** (`node scripts/carousel_render.js --brief <ruta> --pack bloque-solido`).
-Ángulo: a las 8 de la noche, cansado, nadie se acuerda de anotar.
-Caption: el dolor en la primera línea, la prueba en el medio, `Comentá DEMO` al final.
+### D01 · @oniahq · carrusel que CIERRA · 0 créditos · HECHO
+→ ver bloque en «Publicadas / listas» (`D01-oniahq-8pm/`).
 
 ### D02 · Lucía · UGC en lugar nuevo · ~2 créditos · PENDIENTE
 Imagen 9:16 en un lugar que el banco no tenga (**restaurante de almuerzo** es el primero).
@@ -89,6 +86,29 @@ Siguiente lugar: **veterinaria de barrio**. Mismas reglas que D02.
 ## Publicadas / listas
 
 _(cada vuelta agrega su bloque acá: carpeta, cuenta, destino, palabra del CTA, cómo se verificó)_
+
+### D01 · @oniahq · ad «8 de la noche» que CIERRA · LISTA · 0 créditos
+- **Carpeta:** `PARA-PUBLICAR/D01-oniahq-8pm/`
+  - `oniahq-8pm-FEED-1080x1350.png` (feed, 4:5) · `CAPTION.txt` completo.
+- **Cuenta / destino:** **@oniahq** · **feed** (imagen única, no carrusel — el brief `ad-a4` es
+  un solo cover, como los 8 ads de esa serie).
+- **CTA:** **`DEMO`** (el de @oniahq). Caption con la estructura pedida: **dolor** en la 1ª línea
+  («son las 8 de la noche y alguien quiere darte trabajo, vos ya cerraste»), **prueba/mecanismo**
+  en el medio (asistente que atiende por WhatsApp fuera de hora, agenda y deja el mensaje),
+  **`Comentá DEMO`** al final. Sin cifras ni testimonios inventados (cero clientes pagando).
+- **Render:** `node scripts/carousel_render.js --brief hermes-content/carousels/briefs/ads/ad-a4-ocho-de-la-noche.json --pack bloque-solido --account onia --out hermes-content/carousels/out/D01-ad-a4-8pm`
+  (con `CAROUSEL_BROWSER` autodescubierto tras el fix del script).
+- **Cómo se verificó:** MIRADA renderizada al abrirla — 1080×1350 (4:5 feed), 90 KB (no 0-byte),
+  fuentes cargadas (display serif + sans, sin glifos rotos), «8 de la noche» resaltado con
+  subrayado verde, cuerpo legible, botón «Reservá una demo» y firma `@oniahq` correctos, colores
+  de marca. Cero texto corrupto.
+- ⚠️ **Falta lo de Sergio:** confirmar que `DEMO` está viva en el mapa de n8n de @oniahq antes de
+  publicar (incidente RANKING). La pieza y el caption están listos.
+- 🛠️ **Fix de tooling que trajo esta vuelta** (ver `carousels/CAROUSEL_SYSTEM.md` § «Correr en el
+  VPS headless»): `carousel_render.js` estaba roto
+  para TODO pack —requería 3 módulos de pack que nunca se commitearon, y le faltaba `--no-sandbox`
+  para correr Chromium como root en el VPS—. Ahora los packs ausentes cargan perezoso y el
+  navegador de Playwright se autodescubre. **`bloque-solido` (D01/D07/D09) ya rinde.**
 
 ### D13 · Lucía · foto fancy en café de especialidad · LISTA (0 cr extra, subproducto de E3)
 - **Carpeta:** `PARA-PUBLICAR/D13-lucia-cafe-fancy/`

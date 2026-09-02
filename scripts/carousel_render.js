@@ -54,6 +54,8 @@ const BROWSER_CANDIDATES = [
   '/usr/bin/google-chrome',
   '/usr/bin/chromium',
   '/usr/bin/chromium-browser',
+  // Chromium de Playwright en el VPS (el único navegador instalado acá, 2026-09-02).
+  '/root/.cache/ms-playwright/chromium-1223/chrome-linux64/chrome',
 ].filter(Boolean);
 
 const ACCOUNTS = {
@@ -1132,21 +1134,28 @@ function nuviaRibbon(idx, total, stripes, onAccent) {
 // cinco criticas de Sergio del 2026-08-27 a los carruseles anteriores.
 // Pack de la marca personal de Sergio: las herramientas como empleados contratados.
 // Portado de la referencia que el mismo eligio (@iampascio, 2026-08-27).
-const tarjetaEmpleadoHtml = require('./carousel_pack_empleado').crear({
-  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
-});
+// Config compartida por todos los packs externos.
+const PACK_CFG = { esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT };
 
-const datoIlustradoHtml = require('./carousel_pack_dato').crear({
-  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
-});
+// Los packs externos se cargan PEREZOSO: si el archivo del pack no está en el repo
+// (empleado/dato/papel nunca se commitearon), un require eager acá rompía el script
+// entero — incluso al pedir bloque-solido, que sí existe. Ahora sólo falla si se
+// selecciona ese pack, y con un mensaje claro.
+function lazyPack(modPath) {
+  let fn = null;
+  return function (...a) {
+    if (!fn) {
+      try { fn = require(modPath).crear(PACK_CFG); }
+      catch (e) { throw new Error('Pack no disponible (' + modPath + ' falta en el repo): ' + e.message); }
+    }
+    return fn(...a);
+  };
+}
 
-const papelSubrayadoHtml = require('./carousel_pack_papel').crear({
-  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
-});
-
-const bloqueSolidoHtml = require('./carousel_pack_solido').crear({
-  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
-});
+const tarjetaEmpleadoHtml = lazyPack('./carousel_pack_empleado');
+const datoIlustradoHtml = lazyPack('./carousel_pack_dato');
+const papelSubrayadoHtml = lazyPack('./carousel_pack_papel');
+const bloqueSolidoHtml = require('./carousel_pack_solido').crear(PACK_CFG);
 
 function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
@@ -1278,6 +1287,9 @@ function render(args) {
     const png = path.resolve(args.out, `slide-${String(idx + 1).padStart(2, '0')}.png`);
     execFileSync(browser, [
       '--headless=new',
+      // El VPS corre como root: sin --no-sandbox Chromium se niega a arrancar y el
+      // screenshot nunca se escribe (verificado 2026-09-02).
+      '--no-sandbox',
       '--disable-gpu',
       '--hide-scrollbars',
       '--allow-file-access-from-files',
