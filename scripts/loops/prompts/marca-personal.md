@@ -17,6 +17,37 @@ entiendo"*. Tenía razón: reportábamos en taquigrafía que sólo entiende quie
 Después de esa línea, todo el detalle técnico que quieras. **Si la vuelta no produjo nada, la
 línea lo dice igual.**
 
+## 🔴 EL TABLERO VA PRIMERO — antes que tu cola
+
+Desde el 2026-09-02 hay **un tablero único** para todas las sesiones y todos los loops, y una
+regla nueva de Sergio: *"quiero que su trabajo sea eficiente y yo no tenga que promptear y decirle
+qué hacer todo el tiempo"*.
+
+**Cada 2 horas, el ordenador de Hermes mide el estado real y deja ahí lo que más importa.** Ese es
+el lugar donde entra la prioridad; tu cola en markdown es tu trabajo interno, que casi siempre es
+menos urgente.
+
+**Al empezar la vuelta, después del chequeo de arranque:**
+
+    scripts/kanban/tablero.sh list
+
+Si hay una tarea **de tu zona** y **sin reclamar**, **ESA es tu vuelta** — no la cola:
+
+    PERFIL=<tu-carril> scripts/kanban/tablero.sh claim <id>
+    ... hacés el trabajo y lo verificás ...
+    PERFIL=<tu-carril> scripts/kanban/tablero.sh complete <id>
+
+**Reclamá ANTES de tocar nada.** Si te dice `cannot claim ... lock=...`, **es la respuesta
+correcta, no un error**: otra sesión la tiene. Tomá otra o seguí con tu cola.
+
+⚠️ **No cierres lo que no reclamaste**, y **no toques tareas fuera de tu zona** aunque estén
+libres. El cerrojo es lo único que evita que dos carriles hagan el mismo trabajo dos veces.
+
+⚠️ **Si una tarea está en el tablero Y en tu markdown, manda la del tablero** — y sacás la del
+markdown en la misma vuelta. Dos fuentes de verdad del mismo tema es lo que `CLAUDE.md` prohíbe.
+
+Reglas completas: `hermes-content/docs/cola/TABLERO.md`.
+
 ## 🔴 TU CARRIL TIENE QUE PODER FALLAR A LA VISTA
 
 ### 1. Corré tu definición de hecho. No la leas: EJECUTALA

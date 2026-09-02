@@ -158,7 +158,23 @@ vez y se calla). Los dos son decisión de Sergio, no código.
 
 ---
 
-- [ ] 🔴 **El bot contesta el saludo y se calla en el SEGUNDO mensaje. Reproducido hoy, en vivo, en el inbox de los leads reales.**
+- [x] ✅ **RESUELTO el 2026-09-02 — el bot contesta el segundo mensaje.** La causa se sacó
+      corriendo el motor contra el caso, no leyendo código: `MSG1 → stage handoff_humano, notes
+      ["bienvenida","sin_horarios_que_ofrecer"]` · `MSG2 → replies 0, notes
+      ["silencio:handoff_en_curso"]`. Sin Cal.com instalado, los slots de `config.mjs` siguen en
+      *"HORARIO A (pendiente de definir)"*, así que `slotsPending` es SIEMPRE true y
+      `welcomeResult` mandaba **toda** conversación a `handoff_humano` — que es silencio
+      permanente. Y no había humano.
+      **Lo más caro fue el test que lo protegía:** `knowledge.test.mjs` verificaba que el mensaje
+      de bienvenida fuera correcto y **exigía `handoff_humano`**. Verde, y la conversación moría.
+      Un test que mira el primer mensaje no puede ver un bot que enmudece en el segundo.
+      **Arreglado:** `esperando_horario` (la rama viva) + `M0b_SIN_HORARIOS`, que acusa el dato y
+      pide el contacto en vez de re-ofrecer un horario que no existe. 689 tests verdes, test nuevo
+      que falla en rojo antes. Desplegado a `/opt/onia/bot` y **verificado en el widget real**.
+      ⏭️ **Queda lo otro, y es de Sergio:** definir los dos horarios o instalar Cal.com (tablero
+      `t_af8f44ad`). Hasta entonces el bot dice la verdad — "Sergio te coordina el horario".
+
+- [x] ~~🔴 **El bot contesta el saludo y se calla en el SEGUNDO mensaje. Reproducido hoy, en vivo, en el inbox de los leads reales.**
       **Cómo se reproduce** (30 segundos, sin tocar nada): abrir
       `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`,
       escribir *"Hola, quiero informacion sobre el sistema"* → **contesta bien**; después

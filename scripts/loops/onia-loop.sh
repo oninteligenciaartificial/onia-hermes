@@ -117,6 +117,16 @@ case "$NOMBRE" in
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  lucia)
+    # Carril Lucia / modelos (Higgsfield). Era una sesion de Windows: se mudo al
+    # VPS el 2026-09-02 para que corra con la laptop apagada.
+    # 🔴 Es el UNICO carril que puede quemar plata solo. Su prompt le prohibe
+    # generar video y dar de alta plataformas: deja todo listo y Sergio dispara.
+    WT=/root/loops/onia-hermes-lucia
+    RAMA=claude/lucia-vps
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
     # Este es el camino por el que un loop muere sin que nadie se entere: el cron
     # lo sigue llamando cada hora y el unico rastro es un exit 64 en un log que

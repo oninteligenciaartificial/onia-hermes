@@ -1,0 +1,102 @@
+# El tablero — cómo entra cualquier sesión sin pisar a las demás
+
+> Doc vivo, sin fecha en el nombre: se **EDITA**, no se duplica.
+> Escrito el **2026-09-02**, después de probar las dos formas contra el mismo problema.
+
+---
+
+## Por qué existe: las colas en markdown chocan aunque hagas todo bien
+
+Probado el 2026-09-02 con dos ramas de prueba, no razonado:
+
+**Dos carriles cerraron ítems DISTINTOS del mismo archivo — la línea 3 y la línea 4 — y git dio
+conflicto igual.** Están pegadas y el merge no las puede separar.
+
+Eso significa que la regla que habíamos escrito —*"el que MIRA agrega al final, el que ARREGLA
+marca"*— **sólo ayuda si las ediciones quedan lejos**. Con ítems vecinos choca lo mismo. Y ya
+pasó de verdad ese día: dos sesiones escribieron `loops.md` en paralelo y hubo que resolver a
+mano.
+
+**El tablero no tiene ese problema**: cada tarea es una **fila en SQLite**, no una línea de texto.
+Probado con dos agentes reclamando la misma tarea al mismo tiempo:
+
+```
+[chatbot]  Claimed t_f42ff607
+[webventa] cannot claim t_f42ff607: status=running lock=srv1360183:81929
+```
+
+Cerrojo atómico, con vencimiento, y **espacio de trabajo aislado por tarea**, creado solo.
+
+---
+
+## Cómo entra tu sesión — tres comandos
+
+El tablero **vive en el VPS** y se llama `onia`. Cualquier sesión que llegue por SSH usa **el
+mismo**, y eso es justamente lo que evita que se pisen. Probado desde Windows con Git Bash.
+
+```bash
+# 1. Mirar qué hay
+scripts/kanban/tablero.sh list
+
+# 2. Tomar una tarea — poné TU nombre de perfil, siempre
+PERFIL=carril-chatbot scripts/kanban/tablero.sh claim t_abc123
+
+# 3. Cerrarla cuando esté hecha y verificada
+PERFIL=carril-chatbot scripts/kanban/tablero.sh complete t_abc123
+```
+
+Y para dejarle trabajo a otro:
+
+```bash
+scripts/kanban/tablero.sh create "Título corto y accionable" \
+  --body "Qué está roto, cómo se reproduce, y qué archivo mirar" --priority 1
+```
+
+---
+
+## 🔴 Las cuatro reglas, y por qué cada una
+
+**1. Reclamá ANTES de tocar nada.** Si no reclamaste, otra sesión puede estar en esa misma tarea
+ahora mismo. El cerrojo es lo único que lo impide — y si el comando te dice `cannot claim`, **es
+la respuesta correcta, no un error**: tomá otra.
+
+**2. Poné tu `PERFIL`.** Sin eso todo aparece como `sesion-anonima` y, cuando una tarea figura
+tomada, nadie sabe quién la tiene. El nombre es lo que hace legible el tablero.
+
+**3. No cierres lo que no reclamaste.** Marcar `complete` en la tarea de otro es exactamente el
+pisón que el tablero existe para evitar.
+
+**4. Una tarea que creás tiene que poder reproducirse sin vos.** El cuerpo lleva **los pasos, el
+comando y qué devuelve**. Medido en este proyecto: entre el **25% y el 46%** de lo que las colas
+declaraban pendiente **no existía**. Una tarea sin evidencia le hace perder una vuelta entera a
+quien la tome.
+
+---
+
+## Qué NO reemplaza todavía
+
+**Las colas en markdown siguen siendo la fuente de los loops** (`COLA.md`,
+`cola/chatbot.md`, etc.). El tablero está **en prueba**, con tareas reales, en paralelo.
+
+La decisión de migrar del todo es de Sergio y **no se toma hasta que el tablero muestre que
+sostiene un carril completo**. Mientras tanto:
+
+- **Trabajo entre sesiones o entre personas → tablero.** Es donde el choque duele.
+- **Cola interna de un loop → markdown**, como está.
+
+⚠️ **Si una tarea está en los dos lados, la del tablero manda** — y hay que sacar la del markdown
+en el mismo momento, no después. Dos fuentes de verdad del mismo tema es el problema que
+`CLAUDE.md` prohíbe, y un tablero a medias lo crea en vez de resolverlo.
+
+---
+
+## Ver el tablero con los ojos
+
+Está también en el panel de Hermes, pestaña **Kanban**:
+
+```bash
+ssh -i ~/.ssh/onia_hermes_vps_ed25519 -N -L 9119:127.0.0.1:9119 root@187.77.16.63
+```
+
+Y abrir **http://127.0.0.1:9119**. Detalle de Hermes en
+[`../HERMES_AGENT.md`](../HERMES_AGENT.md); quién hace qué oficio, en [`EQUIPO.md`](EQUIPO.md).
