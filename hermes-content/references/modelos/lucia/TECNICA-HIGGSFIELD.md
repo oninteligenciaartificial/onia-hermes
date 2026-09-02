@@ -1147,3 +1147,26 @@ unreadable.
 
 **Esto desbloquea el CLI para imágenes nuevas**: ya no hace falta el navegador con el element para
 cada foto. El navegador sigue siendo el camino cuando se quiere el element puro.
+
+## 14 · 🔴 El límite real no es el saldo: es el tope DIARIO de gracia (2026-09-02)
+
+Con **1.953 créditos disponibles**, un `generate create` devolvió:
+
+```
+Error: {"data":{"modal_data":{"elapsed_days":1},"type":"unlock_full_access_notice"},
+        "error_type":"grace_daily_limit_reached"}
+```
+
+La cuenta arrastra el aviso de **«Payment failed»** y está en **período de gracia**. En gracia hay
+un **tope de generaciones por día** que es independiente del saldo. Se agotó después de 6
+generaciones el 02-sep (2 imágenes + 4 videos, ~27 cr).
+
+**Qué significa para el loop:**
+- **Mirar el saldo NO alcanza** para saber si se puede generar. El corredor del VPS tiene un piso de
+  créditos, y ese piso no ve este límite.
+- El error llega **sin gastar créditos** — no es un cobro perdido, es una puerta cerrada.
+- **Se resuelve solo al día siguiente**, o lo destraba Sergio arreglando el pago. ⛔ El loop **no
+  toca botones de pago**: se anota y se pasa a trabajo de 0 créditos.
+
+**La escalera cuando aparece este error:** creativos de anuncio, captions, carruseles con el
+renderer, auditorías del banco. Todo eso no pasa por Higgsfield.

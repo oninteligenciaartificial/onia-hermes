@@ -66,3 +66,77 @@ Inventar sueldos bolivianos hunde la pieza ante el primer dueño de negocio que 
 publicar hay que traer el número de una fuente real —un aviso de empleo, una planilla, lo que
 Sergio sepa de un cliente— y **anotar de dónde salió**. Sin fuente, se sacan las tres líneas de
 plata y queda sólo el argumento, que se sostiene solo.
+
+---
+
+# V09 — taller mecánico
+
+`V09-taller-seedance.mp4` · 720×1280 · 4,05 s · con audio · **9/9, la única que no tiene defecto**.
+
+## Gancho (0-2 s, quemado en pantalla)
+
+> **Sabe qué herramienta le falta. Cuántas le quedan, no.**
+
+## Caption
+
+```
+Cuatro segundos en un taller de motos. Nadie los filmó.
+
+Lo que costaría filmarlos de verdad:
+  · modelo por media jornada         → Bs …
+  · permiso para grabar en el local  → Bs …
+  · alguien que sostenga la luz      → Bs …
+
+Y la partida que nadie factura: que ese día no entre un cliente apurado.
+
+Pero el punto no es el video.
+
+El punto es el repuesto. Sabés cuál te falta cuando lo necesitás, no antes.
+Y cuando lo pedís, el cliente ya se fue a otro taller.
+
+Un sistema no arregla motos. Te avisa antes de que se acabe.
+```
+
+## CTA
+
+`Comentá DEMO y te muestro cómo se ve tu stock sin contarlo a mano.`
+
+---
+
+# V10 — restaurante de almuerzo
+
+`V10-restaurante-seedance.mp4` · 720×1280 · con audio · **8/9**.
+🔴 **Se sube recortado a 3 s**: en el último segundo el comensal sale de cuadro y ella abre la boca
+sin diálogo. Los primeros 3 s están limpios y el gancho de 2 s cabe de sobra.
+
+## Gancho (0-2 s)
+
+> **Este plato salió. ¿El número 40 o el 60?**
+
+## Caption
+
+```
+Cuatro segundos en un almuerzo de barrio. Nadie los filmó.
+
+Lo que costaría filmarlos de verdad:
+  · modelo por media jornada        → Bs …
+  · permiso para grabar en el salón → Bs …
+  · alguien que sostenga la luz     → Bs …
+
+Y la partida que nadie factura: que a las doce y media no haya cola.
+
+Pero el punto no es el video.
+
+El punto es que a las tres de la tarde nadie se acuerda cuántos platos
+salieron. Y si no sabés eso, tampoco sabés cuánto comprar mañana.
+
+Un sistema no cocina. Cuenta mientras vos atendés.
+```
+
+## CTA
+
+`Comentá DEMO y te muestro cuánto vendiste de verdad esta semana.`
+
+🔴 **Antes de publicar cualquiera:** la palabra `DEMO` tiene que estar viva en el mapa de n8n **de la
+cuenta que publica**. Y las cifras del desglose van vacías a propósito — sin fuente real se sacan
+las tres líneas y queda sólo el argumento.
