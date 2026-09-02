@@ -998,3 +998,61 @@ modelo que salió es el que se pidió. Si vuelve a sustituir, se descarta igual 
 ### Estado
 **No instalado.** Instalarlo toca el VPS, que tiene un dueño a la vez y hoy lo está usando la
 otra sesión. Requiere OK de Sergio y coordinar.
+
+---
+
+## 10. El CLI instalado — y la causa REAL del bug que hizo prohibir el MCP
+
+Instalado en el VPS el 2026-09-01: `higgsfield 1.1.24` en `/usr/bin/higgsfield`.
+Autenticado por **OAuth 2.0 PKCE** con la cuenta de Sergio. El callback va a
+`localhost:8765` **del VPS**, así que el login se completa con un **túnel SSH**:
+
+```
+ssh -L 8765:localhost:8765 root@<vps> 'higgsfield auth login'
+```
+…y se abre la URL que imprime en el navegador local. El token queda en el VPS.
+
+### 🔴 CORRECCIÓN GRANDE: el MCP nunca «sustituyó el modelo en silencio»
+
+La regla del repo decía que el MCP *«pedía `nano_banana_2` y el servidor resolvía a
+`nano_banana_flash` sin avisar»*, y por eso Higgsfield quedó prohibido salvo por navegador.
+`higgsfield model list` muestra la causa real:
+
+| ID real | Nombre que muestra la web |
+|---|---|
+| `nano_banana` | Nano Banana |
+| **`nano_banana_flash`** | **Nano Banana 2** |
+| `nano_banana_2_lite` | Nano Banana 2 Lite |
+| **`nano_banana_pro`** | **Nano Banana Pro** |
+| `nano_banana_2_ai_stylist` | Nano Banana Pro |
+| `nano_banana_2_relight` | Nano Banana Pro |
+| `nano_banana_2_skin_enhancer` | Nano Banana Pro |
+| `nano_banana_2_shots` | Nano Banana Pro |
+
+**`nano_banana_2` no existe como ID.** El modelo que la web llama «Nano Banana 2» tiene ID
+`nano_banana_flash`. No hubo traición: hay **un desfase entre nombre visible e ID**, y encima
+**cinco IDs distintos muestran «Nano Banana Pro»**.
+
+**Consecuencia práctica:** el CLI es seguro **si se usa el ID**, nunca el nombre visible. El ID
+correcto es **`nano_banana_pro`**.
+
+### Lo que el CLI da y el navegador no
+
+- **`higgsfield generate cost <modelo> --prompt "…"`** → devuelve el precio **sin generar**.
+  Medido: `nano_banana_pro` = **2 credits**. Se acabó leer un botón en una captura.
+- **`higgsfield model get <modelo>`** → parámetros exactos. Para `nano_banana_pro`:
+
+  | Param | Valores | Default |
+  |---|---|---|
+  | `aspect_ratio` | `1:1 · 3:2 · 2:3 · 4:3 · 3:4 · 4:5 · 5:4 · **9:16** · 16:9 · 21:9` | **`1:1`** |
+  | `resolution` | `1k · 2k · 4k` | `2k` |
+  | `image_references` | array, hasta 14 | — |
+  | `prompt` | string | requerido |
+
+  ⚠️ **El default del CLI es `1:1`, no `3:4`.** En la web el default era 3:4. Hay que pasar
+  `--aspect-ratio 9:16` **explícitamente** o sale cuadrada.
+- **`higgsfield account status`** → saldo. Medido: **ultra plan, 2.019,21 créditos**.
+
+### Estado
+Autenticado y probado en lectura. **Todavía no se generó nada por CLI** — falta una generación de
+prueba que confirme que lo que sale es lo que se pidió.
