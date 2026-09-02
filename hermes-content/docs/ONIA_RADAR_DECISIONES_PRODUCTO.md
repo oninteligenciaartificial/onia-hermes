@@ -930,3 +930,54 @@ del 2026-08-20 (landing v2 rechazada entera, revertida en producción). No hay u
 
 Mientras no haya decisión, el ítem queda abierto en `COLA.md` con la medición completa para
 que la próxima vuelta no la repita.
+
+---
+
+## 19. La home dice "5 rubros vivos en producción hoy" y el catálogo dice que vivo = un cliente real lo usó (2026-09-02) — decisión de Sergio
+
+**Está vivo en producción ahora**, verificado con `curl https://onia.com.bo/` contra el
+contenedor `onia-landing` (no `main`, no Vercel): la primera banda debajo del hero —la que el
+código rotula *"BANDA DE PRUEBA — solo hechos verificables, cero logos/testimonios"*
+(`web-factory/apps/onia-platform/src/app/(sitio)/page.tsx:492-499`)— abre con
+**`5` · "rubros vivos en producción hoy"**.
+
+**El choque, y por qué no es una discusión de palabras.** El catálogo es la fuente de verdad
+de qué se vende y **define su propio vocabulario** (`ONIA_CATALOGO_DE_VENTA.md`, tabla "Los
+tres estados"):
+
+- 🟢 **Vivo** = *"tiene tablas, pantallas y **un cliente real lo usó**"*.
+- Y dos líneas después, el mismo archivo: *"La base de producción sigue con **0 organizaciones
+  de cliente**, así que 🟡 es el estado por defecto de casi todo"*.
+- En la tabla de rubros, sólo Clínica dental lleva *"el único con recorrido real"*.
+
+O sea: por el diccionario que nos escribimos nosotros, **cero rubros están "vivos"**, y la home
+declara cinco. Lo que el catálogo sí respalda es otra frase: *"desde el 2026-08-30 los CINCO
+ofrecidos **se pueden vender**"*. La cifra `5` es correcta; el que no calza es el adjetivo.
+
+**Por qué lo traigo acá en vez de arreglarlo yo**, que es lo que este carril hace con un
+defecto:
+1. **No es un defecto, es una promesa** — y la regla de `CLAUDE.md` dice que una promesa que
+   cambia *"se barre en TODA la superficie, no solo donde la estabas tocando"*. `/rubros` dice
+   **"Cinco rubros vivos y vendibles hoy"** (verificado en producción y en
+   `(sitio)/rubros/page.tsx:164`). Tocar sólo la home deja las dos páginas discrepando, que es
+   exactamente el bug que esa regla existe para evitar.
+2. **El que vende sos vos.** Cuál de las dos lecturas querés que reciba un lead —"cinco rubros
+   ya andando" vs "cinco rubros que puedo venderte hoy"— es decisión comercial, no un typo.
+
+**Tres caminos, ninguno cuesta plata y ninguno toca el diseño:**
+- **a) Alinear con el catálogo (barato y seguro).** `5` → *"rubros que se venden hoy"* en la
+  home, y `/rubros` a la frase equivalente. Una vuelta, dos archivos, cero píxeles movidos, y
+  la banda vuelve a cumplir lo que su propio comentario promete ("hechos verificables"). Es lo
+  que yo elegiría.
+- **b) Cambiar la palabra, no el marco.** *"rubros encendidos en producción hoy"*: es
+  literalmente cierto (los cinco tracks están activos en el `app.env` de producción) y conserva
+  el peso de "producción". Mismo costo que (a).
+- **c) Dejarlo.** Si tu lectura de "vivo" es "el software del rubro funciona", no hay nada roto
+  y se anota acá como excepción para que ninguna vuelta futura lo vuelva a levantar. Costo
+  cero — el riesgo es que "en producción hoy" le suene a un lead como "ya hay cinco rubros de
+  clientes usándolo", que es la prueba social que no tenemos.
+
+**Lo que NO pude contar yo:** cuántas organizaciones de cliente hay hoy en la base. Ese dato
+vive en la base self-hosted del VPS y es del carril `onia-db`; el "0" de arriba es del catálogo,
+no un `SELECT` de hoy. Si ese número cambió, cambia el color del ítem —pero no la opción (a),
+que es correcta con cualquier número.
