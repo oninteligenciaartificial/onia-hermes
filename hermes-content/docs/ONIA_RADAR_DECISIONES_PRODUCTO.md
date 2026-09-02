@@ -653,6 +653,19 @@ opt-in `prefijo` del commit `ba970f4a`, contenido y no fin de línea.
 
 ## 16. Treinta y un commits verificados ya están en `main` y NINGUNO está desplegado (2026-08-31) — decisión de Sergio
 
+> ⚠️ **Añadido el 2026-09-02 por el integrador — antes de decidir CUÁNDO desplegar, hay que
+> saber que hasta hoy el deploy ni siquiera arrancaba.** `web-factory/pnpm-lock.yaml` estaba
+> desincronizado con `web-factory/apps/onia-platform/package.json`, y los dos scripts de deploy
+> instalan con `pnpm install --frozen-lockfile` (`scripts/deploy-onia-landing.sh:24`,
+> `scripts/deploy-onia-center.sh:31`) — un modo que **falla** si el lockfile no coincide.
+> Reproducido con el lockfile de `main`: `ERR_PNPM_OUTDATED_LOCKFILE`, *"1 dependencies were
+> added: vitest@^4.1.8"*, exit 1. **El deploy de `onia.com.bo` moría en la línea 24, antes de
+> compilar una sola línea.** Ya está arreglado y verificado en `main` (`9d57be50`): con el
+> lockfile sincronizado, `pnpm install --frozen-lockfile` sale exit 0.
+> **Lo que cambia para la decisión:** nada de esta lista se movía aunque Sergio hubiera dicho
+> "desplegá" — habría fallado en el install y parecido un problema del servidor. Ahora sí
+> depende sólo de la decisión.
+
 **Qué pasó.** Dos carriles trabajaron días y su trabajo nunca llegó a `main`: `chatbot` estaba
 **245 commits atrás** y `web-factory` **251**. Lo único que le entraba a `main` eran auto-syncs.
 Mientras tanto la definición de hecho de este proyecto dice *"encendido en producción y
