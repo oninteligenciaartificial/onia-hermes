@@ -1,0 +1,26 @@
+{
+  "slug": "lucia-quiz-ejemplos",
+  "account": "lucia",
+  "formato": "story",
+  "nota": "🔴 Las options NO se dibujan. Se tipean en el sticker NATIVO de encuesta de Instagram al publicar. Responder tiene que costar UN TOQUE — dibujarlas mata la unica ventaja del formato.",
+  "slides": [
+    {
+      "kicker": "¿Qué sale?",
+      "window_label": "prompt",
+      "lines": [
+        "Le pedís a una IA que escriba tu post.",
+        "Le das tu web.",
+        "Y tres ejemplos tuyos."
+      ],
+      "headline": "¿Qué te devuelve?",
+      "options": [
+        "Un post tuyo",
+        "Un post genérico",
+        "Un post tuyo mal escrito",
+        "Depende de los ejemplos"
+      ],
+      "respuesta": "Depende de los ejemplos",
+      "por_que": "La IA copia lo que le mostrás. Con tres ejemplos flojos, copia lo flojo. Es la historia siguiente."
+    }
+  ]
+}
