@@ -952,3 +952,49 @@ no seguro. **La decisión es de Sergio, no mía.**
 **Lo que sí puede correr en el VPS hoy, sin tocar nada:** todo el trabajo de repo — renderizar
 carruseles, escribir creativos, correr los gates, verificar piezas. Eso no necesita sesión ni
 navegador logueado.
+
+---
+
+## 9. El camino correcto para el VPS es el CLI OFICIAL — y me corrijo dos veces
+
+### Corrección 1: exageré el riesgo de la cuenta
+
+Dije que copiar la sesión al VPS «arriesga la cuenta». **Sobredimensionado.** Copiar una cookie
+**no es loguearse**: no dispara el flujo de login. El peor resultado realista es que la **sesión
+se invalide** y Sergio tenga que volver a entrar. Los baneos vienen de volumen abusivo, violación
+de términos o fraude de pago — no de usar la propia sesión desde una segunda máquina.
+
+### Corrección 2: había un camino sancionado y no lo miré
+
+El propio menú de Higgsfield dice **`MCP & CLI`**, y su página tiene una pestaña **para Claude
+Code** con esto:
+
+```
+1. npm i -g @higgsfield/cli
+2. higgsfield auth login      (completa el sign-in en el navegador que abre)
+3. npx skills add higgsfield-ai/skills
+```
+
+Y aclaran: *«If you are using Claude Code or Codex, it's better to use the CLI»*.
+Connector MCP: `https://mcp.higgsfield.ai/mcp`.
+
+**Eso resuelve las tres objeciones de una vez:**
+
+| Objeción | Con el CLI |
+|---|---|
+| Riesgo de sesión | Autentica con **token propio**, no con cookies robadas |
+| Términos de servicio | Es **automatización sancionada** por ellos, no scraping |
+| El VPS no puede | Corre **headless**, sin manejar navegador |
+
+### ⚠️ Lo que NO queda resuelto, y hay que probar
+
+Sergio prohibió el **MCP** el 28-ago por una razón concreta: *«sustituye el modelo en silencio y
+cobra créditos»* — pedía `nano_banana_2` y el servidor resolvía a `nano_banana_flash`.
+
+**El CLI es otra pieza y puede no tener ese defecto**, pero eso **no está medido**. Antes de
+producir con él hay que hacer UNA generación de prueba y verificar en el panel de detalle que el
+modelo que salió es el que se pidió. Si vuelve a sustituir, se descarta igual que el MCP.
+
+### Estado
+**No instalado.** Instalarlo toca el VPS, que tiene un dueño a la vez y hoy lo está usando la
+otra sesión. Requiere OK de Sergio y coordinar.
