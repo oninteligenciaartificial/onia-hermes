@@ -962,6 +962,36 @@ Las tres formas de fantasma que ya aparecieron acá:
       matan desde aca. Se avisa, no se toca. El unico proceso de este carril sigue siendo el
       `serve-out 4319`.
 
+- [x] **AUD10 · La mitad del bloqueo ya estaba VENCIDA: `main` no lista este loop como
+      activo, lo tiene apagado desde el 01-sep** (2026-09-02). Decima vuelta de escalon 2
+      (`CARRIL A` y `CARRIL B` con **cero** `- [ ]`; los 4 sin marcar viven en *Bloqueadas*
+      y *Sin verificar*, que no son cola).
+      **El hallazgo, y corrige a AUD9.** AUD9 escribio que el commit de `docs-auditoria`
+      *"no esta en `main`"* y que por eso **`main` todavia lo lista como activo**. La
+      segunda mitad es **falsa**, medida hoy: `git show origin/main:hermes-content/docs/cola/loops.md`
+      trae a `web-factory-dev-loop` en la tabla **"Apagados a proposito — NO rearmar"**
+      (linea 175), con su motivo completo, y esta ahi desde `fe22ac99` (**2026-09-01**).
+      Lo unico que a `main` le falta de esa rama es `f046236f`, que corrige la cadencia de
+      **`marca-personal`** — otro loop, nada que ver con este.
+      **Por que importa**: la opcion (a) del item bloqueado pedia a Sergio DOS actos
+      (*"mergear `claude/docs-auditoria` a `main` y poner la tarea en `enabled: false`"*).
+      El merge no hace falta: el doc ya lo dice donde tiene que decirlo. **Queda un solo
+      acto, y es de un click**: `enabled: false`. Un bloqueo que pide de mas es tan caro
+      como uno vencido — le cobra a Sergio trabajo que ya esta hecho. Corregido el item.
+      **El bloqueo en si sigue vivo** (re-verificado, no asumido): `list_scheduled_tasks`
+      da `web-factory-dev-loop` con `enabled: true`, `cronExpression 45 * * * *`,
+      `lastRunAt 2026-09-02T08:48Z`. El cron dispara aunque el doc diga que no deberia.
+      **Auditoria del unico `[x]` sin mirar (AUD9), en frio**: sus cuatro numeros de gates
+      se reprodujeron identicos — `typecheck:packages` **exit 0**, `pnpm test` **269/269 en
+      2,77 s**, `pnpm e2e` **103 pasados / 0 fallados / 7 skipped en 1,2 min**, y
+      `git status --short` **vacio despues del e2e** (tercera corrida en frio del tope
+      `maxDiffPixels: 20` de A10: no regenera una sola baseline). Lo unico que no
+      sobrevivio a la auditoria fue su lectura de `main`, arriba.
+      **Salud, los cuatro puntos**: server 4319 → **200**; rama al dia con `origin`
+      (`e81d93e7`) y arbol limpio antes y despues del e2e; typecheck verde; **zombies:
+      ninguno mio** — los 24 `node.exe` de la maquina son los `next dev/start` de otros
+      worktrees, mismo cuadro que midio AUD9. Se avisa, no se toca.
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
@@ -1069,14 +1099,19 @@ Las tres formas de fantasma que ya aparecieron acá:
 ## Bloqueadas (esperan a Sergio)
 
 - [ ] **Apagar `web-factory-dev-loop` en Windows, o rellenar `CARRIL A`.** La decision ya
-      esta escrita y medida por otro carril: `loops.md` en `f046236f`
-      (rama `claude/docs-auditoria`) lo tiene en *"Apagados a proposito — NO rearmar"*
-      porque la cola quedo en cero. Pero ese commit no llego a `main` y el cron de Windows
-      sigue vivo (`45 * * * *`, `enabled: true`). Son dos caminos y los dos son de Sergio:
-      **(a)** apagarlo — mergear `claude/docs-auditoria` a `main` y poner la tarea en
-      `enabled: false`; o **(b)** revivirlo — decir que se construye ahora y `CARRIL A`
-      se rellena con eso. Mientras tanto cada vuelta solo puede auditar lo ya auditado.
+      esta escrita, medida por otro carril, **y ya esta en `main`**: `loops.md` en
+      `origin/main` (linea 175, desde `fe22ac99`, 2026-09-01) lo tiene en *"Apagados a
+      proposito — NO rearmar"* porque la cola quedo en cero. Lo unico que sigue vivo es el
+      cron de Windows (`45 * * * *`, `enabled: true`, `lastRunAt` 2026-09-02T08:48Z): la
+      decision no llego al unico lugar que la ejecuta. Son dos caminos y los dos son de
+      Sergio: **(a)** apagarlo — **un solo acto, poner la tarea en `enabled: false`**; o
+      **(b)** revivirlo — decir que se construye ahora y `CARRIL A` se rellena con eso.
+      Mientras tanto cada vuelta solo puede auditar lo ya auditado.
       Un loop no se apaga a si mismo: por eso esta aca y no lo hizo AUD9.
+      ⚠️ **Corregido por AUD10 (2026-09-02).** Aca decia que el commit *"no llego a `main`"*
+      y que habia que mergear `claude/docs-auditoria` primero. Falso: lo que a `main` le
+      falta de esa rama es `f046236f`, que corrige la cadencia de **`marca-personal`**, otro
+      loop. Este item le pedia a Sergio un merge que no hace falta.
 - [ ] Bloques cifra-editorial · quote-única · features+device (propuesta enviada).
 - [ ] Rediseño del dashboard admin real (onia-platform/onia-center = otra lane):
       se propone y coordina, no se toca desde acá.
