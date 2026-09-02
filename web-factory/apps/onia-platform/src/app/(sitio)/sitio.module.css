@@ -384,9 +384,17 @@
      resto del archivo, el mock quedaba 1,4x más grande en teléfono contra su
      propio bloque. Es la única excepción al ritmo en `em`, y es por eso. */
   container-type: inline-size;
-
-  --panel-paper: #fff;
-  --panel-ink: var(--tinta);
+}
+/* En telefono el ratio se suelta y el mat crece con el panel. El 4/3 estaba
+   para RESERVAR el alto de una foto que ya no existe (el panel se dibuja, no
+   carga nada: no hay CLS que evitar), y con la columna angosta el texto llega
+   a su piso de legibilidad —11,5px— antes que el mat: cuatro filas no entraban
+   y el remate quedaba cortado por 28px (medido a 375). En escritorio el ratio
+   se queda: ahi es la forma de la columna, no un problema de alto. */
+@media (max-width: 767px) {
+  .shape {
+    aspect-ratio: auto;
+  }
 }
 .shapeInk {
   background: var(--ink-block);
@@ -408,10 +416,17 @@
   border-radius: calc(var(--r-block) * 0.7);
   background: var(--panel-paper);
   color: var(--panel-ink);
+  /* ⚠️ Los dos tokens viven ACÁ y no en .shape: el panel también se dibuja
+     dentro del conmutador de rubros, donde el mat es la ranura del rodillo y
+     el color lo pone el rubro. Atados al mat, ese panel salía sin color. */
+  --panel-paper: #fff;
+  --panel-ink: var(--tinta);
   /* El piso NO es decorativo: a 0.6rem la fila de un pendiente caía a 8px en
      teléfono y el panel dejaba de LEERSE, que es lo único que tiene que hacer.
-     El techo lo pone el ancho de columna en escritorio. */
-  font-size: clamp(0.72rem, 3.4cqw, 0.95rem);
+     El techo subió de 0.95rem: con el mat en 4/3 y una lista de tres filas
+     sobraban 88-116px de hueco muerto sobre el remate (medido a 1440), y el
+     panel leía a medio llenar. */
+  font-size: clamp(0.72rem, 3.6cqw, 1.2rem);
   line-height: 1.35;
   text-align: left;
 }
@@ -452,12 +467,20 @@
 }
 
 /* ---- filas de pendientes (panel "agentes") ---- */
-/* El cuerpo flota entre la cabecera y el remate: en 4/3 con dos burbujas o
-   tres filas sobra alto, y pegado arriba el panel quedaba descolgado. */
+/* El cuerpo TOMA el alto que sobra y lo reparte entre sus filas. Antes flotaba
+   centrado (margin auto) y el sobrante se juntaba todo en un hueco muerto
+   entre la última fila y el remate — 88-116px a 1440. El mat tiene ratio fijo
+   y la lista es corta: el aire va entre las filas, no al final. */
 .panelRows,
 .panelChat,
+.panelBars {
+  flex: 1 1 auto;
+  justify-content: space-evenly;
+}
+/* grid: el eje que sobra es el de bloque, y ahí manda align-content */
 .panelGrid {
-  margin: auto 0;
+  flex: 1 1 auto;
+  align-content: space-evenly;
 }
 .panelRows {
   display: flex;
@@ -489,6 +512,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* Hora de la cita (panel dental). Mono y apagada: es el ancla de la fila, no
+   el dato que se lee primero. */
+.panelHora {
+  flex: none;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.76em;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--panel-ink) 62%, transparent);
+}
+
 /* Pastilla de acción: el verde va en la FORMA y el texto en verde OSCURO.
    Blanco sobre verde señal mide 1,48:1; verde-800 sobre verde-100 mide 9,4:1. */
 .panelAct {
@@ -499,6 +532,61 @@
   color: var(--verde-800);
   font-size: 0.74em;
   font-weight: 600;
+}
+/* Estado ya resuelto (Confirmada, Enviada, Armado). Va apagada para que el
+   verde quede reservado a lo único que espera a la persona: con tres pastillas
+   verdes iguales el ojo no sabe dónde caer. Gris al 62% sobre blanco = 6,3:1. */
+.panelActSoft {
+  background: color-mix(in srgb, var(--panel-ink) 6%, transparent);
+  color: color-mix(in srgb, var(--panel-ink) 68%, transparent);
+}
+
+/* ---- caja del día por método de pago (panel "comercio") ---- */
+/* La barra es una FORMA, no una cifra: el argumento es que el día ya viene
+   cortado por método de pago. Un monto adentro de una interfaz creíble se lee
+   como plata real de un cliente, y no hay uno solo pagando todavía. */
+.panelBars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+.panelBarRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.panelBarLbl {
+  flex: none;
+  width: 5.4em;
+  font-size: 0.84em;
+}
+.panelBarTrack {
+  flex: 1 1 auto;
+  height: 0.6em;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--panel-ink) 7%, transparent);
+}
+.panelBarFill {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--verde-500);
+}
+
+/* ---- sesiones del paquete (panel "estética") ---- */
+.panelDots {
+  flex: none;
+  display: flex;
+  gap: 0.25em;
+}
+.panelDot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--panel-ink) 15%, transparent);
+}
+.panelDotOn {
+  background: var(--verde-500);
 }
 
 /* ---- conversación (panel "chat") ---- */
@@ -556,10 +644,9 @@
 /* Va con peso y a tamaño pleno a propósito: es lo SEGUNDO que se lee del
    panel, no el pie de foto. En gris chico el gráfico se quedaba sin frase. */
 .panelFoot {
-  /* `auto` arriba y no `justify-content: space-between` en el padre: con tres
-     hijos el reparto abría un hueco muerto entre la cabecera y la primera
-     fila. Así la cabecera y el cuerpo quedan juntos y el remate cae al pie. */
-  margin: auto 0 0;
+  /* sin `margin: auto` arriba: el que empuja ahora es el cuerpo, que crece y
+     reparte el sobrante entre sus filas en vez de acumularlo acá */
+  margin: 0;
   font-size: 1.05em;
   font-weight: 600;
   line-height: 1.25;
@@ -1749,26 +1836,28 @@
 /* Conmutador de RUBROS — mecánica MEDIDA de Fanvue, portada del bloque     */
 /* vanilla (packages/blocks/src/sticky-niche-switcher.ts) y de la versión   */
 /* React verificada (components/landing-v2/rubros.tsx). El JS solo escribe   */
-/* --niche-i; el CSS deriva el rodillo, la opacidad de las palabras y la     */
-/* píldora. Cero GSAP: conmutador DISCRETO por umbral. Acá el rodillo NO      */
-/* lleva fotos (regla: sin imágenes) — lleva bloques de forma/color por       */
-/* rubro, que es justo el juego de formas de Fanvue.                         */
+/* --niche-i; el CSS deriva el rodillo y la opacidad de las palabras. Cero   */
+/* GSAP: conmutador DISCRETO por umbral.                                     */
+/*                                                                          */
+/* El rodillo lleva el PANEL DIBUJADO de cada rubro, no una captura: cada    */
+/* ranura es el MISMO mat de color de <Shape> (tarjeta clara sobre color,    */
+/* cero sombra) y adentro va el panel del rubro. Hasta el 2026-09-01 llevó   */
+/* cinco .webp del producto, con el recorte horneado en el archivo —el texto */
+/* salía cortado a mitad de palabra— y con sombra propia.                    */
 /* ---------------------------------------------------------------------- */
 
 .runway {
   --niche-i: 0;
   --niche-step: 720px; /* scroll por rubro */
-  /* Alto de la tarjeta-ventana. Era 340: ahi la captura entraba al 45% y el
-     texto de 16px caia a 7px — ilegible, que es por lo que las capturas
-     anteriores "se veian muy mal". A 560 el recorte va casi 1:1 y se lee. */
-  --niche-slot: 560px;
-  --niche-stage: 620px; /* alto del pegado */
+  /* Alto de UNA ranura del rodillo — el paso exacto del traslado. El ancho
+     sale de acá por el ratio 4/3 del mat, el mismo de <Shape> en todo el
+     sitio. Era 560 de alto por 0.853 de ancho: vertical, porque adentro iba
+     una captura de teléfono. Un panel dibujado es una lista, y en vertical
+     dejaba media tarjeta vacía. */
+  --niche-slot: 430px;
+  --niche-stage: 500px; /* alto del pegado */
   --niche-dur: 0.5s;
   --niche-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  /* alto de la píldora en px FIJO: ventana, fila y traslado comparten esta
-     unidad. En em se compondría contra font-size distintos y la ventana
-     mostraría dos filas a la vez (bug medido en el primer render). */
-  --pill-h: 30px;
   position: relative;
   height: calc(var(--niche-step) * var(--niche-run));
   margin-top: 2.4em;
@@ -1819,9 +1908,12 @@
   opacity: 0.25;
   transition: opacity var(--niche-dur) var(--niche-ease);
 }
+/* Fluida y no 3em fijos: la palabra mas larga (Importadora) medida a 48px
+   ocupa ~278px, y entre 768 y 1000 la columna que le queda al lado de la
+   tarjeta es menor — se cortaba contra el borde del inner. */
 @media (min-width: 768px) {
   .word {
-    font-size: 3em;
+    font-size: min(3em, 5vw);
   }
 }
 .word[aria-current="true"] {
@@ -1840,22 +1932,17 @@
   opacity: 1;
 }
 /* la tarjeta ES la ventana: overflow hidden + una tira que se traslada un
-   slot exacto por rubro (rodillo medido, no cross-fade) */
-/* La tarjeta tiene que leerse como una VENTANA al producto. Con el bloque de
-   color se leia sola; con la captura real —que es casi blanca— se fundia con el
-   fondo claro de la seccion y el contenido quedaba flotando sin marco. El borde
-   y la sombra devuelven ese limite sin robarle protagonismo a la foto. */
+   slot exacto por rubro (rodillo medido, no cross-fade).
+   Sin borde, sin fondo y SIN SOMBRA: cada ranura es un mat de color entero, se
+   recorta sola contra el papel de la sección y la profundidad la da el color.
+   El borde y la sombra existían para que la captura casi blanca no se fundiera
+   con el fondo — y contradecían el lenguaje aprobado (cero sombras). */
 .card {
   position: relative;
-  width: calc(var(--niche-slot) * 0.853);
+  width: calc(var(--niche-slot) * 4 / 3);
   height: var(--niche-slot);
   border-radius: var(--r-block);
   overflow: hidden;
-  background: var(--surface-dim);
-  border: 1px solid color-mix(in srgb, var(--tinta) 12%, transparent);
-  box-shadow:
-    0 1px 2px color-mix(in srgb, var(--tinta) 6%, transparent),
-    0 18px 40px -12px color-mix(in srgb, var(--tinta) 18%, transparent);
 }
 .roll {
   display: flex;
@@ -1863,76 +1950,24 @@
   transform: translateY(calc(var(--niche-i) * var(--niche-slot) * -1));
   transition: transform var(--niche-dur) var(--niche-ease);
 }
-/* cada "foto" es un bloque de forma+color del rubro, no una imagen */
+/* Cada ranura es el mat del rubro: color de fondo (lo pone el JSX con el token
+   del rubro) y el panel dibujado apoyado encima. Misma composición que .shape,
+   y por eso el mismo container-type: el panel escala con el ANCHO de la ranura
+   y no con el font-size de la página. */
 .slot {
   position: relative;
   width: 100%;
   height: var(--niche-slot);
+  display: grid;
+  padding: 6%;
   overflow: hidden;
-}
-/* Color del rubro DEBAJO de la foto: es lo que se ve mientras carga y evita el
-   destello blanco. Antes llevaba dos rectangulos translucidos encima que
-   simulaban una interfaz; con la captura real ya no hacen falta, y sin la foto
-   se leian como una imagen rota. */
-.slotShape {
-  position: absolute;
-  inset: 0;
-}
-/* Etiqueta por captura: invisible en desktop, donde la palabra activa ya esta
-   gigante al lado del rodillo. Se enciende en el layout apilado. */
-.slotNombre {
-  display: none;
-}
-.slotFoto {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top left;
-  display: block;
-}
-.pill {
-  position: absolute;
-  left: 12px;
-  bottom: 12px;
-  display: flex;
-  align-items: center;
-  height: var(--pill-h);
-  max-width: calc(100% - 24px);
-  padding: 0 0.7rem;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--tinta) 50%, transparent);
-  backdrop-filter: blur(10px);
-  color: #fff;
-  overflow: hidden;
-  z-index: 1;
-}
-.pillWin {
-  display: block;
-  height: var(--pill-h);
-  overflow: hidden;
-}
-.pillRows {
-  display: block;
-  transform: translateY(calc(var(--niche-i) * var(--pill-h) * -1));
-  transition: transform var(--niche-dur) var(--niche-ease);
-}
-.pillRow {
-  display: block;
-  height: var(--pill-h);
-  line-height: var(--pill-h);
-  font-family: var(--font-mono), monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  white-space: nowrap;
+  container-type: inline-size;
 }
 
 @media (max-width: 1023px) {
   .runway {
-    --niche-slot: 420px;
-    --niche-stage: 520px;
+    --niche-slot: 320px;
+    --niche-stage: 400px;
   }
 }
 
@@ -1959,39 +1994,27 @@
   .word {
     opacity: 1;
   }
+  /* El tope NO es para el teléfono (ahí manda el 100%): este apilado también
+     es el de reduced-motion, y en un escritorio de 1440 sin el tope los cinco
+     paneles salían de 1184px de ancho, con el mock más grande que el texto de
+     la sección. */
   .card {
-    width: min(100%, 320px);
+    width: min(100%, 30rem);
     height: auto;
-    margin: 0 auto;
+    margin-inline: auto;
     overflow: visible;
-    background: none;
   }
   .roll {
     transform: none;
   }
+  /* Cada panel dice su propio rubro en el sello de la cabecera ("Dental",
+     "Comercio"...), así que acá NO va ninguna etiqueta encima: la que había se
+     apoyaba sobre las filas del panel y tapaba una. */
   .slot {
     height: auto;
-    aspect-ratio: 282 / 331;
-    margin-bottom: 12px;
+    aspect-ratio: auto;
+    margin-bottom: 14px;
     border-radius: var(--r-block);
-  }
-  .pill {
-    display: none;
-  }
-  .slotNombre {
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
-    z-index: 1;
-    display: block;
-    padding: 0.28rem 0.6rem;
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--tinta) 82%, transparent);
-    color: #fff;
-    font-family: var(--font-mono), monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
   }
 }
 
@@ -2000,7 +2023,6 @@
 @media (prefers-reduced-motion: reduce) {
   .word,
   .roll,
-  .pillRows,
   .btn,
   .link,
   .navLink,
@@ -2016,9 +2038,6 @@
     transition: none;
     animation: none;
   }
-  .pill {
-    backdrop-filter: none;
-  }
 }
 
 /* ---------------------------------------------------------------------- */
@@ -2031,7 +2050,7 @@
 /*                                                                         */
 /* El envoltorio declara aspect-ratio (cero CLS) y pinta el verde profundo */
 /* debajo: es lo que se ve mientras carga, y evita el destello blanco —    */
-/* misma decisión que .slotShape en el conmutador. La hairline existe      */
+/* misma decisión que el mat de cada rubro en el conmutador. La hairline  */
 /* porque las fotos vienen con los blancos frenados a ~96% y sin ella el   */
 /* borde se funde con el papel #F9FBFA. Cero sombra, como todo el archivo. */
 /* ---------------------------------------------------------------------- */

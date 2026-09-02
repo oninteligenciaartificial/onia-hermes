@@ -22,10 +22,12 @@ import s from "./sitio.module.css";
  *   manifiesto → agentes → chatbot → SWITCHER de rubros (estrella) →
  *   precios → FAQ → cierre.
  *
- * Las tres pantallas del hero, agentes y chatbot son CAPTURAS REALES del
- * producto. Donde todavía no hay clip va un placeholder de forma+color con el
- * ratio ya reservado, así el material real entra sin CLS. Precios y
- * capacidades salen SOLO de las fuentes (lib/pricing.ts,
+ * Ninguna pantalla de esta página es una captura del producto: las de agentes,
+ * chatbot y el conmutador de rubros son PANELES DIBUJADOS (<Shape> en ui.tsx),
+ * y las fotos son de contexto —la persona en su negocio, sin pantalla legible—.
+ * Sergio, 2026-09-01, textual: "no coloques capturas literales del sistema, se
+ * ve mal, coloca cosas referenciales". El guard forma.test.ts lo sostiene.
+ * Precios y capacidades salen SOLO de las fuentes (lib/pricing.ts,
  * content/chatbot-precios.ts, lib/proof.ts) — cero cifras a mano.
  */
 
@@ -186,8 +188,8 @@ const FAQ = [
  *
  * Cada línea es un RESULTADO, y cada resultado es una capacidad YA publicada
  * en este mismo sitio — acá no se promete nada nuevo:
- *   · mañana → switcher.tsx:50 (agenda del día: hora, motivo y teléfono)
- *   · tarde  → switcher.tsx:51 (caja: total del día por método de pago)
+ *   · mañana → panel "dental" de ui.tsx (agenda del día: hora y tratamiento)
+ *   · tarde  → panel "comercio" de ui.tsx (la caja cortada por método de pago)
  *              + rubros/page.tsx:39 (fiados)
  *   · noche  → rubros/page.tsx:41 (paquetes y sesiones) + la sección 5 de
  *              este mismo archivo (el borrador que espera tu aprobación)

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { PanelDibujado } from "./ui";
 import s from "./sitio.module.css";
 
 /**
@@ -15,47 +16,49 @@ import s from "./sitio.module.css";
  *    saltando hacia atrás el índice quedaba clavado en el último).
  *  · Las bandas miden un rubro de alto, no 1px: un punto se saltea entre dos
  *    frames y el observador nunca despierta.
- *  · El CSS deriva del entero el rodillo, la opacidad de las palabras (1 / .25)
- *    y la píldora. Conmutador DISCRETO por umbral (sin scrub, sin pin, sin GSAP).
+ *  · El CSS deriva del entero el rodillo y la opacidad de las palabras (1 /
+ *    .25). Conmutador DISCRETO por umbral (sin scrub, sin pin, sin GSAP).
  *  · Apilado (móvil / reduced-motion) las palabras van ANTES de las formas.
  *
- * El rodillo ya lleva la CAPTURA REAL de cada rubro. Antes llevaba un bloque de
- * forma+color —dos rectangulos translucidos sobre el color del rubro— que se leia
- * como una imagen que no cargo. La ranura estaba reservada con el ratio exacto,
- * asi que cablear la foto no movio nada: cero CLS.
+ * El rodillo lleva el PANEL DIBUJADO de cada rubro (<PanelDibujado>, el mismo
+ * de <Shape>), no una captura. Hasta el 2026-09-01 llevó cinco .webp del
+ * producto y era la peor superficie del sitio: el recorte estaba horneado en el
+ * archivo, así que el texto salía cortado a mitad de palabra ("Borrador → e"),
+ * las capturas traían su propia sombra —contra el lenguaje aprobado, cero
+ * sombras— y una fecha vieja quemada adentro. Sergio, 2026-09-01, textual: "no
+ * coloques capturas literales del sistema, se ve mal, coloca cosas
+ * referenciales". El guard forma.test.ts impide volver a cablearlas.
  *
- * El color sigue debajo de la foto a proposito: es lo que se ve mientras carga,
- * y evita el destello blanco.
+ * El color del rubro pasó de ser el fondo DE la captura a ser el mat sobre el
+ * que se apoya el panel: misma composición que <Shape> en el resto del sitio
+ * (tarjeta clara sobre color, profundidad por solape y escala, cero sombra).
  *
- * Cada rubro muestra la pantalla que cuenta SU historia, no la misma para todos
- * —agenda, caja, cotizaciones, contabilidad—: en un conmutador que existe para
- * probar que el sistema cambia por rubro, cinco fotos parecidas prueban lo
- * contrario. Se generan con prisma/seed-demo.ts de onia-platform + el recorte de
- * .verif-tmp/recortes-rubro.mjs, a 2x del tamano de la tarjeta.
- *
- * `<img>` a secas y no next/image: el build es `output: standalone` sobre el VPS
- * y ahi next/image no optimiza (misma decision que landing-v2/pantalla.tsx).
+ * Cada rubro muestra la pantalla que cuenta SU historia —agenda, caja,
+ * cotizaciones, sesiones, cierre de mes—: en un conmutador que existe para
+ * probar que el sistema cambia por rubro, cinco paneles iguales prueban lo
+ * contrario. El contenido de cada uno vive en ui.tsx, al lado de su rótulo
+ * accesible.
  */
 
 type Rubro = {
-  id: string;
+  /** el mismo id que el panel dibujado en ui.tsx (PanelId) */
+  id: "dental" | "comercio" | "importadora" | "estetica" | "servicios";
   palabra: string;
-  /** color del bloque del rubro (tokens de marca, nunca un hex suelto) */
+  /** color del mat del rubro (tokens de marca, nunca un hex suelto) */
   bg: string;
-  /** que se ve en la captura — es el alt, asi que describe la pantalla */
-  alt: string;
 };
 
+/**
+ * Los cinco mats se alternan a propósito: dos rubros seguidos del mismo verde
+ * hacían que el rodillo pareciera no haber cambiado de panel.
+ */
 const RUBROS: readonly Rubro[] = [
-  { id: "dental", palabra: "Dental", bg: "var(--verde-800)", alt: "Agenda del día de una clínica dental: tres citas con hora, duración, motivo y teléfono." },
-  { id: "comercio", palabra: "Comercio", bg: "var(--verde-900)", alt: "Caja de una ferretería: total del día por método de pago y las ventas una por una." },
-  { id: "importadora", palabra: "Importadora", bg: "var(--tinta)", alt: "Cotizaciones B2B de una importadora, con su estado y su monto en bolivianos." },
-  { id: "estetica", palabra: "Estética", bg: "var(--verde-700)", alt: "Agenda del día de un centro de estética: sesiones de láser y controles post-tratamiento." },
-  { id: "servicios", palabra: "Servicios", bg: "var(--verde-900)", alt: "Contabilidad de un estudio profesional: IVA e IT del mes y registro de ventas." },
+  { id: "dental", palabra: "Dental", bg: "var(--verde-800)" },
+  { id: "comercio", palabra: "Comercio", bg: "var(--signal)" },
+  { id: "importadora", palabra: "Importadora", bg: "var(--tinta)" },
+  { id: "estetica", palabra: "Estética", bg: "var(--verde-700)" },
+  { id: "servicios", palabra: "Servicios", bg: "var(--verde-900)" },
 ];
-
-/** 2x del tamaño de la tarjeta: alcanza para retina sin pagar un archivo enorme. */
-const FOTO = { w: 956, h: 1120 } as const;
 
 export function Switcher() {
   const runwayRef = useRef<HTMLDivElement | null>(null);
@@ -114,37 +117,15 @@ export function Switcher() {
         <div className={s.card}>
           <div className={s.roll}>
             {RUBROS.map((r) => (
-              <div key={r.id} className={s.slot}>
-                <span
-                  className={s.slotShape}
-                  style={{ background: r.bg } as CSSProperties}
-                  aria-hidden="true"
-                />
-                {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
-                <img
-                  src={`/rubros/${r.id}.webp`}
-                  alt={r.alt}
-                  width={FOTO.w}
-                  height={FOTO.h}
-                  loading="lazy"
-                  decoding="async"
-                  className={s.slotFoto}
-                />
-                {/* Solo en el layout APILADO (movil / reduced-motion). Ahi las
-                    cinco capturas se ven a la vez y, sin esto, nada dice cual es
-                    cual: la lista de palabras esta arriba y la correspondencia
-                    queda librada a que el lector cuente posiciones. En desktop
-                    sobra —la palabra activa esta gigante al lado— y por eso el
-                    CSS la esconde. */}
-                <span className={s.slotNombre} aria-hidden="true">
-                  {r.palabra}
-                </span>
+              <div
+                key={r.id}
+                className={s.slot}
+                style={{ background: r.bg } as CSSProperties}
+              >
+                <PanelDibujado panel={r.id} />
               </div>
             ))}
           </div>
-          {/* La pildora con el nombre del rubro se quito al cablear la foto: sobre
-              el bloque de color se leia, pero sobre una captura clara tapaba una
-              fila de datos para repetir la palabra que ya esta gigante al lado. */}
         </div>
 
         <div className={s.stageMid}>

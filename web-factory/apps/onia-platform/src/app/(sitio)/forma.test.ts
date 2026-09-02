@@ -8,19 +8,39 @@ import { describe, expect, it } from "vitest";
  * El sitio de venta NO sirve capturas literales del producto.
  *
  * Sergio, 2026-09-01, textual: "no coloques capturas literales del sistema, se
- * ve mal, coloca cosas referenciales". Ese día había SEIS: cinco pasaban por
- * `<Shape src=...>` y se reemplazaron por paneles dibujados.
+ * ve mal, coloca cosas referenciales". Ese día cayeron primero las que servía
+ * `<Shape src=...>` y después las cinco del conmutador de rubros: todas se
+ * reemplazaron por paneles dibujados.
  *
  * El guard existe porque cablear una captura es la solución obvia y barata: ya
- * pasó una vez (la ranura de forma+color nació vacía y terminó con cuatro
- * .webp del panel adentro), y un `grep` a mano no lo va a atrapar dentro de
- * seis meses. `<Shape>` ya no compila con `src`, pero un `<img>` suelto sí.
+ * pasó dos veces (la ranura de forma+color nació vacía y terminó con cuatro
+ * .webp del panel adentro, y el conmutador con cinco más), y un `grep` a mano
+ * no lo va a atrapar dentro de seis meses. `<Shape>` ya no compila con `src`,
+ * pero un `<img>` suelto sí.
+ *
+ * ⚠️ El patrón cubre DOS rutas y no una. La primera versión sólo miraba
+ * `"…capturas/"`, anclado a comillas dobles: no vio `/rubros/${r.id}.webp` —
+ * otra carpeta, y armado con un template literal— y las cinco capturas del
+ * conmutador sobrevivieron a este mismo archivo. Una regla que sólo caza la
+ * forma exacta del bug de ayer no es una regla.
  *
  * Sólo se mira `app/(sitio)` — la superficie de venta viva. `/v1` y
  * `components/landing-v1/` son el ARCHIVO de la web publicada hasta el
  * 2026-08-21 (noindex, su layout existe para conservarla tal cual se publicó)
  * y conservan su captura a propósito.
+ *
+ * Lo que NO caza, a propósito: `/contexto/` y `/fotos/` son fotos de negocios
+ * reales —una persona en su local, ninguna pantalla legible—, que es
+ * justamente lo referencial que Sergio pidió.
  */
+
+/** Cada patrón es una forma de servir una captura del producto. */
+const CAPTURA: readonly [string, RegExp][] = [
+  // carpeta vieja de capturas, en cualquier string
+  ["capturas/", /["'`][^"'`]*capturas\//],
+  // el conmutador de rubros: ruta a imagen, incluso interpolada
+  ["/rubros/*.<img>", /rubros\/[^"'`\s)]*\.(?:avif|jpe?g|png|webp)/i],
+];
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 
@@ -45,8 +65,10 @@ describe("la superficie de venta dibuja, no fotografía el sistema", () => {
   it.each(archivos.map((f) => [f.slice(AQUI.length + 1), f]))(
     "%s no sirve una captura del producto",
     (_rotulo, ruta) => {
-      // el `"` deja fuera los comentarios que explican POR QUÉ no van
-      expect(readFileSync(ruta, "utf8")).not.toMatch(/"[^"]*capturas\//);
+      const codigo = readFileSync(ruta, "utf8");
+      for (const [rotulo, patron] of CAPTURA) {
+        expect(codigo, `sirve una captura (${rotulo})`).not.toMatch(patron);
+      }
     },
   );
 });
