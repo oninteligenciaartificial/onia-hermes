@@ -160,6 +160,14 @@ S4: "Documento todo en mi comunidad. Gratis. Link arriba."
    comunidad). Fuente: drop D2.
 2. **"3 cursos de IA gratis y con certificado"** — 5 láminas. Recicla el reel de 948
    vistas en formato guardable (los carruseles viven del "guardar").
+3. **"Cómo contesto a cada cliente sin estar yo"** — 7 láminas en
+   `carousels/out/carrusel-atender-clientes/` (portada + 5 pasos + CTA comunidad). El paso
+   a paso de la atención con IA: una sola bandeja · guion propio editado conversando ·
+   entiende fotos y audios · escala a una persona cuando hay que cerrar · seguimiento solo.
+   Todo lo que afirma sale de la fila "Chatbot con IA (web + WhatsApp)" de
+   `ONIA_CATALOGO_DE_VENTA.md`, en estado vivo. **Sin precio** (el catálogo no le pone
+   precio de lista a esa fila). Caption sugerida: el hook es la portada —
+   *"Contesto a cada cliente sin estar yo. Así funciona, en 5 pasos."*
 
 ## Calendario
 
