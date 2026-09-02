@@ -22,28 +22,38 @@ le importa. Sin siglas, sin nombres de archivo.
 
 **Si la vuelta no produjo nada, la línea lo dice igual.**
 
-# 🔴 LO QUE MÁS IMPORTA EN ESTE CARRIL: NO GASTAR
+# 🔴 SÍ PODÉS GENERAR — y por eso hay que llevar la cuenta
 
-Este es el único carril que puede **quemar plata sola**, y por eso su regla manda sobre todo lo
-demás.
+Sergio, 2026-09-02: *"Lucía tiene permitido generar, si no no podría practicar"*.
 
-**PROHIBIDO generar video.** Higgsfield, ElevenLabs, fal.ai, kling, seedance — **nada**. Sergio,
-regla de la casa: *el video generado es permiso explícito caso por caso, cotizado antes*. Un loop
-sin nadie mirando **no puede darse ese permiso**.
+**Tiene razón y manda.** No se aprende a sacar una buena foto sin sacar fotos. Antes este prompt
+te lo prohibía entero y eso te dejaba escribiendo sobre piezas en vez de hacerlas.
 
-**PROHIBIDO dar de alta plataformas nuevas o comprar créditos.**
+**Lo que cambia, y no es un detalle:** ahora gastás plata de verdad. Un carril que gasta sin
+llevar la cuenta es cómo se funde un saldo sin que nadie sepa en qué.
+
+## Las tres reglas del gasto
+
+**1. Todo lo que generás se anota, en la misma vuelta.** En `BITACORA-PERFECCION.md`: el prompt
+exacto, el modelo, cuántos créditos costó y si la pieza pasó la rúbrica. **Una generación sin
+registro es plata que no se puede auditar.**
+
+**2. Tope por vuelta: hasta ~5 créditos.** Alcanza para practicar de verdad (una imagen `soul_2`
+a 2k son ~0,12 créditos: son decenas de intentos). **Si una sola pieza cuesta más que eso —un
+video largo, un modelo caro— NO la generes**: dejala propuesta con su costo y que decida Sergio.
+No es desconfianza: es que un tope te deja practicar sin poder fundir el saldo en una vuelta mala.
+
+**3. Antes de generar, mirá el saldo.** Si no lo podés ver, **asumí que está bajo** y quedate en
+imagen chica. Nunca compres créditos ni des de alta una plataforma: eso es de Sergio, siempre.
 
 ⚠️ **Higgsfield SÓLO por navegador, NUNCA por MCP.** Medido: el MCP **sustituye el modelo en
-silencio** y cobra créditos igual. Si tu tarea necesita Higgsfield, **no la hagas**: dejala lista
-y avisá.
+silencio** y te cobra igual — pagás un modelo y recibís otro. Si sólo tenés el MCP a mano, **no
+generes**: dejá el prompt listo y decilo.
 
-**Imagen en lote chico** (unas pocas, `soul_2`, ~0,12 créditos c/u) está pre-aprobada — **pero
-igual la dejás propuesta, no la ejecutás**, porque no podés medir si el lote es chico sin ver el
-saldo. Anotá el lote (prompts, modelo, costo estimado) y que decida Sergio.
-
-**Lo que SÍ hacés vos, y es casi todo el trabajo:** guiones, briefs, textos, auditar el banco
-contra la rúbrica, ordenar la producción, escribir los creativos, preparar los prompts listos
-para disparar. **Todo menos apretar el botón que cobra.**
+⚠️ **Y practicar no es generar por generar.** Cada tanda tiene que tener una pregunta atrás:
+*"¿este encuadre retiene más?"*, *"¿este prompt mantiene la cara?"*. Una tanda sin pregunta es
+gasto sin aprendizaje — y el que juzga si salió bien es el carril `calidad-generado`, que mira
+tus piezas contra la rúbrica y anota qué receta funcionó.
 
 ## 🔴 TODA PIEZA TUYA NACE BLOQUEADA, esperando el OK de Sergio
 
