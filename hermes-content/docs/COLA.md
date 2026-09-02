@@ -822,6 +822,80 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Gates:** `tsc --noEmit` 0 · `vitest run forma.test.ts` **99 pasando** (eran 51: el walk
       pasó de 33 archivos a 81) · `npm run build` exit 0, 32/32 páginas.
 
+### Encontrado el 2026-09-02 MIRANDO la home en TELÉFONO — ARREGLADO en la misma vuelta
+
+- [x] **La home abría con una franja de 148px EN BLANCO en el primer scroll del iPhone más
+      común, y ninguna revisión lo vio nunca porque todas se hicieron a 1440×900.** Es la
+      pantalla #1 del carril y el dispositivo real del lead: el link llega por WhatsApp y se
+      abre en el teléfono.
+      **Cómo apareció:** ni "Ahora" ni "Después" tenían ítem abierto de esta zona, así que se
+      bajó al escalón 2 (auditar los `[x]`). El `[x]` de las tarjetas sociales auditó limpio —
+      las 16 rutas sirven `og:image` **y** `twitter:image` con `summary_large_image`, medido
+      sobre el HTML del build. Lo que ninguna de las auditorías previas había hecho es abrir las
+      dos pantallas en un viewport de teléfono.
+      **El defecto, medido en tamaños reales de dispositivo** (Playwright, `channel: 'chromium'`):
+
+      | dispositivo | franja en blanco |
+      |---|---|
+      | iPhone 12/13/14/15/16 (390×844) | **148px** |
+      | Galaxy S20/S23 (360×800) | **53px** |
+      | iPhone SE (375×667) | 0 — el panel ni asoma |
+      | iPhone Pro (393×852) y todo lo más alto | 0 — entraba justo al 35% |
+
+      **La causa, y por qué se escapó tres veces:** `src/motion/tokens.ts` definía
+      `viewportOnce = { once: true, amount: 0.3 }`. El `amount` de `whileInView` se mide sobre el
+      **alto del elemento**, no sobre lo que se ve. El panel del día (`s.day`) mide 512px en
+      teléfono y asoma 148px = **29%**, contra un umbral de 30%: se quedaba en `opacity: 0`
+      hasta que el visitante scrolleara. A 393×852 asoma 180px = 35% y dispara — por eso el
+      defecto es invisible en cualquier pantalla grande, incluida la de quien revisa.
+      **Y ya había mordido antes, con la causa a la vista.** `(sitio)/servicios/webs/page.tsx:180`
+      tiene el diagnóstico escrito desde hace tiempo —"un Reveal más alto que ~3,3 pantallas
+      nunca llega al 30% visible y se queda en opacity 0 para siempre"— y se arregló **achicando
+      ese Reveal**. La causa quedó viva en el token, y de ahí llegó a la home. Es el mismo patrón
+      que esta cola ya anotó para los guards: arreglar la instancia donde saltó y no la clase.
+      **Lo que se hizo:** el token pasa a `amount: "some"` (cualquier píxel dentro). La
+      invariante queda enunciable y no depende del alto de nada: **nada que toque la pantalla
+      puede quedar invisible**. Con una fracción no se cumple para bloques altos; con `"some"`
+      se cumple por definición. El estado final de cada página es idéntico —sólo cambia CUÁNDO
+      dispara la entrada—, así que no es un cambio de dirección visual.
+      **Probado que los guards MUERDEN, no que sólo pasan** (`src/motion/tokens.test.ts`, nuevo):
+      - Se devolvió el token a `amount: 0.3` → `× no usa una fraccion como umbral`.
+      - Se escribió `viewport={{ once: true, amount: 0.45 }}` a mano en `reveal.tsx` → el guard
+        lo cazó por archivo y línea. Restaurado, verde.
+      - El guard mira **sólo** el `viewport={{…}}` de `whileInView`, que es la clase que
+        esconde. `useInView` (`CountUp`, `AgentScene`) queda afuera **a propósito y medido**:
+        renderizan su contenido igual —`CountUp` sirve el valor final desde el server— y un
+        umbral ahí sólo demora una animación de pasos. La primera versión del guard los marcaba
+        y era un falso positivo.
+      **Verificado MIRANDO, y en las 16 rutas, no sólo donde arreglé:** barrido de
+      `16 rutas × 3 tamaños = 48 pantallas` preguntando por cualquier elemento con `opacity: 0`
+      que toque el viewport inicial → **cero**. Antes del cambio, ese mismo barrido marcaba la
+      home a 390×844 y a 360×800.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-home-telefono-franja-en-blanco-ANTES.png`
+      (la franja vacía) y `…/2026-09-02-home-telefono-panel-visible.png` (el panel del día ya
+      visible en la primera pantalla).
+
+- [x] **De paso, el gate del carril: los 115 tests de guarda NO los corría nadie.** Las suites
+      que estas vueltas fueron construyendo —`forma.test.ts` (cero capturas del sistema, las 16
+      tarjetas sociales), `alta.test.ts`, `hero.test.ts`— vivían en el repo **sin un script que
+      las invocara**: `package.json` no tenía `test`, y `prebuild` era sólo `tsc --noEmit`. Se
+      corrían a mano con `npx vitest run`. Una regresión de captura literal pasaba el build y
+      llegaba al deploy.
+      **Lo que se hizo:** `"test": "vitest run"` y `"prebuild": "tsc --noEmit && vitest run"`.
+      Es el mismo hook que el deploy real ya ejecuta (`scripts/deploy-onia-landing.sh:25`,
+      `pnpm --filter onia-platform build`), y el install de ese script es
+      `pnpm install --frozen-lockfile` —no `--prod`—, así que `vitest` está disponible igual que
+      `tsc`, que ya corría ahí.
+      **Probado que MUERDE:** con el token roto a propósito, `npm run build` sale **exit 1** y
+      corta **antes** de `next build`. Restaurado, `npm run build` exit 0.
+      **Gates de esta vuelta:** `tsc --noEmit` 0 · `vitest run` **115 pasando** (eran 112: 3 del
+      guard nuevo) · `npm run build` exit 0, 48/48 páginas.
+      **Lo que sigue abierto y es de otro dueño:** las otras apps de `web-factory`
+      (`dental-premium`, `dentalgest-landing`, `ferreteria-sur`, y `site` que ni script tiene) y
+      el cableado en el script raíz — tocar los 4 archivos raíz de `web-factory` no es zona de
+      este loop.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,

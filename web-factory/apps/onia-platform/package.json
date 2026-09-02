@@ -7,9 +7,10 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsc --noEmit",
+    "prebuild": "tsc --noEmit && vitest run",
     "build": "next build",
     "start": "next start",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
