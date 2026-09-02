@@ -81,6 +81,11 @@ Las tres formas de fantasma que ya aparecieron acá:
    contestan 200 y son de un carril vivo — pero **ocho `next start` del mismo worktree
    acumulados en 15 h** es un goteo que ese carril debería cerrar al terminar cada vuelta.
 
+   **Sostenido (AUD11, 2026-09-02):** la limpieza aguanto — **18 `node.exe` / 1.040 MB**,
+   3411 y 3477 siguen en `000` y el server propio en **200**. Los cuatro chequeos verdes:
+   4319 → 200, rama al dia con `origin` (`13a960cb` == `13a960cb`, arbol limpio),
+   `typecheck:packages` exit 0.
+
 ---
 
 ## CARRIL A — DESARROLLAR (build; el cron de tareas tira de acá primero)
@@ -1141,20 +1146,34 @@ Las tres formas de fantasma que ya aparecieron acá:
 
 ## Bloqueadas (esperan a Sergio)
 
-- [ ] **Apagar `web-factory-dev-loop` en Windows, o rellenar `CARRIL A`.** La decision ya
-      esta escrita, medida por otro carril, **y ya esta en `main`**: `loops.md` en
-      `origin/main` (linea 175, desde `fe22ac99`, 2026-09-01) lo tiene en *"Apagados a
-      proposito — NO rearmar"* porque la cola quedo en cero. Lo unico que sigue vivo es el
-      cron de Windows (`45 * * * *`, `enabled: true`, `lastRunAt` 2026-09-02T08:48Z): la
-      decision no llego al unico lugar que la ejecuta. Son dos caminos y los dos son de
-      Sergio: **(a)** apagarlo — **un solo acto, poner la tarea en `enabled: false`**; o
-      **(b)** revivirlo — decir que se construye ahora y `CARRIL A` se rellena con eso.
-      Mientras tanto cada vuelta solo puede auditar lo ya auditado.
-      Un loop no se apaga a si mismo: por eso esta aca y no lo hizo AUD9.
-      ⚠️ **Corregido por AUD10 (2026-09-02).** Aca decia que el commit *"no llego a `main`"*
-      y que habia que mergear `claude/docs-auditoria` primero. Falso: lo que a `main` le
-      falta de esa rama es `f046236f`, que corrige la cadencia de **`marca-personal`**, otro
-      loop. Este item le pedia a Sergio un merge que no hace falta.
+- [ ] **Apagar el cron de Windows `web-factory-dev-loop`: su trabajo ya lo hace otro loop,
+      sobre otra rama y otra cola.** El pedido cambio y hay que decirlo entero, porque la
+      version anterior de este item pedia una decision que Sergio **ya tomo al reves**.
+      ⚠️ **Reverificado por AUD11 (2026-09-02, escalon 0: "un bloqueo VENCIDO es peor que un
+      fantasma").** Lo que decia: *"apagarlo, o rellenar `CARRIL A`"*, citando `loops.md` en
+      *"Apagados a proposito — NO rearmar"*. **Vencido.** Esa misma fila de `loops.md` hoy
+      cierra con: *"⚠️ **REVIVIO el 2026-09-02** como `web-factory-dev` en el VPS
+      (`21 2,8,14,20`, commit `0c48cf72`)… **esta fila es historia, no una orden de
+      apagarlo**"*. O sea: la opcion (b) —revivirlo— ya se ejecuto. Pedirle hoy que lo apague
+      "porque la cola quedo en cero" es pedirle una decision caduca.
+      **Pero el revival no paso aca, y ese es el hallazgo.** Medido contra `origin` en esta
+      vuelta: `origin/claude/web-factory-dev` trae un `web-factory/docs/LOOP_COLA.md`
+      **reestructurado** (1.109 lineas, secciones `## Ahora` / `## Bloqueado` /
+      `## Cerrado — carril A` / `## Cerrado — carril B`) con **6 items abiertos en `## Ahora`**
+      —publicar con un comando, el CTA de la ferreteria a 1440×800, los 192 kB, `hover-lift`
+      sin usar, el punto del spark en 5,03 px, portfolio sin ancla—. **Este** archivo, en
+      `claude/onia-web-architecture-b37eca`, sigue con la estructura vieja (`## CARRIL A` /
+      `## CARRIL B`) y **cero** items abiertos en las dos.
+      **El mismo nombre de archivo son hoy dos archivos distintos en dos ramas, leidos por dos
+      loops distintos** — `web-factory-dev` (VPS, rama `claude/web-factory-dev`) y este
+      (`web-factory-dev-loop`, Windows, esta rama). Es exactamente el choque que `loops.md`
+      nombra: *"dos `chatbot-cola` sobre la misma rama, en dos maquinas, pisandose"*, con el eje
+      cambiado —misma cola conceptual, dos ramas—. El de Windows corre **cada hora**; el del VPS,
+      4 veces al dia sobre la cola que si tiene combustible.
+      **La decision, ahora una sola y de Sergio:** poner `web-factory-dev-loop` en
+      `enabled: false` (un acto). Este carril no se queda sin dueno — `web-factory-dev` ya lo
+      tiene, con los 6 items. **No se toca la cola de la otra rama desde aca**: es otro carril.
+      Un loop no se apaga a si mismo: por eso sigue aca.
 - [ ] Bloques cifra-editorial · quote-única · features+device (propuesta enviada).
 - [ ] Rediseño del dashboard admin real (onia-platform/onia-center = otra lane):
       se propone y coordina, no se toca desde acá.
