@@ -99,3 +99,41 @@ la misma bolsa de papel**, que es el patrón que dio `V05` y `V06`.
 
 **Lo próximo:** animarla con `Turn to video`. Si el video hereda el aspecto del frame —que es lo
 que dice §7 de la técnica—, este va a ser **el primer video vertical**, listo para Reels y ads.
+
+---
+
+## ⚠️ V08 — ferretería · 9:16 real, pero la cara DERIVA · `🔧 REGENERAR`
+
+`V08-ferreteria-seedance.mp4` · job `6e2c730d-aae8-41b6-929c-fe191ddc03d9` · **720×1280 (9:16 exacto)** · 4,05 s · 97 frames · **con audio** · `seedance1_5` · **4,8 cr** (medidos antes de generar).
+Animada desde `B07` (asset `4eb429ec-c734-4e5e-a263-895d9b7f315a`) con `--start-image`.
+
+**Lo que salió bien:** el formato. Es el segundo video vertical real del banco, con audio y al
+precio más bajo medido. Y la acción a medias **se completa**: suelta la bolsa, el cliente toma el
+peso, ella retira la mano al mostrador.
+
+**Lo que salió mal — y por eso no se publica:** mirados los 4 frames (`_V08-TIRA.jpg`), **la cara
+deriva en la segunda mitad**. En los frames 1-2 es Lucía; en el 3-4 la mandíbula se afila, las
+cejas cambian y el pelo queda tirante en vez de suelto. En el frame final **no es la misma
+persona** del inicial. Puntuación **8/9**: falla la casilla 9 (la cara aguanta el clip entero),
+que arrastra a la 1.
+
+### 🔴 La regla que sale de acá: la acción tiene que terminar CON LOS DOS en cuadro
+
+Comparado contra los tres videos que sí funcionaron, la diferencia es una sola:
+
+| Video | Qué pasa con el segundo personaje | Cara |
+|---|---|---|
+| `V05` oficina | se queda en cuadro | ✅ aguanta |
+| `V06` dental | se queda en cuadro | ✅ aguanta |
+| `V07` peluquería | se queda (y ella está frente al espejo, quieta) | ✅ aguanta |
+| **`V08` ferretería** | **sale de cuadro a mitad del clip** | ❌ **deriva** |
+
+Cuando el otro personaje se va, el modelo se queda **sin referencia de escala ni de ángulo** y
+reconstruye la cara de cero. No alcanza con pedir una acción a medias: **el prompt tiene que
+dejar a los dos en cuadro hasta el final.**
+
+**Al regenerar:** cambiar `she draws her hand back toward the counter` por algo que retenga al
+cliente — que siga mirando la bolsa, que la abra ahí mismo. **Una sola variable.**
+
+⚠️ No confundir con `V04`, que se guarda roto a propósito. Éste **sí se regenera**: el defecto ya
+está explicado acá y el archivo no aporta evidencia nueva una vez leída esta nota.
