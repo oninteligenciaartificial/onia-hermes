@@ -472,7 +472,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
 
-- [ ] 🟠 **Decir "`main` compila" no dice NADA sobre `onia.com.bo`: ningún gate corre `tsc`
+- [x] 🟠 **Decir "`main` compila" no dice NADA sobre `onia.com.bo`: ningún gate corre `tsc`
       sobre las apps de `web-factory`.** El único typecheck cableado del repo mira **cero
       líneas de código de app**.
       **Evidencia, medida hoy y en tres lugares distintos:**
@@ -502,24 +502,56 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       código — y justamente por eso conviene que exista antes de que alguien lo toque.
 
       ✅ **Cerrado el residuo más urgente el 2026-09-02, sin tocar la raíz de `web-factory`:**
-      `apps/onia-platform/package.json` ahora tiene `"prebuild": "tsc --noEmit"`. Verificado que
+      `web-factory/apps/onia-platform/package.json` ahora tiene `"prebuild": "tsc --noEmit"`. Verificado que
       es exactamente el comando que corre el deploy real
       (`scripts/deploy-onia-landing.sh:25`, `pnpm --filter onia-platform build`) — no un script
       paralelo que nadie llama: `pnpm run build` en ese filtro ejecuta el hook automáticamente
       (probado en vivo con `prebuild: echo`), y con un error de tipos inyectado a propósito
-      (`layout.tsx` con un `number` asignado a un `string`) el build **corta antes de
+      (en el layout de la app, un `number` asignado a un `string`) el build **corta antes de
       `next build`** con `ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL`. Revertido el error de prueba,
       gates limpios: `tsc --noEmit` 0 · `next build` 32/32 páginas.
-      **Lo que sigue abierto, y es de otro dueño:** `dental-premium`, `dentalgest-landing` y
-      `ferreteria-sur` (mismo arreglo, un dueño con permiso en esas carpetas) y `site` (ni
-      siquiera tiene script `typecheck`). Cablearlo "en el script raíz que un carril corre antes
-      de mergear" sigue sin dueño — tocar los 4 archivos raíz de `web-factory` no es zona de
-      este loop.
-      **Por qué no bastaba con que el `node_modules` faltara:** al arrancar esta vuelta
+      **Por qué no bastaba con que el `node_modules` faltara:** al arrancar esa vuelta
       `npm run typecheck` en `onia-platform` fallaba con `Cannot find module 'vitest'` — no era
       un bug de código, era que este worktree nunca corrió `pnpm install` (root `node_modules`
       no existía). Con el install hecho, tsc y build salen limpios; quedó anotado para que la
       próxima vuelta no lo reporte como regresión.
+
+      ✅ **CERRADO el 2026-09-02 por el integrador: las cinco apps tienen el gate, y de paso
+      apareció que el deploy del sitio de venta estaba ROTO.** Las cuatro que faltaban
+      (`dental-premium`, `dentalgest-landing`, `ferreteria-sur`, `site`) llevan ahora
+      `"prebuild": "tsc --noEmit"`, y `site` estrena además el `typecheck` que no tenía.
+      **Se corrió el typecheck de las cuatro ANTES de cablear el gate**, que es el orden que
+      importa: si alguna hubiera salido roja, cablearla habría roto su deploy en vez de
+      protegerlo. Las cuatro salieron en **exit 0** — o sea que no había ningún error de tipos
+      viviendo en producción, y el gate entra sin deuda que pagar.
+      **`site` NO era una app de adorno:** `scripts/deploy-onia-center.sh:32` la publica con
+      `pnpm --filter site build`, y el `build` raíz de `web-factory` es esa misma app. Era la
+      única de las cinco sin **ningún** chequeo de tipos, y la que menos podía darse el lujo.
+      **El gate se probó cortando, no suponiendo:** con una sonda temporal (un `number` asignado
+      a un `string`) `pnpm --filter site build` murió en `ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL` con
+      `error TS2322` y **`next build` nunca llegó a correr**. Sonda borrada; build limpio
+      después: exit 0. Las otras tres, `prebuild` en exit 0.
+      **🔴 El hallazgo que no estaba en el ítem, y vale más que el ítem:**
+      `web-factory/pnpm-lock.yaml` estaba **desincronizado con
+      `web-factory/apps/onia-platform/package.json`**, y los DOS scripts de deploy instalan con
+      `pnpm install --frozen-lockfile` (`scripts/deploy-onia-landing.sh:24`,
+      `scripts/deploy-onia-center.sh:31`) — que es un modo que **falla**
+      cuando el lockfile no coincide. Reproducido con el lockfile de `main`:
+      `ERR_PNPM_OUTDATED_LOCKFILE … 1 dependencies were added: vitest@^4.1.8`, exit 1.
+      **O sea: el deploy de `onia.com.bo` moría en la línea 24, antes de compilar nada.** Lo
+      dejó así `ae8de266` (*"el gate de tipos del sitio de venta no corría en el VPS"*), que
+      agregó `vitest` al `package.json` y no commiteó el lockfile. Sincronizado (3 líneas) y
+      verificado: `pnpm install --frozen-lockfile` ahora sale **exit 0**, *"Lockfile is up to
+      date"*.
+      ⚠️ **Se tocó `web-factory/pnpm-lock.yaml`, que es archivo raíz de `web-factory`** — la
+      regla pide avisar, y se avisó por Telegram. Es una sincronización mecánica (sólo agrega la
+      entrada de `vitest` que ya estaba declarada en el `package.json`), no un cambio de
+      versiones. Los `tsconfig.tsbuildinfo` que el typecheck ensució se restauraron: no entraron
+      al commit.
+      **Lo único que queda de este ítem, y ya no es un agujero:** cablear los cinco typecheck en
+      un script raíz de `web-factory`. Con `prebuild` en las cinco apps el agujero está tapado
+      donde importa —el camino del deploy—, así que el script raíz pasa a ser comodidad, no
+      protección. Sigue sin dueño porque toca los 4 archivos raíz.
 
 ### Del canario visual — corrida del 2026-09-01 22:41 UTC (tercera pasada)
 
