@@ -121,15 +121,20 @@ function evidenciaDe(textoCrudo) {
     if (/^(origin|upstream)\/[^\/]+$/.test(ruta) && !/\.[a-z0-9]{2,5}$/i.test(ruta)) continue;
 
     // Un HOST o una URL entre backticks no es una ruta de este repo, y esta cola los escribe
-    // todo el tiempo: `app.onia.com.bo/login`, `onia.com.bo`. Caian en "esto parece una ruta"
-    // —tienen barra, o terminan en algo con forma de extension (`.bo`)— y salian fantasma.
-    // Medido el 2026-09-01: la cola de `origin/main` daba 6 errores falsos por esto, o sea el
-    // gate estaba ROJO DE FABRICA. Es peor que gritar en falso de vez en cuando: si el gate
-    // nunca puede estar verde, nadie distingue su rojo real del de siempre y se deja de correr.
-    // Se reconoce por el esquema o porque el primer segmento termina en un TLD de los que
-    // usamos. No puede tragarse un archivo de verdad: ninguno del repo se llama `algo.com`.
+    // todo el tiempo: `app.onia.com.bo/login`, `onia.com.bo`, `onia.com:3000`. Caian en "esto
+    // parece una ruta" —tienen barra, o terminan en algo con forma de extension (`.bo`)— y
+    // salian fantasma. Medido el 2026-09-01: la cola de `origin/main` daba 6 errores falsos
+    // por esto, o sea el gate estaba ROJO DE FABRICA. Es peor que gritar en falso de vez en
+    // cuando: si el gate nunca puede estar verde, nadie distingue su rojo real del de siempre
+    // y se deja de correr. Se reconoce por el esquema o porque el primer segmento (cortado
+    // tambien en ":" para el caso host:puerto) termina en un TLD de los que usamos. No puede
+    // tragarse un archivo de verdad: ninguno del repo se llama `algo.com`.
     if (/^https?:\/\//i.test(ruta)) continue;
-    if (/\.(com|bo|app|dev|io|net|org|ai)$/i.test(ruta.split('/')[0])) continue;
+    if (/\.(com|bo|app|dev|io|net|org|ai|co)$/i.test(ruta.split(/[\/:]/)[0])) continue;
+
+    // Comillas: es un pedazo de codigo o de JSON citado ("BRAND_URL":"https://..."), no un
+    // nombre de archivo. Ninguno del repo las tiene.
+    if (/["']/.test(ruta)) continue;
 
     // Un backtick tambien envuelve codigo y endpoints: `GET /api/x`, `invoice.patient?.ci`,
     // `responsable?.ci ?? patient.ci`. Ningun archivo del repo tiene espacios ni signos de
@@ -414,6 +419,25 @@ function selfCheck() {
   // asi que eso los descarta sin tener que adivinar.
   r = revisarCola('## Ahora\n- [ ] Algo · `existe.png` · `GET /api/x` · `invoice.patient?.ci`\n', tmp);
   ok(!r.problemas.length, 'codigo y endpoints entre backticks no son rutas');
+
+  // (4b) Una URL y un dominio no son archivos. Medido el 2026-09-01: el item de la marca de
+  // Chatwoot daba 8 fantasmas y 7 eran `chat.onia.com.bo`, `www.chatwoot.com` y JSON citado.
+  r = revisarCola('## Ahora\n- [ ] Mirar `https://chat.onia.com.bo/app/login` desde `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una URL con esquema no se verifica contra el disco');
+
+  r = revisarCola('## Ahora\n- [ ] `chat.onia.com.bo` y `www.chatwoot.com` desde `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un dominio suelto tampoco');
+
+  r = revisarCola('## Ahora\n- [ ] Sale `"BRAND_URL":"https://www.chatwoot.com"` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un pedazo de JSON citado no es una ruta');
+
+  // Y el limite, que es lo que impide que el arreglo afloje el gate: un archivo con extension
+  // corta sigue siendo una ruta, y sigue siendo fantasma si no esta.
+  r = revisarCola('## Ahora\n- [ ] Algo · `no-esta.png`\n', tmp);
+  ok(r.problemas.some((x) => x.regla === 'fantasma'), 'un archivo que no existe sigue siendo fantasma');
+
+  r = revisarCola('## Ahora\n- [ ] Solo `https://chat.onia.com.bo`\n', tmp);
+  ok(r.problemas.some((x) => x.regla === 'sin-evidencia'), 'una URL sola no alcanza como evidencia');
 
   // (5) La cola de producto vive en onia-hermes y cita archivos de onia-platform, que es un
   // repo hermano. Sin esto el gate llamaba fantasma a todo el producto — la mitad del carril —

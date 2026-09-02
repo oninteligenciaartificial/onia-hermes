@@ -34,7 +34,7 @@
     "test:dentalgest-bridge": "node scripts/hermes_command_dentalgest.test.js",
     "test:venta-honestidad": "node --test scripts/venta-honestidad.test.mjs",
     "test:propuestas": "node hermes-content/propuestas/generador/generar-propuestas.test.js",
-    "test": "npm run validate:onia-core && npm run test:guards-cableados && npm run test:bot && npm run test:marca-chatwoot && npm run test:venta-honestidad && npm run test:propuestas && npm run test:carousel && npm run test:dentalgest-bridge",
+    "test": "npm run validate:onia-core && npm run test:guards-cableados && npm run test:bot && npm run test:marca-chatwoot && npm run test:campanas-vivas && npm run test:venta-honestidad && npm run test:propuestas && npm run test:carousel && npm run test:dentalgest-bridge",
     "health:propuestas": "node -e \"require('http').get('http://127.0.0.1:3031/health',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>console.log(d))}).on('error',e=>{console.error('Offline:',e.message);process.exitCode=1})\"",
     "mara:prompt-matrix": "node scripts/mara_prompt_matrix.js --limit 12 --routes comfy_ltx23 --run-name pond-smoke-001",
     "mara:comfyui:queue": "node scripts/mara_comfyui_queue.js --workflow C:\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
@@ -45,6 +45,8 @@
     "test:guards-cableados": "node --test scripts/guards-cableados.test.mjs",
     "marca:chatwoot": "node hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs",
     "test:marca-chatwoot": "node --test hermes-content/deploy/vps-ops/chatwoot-marca-publica.test.mjs",
+    "campanas:vivas": "node hermes-content/deploy/vps-ops/campanas-vivas.mjs",
+    "test:campanas-vivas": "node --test hermes-content/deploy/vps-ops/campanas-vivas.test.mjs",
     "test:bot": "cd hermes-content/deploy/vps-ops/bot && node --test"
   }
 }

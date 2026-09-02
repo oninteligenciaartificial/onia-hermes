@@ -26,10 +26,13 @@
 //
 // Sale 0 si el codigo coincide, 1 si hay drift (y nombra los archivos). Env opcionales:
 // ONIA_VPS_HOST (default root@187.77.16.63), ONIA_VPS_KEY, ONIA_VPS_BOT_DIR.
+//
+// Si ONIA_VPS_BOT_DIR es una ruta de ESTE disco (el loop corriendo dentro del propio VPS desde
+// el 2026-09-01), se lee directo sin SSH — ver `ladoVps`.
 
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
@@ -141,13 +144,29 @@ function md5Vps({ host, key, dir }) {
   return parsearMd5sum(execFileSync("ssh", args, { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }));
 }
 
+/**
+ * El lado VPS, elegido segun DONDE corre este script.
+ *
+ * Hasta el 2026-08-31 esto corria en la maquina de Sergio y `/opt/onia/bot` solo existia del
+ * otro lado de un SSH. Desde el 2026-09-01 el loop del carril corre DENTRO del propio VPS
+ * (`hermes-content/docs/cola/loops.md`), y ahi `dir` YA es una ruta de este mismo disco: la
+ * clave `ONIA_VPS_KEY` (pensada para conectarse a uno mismo) ni siquiera existe en el host, y
+ * el script fallaba entero por un SSH que no hacia falta. Si el directorio esta accesible
+ * localmente se lee directo — mas simple y no depende de ninguna clave —; si no, se cae al SSH
+ * de siempre (loop corriendo fuera del VPS, o dir apuntando a otra maquina via env).
+ */
+export function ladoVps({ host, key, dir }) {
+  if (existsSync(dir)) return md5Local(dir);
+  return md5Vps({ host, key, dir });
+}
+
 function main() {
   const espejo = fileURLToPath(new URL(".", import.meta.url));
   const host = process.env.ONIA_VPS_HOST || "root@187.77.16.63";
   const dir = process.env.ONIA_VPS_BOT_DIR || "/opt/onia/bot";
   const key = process.env.ONIA_VPS_KEY || path.join(process.env.HOME || "", ".ssh/onia_hermes_vps_ed25519");
 
-  const r = compararEspejo(md5Local(espejo), md5Vps({ host, key, dir }));
+  const r = compararEspejo(md5Local(espejo), ladoVps({ host, key, dir }));
 
   if (r.ok) {
     console.log(`ESPEJO OK — el codigo de ${espejo} es el que corre en ${host}:${dir}`);
