@@ -1,10 +1,14 @@
 # Recetas Higgsfield — artes y reels para marca personal y comunidad
 
-> Consolidación 2026-09-01 del conocimiento Higgsfield del repo, aplicado a ESTE carril.
-> Reglas madre: Higgsfield SOLO por navegador (el MCP sustituye modelos en silencio y
-> cobra; y loguear la cuenta desde el VPS/datacenter la quema). IMAGEN en lote chico =
-> autorizado y se registra el lote. VIDEO generado = permiso explícito caso por caso,
-> cotizado ANTES. Plan actual: ULTRA (~miles de créditos, ver memoria de cuenta).
+> Consolidación 2026-09-01, actualizada 2026-09-02 tras probar el **CLI oficial**.
+> **La vía de producción es el CLI (`@higgsfield/cli`)** — decisión de Sergio, verificada:
+> job type EXPLÍCITO (sin sustitución silenciosa), `generate cost` cotiza ANTES, y el
+> cobro medido coincidió exacto (0,12 cr cotizados = 0,12 debitados). Autenticado en
+> Windows y en el VPS (token OAuth oficial copiado — no es login de navegador).
+> El MCP viejo sigue PROHIBIDO (sustituía modelos y cobraba). La web queda para lo
+> manual/exploratorio. IMAGEN lote chico = autorizado con registro. VIDEO = permiso
+> explícito caso por caso, cotizado antes. Tope del loop: 2 cr/día, solo imagen.
+> Plan ULTRA: 2.019 créditos al 2026-09-02.
 
 ## Qué modelo para qué (roster del repo)
 
@@ -72,4 +76,4 @@ navegador = Higgsfield.
 
 | Fecha | Pieza | Modelo | Prompt (resumen) | Costo |
 |---|---|---|---|---|
-| — | — | — | — | — |
+| 2026-09-02 | Test CLI: overlay starburst 3D clay (usable para reel "El setup") | text2image_soul_v2 | 3D clay render, orange starburst icon, rounded square, warm white bg | 0,12 cr (cotizado = debitado ✓) |
