@@ -33,9 +33,15 @@ set -a; . /root/.hermes/.env 2>/dev/null; set +a
 : "${TELEGRAM_BOT_TOKEN:?}" "${TELEGRAM_HOME_CHANNEL:?}"
 API="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}"
 
-tg_texto() { curl -s -o /dev/null --max-time 20 "$API/sendMessage" -d chat_id="$TELEGRAM_HOME_CHANNEL" -d parse_mode=HTML --data-urlencode text="$1"; }
-tg_foto()  { curl -s -o /dev/null --max-time 60 "$API/sendPhoto"   -F chat_id="$TELEGRAM_HOME_CHANNEL" -F parse_mode=HTML -F photo=@"$1" -F caption="$2"; }
-tg_video() { curl -s -o /dev/null --max-time 120 "$API/sendVideo"  -F chat_id="$TELEGRAM_HOME_CHANNEL" -F parse_mode=HTML -F video=@"$1" -F caption="$2"; }
+# Cada envio se COMPRUEBA contra la respuesta de Telegram ("ok":true). Tirarla a
+# /dev/null —como hace onia-tg.sh— convierte un token vencido o un archivo muy
+# pesado en una pregunta que Sergio nunca recibe y que este script da por
+# entregada. Si falla, se dice en el log y la tarea NO se marca avisada, para que
+# la proxima corrida lo reintente.
+_tg() { local r; r=$(curl -s --max-time "$1" "${@:2}") || { echo "  telegram: sin respuesta (curl)"; return 1; }; printf '%s' "$r" | grep -q '"ok":true' && return 0; echo "  telegram rechazo: $(printf '%s' "$r" | cut -c1-160)"; return 1; }
+tg_texto() { _tg 20  "$API/sendMessage" -d chat_id="$TELEGRAM_HOME_CHANNEL" -d parse_mode=HTML --data-urlencode text="$1"; }
+tg_foto()  { _tg 60  "$API/sendPhoto"   -F chat_id="$TELEGRAM_HOME_CHANNEL" -F parse_mode=HTML -F photo=@"$1" -F caption="$2"; }
+tg_video() { _tg 120 "$API/sendVideo"   -F chat_id="$TELEGRAM_HOME_CHANNEL" -F parse_mode=HTML -F video=@"$1" -F caption="$2"; }
 esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
 
 # Las bloqueadas de ahora, con motivo y kind del ULTIMO evento (ahi lo guarda el
@@ -46,15 +52,24 @@ IDS=$(printf '%s' "$LISTA" | python3 -c 'import sys,json; [print(t["id"]) for t 
 
 # Primera corrida: resumen unico de lo que ya esperaba, y se marcan todas.
 if [ ! -s "$AVISADAS" ]; then
+  # Sin f-strings con comillas escapadas: el 2026-09-03 un \" adentro de un
+  # f-string, adentro de un python -c, adentro de comillas simples de bash, dio
+  # SyntaxError — y el resumen de las 11 tareas nunca salio mientras las 11
+  # quedaban marcadas como avisadas. .format() con comillas dobles no necesita
+  # escapar nada.
   RES=$(printf '%s' "$LISTA" | python3 -c '
-import sys,json
+import sys,json,html
 ts=json.load(sys.stdin)
-print("\n".join(f"• <code>{t[\"id\"]}</code> — {t[\"title\"][:70]}" for t in ts))')
-  tg_texto "📋 <b>Ya había $(printf '%s\n' "$IDS" | wc -l) tareas esperando tu decisión</b> (de antes de este aviso):
+print("\n".join("• <code>{}</code> — {}".format(t["id"], html.escape(t["title"][:70])) for t in ts))')
+  if tg_texto "📋 <b>Ya había $(printf '%s\n' "$IDS" | wc -l) tareas esperando tu decisión</b> (de antes de este aviso):
 $RES
 
-Desde ahora te llega cada una al instante. Contestás <code>ok &lt;id&gt;</code> o <code>no &lt;id&gt; motivo</code>."
-  printf '%s\n' "$IDS" >> "$AVISADAS"
+Desde ahora te llega cada una al instante. Contestás <code>ok &lt;id&gt;</code> o <code>no &lt;id&gt; motivo</code>."; then
+    printf '%s\n' "$IDS" >> "$AVISADAS"
+    echo "resumen inicial enviado ($(printf '%s\n' "$IDS" | wc -l) tareas)"
+  else
+    echo "resumen inicial NO enviado: se reintenta en la proxima corrida"
+  fi
   exit 0
 fi
 
@@ -87,13 +102,24 @@ $(printf '%s' "$MOTIVO" | esc)
 $(printf '%s' "$CUERPO" | esc)
 
 Contestá: <code>ok $id</code> · <code>no $id motivo</code>"
+  OK=0
   case "${RUTA##*.}" in
-    png|jpg|jpeg|webp|PNG|JPG|JPEG|WEBP) tg_foto "$RUTA" "$(printf '%s' "$TXT" | head -c 1000)" ;;
-    mp4|mov|MP4|MOV)                     tg_video "$RUTA" "$(printf '%s' "$TXT" | head -c 1000)" ;;
-    *)                                   tg_texto "$TXT" ;;
+    png|jpg|jpeg|webp|PNG|JPG|JPEG|WEBP) tg_foto "$RUTA" "$(printf '%s' "$TXT" | head -c 1000)" && OK=1 ;;
+    mp4|mov|MP4|MOV)                     tg_video "$RUTA" "$(printf '%s' "$TXT" | head -c 1000)" && OK=1 ;;
+    *)                                   tg_texto "$TXT" && OK=1 ;;
   esac
-  echo "$id" >> "$AVISADAS"; N=$((N+1))
-  echo "avisada $id${RUTA:+ (con archivo: $RUTA)}"
+  # Si el archivo no paso (muy pesado, formato raro), la pregunta va igual en
+  # texto: Sergio tiene que enterarse aunque no vea la foto.
+  if [ "$OK" = 0 ] && [ -n "$RUTA" ]; then
+    tg_texto "$TXT
+⚠️ (no pude adjuntar el archivo: <code>$(printf '%s' "$RUTA" | esc)</code>)" && OK=1
+  fi
+  if [ "$OK" = 1 ]; then
+    echo "$id" >> "$AVISADAS"; N=$((N+1))
+    echo "avisada $id${RUTA:+ (con archivo: $RUTA)}"
+  else
+    echo "NO avisada $id: fallo el envio, se reintenta en la proxima corrida"
+  fi
 done
 [ "$N" -gt 0 ] && echo "$N pregunta(s) nueva(s) enviada(s) a Sergio"
 exit 0
