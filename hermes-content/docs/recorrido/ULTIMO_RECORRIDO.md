@@ -12,29 +12,76 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## Medido el 2026-09-03 09:40 UTC
+## Medido el 2026-09-03 10:18 UTC
 
-### 🟢 Los 8 pasos, y por primera vez el paso 6 CARGA UN DATO y el 8 lo busca
+### 🟢 Los 8 pasos — y esta vez el paso 3 PODÍA salir rojo
 
 | # | paso | estado | qué se vio |
 |---|---|---|---|
-| 1 | Entrar a `onia.com.bo` y que se VEA | ✔ OK | cargó en 1.651 ms, 6.977 caracteres visibles |
+| 1 | Entrar a `onia.com.bo` y que se VEA | ✔ OK | cargó en 1.476 ms, 6.977 caracteres visibles |
 | 2 | Encontrar el camino de alta | ✔ OK | 7 botones; el camino es "Creá tu cuenta", **2 clics** |
-| 3 | Registrarse con datos `zz-qa-` | ✔ OK | crea la cuenta y manda el correo de confirmación |
-| 4 | Entrar a la plataforma | ✔ OK | entró con la cuenta recién creada |
+| 3 | Registrarse con datos `zz-qa-` | ✔ OK | cuenta creada; **el alta pide confirmar el correo antes del primer login** |
+| 4 | Entrar a la plataforma | ✔ OK | entró tras abrir el enlace de confirmación, como el cliente con el mail |
 | 5 | Elegir rubro y terminar el onboarding | ✔ OK | 6 pantallas del asistente; `/dashboard` dejó de rebotar |
-| 6 | Cargar un dato del rubro | ✔ **OK, de verdad** | **creó el paciente `zz-qa-2026-09-03-paciente` y lo encontró de vuelta en la lista** |
-| 7 | Pantalla de cobro (mirar y FRENAR) | ✔ **OK, y por fin SE VE** | `/billing`: "Facturación · 0 facturas · Cobrado Bs 0,00" |
-| 8 | Abrir la bandeja / el panel | ✔ OK | `/dashboard` abrió; el paciente **no figura ahí** — el panel no lista pacientes |
+| 6 | Cargar un dato del rubro | ✔ OK | creó `zz-qa-2026-09-03-1018-paciente` y lo encontró de vuelta en `/patients` |
+| 7 | Pantalla de cobro (mirar y FRENAR) | ✔ OK | `/billing` a la vista; **frenado ahí a propósito** |
+| 8 | Abrir la bandeja / el panel | ✔ OK | `/dashboard` abrió; el paciente no figura ahí — el panel no lista pacientes |
 
-Capturas en `capturas/` (13 archivos, **los 13 distintos**). Datos crudos en `capturas/resumen.json`.
+**El recorrido se completó entero, y ahora eso significa algo.** Hasta esta vuelta el paso 3 no
+podía salir rojo bajo ninguna circunstancia (abajo el detalle), así que "8 de 8" incluía un paso
+que nunca se midió. Este es el primer recorrido completo con los ocho pasos capaces de fallar.
 
-**Nada del producto se rompió en el camino.** El producto guarda el dato y lo muestra: la lista
-dice *"1 paciente · 1 de 1.500 de tu plan"*. Prueba: `capturas/paso-06c-dato-en-la-lista.png`.
+### Lo que el alta hace de verdad, medido en vivo
+
+`ONIA_ALTA_AUTOMATICA=abierta`. `/register` crea la cuenta, pero **no deja entrar sola**:
+`GOTRUE_MAILER_AUTOCONFIRM=false`, así que el primer login rebota con `email_not_confirmed`
+hasta que el cliente hace clic en el enlace del correo. Verificado que ese correo **sale y lo
+aceptan**: `postfix/smtp: to=<zz-qa-…@onia.com.bo>, relay=route2.mx.cloudflare.net, status=sent
+(250 2.0.0 Ok)`. El enlace también funciona: con `token=` el endpoint procesa y redirige.
+
+Eso significa que **el camino del cliente pasa por su casilla de correo**. No es un fallo, pero
+es el único tramo que el producto no controla — y hasta hoy el recorrido lo confundía con un
+login roto.
 
 ---
 
-## Lo que se hizo esta vuelta: dos pasos dejaron de ser verdes y vacíos
+## Lo que se arregló esta vuelta: el paso 3 no podía fallar
+
+Tarea del tablero `t_bffb91fb`, encontrada por el supervisor abriendo la captura.
+
+El estado del paso 3 era `estado: crearCuenta ? 'ok' : 'no-medido'`: dependía de si el
+formulario **era** de crear cuenta, nunca de si el envío **funcionó**. No existía forma de que
+saliera rojo. Y su único detalle era la URL —que en este alta no se mueve ni al salir bien ni al
+salir mal—, con lo que el reporte decía literalmente *"la URL pasó de /register a /register"* y
+lo llamaba éxito.
+
+**Reproducido en vivo a las 10:10 UTC** con el script viejo: paso 3 **OK**, paso 4 roto, cuenta
+inservible. El verde tapaba el corte y se lo colgaba al login.
+
+Ahora el paso 3 **mira la pantalla**, como ya hacía el paso 4: texto de éxito → OK; error
+visible → roto; ni una cosa ni la otra → roto (el fallo mudo, que es el más caro). Probado en
+rojo antes de darlo por bueno: con el correo ya registrado devolvió
+`ROTO — envié el alta y la pantalla no dijo nada`.
+
+### Tres trampas medidas, que valen más que el arreglo
+
+1. **El correo `zz-qa-<fecha>` hacía chocar las corridas del mismo día.** Ahora lleva la hora
+   (`zz-qa-<fecha>-<hhmm>`). Sin eso, la segunda corrida del día se registra con un correo que
+   ya existe — y ahí aparece la trampa siguiente.
+2. **Registrarse con un correo ya existente no muestra NADA.** El API devuelve **200** y reenvía
+   la confirmación; la pantalla no muestra ni éxito ni error, y el cliente queda mirando el
+   formulario lleno. Después el login rebota con `Invalid login credentials` y la cuenta ya no
+   está en `auth.users`. **Es un hallazgo del producto, no del instrumento** — anotado en la cola
+   de la plataforma.
+3. **`token_hash=` no es `token=`.** El enlace de confirmación con `token_hash` contesta
+   `400 "Verify requires a token or a token hash"`, que se lee exactamente igual que un proxy
+   comiéndose la query — y estuvo a un paso de reportarse como "ningún cliente puede confirmar su
+   cuenta". Con `token=` funciona. Se descartó con `curl` contra el endpoint real **antes** de
+   escribir una línea del hallazgo.
+
+---
+
+## Vueltas anteriores: dos pasos dejaron de ser verdes y vacíos
 
 Ayer el recorrido llegó entero por primera vez, pero **tres pasos daban OK sin haber probado
 nada**. Al mirar las capturas aparecía el motivo, y no era del producto: era del instrumento.

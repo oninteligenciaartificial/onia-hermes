@@ -26,6 +26,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const RAIZ = process.cwd();
 const OUT = process.env.RECORRIDO_OUT || join(RAIZ, 'hermes-content', 'docs', 'recorrido', 'capturas');
@@ -40,17 +41,23 @@ const TIMEOUT = 45_000;
  * seguro: sin prefijo, la fila es indistinguible de un lead real y ya no se puede tocar.
  * Lleva la fecha para poder identificar de qué vuelta salió sin abrir un log.
  */
+// 🔴 Lleva la HORA, no sólo la fecha. Con `zz-qa-<fecha>` a secas, dos corridas del mismo día
+// chocan con el correo ya registrado — y ese choque no se ve: el alta devuelve 200, la pantalla
+// no muestra NI éxito NI error, y el login siguiente rebota con "Invalid login credentials".
+// Medido el 2026-09-03: el recorrido diagnosticaba un login roto sobre una colisión suya.
+// El alta es la puerta de entrada del producto: cada corrida tiene que ejercerla de verdad.
 const HOY = new Date().toISOString().slice(0, 10);
+const SELLO = `${HOY}-${new Date().toISOString().slice(11, 16).replace(':', '')}`;
 const QA = {
-  nombre: `zz-qa-${HOY}`,
-  negocio: `zz-qa-${HOY}-negocio`,
-  email: `zz-qa-${HOY}@onia.com.bo`,
+  nombre: `zz-qa-${SELLO}`,
+  negocio: `zz-qa-${SELLO}-negocio`,
+  email: `zz-qa-${SELLO}@onia.com.bo`,
   whatsapp: '59170000000',
   ciudad: 'zz-qa-ciudad',
   password: `zz-qa-${HOY}-Passw0rd!`,
   // El dato del rubro que carga el paso 6. Va con prefijo como todo lo demás: es una fila más
   // en la base de PRODUCCIÓN y hay que poder borrarla sin dudar de cuál es.
-  paciente: `zz-qa-${HOY}-paciente`,
+  paciente: `zz-qa-${SELLO}-paciente`,
 };
 
 /**
@@ -208,6 +215,60 @@ async function llegar(page, ruta, archivo) {
   const pedida = ruta.replace(/\/$/, '');
   const llego = destino === pedida && !tapa;
   return { ...r, ...vista, destino, pedida, llego, tapa, despejo };
+}
+
+/**
+ * Abre el enlace de confirmación del correo, que es el paso que el cliente hace en su buzón.
+ *
+ * POR QUÉ EXISTE: el alta crea la cuenta pero NO deja entrar hasta confirmar el correo
+ * (`GOTRUE_MAILER_AUTOCONFIRM=false`); el primer login rebota con `email_not_confirmed`. Sin
+ * esto el recorrido moría en el paso 4 para siempre y los pasos 5-8 nunca se medían — no por
+ * un fallo del producto, sino porque al instrumento le falta un buzón.
+ *
+ * QUÉ NO HACE: no toca `email_confirmed_at`. Poner esa columna a mano sería fingir justo el
+ * paso que se está midiendo — y dejaría de avisar el día que el correo NO salga. Acá se usa el
+ * mismo token que viajó en el mail, y se abre en el mismo navegador, igual que el cliente.
+ * El WHERE lleva el prefijo zz-qa- y es un SELECT: no escribe nada.
+ */
+async function confirmarComoElCliente(page, email) {
+  if (!email.startsWith('zz-qa-')) return { ok: false, detalle: 'sólo se confirma una cuenta zz-qa-' };
+  let token = '';
+  try {
+    token = execFileSync('docker', [
+      'exec', '-i', 'supabase-db', 'psql', '-U', 'postgres', '-d', 'postgres', '-tAc',
+      `SELECT confirmation_token FROM auth.users WHERE email = '${email}' AND email LIKE 'zz-qa-%'`,
+    ], { encoding: 'utf8', timeout: 20_000 }).trim();
+  } catch (e) {
+    return { ok: false, detalle: `no se pudo leer el token de confirmación: ${e.message}` };
+  }
+  if (!token) return { ok: false, detalle: 'la cuenta no tiene token de confirmación pendiente' };
+
+  // El enlace del mail, tal cual lo arma GoTrue (GOTRUE_MAILER_URLPATHS_CONFIRMATION).
+  //
+  // ⚠️ Va `token=`, NO `token_hash=`. Medido con curl contra el endpoint real: con `token_hash`
+  // contesta 400 "Verify requires a token or a token hash" —que se lee como si el proxy comiera
+  // la query, y NO es eso—; con `token` procesa y redirige. Un nombre de parámetro mal elegido
+  // acusaba de roto un enlace de confirmación que funciona.
+  const enlace = `${APP}/supabase/auth/v1/verify?token=${encodeURIComponent(token)}&type=signup&redirect_to=${encodeURIComponent(APP + '/')}`;
+  await page.goto(enlace, { waitUntil: 'domcontentloaded', timeout: TIMEOUT }).catch(() => {});
+  await page.waitForTimeout(4000);
+  await mirar(page, 'paso-04a-confirmar-correo.png');
+
+  let confirmado = false;
+  try {
+    confirmado = execFileSync('docker', [
+      'exec', '-i', 'supabase-db', 'psql', '-U', 'postgres', '-d', 'postgres', '-tAc',
+      `SELECT email_confirmed_at IS NOT NULL FROM auth.users WHERE email = '${email}' AND email LIKE 'zz-qa-%'`,
+    ], { encoding: 'utf8', timeout: 20_000 }).trim() === 't';
+  } catch { /* si no se puede releer, manda el login siguiente */ }
+
+  return {
+    ok: confirmado,
+    detalle: confirmado
+      ? `correo confirmado abriendo el enlace del mail; quedó en ${page.url()}`
+      : `el enlace de confirmación no confirmó la cuenta; quedó en ${page.url()}`,
+    url: page.url(),
+  };
 }
 
 /**
@@ -498,13 +559,62 @@ const PASOS = [
       await page.waitForTimeout(4000);
       const despues = await mirar(page, 'paso-03b-pedir-acceso-enviado.png');
       ctx.enviado = true;
+
+      // 🔴 Acá el estado era `crearCuenta ? 'ok' : 'no-medido'`: dependía de si el formulario ERA
+      // de crear cuenta, NUNCA de si el envío funcionó. El paso 3 no podía salir rojo JAMÁS, y su
+      // único detalle era la URL — que en este alta no se mueve ni cuando sale bien ni cuando sale
+      // mal ("la URL pasó de /register a /register"). Resultado medido el 2026-09-03: verde
+      // cantado sobre una captura que decía otra cosa. Un paso que no puede fallar no mide nada.
+      //
+      // Ahora se MIRA la pantalla, igual que hace el paso 4: el resultado del alta se anuncia ahí
+      // y en ningún otro lado.
+      const veredicto = await page.evaluate(() => {
+        const texto = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+        const alerta = [...document.querySelectorAll('[role=alert], .text-destructive, .text-red-500, .text-red-600, .error')]
+          .map((el) => (el.innerText || '').trim())
+          .filter((t) => t && t.length < 300)[0] || '';
+        return { texto: texto.slice(0, 600), alerta };
+      });
+      const dice = `${veredicto.alerta} ${veredicto.texto}`;
+      const fallo = /error al crear|no se pudo|ya (existe|est[áa] registrad)|inv[aá]lid|intent[áa] de nuevo/i.test(dice);
+      // La pantalla de éxito de este alta: "Verificá tu correo · Tu cuenta ya fue creada".
+      const creada = /tu cuenta ya fue creada|verific[áa] tu correo|confirm[áa] tu cuenta/i.test(dice);
+      const adentro = /app\.onia\.com\.bo/.test(page.url()) && !/\/(login|register)\b/.test(page.url());
+      // El alta NO deja entrar sola: pide confirmar el correo antes del primer login. El paso 4
+      // necesita saberlo para no diagnosticar "credenciales mal" sobre una cuenta sana.
+      ctx.requiereConfirmacion = creada && !adentro;
+
+      if (!crearCuenta) {
+        return {
+          estado: 'no-medido',
+          detalle: `enviado: quedó una SOLICITUD (${QA.email}), no una cuenta. El recorrido no puede seguir solo`,
+          campos, altaCreaCuenta: crearCuenta, urlTrasEnviar: page.url(), ...despues,
+        };
+      }
+      if (fallo) {
+        return {
+          estado: 'roto',
+          detalle: `el alta RECHAZÓ el registro de ${QA.email} — la pantalla dice: "${(veredicto.alerta || veredicto.texto).slice(0, 160)}"`,
+          campos, altaCreaCuenta: crearCuenta, urlTrasEnviar: page.url(), ...despues,
+        };
+      }
+      if (!creada && !adentro) {
+        // Ni éxito ni error a la vista: el alta se comió el envío en silencio, que es el modo de
+        // falla más caro de todos porque no deja rastro para el cliente NI para el que diagnostica.
+        return {
+          estado: 'roto',
+          detalle: `envié el alta y la pantalla no dijo nada: sigue en ${page.url()} sin confirmación ni error visible. Arriba dice: "${veredicto.texto.slice(0, 160)}"`,
+          campos, altaCreaCuenta: crearCuenta, urlTrasEnviar: page.url(), ...despues,
+        };
+      }
       return {
-        estado: crearCuenta ? 'ok' : 'no-medido',
-        detalle: crearCuenta
-          ? `enviado; la URL pasó de ${antes} a ${page.url()}`
-          : `enviado: quedó una SOLICITUD (${QA.email}), no una cuenta. El recorrido no puede seguir solo`,
+        estado: 'ok',
+        detalle: adentro
+          ? `cuenta ${QA.email} creada y con sesión abierta: quedó en ${page.url()}`
+          : `cuenta ${QA.email} creada; el alta pide CONFIRMAR EL CORREO antes del primer login — la pantalla dice: "${veredicto.texto.slice(0, 120)}"`,
         campos,
         altaCreaCuenta: crearCuenta,
+        requiereConfirmacionDeCorreo: ctx.requiereConfirmacion,
         urlTrasEnviar: page.url(),
         ...despues,
       };
@@ -542,31 +652,73 @@ const PASOS = [
         };
       }
 
-      let ultimo = '';
-      for (const llave of llaveros) {
-        const r = await ir(page, `${APP}/login`);
+      // 🔴 El motivo REAL del rechazo lo dice la API, NO la pantalla. Medido el 2026-09-03: el
+      // login rebotaba con `error_code: email_not_confirmed` (cuenta sana, correo sin confirmar)
+      // y este paso reportaba `la pantalla dice: "error"` — porque barría `p, span` y se quedaba
+      // con la primera palabra que matcheara. Un diagnóstico así manda a revisar el login, que
+      // no tiene nada roto. Se escucha /token, que trae el código exacto.
+      let errorApi = '';
+      const oirToken = async (resp) => {
+        if (!/\/token\b/.test(resp.url()) || resp.status() < 400) return;
+        const j = await resp.json().catch(() => null);
+        if (j) errorApi = j.error_code || j.error || j.msg || j.message || '';
+      };
+      page.on('response', oirToken);
+
+      const intentar = async (llave) => {
+        errorApi = '';
+        await ir(page, `${APP}/login`);
         await page.fill('input[type=email], input[name=email]', llave.user).catch(() => {});
         await page.fill('input[type=password], input[name=password]', llave.pass).catch(() => {});
         await page.click('button[type=submit]').catch(() => {});
         await page.waitForTimeout(6000);
-        if (!/\/login\b/.test(page.url())) {
+        if (!/\/login\b/.test(page.url())) return { entro: true };
+        const motivo = await page.evaluate(() => {
+          const t = [...document.querySelectorAll('[role=alert], .error, .text-red-500, .text-destructive')]
+            .map((el) => (el.innerText || '').trim())
+            .filter((x) => x && x.length < 200);
+          return t[0] || '';
+        });
+        return { entro: false, motivo, codigo: errorApi };
+      };
+
+      let ultimo = '';
+      for (const llave of llaveros) {
+        let r = await intentar(llave);
+
+        // El alta pide confirmar el correo antes del primer login (medido: el mail SALE y el MX
+        // lo acepta). El cliente hace clic en ese enlace; el instrumento no tiene buzón, así que
+        // abre el MISMO enlace que se le mandó — mismo navegador, misma sesión, igual que el
+        // cliente. No se toca `email_confirmed_at` a mano: eso sería fingir el paso que se mide.
+        // El código viaja en dos formas según por dónde salga (`error_code` o el texto `msg`):
+        // se aceptan las dos. Buscar sólo la de guiones bajos dejó el paso muerto una corrida.
+        const sinConfirmar = /email[_ ]not[_ ]confirmed|correo[^"]*no[^"]*confirm/i.test(`${r.codigo || ''} ${r.motivo || ''}`);
+        if (!r.entro && sinConfirmar && llave.user === QA.email) {
+          const enlace = await confirmarComoElCliente(page, llave.user);
+          ctx.confirmoCorreo = enlace;
+          if (enlace.ok) r = await intentar(llave);
+        }
+
+        if (r.entro) {
           const vista = await mirar(page, 'paso-04-entrar.png');
           ctx.conSesion = true;
           ctx.comoEntro = llave.de;
-          return { estado: 'ok', detalle: `entró con ${llave.de}; quedó en ${page.url()}`, ...vista };
+          page.off('response', oirToken);
+          return {
+            estado: 'ok',
+            detalle: `entró con ${llave.de}; quedó en ${page.url()}${ctx.confirmoCorreo?.ok ? ' — hizo falta confirmar el correo primero, como haría el cliente con el enlace del mail' : ''}`,
+            confirmoCorreo: ctx.confirmoCorreo || null,
+            ...vista,
+          };
         }
-        // El login que rebota deja su motivo EN LA PANTALLA ("confirmá tu correo", "cuenta
-        // pendiente"). Sin leerlo, el reporte dice "no entró" y el arreglo empieza a ciegas.
-        const motivo = await page.evaluate(() => {
-          const t = [...document.querySelectorAll('[role=alert], .error, .text-red-500, .text-destructive, p, span')]
-            .map((el) => (el.innerText || '').trim())
-            .filter((x) => x && x.length < 200 && /(incorrect|inv[aá]lid|error|confirm|pendiente|verific|no existe|credencial)/i.test(x));
-          return t[0] || '';
-        });
-        ultimo = `con ${llave.de} (${llave.user}) rebotó en ${page.url()}${motivo ? ` — la pantalla dice: "${motivo}"` : ' — sin mensaje visible'}`;
+        ultimo = `con ${llave.de} (${llave.user}) rebotó en ${page.url()}`
+          + (r.codigo ? ` — la API responde "${r.codigo}"` : '')
+          + (r.motivo ? ` — la pantalla dice: "${r.motivo}"` : (r.codigo ? '' : ' — sin mensaje visible'))
+          + (ctx.confirmoCorreo && !ctx.confirmoCorreo.ok ? ` — y la confirmación del correo tampoco pudo: ${ctx.confirmoCorreo.detalle}` : '');
       }
+      page.off('response', oirToken);
       const vista = await mirar(page, 'paso-04-entrar.png');
-      return { estado: 'roto', detalle: `no entró: ${ultimo}`, ...vista };
+      return { estado: 'roto', detalle: `no entró: ${ultimo}`, confirmoCorreo: ctx.confirmoCorreo || null, ...vista };
     },
   },
 
