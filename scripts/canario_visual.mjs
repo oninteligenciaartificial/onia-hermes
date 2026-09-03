@@ -1,17 +1,26 @@
 #!/usr/bin/env node
 /**
- * Canario visual — abre las pantallas que ve un cliente, las MIRA (captura full-page)
+ * Canario visual — abre las pantallas que ve un cliente, las MIRA (capturas por viewport)
  * y mide peso real y tiempo real.
  *
  * Un 200 no es verificación: el login de producción mostró durante días los NOMBRES de
  * los iconos como texto, "verificado" con HTTP 200 y grep. Por eso acá se captura y se
  * pesa. La captura la mira un humano (o el agente); el script solo la produce.
  *
+ * ⚠️ NUNCA `page.screenshot({ fullPage: true })` en este sitio. Medido 2026-09-03: fullPage
+ * agranda el viewport al alto entero de la página, y con eso el header (`position: sticky;
+ * top: 0`) del layout de `(sitio)` renderiza en blanco — la home aparece SIN nav, sin que
+ * el sitio esté roto. La misma home con captura por viewport (scroll real) muestra el header
+ * intacto. Es la misma familia de bug que ya rompió `/rubros` (ver memoria
+ * `captura-fullpage-miente.md`). Por eso acá se capturan viewports en pasos de scroll real,
+ * nunca la página entera de una.
+ *
  * Uso:
  *   node scripts/canario_visual.mjs                 # todas las pantallas
  *   node scripts/canario_visual.mjs login-plataforma
  *
- * Escribe <out>/<pantalla>.png y <out>/<pantalla>.json (peso, ms, y qué se ve).
+ * Escribe <out>/<pantalla>-00.png, -01.png... (una por viewport de scroll) y
+ * <out>/<pantalla>.json (peso, ms, y qué se ve).
  */
 import { chromium } from 'playwright';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -164,24 +173,43 @@ async function medir(browser, { nombre, url, cola, duenio }) {
   try { await page.waitForLoadState('networkidle', { timeout: 15_000 }); } catch { /* sigue */ }
   const msTotal = Date.now() - t0;
 
-  // Recorrer la página entera antes de capturar. Sin esto, todo lo que aparece al
-  // scrollear (IntersectionObserver, opacity:0) sale como bloques de color VACÍOS y la
-  // captura miente en la dirección peor: parece rota una página que está sana.
-  // 120ms/400ms medían apagados: la tarjeta de add-on de WhatsApp en /precios (animación
-  // "whileInView" con delay) quedaba en blanco con esos tiempos y aparecía completa con
-  // 300ms/800ms — verificado a mano el 2026-09-03. No es el sitio, es el instrumento.
-  await page.evaluate(async () => {
-    const paso = window.innerHeight * 0.8;
-    for (let y = 0; y < document.body.scrollHeight; y += paso) {
-      window.scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 300));
-    }
-    window.scrollTo(0, 0);
-    await new Promise((r) => setTimeout(r, 800));
-  });
+  // Capturar por VIEWPORT real, nunca `fullPage`. Dos motivos medidos, no supuestos:
+  //
+  // 1) Lo que aparece al scrollear (IntersectionObserver, opacity:0) sale como bloques de
+  //    color VACÍOS si no se scrollea antes — la captura miente en la dirección peor: parece
+  //    rota una página que está sana. 120ms/400ms medían apagados: la tarjeta de add-on de
+  //    WhatsApp en /precios (animación "whileInView" con delay) quedaba en blanco con esos
+  //    tiempos y aparecía completa con 300ms/800ms — verificado a mano el 2026-09-03.
+  // 2) `fullPage: true` agranda el viewport al alto entero del documento para capturar de una
+  //    sola vez, y con eso todo lo que es `position: sticky` dentro de esa página queda mal
+  //    (el header del sitio, el switcher de /rubros) porque ya no hay scroll real que sostenga
+  //    su posición. Medido 2026-09-03: la home sin cambios captura CON header por viewport y
+  //    SIN header por fullPage.
+  //
+  // `scroll-behavior: auto` mata el scroll suave del sitio (si no, una captura a mitad de
+  // animación fotografía la página en tránsito), y se espera a que `scrollY` LLEGUE de verdad,
+  // no a que pase un timeout — ver memoria `captura-fullpage-miente.md`.
+  await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' }).catch(() => {});
+  await page.waitForTimeout(300);
 
-  const png = join(OUT, `${nombre}.png`);
-  await page.screenshot({ path: png, fullPage: true });
+  const alto = await page.evaluate(() => document.documentElement.scrollHeight);
+  const paso = Math.round(900 * 0.85);
+  const capturas = [];
+  for (let y = 0, i = 0; y < alto && i < 24; y += paso, i++) {
+    await page.evaluate((t) => window.scrollTo(0, t), y);
+    await page.waitForFunction(
+      (t) => Math.abs(window.scrollY - t) < 3
+        || Math.abs(window.scrollY - (document.documentElement.scrollHeight - window.innerHeight)) < 3,
+      y,
+      { timeout: 5000 },
+    ).catch(() => {});
+    await page.waitForTimeout(350);
+    const f = join(OUT, `${nombre}-${String(i).padStart(2, '0')}.png`);
+    await page.screenshot({ path: f });
+    capturas.push(f);
+    if (y + paso >= alto) break;
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
 
   const visto = {
     titulo: await page.title().catch(() => null),
@@ -196,7 +224,7 @@ async function medir(browser, { nombre, url, cola, duenio }) {
   await Promise.all(pesajes);
 
   await ctx.close();
-  const datos = { nombre, url, cola, duenio, status, fallo, bytes, msMirable, msTotal, erroresConsola: errores.slice(0, 10), visto };
+  const datos = { nombre, url, cola, duenio, status, fallo, bytes, msMirable, msTotal, erroresConsola: errores.slice(0, 10), visto, capturas: capturas.map((f) => f.split('/').pop()) };
   const veredicto = juzgar(datos);
   datos.baseline = veredicto.baseline;
   // `motivos` son las razones MECÁNICAS por las que esto ya es un ítem. Vacío NO significa
