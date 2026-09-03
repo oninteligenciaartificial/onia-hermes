@@ -7,7 +7,7 @@
 
 ## 🔴 Lo que hay que saber antes de usar cualquiera
 
-Los tres animan **la misma escena** (`E3-cafe.png`, café de especialidad, acción a medias con las
+Los tres animan **la misma escena** (`E3-cafe.jpg`, café de especialidad, acción a medias con las
 dos manos en la taza). Cambian el modelo y la duración. **Formatos verificados con `ffprobe`:**
 
 | Video | Formato real | Audio | Dur. | Modelo | Sirve para |
@@ -114,5 +114,5 @@ Un sistema no atiende por vos. Registra lo que vos ya no alcanzás a anotar.
 > ✅ **Resuelto el 2026-09-02:** ya existe [`LEEME.md`](LEEME.md) con el asset id de cada imagen
 > E2–E3. **Corrección:** los `job_id` de los videos E4/E6 **NO** estaban en los `_E*.log` — esos
 > logs son sólo de imágenes (URL del PNG). Verificado: no hay `job_id` de video guardado en la
-> carpeta. No bloquea re-animar (`--start-image` acepta la ruta local de `E3-cafe.png`), sólo se
+> carpeta. No bloquea re-animar (`--start-image` acepta la ruta local de `E3-cafe.jpg`), sólo se
 > pierde recuperar ese render exacto. Detalle en el `LEEME.md`.

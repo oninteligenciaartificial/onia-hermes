@@ -327,3 +327,256 @@ lindo, aire) **sin costar la cara** (casilla 1 y 7 intactas), escrita como un fl
 requiere volver a experimentar** — se copia y sale. Y deja además una pieza publicable (`D13`).
 El cuello de botella de todo el carril —«fancy le cambia la cara»— queda **resuelto y documentado
 como receta operativa**, no sólo como hallazgo.
+
+### E8 · El bloqueo NO es un cupo diario: la cuenta entera no genera — 2026-09-02 · **0 créditos**
+
+**La vuelta salió a animar `E3-hotel.jpg`** (el pendiente heredado, 4,8 cr, dentro del tope) y
+volvió a chocar con `grace_daily_limit_reached`. En vez de anotar «el límite sigue» y esperar al
+día siguiente —que es lo que decía el pendiente— se midió **qué es** el límite. La respuesta
+cambia el plan del carril, así que la vuelta entrega eso.
+
+**Error idéntico en los tres intentos, palabra por palabra:**
+
+```json
+{"data":{"modal_data":{"elapsed_days":1},"type":"unlock_full_access_notice"},
+ "error_type":"grace_daily_limit_reached"}
+```
+
+| Prueba | Modelo | Costo | Resultado |
+|---|---|---|---|
+| Animar `E3-hotel.jpg` | `seedance1_5` (video) | 4,8 cr | ⛔ `grace_daily_limit_reached` |
+| Imagen nueva (vuelta previa) | `nano_banana_pro` | 2 cr | ⛔ mismo error |
+| **Imagen más barata del catálogo** | `text2image_soul_v2` | **0,12 cr** | ⛔ **mismo error** |
+| `generate cost` de todos ellos | — | **gratis** | ✅ responde normal |
+
+🔴 **El dato que decide: falla el modelo de 0,12 créditos.** Una cuenta con **1948,66 créditos** y
+plan `ultra` (`higgsfield account status`, verificado en vivo) no puede gastar doce centavos de
+crédito. El bloqueo **no es de video, ni de modelos caros, ni de gasto**: es de **toda creación**.
+Cotizar sigue gratis y sigue funcionando, que es lo que hacía parecer que la herramienta estaba viva.
+
+**Y la hipótesis del cupo diario queda REFUTADA por el historial de la propia cuenta**
+(`account transactions`, 200 movimientos leídos):
+
+| día | créditos gastados | generaciones | ¿cortó? |
+|---|---|---|---|
+| **2026-09-02** | **72,67** | **25** | **sí, a las 08:48 UTC** |
+| 2026-08-23 | 83,30 | 29 | no |
+| **2026-08-21** | **313,45** | **69** | **no** |
+
+Si hubiera un tope diario de créditos o de piezas, el 21-ago —**4× el gasto y casi 3× las
+generaciones**— habría cortado mucho antes que el 02-sep. No cortó. **El corte del 02-sep no lo
+causó el consumo de ese día.**
+
+**Última generación exitosa: 2026-09-02T08:48:46 UTC** (Seedance 1.5 Pro, 4,8 cr). Al reintentar
+a las 21:39 UTC seguía bloqueado: **~13 h sin poder generar nada**.
+
+**Pista observada, sin explicación probada:** las cinco últimas generaciones del día salieron a
+**exactamente una por hora** — 04:49 · 05:49 · 06:48 · 07:49 · 08:48 — mientras que antes de las
+04:41 hubo ráfagas de tres en el mismo segundo. Parece un goteo forzado antes del corte total,
+pero **es una observación, no un mecanismo probado**: no la tomes como causa.
+
+⚠️ **Lo que NO sabemos, y no se inventa.** `unlock_full_access_notice` + `elapsed_days: 1` **suena**
+a un cambio de estado de la suscripción (una ventana de «gracia» con acceso recortado), y el
+historial muestra que la cuenta ya osciló antes — `Task Reward Cashback Paused` el 27-ago (−80 cr)
+y `Resumed` el 01-sep (+80 cr). **Pero eso es una hipótesis, no una medición**, y desde el CLI no
+hay forma de refutarla: `account status` informa `ultra` y 1948 créditos, o sea que **la API
+miente por omisión sobre el estado que de verdad bloquea**. Sólo se ve entrando a la cuenta por
+navegador.
+
+**Consecuencia operativa para el carril, hasta que se destrabe:**
+
+1. **No sirve esperar al día siguiente.** El pendiente de `E3-hotel` no está esperando cupo: está
+   esperando a Sergio. Anotado así en el `LEEME.md` del banco.
+2. **Toda vuelta que planee generar tiene que cotizar primero** (`generate cost` es gratis y sigue
+   vivo) **y aceptar que `create` puede rebotar**. Plan B de cero créditos, siempre.
+3. **No reintentar en bucle.** Tres intentos de tres modelos distintos dieron el mismo error: el
+   cuarto no aporta información. Se reintenta **una** vez por vuelta, y si rebota, se hace trabajo
+   de 0 créditos.
+
+**Método que hay que repetir:** el pendiente decía «esperá a mañana» y esa era una conclusión
+heredada, no medida. Contarla de nuevo —tres modelos, el más barato incluido, y el historial de
+gasto— la dio vuelta entera. `CLAUDE.md`: *un dato heredado no se ejecuta sin CONTARLO de nuevo*.
+
+### 🔧 Hallazgo de paso: el banco entero citaba archivos `.png` que no existen — 0 créditos
+
+Al ir a correr el comando heredado saltó que apunta a `E3-hotel.png`, y en disco es **`.jpg`**.
+Verificado en todo el carril: **no hay ni un solo `.png`** en `references/modelos/lucia/`. El
+`LEEME.md` del banco los nombraba `.png` **13 veces** y `CREATIVO.md` 2 — Higgsfield **descarga**
+`.png`, pero al repo entraron convertidas, y los docs copiaron el nombre de la descarga.
+
+**Cualquier comando copiado de esos docs moría en «file not found» antes de tocar el servidor.**
+Corregidas las 15 menciones y verificado que cada archivo citado existe en disco. Queda la nota en
+el encabezado del `LEEME`: se escribe la extensión **que tiene el archivo**, no la que trajo la
+descarga. Es el mismo defecto que la rúbrica combate en las fotos —*medido, no supuesto*— aplicado
+a las rutas.
+
+### E9 · El plan mandaba a publicar el carrusel DESCARTADO — 2026-09-03 · **0 créditos**
+
+**La vuelta arrancó corriendo la definición de hecho** («abrí lo que dice estar listo y miralo»)
+sobre `PRODUCCION_MES_1.md`. L6 figura como **«✅ RENDERIZADO, espera OK»** y cita
+`posts-20260807/render-l6/slide-01..07.png`. **Esa carpeta no existe en este árbol.** Tirando del
+hilo salió algo peor que un archivo faltante.
+
+**La carpeta que el plan mandaba a publicar lleva adentro su propia lápida.** Textual, en
+`render-l6/_NO-SUBIR.md`, decidido el 31-ago comparando las láminas una a una:
+
+> ⛔ NO SUBIR — esta versión quedó superada. **Subí `L6/` en su lugar.**
+> Motivo: acento **mostaza**; el lote del 28-ago lo unifica al **verde Onia**.
+
+O sea: el feed se unificó al verde el 28-ago, se dejó la nota en la carpeta vieja, y **el plan
+—la única puerta de entrada del carril— nunca se enteró**. Cualquier sesión que lo siguiera al pie
+de la letra publicaba el carrusel del color equivocado, con la nota que lo prohíbe a un `ls` de
+distancia. Es exactamente lo que `CLAUDE.md` llama *barrer la promesa en toda la superficie*:
+se arregló el color donde saltó y no el doc que manda a la pieza.
+
+**Corregido:** el plan ahora apunta a `posts-20260807/L6/slide-01..07.jpg`. **Mirado, no supuesto** —
+extraída `slide-07.jpg` (la última, que es donde nadie llega) y abierta: 1080×1350, acento verde
+`#10C26B`, CTA «Comentá SISTEMA», pie `@lucia.antelo.oficial` y la declaración «Soy IA, y no lo
+escondo». La pieza buena está impecable; **el que estaba roto era el puntero.**
+
+#### 🔴 Corrección a E8: la causa de los `.png` fantasma NO era el nombre de la descarga
+
+E8 (vuelta anterior) cerró que los docs citaban `.png` porque *«Higgsfield descarga `.png`, pero al
+repo entraron convertidas, y los docs copiaron el nombre de la descarga»*. **La corrección de las
+15 rutas fue correcta y sigue en pie** — reverificado hoy: los 10 archivos citados por el `LEEME`
+del banco 20260902 existen todos. **Pero el mecanismo que E8 nombró está incompleto, y por eso el
+mismo defecto seguía vivo en otros tres lugares.**
+
+La causa real es una línea de configuración:
+
+```
+hermes-content/references/modelos/.gitignore:2:  *.png
+# "Originales PNG de la generacion (pesados, quedan locales). Los JPG q3 son los assets usables."
+```
+
+**`*.png` está ignorado en TODO el árbol `references/modelos/`.** No es que los docs copiaran mal
+un nombre: es que **cualquier PNG que este carril produzca es invisible para git**, y las láminas
+de carrusel se rendean en PNG. El render escribe, el doc anota la ruta que vio, y git descarta los
+archivos **sin decir una palabra**. La convención real —PNG local, JPG commiteado— es deliberada y
+sana por peso, pero **no está escrita en ningún lado que el carril lea, y nada la hace cumplir**.
+
+**Ya disparó dos veces, y la primera se «arregló» sin desarmarla:**
+
+| cuándo | qué se perdió | cómo se arregló |
+|---|---|---|
+| commit `de009bc4f` | **74 láminas** — *"el feed entero existia solo en esta maquina"* | se convirtieron a JPG a mano y se commitearon. **No se tocó la regla.** |
+| commit `f21948709` | las 7 láminas de L6 | el commit se llama *«L6 renderizado»* y contiene **sólo el brief y ediciones de doc** — cero imágenes |
+
+La trampa quedó armada y volvió a morder. **Un `git commit` que no se queja no prueba que el
+entregable entró**: `git status` calla sobre lo ignorado, que es justo lo que hace este fallo
+silencioso. Antes de anotar una lámina como lista: `git ls-files <ruta>` — si vuelve vacío, el
+archivo **no existe para nadie más que para vos**.
+
+#### 🔴 `main` no tiene ni una lámina de este carril
+
+Medido hoy, contado en vivo y no heredado:
+
+| rama | láminas de Lucía |
+|---|---|
+| `origin/main` | **0** |
+| `origin/claude/ads-creatividades-publicos` | **70** (461 en todo el repo) |
+| `claude/lucia-vps` (esta) | **0** |
+
+Esa rama va **151 commits adelante de `main`**. Todo el output visual del carril vive en una sola
+rama sin integrar: desde un clon limpio, o desde el VPS donde corre este loop, **no hay carrusel
+que abrir**. Es la razón de fondo por la que la vuelta no pudo verificar L6 sin ir a buscarlo a
+otra rama.
+
+⚠️ **No se toca desde acá.** `claude/ads-creatividades-publicos` es el carril de Sergio y mergear a
+`main` es de `onia-cola`. Queda en el tablero, con el conteo medido.
+
+#### 🔧 De paso: `block` del tablero falla si `--kind` va DESPUÉS del id
+
+Al dejar la tarea bloqueada, esto **no bloquea nada** —y es el orden que traen escrito los prompts
+de los loops, incluido el de este carril:
+
+```sh
+# ❌ falla: "unrecognized arguments: Sergio: decidir..."
+onia-tablero.sh block <id> --kind needs_input "razón"
+
+# ✅ funciona
+onia-tablero.sh block --kind needs_input <id> "razón"
+```
+
+Con el orden malo el comando **sale por error y la tarea queda en `ready`**. Un carril que no
+verifique después de bloquear cree que dejó la pieza frenada esperando el OK de Sergio, y en
+realidad la dejó **suelta y reclamable por cualquiera** — que es justo lo contrario de la regla
+«toda pieza nace bloqueada». Se detectó porque el paso siguiente fue un `list` mirando el estado
+real, no porque el comando avisara.
+
+**Regla:** después de `block`, un `list` que confirme el `⊘ blocked`. El tablero ya tiene una
+tarea cerrada sobre esta sintaxis (`t_70696f24`), pero el orden equivocado **sigue vivo en los
+prompts** — no es de este carril arreglarlo ahí.
+
+---
+
+### E10 · L2 rendeado — la primera pieza que este carril puede reconstruir solo — 2026-09-03 · **0 créditos**
+
+**Pregunta de la vuelta:** *¿queda alguna pieza del plan que se pueda terminar sin gastar?* Sí: L2,
+el carrusel fijado «¿Quién es Lucía?», que figuraba **«brief listo, falta render»** desde el 22-ago.
+Doce días parado por nada — el render es local y cuesta cero.
+
+**Entregable: `posts-20260807/L2/slide-01..07.jpg`**, 7 láminas 1080×1350, bloqueadas esperando OK.
+
+#### Lo que apareció al ir a rendear: E9 se quedó corta
+
+E9 (vuelta anterior) midió que las 70 láminas del carril viven sólo en
+`claude/ads-creatividades-publicos` y que `main` tiene 0. Correcto, pero **contó los productos y no
+los insumos**. Al abrir el brief de L2, sus 7 fondos apuntaban a `tanda-20260821/*.png`. Contado en
+vivo, en las tres ramas:
+
+| dónde | imágenes de `tanda-20260821/` |
+|---|---|
+| disco de este worktree | **0** |
+| `origin/main` | **0** |
+| `origin/claude/ads-creatividades-publicos` | **0** |
+
+**No están "en otra rama": nunca entraron a git.** Esa carpeta contiene 24 archivos y son todos
+`.mp4`/`.mp3`. El banco de fotos que alimenta L2 **y L6** existió sólo en la máquina que lo generó.
+
+Esto sube la gravedad de lo que E9 llamó «la trampa del PNG». No es que el output quede sin
+publicar: es que **el insumo se evapora y con él la capacidad de re-rendear la pieza**. Un brief
+cuyos `bg` no están versionados es un brief que sólo funciona una vez, en una sola computadora.
+
+#### Cómo se arregló, y por qué el arreglo es la prueba
+
+Repuntados los 7 fondos al banco `generadas-20260902/` (6 imágenes, **todas commiteadas**, las
+mejor auditadas del carril) y **rendeado acá, en el VPS**. Que el render haya corrido en la máquina
+donde el loop vive —y no en la de Sergio— es la demostración de que la pieza ahora se reconstruye
+desde un clon limpio. Antes no.
+
+Ventaja no buscada: las 6 fotos del banco 0902 **comparten la remera de lino beige**, así que el
+carrusel salió con raccord de vestuario sin generar nada.
+
+#### La secuencia que hay que repetir para no perder láminas
+
+El renderer escribe **PNG** y `references/modelos/.gitignore` ignora `*.png` **en todo el árbol**.
+Rendear y commitear sin más deja el entregable invisible, y `git status` **no dice una palabra**:
+
+```sh
+node scripts/carousel_render.js --brief <b> --out <d> --account lucia --pack editorial-clean --format feed
+for f in slide-*.png; do ffmpeg -loglevel error -y -i "$f" -q:v 3 "${f%.png}.jpg"; done && rm -f slide-*.png
+git check-ignore -v <d>/*.jpg   # VACÍO (exit 1) o no entró
+git ls-files <d>                # tiene que listar las 7
+```
+
+Verificado para estas 7: ninguna ignorada, las 7 versionadas. **Un `git commit` que no se queja no
+prueba que el entregable entró.**
+
+#### Rúbrica: 9/9, mirado a resolución completa
+
+Abiertas 1, 2, 4 y 7 —incluida **la última, que es donde nadie llega**—: misma cara en las 7 (pecas,
+cejas, aro, cadenita), `1080×1350` medido con `ffprobe`, cero texto legible (la pantalla de la
+lámina 4 es UI borrosa), manos correctas, luz de lugar, piel con poros, verde `#10C26B` y pie
+`@lucia.antelo.oficial` — **no** `@oniahq`, que es lo que sale si se olvida `--account lucia`.
+
+**Decisión que Sergio puede querer revertir:** hay 6 fotos para 7 lugares, así que la lámina 7
+repite la portada. Se puso el par en los extremos (máxima distancia) y el texto lo convierte en
+remate. Si no le cierra, una foto nueva de cierre son ~2 cr.
+
+#### Lo que queda armado y no se tocó
+
+El brief de **L6 tiene el mismo defecto**: sus 7 `bg` apuntan a los mismos PNG inexistentes. No se
+repuntó a propósito — L6 ya tiene render bueno (verde, en la rama de ads) y cambiarle los fondos
+cambiaría la pieza que Sergio va a aprobar. Anotado en el plan: si alguna vez hay que re-rendear
+L6, primero se repuntan los fondos.
