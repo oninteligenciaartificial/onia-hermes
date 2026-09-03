@@ -1277,9 +1277,10 @@ const PASOS = [
           elegido, fecha, ...despues,
         });
       }
-      let cita = null;
-      try { cita = JSON.parse(red.post.body); } catch { /* el body va recortado si es largo */ }
-      ctx.citaCreada = { id: cita?.id || null, notas: QA.cita, fecha, hora: elegido.hora };
+      // El body se guarda recortado (la cita entera pesa más de 300 caracteres): el id se lee
+      // con una expresión, no parseando el JSON a medias.
+      const cita = { id: (red.post.body.match(/"id":"([^"]+)"/) || [])[1] || null };
+      ctx.citaCreada = { id: cita.id, notas: QA.cita, fecha, hora: elegido.hora };
 
       // La verificación es VERLA: se recarga la agenda y se busca al paciente en el mes. Si la
       // cita cayó en el mes siguiente, se pasa de mes una vez, como haría el cliente.
