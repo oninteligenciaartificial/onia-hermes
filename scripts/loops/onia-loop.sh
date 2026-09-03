@@ -132,6 +132,25 @@ case "$NOMBRE" in
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  contenido-cola)
+    # Carril CONTENIDO (Lucia, @oniahq, marca personal). Vivia en la app de Claude
+    # Code de la laptop de Sergio y se mudo al VPS el 2026-09-02, con su OK.
+    #
+    # POR QUE: midiendo si el sistema aguanta sin la PC aparecio que este era uno
+    # de los DOS unicos loops que morian al apagarla — y el VPS tenia PROHIBIDO
+    # rearmarlo, porque la tabla de loops.md lo marcaba como `Windows` y el bloque
+    # de auto-cura dice textual que a esos no se los toca. O sea: se apagaba con la
+    # laptop, nada lo reponia y nada avisaba. El modo de falla mas silencioso que
+    # tiene el sistema.
+    #
+    # Trabaja sobre `claude/ads-creatividades-publicos`, NO sobre
+    # `claude/carril-contenido` — esa es la rama que Sergio maneja en su propia
+    # sesion y su prompt tiene prohibido escribir ahi.
+    WT=/root/loops/onia-hermes-contenido-cola
+    RAMA=claude/ads-creatividades-publicos
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   lucia)
     # Carril Lucia / modelos (Higgsfield). Era una sesion de Windows: se mudo al
     # VPS el 2026-09-02 para que corra con la laptop apagada.
