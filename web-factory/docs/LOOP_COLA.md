@@ -102,47 +102,6 @@ Las tres formas de fantasma que ya aparecieron acá:
 > **Cada ítem trae su evidencia re-verificada el 2026-09-01** — y cinco de los siete
 > estaban escritos DENTRO de ítems ya cerrados, donde ningún loop los iba a ver.
 
-- [ ] **El sitio de venta no publica por culpa de una app de ESTE carril, y la causa sigue viva.**
-      onia.com.bo estuvo **nueve días sin publicarse** y no era su culpa: el deploy muere en
-      `pnpm install --frozen-lockfile` porque `web-factory/apps/dental-premium` declara 9
-      dependencias que `web-factory/pnpm-lock.yaml` no tenía. El lockfile ya se parchó (PR #30,
-      2026-09-01 14:52), **la causa no**: las dos apps de cliente llevan un `package-lock.json`
-      de npm dentro de un workspace pnpm, y su propio README manda correr `npm install`. El
-      próximo que siga el README vuelve a tumbar la publicación del sitio que vende.
-      **Evidencia** (`$ gh run view 33544864012 --log-failed`, run del 2026-09-01 18:43 UTC):
-      `ERR_PNPM_OUTDATED_LOCKFILE ... not up to date with <ROOT>/apps/dental-premium/package.json`
-      · `9 dependencies were added: next@15.5.4, react@19.1.0, motion, gsap …`.
-      Los dos lockfiles de npm siguen commiteados —
-      `web-factory/apps/dental-premium/package-lock.json` y
-      `web-factory/apps/ferreteria-sur/package-lock.json`, 35.759 bytes **idénticos**, junto a
-      `web-factory/pnpm-workspace.yaml`, que mete todo `apps` en el workspace de pnpm — y
-      `web-factory/apps/ferreteria-sur/README.md:18` dice `npm install`.
-      Y **no hay ningún gate**: `$ grep -rn frozen-lockfile .github/workflows/` devuelve 0, o sea
-      que la desincronización sólo se descubre publicando, que es como costó nueve días.
-      **Hecho cuando**: los dos `package-lock.json` fuera del repo (y en `.gitignore`), los dos
-      README diciendo `pnpm install`, y la salida pegada de `pnpm install --frozen-lockfile`
-      desde `web-factory/` con exit 0 contra el lockfile de hoy. El gate en CI es el ítem
-      bloqueado de más abajo: `.github/` no es zona de este carril.
-
-- [ ] **Las dos webs de cliente están terminadas y no se pueden publicar con un comando.**
-      `web-factory/apps/dental-premium` y `web-factory/apps/ferreteria-sur` son dos sitios
-      Next terminados, mirados y con gates verdes, y hoy **no existe ninguna forma de
-      publicarlos**: cero proyectos en Vercel (medido con la API el 2026-09-01 — 15 proyectos,
-      ninguno es estos dos), cero entrada en `.github/workflows/`, y el `vercel.json` de la raíz
-      trae deploy por git apagado para todo el repo. El add-on se cierra mandando un link por
-      WhatsApp, y ese link no existe.
-      **Evidencia**: `$ grep -rln dental-premium .github/ scripts/` → 0 · las dos apps ya traen
-      salida standalone (`web-factory/apps/dental-premium/next.config.ts:6`), o sea el MISMO
-      modelo de despliegue que ya usa `scripts/deploy-onia-landing.sh` para onia.com.bo.
-      **Qué hace este ítem** (no publica — la regla 6 lo prohíbe): (a) correr
-      `pnpm --filter dental-premium build` y `pnpm --filter ferreteria-sur build` y pegar la
-      salida, incluido el First Load de cada ruta; (b) dejar en `web-factory/scripts/` un
-      deploy-web-cliente.sh parametrizado por app + subdominio, copiado de
-      `scripts/deploy-onia-landing.sh` (build → tarball → stage → swap con backup y rollback).
-      **Hecho cuando**: los dos builds salen exit 0 con su server.js de standalone listado, y
-      el script pasa `bash -n`. **Bloqueado sólo el último paso**: el subdominio lo elige
-      Sergio — abajo están las dos opciones, cotizadas las dos en Bs 0.
-
 - [ ] **El CTA del hero de la ferretería queda FUERA del pliegue a 1440×800.**
       Lo dejó anotado A3 al cerrar ("entra por 82px a 1440×900 y queda fuera a 1440×800") y
       nunca fue línea de cola, así que ningún loop lo iba a tomar. Es el botón que convierte,
@@ -153,7 +112,11 @@ Las tres formas de fantasma que ya aparecieron acá:
       `web-factory/apps/ferreteria-sur/src/app/sections.css:15`.
       **Hecho cuando**: medido en el navegador a 1440×800, 1440×900 y 390×844, el CTA queda
       **entero dentro del primer viewport en los tres**, con la captura mirada.
-      Re-verificar el número antes de tocar: la medición es del 31-ago.
+      ✅ **Re-verificado el 2026-09-03 y sigue vivo**, ahora contra el bundle de producción
+      (runtime standalone levantado con `node server.js`, no `next dev`): en la captura a
+      **1440×900** el primer viewport termina en el párrafo y la tarjeta de horarios, y el CTA
+      del hero **ya no entra** — o sea que el margen de 82 px que midió A3 a esa misma altura se
+      consumió. A 1440×800 está peor. El único botón visible arriba es el del header.
 
 - [ ] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
       También anotado por A3 al cerrar y nunca convertido en línea. Es el sitio de un negocio
@@ -164,6 +127,11 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Hecho cuando**: la salida de `pnpm --filter ferreteria-sur build` muestra First Load
       **≤150 kB** en la ruta raíz, pegada en el commit, y el sitio mirado renderizado a 1440 y
       390 para probar que la animación sigue viva (import dinámico, no animación borrada).
+      ✅ **Re-medido el 2026-09-03: 192 kB, exacto — y no es sólo la ferretería.**
+      `dental-premium` está en **187 kB** con las mismas dos dependencias planas
+      (`motion` + `gsap`) y el mismo consumidor único, así que el arreglo es el mismo dos veces
+      y este ítem cubre las dos apps. El piso compartido son 102 kB, o sea que lo propio de cada
+      página son 90 kB (ferretería) y 85 kB (dental): el recorte tiene que salir de ahí.
 
 - [ ] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
       T34 se cerró como fantasma con esta frase adentro: *"lo que SÍ falta y no es esto:
@@ -225,6 +193,22 @@ Las tres formas de fantasma que ya aparecieron acá:
       siendo de Sergio"*. **Se sabe hecho** abriendo la página de precios y viendo que
       "Inventario avanzado" ya no cobra, y la home con el hero nuevo.
 
+- [ ] **La app que SIRVE onia.com.bo sigue con el lockfile de npm que este carril acaba de sacar
+      de las suyas — y no es zona de este carril.**
+      El 2026-09-02 se sacaron `apps/dental-premium/package-lock.json` y
+      `apps/ferreteria-sur/package-lock.json` (ítem A8, arriba). **Quedó el tercero, y es el
+      peor**: `$ git ls-files | grep package-lock.json` desde `web-factory/` devuelve hoy una
+      sola línea, `apps/onia-platform/package-lock.json`. Esa app entra al workspace de pnpm por
+      `pnpm-workspace.yaml` (`apps/*`) igual que las otras dos, así que un `npm install` ahí
+      desincroniza `pnpm-lock.yaml` y **vuelve a matar el deploy** — con el agravante de que es
+      la app del sitio de venta, o sea el fallo que ya costó nueve días.
+      **No es dificultad, es zona**: `apps/onia-platform/` es del carril `web-venta`
+      (`hermes-content/docs/cola/loops.md`), y la regla 3 se lo prohíbe a este carril.
+      **Es el mismo trabajo de A8, ya probado**: `git rm --cached` del lockfile, la línea en su
+      `.gitignore`, y `pnpm install --frozen-lockfile` verde. Bs 0.
+      **Decisión**: se rutea a `web-venta`, o se le extiende la zona a este carril sólo para ese
+      archivo. Las dos cuestan lo mismo.
+
 - [ ] **El paso que publica el sitio de venta sigue colgado del de un panel abandonado.**
       En `.github/workflows/deploy-onia-center.yml:78` el paso "Deploy landing" corre en el
       MISMO job y DESPUÉS del deploy de center, **sin `if:`**. Si el primero muere, el segundo
@@ -278,6 +262,71 @@ Las tres formas de fantasma que ya aparecieron acá:
 ---
 
 ## Cerrado — carril A (build)
+
+- [x] **A9 · Las dos webs de cliente ya se publican con un comando — y el standalone con el que
+      se iba a publicar estaba ROTO** (2026-09-03).
+      El ítem pedía correr los dos builds y dejar un `deploy-web-cliente.sh`. Los builds salieron
+      exit 0 **y el `server.js` no estaba donde el modelo de deploy lo espera**: ninguna de las
+      dos apps declaraba `outputFileTracingRoot`, así que Next infería la raíz del trazado sola,
+      se iba más arriba de `web-factory/` y **horneaba la ruta absoluta del checkout dentro del
+      bundle**. Medido buildeando en el VPS, el server.js quedó en
+      `.next/standalone/loops/onia-hermes-webfactory/web-factory/apps/dental-premium/server.js`.
+      O sea: la ruta cambiaba según DÓNDE se buildeó —otra en el runner de CI, otra en cada
+      worktree— y cualquier script copiado del de onia.com.bo (que espera
+      `standalone/apps/<app>/server.js`) fallaba, y fallaba distinto en cada máquina. **Un build
+      exit 0 no dice nada sobre si el bundle se puede desplegar**: por eso el "hecho cuando"
+      pedía LISTAR el server.js, y por eso apareció.
+      **Qué se hizo**: `outputFileTracingRoot: monorepoRoot` en el `next.config.ts` de las dos
+      apps —el mismo patrón que `apps/onia-platform/next.config.ts:37`, que es por lo que ESA sí
+      se despliega— con el motivo escrito adentro; y `web-factory/scripts/deploy-web-cliente.sh`
+      parametrizado por `APP` + `SITE_DOMAIN` (build → tarball → stage → swap con backup,
+      health check y rollback), que además **crea el contenedor si es el primer deploy** e
+      imprime el fragmento de vhost sin aplicarlo (traefik es infra de un solo dueño).
+      Con `DEPLOY_SWAP=false`, el default, buildea y deja el runtime staged sin tocar nada
+      publicado: ése es el modo que puede correr un loop.
+      **Medido, no supuesto**: `pnpm install --frozen-lockfile` exit 0 · los dos builds exit 0
+      (dental **187 kB** First Load en `/`, ferretería **192 kB**) · `server.js` presente en
+      `apps/<app>/.next/standalone/apps/<app>/server.js` en las dos · `bash -n` del script OK ·
+      `pnpm typecheck:packages` verde. Y el runtime ensamblado igual que lo hace el script se
+      **levantó y se miró**: `node apps/<app>/server.js` arranca en ~90 ms, HTTP 200 en 32 ms
+      (27 kB dental / 43 kB ferretería), y las dos home renderizadas a 1440×900 con **cero
+      errores de consola y cero respuestas 4xx**.
+      **Queda para Sergio, y es lo único**: elegir el subdominio (ítem de la sección Bloqueado) y
+      apretar el swap. Desplegar sigue sin ser de este carril.
+
+- [x] **A8 · Sacada la causa por la que una app de este carril tumbaba la publicación de
+      onia.com.bo** (2026-09-02).
+      El lockfile ya estaba sano —`pnpm install --frozen-lockfile` desde `web-factory/` da
+      **exit 0** hoy (`Lockfile is up to date, resolution step is skipped · Already up to date ·
+      Done in 1.3s using pnpm v10.33.3`, 9 workspace projects)—, así que lo que quedaba era la
+      **causa**, y seguía viva: los dos `package-lock.json` de npm trackeados dentro de un
+      workspace pnpm, más un README mandando `npm install`.
+      **Qué se hizo**: `git rm` de `apps/dental-premium/package-lock.json` y
+      `apps/ferreteria-sur/package-lock.json`; `package-lock.json` + `yarn.lock` agregados al
+      `.gitignore` de cada app con el porqué escrito adentro (un `.gitignore` sin motivo se
+      revierte); `apps/ferreteria-sur/README.md` reescrito a `pnpm install --frozen-lockfile`
+      desde la raíz del workspace + `pnpm --filter`.
+      **Probado que eran peso muerto, no supuesto**: con los dos lockfiles ya borrados,
+      `pnpm --filter dental-premium typecheck` y `pnpm --filter ferreteria-sur typecheck` dan
+      **exit 0** — las apps resuelven sus dependencias desde el workspace de pnpm y nunca
+      leyeron esos archivos. `pnpm typecheck:packages`: exit 0.
+      **La cola decía "los dos README" y eran uno**: `apps/dental-premium` **no tenía README**.
+      Ahí el peligro era peor —cero instrucciones, así que el próximo adivina `npm install`—, y
+      se creó uno mínimo, sólo con lo verificado en `package.json` y `next.config.ts`, dejando
+      escrito que el formulario no se documentó porque nadie lo midió en esta pasada.
+      ⚠️ **Hipótesis probada y REFUTADA en la misma vuelta, para que nadie la repita**: las dos
+      apps tienen `"incremental": true` **y** tenían `tsconfig.tsbuildinfo` commiteado, lo que
+      parecía un agujero de gate (un `tsbuildinfo` ajeno haciendo que `tsc --noEmit` no
+      re-chequee). Se midió inyectando un error de tipos real en `src/app/page.tsx` con el
+      `tsbuildinfo` commiteado presente: `tsc` lo cazó igual —
+      `error TS2322: Type 'string' is not assignable to type 'number'`, exit 2. **No enmascara
+      nada.** Se sacaron del repo igual, pero como ruido de diff, no como arreglo de gate.
+      ⚠️ **Queda el mismo riesgo FUERA de zona**: `apps/onia-platform/package-lock.json` sigue
+      trackeado, y esa app también entra al workspace por `apps/*` — es exactamente la que
+      sirve onia.com.bo. Es zona del carril `web-venta`, así que este carril no la tocó: la
+      línea está abajo, en `## Ahora`.
+      **Lección: el lockfile era el síntoma; el hábito de `npm install` era la causa. Arreglar
+      el lockfile sin sacar los archivos que invitan al error deja el bug esperando al próximo.**
 
 - [x] **A1a · Dashboard: charts a tema categórico** (2026-08-30, **rehecho**).
       El primer intento (29-ago) eligió 6 hues **a criterio** y estaba MAL: la skill
