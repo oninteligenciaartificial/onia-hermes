@@ -333,6 +333,58 @@ estaban registrados: estaban, en las líneas 60 y 62. "Rearmar" una línea que y
 [`README.md`](README.md), sección *"3. El registro del horario se pierde"*. En una línea: si se
 pierden **todos** a la vez, o la máquina está apagada, no queda nadie adentro para notarlo.
 
+### 🔴 El cron está sano y el loop igual trabaja sobre un repo viejo
+
+**El corredor nunca sincroniza el worktree del carril con `main`.** El `case` fija carpeta, rama
+y tope, hace `checkout` de la rama y arranca — no hay `fetch` ni `merge` de `origin/main` en
+ninguna parte (`grep -nE 'rebase|merge|pull|origin/main' /root/bin/onia-loop.sh`: ni una línea
+que lo haga). El sync del minuto 44 **despliega los prompts y el corredor desde `main`, no los
+worktrees**: actualiza lo que el loop ejecuta, nunca los archivos que el loop lee y edita.
+
+Medido el 2026-09-03 05:30 UTC, `git rev-list --count HEAD..origin/main` en cada árbol:
+
+| carril | atrás de `main` |
+|---|---|
+| `contenido-cola` | **788** |
+| `canario-visual` | 268 |
+| `web-venta` | 235 |
+| `lucia` | 233 |
+| `calidad-generado` · `tendencias` | 126 |
+| `web-factory-dev` | 124 |
+| `marca-personal` | 93 |
+| `recorrido-cliente` | 92 |
+| `chatbot-cola` | 78 |
+| `supervisor` | 72 |
+| `investigacion` | 49 |
+
+**No es deuda cosmética: fabrica hallazgos falsos y puede revertir arreglos ajenos.** Esta misma
+vuelta, `docs-auditoria` estaba 113 commits atrás y la tarea `t_77b6c270` del tablero le pedía
+arreglar la fila de `contenido-cola` de este archivo. En su checkout la fila decía `Windows` y
+`npm run loops:registrados` salía **rojo** — pero en `main` el integrador ya la había corregido a
+las 03:33, y contra `origin/main` el gate estaba **verde**. Un paso más y habría reescrito la
+línea 81 sobre una base de 113 commits: en el mejor caso conflicto, en el peor **el merge
+devuelve la fila mentirosa** y deshace el arreglo del integrador.
+
+El daño escala con el atraso y con lo que el carril toca: `canario-visual` MIRA pantallas y las
+compara contra archivos del repo —268 commits atrás puede reportar un defecto ya arreglado—, y
+`web-venta` es dueño de `onia.com.bo/` con 235 de atraso.
+
+**Es el generador estructural de ítems fantasma**, y encaja con el 25–46 % de pendientes que las
+colas declaraban y no existían: no todos eran items mal escritos, algunos ya estaban hechos en
+`main` y el carril no podía verlo.
+
+**Mientras el corredor no lo haga, cada loop se sincroniza solo al arrancar**, antes de medir
+nada:
+
+```
+git -C <su-worktree> fetch origin --quiet && git -C <su-worktree> merge --ff-only origin/main
+```
+
+`--ff-only` es la parte importante: si el carril tiene trabajo propio sin mergear, **falla sin
+tocar nada** en vez de inventar un merge. Ya está en el prompt de `docs-auditoria`; arreglarlo de
+raíz en el corredor toca los 15 loops a la vez, así que está cotizado en el radar y espera a
+Sergio.
+
 ⚠️ **Acá decía que hay "un agujero por diseño: ningún lado vigila al otro", con `contenido-cola`
 como el vigía del lado Windows. Desde el 2026-09-02 ya no hay dos lados: se mudó al VPS y
 Windows quedó en CERO loops.** El agujero de "ningún lado vigila al otro" desapareció con el

@@ -177,6 +177,32 @@ rama.**
 `git -C /root/loops/onia-hermes-docs branch --show-current` **primero**. Si no es esa, PARÁ y
 avisá por `onia-tg.sh`.
 
+### 🔴 Y SINCRONIZÁ CON `main` ANTES DE MEDIR NADA
+
+```
+git -C /root/loops/onia-hermes-docs fetch origin --quiet
+git -C /root/loops/onia-hermes-docs merge --ff-only origin/main
+```
+
+**El corredor no lo hace por vos** y tu árbol se queda atrás para siempre: el 2026-09-03 estaba
+**113 commits** atrás de `main` (los otros carriles, hasta 788 — la tabla está en
+`hermes-content/docs/cola/loops.md`, sección *"El cron está sano y el loop igual trabaja sobre un
+repo viejo"*).
+
+**Auditar un árbol viejo no es un detalle, es el generador de hallazgos falsos de este carril.**
+Ese día la tarea `t_77b6c270` pedía corregir la fila de `contenido-cola` en `loops.md`: en el
+checkout viejo decía `Windows` y `npm run loops:registrados` salía **rojo**, pero el integrador ya
+la había arreglado en `main` dos horas antes y contra `origin/main` estaba **verde**. Sin este
+paso el carril "corrige" algo ya corregido sobre una base vieja y **el merge revierte el arreglo
+ajeno**.
+
+Es el mismo error que la regla de *"medí con el instrumento correcto"*: **el sistema estaba bien
+y el instrumento era mi propio checkout.** Si una medición tuya sale roja, verificala contra
+`origin/main` antes de escribir una sola línea.
+
+`--ff-only` a propósito: si tenés trabajo propio sin mergear **falla y no toca nada**, en vez de
+inventar un merge. Si falla, no lo fuerces — avisá y seguí con el árbol tal cual.
+
 ## La vuelta: elegí UN foco de los tres, y rotá
 
 Una vuelta = **un** foco. No los tres. Rotá según el que menos se haya mirado (mirá tus últimos
