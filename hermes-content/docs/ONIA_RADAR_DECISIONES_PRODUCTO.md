@@ -1301,45 +1301,81 @@ formulario real de `/login`. Enchufarla es un `env`.
 **Recomendación: (1).** **Desbloquea:** que `/settings/chatbot` entre a la ronda del canario
 como las otras diez pantallas. Es **S15** en `hermes-content/docs/cola/chatbot.md`.
 
-## 22. El corredor de los loops se edita a mano en el VPS y el repo queda atrás — decidir si se blinda (2026-09-02)
+## 22. ¿Quién avisa cuando un loop se muere? (2026-09-02, re-medido 2026-09-03)
 
-**Qué pasó, medido.** El 2026-09-02 09:18 UTC el carril `investigacion` estaba **muerto con su
-cron intacto**: su línea (`26 3,9,15,21`) seguía en `crontab -l`, pero su `case` había
-desaparecido de `/root/bin/onia-loop.sh` cuando se reescribió el script a las 05:44. Cada corrida
-caía en el `*)` con `exit 64` — que ocurre en la línea 97, **24 líneas antes de que se defina
-`avisar()`** (línea 121). Fallo mudo: nada por Telegram, nada en ningún tablero. Corrió una sola
-vez en su vida (03:00:20Z) y esa vuelta hizo trabajo real (`a7a28f63`, cerró 4 fantasmas de este
-mismo archivo).
+> ✅ **La pregunta original ya no existe.** Esta entrada preguntaba si blindar el corredor
+> porque *"el `.sh` que corre se edita a mano y el del repo queda atrás"*. **Hoy es al revés y
+> está medido**: `main` es la fuente y el VPS es el destino de un despliegue automático.
+>
+> ```
+> md5sum /root/bin/onia-loop.sh                     → 1214e0122a986eba1baa9b7a19fc6044
+> git show origin/main:scripts/loops/onia-loop.sh   → 1214e0122a986eba1baa9b7a19fc6044
+> ```
+>
+> Byte por byte iguales, y **los 14 `case` son los mismos en los dos** (`canario-visual`,
+> `chatbot-cola`, `marca-personal`, `onia-cola`, `docs-auditoria`, `kpis-semanal`, `web-venta`,
+> `investigacion`, `lucia`, `recorrido-cliente`, `tendencias`, `web-factory-dev`,
+> `calidad-generado`, `supervisor`). Lo mismo el sincronizador contra
+> `origin/main:scripts/loops/sincronizar.sh` (`cmp -s` → idénticos).
+>
+> Lo que cerró la puerta es `/root/bin/onia-loops-sync.sh`, por cron al minuto 44: copia
+> corredor, prompts, tablero y lector de Telegram **desde `main`**, con `bash -n` antes de pisar
+> nada, `mv` atómico, y **se despliega a sí mismo**. Su log de esta madrugada lo muestra
+> haciéndolo, 42 minutos antes de esta vuelta:
+> ```
+> 2026-09-03T02:44:02Z actualizado /root/bin/onia-loop.sh
+> 2026-09-03T02:44:02Z actualizado /root/bin/onia-loops-sync.sh
+> ```
+> Su repo fuente (`/root/loops/onia-hermes`) está en `main` con **0 commits atrás** de
+> `origin/main` — o sea que despliega lo vigente, no una foto.
+>
+> **La opción C también está hecha.** `tg()` ahora se define en la línea 32, **arriba del
+> `case`**, y la rama `*)` manda un Telegram nombrando el loop y los ids conocidos —que además
+> lee del propio `case` en vez de una lista a mano. El fallo mudo que originó la entrada
+> (`exit 64` antes de que existiera la función que avisa) ya no puede repetirse.
+>
+> **A y D quedan sin sentido:** avisar de una diferencia que un cron borra dentro de la hora es
+> ruido, y "no hacer nada" ya no es el estado actual.
+>
+> ⚠️ **El riesgo nuevo es el espejo del viejo, y es el diseño buscado, no un bug:** una edición
+> a mano en `/root/bin` ahora se **borra** dentro de la hora. Se arregla en el repo y se mergea
+> a `main`, o no se arregla.
 
-Ya restaurado y versionado. **Lo que queda para vos es evitar la próxima**, porque la causa sigue
-viva: el `.sh` que corre se edita a mano y el del repo queda atrás. En una sola jornada divergió
-**dos veces**; a las 09:18 el repo tenía `claude-sonnet-5` donde el VPS ya corría
-`claude-opus-5 --effort max`, no tenía `web-venta` ni `investigacion`, y le faltaba la guarda de
-`MERGE_HEAD`. Reinstalar desde el repo —que es lo que el propio README manda— **habría bajado el
-modelo de todos los loops y borrado dos carriles.**
+**Lo único que sigue vivo es la opción B, y sigue sin construirse.** Medido hoy: ningún script
+del VPS mira si un loop dejó de arrancar. `grep -l "ARRANCA" /root/bin/*.sh` devuelve **un solo
+archivo, `onia-loop.sh`** — el que lo escribe. Los tres vigías que existen miran otra cosa:
+`claude-guardia.sh` mira Sentry y contenedores, `hermes-vigia.sh` mira los trabajos de Hermes,
+`onia-vigia-embudo.sh` mira el embudo de venta.
 
-**Opciones cotizadas (todas Bs 0, sólo trabajo de una vuelta de loop):**
+**Qué se decide.** Si se pone un vigía que compare cada loop del cron contra su propio log. La
+rama `*)` del corredor cubre **una sola** causa de muerte (nombre sin `case`); un loop que
+arranca y se cuelga, que se queda sin turnos, o cuyo worktree desapareció, sigue muriendo en
+silencio con el cron perfecto. Mientras no se decida, el único detector es que alguien note la
+ausencia de mensajes en Telegram.
 
-- **A — El corredor se avisa a sí mismo.** Extender la guarda que ya existe para los prompts
-  (`ddc3b9f1`): al arrancar, `diff` entre `/root/bin/onia-loop.sh` y la copia del repo; si
-  difieren, Telegram de una línea. Barato, no bloquea nada, y ataca la causa real (nadie se entera
-  de la divergencia). **Recomendada.**
-- **B — Un `ARRANCA` que falte, avisa.** Un chequeo diario que compare cada línea de `crontab -l`
-  contra el `tail` de su log: si no hay `ARRANCA` posterior a la última hora que le tocaba, avisa.
-  Cubre a `investigacion` **y** a cualquier otra causa de muerte silenciosa, no sólo esta. Más
-  trabajo que A, y es el único que detecta un loop que arranca y se cuelga.
-- **C — Mover el `exit 64` después de `avisar()`.** Arregla sólo el caso "nombre no reconocido".
-  Diez minutos. Es un parche, no cubre B.
-- **D — Nada.** Queda la disciplina escrita en `loops.md` paso 3 y 8. Gratis hoy, y ya sabemos que
-  la disciplina sola falló dos veces en un día.
+**El chequeo cuesta 2 segundos y ya está escrito — lo corrí en esta vuelta** (lee `crontab -l`,
+y por cada `onia-loop.sh <id>` busca el último `ARRANCA` de `/var/log/onia-loop-<id>.log`).
+Resultado del 2026-09-03 03:30 UTC: **los 15 vivos**, ninguno con más de 5 h sin arrancar
+(`marca-personal` 5 h es su horario normal de `56 9,13,17,21`).
 
-A y B se pueden hacer las dos; no compiten.
+| opción | qué cuesta | cuánto tarda | qué se pierde |
+|---|---|---|---|
+| **B — vigía diario de `ARRANCA`** | Bs 0. Un script en `/root/bin` + una línea de cron + un archivo de estado para no repetir el aviso. El comando que hace el trabajo ya está probado acá arriba | Una vuelta del carril dueño (docs/infra). No hay nada que investigar: falta empaquetarlo | Nada. Un mensaje de Telegram sólo cuando un loop se pasa de su horario |
+| **D — dejarlo** | Bs 0 hoy | ya está | El próximo loop que muera por una causa distinta a "sin `case`" no lo dice nadie. Ya pasó una vez y costó **un día entero** de `investigacion` |
 
-**El chequeo de arranque mira en una sola dirección.** Aparte de lo de arriba, hay un agujero de
-diseño que conviene que sepas: el bloque pegado en todos los prompts busca filas de la tabla que
-falten en el cron — nunca al revés. Por eso `web-venta` e `investigacion` corrieron días sin estar
-en `loops.md`, invisibles para la auto-cura. Arreglarlo toca los 7 prompts (uno por carril) y el
-bloque dice explícitamente "no lo optimices", así que **no lo tocó nadie todavía**: decidilo vos.
+**Recomendación: B.** El costo es empaquetar un comando de 2 segundos que ya funciona, y es el
+único que cubre las causas de muerte que el corredor no puede ver desde adentro.
+
+**Lo que NO es opción, y por qué:** ampliar la rama `*)` del corredor. Un loop que se cuelga o
+se queda sin turnos **nunca llega a ejecutar el corredor hasta el final** — el aviso tiene que
+venir de afuera del proceso que puede morir. Es la misma razón por la que `hermes-vigia.sh` no
+vive adentro de Hermes.
+
+**Sigue abierto aparte, y no lo tocó nadie: el chequeo de arranque mira en una sola dirección.**
+El bloque pegado en todos los prompts busca filas de `loops.md` que falten en el cron — nunca al
+revés. Arreglarlo toca **los 14 prompts** —contados en `origin/main`, los 14 llevan el bloque— y
+el bloque dice explícitamente "no lo optimices", así que **decidilo vos**. Ver la §25, que hoy
+mide una consecuencia peor de lo mismo.
 
 ## 23. ~~Los arreglos del carril chatbot al producto nunca llegan a `master`~~ — RESUELTO 2026-09-02, Sergio NO decide nada
 
@@ -1437,6 +1473,65 @@ puede "arreglar" hacia atrás algo que otro carril ya dejó bien.
 **No es sólo de este carril.** `/root/bin/onia-loop.sh` no tiene un solo `git fetch` ni
 `git merge --ff-only` antes de trabajar (`grep -n "fetch\|pull\|rebase" /root/bin/onia-loop.sh`
 sólo devuelve comentarios). Los siete carriles arrancan donde los dejó su vuelta anterior.
+
+### 🔴 Re-medido el 2026-09-03: ahora se comió a la auto-cura
+
+Un día después la distancia **creció** y el daño dejó de ser hipotético. Medido por el carril
+`investigacion` sobre su propio árbol al arrancar la vuelta de las 03:26 UTC:
+
+```
+git rev-parse --short HEAD          → 287af2775
+git rev-list --count HEAD..origin/main → 109      (eran 96 ayer)
+git rev-list --count origin/main..HEAD →   2      (sigue siendo fast-forward puro)
+```
+
+**Y esta vez la copia vieja envenenó el chequeo de arranque**, que es justo el mecanismo que
+existe para que el conjunto de loops se recomponga solo. Ese bloque manda comparar `crontab -l`
+contra la tabla de `hermes-content/docs/cola/loops.md` — y la tabla que el carril leyó era la de
+hace 109 commits:
+
+| dónde | loops en la tabla |
+|---|---|
+| la copia del carril (`HEAD`) | 8 |
+| `origin/main` (commit `1444125d5`, 2026-09-02 20:40) | **14** |
+
+Los **siete invisibles** son `lucia`, `kpis-semanal`, `recorrido-cliente`, `web-factory-dev`,
+`tendencias`, `calidad-generado` y `supervisor` — **los siete tienen su línea viva en
+`crontab -l` ahora mismo**. Si a cualquiera de ellos se le hubiera caído el cron, el chequeo
+habría mirado su tabla vieja, no lo habría encontrado, y habría reportado *"todo bien"* sin
+rearmarlo. **La auto-cura no falla ruidosamente: informa salud.**
+
+Es un escalón peor que el caso de `docs-auditoria`. Aquél gastaba una vuelta re-corrigiendo lo
+corregido; éste **rompe la única red que protege a los otros trece loops**, y lo hace en silencio.
+
+**Y casi se cobra una segunda víctima en la misma vuelta.** El carril iba a commitear su edición
+del radar sobre esa base vieja. `git diff --stat HEAD origin/main` sobre este archivo daba
+**+396/−123** y **nueve commits de otros carriles** que no veía (los ítems 28 a 31, y el §20
+recontado en vivo de 3 → 8 commits). Commitear ahí no era "quedar atrás": era **pisar el trabajo
+de tres carriles en el archivo que este loop existe para cuidar.** Se detectó por comparar contra
+`origin/main` antes de escribir — la misma casualidad que salvó a `docs-auditoria`, que no es un
+método.
+
+**Arreglado a mano en esta vuelta, y eso es justamente el problema.** Se mergeó `origin/main` a
+`claude/investigacion` (merge `c89fd4e3c`) con **5 bloques en conflicto, los 5 en este archivo**,
+resueltos a favor de `origin/main` por ser la medición más nueva (01:40 y 02:49 UTC de hoy contra
+17:36 y 21:40 de ayer). Eso arregla **un** carril, **una** vez. Los otros trece siguen arrancando
+donde los dejó su vuelta anterior.
+
+**No cambia la recomendación — la endurece.** Sigue siendo **(a)**, y los dos números de arriba
+dicen por qué es segura acá: `origin/main..HEAD` = 2 con `HEAD..origin/main` = 109 es exactamente
+el caso que `--ff-only` resuelve sin poder abrir un conflicto. Con la salvedad que esta vuelta
+midió en carne propia: cuando **no** es fast-forward, `--ff-only` falla y avisa sin tocar nada —
+que es el comportamiento correcto, porque el merge de verdad exigió cinco decisiones de contenido
+que ningún automatismo puede tomar.
+
+⚠️ **Daño colateral del rewrite del §20, que conviene mirar y no arreglo yo porque no es mi zona:**
+la versión de `origin/main` que quedó —la buena, la recontada— **perdió la tabla de opciones
+cotizadas** (A desplegar `master` · B cherry-pick sólo del icono · C no desplegar, con sus ~3 min
+de build y el rollback por copia) y la reemplazó por *"Recomendación: hacerlo"*. La medición mejoró
+y **la decisión quedó peor**: Sergio vuelve a tener un ítem sin costo ni alternativas. El texto
+está en el historial (`git show 16816a03c`), listo para que la próxima vuelta lo reponga sobre los
+números nuevos.
 
 **Por qué no lo arreglo solo:** tocar el corredor cambia el comportamiento de **los siete
 carriles a la vez**, y el prompt de este carril prohíbe tocar otro carril. Además hay un motivo
