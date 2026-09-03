@@ -95,7 +95,7 @@ quien la tome.
 Lo que necesita su decisión **nace bloqueado**. Ningún loop lo puede tomar hasta que él lo suelte.
 
 ```
-Hermes crea la tarea  →  block --kind needs_input "qué decide Sergio"
+Hermes crea la tarea  →  block <id> "qué decide Sergio" --kind needs_input
 Un loop intenta       →  cannot claim: status=blocked        ← el cerrojo
 Sergio da el OK       →  unblock <id>
 El loop la toma       →  Workspace: … y la trabaja
@@ -103,6 +103,21 @@ El loop la toma       →  Workspace: … y la trabaja
 
 Probado de punta a punta el 2026-09-02, en los dos sentidos: bloqueada **no se puede reclamar**,
 y liberada se reclama en el acto.
+
+⚠️ **El orden de ese primer renglón no es cosmético: al revés no bloquea.** Hasta el 2026-09-03
+acá decía `block --kind needs_input "motivo"`, y esa forma muere entera en
+`hermes: error: unrecognized arguments: motivo` (exit 2) **sin tocar la tarea**. La firma real es
+`block task_id [reason ...]` con `--kind` opcional: argparse no puede leer un posicional de cola
+que viene después de un opcional. Medido contra un id inexistente, para aislar el parseo:
+
+```
+block <id> --kind needs_input "motivo"   → unrecognized arguments   exit=2   NO BLOQUEA
+block <id> "motivo" --kind needs_input   → unknown task             exit=1   parseo OK
+```
+
+Importa porque es el comando con el que se reserva lo que espera el veredicto de Sergio. Si el
+que lo corre no mira el código de salida, cree que dejó la pieza bloqueada y la dejó en `ready`:
+tomable y publicable por cualquiera. **Es exactamente lo que el bloqueo existe para evitar.**
 
 **Sergio libera con UNA línea:**
 
