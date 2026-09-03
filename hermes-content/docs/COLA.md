@@ -1751,6 +1751,56 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       como corresponde). **Ninguna baseline se tocó esta vuelta** — pisar la de las cinco páginas
       afectadas taparía el ítem del widget caído, igual que ayer con `chatbot-landing`.
 
+### Del carril `web-venta` — corrida del 2026-09-03 11:50 UTC (el CHECKLIST DE PRE-ENTREGA, corrido por primera vez)
+
+- [x] 🟠 **`onia.com.bo/favicon.ico` devolvía 404 — ARREGLADO EN CÓDIGO, con gate. Falta el
+      deploy, que es el mismo de `t_68671bc3`.** No devolvía un icono roto: devolvía la
+      **página de error entera, 29 KB de HTML**, a quien pidió una imagen de 3 KB.
+      - **Cómo apareció:** `web-factory/docs/CHECKLIST_PRE_ENTREGA.md` tenía **17 puntos
+        abiertos y CERO ejecutados**. Corridos los 17 contra producción (las 16 URLs del
+        sitemap), **16 puntos pasan** — canonical en las 16, títulos y descripciones únicos
+        sin un solo duplicado, `<html lang="es">`, un `<h1>` por página, cero contenido
+        mixto, 404 propio ("Página no encontrada — Onia"), y las 21 imágenes del sitio con
+        `alt` **y** `width`/`height`. El único fallo binario era éste.
+      - **Por qué nadie lo veía, medido con el instrumento correcto:** el sitio declara
+        `<link rel="icon" href="/icon.svg">` y `apple-icon.png`, y los dos dan 200. Con eso,
+        **Chromium NO pide `/favicon.ico`** — abierta la home con Playwright, dispara
+        exactamente dos peticiones de icono y ninguna es ésa. El que paga es todo cliente que
+        lo pide a pelo sin leer el `<head>`: buscadores, lectores de feeds, gestores de
+        marcadores, navegadores viejos. Un `curl` lo encuentra en un segundo; un navegador no
+        lo encuentra nunca. **Por eso el checklist existe y por eso había que EJECUTARLO.**
+      - **El arreglo, el mínimo posible:** el ICO bueno ya estaba en el repo
+        (`public/brand/v2/favicon.ico`, 3 tamaños, publicado en `/brand/v2/favicon.ico` — o
+        sea, prueba viva de que `public/` se sirve desde la raíz en ESTE deploy). Copiado a
+        `public/favicon.ico`. **Deliberadamente no se usó la convención de metadata de Next**
+        (`app/favicon.ico`): esa agrega un `<link>` propio y podía cambiar qué icono elige un
+        navegador. Verificado que **el `<head>` queda byte a byte idéntico** al de producción:
+        el arreglo es puramente aditivo y sólo llena la ruta que antes daba 404.
+      - **Verificado MIRANDO, contra un servidor de producción real** (`next start` sobre el
+        build, no `dev`): `/favicon.ico` → **200, `image/x-icon`, 3.083 b, byte a byte igual**
+        al del repo; `/icon.svg` y `/apple-icon.png` siguen en 200. El icono **abierto y
+        mirado** a 16/32/128 px: es la marca Onia (cuadrado verde, "on" negro) y se lee a
+        16 px. Y las dos pantallas de venta recapturadas a 390 px sin una sola respuesta 4xx.
+      - **Gate nuevo `(sitio)/icono.test.ts`**, en `prebuild` (el comando real del deploy).
+        Caza la **clase**, no el archivo de ayer: los **tres** iconos que el sitio publica,
+        cada uno con su firma de formato leída del disco (header ICONDIR para el ICO, `<svg`,
+        `\x89PNG`) — así no pasa en verde un PNG renombrado a `.ico`, ni el día que alguien
+        mueva `icon.svg`. Acepta las dos raíces (`public/` y `app/`) porque las dos terminan
+        en la misma URL y el gate no tiene por qué opinar sobre cuál se usa.
+      - **Verificado en ROJO antes**, por el motivo correcto: falló **sólo** el caso
+        `/favicon.ico está en disco`, con los otros 8 en verde.
+      - **Gates:** typecheck exit 0 · build exit 0 (con `prebuild` = `tsc --noEmit && vitest run`).
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Este arreglo es el **cuarto** que se acumula esperando el mismo
+        deploy de `t_68671bc3`.
+
+- [ ] 🟢 **`/terminos` y `/privacidad` son las dos únicas rutas sin `og:url`** (tienen las otras
+      nueve etiquetas Open Graph, imagen incluida; las 14 restantes tienen las diez). Sale del
+      mismo barrido de arriba. Es chico y no toca a un lead que llega por buscador, pero es una
+      asimetría real y sin motivo. Reproducción en 30 s: `curl -s https://onia.com.bo/terminos |
+      grep -o 'property="og:[a-z:]*"' | sort -u` y comparar contra la home.
+      **Zona:** `web-factory/apps/onia-platform/`, donde se arma la metadata de esas dos rutas.
+
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 
 - [x] 🟠 **El ítem de "captura full-page ciega" (abierto 2026-09-02, confirmado vivo en
