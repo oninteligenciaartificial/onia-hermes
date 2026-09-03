@@ -144,14 +144,27 @@ de las que llegan por los DM (`lucia-ig-sistema`, `onia-ig-sistema`).
 
 ## Paso 0.5 — pasar los archivos al teléfono (5 min, una sola vez)
 
-Los renders viven en la PC (`C:\dev\proyectos\onia-hermes`). Son **12 MB** las 7 láminas y
-**19,7 MB** el reel: entra por cualquier lado.
+🟢 **Corregido el 03-sep: para los carruseles del calendario ya no hay que hacer nada de
+esto — llegan solos.** El VPS te los manda al Telegram de casa con
+`node scripts/entregar_pieza.js --dia <N>`: el caption en un bloque que se toca y se copia,
+la hoja de contacto, y las 7 láminas **como archivo**. Descargás y publicás desde el
+teléfono; la PC no entra en el camino.
 
-**Cómo (Telegram, el más limpio):** Telegram en la PC → chat **"Mensajes guardados"** →
-adjuntar → **enviar como ARCHIVO, no como foto** (como foto, Telegram recomprime). Mandar los
-7 `.png`, el `.mp4` y **`portada-v7.jpg`** (la portada del reel, ver Paso 2). En el teléfono:
-descargar cada uno y **guardarlo en la galería** — si no está en la galería, el selector de
-Instagram no lo ve.
+⚠️ **Y el párrafo que estaba acá mandaba a un lugar donde los archivos no están.** Decía
+*«los renders viven en la PC (`C:\dev\proyectos\onia-hermes`) → Telegram en la PC → Mensajes
+guardados»*. Medido el 03-sep con `git ls-tree origin/main` sobre `posts-20260807/`: de las
+cinco carpetas publicables (`L09`, `L6`, `render-l10`, `L08`, `render-l11`) **`main` no tiene
+ninguna** — sólo `L2` y las `P1..P6`. Viven sólo en `claude/ads-creatividades-publicos`. O
+sea que el único camino escrito para llegar al teléfono pasaba por una PC que puede no tener
+la pieza, y que es la misma que se dejó de usar el 02-sep para correr los loops porque se
+apaga. Instagram se publica desde el teléfono: el material terminado no tenía cómo llegar a
+la mano que aprieta el botón.
+
+**El camino a mano sigue valiendo para lo que no es un carrusel del calendario** (el reel del
+Paso 2, por ejemplo): Telegram en la PC → chat **"Mensajes guardados"** → adjuntar →
+**enviar como ARCHIVO, no como foto** (como foto, Telegram recomprime). Mandar el `.mp4` y
+**`portada-v7.jpg`** (la portada del reel, ver Paso 2). En el teléfono: descargar cada uno y
+**guardarlo en la galería** — si no está en la galería, el selector de Instagram no lo ve.
 
 Si el selector igual no los encuentra: en la misma carpeta `FIJADO/` están los mismos 7 como
 `.jpg`; esos se pueden mandar **como foto** y caen directo en la galería. Instagram recomprime

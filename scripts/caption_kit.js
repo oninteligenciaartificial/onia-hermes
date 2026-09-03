@@ -376,5 +376,16 @@ function selfCheck() {
   return 0;
 }
 
-const modo = process.argv[2];
-process.exit(modo === '--self-check' ? selfCheck() : principal(modo));
+// Como CLI corre y sale; como modulo NO ejecuta nada y presta el calendario.
+//
+// La guarda importa: `entregar_pieza.js` necesita PIEZAS y RX_LAMINA, y sin esto un
+// `require()` dispararia la corrida entera (incluido escribir los CAPTION.md) como
+// efecto colateral de importar. Copiar la tabla en el otro script era la alternativa,
+// y es justo el defecto que este carril ya pago cuatro veces: dos versiones vivas del
+// mismo dato, que se separan el dia que alguien edita una sola.
+if (require.main === module) {
+  const modo = process.argv[2];
+  process.exit(modo === '--self-check' ? selfCheck() : principal(modo));
+}
+
+module.exports = { PIEZAS, RX_LAMINA, POSTS, RAIZ };
