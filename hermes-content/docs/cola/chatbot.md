@@ -565,18 +565,41 @@ decisión de Sergio, no código.
 - [x] ✅ **RESUELTO el 2026-09-02 — el bot contesta el segundo mensaje.** La causa se sacó
       corriendo el motor contra el caso, no leyendo código: `MSG1 → stage handoff_humano, notes
       ["bienvenida","sin_horarios_que_ofrecer"]` · `MSG2 → replies 0, notes
-      ["silencio:handoff_en_curso"]`. Sin Cal.com instalado, los slots de `config.mjs` siguen en
+      ["silencio:handoff_en_curso"]`. Sin Cal.com instalado, los slots de `hermes-content/deploy/vps-ops/bot/config.mjs` siguen en
       *"HORARIO A (pendiente de definir)"*, así que `slotsPending` es SIEMPRE true y
       `welcomeResult` mandaba **toda** conversación a `handoff_humano` — que es silencio
       permanente. Y no había humano.
-      **Lo más caro fue el test que lo protegía:** `knowledge.test.mjs` verificaba que el mensaje
+      **Lo más caro fue el test que lo protegía:** `hermes-content/deploy/vps-ops/bot/knowledge.test.mjs` verificaba que el mensaje
       de bienvenida fuera correcto y **exigía `handoff_humano`**. Verde, y la conversación moría.
       Un test que mira el primer mensaje no puede ver un bot que enmudece en el segundo.
       **Arreglado:** `esperando_horario` (la rama viva) + `M0b_SIN_HORARIOS`, que acusa el dato y
       pide el contacto en vez de re-ofrecer un horario que no existe. 689 tests verdes, test nuevo
       que falla en rojo antes. Desplegado a `/opt/onia/bot` y **verificado en el widget real**.
       ⏭️ **Queda lo otro, y es de Sergio:** definir los dos horarios o instalar Cal.com (tablero
-      `t_af8f44ad`). Hasta entonces el bot dice la verdad — "Sergio te coordina el horario".
+      `t_af8f44ad`).
+
+- [x] 🔴 **"Hasta entonces el bot dice la verdad" era FALSO por un tercer camino — y el placeholder
+      SÍ salió a producción.** Lo de arriba tapó el saludo (`M0_SIN_HORARIOS`) y la re-oferta
+      (`M0b_SIN_HORARIOS`), pero quedó vivo el de la **re-pregunta**. Medido en la base, no leído
+      — `message_type=1`, conv 49: a las **21:09 UTC** *"¿En qué horario te viene mejor que te
+      reserve, horario A o horario B?"* y a las **23:03** *"en la opción A o en la B"*.
+      **Por qué las guardas no lo vieron:** buscan el literal `pendiente de definir`, y estos dos
+      son **paráfrasis del LLM**. `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:786` le pasa `pendingAsk` al modelo como
+      `pendingQuestion`; el modelo recibió los dos labels y los reescribió. La misma frase salía
+      además literal por `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:440`. Reproducido:
+      `pendingAsk({botStage:"esperando_horario", slotsOffered:[]}, DEFAULT_CONFIG)` →
+      *"¿Te reservo **HORARIO A (pendiente de definir)** o **HORARIO B (pendiente de definir)**?"*.
+      **El tercer turno YA estaba testeado** — pero sólo por `replies.length >= 1`, o sea "¿habla?"
+      y nunca "¿qué dice?". Los dos turnos anteriores sí miran el texto; el agujero quedó justo
+      donde el guion cae a `pendingAsk`.
+      **Arreglado** con `PENDING_HORARIO_SIN_HORARIOS`, elegida por el flag `pending` de cada slot
+      (`hayHorarioReal`), que tapa el camino determinista y el del LLM de una sola vez.
+      **Intento fallido que vale anotar:** el primer arreglo fue en `activeSlots`, distinguiendo
+      `[]` de sin-definir. Es la causa más limpia, pero rompió `hermes-content/deploy/vps-ops/bot/followup-run.test.mjs:462` — ese
+      fallback a `config.slots` está **documentado y es deliberado**, porque lo comparte una ruta
+      de plantillas de WhatsApp **pagas**. Revertido: el arreglo va en el punto de la fuga, no en
+      la semántica compartida. **721/721 verdes**, test nuevo rojo antes por el motivo correcto.
+      ⚠️ **Commiteado, NO desplegado** — `/opt/onia/bot` es rsync, no git.
 
 - [x] ~~🔴 **El bot contesta el saludo y se calla en el SEGUNDO mensaje. Reproducido hoy, en vivo, en el inbox de los leads reales.**
       **Cómo se reproduce** (30 segundos, sin tocar nada): abrir
@@ -601,6 +624,9 @@ decisión de Sergio, no código.
       eso se sigue adivinando.
       ⚠️ **Ojo con dar por buena una hipótesis sin probarla**: la del add-on parecía cerrada y era
       falsa. La conversación de prueba de hoy queda en el inbox 4 a propósito, para reproducir.
+      **Evidencia del arreglo de la traza:** vive en
+      `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` y la cubren tres tests de
+      `hermes-content/deploy/vps-ops/bot/webhook-server.test.mjs` (lineas 688, 701 y 726).
 
 ## Después
 

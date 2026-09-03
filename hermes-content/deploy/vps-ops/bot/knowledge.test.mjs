@@ -36,6 +36,7 @@ import {
   withKnowledge,
 } from "./knowledge.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
+import { activeSlots, pendingAsk } from "./reply-builder.mjs";
 import { step, createState } from "./bot-engine.mjs";
 import { normalize } from "./guardrails.mjs";
 import { findIndustry, industryLabel } from "./intents.mjs";
@@ -531,6 +532,54 @@ test("sin horarios el bot sigue vivo en el SEGUNDO mensaje: contesta al que cuen
     { config: DEFAULT_CONFIG },
   );
   assert.ok(tercero.replies.length >= 1, "y sigue contestando, no se agota en un turno");
+  // ESTA LINEA FALTABA Y ES POR LO QUE EL PLACEHOLDER LLEGO A PRODUCCION. El tercer turno YA
+  // estaba cubierto, pero solo por "¿habla?" — nunca por "¿que dice?". Los dos turnos de arriba
+  // si miran el texto; este no, y el agujero quedo justo donde el guion cae a `pendingAsk`.
+  const textoTercero = tercero.replies.map((reply) => reply.text).join("\n");
+  assert.ok(!/pendiente de definir/i.test(textoTercero), "el placeholder NUNCA puede llegarle al prospecto");
+});
+
+// ---------------------------------------------------------------------------
+// 5.ter LA RE-PREGUNTA — el agujero por donde el placeholder SI salio a produccion
+// ---------------------------------------------------------------------------
+// Medido el 2026-09-03 en la base de produccion (conv 49, mensajes de 21:09 y 23:03 UTC): el bot
+// le dijo a una conversacion "¿En que horario te viene mejor que te reserve, horario A o horario
+// B?" y "en la opcion A o en la B". Ninguno de los dos es el literal, asi que las guardas de
+// arriba —que buscan "pendiente de definir"— los dejaron pasar enteros.
+//
+// El camino es este: `welcomeResult` marca `slotsOffered: []` (no se ofrecio NINGUN horario), pero
+// `activeSlots` cae a `config.slots` cuando el array esta vacio — un fallback DELIBERADO, que
+// followUpTemplate documenta y necesita — asi que `pendingAsk` recibia los placeholders de
+// config.mjs y renderizaba PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?".
+//
+// Y `pendingAsk` no se dice solo: bot-engine.mjs lo pega al final de la respuesta determinista
+// (linea ~440) Y se lo pasa al LLM como `pendingQuestion` (linea ~786). Eso ultimo es lo que
+// produjo la PARAFRASIS: el modelo recibio los dos labels y los reescribio como "horario A o B".
+// Por eso el arreglo va en `pendingAsk` y no en la plantilla: es el unico punto que tapa las dos.
+// Y la señal es el flag `pending` de cada slot, no el array vacio: cubre los dos caminos sin
+// mover `activeSlots`, que comparte una ruta de plantillas PAGAS.
+test("sin horarios la RE-PREGUNTA no ofrece elegir: ni el literal ni una parafrasis", () => {
+  // El estado EXACTO al que welcomeResult manda a toda conversacion sin horarios definidos.
+  const state = { botStage: "esperando_horario", slotsOffered: [], qualification: {} };
+
+  // El fallback sigue vivo a proposito: lo que NO puede pasar es que esos placeholders se digan.
+  assert.ok(
+    activeSlots(state, DEFAULT_CONFIG).every((slot) => slot.pending),
+    "sin horarios definidos, todo lo que activeSlots devuelve es placeholder",
+  );
+
+  const ask = pendingAsk(state, DEFAULT_CONFIG);
+  assert.ok(ask, "sigue habiendo una pregunta pendiente: el embudo no se apaga");
+  assert.ok(!/pendiente de definir/i.test(ask), "el placeholder NUNCA puede llegarle al prospecto");
+  assert.ok(!ask.includes("{{"), "ninguna variable sin resolver");
+  // La parafrasis del LLM nace de que el texto le OFRECE elegir entre dos cosas sin nombre. Si la
+  // re-pregunta no plantea una eleccion, no hay nada que parafrasear.
+  assert.ok(!/\bhorario a\b|\bopci[oó]n a\b|\bA\)/i.test(ask), "no puede ofrecer 'horario A' / 'opcion A': para el prospecto no significa nada");
+  assert.match(ask, /coordina/i, "dice la verdad: la hora la pone un humano");
+
+  // Con horarios REALES la re-pregunta de siempre no cambia.
+  const conReales = { ...state, slotsOffered: conHorarios(DEFAULT_CONFIG).slots };
+  assert.match(pendingAsk(conReales, DEFAULT_CONFIG), /jueves 15:00/, "con horarios reales se sigue ofreciendo elegir");
 });
 
 test("con horarios reales el guion normal no cambia ni una coma", () => {

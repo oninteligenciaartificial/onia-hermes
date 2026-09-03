@@ -305,6 +305,12 @@ export const SCRIPT = Object.freeze({
   // (precio / SIAT / archivo) vuelve al embudo sin saltear la calificacion.
   PENDING_CALIFICACION: "Volviendo a lo nuestro: me falta {{dato_faltante}} — ¿me lo pasás?",
   PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?",
+  // PENDING_HORARIO_SIN_HORARIOS — la misma re-pregunta cuando `slots` sigue en "pendiente de
+  // definir". PENDING_HORARIO pide elegir entre {{slot_a}} y {{slot_b}}, y sin horarios reales eso
+  // salio a produccion como "¿Te reservo HORARIO A (pendiente de definir) o HORARIO B (pendiente de
+  // definir)?" — y, via el LLM, como "¿horario A o horario B?". Se pide lo unico accionable sin
+  // agenda (el contacto) y la hora la coordina el humano.
+  PENDING_HORARIO_SIN_HORARIOS: "{{humano}} te coordina el horario personalmente. ¿A qué número o correo te escribe?",
   PENDING_AGENDADA: "Igual ya quedamos para **{{dia_hora_elegida}}**.",
 
   // -------------------------------------------------------------------------
