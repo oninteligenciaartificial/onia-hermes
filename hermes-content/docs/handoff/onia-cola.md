@@ -120,21 +120,28 @@ registrarse dos veces con un correo que ya existe y **sin confirmar** no muestra
 Eso explica las tres observaciones a la vez: el `/signup` de GoTrue en 200, la fila de `auth.users`
 desaparecida, y la organización que quedó.
 
-**El arreglo NO se hizo y NO se anuncia como hecho.** La regla es explícita: una hipótesis se
-prueba antes de contarse, y un arreglo sin sus gates no es un arreglo. Se cortó acá por tope de
-tiempo de la vuelta, no porque falte información.
-
 **Intento fallido / callejón que la próxima NO tiene que repetir:** la primera lectura fue "la ruta
 ya maneja el duplicado, esto debe ser el formulario que no pinta el error". Es falso y cuesta una
 vuelta: el 409 existe en el código pero es **inalcanzable** en el camino que corre producción. El
 bug no es de pintura, es que se borra una cuenta.
 
-**Próximo paso concreto (una vuelta corta alcanza):**
-- Test en ROJO primero: signUp que devuelve un user preexistente (`identities` lleno) + provisioning
-  que falla ⇒ el test exige que **NO** se llame `deleteUser`. Hoy se llama: ahí tiene que fallar.
-- Arreglo: dejar de deducir la propiedad del usuario. `createdAuthUser` sólo puede ser `true` si
-  nosotros lo creamos de verdad; en el camino `signUp()` eso no se puede afirmar, así que el
-  borrado de limpieza no debe correr ahí. Y el correo repetido tiene que devolver el 409 que ya
-  está escrito, para que la pantalla deje de estar muda.
-- Gates de `onia-platform` son los TRES: `npx tsc --noEmit` + `npx vitest run` + `npm run lint`
-  (nunca `npx eslint .`).
+### ✅ Cerrado en la vuelta de las 11:33 UTC — commit `38a0c8a` de `onia-platform` (`master`)
+
+La hipótesis de arriba **se probó antes de contarse**, midiendo contra producción (11:41 UTC):
+repetir el alta con un correo sin confirmar devuelve **HTTP 200 con el user entero** — mismo `id`
+que el alta original, `identities` con 1 elemento y **`created_at` con la fecha ORIGINAL**. Eso
+confirma las dos mitades: el 409 por `identities` vacío nunca dispara, y `createdAuthUser=true` es
+falso.
+
+- **La señal es `created_at`**: anterior a la petición ⇒ la cuenta ya existía y no es nuestra ⇒ 409
+  con mensaje, sin provisionar y sin borrar. Margen de 60 s por desfase de reloj.
+- **Cuatro tests, en ROJO antes por los motivos correctos**: `expected 200 to be 409`, provisioning
+  sobre cuenta ajena, y `deleteUser` *"been called 1 times"* — el borrado de la cuenta reproducido
+  en un test. El cuarto (alta legítima con `created_at` de ahora ⇒ 200) es la guardia de regresión.
+- El test que ya existía cubría el correo **confirmado**, que es el caso que **funciona**: otra vez
+  el patrón de "el test mira el primer paso y el sistema muere en el segundo".
+- Gates: `tsc` 0 errores, `lint` 0 errores, `vitest` 2519 pasando.
+- Usuario de prueba borrado de `auth.users`; cero organizaciones huérfanas.
+
+⚠️ **Está en `master`, NO desplegado: para el cliente el bug SIGUE VIVO.** El contenedor
+`onia-platform` corre el build anterior. Desplegar es de Sergio → radar ítem 39.

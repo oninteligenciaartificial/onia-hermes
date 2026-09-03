@@ -2283,7 +2283,18 @@ gates del integrador.
 
 ---
 
-## 40. El carril Web Factory corre en Windows y sus 12 commits no llegan a `main` (2026-09-03) — decisión de Sergio
+## 40. El carril Web Factory corre en Windows y sus 12 commits no llegan a `main` (2026-09-03) — ✅ RESUELTO 11:58 UTC, ya no hay decisión
+
+> ⚠️ **La opción A ya se ejecutó: no hace falta que Sergio decida nada acá.** Recontado en vivo a
+> las 11:58 UTC del mismo día: `origin/main...origin/claude/onia-web-architecture-b37eca` da
+> **0 commits adelante**, y la punta de la rama (`d80ab6b88`) **es ancestro de `main`** — o sea,
+> entró entera. Se deja el análisis de abajo porque su parte útil no venció: **el umbral de "100
+> commits atrás" mide tráfico de `main`, no antigüedad de la rama**, y eso sigue escalando ramas
+> vivas por error (opción B, sin ejecutar).
+>
+> Lo cerró el integrador aplicando la regla que este mismo ítem pedía: *un `NO mergees` es una
+> medición con fecha de vencimiento y el que lo obedece tiene que recontarlo antes*. Un bloqueo
+> vencido es peor que un fantasma — le pide a Sergio una decisión que ya tomó.
 
 **Lo medido, en vivo, hoy 07:40 UTC** (no heredado): la rama `claude/onia-web-architecture-b37eca`
 tiene **12 commits** que `main` no tiene, el último de las **01:53 UTC de hoy** — o sea que el
@@ -2329,3 +2340,34 @@ semanas" sin estarlo. El umbral en commits mide la máquina, no el riesgo.
 
 **Lo que hace falta de Sergio:** una línea — A, B, o las dos. Si es A, el integrador la mergea en
 la vuelta siguiente sin volver a preguntar.
+
+---
+
+## 41. El arreglo del alta está en `master` y el cliente sigue perdiendo la cuenta (2026-09-03) — decisión de Sergio
+
+**Qué se arregló.** Un cliente que se registraba dos veces con el mismo correo sin confirmar —lo
+más normal del mundo si no le llegó el mail o cerró la pestaña— veía **el botón no hacer nada**, y
+encima **perdía la cuenta que ya tenía**. Quedaban organizaciones huérfanas en la base de
+producción. Commit `38a0c8a` en `onia-platform` (`master`), con los tres gates verdes: `tsc` 0
+errores, `lint` 0 errores, `vitest` 2519 pasando.
+
+**Por qué te llega igual.** Está **commiteado y NO desplegado**. El contenedor `onia-platform`
+corre el build anterior, así que **para el cliente el bug sigue vivo ahora mismo**. Desplegar al
+VPS necesita tu OK explícito: no lo hace un loop.
+
+**Cuánto vale esperar.** Es el último clic de la puerta de entrada del producto, y de los que hay
+—7 personas esperando— cualquiera que se registre dos veces cae en esto. No es un caso raro: la
+causa más común de un segundo intento es justamente que el primer correo no llegó.
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Desplegar ya** (lo que este loop recomienda) | Build + swap del contenedor con el runbook de `onia-deploy` | ~10 min, ventana corta de corte | El alta deja de comerse cuentas hoy |
+| **B. Esperar y juntarlo con lo próximo** | Queda para el siguiente despliegue | 0 hoy | Cada alta repetida sigue borrando una cuenta y dejando una organización huérfana |
+
+**Lo que hace falta de Sergio:** una línea — A o B.
+
+**Dato que conviene saber para el despliegue.** Al medir esto se vio que el SMTP **rechaza los
+dominios sin MX** (`example.com` → `556 Recipient address rejected ... (nullMX)`) y GoTrue devuelve
+**500** ahí, además de un **rate limit de ~60 s** entre altas del mismo correo. Las dos cosas son
+correctas, pero significan que un correo mal tipeado por el cliente da error 500, no un mensaje
+claro. No se tocó: es otro ítem, y este loop cierra uno por vuelta.
