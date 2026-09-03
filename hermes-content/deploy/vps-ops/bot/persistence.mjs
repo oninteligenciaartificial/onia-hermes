@@ -100,6 +100,7 @@ export function stateFromRow(row) {
     // tienen columna (qualifyAsks, outboundSeq, scheduledLabel), asi que no hace falta un DDL en
     // produccion para dejar de guardar el id de conversacion como telefono del CRM.
     publicContact: raw.publicContact || null,
+    handoffAckAt: raw.handoffAckAt || null,
     inboxId: raw.inboxId || null,
     displayName: row.display_name,
     botStage: STAGES.includes(row.bot_stage) ? row.bot_stage : "nuevo",

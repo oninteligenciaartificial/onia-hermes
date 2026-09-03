@@ -158,6 +158,50 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **Un mensaje que llega mientras el webhook está caído se pierde PARA SIEMPRE, y pasa
+      una vez por día.** Abierto el 2026-09-03 **por el chequeo de arranque, no por la cola**:
+      `node scripts/sonda_widget.mjs` salió *"EL BOT SE QUEDO MUDO — conversacion 49: #1 → 0
+      respuesta(s) · #2 → 1 respuesta(s)"*.
+      🔴 **La causa NO es el motor, y por eso una semana de diagnóstico miró el lugar equivocado.**
+      Los tres relojes, medidos en vivo y pegados uno al lado del otro:
+      `docker inspect onia-center --format '{{.State.StartedAt}}'` → **00:03:32** (el contenedor
+      reinició) · mensaje **282** entrante **00:03:52**, sin respuesta jamás ·
+      `/var/log/onia-bot-watchdog.log` **00:04:01** *"el webhook NO responde en :3020 —
+      reiniciando"* · mensaje **283** entrante **00:04:08** → contestado a las **00:04:12**.
+      El proceso del webhook cuelga de `docker exec -d` sobre `onia-center`: cuando el contenedor
+      reinicia, se va con él. El watchdog lo levanta, pero tarda **hasta 2 minutos** — y en esa
+      ventana Chatwoot ya disparó su **único** webhook contra un puerto muerto. **Chatwoot no
+      reintenta.** El mensaje no se contesta nunca y nadie se entera.
+      **No es raro: 20 reinicios del webhook entre el 28-ago y el 3-sep** (contados en
+      `/tmp/onia-bot-webhook.log` dentro del contenedor). Cada uno es una ventana en la que un
+      desconocido puede escribir y quedar colgado. Es el modo de falla escrito del carril —el
+      primer mensaje anda, muere el segundo— pero **por debajo del motor**: el motor nunca se entera.
+      **Construido y probado: `hermes-content/deploy/vps-ops/bot/rescate-run.mjs`** + sus 13
+      casos (`hermes-content/deploy/vps-ops/bot/rescate-run.test.mjs`, **13/13**, rojo primero por `Cannot find module`). Pregunta
+      quién escribió y sigue sin respuesta, y **reinyecta ese mensaje por el MISMO webhook con el
+      MISMO payload de Chatwoot**. Reinyectar es seguro y eso es lo que lo hace barato: el
+      `message_key` que arma es `chatwoot:<conv>:<msgId>`, **idéntico** al del webhook en vivo, así
+      que si ya se procesó, `claimInbound` (unique en `bot_messages.message_key`) lo corta antes
+      del motor — reinyectar de más da un *skip*, no una segunda respuesta.
+      **Medido contra producción, no contra el test:** `node rescate-run.mjs` (seco) →
+      *"conv 47 msg 249 — 427 min sin respuesta — «Tengo una clinica dental en Santa Cruz, somos 4
+      personas»"*. **Encontró un huérfano real que nadie había visto.** La selección funciona.
+      🔴 **Lo que FALTA, y es la última milla — 401:** `node rescate-run.mjs --emit` →
+      `wget: server returned error: HTTP/1.1 401 Unauthorized`. El webhook autentica
+      (`hermes-content/deploy/vps-ops/bot/webhook-security.mjs`) y la reinyección no va firmada. **Reproducción en 30 s:** correr ese
+      comando. **El camino más corto está identificado, no hay que investigarlo de nuevo:** el
+      `authenticateChatwootRequest` acepta **secreto en la ruta** (`/webhook/chatwoot/<secreto>`,
+      `verifyPathSecret`, línea 122) además de la firma HMAC. El secreto **no** está en el env del
+      proceso (`cat /proc/<pid>/environ` sólo trae `ONIA_WEBHOOK_PORT`): vive en el archivo que
+      apunta `ONIA_WEBHOOK_ENV_FILE` en `hermes-content/deploy/vps-ops/bot/webhook-server.sh`. Leerlo de ahí y agregarlo a la URL de
+      `postAlWebhook` cierra el ítem.
+      ⚠️ **Y falta desplegarlo**: `/opt/onia/bot` es rsync, no git. Commiteado, **NO desplegado**.
+      ⚠️ **De paso, medido: el log por mensaje que esta cola da por cerrado NO está corriendo.**
+      `/opt/onia/bot/webhook-server.mjs` es del **29-ago** y tiene **cero** llamadas a `traza(`;
+      el del repo tiene 2. Por eso `/tmp/onia-bot-webhook.log` sigue teniendo **sólo** líneas de
+      arranque. El ítem de abajo es honesto (dice "commiteado"), pero mientras no se despliegue el
+      loop sigue diagnosticando a ciegas — que es exactamente lo que costó la semana.
+
 - [x] 🔴 **La sonda reusa UNA conversación para siempre, así que desde la segunda vuelta ya no
       mide "un desconocido escribe dos veces": mide una charla con ocho turnos encima.**
       **CERRADO el 2026-09-02.** La causa medida no era la que este ítem suponía, y la diferencia

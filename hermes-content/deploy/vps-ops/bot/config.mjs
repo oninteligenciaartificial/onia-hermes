@@ -237,6 +237,16 @@ export const SCRIPT = Object.freeze({
     "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
+  // M5_ACUSE — el mensaje que llega DESPUES de haber derivado, mientras el humano todavia no
+  // aparecio. No reabre la conversacion ni promete nada nuevo: solo confirma que lo que escribio
+  // llego. Nace de medir, el 2026-09-03, que tras cada M5 el mensaje siguiente del prospecto se
+  // comia un silencio total — la persona ve "entregado" y nunca una respuesta.
+  M5_ACUSE: [
+    "Te leo, y esto también se lo paso a {{humano}} — sigo siendo el bot, así que no te lo contesto yo para no inventarte nada.",
+    "",
+    "Ya está todo en su bandeja. Te responde desde acá mismo en horario de oficina ({{horario_frase}}).",
+  ].join("\n"),
+
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
   // que algo no le anda, o pregunta como configurarlo). Ofrecerle la demo COMERCIAL a alguien que
   // pide ayuda es el peor error posible del bot: le dice "comprame" a quien ya compro. Este texto
