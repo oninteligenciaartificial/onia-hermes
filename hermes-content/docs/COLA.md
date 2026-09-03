@@ -1754,6 +1754,40 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         uno gasta vueltas de este carril persiguiendo fantasmas. **Verificado que el sitio no
         tiene la culpa en los tres.**
 
+### Del carril `web-venta` — corrida del 2026-09-03 10:45 UTC (las dos pantallas, instrumento ya corregido)
+
+- [x] 🟠 **La home cambiaba de voseo a tuteo DENTRO de la misma oración — CERRADO
+      (`95500f82`), con gate.** La tarjeta "De noche" decía *"**Bajás** la persiana … para que
+      lo **apruebes**"*. No era estilo: el sitio conjuga ese verbo en voseo en cinco lugares
+      (`aprobás`). **Barrido a toda la superficie**, no sólo donde saltó — el mismo `apruebes`
+      estaba en los TÉRMINOS (pegado a un `vos`: *"para que vos las apruebes"*) y en
+      `content/requisitos.ts`, que se renderiza en la home y en `/chatbot`.
+      - **Gate nuevo `(sitio)/voz.test.ts`**, que corre en `prebuild` (el comando real del
+        deploy). Caza la **clase**, no el literal: 25 formas de tuteo inequívocas sobre todo
+        archivo de cliente **descubierto del disco**. Lista deliberadamente conservadora —
+        quedan fuera las formas que tuteo y voseo comparten (`tengas`, `estás`, `te`, `tu`) y
+        `prueba`, que es sustantivo del sitio. Un gate que grita por algo correcto se apaga.
+      - **Verificado en ROJO antes**, por el motivo correcto. Y ese rojo destapó un defecto del
+        propio gate: apuntaba a `page.tsx:122` para algo que estaba en la **215**, porque al
+        sacar comentarios corría la cuenta de líneas. Ahora se blanquean conservando los saltos.
+      - **Gates:** typecheck exit 0 · 157 tests (132 + 25) · build exit 0.
+
+- [x] 🟢 **`/empezar` está sana, y muere el fantasma del titular cortado.** Miradas las 10
+      capturas (1440 y 390) con el instrumento arreglado —scroll real por viewports,
+      `scroll-behavior:auto` inyectado, y espera a que el scroll **llegue** en vez de un
+      `setTimeout`—. El titular *"Creá tu cuenta y usalo de verdad 14 días."* sale **entero**:
+      lo de la vuelta pasada era el scroll suave, no el sitio. Y aparece el **cuarto** miembro
+      de la familia de falsos positivos: un revisor visual reportó *"Al dia"* sin tilde en la
+      home y **el string no existe en la fuente** (`grep "Al dia"` → cero). El `grep` sirvió
+      para lo único que sirve: **descartar**.
+
+- [x] 🟠 **Bloqueo del pie REVERIFICADO y vigente (tablero `t_68671bc3`) — no re-medirlo.**
+      74 px de franja clara bajo el pie negro a 390 px, cero a 1440. **Descartadas dos causas
+      falsas antes de creerle a la foto:** no es el widget de Chatwoot (ocultarlo no mueve el
+      alto, 3689 → 3689) y no es artefacto (`culpables: []`, ningún elemento vive ahí abajo).
+      Arreglo `f0248601` en `main`, gate `cierre.test.ts` puesto, decisión ya cotizada en el
+      radar. **Del lado del código no queda nada: falta sólo el deploy, que es de Sergio.**
+
 - [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
       `register` (705 KB/153 ms, asistente de 2 pasos con 5 rubros, íconos legibles),
@@ -1763,6 +1797,184 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `panel-chatbot` (702 KB/228 ms, redirige a `/login` sin sesión: queda "no medida", no "OK",
       como corresponde). **Ninguna baseline se tocó esta vuelta** — pisar la de las cinco páginas
       afectadas taparía el ítem del widget caído, igual que ayer con `chatbot-landing`.
+
+### Del carril `web-venta` — corrida del 2026-09-03 11:50 UTC (el CHECKLIST DE PRE-ENTREGA, corrido por primera vez)
+
+- [x] 🟠 **`onia.com.bo/favicon.ico` devolvía 404 — ARREGLADO EN CÓDIGO, con gate. Falta el
+      deploy, que es el mismo de `t_68671bc3`.** No devolvía un icono roto: devolvía la
+      **página de error entera, 29 KB de HTML**, a quien pidió una imagen de 3 KB.
+      - **Cómo apareció:** `web-factory/docs/CHECKLIST_PRE_ENTREGA.md` tenía **17 puntos
+        abiertos y CERO ejecutados**. Corridos los 17 contra producción (las 16 URLs del
+        sitemap), **16 puntos pasan** — canonical en las 16, títulos y descripciones únicos
+        sin un solo duplicado, `<html lang="es">`, un `<h1>` por página, cero contenido
+        mixto, 404 propio ("Página no encontrada — Onia"), y las 21 imágenes del sitio con
+        `alt` **y** `width`/`height`. El único fallo binario era éste.
+      - **Por qué nadie lo veía, medido con el instrumento correcto:** el sitio declara
+        `<link rel="icon" href="/icon.svg">` y `apple-icon.png`, y los dos dan 200. Con eso,
+        **Chromium NO pide `/favicon.ico`** — abierta la home con Playwright, dispara
+        exactamente dos peticiones de icono y ninguna es ésa. El que paga es todo cliente que
+        lo pide a pelo sin leer el `<head>`: buscadores, lectores de feeds, gestores de
+        marcadores, navegadores viejos. Un `curl` lo encuentra en un segundo; un navegador no
+        lo encuentra nunca. **Por eso el checklist existe y por eso había que EJECUTARLO.**
+      - **El arreglo, el mínimo posible:** el ICO bueno ya estaba en el repo
+        (`public/brand/v2/favicon.ico`, 3 tamaños, publicado en `/brand/v2/favicon.ico` — o
+        sea, prueba viva de que `public/` se sirve desde la raíz en ESTE deploy). Copiado a
+        `public/favicon.ico`. **Deliberadamente no se usó la convención de metadata de Next**
+        (`app/favicon.ico`): esa agrega un `<link>` propio y podía cambiar qué icono elige un
+        navegador. Verificado que **el `<head>` queda byte a byte idéntico** al de producción:
+        el arreglo es puramente aditivo y sólo llena la ruta que antes daba 404.
+      - **Verificado MIRANDO, contra un servidor de producción real** (`next start` sobre el
+        build, no `dev`): `/favicon.ico` → **200, `image/x-icon`, 3.083 b, byte a byte igual**
+        al del repo; `/icon.svg` y `/apple-icon.png` siguen en 200. El icono **abierto y
+        mirado** a 16/32/128 px: es la marca Onia (cuadrado verde, "on" negro) y se lee a
+        16 px. Y las dos pantallas de venta recapturadas a 390 px sin una sola respuesta 4xx.
+      - **Gate nuevo `(sitio)/icono.test.ts`**, en `prebuild` (el comando real del deploy).
+        Caza la **clase**, no el archivo de ayer: los **tres** iconos que el sitio publica,
+        cada uno con su firma de formato leída del disco (header ICONDIR para el ICO, `<svg`,
+        `\x89PNG`) — así no pasa en verde un PNG renombrado a `.ico`, ni el día que alguien
+        mueva `icon.svg`. Acepta las dos raíces (`public/` y `app/`) porque las dos terminan
+        en la misma URL y el gate no tiene por qué opinar sobre cuál se usa.
+      - **Verificado en ROJO antes**, por el motivo correcto: falló **sólo** el caso
+        `/favicon.ico está en disco`, con los otros 8 en verde.
+      - **Gates:** typecheck exit 0 · build exit 0 (con `prebuild` = `tsc --noEmit && vitest run`).
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Este arreglo es el **cuarto** que se acumula esperando el mismo
+        deploy de `t_68671bc3`.
+
+- [x] 🟢 **`/terminos` y `/privacidad` son las dos únicas rutas sin `og:url` — ARREGLADO Y CON
+      GATE el 2026-09-03 por `web-venta`.** (Tenían las otras nueve etiquetas Open Graph, imagen
+      incluida; las 14 restantes tenían las diez.)
+      - **Confirmado vivo en producción antes de tocar nada**, contra el contenedor que sirve el
+        dominio: `curl -s https://onia.com.bo/terminos | grep -o 'property="og:[a-z:]*"' | sort -u`
+        → nueve etiquetas, sin `og:url`; la home y `/precios` traen las diez.
+      - **La causa:** ninguna de las dos declaraba `openGraph`, así que heredaban el del layout
+        raíz — y `og:url` es la única etiqueta que **no se puede heredar**, porque cambia en cada
+        página. Por eso el hueco pasó desapercibido: la tarjeta se veía casi bien.
+      - **El arreglo:** `openGraph` propio en `src/app/terminos/page.tsx` y
+        `src/app/privacidad/page.tsx`, con `url` igual a su `canonical`.
+      - **Verificado sobre el HTML que EMITE el build, no sobre el fuente** (`next start` en
+        :3987 + `curl`): las dos ahora sirven las diez etiquetas, con
+        `og:url = https://onia.com.bo/terminos` y `…/privacidad`, absolutas. Barrido de **las 16
+        rutas del sitemap**: las 16 con `og:url` correcta. Las dos páginas además **abiertas y
+        MIRADAS** renderizadas a 1440×900 (`/tmp/wv-terminos.png`): siguen sanas.
+      - **Y ahora tiene gate — `web-factory/apps/onia-platform/src/app/compartir.test.ts`**, que
+        corre en `prebuild` (`tsc --noEmit && vitest run`), el comando real del deploy.
+        **Verificado en ROJO antes**, por el motivo correcto: fallaron **sólo** `/terminos` y
+        `/privacidad`, con las otras 14 rutas y el ancla en verde.
+        El corte del gate es el **sitemap**, no la carpeta ni el `noindex`, y las dos
+        alternativas obvias estaban mal: por carpeta se pierde `/terminos`, `/privacidad` y
+        `/servicios/consultoria` (viven fuera de `(sitio)`), y por `noindex` se pierde
+        `/terminos`, que declara `index: false` y **es una de las dos rotas** — compartir e
+        indexar son cosas distintas. Una ruta nueva queda cubierta con sólo agregarla al
+        sitemap, que es lo que ese archivo ya obliga a hacer.
+      - **Gates:** typecheck exit 0 · `vitest run` 183 verdes en 8 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Este arreglo es el **quinto** que se acumula esperando el mismo
+        deploy de `t_68671bc3`.
+      - **Encontrado de paso, NO arreglado** (es otro ítem, no lo abro en la misma vuelta):
+        `/terminos` está en el `sitemap.xml` **y** declara `robots: { index: false }`. El sitemap
+        dice "indexá esto" y la etiqueta dice lo contrario. Repro: `curl -s
+        https://onia.com.bo/terminos | grep -o 'name="robots"[^>]*'` → `content="noindex"`, y
+        `curl -s https://onia.com.bo/sitemap.xml | grep terminos` → la lista. `/privacidad` no
+        tiene el problema (es indexable a propósito, con su motivo escrito).
+        **Zona:** `web-factory/apps/onia-platform/src/app/{sitemap.ts,terminos/page.tsx}`.
+        → **CERRADO en la vuelta siguiente**, abajo.
+
+### Del carril `web-venta` — corrida del 2026-09-03 15:48 UTC (el ítem que la vuelta anterior dejó anotado)
+
+- [x] 🟢 **El sitemap pedía indexar `/terminos` y la propia página lo prohibía — ARREGLADO Y CON
+      GATE.** El sitio se desmentía a sí mismo en la única superficie que lee un buscador.
+      - **Confirmado vivo en producción antes de tocar nada**, contra el contenedor que sirve el
+        dominio (no `main`, no Vercel): `curl -s https://onia.com.bo/terminos | grep -o
+        'name="robots"[^>]*'` → `content="noindex"`, y `curl -s https://onia.com.bo/sitemap.xml`
+        lista `<loc>https://onia.com.bo/terminos</loc>`. No era fantasma.
+      - **Por qué importa y no es cosmético:** un sitemap no enumera contenidos, **pide
+        indexación**. Search Console reporta el choque como error (*"Submitted URL marked
+        'noindex'"*) y gasta rastreo en una página que nosotros mismos excluimos.
+      - **Qué lado cede, y por qué NO el otro:** se saca del sitemap, **no** se le quita el
+        `noindex`. El `noindex` es el lado deliberado — los Términos son un borrador pendiente de
+        revisión por abogado, y el propio archivo ya dejaba escrito *"esta página no la querés en
+        Google, pero sí se manda por WhatsApp"*. Quitarlo habría publicado un borrador legal al
+        buscador: eso es una decisión de Sergio, no de un arreglo. `/privacidad` se queda en el
+        sitemap porque su indexabilidad también está escrita y motivada (el rastreador de Meta
+        valida esa URL al publicar la app del chatbot).
+      - **La regla ya existía en el código y nadie la medía:** `v1/layout.tsx:11` dice
+        *"robots.ts y fuera del sitemap"*, y `/patrones` y `/v1` la cumplen. `/terminos` era la
+        **única** de las 25 páginas del disco que la violaba (barridas las 6 declaraciones de
+        `robots` que hay en la app).
+      - **Gate nuevo `src/app/indexar.test.ts`**, en `prebuild` (`tsc --noEmit && vitest run`, el
+        comando real del deploy). Caza la **clase**: para cada ruta del sitemap exige que exista
+        su `page.tsx` (si no, el sitemap publica un 404), que `robots.ts` no la deshabilite, y que
+        no declare `noindex` — **en las dos formas que acepta Next** (`{ index: false }` y
+        `robots: "noindex"`), porque un gate que sólo entiende la que se usó hoy pasa en verde el
+        día que alguien escribe la otra.
+      - **Verificado en ROJO antes**, por el motivo correcto: falló **sólo** `/terminos`, con los
+        otros 16 casos en verde.
+      - ⚠️ **El arreglo abría un agujero de gate y por eso la vuelta no termina ahí.**
+        `compartir.test.ts` (el gate de `og:url` de ayer) tomaba su lista de rutas **del
+        sitemap** — así que al sacar `/terminos` de ahí, la página habría quedado publicada,
+        compartible y **sin gate, sin que nada se pusiera en rojo**. Un criterio de cobertura que
+        se encoge solo cuando cambia una política de indexación **falla ABIERTO**. Corregido: la
+        lista ahora es **el disco menos el `disallow` de `robots.ts`** —la declaración que el
+        propio sitio ya hace de qué no publica—, así una página nueva nace cubierta y hay que
+        excluirla a mano, a la vista, para que deje de estarlo. **Medido: los casos de
+        `compartir` siguen siendo 16 y `/terminos` sigue entre ellos.**
+      - Los dos gates compartían el mismo parser de metadata; se extrajo a `src/app/rutas.ts` en
+        vez de copiarlo, que era garantizar que en un mes midieran cosas distintas.
+      - **Verificado sobre el HTML que EMITE el build, no sobre el fuente** (`next start` sobre el
+        build de producción, no `dev`): `sitemap.xml` pasa de 16 a **15 URLs**, sin `/terminos` y
+        con `/privacidad` intacta; `/terminos` sigue **200**, con sus **diez** etiquetas OG,
+        `og:url` y `canonical` correctas y su `noindex`. Y **abierta y MIRADA** renderizada a
+        1440×900 y 390×844 (`/tmp/wv-terminos-{escritorio,telefono}-0.png`): título, índice y
+        cuerpo enteros, sin recortes. Los únicos errores de consola son el 429 del widget de
+        Chatwoot, ya medido como falso positivo de la IP del VPS.
+      - **Gates:** typecheck exit 0 · `vitest run` **199 verdes** en 9 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Este arreglo es el **sexto** que se acumula esperando el mismo
+        deploy de `t_68671bc3`.
+
+- [x] 🟢 ~~**Encontrado de paso, NO arreglado**: la `<meta name="description">` de `/terminos`
+      dice *"(borrador, pendiente de revisión por abogado)"*.~~ **ARREGLADO 2026-09-03 ~16:55 UTC
+      (`web-venta`), y era peor de lo que decía el ítem: no sólo era obra, era FALSO.**
+      - **Lo que el ítem no sabía:** el documento se declara `status: "vigente"` en su propio
+        frontmatter (`src/content/legal/terminos.md`). O sea, la página llamaba "borrador" a un
+        texto que el sitio publica como vigente, y por eso tampoco muestra ningún cartel de
+        borrador. *(El ítem decía que el cuerpo estaba limpio porque sus "borradores" son los que
+        propone la IA. La conclusión era correcta, el motivo no: el cuerpo SÍ tiene un aviso de
+        borrador —`legal-page.tsx:48`— pero está condicionado al frontmatter y hoy no se dibuja.)*
+      - **Por qué sobrevivió, que es lo que vale:** el aviso visible estaba **hardcodeado**; se
+        arregló ahí para que respetara el frontmatter —una política publicada como "borrador" no
+        sirve para dar de alta la app en Meta—, el frontmatter pasó a `vigente`, el cartel
+        desapareció de la pantalla… y la `description` siguió repitiendo la frase vieja en el
+        `<head>`. **Un barrido que se verifica MIRANDO la página no alcanza para la metadata**,
+        que es la parte de la superficie de cliente que no se ve mirando.
+      - **Y contagió a un tercero:** `indexar.test.ts` justificaba el `noindex` de `/terminos`
+        con *"los Términos son un borrador pendiente de revisión por abogado"*. Premisa vencida
+        dentro de la justificación de un gate: se lee como vigente y decide por la próxima sesión.
+        Corregida; **el `noindex` no se tocó** (sigue en pie por su otro motivo, el escrito en el
+        propio archivo).
+      - **Gate nuevo, y es la parte reutilizable:** `src/app/obra.test.ts` — ninguna página
+        publicada declara obra en su metadata (8 frases: "muy pronto", "próximamente", "en
+        construcción", "beta", "en desarrollo", "estamos trabajando", "pendiente de revisión",
+        "borrador de trabajo"). Es la regla de Sergio del 2026-08-20 vuelta comando.
+        **Los sujetos salen del DISCO menos el `disallow` de `robots.ts`**, no de una lista de
+        inclusión: una página nueva nace cubierta. Y **NO prohíbe "borrador" a secas ni "todavía
+        no"** a propósito —el primero es una capacidad real del producto (`/agentes`) y el segundo
+        es honestidad aprobada sobre los límites (`/comparativa`)—; una lista que grita de más
+        termina borrada. Trae ancla propia: si alguien vacía las frases, el gate se pone en rojo.
+      - **Verificado en ROJO primero** por el motivo correcto (1 fallo, `/terminos`,
+        `pendiente de revisi[oó]n`) y con las otras 16 páginas en verde: cero falsos positivos en
+        toda la superficie pública.
+      - **Gates:** typecheck exit 0 · `vitest run` **216 verdes** en 10 archivos (eran 199 en 9) ·
+        build exit 0.
+      - **MIRADO renderizado sobre el build real** (standalone en `:3987`, no `main` ni Vercel) a
+        1440×900 y 390×844 — `/root/wv-terminos-{escritorio,telefono}.png`: título, línea de
+        versión, índice y cuerpo enteros, **sin cartel de borrador**, `robots: noindex` intacto,
+        cero errores de JS. Y medido sobre el HTML servido: **cero coincidencias de obra en toda
+        la página**, no sólo en la `description`.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **séptimo** arreglo esperando el mismo deploy de
+        `t_68671bc3`.
 
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 
