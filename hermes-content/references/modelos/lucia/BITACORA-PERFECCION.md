@@ -152,9 +152,88 @@ malos. Y los cuadros 3–5 del propio `INVENTARIO-caras.jpg` la tienen.
 valen son los estructurales (cejas, mandíbula, edad), y por eso la rúbrica los pone primero.
 Un rasgo que sólo aparece en piezas de un mismo generador es sospechoso de ser del generador.
 
+### P10 · 🔴 Recortar la mano no es contar los dedos — y el recorte tranquiliza
+
+**El caso.** `generadas-20260902/` es el lote mejor documentado del carril, y su auditoría hizo
+lo que la rúbrica pide: recortó las manos. Los dos recortes están commiteados
+(`_E2-B-HAND-crop.jpg`, `_E3-cafe-HANDS.jpg`). Con esos recortes a la vista, el LEEME canonizó
+`E3-cafe.jpg` como **"la prueba 9/9 de la receta"** y `E2-B-rooftop.jpg` como **"la mejor
+rooftop"**. `E2-B-rooftop.jpg` tiene **seis dedos**, y fue elegida como **portada del carrusel
+fijado** — la primera imagen que ve todo el que entra al perfil.
+
+**Por qué el recorte no alcanzó.** `_E2-B-HAND-crop.jpg` mide 960×930 y muestra la mano entera.
+Mirada así se lee como una mano: hay piel, hay dedos, hay un vaso. Los dedos se cuentan sólo si
+uno **se propone contarlos**, y a esa escala las crestas 4 y 5 comparten un degradé suave que a
+ojo pasa por el borde de la palma. El recorte hace *sentir* que la casilla 2.1 se cumplió —se
+miró la mano— cuando lo que la casilla pide es un **número**.
+
+**El método que sí lo ve, y tarda 20 segundos.** Recortar la COLUMNA de dedos sola (no la mano),
+estirarla y realzar bordes para despegar las crestas del degradé:
+
+```sh
+ffmpeg -i _E2-B-HAND-crop.jpg -vf \
+  "crop=300:560:520:40,scale=700:-1,eq=contrast=1.9:brightness=-0.06:saturation=0.3,unsharp=7:7:2.2" \
+  /tmp/dedos.png
+```
+
+Se cuentan **pliegues**, no bultos: N pliegues ⇒ N+1 dedos. En `E2-B` dan 4 pliegues → 5 dedos,
+y el pulgar está del otro lado del vaso → **seis**. Evidencia:
+[`L2-portada-seis-dedos.jpg`](../../../docs/research/calidad-generado/L2-portada-seis-dedos.jpg).
+
+**Y el mismo método absuelve, que es la mitad que importa.** A poco zoom yo había anotado sobre
+`E3-cafe.jpg` "dedos fundidos, sin uñas". Con el zoom correcto son **3 + 3 yemas con uña bien
+formada**: dos manos normales —
+[`L2-e3cafe-manos-OK.jpg`](../../../docs/research/calidad-generado/L2-e3cafe-manos-OK.jpg). Lo que
+se veía mal era la **lámina compuesta**, donde el texto y el velo oscuro caen encima de las manos
+y las empastan. **El defecto se busca en la foto fuente, no en la lámina rendeada**: la lámina
+inventa fallas que no existen y tapa las que sí. Es el modo de falla del canario visual otra vez
+— el instrumento produciendo el defecto que después reporta.
+
 ---
 
 ## Veredictos
+
+### `posts-20260807/L2/` — carrusel FIJADO «¿Quién es Lucía?» — **NO SE PUBLICA: falla la lámina 1**
+
+Las 7 abiertas y miradas el 2026-09-03 (commit `cc2346430` de `claude/lucia-vps`, que es la
+versión que Sergio tiene delante en `t_a9ff7367`). **Nunca había pasado por esta rúbrica**: su
+LEEME dice que la primera versión *"sacó 9/9 en la rúbrica visual"*, y esa pasada no contó dedos.
+
+| Bloque | Resultado |
+|---|---|
+| **1 · Identidad** | **✓ las 7.** Tira completa montada (ítem 1.0), ninguna elegida a dedo: cejas arqueadas con cola, mandíbula ovalada, 25–27 años, pecas presentes, piel pareja **sin los manchones del `soul_2`** (1.7), argolla dorada y cadenita fina consistentes. Es el primer lote del carril que pasa 1.0 entero — [`L2-tira-caras-7.jpg`](../../../docs/research/calidad-generado/L2-tira-caras-7.jpg) |
+| **2 · Anatomía** | **✗ por la lámina 1** (ver abajo). Las otras 6 ✓ |
+| **3 · Texto** | ✓ las 7. El overlay está en castellano correcto; la pantalla de la laptop en la 4 queda borrosa y sin texto legible |
+| **4 · Marca** | ✓ las 7. La lámina 2 declara *"Creada con inteligencia artificial"* y la 3 *"etiqueta de IA activada"* (4.1). Sin prueba social, sin estado de obra |
+| **5 · Técnico** | ✓ las 7. 1080×1350 exactas, 131–206 KB, sin md5 repetidos (la 7 ya no clona la portada) |
+
+**La que rompe el lote — `slide-01.jpg`, y es la PORTADA:**
+
+- **Bloque 2 ✗ (2.1) · la mano que sostiene el vaso tiene seis dedos.** Sobre la foto fuente
+  `generadas-20260902/E2-B-rooftop.jpg`, la columna de dedos del lado derecho del vaso muestra
+  **4 pliegues → 5 crestas de dedo**, y el pulgar está apoyado del **otro** lado del vaso, con su
+  uña visible. 5 + 1 = 6. Método y comando en P10; evidencia commiteada.
+- Secundario, misma mano: el dorso no tiene **ni un nudillo** en todo su largo, y mide ~1,7× las
+  falanges visibles cuando debería medir ~1:1 — es la "manopla" que nombra 2.1. Los parches
+  gris-violáceos del dorso son el intento fallido de tendones.
+
+**Motivo en una línea:** el carrusel que va **fijado arriba del perfil** —la primera pieza que ve
+todo el que entra— abre con una mano de seis dedos, y la única auditoría previa que tuvo la
+declaró la mejor foto del banco.
+
+**Qué NO es un problema, para que nadie lo vuelva a abrir:**
+
+- La lámina 5 (`E3-cafe.jpg`) **está bien de manos**: 3 + 3 yemas con uña, dos manos normales. Se
+  ve empastada sólo en la lámina compuesta, por el velo y el texto encima (P10).
+- La 4 sigue con **dos personas al fondo con laptops** bajo el pill «QUIÉN ME HACE». El texto ya
+  no dice "equipo", pero la foto lo sugiere, y Onia es Sergio solo. **Eso no es falla de rúbrica:
+  es la decisión que ya está en el tablero** (cambiar la foto = 2 cr). No se re-pregunta.
+
+**Costo de arreglarlo: 0 créditos, y no hay que generar nada.** La lámina 1 pide "su retrato más
+fuerte" y el mismo banco `generadas-20260902/` tiene dos rooftop más ya commiteadas y con la cara
+correcta: `E2-A-rooftop.jpg` (la del skyline, hoy en la lámina 2) y `E2-C-rooftop.jpg` (mirada a
+cámara, hoy en la 6). **Ninguna de las dos tiene manos en cuadro.** Se repunta el brief y se vuelve
+a rendear con el comando del LEEME, que es determinista. `E2-B-rooftop.jpg` sale del banco.
 
 ### `posts-20260807/` P1–P6 — **el lote NO se publica: 4 de 6 NO PASAN**
 

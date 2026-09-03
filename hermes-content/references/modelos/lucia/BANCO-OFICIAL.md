@@ -161,6 +161,27 @@ antes, y antes de cualquier ancla Element. La causa del ancla (§3) sigue en pie
 
 ---
 
+## 4b. 🔴 Fuera del banco: `generadas-20260902/E2-B-rooftop.jpg` — seis dedos
+
+**Dado de baja el 2026-09-03.** Su LEEME la canoniza como *"la mejor rooftop"* y por eso terminó
+de **portada del carrusel fijado** del perfil. La cara es correcta; **la mano no**: sostiene el
+vaso con cinco crestas de dedo de un lado y el pulgar del otro. Cómo se cuenta y por qué el
+recorte de mano que ya existía no lo mostró → `BITACORA-PERFECCION.md` **P10**. Evidencia:
+`docs/research/calidad-generado/L2-portada-seis-dedos.jpg`.
+
+**No arrastra al lote.** Contadas con el mismo método, las manos de `E3-cafe.jpg` están **bien**
+(3 + 3 yemas con uña). Las otras cuatro de `generadas-20260902/` no tienen manos en cuadro, así
+que 2.1 no aplica y **siguen usables**: `E2-A-rooftop.jpg`, `E2-C-rooftop.jpg`, `E3-hotel.jpg`,
+`E3-coworking.jpg`.
+
+⚠️ **Y hay una consecuencia que no se ve desde acá:** `E3-cafe.jpg` es la foto base de los tres
+videos del lote (`E4-cafe-kling3_0.mp4`, `E4-cafe-seedance1_5.mp4`, `E6-cafe-seedance-8s.mp4`).
+Esa foto pasó, así que **los videos no quedan tocados por esta baja** — pero ninguno de los tres
+fue mirado contra la rúbrica todavía, y un video hereda la mano de su foto base más lo que el
+motor le agregue al moverla. **Pendiente abierto, no cerrado por omisión.**
+
+---
+
 ## 5. Qué NO existe
 
 - **No hay video aprobado como canónico.** Los 73 videos son tests de motor, renders
