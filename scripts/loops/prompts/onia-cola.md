@@ -285,6 +285,11 @@ que es lo que se obedece:
   acá abajo **ya existía cuando esto volvió a pasar**: por sí solo no alcanzó.
 - **El comando es la fuente.** Si alguna vez discrepan, **gana el comando** — y la lista se
   corrige en esa misma vuelta, no en la siguiente.
+- **Y hay una fuente mejor todavía para el mapa loop→rama: el CORREDOR.**
+  `scripts/loops/onia-loop.sh` tiene un `RAMA=` por cada `case`, y **eso** es lo que decide dónde
+  pushea cada loop. Medido el 2026-09-02 21:20 UTC por el carril `docs-auditoria`: esta lista
+  nombraba ocho ramas y el corredor ya definía **catorce loops sobre doce ramas de carril**. Un
+  loop nace en el corredor, no acá — por eso la lista se atrasa cada vez, y van tres.
 
 ⚠️ **Y el costo no es "tarda en llegar": para un prompt, un commit varado NO EXISTE.**
 `onia-loops-sync.sh` copia los prompts a `/root/bin/loops/` **desde `main`**, cada hora al :44. El
@@ -293,7 +298,7 @@ falla muda (`f5c4aa895`); cuatro horas y cuatro vueltas de integrador después,
 `/root/bin/loops/lucia.md:89` **seguía enseñando la forma rota**, porque el arreglo vivía en una
 rama que esta lista no nombraba. Un carril que no puede publicar sus arreglos audita gratis.
 
-⚠️ **`web-venta` e `investigacion` faltaban en esta lista hasta el 2026-09-02 18:33 UTC, y los
+⚠️ **`web-venta` e `investigacion` faltaban en esta lista hasta el 2026-09-02 13:38 UTC, y los
 dos tenían un commit varado.** Sus loops se crearon ese mismo día, con cron registrado y
 corriendo — pero esta lista se escribió antes y **nadie la actualizó**. Un carril que el
 integrador no enumera no se cuenta nunca, así que sus commits **no llegan a `main`** aunque el
@@ -301,14 +306,47 @@ loop pushee perfecto: es el mismo costo que ya se pagó con el chatbot (7 commit
 la rama homónima del otro repo, sólo que en silencio y sin nadie contando mal — **contando bien
 una lista incompleta**. `loops.md` describe este agujero para el cron; acá tenía su gemelo.
 
-**Por eso, la lista de arriba tampoco se cree sola: enumerá EN VIVO también este repo.** Si sale
-una rama que no está listada y su loop existe en `loops.md`, es un carril, y va:
+**Por eso, la lista de arriba tampoco se cree sola: enumerá EN VIVO también este repo:**
 
     git -C /root/loops/onia-hermes branch -r --list 'origin/claude/*' --no-merged origin/main
 
+⚠️ **Acá decía que una rama sin listar es carril "si su loop existe en `loops.md`". Ese filtro
+es el que dejó invisible a `claude/lucia-vps` durante tres días.** Un carril NO necesita un loop:
+puede moverlo un cron pelado. Lucia lo mueven `lucia-ugc.sh` (`37 */3 * * *`) y `lucia-cierre.sh`
+(`10 11 * * *`) — dos líneas de `crontab -l` que **no** son `onia-loop.sh`, así que `loops.md` no
+las lista y nunca las va a listar. Medido el 2026-09-02 17:30 UTC: **17 commits sin mergear**, 90
+archivos, +4780/−894, y lo último de Lucia que llegó a `main` fue `12ea2219` del **2026-08-30**.
+Peor: su árbol `/root/loops/lucia-contenido` es un **clon aparte**, no un worktree — no sale en
+`git worktree list`, así que ninguna enumeración basada en árboles la ve tampoco.
+
+**La regla corregida:** una rama que sale de ese `--no-merged` y **no** está en la lista de arriba
+es un carril hasta que se demuestre lo contrario. No la mergees por tu cuenta: agregala a la lista
+con su dueño y mandá la decisión al radar.
+
+⚠️ **`claude/lucia-vps` SÍ se mergea — el recuadro que decía "NO la mergees" venció, y obedecerlo
+hoy varaba ese carril para siempre.** Decía que arrastraba **+88,2 MB** en 59 binarios (el banco
+de video de Lucía) a un repo que todo clon se lleva entero. Era cierto **cuando se midió**, el
+2026-09-02 17:30 UTC. Al integrar el 2026-09-03 04:40 UTC, contado de nuevo:
+
+- la rama tenía **4** commits sin mergear, no 17;
+- el merge trajo **1,3 MB en 14 archivos**, no 88,2 MB en 59;
+- porque el álbum **ya estaba en `main` desde antes de que se escribiera la advertencia**: lo metió
+  directo el commit `89c692072` (2026-09-02 **03:24** UTC), catorce horas antes de esa medición.
+
+**La advertencia protegía una puerta con el caballo ya adentro**, y su costo no era cero: mientras
+estuviera escrita, ningún integrador iba a mergear ese carril nunca. Cerrada en el radar, ítem 37.
+
+**La moraleja NO es "la advertencia estaba mal"** —era correcta el día que se escribió—: es que un
+`NO mergees` es una medición con fecha de vencimiento, y **el que lo obedece tiene que recontarlo
+antes**, igual que cualquier dato heredado. Un `git diff --shortstat` cuesta dos segundos.
+
+⚠️ Lo que SÍ sigue vivo y **es de Sergio, no tuyo**: `hermes-content/references/modelos/lucia` pesa
+**761,7 MB** en `main` (87 videos), y todo clon del repo se los lleva. Eso no lo destraba un merge.
+Radar, ítem 38.
+
 Ramas de carril activas en **`onia-platform`** (base `origin/master`):
 
-- *(al 2026-09-02 18:33 UTC, ninguna de carril.* `claude/chatbots-platform-review-0d1d09`
+- *(al 2026-09-02 13:38 UTC, ninguna de carril.* `claude/chatbots-platform-review-0d1d09`
   **ya está mergeada a `master`** — se destrabó ese día y por eso salió de esta lista.*)*
 - `claude/onia-core-adoption-sprint5` — **NO la mergees**: 382 commits atrás de `master` con 1
   commit propio (`aa8f211`, +910/−240 en 2 archivos de schema del core). Diverge hace demasiado,

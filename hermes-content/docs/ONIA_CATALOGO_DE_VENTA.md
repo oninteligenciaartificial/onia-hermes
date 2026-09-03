@@ -176,10 +176,12 @@ solicitud en /register  →  fila en access_requests  →  alguien de Onia conta
                         →  alta manual y configuración del rubro  →  el cliente entra
 ```
 
-- `/register` **no crea cuentas**. Es un Server Component que bifurca según
-  `altaAutomaticaAbierta()` (`lib/registration.ts`), y **el default es cerrado**: muestra un
-  formulario de pedido de acceso (seis campos, sin contraseña) y graba un `AccessRequest`.
-  La solicitud se trabaja a mano desde `/admin/solicitudes`.
+- **Con el alta cerrada** (no es el caso hoy), `/register` no crea cuentas: es un Server
+  Component que bifurca según `altaAutomaticaAbierta()` (`lib/registration.ts`) y en esa rama
+  muestra un formulario de pedido de acceso (seis campos, sin contraseña) que graba un
+  `AccessRequest`, trabajado a mano desde `/admin/solicitudes`. **El default del código es
+  cerrado, pero producción corre con `ONIA_ALTA_AUTOMATICA=abierta`**, así que la rama viva es
+  la otra. Verificar cuál rige, sin suponer: `docker exec onia-platform env | grep ALTA`.
 - El encuadre al cliente es **positivo y verdadero**, nunca una disculpa: cada cuenta se
   activa con la configuración del rubro puesta y alguien que la explica. **Prohibida
   cualquier palabra de obra** ("todavía no", "en construcción", "beta").

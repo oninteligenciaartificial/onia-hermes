@@ -2073,3 +2073,98 @@ varados se mergean o se descartan según corresponda.
 
 **Lo que ya es nuestro y está hecho:** los otros cinco carriles varados (14 commits) están en
 `main`, y el merge conflictivo quedó **abortado y limpio**, no a medias.
+
+---
+## 37. El carril de Lucia no lo enumeraba nadie (2026-09-02) — RESUELTO 2026-09-03, ya no hay decisión
+> ⚠️ **Corregido al integrar, 2026-09-03 04:45 UTC. La decisión que pedía abajo ya no existe:
+> las condiciones la tomaron solas, y dejarla escrita le pedía a Sergio elegir sobre un mundo
+> que no es el de hoy.** Lo medido en vivo, no heredado:
+>
+> - **`claude/lucia-vps` está mergeada a `main`.** Tenía **4** commits sin mergear, no 17.
+> - **El merge trajo 1,3 MB en 14 archivos**, no +88,2 MB en 59 binarios.
+> - **Porque el álbum ya estaba en `main` desde ANTES de que se escribiera esta entrada:** el
+>   commit `89c692072` (2026-09-02 **03:24** UTC, *"banco completo"*) lo metió directo, catorce
+>   horas antes de la medición de las 17:30. La opción A cobraba un costo **ya pagado**, y la C
+>   proponía blindar una puerta con el caballo adentro.
+> - Hoy `hermes-content/references/modelos/lucia` pesa **761,7 MB** en `main` — 8,6× lo que esta
+>   entrada temía. Eso sí sigue vivo y es de Sergio: está separado abajo, en el ítem 38.
+>
+> **Lo que esta entrada acertó y sigue valiendo** es el diagnóstico de POR QUÉ nadie la
+> enumeraba: los dos filtros que la excluían por construcción. Los dos están corregidos en el
+> prompt del integrador. Se conserva por eso.
+
+
+**Qué se midió, el 2026-09-02 17:30 UTC.** `origin/claude/lucia-vps` tiene **17 commits sin
+mergear** a `main` (90 archivos, +4780/−894). Lo último de Lucia que sí llegó a `main` fue
+`12ea2219`, del **2026-08-30** — tres días. La rama está pusheada y su árbol limpio, así que
+**no hay nada perdido**: hay trabajo que no se integra.
+
+**Por qué nadie lo vio.** Es el mismo agujero que ya se pagó con el chatbot (7 commits varados) y
+con `web-venta`/`investigacion`, pero por una puerta nueva, y por eso las dos defensas que
+existían fallaron las dos:
+
+- **El integrador no la enumeraba.** Su lista de ramas de carril tenía siete; ésta es la octava.
+- **La regla de rescate tampoco la agarraba:** decía que una rama sin listar es carril *"si su
+  loop existe en `loops.md`"*. Lucia **no tiene loop**: la mueven `lucia-ugc.sh` (`37 */3 * * *`)
+  y `lucia-cierre.sh` (`10 11 * * *`), dos crons pelados que no son `onia-loop.sh` y que
+  `loops.md` no lista ni va a listar nunca. El filtro la excluía por construcción.
+- Y su árbol `/root/loops/lucia-contenido` es un **clon aparte**, no un worktree: no sale en
+  `git worktree list`, así que ninguna enumeración por árboles la ve tampoco.
+
+Las dos primeras ya están corregidas en el prompt del integrador, en el mismo commit que esta
+entrada. Lo que queda para vos es qué hacer con la rama.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A** | Mergear `lucia-vps` entera, como un carril más | **Cero conflictos** — medido: no hay un solo archivo tocado por los dos lados. ~10 min de una vuelta del integrador | `main` engorda **+88,2 MB** (59 binarios: los mp4 y jpg del banco de Lucia). Esos assets no se despliegan, pero **todo clon del repo se los lleva para siempre** |
+| **B** | Mergear sólo la **herramienta compartida** (`scripts/carousel_render.js` +329 y `scripts/carousel_pack_solido.js`, nuevo). El álbum se queda en la rama | ~20 min, cherry-pick. `main` no engorda | Cierra lo único que de verdad duele: hoy hay **dos versiones vivas** del render de carruseles. **Contra:** hay que repetirlo cada vez que Lucia toque `scripts/` |
+| **C** | Declararla fuera del juego a propósito, como `carril-contenido` y `ads-creatividades-publicos`: no se mergea nunca, y queda escrito | ~10 min, ya está medio hecho | Cero ambigüedad. **Contra:** deja el render de carruseles bifurcado a perpetuidad — justo lo que prohíbe *"una sola fuente de verdad por tema"* |
+
+**Lo que este loop recomienda: B.** El banco de videos de Lucia es material de trabajo, no fuente
+de verdad de nada, y 88 MB en `main` se pagan una vez y se cargan para siempre; pero la
+herramienta que lo produce sí tiene que ser única. B separa las dos cosas. Y su única debilidad
+—"hay que acordarse cada vez"— ya quedó cubierta: desde este commit el integrador **enumera la
+rama**, así que la próxima divergencia de `scripts/` la ve alguien.
+
+**Lo que sí es tuyo y no puedo decidir por vos:** Lucia/@oniahq roza el límite que pusiste el
+2026-09-01 (*"el de contenido lo maneja su sesión"*). Ninguna de las tres toca lo que Lucia
+publica; las tres son sobre dónde vive su código. Pero si para vos ese carril es contenido y no
+se toca, la respuesta es **C** y se cierra acá.
+
+---
+
+## 38. `main` carga 761,7 MB de assets de Lucía, y todo clon se los lleva (2026-09-03) — decisión de Sergio
+
+**Lo medido hoy, no heredado.** `hermes-content/references/modelos/lucia` pesa **761,7 MB** en
+`main`, con **87 videos** `.mp4`. No se despliegan ni los ve un cliente: son material de trabajo
+del carril de contenido, versionado en un repo que **todo clon se lleva entero**.
+
+**Cómo llegó.** No fue un merge del integrador. El commit `89c692072` (2026-09-02 03:24 UTC,
+*"ventana de perfeccionamiento … + banco completo"*) lo empujó **directo**. La advertencia que
+existía para frenar exactamente esto —*"no mergees `lucia-vps`, arrastra +88,2 MB"*— se escribió
+**catorce horas después**, contra una puerta que ya estaba abierta. Hoy hay 8,6× lo que esa
+advertencia temía.
+
+**Por qué importa y no es cosmético.** Se conecta con algo ya medido en este repo: el vigía de
+disco encontró que **60 de 97 GB del VPS eran `hermes-content` copiado 14 veces**. Cada worktree,
+cada clon de loop y cada checkout paga estos 761,7 MB otra vez. Los loops crean árboles solos.
+
+**Por qué es de Sergio.** Sacar assets del historial es **destructivo e irreversible** (reescribe
+`main`, invalida todo clon y worktree existente, y los loops tienen 14 árboles vivos). Ningún loop
+debería hacerlo por su cuenta, y este no lo va a hacer.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Nada** | Se acepta el peso. Es el estado de hoy | 0 | Sigue creciendo: el carril de Lucía produce video cada 3 h. El disco del VPS ya dio un susto |
+| **B. Dejar de agregar** | `.gitignore` para `*.mp4` bajo `references/modelos/`, y los videos nuevos viven fuera de git (disco del VPS o almacenamiento externo) | ~20 min, cero riesgo, reversible | Frena la hemorragia. **No** achica lo que ya está: los 761,7 MB siguen en el historial |
+| **C. B + reescribir el historial** | Además, sacar los 87 videos del historial con `git filter-repo` | ~1 h y **coordinación**: hay que rehacer TODOS los clones y worktrees de los loops, o quedan rotos | El repo vuelve a pesar poco. **Irreversible**, y si un loop tiene trabajo sin pushear cuando se hace, se pierde |
+
+**Lo que este loop recomienda: B ahora, y C sólo si el disco vuelve a apretar.** B es reversible,
+cuesta 20 minutos y frena lo que crece; C es la única que achica, pero su costo real no es la hora
+de trabajo sino coordinar catorce árboles vivos sin perder nada.
+
+**Lo que hace falta de Sergio:** una línea. Si es B, este carril lo hace en la vuelta siguiente.

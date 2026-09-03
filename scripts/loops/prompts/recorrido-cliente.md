@@ -71,13 +71,28 @@ Los pasos, en este orden:
 7. **Llegar hasta la pantalla de cobro y MIRARLA. Frenar ahí.**
 8. **Abrir la bandeja / el panel** y ver si el dato del paso 6 aparece.
 
-⚠️ **Trampa conocida, y es la más importante:** el alta de cuentas está **cerrada**. `/register` dejó
-de crear cuentas y `/empezar` es un formulario de «Pedí tu acceso». **Si el recorrido termina en el
-paso 3 porque no hay alta automática, eso NO es un fallo tuyo: es el estado real del producto y así se
-reporta.** No inventes un alta por la base para «poder seguir». Lo que hay que medir en ese caso es
-**si la home promete algo distinto de lo que el formulario entrega** — botones que digan «Probá 14
-días gratis · te registrás y usás el sistema» apuntando a una solicitud son la fricción más cara del
-sitio, y ese es un hallazgo de primera.
+⚠️ **El alta está ABIERTA — medido en vivo el 2026-09-03.** `app.onia.com.bo/register` crea la
+cuenta solo: asistente de dos pasos (1 elegís rubro, 5 tarjetas → 2 nombre, correo, contraseña,
+nombre del negocio) y botón «Crear mi cuenta — 14 días gratis». `/empezar` no tiene ni un `<form>`:
+es una landing cuyos CTA dicen «Creá tu cuenta» y saltan a `/register`. **El recorrido NO termina en
+el paso 3: seguí hasta el final.**
+
+> **Acá decía lo contrario, y frenó este loop en su primera corrida.** Decía que el alta estaba
+> «cerrada» y que `/empezar` era un formulario de «Pedí tu acceso» — cierto el 23-ago, falso desde
+> el **29-ago**, cuando el alta se reabrió. Cinco días leyéndose como presente. Una trampa que ya
+> venció es peor que ninguna: manda a frenar un recorrido que podía seguir.
+
+**Verificá el estado del alta ANTES de asumir cualquiera de los dos, siempre:**
+
+```
+docker exec onia-platform env | grep ALTA     # abierta | cerrada — la fuente que decide
+```
+
+Si dijera `cerrada`, `/register` vuelve a ser un pedido de acceso de seis campos sin contraseña, y
+**ahí sí** frenar en el paso 3 es el estado real del producto y así se reporta — nunca inventes un
+alta por la base para «poder seguir». En ese caso lo que hay que medir es **si la home promete algo
+distinto de lo que el formulario entrega**: botones que digan «Creá tu cuenta» apuntando a una
+solicitud (o al revés) son la fricción más cara del sitio, y ese es un hallazgo de primera.
 
 ## 🔴 EL TABLERO VA PRIMERO — antes que tu cola
 
