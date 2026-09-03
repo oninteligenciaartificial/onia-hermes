@@ -986,6 +986,32 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       El arreglo espera el deploy de Sergio; el gate ya impide que se pierda.
       **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
 
+      ✅ **Cerrada la otra mitad el 2026-09-03: ahora hay un gate que ABRE las dos pantallas.**
+      Los cuatro tests de al lado leen el código fuente: son rápidos, corren en cada build y
+      **no abren nada** — la franja no la encontró ninguno, la encontró una captura. Y el que la
+      guarda vigila la CAUSA de ese día (una barra fija que ya no existe): si vuelve por otro
+      camino, pasa en verde.
+      `web-factory/apps/onia-platform/scripts/mirar-venta.mjs` mide el **síntoma**: abre `/` y
+      `/empezar` en 5 anchos (320 · 390 · 768 · 1440 · 1920), scrollea hasta el fondo y pregunta
+      **qué elemento está pintado al pie del último viewport**. Si es `BODY`/`HTML`, lo que se ve
+      abajo de todo es el fondo de la página y no el pie. También mide desborde horizontal, texto
+      recortado y errores de consola.
+      **Probado con el experimento que estaba servido, no con uno inventado:** el mismo comando
+      contra producción (build viejo, defecto vivo) sale **ROJO, exit 1**, nombrando
+      `/empezar` en móvil-390 y tablet-768 con la captura
+      (`/tmp/gate-prod/empezar-tablet-768-pie.png`, mirada: franja clara de ~55px bajo el pie
+      negro); contra el build de esta rama sale **VERDE, exit 0**. Mismo instrumento, resultados
+      opuestos: discrimina.
+      **Lo que NO se hizo, a propósito:** no se cableó en `prebuild`. El deploy real corre
+      `pnpm --filter onia-platform build`, y meterle un navegador a ese camino cambia un gate por
+      un riesgo. Se corre a mano cada vuelta del loop; `playwright` no se sumó al `package.json`
+      (se elige el que ARRANCA entre los ya instalados — el del worktree pide un Chromium que
+      nadie bajó).
+      **El 429 del widget de chat sale como aviso, no como falla**, porque el ítem de abajo ya
+      midió que los bloqueos vienen del propio monitoreo y el límite vive en otro carril: un gate
+      rojo para siempre por algo que no puede arreglar es un gate que nadie lee.
+      **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
