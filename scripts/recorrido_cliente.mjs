@@ -48,6 +48,9 @@ const QA = {
   whatsapp: '59170000000',
   ciudad: 'zz-qa-ciudad',
   password: `zz-qa-${HOY}-Passw0rd!`,
+  // El dato del rubro que carga el paso 6. Va con prefijo como todo lo demás: es una fila más
+  // en la base de PRODUCCIÓN y hay que poder borrarla sin dudar de cuál es.
+  paciente: `zz-qa-${HOY}-paciente`,
 };
 
 /**
@@ -115,6 +118,64 @@ async function mirar(page, archivo) {
   return { captura: `hermes-content/docs/recorrido/capturas/${archivo}`, dom };
 }
 
+/**
+ * Qué está TAPANDO la pantalla, si hay algo.
+ *
+ * 🔴 Nace del segundo falso verde de este carril (2026-09-03): los pasos 6, 7 y 8 cantaron
+ * "pantalla a la vista" sobre una pantalla cubierta por el modal "Primeros pasos" —1440×900,
+ * `fixed inset-0 z-[60]`, el 100 % del viewport—. `llegar()` comparaba la URL y ahí se detenía,
+ * así que estar en `/billing` y no ver un solo píxel de `/billing` daba OK igual.
+ *
+ * Es el mismo pecado del falso verde anterior, una capa más arriba: antes no se miraba DÓNDE se
+ * estaba; ahora no se miraba SI SE VE ALGO. Comparar la URL no dice que la pantalla se vea.
+ *
+ * Se cuenta como tapa sólo lo `fixed` que cubre ≥50 % del viewport: los `sticky` (cabecera, menú
+ * lateral) son parte del producto y no tapan nada.
+ */
+async function queTapa(page) {
+  return page.evaluate(() => {
+    const tapas = [];
+    for (const el of document.querySelectorAll('body *')) {
+      const st = getComputedStyle(el);
+      if (st.position !== 'fixed') continue;
+      if (st.visibility === 'hidden' || st.opacity === '0' || st.display === 'none') continue;
+      const r = el.getBoundingClientRect();
+      const cubre = (r.width * r.height) / (innerWidth * innerHeight);
+      if (cubre < 0.5) continue;
+      tapas.push({
+        cubre: Math.round(cubre * 100),
+        clase: (el.className || '').toString().slice(0, 60),
+        texto: (el.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 60),
+      });
+    }
+    return tapas[0] || null;
+  });
+}
+
+/**
+ * Cierra lo que el producto pone encima de una cuenta recién creada.
+ *
+ * El modal "Primeros pasos" NO es un bug: `GuiaInicio.tsx:69` lo abre una vez por usuario y al
+ * cerrarlo queda cerrado (`localStorage`). Pero este script arranca un contexto de navegador
+ * limpio en cada corrida, así que lo ve SIEMPRE. Un cliente lo cierra y sigue; el instrumento
+ * tiene que hacer lo mismo antes de fotografiar, o fotografía el modal ocho veces.
+ *
+ * Se aprieta el botón que ofrece el propio producto ("Cerrar por ahora"), no se borra el nodo
+ * por JS: esconder el overlay a mano probaría que sé usar `display:none`, no que el cliente
+ * pueda salir de ahí.
+ */
+async function despejar(page) {
+  const salidas = [/Cerrar por ahora/i, /^Cerrar$/i];
+  for (const nombre of salidas) {
+    const b = page.getByRole('button', { name: nombre });
+    if (!(await b.count().catch(() => 0))) continue;
+    await b.first().click({ timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(900);
+    if (!(await queTapa(page))) return true;
+  }
+  return false;
+}
+
 /** Abre una URL midiendo tiempo real. Un 200 que tarda dos minutos es un fallo con cara de éxito. */
 async function ir(page, url) {
   const t0 = Date.now();
@@ -138,11 +199,26 @@ async function ir(page, url) {
  */
 async function llegar(page, ruta, archivo) {
   const r = await ir(page, `${APP}${ruta}`);
+  // Primero se despeja lo que el producto puso encima, y RECIÉN entonces se fotografía. Al
+  // revés, la foto es del modal y no de la pantalla que este paso dice haber visto.
+  const despejo = await despejar(page);
+  const tapa = await queTapa(page);
   const vista = await mirar(page, archivo);
   const destino = new URL(page.url()).pathname.replace(/\/$/, '');
   const pedida = ruta.replace(/\/$/, '');
-  const llego = destino === pedida;
-  return { ...r, ...vista, destino, pedida, llego };
+  const llego = destino === pedida && !tapa;
+  return { ...r, ...vista, destino, pedida, llego, tapa, despejo };
+}
+
+/**
+ * Por qué un `llegar()` no llegó. Separa las dos causas, que piden arreglos distintos: o el
+ * producto te mandó a otro lado (desvío), o estás en la pantalla correcta y no se ve (tapada).
+ */
+function motivoNoLlego(v, ctx, comoSeLlama) {
+  if (v.tapa) {
+    return `se llegó a ${v.destino} pero la pantalla NO se ve: "${v.tapa.texto}" la cubre al ${v.tapa.cubre} % y no se pudo cerrar`;
+  }
+  return motivoDesvio(v, ctx, comoSeLlama);
 }
 
 /**
@@ -541,11 +617,69 @@ const PASOS = [
     nombre: 'cargar-dato',
     que: 'Cargar un dato real del rubro (un cliente, un paciente, un producto)',
     requiereSesion: true,
+    /**
+     * 🔴 Este paso se llamaba "cargar un dato" y lo único que hacía era ABRIR `/patients` y
+     * sacarle una foto. Nunca creó nada — así que el paso 8 ("¿aparece el dato del paso 6?")
+     * tampoco comprobaba nada, y los dos daban OK. Dos pasos de ocho, verdes y vacíos.
+     *
+     * Abrir una pantalla no prueba que el producto GUARDE. Lo que lo prueba es escribir un dato
+     * y volver a encontrarlo, que es exactamente lo que hace un cliente el primer día.
+     */
     async correr(page, ctx) {
-      const v = await llegar(page, '/patients', 'paso-06-cargar-dato.png');
-      if (v.status >= 400) return { estado: 'roto', detalle: `la pantalla de datos devolvió ${v.status}`, ...v };
-      if (!v.llego) return { estado: 'no-medido', detalle: motivoDesvio(v, ctx, 'la pantalla de datos'), ...v };
-      return { estado: 'ok', detalle: `pantalla de datos en ${page.url()} (${v.status})`, ...v };
+      const lista = await llegar(page, '/patients', 'paso-06-cargar-dato.png');
+      if (lista.status >= 400) return { estado: 'roto', detalle: `la pantalla de datos devolvió ${lista.status}`, ...lista };
+      if (!lista.llego) return { estado: 'no-medido', detalle: motivoNoLlego(lista, ctx, 'la pantalla de datos'), ...lista };
+
+      if (!ESCRIBIR) {
+        return { estado: 'no-medido', detalle: `pantalla de datos a la vista en ${page.url()}, pero sin --escribir no se carga ningún dato`, ...lista };
+      }
+
+      // El alta de paciente es una PÁGINA (`<a href="/patients/new">`), no un modal. Se navega
+      // por el enlace que ofrece la pantalla, no a la URL a mano: si el producto mueve el botón,
+      // el que tiene que fallar es este paso, no un `goto` que siempre acierta.
+      const alta = page.locator('a[href="/patients/new"]').first();
+      if (!(await alta.count().catch(() => 0))) {
+        return { estado: 'roto', detalle: 'la pantalla de pacientes no ofrece ningún camino para cargar uno: no hay enlace a /patients/new', ...lista };
+      }
+      await alta.click({ timeout: 10_000 }).catch(() => {});
+      await page.waitForLoadState('networkidle', { timeout: TIMEOUT }).catch(() => {});
+      await page.waitForTimeout(1200);
+      await despejar(page);
+
+      // ⚠️ Los campos NO tienen `name` ni `id`: sólo `placeholder` (medido el 2026-09-03). Un
+      // relleno que busque por `name` no llena nada y el formulario se envía vacío.
+      const nombre = page.locator('input[placeholder="Ej: Juan Carlos Mamani"]').first();
+      if (!(await nombre.count().catch(() => 0))) {
+        const vista = await mirar(page, 'paso-06b-alta-dato.png');
+        return { estado: 'roto', detalle: `el formulario de alta de paciente no tiene el campo de nombre en ${page.url()}`, ...vista };
+      }
+      await nombre.fill(QA.paciente);
+      const guardar = page.getByRole('button', { name: /Guardar Paciente/i }).first();
+      await guardar.click({ timeout: 10_000 }).catch(() => {});
+      await page.waitForLoadState('networkidle', { timeout: TIMEOUT }).catch(() => {});
+      await page.waitForTimeout(2500);
+      await despejar(page);
+      const guardado = await mirar(page, 'paso-06b-alta-dato.png');
+
+      // La verificación NO es haber apretado "Guardar": es volver a la LISTA y encontrarlo.
+      // Un formulario que se vacía y no dice nada se parece muchísimo a uno que guardó.
+      const vuelta = await llegar(page, '/patients', 'paso-06c-dato-en-la-lista.png');
+      const aparece = await page.evaluate((n) => (document.body.innerText || '').includes(n), QA.paciente);
+      ctx.datoCargado = aparece ? QA.paciente : null;
+      if (!aparece) {
+        return {
+          estado: 'roto',
+          detalle: `se cargó el paciente "${QA.paciente}" y NO aparece en la lista de ${page.url()}: el producto no lo guardó, o no lo muestra`,
+          capturaAlta: guardado.captura,
+          ...vuelta,
+        };
+      }
+      return {
+        estado: 'ok',
+        detalle: `paciente "${QA.paciente}" cargado y encontrado de vuelta en la lista de ${page.url()}`,
+        capturaAlta: guardado.captura,
+        ...vuelta,
+      };
     },
   },
 
@@ -559,7 +693,7 @@ const PASOS = [
     async correr(page, ctx) {
       const v = await llegar(page, '/billing', 'paso-07-cobro.png');
       if (v.status >= 400) return { estado: 'roto', detalle: `la pantalla de cobro devolvió ${v.status}`, ...v };
-      if (!v.llego) return { estado: 'no-medido', detalle: motivoDesvio(v, ctx, 'la pantalla de cobro'), ...v };
+      if (!v.llego) return { estado: 'no-medido', detalle: motivoNoLlego(v, ctx, 'la pantalla de cobro'), ...v };
       return { estado: 'ok', detalle: `pantalla de cobro a la vista en ${page.url()} — FRENADO acá a propósito`, ...v };
     },
   },
@@ -569,11 +703,26 @@ const PASOS = [
     nombre: 'bandeja',
     que: 'Abrir la bandeja / el panel y ver si el dato del paso 6 aparece',
     requiereSesion: true,
+    /**
+     * Este paso pregunta si el dato del paso 6 APARECE. Mientras el paso 6 no cargaba nada, no
+     * tenía nada que buscar y reportaba OK por abrir el panel: verde sobre el vacío.
+     */
     async correr(page, ctx) {
       const v = await llegar(page, '/dashboard', 'paso-08-bandeja.png');
       if (v.status >= 400) return { estado: 'roto', detalle: `el panel devolvió ${v.status}`, ...v };
-      if (!v.llego) return { estado: 'no-medido', detalle: motivoDesvio(v, ctx, 'el panel'), ...v };
-      return { estado: 'ok', detalle: `panel en ${page.url()} (${v.status})`, ...v };
+      if (!v.llego) return { estado: 'no-medido', detalle: motivoNoLlego(v, ctx, 'el panel'), ...v };
+      if (!ctx.datoCargado) {
+        return { estado: 'no-medido', detalle: `el panel abrió en ${page.url()}, pero el paso 6 no dejó ningún dato que buscar`, ...v };
+      }
+      const enElPanel = await page.evaluate((n) => (document.body.innerText || '').includes(n), ctx.datoCargado);
+      return {
+        estado: 'ok',
+        detalle: enElPanel
+          ? `panel en ${page.url()}: el paciente "${ctx.datoCargado}" del paso 6 aparece acá`
+          : `panel en ${page.url()}: el paciente "${ctx.datoCargado}" NO figura en el panel — sí quedó guardado y visible en su lista (paso 6). El panel no lista pacientes: no es un fallo, es lo que muestra`,
+        datoEnElPanel: enElPanel,
+        ...v,
+      };
     },
   },
 ];
@@ -633,7 +782,14 @@ async function main() {
     console.log(`LLEGÓ HASTA EL PASO ${ultimoOk} de ${PASOS.length}.`);
     if (corte) console.log(`CORTE en el paso ${corte.n} (${corte.nombre}) — ${corte.estado}: ${corte.detalle}`);
   }
-  if (ESCRIBIR) console.log(`\n⚠️  Se escribió en producción con ${QA.email}. HAY QUE BORRARLO EN ESTA MISMA VUELTA.`);
+  // El aviso enumera TODO lo creado, no sólo la cuenta: desde que el paso 6 carga un paciente,
+  // un aviso que sólo nombre el correo deja basura anónima en producción — y basura anónima ya
+  // no se puede borrar, porque no hay cómo distinguirla de un dato real.
+  if (ESCRIBIR) {
+    const creado = [`cuenta ${QA.email}`, `organización ${QA.negocio}`];
+    if (ctx.datoCargado) creado.push(`paciente ${ctx.datoCargado}`);
+    console.log(`\n⚠️  Se escribió en producción: ${creado.join(' · ')}. HAY QUE BORRARLO EN ESTA MISMA VUELTA.`);
+  }
 
   // Salida 0 siempre: "el recorrido se corta en el paso 3" es el REPORTE, no un fallo del
   // script. Un exit distinto de cero haría que el corredor lo confunda con una caída.
