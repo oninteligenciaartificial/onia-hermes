@@ -158,6 +158,55 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **Cinco desconocidos escribieron y nadie les contestó — el más viejo hace NUEVE DÍAS —
+      y no existía nada que avisara.** CERRADO el 2026-09-03. Es la mitad abierta del ítem de
+      abajo: ese ítem dice, con todas las letras, que el mensaje *"no se contesta nunca **y nadie
+      se entera**"*. El rescate resuelve "no se contesta" para una ventana de 12 h y **hoy ni
+      siquiera está desplegado**; "nadie se entera" no lo resolvía nada.
+      **Lo que había, revisado uno por uno y no supuesto:** `/root/bin/onia-leads-vigia.sh` mira
+      `access_requests` (el formulario de `/empezar`), **no Chatwoot** · `/root/bin/onia-vigia-embudo.sh`
+      mira que la landing, Cal.com y Postiz respondan por HTTP · `/opt/onia/bot/webhook-watchdog.sh` mira que
+      el puerto 3020 esté vivo · `hermes-content/deploy/vps-ops/bot/rescate-run.mjs` sólo toca de 3 min a 12 h. **Ninguno de los
+      cuatro puede ver a una persona esperando.**
+      **La medida que lo destapó** (base de Chatwoot, inboxes 4 y 5, último mensaje entrante sin
+      ningún saliente después): **conv 37** (WhatsApp, 6 d, *"Hola, vengo de la web de Onia…"*) y
+      **conv 35** (WhatsApp, 8 d, *"…evaluando un sistema de gestión para una clínica"*) **nunca
+      recibieron un solo mensaje saliente**; más conv 36, 40 y 34. Contestarlos es **S7** y vende
+      Sergio — lo que faltaba no era la respuesta, era que alguien supiera que están ahí.
+      **Construido:** `scripts/vigia_sin_respuesta.mjs` + `scripts/vigia_sin_respuesta.test.mjs`
+      (**15/15**, rojo primero por `Cannot find module`) y el envoltorio
+      `hermes-content/deploy/vps-ops/onia-vigia-sin-respuesta.sh`. Sólo LECTURA sobre Chatwoot,
+      seco por defecto. Reusa `esNuestra` de `scripts/objetivo_visible.mjs` en vez de reimplementar quién
+      es "nosotros": dos definiciones del mismo concepto envejecen en direcciones distintas.
+      **Tres decisiones que valen más que el código:**
+      1. **Avisa de `handoff_humano`, no lo calla.** Cuando el bot deriva, su silencio es
+         correcto; que el humano no llegue nunca no lo es. Es exactamente el huérfano real de hoy
+         (conv 47), el que el rescate cuenta y no salva a propósito.
+      2. **No tiene techo de edad**, al revés que el rescate. El rescate ESCRIBE (contestar a
+         alguien de hace tres días llega fuera de contexto y fuera de la ventana de 24 h de Meta);
+         esto sólo AVISA, y avisar de un lead viejo no daña a nadie.
+      3. **Avisa una vez por MENSAJE, no por conversación.** Si la persona insiste, vuelve a
+         avisar: cada insistencia es un lead más caliente. Un vigía que avisa una vez y calla
+         para siempre repite el bug que vino a vigilar.
+      🔴 **Y de paso se arregló un dato falso que envenenaba TODA medición futura del carril: las
+      conversaciones 45, 46 y 47 son de la sonda y figuraban como desconocidos.** La primera
+      corrida las contó a las tres (8 "colgados" en vez de 5). No se asumió: se leyeron sus
+      mensajes —el guion textual de la sonda— y sus contactos (`delicate-cloud-154`,
+      `dawn-glade-230`, `white-pine-699`, **una sola conversación cada uno**, sin teléfono ni
+      correo). Son de antes de que la sonda nombrara `Sonda QA` a su contacto a propósito.
+      Renombrados a `Sonda QA` en la base, que es el nombre que `scripts/objetivo_visible.mjs` ya excluye:
+      con eso el vigía, el gate del objetivo y cualquier conteo a mano dejan de contar nuestro
+      propio tráfico como un lead. **Es el instrumento que se da la razón a sí mismo, en forma de
+      dato.**
+      **Verificado en vivo, no en el test:** en seco → *"5 colgado(s) · 5 sin avisar"*;
+      `--emit` → Telegram salió; segunda corrida → *"5 colgado(s) · **0** sin avisar"* (no repite);
+      estado en `/root/loops/estado/vigia-sin-respuesta.json`.
+      **Encendido**: `/root/bin/onia-vigia-sin-respuesta.sh`, cron `39 */2 * * *`, log
+      `/var/log/onia-vigia-sin-respuesta.log`. El envoltorio busca el script en el clon de `main`
+      y, si todavía no llegó, en el worktree del carril — y **si no lo encuentra en ninguno avisa
+      por Telegram**: un cron que apunta a un solo path arranca roto y se queda roto en silencio,
+      que es el modo de falla que este vigía vino a cerrar.
+
 - [ ] 🔴 **Un mensaje que llega mientras el webhook está caído se pierde PARA SIEMPRE, y pasa
       una vez por día.** Abierto el 2026-09-03 **por el chequeo de arranque, no por la cola**:
       `node scripts/sonda_widget.mjs` salió *"EL BOT SE QUEDO MUDO — conversacion 49: #1 → 0
