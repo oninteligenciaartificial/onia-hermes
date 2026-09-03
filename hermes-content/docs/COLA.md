@@ -755,6 +755,73 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       como corresponde). **Ninguna baseline se tocó esta vuelta** — pisar la de las cinco páginas
       afectadas taparía el ítem del widget caído, igual que ayer con `chatbot-landing`.
 
+### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
+
+- [x] 🟠 **El ítem de "captura full-page ciega" (abierto 2026-09-02, confirmado vivo en
+      `rubros` a las 00:43 UTC) tenía causa raíz en la propia herramienta, y ya está
+      arreglada.** `scripts/canario_visual.mjs` scrolleaba con 120 ms por paso y 400 ms de
+      espera final antes de la captura — insuficiente para las animaciones "aparece al
+      entrar en vista" del sitio (framer-motion `whileInView` con `delay`).
+      - **Reproducido aislado:** con esos mismos tiempos, la tarjeta de add-on de WhatsApp
+        de `/precios` ("No pierdo al que escribe", Bs 390/mes) salía completamente en
+        blanco en la captura — la sección entera parecía vacía. Con 300 ms/800 ms la misma
+        tarjeta aparece completa, con precio, nota de IVA y CTA.
+      - **Confirmado que el DOM SÍ tenía el contenido** con los tiempos viejos
+        (`opacity:1`, `w:1184 h:344` medido con `getComputedStyle`+`getBoundingClientRect`):
+        no era el sitio devolviendo menos HTML, era la captura tomada antes de que la
+        animación terminara.
+      - **Arreglé el script** (`scripts/canario_visual.mjs`, scroll a 300 ms/paso + 800 ms
+        final) y corrí `--self-check`: **13 casos en verde**.
+      - **Re-corrida completa después del arreglo:** `rubros` ahora muestra las 5 filas de
+        "La misma base, con las palabras de tu negocio" (antes: banda vacía) y `precios`
+        muestra la tarjeta de WhatsApp completa. El resto del contenido de las 10 pantallas
+        sigue sano.
+      - **No toqué las baselines de `home`, `precios`, `empezar`, `rubros`:** la única
+        diferencia visible ahora contra esas baselines es que el widget de Chatwoot (429,
+        ítem de abajo) sigue sin aparecer — pisar la baseline ahora horneraría "sin widget"
+        como el estado normal, exactamente lo que ya se evitó con `chatbot-landing` el
+        2026-09-02. Se retoman cuando ese ítem cierre.
+
+- [ ] 🔴 **El widget de Chatwoot sigue caído (429) en las 5 páginas de `onia.com.bo`, y la
+      sonda oficial confirma que NO es sólo tráfico propio: hay IPs ajenas pegándole.**
+      Corrida oficial (`node scripts/canario_visual.mjs`): `home`, `precios`, `empezar`,
+      `rubros`, `chatbot-landing` — las cinco — con `error de consola nuevo: ... status of
+      429 ()`. Mismo patrón de peso que ayer (bundle del widget ausente): home 580 KB,
+      precios 327 KB, empezar 325 KB, rubros 746 KB, chatbot-landing 326 KB.
+      - **Corrí la sonda que pide el CLAUDE.md antes de escribir esto**
+        (`sh /root/loops/onia-hermes/hermes-content/deploy/vps-ops/widget-429-de-quien.sh`),
+        para no repetir el error de la vuelta anterior que dio este mismo 🔴 por AUTOINDUCIDO
+        sin poder salir negativo. Esta vez el veredicto es distinto:
+        ```
+        == 2. ¿A nombre de QUÉ IP está el contador del throttle? ==
+           190.180.28.134     1 cargas (el límite es 5/hora)
+           187.77.16.63       15 cargas (el límite es 5/hora)
+        == 3. ¿Quién pidió /widget en las últimas 6 h? ==
+           187.77.16.63       284 peticiones
+           192.223.122.70     1 peticiones
+           190.180.28.134     1 peticiones
+        VEREDICTO: OJO: 2 peticiones vinieron de IPs ajenas.
+        ```
+      - Lectura: el throttle de la hora actual lo agota casi entero nuestro propio VPS
+        (187.77.16.63, con 15 de las 5 permitidas — las corridas repetidas del canario y de
+        otros carriles lo saturan), pero en las últimas 6 h hubo 2 peticiones de IPs que no
+        son nuestras ni conocidas. Ninguna de esas 2 IPs ajenas llegó sola a las 5 cargas/hora
+        que dispararían SU propio 429 — así que hoy el 429 que ve un visitante real depende de
+        si comparte ventana de una hora con nuestro propio tráfico, no de que el visitante
+        mismo se autolimite.
+      - **No lo toqué**: contenedor y cron del widget son ajenos a este carril, sigue sin
+        dueño declarado (vive en `web-factory/apps/onia-platform/`). Van ~11 horas de caída
+        (primera detección 2026-09-02 16:41 UTC).
+      **Evidencia:** capturas de hoy en
+      `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`.
+
+- [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+      `contacto` (322 KB/158 ms), `register` (707 KB/178 ms, 5 rubros con íconos legibles),
+      `login-plataforma` (696 KB/98 ms, "Pedí tu acceso" presente), `login-chat`
+      (3.500 KB/928 ms, formulario Chatwoot propio, no está caído), `panel-chatbot`
+      (699 KB/114 ms, redirige a `/login` sin sesión: "no medida", no "OK"). Ninguna
+      baseline tocada.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
