@@ -231,13 +231,43 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       Aplicado a `generar-carrusel-prompts.py` (**las 7 láminas regeneradas**) y usado desde
       cero en el generador nuevo `generar-carrusel-equipo.py`. FICHA de
       `carrusel-pinterest-refs` actualizada con la receta.
-- [ ] **Los otros 11 generadores a la tipografía de marca** (abierto 02-sep, 1 de 12 hecho):
+- [ ] **Los otros generadores a la tipografía de marca** (abierto 02-sep, **2 de 12 hechos**):
       quedan `generar-carrusel-atender.py` · `-chatbot.py` · `-comunidad.py` · `-cursos.py` ·
-      `-sistema.py` · `-tareas.py` · `generar-historia-quiz.py` · `generar-lamina-grid-ia.py` ·
-      `-grid-senales.py` · `generar-statement-16anos.py` · `generar-statement-post.py`.
+      `-sistema.py` · `-tareas.py` · `generar-historia-quiz.py` · `-grid-senales.py` ·
+      `generar-statement-16anos.py` · `generar-statement-post.py`.
       **Receta exacta arriba** — no es buscar-y-reemplazar: peso + jerarquía van juntos, y hay
       que MIRAR el render por el desborde del eje `wdth`. Una por vuelta alcanza; cada una
       necesita elegir a mano su remate de 2-3 palabras.
+      ✅ 03-sep: `generar-lamina-grid-ia.py` migrado (ver el ítem de abajo).
+- [x] **La receta ganadora sobre una lámina GRID 2x3** (03-sep) — A/B/C/C2 renderizado y
+      comparado a 33 % y 13 % en `carousels/out/experimento-grid-tipografia/`, sobre la
+      lámina real "Lo que la IA ya hace por tu negocio". La pregunta no era migrar por
+      migrar: **la receta se midió en una PORTADA** (un ícono y nada más compitiendo) y una
+      grid es otra cosa — el encabezado comparte lienzo con 6 celdas que ya tienen su ícono
+      y su resaltado verde. **Gana C2** y la receta transfiere: a 13 % (grilla de perfil) el
+      remate gigante es lo único que sobrevive, igual que en portada, y bajar las celdas de
+      210px a 190px para hacerle lugar no les quita legibilidad.
+      **B vuelve a ser un RETROCESO**, ahora medido también en grid: a 33 % es casi
+      indistinguible de A y a 13 % pesa *menos*. Confirma §6: el peso sin la jerarquía empeora.
+      **El hallazgo nuevo, y sólo se ve al 100 %: una cinta adhesiva necesita algo que
+      SUJETAR.** En C la cinta flotaba en la banda superior pegada a nada, y no lee como
+      collage: lee como un rectángulo gris olvidado en el lienzo. C2 la apoya sobre la
+      esquina del bloque verde del remate y recién ahí funciona.
+      **No era un defecto de esta lámina sino de la receta:** contado en vivo, las **8
+      láminas** de `generar-carrusel-equipo.py` —la pieza más nueva, esperando publicación—
+      tenían la cinta flotando en el mismo vacío. Corregido ahí también: en la portada y el
+      CTA se mete detrás del ícono 3D, y en los 6 interiores se apoya sobre el borde
+      superior de la caja blanca. Las 8 regeneradas y miradas en `CONTACTO-8-laminas.png`.
+      De paso el sticker dejó de decir metadata decorativa ("las 6 DE HOY") y pasó a decir
+      algo ("sin SUELDO"), que es lo que pide la §7 de Sergio.
+      **Y un segundo defecto que sólo apareció al mirar la pieza terminada:** el ícono
+      flotante del collage salía **a todo color** (un cerebro rosa) sobre una lámina cuyo
+      patrón entero es *"íconos grayscale, color SÓLO en los highlights verdes"*. Metía
+      rosa y naranja fuera de paleta y le robaba el único acento a la palabra clave.
+      Corregido en los dos generadores de grid: el `.icono-flot` lleva el mismo
+      `grayscale(1)` que las celdas. La regla de las capas collage viene del patrón de
+      carrusel, donde el fondo es claro y los íconos van a color — **al portarla a un
+      patrón grayscale hay que portar también su disciplina de color**, no sólo el markup.
 - [ ] **Próximo experimento — ¿la zona punteada es del tamaño del sticker real?**
       El gate de arriba prueba que la zona de encuesta está DENTRO de la banda segura,
       pero nadie verificó que su **tamaño** coincida con el del sticker de encuesta de IG:

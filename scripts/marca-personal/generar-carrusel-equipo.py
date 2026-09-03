@@ -89,7 +89,7 @@ body{background:var(--bg);font-family:'Archivo',sans-serif;font-weight:450;overf
 
 PORTADA = f"""
 <div class="lienzo" style="gap:42px">
-  <div class="cinta" style="top:188px;left:100px;transform:rotate(-8deg)"></div>
+  <div class="cinta" style="top:880px;left:212px;transform:rotate(-8deg)"></div>
   <div class="sticker" style="top:206px;right:76px">las 6<br>QUE USO</div>
   <div class="contexto">16 años · Bolivia<br>una empresa de verdad</div>
   <div class="remate">MI EQUIPO<br>NO COBRA</div>
@@ -116,6 +116,7 @@ def puesto(n, icono, titulo, hace, paso, adorno):
     <div class="sticker" style="right:-50px;top:-58px;width:144px;height:144px;font-size:26px">hacé<br>ESTO HOY</div>
     <div class="rotulo" style="margin-bottom:14px">empezá por acá</div>
     <div class="caja">{paso}</div>
+    <div class="cinta" style="top:26px;left:52px;transform:rotate(-7deg)"></div>
   </div>
   <div class="handle">@sergiourcullo</div>
 </div>"""
@@ -123,7 +124,7 @@ def puesto(n, icono, titulo, hace, paso, adorno):
 
 CTA = f"""
 <div class="lienzo" style="gap:48px">
-  <div class="cinta" style="top:206px;right:108px;transform:rotate(7deg)"></div>
+  <div class="cinta" style="top:480px;left:300px;transform:rotate(7deg)"></div>
   <img class="icono-flot" src="{ICONOS}/light_bulb.png" style="width:148px;left:80px;top:220px;transform:rotate(-11deg)">
   <img class="icono" src="{ICONOS}/rocket.png">
   <div class="titulo">Ninguno de los 6 cobra.<br>Los 6 se pueden copiar</div>
@@ -132,20 +133,17 @@ CTA = f"""
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-# Collage por lamina: cinta + un icono 3D flotando, SIEMPRE en la banda superior para no
-# pisar el numero, el titulo ni la caja (el error que atrapo el experimento de tipografia).
+# Collage por lamina: un icono 3D flotando en la banda superior, para no pisar el numero,
+# el titulo ni la caja (el error que atrapo el experimento de tipografia).
+# La CINTA ya no vive aca: la pone puesto() sobre el borde de la caja blanca. Flotando en
+# la banda superior no sujetaba nada y leia como un rectangulo gris olvidado — defecto
+# visto al 100% el 03-sep en experimento-grid-tipografia.py.
 AD = [
-    f'<div class="cinta" style="top:142px;right:118px;transform:rotate(7deg)"></div>'
     f'<img class="icono-flot" src="{ICONOS}/light_bulb.png" style="width:140px;left:68px;top:158px;transform:rotate(-11deg)">',
-    f'<div class="cinta" style="top:150px;left:94px;transform:rotate(-9deg)"></div>'
     f'<img class="icono-flot" src="{ICONOS}/white_check_mark.png" style="width:128px;right:76px;top:162px;transform:rotate(10deg)">',
-    f'<div class="cinta" style="top:142px;right:126px;transform:rotate(6deg)"></div>'
     f'<img class="icono-flot" src="{ICONOS}/brain.png" style="width:136px;left:72px;top:156px;transform:rotate(-8deg)">',
-    f'<div class="cinta" style="top:148px;left:100px;transform:rotate(-7deg)"></div>'
     f'<img class="icono-flot" src="{ICONOS}/sparkles.png" style="width:134px;right:80px;top:160px;transform:rotate(9deg)">',
-    f'<div class="cinta" style="top:142px;right:120px;transform:rotate(8deg)"></div>'
     f'<img class="icono-flot" src="{ICONOS}/bell.png" style="width:130px;left:70px;top:156px;transform:rotate(-10deg)">',
-    f'<div class="cinta" style="top:150px;left:96px;transform:rotate(-8deg)"></div>'
     f'<img class="icono-flot" src="{ICONOS}/hot_beverage.png" style="width:134px;right:78px;top:162px;transform:rotate(9deg)">',
 ]
 

@@ -38,7 +38,7 @@ la receta cada migracion la reinventa mal.
 | micro-etiquetas y handle | **Geist Mono** 500, `letter-spacing:.08em`, mayuscula |
 | PROHIBIDO | black **900** y condensed **wdth 62** (los dos rechazados por Sergio) |
 
-**Las cuatro trampas al migrar una pieza vieja** (todas costaron un render):
+**Las cinco trampas al migrar una pieza vieja** (todas costaron un render):
 
 1. **Bajar el peso SOLO empeora la portada.** 900→650 sin tocar nada mas deja la pieza mas
    debil en la grilla de perfil que como estaba. La migracion va **junto** con la jerarquia
@@ -51,6 +51,15 @@ la receta cada migracion la reinventa mal.
 4. **El resaltado verde necesita `white-space:nowrap` + `box-decoration-break:clone`**, o se
    parte entre lineas. Y **no se le pega puntuacion detras**: el padding deja un hueco
    visible. Se reescribe la frase para que el `<b>` termine en espacio o cierre la oracion.
+5. **La cinta tiene que SUJETAR algo** (03-sep). Sobre fondo plano y pegada a nada no lee
+   como collage: lee como un rectangulo gris olvidado. Va **montada sobre el borde** de un
+   objeto real — la caja blanca, el bloque verde del remate, un icono 3D. Si el objeto se
+   declara despues en el DOM la cinta asoma por detras (bien); si se declara antes, la cinta
+   queda encima (tambien bien). Lo que no funciona es la cinta sola en el aire.
+   Se descubrio mirando el render al **100%**: en las miniaturas de 33% y 13% no se nota, y
+   por eso se habia colado en las 8 laminas de `generar-carrusel-equipo.py`.
+   **Corolario:** el sticker tampoco es decoracion — lleva 2-3 palabras que DICEN algo
+   ("sin SUELDO"), no metadata ("las 6 DE HOY"). Regla "menos es mas" de la §7.
 
 Verde `#00C661` **de fondo con tinta negra** (8,72:1). Como color de texto da 2,12:1 y
 reprueba AA — ver §7 de BASE_CONTENIDO.
