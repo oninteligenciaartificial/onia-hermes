@@ -26,11 +26,41 @@ log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"; }
 
 LISTA=$(timeout 120 $HERMES cron list 2>&1) || { log "no pude listar los trabajos de Hermes"; exit 1; }
 
-# Un trabajo "roto" es el que tiene `error:` en su ultima corrida. Se cuentan por
-# nombre para poder avisar UNA vez por incidente y no una por hora.
-ROTOS=$(printf '%s\n' "$LISTA" | awk '
+# Un trabajo "roto" es el que fallo RECIENTEMENTE. La fecha no es un detalle: es
+# la diferencia entre un incidente y un cadaver.
+#
+# 🔴 Nace del 2026-09-02, y lo cazo Sergio: "Yo al Hermes solo me envia errores y
+# errores, no veo que este mejorando". Tenia razon, y la culpa era de este script.
+#
+# `hermes cron list` muestra el ULTIMO resultado de cada trabajo, sin importar
+# cuando fue. Medido ese dia: 8 trabajos con error, fechados 27-ago, 28-ago,
+# 30-ago, 31-ago, 1-sep y 2-sep-13:00 — todos ANTERIORES al arreglo del proxy
+# LiteLLM. Los 6 que corrieron DESPUES del arreglo dieron ok. O sea: Hermes ya
+# andaba, y este vigia seguia reportando muertos de hace una semana.
+#
+# Y peor que repetir: la firma es el CONJUNTO de rotos, asi que cada vez que un
+# trabajo se recuperaba y salia de la lista, la firma cambiaba y se disparaba un
+# aviso NUEVO con los que quedaban. Mejorar generaba mas mensajes de error. Ese es
+# exactamente el "errores y errores" que veia Sergio: el sistema curandose sonaba
+# igual que el sistema rompiendose.
+#
+# Ventana de 26 h (24 + 2 de colchon): las fechas vienen con offsets distintos
+# (+00:00 y -04:00) y se comparan como texto, asi que el colchon cubre el desfase
+# sin necesidad de normalizar zonas.
+LIMITE=$(date -u -d '26 hours ago' '+%Y-%m-%dT%H:%M:%S' 2>/dev/null || date -u '+%Y-%m-%dT%H:%M:%S')
+ROTOS=$(printf '%s\n' "$LISTA" | awk -v limite="$LIMITE" '
   /Name:/      { nombre=$2 }
-  /Last run:/  { if ($0 ~ /error:/) print nombre }
+  /Last run:/  {
+    if ($0 ~ /error:/) {
+      # "Last run:  2026-09-02T13:00:23.209020+00:00  error: ..." -> el sello ISO
+      if (match($0, /[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}/)) {
+        sello = substr($0, RSTART, RLENGTH)
+        if (sello >= limite) print nombre
+      } else {
+        print nombre   # sin fecha legible: se avisa igual, mejor pecar de aviso
+      }
+    }
+  }
 ' | sort -u)
 
 N=$(printf '%s' "$ROTOS" | grep -c . || true)
