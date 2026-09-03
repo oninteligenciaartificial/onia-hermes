@@ -122,10 +122,24 @@ poner "$FUENTE/renovar-slots-bot.py"       "$DESTINO_BIN/onia-renovar-slots.py"
 poner "$FUENTE/hermes-vigia.sh"            "$DESTINO_BIN/hermes-vigia.sh"
 
 mkdir -p "$DESTINO_BIN/loops"
+# La misma guarda que el corredor, para los prompts. Medido el 2026-09-03 a las
+# 12:04: la guarda de arriba salvo onia-loop.sh, y en la MISMA corrida el sync
+# piso los 15 prompts con la version de main, que no tenia el bloque de memoria
+# compartida — los loops seguian recibiendo la memoria (la inyecta el runner)
+# pero perdieron las instrucciones de como ESCRIBIRLE. Un prompt desplegado que
+# sabe algo que el de main no sabe, no se reemplaza.
+MARCA_PROMPT="MEMORIA COMPARTIDA — la leés al arrancar"
+RECHAZADOS_PROMPT=0
 for f in "$FUENTE"/prompts/*.md; do
   [ -f "$f" ] || continue
-  poner "$f" "$DESTINO_BIN/loops/$(basename "$f")"
+  dest="$DESTINO_BIN/loops/$(basename "$f")"
+  if grep -q "$MARCA_PROMPT" "$dest" 2>/dev/null && ! grep -q "$MARCA_PROMPT" "$f" 2>/dev/null; then
+    RECHAZADOS_PROMPT=$((RECHAZADOS_PROMPT + 1))
+    continue
+  fi
+  poner "$f" "$dest"
 done
+[ "$RECHAZADOS_PROMPT" -gt 0 ] && log "RECHAZADOS $RECHAZADOS_PROMPT prompt(s): main esta ATRAS del VPS (sin '$MARCA_PROMPT') — se espera al integrador"
 
 # Un prompt que quedo en /root/bin/loops y ya no existe en el repo es un loop
 # borrado a medias: el corredor lo seguiria encontrando. Se avisa, no se borra
