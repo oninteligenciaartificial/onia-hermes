@@ -87,3 +87,54 @@ vuelta**.
   diseño** — pero **recontá con `git merge-tree` antes de obedecer esta nota**: es una medición
   con vencimiento, y así se destrabó `lucia-vps`.
 - `claude/onia-core-adoption-sprint5` (onia-platform) sigue siendo decisión de Sergio (radar 26).
+
+---
+
+## Vuelta 2026-09-03 ~13:00 UTC — el alta borra la cuenta del cliente (t_a906491b, EN CURSO)
+
+**Estado: diagnosticado y PROBADO, sin arreglar.** La tarea sigue reclamada por `onia-cola` a
+propósito: no está hecha. La próxima vuelta arranca desde acá, no desde cero.
+
+**Qué pasa (lo reportó `recorrido-cliente`, lo confirmé yo leyendo el código y el env de producción):**
+registrarse dos veces con un correo que ya existe y **sin confirmar** no muestra nada en pantalla
+**y le borra al cliente la cuenta que ya tenía**, dejando su organización huérfana.
+
+**El mecanismo, ya no es hipótesis:**
+
+1. Producción corre el camino `signUp()`, no el camino admin. Medido en vivo:
+   `docker exec onia-platform env` → `ONIA_REGISTRO_CONFIRMA_CORREO=si`, y
+   `docker exec supabase-auth2 env` → `GOTRUE_MAILER_AUTOCONFIRM=false`.
+2. `app/api/auth/register/route.ts:180-187` confía en que GoTrue delata al correo repetido
+   devolviendo `identities: []`. **GoTrue sólo ofusca así a los correos CONFIRMADOS.** Con uno
+   sin confirmar hace un *resend* legítimo: manda de nuevo el mail (`user_confirmation_requested`
+   en los logs, que es justo lo que se observó) y devuelve el user **con `identities` lleno**.
+   Por eso el 409 "Este correo ya está registrado" nunca dispara.
+3. Entonces `route.ts:189-190` hace `userId = signUpData.user.id` — que es el id del usuario
+   **que ya existía** — y marca `createdAuthUser = true`, que es **falso**: no lo creamos nosotros.
+4. `provisionOrganization` choca con el negocio duplicado y tira `ProvisioningError`.
+5. El `catch` de `route.ts:317-321` ve `createdAuthUser === true` y ejecuta
+   `supabaseAdmin.auth.admin.deleteUser(userId)` → **borra al usuario del cliente**.
+   La organización del alta ORIGINAL queda sin dueño: exactamente las filas huérfanas que se
+   encontraron (`organizations` + `profiles` + `organization_entitlements` sin usuario en `auth.users`).
+
+Eso explica las tres observaciones a la vez: el `/signup` de GoTrue en 200, la fila de `auth.users`
+desaparecida, y la organización que quedó.
+
+**El arreglo NO se hizo y NO se anuncia como hecho.** La regla es explícita: una hipótesis se
+prueba antes de contarse, y un arreglo sin sus gates no es un arreglo. Se cortó acá por tope de
+tiempo de la vuelta, no porque falte información.
+
+**Intento fallido / callejón que la próxima NO tiene que repetir:** la primera lectura fue "la ruta
+ya maneja el duplicado, esto debe ser el formulario que no pinta el error". Es falso y cuesta una
+vuelta: el 409 existe en el código pero es **inalcanzable** en el camino que corre producción. El
+bug no es de pintura, es que se borra una cuenta.
+
+**Próximo paso concreto (una vuelta corta alcanza):**
+- Test en ROJO primero: signUp que devuelve un user preexistente (`identities` lleno) + provisioning
+  que falla ⇒ el test exige que **NO** se llame `deleteUser`. Hoy se llama: ahí tiene que fallar.
+- Arreglo: dejar de deducir la propiedad del usuario. `createdAuthUser` sólo puede ser `true` si
+  nosotros lo creamos de verdad; en el camino `signUp()` eso no se puede afirmar, así que el
+  borrado de limpieza no debe correr ahí. Y el correo repetido tiene que devolver el 409 que ya
+  está escrito, para que la pantalla deje de estar muda.
+- Gates de `onia-platform` son los TRES: `npx tsc --noEmit` + `npx vitest run` + `npm run lint`
+  (nunca `npx eslint .`).
