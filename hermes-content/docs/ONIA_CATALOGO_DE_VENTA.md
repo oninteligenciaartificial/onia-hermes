@@ -69,7 +69,17 @@ TRES" — quedó viejo y le sacaba un rubro a la venta sin motivo.
 | Ganadería | `ganadero-offline` | ⛔ **NO.** El track está encendido y las orgs que ya existen siguen andando, pero no hay entidades de hacienda ni sanidad: es el catálogo de comercio con otro nombre. Además el nombre promete **modo offline que no existe** |
 
 **Regla:** un rubro nuevo se ENCIENDE desde el core, no se escribe de cero. El core declara
-11 tracks; el producto usa 7; se venden 3.
+11 tracks; el producto usa 7; se venden **5**.
+
+⚠️ **Acá decía "se venden 3" — corregido 2026-09-03.** Es el mismo número viejo que la nota
+de arriba (§2) ya había corregido el 30-ago en la prosa y en la tabla: el barrido arregló
+las dos superficies visibles y se olvidó de esta línea de resumen. Quedó un archivo que se
+contradice a sí mismo a 15 líneas de distancia, y **la línea de resumen es la que se lee
+cuando se busca el número**, así que mandaba al revés y le sacaba DOS rubros a la venta.
+Contado en vivo contra `origin/master`, no de memoria: `lib/platform/rubros-activos.ts`
+tiene 5 entradas en `RUBROS_ACTIVOS` (dental, comercio, importadora, estética, servicios
+profesionales), `SUPPORTED_VERTICAL_TRACK_IDS` en `lib/platform/types.ts` tiene 7 y
+`onia-core/contract.json` declara 11 tracks y 21 capacidades — esos tres sí estaban bien.
 
 ---
 
