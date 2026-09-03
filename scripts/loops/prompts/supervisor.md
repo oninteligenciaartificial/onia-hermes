@@ -205,8 +205,16 @@ sobre el mismo nombre y el segundo en pushear quedaba rechazado. Ya paso una vez
 escribieron `loops.md` en paralelo y hubo que resolver el conflicto a mano. **Un carril, una
 rama.**
 
-`git -C /root/loops/onia-hermes-docs branch --show-current` **primero**. Si no es esa, PARÁ y
-avisá por `onia-tg.sh`.
+`git -C /root/loops/onia-hermes-supervisor branch --show-current` **primero**. Si no dice
+`claude/supervisor`, PARÁ y avisá por `onia-tg.sh`.
+
+⚠️ **Corregido 2026-09-03: esta línea apuntaba a `/root/loops/onia-hermes-docs`** — el worktree
+de OTRO carril, que está clavado en `claude/docs-auditoria`. La guarda que existe para que dos
+carriles no escriban la misma rama medía el árbol equivocado, así que su condición de parada
+(*"si no es esa"*) se cumplía en TODAS las vueltas: seis la pasaron por alto sin que nadie lo
+notara. **Una guarda que grita siempre se ignora siempre.** Barrido el mismo día sobre los 15
+prompts (`grep -oE 'git -C /root/loops/onia-hermes[a-z-]* branch'`): éste era el único con el
+defecto — los otros cuatro que traen la guarda miran su propio árbol.
 
 ## La vuelta: auditá UN carril, a fondo
 
@@ -331,10 +339,27 @@ Una tarea bloqueada en el tablero le llega por Telegram y la contesta desde el t
     ID=$($T create "Pregunta corta y concreta" --body "Qué necesito decidido, las opciones que ya miré y qué cambia según cada una" --priority 1 --json | python3 -c 'import sys,json;print(json.load(sys.stdin)["id"])')
     $T block "$ID" "Espera decisión de Sergio" --kind needs_input
 
-⚠️ **El motivo va ANTES de `--kind`.** Medido en vivo el 2026-09-03: `block ID --kind needs_input
-"motivo"` devuelve `unrecognized arguments` y la tarea queda `ready` — o sea **no bloquea nada** y la
-pregunta nunca le llega a Sergio. `--reason` tampoco existe. Esta línea estuvo mal escrita en 15
-prompts durante medio día: se había verificado `--help`, no el comando.
+⚠️ **`--kind` NUNCA va entre el id y el motivo.** `reason` es un posicional variádico: con
+`--kind` en el medio, argparse parte los posicionales, escupe el `usage`, sale con **exit 2** y
+**no bloquea nada** — la tarea queda en `ready` y Sergio nunca se entera. Las **otras dos** formas
+sirven, así que si ves una de ellas en otro prompt no la "corrijas". Medido en vivo el 2026-09-03
+18:37 UTC, una tarea nueva por forma:
+
+    block <id> --kind needs_input "motivo"   exit=2  status=ready     ← ROTA, no la uses
+    block <id> "motivo" --kind needs_input   exit=0  status=blocked   ← la de arriba
+    block --kind needs_input <id> "motivo"   exit=0  status=blocked   ← también sirve
+
+`block --help` NO alcanza para verlo: muestra que `reason` es posicional y le da la razón a la
+forma rota. Hay que correrlo contra una tarea REAL y mirar el `status` — con un id inventado las
+tres fallan en la búsqueda y parecen iguales.
+
+⚠️ **Bloquear DOS veces la misma tarea no la bloquea: la EJECUTA.** El tablero cuenta
+reincidencias y al llegar a 2 dispara `block_loop_detected`; en vez de bloquear **promueve la
+tarea y le lanza un agente encima**. Medido el 2026-09-03 18:35 UTC: la segunda llamada devolvió
+`exit=0` igual que un bloqueo bueno, y lo que había detrás era un `hermes … kanban task <id>`
+corriendo de verdad (hubo que matarlo por PID). Para un `needs_input` es el peor caso posible:
+Sergio contesta `ok <id>`, tu carril vuelve a bloquear con el mismo motivo y **su decisión se
+saltea sola**. Una tarea que ya bloqueaste no se re-bloquea: se le agrega un comentario.
 
 Sergio contesta `ok <id>` y la tarea vuelve a ready sola. Reglas:
 
