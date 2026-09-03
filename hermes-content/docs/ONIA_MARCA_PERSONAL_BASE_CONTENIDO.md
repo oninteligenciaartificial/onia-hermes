@@ -200,11 +200,44 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       era peor: al abrirla se reduce entera y las miniaturas dejan de verse al tamaño que se
       quiere juzgar. La fila 100 % se sacó; el tamaño completo se mira en los
       `variante-*.png` sueltos.
-- [ ] **Portadas viejas al patrón ganador** (abierto 02-sep): `carrusel-5-prompts`,
-      `carrusel-cursos-gratis`, `carrusel-tareas-automatizadas`, `carrusel-chatbot-venta` y
-      `carrusel-sistema-venta` siguen con el layout A (título mediano + subtítulo gris).
-      Cada una necesita elegir su remate de 2-3 palabras antes de re-renderizar — una por
-      vuelta alcanza.
+- [x] **La tipografía de marca sobre una pieza vieja** (02-sep, tanda intensiva) —
+      **tercer experimento inventado por el loop**, y el que destapó lo más grande.
+      Contados los 13 generadores de `scripts/marca-personal/`: **12 seguían en black 900 +
+      condensed wdth 62**, las dos cosas que Sergio rechazó. O sea que *casi todo lo que
+      había renderizado esperando publicación estaba fuera del sistema de marca* — el único
+      generador correcto era `generar-curso-dia1.py`, justo el que él aprobó. Es el mismo
+      patrón que el verde de §7: la decisión estaba escrita y nadie la había ejecutado
+      sobre el código.
+      A/B/C renderizado y comparado a **33 % (feed) y 13 % (grilla)** en
+      `carousels/out/experimento-tipografia-marca/`, sobre la portada y un interior reales
+      del carrusel "5 prompts": **A** lo que había (900 / wdth 62) · **B** tipografía de
+      marca a secas (650 / wdth 96) · **C** marca + jerarquía de portada ganadora + collage.
+      **Gana C.** A 13 % es la única donde el remate se sigue leyendo.
+      **El hallazgo que importa: B —el buscar-y-reemplazar— es un RETROCESO.** Bajar el peso
+      de 900 a 650 sin cambiar nada más deja la portada más débil en la grilla que como
+      estaba: el negro condensado al menos pesaba. **La migración tipográfica sólo funciona
+      junto con la jerarquía de portada** (contexto gris chico + remate gigante), nunca sola.
+      Quien migre los otros 11 generadores tiene que hacer las dos cosas o empeora la pieza.
+      **Tres defectos reales que atrapó el render, ninguno visible en el peso del PNG:**
+      1. `wdth 96` es **más ancho** que el condensed 62: "5 PROMPTS" a 172px **se salía del
+         lienzo** (la S final cortada). Tope medido: **138px para 9 caracteres** en una línea
+         sobre los 880px útiles.
+      2. Los íconos flotantes del collage a media altura quedaban **encima del remate**. El
+         collage va en la banda superior o debajo del texto, nunca cruzándolo.
+      3. El resaltado verde **se partía entre líneas** (`[mi` arriba, `negocio]` abajo) y
+         dejaba un **hueco antes de la puntuación**. Se arregla con `white-space:nowrap` +
+         `box-decoration-break:clone`, y **no pegándole puntuación detrás al `<b>`** —
+         completa la trampa de CSS que quedó anotada a medias en el experimento de miniatura.
+      Aplicado a `generar-carrusel-prompts.py` (**las 7 láminas regeneradas**) y usado desde
+      cero en el generador nuevo `generar-carrusel-equipo.py`. FICHA de
+      `carrusel-pinterest-refs` actualizada con la receta.
+- [ ] **Los otros 11 generadores a la tipografía de marca** (abierto 02-sep, 1 de 12 hecho):
+      quedan `generar-carrusel-atender.py` · `-chatbot.py` · `-comunidad.py` · `-cursos.py` ·
+      `-sistema.py` · `-tareas.py` · `generar-historia-quiz.py` · `generar-lamina-grid-ia.py` ·
+      `-grid-senales.py` · `generar-statement-16anos.py` · `generar-statement-post.py`.
+      **Receta exacta arriba** — no es buscar-y-reemplazar: peso + jerarquía van juntos, y hay
+      que MIRAR el render por el desborde del eje `wdth`. Una por vuelta alcanza; cada una
+      necesita elegir a mano su remate de 2-3 palabras.
 - [ ] **Próximo experimento — ¿la zona punteada es del tamaño del sticker real?**
       El gate de arriba prueba que la zona de encuesta está DENTRO de la banda segura,
       pero nadie verificó que su **tamaño** coincida con el del sticker de encuesta de IG:
