@@ -1,36 +1,53 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Telegram -> tablero. La via que faltaba.
+"""Telegram -> tablero. DE RESPALDO: hoy el que lee es el gateway de Hermes.
 
-POR QUE EXISTE: hasta el 2026-09-02 Telegram era de UNA sola direccion. Los 14
-loops le hablaban a Sergio (`onia-tg.sh`) y el no tenia como contestar: para dar
-un visto bueno o encargar algo tenia que abrir la laptop, entrar a una sesion de
-Claude Code y escribir ahi. O sea que el sistema entero se declaraba "autonomo en
-el VPS" pero el UNICO acto que no podia esperar --el veredicto de Sergio-- seguia
-atado a la maquina que se supone que puede apagar.
+⚠️ NO LO PROGRAMES. Si lo dejas corriendo periodicamente, le robas a Sergio sus
+respuestas. Lee el proximo parrafo antes de tocar el crontab.
 
-Medido ese dia: `crontab -l | grep -icE "getUpdates|telegram-in"` daba 1, y ese 1
-era el watchdog del bot de WhatsApp. Cero listeners de Telegram. Un tablero con
-tareas bloqueadas esperando aprobacion, y ningun camino para aprobarlas desde el
-telefono.
+QUIEN LEE HOY: el gateway (`hermes_cli.main gateway run`) es el consumidor del
+token y anda. Telegram entrega cada update UNA sola vez, al que lo pida primero,
+y le contesta `409 Conflict` al segundo que llame getUpdates sobre el mismo
+token: no hay reparto ni cola, es una carrera. Con dos lectores vivos, un
+"ok t_ab12cd34" cae en uno o en el otro segun quien llegue antes -- las
+decisiones de Sergio se pierden A VECES, que es peor que perderse siempre,
+porque asi el circuito parece andar.
 
-QUE HACE: lee los mensajes nuevos del chat de Sergio y los convierte en actos
-sobre el MISMO tablero que usan los loops. No inventa una segunda cola: escribe
-donde los loops ya leen.
+POR QUE ESTE ARCHIVO DECIA LO CONTRARIO, y es la parte que importa: se escribio
+el 2026-09-02 sobre esta medicion, que estaba mal hecha --
+
+    crontab -l | grep -icE "getUpdates|telegram-in"   ->  1 (el watchdog de WhatsApp)
+
+y de ahi concluyo "cero listeners de Telegram". El grep era correcto y la
+conclusion falsa: el gateway NO es una linea de cron, es un proceso vivo, asi
+que ningun grep del crontab lo puede ver. Se pregunto por el calendario cuando
+habia que preguntar por el socket.
+
+    ss -tnp | grep 149.154    ->  ESTAB ... users:(("hermes",pid=4063867))
+
+Verificado el 2026-09-03 19:36 UTC: ese socket estaba abierto, la sesion
+`agent:main:telegram:dm:6830070978` habia intercambiado mensajes hasta las
+18:56, la tarea t_13eaa0ae nacio de un mensaje de Sergio y t_04baed70 se
+desbloqueo a las 18:42:55 con su veredicto. El circuito de entrada nunca estuvo
+muerto: estaba medido con el instrumento equivocado.
+
+PARA QUE SIRVE ENTONCES: para el dia que el gateway no este. Se corre A MANO y
+de a una vez, con el gateway detenido, y hace lo mismo sobre el MISMO tablero
+que leen los loops (no inventa una segunda cola):
 
   ok <id> [nota]   -> desbloquea la tarea (el visto bueno)
   no <id> <razon>  -> la deja bloqueada y le pega la razon al cuerpo
   /tablero         -> devuelve el estado
   cualquier texto  -> tarea nueva, prioridad 1
 
-Corre por cron cada 2 minutos. `getUpdates` con offset: Telegram entrega cada
-mensaje UNA vez y recien lo descarta cuando pedimos el siguiente offset, asi que
-un fallo a mitad de camino reintenta en la vuelta siguiente en vez de perder el
-mensaje.
+`getUpdates` va con offset: Telegram entrega cada mensaje una vez y recien lo
+descarta cuando pedimos el siguiente offset, asi que un fallo a mitad de camino
+reintenta en la corrida siguiente en vez de perder el mensaje.
 """
 import json
 import os
 import subprocess
+import urllib.error  # explicito: lo arrastra urllib.request, pero el 409 se atrapa por nombre
 import urllib.parse
 import urllib.request
 
@@ -153,7 +170,52 @@ def manejar(texto):
     return "📝 Anotado como <b>" + escapar(nuevo) + "</b>\n" + escapar(titulo)
 
 
+def gateway_vivo():
+    """El PID del gateway de Hermes si esta corriendo, o None.
+
+    `pgrep -f gateway` NO sirve: se encuentra a si mismo, porque el shell que
+    corre el chequeo lleva ese texto en su propia linea de comando y contesta
+    "si" cuando no hay nada. Se lista y se descarta el PID propio."""
+    propio = {str(os.getpid()), str(os.getppid())}
+    try:
+        salida = subprocess.run(
+            ["ps", "-eo", "pid=,args="], capture_output=True, text=True, timeout=20
+        ).stdout
+    except Exception:  # noqa: BLE001 - si no se puede mirar, no se bloquea el respaldo
+        return None
+    for linea in salida.splitlines():
+        pid, _, args = linea.strip().partition(" ")
+        if pid in propio or "grep" in args:
+            continue
+        if "hermes_cli.main" in args and "gateway" in args and "run" in args.split():
+            return pid
+    return None
+
+
 def main():
+    # La guarda va ANTES de pollear, y no alcanza con atrapar el 409.
+    #
+    # Medido el 2026-09-03 19:40 UTC, y es peor de lo que parecia: con el gateway
+    # vivo y polleando, esta misma corrida NO dio 409 -- dio exit 0 y cero
+    # mensajes. El gateway usa long-polling, asi que entre una vuelta y la
+    # siguiente queda una ventana en la que el segundo lector ENTRA. O sea que la
+    # carrera no se pierde siempre de forma ruidosa: a veces se gana, y ganarla
+    # significa quedarse con un mensaje de Sergio y contestarlo con este parser de
+    # `ok`/`no` en vez del agente completo del gateway.
+    #
+    # Un fallo intermitente que a veces "funciona" es el que nadie diagnostica.
+    # Por eso se pregunta por el DUENO, no por el resultado de la llamada.
+    duenio = gateway_vivo()
+    if duenio and os.environ.get("ONIA_TG_ENTRADA_FORZAR") != "1":
+        raise SystemExit(
+            "El gateway de Hermes (PID " + duenio + ") ya esta leyendo este bot.\n"
+            "No corro: dos lectores del mismo token se roban los mensajes entre si,\n"
+            "y se los roban A VECES, que es como se pierde un 'ok t_...' sin que\n"
+            "nada quede en rojo.\n"
+            "Si el gateway esta caido y querés usar este respaldo a mano:\n"
+            "    ONIA_TG_ENTRADA_FORZAR=1 " + os.path.basename(__file__)
+        )
+
     offset = 0
     if os.path.exists(OFFSET_F):
         try:
@@ -161,7 +223,23 @@ def main():
         except ValueError:
             offset = 0
 
-    res = api("getUpdates", offset=offset, timeout=0, allowed_updates='["message"]')
+    try:
+        res = api("getUpdates", offset=offset, timeout=0, allowed_updates='["message"]')
+    except urllib.error.HTTPError as e:
+        # 409 = otro proceso ya es dueno del token. Sin este brazo el script
+        # muere con un traceback crudo de urllib, y si ademas alguien lo dejo
+        # programado, muere asi en un log que nadie abre: el fallo mudo que ya
+        # tuvo al loop `investigacion` muerto varios dias sin que nada avisara.
+        if e.code != 409:
+            raise
+        raise SystemExit(
+            "409 Conflict: el token de Telegram YA tiene dueno y no se comparte.\n"
+            "Casi seguro es el gateway de Hermes, que es quien debe leer:\n"
+            "    ss -tnp | grep 149.154\n"
+            "    ps -eo pid,args | grep -F 'gateway run'\n"
+            "Este script es de RESPALDO: se corre a mano y con el gateway detenido.\n"
+            "Programarlo no suma un camino, parte el que ya existe."
+        )
     if not res.get("ok"):
         raise SystemExit("getUpdates fallo: " + json.dumps(res)[:300])
 

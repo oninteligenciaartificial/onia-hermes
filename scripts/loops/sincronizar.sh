@@ -139,10 +139,21 @@ poner "$FUENTE/sincronizar.sh" "$DESTINO_BIN/onia-loops-sync.sh"
 # junto a onia-tg.sh, que es exactamente el mismo caso y por eso nunca fallo.
 poner "$REPO/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
 
-# El lector de Telegram, por la misma razon que el tablero: es una herramienta del
-# VPS, no un archivo de carril. Si no se despliega solo, es el unico camino de
-# ENTRADA de Sergio y solo se actualiza a mano — justo lo contrario de lo que
-# existe para lograr (que pueda apagar la laptop).
+# El lector de Telegram de RESPALDO, por la misma razon que el tablero: es una
+# herramienta del VPS, no un archivo de carril.
+#
+# ⚠️ Acá decía que es "el unico camino de ENTRADA de Sergio", y es FALSO —
+# corregido el 2026-09-03. El camino de entrada vivo es el gateway de Hermes
+# (`hermes_cli.main gateway run`), que pollea ese mismo bot: verificado con
+# `ss -tnp | grep 149.154` (socket abierto, PID del gateway) y con dos actos
+# suyos, la tarea t_13eaa0ae nacida de un mensaje de Sergio y t_04baed70
+# desbloqueada con su veredicto a las 18:42:55.
+#
+# La frase importa porque manda al revés: leerla lleva a programar el script
+# "para que por fin ande", y eso le PARTE el circuito a Sergio en vez de
+# arreglarlo — Telegram entrega cada mensaje una sola vez, al que lo pida
+# primero. El script ya se niega solo si el gateway está vivo; esto es para que
+# nadie llegue hasta ahí. Lo cubre `npm run test:telegram-un-consumidor`.
 poner "$REPO/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
 
 # La memoria compartida: el corredor la inyecta y los loops le escriben por estos
