@@ -3,95 +3,126 @@
 Audita a los otros loops: que ninguno cobre por trabajo que no sirve. Rama `claude/supervisor`.
 No mergea a `main` (eso es de `onia-cola`) y no arregla carriles ajenos: deja la tarea en el tablero.
 
-**Última vuelta: 2026-09-03 10:29 UTC.**
+**Última vuelta: 2026-09-03 16:29 UTC.**
 
 ---
 
 ## Objetivo de la vuelta
 
-Auditar a fondo **un** carril de los nunca mirados, abriendo su trabajo de verdad.
-Elegido: **`calidad-generado`** — 3 vueltas, nadie lo había auditado, y su último commit
-hace una afirmación falsable (*"las 6 piezas que íbamos a publicar tienen dos caras"*).
+Auditar a fondo los carriles menos mirados. Elegidos: **`web-venta`** (el de más volumen —
+30 vueltas hoy, commitea cada hora) y **`tendencias`** (nunca auditado, el más barato).
 
-**Hecho =** decir si su trabajo sirve o no, con evidencia mirada, no leída.
+**Hecho =** decir si su trabajo sirve o no, con evidencia **medida**, no leída.
 
 ## Qué quedó en producción
 
 Nada desplegado — este carril no despliega. Lo que quedó:
 
-- **Tarea `t_ea19e42c` abierta en el tablero** (prioridad 1, sin reclamar, para `lucia` +
-  `calidad-generado` + `onia-cola`): dos carriles escriben los **mismos tres archivos** de
-  calidad de Lucía y el merge choca en `add/add`.
-- **Veredicto sobre `calidad-generado`: SIRVE.** Verificado abriendo las imágenes.
+- **Comentario medido en `t_68671bc3`** (la tarea bloqueada que le pide a Sergio publicar el
+  sitio): el costo de esa decisión **creció 4×** desde que se escribió, y la tarea lo seguía
+  contando mal.
+- **Veredicto sobre `web-venta`: SIRVE**, y es de los mejores.
+- **Veredicto sobre `tendencias`: SIRVE.** Sus fuentes son reales, verificadas en vivo.
 
-## El veredicto, con la evidencia
+## El hallazgo de la vuelta: 8 arreglos del sitio que ningún cliente puede ver
 
-`calidad-generado` frenó un lote que cuatro documentos daban por publicable. **Su carril está
-más cerca de su definición de hecho que ayer**: su trabajo es que Onia no publique una pieza
-mala, y evitó exactamente eso.
+**El sitio de venta no se construye hace 23 h 39 min.** El build que sirve `onia.com.bo` es del
+**2026-09-02 16:52 UTC** — `mtime` de `/opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID`.
 
-Lo verifiqué **mirando**, no leyendo el commit:
+Detrás de ese build hay **8 arreglos**, no 2:
 
-- Abierta `TIRA-6-caras.png`: **P3 tiene manchones rojos inequívocos** en pómulos y nariz;
-  **P4 y P5 son visiblemente otra cara** (más larga y angulosa) que P1/P2/P6.
-- Abierta `_AUDITORIA-CARAS.jpg` (la hoja vieja, original en disco, **no** su recorte):
-  está rotulada literalmente **P1** y **P6** — comparó 2 de 6, y justo las dos que coinciden.
-  P3, P4 y P5 nunca entraron. El hallazgo estructural es cierto y se ve de un vistazo.
+| dónde | cuántos | cuáles |
+|---|---|---|
+| En `main`, después del build | 4 | `36d2576d2` franja blanca en el iPhone más común · `f02486011` la franja bajo el pie · `2dbb3acfd` su test · `74cf65861` el gate del pie que nacía ciego a 12 de 14 hojas |
+| En `claude/web-venta`, sin mergear | 4 | `95500f825` voseo/tuteo en la home · `290604873` favicon · `c06eeb73d` tarjeta al compartir · `2dbcedd12` sitemap |
 
-Lo que además hace bien y conviene no romper: declina fallar P6 por ser zona oscura y
-desenfocada (*"acusar sobre eso sería el error del canario"*), y marca la salvedad de que
-el ángulo 3/4 de P4 y la risa de P5 alargan cualquier cara. **Se limita a lo que la evidencia
-aguanta.** Cero créditos gastados: todo estaba en disco.
+**Probado en vivo, no deducido.** `curl https://onia.com.bo/favicon.ico` → **HTTP 404 con 28.954
+bytes de HTML**: el bug que `web-venta` arregló a las 11:56 sigue entero para el cliente. Y
+`https://onia.com.bo/sitemap.xml` todavía pide indexar `/terminos`, la página que se declara
+`noindex` a sí misma.
 
-## Qué quedó a medias y dónde
+**Control diferencial, para no culpar al servidor:** el ICO **idéntico** que ya estaba en el repo
+antes del build, `https://onia.com.bo/brand/v2/favicon.ico`, devuelve **200, 3.083 bytes,
+`image/x-icon`** — mismo servidor, misma carpeta `public/`, misma extensión. Y
+`public/favicon.ico` **no existe en el disco del contenedor**. No es el servidor, no es un CDN,
+no es un header: es que el deploy no tiene el archivo.
 
-- **El veredicto no llegó a `main`.** Los 3 commits (`d8f370c35`, `aa6ceb3fe`, `525f0f09d`)
-  siguen sólo en `origin/claude/calidad-generado`. Quien lee `main` sigue viendo el lote como
-  publicable. **No lo mergeé: no es mi zona** — y además choca (ver `t_ea19e42c`).
-- La causa del choque **no está decidida** y la decisión no es mía: hay que elegir un dueño
-  único de los tres archivos, o separarlos por nombre.
+**Lo que hice con eso.** No abrí tarea nueva: la decisión ya está preguntada desde las 03:50 y
+repetirle a Sergio algo ya preguntado es peor que no preguntar. Lo que hice fue **corregir el
+precio** en la tarea que ya existe — decía *"hoy hay 2 arreglos más esperando ese mismo deploy"*
+y hoy son 8. **Una decisión que subestima su costo 4× es una decisión que se posterga.**
+
+## Los dos veredictos
+
+**`web-venta` SIRVE, y no es un carril que commitea por commitear.** Cada uno de sus 4 arreglos
+de hoy trae su test que **falla en rojo antes por el motivo correcto**. Dos cosas que ningún otro
+carril hizo:
+
+1. **Ejecutó el checklist de pre-entrega**, que tenía *17 puntos abiertos y CERO ejecutados*.
+   Corrió los 17 contra producción y encontró el único fallo binario real.
+2. **Se cazó un gate que fallaba abierto**: `compartir.test.ts` sacaba su lista de rutas **del
+   sitemap**, así que al sacar `/terminos` del sitemap la página quedaba publicada y sin gate,
+   **sin que nada se pusiera en rojo**. Lo reescribió para derivar la cobertura del disco menos
+   una lista de exclusiones. Eso es exactamente la clase de defecto que este carril caza.
+
+Y **sus `[x]` son honestos**: el ítem del favicon está marcado *"ARREGLADO EN CÓDIGO, con gate.
+Falta el deploy"*, y el commit cierra diciendo *"No está en producción… Es el cuarto arreglo
+esperando ese mismo deploy"*. **No hay `[x]` falso que desmarcar.**
+
+**`tendencias` SIRVE.** Su único commit no mergeado (`d3dec5004`) es una receta de gancho con
+`Library ID` concretos de la Biblioteca de Anuncios de Meta. **Verificado en vivo, no leído**:
+abrí `?id=1449643883671583` con el chromium que el propio documento nombra y el DOM trae
+`Sinergya` 14 veces y la primera línea `TODAVÍA MANEJAS … INVENTARIO, CONTABILIDAD` tal cual la
+cita. El comando de reproducción que documenta **funciona**. Además separa explícitamente *"lo
+que dice la fuente"* de *"lo que infiero yo, y es inferencia"*, y escribe qué **no** pudo ver
+(la Biblioteca no publica impresiones ni CTR de anuncios comerciales) en vez de rellenarlo.
 
 ## Archivos
 
-- `hermes-content/docs/handoff/supervisor.md` — este archivo.
-- Auditado (sin tocar): `origin/claude/calidad-generado`, y en `main` los tres archivos de
-  `hermes-content/references/modelos/lucia/`.
+- `hermes-content/docs/handoff/supervisor.md` (este)
+- Comentario en `t_68671bc3` del tablero (no toqué su estado: no la reclamé)
 
 ## Intentos fallidos — lo que NO era
 
-Tres hipótesis mías que la medición mató. Las tres habrían sido un reporte falso:
-
-1. **"`kpis-semanal` corrió en 7 segundos, es un éxito falso."** Falso: el log dice
-   *"No es lunes en La Paz (es miércoles). Termino sin hacer nada, según la regla del loop"*.
-   Es una salida correcta. **Queda cerrado el ítem 3 del handoff anterior.** (De paso: ese
-   ítem decía "jueves"; era miércoles.)
-2. **"La fila de `contenido-cola` en `loops.md` miente: dice Windows y corre en el VPS."**
-   Ya estaba corregida en `main` (VPS, `11 */3`) por la tarea `t_77b6c270`. Lo viejo era **mi
-   worktree**, no el doc. Rebasé antes de seguir. *Auditar con un checkout viejo fabrica
-   hallazgos falsos sobre trabajo ajeno ya hecho.*
-3. **"El carril de contenido está por publicar las 6 piezas que calidad reprobó."** Falso:
-   `ads-creatividades-publicos` trabaja los **carruseles** de esa carpeta (L2, L6, L08, L09,
-   `render-l10/11`, `FIJADO`), no las fotos P1–P6. Casi lo reporto como riesgo inminente.
-
-Y una del método: **empecé a leer la bitácora en vez de mirar las imágenes.** El texto estaba
-tan bien argumentado que convencía solo — que es justo la condición en la que hay que cambiar
-de instrumento. El hallazgo era cierto, pero eso se supo al abrir el PNG, no al leerlo.
+1. **"`web-venta` acumula trabajo sin publicar, eso es basura."** Falso, y era la trampa de la
+   vuelta. Es lo contrario: el carril **avisó** (bloqueó la tarea a las 03:50), **etiquetó** cada
+   arreglo como no-desplegado, y siguió trabajando en vez de plantarse. Marcarlo como falla le
+   enseñaría a los loops a dejar de trabajar cuando Sergio no contesta. **El cuello es el deploy,
+   no el carril.**
+2. **"El favicon da 404 por el servidor o por un CDN."** Descartado con el control diferencial de
+   arriba antes de reportar. Sin ese control, el hallazgo habría culpado a la infra.
+3. **Elegí `web-venta`, que este handoff decía "ya auditado", en vez de `tendencias`, que
+   recomendaba.** Salió bien —el hallazgo del deploy es real y nadie lo tenía— pero fue suerte,
+   no método: entré por el volumen de commits, no por la lista. **Terminé auditando los dos.**
 
 ## Qué depende de Sergio
 
-**Nada de esta vuelta.** `t_ea19e42c` la resuelven los carriles dueños; no necesita decisión
-suya. No se anotó nada en el radar.
+**Sólo `t_68671bc3`, que ya estaba preguntada** — publicar o no `onia.com.bo`. No se abrió nada
+nuevo ni se anotó nada en el radar. Lo único que cambió es que ahora la tarea dice el precio
+real: **8 arreglos parados, 23 h 39 min sin publicar.**
 
 ## Próximos pasos
 
-1. **No re-auditar `calidad-generado`** hasta que `t_ea19e42c` esté cerrada. Listo = el merge
-   simulado no devuelve conflictos:
-   `git -C /root/loops/onia-hermes merge-tree --write-tree --name-only origin/main origin/claude/calidad-generado`
-2. Auditar el siguiente carril menos mirado. **Ya auditados:** `web-venta`, `chatbot`, `lucia`,
-   `onia-cola`, `recorrido-cliente`, `calidad-generado`. **Nunca auditados: `tendencias`,
+1. **No re-auditar `web-venta` ni `tendencias`** hasta que `t_68671bc3` se resuelva. Para
+   `web-venta`, listo = `curl -s -o /dev/null -w '%{http_code}\n' https://onia.com.bo/favicon.ico`
+   devuelve `200`. **Ese comando es el termómetro del deploy**: mientras dé 404, todo lo que
+   commitee ese carril sigue sin llegar al cliente.
+2. Auditar el siguiente nunca mirado. **Ya auditados:** `web-venta`, `chatbot`, `lucia`,
+   `onia-cola`, `recorrido-cliente`, `calidad-generado`, `tendencias`. **Nunca auditados:
    `web-factory-dev`, `marca-personal`, `canario-visual`, `investigacion`, `docs-auditoria`.**
-   `tendencias` es el que menos vueltas lleva (1) y el más barato de mirar.
-3. Sigue abierto del handoff anterior: la rama de `kpis-semanal` (`claude/marca-personal-loop`)
+   `docs-auditoria` es el más valioso de los que quedan: su trabajo es el más parecido al mío
+   (que lo escrito sea cierto), así que si produce basura, la produce sobre la verdad del repo.
+3. Sigue abierto de dos handoffs atrás: la rama de `kpis-semanal` (`claude/marca-personal-loop`)
    no figura en `loops.md`. Listo = saber si debe estar en la tabla.
-4. Ninguna tarea `ready` del tablero era de esta zona (`t_8baa5891`, `t_13eaa0ae`,
-   `t_a906491b`): no se reclamaron a propósito.
+4. Del handoff anterior, **cerrado**: `t_ea19e42c` (los 3 archivos de calidad de Lucía) figura
+   `done` en el tablero.
+5. Ninguna tarea `ready` del tablero era de esta zona (`t_8baa5891`, `t_13eaa0ae` son pruebas;
+   `t_ad2df41f` es de `tendencias` y está reclamada): no se reclamaron a propósito.
+
+---
+
+## Chequeo de arranque — 2026-09-03 16:29 UTC
+
+**Los 15 loops con línea en `crontab -l` corrieron, y ninguno quedó atrás de su cadencia.**
+Verificado en los dos pasos: registro (`crontab -l`) **y** ejecución (última línea `ARRANCA` de
+`/var/log/onia-loop-<id>.log`). Nada que rearmar, nada que avisar.
