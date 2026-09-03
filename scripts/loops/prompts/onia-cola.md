@@ -261,7 +261,28 @@ Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
 - `claude/docs-auditoria` — carril docs/infra (loop `docs-auditoria`)
 - `claude/web-venta` — sitio de venta (loop `web-venta`)
 - `claude/investigacion` — cotiza las decisiones del radar (loop `investigacion`)
+- `claude/lucia-vps` — carril modelos/Higgsfield (loop `lucia`)
+- `claude/recorrido-cliente` — recorrido del cliente punta a punta (loop `recorrido-cliente`)
+- `claude/web-factory-dev` — webs de cliente (loop `web-factory-dev`)
+- `claude/tendencias` — recetas de contenido con fuente (loop `tendencias`)
+- `claude/calidad-generado` — calidad de lo generado (loop `calidad-generado`)
+- `claude/supervisor` — audita a los otros loops (loop `supervisor`)
 - `claude/git-status-935f47` — la sesion de control (Sergio y el orquestador escriben ahi)
+
+⚠️ **Esas SEIS se agregaron el 2026-09-03 04:40 UTC, y las seis tenían commits varados.** Medido
+en vivo: `lucia-vps` 4, `recorrido-cliente` 3, `web-factory-dev` 2, `calidad-generado` 2,
+`supervisor` 2, `tendencias` 1 — **14 commits de loops vivos que no llegaban a `main`**. Sus loops
+se crearon el 2026-09-02 con cron, prompt y worktree; esta lista se escribió antes y **nadie la
+actualizó**, igual que con `web-venta` e `investigacion` el día anterior. Es la MISMA falla a seis
+veces la escala, y el párrafo de "enumerá en vivo" de acá abajo **ya existía cuando volvió a
+pasar**: no alcanzó. Lo que el loop obedece es esta lista, así que la lista es lo que se mantiene.
+
+⚠️ **Y el costo no es "tarda en llegar": para un prompt, un commit varado NO EXISTE.**
+`onia-loops-sync.sh` copia los prompts a `/root/bin/loops/` **desde `main`**, cada hora al :44. El
+2026-09-03 a las 00:32 el carril `supervisor` arregló en `lucia.md` la sintaxis de `block` que
+falla muda (`f5c4aa895`); cuatro horas y cuatro vueltas de integrador después,
+`/root/bin/loops/lucia.md:89` **seguía enseñando la forma rota**, porque el arreglo vivía en una
+rama que esta lista no nombraba. Un carril que no puede publicar sus arreglos audita gratis.
 
 ⚠️ **`web-venta` e `investigacion` faltaban en esta lista hasta el 2026-09-02 18:33 UTC, y los
 dos tenían un commit varado.** Sus loops se crearon ese mismo día, con cron registrado y
