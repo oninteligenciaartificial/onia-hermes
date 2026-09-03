@@ -528,6 +528,46 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Cómo se sabe que quedó hecho:** correr el canario sobre `login-plataforma` y que la
       captura diga "Entregamos tu sistema", no "Ent regamos t u sist ema".
 
+### Medido el 2026-09-03 — el recorrido entero de las dos pantallas, no sólo el pie
+
+- [ ] 🟡 **NO es un defecto todavía: en desktop 1440 el header aparece y desaparece en el MISMO
+      punto de scroll, y en una toma se lee texto de la página por encima de él.** Se anota
+      porque es reproducible y barato, no porque esté probado — el experimento que lo iba a
+      decidir salió **confundido**, y eso es la mitad del valor de este ítem.
+      **Qué se vio:** recorriendo `/` a 1440 viewport por viewport (scroll real, no `fullPage`),
+      la vista 16 de 18 (`window.scrollTo(0, 12480)`, zona de PREGUNTAS FRECUENTES) muestra la
+      pregunta "¿Los datos del Excel o del cuaderno los cargo yo?" y su `+` **por encima de la
+      barra**, chocando con los links del nav.
+      **Por qué no se anuncia como roto:** el header es translúcido a propósito
+      (`src/components/site-header.module.css:18` — `color-mix(in srgb, var(--bg) 82%,
+      transparent)` + `backdrop-filter: blur(12px)`), así que algo se ve debajo **por diseño**.
+      La sospecha era que el `backdrop-filter` no se compone en la captura y por eso el texto
+      sale nítido en vez de difuminado — el mismo tipo de mentira del rasterizador que ya costó
+      tres días con `"Ent regamos t u sist ema"`.
+      **El experimento y por qué NO concluye:** dos tomas del mismo recorte (1440×70, offset
+      12480), la segunda con `backdrop-filter: none !important` inyectado. Salieron distintas
+      (md5 `e61bf628…` vs `fd6d8459…`) — pero **no por el blur**: en la primera el header **no
+      está** (banda vacía) y en la segunda entra corrido ~16px hacia abajo. O sea que la barra
+      se movió sola entre las dos tomas, así que la comparación no aísla nada. Y la explicación
+      fácil está descartada: `grep -n "translate\|scroll\|hidden" src/components/site-header.tsx
+      src/components/site-header.module.css` devuelve **cero líneas** — no hay ocultar-al-bajar
+      en ese componente.
+      **La pista para la próxima vuelta, que es donde hay que empezar:** hay un SEGUNDO
+      `position: sticky` con `backdrop-filter: blur(10px)` en `src/app/(sitio)/sitio.module.css:1473`.
+      Antes de mirar el blur hay que saber **cuál de los dos elementos** es la barra que sale en
+      la captura, y si el de la landing deja de pegarse porque su contenedor termina.
+      **Repro en 30 segundos** (con el build de la rama servido en `:3987`): abrir a 1440,
+      `window.scrollTo(0, 12480)`, esperar 500 ms y capturar; repetir esperando 2 s. Si las dos
+      tomas difieren con el scroll quieto, el problema es la barra, no el rasterizador.
+      **Lo que sí quedó probado hoy, y por eso el resto de la pantalla no es sospechoso:** el
+      recorrido completo de `/` (19 vistas a 390, 18 a 1440) y de `/empezar` (5 y 4) contra el
+      build de esta rama no muestra ningún otro defecto — ni texto cortado, ni desborde, ni
+      solapamiento. Y los precios de la home salen de la fuente que cobra: `PLANES` de
+      `src/lib/pricing.ts` (320 · 750 · 1.500) coincide con `DEFAULT_PLAN_AMOUNTS` de
+      `/root/loops/onia-platform/lib/subscription-plans.ts` leído hoy en vivo, no con la nota
+      heredada del encabezado de ese archivo (que cita un tip de `master` de agosto y una ruta
+      `C:\` que en el VPS no existe).
+
 ### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
 
 - [ ] 🟠 **Decir "`main` compila" no dice NADA sobre `onia.com.bo`: ningún gate corre `tsc`
