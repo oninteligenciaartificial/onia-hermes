@@ -328,7 +328,36 @@ requiere volver a experimentar** — se copia y sale. Y deja además una pieza p
 El cuello de botella de todo el carril —«fancy le cambia la cara»— queda **resuelto y documentado
 como receta operativa**, no sólo como hallazgo.
 
-### E8 · El bloqueo NO es un cupo diario: la cuenta entera no genera — 2026-09-02 · **0 créditos**
+### E8 · El bloqueo NO es un cupo diario: la cuenta entera no genera — 2026-09-02 · **0 créditos** · ⛔ **REFUTADO**
+
+> ⚠️ **Corregido 2026-09-03 (carril docs-auditoría). Esta sección llegó a la conclusión contraria
+> a la verdadera, y su consecuencia operativa nº 1 mandaba al carril al lado equivocado.**
+>
+> **`grace_daily_limit_reached` SÍ era un cupo diario, y sí servía esperar al día siguiente.** Al
+> cambiar de fecha la generación volvió sola, sin que Sergio tocara nada y sin entrar por navegador:
+>
+> | Pieza | Cuándo (UTC) | Cómo |
+> |---|---|---|
+> | `generadas-20260902/E5-hotel-seedance.mp4` (4,8 MB) | **2026-09-03 00:39** | mismo CLI, mismo `seedance1_5` |
+> | `generadas-20260902/E7-rooftop-seedance.mp4` (4,6 MB) | **2026-09-03 03:39** | ídem |
+>
+> Lo dice también el propio log del carril, `/var/log/onia-loop-lucia-ugc.log:146`: *«el
+> `grace_daily_limit_reached` del 02-sep no era bloqueo permanente — era la cuota diaria. Al cambiar
+> de día volvió a funcionar sin tocar nada, con el mismo comando que ayer no se pudo lanzar»*.
+>
+> **Por qué la refutación de abajo no refutaba nada.** La tabla del 21-ago compara **créditos
+> gastados** y **piezas generadas**, y concluye que no hay tope diario porque ese día se gastó 4×
+> más sin cortar. Pero un cupo `grace_*` no cuenta créditos ni piezas —por eso rebotaba igual el
+> modelo de 0,12 cr, que la sección leyó como prueba de que el bloqueo era total—. **Se midió con
+> la unidad equivocada, y el resultado pareció una prueba.** Es la trampa de siempre: una
+> investigación que no puede refutar su propia hipótesis se vuelve más convincente con cada
+> medición, no más cierta. Lo barato era esperar un día; lo caro fue escalarlo a Sergio.
+>
+> **Lo que SÍ bloquea hoy es otra cosa, medida el 2026-09-03 13:20 La Paz:**
+> `higgsfield account status` → salida `Error: Session expired. Hint: Run: hf auth login`, **exit 2**.
+> No es el plan ni el saldo: es la sesión del CLI, y sólo se arregla con un `hf auth login`
+> interactivo. Ojo con el instrumento: el error sale por **stderr**, así que un `... | head` se
+> traga el código de salida y el chequeo parece verde.
 
 **La vuelta salió a animar `E3-hotel.jpg`** (el pendiente heredado, 4,8 cr, dentro del tope) y
 volvió a chocar con `grace_daily_limit_reached`. En vez de anotar «el límite sigue» y esperar al
@@ -385,8 +414,10 @@ navegador.
 
 **Consecuencia operativa para el carril, hasta que se destrabe:**
 
-1. **No sirve esperar al día siguiente.** El pendiente de `E3-hotel` no está esperando cupo: está
-   esperando a Sergio. Anotado así en el `LEEME.md` del banco.
+1. ~~**No sirve esperar al día siguiente.** El pendiente de `E3-hotel` no está esperando cupo: está
+   esperando a Sergio.~~ ⛔ **Falso, ver la corrección del encabezado.** Sí servía esperar: al día
+   siguiente generó dos videos sin intervención de nadie. Lo que hoy espera a Sergio es el
+   `hf auth login`, que es otro problema.
 2. **Toda vuelta que planee generar tiene que cotizar primero** (`generate cost` es gratis y sigue
    vivo) **y aceptar que `create` puede rebotar**. Plan B de cero créditos, siempre.
 3. **No reintentar en bucle.** Tres intentos de tres modelos distintos dieron el mismo error: el
