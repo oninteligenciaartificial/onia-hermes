@@ -246,6 +246,54 @@ describe("marcadores", () => {
     const radii = [...svg.matchAll(/<circle [^>]*r="([\d.]+)"/g)].map((match) => Number(match[1]));
     expect(Math.min(...radii)).toBeGreaterThanOrEqual(4);
   });
+
+  // A9: el gate de arriba solo miraba `renderChart("line")`, asi que el punto
+  // final del spark del KPI quedo FUERA y sobrevivio a W4 con r=3. El piso de
+  // `dataviz` es de pixeles renderizados, no de unidades de viewBox, y cada SVG
+  // del panel se dibuja a una escala distinta: por eso aca se multiplica por la
+  // escala medida en el navegador en vez de comparar el `r` pelado.
+  const ESCALA_KPI_SPARK = 268.5 / 320; // 0,839 a 1440px, la mas chica del panel.
+
+  it("y el punto del spark del KPI tambien, a la escala mas chica del panel", () => {
+    const body = renderDashboardBody({
+      ...clienteMinimo,
+      dashboard: {
+        ...clienteMinimo.dashboard,
+        kpis: [
+          {
+            label: "Pacientes sin volver",
+            value: "34",
+            delta: "+4",
+            trend: "up",
+            context: "ultimos 90 dias",
+            spark: [12, 4, 19, 7, 22, 9, 34],
+          },
+        ],
+      },
+    });
+    const svg = body.match(/<svg class="wf-kpi-spark"[\s\S]*?<\/svg>/)?.[0] ?? "";
+    const radii = [...svg.matchAll(/<circle [^>]*r="([\d.]+)"/g)].map((match) => Number(match[1]));
+    expect(radii.length).toBeGreaterThan(0);
+    expect(2 * Math.min(...radii) * ESCALA_KPI_SPARK).toBeGreaterThanOrEqual(8);
+  });
+
+  it("y el punto no se recorta contra el borde cuando el ultimo valor es el maximo", () => {
+    const body = renderDashboardBody({
+      ...clienteMinimo,
+      dashboard: {
+        ...clienteMinimo.dashboard,
+        kpis: [
+          { label: "Sube", value: "9", delta: "+2", trend: "up", context: "-", spark: [1, 4, 9] },
+        ],
+      },
+    });
+    const svg = body.match(/<svg class="wf-kpi-spark"[\s\S]*?<\/svg>/)?.[0] ?? "";
+    const circulo = svg.match(/<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)"/);
+    expect(circulo).not.toBeNull();
+    const [, cx, cy, r] = circulo!.map(Number);
+    expect(cy - r).toBeGreaterThanOrEqual(0);
+    expect(cx + r).toBeLessThanOrEqual(320);
+  });
 });
 
 describe("estados de seccion", () => {

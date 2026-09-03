@@ -978,7 +978,17 @@ function renderKpiSpark(values: number[], label: string): string {
   const range = max - min || 1;
   const width = 320;
   const height = 44;
-  const pad = 4;
+  // Piso de 8px de DIAMETRO RENDERIZADO que fija `dataviz`. Aca no alcanza con
+  // copiar el r=4 del chart grande: ese SVG se dibuja a escala ~1,02 (327px de
+  // caja para 320 de viewBox) y el del KPI vive dentro de la tarjeta angosta,
+  // que a 1440 mide 268px => escala 0,839, la mas chica del panel. Medido en el
+  // navegador: r=3 daba 5,03px y r=4 daria 6,71px, los dos bajo el piso; r=4.8
+  // da 8,05px. En mobile la tarjeta es mas ancha, o sea que 0,839 es el peor
+  // caso y sizear contra el lo cubre en todos los anchos.
+  const dotR = 4.8;
+  // El pad tiene que cubrir el radio del punto: con pad 4 el circulo se recorta
+  // contra el borde del viewBox cuando el ultimo valor es el maximo de la serie.
+  const pad = dotR;
   const count = values.length;
 
   const xFor = (index: number): number =>
@@ -990,7 +1000,7 @@ function renderKpiSpark(values: number[], label: string): string {
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
   const last = count ? values[count - 1] : undefined;
   const dot = last !== undefined
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="3" fill="currentColor"></circle>`
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="${dotR}" fill="currentColor"></circle>`
     : "";
 
   // Mismo defecto que W2 arreglo en el sparkline grande, que aca habia quedado:

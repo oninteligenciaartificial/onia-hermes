@@ -93,6 +93,21 @@ Las tres formas de fantasma que ya aparecieron acá:
    `onia.com.bo` está roto aunque nada de su app lo esté — ver el primer ítem de `## Ahora`.
 5. Node zombies de tests viejos → matar. Cerrar con la prueba (200, hash, exit 0).
 
+   ⚠️ **El chequeo 4 nunca se había corrido de verdad, y tenía presa** (2026-09-02).
+   La máquina cargaba **24 `node.exe` / 1.328 MB**. Dos eran del carril muerto
+   `hero-en-home`: `git worktree list` **ya no lo lista** (el directorio quedó huérfano)
+   y sus dos `next dev` (3411, 3477) contestaban **500** hacía 23,5 h. Matados los dos
+   árboles → **18 procesos / 1.147 MB**, 3411 y 3477 en `000`, y el server propio (4319)
+   sigue en **200**. **Un proceso vivo no prueba un servidor vivo: hay que pedirle el
+   código.** Los otros 8 (`web-venta`, puertos 3489/3491/3493/3941-3945) **NO se tocaron**:
+   contestan 200 y son de un carril vivo — pero **ocho `next start` del mismo worktree
+   acumulados en 15 h** es un goteo que ese carril debería cerrar al terminar cada vuelta.
+
+   **Sostenido (AUD11, 2026-09-02):** la limpieza aguanto — **18 `node.exe` / 1.040 MB**,
+   3411 y 3477 siguen en `000` y el server propio en **200**. Los cuatro chequeos verdes:
+   4319 → 200, rama al dia con `origin` (`13a960cb` == `13a960cb`, arbol limpio),
+   `typecheck:packages` exit 0.
+
 ---
 
 ## Ahora
@@ -101,47 +116,6 @@ Las tres formas de fantasma que ya aparecieron acá:
 > existen y que hoy no le llegan a ningún cliente; el resto es deuda medida.
 > **Cada ítem trae su evidencia re-verificada el 2026-09-01** — y cinco de los siete
 > estaban escritos DENTRO de ítems ya cerrados, donde ningún loop los iba a ver.
-
-- [ ] **El sitio de venta no publica por culpa de una app de ESTE carril, y la causa sigue viva.**
-      onia.com.bo estuvo **nueve días sin publicarse** y no era su culpa: el deploy muere en
-      `pnpm install --frozen-lockfile` porque `web-factory/apps/dental-premium` declara 9
-      dependencias que `web-factory/pnpm-lock.yaml` no tenía. El lockfile ya se parchó (PR #30,
-      2026-09-01 14:52), **la causa no**: las dos apps de cliente llevan un `package-lock.json`
-      de npm dentro de un workspace pnpm, y su propio README manda correr `npm install`. El
-      próximo que siga el README vuelve a tumbar la publicación del sitio que vende.
-      **Evidencia** (`$ gh run view 33544864012 --log-failed`, run del 2026-09-01 18:43 UTC):
-      `ERR_PNPM_OUTDATED_LOCKFILE ... not up to date with <ROOT>/apps/dental-premium/package.json`
-      · `9 dependencies were added: next@15.5.4, react@19.1.0, motion, gsap …`.
-      Los dos lockfiles de npm siguen commiteados —
-      `web-factory/apps/dental-premium/package-lock.json` y
-      `web-factory/apps/ferreteria-sur/package-lock.json`, 35.759 bytes **idénticos**, junto a
-      `web-factory/pnpm-workspace.yaml`, que mete todo `apps` en el workspace de pnpm — y
-      `web-factory/apps/ferreteria-sur/README.md:18` dice `npm install`.
-      Y **no hay ningún gate**: `$ grep -rn frozen-lockfile .github/workflows/` devuelve 0, o sea
-      que la desincronización sólo se descubre publicando, que es como costó nueve días.
-      **Hecho cuando**: los dos `package-lock.json` fuera del repo (y en `.gitignore`), los dos
-      README diciendo `pnpm install`, y la salida pegada de `pnpm install --frozen-lockfile`
-      desde `web-factory/` con exit 0 contra el lockfile de hoy. El gate en CI es el ítem
-      bloqueado de más abajo: `.github/` no es zona de este carril.
-
-- [ ] **Las dos webs de cliente están terminadas y no se pueden publicar con un comando.**
-      `web-factory/apps/dental-premium` y `web-factory/apps/ferreteria-sur` son dos sitios
-      Next terminados, mirados y con gates verdes, y hoy **no existe ninguna forma de
-      publicarlos**: cero proyectos en Vercel (medido con la API el 2026-09-01 — 15 proyectos,
-      ninguno es estos dos), cero entrada en `.github/workflows/`, y el `vercel.json` de la raíz
-      trae deploy por git apagado para todo el repo. El add-on se cierra mandando un link por
-      WhatsApp, y ese link no existe.
-      **Evidencia**: `$ grep -rln dental-premium .github/ scripts/` → 0 · las dos apps ya traen
-      salida standalone (`web-factory/apps/dental-premium/next.config.ts:6`), o sea el MISMO
-      modelo de despliegue que ya usa `scripts/deploy-onia-landing.sh` para onia.com.bo.
-      **Qué hace este ítem** (no publica — la regla 6 lo prohíbe): (a) correr
-      `pnpm --filter dental-premium build` y `pnpm --filter ferreteria-sur build` y pegar la
-      salida, incluido el First Load de cada ruta; (b) dejar en `web-factory/scripts/` un
-      deploy-web-cliente.sh parametrizado por app + subdominio, copiado de
-      `scripts/deploy-onia-landing.sh` (build → tarball → stage → swap con backup y rollback).
-      **Hecho cuando**: los dos builds salen exit 0 con su server.js de standalone listado, y
-      el script pasa `bash -n`. **Bloqueado sólo el último paso**: el subdominio lo elige
-      Sergio — abajo están las dos opciones, cotizadas las dos en Bs 0.
 
 - [ ] **El CTA del hero de la ferretería queda FUERA del pliegue a 1440×800.**
       Lo dejó anotado A3 al cerrar ("entra por 82px a 1440×900 y queda fuera a 1440×800") y
@@ -153,7 +127,11 @@ Las tres formas de fantasma que ya aparecieron acá:
       `web-factory/apps/ferreteria-sur/src/app/sections.css:15`.
       **Hecho cuando**: medido en el navegador a 1440×800, 1440×900 y 390×844, el CTA queda
       **entero dentro del primer viewport en los tres**, con la captura mirada.
-      Re-verificar el número antes de tocar: la medición es del 31-ago.
+      ✅ **Re-verificado el 2026-09-03 y sigue vivo**, ahora contra el bundle de producción
+      (runtime standalone levantado con `node server.js`, no `next dev`): en la captura a
+      **1440×900** el primer viewport termina en el párrafo y la tarjeta de horarios, y el CTA
+      del hero **ya no entra** — o sea que el margen de 82 px que midió A3 a esa misma altura se
+      consumió. A 1440×800 está peor. El único botón visible arriba es el del header.
 
 - [ ] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
       También anotado por A3 al cerrar y nunca convertido en línea. Es el sitio de un negocio
@@ -164,6 +142,11 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Hecho cuando**: la salida de `pnpm --filter ferreteria-sur build` muestra First Load
       **≤150 kB** en la ruta raíz, pegada en el commit, y el sitio mirado renderizado a 1440 y
       390 para probar que la animación sigue viva (import dinámico, no animación borrada).
+      ✅ **Re-medido el 2026-09-03: 192 kB, exacto — y no es sólo la ferretería.**
+      `dental-premium` está en **187 kB** con las mismas dos dependencias planas
+      (`motion` + `gsap`) y el mismo consumidor único, así que el arreglo es el mismo dos veces
+      y este ítem cubre las dos apps. El piso compartido son 102 kB, o sea que lo propio de cada
+      página son 90 kB (ferretería) y 85 kB (dental): el recorte tiene que salir de ahí.
 
 - [ ] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
       T34 se cerró como fantasma con esta frase adentro: *"lo que SÍ falta y no es esto:
@@ -225,6 +208,22 @@ Las tres formas de fantasma que ya aparecieron acá:
       siendo de Sergio"*. **Se sabe hecho** abriendo la página de precios y viendo que
       "Inventario avanzado" ya no cobra, y la home con el hero nuevo.
 
+- [ ] **La app que SIRVE onia.com.bo sigue con el lockfile de npm que este carril acaba de sacar
+      de las suyas — y no es zona de este carril.**
+      El 2026-09-02 se sacaron `apps/dental-premium/package-lock.json` y
+      `apps/ferreteria-sur/package-lock.json` (ítem A8, arriba). **Quedó el tercero, y es el
+      peor**: `$ git ls-files | grep package-lock.json` desde `web-factory/` devuelve hoy una
+      sola línea, `apps/onia-platform/package-lock.json`. Esa app entra al workspace de pnpm por
+      `pnpm-workspace.yaml` (`apps/*`) igual que las otras dos, así que un `npm install` ahí
+      desincroniza `pnpm-lock.yaml` y **vuelve a matar el deploy** — con el agravante de que es
+      la app del sitio de venta, o sea el fallo que ya costó nueve días.
+      **No es dificultad, es zona**: `apps/onia-platform/` es del carril `web-venta`
+      (`hermes-content/docs/cola/loops.md`), y la regla 3 se lo prohíbe a este carril.
+      **Es el mismo trabajo de A8, ya probado**: `git rm --cached` del lockfile, la línea en su
+      `.gitignore`, y `pnpm install --frozen-lockfile` verde. Bs 0.
+      **Decisión**: se rutea a `web-venta`, o se le extiende la zona a este carril sólo para ese
+      archivo. Las dos cuestan lo mismo.
+
 - [ ] **El paso que publica el sitio de venta sigue colgado del de un panel abandonado.**
       En `.github/workflows/deploy-onia-center.yml:78` el paso "Deploy landing" corre en el
       MISMO job y DESPUÉS del deploy de center, **sin `if:`**. Si el primero muere, el segundo
@@ -274,10 +273,107 @@ Las tres formas de fantasma que ya aparecieron acá:
       31-ago: *"iba a ser el panel para manejar todo pero quedó abandonado"*, y
       center.onia.com.bo devuelve 404 (medido hoy). Queda sólo el admin de la app de
       plataforma, que sigue siendo otro carril: se propone y se coordina, no se toca desde acá.
+- [ ] **Apagar el cron de Windows `web-factory-dev-loop`: su trabajo ya lo hace otro loop,
+      sobre otra rama y otra cola.** Traido tal cual del carril de Windows
+      (`claude/onia-web-architecture-b37eca`) al integrarlo el 2026-09-03: alla vivia en su
+      propia cola, que es justamente el archivo que este item denuncia duplicado.
+      El pedido cambio y hay que decirlo entero, porque la
+      version anterior de este item pedia una decision que Sergio **ya tomo al reves**.
+      ⚠️ **Reverificado por AUD11 (2026-09-02, escalon 0: "un bloqueo VENCIDO es peor que un
+      fantasma").** Lo que decia: *"apagarlo, o rellenar `CARRIL A`"*, citando `loops.md` en
+      *"Apagados a proposito — NO rearmar"*. **Vencido.** Esa misma fila de `loops.md` hoy
+      cierra con: *"⚠️ **REVIVIO el 2026-09-02** como `web-factory-dev` en el VPS
+      (`21 2,8,14,20`, commit `0c48cf72`)… **esta fila es historia, no una orden de
+      apagarlo**"*. O sea: la opcion (b) —revivirlo— ya se ejecuto. Pedirle hoy que lo apague
+      "porque la cola quedo en cero" es pedirle una decision caduca.
+      **Pero el revival no paso aca, y ese es el hallazgo.** Medido contra `origin` en esta
+      vuelta: `origin/claude/web-factory-dev` trae un `web-factory/docs/LOOP_COLA.md`
+      **reestructurado** (1.109 lineas, secciones `## Ahora` / `## Bloqueado` /
+      `## Cerrado — carril A` / `## Cerrado — carril B`) con **6 items abiertos en `## Ahora`**
+      —publicar con un comando, el CTA de la ferreteria a 1440×800, los 192 kB, `hover-lift`
+      sin usar, el punto del spark en 5,03 px, portfolio sin ancla—. **Este** archivo, en
+      `claude/onia-web-architecture-b37eca`, sigue con la estructura vieja (`## CARRIL A` /
+      `## CARRIL B`) y **cero** items abiertos en las dos.
+      **El mismo nombre de archivo son hoy dos archivos distintos en dos ramas, leidos por dos
+      loops distintos** — `web-factory-dev` (VPS, rama `claude/web-factory-dev`) y este
+      (`web-factory-dev-loop`, Windows, esta rama). Es exactamente el choque que `loops.md`
+      nombra: *"dos `chatbot-cola` sobre la misma rama, en dos maquinas, pisandose"*, con el eje
+      cambiado —misma cola conceptual, dos ramas—. El de Windows corre **cada hora**; el del VPS,
+      4 veces al dia sobre la cola que si tiene combustible.
+      **La decision, ahora una sola y de Sergio:** poner `web-factory-dev-loop` en
+      `enabled: false` (un acto). Este carril no se queda sin dueno — `web-factory-dev` ya lo
+      tiene, con los 6 items. **No se toca la cola de la otra rama desde aca**: es otro carril.
+      Un loop no se apaga a si mismo: por eso sigue aca.
+
 
 ---
 
 ## Cerrado — carril A (build)
+
+- [x] **A9 · Las dos webs de cliente ya se publican con un comando — y el standalone con el que
+      se iba a publicar estaba ROTO** (2026-09-03).
+      El ítem pedía correr los dos builds y dejar un `deploy-web-cliente.sh`. Los builds salieron
+      exit 0 **y el `server.js` no estaba donde el modelo de deploy lo espera**: ninguna de las
+      dos apps declaraba `outputFileTracingRoot`, así que Next infería la raíz del trazado sola,
+      se iba más arriba de `web-factory/` y **horneaba la ruta absoluta del checkout dentro del
+      bundle**. Medido buildeando en el VPS, el server.js quedó en
+      `.next/standalone/loops/onia-hermes-webfactory/web-factory/apps/dental-premium/server.js`.
+      O sea: la ruta cambiaba según DÓNDE se buildeó —otra en el runner de CI, otra en cada
+      worktree— y cualquier script copiado del de onia.com.bo (que espera
+      `standalone/apps/<app>/server.js`) fallaba, y fallaba distinto en cada máquina. **Un build
+      exit 0 no dice nada sobre si el bundle se puede desplegar**: por eso el "hecho cuando"
+      pedía LISTAR el server.js, y por eso apareció.
+      **Qué se hizo**: `outputFileTracingRoot: monorepoRoot` en el `next.config.ts` de las dos
+      apps —el mismo patrón que `apps/onia-platform/next.config.ts:37`, que es por lo que ESA sí
+      se despliega— con el motivo escrito adentro; y `web-factory/scripts/deploy-web-cliente.sh`
+      parametrizado por `APP` + `SITE_DOMAIN` (build → tarball → stage → swap con backup,
+      health check y rollback), que además **crea el contenedor si es el primer deploy** e
+      imprime el fragmento de vhost sin aplicarlo (traefik es infra de un solo dueño).
+      Con `DEPLOY_SWAP=false`, el default, buildea y deja el runtime staged sin tocar nada
+      publicado: ése es el modo que puede correr un loop.
+      **Medido, no supuesto**: `pnpm install --frozen-lockfile` exit 0 · los dos builds exit 0
+      (dental **187 kB** First Load en `/`, ferretería **192 kB**) · `server.js` presente en
+      `apps/<app>/.next/standalone/apps/<app>/server.js` en las dos · `bash -n` del script OK ·
+      `pnpm typecheck:packages` verde. Y el runtime ensamblado igual que lo hace el script se
+      **levantó y se miró**: `node apps/<app>/server.js` arranca en ~90 ms, HTTP 200 en 32 ms
+      (27 kB dental / 43 kB ferretería), y las dos home renderizadas a 1440×900 con **cero
+      errores de consola y cero respuestas 4xx**.
+      **Queda para Sergio, y es lo único**: elegir el subdominio (ítem de la sección Bloqueado) y
+      apretar el swap. Desplegar sigue sin ser de este carril.
+
+- [x] **A8 · Sacada la causa por la que una app de este carril tumbaba la publicación de
+      onia.com.bo** (2026-09-02).
+      El lockfile ya estaba sano —`pnpm install --frozen-lockfile` desde `web-factory/` da
+      **exit 0** hoy (`Lockfile is up to date, resolution step is skipped · Already up to date ·
+      Done in 1.3s using pnpm v10.33.3`, 9 workspace projects)—, así que lo que quedaba era la
+      **causa**, y seguía viva: los dos `package-lock.json` de npm trackeados dentro de un
+      workspace pnpm, más un README mandando `npm install`.
+      **Qué se hizo**: `git rm` de `apps/dental-premium/package-lock.json` y
+      `apps/ferreteria-sur/package-lock.json`; `package-lock.json` + `yarn.lock` agregados al
+      `.gitignore` de cada app con el porqué escrito adentro (un `.gitignore` sin motivo se
+      revierte); `apps/ferreteria-sur/README.md` reescrito a `pnpm install --frozen-lockfile`
+      desde la raíz del workspace + `pnpm --filter`.
+      **Probado que eran peso muerto, no supuesto**: con los dos lockfiles ya borrados,
+      `pnpm --filter dental-premium typecheck` y `pnpm --filter ferreteria-sur typecheck` dan
+      **exit 0** — las apps resuelven sus dependencias desde el workspace de pnpm y nunca
+      leyeron esos archivos. `pnpm typecheck:packages`: exit 0.
+      **La cola decía "los dos README" y eran uno**: `apps/dental-premium` **no tenía README**.
+      Ahí el peligro era peor —cero instrucciones, así que el próximo adivina `npm install`—, y
+      se creó uno mínimo, sólo con lo verificado en `package.json` y `next.config.ts`, dejando
+      escrito que el formulario no se documentó porque nadie lo midió en esta pasada.
+      ⚠️ **Hipótesis probada y REFUTADA en la misma vuelta, para que nadie la repita**: las dos
+      apps tienen `"incremental": true` **y** tenían `tsconfig.tsbuildinfo` commiteado, lo que
+      parecía un agujero de gate (un `tsbuildinfo` ajeno haciendo que `tsc --noEmit` no
+      re-chequee). Se midió inyectando un error de tipos real en `src/app/page.tsx` con el
+      `tsbuildinfo` commiteado presente: `tsc` lo cazó igual —
+      `error TS2322: Type 'string' is not assignable to type 'number'`, exit 2. **No enmascara
+      nada.** Se sacaron del repo igual, pero como ruido de diff, no como arreglo de gate.
+      ⚠️ **Queda el mismo riesgo FUERA de zona**: `apps/onia-platform/package-lock.json` sigue
+      trackeado, y esa app también entra al workspace por `apps/*` — es exactamente la que
+      sirve onia.com.bo. Es zona del carril `web-venta`, así que este carril no la tocó: la
+      línea está abajo, en `## Ahora`.
+      **Lección: el lockfile era el síntoma; el hábito de `npm install` era la causa. Arreglar
+      el lockfile sin sacar los archivos que invitan al error deja el bug esperando al próximo.**
 
 - [x] **A1a · Dashboard: charts a tema categórico** (2026-08-30, **rehecho**).
       El primer intento (29-ago) eligió 6 hues **a criterio** y estaba MAL: la skill
@@ -380,9 +476,12 @@ Las tres formas de fantasma que ya aparecieron acá:
       total al centro, marcadores ≥4) y **mirado en claro y oscuro** — 0 `[data-reveal]`
       ocultos, 0 errores de consola, y el anillo de foco medido tabulando: 12 de 12 con
       anillo, 0 sin él.
-      Anotado, NO tocado (fuera de este ítem): el sparkline del KPI sigue con
-      `preserveAspectRatio="none"`, así que su punto final es una elipse — el mismo defecto
-      que W2 arregló en el sparkline grande.
+      ~~Anotado, NO tocado (fuera de este ítem): el sparkline del KPI sigue con
+      `preserveAspectRatio="none"`, así que su punto final es una elipse.~~
+      ⚠️ **Nota VENCIDA, tachada por AUD7 (2026-09-01).** Se arregló y nadie tachó la línea:
+      `dashboard.ts:1003` (`renderKpiSpark`) emite hoy `preserveAspectRatio="xMidYMid meet"`,
+      con el comentario que cuenta el arreglo, y `dashboard.test.ts:382` guarda que **ningún**
+      SVG del panel vuelva a `none`. Deja de ser algo por hacer.
 - [x] **W5 · Los estados que no existen** (2026-08-31). Evidencia re-verificada antes de
       tocar: `skeleton|retry|aria-busy` → **0 en todo `packages/`** (real), pero el
       **segundo renglón del vacío YA existía** (`renderEmpty(title, hint)` en 5 llamadas,
@@ -633,6 +732,8 @@ Las tres formas de fantasma que ya aparecieron acá:
       y, con la escala de 0,839, mide **5,03px** renderizados — bajo el piso de 8px que
       `dataviz` fijo y que W4 aplico al resto de los marcadores. Es un tamanio, no una
       deformacion.
+      → **Promovida a ítem A9 por AUD7 (2026-09-01)**: sigue siendo cierta, y como nota al
+      pie no la podía tomar nadie. Se trabaja desde A9, no desde acá.
 - [x] **A4 · Pulido de dental-premium** (2026-08-31). Re-verificada la evidencia antes de
       tocar, **dos de los tres sub-items eran fantasma** y hubo que buscar el defecto real
       midiendo, no leyendo la linea. (a) **"dark mode mirado"**: se miro, y no hay nada que
@@ -930,6 +1031,328 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Gates**: `typecheck:packages` verde, **267/267**, `pnpm e2e` 103/0. El cambio es
       un comentario en un test: no dibuja un solo píxel, así que las baselines no se
       tocan.
+
+- [x] **S1 · Los dos gates locales se caian por contencion, no por un defecto** (2026-09-01,
+      vuelta de auditoria: A y B estaban todos `[x]`). `pnpm test` **murio antes de correr
+      un solo test** con `FATAL ERROR: Zone Allocation failed - process out of memory` — a
+      los 78 ms, con el heap en 5,9 MB. Un heap de 5,9 MB no es un test pesado: es la
+      largada. vitest 4 abre **un fork por nucleo** y esta maquina tiene **12** con ~3,3 GB
+      libres; los 12 node arrancando juntos agotan la memoria durante la COLECCION. Por eso
+      cada subcarpeta pasaba por separado (`packages/blocks`, `templates`, `data`, `design`,
+      `generate`, `harvester`, `apps`: verdes las siete) y el rojo parecia un fantasma.
+      Con `maxWorkers: 4` en `vitest.config.ts`: **30 archivos / 267 tests verdes en 2,6 s**.
+      El mismo cuadro en `pnpm e2e`: 3 rojos + 2 flaky, y los tres morian con **`Target page,
+      context or browser has been closed`** — el navegador se caia, no fallaba una asercion.
+      Medido: 1 worker → 49 verdes / 0 rojos · 2 workers → **103 verdes / 0 rojos en 1,2 min**
+      (con 3 tardaba 1,3 min, o sea el paralelismo perdido no cuesta **nada**). Bajado a
+      `workers: 2` en local; CI queda en 4, que no comparte maquina con los loops.
+      ⚠️ **Lo peligroso es que NO estaba roto siempre**: el item de arriba (del mismo dia)
+      declara 267/267 y e2e 103/0 de buena fe. Depende de cuanta RAM libre haya en ese
+      minuto, y **cinco loops corren en paralelo en esta misma maquina**. Un gate que da
+      rojo la mitad de las veces por contencion se termina ignorando — que es exactamente
+      como la suite llevaba ocho vueltas roja sin que nadie mirara. Ahora falla o pasa por
+      lo que mide.
+      **Auditoria de los `[x]` de la misma vuelta** (contra el codigo de HOY, no contra la
+      linea): W1 → `packages/templates/src/font-links.ts` existe y tiene su test ✔ ·
+      W2 → cero `preserveAspectRatio="none"` en superficie (solo se lo nombra en dos
+      comentarios que cuentan la historia) y `--color-primary` quedo solo en cromo, con
+      **test que lo guarda** (`dashboard.test.ts:319`) ✔ · A1a → `--wf-series-*` vivo en
+      `dashboard.ts` ✔. Ninguna se desmarca.
+      **Gates**: `typecheck:packages` verde · `pnpm test` **267/267** · `pnpm e2e` **103/0**.
+      Cambio de configuracion de corrida: no dibuja un pixel, baselines intactas.
+
+- [x] **AUD6 · Auditoría de S1 y del carril B — la primera vez que alguien mira los `[x]`
+      de B, y la corrida que PRUEBA el arreglo de S1** (2026-09-01). Sexta vuelta de
+      escalón 2 (A y B siguen todos `[x]`).
+      **Por qué estos cuatro**: AUD1–AUD5 auditaron **solo el carril A**; B1, B2 y B3
+      llevaban un día cerrados **sin que nadie los verificara contra el disco**. Y S1
+      nació en la vuelta anterior, así que era el otro `[x]` huérfano.
+      **S1, cierto y medible**: `vitest.config.ts` tiene `maxWorkers: 4` con su porqué
+      escrito, y `playwright.config.ts` tiene `workers: process.env.CI ? 4 : 2` — los tres
+      números que la línea declara (4 local en unit, 2 local en e2e, 4 en CI) están en el
+      archivo, no solo en la prosa.
+      🟢 **Y la corrida de hoy lo PRUEBA, que es lo que faltaba.** AUD5 cerró con **3
+      flaky** y los explicó por contención (`page.goto: Page crashed` en los tres, pasaban
+      al reintento). Hoy, **con la misma carga ajena presente** — los mismos 6 `node.exe`
+      del worktree `hero-en-home`, dos `next dev` sobre `apps/onia-platform` (3411 y 3477)
+      con sus hijos, zona prohibida que no se toca — la suite dio **103 pasados, 0
+      fallados, 0 flaky**. S1 no arregló el síntoma de una corrida: bajo la misma
+      condición que antes producía tres caídas de navegador, ahora produce cero.
+      **B1 cierto**: existe `2026-08-31-cosecha-rubros-sin-ancla.md` (7.831 B) y el
+      playbook trae **§9 ganadero y §10 IA/agentes** (antes no existían); la corrección
+      del umbral dental está escrita **con su historia** (`<15%` → **HSV <25%**, "se había
+      escrito el piso de la muestra como ley") y la importadora dice navy de dos acentos,
+      con el `#010101` nombrado como la receta del automotor que era.
+      **B2 cierto**: existe `2026-08-31-cosecha-rubros-flacos.md` (8.028 B) y §2 está
+      reescrita en dos regímenes con las anclas medidas. Miré si el reemplazo repetía el
+      error que denuncia — el régimen "sin pop" pasó de `5-15%` a `HSV S <16%`, que sigue
+      siendo el borde de la muestra — y **no lo repite**: ahora el umbral viene con los
+      tres valores de remedyplace que lo sostienen (8,1% · 15,6% · 7,2%), con el modelo
+      declarado y el ancla nombrada. Un techo medido y mostrado no es lo mismo que un piso
+      heredado a ciegas.
+      **B3 cierto**: `~/.claude/skills/ui-ux-pro-max/` tiene `scripts/search.py` y los 13
+      CSV de `data/` — la skill que la línea encontró siendo "SKILL.md y nada más" hoy
+      está completa.
+      **Ninguna se desmarca.**
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo);
+      rama == `origin` (`18c00cfa`); árbol limpio; `typecheck:packages` verde; `pnpm test`
+      **267/267 en 3,0 s**; `pnpm e2e` **103 pasados / 0 fallados / 7 skipped**. Cero
+      zombies míos: de los 9 `node.exe` vivos, el único de este carril es el
+      `serve-out 4319`.
+      **Lección: el carril B también acumula `[x]` sin auditar.** Cinco auditorías
+      seguidas miraron A porque ahí está el código; los ítems de B son docs y data, y
+      "no dibujan un píxel" se convirtió en excusa para no volver a mirarlos. Un doc que
+      afirma una regla de diseño envejece igual que el código que la implementa.
+
+- [x] **A9 · El punto del KPI spark ya mide 8,05px — y el piso se mide en PIXELES, no en
+      unidades de viewBox** (2026-09-02). Evidencia re-verificada antes de tocar y **medida
+      en el navegador**, no deducida: `dashboard.ts` seguia con `r="3"` y el circulo
+      renderizaba **5,03px** de diametro (la cifra exacta que anotaba el item).
+      🔴 **El arreglo obvio era el equivocado.** Copiar el `r="4"` que W4 le puso al resto
+      de los marcadores **no alcanzaba**: cada SVG del panel se dibuja a una escala
+      distinta y el piso de 8px de `dataviz` es de pixeles en pantalla. Medido a 1440:
+      el chart de linea va a escala **1,023** (caja 327,3px / viewBox 320) y ahi `r=4`
+      da 8,18px ✔; el spark del KPI vive en la tarjeta angosta y va a escala **0,839**
+      (268,5px / 320), donde `r=4` habria dado **6,71px** — otra vez bajo el piso, y con
+      el item marcado como cerrado. Ahora `dotR = 4.8` → **8,05px medidos**. La escala
+      0,839 es el peor caso (en mobile la tarjeta es mas ancha), asi que cubre todos los anchos.
+      **Efecto colateral que hubo que arreglar en el mismo cambio**: con `pad = 4` el
+      circulo de r=4,8 se recortaba contra el borde del viewBox cuando el ultimo valor
+      era el maximo de la serie; el pad ahora sale del propio radio (`const pad = dotR`).
+      **El test se extendio multiplicando por la escala**, no comparando el `r` pelado —
+      un `r >= 4` habria dejado pasar los 6,71px. + un segundo test de no-recorte.
+      **Gates**: `typecheck:packages` verde, `pnpm test` **269/269** (+2), `pnpm e2e`
+      **103 pasados / 0 fallados / 7 skipped**, y **mirado renderizado en claro y oscuro**
+      (0 `[data-reveal]` ocultos, 0 errores de consola, los 4 circulos dentro de su caja).
+      **Gate verificado MUTANDO**: con `dotR = 3` el test nuevo cae con `expected
+      5.034375 to be greater than or equal to 8` — el mismo numero que midio el navegador.
+
+- [x] **A10 · El gate visual se trago un marcador que se AGRANDO 60% — el tope baja de
+      400 a 20, MEDIDO** (2026-09-02). Evidencia re-verificada antes de tocar y confirmada:
+      A9 movio 4 puntos de 5,03 a 8,05px de diametro y desplazo la polilinea de los 4
+      sparks, y `pnpm e2e` habia pasado **8/8 en verde sin tocar una sola baseline** —
+      81 a 184 pixeles distintos por captura contra un presupuesto de 400.
+      🔴 **El presupuesto tapaba el defecto Y ADEMAS impedia refrescar la baseline.** En
+      Playwright 1.61 `--update-snapshots` a secas es modo `changed`: solo reescribe lo que
+      FALLA. Como el diff caia dentro de los 400, la primera corrida con el flag dijo
+      "8 passed" y **no toco un solo archivo** (mtime intacto). Hizo falta
+      `--update-snapshots=all`. O sea que un tope generoso no solo deja pasar la regresion:
+      congela las baselines en un estado que ya nadie puede refrescar por el camino normal.
+      **El piso se MIDIO, no se estimo.** Con las baselines al dia y `maxDiffPixels: 0`,
+      **cuatro corridas limpias seguidas dieron 8/8 verde**: el ruido real entre corridas
+      es **cero**. Y el flap de alto 1840↔1839 que este mismo item daba por razon para no
+      bajar a 0 **no es un obstaculo**: aparece DENTRO del bucle de estabilizacion de
+      `toHaveScreenshot` (se ve en las lineas "Expected an image 1440px by 1840px, received
+      1440px by 1839px" que preceden a la comparacion final) y Playwright lo absorbe
+      recapturando hasta que dos capturas seguidas coinciden. Ademas un alto distinto es un
+      **size mismatch**, que ningun presupuesto de pixeles tapa: subir el tope nunca lo
+      habria protegido.
+      **Queda en 20**, no en 0: deja aire para el antialiasing de un Chromium futuro y sigue
+      **4x por debajo** del defecto real mas chico jamas medido aca (81px). Un gate que da
+      rojo por ruido se termina ignorando — es la leccion que ya esta escrita en
+      `playwright.config.ts`.
+      **Gate verificado MUTANDO**, como pide W6: con `dotR` de vuelta en 3 (el estado
+      pre-A9, exactamente el defecto que el tope viejo se trago) el gate cae **8/8** con
+      585 a 1256 pixeles distintos por captura. Con 400 ese mismo cambio pasaba en verde.
+      **Baselines regeneradas y MIRADAS** (no refrescadas a ciegas): demo 1440 claro — las
+      3 fuentes de W7 cargadas, medidor, donut con total al centro, los 4 sparks con su
+      punto redondo, tabla y panel de IA completos, 0 secciones en `opacity:0`; borde 1440
+      oscuro — negativo bajo el cero, el cero, las 90 barras dentro del viewBox, gauge en
+      0% sin arco, skeleton, error con Reintentar y los dos vacios.
+      **Gates**: `typecheck:packages` verde, `pnpm test` **269/269**, `pnpm e2e` **103
+      pasados / 0 fallados / 7 skipped**, y tres corridas limpias del gate visual con el
+      tope nuevo.
+      **Leccion: un presupuesto sobre una captura fullPage no protege un defecto
+      LOCALIZADO.** W6 lo validó contra `PAD_L` 34→44, que corre TODO el plot y gasta miles
+      de pixeles; el tope quedo calibrado para esa clase de cambio y ciego a la otra. El
+      numero correcto no sale de estimar cuanto ruido "deberia" haber: sale de poner el tope
+      en 0, contar el ruido real y dejar margen sobre ESE numero.
+
+- [x] **AUD7 · Auditar W3/W4/W5 y cazar la primera nota VENCIDA del carril** (2026-09-01).
+      Séptima vuelta de escalón 2 (A y B siguen todos `[x]`). **Por qué estos tres**: AUD1–AUD6
+      auditaron W1, W2, A1a, AUD4, B1, B2, B3 y S1 — **W3, W4 y W5 nunca los miró nadie**, y
+      son los tres ítems que más código tocaron.
+      **Los tres ciertos contra el disco de hoy**: W3 → `chartScale`/`niceMax`/`formatTick`
+      existen (`dashboard.ts:566,575,596`) y de los `Math.max(...,0)` que quedan **ninguno es
+      el bug**: son guardas de conteo, el clamp 0-100 de la barra de progreso (`:452`, el que
+      W3 dijo dejar) y topes de radio ✔ · W4 → medidor `radial` vivo, marcadores en `r="4"`,
+      **una sola** regla `:focus-visible` sobre `a`/`button` (`:1616`) y 5 usos de `44px` ✔ ·
+      W5 → `DashboardEstado = "cargando" | "error"` (`:48`) con `aria-busy` cableado y el Zod
+      declarándolo ✔. **Ninguna se desmarca.**
+      🔴 **Lo que sí estaba podrido era una nota al pie, no un `[x]`.** W4 cerró anotando "el
+      sparkline del KPI **sigue** con `preserveAspectRatio='none'`" — y hoy es falso: A6 lo
+      pasó a `xMidYMid meet` y `dashboard.test.ts:382` lo guarda para todo el panel. Tachada
+      arriba. Es la forma de fantasma nº1 de la REGLA DE EVIDENCIA ("arreglado y no tachado"),
+      **la primera que se caza en este carril**, y explica por qué el loop parece sin
+      combustible teniendo trabajo: las notas al pie no son ítems, así que ni se cierran
+      cuando se arreglan ni se pueden tomar cuando siguen vivas. Por eso la otra nota —el
+      `r=3` del KPI spark, que **sí** sigue siendo cierta— se promovió a **A9**.
+      🔴 **Defecto de infraestructura que seis auditorías no vieron: el worktree estaba en
+      HEAD desasociado.** `git rev-parse --abbrev-ref HEAD` devolvía `HEAD` y `git worktree
+      list` lo confirmaba (`4d57ac8d (detached HEAD)`), justo en la punta de
+      `claude/onia-web-architecture-b37eca`. Al estar en la punta **no se perdió nada**, pero
+      el próximo commit habría quedado huérfano fuera de la rama y el push no lo habría
+      subido. Reasociado con `git checkout claude/onia-web-architecture-b37eca`.
+      **Lección: la regla dura 1 pide la rama y el runbook de salud no la mide.** El punto 2
+      compara `origin` contra `HEAD` — y en HEAD desasociado esa comparación da **igual**, así
+      que pasa en verde mientras la rama no es la que dice ser. `git branch --show-current`
+      devolviendo **vacío** es la señal, y hay que mirarla antes de commitear.
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo); rama
+      reasociada y == `origin` (`4d57ac8d`), árbol limpio; `typecheck:packages` verde;
+      `pnpm test` **267/267 en 2,8 s**; `pnpm e2e` **103 pasados / 0 fallados / 7 skipped, 0
+      flaky** (segunda corrida seguida sin flaky: S1 aguanta). Cero zombies míos — de los 8
+      `node.exe` vivos, 6 son del worktree `hero-en-home` (dos `next dev` sobre
+      `apps/onia-platform`, 3411 y 3477, con sus hijos: otra mano, zona prohibida) y el único
+      de este carril es el `serve-out 4319`.
+
+- [x] **AUD8 · Auditar A9/A10 y estrenar el gate visual apretado desde una sesion limpia**
+      (2026-09-02). Octava vuelta de escalon 2 (A y B siguen todos `[x]`). **Por que estos
+      dos**: AUD1-AUD7 cubrieron W1-W5, A1a, A2, A3, A5, A7, A8, AUD4, S1, B1, B2 y B3 —
+      **A9 y A10 son los unicos `[x]` que nadie habia mirado**, y ademas los mas recientes,
+      que es donde una linea todavia no tuvo tiempo de envejecer mal.
+      **Los dos ciertos contra el disco de hoy.** A9 → `dotR = 4.8` y `const pad = dotR`
+      vivos en `dashboard.ts:988,991`, y sus dos tests existen y son los que decia ser: el
+      de tamaño multiplica por la escala medida (`ESCALA_KPI_SPARK = 268.5 / 320`) en vez de
+      comparar el `r` pelado, y el segundo comprueba que el circulo no se recorte
+      (`cy - r >= 0`, `cx + r <= 320`) ✔ · A10 → `maxDiffPixels: 20` vivo en
+      `tests/e2e/visual.spec.ts:81` ✔. **Ninguna se desmarca.**
+      **Lo que esta vuelta agrega y A10 no podia dar: la primera corrida del gate apretado
+      desde una sesion que no lo escribio.** A10 midio su propio ruido en corridas
+      encadenadas y con las baselines recien regeneradas por el mismo proceso — el caso
+      facil. Aca el gate corrio en frio, en otra sesion y con otra carga de maquina, y dio
+      **8/8 verde sin tocar una sola baseline**. Es la evidencia que faltaba de que el 20 no
+      es un numero apretado a la medida de una corrida afortunada.
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo); rama
+      `claude/onia-web-architecture-b37eca` — verificada con `git branch --show-current`, la
+      señal que AUD7 dejo escrita — al dia con `origin` (`cb47ef40`) y arbol limpio;
+      `typecheck:packages` **exit 0**; `pnpm test` **269/269 en 2,8 s** (el mismo numero que
+      declara A9); `pnpm e2e` **103 pasados / 0 fallados / 7 skipped**.
+      **Cero zombies, y uno que casi lo parece**: los `chrome.exe` vivos son el navegador
+      real de Sergio, **no** de Playwright — Playwright corre su propio Chromium desde la
+      cache `ms-playwright`, asi que un `taskkill` sobre `chrome.exe` le habria cerrado el
+      navegador de trabajo sin arreglar nada. El unico proceso de este carril sigue siendo
+      el `serve-out 4319`.
+
+- [x] **AUD9 · El carril esta sin combustible, y la tabla de loops YA lo dice — pero el
+      cron de Windows sigue disparando** (2026-09-02). Novena vuelta de escalon 2: `CARRIL A`
+      y `CARRIL B` con **cero** `- [ ]` (medido: 36 `[x]`, y los 4 sin marcar viven en
+      *Bloqueadas* y *Sin verificar*, que no son cola).
+      **El hallazgo nuevo, y es de gobierno, no de codigo.** La version mas reciente de
+      `hermes-content/docs/cola/loops.md` (commit `f046236f`, rama `claude/docs-auditoria`,
+      escrita por el loop `docs-auditoria` del VPS el 2026-09-02) **ya movio a
+      `web-factory-dev-loop` a la tabla "Apagados a proposito — NO rearmar"**, con la misma
+      medicion que da esta vuelta y el motivo escrito: *"sin cola, un loop no se planta:
+      inventa trabajo... para revivirlo hace falta rellenar `CARRIL A`, no rearmar el cron"*.
+      **Pero ese commit no esta en `main`** — `main` todavia lo lista como activo — y la
+      tarea de Windows sigue `enabled: true`, `cronExpression 45 * * * *`, con `lastRunAt`
+      2026-09-02T07:48Z. O sea: **la decision esta tomada y escrita, y no llego al unico
+      lugar que la ejecuta.** Un loop no se apaga a si mismo: queda para Sergio, en
+      *Bloqueadas*.
+      **Auditoria del unico `[x]` sin mirar (AUD8), en frio y en otra sesion**: sus tres
+      numeros se reprodujeron identicos — `typecheck:packages` **exit 0**, `pnpm test`
+      **269/269 en 2,77 s**, `pnpm e2e` **103 pasados / 0 fallados / 7 skipped en 1,2 min**,
+      y `git status --short` **vacio despues del e2e**, que es la prueba de que el gate paso
+      **sin regenerar una sola baseline**. Segunda corrida en frio del tope `maxDiffPixels:
+      20` de A10, en otra sesion y otra carga: no se desmarca nada.
+      **Salud, los cuatro puntos**: server 4319 → **200**; rama
+      `claude/onia-web-architecture-b37eca` al dia con `origin` (`92ab1816`) y arbol limpio;
+      typecheck verde; **zombies: ninguno mio**. Los 22 `node.exe` extra que aparecen en la
+      maquina son `next dev`/`next start` de los worktrees `hero-en-home` y `web-venta` —
+      **otros carriles**, y `apps/onia-platform` esta en los prohibidos de la regla 3: no se
+      matan desde aca. Se avisa, no se toca. El unico proceso de este carril sigue siendo el
+      `serve-out 4319`.
+
+- [x] **AUD10 · La mitad del bloqueo ya estaba VENCIDA: `main` no lista este loop como
+      activo, lo tiene apagado desde el 01-sep** (2026-09-02). Decima vuelta de escalon 2
+      (`CARRIL A` y `CARRIL B` con **cero** `- [ ]`; los 4 sin marcar viven en *Bloqueadas*
+      y *Sin verificar*, que no son cola).
+      **El hallazgo, y corrige a AUD9.** AUD9 escribio que el commit de `docs-auditoria`
+      *"no esta en `main`"* y que por eso **`main` todavia lo lista como activo**. La
+      segunda mitad es **falsa**, medida hoy: `git show origin/main:hermes-content/docs/cola/loops.md`
+      trae a `web-factory-dev-loop` en la tabla **"Apagados a proposito — NO rearmar"**
+      (linea 175), con su motivo completo, y esta ahi desde `fe22ac99` (**2026-09-01**).
+      Lo unico que a `main` le falta de esa rama es `f046236f`, que corrige la cadencia de
+      **`marca-personal`** — otro loop, nada que ver con este.
+      **Por que importa**: la opcion (a) del item bloqueado pedia a Sergio DOS actos
+      (*"mergear `claude/docs-auditoria` a `main` y poner la tarea en `enabled: false`"*).
+      El merge no hace falta: el doc ya lo dice donde tiene que decirlo. **Queda un solo
+      acto, y es de un click**: `enabled: false`. Un bloqueo que pide de mas es tan caro
+      como uno vencido — le cobra a Sergio trabajo que ya esta hecho. Corregido el item.
+      **El bloqueo en si sigue vivo** (re-verificado, no asumido): `list_scheduled_tasks`
+      da `web-factory-dev-loop` con `enabled: true`, `cronExpression 45 * * * *`,
+      `lastRunAt 2026-09-02T08:48Z`. El cron dispara aunque el doc diga que no deberia.
+      **Auditoria del unico `[x]` sin mirar (AUD9), en frio**: sus cuatro numeros de gates
+      se reprodujeron identicos — `typecheck:packages` **exit 0**, `pnpm test` **269/269 en
+      2,77 s**, `pnpm e2e` **103 pasados / 0 fallados / 7 skipped en 1,2 min**, y
+      `git status --short` **vacio despues del e2e** (tercera corrida en frio del tope
+      `maxDiffPixels: 20` de A10: no regenera una sola baseline). Lo unico que no
+      sobrevivio a la auditoria fue su lectura de `main`, arriba.
+      **Salud, los cuatro puntos**: server 4319 → **200**; rama al dia con `origin`
+      (`e81d93e7`) y arbol limpio antes y despues del e2e; typecheck verde; **zombies:
+      ninguno mio** — los 24 `node.exe` de la maquina son los `next dev/start` de otros
+      worktrees, mismo cuadro que midio AUD9. Se avisa, no se toca.
+
+- [x] **AUD11 · La resta de la auditoria CIERRA: no queda un solo `[x]` sin mirar, y por eso
+      el escalon 2 tambien se quedo sin combustible** (2026-09-02). Undecima vuelta de escalon 2
+      (`CARRIL A` y `CARRIL B` con **cero** `- [ ]`; los 4 sin marcar viven en *Bloqueadas* y
+      *Sin verificar*, que no son cola).
+      **El hallazgo, y es nuevo porque nadie habia hecho la resta completa.** AUD3 dejo escrita
+      la leccion (*"AUD2 se declaro completa sin notar que la resta no cerraba"*) pero nadie la
+      volvio a correr entera. Corrida hoy: **33 IDs `[x]`** en A + B + AUD, cruzados uno por uno
+      contra la cobertura que declara cada auditoria — AUD1 (A6, W3-W6, T4/T9/T29) · AUD2 (A1a,
+      W1a/b/c, W2, W7, A1c, A1d, A4, B1/B2) · AUD3 (A2, A3, A5) · AUD4 (A7, A8) · AUD5 (AUD4) ·
+      AUD6 (S1, B1, B2, B3) · AUD7 (W3, W4, W5) · AUD8 (A9, A10) · AUD9 (AUD8) · AUD10 (AUD9).
+      **No queda ninguno afuera.** La consecuencia importa mas que el dato: desde AUD9 el unico
+      `[x]` sin auditar de cada vuelta **es la auditoria de la vuelta anterior**. El escalon 2
+      dejo de auditar el carril y pasa a auditarse a si mismo — tres vueltas seguidas
+      reproduciendo los mismos tres numeros. **Eso ya no es una red, es un espejo**, y es la
+      medicion que le faltaba al item bloqueado: no es que el escalon 1 este vacio y el 2 aguante,
+      es que **los dos** estan vacios.
+      **Auditoria del unico `[x]` sin mirar (AUD10), por un camino distinto al suyo**: su hallazgo
+      central sobrevive, y se midio sin repetir su comando. `git show origin/main:.../loops.md |
+      grep -n web-factory-dev-loop` da la fila en **linea 175** exacta, en la tabla *"Apagados a
+      proposito — NO rearmar"*; `git branch -a --contains fe22ac99` lo pone en `origin/main`; y
+      `git merge-base --is-ancestor f046236f origin/main` responde **NO**, con
+      `git show --stat f046236f` confirmando que ese commit toca `marca-personal` y el radar, no
+      este loop. O sea: la correccion de AUD10 a AUD9 es cierta y el merge que el bloqueo le
+      pedia a Sergio efectivamente sobra.
+      **Gates, en frio y en otra sesion**: `typecheck:packages` **exit 0**; `pnpm test`
+      **269/269 en 2,84 s** (30 archivos); `pnpm e2e` **103 pasados / 0 fallados / 7 skipped en
+      1,2 min**; `git status --short` **vacio despues del e2e** — cuarta corrida del tope
+      `maxDiffPixels: 20` de A10 sin regenerar una sola baseline.
+      **Salud, los cuatro puntos**: server 4319 → **200** (no hizo falta relanzarlo); rama
+      `claude/onia-web-architecture-b37eca` al dia con `origin` (`1fac7c17`) y arbol limpio antes
+      y despues del e2e; typecheck verde; **zombies: ninguno mio** — 24 `node.exe` en la maquina,
+      el mismo cuadro de AUD9 y AUD10, son `next dev/start` de otros worktrees. Se avisa, no se toca.
+
+- [x] **AUD12 · El servidor del carril estaba CAIDO — once vueltas de "200" y esta vez daba 000**
+      (2026-09-02). Duodecima vuelta de escalon 2 (`CARRIL A` y `CARRIL B` con **cero** `- [ ]`;
+      los 4 sin marcar viven en *Bloqueadas* y *Sin verificar*, que no son cola).
+      **El hallazgo, y por primera vez en cinco vueltas el runbook de salud hizo trabajo real,
+      no verificacion.** `curl` a `http://localhost:4319/dental-amanecer/` devolvio **000**: el
+      `serve-out` que AUD8-AUD11 dieron por vivo cuatro vueltas seguidas ya no existia. Se
+      relanzo (`node scripts/serve-out.mjs 4319`) y volvio a **200** al primer intento.
+      **Por que se cayo, y esa es la leccion**: la maquina paso de **24 `node.exe` / 1.040 MB**
+      (el cuadro identico que midieron AUD9, AUD10 y AUD11) a **1 solo `node.exe`** antes de
+      relanzar. No murio este proceso: murieron **todos** — los `next dev`/`next start` de
+      `hero-en-home` y `web-venta` incluidos. Un barrido de la maquina, no un defecto del carril.
+      **Y eso desmiente por accion una nota de tres vueltas**: AUD9/AUD10/AUD11 cerraron con
+      "zombies: ninguno mio, los otros son de otros carriles, se avisa y no se toca". Cierto
+      entonces; hoy no queda ninguno que avisar. El chequeo 4 quedo en **2 `node.exe` / 83 MB**,
+      y uno es el mio.
+      **El unico `[x]` sin mirar era AUD11, y su hallazgo central se sostiene**: la resta cierra
+      —no queda `[x]` sin auditar— y por eso el escalon 2 se auto-audita. Esta vuelta lo prueba
+      al reves: el escalon 2 **no** estaba vacio, lo que estaba vacio era su mitad de auditoria.
+      La mitad de salud tenia trabajo esperando y ninguna de las tres vueltas anteriores lo
+      podia ver, porque el servidor se cayo despues de la ultima. **Un runbook que da verde once
+      veces no es un runbook inutil: es uno que todavia no encontro su falla.**
+      **Salud, los cuatro puntos**: 4319 **000 → 200** (remediado, no solo medido); rama
+      `claude/onia-web-architecture-b37eca` al dia con `origin` (`97cc6990`) y arbol limpio;
+      `typecheck:packages` **exit 0**; zombies **ninguno**. Sin `pnpm e2e`: esta vuelta no toco
+      un solo pixel de lo que se dibuja.
+      **Bloqueo re-verificado (escalon 0), sigue vivo**: `list_scheduled_tasks` da
+      `web-factory-dev-loop` con `enabled: true`, `cron 45 * * * *`, `lastRunAt`
+      2026-09-03T01:49Z. Sigue siendo un acto de un click, de Sergio.
 
 ## Cerrado — carril B (análisis)
 

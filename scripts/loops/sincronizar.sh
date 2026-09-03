@@ -29,6 +29,9 @@ REPO=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
 DESTINO_BIN=${ONIA_LOOPS_BIN:-/root/bin}
 FUENTE="$REPO/scripts/loops"
 CAMBIOS=0
+# Indirecto para poder PROBAR este script sin mandarle un Telegram falso a Sergio.
+# Una guarda que no se puede ejercitar es una guarda que nadie sabe si anda.
+TG=${ONIA_TG:-/root/bin/onia-tg.sh}
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"; }
 
@@ -59,20 +62,54 @@ poner() {  # poner <origen> <destino>
   CAMBIOS=$((CAMBIOS + 1))
 }
 
-# 🔴 Guarda contra DEGRADAR el corredor. Nace del 2026-09-03: el runner con la
-# inyeccion de memoria se desplego a mano al VPS a las 11:5x, y `main` todavia no
-# lo tenia. Sin esta guarda, la corrida de las 12:44 lo habria pisado con la
-# version vieja de main — y los 15 loops habrian vuelto a arrancar sin memoria,
-# sin ninguna alerta, igual que anoche con contenido-cola. "Sincronizar desde
-# main" es correcto cuando main va ADELANTE; cuando main va atras del VPS, es
-# borrar trabajo. La marca se elige por capacidad, no por fecha: si el
-# desplegado sabe hacer algo que el de main no, no se reemplaza.
+# 🔴 DOS GUARDAS contra que `main` DEGRADE el corredor. Son dos casos distintos,
+# medidos en dias distintos, y hacen falta las dos:
+#
+# GUARDA 1 — main NO puede apagar un loop que el cron sigue llamando.
+# Nace del 2026-09-02 20:32 UTC, medido por el loop supervisor. Este script copia
+# el corredor DESDE main, siempre, en una direccion sola. Ese dia main estaba CINCO
+# commits atras (los `case` de supervisor, web-factory-dev, recorrido-cliente,
+# tendencias y calidad-generado vivian solo en `claude/git-status-935f47`, sin
+# mergear) mientras los cinco ya tenian linea de cron, prompt en disco y worktree
+# vivo. La corrida de las :44 los habria borrado del corredor sin decir una palabra,
+# y cada uno habria muerto en el `*)` con exit 64.
+# El criterio NO es "main nunca puede sacar un case" — retirar un loop tiene que
+# seguir siendo posible. Es: **si el cron lo sigue llamando, sacarle el case lo mata**.
+# Un loop retirado de verdad se saca primero del crontab; entonces pasa sola.
+#
+# GUARDA 2 — main NO puede quitarle una CAPACIDAD al corredor desplegado.
+# Nace del 2026-09-03: el runner con la inyeccion de memoria compartida se
+# desplego a mano al VPS a las 11:5x y main todavia no lo tenia. La corrida de las
+# 12:44 lo habria pisado con la version vieja y los 15 loops habrian vuelto a
+# arrancar sin memoria, sin alerta. "Sincronizar desde main" es correcto cuando
+# main va ADELANTE; cuando va atras, es borrar trabajo. La marca se elige por
+# capacidad, no por fecha: si el desplegado sabe algo que el de main no, se espera.
+ids_case() { grep -oE '^  [a-z0-9-]+\)' "$1" 2>/dev/null | tr -d ' )' | sort -u; }
+
+PERDIDOS=""
+if [ -f "$DESTINO_BIN/onia-loop.sh" ] && [ -f "$FUENTE/onia-loop.sh" ]; then
+  while read -r id; do
+    [ -n "$id" ] || continue
+    if crontab -l 2>/dev/null | grep -qE "onia-loop\.sh +${id}([[:space:]]|\$)"; then
+      PERDIDOS="$PERDIDOS $id"
+    fi
+  done < <(comm -13 <(ids_case "$FUENTE/onia-loop.sh") <(ids_case "$DESTINO_BIN/onia-loop.sh"))
+fi
+
 MARCA_RUNNER="memoria inyectada"
+DEGRADA=0
 if grep -q "$MARCA_RUNNER" "$DESTINO_BIN/onia-loop.sh" 2>/dev/null \
    && ! grep -q "$MARCA_RUNNER" "$FUENTE/onia-loop.sh" 2>/dev/null; then
+  DEGRADA=1
+fi
+
+if [ -n "$PERDIDOS" ]; then
+  log "RECHAZADO: el corredor de main no conoce a$PERDIDOS, y el cron los sigue llamando — dejo el desplegado"
+  "$TG" "🔴 <b>Sync de loops frenado</b>: el corredor de <code>main</code> no conoce a <code>$(echo "$PERDIDOS" | sed 's/^ //; s/ /<\/code>, <code>/g')</code>, pero el cron los llama igual. Los habria matado con exit 64. Falta mergear su rama a main; mientras tanto dejo el corredor que anda." >/dev/null 2>&1 || true
+elif [ "$DEGRADA" = 1 ]; then
   log "RECHAZADO onia-loop.sh: main esta ATRAS del VPS (le falta '$MARCA_RUNNER') — se espera al integrador"
   if [ ! -f /var/lib/onia-sync-degradacion.avisado ] || [ $(( $(date +%s) - $(stat -c %Y /var/lib/onia-sync-degradacion.avisado) )) -gt 21600 ]; then
-    /root/bin/onia-tg.sh "⚠️ <b>Sync</b>: <code>main</code> tiene un corredor MAS VIEJO que el desplegado (sin memoria compartida). No lo pisé. Falta que el integrador mergee la rama que lo trae." >/dev/null 2>&1 || true
+    "$TG" "⚠️ <b>Sync</b>: <code>main</code> tiene un corredor MAS VIEJO que el desplegado (sin memoria compartida). No lo pisé. Falta que el integrador mergee la rama que lo trae." >/dev/null 2>&1 || true
     touch /var/lib/onia-sync-degradacion.avisado
   fi
 else
@@ -152,6 +189,6 @@ done
 
 if [ "$CAMBIOS" -gt 0 ]; then
   log "sincronizados $CAMBIOS archivo(s) desde main"
-  /root/bin/onia-tg.sh "🔄 <b>Loops</b>: $CAMBIOS archivo(s) desplegados desde <code>main</code> en el VPS" >/dev/null 2>&1 || true
+  "$TG" "🔄 <b>Loops</b>: $CAMBIOS archivo(s) desplegados desde <code>main</code> en el VPS" >/dev/null 2>&1 || true
 fi
 exit 0

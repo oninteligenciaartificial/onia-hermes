@@ -712,9 +712,51 @@ test("recepcionista: en handoff, el click EXACTO de un botón contesta la FAQ si
   assert.equal(click.state.botStage, "handoff_humano", "no sale del handoff: el humano sigue a cargo");
   assert.deepEqual(click.turns[0].sideEffects, [], "solo lectura: cero efectos nuevos");
 
-  const libre = run(["y entonces? me contestan?"], { config: CONFIG_FERRETERIA, state });
+  // El PRIMER texto libre tras el handoff ahora se acusa (ver el test de abajo); del SEGUNDO en
+  // adelante sí es silencio. Se encadenan los dos turnos para llegar a ese segundo.
+  const acuse = run(["y entonces? me contestan?"], { config: CONFIG_FERRETERIA, state });
+  const libre = run(["hola?"], { config: CONFIG_FERRETERIA, state: acuse.state });
   assert.equal(libre.turns[0].replies.length, 0, "texto libre en handoff: silencio, como siempre");
   assert.deepEqual(libre.turns[0].notes, ["silencio:handoff_en_curso"]);
+});
+
+test("handoff sin humano: el PRIMER mensaje que llega despues de derivar se ACUSA, no se tira al vacio", () => {
+  // POR QUE ESTE TEST. Medido en produccion el 2026-09-03 sobre la conversacion 49 (inbox 4, el
+  // del widget de la web): Chatwoot ENTREGO el mensaje 287 y el bot lo proceso 4,08 s — o sea
+  // que no estaba caido, corrio el turno entero y no produjo NADA. La correlacion es perfecta
+  // en las 8 corridas horarias de la sonda: cada vez que el bot contesto M5 ("eso lo tiene que
+  // ver Sergio"), el mensaje SIGUIENTE del prospecto se comio un silencio total.
+  //
+  // `handoff_humano` NO significa que un humano haya llegado: significa que el BOT decidio
+  // derivar. El candado legitimo es `humanTookOver`, que se enciende cuando un humano CONTESTA
+  // de verdad. Confundirlos deja a la persona escribiendole a la nada — y el test de arriba
+  // exigia justamente ese silencio, asi que el bug estaba blindado por su propia suite.
+  // Modo VENTA a proposito: es el de los inboxes 4 y 5, por donde entra todo desconocido, y el
+  // que se midio roto. El recepcionista tiene su propio modulo y su propia rama.
+  const { state: derivado } = run(["DEMO", "quiero que me atienda una persona de verdad"]);
+  const state = derivado.botStage === "handoff_humano" ? derivado : { ...derivado, botStage: "handoff_humano", handoffAckAt: null };
+  assert.equal(state.humanTookOver, false, "nadie contesto todavia: el handoff es una decision del bot");
+
+  const primero = run(["ahi te mando la direccion, es Equipetrol"], { state });
+  assert.equal(primero.turns[0].replies.length, 1, "el primer mensaje tras derivar NO puede quedar sin respuesta");
+  assert.equal(primero.state.botStage, "handoff_humano", "acusar recibo no saca la conversacion del handoff");
+  assert.deepEqual(primero.turns[0].sideEffects, [], "solo acuse: no se re-dispara el aviso ni la cola de revision");
+
+  // Y UNA sola vez: acusar cada mensaje convertiria el acuse en spam.
+  const segundo = run(["hola? sigue ahi?"], { state: primero.state });
+  assert.equal(segundo.turns[0].replies.length, 0, "del segundo en adelante sí es silencio");
+  assert.deepEqual(segundo.turns[0].notes, ["silencio:handoff_en_curso"]);
+});
+
+test("handoff CON humano a cargo: silencio desde el primer mensaje — el acuse no puede pisar a Sergio", () => {
+  // La otra mitad de la regla. Si un humano YA contesto, hablar encima es peor que callarse: el
+  // prospecto ve al bot interrumpiendo a la persona con la que ya esta hablando.
+  const { state: derivado } = run(["DEMO", "quiero que me atienda una persona de verdad"]);
+  const conHumano = { ...derivado, botStage: "handoff_humano", handoffAckAt: null, humanTookOver: true };
+
+  const turno = run(["gracias!"], { state: conHumano });
+  assert.equal(turno.turns[0].replies.length, 0, "con humano a cargo, ni siquiera el acuse");
+  assert.deepEqual(turno.turns[0].notes, ["silencio:humano_a_cargo"]);
 });
 
 test("venta: el funnel de Onia NO lleva botones — M0 sale plano como siempre", () => {

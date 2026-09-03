@@ -71,13 +71,28 @@ Los pasos, en este orden:
 7. **Llegar hasta la pantalla de cobro y MIRARLA. Frenar ahí.**
 8. **Abrir la bandeja / el panel** y ver si el dato del paso 6 aparece.
 
-⚠️ **Trampa conocida, y es la más importante:** el alta de cuentas está **cerrada**. `/register` dejó
-de crear cuentas y `/empezar` es un formulario de «Pedí tu acceso». **Si el recorrido termina en el
-paso 3 porque no hay alta automática, eso NO es un fallo tuyo: es el estado real del producto y así se
-reporta.** No inventes un alta por la base para «poder seguir». Lo que hay que medir en ese caso es
-**si la home promete algo distinto de lo que el formulario entrega** — botones que digan «Probá 14
-días gratis · te registrás y usás el sistema» apuntando a una solicitud son la fricción más cara del
-sitio, y ese es un hallazgo de primera.
+⚠️ **El alta está ABIERTA — medido en vivo el 2026-09-03.** `app.onia.com.bo/register` crea la
+cuenta solo: asistente de dos pasos (1 elegís rubro, 5 tarjetas → 2 nombre, correo, contraseña,
+nombre del negocio) y botón «Crear mi cuenta — 14 días gratis». `/empezar` no tiene ni un `<form>`:
+es una landing cuyos CTA dicen «Creá tu cuenta» y saltan a `/register`. **El recorrido NO termina en
+el paso 3: seguí hasta el final.**
+
+> **Acá decía lo contrario, y frenó este loop en su primera corrida.** Decía que el alta estaba
+> «cerrada» y que `/empezar` era un formulario de «Pedí tu acceso» — cierto el 23-ago, falso desde
+> el **29-ago**, cuando el alta se reabrió. Cinco días leyéndose como presente. Una trampa que ya
+> venció es peor que ninguna: manda a frenar un recorrido que podía seguir.
+
+**Verificá el estado del alta ANTES de asumir cualquiera de los dos, siempre:**
+
+```
+docker exec onia-platform env | grep ALTA     # abierta | cerrada — la fuente que decide
+```
+
+Si dijera `cerrada`, `/register` vuelve a ser un pedido de acceso de seis campos sin contraseña, y
+**ahí sí** frenar en el paso 3 es el estado real del producto y así se reporta — nunca inventes un
+alta por la base para «poder seguir». En ese caso lo que hay que medir es **si la home promete algo
+distinto de lo que el formulario entrega**: botones que digan «Creá tu cuenta» apuntando a una
+solicitud (o al revés) son la fricción más cara del sitio, y ese es un hallazgo de primera.
 
 ## 🔴 EL TABLERO VA PRIMERO — antes que tu cola
 
@@ -421,7 +436,6 @@ Si de estos frentes cerrás unos y otros no, **no marques `[x]`**: dejá el íte
 que falta escrito. Un `[x]` falso cuesta más caro que un ítem abierto, porque nadie vuelve a
 mirarlo.
 
-
 ## 🧠 MEMORIA COMPARTIDA — la leés al arrancar, le escribís al cerrar
 
 > **Nace del 2026-09-03.** Sergio: *"que los loops usen la memoria de hermes también, pero
@@ -436,15 +450,23 @@ que sabe de Sergio (`USER.md`). El corredor la pega antes de tu carril, en cada 
 
 ### Al cerrar la vuelta: si aprendiste algo que le sirve a OTRO carril, dejalo
 
-    /root/bin/onia-aprender.sh "<un hecho, 1-3 frases, con el qué y el POR QUÉ importa>"
+**Lo normal es NO anotar nada.** Una vuelta común no aprende nada que quince carriles necesiten
+saber. Si anotás una cosa por vuelta, a 140 vueltas por día la memoria se llena en 17 horas y
+deja de servir. Anotá **sólo** cuando el hecho cumpla las tres: le sirve a otro carril, no está
+ya arriba, y lo mediste (no lo supusiste).
+
+    /root/bin/onia-aprender.sh "<un hecho, 1-3 frases, con el qué, el POR QUÉ importa, y DÓNDE se ve>"
 
 Qué va: una trampa del sistema que costó una vuelta, un dato de un doc que resultó falso, una
 preferencia o corrección de Sergio (textual, con fecha), un comando que NO es como parece, un
-límite real de una herramienta.
+límite real de una herramienta. **Siempre con la ruta, el comando o la fecha** que lo hace
+verificable: *"el bot muere en el segundo turno"* no alcanza; *"el bot muere en el segundo
+turno — medido 4 de 16 mensajes el 2026-09-02, ver bot-engine.mjs:338"* sí.
 
 Qué NO va: tu log, lo que ya está en la memoria que leíste arriba, opiniones ("creo que el bot
-anda mal" no; "el bot muere en el segundo turno, medido 4 de 16 mensajes" sí), y nada que sea
-solo de tu carril y a nadie más le sirva.
+anda mal"), nada que sea solo de tu carril, y **nada sobre tu propio corredor o tu propio
+prompt** — eso va al radar, no a la memoria. Y **al cerrar**, no a mitad de vuelta: un hecho a
+medio medir es una opinión con fecha.
 
 **Un hecho por llamada.** El script rechaza menos de 40 caracteres (una frase suelta no es un
 hecho) y más de 1.200 (eso es un log). Cada entrada queda firmada con tu carril y la fecha:

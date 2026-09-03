@@ -13,13 +13,24 @@ naranja de seguridad sobre gris cal).
 
 ## Correr
 
+Esta app es un paquete del **workspace pnpm** de `web-factory` (`pnpm-workspace.yaml`:
+`apps/*`). Se instala **una sola vez desde la raíz del workspace**, nunca desde acá:
+
 ```bash
-cd web-factory/apps/ferreteria-sur
-npm install
-npm run dev        # http://localhost:3000
-npm run typecheck  # tsc --noEmit
-npm run build && npm start
+cd web-factory
+pnpm install --frozen-lockfile
+
+pnpm --filter ferreteria-sur dev        # http://localhost:3000
+pnpm --filter ferreteria-sur typecheck  # tsc --noEmit
+pnpm --filter ferreteria-sur build && pnpm --filter ferreteria-sur start
 ```
+
+⚠️ **Nunca `npm install` acá.** Genera un `package-lock.json` que no lee nadie y deja las
+dependencias de esta app fuera de `web-factory/pnpm-lock.yaml`. Eso ya costó **nueve días
+sin publicar onia.com.bo**: el deploy muere en `pnpm install --frozen-lockfile` con
+`ERR_PNPM_OUTDATED_LOCKFILE` — y el sitio que se cae es el de venta, no éste. Si agregás una
+dependencia: `pnpm --filter ferreteria-sur add <paquete>`, y commiteá el `pnpm-lock.yaml` de
+la raíz junto al `package.json`.
 
 ## Variables de entorno
 

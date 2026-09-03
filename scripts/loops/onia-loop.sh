@@ -307,6 +307,10 @@ log "===== ARRANCA $NOMBRE — rama $RAMA — HEAD $ANTES — tope ${TOPE}s ====
 # arriba compara contra main.
 MEMORIA_DIR=/root/.hermes/memories
 PROMPT_FINAL=$(mktemp /tmp/onia-prompt-$NOMBRE-XXXXXX.md)
+# El temporal se borra tambien si el corredor mismo muere (reboot, OOM, kill -9):
+# el `rm -f` de abajo solo corre si el script llega vivo hasta ahi. /tmp aca es
+# disco, no tmpfs — un sobrante sobrevive reinicios.
+trap 'rm -f "$PROMPT_FINAL"' EXIT
 {
   if [ -s "$MEMORIA_DIR/MEMORY.md" ] || [ -s "$MEMORIA_DIR/USER.md" ]; then
     echo "# MEMORIA COMPARTIDA DEL SISTEMA — es contexto, no es tu cola"
@@ -328,7 +332,11 @@ PROMPT_FINAL=$(mktemp /tmp/onia-prompt-$NOMBRE-XXXXXX.md)
   fi
   cat "$PROMPT"
 } > "$PROMPT_FINAL"
-log "memoria inyectada: $(wc -c < "$PROMPT_FINAL") bytes de prompt ($(grep -c '^§$' "$MEMORIA_DIR/MEMORY.md" 2>/dev/null || echo 0) hechos de MEMORY.md)"
+# `grep -c` imprime "0" Y sale con 1 en un archivo vacio: con `|| echo 0` salian DOS
+# ceros en lineas distintas, y la segunda —sin timestamp— pasaba el filtro del
+# reporte a Telegram como si fuera "el informe" de la vuelta.
+HECHOS=$(grep -c '^§$' "$MEMORIA_DIR/MEMORY.md" 2>/dev/null || true)
+log "memoria inyectada: $(wc -c < "$PROMPT_FINAL") bytes de prompt (${HECHOS:-0} hechos de MEMORY.md)"
 
 timeout "$TOPE" claude -p --model "$MODELO" --effort "$ESFUERZO" --max-turns "$TURNOS" \
   --allowedTools "$TOOLS" < "$PROMPT_FINAL" >> "$LOG" 2>&1

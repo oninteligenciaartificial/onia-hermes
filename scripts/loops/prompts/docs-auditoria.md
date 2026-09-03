@@ -177,6 +177,32 @@ rama.**
 `git -C /root/loops/onia-hermes-docs branch --show-current` **primero**. Si no es esa, PARÁ y
 avisá por `onia-tg.sh`.
 
+### 🔴 Y SINCRONIZÁ CON `main` ANTES DE MEDIR NADA
+
+```
+git -C /root/loops/onia-hermes-docs fetch origin --quiet
+git -C /root/loops/onia-hermes-docs merge --ff-only origin/main
+```
+
+**El corredor no lo hace por vos** y tu árbol se queda atrás para siempre: el 2026-09-03 estaba
+**113 commits** atrás de `main` (los otros carriles, hasta 788 — la tabla está en
+`hermes-content/docs/cola/loops.md`, sección *"El cron está sano y el loop igual trabaja sobre un
+repo viejo"*).
+
+**Auditar un árbol viejo no es un detalle, es el generador de hallazgos falsos de este carril.**
+Ese día la tarea `t_77b6c270` pedía corregir la fila de `contenido-cola` en `loops.md`: en el
+checkout viejo decía `Windows` y `npm run loops:registrados` salía **rojo**, pero el integrador ya
+la había arreglado en `main` dos horas antes y contra `origin/main` estaba **verde**. Sin este
+paso el carril "corrige" algo ya corregido sobre una base vieja y **el merge revierte el arreglo
+ajeno**.
+
+Es el mismo error que la regla de *"medí con el instrumento correcto"*: **el sistema estaba bien
+y el instrumento era mi propio checkout.** Si una medición tuya sale roja, verificala contra
+`origin/main` antes de escribir una sola línea.
+
+`--ff-only` a propósito: si tenés trabajo propio sin mergear **falla y no toca nada**, en vez de
+inventar un merge. Si falla, no lo fuerces — avisá y seguí con el árbol tal cual.
+
 ## La vuelta: elegí UN foco de los tres, y rotá
 
 Una vuelta = **un** foco. No los tres. Rotá según el que menos se haya mirado (mirá tus últimos
@@ -345,7 +371,6 @@ Si de estos frentes cerrás unos y otros no, **no marques `[x]`**: dejá el íte
 que falta escrito. Un `[x]` falso cuesta más caro que un ítem abierto, porque nadie vuelve a
 mirarlo.
 
-
 ## 🧠 MEMORIA COMPARTIDA — la leés al arrancar, le escribís al cerrar
 
 > **Nace del 2026-09-03.** Sergio: *"que los loops usen la memoria de hermes también, pero
@@ -360,15 +385,23 @@ que sabe de Sergio (`USER.md`). El corredor la pega antes de tu carril, en cada 
 
 ### Al cerrar la vuelta: si aprendiste algo que le sirve a OTRO carril, dejalo
 
-    /root/bin/onia-aprender.sh "<un hecho, 1-3 frases, con el qué y el POR QUÉ importa>"
+**Lo normal es NO anotar nada.** Una vuelta común no aprende nada que quince carriles necesiten
+saber. Si anotás una cosa por vuelta, a 140 vueltas por día la memoria se llena en 17 horas y
+deja de servir. Anotá **sólo** cuando el hecho cumpla las tres: le sirve a otro carril, no está
+ya arriba, y lo mediste (no lo supusiste).
+
+    /root/bin/onia-aprender.sh "<un hecho, 1-3 frases, con el qué, el POR QUÉ importa, y DÓNDE se ve>"
 
 Qué va: una trampa del sistema que costó una vuelta, un dato de un doc que resultó falso, una
 preferencia o corrección de Sergio (textual, con fecha), un comando que NO es como parece, un
-límite real de una herramienta.
+límite real de una herramienta. **Siempre con la ruta, el comando o la fecha** que lo hace
+verificable: *"el bot muere en el segundo turno"* no alcanza; *"el bot muere en el segundo
+turno — medido 4 de 16 mensajes el 2026-09-02, ver bot-engine.mjs:338"* sí.
 
 Qué NO va: tu log, lo que ya está en la memoria que leíste arriba, opiniones ("creo que el bot
-anda mal" no; "el bot muere en el segundo turno, medido 4 de 16 mensajes" sí), y nada que sea
-solo de tu carril y a nadie más le sirva.
+anda mal"), nada que sea solo de tu carril, y **nada sobre tu propio corredor o tu propio
+prompt** — eso va al radar, no a la memoria. Y **al cerrar**, no a mitad de vuelta: un hecho a
+medio medir es una opinión con fecha.
 
 **Un hecho por llamada.** El script rechaza menos de 40 caracteres (una frase suelta no es un
 hecho) y más de 1.200 (eso es un log). Cada entrada queda firmada con tu carril y la fecha:

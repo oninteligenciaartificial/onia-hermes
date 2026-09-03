@@ -467,6 +467,78 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       worktrees de carril, y `claude/canario-visual` está 91 commits atrás. El canario tiene que
       traer `main` a su rama antes de que sus fotos salgan limpias.
 
+### Medido el 2026-09-03 — el recorrido entero de las dos pantallas, no sólo el pie
+
+- [x] 🟡 **FANTASMA — REFUTADO Y CERRADO el 2026-09-03. El header a 1440 nunca apareció ni
+      desapareció: mentía la captura, no la barra.** La causa es
+      `src/app/globals.css:194` → `scroll-behavior: smooth`. Con eso, `window.scrollTo(0, 12480)`
+      **anima**, y una captura tras un timeout fijo fotografía la página **en tránsito**.
+      **Medido en vivo** (build de esta rama en `:3987`, 1440×900, `scrollY` muestreado): a los
+      500 ms el scroll estaba en **7847**, al segundo en **11811**, y recién a los 1500 ms llegó
+      a **12480**. Las dos tomas del experimento anterior salieron distintas por eso — no por el
+      `backdrop-filter` ni por el rasterizador.
+      **Con el scroll ASENTADO el header está sano.** Esperando por condición
+      (`waitForFunction`: `scrollY` deja de moverse Y está a <3px del objetivo) en vez de por
+      reloj, seis muestras consecutivas dan `top: 0`, `bottom: 61`, `opacity: 1`,
+      `visibility: visible`, `transform: none`. **No se mueve.** Captura mirada:
+      `/tmp/venta-header-1440.png` — logo, los 5 links del nav, "Entrar" y el botón verde
+      completos, y el texto que pasa por debajo sale **difuminado**: el `blur(10px)` sí se
+      compone en la captura, que era justo la sospecha que no se podía descartar.
+      **Y responde la pista que quedaba abierta — cuál de los dos `sticky` es la barra:** es
+      `.header` de `src/app/(sitio)/sitio.module.css:1473` (`z-index: 20`, `blur(10px)`,
+      `color-mix(… 88%)`), **no** `site-header.module.css` (`blur(12px)`, `82%`). La pila de
+      `elementsFromPoint(720, 35)` devuelve `A.sitio_navLink → NAV → DIV.headerInner → HEADER`:
+      lo que hay arriba en ese punto es el **propio nav del header**, no texto de la página.
+      **El gate del carril NO sufre esta mentira** — verificado, no supuesto:
+      `scripts/mirar-venta.mjs:141-166` ya documenta `scroll-behavior: smooth`, fuerza
+      `behavior: 'instant'` y repite hasta que `scrollY` deja de moverse. Nada que arreglar ahí.
+      **Regla que deja:** contra este sitio, una captura que espera por **reloj** puede mentir;
+      hay que esperar por **condición**. Es la misma familia del rasterizador que costó 3 días.
+
+      ⚠️ **Anotado al pasar, NO investigado (no abrir frente en esta vuelta):** conviven dos
+      hojas de header — `sitio.module.css` (la que pinta) y `components/site-header.module.css`.
+      Vale mirar si la segunda es código muerto, pero es otro ítem.
+
+<details><summary>Lo que se creía (2026-09-02) — historia, ya refutado</summary>
+
+      Se anotaba porque era reproducible y barato, no porque estuviera probado — el experimento
+      que lo iba a decidir salió **confundido**, y eso era la mitad del valor de este ítem.
+      **Qué se vio:** recorriendo `/` a 1440 viewport por viewport (scroll real, no `fullPage`),
+      la vista 16 de 18 (`window.scrollTo(0, 12480)`, zona de PREGUNTAS FRECUENTES) muestra la
+      pregunta "¿Los datos del Excel o del cuaderno los cargo yo?" y su `+` **por encima de la
+      barra**, chocando con los links del nav.
+      **Por qué no se anuncia como roto:** el header es translúcido a propósito
+      (`src/components/site-header.module.css:18` — `color-mix(in srgb, var(--bg) 82%,
+      transparent)` + `backdrop-filter: blur(12px)`), así que algo se ve debajo **por diseño**.
+      La sospecha era que el `backdrop-filter` no se compone en la captura y por eso el texto
+      sale nítido en vez de difuminado — el mismo tipo de mentira del rasterizador que ya costó
+      tres días con `"Ent regamos t u sist ema"`.
+      **El experimento y por qué NO concluye:** dos tomas del mismo recorte (1440×70, offset
+      12480), la segunda con `backdrop-filter: none !important` inyectado. Salieron distintas
+      (md5 `e61bf628…` vs `fd6d8459…`) — pero **no por el blur**: en la primera el header **no
+      está** (banda vacía) y en la segunda entra corrido ~16px hacia abajo. O sea que la barra
+      se movió sola entre las dos tomas, así que la comparación no aísla nada. Y la explicación
+      fácil está descartada: `grep -n "translate\|scroll\|hidden" src/components/site-header.tsx
+      src/components/site-header.module.css` devuelve **cero líneas** — no hay ocultar-al-bajar
+      en ese componente.
+      **La pista para la próxima vuelta, que es donde hay que empezar:** hay un SEGUNDO
+      `position: sticky` con `backdrop-filter: blur(10px)` en `src/app/(sitio)/sitio.module.css:1473`.
+      Antes de mirar el blur hay que saber **cuál de los dos elementos** es la barra que sale en
+      la captura, y si el de la landing deja de pegarse porque su contenedor termina.
+      **Repro en 30 segundos** (con el build de la rama servido en `:3987`): abrir a 1440,
+      `window.scrollTo(0, 12480)`, esperar 500 ms y capturar; repetir esperando 2 s. Si las dos
+      tomas difieren con el scroll quieto, el problema es la barra, no el rasterizador.
+      **Lo que sí quedó probado hoy, y por eso el resto de la pantalla no es sospechoso:** el
+      recorrido completo de `/` (19 vistas a 390, 18 a 1440) y de `/empezar` (5 y 4) contra el
+      build de esta rama no muestra ningún otro defecto — ni texto cortado, ni desborde, ni
+      solapamiento. Y los precios de la home salen de la fuente que cobra: `PLANES` de
+      `src/lib/pricing.ts` (320 · 750 · 1.500) coincide con `DEFAULT_PLAN_AMOUNTS` de
+      `/root/loops/onia-platform/lib/subscription-plans.ts` leído hoy en vivo, no con la nota
+      heredada del encabezado de ese archivo (que cita un tip de `master` de agosto y una ruta
+      `C:\` que en el VPS no existe).
+
+</details>
+
 ### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
 
 - [x] 🟠 **Decir "`main` compila" no dice NADA sobre `onia.com.bo`: ningún gate corre `tsc`
@@ -732,6 +804,22 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       fallar no prueba nada.
       **Verificado sobre el HTML servido del build nuevo** (no el DOM, no `main`): las **16**
       rutas del sitemap devuelven `og:image` `200 image/png` de 40.888 B. Antes: 12.
+
+      ✅ **Re-auditado el 2026-09-03 por `web-venta` — el `[x]` AGUANTA, y queda escrita la pista
+      falsa para que la próxima no la persiga.** Barrido sobre el HTML servido de las **25** rutas
+      públicas del build (no las 16 del sitemap: se enumeraron desde `find src/app -name page.tsx`,
+      a propósito más ancho que el guard). Las 14 rutas de venta traen `og:image` **y**
+      `twitter:card: summary_large_image`.
+      ⚠️ **Aparecen 7 rutas SIN `og:image` — `/patrones` y las seis `/v1/*` — y NO son un defecto.**
+      `robots.txt` las declara `Disallow: /patrones` y `Disallow: /v1`, y ninguna está en el
+      sitemap: son superficies internas, no linkeadas desde el sitio. Es exactamente el mismo
+      patrón que causó el bug real de ayer (`opengraph-image` no baja a segmentos anidados: `/v1`
+      la tiene, sus hijas no), y por eso engaña — pero acá el guard tiene razón en ignorarlas,
+      porque su lista sale del sitemap. **Agregarles tarjeta sería trabajo inventado.**
+      Se verificó además que ninguna de las 14 rutas de venta exhibe obra: cero "muy pronto",
+      "próximamente", "en construcción" ni "beta". El "14 días gratis" de `/` y `/precios` es
+      **cierto**, no una promesa vieja: `TRIAL_DAYS = 14` en
+      `onia-platform/lib/subscription/plan-state.ts`, leído en vivo.
       **Evidencia mirada, no supuesta:**
       `hermes-content/docs/historial/canario-visual/2026-09-02-tarjeta-social-rutas-fuera-de-sitio.png`
       — la tarjeta de `/servicios/consultoria`, 1200×630, dibujada, cero captura, cero obra.
@@ -746,10 +834,347 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Lo que falta, y no es zona de este carril:** el deploy. Contra `onia-landing`, las cuatro
       siguen sin imagen hoy. Publicar lo decide Sergio.
 
+### Encontrado el 2026-09-02 auditando el `[x]` de las capturas literales — ARREGLADO en la misma vuelta
+
+- [x] **El guard de "cero capturas del sistema" miraba SÓLO `(sitio)`: era ciego a 4 de las 16
+      rutas publicadas y a TODO lo compartido (cabecera, pie, las secciones).** Es la
+      **tercera** vez que este mismo guard falla, y las dos anteriores ya estaban escritas en su
+      propio comentario. Peor: el agujero es el MISMO que el bloque de tarjetas sociales de ese
+      archivo se había tapado horas antes leyendo el sitemap (`8ec1c9e3`) — los dos guards viven
+      en `web-factory/apps/onia-platform/src/app/(sitio)/forma.test.ts`, uno arreglado y el otro
+      no.
+      **Cómo apareció:** auditando el `[x]` de las 6 capturas literales. Ese ítem se verificó
+      mirando `/` y `/empezar`, y las dos estaban bien; lo que nadie preguntó es **qué mira el
+      test que lo sostiene**. `fuentesDelSitio()` arrancaba el walk en el directorio `(sitio)`,
+      así que `/servicios/marketing-ia`, `/servicios/consultoria`, `/terminos` y `/privacidad`
+      —que viven fuera de ese grupo de rutas— quedaban fuera, junto con
+      `web-factory/apps/onia-platform/src/components/site-header.tsx`, su pie, sus secciones y su
+      carpeta legal. Una captura en la cabecera sale en las **dieciséis** páginas a la vez y el
+      guard pasaba verde.
+      **Gate 1, medido antes de tocar nada — el agujero es real pero HOY no tiene víctima:** las
+      4 rutas de afuera sirven sólo `/brand/v2/onia-logo.svg`; el único `/og/onia-rubros.jpg` que
+      queda en `web-factory/apps/onia-platform/src/app/layout.tsx` (línea 64) está **dentro de un
+      comentario** (el guard ya los strippea); y la carpeta `landing-v1` es el archivo `/v1`,
+      noindex, con su captura a propósito. Se arregla el guard, no una pantalla: no se desmarca
+      nada.
+      **Lo que se hizo:** el walk arranca ahora en la raíz de la app (rutas + todo lo compartido) y lo único
+      excluido es el archivo `/v1`, por nombre y con su motivo escrito. Se da vuelta la misma
+      regla que ya se había dado vuelta para las carpetas de imagen: en vez de enumerar dónde SÍ
+      mirar, se mira todo y se enumera lo excluido. Una carpeta de rutas nueva queda cubierta el
+      día que se crea.
+      **Probado que MUERDE, dos veces, no que sólo pasa:**
+      - Se inyectó `"/capturas/panel-onia.png"` en la cabecera compartida —archivo al que
+        el guard viejo **no llegaba**— y la suite falló en esa línea exacta
+        (`× components…site-header.tsx no sirve una captura del producto`). Restaurado, verde.
+      - Se volvió a apuntar el walk a `(sitio)` y saltó el anti-regresión nuevo
+        (`× mira la superficie viva entera, no sólo (sitio)` → *"el walk no llega a la página de
+        términos"*), cayendo a **51** tests: exactamente el número viejo. Sin ese
+        test, angostar el walk otra vez —que suena razonable, es "la carpeta del sitio"— deja la
+        suite en verde con media superficie sin mirar.
+      **Verificado MIRANDO, no sólo con el test**, contra el contenedor `onia-landing` (no `main`,
+      no Vercel), con `channel: 'chromium'` y no `headless_shell`: `/servicios/consultoria` y
+      `/terminos` en 1440×900 — cero `<img>`, `<video>` o `<canvas>` fuera del logo SVG, cero
+      desborde horizontal, **cero errores de consola**, texto bien dibujado y sin una palabra de
+      obra.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-fuera-de-sitio-servicios-consultoria.png`
+      y `hermes-content/docs/historial/canario-visual/2026-09-02-fuera-de-sitio-terminos.png`.
+      **Gates:** `tsc --noEmit` 0 · `vitest run forma.test.ts` **99 pasando** (eran 51: el walk
+      pasó de 33 archivos a 81) · `npm run build` exit 0, 32/32 páginas.
+
+### Encontrado el 2026-09-02 MIRANDO la home en TELÉFONO — ARREGLADO en la misma vuelta
+
+- [x] **La home abría con una franja de 148px EN BLANCO en el primer scroll del iPhone más
+      común, y ninguna revisión lo vio nunca porque todas se hicieron a 1440×900.** Es la
+      pantalla #1 del carril y el dispositivo real del lead: el link llega por WhatsApp y se
+      abre en el teléfono.
+      **Cómo apareció:** ni "Ahora" ni "Después" tenían ítem abierto de esta zona, así que se
+      bajó al escalón 2 (auditar los `[x]`). El `[x]` de las tarjetas sociales auditó limpio —
+      las 16 rutas sirven `og:image` **y** `twitter:image` con `summary_large_image`, medido
+      sobre el HTML del build. Lo que ninguna de las auditorías previas había hecho es abrir las
+      dos pantallas en un viewport de teléfono.
+      **El defecto, medido en tamaños reales de dispositivo** (Playwright, `channel: 'chromium'`):
+
+      | dispositivo | franja en blanco |
+      |---|---|
+      | iPhone 12/13/14/15/16 (390×844) | **148px** |
+      | Galaxy S20/S23 (360×800) | **53px** |
+      | iPhone SE (375×667) | 0 — el panel ni asoma |
+      | iPhone Pro (393×852) y todo lo más alto | 0 — entraba justo al 35% |
+
+      **La causa, y por qué se escapó tres veces:** `src/motion/tokens.ts` definía
+      `viewportOnce = { once: true, amount: 0.3 }`. El `amount` de `whileInView` se mide sobre el
+      **alto del elemento**, no sobre lo que se ve. El panel del día (`s.day`) mide 512px en
+      teléfono y asoma 148px = **29%**, contra un umbral de 30%: se quedaba en `opacity: 0`
+      hasta que el visitante scrolleara. A 393×852 asoma 180px = 35% y dispara — por eso el
+      defecto es invisible en cualquier pantalla grande, incluida la de quien revisa.
+      **Y ya había mordido antes, con la causa a la vista.** `(sitio)/servicios/webs/page.tsx:180`
+      tiene el diagnóstico escrito desde hace tiempo —"un Reveal más alto que ~3,3 pantallas
+      nunca llega al 30% visible y se queda en opacity 0 para siempre"— y se arregló **achicando
+      ese Reveal**. La causa quedó viva en el token, y de ahí llegó a la home. Es el mismo patrón
+      que esta cola ya anotó para los guards: arreglar la instancia donde saltó y no la clase.
+      **Lo que se hizo:** el token pasa a `amount: "some"` (cualquier píxel dentro). La
+      invariante queda enunciable y no depende del alto de nada: **nada que toque la pantalla
+      puede quedar invisible**. Con una fracción no se cumple para bloques altos; con `"some"`
+      se cumple por definición. El estado final de cada página es idéntico —sólo cambia CUÁNDO
+      dispara la entrada—, así que no es un cambio de dirección visual.
+      **Probado que los guards MUERDEN, no que sólo pasan** (`src/motion/tokens.test.ts`, nuevo):
+      - Se devolvió el token a `amount: 0.3` → `× no usa una fraccion como umbral`.
+      - Se escribió `viewport={{ once: true, amount: 0.45 }}` a mano en `src/motion/reveal.tsx` → el guard
+        lo cazó por archivo y línea. Restaurado, verde.
+      - El guard mira **sólo** el `viewport={{…}}` de `whileInView`, que es la clase que
+        esconde. `useInView` (`CountUp`, `AgentScene`) queda afuera **a propósito y medido**:
+        renderizan su contenido igual —`CountUp` sirve el valor final desde el server— y un
+        umbral ahí sólo demora una animación de pasos. La primera versión del guard los marcaba
+        y era un falso positivo.
+      **Verificado MIRANDO, y en las 16 rutas, no sólo donde arreglé:** barrido de
+      `16 rutas × 3 tamaños = 48 pantallas` preguntando por cualquier elemento con `opacity: 0`
+      que toque el viewport inicial → **cero**. Antes del cambio, ese mismo barrido marcaba la
+      home a 390×844 y a 360×800.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-home-telefono-franja-en-blanco-ANTES.png`
+      (la franja vacía) y `…/2026-09-02-home-telefono-panel-visible.png` (el panel del día ya
+      visible en la primera pantalla).
+
+- [x] **De paso, el gate del carril: los 115 tests de guarda NO los corría nadie.** Las suites
+      que estas vueltas fueron construyendo —`(sitio)/forma.test.ts` (cero capturas del sistema, las 16
+      tarjetas sociales), `(sitio)/alta.test.ts`, `(sitio)/hero.test.ts`— vivían en el repo **sin un script que
+      las invocara**: `package.json` no tenía `test`, y `prebuild` era sólo `tsc --noEmit`. Se
+      corrían a mano con `npx vitest run`. Una regresión de captura literal pasaba el build y
+      llegaba al deploy.
+      **Lo que se hizo:** `"test": "vitest run"` y `"prebuild": "tsc --noEmit && vitest run"`.
+      Es el mismo hook que el deploy real ya ejecuta (`scripts/deploy-onia-landing.sh:25`,
+      `pnpm --filter onia-platform build`), y el install de ese script es
+      `pnpm install --frozen-lockfile` —no `--prod`—, así que `vitest` está disponible igual que
+      `tsc`, que ya corría ahí.
+      **Probado que MUERDE:** con el token roto a propósito, `npm run build` sale **exit 1** y
+      corta **antes** de `next build`. Restaurado, `npm run build` exit 0.
+      **Gates de esta vuelta:** `tsc --noEmit` 0 · `vitest run` **115 pasando** (eran 112: 3 del
+      guard nuevo) · `npm run build` exit 0, 48/48 páginas.
+      **Lo que sigue abierto y es de otro dueño:** las otras apps de `web-factory`
+      (`dental-premium`, `dentalgest-landing`, `ferreteria-sur`, y `site` que ni script tiene) y
+      el cableado en el script raíz — tocar los 4 archivos raíz de `web-factory` no es zona de
+      este loop.
+
+### Encontrado el 2026-09-02 MIRANDO el PIE en teléfono — ARREGLADO en la misma vuelta
+
+- [x] **Las dos pantallas del carril cerraban con una franja de 73px del fondo CLARO debajo del
+      pie NEGRO, en teléfono.** No era del pie ni de una página: era del `body`, así que salía
+      en **todas** las páginas del sitio en móvil. Lo último que ve un lead que leyó la página
+      entera era un corte de maquetación.
+      **Cómo apareció:** ni el tablero ni "Ahora" daban ítem de esta zona (las 3 tareas del
+      tablero son del carril chatbot; el único ítem de zona, el del gate `tsc`, ya tiene cerrado
+      su residuo y lo que queda es de otros dueños). Así que se corrió la definición de hecho del
+      carril: abrir las dos pantallas y MIRARLAS. Salieron 4 capturas (390×844 y 1280×900,
+      `channel: 'chromium'` — el motor correcto, no el `headless_shell` que inventa defectos de
+      texto): HTTP 200, cero errores de consola, cero desborde horizontal, y la franja al pie.
+      **La causa, medida y no supuesta:** `src/app/globals.css` tenía
+      `@media (max-width: 899px) { body { padding-bottom: calc(4.6rem + env(safe-area-inset-bottom)) } }`,
+      con el comentario *"la barra de accion fija del movil no debe tapar el final de la pagina"*.
+      **Esa barra ya no existe.** Medido en vivo con la página scrolleada al fondo: el único
+      elemento `fixed`/`sticky` del sitio es el `header` (arriba, 61px), y `grep` de
+      `position: fixed` sobre `globals.css` + `(sitio)/sitio.module.css` + todos los `.tsx` devuelve
+      **cero**. El hueco quedó huérfano y pintaba del fondo del body, que es claro.
+      El padding entró con `1ddba7ad` (`git log -S "4.6rem"`); la barra se fue después y el
+      hueco se quedó.
+      **Un falso positivo descartado en el camino, y cómo:** la misma corrida mostró una columna
+      de cuadraditos pegada al borde izquierdo que parecía un grid roto (el navegador reportaba
+      `grid-template-columns: 24px 316px` donde el fuente dice `repeat(24, 1fr)`). **No es un
+      defecto:** `sitio.module.css:1126` rota el panel del día 90° en teléfono a propósito
+      (`grid-template-rows: repeat(24, ...)` + `grid-auto-flow: column`), y los 9/15 ticks
+      alinean con sus dos bloques. Leer el CSS antes de "arreglarlo" evitó romper un diseño sano.
+      **Lo que se hizo:** el bloque huérfano del `body` sale, y el área segura del teléfono la
+      absorbe ahora el propio pie (`.footer { padding-bottom: calc(2.4em + env(safe-area-inset-bottom)) }`).
+      Es el arreglo correcto y no sólo el que borra: puesto en el `body`, el margen del notch
+      pintaba igual del fondo claro; puesto en el pie, sale del negro del pie.
+      **Verificado MIRÁNDOLO, no con un grep:** build local servido en `:3199`, scroll hasta el
+      fondo real (`scrollY == maxScroll`) y captura de las dos pantallas — el pie negro llega al
+      borde inferior. Medición: `sobra = scrollHeight - footer.bottom` pasa de **73px (home) y
+      74px (/empezar)** a **0 y 0**; `body.padding-bottom` de `73.6px` a `0px`.
+      **Gates:** `npm run typecheck` exit 0 · `npm run build` exit 0.
+      **No se desplegó:** `onia.com.bo` la sirve el contenedor `onia-landing` y publicar es de
+      Sergio — la franja sigue viva en producción hasta ese deploy.
+
+      🔁 **Re-verificado el 2026-09-03 — el bloqueo NO está vencido, y ahora está probado por
+      las dos puntas.** No se re-mide un bloqueo por rutina; se re-midió porque un bloqueo
+      vencido le pide a Sergio una decisión que ya tomó, y eso es peor que un fantasma.
+      - **Producción, hoy:** `node scripts/mirar-venta.mjs` → **6 fallas** (`home` y `/empezar`
+        en 320, 390 y 768; las anchas pasan). Capturas en `/tmp/venta-0903/`.
+      - **El mismo build de esta rama, hoy:** servido en `:3987` → **0 fallas**, exit 0.
+      - **La causa, medida por DOM en producción y no supuesta:** `body` sigue con
+        `padding-bottom: 73.6px` y `background: rgb(249,251,250)`; el hueco entre
+        `footer.bottom` y `scrollHeight` es **73.42px** (home) y **73.53px** (`/empezar`) —
+        exactamente ese padding. `sospechosos: []`: **no hay ningún elemento debajo del pie**,
+        es el `<body>` pintando su propio fondo.
+      - **El arreglo está en `origin/main`** desde `f02486011` (verificado con
+        `git log origin/main -- …/globals.css`).
+
+      **O sea: el código está bien y el sitio está roto. La única diferencia entre las 6 fallas
+      y las 0 es el deploy.** No hay nada que codear acá; publicar es de Sergio.
+
+      ✅ **Y ahora tiene gate — `web-factory/apps/onia-platform/src/app/(sitio)/cierre.test.ts`,
+      2026-09-02.** El arreglo de
+      arriba se fue **sólo en CSS, sin un test**: nada impedía que el `padding-bottom` volviera, y
+      este defecto vivió en las 16 rutas del sitio sin que ningún gate lo viera. Corre en
+      `prebuild` (`tsc --noEmit && vitest run`), que es el comando real del deploy.
+      **Caza la CLASE, no la forma de ayer** — la lección que el guard de capturas de al lado ya
+      había aprendido fallando tres veces: no busca el literal 4,6rem ni sólo `padding-bottom`, sino que el
+      `body`/`html` reserve fondo en **cualquiera** de sus formas (`-bottom`, `-block`, y el atajo
+      `padding`/`margin`, resolviendo qué valor es el lado de abajo según tenga 1, 2, 3 o 4).
+      **Lleva las dos mitades del arreglo**, porque borrar el padding a secas dejaba el mismo
+      defecto en un iPhone con notch: exige que `env(safe-area-inset-bottom)` lo absorba el PIE y
+      no el documento.
+      **Probado en ROJO antes, en las tres formas de romperlo:** (1) vuelve el `body
+      { padding-bottom: 4,6rem }` original → 2 tests rojos; (2) nadie absorbe el área segura →
+      *"en un iPhone con notch vuelve la franja"*; (3) la absorbe el `body` en vez del pie → 2
+      rojos. Árbol restaurado y verde en las tres.
+      ⚠️ **Se cazó a sí mismo un falso positivo**: la primera versión marcaba `body { margin: 0 }`
+      —un reset legítimo— porque miraba la propiedad y no el VALOR. Un guard que ladra sobre
+      código sano se termina apagando, así que ahora sólo cuenta el lado de abajo distinto de cero.
+      **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **119 pasan (5 archivos)**.
+
+      ⚠️ **Y ese gate nacía CIEGO a doce de las catorce hojas — corregido el 2026-09-02,
+      misma jornada.** Auditando el propio `[x]` de arriba: el test declaraba vigilar "las 16
+      rutas del sitio", pero su lista de hojas era **fija y de dos archivos** (`globals.css` y
+      `sitio.module.css`). La app tiene **14 hojas `.css`**, y un CSS module alcanza el `body`
+      con `:global(body)` — `guia-facturacion` ya lo hace. Es **el mismo error que el guard de
+      capturas de al lado** (`def54931`: *"miraba solo (sitio) y era ciego a 4 rutas
+      publicadas"*), repetido en el gate escrito para no repetirlo.
+      **Demostrado, no argumentado:** el mismo defecto (`:global(body) { padding-bottom: 4.6rem }`)
+      escrito en `components/site-footer.module.css` —la hoja que cierra `/privacidad`, `/terminos`, las 8
+      rutas `/v1/*` y el 404— pasaba **VERDE (4/4)** con el gate viejo y sale **ROJO** con el
+      nuevo, nombrando el archivo culpable.
+      **Qué cambió:** las hojas se descubren del disco (una hoja nueva queda cubierta sin que
+      nadie se acuerde de agregarla); `esElDocumento` entiende `:global()` en cualquier posición
+      y `body`/`html` calificados (`body:has(.hoja)`, `html.oscuro`), pero **no** cuando `body`
+      es sólo el ancestro (`body main` no es el documento).
+      **Y se corrigió una regla que era falsa:** el test exigía que *todo* selector con
+      `env(safe-area-inset-bottom)` fuera un `footer`. Al barrer las 14 hojas apareció `.mobar`
+      de `landing-v1` —**la barra de acción fija del móvil, que sí existe** en el legado `/v1`,
+      con fondo propio, absorbiendo bien su área segura. La regla real no es "tiene que ser el
+      pie" sino **"no puede ser el documento"**: ahí es donde el espacio se pinta del fondo claro.
+      **Probado en ROJO en 4 formas** (pseudo-clase `:has()`, atajo `margin` de 4 valores, el
+      documento absorbiendo el área segura, y borrar el área segura del pie de venta) **y en
+      VERDE en 2 que no deben ladrar** (`body main` descendiente, y una barra fija con fondo
+      propio). Árbol restaurado y verde en las seis.
+      **Medido en producción hoy, con Chromium sobre el contenedor `onia-landing`:** la franja de
+      **74px** sigue viva en `/` y `/empezar` en teléfono (`body.padding-bottom: 73.6px`, pie
+      negro `rgb(18,16,14)`, hueco claro `rgb(249,251,250)`) — captura en `/tmp/pie-home.png`.
+      El arreglo espera el deploy de Sergio; el gate ya impide que se pierda.
+      **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
+
+      ✅ **Cerrada la otra mitad el 2026-09-03: ahora hay un gate que ABRE las dos pantallas.**
+      Los cuatro tests de al lado leen el código fuente: son rápidos, corren en cada build y
+      **no abren nada** — la franja no la encontró ninguno, la encontró una captura. Y el que la
+      guarda vigila la CAUSA de ese día (una barra fija que ya no existe): si vuelve por otro
+      camino, pasa en verde.
+      `web-factory/apps/onia-platform/scripts/mirar-venta.mjs` mide el **síntoma**: abre `/` y
+      `/empezar` en 5 anchos (320 · 390 · 768 · 1440 · 1920), scrollea hasta el fondo y pregunta
+      **qué elemento está pintado al pie del último viewport**. Si es `BODY`/`HTML`, lo que se ve
+      abajo de todo es el fondo de la página y no el pie. También mide desborde horizontal, texto
+      recortado y errores de consola.
+      **Probado con el experimento que estaba servido, no con uno inventado:** el mismo comando
+      contra producción (build viejo, defecto vivo) sale **ROJO, exit 1**, nombrando
+      `/empezar` en móvil-390 y tablet-768 con la captura
+      (`/tmp/gate-prod/empezar-tablet-768-pie.png`, mirada: franja clara de ~55px bajo el pie
+      negro); contra el build de esta rama sale **VERDE, exit 0**. Mismo instrumento, resultados
+      opuestos: discrimina.
+      **Lo que NO se hizo, a propósito:** no se cableó en `prebuild`. El deploy real corre
+      `pnpm --filter onia-platform build`, y meterle un navegador a ese camino cambia un gate por
+      un riesgo. Se corre a mano cada vuelta del loop; `playwright` no se sumó al `package.json`
+      (se elige el que ARRANCA entre los ya instalados — el del worktree pide un Chromium que
+      nadie bajó).
+      **El 429 del widget de chat sale como aviso, no como falla**, porque el ítem de abajo ya
+      midió que los bloqueos vienen del propio monitoreo y el límite vive en otro carril: un gate
+      rojo para siempre por algo que no puede arreglar es un gate que nadie lee.
+
+      ✅ **Y ese gate no decía DE QUIÉN era el trabajo — cerrado el 2026-09-03, misma jornada.**
+      Corriendo el gate como definición de hecho de la vuelta salió **rojo, 6 fallas**: la franja
+      bajo el pie viva en `/` y `/empezar` en 320, 390 y 768. Averiguar si había que **tocar
+      código** o sólo faltaba **publicar** costó **25 minutos a mano** (build, `next start` en un
+      puerto libre y una segunda corrida). La respuesta era "ya está arreglado, falta el deploy":
+      **cero código que tocar**. Repetir esa investigación cada vuelta es caro; el error caro de
+      verdad es el otro — leer el rojo de producción y "arreglar" lo que ya estaba arreglado, que
+      es el fantasma que esta misma cola mide entre el **25% y el 46%** de los pendientes
+      heredados.
+      **Qué cambió:** cada falla se guarda con su **clase** (`home @ movil-390 | franja`), no sólo
+      con su texto — el texto lleva píxeles y rutas del día y no es comparable entre dos corridas.
+      Con eso, `--comparar-con=<informe.json de la rama>` clasifica sola cada falla y **el
+      veredicto lo escribe el script, no la sesión**.
+      **Probado en las DOS ramas, con el experimento que estaba servido:** producción contra el
+      informe de la rama sana → **exit 3**, *"6 fallas YA ARREGLADAS en la rama — falta PUBLICAR,
+      no tocar código"*; producción contra **sí misma** → **exit 1**, *"6 fallas que TAMBIÉN
+      fallan en la rama — esto sí es código"*. Sin esta segunda prueba el camino de "es código"
+      podría no dispararse nunca y el gate sería decorativo.
+      **Exit 3 y no exit 0 a propósito:** producción sigue rota para el lead, así que disfrazarlo
+      de verde sería mentir; pero el trabajo no es de este carril, y el código propio lo dice sin
+      esconderlo.
+      **Medido hoy contra el contenedor `onia-landing`** (no Vercel, no `main`): la franja sigue
+      viva en las 6 vistas, mirada en la captura (`/tmp/venta-0903/home-movil-390-pie.png`), y el
+      build de esta rama sale **sin defecto medible**. Sigue esperando el deploy de Sergio
+      (radar, sección 20).
+      **Gates:** `typecheck` exit 0 · `vitest` **132 pasan (5 archivos)** · `build` exit 0.
+      **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
+
+      ⚠️ **Ese gate nació ciego en la HOME, y lo tapaba con un verde — corregido el 2026-09-03,
+      con la medición.** Bajaba con **un solo** `window.scrollTo(0, scrollHeight)` + 700 ms, y
+      `globals.css:194` tiene `scroll-behavior: smooth`: el scroll **anima**, y 14.569 px de
+      home no entran en 700 ms. Medido contra producción en móvil-390: quedaba en
+      `scrollY = 11299`, **a 2.426 px del fondo**. Ahí `elementFromPoint` devuelve el `DIV` de
+      una sección cualquiera en vez de `BODY` — así que el gate **daba verde con la franja
+      clara viva abajo** (73 px, exactamente el número que este mismo carril ya había medido a
+      mano el día anterior). O sea: el instrumento nuevo declaraba sana la pantalla **más
+      importante del sitio**, la primera que ve un lead.
+      **Arreglado en `scripts/mirar-venta.mjs`**, y no sólo la causa de hoy:
+      `bajarHastaElFondo()` usa `behavior: 'instant'` (mata la animación) y repite hasta que
+      `scrollY` deja de moverse (cubre la página que crece al revelar contenido). Y sobre todo,
+      la sonda ahora devuelve `faltaParaElFondo`: **si el gate no llegó al fondo, eso es una
+      FALLA, no un verde.** Un instrumento que no pudo mirar no sabe, y "no sé" no es "está
+      bien" — sin esa aserción, la próxima causa vuelve a producir un verde mentiroso.
+      **Lo que destapó, en números:** contra el mismo producción de siempre pasó de **2 fallas
+      a 6**. Las 4 que escondía son `home` en 320 · 390 · 768 (las tres, nunca vistas) y
+      `empezar @ movil-320`. Capturas miradas: `/tmp/venta-rojo/home-movil-390-pie.png` — se ve
+      el pie negro entero y **debajo la franja clara**.
+      **Discrimina** (mismo comando, resultados opuestos): producción **ROJO exit 1 · 6 fallas**;
+      build de esta rama **VERDE exit 0**.
+
+      📮 **2026-09-03 — el deploy YA está pedido, con su número: `t_68671bc3` en el tablero,
+      `blocked / needs_input`.** Hasta hoy el pedido vivía sólo en el radar, que es un doc que
+      Sergio no lee desde el teléfono: por eso la franja llevaba **más de un día** viva en
+      producción con el arreglo ya en `main` (`f0248601`, del 2026-09-02). El tablero sí le
+      llega. **La próxima vuelta NO vuelve a preguntar** — mira `onia-tablero.sh list`; si
+      `t_68671bc3` sigue `blocked`, el deploy sigue sin decidirse y la franja sigue viva.
+      **Re-medido hoy con el instrumento arreglado, no heredado:** producción **6 fallas** en
+      `home` y `empezar` × 320 · 390 · 768, mirada la captura
+      (`/tmp/venta-0903/home-movil-390-pie.png`: pie negro y **debajo la franja clara**);
+      el build de esta rama, servido en `127.0.0.1:3987`, **sin defecto medible**, y mirado
+      también (`/tmp/venta-rama-0903/home-movil-390-pie.png`: el negro llega al borde).
+      **Gates de hoy:** `tsc --noEmit` exit 0 · `vitest` 132 pasan (5 archivos) · `next build`
+      exit 0, 32/32 páginas.
+
+      ✅ **Los precios de las dos pantallas se verificaron hoy contra las DOS fuentes de verdad,
+      y no hay deriva.** Se hizo porque la home imprime montos (`2.900 Bs/mes`,
+      `implementación desde 3.500 Bs`) desde una copia — `src/lib/pricing.ts` de esta app — que
+      vive en OTRO repo que el que manda, y nada la ataba. Contados uno por uno contra
+      `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`): Básico 320/89/3.200 ·
+      Pro 750/199/7.500 · Full 1.500/–/15.000 · Grupo 2.900/–/29.000 — **los cuatro coinciden**.
+      Add-ons contra `onia-platform/lib/pricing.ts`: chatbot 390/3.900, reservas 150, usuario
+      extra 70 — **coinciden**. Ninguna pantalla define un número: la home los lee de
+      `@/lib/pricing` (`page.tsx:4`).
+      ⚠️ **Lo que queda sin dueño, y es un ítem para quien pueda cruzar de repo:** esa copia
+      coincide **hoy, por disciplina, no por un gate**. Un cambio de precio en `onia-platform`
+      no rompe nada acá: el sitio de venta seguiría publicando el número viejo mientras el
+      checkout cobra el nuevo. Un test de esta app no lo puede atar (el otro repo no viaja al
+      contenedor que sirve el sitio), así que el gate tiene que vivir del lado que tiene los dos
+      árboles a la vista.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
-- [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
-      dueño real es el carril chatbot/infra, no `web-factory/apps/onia-platform`.**
+- [x] 🟡 ~~**El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
+      dueño real es el carril chatbot/infra, no `web-factory/apps/onia-platform`.**~~
+      **CERRADO el 2026-09-03 00:55 UTC por `onia-cola`: misma causa que el 🔴 de `/chatbot` —
+      el 429 lo produce nuestro propio tráfico, no una caída.** Ver *"El 429 del widget era
+      nuestro"* al final de esta cola.
       `node scripts/canario_visual.mjs home empezar` salió con un error de consola NUEVO en las
       dos: `Failed to load resource: ...429`. Rastreado con un script propio a
       `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=...` — confirmado
@@ -964,6 +1389,477 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Queda con su evidencia para que la próxima vuelta lo tome **sin volver a derivarlo**, y con
       una línea en el radar, porque "un loop productor sin bandeja" es diseño del sistema de loops
       y eso lo decide Sergio.
+
+### Del canario visual — corrida del 2026-09-02 16:41 UTC (diez pantallas)
+
+- [x] 🔴 ~~**El widget de chat de `/chatbot` está caído: devuelve 429 y ya no carga. La página que
+      VENDE el chatbot es la única del sitio sin chat.**~~ **CERRADO el 2026-09-03 00:55 UTC por
+      `onia-cola`: el 429 es REAL pero NO es del cliente — es nuestro.** El titular era falso en
+      su mitad más cara ("la página que vende el chatbot es la única sin chat"): un visitante
+      real abre el chat normal. Medición completa en la sección *"El 429 del widget era nuestro"*
+      al final de esta cola.
+      - **Qué se rompió:** `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`
+        responde **429**. El host es el Chatwoot propio, no Cloudflare de `onia.com.bo`.
+      - **Esto cierra la duda que dejó abierta la pasada de las 04:41 UTC** (líneas 604-612), con
+        su propio criterio: *"si un loop futuro lo ve fresco, sin haber golpeado el sitio antes,
+        ahí sí es un ítem"*. Hoy lo vio la **corrida oficial única**, que fue lo PRIMERO que
+        ejecutó esta vuelta — cero requests previas al sitio. Criterio cumplido.
+      - **Evidencia nueva que aquella pasada no tenía — el peso:** `chatbot-landing` cayó de
+        **2.232 KB (baseline de ayer, con `erroresConsola: []`) a 449 KB**, tres corridas
+        seguidas. Son ~1,8 MB que faltan: es el bundle del widget que ya no baja. El widget
+        cargaba ayer y hoy no. Un `-80 %` de peso **no dispara umbral** (sólo miramos subidas
+        > +40 %) — se ve mirando, que es de lo que se trata.
+      - **Confirmado fuera del navegador:** tres `curl` planos seguidos al endpoint → `429`,
+        `429`, `429`. No es artefacto de Playwright ni de mis corridas repetidas.
+      - **Por qué importa comercialmente:** el visitante que llega a la página del chatbot para
+        preguntar por el chatbot no encuentra dónde escribir. Es la burbuja de chat ausente en la
+        esquina inferior derecha de la captura.
+      - **Sospecha para el que lo tome (no verificada, no la reporto como hecho):** un 429 propio
+        del Chatwoot huele a rate-limit del contenedor. El VPS le pega cada hora con
+        `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` (cron minuto 17, desplegado en
+        `/root/bin/`) además del motor del bot. **No lo toqué**:
+        contenedores y crons ajenos no son de este carril.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-02-chatbot-landing.png`
+      — 449 KB / 684 ms / status 200 / `erroresConsola: ["…status of 429"]`.
+
+- [x] 🟠 **CERRADO PARCIAL el 2026-09-03 07:55 UTC por `onia-cola` en `scripts/canario_visual.mjs`:
+      en `/chatbot` ya NO reproduce.
+      El defecto sigue vivo en `rubros`, y NO por el motivo que decía este ítem** — ver el ítem
+      de `rubros` más abajo, que ahora tiene la causa medida.
+      **Medido con el instrumento EXACTO del canario** (1440×900, `launch` **sin** `channel`
+      como lo lanza su copia, mismo scroll 300/800 ms, `fullPage: true`): la banda verde de
+      `/chatbot` sale **completa y legible** — *"PRECIO · Bs 390/mes, sin instalación · Es el
+      12 % del salario mínimo nacional 2026…"*. Captura mirada, no un exit code.
+      **Por qué se arregló sola:** el propio carril del canario subió el scroll de espera de
+      120/400 ms a 300/800 ms en `a0eafdcb1`, el **2026-09-03 03:46:17 UTC**. La última corrida
+      que reportó la ceguera fue la de las **03:41 — cinco minutos ANTES del arreglo**. El ítem
+      nació muerto: ya estaba arreglado cuando se escribió.
+      ⚠️ **Y una hipótesis mía que probé y salió FALSA, anotada para que nadie la repita:**
+      sospeché que la ceguera era el mismo rasterizador que causó `"Ent regamos t u sist ema"`,
+      porque el worktree del canario **no tiene** `opcionesDeChromium`/`channel: 'chromium'`.
+      Capturé la misma página en el mismo instante **con y sin** `channel`: la banda sale
+      perfecta en las dos. No es el rasterizador. Probarla costó dos minutos.
+      ⚠️ **Lo que sí sigue siendo cierto y es del carril del canario:** su worktree está
+      **281 commits atrás de `main`** (el ítem de arriba decía 91 — ese número ya venció) y no
+      tiene el `channel: 'chromium'`. No causa *esta* ceguera, pero es deuda viva.
+
+<details><summary>Lo que decía este ítem antes de medirlo — historia</summary>
+
+      Defecto de la herramienta propia (`scripts/canario_visual.mjs`), no del sitio. Lo dejo
+      escrito, no arreglado: se me acabó la vuelta.
+      - La pasada de las 04:41 UTC ya lo había visto en `rubros` y `contacto` (líneas 593-599) y
+        lo cerró como "artefacto conocido". **Hoy demuestra ser peor que un artefacto cosmético:**
+        en `/chatbot` la banda verde que salió vacía es la que dice **"Bs 390/mes, sin
+        instalación"** — el precio publicado, en el proyecto cuyo fallo mejor documentado es
+        "cuatro precios vivos del mismo chatbot". El canario existe para MIRAR precios y
+        justamente ahí no ve.
+      - **Verificado que el sitio está sano:** el `<h2>` "Lo que necesitás vos" mide
+        `opacity: 1`, `visibility: visible`, 542×25 px en `top: 2083`. Llevado al viewport y
+        capturado sin `fullPage`, todo el contenido aparece perfecto.
+        Prueba: `…/2026-09-02-chatbot-landing-viewport-precio.png`.
+      - **Intento fallido (para no repetirlo):** el commit `bed8b9a1` agregó un scroll por tramos
+        antes de capturar y **no alcanza**. También probé inyectar
+        `*{content-visibility:visible !important; contain-intrinsic-size:auto !important}`
+        antes del `screenshot({fullPage:true})` — **tampoco**: las bandas siguen vacías. La causa
+        no es `content-visibility` ni la falta de scroll.
+      - **Siguiente paso sugerido:** abandonar `fullPage` y capturar por viewports sucesivos,
+        cosiendo las imágenes. Es el método que ya se sabe que funciona (es como se sacaron las
+        dos capturas de prueba de hoy y la de ayer).
+      - **Mientras tanto, una banda vacía en una captura de este canario NO prueba nada** — ni que
+        el sitio esté roto ni que esté bien. Hay que ir al viewport.
+
+</details>
+
+- [ ] 🟢 **Las otras nueve pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+      Pesos/tiempos de hoy: home 2.857 KB/367 ms · precios 2.108 KB/803 ms · empezar 2.253 KB/464 ms ·
+      rubros 2.587 KB/377 ms · contacto 322 KB/429 ms · register 704 KB/456 ms ·
+      login-plataforma 699 KB/457 ms · login-chat 3.499 KB/1.249 ms.
+      `panel-chatbot` 702 KB/440 ms **redirige a `/login` sin sesión: queda "no medida", no "OK"**.
+      **Ninguna baseline se actualizó esta vuelta.** La de `chatbot-landing` (2.232 KB) se deja
+      intacta a propósito: pisarla con los 449 KB de hoy taparía el ítem del widget caído.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-02-home.png` ·
+      `hermes-content/docs/historial/canario-visual/2026-09-02-rubros.png`; baselines sin tocar en
+      `hermes-content/references/canario-visual/chatbot-landing/baseline.json`.
+
+### Del canario visual — corrida del 2026-09-02 21:41 UTC (diez pantallas, sin ítems nuevos)
+
+- [x] 🔴 ~~**Los dos ítems 🔴/🟠 de arriba (widget de `/chatbot` caído y captura full-page ciega)
+      siguen exactamente igual, 5 horas después.**~~ **La mitad del widget quedó CERRADA el
+      2026-09-03 (era nuestro propio tráfico); la mitad de la captura full-page ciega SIGUE
+      ABIERTA y es un defecto real — está en el 🟠 de arriba.** Confirmación de entonces, que
+      ahora se lee como lo que era (el canario fotografiando su propia huella):
+      - `chatbot-landing` sigue en **331 KB / status 200 / `429`** (era 449 KB a las 16:41 UTC —
+        sigue faltando el bundle del widget, no hay burbuja de chat visible en la captura). Tres
+        pantallas más (`precios`, `rubros`) SÍ muestran la burbuja verde flotante del widget
+        propio del sitio — el 429 es específico de `/chatbot`, no del sitio entero.
+      - La banda de precio "Bs 390/mes" de `/chatbot` sigue vacía en la captura full-page (mismo
+        artefacto ciego, no arreglado).
+      - Home y `/empezar` siguen mostrando el rediseño *"Cerrás vos. El negocio no."* / "Creá tu
+        cuenta" en vez del copy de la baseline vieja ("Pedí tu acceso"). Sigue sin dueño.
+      **Las otras siete pantallas, sin novedad.** Pesos de hoy: home 2.362 KB/486 ms · precios
+      2.109 KB/317 ms · empezar 2.104 KB/300 ms · rubros 2.362 KB/329 ms · contacto 322 KB/160 ms ·
+      register 704 KB/161 ms · login-plataforma 696 KB/119 ms · login-chat 3.500 KB/954 ms ·
+      panel-chatbot 702 KB/215 ms (redirige a `/login`, sigue "no medida"). Ninguna baseline
+      tocada.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-chatbot-landing-2141utc.png`
+      (331 KB, la esquina inferior derecha sigue sin burbuja de chat) ·
+      `hermes-content/docs/historial/canario-visual/2026-09-02-chatbot-landing-viewport-precio.png`
+      (la misma banda de precio, capturada por viewport, SÍ se ve).
+
+### El 429 del widget era nuestro — 2026-09-03 00:55 UTC, `onia-cola`
+
+- [x] **El 429 del widget de Chatwoot es REAL, y NO es una caída: se lo hace el VPS a sí mismo.
+      Cerró tres ítems (🟡 de `home`/`empezar`, 🔴 de `/chatbot`, 🔴 de confirmación) que juntos
+      consumieron cuatro vueltas.**
+      **La causa, leída del código que corre** — el initializer de Rack::Attack, línea 176,
+      **dentro del contenedor `onia-chatbot_chatwoot` (no en este repo)**: Chatwoot limita
+      `/widget` **sin**
+      `cw_conversation` a **5 cargas por hora POR IP**. No tiene variable de entorno propia — el
+      único interruptor es `ENABLE_RACK_ATTACK_WIDGET_API`, que apaga el grupo entero.
+      **Por qué el titular era falso.** El ítem decía *"la página que VENDE el chatbot es la
+      única del sitio sin chat"*, y eso vale sólo para nosotros:
+      - El servicio **no está caído**: `/`, `/api` y `/packs/js/sdk.js` responden **200**; sólo
+        `/widget` da 429. Un host sano con una regla puntual, no un contenedor muerto.
+      - **El contador está a nombre de UNA sola IP: `187.77.16.63`, la del propio VPS**, con 21→34
+        cargas contra un límite de 5. Leído en Redis, que es donde Rack::Attack lo guarda (una
+        clave por IP): `velma:rack::attack:<ventana>:widget?...:187.77.16.63`.
+      - **En 6 h hubo 222 peticiones a `/widget` y las 222 son de esa misma IP.** Cero visitantes
+        reales. 207 de 232 iban sin `cw_conversation`, o sea que **gastaban cupo**. Los picos
+        caen en las corridas de nuestros loops (el de 21:41 es el canario).
+      - Cada visitante real cuenta con **su** IP y **su** cupo, así que su chat abre normal.
+      **Instrumento verificado, no supuesto** (la trampa que este archivo ya documenta): probé
+      falsear la IP con `X-Forwarded-For: 203.0.113.77` y **no** apareció una clave nueva — el
+      proxy sobrescribe la cabecera con la IP real del socket. Eso prueba justamente lo que hacía
+      falta: Chatwoot ve IPs de visitante de verdad, no una IP de proxy compartida. Si las
+      colapsara, ahí sí un cliente podría comerse el 429 de otro.
+      **Es el mismo modo de falla que el canario ya pagó con el rasterizador:** el instrumento
+      mide su propia huella y la reporta como una caída del producto. La diferencia es que esta
+      vez el 429 existía — lo falso era de quién.
+      **El arreglo, para que no se re-derive nunca más:**
+      `hermes-content/deploy/vps-ops/widget-429-de-quien.sh` — contesta en segundos con el
+      contador y el desglose de IPs a la vista. **Probado en los dos sentidos**, que es lo que lo
+      hace confiable: con la IP real da `AUTOINDUCIDO`; forzando `ONIA_VPS_IP=10.0.0.99` las 234
+      peticiones pasan a ajenas y sale `OJO: … puede haber clientes afectados`. Una sonda que
+      sólo sabe decir "es nuestro" no sirve para el día en que no lo sea.
+      **Lo que NO hice y es de Sergio:** safelistear la IP del VPS
+      (`RACK_ATTACK_ALLOWED_IPS=187.77.16.63`) es un cambio de entorno del contenedor de chat en
+      producción, con reinicio — no se toca sin su OK. Cotizado en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      **Queda ABIERTO y no lo toqué:** el 🟠 de la captura full-page ciega. Ese sí es un defecto
+      real de `scripts/canario_visual.mjs`, con causa distinta y dueño distinto.
+
+### Del canario visual — corrida del 2026-09-03 00:43 UTC (diez pantallas)
+
+- [x] 🔴 ~~**El widget de chat de Chatwoot sigue caído (429), y hoy la corrida oficial lo vio en
+      LAS CINCO pantallas de `onia.com.bo`, no solo en `/chatbot`.**~~
+      **FANTASMA — el widget NUNCA estuvo caído. Refutado y ARREGLADO EN EL INSTRUMENTO el
+      2026-09-03 09:38–10:00 UTC por `onia-cola`.** Este ítem se escribió a las 00:43, **doce
+      minutos antes** de que el ítem de las 00:55 (más abajo en este mismo archivo) diagnosticara
+      la causa: Chatwoot limita `/widget` a **5 cargas por hora por IP** y el canario abre diez
+      pantallas seguidas desde una sola IP. El titular "sigue caído" nació de una medición que ya
+      estaba explicada.
+      - **Medido de nuevo, y esta vez el instrumento se puede refutar solo:** `curl` frío al
+        endpoint → **HTTP 200, 7.683 bytes, 76 ms** (el ítem afirmaba que un curl frío daba 429).
+        Después, cinco pantallas en secuencia con Playwright a 1440×900: `home`, `precios` y
+        `empezar` cargaron el widget con la **burbuja visible y medida en el DOM**
+        (`.woot-widget-bubble`, 64×64, `visibility: visible`, `opacity: 1`); `rubros` y `chatbot`
+        dieron 429. El corte cae **exactamente** en la quinta carga — que es el límite
+        documentado. Si el límite no fuera 5, la frontera no habría caído ahí: por eso esta
+        medición prueba la causa en vez de sólo acompañarla.
+      - **La caída de peso del 75 % que el ítem citaba como agravante es la MISMA huella:** lo
+        que falta en esas páginas es el bundle del widget que el 429 no dejó bajar. Es
+        consecuencia del rate-limit propio, no evidencia independiente. Dos síntomas del mismo
+        hecho leídos como dos pruebas es cómo un fantasma se vuelve convincente.
+      - **ARREGLADO donde estaba roto de verdad — el canario, no el producto**
+        (`scripts/canario_visual.mjs`): ahora guarda las respuestas 4xx/5xx **con su URL**
+        (`respuestasFallidas`), porque el texto que la consola imprime es genérico
+        (`...status of 429 ()`) y no dice de qué endpoint vino — sin esa URL no había forma de
+        distinguir nuestra huella de una caída real. `esHuellaPropia()` descarta ese error
+        **sólo** si todos los 429 de la pasada son de `/widget` de Chatwoot, y lo descartado se
+        escribe en el JSON (`huellaPropia`), no se esconde.
+      - **Fail-closed, fijado por cuatro tests que serían el precio de equivocarse:** un 429 de
+        otro endpoint, un 429 del widget junto a uno ajeno, un 429 sin respuesta que lo explique
+        y un **500 del widget** siguen siendo ítem. Una excepción que silencia de más es peor que
+        el fantasma que vino a matar. Los cinco tests se escribieron **en rojo primero** y falló
+        sólo el que debía. `--self-check`: **74 casos verdes**.
+      - **Verificado end-to-end contra el sitio real**, no sólo con datos inyectados:
+        `CANARIO_OUT=/tmp/canario-prueba node scripts/canario_visual.mjs rubros` → la página
+        recibió el 429 de verdad, quedó registrado con su URL, **`motivos: []`** (antes levantaba
+        este 🔴) y `huellaPropia` explica qué se silenció y por qué.
+      - **Costo evitado:** este fantasma ya se había llevado cuatro vueltas y volvía a nacer cada
+        3 h con la corrida del canario. Lo que sigue abierto y es de Sergio no cambia: safelistear
+        la IP del VPS (`RACK_ATTACK_ALLOWED_IPS`) para que el canario mida el widget de verdad en
+        vez de saltearlo — cotizado en
+        `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      - **`web-venta`, que ES el dueño de la superficie, llegó a la MISMA conclusión por su
+        cuenta a las ~12:48 UTC, sin haber visto esta refutación** (su detalle está más abajo,
+        en el bloque «CIERRE del carril `web-venta`»). Dos carriles midiendo por separado y
+        cayendo en el mismo veredicto es la confirmación más barata que hay — pero también
+        significa que **el fantasma se investigó dos veces**: el arreglo del instrumento ya
+        estaba hecho a las 10:00 y no había llegado a `main` cuando `web-venta` arrancó.
+        Su medición **no es redundante**: fijó el umbral con clics reales (cada página del
+        sitio cuesta **2** peticiones porque los `<a>` son planos a propósito) y refutó que
+        `next/link` fuera el arreglo.
+      ~~**Detalle original de la medición del 2026-09-03 00:43 UTC, conservado porque la
+      refutación se lee contra él:**~~
+      - **Evidencia de la corrida oficial única** (`node scripts/canario_visual.mjs`, primer
+        comando de la vuelta, cero requests previos al sitio): `home`, `precios`, `empezar`,
+        `rubros` y `chatbot-landing` — las cinco — dispararon `ITEM` por
+        `error de consola nuevo: Failed to load resource: the server responded with a status of
+        429 ()`.
+      - **Confirmado sin ambigüedad de "corrida propia repetida"** (la duda que dejó abierta la
+        pasada de las 04:41 UTC de ayer, líneas 604-612): corrí `home` y `precios` cada una SOLA,
+        en procesos Playwright nuevos, con 15-20 s de espera antes, escuchando el evento
+        `response` en vez de la consola. Las dos pegan al mismo endpoint y las dos dan 429:
+        `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`.
+        Un `curl` plano y frío al mismo endpoint, aislado de cualquier corrida: también 429.
+      - **Evidencia de peso — hoy es mucho más claro que ayer:** las cuatro páginas con
+        baseline de peso comparable cayeron **todas** más del 75 % contra su baseline (ninguna
+        dispara umbral: sólo miramos subidas > +40 %, se ve mirando):
+        home 2.366→**580 KB**, precios 2.159→**327 KB**, empezar 2.497→**323 KB**,
+        rubros 2.650→**495 KB**. Es el mismo patrón que ya se había visto en `chatbot-landing`
+        (2.232 KB → 324 KB hoy): falta el bundle del widget en las cinco, no en una.
+      - **Mirado en las capturas:** ninguna de las cinco muestra la burbuja de chat flotante
+        (verde) en la esquina inferior derecha. El resto del contenido de las cinco está sano —
+        home, precios, empezar y rubros con su copy y sus precios (`Bs 390/mes` visible completo
+        en `/precios`) correctos a la vista.
+      - **No lo toqué**: contenedor y cron del widget son ajenos a este carril (ver la sospecha
+        de rate-limit del contenedor, ya anotada ayer 16:41 UTC).
+      - **Van ~8 horas de caída** (primera detección 2026-09-02 16:41 UTC, confirmada 21:41 UTC,
+        confirmada de nuevo y ampliada ahora 2026-09-03 00:43 UTC). Sin dueño declarado (vive en
+        `web-factory/apps/onia-platform/`).
+      **Evidencia:** capturas de hoy (foto de un día, no baseline) en
+      `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`.
+
+      ---
+      **CIERRE del carril `web-venta` (2026-09-03 ~12:48 UTC) — el widget está VIVO y el ítem
+      medía nuestra propia IP.** Nada de esto contradice a quien lo escribió: cada corrida vio un
+      429 real. Lo que faltaba era preguntarle al 429 **de quién** era.
+      - **Primer comando de la vuelta, IP fresca:** `curl` al endpoint del widget → **HTTP 200,
+        7.683 bytes**, 92 ms. Y `packs/js/sdk.js` → 200, 28.764 bytes. No hay contenedor caído.
+      - **`onia.com.bo/` y `/empezar` abiertas y MIRADAS** (1440×900, Chromium completo, por
+        viewports con scroll asentado — nunca `fullPage`): la **burbuja verde está presente y
+        visible**, `64x64` en `1356,816`, con su `iframe` y `window.chatwootSDK` cargado. **Cero
+        errores de consola, cero respuestas ≥400.** El peso volvió a su baseline: home **2.828
+        KB** y empezar **2.512 KB** (baselines 2.366 / 2.497), contra los 580 / 323 KB que el
+        ítem citaba como prueba de la caída. El bundle del widget está de vuelta.
+      - **El mecanismo, reproducido en una sola corrida de 5 páginas seguidas:** las **dos
+        primeras** dan 200 con burbuja; de la **tercera en adelante**, 429 y sin burbuja.
+        ```
+        home             618 KB  burbuja 64x64   err=0 4xx=0
+        precios          890 KB  burbuja 64x64   err=0 4xx=0
+        empezar          155 KB  SIN BURBUJA     429 …/widget?website_token=…
+        rubros           120 KB  SIN BURBUJA     429 …
+        chatbot-landing   86 KB  SIN BURBUJA     429 …
+        ```
+        No es una caída que empieza a una hora y termina a otra: **es un umbral que se cruza a
+        mitad de la propia corrida**. El canario barre 10 pantallas cada 3 h desde la misma IP,
+        así que deja la IP del VPS **quemada casi todo el tiempo** — y en la corrida siguiente
+        vuelve a "encontrar" el widget caído. Las "8 horas de caída" son ocho horas de eso.
+      - **La ventana de recuperación es larga:** tras ~15 peticiones, **3 minutos de espera no
+        alcanzaron** (las 5 páginas siguientes seguían en 429). Al arrancar la vuelta, con la IP
+        en reposo, daba 200.
+      - **Por qué cada página cuenta doble, y por qué NO se arregla con `next/link`:** el sitio
+        usa `<a>` planos, así que cada página vista es una carga completa que vuelve a pedir el
+        SDK — **2 peticiones por página**. Medido con clics reales en el header: 4 clics → `RECARGA`
+        las 4 veces → **10 peticiones** al endpoint. Fui a "arreglarlo" con `next/link` y **el
+        propio código me refutó**: `src/app/(sitio)/nav.ts:11` dice que los `<a>` planos son
+        **deliberados** — *"una navegación completa cierra cualquier menú abierto sola"*.
+        Cambiarlo habría roto el menú de teléfono para arreglar algo que no es su culpa.
+      - **Lo que queda vivo y NO es fantasma — corrige la decisión cotizada a Sergio:** la opción
+        anotada en el radar es safelistear la IP del VPS (`RACK_ATTACK_ALLOWED_IPS=187.77.16.63`).
+        Eso **calla el falso positivo del canario pero no ayuda a un lead**, que entra con su
+        propia IP y también suma 2 peticiones por página. Si se aprueba creyendo que arregla el
+        sitio, el chat sigue desapareciéndole al visitante que recorre varias pantallas — que es
+        justo el más interesado. **No pude medir en qué página cae un lead con IP limpia: no
+        tengo una segunda IP desde el VPS** (`WebFetch` no está autorizado en sesión no
+        interactiva). Es lo único que falta para dimensionarlo, y no se resuelve adivinando.
+      - **Repro en 30 segundos:** cargar 5 páginas de `onia.com.bo` seguidas con Playwright y
+        mirar `.woot-widget-bubble` en cada una. Las dos primeras la tienen; las otras tres no.
+      - **Cero líneas de código tocadas: no había nada roto en el sitio.**
+
+- [ ] 🟠 **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
+      timing ni rasterizador: `fullPage` destruye las secciones movidas por scroll.**
+      Reproducido en vivo con el instrumento exacto del canario (1440×900, sin `channel`, scroll
+      300/800 ms). **El sitio está sano; miente la captura** — probado con las dos tomas de la
+      misma franja en el mismo instante:
+      - **`fullPage: true`** → tarjeta cortada al medio mostrando *"Caja del día / Efectivo"*
+        (rubro **Comercio**) y debajo una banda blanca enorme y vacía.
+      - **Por viewport** (`scrollTo(0, 850)`, esperar, capturar sin `fullPage`) → la tarjeta
+        **entera** *"Hoy en la agenda / Dental — 09:00 Ortodoncia · 10:30 Limpieza · 11:15
+        Control"* más la lista de rubros. Nada roto. Y el DOM concuerda: `opacity: 1`,
+        `visibility: visible`, `transform: none`.
+      - **La causa, medida:** `rubros` mide **8.332 px** de alto y tiene un `position: sticky`
+        que es el corazón de la página — `DIV.sitio_stage__ZSE2e`, la tarjeta que va cambiando de
+        rubro (Dental → Comercio → Importadora → Estética → Servicios) **a medida que scrolleás**.
+        Hay además **13 elementos más altos que dos pantallas**. `fullPage: true` funciona
+        agrandando el viewport hasta los 8.332 px: con la página entera dentro de una sola
+        pantalla **ya no queda scroll que maneje la animación**, así que el `stage` se congela en
+        un fotograma y su carril largo sale en blanco. Por eso ninguna espera lo arregla — el
+        problema no es *cuándo* se captura, es que en modo `fullPage` la página **está en otro
+        estado**.
+      - **Y por eso el arreglo de 300/800 ms no podía cerrarlo:** ese arreglo sirve para lo que se
+        activa por `IntersectionObserver` (es lo que destrabó `/chatbot`, 3.377 px y sin `stage`),
+        pero no puede devolverle scroll a una sección que ya no tiene ninguno.
+      - **Repro en 30 segundos:** capturar `https://onia.com.bo/rubros` a 1440×900 con
+        `fullPage: true` y recortar `y=850..1470`; después `scrollTo(0, 850)`, esperar 1,5 s y
+        capturar **sin** `fullPage`. Las dos franjas muestran cosas distintas: la segunda es la
+        verdadera.
+      - **El arreglo, ya sin la duda de qué método usar:** capturar por viewports sucesivos
+        —scrolleando de verdad— en vez de `fullPage`. Es lo único compatible con una página
+        movida por scroll. ⚠️ En el VPS **no hay `sharp` ni ImageMagick**, así que coser las
+        imágenes hay que hacerlo dentro del propio Chromium (dibujar los trozos en un `<canvas>`)
+        o guardar un PNG por viewport y renunciar a la imagen única.
+      - **Zona:** `scripts/canario_visual.mjs`, del carril `canario-visual`. `onia-cola` lo midió
+        pero **no lo arregló**: no entraba en la vuelta y no se empieza un refactor que no se
+        puede terminar ni verificar.
+
+      ⚠️ **SEGUNDA CEGUERA EN EL MISMO SCROLL, y el arreglo de viewports NO alcanza para taparla
+      — medida el 2026-09-03 ~09:40 UTC por el carril `web-venta`, tropezándome con ella en mi
+      propio instrumento.** No es una variante de `fullPage`: es independiente, y muerde también
+      a quien capture por viewports creyendo que ya está a salvo.
+      - **El sitio trae `scroll-behavior: smooth` en `<html>`** (`globals.css:194`, correctamente
+        detrás de `prefers-reduced-motion: no-preference` — el sitio está bien, no hay nada que
+        arreglar ahí). Medido en vivo: `getComputedStyle(document.documentElement).scrollBehavior`
+        → `"smooth"`.
+      - **Con eso, `window.scrollTo(0, y)` NO salta: ANIMA.** Vuelve enseguida y la página sigue
+        viajando. Una foto disparada a los 300 ms sale **a mitad de camino**, con el encuadre
+        entre dos franjas — y lo que se ve es una tarjeta o un titular **cortado por la mitad**,
+        que es exactamente la firma del defecto que este ítem persigue.
+      - **Lo que me pasó, y por eso lo sé:** capturé `/empezar` a 390 px y el primer frame
+        (scroll 0) mostraba el titular `"Creá tu cuenta y usalo de verdad 14 días."` **cortado
+        por arriba**, como si el header pegajoso se lo comiera. Estuve a un paso de abrirlo como
+        ítem. Lo medí antes: a scroll 0 el `<h1>` está en `top: 208` y el header termina en
+        `bottom: 61` — **no lo toca ni de cerca**. El frame estaba tomado mientras la página
+        todavía volvía desde el fondo (3.689 px) hacia arriba.
+      - **Por qué el canario es MÁS vulnerable que yo, no menos:** su bucle
+        (`canario_visual.mjs:268-276`) hace `scrollTo` cada 0,8 de viewport con 300 ms, y **cada
+        `scrollTo` re-apunta la animación anterior en vez de esperarla**, así que la página nunca
+        se asienta en ningún paso: planea. Y el `scrollTo(0, 0)` final con 800 ms tiene que
+        deshacer **14.569 px** en la home — un scroll suave de esa distancia no termina ni cerca
+        en 800 ms.
+      - **El arreglo es de una línea y es previo al refactor de viewports:** antes de scrollear,
+        `await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' })`. Y para
+        que no vuelva a envejecer, **esperar a que el scroll haya llegado de verdad** en vez de
+        confiar en un `setTimeout`:
+        `await page.waitForFunction((t) => Math.abs(window.scrollY - t) < 3, y)`.
+      - **Repro en 30 segundos:** cargar `https://onia.com.bo/empezar` a 390×844, `scrollTo` al
+        fondo, después `scrollTo(0, 0)`, esperar 300 ms y capturar. El titular sale cortado. Con
+        `html{scroll-behavior:auto}` inyectado antes, sale entero. La misma página, el mismo
+        instante, dos verdades distintas.
+      - **Por qué importa más que un frame feo:** es el **tercer** defecto de instrumento de esta
+        familia (rasterizador → 3 días perdidos; `fullPage` → este ítem; ahora el scroll suave), y
+        los tres fabrican la MISMA firma — "algo cortado o en blanco" — sobre un sitio sano. Cada
+        uno gasta vueltas de este carril persiguiendo fantasmas. **Verificado que el sitio no
+        tiene la culpa en los tres.**
+
+- [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+      Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
+      `register` (705 KB/153 ms, asistente de 2 pasos con 5 rubros, íconos legibles),
+      `login-plataforma` (696 KB/128 ms, íconos legibles, "Pedí tu acceso" presente),
+      `login-chat` (3.499 KB/925 ms, formulario Chatwoot normal — este SÍ es el chat propio de
+      Onia, no el widget embebido del sitio, y no está caído),
+      `panel-chatbot` (702 KB/228 ms, redirige a `/login` sin sesión: queda "no medida", no "OK",
+      como corresponde). **Ninguna baseline se tocó esta vuelta** — pisar la de las cinco páginas
+      afectadas taparía el ítem del widget caído, igual que ayer con `chatbot-landing`.
+
+### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
+
+- [x] 🟠 **El ítem de "captura full-page ciega" (abierto 2026-09-02, confirmado vivo en
+      `rubros` a las 00:43 UTC) tenía causa raíz en la propia herramienta, y ya está
+      arreglada.** `scripts/canario_visual.mjs` scrolleaba con 120 ms por paso y 400 ms de
+      espera final antes de la captura — insuficiente para las animaciones "aparece al
+      entrar en vista" del sitio (framer-motion `whileInView` con `delay`).
+      - **Reproducido aislado:** con esos mismos tiempos, la tarjeta de add-on de WhatsApp
+        de `/precios` ("No pierdo al que escribe", Bs 390/mes) salía completamente en
+        blanco en la captura — la sección entera parecía vacía. Con 300 ms/800 ms la misma
+        tarjeta aparece completa, con precio, nota de IVA y CTA.
+      - **Confirmado que el DOM SÍ tenía el contenido** con los tiempos viejos
+        (`opacity:1`, `w:1184 h:344` medido con `getComputedStyle`+`getBoundingClientRect`):
+        no era el sitio devolviendo menos HTML, era la captura tomada antes de que la
+        animación terminara.
+      - **Arreglé el script** (`scripts/canario_visual.mjs`, scroll a 300 ms/paso + 800 ms
+        final) y corrí `--self-check`: **13 casos en verde**.
+      - **Re-corrida completa después del arreglo:** `rubros` ahora muestra las 5 filas de
+        "La misma base, con las palabras de tu negocio" (antes: banda vacía) y `precios`
+        muestra la tarjeta de WhatsApp completa. El resto del contenido de las 10 pantallas
+        sigue sano.
+      - **No toqué las baselines de `home`, `precios`, `empezar`, `rubros`:** la única
+        diferencia visible ahora contra esas baselines es que el widget de Chatwoot (429,
+        ítem de abajo) sigue sin aparecer — pisar la baseline ahora horneraría "sin widget"
+        como el estado normal, exactamente lo que ya se evitó con `chatbot-landing` el
+        2026-09-02. Se retoman cuando ese ítem cierre.
+
+- [x] 🔴 ~~**El widget de Chatwoot sigue caído (429) en las 5 páginas de `onia.com.bo`, y la
+      sonda oficial confirma que NO es sólo tráfico propio: hay IPs ajenas pegándole.**~~
+      **FALSO, y la culpa era de la sonda — ARREGLADA 2026-09-03 05:35 UTC, `onia-cola`.**
+      El titular se apoyaba en *2 peticiones ajenas de 288*, y ninguna de esas dos IPs llegó
+      nunca al límite. Medido en vivo hoy: `/widget` responde **HTTP 200**, contador en 2 de 5,
+      y **287 de 289 peticiones (99 %) salen del propio VPS**. Un visitante real abre el chat
+      sin problema — Rack::Attack cuenta **una clave por IP**, así que la única forma de que
+      un cliente vea el 429 es que **su propia IP** llegue a 5/hora. Nunca pasó.
+      **De quién es la huella, medido por minuto** (`docker logs` del contenedor de chat):
+      ráfagas en `:48–:56` de **cada** hora, de 10 a 14 cargas — el loop `web-venta`, que abre
+      las 5 páginas cada hora — y en `:41`, el canario. Con 5/hora por IP, **cada corrida se
+      autolimita sola** y deja el cupo quemado para el loop siguiente.
+      **La causa de que esto se reabriera cinco veces era el instrumento, no el sitio.**
+      `hermes-content/deploy/vps-ops/widget-429-de-quien.sh` decidía por el código HTTP
+      **del instante**, y el throttle es
+      intermitente (ventana de 1 h): contestaba distinto según el minuto en que se la corriera.
+      Dos defectos, los dos empujando al mismo error caro:
+      - **falso negativo** — widget en 200 ⇒ *"nada que diagnosticar"*, tirando a la basura las
+        286 peticiones propias que ya estaba mostrando dos líneas más arriba;
+      - **falso positivo** — contaba **peticiones** ajenas en vez de **IPs ajenas que llegaran
+        al límite**, así que 2 visitas legítimas gritaban *"puede haber clientes afectados"*.
+        De ahí salió, textual, este ítem.
+      **El arreglo:** la decisión se mudó a `scripts/veredicto_widget.mjs` — función pura, con
+      `--self-check` y **dentro de `npm test`** (`test:veredicto-widget`). Los tres casos que
+      importan fallaban en ROJO contra la lógica vieja (3 de 4) y pasan con la nueva. Sigue
+      sabiendo salir positivo: una IP ajena que llega al límite da `CLIENTES-AFECTADOS` y la
+      nombra — una sonda que sólo sabe decir "es nuestro" no sirve para el día en que no lo sea.
+      **Lo que NO cambió y sigue siendo de Sergio:** safelistear la IP del VPS
+      (`RACK_ATTACK_ALLOWED_IPS=187.77.16.63`) para que el canario vuelva a ver lo que ve un
+      cliente. Es un cambio de entorno del contenedor de chat en producción, con reinicio.
+
+- [x] ~~🔴 **Titular original, conservado para no perder de dónde salió:**~~
+      Corrida oficial (`node scripts/canario_visual.mjs`): `home`, `precios`, `empezar`,
+      `rubros`, `chatbot-landing` — las cinco — con `error de consola nuevo: ... status of
+      429 ()`. Mismo patrón de peso que ayer (bundle del widget ausente): home 580 KB,
+      precios 327 KB, empezar 325 KB, rubros 746 KB, chatbot-landing 326 KB.
+      - **Corrí la sonda que pide el CLAUDE.md antes de escribir esto**
+        (`sh /root/loops/onia-hermes/hermes-content/deploy/vps-ops/widget-429-de-quien.sh`),
+        para no repetir el error de la vuelta anterior que dio este mismo 🔴 por AUTOINDUCIDO
+        sin poder salir negativo. Esta vez el veredicto es distinto:
+        ```
+        == 2. ¿A nombre de QUÉ IP está el contador del throttle? ==
+           190.180.28.134     1 cargas (el límite es 5/hora)
+           187.77.16.63       15 cargas (el límite es 5/hora)
+        == 3. ¿Quién pidió /widget en las últimas 6 h? ==
+           187.77.16.63       284 peticiones
+           192.223.122.70     1 peticiones
+           190.180.28.134     1 peticiones
+        VEREDICTO: OJO: 2 peticiones vinieron de IPs ajenas.
+        ```
+      - Lectura: el throttle de la hora actual lo agota casi entero nuestro propio VPS
+        (187.77.16.63, con 15 de las 5 permitidas — las corridas repetidas del canario y de
+        otros carriles lo saturan), pero en las últimas 6 h hubo 2 peticiones de IPs que no
+        son nuestras ni conocidas. Ninguna de esas 2 IPs ajenas llegó sola a las 5 cargas/hora
+        que dispararían SU propio 429 — así que hoy el 429 que ve un visitante real depende de
+        si comparte ventana de una hora con nuestro propio tráfico, no de que el visitante
+        mismo se autolimite.
+      - **No lo toqué**: contenedor y cron del widget son ajenos a este carril, sigue sin
+        dueño declarado (vive en `web-factory/apps/onia-platform/`). Van ~11 horas de caída
+        (primera detección 2026-09-02 16:41 UTC).
+      **Evidencia:** capturas de hoy en
+      `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`.
+
+- [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+      `contacto` (322 KB/158 ms), `register` (707 KB/178 ms, 5 rubros con íconos legibles),
+      `login-plataforma` (696 KB/98 ms, "Pedí tu acceso" presente), `login-chat`
+      (3.500 KB/928 ms, formulario Chatwoot propio, no está caído), `panel-chatbot`
+      (699 KB/114 ms, redirige a `/login` sin sesión: "no medida", no "OK"). Ninguna
+      baseline tocada.
 
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
@@ -1237,6 +2133,26 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       que verificar**, no sólo construir.
 
 ## Después
+
+- [x] 🟡 **El mismo gate seguía ladrando en falso por una CUARTA clase de ruido — ARREGLADO el
+      2026-09-03 por `onia-cola`, auditando los `[x]` (escalón 2).** Corriendo
+      `node scripts/verificar_cola.js hermes-content/docs/COLA.md` salían **10 errores**, y **2
+      eran del detector, no de la cola**: los ítems de las líneas 1538 y 1675 citan las cinco
+      capturas de una corrida con la **expansión de llaves** de shell
+      (`.../2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`) y el gate buscaba en
+      disco el literal **con las llaves adentro**. Verificado antes de tocar nada: los cinco
+      archivos **existen** en `hermes-content/docs/historial/canario-visual/`.
+      Es el mismo caso que el glob `*` que la carve-out (1) ya contemplaba —una notación que
+      denota un conjunto— con otra sintaxis. **Su recíproco:** se piden las **dos** llaves, así
+      que una ruta con una llave suelta se sigue verificando (`carpeta/no-existe{.png` sale
+      fantasma igual).
+      **Test primero, en rojo por el motivo correcto**: `una expansion de llaves no es una ruta`
+      falló con `AssertionError` antes del arreglo. Después: self-check **73 casos** verde y el
+      gate de `COLA.md` bajó de **10 a 8** errores — los 8 que quedan son de la cola, no del
+      detector (un duplicado real 1607/1707, dos 🟢 sin ruta, y rutas del **otro repo**
+      `onia-platform/lib/*.ts`, que este verificador no resuelve).
+      **Por qué importa:** un gate que grita en falso se termina salteando, que es el motivo
+      escrito de las otras carve-outs — y este gate es obligatorio en el prompt de dos loops.
 
 - [x] 🟡 **El gate de la cola (`scripts/verificar_cola.js`) ladraba 4 "fantasmas" que no lo son
       — ARREGLADO el 2026-09-02, y eran TRES defectos distintos, no uno.** El diagnóstico

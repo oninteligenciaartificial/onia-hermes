@@ -23,8 +23,12 @@ shopt -s nullglob
 PENDIENTES=("$INBOX"/*.md)
 [ ${#PENDIENTES[@]} -eq 0 ] && exit 0
 
-normalizar() {  # minusculas, sin acentos ni puntuacion ni espacios dobles: dos frases iguales dan el mismo hash
-  tr '[:upper:]' '[:lower:]' | iconv -f utf-8 -t ascii//TRANSLIT 2>/dev/null | tr -cd 'a-z0-9 \n' | tr -s ' ' | sed 's/^ *//;s/ *$//'
+# Minusculas, sin acentos, sin espacios dobles: dos frases iguales dan el mismo
+# hash. Se CONSERVAN "." y ",": el verificador del 2026-09-03 mostro que sin
+# ellos "1,5 creditos" y "15 creditos" eran EL MISMO hecho, y un loop que corrigiera
+# solo la cifra perdia la correccion en silencio como "repetido".
+normalizar() {
+  tr '[:upper:]' '[:lower:]' | iconv -f utf-8 -t ascii//TRANSLIT 2>/dev/null | tr -cd 'a-z0-9., \n' | tr -s ' ' | sed 's/^ *//;s/ *$//'
 }
 
 exec 9>"$LOCK"
@@ -39,6 +43,13 @@ if ! flock -w 30 9; then echo "no consegui el cerrojo de la memoria en 30s"; exi
 # no rompe nada y se queda para siempre.
 PENDIENTES=("$INBOX"/*.md)
 [ ${#PENDIENTES[@]} -eq 0 ] && { flock -u 9; exit 0; }
+
+# 🔴 Hermes reescribe MEMORY.md SIN salto de linea final (medido el 2026-09-03 tras
+# un add/remove suyo). Un `printf '§\n...' >>` a ciegas deja el separador pegado a
+# la ultima linea ("texto§"): `grep -c '^§$'` no lo cuenta, el awk del dedup no lo
+# separa, y el hecho pegado se vuelve a agregar en la vuelta siguiente. Antes de
+# escribir, se garantiza que el archivo termina en newline.
+if [ -s "$MEM" ] && [ -n "$(tail -c1 "$MEM")" ]; then printf '\n' >> "$MEM"; fi
 
 # Firmas de lo que YA esta, para no repetir. La firma del bloque es la del hecho
 # sin su linea de "aprendido por": dos loops que aprendieron lo mismo en dias

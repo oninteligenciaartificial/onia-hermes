@@ -23,25 +23,42 @@ import { describe, expect, it } from "vitest";
  *      la lista de excepciones de este comentario omitía `/og/`: un lector
  *      concluía que no quedaba ninguna. El guard daba VERDE sobre la captura
  *      más visible del sitio, la que ve un lead antes de abrir la página.
+ *   3. La tercera no fue la carpeta de la imagen sino DÓNDE miraba: el walk
+ *      arrancaba en `(sitio)`, así que era ciego a la mitad de la superficie
+ *      que un lead abre. Fuera de ese grupo viven `/servicios/marketing-ia`,
+ *      `/servicios/consultoria`, `/terminos` y `/privacidad` —4 de las 16 URLs
+ *      del sitemap— y TODO lo compartido (`site-header`, `site-footer`,
+ *      `components/sections/`, `components/legal/`), que es donde una captura
+ *      se cuela una vez y sale en las dieciséis páginas a la vez. Es el mismo
+ *      agujero estructural que el bloque de tarjetas sociales de más abajo ya
+ *      había tapado el 2026-09-02 leyendo el sitemap; los dos guards vivían en
+ *      ESTE archivo, uno arreglado y el otro no.
  *
- * Por eso ahora la regla se da vuelta: en vez de enumerar las carpetas
- * PROHIBIDAS —que son infinitas y siempre falta la próxima— se enumeran las
- * PERMITIDAS. Cualquier ruta a imagen que no sea una de ésas es un fallo,
- * venga de `/og/`, `/panel/`, `/pantallas/` o de la carpeta que se invente
- * mañana.
+ * Por eso ahora la regla se da vuelta DOS veces: en vez de enumerar las
+ * carpetas PROHIBIDAS —que son infinitas y siempre falta la próxima— se
+ * enumeran las PERMITIDAS; y en vez de enumerar dónde SÍ mirar, se mira la
+ * superficie viva entera y se enumera lo excluido, con su motivo. Una carpeta
+ * de rutas nueva queda cubierta el día que se crea, sin tocar este archivo.
  *
  * Lo permitido, y por qué: `/contexto/` y `/fotos/` son fotos de negocios
  * reales —una persona en su local, ninguna pantalla legible—, que es
  * justamente lo referencial que Sergio pidió.
  *
- * Sólo se mira `app/(sitio)`, la superficie de venta viva. `/v1` y
- * `components/landing-v1/` son el ARCHIVO de la web publicada hasta el
- * 2026-08-21 (noindex, su layout existe para conservarla tal cual se publicó) y
- * conservan su captura a propósito.
+ * Se mira `src/app` y `src/components` enteros. Lo único excluido es el
+ * ARCHIVO de la web publicada hasta el 2026-08-21 (`app/v1/` y
+ * `components/landing-v1/`): es noindex, su layout existe para conservarla tal
+ * cual se publicó y sus capturas quedan a propósito. Si alguien lo renombra, el
+ * walk lo alcanza y el test se pone rojo — que es el lado seguro del error.
  */
 
 /** Carpetas de imagen que SÍ puede servir la superficie de venta. */
 const PERMITIDAS = ["/contexto/", "/fotos/"] as const;
+
+/**
+ * El archivo de la web vieja, con su captura conservada a propósito. Es la
+ * ÚNICA excusa para no mirar un archivo: cualquier otra carpeta entra.
+ */
+const ARCHIVO_V1 = ["app/v1", "components/landing-v1"] as const;
 
 /** Cualquier ruta a un archivo de imagen, incluso armada con template literal. */
 const RUTA_IMAGEN = /["'`][^"'`]*\.(?:avif|jpe?g|png|webp)/gi;
@@ -57,26 +74,49 @@ function soloCodigo(fuente: string): string {
 }
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
+/** `src/`, la superficie viva entera: rutas de `app/` y todo lo compartido. */
+const SRC = dirname(dirname(AQUI));
 
 function fuentesDelSitio(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
-    if (e.isDirectory()) return fuentesDelSitio(join(dir, e.name));
+    const ruta = join(dir, e.name);
+    if (ARCHIVO_V1.some((a) => ruta === join(SRC, a))) return [];
+    if (e.isDirectory()) return fuentesDelSitio(ruta);
     // los .ts entran: una constante con la ruta no deja de ser una captura por
     // vivir fuera del JSX. Los tests quedan afuera o se cazan a sí mismos.
     if (!/\.tsx?$/.test(e.name) || /\.test\.tsx?$/.test(e.name)) return [];
-    return [join(dir, e.name)];
+    return [ruta];
   });
 }
 
 describe("la superficie de venta dibuja, no fotografía el sistema", () => {
-  const archivos = fuentesDelSitio(AQUI);
+  const archivos = fuentesDelSitio(SRC);
+  const rotulo = (f: string) => f.slice(SRC.length + 1);
 
   it("encuentra las páginas del sitio", () => {
     // si el walk se rompe, los expects de abajo pasan sobre una lista vacía
     expect(archivos.length).toBeGreaterThan(5);
   });
 
-  it.each(archivos.map((f) => [f.slice(AQUI.length + 1), f]))(
+  /**
+   * El anti-regresión del agujero #3. Sin esto, alguien vuelve a apuntar el
+   * walk a `(sitio)` —que suena razonable, es "la carpeta del sitio"— y la
+   * suite sigue en verde con media superficie sin mirar. Las tres rutas de
+   * abajo son de venta, están en el sitemap o las carga toda página, y NINGUNA
+   * vive en `(sitio)`.
+   */
+  it("mira la superficie viva entera, no sólo (sitio)", () => {
+    const relativos = archivos.map(rotulo);
+    for (const afuera of [
+      join("app", "terminos", "page.tsx"),
+      join("app", "servicios", "consultoria", "page.tsx"),
+      join("components", "site-header.tsx"),
+    ]) {
+      expect(relativos, `el walk no llega a ${afuera}`).toContain(afuera);
+    }
+  });
+
+  it.each(archivos.map((f) => [rotulo(f), f]))(
     "%s no sirve una captura del producto",
     (_rotulo, ruta) => {
       const codigo = soloCodigo(readFileSync(ruta, "utf8"));

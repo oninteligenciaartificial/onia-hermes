@@ -320,10 +320,36 @@ navegador). Un umbral roto en silencio deja el carril en verde para siempre.
 > de obra. La regla de siempre, otra vez: **un `grep` sirve para descartar, nunca para
 > confirmar.** Buscá la palabra para saber **dónde mirar**, y decidí con la captura.
 
-> ⚠️ **Tus propias corridas repetidas te pueden devolver un `429`.** Apareció midiendo la home
-> muchas veces seguidas, y las baselines de esa misma pantalla tienen `erroresConsola: []`. Un 429
-> que sólo aparece cuando remedís no es un defecto del sitio: es tuyo. Confirmalo con una corrida
-> sola antes de escribirlo.
+> 🔴 **Un `429` del widget de chat NO se escribe como ítem sin correr la sonda. Y "una corrida
+> sola" NO alcanza como prueba — ese criterio ya falló.**
+>
+> Acá decía: *"un 429 que sólo aparece cuando remedís es tuyo; confirmalo con una corrida sola
+> antes de escribirlo"*. **Ese consejo produjo un ítem 🔴 falso.** El 2026-09-02 este canario hizo
+> exactamente lo que pedía —una corrida oficial única, lo primero de la vuelta, cero pedidos
+> previos—, siguió viendo 429, dio el criterio por cumplido y escribió *"la página que VENDE el
+> chatbot es la única del sitio sin chat"*. Costó **cuatro vueltas** de `onia-cola`.
+>
+> **Por qué el criterio era malo, medido el 2026-09-03:** Chatwoot limita `/widget` a **5 cargas
+> por hora POR IP**, y **una sola pasada tuya de diez pantallas ya lo excede** — varias pantallas
+> embeben el widget. O sea: la corrida "sola y fresca" **se autoenvenena antes de terminar**, y
+> encima deja el cupo quemado por el resto de la hora. Un test que no puede salir negativo no
+> prueba nada.
+>
+> **El test correcto, que sí puede salir en los dos sentidos:**
+>
+>     sh /root/loops/onia-hermes/hermes-content/deploy/vps-ops/widget-429-de-quien.sh
+>
+> **Ruta absoluta a propósito, no la cambies por una relativa:** la sonda vive en `main` y tu
+> worktree (`/root/loops/onia-hermes-canario`) está en tu propia rama, que no la tiene. Una ruta
+> relativa te daría "no such file" y volverías a decidir a ojo.
+>
+> Lee el contador real de Rack::Attack en Redis y el desglose de IPs de las últimas 6 h.
+> - Dice **`AUTOINDUCIDO`** → es nuestro propio tráfico. **No es un ítem.** No lo escribas.
+> - Dice **`OJO: … IPs ajenas`** → ahí sí hay clientes afectados: va como ítem, con esa salida
+>   pegada como evidencia.
+>
+> **Y no confundas las dos mitades.** Que el 429 sea nuestro **no** vuelve buena la captura: la
+> banda vacía del full-page es un defecto **aparte y real**. Cada una con su instrumento.
 
 ## La pasada
 
@@ -480,7 +506,6 @@ Si de estos frentes cerrás unos y otros no, **no marques `[x]`**: dejá el íte
 que falta escrito. Un `[x]` falso cuesta más caro que un ítem abierto, porque nadie vuelve a
 mirarlo.
 
-
 ## 🧠 MEMORIA COMPARTIDA — la leés al arrancar, le escribís al cerrar
 
 > **Nace del 2026-09-03.** Sergio: *"que los loops usen la memoria de hermes también, pero
@@ -495,15 +520,23 @@ que sabe de Sergio (`USER.md`). El corredor la pega antes de tu carril, en cada 
 
 ### Al cerrar la vuelta: si aprendiste algo que le sirve a OTRO carril, dejalo
 
-    /root/bin/onia-aprender.sh "<un hecho, 1-3 frases, con el qué y el POR QUÉ importa>"
+**Lo normal es NO anotar nada.** Una vuelta común no aprende nada que quince carriles necesiten
+saber. Si anotás una cosa por vuelta, a 140 vueltas por día la memoria se llena en 17 horas y
+deja de servir. Anotá **sólo** cuando el hecho cumpla las tres: le sirve a otro carril, no está
+ya arriba, y lo mediste (no lo supusiste).
+
+    /root/bin/onia-aprender.sh "<un hecho, 1-3 frases, con el qué, el POR QUÉ importa, y DÓNDE se ve>"
 
 Qué va: una trampa del sistema que costó una vuelta, un dato de un doc que resultó falso, una
 preferencia o corrección de Sergio (textual, con fecha), un comando que NO es como parece, un
-límite real de una herramienta.
+límite real de una herramienta. **Siempre con la ruta, el comando o la fecha** que lo hace
+verificable: *"el bot muere en el segundo turno"* no alcanza; *"el bot muere en el segundo
+turno — medido 4 de 16 mensajes el 2026-09-02, ver bot-engine.mjs:338"* sí.
 
 Qué NO va: tu log, lo que ya está en la memoria que leíste arriba, opiniones ("creo que el bot
-anda mal" no; "el bot muere en el segundo turno, medido 4 de 16 mensajes" sí), y nada que sea
-solo de tu carril y a nadie más le sirva.
+anda mal"), nada que sea solo de tu carril, y **nada sobre tu propio corredor o tu propio
+prompt** — eso va al radar, no a la memoria. Y **al cerrar**, no a mitad de vuelta: un hecho a
+medio medir es una opinión con fecha.
 
 **Un hecho por llamada.** El script rechaza menos de 40 caracteres (una frase suelta no es un
 hecho) y más de 1.200 (eso es un log). Cada entrada queda firmada con tu carril y la fecha:

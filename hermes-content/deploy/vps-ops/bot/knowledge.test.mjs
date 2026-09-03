@@ -36,6 +36,7 @@ import {
   withKnowledge,
 } from "./knowledge.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
+import { activeSlots, pendingAsk } from "./reply-builder.mjs";
 import { step, createState } from "./bot-engine.mjs";
 import { normalize } from "./guardrails.mjs";
 import { findIndustry, industryLabel } from "./intents.mjs";
@@ -484,39 +485,101 @@ test("sin horarios reales el bot NO inventa ni muestra el placeholder: saluda y 
   assert.match(texto, /coordina uno personalmente/, "se le dice la verdad: el horario lo pone un humano");
   assert.match(texto, /a qué se dedica tu negocio/, "y no se pierde la calificacion");
 
-  // 2026-09-02: aca decia `handoff_humano`, y ESTE TEST BLINDABA EL BUG. Verificaba que el
-  // mensaje fuera correcto y nunca que la conversacion pudiera seguir — y `handoff_humano` es
-  // silencio permanente (barrera 1 de step()). Como los slots nunca se definieron, TODA
-  // conversacion caia ahi: el bot saludaba y no volvia a hablar. Cinco personas escribieron
-  // entre el 24 y el 29 de agosto; a cuatro no les contesto nadie.
-  assert.equal(result.nextState.botStage, "esperando_horario", "sigue el guion vivo: sin agenda igual califica");
+  // ESTA LINEA EXIGIA `handoff_humano` Y ERA EL BLINDAJE DEL BUG. Verificaba que el mensaje fuera
+  // correcto y nunca que la conversacion pudiera seguir. Derivar a un humano es correcto —los dos
+  // efectos de abajo lo hacen— pero `handoff_humano` ademas MATA al bot: es la barrera que
+  // devuelve cero respuestas para siempre (barrera 1 de step()). Como los slots nunca se
+  // definieron, TODA conversacion caia ahi: el bot saludaba y no volvia a hablar. Cinco personas
+  // escribieron entre el 24 y el 29 de agosto; a cuatro no les contesto nadie. El test quedaba
+  // verde igual. `esperando_horario` deriva IGUAL y sigue calificando; lo prueba el test de
+  // abajo, que es el que mira el segundo turno.
+  assert.equal(result.nextState.botStage, "esperando_horario", "deriva al humano SIN quedarse mudo: handoff_humano no responde nunca mas");
   assert.ok(result.notes.includes("sin_horarios_que_ofrecer"));
   const tipos = result.sideEffects.map((effect) => effect.type);
   assert.ok(tipos.includes("lead_upsert"), "el lead nace igual: el prospecto no se pierde");
   assert.ok(tipos.includes("notify_sergio"), "y Sergio se entera de que tiene que proponer hora");
 });
 
-test("sin horarios, el bot CONTESTA el segundo mensaje — el que costo una semana de silencio", () => {
-  // El test de arriba miraba el primer mensaje y nada mas. Este mira el SEGUNDO, que es donde
-  // se perdian los prospectos: saludaba bien y despues, mudo para siempre.
-  const cfg = DEFAULT_CONFIG;
-  const uno = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config: cfg });
-  assert.equal(uno.replies.length, 1, "saluda");
+// EL SEGUNDO TURNO ES EL QUE PAGA. El test de arriba miraba el mensaje de bienvenida, y por eso
+// estuvo VERDE toda la semana en que el bot saludaba y se callaba: `handoff_humano` es la barrera
+// que hace que step() devuelva CERO respuestas para siempre (bot-engine.mjs, case "handoff_humano").
+// Como los slots de config.mjs siguen en "pendiente de definir", CADA conversacion caia ahi.
+// Medido el 2026-09-02 en la base de produccion: de las conversaciones de personas reales desde el
+// 24-ago, ninguna recibio jamas una SEGUNDA respuesta. Un test que solo mira el primer mensaje no
+// ve un sistema que muere en el segundo.
+test("sin horarios el bot sigue vivo en el SEGUNDO mensaje: contesta al que cuenta su negocio", () => {
+  const bienvenida = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config: DEFAULT_CONFIG });
+  assert.equal(bienvenida.replies.length, 1, "saluda");
 
-  const dos = step(uno.nextState, { text: "Tengo una clinica dental en Santa Cruz, somos 4 personas" }, { config: cfg });
-  assert.ok(dos.replies.length >= 1, "EL BUG: aca el bot se quedaba mudo para siempre");
-  assert.ok(!dos.notes.includes("silencio:handoff_en_curso"), "no puede irse al silencio por no tener agenda");
+  const segundo = step(
+    bienvenida.nextState,
+    { text: "Tengo una clinica dental en Santa Cruz, somos 4 personas", receivedAt: "2026-07-27T14:06:00Z" },
+    { config: DEFAULT_CONFIG },
+  );
 
-  const texto = dos.replies.map((reply) => reply.text).join("\n");
-  assert.ok(!/pendiente de definir/i.test(texto), "no re-ofrece un horario que no existe");
+  assert.ok(segundo.replies.length > 0, "el bot NO puede quedarse mudo en el segundo mensaje");
+  const texto = segundo.replies.map((reply) => reply.text).join("\n");
+  assert.ok(!/pendiente de definir/i.test(texto), "el placeholder NUNCA puede llegarle al prospecto");
   assert.ok(!texto.includes("{{"), "ninguna variable sin resolver");
+  assert.match(texto, /odontolog/i, "acusa recibo del dato que dio, no lo vuelve a preguntar");
+  assert.ok(!segundo.notes.includes("silencio:handoff_en_curso"), "el silencio del handoff es exactamente el bug");
 
-  // y el dato del prospecto no se pierde: es lo unico que se puede capturar sin agenda
-  assert.ok(/odontolog|dental/i.test(texto) || Object.keys(dos.nextState.qualification || {}).length > 0,
-    "captura lo que le contaron");
+  // TERCER turno: un bot que contesta una vez mas y se apaga tampoco sirve. El silencio se podia
+  // haber corrido un turno en vez de arreglarse, y solo un tercer mensaje lo distingue.
+  const tercero = step(
+    segundo.nextState,
+    { text: "atendemos de 9 a 19", receivedAt: "2026-07-27T14:12:00Z" },
+    { config: DEFAULT_CONFIG },
+  );
+  assert.ok(tercero.replies.length >= 1, "y sigue contestando, no se agota en un turno");
+  // ESTA LINEA FALTABA Y ES POR LO QUE EL PLACEHOLDER LLEGO A PRODUCCION. El tercer turno YA
+  // estaba cubierto, pero solo por "¿habla?" — nunca por "¿que dice?". Los dos turnos de arriba
+  // si miran el texto; este no, y el agujero quedo justo donde el guion cae a `pendingAsk`.
+  const textoTercero = tercero.replies.map((reply) => reply.text).join("\n");
+  assert.ok(!/pendiente de definir/i.test(textoTercero), "el placeholder NUNCA puede llegarle al prospecto");
+});
 
-  const tres = step(dos.nextState, { text: "atendemos de 9 a 19" }, { config: cfg });
-  assert.ok(tres.replies.length >= 1, "y sigue contestando, no se agota en un turno");
+// ---------------------------------------------------------------------------
+// 5.ter LA RE-PREGUNTA — el agujero por donde el placeholder SI salio a produccion
+// ---------------------------------------------------------------------------
+// Medido el 2026-09-03 en la base de produccion (conv 49, mensajes de 21:09 y 23:03 UTC): el bot
+// le dijo a una conversacion "¿En que horario te viene mejor que te reserve, horario A o horario
+// B?" y "en la opcion A o en la B". Ninguno de los dos es el literal, asi que las guardas de
+// arriba —que buscan "pendiente de definir"— los dejaron pasar enteros.
+//
+// El camino es este: `welcomeResult` marca `slotsOffered: []` (no se ofrecio NINGUN horario), pero
+// `activeSlots` cae a `config.slots` cuando el array esta vacio — un fallback DELIBERADO, que
+// followUpTemplate documenta y necesita — asi que `pendingAsk` recibia los placeholders de
+// config.mjs y renderizaba PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?".
+//
+// Y `pendingAsk` no se dice solo: bot-engine.mjs lo pega al final de la respuesta determinista
+// (linea ~440) Y se lo pasa al LLM como `pendingQuestion` (linea ~786). Eso ultimo es lo que
+// produjo la PARAFRASIS: el modelo recibio los dos labels y los reescribio como "horario A o B".
+// Por eso el arreglo va en `pendingAsk` y no en la plantilla: es el unico punto que tapa las dos.
+// Y la señal es el flag `pending` de cada slot, no el array vacio: cubre los dos caminos sin
+// mover `activeSlots`, que comparte una ruta de plantillas PAGAS.
+test("sin horarios la RE-PREGUNTA no ofrece elegir: ni el literal ni una parafrasis", () => {
+  // El estado EXACTO al que welcomeResult manda a toda conversacion sin horarios definidos.
+  const state = { botStage: "esperando_horario", slotsOffered: [], qualification: {} };
+
+  // El fallback sigue vivo a proposito: lo que NO puede pasar es que esos placeholders se digan.
+  assert.ok(
+    activeSlots(state, DEFAULT_CONFIG).every((slot) => slot.pending),
+    "sin horarios definidos, todo lo que activeSlots devuelve es placeholder",
+  );
+
+  const ask = pendingAsk(state, DEFAULT_CONFIG);
+  assert.ok(ask, "sigue habiendo una pregunta pendiente: el embudo no se apaga");
+  assert.ok(!/pendiente de definir/i.test(ask), "el placeholder NUNCA puede llegarle al prospecto");
+  assert.ok(!ask.includes("{{"), "ninguna variable sin resolver");
+  // La parafrasis del LLM nace de que el texto le OFRECE elegir entre dos cosas sin nombre. Si la
+  // re-pregunta no plantea una eleccion, no hay nada que parafrasear.
+  assert.ok(!/\bhorario a\b|\bopci[oó]n a\b|\bA\)/i.test(ask), "no puede ofrecer 'horario A' / 'opcion A': para el prospecto no significa nada");
+  assert.match(ask, /coordina/i, "dice la verdad: la hora la pone un humano");
+
+  // Con horarios REALES la re-pregunta de siempre no cambia.
+  const conReales = { ...state, slotsOffered: conHorarios(DEFAULT_CONFIG).slots };
+  assert.match(pendingAsk(conReales, DEFAULT_CONFIG), /jueves 15:00/, "con horarios reales se sigue ofreciendo elegir");
 });
 
 test("con horarios reales el guion normal no cambia ni una coma", () => {

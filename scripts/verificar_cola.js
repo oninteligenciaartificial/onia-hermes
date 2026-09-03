@@ -147,11 +147,29 @@ function evidenciaDe(textoCrudo) {
     // pregunta en el nombre, asi que eso los descarta sin tener que adivinar.
     if (/[\s?]/.test(ruta)) continue;
 
+    // Un paquete de npm CON SCOPE no es un archivo de este repo: `@supabase/ssr`,
+    // `@anthropic-ai/sdk`, `@supabase/ssr/dist/main/index.js`. Tienen barra, asi que caian en
+    // "esto parece una ruta" y salian fantasma (medido el 2026-09-02: la cola de chatbot volvio
+    // a exit 1 por citar la libreria con la que se arman las cookies de sesion). Es el mismo
+    // gate gritando en falso que las cinco reglas de arriba, y por el mismo motivo se descarta:
+    // ningun archivo de estos repos tiene un primer segmento que empiece con `@`.
+    // Ojo: se exige que el `@` sea el PRIMER caracter. Un `correo@dominio/x` no es un scope.
+    if (/^@[a-z0-9._-]+\//i.test(ruta)) continue;
+
     // Un GLOB no es un archivo: es una ZONA. Esta cola escribe
     // `web-factory/apps/onia-platform/**` para decir de que carril es una carpeta, y
     // `public/rubros/*.webp` para nombrar un conjunto. Buscarlos en disco daba fantasma
     // siempre (medido el 2026-09-02 sobre COLA.md). Ningun archivo del repo tiene `*`.
     if (/\*/.test(ruta)) continue;
+
+    // Una EXPANSION DE LLAVES tampoco: es un GLOB con otra sintaxis. La cola escribe
+    // `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar}.png`
+    // para citar las cinco capturas de una corrida sin repetir la carpeta larga. El gate
+    // buscaba en disco el literal CON las llaves y daba fantasma sobre archivos que existen
+    // (medido el 2026-09-03: 2 de sus 10 errores sobre COLA.md, items 1538 y 1675).
+    // Se piden las DOS llaves y en orden, que es lo que impide que esto afloje el gate: un
+    // archivo con una llave suelta en el nombre se sigue verificando.
+    if (/\{[^}]*\}/.test(ruta)) continue;
 
     // Una cita ABREVIADA tampoco es un archivo. La cola escribe
     // `…/2026-09-02-mismo-html-chromium-real-login.png` para no repetir la carpeta larga: el
@@ -173,8 +191,13 @@ function evidenciaDe(textoCrudo) {
     // pide que el sufijo sea una extension que exista de verdad en estos repos. Con barra
     // (arriba) se sigue verificando siempre, asi que esto no puede tapar un archivo en una
     // carpeta — solo desarma la confusion "identificador punteado == nombre de archivo".
-    const ext = ruta.match(/\.([a-z0-9]{1,5})$/i);
-    if (ext && EXTENSIONES.has(ext[1].toLowerCase())) rutas.push(ruta);
+    // Y ademas tiene que haber NOMBRE antes del punto. Sin el `(.+)` el token entero `.tsx`
+    // pasaba —su sufijo es una extension conocida— y el gate acusaba "apunta a .tsx y ese
+    // archivo NO existe" sobre una frase que solo decia "todos los archivos de ese tipo".
+    // Un dotfile de verdad (`.env`, `.gitignore`) se nombra CON su carpeta y lo resuelve la
+    // rama de arriba, asi que exigir nombre aca no puede tapar ninguno.
+    const ext = ruta.match(/^(.+)\.([a-z0-9]{1,5})$/i);
+    if (ext && EXTENSIONES.has(ext[2].toLowerCase())) rutas.push(ruta);
   }
 
   // La misma ruta citada dos veces en un item es UN problema, no dos. El gate reportaba el
@@ -676,6 +699,30 @@ function selfCheck() {
   r = revisarCola('## Ahora\n- [ ] Zona `carpeta/*.webp` · `existe.png`\n', tmp);
   ok(!r.problemas.length, 'un glob con comodin de nombre tampoco');
 
+  // (1c) Una EXPANSION DE LLAVES de shell tampoco es un archivo: es la forma corta de nombrar
+  // varios. La cola escribe `.../2026-09-03-{home,precios,empezar,rubros}.png` para citar las
+  // cinco capturas de una corrida en un renglon. Es el MISMO caso que el glob de (1) —una
+  // notacion que denota un conjunto— y salia fantasma por el mismo motivo: se buscaba en disco
+  // el literal con las llaves adentro. Medido el 2026-09-03 sobre COLA.md: 2 de los 10 errores
+  // del gate eran esto, en los items 1538 y 1675, sobre capturas que SI existen.
+  r = revisarCola('## Ahora\n- [ ] Fotos `carpeta/2026-{a,b}.png` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una expansion de llaves no es una ruta');
+  // Su reciproco: hacen falta las DOS llaves. Una ruta con una llave suelta no se tapa.
+  r = revisarCola('## Ahora\n- [ ] Roto `carpeta/no-existe{.png`\n', tmp);
+  ok(r.problemas.length === 1, 'una llave suelta NO convierte la ruta en expansion');
+
+  // (1b) Un paquete de npm CON SCOPE tiene barra y no es un archivo del repo. La cola de chatbot
+  // salio en rojo el 2026-09-02 por citar `@supabase/ssr`, la libreria con la que se arman las
+  // cookies de sesion — evidencia legitima, marcada como fantasma.
+  r = revisarCola('## Ahora\n- [ ] Cookies con `@supabase/ssr` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un paquete npm con scope no es una ruta');
+  r = revisarCola('## Ahora\n- [ ] Import de `@supabase/ssr/dist/main/index.js` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'ni una ruta interna de ese paquete');
+  // Su reciproco, que es lo que impide que el carve-out afloje: el `@` tiene que ser el PRIMER
+  // caracter. Una ruta de verdad que apenas contiene un `@` sigue verificandose.
+  r = revisarCola('## Ahora\n- [ ] Roto `carpeta@vieja/no-existe.png`\n', tmp);
+  ok(r.problemas.length === 1, 'un `@` en medio NO convierte la ruta en paquete npm');
+
   // (2) `visto.texto` es una EXPRESION de JavaScript citada, no un archivo: `.texto` no es una
   // extension. Un nombre suelto sin barra solo es ruta si su extension es de las que existen
   // en estos repos; con barra se sigue verificando siempre.
@@ -685,6 +732,21 @@ function selfCheck() {
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'la carve-out de extensiones no tapa un archivo suelto');
   r = revisarCola('## Ahora\n- [ ] Algo · `carpeta/no-esta.texto`\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'con barra se verifica aunque la extension sea rara');
+
+  // (2b) Una extension SOLA no es un archivo. La cola escribe "grep sobre todos los `.tsx`"
+  // para decir "los archivos de ese tipo", y el gate contestaba "apunta a .tsx y ese archivo NO
+  // existe" — una frase sin sentido, porque nadie nombro un archivo llamado `.tsx`.
+  // Medido el 2026-09-02 sobre COLA.md: 2 de los 9 ERROR eran esto (`.tsx` y `.css`).
+  // La carve-out de (2) pedia que el sufijo fuera una extension conocida, pero NO que hubiera
+  // nombre antes del punto, asi que el token entero `.css` pasaba el filtro y entraba como ruta.
+  r = revisarCola('## Ahora\n- [ ] Un grep sobre todos los `.tsx` y los `.css` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una extension sola no es una ruta');
+  // Su reciproco 1: con nombre delante, el archivo suelto se sigue verificando.
+  r = revisarCola('## Ahora\n- [ ] Algo · `a.tsx`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'la carve-out no tapa un archivo de nombre corto');
+  // Su reciproco 2: un dotfile de verdad se nombra CON su carpeta, y ahi se sigue verificando.
+  r = revisarCola('## Ahora\n- [ ] Algo · `carpeta/.env`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'un dotfile con barra se sigue verificando');
 
   // (3) Un mismo item cita el archivo entero UNA vez y despues lo nombra corto
   // ("Ese archivo (`alta.ts`) ya deja el runbook"). El nombre corto no existe en la raiz, pero

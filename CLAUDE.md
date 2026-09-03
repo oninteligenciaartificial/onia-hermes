@@ -78,6 +78,21 @@ Instrucciones de proyecto. Override sobre defaults.
   > cara del sitio, en el último clic, y encima contradice el copy honesto de al lado.
   > Arreglar el síntoma donde saltó y no los hermanos que llaman a lo mismo deja el bug vivo.
 
+  ⚠️ **Eso es HISTORIA, no el estado de hoy — corregido 2026-09-03.** El alta se volvió a
+  **ABRIR** el 29-ago y este párrafo siguió leyéndose como presente durante cinco días. Hoy
+  `app.onia.com.bo/register` **crea la cuenta solo**: asistente de dos pasos (elegís rubro →
+  nombre, correo, contraseña, nombre del negocio) y botón "Crear mi cuenta — 14 días gratis";
+  `/empezar` no tiene ni un `<form>` y sus CTA dicen "Creá tu cuenta". Medido en vivo, no de
+  memoria: `docker exec onia-platform env | grep ALTA` → `ONIA_ALTA_AUTOMATICA=abierta`, y las
+  dos pantallas abiertas y MIRADAS renderizadas.
+  >
+  > **La regla de arriba sigue intacta; lo que falló fue su ejemplo.** Una promesa que cambia se
+  > barre en toda la superficie — y el barrido tiene que alcanzar también a **las reglas que la
+  > citan**, porque un ejemplo congelado en pasado se lee como presente y manda al revés: hace
+  > creer que la puerta está cerrada cuando está abierta. El estado vigente del alta se verifica
+  > con el comando de arriba y con `web-factory/apps/onia-platform/src/app/(sitio)/alta.ts`
+  > (que es un ESPEJO del producto, no la fuente).
+
 ## Verificar es MIRAR, no suponer (REGLA)
 
 > Nace del mismo día: el login de producción mostraba los NOMBRES de los iconos como
