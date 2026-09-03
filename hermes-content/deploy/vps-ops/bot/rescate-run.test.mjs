@@ -182,11 +182,15 @@ test("si el webhook rechaza uno, el barrido sigue con los demas y lo reporta", a
       ],
       postWebhook: async (p) => {
         if (p.conversation.id === 49) throw new Error("puerto muerto");
-        return { ok: true };
+        // Cuerpo real: `postAlWebhook` SIEMPRE devuelve `respuesta`. El mock de antes
+        // contestaba `{ok:true}` pelado — que en produccion no existe — y con eso este caso
+        // afirmaba un rescate que el barrido no podia leer.
+        return { ok: true, respuesta: '{"ok":true,"sent":[{"id":991}]}' };
       },
     },
   );
   assert.equal(res.reinyectados, 1, "el fallo de uno no puede cancelar el rescate del otro");
+  assert.equal(res.contestados, 1, "y el que si salio tiene que contarse como rescatado");
   assert.equal(res.fallidos.length, 1);
   assert.equal(res.fallidos[0].conversationId, 49);
 });
@@ -307,6 +311,104 @@ test("el bot en handoff no contesta y eso NO es un rescate", () => {
 test("una respuesta que no es JSON no rompe el barrido ni se cuenta como exito", () => {
   assert.equal(clasificarRespuesta("<html>502</html>").contestado, false);
   assert.equal(clasificarRespuesta(undefined).contestado, false);
+});
+
+// ---------------------------------------------------------------------------
+// EL RESCATE FUNCIONABA Y EL TESTIGO NO — medido el 2026-09-03 provocando el primer
+// huerfano de verdad (msg 339 insertado directo en la base de Chatwoot, sin disparar el
+// webhook: el mismo estado que deja un webhook caido). El cron lo encontro, lo reinyecto y
+// **el bot le contesto** (`rama=respondio enviados=1/1`, msg 340 en la conversacion). Pero el
+// barrido informo `0 CONTESTADOS` y NO aviso a nadie: `-> respuesta_ilegible`.
+//
+// La causa, medida y no razonada, es el `.slice(0, 300)` de `postAlWebhook`:
+//
+//     cuerpo de EXITO  = 903 caracteres  -> cortado a 300: "Unterminated string in JSON"
+//     cuerpo de DEDUP  = 101 caracteres  -> cortado a 300: intacto
+//
+// Es decir: el corte rompia UNICAMENTE el caso que importa. Todo lo que se habia probado
+// hasta hoy —a mano y contra produccion— era dedup, y por eso salio verde siempre. El unico
+// camino que nunca se habia ejercido es el unico que salva un lead.
+//
+// Estos casos cruzan `postAlWebhook` con `clasificarRespuesta`. Sueltos no ven nada: el bug
+// no vive en ninguna de las dos, vive en el cuerpo que una le pasa a la otra.
+// ---------------------------------------------------------------------------
+
+/** Un cuerpo de exito con la forma y el TAMAÑO del real (903 chars el 2026-09-03). */
+function cuerpoDeExito() {
+  return JSON.stringify({
+    ok: true,
+    skipped: false,
+    deduped: false,
+    duplicate: false,
+    sent: [
+      {
+        id: 340,
+        content:
+          "¿Querés que te reserve para el viernes 4 de septiembre a las 14:00 o para el sábado 5 a las 9:00? " +
+          "Contame qué día te queda mejor y lo dejo agendado. La demo dura 30 minutos y te la hace Sergio.",
+      },
+    ],
+    stageBefore: "esperando_horario",
+    stageAfter: "esperando_horario",
+    reason: null,
+    traza: { conv: 49, msg: 339, rama: "respondio", etapa: "esperando_horario->esperando_horario" },
+  });
+}
+
+test("EL TESTIGO ROTO: un rescate que SI contesto tiene que contarse como contestado", async () => {
+  const cuerpo = cuerpoDeExito();
+  assert.ok(cuerpo.length > 300, `el cuerpo de exito real pasa de 300; este mide ${cuerpo.length}`);
+
+  const res = await postAlWebhook(
+    { event: "message_created", conversation: { id: 49 } },
+    {
+      run: async () => ({ stdout: cuerpo }),
+      leerEnv: () => "ONIA_CHATWOOT_WEBHOOK_PATH_SECRET=s3cr3-to",
+      env: { ONIA_WEBHOOK_PORT: "3020" },
+    },
+  );
+
+  const veredicto = clasificarRespuesta(res.respuesta);
+  assert.equal(
+    veredicto.contestado,
+    true,
+    `el bot contesto de verdad y el barrido lo leyo como "${veredicto.motivo}"`,
+  );
+});
+
+test("la asimetria que lo escondio: el cuerpo corto de dedup sobrevivia al corte y el largo no", async () => {
+  const dedup = '{"ok":true,"skipped":false,"deduped":true,"duplicate":true,"sent":[],"reason":"mensaje_ya_procesado"}';
+  assert.ok(dedup.length < 300, "el cuerpo de dedup medido son 101 chars: por eso nunca fallo");
+
+  const pegar = async (stdout) =>
+    clasificarRespuesta(
+      (
+        await postAlWebhook(
+          { event: "message_created", conversation: { id: 49 } },
+          { run: async () => ({ stdout }), leerEnv: () => "", env: {} },
+        )
+      ).respuesta,
+    );
+
+  assert.equal((await pegar(dedup)).motivo, "mensaje_ya_procesado");
+  assert.equal((await pegar(cuerpoDeExito())).motivo, "contestado");
+});
+
+test("una respuesta que el barrido no puede leer es un FALLO ruidoso, no un silencio", async () => {
+  // Antes esto salia con exit 0 y "0 CONTESTADOS": indistinguible de no haber tenido trabajo.
+  // Un rescate cuyo resultado no se puede leer es un desconocido que quiza quedo sin contestar.
+  const r = await runRescateSweep(
+    { emitir: true, ahoraMs: T0 + min(10) },
+    {
+      leerFilas: async () => [fila({ createdAtMs: T0 })],
+      postWebhook: async () => ({ ok: true, respuesta: "<html>502 Bad Gateway</html>" }),
+      avisar: async () => {},
+    },
+  );
+  assert.equal(r.reinyectados, 1);
+  assert.equal(r.contestados, 0);
+  assert.equal(r.fallidos.length, 1, "una respuesta ilegible tiene que salir por fallidos (exit 1)");
+  assert.match(r.fallidos[0].motivo, /ilegible/);
 });
 
 test("el barrido separa lo mandado de lo CONTESTADO, que es lo unico que salva un lead", async () => {

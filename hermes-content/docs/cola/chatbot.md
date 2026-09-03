@@ -246,7 +246,7 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       por Telegram**: un cron que apunta a un solo path arranca roto y se queda roto en silencio,
       que es el modo de falla que este vigía vino a cerrar.
 
-- [ ] 🔴 **Un mensaje que llega mientras el webhook está caído se pierde PARA SIEMPRE, y pasa
+- [x] 🔴 **Un mensaje que llega mientras el webhook está caído se pierde PARA SIEMPRE, y pasa
       una vez por día.** Abierto el 2026-09-03 **por el chequeo de arranque, no por la cola**:
       `node scripts/sonda_widget.mjs` salió *"EL BOT SE QUEDO MUDO — conversacion 49: #1 → 0
       respuesta(s) · #2 → 1 respuesta(s)"*.
@@ -331,10 +331,39 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       el escapador se escribe local en vez de importarlo de `scripts/` porque este archivo se
       rsyncea plano al bot, donde esa carpeta no existe, y el import reventaría en producción, no
       en el test.
-      3. **Falta todavía la prueba de un rescate que produzca una respuesta VISIBLE.** Hoy tampoco
-         se pudo: el barrido mide **0 huérfanos** (el de ayer, conv 47, estaba en handoff). Ya no
-         hay que acordarse de mirar: con el cron encendido, **el próximo huérfano real se rescata
-         solo y el aviso lo cuenta**. Hecho = llega ese Telegram, o el log dice `CONTESTADOS ≥ 1`.
+      ✅ **CERRADO el 2026-09-03: hay un rescate con respuesta VISIBLE, y probarlo destapó que el
+      testigo estaba roto.** Este punto esperaba "el próximo huérfano real" — o sea, esperaba a que
+      la realidad probara la red de seguridad. Se provocó en vez de esperarla: **un `insert` directo
+      en la base de Chatwoot no dispara el callback de Rails, así que el webhook nunca se entera** —
+      exactamente el estado que deja un webhook caído (el mensaje queda guardado y sin procesar).
+      Se hizo en la conversación **49, que es la de la sonda**, no en la de un lead.
+      **El cron de las 10:14 lo encontró solo y lo reinyectó**, y el webhook contestó de verdad:
+      `conv=49 msg=339 rama=respondio enviados=1/1` → mensaje 340 en la conversación.
+      🔴 **Y el barrido informó `0 CONTESTADOS` y no avisó a nadie: `-> respuesta_ilegible`.** El
+      rescate funcionaba; el que no funcionaba era el testigo. La causa, medida y no razonada, es el
+      `.slice(0, 300)` de `postAlWebhook`: se cortaba el cuerpo ANTES de parsearlo.
+      **Cuerpo de éxito = 903 caracteres** (lleva adentro el mensaje que el bot mandó) → cortado a
+      300 devuelve `Unterminated string in JSON at position 300`. **Cuerpo de dedup = 101** → pasa
+      intacto. O sea que el corte rompía **únicamente el caso que salva un lead**, y por eso todo lo
+      que se había probado hasta hoy —siempre dedup— salió verde. Con esto el ítem no podía cerrarse
+      nunca: su propio criterio (`CONTESTADOS ≥ 1`) era inalcanzable aunque el circuito anduviera.
+      **Arreglado, rojo primero** por el motivo correcto (`el barrido lo leyó como
+      "respuesta_ilegible"`, textual el de producción): el cuerpo se devuelve entero — truncar lo
+      que hay que parsear no es acotar, es corromper. **29 → 32 casos.** Los tres nuevos cruzan
+      `postAlWebhook` con `clasificarRespuesta`: sueltas, ninguna de las dos tiene el bug; vive en el
+      cuerpo que una le pasa a la otra. De paso se corrigió un mock irreal (`{ok:true}` sin cuerpo,
+      algo que `postAlWebhook` nunca devuelve) que afirmaba un rescate ilegible como bueno.
+      **Y una respuesta ilegible ahora es un FALLO ruidoso (`exit 1`), no un silencio**: salía con
+      `exit 0` y `0 CONTESTADOS`, indistinguible de una vuelta sin trabajo — así el testigo roto
+      sobrevivió doce corridas sin que nadie lo notara.
+      **La prueba final, con la versión arreglada contra producción:** tercer huérfano provocado
+      (msg 343) → `conv 49 msg 343 — 5 min sin respuesta -> contestado · 1 CONTESTADOS`, respuesta
+      visible (msg 344) y **el Telegram llegó**. El gate del carril se volvió a correr después:
+      `EL BOT CONTESTO LOS 2`.
+      ⚠️ **Commiteado, NO desplegado.** El cron usa el clon de `main`
+      (`/root/loops/onia-hermes/...`), así que **hasta que `onia-cola` mergee esta rama el barrido
+      en producción sigue con el corte**: encuentra y reinyecta bien, pero seguirá informando
+      `0 CONTESTADOS` y sin avisar cuando salve a alguien.
       ⚠️ **El log por mensaje YA está desplegado — el párrafo que decía lo contrario era viejo.**
       Recontado hoy: `/tmp/onia-bot/webhook-server.mjs` (el que corre) es del **3-sep 01:58**, no
       del 29-ago, y su stdout va a `/tmp/onia-bot-webhook.log` **dentro del contenedor** — por eso
