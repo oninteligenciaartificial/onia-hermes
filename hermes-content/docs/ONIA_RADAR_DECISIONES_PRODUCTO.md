@@ -758,6 +758,44 @@ mueven la aguja son distintos y se pueden hacer por separado:
   también que el bot agende** (mergeado el 2026-09-01). Sin esto, un desconocido que llega desde
   la web sigue recibiendo la respuesta genérica, y una cita sigue derivándose a mano — que es
   justo lo que `pricing.ts` cobra como resuelto.
+
+  > 🔴 **Medido en vivo el 2026-09-03 01:40 UTC por el integrador, y ahora incluye el arreglo más
+  > caro de la semana.** Esta opción (a) dejó de ser "campañas y agenda": **el bot que atiende
+  > leads AHORA MISMO no tiene el fix de que se moría al llegar el mensaje.**
+  >
+  > **Dónde corre de verdad, que no es donde parecía.** El proceso es
+  > `node /tmp/onia-bot/webhook-server.mjs` (PID 869520, arrancado 00:04:04Z) y **corre DENTRO del
+  > contenedor `onia-center`**, no en el host: `/tmp/onia-bot/` está vacío visto desde el VPS y el
+  > cwd del proceso es `/app/apps/site`. La cadena de deploy es
+  > `repo → /opt/onia/bot/ (staging) → /tmp/onia-bot/ del contenedor`.
+  >
+  > **La prueba de que está atrás**, por `md5sum`, no por fecha:
+  >
+  > | archivo | vivo (contenedor) | `main` de hoy |
+  > |---|---|---|
+  > | `bot-engine.mjs` | `afe24f58…` | `ab0181ed…` |
+  > | `config.mjs` | `cfabb292…` | `35dc9d8f…` |
+  > | `persistence.mjs` | `555ff62c…` | `ada07d4d…` |
+  > | `knowledge.onia.json` | **no existe** | presente |
+  > | `rescate-run.mjs` | **no existe** | presente |
+  >
+  > `/opt/onia/bot/bot-engine.mjs` da el **mismo** `afe24f58…` que la copia viva: el staging
+  > también está atrás, así que no alcanza con reiniciar el contenedor.
+  >
+  > **Cuánto hay parado:** la copia viva es del **2026-09-02 17:19**; desde esa marca `main`
+  > acumuló **10 commits que tocan `bot/`**, incluidos los 4 mergeados hoy (`51057fb9e`,
+  > `3c2f4ef89`, `f22f47bcb` y su merge). El más caro es **`3c2f4ef89`**: el bot no se callaba,
+  > estaba **muerto** cuando llegaba el mensaje, y Chatwoot no reintenta — o sea que hoy un lead
+  > real todavía puede escribir al vacío.
+  >
+  > ⚠️ **Y hay un segundo motivo, independiente de qué versión sea la buena:** el código vivo
+  > está en **`/tmp` de un contenedor**. Cuando `onia-center` reinicia, se lo lleva puesto — es
+  > exactamente el reinicio de las 00:03:32Z que `3c2f4ef89` diagnosticó. El `webhook-watchdog.sh`
+  > (cron cada 2 min) lo vuelve a levantar, pero **desde el staging viejo**.
+  >
+  > **Lo que este carril NO puede hacer:** el deploy. Sigue siendo tuyo. Lo que sí queda listo es
+  > la cuenta: son 10 commits, el instalador es `/opt/onia/bot/webhook-server.sh knowledge` para
+  > el conocimiento, y el motor se copia por la misma cadena de arriba.
 - ~~**(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
   ajeno de una pantalla que ven los clientes desde el 16-ago.~~ ⚠️ **VENCIDA — verificada en vivo
   el 2026-09-02. No le pidan a Sergio esta decisión: ya está tomada y automatizada.** El script
